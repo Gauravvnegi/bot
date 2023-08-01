@@ -9,6 +9,7 @@ import {
 } from '@angular/forms';
 import {
   AdminUtilityService,
+  ModuleNames,
   QueryConfig,
   daysOfWeek,
 } from '@hospitality-bot/admin/shared';
@@ -24,7 +25,10 @@ import {
   RoomTypes,
 } from '../../types/channel-manager.types';
 import { getWeekendBG } from '../../models/bulk-update.models';
-import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import {
+  GlobalFilterService,
+  SubscriptionPlanService,
+} from '@hospitality-bot/admin/core/theme';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { ChannelManagerService } from '../../services/channel-manager.service';
 import * as moment from 'moment';
@@ -52,10 +56,10 @@ export class UpdateRatesComponent implements OnInit {
   loading = false;
   loadingError = false;
   isRoomsEmpty = false;
+  hasDynamicPricing = false;
   currentDate = new Date();
 
   $subscription = new Subscription();
-  dynamicPricing = new Map<number, boolean>();
   ratesRoomDetails = new Map<string, RoomMapType>();
 
   constructor(
@@ -64,11 +68,13 @@ export class UpdateRatesComponent implements OnInit {
     private globalFilter: GlobalFilterService,
     private snackbarService: SnackBarService,
     private channelManagerService: ChannelManagerService,
-    private adminUtilityService: AdminUtilityService
+    private adminUtilityService: AdminUtilityService,
+    private subscriptionPlanService: SubscriptionPlanService
   ) {}
 
   ngOnInit(): void {
     this.entityId = this.globalFilter.entityId;
+    this.initDynamicPriceSubscription();
     this.initDate(Date.now());
     this.getRestrictions();
     this.initRoomTypes();
@@ -91,7 +97,6 @@ export class UpdateRatesComponent implements OnInit {
     }
     return Array.from({ length: this.dateLimit }, (_, index) => index);
   }
-
   initRoomTypes() {
     this.channelMangerForm.roomDetails.subscribe((rooms: RoomTypes[]) => {
       if (this.channelMangerForm.isRoomDetailsLoaded) {
@@ -115,8 +120,9 @@ export class UpdateRatesComponent implements OnInit {
 
   addRoomsControl() {
     this.addRoomTypesControl();
-    this.addRootDynamicControl();
+    if (this.hasDynamicPricing) this.addRootDynamicControl();
     this.listenChanges();
+    this.getRates();
   }
 
   addRootDynamicControl() {
@@ -124,7 +130,6 @@ export class UpdateRatesComponent implements OnInit {
       'dynamicPricing',
       this.getValuesArrayControl('boolean')
     );
-    this.getRates();
   }
 
   /**
@@ -267,7 +272,6 @@ export class UpdateRatesComponent implements OnInit {
       );
 
       this.addRatesAndRestrictionControl(ratePlansControl, ratePlanIdx);
-
       this.addChannelsControl(ratePlan.channels, roomTypeIdx, ratePlanIdx);
     });
   }
@@ -394,28 +398,30 @@ export class UpdateRatesComponent implements OnInit {
       this.setRoomDetails();
     });
 
-    this.useFormControl.dynamicPricing.controls.forEach((control, idx) => {
-      control.valueChanges.subscribe((res) => {
-        this.useFormControl.roomTypes.controls.forEach(
-          (roomTypeControl: FormGroup) => {
-            this.disableRateControls(roomTypeControl, idx, res);
+    if (this.hasDynamicPricing) {
+      this.useFormControl.dynamicPricing.controls.forEach((control, idx) => {
+        control.valueChanges.subscribe((res) => {
+          this.useFormControl.roomTypes.controls.forEach(
+            (roomTypeControl: FormGroup) => {
+              this.disableRateControls(roomTypeControl, idx, res);
+            }
+          );
+          if (res.value) {
+            this.getDynamicPrice({
+              ...res,
+              index: idx,
+              roomControls: [
+                ...this.useFormControl.roomTypes.controls.map(
+                  (roomTypeControls: FormArray) => ({
+                    roomTypeFG: roomTypeControls,
+                  })
+                ),
+              ],
+            });
           }
-        );
-        if (res.value) {
-          this.getDynamicPrice({
-            ...res,
-            index: idx,
-            roomControls: [
-              ...this.useFormControl.roomTypes.controls.map(
-                (roomTypeControls: FormArray) => ({
-                  roomTypeFG: roomTypeControls,
-                })
-              ),
-            ],
-          });
-        }
+        });
       });
-    });
+    }
   }
 
   getRates(selectedDate = this.useForm.value.date) {
@@ -429,7 +435,6 @@ export class UpdateRatesComponent implements OnInit {
         .subscribe(
           (res) => {
             const data = new UpdateRates().deserialize(res.roomType);
-            this.dynamicPricing = data.dynamicPricing;
             this.ratesRoomDetails = data.ratesRoomDetails;
             this.setRoomDetails(selectedDate);
             this.loading = false;
@@ -459,7 +464,8 @@ export class UpdateRatesComponent implements OnInit {
 
     const data = UpdateRates.buildRequestData(
       this.useForm.getRawValue(),
-      fromDate
+      fromDate,
+      'submit-form'
     );
 
     this.$subscription.add(
@@ -492,17 +498,6 @@ export class UpdateRatesComponent implements OnInit {
     let currentDate = new Date(fromDate);
 
     if (roomTypeControls.length > 0) {
-      //Root Dynamic Pricing mapping
-      this.useFormControl.dynamicPricing.controls.forEach(
-        (dynamicPrice: FormGroup) => {
-          dynamicPrice.controls.value.patchValue(
-            this.dynamicPricing[currentDate.getTime()] ?? false,
-            { emitEvent: false }
-          );
-          currentDate.setDate(currentDate.getDate() + 1);
-        }
-      );
-
       // Rate Plans Mapping
       currentDate = new Date(fromDate);
       for (let roomControl of roomTypeControls) {
@@ -533,24 +528,41 @@ export class UpdateRatesComponent implements OnInit {
           currentDate = new Date(fromDate);
         });
 
-        //roomType dynamic price mapping
-        this.ratesRoomDetails[roomId] &&
+        if (this.hasDynamicPricing) {
+          //roomType dynamic price mapping
           (roomControl.get('dynamicPrice') as FormArray).controls.forEach(
             (dynamicPriceControl, index) => {
-              let currentRoomDate = new Date(currentDate);
-              currentRoomDate.setDate(currentDate.getDate() + index);
+              let currentRoomDate = new Date(fromDate);
+              currentRoomDate.setDate(currentRoomDate.getDate() + index);
               const dynamicPriceStatus =
-                this.ratesRoomDetails[roomId].availability[
+                this.ratesRoomDetails[roomId]?.availability[
                   currentRoomDate.getTime()
                 ]?.dynamicPrice ?? false;
 
-              if (dynamicPriceStatus) {
-                this.disableRateControls(roomControl as FormGroup, index, {
-                  value: dynamicPriceStatus,
-                });
-              }
+              this.disableRateControls(roomControl as FormGroup, index, {
+                value: dynamicPriceStatus,
+              });
             }
           );
+        }
+      }
+
+      if (this.hasDynamicPricing) {
+        // Root Dynamic Pricing mapping
+        const verticalData = UpdateRates.buildRequestData(
+          this.useForm.getRawValue(),
+          this.useForm.get('date').value,
+          'dynamic-pricing'
+        );
+
+        verticalData.updates.forEach((item, idx) => {
+          this.useFormControl.dynamicPricing
+            .at(idx)
+            .patchValue(
+              { value: item.rates.every((elm) => elm.dynamicPricing) },
+              { emitEvent: false }
+            );
+        });
       }
     }
   }
@@ -578,7 +590,7 @@ export class UpdateRatesComponent implements OnInit {
         )
         .subscribe(
           (res) => {
-            const data = new UpdateRates().buildDynamicPricing(res.roomType);
+            const data = UpdateRates.buildDynamicPricing(res.roomType);
             dynamicPrice.roomControls.forEach((roomType) => {
               (roomType.roomTypeFG.get(
                 'ratePlans'
@@ -612,6 +624,12 @@ export class UpdateRatesComponent implements OnInit {
           },
           this.handleFinal
         )
+    );
+  }
+
+  initDynamicPriceSubscription() {
+    this.hasDynamicPricing = this.subscriptionPlanService.checkModuleSubscription(
+      ModuleNames.DYNAMIC_PRICING
     );
   }
 

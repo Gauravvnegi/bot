@@ -98,11 +98,13 @@
         >+{{ summaryData.taxesAndFees }}</span
       >
     </p>
-    <hospitality-bot-button
-      [label]="detailsView ? 'View Less' : 'View Details'"
-      variant="text"
-      (onClick)="detailsView = !detailsView"
-    ></hospitality-bot-button>
+    <div class="view-details-btn">
+      <hospitality-bot-button
+        [label]="detailsView ? 'View Less' : 'View Details'"
+        variant="text"
+        (onClick)="detailsView = !detailsView"
+      ></hospitality-bot-button>
+    </div>
     <ng-container [ngTemplateOutlet]="detailsViewTemplate"> </ng-container>
     <p
       class="bk-summary_priceInfo_perNight"

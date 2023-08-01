@@ -237,14 +237,15 @@ export class ReservationFormData {
     this.guestInformation = new GuestInfo().deserialize(input);
     this.paymentMethod = new PaymentInfo().deserialize(input);
     this.offerId = input?.id;
-    this.roomInformation = input?.bookingItems.map((item: BookingItem) => ({
-      adultCount: item.adultCount,
-      childCount: item.childCount,
-      roomTypeId: item.roomTypeId,
-      ratePlanId: item.ratePlanId,
-      roomNumbers: item.tableNumberOrRoomNumber,
-      roomCount: item.roomCount,
-    }));
+    if (input.bookingItems)
+      this.roomInformation = input?.bookingItems.map((item: BookingItem) => ({
+        adultCount: item.adultCount,
+        childCount: item.childCount,
+        roomTypeId: item.roomTypeId,
+        ratePlanId: item.ratePlanId,
+        roomNumbers: item.tableNumberOrRoomNumber,
+        roomCount: item.roomCount,
+      }));
     return this;
   }
 }
@@ -414,7 +415,7 @@ export class RoomSummaryData {
   totalAmount: number;
   bookingItems: BookingItem[];
   desrialize(input: RoomSummaryResponse) {
-    this.from = input.from
+    this.from = input.from;
     return this;
   }
 }

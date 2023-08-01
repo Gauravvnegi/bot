@@ -1,3 +1,6 @@
 <ng-container [formGroup]="controlContainer.control">
-  <p-inputSwitch  [formControlName]="controlName"></p-inputSwitch>
+  <p-inputSwitch
+    [disabled]="isDisabled"
+    [formControlName]="controlName"
+  ></p-inputSwitch>
 </ng-container>

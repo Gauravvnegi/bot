@@ -137,7 +137,12 @@
             *ngIf="rowData.preparationTime; else emptyCell"
           >
             <div class="primary-text">
-              {{ rowData.preparationTime | date: 'HH:mm' }}
+              {{ rowData.preparationTime / (1000 * 60 * 60) | number: '2.0-0' }}
+              hrs,
+              {{
+                (rowData.preparationTime / (1000 * 60)) % 60 | number: '2.0-0'
+              }}
+              mins
             </div>
           </div>
         </td>

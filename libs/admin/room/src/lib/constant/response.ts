@@ -6,7 +6,7 @@ export const roomStatuses: RoomStatus[] = [
   'INSPECTED',
   'OUT_OF_ORDER',
   'OUT_OF_SERVICE',
-  'UNAVAILABLE',
+  'DIRTY',
 ];
 
 export const roomStatusDetails: Record<
@@ -28,10 +28,6 @@ export const roomStatusDetails: Record<
   OUT_OF_ORDER: {
     label: 'Out of Order',
     type: 'failed',
-  },
-  UNAVAILABLE: {
-    label: 'Unavailable',
-    type: 'unavailable',
   },
   VACANT: {
     label: 'Vacant',

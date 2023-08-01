@@ -1,5 +1,6 @@
 import { EntityState } from '@hospitality-bot/admin/shared';
 import { DateService } from '@hospitality-bot/shared/utils';
+import { convertToTitleCase } from 'libs/admin/shared/src/lib/utils/valueFormatter';
 import { get, set, trim } from 'lodash';
 
 export class InhouseTable {
@@ -57,7 +58,6 @@ export class InhouseData {
     input.rooms.forEach((room) => this.rooms.push(new Room().desrialize(room)));
     Object.assign(
       this,
-      set({}, 'action', get(input, ['action'])),
       set({}, 'closedTime', get(input, ['closedTime'])),
       set({}, 'confirmationNumber', get(input, ['confirmationNumber'])),
       set({}, 'elaspedTime', get(input, ['elaspedTime'])),
@@ -77,6 +77,7 @@ export class InhouseData {
       set({}, 'state', get(input, ['state'])),
       set({}, 'status', get(input, ['status']))
     );
+    this.action = convertToTitleCase(input?.action);
 
     return this;
   }

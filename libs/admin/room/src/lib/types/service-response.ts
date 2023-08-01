@@ -3,7 +3,6 @@ export type RoomStatus =
   | 'INSPECTED'
   | 'OUT_OF_SERVICE'
   | 'OUT_OF_ORDER'
-  | 'UNAVAILABLE'
   | 'DIRTY';
 
 export type RoomTypeStatus = 'ACTIVE' | 'INACTIVE';
@@ -31,9 +30,9 @@ export type RoomResponse = {
   features: Features[];
   status: RoomStatus;
   //--- can be modified
-  toDate: number;
-  fromDate: number;
-  remarks: string;
+  currentStatusFrom: number;
+  currentStatusTo: number;
+  remark: string;
 
   source?: string;
   price: number;

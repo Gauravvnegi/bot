@@ -132,10 +132,10 @@ export class ManageReservationService extends ApiService {
     //   phoneNumber: formValue?.guestInformation?.phoneNumber ?? '',
     // };
     // reservationData.guestDetails = formValue.guestInformation.guestDetails;
-    reservationData.roomTypeId = formValue.roomInformation?.roomTypeId ?? '';
-    reservationData.adultCount = formValue.roomInformation?.adultCount ?? 0;
-    reservationData.childCount = formValue.roomInformation?.childCount ?? 0;
-    reservationData.roomCount = formValue.roomInformation?.roomCount ?? 0;
+    // reservationData.roomTypeId = formValue.roomInformation?.roomTypeId ?? '';
+    // reservationData.adultCount = formValue.roomInformation?.adultCount ?? 0;
+    // reservationData.childCount = formValue.roomInformation?.childCount ?? 0;
+    // reservationData.roomCount = formValue.roomInformation?.roomCount ?? 0;
     reservationData.from = formValue.reservationInformation.from ?? 0;
     reservationData.to = formValue.reservationInformation.to ?? 0;
     reservationData.reservationType =
@@ -145,13 +145,6 @@ export class ManageReservationService extends ApiService {
       formValue.reservationInformation.sourceName ?? '';
     reservationData.marketSegment =
       formValue.reservationInformation.marketSegment ?? '';
-    reservationData.address = {
-      addressLine1: formValue.address.addressLine1 ?? '',
-      city: formValue.address.city ?? '',
-      state: formValue.address.state ?? '',
-      countryCode: formValue.address.countryCode ?? '',
-      postalCode: formValue.address.postalCode ?? '',
-    };
     reservationData.paymentMethod = formValue.paymentMethod.paymentMethod ?? '';
     reservationData.totalPaidAmount =
       formValue.paymentMethod.totalPaidAmount ?? 0;

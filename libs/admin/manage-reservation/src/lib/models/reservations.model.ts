@@ -233,14 +233,17 @@ export class ReservationFormData {
     this.guestInformation = new GuestInfo().deserialize(input);
     this.paymentMethod = new PaymentInfo().deserialize(input);
     this.offerId = input?.offerId;
-    this.roomInformation = input.bookingItems.map((item: RoomTypeInfoRes) => ({
-      adultCount: item.adultCount,
-      childCount: item.childCount,
-      roomTypeId: item.roomTypeId,
-      ratePlanId: item.ratePlanTypeId,
-      roomNumbers: item.roomNumbers,
-      roomCount: item.roomCount,
-    }));
+    if (input.bookingItems)
+      this.roomInformation = input?.bookingItems.map(
+        (item: RoomTypeInfoRes) => ({
+          adultCount: item.adultCount,
+          childCount: item.childCount,
+          roomTypeId: item.roomTypeId,
+          ratePlanId: item.ratePlanTypeId,
+          roomNumbers: item.roomNumbers,
+          roomCount: item.roomCount,
+        })
+      );
     return this;
   }
 }

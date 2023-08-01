@@ -1,4 +1,9 @@
-import { Chip, Cols, FlagType, Status } from '@hospitality-bot/admin/shared';
+import {
+  Chip,
+  Cols,
+  FlagType,
+  Option,
+} from '@hospitality-bot/admin/shared';
 import { ManageSiteStatus } from './manage-site';
 
 export const status = [
@@ -111,4 +116,11 @@ export const cols: Cols[] = [
     sortType: 'string',
     width: '20%',
   },
+];
+
+export const MenuOptions: Option[] = [
+  { label: 'Edit', value: 'EDIT' },
+  { label: 'Clone', value: 'CLONE' },
+  { label: 'Delete', value: 'DELETE' },
+  { label: 'Copy URL', value: 'COPY_URL' },
 ];

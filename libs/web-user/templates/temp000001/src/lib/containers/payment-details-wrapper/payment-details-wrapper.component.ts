@@ -93,15 +93,14 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
         const gatewayDetails = data?.paymentConfiguration?.map((gateway) => ({
           gatewayType: gateway?.type,
           imgSrc:
-            gateway?.imgSrc || gateway?.type === 'CCAVENUE'
-              ? 'https://nyc3.digitaloceanspaces.com/botfiles/bot/entity/roseate/banner/ccavenue.webp'
+            // gateway?.imgSrc ||
+            gateway?.type === 'CCAVENUE'
+              ? 'https://nyc3.digitaloceanspaces.com/botfiles/bot/payment_method/ccavenue.png'
               : 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/PayU.svg/1200px-PayU.svg.png',
           payload: {
             redirectUrl: `${environment.host_url}${this.router.url}&entity=payment`,
           },
         }));
-
-        console.log(gatewayDetails)
 
         this.paymentUrl = initPaymentModule({
           userInfo: {

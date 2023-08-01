@@ -55,7 +55,6 @@ export class UpdateRatesComponent implements OnInit {
   currentDate = new Date();
 
   $subscription = new Subscription();
-  dynamicPricing = new Map<number, boolean>();
   ratesRoomDetails = new Map<string, RoomMapType>();
 
   constructor(
@@ -267,7 +266,6 @@ export class UpdateRatesComponent implements OnInit {
       );
 
       this.addRatesAndRestrictionControl(ratePlansControl, ratePlanIdx);
-
       this.addChannelsControl(ratePlan.channels, roomTypeIdx, ratePlanIdx);
     });
   }
@@ -429,7 +427,6 @@ export class UpdateRatesComponent implements OnInit {
         .subscribe(
           (res) => {
             const data = new UpdateRates().deserialize(res.roomType);
-            this.dynamicPricing = data.dynamicPricing;
             this.ratesRoomDetails = data.ratesRoomDetails;
             this.setRoomDetails(selectedDate);
             this.loading = false;
@@ -459,7 +456,8 @@ export class UpdateRatesComponent implements OnInit {
 
     const data = UpdateRates.buildRequestData(
       this.useForm.getRawValue(),
-      fromDate
+      fromDate,
+      'submit-form'
     );
 
     this.$subscription.add(
@@ -492,17 +490,6 @@ export class UpdateRatesComponent implements OnInit {
     let currentDate = new Date(fromDate);
 
     if (roomTypeControls.length > 0) {
-      //Root Dynamic Pricing mapping
-      this.useFormControl.dynamicPricing.controls.forEach(
-        (dynamicPrice: FormGroup) => {
-          dynamicPrice.controls.value.patchValue(
-            this.dynamicPricing[currentDate.getTime()] ?? false,
-            { emitEvent: false }
-          );
-          currentDate.setDate(currentDate.getDate() + 1);
-        }
-      );
-
       // Rate Plans Mapping
       currentDate = new Date(fromDate);
       for (let roomControl of roomTypeControls) {
@@ -534,24 +521,37 @@ export class UpdateRatesComponent implements OnInit {
         });
 
         //roomType dynamic price mapping
-        this.ratesRoomDetails[roomId] &&
-          (roomControl.get('dynamicPrice') as FormArray).controls.forEach(
-            (dynamicPriceControl, index) => {
-              let currentRoomDate = new Date(currentDate);
-              currentRoomDate.setDate(currentDate.getDate() + index);
-              const dynamicPriceStatus =
-                this.ratesRoomDetails[roomId].availability[
-                  currentRoomDate.getTime()
-                ]?.dynamicPrice ?? false;
+        (roomControl.get('dynamicPrice') as FormArray).controls.forEach(
+          (dynamicPriceControl, index) => {
+            let currentRoomDate = new Date(fromDate);
+            currentRoomDate.setDate(currentRoomDate.getDate() + index);
+            const dynamicPriceStatus =
+              this.ratesRoomDetails[roomId]?.availability[
+                currentRoomDate.getTime()
+              ]?.dynamicPrice ?? false;
 
-              if (dynamicPriceStatus) {
-                this.disableRateControls(roomControl as FormGroup, index, {
-                  value: dynamicPriceStatus,
-                });
-              }
-            }
-          );
+            this.disableRateControls(roomControl as FormGroup, index, {
+              value: dynamicPriceStatus,
+            });
+          }
+        );
       }
+
+      // Root Dynamic Pricing mapping
+      const verticalData = UpdateRates.buildRequestData(
+        this.useForm.getRawValue(),
+        this.useForm.get('date').value,
+        'dynamic-pricing'
+      );
+
+      verticalData.updates.forEach((item, idx) => {
+        this.useFormControl.dynamicPricing
+          .at(idx)
+          .patchValue(
+            { value: item.rates.every((elm) => elm.dynamicPricing) },
+            { emitEvent: false }
+          );
+      });
     }
   }
 
@@ -578,7 +578,7 @@ export class UpdateRatesComponent implements OnInit {
         )
         .subscribe(
           (res) => {
-            const data = new UpdateRates().buildDynamicPricing(res.roomType);
+            const data = UpdateRates.buildDynamicPricing(res.roomType);
             dynamicPrice.roomControls.forEach((roomType) => {
               (roomType.roomTypeFG.get(
                 'ratePlans'

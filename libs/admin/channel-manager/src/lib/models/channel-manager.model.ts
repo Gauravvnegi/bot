@@ -1,3 +1,4 @@
+import { FormGroup } from '@angular/forms';
 import {
   RoomMapType,
   UpdateInventoryType,
@@ -108,7 +109,6 @@ export class UpdateInventory {
 }
 
 export class UpdateRates {
-  dynamicPricing = new Map<number, boolean>();
   ratesRoomDetails = new Map<string, RoomMapType>();
 
   deserialize(input: ChannelManagerResponse) {
@@ -164,17 +164,12 @@ export class UpdateRates {
           available: currentRatePlan.rate,
         };
       });
-
-      //Configuration of root dynamic pricing
-      this.dynamicPricing[currentDay] = currentData.rates.every(
-        (item) => item.dynamicPricing
-      );
     });
 
     return this;
   }
 
-  buildDynamicPricing(input: ChannelManagerResponse) {
+  static buildDynamicPricing(input: ChannelManagerResponse) {
     let dynamicPricing = new Map<string, Map<string, number>>();
     (input.updates as UpdateRatesResponse[])?.forEach((currentData) => {
       currentData.rates.forEach((ratePlans) => {
@@ -187,18 +182,14 @@ export class UpdateRates {
     });
     return dynamicPricing;
   }
-
-  static buildRequestData(formData, fromDate: number) {
-    let dynamicPricingMap = new Map<number, boolean>();
-    //if dynamic pricing true then do not send data of those date
+  static buildRequestData(
+    formData,
+    fromDate: number,
+    type: 'submit-form' | 'dynamic-pricing'
+  ) {
     let updates: UpdateRatesType[] = [];
 
     let selectedDate = new Date(fromDate);
-    formData.dynamicPricing.forEach((price) => {
-      dynamicPricingMap[selectedDate.getTime()] = price.value;
-      selectedDate.setDate(selectedDate.getDate() + 1);
-    });
-
     formData.roomTypes.forEach((room) => {
       room.ratePlans.forEach((ratePlan) => {
         selectedDate = new Date(fromDate);
@@ -219,7 +210,9 @@ export class UpdateRates {
           };
 
           // filter rates plan who have not any input on this particular day
-          perDayData.rates = perDayData.rates.filter((item) => item.rate);
+          perDayData.rates = perDayData.rates.filter((item) =>
+            type === 'submit-form' ? item.rate : true
+          );
           selectedDate.setDate(selectedDate.getDate() + 1);
           return perDayData;
         });
@@ -227,7 +220,11 @@ export class UpdateRates {
     });
 
     // filter data who haven't exist any rate plans
-    return { updates: updates.filter((item) => item.rates.length > 0) };
+    return {
+      updates: updates.filter((item) =>
+        type === 'submit-form' ? item.rates.length > 0 : true
+      ),
+    };
   }
 
   static buildBulkUpdateRequest(formData) {

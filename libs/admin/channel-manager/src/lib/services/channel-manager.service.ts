@@ -26,7 +26,7 @@ export class ChannelManagerService extends ApiService {
 
   getRoomDetails(entityId) {
     return this.get(
-      `/api/v1/entity/${entityId}/inventory?type=ROOM_TYPE&offset=0&limit=${100}`
+      `/api/v1/entity/${entityId}/inventory?roomTypeStatus=true&type=ROOM_TYPE&offset=0&limit=${100}`
     );
   }
 

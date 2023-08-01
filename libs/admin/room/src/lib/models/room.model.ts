@@ -34,18 +34,20 @@ export class SingleRoom {
   id: string;
   roomNumber: string;
   floorNumber: string;
-  roomStatus: RoomStatus;
+  status: RoomStatus;
   currency: string;
   price: number;
   roomTypeId: string;
   featureIds: string[];
   removeFeatures?: string[];
-
+  remark?: string;
+  currentStatusTo?: number;
+  currentStatusFrom?: number;
   deserialize(input: SingleRoomData) {
     this.id = input.id ?? '';
     this.roomNumber = input.roomNo ?? '';
     this.floorNumber = input.floorNo ?? '';
-    this.roomStatus = input.status;
+    this.status = input.status;
     this.currency = input.currency ?? '';
     this.price = input.price ?? null;
     this.roomTypeId = input.roomTypeId ?? '';
@@ -53,6 +55,9 @@ export class SingleRoom {
     this.removeFeatures = input.removeFeatures.length
       ? input.removeFeatures
       : null; //as per BE requirement
+    this.remark = input.remark ?? '';
+    this.currentStatusTo = input?.currentStatusTo;
+    this.currentStatusFrom = input?.currentStatusFrom;
     return this;
   }
 }

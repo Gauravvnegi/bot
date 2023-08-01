@@ -147,7 +147,7 @@ export class RequestListComponent implements OnInit, OnDestroy {
 
           setTimeout(() => {
             this.loadData(0, this.listData?.length || 10);
-          }, 150);
+          }, 800);
         }
       })
     );

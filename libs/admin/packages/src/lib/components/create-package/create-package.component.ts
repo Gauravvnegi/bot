@@ -94,7 +94,7 @@ export class CreatePackageComponent implements OnInit {
       ],
       imageUrl: ['', Validators.required],
       currency: ['', Validators.required],
-      rate: ['', Validators.required],
+      rate: ['0', [Validators.required, Validators.min(0)]],
       discountType: ['PERCENTAGE', Validators.required],
       discountValue: ['0', [Validators.required, Validators.min(0)]],
       discountedCurrency: ['', Validators.required],
@@ -250,7 +250,6 @@ export class CreatePackageComponent implements OnInit {
     };
 
     const clearError = () => {
-      if (rate.value) rate.setErrors(null);
       if (discountValue.value > 0) discountValue.setErrors(null);
     };
 
@@ -399,7 +398,7 @@ export class CreatePackageComponent implements OnInit {
       discountedCurrency,
       ...rest
     } = this.useForm.getRawValue() as PackageFormData;
-
+    this.loading = true;
     if (this.packageId) {
       this.$subscription.add(
         this.packagesService

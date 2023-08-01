@@ -292,7 +292,7 @@ export class CreateOfferComponent implements OnInit {
         roomTypeIds: [],
       }
     );
-
+    this.loading = true;
     if (!!this.offerId) {
       this.subscription$.add(
         this.offerService
@@ -324,6 +324,7 @@ export class CreateOfferComponent implements OnInit {
   }
 
   getOfferById() {
+    this.loading = true;
     this.subscription$.add(
       this.offerService
         .getLibraryItemById<OfferResponse>(this.entityId, this.offerId, {

@@ -1,4 +1,4 @@
-<div class="wrapper">
+<div class="wrapper" [id]="fa.referenceId">
   <mat-horizontal-stepper [@.disabled]="true" #stepper>
     <mat-step></mat-step>
     <mat-step></mat-step>
@@ -31,17 +31,17 @@
     </ng-container>
   </ng-container>
 
-  <div class="footer" *ngIf="stepper.selectedIndex === 0">
-    <hospitality-bot-button
-      label="Schedule"
-      [disabled]="isSending"
-      (click)="scheduleCampaign()"
-      variant="outlined"
-    ></hospitality-bot-button>
-    <hospitality-bot-button
-      [label]="isSending ? 'Sending' : 'Send'"
-      (click)="sendMail()"
-      [disabled]="isSending"
-    ></hospitality-bot-button>
-  </div>
+  <hospitality-bot-form-action
+    [disabled]="stepper.selectedIndex !== 0"
+    class="full-width"
+    [config]="{
+      preLabel: 'Schedule',
+      preSeverity: 'primary',
+      postLabel: 'Send'
+    }"
+    (onPreAction)="scheduleCampaign()"
+    (onPostAction)="sendMail()"
+    #fa
+  >
+  </hospitality-bot-form-action>
 </div>

@@ -5,6 +5,7 @@ import {
   BaseDatatableComponent,
   CookiesSettingsService,
   TableService,
+  Option,
   UserService,
 } from '@hospitality-bot/admin/shared';
 import { ModalComponent } from 'libs/admin/shared/src/lib/components/modal/modal.component';
@@ -18,7 +19,12 @@ import {
 } from '@hospitality-bot/shared/material';
 import { LazyLoadEvent } from 'primeng/api';
 import { Subscription } from 'rxjs';
-import { cols, manageSiteStatus, status } from '../../constant/data-table';
+import {
+  MenuOptions,
+  cols,
+  manageSiteStatus,
+  status,
+} from '../../constant/data-table';
 import { ManageSiteStatus } from '../../constant/manage-site';
 import { ManageSite, ManageSiteList } from '../../models/data-table.model';
 import { ManageSitesService } from '../../services/manage-sites.service';
@@ -47,6 +53,8 @@ export class ManageSiteDataTableComponent extends BaseDatatableComponent {
   userId: string;
   nextState: NextState[];
   $subscription = new Subscription();
+
+  menuOptions: Option[] = MenuOptions;
 
   constructor(
     public fb: FormBuilder,
@@ -113,6 +121,20 @@ export class ManageSiteDataTableComponent extends BaseDatatableComponent {
   selectSite(rowData) {
     if (rowData.id && rowData.status !== ManageSiteStatus.DELETE) {
       this.cookiesSettingService.initPlatformChange(rowData.id, '/pages');
+    }
+  }
+
+  handleMenuClick(value: string, rowData: ManageSite) {
+    switch (value) {
+      case 'EDIT':
+        this.selectSite(rowData);
+        break;
+      case 'CLONE':
+        break;
+      case 'DELETE':
+        break;
+      case 'COPY_URL':
+        break;
     }
   }
 

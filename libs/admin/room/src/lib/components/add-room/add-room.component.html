@@ -82,7 +82,7 @@
     <div class="form-block" [formGroup]="statusQuoForm">
       <hospitality-bot-select
         class="half-width"
-        controlName="roomStatus"
+        controlName="status"
         label="Room Status"
         [options]="roomStatuses"
         [loading]="isRoomInfoLoading"
@@ -90,7 +90,7 @@
       <div class="container" *ngIf="isDateRequired">
         <hospitality-bot-date
           class="half-width"
-          controlName="fromDate"
+          controlName="currentStatusFrom"
           label="From"
           [props]="{ placeholder: 'Select From Date' }"
           [settings]="{
@@ -102,7 +102,7 @@
         ></hospitality-bot-date>
         <hospitality-bot-date
           class="half-width"
-          controlName="toDate"
+          controlName="currentStatusTo"
           label="To"
           [props]="{ placeholder: 'Select To Date' }"
           [settings]="{
@@ -115,7 +115,7 @@
       </div>
       <hospitality-bot-text-area
         class="full-width"
-        controlName="remarks"
+        controlName="remark"
         label="Remarks"
       ></hospitality-bot-text-area>
     </div>
@@ -124,8 +124,8 @@
     class="full-width"
     [loading]="loading"
     [isId]="roomId"
-    (onReset)="resetForm()"
-    (onSave)="handleSubmit()"
+    (onPreAction)="resetForm()"
+    (onPostAction)="handleSubmit()"
     #fa
   >
   </hospitality-bot-form-action>

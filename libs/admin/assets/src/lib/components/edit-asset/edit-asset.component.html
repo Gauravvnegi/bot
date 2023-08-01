@@ -58,8 +58,8 @@
   <hospitality-bot-form-action
     class="full-width"
     [isId]="assetId"
-    (onReset)="resetForm()"
-    (onSave)="handleSubmit()"
+    (onPreAction)="resetForm()"
+    (onPostAction)="handleSubmit()"
     #fa
   >
   </hospitality-bot-form-action>

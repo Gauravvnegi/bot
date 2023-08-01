@@ -71,3 +71,10 @@
   margin: 0px -16px 0 -80px;
   padding: 20px 45px 20px 20px;
 }
+
+:host ::ng-deep .status-toggle {
+  .wrapper {
+    display: flex;
+    gap: 10px;
+  }
+}

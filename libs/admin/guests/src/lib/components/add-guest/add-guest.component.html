@@ -95,9 +95,11 @@
       class="full-width"
       [loading]="loading"
       [isId]="guestId"
-      (onReset)="resetForm()"
-      (onSave)="handleSubmit()"
-      type="Non-sticky"
+      (onPreAction)="resetForm()"
+      (onPostAction)="handleSubmit()"
+      [config]="{
+        type: 'non-sticky'
+      }"
       #fa
     >
     </hospitality-bot-form-action>

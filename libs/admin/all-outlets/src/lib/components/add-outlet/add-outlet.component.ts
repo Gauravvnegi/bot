@@ -49,6 +49,7 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
   isCompLoading = false;
   siteId: string;
   logoUrl: string;
+  redirectUrl: string;
 
   @HostListener('window:beforeunload', ['$event'])
   handleBeforeUnload(event: BeforeUnloadEvent) {
@@ -142,9 +143,9 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
         this.loading = true;
         this.outletService.getOutletById(this.outletId).subscribe(
           (res) => {
-            const { type, subType, logo, ...rest } = res;
+            const { absoluteRoute, type, subType, logo, ...rest } = res;
             this.logoUrl = logo;
-
+            this.redirectUrl = absoluteRoute;
             this.initOptionConfig(type);
 
             this.useForm.get('type').setValue(type);
@@ -376,7 +377,7 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
         'Browse the menu and place your order',
         'Place your orders',
       ],
-      route: 'https://www.test.menu.com/',
+      route: this.redirectUrl,
       logoUrl: this.logoUrl,
     };
     togglePopupCompRef.componentInstance.onClose.subscribe(() => {

@@ -11,6 +11,9 @@ export type BaseRoomForm = {
   status: RoomStatus;
   featureIds: string[];
   removeFeatures?: string[];
+  remark?: string;
+  currentStatusTo?: number;
+  currentStatusFrom?: number;
 };
 
 //  ******** Single Room Interface ********
@@ -38,9 +41,9 @@ export type MultipleRoomForm = BaseRoomForm & {
 export type MultipleRoomData = MultipleRoomBase & BaseRoomForm;
 
 export type StatusQuoForm = {
-  roomStatus: RoomStatus;
-  remarks: string;
+  status: RoomStatus;
+  remark: string;
   foStatus: RoomFoStatus;
-  toDate: string;
-  fromDate: string;
+  currentStatusTo: string;
+  currentStatusFrom: string;
 };

@@ -48,14 +48,14 @@ export class BookingInfoComponent implements OnInit {
     this.getCountryCode();
     this.initDefaultDates();
     this.listenForDateChange();
-    this.listenFormChanges();
+    // this.listenFormChanges();
   }
 
-  listenFormChanges() {
-    this.reservationInfoControls.source.valueChanges.subscribe((res) => {
-      this.reservationInfoControls.sourceName.setValue('');
-    });
-  }
+  // listenFormChanges() {
+  //   this.reservationInfoControls.source.valueChanges.subscribe((res) => {
+  //     this.reservationInfoControls.sourceName.setValue('');
+  //   });
+  // }
 
   /**
    * Set default to and from dates.

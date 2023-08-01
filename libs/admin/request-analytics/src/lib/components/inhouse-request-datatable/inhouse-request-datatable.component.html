@@ -157,18 +157,20 @@
             </div>
           </td>
           <td>
-            <mat-select
-              class="form-elements"
-              placeholder=""
-              [value]="rowData?.action"
-              (selectionChange)="handleStatusChange(rowData, $event)"
-            >
-              <mat-option
-                [value]="item.value"
-                *ngFor="let item of optionLabels"
-                >{{ item.label }}</mat-option
+            <div class="center-align">
+              <mat-select
+                class="form-elements"
+                placeholder=""
+                [value]="rowData?.action"
+                (selectionChange)="handleStatusChange(rowData, $event)"
               >
-            </mat-select>
+                <mat-option
+                  [value]="item.value"
+                  *ngFor="let item of optionLabels"
+                  >{{ item.label }}</mat-option
+                >
+              </mat-select>
+            </div>
           </td>
         </tr>
       </ng-template>

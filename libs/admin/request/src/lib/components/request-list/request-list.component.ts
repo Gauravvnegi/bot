@@ -144,7 +144,10 @@ export class RequestListComponent implements OnInit, OnDestroy {
       this._requestService.refreshData.subscribe((response) => {
         if (response) {
           this.loading = true;
-          this.loadData(0, this.listData?.length || 10);
+
+          setTimeout(() => {
+            this.loadData(0, this.listData?.length || 10);
+          }, 800);
         }
       })
     );
@@ -297,7 +300,6 @@ export class RequestListComponent implements OnInit, OnDestroy {
    */
   setSelectedRequest(item: InhouseData, i: number): void {
     clearInterval(this.timeInterval);
-
 
     const request = item;
     request.timeLeft = this.timeLeft[i];

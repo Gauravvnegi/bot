@@ -122,13 +122,26 @@ export class CreateFoodPackageComponent extends OutletBaseComponent
       data = { ...data, id: this.foodPackageId };
       this.$subscription.add(
         this.outletService
-          .updateFoodPackage(this.foodPackageId, data)
+          .updateFoodPackage(
+            this.outletId,
+            this.foodPackageId,
+
+            {
+              ...data,
+              type: 'FOOD_PACKAGE',
+              source: 1,
+            },
+            {
+              params: '?type=FOOD_PACKAGE',
+            }
+          )
           .subscribe(this.handleSuccess, this.handleErrors)
       );
     } else {
+      const { foodItems, ...rest } = data;
       this.$subscription.add(
         this.outletService
-          .addFoodPackage(this.outletId, data)
+          .addFoodPackage(this.outletId, rest)
           .subscribe((res) => {
             this.handleSuccess(res.id);
           }, this.handleErrors)
@@ -180,7 +193,26 @@ export class CreateFoodPackageComponent extends OutletBaseComponent
     });
   };
 
-  handleSave() {}
+  handleSave() {
+    const { foodItems } = this.useForm.getRawValue();
+    this.$subscription.add(
+      this.outletService
+        .updateFoodPackage(
+          this.outletId,
+          this.foodPackageId,
+
+          {
+            foodItems,
+            type: 'FOOD_PACKAGE',
+            source: 1,
+          },
+          {
+            params: '?type=FOOD_PACKAGE',
+          }
+        )
+        .subscribe(this.handleSuccess, this.handleErrors)
+    );
+  }
 
   /**
    * @function handleReset

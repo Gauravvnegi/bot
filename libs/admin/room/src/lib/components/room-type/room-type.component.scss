@@ -6,6 +6,11 @@
   flex-wrap: wrap;
 }
 
+@mixin wrapper-gap {
+  gap: 10%;
+  row-gap: 30px;
+}
+
 .wrapper {
   border-radius: 5px;
 }
@@ -97,20 +102,22 @@
 
 .room-occupancy-form-wrapper {
   @include form-wrapper();
-  gap: 10%;
-  row-gap: 30px;
+  @include wrapper-gap();
 }
 
 .room-pricing-form-wrapper {
   padding: 34.5px 50px 37px 50px;
-  gap: 10%;
-  row-gap: 30px;
+  @include wrapper-gap();
+}
+
+.default-rate-plan {
+  padding: 34.5px 50px 0px 50px;
+  @include wrapper-gap();
 }
 
 .rate-plan-wrapper {
-  @include form-wrapper();
-  gap: 10%;
-  row-gap: 30px;
+  padding: 0px 50px 37px 50px;
+  @include wrapper-gap();
 }
 
 .input-fields {
@@ -158,6 +165,9 @@
 }
 
 :host ::ng-deep .header-wrapper {
+  display: flex;
+  gap: 10px;
+  align-items: center;
   .p-menu {
     left: auto !important;
     top: auto !important;
@@ -189,9 +199,21 @@
   @include flex-space-between-cen-Algn;
   @include contained-primary-button;
   gap: 5px;
+  padding: 7px 11.7px 7.5px 12px;
   font-size: 16px;
   font-weight: $bold;
   cursor: pointer;
+  border: none;
+  &:hover {
+    border: 1px solid $primary-cta;
+  }
+  &:focus {
+    border: 1px solid $primary-cta;
+    box-shadow: 0px 0px 0px 1px $primary-cta;
+  }
+  &:focus-visible {
+    outline: none;
+  }
 }
 
 .disabled-option {

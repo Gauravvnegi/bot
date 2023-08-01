@@ -15,7 +15,6 @@ import { BaseDatatableComponent } from 'libs/admin/shared/src/lib/components/dat
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
 import { TableService } from 'libs/admin/shared/src/lib/services/table.service';
 import { SnackBarService } from 'libs/shared/material/src';
-import { SortEvent } from 'primeng/api';
 import { Observable, Subscription, forkJoin } from 'rxjs';
 import { UserPermissionTable } from '../../models/user-permission-table.model';
 import { ManagePermissionService } from '../../services/manage-permission.service';
@@ -78,7 +77,6 @@ export class UserPermissionDatatableComponent extends BaseDatatableComponent
     private _managePermissionService: ManagePermissionService,
     public userService: UserService,
     private snackbarService: SnackBarService,
-    private location: Location,
     protected tabFilterService: TableService
   ) {
     super(fb, tabFilterService);

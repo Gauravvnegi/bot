@@ -36,6 +36,8 @@ export class BookingSummaryComponent implements OnInit {
   displayBookingOffer = false;
   parentFormGroup: FormGroup;
   isBooking = false;
+  detailsView = false;
+  dateDifference: number = 1;
 
   heading = '';
   stayInfo = '';
@@ -77,6 +79,9 @@ export class BookingSummaryComponent implements OnInit {
     this.entityId = this.globalFilterService.entityId;
     this.reservationId = this.activatedRoute.snapshot.paramMap.get('id');
     this.parentFormGroup = this.controlContainer.control as FormGroup;
+    this.formService.dateDifference.subscribe((res) => {
+      this.dateDifference = res;
+    });
   }
 
   offerSelect(item?: any): void {

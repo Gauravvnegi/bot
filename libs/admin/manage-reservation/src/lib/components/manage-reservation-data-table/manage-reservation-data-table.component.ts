@@ -43,7 +43,8 @@ import { ManageReservationService } from '../../services/manage-reservation.serv
 import { ReservationListResponse } from '../../types/response.type';
 import { FormService } from '../../services/form.service';
 import { SelectedEntity } from '../../types/reservation.type';
-import { skip, distinctUntilChanged, tap } from 'rxjs/operators';
+import { distinctUntilChanged, tap } from 'rxjs/operators';
+import { InvoiceService } from 'libs/admin/invoice/src/lib/services/invoice.service';
 
 @Component({
   selector: 'hospitality-bot-manage-reservation-data-table',
@@ -90,7 +91,8 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
     protected snackbarService: SnackBarService,
     private router: Router,
     private configService: ConfigService,
-    private modalService: ModalService
+    private modalService: ModalService,
+    private invoiceService: InvoiceService
   ) {
     super(fb, tabFilterService);
   }
@@ -398,6 +400,7 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
         this.editReservation(id);
         break;
       case 'PRINT_INVOICE':
+        this.invoiceService.handleInvoiceDownload(id);
         break;
       case 'ASSIGN_ROOM':
       case 'ASSIGN_TABLE':

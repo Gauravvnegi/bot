@@ -45,7 +45,10 @@
             class="main-section"
             *ngIf="!isRoomsEmpty && allRoomTypes?.length"
           >
-            <div class="dynamic-section left-main-cell">
+            <div
+              *ngIf="hasDynamicPricing"
+              class="dynamic-section left-main-cell"
+            >
               <span class="text">
                 Dynamic Pricing
               </span>
@@ -72,7 +75,10 @@
                       </div>
                     </div>
                   </div>
-                  <div class="room-dynamic-section left-main-cell">
+                  <div
+                    *ngIf="hasDynamicPricing"
+                    class="room-dynamic-section left-main-cell"
+                  >
                     <span class="text">
                       Dynamic Pricing
                     </span>
@@ -194,7 +200,11 @@
             class="main-section"
             *ngIf="!isRoomsEmpty && allRoomTypes?.length"
           >
-            <div class="data-cell-wrapper" formArrayName="dynamicPricing">
+            <div
+              *ngIf="hasDynamicPricing"
+              class="data-cell-wrapper"
+              formArrayName="dynamicPricing"
+            >
               <div class="data-cell dynamic-section">
                 <div
                   class="cell"
@@ -243,7 +253,11 @@
                     </div>
                   </div>
                 </div>
-                <div class="data-cell-wrapper" formArrayName="dynamicPrice">
+                <div
+                  *ngIf="hasDynamicPricing"
+                  class="data-cell-wrapper"
+                  formArrayName="dynamicPrice"
+                >
                   <div class="data-cell room-dynamic-section">
                     <div
                       class="cell"

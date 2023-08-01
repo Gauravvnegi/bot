@@ -16,7 +16,7 @@ import { TemplateLoaderService } from 'libs/web-user/shared/src/lib/services/tem
 import { TemplateService } from 'libs/web-user/shared/src/lib/services/template.service';
 import { ITemplateTemp000001 } from 'libs/web-user/shared/src/lib/types/temp000001';
 import { Subscription } from 'rxjs';
-import { StepsArray } from 'libs/web-user/shared/src/lib/constants/common';
+import { stepsIndexData } from 'libs/web-user/shared/src/lib/constants/common';
 import { Temp000001StepperComponent } from '../../presentational/temp000001-stepper/temp000001-stepper.component';
 
 @Component({
@@ -73,9 +73,8 @@ export class MainComponent implements OnInit, OnDestroy {
             this.listenForStepperChange();
             this.reservationData = reservationData;
 
-            const stepIndex = StepsArray.indexOf(
-              reservationData.stateCompletedSteps
-            );
+            const stepIndex =
+              stepsIndexData[reservationData.stateCompletedSteps] ?? 0;
 
             this.reservationData.stateCompletedSteps =
               stepIndex === -1 ? 0 : stepIndex;

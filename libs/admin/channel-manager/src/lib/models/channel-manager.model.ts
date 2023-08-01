@@ -3,7 +3,11 @@ import {
   UpdateInventoryType,
   UpdateRatesType,
 } from '../types/channel-manager.types';
-import { ChannelManagerResponse } from '../types/response.type';
+import {
+  ChannelManagerResponse,
+  Rates,
+  UpdateRatesResponse,
+} from '../types/response.type';
 
 export class UpdateInventory {
   perDayRoomAvailability = new Map<
@@ -110,7 +114,6 @@ export class UpdateRates {
   deserialize(input: ChannelManagerResponse) {
     input.updates?.forEach((currentData) => {
       const currentDay = currentData.startDate ?? currentData.endDate;
-      this.ratesRoomDetails;
       // rate plan iteration
       const ratePlanData = currentData.inventoryDataMap;
       Object.keys(ratePlanData).forEach((currentRoomId) => {
@@ -125,14 +128,18 @@ export class UpdateRates {
         this.ratesRoomDetails[currentRoomId].availability[currentDay] = {
           quantity: available,
           occupancy: occupancy,
+          dynamicPrice: false,
         };
       });
+
       // all rates plan on current day
       currentData.rates.forEach((currentRatePlan) => {
-        this.dynamicPricing[currentDay] = currentRatePlan.dynamicPricing;
-
         const currentRoomId = currentRatePlan.roomTypeId;
         const currentRatePlanId = currentRatePlan.ratePlanId;
+        // For each room type
+        this.ratesRoomDetails[currentRoomId].availability[
+          currentDay
+        ].dynamicPrice = currentRatePlan.dynamicPricing;
 
         if (!this.ratesRoomDetails[currentRoomId]) {
           this.ratesRoomDetails[currentRoomId] = {
@@ -157,9 +164,28 @@ export class UpdateRates {
           available: currentRatePlan.rate,
         };
       });
+
+      //Configuration of root dynamic pricing
+      this.dynamicPricing[currentDay] = currentData.rates.every(
+        (item) => item.dynamicPricing
+      );
     });
 
     return this;
+  }
+
+  buildDynamicPricing(input: ChannelManagerResponse) {
+    let dynamicPricing = new Map<string, Map<string, number>>();
+    (input.updates as UpdateRatesResponse[])?.forEach((currentData) => {
+      currentData.rates.forEach((ratePlans) => {
+        if (!dynamicPricing[ratePlans.roomTypeId]) {
+          dynamicPricing[ratePlans.roomTypeId] = new Map();
+        }
+        dynamicPricing[ratePlans.roomTypeId][ratePlans.ratePlanId] =
+          ratePlans.rate;
+      });
+    });
+    return dynamicPricing;
   }
 
   static buildRequestData(formData, fromDate: number) {
@@ -181,7 +207,7 @@ export class UpdateRates {
             roomTypeId: room.value,
             rate: rate.value ? +rate.value : null,
             ratePlanId: ratePlan.value,
-            dynamicPricing: false, // get current day dynamic pricing status from Map, if required ex- dynamicPricingMap[currentDay]
+            dynamicPricing: room['dynamicPrice'][dayIndex]?.value, // get current day dynamic pricing status from Map, if required ex- dynamicPricingMap[currentDay]
           };
 
           let perDayData = {

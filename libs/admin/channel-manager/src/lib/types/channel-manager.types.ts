@@ -12,7 +12,6 @@ export type RoomTypes = {
     label: string;
     value: string;
     channels: Channel[];
-    dynamicPrice: boolean[];
   }[];
 };
 
@@ -21,7 +20,7 @@ export type DateOption = { day: string; date: number };
 export type RoomMapType = {
   availability: Map<
     number, // date
-    { quantity: number; occupy: number }
+    { quantity: number; occupy: number; dynamicPrice: boolean }
   >;
 
   ratePlans: Map<

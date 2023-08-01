@@ -101,7 +101,7 @@
                   (keydown.space)="$event.stopPropagation()"
                 />
                 <hospitality-bot-toggle-switch-with-label
-                  [isToggleOn]="true"
+                  [isToggleOn]="defaultRatePlanStatus"
                   (onToggleSwitch)="onToggleSwitch($event)"
                   click-stop-propagation
                 ></hospitality-bot-toggle-switch-with-label>
@@ -265,7 +265,7 @@
                   (keydown.space)="$event.stopPropagation()"
                 />
                 <hospitality-bot-toggle-switch-with-label
-                  [isToggleOn]="true"
+                  [isToggleOn]="ratePlanGroup.get('status').value"
                   (onToggleSwitch)="onToggleSwitch($event, i)"
                   click-stop-propagation
                 ></hospitality-bot-toggle-switch-with-label>

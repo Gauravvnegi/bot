@@ -98,6 +98,7 @@ export type RatePlan = {
   ratePlanId?: string | null;
   basePriceCurrency: string;
   basePrice: number;
+  status?: boolean;
 };
 
 export type AddedRatePlans = {

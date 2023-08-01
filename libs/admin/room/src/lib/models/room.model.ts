@@ -136,6 +136,7 @@ export class RoomTypeForm {
       basePrice: input.pricingDetails.base,
       basePriceCurrency: input.pricingDetails.currency,
       ratePlanId: defaultRatePlan[0].id,
+      status: defaultRatePlan[0].status
     };
     this.dynamicRatePlans = {
       paxPriceCurrency: input.pricingDetails.currency,
@@ -149,6 +150,8 @@ export class RoomTypeForm {
       minPriceCurrency: input.pricingDetails.currency,
       minPrice: input.pricingDetails.min,
       ratePlanId: defaultRatePlan[0].id,
+      status: defaultRatePlan[0].status
+
     };
 
     this.ratePlans = input.ratePlans

@@ -46,11 +46,13 @@
       class="bk-summary_priceInfo_perNight"
       *ngIf="bookingType === 'ROOM_TYPE'"
     >
-      <span class="bk-summary_priceInfo_perNight_label">Per Night</span>
-      <s
-        class="bk-summary_priceInfo_perNight_amount"
-        >{{ summaryData?.totalAmount | currency: 'INR' }}</s
+      <span class="bk-summary_priceInfo_perNight_label"
+        >For {{ dateDifference }}
+        {{ dateDifference > 1 ? 'nights' : 'night' }}</span
       >
+      <s class="bk-summary_priceInfo_perNight_amount">{{
+        summaryData?.totalAmount | currency: 'INR'
+      }}</s>
     </p>
     <p class="bk-summary_priceInfo_person" *ngIf="bookingType === 'ROOM_TYPE'">
       <span class="bk-summary_priceInfo_perNight_label">
@@ -96,6 +98,12 @@
         >+{{ summaryData.taxesAndFees }}</span
       >
     </p>
+    <hospitality-bot-button
+      [label]="detailsView ? 'View Less' : 'View Details'"
+      variant="text"
+      (onClick)="detailsView = !detailsView"
+    ></hospitality-bot-button>
+    <ng-container [ngTemplateOutlet]="detailsViewTemplate"> </ng-container>
     <p
       class="bk-summary_priceInfo_perNight"
       *ngIf="
@@ -159,4 +167,8 @@
       </div>
     </div>
   </ng-template>
+</ng-template>
+
+<ng-template #detailsViewTemplate>
+  <ng-container *ngIf="detailsView"> </ng-container>
 </ng-template>

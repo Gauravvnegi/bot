@@ -154,15 +154,14 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
     this.$selectedEntitySubscription.add(
       this.formService.selectedEntity
         .pipe(
-          skip(1), // Skip the initial value emitted when the subscription is first established
           distinctUntilChanged((prev, curr) => prev.subType === curr.subType), // Compare subType property for changes
           tap((res) => {
             this.selectedEntity = res;
-            this.isSelectedEntityChanged = false; // Set to false by default
           })
         )
         .subscribe((res) => {
           this.isSelectedEntityChanged = true; // Since we only get here when selectedEntity has changed
+          this.resetTableValues();
           this.initDetails(this.selectedEntity);
           this.initTableValue();
         })
@@ -214,6 +213,7 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
         },
         () => {
           this.loading = false;
+          this.isSelectedEntityChanged = false;
         }
       );
   }
@@ -249,23 +249,6 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
         this.menuOptions = RestaurantMenuOptions;
       }
     }
-  }
-
-  /**
-   * To get query params
-   */
-  getOutletConfig(): QueryConfig {
-    const config = {
-      params: this.adminUtilityService.makeQueryParams([
-        ...this.globalQueries,
-        ...this.getSelectedQuickReplyFilters(),
-        {
-          offset: this.first,
-          limit: this.rowsPerPage,
-        },
-      ]),
-    };
-    return config;
   }
 
   /**
@@ -339,12 +322,21 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
   }
 
   changeStatus(status: ReservationStatusType, reservationData) {
+    let bookingType =
+      this.selectedEntity.type === EntityType.HOTEL
+        ? EntitySubType.ROOM_TYPE
+        : EntityType.OUTLET;
     this.loading = true;
     this.$subscription.add(
       this.manageReservationService
-        .updateBookingStatus(reservationData.id, this.entityId, {
-          reservationType: status,
-        })
+        .updateBookingStatus(
+          reservationData.id,
+          this.selectedEntity.id,
+          bookingType,
+          {
+            reservationType: status,
+          }
+        )
         .subscribe(
           (res) => {
             this.values.find(

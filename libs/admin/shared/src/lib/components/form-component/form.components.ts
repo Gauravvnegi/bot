@@ -162,7 +162,7 @@ export class FormComponent implements OnInit {
       wrapper__vertical: this.alignment === 'vertical',
       wrapper__horizontal: this.alignment === 'horizontal',
       'custom-disabled': this.isDisabled,
-       'hide-spinner': hideSpinner
+      'hide-spinner': hideSpinner,
     };
   }
 
@@ -200,6 +200,7 @@ export class FormComponent implements OnInit {
       this.controlContainer.control.get(this.controlName)?.touched
     ) {
       const priorityError = Object.keys(errors)[0];
+      console.log('priorityError', priorityError);
       return this.errorMessages[priorityError];
     }
     return false;

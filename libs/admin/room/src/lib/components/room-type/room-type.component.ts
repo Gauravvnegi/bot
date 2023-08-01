@@ -7,17 +7,22 @@ import {
   Validators,
 } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
-import { ConfigService, DiscountType } from '@hospitality-bot/admin/shared';
+import {
+  GlobalFilterService,
+  SubscriptionPlanService,
+} from '@hospitality-bot/admin/core/theme';
+import {
+  ConfigService,
+  DiscountType,
+  ModuleNames,
+} from '@hospitality-bot/admin/shared';
 import { NavRouteOptions, Option } from 'libs/admin/shared/src';
 import CustomValidators from 'libs/admin/shared/src/lib/utils/validators';
 import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.service';
 import { Subscription } from 'rxjs';
 import {
-  DynamicPricingRatePlan,
   RoomTypeFormData,
   ServicesTypeValue,
-  StaticPricingRatePlan,
   errorMessages,
   noRecordAction,
   noRecordActionForComp,
@@ -28,6 +33,7 @@ import { RoomTypeForm } from '../../models/room.model';
 import { RoomService } from '../../services/room.service';
 import { RatePlanOptions } from '../../types/room';
 import { RatePlanResponse } from '../../types/service-response';
+import { FormService } from '../../services/form.service';
 
 @Component({
   selector: 'hospitality-bot-room-type',
@@ -78,13 +84,18 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
     private configService: ConfigService,
     private router: Router,
     private route: ActivatedRoute,
-    private snackbarService: SnackBarService
+    private snackbarService: SnackBarService,
+    private formService: FormService,
+    private subscriptionPlanService: SubscriptionPlanService
   ) {
     this.roomTypeId = this.route.snapshot.paramMap.get('id');
   }
 
   ngOnInit(): void {
     this.entityId = this.globalService.entityId;
+    this.isPricingDynamic = this.subscriptionPlanService.checkModuleSubscription(
+      ModuleNames.DYNAMIC_PRICING
+    );
     this.initForm();
     this.initOptionConfig();
   }
@@ -125,13 +136,13 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
       maxAdult: [{ value: null, disabled: true }, occupancyValidation],
       area: ['', [Validators.required, Validators.min(0)]],
 
-      staticRatePlans: new FormArray([]),
-      dynamicRatePlans: new FormArray([]),
+      ratePlans: new FormArray([]),
     });
 
-    this.ratePlanArray = this.isPricingDynamic
-      ? (this.useForm.get('dynamicRatePlans') as FormArray)
-      : (this.useForm.get('staticRatePlans') as FormArray);
+    this.addRatePlanType();
+
+    this.ratePlanArray = this.useForm.get('ratePlans') as FormArray;
+
     // If Data is already present
     if (this.roomService.roomTypeFormState) {
       this.useForm.patchValue(this.roomService.roomTypeFormData);
@@ -155,23 +166,57 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
     this.subscription$.add(
       this.configService.$config.subscribe((value) => {
         if (value) {
-          const {
-            currencyConfiguration,
-            roomDiscountConfig,
-            roomRatePlans,
-          } = value;
+          const { currencyConfiguration, roomDiscountConfig } = value;
           this.currencies = currencyConfiguration.map(modOption);
           this.discountTypes = roomDiscountConfig.map(({ value }) => ({
             label: DiscountType[value],
             value,
           }));
-          this.getRatePlans(roomRatePlans);
         }
       })
     );
 
     this.getServices(ServicesTypeValue.PAID);
     this.getServices(ServicesTypeValue.COMPLIMENTARY);
+  }
+
+  addRatePlanType() {
+    if (this.isPricingDynamic)
+      this.useForm.addControl(
+        'dynamicRatePlans',
+        this.fb.group({
+          label: ['Rate Plan'],
+          basePriceCurrency: ['INR'],
+          basePrice: ['', [Validators.required, Validators.min(0)]],
+          minPriceCurrency: ['INR'],
+          minPrice: ['', [Validators.required, Validators.min(0)]],
+          maxPriceCurrency: ['INR'],
+          maxPrice: ['', [Validators.required, Validators.min(0)]],
+          paxPriceCurrency: ['INR'],
+          paxAdultPrice: ['', [Validators.required, Validators.min(0)]],
+          paxChildPrice: ['', [Validators.required, Validators.min(0)]],
+          ratePlanId: [''],
+          status: [true],
+        })
+      );
+    else
+      this.useForm.addControl(
+        'staticRatePlans',
+        this.fb.group({
+          label: ['Rate Plan'],
+          basePriceCurrency: ['INR'],
+          basePrice: ['', [Validators.required, Validators.min(0)]],
+          discountType: ['PERCENTAGE'],
+          discountValue: ['', [Validators.required, Validators.min(0)]],
+          bestPriceCurrency: ['INR'],
+          bestAvailablePrice: ['', [Validators.required, Validators.min(0)]],
+          paxPriceCurrency: ['INR'],
+          paxAdultPrice: ['', [Validators.required, Validators.min(0)]],
+          paxChildPrice: ['', [Validators.required, Validators.min(0)]],
+          ratePlanId: [''],
+          status: [true],
+        })
+      );
   }
 
   initFormDetails() {
@@ -185,36 +230,19 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
           .subscribe(
             (res) => {
               let data = new RoomTypeForm().deserialize(res);
+              const { staticRatePlans, dynamicRatePlans, ...rest } = data;
+              this.isPricingDynamic
+                ? this.useForm
+                    .get('dynamicRatePlans')
+                    .patchValue(dynamicRatePlans)
+                : this.useForm
+                    .get('staticRatePlans')
+                    .patchValue(staticRatePlans);
 
-              // Adds a RatePlan if it exists in api response with label and id, else add default
-              if (this.isPricingDynamic) {
-                if (data.dynamicRatePlans.length > 0) {
-                  data.dynamicRatePlans = data.dynamicRatePlans.map(
-                    (item: any) => {
-                      // Get Rate Plan label according to its id from config api
-                      const label = this.getPlanLabel(item.ratePlanTypeId);
-                      this.addNewRatePlan(item.ratePlanTypeId, label);
-                      return { ...item, label };
-                    }
-                  );
-                } else {
-                  this.addNewRatePlan();
-                }
-              } else {
-                if (data.staticRatePlans.length > 0) {
-                  data.staticRatePlans = data.staticRatePlans.map(
-                    (item: any) => {
-                      // Get Rate Plan label according to its id from config api
-                      const label = this.getPlanLabel(item.ratePlanTypeId);
-                      this.addNewRatePlan(item.ratePlanTypeId, label);
-                      return { ...item, label };
-                    }
-                  );
-                } else {
-                  this.addNewRatePlan();
-                }
-              }
-              this.useForm.patchValue(data);
+              data.ratePlans.forEach(() => {
+                this.addNewRatePlan();
+              });
+              this.useForm.patchValue(data, { emitEvent: false });
             },
             (err) => {
               this.snackbarService.openSnackBarAsText(err.error.message);
@@ -225,126 +253,28 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * @function getPlanLabel Get label from config api using rate plan id
-   */
-  getPlanLabel(id: string) {
-    let label: string;
-    this.configService.$config.subscribe((value) => {
-      const { roomRatePlans } = value;
-      const plan = roomRatePlans.find((plan: any) => plan.id === id);
-      label = plan.label;
-    });
-    return label;
-  }
-
-  // Get All Rate Plans from config api and add initial rate plan.
-  getRatePlans(ratePlans: RatePlanResponse[]) {
-    const plansData = ratePlans.map((option, index) => ({
-      label: option.label,
-      value: option.id,
-      disabled: false,
-      isDefault: option.isDefault,
-      command: () => this.handleRatePlan(option.id, option.label),
-    }));
-    this.plans = plansData;
-    // Adds rate plan only when the rate plan is not already added
-    if (!this.roomTypeId) this.addNewRatePlan();
-  }
-
-  /**
-   * @function handleRatePlan To handle rate plan dropdown clicks
-   */
-  handleRatePlan(value: string, label: string, index?: number) {
-    const targetIndex = index ?? this.selectedIndex;
-    const currentPlan = this.plans.find((plan) => plan.value === value);
-    const ratePlanControl = this.ratePlanArray.at(targetIndex);
-
-    // If current plan is disabled then add next enabled plan
-    if (!currentPlan.disabled) {
-      ratePlanControl.get('ratePlanTypeId').patchValue(value);
-      ratePlanControl.get('label').patchValue(label);
-    } else {
-      const nextEnabledPlan = this.plans.find((plan) => !plan.disabled);
-      ratePlanControl.get('ratePlanTypeId').patchValue(nextEnabledPlan.value);
-      ratePlanControl.get('label').patchValue(nextEnabledPlan.label);
-      nextEnabledPlan.disabled = true;
-    }
-    this.setDisabled(value);
-  }
-
-  /**
-   * Disables the rate plan if already added
-   */
-  setDisabled(value: string) {
-    // Currently selected rate plans
-    const selectedRatePlans = this.plans.filter((item) => item.value === value);
-
-    const ratePlanIds = this.ratePlanArray.controls.map(
-      (control) => control.get('ratePlanTypeId').value
-    );
-    // Disables currently selected rate plans in the array
-    if (ratePlanIds.includes(value)) {
-      selectedRatePlans.map((type) => (type.disabled = true));
-    }
-
-    // Enables remaining rate plans
-    this.plans
-      .filter((item) => !ratePlanIds.includes(item.value))
-      .map((plan) => (plan.disabled = false));
-  }
-
-  /**
    * Handle remove rate plan based on index
    */
-  removeRatePlan(value: string, index: number): void {
-    const removedPlan = this.ratePlanArray.at(index).get('id').value;
+  removeRatePlan(index: number): void {
+    const removedPlan = this.ratePlanArray.at(index).get('ratePlanId').value;
     this.removedRatePlans.push(removedPlan);
     this.ratePlanArray.removeAt(index);
-    this.setDisabled(value);
-    this.planCount--;
   }
 
   /**
    * @function addNewRatePlan Adds new rate plan array based on pricing type
    */
   addNewRatePlan(id?: string, label?: string) {
-    const staticPricing: Record<keyof StaticPricingRatePlan, any> = {
-      basePriceCurrency: ['INR'],
-      basePrice: ['', [Validators.required, Validators.min(0)]],
-      discountType: ['PERCENTAGE'],
-      discountValue: ['', [Validators.required, Validators.min(0)]],
-      bestPriceCurrency: ['INR'],
-      bestAvailablePrice: ['', [Validators.required, Validators.min(0)]],
-      paxPriceCurrency: ['INR'],
-      paxPrice: ['', [Validators.required, Validators.min(0)]],
-      ratePlanTypeId: [''],
-      label: [''],
-      id: [''],
+    const addedRatePlan = {
+      label: ['Rate Plan', [Validators.maxLength(60)]],
+      currency: ['INR'],
+      extraPrice: ['', [Validators.required, Validators.min(0)]],
+      description: [''],
+      ratePlanId: [''],
+      status: [true],
     };
 
-    const dynamicPricing: Record<keyof DynamicPricingRatePlan, any> = {
-      minPriceCurrency: ['INR'],
-      minPrice: ['', [Validators.required, Validators.min(0)]],
-      maxPriceCurrency: ['INR'],
-      maxPrice: ['', [Validators.required, Validators.min(0)]],
-      paxPriceCurrency: ['INR'],
-      paxPrice: ['', [Validators.required, Validators.min(0)]],
-      ratePlanTypeId: [''],
-      label: [''],
-      id: [''],
-    };
-
-    let formGroup: FormGroup;
-    this.isPricingDynamic
-      ? (formGroup = this.fb.group(dynamicPricing))
-      : (formGroup = this.fb.group(staticPricing));
-    this.ratePlanArray.push(formGroup);
-
-    let planIndex = this.ratePlanArray.length - 1;
-    let planLabel = label ? label : this.plans[planIndex].label;
-    let planId = id ? id : this.plans[planIndex].value;
-    this.handleRatePlan(planId, planLabel, planIndex);
-    this.planCount++;
+    this.ratePlanArray.push(this.fb.group(addedRatePlan));
   }
 
   /**
@@ -497,9 +427,14 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
   }
 
   saveDetails() {
-    const data = this.getRoomTypeModData();
+    const data = this.useForm.getRawValue() as RoomTypeFormData;
+
+    const modifiedData = this.formService.getRoomTypeModData(
+      data,
+      this.isPricingDynamic
+    );
     this.subscription$.add(
-      this.roomService.createRoomType(this.entityId, data).subscribe(
+      this.roomService.createRoomType(this.entityId, modifiedData).subscribe(
         (res) => {
           this.loading = false;
           this.router.navigate([`/pages/inventory/room/${routes.dashboard}`]);
@@ -518,13 +453,15 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
   }
 
   updateDetails() {
-    const data = {
-      ...this.getRoomTypeModData(),
+    const data = this.useForm.getRawValue() as RoomTypeFormData;
+
+    const modifiedData = {
+      ...this.formService.getRoomTypeModData(data, this.isPricingDynamic),
       removeRatePlan: this.removedRatePlans,
       id: this.roomTypeId,
     };
     this.subscription$.add(
-      this.roomService.updateRoomType(this.entityId, data).subscribe(
+      this.roomService.updateRoomType(this.entityId, modifiedData).subscribe(
         (res) => {
           this.loading = false;
           this.router.navigate([`/pages/inventory/room/${routes.dashboard}`]);
@@ -542,43 +479,15 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
     );
   }
 
-  getRoomTypeModData() {
-    const {
-      complimentaryAmenities,
-      paidAmenities,
-      staticRatePlans,
-      dynamicRatePlans,
-      ...rest
-    } = this.useForm.getRawValue() as RoomTypeFormData;
-    let staticRatePlanModData = staticRatePlans?.map(
-      ({ discountType, discountValue, id, ...restRatePlan }) => ({
-        ...restRatePlan,
-        id: id || null,
-        discount: {
-          type: discountType,
-          value: discountValue,
-        },
-      })
-    );
+  onToggleSwitch(isToogleOn: boolean, index?: number) {
+    if (!index) {
+      this.isPricingDynamic
+        ? this.useForm.get('dynamicRatePlans').setValue(isToogleOn)
+        : this.useForm.get('staticRatePlans').setValue(isToogleOn);
+      return;
+    }
 
-    let dynamicRatePlanModData = dynamicRatePlans?.map(
-      ({ id, ...restPlan }) => ({
-        ...restPlan,
-        id: id || null,
-      })
-    );
-
-    const ratePlans = this.isPricingDynamic
-      ? dynamicRatePlanModData
-      : staticRatePlanModData;
-
-    const data = {
-      ...rest,
-      ratePlans,
-      roomAmenityIds: [...complimentaryAmenities, ...paidAmenities],
-    };
-
-    return data;
+    this.ratePlanArray.at(index).get('status').setValue(isToogleOn);
   }
 
   resetForm() {

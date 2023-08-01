@@ -142,7 +142,7 @@ export const hotelCols: Cols[] = [
     field: 'reservationType',
     header: 'Actions',
     sortType: 'string',
-    width: '13%',
+    width: '14%',
     isSearchDisabled: true,
   },
 ];

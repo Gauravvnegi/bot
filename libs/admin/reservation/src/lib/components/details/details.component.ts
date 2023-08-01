@@ -364,7 +364,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
   editBooking() {
     this.onDetailsClose.next(false);
     this.router.navigateByUrl(
-      `pages/efrontdesk/manage-reservation/edit-reservation/${this.bookingId}`
+      `pages/efrontdesk/reservation/edit-reservation/${this.bookingId}`
     );
   }
 

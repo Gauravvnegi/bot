@@ -195,7 +195,7 @@
       </td>
 
       <td>
-        <div class="" *ngIf="rowData.reservationType; else emptyCell">
+        <div *ngIf="rowData.reservationType; else emptyCell">
           <hospitality-bot-status-dropdown-toggle
             class="status-toggle"
             [nextStates]="rowData.nextStates"

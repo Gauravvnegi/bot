@@ -1,5 +1,7 @@
 import {
+  AddedRatePlans,
   DynamicPricingRatePlan,
+  RatePlan,
   StaticPricingRatePlan,
 } from '../constant/form';
 import { RoomStatus, RoomTypeResponse } from '../types/service-response';
@@ -100,8 +102,9 @@ export class RoomTypeForm {
   description: string;
   complimentaryAmenities: string[];
   paidAmenities: string[];
-  staticRatePlans: StaticPricingRatePlan[];
-  dynamicRatePlans: DynamicPricingRatePlan[];
+  staticRatePlans: StaticPricingRatePlan;
+  dynamicRatePlans: DynamicPricingRatePlan;
+  ratePlans: AddedRatePlans[];
   maxOccupancy: number;
   maxChildren: number;
   maxAdult: number;
@@ -115,34 +118,50 @@ export class RoomTypeForm {
     this.complimentaryAmenities =
       input.complimentaryAmenities?.map((item) => item.id) ?? [];
     this.paidAmenities = input.paidAmenities?.map((item) => item.id) ?? [];
-    this.maxOccupancy = input.maxOccupancy;
-    this.maxChildren = input.maxChildren;
-    this.maxAdult = input.maxAdult;
+    this.maxOccupancy = input.occupancyDetails.maxOccupancy;
+    this.maxChildren = input.occupancyDetails.maxChildren;
+    this.maxAdult = input.occupancyDetails.maxAdult;
     this.area = input.area;
-    this.staticRatePlans = input.ratePlans.map((ratePlan) => ({
-      ratePlanTypeId: ratePlan.ratePlanTypeId,
-      paxPriceCurrency: ratePlan.paxPriceCurrency,
-      paxPrice: ratePlan.paxPrice,
-      discountType: ratePlan.discount?.type ?? 'PERCENTAGE',
-      discountValue: ratePlan.discount?.value ?? 0,
-      bestPriceCurrency: ratePlan.basePriceCurrency,
-      bestAvailablePrice: ratePlan.bestAvailablePrice,
-      label: '',
-      basePrice: ratePlan.basePrice,
-      basePriceCurrency: ratePlan.basePriceCurrency,
-      id: ratePlan.id,
-    }));
-    this.dynamicRatePlans = input.ratePlans.map((ratePlan) => ({
-      ratePlanTypeId: ratePlan.ratePlanTypeId,
-      paxPriceCurrency: ratePlan.paxPriceCurrency,
-      paxPrice: ratePlan.paxPrice,
-      label: '',
-      id: ratePlan.id,
-      maxPriceCurrency: ratePlan.maxPriceCurrency,
-      maxPrice: ratePlan.maxPrice,
-      minPriceCurrency: ratePlan.minPriceCurrency,
-      minPrice: ratePlan.minPrice,
-    }));
+
+    const defaultRatePlan = input.ratePlans.filter((item) => item.isBase);
+    this.staticRatePlans = {
+      paxPriceCurrency: input.pricingDetails.currency,
+      paxAdultPrice: input.pricingDetails?.paxAdult,
+      paxChildPrice: input.pricingDetails?.paxChild,
+      discountType: defaultRatePlan[0].discount?.type ?? 'PERCENTAGE',
+      discountValue: defaultRatePlan[0].discount?.value ?? 0,
+      bestPriceCurrency: input.pricingDetails.currency,
+      bestAvailablePrice: input.pricingDetails?.bestAvailablePrice ?? 0,
+      label: defaultRatePlan[0].label,
+      basePrice: input.pricingDetails.base,
+      basePriceCurrency: input.pricingDetails.currency,
+      ratePlanId: defaultRatePlan[0].id,
+    };
+    this.dynamicRatePlans = {
+      paxPriceCurrency: input.pricingDetails.currency,
+      paxAdultPrice: input.pricingDetails.paxAdult,
+      paxChildPrice: input.pricingDetails.paxChild,
+      label: defaultRatePlan[0].label,
+      basePrice: input.pricingDetails.base,
+      basePriceCurrency: input.pricingDetails.currency,
+      maxPriceCurrency: input.pricingDetails.currency,
+      maxPrice: input.pricingDetails.max,
+      minPriceCurrency: input.pricingDetails.currency,
+      minPrice: input.pricingDetails.min,
+      ratePlanId: defaultRatePlan[0].id,
+    };
+
+    this.ratePlans = input.ratePlans
+      .filter((item) => !item.isBase)
+      .map((item) => ({
+        label: item.label,
+        ratePlanId: item.id,
+        idBase: item.isBase,
+        extraPrice: item.variablePrice,
+        currency: input.pricingDetails.currency,
+        description: item?.description,
+        status: item.status,
+      }));
 
     return this;
   }

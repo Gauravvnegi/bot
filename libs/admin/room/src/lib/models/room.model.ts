@@ -137,7 +137,6 @@ export class RoomTypeForm {
       basePriceCurrency: input.pricingDetails.currency,
       ratePlanId: defaultRatePlan[0].id,
     };
-
     this.dynamicRatePlans = {
       paxPriceCurrency: input.pricingDetails.currency,
       paxAdultPrice: input.pricingDetails.paxAdult,
@@ -161,6 +160,7 @@ export class RoomTypeForm {
         extraPrice: item.variablePrice,
         currency: input.pricingDetails.currency,
         description: item?.description,
+        status: item.status,
       }));
 
     return this;

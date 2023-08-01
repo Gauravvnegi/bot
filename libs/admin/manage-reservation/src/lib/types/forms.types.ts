@@ -5,10 +5,7 @@ export class ReservationFormData {
   // email: string;
   // contact: Contact;
   // guestDetails: GuestDetails;
-  roomTypeId: string;
-  adultCount: number;
-  childCount: number;
-  roomCount: number;
+  guestId: string;
   from: number;
   to: number;
   reservationType: string;

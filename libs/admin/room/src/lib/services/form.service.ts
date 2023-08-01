@@ -64,6 +64,7 @@ export class FormService {
       isBase: false,
       description: item.description,
       id: item.ratePlanId,
+      status: item.status,
       ...(!isPricingDynamic
         ? {
             discount: discount,

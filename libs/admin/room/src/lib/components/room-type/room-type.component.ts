@@ -196,6 +196,7 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
           paxAdultPrice: ['', [Validators.required, Validators.min(0)]],
           paxChildPrice: ['', [Validators.required, Validators.min(0)]],
           ratePlanId: [''],
+          status: [true],
         })
       );
     else
@@ -213,6 +214,7 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
           paxAdultPrice: ['', [Validators.required, Validators.min(0)]],
           paxChildPrice: ['', [Validators.required, Validators.min(0)]],
           ratePlanId: [''],
+          status: [true],
         })
       );
   }
@@ -269,6 +271,7 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
       extraPrice: ['', [Validators.required, Validators.min(0)]],
       description: [''],
       ratePlanId: [''],
+      status: [true],
     };
 
     this.ratePlanArray.push(this.fb.group(addedRatePlan));
@@ -476,7 +479,16 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
     );
   }
 
-  onToggleSwitch(isToogleOn: boolean) {}
+  onToggleSwitch(isToogleOn: boolean, index?: number) {
+    if (!index) {
+      this.isPricingDynamic
+        ? this.useForm.get('dynamicRatePlans').setValue(isToogleOn)
+        : this.useForm.get('staticRatePlans').setValue(isToogleOn);
+      return;
+    }
+
+    this.ratePlanArray.at(index).get('status').setValue(isToogleOn);
+  }
 
   resetForm() {
     this.useForm.reset({}, { emitEvent: true });

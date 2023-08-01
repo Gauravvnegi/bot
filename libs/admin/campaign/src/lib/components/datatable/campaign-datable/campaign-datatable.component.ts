@@ -18,6 +18,7 @@ import { Campaigns, Campaign } from '../../../data-model/campaign.model';
 import { CampaignService } from '../../../services/campaign.service';
 import { MessageObj } from '../../../types/campaign.type';
 import { campaignStatus } from '../../../constants/response';
+import { MenuOptions } from '../../../constants/camapign';
 
 @Component({
   selector: 'hospitality-bot-campaign-datatable',
@@ -42,6 +43,7 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
   globalQueries = [];
   $subscription = new Subscription();
   entityId: string;
+  menuOptions = MenuOptions;
   constructor(
     public fb: FormBuilder,
     private adminUtilityService: AdminUtilityService,
@@ -216,6 +218,14 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
           () => (this.loading = false)
         )
     );
+  }
+
+  handleMenuClick(value: string, rowData): void {
+    if (value === 'CLONE') {
+      this.cloneCampaign(rowData.id, rowData);
+    } else {
+      this.archiveCampaign(rowData.id, rowData);
+    }
   }
 
   /**

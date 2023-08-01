@@ -23,7 +23,7 @@
       <div
         class="dropdown__item"
         (click)="archiveCampaign()"
-        *ngIf="campaignId && !campaign?.isDraft"
+        *ngIf="campaignId && !_campaign?.isDraft"
       >
         {{ 'campaign.archive' | translate }}
       </div>
@@ -138,7 +138,7 @@
   <hospitality-bot-edit-content
     class="full-width"
     [campaignFG]="campaignFG"
-    [campaignDetails]="campaign"
+    [campaignDetails]="_campaign"
     (addContent)="openAddContent()"
   ></hospitality-bot-edit-content>
 </form>

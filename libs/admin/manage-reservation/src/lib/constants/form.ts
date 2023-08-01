@@ -51,7 +51,7 @@ export type RoomTypes = {
   roomTypeId: string;
   ratePlanId: string;
   roomCount: number;
-  roomNumber: string[];
+  roomNumbers: string[];
   adultCount: number;
   childCount: number;
 };

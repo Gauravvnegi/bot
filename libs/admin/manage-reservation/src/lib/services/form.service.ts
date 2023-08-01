@@ -12,6 +12,9 @@ import { ReservationForm } from '../constants/form';
 })
 export class FormService {
   outletIds = [];
+  dateDifference = new BehaviorSubject(1);
+  toDate: Date;
+  fromDate: Date;
 
   public selectedEntity = new BehaviorSubject<SelectedEntity>(null);
   getSelectedEntity(): Observable<SelectedEntity> {

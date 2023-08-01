@@ -138,10 +138,10 @@ export class CreateFoodPackageComponent extends OutletBaseComponent
           .subscribe(this.handleSuccess, this.handleErrors)
       );
     } else {
-      const { foodItems, ...rest } = data;
+      // const { foodItems, ...rest } = data;
       this.$subscription.add(
         this.outletService
-          .addFoodPackage(this.outletId, rest)
+          .addFoodPackage(this.outletId, data)
           .subscribe((res) => {
             this.handleSuccess(res.id);
           }, this.handleErrors)

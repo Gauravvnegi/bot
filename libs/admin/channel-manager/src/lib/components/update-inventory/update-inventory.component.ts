@@ -132,7 +132,6 @@ export class UpdateInventoryComponent implements OnInit {
       );
 
       this.addRatesAndRestrictionControl(ratePlansControl, roomTypeIdx);
-
       this.addChannelsControl(roomType.channels, roomTypeIdx);
     });
     this.setRoomDetails();

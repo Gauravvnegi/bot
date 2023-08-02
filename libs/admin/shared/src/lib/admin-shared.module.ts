@@ -113,6 +113,7 @@ import { QrCodeModalComponent } from './components/qr-code-modal/qr-code-modal.c
 import { QRCodeModule } from 'angularx-qrcode';
 import { MultiplePrefixInputComponent } from './components/form-component/multiple-prefix-input/multiple-prefix-input.component';
 import { FormActionComponent } from './components/form-component/form-action/form-action.component';
+import { LoaderDirective } from './directives/loader.directive';
 
 @NgModule({
   imports: [
@@ -233,6 +234,7 @@ import { FormActionComponent } from './components/form-component/form-action/for
     QrCodeModalComponent,
     MultiplePrefixInputComponent,
     FormActionComponent,
+    LoaderDirective,
   ],
 
   exports: [
@@ -341,6 +343,7 @@ import { FormActionComponent } from './components/form-component/form-action/for
     GlobalSearchComponent,
     MultiplePrefixInputComponent,
     FormActionComponent,
+    LoaderDirective,
   ],
 })
 export class AdminSharedModule {}

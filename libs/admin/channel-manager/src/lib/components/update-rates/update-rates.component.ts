@@ -32,8 +32,9 @@ import {
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { ChannelManagerService } from '../../services/channel-manager.service';
 import * as moment from 'moment';
-import { Subscription } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
 import { UpdateRates } from '../../models/channel-manager.model';
+import { debounceTime } from 'rxjs/operators';
 
 @Component({
   selector: 'hospitality-bot-update-rates',
@@ -60,6 +61,7 @@ export class UpdateRatesComponent implements OnInit {
   currentDate = new Date();
 
   $subscription = new Subscription();
+  private valueChangesSubject = new Subject<string[]>();
   ratesRoomDetails = new Map<string, RoomMapType>();
 
   constructor(
@@ -388,7 +390,14 @@ export class UpdateRatesComponent implements OnInit {
       this.getRates(selectedDate);
     });
 
-    this.useFormControl.roomType.valueChanges.subscribe((res: string[]) => {
+    // Select Room Types Changes
+    this.useFormControl.roomType.valueChanges
+      .pipe(debounceTime(600))
+      .subscribe((res: string[]) => {
+        this.valueChangesSubject.next(res);
+      });
+
+    this.valueChangesSubject.subscribe((res: string[]) => {
       this.roomTypes = this.allRoomTypes.filter((item) =>
         res.includes(item.value)
       );

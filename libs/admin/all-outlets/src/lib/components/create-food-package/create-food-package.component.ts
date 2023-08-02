@@ -113,10 +113,7 @@ export class CreateFoodPackageComponent extends OutletBaseComponent
       return;
     }
 
-    let data = {
-      ...(this.useForm.getRawValue() as FoodPackageForm),
-      type: 'FOOD_PACKAGE',
-    };
+    let data = this.useForm.getRawValue();
 
     if (this.foodPackageId) {
       data = { ...data, id: this.foodPackageId };
@@ -128,7 +125,6 @@ export class CreateFoodPackageComponent extends OutletBaseComponent
 
             {
               ...data,
-              type: 'FOOD_PACKAGE',
               source: 1,
             },
             {

@@ -246,8 +246,16 @@ export class FormComponent implements OnInit {
     const id = `${this.controlName}-dropdown-input-cta`;
     if (!document.getElementById(id) && this.createPrompt) {
       const newDiv = document.createElement('div');
-      newDiv.innerHTML = `<input type="text" id="myInput"     pInputText
- maxlength="35" placeholder="${this.inputPrompt}"><button id="myButton" onclick="myFunction()">Save</button>`;
+      newDiv.innerHTML = `
+      <div style="position: relative; flex-basis: 85%;">
+      <input style="width: 100%; height: 100%" type="text" id="myInput" pInputText maxlength="35" placeholder="${this.inputPrompt}">
+           <small id="subtitle" style="  position: absolute; bottom: 1em;right: 0.8em;font-size: 0.8em; color: black;"></small>
+
+      </div>
+      <button id="myButton" onclick="myFunction()">Save</button>
+
+ `;
+      const maxLength = 35;
       newDiv.id = id;
       newDiv.className = 'dropdown-input-action-cta'; // styling class
       const menu = document.querySelector(`.${this.menuClass}`);
@@ -255,6 +263,16 @@ export class FormComponent implements OnInit {
 
       const input = document.getElementById('myInput') as HTMLInputElement;
       const button = document.getElementById('myButton');
+
+      const subtitle = document.getElementById('subtitle');
+      subtitle.innerHTML = `0/${maxLength}`;
+
+      input.addEventListener('input', () => updateWordCount());
+
+      const updateWordCount = () => {
+        const currentTextLength = input.value.length;
+        subtitle.innerHTML = `${currentTextLength}/${maxLength}`;
+      };
 
       newDiv.focus();
 

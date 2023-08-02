@@ -26,7 +26,7 @@ import {
   iteratorFields,
   noRecordsActionForFeatures,
 } from '../../constant/form';
-import { roomStatusDetails, roomStatuses } from '../../constant/response';
+import { roomStatusDetails } from '../../constant/response';
 import routes from '../../constant/routes';
 import { MultipleRoomList, SingleRoomList } from '../../models/room.model';
 import { RoomType, RoomTypeList } from '../../models/rooms-data-table.model';
@@ -43,6 +43,7 @@ import {
   StatusQuoForm,
 } from '../../types/use-form';
 import { Services } from '../../models/amenities.model';
+import { convertToTitleCase } from 'libs/admin/shared/src/lib/utils/valueFormatter';
 
 @Component({
   selector: 'hospitality-bot-add-room',
@@ -142,8 +143,8 @@ export class AddRoomComponent implements OnInit, OnDestroy {
       status: ['', Validators.required],
       remark: ['', Validators.required],
       foStatus: [],
-      currentStatusFrom: ['' , Validators.required],
-      currentStatusTo: ['' , Validators.required],
+      currentStatusFrom: ['', Validators.required],
+      currentStatusTo: ['', Validators.required],
     });
 
     this.registerFormListener();
@@ -218,11 +219,6 @@ export class AddRoomComponent implements OnInit, OnDestroy {
    */
   initOptionsConfig(): void {
     this.getRoomTypes();
-    this.roomStatuses = roomStatuses.map((item) => ({
-      label: roomStatusDetails[item].label,
-      value: item,
-      type: roomStatusDetails[item].type,
-    }));
     this.getDefaultFeatures();
   }
 
@@ -361,6 +357,18 @@ export class AddRoomComponent implements OnInit, OnDestroy {
           }
 
           this.useForm.patchValue(data);
+
+          if (roomDetails?.nextStates) {
+            this.roomStatuses = roomDetails?.nextStates?.map((item) => ({
+              label: convertToTitleCase(item),
+              value: item,
+            }));
+          }
+
+          this.roomStatuses.push({
+            label: convertToTitleCase(roomDetails.status),
+            value: roomDetails.status,
+          });
 
           this.statusQuoForm.patchValue({
             status: roomDetails.status,

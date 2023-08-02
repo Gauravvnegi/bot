@@ -42,13 +42,13 @@ export const cols: Record<TableValue, Cols[]> = {
       field: 'name',
       header: 'Type',
       sortType: 'string',
-      width: '14%',
+      width: '20%',
     },
     {
       field: 'area',
       header: 'Area',
       sortType: 'number',
-      width: '13%',
+      width: '16%',
     },
     {
       field: 'roomCount',

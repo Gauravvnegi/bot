@@ -420,7 +420,7 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
         break;
       //to navigate to create service page
       case 'service':
-        this.router.navigate([`pages/library/services/create-service`], {
+        this.router.navigate([`/pages/library/services/create-service`], {
           relativeTo: this.route,
         });
         break;

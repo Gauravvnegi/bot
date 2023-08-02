@@ -125,7 +125,6 @@ export class CreateFoodPackageComponent extends OutletBaseComponent
           .updateFoodPackage(
             this.outletId,
             this.foodPackageId,
-
             {
               ...data,
               type: 'FOOD_PACKAGE',

@@ -38,9 +38,9 @@ export class IteratorComponent implements OnChanges {
   }
 
   ngOnInit() {
-    this.useFormArray.valueChanges.subscribe((res) => {
-      this.createNewFields();
-    });
+    // this.useFormArray.valueChanges.subscribe((res) => {
+    //   this.createNewFields();
+    // });
   }
 
   /**

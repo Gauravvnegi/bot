@@ -1,10 +1,6 @@
 import { Option } from '@hospitality-bot/admin/shared';
-import {
-  BulkUpdateForm,
-  BulkUpdateRequest,
-  RoomTypes,
-  Variant,
-} from '../types/bulk-update.types';
+import { RoomTypes, Variant } from '../types/bulk-update.types';
+import { RoomType } from 'libs/admin/room/src/lib/models/rooms-data-table.model';
 
 export function makeRoomOption(...data) {
   return data.map((item) => {
@@ -12,7 +8,7 @@ export function makeRoomOption(...data) {
   }) as Option[];
 }
 
-export function makeRoomsData(rooms) {
+export function makeRoomsData(rooms: RoomType[]) {
   let res = rooms.map((item) => {
     let room = {
       label: item.name,
@@ -30,8 +26,6 @@ export function makeRoomsData(rooms) {
     };
     return room.ratePlans.length ? room : null;
   });
-
-  // TODO: It must at least 1 ratePlans
   return res.filter((item) => item);
 }
 

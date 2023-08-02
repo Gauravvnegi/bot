@@ -47,8 +47,8 @@ export class UpdateInventory {
       });
 
       this.perDayRoomAvailability[item.startDate] = {
-        roomAvailable: item.inventoryData.available,
-        occupancy: item.inventoryData.occupancy,
+        roomAvailable: item.inventoryData?.available ?? 0,
+        occupancy: item.inventoryData?.occupancy ?? 0,
       };
     });
     return this;

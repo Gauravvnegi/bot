@@ -20,6 +20,7 @@ export class FormActionComponent implements OnInit {
   preVariant = 'outlined';
   preSeverity = 'reset';
   preDisabled = false;
+  preHide = false;
 
   //post-action
   postLabel = 'Create';
@@ -27,6 +28,7 @@ export class FormActionComponent implements OnInit {
   postVariant = 'contained';
   postSeverity = 'primary';
   postDisabled = false;
+  postHide = false;
 
   @Input() disabled: boolean = false;
 

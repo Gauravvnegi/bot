@@ -6,6 +6,7 @@
     #fd
   >
     <hospitality-bot-button
+      *ngIf="!preHide"
       [label]="preLabel"
       (onClick)="preAction()"
       [variant]="preVariant"
@@ -13,6 +14,7 @@
       [disabled]="preDisabled || disabled || loading"
     ></hospitality-bot-button>
     <hospitality-bot-button
+      *ngIf="!postHide"
       [label]="postLabel"
       (onClick)="postAction()"
       [variant]="postVariant"

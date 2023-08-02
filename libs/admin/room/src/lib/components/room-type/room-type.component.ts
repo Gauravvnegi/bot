@@ -187,7 +187,10 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
       this.useForm.addControl(
         'dynamicRatePlans',
         this.fb.group({
-          label: ['', [Validators.maxLength(60)]],
+          label: [
+            'EP (Room Only)',
+            [Validators.required, Validators.maxLength(60)],
+          ],
           basePriceCurrency: ['INR'],
           basePrice: ['', [Validators.required, Validators.min(0)]],
           minPriceCurrency: ['INR'],
@@ -205,7 +208,10 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
       this.useForm.addControl(
         'staticRatePlans',
         this.fb.group({
-          label: ['', [Validators.maxLength(60)]],
+          label: [
+            'EP (Room Only)',
+            [Validators.required, Validators.maxLength(60)],
+          ],
           basePriceCurrency: ['INR'],
           basePrice: ['', [Validators.required, Validators.min(0)]],
           discountType: ['PERCENTAGE'],
@@ -271,7 +277,7 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
    */
   addNewRatePlan(id?: string, label?: string) {
     const addedRatePlan = {
-      label: ['', [Validators.maxLength(60)]],
+      label: ['', [Validators.required, Validators.maxLength(60)]],
       currency: ['INR'],
       extraPrice: ['', [Validators.required, Validators.min(0)]],
       description: [''],

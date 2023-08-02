@@ -23,6 +23,7 @@ export const cols: Record<TableValue, Cols[]> = {
       field: 'foStatus',
       header: 'Reservation Status',
       sortType: 'string',
+      isSearchDisabled: true,
     },
     // {
     //   field: 'price',
@@ -31,7 +32,7 @@ export const cols: Record<TableValue, Cols[]> = {
     //   width: '23%',
     // },
     {
-      field: 'status.value',
+      field: 'status',
       header: 'Action / Status',
       sortType: 'string',
       width: '16%',
@@ -70,10 +71,12 @@ export const cols: Record<TableValue, Cols[]> = {
       width: '17%',
     },
     {
-      field: 'status.value',
-      header: 'Active',
+      field: 'status',
+      header: 'Action',
       sortType: 'string',
       width: '16%',
+      isSearchDisabled: true,
+      isSortDisabled: true,
     },
   ],
 };
@@ -92,7 +95,7 @@ export const roomDetailsCols: Cols[] = [
     width: '20%',
   },
   {
-    field: 'roomStatus',
+    field: 'status',
     header: 'Room Status',
     sortType: 'string',
     width: '20%',
@@ -106,6 +109,7 @@ export const roomDetailsCols: Cols[] = [
   {
     field: 'action',
     header: 'Action',
+    isSortDisabled: true,
     isSearchDisabled: true,
     width: '20%',
   },

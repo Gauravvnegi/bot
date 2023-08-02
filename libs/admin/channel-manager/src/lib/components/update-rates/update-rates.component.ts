@@ -34,7 +34,7 @@ import { ChannelManagerService } from '../../services/channel-manager.service';
 import * as moment from 'moment';
 import { Subject, Subscription } from 'rxjs';
 import { UpdateRates } from '../../models/channel-manager.model';
-import { debounceTime } from 'rxjs/operators';
+import { debounceTime, tap } from 'rxjs/operators';
 
 @Component({
   selector: 'hospitality-bot-update-rates',
@@ -56,6 +56,7 @@ export class UpdateRatesComponent implements OnInit {
   restrictions: RestrictionAndValuesOption[];
   loading = false;
   loadingError = false;
+  isLoaderVisible = false;
   isRoomsEmpty = false;
   hasDynamicPricing = false;
   currentDate = new Date();
@@ -392,7 +393,12 @@ export class UpdateRatesComponent implements OnInit {
 
     // Select Room Types Changes
     this.useFormControl.roomType.valueChanges
-      .pipe(debounceTime(600))
+      .pipe(
+        tap((value) => {
+          this.isLoaderVisible = true;
+        }),
+        debounceTime(600)
+      )
       .subscribe((res: string[]) => {
         this.valueChangesSubject.next(res);
       });
@@ -405,6 +411,7 @@ export class UpdateRatesComponent implements OnInit {
       this.useForm.removeControl('roomTypes');
       this.addRoomTypesControl();
       this.setRoomDetails();
+      this.isLoaderVisible = false;
     });
 
     if (this.hasDynamicPricing) {

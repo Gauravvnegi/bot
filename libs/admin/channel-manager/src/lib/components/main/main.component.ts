@@ -1,15 +1,24 @@
 import { Component, OnDestroy } from '@angular/core';
 import { ChannelManagerFormService } from '../../services/channel-manager-form.service';
-import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import { Router } from '@angular/router';
 @Component({
   selector: 'hospitality-bot-main',
   templateUrl: './main.component.html',
   styleUrls: ['./main.component.scss'],
 })
 export class MainComponent {
-  constructor(private channelManagerFormService: ChannelManagerFormService) {}
+  constructor(
+    private channelManagerFormService: ChannelManagerFormService,
+    private router: Router
+  ) {}
 
   ngOnDestroy(): void {
-    this.channelManagerFormService.reset();
+    if (
+      !(
+        this.router.url.includes('update-inventory') ||
+        this.router.url.includes('update-rates')
+      )
+    )
+      this.channelManagerFormService.reset();
   }
 }

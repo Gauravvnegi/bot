@@ -51,3 +51,14 @@ export type TransactionHistoryResponse = {
   updated: number;
 };
 
+export type LoaderProps = {
+  isVisible: boolean;
+  showLoader?: boolean;
+  loaderAlignment?: {
+    top: string;
+    left: string;
+    right?: string;
+    bottom?: string;
+  };
+  viewHeight?: string;
+};

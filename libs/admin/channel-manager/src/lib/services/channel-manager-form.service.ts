@@ -22,6 +22,7 @@ export class ChannelManagerFormService {
   };
 
   reset() {
+    this.isRoomDetailsLoaded = false;
     this.roomDetails.next([]);
   }
 

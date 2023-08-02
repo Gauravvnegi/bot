@@ -19,12 +19,18 @@ export function makeRoomsData(rooms) {
       value: item.id,
       channels: [],
       ratePlans:
-        item.ratePlans.map((ratePlan) => ({
-          type: ratePlan.label,
-          label: ratePlan.label,
-          value: ratePlan.id,
-          channels: [],
-        })) ?? [],
+        item.ratePlans
+          .map((ratePlan) =>
+            ratePlan.status
+              ? {
+                  type: ratePlan.label,
+                  label: ratePlan.label,
+                  value: ratePlan.id,
+                  channels: [],
+                }
+              : null
+          )
+          ?.filter((ratePlan) => ratePlan) ?? [],
     };
     return room.ratePlans.length ? room : null;
   });

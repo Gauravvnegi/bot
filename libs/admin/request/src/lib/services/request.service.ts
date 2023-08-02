@@ -12,6 +12,7 @@ export class RequestService extends ApiService {
   selectedRequest = new BehaviorSubject(null);
   refreshData = new BehaviorSubject<boolean>(false);
   requestStatus = new BehaviorSubject<RequestStatus[]>([]); // ['TODO', 'RESOLVED', 'CANCELED', 'IN_PROGRESS', 'TIMEOUT']
+  assigneeList = new BehaviorSubject<any[]>([]);
 
   syncRequest(entityId: string): Observable<any> {
     return this.get(
@@ -137,5 +138,13 @@ export class RequestService extends ApiService {
 
   getGuestRequestData(guestId) {
     return this.get(`/api/v1/request/${guestId}/guest`);
+  }
+
+  getItemDetails(entityId: string, itemId: string): Observable<any> {
+    return this.get(`/api/v1/entity/${entityId}/cms-service/${itemId}`);
+  }
+
+  assignComplaintToUser(jobId: string, data): Observable<any> {
+    return this.patch(`/api/v1/request/${jobId}/assignee`, data);
   }
 }

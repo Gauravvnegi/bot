@@ -27,6 +27,10 @@ export class RequestDetailComponent implements OnInit, OnDestroy {
   data: InhouseData;
   status = false;
   statusList: Option[] = [];
+  assigneeList: Option[] = [
+    { label: 'Assignee 1', value: 'assignee1' },
+    { label: 'Assignee 2', value: 'assignee2' },
+  ];
   $subscription = new Subscription();
   entityId: string;
   @Output() guestInfo = new EventEmitter();
@@ -62,7 +66,9 @@ export class RequestDetailComponent implements OnInit, OnDestroy {
         (response: InhouseData) => {
           if (response) {
             this.data = response;
+            //need to patch assigne
             this.requestFG.patchValue({ status: response.action });
+            this.getAssigneeList(response.itemId);
             this.status = true;
           } else {
             this.data = new InhouseData();
@@ -89,6 +95,21 @@ export class RequestDetailComponent implements OnInit, OnDestroy {
     );
   }
 
+  getAssigneeList(itemId) {
+    this.$subscription.add(
+      this._requestService
+        .getItemDetails(this.entityId, itemId)
+        .subscribe((response) => {
+          this.assigneeList = response.requestItemUsers.map((item) => {
+            return {
+              label: item.firstName + ' ' + item.lastName,
+              value: item.userId,
+            };
+          });
+        })
+    );
+  }
+
   /**
    * @function listenForGlobalFilters To listen for global filters and load data when filter value is changed.
    */
@@ -106,6 +127,7 @@ export class RequestDetailComponent implements OnInit, OnDestroy {
   initFG() {
     this.requestFG = this.fb.group({
       status: [''],
+      assignee: [''],
     });
   }
 
@@ -165,6 +187,16 @@ export class RequestDetailComponent implements OnInit, OnDestroy {
           }
         )
     );
+  }
+
+  handleAssigneeChange(event) {
+    this._requestService
+      .assignComplaintToUser(this.data.jobID, {
+        assignedTo: event.value,
+      })
+      .subscribe(() => {
+        this.requestFG.patchValue({ assignee: event.value });
+      });
   }
 
   ngOnDestroy(): void {

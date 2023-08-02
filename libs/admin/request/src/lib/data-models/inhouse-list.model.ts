@@ -39,6 +39,7 @@ export class InhouseData {
   id: string;
   itemCode: string;
   itemName: string;
+  itemId: string;
   jobDuration: number;
   sla: number;
   jobID: string;
@@ -90,6 +91,7 @@ export class InhouseData {
 
     this.timeLeft = input.timeLeft;
     this.source = input.source;
+    this.itemId = input.itemId;
 
     return this;
   }

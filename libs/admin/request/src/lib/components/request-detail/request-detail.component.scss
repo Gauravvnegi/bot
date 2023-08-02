@@ -114,6 +114,8 @@ td {
       letter-spacing: 1.44px;
       color: $secondary;
       margin-bottom: 10px;
+      border-bottom: 1px solid #e5e9f2;
+      padding-bottom: 6px;
     }
     &-subtitle {
       font-size: 16px;
@@ -136,8 +138,8 @@ td {
         width: fit-content;
         color: $white;
         font-weight: $bold;
-        margin-top: 15px;
-        margin-left: 15px;
+        // margin-top: 15px;
+        // margin-left: 15px;
       }
       &-booking {
         margin-top: 15px;
@@ -207,6 +209,7 @@ td {
   display: flex;
   position: absolute;
   right: 25px;
+  top: 4em;
   font-size: 22px;
   align-items: center;
   gap: 0.1em;
@@ -222,4 +225,9 @@ td {
     color: gray;
     font-size: 12px;
   }
+}
+
+.jobno-wrapper {
+  display: flex;
+  flex-direction: column;
 }

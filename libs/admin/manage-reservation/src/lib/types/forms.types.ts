@@ -57,6 +57,7 @@ export class OutletFormData {
   from: number;
   to: number;
   reservationType: string;
+  status: string;
   source: string;
   sourceName: string;
   marketSegment: string;
@@ -81,3 +82,5 @@ type ItemsData = {
 //   roomTypeCount: number;
 //   numberOfRooms: number;
 // }
+
+export type OutletConfig = {};

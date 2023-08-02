@@ -54,6 +54,8 @@ export class FormService {
     reservationData.sourceName = input.reservationInformation?.sourceName;
     reservationData.source = input.reservationInformation?.source;
     reservationData.marketSegment = input.reservationInformation?.marketSegment;
+    reservationData.status = input.reservationInformation?.status;
+    reservationData.reservationType = input.reservationInformation?.status;
 
     // Booking/order/event info
     reservationData.adultCount =

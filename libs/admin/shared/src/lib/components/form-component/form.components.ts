@@ -200,7 +200,6 @@ export class FormComponent implements OnInit {
       this.controlContainer.control.get(this.controlName)?.touched
     ) {
       const priorityError = Object.keys(errors)[0];
-      console.log('priorityError', priorityError);
       return this.errorMessages[priorityError];
     }
     return false;

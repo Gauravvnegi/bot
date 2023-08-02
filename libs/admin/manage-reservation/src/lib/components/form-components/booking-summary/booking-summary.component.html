@@ -62,13 +62,21 @@
             ? controlContainer.control?.get('roomInformation.adultCount')?.value
             : 0
         }}
-        Adult, Adults &
+        {{
+          controlContainer.control?.get('roomInformation.adultCount')?.value > 1
+            ? 'Adults'
+            : 'Adult'
+        }}
         {{
           controlContainer.control?.get('roomInformation.childCount')?.value
             ? controlContainer.control?.get('roomInformation.childCount')?.value
             : 0
         }}
-        Kid Child
+        {{
+          controlContainer.control?.get('roomInformation.childCount')?.value > 1
+            ? 'Children'
+            : 'Child'
+        }}
       </span>
       <span class="bk-summary_priceInfo_perNight_amount">
         {{ summaryData?.totalAmount | currency: 'INR' }}
@@ -98,7 +106,7 @@
         >+{{ summaryData.taxesAndFees }}</span
       >
     </p>
-    <div class="view-details-btn">
+    <div class="view-details-btn" *ngIf="bookingType === 'ROOM_TYPE'">
       <hospitality-bot-button
         [label]="detailsView ? 'View Less' : 'View Details'"
         variant="text"

@@ -2,13 +2,11 @@ import { Injectable } from '@angular/core';
 import { ApiService } from '@hospitality-bot/shared/utils';
 import { SearchResultResponse } from 'libs/admin/library/src/lib/types/response';
 import { RoomTypeListResponse } from 'libs/admin/room/src/lib/types/service-response';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { ReservationTableValue } from '../constants/reservation-table';
+import { Observable } from 'rxjs';
 import { ReservationFormData } from '../types/forms.types';
 import { QueryConfig } from '../types/reservation.type';
-import { distinctUntilChanged, map } from 'rxjs/operators';
-import { EntityType } from '@hospitality-bot/admin/shared';
-import { SummaryData } from '../models/reservations.model';
+import { map } from 'rxjs/operators';
+import { MenuItemListResponse } from '../types/response.type';
 
 @Injectable()
 export class ManageReservationService extends ApiService {
@@ -112,6 +110,15 @@ export class ManageReservationService extends ApiService {
     });
   }
 
+  getMenuList(outletId: string): Observable<MenuItemListResponse> {
+    return this.get(
+      `/api/v1/menus/items?entityId=${outletId}&pagination=false`,
+      {
+        headers: { 'entity-id': outletId },
+      }
+    );
+  }
+
   getReservationItemsByCategory<T>(config?: QueryConfig): Observable<T> {
     return this.get(`/api/v1/booking${config?.params}`);
   }
@@ -157,103 +164,6 @@ export class ManageReservationService extends ApiService {
     entityId,
     config: QueryConfig = { params: '?order=DESC&limit=5' }
   ): Observable<any> {
-    return this.get(
-      `/api/v1/entity/${entityId}/tax${config?.params ?? ''}`
-    ).pipe(
-      map((res) => {
-        res.records = [
-          {
-            invoiceId: 1682254737883,
-            outletName: 'Outlet 1',
-            bookingNumber: '1682254737883',
-            guestName: 'Rajesh',
-            date: '2021-05-21',
-            time: '12:00 PM',
-            totalDueAmount: 100,
-            totalAmount: 1000,
-            source: 'Agent',
-            paymentMethod: 'Cash',
-            reservationType: 'DRAFT',
-            status: 'Paid',
-            statusValues: ['Paid', 'Unpaid'],
-          },
-          {
-            invoiceId: 1682254737883,
-            outletName: 'Outlet 1',
-            bookingNumber: '1682254737883',
-            guestName: 'Rajesh',
-            date: '2021-05-21',
-            time: '12:00 PM',
-            totalDueAmount: 100,
-            totalAmount: 1000,
-            source: 'Agent',
-            paymentMethod: 'Cash',
-            reservationType: 'CONFIRMED',
-            status: 'Paid',
-            statusValues: ['Paid', 'Unpaid'],
-          },
-          {
-            invoiceId: 1682254737883,
-            outletName: 'Outlet 1',
-            bookingNumber: '1682254737883',
-            guestName: 'Rajesh',
-            from: '2021-05-21 12:00 PM',
-            to: '2021-05-21 12:00 PM',
-            totalDueAmount: 100,
-            totalAmount: 1000,
-            source: 'Agent',
-            paymentMethod: 'Cash',
-            reservationType: 'DRAFT',
-            status: 'Paid',
-            statusValues: ['Paid', 'Unpaid'],
-          },
-          {
-            invoiceId: 1682254737883,
-            outletName: 'Outlet 1',
-            bookingNumber: '1682254737883',
-            guestName: 'Rajesh',
-            date: '2021-05-21',
-            time: '12:00 PM',
-            totalDueAmount: 100,
-            totalAmount: 1000,
-            source: 'Agent',
-            paymentMethod: 'Cash',
-            reservationType: 'CONFIRMED',
-            status: 'Paid',
-            statusValues: ['Paid', 'Unpaid'],
-          },
-          {
-            invoiceId: 1682254737883,
-            outletName: 'Outlet 1',
-            bookingNumber: '1682254737883',
-            guestName: 'Rajesh',
-            date: '2021-05-21',
-            time: '12:00 PM',
-            totalDueAmount: 100,
-            totalAmount: 1000,
-            source: 'Agent',
-            paymentMethod: 'Cash',
-            reservationType: 'DRAFT',
-            status: 'Paid',
-            statusValues: ['Paid', 'Unpaid'],
-          },
-        ];
-
-        res.entityTypeCounts = {};
-        res.entityStateCounts = {
-          draft: 3,
-          confirmed: 2,
-          canceled: 0,
-          waitListed: 0,
-          noShow: 0,
-          inSession: 0,
-          completed: 0,
-        };
-
-        res.total = 5;
-
-        return res;
-      })
-    );
+    return this.get(`/api/v1/entity/${entityId}/tax${config?.params ?? ''}`);
   }
 }

@@ -21,6 +21,7 @@ export class IteratorComponent implements OnChanges {
   constructor(protected fb: FormBuilder) {}
 
   @Output() currentIndex: EventEmitter<number> = new EventEmitter<number>();
+  @Output() removedIndex: EventEmitter<number> = new EventEmitter<number>();
 
   @Input() fields: IteratorField[];
   @Input() useFormArray: FormArray;
@@ -34,6 +35,12 @@ export class IteratorComponent implements OnChanges {
     if (!changes?.useFormArray?.currentValue.length) {
       this.createNewFields();
     }
+  }
+
+  ngOnInit() {
+    this.useFormArray.valueChanges.subscribe((res) => {
+      this.createNewFields();
+    });
   }
 
   /**
@@ -82,5 +89,6 @@ export class IteratorComponent implements OnChanges {
       return;
     }
     this.useFormArray.removeAt(index);
+    this.removedIndex.emit(index);
   }
 }

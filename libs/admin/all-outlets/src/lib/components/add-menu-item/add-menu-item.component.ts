@@ -115,7 +115,7 @@ export class AddMenuItemComponent extends OutletBaseComponent
       dineInPriceCurrency: ['INR'],
       dineInPrice: ['', [Validators.required, Validators.min(0)]],
       deliveryPriceCurrency: ['INR'],
-      deliveryPrice: ['', [Validators.required, Validators.min(0)]],
+      deliveryPrice: ['', [Validators.min(0)]],
       hsnCode: [''],
       taxIds: [[]],
       description: [''],

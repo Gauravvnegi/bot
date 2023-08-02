@@ -126,7 +126,10 @@
             <div class="primary-text">
               {{ rowData.dineInPrice | currency: 'INR' }}/Dine In Price
             </div>
-            <div class="secondary-text" *ngIf="rowData.deliveryPrice">
+            <div
+              class="secondary-text"
+              *ngIf="rowData.deliveryPrice; else emptyCell"
+            >
               {{ rowData?.deliveryPrice | currency: 'INR' }}/Delivery Price
             </div>
           </div>

@@ -5,7 +5,12 @@ import {
   ReservationResponse,
   SummaryResponse,
 } from '../types/response.type';
-import { EntityState, FlagType, Option } from '@hospitality-bot/admin/shared';
+import {
+  EntityState,
+  EntitySubType,
+  FlagType,
+  Option,
+} from '@hospitality-bot/admin/shared';
 import { SearchGuestResponse } from 'libs/admin/guests/src/lib/types/guest.type';
 import { MenuItemsData, RoomTypes, SpaItems } from '../constants/form';
 import { OutletFormData } from '../types/forms.types';
@@ -255,7 +260,7 @@ export class OutletForm {
   guestInformation: GuestInfo;
   paymentMethod: PaymentInfo;
   offerId: string;
-  orderInforamtion?: OrderInfo;
+  orderInformation?: OrderInfo;
   bookingInformation?: BookingInformation;
   eventInformation?: EventInformation;
 
@@ -264,14 +269,16 @@ export class OutletForm {
     this.guestInformation = new GuestInfo().deserialize(input);
     this.paymentMethod = new PaymentInfo().deserialize(input);
     this.offerId = input?.offerId;
-
     switch (input.outletType) {
-      case 'RESTUARANT':
-        this.orderInforamtion = new OrderInfo().deserialize(input);
-      case 'VENUE':
+      case EntitySubType.RESTAURANT:
+        this.orderInformation = new OrderInfo().deserialize(input);
+        break;
+      case EntitySubType.VENUE:
         this.eventInformation = new EventInformation().deserialize(input);
-      case 'SPA':
+        break;
+      case EntitySubType.SPA:
         this.bookingInformation = new BookingInformation().deserialize(input);
+        break;
     }
     return this;
   }
@@ -347,7 +354,7 @@ export class BookingInfo {
     this.source = input?.source;
     this.sourceName = input?.sourceName;
     this.marketSegment = input?.marketSegment;
-    this.status = input?.status ?? '';
+    this.status = input?.reservationType ?? '';
     this.dateAndTime = input?.from;
     return this;
   }

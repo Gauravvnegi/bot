@@ -12,6 +12,8 @@ import {
   NavRouteOptions,
   AdminUtilityService,
   Option,
+  EntityType,
+  EntitySubType,
 } from '@hospitality-bot/admin/shared';
 import { IteratorField } from 'libs/admin/shared/src/lib/types/fields.type';
 import { Subscription } from 'rxjs';
@@ -39,6 +41,7 @@ import {
 } from '../../types/reservation.type';
 import { ServiceListResponse } from '../../types/response.type';
 import { LibraryService } from '@hospitality-bot/admin/library';
+import { debounceTime } from 'rxjs/operators';
 
 @Component({
   selector: 'hospitality-bot-spa-reservation',
@@ -160,9 +163,6 @@ export class SpaReservationComponent implements OnInit {
       .valueChanges.subscribe((res) => {
         this.itemInfo = `For ${res} Adult`;
       });
-    this.spaBookingInfo.valueChanges.subscribe((res) => {
-      this.getSummaryData();
-    });
   }
 
   /**
@@ -180,7 +180,12 @@ export class SpaReservationComponent implements OnInit {
           .get('amount')
           .setValue(selectedService?.price);
         this.spaItemsControls[index].get('quantity').setValue(1);
+        this.getSummaryData();
       });
+    this.spaItemsControls[index]
+      .get('quantity')
+      .valueChanges.pipe(debounceTime(1000))
+      .subscribe((res) => this.getSummaryData());
   }
 
   /**
@@ -292,13 +297,10 @@ export class SpaReservationComponent implements OnInit {
   }
 
   getSummaryData(): void {
-    const defaultProps = [
-      {
-        type: 'OUTLET',
-      },
-    ];
     const config = {
-      params: this.adminUtilityService.makeQueryParams(defaultProps),
+      params: this.adminUtilityService.makeQueryParams([
+        { type: EntityType.OUTLET },
+      ]),
     };
     const data = {
       fromDate: this.reservationInfoControls.dateAndTime.value,
@@ -309,13 +311,14 @@ export class SpaReservationComponent implements OnInit {
         unit: item.get('quantity')?.value ?? 0,
         amount: item.get('amount').value,
       })),
-      outletType: 'SPA',
+      outletType: EntitySubType.SPA,
     };
     this.$subscription.add(
       this.manageReservationService
         .getSummaryData(this.outletId, data, config)
         .subscribe(
           (res) => {
+            debugger;
             this.summaryData = new SummaryData()?.deserialize(res);
             this.userForm
               .get('paymentMethod.totalPaidAmount')

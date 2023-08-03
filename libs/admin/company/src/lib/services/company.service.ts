@@ -47,4 +47,8 @@ export class CompanyService extends ApiService {
       status: data.status,
     });
   }
+
+  sortMemberBy(config: QueryConfig): Observable<CompanyListResponse> {
+    return this.get(`/api/v1/members${config.params}`);
+  }
 }

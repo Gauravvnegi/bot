@@ -1,12 +1,16 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from 'libs/shared/utils/src/lib/services/api.service';
 import { Observable } from 'rxjs';
-import { GuestType, SearchGuestResponse } from '../types/guest.type';
+import {
+  GuestListResponse,
+  GuestType,
+  SearchGuestResponse,
+} from '../types/guest.type';
 import { QueryConfig } from '@hospitality-bot/admin/shared';
 
 @Injectable()
 export class GuestTableService extends ApiService {
-  getGuestList(config: QueryConfig): Observable<any> {
+  getGuestList(config: QueryConfig): Observable<GuestListResponse> {
     return this.get(`/api/v1/members${config.params}`);
   }
 
@@ -56,5 +60,9 @@ export class GuestTableService extends ApiService {
     return this.get(`/api/v1/members/stats/export${config.params}`, {
       responseType: 'blob',
     });
+  }
+
+  sortMemberBy(config: QueryConfig): Observable<GuestListResponse> {
+    return this.get(`/api/v1/members${config.params}`);
   }
 }

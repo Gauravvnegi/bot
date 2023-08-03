@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ControlContainer } from '@angular/forms';
 import { FormComponent } from '../form-component/form.components';
 import { debounceTime } from 'rxjs/operators';
@@ -12,7 +12,11 @@ import { debounceTime } from 'rxjs/operators';
   ],
 })
 export class GlobalSearchComponent extends FormComponent {
+  scattered = false;
+  hasSuggestion = false;
+  @Input() suggestionList: string[];
   @Output() onSearch = new EventEmitter<string>();
+  @Output() onSuggestClick = new EventEmitter<string>();
   constructor(public controlContainer: ControlContainer) {
     super(controlContainer);
   }
@@ -34,11 +38,18 @@ export class GlobalSearchComponent extends FormComponent {
     this.controlContainer.control.get(this.controlName).setValue('');
   }
 
+  suggestClick(key: string) {
+    this.onSuggestClick.emit(key);
+    setTimeout(() => {
+      this.isClearShow = false;
+    }, 500);
+  }
+
   //TODO: For collapsed searchbar
-  // isClearShow = false;
-  // onBlurSearch(event: Event) {
-  //   this.isClearShow = !this.isClearShow;
-  // }
+  isClearShow = false;
+  onBlurSearch(event: Event) {
+    this.isClearShow = !this.isClearShow;
+  }
 
   // valueChange(event, data) {
   //   data.length > 3 &&

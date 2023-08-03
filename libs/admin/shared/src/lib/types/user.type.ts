@@ -118,4 +118,5 @@ export type UserResponse = {
   }[];
   sites: Sites[];
   agent: boolean;
+  reportingTo: string;
 };

@@ -128,6 +128,10 @@ export class ManagePermissionService extends ApiService {
     return this.patch(`/api/v1/user/${userId}`, statusData);
   }
 
+  getUserJobDetails(userId: string): Observable<any> {
+    return this.get(`/api/v1/request/user/${userId}`);
+  }
+
   getUserDetailsById(userId: string): Observable<any> {
     return this.get(`/api/v1/user/${userId}`);
   }
@@ -153,10 +157,8 @@ export class ManagePermissionService extends ApiService {
     );
   }
 
-  getAllUsers(config: QueryConfig): Observable<UserListResponse> {
-    return this.get(
-      `/api/v1/entity/${config.entityId}/users${config.queryObj ?? ''}`
-    );
+  getAllUsers(entityId: string, config): Observable<UserListResponse> {
+    return this.get(`/api/v1/entity/${entityId}/users${config.params ?? ''}`);
   }
 
   addNewUser(parentUserId: string, data: any) {

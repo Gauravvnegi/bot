@@ -10,7 +10,7 @@ type Availability = {
 export type UpdateInventoryResponse = {
   startDate: number;
   endDate: number;
-  inventoryData: Availability;
+  inventoryDataMap: Map<string, Availability>;
   rooms: RoomTypesResponse[];
 };
 

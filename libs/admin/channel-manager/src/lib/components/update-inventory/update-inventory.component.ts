@@ -26,6 +26,7 @@ import { ChannelManagerService } from '../../services/channel-manager.service';
 import * as moment from 'moment';
 import { UpdateInventory } from '../../models/channel-manager.model';
 import { debounceTime, tap } from 'rxjs/operators';
+import { UpdateInventoryResponse } from '../../types/response.type';
 
 @Component({
   selector: 'hospitality-bot-update-inventory',
@@ -51,6 +52,7 @@ export class UpdateInventoryComponent implements OnInit {
 
   perDayRoomAvailability = new Map<number, any>();
   inventoryRoomDetails: Map<any, any[]>;
+  inventoryResponse: UpdateInventoryResponse[];
   currentDate = new Date();
 
   constructor(
@@ -269,6 +271,10 @@ export class UpdateInventoryComponent implements OnInit {
         debounceTime(300)
       )
       .subscribe((res: string[]) => {
+        this.perDayRoomAvailability = UpdateInventory.buildAvailability(
+          this.inventoryResponse,
+          this.useFormControl.roomType.value
+        );
         this.roomTypes = this.allRoomTypes.filter((item) =>
           res.includes(item.value)
         );
@@ -293,7 +299,12 @@ export class UpdateInventoryComponent implements OnInit {
         .subscribe(
           (res) => {
             const data = new UpdateInventory().deserialize(res.roomType);
-            this.perDayRoomAvailability = data.perDayRoomAvailability;
+            this.inventoryResponse = res.roomType
+              .updates as UpdateInventoryResponse[];
+            this.perDayRoomAvailability = UpdateInventory.buildAvailability(
+              this.inventoryResponse,
+              this.useFormControl.roomType.value
+            );
             this.inventoryRoomDetails = data.inventoryRoomDetails;
             this.setRoomDetails(selectedDate);
             this.loading = false;

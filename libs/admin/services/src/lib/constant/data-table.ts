@@ -67,6 +67,7 @@ export const cols: Cols[] = [
     sortType: 'string',
     width: '18%',
     isSearchDisabled: true,
+    isSortDisabled: true,
   },
 ];
 

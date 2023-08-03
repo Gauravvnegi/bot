@@ -118,10 +118,9 @@ export class VenueReservationComponent implements OnInit {
       }),
       offerId: [''],
     });
-
     // Add food package items to the form
     this.foodPackageArray = this.userForm.get(
-      'orderInformation.foodPackages'
+      'eventInformation.foodPackages'
     ) as FormArray;
 
     // Add the first food package item to the form

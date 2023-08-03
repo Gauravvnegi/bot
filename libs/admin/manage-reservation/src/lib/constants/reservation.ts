@@ -1,5 +1,6 @@
 import { IteratorField } from 'libs/admin/shared/src/lib/types/fields.type';
 import { RatePlanData } from '../models/reservations.model';
+import { AddedRatePlans } from 'libs/admin/room/src/lib/constant/form';
 
 export const roomFields: IteratorField[] = [
   {
@@ -55,8 +56,7 @@ export type RoomFieldTypeOption = {
   label: string;
   value: string;
   roomCount: number;
-  ratePlan: RatePlanData[];
-  roomNumber: string[];
+  ratePlan: AddedRatePlans[];
   maxChildren: number;
   maxAdult: number;
 };
@@ -83,11 +83,12 @@ export const menuItemFields: IteratorField[] = [
   {
     label: 'Menu Item',
     name: 'menuItems',
-    type: 'auto-complete',
+    type: 'select',
     options: [],
     required: false,
     placeholder: 'Search by name',
     width: '40%',
+    isAsync: true,
   },
   {
     label: 'Quantity',
@@ -104,6 +105,7 @@ export const menuItemFields: IteratorField[] = [
     required: false,
     placeholder: 'Enter',
     width: '25%',
+    disabled: true,
   },
 ];
 
@@ -133,6 +135,7 @@ export const spaFields: IteratorField[] = [
     required: false,
     placeholder: 'Enter',
     width: '28%',
+    disabled: true,
   },
 ];
 
@@ -160,6 +163,7 @@ export const venueFields: IteratorField[] = [
     required: false,
     placeholder: 'Enter',
     width: '30%',
+    disabled: true,
   },
 ];
 
@@ -190,7 +194,7 @@ export const eventOptions = [
 
 export const restaurantReservationTypes = [
   { label: 'Dine-in', value: 'DINE_IN' },
-  { label: 'Delivery', value: 'Delivery' },
+  { label: 'Delivery', value: 'DELIVERY' },
 ];
 
 export const roomReservationTypes = [

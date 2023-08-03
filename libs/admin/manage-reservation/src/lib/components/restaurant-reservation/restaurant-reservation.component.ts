@@ -12,6 +12,8 @@ import {
   NavRouteOptions,
   AdminUtilityService,
   Option,
+  EntitySubType,
+  EntityType,
 } from '@hospitality-bot/admin/shared';
 import { Subscription } from 'rxjs';
 import { manageReservationRoutes } from '../../constants/routes';
@@ -36,6 +38,10 @@ import { OutletService } from 'libs/admin/all-outlets/src/lib/services/outlet.se
 import { MenuItemList } from '../../models/forms.model';
 import { SelectedEntity } from '../../types/reservation.type';
 import { OutletItems } from '../../constants/reservation-table';
+import { MenuItemListResponse } from '../../types/response.type';
+import { debounceTime } from 'rxjs/operators';
+import { OutletForm } from '../../models/reservations.model';
+import { ItemsData } from '../../types/forms.types';
 
 @Component({
   selector: 'hospitality-bot-restaurant-reservation',
@@ -54,8 +60,10 @@ export class RestaurantReservationComponent implements OnInit {
 
   entityId: string;
   reservationId: string;
+  reservationType: string;
   outletId: string;
 
+  menuItemsValues = [];
   reservationTypes: Option[] = [];
   statusOptions: Option[] = [];
   foodPackages: Option[] = [];
@@ -72,14 +80,13 @@ export class RestaurantReservationComponent implements OnInit {
   date: string;
   time: string;
   deductedAmount = 0;
-  bookingType = 'RESTAURANT';
+  bookingType = EntitySubType.RESTAURANT;
 
   pageTitle: string;
   routes: NavRouteOptions = [];
 
   /* menu options variable */
-  loadingResults = false;
-  menuItems: Option[] = [];
+  menuItems: (Option & { deliveryPrice?: number; dineInPrice: number })[] = [];
   outletItems: OutletItems[] = [];
   // summaryInfo: SummaryInfo;
   tableNumber = '';
@@ -114,6 +121,7 @@ export class RestaurantReservationComponent implements OnInit {
     this.entityId = this.globalFilterService.entityId;
     this.outletId = this.selectedEntity.id;
     this.fields = menuItemFields;
+    this.getMenuItems();
     this.initOptions();
     this.getReservationId();
   }
@@ -124,15 +132,13 @@ export class RestaurantReservationComponent implements OnInit {
     if (this.expandAccordion) {
       this.formSerivce.enableAccordion = false;
     }
-    // this.setDateAndTime(this.reservationInfoControls.dateAndTime.value);
   }
 
   initOptions() {
     // Update fields for search in select component
     this.fields[0] = {
       ...this.fields[0],
-      loading: this.loadingResults,
-      searchResults: this.searchResults.bind(this),
+      noMoreResults: true,
     };
     this.reservationTypes = restaurantReservationTypes;
   }
@@ -155,7 +161,7 @@ export class RestaurantReservationComponent implements OnInit {
       }),
       orderInformation: this.fb.group({
         tableNumber: [''],
-        numberOfAdults: [''],
+        numberOfAdults: [0],
         foodPackages: new FormArray([]),
         menuItems: this.menuItemsArray,
         kotInstructions: [''],
@@ -200,6 +206,18 @@ export class RestaurantReservationComponent implements OnInit {
       if (res) this.setDateAndTime(res);
     });
 
+    // Filter menu items which has delivery price
+    this.reservationInfoControls.reservationType.valueChanges.subscribe(
+      (res) => {
+        this.reservationType = res;
+        res === 'DELIVERY'
+          ? (this.fields[0].options = this.fields[0].options.filter(
+              (items) => items.deliveryPrice
+            ))
+          : (this.fields[0].options = this.menuItems);
+      }
+    );
+
     this.reservationInfoControls.reservationType.valueChanges.subscribe(
       (res) => {
         if (res === 'NOSHOW' || res === 'CANCELED') {
@@ -224,15 +242,21 @@ export class RestaurantReservationComponent implements OnInit {
         const selectedMenuItem = this.menuItems.find(
           (service) => service.value === res
         );
-        this.menuItemsControls[index]
-          .get('amount')
-          .setValue(selectedMenuItem.price);
+
+        const selectedPrice =
+          this.reservationType === 'DELIVERY'
+            ? selectedMenuItem?.deliveryPrice
+            : selectedMenuItem?.dineInPrice;
+
+        this.menuItemsControls[index].get('amount').setValue(selectedPrice);
+        this.menuItemsControls[index].get('quantity').setValue(1);
+
+        this.getSummaryData();
       });
     this.menuItemsControls[index]
       .get('quantity')
-      .valueChanges.subscribe((res: number) => {
-        this.getSummaryData();
-      });
+      .valueChanges.pipe(debounceTime(1000))
+      .subscribe((res: number) => this.getSummaryData());
   }
 
   /**
@@ -278,8 +302,16 @@ export class RestaurantReservationComponent implements OnInit {
         .getReservationDataById(this.reservationId, this.entityId)
         .subscribe(
           (response) => {
-            const data = new ReservationFormData().deserialize(response);
-            this.userForm.patchValue(data);
+            const data = new OutletForm().deserialize(response);
+            const {
+              orderInformation: { menuItems, ...orderInfo },
+              ...formData
+            } = data;
+            this.menuItemsValues = menuItems;
+            this.userForm.patchValue({
+              orderInformation: orderInfo,
+              ...formData,
+            });
             this.summaryData = new SummaryData().deserialize(response);
             this.setFormDisability(data.reservationInformation);
             if (data.offerId)
@@ -337,6 +369,23 @@ export class RestaurantReservationComponent implements OnInit {
       );
   }
 
+  getMenuItems() {
+    this.$subscription.add(
+      this.manageReservationService
+        .getMenuList(this.outletId)
+        .subscribe((items: MenuItemListResponse) => {
+          const menuList = items.records;
+          this.menuItems = items.records.map((item) => ({
+            label: item.name,
+            value: item.id,
+            deliveryPrice: item?.deliveryPrice ?? null,
+            dineInPrice: item.dineInPrice,
+          }));
+          this.fields[0].options = this.menuItems;
+        })
+    );
+  }
+
   offerSelect(offerData?: OfferData): void {
     if (offerData) {
       this.userForm.patchValue({ offerId: offerData.id });
@@ -351,79 +400,41 @@ export class RestaurantReservationComponent implements OnInit {
   getSummaryData(): void {
     const config = {
       params: this.adminUtilityService.makeQueryParams([
-        { type: 'RESTAURANT' },
+        { type: EntityType.OUTLET },
       ]),
     };
 
     const data = {
       fromDate: this.reservationInfoControls.dateAndTime.value,
       toDate: this.reservationInfoControls.dateAndTime.value,
-      adultCount: this.orderInfoControls.numberOfAdults,
+      adultCount: this.orderInfoControls.numberOfAdults.value,
       items: this.menuItemsControls.map((item) => ({
-        itemId: item.get('serviceName').value,
+        itemId: item.get('menuItems').value,
         unit: item.get('quantity')?.value ?? 0,
         amount: item.get('amount').value,
       })),
-      outletType: 'SPA',
+      outletType: EntitySubType.RESTAURANT,
     };
-    if (this.userForm.get('roomInformation.roomTypeId')?.value) {
-      this.$subscription.add(
-        this.manageReservationService
-          .getSummaryData(this.outletId, data, config)
-          .subscribe(
-            (res) => {
-              this.summaryData = new SummaryData()?.deserialize(res);
-              this.userForm
-                .get('roomInformation')
-                .patchValue(this.summaryData, { emitEvent: false });
-              this.userForm
-                .get('paymentMethod.totalPaidAmount')
-                .setValidators([Validators.max(this.summaryData?.totalAmount)]);
-              this.userForm
-                .get('paymentMethod.totalPaidAmount')
-                .updateValueAndValidity();
-              this.userForm
-                .get('paymentRule.deductedAmount')
-                .patchValue(this.summaryData?.totalAmount);
-              this.deductedAmount = this.summaryData?.totalAmount;
-            },
-            (error) => {}
-          )
-      );
-    }
-  }
-
-  /**
-   * @function searchServices To search services
-   * @param text search text
-   */
-  searchResults(text: string) {
-    if (text) {
-      this.loadingResults = true;
-      this.outletService
-        .searchItem(this.outletId, {
-          params: `?key=${text}&type=${OutletItems.MENU_ITEM}`,
-        })
-        .subscribe((res) => {
-          this.loadingResults = false;
-          this.menuItems = res
-            ? this.outletItems.reduce((prev, curr) => {
-                let currentList = res[curr] as Option[];
-                let descriptiveType: string = curr;
-
-                let data =
-                  currentList.map((item) => {
-                    return {
-                      label: item.name,
-                      value: item.id,
-                    };
-                  }) ?? [];
-                return [...prev, ...data];
-              }, [])
-            : [];
-          this.fields[0].options = this.menuItems;
-        });
-    }
+    this.$subscription.add(
+      this.manageReservationService
+        .getSummaryData(this.outletId, data, config)
+        .subscribe(
+          (res) => {
+            this.summaryData = new SummaryData()?.deserialize(res);
+            this.userForm
+              .get('paymentMethod.totalPaidAmount')
+              .setValidators([Validators.max(this.summaryData?.totalAmount)]);
+            this.userForm
+              .get('paymentMethod.totalPaidAmount')
+              .updateValueAndValidity();
+            this.userForm
+              .get('paymentRule.deductedAmount')
+              .patchValue(this.summaryData?.totalAmount);
+            this.deductedAmount = this.summaryData?.totalAmount;
+          },
+          (error) => {}
+        )
+    );
   }
 
   get inputControl() {

@@ -1,4 +1,4 @@
-<div class="main-wrapper">
+<div class="main-wrapper" [id]="fa?.referenceId">
   <hospitality-bot-navigation-header
     heading="Update rates"
     [routes]="[{ label: 'Update rates', link: './' }]"
@@ -22,7 +22,7 @@
       <!-- LEFT SECTION -->
       <div class="left">
         <div class="left__main">
-          <div class="main-header main-header__left">
+          <div class="main-header main-header__left date-header-sticky">
             <hospitality-bot-room-types
               class="room-types-select"
               [controlName]="'roomType'"
@@ -46,8 +46,15 @@
             *ngIf="!isRoomsEmpty && allRoomTypes?.length"
           >
             <div
+              loader
+              [isVisible]="isLoaderVisible"
+              [props]="{
+                showLoader: false
+              }"
+            ></div>
+            <div
               *ngIf="hasDynamicPricing"
-              class="dynamic-section left-main-cell"
+              class="dynamic-section left-main-cell dynamic-pricing-header-sticky"
             >
               <span class="text">
                 Dynamic Pricing
@@ -184,7 +191,7 @@
       <!-- RIGHT SECTION -->
       <div class="right">
         <div class="right__main">
-          <div class="main-header main-header__right">
+          <div class="main-header main-header__right date-header-sticky">
             <div class="date-wrapper dates-header">
               <div
                 *ngFor="let date of dates"
@@ -201,8 +208,16 @@
             *ngIf="!isRoomsEmpty && allRoomTypes?.length"
           >
             <div
+              loader
+              [isVisible]="isLoaderVisible"
+              [props]="{
+                top: '50%',
+                left: '25%'
+              }"
+            ></div>
+            <div
               *ngIf="hasDynamicPricing"
-              class="data-cell-wrapper"
+              class="data-cell-wrapper dynamic-pricing-header-sticky"
               formArrayName="dynamicPricing"
             >
               <div class="data-cell dynamic-section">
@@ -378,13 +393,6 @@
       </div>
     </div>
 
-    <hospitality-bot-button
-      class="save-btn"
-      label="Save"
-      (onClick)="handleSave()"
-      [disabled]="loading || loadingError"
-      *ngIf="!isRoomsEmpty && allRoomTypes?.length"
-    ></hospitality-bot-button>
     <ng-container
       *ngIf="!isRoomsEmpty && allRoomTypes?.length; else emptyView"
     ></ng-container>
@@ -404,4 +412,18 @@
     >
     </hospitality-bot-empty-table>
   </ng-template>
+
+  <hospitality-bot-form-action
+    class="full-width"
+    [loading]="loading"
+    [config]="{
+      preHide: true,
+      postLabel: 'Save',
+      postDisable:
+        loading || loadingError || !(!isRoomsEmpty && allRoomTypes?.length)
+    }"
+    (onPostAction)="handleSave()"
+    #fa
+  >
+  </hospitality-bot-form-action>
 </div>

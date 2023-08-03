@@ -21,6 +21,7 @@ import { Location } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { ReservationForm } from '../../../constants/form';
 import { FormService } from '../../../services/form.service';
+import { EntitySubType, EntityType } from '@hospitality-bot/admin/shared';
 
 @Component({
   selector: 'hospitality-bot-booking-summary',
@@ -96,7 +97,7 @@ export class BookingSummaryComponent implements OnInit {
   handleBooking(): void {
     this.isBooking = true;
     let data: any;
-    if (this.bookingType === 'HOTEL')
+    if (this.bookingType === EntityType.HOTEL)
       data = this.manageReservationService.mapReservationData(
         this.parentFormGroup.getRawValue()
       );
@@ -110,7 +111,10 @@ export class BookingSummaryComponent implements OnInit {
   }
 
   createReservation(data): void {
-    const type = this.bookingType === 'ROOM_TYPE' ? 'ROOM_TYPE' : 'OUTLET';
+    const type =
+      this.bookingType === EntitySubType.ROOM_TYPE
+        ? EntitySubType.ROOM_TYPE
+        : EntityType.OUTLET;
     this.$subscription.add(
       this.manageReservationService
         .createReservation(this.outletId, data, type)

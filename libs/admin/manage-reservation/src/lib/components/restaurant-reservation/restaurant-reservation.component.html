@@ -74,6 +74,8 @@
             [useFormArray]="menuItemsArray"
             ctaLabel="+ Add Item"
             (currentIndex)="onItemsAdded($event)"
+            (removedIndex)="getSummaryData()"
+            [itemValues]="menuItemsValues"
           ></hospitality-bot-iterator>
           <hospitality-bot-text-area
             class="full-width"
@@ -105,7 +107,8 @@
           heading: selectedEntity.label,
           itemInfo: numberOfAdults,
           stayInfo: tableNumber,
-          bookingType: bookingType
+          bookingType: bookingType,
+          outletId: selectedEntity.id
         }"
       >
         <div class="bk-summary_roomInfo_checkoutInfo">
@@ -129,7 +132,7 @@
             Guests
           </p>
           <p class="bk-summary_roomInfo_guestInfo_subText">
-            2
+            {{ orderInfoControls.numberOfAdults.value }}
           </p>
         </div>
       </hospitality-bot-booking-summary>

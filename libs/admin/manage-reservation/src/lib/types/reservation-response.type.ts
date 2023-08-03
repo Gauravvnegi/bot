@@ -1,3 +1,5 @@
+import { GuestType } from 'libs/admin/guests/src/lib/types/guest.type';
+
 export type RoomReservationResponse = {
   id: string;
   from: number;
@@ -11,33 +13,11 @@ export type RoomReservationResponse = {
   totalDueAmount: number;
   reservationNumber: string;
   status: string;
-  guest: Guest;
+  guest: GuestType;
   created: number;
   offerAmount: number;
   nextStates: string[];
   bookingItems: BookingItem[];
-};
-
-export type Guest = {
-  id: string;
-  firstName: string;
-  lastName: string;
-  contactDetails: ContactDetails;
-  dateOfBirth: number;
-  age: number;
-  type: string;
-  isVerified: boolean;
-  status: boolean;
-  code: string;
-  created: number;
-  updated: number;
-  gender: string;
-};
-
-export type ContactDetails = {
-  cc: string;
-  contactNumber: string;
-  emailId: string;
 };
 
 export type BookingItem = {

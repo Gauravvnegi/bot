@@ -210,7 +210,6 @@ export class RoomDataTableComponent extends BaseDatatableComponent
    */
   handleRoomStatus(status: RoomStatus, id: string): void {
     this.loading = true;
-
     this.$subscription.add(
       this.roomService
         .updateRoomStatus(this.entityId, {
@@ -260,13 +259,13 @@ export class RoomDataTableComponent extends BaseDatatableComponent
    * @function handleStatus To handle the status change
    * @param status status value
    */
-  handleStatus(status: RoomStatus | RoomTypeStatus, rowData): void {
+  handleStatus(status: RoomStatus | boolean, rowData): void {
     if (this.selectedTab === TableValue.room) {
       this.handleRoomStatus(status as RoomStatus, rowData.id);
     }
 
     if (this.selectedTab === TableValue.roomType) {
-      const roomTypeStatus = status === 'ACTIVE';
+      const roomTypeStatus = status;
       if (!roomTypeStatus) {
         const dialogConfig = new MatDialogConfig();
         dialogConfig.disableClose = true;
@@ -290,7 +289,7 @@ export class RoomDataTableComponent extends BaseDatatableComponent
           togglePopupCompRef.componentInstance.content = {
             heading: 'In-active Room Type',
             description: [
-              `There are ${rowData.roomCount.active} rooms in this room type`,
+              `There are ${rowData.roomCount} rooms in this room type`,
               'You are about to mark this room type in-active.',
               'Are you Sure?',
             ],
@@ -304,7 +303,10 @@ export class RoomDataTableComponent extends BaseDatatableComponent
             {
               label: 'Yes',
               onClick: () => {
-                this.handleRoomTypeStatus(roomTypeStatus, rowData.id);
+                this.handleRoomTypeStatus(
+                  roomTypeStatus as boolean,
+                  rowData.id
+                );
                 this.modalService.close();
               },
               variant: 'contained',
@@ -316,7 +318,7 @@ export class RoomDataTableComponent extends BaseDatatableComponent
           this.modalService.close();
         });
       } else {
-        this.handleRoomTypeStatus(roomTypeStatus, rowData.id);
+        this.handleRoomTypeStatus(roomTypeStatus as boolean, rowData.id);
       }
     }
   }

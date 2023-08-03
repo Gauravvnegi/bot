@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from 'libs/shared/utils/src/lib/services/api.service';
 import { Observable } from 'rxjs';
-import { SearchGuestResponse } from '../types/guest.type';
+import { GuestType, SearchGuestResponse } from '../types/guest.type';
 import { QueryConfig } from '@hospitality-bot/admin/shared';
 
 @Injectable()
@@ -10,7 +10,7 @@ export class GuestTableService extends ApiService {
     return this.get(`/api/v1/members${config.params}`);
   }
 
-  getGuestById(guestId: string): Observable<any> {
+  getGuestById(guestId: string): Observable<GuestType> {
     return this.get(`/api/v1/members/${guestId}`);
   }
 

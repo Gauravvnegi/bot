@@ -32,8 +32,9 @@ import {
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { ChannelManagerService } from '../../services/channel-manager.service';
 import * as moment from 'moment';
-import { Subscription } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
 import { UpdateRates } from '../../models/channel-manager.model';
+import { debounceTime, tap } from 'rxjs/operators';
 
 @Component({
   selector: 'hospitality-bot-update-rates',
@@ -55,11 +56,13 @@ export class UpdateRatesComponent implements OnInit {
   restrictions: RestrictionAndValuesOption[];
   loading = false;
   loadingError = false;
+  isLoaderVisible = false;
   isRoomsEmpty = false;
   hasDynamicPricing = false;
   currentDate = new Date();
 
   $subscription = new Subscription();
+  private valueChangesSubject = new Subject<string[]>();
   ratesRoomDetails = new Map<string, RoomMapType>();
 
   constructor(
@@ -91,7 +94,13 @@ export class UpdateRatesComponent implements OnInit {
     return this.useFormControl.roomTypes?.controls;
   }
 
-  getArray(value?: number) {
+  getArray(value?: number, restrictionFA?: FormArray) {
+    if (restrictionFA && value) {
+      return restrictionFA.controls.map((FG: FormGroup) =>
+        FG.get('value').disabled ? FG.get('value').value : value
+      );
+    }
+
     if (value) {
       return Array.from({ length: this.dateLimit }).fill(value);
     }
@@ -201,9 +210,9 @@ export class UpdateRatesComponent implements OnInit {
     ) => {
       const rateControl = (control.get('rates') as FormArray).at(idx);
       if (res.value) {
-        rateControl.disable();
+        rateControl.disable({ emitEvent: false });
       } else {
-        rateControl.enable();
+        rateControl.enable({ emitEvent: false });
       }
     };
 
@@ -290,9 +299,8 @@ export class UpdateRatesComponent implements OnInit {
         restrictionFA.controls.forEach((rateControl) => {
           rateControl.valueChanges.subscribe((res) => {
             const linkedValue = control.at(idx).get('linked').value;
-
             if (linkedValue) {
-              restrictionFA.patchValue(this.getArray(res), {
+              restrictionFA.patchValue(this.getArray(res, restrictionFA), {
                 emitEvent: false,
               });
             }
@@ -381,14 +389,33 @@ export class UpdateRatesComponent implements OnInit {
       this.initDate(res);
     });
 
-    this.useForm.controls['date'].valueChanges.subscribe((selectedDate) => {
-      this.useForm.controls['date'].patchValue(selectedDate, {
-        emitEvent: false,
+    this.useForm.controls['date'].valueChanges
+      .pipe(
+        tap((value) => {
+          this.isLoaderVisible = true;
+        }),
+        debounceTime(300)
+      )
+      .subscribe((selectedDate) => {
+        this.useForm.controls['date'].patchValue(selectedDate, {
+          emitEvent: false,
+        });
+        this.getRates(selectedDate);
       });
-      this.getRates(selectedDate);
-    });
 
-    this.useFormControl.roomType.valueChanges.subscribe((res: string[]) => {
+    // Select Room Types Changes
+    this.useFormControl.roomType.valueChanges
+      .pipe(
+        tap((value) => {
+          this.isLoaderVisible = true;
+        }),
+        debounceTime(600)
+      )
+      .subscribe((res: string[]) => {
+        this.valueChangesSubject.next(res);
+      });
+
+    this.valueChangesSubject.subscribe((res: string[]) => {
       this.roomTypes = this.allRoomTypes.filter((item) =>
         res.includes(item.value)
       );
@@ -396,6 +423,7 @@ export class UpdateRatesComponent implements OnInit {
       this.useForm.removeControl('roomTypes');
       this.addRoomTypesControl();
       this.setRoomDetails();
+      this.isLoaderVisible = false;
     });
 
     if (this.hasDynamicPricing) {
@@ -439,10 +467,12 @@ export class UpdateRatesComponent implements OnInit {
             this.setRoomDetails(selectedDate);
             this.loading = false;
             this.loadingError = false;
+            this.isLoaderVisible = false;
           },
           (error) => {
             this.loading = false;
             this.loadingError = true;
+            this.isLoaderVisible = false;
           },
           this.handleFinal
         )

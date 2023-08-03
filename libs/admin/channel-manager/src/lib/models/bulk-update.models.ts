@@ -1,10 +1,6 @@
 import { Option } from '@hospitality-bot/admin/shared';
-import {
-  BulkUpdateForm,
-  BulkUpdateRequest,
-  RoomTypes,
-  Variant,
-} from '../types/bulk-update.types';
+import { RoomTypes, Variant } from '../types/bulk-update.types';
+import { RoomType } from 'libs/admin/room/src/lib/models/rooms-data-table.model';
 
 export function makeRoomOption(...data) {
   return data.map((item) => {
@@ -12,24 +8,24 @@ export function makeRoomOption(...data) {
   }) as Option[];
 }
 
-export function makeRoomsData(rooms) {
+export function makeRoomsData(rooms: RoomType[]) {
   let res = rooms.map((item) => {
     let room = {
       label: item.name,
       value: item.id,
       channels: [],
       ratePlans:
-        item.ratePlans.map((ratePlan) => ({
-          type: ratePlan.label,
-          label: ratePlan.label,
-          value: ratePlan.id,
-          channels: [],
-        })) ?? [],
+        item.ratePlans
+          ?.filter((ratePlan) => ratePlan.status)
+          .map((ratePlan) => ({
+            type: ratePlan.label,
+            label: ratePlan.label,
+            value: ratePlan.id,
+            channels: [],
+          })) ?? [],
     };
     return room.ratePlans.length ? room : null;
   });
-
-  // TODO: It must at least 1 ratePlans
   return res.filter((item) => item);
 }
 

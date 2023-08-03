@@ -109,7 +109,7 @@ export class Guest implements IDeserializable {
       set({}, 'email', get(input, ['contactDetails', 'emailId']))
     );
     this.guestAttributes = new GuestAttributes().deserialize(input.attributes);
-    if (input.reservation[0]) {
+    if (input?.reservation) {
       const reservation = input.reservation[0];
       this.booking = new Booking().deserialize(reservation);
       this.feedback = new Feedback().deserialize(reservation.feedback);

@@ -53,7 +53,7 @@ export const cols = {
     {
       field: 'invoiceId',
       header: 'Invoice Id',
-      sortType: 'number',
+      sortType: 'string',
     },
     {
       field: 'bookingNumber',

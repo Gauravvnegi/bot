@@ -26,6 +26,8 @@
             [useFormArray]="spaBookingInfo"
             ctaLabel="+ Add Item"
             (currentIndex)="onItemsAdded($event)"
+            (removedIndex)="getSummaryData()"
+            [itemValues]="spaItemsValues"
           ></hospitality-bot-iterator>
         </div>
       </p-accordionTab>

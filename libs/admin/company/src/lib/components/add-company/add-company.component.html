@@ -20,7 +20,11 @@
     <hospitality-bot-input
       class="half-width"
       controlName="name"
+      maxLength="60"
       label="Name"
+      [props]="{
+        placeholder: 'Enter'
+      }"
     ></hospitality-bot-input>
 
     <hospitality-bot-input
@@ -32,7 +36,8 @@
         errorMessages: {
           required: 'This is a required field.',
           pattern: 'Please enter a valid email address.'
-        }
+        },
+        placeholder: 'Enter'
       }"
     ></hospitality-bot-input>
 
@@ -56,7 +61,11 @@
     <hospitality-bot-input
       class="half-width"
       controlName="salePersonName"
+      maxLength="60"
       label="Sales Person Name"
+      [props]="{
+        placeholder: 'Enter'
+      }"
     ></hospitality-bot-input>
 
     <hospitality-bot-phone-number
@@ -80,7 +89,8 @@
           moreThan100: 'Cannot be more than 100%.',
           notAllowedChr: 'Decimal are not allowed.',
           min: 'Value can not be less than 0.'
-        }
+        },
+        placeholder: 'Enter'
       }"
     ></hospitality-bot-prefix-field>
   </div>

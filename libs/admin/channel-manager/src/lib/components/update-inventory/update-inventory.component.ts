@@ -25,6 +25,7 @@ import { Subscription } from 'rxjs';
 import { ChannelManagerService } from '../../services/channel-manager.service';
 import * as moment from 'moment';
 import { UpdateInventory } from '../../models/channel-manager.model';
+import { debounceTime, tap } from 'rxjs/operators';
 
 @Component({
   selector: 'hospitality-bot-update-inventory',
@@ -45,6 +46,7 @@ export class UpdateInventoryComponent implements OnInit {
   loading = false;
   loadingError = false;
   isRoomsEmpty = false;
+  isLoaderVisible = false;
   $subscription = new Subscription();
 
   perDayRoomAvailability = new Map<number, any>();
@@ -245,21 +247,35 @@ export class UpdateInventoryComponent implements OnInit {
       this.initDate(res);
     });
 
-    this.useForm.controls['date'].valueChanges.subscribe((selectedDate) => {
-      this.useForm.controls['date'].patchValue(selectedDate, {
-        emitEvent: false,
+    this.useForm.controls['date'].valueChanges
+      .pipe(
+        tap((value) => {
+          this.isLoaderVisible = true;
+        }),
+        debounceTime(300)
+      )
+      .subscribe((selectedDate) => {
+        this.useForm.controls['date'].patchValue(selectedDate, {
+          emitEvent: false,
+        });
+        this.getInventory(selectedDate);
       });
-      this.getInventory(selectedDate);
-    });
 
-    this.useFormControl.roomType.valueChanges.subscribe((res: string[]) => {
-      this.roomTypes = this.allRoomTypes.filter((item) =>
-        res.includes(item.value)
-      );
-      this.isRoomsEmpty = !res.length;
-      this.useForm.removeControl('roomTypes');
-      this.addRoomTypesControl();
-    });
+    this.useFormControl.roomType.valueChanges
+      .pipe(
+        tap((value) => {
+          this.isLoaderVisible = true;
+        }),
+        debounceTime(300)
+      )
+      .subscribe((res: string[]) => {
+        this.roomTypes = this.allRoomTypes.filter((item) =>
+          res.includes(item.value)
+        );
+        this.isRoomsEmpty = !res.length;
+        this.useForm.removeControl('roomTypes');
+        this.addRoomTypesControl();
+      });
   }
 
   getWeekendBG(day: string, isOccupancy = false) {
@@ -282,6 +298,7 @@ export class UpdateInventoryComponent implements OnInit {
             this.setRoomDetails(selectedDate);
             this.loading = false;
             this.loadingError = false;
+            this.isLoaderVisible = false;
           },
           (error) => {
             this.useForm.controls['date'].patchValue(this.currentDate, {
@@ -290,6 +307,7 @@ export class UpdateInventoryComponent implements OnInit {
             this.setRoomDetails();
             this.loading = false;
             this.loadingError = true;
+            this.isLoaderVisible = false;
           },
           this.handleFinal
         )
@@ -333,6 +351,7 @@ export class UpdateInventoryComponent implements OnInit {
         currentDate = new Date(fromDate);
       }
     }
+    this.isLoaderVisible = false;
   }
 
   handleSave() {

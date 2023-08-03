@@ -79,7 +79,7 @@ export class AddAgentComponent implements OnInit {
 
   initAgentForm() {
     this.agentForm = this.fb.group({
-      status: [true, Validators.required],
+      status: [true],
       name: ['', [Validators.required]],
       email: ['', [Validators.required, Validators.pattern(Regex.EMAIL_REGEX)]],
       cc: ['+91', [Validators.required]],

@@ -64,17 +64,17 @@ export class FormService {
     reservationData.items =
       input.bookingInformation?.spaItems.map((item) => ({
         itemId: item.serviceName,
-        unit: item?.quantity ?? 1,
+        quantity: item?.quantity ?? 1,
         amount: item.amount,
       })) ??
       input.orderInformation?.menuItems.map((item) => ({
         itemId: item.menuItems,
-        unit: item?.quantity ?? 1,
+        quantity: item?.quantity ?? 1,
         amount: item.amount,
       })) ??
       input.eventInformation?.venueInfo.map((item) => ({
         itemId: item.description,
-        unit: item?.quantity ?? 1,
+        quantity: item?.quantity ?? 1,
         amount: item.amount,
       }));
 

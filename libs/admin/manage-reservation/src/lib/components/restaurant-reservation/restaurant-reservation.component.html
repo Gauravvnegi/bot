@@ -75,6 +75,7 @@
             ctaLabel="+ Add Item"
             (currentIndex)="onItemsAdded($event)"
             (removedIndex)="getSummaryData()"
+            [itemValues]="menuItemsValues"
           ></hospitality-bot-iterator>
           <hospitality-bot-text-area
             class="full-width"

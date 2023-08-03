@@ -1,18 +1,10 @@
-import {
-  Directive,
-  ElementRef,
-  Renderer2,
-  OnInit,
-  ComponentFactoryResolver,
-  ViewContainerRef,
-  Input,
-} from '@angular/core';
+import { Directive, ElementRef, Renderer2, Input } from '@angular/core';
 import { map } from 'lodash';
 import { LoaderProps } from '../types/response';
 @Directive({
   selector: '[loader]',
 })
-export class LoaderDirective implements OnInit {
+export class LoaderDirective {
   loading = false;
   @Input() set isVisible(value: boolean) {
     this.loading = value;
@@ -62,10 +54,6 @@ export class LoaderDirective implements OnInit {
   }
 
   constructor(private elementRef: ElementRef, private renderer: Renderer2) {}
-
-  ngOnInit(): void {
-    // this.initView();
-  }
 
   initView() {
     if (this.loading) {

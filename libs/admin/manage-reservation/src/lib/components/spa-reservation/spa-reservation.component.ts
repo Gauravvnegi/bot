@@ -318,7 +318,6 @@ export class SpaReservationComponent implements OnInit {
         .getSummaryData(this.outletId, data, config)
         .subscribe(
           (res) => {
-            debugger;
             this.summaryData = new SummaryData()?.deserialize(res);
             this.userForm
               .get('paymentMethod.totalPaidAmount')

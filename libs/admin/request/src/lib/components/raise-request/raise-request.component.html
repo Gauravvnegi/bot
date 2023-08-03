@@ -50,6 +50,14 @@
           controlName="priority"
         ></hospitality-bot-select>
       </div>
+      <div class="form-elements-container full-width">
+        <hospitality-bot-select
+          [disabled]="!requestFG.get('itemCode').value"
+          [options]="userList"
+          label="Assign To"
+          controlName="assignTo"
+        ></hospitality-bot-select>
+      </div>
 
       <div class="form-elements-container full-width">
         <hospitality-bot-text-area controlName="remarks" label="Remarks">

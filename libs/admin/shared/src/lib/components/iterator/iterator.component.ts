@@ -36,8 +36,8 @@ export class IteratorComponent implements OnChanges {
   @Input() maxLimit = 0;
 
   ngOnChanges(changes: SimpleChanges): void {
-    const itemValues = changes.itemValues.currentValue;
-    if (itemValues.length) {
+    const itemValues = changes?.itemValues?.currentValue;
+    if (itemValues?.length) {
       if (itemValues.length > 1) {
         // Create new form fields for each item in the array
         itemValues.forEach((item) => {

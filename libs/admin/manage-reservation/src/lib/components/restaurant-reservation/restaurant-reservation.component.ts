@@ -312,7 +312,6 @@ export class RestaurantReservationComponent implements OnInit {
               orderInformation: orderInfo,
               ...formData,
             });
-            // this.userForm.patchValue(data);
             this.summaryData = new SummaryData().deserialize(response);
             this.setFormDisability(data.reservationInformation);
             if (data.offerId)

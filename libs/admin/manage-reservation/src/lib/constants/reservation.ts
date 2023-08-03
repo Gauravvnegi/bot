@@ -1,5 +1,6 @@
 import { IteratorField } from 'libs/admin/shared/src/lib/types/fields.type';
 import { RatePlanData } from '../models/reservations.model';
+import { AddedRatePlans } from 'libs/admin/room/src/lib/constant/form';
 
 export const roomFields: IteratorField[] = [
   {
@@ -55,8 +56,7 @@ export type RoomFieldTypeOption = {
   label: string;
   value: string;
   roomCount: number;
-  ratePlan: RatePlanData[];
-  roomNumber: string[];
+  ratePlan: AddedRatePlans[];
   maxChildren: number;
   maxAdult: number;
 };

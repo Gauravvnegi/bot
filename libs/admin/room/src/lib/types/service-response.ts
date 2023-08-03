@@ -98,6 +98,8 @@ export type RatePlanRes = {
   };
   id: string;
   status: boolean;
+  sellingPrice: number;
+  total: number;
 };
 
 export type PricingDetails = {

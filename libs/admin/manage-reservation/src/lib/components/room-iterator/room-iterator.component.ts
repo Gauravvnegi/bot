@@ -26,11 +26,9 @@ import { Subscription } from 'rxjs';
 import { roomFields, RoomFieldTypeOption } from '../../constants/reservation';
 import { ManageReservationService } from '../../services/manage-reservation.service';
 
-import {
-  RoomTypeOption,
-  RoomTypeOptionList,
-} from '../../models/reservations.model';
+import { RoomTypeOptionList } from '../../models/reservations.model';
 import { FormService } from '../../services/form.service';
+import { RoomTypeForm } from 'libs/admin/room/src/lib/models/room.model';
 @Component({
   selector: 'hospitality-bot-room-iterator',
   templateUrl: './room-iterator.component.html',
@@ -56,15 +54,11 @@ export class RoomIteratorComponent extends IteratorComponent
   maxAdultLimit = 0;
   maxChildLimit = 0;
 
-  ratePlans: Option[] = [];
   roomTypes: RoomFieldTypeOption[] = [];
 
   $subscription = new Subscription();
 
   loadingRoomTypes = false;
-
-  ratePlanOptionsArray: Option[][] = [];
-  roomNumberOptionsArray: Option[][] = [];
 
   @ViewChild('main') main: ElementRef;
 
@@ -99,6 +93,8 @@ export class RoomIteratorComponent extends IteratorComponent
       roomNumber: [{ value: [], disabled: true }],
       adultCount: [''],
       childCount: [''],
+      ratePlanOptions: [[]],
+      roomNumberOptions: [[]],
     };
 
     const formGroup = this.fb.group(data);
@@ -130,23 +126,20 @@ export class RoomIteratorComponent extends IteratorComponent
             (item) => item.value === res
           );
           if (selectedRoomType) {
-            // find the rate plan available in the room type
-            this.ratePlanOptionsArray[index] = selectedRoomType.ratePlan.map(
-              (item) => {
-                const availableRatePlan = this.ratePlans.find(
-                  (ratePlan) => ratePlan.value === item.value
-                );
-                // set the price, value and discounted price of the rate plan.
-                return {
-                  label: availableRatePlan ? availableRatePlan.label : '',
-                  value: item.value,
-                  price: item.price,
-                  discountedPrice: item.discountedPrice,
-                };
-              }
-            );
+            const ratePlanOptions = selectedRoomType.ratePlan.map((item) => ({
+              label: item.label,
+              value: item.ratePlanId,
+              price: item.total,
+              isBase: item.isBase,
+            }));
+            this.roomControls[index]
+              .get('ratePlanOptions')
+              .setValue(ratePlanOptions);
 
             this.roomControls[index].get('ratePlan').enable();
+            const defaultPlan = ratePlanOptions.filter((item) => item.isBase)[0]
+              .value;
+            this.roomControls[index].get('ratePlan').patchValue(defaultPlan);
             this.roomControls[index]
               .get('ratePlan')
               .setValidators([Validators.required]);
@@ -190,15 +183,9 @@ export class RoomIteratorComponent extends IteratorComponent
   listenRatePlanChanges(index: number) {
     this.roomControls[index].get('ratePlan')?.valueChanges.subscribe((res) => {
       if (res) {
-        const selectedRatePlan = this.ratePlanOptionsArray[index].find(
-          (item) => item.value === res
-        );
-        if (selectedRatePlan) {
-          this.formService.price.next(selectedRatePlan.price);
-          this.formService.discountedPrice.next(
-            selectedRatePlan.discountedPrice
-          );
-        }
+        const selectedRatePlan = this.roomControls[index]
+          .get('ratePlanOptions')
+          .value.find((item) => item.value === res);
       }
     });
   }
@@ -206,15 +193,6 @@ export class RoomIteratorComponent extends IteratorComponent
   initDetails() {
     this.parentFormGroup = this.controlContainer.control as FormGroup;
     this.roomTypeArray = this.fb.array([]);
-    this.configService.$config.subscribe((value) => {
-      if (value) {
-        const { roomRatePlans } = value;
-        this.ratePlans = roomRatePlans.map((item) => ({
-          label: item.label,
-          value: item.id,
-        }));
-      }
-    });
   }
 
   listenForGlobalFilters(): void {
@@ -253,18 +231,18 @@ export class RoomIteratorComponent extends IteratorComponent
             const data = res;
             this.roomTypes =
               data.ROOM_TYPE?.filter((item) => item.status).map((item) => {
-                new RoomTypeOption().deserialize(item);
+                new RoomTypeForm().deserialize(item);
                 return {
                   label: item.name,
                   value: item.id,
-                  ratePlan: item.ratePlan,
-                  roomNumber: ['200', '201'],
+                  ratePlan: item.ratePlans,
                   roomCount: item.roomCount,
                   maxChildren: item.maxChildren,
                   maxAdult: item.maxAdult,
                 };
               }) ?? [];
             this.fields[0].options = this.roomTypes;
+            this.loadingRoomTypes = false;
           },
           ({ error }) => {
             this.snackbarService.openSnackBarAsText(error.message);
@@ -318,14 +296,14 @@ export class RoomIteratorComponent extends IteratorComponent
               .records.map((item) => ({
                 label: item.name,
                 value: item.id,
-                ratePlan: item.ratePlan,
-                roomNumber: ['200', '201'],
-                roomCount: item.roomCount,
+                ratePlan: item.allRatePlans,
+                roomCount: 1,
                 maxChildren: item.maxChildren,
                 maxAdult: item.maxAdult,
               }));
             this.roomTypes = [...this.roomTypes, ...data];
             this.fields[0].options = this.roomTypes;
+            this.loadingRoomTypes = false;
           },
           ({ error }) => {
             this.snackbarService.openSnackBarAsText(error.message);

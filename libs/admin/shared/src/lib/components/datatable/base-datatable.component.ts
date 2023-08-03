@@ -381,7 +381,6 @@ export class BaseDatatableComponent implements OnInit {
     selectedChips: Set<string>;
   }): void {
     this.selectedFilterChips = selectedChips;
-
     this.changePage(0);
   }
 

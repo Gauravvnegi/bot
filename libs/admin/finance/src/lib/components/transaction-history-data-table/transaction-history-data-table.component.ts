@@ -3,18 +3,21 @@ import { FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { QueryConfig } from '@hospitality-bot/admin/library';
+import { MatDialogConfig } from '@angular/material/dialog';
+import { DetailsComponent as BookingDetailComponent } from 'libs/admin/reservation/src/lib/components/details/details.component';
 import {
-  BaseDatatableComponent,
   AdminUtilityService,
+  BaseDatatableComponent,
   TableService,
 } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
+import * as FileSaver from 'file-saver';
+import { ModalService } from 'libs/shared/material/src/lib/services/modal.service';
+import { LazyLoadEvent } from 'primeng/api';
 import { Subscription } from 'rxjs';
 import { cols, transactionStatus } from '../../constants/data-table';
-import { LazyLoadEvent } from 'primeng/api';
-import * as FileSaver from 'file-saver';
-import { FinanceService } from '../../services/finance.service';
 import { TransactionHistoryList } from '../../models/history.model';
+import { FinanceService } from '../../services/finance.service';
 
 @Component({
   selector: 'hospitality-bot-transaction-history-data-table',
@@ -42,7 +45,8 @@ export class TransactionHistoryDataTableComponent extends BaseDatatableComponent
     private globalFilterService: GlobalFilterService,
     protected snackbarService: SnackBarService,
     private router: Router,
-    private financeService: FinanceService
+    private financeService: FinanceService,
+    private modalService: ModalService
   ) {
     super(fb, tabFilterService);
   }
@@ -122,6 +126,24 @@ export class TransactionHistoryDataTableComponent extends BaseDatatableComponent
   //       : { status: chips[0].value === 'SUCCESS' ? 'SUCCESS' : 'FAILURE' },
   //   ];
   // }
+
+  openDetailsPage(reservationId: string) {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = true;
+    dialogConfig.width = '100%';
+    const detailCompRef = this.modalService.openDialog(
+      BookingDetailComponent,
+      dialogConfig
+    );
+
+    detailCompRef.componentInstance.bookingId = reservationId;
+    detailCompRef.componentInstance.tabKey = 'payment_details';
+    this.$subscription.add(
+      detailCompRef.componentInstance.onDetailsClose.subscribe((res) => {
+        detailCompRef.close();
+      })
+    );
+  }
 
   /**
    * @function exportCSV To export CSV report of the table.

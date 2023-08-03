@@ -18,6 +18,7 @@ export class UserConfig implements IDeserializable {
   email: string;
   profileUrl: string;
   timezone: string;
+  reportingTo: string;
 
   deserialize(input: UserResponse) {
     this.id = input.id;
@@ -28,8 +29,9 @@ export class UserConfig implements IDeserializable {
     this.jobTitle = input.title;
     this.cc = input.cc;
     this.phoneNumber = input.phoneNumber;
-    this.profileUrl = input.profileUrl; 
+    this.profileUrl = input.profileUrl;
     this.email = input.email;
+    this.reportingTo = input.reportingTo;
 
     this.brandName = localStorage.getItem(tokensConfig.brandId);
     this.branchName = localStorage.getItem(tokensConfig.entityId);

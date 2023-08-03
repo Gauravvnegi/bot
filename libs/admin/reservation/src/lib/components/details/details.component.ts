@@ -57,7 +57,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
     { label: 'Advance Booking', icon: '' },
     { label: 'Current Booking', icon: '' },
   ];
-  bookingId;
+  @Input('bookingId') bookingId: string; //reservationId
   branchConfig;
   $subscription = new Subscription();
 
@@ -143,7 +143,11 @@ export class DetailsComponent implements OnInit, OnDestroy {
         this.branchConfig = brandConfig.entities.find(
           (branch) => branch.id === branchId
         );
-        this.loadGuestInfo();
+        if (this.bookingId) {
+          this.getReservationDetails(true);
+        } else {
+          this.loadGuestInfo();
+        }
       })
     );
   }
@@ -190,7 +194,11 @@ export class DetailsComponent implements OnInit, OnDestroy {
     );
   }
 
-  getReservationDetails() {
+  /**
+   * Handle getting th reservation data based on reservation ID (bookingId)
+   * @param initGuestDetails Init guest details is use to fetch guest data after reservation data
+   */
+  getReservationDetails(initGuestDetails = false) {
     this.$subscription.add(
       this._reservationService.getReservationDetails(this.bookingId).subscribe(
         (response) => {
@@ -198,8 +206,14 @@ export class DetailsComponent implements OnInit, OnDestroy {
             response,
             this.globalFilterService.timezone
           );
-          this.mapValuesInForm();
-          this.isReservationDetailFetched = true;
+          if (initGuestDetails) {
+            this.bookingNumber = response.number;
+            this.guestId = response.guestDetails.primaryGuest.id;
+            this.loadGuestInfo();
+          } else {
+            this.mapValuesInForm();
+            this.isReservationDetailFetched = true;
+          }
         },
         ({ error }) => {
           this.closeDetails();
@@ -617,15 +631,15 @@ export class DetailsComponent implements OnInit, OnDestroy {
       );
   }
 
-  getPrimaryGuestDetails() {
-    if (this.guestReservationDropdownList.length)
-      this.details.guestDetails.forEach((guest) => {
-        if (guest.isPrimary === true) {
-          this.primaryGuest = guest;
-          return;
-        }
-      });
-  }
+  // getPrimaryGuestDetails() {
+  //   if (this.guestReservationDropdownList.length)
+  //     this.details.guestDetails.forEach((guest) => {
+  //       if (guest.isPrimary === true) {
+  //         this.primaryGuest = guest;
+  //         return;
+  //       }
+  //     });
+  // }
 
   openSendNotification(channel) {
     if (channel) {
@@ -682,21 +696,27 @@ export class DetailsComponent implements OnInit, OnDestroy {
         });
       }
     });
-    if (this.guestReservationDropdownList.length) {
-      if (this.bookingNumber)
-        this.bookingId = this.guestReservationDropdownList.filter(
-          (booking) => booking.bookingNumber === this.bookingNumber
-        )[0].bookingId;
-      else {
-        this.bookingNumber = this.guestReservationDropdownList[0]?.bookingNumber;
-        this.bookingId = this.guestReservationDropdownList[0]?.bookingId;
-      }
-      this.bookingFG.get('booking').setValue(this.bookingId);
-      this.getReservationDetails();
-    } else {
+
+    if (this.bookingId) {
+      this.mapValuesInForm();
       this.isReservationDetailFetched = true;
-      this.isGuestInfoPatched = true;
+    } else {
+      if (this.guestReservationDropdownList.length) {
+        if (this.bookingNumber)
+          this.bookingId = this.guestReservationDropdownList.filter(
+            (booking) => booking.bookingNumber === this.bookingNumber
+          )[0].bookingId;
+        else {
+          this.bookingNumber = this.guestReservationDropdownList[0]?.bookingNumber;
+          this.bookingId = this.guestReservationDropdownList[0]?.bookingId;
+        }
+        this.getReservationDetails();
+      } else {
+        this.isReservationDetailFetched = true;
+        this.isGuestInfoPatched = true;
+      }
     }
+    this.bookingFG.get('booking').setValue(this.bookingId);
   }
 
   handleBookingChange(event) {

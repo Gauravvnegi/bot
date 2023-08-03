@@ -20,6 +20,7 @@ import { Subscription } from 'rxjs';
 import { request } from '../../constants/request';
 import { debounceTime, filter, map, startWith } from 'rxjs/operators';
 import { RequestService } from '../../services/request.service';
+import { Option } from '@hospitality-bot/admin/shared';
 
 @Component({
   selector: 'hospitality-bot-raise-request',
@@ -37,6 +38,8 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
   priorityList = request.priority;
   isRaisingRequest = false;
   requestConfig = request;
+  userList: Option[] = [];
+  requestData: any;
   constructor(
     private fb: FormBuilder,
     private globalFilterService: GlobalFilterService,
@@ -54,6 +57,7 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
   registerListeners(): void {
     this.listenForGlobalFilters();
     this.listenForRoomNumberChanges();
+    this.listenForItemChanges();
   }
 
   /**
@@ -82,6 +86,7 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
       jobDuration: [''],
       remarks: ['', [Validators.maxLength(200)]],
       quantity: [1],
+      assignTo: [''],
     });
 
     this.searchFG = this.fb.group({
@@ -107,6 +112,7 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
       this._requestService
         .getCMSServices(this.entityId, config)
         .subscribe((response) => {
+          this.requestData = response;
           this.items = response.cms_services
             .sort((a, b) => a.itemName.trim().localeCompare(b.itemName.trim()))
             .map((item) => ({
@@ -116,6 +122,17 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
             }));
         })
     );
+  }
+
+  listenForItemChanges(): void {
+    this.requestFG.get('itemCode').valueChanges.subscribe((value) => {
+      this.userList = this.requestData.cms_services
+        .find((item) => item.itemCode === value)
+        .requestItemUsers.map((user) => ({
+          label: `${user.firstName} ${user.lastName}`,
+          value: user.userId,
+        }));
+    });
   }
 
   /**

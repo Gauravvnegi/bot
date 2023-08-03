@@ -174,3 +174,11 @@ tr > td {
   background-color: white;
 }
 
+.disabled {
+  padding: 10px;
+  background-color: #ccc;
+  color: #666;
+  border: none;
+  cursor: not-allowed;
+  pointer-events: none;
+}

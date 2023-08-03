@@ -21,6 +21,9 @@
       class="half-width"
       controlName="name"
       label="Agent Name"
+      [props]="{
+        placeholder: 'Enter'
+      }"
     ></hospitality-bot-input>
 
     <hospitality-bot-input
@@ -29,6 +32,7 @@
       label="Email"
       [props]="{
         type: 'email',
+        placeholder: 'Enter',
         errorMessages: {
           required: 'This is a required field.',
           pattern: 'Please enter a valid email address.'
@@ -49,7 +53,6 @@
       maxLength="14"
       [props]="{
         placeholder: 'Enter 14 digit IATA No.',
-        type: 'number',
         errorMessages: {
           requiredLength: 'Length should be 14 digit.'
         }
@@ -80,7 +83,8 @@
           moreThan100: 'Cannot be more than 100%.',
           notAllowedChr: 'Decimal are not allowed.',
           min: 'Value can not be less than 0.'
-        }
+        },
+        placeholder: 'Enter'
       }"
     ></hospitality-bot-prefix-field>
   </div>

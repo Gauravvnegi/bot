@@ -28,13 +28,13 @@
           </span>
 
           <span class="panel-tree__header-checkbox variant-wrapper">
-            <label
-              [for]="variant.id"
+            <span
+              class="enable-child"
               (click)="
                 onVariantChange(!variant.isSelected, variantIndex);
                 $event.stopPropagation()
               "
-              >{{ variant.name }}</label
+              >{{ variant.name }}</span
             >
             <!-- TODO: This feature may be used in future -->
             <!-- <hospitality-bot-menu-button

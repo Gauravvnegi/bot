@@ -385,6 +385,7 @@ export class UpdateRatesComponent implements OnInit {
     });
 
     this.useForm.controls['date'].valueChanges.subscribe((selectedDate) => {
+      this.isLoaderVisible = true;
       this.useForm.controls['date'].patchValue(selectedDate, {
         emitEvent: false,
       });
@@ -455,10 +456,12 @@ export class UpdateRatesComponent implements OnInit {
             this.setRoomDetails(selectedDate);
             this.loading = false;
             this.loadingError = false;
+            this.isLoaderVisible = false;
           },
           (error) => {
             this.loading = false;
             this.loadingError = true;
+            this.isLoaderVisible = false;
           },
           this.handleFinal
         )

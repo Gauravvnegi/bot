@@ -1,8 +1,8 @@
 import { FormGroup } from '@angular/forms';
-import { GuestType } from '../types/guest.type';
+import { GuestMemberForm, GuestType } from '../types/guest.type';
 
 export class GuestFactory {
-  static mapFormData(formData) {
+  static mapFormData(formData: GuestMemberForm) {
     return {
       firstName: formData['firstName'] ?? '',
       lastName: formData['lastName'] ?? '',
@@ -15,9 +15,16 @@ export class GuestFactory {
       companyId: formData['company'] ?? '',
       gender: formData['gender'] ?? '',
       dateOfBirth: formData['dateOfBirth'] ?? '',
+      address: {
+        addressLine1: formData.address['formattedAddress'] ?? '',
+        city: formData.address['city'] ?? '',
+        state: formData.address['state'] ?? '',
+        countryCode: formData.address['country'] ?? '',
+        postalCode: formData.address['postalCode'] ?? '',
+      },
     } as GuestType;
   }
-  static patchEditView(form: FormGroup, input) {
+  static patchEditView(form: FormGroup, input: GuestType) {
     const contact = input.contactDetails;
     form.patchValue({
       firstName: input?.firstName ?? '',
@@ -29,6 +36,13 @@ export class GuestFactory {
       gender: input.gender ?? '',
       dateOfBirth: input.dateOfBirth ?? Date.now(),
       age: input?.age ?? '',
+      address: {
+        formattedAddress: `${input.address?.addressLine1 ?? ''}`,
+        city: input.address?.city ?? '',
+        state: input.address?.state ?? '',
+        countryCode: input.address?.countryCode ?? '',
+        postalCode: input.address?.postalCode ?? '',
+      },
     });
   }
 }

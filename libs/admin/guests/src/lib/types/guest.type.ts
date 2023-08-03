@@ -1,4 +1,23 @@
 import { AgentTableResponse } from 'libs/admin/agent/src/lib/types/response';
+export type AddressFieldType = {
+  formattedAddress: string;
+  city: string;
+  state: string;
+  countryCode: string;
+  postalCode: string;
+};
+export interface GuestMemberForm {
+  firstName: string;
+  lastName: string;
+  email: string;
+  cc: string;
+  phoneNo: string;
+  company?: string;
+  gender: string;
+  dateOfBirth: string;
+  age: string;
+  address: AddressFieldType;
+}
 
 export type ChartTypeOption = {
   name: string;
@@ -33,7 +52,5 @@ type discard =
   | 'iataNumber'
   | 'isVerified'
   | 'status'
-  | 'address'
-  | 'code'
-  | 'company';
+  | 'code';
 export type GuestType = Omit<AgentTableResponse, discard>;

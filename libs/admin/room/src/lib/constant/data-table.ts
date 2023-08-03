@@ -18,6 +18,7 @@ export const cols: Record<TableValue, Cols[]> = {
       field: 'date',
       header: 'Date',
       sortType: 'date',
+      isSearchDisabled: true,
     },
     {
       field: 'foStatus',
@@ -35,6 +36,7 @@ export const cols: Record<TableValue, Cols[]> = {
       field: 'status',
       header: 'Action / Status',
       sortType: 'string',
+      isSearchDisabled: true,
       width: '16%',
     },
   ],

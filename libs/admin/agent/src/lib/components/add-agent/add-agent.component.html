@@ -21,6 +21,7 @@
       class="half-width"
       controlName="name"
       label="Agent Name"
+      maxLength="60"
       [props]="{
         placeholder: 'Enter'
       }"
@@ -66,7 +67,15 @@
       (createCompany)="createNewCompany()"
     ></hospitality-bot-company-list>
 
-    <hospitality-bot-address-component class="half-width" controlName="address">
+    <hospitality-bot-address-component
+      class="half-width"
+      controlName="address"
+      [props]="{
+        errorMessages: {
+          required: 'This is a required field.'
+        }
+      }"
+    >
     </hospitality-bot-address-component>
 
     <hospitality-bot-prefix-field

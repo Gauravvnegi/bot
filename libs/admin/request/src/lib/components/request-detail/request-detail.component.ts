@@ -67,7 +67,10 @@ export class RequestDetailComponent implements OnInit, OnDestroy {
           if (response) {
             this.data = response;
             //need to patch assigne
-            this.requestFG.patchValue({ status: response.action });
+            this.requestFG.patchValue({
+              status: response.action,
+              assignee: response.assigneeId,
+            });
             this.getAssigneeList(response.itemId);
             this.status = true;
           } else {
@@ -103,7 +106,7 @@ export class RequestDetailComponent implements OnInit, OnDestroy {
           this.assigneeList = response.requestItemUsers.map((item) => {
             return {
               label: item.firstName + ' ' + item.lastName,
-              value: item.userId,
+              value: item.id,
             };
           });
         })
@@ -191,12 +194,22 @@ export class RequestDetailComponent implements OnInit, OnDestroy {
 
   handleAssigneeChange(event) {
     this._requestService
-      .assignComplaintToUser(this.data.jobID, {
+      .assignComplaintToUser(this.data.id, {
         assignedTo: event.value,
       })
       .subscribe(() => {
+        this.snackbarService.openSnackBarAsText(
+          `Assignee updated successfully`,
+          '',
+          { panelClass: 'success' }
+        );
         this.requestFG.patchValue({ assignee: event.value });
-      });
+
+        this._requestService.refreshData.next(true);
+      }),
+      ({ error }) => {
+        this.requestFG.patchValue({ assignee: this.data.assigneeId });
+      };
   }
 
   ngOnDestroy(): void {

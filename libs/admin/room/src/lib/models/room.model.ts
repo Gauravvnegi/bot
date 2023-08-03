@@ -116,8 +116,11 @@ export class RoomTypeForm {
   maxChildren: number;
   maxAdult: number;
   area: number;
+  id?: string;
+  allRatePlans?: AddedRatePlans[];
 
   deserialize(input: RoomTypeResponse) {
+    this.id = input?.id;
     this.status = input.status;
     this.name = input.name;
     this.imageUrls = input.imageUrls;
@@ -165,12 +168,27 @@ export class RoomTypeForm {
       .map((item) => ({
         label: item.label,
         ratePlanId: item.id,
-        idBase: item.isBase,
+        isBase: item.isBase,
         extraPrice: item.variablePrice,
         currency: input.pricingDetails.currency,
         description: item?.description,
         status: item.status,
+        sellingPrice: item?.sellingPrice,
+        total: item?.total ?? 0,
       }));
+
+    // For Reservation
+    this.allRatePlans = input.ratePlans.map((item) => ({
+      label: item.label,
+      ratePlanId: item.id,
+      isBase: item.isBase,
+      extraPrice: item.variablePrice,
+      currency: input.pricingDetails.currency,
+      description: item?.description,
+      status: item.status,
+      sellingPrice: item?.sellingPrice,
+      total: item?.total ?? 0,
+    }));
 
     return this;
   }

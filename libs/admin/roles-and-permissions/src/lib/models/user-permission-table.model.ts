@@ -1,5 +1,9 @@
 import { UserListResponse, UserResponse } from '../types/response';
 import { Department, Permission, HotelAccess } from '../types';
+import {
+  EntityStateCounts,
+  EntityTypeCounts,
+} from '@hospitality-bot/admin/library';
 export interface IDeserializable {
   deserialize(input: any, hotelNationality: string): this;
 }
@@ -95,10 +99,16 @@ export class User {
 
 export class UserPermissionTable {
   records: User[];
+  entityStateCounts: {};
+  entityTypeCounts: {};
+  totalRecords: number;
   deserialize(input: UserListResponse) {
     this.records = input.records.map((record) =>
       new User().deserialize(record)
     );
+    this.entityStateCounts = input.entityStateCounts;
+    this.entityTypeCounts = input.entityTypeCounts;
+    this.totalRecords = input.total;
     return this;
   }
 }

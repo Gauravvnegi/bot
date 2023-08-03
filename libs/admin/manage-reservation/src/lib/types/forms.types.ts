@@ -1,4 +1,5 @@
-import { C } from '@angular/cdk/keycodes';
+import { GuestType } from 'libs/admin/guests/src/lib/types/guest.type';
+
 export class ReservationFormData {
   // firstName: string;
   // lastName: string;
@@ -40,18 +41,6 @@ export type GuestDetails = {
   email: string;
 };
 
-export type GuestType = {
-  active: boolean;
-  firstName: string;
-  email: string;
-  cc: string;
-  phoneNo: string;
-  companyName: string;
-  gender: string;
-  dateOfBirth: string;
-  age: string;
-};
-
 export class OutletFormData {
   adultCount: number;
   from: number;
@@ -67,6 +56,7 @@ export class OutletFormData {
   paymentRemark: string;
   eventType: string;
   guestId: string;
+  guest: GuestType;
   items: ItemsData[];
   outletType: string;
 }

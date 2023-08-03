@@ -15,8 +15,11 @@ export class FormService {
   dateDifference = new BehaviorSubject(1);
   toDate: Date;
   fromDate: Date;
-
+  
+  guestId = new BehaviorSubject<string>('');
+  
   public selectedEntity = new BehaviorSubject<SelectedEntity>(null);
+
   getSelectedEntity(): Observable<SelectedEntity> {
     return this.selectedEntity.asObservable().pipe(distinctUntilChanged());
   }

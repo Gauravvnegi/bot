@@ -56,6 +56,7 @@ export type JobRequestResponse = {
   timeLeft: number;
   sla: number;
   itemId: string;
+  assigneeId: string;
 };
 
 export type AllJobRequestResponse = {

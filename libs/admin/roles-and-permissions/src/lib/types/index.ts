@@ -78,4 +78,5 @@ export type UserForm = {
   email: string;
   profileUrl: string;
   permissionConfigs: any;
+  reportingTo: string;
 };

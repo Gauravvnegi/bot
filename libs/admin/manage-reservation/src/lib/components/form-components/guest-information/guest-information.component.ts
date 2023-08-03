@@ -8,6 +8,7 @@ import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { manageGuestRoutes } from 'libs/admin/guests/src/lib/constant/route';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import { FormService } from '../../../services/form.service';
 
 @Component({
   selector: 'hospitality-bot-guest-information',
@@ -35,7 +36,8 @@ export class GuestInformationComponent implements OnInit {
     private guestService: GuestTableService,
     private router: Router,
     private adminUtilityService: AdminUtilityService,
-    private globalFilterService: GlobalFilterService
+    private globalFilterService: GlobalFilterService,
+    private formService: FormService
   ) {}
 
   ngOnInit(): void {
@@ -120,6 +122,11 @@ export class GuestInformationComponent implements OnInit {
           email: guest.contactDetails.emailId,
         }));
         this.guestOptions = [...this.guestOptions, ...guestDetails];
+        this.formService.guestId.subscribe((res) => {
+          this.parentFormGroup
+            .get('guestInformation.guestDetails')
+            .patchValue(res);
+        });
         this.noMoreGuests = guests.length < 5;
         this.loadingGuests = false;
       },
@@ -132,7 +139,12 @@ export class GuestInformationComponent implements OnInit {
   getConfig() {
     const config = [
       ...this.globalQueries,
-      { entityState: 'ALL', offset: this.guestsOffSet, limit: 5, type: 'GUEST' },
+      {
+        entityState: 'ALL',
+        offset: this.guestsOffSet,
+        limit: 5,
+        type: 'GUEST',
+      },
     ];
     return { params: this.adminUtilityService.makeQueryParams(config) };
   }

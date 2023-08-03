@@ -1,43 +1,44 @@
-export type TransactionStatus = 'SUCCESS' | 'FAILURE'
+export type TransactionStatus = 'SUCCESS' | 'FAILURE';
 
 export type InvoiceHistoryResponse = {
-    totalAmount: number;
-    totalPaidAmount: number;
-    totalDueAmount: number;
-    invoiceCode: string;
-    invoiceGenerated: boolean;
-    invoiceDate: number;
-    pdfUrl: string;
-    bookingNumber: string;
-}
+  totalAmount: number;
+  totalPaidAmount: number;
+  totalDueAmount: number;
+  invoiceCode: string;
+  invoiceGenerated: boolean;
+  invoiceDate: number;
+  pdfUrl: string;
+  bookingNumber: string;
+  reservationId: string;
+};
 
 export type InvoiceHistoryListResponse = {
-    records: InvoiceHistoryResponse[];
-    total: number;
-}
+  records: InvoiceHistoryResponse[];
+  total: number;
+};
 
 export type TransactionHistoryResponse = {
-    id: string;
-    amount: number;
-    transactionId: string;
-    status: string;
-    reservationId: string;
-    created: number;
-    paymentMethod: string;
-    remarks: string;    
-}
+  id: string;
+  amount: number;
+  transactionId: string;
+  status: string;
+  reservationId: string;
+  created: number;
+  paymentMethod: string;
+  remarks: string;
+};
 
 export type TransactionHistoryListResponse = {
-    records: TransactionHistoryResponse[];
-    total: number;
-    entityStateCounts: EntityStateCountsResponse;
-    entityTypeCounts: any;
-}
+  records: TransactionHistoryResponse[];
+  total: number;
+  entityStateCounts: EntityStateCountsResponse;
+  entityTypeCounts: any;
+};
 
 export type EntityStateCountsResponse = {
-    All: number;
-    Paid: number;
-    Unpaid: number;
+  All: number;
+  Paid: number;
+  Unpaid: number;
 };
 
 // {

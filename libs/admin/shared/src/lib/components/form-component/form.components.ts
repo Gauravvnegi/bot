@@ -248,7 +248,7 @@ export class FormComponent implements OnInit {
       newDiv.innerHTML = `
       <div style="position: relative; flex-basis: 85%;">
       <input style="width: 100%; height: 100%" type="text" id="myInput" pInputText maxlength="35" placeholder="${this.inputPrompt}">
-           <small id="subtitle" style="  position: absolute; bottom: 1em;right: 0.8em;font-size: 0.8em; color: black;"></small>
+           <small id="subtitle" style="  position: absolute; bottom: 1em;right: 0.8em;font-size: 1em; color: lightgray;"></small>
 
       </div>
       <button id="myButton" onclick="myFunction()">Save</button>

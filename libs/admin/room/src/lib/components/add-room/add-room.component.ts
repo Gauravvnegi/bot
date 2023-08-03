@@ -141,7 +141,7 @@ export class AddRoomComponent implements OnInit, OnDestroy {
 
     this.statusQuoForm = this.fb.group({
       status: ['', Validators.required],
-      remark: ['', Validators.required],
+      remark: [''],
       foStatus: [],
       currentStatusFrom: ['', Validators.required],
       currentStatusTo: ['', Validators.required],

@@ -58,6 +58,7 @@ export class SpaReservationComponent implements OnInit {
   reservationId: string;
 
   statusOptions: Option[] = [];
+  spaItemsValues = [];
 
   offersList: OfferList;
   selectedOffer: OfferData;
@@ -231,7 +232,18 @@ export class SpaReservationComponent implements OnInit {
         .subscribe(
           (response) => {
             const data = new OutletForm().deserialize(response);
-            this.userForm.patchValue(data);
+
+            const {
+              bookingInformation: { spaItems, ...spaInfo },
+              ...formData
+            } = data;
+            
+            this.spaItemsValues = spaItems;
+            this.userForm.patchValue({
+              bookingInformation: spaInfo,
+              ...formData,
+            });
+
             this.summaryData = new SummaryData().deserialize(response);
             this.setFormDisability(data.reservationInformation);
             this.userForm.valueChanges.subscribe((_) => {
@@ -318,7 +330,6 @@ export class SpaReservationComponent implements OnInit {
         .getSummaryData(this.outletId, data, config)
         .subscribe(
           (res) => {
-            debugger;
             this.summaryData = new SummaryData()?.deserialize(res);
             this.userForm
               .get('paymentMethod.totalPaidAmount')

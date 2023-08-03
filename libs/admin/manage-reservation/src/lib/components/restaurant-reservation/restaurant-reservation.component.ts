@@ -41,6 +41,7 @@ import { OutletItems } from '../../constants/reservation-table';
 import { MenuItemListResponse } from '../../types/response.type';
 import { debounceTime } from 'rxjs/operators';
 import { OutletForm } from '../../models/reservations.model';
+import { ItemsData } from '../../types/forms.types';
 
 @Component({
   selector: 'hospitality-bot-restaurant-reservation',
@@ -62,6 +63,7 @@ export class RestaurantReservationComponent implements OnInit {
   reservationType: string;
   outletId: string;
 
+  menuItemsValues = [];
   reservationTypes: Option[] = [];
   statusOptions: Option[] = [];
   foodPackages: Option[] = [];
@@ -305,7 +307,7 @@ export class RestaurantReservationComponent implements OnInit {
               orderInformation: { menuItems, ...orderInfo },
               ...formData
             } = data;
-            this.menuItemsArray.patchValue(menuItems);
+            this.menuItemsValues = menuItems;
             this.userForm.patchValue({
               orderInformation: orderInfo,
               ...formData,

@@ -71,9 +71,9 @@ export class OutletFormData {
   outletType: string;
 }
 
-type ItemsData = {
+export type ItemsData = {
   itemId: string;
-  unit: number;
+  quantity: number;
   amount: number;
 };
 

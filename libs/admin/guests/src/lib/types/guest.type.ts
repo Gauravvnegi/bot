@@ -45,7 +45,6 @@ export type SearchGuestResponse = {
 };
 
 type discard =
-  | 'id'
   | 'nationality'
   | 'priceModifier'
   | 'priceModifierValue'

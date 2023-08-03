@@ -3,13 +3,31 @@ import {
   EntityStateCountsResponse,
   EntityTypeCountsResponse,
 } from '../models/reservations.model';
+import { GuestType } from 'libs/admin/guests/src/lib/types/guest.type';
+
 /* Reservation List Response Types deceleration */
 export type ReservationListResponse = {
-  records?: ReservationResponse[];
+  records?: RoomReservationRes[];
   total: number;
   entityStateCounts: EntityStateCountsResponse;
   entityTypeCounts: EntityTypeCountsResponse;
 };
+
+export type RoomReservationRes = {
+  id: string;
+  from: number;
+  to: number;
+  source: string;
+  reservationType: string;
+  sourceName: string;
+  reservationNumber: string;
+  status: string;
+  guest: GuestType;
+  created: number;
+  nextStates: string[];
+  bookingItems: BookingItems[];
+  pricingDetails: PricingDetails;
+}
 
 /* Reservation Response Types Deceleration*/
 export type ReservationResponse = {
@@ -196,4 +214,39 @@ export class RoomTypeInfoRes {
   roomTypeId: string;
   roomNumbers: string[];
   ratePlanTypeId: string;
+}
+
+export type BookingItems = {
+  roomDetails: {
+    ratePlan: {
+      id: string;
+      basePrice: number;
+      sellingPrice: number;
+      type: string;
+      isBase: boolean;
+    }
+    roomNumber: string;
+    roomTypeId: string;
+    roomTypeName: string;
+    roomCount: number;
+  }
+  pricingDetails: PricingDetails;
+  occupancyDetails: {
+    maxChildren: number;
+    maxAdult: number;
+  }
+  id: string;
+}
+
+export type PricingDetails = {
+  max: number;
+  min: number;
+  base: number;
+  paxChild: number;
+  paxAdult: number;
+  totalAmount: number;
+  totalPaidAmount: number;
+  totalDueAmount: number;
+  taxAndFees: number;
+  basePrice: number;
 }

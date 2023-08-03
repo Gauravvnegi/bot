@@ -10,7 +10,7 @@ type Availability = {
 export type UpdateInventoryResponse = {
   startDate: number;
   endDate: number;
-  inventoryDataMap: Map<string, Availability>;
+  inventoryDataMap: Record<string, Availability>;
   rooms: RoomTypesResponse[];
 };
 
@@ -35,6 +35,6 @@ export type UpdateRatesResponse = Omit<
   UpdateInventoryResponse,
   'inventoryData' | 'rooms'
 > & {
-  inventoryDataMap: Map<string, Availability>;
+  inventoryDataMap: Record<string, Availability>;
   rates: Rates[];
 };

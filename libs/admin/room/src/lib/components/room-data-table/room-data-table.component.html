@@ -144,7 +144,9 @@
   <td>
     <div [roomStatus]="rowData.status" *ngIf="rowData.type; else emptyCell">
       <div>
-        {{ rowData.roomNo || '--' }}&nbsp;-&nbsp;{{ rowData.type || '--' }}
+        {{ rowData.roomNo || '--' }}&nbsp;-&nbsp;{{
+          rowData.type || 'Executive Room'
+        }}
       </div>
     </div>
   </td>

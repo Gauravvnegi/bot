@@ -28,7 +28,7 @@ import { SubscriptionPlanService } from 'apps/admin/src/app/core/theme/src/lib/s
   ],
 })
 export class RequestWrapperComponent implements OnInit, OnDestroy {
-  pageTitle = 'Requests';
+  pageTitle = 'Complaints';
   guestInfoEnable = false;
   private $subscription = new Subscription();
   requestConfig = request;
@@ -46,7 +46,7 @@ export class RequestWrapperComponent implements OnInit, OnDestroy {
 
   selectedIndex = 0;
   buttonConfig = [
-    { button: true, label: 'Raise Request', icon: 'assets/svg/requests.svg' },
+    { button: true, label: 'Raise Complaint', icon: 'assets/svg/requests.svg' },
   ];
 
   constructor(

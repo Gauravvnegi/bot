@@ -36,7 +36,7 @@ import { ServiceData } from '../../types/service';
 })
 export class ServicesDataTableComponent extends BaseDatatableComponent {
   readonly servicesRoutes = servicesRoutes;
-
+  isAllTabFilterRequired: boolean = true;
   entityId: string;
   tabFilterItems = filters;
   selectedTable: TableValue;

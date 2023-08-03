@@ -1,4 +1,5 @@
 import { FormGroup } from '@angular/forms';
+import { pick, reduce } from 'lodash';
 import {
   RoomMapType,
   UpdateInventoryType,
@@ -7,18 +8,11 @@ import {
 import {
   ChannelManagerResponse,
   Rates,
+  UpdateInventoryResponse,
   UpdateRatesResponse,
 } from '../types/response.type';
 
 export class UpdateInventory {
-  perDayRoomAvailability = new Map<
-    number,
-    {
-      roomAvailable: number;
-      occupancy: number;
-    }
-  >();
-
   inventoryRoomDetails = new Map<
     string,
     {
@@ -45,15 +39,40 @@ export class UpdateInventory {
           },
         ];
       });
-
-      this.perDayRoomAvailability[item.startDate] = {
-        roomAvailable: item.inventoryData?.available ?? 0,
-        occupancy: item.inventoryData?.occupancy ?? 0,
-      };
     });
     return this;
   }
 
+  static buildAvailability(
+    input: UpdateInventoryResponse[],
+    selectedRooms: string[]
+  ) {
+    let perDayRoomAvailability = new Map<
+      number,
+      {
+        roomAvailable: number;
+        occupancy: number;
+      }
+    >();
+    input.map((item) => {
+      const selectedAvailability = pick(item.inventoryDataMap, selectedRooms);
+      const totalSelectedRooms = Object.keys(selectedAvailability).length;
+      perDayRoomAvailability[item.startDate] = {
+        roomAvailable: reduce(
+          selectedAvailability,
+          (sum, curr) => sum + curr['available'],
+          0
+        ),
+        occupancy:
+          reduce(
+            selectedAvailability,
+            (sum, curr) => sum + curr['occupancy'],
+            0
+          ) / totalSelectedRooms,
+      };
+    });
+    return perDayRoomAvailability;
+  }
   static buildRequestData(formData, fromDate: number) {
     let updates: UpdateInventoryType[] = [];
     formData.roomTypes.forEach((item, index) => {

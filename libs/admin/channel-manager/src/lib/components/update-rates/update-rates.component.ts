@@ -94,7 +94,13 @@ export class UpdateRatesComponent implements OnInit {
     return this.useFormControl.roomTypes?.controls;
   }
 
-  getArray(value?: number) {
+  getArray(value?: number, restrictionFA?: FormArray) {
+    if (restrictionFA && value) {
+      return restrictionFA.controls.map((FG: FormGroup) =>
+        FG.get('value').disabled ? FG.get('value').value : value
+      );
+    }
+
     if (value) {
       return Array.from({ length: this.dateLimit }).fill(value);
     }
@@ -204,9 +210,9 @@ export class UpdateRatesComponent implements OnInit {
     ) => {
       const rateControl = (control.get('rates') as FormArray).at(idx);
       if (res.value) {
-        rateControl.disable();
+        rateControl.disable({ emitEvent: false });
       } else {
-        rateControl.enable();
+        rateControl.enable({ emitEvent: false });
       }
     };
 
@@ -293,9 +299,8 @@ export class UpdateRatesComponent implements OnInit {
         restrictionFA.controls.forEach((rateControl) => {
           rateControl.valueChanges.subscribe((res) => {
             const linkedValue = control.at(idx).get('linked').value;
-
             if (linkedValue) {
-              restrictionFA.patchValue(this.getArray(res), {
+              restrictionFA.patchValue(this.getArray(res, restrictionFA), {
                 emitEvent: false,
               });
             }

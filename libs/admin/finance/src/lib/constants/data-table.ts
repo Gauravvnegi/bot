@@ -63,7 +63,7 @@ export const cols = {
     {
       field: 'date',
       header: 'Invoice Date',
-      sortType: 'date',
+      isSortDisabled: true,
       isSearchDisabled: true,
     },
     {
@@ -82,8 +82,8 @@ export const cols = {
     {
       field: 'dateTime',
       header: 'Date & Time',
-      sortType: 'date',
-      isSearchDisabled: true
+      isSortDisabled: true,
+      isSearchDisabled: true,
     },
     {
       field: 'status',
@@ -163,13 +163,16 @@ export const records = [
 
 export const title = 'Invoice History';
 
-export const transactionStatus: Record<TransactionStatus, {label: string; type: FlagType}> = {
+export const transactionStatus: Record<
+  TransactionStatus,
+  { label: string; type: FlagType }
+> = {
   SUCCESS: {
     label: 'Paid',
-    type: 'active'
+    type: 'active',
   },
   FAILURE: {
     label: 'Failed',
-    type: 'failed'
-  }
-}
+    type: 'failed',
+  },
+};

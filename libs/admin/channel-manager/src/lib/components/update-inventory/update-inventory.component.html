@@ -49,6 +49,13 @@
             class="main-section"
             *ngIf="!isRoomsEmpty && allRoomTypes?.length"
           >
+            <div
+              loader
+              [isVisible]="isLoaderVisible"
+              [props]="{
+                showLoader: false
+              }"
+            ></div>
             <div class="heading-section left-main-cell">
               <div class="left-main-cell__left head-cell ttp">
                 <div class="main-text">
@@ -167,6 +174,14 @@
             </div>
           </div>
           <div class="main-section" *ngIf="!isRoomsEmpty">
+            <div
+              loader
+              [isVisible]="isLoaderVisible"
+              [props]="{
+                top: '50%',
+                left: '25%'
+              }"
+            ></div>
             <div class="data-cell-wrapper">
               <div class="data-cell heading-section">
                 <div

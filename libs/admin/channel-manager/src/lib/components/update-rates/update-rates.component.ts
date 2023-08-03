@@ -384,13 +384,19 @@ export class UpdateRatesComponent implements OnInit {
       this.initDate(res);
     });
 
-    this.useForm.controls['date'].valueChanges.subscribe((selectedDate) => {
-      this.isLoaderVisible = true;
-      this.useForm.controls['date'].patchValue(selectedDate, {
-        emitEvent: false,
+    this.useForm.controls['date'].valueChanges
+      .pipe(
+        tap((value) => {
+          this.isLoaderVisible = true;
+        }),
+        debounceTime(300)
+      )
+      .subscribe((selectedDate) => {
+        this.useForm.controls['date'].patchValue(selectedDate, {
+          emitEvent: false,
+        });
+        this.getRates(selectedDate);
       });
-      this.getRates(selectedDate);
-    });
 
     // Select Room Types Changes
     this.useFormControl.roomType.valueChanges

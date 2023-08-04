@@ -16,10 +16,7 @@ import {
 } from '@angular/forms';
 import { GlobalFilterService, Item } from '@hospitality-bot/admin/core/theme';
 import { SnackBarService } from '@hospitality-bot/shared/material';
-import {
-  AdminUtilityService,
-  ConfigService,
-} from 'libs/admin/shared/src';
+import { AdminUtilityService, ConfigService } from 'libs/admin/shared/src';
 import { IteratorComponent } from 'libs/admin/shared/src/lib/components/iterator/iterator.component';
 import { Subscription } from 'rxjs';
 import { roomFields, RoomFieldTypeOption } from '../../constants/reservation';
@@ -101,11 +98,12 @@ export class RoomIteratorComponent extends IteratorComponent
 
     // Index for keeping track of roomTypes array.
     const index = this.roomTypeArray.controls.indexOf(formGroup);
-    const roomInformationGroup = this.fb.group({
-      roomTypes: this.roomTypeArray,
-    });
+    const roomInformationGroup = this.fb.group(
+      {
+        roomTypes: this.roomTypeArray,
+      }
+    );
     this.parentFormGroup.addControl('roomInformation', roomInformationGroup);
-
     this.listenRoomTypeChanges(index);
     this.listenRatePlanChanges(index);
     this.listenForFormChanges(index);
@@ -133,12 +131,14 @@ export class RoomIteratorComponent extends IteratorComponent
             }));
             this.roomControls[index]
               .get('ratePlanOptions')
-              .setValue(ratePlanOptions);
+              .patchValue(ratePlanOptions, { emitEvent: false });
 
             this.roomControls[index].get('ratePlan').enable();
             const defaultPlan = ratePlanOptions.filter((item) => item.isBase)[0]
               .value;
-            this.roomControls[index].get('ratePlan').patchValue(defaultPlan);
+            this.roomControls[index]
+              .get('ratePlan')
+              .patchValue(defaultPlan, { emitEvent: false });
             this.roomControls[index]
               .get('ratePlan')
               .setValidators([Validators.required]);
@@ -170,9 +170,15 @@ export class RoomIteratorComponent extends IteratorComponent
         Validators.min(1),
         Validators.max(selectedRoomType.maxAdult),
       ]);
-    this.roomControls[index].get('adultCount').setValue(1);
-    this.roomControls[index].get('roomCount').setValue(1);
-    this.roomControls[index].get('childCount').setValue(0);
+    this.roomControls[index]
+      .get('adultCount')
+      .patchValue(1, { emitEvent: false });
+    this.roomControls[index]
+      .get('roomCount')
+      .patchValue(1, { emitEvent: false });
+    this.roomControls[index]
+      .get('childCount')
+      .patchValue(0, { emitEvent: false });
   }
 
   /**
@@ -335,7 +341,7 @@ export class RoomIteratorComponent extends IteratorComponent
    */
   removeField(index: number) {
     if (this.roomTypeArray.length === 1) {
-      this.roomTypeArray.at(0).reset();
+      this.roomTypeArray.at(0).reset({ value: null, emitEvent: false });
       return;
     }
     this.roomTypeArray.removeAt(index);

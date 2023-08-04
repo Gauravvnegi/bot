@@ -15,6 +15,7 @@ import {
   OfferData,
   OfferList,
   ReservationFormData,
+  RoomSummaryData,
   SummaryData,
 } from '../../models/reservations.model';
 import { ManageReservationService } from '../../services/manage-reservation.service';
@@ -27,8 +28,9 @@ import { ReservationForm, RoomTypes } from '../../constants/form';
 import { roomFields, roomReservationTypes } from '../../constants/reservation';
 import { FormService } from '../../services/form.service';
 import { SelectedEntity } from '../../types/reservation.type';
-import { debounceTime } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { ReservationSummary } from '../../types/forms.types';
+import { BookingItemsSummary } from '../../types/response.type';
 
 @Component({
   selector: 'hospitality-bot-add-reservation',
@@ -47,7 +49,7 @@ export class AddReservationComponent implements OnInit, OnDestroy {
   roomNumbers: Option[] = [];
   offersList: OfferList;
   selectedOffer: OfferData;
-  summaryData: SummaryData;
+  summaryData: RoomSummaryData;
   fields = roomFields;
 
   formValueChanges = false;
@@ -65,7 +67,6 @@ export class AddReservationComponent implements OnInit, OnDestroy {
   @Input() selectedEntity: SelectedEntity;
 
   // Booking Summary props
-  heading = '';
   adultCount = 0;
   roomCount = 1;
   childCount = 0;
@@ -88,7 +89,6 @@ export class AddReservationComponent implements OnInit, OnDestroy {
 
   initDetails() {
     this.reservationId = this.activatedRoute.snapshot.paramMap.get('id');
-    this.heading = this.selectedEntity.label;
     this.expandAccordion = this.formService.enableAccordion;
     if (this.expandAccordion) {
       this.formService.enableAccordion = false;
@@ -123,11 +123,11 @@ export class AddReservationComponent implements OnInit, OnDestroy {
   listenForFormChanges(index?: number): void {
     this.formValueChanges = true;
 
-    this.userForm
-      .get('roomInformation')
-      ?.valueChanges.pipe(debounceTime(1000))
+    this.inputControls.roomInformation
+      ?.get('roomTypes')
+      .valueChanges.pipe(debounceTime(1000), distinctUntilChanged())
       .subscribe((res) => {
-        if (res) {
+        if (res && res[res.length - 1]?.roomTypeId.length) {
           this.userForm.get('offerId').reset();
           this.getOfferByRoomType(res);
           this.getSummaryData();
@@ -158,7 +158,7 @@ export class AddReservationComponent implements OnInit, OnDestroy {
             const { guestInformation, roomInformation, ...formData } = data;
             this.formService.guestId.next(guestInformation.id);
             this.userForm.patchValue(data);
-            this.summaryData = new SummaryData().deserialize(response);
+            // this.summaryData = new SummaryData().deserialize(response);
             this.setFormDisability(data.reservationInformation);
             if (data.offerId)
               this.getOfferByRoomType(
@@ -230,6 +230,7 @@ export class AddReservationComponent implements OnInit, OnDestroy {
     const config = {
       params: this.adminUtilityService.makeQueryParams([{ type: 'ROOM_TYPE' }]),
     };
+
     const data: ReservationSummary = {
       fromDate: this.reservationInfoControls.from.value,
       toDate: this.reservationInfoControls.to.value,
@@ -247,12 +248,14 @@ export class AddReservationComponent implements OnInit, OnDestroy {
         },
       })),
     };
+
     this.$subscription.add(
       this.manageReservationService
         .getSummaryData(this.entityId, data, config)
         .subscribe(
           (res) => {
-            this.summaryData = new SummaryData()?.deserialize(res);
+            this.summaryData = new RoomSummaryData()?.deserialize(res);
+            this.updateBookingItemsCounts(this.summaryData.bookingItems);
             this.userForm
               .get('roomInformation')
               .patchValue(this.summaryData, { emitEvent: false });
@@ -270,6 +273,21 @@ export class AddReservationComponent implements OnInit, OnDestroy {
           (error) => {}
         )
     );
+  }
+
+  updateBookingItemsCounts(bookingItems: BookingItemsSummary[]) {
+    const totalValues = bookingItems.reduce(
+      (acc, bookingItem) => {
+        acc.maxAdult += bookingItem.maxAdult;
+        acc.maxChildren += bookingItem.maxChildren;
+        acc.roomCount += bookingItem.roomCount;
+        return acc;
+      },
+      { maxAdult: 0, maxChildren: 0, roomCount: 0 } // Initial values for reduce
+    );
+    this.adultCount = totalValues.maxAdult;
+    this.roomCount = totalValues.roomCount;
+    this.childCount = totalValues.maxChildren;
   }
 
   /**

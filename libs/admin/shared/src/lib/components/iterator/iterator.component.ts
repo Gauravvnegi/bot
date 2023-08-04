@@ -95,7 +95,7 @@ export class IteratorComponent implements OnChanges {
    */
   removeField(index: number) {
     if (this.useFormArray.length === 1) {
-      this.useFormArray.at(0).reset();
+      if (this.useFormArray.valid) this.useFormArray.at(0).reset();
       return;
     }
     this.useFormArray.removeAt(index);

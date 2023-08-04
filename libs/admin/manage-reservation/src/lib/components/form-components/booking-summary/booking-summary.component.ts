@@ -21,7 +21,7 @@ import { Subscription } from 'rxjs';
 import { ReservationForm } from '../../../constants/form';
 import { FormService } from '../../../services/form.service';
 import { EntitySubType, EntityType } from '@hospitality-bot/admin/shared';
-import { RoomReservationRes } from '../../../types/response.type';
+import { BookingItems, RoomReservationRes } from '../../../types/response.type';
 
 @Component({
   selector: 'hospitality-bot-booking-summary',
@@ -80,6 +80,7 @@ export class BookingSummaryComponent implements OnInit {
     this.entityId = this.globalFilterService.entityId;
     this.reservationId = this.activatedRoute.snapshot.paramMap.get('id');
     this.parentFormGroup = this.controlContainer.control as FormGroup;
+
     this.formService.dateDifference.subscribe((res) => {
       this.dateDifference = res;
     });

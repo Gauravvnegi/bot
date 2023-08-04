@@ -1,6 +1,15 @@
 <ng-container *ngIf="!displayBookingOffer; else bookingOffer">
   <div class="bk-summary_heading">Reservation Summary</div>
   <p class="divider"></p>
+  <div
+    class="bk-summary_subheading"
+    *ngIf="bookingType === 'ROOM_TYPE' && summaryData?.bookingItems"
+  >
+    {{ (summaryData?.bookingItems)[0]?.roomTypeLabel }}
+    <span *ngIf="summaryData?.bookingItems.length > 1"
+      >+{{ summaryData?.bookingItems.length - 1 }}</span
+    >
+  </div>
   <div class="bk-summary_subheading" *ngIf="heading">
     {{ heading }}
   </div>

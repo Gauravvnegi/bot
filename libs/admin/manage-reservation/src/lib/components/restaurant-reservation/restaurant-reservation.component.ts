@@ -21,7 +21,6 @@ import {
   OfferList,
   OfferData,
   SummaryData,
-  ReservationFormData,
   BookingInfo,
 } from '../../models/reservations.model';
 import { ManageReservationService } from '../../services/manage-reservation.service';
@@ -35,13 +34,11 @@ import { IteratorField } from 'libs/admin/shared/src/lib/types/fields.type';
 import { ReservationForm } from '../../constants/form';
 import { FormService } from '../../services/form.service';
 import { OutletService } from 'libs/admin/all-outlets/src/lib/services/outlet.service';
-import { MenuItemList } from '../../models/forms.model';
 import { SelectedEntity } from '../../types/reservation.type';
 import { OutletItems } from '../../constants/reservation-table';
 import { MenuItemListResponse } from '../../types/response.type';
 import { debounceTime } from 'rxjs/operators';
 import { OutletForm } from '../../models/reservations.model';
-import { ItemsData } from '../../types/forms.types';
 
 @Component({
   selector: 'hospitality-bot-restaurant-reservation',

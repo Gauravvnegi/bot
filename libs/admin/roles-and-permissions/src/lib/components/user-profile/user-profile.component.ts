@@ -153,9 +153,8 @@ export class UserProfileComponent implements OnInit {
    */
   initTeamMember() {
     this._managePermissionService
-      .getManagedUsers({
-        queryObj: '?limit=3',
-        loggedInUserId: this.loggedInUserId,
+      .getAllUsers(this.entityId, {
+        params: '?limit=3&type=REPORTING',
       })
       .subscribe((res) => {
         const color = ['#99e6e6', '#4db380', '#e6331a'];

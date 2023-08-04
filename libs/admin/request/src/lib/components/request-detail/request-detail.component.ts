@@ -106,7 +106,7 @@ export class RequestDetailComponent implements OnInit, OnDestroy {
           this.assigneeList = response.requestItemUsers.map((item) => {
             return {
               label: item.firstName + ' ' + item.lastName,
-              value: item.id,
+              value: item.userId,
             };
           });
         })

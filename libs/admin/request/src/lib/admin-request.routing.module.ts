@@ -11,6 +11,7 @@ import { GuestInfoComponent } from './components/guest-info/guest-info.component
 import { GuestPersonalInfoComponent } from './components/guest-personal-info/guest-personal-info.component';
 import { GuestRequestsComponent } from './components/guest-requests/guest-requests.component';
 import { GuestBookingInfoComponent } from './components/guest-booking-info/guest-booking-info.component';
+import { AddItemComponent } from './components/add-item/add-item.component';
 
 const appRoutes: Route[] = [
   {
@@ -20,6 +21,10 @@ const appRoutes: Route[] = [
       {
         path: '',
         component: RequestWrapperComponent,
+      },
+      {
+        path: 'add-item',
+        component: AddItemComponent,
       },
     ],
   },
@@ -42,5 +47,6 @@ export class AdminRequestRoutingModule {
     GuestPersonalInfoComponent,
     GuestBookingInfoComponent,
     GuestRequestsComponent,
+    AddItemComponent,
   ];
 }

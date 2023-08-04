@@ -86,6 +86,7 @@ export class ManagePermissionService extends ApiService {
       cc: value.cc,
       phoneNumber: value.phoneNumber,
       profileUrl: value.profileUrl,
+      reportingTo: value.reportingTo,
       departments: allDepartments.filter((item) =>
         value.departments?.includes(item.department)
       ),

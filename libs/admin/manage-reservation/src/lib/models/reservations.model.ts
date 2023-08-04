@@ -1,9 +1,7 @@
-import { RoomTypeResponse } from 'libs/admin/room/src/lib/types/service-response';
 import {
   BookingItems,
   PaymentMethodConfig,
   ReservationListResponse,
-  ReservationResponse,
   RoomReservationRes,
   SummaryResponse,
 } from '../types/response.type';
@@ -20,7 +18,7 @@ import {
   BookingItem,
   RoomReservationResponse,
   RoomSummaryResponse,
-} from '../types/reservation-response.type';
+} from '../types/response.type';
 import { RoomTypeForm } from 'libs/admin/room/src/lib/models/room.model';
 /* Reservation */
 
@@ -183,23 +181,22 @@ export class OfferData {
 export class ReservationFormData {
   reservationInformation: BookingInfo;
   guestInformation: GuestInfo;
-  paymentMethod: PaymentInfo;
+  // paymentMethod: PaymentInfo;
   offerId: string;
   roomInformation: RoomTypes[];
   deserialize(input: RoomReservationResponse) {
     this.reservationInformation = new BookingInfo().deserialize(input);
     this.guestInformation = new GuestInfo().deserialize(input);
-    this.paymentMethod = new PaymentInfo().deserialize(input);
+    // this.paymentMethod = new PaymentInfo().deserialize(input);
     this.offerId = input?.id;
-    if (input.bookingItems)
-      this.roomInformation = input?.bookingItems.map((item: BookingItem) => ({
-        adultCount: item.adultCount,
-        childCount: item.childCount,
-        roomTypeId: item.roomTypeId,
-        ratePlanId: item.ratePlanId,
-        roomNumbers: item.tableNumberOrRoomNumber,
-        roomCount: item.roomCount,
-      }));
+    this.roomInformation = input?.bookingItems.map((item: BookingItem) => ({
+      adultCount: item.occupancyDetails.maxAdult,
+      childCount: item.occupancyDetails.maxChildren,
+      roomTypeId: item.roomDetails.roomTypeId,
+      ratePlanId: item.roomDetails.ratePlan.id,
+      roomCount: item.roomDetails.roomCount,
+    }));
+    // roomNumbers: item?.tableNumberOrRoomNumber,
     return this;
   }
 }
@@ -207,7 +204,7 @@ export class ReservationFormData {
 export class OutletForm {
   reservationInformation: BookingInfo;
   guestInformation: GuestInfo;
-  paymentMethod: PaymentInfo;
+  // paymentMethod: PaymentInfo;
   offerId: string;
   orderInformation?: OrderInfo;
   bookingInformation?: BookingInformation;
@@ -216,7 +213,7 @@ export class OutletForm {
   deserialize(input: OutletFormData) {
     this.reservationInformation = new BookingInfo().deserialize(input);
     this.guestInformation = new GuestInfo().deserialize(input);
-    this.paymentMethod = new PaymentInfo().deserialize(input);
+    // this.paymentMethod = new PaymentInfo().deserialize(input);
     this.offerId = input?.offerId;
     switch (input.outletType) {
       case EntitySubType.RESTAURANT:
@@ -244,7 +241,7 @@ export class OrderInfo {
     this.kotInstructions = input?.kotInstructions ?? '';
     this.menuItems = input.items.map((item) => ({
       menuItems: item?.itemId,
-      quantity: item?.quantity ?? 1,
+      unit: item?.unit ?? 1,
       amount: item?.amount ?? 0,
     }));
     this.tableNumber = input?.tableNumber ?? '';
@@ -264,7 +261,7 @@ export class EventInformation {
     this.foodPackageCount = input?.foodPackageCount ?? 1;
     this.venueInfo = input.items.map((item) => ({
       description: item?.itemId,
-      quantity: item?.quantity ?? 1,
+      unit: item?.unit ?? 1,
       amount: item?.amount ?? 0,
     }));
     return this;
@@ -279,7 +276,7 @@ export class BookingInformation {
     this.numberOfAdults = input?.numberOfAdults ?? 1;
     this.spaItems = input.items.map((item) => ({
       serviceName: item?.itemId,
-      quantity: item?.quantity ?? 1,
+      unit: item?.unit ?? 1,
       amount: item?.amount ?? 0,
     }));
     return this;
@@ -317,17 +314,17 @@ export class GuestInfo {
   }
 }
 
-export class PaymentInfo {
-  totalPaidAmount: string;
-  paymentMethod: string;
-  paymentRemark: string;
-  deserialize(input): this {
-    this.totalPaidAmount = input?.totalPaidAmount;
-    this.paymentMethod = input?.paymentMethod;
-    this.paymentRemark = input?.paymentRemark;
-    return this;
-  }
-}
+// export class PaymentInfo {
+//   totalPaidAmount: string;
+//   paymentMethod: string;
+//   paymentRemark: string;
+//   deserialize(input): this {
+//     this.totalPaidAmount = input?.totalPaidAmount;
+//     this.paymentMethod = input?.paymentMethod;
+//     this.paymentRemark = input?.paymentRemark;
+//     return this;
+//   }
+// }
 
 export class PaymentMethodList {
   records: PaymentMethod[];

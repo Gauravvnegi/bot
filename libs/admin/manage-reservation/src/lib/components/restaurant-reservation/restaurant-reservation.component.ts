@@ -21,7 +21,6 @@ import {
   OfferList,
   OfferData,
   SummaryData,
-  ReservationFormData,
   BookingInfo,
 } from '../../models/reservations.model';
 import { ManageReservationService } from '../../services/manage-reservation.service';
@@ -35,13 +34,12 @@ import { IteratorField } from 'libs/admin/shared/src/lib/types/fields.type';
 import { ReservationForm } from '../../constants/form';
 import { FormService } from '../../services/form.service';
 import { OutletService } from 'libs/admin/all-outlets/src/lib/services/outlet.service';
-import { MenuItemList } from '../../models/forms.model';
 import { SelectedEntity } from '../../types/reservation.type';
 import { OutletItems } from '../../constants/reservation-table';
-import { MenuItemListResponse } from '../../types/response.type';
 import { debounceTime } from 'rxjs/operators';
 import { OutletForm } from '../../models/reservations.model';
-import { ItemsData } from '../../types/forms.types';
+import { ReservationSummary } from '../../types/forms.types';
+import { MenuItemListResponse } from 'libs/admin/all-outlets/src/lib/types/outlet';
 
 @Component({
   selector: 'hospitality-bot-restaurant-reservation',
@@ -249,12 +247,12 @@ export class RestaurantReservationComponent implements OnInit {
             : selectedMenuItem?.dineInPrice;
 
         this.menuItemsControls[index].get('amount').setValue(selectedPrice);
-        this.menuItemsControls[index].get('quantity').setValue(1);
+        this.menuItemsControls[index].get('unit').setValue(1);
 
         this.getSummaryData();
       });
     this.menuItemsControls[index]
-      .get('quantity')
+      .get('unit')
       .valueChanges.pipe(debounceTime(1000))
       .subscribe((res: number) => this.getSummaryData());
   }
@@ -302,22 +300,29 @@ export class RestaurantReservationComponent implements OnInit {
         .getReservationDataById(this.reservationId, this.entityId)
         .subscribe(
           (response) => {
+
             const data = new OutletForm().deserialize(response);
             const {
               orderInformation: { menuItems, ...orderInfo },
               ...formData
             } = data;
+
+            // Menu Items Array Values
             this.menuItemsValues = menuItems;
             this.userForm.patchValue({
               orderInformation: orderInfo,
               ...formData,
             });
+
+            // Summary Data for restaurant
             this.summaryData = new SummaryData().deserialize(response);
             this.setFormDisability(data.reservationInformation);
-            if (data.offerId)
-              this.getOfferByRoomType(
-                this.userForm.get('roomInformation.roomTypeId').value
-              );
+
+            // if (data.offerId)
+            //   this.getOfferByRoomType(
+            //     this.userForm.get('roomInformation.roomTypeId').value
+            //   );
+
             this.userForm.valueChanges.subscribe((_) => {
               if (!this.formValueChanges) {
                 this.formValueChanges = true;
@@ -404,17 +409,18 @@ export class RestaurantReservationComponent implements OnInit {
       ]),
     };
 
-    const data = {
+    const data: ReservationSummary = {
       fromDate: this.reservationInfoControls.dateAndTime.value,
       toDate: this.reservationInfoControls.dateAndTime.value,
       adultCount: this.orderInfoControls.numberOfAdults.value,
       items: this.menuItemsControls.map((item) => ({
         itemId: item.get('menuItems').value,
-        unit: item.get('quantity')?.value ?? 0,
+        unit: item.get('unit')?.value ?? 0,
         amount: item.get('amount').value,
       })),
       outletType: EntitySubType.RESTAURANT,
     };
+    
     this.$subscription.add(
       this.manageReservationService
         .getSummaryData(this.outletId, data, config)

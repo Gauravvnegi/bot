@@ -28,6 +28,7 @@ import { roomFields, roomReservationTypes } from '../../constants/reservation';
 import { FormService } from '../../services/form.service';
 import { SelectedEntity } from '../../types/reservation.type';
 import { debounceTime } from 'rxjs/operators';
+import { ReservationSummary } from '../../types/forms.types';
 
 @Component({
   selector: 'hospitality-bot-add-reservation',
@@ -41,6 +42,7 @@ export class AddReservationComponent implements OnInit, OnDestroy {
   reservationId: string;
   globalQueries = [];
 
+  roomTypeValues = [];
   reservationTypes: Option[] = [];
   roomNumbers: Option[] = [];
   offersList: OfferList;
@@ -138,6 +140,7 @@ export class AddReservationComponent implements OnInit, OnDestroy {
       this.reservationTypes = [
         ...roomReservationTypes,
         { label: 'Canceled', value: 'CANCELED' },
+        { label: 'No Show', value: 'NOSHOW' },
       ];
       this.getReservationDetails();
     } else {
@@ -152,7 +155,7 @@ export class AddReservationComponent implements OnInit, OnDestroy {
         .subscribe(
           (response) => {
             const data = new ReservationFormData().deserialize(response);
-            const { guestInformation, ...formData } = data;
+            const { guestInformation, roomInformation, ...formData } = data;
             this.formService.guestId.next(guestInformation.id);
             this.userForm.patchValue(data);
             this.summaryData = new SummaryData().deserialize(response);
@@ -227,7 +230,7 @@ export class AddReservationComponent implements OnInit, OnDestroy {
     const config = {
       params: this.adminUtilityService.makeQueryParams([{ type: 'ROOM_TYPE' }]),
     };
-    const data = {
+    const data: ReservationSummary = {
       fromDate: this.reservationInfoControls.from.value,
       toDate: this.reservationInfoControls.to.value,
       bookingItems: this.roomControls.map((item) => ({

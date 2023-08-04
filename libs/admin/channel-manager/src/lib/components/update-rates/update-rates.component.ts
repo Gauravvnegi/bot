@@ -209,7 +209,8 @@ export class UpdateRatesComponent implements OnInit {
       res: { value: boolean }
     ) => {
       const rateControl = (control.get('rates') as FormArray).at(idx);
-      if (res.value) {
+      const isBase = control.get('isBase').value;
+      if (res.value || !isBase) {
         rateControl.disable({ emitEvent: false });
       } else {
         rateControl.enable({ emitEvent: false });
@@ -274,13 +275,19 @@ export class UpdateRatesComponent implements OnInit {
           value: [ratePlan.value],
           linked: [false],
           showChannels: [false],
+          isBase: [ratePlan.isBase],
+          variablePrice: [ratePlan.variablePrice],
           selectedRestriction: [
             this.restrictions && this.restrictions[0].value,
           ],
         })
       );
 
-      this.addRatesAndRestrictionControl(ratePlansControl, ratePlanIdx);
+      this.addRatesAndRestrictionControl(
+        ratePlansControl,
+        ratePlanIdx,
+        roomTypeIdx
+      );
       this.addChannelsControl(ratePlan.channels, roomTypeIdx, ratePlanIdx);
     });
   }
@@ -290,13 +297,17 @@ export class UpdateRatesComponent implements OnInit {
    * @param control
    * @param idx
    */
-  addRatesAndRestrictionControl(control: FormArray, idx: number) {
+  addRatesAndRestrictionControl(
+    control: FormArray,
+    idx: number,
+    roomTypeIdx: number
+  ) {
     const controlG = control.at(idx) as FormGroup;
     this.restrictions &&
       this.restrictions.forEach((item) => {
         controlG.addControl(item.value, this.getValuesArrayControl(item.type));
         const restrictionFA = control.at(idx).get(item.value) as FormArray;
-        restrictionFA.controls.forEach((rateControl) => {
+        restrictionFA.controls.forEach((rateControl, dayIndex) => {
           rateControl.valueChanges.subscribe((res) => {
             const linkedValue = control.at(idx).get('linked').value;
             if (linkedValue) {
@@ -304,9 +315,45 @@ export class UpdateRatesComponent implements OnInit {
                 emitEvent: false,
               });
             }
+
+            // RatePlan Pricing Control with Base RatePlan
+            control.controls?.forEach((ratePlanControl) => {
+              const isBase = ratePlanControl.get('isBase').value;
+              const dynamicControl = this.useFormControl.roomTypes.controls[
+                roomTypeIdx
+              ].get('dynamicPrice') as FormArray;
+
+              if (!isBase && !dynamicControl.at(dayIndex).get('value').value) {
+                const variablePrice = ratePlanControl.get('variablePrice')
+                  .value;
+                const price = res.value.length
+                  ? +res.value + variablePrice
+                  : null;
+
+                const rates = ratePlanControl.get('rates') as FormArray;
+                const newPriceList = rates.controls.map((rate, rateIndex) => ({
+                  value: dynamicControl.at(rateIndex).get('value').value
+                    ? rate.get('value').value
+                    : price,
+                }));
+
+                if (linkedValue) {
+                  rates.patchValue(newPriceList, {
+                    emitEvent: false,
+                  });
+                } else {
+                  rates
+                    .at(dayIndex)
+                    .patchValue({ value: price }, { emitEvent: false });
+                }
+              }
+            });
           });
         });
       });
+
+    const isBase = controlG.get('isBase').value;
+    if (!isBase) controlG.disable({ emitEvent: false });
   }
 
   /**
@@ -338,7 +385,11 @@ export class UpdateRatesComponent implements OnInit {
         })
       );
 
-      this.addRatesAndRestrictionControl(channelControl, channelIdx);
+      this.addRatesAndRestrictionControl(
+        channelControl,
+        channelIdx,
+        roomTypeIdx
+      );
     });
   }
 
@@ -497,7 +548,7 @@ export class UpdateRatesComponent implements OnInit {
       fromDate,
       'submit-form'
     );
-
+    debugger;
     this.$subscription.add(
       this.channelManagerService
         .updateChannelManager(data, this.entityId, this.getQueryConfig())
@@ -550,7 +601,8 @@ export class UpdateRatesComponent implements OnInit {
                   ]
                 : null;
               valueControl.patchValue(
-                responseRatePlan ? responseRatePlan.available : null
+                responseRatePlan ? responseRatePlan.available : null,
+                { emitEvent: false }
               );
               currentDate.setDate(currentDate.getDate() + 1);
             }

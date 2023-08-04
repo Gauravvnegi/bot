@@ -33,15 +33,16 @@ import {
 import { ManageReservationService } from '../../services/manage-reservation.service';
 import { ReservationForm } from '../../constants/form';
 import { FormService } from '../../services/form.service';
-import { ServiceList } from '../../models/forms.model';
+import { SelectedEntity } from '../../types/reservation.type';
 import {
   LibrarySearchItem,
-  SelectedEntity,
-  ServicesTypeValue,
-} from '../../types/reservation.type';
-import { ServiceListResponse } from '../../types/response.type';
-import { LibraryService } from '@hospitality-bot/admin/library';
+  LibraryService,
+} from '@hospitality-bot/admin/library';
 import { debounceTime } from 'rxjs/operators';
+import { ReservationSummary } from '../../types/forms.types';
+import { ServiceListResponse } from 'libs/admin/services/src/lib/types/response';
+import { ServiceList } from 'libs/admin/services/src/lib/models/services.model';
+import { ServicesTypeValue } from 'libs/admin/room/src/lib/constant/form';
 
 @Component({
   selector: 'hospitality-bot-spa-reservation',
@@ -180,11 +181,11 @@ export class SpaReservationComponent implements OnInit {
         this.spaItemsControls[index]
           .get('amount')
           .setValue(selectedService?.price);
-        this.spaItemsControls[index].get('quantity').setValue(1);
+        this.spaItemsControls[index].get('unit').setValue(1);
         this.getSummaryData();
       });
     this.spaItemsControls[index]
-      .get('quantity')
+      .get('unit')
       .valueChanges.pipe(debounceTime(1000))
       .subscribe((res) => this.getSummaryData());
   }
@@ -237,7 +238,7 @@ export class SpaReservationComponent implements OnInit {
               bookingInformation: { spaItems, ...spaInfo },
               ...formData
             } = data;
-            
+
             this.spaItemsValues = spaItems;
             this.userForm.patchValue({
               bookingInformation: spaInfo,
@@ -314,13 +315,13 @@ export class SpaReservationComponent implements OnInit {
         { type: EntityType.OUTLET },
       ]),
     };
-    const data = {
+    const data: ReservationSummary = {
       fromDate: this.reservationInfoControls.dateAndTime.value,
       toDate: this.reservationInfoControls.dateAndTime.value,
       adultCount: this.userForm.get('bookingInformation.numberOfAdults').value,
       items: this.spaItemsControls.map((item) => ({
         itemId: item.get('serviceName').value,
-        unit: item.get('quantity')?.value ?? 0,
+        unit: item.get('unit')?.value ?? 0,
         amount: item.get('amount').value,
       })),
       outletType: EntitySubType.SPA,

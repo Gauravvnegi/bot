@@ -21,6 +21,8 @@ export function makeRoomsData(rooms: RoomType[]) {
             type: ratePlan.label,
             label: ratePlan.label,
             value: ratePlan.id,
+            isBase: ratePlan.isBase,
+            variablePrice: ratePlan.variablePrice,
             channels: [],
           })) ?? [],
     };

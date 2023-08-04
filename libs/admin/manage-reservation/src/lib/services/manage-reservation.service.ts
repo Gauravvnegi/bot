@@ -3,10 +3,12 @@ import { ApiService } from '@hospitality-bot/shared/utils';
 import { SearchResultResponse } from 'libs/admin/library/src/lib/types/response';
 import { RoomTypeListResponse } from 'libs/admin/room/src/lib/types/service-response';
 import { Observable } from 'rxjs';
-import { ReservationFormData } from '../types/forms.types';
-import { QueryConfig } from '../types/reservation.type';
+import {
+  ReservationSummary,
+} from '../types/forms.types';
 import { map } from 'rxjs/operators';
-import { MenuItemListResponse } from '../types/response.type';
+import { MenuItemListResponse } from 'libs/admin/all-outlets/src/lib/types/outlet';
+import { QueryConfig } from '@hospitality-bot/admin/shared';
 
 @Injectable()
 export class ManageReservationService extends ApiService {
@@ -86,7 +88,7 @@ export class ManageReservationService extends ApiService {
     bookingId: string,
     entityId: string,
     bookingType: string,
-    data
+    data: { reservationType: string }
   ): Observable<any> {
     return this.patch(
       `/api/v1/booking/${bookingId}?bookingType=${bookingType}&entityId=${entityId}`,
@@ -94,11 +96,11 @@ export class ManageReservationService extends ApiService {
     );
   }
 
-  addGuest(data) {
-    return this.post('api/v1/members?type=GUEST', data);
-  }
-
-  getSummaryData(entityId: string, data, config: QueryConfig): Observable<any> {
+  getSummaryData(
+    entityId: string,
+    data: ReservationSummary,
+    config: QueryConfig
+  ): Observable<any> {
     return this.post(`/api/v1/booking/summary${config?.params}`, data, {
       headers: { 'entity-id': entityId },
     });
@@ -127,43 +129,5 @@ export class ManageReservationService extends ApiService {
     return this.get(`/api/v1/booking/export${config?.params ?? ''}`, {
       responseType: 'blob',
     });
-  }
-
-  mapReservationData(formValue) {
-    const reservationData = new ReservationFormData();
-    // reservationData.firstName = formValue.guestInformation.firstName ?? '';
-    // reservationData.lastName = formValue.guestInformation.lastName ?? '';
-    // reservationData.email = formValue.guestInformation.email ?? '';
-    // reservationData.contact = {
-    //   countryCode: formValue?.guestInformation?.countryCode ?? '',
-    //   phoneNumber: formValue?.guestInformation?.phoneNumber ?? '',
-    // };
-    // reservationData.guestDetails = formValue.guestInformation.guestDetails;
-    // reservationData.roomTypeId = formValue.roomInformation?.roomTypeId ?? '';
-    // reservationData.adultCount = formValue.roomInformation?.adultCount ?? 0;
-    // reservationData.childCount = formValue.roomInformation?.childCount ?? 0;
-    // reservationData.roomCount = formValue.roomInformation?.roomCount ?? 0;
-    reservationData.from = formValue.reservationInformation.from ?? 0;
-    reservationData.to = formValue.reservationInformation.to ?? 0;
-    reservationData.reservationType =
-      formValue.reservationInformation.reservationType ?? '';
-    reservationData.source = formValue.reservationInformation.source ?? '';
-    reservationData.sourceName =
-      formValue.reservationInformation.sourceName ?? '';
-    reservationData.marketSegment =
-      formValue.reservationInformation.marketSegment ?? '';
-    reservationData.paymentMethod = formValue.paymentMethod.paymentMethod ?? '';
-    reservationData.totalPaidAmount =
-      formValue.paymentMethod.totalPaidAmount ?? 0;
-    reservationData.offerId = formValue.offerId ?? '';
-    reservationData.paymentRemark = formValue.paymentMethod.paymentRemark ?? '';
-    return reservationData;
-  }
-
-  getReservationList(
-    entityId,
-    config: QueryConfig = { params: '?order=DESC&limit=5' }
-  ): Observable<any> {
-    return this.get(`/api/v1/entity/${entityId}/tax${config?.params ?? ''}`);
   }
 }

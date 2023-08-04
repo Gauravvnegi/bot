@@ -3,7 +3,6 @@ import { FormBuilder } from '@angular/forms';
 import { MatDialogConfig } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
-import { QueryConfig } from '@hospitality-bot/admin/library';
 import {
   AdminUtilityService,
   BaseDatatableComponent as BaseDatableComponent,
@@ -11,6 +10,7 @@ import {
   EntitySubType,
   EntityType,
   Option,
+  QueryConfig,
   TableService,
   sharedConfig,
 } from '@hospitality-bot/admin/shared';
@@ -98,36 +98,9 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
   }
 
   ngOnInit(): void {
-    // this.getConfigData();
-
     this.tableName = title;
     this.listenForGlobalFilters();
     this.listenForSelectedEntityChange();
-  }
-
-  // initTableDetails = () => {
-  //   this.selectedOutlet === EntityTabGroup.HOTEL
-  //     ? (this.cols = hotelCols)
-  //     : (this.cols = outletCols);
-  // };
-
-  getConfigData(): void {
-    this.configService
-      .getColorAndIconConfig(this.entityId)
-      .subscribe((response) => {
-        this.configData = new BookingConfig().deserialize(
-          response.bookingConfig
-        );
-
-        const data = this.configData.source.map((item) => {
-          return {
-            ...item,
-            content: '',
-            disabled: false,
-            total: 0,
-          };
-        });
-      });
   }
 
   /**
@@ -139,6 +112,7 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
     this.globalFilterService.globalFilter$.subscribe((data) => {
       // set-global query everytime global filter changes
       this.globalQueries = [...data['dateRange'].queryValue];
+      // Only run if selectedEntity is not changed
       if (!this.isSelectedEntityChanged && this.selectedEntity) {
         this.initTableValue();
       }
@@ -147,6 +121,7 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
 
   loadData(event: LazyLoadEvent): void {
     this.formService.selectedTab = this.selectedTab;
+    // Only run if selectedEntity is not changed
     if (!this.isSelectedEntityChanged && this.selectedEntity) {
       this.initTableValue();
     }
@@ -219,21 +194,6 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
         }
       );
   }
-
-  // listenForOutletChange(value: SelectedEntity) {
-  //   this.selectedOutlets = value;
-  //   // if (this.selectedOutlet !== this.previousOutlet) {
-  //   //   this.resetTableValues();
-  //   //   this.loading = true;
-  //   //   this.isOutletChanged = true;
-  //   // } else {
-  //   //   this.isOutletChanged = false;
-  //   // }
-  //   this.resetTableValues();
-  //   this.loading = true;
-  //   // this.previousOutlet = this.selectedOutlet;
-  //   this.initDetails(this.selectedOutlets);
-  // }
 
   initDetails(selectedEntity: SelectedEntity) {
     if (selectedEntity.subType === EntitySubType.ROOM_TYPE) {
@@ -391,6 +351,9 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
     return config;
   }
 
+  /**
+   * @function handleMenuClick To handle click on menu button.
+   */
   handleMenuClick(value: string, id: string) {
     switch (value) {
       case 'MANAGE_INVOICE':

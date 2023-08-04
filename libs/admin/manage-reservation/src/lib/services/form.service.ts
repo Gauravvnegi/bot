@@ -1,10 +1,9 @@
 import { Injectable } from '@angular/core';
-import { EntitySubType, EntityType } from '@hospitality-bot/admin/shared';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { distinctUntilChanged } from 'rxjs/operators';
 import { ReservationTableValue } from '../constants/reservation-table';
 import { SelectedEntity } from '../types/reservation.type';
-import { OutletFormData } from '../types/forms.types';
+import { OutletFormData, RoomReservationFormData } from '../types/forms.types';
 import { ReservationForm } from '../constants/form';
 
 @Injectable({
@@ -15,9 +14,9 @@ export class FormService {
   dateDifference = new BehaviorSubject(1);
   toDate: Date;
   fromDate: Date;
-  
+
   guestId = new BehaviorSubject<string>('');
-  
+
   public selectedEntity = new BehaviorSubject<SelectedEntity>(null);
 
   getSelectedEntity(): Observable<SelectedEntity> {
@@ -40,6 +39,46 @@ export class FormService {
   price = new BehaviorSubject(0);
   discountedPrice = new BehaviorSubject(0);
   // roomType = new BehaviorSubject({roomTypeCount: 0, roomTypeName: ''});
+
+  mapRoomReservationData(input: ReservationForm): RoomReservationFormData {
+    const roomReservationData = new RoomReservationFormData();
+  
+    // Map Reservation Info
+    roomReservationData.from =
+      input.reservationInformation?.dateAndTime ?? input.reservationInformation?.from;
+    roomReservationData.to =
+      input.reservationInformation?.dateAndTime ?? input.reservationInformation?.to;
+    roomReservationData.reservationType =
+      input.reservationInformation?.reservationType ?? input.reservationInformation?.status;
+    roomReservationData.sourceName = input.reservationInformation?.sourceName;
+    roomReservationData.source = input.reservationInformation?.source;
+    roomReservationData.marketSegment = input.reservationInformation?.marketSegment;
+    roomReservationData.paymentMethod = input.paymentMethod?.paymentMethod ?? '';
+    roomReservationData.paymentRemark = input.paymentMethod?.paymentRemark ?? '';
+    roomReservationData.guestId = input.guestInformation?.guestDetails;
+  
+    // Map Booking Items
+    if (input.roomInformation?.roomTypes) {
+      roomReservationData.bookingItems = input.roomInformation.roomTypes.map(
+        (roomType) => ({
+          roomDetails: {
+            ratePlan: { id: roomType.ratePlanId },
+            roomTypeId: roomType.roomTypeId,
+            roomCount: roomType.roomCount,
+          },
+          occupancyDetails: {
+            maxChildren: roomType.childCount,
+            maxAdult: roomType.adultCount,
+          },
+        })
+      );
+    } else {
+      roomReservationData.bookingItems = [];
+    }
+  
+    return roomReservationData;
+  }
+  
 
   mapOutletReservationData(input: ReservationForm, outletType: string) {
     const reservationData = new OutletFormData();
@@ -67,17 +106,17 @@ export class FormService {
     reservationData.items =
       input.bookingInformation?.spaItems.map((item) => ({
         itemId: item.serviceName,
-        quantity: item?.quantity ?? 1,
+        unit: item?.unit ?? 1,
         amount: item.amount,
       })) ??
       input.orderInformation?.menuItems.map((item) => ({
         itemId: item.menuItems,
-        quantity: item?.quantity ?? 1,
+        unit: item?.unit ?? 1,
         amount: item.amount,
       })) ??
       input.eventInformation?.venueInfo.map((item) => ({
         itemId: item.description,
-        quantity: item?.quantity ?? 1,
+        unit: item?.unit ?? 1,
         amount: item.amount,
       }));
 

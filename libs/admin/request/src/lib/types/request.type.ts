@@ -8,3 +8,13 @@ export type CMSUpdateJobData = {
   lastName: string;
   action?: 'Todo';
 };
+
+export type ServiceItemForm = {
+  itemName: string;
+  categoryDesc: string;
+  functionCode: string;
+  serviceCode: string;
+  itemDesc: string;
+  sla: string;
+  users: string;
+};

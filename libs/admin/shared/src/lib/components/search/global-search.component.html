@@ -5,7 +5,9 @@
       pInputText
       [formControlName]="controlName"
       [placeholder]="placeholder.length ? placeholder : 'Search...'"
+      (focus)="onBlurSearch($event)"
     />
+    <!-- (blur)="onBlurSearch($event); clearSearch()" -->
     <!-- For collapsed search bar, put it into input & uncomment searchbar
       [ngStyle]="
         isClearShow ? { 'border-radius': '4px' } : { 'border-radius': '50px' }
@@ -23,5 +25,15 @@
       (click)="searchBar.blur(); searchBar.focus()"
       *ngIf="!isClearShow"
     ></i> -->
+    <div
+      *ngIf="hasSuggestion && isClearShow"
+      [ngClass]="scattered ? 'suggestions scattered' : 'suggestions'"
+    >
+      <ng-container *ngFor="let item of suggestionList">
+        <button (click)="suggestClick(item)" class="btn">
+          {{ item }}
+        </button>
+      </ng-container>
+    </div>
   </form>
 </span>

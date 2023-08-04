@@ -15,13 +15,13 @@ import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { ModalComponent } from 'libs/admin/shared/src/lib/components/modal/modal.component';
 import { manageReservationRoutes } from '../../../constants/routes';
 import { ManageReservationService } from '../../../services/manage-reservation.service';
-import { ReservationResponse } from '../../../types/response.type';
 import { Clipboard } from '@angular/cdk/clipboard';
 import { Location } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { ReservationForm } from '../../../constants/form';
 import { FormService } from '../../../services/form.service';
 import { EntitySubType, EntityType } from '@hospitality-bot/admin/shared';
+import { RoomReservationRes } from '../../../types/response.type';
 
 @Component({
   selector: 'hospitality-bot-booking-summary',
@@ -98,7 +98,7 @@ export class BookingSummaryComponent implements OnInit {
     this.isBooking = true;
     let data: any;
     if (this.bookingType === EntityType.HOTEL)
-      data = this.manageReservationService.mapReservationData(
+      data = this.formService.mapRoomReservationData(
         this.parentFormGroup.getRawValue()
       );
     else
@@ -119,7 +119,7 @@ export class BookingSummaryComponent implements OnInit {
       this.manageReservationService
         .createReservation(this.outletId, data, type)
         .subscribe(
-          (res: ReservationResponse) => {
+          (res: RoomReservationRes) => {
             this.bookingConfirmationPopup(res?.reservationNumber);
           },
           (error) => {
@@ -137,7 +137,7 @@ export class BookingSummaryComponent implements OnInit {
       this.manageReservationService
         .updateReservation(this.outletId, this.reservationId, data)
         .subscribe(
-          (res: ReservationResponse) => {
+          (res: RoomReservationRes) => {
             this.bookingConfirmationPopup(res?.reservationNumber);
           },
           (error) => {

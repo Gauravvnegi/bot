@@ -19,7 +19,6 @@ import { SnackBarService } from '@hospitality-bot/shared/material';
 import {
   AdminUtilityService,
   ConfigService,
-  Option,
 } from 'libs/admin/shared/src';
 import { IteratorComponent } from 'libs/admin/shared/src/lib/components/iterator/iterator.component';
 import { Subscription } from 'rxjs';

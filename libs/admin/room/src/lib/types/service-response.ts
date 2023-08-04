@@ -87,19 +87,20 @@ export type RoomTypeResponse = {
 };
 
 export type RatePlanRes = {
-  label: string;
+  label?: string;
+  type?: string;
   variablePrice: number;
-  currency: string;
+  currency?: string;
   isBase: boolean;
-  description: string;
-  discount: {
+  description?: string;
+  discount?: {
     type: string;
     value: number;
   };
-  id: string;
-  status: boolean;
-  sellingPrice: number;
-  total: number;
+  id?: string;
+  status?: boolean;
+  sellingPrice?: number;
+  total?: number;
 };
 
 export type PricingDetails = {

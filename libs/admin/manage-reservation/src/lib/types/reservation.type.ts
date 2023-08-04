@@ -12,15 +12,6 @@ export type CategoryData = {
   type: 'SERVICE_CATEGORY' | 'PACKAGE_CATEGORY';
 };
 
-/**
- * @type QueryConfig
- * @key params format is `?type=NEW`
- * One of the query param is 'type'
- */
-export type QueryConfig = {
-  params: string;
-};
-
 export type ReservationStatus = 'DRAFT' | 'CONFIRMED' | 'CANCELED';
 
 export type SelectedEntity = {
@@ -29,16 +20,3 @@ export type SelectedEntity = {
   subType: EntitySubType;
   label: string;
 };
-
-export enum ServicesTypeValue {
-  PAID = 'PAID',
-  COMPLIMENTARY = 'COMPLIMENTARY',
-}
-
-export enum LibrarySearchItem {
-  PACKAGE_CATEGORY = 'PACKAGE_CATEGORY',
-  SERVICE_CATEGORY = 'SERVICE_CATEGORY',
-  ROOM_TYPE = 'ROOM_TYPE',
-  SERVICE = 'SERVICE',
-  PACKAGE = 'PACKAGE',
-}

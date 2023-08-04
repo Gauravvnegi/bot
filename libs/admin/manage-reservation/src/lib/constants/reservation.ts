@@ -92,7 +92,7 @@ export const menuItemFields: IteratorField[] = [
   },
   {
     label: 'Quantity',
-    name: 'quantity',
+    name: 'unit',
     type: 'input',
     required: false,
     placeholder: 'Enter',
@@ -122,7 +122,7 @@ export const spaFields: IteratorField[] = [
   },
   {
     label: 'Quantity',
-    name: 'quantity',
+    name: 'unit',
     type: 'input',
     required: false,
     placeholder: 'Enter',
@@ -150,7 +150,7 @@ export const venueFields: IteratorField[] = [
   },
   {
     label: 'Quantity',
-    name: 'serviceName',
+    name: 'unit',
     type: 'input',
     required: true,
     placeholder: 'Enter',
@@ -200,5 +200,4 @@ export const restaurantReservationTypes = [
 export const roomReservationTypes = [
   { label: 'Draft', value: 'DRAFT' },
   { label: 'Confirmed', value: 'CONFIRMED' },
-  { label: 'No Show', value: 'NOSHOW' },
 ];

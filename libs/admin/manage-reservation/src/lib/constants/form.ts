@@ -35,7 +35,7 @@ type BookingInformation = {
 
 export type SpaItems = {
   serviceName: string;
-  quantity: number;
+  unit: number;
   amount: number;
 };
 
@@ -51,7 +51,7 @@ export type RoomTypes = {
   roomTypeId: string;
   ratePlanId: string;
   roomCount: number;
-  roomNumbers: string[];
+  roomNumbers?: string[];
   adultCount: number;
   childCount: number;
 };
@@ -77,13 +77,13 @@ type EventInformation = {
 
 export type VenueItemsData = {
   description: string;
-  quantity: number;
+  unit: number;
   amount: number;
 };
 
 export type MenuItemsData = {
   menuItems: string;
-  quantity: number;
+  unit: number;
   amount: number;
 };
 

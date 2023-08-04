@@ -48,7 +48,7 @@ export class AgentService extends ApiService {
     });
   }
 
-  searchAgent(config: QueryConfig) {
+  searchAgent(config: QueryConfig): Observable<AgentTableResponse[]> {
     return this.get(`/api/v1/search/members${config.params}`);
   }
 
@@ -56,5 +56,9 @@ export class AgentService extends ApiService {
     return this.get(`/api/v1/members/export${config?.params}`, {
       responseType: 'blob',
     });
+  }
+
+  sortMemberBy(config: QueryConfig): Observable<AgentListResponse> {
+    return this.get(`/api/v1/members${config.params}`);
   }
 }

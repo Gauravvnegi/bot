@@ -43,31 +43,21 @@ import { ReservationSummary } from '../../types/forms.types';
 import { ServiceListResponse } from 'libs/admin/services/src/lib/types/response';
 import { ServiceList } from 'libs/admin/services/src/lib/models/services.model';
 import { ServicesTypeValue } from 'libs/admin/room/src/lib/constant/form';
+import { BaseReservationComponent } from '../base-reservation.component';
 
 @Component({
   selector: 'hospitality-bot-spa-reservation',
   templateUrl: './spa-reservation.component.html',
   styleUrls: ['./spa-reservation.component.scss', '../reservation.styles.scss'],
 })
-export class SpaReservationComponent implements OnInit {
-  userForm: FormGroup;
+export class SpaReservationComponent extends BaseReservationComponent implements OnInit {
   spaBookingInfo: FormArray;
   fields: IteratorField[];
-
-  outletId: string;
-  entityId: string;
-  reservationId: string;
 
   statusOptions: Option[] = [];
   spaItemsValues = [];
 
-  offersList: OfferList;
-  selectedOffer: OfferData;
   summaryData: SummaryData;
-
-  // loading = false;
-  formValueChanges = false;
-  disabledForm = false;
 
   date: string;
   time: string;
@@ -78,48 +68,33 @@ export class SpaReservationComponent implements OnInit {
   noMoreResults = false;
   services: (Option & { price: number })[] = [];
 
-  deductedAmount = 0;
-  bookingType = 'SPA';
-
   itemInfo = 'For 1 Adult';
-
-  pageTitle: string;
-  routes: NavRouteOptions = [];
-
-  @Input() selectedEntity: SelectedEntity;
-
-  $subscription = new Subscription();
 
   constructor(
     private fb: FormBuilder,
     private adminUtilityService: AdminUtilityService,
-    private globalFilterService: GlobalFilterService,
+    protected globalFilterService: GlobalFilterService,
     private manageReservationService: ManageReservationService,
     protected activatedRoute: ActivatedRoute,
     private formService: FormService,
     private libraryService: LibraryService,
     private router: Router
   ) {
-    this.initForm();
-    this.reservationId = this.activatedRoute.snapshot.paramMap.get('id');
+    super(globalFilterService, activatedRoute);
 
-    const { navRoutes, title } = manageReservationRoutes[
-      this.reservationId ? 'editReservation' : 'addReservation'
-    ];
-    this.routes = navRoutes;
-    this.pageTitle = title;
   }
-
+  
   ngOnInit(): void {
-    this.entityId = this.globalFilterService.entityId;
-    this.outletId = this.selectedEntity.id;
-    this.fields = spaFields;
-    this.initOptions();
+    this.initForm();
+    this.initDetails();
     this.getReservationId();
     this.getServices();
   }
 
-  initOptions() {
+  initDetails() {
+    this.bookingType = EntitySubType.SPA;
+    this.outletId = this.selectedEntity.id;
+    this.fields = spaFields;
     // Update Fields for search in select component
     this.fields[0] = {
       ...this.fields[0],
@@ -441,14 +416,6 @@ export class SpaReservationComponent implements OnInit {
     this.router.navigate([`/pages/library/services/create-service`]);
   }
 
-  get reservationInfoControls() {
-    return (this.userForm.get('reservationInformation') as FormGroup)
-      .controls as Record<
-      keyof ReservationForm['reservationInformation'],
-      AbstractControl
-    >;
-  }
-
   get spaItemsControls() {
     return ((this.userForm.get('bookingInformation') as FormGroup).get(
       'spaItems'
@@ -466,11 +433,4 @@ export class SpaReservationComponent implements OnInit {
   handleFinal = () => {
     this.loadingResults = false;
   };
-
-  /**
-   * @function ngOnDestroy to unsubscribe subscription.
-   */
-  ngOnDestroy(): void {
-    this.$subscription.unsubscribe();
-  }
 }

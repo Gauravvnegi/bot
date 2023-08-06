@@ -2,9 +2,11 @@ import {
   Component,
   ElementRef,
   EventEmitter,
+  OnChanges,
   OnDestroy,
   OnInit,
   Output,
+  SimpleChanges,
   ViewChild,
 } from '@angular/core';
 import {
@@ -31,7 +33,7 @@ import { RoomTypeForm } from 'libs/admin/room/src/lib/models/room.model';
   styleUrls: ['./room-iterator.component.scss'],
 })
 export class RoomIteratorComponent extends IteratorComponent
-  implements OnInit, OnDestroy {
+  implements OnChanges, OnInit, OnDestroy {
   parentFormGroup: FormGroup;
   roomTypeArray: FormArray;
 
@@ -71,6 +73,20 @@ export class RoomIteratorComponent extends IteratorComponent
     super(fb);
   }
 
+  ngOnChanges(changes: SimpleChanges): void {
+    const itemValues = changes?.itemValues?.currentValue;
+    if (itemValues?.length) {
+      if (itemValues.length > 1) {
+        // Create new form fields for each item in the array
+        itemValues.forEach((item) => {
+          this.createNewFields();
+        });
+      }
+      // Patch the new values to the form array
+      this.roomTypeArray.patchValue(itemValues);
+    }
+  }
+
   ngOnInit(): void {
     this.entityId = this.globalFilterService.entityId;
     this.initDetails();
@@ -98,11 +114,9 @@ export class RoomIteratorComponent extends IteratorComponent
 
     // Index for keeping track of roomTypes array.
     const index = this.roomTypeArray.controls.indexOf(formGroup);
-    const roomInformationGroup = this.fb.group(
-      {
-        roomTypes: this.roomTypeArray,
-      }
-    );
+    const roomInformationGroup = this.fb.group({
+      roomTypes: this.roomTypeArray,
+    });
     this.parentFormGroup.addControl('roomInformation', roomInformationGroup);
     this.listenRoomTypeChanges(index);
     this.listenRatePlanChanges(index);

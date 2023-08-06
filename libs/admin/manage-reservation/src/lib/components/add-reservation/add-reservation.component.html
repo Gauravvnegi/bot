@@ -16,6 +16,7 @@
         <hospitality-bot-room-iterator
           (refreshData)="getSummaryData()"
           (listenChanges)="listenForFormChanges($event)"
+          [itemValues]="roomTypeValues"
         >
         </hospitality-bot-room-iterator>
       </p-accordionTab>

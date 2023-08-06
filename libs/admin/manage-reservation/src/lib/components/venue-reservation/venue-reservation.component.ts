@@ -3,10 +3,10 @@ import { FormGroup, FormArray, FormBuilder, Validators, AbstractControl } from '
 import { ActivatedRoute } from '@angular/router';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
-  NavRouteOptions,
   AdminUtilityService,
   Option,
   EntityType,
+  EntitySubType,
 } from '@hospitality-bot/admin/shared';
 import { IteratorField } from 'libs/admin/shared/src/lib/types/fields.type';
 import { Subscription } from 'rxjs';
@@ -27,6 +27,7 @@ import {
 import { ManageReservationService } from '../../services/manage-reservation.service';
 import { SelectedEntity } from '../../types/reservation.type';
 import { ReservationForm } from '../../constants/form';
+import { BaseReservationComponent } from '../base-reservation.component';
 
 @Component({
   selector: 'hospitality-bot-venue-reservation',
@@ -36,63 +37,35 @@ import { ReservationForm } from '../../constants/form';
     '../reservation.styles.scss',
   ],
 })
-export class VenueReservationComponent implements OnInit {
-  userForm: FormGroup;
+export class VenueReservationComponent extends BaseReservationComponent implements OnInit {
   venueBookingInfo: FormArray;
   foodPackageArray: FormArray;
-
-  fields: IteratorField[];
-
-  entityId: string;
-  reservationId: string;
 
   statusOptions: Option[] = [];
   eventOptions: Option[] = [];
   foodPackages: Option[] = [];
 
-  offersList: OfferList;
-  selectedOffer: OfferData;
   summaryData: SummaryData;
-
-  // loading = false;
-  formValueChanges = false;
-  disabledForm = false;
-
-  deductedAmount = 0;
-  bookingType = 'VENUE';
-
-  pageTitle = 'Add Reservation';
-  routes: NavRouteOptions = [];
-
-  @Input() selectedEntity: SelectedEntity;
-
-  $subscription = new Subscription();
 
   constructor(
     private fb: FormBuilder,
     private adminUtilityService: AdminUtilityService,
-    private globalFilterService: GlobalFilterService,
+    protected globalFilterService: GlobalFilterService,
     private manageReservationService: ManageReservationService,
     protected activatedRoute: ActivatedRoute
   ) {
-    this.initForm();
-    this.reservationId = this.activatedRoute.snapshot.paramMap.get('id');
-
-    const { navRoutes, title } = manageReservationRoutes[
-      this.reservationId ? 'editReservation' : 'addReservation'
-    ];
-    this.routes = navRoutes;
-    this.pageTitle = title;
+    super(globalFilterService, activatedRoute);
   }
-
+  
   ngOnInit(): void {
-    this.entityId = this.globalFilterService.entityId;
-    this.fields = venueFields;
-    this.initOptions();
+    this.initForm();
+    this.initDetails();
     this.getReservationId();
   }
 
-  initOptions() {
+  initDetails() {
+    this.bookingType = EntitySubType.VENUE;
+    this.fields = venueFields;
     this.eventOptions = eventOptions;
   }
 
@@ -303,14 +276,6 @@ export class VenueReservationComponent implements OnInit {
     );
   }
 
-  get reservationInfoControls() {
-    return (this.userForm.get('reservationInformation') as FormGroup)
-      .controls as Record<
-      keyof ReservationForm['reservationInformation'],
-      AbstractControl
-    >;
-  }
-
   get eventInfoControls() {
     return (this.userForm.get('eventInformation') as FormGroup)
       .controls as Record<
@@ -319,10 +284,5 @@ export class VenueReservationComponent implements OnInit {
     >;
   }
 
-  /**
-   * @function ngOnDestroy to unsubscribe subscription.
-   */
-  ngOnDestroy(): void {
-    this.$subscription.unsubscribe();
-  }
+
 }

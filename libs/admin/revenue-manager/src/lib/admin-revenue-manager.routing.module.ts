@@ -8,6 +8,7 @@ import {
 } from '@hospitality-bot/admin/shared';
 import { MainComponent } from './components/main/main.component';
 import { DynamicPricingComponent } from './components/dynamic-pricing/dynamic-pricing.component';
+import { StepperComponent } from 'libs/admin/shared/src/lib/components/stepper/stepper.component';
 
 const appRoutes: CRoutes = [
   {

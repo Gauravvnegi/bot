@@ -16,8 +16,8 @@ export const routes = {
   [ModuleNames.FRONT_DESK]: 'efrontdesk',
   [ModuleNames.FRONT_DESK_DASHBOARD]: 'efrontdesk/dashboard',
   [ModuleNames.IN_HOUSE_GUEST]: 'efrontdesk/in-house-guest',
-  [ModuleNames.REQUEST_DASHBOARD]: 'efrontdesk/request-analytics',
-  [ModuleNames.REQUEST]: 'efrontdesk/request',
+  [ModuleNames.REQUEST_DASHBOARD]: 'efrontdesk/complaint-analytics',
+  [ModuleNames.REQUEST]: 'efrontdesk/complaint',
   [ModuleNames.ADD_RESERVATION]: 'efrontdesk/reservation',
 
   // Freddie

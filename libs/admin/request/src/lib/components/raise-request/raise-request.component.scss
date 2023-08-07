@@ -1,5 +1,11 @@
 @import 'main';
 
+.form-block {
+  @include form-block;
+  box-shadow: unset;
+  padding: unset;
+}
+
 .container {
   position: relative;
   padding-bottom: 86px;
@@ -84,6 +90,7 @@
   gap: 30px;
   position: absolute;
   bottom: 0;
+  left: 0;
 
   &-cancel {
     width: 113px;

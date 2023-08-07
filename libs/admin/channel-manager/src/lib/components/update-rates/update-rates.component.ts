@@ -548,7 +548,6 @@ export class UpdateRatesComponent implements OnInit {
       fromDate,
       'submit-form'
     );
-    debugger;
     this.$subscription.add(
       this.channelManagerService
         .updateChannelManager(data, this.entityId, this.getQueryConfig())

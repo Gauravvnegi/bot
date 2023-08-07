@@ -79,5 +79,9 @@ export const routes = {
   [ModuleNames.MANAGE_INVENTORY]: 'channel-manager/update-inventory',
   [ModuleNames.DYNAMIC_PRICING]: 'channel-manager/dynamic-pricing',
 
+  //REVENUE_MANAGER
+  [ModuleNames.REVENUE_MANAGER]: 'revenue-manager',
+  [ModuleNames.REVENUE_DYNAMIC_PRICING]: 'revenue-manager/dynamic-pricing',
+
   RoleAndPermission: 'roles-permissions',
 };

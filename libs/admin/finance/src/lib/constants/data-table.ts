@@ -89,6 +89,7 @@ export const cols = {
       field: 'status',
       header: 'Status',
       sortType: 'string',
+      isSearchDisabled: true,
     },
     {
       field: 'paymentMethod',

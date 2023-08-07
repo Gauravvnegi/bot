@@ -114,7 +114,8 @@ import { QRCodeModule } from 'angularx-qrcode';
 import { MultiplePrefixInputComponent } from './components/form-component/multiple-prefix-input/multiple-prefix-input.component';
 import { FormActionComponent } from './components/form-component/form-action/form-action.component';
 import { LoaderDirective } from './directives/loader.directive';
-
+import { StepperComponent } from './components/stepper/stepper.component';
+import { StepsModule } from 'primeng/steps';
 @NgModule({
   imports: [
     CommonModule,
@@ -144,6 +145,7 @@ import { LoaderDirective } from './directives/loader.directive';
     ToggleButtonModule,
     InputNumberModule,
     QRCodeModule,
+    StepsModule,
   ],
   declarations: [
     DatatableComponent,
@@ -235,6 +237,7 @@ import { LoaderDirective } from './directives/loader.directive';
     MultiplePrefixInputComponent,
     FormActionComponent,
     LoaderDirective,
+    StepperComponent,
   ],
 
   exports: [
@@ -344,6 +347,7 @@ import { LoaderDirective } from './directives/loader.directive';
     MultiplePrefixInputComponent,
     FormActionComponent,
     LoaderDirective,
+    StepperComponent,
   ],
 })
 export class AdminSharedModule {}

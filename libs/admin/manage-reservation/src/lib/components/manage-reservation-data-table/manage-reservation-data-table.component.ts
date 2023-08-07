@@ -160,12 +160,7 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
           // Process the response and update the data
           this.reservationLists = new ReservationList().deserialize(res);
           if (this.selectedEntity.subType === EntitySubType.ROOM_TYPE) {
-            this.values = this.reservationLists.reservationData.map((item) => {
-              return {
-                ...item,
-                statusValues: this.getStatusValues(item.reservationType),
-              };
-            });
+            this.values = this.reservationLists.reservationData;
             this.initFilters(
               this.reservationLists.entityTypeCounts,
               this.reservationLists.entityStateCounts,
@@ -211,33 +206,6 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
         this.menuOptions = RestaurantMenuOptions;
       }
     }
-  }
-
-  /**
-   * @function getStatusValues To get status value.
-   */
-  getStatusValues(status) {
-    return [
-      {
-        label: 'Draft',
-        value: ReservationStatusType.DRAFT,
-        type: 'warning',
-        disabled:
-          status === ReservationStatusType.CANCELED ||
-          status === ReservationStatusType.CONFIRMED,
-      },
-      {
-        label: 'Cancel',
-        value: ReservationStatusType.CANCELED,
-        type: 'failed',
-      },
-      {
-        label: 'Confirm',
-        value: ReservationStatusType.CONFIRMED,
-        type: 'new',
-        disabled: status === ReservationStatusType.CANCELED,
-      },
-    ];
   }
 
   /**

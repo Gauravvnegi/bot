@@ -58,7 +58,7 @@ export class RoomReservation {
       : '';
     this.companyName = input.guest?.company?.firstName ?? '';
     this.created = input.created;
-    this.nextStates = input.nextStates;
+    this.nextStates = [input.reservationType, ...input.nextStates];
     this.bookingItems = input.bookingItems;
     this.totalAmount = input.pricingDetails.totalAmount;
     this.totalPaidAmount = input.pricingDetails.totalPaidAmount;

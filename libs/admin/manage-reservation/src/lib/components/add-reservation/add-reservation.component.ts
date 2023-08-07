@@ -126,7 +126,7 @@ export class AddReservationComponent extends BaseReservationComponent
             const data = new ReservationFormData().deserialize(response);
             const { guestInformation, roomInformation, ...formData } = data;
             this.roomTypeValues = roomInformation;
-            this.formService.guestId.next(guestInformation.id);
+            this.formService.guestInformation.next(guestInformation);
             this.userForm.patchValue(data);
             // this.summaryData = new SummaryData().deserialize(response);
             this.setFormDisability(data.reservationInformation);

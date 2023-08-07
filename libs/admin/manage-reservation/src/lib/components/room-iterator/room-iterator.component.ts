@@ -79,10 +79,9 @@ export class RoomIteratorComponent extends IteratorComponent
     if (itemValues?.length) {
       if (itemValues.length > 1) {
         // Create new form fields for each item in the array
-        itemValues.forEach((item) => {
+        itemValues.slice(1).forEach((item) => {
           this.createNewFields();
         });
-        debugger;
       }
       this.initRoomDetails(itemValues);
       // Patch the new values to the form array
@@ -92,8 +91,8 @@ export class RoomIteratorComponent extends IteratorComponent
   ngOnInit(): void {
     this.entityId = this.globalFilterService.entityId;
     this.initDetails();
-    this.createNewFields();
     this.listenForGlobalFilters();
+    this.createNewFields();
   }
 
   /**
@@ -130,7 +129,6 @@ export class RoomIteratorComponent extends IteratorComponent
     this.isDefaultRoomType = true;
     itemValues.forEach((value, index) => {
       // Check if the room type option is present
-      debugger;
       if (
         this.roomTypes.findIndex((item) => item.value === value.roomTypeId) ===
         -1
@@ -168,7 +166,6 @@ export class RoomIteratorComponent extends IteratorComponent
           const selectedRoomType = this.roomTypes.find(
             (item) => item.value === res
           );
-          debugger;
           if (selectedRoomType) {
             // Sets rate plan options according to the selected room type
             const ratePlanOptions = selectedRoomType.ratePlan.map((item) => ({

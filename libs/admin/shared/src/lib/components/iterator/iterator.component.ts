@@ -37,7 +37,7 @@ export class IteratorComponent implements OnChanges {
     if (itemValues?.length) {
       if (itemValues.length > 1) {
         // Create new form fields for each item in the array
-        itemValues.forEach((item) => {
+        itemValues.slice(1).forEach((item) => {
           this.createNewFields();
         });
       }

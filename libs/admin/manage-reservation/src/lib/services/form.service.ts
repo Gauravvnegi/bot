@@ -3,8 +3,13 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { distinctUntilChanged } from 'rxjs/operators';
 import { ReservationTableValue } from '../constants/reservation-table';
 import { SelectedEntity } from '../types/reservation.type';
-import { OutletFormData, RoomReservationFormData } from '../types/forms.types';
+import {
+  GuestDetails,
+  OutletFormData,
+  RoomReservationFormData,
+} from '../types/forms.types';
 import { ReservationForm } from '../constants/form';
+import { GuestInfo } from '../models/reservations.model';
 
 @Injectable({
   providedIn: 'root',
@@ -15,7 +20,7 @@ export class FormService {
   toDate: Date;
   fromDate: Date;
 
-  guestId = new BehaviorSubject<string>('');
+  guestInformation: BehaviorSubject<GuestInfo> = new BehaviorSubject<GuestInfo>(null);
 
   public selectedEntity = new BehaviorSubject<SelectedEntity>(null);
 

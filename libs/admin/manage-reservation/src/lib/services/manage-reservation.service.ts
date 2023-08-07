@@ -25,7 +25,6 @@ export class ManageReservationService extends ApiService {
   }
 
   createReservation(entityId: string, data, bookingType): Observable<any> {
-    debugger;
     return this.post(`/api/v1/booking?type=${bookingType}`, data, {
       headers: { 'entity-id': entityId },
     });

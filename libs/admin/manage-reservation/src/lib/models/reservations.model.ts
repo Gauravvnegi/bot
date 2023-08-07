@@ -12,7 +12,10 @@ import {
   FlagType,
   Option,
 } from '@hospitality-bot/admin/shared';
-import { SearchGuestResponse } from 'libs/admin/guests/src/lib/types/guest.type';
+import {
+  GuestType,
+  SearchGuestResponse,
+} from 'libs/admin/guests/src/lib/types/guest.type';
 import { MenuItemsData, RoomTypes, SpaItems } from '../constants/form';
 import { OutletFormData } from '../types/forms.types';
 import {
@@ -186,7 +189,7 @@ export class ReservationFormData {
   roomInformation: RoomTypes[];
   deserialize(input: RoomReservationResponse) {
     this.reservationInformation = new BookingInfo().deserialize(input);
-    this.guestInformation = new GuestInfo().deserialize(input);
+    this.guestInformation = new GuestInfo().deserialize(input.guest);
     // this.paymentMethod = new PaymentInfo().deserialize(input);
     this.offerId = input?.id;
     this.roomInformation = input?.bookingItems.map((item: BookingItems) => ({
@@ -219,7 +222,7 @@ export class OutletForm {
 
   deserialize(input: OutletFormData) {
     this.reservationInformation = new BookingInfo().deserialize(input);
-    this.guestInformation = new GuestInfo().deserialize(input);
+    this.guestInformation = new GuestInfo().deserialize(input.guest);
     // this.paymentMethod = new PaymentInfo().deserialize(input);
     this.offerId = input?.offerId;
     switch (input.outletType) {
@@ -315,8 +318,18 @@ export class BookingInfo {
 
 export class GuestInfo {
   id: string;
-  deserialize(input) {
-    this.id = input.guest?.id;
+  firstName: string;
+  lastName: string;
+  phoneNumber: string;
+  cc: string;
+  email: string;
+  deserialize(input: GuestType) {
+    this.id = input?.id;
+    this.firstName = input.firstName;
+    this.lastName = input.lastName;
+    this.phoneNumber = input.contactDetails.contactNumber;
+    this.cc = input.contactDetails.cc;
+    this.email = input.contactDetails.emailId;
     return this;
   }
 }

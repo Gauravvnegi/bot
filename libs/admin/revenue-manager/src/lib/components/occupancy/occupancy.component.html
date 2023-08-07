@@ -1,0 +1,16 @@
+<div class="wrapper__occupancy" [id]="fa.referenceId">
+  <div class="wrapper__occupancy-content"></div>
+  <div class="wrapper__occupancy-footer">
+    <span><strong>Note:</strong> {{ footerNote }}</span>
+    <hospitality-bot-form-action
+      class="full-width"
+      [loading]="loading"
+      [config]="{
+        preHide: true,
+        postLabel: 'Save'
+      }"
+      (onPostAction)="handleSave()"
+      #fa
+    ></hospitality-bot-form-action>
+  </div>
+</div>

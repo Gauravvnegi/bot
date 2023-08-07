@@ -1,15 +1,7 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import {
-  AbstractControl,
-  FormArray,
-  FormBuilder,
-  FormGroup,
-  Validators,
-} from '@angular/forms';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
-import { Subscription } from 'rxjs';
-import { manageReservationRoutes } from '../../constants/routes';
 import {
   BookingInfo,
   OfferData,
@@ -21,18 +13,14 @@ import { ManageReservationService } from '../../services/manage-reservation.serv
 import {
   AdminUtilityService,
   EntitySubType,
-  NavRouteOptions,
   Option,
 } from '@hospitality-bot/admin/shared';
-import { ReservationForm, RoomTypes } from '../../constants/form';
 import { roomFields, roomReservationTypes } from '../../constants/reservation';
 import { FormService } from '../../services/form.service';
-import { SelectedEntity } from '../../types/reservation.type';
-import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
-import { ReservationSummary } from '../../types/forms.types';
+import { debounceTime } from 'rxjs/operators';
+import { OccupancyDetails, ReservationSummary } from '../../types/forms.types';
 import { BookingItemsSummary } from '../../types/response.type';
 import { BaseReservationComponent } from '../base-reservation.component';
-import { title } from '../../constants/reservation-table';
 
 @Component({
   selector: 'hospitality-bot-add-reservation',
@@ -50,9 +38,11 @@ export class AddReservationComponent extends BaseReservationComponent
   expandAccordion = false;
 
   // Booking Summary props
-  adultCount = 0;
-  roomCount = 1;
-  childCount = 0;
+  occupancyDetails: OccupancyDetails = {
+    adultCount: 0,
+    childCount: 0,
+    roomCount: 0,
+  };
 
   constructor(
     private fb: FormBuilder,
@@ -66,6 +56,7 @@ export class AddReservationComponent extends BaseReservationComponent
   }
 
   ngOnInit(): void {
+    this.summaryData = new RoomSummaryData().deserialize();
     this.initForm();
     this.initDetails();
     this.getReservationId();
@@ -103,7 +94,7 @@ export class AddReservationComponent extends BaseReservationComponent
   listenForFormChanges(index?: number): void {
     this.formValueChanges = true;
     this.roomControls[index].valueChanges
-      .pipe(debounceTime(1000), distinctUntilChanged())
+      .pipe(debounceTime(1000))
       .subscribe((res) => {
         if (res) {
           this.userForm.get('offerId').reset();
@@ -134,7 +125,6 @@ export class AddReservationComponent extends BaseReservationComponent
           (response) => {
             const data = new ReservationFormData().deserialize(response);
             const { guestInformation, roomInformation, ...formData } = data;
-            debugger;
             this.roomTypeValues = roomInformation;
             this.formService.guestId.next(guestInformation.id);
             this.userForm.patchValue(data);
@@ -257,16 +247,14 @@ export class AddReservationComponent extends BaseReservationComponent
   updateBookingItemsCounts(bookingItems: BookingItemsSummary[]) {
     const totalValues = bookingItems.reduce(
       (acc, bookingItem) => {
-        acc.maxAdult += bookingItem.maxAdult;
-        acc.maxChildren += bookingItem.maxChildren;
+        acc.adultCount += bookingItem.maxAdult;
+        acc.childCount += bookingItem.maxChildren;
         acc.roomCount += bookingItem.roomCount;
         return acc;
       },
-      { maxAdult: 0, maxChildren: 0, roomCount: 0 } // Initial values for reduce
+      { adultCount: 0, childCount: 0, roomCount: 0 } // Initial values for reduce
     );
-    this.adultCount = totalValues.maxAdult;
-    this.roomCount = totalValues.roomCount;
-    this.childCount = totalValues.maxChildren;
+    this.occupancyDetails = totalValues;
   }
 
   /**

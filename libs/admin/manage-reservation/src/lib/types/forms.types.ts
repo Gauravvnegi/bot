@@ -70,3 +70,9 @@ export type ReservationSummary = {
   bookingItems?: BookingItemFormData[];
   items?: ItemsData[];
 };
+
+export type OccupancyDetails = {
+  adultCount: number;
+  roomCount: number;
+  childCount: number;
+};

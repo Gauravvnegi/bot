@@ -46,7 +46,7 @@ import { Services } from '../../models/amenities.model';
 import { convertToTitleCase } from 'libs/admin/shared/src/lib/utils/valueFormatter';
 
 @Component({
-  selector: 'hospitality-bot-add-room',
+  selector: 'hospitsubmissionality-bot-add-room',
   templateUrl: './add-room.component.html',
   styleUrls: ['./add-room.component.scss'],
 })

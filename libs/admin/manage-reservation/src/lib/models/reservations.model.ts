@@ -193,8 +193,15 @@ export class ReservationFormData {
       adultCount: item.occupancyDetails.maxAdult,
       childCount: item.occupancyDetails.maxChildren,
       roomTypeId: item.roomDetails.roomTypeId,
-      ratePlanId: item.roomDetails.ratePlan.id,
+      ratePlan: item.roomDetails.ratePlan.id,
       roomCount: item.roomDetails.roomCount,
+      roomTypeLabel: item.roomDetails.roomTypeLabel,
+      allRatePlans: {
+        value: item.roomDetails.ratePlan.id,
+        label: item.roomDetails.ratePlan.label,
+        isBase: item.roomDetails.ratePlan.isBase,
+        sellingPrice: item?.roomDetails.ratePlan.sellingPrice,
+      },
     }));
     // roomNumbers: item?.tableNumberOrRoomNumber,
     return this;
@@ -367,27 +374,28 @@ export class RoomSummaryData {
   offerAmount: number;
   location: string;
 
-  deserialize(input: RoomSummaryResponse): this {
-    this.from = input?.from;
-    this.to = input?.to;
-    this.bookingItems = input.bookingItems.map((item) => ({
-      ...item.roomDetails,
-      ...item.occupancyDetails,
-      ...item.pricingDetails,
-      id: item.id,
-    }));
-    this.location = input?.location;
-    this.offerAmount = input?.offer?.discountedPrice;
-    this.totalAmount = input?.pricingDetails.totalAmount;
-    this.taxAndFees = input.pricingDetails.taxAndFees;
-    this.base = input.pricingDetails.base;
-    this.basePrice = input.pricingDetails.basePrice;
-    this.totalPaidAmount = input.pricingDetails.totalPaidAmount;
-    this.totalDueAmount = input.pricingDetails.totalDueAmount;
-    this.min = input.pricingDetails.min;
-    this.max = input.pricingDetails.max;
-    this.paxChild = input.pricingDetails.paxChild;
-    this.paxAdult = input.pricingDetails.paxAdult;
+  deserialize(input?: RoomSummaryResponse) {
+    this.from = input?.from ?? 0;
+    this.to = input?.to ?? 0;
+    this.bookingItems =
+      input?.bookingItems.map((item) => ({
+        ...item?.roomDetails,
+        ...item?.occupancyDetails,
+        ...item?.pricingDetails,
+        id: item?.id,
+      })) ?? [];
+    this.location = input?.location ?? '';
+    this.offerAmount = input?.offer?.discountedPrice ?? 0;
+    this.totalAmount = input?.pricingDetails.totalAmount ?? 0;
+    this.taxAndFees = input?.pricingDetails?.taxAndFees ?? 0;
+    this.base = input?.pricingDetails?.base ?? 0;
+    this.basePrice = input?.pricingDetails?.basePrice ?? 0;
+    this.totalPaidAmount = input?.pricingDetails?.totalPaidAmount ?? 0;
+    this.totalDueAmount = input?.pricingDetails?.totalDueAmount ?? 0;
+    this.min = input?.pricingDetails?.min ?? 0;
+    this.max = input?.pricingDetails?.max ?? 0;
+    this.paxChild = input?.pricingDetails?.paxChild ?? 0;
+    this.paxAdult = input?.pricingDetails?.paxAdult ?? 0;
     return this;
   }
 }

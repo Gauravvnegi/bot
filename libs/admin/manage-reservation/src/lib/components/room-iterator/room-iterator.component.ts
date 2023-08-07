@@ -23,10 +23,12 @@ import { IteratorComponent } from 'libs/admin/shared/src/lib/components/iterator
 import { Subscription } from 'rxjs';
 import { roomFields, RoomFieldTypeOption } from '../../constants/reservation';
 import { ManageReservationService } from '../../services/manage-reservation.service';
-
 import { RoomTypeOptionList } from '../../models/reservations.model';
 import { FormService } from '../../services/form.service';
 import { RoomTypeForm } from 'libs/admin/room/src/lib/models/room.model';
+import { RoomTypes } from '../../constants/form';
+import { forEach } from 'lodash';
+import { P } from '@angular/cdk/keycodes';
 @Component({
   selector: 'hospitality-bot-room-iterator',
   templateUrl: './room-iterator.component.html',
@@ -57,6 +59,7 @@ export class RoomIteratorComponent extends IteratorComponent
   $subscription = new Subscription();
 
   loadingRoomTypes = false;
+  isDefaultRoomType = false;
 
   @ViewChild('main') main: ElementRef;
 
@@ -66,9 +69,7 @@ export class RoomIteratorComponent extends IteratorComponent
     private adminUtilityService: AdminUtilityService,
     private manageReservationService: ManageReservationService,
     private snackbarService: SnackBarService,
-    private controlContainer: ControlContainer,
-    private configService: ConfigService,
-    private formService: FormService
+    private controlContainer: ControlContainer
   ) {
     super(fb);
   }
@@ -81,9 +82,10 @@ export class RoomIteratorComponent extends IteratorComponent
         itemValues.forEach((item) => {
           this.createNewFields();
         });
+        debugger;
       }
+      this.initRoomDetails(itemValues);
       // Patch the new values to the form array
-      this.roomTypeArray.patchValue(itemValues);
     }
   }
 
@@ -123,6 +125,36 @@ export class RoomIteratorComponent extends IteratorComponent
     this.listenForFormChanges(index);
   }
 
+  // Init Room Details
+  initRoomDetails(itemValues: RoomTypes[]) {
+    this.isDefaultRoomType = true;
+    itemValues.forEach((value, index) => {
+      // Check if the room type option is present
+      debugger;
+      if (
+        this.roomTypes.findIndex((item) => item.value === value.roomTypeId) ===
+        -1
+      ) {
+        this.roomTypes.push({
+          label: value?.roomTypeLabel,
+          value: value?.roomTypeId,
+          roomCount: value?.roomCount,
+          maxAdult: value?.adultCount,
+          maxChildren: value?.childCount,
+          ratePlan: [value.allRatePlans],
+        });
+      }
+      // Patch room details in the form array
+      this.roomTypeArray.at(index).patchValue({
+        roomTypeId: value.roomTypeId,
+        roomCount: value.adultCount,
+        childCount: value.childCount,
+        adultCount: value.adultCount,
+        ratePlan: value.allRatePlans.value,
+      });
+    });
+  }
+
   /**
    * @function listenRoomTypeChanges Listen changes in room type
    * @param index to keep track of the form array.
@@ -136,11 +168,13 @@ export class RoomIteratorComponent extends IteratorComponent
           const selectedRoomType = this.roomTypes.find(
             (item) => item.value === res
           );
+          debugger;
           if (selectedRoomType) {
+            // Sets rate plan options according to the selected room type
             const ratePlanOptions = selectedRoomType.ratePlan.map((item) => ({
               label: item.label,
-              value: item.ratePlanId,
-              price: item.total,
+              value: item.value,
+              sellingprice: item.sellingPrice,
               isBase: item.isBase,
             }));
             this.roomControls[index]
@@ -148,14 +182,16 @@ export class RoomIteratorComponent extends IteratorComponent
               .patchValue(ratePlanOptions, { emitEvent: false });
 
             this.roomControls[index].get('ratePlan').enable();
-            const defaultPlan = ratePlanOptions.filter((item) => item.isBase)[0]
-              .value;
-            this.roomControls[index]
-              .get('ratePlan')
-              .patchValue(defaultPlan, { emitEvent: false });
-            this.roomControls[index]
-              .get('ratePlan')
-              .setValidators([Validators.required]);
+
+            if (!this.isDefaultRoomType) {
+              // Patch default Base rate plan when not in edit mode.
+              const defaultPlan = ratePlanOptions.filter(
+                (item) => item.isBase
+              )[0].value;
+              this.roomControls[index]
+                .get('ratePlan')
+                .patchValue(defaultPlan, { emitEvent: false });
+            }
           }
           this.updateFormValueAndValidity(selectedRoomType, index);
         }
@@ -185,14 +221,21 @@ export class RoomIteratorComponent extends IteratorComponent
         Validators.max(selectedRoomType.maxAdult),
       ]);
     this.roomControls[index]
-      .get('adultCount')
-      .patchValue(1, { emitEvent: false });
-    this.roomControls[index]
-      .get('roomCount')
-      .patchValue(1, { emitEvent: false });
-    this.roomControls[index]
-      .get('childCount')
-      .patchValue(0, { emitEvent: false });
+      .get('ratePlan')
+      .setValidators([Validators.required]);
+
+    if (!this.isDefaultRoomType) {
+      // Patch default count values only if not in edit mode
+      this.roomControls[index]
+        .get('adultCount')
+        .patchValue(1, { emitEvent: false });
+      this.roomControls[index]
+        .get('roomCount')
+        .patchValue(1, { emitEvent: false });
+      this.roomControls[index]
+        .get('childCount')
+        .patchValue(0, { emitEvent: false });
+    }
   }
 
   /**
@@ -254,7 +297,7 @@ export class RoomIteratorComponent extends IteratorComponent
                 return {
                   label: item.name,
                   value: item.id,
-                  ratePlan: item.ratePlans,
+                  ratePlan: item.allRatePlans,
                   roomCount: item.roomCount,
                   maxChildren: item.maxChildren,
                   maxAdult: item.maxAdult,

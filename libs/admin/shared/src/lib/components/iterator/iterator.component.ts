@@ -10,9 +10,6 @@ import {
 } from '@angular/core';
 import { FormArray, FormBuilder, Validators } from '@angular/forms';
 import { IteratorField } from '../../types/fields.type';
-import { FormProps } from '../../types/form.type';
-import { ItemsData } from 'libs/admin/manage-reservation/src/lib/types/forms.types';
-import { ignoreElements } from 'rxjs/operators';
 
 @Component({
   selector: 'hospitality-bot-iterator',

@@ -21,7 +21,8 @@ import { Subscription } from 'rxjs';
 import { ReservationForm } from '../../../constants/form';
 import { FormService } from '../../../services/form.service';
 import { EntitySubType, EntityType } from '@hospitality-bot/admin/shared';
-import { BookingItems, RoomReservationRes } from '../../../types/response.type';
+import { RoomReservationRes } from '../../../types/response.type';
+import { OccupancyDetails } from '../../../types/forms.types';
 
 @Component({
   selector: 'hospitality-bot-booking-summary',
@@ -45,7 +46,7 @@ export class BookingSummaryComponent implements OnInit {
   guestInfo = '';
   bookingType = '';
   outletId = '';
-
+  occupancyDetails: OccupancyDetails;
   $subscription = new Subscription();
 
   @Input() summaryData: SummaryData;
@@ -98,7 +99,7 @@ export class BookingSummaryComponent implements OnInit {
   handleBooking(): void {
     this.isBooking = true;
     let data: any;
-    if (this.bookingType === EntityType.HOTEL)
+    if (this.bookingType === EntitySubType.ROOM_TYPE)
       data = this.formService.mapRoomReservationData(
         this.parentFormGroup.getRawValue()
       );
@@ -116,20 +117,22 @@ export class BookingSummaryComponent implements OnInit {
       this.bookingType === EntitySubType.ROOM_TYPE
         ? EntitySubType.ROOM_TYPE
         : EntityType.OUTLET;
+    const id =
+      this.bookingType === EntitySubType.ROOM_TYPE
+        ? this.entityId
+        : this.outletId;
     this.$subscription.add(
-      this.manageReservationService
-        .createReservation(this.outletId, data, type)
-        .subscribe(
-          (res: RoomReservationRes) => {
-            this.bookingConfirmationPopup(res?.reservationNumber);
-          },
-          (error) => {
-            this.isBooking = false;
-          },
-          () => {
-            this.isBooking = false;
-          }
-        )
+      this.manageReservationService.createReservation(id, data, type).subscribe(
+        (res: RoomReservationRes) => {
+          this.bookingConfirmationPopup(res?.reservationNumber);
+        },
+        (error) => {
+          this.isBooking = false;
+        },
+        () => {
+          this.isBooking = false;
+        }
+      )
     );
   }
 
@@ -227,4 +230,5 @@ type BookingSummaryInfo = {
   guestInfo: string;
   bookingType: string;
   outletId?: string;
+  occupancyDetails?: OccupancyDetails;
 };

@@ -7,7 +7,7 @@
   >
     {{ (summaryData?.bookingItems)[0]?.roomTypeLabel }}
     <span *ngIf="summaryData?.bookingItems.length > 1"
-      >+{{ summaryData?.bookingItems.length - 1 }}</span
+      >+({{ summaryData?.bookingItems.length - 1 }})</span
     >
   </div>
   <div class="bk-summary_subheading" *ngIf="heading">
@@ -50,94 +50,20 @@
       </p>
     </ng-template>
   </div>
-  <div class="bk-summary_priceInfo">
-    <p
-      class="bk-summary_priceInfo_perNight"
-      *ngIf="bookingType === 'ROOM_TYPE'"
+  <ng-container *ngIf="summaryData?.bookingItems.length && detailsView">
+    <ng-container
+      *ngFor="let bookingItem of summaryData?.bookingItems"
+      [ngTemplateOutlet]="summaryTemplate"
+      [ngTemplateOutletContext]="{
+        bookingItem: bookingItem
+      }"
     >
-      <span class="bk-summary_priceInfo_perNight_label"
-        >For {{ dateDifference }}
-        {{ dateDifference > 1 ? 'nights' : 'night' }}</span
-      >
-      <s class="bk-summary_priceInfo_perNight_amount">{{
-        summaryData?.totalAmount | currency: 'INR'
-      }}</s>
-    </p>
-    <p class="bk-summary_priceInfo_person" *ngIf="bookingType === 'ROOM_TYPE'">
-      <span class="bk-summary_priceInfo_perNight_label">
-        For
-        {{
-          controlContainer.control?.get('roomInformation.adultCount')?.value
-            ? controlContainer.control?.get('roomInformation.adultCount')?.value
-            : 0
-        }}
-        {{
-          controlContainer.control?.get('roomInformation.adultCount')?.value > 1
-            ? 'Adults'
-            : 'Adult'
-        }}
-        {{
-          controlContainer.control?.get('roomInformation.childCount')?.value
-            ? controlContainer.control?.get('roomInformation.childCount')?.value
-            : 0
-        }}
-        {{
-          controlContainer.control?.get('roomInformation.childCount')?.value > 1
-            ? 'Children'
-            : 'Child'
-        }}
-      </span>
-      <span class="bk-summary_priceInfo_perNight_amount">
-        {{ summaryData?.totalAmount | currency: 'INR' }}
-      </span>
-    </p>
-    <p class="bk-summary_priceInfo_person" *ngIf="bookingType !== 'ROOM_TYPE'">
-      <span class="bk-summary_priceInfo_perNight_label">{{ itemInfo }}</span>
-      <span class="bk-summary_priceInfo_perNight_discountedAmount">{{
-        summaryData?.totalAmount | currency: 'INR'
-      }}</span>
-    </p>
-    <p class="bk-summary_priceInfo_taxFair" *ngIf="summaryData?.offerAmount">
-      <span class="bk-summary_priceInfo_perNight_label"
-        >Discount<i class="fa fa-info-circle" aria-hidden="true"></i
-      ></span>
-      <span class="bk-summary_priceInfo_perNight_amount">{{
-        summaryData?.offerAmount | currency: 'INR'
-      }}</span>
-    </p>
-    <p class="bk-summary_priceInfo_taxFair">
-      <span class="bk-summary_priceInfo_perNight_label"
-        >Taxes & Fees <i class="fa fa-info-circle" aria-hidden="true"></i
-      ></span>
-      <span
-        class="bk-summary_priceInfo_perNight_amount"
-        *ngIf="summaryData?.taxesAndFees"
-        >+{{ summaryData.taxesAndFees }}</span
-      >
-    </p>
-    <div class="view-details-btn" *ngIf="bookingType === 'ROOM_TYPE'">
-      <hospitality-bot-button
-        [label]="detailsView ? 'View Less' : 'View Details'"
-        variant="text"
-        (onClick)="detailsView = !detailsView"
-      ></hospitality-bot-button>
-    </div>
-    <ng-container [ngTemplateOutlet]="detailsViewTemplate"> </ng-container>
-    <p
-      class="bk-summary_priceInfo_perNight"
-      *ngIf="
-        controlContainer.control.get('paymentMethod.totalPaidAmount').value
-      "
-    >
-      <span class="bk-summary_priceInfo_perNight_label">Paid Amount</span>
-      <span class="bk-summary_priceInfo_perNight_amount"
-        >-{{
-          controlContainer.control.get('paymentMethod.totalPaidAmount').value
-            | currency: 'INR'
-        }}</span
-      >
-    </p>
-  </div>
+    </ng-container>
+  </ng-container>
+  <ng-container *ngIf="!summaryData.bookingItems.length || !detailsView">
+    <ng-container [ngTemplateOutlet]="summaryTemplate"> </ng-container>
+  </ng-container>
+
   <p class="divider"></p>
   <div class="bk-summary_total">
     <p class="bk-summary_total_label">Total Amount to be paid</p>
@@ -190,4 +116,87 @@
 
 <ng-template #detailsViewTemplate>
   <ng-container *ngIf="detailsView"> </ng-container>
+</ng-template>
+
+<ng-template #summaryTemplate let-bookingItem="bookingItem">
+  <div class="bk-summary_priceInfo">
+    <p
+      class="bk-summary_priceInfo_perNight"
+      *ngIf="bookingType === 'ROOM_TYPE'"
+    >
+      <span class="bk-summary_priceInfo_perNight_label"
+        >For {{ dateDifference }}
+        {{ dateDifference > 1 ? 'nights' : 'night' }}</span
+      >
+      <s class="bk-summary_priceInfo_perNight_amount">{{
+        summaryData?.totalAmount | currency: 'INR'
+      }}</s>
+    </p>
+    <p class="bk-summary_priceInfo_person" *ngIf="bookingType === 'ROOM_TYPE'">
+      <span class="bk-summary_priceInfo_perNight_label">
+        For
+        {{
+          bookingItems?.maxAdult
+            ? bookingItems.maxAdult
+            : occupancyDetails.adultCount
+        }}
+        Adults
+        {{
+          bookingItems?.maxChild
+            ? bookingItems.maxChild
+            : occupancyDetails.childCount
+        }}
+        Kids
+      </span>
+      <span class="bk-summary_priceInfo_perNight_amount">
+        {{ summaryData?.totalAmount | currency: 'INR' }}
+      </span>
+    </p>
+    <p class="bk-summary_priceInfo_person" *ngIf="bookingType !== 'ROOM_TYPE'">
+      <span class="bk-summary_priceInfo_perNight_label">{{ itemInfo }}</span>
+      <span class="bk-summary_priceInfo_perNight_discountedAmount">{{
+        summaryData?.totalAmount | currency: 'INR'
+      }}</span>
+    </p>
+    <p class="bk-summary_priceInfo_taxFair" *ngIf="summaryData?.offerAmount">
+      <span class="bk-summary_priceInfo_perNight_label"
+        >Discount<i class="fa fa-info-circle" aria-hidden="true"></i
+      ></span>
+      <span class="bk-summary_priceInfo_perNight_amount">{{
+        summaryData?.offerAmount | currency: 'INR'
+      }}</span>
+    </p>
+    <p class="bk-summary_priceInfo_taxFair">
+      <span class="bk-summary_priceInfo_perNight_label"
+        >Taxes & Fees <i class="fa fa-info-circle" aria-hidden="true"></i
+      ></span>
+      <span
+        class="bk-summary_priceInfo_perNight_amount"
+        *ngIf="summaryData?.taxesAndFees"
+        >+{{ summaryData.taxesAndFees }}</span
+      >
+    </p>
+    <div class="view-details-btn" *ngIf="bookingType === 'ROOM_TYPE'">
+      <hospitality-bot-button
+        [label]="detailsView ? 'View Less' : 'View Details'"
+        variant="text"
+        (onClick)="detailsView = !detailsView"
+      ></hospitality-bot-button>
+    </div>
+    <ng-container [ngTemplateOutlet]="detailsViewTemplate"> </ng-container>
+    <p
+      class="bk-summary_priceInfo_perNight"
+      *ngIf="
+        controlContainer.control.get('paymentMethod.totalPaidAmount').value
+      "
+    >
+      <span class="bk-summary_priceInfo_perNight_label">Paid Amount</span>
+      <span class="bk-summary_priceInfo_perNight_amount"
+        >-{{
+          controlContainer.control.get('paymentMethod.totalPaidAmount').value
+            | currency: 'INR'
+        }}</span
+      >
+    </p>
+  </div>
 </ng-template>

@@ -4,6 +4,12 @@ export const request = {
     { label: 'High', value: 'HIGH' },
     { label: 'ASAP', value: 'ASAP' },
   ],
+
+  listBy: [
+    { label: 'All', value: 'ALL' },
+    { label: 'FOCUSED', value: 'FOCUSED' },
+  ],
+
   // status: [
   //   { label: 'To-Do', value: 'Todo' },
   //   // { label: 'To-Do', value: 'Immediate' },

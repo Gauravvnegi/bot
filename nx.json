@@ -212,6 +212,9 @@
     },
     "admin-guest-dashboard": {
       "tags": []
+    },
+    "admin-revenue-manager": {
+      "tags": []
     }
   }
 }

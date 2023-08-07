@@ -7,7 +7,7 @@
   // overflow: hidden;
 }
 
-:host ::ng-deep .p-dropdown-empty-message{
+:host ::ng-deep .p-dropdown-empty-message {
   padding: 1rem;
 }
 
@@ -29,7 +29,10 @@
   align-items: center;
   padding: 0;
   overflow: visible;
-  line-height: 1.2em;
+  font-size: 14px;
+  line-height: 1.07;
+  letter-spacing: 0.84px;
+  text-align: left;
   &.p-disabled {
     cursor: not-allowed !important;
   }
@@ -62,6 +65,13 @@
 
   .p-dropdown {
     border-color: $border-color;
+    &::placeholder {
+      font-size: 14px;
+      line-height: 1.07;
+      letter-spacing: 0.84px;
+      text-align: left;
+    }
+
     &:hover {
       border-color: $primary-form-color;
     }

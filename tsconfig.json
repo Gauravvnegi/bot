@@ -145,6 +145,9 @@
       "@hospitality-bot/admin/members": ["libs/admin/members/src/index.ts"],
       "@hospitality-bot/admin/guest-dashboard": [
         "libs/admin/guest-dashboard/src/index.ts"
+      ],
+      "@hospitality-bot/admin/revenue-manager": [
+        "libs/admin/revenue-manager/src/index.ts"
       ]
     }
   },

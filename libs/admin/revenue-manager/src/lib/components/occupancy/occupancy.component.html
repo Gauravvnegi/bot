@@ -1,5 +1,84 @@
-<div class="wrapper__occupancy" [id]="fa.referenceId">
-  <div class="wrapper__occupancy-content"></div>
+<div
+  *ngIf="useForm"
+  class="wrapper__occupancy"
+  [id]="fa.referenceId"
+  [formGroup]="useForm"
+>
+  <div class="wrapper__occupancy-content" formArrayName="season">
+    <ng-container
+      *ngFor="let occupancy of formControls; let seasonIndex = index"
+      [formGroupName]="seasonIndex"
+    >
+      <p-accordion class="accordion" [activeIndex]="0">
+        <p-accordionTab>
+          <p-header>
+            <div class="header">
+              {{
+                !!occupancy.get('name').value?.length
+                  ? occupancy.get('name').value
+                  : 'Season ' + seasonIndex
+              }}
+            </div>
+          </p-header>
+          <div class="content">
+            <div class="left form-block">
+              <hospitality-bot-input
+                class="full-width"
+                controlName="name"
+                maxLength="60"
+                label="Name"
+                [props]="{
+                  placeholder: 'Enter'
+                }"
+              ></hospitality-bot-input>
+
+              <hospitality-bot-select
+                class="full-width"
+                controlName="roomType"
+                label="Room Type"
+                [props]="{
+                  placeholder: 'Select'
+                }"
+                [options]="allRoomType"
+              ></hospitality-bot-select>
+            </div>
+            <div class="right form-block">
+              <hospitality-bot-date
+                class="half-width"
+                controlName="fromDate"
+                label="To"
+                [props]="{ placeholder: 'Select To Date' }"
+                [settings]="{
+                  enableTime: false,
+                  dateValue: endDateValue
+                }"
+              ></hospitality-bot-date>
+
+              <hospitality-bot-date
+                class="half-width"
+                controlName="toDate"
+                label="To"
+                [props]="{ placeholder: 'Select To Date' }"
+                [settings]="{
+                  enableTime: false,
+                  dateValue: endDateValue
+                }"
+              ></hospitality-bot-date>
+
+              <hospitality-bot-checkbox-selector
+                class="weekdays__selector full-width"
+                label="Days"
+                [allChecked]="true"
+                controlName="selectedDays"
+                [options]="weeks"
+              >
+              </hospitality-bot-checkbox-selector>
+            </div>
+          </div>
+        </p-accordionTab>
+      </p-accordion>
+    </ng-container>
+  </div>
   <div class="wrapper__occupancy-footer">
     <span><strong>Note:</strong> {{ footerNote }}</span>
     <hospitality-bot-form-action

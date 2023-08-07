@@ -1,0 +1,47 @@
+@import 'main';
+
+.wrapper__occupancy {
+  &-content {
+    .header {
+      font-weight: bold;
+    }
+  }
+
+  &-footer {
+    margin-top: 30px;
+  }
+
+  .content {
+    display: flex;
+  }
+
+  .left {
+    width: 35%;
+  }
+
+  .right {
+    width: 65%;
+  }
+}
+
+:host ::ng-deep {
+  .p-accordion
+    .p-accordion-header:not(.p-disabled).p-highlight
+    .p-accordion-header-link {
+    border-bottom: 2px solid #ebe9e9;
+  }
+
+  .days-selector {
+    display: flex;
+    gap: 32px;
+  }
+}
+
+.form-block {
+  @include form-block;
+  box-shadow: none !important;
+}
+
+.weekdays__selector {
+  margin-top: 10px;
+}

@@ -32,15 +32,14 @@
                 }"
               ></hospitality-bot-input>
 
-              <hospitality-bot-select
+              <hospitality-bot-room-types
                 class="full-width"
-                controlName="roomType"
-                label="Room Type"
+                [controlName]="'roomType'"
                 [props]="{
-                  placeholder: 'Select'
+                  isAllSelected: true
                 }"
-                [options]="allRoomType"
-              ></hospitality-bot-select>
+              >
+              </hospitality-bot-room-types>
             </div>
             <div class="right form-block">
               <hospitality-bot-date

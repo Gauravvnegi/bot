@@ -8,7 +8,6 @@ import {
 } from '@hospitality-bot/admin/shared';
 import { MainComponent } from './components/main/main.component';
 import { DynamicPricingComponent } from './components/dynamic-pricing/dynamic-pricing.component';
-import { StepperComponent } from 'libs/admin/shared/src/lib/components/stepper/stepper.component';
 import { OccupancyComponent } from './components/occupancy/occupancy.component';
 import { InventoryReallocationComponent } from './components/inventory-reallocation/inventory-reallocation.component';
 import { DayTimeTriggerComponent } from './components/day-time-trigger/day-time-trigger.component';

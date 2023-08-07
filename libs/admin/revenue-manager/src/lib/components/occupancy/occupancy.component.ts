@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { RoomType } from '../../types/revenue-manager.types';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
-import { RevenueManagerService } from '../../services/revenue-manager.service';
-import { RoomTypeList } from '../../models/revenue-manager.model';
+import { DynamicPricingService } from '../../services/dynamic-pricing.service';
 import { weeks } from 'libs/admin/channel-manager/src/lib/components/constants/bulkupdate-response';
+import { BarPriceService } from '../../services/bar-price.service';
+import { RoomTypes } from '../../types/bar-price.types';
 
 @Component({
   selector: 'hospitality-bot-occupancy',
@@ -19,14 +19,15 @@ export class OccupancyComponent implements OnInit {
   deleniti autem illum!`;
   entityId = '';
   useForm: FormGroup;
-  allRooms: RoomType[];
+  allRooms: RoomTypes[];
   currentDay = new Date();
   seventhDay = new Date();
   weeks = weeks;
 
   constructor(
     private fb: FormBuilder,
-    private revenueManagerService: RevenueManagerService,
+    private dynamicPricingService: DynamicPricingService,
+    private barPriceService: BarPriceService,
     private globalFilter: GlobalFilterService
   ) {}
 
@@ -39,12 +40,14 @@ export class OccupancyComponent implements OnInit {
     this.currentDay.setHours(0, 0, 0, 0);
     this.seventhDay.setHours(0, 0, 0, 0);
     this.seventhDay.setDate(this.seventhDay.getDate() + 7);
-    this.revenueManagerService
-      .getRoomDetails(this.entityId)
-      .subscribe((res) => {
-        this.allRooms = new RoomTypeList().deserialize(res).records;
+    this.barPriceService.roomDetails.subscribe((res) => {
+      if (this.barPriceService.isRoomDetailsLoaded) {
+        this.allRooms = res;
         this.initForm();
-      });
+      } else {
+        this.barPriceService.loadRoomTypes(this.entityId);
+      }
+    });
   }
 
   initForm() {
@@ -83,7 +86,7 @@ export class OccupancyComponent implements OnInit {
     });
   }
 
-  addOccupancyControl(occupancyFG: FormGroup, room: RoomType) {
+  addOccupancyControl(occupancyFG: FormGroup, room: RoomTypes) {
     (occupancyFG.get('occupancy') as FormArray).push(
       this.fb.group({
         value: [room.value],

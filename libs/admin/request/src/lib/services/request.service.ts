@@ -147,4 +147,8 @@ export class RequestService extends ApiService {
   assignComplaintToUser(jobId: string, data): Observable<any> {
     return this.patch(`/api/v1/request/${jobId}/assignee`, data);
   }
+
+  addServiceItem(entityId: string, data): Observable<any> {
+    return this.post(`/api/v1/entity/${entityId}/cms-service`, data);
+  }
 }

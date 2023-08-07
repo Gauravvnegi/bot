@@ -37,9 +37,11 @@
           label="Item Name"
           controlName="itemCode"
           [props]="{
-            isAsync: true
+            isAsync: true,
+            createPrompt: '+ Add New Item'
           }"
           [stopEmission]="true"
+          (onCreate)="create()"
         ></hospitality-bot-select>
       </div>
 

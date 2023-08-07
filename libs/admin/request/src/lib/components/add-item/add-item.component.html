@@ -1,0 +1,65 @@
+<div class="wrapper" [id]="fa.referenceId">
+  <hospitality-bot-navigation-header [heading]="pageTitle" [routes]="navRoutes">
+  </hospitality-bot-navigation-header>
+  <div class="form-block" [formGroup]="useForm">
+    <hospitality-bot-input
+      class="half-width"
+      controlName="itemName"
+      label="Item Name"
+      maxLength="60"
+    ></hospitality-bot-input>
+    <hospitality-bot-input
+      class="half-width"
+      controlName="categoryDesc"
+      label="category Description"
+      maxLength="60"
+    ></hospitality-bot-input>
+    <hospitality-bot-input
+      class="half-width"
+      controlName="functionCode"
+      label="Function Code"
+      maxLength="60"
+    ></hospitality-bot-input>
+    <hospitality-bot-input
+      class="half-width"
+      controlName="serviceCode"
+      label="Service Code"
+      maxLength="60"
+    >
+    </hospitality-bot-input>
+    <hospitality-bot-input
+      class="half-width"
+      controlName="sla"
+      label="SLA"
+      maxLength="60"
+    ></hospitality-bot-input>
+    <hospitality-bot-input
+      class="half-width"
+      controlName="itemDesc"
+      label="Item Description"
+      maxLength="60"
+    ></hospitality-bot-input>
+
+    <hospitality-bot-multi-select
+      class="full-width"
+      controlName="users"
+      label="users"
+      [options]="userList"
+      [props]="{
+        isAsync: true
+      }"
+      [loading]="loading"
+      [stopEmission]="true"
+    ></hospitality-bot-multi-select>
+
+    <hospitality-bot-form-action
+      class="full-width"
+      [loading]="loading"
+      [isId]=""
+      (onPreAction)="resetForm()"
+      (onPostAction)="handleSubmit()"
+      #fa
+    >
+    </hospitality-bot-form-action>
+  </div>
+</div>

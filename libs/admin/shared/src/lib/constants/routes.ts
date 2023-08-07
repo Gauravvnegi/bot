@@ -82,6 +82,7 @@ export const routes = {
   //REVENUE_MANAGER
   [ModuleNames.REVENUE_MANAGER]: 'revenue-manager',
   [ModuleNames.REVENUE_DYNAMIC_PRICING]: 'revenue-manager/dynamic-pricing',
+  [ModuleNames.REVENUE_SETUP_BAR_PRICE]: 'revenue-manager/setup-bar-price',
 
   RoleAndPermission: 'roles-permissions',
 };

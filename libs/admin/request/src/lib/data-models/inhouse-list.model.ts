@@ -39,6 +39,7 @@ export class InhouseData {
   id: string;
   itemCode: string;
   itemName: string;
+  itemId: string;
   jobDuration: number;
   sla: number;
   jobID: string;
@@ -55,6 +56,7 @@ export class InhouseData {
   stayDetails: StayDetails;
   timeLeft: number;
   source: string;
+  assigneeId: string;
 
   deserialize(input: JobRequestResponse) {
     this.rooms = new Array<Room>();
@@ -90,6 +92,8 @@ export class InhouseData {
 
     this.timeLeft = input.timeLeft;
     this.source = input.source;
+    this.itemId = input.itemId;
+    this.assigneeId = input.assigneeId;
 
     return this;
   }

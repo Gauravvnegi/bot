@@ -63,6 +63,8 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
   roomTypeId: string;
   entityId: string;
 
+  defaultRatePlanStatus: boolean = true;
+
   defaultImage: string = 'assets/images/image-upload.png';
   pageTitle = 'Add Room Type';
   navRoutes: NavRouteOptions = [
@@ -185,7 +187,10 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
       this.useForm.addControl(
         'dynamicRatePlans',
         this.fb.group({
-          label: ['Rate Plan'],
+          label: [
+            'EP (Room Only)',
+            [Validators.required, Validators.maxLength(60)],
+          ],
           basePriceCurrency: ['INR'],
           basePrice: ['', [Validators.required, Validators.min(0)]],
           minPriceCurrency: ['INR'],
@@ -203,7 +208,10 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
       this.useForm.addControl(
         'staticRatePlans',
         this.fb.group({
-          label: ['Rate Plan'],
+          label: [
+            'EP (Room Only)',
+            [Validators.required, Validators.maxLength(60)],
+          ],
           basePriceCurrency: ['INR'],
           basePrice: ['', [Validators.required, Validators.min(0)]],
           discountType: ['PERCENTAGE'],
@@ -231,13 +239,16 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
             (res) => {
               let data = new RoomTypeForm().deserialize(res);
               const { staticRatePlans, dynamicRatePlans, ...rest } = data;
-              this.isPricingDynamic
-                ? this.useForm
-                    .get('dynamicRatePlans')
-                    .patchValue(dynamicRatePlans)
-                : this.useForm
-                    .get('staticRatePlans')
-                    .patchValue(staticRatePlans);
+
+              if (this.isPricingDynamic) {
+                this.useForm
+                  .get('dynamicRatePlans')
+                  .patchValue(dynamicRatePlans);
+                this.defaultRatePlanStatus = dynamicRatePlans.status;
+              } else {
+                this.useForm.get('staticRatePlans').patchValue(staticRatePlans);
+                this.defaultRatePlanStatus = dynamicRatePlans.status;
+              }
 
               data.ratePlans.forEach(() => {
                 this.addNewRatePlan();
@@ -266,7 +277,7 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
    */
   addNewRatePlan(id?: string, label?: string) {
     const addedRatePlan = {
-      label: ['Rate Plan', [Validators.maxLength(60)]],
+      label: ['', [Validators.required, Validators.maxLength(60)]],
       currency: ['INR'],
       extraPrice: ['', [Validators.required, Validators.min(0)]],
       description: [''],
@@ -480,13 +491,12 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
   }
 
   onToggleSwitch(isToogleOn: boolean, index?: number) {
-    if (!index) {
+    if (!index && index !== 0) {
       this.isPricingDynamic
-        ? this.useForm.get('dynamicRatePlans').setValue(isToogleOn)
-        : this.useForm.get('staticRatePlans').setValue(isToogleOn);
+        ? this.useForm.get('dynamicRatePlans.status').setValue(isToogleOn)
+        : this.useForm.get('staticRatePlans.status').setValue(isToogleOn);
       return;
     }
-
     this.ratePlanArray.at(index).get('status').setValue(isToogleOn);
   }
 

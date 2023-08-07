@@ -113,10 +113,7 @@ export class CreateFoodPackageComponent extends OutletBaseComponent
       return;
     }
 
-    let data = {
-      ...(this.useForm.getRawValue() as FoodPackageForm),
-      type: 'FOOD_PACKAGE',
-    };
+    let data = this.useForm.getRawValue();
 
     if (this.foodPackageId) {
       data = { ...data, id: this.foodPackageId };
@@ -125,10 +122,8 @@ export class CreateFoodPackageComponent extends OutletBaseComponent
           .updateFoodPackage(
             this.outletId,
             this.foodPackageId,
-
             {
               ...data,
-              type: 'FOOD_PACKAGE',
               source: 1,
             },
             {
@@ -138,10 +133,10 @@ export class CreateFoodPackageComponent extends OutletBaseComponent
           .subscribe(this.handleSuccess, this.handleErrors)
       );
     } else {
-      const { foodItems, ...rest } = data;
+      // const { foodItems, ...rest } = data;
       this.$subscription.add(
         this.outletService
-          .addFoodPackage(this.outletId, rest)
+          .addFoodPackage(this.outletId, data)
           .subscribe((res) => {
             this.handleSuccess(res.id);
           }, this.handleErrors)

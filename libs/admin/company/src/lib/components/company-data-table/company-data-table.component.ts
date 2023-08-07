@@ -17,6 +17,14 @@ import { LazyLoadEvent } from 'primeng/api';
 import { CompanyModel, CompanyResponseModel } from '../../models/company.model';
 import { CompanyListResponse } from '../../types/response';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import {
+  SortBy,
+  SortFilterList,
+} from 'libs/admin/agent/src/lib/constant/response';
+import {
+  MemberSortTypes,
+  SortingOrder,
+} from 'libs/admin/agent/src/lib/types/agent';
 
 @Component({
   selector: 'hospitality-bot-agent-data-table',
@@ -32,6 +40,7 @@ export class CompanyDataTableComponent extends BaseDatatableComponent
   tableName = title;
   cols = cols;
   entityId: string;
+  sortFilterList = SortFilterList;
 
   $subscription = new Subscription();
 
@@ -62,14 +71,8 @@ export class CompanyDataTableComponent extends BaseDatatableComponent
   initTable() {
     this.loading = true;
     this.companyService.getCompanyDetails(this.getQueryConfig()).subscribe(
-      (res: CompanyListResponse) => {
-        const companyList = new CompanyResponseModel().deserialize(res);
-        this.values = companyList.records;
-        this.initFilters(
-          companyList.entityStateCounts,
-          companyList.entityTypeCounts,
-          companyList.totalRecord
-        );
+      (res) => {
+        this.mapData(res);
         this.loading = false;
       },
       () => {
@@ -80,17 +83,46 @@ export class CompanyDataTableComponent extends BaseDatatableComponent
     );
   }
 
-  getQueryConfig(): QueryConfig {
+  sortBy(key: MemberSortTypes) {
+    this.loading = true;
+    this.$subscription.add(
+      this.companyService
+        .sortMemberBy(this.getQueryConfig(SortBy[key]))
+        .subscribe(
+          (res) => {
+            this.mapData(res);
+            this.loading = false;
+          },
+          (error) => {
+            this.loading = false;
+          },
+          this.handleFinal
+        )
+    );
+  }
+
+  mapData(res: CompanyListResponse) {
+    const companyList = new CompanyResponseModel().deserialize(res);
+    this.values = companyList.records;
+    this.initFilters(
+      companyList.entityStateCounts,
+      companyList.entityTypeCounts,
+      companyList.totalRecord
+    );
+  }
+
+  getQueryConfig(sortBy?: SortingOrder): QueryConfig {
     const config = {
       params: this.adminUtilityService.makeQueryParams([
         ...this.getSelectedQuickReplyFilters({ key: 'entityState' }),
         {
           type: 'COMPANY',
           entityId: this.entityId,
-          orderBy: 'DESC',
+          order: 'DESC',
           sort: 'created',
           offset: this.first,
           limit: this.rowsPerPage,
+          ...sortBy,
         },
       ]),
     };

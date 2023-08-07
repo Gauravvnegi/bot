@@ -13,6 +13,9 @@
             controlName="name"
             label="Room Type Name"
             maxLength="60"
+            [props]="{
+              placeholder: 'Enter'
+            }"
           ></hospitality-bot-input>
         </div>
         <div class="file-upload-wrapper">
@@ -25,6 +28,7 @@
               unit: 4,
               isMultiple: true
             }"
+            [isFeatureView]="true"
             [entityId]="entityId"
             path="static-content/room-types"
           ></hospitality-bot-custom-file-upload>
@@ -94,21 +98,37 @@
           <p-accordionTab click [selected]="true">
             <p-header>
               <div class="header-wrapper">
-                <input
-                  click-stop-propagation
-                  class="header-button"
-                  formControlName="label"
-                  (keydown.space)="$event.stopPropagation()"
-                />
-                <hospitality-bot-toggle-switch-with-label
-                  [isToggleOn]="true"
+                <div class="header-button">
+                  <span class="label">
+                    {{
+                      useForm.get(
+                        isPricingDynamic
+                          ? 'dynamicRatePlans.label'
+                          : 'staticRatePlans.label'
+                      ).value
+                    }}</span
+                  >
+                </div>
+                <!-- <hospitality-bot-toggle-switch-with-label
+                  [isToggleOn]="defaultRatePlanStatus"
                   (onToggleSwitch)="onToggleSwitch($event)"
                   click-stop-propagation
-                ></hospitality-bot-toggle-switch-with-label>
+                ></hospitality-bot-toggle-switch-with-label> -->
               </div>
             </p-header>
 
             <div>
+              <div class="form-block" *ngIf="!isPricingDynamic">
+                <hospitality-bot-input
+                  label="Name"
+                  class="half-width"
+                  controlName="label"
+                  maxLength="60"
+                  [props]="{
+                    placeholder: 'Enter'
+                  }"
+                ></hospitality-bot-input>
+              </div>
               <hospitality-bot-discount-form
                 *ngIf="!isPricingDynamic"
                 class="form-block"
@@ -121,6 +141,9 @@
                 [labels]="{
                   originalPriceLabel: 'Base Price-Single Occupancy',
                   discountedPriceLabel: 'Best Available Rate'
+                }"
+                [props]="{
+                  placeholder: 'Enter'
                 }"
                 [settings]="{
                   className: 'half-width'
@@ -152,6 +175,16 @@
               </hospitality-bot-discount-form>
 
               <div class="form-block" *ngIf="isPricingDynamic">
+                <hospitality-bot-input
+                  label="Name"
+                  controlName="label"
+                  class="half-width"
+                  maxLength="60"
+                  [props]="{
+                    placeholder: 'Enter'
+                  }"
+                ></hospitality-bot-input>
+                <div class="half-width"></div>
                 <hospitality-bot-prefix-field
                   class="half-width"
                   label="Base Price-Single Occupancy"
@@ -159,7 +192,7 @@
                   postControlName="basePrice"
                   [options]="currencies"
                   [defaultProps]="{
-                    post: { type: 'number' }
+                    post: { type: 'number', placeholder: 'Enter'}
                   }"
                   [props]="{
                     errorMessages: {
@@ -175,7 +208,7 @@
                   label="Min Price"
                   [options]="currencies"
                   [defaultProps]="{
-                    post: { type: 'number' }
+                    post: { type: 'number', placeholder: 'Enter'}
                   }"
                   [props]="{
                     errorMessages: {
@@ -191,7 +224,7 @@
                   label="Max Price"
                   [options]="currencies"
                   [defaultProps]="{
-                    post: { type: 'number' }
+                    post: { type: 'number', placeholder: 'Enter' }
                   }"
                   [props]="{
                     errorMessages: {
@@ -258,14 +291,13 @@
           >
             <p-header>
               <div class="header-wrapper">
-                <input
-                  click-stop-propagation
-                  class="header-button"
-                  formControlName="label"
-                  (keydown.space)="$event.stopPropagation()"
-                />
+                <div class="header-button">
+                  <span class="label">
+                    {{ ratePlanGroup.get('label').value }}</span
+                  >
+                </div>
                 <hospitality-bot-toggle-switch-with-label
-                  [isToggleOn]="true"
+                  [isToggleOn]="ratePlanGroup.get('status').value"
                   (onToggleSwitch)="onToggleSwitch($event, i)"
                   click-stop-propagation
                 ></hospitality-bot-toggle-switch-with-label>
@@ -280,6 +312,15 @@
             </p-header>
 
             <div class="form-block">
+              <hospitality-bot-input
+                label="Name"
+                class="half-width"
+                controlName="label"
+                maxLength="60"
+                [props]="{
+                  placeholder: 'Enter'
+                }"
+              ></hospitality-bot-input>
               <hospitality-bot-prefix-field
                 class="half-width"
                 preControlName="currency"
@@ -293,7 +334,8 @@
                   errorMessages: {
                     required: 'This is a required field.',
                     min: 'Value must be greater than 0.'
-                  }
+                  },
+                  placeholder: 'Enter'
                 }"
               ></hospitality-bot-prefix-field>
               <hospitality-bot-text-area
@@ -333,6 +375,9 @@
               },
               type: 'number'
             }"
+            [props]="{
+              placeholder: 'Enter'
+            }"
           ></hospitality-bot-input>
         </div>
         <div class="input-fields">
@@ -340,6 +385,9 @@
             controlName="maxChildren"
             label="Max Children"
             [props]="inputValidationProps"
+            [props]="{
+              placeholder: 'Enter'
+            }"
           ></hospitality-bot-input>
         </div>
         <div class="input-fields">
@@ -347,6 +395,9 @@
             controlName="maxAdult"
             label="Max Adult"
             [props]="inputValidationProps"
+            [props]="{
+              placeholder: 'Enter'
+            }"
           ></hospitality-bot-input>
         </div>
         <div class="input-fields">
@@ -357,6 +408,9 @@
               errorMessages: inputValidationProps.errorMessages,
               type: 'number',
               subtitle: 'Sq. Ft'
+            }"
+            [props]="{
+              placeholder: 'Enter'
             }"
           ></hospitality-bot-input>
         </div>

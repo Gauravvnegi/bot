@@ -6,7 +6,7 @@
         alt="raise-request-icon"
         class="raise-request-icon"
       />
-      {{ 'raiseRequest' | translate }}
+      {{ 'Raise Complaint' | translate }}
     </div>
     <div (click)="close({ status: false })" class="close">
       <i class="fa fa-times" aria-hidden="true"></i>
@@ -37,9 +37,11 @@
           label="Item Name"
           controlName="itemCode"
           [props]="{
-            isAsync: true
+            isAsync: true,
+            createPrompt: '+ Add New Item'
           }"
           [stopEmission]="true"
+          (onCreate)="create()"
         ></hospitality-bot-select>
       </div>
 
@@ -48,6 +50,14 @@
           [options]="priorityList"
           label="Priority"
           controlName="priority"
+        ></hospitality-bot-select>
+      </div>
+      <div class="form-elements-container full-width">
+        <hospitality-bot-select
+          [disabled]="!requestFG.get('itemCode').value"
+          [options]="userList"
+          label="Assign To"
+          controlName="assignTo"
         ></hospitality-bot-select>
       </div>
 

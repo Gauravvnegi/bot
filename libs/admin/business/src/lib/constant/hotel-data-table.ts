@@ -20,6 +20,7 @@ export const cols = [
       'timeDayEnd',
     ],
     width: '23.75%',
+    isSortDisabled: true,
   },
   {
     field: 'contact',
@@ -27,6 +28,7 @@ export const cols = [
     sortType: 'string',
     searchField: ['contact.number', 'contact.countryCode', 'emailId'],
     width: '23.75%',
+    isSortDisabled: true,
   },
   {
     field: 'url',
@@ -34,6 +36,7 @@ export const cols = [
     sortType: 'string',
     width: '23.75%',
     isSearchDisabled: true,
+    isSortDisabled: true,
   },
   {
     field: 'status',

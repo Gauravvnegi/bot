@@ -88,3 +88,38 @@
   color: #00162b;
   padding: 25px 30px;
 }
+
+p-header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 15px;
+}
+
+:host ::ng-deep .p-accordion {
+  .p-accordion-tab {
+    box-shadow: none !important;
+    margin-bottom: 0px;
+    .p-accordion-header {
+      width: 100%;
+      height: 100%;
+      .p-accordion-header-link {
+        padding: 0px 15px !important;
+      }
+    }
+    .form-block {
+      box-shadow: none !important;
+    }
+  }
+  .p-accordion-tab-active {
+    .p-accordion-header {
+      border-bottom: solid 1px rgba(112, 112, 112, 0.35);
+    }
+  }
+}
+
+.header-wrapper {
+  display: flex;
+  justify-content: space-between;
+}

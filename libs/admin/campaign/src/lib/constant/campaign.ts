@@ -85,19 +85,11 @@ export const campaignConfig = {
         width: '26%',
       },
       {
-        field: 'active',
-        header: 'Active',
-        isSortDisabled: true,
-        isSearchDisabled: true,
-        width: '13%',
-      },
-      {
         field: 'action',
         header: 'Action',
         isSortDisabled: true,
-        sortType: 'string',
         isSearchDisabled: true,
-        width: '11%',
+        width: '13%',
       },
     ],
     templateTypes: [

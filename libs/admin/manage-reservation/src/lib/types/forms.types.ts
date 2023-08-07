@@ -1,36 +1,32 @@
-import { C } from '@angular/cdk/keycodes';
-export class ReservationFormData {
-  // firstName: string;
-  // lastName: string;
-  // email: string;
-  // contact: Contact;
-  // guestDetails: GuestDetails;
-  guestId: string;
+import { EntitySubType } from '@hospitality-bot/admin/shared';
+import { GuestType } from 'libs/admin/guests/src/lib/types/guest.type';
+
+export class RoomReservationFormData {
   from: number;
   to: number;
   reservationType: string;
   source: string;
   sourceName: string;
-  paymentMethod: string;
   marketSegment: string;
-  address: Address;
-  totalPaidAmount: number;
+  paymentMethod: string;
   paymentRemark: string;
-  offerId: string;
+  guestId: string;
+  bookingItems: BookingItemFormData[];
 }
 
-export class Contact {
-  countryCode: string;
-  phoneNumber: string;
-}
-
-export class Address {
-  addressLine1: any;
-  city: string;
-  state: string;
-  countryCode: string;
-  postalCode: string;
-}
+export type BookingItemFormData = {
+  roomDetails: {
+    ratePlan: {
+      id: string;
+    };
+    roomTypeId: string;
+    roomCount: number;
+  };
+  occupancyDetails: {
+    maxChildren: number;
+    maxAdult: number;
+  };
+};
 
 export type GuestDetails = {
   label: string;
@@ -40,23 +36,12 @@ export type GuestDetails = {
   email: string;
 };
 
-export type GuestType = {
-  active: boolean;
-  firstName: string;
-  email: string;
-  cc: string;
-  phoneNo: string;
-  companyName: string;
-  gender: string;
-  dateOfBirth: string;
-  age: string;
-};
-
 export class OutletFormData {
   adultCount: number;
   from: number;
   to: number;
   reservationType: string;
+  status: string;
   source: string;
   sourceName: string;
   marketSegment: string;
@@ -66,18 +51,22 @@ export class OutletFormData {
   paymentRemark: string;
   eventType: string;
   guestId: string;
+  guest: GuestType;
   items: ItemsData[];
   outletType: string;
 }
 
-type ItemsData = {
+export type ItemsData = {
   itemId: string;
   unit: number;
   amount: number;
 };
 
-// export type RoomTypeSummary = {
-//   roomTypeName: string;
-//   roomTypeCount: number;
-//   numberOfRooms: number;
-// }
+export type ReservationSummary = {
+  fromDate: string;
+  toDate: string;
+  adultCount?: number;
+  outletType?: EntitySubType;
+  bookingItems?: BookingItemFormData[];
+  items?: ItemsData[];
+};

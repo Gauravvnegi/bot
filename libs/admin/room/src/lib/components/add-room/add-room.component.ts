@@ -26,7 +26,7 @@ import {
   iteratorFields,
   noRecordsActionForFeatures,
 } from '../../constant/form';
-import { roomStatusDetails, roomStatuses } from '../../constant/response';
+import { roomStatusDetails } from '../../constant/response';
 import routes from '../../constant/routes';
 import { MultipleRoomList, SingleRoomList } from '../../models/room.model';
 import { RoomType, RoomTypeList } from '../../models/rooms-data-table.model';
@@ -43,6 +43,7 @@ import {
   StatusQuoForm,
 } from '../../types/use-form';
 import { Services } from '../../models/amenities.model';
+import { convertToTitleCase } from 'libs/admin/shared/src/lib/utils/valueFormatter';
 
 @Component({
   selector: 'hospitality-bot-add-room',
@@ -139,11 +140,11 @@ export class AddRoomComponent implements OnInit, OnDestroy {
     });
 
     this.statusQuoForm = this.fb.group({
-      roomStatus: ['', Validators.required],
-      remarks: ['', Validators.required],
+      status: ['', Validators.required],
+      remark: [''],
       foStatus: [],
-      toDate: [''],
-      fromDate: [''],
+      currentStatusFrom: ['', Validators.required],
+      currentStatusTo: ['', Validators.required],
     });
 
     this.registerFormListener();
@@ -179,9 +180,9 @@ export class AddRoomComponent implements OnInit, OnDestroy {
 
   registerRoomStateChangeListener() {
     const {
-      fromDate,
-      toDate,
-      roomStatus,
+      currentStatusFrom,
+      currentStatusTo,
+      status,
       foStatus,
     } = this.statusQuoFormControls;
 
@@ -192,7 +193,7 @@ export class AddRoomComponent implements OnInit, OnDestroy {
       };
     });
 
-    roomStatus.valueChanges.subscribe((res: RoomStatus) => {
+    status.valueChanges.subscribe((res: RoomStatus) => {
       this.currentRoomState[0] = {
         value: roomStatusDetails[res]?.label,
         type: roomStatusDetails[res]?.type,
@@ -201,15 +202,15 @@ export class AddRoomComponent implements OnInit, OnDestroy {
       this.isDateRequired = res === 'OUT_OF_ORDER' || res === 'OUT_OF_SERVICE';
 
       if (this.isDateRequired) {
-        fromDate.setValidators([Validators.required]);
-        toDate.setValidators([Validators.required]);
+        currentStatusFrom.setValidators([Validators.required]);
+        currentStatusTo.setValidators([Validators.required]);
       } else {
-        fromDate.clearValidators();
-        toDate.clearValidators();
+        currentStatusFrom.clearValidators();
+        currentStatusTo.clearValidators();
       }
 
-      fromDate.updateValueAndValidity();
-      toDate.updateValueAndValidity();
+      currentStatusFrom.updateValueAndValidity();
+      currentStatusTo.updateValueAndValidity();
     });
   }
 
@@ -218,11 +219,6 @@ export class AddRoomComponent implements OnInit, OnDestroy {
    */
   initOptionsConfig(): void {
     this.getRoomTypes();
-    this.roomStatuses = roomStatuses.map((item) => ({
-      label: roomStatusDetails[item].label,
-      value: item,
-      type: roomStatusDetails[item].type,
-    }));
     this.getDefaultFeatures();
   }
 
@@ -362,10 +358,24 @@ export class AddRoomComponent implements OnInit, OnDestroy {
 
           this.useForm.patchValue(data);
 
+          if (roomDetails?.nextStates) {
+            this.roomStatuses = roomDetails?.nextStates?.map((item) => ({
+              label: convertToTitleCase(item),
+              value: item,
+            }));
+          }
+
+          this.roomStatuses.push({
+            label: convertToTitleCase(roomDetails.status),
+            value: roomDetails.status,
+          });
+
           this.statusQuoForm.patchValue({
-            roomStatus: roomDetails.status,
-            remarks: roomDetails.remarks,
+            status: roomDetails.status,
+            remark: roomDetails.remark,
             foStatus: roomDetails.frontOfficeState,
+            currentStatusFrom: roomDetails.currentStatusFrom,
+            currentStatusTo: roomDetails.currentStatusTo,
           });
 
           this.isRoomInfoLoading = false;
@@ -431,11 +441,11 @@ export class AddRoomComponent implements OnInit, OnDestroy {
    */
   updateRoom(): void {
     let data = this.useForm.getRawValue();
+    let statusData = this.statusQuoForm.getRawValue();
     const activeFeatures = data.featureIds;
     const removeFeatures = this.featureIds.filter(
       (item) => !activeFeatures.includes(item)
     );
-    data.status = this.statusQuoForm.get('roomStatus').value;
     this.$subscription.add(
       this.roomService
         .updateRoom(this.entityId, {
@@ -444,6 +454,7 @@ export class AddRoomComponent implements OnInit, OnDestroy {
               id: this.roomId,
               removeFeatures: removeFeatures,
               ...data,
+              ...statusData,
             }).list[0],
           ],
         })

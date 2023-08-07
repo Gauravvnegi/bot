@@ -13,12 +13,14 @@ export class InvoiceHistory {
   bookingNumber: string;
   invoiceDate: number;
   totalBill: number;
+  reservationId: string;
 
   deserialize(input: InvoiceHistoryResponse) {
     this.invoiceId = input?.invoiceCode ?? '';
     this.bookingNumber = input?.bookingNumber ?? '';
     this.invoiceDate = input?.invoiceDate ?? 0;
     this.totalBill = input?.totalAmount ?? 0;
+    this.reservationId = input?.reservationId ?? '';
     return this;
   }
 }
@@ -43,6 +45,7 @@ export class TransactionHistory {
   paymentMethod: string;
   remarks: string;
   credit: number;
+  reservationId: string;
   // balanceDue: string;
 
   deserialize(input: TransactionHistoryResponse) {
@@ -52,6 +55,7 @@ export class TransactionHistory {
     this.paymentMethod = input.paymentMethod ?? '';
     this.remarks = input.remarks ?? '';
     this.credit = input.amount ?? 0;
+    this.reservationId = input.reservationId;
     // this.balanceDue = input.balanceDue;
     return this;
   }
@@ -61,14 +65,15 @@ export class TransactionHistoryList {
   records: TransactionHistory[];
   totalRecords: number;
   entityStateCounts: EntityState<string>;
-  entityTypeCounts: EntityState<string>
+  entityTypeCounts: EntityState<string>;
   deserialize(input: TransactionHistoryListResponse) {
-    this.records = input.records?.map((item) =>
-      new TransactionHistory().deserialize(item)
-    ) ?? [];
+    this.records =
+      input.records?.map((item) =>
+        new TransactionHistory().deserialize(item)
+      ) ?? [];
     this.totalRecords = input.total;
     this.entityStateCounts = input.entityStateCounts;
-    this.entityTypeCounts = input.entityTypeCounts
+    this.entityTypeCounts = input.entityTypeCounts;
     return this;
   }
 }

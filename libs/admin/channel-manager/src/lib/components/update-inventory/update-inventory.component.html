@@ -10,9 +10,17 @@
       [link]="'/pages/channel-manager/update-inventory/inventory-bulk-update'"
     ></hospitality-bot-button>
   </hospitality-bot-navigation-header>
-  <div class="inventory-form" *ngIf="!!useForm; else loader">
+  <div
+    class="inventory-form"
+    *ngIf="!!useForm; else loader"
+    [id]="fa?.referenceId"
+  >
     <div
-      [ngClass]="!isRoomsEmpty ? 'wrapper' : 'wrapper reduce-height'"
+      [ngClass]="
+        !isRoomsEmpty && allRoomTypes?.length
+          ? 'wrapper'
+          : 'wrapper reduce-height'
+      "
       [formGroup]="useForm"
     >
       <!-- LEFT SECTION -->
@@ -32,12 +40,22 @@
                 controlName="date"
                 [settings]="{ enableTime: false, dateFormat: 'M dd, yy' }"
                 [minDate]="currentDate"
-                [disabled]="isRoomsEmpty"
+                [disabled]="isRoomsEmpty || !allRoomTypes?.length"
               >
               </hospitality-bot-date>
             </div>
           </div>
-          <div class="main-section" *ngIf="!isRoomsEmpty">
+          <div
+            class="main-section"
+            *ngIf="!isRoomsEmpty && allRoomTypes?.length"
+          >
+            <div
+              loader
+              [isVisible]="isLoaderVisible"
+              [props]="{
+                showLoader: false
+              }"
+            ></div>
             <div class="heading-section left-main-cell">
               <div class="left-main-cell__left head-cell ttp">
                 <div class="main-text">
@@ -156,6 +174,14 @@
             </div>
           </div>
           <div class="main-section" *ngIf="!isRoomsEmpty">
+            <div
+              loader
+              [isVisible]="isLoaderVisible"
+              [props]="{
+                top: '50%',
+                left: '25%'
+              }"
+            ></div>
             <div class="data-cell-wrapper">
               <div class="data-cell heading-section">
                 <div
@@ -270,23 +296,35 @@
         </div>
       </div>
     </div>
-    <hospitality-bot-button
-      class="save-btn"
-      label="Save"
-      (onClick)="handleSave()"
-      [disabled]="loading || loadingError"
-      *ngIf="!isRoomsEmpty"
-    ></hospitality-bot-button>
-    <ng-container *ngIf="!isRoomsEmpty; else emptyTable"></ng-container>
+
+    <hospitality-bot-form-action
+      class="full-width"
+      [loading]="loading"
+      [config]="{
+        preHide: true,
+        postLabel: 'Save',
+        postDisable:
+          loading || loadingError || !(!isRoomsEmpty && allRoomTypes?.length)
+      }"
+      (onPostAction)="handleSave()"
+      #fa
+    >
+    </hospitality-bot-form-action>
+
+    <ng-container
+      *ngIf="!isRoomsEmpty && allRoomTypes?.length; else emptyView"
+    ></ng-container>
   </div>
   <ng-template #loader>
     <hospitality-bot-loader-bounce></hospitality-bot-loader-bounce>
   </ng-template>
-  <ng-template #emptyTable>
+  <ng-template #emptyView>
     <hospitality-bot-empty-table
       [isLoading]="loading"
       [content]="{
-        description: 'Please select at least one rooms',
+        description: allRoomTypes?.length
+          ? 'Please select at least one rooms'
+          : 'There is no room available',
         imageSrc: 'assets/images/empty-table-service.png'
       }"
     >

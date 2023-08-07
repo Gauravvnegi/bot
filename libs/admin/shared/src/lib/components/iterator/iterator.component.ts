@@ -11,6 +11,8 @@ import {
 import { FormArray, FormBuilder, Validators } from '@angular/forms';
 import { IteratorField } from '../../types/fields.type';
 import { FormProps } from '../../types/form.type';
+import { ItemsData } from 'libs/admin/manage-reservation/src/lib/types/forms.types';
+import { ignoreElements } from 'rxjs/operators';
 
 @Component({
   selector: 'hospitality-bot-iterator',
@@ -21,19 +23,34 @@ export class IteratorComponent implements OnChanges {
   constructor(protected fb: FormBuilder) {}
 
   @Output() currentIndex: EventEmitter<number> = new EventEmitter<number>();
+  @Output() removedIndex: EventEmitter<number> = new EventEmitter<number>();
 
   @Input() fields: IteratorField[];
   @Input() useFormArray: FormArray;
   @Input() ctaLabel: '+ Add More';
+  @Input() itemValues = [];
+
   @ViewChild('main') main: ElementRef;
 
   // Zero maxLimit means there is no limit
   @Input() maxLimit = 0;
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (!changes?.useFormArray?.currentValue.length) {
-      this.createNewFields();
+    const itemValues = changes?.itemValues?.currentValue;
+    if (itemValues?.length) {
+      if (itemValues.length > 1) {
+        // Create new form fields for each item in the array
+        itemValues.forEach((item) => {
+          this.createNewFields();
+        });
+      }
+      // Patch the new values to the form array
+      this.useFormArray.patchValue(itemValues);
     }
+  }
+
+  ngOnInit() {
+    this.createNewFields();
   }
 
   /**
@@ -82,5 +99,6 @@ export class IteratorComponent implements OnChanges {
       return;
     }
     this.useFormArray.removeAt(index);
+    this.removedIndex.emit(index);
   }
 }

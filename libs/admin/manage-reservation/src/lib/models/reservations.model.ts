@@ -1,83 +1,65 @@
-import { RoomTypeResponse } from 'libs/admin/room/src/lib/types/service-response';
 import {
+  BookingItems,
   PaymentMethodConfig,
   ReservationListResponse,
-  ReservationResponse,
-  RoomTypeInfoRes,
+  RoomReservationRes,
   SummaryResponse,
 } from '../types/response.type';
-import { EntityState, FlagType, Option } from '@hospitality-bot/admin/shared';
+import {
+  EntityState,
+  EntitySubType,
+  FlagType,
+  Option,
+} from '@hospitality-bot/admin/shared';
 import { SearchGuestResponse } from 'libs/admin/guests/src/lib/types/guest.type';
 import { MenuItemsData, RoomTypes, SpaItems } from '../constants/form';
 import { OutletFormData } from '../types/forms.types';
+import {
+  BookingItem,
+  RoomReservationResponse,
+  RoomSummaryResponse,
+} from '../types/response.type';
+import { RoomTypeForm } from 'libs/admin/room/src/lib/models/room.model';
 /* Reservation */
-export class Reservation {
+
+export class RoomReservation {
   id: string;
-  entityId: string;
-  invoiceId: string;
-  rooms: number;
-  roomType: string;
-  confirmationNo: string;
-  guestName: string;
-  guestCompany: string;
-  outletName: string;
-  outletType: string;
-  date: string;
-  amount: number;
-  source: string;
-  payment: string;
-  status: string;
-  type: string; // OTA,AGENT, WALK-In, Offline Sales, Booking Engine
-  reservationNumber: string;
-  totalDueAmount: number;
-  firstName: string;
-  lastName: string;
-  paymentMethod: string;
-  totalPaidAmount: number;
-  roomCount: number;
-  reservationType: string;
   from: number;
   to: number;
-  totalAmount: number;
-  fullName: string;
-  roomNumber: number;
-  nextStates: string[];
+  source: string;
+  reservationType: string;
   sourceName: string;
+  confirmationNumber: string;
+  status: string;
+  guestName: string;
+  companyName: string;
+  created: number;
+  nextStates: string[];
+  bookingItems: BookingItems[];
+  totalAmount: number;
+  totalDueAmount: number;
+  totalPaidAmount: number;
 
-  deserialize(input: ReservationResponse) {
+  deserialize(input: RoomReservationRes) {
     this.id = input.id;
-    this.entityId = input.entityId;
-    this.invoiceId = input?.invoiceId ?? '';
-    this.rooms = input.rooms;
-    this.roomType = input.roomType;
-    this.confirmationNo = input.reservationNumber;
-    this.guestName = input.name;
-    this.guestCompany = input.company;
-    this.date = input.date;
-    this.amount = input.amount;
+    this.from = input.from;
+    this.to = input.to;
     this.source = input.source;
-    this.payment = input.payment;
+    this.reservationType = input.reservationType;
+    this.confirmationNumber = input.reservationNumber;
+    this.sourceName = input.sourceName;
+    this.source = input.source;
     this.status = input.status;
-    this.outletName = input?.outletName ?? '';
-    this.outletType = input?.outletType ?? '';
-    this.type = input.reservationTypes;
-    this.reservationNumber = input?.reservationNumber;
-    this.totalDueAmount = input?.totalDueAmount;
-    this.firstName = input?.firstName;
-    this.lastName = input?.lastName;
-    this.paymentMethod = input?.paymentMethod;
-    this.totalPaidAmount = input?.totalPaidAmount;
-    this.roomCount = input?.roomCount;
-    this.reservationType = input?.reservationType;
-    this.from = input?.from;
-    this.to = input?.to;
-    this.totalAmount = input?.totalAmount;
-    this.fullName = this.firstName
-      ? this?.firstName + ' ' + (this?.lastName ?? '')
+    this.guestName = input.guest.firstName
+      ? input.guest?.firstName + ' ' + (input.guest?.lastName ?? '')
       : '';
-    this.roomNumber = input?.roomNumber;
-    this.sourceName = input?.sourceName;
-    this.nextStates = [...input.nextStates, input.reservationType];
+    this.companyName = input.guest?.company?.firstName ?? '';
+    this.created = input.created;
+    this.nextStates = input.nextStates;
+    this.bookingItems = input.bookingItems;
+    this.totalAmount = input.pricingDetails.totalAmount;
+    this.totalPaidAmount = input.pricingDetails.totalPaidAmount;
+    this.totalDueAmount = input.pricingDetails.totalDueAmount;
     return this;
   }
 }
@@ -91,13 +73,14 @@ export type Status = {
 
 /* Lists of all type Reservations*/
 export class ReservationList {
-  reservationData: Reservation[];
+  reservationData: RoomReservation[];
   total: number;
   entityStateCounts: EntityState<string>;
   entityTypeCounts: EntityState<string>;
   deserialize(input: ReservationListResponse) {
     this.reservationData =
-      input.records?.map((item) => new Reservation().deserialize(item)) ?? [];
+      input.records?.map((item) => new RoomReservation().deserialize(item)) ??
+      [];
     this.total = input.total;
     this.entityStateCounts = input.entityStateCounts;
     this.entityTypeCounts = input.entityTypeCounts;
@@ -159,38 +142,11 @@ export class EntityStateCounts {
 }
 
 export class RoomTypeOptionList {
-  records: RoomTypeOption[];
+  records: RoomTypeForm[];
   deserialize(input) {
     this.records =
-      input?.roomTypes.map((item) => new RoomTypeOption().deserialize(item)) ??
+      input?.roomTypes.map((item) => new RoomTypeForm().deserialize(item)) ??
       [];
-    return this;
-  }
-}
-
-export class RoomTypeOption {
-  id: string;
-  name: string;
-  ratePlan: RatePlanData[];
-  roomNumber: string[];
-  roomCount: number;
-  occupancy: number;
-  maxChildren: number;
-  maxAdult: number;
-
-  deserialize(input: RoomTypeResponse) {
-    this.id = input.id ?? '';
-    this.name = input.name ?? '';
-    this.maxChildren = input.occupancyDetails.maxChildren ?? 0;
-    // this.roomNumber = input.roomNumber ?? [];
-    // this.ratePlan = input?.ratePlans.map((item) => ({
-    //   value: item.ratePlanTypeId,
-    //   price: item.basePrice,
-    //   discountedPrice: item.bestAvailablePrice,
-    // }));
-    this.maxAdult = input.occupancyDetails.maxAdult ?? 0;
-    this.roomCount = input.roomCount ?? 0;
-    this.occupancy = input.occupancyDetails.maxOccupancy ?? null;
     return this;
   }
 }
@@ -225,25 +181,22 @@ export class OfferData {
 export class ReservationFormData {
   reservationInformation: BookingInfo;
   guestInformation: GuestInfo;
-  paymentMethod: PaymentInfo;
+  // paymentMethod: PaymentInfo;
   offerId: string;
   roomInformation: RoomTypes[];
-  deserialize(input): this {
+  deserialize(input: RoomReservationResponse) {
     this.reservationInformation = new BookingInfo().deserialize(input);
     this.guestInformation = new GuestInfo().deserialize(input);
-    this.paymentMethod = new PaymentInfo().deserialize(input);
-    this.offerId = input?.offerId;
-    if (input.bookingItems)
-      this.roomInformation = input?.bookingItems.map(
-        (item: RoomTypeInfoRes) => ({
-          adultCount: item.adultCount,
-          childCount: item.childCount,
-          roomTypeId: item.roomTypeId,
-          ratePlanId: item.ratePlanTypeId,
-          roomNumbers: item.roomNumbers,
-          roomCount: item.roomCount,
-        })
-      );
+    // this.paymentMethod = new PaymentInfo().deserialize(input);
+    this.offerId = input?.id;
+    this.roomInformation = input?.bookingItems.map((item: BookingItem) => ({
+      adultCount: item.occupancyDetails.maxAdult,
+      childCount: item.occupancyDetails.maxChildren,
+      roomTypeId: item.roomDetails.roomTypeId,
+      ratePlanId: item.roomDetails.ratePlan.id,
+      roomCount: item.roomDetails.roomCount,
+    }));
+    // roomNumbers: item?.tableNumberOrRoomNumber,
     return this;
   }
 }
@@ -251,25 +204,27 @@ export class ReservationFormData {
 export class OutletForm {
   reservationInformation: BookingInfo;
   guestInformation: GuestInfo;
-  paymentMethod: PaymentInfo;
+  // paymentMethod: PaymentInfo;
   offerId: string;
-  orderInforamtion?: OrderInfo;
+  orderInformation?: OrderInfo;
   bookingInformation?: BookingInformation;
   eventInformation?: EventInformation;
 
   deserialize(input: OutletFormData) {
     this.reservationInformation = new BookingInfo().deserialize(input);
     this.guestInformation = new GuestInfo().deserialize(input);
-    this.paymentMethod = new PaymentInfo().deserialize(input);
+    // this.paymentMethod = new PaymentInfo().deserialize(input);
     this.offerId = input?.offerId;
-
     switch (input.outletType) {
-      case 'RESTUARANT':
-        this.orderInforamtion = new OrderInfo().deserialize(input);
-      case 'VENUE':
+      case EntitySubType.RESTAURANT:
+        this.orderInformation = new OrderInfo().deserialize(input);
+        break;
+      case EntitySubType.VENUE:
         this.eventInformation = new EventInformation().deserialize(input);
-      case 'SPA':
+        break;
+      case EntitySubType.SPA:
         this.bookingInformation = new BookingInformation().deserialize(input);
+        break;
     }
     return this;
   }
@@ -286,7 +241,7 @@ export class OrderInfo {
     this.kotInstructions = input?.kotInstructions ?? '';
     this.menuItems = input.items.map((item) => ({
       menuItems: item?.itemId,
-      quantity: item?.quantity ?? 1,
+      unit: item?.unit ?? 1,
       amount: item?.amount ?? 0,
     }));
     this.tableNumber = input?.tableNumber ?? '';
@@ -306,7 +261,7 @@ export class EventInformation {
     this.foodPackageCount = input?.foodPackageCount ?? 1;
     this.venueInfo = input.items.map((item) => ({
       description: item?.itemId,
-      quantity: item?.quantity ?? 1,
+      unit: item?.unit ?? 1,
       amount: item?.amount ?? 0,
     }));
     return this;
@@ -321,7 +276,7 @@ export class BookingInformation {
     this.numberOfAdults = input?.numberOfAdults ?? 1;
     this.spaItems = input.items.map((item) => ({
       serviceName: item?.itemId,
-      quantity: item?.quantity ?? 1,
+      unit: item?.unit ?? 1,
       amount: item?.amount ?? 0,
     }));
     return this;
@@ -345,39 +300,31 @@ export class BookingInfo {
     this.source = input?.source;
     this.sourceName = input?.sourceName;
     this.marketSegment = input?.marketSegment;
-    this.status = input?.status ?? '';
+    this.status = input?.reservationType ?? '';
     this.dateAndTime = input?.from;
     return this;
   }
 }
 
 export class GuestInfo {
-  firstName: string;
-  lastName: string;
-  email: string;
-  countryCode: number;
-  phoneNumber: number;
-  deserialize(input): this {
-    this.firstName = input?.firstName;
-    this.lastName = input?.lastName;
-    this.email = input?.email;
-    this.countryCode = input?.contact?.countryCode;
-    this.phoneNumber = input?.contact?.phoneNumber;
+  id: string;
+  deserialize(input) {
+    this.id = input.guest?.id;
     return this;
   }
 }
 
-export class PaymentInfo {
-  totalPaidAmount: string;
-  paymentMethod: string;
-  paymentRemark: string;
-  deserialize(input): this {
-    this.totalPaidAmount = input?.totalPaidAmount;
-    this.paymentMethod = input?.paymentMethod;
-    this.paymentRemark = input?.paymentRemark;
-    return this;
-  }
-}
+// export class PaymentInfo {
+//   totalPaidAmount: string;
+//   paymentMethod: string;
+//   paymentRemark: string;
+//   deserialize(input): this {
+//     this.totalPaidAmount = input?.totalPaidAmount;
+//     this.paymentMethod = input?.paymentMethod;
+//     this.paymentRemark = input?.paymentRemark;
+//     return this;
+//   }
+// }
 
 export class PaymentMethodList {
   records: PaymentMethod[];
@@ -403,6 +350,21 @@ export class PaymentMethod {
   }
 }
 
+export class RoomSummaryData {
+  from: number;
+  to: number;
+  roomCount: number;
+  adultCount: number;
+  childCount: number;
+  location: string;
+  totalAmount: number;
+  bookingItems: BookingItem[];
+  desrialize(input: RoomSummaryResponse) {
+    this.from = input.from;
+    return this;
+  }
+}
+
 export class SummaryData {
   name: string;
   from: number;
@@ -422,9 +384,6 @@ export class SummaryData {
   // roomNumbers: Option[];
 
   deserialize(input: SummaryResponse): this {
-    // this.id = input?.id;
-    // this.roomTypeName = input?.roomTypeName;
-    // this.roomNumbers = input?.roomNumbers;
     this.from = input.from;
     this.to = input.to;
     this.name = input?.name;

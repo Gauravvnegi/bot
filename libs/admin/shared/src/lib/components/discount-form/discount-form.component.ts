@@ -15,7 +15,7 @@ export class DiscountFormComponent extends FormComponent implements OnInit {
     { label: 'Flat', value: 'FLAT' },
   ];
 
-  className = 'half-width'
+  className = 'half-width';
 
   errorMessages = {
     required: 'This is a required field.',
@@ -35,9 +35,9 @@ export class DiscountFormComponent extends FormComponent implements OnInit {
   discountedPrice = 'discountedPrice';
   discountedPriceCurrency = 'discountedPriceCurrency';
 
-  originalPriceLabel = 'Original Price'
-  discountLabel = 'Discount Type'
-  discountedPriceLabel = 'Discounted Price'
+  originalPriceLabel = 'Original Price';
+  discountLabel = 'Discount';
+  discountedPriceLabel = 'Discounted Price';
 
   @Input() set controls(value: controlSettings) {
     Object.entries(value)?.forEach(([key, value]) => {
@@ -45,16 +45,16 @@ export class DiscountFormComponent extends FormComponent implements OnInit {
     });
   }
 
-  @Input() set labels(value: labelSettings){
-    Object.entries(value)?.forEach(([key,value])=>{
-      this[key]=value;
-    })
+  @Input() set labels(value: labelSettings) {
+    Object.entries(value)?.forEach(([key, value]) => {
+      this[key] = value;
+    });
   }
 
-  @Input() set settings(value: formSettings){
-    Object.entries(value)?.forEach(([key,value]) =>{
-      this[key]=value;
-    })
+  @Input() set settings(value: formSettings) {
+    Object.entries(value)?.forEach(([key, value]) => {
+      this[key] = value;
+    });
   }
 
   constructor(public controlContainer: ControlContainer) {
@@ -91,14 +91,14 @@ export class DiscountFormComponent extends FormComponent implements OnInit {
 
       if (price)
         discountedPrice.patchValue(
-          type === 'NUMBER'
+          type === 'FLAT'
             ? price - discount
             : Math.round(
                 (price - (price * discount) / 100 + Number.EPSILON) * 100
               ) / 100
         );
 
-      if (type === 'NUMBER' && discount > price) {
+      if (type === 'FLAT' && discount > price) {
         return 'isNumError';
       }
 
@@ -174,8 +174,8 @@ type labelSettings = {
   originalyPriceLabel: string;
   discountLable: string;
   discountedPriceLabel: string;
-}
+};
 
 type formSettings = {
   className: string;
-}
+};

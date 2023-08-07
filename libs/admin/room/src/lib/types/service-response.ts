@@ -3,7 +3,6 @@ export type RoomStatus =
   | 'INSPECTED'
   | 'OUT_OF_SERVICE'
   | 'OUT_OF_ORDER'
-  | 'UNAVAILABLE'
   | 'DIRTY';
 
 export type RoomTypeStatus = 'ACTIVE' | 'INACTIVE';
@@ -31,9 +30,9 @@ export type RoomResponse = {
   features: Features[];
   status: RoomStatus;
   //--- can be modified
-  toDate: number;
-  fromDate: number;
-  remarks: string;
+  currentStatusFrom: number;
+  currentStatusTo: number;
+  remark: string;
 
   source?: string;
   price: number;
@@ -88,17 +87,20 @@ export type RoomTypeResponse = {
 };
 
 export type RatePlanRes = {
-  label: string;
+  label?: string;
+  type?: string;
   variablePrice: number;
-  currency: string;
+  currency?: string;
   isBase: boolean;
-  description: string;
-  discount: {
+  description?: string;
+  discount?: {
     type: string;
     value: number;
   };
-  id: string;
-  status: boolean;
+  id?: string;
+  status?: boolean;
+  sellingPrice?: number;
+  total?: number;
 };
 
 export type PricingDetails = {

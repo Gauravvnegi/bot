@@ -1,19 +1,18 @@
+import { FormGroup } from '@angular/forms';
+import { pick, reduce } from 'lodash';
 import {
   RoomMapType,
   UpdateInventoryType,
   UpdateRatesType,
 } from '../types/channel-manager.types';
-import { ChannelManagerResponse } from '../types/response.type';
+import {
+  ChannelManagerResponse,
+  Rates,
+  UpdateInventoryResponse,
+  UpdateRatesResponse,
+} from '../types/response.type';
 
 export class UpdateInventory {
-  perDayRoomAvailability = new Map<
-    number,
-    {
-      roomAvailable: number;
-      occupancy: number;
-    }
-  >();
-
   inventoryRoomDetails = new Map<
     string,
     {
@@ -40,15 +39,40 @@ export class UpdateInventory {
           },
         ];
       });
-
-      this.perDayRoomAvailability[item.startDate] = {
-        roomAvailable: item.inventoryData.available,
-        occupancy: item.inventoryData.occupancy,
-      };
     });
     return this;
   }
 
+  static buildAvailability(
+    input: UpdateInventoryResponse[],
+    selectedRooms: string[]
+  ) {
+    let perDayRoomAvailability = new Map<
+      number,
+      {
+        roomAvailable: number;
+        occupancy: number;
+      }
+    >();
+    input.map((item) => {
+      const selectedAvailability = pick(item.inventoryDataMap, selectedRooms);
+      const totalSelectedRooms = Object.keys(selectedAvailability).length;
+      perDayRoomAvailability[item.startDate] = {
+        roomAvailable: reduce(
+          selectedAvailability,
+          (sum, curr) => sum + curr['available'],
+          0
+        ),
+        occupancy:
+          reduce(
+            selectedAvailability,
+            (sum, curr) => sum + curr['occupancy'],
+            0
+          ) / totalSelectedRooms,
+      };
+    });
+    return perDayRoomAvailability;
+  }
   static buildRequestData(formData, fromDate: number) {
     let updates: UpdateInventoryType[] = [];
     formData.roomTypes.forEach((item, index) => {
@@ -104,13 +128,11 @@ export class UpdateInventory {
 }
 
 export class UpdateRates {
-  dynamicPricing = new Map<number, boolean>();
   ratesRoomDetails = new Map<string, RoomMapType>();
 
   deserialize(input: ChannelManagerResponse) {
     input.updates?.forEach((currentData) => {
       const currentDay = currentData.startDate ?? currentData.endDate;
-      this.ratesRoomDetails;
       // rate plan iteration
       const ratePlanData = currentData.inventoryDataMap;
       Object.keys(ratePlanData).forEach((currentRoomId) => {
@@ -125,14 +147,18 @@ export class UpdateRates {
         this.ratesRoomDetails[currentRoomId].availability[currentDay] = {
           quantity: available,
           occupancy: occupancy,
+          dynamicPrice: false,
         };
       });
+
       // all rates plan on current day
       currentData.rates.forEach((currentRatePlan) => {
-        this.dynamicPricing[currentDay] = currentRatePlan.dynamicPricing;
-
         const currentRoomId = currentRatePlan.roomTypeId;
         const currentRatePlanId = currentRatePlan.ratePlanId;
+        // For each room type
+        this.ratesRoomDetails[currentRoomId].availability[
+          currentDay
+        ].dynamicPrice = currentRatePlan.dynamicPricing;
 
         if (!this.ratesRoomDetails[currentRoomId]) {
           this.ratesRoomDetails[currentRoomId] = {
@@ -162,17 +188,27 @@ export class UpdateRates {
     return this;
   }
 
-  static buildRequestData(formData, fromDate: number) {
-    let dynamicPricingMap = new Map<number, boolean>();
-    //if dynamic pricing true then do not send data of those date
+  static buildDynamicPricing(input: ChannelManagerResponse) {
+    let dynamicPricing = new Map<string, Map<string, number>>();
+    (input.updates as UpdateRatesResponse[])?.forEach((currentData) => {
+      currentData.rates.forEach((ratePlans) => {
+        if (!dynamicPricing[ratePlans.roomTypeId]) {
+          dynamicPricing[ratePlans.roomTypeId] = new Map();
+        }
+        dynamicPricing[ratePlans.roomTypeId][ratePlans.ratePlanId] =
+          ratePlans.rate;
+      });
+    });
+    return dynamicPricing;
+  }
+  static buildRequestData(
+    formData,
+    fromDate: number,
+    type: 'submit-form' | 'dynamic-pricing'
+  ) {
     let updates: UpdateRatesType[] = [];
 
     let selectedDate = new Date(fromDate);
-    formData.dynamicPricing.forEach((price) => {
-      dynamicPricingMap[selectedDate.getTime()] = price.value;
-      selectedDate.setDate(selectedDate.getDate() + 1);
-    });
-
     formData.roomTypes.forEach((room) => {
       room.ratePlans.forEach((ratePlan) => {
         selectedDate = new Date(fromDate);
@@ -181,7 +217,7 @@ export class UpdateRates {
             roomTypeId: room.value,
             rate: rate.value ? +rate.value : null,
             ratePlanId: ratePlan.value,
-            dynamicPricing: false, // get current day dynamic pricing status from Map, if required ex- dynamicPricingMap[currentDay]
+            dynamicPricing: room['dynamicPrice'][dayIndex]?.value, // get current day dynamic pricing status from Map, if required ex- dynamicPricingMap[currentDay]
           };
 
           let perDayData = {
@@ -193,7 +229,9 @@ export class UpdateRates {
           };
 
           // filter rates plan who have not any input on this particular day
-          perDayData.rates = perDayData.rates.filter((item) => item.rate);
+          perDayData.rates = perDayData.rates.filter((item) =>
+            type === 'submit-form' ? item.rate : true
+          );
           selectedDate.setDate(selectedDate.getDate() + 1);
           return perDayData;
         });
@@ -201,7 +239,11 @@ export class UpdateRates {
     });
 
     // filter data who haven't exist any rate plans
-    return { updates: updates.filter((item) => item.rates.length > 0) };
+    return {
+      updates: updates.filter((item) =>
+        type === 'submit-form' ? item.rates.length > 0 : true
+      ),
+    };
   }
 
   static buildBulkUpdateRequest(formData) {

@@ -1,11 +1,12 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { FormGroup, FormArray, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormArray, FormBuilder, Validators, AbstractControl } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
   NavRouteOptions,
   AdminUtilityService,
   Option,
+  EntityType,
 } from '@hospitality-bot/admin/shared';
 import { IteratorField } from 'libs/admin/shared/src/lib/types/fields.type';
 import { Subscription } from 'rxjs';
@@ -25,6 +26,7 @@ import {
 } from '../../models/reservations.model';
 import { ManageReservationService } from '../../services/manage-reservation.service';
 import { SelectedEntity } from '../../types/reservation.type';
+import { ReservationForm } from '../../constants/form';
 
 @Component({
   selector: 'hospitality-bot-venue-reservation',
@@ -118,10 +120,9 @@ export class VenueReservationComponent implements OnInit {
       }),
       offerId: [''],
     });
-
     // Add food package items to the form
     this.foodPackageArray = this.userForm.get(
-      'orderInformation.foodPackages'
+      'eventInformation.foodPackages'
     ) as FormArray;
 
     // Add the first food package item to the form
@@ -269,48 +270,53 @@ export class VenueReservationComponent implements OnInit {
   }
 
   getSummaryData(): void {
-    const defaultProps = [
-      {
-        type: 'ROOM_TYPE',
-        fromDate: this.userForm.get('reservationInformation.from')?.value,
-        toDate: this.userForm.get('reservationInformation.to')?.value,
-        adultCount: this.userForm.get('roomInformation.adultCount')?.value || 1,
-        roomCount: this.userForm.get('roomInformation.roomCount')?.value || 1,
-        childCount: this.userForm.get('roomInformation.childCount')?.value || 0,
-        roomType: this.userForm.get('roomInformation.roomTypeId')?.value,
-        offerId: this.userForm.get('offerId')?.value,
-        entityId: this.entityId,
-      },
-    ];
     const config = {
-      params: this.adminUtilityService.makeQueryParams(defaultProps),
+      params: this.adminUtilityService.makeQueryParams([
+        { type: EntityType.OUTLET },
+      ]),
     };
-    const data = {};
-    if (this.userForm.get('roomInformation.roomTypeId')?.value) {
-      this.$subscription.add(
-        this.manageReservationService
-          .getSummaryData(this.entityId, data, config)
-          .subscribe(
-            (res) => {
-              this.summaryData = new SummaryData()?.deserialize(res);
-              this.userForm
-                .get('roomInformation')
-                .patchValue(this.summaryData, { emitEvent: false });
-              this.userForm
-                .get('paymentMethod.totalPaidAmount')
-                .setValidators([Validators.max(this.summaryData?.totalAmount)]);
-              this.userForm
-                .get('paymentMethod.totalPaidAmount')
-                .updateValueAndValidity();
-              this.userForm
-                .get('paymentRule.deductedAmount')
-                .patchValue(this.summaryData?.totalAmount);
-              this.deductedAmount = this.summaryData?.totalAmount;
-            },
-            (error) => {}
-          )
-      );
-    }
+    const data = {
+      fromDate: this.reservationInfoControls.from.value,
+      toDate: this.reservationInfoControls.to.value,
+      adultCount: this.eventInfoControls.numberOfAdults.value,
+      
+    };
+    this.$subscription.add(
+      this.manageReservationService
+        .getSummaryData(this.entityId, data, config)
+        .subscribe(
+          (res) => {
+            this.summaryData = new SummaryData()?.deserialize(res);
+            this.userForm
+              .get('paymentMethod.totalPaidAmount')
+              .setValidators([Validators.max(this.summaryData?.totalAmount)]);
+            this.userForm
+              .get('paymentMethod.totalPaidAmount')
+              .updateValueAndValidity();
+            this.userForm
+              .get('paymentRule.deductedAmount')
+              .patchValue(this.summaryData?.totalAmount);
+            this.deductedAmount = this.summaryData?.totalAmount;
+          },
+          (error) => {}
+        )
+    );
+  }
+
+  get reservationInfoControls() {
+    return (this.userForm.get('reservationInformation') as FormGroup)
+      .controls as Record<
+      keyof ReservationForm['reservationInformation'],
+      AbstractControl
+    >;
+  }
+
+  get eventInfoControls() {
+    return (this.userForm.get('eventInformation') as FormGroup)
+      .controls as Record<
+      keyof ReservationForm['eventInformation'],
+      AbstractControl
+    >;
   }
 
   /**

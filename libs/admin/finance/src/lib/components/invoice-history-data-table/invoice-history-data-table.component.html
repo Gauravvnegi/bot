@@ -62,7 +62,7 @@
     let-columns="columns"
     let-rowIndex="rowIndex"
   >
-    <tr class="table-row" (click)="editService(rowData.id)">
+    <tr class="table-row" (click)="openDetailsPage(rowData.reservationId)">
       <td class="table-row__checkbox">
         <p-tableCheckbox
           [value]="rowData"

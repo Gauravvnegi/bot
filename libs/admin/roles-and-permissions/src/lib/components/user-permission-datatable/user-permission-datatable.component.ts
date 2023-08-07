@@ -14,12 +14,16 @@ import * as FileSaver from 'file-saver';
 import { BaseDatatableComponent } from 'libs/admin/shared/src/lib/components/datatable/base-datatable.component';
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
 import { TableService } from 'libs/admin/shared/src/lib/services/table.service';
-import { SnackBarService } from 'libs/shared/material/src';
+import { ModalService, SnackBarService } from 'libs/shared/material/src';
 import { Observable, Subscription, forkJoin } from 'rxjs';
 import { UserPermissionTable } from '../../models/user-permission-table.model';
 import { ManagePermissionService } from '../../services/manage-permission.service';
 import { QueryConfig } from '../../types';
 import { chips, cols, tableName } from '../../constants/data-table';
+import { get } from 'lodash';
+import { LazyLoadEvent } from 'primeng/api';
+import { MatDialogConfig } from '@angular/material/dialog';
+import { ModalComponent } from 'libs/admin/shared/src/lib/components/modal/modal.component';
 
 @Component({
   selector: 'hospitality-bot-user-permission-datatable',
@@ -28,6 +32,7 @@ import { chips, cols, tableName } from '../../constants/data-table';
     '../../../../../shared/src/lib/components/datatable/datatable.component.scss',
     './user-permission-datatable.component.scss',
   ],
+  providers: [ModalService],
 })
 export class UserPermissionDatatableComponent extends BaseDatatableComponent
   implements OnInit, OnDestroy {
@@ -35,6 +40,7 @@ export class UserPermissionDatatableComponent extends BaseDatatableComponent
     userId?: string;
     isView?: boolean;
   }>();
+  loggedInUserId: string;
   @Input() tabFilterIdx = 1;
 
   tableName = tableName;
@@ -44,30 +50,13 @@ export class UserPermissionDatatableComponent extends BaseDatatableComponent
   triggerInitialData = false;
   isQuickFilters = false;
   isTabFilters = true;
-  tabFilterItems = [
-    {
-      label: 'All',
-      content: '',
-      value: 'ALL',
-      disabled: false,
-      total: 0,
-      chips: [],
-    },
-    {
-      label: 'Reporting to me',
-      content: '',
-      value: 'REPORTING',
-      disabled: false,
-      total: 0,
-      chips: [],
-    },
-  ];
   entityId: string;
   filterChips = chips;
   cols = cols;
   allUsersValues;
   manageUsersValues;
   $subscription = new Subscription();
+  isAllTabFilterRequired = true;
 
   constructor(
     public fb: FormBuilder,
@@ -77,76 +66,73 @@ export class UserPermissionDatatableComponent extends BaseDatatableComponent
     private _managePermissionService: ManagePermissionService,
     public userService: UserService,
     private snackbarService: SnackBarService,
-    protected tabFilterService: TableService
+    protected tabFilterService: TableService,
+    private modalService: ModalService
   ) {
     super(fb, tabFilterService);
   }
 
   ngOnInit(): void {
     this.entityId = this.userService.getentityId();
+    this.loggedInUserId = this.userService.getLoggedInUserId();
     this.loadInitialData();
   }
 
   loadInitialData(queries = []) {
     this.loading = true;
     this.$subscription.add(
-      this.fetchDataFrom(queries).subscribe(
-        ([allUsersData, manageUsersData]) => {
-          this.allUsersValues = new UserPermissionTable().deserialize(
-            allUsersData
-          ).records;
-          this.manageUsersValues = new UserPermissionTable().deserialize(
-            manageUsersData
-          ).records;
+      this._managePermissionService
+        .getAllUsers(this.entityId, this.getQueryConfig())
+        .subscribe(
+          (allUsersData) => {
+            const manageUsersValues = new UserPermissionTable().deserialize(
+              allUsersData
+            );
+            this.values = manageUsersValues.records;
+            this.totalRecords = manageUsersValues.totalRecords;
 
-          this.tabFilterItems[0].total = allUsersData.total;
-          this.tabFilterItems[1].total = manageUsersData.total;
-          this.setTableValues();
+            this.initFilters(
+              manageUsersValues.entityTypeCounts,
+              manageUsersValues.entityStateCounts,
+              manageUsersValues.totalRecords
+            );
 
-          this.loading = false;
-        },
-        (error) => {
-          this.allUsersValues = [];
-          this.manageUsersValues = [];
-          this.loading = false;
-        }
-      )
+            this.loading = false;
+          },
+          (error) => {
+            this.allUsersValues = [];
+            this.manageUsersValues = [];
+            this.loading = false;
+          }
+        )
     );
   }
 
-  setTableValues() {
-    this.values =
-      this.tabFilterIdx === 0 ? this.allUsersValues : this.manageUsersValues;
-    this.totalRecords = this.tabFilterItems[this.tabFilterIdx].total;
-  }
-
-  fetchDataFrom(
-    queries,
-    defaultProps = { offset: this.first, limit: this.rowsPerPage }
-  ): Observable<any> {
-    this.resetRowSelection();
-    queries.push(defaultProps);
-    const config: QueryConfig = {
-      queryObj: this._adminUtilityService.makeQueryParams(queries),
-      loggedInUserId: this.userService.getLoggedInUserId(),
-      entityId: this.entityId,
+  getQueryConfig() {
+    const config = {
+      params: this._adminUtilityService.makeQueryParams([
+        ...this.getSelectedQuickReplyFilters({ isStatusBoolean: true }),
+        ...[{ order: 'DESC' }],
+        {
+          offset: this.first,
+          limit: this.rowsPerPage,
+          type:
+            this.tabFilterItems[this.tabFilterIdx]?.value === 'ALL'
+              ? ''
+              : this.tabFilterItems[this.tabFilterIdx]?.value ?? '',
+        },
+      ]),
     };
-    const allUsers$ = this._managePermissionService.getAllUsers(config);
-    const managedUsers$ = this._managePermissionService.getManagedUsers(config);
 
-    return forkJoin([allUsers$, managedUsers$]);
+    return config;
   }
 
-  loadData(event) {
-    this.loading = true;
-    this.updatePaginations(event);
+  /**
+   * @function loadData Fetch data as paginates
+   * @param event
+   */
+  loadData(event: LazyLoadEvent) {
     this.loadInitialData();
-  }
-
-  onSelectedTabFilterChange({ index }) {
-    this.tabFilterIdx = index;
-    this.setTableValues();
-    // this.loadInitialData();
   }
 
   exportCSV() {
@@ -181,6 +167,58 @@ export class UserPermissionDatatableComponent extends BaseDatatableComponent
     );
   }
 
+  handelStatus(status: boolean, userData) {
+    if (!status) {
+      this._managePermissionService
+        .getUserJobDetails(userData.userId)
+        .subscribe((res) => {
+          const dialogConfig = new MatDialogConfig();
+          dialogConfig.disableClose = true;
+          const togglePopupCompRef = this.modalService.openDialog(
+            ModalComponent,
+            dialogConfig
+          );
+          let description = [
+            `Are you sure you want to deactivate the user?`,
+            `user have ${res?.length} jobs pending`,
+          ];
+          let label: string = 'Deactivate';
+
+          //api call to check if user have any jobs pending
+          if (!res) {
+            description = [`Are you sure you want to deactivate the user?`];
+          }
+
+          togglePopupCompRef.componentInstance.content = {
+            heading: `Mark As ${status ? 'Active' : 'Inactive'}`,
+            description: description,
+          };
+
+          togglePopupCompRef.componentInstance.actions = [
+            {
+              label: 'Cancel',
+              onClick: () => this.modalService.close(),
+              variant: 'outlined',
+            },
+            {
+              label: label,
+              onClick: () => {
+                this.updateRolesStatus(status, userData);
+                togglePopupCompRef.close();
+              },
+              variant: 'contained',
+            },
+          ];
+
+          togglePopupCompRef.componentInstance.onClose.subscribe(() => {
+            togglePopupCompRef.close();
+          });
+        });
+    } else {
+      this.updateRolesStatus(status, userData);
+    }
+  }
+
   updateRolesStatus(status: boolean, userData) {
     const data = {
       id: userData.userId,
@@ -213,6 +251,13 @@ export class UserPermissionDatatableComponent extends BaseDatatableComponent
       userId: rowData?.userId,
       isView: rowData?.parentId !== this.userService.getLoggedInUserId(),
     });
+  }
+
+  isEditAccessDenied(rowData) {
+    return !(
+      rowData?.parentId === this.loggedInUserId ||
+      rowData?.reportingTo === this.loggedInUserId
+    );
   }
 
   /**

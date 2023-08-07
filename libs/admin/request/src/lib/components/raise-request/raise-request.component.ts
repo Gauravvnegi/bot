@@ -20,6 +20,8 @@ import { Subscription } from 'rxjs';
 import { request } from '../../constants/request';
 import { debounceTime, filter, map, startWith } from 'rxjs/operators';
 import { RequestService } from '../../services/request.service';
+import { Option } from '@hospitality-bot/admin/shared';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'hospitality-bot-raise-request',
@@ -37,13 +39,17 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
   priorityList = request.priority;
   isRaisingRequest = false;
   requestConfig = request;
+  userList: Option[] = [];
+  requestData: any;
   constructor(
     private fb: FormBuilder,
     private globalFilterService: GlobalFilterService,
     private snackbarService: SnackBarService,
     private _requestService: RequestService,
     private adminUtilityService: AdminUtilityService,
-    private _translateService: TranslateService
+    private _translateService: TranslateService,
+    private router: Router,
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
@@ -54,6 +60,7 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
   registerListeners(): void {
     this.listenForGlobalFilters();
     this.listenForRoomNumberChanges();
+    this.listenForItemChanges();
   }
 
   /**
@@ -78,10 +85,12 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
       lastName: ['', Validators.required],
       itemName: [''],
       itemCode: ['', Validators.required],
+      itemId: [''],
       priority: ['', Validators.required],
       jobDuration: [''],
       remarks: ['', [Validators.maxLength(200)]],
       quantity: [1],
+      assignTo: [''],
     });
 
     this.searchFG = this.fb.group({
@@ -91,6 +100,7 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
     this.requestFG.get('itemCode').valueChanges.subscribe((value) => {
       const service = this.items.find((d) => d.value === value);
       this.requestFG.get('itemName').setValue(service.label);
+      this.requestFG.get('itemId').setValue(service.itemId);
     });
   }
 
@@ -107,15 +117,28 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
       this._requestService
         .getCMSServices(this.entityId, config)
         .subscribe((response) => {
+          this.requestData = response;
           this.items = response.cms_services
             .sort((a, b) => a.itemName.trim().localeCompare(b.itemName.trim()))
             .map((item) => ({
               label: item.itemName,
               value: item.itemCode,
+              itemId: item.id,
               duration: item.duration,
             }));
         })
     );
+  }
+
+  listenForItemChanges(): void {
+    this.requestFG.get('itemCode').valueChanges.subscribe((value) => {
+      this.userList = this.requestData.cms_services
+        .find((item) => item.itemCode === value)
+        .requestItemUsers.map((user) => ({
+          label: `${user.firstName} ${user.lastName}`,
+          value: user.userId,
+        }));
+    });
   }
 
   /**
@@ -180,7 +203,6 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
    * @param closeData The status and reservation data.
    */
   close(closeData: { status: boolean; data?; load: boolean }): void {
-    console.log(closeData);
     this.onRaiseRequestClose.emit(closeData);
   }
 
@@ -223,6 +245,14 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
             })
         );
       else this.reservation = {};
+    });
+  }
+
+  create() {
+    this.onRaiseRequestClose.emit({ status: false });
+
+    this.router.navigate(['/pages/efrontdesk/request/add-item'], {
+      relativeTo: this.route,
     });
   }
 

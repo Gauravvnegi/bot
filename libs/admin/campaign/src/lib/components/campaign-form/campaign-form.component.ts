@@ -33,7 +33,15 @@ export class CampaignFormComponent implements OnInit, OnDestroy {
   @Input() entityId: string;
   @Input() campaignId: string;
   @Input() campaignFG: FormGroup;
-  @Input() campaign: Campaign;
+  _campaign: Campaign;
+  @Input() set campaign(value: Campaign) {
+    this._campaign = value;
+    if (this.campaignId) {
+      this.pageTitle = 'Edit Campaign';
+      this.navRoutes[2].label = 'Edit Campaign';
+    }
+    this.draftDate = this._campaign?.updatedAt ?? this._campaign?.createdAt;
+  }
   @Output() changeStep = new EventEmitter();
   @Output() save = new EventEmitter();
   templateData = '';
@@ -67,11 +75,6 @@ export class CampaignFormComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    if (this.campaignId) {
-      this.pageTitle = 'Edit Campaign';
-      this.navRoutes[2].label = 'Edit Campaign';
-    }
-    this.draftDate = this.campaign?.updatedAt ?? this.campaign?.createdAt;
     this.getFromEmails();
   }
 

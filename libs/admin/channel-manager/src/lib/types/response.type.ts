@@ -10,7 +10,7 @@ type Availability = {
 export type UpdateInventoryResponse = {
   startDate: number;
   endDate: number;
-  inventoryData: Availability;
+  inventoryDataMap: Record<string, Availability>;
   rooms: RoomTypesResponse[];
 };
 
@@ -23,7 +23,7 @@ export type ChannelManagerResponse = {
   soldOut: boolean;
 };
 
-type Rates = {
+export type Rates = {
   dynamicPricing: boolean;
   rate: number;
   ratePlanId: string;
@@ -35,6 +35,6 @@ export type UpdateRatesResponse = Omit<
   UpdateInventoryResponse,
   'inventoryData' | 'rooms'
 > & {
-  inventoryDataMap: Map<string, Availability>;
+  inventoryDataMap: Record<string, Availability>;
   rates: Rates[];
 };

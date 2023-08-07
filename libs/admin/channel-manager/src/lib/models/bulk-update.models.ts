@@ -1,10 +1,6 @@
 import { Option } from '@hospitality-bot/admin/shared';
-import {
-  BulkUpdateForm,
-  BulkUpdateRequest,
-  RoomTypes,
-  Variant,
-} from '../types/bulk-update.types';
+import { RoomTypes, Variant } from '../types/bulk-update.types';
+import { RoomType } from 'libs/admin/room/src/lib/models/rooms-data-table.model';
 
 export function makeRoomOption(...data) {
   return data.map((item) => {
@@ -12,36 +8,27 @@ export function makeRoomOption(...data) {
   }) as Option[];
 }
 
-export function makeRoomsData(rooms, configRatePlans) {
+export function makeRoomsData(rooms: RoomType[]) {
   let res = rooms.map((item) => {
     let room = {
       label: item.name,
       value: item.id,
       channels: [],
-      ratePlans: item.ratePlans
-        .map((ratePlan) => {
-          let rates = configRatePlans.find(
-            (configRates) => configRates.id === ratePlan.ratePlanTypeId
-          );
-          let myRatePlan = rates
-            ? {
-                ...ratePlan,
-                type: rates.key,
-                label: rates.label,
-                value: rates.id,
-                channels: [],
-              }
-            : null;
-          return myRatePlan;
-        })
-        // TODO: It must at least 1 ratePlans
-        .filter((item) => item),
+      ratePlans:
+        item.ratePlans
+          ?.filter((ratePlan) => ratePlan.status)
+          .map((ratePlan) => ({
+            type: ratePlan.label,
+            label: ratePlan.label,
+            value: ratePlan.id,
+            isBase: ratePlan.isBase,
+            variablePrice: ratePlan.variablePrice,
+            channels: [],
+          })) ?? [],
     };
-    return room;
+    return room.ratePlans.length ? room : null;
   });
-
-  // TODO: It must at least 1 ratePlans
-  return res.filter((item) => item.ratePlans.length);
+  return res.filter((item) => item);
 }
 
 export class CheckBoxTreeFactory {

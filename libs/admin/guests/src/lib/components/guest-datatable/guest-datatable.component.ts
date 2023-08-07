@@ -9,16 +9,21 @@ import {
 } from '@hospitality-bot/admin/shared';
 import * as FileSaver from 'file-saver';
 import { Subscription } from 'rxjs';
-import {
-  Guest,
-  GuestData,
-  GuestTable,
-} from '../../data-models/guest-table.model';
+import { GuestData, GuestTable } from '../../data-models/guest-table.model';
 import { GuestTableService } from '../../services/guest-table.service';
 import { manageGuestRoutes } from '../../constant/route';
 import { guestCols } from '../../constant/guest';
 import { LazyLoadEvent } from 'primeng/api';
-import { Route, Router } from '@angular/router';
+import { Router } from '@angular/router';
+import {
+  MemberSortTypes,
+  SortingOrder,
+} from 'libs/admin/agent/src/lib/types/agent';
+import {
+  SortBy,
+  SortFilterList,
+} from 'libs/admin/agent/src/lib/constant/response';
+import { GuestListResponse } from '../../types/guest.type';
 @Component({
   selector: 'hospitality-bot-guest-datatable',
   templateUrl: './guest-datatable.component.html',
@@ -32,7 +37,7 @@ export class GuestDatatableComponent extends BaseDatatableComponent
   tableName = 'Guest List';
 
   guestRoutes = manageGuestRoutes;
-
+  sortFilterList = SortFilterList;
   entityId: string;
   cols = guestCols;
   globalQueries = [];
@@ -63,13 +68,7 @@ export class GuestDatatableComponent extends BaseDatatableComponent
     this.$subscription.add(
       this.guestTableService.getGuestList(this.getQueryConfig()).subscribe(
         (res) => {
-          const guestData = new GuestTable().deserialize(res);
-          this.values = guestData.records;
-          this.initFilters(
-            guestData.entityStateCounts,
-            guestData.entityTypeCounts,
-            guestData.totalRecord
-          );
+          this.mapData(res);
           this.loading = false;
         },
         (error) => {
@@ -81,7 +80,35 @@ export class GuestDatatableComponent extends BaseDatatableComponent
     );
   }
 
-  getQueryConfig(): QueryConfig {
+  sortBy(key: MemberSortTypes) {
+    this.loading = true;
+    this.$subscription.add(
+      this.guestTableService
+        .sortMemberBy(this.getQueryConfig(SortBy[key]))
+        .subscribe(
+          (res) => {
+            this.mapData(res);
+            this.loading = false;
+          },
+          (error) => {
+            this.loading = false;
+          },
+          this.handleFinal
+        )
+    );
+  }
+
+  mapData(res: GuestListResponse) {
+    const guestData = new GuestTable().deserialize(res);
+    this.values = guestData.records;
+    this.initFilters(
+      guestData.entityStateCounts,
+      guestData.entityTypeCounts,
+      guestData.totalRecord
+    );
+  }
+
+  getQueryConfig(sortBy?: SortingOrder): QueryConfig {
     // TODO: We have to remove toDate & fromDate after getting api of guest list
     this.globalQueries = [
       {
@@ -96,10 +123,11 @@ export class GuestDatatableComponent extends BaseDatatableComponent
         {
           type: 'GUEST',
           entityId: this.entityId,
-          orderBy: 'DESC',
+          order: 'DESC',
           sort: 'created',
           offset: this.first,
           limit: this.rowsPerPage,
+          ...sortBy,
         },
       ]),
     };

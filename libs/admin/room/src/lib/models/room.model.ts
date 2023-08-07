@@ -34,25 +34,30 @@ export class SingleRoom {
   id: string;
   roomNumber: string;
   floorNumber: string;
-  roomStatus: RoomStatus;
+  status: RoomStatus;
   currency: string;
   price: number;
   roomTypeId: string;
   featureIds: string[];
   removeFeatures?: string[];
-
+  remark?: string;
+  currentStatusTo?: number;
+  currentStatusFrom?: number;
   deserialize(input: SingleRoomData) {
     this.id = input.id ?? '';
     this.roomNumber = input.roomNo ?? '';
     this.floorNumber = input.floorNo ?? '';
-    this.roomStatus = input.status;
+    this.status = input.status;
     this.currency = input.currency ?? '';
     this.price = input.price ?? null;
     this.roomTypeId = input.roomTypeId ?? '';
     this.featureIds = input.featureIds ?? [];
-    this.removeFeatures = input.removeFeatures.length
-      ? input.removeFeatures
+    this.removeFeatures = input?.removeFeatures?.length
+      ? input?.removeFeatures
       : null; //as per BE requirement
+    this.remark = input.remark ?? '';
+    this.currentStatusTo = input?.currentStatusTo;
+    this.currentStatusFrom = input?.currentStatusFrom;
     return this;
   }
 }
@@ -82,6 +87,7 @@ export class MultipleRoom {
   currency: string;
   price: number;
   roomTypeId: string;
+  featureIds: string[];
 
   deserialize(input: MultipleRoomData) {
     this.from = input.from ?? '';
@@ -91,6 +97,7 @@ export class MultipleRoom {
     this.currency = input.currency ?? '';
     this.price = input.price;
     this.roomTypeId = input.roomTypeId ?? '';
+    this.featureIds = input?.featureIds ?? [];
     return this;
   }
 }
@@ -109,8 +116,11 @@ export class RoomTypeForm {
   maxChildren: number;
   maxAdult: number;
   area: number;
+  id?: string;
+  allRatePlans?: AddedRatePlans[];
 
   deserialize(input: RoomTypeResponse) {
+    this.id = input?.id;
     this.status = input.status;
     this.name = input.name;
     this.imageUrls = input.imageUrls;
@@ -136,6 +146,7 @@ export class RoomTypeForm {
       basePrice: input.pricingDetails.base,
       basePriceCurrency: input.pricingDetails.currency,
       ratePlanId: defaultRatePlan[0].id,
+      status: defaultRatePlan[0].status,
     };
     this.dynamicRatePlans = {
       paxPriceCurrency: input.pricingDetails.currency,
@@ -149,6 +160,7 @@ export class RoomTypeForm {
       minPriceCurrency: input.pricingDetails.currency,
       minPrice: input.pricingDetails.min,
       ratePlanId: defaultRatePlan[0].id,
+      status: defaultRatePlan[0].status,
     };
 
     this.ratePlans = input.ratePlans
@@ -156,12 +168,27 @@ export class RoomTypeForm {
       .map((item) => ({
         label: item.label,
         ratePlanId: item.id,
-        idBase: item.isBase,
+        isBase: item.isBase,
         extraPrice: item.variablePrice,
         currency: input.pricingDetails.currency,
         description: item?.description,
         status: item.status,
+        sellingPrice: item?.sellingPrice,
+        total: item?.total ?? 0,
       }));
+
+    // For Reservation
+    this.allRatePlans = input.ratePlans.map((item) => ({
+      label: item.label,
+      ratePlanId: item.id,
+      isBase: item.isBase,
+      extraPrice: item.variablePrice,
+      currency: input.pricingDetails.currency,
+      description: item?.description,
+      status: item.status,
+      sellingPrice: item?.sellingPrice,
+      total: item?.total ?? 0,
+    }));
 
     return this;
   }

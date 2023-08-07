@@ -51,6 +51,10 @@
         </div>
         <div class="checkbox" *ngIf="isFeatureView">
           <input
+            #checkbox
+            [disabled]="
+              !this.featureValueIndex?.includes(i) && this.exceedFeatureLimit
+            "
             type="checkbox"
             [checked]="featureValueIndex?.includes(i)"
             (change)="processCheckboxChange($event, i)"

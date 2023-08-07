@@ -15,12 +15,13 @@ import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { ModalComponent } from 'libs/admin/shared/src/lib/components/modal/modal.component';
 import { manageReservationRoutes } from '../../../constants/routes';
 import { ManageReservationService } from '../../../services/manage-reservation.service';
-import { ReservationResponse } from '../../../types/response.type';
 import { Clipboard } from '@angular/cdk/clipboard';
 import { Location } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { ReservationForm } from '../../../constants/form';
 import { FormService } from '../../../services/form.service';
+import { EntitySubType, EntityType } from '@hospitality-bot/admin/shared';
+import { RoomReservationRes } from '../../../types/response.type';
 
 @Component({
   selector: 'hospitality-bot-booking-summary',
@@ -36,6 +37,8 @@ export class BookingSummaryComponent implements OnInit {
   displayBookingOffer = false;
   parentFormGroup: FormGroup;
   isBooking = false;
+  detailsView = false;
+  dateDifference: number = 1;
 
   heading = '';
   stayInfo = '';
@@ -77,6 +80,9 @@ export class BookingSummaryComponent implements OnInit {
     this.entityId = this.globalFilterService.entityId;
     this.reservationId = this.activatedRoute.snapshot.paramMap.get('id');
     this.parentFormGroup = this.controlContainer.control as FormGroup;
+    this.formService.dateDifference.subscribe((res) => {
+      this.dateDifference = res;
+    });
   }
 
   offerSelect(item?: any): void {
@@ -91,8 +97,8 @@ export class BookingSummaryComponent implements OnInit {
   handleBooking(): void {
     this.isBooking = true;
     let data: any;
-    if (this.bookingType === 'HOTEL')
-      data = this.manageReservationService.mapReservationData(
+    if (this.bookingType === EntityType.HOTEL)
+      data = this.formService.mapRoomReservationData(
         this.parentFormGroup.getRawValue()
       );
     else
@@ -105,12 +111,15 @@ export class BookingSummaryComponent implements OnInit {
   }
 
   createReservation(data): void {
-    const type = this.bookingType === 'ROOM_TYPE' ? 'ROOM_TYPE' : 'OUTLET';
+    const type =
+      this.bookingType === EntitySubType.ROOM_TYPE
+        ? EntitySubType.ROOM_TYPE
+        : EntityType.OUTLET;
     this.$subscription.add(
       this.manageReservationService
         .createReservation(this.outletId, data, type)
         .subscribe(
-          (res: ReservationResponse) => {
+          (res: RoomReservationRes) => {
             this.bookingConfirmationPopup(res?.reservationNumber);
           },
           (error) => {
@@ -128,7 +137,7 @@ export class BookingSummaryComponent implements OnInit {
       this.manageReservationService
         .updateReservation(this.outletId, this.reservationId, data)
         .subscribe(
-          (res: ReservationResponse) => {
+          (res: RoomReservationRes) => {
             this.bookingConfirmationPopup(res?.reservationNumber);
           },
           (error) => {

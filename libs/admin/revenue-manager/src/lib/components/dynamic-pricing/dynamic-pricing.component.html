@@ -8,6 +8,21 @@
     >
     </hospitality-bot-navigation-header>
   </div>
-  <hospitality-bot-stepper [stepList]="itemList"></hospitality-bot-stepper>
-  <div class="content"></div>
+  <hospitality-bot-stepper
+    [stepList]="itemList"
+    (onActive)="onActive($event)"
+  ></hospitality-bot-stepper>
+  <div class="content">
+    <ng-container [ngSwitch]="activeStep">
+      <hospitality-bot-occupancy *ngSwitchCase="0"></hospitality-bot-occupancy>
+
+      <hospitality-bot-day-time-trigger
+        *ngSwitchCase="1"
+      ></hospitality-bot-day-time-trigger>
+
+      <hospitality-bot-inventory-reallocation
+        *ngSwitchCase="2"
+      ></hospitality-bot-inventory-reallocation>
+    </ng-container>
+  </div>
 </div>

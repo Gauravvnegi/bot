@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MenuItem } from 'primeng/api';
+export type StepperEmitType = { item: MenuItem; index: number };
 
 @Component({
   selector: 'hospitality-bot-stepper',
@@ -9,7 +10,7 @@ import { MenuItem } from 'primeng/api';
 export class StepperComponent implements OnInit {
   @Input() stepList: MenuItem[];
   @Input() activeIndex = 0;
-  @Output() onActive = new EventEmitter<{ item: MenuItem; index: number }>();
+  @Output() onActive = new EventEmitter<StepperEmitType>();
   constructor() {}
 
   ngOnInit(): void {

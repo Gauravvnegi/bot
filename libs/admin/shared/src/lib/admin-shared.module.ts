@@ -115,7 +115,7 @@ import { MultiplePrefixInputComponent } from './components/form-component/multip
 import { FormActionComponent } from './components/form-component/form-action/form-action.component';
 import { LoaderDirective } from './directives/loader.directive';
 import { StepperComponent } from './components/stepper/stepper.component';
-
+import { StepsModule } from 'primeng/steps';
 @NgModule({
   imports: [
     CommonModule,
@@ -145,6 +145,7 @@ import { StepperComponent } from './components/stepper/stepper.component';
     ToggleButtonModule,
     InputNumberModule,
     QRCodeModule,
+    StepsModule,
   ],
   declarations: [
     DatatableComponent,

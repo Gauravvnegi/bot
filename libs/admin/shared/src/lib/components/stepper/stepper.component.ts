@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { StepperList } from '../../types/common.type';
+import { MenuItem } from 'primeng/api';
 
 @Component({
   selector: 'hospitality-bot-stepper',
@@ -7,13 +7,26 @@ import { StepperList } from '../../types/common.type';
   styleUrls: ['./stepper.component.scss'],
 })
 export class StepperComponent implements OnInit {
-  @Input() stepList: StepperList[];
-  @Output() onActive = new EventEmitter<number>();
+  @Input() stepList: MenuItem[];
+  @Input() activeIndex = 0;
+  @Output() onActive = new EventEmitter<{ item: MenuItem; index: number }>();
   constructor() {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.initCommand();
+  }
 
-  onClick(index) {
+  initCommand() {
+    this.stepList = this.stepList.map((item, index) => ({
+      ...item,
+      command: (event: any) => {
+        this.activeIndex = index;
+        this.onActive.emit({ item: this.stepList[index], index: index });
+      },
+    }));
+  }
+
+  onActiveIndexChange(index) {
     this.onActive.emit(index);
   }
 }

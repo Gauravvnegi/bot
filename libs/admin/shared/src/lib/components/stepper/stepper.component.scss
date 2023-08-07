@@ -1,0 +1,23 @@
+::ng-deep .stepper {
+  .p-steps {
+    ul {
+      display: flex;
+      justify-content: space-between;
+    }
+    .p-steps-item {
+      justify-content: center;
+    }
+    .p-steps-item .p-menuitem-link {
+      display: flex;
+      flex-direction: column;
+      cursor: pointer;
+    }
+    .p-steps-item:before {
+      top: 33%;
+    }
+  }
+
+  .active-progress {
+    font-weight: bold;
+  }
+}

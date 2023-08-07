@@ -28,7 +28,7 @@ const appRoutes: CRoutes = [
           ),
       },
       {
-        path: 'request-analytics',
+        path: 'complaint-analytics',
         name: ModuleNames.REQUEST_DASHBOARD,
         loadChildren: () =>
           import('@hospitality-bot/admin/request-analytics').then(
@@ -36,7 +36,7 @@ const appRoutes: CRoutes = [
           ),
       },
       {
-        path: 'request',
+        path: 'complaint',
         name: ModuleNames.REQUEST,
         loadChildren: () =>
           import('@hospitality-bot/admin/request').then(

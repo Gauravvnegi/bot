@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { UserService } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
@@ -10,7 +10,10 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'hospitality-bot-add-item',
   templateUrl: './add-item.component.html',
-  styleUrls: ['./add-item.component.scss'],
+  styleUrls: [
+    './add-item.component.scss',
+    '../raise-request/raise-request.component.scss',
+  ],
 })
 export class AddItemComponent implements OnInit {
   pageTitle = 'Add Item';
@@ -20,6 +23,7 @@ export class AddItemComponent implements OnInit {
   userList;
   useForm: FormGroup;
   entityId: string;
+  @Output() onClose = new EventEmitter();
 
   constructor(
     private fb: FormBuilder,
@@ -59,6 +63,11 @@ export class AddItemComponent implements OnInit {
           value: item.id,
         }));
       });
+  }
+
+  close(): void {
+    debugger;
+    this.onClose.emit();
   }
 
   handleSubmit() {

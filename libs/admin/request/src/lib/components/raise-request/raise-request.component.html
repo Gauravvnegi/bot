@@ -13,70 +13,72 @@
     </div>
   </div>
   <div class="body">
-    <div class="form-elements-groups" [formGroup]="searchFG">
-      <div class="form-elements-container full-width">
-        <hospitality-bot-input
-          label="Room"
-          controlName="search"
-        ></hospitality-bot-input>
-      </div>
+    <div class="form-block" [formGroup]="requestFG">
+      <hospitality-bot-input
+        class="half-width"
+        label="Room"
+        controlName="roomNo"
+      ></hospitality-bot-input>
+      <hospitality-bot-select
+        class="half-width"
+        [options]="items"
+        label="Item Name"
+        controlName="itemCode"
+        [props]="{
+          isAsync: true,
+          createPrompt: '+ Add New Item'
+        }"
+        [stopEmission]="true"
+        (onCreate)="create()"
+      ></hospitality-bot-select>
+
+      <hospitality-bot-input
+        class="half-width"
+        label="First Name"
+        controlName="firstName"
+      >
+      </hospitality-bot-input>
+
+      <hospitality-bot-input
+        class="half-width"
+        label="Last Name"
+        controlName="lastName"
+      >
+      </hospitality-bot-input>
+
+      <hospitality-bot-select
+        class="half-width"
+        [options]="priorityList"
+        label="Priority"
+        controlName="priority"
+      ></hospitality-bot-select>
+
+      <hospitality-bot-select
+        class="half-width"
+        [disabled]="!requestFG.get('itemCode').value"
+        [options]="userList"
+        label="Assign To"
+        controlName="assigneeId"
+      ></hospitality-bot-select>
+
+      <hospitality-bot-text-area
+        class="full-width"
+        controlName="remarks"
+        label="Remarks"
+      >
+      </hospitality-bot-text-area>
     </div>
-    <div class="form-elements-groups" [formGroup]="requestFG">
-      <div class="form-elements-container">
-        <hospitality-bot-input label="First Name" controlName="firstName">
-        </hospitality-bot-input>
-      </div>
-
-      <div class="form-elements-container">
-        <hospitality-bot-input label="Last Name" controlName="lastName">
-        </hospitality-bot-input>
-      </div>
-      <div class="form-elements-container">
-        <hospitality-bot-select
-          [options]="items"
-          label="Item Name"
-          controlName="itemCode"
-          [props]="{
-            isAsync: true,
-            createPrompt: '+ Add New Item'
-          }"
-          [stopEmission]="true"
-          (onCreate)="create()"
-        ></hospitality-bot-select>
-      </div>
-
-      <div class="form-elements-container">
-        <hospitality-bot-select
-          [options]="priorityList"
-          label="Priority"
-          controlName="priority"
-        ></hospitality-bot-select>
-      </div>
-      <div class="form-elements-container full-width">
-        <hospitality-bot-select
-          [disabled]="!requestFG.get('itemCode').value"
-          [options]="userList"
-          label="Assign To"
-          controlName="assignTo"
-        ></hospitality-bot-select>
-      </div>
-
-      <div class="form-elements-container full-width">
-        <hospitality-bot-text-area controlName="remarks" label="Remarks">
-        </hospitality-bot-text-area>
-      </div>
+    <div class="request-popup-btnwrap">
+      <hospitality-bot-button
+        label="Cancel"
+        (click)="close({ status: false })"
+        variant="outlined"
+      ></hospitality-bot-button>
+      <hospitality-bot-button
+        label="Save"
+        (click)="raiseRequest()"
+        [disabled]="isRaisingRequest"
+      ></hospitality-bot-button>
     </div>
-  </div>
-  <div class="request-popup-btnwrap">
-    <hospitality-bot-button
-      label="Cancel"
-      (click)="close({ status: false })"
-      variant="outlined"
-    ></hospitality-bot-button>
-    <hospitality-bot-button
-      label="Save"
-      (click)="raiseRequest()"
-      [disabled]="isRaisingRequest"
-    ></hospitality-bot-button>
   </div>
 </div>

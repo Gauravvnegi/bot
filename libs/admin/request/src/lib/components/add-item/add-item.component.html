@@ -1,65 +1,70 @@
-<div class="wrapper" [id]="fa.referenceId">
-  <hospitality-bot-navigation-header [heading]="pageTitle" [routes]="navRoutes">
-  </hospitality-bot-navigation-header>
-  <div class="form-block" [formGroup]="useForm">
-    <hospitality-bot-input
-      class="half-width"
-      controlName="itemName"
-      label="Item Name"
-      maxLength="60"
-    ></hospitality-bot-input>
-    <hospitality-bot-input
-      class="half-width"
-      controlName="categoryDesc"
-      label="category Description"
-      maxLength="60"
-    ></hospitality-bot-input>
-    <hospitality-bot-input
-      class="half-width"
-      controlName="functionCode"
-      label="Function Code"
-      maxLength="60"
-    ></hospitality-bot-input>
-    <hospitality-bot-input
-      class="half-width"
-      controlName="serviceCode"
-      label="Service Code"
-      maxLength="60"
-    >
-    </hospitality-bot-input>
-    <hospitality-bot-input
-      class="half-width"
-      controlName="sla"
-      label="SLA"
-      maxLength="60"
-    ></hospitality-bot-input>
-    <hospitality-bot-input
-      class="half-width"
-      controlName="itemDesc"
-      label="Item Description"
-      maxLength="60"
-    ></hospitality-bot-input>
+<div class="container">
+  <div class="header">
+    <div class="button raise-request-btn">
+      <img
+        src="assets/svg/requests.svg"
+        alt="raise-request-icon"
+        class="raise-request-icon"
+      />
+      {{ 'Add Item' | translate }}
+    </div>
+    <div (click)="close()" class="close">
+      <i class="fa fa-times" aria-hidden="true"></i>
+    </div>
+  </div>
+  <div class="body">
+    <div class="form-block" [formGroup]="useForm">
+      <hospitality-bot-input
+        class="full-width"
+        controlName="itemName"
+        label="Name"
+      ></hospitality-bot-input>
+      <hospitality-bot-input
+        class="half-width"
+        controlName="categoryDesc"
+        label="Category"
+      ></hospitality-bot-input>
+      <hospitality-bot-input
+        class="half-width"
+        controlName="functionCode"
+        label="Service Code"
+      ></hospitality-bot-input>
+      <hospitality-bot-time-picker
+        class="half-width"
+        controlName="sla"
+        label="SLA"
+        format="millisecond"
+      ></hospitality-bot-time-picker>
 
-    <hospitality-bot-multi-select
-      class="full-width"
-      controlName="users"
-      label="users"
-      [options]="userList"
-      [props]="{
-        isAsync: true
-      }"
-      [loading]="loading"
-      [stopEmission]="true"
-    ></hospitality-bot-multi-select>
+      <hospitality-bot-text-area
+        class="full-width"
+        controlName="itemDesc"
+        label="Remarks"
+      >
+      </hospitality-bot-text-area>
 
-    <hospitality-bot-form-action
-      class="full-width"
-      [loading]="loading"
-      [isId]=""
-      (onPreAction)="resetForm()"
-      (onPostAction)="handleSubmit()"
-      #fa
-    >
-    </hospitality-bot-form-action>
+      <hospitality-bot-multi-select
+        class="full-width"
+        controlName="users"
+        label="Users"
+        [options]="userList"
+        [props]="{
+          isAsync: true
+        }"
+        [loading]="loading"
+        [stopEmission]="true"
+      ></hospitality-bot-multi-select>
+      <div class="request-popup-btnwrap">
+        <hospitality-bot-button
+          label="Cancel"
+          (click)="close()"
+          variant="outlined"
+        ></hospitality-bot-button>
+        <hospitality-bot-button
+          label="Save"
+          (click)="handleSubmit()"
+        ></hospitality-bot-button>
+      </div>
+    </div>
   </div>
 </div>

@@ -4,6 +4,7 @@ import { RouterModule, Route } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AdminRevenueMangerRoutingModule } from './admin-revenue-manager.routing.module';
 import { AdminSharedModule } from '@hospitality-bot/admin/shared';
+import { RevenueManagerService } from './services/revenue-manager.service';
 
 @NgModule({
   imports: [
@@ -15,6 +16,6 @@ import { AdminSharedModule } from '@hospitality-bot/admin/shared';
     ReactiveFormsModule,
   ],
   declarations: [...AdminRevenueMangerRoutingModule.components],
-  providers: [],
+  providers: [RevenueManagerService],
 })
 export class AdminRevenueManagerModule {}

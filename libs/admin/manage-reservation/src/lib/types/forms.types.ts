@@ -69,4 +69,15 @@ export type ReservationSummary = {
   outletType?: EntitySubType;
   bookingItems?: BookingItemFormData[];
   items?: ItemsData[];
+  tableNumberOrRoomNumber?: number;
+  occupancyDetails?: {
+    maxChildren?: number;
+    maxAdult: number;
+  };
+};
+
+export type OccupancyDetails = {
+  adultCount: number;
+  roomCount: number;
+  childCount: number;
 };

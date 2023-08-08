@@ -2,6 +2,7 @@ import {
   AddedRatePlans,
   DynamicPricingRatePlan,
   RatePlan,
+  ReservationRatePlan,
   StaticPricingRatePlan,
 } from '../constant/form';
 import { RoomStatus, RoomTypeResponse } from '../types/service-response';
@@ -117,7 +118,7 @@ export class RoomTypeForm {
   maxAdult: number;
   area: number;
   id?: string;
-  allRatePlans?: AddedRatePlans[];
+  allRatePlans?: ReservationRatePlan[];
 
   deserialize(input: RoomTypeResponse) {
     this.id = input?.id;
@@ -180,14 +181,9 @@ export class RoomTypeForm {
     // For Reservation
     this.allRatePlans = input.ratePlans.map((item) => ({
       label: item.label,
-      ratePlanId: item.id,
+      value: item.id,
       isBase: item.isBase,
-      extraPrice: item.variablePrice,
-      currency: input.pricingDetails.currency,
-      description: item?.description,
-      status: item.status,
       sellingPrice: item?.sellingPrice,
-      total: item?.total ?? 0,
     }));
 
     return this;

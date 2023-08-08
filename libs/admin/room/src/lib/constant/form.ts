@@ -120,6 +120,13 @@ export type AddedRatePlans = {
   sellingPrice?: number;
 };
 
+export type ReservationRatePlan = {
+  label: string;
+  value: string;
+  isBase: boolean;
+  sellingPrice: number;
+};
+
 export type RoomTypeData = Omit<
   RoomTypeFormData,
   'complimentaryAmenities' | 'paidAmenities'

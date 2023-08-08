@@ -15,7 +15,8 @@
       >
         <hospitality-bot-room-iterator
           (refreshData)="getSummaryData()"
-          (listenChanges)="listenForFormChanges($event)"
+          (listenChanges)="listenForFormChanges()"
+          [itemValues]="roomTypeValues"
         >
         </hospitality-bot-room-iterator>
       </p-accordionTab>
@@ -38,7 +39,7 @@
         [disabledForm]="disabledForm"
         [bookingInfo]="{
           bookingType: bookingType,
-          heading: heading
+          occupancyDetails: occupancyDetails
         }"
       >
         <div class="bk-summary_roomInfo_checkoutInfo summary-item">
@@ -62,11 +63,11 @@
             Rooms & Guests
           </p>
           <p class="bk-summary_roomInfo_guestInfo_subText">
-            {{ roomCount }}
+            {{ occupancyDetails.roomCount }}
             Room,
-            {{ adultCount }}
+            {{ occupancyDetails.adultCount }}
             Adult,
-            {{ childCount }}
+            {{ occupancyDetails.childCount }}
             Kid
           </p>
         </div>

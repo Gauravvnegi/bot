@@ -4,6 +4,7 @@ import {
 } from '../models/reservations.model';
 import { GuestType } from 'libs/admin/guests/src/lib/types/guest.type';
 import { RatePlanRes } from 'libs/admin/room/src/lib/types/service-response';
+import { ItemsData } from './forms.types';
 
 /* Reservation List Response Types deceleration */
 export type ReservationListResponse = {
@@ -55,19 +56,13 @@ export type PaymentMethodConfig = {
 };
 
 export type SummaryResponse = {
-  name: string;
+  bookingItems?: BookingItems[];
+  items?: ItemsData[];
   from: number;
   to: number;
-  roomCount: number;
-  adultCount: number;
-  childCount: number;
   location: string;
-  originalPrice: number;
-  basePrice: number;
-  offerAmount: number;
-  taxAndFees: number;
-  totalAmount: number;
-  taxes: string[];
+  pricingDetails: PricingDetails;
+  offer: { discountedPrice: number };
 };
 
 export type BookingItems = {
@@ -75,7 +70,7 @@ export type BookingItems = {
     ratePlan: RatePlanRes;
     roomNumber: string;
     roomTypeId: string;
-    roomTypeName: string;
+    roomTypeLabel: string;
     roomCount: number;
   };
   pricingDetails: PricingDetails;
@@ -83,6 +78,25 @@ export type BookingItems = {
     maxChildren: number;
     maxAdult: number;
   };
+  id?: string;
+};
+
+export type BookingItemsSummary = {
+  ratePlan: RatePlanRes;
+  roomNumber: string;
+  roomTypeId: string;
+  roomTypeLabel: string;
+  roomCount: number;
+  totalPaidAmount: number;
+  totalAmount: number;
+  taxAndFees: number;
+  basePrice: number;
+  totalDueAmount: number;
+  maxChildren: number;
+  maxAdult: number;
+  min: number;
+  max: number;
+  base: number;
   id: string;
 };
 
@@ -116,31 +130,5 @@ export type RoomReservationResponse = {
   created: number;
   offerAmount: number;
   nextStates: string[];
-  bookingItems: BookingItem[];
-};
-
-export type BookingItem = {
-  id: string;
-  occupancyDetails: {
-    maxAdult: number;
-    maxChildren: number;
-  };
-  pricingDetails: PricingDetails;
-  roomDetails: {
-    ratePlan: RatePlanRes;
-    roomCount: number;
-    roomTypeId: string;
-    roomTypeName: string;
-  };
-};
-
-export type RoomSummaryResponse = {
-  from: number;
-  to: number;
-  roomCount: number;
-  adultCount: number;
-  childCount: number;
-  location: string;
-  totalAmount: number;
-  bookingItems: BookingItem[];
+  bookingItems: BookingItems[];
 };

@@ -37,7 +37,7 @@ export class IteratorComponent implements OnChanges {
     if (itemValues?.length) {
       if (itemValues.length > 1) {
         // Create new form fields for each item in the array
-        itemValues.slice(1).forEach((item) => {
+        itemValues.forEach((item) => {
           this.createNewFields();
         });
       }
@@ -45,11 +45,7 @@ export class IteratorComponent implements OnChanges {
       this.useFormArray.patchValue(itemValues);
     }
   }
-
-  ngOnInit() {
-    this.createNewFields();
-  }
-
+  
   /**
    * @function createNewFields To get the initial value config
    */

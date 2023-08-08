@@ -36,6 +36,7 @@ export class RoomReservation {
   created: number;
   nextStates: string[];
   bookingItems: BookingItems[];
+  roomTypes: string[];
   totalAmount: number;
   totalDueAmount: number;
   totalPaidAmount: number;
@@ -60,6 +61,9 @@ export class RoomReservation {
     this.totalAmount = input.pricingDetails.totalAmount;
     this.totalPaidAmount = input.pricingDetails.totalPaidAmount;
     this.totalDueAmount = input.pricingDetails.totalDueAmount;
+    this.roomTypes = input.bookingItems.map(
+      (item) => item.roomDetails.roomTypeLabel
+    );
     return this;
   }
 }

@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { DynamicPricingComponent } from './dynamic-pricing.component';
+import { BarPriceComponent } from './bar-price.component';
 
-describe('DynamicPricingComponent', () => {
-  let component: DynamicPricingComponent;
-  let fixture: ComponentFixture<DynamicPricingComponent>;
+describe('BarPriceComponent', () => {
+  let component: BarPriceComponent;
+  let fixture: ComponentFixture<BarPriceComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ DynamicPricingComponent ]
+      declarations: [ BarPriceComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(DynamicPricingComponent);
+    fixture = TestBed.createComponent(BarPriceComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -23,6 +23,11 @@ const appRoutes: CRoutes = [
     name: ModuleNames.REVENUE_MANAGER,
     children: [
       {
+        path: 'setup-bar-price',
+        component: BarPriceComponent,
+        name: ModuleNames.REVENUE_SETUP_BAR_PRICE,
+      },
+      {
         path: 'dynamic-pricing',
         name: ModuleNames.REVENUE_DYNAMIC_PRICING,
         component: MainComponent,
@@ -33,11 +38,6 @@ const appRoutes: CRoutes = [
             name: ModuleNames.REVENUE_DYNAMIC_PRICING,
           },
         ],
-      },
-      {
-        path: 'setup-bar-price',
-        component: BarPriceComponent,
-        name: ModuleNames.REVENUE_SETUP_BAR_PRICE,
       },
     ],
   },

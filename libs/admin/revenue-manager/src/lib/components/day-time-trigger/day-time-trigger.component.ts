@@ -69,7 +69,7 @@ export class DayTimeTriggerComponent implements OnInit {
 
   get dynamicPricingControl() {
     return this.dynamicPricingFG.controls as Record<
-      'roomType' | 'barPrices',
+      'timeFA',
       AbstractControl
     > & {
       timeFA: FormArray;

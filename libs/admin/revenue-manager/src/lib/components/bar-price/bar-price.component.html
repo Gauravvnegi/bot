@@ -1,0 +1,158 @@
+<div class="main-wrapper" [id]="fa?.referenceId">
+  <hospitality-bot-navigation-header
+    heading="Setup Bar Price"
+    [routes]="[{ label: 'Revenue Manager', link: './' }]"
+    [isStickyTitle]="false"
+    [isBack]="false"
+  ></hospitality-bot-navigation-header>
+  <ng-container *ngIf="!!useForm; else loader">
+    <div class="wrapper" [formGroup]="useForm">
+      <div class="room-type-option">
+        <hospitality-bot-room-types
+          class="room-types-select"
+          [controlName]="'roomType'"
+          [props]="{
+            isAllSelected: true
+          }"
+        >
+        </hospitality-bot-room-types>
+      </div>
+      <ng-container
+        *ngIf="!isRoomsEmpty && allRoomTypes?.length; else emptyView"
+      >
+        <p-accordion class="accordion" [multiple]="true">
+          <div formArrayName="barPrices" *ngIf="barPriceControl">
+            <ng-container
+              *ngFor="let barPrice of barPriceControl; let i = index"
+            >
+              <div
+                *ngIf="checkForRoomTypeSelection(barPrice.get('id').value)"
+                style="margin-bottom: 15px;"
+              >
+                <div [formGroupName]="i">
+                  <p-accordionTab [selected]="i == 0">
+                    <p-header>{{ barPrice.get('label').value }}</p-header>
+                    <div class="basic-detail">
+                      <div class="field">
+                        <hospitality-bot-input
+                          label="Price"
+                          controlName="price"
+                          [props]="{
+                            type: 'number'
+                          }"
+                          [disabled]="true"
+                        ></hospitality-bot-input>
+                      </div>
+                      <div class="row-1" formArrayName="ratePlans">
+                        <div
+                          class="field"
+                          *ngFor="
+                            let ratePlan of barPrice.get('ratePlans').controls;
+                            let ratePlanFG = index
+                          "
+                          [formGroupName]="ratePlanFG"
+                        >
+                          <hospitality-bot-input
+                            [label]="ratePlan.value.label"
+                            controlName="value"
+                            [props]="{
+                              type: 'number'
+                            }"
+                          ></hospitality-bot-input>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="pax">
+                      <div class="pax__title">Pax</div>
+                      <div class="pax__body">
+                        <div class="field">
+                          <hospitality-bot-input
+                            label="Child Below 5"
+                            controlName="childBelowFive"
+                            [props]="{
+                              type: 'number'
+                            }"
+                          ></hospitality-bot-input>
+                        </div>
+                        <div class="field">
+                          <hospitality-bot-input
+                            label="Child 5-12"
+                            controlName="chileFiveToTwelve"
+                            [props]="{
+                              type: 'number'
+                            }"
+                          ></hospitality-bot-input>
+                        </div>
+                        <div class="field">
+                          <hospitality-bot-input
+                            label="Adult (12+)"
+                            controlName="adult"
+                            [props]="{
+                              type: 'number'
+                            }"
+                          ></hospitality-bot-input>
+                        </div>
+                      </div>
+                    </div>
+                    <div
+                      formArrayName="exceptions"
+                      *ngIf="barPrice.get('exceptions').controls.length"
+                    >
+                      <div
+                        *ngFor="
+                          let exception of barPrice.get('exceptions').controls;
+                          let j = index
+                        "
+                        [formGroupName]="j"
+                      >
+                        <hospitality-bot-exception
+                          [parentFG]="barPrice.get('exceptions').controls[j]"
+                          (removeAction)="removeException(barPrice, j)"
+                        ></hospitality-bot-exception>
+                      </div>
+                    </div>
+                    <div class="add-exception">
+                      <div class="link" (click)="addException(barPrice)">
+                        +Add Exception
+                      </div>
+                    </div>
+                  </p-accordionTab>
+                </div>
+              </div>
+            </ng-container>
+          </div>
+        </p-accordion>
+      </ng-container>
+    </div>
+  </ng-container>
+  <ng-template #loader>
+    <hospitality-bot-loader-bounce></hospitality-bot-loader-bounce>
+  </ng-template>
+  <ng-template #emptyView>
+    <hospitality-bot-empty-table
+      [isLoading]="loading"
+      [content]="{
+        description:
+          !isRoomsEmpty && allRoomTypes?.length
+            ? 'Please select at least one rooms'
+            : 'There is no room available',
+        imageSrc: 'assets/images/empty-table-service.png'
+      }"
+    >
+    </hospitality-bot-empty-table>
+  </ng-template>
+
+  <hospitality-bot-form-action
+    class="full-width"
+    [loading]="loading"
+    [config]="{
+      preHide: true,
+      postLabel: 'Save',
+      postDisable:
+        (!isRoomsEmpty && loading) || loadingError || !allRoomTypes?.length
+    }"
+    (onPostAction)="handleSave()"
+    #fa
+  >
+  </hospitality-bot-form-action>
+</div>

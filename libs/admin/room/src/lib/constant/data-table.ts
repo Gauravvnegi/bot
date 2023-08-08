@@ -57,7 +57,6 @@ export const cols: Record<TableValue, Cols[]> = {
       field: 'roomCount',
       header: 'Room Count',
       sortType: 'number',
-      isSearchDisabled: true,
       width: '17%',
     },
     {

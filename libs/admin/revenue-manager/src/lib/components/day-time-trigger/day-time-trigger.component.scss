@@ -1,0 +1,100 @@
+$border-color: rgba(112, 112, 112, 0.35);
+.accordion-list {
+  margin-bottom: 30px;
+}
+
+.accordion-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 16px;
+  font-weight: 600;
+  .title {
+    display: flex;
+    font-size: 18px;
+    gap: 20px;
+    .date {
+      font-size: 16px;
+      color: $border-color;
+      font-weight: 500;
+    }
+  }
+  .status {
+    display: flex;
+    align-items: center;
+    // gap: 10px;
+  }
+}
+.accordion-body {
+  padding: 30px;
+  .name-field {
+    width: 340px;
+    margin-bottom: 30px;
+  }
+  .date-days-field {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    .days {
+      width: calc(100% - 400px);
+    }
+  }
+}
+
+.add-level {
+  padding: 20px 30px;
+  border-top: 1px solid $border-color;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.add-trigger {
+  margin: 25px 15px 0 0;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.link {
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 600;
+  color: #5f38f9;
+}
+
+:host ::ng-deep {
+  .p-multiselect .p-multiselect-panel {
+    min-width: 255px;
+  }
+  p-header {
+    width: calc(100% - 30px);
+  }
+  .p-accordion-content {
+    border-top: 1px solid $border-color !important;
+  }
+  .pi-chevron-right:before,
+  .pi-chevron-down:before {
+    color: #5f38f9;
+  }
+  .p-accordion-content {
+    padding: 0 !important;
+  }
+  .button {
+    height: unset !important;
+    padding: 0 10px !important;
+  }
+  .wrapper {
+    height: unset !important;
+  }
+  .time-picker-input__wrapper {
+    margin-top: 0 !important;
+    max-width: 330px;
+  }
+}
+
+th {
+  background-color: #f1f2f7 !important;
+  font-size: 16px;
+  color: #787c9e !important;
+  letter-spacing: 0.96px !important;
+  font-weight: 600 !important;
+}

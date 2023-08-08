@@ -1,0 +1,28 @@
+<div class="dates">
+  <div class="field">
+    <hospitality-bot-date
+      class="bulk-update__date"
+      controlName="fromDate"
+      label="From"
+      [props]="{ placeholder: 'Select From Date' }"
+      [settings]="{
+        enableTime: false
+      }"
+      [minDate]="startMinDate"
+      [maxDate]="startMaxDate"
+    ></hospitality-bot-date>
+  </div>
+  <div class="field">
+    <hospitality-bot-date
+      class="bulk-update__date"
+      controlName="toDate"
+      label="To"
+      [props]="{ placeholder: 'Select To Date' }"
+      [settings]="{
+        enableTime: false
+      }"
+      [minDate]="endMinDate"
+      [maxDate]="endMaxDate"
+    ></hospitality-bot-date>
+  </div>
+</div>

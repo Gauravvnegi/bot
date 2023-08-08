@@ -14,6 +14,7 @@ import { DayTimeTriggerComponent } from './components/day-time-trigger/day-time-
 import { BarPriceComponent } from './components/bar-price/bar-price.component';
 import { RoomTypesComponent } from './components/room-types/room-types.component';
 import { ExceptionComponent } from './components/exception/exception.component';
+import { FromToDateComponent } from './components/from-to-date/from-to-date.component';
 
 const appRoutes: CRoutes = [
   {
@@ -61,6 +62,7 @@ export class AdminRevenueMangerRoutingModule {
     MainComponent,
     DynamicPricingComponent,
     ExceptionComponent,
+    FromToDateComponent,
     OccupancyComponent,
     InventoryReallocationComponent,
     DayTimeTriggerComponent,

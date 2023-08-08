@@ -93,6 +93,7 @@ export class RoomIteratorComponent extends IteratorComponent
     this.initDetails();
     this.listenForGlobalFilters();
     this.createNewFields();
+    this.listenForFormChanges();
   }
 
   /**
@@ -121,7 +122,6 @@ export class RoomIteratorComponent extends IteratorComponent
     this.parentFormGroup.addControl('roomInformation', roomInformationGroup);
     this.listenRoomTypeChanges(index);
     this.listenRatePlanChanges(index);
-    this.listenForFormChanges(index);
   }
 
   // Init Room Details
@@ -321,8 +321,8 @@ export class RoomIteratorComponent extends IteratorComponent
     this.refreshData.emit();
   }
 
-  listenForFormChanges(index: number): void {
-    this.listenChanges.emit(index);
+  listenForFormChanges(): void {
+    this.listenChanges.emit();
   }
 
   /**

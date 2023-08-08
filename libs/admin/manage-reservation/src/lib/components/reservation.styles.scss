@@ -49,9 +49,7 @@
   position: sticky;
   top: 65px;
   min-width: 32%;
-  min-height: 480px;
   height: fit-content;
-  padding: 17px 16px 0px 16px;
   border-radius: 5px;
   border: solid 1px rgba(112, 112, 112, 0.4);
   background-color: $white;
@@ -92,8 +90,7 @@
 
   &_subheading {
     @include normal-sm-text;
-    font-weight: $bold;
-
+    color: #3b3b3b;
     &_label {
       margin-bottom: 9px;
     }
@@ -186,7 +183,7 @@
   &_total {
     @include flex-space-between;
 
-    margin-bottom: 33px;
+    margin-bottom: 15px;
     &_label {
       font-weight: $bold;
     }
@@ -197,10 +194,9 @@
       color: #53d397;
     }
   }
-  &_btnwrapper {
+  &_btn-wrapper {
     @include flex-justify-center;
-
-    margin-bottom: 21px;
+    padding-bottom: 21px;
   }
 }
 

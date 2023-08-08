@@ -1,7 +1,15 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  SimpleChanges,
+} from '@angular/core';
 import {
   OfferData,
   OfferList,
+  RoomSummaryData,
   SummaryData,
 } from '../../../models/reservations.model';
 import { AbstractControl, ControlContainer, FormGroup } from '@angular/forms';
@@ -49,7 +57,7 @@ export class BookingSummaryComponent implements OnInit {
   occupancyDetails: OccupancyDetails;
   $subscription = new Subscription();
 
-  @Input() summaryData: SummaryData;
+  @Input() summaryData: RoomSummaryData;
   @Input() selectedOffer: OfferData;
   @Input() offersList: OfferList;
   @Input() disabledForm: boolean;
@@ -76,6 +84,11 @@ export class BookingSummaryComponent implements OnInit {
     private _clipboard: Clipboard,
     private formService: FormService
   ) {}
+
+  ngOnChanges(changes: SimpleChanges): void {
+    const summaryDataChanges = changes?.summaryData?.currentValue;
+    if (summaryDataChanges?.bookingItems?.length < 2) this.detailsView = false;
+  }
 
   ngOnInit(): void {
     this.entityId = this.globalFilterService.entityId;

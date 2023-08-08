@@ -91,15 +91,21 @@ export class AddReservationComponent extends BaseReservationComponent
   /**
    * @function listenForFormChanges Listen for form values changes.
    */
-  listenForFormChanges(index?: number): void {
+  listenForFormChanges(): void {
     this.formValueChanges = true;
-    this.roomControls[index].valueChanges
-      .pipe(debounceTime(1000))
+    this.inputControls.roomInformation
+      .get('roomTypes')
+      .valueChanges.pipe(debounceTime(1000))
       .subscribe((res) => {
-        if (res) {
+        if (res && res[res.length - 1].roomTypeId?.length) {
           this.userForm.get('offerId').reset();
           this.getOfferByRoomType(res);
           this.getSummaryData();
+        }
+
+        // When all items are removed from roomArray
+        if (res[res.length - 1].roomTypeId === null) {
+          this.summaryData = new RoomSummaryData().deserialize();
         }
       });
   }

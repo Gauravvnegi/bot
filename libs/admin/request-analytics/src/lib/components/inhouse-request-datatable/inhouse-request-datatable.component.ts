@@ -83,9 +83,11 @@ export class InhouseRequestDatatableComponent extends BaseDatatableComponent
           ...this.globalQueries,
           {
             order: 'DESC',
-            entityType: this.entityType,
+            journeyType: this.entityType,
           },
-          ...this.getSelectedQuickReplyFilters(),
+          ...this.getSelectedQuickReplyFilters({
+            key: 'journeyType',
+          }),
         ]);
       })
     );
@@ -158,10 +160,10 @@ export class InhouseRequestDatatableComponent extends BaseDatatableComponent
           ...this.globalQueries,
           {
             order: 'DESC',
-            entityType: this.entityType,
+            journeyType: this.entityType,
           },
           ...this.getSelectedQuickReplyFilters({
-            key: 'actionType',
+            key: 'journeyType',
           }),
         ],
         { offset: this.first, limit: this.rowsPerPage }
@@ -204,9 +206,9 @@ export class InhouseRequestDatatableComponent extends BaseDatatableComponent
         ...this.globalQueries,
         {
           order: 'DESC',
-          entityType: this.entityType,
+          journeyType: this.entityType,
         },
-        ...this.getSelectedQuickReplyFilters({ key: 'actionType' }),
+        ...this.getSelectedQuickReplyFilters({ key: 'journeyType' }),
         ...this.selectedRows.map((item) => ({ ids: item.id })),
       ]),
     };
@@ -232,9 +234,9 @@ export class InhouseRequestDatatableComponent extends BaseDatatableComponent
         ...this.globalQueries,
         {
           order: 'DESC',
-          entityType: this.entityType,
+          journeyType: this.entityType,
         },
-        ...this.getSelectedQuickReplyFilters({ key: 'actionType' }),
+        ...this.getSelectedQuickReplyFilters({ key: 'journeyType' }),
       ],
       false,
       {
@@ -260,7 +262,7 @@ export class InhouseRequestDatatableComponent extends BaseDatatableComponent
           cmsUserType: 'Admin',
           entityId: this.entityId,
           actionType: event.value,
-          entityType: this.entityType,
+          journeyType: this.entityType,
         },
       ]),
     };

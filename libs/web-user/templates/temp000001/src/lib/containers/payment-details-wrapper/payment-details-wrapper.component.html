@@ -8,6 +8,7 @@
     >
       <mat-tab
         *ngFor="let header of hotelPaymentConfig.paymentHeaders; let i = index"
+        [label]="header?.type"
       >
         <ng-template mat-tab-label>
           <div
@@ -49,7 +50,10 @@
               Payment Methods
             </div> -->
             <web-user-payment-method
-              *ngIf="hotelPaymentConfig && this.reservationData.paymentSummary.payableAmount !== 0"
+              *ngIf="
+                hotelPaymentConfig &&
+                this.reservationData.paymentSummary.payableAmount !== 0
+              "
               [settings]="{ paymentConfigurations: paymentConfiguration }"
               (paymentMethod)="setPaymentMethodData($event)"
               [paymentUrl]="paymentUrl"
@@ -65,7 +69,7 @@
     </mat-tab-group>
   </div>
 
-  <div *ngIf="selectedIndex === 0" class="main-template-button">
+  <div *ngIf="!isSubmitDisabled" class="main-template-button">
     <ng-container
       button-renderer
       [config]="getUpdatedBtnConfig()"
@@ -73,7 +77,7 @@
     >
     </ng-container>
   </div>
-  <div *ngIf="selectedIndex === 1" class="main-template-button">
+  <div *ngIf="isSubmitDisabled" class="main-template-button">
     <ng-container
       button-renderer
       [config]="getUpdatedBtnConfig(true)"

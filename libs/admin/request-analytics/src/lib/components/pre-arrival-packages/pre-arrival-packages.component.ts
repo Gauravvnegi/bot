@@ -124,7 +124,7 @@ export class PreArrivalPackagesComponent implements OnInit, OnDestroy {
       queryObj: this._adminUtilityService.makeQueryParams([
         ...this.globalFilters,
         {
-          entityType: this.entityType,
+          journeyType: this.entityType,
           packageId: this.tabFilterItems[this.tabFilterIdx]?.value,
         },
       ]),

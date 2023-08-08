@@ -66,7 +66,6 @@ export class AddItemComponent implements OnInit {
   }
 
   close(): void {
-    debugger;
     this.onClose.emit();
   }
 

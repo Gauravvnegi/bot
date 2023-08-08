@@ -111,8 +111,9 @@ export const hotelCols: Cols[] = [
   },
   {
     field: 'fullName',
-    header: 'Guest',
+    header: 'Guest / Company',
     sortType: 'string',
+    searchField: ['fullName', 'companyName']
   },
   {
     field: 'from',

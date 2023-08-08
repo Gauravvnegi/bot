@@ -1,28 +1,24 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import {
   FormGroup,
   FormArray,
   FormBuilder,
   Validators,
-  AbstractControl,
 } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
-  NavRouteOptions,
   AdminUtilityService,
   Option,
   EntityType,
   EntitySubType,
 } from '@hospitality-bot/admin/shared';
 import { IteratorField } from 'libs/admin/shared/src/lib/types/fields.type';
-import { Subscription } from 'rxjs';
 import {
   editModeStatusOptions,
   spaFields,
   statusOptions,
 } from '../../constants/reservation';
-import { manageReservationRoutes } from '../../constants/routes';
 import {
   OfferList,
   OfferData,
@@ -31,9 +27,7 @@ import {
   OutletForm,
 } from '../../models/reservations.model';
 import { ManageReservationService } from '../../services/manage-reservation.service';
-import { ReservationForm } from '../../constants/form';
 import { FormService } from '../../services/form.service';
-import { SelectedEntity } from '../../types/reservation.type';
 import {
   LibrarySearchItem,
   LibraryService,
@@ -56,8 +50,6 @@ export class SpaReservationComponent extends BaseReservationComponent implements
 
   statusOptions: Option[] = [];
   spaItemsValues = [];
-
-  summaryData: SummaryData;
 
   date: string;
   time: string;

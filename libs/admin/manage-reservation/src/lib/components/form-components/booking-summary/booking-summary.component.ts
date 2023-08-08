@@ -9,7 +9,6 @@ import {
 import {
   OfferData,
   OfferList,
-  RoomSummaryData,
   SummaryData,
 } from '../../../models/reservations.model';
 import { AbstractControl, ControlContainer, FormGroup } from '@angular/forms';
@@ -57,7 +56,7 @@ export class BookingSummaryComponent implements OnInit {
   occupancyDetails: OccupancyDetails;
   $subscription = new Subscription();
 
-  @Input() summaryData: RoomSummaryData;
+  @Input() summaryData: SummaryData;
   @Input() selectedOffer: OfferData;
   @Input() offersList: OfferList;
   @Input() disabledForm: boolean;
@@ -196,7 +195,7 @@ export class BookingSummaryComponent implements OnInit {
         onClick: () => {
           this.router.navigate(
             [
-              `/pages/efrontdesk/manage-reservation/${manageReservationRoutes.addReservation.route}`,
+              `/pages/efrontdesk/reservation/${manageReservationRoutes.addReservation.route}`,
             ],
             { replaceUrl: true }
           );

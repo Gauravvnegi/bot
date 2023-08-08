@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import {
   FormGroup,
   FormBuilder,
@@ -9,14 +9,11 @@ import {
 import { ActivatedRoute } from '@angular/router';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
-  NavRouteOptions,
   AdminUtilityService,
   Option,
   EntitySubType,
   EntityType,
 } from '@hospitality-bot/admin/shared';
-import { Subscription } from 'rxjs';
-import { manageReservationRoutes } from '../../constants/routes';
 import {
   OfferList,
   OfferData,
@@ -30,11 +27,8 @@ import {
   restaurantReservationTypes,
   statusOptions,
 } from '../../constants/reservation';
-import { IteratorField } from 'libs/admin/shared/src/lib/types/fields.type';
 import { ReservationForm } from '../../constants/form';
 import { FormService } from '../../services/form.service';
-import { OutletService } from 'libs/admin/all-outlets/src/lib/services/outlet.service';
-import { SelectedEntity } from '../../types/reservation.type';
 import { OutletItems } from '../../constants/reservation-table';
 import { debounceTime } from 'rxjs/operators';
 import { OutletForm } from '../../models/reservations.model';
@@ -60,8 +54,6 @@ export class RestaurantReservationComponent extends BaseReservationComponent imp
   reservationTypes: Option[] = [];
   statusOptions: Option[] = [];
   foodPackages: Option[] = [];
-
-  summaryData: SummaryData;
 
   expandAccordion = false;
 
@@ -290,8 +282,7 @@ export class RestaurantReservationComponent extends BaseReservationComponent imp
               ...formData,
             });
 
-            // Summary Data for restaurant
-            this.summaryData = new SummaryData().deserialize(response);
+            // this.summaryData = new SummaryData().deserialize(response);
             this.setFormDisability(data.reservationInformation);
 
             // if (data.offerId)
@@ -388,7 +379,9 @@ export class RestaurantReservationComponent extends BaseReservationComponent imp
     const data: ReservationSummary = {
       fromDate: this.reservationInfoControls.dateAndTime.value,
       toDate: this.reservationInfoControls.dateAndTime.value,
-      adultCount: this.orderInfoControls.numberOfAdults.value,
+      occupancyDetails: {
+        maxAdult: this.orderInfoControls.numberOfAdults.value,
+      },
       items: this.menuItemsControls.map((item) => ({
         itemId: item.get('menuItems').value,
         unit: item.get('unit')?.value ?? 0,

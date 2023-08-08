@@ -4,6 +4,7 @@ import {
 } from '../models/reservations.model';
 import { GuestType } from 'libs/admin/guests/src/lib/types/guest.type';
 import { RatePlanRes } from 'libs/admin/room/src/lib/types/service-response';
+import { ItemsData } from './forms.types';
 
 /* Reservation List Response Types deceleration */
 export type ReservationListResponse = {
@@ -54,29 +55,14 @@ export type PaymentMethodConfig = {
   instructions?: any;
 };
 
-export type RoomSummaryResponse = {
-  bookingItems: BookingItems[];
+export type SummaryResponse = {
+  bookingItems?: BookingItems[];
+  items?: ItemsData[];
   from: number;
   to: number;
   location: string;
   pricingDetails: PricingDetails;
   offer: { discountedPrice: number };
-};
-
-export type SummaryResponse = {
-  name: string;
-  from: number;
-  to: number;
-  roomCount: number;
-  adultCount: number;
-  childCount: number;
-  location: string;
-  originalPrice: number;
-  basePrice: number;
-  offerAmount: number;
-  taxAndFees: number;
-  totalAmount: number;
-  taxes: string[];
 };
 
 export type BookingItems = {
@@ -112,7 +98,7 @@ export type BookingItemsSummary = {
   max: number;
   base: number;
   id: string;
-}
+};
 
 export type PricingDetails = {
   max: number;

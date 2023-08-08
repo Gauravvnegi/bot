@@ -1,7 +1,11 @@
 import { Component, Input } from '@angular/core';
 import { AbstractControl, FormGroup } from '@angular/forms';
 import { IteratorField } from 'libs/admin/shared/src/lib/types/fields.type';
-import { OfferData, OfferList } from '../models/reservations.model';
+import {
+  OfferData,
+  OfferList,
+  SummaryData,
+} from '../models/reservations.model';
 import { SelectedEntity } from '../types/reservation.type';
 import { NavRouteOptions } from '@hospitality-bot/admin/shared';
 import { Subscription } from 'rxjs';
@@ -23,7 +27,7 @@ export class BaseReservationComponent {
   reservationId: string;
   bookingType: string;
 
-  //   summaryData: SummaryData;
+  summaryData: SummaryData;
   formValueChanges: boolean = false;
   disabledForm = false;
   deductedAmount = 0;
@@ -50,6 +54,7 @@ export class BaseReservationComponent {
     ];
     this.routes = navRoutes;
     this.pageTitle = title;
+    this.summaryData = new SummaryData().deserialize();
   }
 
   get reservationInfoControls() {

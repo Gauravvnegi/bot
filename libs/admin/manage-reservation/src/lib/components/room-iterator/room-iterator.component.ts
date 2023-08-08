@@ -384,8 +384,8 @@ export class RoomIteratorComponent extends IteratorComponent
     }
     this.createNewFields();
     setTimeout(() => {
-      this.main.nativeElement.scrollIntoView({ behavior: 'smooth' });
-      this.main.nativeElement.scrollTop = this.main.nativeElement.scrollHeight;
+      this.main.nativeElement?.scrollIntoView({ behavior: 'smooth' });
+      this.main.nativeElement.scrollTop = this.main.nativeElement?.scrollHeight;
     }, 1000);
   }
 

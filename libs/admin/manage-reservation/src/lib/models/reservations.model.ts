@@ -17,11 +17,8 @@ import {
   SearchGuestResponse,
 } from 'libs/admin/guests/src/lib/types/guest.type';
 import { MenuItemsData, RoomTypes, SpaItems } from '../constants/form';
-import { OutletFormData } from '../types/forms.types';
-import {
-  RoomReservationResponse,
-  RoomSummaryResponse,
-} from '../types/response.type';
+import { ItemsData, OutletFormData } from '../types/forms.types';
+import { RoomReservationResponse } from '../types/response.type';
 import { RoomTypeForm } from 'libs/admin/room/src/lib/models/room.model';
 /* Reservation */
 
@@ -370,16 +367,17 @@ export class PaymentMethod {
   }
 }
 
-export class RoomSummaryData {
+export class SummaryData {
   from: number;
   to: number;
-  bookingItems: BookingItemsSummary[];
-  max: number;
-  min: number;
-  base: number;
-  paxChild: number;
-  paxAdult: number;
-  totalAmount: number;
+  bookingItems?: BookingItemsSummary[];
+  items?: ItemsData[];
+  max?: number;
+  min?: number;
+  base?: number;
+  paxChild?: number;
+  paxAdult?: number;
+  totalAmount?: number;
   totalPaidAmount: number;
   totalDueAmount: number;
   taxAndFees: number;
@@ -387,15 +385,21 @@ export class RoomSummaryData {
   offerAmount: number;
   location: string;
 
-  deserialize(input?: RoomSummaryResponse) {
+  deserialize(input?: SummaryResponse) {
     this.from = input?.from ?? 0;
     this.to = input?.to ?? 0;
     this.bookingItems =
-      input?.bookingItems.map((item) => ({
+      input?.bookingItems?.map((item) => ({
         ...item?.roomDetails,
         ...item?.occupancyDetails,
         ...item?.pricingDetails,
         id: item?.id,
+      })) ?? [];
+    this.items =
+      input?.items?.map((item) => ({
+        itemId: item?.itemId,
+        unit: item?.unit,
+        amount: item?.amount,
       })) ?? [];
     this.location = input?.location ?? '';
     this.offerAmount = input?.offer?.discountedPrice ?? 0;
@@ -409,42 +413,6 @@ export class RoomSummaryData {
     this.max = input?.pricingDetails?.max ?? 0;
     this.paxChild = input?.pricingDetails?.paxChild ?? 0;
     this.paxAdult = input?.pricingDetails?.paxAdult ?? 0;
-    return this;
-  }
-}
-
-export class SummaryData {
-  name: string;
-  from: number;
-  to: number;
-  roomCount: number;
-  adultCount: number;
-  childCount: number;
-  location: string;
-  originalPrice: number;
-  basePrice: number;
-  offerAmount: number;
-  taxAndFees: number;
-  totalAmount: number;
-  taxes: string[];
-  // id: string;
-  // roomTypeName: string;
-  // roomNumbers: Option[];
-
-  deserialize(input: SummaryResponse): this {
-    this.from = input.from;
-    this.to = input.to;
-    this.name = input?.name;
-    this.location = input?.location;
-    this.offerAmount = input?.offerAmount;
-    this.originalPrice = input?.originalPrice;
-    this.basePrice = input?.basePrice;
-    this.taxAndFees = input?.taxAndFees;
-    this.totalAmount = input?.totalAmount;
-    this.adultCount = input?.adultCount;
-    this.childCount = input?.childCount;
-    this.roomCount = input?.roomCount;
-    this.taxes = input?.taxes;
     return this;
   }
 }

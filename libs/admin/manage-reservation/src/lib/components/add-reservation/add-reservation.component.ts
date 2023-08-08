@@ -7,7 +7,7 @@ import {
   OfferData,
   OfferList,
   ReservationFormData,
-  RoomSummaryData,
+  SummaryData,
 } from '../../models/reservations.model';
 import { ManageReservationService } from '../../services/manage-reservation.service';
 import {
@@ -33,7 +33,7 @@ export class AddReservationComponent extends BaseReservationComponent
   reservationTypes: Option[] = [];
   roomNumbers: Option[] = [];
 
-  summaryData: RoomSummaryData;
+  summaryData: SummaryData;
 
   expandAccordion = false;
 
@@ -56,7 +56,6 @@ export class AddReservationComponent extends BaseReservationComponent
   }
 
   ngOnInit(): void {
-    this.summaryData = new RoomSummaryData().deserialize();
     this.initForm();
     this.initDetails();
     this.getReservationId();
@@ -105,7 +104,7 @@ export class AddReservationComponent extends BaseReservationComponent
 
         // When all items are removed from roomArray
         if (res[res.length - 1].roomTypeId === null) {
-          this.summaryData = new RoomSummaryData().deserialize();
+          this.summaryData = new SummaryData().deserialize();
         }
       });
   }
@@ -229,7 +228,7 @@ export class AddReservationComponent extends BaseReservationComponent
         .getSummaryData(this.entityId, data, config)
         .subscribe(
           (res) => {
-            this.summaryData = new RoomSummaryData()?.deserialize(res);
+            this.summaryData = new SummaryData()?.deserialize(res);
             this.updateBookingItemsCounts(this.summaryData.bookingItems);
             this.userForm
               .get('roomInformation')

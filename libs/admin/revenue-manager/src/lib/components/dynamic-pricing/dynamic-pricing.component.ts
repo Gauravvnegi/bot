@@ -1,6 +1,16 @@
 import { Component, OnInit } from '@angular/core';
+import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { StepperEmitType } from 'libs/admin/shared/src/lib/components/stepper/stepper.component';
 import { MenuItem } from 'primeng/api';
+import { BarPriceService } from '../../services/bar-price.service';
+import { RoomTypes } from '../../types/bar-price.types';
+import {
+  AbstractControl,
+  FormArray,
+  FormBuilder,
+  FormGroup,
+} from '@angular/forms';
+import { Revenue } from '../../constants/revenue-manager.const';
 
 @Component({
   selector: 'hospitality-bot-dynamic-pricing',
@@ -9,6 +19,9 @@ import { MenuItem } from 'primeng/api';
 })
 export class DynamicPricingComponent implements OnInit {
   activeStep = 0;
+  allRooms: RoomTypes[];
+  entityId: string;
+  dynamicPricingFG: FormGroup;
   itemList: MenuItem[] = [
     {
       label: 'Occupancy',
@@ -20,11 +33,109 @@ export class DynamicPricingComponent implements OnInit {
       label: 'Inventory Reallocation',
     },
   ];
-  constructor() {}
+  constructor(
+    private barPriceService: BarPriceService,
+    private fb: FormBuilder,
+    private globalFilter: GlobalFilterService
+  ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.entityId = this.globalFilter.entityId;
+    this.initRoom();
+  }
+
+  initRoom() {
+    this.barPriceService.roomDetails.subscribe((res) => {
+      if (this.barPriceService.isRoomDetailsLoaded) {
+        this.allRooms = res;
+        this.initFG();
+      } else {
+        this.barPriceService.loadRoomTypes(this.entityId);
+      }
+    });
+  }
+
+  initFG() {
+    this.dynamicPricingFG = this.fb.group({
+      inventoryAllocationFA: this.fb.array([this.getInventoryAllocationFG()]),
+      timeFA: this.fb.array([this.getTriggerFG()]),
+    });
+  }
+
+  getTriggerFG(data?: any): FormGroup {
+    const triggerFG = this.fb.group({
+      name: [''],
+      fromDate: [''],
+      toDate: [''],
+      selectedDays: [[]],
+      levels: this.fb.array([this.getLevelFG()]),
+      status: [true],
+    });
+    if (data) triggerFG.patchValue(data);
+    return triggerFG;
+  }
+
+  getLevelFG(): FormGroup {
+    return this.fb.group({
+      time: [''],
+      occupancyLowerLimit: [''],
+      occupancyUpperLimit: [''],
+      discount: [''],
+    });
+  }
+
+  getInventoryAllocationFG(data?: any): FormGroup {
+    const triggerFG = this.fb.group({
+      name: [''],
+      fromDate: [''],
+      toDate: [''],
+      selectedDays: [[]],
+      reallocations: this.fb.array([]),
+      status: [true],
+    });
+    if (this.allRooms)
+      this.addRoomAllocationControl(
+        triggerFG.get('reallocations') as FormArray
+      );
+    if (data) triggerFG.patchValue(data);
+    return triggerFG;
+  }
+
+  addRoomAllocationControl(allocationFA: FormArray) {
+    this.allRooms.forEach((item) => {
+      allocationFA.push(
+        this.fb.group({
+          label: [item.label],
+          percentage: [''],
+          count: [''],
+          value: [item.value],
+        })
+      );
+    });
+  }
+
+  modifyInventoryAllocationFG(mode = Revenue.add, index?: number): void {
+    if (mode == Revenue.add)
+      this.dynamicPricingControl.inventoryAllocationFA.controls.push(
+        this.getInventoryAllocationFG()
+      );
+    else if (
+      this.dynamicPricingControl.inventoryAllocationFA.controls.length > 1
+    )
+      this.dynamicPricingControl.inventoryAllocationFA.removeAt(index);
+  }
 
   onActive(event: StepperEmitType) {
     this.activeStep = event.index;
+  }
+
+  get dynamicPricingControl() {
+    return this.dynamicPricingFG.controls as Record<
+      'inventoryAllocationFA' | 'timeFA',
+      AbstractControl
+    > & {
+      inventoryAllocationFA: FormArray;
+      timeFA: FormArray;
+    };
   }
 }

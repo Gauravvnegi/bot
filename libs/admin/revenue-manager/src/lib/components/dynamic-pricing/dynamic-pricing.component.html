@@ -18,9 +18,11 @@
 
       <hospitality-bot-day-time-trigger
         *ngSwitchCase="1"
+        [dynamicPricingFG]="dynamicPricingFG"
       ></hospitality-bot-day-time-trigger>
 
       <hospitality-bot-inventory-reallocation
+        [dynamicPricingFG]="dynamicPricingFG"
         *ngSwitchCase="2"
       ></hospitality-bot-inventory-reallocation>
     </ng-container>

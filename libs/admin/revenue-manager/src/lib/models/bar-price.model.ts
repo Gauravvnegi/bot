@@ -1,4 +1,5 @@
 import { RoomType } from 'libs/admin/room/src/lib/models/rooms-data-table.model';
+
 export function makeRoomsData(rooms: RoomType[]) {
   let res = rooms.map((item) => {
     let room = {

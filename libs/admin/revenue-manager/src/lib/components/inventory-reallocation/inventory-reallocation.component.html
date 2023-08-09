@@ -1,4 +1,4 @@
-<div [formGroup]="dynamicPricingFG">
+<div [formGroup]="dynamicPricingFG" *ngIf="!!dynamicPricingFG">
   <p-accordion class="accordion" formArrayName="inventoryAllocationFA">
     <div
       *ngFor="
@@ -104,43 +104,45 @@
               </tr>
             </ng-template>
           </p-table>
-          <div
-            [formGroupName]="j"
-            style="
-              display: flex;
-              padding: 15px 0;
-              align-items: center;
-              border-bottom: 1px solid rgba(112, 112, 112, 0.35);
-            "
+          <ng-container
             *ngFor="
-              let reallocation of inventoryAllocationFG.value.reallocations;
+              let reallocation of inventoryAllocationFG.get('reallocations')
+                ?.controls;
               let j = index
             "
           >
-            <div style="width: 30%; padding-left: 30px;">
-              {{ reallocation.label }}
+            <div
+              [formGroupName]="j"
+              style="
+                display: flex;
+                padding: 15px 0;
+                align-items: center;
+                border-bottom: 1px solid rgba(112, 112, 112, 0.35);
+              "
+            >
+              <div style="width: 30%; padding-left: 30px;">
+                {{ reallocation.value.label }}
+              </div>
+              <div style="width: 30%; padding: 0 1rem;">
+                <hospitality-bot-input
+                  controlName="percentage"
+                  [props]="{
+                    placeholder: 'Enter',
+                    type: 'number'
+                  }"
+                ></hospitality-bot-input>
+              </div>
+              <div style="width: 40%; padding: 0 1rem;">
+                <hospitality-bot-input
+                  controlName="count"
+                  [props]="{
+                    placeholder: 'Enter',
+                    type: 'number'
+                  }"
+                ></hospitality-bot-input>
+              </div>
             </div>
-            <div style="width: 30%; padding: 0 1rem;">
-              <hospitality-bot-input
-                class="full-width"
-                controlName="percentage"
-                [props]="{
-                  placeholder: 'Enter',
-                  type: 'number'
-                }"
-              ></hospitality-bot-input>
-            </div>
-            <div style="width: 40%; padding: 0 1rem;">
-              <hospitality-bot-input
-                class="full-width"
-                controlName="count"
-                [props]="{
-                  placeholder: 'Enter',
-                  type: 'number'
-                }"
-              ></hospitality-bot-input>
-            </div>
-          </div>
+          </ng-container>
         </div>
       </p-accordionTab>
     </div>

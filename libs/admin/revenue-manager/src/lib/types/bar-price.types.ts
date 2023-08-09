@@ -3,6 +3,7 @@ type Channel = {
   value: string;
 };
 
+// refactor - Needs to converted to model - as it is not api response data
 export type RoomTypes = {
   label: string;
   value: string;

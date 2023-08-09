@@ -32,7 +32,7 @@ export class AddReservationComponent extends BaseReservationComponent
   roomTypeValues = [];
   reservationTypes: Option[] = [];
   roomNumbers: Option[] = [];
-
+  roomTypeIds: string[] = [];
   summaryData: SummaryData;
 
   expandAccordion = false;
@@ -96,9 +96,10 @@ export class AddReservationComponent extends BaseReservationComponent
       .get('roomTypes')
       .valueChanges.pipe(debounceTime(1000))
       .subscribe((res) => {
-        if (res && res[res.length - 1].roomTypeId?.length) {
+        const roomTypeIds = res.map((item) => item.roomTypeId);
+        if (res && roomTypeIds?.length) {
           this.userForm.get('offerId').reset();
-          this.getOfferByRoomType(res);
+          this.getOfferByRoomType(roomTypeIds);
           this.getSummaryData();
         }
 
@@ -132,20 +133,16 @@ export class AddReservationComponent extends BaseReservationComponent
             const { guestInformation, roomInformation, ...formData } = data;
             this.roomTypeValues = roomInformation;
             this.formService.guestInformation.next(guestInformation);
+
             this.userForm.patchValue(data);
-            // this.summaryData = new SummaryData().deserialize(response);
             this.setFormDisability(data.reservationInformation);
-            debugger;
-            if (data.offerId)
-              this.getOfferByRoomType(
-                this.roomControls[0].get('roomTypeId').value
+
+            if (data.offerId) {
+              const roomTypeIds = roomInformation.map(
+                (item) => item.roomTypeId
               );
-            // this.userForm.valueChanges.subscribe((_) => {
-            // if (!this.formValueChanges) {
-            // this.formValueChanges = true;
-            // this.listenForFormChanges();
-            // }
-            // });
+              this.getOfferByRoomType(roomTypeIds);
+            }
           },
           (error) => {}
         )
@@ -172,13 +169,24 @@ export class AddReservationComponent extends BaseReservationComponent
     }
   }
 
-  getOfferByRoomType(id: string): void {
-    if (id)
+  getOfferByRoomType(roomTypeIds: string[]): void {
+    const config = {
+      params: this.adminUtilityService.makeQueryParams([
+        {
+          pagination: false,
+          type: 'OFFER',
+          source: 1,
+          serviceIds: roomTypeIds,
+        },
+      ]),
+    };
+    if (roomTypeIds.length)
       this.$subscription.add(
         this.manageReservationService
-          .getOfferByRoomType(this.entityId, id)
+          .getOfferByRoomType(this.entityId, config)
           .subscribe(
             (response) => {
+              debugger;
               this.offersList = new OfferList().deserialize(response);
               if (this.userForm.get('offerId').value) {
                 this.selectedOffer = this.offersList.records.filter(

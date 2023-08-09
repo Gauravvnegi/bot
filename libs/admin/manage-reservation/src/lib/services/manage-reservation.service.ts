@@ -30,27 +30,8 @@ export class ManageReservationService extends ApiService {
     });
   }
 
-  getOfferByRoomType(entityId: string, roomTypeId: string): Observable<any> {
-    // `/api/v1/entity/${entityId}/inventory/room/${roomTypeId}`
-    return this.get(
-      `/api/v1/payment/configurations/admin?entity_id=${entityId}&status=ACTIVE`
-    ).pipe(
-      map((res) => {
-        res = {
-          offers: [
-            {
-              id: 1,
-              description: 'AGENT0020',
-            },
-            {
-              id: 2,
-              description: 'AGENT0202',
-            },
-          ],
-        };
-        return res;
-      })
-    );
+  getOfferByRoomType(entityId: string, config: QueryConfig): Observable<any> {
+    return this.get(`/api/v1/entity/${entityId}/library/${config.params}`);
   }
 
   getReservationDataById(bookingId: string, entityId: string): Observable<any> {

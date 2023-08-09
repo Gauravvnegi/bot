@@ -8,8 +8,8 @@
         *ngIf="bookingType === 'ROOM_TYPE' && summaryData?.bookingItems"
       >
         {{ (summaryData?.bookingItems)[0]?.roomTypeLabel }}
-        <span *ngIf="summaryData?.bookingItems.length > 1"
-          >(+{{ summaryData?.bookingItems.length - 1 }})</span
+        <span class="room-count" *ngIf="summaryData?.bookingItems.length > 1"
+          >+{{ summaryData?.bookingItems.length - 1 }}</span
         >
       </div>
       <div class="bk-summary_subheading" *ngIf="heading">
@@ -83,7 +83,6 @@
           "
         >
           <ng-container
-            *ngIf="index > 0"
             [ngTemplateOutlet]="summaryTemplate"
             [ngTemplateOutletContext]="{
               bookingItem: bookingItem,
@@ -108,9 +107,7 @@
       >
         <ng-container [ngTemplateOutlet]="summaryTemplate"> </ng-container>
       </ng-container>
-      <ng-container
-        *ngIf="bookingType === '!ROOM_TYPE' && !summaryData"
-      >
+      <ng-container *ngIf="bookingType === '!ROOM_TYPE' && !summaryData">
         <ng-container [ngTemplateOutlet]="outletSummaryTemplate">
         </ng-container>
       </ng-container>
@@ -206,10 +203,11 @@
 </ng-template>
 
 <ng-template #summaryTemplate let-index="index" let-bookingItem="bookingItem">
-  <p *ngIf="index" class="divider"></p>
+  <p *ngIf="index || index === 0" class="divider"></p>
   <div class="bk-summary_priceInfo">
-    <div class="bk-summary_subheading" *ngIf="index">
+    <div class="bk-summary_subheading" *ngIf="index || index === 0">
       {{ bookingItem?.roomTypeLabel }}
+      <span class="room-count"> x{{ bookingItem?.roomCount }} </span>
     </div>
     <p class="bk-summary_priceInfo_perNight">
       <span class="bk-summary_priceInfo_perNight_label"

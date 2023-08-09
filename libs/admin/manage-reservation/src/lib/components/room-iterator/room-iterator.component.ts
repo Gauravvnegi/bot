@@ -211,7 +211,6 @@ export class RoomIteratorComponent extends IteratorComponent
     this.manageReservationService
       .getRoomNumber(this.entityId, config)
       .subscribe((res) => {
-        debugger;
         const roomNumberOptions = res.rooms.map((room: RoomsByRoomType) => ({
           label: room.roomNumber,
           value: room.id,
@@ -220,7 +219,6 @@ export class RoomIteratorComponent extends IteratorComponent
         this.roomControls[index]
           .get('roomNumberOptions')
           .patchValue(roomNumberOptions, { emitEvent: false });
-        debugger;
       });
   }
 
@@ -399,10 +397,10 @@ export class RoomIteratorComponent extends IteratorComponent
     }
     this.createNewFields();
     this.isDefaultRoomType = false;
-    setTimeout(() => {
-      this.main.nativeElement?.scrollIntoView({ behavior: 'smooth' });
-      this.main.nativeElement.scrollTop = this.main.nativeElement?.scrollHeight;
-    }, 1000);
+    // setTimeout(() => {
+    //   this.main.nativeElement?.scrollIntoView({ behavior: 'smooth' });
+    //   this.main.nativeElement.scrollTop = this.main.nativeElement?.scrollHeight;
+    // }, 1000);
   }
 
   /**

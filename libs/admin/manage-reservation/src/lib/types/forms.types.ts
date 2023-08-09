@@ -22,6 +22,8 @@ export type BookingItemFormData = {
     };
     roomTypeId: string;
     roomCount: number;
+    roomTypeLabel?: string;
+    roomIds?: string[];
   };
   occupancyDetails: {
     maxChildren: number;

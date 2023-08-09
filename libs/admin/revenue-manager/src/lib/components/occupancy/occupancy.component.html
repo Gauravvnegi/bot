@@ -105,7 +105,7 @@
             </div>
             <div class="occupancy-form" formArrayName="roomTypes">
               <ng-container
-                *ngIf="season.get('roomTypes')?.controls.length; else emptyRoom"
+                *ngIf="season.get('roomType')?.value.length; else emptyRoom"
               ></ng-container>
 
               <p-accordion
@@ -153,10 +153,18 @@
                             postFieldType="input"
                             [defaultProps]="{
                               pre: {
-                                placeholder: 'Start'
+                                placeholder: 'Start',
+                                errorMessages: {
+                                  required: 'This is required field',
+                                  min: 'End should be grater than start.'
+                                }
                               },
                               post: {
-                                placeholder: 'End'
+                                placeholder: 'End',
+                                errorMessages: {
+                                  required: 'This is required field',
+                                  min: 'End should be grater than start.'
+                                }
                               }
                             }"
                             [settings]="{
@@ -234,7 +242,6 @@
         postLabel: 'Save'
       }"
       (onPostAction)="handleSave()"
-      [disabled]="dynamicPricingFG.invalid"
       #fa
     ></hospitality-bot-form-action>
   </div>

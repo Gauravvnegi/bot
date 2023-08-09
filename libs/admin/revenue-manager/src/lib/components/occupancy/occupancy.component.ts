@@ -73,7 +73,7 @@ export class OccupancyComponent {
   listenChanges() {
     this.dynamicPricingControl?.occupancyFA.controls.forEach(
       (seasonFG: FormGroup) => {
-        //roomType change subscription
+        //roomType change listening
         const roomTypeFG = seasonFG.get('roomTypes') as FormArray;
         seasonFG.get('roomType').valueChanges.subscribe((res: string[]) => {
           roomTypeFG.controls.forEach((roomType: FormGroup, index) => {
@@ -86,7 +86,7 @@ export class OccupancyComponent {
         roomTypeFG.controls.forEach((roomTypeFG: FormGroup) => {
           const basePrice = roomTypeFG.get('basePrice').value;
 
-          //occupancy change subscription
+          //occupancy change listening
           (roomTypeFG.get('occupancy') as FormArray).controls.forEach(
             (occupancyFG: FormGroup) => {
               occupancyFG
@@ -105,6 +105,20 @@ export class OccupancyComponent {
                   { emitEvent: false }
                 );
               });
+
+              const { start, end } = occupancyFG.controls;
+              const customError = { min: 'Start should be less than end.' };
+              start.valueChanges.subscribe((startValue) => {
+                const condition = end.value && +startValue > end.value;
+                start.setErrors(condition ? customError : null);
+                end.setErrors(condition && null);
+              });
+
+              end.valueChanges.subscribe((endValue) => {
+                const condition = start.value && +endValue < start.value;
+                end.setErrors(condition ? customError : null);
+                start.setErrors(condition && null);
+              });
             }
           );
         });
@@ -114,5 +128,6 @@ export class OccupancyComponent {
 
   handleSave() {
     console.log(this.dynamicPricingControl.occupancyFA);
+    debugger;
   }
 }

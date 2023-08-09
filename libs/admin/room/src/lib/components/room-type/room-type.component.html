@@ -163,12 +163,13 @@
                   }"
                   [currencyOptions]="currencies"
                   [defaultProps]="{
-                    post: { type: 'number', float: true }
-                  }"
-                  [props]="{
-                    errorMessages: {
-                      required: 'This is a required field.',
-                      min: 'Value must be greater than 0.'
+                    post: {
+                      type: 'number',
+                      float: true,
+                      errorMessages: {
+                        required: 'This is a required field.',
+                        min: 'Value must be greater than 0.'
+                      }
                     }
                   }"
                 ></hospitality-bot-multiple-prefix-input>
@@ -192,12 +193,13 @@
                   postControlName="basePrice"
                   [options]="currencies"
                   [defaultProps]="{
-                    post: { type: 'number', placeholder: 'Enter'}
-                  }"
-                  [props]="{
-                    errorMessages: {
-                      required: 'This is a required field.',
-                      min: 'Value must be greater than 0.'
+                    post: {
+                      type: 'number',
+                      placeholder: 'Enter',
+                      errorMessages: {
+                        required: 'This is a required field.',
+                        min: 'Value must be greater than 0.'
+                      }
                     }
                   }"
                 ></hospitality-bot-prefix-field>
@@ -208,12 +210,13 @@
                   label="Min Price"
                   [options]="currencies"
                   [defaultProps]="{
-                    post: { type: 'number', placeholder: 'Enter'}
-                  }"
-                  [props]="{
-                    errorMessages: {
-                      required: 'This is a required field.',
-                      min: 'Value must be greater than 0.'
+                    post: {
+                      type: 'number',
+                      placeholder: 'Enter',
+                      errorMessages: {
+                        required: 'This is a required field.',
+                        min: 'Value must be greater than 0.'
+                      }
                     }
                   }"
                 ></hospitality-bot-prefix-field>
@@ -224,12 +227,13 @@
                   label="Max Price"
                   [options]="currencies"
                   [defaultProps]="{
-                    post: { type: 'number', placeholder: 'Enter' }
-                  }"
-                  [props]="{
-                    errorMessages: {
-                      required: 'This is a required field.',
-                      min: 'Value must be greater than 0.'
+                    post: {
+                      type: 'number',
+                      placeholder: 'Enter',
+                      errorMessages: {
+                        required: 'This is a required field.',
+                        min: 'Value must be greater than 0.'
+                      }
                     }
                   }"
                 ></hospitality-bot-prefix-field>

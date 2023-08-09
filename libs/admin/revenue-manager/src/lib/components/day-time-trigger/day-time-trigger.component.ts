@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import {
   AbstractControl,
   FormArray,
@@ -14,20 +14,12 @@ import { weeks } from 'libs/admin/channel-manager/src/lib/components/constants/b
   styleUrls: ['./day-time-trigger.component.scss'],
 })
 export class DayTimeTriggerComponent implements OnInit {
-  dynamicPricingFG: FormGroup;
+  @Input() dynamicPricingFG: FormGroup;
 
   weeks = weeks;
-  constructor(private fb: FormBuilder) {
-    this.initFG();
-  }
+  constructor(private fb: FormBuilder) {}
 
   ngOnInit(): void {}
-
-  initFG() {
-    this.dynamicPricingFG = this.fb.group({
-      timeFA: this.fb.array([this.getTriggerFG()]),
-    });
-  }
 
   getTriggerFG(data?: any): FormGroup {
     const triggerFG = this.fb.group({

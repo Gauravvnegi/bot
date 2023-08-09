@@ -44,8 +44,6 @@ export class OccupancyComponent implements OnInit {
       if (this.barPriceService.isRoomDetailsLoaded) {
         this.allRooms = res;
         this.initForm();
-      } else {
-        this.barPriceService.loadRoomTypes(this.entityId);
       }
     });
   }

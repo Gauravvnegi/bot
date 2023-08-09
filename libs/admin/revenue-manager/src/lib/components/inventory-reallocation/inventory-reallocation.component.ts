@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import {
   AbstractControl,
   FormArray,
@@ -17,7 +17,7 @@ import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
   styleUrls: ['./inventory-reallocation.component.scss'],
 })
 export class InventoryReallocationComponent implements OnInit {
-  dynamicPricingFG: FormGroup;
+  @Input() dynamicPricingFG: FormGroup;
   weeks = weeks;
   roomTypes: RoomTypes[];
   entityId: string;
@@ -25,9 +25,7 @@ export class InventoryReallocationComponent implements OnInit {
     private barPriceService: BarPriceService,
     private fb: FormBuilder,
     private globalFilter: GlobalFilterService
-  ) {
-    this.initFG();
-  }
+  ) {}
 
   ngOnInit(): void {
     this.entityId = this.globalFilter.entityId;
@@ -38,16 +36,7 @@ export class InventoryReallocationComponent implements OnInit {
     this.barPriceService.roomDetails.subscribe((rooms: RoomTypes[]) => {
       if (this.barPriceService.isRoomDetailsLoaded) {
         this.roomTypes = rooms;
-        this.addRoomAllocationControls();
-      } else {
-        this.barPriceService.loadRoomTypes(this.entityId);
       }
-    });
-  }
-
-  initFG() {
-    this.dynamicPricingFG = this.fb.group({
-      inventoryAllocationFA: this.fb.array([this.getInventoryAllocationFG()]),
     });
   }
 
@@ -77,24 +66,6 @@ export class InventoryReallocationComponent implements OnInit {
       this.dynamicPricingControl.inventoryAllocationFA.controls.length > 1
     )
       this.dynamicPricingControl.inventoryAllocationFA.removeAt(index);
-  }
-
-  addRoomAllocationControls() {
-    const fa = this.dynamicPricingControl.inventoryAllocationFA.controls[0].get(
-      'reallocations'
-    ) as FormArray;
-    fa.clear();
-    this.roomTypes.forEach((item) => {
-      fa.push(
-        this.fb.group({
-          label: [item.label],
-          percentage: [''],
-          count: [''],
-          value: [item.value],
-        })
-      );
-      fa.updateValueAndValidity();
-    });
   }
 
   addRoomAllocationControl(allocationFA: FormArray) {

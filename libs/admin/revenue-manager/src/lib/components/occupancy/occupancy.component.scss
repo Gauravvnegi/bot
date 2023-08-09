@@ -4,16 +4,10 @@
   &-content {
     .header {
       font-size: 18px;
-      font-weight: 600;
-      font-stretch: normal;
-      font-style: normal;
-      line-height: normal;
-      letter-spacing: 1.08px;
-      text-align: left;
-      width: 100px;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
+      width: 100px;
     }
     .season-header {
       display: flex;
@@ -57,11 +51,6 @@
     .header {
       font-size: 16px !important;
       font-weight: 600;
-      font-stretch: normal;
-      font-style: normal;
-      line-height: normal;
-      letter-spacing: 0.96px;
-      text-align: left;
       color: #fff;
     }
 
@@ -69,7 +58,6 @@
       display: flex;
       justify-content: space-around;
       &-header {
-        letter-spacing: 0.96px;
         font-weight: 600;
         font-stretch: normal;
         color: #787c9e;
@@ -85,30 +73,21 @@
       }
     }
 
-    .p-accordion
-      p-accordiontab:first-child
-      .p-accordion-header
-      .p-accordion-header-link {
-      background-color: #4b4d54;
-      color: white;
+    .p-accordion p-accordiontab .p-accordion-header .p-accordion-header-link {
+      background-color: #4b4d54 !important;
+      color: white !important;
       margin-bottom: 6px;
     }
     .p-accordion .p-accordion-header .p-accordion-header-link {
       padding: 0.5rem 1.5rem;
     }
-    .p-accordion
-      p-accordiontab:first-child
-      .p-accordion-header
-      .p-accordion-header-link,
-    .p-accordion p-accordiontab:last-child .p-accordion-content {
+    .p-accordion p-accordiontab .p-accordion-header .p-accordion-header-link,
+    .p-accordion p-accordiontab .p-accordion-content {
       border-top-right-radius: 0px !important;
       border-top-left-radius: 0px !important;
     }
 
-    .p-accordion
-      p-accordiontab:last-child
-      .p-accordion-header:not(.p-highlight)
-      .p-accordion-header-link {
+    .p-accordion p-accordiontab .p-accordion-header .p-accordion-header-link {
       border-top-right-radius: 0px !important;
       border-top-left-radius: 0px !important;
     }

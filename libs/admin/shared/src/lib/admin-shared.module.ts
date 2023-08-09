@@ -116,6 +116,7 @@ import { FormActionComponent } from './components/form-component/form-action/for
 import { LoaderDirective } from './directives/loader.directive';
 import { StepperComponent } from './components/stepper/stepper.component';
 import { StepsModule } from 'primeng/steps';
+import { FromToDateComponent } from './components/from-to-date/from-to-date.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -238,6 +239,7 @@ import { StepsModule } from 'primeng/steps';
     FormActionComponent,
     LoaderDirective,
     StepperComponent,
+    FromToDateComponent,
   ],
 
   exports: [
@@ -348,6 +350,7 @@ import { StepsModule } from 'primeng/steps';
     FormActionComponent,
     LoaderDirective,
     StepperComponent,
+    FromToDateComponent,
   ],
 })
 export class AdminSharedModule {}

@@ -68,6 +68,7 @@
       </ng-container>
       <div class="view-details-btn" *ngIf="bookingType === 'ROOM_TYPE'">
         <hospitality-bot-button
+          class="btn"
           *ngIf="summaryData?.bookingItems.length > 1"
           [label]="detailsView ? 'View Less' : 'View Details'"
           variant="text"

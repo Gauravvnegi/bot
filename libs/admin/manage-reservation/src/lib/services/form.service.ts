@@ -20,7 +20,9 @@ export class FormService {
   toDate: Date;
   fromDate: Date;
 
-  guestInformation: BehaviorSubject<GuestInfo> = new BehaviorSubject<GuestInfo>(null);
+  guestInformation: BehaviorSubject<GuestInfo> = new BehaviorSubject<GuestInfo>(
+    null
+  );
 
   public selectedEntity = new BehaviorSubject<SelectedEntity>(null);
 
@@ -45,9 +47,13 @@ export class FormService {
   discountedPrice = new BehaviorSubject(0);
   // roomType = new BehaviorSubject({roomTypeCount: 0, roomTypeName: ''});
 
-  mapRoomReservationData(input: ReservationForm): RoomReservationFormData {
+  mapRoomReservationData(
+    input: ReservationForm,
+    id?: string
+  ): RoomReservationFormData {
     const roomReservationData = new RoomReservationFormData();
     // Map Reservation Info
+    roomReservationData.id = id ?? '';
     roomReservationData.from =
       input.reservationInformation?.dateAndTime ??
       input.reservationInformation?.from;
@@ -89,9 +95,10 @@ export class FormService {
     return roomReservationData;
   }
 
-  mapOutletReservationData(input: ReservationForm, outletType: string) {
+  mapOutletReservationData(input: ReservationForm, outletType: string, id?: string) {
     const reservationData = new OutletFormData();
     // Reservation Info
+    reservationData.id = id ?? '';
     reservationData.eventType = input.reservationInformation?.eventType ?? '';
     reservationData.from =
       input.reservationInformation?.dateAndTime ??

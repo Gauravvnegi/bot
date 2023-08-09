@@ -12,6 +12,7 @@ export class RoomReservationFormData {
   paymentRemark: string;
   guestId: string;
   bookingItems: BookingItemFormData[];
+  id?: string;
 }
 
 export type BookingItemFormData = {
@@ -54,6 +55,7 @@ export class OutletFormData {
   guest: GuestType;
   items: ItemsData[];
   outletType: string;
+  id?: string;
 }
 
 export type ItemsData = {

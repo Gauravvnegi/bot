@@ -49,7 +49,7 @@ export class RoomIteratorComponent extends IteratorComponent
   errorMessages = {};
 
   roomTypeOffSet = 0;
-  roomTypeLimit = 10;
+  roomTypeLimit = 20;
 
   maxAdultLimit = 0;
   maxChildLimit = 0;
@@ -334,8 +334,7 @@ export class RoomIteratorComponent extends IteratorComponent
       ...queries,
       {
         type: 'ROOM_TYPE',
-        offset: this.roomTypeOffSet,
-        limit: this.roomTypeLimit,
+        pagination: false,
         createBooking: true,
       },
     ];
@@ -383,6 +382,7 @@ export class RoomIteratorComponent extends IteratorComponent
       return;
     }
     this.createNewFields();
+    this.isDefaultRoomType = false;
     setTimeout(() => {
       this.main.nativeElement?.scrollIntoView({ behavior: 'smooth' });
       this.main.nativeElement.scrollTop = this.main.nativeElement?.scrollHeight;

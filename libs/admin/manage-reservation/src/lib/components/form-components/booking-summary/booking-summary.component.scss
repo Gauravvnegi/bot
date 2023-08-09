@@ -8,9 +8,15 @@
   height: 28vh;
 }
 
-.view-details-btn {
+:host ::ng-deep .view-details-btn {
   display: flex;
   justify-content: flex-end;
+  .btn{
+    .button{
+      min-width: 0px;
+      padding: 0px;
+    }
+  }
 }
 
 .container {

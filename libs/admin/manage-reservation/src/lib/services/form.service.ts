@@ -4,7 +4,6 @@ import { distinctUntilChanged } from 'rxjs/operators';
 import { ReservationTableValue } from '../constants/reservation-table';
 import { SelectedEntity } from '../types/reservation.type';
 import {
-  GuestDetails,
   OutletFormData,
   RoomReservationFormData,
 } from '../types/forms.types';
@@ -54,6 +53,7 @@ export class FormService {
     const roomReservationData = new RoomReservationFormData();
     // Map Reservation Info
     roomReservationData.id = id ?? '';
+    debugger;
     roomReservationData.from =
       input.reservationInformation?.dateAndTime ??
       input.reservationInformation?.from;
@@ -86,6 +86,7 @@ export class FormService {
             maxChildren: roomType.childCount,
             maxAdult: roomType.adultCount,
           },
+          id: roomType?.id ?? null,
         })
       );
     } else {

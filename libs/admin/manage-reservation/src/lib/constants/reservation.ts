@@ -62,6 +62,7 @@ export type RoomFieldTypeOption = {
   ratePlan?: ReservationRatePlan[];
   maxChildren: number;
   maxAdult: number;
+  id?: string;
 };
 
 export const Reservation = {

@@ -109,6 +109,7 @@ export class RoomIteratorComponent extends IteratorComponent
       childCount: [''],
       ratePlanOptions: [[]],
       roomNumberOptions: [[]],
+      id: [''],
     };
 
     const formGroup = this.fb.group(data);
@@ -140,6 +141,7 @@ export class RoomIteratorComponent extends IteratorComponent
           maxAdult: value?.adultCount,
           maxChildren: value?.childCount,
           ratePlan: [value.allRatePlans],
+          id: value?.id,
         });
       }
       // Patch room details in the form array
@@ -149,6 +151,7 @@ export class RoomIteratorComponent extends IteratorComponent
         childCount: value.childCount,
         adultCount: value.adultCount,
         ratePlan: value.allRatePlans.value,
+        id: value?.id,
       });
     });
   }

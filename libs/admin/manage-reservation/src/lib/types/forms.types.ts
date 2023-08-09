@@ -27,6 +27,7 @@ export type BookingItemFormData = {
     maxChildren: number;
     maxAdult: number;
   };
+  id?: string;
 };
 
 export type GuestDetails = {

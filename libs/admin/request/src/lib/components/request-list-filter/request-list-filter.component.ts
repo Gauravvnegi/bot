@@ -52,7 +52,7 @@ export class RequestListFilterComponent implements OnInit {
         sort: values.sortBy.label,
         order: values.sortBy.order,
         priorityType: values.filterBy,
-        listType: values.listType.label,
+        entityType: values.listType.label,
       },
     });
   }

@@ -35,3 +35,8 @@ export const cols: Cols[] = [
 export const chips = filtersChips.map((item) => ({ ...item }));
 
 export const title = 'Offers';
+
+export enum DiscountType {
+  PERCENTAGE = '%OFF',
+  NUMBER = 'FLAT',
+}

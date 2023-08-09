@@ -110,7 +110,7 @@ type PaymentRule = {
   inclusionsAndTerms: string;
 };
 
-type PaymentMethod = {
+export type PaymentMethod = {
   cashierFirstName: string;
   cashierLastName: string;
   totalPaidAmount: number;

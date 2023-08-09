@@ -10,6 +10,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import {
+  AbstractControl,
   ControlContainer,
   FormArray,
   FormBuilder,
@@ -24,11 +25,8 @@ import { Subscription } from 'rxjs';
 import { roomFields, RoomFieldTypeOption } from '../../constants/reservation';
 import { ManageReservationService } from '../../services/manage-reservation.service';
 import { RoomTypeOptionList } from '../../models/reservations.model';
-import { FormService } from '../../services/form.service';
 import { RoomTypeForm } from 'libs/admin/room/src/lib/models/room.model';
-import { RoomTypes } from '../../constants/form';
-import { forEach } from 'lodash';
-import { P } from '@angular/cdk/keycodes';
+import { ReservationForm, RoomTypes } from '../../constants/form';
 import { RoomsByRoomType } from 'libs/admin/room/src/lib/types/service-response';
 @Component({
   selector: 'hospitality-bot-room-iterator',
@@ -51,9 +49,6 @@ export class RoomIteratorComponent extends IteratorComponent
 
   roomTypeOffSet = 0;
   roomTypeLimit = 20;
-
-  maxAdultLimit = 0;
-  maxChildLimit = 0;
 
   roomTypes: RoomFieldTypeOption[] = [];
 
@@ -148,7 +143,7 @@ export class RoomIteratorComponent extends IteratorComponent
       // Patch room details in the form array
       this.roomTypeArray.at(index).patchValue({
         roomTypeId: value.roomTypeId,
-        roomCount: value.adultCount,
+        roomCount: value.roomCount,
         childCount: value.childCount,
         adultCount: value.adultCount,
         ratePlan: value.allRatePlans.value,
@@ -202,6 +197,8 @@ export class RoomIteratorComponent extends IteratorComponent
     const config = {
       params: this.adminUtilityService.makeQueryParams([
         {
+          from: this.inputControls.reservationInformation.get('from').value,
+          to: this.inputControls.reservationInformation.get('to').value,
           type: 'ROOM',
           createBooking: true,
           roomTypeId: roomTypeId,
@@ -229,8 +226,6 @@ export class RoomIteratorComponent extends IteratorComponent
     selectedRoomType: RoomFieldTypeOption,
     index: number
   ) {
-    this.maxAdultLimit = selectedRoomType.maxAdult;
-    this.maxChildLimit = selectedRoomType.maxAdult;
     this.roomControls[index].get('ratePlan').enable();
     this.roomControls[index].get('roomNumber').enable();
 
@@ -420,6 +415,13 @@ export class RoomIteratorComponent extends IteratorComponent
    */
   ngOnDestroy(): void {
     this.$subscription.unsubscribe();
+  }
+
+  get inputControls() {
+    return this.parentFormGroup.controls as Record<
+      keyof ReservationForm,
+      AbstractControl
+    >;
   }
 
   get roomControls() {

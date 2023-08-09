@@ -1,10 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {
-  FormGroup,
-  FormArray,
-  FormBuilder,
-  Validators,
-} from '@angular/forms';
+import { FormGroup, FormArray, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
@@ -44,7 +39,8 @@ import { BaseReservationComponent } from '../base-reservation.component';
   templateUrl: './spa-reservation.component.html',
   styleUrls: ['./spa-reservation.component.scss', '../reservation.styles.scss'],
 })
-export class SpaReservationComponent extends BaseReservationComponent implements OnInit {
+export class SpaReservationComponent extends BaseReservationComponent
+  implements OnInit {
   spaBookingInfo: FormArray;
   fields: IteratorField[];
 
@@ -70,12 +66,11 @@ export class SpaReservationComponent extends BaseReservationComponent implements
     protected activatedRoute: ActivatedRoute,
     private formService: FormService,
     private libraryService: LibraryService,
-    private router: Router
+    private router: Router,
   ) {
     super(globalFilterService, activatedRoute);
-
   }
-  
+
   ngOnInit(): void {
     this.initForm();
     this.initDetails();
@@ -246,24 +241,24 @@ export class SpaReservationComponent extends BaseReservationComponent implements
     }
   }
 
-  getOfferByRoomType(id: string): void {
-    if (id)
-      this.$subscription.add(
-        this.manageReservationService
-          .getOfferByRoomType(this.entityId, id)
-          .subscribe(
-            (response) => {
-              this.offersList = new OfferList().deserialize(response);
-              if (this.userForm.get('offerId').value) {
-                this.selectedOffer = this.offersList.records.filter(
-                  (item) => item.id === this.userForm.get('offerId').value
-                )[0];
-              }
-            },
-            (error) => {}
-          )
-      );
-  }
+  // getOfferByRoomType(id: string): void {
+  //   if (id)
+  //     this.$subscription.add(
+  //       this.manageReservationService
+  //         .getOfferByRoomType(this.entityId, id)
+  //         .subscribe(
+  //           (response) => {
+  //             this.offersList = new OfferList().deserialize(response);
+  //             if (this.userForm.get('offerId').value) {
+  //               this.selectedOffer = this.offersList.records.filter(
+  //                 (item) => item.id === this.userForm.get('offerId').value
+  //               )[0];
+  //             }
+  //           },
+  //           (error) => {}
+  //         )
+  //     );
+  // }
 
   offerSelect(offerData?: OfferData): void {
     if (offerData) {

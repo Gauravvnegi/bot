@@ -33,8 +33,6 @@ export class AddReservationComponent extends BaseReservationComponent
   reservationTypes: Option[] = [];
   roomNumbers: Option[] = [];
   roomTypeIds: string[] = [];
-  summaryData: SummaryData;
-
   expandAccordion = false;
 
   // Booking Summary props
@@ -97,7 +95,8 @@ export class AddReservationComponent extends BaseReservationComponent
       .valueChanges.pipe(debounceTime(1000))
       .subscribe((res) => {
         const roomTypeIds = res.map((item) => item.roomTypeId);
-        if (res && roomTypeIds?.length) {
+        // check if the last added room type is selected
+        if (res && res[res.length - 1].roomTypeId?.length) {
           this.userForm.get('offerId').reset();
           this.getOfferByRoomType(roomTypeIds);
           this.getSummaryData();
@@ -108,6 +107,21 @@ export class AddReservationComponent extends BaseReservationComponent
           this.summaryData = new SummaryData().deserialize();
         }
       });
+    // this.inputControls.reservationInformation
+    //   .get('from')
+    //   .valueChanges.subscribe((res) => {
+    //     if (res) {
+    //       this.getSummaryData();
+    //     }
+    //   });
+
+    // this.inputControls.reservationInformation
+    //   .get('to')
+    //   .valueChanges.subscribe((res) => {
+    //     if (res) {
+    //       this.getSummaryData();
+    //     }
+    //   });
   }
 
   getReservationId(): void {
@@ -186,7 +200,6 @@ export class AddReservationComponent extends BaseReservationComponent
           .getOfferByRoomType(this.entityId, config)
           .subscribe(
             (response) => {
-              debugger;
               this.offersList = new OfferList().deserialize(response);
               if (this.userForm.get('offerId').value) {
                 this.selectedOffer = this.offersList.records.filter(

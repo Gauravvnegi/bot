@@ -27,9 +27,6 @@ import { ReservationForm } from '../../../constants/form';
   ],
 })
 export class PaymentMethodComponent implements OnInit {
-  // @Input() paymentOptions: Option[] = [];
-  // @Input() currencies: Option[] = [];
-
   currencies: Option[] = [];
   paymentOptions: Option[] = [];
   entityId: string;

@@ -25,7 +25,7 @@ import { ManageReservationService } from '../../../services/manage-reservation.s
 import { Clipboard } from '@angular/cdk/clipboard';
 import { Location } from '@angular/common';
 import { Subscription } from 'rxjs';
-import { ReservationForm } from '../../../constants/form';
+import { PaymentMethod, ReservationForm } from '../../../constants/form';
 import { FormService } from '../../../services/form.service';
 import { EntitySubType, EntityType } from '@hospitality-bot/admin/shared';
 import { RoomReservationRes } from '../../../types/response.type';
@@ -213,7 +213,6 @@ export class BookingSummaryComponent implements OnInit {
             ],
             { replaceUrl: true }
           );
-          // this.userForm.reset();
           this.handleInitForm.emit();
           this.modalService.close();
         },
@@ -242,11 +241,16 @@ export class BookingSummaryComponent implements OnInit {
     });
   }
 
-  get inputControl() {
+  get inputControls() {
     return this.parentFormGroup.controls as Record<
       keyof ReservationForm,
       AbstractControl
     >;
+  }
+
+  get paymentControls() {
+    return (this.parentFormGroup.get('paymentMethod') as FormGroup)
+      .controls as Record<keyof PaymentMethod, AbstractControl>;
   }
 }
 

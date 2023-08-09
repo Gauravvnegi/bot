@@ -44,7 +44,8 @@ import { BaseReservationComponent } from '../base-reservation.component';
     '../reservation.styles.scss',
   ],
 })
-export class RestaurantReservationComponent extends BaseReservationComponent implements OnInit {
+export class RestaurantReservationComponent extends BaseReservationComponent
+  implements OnInit {
   menuItemsArray: FormArray;
   foodPackageArray: FormArray;
 
@@ -75,7 +76,7 @@ export class RestaurantReservationComponent extends BaseReservationComponent imp
     protected globalFilterService: GlobalFilterService,
     private manageReservationService: ManageReservationService,
     protected activatedRoute: ActivatedRoute,
-    private formSerivce: FormService,
+    private formService: FormService
   ) {
     super(globalFilterService, activatedRoute);
 
@@ -90,13 +91,13 @@ export class RestaurantReservationComponent extends BaseReservationComponent imp
   }
 
   initDetails() {
-    this.bookingType = EntitySubType.RESTAURANT
+    this.bookingType = EntitySubType.RESTAURANT;
     this.outletId = this.selectedEntity.id;
     this.fields = menuItemFields;
     this.outletItems = [OutletItems.MENU_ITEM, OutletItems.FOOD_PACKAGE];
-    this.expandAccordion = this.formSerivce.enableAccordion;
+    this.expandAccordion = this.formService.enableAccordion;
     if (this.expandAccordion) {
-      this.formSerivce.enableAccordion = false;
+      this.formService.enableAccordion = false;
     }
   }
 
@@ -168,7 +169,7 @@ export class RestaurantReservationComponent extends BaseReservationComponent imp
       this.tableNumber = `Table Number: ${res?.tableNumber}`;
     });
 
-    this.formSerivce.reservationDateAndTime.subscribe((res) => {
+    this.formService.reservationDateAndTime.subscribe((res) => {
       if (res) this.setDateAndTime(res);
     });
 
@@ -268,7 +269,6 @@ export class RestaurantReservationComponent extends BaseReservationComponent imp
         .getReservationDataById(this.reservationId, this.entityId)
         .subscribe(
           (response) => {
-
             const data = new OutletForm().deserialize(response);
             const {
               orderInformation: { menuItems, ...orderInfo },
@@ -322,24 +322,24 @@ export class RestaurantReservationComponent extends BaseReservationComponent imp
     }
   }
 
-  getOfferByRoomType(id: string): void {
-    if (id)
-      this.$subscription.add(
-        this.manageReservationService
-          .getOfferByRoomType(this.entityId, id)
-          .subscribe(
-            (response) => {
-              this.offersList = new OfferList().deserialize(response);
-              if (this.userForm.get('offerId').value) {
-                this.selectedOffer = this.offersList.records.filter(
-                  (item) => item.id === this.userForm.get('offerId').value
-                )[0];
-              }
-            },
-            (error) => {}
-          )
-      );
-  }
+  // getOfferByRoomType(id: string): void {
+  //   if (id)
+  //     this.$subscription.add(
+  //       this.manageReservationService
+  //         .getOfferByRoomType(this.entityId, id)
+  //         .subscribe(
+  //           (response) => {
+  //             this.offersList = new OfferList().deserialize(response);
+  //             if (this.userForm.get('offerId').value) {
+  //               this.selectedOffer = this.offersList.records.filter(
+  //                 (item) => item.id === this.userForm.get('offerId').value
+  //               )[0];
+  //             }
+  //           },
+  //           (error) => {}
+  //         )
+  //     );
+  // }
 
   getMenuItems() {
     this.$subscription.add(
@@ -389,7 +389,7 @@ export class RestaurantReservationComponent extends BaseReservationComponent imp
       })),
       outletType: EntitySubType.RESTAURANT,
     };
-    
+
     this.$subscription.add(
       this.manageReservationService
         .getSummaryData(this.outletId, data, config)
@@ -425,5 +425,4 @@ export class RestaurantReservationComponent extends BaseReservationComponent imp
       'menuItems'
     ) as FormArray).controls;
   }
-
 }

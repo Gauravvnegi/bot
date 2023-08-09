@@ -18,13 +18,6 @@ import { ReservationForm } from '../../../constants/form';
   styleUrls: ['./booking-info.component.scss', '../../reservation.styles.scss'],
 })
 export class BookingInfoComponent implements OnInit {
-  startMinDate = new Date();
-  endMinDate = new Date();
-  maxFromDate = new Date();
-  maxToDate = new Date();
-  entityId: string;
-  reservationId: string;
-
   countries: Option[];
   @Input() expandAccordion: boolean = false;
   @Input() reservationTypes: Option[] = [];
@@ -33,15 +26,19 @@ export class BookingInfoComponent implements OnInit {
   @Input() bookingType: string;
   configData: BookingConfig;
 
+  entityId: string;
+  startMinDate = new Date();
+  endMinDate = new Date();
+  maxFromDate = new Date();
+  maxToDate = new Date();
+
   constructor(
     public controlContainer: ControlContainer,
     private configService: ConfigService,
     private globalFilterService: GlobalFilterService,
     private activatedRoute: ActivatedRoute,
     private formService: FormService
-  ) {
-    this.reservationId = this.activatedRoute.snapshot.paramMap.get('id');
-  }
+  ) {}
 
   ngOnInit(): void {
     this.entityId = this.globalFilterService.entityId;

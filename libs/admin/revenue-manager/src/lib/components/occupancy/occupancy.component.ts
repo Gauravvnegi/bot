@@ -52,10 +52,10 @@ export class OccupancyComponent implements OnInit {
 
   initForm() {
     this.useForm = this.fb.group({
+      status: [false],
       season: this.fb.array([]),
     });
     this.addSeasonControl();
-    console.log(this.useForm);
   }
 
   addSeasonControl() {
@@ -64,39 +64,87 @@ export class OccupancyComponent implements OnInit {
         name: ['', [Validators.required]],
         fromDate: [this.currentDay, [Validators.required]],
         toDate: [this.seventhDay, [Validators.required]],
-        roomType: ['', [Validators.required]],
+        roomType: [
+          this.allRooms.map((item) => item.value),
+          [Validators.required],
+        ],
         selectedDays: ['', [Validators.required]],
-        roomTypes: this.fb.array([]),
       })
     );
-    this.addRoomTypeOccupancy(this.seasonControl.at(0) as FormGroup, 0);
+    const seasonIndex = this.seasonControl.length - 1;
+    const seasonFG = this.seasonControl.at(seasonIndex) as FormGroup;
+    const seasonArray = this.seasonControl.at(seasonIndex) as FormGroup;
+    seasonFG.get('roomType').valueChanges.subscribe((res: string[]) => {
+      seasonArray.removeControl('roomTypes');
+      seasonArray.addControl('roomTypes', this.fb.array([]));
+      this.addRoomTypeOccupancy(seasonFG);
+    });
+
+    seasonArray.addControl('roomTypes', this.fb.array([]));
+    this.addRoomTypeOccupancy(seasonFG);
   }
 
-  addRoomTypeOccupancy(seasonControl: FormGroup, roomTypeIdx: number) {
-    this.allRooms.forEach((room, idx) => {
-      (seasonControl.get('roomTypes') as FormArray).push(
-        this.fb.group({
-          occupancy: this.fb.array([], [Validators.required]),
-        })
+  removeSeason(seasonIndex: number) {
+    this.seasonControl.removeAt(seasonIndex);
+  }
+
+  seasonStatusChange(status, seasonIndex: number) {
+    this.seasonControl.at(seasonIndex).patchValue({ status: status });
+  }
+
+  addRoomTypeOccupancy(seasonControl: FormGroup) {
+    const selectedRooms = seasonControl.get('roomType').value;
+    const roomTypeFA = seasonControl.get('roomTypes') as FormArray;
+    this.allRooms
+      .filter((room) => selectedRooms.includes(room.value))
+      .forEach((room, idx) => {
+        roomTypeFA.controls.push(
+          this.fb.group({
+            roomId: [room.value],
+            roomName: [room.label],
+            basePrice: [room.price],
+          })
+        );
+        const roomType = roomTypeFA.at(idx) as FormGroup;
+        roomType.addControl(
+          'occupancy',
+          this.fb.array([], [Validators.required])
+        );
+        this.addOccupancyControl(roomType);
+      });
+  }
+
+  addOccupancyControl(occupancyFG: FormGroup) {
+    const occupancyFA = occupancyFG.get('occupancy') as FormArray;
+    occupancyFA.push(
+      this.fb.group({
+        start: [, [Validators.min(0), Validators.required]],
+        end: [, [Validators.min(0), Validators.required]],
+        discount: [, [Validators.min(0), Validators.required]],
+        rate: [, [Validators.min(0), Validators.required]],
+      })
+    );
+
+    const basePrice = occupancyFG.get('basePrice').value;
+    const occupancyFA__FG = occupancyFA.at(occupancyFA.length - 1);
+    occupancyFA__FG.get('discount').valueChanges.subscribe((percentage) => {
+      occupancyFA__FG.patchValue(
+        { rate: (basePrice * +percentage) / 100 },
+        { emitEvent: false }
       );
-      const roomType = (this.seasonControl
-        .at(roomTypeIdx)
-        .get('roomTypes') as FormArray).at(idx);
-      this.addOccupancyControl(roomType as FormGroup, room);
+    });
+
+    occupancyFA__FG.get('rate').valueChanges.subscribe((rate) => {
+      const percentage = (+rate / basePrice) * 100;
+      occupancyFA__FG.patchValue(
+        { discount: percentage.toFixed(2) },
+        { emitEvent: false }
+      );
     });
   }
 
-  addOccupancyControl(occupancyFG: FormGroup, room: RoomTypes) {
-    (occupancyFG.get('occupancy') as FormArray).push(
-      this.fb.group({
-        value: [room.value],
-        label: [room.label],
-        rates: [room.price],
-        start: [],
-        end: [],
-        discount: [],
-      })
-    );
+  removeOccupancyControl(occupancyFG: FormGroup, occupancyIndex: number) {
+    (occupancyFG.get('occupancy') as FormArray).removeAt(occupancyIndex);
   }
 
   get seasonControl() {
@@ -107,5 +155,7 @@ export class OccupancyComponent implements OnInit {
     return (this.useForm?.get('season') as FormArray)?.controls;
   }
 
-  handleSave() {}
+  handleSave() {
+    console.log(this.useForm);
+  }
 }

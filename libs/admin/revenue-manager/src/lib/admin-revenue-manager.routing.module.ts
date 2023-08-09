@@ -14,6 +14,7 @@ import { DayTimeTriggerComponent } from './components/day-time-trigger/day-time-
 import { BarPriceComponent } from './components/bar-price/bar-price.component';
 import { RoomTypesComponent } from './components/room-types/room-types.component';
 import { ExceptionComponent } from './components/exception/exception.component';
+import { FromToDateComponent } from './components/from-to-date/from-to-date.component';
 
 const appRoutes: CRoutes = [
   {
@@ -21,6 +22,11 @@ const appRoutes: CRoutes = [
     component: MainComponent,
     name: ModuleNames.REVENUE_MANAGER,
     children: [
+      {
+        path: 'setup-bar-price',
+        component: BarPriceComponent,
+        name: ModuleNames.REVENUE_SETUP_BAR_PRICE,
+      },
       {
         path: 'dynamic-pricing',
         name: ModuleNames.REVENUE_DYNAMIC_PRICING,
@@ -32,11 +38,6 @@ const appRoutes: CRoutes = [
             name: ModuleNames.REVENUE_DYNAMIC_PRICING,
           },
         ],
-      },
-      {
-        path: 'setup-bar-price',
-        component: BarPriceComponent,
-        name: ModuleNames.REVENUE_SETUP_BAR_PRICE,
       },
     ],
   },
@@ -61,6 +62,7 @@ export class AdminRevenueMangerRoutingModule {
     MainComponent,
     DynamicPricingComponent,
     ExceptionComponent,
+    FromToDateComponent,
     OccupancyComponent,
     InventoryReallocationComponent,
     DayTimeTriggerComponent,

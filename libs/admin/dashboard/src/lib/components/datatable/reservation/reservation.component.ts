@@ -43,6 +43,7 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
   isResizableColumns = true;
   isAutoLayout = false;
   isCustomSort = true;
+  rowsPerPage = 200;
   triggerInitialData = false;
   cols = cols.reservation;
   selectedTab: TableValue;

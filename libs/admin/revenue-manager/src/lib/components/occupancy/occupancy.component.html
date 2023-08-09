@@ -9,74 +9,214 @@
       *ngFor="let occupancy of formControls; let seasonIndex = index"
       [formGroupName]="seasonIndex"
     >
-      <p-accordion class="accordion" [activeIndex]="0">
+      <p-accordion
+        class="accordion"
+        [activeIndex]="seasonIndex === 0 ? 0 : false"
+      >
         <p-accordionTab>
-          <p-header>
-            <div class="header">
-              {{
-                !!occupancy.get('name').value?.length
-                  ? occupancy.get('name').value
-                  : 'Season ' + seasonIndex
-              }}
+          <p-header class="season-header">
+            <div class="header-wrapper">
+              <div class="header-button">
+                <div class="header">
+                  {{
+                    !!occupancy.get('name').value?.length
+                      ? occupancy.get('name').value
+                      : 'Season ' + (seasonIndex + 1)
+                  }}
+                </div>
+              </div>
+              <hospitality-bot-toggle-switch-with-label
+                class="toggle"
+                [isToggleOn]="occupancy.get('status')?.value"
+                (onToggleSwitch)="seasonStatusChange($event, seasonIndex)"
+                click-stop-propagation
+              ></hospitality-bot-toggle-switch-with-label>
             </div>
+            <hospitality-bot-button
+              click-stop-propagation
+              [class]="formControls.length > 1 ? 'remove' : 'remove disable'"
+              label="Remove"
+              variant="text"
+              severity="reset"
+              (onClick)="formControls.length > 1 && removeSeason(seasonIndex)"
+            ></hospitality-bot-button>
           </p-header>
           <div class="content">
-            <div class="left form-block">
-              <hospitality-bot-input
-                class="full-width"
-                controlName="name"
-                maxLength="60"
-                label="Name"
-                [props]="{
-                  placeholder: 'Enter'
-                }"
-              ></hospitality-bot-input>
+            <div class="season-form">
+              <div class="left form-block">
+                <hospitality-bot-input
+                  class="full-width"
+                  controlName="name"
+                  maxLength="60"
+                  label="Name"
+                  [props]="{
+                    placeholder: 'Enter'
+                  }"
+                ></hospitality-bot-input>
 
-              <hospitality-bot-room-types
-                class="full-width"
-                [controlName]="'roomType'"
-                [props]="{
-                  isAllSelected: true
-                }"
-              >
-              </hospitality-bot-room-types>
+                <hospitality-bot-room-types
+                  class="full-width"
+                  [controlName]="'roomType'"
+                  [props]="{
+                    isAllSelected: true
+                  }"
+                >
+                </hospitality-bot-room-types>
+              </div>
+              <div class="right form-block">
+                <hospitality-bot-date
+                  class="half-width"
+                  controlName="fromDate"
+                  label="To"
+                  [props]="{ placeholder: 'Select To Date' }"
+                  [settings]="{
+                    enableTime: false,
+                    dateValue: endDateValue
+                  }"
+                ></hospitality-bot-date>
+
+                <hospitality-bot-date
+                  class="half-width"
+                  controlName="toDate"
+                  label="To"
+                  [props]="{ placeholder: 'Select To Date' }"
+                  [settings]="{
+                    enableTime: false,
+                    dateValue: endDateValue
+                  }"
+                ></hospitality-bot-date>
+
+                <hospitality-bot-checkbox-selector
+                  class="weekdays__selector full-width"
+                  label="Days"
+                  [allChecked]="true"
+                  controlName="selectedDays"
+                  [options]="weeks"
+                >
+                </hospitality-bot-checkbox-selector>
+              </div>
             </div>
-            <div class="right form-block">
-              <hospitality-bot-date
-                class="half-width"
-                controlName="fromDate"
-                label="To"
-                [props]="{ placeholder: 'Select To Date' }"
-                [settings]="{
-                  enableTime: false,
-                  dateValue: endDateValue
-                }"
-              ></hospitality-bot-date>
+            <div class="occupancy-form" formArrayName="roomTypes">
+              <ng-container
+                *ngIf="
+                  occupancy.get('roomTypes')?.controls.length;
+                  else emptyRoom
+                "
+              ></ng-container>
 
-              <hospitality-bot-date
-                class="half-width"
-                controlName="toDate"
-                label="To"
-                [props]="{ placeholder: 'Select To Date' }"
-                [settings]="{
-                  enableTime: false,
-                  dateValue: endDateValue
-                }"
-              ></hospitality-bot-date>
-
-              <hospitality-bot-checkbox-selector
-                class="weekdays__selector full-width"
-                label="Days"
-                [allChecked]="true"
-                controlName="selectedDays"
-                [options]="weeks"
+              <ng-container
+                *ngFor="
+                  let room of occupancy.get('roomTypes')?.controls;
+                  let roomIndex = index
+                "
+                [formGroupName]="roomIndex"
               >
-              </hospitality-bot-checkbox-selector>
+                <p-accordion
+                  class="room-accordion"
+                  [activeIndex]="roomIndex === 0 ? 0 : false"
+                >
+                  <p-accordionTab>
+                    <p-header>
+                      <div class="header">
+                        {{ room.get('roomName')?.value }}
+                      </div>
+                    </p-header>
+                    <div class="occupancy__content">
+                      <div class="occupancy occupancy-header">
+                        <span class="item">Start & End</span>
+                        <span class="item item__discount">Discount/Markup</span>
+                        <span class="item">Rates</span>
+                        &nbsp;
+                      </div>
+                      <div
+                        formArrayName="occupancy"
+                        class="occupancy occupancy-form form-block"
+                      >
+                        <ng-container
+                          *ngFor="
+                            let roomOccupancy of room.get('occupancy')
+                              ?.controls;
+                            let occupancyIndex = index
+                          "
+                          [formGroupName]="occupancyIndex"
+                        >
+                          <hospitality-bot-prefix-field
+                            class="one-fourth-width"
+                            preControlName="start"
+                            postControlName="end"
+                            preFieldType="input"
+                            postFieldType="input"
+                            [defaultProps]="{
+                              pre: {
+                                placeholder: 'Start'
+                              },
+                              post: {
+                                placeholder: 'End'
+                              }
+                            }"
+                            [settings]="{
+                              layout: 'dashed'
+                            }"
+                          >
+                          </hospitality-bot-prefix-field>
+                          <hospitality-bot-input
+                            controlName="discount"
+                            [min]="0"
+                            [props]="{
+                              placeholder: 'Enter',
+                              type: 'number',
+                              subtitle: '%',
+                              errorMessages: {
+                                required: 'This is required field',
+                                min: 'Minimum value should be 0'
+                              }
+                            }"
+                          ></hospitality-bot-input>
+                          <hospitality-bot-input
+                            controlName="rate"
+                            [min]="0"
+                            [props]="{
+                              placeholder: 'Enter',
+                              type: 'number',
+                              subtitle: 'Rs. ' + room.get('basePrice').value,
+                              strike: true,
+                              errorMessages: {
+                                required: 'This is required field',
+                                min: 'Minimum value should be 0'
+                              }
+                            }"
+                          ></hospitality-bot-input>
+                          <i
+                            [class]="
+                              room.get('occupancy').controls.length > 1
+                                ? 'pi pi-times remove'
+                                : 'pi pi-times remove disable'
+                            "
+                            (click)="
+                              room.get('occupancy').controls.length > 1 &&
+                                removeOccupancyControl(room, occupancyIndex)
+                            "
+                          ></i>
+                        </ng-container>
+                      </div>
+                      <div class="link" (click)="addOccupancyControl(room)">
+                        +Add More
+                      </div>
+                    </div>
+                  </p-accordionTab>
+                </p-accordion>
+              </ng-container>
             </div>
           </div>
         </p-accordionTab>
       </p-accordion>
+      <br />
     </ng-container>
+    <div class="add-season">
+      <div class="link" (click)="addSeasonControl()">
+        +Add New Season
+      </div>
+    </div>
   </div>
   <div class="wrapper__occupancy-footer">
     <span><strong>Note:</strong> {{ footerNote }}</span>
@@ -88,7 +228,14 @@
         postLabel: 'Save'
       }"
       (onPostAction)="handleSave()"
+      [disabled]="useForm.invalid"
       #fa
     ></hospitality-bot-form-action>
   </div>
+
+  <ng-template #emptyRoom>
+    <div class="empty-room">
+      Please select at least one room.
+    </div>
+  </ng-template>
 </div>

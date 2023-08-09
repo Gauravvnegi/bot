@@ -206,6 +206,7 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
         this.menuOptions = RestaurantMenuOptions;
       }
     }
+    this.rowsPerPage = 200;
   }
 
   /**

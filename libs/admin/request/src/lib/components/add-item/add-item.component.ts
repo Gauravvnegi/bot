@@ -92,7 +92,7 @@ export class AddItemComponent implements OnInit {
       '',
       { panelClass: 'success' }
     );
-    this.router.navigate(['/pages/efrontdesk/request']);
+    this.onClose.emit();
   };
 
   handleError = (error) => {

@@ -252,7 +252,6 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
   }
 
   create() {
-    this.onRaiseRequestClose.emit({ status: false });
 
     //to open add new item pop up
 
@@ -268,7 +267,8 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
 
     this.$subscription.add(
       addItemCompRef.componentInstance.onClose.subscribe(() => {
-        this._modalService.close();
+        debugger;
+        addItemCompRef.close();
       })
     );
   }

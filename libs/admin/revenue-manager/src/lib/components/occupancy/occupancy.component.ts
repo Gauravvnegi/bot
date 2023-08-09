@@ -10,6 +10,8 @@ export type ControlTypes = 'season' | 'occupancy';
   styleUrls: ['./occupancy.component.scss'],
 })
 export class OccupancyComponent {
+  readonly weeks = weeks;
+
   loading = false;
   footerNote = `Lorem ipsum dolor sit amet consectetur adipisicing elit. Error eos
   alias consequuntur necessitatibus dolore, fugit eligendi, exercitationem
@@ -26,7 +28,6 @@ export class OccupancyComponent {
 
   @Input() season: FormGroup;
   @Input() occupancy: FormGroup;
-  weeks = weeks;
 
   get dynamicPricingFG(): FormGroup {
     return this.parentForm;
@@ -131,6 +132,5 @@ export class OccupancyComponent {
 
   handleSave() {
     console.log(this.dynamicPricingControl.occupancyFA);
-    debugger;
   }
 }

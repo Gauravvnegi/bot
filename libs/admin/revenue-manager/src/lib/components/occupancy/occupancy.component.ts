@@ -107,15 +107,18 @@ export class OccupancyComponent {
               });
 
               const { start, end } = occupancyFG.controls;
-              const customError = { min: 'Start should be less than end.' };
               start.valueChanges.subscribe((startValue) => {
                 const condition = end.value && +startValue > end.value;
+                const customError = { min: 'Start should be less than End.' };
                 start.setErrors(condition ? customError : null);
                 end.setErrors(condition && null);
               });
 
               end.valueChanges.subscribe((endValue) => {
                 const condition = start.value && +endValue < start.value;
+                const customError = {
+                  min: 'End should be greater than Start.',
+                };
                 end.setErrors(condition ? customError : null);
                 start.setErrors(condition && null);
               });

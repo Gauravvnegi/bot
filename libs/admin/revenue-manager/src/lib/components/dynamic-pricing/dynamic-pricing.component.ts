@@ -5,7 +5,10 @@ import { MenuItem } from 'primeng/api';
 @Component({
   selector: 'hospitality-bot-dynamic-pricing',
   templateUrl: './dynamic-pricing.component.html',
-  styleUrls: ['./dynamic-pricing.component.scss'],
+  styleUrls: [
+    '../bar-price/bar-price.component.scss',
+    './dynamic-pricing.component.scss',
+  ],
 })
 export class DynamicPricingComponent implements OnInit {
   activeStep = 0;

@@ -209,8 +209,7 @@ export class UpdateRatesComponent implements OnInit {
       res: { value: boolean }
     ) => {
       const rateControl = (control.get('rates') as FormArray).at(idx);
-      const isBase = control.get('isBase').value;
-      if (res.value || !isBase) {
+      if (res.value) {
         rateControl.disable({ emitEvent: false });
       } else {
         rateControl.enable({ emitEvent: false });
@@ -317,43 +316,47 @@ export class UpdateRatesComponent implements OnInit {
             }
 
             // RatePlan Pricing Control with Base RatePlan
-            control.controls?.forEach((ratePlanControl) => {
-              const isBase = ratePlanControl.get('isBase').value;
-              const dynamicControl = this.useFormControl.roomTypes.controls[
-                roomTypeIdx
-              ].get('dynamicPrice') as FormArray;
+            const isBaseRatePlanRow = controlG.get('isBase').value;
+            isBaseRatePlanRow &&
+              control.controls?.forEach((ratePlanControl) => {
+                const isBase = ratePlanControl.get('isBase').value;
+                const dynamicControl = this.useFormControl.roomTypes.controls[
+                  roomTypeIdx
+                ].get('dynamicPrice') as FormArray;
 
-              if (!isBase && !dynamicControl.at(dayIndex).get('value').value) {
-                const variablePrice = ratePlanControl.get('variablePrice')
-                  .value;
-                const price = res.value.length
-                  ? +res.value + variablePrice
-                  : null;
+                if (
+                  !isBase &&
+                  !dynamicControl.at(dayIndex).get('value').value
+                ) {
+                  const variablePrice = ratePlanControl.get('variablePrice')
+                    .value;
+                  const price = res.value.length
+                    ? +res.value + variablePrice
+                    : null;
 
-                const rates = ratePlanControl.get('rates') as FormArray;
-                const newPriceList = rates.controls.map((rate, rateIndex) => ({
-                  value: dynamicControl.at(rateIndex).get('value').value
-                    ? rate.get('value').value
-                    : price,
-                }));
+                  const rates = ratePlanControl.get('rates') as FormArray;
+                  const newPriceList = rates.controls.map(
+                    (rate, rateIndex) => ({
+                      value: dynamicControl.at(rateIndex).get('value').value
+                        ? rate.get('value').value
+                        : price,
+                    })
+                  );
 
-                if (linkedValue) {
-                  rates.patchValue(newPriceList, {
-                    emitEvent: false,
-                  });
-                } else {
-                  rates
-                    .at(dayIndex)
-                    .patchValue({ value: price }, { emitEvent: false });
+                  if (linkedValue) {
+                    rates.patchValue(newPriceList, {
+                      emitEvent: false,
+                    });
+                  } else {
+                    rates
+                      .at(dayIndex)
+                      .patchValue({ value: price }, { emitEvent: false });
+                  }
                 }
-              }
-            });
+              });
           });
         });
       });
-
-    const isBase = controlG.get('isBase').value;
-    if (!isBase) controlG.disable({ emitEvent: false });
   }
 
   /**

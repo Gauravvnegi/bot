@@ -1,0 +1,6 @@
+@import 'main';
+:host ::ng-deep {
+  .p-steps .p-steps-item.p-highlight .p-steps-number {
+    background-color: #5f38f9;
+  }
+}

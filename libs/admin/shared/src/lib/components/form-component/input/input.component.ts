@@ -14,6 +14,7 @@ export class InputComponent extends FormComponent {
   @Input() min: number;
   @Input() max: number;
   @Input() controlName: string;
+  strike = false;
   inputLength = 0;
 
   constructor(public controlContainer: ControlContainer) {

@@ -331,6 +331,7 @@ export class CreateOfferComponent implements OnInit {
           params: '?type=OFFER',
         })
         .subscribe((res) => {
+          this.loading = false;
           this.routes[2].label = 'Edit Offer';
           let { packageCode, subPackages, roomTypes, ...restData } = res;
 

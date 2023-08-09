@@ -25,6 +25,7 @@
     [mention]="items"
     [mentionConfig]="{ triggerChar: '@', labelKey: 'name' }"
     (itemSelected)="setSelectedItem($event)"
+    (keyup.enter)="sendMessage()"
   />
   <div
     class="sendMessage"

@@ -1,17 +1,17 @@
 <div
-  *ngIf="useForm"
+  *ngIf="dynamicPricingFG"
   class="wrapper__occupancy"
   [id]="fa.referenceId"
-  [formGroup]="useForm"
+  [formGroup]="dynamicPricingFG"
 >
-  <div class="wrapper__occupancy-content" formArrayName="season">
-    <ng-container
-      *ngFor="let occupancy of formControls; let seasonIndex = index"
-      [formGroupName]="seasonIndex"
-    >
-      <p-accordion
-        class="accordion"
-        [activeIndex]="seasonIndex === 0 ? 0 : false"
+  <div class="wrapper__occupancy-content" formArrayName="occupancyFA">
+    <p-accordion class="accordion" [activeIndex]="[0]" [multiple]="true">
+      <ng-container
+        *ngFor="
+          let season of dynamicPricingControl.occupancyFA.controls;
+          let seasonIndex = index
+        "
+        [formGroupName]="seasonIndex"
       >
         <p-accordionTab>
           <p-header class="season-header">
@@ -19,26 +19,33 @@
               <div class="header-button">
                 <div class="header">
                   {{
-                    !!occupancy.get('name').value?.length
-                      ? occupancy.get('name').value
+                    !!season.get('name').value?.length
+                      ? season.get('name').value
                       : 'Season ' + (seasonIndex + 1)
                   }}
                 </div>
               </div>
               <hospitality-bot-toggle-switch-with-label
                 class="toggle"
-                [isToggleOn]="occupancy.get('status')?.value"
+                [isToggleOn]="season.get('status')?.value"
                 (onToggleSwitch)="seasonStatusChange($event, seasonIndex)"
                 click-stop-propagation
               ></hospitality-bot-toggle-switch-with-label>
             </div>
             <hospitality-bot-button
               click-stop-propagation
-              [class]="formControls.length > 1 ? 'remove' : 'remove disable'"
+              [class]="
+                dynamicPricingControl.occupancyFA.length > 1
+                  ? 'remove'
+                  : 'remove disable'
+              "
               label="Remove"
               variant="text"
               severity="reset"
-              (onClick)="formControls.length > 1 && removeSeason(seasonIndex)"
+              (onClick)="
+                dynamicPricingControl.occupancyFA.length > 1 &&
+                  remove('season', seasonIndex)
+              "
             ></hospitality-bot-button>
           </p-header>
           <div class="content">
@@ -98,24 +105,22 @@
             </div>
             <div class="occupancy-form" formArrayName="roomTypes">
               <ng-container
-                *ngIf="
-                  occupancy.get('roomTypes')?.controls.length;
-                  else emptyRoom
-                "
+                *ngIf="season.get('roomType')?.value.length; else emptyRoom"
               ></ng-container>
 
-              <ng-container
-                *ngFor="
-                  let room of occupancy.get('roomTypes')?.controls;
-                  let roomIndex = index
-                "
-                [formGroupName]="roomIndex"
+              <p-accordion
+                class="room-accordion"
+                [multiple]="true"
+                [activeIndex]="[0]"
               >
-                <p-accordion
-                  class="room-accordion"
-                  [activeIndex]="roomIndex === 0 ? 0 : false"
+                <ng-container
+                  *ngFor="
+                    let room of season.get('roomTypes')?.controls;
+                    let roomIndex = index
+                  "
+                  [formGroupName]="roomIndex"
                 >
-                  <p-accordionTab>
+                  <p-accordionTab *ngIf="room.get('isSelected').value">
                     <p-header>
                       <div class="header">
                         {{ room.get('roomName')?.value }}
@@ -148,10 +153,18 @@
                             postFieldType="input"
                             [defaultProps]="{
                               pre: {
-                                placeholder: 'Start'
+                                placeholder: 'Start',
+                                errorMessages: {
+                                  required: 'This is required field',
+                                  min: 'End should be grater than start.'
+                                }
                               },
                               post: {
-                                placeholder: 'End'
+                                placeholder: 'End',
+                                errorMessages: {
+                                  required: 'This is required field',
+                                  min: 'End should be grater than start.'
+                                }
                               }
                             }"
                             [settings]="{
@@ -194,26 +207,27 @@
                             "
                             (click)="
                               room.get('occupancy').controls.length > 1 &&
-                                removeOccupancyControl(room, occupancyIndex)
+                                remove('occupancy', occupancyIndex, room)
                             "
                           ></i>
                         </ng-container>
                       </div>
-                      <div class="link" (click)="addOccupancyControl(room)">
+                      <div class="link" (click)="add('occupancy', room)">
                         +Add More
                       </div>
                     </div>
                   </p-accordionTab>
-                </p-accordion>
-              </ng-container>
+                </ng-container>
+              </p-accordion>
             </div>
           </div>
         </p-accordionTab>
-      </p-accordion>
-      <br />
-    </ng-container>
+
+        <br />
+      </ng-container>
+    </p-accordion>
     <div class="add-season">
-      <div class="link" (click)="addSeasonControl()">
+      <div class="link" (click)="add('season')">
         +Add New Season
       </div>
     </div>
@@ -228,7 +242,6 @@
         postLabel: 'Save'
       }"
       (onPostAction)="handleSave()"
-      [disabled]="useForm.invalid"
       #fa
     ></hospitality-bot-form-action>
   </div>

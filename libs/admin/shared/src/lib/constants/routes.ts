@@ -19,6 +19,7 @@ export const routes = {
   [ModuleNames.REQUEST_DASHBOARD]: 'efrontdesk/complaint-analytics',
   [ModuleNames.REQUEST]: 'efrontdesk/complaint',
   [ModuleNames.ADD_RESERVATION]: 'efrontdesk/reservation',
+  [ModuleNames.ROOM]: 'efrontdesk/room',
 
   // Freddie
   [ModuleNames.FREDDIE]: 'freddie',
@@ -51,7 +52,7 @@ export const routes = {
 
   // Inventory
   [ModuleNames.INVENTORY]: 'inventory',
-  [ModuleNames.ROOM]: 'inventory/room',
+  // [ModuleNames.ROOM]: 'inventory/room',
 
   // FINANCE
   [ModuleNames.FINANCE]: 'finance',

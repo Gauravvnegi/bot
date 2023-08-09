@@ -123,7 +123,7 @@ export class RequestListComponent implements OnInit, OnDestroy {
           {
             ...this.filterData,
             order: 'DESC',
-            jourenyType: this.entityType,
+            journeyType: this.entityType,
             actionType: this.tabFilterItems[this.tabFilterIdx].value,
             offset: 0,
             limit:

@@ -114,19 +114,35 @@ export class DynamicPricingComponent implements OnInit {
     });
   }
 
-  modifyInventoryAllocationFG(mode = Revenue.add, index?: number): void {
-    if (mode == Revenue.add)
+  modifyInventoryAllocationFG(event: { mode: string; index?: number }): void {
+    if (event.mode == Revenue.add)
       this.dynamicPricingControl.inventoryAllocationFA.controls.push(
         this.getInventoryAllocationFG()
       );
     else if (
       this.dynamicPricingControl.inventoryAllocationFA.controls.length > 1
     )
-      this.dynamicPricingControl.inventoryAllocationFA.removeAt(index);
+      this.dynamicPricingControl.inventoryAllocationFA.removeAt(event.index);
   }
 
   onActive(event: StepperEmitType) {
     this.activeStep = event.index;
+  }
+
+  modifyTriggerFG(event: { mode: string; index?: number }): void {
+    if (event.mode == Revenue.add)
+      this.dynamicPricingControl.timeFA.controls.push(this.getTriggerFG());
+    else this.dynamicPricingControl.timeFA.removeAt(event.index);
+  }
+
+  modifyLevelFG(event: {
+    triggerFG: FormGroup;
+    mode: string;
+    index?: number;
+  }): void {
+    const levelFA = event.triggerFG.get('levels') as FormArray;
+    if (event.mode == Revenue.add) levelFA.controls.push(this.getLevelFG());
+    else levelFA.removeAt(event.index);
   }
 
   get dynamicPricingControl() {

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import {
   AbstractControl,
   FormArray,
@@ -18,6 +18,7 @@ import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 })
 export class InventoryReallocationComponent implements OnInit {
   @Input() dynamicPricingFG: FormGroup;
+  @Output() modifyInventoryAllocationFGEvent = new EventEmitter();
   weeks = weeks;
   roomTypes: RoomTypes[];
   entityId: string;
@@ -40,45 +41,8 @@ export class InventoryReallocationComponent implements OnInit {
     });
   }
 
-  getInventoryAllocationFG(data?: any): FormGroup {
-    const triggerFG = this.fb.group({
-      name: [''],
-      fromDate: [''],
-      toDate: [''],
-      selectedDays: [[]],
-      reallocations: this.fb.array([]),
-      status: [true],
-    });
-    if (this.roomTypes)
-      this.addRoomAllocationControl(
-        triggerFG.get('reallocations') as FormArray
-      );
-    if (data) triggerFG.patchValue(data);
-    return triggerFG;
-  }
-
   modifyInventoryAllocationFG(mode = Revenue.add, index?: number): void {
-    if (mode == Revenue.add)
-      this.dynamicPricingControl.inventoryAllocationFA.controls.push(
-        this.getInventoryAllocationFG()
-      );
-    else if (
-      this.dynamicPricingControl.inventoryAllocationFA.controls.length > 1
-    )
-      this.dynamicPricingControl.inventoryAllocationFA.removeAt(index);
-  }
-
-  addRoomAllocationControl(allocationFA: FormArray) {
-    this.roomTypes.forEach((item) => {
-      allocationFA.push(
-        this.fb.group({
-          label: [item.label],
-          percentage: [''],
-          count: [''],
-          value: [item.value],
-        })
-      );
-    });
+    this.modifyInventoryAllocationFGEvent.emit({ mode, index });
   }
 
   get dynamicPricingControl() {

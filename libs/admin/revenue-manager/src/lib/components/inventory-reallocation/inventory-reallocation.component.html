@@ -1,4 +1,4 @@
-<div [formGroup]="dynamicPricingFG">
+<div [formGroup]="dynamicPricingFG" *ngIf="!!dynamicPricingFG">
   <p-accordion class="accordion" formArrayName="inventoryAllocationFA">
     <div
       *ngFor="

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import {
   AbstractControl,
   FormArray,
@@ -15,38 +15,15 @@ import { weeks } from 'libs/admin/channel-manager/src/lib/components/constants/b
 })
 export class DayTimeTriggerComponent implements OnInit {
   @Input() dynamicPricingFG: FormGroup;
-
+  @Output() modifyTriggerFGEvent = new EventEmitter();
+  @Output() modifyLevelFGEvent = new EventEmitter();
   weeks = weeks;
   constructor(private fb: FormBuilder) {}
 
   ngOnInit(): void {}
 
-  getTriggerFG(data?: any): FormGroup {
-    const triggerFG = this.fb.group({
-      name: [''],
-      fromDate: [''],
-      toDate: [''],
-      selectedDays: [[]],
-      levels: this.fb.array([this.getLevelFG()]),
-      status: [true],
-    });
-    if (data) triggerFG.patchValue(data);
-    return triggerFG;
-  }
-
-  getLevelFG(): FormGroup {
-    return this.fb.group({
-      time: [''],
-      occupancyLowerLimit: [''],
-      occupancyUpperLimit: [''],
-      discount: [''],
-    });
-  }
-
   modifyTriggerFG(mode = Revenue.add, index?: number): void {
-    if (mode == Revenue.add)
-      this.dynamicPricingControl.timeFA.controls.push(this.getTriggerFG());
-    else this.dynamicPricingControl.timeFA.removeAt(index);
+    this.modifyTriggerFGEvent.emit({ mode, index });
   }
 
   modifyLevelFG(
@@ -54,9 +31,7 @@ export class DayTimeTriggerComponent implements OnInit {
     mode = Revenue.add,
     index?: number
   ): void {
-    const levelFA = triggerFG.get('levels') as FormArray;
-    if (mode == Revenue.add) levelFA.controls.push(this.getLevelFG());
-    else levelFA.removeAt(index);
+    this.modifyLevelFGEvent.emit({ triggerFG, mode, index });
   }
 
   get dynamicPricingControl() {

@@ -9,6 +9,7 @@ import {
   FormArray,
   FormBuilder,
   FormGroup,
+  Validators,
 } from '@angular/forms';
 import { Revenue } from '../../constants/revenue-manager.const';
 
@@ -25,6 +26,8 @@ export class DynamicPricingComponent implements OnInit {
   allRooms: RoomTypes[];
   entityId: string;
   dynamicPricingFG: FormGroup;
+  currentDay = new Date();
+  seventhDay = new Date();
   itemList: MenuItem[] = [
     {
       label: 'Occupancy',
@@ -44,6 +47,9 @@ export class DynamicPricingComponent implements OnInit {
 
   ngOnInit(): void {
     this.entityId = this.globalFilter.entityId;
+    this.currentDay.setHours(0, 0, 0, 0);
+    this.seventhDay.setHours(0, 0, 0, 0);
+    this.seventhDay.setDate(this.seventhDay.getDate() + 7);
     this.initRoom();
   }
 
@@ -60,8 +66,44 @@ export class DynamicPricingComponent implements OnInit {
 
   initFG() {
     this.dynamicPricingFG = this.fb.group({
+      occupancyFA: this.fb.array([this.seasonFG]),
       inventoryAllocationFA: this.fb.array([this.getInventoryAllocationFG()]),
       timeFA: this.fb.array([this.getTriggerFG()]),
+    });
+  }
+
+  get seasonFG() {
+    return this.fb.group({
+      status: [true],
+      name: ['', [Validators.required]],
+      fromDate: [this.currentDay, [Validators.required]],
+      toDate: [this.seventhDay, [Validators.required]],
+      roomType: [
+        this.allRooms.map((item) => item.value),
+        [Validators.required],
+      ],
+      selectedDays: ['', [Validators.required]],
+      roomTypes: this.fb.array(this.getRoomTypesFA()),
+    });
+  }
+  getRoomTypesFA() {
+    return this.allRooms.map((room) =>
+      this.fb.group({
+        isSelected: [true],
+        roomId: [room.value],
+        roomName: [room.label],
+        basePrice: [room.price],
+        occupancy: this.fb.array([this.seasonOccupancyFG]),
+      })
+    );
+  }
+
+  get seasonOccupancyFG(): FormGroup {
+    return this.fb.group({
+      start: [, [Validators.min(0), Validators.required]],
+      end: [, [Validators.min(0), Validators.required]],
+      discount: [, [Validators.min(0), Validators.required]],
+      rate: [, [Validators.min(0), Validators.required]],
     });
   }
 
@@ -134,11 +176,12 @@ export class DynamicPricingComponent implements OnInit {
 
   get dynamicPricingControl() {
     return this.dynamicPricingFG.controls as Record<
-      'inventoryAllocationFA' | 'timeFA',
+      'inventoryAllocationFA' | 'timeFA' | 'occupancyFA',
       AbstractControl
     > & {
       inventoryAllocationFA: FormArray;
       timeFA: FormArray;
+      occupancyFA: FormArray;
     };
   }
 }

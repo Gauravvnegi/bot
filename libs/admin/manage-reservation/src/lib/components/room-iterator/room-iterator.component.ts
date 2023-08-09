@@ -29,6 +29,7 @@ import { RoomTypeForm } from 'libs/admin/room/src/lib/models/room.model';
 import { RoomTypes } from '../../constants/form';
 import { forEach } from 'lodash';
 import { P } from '@angular/cdk/keycodes';
+import { RoomsByRoomType } from 'libs/admin/room/src/lib/types/service-response';
 @Component({
   selector: 'hospitality-bot-room-iterator',
   templateUrl: './room-iterator.component.html',
@@ -103,9 +104,9 @@ export class RoomIteratorComponent extends IteratorComponent
     const data = {
       roomTypeId: ['', [Validators.required]],
       ratePlan: [{ value: '', disabled: true }],
-      roomCount: ['', [Validators.required, Validators.min(1)]],
+      roomCount: ['', [Validators.required]],
       roomNumber: [{ value: [], disabled: true }],
-      adultCount: [''],
+      adultCount: ['', [Validators.required]],
       childCount: [''],
       ratePlanOptions: [[]],
       roomNumberOptions: [[]],
@@ -181,8 +182,7 @@ export class RoomIteratorComponent extends IteratorComponent
               .get('ratePlanOptions')
               .patchValue(ratePlanOptions, { emitEvent: false });
 
-            this.roomControls[index].get('ratePlan').enable();
-
+            this.getRoomsByRoomType(res, index);
             if (!this.isDefaultRoomType) {
               // Patch default Base rate plan when not in edit mode.
               const defaultPlan = ratePlanOptions.filter(
@@ -198,6 +198,32 @@ export class RoomIteratorComponent extends IteratorComponent
       });
   }
 
+  getRoomsByRoomType(roomTypeId: string, index: number) {
+    const config = {
+      params: this.adminUtilityService.makeQueryParams([
+        {
+          type: 'ROOM',
+          createBooking: true,
+          roomTypeId: roomTypeId,
+        },
+      ]),
+    };
+    this.manageReservationService
+      .getRoomNumber(this.entityId, config)
+      .subscribe((res) => {
+        debugger;
+        const roomNumberOptions = res.rooms.map((room: RoomsByRoomType) => ({
+          label: room.roomNumber,
+          value: room.id,
+        }));
+
+        this.roomControls[index]
+          .get('roomNumberOptions')
+          .patchValue(roomNumberOptions, { emitEvent: false });
+        debugger;
+      });
+  }
+
   /**
    * @function updateFormValueAndValidity Updates child, adult and room count values and validations
    */
@@ -207,22 +233,8 @@ export class RoomIteratorComponent extends IteratorComponent
   ) {
     this.maxAdultLimit = selectedRoomType.maxAdult;
     this.maxChildLimit = selectedRoomType.maxAdult;
-    this.roomControls[index]
-      .get('childCount')
-      .setValidators([
-        Validators.min(0),
-        Validators.max(selectedRoomType.maxChildren),
-      ]);
-    this.roomControls[index]
-      .get('adultCount')
-      .setValidators([
-        Validators.required,
-        Validators.min(1),
-        Validators.max(selectedRoomType.maxAdult),
-      ]);
-    this.roomControls[index]
-      .get('ratePlan')
-      .setValidators([Validators.required]);
+    this.roomControls[index].get('ratePlan').enable();
+    this.roomControls[index].get('roomNumber').enable();
 
     if (!this.isDefaultRoomType) {
       // Patch default count values only if not in edit mode
@@ -337,7 +349,8 @@ export class RoomIteratorComponent extends IteratorComponent
       ...queries,
       {
         type: 'ROOM_TYPE',
-        pagination: false,
+        offset: this.roomTypeOffSet,
+        limit: this.roomTypeLimit,
         createBooking: true,
       },
     ];

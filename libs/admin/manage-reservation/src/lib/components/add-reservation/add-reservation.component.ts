@@ -135,6 +135,7 @@ export class AddReservationComponent extends BaseReservationComponent
             this.userForm.patchValue(data);
             // this.summaryData = new SummaryData().deserialize(response);
             this.setFormDisability(data.reservationInformation);
+            debugger;
             if (data.offerId)
               this.getOfferByRoomType(
                 this.roomControls[0].get('roomTypeId').value

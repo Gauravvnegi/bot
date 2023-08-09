@@ -206,6 +206,7 @@ export class ReservationFormData {
         isBase: item.roomDetails.ratePlan.isBase,
         sellingPrice: item?.roomDetails.ratePlan.sellingPrice,
       },
+      id: item?.id,
     }));
     // roomNumbers: item?.tableNumberOrRoomNumber,
     return this;

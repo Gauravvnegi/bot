@@ -94,6 +94,10 @@ export class ManageReservationService extends ApiService {
     );
   }
 
+  getRoomNumber(entityId: string, config: QueryConfig) {
+    return this.get(`/api/v1/entity/${entityId}/inventory${config.params}`);
+  }
+
   getSummaryData(
     entityId: string,
     data: ReservationSummary,

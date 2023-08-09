@@ -126,11 +126,11 @@ export class BookingSummaryComponent implements OnInit {
     else
       data = this.formService.mapOutletReservationData(
         this.parentFormGroup.getRawValue(),
-        this.bookingType,
-        id
+        this.bookingType
       );
-    if (this.reservationId) this.updateReservation(data, id);
-    else this.createReservation(data, id);
+    if (this.reservationId) {
+      this.updateReservation(data, id);
+    } else this.createReservation(data, id);
   }
 
   createReservation(data: RoomReservationFormData, entityId: string): void {
@@ -138,7 +138,7 @@ export class BookingSummaryComponent implements OnInit {
       this.bookingType === EntitySubType.ROOM_TYPE
         ? EntitySubType.ROOM_TYPE
         : EntityType.OUTLET;
-        
+
     const { id, ...formData } = data;
     this.$subscription.add(
       this.manageReservationService
@@ -162,6 +162,7 @@ export class BookingSummaryComponent implements OnInit {
       this.bookingType === EntitySubType.ROOM_TYPE
         ? this.entityId
         : this.outletId;
+
     this.$subscription.add(
       this.manageReservationService
         .updateReservation(entityId, this.reservationId, data)

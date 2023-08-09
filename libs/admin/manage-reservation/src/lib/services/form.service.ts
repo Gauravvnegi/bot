@@ -3,10 +3,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { distinctUntilChanged } from 'rxjs/operators';
 import { ReservationTableValue } from '../constants/reservation-table';
 import { SelectedEntity } from '../types/reservation.type';
-import {
-  OutletFormData,
-  RoomReservationFormData,
-} from '../types/forms.types';
+import { OutletFormData, RoomReservationFormData } from '../types/forms.types';
 import { ReservationForm } from '../constants/form';
 import { GuestInfo } from '../models/reservations.model';
 
@@ -53,7 +50,6 @@ export class FormService {
     const roomReservationData = new RoomReservationFormData();
     // Map Reservation Info
     roomReservationData.id = id ?? '';
-    debugger;
     roomReservationData.from =
       input.reservationInformation?.dateAndTime ??
       input.reservationInformation?.from;
@@ -76,18 +72,25 @@ export class FormService {
     // Map Booking Items
     if (input.roomInformation?.roomTypes) {
       roomReservationData.bookingItems = input.roomInformation.roomTypes.map(
-        (roomType) => ({
-          roomDetails: {
-            ratePlan: { id: roomType.ratePlan },
-            roomTypeId: roomType.roomTypeId,
-            roomCount: roomType.roomCount,
-          },
-          occupancyDetails: {
-            maxChildren: roomType.childCount,
-            maxAdult: roomType.adultCount,
-          },
-          id: roomType?.id ?? null,
-        })
+        (roomType) => {
+          const bookingItem: any = {
+            roomDetails: {
+              ratePlan: { id: roomType.ratePlan },
+              roomTypeId: roomType.roomTypeId,
+              roomCount: roomType.roomCount,
+            },
+            occupancyDetails: {
+              maxChildren: roomType.childCount,
+              maxAdult: roomType.adultCount,
+            },
+          };
+
+          if (roomType.id.length) {
+            bookingItem.id = roomType.id;
+          }
+
+          return bookingItem;
+        }
       );
     } else {
       roomReservationData.bookingItems = [];
@@ -96,7 +99,11 @@ export class FormService {
     return roomReservationData;
   }
 
-  mapOutletReservationData(input: ReservationForm, outletType: string, id?: string) {
+  mapOutletReservationData(
+    input: ReservationForm,
+    outletType: string,
+    id?: string
+  ) {
     const reservationData = new OutletFormData();
     // Reservation Info
     reservationData.id = id ?? '';

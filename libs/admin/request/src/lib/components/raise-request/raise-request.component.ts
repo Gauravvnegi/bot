@@ -267,7 +267,6 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
 
     this.$subscription.add(
       addItemCompRef.componentInstance.onClose.subscribe(() => {
-        debugger;
         addItemCompRef.close();
       })
     );

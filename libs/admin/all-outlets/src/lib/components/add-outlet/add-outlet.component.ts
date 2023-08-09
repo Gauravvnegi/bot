@@ -143,6 +143,7 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
         this.loading = true;
         this.outletService.getOutletById(this.outletId).subscribe(
           (res) => {
+            this.loading = false;
             const { absoluteRoute, type, subType, logo, ...rest } = res;
             this.logoUrl = logo;
             this.redirectUrl = absoluteRoute;
@@ -435,9 +436,12 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
         break;
       //to navigate to create food package page
       case 'food-package':
-        this.router.navigate([outletBusinessRoutes.foodPackage.route], {
-          relativeTo: this.route,
-        });
+        this.router.navigate(
+          [`${outletId}/${outletBusinessRoutes.foodPackage.route}`],
+          {
+            relativeTo: this.route,
+          }
+        );
         break;
       //to navigate back to edit brand page
       case 'brand':

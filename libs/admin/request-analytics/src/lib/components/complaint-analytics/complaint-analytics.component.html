@@ -3,4 +3,36 @@
   [routes]="navRoutes"
   [isBack]="false"
 >
+  <hospitality-bot-button
+    label="+ Create Item"
+    variant="text"
+    severity="primary"
+    (onClick)="createServiceItem()"
+  ></hospitality-bot-button>
+  <hospitality-bot-button
+    label="+ Raise Complaint"
+    (onClick)="raiseRequest()"
+  ></hospitality-bot-button>
 </hospitality-bot-navigation-header>
+
+<div class="feedback-container mb-20">
+  <div class="stats--wrapper">
+    <div class="bifurcation-stats">
+      <complaint-bifurcation></complaint-bifurcation>
+    </div>
+  </div>
+  <div class="stat-card-wrapper">
+    <hospitality-bot-stats-card
+      [stats]="statCard[0]"
+      class="stat-card"
+    ></hospitality-bot-stats-card>
+    <hospitality-bot-stats-card
+      [stats]="statCard[1]"
+      class="stat-card"
+    ></hospitality-bot-stats-card>
+    <hospitality-bot-stats-card
+      [stats]="statCard[2]"
+      class="stat-card"
+    ></hospitality-bot-stats-card>
+  </div>
+</div>

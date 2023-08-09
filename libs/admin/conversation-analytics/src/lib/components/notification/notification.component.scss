@@ -107,7 +107,7 @@
 
       letter-spacing: 0.84px;
       color: $subtitle;
-      max-width: 113px;
+      // max-width: 113px;
     }
     &-values {
       @include flex-col-end-algn;

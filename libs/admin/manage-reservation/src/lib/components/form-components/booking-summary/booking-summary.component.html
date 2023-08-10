@@ -23,29 +23,6 @@
         <ng-content *ngIf="!displayBookingOffer"></ng-content>
       </div>
       <div class="bk-summary_offerInfo" *ngIf="bookingType === 'ROOM_TYPE'">
-        <ng-container
-          *ngIf="
-            controlContainer.control.get('offerId').value &&
-              selectedOffer?.description;
-            else selectOffer
-          "
-        >
-          <p>
-            Offer Applied
-          </p>
-          <div class="offer">
-            <div
-              [innerHtml]="selectedOffer.description"
-              class="offer_card"
-            ></div>
-            <div class="offer_gift">
-              <img src="assets/svg/offer_gift.svg" alt="offer gift" />
-            </div>
-            <div class="offer_cross" (click)="offerSelect()">
-              <img src="assets/images/cross.png" alt="cross" />
-            </div>
-          </div>
-        </ng-container>
         <ng-template #selectOffer>
           <p>
             Have an Offer?
@@ -154,13 +131,13 @@
   </div>
   <div class="offersList">
     <ng-container *ngIf="offersList?.records?.length; else emptyOffer">
-      <div *ngFor="let item of offersList?.records" class="offer">
-        <div class="offer" (click)="offerSelect(item)">
-          <div [innerHtml]="item.description" class="offer_card"></div>
-          <div class="offer_gift">
-            <img src="assets/svg/offer_gift.svg" alt="offer gift" />
-          </div>
-        </div>
+      <div
+        *ngFor="let item of offersList?.records"
+        class="offer"
+        (click)="offerSelect(item)"
+      >
+        <div class="offerName">{{ item.name }}</div>
+        <div class="offerDescription">{{ item.description }}</div>
       </div>
     </ng-container>
   </div>
@@ -199,6 +176,27 @@
 </ng-template>
 
 <ng-template #summaryTemplate let-index="index" let-bookingItem="bookingItem">
+  <ng-container
+    *ngIf="
+      controlContainer.control.get('offerId').value &&
+        selectedOffer?.description;
+      else selectOffer
+    "
+  >
+    <div>
+      <p>
+        Promo Code
+      </p>
+      <hospitality-bot-button
+        label="Remove"
+        severity="reset"
+        (onClick)="offerSelect()"
+      ></hospitality-bot-button>
+    </div>
+    <div class="offer">
+      <div class="offer_card">selectedOffer.description</div>
+    </div>
+  </ng-container>
   <p *ngIf="index || index === 0" class="divider"></p>
   <div class="bk-summary_priceInfo">
     <div class="bk-summary_subheading" *ngIf="index || index === 0">

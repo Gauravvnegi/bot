@@ -173,10 +173,12 @@ export type RatePlanData = {
 
 export class OfferData {
   id: string;
+  name: string;
   description: string;
 
   deserialize(input) {
     this.id = input.id ?? '';
+    this.name = input.name ?? '';
     this.description = input.description ?? '';
     return this;
   }

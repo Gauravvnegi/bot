@@ -37,8 +37,7 @@ export class BookingInfoComponent implements OnInit {
   entityId: string;
   startMinDate = new Date();
   endMinDate = new Date();
-  maxFromDate = new Date();
-  maxToDate = new Date();
+  maxDate = new Date();
 
   constructor(
     public controlContainer: ControlContainer,
@@ -61,8 +60,7 @@ export class BookingInfoComponent implements OnInit {
   initDates() {
     this.startMinDate = new Date();
     this.endMinDate = new Date();
-    this.maxFromDate = new Date();
-    this.maxToDate = new Date();
+    this.maxDate = new Date();
     this.initDefaultDates();
     this.listenForDateChange();
   }
@@ -78,15 +76,12 @@ export class BookingInfoComponent implements OnInit {
    */
   initDefaultDates() {
     this.endMinDate.setDate(this.startMinDate.getDate() + 1);
-    this.maxFromDate.setDate(this.endMinDate.getDate() - 1);
-
-    // this.formService.toDate = this.endMinDate;
-    // this.formService.fromDate = this.maxFromDate;
+    this.maxDate.setDate(this.endMinDate.getDate() - 1);
 
     if (this.bookingType === 'ROOM_TYPE')
-      this.maxToDate.setDate(this.startMinDate.getDate() + 365);
+      this.maxDate.setDate(this.startMinDate.getDate() + 365);
     if (this.bookingType === 'VENUE')
-      this.maxToDate = moment().add(24, 'hours').toDate();
+      this.maxDate = moment().add(24, 'hours').toDate();
     this.endMinDate.setTime(this.endMinDate.getTime() - 5 * 60 * 1000);
   }
 
@@ -110,19 +105,26 @@ export class BookingInfoComponent implements OnInit {
         const maxToLimit = new Date(res);
         this.formService.fromDate = maxToLimit;
         this.updateDateDifference();
-        this.maxToDate.setDate(maxToLimit.getDate() + 365);
-        this.formService.reservationDate.next(res);
 
-        if (this.roomControls.status === 'VALID') {
+        // Calculate the date for one day later
+        const nextDay = new Date(maxToLimit);
+        nextDay.setDate(nextDay.getDate() + 1);
+
+        this.maxDate.setDate(maxToLimit.getDate() + 365);
+        this.formService.reservationDate.next(res);
+        toDateControl.setValue(nextDay); // Set toDateControl to one day later
+
+        if (this.roomControls.valid) {
           this.getSummary.emit();
         }
       });
+
       toDateControl.valueChanges.subscribe((res) => {
         const maxLimit = new Date(res);
         this.formService.toDate = maxLimit;
         this.updateDateDifference();
-        this.maxFromDate.setDate(maxLimit.getDate() - 1);
-        if (this.roomControls.status === 'VALID') {
+        this.maxDate.setDate(maxLimit.getDate() - 1);
+        if (this.roomControls.valid) {
           this.getSummary.emit();
         }
       });
@@ -136,7 +138,7 @@ export class BookingInfoComponent implements OnInit {
       fromDateControl.valueChanges.subscribe((res) => {
         const maxLimit = new Date(res);
         toDateControl.setValue(moment(maxLimit).unix() * 1000);
-        this.maxToDate = moment(maxLimit).add(24, 'hours').toDate();
+        this.maxDate = moment(maxLimit).add(24, 'hours').toDate();
         this.formService.reservationDate.next(res);
       });
     }

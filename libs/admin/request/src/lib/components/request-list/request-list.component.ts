@@ -99,8 +99,8 @@ export class RequestListComponent implements OnInit, OnDestroy {
           {
             ...this.filterData,
             order: 'DESC',
-            entityType: this.entityType,
-            actionType: this.tabFilterItems[this.tabFilterIdx]?.value,
+            journeyType: this.entityType,
+            entityType: this.tabFilterItems[this.tabFilterIdx]?.value,
             offset: 0,
             limit:
               this.listData && this.listData.length > 10
@@ -123,7 +123,7 @@ export class RequestListComponent implements OnInit, OnDestroy {
           {
             ...this.filterData,
             order: 'DESC',
-            entityType: this.entityType,
+            journeyType: this.entityType,
             actionType: this.tabFilterItems[this.tabFilterIdx].value,
             offset: 0,
             limit:
@@ -226,7 +226,7 @@ export class RequestListComponent implements OnInit, OnDestroy {
           ...this.filterData,
           offset,
           limit,
-          entityType: this.entityType,
+          journeyType: this.entityType,
           actionType: this.tabFilterItems[this.tabFilterIdx].value,
         },
       ]).subscribe((response) => {
@@ -380,7 +380,7 @@ export class RequestListComponent implements OnInit, OnDestroy {
             offset,
             limit,
             key: this.parentFG.get('search').value.trim(),
-            entityType: this.entityType,
+            journeyType: this.entityType,
           },
         ]),
       })

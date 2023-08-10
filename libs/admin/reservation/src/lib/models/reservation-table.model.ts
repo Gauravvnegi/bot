@@ -426,15 +426,13 @@ export class Room implements IDeserializable {
   status;
   roomClass;
   deserialize(input: any) {
-    Object.assign(
-      this,
-      set({}, 'roomNumber', get(input, ['roomNumber'])),
-      set({}, 'type', get(input, ['roomType'])),
-      set({}, 'unit', get(input, ['unit'])),
-      set({}, 'chargeCode', get(input, ['chargeCode'])),
-      set({}, 'status', get(input, ['status'])),
-      set({}, 'roomClass', get(input, ['roomClass']))
-    );
+    this.roomNumber = input?.room?.roomNumber;
+    this.type = input.room?.type;
+    this.unit = input.room?.unit;
+    this.chargeCode = input?.room?.chargeCode;
+    this.status = input.room?.status;
+    this.roomClass = input.room?.roomClass;
+
     return this;
   }
 }

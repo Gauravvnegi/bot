@@ -15,7 +15,7 @@ export const SortBy: Record<MemberSortTypes, SortingOrder> = {
     order: 'DESC',
   },
   Modified: {
-    sort: 'update',
+    sort: 'updated',
     order: 'DESC',
   },
   Oldest: {

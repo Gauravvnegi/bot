@@ -10,9 +10,6 @@ import {
 } from '@angular/core';
 import { FormArray, FormBuilder, Validators } from '@angular/forms';
 import { IteratorField } from '../../types/fields.type';
-import { FormProps } from '../../types/form.type';
-import { ItemsData } from 'libs/admin/manage-reservation/src/lib/types/forms.types';
-import { ignoreElements } from 'rxjs/operators';
 
 @Component({
   selector: 'hospitality-bot-iterator',
@@ -40,7 +37,7 @@ export class IteratorComponent implements OnChanges {
     if (itemValues?.length) {
       if (itemValues.length > 1) {
         // Create new form fields for each item in the array
-        itemValues.forEach((item) => {
+        itemValues.slice(1).forEach((item) => {
           this.createNewFields();
         });
       }
@@ -95,7 +92,7 @@ export class IteratorComponent implements OnChanges {
    */
   removeField(index: number) {
     if (this.useFormArray.length === 1) {
-      this.useFormArray.at(0).reset();
+      if (this.useFormArray.valid) this.useFormArray.at(0).reset();
       return;
     }
     this.useFormArray.removeAt(index);

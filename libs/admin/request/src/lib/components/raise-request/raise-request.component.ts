@@ -14,7 +14,7 @@ import {
 import { TranslateService } from '@ngx-translate/core';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
-import { SnackBarService } from 'libs/shared/material/src';
+import { ModalService, SnackBarService } from 'libs/shared/material/src';
 import { DateService } from '@hospitality-bot/shared/utils';
 import { Subscription } from 'rxjs';
 import { request } from '../../constants/request';
@@ -22,6 +22,8 @@ import { debounceTime, filter, map, startWith } from 'rxjs/operators';
 import { RequestService } from '../../services/request.service';
 import { Option } from '@hospitality-bot/admin/shared';
 import { ActivatedRoute, Router } from '@angular/router';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { AddItemComponent } from '../add-item/add-item.component';
 
 @Component({
   selector: 'hospitality-bot-raise-request',
@@ -49,7 +51,8 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
     private adminUtilityService: AdminUtilityService,
     private _translateService: TranslateService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private _modalService: ModalService
   ) {}
 
   ngOnInit(): void {
@@ -90,11 +93,7 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
       jobDuration: [''],
       remarks: ['', [Validators.maxLength(200)]],
       quantity: [1],
-      assignTo: [''],
-    });
-
-    this.searchFG = this.fb.group({
-      search: [''],
+      assigneeId: [''],
     });
 
     this.requestFG.get('itemCode').valueChanges.subscribe((value) => {
@@ -210,50 +209,67 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
    * @function listenForRoomNumberChanges To listen for room number field value change.
    */
   listenForRoomNumberChanges(): void {
-    const formChanges$ = this.searchFG.valueChanges.pipe(
-      filter(() => !!(this.searchFG.get('search') as FormControl).value)
-    );
-
-    formChanges$.pipe(debounceTime(1000)).subscribe((response) => {
-      this.requestFG.patchValue({
-        roomNo: response.search,
-      });
-      if (response?.search.length >= 3)
-        this.$subscription.add(
-          this._requestService
-            .searchBooking(
-              this.adminUtilityService.makeQueryParams([
-                {
-                  roomNo: response?.search,
-                },
-              ])
-            )
-            .subscribe((res) => {
-              if (res) {
-                this.reservation = res;
-                this.requestFG.patchValue({
-                  firstName: res.guestDetails.primaryGuest.firstName,
-                  lastName: res.guestDetails.primaryGuest.lastName,
-                });
-                this.requestFG.get('firstName').disable();
-                this.requestFG.get('lastName').disable();
-              } else {
-                this.reservation = {};
-                this.requestFG.get('firstName').enable();
-                this.requestFG.get('lastName').enable();
-              }
-            })
+    this.requestFG
+      .get('roomNo')
+      .valueChanges.pipe(debounceTime(1000))
+      .subscribe((response) => {
+        this.requestFG.patchValue(
+          {
+            roomNo: response,
+          },
+          {
+            emitEvent: false,
+          }
         );
-      else this.reservation = {};
-    });
+        if (response?.length >= 3)
+          this.$subscription.add(
+            this._requestService
+              .searchBooking(
+                this.adminUtilityService.makeQueryParams([
+                  {
+                    roomNo: response,
+                  },
+                ])
+              )
+              .subscribe((res) => {
+                if (res) {
+                  this.reservation = res;
+                  this.requestFG.patchValue({
+                    firstName: res.guestDetails.primaryGuest.firstName,
+                    lastName: res.guestDetails.primaryGuest.lastName,
+                  });
+                  this.requestFG.get('firstName').disable();
+                  this.requestFG.get('lastName').disable();
+                } else {
+                  this.reservation = {};
+                  this.requestFG.get('firstName').enable();
+                  this.requestFG.get('lastName').enable();
+                }
+              })
+          );
+        else this.reservation = {};
+      });
   }
 
   create() {
-    this.onRaiseRequestClose.emit({ status: false });
 
-    this.router.navigate(['/pages/efrontdesk/request/add-item'], {
-      relativeTo: this.route,
-    });
+    //to open add new item pop up
+
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = true;
+    dialogConfig.width = '500px';
+    dialogConfig.height = '90vh';
+
+    const addItemCompRef = this._modalService.openDialog(
+      AddItemComponent,
+      dialogConfig
+    );
+
+    this.$subscription.add(
+      addItemCompRef.componentInstance.onClose.subscribe(() => {
+        addItemCompRef.close();
+      })
+    );
   }
 
   ngOnDestroy(): void {

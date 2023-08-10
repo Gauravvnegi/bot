@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { DynamicPricingComponent } from './dynamic-pricing.component';
+import { FromToDateComponent } from './from-to-date.component';
 
-describe('DynamicPricingComponent', () => {
-  let component: DynamicPricingComponent;
-  let fixture: ComponentFixture<DynamicPricingComponent>;
+describe('FromToDateComponent', () => {
+  let component: FromToDateComponent;
+  let fixture: ComponentFixture<FromToDateComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ DynamicPricingComponent ]
+      declarations: [ FromToDateComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(DynamicPricingComponent);
+    fixture = TestBed.createComponent(FromToDateComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -11,11 +11,12 @@ export class RequestListFilterComponent implements OnInit {
   @Input() parentFG: FormGroup;
   @Output() filterApplied = new EventEmitter();
   sortList = request.sort;
+  filterData = request.filter;
   @Output() close = new EventEmitter();
 
   useForm: FormGroup;
 
-  filterData = request.filter;
+  listData = request.listBy;
   constructor(private fb: FormBuilder) {}
 
   ngOnInit(): void {
@@ -24,6 +25,7 @@ export class RequestListFilterComponent implements OnInit {
     this.useForm = this.fb.group({
       sortBy: new FormControl({}),
       filterBy: this.fb.array(this.filterData.map((x) => false)),
+      listType: new FormControl({}),
     });
   }
 
@@ -50,8 +52,19 @@ export class RequestListFilterComponent implements OnInit {
         sort: values.sortBy.label,
         order: values.sortBy.order,
         priorityType: values.filterBy,
+        entityType: values.listType.label,
       },
     });
+  }
+
+  setListBy(item: { value: string; order: string }): void {
+    this.listControl.setValue(
+      {
+        label: item.value,
+        order: item.order,
+      },
+      { emitEvent: false }
+    );
   }
 
   /**
@@ -84,9 +97,9 @@ export class RequestListFilterComponent implements OnInit {
     const value = {
       sortBy: [],
       filterBy: this.filterData.map((x) => false),
-    }
+    };
     // this.parentFG.patchValue(value);
-    this.useForm.patchValue(value)
+    this.useForm.patchValue(value);
 
     this.applyFilter();
   }
@@ -95,6 +108,10 @@ export class RequestListFilterComponent implements OnInit {
 
   get sortControl(): FormControl {
     return this.useForm?.get('sortBy') as FormControl;
+  }
+
+  get listControl(): FormControl {
+    return this.useForm?.get('listType') as FormControl;
   }
 
   get filterFormArray(): FormArray {

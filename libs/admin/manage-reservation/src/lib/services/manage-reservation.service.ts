@@ -3,9 +3,7 @@ import { ApiService } from '@hospitality-bot/shared/utils';
 import { SearchResultResponse } from 'libs/admin/library/src/lib/types/response';
 import { RoomTypeListResponse } from 'libs/admin/room/src/lib/types/service-response';
 import { Observable } from 'rxjs';
-import {
-  ReservationSummary,
-} from '../types/forms.types';
+import { ReservationSummary } from '../types/forms.types';
 import { map } from 'rxjs/operators';
 import { MenuItemListResponse } from 'libs/admin/all-outlets/src/lib/types/outlet';
 import { QueryConfig } from '@hospitality-bot/admin/shared';

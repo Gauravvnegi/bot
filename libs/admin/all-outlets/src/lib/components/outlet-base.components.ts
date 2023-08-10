@@ -6,7 +6,6 @@ import {
 } from '@angular/router';
 import {
   OutletAddRoutes,
-  OutletEditRoutes,
   correspondingEditRouteName,
   hasId,
   navRoutes,

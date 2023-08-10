@@ -202,7 +202,7 @@ export class ChatComponent
             },
             ({ error }) => {
               this.isLoading = false;
-              this.chat = new Chats(); 
+              this.chat = new Chats();
             }
           )
       );
@@ -321,9 +321,7 @@ export class ChatComponent
           this.selectedChat.receiverId,
           this.selectedChat.phone
         )
-        .subscribe(
-          (response) => this.liveChatFG.patchValue(response)
-        )
+        .subscribe((response) => this.liveChatFG.patchValue(response))
     );
   }
 
@@ -335,9 +333,7 @@ export class ChatComponent
           this.selectedChat.receiverId,
           this.liveChatFG.getRawValue()
         )
-        .subscribe(
-          (response) => this.liveChatFG.patchValue(response)
-        )
+        .subscribe((response) => this.liveChatFG.patchValue(response))
     );
   }
 
@@ -355,17 +351,17 @@ export class ChatComponent
       ]),
     };
     this.$subscription.add(
-      this.messageService.getRequestByConfNo(config).subscribe(
-        (response) => {
-          this.requestList = new RequestList().deserialize(response).data;
-        }
-      )
+      this.messageService.getRequestByConfNo(config).subscribe((response) => {
+        this.requestList = new RequestList().deserialize(response).data;
+      })
     );
   }
   openRaiseRequest() {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;
-    dialogConfig.width = '50%';
+    dialogConfig.width = '500px';
+    dialogConfig.height = '90vh';
+
     const raiseRequestCompRef = this.modalService.openDialog(
       RaiseRequestComponent,
       dialogConfig
@@ -382,11 +378,9 @@ export class ChatComponent
             this.$subscription.add(
               this.messageService
                 .updateGuestDetail(this.entityId, this.data.receiverId, values)
-                .subscribe(
-                  (response) => {
-                    this.messageService.refreshData$.next(true);
-                  }
-                )
+                .subscribe((response) => {
+                  this.messageService.refreshData$.next(true);
+                })
             );
           }
           raiseRequestCompRef.close();
@@ -399,16 +393,14 @@ export class ChatComponent
     this.$subscription.add(
       this.messageService
         .exportChat(this.entityId, this.selectedChat.receiverId)
-        .subscribe(
-          (response) => {
-            FileSaver.saveAs(
-              response,
-              `${this.selectedChat.name
-                .split(' ')
-                .join('_')}_export_${new Date().getTime()}.csv`
-            );
-          }
-        )
+        .subscribe((response) => {
+          FileSaver.saveAs(
+            response,
+            `${this.selectedChat.name
+              .split(' ')
+              .join('_')}_export_${new Date().getTime()}.csv`
+          );
+        })
     );
   }
 

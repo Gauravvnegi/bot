@@ -35,7 +35,14 @@
   />
 
   <ng-container *ngIf="!isLoading">
-    <small *ngIf="subtitle" class="subtitle">{{ subtitle }}</small>
+    <small *ngIf="subtitle" class="subtitle"
+      ><ng-container *ngIf="!strike; else strikeText">{{
+        subtitle
+      }}</ng-container>
+    </small>
+    <ng-template #strikeText>
+      <del>{{ subtitle }}</del>
+    </ng-template>
   </ng-container>
 
   <small *ngIf="error" class="p-error"> {{ error }}</small>

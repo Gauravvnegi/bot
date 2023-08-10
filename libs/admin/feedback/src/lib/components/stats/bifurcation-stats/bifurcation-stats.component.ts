@@ -184,7 +184,7 @@ export class BifurcationStatsComponent implements OnInit {
           this.getGTMStats(gtmResponse);
           // Process all stats
           this.getAllStats(allResponse);
-          this.getOtherStats(othersResponse)
+          this.getOtherStats(othersResponse);
           this.initGraph(
             this.feedback.reduce(
               (accumulator, current) => accumulator + +current.score,
@@ -242,15 +242,15 @@ export class BifurcationStatsComponent implements OnInit {
       comparisonPercent: 100,
     });
   }
-  
-  getOtherStats(response){
+
+  getOtherStats(response) {
     this.feedback.push({
       label: 'Others',
       score: response.totalCount,
       additionalData: response.totalCount,
       color: 'rgb(197, 197, 197)',
       comparisonPercent: 100,
-    })
+    });
     this.othersCount = response.totalCount;
   }
 

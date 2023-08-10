@@ -19,7 +19,11 @@
           controlName="roomTypeId"
           label="Room Type"
           [options]="roomTypes"
-          [props]="{ isAsync: true, createPrompt: '+ Add New Room Type' }"
+          [props]="{
+            isAsync: true,
+            createPrompt: '+ Add New Room Type',
+            placeholder: 'Select Room Type'
+          }"
           [loading]="loadingRoomTypes"
           (paginate)="loadMoreRoomTypes()"
           (onSearch)="searchRoomTypes($event)"

@@ -34,6 +34,12 @@ export const customModule = {
       {
         isSubscribed: true,
         isView: true,
+        label: 'Setup Bar Price',
+        name: 'REVENUE_SETUP_BAR_PRICE',
+      },
+      {
+        isSubscribed: true,
+        isView: true,
         label: 'Dynamic Pricing',
         name: 'REVENUE_DYNAMIC_PRICING',
       },

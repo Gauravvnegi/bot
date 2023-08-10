@@ -1,5 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { ControlContainer, FormBuilder, FormGroup } from '@angular/forms';
+import {
+  ControlContainer,
+  FormBuilder,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import { AdminUtilityService, Option } from '@hospitality-bot/admin/shared';
 import { GuestTableService } from 'libs/admin/guests/src/lib/services/guest-table.service';
 import { Guest } from '../../../models/reservations.model';
@@ -44,12 +49,13 @@ export class GuestInformationComponent implements OnInit {
     this.entityId = this.globalFilterService.entityId;
     this.addFormGroup();
     this.listenForGlobalFilters();
+    this.initGuestDetails();
   }
 
   addFormGroup() {
     this.parentFormGroup = this.controlContainer.control as FormGroup;
     const data = {
-      guestDetails: [''],
+      guestDetails: ['', [Validators.required]],
     };
     this.parentFormGroup.addControl('guestInformation', this.fb.group(data));
   }
@@ -122,11 +128,6 @@ export class GuestInformationComponent implements OnInit {
           email: guest.contactDetails.emailId,
         }));
         this.guestOptions = [...this.guestOptions, ...guestDetails];
-        this.formService.guestId.subscribe((res) => {
-          this.parentFormGroup
-            .get('guestInformation.guestDetails')
-            .patchValue(res);
-        });
         this.noMoreGuests = guests.length < 5;
         this.loadingGuests = false;
       },
@@ -134,6 +135,27 @@ export class GuestInformationComponent implements OnInit {
         this.loadingGuests = false;
       }
     );
+  }
+
+  initGuestDetails() {
+    this.formService.guestInformation.subscribe((res) => {
+      if (res) {
+        if (
+          this.guestOptions.findIndex((item) => item.value === res.id) === -1
+        ) {
+          this.guestOptions.push({
+            label: `${res.firstName} ${res.lastName}`,
+            value: res.id,
+            phoneNumber: res.phoneNumber,
+            cc: res.cc,
+            email: res.email,
+          });
+        }
+        this.parentFormGroup
+          .get('guestInformation.guestDetails')
+          .patchValue(res.id);
+      }
+    });
   }
 
   getConfig() {

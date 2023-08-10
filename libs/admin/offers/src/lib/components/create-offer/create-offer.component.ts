@@ -7,13 +7,14 @@ import {
   ServiceTypeOptionValue,
 } from '@hospitality-bot/admin/library';
 import { SnackBarService } from '@hospitality-bot/shared/material';
-import { DiscountType, NavRouteOptions, Option } from 'libs/admin/shared/src';
+import { NavRouteOptions, Option } from 'libs/admin/shared/src';
 import { ConfigService } from 'libs/admin/shared/src/lib/services/config.service';
 import { Subscription } from 'rxjs';
 import routes from '../../constant/routes';
 import { OffersServices } from '../../services/offers.service';
 import { OfferData, OfferFormData, OffersOnEntity } from '../../types/offers';
 import { OfferResponse, SearchResult } from '../../types/response';
+import { DiscountType } from '../../constant/data-table';
 
 @Component({
   selector: 'hospitality-bot-create-offer',
@@ -331,6 +332,7 @@ export class CreateOfferComponent implements OnInit {
           params: '?type=OFFER',
         })
         .subscribe((res) => {
+          this.loading = false;
           this.routes[2].label = 'Edit Offer';
           let { packageCode, subPackages, roomTypes, ...restData } = res;
 

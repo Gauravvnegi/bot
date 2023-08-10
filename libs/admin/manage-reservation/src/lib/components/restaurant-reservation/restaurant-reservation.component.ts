@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import {
   FormGroup,
   FormBuilder,
@@ -9,14 +9,11 @@ import {
 import { ActivatedRoute } from '@angular/router';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
-  NavRouteOptions,
   AdminUtilityService,
   Option,
   EntitySubType,
   EntityType,
 } from '@hospitality-bot/admin/shared';
-import { Subscription } from 'rxjs';
-import { manageReservationRoutes } from '../../constants/routes';
 import {
   OfferList,
   OfferData,
@@ -30,16 +27,14 @@ import {
   restaurantReservationTypes,
   statusOptions,
 } from '../../constants/reservation';
-import { IteratorField } from 'libs/admin/shared/src/lib/types/fields.type';
 import { ReservationForm } from '../../constants/form';
 import { FormService } from '../../services/form.service';
-import { OutletService } from 'libs/admin/all-outlets/src/lib/services/outlet.service';
-import { SelectedEntity } from '../../types/reservation.type';
 import { OutletItems } from '../../constants/reservation-table';
 import { debounceTime } from 'rxjs/operators';
 import { OutletForm } from '../../models/reservations.model';
 import { ReservationSummary } from '../../types/forms.types';
 import { MenuItemListResponse } from 'libs/admin/all-outlets/src/lib/types/outlet';
+import { BaseReservationComponent } from '../base-reservation.component';
 
 @Component({
   selector: 'hospitality-bot-restaurant-reservation',
@@ -49,39 +44,23 @@ import { MenuItemListResponse } from 'libs/admin/all-outlets/src/lib/types/outle
     '../reservation.styles.scss',
   ],
 })
-export class RestaurantReservationComponent implements OnInit {
-  userForm: FormGroup;
+export class RestaurantReservationComponent extends BaseReservationComponent implements OnInit {
   menuItemsArray: FormArray;
   foodPackageArray: FormArray;
 
-  fields: IteratorField[];
-
-  entityId: string;
-  reservationId: string;
   reservationType: string;
-  outletId: string;
 
   menuItemsValues = [];
   reservationTypes: Option[] = [];
   statusOptions: Option[] = [];
   foodPackages: Option[] = [];
 
-  offersList: OfferList;
-  selectedOffer: OfferData;
-  summaryData: SummaryData;
-
-  // loading = false;
-  formValueChanges = false;
-  disabledForm = false;
   expandAccordion = false;
 
   date: string;
   time: string;
-  deductedAmount = 0;
-  bookingType = EntitySubType.RESTAURANT;
 
   pageTitle: string;
-  routes: NavRouteOptions = [];
 
   /* menu options variable */
   menuItems: (Option & { deliveryPrice?: number; dineInPrice: number })[] = [];
@@ -90,42 +69,31 @@ export class RestaurantReservationComponent implements OnInit {
   tableNumber = '';
   numberOfAdults = '';
 
-  @Input() selectedEntity: SelectedEntity;
-
-  $subscription = new Subscription();
-
   constructor(
     private fb: FormBuilder,
     private adminUtilityService: AdminUtilityService,
-    private globalFilterService: GlobalFilterService,
+    protected globalFilterService: GlobalFilterService,
     private manageReservationService: ManageReservationService,
     protected activatedRoute: ActivatedRoute,
     private formSerivce: FormService,
-    private outletService: OutletService
   ) {
-    this.initForm();
-    this.reservationId = this.activatedRoute.snapshot.paramMap.get('id');
+    super(globalFilterService, activatedRoute);
 
-    const { navRoutes, title } = manageReservationRoutes[
-      this.reservationId ? 'editReservation' : 'addReservation'
-    ];
-    this.routes = navRoutes;
-    this.pageTitle = title;
-    this.outletItems = [OutletItems.MENU_ITEM, OutletItems.FOOD_PACKAGE];
+    this.initForm();
   }
 
   ngOnInit(): void {
     this.initDetails();
-    this.entityId = this.globalFilterService.entityId;
-    this.outletId = this.selectedEntity.id;
-    this.fields = menuItemFields;
     this.getMenuItems();
     this.initOptions();
     this.getReservationId();
   }
 
   initDetails() {
-    this.entityId = this.globalFilterService.entityId;
+    this.bookingType = EntitySubType.RESTAURANT
+    this.outletId = this.selectedEntity.id;
+    this.fields = menuItemFields;
+    this.outletItems = [OutletItems.MENU_ITEM, OutletItems.FOOD_PACKAGE];
     this.expandAccordion = this.formSerivce.enableAccordion;
     if (this.expandAccordion) {
       this.formSerivce.enableAccordion = false;
@@ -195,7 +163,7 @@ export class RestaurantReservationComponent implements OnInit {
    * @function listenForFormChanges Listen for form values changes.
    */
   listenForFormChanges(): void {
-    this.inputControl.orderInformation.valueChanges.subscribe((res) => {
+    this.inputControls.orderInformation.valueChanges.subscribe((res) => {
       this.numberOfAdults = `For ${res?.numberOfAdults} Adults`;
       this.tableNumber = `Table Number: ${res?.tableNumber}`;
     });
@@ -314,8 +282,7 @@ export class RestaurantReservationComponent implements OnInit {
               ...formData,
             });
 
-            // Summary Data for restaurant
-            this.summaryData = new SummaryData().deserialize(response);
+            // this.summaryData = new SummaryData().deserialize(response);
             this.setFormDisability(data.reservationInformation);
 
             // if (data.offerId)
@@ -412,7 +379,9 @@ export class RestaurantReservationComponent implements OnInit {
     const data: ReservationSummary = {
       fromDate: this.reservationInfoControls.dateAndTime.value,
       toDate: this.reservationInfoControls.dateAndTime.value,
-      adultCount: this.orderInfoControls.numberOfAdults.value,
+      occupancyDetails: {
+        maxAdult: this.orderInfoControls.numberOfAdults.value,
+      },
       items: this.menuItemsControls.map((item) => ({
         itemId: item.get('menuItems').value,
         unit: item.get('unit')?.value ?? 0,
@@ -443,21 +412,6 @@ export class RestaurantReservationComponent implements OnInit {
     );
   }
 
-  get inputControl() {
-    return this.userForm.controls as Record<
-      keyof ReservationForm,
-      AbstractControl
-    >;
-  }
-
-  get reservationInfoControls() {
-    return (this.userForm.get('reservationInformation') as FormGroup)
-      .controls as Record<
-      keyof ReservationForm['reservationInformation'],
-      AbstractControl
-    >;
-  }
-
   get orderInfoControls() {
     return (this.userForm.get('orderInformation') as FormGroup)
       .controls as Record<
@@ -472,10 +426,4 @@ export class RestaurantReservationComponent implements OnInit {
     ) as FormArray).controls;
   }
 
-  /**
-   * @function ngOnDestroy to unsubscribe subscription.
-   */
-  ngOnDestroy(): void {
-    this.$subscription.unsubscribe();
-  }
 }

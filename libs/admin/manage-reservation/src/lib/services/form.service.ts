@@ -3,8 +3,13 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { distinctUntilChanged } from 'rxjs/operators';
 import { ReservationTableValue } from '../constants/reservation-table';
 import { SelectedEntity } from '../types/reservation.type';
-import { OutletFormData, RoomReservationFormData } from '../types/forms.types';
+import {
+  GuestDetails,
+  OutletFormData,
+  RoomReservationFormData,
+} from '../types/forms.types';
 import { ReservationForm } from '../constants/form';
+import { GuestInfo } from '../models/reservations.model';
 
 @Injectable({
   providedIn: 'root',
@@ -15,7 +20,7 @@ export class FormService {
   toDate: Date;
   fromDate: Date;
 
-  guestId = new BehaviorSubject<string>('');
+  guestInformation: BehaviorSubject<GuestInfo> = new BehaviorSubject<GuestInfo>(null);
 
   public selectedEntity = new BehaviorSubject<SelectedEntity>(null);
 
@@ -42,27 +47,32 @@ export class FormService {
 
   mapRoomReservationData(input: ReservationForm): RoomReservationFormData {
     const roomReservationData = new RoomReservationFormData();
-  
     // Map Reservation Info
     roomReservationData.from =
-      input.reservationInformation?.dateAndTime ?? input.reservationInformation?.from;
+      input.reservationInformation?.dateAndTime ??
+      input.reservationInformation?.from;
     roomReservationData.to =
-      input.reservationInformation?.dateAndTime ?? input.reservationInformation?.to;
+      input.reservationInformation?.dateAndTime ??
+      input.reservationInformation?.to;
     roomReservationData.reservationType =
-      input.reservationInformation?.reservationType ?? input.reservationInformation?.status;
+      input.reservationInformation?.reservationType ??
+      input.reservationInformation?.status;
     roomReservationData.sourceName = input.reservationInformation?.sourceName;
     roomReservationData.source = input.reservationInformation?.source;
-    roomReservationData.marketSegment = input.reservationInformation?.marketSegment;
-    roomReservationData.paymentMethod = input.paymentMethod?.paymentMethod ?? '';
-    roomReservationData.paymentRemark = input.paymentMethod?.paymentRemark ?? '';
+    roomReservationData.marketSegment =
+      input.reservationInformation?.marketSegment;
+    roomReservationData.paymentMethod =
+      input.paymentMethod?.paymentMethod ?? '';
+    roomReservationData.paymentRemark =
+      input.paymentMethod?.paymentRemark ?? '';
     roomReservationData.guestId = input.guestInformation?.guestDetails;
-  
+
     // Map Booking Items
     if (input.roomInformation?.roomTypes) {
       roomReservationData.bookingItems = input.roomInformation.roomTypes.map(
         (roomType) => ({
           roomDetails: {
-            ratePlan: { id: roomType.ratePlanId },
+            ratePlan: { id: roomType.ratePlan },
             roomTypeId: roomType.roomTypeId,
             roomCount: roomType.roomCount,
           },
@@ -75,10 +85,9 @@ export class FormService {
     } else {
       roomReservationData.bookingItems = [];
     }
-  
+
     return roomReservationData;
   }
-  
 
   mapOutletReservationData(input: ReservationForm, outletType: string) {
     const reservationData = new OutletFormData();

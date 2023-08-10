@@ -14,13 +14,23 @@
   ></hospitality-bot-stepper>
   <div class="content">
     <ng-container [ngSwitch]="activeStep">
-      <hospitality-bot-occupancy *ngSwitchCase="0"></hospitality-bot-occupancy>
+      <hospitality-bot-occupancy
+        *ngSwitchCase="0"
+        [dynamicPricingFG]="dynamicPricingFG"
+        [season]="dynamicPricingFG && seasonFG"
+        [occupancy]="dynamicPricingFG && seasonOccupancyFG"
+      ></hospitality-bot-occupancy>
 
       <hospitality-bot-day-time-trigger
         *ngSwitchCase="1"
+        [dynamicPricingFG]="dynamicPricingFG"
+        (modifyTriggerFGEvent)="modifyTriggerFG($event)"
+        (modifyLevelFGEvent)="modifyLevelFG($event)"
       ></hospitality-bot-day-time-trigger>
 
       <hospitality-bot-inventory-reallocation
+        [dynamicPricingFG]="dynamicPricingFG"
+        (modifyInventoryAllocationFGEvent)="modifyInventoryAllocationFG($event)"
         *ngSwitchCase="2"
       ></hospitality-bot-inventory-reallocation>
     </ng-container>

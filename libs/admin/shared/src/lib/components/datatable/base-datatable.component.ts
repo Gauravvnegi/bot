@@ -63,9 +63,9 @@ export class BaseDatatableComponent implements OnInit {
   tableFG: FormGroup;
 
   isPaginator = false;
-  rowsPerPage = 5;
+  rowsPerPage = 50;
   showCurrentPageReport = true;
-  rowsPerPageOptions = [5, 10, 25, 50];
+  rowsPerPageOptions = [5, 10, 25, 50, 200];
   first = 0; //index of the first page to show
 
   @Input() tableConfig = {

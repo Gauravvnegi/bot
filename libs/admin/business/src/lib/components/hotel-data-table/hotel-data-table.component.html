@@ -114,15 +114,17 @@
       <td>
         <div
           class="cell-content"
-          *ngIf="rowData?.contact.number || rowData?.emailId; else emptyCell"
+          *ngIf="rowData?.contact?.number || rowData?.emailId; else emptyCell"
         >
           <div class="primary-text" *ngIf="rowData?.contact?.number">
             <a
               (click)="$event.stopPropagation()"
               href="tel:{{
-                rowData.contact.countryCode + rowData.contact.number
+                rowData?.contact?.countryCode + rowData?.contact?.number
               }}"
-              >{{ rowData.contact.countryCode }}-{{ rowData.contact.number }}</a
+              >{{ rowData?.contact?.countryCode }}-{{
+                rowData?.contact?.number
+              }}</a
             >
           </div>
           <div class="primary-text" *ngIf="rowData?.emailId">

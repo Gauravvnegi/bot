@@ -1,15 +1,15 @@
+<hospitality-bot-navigation-header
+  heading="Update rates"
+  [routes]="[{ label: 'Update rates', link: './' }]"
+  [isStickyTitle]="false"
+  [isBack]="false"
+>
+  <hospitality-bot-button
+    label="Bulk update"
+    [link]="'/pages/channel-manager/update-rates/rates-bulk-update'"
+  ></hospitality-bot-button>
+</hospitality-bot-navigation-header>
 <div class="main-wrapper" [id]="fa?.referenceId">
-  <hospitality-bot-navigation-header
-    heading="Update rates"
-    [routes]="[{ label: 'Update rates', link: './' }]"
-    [isStickyTitle]="false"
-    [isBack]="false"
-  >
-    <hospitality-bot-button
-      label="Bulk update"
-      [link]="'/pages/channel-manager/update-rates/rates-bulk-update'"
-    ></hospitality-bot-button>
-  </hospitality-bot-navigation-header>
   <div class="inventory-form" *ngIf="!!useForm; else loader">
     <div
       [ngClass]="

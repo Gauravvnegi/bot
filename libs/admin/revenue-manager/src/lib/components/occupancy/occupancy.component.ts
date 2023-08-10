@@ -1,6 +1,26 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { AbstractControl, FormArray, FormGroup } from '@angular/forms';
+import {
+  AbstractControl,
+  FormArray,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import { weeks } from 'libs/admin/channel-manager/src/lib/components/constants/bulkupdate-response';
+import { DynamicPricingFactory } from '../../models/dynamic-pricing.model';
+import { Revenue } from '../../constants/revenue-manager.const';
+import {
+  ConfigCategory,
+  ConfigType,
+  RevenueType,
+} from '../../types/dynamic-pricing.types';
+import { DynamicPricingService } from '../../services/dynamic-pricing.service';
+import { Subscription } from 'rxjs';
+import {
+  AdminUtilityService,
+  QueryConfig,
+} from '@hospitality-bot/admin/shared';
+import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import { SnackBarService } from '@hospitality-bot/shared/material';
 
 export type ControlTypes = 'season' | 'occupancy';
 
@@ -9,8 +29,9 @@ export type ControlTypes = 'season' | 'occupancy';
   templateUrl: './occupancy.component.html',
   styleUrls: ['./occupancy.component.scss'],
 })
-export class OccupancyComponent {
+export class OccupancyComponent implements OnInit {
   readonly weeks = weeks;
+  entityId = '';
 
   loading = false;
   footerNote = `Lorem ipsum dolor sit amet consectetur adipisicing elit. Error eos
@@ -28,6 +49,7 @@ export class OccupancyComponent {
 
   @Input() season: FormGroup;
   @Input() occupancy: FormGroup;
+  $subscription = new Subscription();
 
   get dynamicPricingFG(): FormGroup {
     return this.parentForm;
@@ -40,6 +62,17 @@ export class OccupancyComponent {
     > & {
       occupancyFA: FormArray;
     };
+  }
+
+  constructor(
+    private globalFilterService: GlobalFilterService,
+    private dynamicPricingService: DynamicPricingService,
+    private adminUtilityService: AdminUtilityService,
+    private snackbarService: SnackBarService
+  ) {}
+
+  ngOnInit(): void {
+    this.entityId = this.globalFilterService.entityId;
   }
 
   seasonStatusChange(status, seasonIndex: number) {
@@ -86,23 +119,29 @@ export class OccupancyComponent {
 
         roomTypeFG.controls.forEach((roomTypeFG: FormGroup) => {
           const basePrice = roomTypeFG.get('basePrice').value;
-
           //occupancy change listening
           (roomTypeFG.get('occupancy') as FormArray).controls.forEach(
             (occupancyFG: FormGroup) => {
               occupancyFG
                 .get('discount')
                 .valueChanges.subscribe((percentage) => {
+                  const rate =
+                    (parseInt(percentage) * basePrice) / 100 + basePrice;
                   occupancyFG.patchValue(
-                    { rate: (basePrice * +percentage) / 100 },
+                    {
+                      rate: rate.toFixed(2),
+                    },
                     { emitEvent: false }
                   );
                 });
 
               occupancyFG.get('rate').valueChanges.subscribe((rate) => {
-                const percentage = (+rate / basePrice) * 100;
+                const discount =
+                  ((parseInt(rate) - basePrice) / basePrice) * 100;
                 occupancyFG.patchValue(
-                  { discount: percentage.toFixed(2) },
+                  {
+                    discount: discount.toFixed(2),
+                  },
                   { emitEvent: false }
                 );
               });
@@ -130,7 +169,55 @@ export class OccupancyComponent {
     );
   }
 
-  handleSave() {
-    console.log(this.dynamicPricingControl.occupancyFA);
+  handleSave(form: FormGroup) {
+    const {
+      status,
+      invalidList,
+    } = this.dynamicPricingService.occupancyValidate(form);
+    if (!status) {
+      form.markAllAsTouched();
+      this.snackbarService.openSnackBarAsText(
+        'Invalid form: Please fix errors'
+      );
+      return;
+    }
+
+    this.loading = true;
+    const { type } = form.controls;
+    const requestedData = DynamicPricingFactory.buildRequest(form, 'OCCUPANCY');
+    const request =
+      Revenue[type.value] === Revenue['add']
+        ? this.dynamicPricingService.createDynamicPricing
+        : this.dynamicPricingService.updateDynamicPricing;
+
+    this.$subscription.add(
+      request(
+        requestedData,
+        this.entityId,
+        this.getQueryConfig('OCCUPANCY')
+      ).subscribe(
+        (res) => {
+          console.log(res);
+        },
+        (error) => {
+          this.loading = false;
+        },
+        this.handleFinal
+      )
+    );
+  }
+
+  getQueryConfig(type: ConfigType): QueryConfig {
+    return {
+      params: this.adminUtilityService.makeQueryParams([
+        {
+          type: type,
+        },
+      ]),
+    };
+  }
+
+  handleFinal() {
+    this.loading = false;
   }
 }

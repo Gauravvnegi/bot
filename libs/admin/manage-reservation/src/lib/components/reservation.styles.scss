@@ -111,7 +111,7 @@
 
   &_offerInfo {
     font-weight: $bold;
-    margin-bottom: 16px;
+    margin: 8px 0;
     span {
       cursor: pointer;
       color: $authColor;
@@ -214,16 +214,27 @@
     padding: 10px 15px;
     cursor: pointer;
     background-color: #f8f9fb;
-    .offerName {
-      @include normal-md-text;
-      color: #3b3b3b;
-    }
     .offerDescription {
       @include normal-sm-text;
       color: #3b3b3b;
       opacity: 0.6;
     }
   }
+}
+
+.promo-code {
+  display: flex;
+  gap: 10px;
+  .remove-btn {
+    color: #f00;
+    cursor: pointer;
+    border-bottom: 1px solid #f00;
+  }
+}
+
+.offerName {
+  @include normal-md-text;
+  color: #3b3b3b;
 }
 
 :host ::ng-deep .p-dropdown-panel {

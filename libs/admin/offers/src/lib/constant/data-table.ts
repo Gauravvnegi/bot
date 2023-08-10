@@ -26,7 +26,7 @@ export const cols: Cols[] = [
   {
     field: 'status',
     header: 'Action',
-    sortType: 'string',
+    sortType: 'number',
     width: '20%',
     isSearchDisabled: true,
   },

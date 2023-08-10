@@ -85,9 +85,9 @@ export const campaignConfig = {
         width: '26%',
       },
       {
-        field: 'action',
+        field: 'status',
         header: 'Action',
-        isSortDisabled: true,
+        sortType: 'number',
         isSearchDisabled: true,
         width: '13%',
       },

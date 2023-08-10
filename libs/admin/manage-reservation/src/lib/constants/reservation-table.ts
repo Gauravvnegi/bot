@@ -113,7 +113,7 @@ export const hotelCols: Cols[] = [
     field: 'fullName',
     header: 'Guest / Company',
     sortType: 'string',
-    searchField: ['fullName', 'companyName']
+    searchField: ['fullName', 'companyName'],
   },
   {
     field: 'from',
@@ -144,7 +144,6 @@ export const hotelCols: Cols[] = [
     header: 'Actions',
     sortType: 'string',
     width: '14%',
-    isSortDisabled: true,
     isSearchDisabled: true,
   },
 ];
@@ -205,6 +204,7 @@ export const outletCols: Cols[] = [
     header: 'Actions',
     sortType: 'string',
     width: '13%',
+    isSearchDisabled: true,
   },
 ];
 export const title = 'Reservation';

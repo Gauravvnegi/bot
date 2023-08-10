@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import {
   AbstractControl,
   FormArray,
@@ -12,6 +12,7 @@ import { debounceTime, tap } from 'rxjs/operators';
 import { BarPriceService } from '../../services/bar-price.service';
 import { DateOption, RoomTypes } from '../../types/bar-price.types';
 import { RatePlanRes } from 'libs/admin/room/src/lib/types/service-response';
+import { Accordion } from 'primeng/accordion';
 
 @Component({
   selector: 'hospitality-bot-bar-price',
@@ -30,6 +31,7 @@ export class BarPriceComponent implements OnInit {
   loadingError = false;
   active = [0];
   $subscription = new Subscription();
+  @ViewChild('accordion') accordion: Accordion;
   private valueChangesSubject = new Subject<string[]>();
 
   constructor(
@@ -107,11 +109,11 @@ export class BarPriceComponent implements OnInit {
     return this.fb.array(
       this.roomTypes.map((item) =>
         this.fb.group({
-          price: [item['price'], [Validators.min(0)]],
+          price: [item['price'], [Validators.min(0), Validators.required]],
           ratePlans: this.addRatePlans(item.ratePlans),
-          childBelowFive: ['', [Validators.min(0)]],
-          chileFiveToTwelve: ['', [Validators.min(0)]],
-          adult: ['', [Validators.min(0)]],
+          childBelowFive: ['', [Validators.min(0), Validators.required]],
+          chileFiveToTwelve: ['', [Validators.min(0), Validators.required]],
+          adult: ['', [Validators.min(0), Validators.required]],
           exceptions: this.fb.array([]),
           id: [item.value],
           label: [item.label],
@@ -129,7 +131,7 @@ export class BarPriceComponent implements OnInit {
       ].map((item: RatePlanRes) =>
         this.fb.group({
           label: [item.label],
-          value: [item.variablePrice, [Validators.min(0)]],
+          value: [item.variablePrice, [Validators.min(0), Validators.required]],
         })
       )
     );
@@ -150,7 +152,21 @@ export class BarPriceComponent implements OnInit {
     });
   }
 
-  handleSave() {}
+  handleSave() {
+    if (this.useForm.invalid) {
+      this.useForm.markAllAsTouched();
+      this.openAllInvalidAccordion();
+    }
+  }
+
+  openAllInvalidAccordion() {
+    if (!!this.accordion?.tabs) {
+      this.accordion.tabs.forEach((tab, index) => {
+        if (!tab.selected && this.barPriceControl[index].invalid)
+          tab.selected = true;
+      });
+    }
+  }
 
   handleFinal() {
     this.loading = false;

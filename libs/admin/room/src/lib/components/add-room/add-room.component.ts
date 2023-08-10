@@ -69,8 +69,8 @@ export class AddRoomComponent implements OnInit, OnDestroy {
 
   pageTitle = 'Add rooms';
   navRoutes: NavRouteOptions = [
-    { label: 'Inventory', link: './' },
-    { label: 'Rooms', link: '/pages/inventory/room' },
+    { label: 'efrontdesk', link: './' },
+    { label: 'Rooms', link: '/pages/efrontdesk/room' },
     { label: 'Add Rooms', link: './' },
   ];
 
@@ -412,7 +412,7 @@ export class AddRoomComponent implements OnInit, OnDestroy {
    * @function addRoomType Add room type
    */
   createRoomType() {
-    this.router.navigate([`/pages/inventory/room/${routes.addRoomType}`]);
+    this.router.navigate([`/pages/efrontdesk/room/${routes.addRoomType}`]);
   }
 
   /**

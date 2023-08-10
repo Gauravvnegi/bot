@@ -148,6 +148,11 @@ $border-color: rgba(112, 112, 112, 0.35);
   .p-multiselect .p-multiselect-panel {
     min-width: 255px;
   }
+  .p-accordion {
+    gap: 15px;
+    display: flex;
+    flex-direction: column;
+  }
   p-header {
     font-size: 16px !important;
     font-weight: 600 !important;

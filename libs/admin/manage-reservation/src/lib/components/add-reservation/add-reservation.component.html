@@ -7,6 +7,7 @@
         [reservationTypes]="reservationTypes"
         [bookingType]="bookingType"
         [expandAccordion]="expandAccordion"
+        (getSummary)="getSummaryData()"
       ></hospitality-bot-booking-info>
       <p-accordionTab
         [selected]="expandAccordion"
@@ -47,15 +48,9 @@
             Checkin - Checkout
           </p>
           <p class="bk-summary_roomInfo_checkoutInfo_subText">
-            {{
-              userForm.get('reservationInformation.from')?.value
-                | date: 'dd/MM/yyyy'
-            }}
+            {{ reservationInfoControls.from.value | date: 'dd/MM/yyyy' }}
             -
-            {{
-              userForm.get('reservationInformation.to')?.value
-                | date: 'dd/MM/yyyy'
-            }}
+            {{ reservationInfoControls.to.value | date: 'dd/MM/yyyy' }}
           </p>
         </div>
         <div class="bk-summary_roomInfo_guestInfo summary-item">

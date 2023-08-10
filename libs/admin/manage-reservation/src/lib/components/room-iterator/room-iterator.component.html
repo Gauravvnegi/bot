@@ -19,37 +19,16 @@
           [formGroupName]="i"
           *ngFor="let field of fields"
           [style.flexBasis]="field.width ? field.width : width"
+          [style.width]="'100px'"
           [ngSwitch]="field.type"
         >
           <hospitality-bot-input
             *ngSwitchCase="'input'"
             [controlName]="field.name"
-            [props]="
-              field.name !== 'roomTypeId'
-                ? field.name !== 'childCount'
-                  ? {
-                      placeholder: field.placeholder,
-                      type: 'number',
-                      errorMessages: {
-                        required: 'This is a required field.',
-                        min: 'Value must be greater than 0',
-                        max: 'Value cannot be more than max limit'
-                      }
-                    }
-                  : {
-                      placeholder: field.placeholder,
-                      type: 'number',
-                      errorMessages: {
-                        required: 'This is a required field.',
-                        min: 'Value can not be less than 0.',
-                        max: 'Value can not be more than max limit'
-                      }
-                    }
-                : {
-                    placeholder: field.placeholder,
-                    type: 'number'
-                  }
-            "
+            [props]="{
+              placeholder: field.placeholder,
+              type: 'number'
+            }"
             [disabled]="field.disabled"
           ></hospitality-bot-input>
           <hospitality-bot-multi-select
@@ -59,12 +38,17 @@
               placeholder: field.placeholder,
               isAsync: false
             }"
-            [options]="field.options"
+            [options]="
+              field.options
+                ? field.options
+                : controls.get('roomNumberOptions').value
+            "
             [disabled]="field.disabled"
             [settings]="{ showHeader: false }"
           ></hospitality-bot-multi-select>
           <hospitality-bot-select
             *ngSwitchCase="'select'"
+            class="select"
             [controlName]="field.name"
             [props]="{
               placeholder: field.placeholder,

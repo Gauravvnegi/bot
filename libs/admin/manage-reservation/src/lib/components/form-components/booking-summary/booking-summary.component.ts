@@ -25,11 +25,14 @@ import { ManageReservationService } from '../../../services/manage-reservation.s
 import { Clipboard } from '@angular/cdk/clipboard';
 import { Location } from '@angular/common';
 import { Subscription } from 'rxjs';
-import { ReservationForm } from '../../../constants/form';
+import { PaymentMethod, ReservationForm } from '../../../constants/form';
 import { FormService } from '../../../services/form.service';
 import { EntitySubType, EntityType } from '@hospitality-bot/admin/shared';
 import { RoomReservationRes } from '../../../types/response.type';
-import { OccupancyDetails } from '../../../types/forms.types';
+import {
+  OccupancyDetails,
+  RoomReservationFormData,
+} from '../../../types/forms.types';
 
 @Component({
   selector: 'hospitality-bot-booking-summary',
@@ -111,47 +114,58 @@ export class BookingSummaryComponent implements OnInit {
   handleBooking(): void {
     this.isBooking = true;
     let data: any;
+    const id =
+      this.bookingType === EntitySubType.ROOM_TYPE
+        ? this.entityId
+        : this.outletId;
     if (this.bookingType === EntitySubType.ROOM_TYPE)
       data = this.formService.mapRoomReservationData(
-        this.parentFormGroup.getRawValue()
+        this.parentFormGroup.getRawValue(),
+        id
       );
     else
       data = this.formService.mapOutletReservationData(
         this.parentFormGroup.getRawValue(),
         this.bookingType
       );
-    if (this.reservationId) this.updateReservation(data);
-    else this.createReservation(data);
+    if (this.reservationId) {
+      this.updateReservation(data, id);
+    } else this.createReservation(data, id);
   }
 
-  createReservation(data): void {
+  createReservation(data: RoomReservationFormData, entityId: string): void {
     const type =
       this.bookingType === EntitySubType.ROOM_TYPE
         ? EntitySubType.ROOM_TYPE
         : EntityType.OUTLET;
+
+    const { id, ...formData } = data;
+    this.$subscription.add(
+      this.manageReservationService
+        .createReservation(entityId, formData, type)
+        .subscribe(
+          (res: RoomReservationRes) => {
+            this.bookingConfirmationPopup(res?.reservationNumber);
+          },
+          (error) => {
+            this.isBooking = false;
+          },
+          () => {
+            this.isBooking = false;
+          }
+        )
+    );
+  }
+
+  updateReservation(data: RoomReservationFormData, entityId: string): void {
     const id =
       this.bookingType === EntitySubType.ROOM_TYPE
         ? this.entityId
         : this.outletId;
-    this.$subscription.add(
-      this.manageReservationService.createReservation(id, data, type).subscribe(
-        (res: RoomReservationRes) => {
-          this.bookingConfirmationPopup(res?.reservationNumber);
-        },
-        (error) => {
-          this.isBooking = false;
-        },
-        () => {
-          this.isBooking = false;
-        }
-      )
-    );
-  }
 
-  updateReservation(data): void {
     this.$subscription.add(
       this.manageReservationService
-        .updateReservation(this.outletId, this.reservationId, data)
+        .updateReservation(entityId, this.reservationId, data)
         .subscribe(
           (res: RoomReservationRes) => {
             this.bookingConfirmationPopup(res?.reservationNumber);
@@ -199,8 +213,10 @@ export class BookingSummaryComponent implements OnInit {
             ],
             { replaceUrl: true }
           );
-          // this.userForm.reset();
+          // this.handleInitForm.emit();
+          this.parentFormGroup.reset();
           this.handleInitForm.emit();
+          this.initDefaultData();
           this.modalService.close();
         },
         variant: 'outlined',
@@ -228,11 +244,30 @@ export class BookingSummaryComponent implements OnInit {
     });
   }
 
-  get inputControl() {
+  initDefaultData() {
+    this.formService.initialData.subscribe((res) => {
+      if (res) {
+        this.inputControls.paymentMethod.patchValue({
+          cashierFirstName: res.cashierFirstName,
+          cashierLastName: res.cashierLastName,
+          currency: res.currency,
+          totalPaidAmount: 0,
+        });
+      }
+    });
+    this.formService.setInitialDates.next('');
+  }
+
+  get inputControls() {
     return this.parentFormGroup.controls as Record<
       keyof ReservationForm,
       AbstractControl
     >;
+  }
+
+  get paymentControls() {
+    return (this.parentFormGroup.get('paymentMethod') as FormGroup)
+      .controls as Record<keyof PaymentMethod, AbstractControl>;
   }
 }
 

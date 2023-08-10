@@ -1,5 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormArray, FormBuilder, Validators, AbstractControl } from '@angular/forms';
+import {
+  FormGroup,
+  FormArray,
+  FormBuilder,
+  Validators,
+  AbstractControl,
+} from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
@@ -24,6 +30,7 @@ import {
 import { ManageReservationService } from '../../services/manage-reservation.service';
 import { ReservationForm } from '../../constants/form';
 import { BaseReservationComponent } from '../base-reservation.component';
+import { FormService } from '../../services/form.service';
 
 @Component({
   selector: 'hospitality-bot-venue-reservation',
@@ -33,7 +40,8 @@ import { BaseReservationComponent } from '../base-reservation.component';
     '../reservation.styles.scss',
   ],
 })
-export class VenueReservationComponent extends BaseReservationComponent implements OnInit {
+export class VenueReservationComponent extends BaseReservationComponent
+  implements OnInit {
   venueBookingInfo: FormArray;
   foodPackageArray: FormArray;
 
@@ -46,11 +54,12 @@ export class VenueReservationComponent extends BaseReservationComponent implemen
     private adminUtilityService: AdminUtilityService,
     protected globalFilterService: GlobalFilterService,
     private manageReservationService: ManageReservationService,
-    protected activatedRoute: ActivatedRoute
+    protected activatedRoute: ActivatedRoute,
+    private formService: FormService
   ) {
     super(globalFilterService, activatedRoute);
   }
-  
+
   ngOnInit(): void {
     this.initForm();
     this.initDetails();
@@ -120,7 +129,7 @@ export class VenueReservationComponent extends BaseReservationComponent implemen
       ?.valueChanges.subscribe((res) => {
         if (res) {
           this.userForm.get('offerId').reset();
-          this.getOfferByRoomType(res);
+          // this.getOfferByRoomType(res);
           this.getSummaryData();
         }
       });
@@ -171,15 +180,15 @@ export class VenueReservationComponent extends BaseReservationComponent implemen
             this.summaryData = new SummaryData().deserialize(response);
             this.setFormDisability(data.reservationInformation);
             if (data.offerId)
-              this.getOfferByRoomType(
-                this.userForm.get('roomInformation.roomTypeId').value
-              );
-            this.userForm.valueChanges.subscribe((_) => {
-              if (!this.formValueChanges) {
-                this.formValueChanges = true;
-                this.listenForFormChanges();
-              }
-            });
+              // this.getOfferByRoomType(
+              //   this.userForm.get('roomInformation.roomTypeId').value
+              // );
+              this.userForm.valueChanges.subscribe((_) => {
+                if (!this.formValueChanges) {
+                  this.formValueChanges = true;
+                  this.listenForFormChanges();
+                }
+              });
           },
           (error) => {}
         )
@@ -206,24 +215,24 @@ export class VenueReservationComponent extends BaseReservationComponent implemen
     }
   }
 
-  getOfferByRoomType(id: string): void {
-    if (id)
-      this.$subscription.add(
-        this.manageReservationService
-          .getOfferByRoomType(this.entityId, id)
-          .subscribe(
-            (response) => {
-              this.offersList = new OfferList().deserialize(response);
-              if (this.userForm.get('offerId').value) {
-                this.selectedOffer = this.offersList.records.filter(
-                  (item) => item.id === this.userForm.get('offerId').value
-                )[0];
-              }
-            },
-            (error) => {}
-          )
-      );
-  }
+  // getOfferByRoomType(id: string): void {
+  //   if (id)
+  //     this.$subscription.add(
+  //       this.manageReservationService
+  //         .getOfferByRoomType(this.entityId, id)
+  //         .subscribe(
+  //           (response) => {
+  //             this.offersList = new OfferList().deserialize(response);
+  //             if (this.userForm.get('offerId').value) {
+  //               this.selectedOffer = this.offersList.records.filter(
+  //                 (item) => item.id === this.userForm.get('offerId').value
+  //               )[0];
+  //             }
+  //           },
+  //           (error) => {}
+  //         )
+  //     );
+  // }
 
   offerSelect(offerData?: OfferData): void {
     if (offerData) {
@@ -246,7 +255,6 @@ export class VenueReservationComponent extends BaseReservationComponent implemen
       fromDate: this.reservationInfoControls.from.value,
       toDate: this.reservationInfoControls.to.value,
       adultCount: this.eventInfoControls.numberOfAdults.value,
-      
     };
     this.$subscription.add(
       this.manageReservationService
@@ -277,6 +285,4 @@ export class VenueReservationComponent extends BaseReservationComponent implemen
       AbstractControl
     >;
   }
-
-
 }

@@ -52,9 +52,8 @@ export const listingConfig = {
         isSearchDisabled: true,
       },
       {
-        field: '',
+        field: 'active',
         header: 'Active',
-        isSortDisabled: true,
         sortType: 'number',
         isSearchDisabled: true,
       },

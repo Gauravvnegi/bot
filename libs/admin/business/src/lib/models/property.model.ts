@@ -25,7 +25,7 @@ export class Entity {
   contact;
   description: string;
   emailId: string;
-  status: string;
+  status: boolean;
   parentId: string;
   url: string;
   minimumOccupancy?: number;
@@ -54,7 +54,7 @@ export class Entity {
     this.contact = input?.contact;
     this.description = input?.description;
     this.emailId = input?.emailId;
-    this.status = input?.status;
+    this.status = input?.status === 'ACTIVE';
     this.parentId = input?.parentId;
     this.url = input?.absoluteRoute;
     this.minimumOccupancy = input?.minimumOccupancy;

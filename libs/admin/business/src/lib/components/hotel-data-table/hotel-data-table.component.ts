@@ -176,10 +176,10 @@ export class HotelDataTableComponent extends BaseDatatableComponent
     this.loading = true;
     this.$subscription.add(
       this.businessService
-        .updateHotel(rowData.id, { status: status })
+        .updateHotel(rowData.id, { status: status ? 'ACTIVE' : 'INACTIVE' })
         .subscribe(
           (res) => {
-            this.loadInitialData();
+            this.initTableValue();
             this.snackbarService.openSnackBarAsText(
               'Status changes successfully',
               '',

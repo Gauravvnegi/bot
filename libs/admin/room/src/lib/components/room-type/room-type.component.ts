@@ -68,8 +68,8 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
   defaultImage: string = 'assets/images/image-upload.png';
   pageTitle = 'Add Room Type';
   navRoutes: NavRouteOptions = [
-    { label: 'Inventory', link: './' },
-    { label: 'Rooms', link: '/pages/inventory/room' },
+    { label: 'efrontdesk', link: './' },
+    { label: 'Rooms', link: '/pages/efrontdesk/room' },
     { label: 'Add Room Type', link: './' },
   ];
 
@@ -390,7 +390,7 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
   saveRoomTypeData(serviceType) {
     const data = this.useForm.getRawValue();
     this.roomService.initRoomTypeFormData(data, serviceType, true);
-    this.router.navigate(['/pages/inventory/room/add-room-type/services']);
+    this.router.navigate(['/pages/efrontdesk/room/add-room-type/services']);
   }
 
   /**
@@ -411,7 +411,7 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
       this.router.navigate(['pages/library/services/create-service']);
     } else {
       this.router.navigate([
-        'pages/inventory/room/add-room-type/import-services',
+        'pages/efrontdesk/room/add-room-type/import-services',
       ]);
     }
   }
@@ -448,7 +448,7 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
       this.roomService.createRoomType(this.entityId, modifiedData).subscribe(
         (res) => {
           this.loading = false;
-          this.router.navigate([`/pages/inventory/room/${routes.dashboard}`]);
+          this.router.navigate([`/pages/efrontdesk/room/${routes.dashboard}`]);
           this.snackbarService.openSnackBarAsText(
             'Room type is created successfully',
             '',
@@ -475,7 +475,7 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
       this.roomService.updateRoomType(this.entityId, modifiedData).subscribe(
         (res) => {
           this.loading = false;
-          this.router.navigate([`/pages/inventory/room/${routes.dashboard}`]);
+          this.router.navigate([`/pages/efrontdesk/room/${routes.dashboard}`]);
           this.snackbarService.openSnackBarAsText(
             'Room type is updated successfully',
             '',

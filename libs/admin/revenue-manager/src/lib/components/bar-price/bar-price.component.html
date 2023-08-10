@@ -20,107 +20,108 @@
       <ng-container
         *ngIf="!isRoomsEmpty && allRoomTypes?.length; else emptyView"
       >
-        <p-accordion class="accordion" [multiple]="true">
-          <div formArrayName="barPrices" *ngIf="barPriceControl">
+        <p-accordion
+          class="accordion"
+          [multiple]="true"
+          #accordion
+          formArrayName="barPrices"
+        >
+          <ng-container *ngFor="let barPrice of barPriceControl; let i = index">
             <ng-container
-              *ngFor="let barPrice of barPriceControl; let i = index"
+              *ngIf="checkForRoomTypeSelection(barPrice.get('id').value)"
             >
-              <div
-                *ngIf="checkForRoomTypeSelection(barPrice.get('id').value)"
-                style="margin-bottom: 15px;"
-              >
+              <p-accordionTab [selected]="i == 0">
+                <p-header>{{ barPrice.get('label').value }}</p-header>
                 <div [formGroupName]="i">
-                  <p-accordionTab [selected]="i == 0">
-                    <p-header>{{ barPrice.get('label').value }}</p-header>
-                    <div class="basic-detail">
-                      <div class="field">
+                  <div class="basic-detail">
+                    <div class="field">
+                      <hospitality-bot-input
+                        label="Price"
+                        controlName="price"
+                        [props]="{
+                          type: 'number'
+                        }"
+                        [disabled]="true"
+                      ></hospitality-bot-input>
+                    </div>
+                    <div class="row-1" formArrayName="ratePlans">
+                      <div
+                        class="field"
+                        *ngFor="
+                          let ratePlan of barPrice.get('ratePlans').controls;
+                          let ratePlanFG = index
+                        "
+                        [formGroupName]="ratePlanFG"
+                      >
                         <hospitality-bot-input
-                          label="Price"
-                          controlName="price"
+                          [label]="ratePlan.value.label"
+                          controlName="value"
                           [props]="{
                             type: 'number'
                           }"
-                          [disabled]="true"
                         ></hospitality-bot-input>
                       </div>
-                      <div class="row-1" formArrayName="ratePlans">
-                        <div
-                          class="field"
-                          *ngFor="
-                            let ratePlan of barPrice.get('ratePlans').controls;
-                            let ratePlanFG = index
-                          "
-                          [formGroupName]="ratePlanFG"
-                        >
-                          <hospitality-bot-input
-                            [label]="ratePlan.value.label"
-                            controlName="value"
-                            [props]="{
-                              type: 'number'
-                            }"
-                          ></hospitality-bot-input>
-                        </div>
+                    </div>
+                  </div>
+                  <div class="pax">
+                    <div class="pax__title">Pax</div>
+                    <div class="pax__body">
+                      <div class="field">
+                        <hospitality-bot-input
+                          label="Child Below 5"
+                          controlName="childBelowFive"
+                          [props]="{
+                            type: 'number'
+                          }"
+                        ></hospitality-bot-input>
+                      </div>
+                      <div class="field">
+                        <hospitality-bot-input
+                          label="Child 5-12"
+                          controlName="chileFiveToTwelve"
+                          [props]="{
+                            type: 'number'
+                          }"
+                        ></hospitality-bot-input>
+                      </div>
+                      <div class="field">
+                        <hospitality-bot-input
+                          label="Adult (12+)"
+                          controlName="adult"
+                          [props]="{
+                            type: 'number'
+                          }"
+                        ></hospitality-bot-input>
                       </div>
                     </div>
-                    <div class="pax">
-                      <div class="pax__title">Pax</div>
-                      <div class="pax__body">
-                        <div class="field">
-                          <hospitality-bot-input
-                            label="Child Below 5"
-                            controlName="childBelowFive"
-                            [props]="{
-                              type: 'number'
-                            }"
-                          ></hospitality-bot-input>
-                        </div>
-                        <div class="field">
-                          <hospitality-bot-input
-                            label="Child 5-12"
-                            controlName="chileFiveToTwelve"
-                            [props]="{
-                              type: 'number'
-                            }"
-                          ></hospitality-bot-input>
-                        </div>
-                        <div class="field">
-                          <hospitality-bot-input
-                            label="Adult (12+)"
-                            controlName="adult"
-                            [props]="{
-                              type: 'number'
-                            }"
-                          ></hospitality-bot-input>
-                        </div>
-                      </div>
-                    </div>
+                  </div>
+                  <div
+                    formArrayName="exceptions"
+                    *ngIf="barPrice.get('exceptions').controls.length"
+                  >
                     <div
-                      formArrayName="exceptions"
-                      *ngIf="barPrice.get('exceptions').controls.length"
+                      *ngFor="
+                        let exception of barPrice.get('exceptions').controls;
+                        let j = index
+                      "
+                      [formGroupName]="j"
                     >
-                      <div
-                        *ngFor="
-                          let exception of barPrice.get('exceptions').controls;
-                          let j = index
-                        "
-                        [formGroupName]="j"
-                      >
-                        <hospitality-bot-exception
-                          [parentFG]="barPrice.get('exceptions').controls[j]"
-                          (removeAction)="removeException(barPrice, j)"
-                        ></hospitality-bot-exception>
-                      </div>
+                      <hospitality-bot-exception
+                        [price]="barPrice.get('price')?.value"
+                        [parentFG]="barPrice.get('exceptions').controls[j]"
+                        (removeAction)="removeException(barPrice, j)"
+                      ></hospitality-bot-exception>
                     </div>
-                    <div class="add-exception">
-                      <div class="link" (click)="addException(barPrice)">
-                        +Add Exception
-                      </div>
+                  </div>
+                  <div class="add-exception">
+                    <div class="link" (click)="addException(barPrice)">
+                      +Add Exception
                     </div>
-                  </p-accordionTab>
+                  </div>
                 </div>
-              </div>
+              </p-accordionTab>
             </ng-container>
-          </div>
+          </ng-container>
         </p-accordion>
       </ng-container>
     </div>

@@ -110,7 +110,7 @@
         <div class="table-room-no" [roomStatus]="rowData?.roomStatus">
           <div>
             {{
-              (rowData?.bookingItems)[0]?.roomDetails.roomTypeName || '--'
+              (rowData?.bookingItems)[0]?.roomDetails.roomTypeLabel || '--'
             }}&nbsp;-&nbsp;{{
               (rowData?.bookingItems)[0]?.roomDetails.roomNumber || '--'
             }}

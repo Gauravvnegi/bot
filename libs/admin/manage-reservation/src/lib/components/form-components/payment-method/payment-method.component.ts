@@ -17,6 +17,7 @@ import { ManageReservationService } from '../../../services/manage-reservation.s
 import { PaymentMethodList } from '../../../models/reservations.model';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { ReservationForm } from '../../../constants/form';
+import { FormService } from '../../../services/form.service';
 
 @Component({
   selector: 'hospitality-bot-payment-method',
@@ -27,9 +28,6 @@ import { ReservationForm } from '../../../constants/form';
   ],
 })
 export class PaymentMethodComponent implements OnInit {
-  // @Input() paymentOptions: Option[] = [];
-  // @Input() currencies: Option[] = [];
-
   currencies: Option[] = [];
   paymentOptions: Option[] = [];
   entityId: string;
@@ -42,7 +40,8 @@ export class PaymentMethodComponent implements OnInit {
     private configService: ConfigService,
     private manageReservationService: ManageReservationService,
     private globalFilterService: GlobalFilterService,
-    private userService: UserService
+    private userService: UserService,
+    private formService: FormService
   ) {}
 
   ngOnInit(): void {
@@ -54,6 +53,11 @@ export class PaymentMethodComponent implements OnInit {
     const { firstName, lastName } = this.userService.userDetails;
     this.inputControl.cashierFirstName.setValue(firstName);
     this.inputControl.cashierLastName.setValue(lastName);
+    this.formService.initialData.next({
+      ...this.formService.initialData.getValue(), // Get the current values
+      cashierFirstName: firstName,
+      cashierLastName: lastName,
+    });
   }
 
   addFormGroup() {
@@ -84,6 +88,10 @@ export class PaymentMethodComponent implements OnInit {
           value,
         }));
         this.controlContainer.control.get('paymentMethod').patchValue({
+          currency: this.currencies[0].value,
+        });
+        this.formService.initialData.next({
+          ...this.formService.initialData.getValue(), // Get the current values
           currency: this.currencies[0].value,
         });
       }

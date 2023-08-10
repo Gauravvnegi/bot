@@ -30,9 +30,20 @@
       [stats]="statCard[1]"
       class="stat-card"
     ></hospitality-bot-stats-card>
-    <hospitality-bot-stats-card
-      [stats]="statCard[2]"
-      class="stat-card"
-    ></hospitality-bot-stats-card>
+    <hospitality-bot-stats-card [stats]="statCard[2]" class="stat-card">
+      <ng-container>
+        <div class="additional-stats-container">
+          <div class="stats-wrapper">
+            <span class="stats">7</span>
+            <div class="text">Agents On Ticket</div>
+          </div>
+
+          <div class="stats-wrapper">
+            <span class="stats">14</span>
+            <div class="text">Available Agents</div>
+          </div>
+        </div>
+      </ng-container>
+    </hospitality-bot-stats-card>
   </div>
 </div>

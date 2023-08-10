@@ -36,6 +36,7 @@ export class RoomReservation {
   created: number;
   nextStates: string[];
   bookingItems: BookingItems[];
+  roomTypes: string[];
   totalAmount: number;
   totalDueAmount: number;
   totalPaidAmount: number;
@@ -60,6 +61,9 @@ export class RoomReservation {
     this.totalAmount = input.pricingDetails.totalAmount;
     this.totalPaidAmount = input.pricingDetails.totalPaidAmount;
     this.totalDueAmount = input.pricingDetails.totalDueAmount;
+    this.roomTypes = input.bookingItems.map(
+      (item) => item.roomDetails.roomTypeLabel
+    );
     return this;
   }
 }
@@ -169,10 +173,12 @@ export type RatePlanData = {
 
 export class OfferData {
   id: string;
+  name: string;
   description: string;
 
   deserialize(input) {
     this.id = input.id ?? '';
+    this.name = input.name ?? '';
     this.description = input.description ?? '';
     return this;
   }
@@ -202,8 +208,9 @@ export class ReservationFormData {
         isBase: item.roomDetails.ratePlan.isBase,
         sellingPrice: item?.roomDetails.ratePlan.sellingPrice,
       },
+      id: item?.id,
+      roomNumbers: [item?.roomDetails.roomNumber],
     }));
-    // roomNumbers: item?.tableNumberOrRoomNumber,
     return this;
   }
 }

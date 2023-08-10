@@ -218,3 +218,19 @@ export type Features = {
   created: number;
   updated: number;
 };
+
+export type RoomsByRoomType = {
+  currentStatusFrom: number;
+  currentStatusTo: number;
+  floorNumber: string;
+  frontOfficeState: string;
+  id: string;
+  nextStates: string[];
+  remark: string;
+  roomNumber: string;
+  roomTypeDetails: {
+    id: string,
+    name: string,
+  }
+  status: string;
+}

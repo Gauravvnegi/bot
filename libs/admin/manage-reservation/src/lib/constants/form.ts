@@ -57,10 +57,12 @@ export type RoomTypes = {
   ratePlan: string;
   roomCount: number;
   roomNumbers?: string[];
+  roomNumber?: string;
   adultCount: number;
   childCount: number;
   roomTypeLabel?: string;
   allRatePlans?: ReservationRatePlan;
+  id?: string;
 };
 
 export type OrderInformation = {
@@ -109,7 +111,7 @@ type PaymentRule = {
   inclusionsAndTerms: string;
 };
 
-type PaymentMethod = {
+export type PaymentMethod = {
   cashierFirstName: string;
   cashierLastName: string;
   totalPaidAmount: number;

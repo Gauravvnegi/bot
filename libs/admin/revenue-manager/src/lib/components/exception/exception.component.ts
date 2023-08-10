@@ -14,6 +14,7 @@ export class ExceptionComponent {
   endMaxDate: Date;
   weeks = weeks;
   @Input() parentFG: FormGroup;
+  @Input() price: number;
   @Output() removeAction = new EventEmitter();
   removeException() {
     this.removeAction.emit();

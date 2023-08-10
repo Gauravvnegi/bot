@@ -34,7 +34,7 @@ export const roomFields: IteratorField[] = [
   },
   {
     label: 'Room Number',
-    name: 'roomNumber',
+    name: 'roomNumbers',
     type: 'multi-select',
     placeholder: 'Enter',
     width: '18%',
@@ -62,6 +62,7 @@ export type RoomFieldTypeOption = {
   ratePlan?: ReservationRatePlan[];
   maxChildren: number;
   maxAdult: number;
+  id?: string;
 };
 
 export const Reservation = {

@@ -19,7 +19,6 @@
           *ngFor="let field of fields"
           [style.flexBasis]="field.width ? field.width : width"
           [ngSwitch]="field.type"
-          class="value"
         >
           <hospitality-bot-input
             *ngSwitchCase="'input'"

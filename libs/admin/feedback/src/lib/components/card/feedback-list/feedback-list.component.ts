@@ -236,7 +236,7 @@ export class FeedbackListComponent implements OnInit, OnDestroy {
 
           this.paginationDisabled =
             this.pagination.limit > response.records.length;
-            this.loading = false;
+          this.loading = false;
         },
         ({ error }) => {
           this.loading = false;
@@ -264,7 +264,7 @@ export class FeedbackListComponent implements OnInit, OnDestroy {
     const config = {
       queryObj: this._adminUtilityService.makeQueryParams([
         ...queries,
-        { entityIds: this.setEntityId() },
+        { entityIds: this.setEntityId(), sort: 'updated' },
       ]),
     };
     return this.cardService.getFeedbackList(config);
@@ -364,7 +364,7 @@ export class FeedbackListComponent implements OnInit, OnDestroy {
             queryObj: this._adminUtilityService.makeQueryParams([
               ...this.globalQueries,
               this.filterData,
-              { key: this.search },
+              { key: this.search, sort: 'updated' },
             ]),
           })
           .subscribe(
@@ -375,7 +375,7 @@ export class FeedbackListComponent implements OnInit, OnDestroy {
                 this.feedbackType,
                 this.colorMap
               ).records),
-            ({ error }) =>{
+            ({ error }) => {
               this.loading = false;
             }
           )

@@ -11,7 +11,7 @@
   flex-basis: 32.5%;
   background: $white;
   border: solid 1px $borderCol;
-  box-shadow: 0px 3px 6px $boxShadow;
+  // box-shadow: 0px 3px 6px $boxShadow;
   border-radius: 5px;
   // @media screen and (max-width: 1340px) {
   //   flex-basis: 44%;
@@ -213,4 +213,74 @@
 
 .mb-20 {
   margin-bottom: 20px;
+}
+
+:host ::ng-deep .stat-card {
+  .wrapper {
+    // padding: 20px 20px 0 17.5px;
+    .header-content {
+      .stats-text {
+        font-size: 20px;
+        font-weight: $bolder;
+      }
+      .icons {
+        height: 50px;
+        width: 50px;
+      }
+    }
+    .info {
+      .amount {
+        font-size: 41px;
+        font-weight: $bolder;
+      }
+      .percent {
+        .comparison-percent {
+          font-size: 12px;
+        }
+        img {
+          width: 10.7px;
+          height: 12px;
+        }
+      }
+      .compared-dates {
+        font-size: 10px;
+      }
+    }
+  }
+}
+
+.additional-stats-container {
+  display: flex;
+  gap: 1em;
+}
+
+.stats-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 1em;
+
+  .stats {
+    font-size: 41px;
+    font-weight: 600;
+    color: #002046;
+  }
+  .text {
+    width: 86px;
+    height: 38px;
+    margin: 8px 25px 8px 10px;
+    opacity: 0.42;
+    font-family: Roboto;
+    font-size: 14px;
+    font-weight: bold;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: 0.84px;
+    text-align: left;
+    color: #002046;
+  }
+}
+
+:host ::ng-deep .graph {
+  margin: unset !important;
 }

@@ -36,16 +36,27 @@ export class BookingInfoComponent implements OnInit {
     public controlContainer: ControlContainer,
     private configService: ConfigService,
     private globalFilterService: GlobalFilterService,
-    private activatedRoute: ActivatedRoute,
     private formService: FormService
   ) {}
 
   ngOnInit(): void {
     this.entityId = this.globalFilterService.entityId;
     this.getCountryCode();
+    this.initDates();
+    this.formService.setInitialDates.subscribe((res) => {
+      if (res !== null) {
+        this.initDates();
+      }
+    });
+  }
+
+  initDates() {
+    this.startMinDate = new Date();
+    this.endMinDate = new Date();
+    this.maxFromDate = new Date();
+    this.maxToDate = new Date();
     this.initDefaultDates();
     this.listenForDateChange();
-    // this.listenFormChanges();
   }
 
   // listenFormChanges() {
@@ -60,14 +71,14 @@ export class BookingInfoComponent implements OnInit {
   initDefaultDates() {
     this.endMinDate.setDate(this.startMinDate.getDate() + 1);
     this.maxFromDate.setDate(this.endMinDate.getDate() - 1);
-    this.formService.toDate = this.endMinDate;
-    this.formService.fromDate = this.maxFromDate;
+
+    // this.formService.toDate = this.endMinDate;
+    // this.formService.fromDate = this.maxFromDate;
 
     if (this.bookingType === 'ROOM_TYPE')
       this.maxToDate.setDate(this.startMinDate.getDate() + 365);
     if (this.bookingType === 'VENUE')
       this.maxToDate = moment().add(24, 'hours').toDate();
-
     this.endMinDate.setTime(this.endMinDate.getTime() - 5 * 60 * 1000);
   }
 
@@ -87,7 +98,7 @@ export class BookingInfoComponent implements OnInit {
       'reservationInformation.dateAndTime'
     );
 
-    // Listen to from and to date changes in ROOM_TYPE and setting
+    // Listen to from and to date changes in ROOM_TYPE and set
     // min and max dates accordingly
     if (this.bookingType === 'ROOM_TYPE') {
       fromDateControl.setValue(startTime);

@@ -213,7 +213,10 @@ export class BookingSummaryComponent implements OnInit {
             ],
             { replaceUrl: true }
           );
+          // this.handleInitForm.emit();
+          this.parentFormGroup.reset();
           this.handleInitForm.emit();
+          this.initDefaultData();
           this.modalService.close();
         },
         variant: 'outlined',
@@ -239,6 +242,20 @@ export class BookingSummaryComponent implements OnInit {
     this.snackbarService.openSnackBarAsText('Confirmation number copied', '', {
       panelClass: 'success',
     });
+  }
+
+  initDefaultData() {
+    this.formService.initialData.subscribe((res) => {
+      if (res) {
+        this.inputControls.paymentMethod.patchValue({
+          cashierFirstName: res.cashierFirstName,
+          cashierLastName: res.cashierLastName,
+          currency: res.currency,
+          totalPaidAmount: 0,
+        });
+      }
+    });
+    this.formService.setInitialDates.next('');
   }
 
   get inputControls() {

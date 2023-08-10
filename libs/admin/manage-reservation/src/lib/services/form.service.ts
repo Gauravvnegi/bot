@@ -3,7 +3,11 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { distinctUntilChanged } from 'rxjs/operators';
 import { ReservationTableValue } from '../constants/reservation-table';
 import { SelectedEntity } from '../types/reservation.type';
-import { OutletFormData, RoomReservationFormData } from '../types/forms.types';
+import {
+  InitialFormData,
+  OutletFormData,
+  RoomReservationFormData,
+} from '../types/forms.types';
 import { ReservationForm } from '../constants/form';
 import { GuestInfo } from '../models/reservations.model';
 
@@ -15,6 +19,12 @@ export class FormService {
   dateDifference = new BehaviorSubject(1);
   toDate: Date;
   fromDate: Date;
+
+  setInitialDates = new BehaviorSubject<String>(null);
+
+  initialData: BehaviorSubject<InitialFormData> = new BehaviorSubject<
+    InitialFormData
+  >({});
 
   guestInformation: BehaviorSubject<GuestInfo> = new BehaviorSubject<GuestInfo>(
     null
@@ -37,11 +47,6 @@ export class FormService {
   }
   selectedTab = ReservationTableValue.ALL;
   enableAccordion: boolean = false;
-
-  //  Booking Summary Props
-  price = new BehaviorSubject(0);
-  discountedPrice = new BehaviorSubject(0);
-  // roomType = new BehaviorSubject({roomTypeCount: 0, roomTypeName: ''});
 
   mapRoomReservationData(
     input: ReservationForm,

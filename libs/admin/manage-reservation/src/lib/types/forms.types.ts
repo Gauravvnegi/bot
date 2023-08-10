@@ -86,3 +86,9 @@ export type OccupancyDetails = {
   roomCount: number;
   childCount: number;
 };
+
+export type InitialFormData = {
+  cashierFirstName?: string;
+  cashierLastName?: string;
+  currency?: string;
+}

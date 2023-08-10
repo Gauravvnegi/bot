@@ -107,21 +107,6 @@ export class AddReservationComponent extends BaseReservationComponent
           this.summaryData = new SummaryData().deserialize();
         }
       });
-    // this.inputControls.reservationInformation
-    //   .get('from')
-    //   .valueChanges.subscribe((res) => {
-    //     if (res) {
-    //       this.getSummaryData();
-    //     }
-    //   });
-
-    // this.inputControls.reservationInformation
-    //   .get('to')
-    //   .valueChanges.subscribe((res) => {
-    //     if (res) {
-    //       this.getSummaryData();
-    //     }
-    //   });
   }
 
   getReservationId(): void {
@@ -149,7 +134,6 @@ export class AddReservationComponent extends BaseReservationComponent
             this.formService.guestInformation.next(guestInformation);
 
             this.userForm.patchValue(data);
-            this.setFormDisability(data.reservationInformation);
 
             if (data.offerId) {
               const roomTypeIds = roomInformation.map(
@@ -163,21 +147,24 @@ export class AddReservationComponent extends BaseReservationComponent
     );
   }
 
-  setFormDisability(data: BookingInfo): void {
-    this.userForm.get('reservationInformation.source').disable();
+  setFormDisability(): void {
+    // this.userForm.get('reservationInformation.source').disable();
+    const reservationType = this.reservationInfoControls.reservationType.value;
+    const source = this.reservationInfoControls.source;
+    source.disable();
     switch (true) {
-      case data.reservationType === 'CONFIRMED':
+      case reservationType === 'CONFIRMED':
         this.userForm.disable();
         this.disabledForm = true;
         break;
-      case data.reservationType === 'CANCELED':
+      case reservationType === 'CANCELED':
         this.userForm.disable();
         this.disabledForm = true;
         break;
-      case data.source === 'CREATE_WITH':
+      case source.value === 'CREATE_WITH':
         this.disabledForm = true;
         break;
-      case data.source === 'OTHERS':
+      case source.value === 'OTHERS':
         this.disabledForm = true;
         break;
     }
@@ -227,7 +214,6 @@ export class AddReservationComponent extends BaseReservationComponent
     const config = {
       params: this.adminUtilityService.makeQueryParams([{ type: 'ROOM_TYPE' }]),
     };
-
     const data: ReservationSummary = {
       fromDate: this.reservationInfoControls.from.value,
       toDate: this.reservationInfoControls.to.value,

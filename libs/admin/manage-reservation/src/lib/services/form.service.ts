@@ -83,7 +83,7 @@ export class FormService {
               ratePlan: { id: roomType.ratePlan },
               roomTypeId: roomType.roomTypeId,
               roomCount: roomType.roomCount,
-              roomIds: roomType.roomIds,
+              roomNumbers: roomType.roomNumbers,
             },
             occupancyDetails: {
               maxChildren: roomType.childCount,

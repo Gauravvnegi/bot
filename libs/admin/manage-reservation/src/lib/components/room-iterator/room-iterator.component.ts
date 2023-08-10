@@ -100,7 +100,7 @@ export class RoomIteratorComponent extends IteratorComponent
       roomTypeId: ['', [Validators.required]],
       ratePlan: [{ value: '', disabled: true }],
       roomCount: ['', [Validators.required]],
-      roomNumber: [{ value: [], disabled: true }],
+      roomNumbers: [{ value: [], disabled: true }],
       adultCount: ['', [Validators.required]],
       childCount: [''],
       ratePlanOptions: [[]],
@@ -141,12 +141,13 @@ export class RoomIteratorComponent extends IteratorComponent
         });
       }
       // Patch room details in the form array
-      this.roomTypeArray.at(index).patchValue({
+      this.roomControls[index].patchValue({
         roomTypeId: value.roomTypeId,
         roomCount: value.roomCount,
         childCount: value.childCount,
         adultCount: value.adultCount,
         ratePlan: value.allRatePlans.value,
+        roomNumbers: value.roomNumbers,
         id: value?.id,
       });
     });
@@ -188,7 +189,7 @@ export class RoomIteratorComponent extends IteratorComponent
                 .patchValue(defaultPlan, { emitEvent: false });
             }
           }
-          this.updateFormValueAndValidity(selectedRoomType, index);
+          this.updateFormValueAndValidity(index);
         }
       });
   }
@@ -210,7 +211,7 @@ export class RoomIteratorComponent extends IteratorComponent
       .subscribe((res) => {
         const roomNumberOptions = res.rooms.map((room: RoomsByRoomType) => ({
           label: room.roomNumber,
-          value: room.id,
+          value: room.roomNumber,
         }));
 
         this.roomControls[index]
@@ -222,13 +223,9 @@ export class RoomIteratorComponent extends IteratorComponent
   /**
    * @function updateFormValueAndValidity Updates child, adult and room count values and validations
    */
-  updateFormValueAndValidity(
-    selectedRoomType: RoomFieldTypeOption,
-    index: number
-  ) {
+  updateFormValueAndValidity(index: number) {
     this.roomControls[index].get('ratePlan').enable();
-    this.roomControls[index].get('roomNumber').enable();
-
+    this.roomControls[index].get('roomNumbers').enable();
     if (!this.isDefaultRoomType) {
       // Patch default count values only if not in edit mode
       this.roomControls[index]
@@ -392,10 +389,6 @@ export class RoomIteratorComponent extends IteratorComponent
     }
     this.createNewFields();
     this.isDefaultRoomType = false;
-    // setTimeout(() => {
-    //   this.main.nativeElement?.scrollIntoView({ behavior: 'smooth' });
-    //   this.main.nativeElement.scrollTop = this.main.nativeElement?.scrollHeight;
-    // }, 1000);
   }
 
   /**

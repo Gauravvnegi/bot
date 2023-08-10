@@ -207,8 +207,8 @@ export class ReservationFormData {
         sellingPrice: item?.roomDetails.ratePlan.sellingPrice,
       },
       id: item?.id,
+      roomNumbers: [item?.roomDetails.roomNumber],
     }));
-    // roomNumbers: item?.tableNumberOrRoomNumber,
     return this;
   }
 }

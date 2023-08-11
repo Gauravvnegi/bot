@@ -130,9 +130,11 @@ export class FormService {
     reservationData.reservationType = input.reservationInformation?.status;
 
     // Booking/order/event info
-    reservationData.adultCount =
-      input.orderInformation?.numberOfAdults ??
-      input.bookingInformation?.numberOfAdults;
+    reservationData.occupancyDetails = {
+      maxAdult:
+        input.orderInformation?.numberOfAdults ??
+        input.bookingInformation?.numberOfAdults,
+    };
     reservationData.items =
       input.bookingInformation?.spaItems.map((item) => ({
         itemId: item.serviceName,

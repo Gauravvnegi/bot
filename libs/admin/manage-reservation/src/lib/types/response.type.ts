@@ -26,7 +26,7 @@ export type RoomReservationRes = {
   guest: GuestType;
   created: number;
   nextStates: string[];
-  bookingItems: BookingItems[];
+  bookingItems?: BookingItems[];
   pricingDetails: PricingDetails;
 };
 
@@ -60,6 +60,7 @@ export type SummaryResponse = {
   items?: ItemsData[];
   from: number;
   to: number;
+  occupancyDetails?: { maxAdult: number };
   location: string;
   pricingDetails: PricingDetails;
   offer: { discountedPrice: number };

@@ -35,8 +35,8 @@ export class RoomReservation {
   companyName: string;
   created: number;
   nextStates: string[];
-  bookingItems: BookingItems[];
-  roomTypes: string[];
+  bookingItems?: BookingItems[];
+  roomTypes?: string[];
   totalAmount: number;
   totalDueAmount: number;
   totalPaidAmount: number;
@@ -57,13 +57,15 @@ export class RoomReservation {
     this.companyName = input.guest?.company?.firstName ?? '';
     this.created = input.created;
     this.nextStates = [input.reservationType, ...input.nextStates];
-    this.bookingItems = input.bookingItems;
     this.totalAmount = input.pricingDetails.totalAmount;
     this.totalPaidAmount = input.pricingDetails.totalPaidAmount;
     this.totalDueAmount = input.pricingDetails.totalDueAmount;
-    this.roomTypes = input.bookingItems.map(
-      (item) => item.roomDetails.roomTypeLabel
-    );
+    if (input?.bookingItems) {
+      this.bookingItems = input?.bookingItems;
+      this.roomTypes =
+        input?.bookingItems.map((item) => item?.roomDetails?.roomTypeLabel) ??
+        [];
+    }
     return this;
   }
 
@@ -388,6 +390,7 @@ export class SummaryData {
   bookingItems?: BookingItemsSummary[];
   items?: ItemsData[];
   max?: number;
+  adultCount?: number;
   min?: number;
   base?: number;
   paxChild?: number;
@@ -416,6 +419,7 @@ export class SummaryData {
         unit: item?.unit,
         amount: item?.amount,
       })) ?? [];
+    this.adultCount = input?.occupancyDetails.maxAdult ?? 1;
     this.location = input?.location ?? '';
     this.offerAmount = input?.offer?.discountedPrice ?? 0;
     this.totalAmount = input?.pricingDetails.totalAmount ?? 0;

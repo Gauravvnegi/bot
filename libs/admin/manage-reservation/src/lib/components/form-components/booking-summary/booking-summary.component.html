@@ -147,7 +147,9 @@
 <ng-template #outletSummaryTemplate let-summaryData="summaryData">
   <p class="bk-summary_priceInfo_person">
     <span class="bk-summary_priceInfo_perNight_label">
-      For {{ summaryData?.maxAdult ? summaryData.maxAdult : 0 }} Adults
+      For
+      {{ summaryData?.adultCount }}
+      Adults
     </span>
     <span class="bk-summary_priceInfo_perNight_amount">
       {{ summaryData?.basePrice | currency: 'INR' }}

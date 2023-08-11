@@ -66,8 +66,6 @@ export class RestaurantReservationComponent extends BaseReservationComponent
   /* menu options variable */
   menuItems: (Option & { deliveryPrice?: number; dineInPrice: number })[] = [];
   outletItems: OutletItems[] = [];
-  tableNumber = '';
-  numberOfAdults = '';
 
   constructor(
     private fb: FormBuilder,
@@ -163,10 +161,11 @@ export class RestaurantReservationComponent extends BaseReservationComponent
    * @function listenForFormChanges Listen for form values changes.
    */
   listenForFormChanges(): void {
-    this.inputControls.orderInformation.valueChanges.subscribe((res) => {
-      this.numberOfAdults = `For ${res?.numberOfAdults} Adults`;
-      this.tableNumber = `Table Number: ${res?.tableNumber}`;
-    });
+    this.inputControls.orderInformation.valueChanges
+      .pipe(debounceTime(1000))
+      .subscribe((res) => {
+        this.getSummaryData();
+      });
 
     this.formService.reservationDateAndTime.subscribe((res) => {
       if (res) this.setDateAndTime(res);
@@ -181,6 +180,26 @@ export class RestaurantReservationComponent extends BaseReservationComponent
               (items) => items.deliveryPrice
             ))
           : (this.fields[0].options = this.menuItems);
+
+        const indexesToRemove: number[] = [];
+
+        // remove the items if already patched
+        this.menuItemsControls.forEach((control, index) => {
+          const value = control.get('menuItems').value;
+          if (value) {
+            const item = this.fields[0].options.find(
+              (option) => option.value === value
+            );
+            if (!item) {
+              indexesToRemove.push(index);
+            }
+          }
+        });
+
+        // Remove the controls after the loop
+        indexesToRemove.reverse().forEach((index) => {
+          this.menuItemsArray.removeAt(index);
+        });
       }
     );
 

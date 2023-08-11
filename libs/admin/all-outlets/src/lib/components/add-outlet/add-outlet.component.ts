@@ -379,7 +379,7 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
         'Browse the menu and place your order',
         'Place your orders',
       ],
-      route: this.redirectUrl,
+      route: this.redirectUrl ?? 'https://www.test.menu.com/',
       logoUrl: this.logoUrl,
     };
     togglePopupCompRef.componentInstance.onClose.subscribe(() => {

@@ -99,10 +99,11 @@ export const hotelCols: Cols[] = [
     sortType: 'string',
   },
   {
-    field: 'roomNumber',
+    field: 'roomType',
     header: 'Room No / Type',
     sortType: 'number',
     searchField: ['roomNumber', 'roomType'],
+    width: '13%',
   },
   {
     field: 'confirmationNo',

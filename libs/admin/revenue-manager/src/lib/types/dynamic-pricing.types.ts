@@ -1,9 +1,17 @@
+export type DynamicPricingResponse = {
+  configDetails: DynamicPricingRequest[];
+};
+
 export type DynamicPricingRequest = {
+  id?: string;
   name: string;
   fromDate: number;
   toDate: number;
+  entityId?: string;
   daysIncluded: DaysType[];
   status: StatusType;
+  type: ConfigType;
+  configCategory: ConfigCategory;
   configItems: ConfigItemType[];
 };
 
@@ -24,6 +32,7 @@ export type ConfigItemType = {
 };
 
 export type ConfigRuleType = {
+  id?: string;
   occupancyStart: number;
   occupancyEnd: number;
   discountOrMarkup: {
@@ -40,4 +49,43 @@ export type ConfigType =
   | 'DATE_TIME_TRIGGER'
   | 'INVENTORY_REALLOCATION';
 
-export type RevenueType = 'add' | 'update';
+export type ModeType = 'add' | 'update';
+
+export type OccupancyUpdateRequestType = Record<
+  string,
+  | string
+  | number
+  | DaysType[]
+  | ConfigItemType[]
+  | ConfigRuleType[]
+  | ConfigCategory
+>;
+
+// occupancy types
+
+export type OccupancyFormControlsType =
+  | 'id'
+  | 'fromDate'
+  | 'toDate'
+  | 'name'
+  | 'configCategory'
+  | 'roomType'
+  | 'roomTypes'
+  | 'selectedDays'
+  | 'status';
+
+export type RoomsConfigType = {
+  isSelected: boolean;
+  roomId: string;
+  roomName: string;
+  basePrice: number;
+  occupancy: OccupancyRuleType[];
+};
+
+export type OccupancyRuleType = {
+  id?: string;
+  start: number;
+  end: number;
+  discount: number;
+  rate?: number;
+};

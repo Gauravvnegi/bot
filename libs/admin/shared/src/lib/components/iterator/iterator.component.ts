@@ -80,10 +80,10 @@ export class IteratorComponent implements OnChanges {
       return;
     }
     this.createNewFields();
-    setTimeout(() => {
-      this.main.nativeElement.scrollIntoView({ behavior: 'smooth' });
-      this.main.nativeElement.scrollTop = this.main.nativeElement.scrollHeight;
-    }, 1000);
+    // setTimeout(() => {
+    //   this.main.nativeElement.scrollIntoView({ behavior: 'smooth' });
+    //   this.main.nativeElement.scrollTop = this.main.nativeElement.scrollHeight;
+    // }, 1000);
   }
 
   /**

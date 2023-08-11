@@ -107,13 +107,23 @@
         </div>
       </td>
       <td *ngIf="selectedEntity.subType === 'ROOM_TYPE'">
-        <div class="table-room-no" [roomStatus]="rowData?.roomStatus">
+        <div class="multi-cell-content" [roomStatus]="rowData?.roomStatus">
           <div>
-            {{
-              (rowData?.bookingItems)[0]?.roomDetails.roomTypeLabel || '--'
-            }}&nbsp;-&nbsp;{{
+            {{ (rowData?.roomTypes)[0] || '--' }}&nbsp;-&nbsp;{{
               (rowData?.bookingItems)[0]?.roomDetails.roomNumber || '--'
             }}
+          </div>
+          <b class="rowData">
+            {{ rowData.getRoomTypeDisplay().countString }}
+          </b>
+          <div
+            *ngIf="rowData?.roomTypes.length > 1"
+            class="room-type-cell"
+            [ngClass]="{ demo: rowData?.roomTypes.length > 1 }"
+          >
+            <div *ngFor="let roomType of rowData?.roomTypes; let i = index">
+              <ng-container *ngIf="i !== 0">{{ roomType }}</ng-container>
+            </div>
           </div>
         </div>
       </td>

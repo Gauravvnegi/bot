@@ -117,6 +117,8 @@ import { LoaderDirective } from './directives/loader.directive';
 import { StepperComponent } from './components/stepper/stepper.component';
 import { StepsModule } from 'primeng/steps';
 import { FromToDateComponent } from './components/from-to-date/from-to-date.component';
+import { TimerComponent } from './components/timer/timer.component';
+
 @NgModule({
   imports: [
     CommonModule,
@@ -240,6 +242,7 @@ import { FromToDateComponent } from './components/from-to-date/from-to-date.comp
     LoaderDirective,
     StepperComponent,
     FromToDateComponent,
+    TimerComponent,
   ],
 
   exports: [
@@ -351,6 +354,7 @@ import { FromToDateComponent } from './components/from-to-date/from-to-date.comp
     LoaderDirective,
     StepperComponent,
     FromToDateComponent,
+    TimerComponent,
   ],
 })
 export class AdminSharedModule {}

@@ -130,10 +130,7 @@
                           <span class="item">Rates</span>
                           &nbsp;
                         </div>
-                        <div
-                          formArrayName="occupancy"
-                          class="occupancy occupancy-form form-block"
-                        >
+                        <div formArrayName="occupancy">
                           <ng-container
                             *ngFor="
                               let roomOccupancy of room.get('occupancy')
@@ -142,73 +139,76 @@
                             "
                             [formGroupName]="occupancyIndex"
                           >
-                            <hospitality-bot-prefix-field
-                              class="one-fourth-width"
-                              preControlName="start"
-                              postControlName="end"
-                              preFieldType="input"
-                              postFieldType="input"
-                              [defaultProps]="{
-                                pre: {
-                                  placeholder: 'Start',
+                            <div class="occupancy occupancy-form form-block">
+                              <hospitality-bot-prefix-field
+                                class="one-fourth-width"
+                                preControlName="start"
+                                postControlName="end"
+                                preFieldType="input"
+                                postFieldType="input"
+                                [defaultProps]="{
+                                  pre: {
+                                    placeholder: 'Start',
+                                    type: 'number',
+                                    errorMessages: {
+                                      required: 'This is required field',
+                                      min: 'End should be grater than start.'
+                                    }
+                                  },
+                                  post: {
+                                    placeholder: 'End',
+                                    type: 'number',
+                                    errorMessages: {
+                                      required: 'This is required field',
+                                      min: 'End should be grater than start.'
+                                    }
+                                  }
+                                }"
+                                [settings]="{
+                                  layout: 'dashed'
+                                }"
+                              >
+                              </hospitality-bot-prefix-field>
+                              <hospitality-bot-input
+                                controlName="discount"
+                                [min]="0"
+                                [props]="{
+                                  placeholder: 'Enter',
                                   type: 'number',
+                                  subtitle: '%',
                                   errorMessages: {
                                     required: 'This is required field',
-                                    min: 'End should be grater than start.'
+                                    min: 'Value should be >= -100'
                                   }
-                                },
-                                post: {
-                                  placeholder: 'End',
+                                }"
+                              ></hospitality-bot-input>
+                              <hospitality-bot-input
+                                controlName="rate"
+                                [min]="0"
+                                [props]="{
+                                  placeholder: 'Enter',
                                   type: 'number',
+                                  subtitle:
+                                    'Rs. ' + room.get('basePrice').value,
+                                  strike: true,
                                   errorMessages: {
                                     required: 'This is required field',
-                                    min: 'End should be grater than start.'
+                                    min: 'Minimum value should be 0'
                                   }
-                                }
-                              }"
-                              [settings]="{
-                                layout: 'dashed'
-                              }"
-                            >
-                            </hospitality-bot-prefix-field>
-                            <hospitality-bot-input
-                              controlName="discount"
-                              [min]="0"
-                              [props]="{
-                                placeholder: 'Enter',
-                                type: 'number',
-                                subtitle: '%',
-                                errorMessages: {
-                                  required: 'This is required field',
-                                  min: 'Value should be >= -100'
-                                }
-                              }"
-                            ></hospitality-bot-input>
-                            <hospitality-bot-input
-                              controlName="rate"
-                              [min]="0"
-                              [props]="{
-                                placeholder: 'Enter',
-                                type: 'number',
-                                subtitle: 'Rs. ' + room.get('basePrice').value,
-                                strike: true,
-                                errorMessages: {
-                                  required: 'This is required field',
-                                  min: 'Minimum value should be 0'
-                                }
-                              }"
-                            ></hospitality-bot-input>
-                            <i
-                              [class]="
-                                room.get('occupancy').controls.length > 1
-                                  ? 'pi pi-times remove'
-                                  : 'pi pi-times remove disable'
-                              "
-                              (click)="
-                                room.get('occupancy').controls.length > 1 &&
-                                  remove('occupancy', occupancyIndex, room)
-                              "
-                            ></i>
+                                }"
+                              ></hospitality-bot-input>
+                              <i
+                                [class]="
+                                  room.get('occupancy').controls.length > 1
+                                    ? 'pi pi-times remove'
+                                    : 'pi pi-times remove disable'
+                                "
+                                (click)="
+                                  room.get('occupancy').controls.length > 1 &&
+                                    remove('occupancy', occupancyIndex, room)
+                                "
+                              ></i>
+                            </div>
                           </ng-container>
                         </div>
                         <div class="link" (click)="add('occupancy', room)">

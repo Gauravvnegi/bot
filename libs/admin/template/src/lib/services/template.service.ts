@@ -16,7 +16,7 @@ export class TemplateService extends ApiService {
    * @returns api to get topic list.
    */
   getTopicList(id: string, config): Observable<any> {
-    return this.get(`/api/v1/entity/${id}/topics/${config.queryObj}`);
+    return this.get(`/api/v1/entity/${id}/topics${config.queryObj}`);
   }
 
   /**

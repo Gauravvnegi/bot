@@ -51,7 +51,7 @@ export class SubscriptionPlanService extends ApiService {
 
   getSubscriptionUsage(entityId: string, config: any): Observable<any> {
     return this.get(
-      `/api/v1/entity/${entityId}/subscriptions/usage/${config.queryObj}`
+      `/api/v1/entity/${entityId}/subscriptions/usage${config.queryObj}`
     );
   }
 

@@ -359,7 +359,6 @@ export class UserProfileComponent implements OnInit {
         params: '?status=true&mention=true',
       })
       .subscribe((data) => {
-        console.log(data);
         // const manageUsersValues = new UserPermissionTable().deserialize(data)
         //   .records;
         this.userList = data.users.map((item) => ({

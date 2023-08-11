@@ -4,7 +4,7 @@ import { distinctUntilChanged } from 'rxjs/operators';
 import { ReservationTableValue } from '../constants/reservation-table';
 import { SelectedEntity } from '../types/reservation.type';
 import {
-  GuestDetails,
+  InitialFormData,
   OutletFormData,
   RoomReservationFormData,
 } from '../types/forms.types';
@@ -20,7 +20,15 @@ export class FormService {
   toDate: Date;
   fromDate: Date;
 
-  guestInformation: BehaviorSubject<GuestInfo> = new BehaviorSubject<GuestInfo>(null);
+  setInitialDates = new BehaviorSubject<String>(null);
+
+  initialData: BehaviorSubject<InitialFormData> = new BehaviorSubject<
+    InitialFormData
+  >({});
+
+  guestInformation: BehaviorSubject<GuestInfo> = new BehaviorSubject<GuestInfo>(
+    null
+  );
 
   public selectedEntity = new BehaviorSubject<SelectedEntity>(null);
 
@@ -40,14 +48,13 @@ export class FormService {
   selectedTab = ReservationTableValue.ALL;
   enableAccordion: boolean = false;
 
-  //  Booking Summary Props
-  price = new BehaviorSubject(0);
-  discountedPrice = new BehaviorSubject(0);
-  // roomType = new BehaviorSubject({roomTypeCount: 0, roomTypeName: ''});
-
-  mapRoomReservationData(input: ReservationForm): RoomReservationFormData {
+  mapRoomReservationData(
+    input: ReservationForm,
+    id?: string
+  ): RoomReservationFormData {
     const roomReservationData = new RoomReservationFormData();
     // Map Reservation Info
+    roomReservationData.id = id ?? '';
     roomReservationData.from =
       input.reservationInformation?.dateAndTime ??
       input.reservationInformation?.from;
@@ -70,17 +77,26 @@ export class FormService {
     // Map Booking Items
     if (input.roomInformation?.roomTypes) {
       roomReservationData.bookingItems = input.roomInformation.roomTypes.map(
-        (roomType) => ({
-          roomDetails: {
-            ratePlan: { id: roomType.ratePlan },
-            roomTypeId: roomType.roomTypeId,
-            roomCount: roomType.roomCount,
-          },
-          occupancyDetails: {
-            maxChildren: roomType.childCount,
-            maxAdult: roomType.adultCount,
-          },
-        })
+        (roomType) => {
+          const bookingItem: any = {
+            roomDetails: {
+              ratePlan: { id: roomType.ratePlan },
+              roomTypeId: roomType.roomTypeId,
+              roomCount: roomType.roomCount,
+              roomNumbers: roomType.roomNumbers,
+            },
+            occupancyDetails: {
+              maxChildren: roomType.childCount,
+              maxAdult: roomType.adultCount,
+            },
+          };
+
+          if (roomType.id.length) {
+            bookingItem.id = roomType.id;
+          }
+
+          return bookingItem;
+        }
       );
     } else {
       roomReservationData.bookingItems = [];
@@ -89,9 +105,14 @@ export class FormService {
     return roomReservationData;
   }
 
-  mapOutletReservationData(input: ReservationForm, outletType: string) {
+  mapOutletReservationData(
+    input: ReservationForm,
+    outletType: string,
+    id?: string
+  ) {
     const reservationData = new OutletFormData();
     // Reservation Info
+    reservationData.id = id ?? '';
     reservationData.eventType = input.reservationInformation?.eventType ?? '';
     reservationData.from =
       input.reservationInformation?.dateAndTime ??

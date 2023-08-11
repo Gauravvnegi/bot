@@ -28,7 +28,7 @@ export class ComplaintAnalyticsComponent implements OnInit {
     private modalService: ModalService
   ) {}
 
-  statCard: StatCard[] = [
+  statCard = [
     {
       label: 'Avg Ticket/Day',
       score: '50',
@@ -39,15 +39,13 @@ export class ComplaintAnalyticsComponent implements OnInit {
     {
       label: 'Avg Time Taken/Day',
       score: '10',
-      additionalData: '5',
+      additionalData: '5 Mins',
       comparisonPercent: 100,
       color: '#ef1d45',
     },
     {
       label: 'Agent Distribution',
       score: '50',
-      additionalData: '5',
-      comparisonPercent: 100,
       color: '#4ba0f5',
     },
   ];

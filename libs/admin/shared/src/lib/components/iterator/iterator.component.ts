@@ -46,7 +46,7 @@ export class IteratorComponent implements OnChanges {
     }
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.createNewFields();
   }
 

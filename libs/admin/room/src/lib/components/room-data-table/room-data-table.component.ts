@@ -329,13 +329,16 @@ export class RoomDataTableComponent extends BaseDatatableComponent
    */
   openEditForm(rowData): void {
     if (this.selectedTab === TableValue.room) {
-      this.router.navigate([`/pages/inventory/room/${routes.addRoom}/single`], {
-        queryParams: { id: rowData.id },
-      });
+      this.router.navigate(
+        [`/pages/efrontdesk/room/${routes.addRoom}/single`],
+        {
+          queryParams: { id: rowData.id },
+        }
+      );
     }
     if (this.selectedTab === TableValue.roomType) {
       this.router.navigate([
-        `/pages/inventory/room/${routes.addRoomType}/${rowData.id}`,
+        `/pages/efrontdesk/room/${routes.addRoomType}/${rowData.id}`,
       ]);
     }
   }

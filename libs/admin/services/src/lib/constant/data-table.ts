@@ -64,10 +64,9 @@ export const cols: Cols[] = [
   {
     field: 'status',
     header: 'Action',
-    sortType: 'string',
+    sortType: 'number',
     width: '18%',
     isSearchDisabled: true,
-    isSortDisabled: true,
   },
 ];
 

@@ -30,27 +30,8 @@ export class ManageReservationService extends ApiService {
     });
   }
 
-  getOfferByRoomType(entityId: string, roomTypeId: string): Observable<any> {
-    // `/api/v1/entity/${entityId}/inventory/room/${roomTypeId}`
-    return this.get(
-      `/api/v1/payment/configurations/admin?entity_id=${entityId}&status=ACTIVE`
-    ).pipe(
-      map((res) => {
-        res = {
-          offers: [
-            {
-              id: 1,
-              description: 'AGENT0020',
-            },
-            {
-              id: 2,
-              description: 'AGENT0202',
-            },
-          ],
-        };
-        return res;
-      })
-    );
+  getOfferByRoomType(entityId: string, config: QueryConfig): Observable<any> {
+    return this.get(`/api/v1/entity/${entityId}/library/${config.params}`);
   }
 
   getReservationDataById(bookingId: string, entityId: string): Observable<any> {
@@ -89,9 +70,13 @@ export class ManageReservationService extends ApiService {
     data: { reservationType: string }
   ): Observable<any> {
     return this.patch(
-      `/api/v1/booking/${bookingId}?bookingType=${bookingType}&entityId=${entityId}`,
+      `/api/v1/booking/${bookingId}/status?bookingType=${bookingType}&entityId=${entityId}`,
       data
     );
+  }
+
+  getRoomNumber(entityId: string, config: QueryConfig) {
+    return this.get(`/api/v1/entity/${entityId}/inventory${config.params}`);
   }
 
   getSummaryData(

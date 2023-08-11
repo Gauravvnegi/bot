@@ -75,13 +75,12 @@ export class DynamicPricingComponent implements OnInit {
   get seasonFG() {
     return this.fb.group({
       status: [true],
+      type: ['add'], // it should be ModeType -> 'add'|'update'
       name: ['', [Validators.required]],
       fromDate: [this.currentDay, [Validators.required]],
       toDate: [this.seventhDay, [Validators.required]],
-      roomType: [
-        this.allRooms.map((item) => item.value),
-        [Validators.required],
-      ],
+      configCategory: ['ROOM_TYPE'],
+      roomType: [, [Validators.required]],
       selectedDays: ['', [Validators.required]],
       roomTypes: this.fb.array(this.getRoomTypesFA()),
     });
@@ -102,7 +101,7 @@ export class DynamicPricingComponent implements OnInit {
     return this.fb.group({
       start: [, [Validators.min(0), Validators.required]],
       end: [, [Validators.min(0), Validators.required]],
-      discount: [, [Validators.min(0), Validators.required]],
+      discount: [, [Validators.min(-100), Validators.required]],
       rate: [, [Validators.min(0), Validators.required]],
     });
   }

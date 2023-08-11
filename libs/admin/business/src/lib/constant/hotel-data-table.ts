@@ -41,7 +41,7 @@ export const cols = [
   {
     field: 'status',
     header: 'Actions',
-    isSortDisabled: true,
+    sortType: 'number',
     isSearchDisabled: true,
 
     width: '23.75%',

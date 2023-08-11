@@ -8,9 +8,15 @@
   height: 28vh;
 }
 
-.view-details-btn {
+:host ::ng-deep .view-details-btn {
   display: flex;
   justify-content: flex-end;
+  .btn {
+    .button {
+      min-width: 0px;
+      padding: 0px;
+    }
+  }
 }
 
 .container {
@@ -27,4 +33,9 @@
   opacity: 0.5;
   padding: 16px;
   margin-bottom: 17.5px;
+}
+
+.room-count {
+  font-size: 13px;
+  opacity: 0.8;
 }

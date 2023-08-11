@@ -133,7 +133,6 @@ export const assetConfig = {
       {
         field: 'active',
         header: 'Active',
-        isSortDisabled: true,
         sortType: 'number',
 
         isSearchDisabled: true,

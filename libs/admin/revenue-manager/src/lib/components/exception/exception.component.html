@@ -20,7 +20,9 @@
         label="Updated Price"
         controlName="price"
         [props]="{
-          type: 'number'
+          type: 'number',
+          subtitle: 'Rs. ' + price,
+          strike: true
         }"
       ></hospitality-bot-input>
     </div>

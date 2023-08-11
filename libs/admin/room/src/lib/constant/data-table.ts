@@ -74,10 +74,9 @@ export const cols: Record<TableValue, Cols[]> = {
     {
       field: 'status',
       header: 'Action',
-      sortType: 'string',
+      sortType: 'number',
       width: '16%',
       isSearchDisabled: true,
-      isSortDisabled: true,
     },
   ],
 };

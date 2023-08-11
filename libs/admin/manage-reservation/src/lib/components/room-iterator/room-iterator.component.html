@@ -45,6 +45,7 @@
             "
             [disabled]="field.disabled"
             [settings]="{ showHeader: false }"
+            [loading]="field.loading[i]"
           ></hospitality-bot-multi-select>
           <hospitality-bot-select
             *ngSwitchCase="'select'"
@@ -55,14 +56,14 @@
               isAsync: field.isAsync
             }"
             (paginate)="loadMoreRoomTypes(i)"
-            (onSearch)="searchRoomTypes($event)"
+            (onSearch)="searchRoomTypes($event, i)"
             [options]="
               field.options
                 ? field.options
                 : controls.get('ratePlanOptions').value
             "
             [disabled]="field.disabled"
-            [loading]="field.options ? loadingRoomTypes : false"
+            [loading]="field.options ? loadingRoomTypes[i] : false"
           ></hospitality-bot-select>
         </div>
         <mat-icon class="delete" (click)="removeField(i)">clear</mat-icon>

@@ -66,7 +66,6 @@ export class RestaurantReservationComponent extends BaseReservationComponent
   /* menu options variable */
   menuItems: (Option & { deliveryPrice?: number; dineInPrice: number })[] = [];
   outletItems: OutletItems[] = [];
-  // summaryInfo: SummaryInfo;
   tableNumber = '';
   numberOfAdults = '';
 
@@ -128,7 +127,7 @@ export class RestaurantReservationComponent extends BaseReservationComponent
       }),
       orderInformation: this.fb.group({
         tableNumber: [''],
-        numberOfAdults: [0],
+        numberOfAdults: [1],
         foodPackages: new FormArray([]),
         menuItems: this.menuItemsArray,
         kotInstructions: [''],

@@ -460,6 +460,14 @@ export class BookingConfig {
   }
 }
 
+export class GuestList {
+  records: Guest[];
+  deserialize(input: SearchGuestResponse[]) {
+    this.records = input.map((item) => new Guest().deserialize(item));
+    return this;
+  }
+}
+
 export class Guest {
   label: string;
   value: string;

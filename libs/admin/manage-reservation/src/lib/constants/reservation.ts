@@ -38,6 +38,7 @@ export const roomFields: IteratorField[] = [
     type: 'multi-select',
     placeholder: 'Enter',
     width: '18%',
+    loading: [false],
   },
   {
     label: 'Adult',
@@ -89,7 +90,7 @@ export const menuItemFields: IteratorField[] = [
     name: 'menuItems',
     type: 'select',
     options: [],
-    required: false,
+    required: true,
     placeholder: 'Search by name',
     width: '40%',
     isAsync: true,
@@ -101,6 +102,7 @@ export const menuItemFields: IteratorField[] = [
     required: false,
     placeholder: 'Enter',
     width: '25%',
+    dataType: 'number',
   },
   {
     label: 'Amount',
@@ -110,6 +112,7 @@ export const menuItemFields: IteratorField[] = [
     placeholder: 'Enter',
     width: '25%',
     disabled: true,
+    dataType: 'number',
   },
 ];
 
@@ -131,6 +134,7 @@ export const spaFields: IteratorField[] = [
     required: false,
     placeholder: 'Enter',
     width: '28%',
+    dataType: 'number',
   },
   {
     label: 'Amount',
@@ -140,6 +144,7 @@ export const spaFields: IteratorField[] = [
     placeholder: 'Enter',
     width: '28%',
     disabled: true,
+    dataType: 'number',
   },
 ];
 
@@ -159,6 +164,7 @@ export const venueFields: IteratorField[] = [
     required: true,
     placeholder: 'Enter',
     width: '30%',
+    dataType: 'number',
   },
   {
     label: 'Amount',
@@ -168,6 +174,7 @@ export const venueFields: IteratorField[] = [
     placeholder: 'Enter',
     width: '30%',
     disabled: true,
+    dataType: 'number',
   },
 ];
 

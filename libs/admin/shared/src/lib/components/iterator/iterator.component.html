@@ -26,7 +26,8 @@
             [disabled]="field.disabled"
             [props]="{
               placeholder: field.placeholder ? field.placeholder : '',
-              fontSize: '14px'
+              fontSize: '14px',
+              type: field?.dataType
             }"
           ></hospitality-bot-input>
           <hospitality-bot-auto-complete

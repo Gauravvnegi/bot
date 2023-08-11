@@ -134,7 +134,7 @@ export class RoomTypeForm {
     this.maxAdult = input.occupancyDetails.maxAdult;
     this.area = input.area;
 
-    const defaultRatePlan = input.ratePlans.filter((item) => item.isBase);
+    const defaultRatePlan = input?.ratePlans.filter((item) => item.isBase);
     this.staticRatePlans = {
       paxPriceCurrency: input.pricingDetails.currency,
       paxAdultPrice: input.pricingDetails?.paxAdult,

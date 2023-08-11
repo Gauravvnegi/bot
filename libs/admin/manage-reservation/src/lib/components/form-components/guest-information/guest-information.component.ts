@@ -7,7 +7,7 @@ import {
 } from '@angular/forms';
 import { AdminUtilityService, Option } from '@hospitality-bot/admin/shared';
 import { GuestTableService } from 'libs/admin/guests/src/lib/services/guest-table.service';
-import { Guest } from '../../../models/reservations.model';
+import { Guest, GuestList } from '../../../models/reservations.model';
 import { GuestDetails } from '../../../types/forms.types';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -93,8 +93,8 @@ export class GuestInformationComponent implements OnInit {
       this.loadingGuests = true;
       this.guestService.searchGuest(text).subscribe((res) => {
         this.loadingGuests = false;
-        const data = new Guest().deserialize(res);
-        this.guestOptions.push(data);
+        const data = new GuestList().deserialize(res).records;
+        this.guestOptions = data;
       });
     } else {
       this.guestsOffSet = 0;

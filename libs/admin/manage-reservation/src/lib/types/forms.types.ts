@@ -41,7 +41,9 @@ export type GuestDetails = {
 };
 
 export class OutletFormData {
-  adultCount: number;
+  occupancyDetails: {
+    maxAdult: number;
+  }
   from: number;
   to: number;
   reservationType: string;

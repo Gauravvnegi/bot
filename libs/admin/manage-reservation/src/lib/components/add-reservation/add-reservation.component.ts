@@ -3,7 +3,6 @@ import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
-  BookingInfo,
   OfferData,
   OfferList,
   ReservationFormData,
@@ -107,6 +106,18 @@ export class AddReservationComponent extends BaseReservationComponent
           this.summaryData = new SummaryData().deserialize();
         }
       });
+    this.reservationInfoControls.reservationType.valueChanges.subscribe(
+      (res) => {
+        if (res === 'DRAFT') {
+          this.roomControls.forEach((item) => {
+            item.get('roomNumbers').patchValue([], { emitEvent: false });
+          });
+          this.fields[3].disabled = true;
+        } else {
+          this.fields[3].disabled = false;
+        }
+      }
+    );
   }
 
   getReservationId(): void {
@@ -149,24 +160,27 @@ export class AddReservationComponent extends BaseReservationComponent
 
   setFormDisability(): void {
     // this.userForm.get('reservationInformation.source').disable();
-    const reservationType = this.reservationInfoControls.reservationType.value;
-    const source = this.reservationInfoControls.source;
-    source.disable();
-    switch (true) {
-      case reservationType === 'CONFIRMED':
-        this.userForm.disable();
-        this.disabledForm = true;
-        break;
-      case reservationType === 'CANCELED':
-        this.userForm.disable();
-        this.disabledForm = true;
-        break;
-      case source.value === 'CREATE_WITH':
-        this.disabledForm = true;
-        break;
-      case source.value === 'OTHERS':
-        this.disabledForm = true;
-        break;
+    if (this.reservationId) {
+      const reservationType = this.reservationInfoControls.reservationType
+        .value;
+      const source = this.reservationInfoControls.source;
+      source.disable({ emitEvent: false });
+      switch (true) {
+        case reservationType === 'CONFIRMED':
+          this.userForm.disable({ emitEvent: false });
+          this.disabledForm = true;
+          break;
+        case reservationType === 'CANCELED':
+          this.userForm.disable({ emitEvent: false });
+          this.disabledForm = true;
+          break;
+        case source.value === 'CREATE_WITH':
+          this.disabledForm = true;
+          break;
+        case source.value === 'OTHERS':
+          this.disabledForm = true;
+          break;
+      }
     }
   }
 
@@ -255,7 +269,8 @@ export class AddReservationComponent extends BaseReservationComponent
               .patchValue(this.summaryData?.totalAmount);
             this.deductedAmount = this.summaryData?.totalAmount;
           },
-          (error) => {}
+          (error) => {},
+          () => this.setFormDisability()
         )
     );
   }

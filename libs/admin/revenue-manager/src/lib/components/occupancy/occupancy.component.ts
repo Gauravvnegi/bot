@@ -5,13 +5,15 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
-import { weeks } from 'libs/admin/channel-manager/src/lib/components/constants/bulkupdate-response';
-import { DynamicPricingFactory } from '../../models/dynamic-pricing.model';
-import { Revenue } from '../../constants/revenue-manager.const';
+import {
+  DynamicPricingFactory,
+  DynamicPricingHandler,
+} from '../../models/dynamic-pricing.model';
+import { Revenue, weeks } from '../../constants/revenue-manager.const';
 import {
   ConfigCategory,
   ConfigType,
-  RevenueType,
+  ModeType,
 } from '../../types/dynamic-pricing.types';
 import { DynamicPricingService } from '../../services/dynamic-pricing.service';
 import { Subscription } from 'rxjs';
@@ -21,6 +23,7 @@ import {
 } from '@hospitality-bot/admin/shared';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { SnackBarService } from '@hospitality-bot/shared/material';
+import { RoomTypes } from '../../types/bar-price.types';
 
 export type ControlTypes = 'season' | 'occupancy';
 
@@ -43,12 +46,14 @@ export class OccupancyComponent implements OnInit {
   @Input() set dynamicPricingFG(form: FormGroup) {
     if (form) {
       this.parentForm = form;
+      this.initSeason();
       this.listenChanges();
     }
   }
 
   @Input() season: FormGroup;
   @Input() occupancy: FormGroup;
+  @Input() rooms: RoomTypes[];
   $subscription = new Subscription();
 
   get dynamicPricingFG(): FormGroup {
@@ -75,10 +80,27 @@ export class OccupancyComponent implements OnInit {
     this.entityId = this.globalFilterService.entityId;
   }
 
+  initSeason() {
+    this.loading = true;
+    this.$subscription.add(
+      this.dynamicPricingService.getOccupancyList().subscribe((res) => {
+        if (!res.configDetails.length) {
+          this.add('season');
+        } else {
+          const handler = new DynamicPricingHandler().deserialize(
+            res,
+            this.rooms
+          );
+          handler.mapOccupancy(this);
+        }
+      })
+    );
+  }
+
   seasonStatusChange(status, seasonIndex: number) {
-    this.dynamicPricingControl.occupancyFA
-      .at(seasonIndex)
-      .patchValue({ status: status });
+    const control = this.dynamicPricingControl.occupancyFA.at(seasonIndex);
+    control.patchValue({ status: status });
+    control.get('status').markAsDirty();
   }
 
   add(type: ControlTypes, formGroup?: FormGroup) {
@@ -181,21 +203,26 @@ export class OccupancyComponent implements OnInit {
       );
       return;
     }
-
     this.loading = true;
     const { type } = form.controls;
-    const requestedData = DynamicPricingFactory.buildRequest(form, 'OCCUPANCY');
-    const request =
+    const requestedData = DynamicPricingFactory.buildRequest(
+      form,
+      'OCCUPANCY',
+      form.get('type').value
+    );
+    const requestFunction =
       Revenue[type.value] === Revenue['add']
         ? this.dynamicPricingService.createDynamicPricing
         : this.dynamicPricingService.updateDynamicPricing;
+    const request = requestFunction.bind(this.dynamicPricingService);
+    const requestParams = [
+      requestedData,
+      this.entityId,
+      this.getQueryConfig('OCCUPANCY'),
+    ];
 
     this.$subscription.add(
-      request(
-        requestedData,
-        this.entityId,
-        this.getQueryConfig('OCCUPANCY')
-      ).subscribe(
+      request(...requestParams).subscribe(
         (res) => {
           console.log(res);
         },

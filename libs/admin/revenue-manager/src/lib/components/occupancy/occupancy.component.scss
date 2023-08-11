@@ -1,5 +1,5 @@
 @import 'main';
-
+$border-color: rgba(112, 112, 112, 0.35);
 .wrapper__occupancy {
   &-content {
     .header {
@@ -8,6 +8,11 @@
       overflow: hidden;
       text-overflow: ellipsis;
       width: 100px;
+    }
+    .date {
+      font-size: 16px;
+      color: $border-color;
+      font-weight: 500;
     }
     .season-header {
       display: flex;

@@ -66,7 +66,7 @@ export class DynamicPricingComponent implements OnInit {
 
   initFG() {
     this.dynamicPricingFG = this.fb.group({
-      occupancyFA: this.fb.array([this.seasonFG]),
+      occupancyFA: this.fb.array([]),
       inventoryAllocationFA: this.fb.array([this.getInventoryAllocationFG()]),
       timeFA: this.fb.array([this.getTriggerFG()]),
     });
@@ -75,13 +75,14 @@ export class DynamicPricingComponent implements OnInit {
   get seasonFG() {
     return this.fb.group({
       status: [true],
+      id: [''],
       type: ['add'], // it should be ModeType -> 'add'|'update'
-      name: ['', [Validators.required]],
-      fromDate: [this.currentDay, [Validators.required]],
-      toDate: [this.seventhDay, [Validators.required]],
+      name: [, [Validators.required]],
+      fromDate: [, [Validators.required]],
+      toDate: [, [Validators.required]],
       configCategory: ['ROOM_TYPE'],
       roomType: [, [Validators.required]],
-      selectedDays: ['', [Validators.required]],
+      selectedDays: [, [Validators.required]],
       roomTypes: this.fb.array(this.getRoomTypesFA()),
     });
   }

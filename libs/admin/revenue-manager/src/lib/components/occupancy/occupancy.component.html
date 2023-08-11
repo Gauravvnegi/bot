@@ -30,6 +30,15 @@
                 (onToggleSwitch)="seasonStatusChange($event, seasonIndex)"
                 click-stop-propagation
               ></hospitality-bot-toggle-switch-with-label>
+              <div class="date">
+                <span *ngIf="season.get('fromDate').value; else empty">{{
+                  season.get('fromDate').value | date: 'dd/MM/yyyy'
+                }}</span>
+                to
+                <span *ngIf="season.get('toDate').value; else empty">{{
+                  season.get('toDate').value | date: 'dd/MM/yyyy'
+                }}</span>
+              </div>
             </div>
             <hospitality-bot-button
               click-stop-propagation
@@ -67,28 +76,9 @@
                 </hospitality-bot-room-types>
               </div>
               <div class="right form-block">
-                <hospitality-bot-date
-                  class="half-width"
-                  controlName="fromDate"
-                  label="From"
-                  [props]="{ placeholder: 'Select To Date' }"
-                  [settings]="{
-                    enableTime: false,
-                    dateValue: endDateValue
-                  }"
-                ></hospitality-bot-date>
-
-                <hospitality-bot-date
-                  class="half-width"
-                  controlName="toDate"
-                  label="To"
-                  [props]="{ placeholder: 'Select To Date' }"
-                  [settings]="{
-                    enableTime: false,
-                    dateValue: endDateValue
-                  }"
-                ></hospitality-bot-date>
-
+                <hospitality-bot-from-to-date
+                  [parentFG]="season"
+                ></hospitality-bot-from-to-date>
                 <hospitality-bot-checkbox-selector
                   class="weekdays__selector full-width"
                   label="Days"
@@ -247,4 +237,5 @@
       Please select at least one room.
     </div>
   </ng-template>
+  <ng-template #empty>--/--/----</ng-template>
 </div>

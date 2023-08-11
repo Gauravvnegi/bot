@@ -66,6 +66,14 @@ export class RoomReservation {
     );
     return this;
   }
+
+  getRoomTypeDisplay() {
+    return {
+      count: this.roomTypes.length,
+      countString:
+        this.roomTypes.length > 1 ? `(+${this.roomTypes.length - 1})` : null,
+    };
+  }
 }
 
 export type Status = {

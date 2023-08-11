@@ -305,8 +305,8 @@ export class RoomIteratorComponent extends IteratorComponent
    * @param text search text
    */
   searchRoomTypes(text: string, index): void {
-    this.loadingRoomTypes[index] = true;
     if (text) {
+      this.loadingRoomTypes[index] = true;
       this.manageReservationService
         .searchLibraryItem(this.entityId, {
           params: `?key=${text}&type=ROOM_TYPE`,
@@ -330,6 +330,7 @@ export class RoomIteratorComponent extends IteratorComponent
             this.loadingRoomTypes[index] = false;
           },
           ({ error }) => {
+            this.loadingRoomTypes[index] = false;
             this.snackbarService.openSnackBarAsText(error.message);
           },
           () => {

@@ -107,12 +107,13 @@ export class BookingInfoComponent implements OnInit {
         this.updateDateDifference();
 
         // Calculate the date for one day later
-        const nextDay = new Date(maxToLimit);
-        nextDay.setDate(nextDay.getDate() + 1);
+        maxToLimit.setDate(maxToLimit.getDate() + 1);
+        const nextDayTime = moment(maxToLimit).unix() * 1000;
 
-        this.maxDate.setDate(maxToLimit.getDate() + 365);
+        toDateControl.setValue(nextDayTime); // Set toDateControl to one day later
+
+        this.maxDate.setDate(maxToLimit.getDate() + 364);
         this.formService.reservationDate.next(res);
-        toDateControl.setValue(nextDay); // Set toDateControl to one day later
 
         if (this.roomControls.valid) {
           this.getSummary.emit();

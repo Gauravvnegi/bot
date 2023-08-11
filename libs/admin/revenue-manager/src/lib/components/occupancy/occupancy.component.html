@@ -4,7 +4,7 @@
   [formGroup]="dynamicPricingFG"
 >
   <div class="wrapper__occupancy-content" formArrayName="occupancyFA">
-    <p-accordion class="accordion" [activeIndex]="[0]" [multiple]="true">
+    <p-accordion class="accordion" [multiple]="true">
       <ng-container
         *ngFor="
           let season of dynamicPricingControl.occupancyFA.controls;
@@ -12,7 +12,7 @@
         "
         [formGroupName]="seasonIndex"
       >
-        <p-accordionTab>
+        <p-accordionTab [selected]="seasonIndex == 0">
           <p-header class="season-header">
             <div class="header-wrapper">
               <div class="header-button">
@@ -103,11 +103,7 @@
               <ng-container
                 *ngIf="season.get('roomType').value?.length; else emptyRoom"
               >
-                <p-accordion
-                  class="room-accordion"
-                  [multiple]="true"
-                  [activeIndex]="[0]"
-                >
+                <p-accordion class="room-accordion" [multiple]="true">
                   <ng-container
                     *ngFor="
                       let room of season.get('roomTypes')?.controls;
@@ -115,7 +111,10 @@
                     "
                     [formGroupName]="roomIndex"
                   >
-                    <p-accordionTab *ngIf="room.get('isSelected').value">
+                    <p-accordionTab
+                      [selected]="roomIndex == 0"
+                      *ngIf="room.get('isSelected').value"
+                    >
                       <p-header>
                         <div class="header">
                           {{ room.get('roomName')?.value }}

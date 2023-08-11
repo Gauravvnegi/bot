@@ -56,8 +56,6 @@ export class SpaReservationComponent extends BaseReservationComponent
   noMoreResults = false;
   services: (Option & { price: number })[] = [];
 
-  itemInfo = 'For 1 Adult';
-
   constructor(
     private fb: FormBuilder,
     private adminUtilityService: AdminUtilityService,
@@ -66,7 +64,7 @@ export class SpaReservationComponent extends BaseReservationComponent
     protected activatedRoute: ActivatedRoute,
     private formService: FormService,
     private libraryService: LibraryService,
-    private router: Router,
+    private router: Router
   ) {
     super(globalFilterService, activatedRoute);
   }
@@ -124,8 +122,9 @@ export class SpaReservationComponent extends BaseReservationComponent
     });
     this.userForm
       .get('bookingInformation.numberOfAdults')
-      .valueChanges.subscribe((res) => {
-        this.itemInfo = `For ${res} Adult`;
+      .valueChanges.pipe(debounceTime(1000))
+      .subscribe((res) => {
+        this.getSummaryData();
       });
   }
 

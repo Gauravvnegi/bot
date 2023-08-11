@@ -17,7 +17,8 @@
               errorMessages: {
                 required: 'This is a required field.',
                 min: 'Value should be more than 0'
-              }
+              },
+              type: 'number'
             }"
           ></hospitality-bot-input>
           <hospitality-bot-iterator
@@ -49,7 +50,6 @@
         (handleInitForm)="initForm()"
         [disabledForm]="disabledForm"
         [bookingInfo]="{
-          itemInfo: itemInfo,
           bookingType: bookingType,
           outletId: outletId,
           heading: selectedEntity.label

@@ -52,8 +52,6 @@ export class BookingSummaryComponent implements OnInit {
   dateDifference: number = 1;
 
   heading = '';
-  stayInfo = '';
-  guestInfo = '';
   bookingType = '';
   outletId = '';
   occupancyDetails: OccupancyDetails;
@@ -272,10 +270,8 @@ export class BookingSummaryComponent implements OnInit {
 }
 
 type BookingSummaryInfo = {
-  heading: string;
-  itemInfo: string;
-  guestInfo: string;
   bookingType: string;
   outletId?: string;
+  heading: string;
   occupancyDetails?: OccupancyDetails;
 };

@@ -1,4 +1,4 @@
-import { ButtonVariant, Option } from './form.type';
+import { ButtonVariant, InputType, Option } from './form.type';
 
 export type IteratorField = {
   label?: string;
@@ -13,8 +13,9 @@ export type IteratorField = {
   loadMoreResults?: () => void;
   searchResults?: (event: string) => void;
   create?: () => void;
-  loading?: boolean;
+  loading?: boolean | boolean[];
   noMoreResults?: boolean;
+  dataType?: InputType;
 };
 
 export type ModalAction = {

@@ -54,7 +54,7 @@ export class RoomIteratorComponent extends IteratorComponent
 
   $subscription = new Subscription();
 
-  loadingRoomTypes = false;
+  loadingRoomTypes = [false];
   isDefaultRoomType = false;
 
   @ViewChild('main') main: ElementRef;
@@ -92,6 +92,23 @@ export class RoomIteratorComponent extends IteratorComponent
     this.listenForFormChanges();
   }
 
+  initDetails() {
+    this.parentFormGroup = this.controlContainer.control as FormGroup;
+    this.roomTypeArray = this.fb.array([]);
+  }
+
+  listenForGlobalFilters(): void {
+    this.globalFilterService.globalFilter$.subscribe((data) => {
+      // set-global query everytime global filter changes
+      this.globalQueries = [
+        ...data['filter'].queryValue,
+        ...data['dateRange'].queryValue,
+      ];
+
+      this.getRoomType(this.globalQueries);
+    });
+  }
+
   /**
    * @function createNewFields To get the initial value config
    */
@@ -117,8 +134,14 @@ export class RoomIteratorComponent extends IteratorComponent
       roomTypes: this.roomTypeArray,
     });
     this.parentFormGroup.addControl('roomInformation', roomInformationGroup);
+
+    this.listenRoomFormChanges(index);
+  }
+
+  listenRoomFormChanges(index: number) {
     this.listenRoomTypeChanges(index);
     this.listenRatePlanChanges(index);
+    this.listenRoomNumbersChanges(index);
   }
 
   // Init Room Details
@@ -166,6 +189,7 @@ export class RoomIteratorComponent extends IteratorComponent
           const selectedRoomType = this.roomTypes.find(
             (item) => item.value === res
           );
+          this.roomControls[index].get('roomNumbers').reset();
           if (selectedRoomType) {
             // Sets rate plan options according to the selected room type
             const ratePlanOptions = selectedRoomType.ratePlan.map((item) => ({
@@ -206,6 +230,8 @@ export class RoomIteratorComponent extends IteratorComponent
         },
       ]),
     };
+    // Set loading for roomNumber
+    this.fields[3].loading[index] = true;
     this.manageReservationService
       .getRoomNumber(this.entityId, config)
       .subscribe((res) => {
@@ -213,10 +239,10 @@ export class RoomIteratorComponent extends IteratorComponent
           label: room.roomNumber,
           value: room.roomNumber,
         }));
-
         this.roomControls[index]
           .get('roomNumberOptions')
           .patchValue(roomNumberOptions, { emitEvent: false });
+        this.fields[3].loading[index] = false;
       });
   }
 
@@ -254,21 +280,16 @@ export class RoomIteratorComponent extends IteratorComponent
     });
   }
 
-  initDetails() {
-    this.parentFormGroup = this.controlContainer.control as FormGroup;
-    this.roomTypeArray = this.fb.array([]);
-  }
-
-  listenForGlobalFilters(): void {
-    this.globalFilterService.globalFilter$.subscribe((data) => {
-      // set-global query everytime global filter changes
-      this.globalQueries = [
-        ...data['filter'].queryValue,
-        ...data['dateRange'].queryValue,
-      ];
-
-      this.getRoomType(this.globalQueries);
-    });
+  listenRoomNumbersChanges(index) {
+    this.roomControls[index]
+      .get('roomNumbers')
+      .valueChanges.subscribe((res) => {
+        if (res) {
+          this.roomControls[index]
+            .get('roomCount')
+            .patchValue(res.length, { emitEvent: false });
+        }
+      });
   }
 
   /**
@@ -276,16 +297,16 @@ export class RoomIteratorComponent extends IteratorComponent
    */
   loadMoreRoomTypes(index: number): void {
     this.roomTypeOffSet = this.roomTypeOffSet + 10;
-    this.getRoomType(this.globalQueries);
+    this.getRoomType(this.globalQueries, index);
   }
 
   /**
    * @function searchRoomTypes To search categories
    * @param text search text
    */
-  searchRoomTypes(text: string): void {
-    this.loadingRoomTypes = true;
+  searchRoomTypes(text: string, index): void {
     if (text) {
+      this.loadingRoomTypes[index] = true;
       this.manageReservationService
         .searchLibraryItem(this.entityId, {
           params: `?key=${text}&type=ROOM_TYPE`,
@@ -306,13 +327,14 @@ export class RoomIteratorComponent extends IteratorComponent
                 };
               }) ?? [];
             this.fields[0].options = this.roomTypes;
-            this.loadingRoomTypes = false;
+            this.loadingRoomTypes[index] = false;
           },
           ({ error }) => {
+            this.loadingRoomTypes[index] = false;
             this.snackbarService.openSnackBarAsText(error.message);
           },
           () => {
-            this.loadingRoomTypes = false;
+            this.loadingRoomTypes[index] = false;
           }
         );
     } else {
@@ -334,7 +356,7 @@ export class RoomIteratorComponent extends IteratorComponent
    * @function getRoomType to get room types.
    * @param queries global Queries.
    */
-  getRoomType(queries): void {
+  getRoomType(queries, index?: number): void {
     queries = [
       ...queries,
       {
@@ -349,7 +371,7 @@ export class RoomIteratorComponent extends IteratorComponent
       params: this.adminUtilityService.makeQueryParams(queries),
     };
 
-    this.loadingRoomTypes = true;
+    this.loadingRoomTypes[index ?? 0] = true;
     this.$subscription.add(
       this.manageReservationService
         .getRoomTypeList(this.entityId, config)
@@ -367,13 +389,13 @@ export class RoomIteratorComponent extends IteratorComponent
               }));
             this.roomTypes = [...this.roomTypes, ...data];
             this.fields[0].options = this.roomTypes;
-            this.loadingRoomTypes = false;
+            this.loadingRoomTypes[index ?? 0] = false;
           },
           ({ error }) => {
             this.snackbarService.openSnackBarAsText(error.message);
           },
           () => {
-            this.loadingRoomTypes = false;
+            this.loadingRoomTypes[index ?? 0] = false;
           }
         )
     );

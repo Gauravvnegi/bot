@@ -35,8 +35,8 @@ export class RoomReservation {
   companyName: string;
   created: number;
   nextStates: string[];
-  bookingItems: BookingItems[];
-  roomTypes: string[];
+  bookingItems?: BookingItems[];
+  roomTypes?: string[];
   totalAmount: number;
   totalDueAmount: number;
   totalPaidAmount: number;
@@ -57,14 +57,24 @@ export class RoomReservation {
     this.companyName = input.guest?.company?.firstName ?? '';
     this.created = input.created;
     this.nextStates = [input.reservationType, ...input.nextStates];
-    this.bookingItems = input.bookingItems;
     this.totalAmount = input.pricingDetails.totalAmount;
     this.totalPaidAmount = input.pricingDetails.totalPaidAmount;
     this.totalDueAmount = input.pricingDetails.totalDueAmount;
-    this.roomTypes = input.bookingItems.map(
-      (item) => item.roomDetails.roomTypeLabel
-    );
+    if (input?.bookingItems) {
+      this.bookingItems = input?.bookingItems;
+      this.roomTypes =
+        input?.bookingItems.map((item) => item?.roomDetails?.roomTypeLabel) ??
+        [];
+    }
     return this;
+  }
+
+  getRoomTypeDisplay() {
+    return {
+      count: this.roomTypes.length,
+      countString:
+        this.roomTypes.length > 1 ? `(+${this.roomTypes.length - 1})` : null,
+    };
   }
 }
 
@@ -380,6 +390,7 @@ export class SummaryData {
   bookingItems?: BookingItemsSummary[];
   items?: ItemsData[];
   max?: number;
+  adultCount?: number;
   min?: number;
   base?: number;
   paxChild?: number;
@@ -408,6 +419,7 @@ export class SummaryData {
         unit: item?.unit,
         amount: item?.amount,
       })) ?? [];
+    this.adultCount = input?.occupancyDetails.maxAdult ?? 1;
     this.location = input?.location ?? '';
     this.offerAmount = input?.offer?.discountedPrice ?? 0;
     this.totalAmount = input?.pricingDetails.totalAmount ?? 0;
@@ -457,6 +469,14 @@ export class BookingConfig {
       default:
         return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
     }
+  }
+}
+
+export class GuestList {
+  records: Guest[];
+  deserialize(input: SearchGuestResponse[]) {
+    this.records = input.map((item) => new Guest().deserialize(item));
+    return this;
   }
 }
 

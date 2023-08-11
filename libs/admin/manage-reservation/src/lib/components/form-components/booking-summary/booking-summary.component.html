@@ -59,7 +59,7 @@
           </ng-container>
         </ng-container>
       </ng-container>
-      <ng-container *ngIf="bookingType === '!ROOM_TYPE'">
+      <ng-container *ngIf="bookingType !== 'ROOM_TYPE'">
         <ng-container
           [ngTemplateOutlet]="outletSummaryTemplate"
           [ngTemplateOutletContext]="{
@@ -74,7 +74,7 @@
       >
         <ng-container [ngTemplateOutlet]="summaryTemplate"> </ng-container>
       </ng-container>
-      <ng-container *ngIf="bookingType === '!ROOM_TYPE' && !summaryData">
+      <ng-container *ngIf="bookingType !== 'ROOM_TYPE' && !summaryData">
         <ng-container [ngTemplateOutlet]="outletSummaryTemplate">
         </ng-container>
       </ng-container>
@@ -144,14 +144,12 @@
   </ng-template>
 </ng-template>
 
-<ng-template
-  #outletSummaryTemplate
-  let-summaryData="summaryData"
-  let-initalDate=""
->
+<ng-template #outletSummaryTemplate let-summaryData="summaryData">
   <p class="bk-summary_priceInfo_person">
     <span class="bk-summary_priceInfo_perNight_label">
-      For {{ summaryData?.maxAdult ? summaryData.maxAdult : 0 }} Adults
+      For
+      {{ summaryData?.adultCount }}
+      Adults
     </span>
     <span class="bk-summary_priceInfo_perNight_amount">
       {{ summaryData?.basePrice | currency: 'INR' }}

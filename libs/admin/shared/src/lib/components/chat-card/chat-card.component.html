@@ -102,7 +102,9 @@
     >
       <div>Time Left:</div>
       <!-- <div appCountdown [config]="{ value: taskStatus.timeLeft }"></div> -->
-      <div>{{ taskStatus.timeLeft }}m</div>
+      <div>
+        {{ formatTime(taskStatus.timeLeft) }}
+      </div>
     </div>
     <div class="card-wrapper_time" [ngStyle]="{ float: 'right' }">
       {{ time }}

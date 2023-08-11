@@ -52,11 +52,10 @@
       {{ data.itemName }}
     </div>
 
-    <div *ngIf="data?.timeLeft !== undefined" class="time-left">
-      <img src="assets/images/timer.webp" alt="timer" />
-      <div class="time" appCountdown [config]="{ value: data.timeLeft }"></div>
-      <!-- <div class="text">Left</div> -->
-    </div>
+    <hospitality-bot-timer
+      *ngIf="data?.timeLeft !== undefined"
+      [inputMilliseconds]="data.timeLeft"
+    ></hospitality-bot-timer>
 
     <div class="request-items-body-subtitle">
       {{ data.remarks }}

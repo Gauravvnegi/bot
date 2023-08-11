@@ -64,6 +64,7 @@ export class DateComponent extends FormComponent implements OnInit {
     // time zone to be handled
     const epochDate = DateService.convertDateToTimestamp(date) * 1000;
     this.inputControl.setValue(epochDate);
+    this.inputControl.markAsDirty();
   }
 
   /**

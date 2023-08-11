@@ -59,7 +59,9 @@
             [checked]="featureValueIndex?.includes(i)"
             (change)="processCheckboxChange($event, i)"
           />
-          <label for="checkbox"> Make Featured Image</label><br />
+          <label (click)="checkbox.click()" for="checkbox">
+            Make Featured Image</label
+          ><br />
         </div>
         <div
           class="upload-button"

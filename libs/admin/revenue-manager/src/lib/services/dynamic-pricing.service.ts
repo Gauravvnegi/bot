@@ -1,9 +1,14 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from '@hospitality-bot/shared/utils';
-import { DynamicPricingRequest } from '../types/dynamic-pricing.types';
+import {
+  DynamicPricingRequest,
+  DynamicPricingResponse,
+} from '../types/dynamic-pricing.types';
 import { QueryConfig } from '@hospitality-bot/admin/shared';
-import { Observable } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
 import { FormArray, FormGroup } from '@angular/forms';
+import { catchError, map } from 'rxjs/operators';
+import { OccupancyResponse } from '../constants/response.const';
 
 @Injectable()
 export class DynamicPricingService extends ApiService {
@@ -25,6 +30,12 @@ export class DynamicPricingService extends ApiService {
     return this.patch(`/api/v1/revenue/dynamic-pricing${config.params}`, data, {
       header: { 'entity-id': entityId },
     });
+  }
+
+  getOccupancyList(config?: QueryConfig): Observable<DynamicPricingResponse> {
+    return this.get(
+      `/api/v1/members/?type=AGENT&entityId=f4baead1-06c6-42e8-821b-aef4a99ef5bb&order=DESC&sort=created&limit=50`
+    ).pipe(map((response) => OccupancyResponse as DynamicPricingResponse));
   }
 
   occupancyValidate(

@@ -15,7 +15,7 @@ export class MessageService extends ApiService {
     receiver: {},
   };
   getChatList(entityId: string, queryObj) {
-    return this.get(`/api/v1/entity/${entityId}/conversations/${queryObj}`);
+    return this.get(`/api/v1/entity/${entityId}/conversations${queryObj}`);
   }
 
   searchChatList(entityId: string, queryObj) {

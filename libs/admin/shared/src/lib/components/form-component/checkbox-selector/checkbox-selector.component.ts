@@ -57,9 +57,9 @@ export class CheckboxSelectorComponent extends FormComponent {
 
     changedCheckbox.all && (selectedCheckbox = [...this.checkboxControlsName]);
 
-    this.controlContainer.control
-      .get(this.controlName)
-      ?.patchValue(selectedCheckbox);
+    const control = this.controlContainer.control.get(this.controlName);
+    control.patchValue(selectedCheckbox);
+    control.markAsDirty();
   }
 
   toggleSelectAll(): void {

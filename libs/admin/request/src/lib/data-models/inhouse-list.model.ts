@@ -90,7 +90,7 @@ export class InhouseData {
       set({}, 'status', get(input, ['status']))
     );
 
-    this.timeLeft = input.timeLeft;
+    this.timeLeft = input.timeLeft * 60 * 1000;
     this.source = input.source;
     this.itemId = input.itemId;
     this.assigneeId = input.assigneeId;

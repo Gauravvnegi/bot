@@ -90,7 +90,7 @@ export class RoomDetailsDataTableComponent extends BaseDatatableComponent
   }
 
   onEditRoom(id: string) {
-    this.router.navigate([`/pages/inventory/room/${routes.addRoom}/single`], {
+    this.router.navigate([`/pages/efrontdesk/room/${routes.addRoom}/single`], {
       queryParams: { id },
     });
   }

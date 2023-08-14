@@ -27,10 +27,7 @@ export class RequestDetailComponent implements OnInit, OnDestroy {
   data: InhouseData;
   status = false;
   statusList: Option[] = [];
-  assigneeList: Option[] = [
-    { label: 'Assignee 1', value: 'assignee1' },
-    { label: 'Assignee 2', value: 'assignee2' },
-  ];
+  assigneeList: Option[];
   $subscription = new Subscription();
   entityId: string;
   @Output() guestInfo = new EventEmitter();

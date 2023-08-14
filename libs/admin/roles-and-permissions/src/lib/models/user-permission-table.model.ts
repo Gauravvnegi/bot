@@ -22,6 +22,7 @@ export class User {
   hotelAccess: HotelAccess;
   status: boolean;
   permissionConfigs: Permission[];
+  reportingTo: string;
   deserialize(input: UserResponse) {
     this.firstName = input.firstName;
     this.lastName = input.lastName;
@@ -36,6 +37,7 @@ export class User {
     this.hotelAccess = input.hotelAccess;
     this.status = input.status;
     this.permissionConfigs = input.permissions;
+    this.reportingTo = input?.reportingTo;
     return this;
   }
 

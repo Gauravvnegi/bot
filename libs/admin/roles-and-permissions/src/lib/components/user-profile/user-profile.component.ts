@@ -162,7 +162,7 @@ export class UserProfileComponent implements OnInit {
           initial: item.firstName?.charAt(0) + item.lastName?.charAt(0),
           color: color[idx],
         }));
-        this.totalTeamMember = res?.total;
+        this.totalTeamMember = res?.entityTypeCounts['REPORTING'];
       });
   }
 

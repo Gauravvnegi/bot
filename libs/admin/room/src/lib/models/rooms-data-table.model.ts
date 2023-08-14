@@ -52,9 +52,14 @@ export class Room {
     this.date = input.updated ?? input.created ?? null;
     this.price = input.price ?? null;
     this.currency = input.currency ?? '';
-    this.status = input.status ?? '';
+
+    const currentStatus = input.statusDetailsList.filter(
+      (item) => item.isCurrentStatus
+    )[0]?.status;
+
+    this.status = currentStatus;
     this.foStatus = input.frontOfficeState ?? '';
-    this.nextStates = [...input.nextStates, input.status];
+    this.nextStates = [...input.nextStates, currentStatus];
     return this;
   }
 

@@ -5,7 +5,11 @@ import {
   ReservationRatePlan,
   StaticPricingRatePlan,
 } from '../constant/form';
-import { RoomStatus, RoomTypeResponse } from '../types/service-response';
+import {
+  RoomStatus,
+  RoomTypeResponse,
+  StatusDetails,
+} from '../types/service-response';
 import {
   MultipleRoomData,
   MultipleRoomForm,
@@ -35,20 +39,21 @@ export class SingleRoom {
   id: string;
   roomNumber: string;
   floorNumber: string;
-  status: RoomStatus;
   currency: string;
   price: number;
   roomTypeId: string;
   featureIds: string[];
   removeFeatures?: string[];
-  remark?: string;
-  currentStatusTo?: number;
-  currentStatusFrom?: number;
+  // status: RoomStatus;
+  // remark?: string;
+  // currentStatusTo?: number;
+  // currentStatusFrom?: number;
+  statusDetailsList?: StatusDetails[];
   deserialize(input: SingleRoomData) {
     this.id = input.id ?? '';
     this.roomNumber = input.roomNo ?? '';
     this.floorNumber = input.floorNo ?? '';
-    this.status = input.status;
+    // this.status = input.status;
     this.currency = input.currency ?? '';
     this.price = input.price ?? null;
     this.roomTypeId = input.roomTypeId ?? '';
@@ -56,9 +61,16 @@ export class SingleRoom {
     this.removeFeatures = input?.removeFeatures?.length
       ? input?.removeFeatures
       : null; //as per BE requirement
-    this.remark = input.remark ?? '';
-    this.currentStatusTo = input?.currentStatusTo;
-    this.currentStatusFrom = input?.currentStatusFrom;
+    // this.remark = input.remark ?? '';
+    // this.currentStatusTo = input?.currentStatusTo;
+    // this.currentStatusFrom = input?.currentStatusFrom;
+    this.statusDetailsList = input?.statusDetails.map((item) => ({
+      toDate: item.toDate,
+      fromDate: item.fromDate,
+      isCurrentStatus: item.isCurrentStatus,
+      status: item.status,
+      remark: item.remark,
+    }));
     return this;
   }
 }

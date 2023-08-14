@@ -26,6 +26,7 @@ export type UserResponse = {
 
   agent: boolean;
   hotelAccess: HotelAccess;
+  reportingTo: string;
 };
 
 export type UserListResponse = {

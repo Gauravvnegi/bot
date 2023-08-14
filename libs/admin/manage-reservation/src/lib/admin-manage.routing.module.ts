@@ -12,7 +12,6 @@ import { VenueReservationComponent } from './components/venue-reservation/venue-
 import { PaymentRuleComponent } from './components/form-components/payment-rule/payment-rule.component';
 import { PaymentMethodComponent } from './components/form-components/payment-method/payment-method.component';
 import { InstructionsComponent } from './components/form-components/instructions/instructions.component';
-import { BillingAddressComponent } from './components/form-components/billing-address/billing-address.component';
 import { GuestInformationComponent } from './components/form-components/guest-information/guest-information.component';
 import { BookingSummaryComponent } from './components/form-components/booking-summary/booking-summary.component';
 import { ReservationComponent } from './components/reservation/reservation.component';
@@ -68,7 +67,6 @@ export class AdminManageReservationRoutingModule {
     RestaurantReservationComponent,
     VenueReservationComponent,
     InstructionsComponent,
-    BillingAddressComponent,
     GuestInformationComponent,
     BookingSummaryComponent,
     ReservationComponent,

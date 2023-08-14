@@ -29,7 +29,10 @@ import {
 } from '../../constants/reservation';
 import { ReservationForm } from '../../constants/form';
 import { FormService } from '../../services/form.service';
-import { OutletItems } from '../../constants/reservation-table';
+import {
+  OutletItems,
+  ReservationType,
+} from '../../constants/reservation-table';
 import { debounceTime } from 'rxjs/operators';
 import { OutletForm } from '../../models/reservations.model';
 import { ReservationSummary } from '../../types/forms.types';
@@ -61,8 +64,6 @@ export class RestaurantReservationComponent extends BaseReservationComponent
   date: string;
   time: string;
 
-  pageTitle: string;
-
   /* menu options variable */
   menuItems: (Option & { deliveryPrice?: number; dineInPrice: number })[] = [];
   outletItems: OutletItems[] = [];
@@ -76,7 +77,6 @@ export class RestaurantReservationComponent extends BaseReservationComponent
     private formService: FormService
   ) {
     super(globalFilterService, activatedRoute);
-
     this.initForm();
   }
 
@@ -85,6 +85,7 @@ export class RestaurantReservationComponent extends BaseReservationComponent
     this.getMenuItems();
     this.initOptions();
     this.getReservationId();
+    this.listenForFormChanges();
   }
 
   initDetails() {
@@ -171,6 +172,19 @@ export class RestaurantReservationComponent extends BaseReservationComponent
       if (res) this.setDateAndTime(res);
     });
 
+    this.listenReservationTypeChanges();
+    this.reservationInfoControls.status.valueChanges.subscribe((res) => {
+      if (res === 'NOSHOW' || res === 'CANCELED') {
+        this.orderInfoControls.tableNumber.disable();
+        this.orderInfoControls.numberOfAdults.disable();
+      } else {
+        this.orderInfoControls.numberOfAdults.enable();
+        this.orderInfoControls.tableNumber.enable();
+      }
+    });
+  }
+
+  listenReservationTypeChanges() {
     // Filter menu items which has delivery price
     this.reservationInfoControls.reservationType.valueChanges.subscribe(
       (res) => {
@@ -195,23 +209,10 @@ export class RestaurantReservationComponent extends BaseReservationComponent
             }
           }
         });
-
         // Remove the controls after the loop
         indexesToRemove.reverse().forEach((index) => {
           this.menuItemsArray.removeAt(index);
         });
-      }
-    );
-
-    this.reservationInfoControls.reservationType.valueChanges.subscribe(
-      (res) => {
-        if (res === 'NOSHOW' || res === 'CANCELED') {
-          this.orderInfoControls.tableNumber.disable();
-          this.orderInfoControls.numberOfAdults.disable();
-        } else {
-          this.orderInfoControls.numberOfAdults.enable();
-          this.orderInfoControls.tableNumber.enable();
-        }
       }
     );
   }
@@ -272,12 +273,6 @@ export class RestaurantReservationComponent extends BaseReservationComponent
         ...editModeStatusOptions,
         { label: 'Seated', value: 'SEATED' },
       ];
-      this.userForm.valueChanges.subscribe((_) => {
-        if (!this.formValueChanges) {
-          this.formValueChanges = true;
-          this.listenForFormChanges();
-        }
-      });
     }
   }
 
@@ -299,72 +294,41 @@ export class RestaurantReservationComponent extends BaseReservationComponent
               orderInformation: orderInfo,
               ...formData,
             });
-
-            // this.summaryData = new SummaryData().deserialize(response);
-            this.setFormDisability(data.reservationInformation);
-
-            // if (data.offerId)
-            //   this.getOfferByRoomType(
-            //     this.userForm.get('roomInformation.roomTypeId').value
-            //   );
-
-            this.userForm.valueChanges.subscribe((_) => {
-              if (!this.formValueChanges) {
-                this.formValueChanges = true;
-                this.listenForFormChanges();
-              }
-            });
           },
           (error) => {}
         )
     );
   }
 
-  setFormDisability(data: BookingInfo): void {
-    this.userForm.get('reservationInformation.source').disable();
-    switch (true) {
-      case data.reservationType === 'CONFIRMED':
-        this.userForm.disable();
-        this.disabledForm = true;
-        break;
-      case data.reservationType === 'CANCELED':
-        this.userForm.disable();
-        this.disabledForm = true;
-        break;
-      case data.source === 'CREATE_WITH':
-        this.disabledForm = true;
-        break;
-      case data.source === 'OTHERS':
-        this.disabledForm = true;
-        break;
+  setFormDisability(): void {
+    // this.userForm.get('reservationInformation.source').disable();
+    if (this.reservationId) {
+      const reservationType = this.reservationInfoControls.reservationType
+        .value;
+      switch (true) {
+        case reservationType === ReservationType.CONFIRMED:
+          this.userForm.disable();
+          this.disabledForm = true;
+          break;
+        case reservationType === ReservationType.CANCELED:
+          this.userForm.disable();
+          this.disabledForm = true;
+          break;
+        // case data.source === 'CREATE_WITH':
+        //   this.disabledForm = true;
+        //   break;
+        // case data.source === 'OTHERS':
+        //   this.disabledForm = true;
+        //   break;
+      }
     }
   }
-
-  // getOfferByRoomType(id: string): void {
-  //   if (id)
-  //     this.$subscription.add(
-  //       this.manageReservationService
-  //         .getOfferByRoomType(this.entityId, id)
-  //         .subscribe(
-  //           (response) => {
-  //             this.offersList = new OfferList().deserialize(response);
-  //             if (this.userForm.get('offerId').value) {
-  //               this.selectedOffer = this.offersList.records.filter(
-  //                 (item) => item.id === this.userForm.get('offerId').value
-  //               )[0];
-  //             }
-  //           },
-  //           (error) => {}
-  //         )
-  //     );
-  // }
 
   getMenuItems() {
     this.$subscription.add(
       this.manageReservationService
         .getMenuList(this.outletId)
         .subscribe((items: MenuItemListResponse) => {
-          const menuList = items.records;
           this.menuItems = items.records.map((item) => ({
             label: item.name,
             value: item.id,
@@ -425,7 +389,8 @@ export class RestaurantReservationComponent extends BaseReservationComponent
               .patchValue(this.summaryData?.totalAmount);
             this.deductedAmount = this.summaryData?.totalAmount;
           },
-          (error) => {}
+          (error) => {},
+          () => this.setFormDisability()
         )
     );
   }

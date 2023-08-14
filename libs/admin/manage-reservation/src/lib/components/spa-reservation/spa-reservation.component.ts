@@ -33,6 +33,7 @@ import { ServiceListResponse } from 'libs/admin/services/src/lib/types/response'
 import { ServiceList } from 'libs/admin/services/src/lib/models/services.model';
 import { ServicesTypeValue } from 'libs/admin/room/src/lib/constant/form';
 import { BaseReservationComponent } from '../base-reservation.component';
+import { ReservationType } from '../../constants/reservation-table';
 
 @Component({
   selector: 'hospitality-bot-spa-reservation',
@@ -205,59 +206,35 @@ export class SpaReservationComponent extends BaseReservationComponent
               bookingInformation: spaInfo,
               ...formData,
             });
-
-            this.summaryData = new SummaryData().deserialize(response);
-            this.setFormDisability(data.reservationInformation);
-            this.userForm.valueChanges.subscribe((_) => {
-              if (!this.formValueChanges) {
-                this.formValueChanges = true;
-                this.listenForFormChanges();
-              }
-            });
           },
           (error) => {}
         )
     );
   }
 
-  setFormDisability(data: BookingInfo): void {
-    this.userForm.get('reservationInformation.source').disable();
-    switch (true) {
-      case data.reservationType === 'CONFIRMED':
-        this.userForm.disable();
-        this.disabledForm = true;
-        break;
-      case data.reservationType === 'CANCELED':
-        this.userForm.disable();
-        this.disabledForm = true;
-        break;
-      case data.source === 'CREATE_WITH':
-        this.disabledForm = true;
-        break;
-      case data.source === 'OTHERS':
-        this.disabledForm = true;
-        break;
+  setFormDisability(): void {
+    // this.userForm.get('reservationInformation.source').disable();
+    if (this.reservationId) {
+      const reservationType = this.reservationInfoControls.reservationType
+        .value;
+      switch (true) {
+        case reservationType === ReservationType.CONFIRMED:
+          this.userForm.disable();
+          this.disabledForm = true;
+          break;
+        case reservationType === ReservationType.CANCELED:
+          this.userForm.disable();
+          this.disabledForm = true;
+          break;
+        // case data.source === 'CREATE_WITH':
+        //   this.disabledForm = true;
+        //   break;
+        // case data.source === 'OTHERS':
+        //   this.disabledForm = true;
+        //   break;
+      }
     }
   }
-
-  // getOfferByRoomType(id: string): void {
-  //   if (id)
-  //     this.$subscription.add(
-  //       this.manageReservationService
-  //         .getOfferByRoomType(this.entityId, id)
-  //         .subscribe(
-  //           (response) => {
-  //             this.offersList = new OfferList().deserialize(response);
-  //             if (this.userForm.get('offerId').value) {
-  //               this.selectedOffer = this.offersList.records.filter(
-  //                 (item) => item.id === this.userForm.get('offerId').value
-  //               )[0];
-  //             }
-  //           },
-  //           (error) => {}
-  //         )
-  //     );
-  // }
 
   offerSelect(offerData?: OfferData): void {
     if (offerData) {
@@ -304,7 +281,8 @@ export class SpaReservationComponent extends BaseReservationComponent
               .patchValue(this.summaryData?.totalAmount);
             this.deductedAmount = this.summaryData?.totalAmount;
           },
-          (error) => {}
+          (error) => {},
+          () => this.setFormDisability()
         )
     );
   }

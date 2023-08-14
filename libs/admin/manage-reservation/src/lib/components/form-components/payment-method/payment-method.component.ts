@@ -51,8 +51,10 @@ export class PaymentMethodComponent implements OnInit {
     this.initConfig();
 
     const { firstName, lastName } = this.userService.userDetails;
-    this.inputControl.cashierFirstName.setValue(firstName);
-    this.inputControl.cashierLastName.setValue(lastName);
+    this.paymentControls.cashierFirstName.setValue(firstName);
+    this.paymentControls.cashierLastName.setValue(lastName);
+
+    // Set initial data for continue reservation after confirm booking.
     this.formService.initialData.next({
       ...this.formService.initialData.getValue(), // Get the current values
       cashierFirstName: firstName,
@@ -90,6 +92,8 @@ export class PaymentMethodComponent implements OnInit {
         this.controlContainer.control.get('paymentMethod').patchValue({
           currency: this.currencies[0].value,
         });
+
+        // Set initial data for continue reservation after confirm booking.
         this.formService.initialData.next({
           ...this.formService.initialData.getValue(), // Get the current values
           currency: this.currencies[0].value,
@@ -118,7 +122,7 @@ export class PaymentMethodComponent implements OnInit {
     );
   }
 
-  get inputControl() {
+  get paymentControls() {
     return (this.parentFormGroup.get('paymentMethod') as FormGroup)
       .controls as Record<
       keyof ReservationForm['paymentMethod'],

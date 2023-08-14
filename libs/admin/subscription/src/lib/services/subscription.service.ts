@@ -10,19 +10,19 @@ export class SubscriptionService extends ApiService {
 
   getSubscriptionUsage(entityId: string, config): Observable<any> {
     return this.get(
-      `/api/v1/entity/${entityId}/subscriptions/usage/${config.queryObj}`
+      `/api/v1/entity/${entityId}/subscriptions/usage${config.queryObj}`
     );
   }
 
   getSubscriptionUsagePercentage(entityId: string, config): Observable<any> {
     return this.get(
-      `/api/v1/entity/${entityId}/subscriptions/usage/percentage/${config.queryObj}`
+      `/api/v1/entity/${entityId}/subscriptions/usage/percentage${config.queryObj}`
     );
   }
 
   exportCSV(entityId, config): Observable<any> {
     return this.get(
-      `/api/v1/entity/${entityId}/subscriptions/exportcsv/${config.queryObj}`,
+      `/api/v1/entity/${entityId}/subscriptions/exportcsv${config.queryObj}`,
       {
         responseType: 'blob',
       }

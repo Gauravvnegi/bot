@@ -13,7 +13,7 @@ export class StatisticsService extends ApiService {
    * @returns An Observable with stats data.
    */
   getStatistics(config): Observable<any> {
-    return this.get(`/api/v1/dashboard-stats/${config.queryObj}`);
+    return this.get(`/api/v1/dashboard-stats${config.queryObj}`);
   }
 
   /**
@@ -32,7 +32,7 @@ export class StatisticsService extends ApiService {
    */
   getBookingStatusStatistics(config): Observable<any> {
     return this.get(
-      `/api/v1/dashboard-stats/reservations/status/${config.queryObj}`
+      `/api/v1/dashboard-stats/reservations/status${config.queryObj}`
     );
   }
 
@@ -42,7 +42,7 @@ export class StatisticsService extends ApiService {
    * @returns An Observable with stats data.
    */
   getReservationStatistics(config): Observable<any> {
-    return this.get(`/api/v1/dashboard-stats/reservations/${config.queryObj}`);
+    return this.get(`/api/v1/dashboard-stats/reservations${config.queryObj}`);
   }
 
   /**

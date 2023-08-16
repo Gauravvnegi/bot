@@ -30,3 +30,31 @@ export type SentimentStatsResponse = {
   };
   packageTotalCounts: Record<string, number>;
 };
+
+export type RequestResponse = {
+  requestStats: RequestStat;
+  totalCount: number;
+};
+
+export type RequestStat = {
+  TODO: number;
+  RESOLVED: number;
+  IN_PROGRESS: number;
+  TIMEOUT?: number;
+  CANCELED?: number;
+};
+
+export type AverageStats = {
+  averageStats: {
+    averageTicketsPerDay: number;
+    averageTimePerTicket: number;
+    timeoutTickets: number;
+  };
+};
+
+export type DistributionStats = {
+  distributionStats: {
+    availableUsers: number;
+    occupiedUsers: number;
+  };
+};

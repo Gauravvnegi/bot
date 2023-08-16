@@ -18,9 +18,13 @@ import { roomFields, roomReservationTypes } from '../../constants/reservation';
 import { FormService } from '../../services/form.service';
 import { debounceTime } from 'rxjs/operators';
 import { OccupancyDetails, ReservationSummary } from '../../types/forms.types';
-import { BookingItemsSummary } from '../../types/response.type';
+import {
+  BookingItemsSummary,
+  RoomReservationResponse,
+} from '../../types/response.type';
 import { BaseReservationComponent } from '../base-reservation.component';
 import { ReservationType } from '../../constants/reservation-table';
+import { convertToTitleCase } from 'libs/admin/shared/src/lib/utils/valueFormatter';
 
 @Component({
   selector: 'hospitality-bot-add-reservation',
@@ -55,15 +59,18 @@ export class AddReservationComponent extends BaseReservationComponent
   ngOnInit(): void {
     this.initForm();
     this.initDetails();
-    this.getReservationId();
+    if (this.reservationId) this.getReservationDetails();
   }
 
   initDetails() {
     this.expandAccordion = this.formService.enableAccordion;
+
     // Expand accordion for assign room from reservation table.
     if (this.expandAccordion) {
       this.formService.enableAccordion = false;
     }
+
+    this.reservationTypes = roomReservationTypes;
     this.fields = roomFields;
     this.bookingType = EntitySubType.ROOM_TYPE;
   }
@@ -124,35 +131,32 @@ export class AddReservationComponent extends BaseReservationComponent
     );
   }
 
-  getReservationId(): void {
-    if (this.reservationId) {
-      this.reservationTypes = [
-        ...roomReservationTypes,
-        { label: 'Canceled', value: 'CANCELED' },
-        // { label: 'No Show', value: 'NOSHOW' },  Not implemented from BE yet
-      ];
-      this.getReservationDetails();
-    } else {
-      this.reservationTypes = roomReservationTypes;
-    }
-  }
-
   getReservationDetails(): void {
     this.$subscription.add(
       this.manageReservationService
         .getReservationDataById(this.reservationId, this.entityId)
         .subscribe(
-          (response) => {
+          (response: RoomReservationResponse) => {
             const data = new ReservationFormData().deserialize(response);
 
-            const { guestInformation, roomInformation, ...formData } = data;
+            const {
+              guestInformation,
+              roomInformation,
+              nextStates,
+              ...formData
+            } = data;
+
+            if (nextStates)
+              this.reservationTypes = nextStates.map((item) => ({
+                label: convertToTitleCase(item),
+                value: item,
+              }));
 
             // Create options for room and guest if not already available
             // in room iterator and guest info component.
             this.roomTypeValues = roomInformation;
             this.formService.guestInformation.next(guestInformation);
-
-            this.userForm.patchValue(data);
+            this.userForm.patchValue(formData);
 
             if (data.offerId) {
               const roomTypeIds = roomInformation.map(

@@ -200,11 +200,14 @@ export class ReservationFormData {
   // paymentMethod: PaymentInfo;
   offerId: string;
   roomInformation: RoomTypes[];
+  nextStates: string[];
   deserialize(input: RoomReservationResponse) {
     this.reservationInformation = new BookingInfo().deserialize(input);
     this.guestInformation = new GuestInfo().deserialize(input.guest);
     // this.paymentMethod = new PaymentInfo().deserialize(input);
     this.offerId = input?.id;
+    this.nextStates = [input?.reservationType, ...input?.nextStates];
+
     this.roomInformation = input?.bookingItems.map((item: BookingItems) => ({
       adultCount: item.occupancyDetails.maxAdult,
       childCount: item.occupancyDetails.maxChildren,
@@ -419,7 +422,7 @@ export class SummaryData {
         unit: item?.unit,
         amount: item?.amount,
       })) ?? [];
-    this.adultCount = input?.occupancyDetails.maxAdult ?? 1;
+    this.adultCount = input?.occupancyDetails?.maxAdult ?? 1;
     this.location = input?.location ?? '';
     this.offerAmount = input?.offer?.discountedPrice ?? 0;
     this.totalAmount = input?.pricingDetails.totalAmount ?? 0;

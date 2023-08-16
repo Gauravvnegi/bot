@@ -239,6 +239,7 @@
             "assets": [
               "apps/admin/src/favicon.ico",
               "apps/admin/src/assets",
+              "apps/admin/src/.well-known",
               "apps/admin/src/firebase-messaging-sw.js"
             ],
             "styles": [

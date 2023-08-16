@@ -81,7 +81,6 @@ export class NavigationHeaderComponent implements OnInit, OnDestroy {
 
   onScroll = () => {
     const { top } = this.header?.nativeElement.getBoundingClientRect();
-    console.log(top);
     this.isScrolledUp = top < 60;
     this.isSpaceNeeded = top < 60 + this.extraGap + 5;
   };

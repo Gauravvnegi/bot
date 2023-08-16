@@ -17,9 +17,7 @@
       <hospitality-bot-occupancy
         *ngSwitchCase="0"
         [dynamicPricingFG]="dynamicPricingFG"
-        [season]="dynamicPricingFG && seasonFG"
-        [occupancy]="dynamicPricingFG && seasonOccupancyFG"
-        [rooms]="allRooms && allRooms"
+        [rooms]="allRooms"
       ></hospitality-bot-occupancy>
 
       <hospitality-bot-day-time-trigger

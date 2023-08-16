@@ -15,9 +15,9 @@ export class DynamicPricingService extends ApiService {
   createDynamicPricing(
     data: DynamicPricingRequest,
     entityId: string,
-    config?: QueryConfig
+    config: QueryConfig
   ): Observable<DynamicPricingRequest> {
-    return this.post(`/api/v1/revenue/dynamic-pricing${config?.params}`, data, {
+    return this.post(`/api/v1/revenue/dynamic-pricing${config.params}`, data, {
       header: { 'entity-id': entityId },
     });
   }
@@ -25,11 +25,16 @@ export class DynamicPricingService extends ApiService {
   updateDynamicPricing(
     data: DynamicPricingRequest,
     entityId: string,
-    config?: QueryConfig
+    config: QueryConfig,
+    updateId: string
   ): Observable<DynamicPricingRequest> {
-    return this.patch(`/api/v1/revenue/dynamic-pricing${config.params}`, data, {
-      header: { 'entity-id': entityId },
-    });
+    return this.patch(
+      `/api/v1/revenue/dynamic-pricing-configuration/${updateId}${config.params}`,
+      data,
+      {
+        header: { 'entity-id': entityId },
+      }
+    );
   }
 
   getOccupancyList(config?: QueryConfig): Observable<DynamicPricingResponse> {

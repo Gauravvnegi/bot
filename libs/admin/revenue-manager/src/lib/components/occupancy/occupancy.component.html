@@ -82,7 +82,6 @@
                 <hospitality-bot-checkbox-selector
                   class="weekdays__selector full-width"
                   label="Days"
-                  [allChecked]="true"
                   controlName="selectedDays"
                   [options]="weeks"
                 >
@@ -102,7 +101,7 @@
                     [formGroupName]="roomIndex"
                   >
                     <p-accordionTab
-                      [selected]="roomIndex == 0"
+                      [selected]="roomIndex == selectedRoomIndex(seasonIndex)"
                       *ngIf="room.get('isSelected').value"
                     >
                       <p-header>

@@ -12,10 +12,8 @@ import {
   ConfigCategory,
   RoomsConfigType,
 } from '../types/dynamic-pricing.types';
-import { Revenue } from '../constants/revenue-manager.const';
 import { RoomTypes } from '../types/bar-price.types';
 import { OccupancyComponent } from '../components/occupancy/occupancy.component';
-
 export class DynamicPricingFactory {
   static buildRequest(form: FormGroup, type: ConfigType, mode: ModeType) {
     let data:
@@ -24,7 +22,10 @@ export class DynamicPricingFactory {
       | Record<string, string>;
     switch (type) {
       case 'OCCUPANCY':
-        data = DynamicPricingFactory.occupancyRequest(form, mode);
+        data =
+          mode === 'add'
+            ? DynamicPricingFactory.getNewProperties(form)
+            : DynamicPricingFactory.getChangedProperties(form);
         break;
       case 'DATE_TIME_TRIGGER':
         // add method for date time trigger
@@ -36,7 +37,7 @@ export class DynamicPricingFactory {
 
     return data;
   }
-  static occupancyRequest(form: FormGroup, mode: ModeType) {
+  static getNewProperties(form: FormGroup) {
     const {
       fromDate,
       toDate,
@@ -46,34 +47,26 @@ export class DynamicPricingFactory {
       selectedDays,
       status,
     } = form.controls;
-    const data =
-      mode === Revenue['add']
-        ? ({
-            status: status.value,
-            name: name.value,
-            fromDate: new Date(fromDate.value).getTime(),
-            toDate: new Date(toDate.value).getTime(),
-            daysIncluded: selectedDays.value.map((day: string) =>
-              day.toUpperCase()
+    return {
+      status: status.value ? 'ACTIVE' : 'INACTIVE',
+      name: name.value,
+      fromDate: new Date(fromDate.value).getTime(),
+      toDate: new Date(toDate.value).getTime(),
+      daysIncluded: selectedDays.value.map((day: string) => day.toUpperCase()),
+      configItems: (roomTypes as FormArray).controls
+        .filter((item) => item.get('isSelected').value)
+        .map((room: FormGroup) => {
+          const { occupancy, roomId } = room.controls;
+          const configItem: ConfigItemType = {
+            type: configCategory.value,
+            id: roomId.value,
+            configRules: (occupancy as FormArray).controls.map(
+              (rule: FormGroup) => DynamicPricingFactory.getOccupancyRules(rule)
             ),
-            configItems: (roomTypes as FormArray).controls.map(
-              (room: FormGroup) => {
-                const { occupancy, roomId } = room.controls;
-                const configItem: ConfigItemType = {
-                  type: configCategory.value,
-                  id: roomId.value,
-                  configRules: (occupancy as FormArray).controls.map(
-                    (rule: FormGroup) =>
-                      DynamicPricingFactory.getOccupancyRules(rule)
-                  ),
-                };
-                return configItem;
-              }
-            ),
-          } as DynamicPricingRequest)
-        : DynamicPricingFactory.getChangedProperties(form);
-
-    return data;
+          };
+          return configItem;
+        }),
+    } as DynamicPricingRequest;
   }
 
   static getChangedProperties(formGroup: FormGroup) {
@@ -99,7 +92,20 @@ export class DynamicPricingFactory {
                 )
               );
             requestData[name] = occupancyRuleData;
+          } else if (name === 'removedRules') {
+            currentControl['controls'].length &&
+              (requestData[name] = currentControl['controls']);
           } else {
+            const dependentControlList: OccupancyFormControlsType[] = [
+              'fromDate',
+              'toDate',
+              'selectedDays',
+            ];
+            if (dependentControlList.includes(name)) {
+              dependentControlList.forEach((item) => {
+                requestData[item] = formGroup.get(item).value;
+              });
+            }
             requestData[name] = currentControl.value;
           }
         }
@@ -112,7 +118,7 @@ export class DynamicPricingFactory {
     const { id, discount, end, rate, start } = rule.controls;
     const status = true; //TODO, Future dependent
     return {
-      id: id?.value,
+      id: id?.value ?? undefined,
       occupancyStart: +start?.value,
       occupancyEnd: +end?.value,
       status: status ? 'ACTIVE' : 'INACTIVE',
@@ -134,43 +140,39 @@ export class DynamicPricingHandler {
     return this;
   }
 
-  mapOccupancy(instance: OccupancyComponent) {
-    // PENDING: Need to be recheck, these logic
-    // Not Working (RoomTypes, Occupancy) - Recheck
-    this.dataList.forEach((item, index) => {
-      instance.add('season');
-      const season = instance.dynamicPricingControl.occupancyFA.at(
-        index
-      ) as FormGroup;
-      season.patchValue({
-        fromDate: item.fromDate,
-        toDate: item.toDate,
-        type: 'update',
-        name: item.name,
-        configCategory: item.configCategory,
-        selectedDays: item.selectedDays,
-        status: item.status,
-        roomType: item.roomType,
-      });
-      const roomTypesControl = season.get('roomTypes') as FormArray;
-      item.roomTypes.forEach((room, roomIndex) => {
-        const roomControl = roomTypesControl.at(roomIndex);
-        roomControl?.patchValue({
-          isSelected: room.isSelected,
-        });
+  mapOccupancy(season: FormGroup, item: DynamicPricingForm) {
+    season.patchValue({
+      id: item.id,
+      fromDate: item.fromDate,
+      toDate: item.toDate,
+      type: 'update',
+      name: item.name,
+      configCategory: item.configCategory,
+      selectedDays: item.selectedDays,
+      status: item.status,
+      roomType: item.roomType,
+    });
 
-        const occupancyControl = roomControl.get('occupancy') as FormArray;
-        room.occupancy.forEach((rule, ruleIndex) => {
-          occupancyControl.at(ruleIndex)?.patchValue({
-            start: rule.start,
-            end: rule.end,
-            discount: rule.discount,
-          });
-        });
-      });
+    const roomTypesControl = season.get('roomTypes') as FormArray;
+    const roomTypesControlList = roomTypesControl.controls.filter(
+      (control: FormGroup) =>
+        season.get('roomType').value.includes(control.get('roomId').value)
+    );
 
-      // ISSUE-> only last item patched to everyone
-      console.log(season, '===>', item.name, '***', season.get('name').value);
+    roomTypesControlList.forEach((roomType: FormGroup, roomIndex) => {
+      const { occupancy } = roomType.controls;
+      (occupancy as FormArray).controls.forEach(
+        (occupancyControl: FormGroup, occupancyIndex) => {
+          const rule = item.roomTypes[roomIndex]?.occupancy[occupancyIndex];
+          rule &&
+            occupancyControl.patchValue({
+              id: rule.id,
+              start: rule.start,
+              end: rule.end,
+              discount: rule.discount,
+            });
+        }
+      );
     });
   }
 }
@@ -199,7 +201,7 @@ export class DynamicPricingForm {
     this.roomTypes = input.configItems.map((room, index) => {
       const currentRoom = rooms.find((item) => item.value == room.id);
       let roomConfig: RoomsConfigType = {
-        isSelected: index === 0 ? true : false,
+        isSelected: false,
         roomId: room.id,
         basePrice: currentRoom?.price,
         roomName: currentRoom?.label,
@@ -210,7 +212,6 @@ export class DynamicPricingForm {
           discount: rule.discountOrMarkup.value,
         })),
       };
-
       return roomConfig;
     });
     return this;

@@ -37,6 +37,12 @@ export class DynamicPricingService extends ApiService {
     );
   }
 
+  deleteDynamicPricing(entityId: string, deleteId: string) {
+    return this.delete(
+      `/api/v1/revenue/dynamic-pricing-configuration/${deleteId}`
+    );
+  }
+
   getOccupancyList(config?: QueryConfig): Observable<DynamicPricingResponse> {
     return this.get(
       `/api/v1/members/?type=AGENT&entityId=f4baead1-06c6-42e8-821b-aef4a99ef5bb&order=DESC&sort=created&limit=50`

@@ -13,6 +13,7 @@ import {
   RoomsConfigType,
 } from '../types/dynamic-pricing.types';
 import { RoomTypes } from '../types/bar-price.types';
+import { OccupancyComponent } from '../components/occupancy/occupancy.component';
 export class DynamicPricingFactory {
   static buildRequest(form: FormGroup, type: ConfigType, mode: ModeType) {
     let data:
@@ -91,6 +92,9 @@ export class DynamicPricingFactory {
                 )
               );
             requestData[name] = occupancyRuleData;
+          } else if (name === 'removedRules') {
+            currentControl['controls'].length &&
+              (requestData[name] = currentControl['controls']);
           } else {
             const dependentControlList: OccupancyFormControlsType[] = [
               'fromDate',

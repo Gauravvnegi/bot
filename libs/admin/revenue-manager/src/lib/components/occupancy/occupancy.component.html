@@ -193,7 +193,12 @@
                                 "
                                 (click)="
                                   room.get('occupancy').controls.length > 1 &&
-                                    remove('occupancy', occupancyIndex, room)
+                                    remove(
+                                      'occupancy',
+                                      occupancyIndex,
+                                      season,
+                                      room
+                                    )
                                 "
                               ></i>
                             </div>

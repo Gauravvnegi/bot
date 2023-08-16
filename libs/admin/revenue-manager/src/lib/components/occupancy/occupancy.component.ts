@@ -130,6 +130,7 @@ export class OccupancyComponent implements OnInit {
       toDate: [, [Validators.required]],
       configCategory: ['ROOM_TYPE'],
       roomType: [, [Validators.required]],
+      removedRules: this.fb.array([]),
       selectedDays: [, [Validators.required]],
       roomTypes: this.fb.array(this.getRoomTypesFA()),
     });
@@ -157,13 +158,47 @@ export class OccupancyComponent implements OnInit {
     });
   }
 
-  remove(type: ControlTypes, index: number, roomType?: FormGroup) {
+  remove(
+    type: ControlTypes,
+    index: number,
+    season?: FormGroup,
+    roomType?: FormGroup
+  ) {
     switch (type) {
       case 'season':
-        this.dynamicPricingControl.occupancyFA.removeAt(index);
+        this.loading = true;
+        const season = this.dynamicPricingControl.occupancyFA;
+        this.$subscription.add(
+          this.dynamicPricingService
+            .deleteDynamicPricing(
+              this.entityId,
+              season.at(index).get('id').value
+            )
+            .subscribe(
+              (res) => {
+                this.snackbarService.openSnackBarAsText(
+                  `Season deleted Successfully.`,
+                  '',
+                  { panelClass: 'success' }
+                );
+                season.removeAt(index);
+              },
+              (error) => {
+                this.loading = false;
+              },
+              this.handleFinal
+            )
+        );
         break;
       case 'occupancy':
-        (roomType.get('occupancy') as FormArray).removeAt(index);
+        const rule = roomType.get('occupancy') as FormArray;
+        const ruleId = rule.at(index).get('id');
+        if (ruleId.value) {
+          const removedFA = season.get('removedRules') as FormArray;
+          removedFA.controls.push(ruleId.value);
+          removedFA.markAsDirty();
+        }
+        rule.removeAt(index);
         break;
     }
   }
@@ -175,12 +210,20 @@ export class OccupancyComponent implements OnInit {
         const roomTypeFG = seasonFG.get('roomTypes') as FormArray;
         seasonFG.get('roomType').valueChanges.subscribe((res: string[]) => {
           roomTypeFG.controls.forEach((roomType: FormGroup, index) => {
+            const hasSelected = res.includes(roomType.get('roomId').value);
             roomType.patchValue(
               {
-                isSelected: res.includes(roomType.get('roomId').value),
+                isSelected: hasSelected,
               },
               { emitEvent: false }
             );
+
+            //TODO: store in removedRules
+            const selectedOccupancy = hasSelected
+              ? (roomType.get('occupancy') as FormArray).controls.map(
+                  (item) => item.get('id').value
+                )
+              : [];
           });
         });
 

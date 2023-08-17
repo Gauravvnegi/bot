@@ -34,6 +34,16 @@ export const OccupancyResponse = {
               },
               status: 'ACTIVE',
             },
+            {
+              id: '44454f11-97d7-41ec-bf1f-e8b31e53a222',
+              occupancyStart: 5.0,
+              occupancyEnd: 56.0,
+              discountOrMarkup: {
+                type: 'PERCENTAGE',
+                value: -8.0,
+              },
+              status: 'ACTIVE',
+            },
           ],
         },
         {

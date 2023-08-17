@@ -72,7 +72,7 @@ export class OccupancyComponent implements OnInit {
     private dynamicPricingService: DynamicPricingService,
     private adminUtilityService: AdminUtilityService,
     private snackbarService: SnackBarService,
-    private fb: FormBuilder
+    public fb: FormBuilder
   ) {}
 
   ngOnInit(): void {
@@ -91,11 +91,7 @@ export class OccupancyComponent implements OnInit {
             this.rooms
           );
           handler.dataList.forEach((item, index) => {
-            this.add('season');
-            const season = this.dynamicPricingControl.occupancyFA.at(
-              index
-            ) as FormGroup;
-            handler.mapOccupancy(season, item);
+            handler.mapOccupancy(index, item, this);
           });
         }
       })
@@ -161,8 +157,8 @@ export class OccupancyComponent implements OnInit {
   remove(
     type: ControlTypes,
     index: number,
-    season?: FormGroup,
-    roomType?: FormGroup
+    form?: FormGroup,
+    seasonFG?: FormGroup
   ) {
     switch (type) {
       case 'season':
@@ -191,10 +187,10 @@ export class OccupancyComponent implements OnInit {
         );
         break;
       case 'occupancy':
-        const rule = roomType.get('occupancy') as FormArray;
-        const ruleId = rule.at(index).get('id');
-        if (ruleId.value) {
-          const removedFA = season.get('removedRules') as FormArray;
+        const rule = form.get('occupancy') as FormArray;
+        const ruleId = rule.at(index)?.get('id');
+        if (ruleId?.value) {
+          const removedFA = seasonFG?.get('removedRules') as FormArray;
           removedFA.controls.push(ruleId.value);
           removedFA.markAsDirty();
         }
@@ -207,9 +203,9 @@ export class OccupancyComponent implements OnInit {
     this.dynamicPricingControl?.occupancyFA.controls.forEach(
       (seasonFG: FormGroup) => {
         //roomType change listening
-        const roomTypeFG = seasonFG.get('roomTypes') as FormArray;
+        const roomTypeFA = seasonFG.get('roomTypes') as FormArray;
         seasonFG.get('roomType').valueChanges.subscribe((res: string[]) => {
-          roomTypeFG.controls.forEach((roomType: FormGroup, index) => {
+          roomTypeFA.controls.forEach((roomType: FormGroup, index) => {
             const hasSelected = res.includes(roomType.get('roomId').value);
             roomType.patchValue(
               {
@@ -217,17 +213,10 @@ export class OccupancyComponent implements OnInit {
               },
               { emitEvent: false }
             );
-
-            //TODO: store in removedRules
-            const selectedOccupancy = hasSelected
-              ? (roomType.get('occupancy') as FormArray).controls.map(
-                  (item) => item.get('id').value
-                )
-              : [];
           });
         });
 
-        roomTypeFG.controls.forEach((roomTypeFG: FormGroup) => {
+        roomTypeFA.controls.forEach((roomTypeFG: FormGroup) => {
           const basePrice = roomTypeFG.get('basePrice').value;
           //occupancy change listening
           (roomTypeFG.get('occupancy') as FormArray).controls.forEach(

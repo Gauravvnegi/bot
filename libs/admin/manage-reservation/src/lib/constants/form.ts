@@ -1,5 +1,4 @@
 import {
-  AddedRatePlans,
   ReservationRatePlan,
 } from 'libs/admin/room/src/lib/constant/form';
 

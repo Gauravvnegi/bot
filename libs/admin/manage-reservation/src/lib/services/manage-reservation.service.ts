@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
 import { ReservationSummary } from '../types/forms.types';
 import { map } from 'rxjs/operators';
 import { MenuItemListResponse } from 'libs/admin/all-outlets/src/lib/types/outlet';
-import { QueryConfig } from '@hospitality-bot/admin/shared';
+import { EntitySubType, QueryConfig } from '@hospitality-bot/admin/shared';
 
 @Injectable()
 export class ManageReservationService extends ApiService {
@@ -41,10 +41,11 @@ export class ManageReservationService extends ApiService {
   updateReservation<T, K>(
     entityId: string,
     reservationId: string,
-    data: any
+    data: any,
+    bookingType: string
   ): Observable<K> {
     return this.put(
-      `/api/v1/booking/${reservationId}?bookingType=ROOM_TYPE&entityId=${entityId}`,
+      `/api/v1/booking/${reservationId}?bookingType=${bookingType}&entityId=${entityId}`,
       data
     );
   }

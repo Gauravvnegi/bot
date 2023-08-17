@@ -1,4 +1,4 @@
-import { Cols, FlagType, Option, Status } from '@hospitality-bot/admin/shared';
+import { Cols, FlagType, Option } from '@hospitality-bot/admin/shared';
 import { Chip } from '@hospitality-bot/admin/shared';
 import { ReservationStatus } from '../types/reservation.type';
 /**
@@ -239,27 +239,6 @@ export enum ReservationStatusType {
   DRAFT = 'DRAFT',
   CANCELED = 'CANCELED',
 }
-
-// export const reservationStatus: Status[] = [
-//   {
-//     label: 'Draft',
-//     value: ReservationStatusType.DRAFT,
-//     type: 'warning',
-//     disabled: false,
-//   },
-//   {
-//     label: 'Cancel',
-//     value: ReservationStatusType.CANCELED,
-//     type: 'failed',
-//     disabled: false,
-//   },
-//   {
-//     label: 'Confirm',
-//     value: ReservationStatusType.CONFIRMED,
-//     type: 'active',
-//     disabled: false,
-//   },
-// ];
 
 /* All Chips */
 export const chips: Chip<

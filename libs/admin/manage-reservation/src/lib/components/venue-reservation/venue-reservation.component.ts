@@ -31,6 +31,7 @@ import { ManageReservationService } from '../../services/manage-reservation.serv
 import { ReservationForm } from '../../constants/form';
 import { BaseReservationComponent } from '../base-reservation.component';
 import { FormService } from '../../services/form.service';
+import { ReservationType } from '../../constants/reservation-table';
 
 @Component({
   selector: 'hospitality-bot-venue-reservation',
@@ -198,11 +199,11 @@ export class VenueReservationComponent extends BaseReservationComponent
   setFormDisability(data: BookingInfo): void {
     this.userForm.get('reservationInformation.source').disable();
     switch (true) {
-      case data.reservationType === 'CONFIRMED':
+      case data.reservationType === ReservationType.CONFIRMED:
         this.userForm.disable();
         this.disabledForm = true;
         break;
-      case data.reservationType === 'CANCELED':
+      case data.reservationType === ReservationType.CANCELED:
         this.userForm.disable();
         this.disabledForm = true;
         break;

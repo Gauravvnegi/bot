@@ -19,7 +19,10 @@ import {
 } from '@angular/forms';
 import { GlobalFilterService, Item } from '@hospitality-bot/admin/core/theme';
 import { SnackBarService } from '@hospitality-bot/shared/material';
-import { AdminUtilityService, ConfigService } from 'libs/admin/shared/src';
+import {
+  AdminUtilityService,
+  EntitySubType,
+} from 'libs/admin/shared/src';
 import { IteratorComponent } from 'libs/admin/shared/src/lib/components/iterator/iterator.component';
 import { Subscription } from 'rxjs';
 import { roomFields, RoomFieldTypeOption } from '../../constants/reservation';
@@ -309,7 +312,7 @@ export class RoomIteratorComponent extends IteratorComponent
       this.loadingRoomTypes[index] = true;
       this.manageReservationService
         .searchLibraryItem(this.entityId, {
-          params: `?key=${text}&type=ROOM_TYPE`,
+          params: `?key=${text}&type=${EntitySubType.ROOM_TYPE}`,
         })
         .subscribe(
           (res: any) => {
@@ -360,7 +363,7 @@ export class RoomIteratorComponent extends IteratorComponent
     queries = [
       ...queries,
       {
-        type: 'ROOM_TYPE',
+        type: EntitySubType.ROOM_TYPE,
         offset: this.roomTypeOffSet,
         limit: this.roomTypeLimit,
         createBooking: true,

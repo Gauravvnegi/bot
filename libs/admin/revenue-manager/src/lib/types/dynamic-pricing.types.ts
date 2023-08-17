@@ -1,3 +1,5 @@
+import { FormArray } from '@angular/forms';
+
 export type DynamicPricingResponse = {
   configDetails: DynamicPricingRequest[];
 };
@@ -21,6 +23,7 @@ export type DaysType =
   | 'WEDNESDAY'
   | 'THURSDAY'
   | 'FRIDAY'
+  | 'SATURDAY'
   | 'SUNDAY';
 
 export type ConfigCategory = 'ROOM_TYPE' | 'HOTEL';
@@ -89,4 +92,10 @@ export type OccupancyRuleType = {
   end: number;
   discount: number;
   rate?: number;
+};
+
+export type DynamicPricingForm = {
+  occupancyFA: FormArray;
+  inventoryAllocationFA: FormArray;
+  timeFA: FormArray;
 };

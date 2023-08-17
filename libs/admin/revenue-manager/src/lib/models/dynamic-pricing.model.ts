@@ -71,6 +71,7 @@ export class DynamicPricingFactory {
 
   static getChangedProperties(formGroup: FormGroup) {
     let requestData: OccupancyUpdateRequestType = {};
+    let removedRulesIds = [];
     Object.keys(formGroup.controls).forEach(
       (name: OccupancyFormControlsType) => {
         const currentControl = formGroup.controls[name];
@@ -93,8 +94,23 @@ export class DynamicPricingFactory {
               );
             requestData[name] = occupancyRuleData;
           } else if (name === 'removedRules') {
-            currentControl['controls'].length &&
-              (requestData[name] = currentControl['controls']);
+            removedRulesIds = [
+              ...removedRulesIds,
+              ...currentControl['controls'],
+            ];
+          } else if (name === 'roomType') {
+            //Finding deleted rules who is unselected from roomTypes
+            const removedRules = (formGroup.controls[
+              'roomTypes'
+            ] as FormArray).controls
+              .filter((roomType) => !roomType.get('isSelected').value)
+              .map((roomType) =>
+                (roomType.get('occupancy') as FormArray).controls
+                  .filter((rules) => rules.get('id')?.value)
+                  .map((rules) => rules.get('id').value)
+              )
+              .reduce((acc, val) => acc.concat(val), []);
+            removedRulesIds = [...removedRulesIds, ...removedRules];
           } else {
             const dependentControlList: OccupancyFormControlsType[] = [
               'fromDate',
@@ -111,6 +127,7 @@ export class DynamicPricingFactory {
         }
       }
     );
+    removedRulesIds.length && (requestData['removedRules'] = removedRulesIds);
     return requestData;
   }
 
@@ -140,7 +157,16 @@ export class DynamicPricingHandler {
     return this;
   }
 
-  mapOccupancy(season: FormGroup, item: DynamicPricingForm) {
+  mapOccupancy(
+    seasonIndex: number,
+    item: DynamicPricingForm,
+    instance: OccupancyComponent
+  ) {
+    instance.add('season');
+    const season = instance.dynamicPricingControl.occupancyFA.at(
+      seasonIndex
+    ) as FormGroup;
+
     season.patchValue({
       id: item.id,
       fromDate: item.fromDate,
@@ -153,17 +179,32 @@ export class DynamicPricingHandler {
       roomType: item.roomType,
     });
 
+    //filtering rooms who has at least one rule
     const roomTypesControl = season.get('roomTypes') as FormArray;
     const roomTypesControlList = roomTypesControl.controls.filter(
       (control: FormGroup) =>
-        season.get('roomType').value.includes(control.get('roomId').value)
+        item.roomType.includes(control.get('roomId').value)
     );
 
-    roomTypesControlList.forEach((roomType: FormGroup, roomIndex) => {
-      const { occupancy } = roomType.controls;
+    roomTypesControlList.forEach((roomControl: FormGroup, index) => {
+      roomControl.removeControl('occupancy');
+      roomControl.addControl(
+        'occupancy',
+        instance.fb.array(
+          Array.from(
+            { length: item.roomTypes[index].occupancy.length },
+            () => instance.seasonOccupancyFG
+          )
+        )
+      );
+      //subscribing new occupancy rules
+      instance.listenChanges();
+
+      //patching all values of rules
+      const { occupancy } = roomControl.controls;
       (occupancy as FormArray).controls.forEach(
         (occupancyControl: FormGroup, occupancyIndex) => {
-          const rule = item.roomTypes[roomIndex]?.occupancy[occupancyIndex];
+          const rule = item.roomTypes[index]?.occupancy[occupancyIndex];
           rule &&
             occupancyControl.patchValue({
               id: rule.id,

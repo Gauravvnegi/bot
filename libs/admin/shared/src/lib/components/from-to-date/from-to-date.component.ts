@@ -7,12 +7,14 @@ import { FormGroup } from '@angular/forms';
   styleUrls: ['./from-to-date.component.scss'],
 })
 export class FromToDateComponent implements OnInit {
-  startMinDate = new Date();
+  startMinDate = new Date(); //input  - refactor
   endMinDate = new Date();
   startMaxDate: Date;
-  endMaxDate: Date;
+  endMaxDate: Date; // input - refactor
   @Input() parentFG: FormGroup;
-  @Input() className: string;
+  // refactor - do not input formGroup
+  // refactor - get control with default value
+  @Input() className: string; // default class-name
 
   ngOnInit() {
     this.parentFG.get('fromDate')?.valueChanges.subscribe((res) => {

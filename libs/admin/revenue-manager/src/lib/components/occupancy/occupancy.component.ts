@@ -6,26 +6,25 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
-import {
-  DynamicPricingFactory,
-  DynamicPricingHandler,
-} from '../../models/dynamic-pricing.model';
-import { Revenue, weeks } from '../../constants/revenue-manager.const';
-import {
-  ConfigCategory,
-  ConfigType,
-  ModeType,
-} from '../../types/dynamic-pricing.types';
-import { DynamicPricingService } from '../../services/dynamic-pricing.service';
-import { Subscription } from 'rxjs';
+import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
   AdminUtilityService,
   Option,
   QueryConfig,
 } from '@hospitality-bot/admin/shared';
-import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { SnackBarService } from '@hospitality-bot/shared/material';
+import { Subscription } from 'rxjs';
+import { Revenue, weeks } from '../../constants/revenue-manager.const';
+import {
+  DynamicPricingFactory,
+  DynamicPricingHandler,
+} from '../../models/dynamic-pricing.model';
+import { DynamicPricingService } from '../../services/dynamic-pricing.service';
 import { RoomTypes } from '../../types/bar-price.types';
+import {
+  ConfigType,
+  DynamicPricingForm,
+} from '../../types/dynamic-pricing.types';
 
 export type ControlTypes = 'season' | 'occupancy';
 
@@ -65,7 +64,7 @@ export class OccupancyComponent implements OnInit {
 
   get dynamicPricingControl() {
     return this.dynamicPricingFG?.controls as Record<
-      'occupancyFA',
+      keyof DynamicPricingForm,
       AbstractControl
     > & {
       occupancyFA: FormArray;

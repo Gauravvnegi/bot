@@ -2,7 +2,7 @@
   <div class="stats">
     <div class="stats__head" [formGroup]="bifurcationFG">
       <div
-        *skeleton="stats == undefined; height: '30px'; width: '120px'"
+        *skeleton="!request.length; height: '30px'; width: '120px'"
         class="stats__head__title"
       >
         {{ 'Total Complaint' }}
@@ -11,10 +11,10 @@
     <div class="stats__body">
       <div class="stats__body__detail">
         <ng-container
-          *skeleton="stats == undefined; height: '50px'; width: '120px'"
+          *skeleton="!request.length; height: '50px'; width: '120px'"
         >
           <div class="stats__body__detail__shared">
-            {{ noActionCount + gtmCount + othersCount }}
+            {{ totalCount }}
           </div>
           <div class="stats__body__detail__sharedtitle">
             Overall Shared
@@ -22,7 +22,7 @@
         </ng-container>
         <ng-container
           *skeleton="
-            stats === undefined;
+            !request.length;
             height: '41px';
             width: '160px';
             repeat: 3;
@@ -30,7 +30,7 @@
           "
         >
           <ng-container>
-            <div class="received-wrap" *ngFor="let item of feedback">
+            <div class="received-wrap" *ngFor="let item of request">
               <div class="received-wrap__container">
                 <div
                   class="received-wrap__container__dot"
@@ -58,7 +58,7 @@
                   />
                 </div>
                 <div class="received-wrap__container__date">
-                  {{ 'in_thirty_days' | translate }}
+                  In 30 days
                 </div>
               </div>
               <div class="received-wrap__recived-title">
@@ -73,7 +73,7 @@
           <canvas
             baseChart
             *skeleton="
-              stats === undefined;
+              !request.length;
               height: '200px';
               width: '200px';
               borderRadius: '50%';

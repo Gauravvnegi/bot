@@ -354,7 +354,7 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
           order: sharedConfig.defaultOrder,
         },
         ...this.selectedRows.map((item) => ({ ids: item.id })),
-        { type: 'ROOM_TYPE', entityId: this.entityId },
+        { type: EntitySubType.ROOM_TYPE, entityId: this.entityId },
       ]),
     };
     this.$subscription.add(

@@ -7,7 +7,7 @@ import {
 } from '@angular/forms';
 import { AdminUtilityService, Option } from '@hospitality-bot/admin/shared';
 import { GuestTableService } from 'libs/admin/guests/src/lib/services/guest-table.service';
-import { Guest, GuestList } from '../../../models/reservations.model';
+import { GuestList } from '../../../models/reservations.model';
 import { GuestDetails } from '../../../types/forms.types';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';

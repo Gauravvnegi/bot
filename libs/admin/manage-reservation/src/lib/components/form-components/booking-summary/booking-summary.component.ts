@@ -52,7 +52,7 @@ export class BookingSummaryComponent implements OnInit {
   dateDifference: number = 1;
 
   heading = '';
-  bookingType = '';
+  bookingType: EntitySubType;
   outletId = '';
   occupancyDetails: OccupancyDetails;
   $subscription = new Subscription();
@@ -116,6 +116,11 @@ export class BookingSummaryComponent implements OnInit {
       this.bookingType === EntitySubType.ROOM_TYPE
         ? this.entityId
         : this.outletId;
+    const type =
+      this.bookingType === EntitySubType.ROOM_TYPE
+        ? EntitySubType.ROOM_TYPE
+        : EntityType.OUTLET;
+
     if (this.bookingType === EntitySubType.ROOM_TYPE)
       data = this.formService.mapRoomReservationData(
         this.parentFormGroup.getRawValue(),
@@ -127,16 +132,15 @@ export class BookingSummaryComponent implements OnInit {
         this.bookingType
       );
     if (this.reservationId) {
-      this.updateReservation(data, id);
-    } else this.createReservation(data, id);
+      this.updateReservation(data, id, type);
+    } else this.createReservation(data, id, type);
   }
 
-  createReservation(data: RoomReservationFormData, entityId: string): void {
-    const type =
-      this.bookingType === EntitySubType.ROOM_TYPE
-        ? EntitySubType.ROOM_TYPE
-        : EntityType.OUTLET;
-
+  createReservation(
+    data: RoomReservationFormData,
+    entityId: string,
+    type: string
+  ): void {
     const { id, ...formData } = data;
     this.$subscription.add(
       this.manageReservationService
@@ -155,15 +159,14 @@ export class BookingSummaryComponent implements OnInit {
     );
   }
 
-  updateReservation(data: RoomReservationFormData, entityId: string): void {
-    const id =
-      this.bookingType === EntitySubType.ROOM_TYPE
-        ? this.entityId
-        : this.outletId;
-
+  updateReservation(
+    data: RoomReservationFormData,
+    entityId: string,
+    type: string
+  ): void {
     this.$subscription.add(
       this.manageReservationService
-        .updateReservation(entityId, this.reservationId, data)
+        .updateReservation(entityId, this.reservationId, data, type)
         .subscribe(
           (res: RoomReservationRes) => {
             this.bookingConfirmationPopup(res?.reservationNumber);

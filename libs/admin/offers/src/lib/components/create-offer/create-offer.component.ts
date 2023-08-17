@@ -123,9 +123,9 @@ export class CreateOfferComponent implements OnInit {
                 }`,
         });
 
-      if (type === 'NUMBER' && discount > price) {
-        return 'isNumError';
-      }
+      // if (type === 'NUMBER' && discount > price) {
+      //   return 'isNumError';
+      // }
 
       if (type === 'PERCENTAGE' && discount > 100) {
         return 'isPercentError';
@@ -180,25 +180,25 @@ export class CreateOfferComponent implements OnInit {
       }
       return prev + this.selectedServicePrice[curr.value];
     }, 0);
-    this.useForm.get('rate').setValue(totalPrice);
-    const rateValue = +this.useForm.get('rate').value;
+    // this.useForm.get('rate').setValue(totalPrice);
+    // const rateValue = +this.useForm.get('rate').value;
     const discountType = this.useForm.get('discountType').value;
     const discountValue = +this.useForm.get('discountValue').value;
 
-    if (rateValue && discountType) {
-      const discountedPrice =
-        discountType === 'NUMBER'
-          ? `${rateValue - discountValue}`
-          : `${
-              Math.round(
-                (rateValue -
-                  (rateValue * discountValue) / 100 +
-                  Number.EPSILON) *
-                  100
-              ) / 100
-            }`;
-      this.useForm.get('discountedPrice').setValue(discountedPrice);
-    }
+    // if (rateValue && discountType) {
+    //   const discountedPrice =
+    //     discountType === 'NUMBER'
+    //       ? `${rateValue - discountValue}`
+    //       : `${
+    //           Math.round(
+    //             (rateValue -
+    //               (rateValue * discountValue) / 100 +
+    //               Number.EPSILON) *
+    //               100
+    //           ) / 100
+    //         }`;
+    //   this.useForm.get('discountedPrice').setValue(discountedPrice);
+    // }
   }
 
   searchOptions(text: string) {

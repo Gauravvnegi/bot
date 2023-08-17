@@ -18,7 +18,9 @@
 <div class="feedback-container mb-20">
   <div class="stats--wrapper">
     <div class="bifurcation-stats">
-      <complaint-bifurcation></complaint-bifurcation>
+      <complaint-bifurcation
+        [globalQueries]="globalQueries"
+      ></complaint-bifurcation>
     </div>
   </div>
   <div class="stat-card-wrapper">
@@ -30,16 +32,16 @@
       [stats]="statCard[1]"
       class="stat-card"
     ></hospitality-bot-stats-card>
-    <hospitality-bot-stats-card [stats]="statCard[2]" class="stat-card">
+    <hospitality-bot-stats-card [stats]="agentStats" class="stat-card">
       <ng-container>
         <div class="additional-stats-container">
           <div class="stats-wrapper">
-            <span class="stats">7</span>
+            <span class="stats">{{ agentsOnTicket }}</span>
             <div class="text">Agents On Ticket</div>
           </div>
 
           <div class="stats-wrapper">
-            <span class="stats">14</span>
+            <span class="stats">{{ availableAgents }}</span>
             <div class="text">Available Agents</div>
           </div>
         </div>

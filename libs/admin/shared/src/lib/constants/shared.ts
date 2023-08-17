@@ -35,6 +35,9 @@ export enum StatCardImageUrls {
   SellsGraph = 'assets/svg/avg-room-rate.svg',
   TotalOrders = 'assets/svg/remaining-inventory-cost.svg',
   InProgress = 'assets/svg/in-progress.svg',
+  AverageTicket = 'assets/svg/tickets.svg',
+  AverageTime = 'assets/svg/time-taken.svg',
+  Agent = 'assets/svg/agent.svg',
 }
 
 export enum DiscountType {

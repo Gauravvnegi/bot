@@ -18,7 +18,9 @@ export class StatsCardComponent {
   tooltip: string;
 
   @Input() set stats(value) {
-    this.title = value?.label?.replace(/\s+|-/g, '');
+    this.title = value?.title
+      ? value?.title
+      : value?.label?.replace(/\s+|-/g, '');
     this.label = value?.label;
     this.score = value?.score;
     this.comparisonPercent = value?.comparisonPercent || '';

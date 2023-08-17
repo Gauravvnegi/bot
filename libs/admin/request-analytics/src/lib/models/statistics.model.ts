@@ -1,7 +1,12 @@
 import { colors as randomColors } from '@hospitality-bot/admin/shared';
 import { convertToTitleCase } from 'libs/admin/shared/src/lib/utils/valueFormatter';
 import { get, set } from 'lodash';
-import { SentimentStatsResponse } from '../types/response.types';
+import {
+  AverageStats,
+  RequestResponse,
+  RequestStat,
+  SentimentStatsResponse,
+} from '../types/response.types';
 
 export class InhouseSource {
   inhouseRequestSourceStats: any;
@@ -74,6 +79,52 @@ export class Sentiment {
 
     this.name = convertToTitleCase(this.label);
 
+    return this;
+  }
+}
+
+export class RequestStats {
+  requestStats: { label: string; value: number; color: string }[];
+  totalCount: number;
+
+  deserialize(input: RequestResponse) {
+    const requestStatKeys = Object.keys(
+      input.requestStats
+    ) as (keyof RequestStat)[];
+
+    const colors = ['#beaeff', '#5f38f9', 'rgb(197, 197, 197)', '#5f38f9'];
+    this.requestStats = requestStatKeys
+      .filter((key) => key !== 'CANCELED')
+      .map((key, index) => {
+        return {
+          label: key === 'TIMEOUT' ? 'Timed-out' : convertToTitleCase(key),
+          value: input.requestStats[key],
+          color: colors[index],
+        };
+      });
+    this.totalCount = input.totalCount;
+    return this;
+  }
+}
+
+export class AverageRequestStats {
+  averageStats: { label: string; value: number; title: string }[];
+
+  deserialize(input: AverageStats) {
+    const statsData = Object.keys(input.averageStats);
+    this.averageStats = statsData
+      .filter((key) => key !== 'timeoutTickets')
+      .map((key) => {
+        return {
+          label:
+            key === 'averageTicketsPerDay'
+              ? 'Average Tickets/Day'
+              : 'Average Time Taken/Tickets',
+          value: input.averageStats[key],
+          title:
+            key === 'averageTicketsPerDay' ? 'AverageTicket' : 'AverageTime',
+        };
+      });
     return this;
   }
 }

@@ -72,41 +72,6 @@ export class DynamicPricingComponent implements OnInit {
     });
   }
 
-  get seasonFG() {
-    return this.fb.group({
-      status: [true],
-      id: [''],
-      type: ['add'], // it should be ModeType -> 'add'|'update'
-      name: [, [Validators.required]],
-      fromDate: [, [Validators.required]],
-      toDate: [, [Validators.required]],
-      configCategory: ['ROOM_TYPE'],
-      roomType: [, [Validators.required]],
-      selectedDays: [, [Validators.required]],
-      roomTypes: this.fb.array(this.getRoomTypesFA()),
-    });
-  }
-  getRoomTypesFA() {
-    return this.allRooms.map((room) =>
-      this.fb.group({
-        isSelected: [true],
-        roomId: [room.value],
-        roomName: [room.label],
-        basePrice: [room.price],
-        occupancy: this.fb.array([this.seasonOccupancyFG]),
-      })
-    );
-  }
-
-  get seasonOccupancyFG(): FormGroup {
-    return this.fb.group({
-      start: [, [Validators.min(0), Validators.required]],
-      end: [, [Validators.min(0), Validators.required]],
-      discount: [, [Validators.min(-100), Validators.required]],
-      rate: [, [Validators.min(0), Validators.required]],
-    });
-  }
-
   getTriggerFG(data?: any): FormGroup {
     const triggerFG = this.fb.group({
       name: [''],
@@ -199,5 +164,9 @@ export class DynamicPricingComponent implements OnInit {
       timeFA: FormArray;
       occupancyFA: FormArray;
     };
+  }
+
+  get dynamicPricingInstance(): DynamicPricingComponent {
+    return this;
   }
 }

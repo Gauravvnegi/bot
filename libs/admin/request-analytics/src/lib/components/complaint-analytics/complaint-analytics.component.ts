@@ -1,15 +1,22 @@
 import { Component, OnInit } from '@angular/core';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
-import { ConfigService } from '@hospitality-bot/admin/shared';
+import {
+  AdminUtilityService,
+  ConfigService,
+} from '@hospitality-bot/admin/shared';
 import {
   ModalService,
   SnackBarService,
 } from '@hospitality-bot/shared/material';
 import { Subscription } from 'rxjs';
-import { StatCard } from '../../types/complaint.type';
 import { MatDialogConfig } from '@angular/material/dialog';
 import { AddItemComponent } from 'libs/admin/request/src/lib/components/add-item/add-item.component';
 import { RaiseRequestComponent } from 'libs/admin/request/src/lib/components/raise-request/raise-request.component';
+import { DateService } from '@hospitality-bot/shared/utils';
+import { AnalyticsService } from '../../services/analytics.service';
+import { AverageStats, DistributionStats } from '../../types/response.types';
+import { AverageRequestStats } from '../../models/statistics.model';
+import { StatCard } from '../../types/complaint.type';
 
 @Component({
   selector: 'complaint-analytics',
@@ -19,38 +26,96 @@ import { RaiseRequestComponent } from 'libs/admin/request/src/lib/components/rai
 export class ComplaintAnalyticsComponent implements OnInit {
   welcomeMessage = 'Welcome To Complaint Analytics';
   navRoutes = [{ label: 'Complaint Analytics', link: './' }];
+
+  selectedInterval: string;
+  globalQueries = [];
+
+  entityId: string;
+
+  agentsOnTicket = 0;
+  availableAgents = 0;
+
   $subscription = new Subscription();
 
   constructor(
     private configService: ConfigService,
     private globalFilterService: GlobalFilterService,
     private snackBarService: SnackBarService,
-    private modalService: ModalService
+    private modalService: ModalService,
+    private dateService: DateService,
+    private analyticsService: AnalyticsService,
+    private adminUtilityService: AdminUtilityService
   ) {}
 
-  statCard = [
-    {
-      label: 'Avg Ticket/Day',
-      score: '50',
-      additionalData: '100',
-      comparisonPercent: 100,
-      color: '#31bb92',
-    },
-    {
-      label: 'Avg Time Taken/Day',
-      score: '10',
-      additionalData: '5 Mins',
-      comparisonPercent: 100,
-      color: '#ef1d45',
-    },
-    {
-      label: 'Agent Distribution',
-      score: '50',
-      color: '#4ba0f5',
-    },
-  ];
+  statCard: StatCard[] = [];
+  agentStats: StatCard;
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.entityId = this.globalFilterService.entityId;
+    this.listenForGlobalFilters();
+    this.getAgentStats();
+  }
+
+  listenForGlobalFilters(): void {
+    this.$subscription.add(
+      this.globalFilterService.globalFilter$.subscribe((data) => {
+        const calenderType = {
+          calenderType: this.dateService.getCalendarType(
+            data['dateRange'].queryValue[0].toDate,
+            data['dateRange'].queryValue[1].fromDate,
+            this.globalFilterService.timezone
+          ),
+        };
+        this.selectedInterval = calenderType.calenderType;
+        this.globalQueries = [
+          ...data['filter'].queryValue,
+          ...data['dateRange'].queryValue,
+          calenderType,
+        ];
+        this.statCard = [];
+        this.getPerDayStats();
+      })
+    );
+  }
+
+  getConfig() {
+    const config = {
+      params: this.adminUtilityService.makeQueryParams([...this.globalQueries]),
+    };
+    return config;
+  }
+
+  getPerDayStats() {
+    this.analyticsService
+      .getPerDayRequestStats(this.getConfig())
+      .subscribe((res: AverageStats) => {
+        const statsData = new AverageRequestStats().deserialize(res);
+        statsData.averageStats.forEach((stat) => {
+          this.statCard.push({
+            title: stat.title,
+            label: stat.label,
+            score: stat.value.toString(),
+            additionalData: stat.value.toString(),
+            comparisonPercent: 100,
+          });
+        });
+      });
+  }
+
+  getAgentStats() {
+    this.analyticsService
+      .getAgentDistributionStats()
+      .subscribe((res: DistributionStats) => {
+        this.agentStats = {
+          label: 'Agents Distrubution',
+          title: 'Agent',
+          score: res.distributionStats.availableUsers.toString(),
+        };
+
+        this.agentsOnTicket = res.distributionStats.occupiedUsers;
+        this.availableAgents = res.distributionStats.availableUsers;
+      });
+  }
 
   createServiceItem() {
     //to open add new item pop up

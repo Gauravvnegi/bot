@@ -14,12 +14,7 @@ import {
   EntitySubType,
   EntityType,
 } from '@hospitality-bot/admin/shared';
-import {
-  OfferList,
-  OfferData,
-  SummaryData,
-  BookingInfo,
-} from '../../models/reservations.model';
+import { OfferData, SummaryData } from '../../models/reservations.model';
 import { ManageReservationService } from '../../services/manage-reservation.service';
 import {
   editModeStatusOptions,
@@ -165,7 +160,9 @@ export class RestaurantReservationComponent extends BaseReservationComponent
     this.inputControls.orderInformation.valueChanges
       .pipe(debounceTime(1000))
       .subscribe((res) => {
-        this.getSummaryData();
+        if (res && res.menuItems[res.menuItems?.length - 1].menuItems?.length) {
+          this.getSummaryData();
+        }
       });
 
     this.formService.reservationDateAndTime.subscribe((res) => {
@@ -236,13 +233,7 @@ export class RestaurantReservationComponent extends BaseReservationComponent
 
         this.menuItemsControls[index].get('amount').setValue(selectedPrice);
         this.menuItemsControls[index].get('unit').setValue(1);
-
-        this.getSummaryData();
       });
-    this.menuItemsControls[index]
-      .get('unit')
-      .valueChanges.pipe(debounceTime(1000))
-      .subscribe((res: number) => this.getSummaryData());
   }
 
   /**

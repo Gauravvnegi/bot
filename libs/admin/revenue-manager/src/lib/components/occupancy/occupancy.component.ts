@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import {
   AbstractControl,
   FormArray,
+  FormBuilder,
   FormGroup,
   Validators,
 } from '@angular/forms';
@@ -50,9 +51,6 @@ export class OccupancyComponent implements OnInit {
       this.listenChanges();
     }
   }
-
-  @Input() season: FormGroup;
-  @Input() occupancy: FormGroup;
   @Input() rooms: RoomTypes[];
   $subscription = new Subscription();
 
@@ -73,7 +71,8 @@ export class OccupancyComponent implements OnInit {
     private globalFilterService: GlobalFilterService,
     private dynamicPricingService: DynamicPricingService,
     private adminUtilityService: AdminUtilityService,
-    private snackbarService: SnackBarService
+    private snackbarService: SnackBarService,
+    private fb: FormBuilder
   ) {}
 
   ngOnInit(): void {
@@ -91,7 +90,13 @@ export class OccupancyComponent implements OnInit {
             res,
             this.rooms
           );
-          handler.mapOccupancy(this);
+          handler.dataList.forEach((item, index) => {
+            this.add('season');
+            const season = this.dynamicPricingControl.occupancyFA.at(
+              index
+            ) as FormGroup;
+            handler.mapOccupancy(season, item);
+          });
         }
       })
     );
@@ -106,22 +111,94 @@ export class OccupancyComponent implements OnInit {
   add(type: ControlTypes, formGroup?: FormGroup) {
     switch (type) {
       case 'season':
-        this.dynamicPricingControl.occupancyFA.push(this.season);
+        this.dynamicPricingControl.occupancyFA.push(this.seasonFG);
         break;
       case 'occupancy':
-        (formGroup?.get('occupancy') as FormArray).push(this.occupancy);
+        (formGroup?.get('occupancy') as FormArray).push(this.seasonOccupancyFG);
         break;
     }
     this.listenChanges();
   }
 
-  remove(type: ControlTypes, index: number, roomType?: FormGroup) {
+  get seasonFG() {
+    return this.fb.group({
+      status: [true],
+      id: [''],
+      type: ['add'], // it should be ModeType -> 'add'|'update'
+      name: [, [Validators.required]],
+      fromDate: [, [Validators.required]],
+      toDate: [, [Validators.required]],
+      configCategory: ['ROOM_TYPE'],
+      roomType: [, [Validators.required]],
+      removedRules: this.fb.array([]),
+      selectedDays: [, [Validators.required]],
+      roomTypes: this.fb.array(this.getRoomTypesFA()),
+    });
+  }
+
+  getRoomTypesFA() {
+    return this.rooms.map((room) =>
+      this.fb.group({
+        isSelected: [true],
+        roomId: [room.value],
+        roomName: [room.label],
+        basePrice: [room.price],
+        occupancy: this.fb.array([this.seasonOccupancyFG]),
+      })
+    );
+  }
+
+  get seasonOccupancyFG(): FormGroup {
+    return this.fb.group({
+      id: [],
+      start: [, [Validators.min(0), Validators.required]],
+      end: [, [Validators.min(0), Validators.required]],
+      discount: [, [Validators.min(-100), Validators.required]],
+      rate: [, [Validators.min(0), Validators.required]],
+    });
+  }
+
+  remove(
+    type: ControlTypes,
+    index: number,
+    season?: FormGroup,
+    roomType?: FormGroup
+  ) {
     switch (type) {
       case 'season':
-        this.dynamicPricingControl.occupancyFA.removeAt(index);
+        this.loading = true;
+        const season = this.dynamicPricingControl.occupancyFA;
+        this.$subscription.add(
+          this.dynamicPricingService
+            .deleteDynamicPricing(
+              this.entityId,
+              season.at(index).get('id').value
+            )
+            .subscribe(
+              (res) => {
+                this.snackbarService.openSnackBarAsText(
+                  `Season deleted Successfully.`,
+                  '',
+                  { panelClass: 'success' }
+                );
+                season.removeAt(index);
+              },
+              (error) => {
+                this.loading = false;
+              },
+              this.handleFinal
+            )
+        );
         break;
       case 'occupancy':
-        (roomType.get('occupancy') as FormArray).removeAt(index);
+        const rule = roomType.get('occupancy') as FormArray;
+        const ruleId = rule.at(index).get('id');
+        if (ruleId.value) {
+          const removedFA = season.get('removedRules') as FormArray;
+          removedFA.controls.push(ruleId.value);
+          removedFA.markAsDirty();
+        }
+        rule.removeAt(index);
         break;
     }
   }
@@ -133,9 +210,20 @@ export class OccupancyComponent implements OnInit {
         const roomTypeFG = seasonFG.get('roomTypes') as FormArray;
         seasonFG.get('roomType').valueChanges.subscribe((res: string[]) => {
           roomTypeFG.controls.forEach((roomType: FormGroup, index) => {
-            roomType.patchValue({
-              isSelected: res.includes(roomType.get('roomId').value),
-            });
+            const hasSelected = res.includes(roomType.get('roomId').value);
+            roomType.patchValue(
+              {
+                isSelected: hasSelected,
+              },
+              { emitEvent: false }
+            );
+
+            //TODO: store in removedRules
+            const selectedOccupancy = hasSelected
+              ? (roomType.get('occupancy') as FormArray).controls.map(
+                  (item) => item.get('id').value
+                )
+              : [];
           });
         });
 
@@ -191,6 +279,13 @@ export class OccupancyComponent implements OnInit {
     );
   }
 
+  selectedRoomIndex(seasonIndex: number): number {
+    const roomId = this.dynamicPricingControl.occupancyFA
+      .at(seasonIndex)
+      .get('roomType').value[0];
+    return this.rooms.findIndex((item) => item.value === roomId);
+  }
+
   handleSave(form: FormGroup) {
     const {
       status,
@@ -204,12 +299,20 @@ export class OccupancyComponent implements OnInit {
       return;
     }
     this.loading = true;
-    const { type } = form.controls;
+    const { id, type } = form.controls;
     const requestedData = DynamicPricingFactory.buildRequest(
       form,
       'OCCUPANCY',
       form.get('type').value
     );
+
+    if (!Object.keys(requestedData).length) {
+      this.snackbarService.openSnackBarAsText(
+        'Please make changes for the new updates.'
+      );
+      return;
+    }
+
     const requestFunction =
       Revenue[type.value] === Revenue['add']
         ? this.dynamicPricingService.createDynamicPricing
@@ -219,11 +322,19 @@ export class OccupancyComponent implements OnInit {
       requestedData,
       this.entityId,
       this.getQueryConfig('OCCUPANCY'),
+      id.value,
     ];
 
     this.$subscription.add(
       request(...requestParams).subscribe(
         (res) => {
+          this.snackbarService.openSnackBarAsText(
+            `Season ${
+              form.get('type').value === 'add' ? 'Created ' : 'Updated '
+            } Successfully.`,
+            '',
+            { panelClass: 'success' }
+          );
           console.log(res);
         },
         (error) => {

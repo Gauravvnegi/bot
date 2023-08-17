@@ -153,7 +153,7 @@ export class BifurcationStatsComponent implements OnInit {
     });
   }
 
-  getConfig(type) {
+  getConfig(type: string) {
     const config = {
       queryObj: this._adminUtilityService.makeQueryParams([
         ...this.globalQueries,

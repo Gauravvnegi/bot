@@ -1,0 +1,32 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.botshot.requestapp",
+      "sha256_cert_fingerprints": [
+        "60:05:B7:5C:6B:C2:B8:1E:87:C9:50:B8:E3:7A:EE:E3:09:31:05:5B:CA:4B:6A:AC:52:3B:5B:50:9F:CD:B5:B1"
+      ]
+    }
+  },
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.botshot.requestapp.dev",
+      "sha256_cert_fingerprints": [
+        "60:05:B7:5C:6B:C2:B8:1E:87:C9:50:B8:E3:7A:EE:E3:09:31:05:5B:CA:4B:6A:AC:52:3B:5B:50:9F:CD:B5:B1"
+      ]
+    }
+  },
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.botshot.requestapp.stage",
+      "sha256_cert_fingerprints": [
+        "60:05:B7:5C:6B:C2:B8:1E:87:C9:50:B8:E3:7A:EE:E3:09:31:05:5B:CA:4B:6A:AC:52:3B:5B:50:9F:CD:B5:B1"
+      ]
+    }
+  }
+]

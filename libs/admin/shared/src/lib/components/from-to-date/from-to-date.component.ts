@@ -12,6 +12,7 @@ export class FromToDateComponent implements OnInit {
   startMaxDate: Date;
   endMaxDate: Date;
   @Input() parentFG: FormGroup;
+  @Input() className: string;
 
   ngOnInit() {
     this.parentFG.get('fromDate')?.valueChanges.subscribe((res) => {

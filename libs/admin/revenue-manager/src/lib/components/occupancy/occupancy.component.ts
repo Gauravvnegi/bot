@@ -20,6 +20,7 @@ import { DynamicPricingService } from '../../services/dynamic-pricing.service';
 import { Subscription } from 'rxjs';
 import {
   AdminUtilityService,
+  Option,
   QueryConfig,
 } from '@hospitality-bot/admin/shared';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
@@ -35,6 +36,10 @@ export type ControlTypes = 'season' | 'occupancy';
 })
 export class OccupancyComponent implements OnInit {
   readonly weeks = weeks;
+  configCategory: Option[] = [
+    { label: 'Room Type', value: 'ROOM_TYPE' },
+    { label: 'Hotel Type', value: 'HOTEL' },
+  ];
   entityId = '';
 
   loading = false;
@@ -124,7 +129,7 @@ export class OccupancyComponent implements OnInit {
       name: [, [Validators.required]],
       fromDate: [, [Validators.required]],
       toDate: [, [Validators.required]],
-      configCategory: ['ROOM_TYPE'],
+      configCategory: ['ROOM_TYPE', [Validators.required]],
       roomType: [, [Validators.required]],
       removedRules: this.fb.array([]),
       selectedDays: [, [Validators.required]],
@@ -202,6 +207,7 @@ export class OccupancyComponent implements OnInit {
   listenChanges() {
     this.dynamicPricingControl?.occupancyFA.controls.forEach(
       (seasonFG: FormGroup) => {
+        seasonFG.patchValue({ configCategory: 'ROOM_TYPE' });
         //roomType change listening
         const roomTypeFA = seasonFG.get('roomTypes') as FormArray;
         seasonFG.get('roomType').valueChanges.subscribe((res: string[]) => {

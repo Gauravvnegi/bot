@@ -123,9 +123,9 @@ export class CreateOfferComponent implements OnInit {
                 }`,
         });
 
-      if (type === 'NUMBER' && discount > price) {
-        return 'isNumError';
-      }
+      // if (type === 'NUMBER' && discount > price) {
+      //   return 'isNumError';
+      // }
 
       if (type === 'PERCENTAGE' && discount > 100) {
         return 'isPercentError';

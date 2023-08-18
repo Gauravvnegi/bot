@@ -39,3 +39,12 @@ export type Bar = {
   hoverBackgroundColor?: string[];
 };
 
+export type StatCard = {
+  label: string;
+  key?: string;
+  score?: string | number;
+  additionalData?: string | number;
+  comparisonPercent?: number;
+  color?: string;
+  tooltip?: string;
+};

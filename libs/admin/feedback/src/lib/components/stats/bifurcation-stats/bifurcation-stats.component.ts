@@ -5,6 +5,7 @@ import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
   AdminUtilityService,
   CircularChart,
+  StatCard,
 } from '@hospitality-bot/admin/shared';
 import {
   SnackBarService,
@@ -15,7 +16,6 @@ import { TranslateService } from '@ngx-translate/core';
 import { feedback } from '../../../constants/feedback';
 import { StatisticsService } from '../../../services/feedback-statistics.service';
 import { Subscription, forkJoin } from 'rxjs';
-import { StatCard } from '../../../types/feedback.type';
 import { chartConfig } from '../../../constants/chart';
 
 @Component({

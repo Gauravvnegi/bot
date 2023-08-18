@@ -37,7 +37,6 @@ export class AssetDatatableComponent extends BaseDatatableComponent
   isAutoLayout = false;
   isAllTabFilterRequired = true;
   triggerInitialData = false;
-  rowsPerPage = 5;
   globalQueries = [];
   $subscription = new Subscription();
   entityId: any;

@@ -206,7 +206,7 @@ export class ReservationFormData {
     this.guestInformation = new GuestInfo().deserialize(input.guest);
     // this.paymentMethod = new PaymentInfo().deserialize(input);
     this.offerId = input?.id;
-    this.nextStates = [input?.reservationType, ...input?.nextStates];
+    this.nextStates = [input.reservationType, ...input.nextStates];
 
     this.roomInformation = input?.bookingItems.map((item: BookingItems) => ({
       adultCount: item.occupancyDetails.maxAdult,

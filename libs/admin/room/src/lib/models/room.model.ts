@@ -65,7 +65,7 @@ export class SingleRoom {
     // this.currentStatusTo = input?.currentStatusTo;
     // this.currentStatusFrom = input?.currentStatusFrom;
     if (input.statusDetails)
-      this.statusDetailsList = input?.statusDetails.map((item) => ({
+      this.statusDetailsList = input.statusDetails.map((item) => ({
         toDate: item.toDate,
         fromDate: item.fromDate,
         isCurrentStatus: item.isCurrentStatus,

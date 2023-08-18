@@ -15,13 +15,13 @@
     >
     <div
       *skeleton="
-        title == undefined;
+        key == undefined;
         borderRadius: '50%';
         height: '50px';
         width: '50px'
       "
     >
-      <img class="icons" [src]="getImageUrl(title)" alt="" />
+      <img class="icons" [src]="getImageUrl(key)" alt="" />
     </div>
   </div>
   <div

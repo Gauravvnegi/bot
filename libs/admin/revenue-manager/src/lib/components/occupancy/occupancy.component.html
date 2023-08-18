@@ -76,11 +76,21 @@
                 </hospitality-bot-room-types>
               </div>
               <div class="right form-block">
-                <hospitality-bot-from-to-date
-                  [parentFG]="season"
-                ></hospitality-bot-from-to-date>
+                <div class="top form-block no-padding">
+                  <hospitality-bot-from-to-date
+                    [parentFG]="season"
+                    class="half-width"
+                  ></hospitality-bot-from-to-date>
+
+                  <hospitality-bot-select
+                    class="half-width"
+                    [controlName]="'configCategory'"
+                    label="Configuration"
+                    [options]="configCategory"
+                  ></hospitality-bot-select>
+                </div>
                 <hospitality-bot-checkbox-selector
-                  class="weekdays__selector full-width"
+                  class="bottom weekdays__selector full-width"
                   label="Days"
                   controlName="selectedDays"
                   [options]="weeks"
@@ -196,8 +206,8 @@
                                     remove(
                                       'occupancy',
                                       occupancyIndex,
-                                      season,
-                                      room
+                                      room,
+                                      season
                                     )
                                 "
                               ></i>

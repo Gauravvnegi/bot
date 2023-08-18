@@ -3,6 +3,7 @@ import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
   AdminUtilityService,
   ConfigService,
+  StatCard,
 } from '@hospitality-bot/admin/shared';
 import {
   ModalService,
@@ -16,7 +17,6 @@ import { DateService } from '@hospitality-bot/shared/utils';
 import { AnalyticsService } from '../../services/analytics.service';
 import { AverageStats, DistributionStats } from '../../types/response.types';
 import { AverageRequestStats } from '../../models/statistics.model';
-import { StatCard } from '../../types/complaint.type';
 
 @Component({
   selector: 'complaint-analytics',
@@ -34,6 +34,9 @@ export class ComplaintAnalyticsComponent implements OnInit {
 
   agentsOnTicket = 0;
   availableAgents = 0;
+
+  createdPerDay = 0;
+  closedPerDay = 0;
 
   $subscription = new Subscription();
 
@@ -90,12 +93,14 @@ export class ComplaintAnalyticsComponent implements OnInit {
       .getPerDayRequestStats(this.getConfig())
       .subscribe((res: AverageStats) => {
         const statsData = new AverageRequestStats().deserialize(res);
+        this.createdPerDay = statsData.createdTickets;
+        this.closedPerDay = statsData.resolvedTickets;
         statsData.averageStats.forEach((stat) => {
           this.statCard.push({
-            title: stat.title,
+            key: stat.key,
             label: stat.label,
-            score: stat.value.toString(),
-            additionalData: stat.value.toString(),
+            score: stat.value,
+            additionalData: stat.value,
             comparisonPercent: 100,
           });
         });
@@ -108,7 +113,7 @@ export class ComplaintAnalyticsComponent implements OnInit {
       .subscribe((res: DistributionStats) => {
         this.agentStats = {
           label: 'Agents Distrubution',
-          title: 'Agent',
+          key: 'Agent',
           score: res.distributionStats.availableUsers.toString(),
         };
 

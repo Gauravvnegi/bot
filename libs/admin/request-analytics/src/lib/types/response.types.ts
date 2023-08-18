@@ -41,7 +41,7 @@ export type RequestStat = {
   RESOLVED: number;
   IN_PROGRESS: number;
   TIMEOUT?: number;
-  CANCELED?: number;
+  CANCELLED?: number;
 };
 
 export type AverageStats = {

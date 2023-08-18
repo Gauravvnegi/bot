@@ -45,14 +45,6 @@ export type Chip = {
   type: string;
 };
 
-export type StatCard = {
-  label: string;
-  score: string | number;
-  additionalData: string | number;
-  comparisonPercent: number;
-  color?: string;
-};
-
 export type FeedbackStatusType =
   | 'HIGHPOTENTIAL'
   | 'HIGHRISK'

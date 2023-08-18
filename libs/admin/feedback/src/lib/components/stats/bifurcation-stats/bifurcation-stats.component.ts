@@ -5,6 +5,7 @@ import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
   AdminUtilityService,
   CircularChart,
+  StatCard,
 } from '@hospitality-bot/admin/shared';
 import {
   SnackBarService,
@@ -15,7 +16,6 @@ import { TranslateService } from '@ngx-translate/core';
 import { feedback } from '../../../constants/feedback';
 import { StatisticsService } from '../../../services/feedback-statistics.service';
 import { Subscription, forkJoin } from 'rxjs';
-import { StatCard } from '../../../types/feedback.type';
 import { chartConfig } from '../../../constants/chart';
 
 @Component({
@@ -180,6 +180,7 @@ export class BifurcationStatsComponent implements OnInit {
     this.$subscription.add(
       forkJoin([gtmStats$, allStats$, othersResponse$]).subscribe(
         ([gtmResponse, allResponse, othersResponse]) => {
+          debugger;
           // Process GTM stats
           this.getGTMStats(gtmResponse);
           // Process all stats
@@ -201,6 +202,7 @@ export class BifurcationStatsComponent implements OnInit {
    * @function getStats To get received feedback bifurcation data.
    */
   getGTMStats(response): void {
+    debugger;
     this.statCard = [];
     this.gtmCount = 0;
     this.stats = new Bifurcation().deserialize(response);

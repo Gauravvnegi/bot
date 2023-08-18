@@ -3,6 +3,7 @@ import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
   AdminUtilityService,
   ConfigService,
+  StatCard,
 } from '@hospitality-bot/admin/shared';
 import {
   ModalService,
@@ -16,7 +17,6 @@ import { DateService } from '@hospitality-bot/shared/utils';
 import { AnalyticsService } from '../../services/analytics.service';
 import { AverageStats, DistributionStats } from '../../types/response.types';
 import { AverageRequestStats } from '../../models/statistics.model';
-import { StatCard } from '../../types/complaint.type';
 
 @Component({
   selector: 'complaint-analytics',
@@ -92,7 +92,7 @@ export class ComplaintAnalyticsComponent implements OnInit {
         const statsData = new AverageRequestStats().deserialize(res);
         statsData.averageStats.forEach((stat) => {
           this.statCard.push({
-            title: stat.title,
+            key: stat.key,
             label: stat.label,
             score: stat.value.toString(),
             additionalData: stat.value.toString(),
@@ -108,7 +108,7 @@ export class ComplaintAnalyticsComponent implements OnInit {
       .subscribe((res: DistributionStats) => {
         this.agentStats = {
           label: 'Agents Distrubution',
-          title: 'Agent',
+          key: 'Agent',
           score: res.distributionStats.availableUsers.toString(),
         };
 

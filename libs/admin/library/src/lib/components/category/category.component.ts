@@ -126,6 +126,10 @@ export class CategoryComponent implements OnInit {
         })
         .subscribe(
           (res) => {
+            this.categories.push({
+              label: res?.name,
+              value: res?.id,
+            });
             this.inputControl.setValue(res.id);
           },
           () => {

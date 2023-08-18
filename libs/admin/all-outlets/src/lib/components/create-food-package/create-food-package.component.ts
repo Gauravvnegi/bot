@@ -6,12 +6,12 @@ import { SnackBarService } from '@hospitality-bot/shared/material';
 import { Subscription } from 'rxjs';
 import { errorMessages } from '../../constants/form';
 import { OutletService } from '../../services/outlet.service';
-import { FoodPackageForm } from '../../types/outlet';
 import { OutletBaseComponent } from '../outlet-base.components';
 import { TaxService } from 'libs/admin/tax/src/lib/services/tax.service';
 import { IteratorField } from 'libs/admin/shared/src/lib/types/fields.type';
 import { foodPackageFields } from '../../constants/data';
 import { PageReloadService } from '../../services/page-reload.service.service';
+import { CategoryData, LibraryService } from '@hospitality-bot/admin/library';
 
 @Component({
   selector: 'hospitality-bot-create-food-package',
@@ -29,21 +29,17 @@ export class CreateFoodPackageComponent extends OutletBaseComponent
   navRoutes: NavRouteOptions;
   packageCode: string = '# will be auto generated';
   $subscription = new Subscription();
+
   loading: boolean = false;
+
   taxes: Option[] = [];
   isPackageCreated = false;
 
-  types: Option[] = [
-    { label: 'Veg', value: 'VEG' },
-    { label: 'Non-veg', value: 'NONVEG' },
-    { label: 'Drinks', value: 'DRINKS' },
-    { label: 'Desserts', value: 'DESSERTS' },
-  ];
-  foodCategories: Option[] = [
-    { label: 'Category 1', value: 'CATEGORY1' },
-    { label: 'Category 2', value: 'CATEGORY2' },
-    { label: 'Category 3', value: 'CATEGORY3' },
-  ];
+  loadingTypes: boolean = false;
+  type: CategoryData['type'] = 'FOOD_PACKAGE_CATEGORY';
+  typeOffSet = 0;
+  types: Option[] = [];
+  noMoreTypes = false;
 
   constructor(
     private fb: FormBuilder,
@@ -52,7 +48,8 @@ export class CreateFoodPackageComponent extends OutletBaseComponent
     router: Router,
     private taxService: TaxService,
     private outletService: OutletService,
-    private pageReloadService: PageReloadService
+    private pageReloadService: PageReloadService,
+    private libraryService: LibraryService
   ) {
     super(router, route);
   }
@@ -84,6 +81,8 @@ export class CreateFoodPackageComponent extends OutletBaseComponent
       foodItems: this.foodItemsArray,
       source: [1],
     });
+
+    this.getPackageTypes();
 
     if (this.foodPackageId) {
       this.$subscription.add(
@@ -142,6 +141,90 @@ export class CreateFoodPackageComponent extends OutletBaseComponent
           }, this.handleErrors)
       );
     }
+  }
+
+  getPackageTypes() {
+    this.loadingTypes = true;
+    this.$subscription.add(
+      this.libraryService
+        .getCategories(this.outletId, {
+          params: `?type=${this.type}&offset=${this.typeOffSet}&limit=10&status=true`,
+        })
+        .subscribe(
+          (res) => {
+            const data = res.records.map((type) => ({
+              label: type.name,
+              value: type.id,
+            }));
+            this.types = [...this.types, ...data];
+            this.noMoreTypes = data.length < 10;
+            this.loadingTypes = false;
+          },
+          (err) => {
+            this.loadingTypes = false;
+          }
+        )
+    );
+  }
+
+  loadMoreTypes() {
+    this.typeOffSet = this.typeOffSet + 10;
+    this.getPackageTypes();
+  }
+
+  searchTypes(text: string) {
+    if (text) {
+      this.loadingTypes = true;
+      this.libraryService
+        .searchLibraryItem(this.outletId, {
+          params: `key=${text}&type=${this.type}`,
+        })
+        .subscribe((res) => {
+          this.loadingTypes = false;
+          const data = res && res[this.type];
+          this.types =
+            data?.map((item) => ({
+              label: item.name,
+              value: item.id,
+            })) ?? [];
+        });
+    } else {
+      this.typeOffSet = 0;
+      this.types = [];
+      this.getPackageTypes();
+    }
+  }
+
+  create(event) {
+    this.$subscription.add(
+      this.libraryService
+        .createCategory(this.outletId, {
+          name: event,
+          source: 1,
+          imageUrl: '',
+          active: true,
+          type: this.type,
+        })
+        .subscribe(
+          (res) => {
+            this.types.push({
+              label: res?.name,
+              value: res?.id,
+            });
+            this.useForm.get('type').setValue(res.id);
+          },
+          () => {
+            this.snackbarService.openSnackBarAsText(
+              'Type created successfully',
+              '',
+              { panelClass: 'success' }
+            );
+            this.typeOffSet = 0;
+            this.types = [];
+            this.getPackageTypes();
+          }
+        )
+    );
   }
 
   /**

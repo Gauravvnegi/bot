@@ -30,10 +30,15 @@
         controlName="type"
         [options]="types"
         [props]="{
+          isAsync: true,
           placeholder: 'Select Type',
-          createPrompt: 'Add New Type',
+          createPrompt: '+ Add New Type',
           inputPrompt: 'Enter Type'
         }"
+        [loading]="loadingTypes"
+        (paginate)="(loadMoreTypes)"
+        (onSearch)="searchTypes($event)"
+        [stopEmission]="noMoreTypes"
         (onCreate)="createType($event)"
       ></hospitality-bot-select>
       <hospitality-bot-discount-form

@@ -42,7 +42,7 @@ export type Bar = {
 export type StatCard = {
   label: string;
   key?: string;
-  score: string | number;
+  score?: string | number;
   additionalData?: string | number;
   comparisonPercent?: number;
   color?: string;

@@ -46,9 +46,10 @@ export type RequestStat = {
 
 export type AverageStats = {
   averageStats: {
-    averageTicketsPerDay: number;
-    averageTimePerTicket: number;
-    timeoutTickets: number;
+    averageCreatedJobs: number;
+    averagetTimePerJob: number;
+    averageResolvedJobs: number;
+    timeoutJobs: number;
   };
 };
 

@@ -180,7 +180,6 @@ export class BifurcationStatsComponent implements OnInit {
     this.$subscription.add(
       forkJoin([gtmStats$, allStats$, othersResponse$]).subscribe(
         ([gtmResponse, allResponse, othersResponse]) => {
-          debugger;
           // Process GTM stats
           this.getGTMStats(gtmResponse);
           // Process all stats
@@ -202,7 +201,6 @@ export class BifurcationStatsComponent implements OnInit {
    * @function getStats To get received feedback bifurcation data.
    */
   getGTMStats(response): void {
-    debugger;
     this.statCard = [];
     this.gtmCount = 0;
     this.stats = new Bifurcation().deserialize(response);

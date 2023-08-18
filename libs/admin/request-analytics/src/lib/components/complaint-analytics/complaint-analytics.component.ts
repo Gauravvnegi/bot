@@ -35,6 +35,9 @@ export class ComplaintAnalyticsComponent implements OnInit {
   agentsOnTicket = 0;
   availableAgents = 0;
 
+  createdPerDay = 0;
+  closedPerDay = 0;
+
   $subscription = new Subscription();
 
   constructor(
@@ -90,12 +93,14 @@ export class ComplaintAnalyticsComponent implements OnInit {
       .getPerDayRequestStats(this.getConfig())
       .subscribe((res: AverageStats) => {
         const statsData = new AverageRequestStats().deserialize(res);
+        this.createdPerDay = statsData.createdTickets;
+        this.closedPerDay = statsData.resolvedTickets;
         statsData.averageStats.forEach((stat) => {
           this.statCard.push({
             key: stat.key,
             label: stat.label,
-            score: stat.value.toString(),
-            additionalData: stat.value.toString(),
+            score: stat.value,
+            additionalData: stat.value,
             comparisonPercent: 100,
           });
         });

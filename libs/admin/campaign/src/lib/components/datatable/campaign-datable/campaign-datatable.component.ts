@@ -38,7 +38,6 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
   isCustomSort = true;
   isAllTabFilterRequired = true;
   triggerInitialData = false;
-  rowsPerPage = campaignConfig.rowsPerPage.rows;
   cols = campaignConfig.datatable.cols;
   globalQueries = [];
   $subscription = new Subscription();

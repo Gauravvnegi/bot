@@ -193,7 +193,7 @@ export class BaseDatatableComponent implements OnInit {
   }
 
   resetTableValues() {
-    this.rowsPerPage = 5;
+    this.rowsPerPage = 50;
     this.first = 0;
     this.values = [];
     this.tabFilterItems = [];

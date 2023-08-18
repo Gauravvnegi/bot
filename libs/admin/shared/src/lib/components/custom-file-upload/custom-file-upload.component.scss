@@ -133,4 +133,8 @@
 .disable {
   color: lightgray;
   pointer-events: none;
+
+  label {
+    color: lightgray;
+  }
 }

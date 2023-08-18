@@ -100,7 +100,7 @@ export class RequestListComponent implements OnInit, OnDestroy {
             ...this.filterData,
             order: 'DESC',
             journeyType: this.entityType,
-            entityType: this.tabFilterItems[this.tabFilterIdx]?.value,
+            actionType: this.tabFilterItems[this.tabFilterIdx]?.value,
             offset: 0,
             limit:
               this.listData && this.listData.length > 10
@@ -147,7 +147,7 @@ export class RequestListComponent implements OnInit, OnDestroy {
 
           setTimeout(() => {
             this.loadData(0, this.listData?.length || 10);
-          }, 1000);
+          }, 1500);
         }
       })
     );

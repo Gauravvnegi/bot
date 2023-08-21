@@ -29,10 +29,7 @@ export class Entity {
   parentId: string;
   url: string;
   minimumOccupancy?: number;
-  dayOfOperationStart?: string;
-  dayOfOperationEnd?: string;
-  timeDayStart?: string;
-  timeDayEnd?: string;
+  operationalDays;
   area?: string;
   dimension?: string;
   type?: string;
@@ -58,10 +55,7 @@ export class Entity {
     this.parentId = input?.parentId;
     this.url = input?.absoluteRoute;
     this.minimumOccupancy = input?.minimumOccupancy;
-    this.dayOfOperationStart = input?.dayOfOperationStart;
-    this.dayOfOperationEnd = input?.dayOfOperationEnd;
-    this.timeDayStart = input?.timeDayStart;
-    this.timeDayEnd = input?.timeDayEnd;
+    this.operationalDays = input?.operationalDays;
     this.area = input?.area;
     this.dimension = input?.dimension;
     this.type = input?.type;

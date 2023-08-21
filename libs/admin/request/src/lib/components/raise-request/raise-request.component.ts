@@ -72,6 +72,7 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
     this.listenForItemChanges();
     this.listenForDepartmentChanges();
     this.getUserList();
+    this.listenForAddItemChanges();
   }
 
   /**
@@ -136,6 +137,12 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
             }));
         })
     );
+  }
+
+  listenForAddItemChanges() {
+    this._requestService.refreshItemList.subscribe((res) => {
+      if (res) this.initItemList();
+    });
   }
 
   listenForItemChanges(): void {

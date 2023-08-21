@@ -211,15 +211,15 @@ export class DepartmentList {
     input.forEach((user) => {
       user.departments.forEach((department) => {
         const existingDepartment = this.departmentWithUsers.find(
-          (d) => d.value === department.module
+          (d) => d.value === department.department
         );
 
         if (existingDepartment) {
           existingDepartment.users.push(user.userId);
         } else {
           this.departmentWithUsers.push({
-            label: convertToTitleCase(department.module),
-            value: department.module,
+            label: convertToTitleCase(department.department),
+            value: department.department,
             users: [user.userId],
           });
         }

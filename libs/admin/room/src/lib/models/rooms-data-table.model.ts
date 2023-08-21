@@ -99,6 +99,7 @@ export class RoomType {
   status: boolean;
   price: number;
   currency: string;
+  isBase: boolean;
   nextStates: string[];
   ratePlans?: RatePlanRes[];
 
@@ -120,6 +121,7 @@ export class RoomType {
       input.pricingDetails?.base;
     this.currency = input.currency ?? '';
     this.ratePlans = input.ratePlans;
+    this.isBase = input.isBase ?? true; // TODO: need to add from BE
     return this;
   }
 }

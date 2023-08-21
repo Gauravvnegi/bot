@@ -11,6 +11,7 @@ import {
   DynamicPricingResponse,
   ConfigCategory,
   RoomsConfigType,
+  OccupancyRuleType,
 } from '../types/dynamic-pricing.types';
 import { RoomTypes } from '../types/bar-price.types';
 import { OccupancyComponent } from '../components/occupancy/occupancy.component';
@@ -176,37 +177,32 @@ export class DynamicPricingHandler {
       configCategory: item.configCategory,
       selectedDays: item.selectedDays,
       status: item.status,
-      roomType: item.roomType,
     });
 
-    //filtering rooms who has at least one rule
-    const roomTypesControl = season.get('roomTypes') as FormArray;
-    const roomTypesControlList = roomTypesControl.controls.filter(
-      (control: FormGroup) =>
-        item.roomType.includes(control.get('roomId').value)
-    );
+    if (item.configCategory == 'HOTEL') {
+      season.patchValue({
+        configCategory: 'HOTEL',
+        basePrice: item?.basePrice,
+      });
 
-    roomTypesControlList.forEach((roomControl: FormGroup, index) => {
-      roomControl.removeControl('occupancy');
-      roomControl.addControl(
-        'occupancy',
+      season.get('roomType').disable();
+      season.removeControl('hotelConfig');
+      season.addControl(
+        'hotelConfig',
         instance.fb.array(
           Array.from(
-            { length: item.roomTypes[index].occupancy.length },
+            { length: item.hotelConfig.length },
             () => instance.seasonOccupancyFG
           )
         )
       );
-      //subscribing new occupancy rules
       instance.listenChanges();
 
-      //patching all values of rules
-      const { occupancy } = roomControl.controls;
-      (occupancy as FormArray).controls.forEach(
-        (occupancyControl: FormGroup, occupancyIndex) => {
-          const rule = item.roomTypes[index]?.occupancy[occupancyIndex];
+      (season.get('hotelConfig') as FormArray).controls.forEach(
+        (hotelOccupancy: FormGroup, index) => {
+          const rule = item.hotelConfig[index];
           rule &&
-            occupancyControl.patchValue({
+            hotelOccupancy.patchValue({
               id: rule.id,
               start: rule.start,
               end: rule.end,
@@ -214,7 +210,48 @@ export class DynamicPricingHandler {
             });
         }
       );
-    });
+    } else {
+      //filtering rooms who has at least one rule
+      season.patchValue({
+        configCategory: 'ROOM_TYPE',
+        roomType: item.roomType,
+      });
+      const roomTypesControl = season.get('roomTypes') as FormArray;
+      const roomTypesControlList = roomTypesControl.controls.filter(
+        (control: FormGroup) =>
+          item.roomType.includes(control.get('roomId').value)
+      );
+
+      roomTypesControlList.forEach((roomControl: FormGroup, index) => {
+        roomControl.removeControl('occupancy');
+        roomControl.addControl(
+          'occupancy',
+          instance.fb.array(
+            Array.from(
+              { length: item.roomTypes[index].occupancy.length },
+              () => instance.seasonOccupancyFG
+            )
+          )
+        );
+        //subscribing new occupancy rules
+        instance.listenChanges();
+
+        //patching all values of rules
+        const { occupancy } = roomControl.controls;
+        (occupancy as FormArray).controls.forEach(
+          (occupancyControl: FormGroup, occupancyIndex) => {
+            const rule = item.roomTypes[index]?.occupancy[occupancyIndex];
+            rule &&
+              occupancyControl.patchValue({
+                id: rule.id,
+                start: rule.start,
+                end: rule.end,
+                discount: rule.discount,
+              });
+          }
+        );
+      });
+    }
   }
 }
 
@@ -226,6 +263,8 @@ export class DynamicPricingForm {
   fromDate: number;
   toDate: number;
   configCategory: ConfigCategory;
+  hotelConfig: OccupancyRuleType[];
+  basePrice?: number;
   roomType: string[];
   selectedDays: string[];
   roomTypes: RoomsConfigType[];
@@ -236,25 +275,44 @@ export class DynamicPricingForm {
     this.name = input.name;
     this.fromDate = input.fromDate;
     this.toDate = input.toDate;
-    this.configCategory = input.configCategory;
     this.selectedDays = input.daysIncluded;
-    this.roomType = input.configItems.map((item) => item.id);
-    this.roomTypes = input.configItems.map((room, index) => {
-      const currentRoom = rooms.find((item) => item.value == room.id);
-      let roomConfig: RoomsConfigType = {
-        isSelected: false,
-        roomId: room.id,
-        basePrice: currentRoom?.price,
-        roomName: currentRoom?.label,
-        occupancy: room.configRules.map((rule) => ({
+
+    const getRules = (configRules) => {
+      return (
+        configRules.map((rule) => ({
           id: rule?.id,
           start: rule.occupancyStart,
           end: rule.occupancyEnd,
           discount: rule.discountOrMarkup.value,
-        })),
-      };
-      return roomConfig;
-    });
+        })) ?? []
+      );
+    };
+
+    if (input.configItems.some((item) => item.type === 'ROOM_TYPE')) {
+      this.hotelConfig = [];
+      this.roomType = input.configItems.map((item) => item.id);
+      this.roomTypes = input.configItems.map((room, index) => {
+        this.configCategory = room.type;
+        const currentRoom = rooms.find((item) => item.value == room.id);
+        let roomConfig: RoomsConfigType = {
+          isSelected: false,
+          roomId: room.id,
+          basePrice: currentRoom?.price,
+          roomName: currentRoom?.label,
+          occupancy: getRules(room.configRules),
+        };
+        return roomConfig;
+      });
+    } else {
+      this.roomType = [];
+      this.roomTypes = [];
+      this.basePrice = rooms.find((item) => item.isBase).price;
+      this.hotelConfig = input.configItems.reduce((acc, curr) => {
+        this.configCategory = curr.type;
+        return getRules(curr.configRules);
+      }, []);
+    }
+
     return this;
   }
 }

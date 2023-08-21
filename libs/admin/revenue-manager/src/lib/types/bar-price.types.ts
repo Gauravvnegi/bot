@@ -10,6 +10,7 @@ export type RoomTypes = {
   channels: Channel[];
   price: number;
   roomCount: number;
+  isBase: boolean;
   ratePlans: {
     type: string;
     label: string;

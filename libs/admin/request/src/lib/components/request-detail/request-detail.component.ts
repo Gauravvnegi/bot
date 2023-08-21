@@ -35,6 +35,7 @@ export class RequestDetailComponent implements OnInit, OnDestroy {
   @Output() guestInfo = new EventEmitter();
   @Input() guestInfoEnable;
   closedTimestamp: number;
+  formattedClosedTimestamp: string;
 
   requestFG: FormGroup;
   constructor(
@@ -75,6 +76,7 @@ export class RequestDetailComponent implements OnInit, OnDestroy {
             this.closedTimestamp = response?.closedTime;
             this.getAssigneeList(response.itemId);
             this.status = true;
+            this.formattedDate();
           } else {
             this.data = new InhouseData();
             this.status = false;
@@ -184,6 +186,8 @@ export class RequestDetailComponent implements OnInit, OnDestroy {
               '',
               { panelClass: 'success' }
             );
+            this.data.action = event.value;
+            this.formattedDate();
 
             this._requestService.refreshData.next(true);
           },
@@ -194,11 +198,11 @@ export class RequestDetailComponent implements OnInit, OnDestroy {
     );
   }
 
-  formattedDate(): string {
+  formattedDate() {
     const dateObject: Date = this.closedTimestamp
       ? new Date(this.closedTimestamp)
       : new Date();
-    return this.datePipe.transform(
+    this.formattedClosedTimestamp = this.datePipe.transform(
       dateObject,
       "EEEE, MMMM d, y, 'at' HH:mm:ss",
       'UTC'

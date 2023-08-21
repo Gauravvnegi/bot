@@ -177,12 +177,12 @@ export class DynamicPricingHandler {
       configCategory: item.configCategory,
       selectedDays: item.selectedDays,
       status: item.status,
+      basePrice: item.basePrice,
     });
 
     if (item.configCategory == 'HOTEL') {
       season.patchValue({
         configCategory: 'HOTEL',
-        basePrice: item?.basePrice,
       });
 
       season.get('roomType').disable();
@@ -264,7 +264,7 @@ export class DynamicPricingForm {
   toDate: number;
   configCategory: ConfigCategory;
   hotelConfig: OccupancyRuleType[];
-  basePrice?: number;
+  basePrice: number;
   roomType: string[];
   selectedDays: string[];
   roomTypes: RoomsConfigType[];
@@ -276,6 +276,7 @@ export class DynamicPricingForm {
     this.fromDate = input.fromDate;
     this.toDate = input.toDate;
     this.selectedDays = input.daysIncluded;
+    this.basePrice = rooms.find((item) => item.isBase).price;
 
     const getRules = (configRules) => {
       return (
@@ -306,7 +307,6 @@ export class DynamicPricingForm {
     } else {
       this.roomType = [];
       this.roomTypes = [];
-      this.basePrice = rooms.find((item) => item.isBase).price;
       this.hotelConfig = input.configItems.reduce((acc, curr) => {
         this.configCategory = curr.type;
         return getRules(curr.configRules);

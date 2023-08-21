@@ -172,6 +172,12 @@ export class OccupancyComponent implements OnInit {
     form?: FormGroup,
     seasonFG?: FormGroup
   ) {
+    const saveRule = (formGroup: FormGroup, ruleId) => {
+      const removedFA = formGroup.get('removedRules') as FormArray;
+      removedFA.controls.push(ruleId);
+      removedFA.markAsDirty();
+    };
+
     switch (type) {
       case 'season':
         this.loading = true;
@@ -200,16 +206,19 @@ export class OccupancyComponent implements OnInit {
         break;
       case 'occupancy':
         const rule = form.get('occupancy') as FormArray;
-        const ruleId = rule.at(index)?.get('id');
+        var ruleId = rule.at(index)?.get('id');
         if (ruleId?.value) {
-          const removedFA = seasonFG?.get('removedRules') as FormArray;
-          removedFA.controls.push(ruleId.value);
-          removedFA.markAsDirty();
+          saveRule(seasonFG, ruleId.value);
         }
         rule.removeAt(index);
         break;
       case 'hotel-occupancy':
-        (form.get('hotelConfig') as FormArray).removeAt(index);
+        const control = form.get('hotelConfig') as FormArray;
+        var ruleId = control.at(index)?.get('id');
+        if (ruleId?.value) {
+          saveRule(form, ruleId.value);
+        }
+        control.removeAt(index);
         break;
     }
   }
@@ -258,21 +267,19 @@ export class OccupancyComponent implements OnInit {
           });
         };
 
-        if (configCategoryFG.value == 'HOTEL') {
-          configCategoryFG.valueChanges.subscribe((res: ConfigCategory) => {
-            if (res) {
-              res == 'HOTEL'
-                ? roomTypeControl.disable()
-                : roomTypeControl.enable();
-            }
-          });
-
-          (seasonFG.get('hotelConfig') as FormArray).controls.forEach(
-            (rule: FormGroup) => {
-              ruleSubscription(rule, +seasonFG.get('basePrice').value);
-            }
-          );
-        } else {
+        configCategoryFG.valueChanges.subscribe((res: ConfigCategory) => {
+          if (res) {
+            res == 'HOTEL'
+              ? roomTypeControl.disable()
+              : roomTypeControl.enable();
+          }
+        });
+        (seasonFG.get('hotelConfig') as FormArray).controls.forEach(
+          (rule: FormGroup) => {
+            ruleSubscription(rule, +seasonFG.get('basePrice').value);
+          }
+        );
+        if (configCategoryFG.value == 'ROOM_TYPE') {
           //roomType change listening
           const roomTypeFA = seasonFG.get('roomTypes') as FormArray;
           roomTypeControl.valueChanges.subscribe((res: string[]) => {

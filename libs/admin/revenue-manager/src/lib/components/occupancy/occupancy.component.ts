@@ -51,8 +51,10 @@ export class OccupancyComponent implements OnInit {
   @Input() set dynamicPricingFG(form: FormGroup) {
     if (form) {
       this.parentForm = form;
-      this.initSeason();
-      this.listenChanges();
+      if (!this.dynamicPricingControl.occupancyFA.length) {
+        this.initSeason();
+        this.listenChanges();
+      }
     }
   }
   @Input() rooms: RoomTypes[];

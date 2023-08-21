@@ -17,11 +17,13 @@ import { RequestStatus } from '../../constants/request';
 import { InhouseData } from '../../data-models/inhouse-list.model';
 import { RequestService } from '../../services/request.service';
 import { CMSUpdateJobData } from '../../types/request.type';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'hospitality-bot-request-detail',
   templateUrl: './request-detail.component.html',
   styleUrls: ['./request-detail.component.scss'],
+  providers: [DatePipe],
 })
 export class RequestDetailComponent implements OnInit, OnDestroy {
   data: InhouseData;
@@ -32,6 +34,7 @@ export class RequestDetailComponent implements OnInit, OnDestroy {
   entityId: string;
   @Output() guestInfo = new EventEmitter();
   @Input() guestInfoEnable;
+  closedTimestamp: number;
 
   requestFG: FormGroup;
   constructor(
@@ -39,7 +42,8 @@ export class RequestDetailComponent implements OnInit, OnDestroy {
     private fb: FormBuilder,
     private adminUtilityService: AdminUtilityService,
     private snackbarService: SnackBarService,
-    private globalFilterService: GlobalFilterService
+    private globalFilterService: GlobalFilterService,
+    private datePipe: DatePipe
   ) {}
 
   ngOnInit(): void {
@@ -68,6 +72,7 @@ export class RequestDetailComponent implements OnInit, OnDestroy {
               status: response.action,
               assignee: response.assigneeId,
             });
+            this.closedTimestamp = response?.closedTime;
             this.getAssigneeList(response.itemId);
             this.status = true;
           } else {
@@ -186,6 +191,17 @@ export class RequestDetailComponent implements OnInit, OnDestroy {
             this.requestFG.patchValue({ status: this.data.action });
           }
         )
+    );
+  }
+
+  formattedDate(): string {
+    const dateObject: Date = this.closedTimestamp
+      ? new Date(this.closedTimestamp)
+      : new Date();
+    return this.datePipe.transform(
+      dateObject,
+      "EEEE, MMMM d, y, 'at' HH:mm:ss",
+      'UTC'
     );
   }
 

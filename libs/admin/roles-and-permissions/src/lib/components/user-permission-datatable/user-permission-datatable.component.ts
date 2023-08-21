@@ -238,7 +238,9 @@ export class UserPermissionDatatableComponent extends BaseDatatableComponent
             { panelClass: 'success' }
           );
         },
-        ({ error }) => {}
+        ({ error }) => {
+          debugger;
+        }
       );
   }
 

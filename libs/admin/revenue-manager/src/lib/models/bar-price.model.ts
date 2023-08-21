@@ -7,6 +7,7 @@ export function makeRoomsData(rooms: RoomType[]) {
       value: item.id,
       channels: [],
       price: item.price,
+      roomCount: item.roomCount,
       ratePlans:
         item.ratePlans
           ?.filter((ratePlan) => ratePlan.status)

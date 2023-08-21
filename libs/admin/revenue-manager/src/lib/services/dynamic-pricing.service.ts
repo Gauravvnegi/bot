@@ -49,31 +49,29 @@ export class DynamicPricingService extends ApiService {
     ).pipe(map((response) => OccupancyResponse as DynamicPricingResponse));
   }
 
-  occupancyValidate(
-    form: FormGroup
-  ): { status: boolean; invalidList: number[] } {
+  occupancyValidate(form: FormGroup): boolean {
     const {
       name,
       fromDate,
       toDate,
-      roomType,
       selectedDays,
       roomTypes,
+      configCategory,
+      hotelConfig,
     } = form.controls;
     let isValid =
-      name.valid &&
-      fromDate.valid &&
-      toDate.valid &&
-      roomType.valid &&
-      selectedDays.valid;
-
-    let invalidRoomIndex = [];
-    (roomTypes as FormArray).controls.forEach((room: FormGroup, index) => {
-      if (room.get('isSelected').value) {
-        isValid = isValid ? room.get('occupancy').valid : false;
-        invalidRoomIndex.push(index);
-      }
-    });
-    return { status: isValid, invalidList: invalidRoomIndex };
+      name.valid && fromDate.valid && toDate.valid && selectedDays.valid;
+    if (configCategory.value == 'ROOM_TYPE') {
+      (roomTypes as FormArray).controls.forEach((room: FormGroup, index) => {
+        if (room.get('isSelected').value) {
+          isValid = isValid ? room.get('occupancy').valid : false;
+        }
+      });
+    } else {
+      (hotelConfig as FormArray).controls.forEach((rule: FormGroup) => {
+        isValid = isValid ? rule.valid : false;
+      });
+    }
+    return isValid;
   }
 }

@@ -135,12 +135,13 @@ export class OccupancyComponent implements OnInit {
       fromDate: [, [Validators.required]],
       toDate: [, [Validators.required]],
       configCategory: ['ROOM_TYPE', [Validators.required]],
+      hotelConfig: this.fb.array([this.seasonOccupancyFG]),
+      hotelId: [],
+      basePrice: [],
       roomType: [, [Validators.required]],
       removedRules: this.fb.array([]),
       selectedDays: [, [Validators.required]],
       roomTypes: this.fb.array(this.getRoomTypesFA()),
-      basePrice: [],
-      hotelConfig: this.fb.array([this.seasonOccupancyFG]),
     });
   }
 
@@ -316,11 +317,7 @@ export class OccupancyComponent implements OnInit {
   }
 
   handleSave(form: FormGroup) {
-    const {
-      status,
-      invalidList,
-    } = this.dynamicPricingService.occupancyValidate(form);
-    if (!status) {
+    if (!this.dynamicPricingService.occupancyValidate(form)) {
       form.markAllAsTouched();
       this.snackbarService.openSnackBarAsText(
         'Invalid form: Please fix errors'

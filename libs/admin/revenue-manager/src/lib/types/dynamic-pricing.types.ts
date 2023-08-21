@@ -76,7 +76,8 @@ export type OccupancyFormControlsType =
   | 'roomTypes'
   | 'selectedDays'
   | 'status'
-  | 'removedRules';
+  | 'removedRules'
+  | 'hotelConfig';
 
 export type RoomsConfigType = {
   isSelected: boolean;

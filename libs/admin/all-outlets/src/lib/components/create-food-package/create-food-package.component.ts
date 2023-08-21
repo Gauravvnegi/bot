@@ -33,17 +33,7 @@ export class CreateFoodPackageComponent extends OutletBaseComponent
   taxes: Option[] = [];
   isPackageCreated = false;
 
-  types: Option[] = [
-    { label: 'Veg', value: 'VEG' },
-    { label: 'Non-veg', value: 'NONVEG' },
-    { label: 'Drinks', value: 'DRINKS' },
-    { label: 'Desserts', value: 'DESSERTS' },
-  ];
-  foodCategories: Option[] = [
-    { label: 'Category 1', value: 'CATEGORY1' },
-    { label: 'Category 2', value: 'CATEGORY2' },
-    { label: 'Category 3', value: 'CATEGORY3' },
-  ];
+  foodCategories: Option[];
 
   constructor(
     private fb: FormBuilder,
@@ -63,6 +53,7 @@ export class CreateFoodPackageComponent extends OutletBaseComponent
     this.fields = foodPackageFields;
     this.initForm();
     this.getTax();
+    this.getFoodPackageCategory();
   }
 
   initForm(): void {
@@ -71,8 +62,8 @@ export class CreateFoodPackageComponent extends OutletBaseComponent
     this.useForm = this.fb.group({
       active: [true],
       name: ['', Validators.required],
-      type: ['', Validators.required],
-      originalPrice: ['', Validators.required],
+      parentId: ['', Validators.required],
+      rate: ['', Validators.required],
       currency: ['INR'],
       discountType: ['PERCENTAGE'],
       discountValue: ['', Validators.required],
@@ -160,6 +151,17 @@ export class CreateFoodPackageComponent extends OutletBaseComponent
         }));
       })
     );
+  }
+
+  getFoodPackageCategory() {
+    this.outletService
+      .getFoodPackageCategory(this.outletId)
+      .subscribe((res) => {
+        this.foodCategories = res?.records?.map((item) => ({
+          label: item.name,
+          value: item.id,
+        }));
+      });
   }
 
   createTax() {

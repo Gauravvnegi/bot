@@ -83,13 +83,13 @@ export const cols: Record<TableValue, Cols[]> = {
 
 export const roomDetailsCols: Cols[] = [
   {
-    field: 'roomNumber',
+    field: 'roomNo',
     header: 'Room Number',
     sortType: 'number',
     width: '20%',
   },
   {
-    field: 'floor',
+    field: 'floorNo',
     header: 'Floor',
     sortType: 'number',
     width: '20%',

@@ -85,6 +85,7 @@ export type RoomTypeResponse = {
   originalPrice: number;
   currency: string;
   features: string[];
+  isBase: boolean;
 };
 
 export type RatePlanRes = {

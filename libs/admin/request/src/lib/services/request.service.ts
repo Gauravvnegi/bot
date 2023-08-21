@@ -13,6 +13,7 @@ export class RequestService extends ApiService {
   refreshData = new BehaviorSubject<boolean>(false);
   requestStatus = new BehaviorSubject<RequestStatus[]>([]); // ['TODO', 'RESOLVED', 'CANCELED', 'IN_PROGRESS', 'TIMEOUT']
   assigneeList = new BehaviorSubject<any[]>([]);
+  refreshItemList = new BehaviorSubject<boolean>(false);
 
   syncRequest(entityId: string): Observable<any> {
     return this.get(

@@ -97,7 +97,12 @@
 
   <div class="time-left__wrapper" *ngIf="taskStatus">
     <div
-      *ngIf="taskStatus?.timeLeft !== undefined && !isSelected"
+      *ngIf="
+        taskStatus?.timeLeft !== undefined &&
+        !isSelected &&
+        taskStatus?.action !== 'RESOLVED' &&
+        taskStatus?.action !== 'CANCELLED'
+      "
       class="time-left"
     >
       <div>Time Left:</div>

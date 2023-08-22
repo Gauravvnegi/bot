@@ -1,3 +1,4 @@
+import { I } from '@angular/cdk/keycodes';
 import { Component, Input, OnInit } from '@angular/core';
 import { AbstractControl, ControlContainer } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -20,14 +21,19 @@ import { Subscription } from 'rxjs';
 export class CategoryComponent implements OnInit {
   @Input() controlName: string;
   @Input() type: CategoryData['type'];
+  @Input() set entityId(value: string) {
+    this._entityId = value;
+    this.getCategories(value);
+  }
+  @Input() disabled: string;
   categoryOffSet = 0;
   loadingCategory = false;
   noMoreCategories = false;
   categories: Option[] = [];
   $subscription = new Subscription();
-  entityId: string;
   servicesService: any;
   inputControl: AbstractControl;
+  _entityId: string;
 
   constructor(
     private globalFilterService: GlobalFilterService,
@@ -39,19 +45,20 @@ export class CategoryComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.entityId = this.globalFilterService.entityId;
+    if (!this._entityId) this._entityId = this.globalFilterService.entityId;
     this.inputControl = this.controlContainer.control.get(this.controlName);
     this.getCategories();
   }
+  
   /**
    * @function getCategories
    * @description get categories from server
    */
-  getCategories() {
+  getCategories(_entityId?: string) {
     this.loadingCategory = true;
     this.$subscription.add(
       this.libraryService
-        .getCategories(this.entityId, {
+        .getCategories(this._entityId, {
           params: `?type=${this.type}&offset=${this.categoryOffSet}&limit=10&status=true`,
         })
         .subscribe(
@@ -88,7 +95,7 @@ export class CategoryComponent implements OnInit {
     if (text) {
       this.loadingCategory = true;
       this.libraryService
-        .searchLibraryItem(this.entityId, {
+        .searchLibraryItem(this._entityId, {
           params: `?key=${text}&type=${LibrarySearchItem[this.type]}`,
         })
         .subscribe((res) => {
@@ -117,7 +124,7 @@ export class CategoryComponent implements OnInit {
   create(event) {
     this.$subscription.add(
       this.libraryService
-        .createCategory(this.entityId, {
+        .createCategory(this._entityId, {
           name: event,
           source: 1,
           imageUrl: '',

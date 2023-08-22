@@ -21,6 +21,7 @@ export class TabHeaderComponent implements OnInit {
   @Output() selectedTabChange = new EventEmitter();
   @ViewChild('tabFilter') tabFilter: ElementRef;
   @Input() extraGap = 40;
+  @Input() scrollBoundary = 120;
 
   @Input() isSticky = false;
   isScrolledUp: boolean = false;
@@ -40,7 +41,7 @@ export class TabHeaderComponent implements OnInit {
     const tabFilterElement = this.tabFilter?.nativeElement;
     if (tabFilterElement) {
       const { top } = tabFilterElement.getBoundingClientRect();
-      this.isScrolledUp = top < 120;
+      this.isScrolledUp = top < this.scrollBoundary;
     }
   };
 }

@@ -11,7 +11,10 @@ import {
   LibraryItem,
   ServiceTypeOptionValue,
 } from '@hospitality-bot/admin/library';
-import { ConfigService } from '@hospitality-bot/admin/shared';
+import {
+  ConfigService,
+  HotelDetailService,
+} from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { NavRouteOptions, Option } from 'libs/admin/shared/src';
 import { Subscription } from 'rxjs';
@@ -59,6 +62,10 @@ export class CreateServiceComponent implements OnInit {
 
   isSelectedTypePaid = false;
 
+  entityList: any[] = [];
+
+  brandId: string;
+
   constructor(
     private fb: FormBuilder,
     private globalFilterService: GlobalFilterService,
@@ -66,7 +73,8 @@ export class CreateServiceComponent implements OnInit {
     private snackbarService: SnackBarService,
     private configService: ConfigService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private hotelDetailService: HotelDetailService
   ) {
     this.serviceId = this.route.snapshot.paramMap.get('id');
 
@@ -79,9 +87,27 @@ export class CreateServiceComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.entityId = this.globalFilterService.entityId;
+    this.brandId = this.hotelDetailService.brandId;
     this.initForm();
-    this.initOptionsConfig();
+    this.getEntityList();
+    this.listenForTypeChange();
+  }
+
+  getEntityList() {
+    this.entityList =
+      this.hotelDetailService.brands
+        .find((item) => item.id === this.brandId)
+        ?.entities.map((item) => ({
+          label: item.name,
+          value: item.id,
+        })) ?? [];
+  }
+
+  listenForTypeChange() {
+    this.useForm.get('type').valueChanges.subscribe((res) => {
+      this.entityId = res;
+      this.initOptionsConfig();
+    });
   }
 
   /**
@@ -93,11 +119,9 @@ export class CreateServiceComponent implements OnInit {
       // currency: [''],
       parentId: ['', Validators.required],
       type: ['', Validators.required],
-      subType: [''],
-      categoryName: [''],
       imageUrl: ['', Validators.required],
       name: ['', Validators.required],
-      serviceType: ['', Validators.required],
+      serviceType: [''],
       // rate: [''],
       unit: ['', Validators.required],
       enableVisibility: [[], Validators.required],

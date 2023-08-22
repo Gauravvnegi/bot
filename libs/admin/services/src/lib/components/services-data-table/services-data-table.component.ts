@@ -7,6 +7,7 @@ import { LibraryItem, QueryConfig } from '@hospitality-bot/admin/library';
 import {
   AdminUtilityService,
   BaseDatatableComponent,
+  HotelDetailService,
   TableService,
 } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
@@ -25,6 +26,7 @@ import { ServiceList } from '../../models/services.model';
 import { ServicesService } from '../../services/services.service';
 import { ServiceListResponse, ServiceResponse } from '../../types/response';
 import { ServiceData } from '../../types/service';
+import { feedback } from '@hospitality-bot/admin/feedback';
 
 @Component({
   selector: 'hospitality-bot-services-data-table',
@@ -45,6 +47,9 @@ export class ServicesDataTableComponent extends BaseDatatableComponent {
   cols = cols;
   isQuickFilters = true;
   isAllATabItem = true;
+  feedbackType: string;
+  brandId: string;
+  branchId: string;
 
   $subscription = new Subscription();
 
@@ -55,24 +60,55 @@ export class ServicesDataTableComponent extends BaseDatatableComponent {
     private adminUtilityService: AdminUtilityService,
     private globalFilterService: GlobalFilterService,
     protected snackbarService: SnackBarService, // private router: Router, // private modalService: ModalService
-    private router: Router
+    private router: Router,
+    private _hotelDetailService: HotelDetailService
   ) {
     super(fb, tabFilterService);
   }
 
   ngOnInit(): void {
     this.entityId = this.globalFilterService.entityId;
-    this.listenToTableChange();
+    // this.listenToTableChange();
+    this.listenForGlobalFilters();
+  }
+
+  // /**
+  //  * @function listenToTableChange  To listen to table changes
+  //  */
+  // listenToTableChange() {
+  //   this.servicesService.selectedTable.subscribe((value) => {
+  //     this.selectedTable = value;
+  //     ;
+  //     this.initTableValue();
+  //   });
+  // }
+
+  /**
+   * @function onGlobalTabFilterChanges To listen to global tab filter changes
+   * @param value
+   */
+
+  onGlobalTabFilterChanges(value) {
+    this.entityId = value;
+    this.initTableValue();
   }
 
   /**
-   * @function listenToTableChange  To listen to table changes
+   * @function listenForGlobalFilters To listen to global filters
+   * @returns
+   * @memberof ServicesDataTableComponent
    */
-  listenToTableChange() {
-    this.servicesService.selectedTable.subscribe((value) => {
-      this.selectedTable = value;
-      this.initTableValue();
-    });
+
+  listenForGlobalFilters(): void {
+    this.$subscription.add(
+      this.globalFilterService.globalFilter$.subscribe((data) => {
+        this.feedbackType = data['filter'].value.feedback.feedbackType;
+        this.brandId = data.filter?.value?.property?.brandName;
+        this.branchId = data.filter?.value?.property?.entityName;
+        //to get outlet or hotel ids for initial of table list api call
+        this.initTableValue();
+      })
+    );
   }
 
   /**
@@ -172,10 +208,25 @@ export class ServicesDataTableComponent extends BaseDatatableComponent {
           serviceType: this.tabFilterItems[this.tabFilterIdx].value,
           offset: this.first,
           limit: this.rowsPerPage,
+          entityIds: this.getEntityId(),
         },
       ]),
     };
     return config;
+  }
+
+  /**
+   * @function setEntityId To set entity id based on current table filter.
+   * @returns The entityIds.
+   */
+  getEntityId() {
+    if (this.feedbackType === feedback.types.transactional) {
+      const branch = this._hotelDetailService.brands
+        .find((brand) => brand.id === this.brandId)
+        .entities.find((branch) => branch['id'] === this.branchId);
+      return branch.entities.map((outlet) => outlet.id);
+    }
+    return this.entityId;
   }
 
   /**

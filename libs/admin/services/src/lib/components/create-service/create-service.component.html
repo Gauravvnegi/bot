@@ -20,33 +20,24 @@
         placeholder: 'Enter'
       }"
     ></hospitality-bot-input>
-    <div class="half-width type-wrapper">
-      <hospitality-bot-select
-        [loading]="loading"
-        class="half-width"
-        controlName="type"
-        label="Type"
-        [options]="types"
-        [props]="{
-          placeholder: 'Select Type'
-        }"
-      ></hospitality-bot-select>
-      <hospitality-bot-select
-        [loading]="loading"
-        class="half-width"
-        controlName="subType"
-        label="Sub Type"
-        [options]="[]"
-        [props]="{
-          placeholder: 'Select Sub Type'
-        }"
-      ></hospitality-bot-select>
-    </div>
+
+    <hospitality-bot-select
+      [loading]="loading"
+      class="half-width"
+      controlName="type"
+      label="Property / Outlet"
+      [options]="entityList"
+      [props]="{
+        placeholder: 'Select Type'
+      }"
+    ></hospitality-bot-select>
 
     <hospitality-bot-category
       controlName="parentId"
       class="half-width"
       type="SERVICE_CATEGORY"
+      [entityId]="entityId"
+      [disabled]="!useForm.get('type').value"
     >
     </hospitality-bot-category>
 
@@ -54,7 +45,6 @@
       class="upload"
       formControlName="imageUrl"
       [entityId]="entityId"
-      [isFeatureView]="true"
     ></hospitality-bot-custom-file-upload>
     <hospitality-bot-prefix-field
       class="one-third-width"
@@ -86,6 +76,7 @@
         isAsync: true,
         createPrompt: '+ Create New Tax'
       }"
+      [disabled]="!useForm.get('type').value"
       (onCreate)="createTax()"
     ></hospitality-bot-multi-select>
     <hospitality-bot-input

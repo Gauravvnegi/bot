@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import {
   GlobalFilterService,
   SubscriptionPlanService,
@@ -16,6 +16,10 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./feedback-types.component.scss'],
 })
 export class FeedbackTypesComponent implements OnInit {
+  @Output() onTabFilterChange = new EventEmitter();
+  @Input() extraGap = 60;
+  @Input() scrollBoundary = 120;
+
   entityId = '';
   tabFilterIdx = 0;
   tabFilterItems = [
@@ -172,5 +176,6 @@ export class FeedbackTypesComponent implements OnInit {
       status: true,
       type: this.tabFilterItems[this.tabFilterIdx].type,
     });
+    this.onTabFilterChange.emit(this.statisticsService.outletIds);
   }
 }

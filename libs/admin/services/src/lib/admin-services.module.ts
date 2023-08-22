@@ -6,6 +6,7 @@ import { AdminSharedModule } from '@hospitality-bot/admin/shared';
 import { AdminServicesRoutingModule } from './admin-services.routing.module';
 import { ServicesService } from './services/services.service';
 import { AdminLibraryModule } from '@hospitality-bot/admin/library';
+import { AdminFeedbackModule } from '@hospitality-bot/admin/feedback';
 
 @NgModule({
   imports: [
@@ -16,6 +17,7 @@ import { AdminLibraryModule } from '@hospitality-bot/admin/library';
     FormsModule,
     ReactiveFormsModule,
     AdminLibraryModule,
+    AdminFeedbackModule,
   ],
   declarations: [...AdminServicesRoutingModule.components],
   providers: [ServicesService],

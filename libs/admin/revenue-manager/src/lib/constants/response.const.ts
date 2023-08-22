@@ -15,7 +15,7 @@ export const OccupancyResponse = {
           id: '5ef958ce-39a7-421c-80e8-ee9973e27b99',
           configRules: [
             {
-              id: '4b33e0a6-868a-41b4-a2da-2481ac905091',
+              id: 'd91323bd-abeb-4f15-a0c6-43908fc9bd91',
               occupancyStart: 0.0,
               occupancyEnd: 3.0,
               discountOrMarkup: {
@@ -50,7 +50,7 @@ export const OccupancyResponse = {
       configItems: [
         {
           type: 'ROOM_TYPE',
-          id: '69b42990-aad6-4566-a2c8-0b89172e96d7',
+          id: 'c2c5a014-5da6-4ae2-ae29-980636434ccc',
           configRules: [
             {
               id: 'e664492d-1371-485a-b640-ba0d2b751875',
@@ -86,7 +86,7 @@ export const OccupancyResponse = {
         },
         {
           type: 'ROOM_TYPE',
-          id: '80f933ba-ac3e-479e-abc7-eb73116cabba',
+          id: 'd91323bd-abeb-4f15-a0c6-43908fc9bd91',
           configRules: [
             {
               id: 'e55cb026-f956-46f1-b3e8-f639efa8b681',
@@ -124,7 +124,7 @@ export const OccupancyResponse = {
       configItems: [
         {
           type: 'ROOM_TYPE',
-          id: '69b42990-aad6-4566-a2c8-0b89172e96d7',
+          id: 'c2c5a014-5da6-4ae2-ae29-980636434ccc',
           configRules: [
             {
               id: '652ebbb8-9168-4d08-8392-218b76230a17',
@@ -150,7 +150,7 @@ export const OccupancyResponse = {
         },
         {
           type: 'ROOM_TYPE',
-          id: '80f933ba-ac3e-479e-abc7-eb73116cabba',
+          id: 'd91323bd-abeb-4f15-a0c6-43908fc9bd91',
           configRules: [
             {
               id: '052fde09-0463-48f1-979d-f29a3e62c486',

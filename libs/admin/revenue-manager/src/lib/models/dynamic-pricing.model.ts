@@ -12,8 +12,8 @@ import {
   RoomsConfigType,
   OccupancyRuleType,
 } from '../types/dynamic-pricing.types';
-import { RoomTypes } from '../types/bar-price.types';
 import { OccupancyComponent } from '../components/occupancy/occupancy.component';
+import { RoomTypes } from './bar-price.model';
 export class DynamicPricingFactory {
   static buildRequest(form: FormGroup, type: ConfigType, mode: ModeType) {
     let data:

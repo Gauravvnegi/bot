@@ -5,7 +5,7 @@ import { ControlContainer } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { BarPriceService } from '../../services/bar-price.service';
-import { RoomTypes } from '../../types/bar-price.types';
+import { RoomTypes } from '../../models/bar-price.model';
 
 @Component({
   selector: 'hospitality-bot-room-types',

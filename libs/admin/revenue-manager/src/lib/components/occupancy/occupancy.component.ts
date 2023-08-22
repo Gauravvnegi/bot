@@ -20,12 +20,12 @@ import {
   DynamicPricingHandler,
 } from '../../models/dynamic-pricing.model';
 import { DynamicPricingService } from '../../services/dynamic-pricing.service';
-import { RoomTypes } from '../../types/bar-price.types';
 import {
   ConfigCategory,
   ConfigType,
   DynamicPricingForm,
 } from '../../types/dynamic-pricing.types';
+import { RoomTypes } from '../../models/bar-price.model';
 
 export type ControlTypes = 'season' | 'occupancy' | 'hotel-occupancy';
 

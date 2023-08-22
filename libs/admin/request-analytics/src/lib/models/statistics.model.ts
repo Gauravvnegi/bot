@@ -1,7 +1,12 @@
 import { colors as randomColors } from '@hospitality-bot/admin/shared';
 import { convertToTitleCase } from 'libs/admin/shared/src/lib/utils/valueFormatter';
 import { get, set } from 'lodash';
-import { SentimentStatsResponse } from '../types/response.types';
+import {
+  AverageStats,
+  RequestResponse,
+  RequestStat,
+  SentimentStatsResponse,
+} from '../types/response.types';
 
 export class InhouseSource {
   inhouseRequestSourceStats: any;
@@ -74,6 +79,54 @@ export class Sentiment {
 
     this.name = convertToTitleCase(this.label);
 
+    return this;
+  }
+}
+
+export class RequestStats {
+  requestStats: { label: string; value: number; color: string }[];
+  totalCount: number;
+
+  deserialize(input: RequestResponse) {
+    const requestStatKeys = Object.keys(
+      input.requestStats
+    ) as (keyof RequestStat)[];
+
+    const colors = ['#beaeff', '#5f38f9', 'rgb(197, 197, 197)', '#5f38f9'];
+    this.requestStats = requestStatKeys
+      .filter((requestKey) => requestKey !== 'CANCELLED')
+      .map((requestKey, index) => {
+        return {
+          label:
+            requestKey === 'TIMEOUT'
+              ? 'Timed-out'
+              : convertToTitleCase(requestKey),
+          value: input.requestStats[requestKey],
+          color: colors[index],
+        };
+      });
+    this.totalCount = input.totalCount;
+    return this;
+  }
+}
+
+export class AverageRequestStats {
+  averageStats: { label: string; value: number | string; key: string }[];
+  createdTickets: number;
+  resolvedTickets: number;
+  deserialize(input: AverageStats) {
+    const statsData = Object.keys(input.averageStats);
+    this.averageStats = statsData
+      .filter((requestKey) => requestKey === 'averageTimePerJob')
+      .map((requestKey) => {
+        return {
+          label: 'Average Time Taken/Tickets',
+          value: `${input.averageStats[requestKey]} Mins`,
+          key: 'AverageTime',
+        };
+      });
+    this.createdTickets = input.averageStats.averageCreatedJobs;
+    this.resolvedTickets = input.averageStats.averageResolvedJobs;
     return this;
   }
 }

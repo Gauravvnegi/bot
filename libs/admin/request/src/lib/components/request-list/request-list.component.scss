@@ -4,16 +4,33 @@
   background-color: $completed-state;
 }
 
+.priority-low-text {
+  color: $completed-state;
+}
+
+
 .priority-medium {
   background-color: $priority-medium;
+}
+
+.priority-medium-text {
+  color: $priority-medium;
 }
 
 .priority-high {
   background-color: $priority-high;
 }
 
+.priority-high-text {
+  color: $priority-high;
+}
+
 .priority-asap {
   background-color: $darkRed;
+}
+
+.priority-asap-text {
+  color: $darkRed;
 }
 
 .sla-new {

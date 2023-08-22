@@ -1,21 +1,25 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { FormGroup, FormArray, FormBuilder, Validators } from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
+import {
+  FormGroup,
+  FormArray,
+  FormBuilder,
+  Validators,
+  AbstractControl,
+} from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
-  NavRouteOptions,
   AdminUtilityService,
   Option,
+  EntityType,
+  EntitySubType,
 } from '@hospitality-bot/admin/shared';
-import { IteratorField } from 'libs/admin/shared/src/lib/types/fields.type';
-import { Subscription } from 'rxjs';
 import {
   editModeStatusOptions,
   eventOptions,
   statusOptions,
   venueFields,
 } from '../../constants/reservation';
-import { manageReservationRoutes } from '../../constants/routes';
 import {
   OfferList,
   OfferData,
@@ -24,7 +28,10 @@ import {
   BookingInfo,
 } from '../../models/reservations.model';
 import { ManageReservationService } from '../../services/manage-reservation.service';
-import { SelectedEntity } from '../../types/reservation.type';
+import { ReservationForm } from '../../constants/form';
+import { BaseReservationComponent } from '../base-reservation.component';
+import { FormService } from '../../services/form.service';
+import { ReservationType } from '../../constants/reservation-table';
 
 @Component({
   selector: 'hospitality-bot-venue-reservation',
@@ -34,63 +41,35 @@ import { SelectedEntity } from '../../types/reservation.type';
     '../reservation.styles.scss',
   ],
 })
-export class VenueReservationComponent implements OnInit {
-  userForm: FormGroup;
+export class VenueReservationComponent extends BaseReservationComponent
+  implements OnInit {
   venueBookingInfo: FormArray;
   foodPackageArray: FormArray;
-
-  fields: IteratorField[];
-
-  entityId: string;
-  reservationId: string;
 
   statusOptions: Option[] = [];
   eventOptions: Option[] = [];
   foodPackages: Option[] = [];
 
-  offersList: OfferList;
-  selectedOffer: OfferData;
-  summaryData: SummaryData;
-
-  // loading = false;
-  formValueChanges = false;
-  disabledForm = false;
-
-  deductedAmount = 0;
-  bookingType = 'VENUE';
-
-  pageTitle = 'Add Reservation';
-  routes: NavRouteOptions = [];
-
-  @Input() selectedEntity: SelectedEntity;
-
-  $subscription = new Subscription();
-
   constructor(
     private fb: FormBuilder,
     private adminUtilityService: AdminUtilityService,
-    private globalFilterService: GlobalFilterService,
+    protected globalFilterService: GlobalFilterService,
     private manageReservationService: ManageReservationService,
-    protected activatedRoute: ActivatedRoute
+    protected activatedRoute: ActivatedRoute,
+    private formService: FormService
   ) {
-    this.initForm();
-    this.reservationId = this.activatedRoute.snapshot.paramMap.get('id');
-
-    const { navRoutes, title } = manageReservationRoutes[
-      this.reservationId ? 'editReservation' : 'addReservation'
-    ];
-    this.routes = navRoutes;
-    this.pageTitle = title;
+    super(globalFilterService, activatedRoute);
   }
 
   ngOnInit(): void {
-    this.entityId = this.globalFilterService.entityId;
-    this.fields = venueFields;
-    this.initOptions();
+    this.initForm();
+    this.initDetails();
     this.getReservationId();
   }
 
-  initOptions() {
+  initDetails() {
+    this.bookingType = EntitySubType.VENUE;
+    this.fields = venueFields;
     this.eventOptions = eventOptions;
   }
 
@@ -118,10 +97,9 @@ export class VenueReservationComponent implements OnInit {
       }),
       offerId: [''],
     });
-
     // Add food package items to the form
     this.foodPackageArray = this.userForm.get(
-      'orderInformation.foodPackages'
+      'eventInformation.foodPackages'
     ) as FormArray;
 
     // Add the first food package item to the form
@@ -152,7 +130,7 @@ export class VenueReservationComponent implements OnInit {
       ?.valueChanges.subscribe((res) => {
         if (res) {
           this.userForm.get('offerId').reset();
-          this.getOfferByRoomType(res);
+          // this.getOfferByRoomType(res);
           this.getSummaryData();
         }
       });
@@ -203,15 +181,15 @@ export class VenueReservationComponent implements OnInit {
             this.summaryData = new SummaryData().deserialize(response);
             this.setFormDisability(data.reservationInformation);
             if (data.offerId)
-              this.getOfferByRoomType(
-                this.userForm.get('roomInformation.roomTypeId').value
-              );
-            this.userForm.valueChanges.subscribe((_) => {
-              if (!this.formValueChanges) {
-                this.formValueChanges = true;
-                this.listenForFormChanges();
-              }
-            });
+              // this.getOfferByRoomType(
+              //   this.userForm.get('roomInformation.roomTypeId').value
+              // );
+              this.userForm.valueChanges.subscribe((_) => {
+                if (!this.formValueChanges) {
+                  this.formValueChanges = true;
+                  this.listenForFormChanges();
+                }
+              });
           },
           (error) => {}
         )
@@ -221,11 +199,11 @@ export class VenueReservationComponent implements OnInit {
   setFormDisability(data: BookingInfo): void {
     this.userForm.get('reservationInformation.source').disable();
     switch (true) {
-      case data.reservationType === 'CONFIRMED':
+      case data.reservationType === ReservationType.CONFIRMED:
         this.userForm.disable();
         this.disabledForm = true;
         break;
-      case data.reservationType === 'CANCELED':
+      case data.reservationType === ReservationType.CANCELED:
         this.userForm.disable();
         this.disabledForm = true;
         break;
@@ -238,24 +216,24 @@ export class VenueReservationComponent implements OnInit {
     }
   }
 
-  getOfferByRoomType(id: string): void {
-    if (id)
-      this.$subscription.add(
-        this.manageReservationService
-          .getOfferByRoomType(this.entityId, id)
-          .subscribe(
-            (response) => {
-              this.offersList = new OfferList().deserialize(response);
-              if (this.userForm.get('offerId').value) {
-                this.selectedOffer = this.offersList.records.filter(
-                  (item) => item.id === this.userForm.get('offerId').value
-                )[0];
-              }
-            },
-            (error) => {}
-          )
-      );
-  }
+  // getOfferByRoomType(id: string): void {
+  //   if (id)
+  //     this.$subscription.add(
+  //       this.manageReservationService
+  //         .getOfferByRoomType(this.entityId, id)
+  //         .subscribe(
+  //           (response) => {
+  //             this.offersList = new OfferList().deserialize(response);
+  //             if (this.userForm.get('offerId').value) {
+  //               this.selectedOffer = this.offersList.records.filter(
+  //                 (item) => item.id === this.userForm.get('offerId').value
+  //               )[0];
+  //             }
+  //           },
+  //           (error) => {}
+  //         )
+  //     );
+  // }
 
   offerSelect(offerData?: OfferData): void {
     if (offerData) {
@@ -269,54 +247,43 @@ export class VenueReservationComponent implements OnInit {
   }
 
   getSummaryData(): void {
-    const defaultProps = [
-      {
-        type: 'ROOM_TYPE',
-        fromDate: this.userForm.get('reservationInformation.from')?.value,
-        toDate: this.userForm.get('reservationInformation.to')?.value,
-        adultCount: this.userForm.get('roomInformation.adultCount')?.value || 1,
-        roomCount: this.userForm.get('roomInformation.roomCount')?.value || 1,
-        childCount: this.userForm.get('roomInformation.childCount')?.value || 0,
-        roomType: this.userForm.get('roomInformation.roomTypeId')?.value,
-        offerId: this.userForm.get('offerId')?.value,
-        entityId: this.entityId,
-      },
-    ];
     const config = {
-      params: this.adminUtilityService.makeQueryParams(defaultProps),
+      params: this.adminUtilityService.makeQueryParams([
+        { type: EntityType.OUTLET },
+      ]),
     };
-    const data = {};
-    if (this.userForm.get('roomInformation.roomTypeId')?.value) {
-      this.$subscription.add(
-        this.manageReservationService
-          .getSummaryData(this.entityId, data, config)
-          .subscribe(
-            (res) => {
-              this.summaryData = new SummaryData()?.deserialize(res);
-              this.userForm
-                .get('roomInformation')
-                .patchValue(this.summaryData, { emitEvent: false });
-              this.userForm
-                .get('paymentMethod.totalPaidAmount')
-                .setValidators([Validators.max(this.summaryData?.totalAmount)]);
-              this.userForm
-                .get('paymentMethod.totalPaidAmount')
-                .updateValueAndValidity();
-              this.userForm
-                .get('paymentRule.deductedAmount')
-                .patchValue(this.summaryData?.totalAmount);
-              this.deductedAmount = this.summaryData?.totalAmount;
-            },
-            (error) => {}
-          )
-      );
-    }
+    const data = {
+      fromDate: this.reservationInfoControls.from.value,
+      toDate: this.reservationInfoControls.to.value,
+      adultCount: this.eventInfoControls.numberOfAdults.value,
+    };
+    this.$subscription.add(
+      this.manageReservationService
+        .getSummaryData(this.entityId, data, config)
+        .subscribe(
+          (res) => {
+            this.summaryData = new SummaryData()?.deserialize(res);
+            this.userForm
+              .get('paymentMethod.totalPaidAmount')
+              .setValidators([Validators.max(this.summaryData?.totalAmount)]);
+            this.userForm
+              .get('paymentMethod.totalPaidAmount')
+              .updateValueAndValidity();
+            this.userForm
+              .get('paymentRule.deductedAmount')
+              .patchValue(this.summaryData?.totalAmount);
+            this.deductedAmount = this.summaryData?.totalAmount;
+          },
+          (error) => {}
+        )
+    );
   }
 
-  /**
-   * @function ngOnDestroy to unsubscribe subscription.
-   */
-  ngOnDestroy(): void {
-    this.$subscription.unsubscribe();
+  get eventInfoControls() {
+    return (this.userForm.get('eventInformation') as FormGroup)
+      .controls as Record<
+      keyof ReservationForm['eventInformation'],
+      AbstractControl
+    >;
   }
 }

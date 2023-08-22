@@ -99,7 +99,7 @@ export class RequestListComponent implements OnInit, OnDestroy {
           {
             ...this.filterData,
             order: 'DESC',
-            entityType: this.entityType,
+            journeyType: this.entityType,
             actionType: this.tabFilterItems[this.tabFilterIdx]?.value,
             offset: 0,
             limit:
@@ -123,7 +123,7 @@ export class RequestListComponent implements OnInit, OnDestroy {
           {
             ...this.filterData,
             order: 'DESC',
-            entityType: this.entityType,
+            journeyType: this.entityType,
             actionType: this.tabFilterItems[this.tabFilterIdx].value,
             offset: 0,
             limit:
@@ -147,7 +147,7 @@ export class RequestListComponent implements OnInit, OnDestroy {
 
           setTimeout(() => {
             this.loadData(0, this.listData?.length || 10);
-          }, 150);
+          }, 1500);
         }
       })
     );
@@ -226,7 +226,7 @@ export class RequestListComponent implements OnInit, OnDestroy {
           ...this.filterData,
           offset,
           limit,
-          entityType: this.entityType,
+          journeyType: this.entityType,
           actionType: this.tabFilterItems[this.tabFilterIdx].value,
         },
       ]).subscribe((response) => {
@@ -289,9 +289,9 @@ export class RequestListComponent implements OnInit, OnDestroy {
   startTimeLeftTimer() {
     this.timeInterval = setInterval(() => {
       this.timeLeft = this.timeLeft.map((item) =>
-        item - 1 > 0 ? item - 1 : 0
+        item - 1000 > 0 ? item - 1000 : 0
       );
-    }, 1000 * 60);
+    }, 1000);
   }
 
   /**
@@ -380,7 +380,7 @@ export class RequestListComponent implements OnInit, OnDestroy {
             offset,
             limit,
             key: this.parentFG.get('search').value.trim(),
-            entityType: this.entityType,
+            journeyType: this.entityType,
           },
         ]),
       })

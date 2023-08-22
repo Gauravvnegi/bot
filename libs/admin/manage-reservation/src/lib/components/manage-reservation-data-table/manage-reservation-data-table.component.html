@@ -92,9 +92,9 @@
         ></p-tableCheckbox>
       </td>
       <td>
-        <div class="cell-content" *ngIf="rowData.invoiceId; else emptyCell">
+        <div class="cell-content" *ngIf="rowData?.invoiceId; else emptyCell">
           <div class="primary-text">
-            {{ rowData.invoiceId || '--' }}
+            {{ rowData?.invoiceId || '--' }}
           </div>
         </div>
       </td>
@@ -107,27 +107,42 @@
         </div>
       </td>
       <td *ngIf="selectedEntity.subType === 'ROOM_TYPE'">
-        <div class="table-room-no" [roomStatus]="rowData.roomStatus">
+        <div class="multi-cell-content" [roomStatus]="rowData?.roomStatus">
           <div>
-            {{ rowData.roomNumber || '--' }}&nbsp;-&nbsp;{{
-              rowData.roomType || '--'
+            {{ (rowData?.roomTypes)[0] || '--' }}&nbsp;-&nbsp;{{
+              (rowData?.bookingItems)[0]?.roomDetails.roomNumber || '--'
             }}
+          </div>
+          <b class="rowData">
+            {{ rowData.getRoomTypeDisplay().countString }}
+          </b>
+          <div
+            *ngIf="rowData?.roomTypes.length > 1"
+            class="room-type-cell"
+            [ngClass]="{ demo: rowData?.roomTypes.length > 1 }"
+          >
+            <div *ngFor="let roomType of rowData?.roomTypes; let i = index">
+              <ng-container *ngIf="i !== 0">{{ roomType }}</ng-container>
+            </div>
           </div>
         </div>
       </td>
       <td>
         <div class="center-align">
-          <div class="primary-text">#{{ rowData.confirmationNo }}</div>
+          <div class="primary-text">#{{ rowData?.confirmationNo }}</div>
         </div>
       </td>
 
       <td>
         <div
           class="cell-content"
-          *ngIf="rowData.fullName.length; else emptyCell"
+          *ngIf="rowData?.guestName.length; else emptyCell"
         >
           <div class="primary-text">
-            {{ rowData.fullName }}
+            {{ rowData.guestName }}
+          </div>
+          <div class="secondary-text">
+            {{ rowData?.companyName || '--' }}
           </div>
         </div>
       </td>
@@ -135,22 +150,24 @@
       <td *ngIf="selectedEntity.subType !== 'ROOM_TYPE'">
         <div class="center-align">
           <div class="primary-text txtSize">
-            {{ rowData.from | date: 'dd/MM/yy' }}
+            {{ rowData?.from | date: 'dd/MM/yy' }}
           </div>
           <div class="secondary-text">
-            {{ rowData.from | date: 'HH:mm' }}
+            {{ rowData?.from | date: 'HH:mm' }}
           </div>
         </div>
       </td>
       <td *ngIf="selectedEntity.subType === 'ROOM_TYPE'">
         <div class="center-align">
           <div class="primary-text txtSize">
-            {{ rowData.from | date: 'dd/MM/yy' }}-{{
-              rowData.to | date: 'dd/MM/yy'
+            {{ rowData?.from | date: 'dd/MM/yy' }}-{{
+              rowData?.to | date: 'dd/MM/yy'
             }}
           </div>
           <div class="secondary-text">
-            {{ rowData.from | date: 'HH:mm' }}-{{ rowData.to | date: 'HH:mm' }}
+            {{ rowData?.from | date: 'HH:mm' }}-{{
+              rowData?.to | date: 'HH:mm'
+            }}
           </div>
         </div>
       </td>
@@ -166,19 +183,19 @@
                   rowData?.totalDueAmount > 0 &&
                   rowData?.totalDueAmount <= rowData?.totalAmount
               }"
-              >{{ rowData.totalDueAmount | currency: 'INR' }}</span
+              >{{ rowData?.totalDueAmount | currency: 'INR' }}</span
             >
-            /{{ rowData.totalAmount | currency: 'INR' }}
+            /{{ rowData?.totalAmount | currency: 'INR' }}
           </div>
         </div>
       </td>
       <td>
         <div class="center-align" *ngIf="rowData.sourceName; else emptyCell">
           <div class="primary-text">
-            {{ rowData.sourceName }}
+            {{ rowData?.sourceName }}
           </div>
           <div class="secondary-text">
-            {{ rowData.source }}
+            {{ rowData?.source }}
           </div>
         </div>
       </td>
@@ -186,10 +203,7 @@
       <td>
         <div class="center-align">
           <div class="primary-text">
-            {{ rowData.paymentMethod }}
-          </div>
-          <div class="secondary-text">
-            {{ rowData.totalPaidAmount | currency: 'INR' }}
+            {{ rowData?.totalPaidAmount | currency: 'INR' }}
           </div>
         </div>
       </td>

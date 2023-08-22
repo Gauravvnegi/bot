@@ -1,0 +1,179 @@
+<div [formGroup]="dynamicPricingFG" *ngIf="!!dynamicPricingFG">
+  <p-accordion class="accordion" [multiple]="true">
+    <div formArrayName="timeFA">
+      <div
+        *ngFor="
+          let triggerFG of dynamicPricingControl.timeFA?.controls;
+          let i = index
+        "
+        class="accordion-list"
+      >
+        <div [formGroupName]="i">
+          <p-accordionTab [selected]="i == 0">
+            <p-header>
+              <div class="accordion-header">
+                <div class="title">
+                  <div>
+                    {{ triggerFG.get('name').value || 'Time Based Trigger' }}
+                  </div>
+                  <div class="date">
+                    <span *ngIf="triggerFG.get('fromDate').value; else empty">{{
+                      triggerFG.get('fromDate').value | date: 'dd/MM/yyyy'
+                    }}</span>
+                    to
+                    <span *ngIf="triggerFG.get('toDate').value; else empty">{{
+                      triggerFG.get('toDate').value | date: 'dd/MM/yyyy'
+                    }}</span>
+                  </div>
+                </div>
+                <div class="status">
+                  <div>
+                    Status: {{ triggerFG.get('status').value ? 'On' : 'Off' }}
+                  </div>
+                  <div click-stop-propagation>
+                    <hospitality-bot-toggle-switch
+                      class="status"
+                      controlName="status"
+                      onLabel=""
+                      offLabel=""
+                    ></hospitality-bot-toggle-switch>
+                  </div>
+                  <hospitality-bot-button
+                    click-stop-propagation
+                    label="Remove"
+                    variant="text"
+                    severity="reset"
+                    (onClick)="modifyTriggerFG('', i)"
+                  ></hospitality-bot-button>
+                </div>
+              </div>
+            </p-header>
+            <div class="accordion-body">
+              <div class="name-field">
+                <hospitality-bot-input
+                  class="full-width"
+                  controlName="name"
+                  maxLength="60"
+                  label="Name"
+                  [props]="{
+                    placeholder: 'Enter Name'
+                  }"
+                ></hospitality-bot-input>
+              </div>
+              <div class="date-days-field">
+                <hospitality-bot-from-to-date
+                  [parentFG]="triggerFG"
+                ></hospitality-bot-from-to-date>
+                <div class="days">
+                  <hospitality-bot-checkbox-selector
+                    class="bulk-update__week-days"
+                    label="Days"
+                    [allChecked]="true"
+                    [controlName]="'selectedDays'"
+                    [options]="weeks"
+                  >
+                  </hospitality-bot-checkbox-selector>
+                </div>
+              </div>
+            </div>
+            <div
+              class="level-datatable"
+              formArrayName="levels"
+              style="margin-top: 30px;"
+            >
+              <p-table>
+                <ng-template pTemplate="header">
+                  <tr>
+                    <th style="width: 35%; padding-left: 30px;">Time</th>
+                    <th style="width: 15%;">Occupancy<</th>
+                    <th style="width: 20%;">Occupancy>=</th>
+                    <th style="width: 30%;">Discount/Markup</th>
+                  </tr>
+                </ng-template>
+              </p-table>
+              <ng-container
+                *ngFor="
+                  let levelFG of triggerFG.get('levels')?.controls;
+                  let j = index
+                "
+              >
+                <div
+                  [formGroupName]="j"
+                  style="display: flex; padding: 15px 0;"
+                >
+                  <div style="width: 35%; padding-left: 30px;">
+                    <hospitality-bot-time-picker
+                      class="one-third-width"
+                      controlName="time"
+                      format="millisecond"
+                    ></hospitality-bot-time-picker>
+                  </div>
+                  <div style="width: 15%; padding: 0 1rem;">
+                    <hospitality-bot-input
+                      class="full-width"
+                      controlName="occupancyLowerLimit"
+                      [props]="{
+                        placeholder: 'Enter',
+                        type: 'number'
+                      }"
+                    ></hospitality-bot-input>
+                  </div>
+                  <div style="width: 20%; padding: 0 1rem;">
+                    <hospitality-bot-input
+                      class="full-width"
+                      controlName="occupancyUpperLimit"
+                      [props]="{
+                        placeholder: 'Enter',
+                        type: 'number'
+                      }"
+                    ></hospitality-bot-input>
+                  </div>
+                  <div
+                    style="
+                      width: 30%;
+                      padding: 0 30px 0 1rem;
+                      display: flex;
+                      align-items: center;
+                      gap: 15px;
+                    "
+                  >
+                    <div style="width: calc(100% - 35px);">
+                      <hospitality-bot-input
+                        class="full-width"
+                        controlName="discount"
+                        [props]="{
+                          placeholder: 'Enter',
+                          type: 'number'
+                        }"
+                      ></hospitality-bot-input>
+                    </div>
+                    <div
+                      style="
+                        color: red;
+                        font-size: 25px;
+                        cursor: pointer;
+                        border-width: 2px;
+                      "
+                      (click)="modifyLevelFG(triggerFG, '', j)"
+                    >
+                      &#10006;
+                    </div>
+                  </div>
+                </div>
+              </ng-container>
+            </div>
+            <div class="add-level">
+              <div class="link" (click)="modifyLevelFG(triggerFG)">
+                +Add Level
+              </div>
+            </div>
+          </p-accordionTab>
+        </div>
+      </div>
+      <div class="add-trigger">
+        <div class="link" (click)="modifyTriggerFG()">+Add New</div>
+      </div>
+    </div>
+  </p-accordion>
+</div>
+<ng-template #empty>--/--/----</ng-template>

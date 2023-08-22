@@ -1,19 +1,37 @@
 import { Injectable } from '@angular/core';
-import { EntitySubType, EntityType } from '@hospitality-bot/admin/shared';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { distinctUntilChanged } from 'rxjs/operators';
 import { ReservationTableValue } from '../constants/reservation-table';
 import { SelectedEntity } from '../types/reservation.type';
-import { OutletFormData } from '../types/forms.types';
+import {
+  InitialFormData,
+  OutletFormData,
+  RoomReservationFormData,
+} from '../types/forms.types';
 import { ReservationForm } from '../constants/form';
+import { GuestInfo } from '../models/reservations.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class FormService {
   outletIds = [];
+  dateDifference = new BehaviorSubject(1);
+  toDate: Date;
+  fromDate: Date;
+
+  setInitialDates = new BehaviorSubject<String>(null);
+
+  initialData: BehaviorSubject<InitialFormData> = new BehaviorSubject<
+    InitialFormData
+  >({});
+
+  guestInformation: BehaviorSubject<GuestInfo> = new BehaviorSubject<GuestInfo>(
+    null
+  );
 
   public selectedEntity = new BehaviorSubject<SelectedEntity>(null);
+
   getSelectedEntity(): Observable<SelectedEntity> {
     return this.selectedEntity.asObservable().pipe(distinctUntilChanged());
   }
@@ -30,14 +48,71 @@ export class FormService {
   selectedTab = ReservationTableValue.ALL;
   enableAccordion: boolean = false;
 
-  //  Booking Summary Props
-  price = new BehaviorSubject(0);
-  discountedPrice = new BehaviorSubject(0);
-  // roomType = new BehaviorSubject({roomTypeCount: 0, roomTypeName: ''});
+  mapRoomReservationData(
+    input: ReservationForm,
+    id?: string
+  ): RoomReservationFormData {
+    const roomReservationData = new RoomReservationFormData();
+    // Map Reservation Info
+    roomReservationData.id = id ?? '';
+    roomReservationData.from =
+      input.reservationInformation?.dateAndTime ??
+      input.reservationInformation?.from;
+    roomReservationData.to =
+      input.reservationInformation?.dateAndTime ??
+      input.reservationInformation?.to;
+    roomReservationData.reservationType =
+      input.reservationInformation?.reservationType ??
+      input.reservationInformation?.status;
+    roomReservationData.sourceName = input.reservationInformation?.sourceName;
+    roomReservationData.source = input.reservationInformation?.source;
+    roomReservationData.marketSegment =
+      input.reservationInformation?.marketSegment;
+    roomReservationData.paymentMethod =
+      input.paymentMethod?.paymentMethod ?? '';
+    roomReservationData.paymentRemark =
+      input.paymentMethod?.paymentRemark ?? '';
+    roomReservationData.guestId = input.guestInformation?.guestDetails;
 
-  mapOutletReservationData(input: ReservationForm, outletType: string) {
+    // Map Booking Items
+    if (input.roomInformation?.roomTypes) {
+      roomReservationData.bookingItems = input.roomInformation.roomTypes.map(
+        (roomType) => {
+          const bookingItem: any = {
+            roomDetails: {
+              ratePlan: { id: roomType.ratePlan },
+              roomTypeId: roomType.roomTypeId,
+              roomCount: roomType.roomCount,
+              roomNumbers: roomType.roomNumbers,
+            },
+            occupancyDetails: {
+              maxChildren: roomType.childCount,
+              maxAdult: roomType.adultCount,
+            },
+          };
+
+          if (roomType.id.length) {
+            bookingItem.id = roomType.id;
+          }
+
+          return bookingItem;
+        }
+      );
+    } else {
+      roomReservationData.bookingItems = [];
+    }
+
+    return roomReservationData;
+  }
+
+  mapOutletReservationData(
+    input: ReservationForm,
+    outletType: string,
+    id?: string
+  ) {
     const reservationData = new OutletFormData();
     // Reservation Info
+    reservationData.id = id ?? '';
     reservationData.eventType = input.reservationInformation?.eventType ?? '';
     reservationData.from =
       input.reservationInformation?.dateAndTime ??
@@ -51,25 +126,29 @@ export class FormService {
     reservationData.sourceName = input.reservationInformation?.sourceName;
     reservationData.source = input.reservationInformation?.source;
     reservationData.marketSegment = input.reservationInformation?.marketSegment;
+    reservationData.status = input.reservationInformation?.status;
+    reservationData.reservationType = input.reservationInformation?.status;
 
     // Booking/order/event info
-    reservationData.adultCount =
-      input.orderInformation?.numberOfAdults ??
-      input.bookingInformation?.numberOfAdults;
+    reservationData.occupancyDetails = {
+      maxAdult:
+        input.orderInformation?.numberOfAdults ??
+        input.bookingInformation?.numberOfAdults,
+    };
     reservationData.items =
       input.bookingInformation?.spaItems.map((item) => ({
         itemId: item.serviceName,
-        unit: item?.quantity ?? 1,
+        unit: item?.unit ?? 1,
         amount: item.amount,
       })) ??
       input.orderInformation?.menuItems.map((item) => ({
         itemId: item.menuItems,
-        unit: item?.quantity ?? 1,
+        unit: item?.unit ?? 1,
         amount: item.amount,
       })) ??
       input.eventInformation?.venueInfo.map((item) => ({
         itemId: item.description,
-        unit: item?.quantity ?? 1,
+        unit: item?.unit ?? 1,
         amount: item.amount,
       }));
 

@@ -33,17 +33,7 @@ export class CreateFoodPackageComponent extends OutletBaseComponent
   taxes: Option[] = [];
   isPackageCreated = false;
 
-  types: Option[] = [
-    { label: 'Veg', value: 'VEG' },
-    { label: 'Non-veg', value: 'NONVEG' },
-    { label: 'Drinks', value: 'DRINKS' },
-    { label: 'Desserts', value: 'DESSERTS' },
-  ];
-  foodCategories: Option[] = [
-    { label: 'Category 1', value: 'CATEGORY1' },
-    { label: 'Category 2', value: 'CATEGORY2' },
-    { label: 'Category 3', value: 'CATEGORY3' },
-  ];
+  foodCategories: Option[];
 
   constructor(
     private fb: FormBuilder,
@@ -63,6 +53,7 @@ export class CreateFoodPackageComponent extends OutletBaseComponent
     this.fields = foodPackageFields;
     this.initForm();
     this.getTax();
+    this.getFoodPackageCategory();
   }
 
   initForm(): void {
@@ -71,8 +62,8 @@ export class CreateFoodPackageComponent extends OutletBaseComponent
     this.useForm = this.fb.group({
       active: [true],
       name: ['', Validators.required],
-      type: ['', Validators.required],
-      originalPrice: ['', Validators.required],
+      parentId: ['', Validators.required],
+      rate: ['', Validators.required],
       currency: ['INR'],
       discountType: ['PERCENTAGE'],
       discountValue: ['', Validators.required],
@@ -113,10 +104,7 @@ export class CreateFoodPackageComponent extends OutletBaseComponent
       return;
     }
 
-    let data = {
-      ...(this.useForm.getRawValue() as FoodPackageForm),
-      type: 'FOOD_PACKAGE',
-    };
+    let data = this.useForm.getRawValue();
 
     if (this.foodPackageId) {
       data = { ...data, id: this.foodPackageId };
@@ -125,10 +113,8 @@ export class CreateFoodPackageComponent extends OutletBaseComponent
           .updateFoodPackage(
             this.outletId,
             this.foodPackageId,
-
             {
               ...data,
-              type: 'FOOD_PACKAGE',
               source: 1,
             },
             {
@@ -138,10 +124,10 @@ export class CreateFoodPackageComponent extends OutletBaseComponent
           .subscribe(this.handleSuccess, this.handleErrors)
       );
     } else {
-      const { foodItems, ...rest } = data;
+      // const { foodItems, ...rest } = data;
       this.$subscription.add(
         this.outletService
-          .addFoodPackage(this.outletId, rest)
+          .addFoodPackage(this.outletId, data)
           .subscribe((res) => {
             this.handleSuccess(res.id);
           }, this.handleErrors)
@@ -165,6 +151,17 @@ export class CreateFoodPackageComponent extends OutletBaseComponent
         }));
       })
     );
+  }
+
+  getFoodPackageCategory() {
+    this.outletService
+      .getFoodPackageCategory(this.outletId)
+      .subscribe((res) => {
+        this.foodCategories = res?.records?.map((item) => ({
+          label: item.name,
+          value: item.id,
+        }));
+      });
   }
 
   createTax() {

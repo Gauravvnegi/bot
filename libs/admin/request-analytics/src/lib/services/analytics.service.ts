@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { ApiService } from 'libs/shared/utils/src/lib/services/api.service';
 import { Observable } from 'rxjs';
 import { SentimentStatsResponse } from '../types/response.types';
+import { QueryConfig } from '@hospitality-bot/admin/shared';
 
 @Injectable()
 export class AnalyticsService extends ApiService {
@@ -66,5 +67,17 @@ export class AnalyticsService extends ApiService {
 
   updatePreArrivalRequest(id, data) {
     return this.patch(`/api/v1/request/pre-arrival/${id}`, data);
+  }
+
+  getComplaintStats(config: QueryConfig) {
+    return this.get(`/api/v1/request-analytics/stats/${config.params}`);
+  }
+
+  getPerDayRequestStats(config: QueryConfig) {
+    return this.get(`/api/v1/request-analytics/average/count/${config.params}`);
+  }
+
+  getAgentDistributionStats() {
+    return this.get(`/api/v1/request-analytics/distribution`);
   }
 }

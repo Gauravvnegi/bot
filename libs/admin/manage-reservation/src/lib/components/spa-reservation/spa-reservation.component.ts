@@ -1,26 +1,19 @@
-import { Component, Input, OnInit } from '@angular/core';
-import {
-  FormGroup,
-  FormArray,
-  FormBuilder,
-  Validators,
-  AbstractControl,
-} from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
+import { FormGroup, FormArray, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
-  NavRouteOptions,
   AdminUtilityService,
   Option,
+  EntityType,
+  EntitySubType,
 } from '@hospitality-bot/admin/shared';
 import { IteratorField } from 'libs/admin/shared/src/lib/types/fields.type';
-import { Subscription } from 'rxjs';
 import {
   editModeStatusOptions,
   spaFields,
   statusOptions,
 } from '../../constants/reservation';
-import { manageReservationRoutes } from '../../constants/routes';
 import {
   OfferList,
   OfferData,
@@ -29,40 +22,31 @@ import {
   OutletForm,
 } from '../../models/reservations.model';
 import { ManageReservationService } from '../../services/manage-reservation.service';
-import { ReservationForm } from '../../constants/form';
 import { FormService } from '../../services/form.service';
-import { ServiceList } from '../../models/forms.model';
 import {
   LibrarySearchItem,
-  SelectedEntity,
-  ServicesTypeValue,
-} from '../../types/reservation.type';
-import { ServiceListResponse } from '../../types/response.type';
-import { LibraryService } from '@hospitality-bot/admin/library';
+  LibraryService,
+} from '@hospitality-bot/admin/library';
+import { debounceTime } from 'rxjs/operators';
+import { ReservationSummary } from '../../types/forms.types';
+import { ServiceListResponse } from 'libs/admin/services/src/lib/types/response';
+import { ServiceList } from 'libs/admin/services/src/lib/models/services.model';
+import { ServicesTypeValue } from 'libs/admin/room/src/lib/constant/form';
+import { BaseReservationComponent } from '../base-reservation.component';
+import { ReservationType } from '../../constants/reservation-table';
 
 @Component({
   selector: 'hospitality-bot-spa-reservation',
   templateUrl: './spa-reservation.component.html',
   styleUrls: ['./spa-reservation.component.scss', '../reservation.styles.scss'],
 })
-export class SpaReservationComponent implements OnInit {
-  userForm: FormGroup;
+export class SpaReservationComponent extends BaseReservationComponent
+  implements OnInit {
   spaBookingInfo: FormArray;
   fields: IteratorField[];
 
-  outletId: string;
-  entityId: string;
-  reservationId: string;
-
   statusOptions: Option[] = [];
-
-  offersList: OfferList;
-  selectedOffer: OfferData;
-  summaryData: SummaryData;
-
-  // loading = false;
-  formValueChanges = false;
-  disabledForm = false;
+  spaItemsValues = [];
 
   date: string;
   time: string;
@@ -73,48 +57,30 @@ export class SpaReservationComponent implements OnInit {
   noMoreResults = false;
   services: (Option & { price: number })[] = [];
 
-  deductedAmount = 0;
-  bookingType = 'SPA';
-
-  itemInfo = 'For 1 Adult';
-
-  pageTitle: string;
-  routes: NavRouteOptions = [];
-
-  @Input() selectedEntity: SelectedEntity;
-
-  $subscription = new Subscription();
-
   constructor(
     private fb: FormBuilder,
     private adminUtilityService: AdminUtilityService,
-    private globalFilterService: GlobalFilterService,
+    protected globalFilterService: GlobalFilterService,
     private manageReservationService: ManageReservationService,
     protected activatedRoute: ActivatedRoute,
     private formService: FormService,
     private libraryService: LibraryService,
     private router: Router
   ) {
-    this.initForm();
-    this.reservationId = this.activatedRoute.snapshot.paramMap.get('id');
-
-    const { navRoutes, title } = manageReservationRoutes[
-      this.reservationId ? 'editReservation' : 'addReservation'
-    ];
-    this.routes = navRoutes;
-    this.pageTitle = title;
+    super(globalFilterService, activatedRoute);
   }
 
   ngOnInit(): void {
-    this.entityId = this.globalFilterService.entityId;
-    this.outletId = this.selectedEntity.id;
-    this.fields = spaFields;
-    this.initOptions();
+    this.initForm();
+    this.initDetails();
     this.getReservationId();
     this.getServices();
   }
 
-  initOptions() {
+  initDetails() {
+    this.bookingType = EntitySubType.SPA;
+    this.outletId = this.selectedEntity.id;
+    this.fields = spaFields;
     // Update Fields for search in select component
     this.fields[0] = {
       ...this.fields[0],
@@ -157,12 +123,10 @@ export class SpaReservationComponent implements OnInit {
     });
     this.userForm
       .get('bookingInformation.numberOfAdults')
-      .valueChanges.subscribe((res) => {
-        this.itemInfo = `For ${res} Adult`;
+      .valueChanges.pipe(debounceTime(1000))
+      .subscribe((res) => {
+        this.getSummaryData();
       });
-    this.spaBookingInfo.valueChanges.subscribe((res) => {
-      this.getSummaryData();
-    });
   }
 
   /**
@@ -179,8 +143,13 @@ export class SpaReservationComponent implements OnInit {
         this.spaItemsControls[index]
           .get('amount')
           .setValue(selectedService?.price);
-        this.spaItemsControls[index].get('quantity').setValue(1);
+        this.spaItemsControls[index].get('unit').setValue(1);
+        this.getSummaryData();
       });
+    this.spaItemsControls[index]
+      .get('unit')
+      .valueChanges.pipe(debounceTime(1000))
+      .subscribe((res) => this.getSummaryData());
   }
 
   /**
@@ -226,14 +195,16 @@ export class SpaReservationComponent implements OnInit {
         .subscribe(
           (response) => {
             const data = new OutletForm().deserialize(response);
-            this.userForm.patchValue(data);
-            this.summaryData = new SummaryData().deserialize(response);
-            this.setFormDisability(data.reservationInformation);
-            this.userForm.valueChanges.subscribe((_) => {
-              if (!this.formValueChanges) {
-                this.formValueChanges = true;
-                this.listenForFormChanges();
-              }
+
+            const {
+              bookingInformation: { spaItems, ...spaInfo },
+              ...formData
+            } = data;
+
+            this.spaItemsValues = spaItems;
+            this.userForm.patchValue({
+              bookingInformation: spaInfo,
+              ...formData,
             });
           },
           (error) => {}
@@ -241,43 +212,28 @@ export class SpaReservationComponent implements OnInit {
     );
   }
 
-  setFormDisability(data: BookingInfo): void {
-    this.userForm.get('reservationInformation.source').disable();
-    switch (true) {
-      case data.reservationType === 'CONFIRMED':
-        this.userForm.disable();
-        this.disabledForm = true;
-        break;
-      case data.reservationType === 'CANCELED':
-        this.userForm.disable();
-        this.disabledForm = true;
-        break;
-      case data.source === 'CREATE_WITH':
-        this.disabledForm = true;
-        break;
-      case data.source === 'OTHERS':
-        this.disabledForm = true;
-        break;
+  setFormDisability(): void {
+    // this.userForm.get('reservationInformation.source').disable();
+    if (this.reservationId) {
+      const reservationType = this.reservationInfoControls.reservationType
+        .value;
+      switch (true) {
+        case reservationType === ReservationType.CONFIRMED:
+          this.userForm.disable();
+          this.disabledForm = true;
+          break;
+        case reservationType === ReservationType.CANCELED:
+          this.userForm.disable();
+          this.disabledForm = true;
+          break;
+        // case data.source === 'CREATE_WITH':
+        //   this.disabledForm = true;
+        //   break;
+        // case data.source === 'OTHERS':
+        //   this.disabledForm = true;
+        //   break;
+      }
     }
-  }
-
-  getOfferByRoomType(id: string): void {
-    if (id)
-      this.$subscription.add(
-        this.manageReservationService
-          .getOfferByRoomType(this.entityId, id)
-          .subscribe(
-            (response) => {
-              this.offersList = new OfferList().deserialize(response);
-              if (this.userForm.get('offerId').value) {
-                this.selectedOffer = this.offersList.records.filter(
-                  (item) => item.id === this.userForm.get('offerId').value
-                )[0];
-              }
-            },
-            (error) => {}
-          )
-      );
   }
 
   offerSelect(offerData?: OfferData): void {
@@ -292,24 +248,21 @@ export class SpaReservationComponent implements OnInit {
   }
 
   getSummaryData(): void {
-    const defaultProps = [
-      {
-        type: 'OUTLET',
-      },
-    ];
     const config = {
-      params: this.adminUtilityService.makeQueryParams(defaultProps),
+      params: this.adminUtilityService.makeQueryParams([
+        { type: EntityType.OUTLET },
+      ]),
     };
-    const data = {
+    const data: ReservationSummary = {
       fromDate: this.reservationInfoControls.dateAndTime.value,
       toDate: this.reservationInfoControls.dateAndTime.value,
       adultCount: this.userForm.get('bookingInformation.numberOfAdults').value,
       items: this.spaItemsControls.map((item) => ({
         itemId: item.get('serviceName').value,
-        unit: item.get('quantity')?.value ?? 0,
+        unit: item.get('unit')?.value ?? 0,
         amount: item.get('amount').value,
       })),
-      outletType: 'SPA',
+      outletType: EntitySubType.SPA,
     };
     this.$subscription.add(
       this.manageReservationService
@@ -328,7 +281,8 @@ export class SpaReservationComponent implements OnInit {
               .patchValue(this.summaryData?.totalAmount);
             this.deductedAmount = this.summaryData?.totalAmount;
           },
-          (error) => {}
+          (error) => {},
+          () => this.setFormDisability()
         )
     );
   }
@@ -426,14 +380,6 @@ export class SpaReservationComponent implements OnInit {
     this.router.navigate([`/pages/library/services/create-service`]);
   }
 
-  get reservationInfoControls() {
-    return (this.userForm.get('reservationInformation') as FormGroup)
-      .controls as Record<
-      keyof ReservationForm['reservationInformation'],
-      AbstractControl
-    >;
-  }
-
   get spaItemsControls() {
     return ((this.userForm.get('bookingInformation') as FormGroup).get(
       'spaItems'
@@ -451,11 +397,4 @@ export class SpaReservationComponent implements OnInit {
   handleFinal = () => {
     this.loadingResults = false;
   };
-
-  /**
-   * @function ngOnDestroy to unsubscribe subscription.
-   */
-  ngOnDestroy(): void {
-    this.$subscription.unsubscribe();
-  }
 }

@@ -17,20 +17,25 @@ import { RequestStatus } from '../../constants/request';
 import { InhouseData } from '../../data-models/inhouse-list.model';
 import { RequestService } from '../../services/request.service';
 import { CMSUpdateJobData } from '../../types/request.type';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'hospitality-bot-request-detail',
   templateUrl: './request-detail.component.html',
   styleUrls: ['./request-detail.component.scss'],
+  providers: [DatePipe],
 })
 export class RequestDetailComponent implements OnInit, OnDestroy {
   data: InhouseData;
   status = false;
   statusList: Option[] = [];
+  assigneeList: Option[];
   $subscription = new Subscription();
   entityId: string;
   @Output() guestInfo = new EventEmitter();
   @Input() guestInfoEnable;
+  closedTimestamp: number;
+  formattedClosedTimestamp: string;
 
   requestFG: FormGroup;
   constructor(
@@ -38,7 +43,8 @@ export class RequestDetailComponent implements OnInit, OnDestroy {
     private fb: FormBuilder,
     private adminUtilityService: AdminUtilityService,
     private snackbarService: SnackBarService,
-    private globalFilterService: GlobalFilterService
+    private globalFilterService: GlobalFilterService,
+    private datePipe: DatePipe
   ) {}
 
   ngOnInit(): void {
@@ -62,8 +68,15 @@ export class RequestDetailComponent implements OnInit, OnDestroy {
         (response: InhouseData) => {
           if (response) {
             this.data = response;
-            this.requestFG.patchValue({ status: response.action });
+            //need to patch assigne
+            this.requestFG.patchValue({
+              status: response.action,
+              assignee: response.assigneeId,
+            });
+            this.closedTimestamp = response?.closedTime;
+            this.getAssigneeList(response.itemId);
             this.status = true;
+            this.formattedDate();
           } else {
             this.data = new InhouseData();
             this.status = false;
@@ -89,6 +102,21 @@ export class RequestDetailComponent implements OnInit, OnDestroy {
     );
   }
 
+  getAssigneeList(itemId) {
+    this.$subscription.add(
+      this._requestService
+        .getItemDetails(this.entityId, itemId)
+        .subscribe((response) => {
+          this.assigneeList = response.requestItemUsers.map((item) => {
+            return {
+              label: item.firstName + ' ' + item.lastName,
+              value: item.userId,
+            };
+          });
+        })
+    );
+  }
+
   /**
    * @function listenForGlobalFilters To listen for global filters and load data when filter value is changed.
    */
@@ -106,6 +134,7 @@ export class RequestDetailComponent implements OnInit, OnDestroy {
   initFG() {
     this.requestFG = this.fb.group({
       status: [''],
+      assignee: [''],
     });
   }
 
@@ -157,6 +186,8 @@ export class RequestDetailComponent implements OnInit, OnDestroy {
               '',
               { panelClass: 'success' }
             );
+            this.data.action = event.value;
+            this.formattedDate();
 
             this._requestService.refreshData.next(true);
           },
@@ -165,6 +196,37 @@ export class RequestDetailComponent implements OnInit, OnDestroy {
           }
         )
     );
+  }
+
+  formattedDate() {
+    const dateObject: Date = this.closedTimestamp
+      ? new Date(this.closedTimestamp)
+      : new Date();
+    this.formattedClosedTimestamp = this.datePipe.transform(
+      dateObject,
+      "EEEE, MMMM d, y, 'at' HH:mm:ss",
+      'UTC'
+    );
+  }
+
+  handleAssigneeChange(event) {
+    this._requestService
+      .assignComplaintToUser(this.data.id, {
+        assignedTo: event.value,
+      })
+      .subscribe(() => {
+        this.snackbarService.openSnackBarAsText(
+          `Assignee updated successfully`,
+          '',
+          { panelClass: 'success' }
+        );
+        this.requestFG.patchValue({ assignee: event.value });
+
+        this._requestService.refreshData.next(true);
+      }),
+      ({ error }) => {
+        this.requestFG.patchValue({ assignee: this.data.assigneeId });
+      };
   }
 
   ngOnDestroy(): void {

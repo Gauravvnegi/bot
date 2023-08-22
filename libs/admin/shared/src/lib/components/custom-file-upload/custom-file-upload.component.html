@@ -49,13 +49,26 @@
         <div [style.width]="unit == 1 ? '302px' : '200px'" class="hint">
           {{ hint }}
         </div>
-        <div class="checkbox" *ngIf="isFeatureView">
+        <div
+          class="checkbox"
+          *ngIf="isFeatureView"
+          [ngClass]="{
+            disable:
+              !this.featureValueIndex?.includes(i) && this.exceedFeatureLimit
+          }"
+        >
           <input
+            #checkbox
+            [disabled]="
+              !this.featureValueIndex?.includes(i) && this.exceedFeatureLimit
+            "
             type="checkbox"
             [checked]="featureValueIndex?.includes(i)"
             (change)="processCheckboxChange($event, i)"
           />
-          <label for="checkbox"> Make Featured Image</label><br />
+          <label (click)="checkbox.click()" for="checkbox">
+            Make Featured Image</label
+          ><br />
         </div>
         <div
           class="upload-button"

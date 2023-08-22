@@ -13,6 +13,7 @@ export class CheckboxSelectorComponent extends FormComponent {
   @Input() set allChecked(value: boolean) {
     this.defaultAllChecked = value;
     this.setControls(value);
+    this.setDefault();
   }
 
   checkBoxForm: FormGroup;
@@ -26,6 +27,7 @@ export class CheckboxSelectorComponent extends FormComponent {
 
   ngOnInit(): void {
     this.setControls(this.defaultAllChecked);
+    this.setDefault();
     this.listenChanges();
   }
 
@@ -54,12 +56,11 @@ export class CheckboxSelectorComponent extends FormComponent {
       const value = changedCheckbox[key];
       value && selectedCheckbox.push(key);
     });
-
     changedCheckbox.all && (selectedCheckbox = [...this.checkboxControlsName]);
 
-    this.controlContainer.control
-      .get(this.controlName)
-      ?.patchValue(selectedCheckbox);
+    const control = this.controlContainer.control.get(this.controlName);
+    control?.patchValue(selectedCheckbox);
+    control?.markAsDirty();
   }
 
   toggleSelectAll(): void {
@@ -81,6 +82,18 @@ export class CheckboxSelectorComponent extends FormComponent {
       allControl.setValue(false);
     } else {
       allControl.setValue(true);
+    }
+  }
+
+  setDefault() {
+    const control = this.controlContainer.control.get(this.controlName);
+    if (control?.value?.length) {
+      control.value.forEach((item) => {
+        this.checkBoxForm.patchValue({ [item]: true });
+        this.checkBoxForm.markAsDirty();
+      });
+    } else {
+      this.setControls(this.defaultAllChecked);
     }
   }
 }

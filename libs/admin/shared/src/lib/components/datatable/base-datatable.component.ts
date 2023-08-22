@@ -63,9 +63,9 @@ export class BaseDatatableComponent implements OnInit {
   tableFG: FormGroup;
 
   isPaginator = false;
-  rowsPerPage = 5;
+  rowsPerPage = 50;
   showCurrentPageReport = true;
-  rowsPerPageOptions = [5, 10, 25, 50];
+  rowsPerPageOptions = [5, 10, 25, 50, 200];
   first = 0; //index of the first page to show
 
   @Input() tableConfig = {
@@ -193,7 +193,7 @@ export class BaseDatatableComponent implements OnInit {
   }
 
   resetTableValues() {
-    this.rowsPerPage = 5;
+    this.rowsPerPage = 50;
     this.first = 0;
     this.values = [];
     this.tabFilterItems = [];
@@ -381,7 +381,6 @@ export class BaseDatatableComponent implements OnInit {
     selectedChips: Set<string>;
   }): void {
     this.selectedFilterChips = selectedChips;
-
     this.changePage(0);
   }
 

@@ -26,7 +26,7 @@ export const cols: Cols[] = [
   {
     field: 'status',
     header: 'Action',
-    sortType: 'string',
+    sortType: 'number',
     width: '20%',
     isSearchDisabled: true,
   },
@@ -35,3 +35,8 @@ export const cols: Cols[] = [
 export const chips = filtersChips.map((item) => ({ ...item }));
 
 export const title = 'Offers';
+
+export enum DiscountType {
+  PERCENTAGE = '%OFF',
+  NUMBER = 'FLAT',
+}

@@ -9,7 +9,7 @@
   @include header-fixed-position;
   height: $sticky-header-height;
   transition: box-shadow 1s ease-in;
-  padding: 20px 22px;
+  padding: 20px 32px 20px 24px;
   box-shadow: 1px 7px 8px -7px rgba(181, 181, 181, 1);
 }
 
@@ -111,4 +111,8 @@
 
 .nav-header-wrapper {
   padding-top: 20px;
+}
+
+.disabled {
+  pointer-events: none;
 }

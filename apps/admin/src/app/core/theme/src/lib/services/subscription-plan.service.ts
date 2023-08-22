@@ -20,15 +20,7 @@ export class SubscriptionPlanService extends ApiService {
   getSubscriptionPlan(entityId: string): Observable<any> {
     return this.get(`/api/v1/entity/${entityId}/subscriptions/`).pipe(
       map((res) => {
-        const guest = res.products.find(
-          (item) => item.name === ModuleNames.GUESTS
-        );
-        if (guest) {
-          guest['name'] = ModuleNames.MEMBERS;
-          guest['label'] = 'Members';
-          guest['config'] = customModule.guests.config;
-        }
-        res.products = [...res.products];
+        res.products = [...res.products, customModule.revenueManager];
         return res;
       })
     );
@@ -59,7 +51,7 @@ export class SubscriptionPlanService extends ApiService {
 
   getSubscriptionUsage(entityId: string, config: any): Observable<any> {
     return this.get(
-      `/api/v1/entity/${entityId}/subscriptions/usage/${config.queryObj}`
+      `/api/v1/entity/${entityId}/subscriptions/usage${config.queryObj}`
     );
   }
 

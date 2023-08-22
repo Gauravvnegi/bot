@@ -7,6 +7,7 @@
         [reservationTypes]="reservationTypes"
         [bookingType]="bookingType"
         [expandAccordion]="expandAccordion"
+        (getSummary)="getSummaryData()"
       ></hospitality-bot-booking-info>
       <p-accordionTab
         [selected]="expandAccordion"
@@ -15,7 +16,8 @@
       >
         <hospitality-bot-room-iterator
           (refreshData)="getSummaryData()"
-          (listenChanges)="listenForFormChanges($event)"
+          (listenChanges)="listenForFormChanges()"
+          [itemValues]="roomTypeValues"
         >
         </hospitality-bot-room-iterator>
       </p-accordionTab>
@@ -38,35 +40,29 @@
         [disabledForm]="disabledForm"
         [bookingInfo]="{
           bookingType: bookingType,
-          heading: heading
+          occupancyDetails: occupancyDetails
         }"
       >
-        <div class="bk-summary_roomInfo_checkoutInfo">
+        <div class="bk-summary_roomInfo_checkoutInfo summary-item">
           <p class="bk-summary_roomInfo_checkoutInfo_heading">
             Checkin - Checkout
           </p>
           <p class="bk-summary_roomInfo_checkoutInfo_subText">
-            {{
-              userForm.get('reservationInformation.from')?.value
-                | date: 'dd/MM/yyyy'
-            }}
+            {{ reservationInfoControls.from.value | date: 'dd/MM/yyyy' }}
             -
-            {{
-              userForm.get('reservationInformation.to')?.value
-                | date: 'dd/MM/yyyy'
-            }}
+            {{ reservationInfoControls.to.value | date: 'dd/MM/yyyy' }}
           </p>
         </div>
-        <div class="bk-summary_roomInfo_guestInfo">
+        <div class="bk-summary_roomInfo_guestInfo summary-item">
           <p class="bk-summary_roomInfo_guestInfo_heading">
             Rooms & Guests
           </p>
           <p class="bk-summary_roomInfo_guestInfo_subText">
-            {{ roomCount }}
+            {{ occupancyDetails.roomCount }}
             Room,
-            {{ adultCount }}
+            {{ occupancyDetails.adultCount }}
             Adult,
-            {{ childCount }}
+            {{ occupancyDetails.childCount }}
             Kid
           </p>
         </div>

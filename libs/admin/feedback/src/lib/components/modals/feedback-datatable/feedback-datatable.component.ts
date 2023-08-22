@@ -33,7 +33,6 @@ import {
 } from '../../../data-models/feedback-datatable.model';
 import { StatisticsService } from '../../../services/feedback-statistics.service';
 import { FeedbackTableService } from '../../../services/table.service';
-import { SelectedChip } from '../../../types/feedback.type';
 import { FeedbackDatatableComponent } from '../../datatable/feedback-datatable/feedback-datatable.component';
 import { FeedbackDetailModalComponent } from '../feedback-detail-modal/feedback-detail.component';
 import { feedbackStatus } from '../../../constants/feedback';
@@ -110,7 +109,6 @@ export class FeedbackDatatableModalComponent extends FeedbackDatatableComponent
     this.config = this.data.config;
     this.feedbackGraph = this.config[0].feedbackGraph;
     this.feedbackType = this.data.feedbackType;
-    this.rowsPerPage = 5;
     if (this.tableName === 'Response Rate')
       this.isNotVisible =
         this.tabFilterIdx === 0 || this.tabFilterIdx === 2 ? true : false;

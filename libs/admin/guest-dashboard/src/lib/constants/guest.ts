@@ -403,6 +403,7 @@ export const guest = {
         field: 'stageAndourney',
         header: 'Stage/ Channels',
         isSearchDisabled: true,
+        isSortDisabled: true,
       },
     ],
   },

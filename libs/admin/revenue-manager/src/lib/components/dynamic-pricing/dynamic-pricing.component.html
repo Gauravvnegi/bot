@@ -1,0 +1,37 @@
+<div class="main-wrapper">
+  <div class="header">
+    <hospitality-bot-navigation-header
+      heading="Dynamic Pricing"
+      [routes]="[{ label: 'Revenue Manager', link: './' }]"
+      [isStickyTitle]="false"
+      [isBack]="false"
+    >
+    </hospitality-bot-navigation-header>
+  </div>
+  <hospitality-bot-stepper
+    [stepList]="itemList"
+    (onActive)="onActive($event)"
+  ></hospitality-bot-stepper>
+  <div class="content">
+    <ng-container [ngSwitch]="activeStep">
+      <hospitality-bot-occupancy
+        *ngSwitchCase="0"
+        [dynamicPricingFG]="dynamicPricingFG"
+        [rooms]="allRooms"
+      ></hospitality-bot-occupancy>
+
+      <hospitality-bot-day-time-trigger
+        *ngSwitchCase="1"
+        [dynamicPricingFG]="dynamicPricingFG"
+        (modifyTriggerFGEvent)="modifyTriggerFG($event)"
+        (modifyLevelFGEvent)="modifyLevelFG($event)"
+      ></hospitality-bot-day-time-trigger>
+
+      <hospitality-bot-inventory-reallocation
+        [dynamicPricingFG]="dynamicPricingFG"
+        (modifyInventoryAllocationFGEvent)="modifyInventoryAllocationFG($event)"
+        *ngSwitchCase="2"
+      ></hospitality-bot-inventory-reallocation>
+    </ng-container>
+  </div>
+</div>

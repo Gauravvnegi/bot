@@ -165,6 +165,15 @@ const appRoutes: Route[] = [
         canActivate: [CanActivateGuard],
       },
       {
+        path: 'revenue-manager',
+        loadChildren: () =>
+          import('@hospitality-bot/admin/revenue-manager').then(
+            (m) => m.AdminRevenueManagerModule
+          ),
+        canLoad: [CanLoadGuard],
+        canActivate: [CanActivateGuard],
+      },
+      {
         path: 'redirect',
         loadChildren: () =>
           import('@hospitality-bot/admin/unsubscribed').then(

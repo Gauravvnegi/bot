@@ -20,7 +20,11 @@ import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.
 import { Subscription } from 'rxjs';
 import { cuisinesType } from '../../constants/data';
 import { outletBusinessRoutes } from '../../constants/routes';
-import { FoodPackageList, MenuList } from '../../models/outlet.model';
+import {
+  FoodPackageList,
+  MenuList,
+  OutletFormData,
+} from '../../models/outlet.model';
 import { Services } from '../../models/services';
 import { OutletFormService } from '../../services/outlet-form.service';
 import { OutletService } from '../../services/outlet.service';
@@ -107,10 +111,10 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
         countryCode: ['+91'],
         number: [''],
       }),
-      dayOfOperationStart: ['', [Validators.required]],
-      dayOfOperationEnd: ['', [Validators.required]],
-      timeDayStart: ['', [Validators.required]],
-      timeDayEnd: ['', [Validators.required]],
+      startDay: ['', [Validators.required]],
+      endDay: ['', [Validators.required]],
+      from: ['', [Validators.required]],
+      to: ['', [Validators.required]],
       address: [{}, [Validators.required]],
       imageUrl: [[], [Validators.required]],
       description: [''],
@@ -143,12 +147,24 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
         this.loading = true;
         this.outletService.getOutletById(this.outletId).subscribe(
           (res) => {
-            const { absoluteRoute, type, subType, logo, ...rest } = res;
+            this.loading = false;
+            const {
+              absoluteRoute,
+              type,
+              subType,
+              logo,
+              operationalDays,
+              ...rest
+            } = res;
             this.logoUrl = logo;
             this.redirectUrl = absoluteRoute;
             this.initOptionConfig(type);
 
             this.useForm.get('type').setValue(type);
+            this.useForm.get('startDay').setValue(operationalDays?.startDay);
+            this.useForm.get('endDay').setValue(operationalDays?.endDay);
+            this.useForm.get('from').setValue(operationalDays?.from);
+            this.useForm.get('to').setValue(operationalDays?.to);
 
             this.useForm.get('type').disable();
             this.useForm.get('subType').setValue(subType.toUpperCase());
@@ -259,7 +275,7 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
       return;
     }
 
-    let data = this.useForm.getRawValue() as OutletForm;
+    let data = new OutletFormData().deserialize(this.useForm.getRawValue());
 
     //api call to add/update outlet
     if (this.outletId) {
@@ -369,7 +385,8 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
     const { imageUrl } = this.formControls;
 
     togglePopupCompRef.componentInstance.content = {
-      backgroundURl: imageUrl?.value[0]?.url,
+      backgroundURl: imageUrl?.value.filter((item) => item.isFeatured)?.[0]
+        ?.url,
 
       descriptionHeading: 'HOW TO ORDER',
       descriptionsPoints: [
@@ -377,7 +394,7 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
         'Browse the menu and place your order',
         'Place your orders',
       ],
-      route: this.redirectUrl,
+      route: this.redirectUrl ?? 'https://www.test.menu.com/',
       logoUrl: this.logoUrl,
     };
     togglePopupCompRef.componentInstance.onClose.subscribe(() => {
@@ -420,7 +437,7 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
         break;
       //to navigate to create service page
       case 'service':
-        this.router.navigate([`pages/library/services/create-service`], {
+        this.router.navigate([`/pages/library/services/create-service`], {
           relativeTo: this.route,
         });
         break;
@@ -435,9 +452,12 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
         break;
       //to navigate to create food package page
       case 'food-package':
-        this.router.navigate([outletBusinessRoutes.foodPackage.route], {
-          relativeTo: this.route,
-        });
+        this.router.navigate(
+          [`${outletId}/${outletBusinessRoutes.foodPackage.route}`],
+          {
+            relativeTo: this.route,
+          }
+        );
         break;
       //to navigate back to edit brand page
       case 'brand':

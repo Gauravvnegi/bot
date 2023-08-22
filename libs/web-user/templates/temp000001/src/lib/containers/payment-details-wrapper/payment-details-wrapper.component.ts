@@ -35,6 +35,7 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
   selectedPaymentOption: SelectedPaymentOption = new SelectedPaymentOption();
   paymentUrl: string;
   selectedIndex: number = 0;
+  selectedTab: 'Pay At Desk' | 'Pay Now' = 'Pay At Desk';
 
   constructor(
     private _paymentDetailsService: PaymentDetailsService,
@@ -74,8 +75,10 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
     return this.buttonConfig;
   }
 
-  onTabChanged({ index }) {
+  onTabChanged(event) {
+    const { index, tab } = event;
     this.selectedIndex = index;
+    this.selectedTab = tab.textLabel;
   }
 
   initPaymentDetailsDS(hotelPaymentConfig) {
@@ -93,15 +96,14 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
         const gatewayDetails = data?.paymentConfiguration?.map((gateway) => ({
           gatewayType: gateway?.type,
           imgSrc:
-            gateway?.imgSrc || gateway?.type === 'CCAVENUE'
-              ? 'https://nyc3.digitaloceanspaces.com/botfiles/bot/entity/roseate/banner/ccavenue.webp'
+            // gateway?.imgSrc ||
+            gateway?.type === 'CCAVENUE'
+              ? 'https://nyc3.digitaloceanspaces.com/botfiles/bot/payment_method/ccavenue.png'
               : 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/PayU.svg/1200px-PayU.svg.png',
           payload: {
             redirectUrl: `${environment.host_url}${this.router.url}&entity=payment`,
           },
         }));
-
-        console.log(gatewayDetails)
 
         this.paymentUrl = initPaymentModule({
           userInfo: {
@@ -110,7 +112,7 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
             reservationId: this._reservationService.reservationId,
           },
           uiConfig: {
-            heading: 'Select a payment method',
+            heading: 'Select a payment method to proceed...',
             variant: 'standard',
           },
           gatewayDetails,
@@ -147,6 +149,16 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
         this.updatePaymentStatus(journeyEnums.JOURNEY.preCheckin);
       }
     }
+  }
+
+  get isSubmitDisabled() {
+    if (!this.matTab) return;
+    const TAB_INDEX = this.matTab['_selectedIndex'];
+    return (
+      this.hotelPaymentConfig.paymentHeaders[TAB_INDEX].type ===
+        paymentEnum.PaymentHeaders.payNow &&
+      this.reservationData.paymentSummary.payableAmount !== 0
+    );
   }
 
   onCheckinSubmit() {
@@ -285,7 +297,7 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
   }
 
   handlePayNowPayment(data, buttonRef: string) {
-    switch (this.selectedPaymentOption.config.gatewayType) {
+    switch (this.selectedPaymentOption?.config.gatewayType) {
       case paymentEnum.GatewayTypes.ccavenue:
         this.initiateCCAvenuePayment(data, buttonRef);
         break;

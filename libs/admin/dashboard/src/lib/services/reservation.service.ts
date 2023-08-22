@@ -18,7 +18,7 @@ export class ReservationService extends ApiService {
    * @returns An Observable with reservation list.
    */
   getReservationDetails(config): Observable<any> {
-    return this.get(`/api/v1/reservations/${config.queryObj}`);
+    return this.get(`/api/v1/reservations${config.queryObj}`);
   }
 
   /**

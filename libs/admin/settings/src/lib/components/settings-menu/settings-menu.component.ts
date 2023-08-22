@@ -13,6 +13,7 @@ import { routeUrl, SettingOptions } from '../../constant/settings-menu';
 })
 export class SettingsMenuComponent implements OnInit {
   settings: SettingsMenuItem[];
+  isImageLoaded = false;
 
   constructor(
     private router: Router,
@@ -36,4 +37,10 @@ export class SettingsMenuComponent implements OnInit {
         break;
     }
   }
+
+  onImageLoad() {
+    this.isImageLoaded = true; 
+    
+  }
+
 }

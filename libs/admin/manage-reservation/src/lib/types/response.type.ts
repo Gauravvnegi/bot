@@ -1,49 +1,33 @@
-import { EntityState } from '@hospitality-bot/admin/shared';
 import {
   EntityStateCountsResponse,
   EntityTypeCountsResponse,
 } from '../models/reservations.model';
+import { GuestType } from 'libs/admin/guests/src/lib/types/guest.type';
+import { RatePlanRes } from 'libs/admin/room/src/lib/types/service-response';
+import { ItemsData } from './forms.types';
+
 /* Reservation List Response Types deceleration */
 export type ReservationListResponse = {
-  records?: ReservationResponse[];
+  records?: RoomReservationRes[];
   total: number;
   entityStateCounts: EntityStateCountsResponse;
   entityTypeCounts: EntityTypeCountsResponse;
 };
 
-/* Reservation Response Types Deceleration*/
-export type ReservationResponse = {
+export type RoomReservationRes = {
   id: string;
-  entityId: string;
-  invoiceId: string;
-  rooms: number;
-  roomType: string;
-  confirmationNo: string;
-  name: string;
-  company: string;
-  outletType?: string;
-  outletName?: string;
-  date: string;
-  amount: number;
-  source: string;
-  payment: string;
-  status: string;
-  reservationTypes: string;
-  reservationNumber: string;
-  totalDueAmount: number;
-  firstName: string;
-  lastName: string;
-  paymentMethod: string;
-  totalPaidAmount: number;
-  roomCount: number;
-  reservationType: string;
   from: number;
   to: number;
-  totalAmount: number;
-  fullName: string;
-  roomNumber: number;
-  nextStates: string[];
+  source: string;
+  reservationType: string;
   sourceName: string;
+  reservationNumber: string;
+  status: string;
+  guest: GuestType;
+  created: number;
+  nextStates: string[];
+  bookingItems?: BookingItems[];
+  pricingDetails: PricingDetails;
 };
 
 export type PaymentConfigResponse = {
@@ -71,129 +55,81 @@ export type PaymentMethodConfig = {
   instructions?: any;
 };
 
-export type RoomTypeResponse = {
-  id: string;
-  name: string;
-  imageUrls: string[];
-  description: string;
-  roomCount: number;
-  activeRoomCount: number;
-  unavailableRoomCount: number;
-  ratePlans: RatePlanRes[];
-  soldOutCount: number;
-  maxChildren: number;
-  maxAdult: number;
-  area: number;
-  status: boolean;
-  maxOccupancy: number;
-  discountedPrice: number;
-  originalPrice: number;
-  currency: string;
-};
-
-export type RatePlanRes = {
-  basePriceCurrency: string;
-  basePrice: string;
-  discountType: string;
-  discountValue: number;
-  bestAvailablePrice: string;
-  maxPriceCurrency: string;
-  maxPrice: number;
-  minPriceCurrency: string;
-  minPrice: number;
-  paxPriceCurrency: string;
-  paxPrice: string;
-  ratePlanTypeId: string;
-  discount: {
-    type: string;
-    value: number;
-  };
-  id: string;
-};
-
 export type SummaryResponse = {
-  name: string;
+  bookingItems?: BookingItems[];
+  items?: ItemsData[];
   from: number;
   to: number;
-  roomCount: number;
-  adultCount: number;
-  childCount: number;
+  occupancyDetails?: { maxAdult: number };
   location: string;
-  originalPrice: number;
-  basePrice: number;
-  offerAmount: number;
-  taxAndFees: number;
-  totalAmount: number;
-  taxes: string[];
+  pricingDetails: PricingDetails;
+  offer: { discountedPrice: number };
 };
 
-export type ServiceListResponse = {
-  services?: ServiceResponse[];
-  paidPackages?: ServiceResponse[];
-  complimentaryPackages?: ServiceResponse[];
-  total: number;
-  entityStateCounts: EntityState<string>;
-  entityTypeCounts: EntityState<string>;
+export type BookingItems = {
+  roomDetails: {
+    ratePlan: RatePlanRes;
+    roomNumber: string;
+    roomTypeId: string;
+    roomTypeLabel: string;
+    roomCount: number;
+  };
+  pricingDetails: PricingDetails;
+  occupancyDetails: {
+    maxChildren: number;
+    maxAdult: number;
+  };
+  id?: string;
 };
 
-export type ServiceResponse = {
-  id: string;
-  name: string;
-  description: string;
-  rate: number;
-  startDate: number;
-  endDate: number;
-  active: boolean;
-  currency: string;
-  packageCode: string;
-  imageUrl: string;
-  entityId: string;
-  source: string;
-  type: string;
-  unit: string;
-  autoAccept: boolean;
-  hasChild: boolean;
-  parentId: string;
-  categoryName: string;
-  enableVisibility: string[];
-  taxes: any[];
-};
-
-export type MenuItemForm = {
-  name: string;
-  description: string;
-  mealPreference: string;
-  category: string;
-  type: string;
-  preparationTime: number;
-  quantity: number;
-  unit: string;
-  dineInPrice: number;
-  dineInPriceCurrency: string;
-  deliveryPrice: number;
-  deliveryPriceCurrency: string;
-  hsnCode: string;
-  taxes: any[];
-  status: boolean;
-};
-
-export type MenuItemResponse = MenuItemForm & {
-  id: string;
-  code?: string;
-};
-
-export type MenuItemListResponse = {
-  records: MenuItemResponse[];
-  total: number;
-  entityStateCounts: EntityState<string>;
-  entityTypeCounts: EntityState<string>;
-};
-
-export class RoomTypeInfoRes {
-  adultCount: number;
-  childCount: number;
-  roomCount: number;
+export type BookingItemsSummary = {
+  ratePlan: RatePlanRes;
+  roomNumber: string;
   roomTypeId: string;
-  roomNumbers: string[];
-  ratePlanTypeId: string;
-}
+  roomTypeLabel: string;
+  roomCount: number;
+  totalPaidAmount: number;
+  totalAmount: number;
+  taxAndFees: number;
+  basePrice: number;
+  totalDueAmount: number;
+  maxChildren: number;
+  maxAdult: number;
+  min: number;
+  max: number;
+  base: number;
+  id: string;
+};
+
+export type PricingDetails = {
+  max: number;
+  min: number;
+  base: number;
+  paxChild: number;
+  paxAdult: number;
+  totalAmount: number;
+  totalPaidAmount: number;
+  totalDueAmount: number;
+  taxAndFees: number;
+  basePrice: number;
+};
+
+export type RoomReservationResponse = {
+  id: string;
+  from: number;
+  to: number;
+  totalAmount: number;
+  source: string;
+  reservationType: string;
+  sourceName: string;
+  marketSegment: string;
+  totalPaidAmount: number;
+  totalDueAmount: number;
+  reservationNumber: string;
+  status: string;
+  guest: GuestType;
+  created: number;
+  offerAmount: number;
+  nextStates: string[];
+  bookingItems: BookingItems[];
+};

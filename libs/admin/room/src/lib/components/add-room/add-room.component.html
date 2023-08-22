@@ -19,7 +19,11 @@
           controlName="roomTypeId"
           label="Room Type"
           [options]="roomTypes"
-          [props]="{ isAsync: true, createPrompt: '+ Add New Room Type' }"
+          [props]="{
+            isAsync: true,
+            createPrompt: '+ Add New Room Type',
+            placeholder: 'Select Room Type'
+          }"
           [loading]="loadingRoomTypes"
           (paginate)="loadMoreRoomTypes()"
           (onSearch)="searchRoomTypes($event)"
@@ -64,7 +68,59 @@
   </div>
 
   <div class="main" *ngIf="roomId">
-    <div class="sub-heading status__wrapper">
+    <p-accordion>
+      <p-accordionTab [selected]="true">
+        <p-header>
+          <div class="header">Room Status</div>
+          <span
+            statusCell
+            [status]="currentRoomState[0]?.value"
+            [type]="currentRoomState[0]?.type"
+          ></span>
+        </p-header>
+        <div class="form-block" [formGroup]="statusQuoForm">
+          <hospitality-bot-select
+            class="half-width"
+            controlName="status"
+            label="Room Status"
+            [options]="roomStatuses"
+            [loading]="isRoomInfoLoading"
+          ></hospitality-bot-select>
+          <div class="container" *ngIf="isDateRequired">
+            <hospitality-bot-date
+              class="half-width"
+              controlName="currentStatusFrom"
+              label="From"
+              [props]="{ placeholder: 'Select From Date' }"
+              [settings]="{
+                enableTime: false,
+                dateValue: endMinDate,
+                isDisabled: false
+              }"
+              [minDate]="startMinDate"
+            ></hospitality-bot-date>
+            <hospitality-bot-date
+              class="half-width"
+              controlName="currentStatusTo"
+              label="To"
+              [props]="{ placeholder: 'Select To Date' }"
+              [settings]="{
+                enableTime: false,
+                dateValue: endMinDate,
+                isDisabled: false
+              }"
+              [minDate]="endMinDate"
+            ></hospitality-bot-date>
+          </div>
+          <hospitality-bot-text-area
+            class="full-width"
+            controlName="remark"
+            label="Remarks"
+          ></hospitality-bot-text-area>
+        </div>
+      </p-accordionTab>
+    </p-accordion>
+    <!-- <div class="sub-heading status__wrapper">
       <span> Room Status </span>
       <span class="status" *ngIf="!!currentRoomState.length">
         <span
@@ -78,11 +134,11 @@
           [type]="currentRoomState[1]?.type"
         ></span>
       </span>
-    </div>
-    <div class="form-block" [formGroup]="statusQuoForm">
+    </div> -->
+    <!-- <div class="form-block" [formGroup]="statusQuoForm">
       <hospitality-bot-select
         class="half-width"
-        controlName="roomStatus"
+        controlName="status"
         label="Room Status"
         [options]="roomStatuses"
         [loading]="isRoomInfoLoading"
@@ -90,7 +146,7 @@
       <div class="container" *ngIf="isDateRequired">
         <hospitality-bot-date
           class="half-width"
-          controlName="fromDate"
+          controlName="currentStatusFrom"
           label="From"
           [props]="{ placeholder: 'Select From Date' }"
           [settings]="{
@@ -102,7 +158,7 @@
         ></hospitality-bot-date>
         <hospitality-bot-date
           class="half-width"
-          controlName="toDate"
+          controlName="currentStatusTo"
           label="To"
           [props]="{ placeholder: 'Select To Date' }"
           [settings]="{
@@ -115,10 +171,10 @@
       </div>
       <hospitality-bot-text-area
         class="full-width"
-        controlName="remarks"
+        controlName="remark"
         label="Remarks"
       ></hospitality-bot-text-area>
-    </div>
+    </div> -->
   </div>
   <hospitality-bot-form-action
     class="full-width"

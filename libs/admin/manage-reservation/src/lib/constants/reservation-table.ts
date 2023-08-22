@@ -1,4 +1,4 @@
-import { Cols, FlagType, Option, Status } from '@hospitality-bot/admin/shared';
+import { Cols, FlagType, Option } from '@hospitality-bot/admin/shared';
 import { Chip } from '@hospitality-bot/admin/shared';
 import { ReservationStatus } from '../types/reservation.type';
 /**
@@ -99,10 +99,11 @@ export const hotelCols: Cols[] = [
     sortType: 'string',
   },
   {
-    field: 'roomNumber',
+    field: 'roomType',
     header: 'Room No / Type',
     sortType: 'number',
     searchField: ['roomNumber', 'roomType'],
+    width: '13%',
   },
   {
     field: 'confirmationNo',
@@ -111,8 +112,9 @@ export const hotelCols: Cols[] = [
   },
   {
     field: 'fullName',
-    header: 'Guest',
+    header: 'Guest / Company',
     sortType: 'string',
+    searchField: ['fullName', 'companyName'],
   },
   {
     field: 'from',
@@ -237,27 +239,6 @@ export enum ReservationStatusType {
   DRAFT = 'DRAFT',
   CANCELED = 'CANCELED',
 }
-
-// export const reservationStatus: Status[] = [
-//   {
-//     label: 'Draft',
-//     value: ReservationStatusType.DRAFT,
-//     type: 'warning',
-//     disabled: false,
-//   },
-//   {
-//     label: 'Cancel',
-//     value: ReservationStatusType.CANCELED,
-//     type: 'failed',
-//     disabled: false,
-//   },
-//   {
-//     label: 'Confirm',
-//     value: ReservationStatusType.CONFIRMED,
-//     type: 'active',
-//     disabled: false,
-//   },
-// ];
 
 /* All Chips */
 export const chips: Chip<

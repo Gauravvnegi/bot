@@ -179,8 +179,12 @@
     [formGroup]="tableFG"
     controlName="search"
     [props]="{
-      placeholder: 'Search by Name, Code...'
+      placeholder: 'Search by Name, Phone No or Code...',
+      hasSuggestion: true,
+      scattered: true
     }"
+    [suggestionList]="sortFilterList"
+    (onSuggestClick)="sortBy($event)"
     (onSearch)="searchGuest($event)"
   ></hospitality-bot-global-search>
 </ng-template>

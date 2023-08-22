@@ -24,75 +24,29 @@ export const layoutConfig = {
  * Add to get subscription api
  */
 export const customModule = {
-  // finance: {
-  //   name: 'FINANCE',
-  //   label: 'Finance',
-  //   description: 'Outlet Module',
-  //   icon:
-  //     'https://nyc3.digitaloceanspaces.com/botfiles/bot/subscription_icons/FrontDesk.svg',
-  //   config: [
-  //     {
-  //       isSubscribed: true,
-  //       isView: true,
-  //       label: 'Invoice',
-  //       name: 'INVOICE',
-  //     },
-  //     {
-  //       isSubscribed: true,
-  //       isView: true,
-  //       label: 'Transaction',
-  //       name: 'TRANSACTION',
-  //     },
-  //   ],
-  //   isSubscribed: true,
-  //   isView: true,
-  // },
-  // outlets: {
-  //   name: 'OUTLET',
-  //   label: 'Outlet',
-  //   description: 'Outlet Module',
-  //   icon:
-  //     'https://nyc3.digitaloceanspaces.com/botfiles/bot/subscription_icons/FrontDesk.svg',
-  //   config: [
-  //     {
-  //       isSubscribed: true,
-  //       isView: true,
-  //       label: 'Dashboard',
-  //       name: 'OUTLETS_DASHBOARD',
-  //     },
-  //     {
-  //       isSubscribed: true,
-  //       isView: true,
-  //       label: 'All Outlets',
-  //       name: 'ALL_OUTLETS',
-  //     },
-  //   ],
-  //   isSubscribed: true,
-  //   isView: true,
-  // },
-  // channelManager: {
-  //   name: 'CHANNEL_MANAGER',
-  //   label: 'Channel Manager',
-  //   description: 'Channel Manager Module',
-  //   icon:
-  //     'https://nyc3.digitaloceanspaces.com/botfiles/bot/subscription_icons/FrontDesk.svg',
-  //   config: [
-  //     {
-  //       isSubscribed: true,
-  //       isView: true,
-  //       label: 'Update Inventory',
-  //       name: 'UPDATE_INVENTORY',
-  //     },
-  //     {
-  //       isSubscribed: true,
-  //       isView: true,
-  //       label: 'Update Rates',
-  //       name: 'UPDATE_RATES',
-  //     },
-  //   ],
-  //   isSubscribed: true,
-  //   isView: true,
-  // },
+  revenueManager: {
+    name: 'REVENUE_MANAGER',
+    label: 'Revenue Manager',
+    description: 'Revenue Manager Module',
+    icon:
+      'https://nyc3.digitaloceanspaces.com/botfiles/bot/subscription_icons/FrontDesk.svg',
+    config: [
+      {
+        isSubscribed: true,
+        isView: true,
+        label: 'Setup Bar Price',
+        name: 'REVENUE_SETUP_BAR_PRICE',
+      },
+      {
+        isSubscribed: true,
+        isView: true,
+        label: 'Dynamic Pricing',
+        name: 'REVENUE_DYNAMIC_PRICING',
+      },
+    ],
+    isSubscribed: true,
+    isView: true,
+  },
   guests: {
     config: [
       {

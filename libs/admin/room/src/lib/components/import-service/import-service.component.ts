@@ -30,9 +30,9 @@ export class ImportServiceComponent implements OnInit {
   filteredServices: any[] = [];
   allServices;
   navRoutes: NavRouteOptions = [
-    { label: 'Inventory', link: './' },
-    { label: 'Rooms', link: '/pages/inventory/room' },
-    { label: 'Add Room Type', link: '/pages/inventory/room/add-room-type' },
+    { label: 'efrontdesk', link: './' },
+    { label: 'Rooms', link: '/pages/efrontdesk/room' },
+    { label: 'Add Room Type', link: '/pages/efrontdesk/room/add-room-type' },
     { label: 'Import Services', link: './' },
   ];
 

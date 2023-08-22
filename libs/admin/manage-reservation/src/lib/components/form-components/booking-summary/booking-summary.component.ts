@@ -1,4 +1,11 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  SimpleChanges,
+} from '@angular/core';
 import {
   OfferData,
   OfferList,
@@ -15,12 +22,17 @@ import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { ModalComponent } from 'libs/admin/shared/src/lib/components/modal/modal.component';
 import { manageReservationRoutes } from '../../../constants/routes';
 import { ManageReservationService } from '../../../services/manage-reservation.service';
-import { ReservationResponse } from '../../../types/response.type';
 import { Clipboard } from '@angular/cdk/clipboard';
 import { Location } from '@angular/common';
 import { Subscription } from 'rxjs';
-import { ReservationForm } from '../../../constants/form';
+import { PaymentMethod, ReservationForm } from '../../../constants/form';
 import { FormService } from '../../../services/form.service';
+import { EntitySubType, EntityType } from '@hospitality-bot/admin/shared';
+import { RoomReservationRes } from '../../../types/response.type';
+import {
+  OccupancyDetails,
+  RoomReservationFormData,
+} from '../../../types/forms.types';
 
 @Component({
   selector: 'hospitality-bot-booking-summary',
@@ -36,13 +48,13 @@ export class BookingSummaryComponent implements OnInit {
   displayBookingOffer = false;
   parentFormGroup: FormGroup;
   isBooking = false;
+  detailsView = false;
+  dateDifference: number = 1;
 
   heading = '';
-  stayInfo = '';
-  guestInfo = '';
-  bookingType = '';
+  bookingType: EntitySubType;
   outletId = '';
-
+  occupancyDetails: OccupancyDetails;
   $subscription = new Subscription();
 
   @Input() summaryData: SummaryData;
@@ -73,10 +85,19 @@ export class BookingSummaryComponent implements OnInit {
     private formService: FormService
   ) {}
 
+  ngOnChanges(changes: SimpleChanges): void {
+    const summaryDataChanges = changes?.summaryData?.currentValue;
+    if (summaryDataChanges?.bookingItems?.length < 2) this.detailsView = false;
+  }
+
   ngOnInit(): void {
     this.entityId = this.globalFilterService.entityId;
     this.reservationId = this.activatedRoute.snapshot.paramMap.get('id');
     this.parentFormGroup = this.controlContainer.control as FormGroup;
+
+    this.formService.dateDifference.subscribe((res) => {
+      this.dateDifference = res;
+    });
   }
 
   offerSelect(item?: any): void {
@@ -91,26 +112,41 @@ export class BookingSummaryComponent implements OnInit {
   handleBooking(): void {
     this.isBooking = true;
     let data: any;
-    if (this.bookingType === 'HOTEL')
-      data = this.manageReservationService.mapReservationData(
-        this.parentFormGroup.getRawValue()
+    const id =
+      this.bookingType === EntitySubType.ROOM_TYPE
+        ? this.entityId
+        : this.outletId;
+    const type =
+      this.bookingType === EntitySubType.ROOM_TYPE
+        ? EntitySubType.ROOM_TYPE
+        : EntityType.OUTLET;
+
+    if (this.bookingType === EntitySubType.ROOM_TYPE)
+      data = this.formService.mapRoomReservationData(
+        this.parentFormGroup.getRawValue(),
+        id
       );
     else
       data = this.formService.mapOutletReservationData(
         this.parentFormGroup.getRawValue(),
         this.bookingType
       );
-    if (this.reservationId) this.updateReservation(data);
-    else this.createReservation(data);
+    if (this.reservationId) {
+      this.updateReservation(data, id, type);
+    } else this.createReservation(data, id, type);
   }
 
-  createReservation(data): void {
-    const type = this.bookingType === 'ROOM_TYPE' ? 'ROOM_TYPE' : 'OUTLET';
+  createReservation(
+    data: RoomReservationFormData,
+    entityId: string,
+    type: string
+  ): void {
+    const { id, ...formData } = data;
     this.$subscription.add(
       this.manageReservationService
-        .createReservation(this.outletId, data, type)
+        .createReservation(entityId, formData, type)
         .subscribe(
-          (res: ReservationResponse) => {
+          (res: RoomReservationRes) => {
             this.bookingConfirmationPopup(res?.reservationNumber);
           },
           (error) => {
@@ -123,12 +159,16 @@ export class BookingSummaryComponent implements OnInit {
     );
   }
 
-  updateReservation(data): void {
+  updateReservation(
+    data: RoomReservationFormData,
+    entityId: string,
+    type: string
+  ): void {
     this.$subscription.add(
       this.manageReservationService
-        .updateReservation(this.outletId, this.reservationId, data)
+        .updateReservation(entityId, this.reservationId, data, type)
         .subscribe(
-          (res: ReservationResponse) => {
+          (res: RoomReservationRes) => {
             this.bookingConfirmationPopup(res?.reservationNumber);
           },
           (error) => {
@@ -170,12 +210,14 @@ export class BookingSummaryComponent implements OnInit {
         onClick: () => {
           this.router.navigate(
             [
-              `/pages/efrontdesk/manage-reservation/${manageReservationRoutes.addReservation.route}`,
+              `/pages/efrontdesk/reservation/${manageReservationRoutes.addReservation.route}`,
             ],
             { replaceUrl: true }
           );
-          // this.userForm.reset();
+          // this.handleInitForm.emit();
+          this.parentFormGroup.reset();
           this.handleInitForm.emit();
+          this.initDefaultData();
           this.modalService.close();
         },
         variant: 'outlined',
@@ -203,18 +245,36 @@ export class BookingSummaryComponent implements OnInit {
     });
   }
 
-  get inputControl() {
+  initDefaultData() {
+    this.formService.initialData.subscribe((res) => {
+      if (res) {
+        this.inputControls.paymentMethod.patchValue({
+          cashierFirstName: res.cashierFirstName,
+          cashierLastName: res.cashierLastName,
+          currency: res.currency,
+          totalPaidAmount: 0,
+        });
+      }
+    });
+    this.formService.setInitialDates.next('');
+  }
+
+  get inputControls() {
     return this.parentFormGroup.controls as Record<
       keyof ReservationForm,
       AbstractControl
     >;
   }
+
+  get paymentControls() {
+    return (this.parentFormGroup.get('paymentMethod') as FormGroup)
+      .controls as Record<keyof PaymentMethod, AbstractControl>;
+  }
 }
 
 type BookingSummaryInfo = {
-  heading: string;
-  itemInfo: string;
-  guestInfo: string;
   bookingType: string;
   outletId?: string;
+  heading: string;
+  occupancyDetails?: OccupancyDetails;
 };

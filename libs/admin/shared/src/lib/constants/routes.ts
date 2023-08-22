@@ -15,10 +15,11 @@ export const routes = {
   // Front Desk
   [ModuleNames.FRONT_DESK]: 'efrontdesk',
   [ModuleNames.FRONT_DESK_DASHBOARD]: 'efrontdesk/dashboard',
-  [ModuleNames.HOUSE_GUEST]: 'efrontdesk/house-guest',
-  [ModuleNames.REQUEST_DASHBOARD]: 'efrontdesk/request-analytics',
-  [ModuleNames.REQUEST]: 'efrontdesk/request',
+  [ModuleNames.IN_HOUSE_GUEST]: 'efrontdesk/in-house-guest',
+  [ModuleNames.REQUEST_DASHBOARD]: 'efrontdesk/complaint-analytics',
+  [ModuleNames.REQUEST]: 'efrontdesk/complaint',
   [ModuleNames.ADD_RESERVATION]: 'efrontdesk/reservation',
+  [ModuleNames.ROOM]: 'efrontdesk/room',
 
   // Freddie
   [ModuleNames.FREDDIE]: 'freddie',
@@ -51,7 +52,7 @@ export const routes = {
 
   // Inventory
   [ModuleNames.INVENTORY]: 'inventory',
-  [ModuleNames.ROOM]: 'inventory/room',
+  // [ModuleNames.ROOM]: 'inventory/room',
 
   // FINANCE
   [ModuleNames.FINANCE]: 'finance',
@@ -78,6 +79,11 @@ export const routes = {
   [ModuleNames.MANAGE_RATE]: 'channel-manager/update-rates',
   [ModuleNames.MANAGE_INVENTORY]: 'channel-manager/update-inventory',
   [ModuleNames.DYNAMIC_PRICING]: 'channel-manager/dynamic-pricing',
+
+  //REVENUE_MANAGER
+  [ModuleNames.REVENUE_MANAGER]: 'revenue-manager',
+  [ModuleNames.REVENUE_DYNAMIC_PRICING]: 'revenue-manager/dynamic-pricing',
+  [ModuleNames.REVENUE_SETUP_BAR_PRICE]: 'revenue-manager/setup-bar-price',
 
   RoleAndPermission: 'roles-permissions',
 };

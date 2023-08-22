@@ -1,62 +1,27 @@
-export const dataList = [
-  {
-    id: '1',
-    salutation: 'Mr.',
-    firstName: 'John',
-    lastName: 'Doe',
-    contactDetails: {
-      cc: '+1',
-      contactNumber: '1234567890',
-      emailId: 'john.doe@example.com',
-    },
-    nationality: 'US',
-    age: 30,
-    address: {
-      addressLine1: '123 Main St',
-      city: 'New York',
-      state: 'NY',
-      countryCode: 'US',
-      postalCode: '12345',
-    },
-    salesPersonName: 'Jane Smith',
-    salesPersonPhone: '9876543210',
-    iataNumber: '12345678',
-    priceModifier: '10%',
-    priceModifierType: 'Percentage',
-    priceModifierValue: '10',
-    companyName: 'ABC Company',
-    companyCode: 1234,
-    action: true,
-    companyId: 'C1',
+import { MemberSortTypes, SortingOrder } from '../types/agent';
+
+export const SortBy: Record<MemberSortTypes, SortingOrder> = {
+  'A-Z': {
+    sort: 'firstName',
+    order: 'ASC',
   },
-  {
-    id: '1',
-    salutation: 'Mr.',
-    firstName: 'John',
-    lastName: 'Doe',
-    contactDetails: {
-      cc: '+1',
-      contactNumber: '1234567890',
-      emailId: 'john.doe@example.com',
-    },
-    nationality: 'US',
-    age: 30,
-    address: {
-      addressLine1: '123 Main St',
-      city: 'New York',
-      state: 'NY',
-      countryCode: 'US',
-      postalCode: '12345',
-    },
-    salesPersonName: 'Jane Smith',
-    salesPersonPhone: '9876543210',
-    iataNumber: '12345678',
-    priceModifier: '10%',
-    priceModifierType: 'Percentage',
-    priceModifierValue: '10',
-    companyName: 'ABC Company',
-    companyCode: 1234,
-    action: true,
-    companyId: 'C1',
+
+  'Z-A': {
+    sort: 'firstName',
+    order: 'DESC',
   },
-];
+  Latest: {
+    sort: 'created',
+    order: 'DESC',
+  },
+  Modified: {
+    sort: 'updated',
+    order: 'DESC',
+  },
+  Oldest: {
+    sort: 'created',
+    order: 'ASC',
+  },
+};
+
+export const SortFilterList = Object.keys(SortBy).map((key) => key);

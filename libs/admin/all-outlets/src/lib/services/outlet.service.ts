@@ -16,6 +16,7 @@ import { MenuFormData, MenuResponse } from '../types/menu';
 import {
   FoodPackageForm,
   MenuItemForm,
+  MenuItemListResponse,
   MenuItemResponse,
   MenuListResponse,
 } from '../types/outlet';
@@ -44,7 +45,10 @@ export class OutletService extends ApiService {
     return this.get(`/api/v1/config?key=OUTLET_CONFIGURATION`);
   }
 
-  getMenuItems(config: QueryConfig, outletId: string): Observable<any> {
+  getMenuItems(
+    config: QueryConfig,
+    outletId: string
+  ): Observable<MenuItemListResponse> {
     return this.get(`/api/v1/menus/items${config.params}`, {
       headers: { 'entity-id': outletId },
     });
@@ -180,6 +184,12 @@ export class OutletService extends ApiService {
   ): Observable<SearchResultResponse> {
     return this.get(
       `/api/v1/entity/${entityId}/menu/search${config?.params ?? ''}`
+    );
+  }
+
+  getFoodPackageCategory(entityId: string): Observable<any>{
+    return this.get(
+      `/api/v1/entity/${entityId}/categories?type=FOOD_PACKAGE_CATEGORY`
     );
   }
 }

@@ -237,7 +237,7 @@
   font-weight: $bold;
 }
 
-:host ::ng-deep .guest {
+:host ::ng-deep .multi-cell-content {
   color: $primary-black;
   font-size: 12px;
   position: relative;
@@ -776,6 +776,8 @@ $table-hover-color: #f3f3f3;
       .contained {
         &__primary {
           text-align: center;
+          overflow: hidden;
+          text-overflow: ellipsis;
           font-size: 12px;
           letter-spacing: 0.72px;
           color: $primary-cta;
@@ -785,6 +787,10 @@ $table-hover-color: #f3f3f3;
         }
 
         &__primary:hover {
+          overflow: visible;
+          text-overflow: unset;
+          white-space: normal;
+
           // background-color: $grayLight !important;
         }
       }

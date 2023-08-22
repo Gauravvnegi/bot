@@ -1,14 +1,14 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { AbstractControl, ControlContainer, FormGroup } from '@angular/forms';
 import {
   ConfigService,
   CountryCodeList,
+  EntitySubType,
   Option,
 } from '@hospitality-bot/admin/shared';
 import { BookingConfig } from '../../../models/reservations.model';
 import * as moment from 'moment';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
-import { ActivatedRoute } from '@angular/router';
 import { FormService } from '../../../services/form.service';
 import { ReservationForm } from '../../../constants/form';
 
@@ -18,37 +18,49 @@ import { ReservationForm } from '../../../constants/form';
   styleUrls: ['./booking-info.component.scss', '../../reservation.styles.scss'],
 })
 export class BookingInfoComponent implements OnInit {
-  startMinDate = new Date();
-  endMinDate = new Date();
-  maxFromDate = new Date();
-  maxToDate = new Date();
-  entityId: string;
-  reservationId: string;
-
   countries: Option[];
   @Input() expandAccordion: boolean = false;
   @Input() reservationTypes: Option[] = [];
   @Input() statusOptions: Option[] = [];
   @Input() eventTypes: Option[] = [];
   @Input() bookingType: string;
+
+  @Output() getSummary: EventEmitter<any> = new EventEmitter<any>();
+
   configData: BookingConfig;
+
+  entityId: string;
+  startMinDate = new Date();
+  endMinDate = new Date();
+  maxDate = new Date();
 
   constructor(
     public controlContainer: ControlContainer,
     private configService: ConfigService,
     private globalFilterService: GlobalFilterService,
-    private activatedRoute: ActivatedRoute,
     private formService: FormService
-  ) {
-    this.reservationId = this.activatedRoute.snapshot.paramMap.get('id');
-  }
+  ) {}
 
   ngOnInit(): void {
     this.entityId = this.globalFilterService.entityId;
     this.getCountryCode();
+    this.initDates();
+
+    // listening changes after the form is created for continue reservation.
+    this.formService.setInitialDates.subscribe((res) => {
+      if (res !== null) {
+        this.initDates();
+      }
+    });
+  }
+
+  initDates() {
+    // Reset dates for continue reservation flow after form submission.
+    this.startMinDate = new Date();
+    this.endMinDate = new Date();
+    this.maxDate = new Date();
     this.initDefaultDates();
     this.listenForDateChange();
-    // this.listenFormChanges();
   }
 
   // listenFormChanges() {
@@ -62,13 +74,15 @@ export class BookingInfoComponent implements OnInit {
    */
   initDefaultDates() {
     this.endMinDate.setDate(this.startMinDate.getDate() + 1);
-    this.maxFromDate.setDate(this.endMinDate.getDate() - 1);
+    this.maxDate.setDate(this.endMinDate.getDate() - 1);
 
-    if (this.bookingType === 'ROOM_TYPE')
-      this.maxToDate.setDate(this.startMinDate.getDate() + 365);
-    if (this.bookingType === 'VENUE')
-      this.maxToDate = moment().add(24, 'hours').toDate();
+    // Reservation dates should be within 1 year time.
+    if (this.bookingType === EntitySubType.ROOM_TYPE)
+      this.maxDate.setDate(this.startMinDate.getDate() + 365);
 
+    // Venue only valid till 24 hours later.
+    if (this.bookingType === EntitySubType.VENUE)
+      this.maxDate = moment().add(24, 'hours').toDate();
     this.endMinDate.setTime(this.endMinDate.getTime() - 5 * 60 * 1000);
   }
 
@@ -78,41 +92,56 @@ export class BookingInfoComponent implements OnInit {
   listenForDateChange() {
     const startTime = moment(this.startMinDate).unix() * 1000;
     const endTime = moment(this.endMinDate).unix() * 1000;
-    const toDateControl = this.controlContainer.control.get(
-      'reservationInformation.to'
-    );
-    const fromDateControl = this.controlContainer.control.get(
-      'reservationInformation.from'
-    );
-    const dateAndTimeControl = this.controlContainer.control.get(
-      'reservationInformation.dateAndTime'
-    );
 
-    // Listen to from and to date changes in ROOM_TYPE and setting
+    const toDateControl = this.reservationInfoControls?.to;
+    const fromDateControl = this.reservationInfoControls?.from;
+    const dateAndTimeControl = this.reservationInfoControls?.dateAndTime;
+
+    // Listen to from and to date changes in ROOM_TYPE and set
     // min and max dates accordingly
-    if (this.bookingType === 'ROOM_TYPE') {
+    if (this.bookingType === EntitySubType.ROOM_TYPE) {
       fromDateControl.setValue(startTime);
       toDateControl.setValue(endTime);
+
       fromDateControl.valueChanges.subscribe((res) => {
         const maxToLimit = new Date(res);
-        this.maxToDate.setDate(maxToLimit.getDate() + 365);
+        this.formService.fromDate = maxToLimit;
+        this.updateDateDifference();
+
+        // Calculate the date for one day later
+        maxToLimit.setDate(maxToLimit.getDate() + 1);
+        const nextDayTime = moment(maxToLimit).unix() * 1000;
+
+        toDateControl.setValue(nextDayTime); // Set toDateControl to one day later
+
+        this.maxDate.setDate(maxToLimit.getDate() + 364);
         this.formService.reservationDate.next(res);
+
+        if (this.roomControls.valid) {
+          this.getSummary.emit();
+        }
       });
+
       toDateControl.valueChanges.subscribe((res) => {
         const maxLimit = new Date(res);
-        this.maxFromDate.setDate(maxLimit.getDate() - 1);
+        this.formService.toDate = maxLimit;
+        this.updateDateDifference();
+        this.maxDate.setDate(maxLimit.getDate() - 1);
+        if (this.roomControls.valid) {
+          this.getSummary.emit();
+        }
       });
     }
 
     // Listen to from and to date changes in Venue
-    else if (this.bookingType === 'VENUE') {
+    else if (this.bookingType === EntitySubType.VENUE) {
       fromDateControl.setValue(startTime);
       toDateControl.setValue(endTime);
       this.endMinDate.setDate(this.startMinDate.getDate());
       fromDateControl.valueChanges.subscribe((res) => {
         const maxLimit = new Date(res);
         toDateControl.setValue(moment(maxLimit).unix() * 1000);
-        this.maxToDate = moment(maxLimit).add(24, 'hours').toDate();
+        this.maxDate = moment(maxLimit).add(24, 'hours').toDate();
         this.formService.reservationDate.next(res);
       });
     }
@@ -142,12 +171,12 @@ export class BookingInfoComponent implements OnInit {
             item.value !== 'OTHERS' &&
             item.value !== 'OTA'
         );
-        if (this.bookingType === 'ROOM_TYPE')
+        if (this.bookingType === EntitySubType.ROOM_TYPE)
           this.configData.source = [
             ...this.configData.source,
             { label: 'OTA', value: 'OTA' },
           ];
-        if (this.bookingType === 'RESTAURANT')
+        if (this.bookingType === EntitySubType.RESTAURANT)
           this.configData.source = [
             ...this.configData.source,
             { label: 'Online food order', value: 'ONLINE_FOOD_ORDER' },
@@ -159,6 +188,24 @@ export class BookingInfoComponent implements OnInit {
     });
   }
 
+  updateDateDifference() {
+    // Get the toDate and fromDate values from the form service
+    const toDateValue = this.formService.toDate;
+    const fromDateValue = this.formService.fromDate;
+
+    if (toDateValue && fromDateValue) {
+      // Calculate the date difference in days
+      const dateDiffInMilliseconds =
+        toDateValue.getTime() - fromDateValue.getTime();
+      const dateDiffInDays = Math.ceil(
+        dateDiffInMilliseconds / (1000 * 60 * 60 * 24)
+      );
+
+      // Update the dateDifference BehaviorSubject with the new value
+      this.formService.dateDifference.next(dateDiffInDays);
+    }
+  }
+
   get reservationInfoControls() {
     return (this.controlContainer.control.get(
       'reservationInformation'
@@ -166,5 +213,9 @@ export class BookingInfoComponent implements OnInit {
       keyof ReservationForm['reservationInformation'],
       AbstractControl
     >;
+  }
+
+  get roomControls() {
+    return this.controlContainer.control.get('roomInformation') as FormGroup;
   }
 }

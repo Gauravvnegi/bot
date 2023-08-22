@@ -1,0 +1,61 @@
+<hospitality-bot-navigation-header
+  [heading]="welcomeMessage"
+  [routes]="navRoutes"
+  [isBack]="false"
+>
+  <hospitality-bot-button
+    label="+ Create Item"
+    variant="text"
+    severity="primary"
+    (onClick)="createServiceItem()"
+  ></hospitality-bot-button>
+  <hospitality-bot-button
+    label="+ Raise Complaint"
+    (onClick)="raiseRequest()"
+  ></hospitality-bot-button>
+</hospitality-bot-navigation-header>
+
+<div class="feedback-container mb-20">
+  <div class="stats--wrapper">
+    <div class="bifurcation-stats">
+      <complaint-bifurcation
+        [globalQueries]="globalQueries"
+      ></complaint-bifurcation>
+    </div>
+  </div>
+  <div class="stat-card-wrapper">
+    <hospitality-bot-stats-card [stats]="{label: 'Tickets Distribution', key: 'AverageTicket'}" class="stat-card">
+      <ng-container>
+        <div class="additional-stats-container">
+          <div class="stats-wrapper">
+            <span class="stats">{{ createdPerDay }}</span>
+            <div class="text">Created/Day</div>
+          </div>
+          <div class="stats-wrapper">
+            <div class="stats">{{ closedPerDay }}</div>
+            <div class="text">Closed/Day</div>
+          </div>
+        </div>
+      </ng-container>
+    </hospitality-bot-stats-card>
+    <hospitality-bot-stats-card
+      [stats]="statCard[0]"
+      class="stat-card"
+    ></hospitality-bot-stats-card>
+    <hospitality-bot-stats-card [stats]="agentStats" class="stat-card">
+      <ng-container>
+        <div class="additional-stats-container">
+          <div class="stats-wrapper">
+            <span class="stats">{{ agentsOnTicket }}</span>
+            <div class="text">Agents On Ticket</div>
+          </div>
+
+          <div class="stats-wrapper">
+            <span class="stats">{{ availableAgents }}</span>
+            <div class="text">Available Agents</div>
+          </div>
+        </div>
+      </ng-container>
+    </hospitality-bot-stats-card>
+  </div>
+</div>

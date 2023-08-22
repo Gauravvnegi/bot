@@ -13,7 +13,11 @@ export class ChannelManagerService extends ApiService {
     return this.get(`/api/v1/entity/${entityId}/inventory${config?.params}`);
   }
 
-  updateChannelManager(data, entityId, config?: QueryConfig): Observable<any> {
+  updateChannelManager(
+    data,
+    entityId,
+    config?: QueryConfig
+  ): Observable<ChannelManagerResponse> {
     return this.put(
       `/api/v1/entity/${entityId}/inventory${config?.params}`,
       data
@@ -22,7 +26,14 @@ export class ChannelManagerService extends ApiService {
 
   getRoomDetails(entityId) {
     return this.get(
-      `/api/v1/entity/${entityId}/inventory?type=ROOM_TYPE&offset=0&limit=${100}`
+      `/api/v1/entity/${entityId}/inventory?roomTypeStatus=true&type=ROOM_TYPE&offset=0&limit=${100}`
     );
+  }
+
+  getDynamicPricing(
+    entityId,
+    config?: QueryConfig
+  ): Observable<{ roomType: ChannelManagerResponse }> {
+    return this.get(`/api/v1/entity/${entityId}/inventory${config.params}`);
   }
 }

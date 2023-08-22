@@ -14,12 +14,19 @@ import {
 import { TranslateService } from '@ngx-translate/core';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
-import { SnackBarService } from 'libs/shared/material/src';
+import { ModalService, SnackBarService } from 'libs/shared/material/src';
 import { DateService } from '@hospitality-bot/shared/utils';
 import { Subscription } from 'rxjs';
 import { request } from '../../constants/request';
 import { debounceTime, filter, map, startWith } from 'rxjs/operators';
 import { RequestService } from '../../services/request.service';
+import { Option } from '@hospitality-bot/admin/shared';
+import { ActivatedRoute, Router } from '@angular/router';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { AddItemComponent } from '../add-item/add-item.component';
+import { DepartmentList } from '../../data-models/request.model';
+import { convertToTitleCase } from 'libs/admin/shared/src/lib/utils/valueFormatter';
+import { ManagePermissionService } from 'libs/admin/roles-and-permissions/src/lib/services/manage-permission.service';
 
 @Component({
   selector: 'hospitality-bot-raise-request',
@@ -37,13 +44,21 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
   priorityList = request.priority;
   isRaisingRequest = false;
   requestConfig = request;
+  users = [];
+  userList: Option[] = [];
+  requestData: any;
+  departmentList: any[] = [];
   constructor(
     private fb: FormBuilder,
     private globalFilterService: GlobalFilterService,
     private snackbarService: SnackBarService,
     private _requestService: RequestService,
     private adminUtilityService: AdminUtilityService,
-    private _translateService: TranslateService
+    private _translateService: TranslateService,
+    private router: Router,
+    private route: ActivatedRoute,
+    private _modalService: ModalService,
+    private _managePermissionService: ManagePermissionService
   ) {}
 
   ngOnInit(): void {
@@ -54,6 +69,10 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
   registerListeners(): void {
     this.listenForGlobalFilters();
     this.listenForRoomNumberChanges();
+    this.listenForItemChanges();
+    this.listenForDepartmentChanges();
+    this.getUserList();
+    this.listenForAddItemChanges();
   }
 
   /**
@@ -78,19 +97,19 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
       lastName: ['', Validators.required],
       itemName: [''],
       itemCode: ['', Validators.required],
+      itemId: [''],
       priority: ['', Validators.required],
       jobDuration: [''],
       remarks: ['', [Validators.maxLength(200)]],
       quantity: [1],
-    });
-
-    this.searchFG = this.fb.group({
-      search: [''],
+      assigneeId: [''],
+      departmentName: [''],
     });
 
     this.requestFG.get('itemCode').valueChanges.subscribe((value) => {
       const service = this.items.find((d) => d.value === value);
       this.requestFG.get('itemName').setValue(service.label);
+      this.requestFG.get('itemId').setValue(service.itemId);
     });
   }
 
@@ -107,15 +126,67 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
       this._requestService
         .getCMSServices(this.entityId, config)
         .subscribe((response) => {
+          this.requestData = response;
           this.items = response.cms_services
             .sort((a, b) => a.itemName.trim().localeCompare(b.itemName.trim()))
             .map((item) => ({
               label: item.itemName,
               value: item.itemCode,
+              itemId: item.id,
               duration: item.duration,
             }));
         })
     );
+  }
+
+  listenForAddItemChanges() {
+    this._requestService.refreshItemList.subscribe((res) => {
+      if (res) this.initItemList();
+    });
+  }
+
+  listenForItemChanges(): void {
+    this.requestFG.get('itemCode').valueChanges.subscribe((value) => {
+      const itemId = this.items.find((d) => d.value === value).itemId;
+      this.requestFG.get('departmentName').setValue('', { emitEvent: false });
+      this.requestFG.get('assigneeId').setValue('', { emitEvent: false });
+      this.getItemDetails(itemId);
+    });
+  }
+
+  getUserList() {
+    this._managePermissionService
+      .getAllUsers(this.entityId, {
+        params: '?status=true&mention=true',
+      })
+      .subscribe((data) => {
+        this.users = data.users.map((item) => ({
+          label: `${item.firstName} ${item.lastName}`,
+          value: item.id,
+        }));
+      });
+  }
+
+  getItemDetails(itemId) {
+    this.$subscription.add(
+      this._requestService
+        .getItemDetails(this.entityId, itemId)
+        .subscribe((response) => {
+          const data = new DepartmentList().deserialize(
+            response?.requestItemUsers
+          );
+          this.departmentList = data.departmentWithUsers;
+        })
+    );
+  }
+
+  listenForDepartmentChanges() {
+    this.requestFG.get('departmentName').valueChanges.subscribe((value) => {
+      const department = this.departmentList.find((d) => d.value === value);
+      this.userList = this.users.filter((user) => {
+        return department.users.includes(user.value);
+      });
+    });
   }
 
   /**
@@ -180,7 +251,6 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
    * @param closeData The status and reservation data.
    */
   close(closeData: { status: boolean; data?; load: boolean }): void {
-    console.log(closeData);
     this.onRaiseRequestClose.emit(closeData);
   }
 
@@ -188,42 +258,66 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
    * @function listenForRoomNumberChanges To listen for room number field value change.
    */
   listenForRoomNumberChanges(): void {
-    const formChanges$ = this.searchFG.valueChanges.pipe(
-      filter(() => !!(this.searchFG.get('search') as FormControl).value)
+    this.requestFG
+      .get('roomNo')
+      .valueChanges.pipe(debounceTime(1000))
+      .subscribe((response) => {
+        this.requestFG.patchValue(
+          {
+            roomNo: response,
+          },
+          {
+            emitEvent: false,
+          }
+        );
+        if (response?.length >= 3)
+          this.$subscription.add(
+            this._requestService
+              .searchBooking(
+                this.adminUtilityService.makeQueryParams([
+                  {
+                    roomNo: response,
+                  },
+                ])
+              )
+              .subscribe((res) => {
+                if (res) {
+                  this.reservation = res;
+                  this.requestFG.patchValue({
+                    firstName: res.guestDetails.primaryGuest.firstName,
+                    lastName: res.guestDetails.primaryGuest.lastName,
+                  });
+                  this.requestFG.get('firstName').disable();
+                  this.requestFG.get('lastName').disable();
+                } else {
+                  this.reservation = {};
+                  this.requestFG.get('firstName').enable();
+                  this.requestFG.get('lastName').enable();
+                }
+              })
+          );
+        else this.reservation = {};
+      });
+  }
+
+  create() {
+    //to open add new item pop up
+
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = true;
+    dialogConfig.width = '500px';
+    dialogConfig.height = '90vh';
+
+    const addItemCompRef = this._modalService.openDialog(
+      AddItemComponent,
+      dialogConfig
     );
 
-    formChanges$.pipe(debounceTime(1000)).subscribe((response) => {
-      this.requestFG.patchValue({
-        roomNo: response.search,
-      });
-      if (response?.search.length >= 3)
-        this.$subscription.add(
-          this._requestService
-            .searchBooking(
-              this.adminUtilityService.makeQueryParams([
-                {
-                  roomNo: response?.search,
-                },
-              ])
-            )
-            .subscribe((res) => {
-              if (res) {
-                this.reservation = res;
-                this.requestFG.patchValue({
-                  firstName: res.guestDetails.primaryGuest.firstName,
-                  lastName: res.guestDetails.primaryGuest.lastName,
-                });
-                this.requestFG.get('firstName').disable();
-                this.requestFG.get('lastName').disable();
-              } else {
-                this.reservation = {};
-                this.requestFG.get('firstName').enable();
-                this.requestFG.get('lastName').enable();
-              }
-            })
-        );
-      else this.reservation = {};
-    });
+    this.$subscription.add(
+      addItemCompRef.componentInstance.onClose.subscribe(() => {
+        addItemCompRef.close();
+      })
+    );
   }
 
   ngOnDestroy(): void {

@@ -20,6 +20,7 @@ export class NavigationHeaderComponent implements OnInit, OnDestroy {
   draftDate: string;
   isScrolledUp: boolean;
   isSpaceNeeded: boolean = false;
+  _dateTime: number;
 
   @Input() heading: string;
   @Input() routes: NavRouteOptions = [];
@@ -35,7 +36,7 @@ export class NavigationHeaderComponent implements OnInit, OnDestroy {
       this.setDraftTime(new Date(value as number));
     } else {
       this.dateTitle = value.dateTitle;
-      this.dateTime = value.dateTime;
+      this._dateTime = value.dateTime;
     }
   }
 

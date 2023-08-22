@@ -4,6 +4,7 @@ import {
   MenuItemResponse,
   MenuListResponse,
   MenuResponse,
+  OutletForm,
 } from '../types/outlet';
 import {
   FoodPackageListResponse,
@@ -163,6 +164,60 @@ export class FoodPackage {
     this.autoAccept = input?.autoAccept;
     this.hasChild = input?.hasChild;
     this.discountedPrice = input?.discountedPrice;
+    return this;
+  }
+}
+
+export class OutletFormData {
+  status: string;
+  name: string;
+  emailId: string;
+  contact;
+  address;
+  imageUrl;
+  description: string;
+  serviceIds: string[];
+  socialPlatforms;
+  type: string;
+  subType: string;
+  cuisinesType?: string;
+  minimumOccupancy: number;
+  maximumOccupancy: number;
+  operationalDays;
+  area: string;
+  dimension: string;
+  rules;
+  paidServiceIds?;
+  menuIds?;
+  foodPackageIds?;
+
+  deserialize(input: OutletForm) {
+    this.status = input?.status;
+    this.name = input?.name;
+    this.emailId = input?.emailId;
+    this.contact = input?.contact;
+    this.address = input?.address;
+    this.imageUrl = input?.imageUrl;
+    this.description = input?.description;
+    this.serviceIds = input?.serviceIds;
+    this.socialPlatforms = input?.socialPlatforms;
+    this.type = input?.type;
+    this.subType = input?.subType;
+    this.cuisinesType = input?.cuisinesType;
+    this.minimumOccupancy = input?.minimumOccupancy;
+    this.maximumOccupancy = input?.maximumOccupancy;
+    this.operationalDays = {
+      startDay: input?.startDay,
+      endDay: input?.endDay,
+      from: input?.from,
+      to: input?.to,
+    };
+    this.area = input?.area;
+    this.dimension = input?.dimension;
+    this.rules = input?.rules;
+    this.paidServiceIds = input?.paidServiceIds;
+    this.menuIds = input?.menuIds;
+    this.foodPackageIds = input?.foodPackageIds;
     return this;
   }
 }

@@ -61,10 +61,10 @@
         <div class="content-wrap-r2-divider"></div>
         <div
           [ngClass]="{
-            'sla-timeout': taskStatus?.slaValue < 0,
-            'sla-pending':
-              taskStatus?.slaValue <= 5 && taskStatus?.slaValue >= 0,
-            'sla-new': taskStatus?.SlaStatus > 5
+            'priority-low-text': priority === 'Low',
+            'priority-medium-text': priority === 'Medium',
+            'priority-high-text': priority === 'High',
+            'priority-asap-text': priority === 'ASAP'
           }"
         >
           {{ 'SLA' }}: {{ taskStatus?.sla }}
@@ -96,12 +96,22 @@
   </div>
 
   <div class="time-left__wrapper" *ngIf="taskStatus">
-    <div *ngIf="taskStatus?.timeLeft !== undefined && !isSelected" class="time-left">
+    <div
+      *ngIf="
+        taskStatus?.timeLeft !== undefined &&
+        !isSelected &&
+        taskStatus?.action !== 'RESOLVED' &&
+        taskStatus?.action !== 'CANCELLED'
+      "
+      class="time-left"
+    >
       <div>Time Left:</div>
       <!-- <div appCountdown [config]="{ value: taskStatus.timeLeft }"></div> -->
-      <div>{{ taskStatus.timeLeft }}m</div>
+      <div>
+        {{ formatTime(taskStatus.timeLeft) }}
+      </div>
     </div>
-    <div class="card-wrapper_time" [ngStyle]="{ 'float': 'right' }">
+    <div class="card-wrapper_time" [ngStyle]="{ float: 'right' }">
       {{ time }}
     </div>
   </div>

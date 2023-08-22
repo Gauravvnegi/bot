@@ -31,7 +31,7 @@
   }
 }
 
-.values-row {
+:host ::ng-deep .values-row {
   position: relative;
   display: flex;
   gap: 2%;

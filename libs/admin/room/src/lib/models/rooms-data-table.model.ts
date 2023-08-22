@@ -99,6 +99,7 @@ export class RoomType {
   status: boolean;
   price: number;
   currency: string;
+  isBase: boolean;
   nextStates: string[];
   ratePlans?: RatePlanRes[];
 
@@ -114,9 +115,13 @@ export class RoomType {
     this.occupancy = input.occupancyDetails.maxOccupancy ?? null;
     this.status = input.status;
     // mapping discounted price
-    this.price = input.discountedPrice ?? input.originalPrice;
+    this.price =
+      input.discountedPrice ??
+      input.originalPrice ??
+      input.pricingDetails?.base;
     this.currency = input.currency ?? '';
     this.ratePlans = input.ratePlans;
+    this.isBase = input.isBase ?? true; // TODO: need to add from BE
     return this;
   }
 }

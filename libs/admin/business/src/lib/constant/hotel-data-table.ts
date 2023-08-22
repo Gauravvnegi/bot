@@ -13,13 +13,9 @@ export const cols = [
     field: 'workingDays',
     header: 'Working days / Timings',
     sortType: 'string',
-    searchField: [
-      'dayOfOperationStart',
-      'dayOfOperationEnd',
-      'timeDayStart',
-      'timeDayEnd',
-    ],
+    searchField: ['startDay', 'endDay', 'from', 'to'],
     width: '23.75%',
+    isSortDisabled: true,
   },
   {
     field: 'contact',
@@ -27,6 +23,7 @@ export const cols = [
     sortType: 'string',
     searchField: ['contact.number', 'contact.countryCode', 'emailId'],
     width: '23.75%',
+    isSortDisabled: true,
   },
   {
     field: 'url',
@@ -34,11 +31,12 @@ export const cols = [
     sortType: 'string',
     width: '23.75%',
     isSearchDisabled: true,
+    isSortDisabled: true,
   },
   {
     field: 'status',
     header: 'Actions',
-    isSortDisabled: true,
+    sortType: 'number',
     isSearchDisabled: true,
 
     width: '23.75%',

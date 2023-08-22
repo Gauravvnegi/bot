@@ -195,3 +195,9 @@
 :host ::ng-deep .p-datatable {
   @include tableCellPadding(1em);
 }
+
+:host ::ng-deep .status-toggle {
+  .wrapper {
+    display: flex;
+  }
+}

@@ -9,7 +9,7 @@
       </div>
     </div>
     <div class="request-items-header-right" [formGroup]="requestFG">
-      <!-- <div class="form-elements-container">
+      <div class="form-elements-container">
         <mat-select
           class="form-elements"
           placeholder="Status"
@@ -22,16 +22,16 @@
             >{{ status.label }}</mat-option
           >
         </mat-select>
-      </div> -->
+      </div>
       <div class="form-elements-container">
         <mat-select
           class="form-elements"
-          placeholder="Status"
-          formControlName="status"
-          (selectionChange)="handleStatusChange($event)"
+          placeholder="Assignee"
+          formControlName="assignee"
+          (selectionChange)="handleAssigneeChange($event)"
         >
           <mat-option
-            *ngFor="let status of statusList"
+            *ngFor="let status of assigneeList"
             [value]="status.value"
             >{{ status.label }}</mat-option
           >
@@ -52,11 +52,20 @@
       {{ data.itemName }}
     </div>
 
-    <div *ngIf="data?.timeLeft !== undefined" class="time-left">
-      <img src="assets/images/timer.webp" alt="timer" />
-      <div class="time" appCountdown [config]="{ value: data.timeLeft }"></div>
-      <!-- <div class="text">Left</div> -->
-    </div>
+    <hospitality-bot-timer
+      class="time-left"
+      *ngIf="
+        data?.timeLeft !== undefined &&
+        data?.action !== 'RESOLVED' &&
+        data?.action !== 'CANCELLED'
+      "
+      [inputMilliseconds]="data.timeLeft"
+    ></hospitality-bot-timer>
+
+    <span class="resolved-text" *ngIf="data?.action === 'RESOLVED'">
+      Resolved on:
+      {{ formattedClosedTimestamp }}
+    </span>
 
     <div class="request-items-body-subtitle">
       {{ data.remarks }}
@@ -64,22 +73,17 @@
     <div class="request-items-body-card">
       <table>
         <tr class="tr">
-          <th>Job No.</th>
-          <th>Room No. / Priority</th>
+          <th>Job No. / Priority</th>
+          <th>Room No. / Type</th>
           <th>Source</th>
           <th>Phone No. / Email</th>
         </tr>
         <tr>
           <td>
-            <div>
+            <div class="jobno-wrapper">
               {{ data.jobNo }}
             </div>
-          </td>
-          <td>
-            <span class="request-items-body-card-booking">
-              {{ data.rooms[0]?.getRoomNumberAndType() }}
-            </span>
-            <span
+            <div
               class="request-items-body-card-status"
               [ngClass]="{
                 'priority-low': data.priority === 'Low',
@@ -89,6 +93,16 @@
               }"
             >
               {{ data.priority }}
+            </div>
+          </td>
+          <td>
+            <span
+              [roomStatus]="data.rooms[0]?.status"
+              class="request-items-body-card-booking"
+            >
+              {{ data.rooms[0]?.roomNumber || '--' }}&nbsp;-&nbsp;{{
+                data.rooms[0]?.type || '--'
+              }}
             </span>
           </td>
           <td>{{ data.source }}</td>
@@ -143,10 +157,17 @@
       <img src="assets/svg/no_request.svg" alt="No Request" />
     </div>
     <div class="no-data__title">
-      No Requests
+      No Complaints
     </div>
     <div class="no-data__description">
-      Please select a request to view
+      Please select a complaint to view
     </div>
   </div>
+</ng-template>
+
+<ng-template #date>
+  <span>
+    Resolved on:
+    {{ formattedDate() }}
+  </span>
 </ng-template>

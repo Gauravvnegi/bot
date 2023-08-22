@@ -1,18 +1,21 @@
 import { Component, OnInit } from '@angular/core';
-import { cols, title } from '../../constants/data-table';
-import { Subscription } from 'rxjs';
 import { FormBuilder } from '@angular/forms';
+import { MatDialogConfig } from '@angular/material/dialog';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import { QueryConfig } from '@hospitality-bot/admin/library';
 import {
   AdminUtilityService,
   BaseDatatableComponent,
   TableService,
 } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
-import { FinanceService } from '../../services/finance.service';
-import { QueryConfig } from '@hospitality-bot/admin/library';
-import { InvoiceHistoryList } from '../../models/history.model';
+import { DetailsComponent as BookingDetailComponent } from 'libs/admin/reservation/src/lib/components/details/details.component';
+import { ModalService } from 'libs/shared/material/src/lib/services/modal.service';
 import { LazyLoadEvent } from 'primeng/api';
+import { Subscription } from 'rxjs';
+import { cols, title } from '../../constants/data-table';
+import { InvoiceHistoryList } from '../../models/history.model';
+import { FinanceService } from '../../services/finance.service';
 
 @Component({
   selector: 'hospitality-bot-invoice-history-data-table',
@@ -38,7 +41,8 @@ export class InvoiceHistoryDataTableComponent extends BaseDatatableComponent
     private adminUtilityService: AdminUtilityService,
     private globalFilterService: GlobalFilterService,
     protected snackbarService: SnackBarService, // private router: Router, // private modalService: ModalService
-    private financeService: FinanceService
+    private financeService: FinanceService,
+    private modalService: ModalService
   ) {
     super(fb, tabFilterService);
   }
@@ -56,9 +60,8 @@ export class InvoiceHistoryDataTableComponent extends BaseDatatableComponent
     this.loading = true;
     this.financeService.getInvoiceHistory(this.getQueryConfig()).subscribe(
       (res) => {
-        this.values = new InvoiceHistoryList().deserialize(res)
-          .records;
-        this.totalRecords = res.total
+        this.values = new InvoiceHistoryList().deserialize(res).records;
+        this.totalRecords = res.total;
       },
       () => {
         this.values = [];
@@ -93,6 +96,24 @@ export class InvoiceHistoryDataTableComponent extends BaseDatatableComponent
       ]),
     };
     return config;
+  }
+
+  openDetailsPage(reservationId: string) {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = true;
+    dialogConfig.width = '100%';
+    const detailCompRef = this.modalService.openDialog(
+      BookingDetailComponent,
+      dialogConfig
+    );
+
+    detailCompRef.componentInstance.bookingId = reservationId;
+    detailCompRef.componentInstance.tabKey = 'payment_details';
+    this.$subscription.add(
+      detailCompRef.componentInstance.onDetailsClose.subscribe((res) => {
+        detailCompRef.close();
+      })
+    );
   }
 
   /**

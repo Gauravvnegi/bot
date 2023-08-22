@@ -114,6 +114,8 @@ td {
       letter-spacing: 1.44px;
       color: $secondary;
       margin-bottom: 10px;
+      border-bottom: 1px solid #e5e9f2;
+      padding-bottom: 6px;
     }
     &-subtitle {
       font-size: 16px;
@@ -136,8 +138,8 @@ td {
         width: fit-content;
         color: $white;
         font-weight: $bold;
-        margin-top: 15px;
-        margin-left: 15px;
+        // margin-top: 15px;
+        // margin-left: 15px;
       }
       &-booking {
         margin-top: 15px;
@@ -204,22 +206,23 @@ td {
 }
 
 .time-left {
+  position: absolute;
+  right: 25px;
+  top: 6em;
+}
+
+.jobno-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.resolved-text {
   display: flex;
   position: absolute;
   right: 25px;
-  font-size: 22px;
+  top: 6em;
+  font-size: 16px;
   align-items: center;
+  color: #2a8853;
   gap: 0.1em;
-  img {
-    width: 14%;
-  }
-  .time {
-    margin-left: 7px;
-    color: $inactive-state;
-  }
-
-  .text {
-    color: gray;
-    font-size: 12px;
-  }
 }

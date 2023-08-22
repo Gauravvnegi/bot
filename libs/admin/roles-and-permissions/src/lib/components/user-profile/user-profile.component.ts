@@ -22,11 +22,13 @@ import { managePermissionRoutes, navRoute } from '../../constants/routes';
 import { ManagePermissionService } from '../../services/manage-permission.service';
 import { PageState, Permission, PermissionMod, UserForm } from '../../types';
 import { UserPermissionDatatableComponent } from '../user-permission-datatable/user-permission-datatable.component';
+import { UserPermissionTable } from '../../models/user-permission-table.model';
 
 @Component({
   selector: 'hospitality-bot-user-profile',
   templateUrl: './user-profile.component.html',
   styleUrls: ['./user-profile.component.scss'],
+  providers: [ModalService],
 })
 export class UserProfileComponent implements OnInit {
   loggedInUserId: string;
@@ -35,6 +37,7 @@ export class UserProfileComponent implements OnInit {
   products: Option[];
   brandNames: Option[];
   branchNames: Option[];
+  userList: Option[];
 
   tabListItems: { label: string; value: string }[];
   tabIdx = 1;
@@ -66,6 +69,8 @@ export class UserProfileComponent implements OnInit {
   navRoutes: NavRouteOptions = [];
   state: PageState;
 
+  entityId: string;
+
   updateMessage: Record<PageState, string> = {
     addNewUser: 'User Added Successfully',
     editUser: 'User Profile Updated Successfully',
@@ -87,6 +92,8 @@ export class UserProfileComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.entityId = this._userService.getentityId();
+    this.getUserList();
     this.loggedInUserId = this._userService.getLoggedInUserId();
     this.brandNames = this._hotelDetailService.brands.map((item) => ({
       value: item.id,
@@ -146,9 +153,8 @@ export class UserProfileComponent implements OnInit {
    */
   initTeamMember() {
     this._managePermissionService
-      .getManagedUsers({
-        queryObj: '?limit=3',
-        loggedInUserId: this.loggedInUserId,
+      .getAllUsers(this.entityId, {
+        params: '?limit=3&type=REPORTING',
       })
       .subscribe((res) => {
         const color = ['#99e6e6', '#4db380', '#e6331a'];
@@ -156,7 +162,7 @@ export class UserProfileComponent implements OnInit {
           initial: item.firstName?.charAt(0) + item.lastName?.charAt(0),
           color: color[idx],
         }));
-        this.totalTeamMember = res?.total;
+        this.totalTeamMember = res?.entityTypeCounts['REPORTING'];
       });
   }
 
@@ -279,11 +285,12 @@ export class UserProfileComponent implements OnInit {
       products: [[], Validators.required],
       departments: [[], Validators.required],
       branchName: [[], Validators.required],
-      cc: [''],
+      cc: ['', [Validators.required]],
       phoneNumber: ['', [Validators.required]],
       email: ['', [Validators.required, Validators.pattern(Regex.EMAIL_REGEX)]],
       profileUrl: [''],
       permissionConfigs: this._fb.array([]),
+      reportingTo: [''],
     });
   }
 
@@ -344,6 +351,21 @@ export class UserProfileComponent implements OnInit {
 
       this.userForm.patchValue({ departments: currentDepartments });
     });
+  }
+
+  getUserList() {
+    this._managePermissionService
+      .getAllUsers(this.entityId, {
+        params: '?status=true&mention=true',
+      })
+      .subscribe((data) => {
+        // const manageUsersValues = new UserPermissionTable().deserialize(data)
+        //   .records;
+        this.userList = data.users.map((item) => ({
+          label: `${item.firstName} ${item.lastName}`,
+          value: item.id,
+        }));
+      });
   }
 
   constructPermission(config: Permission) {

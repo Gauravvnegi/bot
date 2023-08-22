@@ -5,7 +5,7 @@
 >
   <div class="heading">{{ tableName }}</div>
   <div class="action-wrapper">
-    <ng-container [ngTemplateOutlet]="search"></ng-container>
+    <ng-container [ngTemplateOutlet]="search" #searchComponent></ng-container>
     <hospitality-bot-button
       label="+ Add agent"
       link="/pages/members/agent/{{ routes.addAgent.route }}"
@@ -212,8 +212,12 @@
     [formGroup]="tableFG"
     controlName="search"
     [props]="{
-      placeholder: 'Search by Name, Code...'
+      placeholder: 'Search by Name, Phone No, Code or IATA...',
+      hasSuggestion: true,
+      scattered: true
     }"
+    [suggestionList]="sortFilterList"
+    (onSuggestClick)="sortBy($event)"
     (onSearch)="searchAgent($event)"
   ></hospitality-bot-global-search>
 </ng-template>

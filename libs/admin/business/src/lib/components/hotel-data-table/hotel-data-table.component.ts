@@ -100,6 +100,19 @@ export class HotelDataTableComponent extends BaseDatatableComponent
     );
   }
 
+  secondsToAMPMTime(seconds) {
+    const hours = Math.floor(seconds / 3600);
+    const minutes = Math.floor((seconds % 3600) / 60);
+    const period = hours < 12 ? 'AM' : 'PM';
+
+    const formattedHours = hours === 0 ? 12 : hours > 12 ? hours - 12 : hours;
+
+    const timeString = `${formattedHours
+      .toString()
+      .padStart(2, '0')}:${minutes.toString().padStart(2, '0')} ${period}`;
+    return timeString;
+  }
+  
   /**
    * To get query params
    */
@@ -176,10 +189,10 @@ export class HotelDataTableComponent extends BaseDatatableComponent
     this.loading = true;
     this.$subscription.add(
       this.businessService
-        .updateHotel(rowData.id, { status: status })
+        .updateHotel(rowData.id, { status: status ? 'ACTIVE' : 'INACTIVE' })
         .subscribe(
           (res) => {
-            this.loadInitialData();
+            this.initTableValue();
             this.snackbarService.openSnackBarAsText(
               'Status changes successfully',
               '',

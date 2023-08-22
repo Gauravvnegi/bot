@@ -57,7 +57,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
   @ViewChild('cardComponent') cardComponent: MainComponent;
   @Input() globalFeedbackFilterType: string;
   @Input() tableName = feedback.table.name;
-  // @Input() tabFilterIdx = 0;
+  // tabFilterIdx = 0;
   // @Input() tabFilterItems = [];
   globalFeedbackConfig = feedback;
   outlets = [];
@@ -69,7 +69,6 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
   isCustomSort = true;
   triggerInitialData = false;
   entityId: string;
-  rowsPerPage = 25;
   colorMap;
   responseRate;
   cols: Cols[] = feedback.cols.feedbackDatatable.transactional;
@@ -108,7 +107,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
       type: '',
       defaultLabel: 'Export Summary',
     });
-    this.selectedTab = 'ALL';
+    this.selectedTab = this.tabFilterItems[this.tabFilterIdx]?.value;
   }
 
   registerListeners(): void {

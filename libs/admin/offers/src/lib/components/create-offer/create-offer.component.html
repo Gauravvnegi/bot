@@ -72,7 +72,7 @@
       class="half-width"
       preControlName="discountType"
       postControlName="discountValue"
-      label="Discount Type"
+      label="Discount"
       [options]="discount"
       [defaultProps]="{ post: { type: 'number' } }"
       [props]="{
@@ -85,14 +85,14 @@
       }"
     ></hospitality-bot-prefix-field>
 
-    <hospitality-bot-view-input
+    <!-- <hospitality-bot-view-input
       class="half-width"
       label="Discount Price"
       controlName="discountedPrice"
       [strikeValue]="useForm.get('rate').value"
       [suffix]="currency"
     >
-    </hospitality-bot-view-input>
+    </hospitality-bot-view-input> -->
     <hospitality-bot-form-action
       class="full-width"
       [loading]="loading"

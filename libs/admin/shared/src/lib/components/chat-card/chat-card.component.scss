@@ -41,7 +41,7 @@
       }
       &_status {
         padding: 1px 5px 2px;
-        border-radius: 2px;
+        border-radius: 5px;
         color: $white;
         width: fit-content;
         font-size: 11px;
@@ -202,14 +202,26 @@
 .priority-low {
   background-color: $completed-state;
 }
+.priority-low-text {
+  color: $completed-state;
+}
 .priority-medium {
   background-color: $priority-medium;
+}
+.priority-medium-text {
+  color: $priority-medium;
 }
 .priority-high {
   background-color: $priority-high;
 }
+.priority-high-text {
+  color: $priority-high;
+}
 .priority-asap {
   background-color: $darkRed;
+}
+.priority-asap-text {
+  color: $darkRed;
 }
 .sla-new {
   color: $completed-state;
@@ -239,7 +251,7 @@
 
   display: flex;
   padding: 1px 5px 2px;
-  border-radius: 2px;
+  border-radius: 5px;
   color: #ffffff;
   width: fit-content;
   font-size: 11px;

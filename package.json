@@ -12,6 +12,7 @@
     "start:admin": "ng run admin:serve",
     "start:web-user": "ng serve --project=web-user",
     "build": "ng build",
+    "build:admin:stg": "ng run admin:build --configuration=staging --baseHref=/",
     "build:web-user:dev": "ng run web-user:build --configuration=development",
     "test": "ng test",
     "lint": "npx nx workspace-lint && ng lint",

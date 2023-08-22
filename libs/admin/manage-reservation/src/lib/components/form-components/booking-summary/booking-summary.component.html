@@ -1,82 +1,236 @@
 <ng-container *ngIf="!displayBookingOffer; else bookingOffer">
-  <div class="bk-summary_heading">Reservation Summary</div>
-  <p class="divider"></p>
-  <div class="bk-summary_subheading" *ngIf="heading">
-    {{ heading }}
-  </div>
-  <div class="bk-summary_subheading_label">
-    {{ summaryData?.location }}
-  </div>
-
-  <div class="bk-summary_roomInfo">
-    <ng-content *ngIf="!displayBookingOffer"></ng-content>
-  </div>
-  <div class="bk-summary_offerInfo" *ngIf="bookingType === 'ROOM_TYPE'">
-    <ng-container
-      *ngIf="
-        controlContainer.control.get('offerId').value &&
-          selectedOffer?.description;
-        else selectOffer
-      "
-    >
-      <p>
-        Offer Applied
-      </p>
-      <div class="offer">
-        <div [innerHtml]="selectedOffer.description" class="offer_card"></div>
-        <div class="offer_gift">
-          <img src="assets/svg/offer_gift.svg" alt="offer gift" />
-        </div>
-        <div class="offer_cross" (click)="offerSelect()">
-          <img src="assets/images/cross.png" alt="cross" />
-        </div>
+  <div class="summary-wrapper">
+    <div class="bk-summary_heading page-heading">Reservation Summary</div>
+    <!-- <p class="divider"></p> -->
+    <div class="container">
+      <div
+        class="bk-summary_subheading"
+        *ngIf="bookingType === 'ROOM_TYPE' && summaryData?.bookingItems"
+      >
+        {{ (summaryData?.bookingItems)[0]?.roomTypeLabel }}
+        <span class="room-count" *ngIf="summaryData?.bookingItems.length > 1"
+          >+{{ summaryData?.bookingItems.length - 1 }}</span
+        >
       </div>
-    </ng-container>
-    <ng-template #selectOffer>
-      <p>
-        Have an Offer?
-        <span (click)="displayBookingOffer = !displayBookingOffer"
-          >Apply Offer</span
+      <div class="bk-summary_subheading" *ngIf="heading">
+        {{ heading }}
+      </div>
+      <div class="bk-summary_subheading_label">
+        {{ summaryData?.location }}
+      </div>
+
+      <div class="bk-summary_roomInfo">
+        <ng-content *ngIf="!displayBookingOffer"></ng-content>
+      </div>
+      <ng-container
+        *ngIf="bookingType === 'ROOM_TYPE' && summaryData?.bookingItems.length"
+      >
+        <ng-container
+          [ngTemplateOutlet]="summaryTemplate"
+          [ngTemplateOutletContext]="{
+            bookingItem: summaryData
+          }"
+        >
+        </ng-container>
+      </ng-container>
+      <div class="view-details-btn" *ngIf="bookingType === 'ROOM_TYPE'">
+        <hospitality-bot-button
+          class="btn"
+          *ngIf="summaryData?.bookingItems.length > 1"
+          [label]="detailsView ? 'View Less' : 'View Details'"
+          variant="text"
+          (onClick)="detailsView = !detailsView"
+        ></hospitality-bot-button>
+      </div>
+      <ng-container *ngIf="bookingType === 'ROOM_TYPE' && detailsView">
+        <ng-container
+          *ngFor="
+            let bookingItem of summaryData?.bookingItems;
+            let index = index
+          "
+        >
+          <ng-container
+            [ngTemplateOutlet]="summaryTemplate"
+            [ngTemplateOutletContext]="{
+              bookingItem: bookingItem,
+              index: index
+            }"
+          >
+          </ng-container>
+        </ng-container>
+      </ng-container>
+      <ng-container *ngIf="bookingType !== 'ROOM_TYPE'">
+        <ng-container
+          [ngTemplateOutlet]="outletSummaryTemplate"
+          [ngTemplateOutletContext]="{
+            summaryData: summaryData
+          }"
+        >
+        </ng-container>
+      </ng-container>
+      <!-- when there is no summary -->
+      <ng-container
+        *ngIf="bookingType === 'ROOM_TYPE' && !summaryData?.bookingItems.length"
+      >
+        <ng-container [ngTemplateOutlet]="summaryTemplate"> </ng-container>
+      </ng-container>
+      <ng-container *ngIf="bookingType !== 'ROOM_TYPE' && !summaryData">
+        <ng-container [ngTemplateOutlet]="outletSummaryTemplate">
+        </ng-container>
+      </ng-container>
+      <p
+        class="bk-summary_priceInfo_perNight"
+        *ngIf="paymentControls?.totalPaidAmount.value"
+      >
+        <span class="bk-summary_priceInfo_perNight_label">Paid Amount</span>
+        <span class="bk-summary_priceInfo_perNight_amount"
+          >-{{ paymentControls.totalPaidAmount.value | currency: 'INR' }}</span
         >
       </p>
-    </ng-template>
+    </div>
+    <p class="divider"></p>
+    <div class="footer">
+      <div class="bk-summary_total">
+        <p class="bk-summary_total_label">Total Amount to be paid</p>
+        <p class="bk-summary_total_amount">
+          {{
+            summaryData?.totalAmount -
+              (paymentControls.totalPaidAmount.value
+                ? paymentControls.totalPaidAmount.value
+                : 0) | currency: 'INR'
+          }}
+        </p>
+      </div>
+      <div class="bk-summary_btn-wrapper">
+        <hospitality-bot-button
+          (click)="handleBooking()"
+          label="{{ this.reservationId ? 'Update' : 'Confirm' }} Reservation"
+          [disabled]="controlContainer.control.invalid || disabledForm"
+          [isLoading]="isBooking"
+        ></hospitality-bot-button>
+      </div>
+    </div>
   </div>
-  <div class="bk-summary_priceInfo">
-    <p
-      class="bk-summary_priceInfo_perNight"
-      *ngIf="bookingType === 'ROOM_TYPE'"
+</ng-container>
+<ng-template #bookingOffer>
+  <div class="bk-summary_heading page-heading">
+    <mat-icon (click)="displayBookingOffer = !displayBookingOffer"
+      >arrow_back</mat-icon
     >
-      <span class="bk-summary_priceInfo_perNight_label">Per Night</span>
-      <s
-        class="bk-summary_priceInfo_perNight_amount"
-        >{{ summaryData?.totalAmount | currency: 'INR' }}</s
+    Offers
+  </div>
+  <div class="offersList">
+    <ng-container *ngIf="offersList?.records?.length; else emptyOffer">
+      <div
+        *ngFor="let item of offersList?.records"
+        class="offer"
+        (click)="offerSelect(item)"
       >
+        <div class="offerName">{{ item.name }}</div>
+        <div [innerHTML]="item.description" class="offerDescription"></div>
+      </div>
+    </ng-container>
+  </div>
+
+  <ng-template #emptyOffer>
+    <div class="empty-offer-view">
+      <div class="offer_box">
+        <img src="assets/svg/empty_box.svg" alt="empty box" />
+      </div>
+      <div class="offer_text">
+        Currently You do not have any Offer
+      </div>
+    </div>
+  </ng-template>
+</ng-template>
+
+<ng-template #outletSummaryTemplate let-summaryData="summaryData">
+  <p class="bk-summary_priceInfo_person">
+    <span class="bk-summary_priceInfo_perNight_label">
+      For
+      {{ summaryData?.adultCount }}
+      Adults
+    </span>
+    <span class="bk-summary_priceInfo_perNight_amount">
+      {{ summaryData?.basePrice | currency: 'INR' }}
+    </span>
+  </p>
+  <p class="bk-summary_priceInfo_taxFair">
+    <span class="bk-summary_priceInfo_perNight_label"
+      >Taxes & Fees <i class="fa fa-info-circle" aria-hidden="true"></i
+    ></span>
+    <span
+      class="bk-summary_priceInfo_perNight_amount"
+      *ngIf="summaryData?.taxAndFees"
+      >+{{ summaryData?.taxAndFees | currency: 'INR' }}</span
+    >
+  </p>
+</ng-template>
+
+<ng-template #summaryTemplate let-index="index" let-bookingItem="bookingItem">
+  <p *ngIf="index !== undefined" class="divider"></p>
+  <div class="bk-summary_priceInfo">
+    <div class="bk-summary_subheading" *ngIf="index !== undefined">
+      {{ bookingItem?.roomTypeLabel }}
+      <span class="room-count"> x{{ bookingItem?.roomCount }} </span>
+    </div>
+    <div class="bk-summary_offerInfo" *ngIf="bookingType === 'ROOM_TYPE'">
+      <ng-container
+        *ngIf="
+          inputControls?.offerId.value && selectedOffer?.name;
+          else selectOffer
+        "
+      >
+        <div class="promo-code">
+          <p>Promo Code</p>
+          <span
+            *ngIf="index === undefined"
+            class="remove-btn"
+            (click)="offerSelect()"
+            >Remove</span
+          >
+        </div>
+        <div class="offer">
+          <div class="offerName">{{ selectedOffer?.name }}</div>
+        </div>
+      </ng-container>
+      <ng-template #selectOffer>
+        <p *ngIf="index === undefined">
+          Have an Offer?
+          <span (click)="displayBookingOffer = !displayBookingOffer"
+            >Apply Offer</span
+          >
+        </p>
+      </ng-template>
+    </div>
+    <p class="bk-summary_priceInfo_perNight">
+      <span class="bk-summary_priceInfo_perNight_label"
+        >For {{ dateDifference }}
+        {{ dateDifference > 1 ? 'nights' : 'night' }}</span
+      >
+      <!-- <s class="bk-summary_priceInfo_perNight_amount">{{
+        bookingItem?.totalAmount | currency: 'INR'
+      }}</s> -->
     </p>
-    <p class="bk-summary_priceInfo_person" *ngIf="bookingType === 'ROOM_TYPE'">
+    <p class="bk-summary_priceInfo_person">
       <span class="bk-summary_priceInfo_perNight_label">
         For
         {{
-          controlContainer.control?.get('roomInformation.adultCount')?.value
-            ? controlContainer.control?.get('roomInformation.adultCount')?.value
-            : 0
+          bookingItem?.maxAdult
+            ? bookingItem.maxAdult
+            : occupancyDetails.adultCount
         }}
-        Adult, Adults &
+        Adults
         {{
-          controlContainer.control?.get('roomInformation.childCount')?.value
-            ? controlContainer.control?.get('roomInformation.childCount')?.value
-            : 0
+          bookingItem?.maxChild
+            ? bookingItem.maxChild
+            : occupancyDetails.childCount
         }}
-        Kid Child
+        Kids
       </span>
       <span class="bk-summary_priceInfo_perNight_amount">
-        {{ summaryData?.totalAmount | currency: 'INR' }}
+        {{ bookingItem?.basePrice | currency: 'INR' }}
       </span>
-    </p>
-    <p class="bk-summary_priceInfo_person" *ngIf="bookingType !== 'ROOM_TYPE'">
-      <span class="bk-summary_priceInfo_perNight_label">{{ itemInfo }}</span>
-      <span class="bk-summary_priceInfo_perNight_discountedAmount">{{
-        summaryData?.totalAmount | currency: 'INR'
-      }}</span>
     </p>
     <p class="bk-summary_priceInfo_taxFair" *ngIf="summaryData?.offerAmount">
       <span class="bk-summary_priceInfo_perNight_label"
@@ -92,71 +246,9 @@
       ></span>
       <span
         class="bk-summary_priceInfo_perNight_amount"
-        *ngIf="summaryData?.taxesAndFees"
-        >+{{ summaryData.taxesAndFees }}</span
-      >
-    </p>
-    <p
-      class="bk-summary_priceInfo_perNight"
-      *ngIf="
-        controlContainer.control.get('paymentMethod.totalPaidAmount').value
-      "
-    >
-      <span class="bk-summary_priceInfo_perNight_label">Paid Amount</span>
-      <span class="bk-summary_priceInfo_perNight_amount"
-        >-{{
-          controlContainer.control.get('paymentMethod.totalPaidAmount').value
-            | currency: 'INR'
-        }}</span
+        *ngIf="bookingItem?.taxAndFees"
+        >+{{ bookingItem?.taxAndFees | currency: 'INR' }}</span
       >
     </p>
   </div>
-  <p class="divider"></p>
-  <div class="bk-summary_total">
-    <p class="bk-summary_total_label">Total Amount to be paid</p>
-    <p class="bk-summary_total_amount">
-      {{
-        summaryData?.totalAmount -
-          controlContainer.control.get('paymentMethod.totalPaidAmount').value
-          | currency: 'INR'
-      }}
-    </p>
-  </div>
-  <div class="bk-summary_btnwrapper">
-    <hospitality-bot-button
-      (click)="handleBooking()"
-      label="{{ this.reservationId ? 'Update' : 'Confirm' }} Reservation"
-      [disabled]="controlContainer.control.invalid || disabledForm"
-      [isLoading]="isBooking"
-    ></hospitality-bot-button>
-  </div>
-</ng-container>
-<ng-template #bookingOffer>
-  <div class="bk-summary_heading">
-    <mat-icon (click)="displayBookingOffer = !displayBookingOffer"
-      >arrow_back</mat-icon
-    >
-    Offers
-  </div>
-  <p class="divider"></p>
-  <ng-container *ngIf="offersList?.records?.length; else emptyOffer">
-    <div *ngFor="let item of offersList?.records" class="offerList">
-      <div class="offer" (click)="offerSelect(item)">
-        <div [innerHtml]="item.description" class="offer_card"></div>
-        <div class="offer_gift">
-          <img src="assets/svg/offer_gift.svg" alt="offer gift" />
-        </div>
-      </div>
-    </div>
-  </ng-container>
-  <ng-template #emptyOffer>
-    <div class="empty-offer-view">
-      <div class="offerList_box">
-        <img src="assets/svg/empty_box.svg" alt="empty box" />
-      </div>
-      <div class="offerList_text">
-        Currently You do not have any Offer
-      </div>
-    </div>
-  </ng-template>
 </ng-template>

@@ -12,7 +12,7 @@ export class CampaignService extends ApiService {
    * @returns get api of topic list.
    */
   getTopicList(id: string, config: QueryConfig) {
-    return this.get(`/api/v1/entity/${id}/topics/${config.queryObj}`);
+    return this.get(`/api/v1/entity/${id}/topics${config.queryObj}`);
   }
 
   /**

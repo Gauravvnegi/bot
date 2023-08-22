@@ -1,17 +1,8 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import {
-  AbstractControl,
-  FormArray,
-  FormBuilder,
-  FormGroup,
-  Validators,
-} from '@angular/forms';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
-import { Subscription } from 'rxjs';
-import { manageReservationRoutes } from '../../constants/routes';
 import {
-  BookingInfo,
   OfferData,
   OfferList,
   ReservationFormData,
@@ -20,81 +11,68 @@ import {
 import { ManageReservationService } from '../../services/manage-reservation.service';
 import {
   AdminUtilityService,
-  NavRouteOptions,
+  EntitySubType,
   Option,
 } from '@hospitality-bot/admin/shared';
-import { ReservationForm, RoomTypes } from '../../constants/form';
 import { roomFields, roomReservationTypes } from '../../constants/reservation';
 import { FormService } from '../../services/form.service';
-import { SelectedEntity } from '../../types/reservation.type';
+import { debounceTime } from 'rxjs/operators';
+import { OccupancyDetails, ReservationSummary } from '../../types/forms.types';
+import {
+  BookingItemsSummary,
+  RoomReservationResponse,
+} from '../../types/response.type';
+import { BaseReservationComponent } from '../base-reservation.component';
+import { ReservationType } from '../../constants/reservation-table';
+import { convertToTitleCase } from 'libs/admin/shared/src/lib/utils/valueFormatter';
 
 @Component({
   selector: 'hospitality-bot-add-reservation',
   templateUrl: './add-reservation.component.html',
   styleUrls: ['./add-reservation.component.scss', '../reservation.styles.scss'],
 })
-export class AddReservationComponent implements OnInit, OnDestroy {
-  userForm: FormGroup;
-
-  entityId: string;
-  reservationId: string;
-  globalQueries = [];
-
+export class AddReservationComponent extends BaseReservationComponent
+  implements OnInit, OnDestroy {
+  roomTypeValues = [];
   reservationTypes: Option[] = [];
-  roomNumbers: Option[] = [];
-  offersList: OfferList;
-  selectedOffer: OfferData;
-  summaryData: SummaryData;
-  fields = roomFields;
-
-  formValueChanges = false;
-  disabledForm = false;
+  roomTypeIds: string[] = [];
   expandAccordion = false;
 
-  deductedAmount = 0;
-  bookingType = 'ROOM_TYPE';
-
-  pageTitle = 'Add Booking';
-  routes: NavRouteOptions = [];
-
-  $subscription = new Subscription();
-
-  @Input() selectedEntity: SelectedEntity;
-
   // Booking Summary props
-  heading = '';
-  adultCount = 0;
-  roomCount = 1;
-  childCount = 0;
+  occupancyDetails: OccupancyDetails = {
+    adultCount: 0,
+    childCount: 0,
+    roomCount: 0,
+  };
 
   constructor(
     private fb: FormBuilder,
     private adminUtilityService: AdminUtilityService,
-    private globalFilterService: GlobalFilterService,
+    protected globalFilterService: GlobalFilterService,
     private manageReservationService: ManageReservationService,
     protected activatedRoute: ActivatedRoute,
     private formService: FormService
-  ) {}
+  ) {
+    super(globalFilterService, activatedRoute);
+  }
 
   ngOnInit(): void {
     this.initForm();
-    this.entityId = this.globalFilterService.entityId;
     this.initDetails();
-    this.getReservationId();
+    if (this.reservationId) this.getReservationDetails();
   }
 
   initDetails() {
-    this.reservationId = this.activatedRoute.snapshot.paramMap.get('id');
-    this.heading = this.selectedEntity.label;
     this.expandAccordion = this.formService.enableAccordion;
+
+    // Expand accordion for assign room from reservation table.
     if (this.expandAccordion) {
       this.formService.enableAccordion = false;
     }
-    const { navRoutes, title } = manageReservationRoutes[
-      this.reservationId ? 'editReservation' : 'addReservation'
-    ];
-    this.routes = navRoutes;
-    this.pageTitle = title;
+
+    this.reservationTypes = roomReservationTypes;
+    this.fields = roomFields;
+    this.bookingType = EntitySubType.ROOM_TYPE;
   }
 
   /**
@@ -117,48 +95,40 @@ export class AddReservationComponent implements OnInit, OnDestroy {
   /**
    * @function listenForFormChanges Listen for form values changes.
    */
-  listenForFormChanges(index?: number): void {
+  listenForFormChanges(): void {
     this.formValueChanges = true;
-
-    this.roomControls[index]
-      .get('roomTypeId')
-      ?.valueChanges.subscribe((res) => {
-        if (res) {
+    this.inputControls.roomInformation
+      .get('roomTypes')
+      .valueChanges.pipe(debounceTime(1000))
+      .subscribe((res) => {
+        const roomTypeIds = res.map((item) => item.roomTypeId);
+        // check if the last added room type is selected
+        if (res && res[res.length - 1].roomTypeId?.length) {
           this.userForm.get('offerId').reset();
-          this.getOfferByRoomType(res);
+          this.getOfferByRoomType(roomTypeIds);
           this.getSummaryData();
+        }
+
+        // Reset summary when all items are removed from roomArray.
+        if (res[res.length - 1].roomTypeId === null) {
+          this.summaryData = new SummaryData().deserialize();
         }
       });
 
-    this.roomControls[index].get('adultCount').valueChanges.subscribe((res) => {
-      this.adultCount = res;
-    });
-    this.roomControls[index].get('childCount').valueChanges.subscribe((res) => {
-      this.childCount = res;
-    });
-    // this.roomControls[index].get('roomCount')?.valueChanges.subscribe((res) => {
-    //   if (res) {
-    //     if (
-    //       this.roomControls[index].get('roomCount').value >
-    //       this.roomControls[index].get('adultCount').value
-    //     )
-    //       this.roomControls[index]
-    //         .get('adultCount')
-    //         .patchValue(this.roomControls[].get('roomCount').value);
-    //   }
-    // });
-  }
-
-  getReservationId(): void {
-    if (this.reservationId) {
-      this.reservationTypes = [
-        ...roomReservationTypes,
-        { label: 'Canceled', value: 'CANCELED' },
-      ];
-      this.getReservationDetails();
-    } else {
-      this.reservationTypes = roomReservationTypes;
-    }
+    // Listen changes in reservation Type.
+    this.reservationInfoControls.reservationType.valueChanges.subscribe(
+      (res) => {
+        // Disable roomNumber field if the reservation type is draft.
+        if (res === ReservationType.DRAFT) {
+          this.roomControls.forEach((item) => {
+            item.get('roomNumbers').patchValue([], { emitEvent: false });
+          });
+          this.fields[3].disabled = true;
+        } else {
+          this.fields[3].disabled = false;
+        }
+      }
+    );
   }
 
   getReservationDetails(): void {
@@ -166,52 +136,83 @@ export class AddReservationComponent implements OnInit, OnDestroy {
       this.manageReservationService
         .getReservationDataById(this.reservationId, this.entityId)
         .subscribe(
-          (response) => {
+          (response: RoomReservationResponse) => {
             const data = new ReservationFormData().deserialize(response);
-            this.userForm.patchValue(data);
-            this.summaryData = new SummaryData().deserialize(response);
-            this.setFormDisability(data.reservationInformation);
-            if (data.offerId)
-              this.getOfferByRoomType(
-                this.roomControls[0].get('roomTypeId').value
+
+            const {
+              guestInformation,
+              roomInformation,
+              nextStates,
+              ...formData
+            } = data;
+
+            if (nextStates)
+              this.reservationTypes = nextStates.map((item) => ({
+                label: convertToTitleCase(item),
+                value: item,
+              }));
+
+            // Create options for room and guest if not already available
+            // in room iterator and guest info component.
+            this.roomTypeValues = roomInformation;
+            this.formService.guestInformation.next(guestInformation);
+            this.userForm.patchValue(formData);
+
+            if (data.offerId) {
+              const roomTypeIds = roomInformation.map(
+                (item) => item.roomTypeId
               );
-            this.userForm.valueChanges.subscribe((_) => {
-              if (!this.formValueChanges) {
-                this.formValueChanges = true;
-                this.listenForFormChanges();
-              }
-            });
+              this.getOfferByRoomType(roomTypeIds);
+            }
           },
           (error) => {}
         )
     );
   }
 
-  setFormDisability(data: BookingInfo): void {
-    this.userForm.get('reservationInformation.source').disable();
-    switch (true) {
-      case data.reservationType === 'CONFIRMED':
-        this.userForm.disable();
-        this.disabledForm = true;
-        break;
-      case data.reservationType === 'CANCELED':
-        this.userForm.disable();
-        this.disabledForm = true;
-        break;
-      case data.source === 'CREATE_WITH':
-        this.disabledForm = true;
-        break;
-      case data.source === 'OTHERS':
-        this.disabledForm = true;
-        break;
+  // Sets form Disability according to the reservation type.
+  setFormDisability(): void {
+    // this.userForm.get('reservationInformation.source').disable();
+    if (this.reservationId) {
+      const reservationType = this.reservationInfoControls.reservationType
+        .value;
+      const source = this.reservationInfoControls.source;
+      source.disable({ emitEvent: false });
+      switch (true) {
+        case reservationType === ReservationType.CONFIRMED:
+          this.userForm.disable({ emitEvent: false });
+          this.disabledForm = true;
+          break;
+        case reservationType === ReservationType.CANCELED:
+          this.userForm.disable({ emitEvent: false });
+          this.disabledForm = true;
+          break;
+        // case source.value === 'CREATE_WITH':
+        //   this.disabledForm = true;
+        //   break;
+        // case source.value === 'OTHERS':
+        //   this.disabledForm = true;
+        //   break;
+      }
     }
   }
 
-  getOfferByRoomType(id: string): void {
-    if (id)
+  getOfferByRoomType(roomTypeIds: string[]): void {
+    const config = {
+      params: this.adminUtilityService.makeQueryParams([
+        {
+          pagination: false,
+          type: 'OFFER',
+          source: 1,
+          serviceIds: roomTypeIds,
+        },
+      ]),
+    };
+    // get offers for all roomTypes
+    if (roomTypeIds.length)
       this.$subscription.add(
         this.manageReservationService
-          .getOfferByRoomType(this.entityId, id)
+          .getOfferByRoomType(this.entityId, config)
           .subscribe(
             (response) => {
               this.offersList = new OfferList().deserialize(response);
@@ -239,45 +240,76 @@ export class AddReservationComponent implements OnInit, OnDestroy {
 
   getSummaryData(): void {
     const config = {
-      params: this.adminUtilityService.makeQueryParams([{ type: 'ROOM_TYPE' }]),
+      params: this.adminUtilityService.makeQueryParams([
+        { type: EntitySubType.ROOM_TYPE },
+      ]),
     };
-    const data = {
+
+    // Summary data for booking summary
+    const data: ReservationSummary = {
       fromDate: this.reservationInfoControls.from.value,
       toDate: this.reservationInfoControls.to.value,
-      roomTypeId: this.roomControls[0].get('roomTypeId').value,
-      // roomInformation: [
-      //   {
-      //     ratePlan: this.roomControls[0].get('ratePlan').value,
-      //     adultCount: this.adultCount,
-      //     childCount: this.childCount,
-      //   },
-      // ],
+      bookingItems: this.roomControls.map((item) => ({
+        roomDetails: {
+          ratePlan: {
+            id: item.get('ratePlan').value,
+          },
+          roomTypeId: item.get('roomTypeId').value,
+          roomCount: item.get('roomCount').value,
+        },
+        occupancyDetails: {
+          maxChildren: item.get('childCount').value,
+          maxAdult: item.get('adultCount').value,
+        },
+      })),
+      offer: {
+        id: this.inputControls.offerId.value,
+      },
     };
-    if (this.roomControls[0].get('roomTypeId')?.value) {
-      this.$subscription.add(
-        this.manageReservationService
-          .getSummaryData(this.entityId, data, config)
-          .subscribe(
-            (res) => {
-              this.summaryData = new SummaryData()?.deserialize(res);
-              this.userForm
-                .get('roomInformation')
-                .patchValue(this.summaryData, { emitEvent: false });
-              this.userForm
-                .get('paymentMethod.totalPaidAmount')
-                .setValidators([Validators.max(this.summaryData?.totalAmount)]);
-              this.userForm
-                .get('paymentMethod.totalPaidAmount')
-                .updateValueAndValidity();
-              this.userForm
-                .get('paymentRule.deductedAmount')
-                .patchValue(this.summaryData?.totalAmount);
-              this.deductedAmount = this.summaryData?.totalAmount;
-            },
-            (error) => {}
-          )
-      );
-    }
+
+    this.$subscription.add(
+      this.manageReservationService
+        .getSummaryData(this.entityId, data, config)
+        .subscribe(
+          (res) => {
+            this.summaryData = new SummaryData()?.deserialize(res);
+
+            // Modify data to show summary for occupancy details.
+            this.updateBookingItemsCounts(this.summaryData.bookingItems);
+
+            // Set value and validators for payment according to the summaryData.
+            this.userForm
+              .get('paymentMethod.totalPaidAmount')
+              .setValidators([Validators.max(this.summaryData?.totalAmount)]);
+            this.userForm
+              .get('paymentMethod.totalPaidAmount')
+              .updateValueAndValidity();
+
+            // Needs to be changed according to api.
+            this.userForm
+              .get('paymentRule.deductedAmount')
+              .patchValue(this.summaryData?.totalAmount);
+            this.deductedAmount = this.summaryData?.totalAmount;
+          },
+          (error) => {},
+          () => this.setFormDisability()
+        )
+    );
+  }
+
+  // Get room adult and child count for all room types
+  updateBookingItemsCounts(bookingItems: BookingItemsSummary[]) {
+    const totalValues = bookingItems.reduce(
+      (acc, bookingItem) => {
+        acc.adultCount += bookingItem.maxAdult;
+        acc.childCount += bookingItem.maxChildren;
+        acc.roomCount += bookingItem.roomCount;
+        return acc;
+      },
+      { adultCount: 0, childCount: 0, roomCount: 0 } // Initial values for reduce
+    );
+    this.occupancyDetails = totalValues;
+    // set occupancy details to display in summary.
   }
 
   /**
@@ -291,13 +323,5 @@ export class AddReservationComponent implements OnInit, OnDestroy {
     return ((this.userForm.get('roomInformation') as FormGroup).get(
       'roomTypes'
     ) as FormArray).controls;
-  }
-
-  get reservationInfoControls() {
-    return (this.userForm.get('reservationInformation') as FormGroup)
-      .controls as Record<
-      keyof ReservationForm['reservationInformation'],
-      AbstractControl
-    >;
   }
 }

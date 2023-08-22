@@ -54,10 +54,9 @@ export const topicConfig = {
         sortType: 'string',
       },
       {
-        field: 'active',
+        field: 'status',
         header: 'Active',
-        isSortDisabled: true,
-
+        sortType: 'number',
         isSearchDisabled: true,
       },
     ],

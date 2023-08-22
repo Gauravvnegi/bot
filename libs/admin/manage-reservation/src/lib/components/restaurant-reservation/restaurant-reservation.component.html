@@ -14,11 +14,18 @@
             class="half-width"
             controlName="tableNumber"
             label="Table Number"
+            [props]="{
+              placeholder: 'Enter'
+            }"
           ></hospitality-bot-input>
           <hospitality-bot-input
             class="half-width"
             controlName="numberOfAdults"
             label="No. of Adults"
+            [props]="{
+              placeholder: 'Enter',
+              type: 'number'
+            }"
           ></hospitality-bot-input>
           <div
             class="food-package-wrapper full-width"
@@ -74,6 +81,8 @@
             [useFormArray]="menuItemsArray"
             ctaLabel="+ Add Item"
             (currentIndex)="onItemsAdded($event)"
+            (removedIndex)="getSummaryData()"
+            [itemValues]="menuItemsValues"
           ></hospitality-bot-iterator>
           <hospitality-bot-text-area
             class="full-width"
@@ -103,9 +112,8 @@
         [disabledForm]="disabledForm"
         [bookingInfo]="{
           heading: selectedEntity.label,
-          itemInfo: numberOfAdults,
-          stayInfo: tableNumber,
-          bookingType: bookingType
+          bookingType: bookingType,
+          outletId: selectedEntity.id
         }"
       >
         <div class="bk-summary_roomInfo_checkoutInfo">
@@ -129,7 +137,7 @@
             Guests
           </p>
           <p class="bk-summary_roomInfo_guestInfo_subText">
-            2
+            {{ orderInfoControls.numberOfAdults.value }}
           </p>
         </div>
       </hospitality-bot-booking-summary>

@@ -165,6 +165,9 @@
 }
 
 :host ::ng-deep .header-wrapper {
+  display: flex;
+  gap: 10px;
+  align-items: center;
   .p-menu {
     left: auto !important;
     top: auto !important;
@@ -196,21 +199,13 @@
   @include flex-space-between-cen-Algn;
   @include contained-primary-button;
   gap: 5px;
-  padding: 7px 11.7px 7.5px 12px;
+  justify-content: center;
+  padding: 7px 20px;
   font-size: 16px;
+  min-width: 200px;
+  min-height: 40px;
   font-weight: $bold;
-  cursor: pointer;
   border: none;
-  &:hover {
-    border: 1px solid $primary-cta;
-  }
-  &:focus {
-    border: 1px solid $primary-cta;
-    box-shadow: 0px 0px 0px 1px $primary-cta;
-  }
-  &:focus-visible {
-    outline: none;
-  }
 }
 
 .disabled-option {

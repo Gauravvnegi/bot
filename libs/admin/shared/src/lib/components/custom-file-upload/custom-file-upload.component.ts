@@ -48,7 +48,7 @@ export class CustomFileUploadComponent
   isMultiple: boolean = false;
   @Input() parentFG: FormGroup;
   @Input() isDisable = false;
-
+  exceedFeatureLimit: boolean = false;
   @Input() baseType: keyof typeof fileUploadConfiguration = 'image';
 
   @Input() set settings(value: {
@@ -90,6 +90,8 @@ export class CustomFileUploadComponent
   formArray: FormArray;
   inputControl: AbstractControl;
 
+  @ViewChild('checkbox') checkbox: ElementRef;
+
   constructor(
     private snackbarService: SnackBarService,
     private userDetailsService: UserService,
@@ -124,7 +126,13 @@ export class CustomFileUploadComponent
   processCheckboxChange(event, index) {
     if (event.target.checked) {
       this.featureValueIndex.push(index);
+
+      if (this.featureValueIndex.length >= 4) {
+        this.exceedFeatureLimit = true;
+      }
     } else {
+      this.exceedFeatureLimit = false;
+
       this.featureValueIndex = this.featureValueIndex?.filter(
         (item) => item !== index
       );
@@ -164,6 +172,7 @@ export class CustomFileUploadComponent
             return item;
           }
         });
+      this.exceedFeatureLimit = this.featureValueIndex.length >= 4;
     }
   }
 

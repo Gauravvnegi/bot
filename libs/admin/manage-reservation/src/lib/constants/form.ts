@@ -1,3 +1,7 @@
+import {
+  ReservationRatePlan,
+} from 'libs/admin/room/src/lib/constant/form';
+
 export type ReservationForm = {
   reservationInformation: ReservationInformation;
   guestInformation: GuestInformation;
@@ -35,7 +39,7 @@ type BookingInformation = {
 
 export type SpaItems = {
   serviceName: string;
-  quantity: number;
+  unit: number;
   amount: number;
 };
 
@@ -49,11 +53,15 @@ type RoomInformation = {
 
 export type RoomTypes = {
   roomTypeId: string;
-  ratePlanId: string;
+  ratePlan: string;
   roomCount: number;
-  roomNumber: string[];
+  roomNumbers?: string[];
+  roomNumber?: string;
   adultCount: number;
   childCount: number;
+  roomTypeLabel?: string;
+  allRatePlans?: ReservationRatePlan;
+  id?: string;
 };
 
 export type OrderInformation = {
@@ -77,13 +85,13 @@ type EventInformation = {
 
 export type VenueItemsData = {
   description: string;
-  quantity: number;
+  unit: number;
   amount: number;
 };
 
 export type MenuItemsData = {
   menuItems: string;
-  quantity: number;
+  unit: number;
   amount: number;
 };
 
@@ -102,7 +110,7 @@ type PaymentRule = {
   inclusionsAndTerms: string;
 };
 
-type PaymentMethod = {
+export type PaymentMethod = {
   cashierFirstName: string;
   cashierLastName: string;
   totalPaidAmount: number;

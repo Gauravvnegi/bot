@@ -63,11 +63,13 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
   roomTypeId: string;
   entityId: string;
 
+  defaultRatePlanStatus: boolean = true;
+
   defaultImage: string = 'assets/images/image-upload.png';
   pageTitle = 'Add Room Type';
   navRoutes: NavRouteOptions = [
-    { label: 'Inventory', link: './' },
-    { label: 'Rooms', link: '/pages/inventory/room' },
+    { label: 'efrontdesk', link: './' },
+    { label: 'Rooms', link: '/pages/efrontdesk/room' },
     { label: 'Add Room Type', link: './' },
   ];
 
@@ -166,17 +168,12 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
     this.subscription$.add(
       this.configService.$config.subscribe((value) => {
         if (value) {
-          const {
-            currencyConfiguration,
-            roomDiscountConfig,
-            roomRatePlans,
-          } = value;
+          const { currencyConfiguration, roomDiscountConfig } = value;
           this.currencies = currencyConfiguration.map(modOption);
           this.discountTypes = roomDiscountConfig.map(({ value }) => ({
             label: DiscountType[value],
             value,
           }));
-          this.getRatePlans(roomRatePlans);
         }
       })
     );
@@ -190,24 +187,31 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
       this.useForm.addControl(
         'dynamicRatePlans',
         this.fb.group({
-          label: ['Rate Plan'],
-          basePriceCurrency: ['INR'],
+          label: [
+            'EP (Room Only)',
+            [Validators.required, Validators.maxLength(60)],
+          ],
+          basePriceCurrency: ['INR', [Validators.required]],
           basePrice: ['', [Validators.required, Validators.min(0)]],
-          minPriceCurrency: ['INR'],
+          minPriceCurrency: ['INR', [Validators.required]],
           minPrice: ['', [Validators.required, Validators.min(0)]],
-          maxPriceCurrency: ['INR'],
-          maxPrice: ['', [Validators.required, Validators.min(0)]],
-          paxPriceCurrency: ['INR'],
+          maxPriceCurrency: ['INR', [Validators.required, Validators.required]],
+          maxPrice: ['', [Validators.min(0)]],
+          paxPriceCurrency: ['INR', [Validators.required, Validators.required]],
           paxAdultPrice: ['', [Validators.required, Validators.min(0)]],
           paxChildPrice: ['', [Validators.required, Validators.min(0)]],
           ratePlanId: [''],
+          status: [true],
         })
       );
     else
       this.useForm.addControl(
         'staticRatePlans',
         this.fb.group({
-          label: ['Rate Plan'],
+          label: [
+            'EP (Room Only)',
+            [Validators.required, Validators.maxLength(60)],
+          ],
           basePriceCurrency: ['INR'],
           basePrice: ['', [Validators.required, Validators.min(0)]],
           discountType: ['PERCENTAGE'],
@@ -218,6 +222,7 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
           paxAdultPrice: ['', [Validators.required, Validators.min(0)]],
           paxChildPrice: ['', [Validators.required, Validators.min(0)]],
           ratePlanId: [''],
+          status: [true],
         })
       );
   }
@@ -235,13 +240,15 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
               let data = new RoomTypeForm().deserialize(res);
               const { staticRatePlans, dynamicRatePlans, ...rest } = data;
 
-              this.isPricingDynamic
-                ? this.useForm
-                    .get('dynamicRatePlans')
-                    .patchValue(dynamicRatePlans)
-                : this.useForm
-                    .get('staticRatePlans')
-                    .patchValue(staticRatePlans);
+              if (this.isPricingDynamic) {
+                this.useForm
+                  .get('dynamicRatePlans')
+                  .patchValue(dynamicRatePlans);
+                this.defaultRatePlanStatus = dynamicRatePlans.status;
+              } else {
+                this.useForm.get('staticRatePlans').patchValue(staticRatePlans);
+                this.defaultRatePlanStatus = dynamicRatePlans.status;
+              }
 
               data.ratePlans.forEach(() => {
                 this.addNewRatePlan();
@@ -254,75 +261,6 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
           )
       );
     }
-  }
-
-  /**
-   * @function getPlanLabel Get label from config api using rate plan id
-   */
-  getPlanLabel(id: string) {
-    let label: string;
-    this.configService.$config.subscribe((value) => {
-      const { roomRatePlans } = value;
-      const plan = roomRatePlans.find((plan: any) => plan.id === id);
-      label = plan.label;
-    });
-    return label;
-  }
-
-  // Get All Rate Plans from config api and add initial rate plan.
-  getRatePlans(ratePlans: RatePlanResponse[]) {
-    const plansData = ratePlans.map((option, index) => ({
-      label: option.label,
-      value: option.id,
-      disabled: false,
-      isDefault: option.isDefault,
-      command: () => this.handleRatePlan(option.id, option.label),
-    }));
-    this.plans = plansData;
-    // Adds rate plan only when the rate plan is not already added
-    // if (!this.roomTypeId) this.addNewRatePlan();
-  }
-
-  /**
-   * @function handleRatePlan To handle rate plan dropdown clicks
-   */
-  handleRatePlan(value: string, label: string, index?: number) {
-    const targetIndex = index ?? this.selectedIndex;
-    const currentPlan = this.plans.find((plan) => plan.value === value);
-    const ratePlanControl = this.ratePlanArray.at(targetIndex);
-
-    // If current plan is disabled then add next enabled plan
-    if (!currentPlan.disabled) {
-      ratePlanControl.get('ratePlanTypeId').patchValue(value);
-      ratePlanControl.get('label').patchValue(label);
-    } else {
-      const nextEnabledPlan = this.plans.find((plan) => !plan.disabled);
-      ratePlanControl.get('ratePlanTypeId').patchValue(nextEnabledPlan.value);
-      ratePlanControl.get('label').patchValue(nextEnabledPlan.label);
-      nextEnabledPlan.disabled = true;
-    }
-    this.setDisabled(value);
-  }
-
-  /**
-   * Disables the rate plan if already added
-   */
-  setDisabled(value: string) {
-    // Currently selected rate plans
-    const selectedRatePlans = this.plans.filter((item) => item.value === value);
-
-    const ratePlanIds = this.ratePlanArray.controls.map(
-      (control) => control.get('ratePlanTypeId').value
-    );
-    // Disables currently selected rate plans in the array
-    if (ratePlanIds.includes(value)) {
-      selectedRatePlans.map((type) => (type.disabled = true));
-    }
-
-    // Enables remaining rate plans
-    this.plans
-      .filter((item) => !ratePlanIds.includes(item.value))
-      .map((plan) => (plan.disabled = false));
   }
 
   /**
@@ -339,10 +277,12 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
    */
   addNewRatePlan(id?: string, label?: string) {
     const addedRatePlan = {
-      label: ['Rate Plan', [Validators.maxLength(60)]],
+      label: ['', [Validators.required, Validators.maxLength(60)]],
       currency: ['INR'],
       extraPrice: ['', [Validators.required, Validators.min(0)]],
       description: [''],
+      ratePlanId: [''],
+      status: [true],
     };
 
     this.ratePlanArray.push(this.fb.group(addedRatePlan));
@@ -450,7 +390,7 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
   saveRoomTypeData(serviceType) {
     const data = this.useForm.getRawValue();
     this.roomService.initRoomTypeFormData(data, serviceType, true);
-    this.router.navigate(['/pages/inventory/room/add-room-type/services']);
+    this.router.navigate(['/pages/efrontdesk/room/add-room-type/services']);
   }
 
   /**
@@ -471,7 +411,7 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
       this.router.navigate(['pages/library/services/create-service']);
     } else {
       this.router.navigate([
-        'pages/inventory/room/add-room-type/import-services',
+        'pages/efrontdesk/room/add-room-type/import-services',
       ]);
     }
   }
@@ -508,7 +448,7 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
       this.roomService.createRoomType(this.entityId, modifiedData).subscribe(
         (res) => {
           this.loading = false;
-          this.router.navigate([`/pages/inventory/room/${routes.dashboard}`]);
+          this.router.navigate([`/pages/efrontdesk/room/${routes.dashboard}`]);
           this.snackbarService.openSnackBarAsText(
             'Room type is created successfully',
             '',
@@ -535,7 +475,7 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
       this.roomService.updateRoomType(this.entityId, modifiedData).subscribe(
         (res) => {
           this.loading = false;
-          this.router.navigate([`/pages/inventory/room/${routes.dashboard}`]);
+          this.router.navigate([`/pages/efrontdesk/room/${routes.dashboard}`]);
           this.snackbarService.openSnackBarAsText(
             'Room type is updated successfully',
             '',
@@ -548,6 +488,16 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
         }
       )
     );
+  }
+
+  onToggleSwitch(isToogleOn: boolean, index?: number) {
+    if (!index && index !== 0) {
+      this.isPricingDynamic
+        ? this.useForm.get('dynamicRatePlans.status').setValue(isToogleOn)
+        : this.useForm.get('staticRatePlans.status').setValue(isToogleOn);
+      return;
+    }
+    this.ratePlanArray.at(index).get('status').setValue(isToogleOn);
   }
 
   resetForm() {

@@ -74,7 +74,7 @@ export class InhouseSentimentsComponent implements OnInit, OnDestroy {
           ...data['filter'].queryValue,
           ...data['dateRange'].queryValue,
           calenderType,
-          { entityType: 'Inhouse' },
+          { journeyType: 'Inhouse' },
         ];
         this.getInhouseSentimentsData();
       })
@@ -87,12 +87,10 @@ export class InhouseSentimentsComponent implements OnInit, OnDestroy {
     };
 
     this.$subscription.add(
-      this.analyticsService.getSentimentsStats(config).subscribe(
-        (response) => {
-          this.graphData = new InhouseSentiments().deserialize(response);
-          this.initGraphData();
-        }
-      )
+      this.analyticsService.getSentimentsStats(config).subscribe((response) => {
+        this.graphData = new InhouseSentiments().deserialize(response);
+        this.initGraphData();
+      })
     );
   }
   /**

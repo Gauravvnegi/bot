@@ -10,8 +10,8 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./analytics.component.scss'],
 })
 export class AnalyticsComponent implements OnInit, OnDestroy {
-  welcomeMessage = 'Welcome To Request Analytics';
-  navRoutes = [{ label: 'Request Analytics', link: './' }];
+  welcomeMessage = 'Welcome To Complaint Analytics';
+  navRoutes = [{ label: 'Complaint Analytics', link: './' }];
 
   entityId: string;
   requestConfiguration: RequestConfiguration = {
@@ -51,7 +51,7 @@ export class AnalyticsComponent implements OnInit, OnDestroy {
       const configuration = (data: ConfigurationResponse) => {
         if (!data?.requestModuleConfiguration) {
           this.snackBarService.openSnackBarAsText(
-            'Problem getting Request Module Configuration'
+            'Problem getting Complaint Module Configuration'
           );
         }
         return Object.values(data.requestModuleConfiguration).reduce(

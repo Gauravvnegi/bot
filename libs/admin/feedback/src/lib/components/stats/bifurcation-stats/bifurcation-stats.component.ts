@@ -5,6 +5,7 @@ import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
   AdminUtilityService,
   CircularChart,
+  StatCard,
 } from '@hospitality-bot/admin/shared';
 import {
   SnackBarService,
@@ -15,7 +16,6 @@ import { TranslateService } from '@ngx-translate/core';
 import { feedback } from '../../../constants/feedback';
 import { StatisticsService } from '../../../services/feedback-statistics.service';
 import { Subscription, forkJoin } from 'rxjs';
-import { StatCard } from '../../../types/feedback.type';
 import { chartConfig } from '../../../constants/chart';
 
 @Component({
@@ -153,7 +153,7 @@ export class BifurcationStatsComponent implements OnInit {
     });
   }
 
-  getConfig(type) {
+  getConfig(type: string) {
     const config = {
       queryObj: this._adminUtilityService.makeQueryParams([
         ...this.globalQueries,
@@ -184,7 +184,7 @@ export class BifurcationStatsComponent implements OnInit {
           this.getGTMStats(gtmResponse);
           // Process all stats
           this.getAllStats(allResponse);
-          this.getOtherStats(othersResponse)
+          this.getOtherStats(othersResponse);
           this.initGraph(
             this.feedback.reduce(
               (accumulator, current) => accumulator + +current.score,
@@ -242,15 +242,15 @@ export class BifurcationStatsComponent implements OnInit {
       comparisonPercent: 100,
     });
   }
-  
-  getOtherStats(response){
+
+  getOtherStats(response) {
     this.feedback.push({
       label: 'Others',
       score: response.totalCount,
       additionalData: response.totalCount,
       color: 'rgb(197, 197, 197)',
       comparisonPercent: 100,
-    })
+    });
     this.othersCount = response.totalCount;
   }
 

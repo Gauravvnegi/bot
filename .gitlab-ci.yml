@@ -4,7 +4,7 @@ variables:
 stages:
   - deploy_admin
   - deploy_web
-timeout: 1h
+
 Deploy_Admin:
   stage: deploy_admin
   environment:
@@ -25,6 +25,7 @@ Deploy_Admin:
     - kubectl apply -f deployment.yaml --validate=false
   tags:
     - k8s-dev
+  timeout: 1h
 
 Deploy_Web:
   stage: deploy_web
@@ -51,7 +52,7 @@ Deploy_Web:
   
   tags:
     - k8s-dev
-  
+  timeout: 1h
 #test_project:
 #    stage: test
 #    script:

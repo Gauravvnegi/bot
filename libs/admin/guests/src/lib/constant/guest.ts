@@ -23,11 +23,13 @@ export const guestCols = [
     header: 'Date Of Birth',
     sortType: 'string',
     width: '15%',
+    searchField: ['dobString'],
   },
   {
     field: `created`,
     header: 'Created',
     sortType: 'string',
     width: '15%',
+    searchField: ['createdString'],
   },
 ];

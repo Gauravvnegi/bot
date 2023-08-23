@@ -1,6 +1,7 @@
 import { EntityState } from '@hospitality-bot/admin/shared';
 import { CompanyFormType } from '../types/form.types';
 import { CompanyListResponse, CompanyResponseType } from '../types/response';
+import { DateService } from '@hospitality-bot/shared/utils';
 
 export class CompanyModel {
   id: string;
@@ -14,6 +15,7 @@ export class CompanyModel {
   discount: string;
   discountType: string;
   created: number;
+  createdString: string;
   status: boolean;
 
   static mapFormData(form: CompanyFormType) {
@@ -57,6 +59,7 @@ export class CompanyModel {
       discountType: input.priceModifier,
       status: input.status,
       created: input.created,
+      createdString: DateService.getDateMDY(input.created),
     });
     return this;
   }

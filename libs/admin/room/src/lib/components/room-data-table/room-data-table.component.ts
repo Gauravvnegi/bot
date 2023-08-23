@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { MatDialogConfig } from '@angular/material/dialog';
-import { Router } from '@angular/router';
+import { NavigationExtras, Router } from '@angular/router';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
   AdminUtilityService,
@@ -26,8 +26,8 @@ import {
   RoomListResponse,
   RoomStatus,
   RoomTypeListResponse,
-  RoomTypeStatus,
 } from '../../types/service-response';
+import { FormService } from '../../services/form.service';
 
 @Component({
   selector: 'hospitality-bot-room-data-table',
@@ -54,7 +54,8 @@ export class RoomDataTableComponent extends BaseDatatableComponent
     private globalFilterService: GlobalFilterService,
     protected snackbarService: SnackBarService,
     private router: Router,
-    private modalService: ModalService
+    private modalService: ModalService,
+    private formService: FormService
   ) {
     super(fb, tabFilterService);
   }
@@ -210,6 +211,13 @@ export class RoomDataTableComponent extends BaseDatatableComponent
    */
   handleRoomStatus(status: RoomStatus, id: string): void {
     this.loading = true;
+    if (status === 'OUT_OF_ORDER' || status === 'OUT_OF_SERVICE') {
+      this.formService.roomStatus.next(status);
+      this.router.navigate([`/pages/inventory/room/${routes.addRoom}/single`], {
+        queryParams: { id: id },
+      });
+      return;
+    }
     this.$subscription.add(
       this.roomService
         .updateRoomStatus(this.entityId, {

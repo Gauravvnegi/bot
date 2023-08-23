@@ -4,7 +4,7 @@ variables:
 stages:
   - deploy_admin
   - deploy_web
-timeout: 3600
+timeout: 1h
 Deploy_Admin:
   stage: deploy_admin
   environment:

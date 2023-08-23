@@ -4,6 +4,7 @@ variables:
 stages:
   - deploy_admin
   - deploy_web
+timeout: 3600
 Deploy_Admin:
   stage: deploy_admin
   environment:
@@ -47,7 +48,7 @@ Deploy_Web:
     - cat deployment.yaml
     - sed -i "s/latest/${IMAGE_TAG}/g" deployment.yaml
     - kubectl apply -f deployment.yaml --validate=false
-  timeout: 3600
+  
   tags:
     - k8s-dev
   

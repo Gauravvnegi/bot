@@ -186,4 +186,10 @@ export class OutletService extends ApiService {
       `/api/v1/entity/${entityId}/menu/search${config?.params ?? ''}`
     );
   }
+
+  getFoodPackageCategory(entityId: string): Observable<any>{
+    return this.get(
+      `/api/v1/entity/${entityId}/categories?type=FOOD_PACKAGE_CATEGORY`
+    );
+  }
 }

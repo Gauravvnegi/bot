@@ -16,7 +16,7 @@
         <p-header>
           <div>
             {{
-              rulesControl.controls[i].get('title').value || 'Rule ' + (i + 1)
+              rulesControl.controls[i].get('name').value || 'Rule ' + (i + 1)
             }}
           </div>
           <hospitality-bot-button
@@ -30,7 +30,7 @@
 
         <hospitality-bot-input
           class="half-width"
-          controlName="title"
+          controlName="name"
           label="Name"
           maxLength="60"
           [props]="{

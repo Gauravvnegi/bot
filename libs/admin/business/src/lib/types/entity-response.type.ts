@@ -55,10 +55,7 @@ export type EntityResponse = {
   parentId: string;
   route: string;
   minimumOccupancy?: number;
-  dayOfOperationStart?: string;
-  dayOfOperationEnd?: string;
-  timeDayStart?: string;
-  timeDayEnd?: string;
+  operationalDays;
   area?: string;
   dimension?: string;
   type?: string;

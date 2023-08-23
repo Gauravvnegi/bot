@@ -100,6 +100,17 @@
             </div>
           </div>
         </div>
+         <div class="filterUnderline"></div>
+        <div class="sortBy">
+          Assigned To
+        </div>
+          <hospitality-bot-select
+        label="Assigned To"
+        controlName="assignedTo"
+        [options]="assignedToList"
+        [stopEmission]="true"
+        [loading]="loading"
+      ></hospitality-bot-select>
       </div>
       <div class="applyBtnWrapper">
         <hospitality-bot-button

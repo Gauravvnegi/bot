@@ -2,6 +2,7 @@
   <div class="field">
     <hospitality-bot-date
       class="bulk-update__date"
+      [ngClass]="className"
       controlName="fromDate"
       label="From"
       [props]="{ placeholder: 'Select From Date' }"
@@ -15,6 +16,7 @@
   <div class="field">
     <hospitality-bot-date
       class="bulk-update__date"
+      [ngClass]="className"
       controlName="toDate"
       label="To"
       [props]="{ placeholder: 'Select To Date' }"

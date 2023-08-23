@@ -360,23 +360,22 @@ export class RoomDataTableComponent extends BaseDatatableComponent
     const config: QueryConfig = {
       params: this.adminUtilityService.makeQueryParams([
         ...this.selectedRows.map((item) => ({ ids: item.id })),
+        { type: this.selectedTab },
       ]),
     };
     this.$subscription.add(
-      this.roomService
-        .exportCSV(this.entityId, this.selectedTab, config)
-        .subscribe(
-          (res) => {
-            FileSaver.saveAs(
-              res,
-              `${this.tableName.toLowerCase()}_export_${new Date().getTime()}.csv`
-            );
-          },
-          () => {},
-          () => {
-            this.loading = false;
-          }
-        )
+      this.roomService.exportCSV(this.entityId, config).subscribe(
+        (res) => {
+          FileSaver.saveAs(
+            res,
+            `${this.tableName.toLowerCase()}_export_${new Date().getTime()}.csv`
+          );
+        },
+        () => {},
+        () => {
+          this.loading = false;
+        }
+      )
     );
   }
 

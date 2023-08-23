@@ -35,11 +35,7 @@ export class CreateFoodPackageComponent extends OutletBaseComponent
   taxes: Option[] = [];
   isPackageCreated = false;
 
-  loadingTypes: boolean = false;
-  type: CategoryData['type'] = 'FOOD_PACKAGE_CATEGORY';
-  typeOffSet = 0;
-  types: Option[] = [];
-  noMoreTypes = false;
+  foodCategories: Option[];
 
   constructor(
     private fb: FormBuilder,
@@ -60,6 +56,7 @@ export class CreateFoodPackageComponent extends OutletBaseComponent
     this.fields = foodPackageFields;
     this.initForm();
     this.getTax();
+    this.getFoodPackageCategory();
   }
 
   initForm(): void {
@@ -68,8 +65,8 @@ export class CreateFoodPackageComponent extends OutletBaseComponent
     this.useForm = this.fb.group({
       active: [true],
       name: ['', Validators.required],
-      type: ['', Validators.required],
-      originalPrice: ['', Validators.required],
+      parentId: ['', Validators.required],
+      rate: ['', Validators.required],
       currency: ['INR'],
       discountType: ['PERCENTAGE'],
       discountValue: ['', Validators.required],
@@ -81,8 +78,6 @@ export class CreateFoodPackageComponent extends OutletBaseComponent
       foodItems: this.foodItemsArray,
       source: [1],
     });
-
-    this.getPackageTypes();
 
     if (this.foodPackageId) {
       this.$subscription.add(
@@ -143,90 +138,6 @@ export class CreateFoodPackageComponent extends OutletBaseComponent
     }
   }
 
-  getPackageTypes() {
-    this.loadingTypes = true;
-    this.$subscription.add(
-      this.libraryService
-        .getCategories(this.outletId, {
-          params: `?type=${this.type}&offset=${this.typeOffSet}&limit=10&status=true`,
-        })
-        .subscribe(
-          (res) => {
-            const data = res.records.map((type) => ({
-              label: type.name,
-              value: type.id,
-            }));
-            this.types = [...this.types, ...data];
-            this.noMoreTypes = data.length < 10;
-            this.loadingTypes = false;
-          },
-          (err) => {
-            this.loadingTypes = false;
-          }
-        )
-    );
-  }
-
-  loadMoreTypes() {
-    this.typeOffSet = this.typeOffSet + 10;
-    this.getPackageTypes();
-  }
-
-  searchTypes(text: string) {
-    if (text) {
-      this.loadingTypes = true;
-      this.libraryService
-        .searchLibraryItem(this.outletId, {
-          params: `key=${text}&type=${this.type}`,
-        })
-        .subscribe((res) => {
-          this.loadingTypes = false;
-          const data = res && res[this.type];
-          this.types =
-            data?.map((item) => ({
-              label: item.name,
-              value: item.id,
-            })) ?? [];
-        });
-    } else {
-      this.typeOffSet = 0;
-      this.types = [];
-      this.getPackageTypes();
-    }
-  }
-
-  create(event) {
-    this.$subscription.add(
-      this.libraryService
-        .createCategory(this.outletId, {
-          name: event,
-          source: 1,
-          imageUrl: '',
-          active: true,
-          type: this.type,
-        })
-        .subscribe(
-          (res) => {
-            this.types.push({
-              label: res?.name,
-              value: res?.id,
-            });
-            this.useForm.get('type').setValue(res.id);
-          },
-          () => {
-            this.snackbarService.openSnackBarAsText(
-              'Type created successfully',
-              '',
-              { panelClass: 'success' }
-            );
-            this.typeOffSet = 0;
-            this.types = [];
-            this.getPackageTypes();
-          }
-        )
-    );
-  }
-
   /**
    * @function getTax to get tax options
    * @returns void
@@ -245,11 +156,20 @@ export class CreateFoodPackageComponent extends OutletBaseComponent
     );
   }
 
+  getFoodPackageCategory() {
+    this.outletService
+      .getFoodPackageCategory(this.outletId)
+      .subscribe((res) => {
+        this.foodCategories = res?.records?.map((item) => ({
+          label: item.name,
+          value: item.id,
+        }));
+      });
+  }
+
   createTax() {
     this.router.navigate(['pages/settings/tax/create-tax']);
   }
-
-  createType(name: string) {}
 
   handleErrors = ({ error }) => {
     this.loading = false;

@@ -17,16 +17,17 @@ export type OutletResponse = {
   emailId: string;
   status: string;
   maximumOccupancy: number;
-  dayOfOperationStart: string;
-  dayOfOperationEnd: string;
-  timeDayStart: string;
-  timeDayEnd: string;
+  startDay: string;
+  endDay: string;
+  from: string;
+  to: string;
   area: string;
   dimension: string;
   type: string;
   subType: string;
   parentId: string;
   absoluteRoute: string;
+  operationalDays;
 };
 
 type Image = {

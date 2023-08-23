@@ -154,7 +154,23 @@
                               ></ng-container>
                             </ng-container>
                           </div>
-                          <div class="link" (click)="add('occupancy', room)">
+                          <div
+                            class="link"
+                            [ngClass]="
+                              isDisableAddNewRule(
+                                room.get('occupancy'),
+                                room.get('roomCount')
+                              )
+                                ? 'disable'
+                                : ''
+                            "
+                            (click)="
+                              !isDisableAddNewRule(
+                                room.get('occupancy'),
+                                room.get('roomCount')
+                              ) && add('occupancy', room)
+                            "
+                          >
                             +Add More
                           </div>
                         </div>
@@ -200,8 +216,19 @@
                       </div>
                       <div
                         class="link"
+                        [ngClass]="
+                          isDisableAddNewRule(
+                            season.get('hotelConfig'),
+                            season.get('roomCount')
+                          )
+                            ? 'disable'
+                            : ''
+                        "
                         (click)="
-                          add('hotel-occupancy', season.get('hotelConfig'))
+                          !isDisableAddNewRule(
+                            season.get('hotelConfig'),
+                            season.get('roomCount')
+                          ) && add('hotel-occupancy', season.get('hotelConfig'))
                         "
                       >
                         +Add More
@@ -254,7 +281,7 @@
                           type: 'number',
                           errorMessages: {
                             required: 'This is required field',
-                            min: 'End should be grater than start.'
+                            min: 'Start should be <= End.'
                           }
                         },
                         post: {
@@ -262,7 +289,7 @@
                           type: 'number',
                           errorMessages: {
                             required: 'This is required field',
-                            min: 'End should be grater than start.'
+                            min: 'End should be >= Start.'
                           }
                         }
                       }"

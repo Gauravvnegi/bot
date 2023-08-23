@@ -45,8 +45,8 @@ export class DynamicPricingService extends ApiService {
 
   getOccupancyList(config?: QueryConfig): Observable<DynamicPricingResponse> {
     return this.get(
-      `/api/v1/members/?type=AGENT&entityId=f4baead1-06c6-42e8-821b-aef4a99ef5bb&order=DESC&sort=created&limit=50`
-    ).pipe(map((response) => OccupancyResponse as DynamicPricingResponse));
+      `/api/v1/revenue/dynamic-pricing-configuration${config.params}`
+    );
   }
 
   occupancyValidate(form: FormGroup): boolean {

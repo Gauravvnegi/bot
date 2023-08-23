@@ -65,7 +65,7 @@ export class BaseDatatableComponent implements OnInit {
   isPaginator = false;
   rowsPerPage = 50;
   showCurrentPageReport = true;
-  rowsPerPageOptions = [5, 10, 25, 50, 200];
+  rowsPerPageOptions = [5, 10, 25, 50, 100, 200];
   first = 0; //index of the first page to show
 
   @Input() tableConfig = {

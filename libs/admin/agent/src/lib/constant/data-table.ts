@@ -39,7 +39,7 @@ export const cols: Cols[] = [
     header: 'Created',
     sortType: 'string',
     width: '8%',
-    searchField: ['created'],
+    searchField: ['createdString'],
   },
   {
     field: 'status',

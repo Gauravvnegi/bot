@@ -12,8 +12,8 @@ import {
   RoomsConfigType,
   OccupancyRuleType,
 } from '../types/dynamic-pricing.types';
-import { RoomTypes } from '../types/bar-price.types';
 import { OccupancyComponent } from '../components/occupancy/occupancy.component';
+import { RoomTypes } from './bar-price.model';
 export class DynamicPricingFactory {
   static buildRequest(form: FormGroup, type: ConfigType, mode: ModeType) {
     let data:
@@ -104,7 +104,15 @@ export class DynamicPricingFactory {
                 requestData[item] = formGroup.get(item).value;
               });
             }
-            name != 'hotelConfig' && (requestData[name] = currentControl.value);
+
+            // if any other changes are remain then store it
+            name != 'hotelConfig' &&
+              (requestData[name] =
+                name == 'status'
+                  ? currentControl.value
+                    ? 'ACTIVE'
+                    : 'INACTIVE'
+                  : currentControl.value);
           };
 
           if (formGroup.controls['configCategory'].value == 'ROOM_TYPE') {

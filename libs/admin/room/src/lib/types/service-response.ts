@@ -28,11 +28,12 @@ export type RoomResponse = {
     unavailableRoomCount: number;
   };
   features: Features[];
-  status: RoomStatus;
+  statusDetailsList: StatusDetails[];
+  // status: RoomStatus;
   //--- can be modified
-  currentStatusFrom: number;
-  currentStatusTo: number;
-  remark: string;
+  // currentStatusFrom: number;
+  // currentStatusTo: number;
+  // remark: string;
 
   source?: string;
   price: number;
@@ -234,4 +235,12 @@ export type RoomsByRoomType = {
     name: string;
   };
   status: string;
+};
+
+export type StatusDetails = {
+  remark?: string;
+  status: RoomStatus;
+  toDate?: number;
+  fromDate?: number;
+  isCurrentStatus?: boolean;
 };

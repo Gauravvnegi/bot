@@ -8,6 +8,7 @@ import {
   Status,
 } from '../../../../reservation/src/lib/models/reservation-table.model';
 import { EntityState } from '@hospitality-bot/admin/shared';
+import { DateService } from '@hospitality-bot/shared/utils';
 
 export interface IDeserializable {
   deserialize(input: any, hotelNationality: string): this;
@@ -42,6 +43,8 @@ export class GuestData {
   isVerified: boolean;
   dob: number;
   created: number;
+  dobString: string;
+  createdString: string;
   status: boolean;
   type: string;
 
@@ -62,8 +65,9 @@ export class GuestData {
       code: input['code'],
       dob: input['dateOfBirth'],
       created: input['created'],
+      dobString: DateService.getDateMDY(input['dateOfBirth']),
+      createdString: DateService.getDateMDY(input['created']),
     });
-
     return this;
   }
 }

@@ -30,7 +30,11 @@
       [ngClass]="scattered ? 'suggestions scattered' : 'suggestions'"
     >
       <ng-container *ngFor="let item of suggestionList">
-        <button (click)="suggestClick(item)" class="btn">
+        <button
+          (click)="suggestClick(item)"
+          class="btn"
+          [ngClass]="item === selectedItem ? 'active' : ''"
+        >
           {{ item }}
         </button>
       </ng-container>

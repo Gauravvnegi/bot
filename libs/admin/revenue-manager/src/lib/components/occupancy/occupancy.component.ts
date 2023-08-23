@@ -423,7 +423,6 @@ export class OccupancyComponent implements OnInit {
             '',
             { panelClass: 'success' }
           );
-          console.log(res);
         },
         (error) => {
           this.loading = false;

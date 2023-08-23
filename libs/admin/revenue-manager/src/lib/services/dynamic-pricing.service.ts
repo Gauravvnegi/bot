@@ -17,9 +17,13 @@ export class DynamicPricingService extends ApiService {
     entityId: string,
     config: QueryConfig
   ): Observable<DynamicPricingRequest> {
-    return this.post(`/api/v1/revenue/dynamic-pricing${config.params}`, data, {
-      header: { 'entity-id': entityId },
-    });
+    return this.post(
+      `/api/v1/revenue/dynamic-pricing-configuration/${config.params}`,
+      data,
+      {
+        header: { 'entity-id': entityId },
+      }
+    );
   }
 
   updateDynamicPricing(

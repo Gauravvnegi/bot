@@ -70,20 +70,27 @@ export class CompanyDataTableComponent extends BaseDatatableComponent
 
   initTable() {
     this.loading = true;
-    this.companyService.getCompanyDetails(this.getQueryConfig()).subscribe(
-      (res) => {
-        this.mapData(res);
-        this.loading = false;
-      },
-      () => {
-        this.values = [];
-        this.loading = false;
-      },
-      this.handleFinal
-    );
+    this.companyService
+      .getCompanyDetails(this.getQueryConfig(SortBy[this.sortedBy]))
+      .subscribe(
+        (res) => {
+          this.mapData(res);
+          this.loading = false;
+        },
+        () => {
+          this.values = [];
+          this.loading = false;
+        },
+        this.handleFinal
+      );
   }
 
   sortBy(key: MemberSortTypes) {
+    this.sortedBy = key;
+    if (this.searchKey) {
+      this.searchCompany(this.searchKey);
+      return;
+    }
     this.loading = true;
     this.$subscription.add(
       this.companyService
@@ -173,11 +180,21 @@ export class CompanyDataTableComponent extends BaseDatatableComponent
   searchCompany(key: string) {
     if (!key.length) {
       this.initTable();
+      this.searchKey = null;
       return;
     }
+    this.searchKey = key;
     this.loading = true;
     this.companyService
-      .searchCompany({ params: `?key=${key}&type=COMPANY` })
+      .searchCompany({
+        params: this.adminUtilityService.makeQueryParams([
+          {
+            key: key,
+            type: 'COMPANY',
+            ...SortBy[this.sortedBy],
+          },
+        ]),
+      })
       .subscribe((res) => {
         this.values =
           res?.records?.map((item) => new CompanyModel().deserialize(item)) ??

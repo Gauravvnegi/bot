@@ -91,11 +91,20 @@ export class GuestInformationComponent implements OnInit {
   searchGuests(text: string) {
     if (text) {
       this.loadingGuests = true;
-      this.guestService.searchGuest(text).subscribe((res) => {
-        this.loadingGuests = false;
-        const data = new GuestList().deserialize(res).records;
-        this.guestOptions = data;
-      });
+      this.guestService
+        .searchGuest({
+          params: this.adminUtilityService.makeQueryParams([
+            {
+              key: text,
+              type: 'GUEST',
+            },
+          ]),
+        })
+        .subscribe((res) => {
+          this.loadingGuests = false;
+          const data = new GuestList().deserialize(res).records;
+          this.guestOptions = data;
+        });
     } else {
       this.guestsOffSet = 0;
       this.guestOptions = [];

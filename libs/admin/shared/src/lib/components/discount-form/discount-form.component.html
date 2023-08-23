@@ -1,14 +1,24 @@
 <hospitality-bot-prefix-field
   [class]="className"
+  class="base-price"
   [options]="currencies"
   [label]="originalPriceLabel"
   [preControlName]="currency"
   [postControlName]="originalPrice"
   [defaultProps]="{
-    post: { type: 'number', placeholder: 'Enter price' }
+    post: { type: 'number', placeholder: 'Enter Base price' }
   }"
   [props]="{ errorMessages: errorMessages }"
 >
+  <span> + </span>
+
+  <hospitality-bot-input
+    class="price"
+    controlName="price"
+    [props]="{
+      placeholder: 'Enter Price'
+    }"
+  ></hospitality-bot-input>
 </hospitality-bot-prefix-field>
 <hospitality-bot-prefix-field
   [class]="className"

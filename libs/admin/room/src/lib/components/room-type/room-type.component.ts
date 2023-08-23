@@ -44,6 +44,7 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
   readonly inputValidationProps = { errorMessages, type: 'number' };
   readonly noRecordAction = noRecordAction;
   readonly noRecordActionForComp = noRecordActionForComp;
+  currencies: Option[] = [{ label: 'INR', value: 'INR' }];
 
   subscription$ = new Subscription();
 
@@ -76,7 +77,6 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
   /* Dropdown Options */
   paidServices: Service[] = [];
   compServices: Service[] = [];
-  currencies: Option[] = [];
   discountTypes: Option[] = [];
 
   constructor(

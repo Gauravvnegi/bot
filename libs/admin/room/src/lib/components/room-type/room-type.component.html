@@ -149,6 +149,30 @@
                   className: 'half-width'
                 }"
               >
+                <hospitality-bot-prefix-field
+                  class="half-width"
+                  [options]="currencies"
+                  label="Double Occupancy pricing"
+                  [preControlName]="discountType"
+                  [postControlName]="discountValue"
+                  [defaultProps]="{
+                    post: { type: 'number', placeholder: 'Enter Price' }
+                  }"
+                  [props]="{ errorMessages: errorMessages }"
+                >
+                </hospitality-bot-prefix-field>
+                <hospitality-bot-prefix-field
+                  class="half-width"
+                  [options]="currencies"
+                  label="Triple Occupancy pricing"
+                  [preControlName]="discountType"
+                  [postControlName]="discountValue"
+                  [defaultProps]="{
+                    post: { type: 'number', placeholder: 'Enter Price' }
+                  }"
+                  [props]="{ errorMessages: errorMessages }"
+                >
+                </hospitality-bot-prefix-field>
                 <hospitality-bot-multiple-prefix-input
                   class="half-width"
                   [controls]="{

@@ -104,7 +104,15 @@ export class DynamicPricingFactory {
                 requestData[item] = formGroup.get(item).value;
               });
             }
-            name != 'hotelConfig' && (requestData[name] = currentControl.value);
+
+            // if any other changes are remain then store it
+            name != 'hotelConfig' &&
+              (requestData[name] =
+                name == 'status'
+                  ? currentControl.value
+                    ? 'ACTIVE'
+                    : 'INACTIVE'
+                  : currentControl.value);
           };
 
           if (formGroup.controls['configCategory'].value == 'ROOM_TYPE') {

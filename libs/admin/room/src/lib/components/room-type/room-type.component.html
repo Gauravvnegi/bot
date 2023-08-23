@@ -146,20 +146,47 @@
                   placeholder: 'Enter'
                 }"
                 [settings]="{
-                  className: 'half-width'
+                  className: 'half-width',
+                  isPriceControl: true
                 }"
               >
+                <hospitality-bot-prefix-field
+                  class="half-width"
+                  [options]="currencies"
+                  label="Double Occupancy pricing"
+                  preControlName="doubleOccupancyCurrency"
+                  postControlName="doubleOccupancyPrice"
+                  [defaultProps]="{
+                    post: { type: 'number', placeholder: 'Enter Price' }
+                  }"
+                  [props]="{ errorMessages: errorMessages }"
+                >
+                </hospitality-bot-prefix-field>
+                <hospitality-bot-prefix-field
+                  class="half-width"
+                  [options]="currencies"
+                  label="Triple Occupancy pricing"
+                  preControlName="tripleOccupancyCurrency"
+                  postControlName="tripleOccupancyPrice"
+                  [defaultProps]="{
+                    post: { type: 'number', placeholder: 'Enter Price' }
+                  }"
+                  [props]="{ errorMessages: errorMessages }"
+                >
+                </hospitality-bot-prefix-field>
                 <hospitality-bot-multiple-prefix-input
                   class="half-width"
                   [controls]="{
                     currencyControlName: 'paxPriceCurrency',
                     preCountControlName: 'paxAdultPrice',
-                    postCountControlName: 'paxChildPrice'
+                    postCountControlName: 'paxChildPrice',
+                    additionalControlName: 'paxChildBelowFive'
                   }"
                   [labels]="{
                     mainLabel: 'Pax Additional Cost',
                     preCountLabel: 'Adult',
-                    postCountLabel: 'Child'
+                    postCountLabel: 'Child 5-12',
+                    additionalLabel: 'Child  5'
                   }"
                   [currencyOptions]="currencies"
                   [defaultProps]="{

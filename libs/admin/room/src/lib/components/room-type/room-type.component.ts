@@ -44,6 +44,7 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
   readonly inputValidationProps = { errorMessages, type: 'number' };
   readonly noRecordAction = noRecordAction;
   readonly noRecordActionForComp = noRecordActionForComp;
+  currencies: Option[] = [{ label: 'INR', value: 'INR' }];
 
   subscription$ = new Subscription();
 
@@ -76,7 +77,6 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
   /* Dropdown Options */
   paidServices: Service[] = [];
   compServices: Service[] = [];
-  currencies: Option[] = [];
   discountTypes: Option[] = [];
 
   constructor(
@@ -95,9 +95,9 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.entityId = this.globalService.entityId;
-    this.isPricingDynamic = this.subscriptionPlanService.checkModuleSubscription(
-      ModuleNames.DYNAMIC_PRICING
-    );
+    // this.isPricingDynamic = this.subscriptionPlanService.checkModuleSubscription(
+    //   ModuleNames.DYNAMIC_PRICING
+    // );
     this.initForm();
     this.initOptionConfig();
   }
@@ -191,15 +191,21 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
             'EP (Room Only)',
             [Validators.required, Validators.maxLength(60)],
           ],
-          basePriceCurrency: ['INR', [Validators.required]],
+          basePriceCurrency: ['INR'],
           basePrice: ['', [Validators.required, Validators.min(0)]],
-          minPriceCurrency: ['INR', [Validators.required]],
+          price: ['', [Validators.required, Validators.min(0)]],
+          minPriceCurrency: ['INR'],
           minPrice: ['', [Validators.required, Validators.min(0)]],
-          maxPriceCurrency: ['INR', [Validators.required, Validators.required]],
+          maxPriceCurrency: ['INR'],
           maxPrice: ['', [Validators.min(0)]],
-          paxPriceCurrency: ['INR', [Validators.required, Validators.required]],
+          doubleOccupancyPrice: ['', [Validators.min(0)]],
+          tripleOccupancyCurrency: ['INR'],
+          doubleOccupancyCurrency: ['INR'],
+          tripleOccupancyPrice: ['', [Validators.min(0)]],
+          paxPriceCurrency: ['INR'],
           paxAdultPrice: ['', [Validators.required, Validators.min(0)]],
           paxChildPrice: ['', [Validators.required, Validators.min(0)]],
+          paxChildBelowFive: ['', [Validators.required, Validators.min(0)]],
           ratePlanId: [''],
           status: [true],
         })
@@ -214,13 +220,19 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
           ],
           basePriceCurrency: ['INR'],
           basePrice: ['', [Validators.required, Validators.min(0)]],
+          price: ['', [Validators.required, Validators.min(0)]],
           discountType: ['PERCENTAGE'],
           discountValue: ['', [Validators.required, Validators.min(0)]],
+          doubleOccupancyPrice: ['', [Validators.min(0)]],
+          doubleOccupancyCurrency: ['INR'],
+          tripleOccupancyCurrency: ['INR'],
+          tripleOccupancyPrice: ['', [Validators.min(0)]],
           bestPriceCurrency: ['INR'],
           bestAvailablePrice: ['', [Validators.required, Validators.min(0)]],
           paxPriceCurrency: ['INR'],
           paxAdultPrice: ['', [Validators.required, Validators.min(0)]],
           paxChildPrice: ['', [Validators.required, Validators.min(0)]],
+          paxChildBelowFive: ['', [Validators.required, Validators.min(0)]],
           ratePlanId: [''],
           status: [true],
         })

@@ -1,6 +1,11 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormComponent } from '../form-component/form.components';
-import { ControlContainer, FormControl, FormGroup } from '@angular/forms';
+import {
+  AbstractControl,
+  ControlContainer,
+  FormControl,
+  FormGroup,
+} from '@angular/forms';
 import { Option } from '../../types/form.type';
 
 @Component({
@@ -16,6 +21,7 @@ export class DiscountFormComponent extends FormComponent implements OnInit {
   ];
 
   className = 'half-width';
+  isPriceControl = false;
 
   errorMessages = {
     required: 'This is a required field.',
@@ -35,6 +41,10 @@ export class DiscountFormComponent extends FormComponent implements OnInit {
   discountedPrice = 'discountedPrice';
   discountedPriceCurrency = 'discountedPriceCurrency';
 
+  price = 'price';
+
+  preCountLabel = 'Base Price';
+  postCountLabel = 'Price';
   originalPriceLabel = 'Original Price';
   discountLabel = 'Discount';
   discountedPriceLabel = 'Discounted Price';
@@ -69,10 +79,13 @@ export class DiscountFormComponent extends FormComponent implements OnInit {
    * @function registerRateAndDiscountChange Subscribe to rate and discount value subscription to get discounted price
    */
   registerRateAndDiscountChange() {
-    const originalPrice = this.controlContainer.control.get(this.originalPrice);
+    let originalPrice = this.controlContainer.control.get(this.originalPrice);
     const discountValue = this.controlContainer.control.get(this.discountValue);
     const discountType = this.controlContainer.control.get(this.discountType);
     const currency = this.controlContainer.control.get(this.currency);
+
+    let priceControl: AbstractControl;
+
     const discountedPriceCurrency = this.controlContainer.control.get(
       this.discountedPriceCurrency
     );
@@ -80,12 +93,16 @@ export class DiscountFormComponent extends FormComponent implements OnInit {
       this.discountedPrice
     );
 
+    if (this.isPriceControl) {
+      priceControl = this.controlContainer.control.get(this.price);
+    }
+
     /**
      * @function setDiscountValueAndErrors To update the discount value
      * @returns error type
      */
     const setDiscountValueAndErrors = () => {
-      const price = +originalPrice.value ?? 0;
+      const price = +originalPrice.value + +(priceControl.value ?? 0) ?? 0;
       const discount = +(discountValue.value ?? 0);
       const type = discountType.value;
 
@@ -131,6 +148,23 @@ export class DiscountFormComponent extends FormComponent implements OnInit {
       }
     });
 
+    if (this.isPriceControl) {
+      /* Price Subscription */
+      priceControl.valueChanges.subscribe(() => {
+        clearError();
+        const error = setDiscountValueAndErrors();
+        if (error === 'isNumError') {
+          priceControl.setErrors({ isPriceLess: true });
+        }
+        if (error === 'isPercentError') {
+          discountValue.setErrors({ moreThan100: true });
+        }
+        if (priceControl.value < 0) {
+          priceControl.setErrors({ min: true });
+        }
+      });
+    }
+
     /**
      * @function discountSubscription To handle changes in discount value
      */
@@ -174,8 +208,11 @@ type labelSettings = {
   originalyPriceLabel: string;
   discountLable: string;
   discountedPriceLabel: string;
+  preCountLabel: string;
+  postCountLabel: string;
 };
 
 type formSettings = {
   className: string;
+  isPriceControl: boolean;
 };

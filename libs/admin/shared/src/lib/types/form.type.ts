@@ -25,6 +25,7 @@ export type FormProps = {
   subtitle?: string;
   isAutoFocusFilter?: boolean;
   tabIndex?: string;
+  isPriceField?: boolean;
 };
 
 export type ButtonVariant = 'text' | 'contained' | 'outlined';
@@ -49,4 +50,4 @@ export type AddressData = {
   postalCode?: string;
   latitude?: number;
   longitude?: number;
-}
+};

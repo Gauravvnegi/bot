@@ -3,7 +3,6 @@ import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { StepperEmitType } from 'libs/admin/shared/src/lib/components/stepper/stepper.component';
 import { MenuItem } from 'primeng/api';
 import { BarPriceService } from '../../services/bar-price.service';
-import { RoomTypes } from '../../types/bar-price.types';
 import {
   AbstractControl,
   FormArray,
@@ -13,6 +12,7 @@ import {
 } from '@angular/forms';
 import { Revenue } from '../../constants/revenue-manager.const';
 import { DynamicPricingForm } from '../../types/dynamic-pricing.types';
+import { RoomTypes } from '../../models/bar-price.model';
 
 @Component({
   selector: 'hospitality-bot-dynamic-pricing',

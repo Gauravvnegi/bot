@@ -2,6 +2,7 @@ import { EntityState, Option } from '@hospitality-bot/admin/shared';
 import { AgentFormType } from '../types/form.types';
 import { AgentListResponse, AgentTableResponse } from '../types/response';
 import { CompanyResponseType } from 'libs/admin/company/src/lib/types/response';
+import { DateService } from '@hospitality-bot/shared/utils';
 export class AgentModel {
   id: string;
   name: string;
@@ -16,6 +17,7 @@ export class AgentModel {
   commission: string;
   status: boolean;
   created: number;
+  createdString: string;
 
   static mapFormData(form: AgentFormType) {
     const name = form.name.split(' ');
@@ -63,6 +65,7 @@ export class AgentModel {
       status: input.status,
       companyId: input.company?.id,
       created: input?.created,
+      createdString: DateService.getDateMDY(input?.created),
     });
     return this;
   }

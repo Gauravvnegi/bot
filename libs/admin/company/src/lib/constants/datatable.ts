@@ -34,6 +34,7 @@ export const cols: Cols[] = [
     field: 'created',
     header: 'Created',
     sortType: 'number',
+    searchField: ['createdString'],
   },
   {
     field: 'status',

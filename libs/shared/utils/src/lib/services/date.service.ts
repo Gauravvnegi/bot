@@ -146,4 +146,12 @@ export class DateService {
   getCurrentTimeStamp(timezone = '+05:30') {
     return moment().utcOffset(timezone).unix() * 1000;
   }
+
+  static getDateMDY(date: number) {
+    return new Date(date)?.toLocaleString('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+    });
+  }
 }

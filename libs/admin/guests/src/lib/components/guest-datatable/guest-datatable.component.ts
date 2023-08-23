@@ -66,21 +66,28 @@ export class GuestDatatableComponent extends BaseDatatableComponent
   getDataTableValue() {
     this.loading = true;
     this.$subscription.add(
-      this.guestTableService.getGuestList(this.getQueryConfig()).subscribe(
-        (res) => {
-          this.mapData(res);
-          this.loading = false;
-        },
-        (error) => {
-          this.values = [];
-          this.loading = false;
-        },
-        this.handleFinal
-      )
+      this.guestTableService
+        .getGuestList(this.getQueryConfig(SortBy[this.sortedBy]))
+        .subscribe(
+          (res) => {
+            this.mapData(res);
+            this.loading = false;
+          },
+          (error) => {
+            this.values = [];
+            this.loading = false;
+          },
+          this.handleFinal
+        )
     );
   }
 
   sortBy(key: MemberSortTypes) {
+    this.sortedBy = key;
+    if (this.searchKey) {
+      this.searchGuest(this.searchKey);
+      return;
+    }
     this.loading = true;
     this.$subscription.add(
       this.guestTableService
@@ -109,7 +116,6 @@ export class GuestDatatableComponent extends BaseDatatableComponent
   }
 
   getQueryConfig(sortBy?: SortingOrder): QueryConfig {
-    // TODO: We have to remove toDate & fromDate after getting api of guest list
     this.globalQueries = [
       {
         entityId: this.entityId,
@@ -143,13 +149,25 @@ export class GuestDatatableComponent extends BaseDatatableComponent
   searchGuest(key: string) {
     if (!key.length) {
       this.getDataTableValue();
+      this.searchKey = null;
       return;
     }
+    this.searchKey = key;
     this.loading = true;
-    this.guestTableService.searchGuest(key).subscribe((res) => {
-      this.values = res.map((item) => new GuestData().deserialize(item));
-      this.loading = false;
-    });
+    this.guestTableService
+      .searchGuest({
+        params: this.adminUtilityService.makeQueryParams([
+          {
+            key: key,
+            type: 'GUEST',
+            ...SortBy[this.sortedBy],
+          },
+        ]),
+      })
+      .subscribe((res) => {
+        this.values = res.map((item) => new GuestData().deserialize(item));
+        this.loading = false;
+      });
   }
 
   exportCSV(): void {

@@ -1,11 +1,6 @@
 <div class="container">
   <div class="header">
     <div class="button raise-request-btn">
-      <img
-        src="assets/svg/requests.svg"
-        alt="raise-request-icon"
-        class="raise-request-icon"
-      />
       {{ 'Add Item' | translate }}
     </div>
     <div (click)="close()" class="close">
@@ -35,15 +30,7 @@
         label="SLA"
         format="millisecond"
       ></hospitality-bot-time-picker>
-
-      <hospitality-bot-text-area
-        class="full-width"
-        controlName="itemDesc"
-        label="Remarks"
-      >
-      </hospitality-bot-text-area>
-
-      <hospitality-bot-multi-select
+        <hospitality-bot-multi-select
         class="full-width"
         controlName="users"
         label="Users"
@@ -54,6 +41,15 @@
         [loading]="loading"
         [stopEmission]="true"
       ></hospitality-bot-multi-select>
+
+      <hospitality-bot-text-area
+        class="full-width"
+        controlName="itemDesc"
+        label="Remarks"
+      >
+      </hospitality-bot-text-area>
+
+    
       <div class="request-popup-btnwrap">
         <hospitality-bot-button
           label="Cancel"

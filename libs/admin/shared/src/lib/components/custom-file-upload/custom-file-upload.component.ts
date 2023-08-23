@@ -127,7 +127,7 @@ export class CustomFileUploadComponent
     if (event.target.checked) {
       this.featureValueIndex.push(index);
 
-      if (this.featureValueIndex.length === 4) {
+      if (this.featureValueIndex.length >= 4) {
         this.exceedFeatureLimit = true;
       }
     } else {
@@ -172,6 +172,7 @@ export class CustomFileUploadComponent
             return item;
           }
         });
+      this.exceedFeatureLimit = this.featureValueIndex.length >= 4;
     }
   }
 

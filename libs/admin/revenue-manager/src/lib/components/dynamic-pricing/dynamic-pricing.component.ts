@@ -3,7 +3,6 @@ import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { StepperEmitType } from 'libs/admin/shared/src/lib/components/stepper/stepper.component';
 import { MenuItem } from 'primeng/api';
 import { BarPriceService } from '../../services/bar-price.service';
-import { RoomTypes } from '../../types/bar-price.types';
 import {
   AbstractControl,
   FormArray,
@@ -12,6 +11,8 @@ import {
   Validators,
 } from '@angular/forms';
 import { Revenue } from '../../constants/revenue-manager.const';
+import { DynamicPricingForm } from '../../types/dynamic-pricing.types';
+import { RoomTypes } from '../../models/bar-price.model';
 
 @Component({
   selector: 'hospitality-bot-dynamic-pricing',
@@ -29,15 +30,9 @@ export class DynamicPricingComponent implements OnInit {
   currentDay = new Date();
   seventhDay = new Date();
   itemList: MenuItem[] = [
-    {
-      label: 'Occupancy',
-    },
-    {
-      label: 'Day/Time Trigger',
-    },
-    {
-      label: 'Inventory Reallocation',
-    },
+    { label: 'Occupancy' },
+    { label: 'Day/Time Trigger' },
+    { label: 'Inventory Reallocation' },
   ];
   constructor(
     private barPriceService: BarPriceService,
@@ -65,11 +60,13 @@ export class DynamicPricingComponent implements OnInit {
   }
 
   initFG() {
-    this.dynamicPricingFG = this.fb.group({
+    const data: DynamicPricingForm = {
       occupancyFA: this.fb.array([]),
       inventoryAllocationFA: this.fb.array([this.getInventoryAllocationFG()]),
       timeFA: this.fb.array([this.getTriggerFG()]),
-    });
+    };
+
+    this.dynamicPricingFG = this.fb.group(data);
   }
 
   getTriggerFG(data?: any): FormGroup {
@@ -157,7 +154,7 @@ export class DynamicPricingComponent implements OnInit {
 
   get dynamicPricingControl() {
     return this.dynamicPricingFG.controls as Record<
-      'inventoryAllocationFA' | 'timeFA' | 'occupancyFA',
+      keyof DynamicPricingForm,
       AbstractControl
     > & {
       inventoryAllocationFA: FormArray;

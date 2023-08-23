@@ -285,7 +285,7 @@ export class UserProfileComponent implements OnInit {
       products: [[], Validators.required],
       departments: [[], Validators.required],
       branchName: [[], Validators.required],
-      cc: [''],
+      cc: ['', [Validators.required]],
       phoneNumber: ['', [Validators.required]],
       email: ['', [Validators.required, Validators.pattern(Regex.EMAIL_REGEX)]],
       profileUrl: [''],

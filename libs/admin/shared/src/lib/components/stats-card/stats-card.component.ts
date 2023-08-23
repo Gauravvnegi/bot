@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { StatCardImageUrls, sharedConfig } from '../../constants';
+import { StatCard } from '../../types/chart.type';
 
 @Component({
   selector: 'hospitality-bot-stats-card',
@@ -9,28 +10,26 @@ import { StatCardImageUrls, sharedConfig } from '../../constants';
 export class StatsCardComponent {
   adminSharedConfig = sharedConfig;
 
-  title: string;
+  key: string;
   label: string;
-  score: string;
-  additionalData: string;
+  score: string | number;
+  additionalData: string | number;
   comparisonPercent: number;
   imageUrls = StatCardImageUrls;
   tooltip: string;
 
-  @Input() set stats(value) {
-    this.title = value?.title
-      ? value?.title
-      : value?.label?.replace(/\s+|-/g, '');
+  @Input() set stats(value: StatCard) {
+    this.key = value?.key ? value?.key : value?.label?.replace(/\s+|-/g, '');
     this.label = value?.label;
     this.score = value?.score;
-    this.comparisonPercent = value?.comparisonPercent || '';
+    this.comparisonPercent = value?.comparisonPercent || 0;
     this.additionalData = value?.additionalData || '';
     this.tooltip = value?.tooltip;
   }
 
-  getImageUrl(title: string): string {
-    if (title) {
-      return StatCardImageUrls[title];
+  getImageUrl(key: string): string {
+    if (key) {
+      return StatCardImageUrls[key];
     }
   }
 }

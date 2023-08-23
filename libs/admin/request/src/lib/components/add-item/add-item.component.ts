@@ -1,5 +1,5 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { UserService } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { ManagePermissionService } from 'libs/admin/roles-and-permissions/src/lib/services/manage-permission.service';
@@ -42,13 +42,13 @@ export class AddItemComponent implements OnInit {
 
   initForm() {
     this.useForm = this.fb.group({
-      itemName: [''],
-      categoryDesc: [''],
+      itemName: ['', [Validators.required]],
+      categoryDesc: ['', [Validators.required]],
       functionCode: [''],
       serviceCode: [''],
       itemDesc: [''],
-      sla: [''],
-      users: [''],
+      sla: ['', [Validators.required]],
+      users: ['', [Validators.required]],
     });
   }
 
@@ -92,6 +92,7 @@ export class AddItemComponent implements OnInit {
       '',
       { panelClass: 'success' }
     );
+    this.requestService.refreshItemList.next(true);
     this.onClose.emit();
   };
 

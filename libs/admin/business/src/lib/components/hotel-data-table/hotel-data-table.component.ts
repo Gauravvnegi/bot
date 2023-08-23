@@ -100,6 +100,19 @@ export class HotelDataTableComponent extends BaseDatatableComponent
     );
   }
 
+  secondsToAMPMTime(seconds) {
+    const hours = Math.floor(seconds / 3600);
+    const minutes = Math.floor((seconds % 3600) / 60);
+    const period = hours < 12 ? 'AM' : 'PM';
+
+    const formattedHours = hours === 0 ? 12 : hours > 12 ? hours - 12 : hours;
+
+    const timeString = `${formattedHours
+      .toString()
+      .padStart(2, '0')}:${minutes.toString().padStart(2, '0')} ${period}`;
+    return timeString;
+  }
+  
   /**
    * To get query params
    */

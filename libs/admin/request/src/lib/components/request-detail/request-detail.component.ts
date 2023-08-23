@@ -17,11 +17,13 @@ import { RequestStatus } from '../../constants/request';
 import { InhouseData } from '../../data-models/inhouse-list.model';
 import { RequestService } from '../../services/request.service';
 import { CMSUpdateJobData } from '../../types/request.type';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'hospitality-bot-request-detail',
   templateUrl: './request-detail.component.html',
   styleUrls: ['./request-detail.component.scss'],
+  providers: [DatePipe],
 })
 export class RequestDetailComponent implements OnInit, OnDestroy {
   data: InhouseData;
@@ -32,6 +34,8 @@ export class RequestDetailComponent implements OnInit, OnDestroy {
   entityId: string;
   @Output() guestInfo = new EventEmitter();
   @Input() guestInfoEnable;
+  closedTimestamp: number;
+  formattedClosedTimestamp: string;
 
   requestFG: FormGroup;
   constructor(
@@ -39,7 +43,8 @@ export class RequestDetailComponent implements OnInit, OnDestroy {
     private fb: FormBuilder,
     private adminUtilityService: AdminUtilityService,
     private snackbarService: SnackBarService,
-    private globalFilterService: GlobalFilterService
+    private globalFilterService: GlobalFilterService,
+    private datePipe: DatePipe
   ) {}
 
   ngOnInit(): void {
@@ -68,8 +73,10 @@ export class RequestDetailComponent implements OnInit, OnDestroy {
               status: response.action,
               assignee: response.assigneeId,
             });
+            this.closedTimestamp = response?.closedTime;
             this.getAssigneeList(response.itemId);
             this.status = true;
+            this.formattedDate();
           } else {
             this.data = new InhouseData();
             this.status = false;
@@ -179,6 +186,8 @@ export class RequestDetailComponent implements OnInit, OnDestroy {
               '',
               { panelClass: 'success' }
             );
+            this.data.action = event.value;
+            this.formattedDate();
 
             this._requestService.refreshData.next(true);
           },
@@ -186,6 +195,17 @@ export class RequestDetailComponent implements OnInit, OnDestroy {
             this.requestFG.patchValue({ status: this.data.action });
           }
         )
+    );
+  }
+
+  formattedDate() {
+    const dateObject: Date = this.closedTimestamp
+      ? new Date(this.closedTimestamp)
+      : new Date();
+    this.formattedClosedTimestamp = this.datePipe.transform(
+      dateObject,
+      "EEEE, MMMM d, y, 'at' HH:mm:ss",
+      'UTC'
     );
   }
 

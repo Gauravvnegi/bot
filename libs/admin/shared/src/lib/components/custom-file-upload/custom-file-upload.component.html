@@ -49,7 +49,14 @@
         <div [style.width]="unit == 1 ? '302px' : '200px'" class="hint">
           {{ hint }}
         </div>
-        <div class="checkbox" *ngIf="isFeatureView">
+        <div
+          class="checkbox"
+          *ngIf="isFeatureView"
+          [ngClass]="{
+            disable:
+              !this.featureValueIndex?.includes(i) && this.exceedFeatureLimit
+          }"
+        >
           <input
             #checkbox
             [disabled]="

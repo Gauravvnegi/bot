@@ -10,9 +10,10 @@ import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { Subject, Subscription } from 'rxjs';
 import { debounceTime, tap } from 'rxjs/operators';
 import { BarPriceService } from '../../services/bar-price.service';
-import { DateOption, RoomTypes } from '../../types/bar-price.types';
+import { DateOption } from '../../types/bar-price.types';
 import { RatePlanRes } from 'libs/admin/room/src/lib/types/service-response';
 import { Accordion } from 'primeng/accordion';
+import { RoomTypes } from '../../models/bar-price.model';
 
 @Component({
   selector: 'hospitality-bot-bar-price',

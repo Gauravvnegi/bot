@@ -66,7 +66,7 @@ export class CreateTaxComponent implements OnInit {
   }
 
   /**
-   * @function getTax To get tax details if taxId is present
+   * @function getTax Tenu items created successfullo get tax details if taxId is present
    * @returns void
    * @description If taxId is present then it will call getTaxById api to get tax details and patch value in form
    */
@@ -77,6 +77,7 @@ export class CreateTaxComponent implements OnInit {
         .getTaxById(this.entityId, this.taxId)
         .subscribe((res: TaxFormData) => {
           this.useForm.get('country').setValue(res.country);
+          this.useForm.get('country').disable();
           this.useForm.get('taxType').setValue(res.taxType);
           this.useForm.get('category').setValue(res.category);
           this.useForm.get('taxValue').setValue(res.taxValue);

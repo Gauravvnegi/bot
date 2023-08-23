@@ -35,7 +35,7 @@ export class RulesComponent extends FormComponent implements OnInit {
     this.useForm = this.fb.group({
       rules: this.fb.array([
         this.fb.group({
-          title: ['', [Validators.required]],
+          name: ['', [Validators.required]],
           description: ['', [Validators.required]],
         }),
       ]),
@@ -71,7 +71,7 @@ export class RulesComponent extends FormComponent implements OnInit {
   addRule(): void {
     this.rulesControl.push(
       this.fb.group({
-        title: ['', [Validators.required]],
+        name: ['', [Validators.required]],
         description: ['', [Validators.required]],
       })
     );

@@ -112,7 +112,7 @@ export class AddMenuItemComponent extends OutletBaseComponent
       preparationTime: ['', Validators.required],
       quantity: ['', Validators.required],
       unit: ['GRAMS'],
-      dineInPriceCurrency: ['INR'],
+      dineInPriceCurrency: ['INR', [Validators.required]],
       dineInPrice: ['', [Validators.required, Validators.min(0)]],
       deliveryPriceCurrency: ['INR'],
       deliveryPrice: ['', [Validators.min(0)]],

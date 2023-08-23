@@ -274,7 +274,7 @@ export class RoomDataTableComponent extends BaseDatatableComponent
           dialogConfig
         );
 
-        const soldOut = rowData.roomCount.soldOut;
+        const soldOut = rowData?.roomCount?.soldOut;
 
         if (soldOut) {
           togglePopupCompRef.componentInstance.content = {
@@ -289,7 +289,7 @@ export class RoomDataTableComponent extends BaseDatatableComponent
           togglePopupCompRef.componentInstance.content = {
             heading: 'In-active Room Type',
             description: [
-              `There are ${rowData.roomCount} rooms in this room type`,
+              `There are ${rowData?.roomCount ?? 0} rooms in this room type`,
               'You are about to mark this room type in-active.',
               'Are you Sure?',
             ],

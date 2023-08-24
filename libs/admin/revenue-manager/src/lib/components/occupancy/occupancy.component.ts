@@ -6,27 +6,28 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
+import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import {
+  AdminUtilityService,
+  Option,
+  QueryConfig,
+} from '@hospitality-bot/admin/shared';
+import { SnackBarService } from '@hospitality-bot/shared/material';
+import { Subscription } from 'rxjs';
+import { Revenue, weeks } from '../../constants/revenue-manager.const';
 import {
   DynamicPricingFactory,
   DynamicPricingHandler,
 } from '../../models/dynamic-pricing.model';
-import { Revenue, weeks } from '../../constants/revenue-manager.const';
+import { DynamicPricingService } from '../../services/dynamic-pricing.service';
 import {
   ConfigCategory,
   ConfigType,
-  ModeType,
+  DynamicPricingForm,
 } from '../../types/dynamic-pricing.types';
-import { DynamicPricingService } from '../../services/dynamic-pricing.service';
-import { Subscription } from 'rxjs';
-import {
-  AdminUtilityService,
-  QueryConfig,
-} from '@hospitality-bot/admin/shared';
-import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
-import { SnackBarService } from '@hospitality-bot/shared/material';
-import { RoomTypes } from '../../types/bar-price.types';
+import { RoomTypes } from '../../models/bar-price.model';
 
-export type ControlTypes = 'season' | 'occupancy';
+export type ControlTypes = 'season' | 'occupancy' | 'hotel-occupancy';
 
 @Component({
   selector: 'hospitality-bot-occupancy',
@@ -35,6 +36,10 @@ export type ControlTypes = 'season' | 'occupancy';
 })
 export class OccupancyComponent implements OnInit {
   readonly weeks = weeks;
+  configCategory: Option[] = [
+    { label: 'Room Type', value: 'ROOM_TYPE' },
+    { label: 'Hotel Type', value: 'HOTEL' },
+  ];
   entityId = '';
 
   loading = false;
@@ -47,8 +52,10 @@ export class OccupancyComponent implements OnInit {
   @Input() set dynamicPricingFG(form: FormGroup) {
     if (form) {
       this.parentForm = form;
-      this.initSeason();
-      this.listenChanges();
+      if (!this.dynamicPricingControl.occupancyFA.length) {
+        this.initSeason();
+        this.listenChanges();
+      }
     }
   }
   @Input() rooms: RoomTypes[];
@@ -60,7 +67,7 @@ export class OccupancyComponent implements OnInit {
 
   get dynamicPricingControl() {
     return this.dynamicPricingFG?.controls as Record<
-      'occupancyFA',
+      keyof DynamicPricingForm,
       AbstractControl
     > & {
       occupancyFA: FormArray;
@@ -72,7 +79,7 @@ export class OccupancyComponent implements OnInit {
     private dynamicPricingService: DynamicPricingService,
     private adminUtilityService: AdminUtilityService,
     private snackbarService: SnackBarService,
-    private fb: FormBuilder
+    public fb: FormBuilder
   ) {}
 
   ngOnInit(): void {
@@ -82,23 +89,21 @@ export class OccupancyComponent implements OnInit {
   initSeason() {
     this.loading = true;
     this.$subscription.add(
-      this.dynamicPricingService.getOccupancyList().subscribe((res) => {
-        if (!res.configDetails.length) {
-          this.add('season');
-        } else {
-          const handler = new DynamicPricingHandler().deserialize(
-            res,
-            this.rooms
-          );
-          handler.dataList.forEach((item, index) => {
+      this.dynamicPricingService
+        .getOccupancyList(this.getQueryConfig('OCCUPANCY'))
+        .subscribe((res) => {
+          if (!res.configDetails.length) {
             this.add('season');
-            const season = this.dynamicPricingControl.occupancyFA.at(
-              index
-            ) as FormGroup;
-            handler.mapOccupancy(season, item);
-          });
-        }
-      })
+          } else {
+            const handler = new DynamicPricingHandler().deserialize(
+              res,
+              this.rooms
+            );
+            handler.dataList.forEach((item, index) => {
+              handler.mapOccupancy(index, item, this);
+            });
+          }
+        })
     );
   }
 
@@ -108,13 +113,16 @@ export class OccupancyComponent implements OnInit {
     control.get('status').markAsDirty();
   }
 
-  add(type: ControlTypes, formGroup?: FormGroup) {
+  add(type: ControlTypes, form?: FormGroup | FormArray) {
     switch (type) {
       case 'season':
         this.dynamicPricingControl.occupancyFA.push(this.seasonFG);
         break;
       case 'occupancy':
-        (formGroup?.get('occupancy') as FormArray).push(this.seasonOccupancyFG);
+        (form?.get('occupancy') as FormArray).push(this.seasonOccupancyFG);
+        break;
+      case 'hotel-occupancy':
+        (form as FormArray).controls.push(this.seasonOccupancyFG);
         break;
     }
     this.listenChanges();
@@ -128,7 +136,11 @@ export class OccupancyComponent implements OnInit {
       name: [, [Validators.required]],
       fromDate: [, [Validators.required]],
       toDate: [, [Validators.required]],
-      configCategory: ['ROOM_TYPE'],
+      configCategory: ['ROOM_TYPE', [Validators.required]],
+      hotelConfig: this.fb.array([this.seasonOccupancyFG]),
+      hotelId: [],
+      basePrice: [],
+      roomCount: [this.rooms.find((item) => item.isBase)?.roomCount ?? 0],
       roomType: [, [Validators.required]],
       removedRules: this.fb.array([]),
       selectedDays: [, [Validators.required]],
@@ -142,7 +154,8 @@ export class OccupancyComponent implements OnInit {
         isSelected: [true],
         roomId: [room.value],
         roomName: [room.label],
-        basePrice: [room.price],
+        basePrice: [room?.price ?? 0],
+        roomCount: [room?.roomCount ?? 0],
         occupancy: this.fb.array([this.seasonOccupancyFG]),
       })
     );
@@ -151,7 +164,7 @@ export class OccupancyComponent implements OnInit {
   get seasonOccupancyFG(): FormGroup {
     return this.fb.group({
       id: [],
-      start: [, [Validators.min(0), Validators.required]],
+      start: [1, [Validators.min(0), Validators.required]],
       end: [, [Validators.min(0), Validators.required]],
       discount: [, [Validators.min(-100), Validators.required]],
       rate: [, [Validators.min(0), Validators.required]],
@@ -161,9 +174,15 @@ export class OccupancyComponent implements OnInit {
   remove(
     type: ControlTypes,
     index: number,
-    season?: FormGroup,
-    roomType?: FormGroup
+    form?: FormGroup,
+    seasonFG?: FormGroup
   ) {
+    const saveRule = (formGroup: FormGroup, ruleId) => {
+      const removedFA = formGroup.get('removedRules') as FormArray;
+      removedFA.controls.push(ruleId);
+      removedFA.markAsDirty();
+    };
+
     switch (type) {
       case 'season':
         this.loading = true;
@@ -191,14 +210,30 @@ export class OccupancyComponent implements OnInit {
         );
         break;
       case 'occupancy':
-        const rule = roomType.get('occupancy') as FormArray;
-        const ruleId = rule.at(index).get('id');
-        if (ruleId.value) {
-          const removedFA = season.get('removedRules') as FormArray;
-          removedFA.controls.push(ruleId.value);
-          removedFA.markAsDirty();
+        const rule = form.get('occupancy') as FormArray;
+        var ruleId = rule.at(index)?.get('id');
+        if (ruleId?.value) {
+          saveRule(seasonFG, ruleId.value);
         }
         rule.removeAt(index);
+        this.applyRulesConstraint(
+          rule,
+          +form.get('roomCount').value,
+          index == 0 ? 'first' : null
+        );
+        break;
+      case 'hotel-occupancy':
+        const control = form.get('hotelConfig') as FormArray;
+        var ruleId = control.at(index)?.get('id');
+        if (ruleId?.value) {
+          saveRule(form, ruleId.value);
+        }
+        control.removeAt(index);
+        this.applyRulesConstraint(
+          control,
+          +form.get('roomCount').value,
+          index == 0 ? 'first' : null
+        );
         break;
     }
   }
@@ -206,77 +241,134 @@ export class OccupancyComponent implements OnInit {
   listenChanges() {
     this.dynamicPricingControl?.occupancyFA.controls.forEach(
       (seasonFG: FormGroup) => {
-        //roomType change listening
-        const roomTypeFG = seasonFG.get('roomTypes') as FormArray;
-        seasonFG.get('roomType').valueChanges.subscribe((res: string[]) => {
-          roomTypeFG.controls.forEach((roomType: FormGroup, index) => {
-            const hasSelected = res.includes(roomType.get('roomId').value);
-            roomType.patchValue(
+        const roomTypeControl = seasonFG.get('roomType');
+        const configCategoryFG = seasonFG.get('configCategory');
+        const ruleSubscription = (
+          ruleFA: FormArray,
+          index: number,
+          basePrice: number,
+          roomCount: number
+        ) => {
+          const form = ruleFA.at(index) as FormGroup;
+          const { discount, rate, start, end } = form.controls;
+          discount.valueChanges.subscribe((percentage) => {
+            const rate = (parseInt(percentage) * basePrice) / 100 + basePrice;
+            form.patchValue(
               {
-                isSelected: hasSelected,
+                rate: rate.toFixed(2),
               },
               { emitEvent: false }
             );
-
-            //TODO: store in removedRules
-            const selectedOccupancy = hasSelected
-              ? (roomType.get('occupancy') as FormArray).controls.map(
-                  (item) => item.get('id').value
-                )
-              : [];
           });
+
+          rate.valueChanges.subscribe((rate) => {
+            const discount = ((parseInt(rate) - basePrice) / basePrice) * 100;
+            form.patchValue(
+              {
+                discount: discount.toFixed(2),
+              },
+              { emitEvent: false }
+            );
+          });
+
+          start.valueChanges.subscribe((startValue) => {
+            const condition = end.value && +startValue > end.value;
+            const customError = { min: 'Start should be <= End.' };
+            start.setErrors(condition ? customError : null);
+            end.setErrors(condition && null);
+          });
+
+          end.valueChanges.subscribe((endValue) => {
+            const condition = start.value && +endValue < start.value;
+            const customError = {
+              min: 'End should be >= Start.',
+            };
+            end.setErrors(condition ? customError : null);
+            start.setErrors(condition && null);
+          });
+
+          // Restriction
+          start.disable();
+          if (index === ruleFA.controls.length - 1) {
+            end.patchValue(roomCount, { emitEvent: false });
+          }
+          console.log('called...', ruleFA.controls.length);
+        };
+        configCategoryFG.valueChanges.subscribe((res: ConfigCategory) => {
+          if (res) {
+            res == 'HOTEL'
+              ? roomTypeControl.disable()
+              : roomTypeControl.enable();
+          }
         });
-
-        roomTypeFG.controls.forEach((roomTypeFG: FormGroup) => {
-          const basePrice = roomTypeFG.get('basePrice').value;
-          //occupancy change listening
-          (roomTypeFG.get('occupancy') as FormArray).controls.forEach(
-            (occupancyFG: FormGroup) => {
-              occupancyFG
-                .get('discount')
-                .valueChanges.subscribe((percentage) => {
-                  const rate =
-                    (parseInt(percentage) * basePrice) / 100 + basePrice;
-                  occupancyFG.patchValue(
-                    {
-                      rate: rate.toFixed(2),
-                    },
-                    { emitEvent: false }
-                  );
-                });
-
-              occupancyFG.get('rate').valueChanges.subscribe((rate) => {
-                const discount =
-                  ((parseInt(rate) - basePrice) / basePrice) * 100;
-                occupancyFG.patchValue(
-                  {
-                    discount: discount.toFixed(2),
-                  },
-                  { emitEvent: false }
-                );
-              });
-
-              const { start, end } = occupancyFG.controls;
-              start.valueChanges.subscribe((startValue) => {
-                const condition = end.value && +startValue > end.value;
-                const customError = { min: 'Start should be less than End.' };
-                start.setErrors(condition ? customError : null);
-                end.setErrors(condition && null);
-              });
-
-              end.valueChanges.subscribe((endValue) => {
-                const condition = start.value && +endValue < start.value;
-                const customError = {
-                  min: 'End should be greater than Start.',
-                };
-                end.setErrors(condition ? customError : null);
-                start.setErrors(condition && null);
-              });
-            }
+        const hotelConfigFA = seasonFG.get('hotelConfig') as FormArray;
+        hotelConfigFA.controls.forEach((rule: FormGroup, index) => {
+          ruleSubscription(
+            hotelConfigFA,
+            index,
+            +seasonFG.get('basePrice').value,
+            +seasonFG.get('roomCount').value
           );
         });
+        this.applyRulesConstraint(
+          hotelConfigFA,
+          +seasonFG.get('roomCount').value
+        );
+
+        if (configCategoryFG.value == 'ROOM_TYPE') {
+          //roomType change listening
+          const roomTypeFA = seasonFG.get('roomTypes') as FormArray;
+          roomTypeControl.valueChanges.subscribe((res: string[]) => {
+            roomTypeFA.controls.forEach((roomType: FormGroup, index) => {
+              const hasSelected = res?.includes(roomType.get('roomId').value);
+              roomType.patchValue(
+                {
+                  isSelected: hasSelected,
+                },
+                { emitEvent: false }
+              );
+            });
+          });
+
+          roomTypeFA.controls.forEach((roomTypeFG: FormGroup) => {
+            const basePrice = roomTypeFG.get('basePrice').value;
+            const roomCount = roomTypeFG.get('roomCount').value;
+            //occupancy change listening
+            const occupancyFA = roomTypeFG.get('occupancy') as FormArray;
+            occupancyFA.controls.forEach((occupancyFG: FormGroup, index) => {
+              ruleSubscription(occupancyFA, index, basePrice, roomCount);
+            });
+            this.applyRulesConstraint(occupancyFA, roomCount);
+          });
+        }
       }
     );
+  }
+
+  applyRulesConstraint(
+    rules: FormArray,
+    roomCount: number,
+    deleteFrom?: 'first' | 'mid' | 'last'
+  ) {
+    if (deleteFrom && deleteFrom === 'first') {
+      rules.at(0)?.get('start').patchValue(1, {
+        emitEvent: false,
+      });
+      return;
+    }
+    rules.controls.reduce((acc: FormGroup, curr: FormGroup, index) => {
+      const { start, end } = curr.controls;
+      acc &&
+        start.patchValue(+acc.get('end').value + 1, {
+          emitEvent: false,
+        });
+
+      if (index === rules.controls.length - 1) {
+        end.patchValue(roomCount, { emitEvent: false });
+      }
+      acc = curr;
+      return curr;
+    });
   }
 
   selectedRoomIndex(seasonIndex: number): number {
@@ -287,11 +379,7 @@ export class OccupancyComponent implements OnInit {
   }
 
   handleSave(form: FormGroup) {
-    const {
-      status,
-      invalidList,
-    } = this.dynamicPricingService.occupancyValidate(form);
-    if (!status) {
+    if (!this.dynamicPricingService.occupancyValidate(form)) {
       form.markAllAsTouched();
       this.snackbarService.openSnackBarAsText(
         'Invalid form: Please fix errors'
@@ -335,7 +423,6 @@ export class OccupancyComponent implements OnInit {
             '',
             { panelClass: 'success' }
           );
-          console.log(res);
         },
         (error) => {
           this.loading = false;
@@ -343,6 +430,16 @@ export class OccupancyComponent implements OnInit {
         this.handleFinal
       )
     );
+  }
+
+  isDisableAddNewRule(ruleFA: FormArray, roomCountFG: FormGroup): boolean {
+    const isRulesValid = () => {
+      return ruleFA.controls.every(
+        (item: FormGroup) => +item.get('start').value <= +item.get('end').value
+      );
+    };
+    const end = +ruleFA.at(ruleFA.controls.length - 1).value.end;
+    return end >= +roomCountFG.value || !isRulesValid();
   }
 
   getQueryConfig(type: ConfigType): QueryConfig {

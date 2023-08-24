@@ -34,10 +34,9 @@ export class AddressComponent extends FormComponent implements OnInit {
     this.initForm();
     this.initInputControl();
     const validators = this.inputControl?.validator;
-    //  const isRequired =
 
-    if (validators && validators({} as AbstractControl)?.required) {
-      this.addressForm.get('addressData').setValidators([Validators.required]);
+    if (validators && validators({} as AbstractControl)) {
+      this.addressForm.get('addressData').setValidators(validators);
     }
     this.getValueFromParent();
     this.onValueChange();
@@ -47,6 +46,23 @@ export class AddressComponent extends FormComponent implements OnInit {
     this.addressForm = this.fb.group({
       addressData: [[]],
     });
+  }
+
+  get getValidator() {
+    const control = this.controlContainer.control.get(this.controlName);
+    const errors = control?.errors;
+
+    const addressDataControl = this.addressForm.get('addressData');
+    addressDataControl.setErrors(errors);
+
+    const validators = control?.validator;
+    addressDataControl.setValidators(validators);
+
+    if (control?.touched) {
+      addressDataControl.markAsTouched();
+    }
+
+    return '';
   }
 
   getValueFromParent() {
@@ -89,9 +105,11 @@ export class AddressComponent extends FormComponent implements OnInit {
       if (res !== null && res !== undefined && res !== '') {
         this.getAddressById(res.value).subscribe((res) => {
           this.inputControl.setValue(res);
+          this.inputControl.markAsDirty();
         });
       } else {
         this.inputControl.setValue(null);
+        this.inputControl.markAsDirty();
       }
     });
   }

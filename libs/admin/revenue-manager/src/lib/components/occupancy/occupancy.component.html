@@ -1,3 +1,4 @@
+
 <div
   *ngIf="dynamicPricingFG"
   class="wrapper__occupancy"
@@ -68,7 +69,6 @@
                     placeholder: 'Enter'
                   }"
                 ></hospitality-bot-input>
-
                 <hospitality-bot-room-types
                   class="full-width"
                   [controlName]="'roomType'"
@@ -76,11 +76,20 @@
                 </hospitality-bot-room-types>
               </div>
               <div class="right form-block">
-                <hospitality-bot-from-to-date
-                  [parentFG]="season"
-                ></hospitality-bot-from-to-date>
+                <div class="top form-block no-padding">
+                  <hospitality-bot-from-to-date
+                    [parentFG]="season"
+                    class="half-width"
+                  ></hospitality-bot-from-to-date>
+                  <hospitality-bot-select
+                    class="half-width"
+                    [controlName]="'configCategory'"
+                    label="Configuration"
+                    [options]="configCategory"
+                  ></hospitality-bot-select>
+                </div>
                 <hospitality-bot-checkbox-selector
-                  class="weekdays__selector full-width"
+                  class="bottom weekdays__selector full-width"
                   label="Days"
                   controlName="selectedDays"
                   [options]="weeks"
@@ -88,130 +97,144 @@
                 </hospitality-bot-checkbox-selector>
               </div>
             </div>
-            <div class="occupancy-form" formArrayName="roomTypes">
+            <div class="occupancy-form">
               <ng-container
-                *ngIf="season.get('roomType').value?.length; else emptyRoom"
+                *ngIf="!season.get('roomType').disabled; else hotelCategory"
+                formArrayName="roomTypes"
               >
-                <p-accordion class="room-accordion" [multiple]="true">
-                  <ng-container
-                    *ngFor="
-                      let room of season.get('roomTypes')?.controls;
-                      let roomIndex = index
-                    "
-                    [formGroupName]="roomIndex"
-                  >
-                    <p-accordionTab
-                      [selected]="roomIndex == selectedRoomIndex(seasonIndex)"
-                      *ngIf="room.get('isSelected').value"
+                <ng-container
+                  *ngIf="season.get('roomType').value?.length; else emptyRoom"
+                >
+                  <p-accordion class="room-accordion" [multiple]="true">
+                    <ng-container
+                      *ngFor="
+                        let room of season.get('roomTypes')?.controls;
+                        let roomIndex = index
+                      "
+                      [formGroupName]="roomIndex"
                     >
-                      <p-header>
-                        <div class="header">
-                          {{ room.get('roomName')?.value }}
-                        </div>
-                      </p-header>
-                      <div class="occupancy__content">
-                        <div class="occupancy occupancy-header">
-                          <span class="item">Start & End</span>
-                          <span class="item item__discount"
-                            >Discount/Markup</span
-                          >
-                          <span class="item">Rates</span>
-                          &nbsp;
-                        </div>
-                        <div formArrayName="occupancy">
+                      <p-accordionTab
+                        [selected]="roomIndex == selectedRoomIndex(seasonIndex)"
+                        *ngIf="room.get('isSelected').value"
+                      >
+                        <p-header>
+                          <div class="header">
+                            {{ room.get('roomName')?.value }}
+                          </div>
+                        </p-header>
+                        <div class="occupancy__content">
                           <ng-container
-                            *ngFor="
-                              let roomOccupancy of room.get('occupancy')
-                                ?.controls;
-                              let occupancyIndex = index
+                            *ngTemplateOutlet="ruleHeading"
+                          ></ng-container>
+                          <div formArrayName="occupancy">
+                            <ng-container
+                              *ngFor="
+                                let roomOccupancy of room.get('occupancy')
+                                  ?.controls;
+                                let occupancyIndex = index
+                              "
+                              [formGroupName]="occupancyIndex"
+                            >
+                              <ng-container
+                                *ngTemplateOutlet="
+                                  ruleControls;
+                                  context: {
+                                    form: roomOccupancy,
+                                    roomConfig: {
+                                      room: room
+                                    },
+                                    basePrice: room.get('basePrice').value,
+                                    occupancyLength: room.get('occupancy')
+                                      .controls.length,
+                                    index: occupancyIndex,
+                                    season: season
+                                  }
+                                "
+                              ></ng-container>
+                            </ng-container>
+                          </div>
+                          <div
+                            class="link"
+                            [ngClass]="
+                              isDisableAddNewRule(
+                                room.get('occupancy'),
+                                room.get('roomCount')
+                              )
+                                ? 'disable'
+                                : ''
                             "
-                            [formGroupName]="occupancyIndex"
+                            (click)="
+                              !isDisableAddNewRule(
+                                room.get('occupancy'),
+                                room.get('roomCount')
+                              ) && add('occupancy', room)
+                            "
                           >
-                            <div class="occupancy occupancy-form form-block">
-                              <hospitality-bot-prefix-field
-                                class="one-fourth-width"
-                                preControlName="start"
-                                postControlName="end"
-                                preFieldType="input"
-                                postFieldType="input"
-                                [defaultProps]="{
-                                  pre: {
-                                    placeholder: 'Start',
-                                    type: 'number',
-                                    errorMessages: {
-                                      required: 'This is required field',
-                                      min: 'End should be grater than start.'
-                                    }
-                                  },
-                                  post: {
-                                    placeholder: 'End',
-                                    type: 'number',
-                                    errorMessages: {
-                                      required: 'This is required field',
-                                      min: 'End should be grater than start.'
-                                    }
-                                  }
-                                }"
-                                [settings]="{
-                                  layout: 'dashed'
-                                }"
-                              >
-                              </hospitality-bot-prefix-field>
-                              <hospitality-bot-input
-                                controlName="discount"
-                                [min]="0"
-                                [props]="{
-                                  placeholder: 'Enter',
-                                  type: 'number',
-                                  subtitle: '%',
-                                  errorMessages: {
-                                    required: 'This is required field',
-                                    min: 'Value should be >= -100'
-                                  }
-                                }"
-                              ></hospitality-bot-input>
-                              <hospitality-bot-input
-                                controlName="rate"
-                                [min]="0"
-                                [props]="{
-                                  placeholder: 'Enter',
-                                  type: 'number',
-                                  subtitle:
-                                    'Rs. ' + room.get('basePrice').value,
-                                  strike: true,
-                                  errorMessages: {
-                                    required: 'This is required field',
-                                    min: 'Minimum value should be 0'
-                                  }
-                                }"
-                              ></hospitality-bot-input>
-                              <i
-                                [class]="
-                                  room.get('occupancy').controls.length > 1
-                                    ? 'pi pi-times remove'
-                                    : 'pi pi-times remove disable'
-                                "
-                                (click)="
-                                  room.get('occupancy').controls.length > 1 &&
-                                    remove(
-                                      'occupancy',
-                                      occupancyIndex,
-                                      season,
-                                      room
-                                    )
-                                "
-                              ></i>
-                            </div>
-                          </ng-container>
+                            +Add More
+                          </div>
                         </div>
-                        <div class="link" (click)="add('occupancy', room)">
-                          +Add More
-                        </div>
-                      </div>
-                    </p-accordionTab>
-                  </ng-container>
-                </p-accordion>
+                      </p-accordionTab>
+                    </ng-container>
+                  </p-accordion>
+                </ng-container>
               </ng-container>
+              <ng-template formArrayName="hotelConfig" #hotelCategory>
+                <p-accordion class="room-accordion">
+                  <p-accordionTab [selected]="true" class="no-shadow">
+                    <p-header>
+                      <span> Occupancy Level</span>
+                    </p-header>
+                    <div class="occupancy__content">
+                      <ng-container
+                        *ngTemplateOutlet="ruleHeading"
+                      ></ng-container>
+                      <div>
+                        <ng-container
+                          *ngFor="
+                            let hotelOccupancy of season.get('hotelConfig')
+                              ?.controls;
+                            let occupancyIndex = index
+                          "
+                          [formGroupName]="occupancyIndex"
+                        >
+                          <ng-container
+                            *ngTemplateOutlet="
+                              ruleControls;
+                              context: {
+                                form: hotelOccupancy,
+                                occupancyLength: season.get('hotelConfig')
+                                  ?.controls.length,
+                                index: occupancyIndex,
+                                season: season,
+                                basePrice: season.get('basePrice').value
+                              }
+                            "
+                          ></ng-container>
+                        </ng-container>
+                      </div>
+                      <div
+                        class="link"
+                        [ngClass]="
+                          isDisableAddNewRule(
+                            season.get('hotelConfig'),
+                            season.get('roomCount')
+                          )
+                            ? 'disable'
+                            : ''
+                        "
+                        (click)="
+                          !isDisableAddNewRule(
+                            season.get('hotelConfig'),
+                            season.get('roomCount')
+                          ) && add('hotel-occupancy', season.get('hotelConfig'))
+                        "
+                      >
+                        +Add More
+                      </div>
+                    </div>
+                  </p-accordionTab>
+                </p-accordion>
+              </ng-template>
               <div class="action">
                 <hospitality-bot-button
                   label="Save"
@@ -219,10 +242,102 @@
                 >
                 </hospitality-bot-button>
               </div>
+              <ng-template #ruleHeading>
+                <div class="occupancy occupancy-header">
+                  <span class="item">Start & End</span>
+                  <span class="item item__discount">Discount/Markup</span>
+                  <span class="item">Rates</span>
+                  &nbsp;
+                </div>
+              </ng-template>
+              <ng-template
+                #ruleControls
+                let-form="form"
+                let-roomConfig="roomConfig"
+                let-occupancyLength="occupancyLength"
+                let-season="season"
+                let-index="index"
+                let-basePrice="basePrice"
+              >
+                <ng-container *ngIf="form">
+                  <div
+                    class="occupancy occupancy-form form-block"
+                    [formGroup]="form"
+                  >
+                    <hospitality-bot-prefix-field
+                      class="one-fourth-width"
+                      preControlName="start"
+                      postControlName="end"
+                      preFieldType="input"
+                      postFieldType="input"
+                      [defaultProps]="{
+                        pre: {
+                          placeholder: 'Start',
+                          type: 'number',
+                          errorMessages: {
+                            required: 'This is required field',
+                            min: 'Start should be <= End.'
+                          }
+                        },
+                        post: {
+                          placeholder: 'End',
+                          type: 'number',
+                          errorMessages: {
+                            required: 'This is required field',
+                            min: 'End should be >= Start.'
+                          }
+                        }
+                      }"
+                      [settings]="{
+                        layout: 'dashed'
+                      }"
+                    >
+                    </hospitality-bot-prefix-field>
+                    <hospitality-bot-input
+                      controlName="discount"
+                      [min]="0"
+                      [props]="{
+                        placeholder: 'Enter',
+                        type: 'number',
+                        subtitle: '%',
+                        errorMessages: {
+                          required: 'This is required field',
+                          min: 'Value should be >= -100'
+                        }
+                      }"
+                    ></hospitality-bot-input>
+                    <hospitality-bot-input
+                      controlName="rate"
+                      [min]="0"
+                      [props]="{
+                        placeholder: 'Enter',
+                        type: 'number',
+                        subtitle: 'Rs. ' + basePrice,
+                        strike: true,
+                        errorMessages: {
+                          required: 'This is required field',
+                          min: 'Minimum value should be 0'
+                        }
+                      }"
+                    ></hospitality-bot-input>
+                    <i
+                      [class]="
+                        occupancyLength > 1
+                          ? 'pi pi-times remove'
+                          : 'pi pi-times remove disable'
+                      "
+                      (click)="
+                        occupancyLength > 1 && roomConfig
+                          ? remove('occupancy', index, roomConfig.room, season)
+                          : remove('hotel-occupancy', index, season)
+                      "
+                    ></i>
+                  </div>
+                </ng-container>
+              </ng-template>
             </div>
           </div>
         </p-accordionTab>
-
         <br />
       </ng-container>
     </p-accordion>
@@ -235,7 +350,6 @@
   <div class="wrapper__occupancy-footer">
     <span><strong>Note:</strong> {{ footerNote }}</span>
   </div>
-
   <ng-template #emptyRoom>
     <div class="empty-room">
       Please select at least one room.

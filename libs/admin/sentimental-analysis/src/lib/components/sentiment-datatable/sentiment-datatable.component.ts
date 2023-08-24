@@ -37,7 +37,6 @@ export class SentimentDatatableComponent extends BaseDatatableComponent
       MockData.sentiment.rowData
     ).records;
     this.totalRecords = this.dataSource.length;
-    this.rowsPerPage = 10;
     this.loadInitialData();
   }
 

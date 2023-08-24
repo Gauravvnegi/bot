@@ -25,6 +25,7 @@ import {
   TableFieldSearch,
 } from '../../types/table.type';
 import { convertToTitleCase } from '../../utils/valueFormatter';
+import { MemberSortTypes } from 'libs/admin/agent/src/lib/types/agent';
 
 interface Import {
   name: string;
@@ -61,11 +62,12 @@ export class BaseDatatableComponent implements OnInit {
   isEmpty = true;
 
   tableFG: FormGroup;
-
+  sortedBy: MemberSortTypes | string;
+  searchKey: string;
   isPaginator = false;
   rowsPerPage = 50;
   showCurrentPageReport = true;
-  rowsPerPageOptions = [5, 10, 25, 50, 200];
+  rowsPerPageOptions = [5, 10, 25, 50, 100, 200];
   first = 0; //index of the first page to show
 
   @Input() tableConfig = {
@@ -193,7 +195,7 @@ export class BaseDatatableComponent implements OnInit {
   }
 
   resetTableValues() {
-    this.rowsPerPage = 5;
+    this.rowsPerPage = 50;
     this.first = 0;
     this.values = [];
     this.tabFilterItems = [];

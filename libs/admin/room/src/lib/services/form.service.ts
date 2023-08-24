@@ -4,11 +4,14 @@ import {
   RoomTypeFormData,
   StaticPricingMod,
 } from '../constant/form';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class FormService {
+  roomStatus = new BehaviorSubject<string>(null);
+
   getRoomTypeModData(
     roomTypeData: RoomTypeFormData,
     isPricingDynamic: boolean

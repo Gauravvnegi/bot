@@ -48,8 +48,6 @@ const appRoutes: Route[] = [
           {
             path: outletBusinessRoutes.foodPackage.route,
             component: ChildMainComponent,
-            pathMatch: 'full',
-
             children: [
               {
                 path: '',

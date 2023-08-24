@@ -67,21 +67,28 @@ export class AgentDataTableComponent extends BaseDatatableComponent
   initTable() {
     this.loading = true;
     this.subscription$.add(
-      this.agentService.getAgentList(this.getQueryConfig()).subscribe(
-        (res) => {
-          this.mapData(res);
-          this.loading = false;
-        },
-        (error) => {
-          this.values = [];
-          this.loading = false;
-        },
-        this.handleFinal
-      )
+      this.agentService
+        .getAgentList(this.getQueryConfig(SortBy[this.sortedBy]))
+        .subscribe(
+          (res) => {
+            this.mapData(res);
+            this.loading = false;
+          },
+          (error) => {
+            this.values = [];
+            this.loading = false;
+          },
+          this.handleFinal
+        )
     );
   }
 
   sortBy(key: MemberSortTypes) {
+    this.sortedBy = key;
+    if (this.searchKey) {
+      this.searchAgent(this.searchKey);
+      return;
+    }
     this.loading = true;
     this.subscription$.add(
       this.agentService
@@ -111,13 +118,22 @@ export class AgentDataTableComponent extends BaseDatatableComponent
 
   searchAgent(key: string) {
     if (!key.length) {
+      this.searchKey = null;
       this.initTable();
       return;
     }
-
+    this.searchKey = key;
     this.loading = true;
     this.agentService
-      .searchAgent({ params: `?key=${key}&type=AGENT` })
+      .searchAgent({
+        params: this.adminUtilityService.makeQueryParams([
+          {
+            key: key,
+            type: 'AGENT',
+            ...SortBy[this.sortedBy],
+          },
+        ]),
+      })
       .subscribe((res) => {
         this.values =
           res.map((item) => new AgentModel().deserialize(item)) ?? [];

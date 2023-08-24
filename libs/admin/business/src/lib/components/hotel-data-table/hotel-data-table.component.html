@@ -99,15 +99,15 @@
       <td>
         <div
           class="cell-content"
-          *ngIf="rowData?.dayOfOperationStart; else emptyCell"
+          *ngIf="rowData?.operationalDays?.startDay; else emptyCell"
         >
           <div class="primary-text">
-            {{ rowData?.dayOfOperationStart }} -
-            {{ rowData?.dayOfOperationEnd }}
+            {{ rowData?.operationalDays?.startDay }} -
+            {{ rowData?.operationalDays?.endDay }}
           </div>
           <div class="primary-text">
-            {{ rowData?.timeDayStart }} -
-            {{ rowData?.timeDayEnd }}
+            {{ secondsToAMPMTime(rowData?.operationalDays?.from) }} -
+            {{ secondsToAMPMTime(rowData?.operationalDays?.to) }}
           </div>
         </div>
       </td>

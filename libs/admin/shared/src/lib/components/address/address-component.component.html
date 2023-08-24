@@ -1,4 +1,4 @@
-<div [formGroup]="addressForm">
+<div [formGroup]="addressForm" class="input-wrapper">
   <hospitality-bot-auto-complete
     controlName="addressData"
     label="Address"
@@ -16,4 +16,6 @@
     }"
   >
   </hospitality-bot-auto-complete>
+
+  <div hidden="true">{{ getValidator }}</div>
 </div>

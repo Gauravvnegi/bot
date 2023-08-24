@@ -167,7 +167,7 @@ export class UserPermissionDatatableComponent extends BaseDatatableComponent
     );
   }
 
-  handelStatus(status: boolean, userData) {
+  handelStatus(status: boolean, userData, force?: boolean) {
     if (!status) {
       this._managePermissionService
         .getUserJobDetails(userData.userId)
@@ -188,6 +188,13 @@ export class UserPermissionDatatableComponent extends BaseDatatableComponent
           if (!res) {
             description = [`Are you sure you want to deactivate the user?`];
           }
+          if (force) {
+            description = [
+              `Are you sure you want to force deactivate the user?`,
+              `User status cannot be updated as there are other users which are reporting to this user.`,
+            ];
+            label = 'Force Deactivate';
+          }
 
           togglePopupCompRef.componentInstance.content = {
             heading: `Mark As ${status ? 'Active' : 'Inactive'}`,
@@ -203,7 +210,11 @@ export class UserPermissionDatatableComponent extends BaseDatatableComponent
             {
               label: label,
               onClick: () => {
-                this.updateRolesStatus(status, userData);
+                this.updateRolesStatus(
+                  status,
+                  userData,
+                  force ? { queryObj: '?forceUpdate=true' } : {}
+                );
                 togglePopupCompRef.close();
               },
               variant: 'contained',
@@ -219,13 +230,13 @@ export class UserPermissionDatatableComponent extends BaseDatatableComponent
     }
   }
 
-  updateRolesStatus(status: boolean, userData) {
+  updateRolesStatus(status: boolean, userData, config?: QueryConfig) {
     const data = {
       id: userData.userId,
       status: status,
     };
     this._managePermissionService
-      .updateRolesStatus(userData.parentId, data)
+      .updateRolesStatus(userData.parentId, data, config)
       .subscribe(
         (_) => {
           this.loadInitialData();
@@ -238,7 +249,10 @@ export class UserPermissionDatatableComponent extends BaseDatatableComponent
             { panelClass: 'success' }
           );
         },
-        ({ error }) => {}
+        ({ error }) => {
+          if (error?.type === 'STATUS_CANNOT_BE_UPDATED')
+            this.handelStatus(status, userData, true);
+        }
       );
   }
 

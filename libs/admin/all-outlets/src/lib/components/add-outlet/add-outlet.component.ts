@@ -20,7 +20,11 @@ import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.
 import { Subscription } from 'rxjs';
 import { cuisinesType } from '../../constants/data';
 import { outletBusinessRoutes } from '../../constants/routes';
-import { FoodPackageList, MenuList } from '../../models/outlet.model';
+import {
+  FoodPackageList,
+  MenuList,
+  OutletFormData,
+} from '../../models/outlet.model';
 import { Services } from '../../models/services';
 import { OutletFormService } from '../../services/outlet-form.service';
 import { OutletService } from '../../services/outlet.service';
@@ -107,11 +111,11 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
         countryCode: ['+91'],
         number: [''],
       }),
-      dayOfOperationStart: ['', [Validators.required]],
-      dayOfOperationEnd: ['', [Validators.required]],
-      timeDayStart: ['', [Validators.required]],
-      timeDayEnd: ['', [Validators.required]],
-      address: [{}, [Validators.required]],
+      startDay: ['', [Validators.required]],
+      endDay: ['', [Validators.required]],
+      from: ['', [Validators.required]],
+      to: ['', [Validators.required]],
+      address: ['', [Validators.required]],
       imageUrl: [[], [Validators.required]],
       description: [''],
       serviceIds: [[]],
@@ -144,12 +148,23 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
         this.outletService.getOutletById(this.outletId).subscribe(
           (res) => {
             this.loading = false;
-            const { absoluteRoute, type, subType, logo, ...rest } = res;
+            const {
+              absoluteRoute,
+              type,
+              subType,
+              logo,
+              operationalDays,
+              ...rest
+            } = res;
             this.logoUrl = logo;
             this.redirectUrl = absoluteRoute;
             this.initOptionConfig(type);
 
             this.useForm.get('type').setValue(type);
+            this.useForm.get('startDay').setValue(operationalDays?.startDay);
+            this.useForm.get('endDay').setValue(operationalDays?.endDay);
+            this.useForm.get('from').setValue(operationalDays?.from);
+            this.useForm.get('to').setValue(operationalDays?.to);
 
             this.useForm.get('type').disable();
             this.useForm.get('subType').setValue(subType.toUpperCase());
@@ -260,7 +275,7 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
       return;
     }
 
-    let data = this.useForm.getRawValue() as OutletForm;
+    let data = new OutletFormData().deserialize(this.useForm.getRawValue());
 
     //api call to add/update outlet
     if (this.outletId) {

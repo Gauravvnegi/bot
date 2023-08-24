@@ -41,14 +41,15 @@ export type RequestStat = {
   RESOLVED: number;
   IN_PROGRESS: number;
   TIMEOUT?: number;
-  CANCELED?: number;
+  CANCELLED?: number;
 };
 
 export type AverageStats = {
   averageStats: {
-    averageTicketsPerDay: number;
-    averageTimePerTicket: number;
-    timeoutTickets: number;
+    averageCreatedJobs: number;
+    averagetTimePerJob: number;
+    averageResolvedJobs: number;
+    timeoutJobs: number;
   };
 };
 

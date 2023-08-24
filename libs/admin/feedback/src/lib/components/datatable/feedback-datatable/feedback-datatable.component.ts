@@ -69,7 +69,6 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
   isCustomSort = true;
   triggerInitialData = false;
   entityId: string;
-  rowsPerPage = 25;
   colorMap;
   responseRate;
   cols: Cols[] = feedback.cols.feedbackDatatable.transactional;

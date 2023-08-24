@@ -13,12 +13,7 @@ export const cols = [
     field: 'workingDays',
     header: 'Working days / Timings',
     sortType: 'string',
-    searchField: [
-      'dayOfOperationStart',
-      'dayOfOperationEnd',
-      'timeDayStart',
-      'timeDayEnd',
-    ],
+    searchField: ['startDay', 'endDay', 'from', 'to'],
     width: '23.75%',
     isSortDisabled: true,
   },

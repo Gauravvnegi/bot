@@ -44,6 +44,7 @@ import {
 } from '../../types/use-form';
 import { Services } from '../../models/amenities.model';
 import { convertToTitleCase } from 'libs/admin/shared/src/lib/utils/valueFormatter';
+import { FormService } from '../../services/form.service';
 
 @Component({
   selector: 'hospitality-bot-add-room',
@@ -62,6 +63,9 @@ export class AddRoomComponent implements OnInit, OnDestroy {
   useFormArray: FormArray;
   fields: IteratorField[];
 
+  startMinDate = new Date();
+  endMinDate = new Date();
+
   roomStatuses: Option[] = [];
   roomTypes: RoomTypeOption[] = [];
   submissionType: AddRoomTypes;
@@ -76,6 +80,7 @@ export class AddRoomComponent implements OnInit, OnDestroy {
 
   isRoomInfoLoading = false;
   isLoadingFeatures = false;
+  isStatusUpdated = false;
 
   /* roomTypes options variable */
   roomTypeOffSet = 0;
@@ -99,7 +104,8 @@ export class AddRoomComponent implements OnInit, OnDestroy {
     private router: Router,
     private location: Location,
     private modalService: ModalService,
-    private libraryService: LibraryService
+    private libraryService: LibraryService,
+    private formService: FormService
   ) {
     this.submissionType = this.route.snapshot.paramMap.get(
       'type'
@@ -118,6 +124,7 @@ export class AddRoomComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.endMinDate.setDate(this.startMinDate.getDate() + 1);
     this.entityId = this.globalFilterService.entityId;
     this.initForm();
     this.initOptionsConfig();
@@ -143,8 +150,8 @@ export class AddRoomComponent implements OnInit, OnDestroy {
       status: ['', Validators.required],
       remark: [''],
       foStatus: [],
-      currentStatusFrom: ['', Validators.required],
-      currentStatusTo: ['', Validators.required],
+      fromDate: ['', Validators.required],
+      toDate: ['', Validators.required],
     });
 
     this.registerFormListener();
@@ -176,12 +183,24 @@ export class AddRoomComponent implements OnInit, OnDestroy {
   registerFormListener() {
     this.registerRoomTypeChangesListener();
     this.registerRoomStateChangeListener();
+    this.listenForRoomStatusChange();
+  }
+
+  listenForRoomStatusChange() {
+    this.formService.roomStatus.subscribe((res) => {
+      if (res) {
+        this.statusQuoFormControls.status.patchValue(res);
+        this.isStatusUpdated = true;
+        const mainLayout = document.getElementById('main-layout');
+        mainLayout.scrollTo(0, mainLayout.scrollHeight);
+      }
+    });
   }
 
   registerRoomStateChangeListener() {
     const {
-      currentStatusFrom,
-      currentStatusTo,
+      fromDate,
+      toDate,
       status,
       foStatus,
     } = this.statusQuoFormControls;
@@ -200,17 +219,16 @@ export class AddRoomComponent implements OnInit, OnDestroy {
       };
 
       this.isDateRequired = res === 'OUT_OF_ORDER' || res === 'OUT_OF_SERVICE';
-
       if (this.isDateRequired) {
-        currentStatusFrom.setValidators([Validators.required]);
-        currentStatusTo.setValidators([Validators.required]);
+        fromDate.setValidators([Validators.required]);
+        toDate.setValidators([Validators.required]);
       } else {
-        currentStatusFrom.clearValidators();
-        currentStatusTo.clearValidators();
+        fromDate.clearValidators();
+        toDate.clearValidators();
       }
 
-      currentStatusFrom.updateValueAndValidity();
-      currentStatusTo.updateValueAndValidity();
+      fromDate.updateValueAndValidity();
+      toDate.updateValueAndValidity();
     });
   }
 
@@ -327,13 +345,14 @@ export class AddRoomComponent implements OnInit, OnDestroy {
         .subscribe((res) => {
           this.featureIds = res.rooms[0].features.map((item) => item.id);
           const roomDetails = res.rooms[0];
+          const statusDetails = res.rooms[0].statusDetailsList[0];
           this.draftDate = roomDetails.updated ?? roomDetails.created;
           this.dateTitle = roomDetails.updated ? 'Updated on' : 'Activated on';
           const data: SingleRoomForm = {
             roomTypeId: roomDetails.roomTypeDetails.id,
             price: roomDetails.price,
             currency: roomDetails.currency,
-            status: roomDetails.status,
+            status: statusDetails.status,
             rooms: [
               {
                 roomNo: roomDetails.roomNumber,
@@ -364,18 +383,26 @@ export class AddRoomComponent implements OnInit, OnDestroy {
               value: item,
             }));
           }
-
           this.roomStatuses.push({
-            label: convertToTitleCase(roomDetails.status),
-            value: roomDetails.status,
+            label: convertToTitleCase(statusDetails.status),
+            value: statusDetails.status,
           });
 
+          // If status is updated to OUT_OF_ORDER or OUT_OF_SERVICE from table.
+          if (!this.isStatusUpdated)
+            this.statusQuoFormControls.status.patchValue(statusDetails.status);
+
+          // Only set the dates if available.
+          if (statusDetails.fromDate) {
+            this.statusQuoForm.patchValue({
+              fromDate: statusDetails?.fromDate,
+              toDate: statusDetails?.toDate,
+            });
+          }
+
           this.statusQuoForm.patchValue({
-            status: roomDetails.status,
-            remark: roomDetails.remark,
+            remark: statusDetails.remark,
             foStatus: roomDetails.frontOfficeState,
-            currentStatusFrom: roomDetails.currentStatusFrom,
-            currentStatusTo: roomDetails.currentStatusTo,
           });
 
           this.isRoomInfoLoading = false;
@@ -454,7 +481,7 @@ export class AddRoomComponent implements OnInit, OnDestroy {
               id: this.roomId,
               removeFeatures: removeFeatures,
               ...data,
-              ...statusData,
+              statusDetails: [{ ...statusData, isCurrentStatus: true }],
             }).list[0],
           ],
         })

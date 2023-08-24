@@ -1,9 +1,9 @@
-<div class="dates">
+<div class="dates" [formGroup]="parentFG">
   <div class="field">
     <hospitality-bot-date
       class="bulk-update__date"
       [ngClass]="className"
-      controlName="fromDate"
+      [controlName]="controlNames.from"
       label="From"
       [props]="{ placeholder: 'Select From Date' }"
       [settings]="{
@@ -17,7 +17,7 @@
     <hospitality-bot-date
       class="bulk-update__date"
       [ngClass]="className"
-      controlName="toDate"
+      [controlName]="controlNames.to"
       label="To"
       [props]="{ placeholder: 'Select To Date' }"
       [settings]="{

@@ -5,10 +5,8 @@ import {
   DynamicPricingResponse,
 } from '../types/dynamic-pricing.types';
 import { QueryConfig } from '@hospitality-bot/admin/shared';
-import { Observable, throwError } from 'rxjs';
+import { Observable } from 'rxjs';
 import { FormArray, FormGroup } from '@angular/forms';
-import { catchError, map } from 'rxjs/operators';
-import { OccupancyResponse } from '../constants/response.const';
 
 @Injectable()
 export class DynamicPricingService extends ApiService {

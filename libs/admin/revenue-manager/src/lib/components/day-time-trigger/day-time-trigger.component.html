@@ -62,7 +62,10 @@
               </div>
               <div class="date-days-field">
                 <hospitality-bot-from-to-date
-                  [parentFG]="triggerFG"
+                  [controlNames]="{
+                    from: 'fromDate',
+                    to: 'toDate'
+                  }"
                 ></hospitality-bot-from-to-date>
                 <div class="days">
                   <hospitality-bot-checkbox-selector

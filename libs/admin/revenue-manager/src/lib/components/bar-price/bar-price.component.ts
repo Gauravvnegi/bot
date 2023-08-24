@@ -13,7 +13,7 @@ import { BarPriceService } from '../../services/bar-price.service';
 import { DateOption } from '../../types/bar-price.types';
 import { RatePlanRes } from 'libs/admin/room/src/lib/types/service-response';
 import { Accordion } from 'primeng/accordion';
-import { RoomTypes } from '../../models/bar-price.model';
+import { RoomTypes } from 'libs/admin/channel-manager/src/lib/models/bulk-update.models';
 
 @Component({
   selector: 'hospitality-bot-bar-price',

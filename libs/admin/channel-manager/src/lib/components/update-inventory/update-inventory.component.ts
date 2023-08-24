@@ -292,15 +292,14 @@ export class UpdateInventoryComponent implements OnInit {
     this.loading = true;
     this.$subscription.add(
       this.channelManagerService
-        .getChannelManagerDetails(
+        .getChannelManagerDetails<UpdateInventoryResponse>(
           this.entityId,
           this.getQueryConfig(selectedDate)
         )
         .subscribe(
           (res) => {
-            const data = new UpdateInventory().deserialize(res.roomType);
-            this.inventoryResponse = res.roomType
-              .roomTypes as UpdateInventoryResponse[];
+            const data = new UpdateInventory().deserialize(res.roomTypes);
+            this.inventoryResponse = res.roomTypes;
             this.perDayRoomAvailability = UpdateInventory.buildAvailability(
               this.inventoryResponse,
               this.useFormControl.roomType.value

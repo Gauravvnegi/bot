@@ -13,7 +13,7 @@ import {
   OccupancyRuleType,
 } from '../types/dynamic-pricing.types';
 import { OccupancyComponent } from '../components/occupancy/occupancy.component';
-import { RoomTypes } from './bar-price.model';
+import { RoomTypes } from 'libs/admin/channel-manager/src/lib/models/bulk-update.models';
 export class DynamicPricingFactory {
   static buildRequest(form: FormGroup, type: ConfigType, mode: ModeType) {
     let data:

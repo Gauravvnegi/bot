@@ -31,6 +31,7 @@ import * as moment from 'moment';
 import { Subject, Subscription } from 'rxjs';
 import { UpdateRates } from '../../models/channel-manager.model';
 import { debounceTime, tap } from 'rxjs/operators';
+import { UpdateRatesResponse } from '../../types/response.type';
 
 @Component({
   selector: 'hospitality-bot-update-rates',
@@ -506,13 +507,13 @@ export class UpdateRatesComponent implements OnInit {
     this.loading = true;
     this.$subscription.add(
       this.channelManagerService
-        .getChannelManagerDetails(
+        .getChannelManagerDetails<UpdateRatesResponse>(
           this.entityId,
           this.getQueryConfig(selectedDate)
         )
         .subscribe(
           (res) => {
-            const data = new UpdateRates().deserialize(res.roomType);
+            const data = new UpdateRates().deserialize(res.roomTypes);
             this.ratesRoomDetails = data.ratesRoomDetails;
             this.setRoomDetails(selectedDate);
             this.loading = false;

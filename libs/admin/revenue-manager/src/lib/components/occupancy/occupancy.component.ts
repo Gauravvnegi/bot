@@ -25,7 +25,7 @@ import {
   ConfigType,
   DynamicPricingForm,
 } from '../../types/dynamic-pricing.types';
-import { RoomTypes } from '../../models/bar-price.model';
+import { RoomTypes } from 'libs/admin/channel-manager/src/lib/models/bulk-update.models';
 
 export type ControlTypes = 'season' | 'occupancy' | 'hotel-occupancy';
 

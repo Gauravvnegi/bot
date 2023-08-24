@@ -43,8 +43,8 @@ export type ConfigRuleType = {
     value: number;
   };
   status: StatusType;
-  fromTimeInMillis: number;
-  toTimeInMillis: number;
+  fromTimeInMillis?: number;
+  toTimeInMillis?: number;
 };
 
 export type StatusType = 'ACTIVE' | 'INACTIVE';

@@ -90,7 +90,7 @@ export class OccupancyComponent implements OnInit {
     this.loading = true;
     this.$subscription.add(
       this.dynamicPricingService
-        .getOccupancyList(this.getQueryConfig('OCCUPANCY'))
+        .getDynamicPricingList(this.getQueryConfig('OCCUPANCY'))
         .subscribe((res) => {
           if (!res.configDetails.length) {
             this.add('season');

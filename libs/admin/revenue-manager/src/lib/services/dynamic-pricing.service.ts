@@ -45,7 +45,9 @@ export class DynamicPricingService extends ApiService {
     );
   }
 
-  getOccupancyList(config?: QueryConfig): Observable<DynamicPricingResponse> {
+  getDynamicPricingList(
+    config?: QueryConfig
+  ): Observable<DynamicPricingResponse> {
     return this.get(
       `/api/v1/revenue/dynamic-pricing-configuration${config.params}`
     );

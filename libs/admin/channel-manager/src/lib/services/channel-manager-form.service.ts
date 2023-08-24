@@ -2,10 +2,7 @@ import { Injectable } from '@angular/core';
 import { RoomTypeList } from 'libs/admin/room/src/lib/models/rooms-data-table.model';
 import { BehaviorSubject } from 'rxjs';
 import { ChannelManagerService } from './channel-manager.service';
-import {
-  Rooms,
-  RoomTypes,
-} from 'libs/admin/revenue-manager/src/lib/models/bar-price.model';
+import { RoomTypes, Rooms } from '../models/bulk-update.models';
 
 @Injectable()
 export class ChannelManagerFormService {

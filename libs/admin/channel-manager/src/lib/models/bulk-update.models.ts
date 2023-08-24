@@ -68,7 +68,7 @@ export function getWeekendBG(day: string, isOccupancy = false) {
     : '';
 }
 
-type UsedType = 'channel-manager' | 'revenue-manager';
+export type UsedType = 'channel-manager' | 'revenue-manager';
 export class Rooms {
   deserialize(input: RoomType[], used?: UsedType) {
     return input

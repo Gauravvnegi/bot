@@ -12,7 +12,7 @@ import {
 } from '@angular/forms';
 import { Revenue } from '../../constants/revenue-manager.const';
 import { DynamicPricingForm } from '../../types/dynamic-pricing.types';
-import { RoomTypes } from '../../models/bar-price.model';
+import { RoomTypes } from 'libs/admin/channel-manager/src/lib/models/bulk-update.models';
 
 @Component({
   selector: 'hospitality-bot-dynamic-pricing',

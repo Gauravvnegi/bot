@@ -65,15 +65,26 @@ export class DynamicPricingService extends ApiService {
     } = form.controls;
     let isValid =
       name.valid && fromDate.valid && toDate.valid && selectedDays.valid;
+    const ruleValidate = (rule: FormGroup) => {
+      if (isValid) {
+        const { start, end } = rule.controls;
+        isValid = +start.value <= +end.value;
+      }
+    };
     if (configCategory.value == 'ROOM_TYPE') {
       (roomTypes as FormArray).controls.forEach((room: FormGroup, index) => {
         if (room.get('isSelected').value) {
-          isValid = isValid ? room.get('occupancy').valid : false;
+          const rules = room.get('occupancy') as FormArray;
+          isValid = isValid ? rules.valid : false;
+          rules.controls.forEach((rule: FormGroup) => {
+            ruleValidate(rule);
+          });
         }
       });
     } else {
       (hotelConfig as FormArray).controls.forEach((rule: FormGroup) => {
         isValid = isValid ? rule.valid : false;
+        ruleValidate(rule);
       });
     }
     return isValid;

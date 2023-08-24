@@ -54,6 +54,7 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
   isCompLoading: boolean = false;
   isPaidLoading: boolean = false;
   isPricingDynamic = false;
+  isBaseRoomType = true;
 
   plans: RatePlanOptions[] = [];
   removedRatePlans: string[] = [];
@@ -120,6 +121,7 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
 
     this.useForm = this.fb.group({
       status: [true],
+      roomTypeStatus: [true],
       name: ['', [Validators.required]],
       imageUrls: [[], [Validators.required]],
       description: ['', [Validators.required]],
@@ -250,7 +252,7 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
             (res) => {
               let data = new RoomTypeForm().deserialize(res);
               const { staticRatePlans, dynamicRatePlans, ...rest } = data;
-
+              debugger;
               if (this.isPricingDynamic) {
                 this.useForm
                   .get('dynamicRatePlans')
@@ -509,6 +511,10 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
       return;
     }
     this.ratePlanArray.at(index).get('status').setValue(isToogleOn);
+  }
+
+  onRoomTypeToggleSwitch(isToggleOn: boolean) {
+    this.useForm.get('roomTypeStatus').setValue(isToggleOn);
   }
 
   resetForm() {

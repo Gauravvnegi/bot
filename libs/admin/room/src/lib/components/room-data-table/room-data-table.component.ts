@@ -184,6 +184,12 @@ export class RoomDataTableComponent extends BaseDatatableComponent
             (res) => {
               const roomTypesList = new RoomTypeList().deserialize(res);
               this.values = roomTypesList.records;
+
+              const baseRoomType = roomTypesList.records.filter(
+                (item) => item.isBaseRoomType
+              );
+
+              this.formService.baseRoomType.baseRoomPrice = baseRoomType[0].price;
               // this.updateQuickReplyFilterCount(res.entityStateCounts);
               // this.updateTabFilterCount(res.entityTypeCounts, res.total);
               // this.updateTotalRecords();

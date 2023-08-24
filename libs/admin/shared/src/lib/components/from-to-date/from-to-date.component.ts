@@ -8,9 +8,9 @@ import { FormComponent } from '../form-component/form.components';
   styleUrls: ['./from-to-date.component.scss'],
 })
 export class FromToDateComponent extends FormComponent implements OnInit {
-  @Input() startMinDate = new Date();
-  endMinDate = new Date();
+  endMinDate: Date = new Date();
   startMaxDate: Date;
+  @Input() startMinDate: Date = new Date();
   @Input() endMaxDate: Date;
   @Input() controlNames = {
     from: 'fromDate',
@@ -32,15 +32,18 @@ export class FromToDateComponent extends FormComponent implements OnInit {
 
   ngOnInit() {
     this.parentFG.get(this.controlNames.from)?.valueChanges.subscribe((res) => {
-      if (this.parentFG.value.toDate < res)
-        this.parentFG.patchValue({ toDate: '' }, { emitEvent: false });
-      this.endMinDate = new Date(res);
+      if (!this.isTimeOnly) {
+        if (this.parentFG.value.toDate < res)
+          this.parentFG.patchValue({ toDate: '' }, { emitEvent: false });
+        this.endMinDate = new Date(res);
+      }
     });
-
     this.parentFG.get(this.controlNames.to)?.valueChanges.subscribe((res) => {
-      this.startMaxDate = new Date(res);
-      if (this.parentFG.value.fromDate > res)
-        this.parentFG.patchValue({ fromDate: '' }, { emitEvent: false });
+      if (!this.isTimeOnly) {
+        this.startMaxDate = new Date(res);
+        if (this.parentFG.value.fromDate > res)
+          this.parentFG.patchValue({ fromDate: '' }, { emitEvent: false });
+      }
     });
   }
 

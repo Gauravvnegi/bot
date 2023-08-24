@@ -13,8 +13,8 @@
         enableTime: isTimeEnable,
         showIcon: showIcon
       }"
-      [minDate]="startMinDate"
-      [maxDate]="startMaxDate"
+      [minDate]="!isTimeOnly && startMinDate"
+      [maxDate]="!isTimeOnly && startMaxDate"
     ></hospitality-bot-date>
   </div>
   <div class="field">
@@ -29,8 +29,8 @@
         enableTime: isTimeEnable,
         showIcon: showIcon
       }"
-      [minDate]="endMinDate"
-      [maxDate]="endMaxDate"
+      [minDate]="!isTimeOnly && endMinDate"
+      [maxDate]="!isTimeOnly && endMaxDate"
     ></hospitality-bot-date>
   </div>
 </div>

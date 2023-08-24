@@ -13,7 +13,7 @@ import {
   OccupancyRuleType,
 } from '../types/dynamic-pricing.types';
 import { OccupancyComponent } from '../components/occupancy/occupancy.component';
-import { RoomTypes } from './bar-price.model';
+import { RoomTypes } from 'libs/admin/channel-manager/src/lib/models/bulk-update.models';
 export class DynamicPricingFactory {
   static buildRequest(form: FormGroup, type: ConfigType, mode: ModeType) {
     let data:
@@ -62,7 +62,7 @@ export class DynamicPricingFactory {
         ? [
             {
               type: configCategory.value,
-              id: hotelId.value,
+              id: hotelId.value ?? undefined,
               configRules: (hotelConfig as FormArray).controls.map(
                 (rule: FormGroup) =>
                   DynamicPricingFactory.getOccupancyRules(rule)
@@ -75,7 +75,7 @@ export class DynamicPricingFactory {
               const { occupancy, roomId } = room.controls;
               const configItem: ConfigItemType = {
                 type: configCategory.value,
-                id: roomId.value,
+                id: roomId.value ?? undefined,
                 configRules: (occupancy as FormArray).controls.map(
                   (rule: FormGroup) =>
                     DynamicPricingFactory.getOccupancyRules(rule)
@@ -238,6 +238,7 @@ export class DynamicPricingHandler {
       basePrice: item.basePrice,
     });
 
+    season.get('configCategory').disable();
     if (item.configCategory == 'HOTEL') {
       season.patchValue({
         configCategory: 'HOTEL',

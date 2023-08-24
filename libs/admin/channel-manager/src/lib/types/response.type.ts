@@ -19,7 +19,7 @@ export type ChannelManagerResponse = {
   soldOutCount: number;
   maxChildren: number;
   maxAdult: number;
-  updates: UpdateInventoryResponse[] | UpdateRatesResponse[];
+  roomTypes: UpdateInventoryResponse[] | UpdateRatesResponse[];
   soldOut: boolean;
 };
 

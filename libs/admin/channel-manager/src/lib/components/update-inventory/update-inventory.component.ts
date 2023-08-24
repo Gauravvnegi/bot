@@ -17,8 +17,8 @@ import {
   restrictionsRecord,
 } from '../../constants/data';
 import { ChannelManagerFormService } from '../../services/channel-manager-form.service';
-import { DateOption, RoomTypes } from '../../types/channel-manager.types';
-import { getWeekendBG } from '../../models/bulk-update.models';
+import { DateOption } from '../../types/channel-manager.types';
+import { RoomTypes, getWeekendBG } from '../../models/bulk-update.models';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { Subscription } from 'rxjs';
@@ -292,15 +292,14 @@ export class UpdateInventoryComponent implements OnInit {
     this.loading = true;
     this.$subscription.add(
       this.channelManagerService
-        .getChannelManagerDetails(
+        .getChannelManagerDetails<UpdateInventoryResponse>(
           this.entityId,
           this.getQueryConfig(selectedDate)
         )
         .subscribe(
           (res) => {
-            const data = new UpdateInventory().deserialize(res.roomType);
-            this.inventoryResponse = res.roomType
-              .updates as UpdateInventoryResponse[];
+            const data = new UpdateInventory().deserialize(res.roomTypes);
+            this.inventoryResponse = res.roomTypes;
             this.perDayRoomAvailability = UpdateInventory.buildAvailability(
               this.inventoryResponse,
               this.useFormControl.roomType.value

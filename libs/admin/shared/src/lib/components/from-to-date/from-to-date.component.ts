@@ -16,7 +16,15 @@ export class FromToDateComponent extends FormComponent implements OnInit {
     from: 'fromDate',
     to: 'toDate',
   };
+  @Input() labels = {
+    from: 'From',
+    to: 'To',
+  };
+
   @Input() className: string;
+  @Input() isTimeEnable = false;
+  @Input() isTimeOnly = false;
+  @Input() showIcon = true;
 
   constructor(public controlContainer: ControlContainer) {
     super(controlContainer);

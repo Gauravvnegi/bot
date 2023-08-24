@@ -84,7 +84,8 @@ export class DynamicPricingComponent implements OnInit {
 
   getLevelFG(): FormGroup {
     return this.fb.group({
-      time: [''],
+      fromTime: [''],
+      toTime: [''],
       occupancyLowerLimit: [''],
       occupancyUpperLimit: [''],
       discount: [''],

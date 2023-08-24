@@ -4,10 +4,14 @@
       class="bulk-update__date"
       [ngClass]="className"
       [controlName]="controlNames.from"
-      label="From"
-      [props]="{ placeholder: 'Select From Date' }"
+      [label]="showLabel ? labels.from : ''"
+      [props]="{
+        placeholder: 'Select From ' + (isTimeOnly ? 'Time' : 'Date')
+      }"
       [settings]="{
-        enableTime: false
+        isTimeOnly: isTimeOnly,
+        enableTime: isTimeEnable,
+        showIcon: showIcon
       }"
       [minDate]="startMinDate"
       [maxDate]="startMaxDate"
@@ -18,10 +22,12 @@
       class="bulk-update__date"
       [ngClass]="className"
       [controlName]="controlNames.to"
-      label="To"
-      [props]="{ placeholder: 'Select To Date' }"
+      [label]="showLabel ? labels.to : ''"
+      [props]="{ placeholder: 'Select To ' + (isTimeOnly ? 'Time' : 'Date') }"
       [settings]="{
-        enableTime: false
+        isTimeOnly: isTimeOnly,
+        enableTime: isTimeEnable,
+        showIcon: showIcon
       }"
       [minDate]="endMinDate"
       [maxDate]="endMaxDate"

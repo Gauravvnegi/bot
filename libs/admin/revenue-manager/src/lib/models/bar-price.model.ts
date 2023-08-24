@@ -1,8 +1,9 @@
 import { RoomType } from 'libs/admin/room/src/lib/models/rooms-data-table.model';
+type UsedType = 'channel-manager' | 'revenue-manager';
 export class Rooms {
-  deserialize(input: RoomType[]) {
+  deserialize(input: RoomType[], used?: UsedType) {
     return input
-      .map((item) => new RoomTypes().deserialize(item))
+      .map((item) => new RoomTypes().deserialize(item, used))
       .filter((item) => item);
   }
 }
@@ -15,7 +16,7 @@ export class RoomTypes {
   roomCount: number;
   isBase: boolean;
   ratePlans: RatePlans[];
-  deserialize(input: RoomType) {
+  deserialize(input: RoomType, used: UsedType) {
     this.label = input.name;
     this.value = input.id;
     this.channels = [];
@@ -26,7 +27,9 @@ export class RoomTypes {
       input.ratePlans
         ?.filter((ratePlan) => ratePlan.status)
         .map((item) => new RatePlans().deserialize(item)) ?? [];
-    return this;
+
+    // Filter Room who have not any rate plan for channel-manager
+    return used == 'channel-manager' && !this.ratePlans.length ? null : this;
   }
 }
 

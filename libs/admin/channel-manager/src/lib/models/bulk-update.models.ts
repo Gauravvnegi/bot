@@ -1,34 +1,11 @@
 import { Option } from '@hospitality-bot/admin/shared';
-import { RoomTypes, Variant } from '../types/bulk-update.types';
+import { Variant } from '../types/bulk-update.types';
 import { RoomType } from 'libs/admin/room/src/lib/models/rooms-data-table.model';
 
 export function makeRoomOption(...data) {
   return data.map((item) => {
     return { label: item.label, value: item.value };
   }) as Option[];
-}
-
-export function makeRoomsData(rooms: RoomType[]) {
-  let res = rooms.map((item) => {
-    let room = {
-      label: item.name,
-      value: item.id,
-      channels: [],
-      ratePlans:
-        item.ratePlans
-          ?.filter((ratePlan) => ratePlan.status)
-          .map((ratePlan) => ({
-            type: ratePlan.label,
-            label: ratePlan.label,
-            value: ratePlan.id,
-            isBase: ratePlan.isBase,
-            variablePrice: ratePlan.variablePrice,
-            channels: [],
-          })) ?? [],
-    };
-    return room.ratePlans.length ? room : null;
-  });
-  return res.filter((item) => item);
 }
 
 export class CheckBoxTreeFactory {
@@ -89,4 +66,67 @@ export function getWeekendBG(day: string, isOccupancy = false) {
       ? 'weekend-occupancy-bg'
       : 'weekend-bg'
     : '';
+}
+
+type UsedType = 'channel-manager' | 'revenue-manager';
+export class Rooms {
+  deserialize(input: RoomType[], used?: UsedType) {
+    return input
+      .map((item) => new RoomTypes().deserialize(item, used))
+      .filter((item) => item);
+  }
+}
+
+export class RoomTypes {
+  label: string;
+  value: string;
+  channels: Channel[];
+  price: number;
+  roomCount: number;
+  isBase: boolean;
+  ratePlans: RatePlans[];
+  deserialize(input: RoomType, used: UsedType) {
+    const isChannelManager = used == 'channel-manager';
+    const inputRatePlan = !isChannelManager
+      ? input.ratePlans?.filter((ratePlan) => ratePlan.status)
+      : input.ratePlans;
+    this.label = input.name;
+    this.value = input.id;
+    this.channels = [];
+    this.price = input.price;
+    this.isBase = input.isBase;
+    this.roomCount = input.roomCount;
+    this.ratePlans =
+      inputRatePlan.map((item) => new RatePlans().deserialize(item)) ?? [];
+    // Filter Room who have not any rate plan for channel-manager
+    return isChannelManager && !this.ratePlans.length ? null : this;
+  }
+}
+
+export class RatePlans {
+  type: string;
+  label: string;
+  value: string;
+  isBase: boolean;
+  variablePrice: number;
+  channels: Channel[];
+  deserialize(input) {
+    this.type = input.label ?? '';
+    this.label = input.label ?? '';
+    this.value = input.id ?? '';
+    this.isBase = input.isBase ?? false;
+    this.variablePrice = input.variablePrice;
+    this.channels = [];
+    return this;
+  }
+}
+
+export class Channel {
+  label: string;
+  value: string;
+  deserialize(input) {
+    this.label = input.label ?? '';
+    this.value = input.value ?? '';
+    return this;
+  }
 }

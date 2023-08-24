@@ -19,12 +19,8 @@ import {
   restrictionsRecord,
 } from '../../constants/data';
 import { ChannelManagerFormService } from '../../services/channel-manager-form.service';
-import {
-  DateOption,
-  RoomMapType,
-  RoomTypes,
-} from '../../types/channel-manager.types';
-import { getWeekendBG } from '../../models/bulk-update.models';
+import { DateOption, RoomMapType } from '../../types/channel-manager.types';
+import { RoomTypes, getWeekendBG } from '../../models/bulk-update.models';
 import {
   GlobalFilterService,
   SubscriptionPlanService,

@@ -23,7 +23,7 @@ export class UpdateInventory {
   >();
 
   deserialize(input: ChannelManagerResponse) {
-    input.updates?.forEach((item) => {
+    input.roomTypes?.forEach((item) => {
       item.rooms?.forEach((inventory) => {
         if (!this.inventoryRoomDetails[inventory.roomTypeId]) {
           this.inventoryRoomDetails[inventory.roomTypeId] = [];
@@ -132,7 +132,7 @@ export class UpdateRates {
   ratesRoomDetails = new Map<string, RoomMapType>();
 
   deserialize(input: ChannelManagerResponse) {
-    input.updates?.forEach((currentData) => {
+    input.roomTypes?.forEach((currentData) => {
       const currentDay = currentData.startDate ?? currentData.endDate;
       // rate plan iteration
       const ratePlanData = currentData.inventoryDataMap;
@@ -191,7 +191,7 @@ export class UpdateRates {
 
   static buildDynamicPricing(input: ChannelManagerResponse) {
     let dynamicPricing = new Map<string, Map<string, number>>();
-    (input.updates as UpdateRatesResponse[])?.forEach((currentData) => {
+    (input.roomTypes as UpdateRatesResponse[])?.forEach((currentData) => {
       currentData.rates.forEach((ratePlans) => {
         if (!dynamicPricing[ratePlans.roomTypeId]) {
           dynamicPricing[ratePlans.roomTypeId] = new Map();

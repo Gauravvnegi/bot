@@ -32,7 +32,7 @@ export class DynamicPricingComponent implements OnInit {
   itemList: MenuItem[] = [
     { label: 'Occupancy' },
     { label: 'Day/Time Trigger' },
-    { label: 'Inventory Reallocation' },
+    // { label: 'Inventory Reallocation' },
   ];
   constructor(
     private barPriceService: BarPriceService,

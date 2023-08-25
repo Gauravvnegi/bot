@@ -7,6 +7,7 @@ import {
 import { QueryConfig } from '@hospitality-bot/admin/shared';
 import { Observable } from 'rxjs';
 import { FormArray, FormGroup } from '@angular/forms';
+import { DayTimeTriggerComponent } from '../components/day-time-trigger/day-time-trigger.component';
 
 @Injectable()
 export class DynamicPricingService extends ApiService {
@@ -87,6 +88,17 @@ export class DynamicPricingService extends ApiService {
         ruleValidate(rule);
       });
     }
+    return isValid;
+  }
+
+  triggerValidate(form: FormGroup): boolean {
+    const { name, fromDate, toDate, selectedDays, hotelConfig } = form.controls;
+    let isValid =
+      name.valid &&
+      fromDate.valid &&
+      toDate.valid &&
+      selectedDays.valid &&
+      !DayTimeTriggerComponent.validateConfiguration(hotelConfig as FormArray);
     return isValid;
   }
 }

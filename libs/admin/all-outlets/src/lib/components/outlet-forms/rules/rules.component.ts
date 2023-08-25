@@ -55,11 +55,26 @@ export class RulesComponent extends FormComponent implements OnInit {
    */
   patchValueToRules(): void {
     if (this.inputControl.value.length) {
-      this.rulesControl.patchValue(this.inputControl.value);
+      this.rulesControl.clear();
+      this.inputControl.value.forEach((rule) => {
+        this.rulesControl.push(
+          this.fb.group({
+            name: [rule.name, [Validators.required]],
+            description: [rule.description, [Validators.required]],
+          })
+        );
+      });
     }
 
     this.rulesControl.valueChanges.subscribe((res) => {
-      this.inputControl.setValue(res);
+      res.value.forEach((rule) => {
+        this.rulesControl.push(
+          this.fb.group({
+            name: [rule.name, [Validators.required]],
+            description: [rule.description, [Validators.required]],
+          })
+        );
+      });
     });
   }
 
@@ -86,7 +101,7 @@ export class RulesComponent extends FormComponent implements OnInit {
    */
   onValueChange(): void {
     this.rulesControl.valueChanges.subscribe((res) => {
-      this.inputControl.setValue(res);
+      this.inputControl.setValue(res, { emitEvent: false });
     });
   }
 

@@ -221,7 +221,7 @@ export class RoomDataTableComponent extends BaseDatatableComponent
     this.$subscription.add(
       this.roomService
         .updateRoomStatus(this.entityId, {
-          rooms: [{ id, status: status }],
+          room: { id: id, status: status },
         })
         .subscribe(
           () => {
@@ -251,8 +251,10 @@ export class RoomDataTableComponent extends BaseDatatableComponent
     this.$subscription.add(
       this.roomService
         .updateRoomTypeStatus(this.entityId, {
-          id,
-          status,
+          roomType: {
+            id: id,
+            status: status,
+          },
         })
         .subscribe(
           () => this.getDataTableValue(),
@@ -282,7 +284,7 @@ export class RoomDataTableComponent extends BaseDatatableComponent
           dialogConfig
         );
 
-        const soldOut = rowData.roomCount.soldOut;
+        const soldOut = rowData?.roomCount?.soldOut;
 
         if (soldOut) {
           togglePopupCompRef.componentInstance.content = {
@@ -297,7 +299,7 @@ export class RoomDataTableComponent extends BaseDatatableComponent
           togglePopupCompRef.componentInstance.content = {
             heading: 'In-active Room Type',
             description: [
-              `There are ${rowData.roomCount} rooms in this room type`,
+              `There are ${rowData?.roomCount ?? 0} rooms in this room type`,
               'You are about to mark this room type in-active.',
               'Are you Sure?',
             ],

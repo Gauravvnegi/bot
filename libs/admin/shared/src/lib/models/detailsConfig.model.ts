@@ -645,7 +645,7 @@ export class Package implements IDeserializable {
       set({}, 'packageCode', get(input, ['packageCode'])),
       set({}, 'unit', get(input, ['unit'])),
       set({}, 'currency', get(input, ['currency'])),
-      set({}, 'status', get(input, ['statusMessage', 'status'])),
+      set({}, 'status', get(input, ['statusMessage', 'state'])),
       set({}, 'remarks', get(input, ['statusMessage', 'remarks']))
     );
     return this;

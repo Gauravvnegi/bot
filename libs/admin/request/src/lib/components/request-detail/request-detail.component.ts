@@ -204,8 +204,7 @@ export class RequestDetailComponent implements OnInit, OnDestroy {
       : new Date();
     this.formattedClosedTimestamp = this.datePipe.transform(
       dateObject,
-      "EEEE, MMMM d, y, 'at' HH:mm:ss",
-      'UTC'
+      "EEEE, MMMM d, y, 'at' HH:mm"
     );
   }
 

@@ -143,7 +143,7 @@ export const cols: Record<TableValue, Cols[]> = {
     {
       field: 'status',
       header: 'Status',
-      sortType: 'string',
+      sortType: 'number',
       width: '14%',
     },
   ],

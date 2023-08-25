@@ -2,10 +2,7 @@ import { Injectable } from '@angular/core';
 import { ApiService } from '@hospitality-bot/shared/utils';
 import { Observable } from 'rxjs/internal/Observable';
 import { TableValue } from '../constant/data-table';
-import {
-  RoomTypeFormData,
-  ServicesTypeValue,
-} from '../constant/form';
+import { RoomTypeFormData, ServicesTypeValue } from '../constant/form';
 import { MultipleRoom, SingleRoom } from '../models/room.model';
 import { QueryConfig } from '../types/room';
 import {
@@ -86,14 +83,14 @@ export class RoomService extends ApiService {
 
   updateRoomStatus(
     entityId: string,
-    data: { rooms: [{ id: string; status: RoomStatus }] }
+    data: { room: { id: string; status: RoomStatus } }
   ): Observable<RoomResponse> {
     return this.patch(`/api/v1/entity/${entityId}/inventory?type=ROOM`, data);
   }
 
   updateRoomTypeStatus(
     entityId: string,
-    data: { id: string; status: boolean }
+    data: { roomType: { id: string; status: boolean } }
   ): Observable<RoomTypeResponse> {
     return this.patch(
       `/api/v1/entity/${entityId}/inventory?type=ROOM_TYPE`,
@@ -119,7 +116,7 @@ export class RoomService extends ApiService {
     return this.get(`/api/v1/entity/${entityId}/inventory/${roomId}?type=ROOM`);
   }
 
-  exportCSV(entityId: string , config?: QueryConfig) {
+  exportCSV(entityId: string, config?: QueryConfig) {
     return this.get(
       `/api/v1/entity/${entityId}/inventory/export${config.params ?? ''}`,
       { responseType: 'blob' }

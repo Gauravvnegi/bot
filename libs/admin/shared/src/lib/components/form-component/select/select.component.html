@@ -32,6 +32,7 @@
     [filterBy]="stopEmission ? 'label' : 'nothing'"
     [filterMatchMode]="stopEmission ? 'contains' : 'notEquals'"
     [resetFilterOnHide]="true"
+    [group]="isGroupOptions"
   >
     <ng-template let-option pTemplate="item">
       <div class="option-items" *ngIf="!option.hidden">
@@ -52,7 +53,7 @@
       </div>
     </ng-template>
 
-    <ng-template let-option pTemplate="selectedItem">
+    <ng-template let-option pTemplate="selectedItem" [ngClass]="">
       <div class="option-items">
         <div *ngIf="option.icon">
           <img
@@ -62,6 +63,15 @@
           />
         </div>
         <span class="option-label">{{ option.label }}</span>
+      </div>
+    </ng-template>
+
+    <ng-template let-group pTemplate="group">
+      <div class="option-items">
+        <div *ngIf="group.icon">
+          <img [src]="group.icon" class="selected-image" [alt]="group.label" />
+        </div>
+        <span class="option-label">{{ group.label }}</span>
       </div>
     </ng-template>
   </p-dropdown>

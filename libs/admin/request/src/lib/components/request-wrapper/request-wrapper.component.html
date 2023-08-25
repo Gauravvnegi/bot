@@ -42,6 +42,13 @@
   </div>
 </hospitality-bot-tab-header>
 
+  <hospitality-bot-tab-group
+  class="request-wrapper-tab"
+    [selectedIndex]="requestTabFilterIdx"
+    [listItems]="listByFilterItems"
+    (selectedTabChange)="onTabFilterChange($event)"
+  ></hospitality-bot-tab-group>
+
 <ng-container [ngSwitch]="tabFilterItems[tabFilterIdx]?.value">
   <ng-container *ngSwitchCase="'INHOUSE'">
     <div class="request-body">

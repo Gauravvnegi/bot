@@ -1,4 +1,4 @@
-import { Component, Output, EventEmitter } from '@angular/core';
+import { Component, Output, EventEmitter, Input } from '@angular/core';
 import { ControlContainer } from '@angular/forms';
 import { FormComponent } from '../form.components';
 
@@ -11,6 +11,8 @@ export class SelectComponent extends FormComponent {
   // menuClass = 'cdk-virtual-scroll-viewport';
   menuClass = 'p-dropdown-items-wrapper';
   searchInputClass = 'p-dropdown-filter';
+  
+  @Input() isGroupOptions: boolean = false; // To group options
 
   @Output() itemSelection: EventEmitter<any> = new EventEmitter<any>();
 

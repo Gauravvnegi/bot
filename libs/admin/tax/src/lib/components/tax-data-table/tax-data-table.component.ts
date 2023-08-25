@@ -108,6 +108,7 @@ export class TaxDataTableComponent extends BaseDatatableComponent
         {
           offset: this.first,
           limit: this.rowsPerPage,
+          entityId: this.entityId,
         },
       ]),
     };

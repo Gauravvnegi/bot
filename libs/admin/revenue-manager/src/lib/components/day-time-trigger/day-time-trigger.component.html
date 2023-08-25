@@ -12,11 +12,11 @@
           <p-accordionTab [selected]="i == 0">
             <p-header>
               <div class="accordion-header">
-                <div class="title">
+                <div class="title item-center">
                   <div>
                     {{ triggerFG.get('name').value || 'Time Based Trigger' }}
                   </div>
-                  <div class="date">
+                  <div class="date item-center">
                     <span *ngIf="triggerFG.get('fromDate').value; else empty">{{
                       triggerFG.get('fromDate').value | date: 'dd/MM/yyyy'
                     }}</span>
@@ -24,10 +24,16 @@
                     <span *ngIf="triggerFG.get('toDate').value; else empty">{{
                       triggerFG.get('toDate').value | date: 'dd/MM/yyyy'
                     }}</span>
+                    <hospitality-bot-toggle-switch-with-label
+                      class="toggle"
+                      [isToggleOn]="triggerFG.get('status')?.value"
+                      (onToggleSwitch)="triggerStatusChange($event, i)"
+                      click-stop-propagation
+                    ></hospitality-bot-toggle-switch-with-label>
                   </div>
                 </div>
                 <div class="status">
-                  <div>
+                  <!-- <div>
                     Status: {{ triggerFG.get('status').value ? 'On' : 'Off' }}
                   </div>
                   <div click-stop-propagation>
@@ -37,7 +43,7 @@
                       onLabel=""
                       offLabel=""
                     ></hospitality-bot-toggle-switch>
-                  </div>
+                  </div> -->
                   <hospitality-bot-button
                     click-stop-propagation
                     label="Remove"

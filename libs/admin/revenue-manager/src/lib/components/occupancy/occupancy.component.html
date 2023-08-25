@@ -24,12 +24,6 @@
                   }}
                 </div>
               </div>
-              <hospitality-bot-toggle-switch-with-label
-                class="toggle"
-                [isToggleOn]="season.get('status')?.value"
-                (onToggleSwitch)="seasonStatusChange($event, seasonIndex)"
-                click-stop-propagation
-              ></hospitality-bot-toggle-switch-with-label>
               <div class="date">
                 <span *ngIf="season.get('fromDate').value; else empty">{{
                   season.get('fromDate').value | date: 'dd/MM/yyyy'
@@ -39,6 +33,12 @@
                   season.get('toDate').value | date: 'dd/MM/yyyy'
                 }}</span>
               </div>
+              <hospitality-bot-toggle-switch-with-label
+                class="toggle"
+                [isToggleOn]="season.get('status')?.value"
+                (onToggleSwitch)="seasonStatusChange($event, seasonIndex)"
+                click-stop-propagation
+              ></hospitality-bot-toggle-switch-with-label>
             </div>
             <hospitality-bot-button
               click-stop-propagation

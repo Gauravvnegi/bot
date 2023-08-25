@@ -26,6 +26,10 @@ export class DayTimeTriggerComponent {
     this.modifyLevelFGEvent.emit({ triggerFG, mode, index });
   }
 
+  triggerStatusChange($event, index) {
+    console.log('hii');
+  }
+
   get dynamicPricingControl() {
     return this.dynamicPricingFG.controls as Record<
       'timeFA',

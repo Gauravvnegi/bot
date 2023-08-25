@@ -17,6 +17,8 @@ $border-color: rgba(112, 112, 112, 0.35);
       font-size: 16px;
       color: $border-color;
       font-weight: 500;
+      display: flex;
+      gap: 10px;
     }
   }
   .status {

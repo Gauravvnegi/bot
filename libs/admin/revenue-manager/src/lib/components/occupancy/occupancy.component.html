@@ -78,8 +78,11 @@
               <div class="right form-block">
                 <div class="top form-block no-padding">
                   <hospitality-bot-from-to-date
-                    [parentFG]="season"
                     class="half-width"
+                    [controlNames]="{
+                      from: 'fromDate',
+                      to: 'toDate'
+                    }"
                   ></hospitality-bot-from-to-date>
 
                   <hospitality-bot-select

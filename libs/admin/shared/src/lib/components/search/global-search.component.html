@@ -19,7 +19,10 @@
       *ngIf="isClearShow" // ADD it into pi-times-circle icon
     -->
 
-    <i class="pi pi-times-circle search-icon" (click)="clearSearch()"></i>
+    <i
+      [ngClass]="!isInputEmpty ? 'pi pi-times-circle search-icon' : ''"
+      (click)="!isInputEmpty && clearSearch()"
+    ></i>
     <!-- <i
       class="pi pi-search search-bar-icon"
       (click)="searchBar.blur(); searchBar.focus()"

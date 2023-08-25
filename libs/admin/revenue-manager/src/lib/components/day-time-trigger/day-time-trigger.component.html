@@ -62,7 +62,10 @@
               </div>
               <div class="date-days-field">
                 <hospitality-bot-from-to-date
-                  [parentFG]="triggerFG"
+                  [controlNames]="{
+                    from: 'fromDate',
+                    to: 'toDate'
+                  }"
                 ></hospitality-bot-from-to-date>
                 <div class="days">
                   <hospitality-bot-checkbox-selector
@@ -102,11 +105,18 @@
                   style="display: flex; padding: 15px 0;"
                 >
                   <div style="width: 35%; padding-left: 30px;">
-                    <hospitality-bot-time-picker
-                      class="one-third-width"
-                      controlName="time"
-                      format="millisecond"
-                    ></hospitality-bot-time-picker>
+                    <hospitality-bot-from-to-date
+                      [controlNames]="{
+                        from: 'fromTime',
+                        to: 'toTime'
+                      }"
+                      [isTimeEnable]="true"
+                      [isTimeOnly]="true"
+                      [showIcon]="false"
+                      [props]="{
+                        showLabel: false
+                      }"
+                    ></hospitality-bot-from-to-date>
                   </div>
                   <div style="width: 15%; padding: 0 1rem;">
                     <hospitality-bot-input

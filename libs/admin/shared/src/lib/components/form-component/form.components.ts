@@ -45,6 +45,7 @@ export class FormComponent implements OnInit {
   menuOptions: Option[] = [];
   isDisabled = false;
   isLoading = false;
+  showLabel = true;
 
   /*** Class Input to for attach api event */
   menuClass: string;

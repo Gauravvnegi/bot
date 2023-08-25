@@ -157,6 +157,7 @@ export class RoomDataTableComponent extends BaseDatatableComponent
             (res) => {
               const roomList = new RoomList().deserialize(res);
               this.values = roomList.records;
+              debugger;
               // this.updateQuickReplyFilterCount(res.entityStateCounts);
               // this.updateTabFilterCount(res.entityTypeCounts, res.total);
               // this.updateTotalRecords();
@@ -184,12 +185,10 @@ export class RoomDataTableComponent extends BaseDatatableComponent
             (res) => {
               const roomTypesList = new RoomTypeList().deserialize(res);
               this.values = roomTypesList.records;
-
-              const baseRoomType = roomTypesList.records.filter(
-                (item) => item.isBaseRoomType
-              );
-
-              this.formService.baseRoomType.baseRoomPrice = baseRoomType[0].price;
+              // const baseRoomType = roomTypesList.records.filter(
+              //   (item) => item.isBaseRoomType
+              // );
+              // this.formService.baseRoomType.baseRoomPrice = baseRoomType[0].price;
               // this.updateQuickReplyFilterCount(res.entityStateCounts);
               // this.updateTabFilterCount(res.entityTypeCounts, res.total);
               // this.updateTotalRecords();
@@ -219,15 +218,21 @@ export class RoomDataTableComponent extends BaseDatatableComponent
     this.loading = true;
     if (status === 'OUT_OF_ORDER' || status === 'OUT_OF_SERVICE') {
       this.formService.roomStatus.next(status);
-      this.router.navigate([`/pages/inventory/room/${routes.addRoom}/single`], {
-        queryParams: { id: id },
-      });
+      this.router.navigate(
+        [`/pages/efrontdesk/room/${routes.addRoom}/single`],
+        {
+          queryParams: { id: id },
+        }
+      );
       return;
     }
     this.$subscription.add(
       this.roomService
         .updateRoomStatus(this.entityId, {
-          rooms: [{ id, status: status }],
+          room: {
+            id: id,
+            statusDetailsList: [{ isCurrentStatus: true, status: status }],
+          },
         })
         .subscribe(
           () => {

@@ -2,10 +2,7 @@ import { Injectable } from '@angular/core';
 import { ApiService } from '@hospitality-bot/shared/utils';
 import { Observable } from 'rxjs/internal/Observable';
 import { TableValue } from '../constant/data-table';
-import {
-  RoomTypeFormData,
-  ServicesTypeValue,
-} from '../constant/form';
+import { RoomTypeFormData, ServicesTypeValue } from '../constant/form';
 import { MultipleRoom, SingleRoom } from '../models/room.model';
 import { QueryConfig } from '../types/room';
 import {
@@ -86,7 +83,12 @@ export class RoomService extends ApiService {
 
   updateRoomStatus(
     entityId: string,
-    data: { rooms: [{ id: string; status: RoomStatus }] }
+    data: {
+      room: {
+        id: string;
+        statusDetailsList: [{ isCurrentStatus: boolean; status: RoomStatus }];
+      };
+    }
   ): Observable<RoomResponse> {
     return this.patch(`/api/v1/entity/${entityId}/inventory?type=ROOM`, data);
   }
@@ -110,7 +112,7 @@ export class RoomService extends ApiService {
 
   updateRoom(
     entityId: string,
-    data: { rooms: SingleRoom[] }
+    data: { room: SingleRoom }
   ): Observable<RoomResponse> {
     return this.put(`/api/v1/entity/${entityId}/inventory?type=ROOM`, data);
   }

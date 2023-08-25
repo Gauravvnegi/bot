@@ -20,7 +20,7 @@ export class RoomTypes {
     this.value = input.id;
     this.channels = [];
     this.price = input.price;
-    this.isBase = input.isBase;
+    this.isBase = input.isBaseRoomType;
     this.roomCount = input.roomCount;
     this.ratePlans =
       input.ratePlans

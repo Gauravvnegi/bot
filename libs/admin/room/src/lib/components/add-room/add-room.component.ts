@@ -28,7 +28,11 @@ import {
 } from '../../constant/form';
 import { roomStatusDetails } from '../../constant/response';
 import routes from '../../constant/routes';
-import { MultipleRoomList, SingleRoomList } from '../../models/room.model';
+import {
+  MultipleRoomList,
+  SingleRoom,
+  SingleRoomList,
+} from '../../models/room.model';
 import { RoomType, RoomTypeList } from '../../models/rooms-data-table.model';
 import { RoomService } from '../../services/room.service';
 import { AddRoomTypes, RoomTypeOption } from '../../types/room';
@@ -198,12 +202,7 @@ export class AddRoomComponent implements OnInit, OnDestroy {
   }
 
   registerRoomStateChangeListener() {
-    const {
-      fromDate,
-      toDate,
-      status,
-      foStatus,
-    } = this.statusQuoFormControls;
+    const { fromDate, toDate, status, foStatus } = this.statusQuoFormControls;
 
     foStatus.valueChanges.subscribe((res: RoomFoStatus) => {
       this.currentRoomState[1] = {
@@ -476,14 +475,12 @@ export class AddRoomComponent implements OnInit, OnDestroy {
     this.$subscription.add(
       this.roomService
         .updateRoom(this.entityId, {
-          rooms: [
-            new SingleRoomList().deserialize({
-              id: this.roomId,
-              removeFeatures: removeFeatures,
-              ...data,
-              statusDetails: [{ ...statusData, isCurrentStatus: true }],
-            }).list[0],
-          ],
+          room: new SingleRoom().deserialize({
+            id: this.roomId,
+            removeFeatures: removeFeatures,
+            ...data,
+            statusDetailsList: [{ ...statusData, isCurrentStatus: true }],
+          }),
         })
         .subscribe(
           (res) => {

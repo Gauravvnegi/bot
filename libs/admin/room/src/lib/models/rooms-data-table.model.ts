@@ -126,7 +126,7 @@ export class RoomType {
       input.pricingDetails?.base;
     this.currency = input.currency ?? '';
     this.ratePlans = input.ratePlans;
-    this.isBaseRoomType = input.isBaseRoomType ?? true; // TODO: need to add from BE
+    this.isBaseRoomType = input.isBaseRoomType ?? null; // TODO: need to add from BE
     return this;
   }
 }

@@ -5,13 +5,16 @@ import {
   StaticPricingMod,
 } from '../constant/form';
 import { BehaviorSubject } from 'rxjs';
+import { RoomType } from '../models/rooms-data-table.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class FormService {
   roomStatus = new BehaviorSubject<string>(null);
-  baseRoomType: BaseRoomType;
+
+  baseRoomType: RoomType;
+  isBaseRoomType: boolean = false;
   
   getRoomTypeModData(
     roomTypeData: RoomTypeFormData,

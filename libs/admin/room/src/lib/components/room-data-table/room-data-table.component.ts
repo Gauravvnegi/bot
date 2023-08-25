@@ -157,7 +157,6 @@ export class RoomDataTableComponent extends BaseDatatableComponent
             (res) => {
               const roomList = new RoomList().deserialize(res);
               this.values = roomList.records;
-              debugger;
               // this.updateQuickReplyFilterCount(res.entityStateCounts);
               // this.updateTabFilterCount(res.entityTypeCounts, res.total);
               // this.updateTotalRecords();
@@ -185,10 +184,19 @@ export class RoomDataTableComponent extends BaseDatatableComponent
             (res) => {
               const roomTypesList = new RoomTypeList().deserialize(res);
               this.values = roomTypesList.records;
-              // const baseRoomType = roomTypesList.records.filter(
-              //   (item) => item.isBaseRoomType
-              // );
-              // this.formService.baseRoomType.baseRoomPrice = baseRoomType[0].price;
+              const baseRoomType = roomTypesList.records.filter(
+                (item) => item.isBaseRoomType
+              );
+              if (baseRoomType) {
+                (this.formService.baseRoomType = baseRoomType[0]),
+                  (this.formService.isBaseRoomType =
+                    baseRoomType[0].isBaseRoomType);
+              } else if (!this.values.length) {
+                this.formService.isBaseRoomType = true;
+              } else {
+                // Base room type to true when there is not baseRoomType
+                this.formService.isBaseRoomType = false;
+              }
               // this.updateQuickReplyFilterCount(res.entityStateCounts);
               // this.updateTabFilterCount(res.entityTypeCounts, res.total);
               // this.updateTotalRecords();

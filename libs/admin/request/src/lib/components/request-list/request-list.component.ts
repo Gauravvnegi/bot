@@ -102,6 +102,7 @@ export class RequestListComponent implements OnInit, OnDestroy {
             journeyType: this.entityType,
             actionType: this.tabFilterItems[this.tabFilterIdx]?.value,
             offset: 0,
+            sort: 'updated',
             limit:
               this.listData && this.listData.length > 10
                 ? this.listData.length
@@ -227,6 +228,8 @@ export class RequestListComponent implements OnInit, OnDestroy {
           offset,
           limit,
           journeyType: this.entityType,
+          sort: 'updated',
+
           actionType: this.tabFilterItems[this.tabFilterIdx].value,
         },
       ]).subscribe((response) => {
@@ -242,6 +245,9 @@ export class RequestListComponent implements OnInit, OnDestroy {
             ).values(),
           ];
         this.totalData = response.total;
+        clearInterval(this.timeInterval);
+        this.timeLeft = this.listData.map((item) => item.timeLeft);
+        this.startTimeLeftTimer();
         this.initTabFilter(response.entityStateCounts, response.total);
         this.loading = false;
       })

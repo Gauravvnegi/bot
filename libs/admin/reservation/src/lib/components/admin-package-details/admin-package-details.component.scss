@@ -53,6 +53,10 @@
   font-weight: $bolder;
 }
 
+.paid-wrapper {
+  margin-bottom: 15px;
+}
+
 .special-request-wrapper {
   @include flex-space-between-cen-Algn;
   margin: 20px 0;

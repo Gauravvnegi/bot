@@ -115,7 +115,7 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
       endDay: ['', [Validators.required]],
       from: ['', [Validators.required]],
       to: ['', [Validators.required]],
-      address: [{}, [Validators.required]],
+      address: ['', [Validators.required]],
       imageUrl: [[], [Validators.required]],
       description: [''],
       serviceIds: [[]],

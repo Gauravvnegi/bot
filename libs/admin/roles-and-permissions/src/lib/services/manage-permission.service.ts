@@ -125,8 +125,11 @@ export class ManagePermissionService extends ApiService {
     return this.put(`/api/v1/user/${data.id}`, data);
   }
 
-  updateRolesStatus(userId: string, statusData) {
-    return this.patch(`/api/v1/user/${userId}`, statusData);
+  updateRolesStatus(userId: string, statusData, config: QueryConfig) {
+    return this.patch(
+      `/api/v1/user/${userId}${config?.queryObj ?? ''}`,
+      statusData
+    );
   }
 
   getUserJobDetails(userId: string): Observable<any> {

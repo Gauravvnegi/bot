@@ -25,7 +25,7 @@ export class NotificationService extends ApiService {
     status: boolean
   ) {
     return this.patch(
-      `/api/v1/user/${userId}/push-notification-setting/${settingId}?status=${status}`,
+      `/api/v1/user/${userId}/settings/${settingId}?status=${status}`,
       {}
     );
   }

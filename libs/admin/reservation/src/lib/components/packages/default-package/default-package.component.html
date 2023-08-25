@@ -54,11 +54,11 @@
       <p class="status">
         Status :&nbsp;
         <ng-container [ngSwitch]="paidAmenityFG.get('status').value">
-          <b *ngSwitchCase="'COMPLETED'" class="status-text-success">
-            COMPLETED
+          <b *ngSwitchCase="'ACCEPT'" class="status-text-success">
+            ACCEPT
           </b>
-          <b *ngSwitchCase="'FAILED'" class="status-text-reject">
-            FAILED
+          <b *ngSwitchCase="'REJECT'" class="status-text-reject">
+            REJECT
           </b>
           <b *ngSwitchCase="'INITIATED'" class="status-text-initiate">
             INITIATED

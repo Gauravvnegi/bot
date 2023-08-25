@@ -95,7 +95,7 @@ export class RoomService extends ApiService {
 
   updateRoomTypeStatus(
     entityId: string,
-    data: { id: string; status: boolean }
+    data: { roomType: { id: string; status: boolean } }
   ): Observable<RoomTypeResponse> {
     return this.patch(
       `/api/v1/entity/${entityId}/inventory?type=ROOM_TYPE`,

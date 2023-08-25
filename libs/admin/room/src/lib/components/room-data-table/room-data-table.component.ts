@@ -262,8 +262,10 @@ export class RoomDataTableComponent extends BaseDatatableComponent
     this.$subscription.add(
       this.roomService
         .updateRoomTypeStatus(this.entityId, {
-          id,
-          status,
+          roomType: {
+            id: id,
+            status: status,
+          },
         })
         .subscribe(
           () => this.getDataTableValue(),

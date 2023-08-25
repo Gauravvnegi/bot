@@ -71,12 +71,12 @@ export class DynamicPricingComponent implements OnInit {
 
   getTriggerFG(data?: any): FormGroup {
     const triggerFG = this.fb.group({
-      name: [''],
-      fromDate: [''],
-      toDate: [''],
-      selectedDays: [[]],
+      name: ['', [Validators.required]],
+      fromDate: ['', [Validators.required]],
+      toDate: ['', [Validators.required]],
+      selectedDays: [[], [Validators.required]],
       levels: this.fb.array([this.getLevelFG()]),
-      status: [true],
+      status: [true, [Validators.required]],
     });
     if (data) triggerFG.patchValue(data);
     return triggerFG;
@@ -84,10 +84,11 @@ export class DynamicPricingComponent implements OnInit {
 
   getLevelFG(): FormGroup {
     return this.fb.group({
-      time: [''],
-      occupancyLowerLimit: [''],
-      occupancyUpperLimit: [''],
-      discount: [''],
+      fromTime: ['', [Validators.required]],
+      toTime: ['', [Validators.required]],
+      occupancyLowerLimit: ['', [Validators.required]],
+      occupancyUpperLimit: ['', [Validators.required]],
+      discount: ['', [Validators.required]],
     });
   }
 

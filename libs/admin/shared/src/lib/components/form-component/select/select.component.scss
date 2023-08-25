@@ -117,3 +117,9 @@
     }
   }
 }
+
+:host ::ng-deep .p-dropdown-panel .p-dropdown-items .p-dropdown-item-group {
+  background-color: $background-grey;
+  font-weight: 500;
+  color: black !important;
+}

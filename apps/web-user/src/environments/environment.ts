@@ -7,11 +7,12 @@ export const environment = {
   ...defaultEnvironment,
   production: false,
   name: 'default',
-  // base_url: 'https://stg.api.botshot.ai:31956',
-  base_url: 'https://dev.api.botshot.ai:8443',
+  // name: 'dev',
+  base_url: 'https://stg.api.botshot.ai:31956',
+  // base_url: 'https://dev.api.botshot.ai:8443',
   // base_url: 'https://api.botshot.in:8443',
   // host_url: 'localhost:4200',
-  host_url: 'https://dev.botshot.ai',
+  host_url: 'https://stg.botshot.ai',
   // host_url: 'https://stg.web.botshot.ai'
 };
 

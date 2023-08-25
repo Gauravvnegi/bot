@@ -38,7 +38,7 @@ export class NotificationDetailComponent {
         this.notificationService.$reservationNotification.next(
           data['reservationId']
         );
-        this.router.navigate(['pages/efrontdesk/request']);
+        this.router.navigate(['pages/efrontdesk/complaint']);
         break;
 
       case 'FEEDBACK':

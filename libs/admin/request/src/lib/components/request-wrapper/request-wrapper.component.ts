@@ -43,6 +43,18 @@ export class RequestWrapperComponent implements OnInit, OnDestroy {
   ];
 
   tabFilterIdx = 0;
+  requestTabFilterIdx = 0;
+
+  listByFilterItems = [
+    {
+      label: 'All',
+      value: 'ALL',
+    },
+    {
+      label: 'Focused',
+      value: 'FOCUSED',
+    },
+  ];
 
   selectedIndex = 0;
   buttonConfig = [
@@ -69,6 +81,12 @@ export class RequestWrapperComponent implements OnInit, OnDestroy {
    */
   onSelectedTabFilterChange(event: MatTabChangeEvent): void {
     this.tabFilterIdx = event.index;
+  }
+
+  onTabFilterChange(event) {
+    this._requestService.requestListFilter.next(
+      this.listByFilterItems[event.index].value
+    );
   }
 
   openGuestInfo(event) {

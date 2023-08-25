@@ -40,6 +40,12 @@ export class GlobalSearchComponent extends FormComponent {
     this.controlContainer.control.get(this.controlName).setValue('');
   }
 
+  get isInputEmpty() {
+    return (
+      this.controlContainer.control.get(this.controlName).value.length == 0
+    );
+  }
+
   suggestClick(key: MemberSortTypes) {
     this.selectedItem = key;
     this.onSuggestClick.emit(key);

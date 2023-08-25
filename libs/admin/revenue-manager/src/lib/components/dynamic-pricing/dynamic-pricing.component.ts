@@ -11,8 +11,18 @@ import {
   Validators,
 } from '@angular/forms';
 import { Revenue } from '../../constants/revenue-manager.const';
-import { DynamicPricingForm } from '../../types/dynamic-pricing.types';
-import { RoomTypes } from '../../models/bar-price.model';
+import {
+  ConfigType,
+  DynamicPricingForm,
+} from '../../types/dynamic-pricing.types';
+import { RoomTypes } from 'libs/admin/channel-manager/src/lib/models/bulk-update.models';
+import { DynamicPricingService } from '../../services/dynamic-pricing.service';
+import { Subscription } from 'rxjs';
+import {
+  AdminUtilityService,
+  QueryConfig,
+} from '@hospitality-bot/admin/shared';
+import { SnackBarService } from '@hospitality-bot/shared/material';
 
 @Component({
   selector: 'hospitality-bot-dynamic-pricing',
@@ -32,12 +42,18 @@ export class DynamicPricingComponent implements OnInit {
   itemList: MenuItem[] = [
     { label: 'Occupancy' },
     { label: 'Day/Time Trigger' },
-    { label: 'Inventory Reallocation' },
+    // { label: 'Inventory Reallocation' },
   ];
+  loading = false;
+  $subscription = new Subscription();
+
   constructor(
     private barPriceService: BarPriceService,
+    private dynamicPricingService: DynamicPricingService,
+    private adminUtilityService: AdminUtilityService,
     private fb: FormBuilder,
-    private globalFilter: GlobalFilterService
+    private globalFilter: GlobalFilterService,
+    private snackbarService: SnackBarService
   ) {}
 
   ngOnInit(): void {
@@ -63,7 +79,7 @@ export class DynamicPricingComponent implements OnInit {
     const data: DynamicPricingForm = {
       occupancyFA: this.fb.array([]),
       inventoryAllocationFA: this.fb.array([this.getInventoryAllocationFG()]),
-      timeFA: this.fb.array([this.getTriggerFG()]),
+      timeFA: this.fb.array([]),
     };
 
     this.dynamicPricingFG = this.fb.group(data);
@@ -71,12 +87,14 @@ export class DynamicPricingComponent implements OnInit {
 
   getTriggerFG(data?: any): FormGroup {
     const triggerFG = this.fb.group({
-      name: [''],
-      fromDate: [''],
-      toDate: [''],
-      selectedDays: [[]],
-      levels: this.fb.array([this.getLevelFG()]),
-      status: [true],
+      id: [],
+      name: ['', [Validators.required]],
+      fromDate: ['', [Validators.required]],
+      toDate: ['', [Validators.required]],
+      type: ['add'],
+      selectedDays: [, [Validators.required]],
+      hotelConfig: this.fb.array([]),
+      status: [true, [Validators.required]],
     });
     if (data) triggerFG.patchValue(data);
     return triggerFG;
@@ -84,10 +102,11 @@ export class DynamicPricingComponent implements OnInit {
 
   getLevelFG(): FormGroup {
     return this.fb.group({
-      time: [''],
-      occupancyLowerLimit: [''],
-      occupancyUpperLimit: [''],
-      discount: [''],
+      fromTime: ['', [Validators.required]],
+      toTime: ['', [Validators.required]],
+      start: ['', [Validators.min(1), Validators.required]],
+      end: ['', [Validators.min(1), Validators.required]],
+      discount: ['', [Validators.required]],
     });
   }
 
@@ -139,7 +158,15 @@ export class DynamicPricingComponent implements OnInit {
   modifyTriggerFG(event: { mode: string; index?: number }): void {
     if (event.mode == Revenue.add)
       this.dynamicPricingControl.timeFA.controls.push(this.getTriggerFG());
-    else this.dynamicPricingControl.timeFA.removeAt(event.index);
+    else {
+      const dayTimeFormArray = this.dynamicPricingControl.timeFA;
+      this.removeDynamicPricing(
+        dayTimeFormArray.at(event.index).get('id').value,
+        dayTimeFormArray,
+        event.index,
+        'DAY_TIME_TRIGGER'
+      );
+    }
   }
 
   modifyLevelFG(event: {
@@ -147,7 +174,7 @@ export class DynamicPricingComponent implements OnInit {
     mode: string;
     index?: number;
   }): void {
-    const levelFA = event.triggerFG.get('levels') as FormArray;
+    const levelFA = event.triggerFG?.get('hotelConfig') as FormArray;
     if (event.mode == Revenue.add) levelFA.controls.push(this.getLevelFG());
     else levelFA.removeAt(event.index);
   }
@@ -165,5 +192,44 @@ export class DynamicPricingComponent implements OnInit {
 
   get dynamicPricingInstance(): DynamicPricingComponent {
     return this;
+  }
+
+  removeDynamicPricing(
+    hotelId: string,
+    formArray: FormArray,
+    index: number,
+    type: ConfigType
+  ) {
+    this.loading = true;
+    this.$subscription.add(
+      this.dynamicPricingService.deleteDynamicPricing(hotelId).subscribe(
+        (res) => {
+          this.snackbarService.openSnackBarAsText(
+            type.split('_').join(' ') + ` deleted Successfully.`,
+            '',
+            { panelClass: 'success' }
+          );
+          formArray.removeAt(index);
+        },
+        (error) => {
+          this.loading = false;
+        },
+        this.handleFinal
+      )
+    );
+  }
+
+  getQueryConfig(type: ConfigType): QueryConfig {
+    return {
+      params: this.adminUtilityService.makeQueryParams([
+        {
+          type: type,
+        },
+      ]),
+    };
+  }
+
+  handleFinal() {
+    this.loading = false;
   }
 }

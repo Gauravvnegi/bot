@@ -2,14 +2,22 @@ import { Injectable } from '@angular/core';
 import { QueryConfig } from '@hospitality-bot/admin/shared';
 import { ApiService } from '@hospitality-bot/shared/utils';
 import { Observable } from 'rxjs';
-import { ChannelManagerResponse } from '../types/response.type';
+import {
+  ChannelManagerResponse,
+  UpdateInventoryResponse,
+  UpdateRatesResponse,
+} from '../types/response.type';
 
 @Injectable()
 export class ChannelManagerService extends ApiService {
-  getChannelManagerDetails(
+  getChannelManagerDetails<
+    T extends UpdateInventoryResponse | UpdateRatesResponse
+  >(
     entityId,
     config?: QueryConfig
-  ): Observable<{ roomType: ChannelManagerResponse }> {
+  ): Observable<{
+    roomTypes: T[];
+  }> {
     return this.get(`/api/v1/entity/${entityId}/inventory${config?.params}`);
   }
 
@@ -26,7 +34,7 @@ export class ChannelManagerService extends ApiService {
 
   getRoomDetails(entityId) {
     return this.get(
-      `/api/v1/entity/${entityId}/inventory?roomTypeStatus=true&type=ROOM_TYPE&offset=0&limit=${100}`
+      `/api/v1/entity/${entityId}/inventory?roomTypeStatus=true&type=ROOM_TYPE&offset=0&limit=${200}`
     );
   }
 

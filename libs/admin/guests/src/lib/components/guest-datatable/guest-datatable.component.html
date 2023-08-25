@@ -46,7 +46,7 @@
   (onHeaderCheckboxToggle)="onToggleSelectAll($event)"
   *ngIf="!isEmpty; else emptyTable"
 >
-  <ng-template pTemplate="caption">
+  <!-- <ng-template pTemplate="caption">
     <div class="caption__wrapper" [formGroup]="tableFG">
       <ng-container [ngTemplateOutlet]="tabFilter"> </ng-container>
       <hospitality-bot-filter-chips
@@ -57,7 +57,7 @@
       >
       </hospitality-bot-filter-chips>
     </div>
-  </ng-template>
+  </ng-template> -->
 
   <ng-template pTemplate="emptymessage">
     <tr hospitality-bot-empty-view [noOfColumns]="cols.length"></tr>

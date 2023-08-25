@@ -122,7 +122,15 @@
                       [isTimeOnly]="true"
                       [showIcon]="false"
                       [props]="{
-                        showLabel: false
+                        showLabel: false,
+                        preErrorMessages: {
+                          required: 'This is required field',
+                          min: 'Start should be < End.'
+                        },
+                        postErrorMessages: {
+                          required: 'This is required field',
+                          min: 'End should be > Start.'
+                        }
                       }"
                     ></hospitality-bot-from-to-date>
                   </div>

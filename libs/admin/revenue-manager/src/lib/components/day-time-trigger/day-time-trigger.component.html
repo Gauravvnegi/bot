@@ -93,9 +93,11 @@
               <p-table>
                 <ng-template pTemplate="header">
                   <tr>
-                    <th style="width: 35%; padding-left: 30px;">Time</th>
-                    <th style="width: 15%;">Occupancy<</th>
-                    <th style="width: 20%;">Occupancy>=</th>
+                    <th style="width: 19%; padding-left: 30px;">From Time</th>
+                    <th style="width: 17.5%; padding-left: 30px;">To Time</th>
+                    <th style="width: 15%;">Start</th>
+                    <th style="width: 5%;"></th>
+                    <th style="width: 17.5%;">End</th>
                     <th style="width: 30%;">Discount/Markup</th>
                   </tr>
                 </ng-template>
@@ -108,7 +110,7 @@
               >
                 <div
                   [formGroupName]="j"
-                  style="display: flex; padding: 15px 0;"
+                  style="display: flex; padding: 23px 0;"
                 >
                   <div style="width: 35%; padding-left: 30px;">
                     <hospitality-bot-from-to-date
@@ -124,17 +126,46 @@
                       }"
                     ></hospitality-bot-from-to-date>
                   </div>
-                  <div style="width: 15%; padding: 0 1rem;">
-                    <hospitality-bot-input
+                  <div style="width: 35%; padding: 0 1rem;" class="no-margin">
+                    <hospitality-bot-prefix-field
+                      class="one-fourth-width"
+                      preControlName="start"
+                      postControlName="end"
+                      preFieldType="input"
+                      postFieldType="input"
+                      [defaultProps]="{
+                        pre: {
+                          placeholder: 'Start',
+                          type: 'number',
+                          errorMessages: {
+                            required: 'This is required field',
+                            min: 'Start should be <= End.'
+                          }
+                        },
+                        post: {
+                          placeholder: 'End',
+                          type: 'number',
+                          errorMessages: {
+                            required: 'This is required field',
+                            min: 'End should be >= Start.'
+                          }
+                        }
+                      }"
+                      [settings]="{
+                        layout: 'dashed'
+                      }"
+                    >
+                    </hospitality-bot-prefix-field>
+                    <!-- <hospitality-bot-input
                       class="full-width"
                       controlName="occupancyLowerLimit"
                       [props]="{
                         placeholder: 'Enter',
                         type: 'number'
                       }"
-                    ></hospitality-bot-input>
+                    ></hospitality-bot-input> -->
                   </div>
-                  <div style="width: 20%; padding: 0 1rem;">
+                  <!-- <div style="width: 20%; padding: 0 1rem;">
                     <hospitality-bot-input
                       class="full-width"
                       controlName="occupancyUpperLimit"
@@ -143,7 +174,7 @@
                         type: 'number'
                       }"
                     ></hospitality-bot-input>
-                  </div>
+                  </div> -->
                   <div
                     style="
                       width: 30%;

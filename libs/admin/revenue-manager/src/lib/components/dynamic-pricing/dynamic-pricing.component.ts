@@ -103,8 +103,8 @@ export class DynamicPricingComponent implements OnInit {
     return this.fb.group({
       fromTime: ['', [Validators.required]],
       toTime: ['', [Validators.required]],
-      occupancyLowerLimit: ['', [Validators.required]],
-      occupancyUpperLimit: ['', [Validators.required]],
+      start: ['', [Validators.required]],
+      end: ['', [Validators.required]],
       discount: ['', [Validators.required]],
     });
   }

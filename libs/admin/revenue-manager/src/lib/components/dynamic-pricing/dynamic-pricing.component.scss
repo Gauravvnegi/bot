@@ -21,4 +21,10 @@ $border-color: rgba(112, 112, 112, 0.35);
   .p-accordion .p-accordion-header .p-accordion-header-link {
     padding: 0.6rem 1.5rem;
   }
+  .no-margin {
+    margin: 0;
+    .main {
+      margin: 0;
+    }
+  }
 }

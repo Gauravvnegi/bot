@@ -39,7 +39,7 @@ export class DynamicPricingService extends ApiService {
     );
   }
 
-  deleteDynamicPricing(entityId: string, deleteId: string) {
+  deleteDynamicPricing(deleteId: string) {
     return this.delete(
       `/api/v1/revenue/dynamic-pricing-configuration/${deleteId}`
     );

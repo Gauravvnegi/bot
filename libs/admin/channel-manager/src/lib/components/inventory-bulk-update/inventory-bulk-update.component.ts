@@ -133,7 +133,7 @@ export class InventoryBulkUpdateComponent implements OnInit {
     this.$subscription.add(
       this.channelManagerService
         .updateChannelManager(
-          { updates: data },
+          { inventoryList: data },
           this.entityId,
           this.getQueryConfig()
         )

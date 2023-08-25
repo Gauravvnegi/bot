@@ -241,7 +241,7 @@ export class UpdateRates {
 
     // filter data who haven't exist any rate plans
     return {
-      updates: updates.filter((item) =>
+      inventoryList: updates.filter((item) =>
         type === 'submit-form' ? item.rates.length > 0 : true
       ),
     };

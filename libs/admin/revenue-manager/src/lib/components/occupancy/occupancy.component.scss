@@ -68,6 +68,7 @@ $border-color: rgba(112, 112, 112, 0.35);
     .occupancy {
       display: flex;
       justify-content: space-around;
+      border-radius: unset;
       &-header {
         font-weight: 600;
         font-stretch: normal;
@@ -106,6 +107,10 @@ $border-color: rgba(112, 112, 112, 0.35);
     .pi-chevron-down:before {
       color: white;
     }
+
+    .p-accordion .p-accordion-tab {
+      box-shadow: unset;
+    }
   }
   .p-accordion .p-accordion-header .p-accordion-header-link {
     padding: 0.6rem 1.5rem;
@@ -128,19 +133,10 @@ $border-color: rgba(112, 112, 112, 0.35);
 }
 
 .link {
-  width: fit-content;
-  margin-left: auto;
   cursor: pointer;
   font-size: 16px;
   font-weight: 600;
   color: #5f38f9;
-  padding: 10px 20px;
-}
-
-.action {
-  display: flex;
-  justify-content: center;
-  padding: 20px;
 }
 
 .no-padding {

@@ -34,4 +34,8 @@ export class DayTimeTriggerComponent {
       timeFA: FormArray;
     };
   }
+
+  handleSave(form: FormGroup) {
+    console.log(form);
+  }
 }

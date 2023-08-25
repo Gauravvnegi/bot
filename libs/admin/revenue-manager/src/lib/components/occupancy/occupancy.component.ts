@@ -189,10 +189,7 @@ export class OccupancyComponent implements OnInit {
         const season = this.dynamicPricingControl.occupancyFA;
         this.$subscription.add(
           this.dynamicPricingService
-            .deleteDynamicPricing(
-              this.entityId,
-              season.at(index).get('id').value
-            )
+            .deleteDynamicPricing(season.at(index).get('id').value)
             .subscribe(
               (res) => {
                 this.snackbarService.openSnackBarAsText(

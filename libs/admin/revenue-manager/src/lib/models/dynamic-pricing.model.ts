@@ -1,4 +1,4 @@
-import { FormArray, FormGroup } from '@angular/forms';
+import { AbstractControl, FormArray, FormGroup } from '@angular/forms';
 import {
   ConfigItemType,
   ConfigRuleType,
@@ -14,6 +14,8 @@ import {
 } from '../types/dynamic-pricing.types';
 import { OccupancyComponent } from '../components/occupancy/occupancy.component';
 import { RoomTypes } from 'libs/admin/channel-manager/src/lib/models/bulk-update.models';
+import { DayTimeTriggerComponent } from '../components/day-time-trigger/day-time-trigger.component';
+import { Revenue } from '../constants/revenue-manager.const';
 export class DynamicPricingFactory {
   static buildRequest(form: FormGroup, type: ConfigType, mode: ModeType) {
     let data:
@@ -27,7 +29,7 @@ export class DynamicPricingFactory {
             ? DynamicPricingFactory.getNewProperties(form)
             : DynamicPricingFactory.getChangedProperties(form);
         break;
-      case 'DATE_TIME_TRIGGER':
+      case 'DAY_TIME_TRIGGER':
         // add method for date time trigger
         break;
       case 'INVENTORY_REALLOCATION':
@@ -208,7 +210,7 @@ export class DynamicPricingFactory {
 
 export class DynamicPricingHandler {
   dataList: DynamicPricingForm[];
-  deserialize(input: DynamicPricingResponse, rooms: RoomTypes[]) {
+  deserialize(input: DynamicPricingResponse, rooms?: RoomTypes[]) {
     this.dataList =
       input.configDetails?.map((item) =>
         new DynamicPricingForm().deserialize(item, rooms)
@@ -257,18 +259,10 @@ export class DynamicPricingHandler {
         )
       );
       instance.listenChanges();
-
-      (season.get('hotelConfig') as FormArray).controls.forEach(
-        (hotelOccupancy: FormGroup, index) => {
-          const rule = item.hotelConfig[index];
-          rule &&
-            hotelOccupancy.patchValue({
-              id: rule.id,
-              start: rule.start,
-              end: rule.end,
-              discount: rule.discount,
-            });
-        }
+      this.mapHotelConfig(
+        season.get('hotelConfig') as FormArray,
+        item,
+        'OCCUPANCY'
       );
     } else {
       //filtering rooms who has at least one rule
@@ -313,6 +307,67 @@ export class DynamicPricingHandler {
       });
     }
   }
+
+  mapHotelConfig(
+    formArray: FormArray,
+    item: DynamicPricingForm,
+    type: ConfigType
+  ) {
+    formArray.controls.forEach((hotelOccupancy: FormGroup, index) => {
+      const rule = item.hotelConfig[index];
+      const triggerConfig =
+        type == 'DAY_TIME_TRIGGER'
+          ? {
+              fromTime: item.fromDate,
+              toTime: item.toDate,
+            }
+          : {};
+      rule &&
+        hotelOccupancy.patchValue({
+          id: rule.id,
+          start: rule.start,
+          end: rule.end,
+          discount: rule.discount,
+          ...triggerConfig,
+        });
+    });
+  }
+
+  mapDayTimeTrigger(
+    triggerIndex: number,
+    item: DynamicPricingForm,
+    instance: DayTimeTriggerComponent
+  ) {
+    instance.modifyTriggerFG(Revenue.add);
+    const triggerFG = instance.dynamicPricingControl.timeFA.at(
+      triggerIndex
+    ) as FormGroup;
+
+    triggerFG.patchValue({
+      id: item.id,
+      fromDate: item.fromDate,
+      toDate: item.toDate,
+      type: 'update',
+      name: item.name,
+      selectedDays: item.selectedDays,
+      status: item.status,
+    });
+
+    triggerFG.addControl(
+      'hotelConfig',
+      instance.fb.array(
+        Array.from({ length: item.hotelConfig.length }, () =>
+          instance.modifyLevelFG(triggerFG, Revenue.add)
+        )
+      )
+    );
+    instance.listenChanges(triggerFG);
+    this.mapHotelConfig(
+      triggerFG.get('hotelConfig') as FormArray,
+      item,
+      'DAY_TIME_TRIGGER'
+    );
+  }
 }
 
 export class DynamicPricingForm {
@@ -337,7 +392,7 @@ export class DynamicPricingForm {
     this.fromDate = input.fromDate;
     this.toDate = input.toDate;
     this.selectedDays = input.daysIncluded;
-    this.basePrice = rooms.find((item) => item.isBase).price;
+    this.basePrice = rooms && rooms.find((item) => item.isBase).price;
 
     const getRules = (configRules) => {
       return (
@@ -346,6 +401,8 @@ export class DynamicPricingForm {
           start: rule.occupancyStart,
           end: rule.occupancyEnd,
           discount: rule.discountOrMarkup.value,
+          fromTime: rule?.fromTimeInMillis,
+          toTime: rule?.toTimeInMillis,
         })) ?? []
       );
     };

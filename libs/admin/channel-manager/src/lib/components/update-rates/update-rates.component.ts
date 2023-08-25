@@ -636,7 +636,7 @@ export class UpdateRatesComponent implements OnInit {
           'dynamic-pricing'
         );
 
-        verticalData.updates.forEach((item, idx) => {
+        verticalData.inventoryList.forEach((item, idx) => {
           this.useFormControl.dynamicPricing
             .at(idx)
             .patchValue(

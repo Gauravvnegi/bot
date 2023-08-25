@@ -6,7 +6,8 @@
       [controlName]="controlNames.from"
       [label]="showLabel ? labels.from : ''"
       [props]="{
-        placeholder: 'Select From ' + (isTimeOnly ? 'Time' : 'Date')
+        placeholder: 'Select From ' + (isTimeOnly ? 'Time' : 'Date'),
+        errorMessages: preErrorMessages
       }"
       [settings]="{
         isTimeOnly: isTimeOnly,
@@ -23,7 +24,10 @@
       [ngClass]="className"
       [controlName]="controlNames.to"
       [label]="showLabel ? labels.to : ''"
-      [props]="{ placeholder: 'Select To ' + (isTimeOnly ? 'Time' : 'Date') }"
+      [props]="{
+        placeholder: 'Select To ' + (isTimeOnly ? 'Time' : 'Date'),
+        errorMessages: postErrorMessages
+      }"
       [settings]="{
         isTimeOnly: isTimeOnly,
         enableTime: isTimeEnable,

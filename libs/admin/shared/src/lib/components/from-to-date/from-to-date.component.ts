@@ -1,7 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ControlContainer, FormGroup } from '@angular/forms';
 import { FormComponent } from '../form-component/form.components';
-
 @Component({
   selector: 'hospitality-bot-from-to-date',
   templateUrl: './from-to-date.component.html',
@@ -25,6 +24,9 @@ export class FromToDateComponent extends FormComponent implements OnInit {
   @Input() isTimeEnable = false;
   @Input() isTimeOnly = false;
   @Input() showIcon = true;
+
+  preErrorMessages: Record<string, string>;
+  postErrorMessages: Record<string, string>;
 
   constructor(public controlContainer: ControlContainer) {
     super(controlContainer);

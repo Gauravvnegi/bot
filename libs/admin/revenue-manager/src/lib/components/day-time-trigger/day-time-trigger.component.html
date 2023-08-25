@@ -87,7 +87,7 @@
             </div>
             <div
               class="level-datatable"
-              formArrayName="levels"
+              formArrayName="hotelConfig"
               style="margin-top: 30px;"
             >
               <p-table>
@@ -104,7 +104,7 @@
               </p-table>
               <ng-container
                 *ngFor="
-                  let levelFG of triggerFG.get('levels')?.controls;
+                  let levelFG of triggerFG?.get('hotelConfig')?.controls;
                   let j = index
                 "
               >

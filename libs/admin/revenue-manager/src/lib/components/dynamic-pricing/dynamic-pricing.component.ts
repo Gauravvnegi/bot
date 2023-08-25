@@ -79,7 +79,7 @@ export class DynamicPricingComponent implements OnInit {
     const data: DynamicPricingForm = {
       occupancyFA: this.fb.array([]),
       inventoryAllocationFA: this.fb.array([this.getInventoryAllocationFG()]),
-      timeFA: this.fb.array([this.getTriggerFG()]),
+      timeFA: this.fb.array([]),
     };
 
     this.dynamicPricingFG = this.fb.group(data);
@@ -91,8 +91,9 @@ export class DynamicPricingComponent implements OnInit {
       name: ['', [Validators.required]],
       fromDate: ['', [Validators.required]],
       toDate: ['', [Validators.required]],
-      selectedDays: [[], [Validators.required]],
-      levels: this.fb.array([this.getLevelFG()]),
+      type: ['add'],
+      selectedDays: [, [Validators.required]],
+      hotelConfig: this.fb.array([]),
       status: [true, [Validators.required]],
     });
     if (data) triggerFG.patchValue(data);
@@ -103,8 +104,8 @@ export class DynamicPricingComponent implements OnInit {
     return this.fb.group({
       fromTime: ['', [Validators.required]],
       toTime: ['', [Validators.required]],
-      start: ['', [Validators.required]],
-      end: ['', [Validators.required]],
+      start: ['', [Validators.min(1), Validators.required]],
+      end: ['', [Validators.min(1), Validators.required]],
       discount: ['', [Validators.required]],
     });
   }
@@ -163,7 +164,7 @@ export class DynamicPricingComponent implements OnInit {
         dayTimeFormArray.at(event.index).get('id').value,
         dayTimeFormArray,
         event.index,
-        'DATE_TIME_TRIGGER'
+        'DAY_TIME_TRIGGER'
       );
     }
   }
@@ -173,7 +174,7 @@ export class DynamicPricingComponent implements OnInit {
     mode: string;
     index?: number;
   }): void {
-    const levelFA = event.triggerFG.get('levels') as FormArray;
+    const levelFA = event.triggerFG?.get('hotelConfig') as FormArray;
     if (event.mode == Revenue.add) levelFA.controls.push(this.getLevelFG());
     else levelFA.removeAt(event.index);
   }

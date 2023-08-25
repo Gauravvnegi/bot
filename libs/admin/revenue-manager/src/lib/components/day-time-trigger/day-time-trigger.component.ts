@@ -16,6 +16,7 @@ import {
 } from '@hospitality-bot/admin/shared';
 import { dayTimeResponse } from '../../constants/response.const';
 import { DynamicPricingHandler } from '../../models/dynamic-pricing.model';
+import { SnackBarService } from '@hospitality-bot/shared/material';
 
 @Component({
   selector: 'hospitality-bot-day-time-trigger',
@@ -45,6 +46,7 @@ export class DayTimeTriggerComponent {
   constructor(
     private dynamicPricingService: DynamicPricingService,
     private adminUtilityService: AdminUtilityService,
+    private snackbarService: SnackBarService,
     public fb: FormBuilder
   ) {}
 
@@ -103,6 +105,10 @@ export class DayTimeTriggerComponent {
     };
   }
 
+  /**
+   *
+   * @param form of Perticular the Day Time Trigger
+   */
   listenChanges(form: FormGroup) {
     const { hotelConfig } = form.controls;
     const levelsFA = hotelConfig as FormArray;
@@ -111,29 +117,36 @@ export class DayTimeTriggerComponent {
       let customError = { min: 'Start should be < End.' };
       start.valueChanges.subscribe((res) => {
         this.errorValidate(start, end, customError, 'first');
-        this.validateConfiguration(levelsFA);
+        DayTimeTriggerComponent.validateConfiguration(levelsFA);
       });
 
       end.valueChanges.subscribe((res) => {
         customError = { min: 'End Should be > Start' };
         this.errorValidate(start, end, customError, 'second');
-        this.validateConfiguration(levelsFA);
+        DayTimeTriggerComponent.validateConfiguration(levelsFA);
       });
 
       fromTime.valueChanges.subscribe((res) => {
         customError = { min: 'From Time should be < To Time' };
         this.errorValidate(fromTime, toTime, customError, 'first');
-        this.validateConfiguration(levelsFA);
+        DayTimeTriggerComponent.validateConfiguration(levelsFA);
       });
 
       toTime.valueChanges.subscribe((res) => {
         customError = { min: 'To Time should be > From Time' };
         this.errorValidate(fromTime, toTime, customError, 'second');
-        this.validateConfiguration(levelsFA);
+        DayTimeTriggerComponent.validateConfiguration(levelsFA);
       });
     });
   }
 
+  /**
+   *
+   * @param first control
+   * @param second control
+   * @param customError message of the error
+   * @param applyError in which side we want to apply error
+   */
   errorValidate(
     first: AbstractControl,
     second: AbstractControl,
@@ -158,38 +171,66 @@ export class DayTimeTriggerComponent {
     }
   }
 
-  validateConfiguration(formArray: FormArray) {
-    // TODO: Check all edge cases
-    console.log('validating...');
+  /**
+   *
+   * @param formArray should be the Array of the configuration
+   * @returns configuration is valid or not
+   */
+  static validateConfiguration(formArray: FormArray): boolean | null {
+    let collide = null;
     formArray.controls.forEach((form: FormGroup, index) => {
-      const { start, end, fromTime, toTime } = form.controls;
-      let timeCollide = false;
-      let occupancyCollide = false;
-      const collide = formArray.controls.find((item: FormGroup, itemIndex) => {
-        const innerFromTimeValue = +item.get('fromTime').value;
-        const innerStartValue = +item.get('start').value;
-        if (itemIndex != index) {
-          timeCollide =
-            +fromTime.value < innerFromTimeValue &&
-            +toTime.value > innerFromTimeValue;
+      if (!collide) {
+        const { start, end, fromTime, toTime } = form.controls;
+        let timeCollide = false;
+        let occupancyCollide = false;
+        collide = formArray.controls.find((item: FormGroup, itemIndex) => {
+          const innerFromTimeValue = +item.get('fromTime').value;
+          const innerStartValue = +item.get('start').value;
+          if (itemIndex != index) {
+            timeCollide =
+              +fromTime.value < innerFromTimeValue &&
+              +toTime.value > innerFromTimeValue;
 
-          occupancyCollide =
-            +start.value > innerStartValue && +end.value < innerStartValue;
-        }
-
-        return timeCollide || occupancyCollide;
-      });
-
-      if (collide) {
-        start.markAllAsTouched();
-        end.markAllAsTouched();
-        fromTime.markAllAsTouched();
-        toTime.markAllAsTouched();
+            if (timeCollide) {
+              occupancyCollide =
+                +start.value < innerStartValue && +end.value > innerStartValue;
+            }
+          }
+          return timeCollide || occupancyCollide;
+        });
       }
     });
+
+    if (collide) {
+      const { start, end, fromTime, toTime } = collide.controls;
+      start.setErrors({ collide: true });
+      end.setErrors({ collide: true });
+      fromTime.setErrors({ collide: true });
+      toTime.setErrors({ collide: true });
+      start.markAllAsTouched();
+      end.markAllAsTouched();
+      fromTime.markAllAsTouched();
+      toTime.markAllAsTouched();
+    } else {
+      formArray.controls.forEach((form: FormGroup) => {
+        const { start, end, fromTime, toTime } = form.controls;
+        start.markAsUntouched();
+        end.markAsUntouched();
+        fromTime.markAsUntouched();
+        toTime.markAsUntouched();
+      });
+    }
+    return collide ? true : false;
   }
 
   handleSave(form: FormGroup) {
+    if (!this.dynamicPricingService.triggerValidate(form)) {
+      form.markAllAsTouched();
+      this.snackbarService.openSnackBarAsText(
+        'Invalid form: Please fix errors'
+      );
+      return;
+    }
     console.log(form);
   }
 

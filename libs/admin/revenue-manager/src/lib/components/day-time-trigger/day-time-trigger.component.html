@@ -125,11 +125,13 @@
                         showLabel: false,
                         preErrorMessages: {
                           required: 'This is required field',
-                          min: 'Start should be < End.'
+                          min: 'From Time should be < To Time.',
+                          collide: 'Collide, Fix it !'
                         },
                         postErrorMessages: {
                           required: 'This is required field',
-                          min: 'End should be > Start.'
+                          min: 'To Time should be > From Time.',
+                          collide: 'Collide, Fix it !'
                         }
                       }"
                     ></hospitality-bot-from-to-date>
@@ -147,7 +149,8 @@
                           type: 'number',
                           errorMessages: {
                             required: 'This is required field',
-                            min: 'Start should be <= End.'
+                            min: 'Start should be <= End.',
+                            collide: 'Collide, Fix it !'
                           }
                         },
                         post: {
@@ -155,7 +158,8 @@
                           type: 'number',
                           errorMessages: {
                             required: 'This is required field',
-                            min: 'End should be >= Start.'
+                            min: 'End should be >= Start.',
+                            collide: 'Collide, Fix it !'
                           }
                         }
                       }"

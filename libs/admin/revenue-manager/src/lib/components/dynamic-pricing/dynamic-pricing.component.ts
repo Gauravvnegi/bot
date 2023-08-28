@@ -181,7 +181,9 @@ export class DynamicPricingComponent implements OnInit {
     else {
       const levelRemoveId = levelFA.at(event.index).value.id;
       levelRemoveId &&
-        (event.triggerFG.get('removedRules') as FormArray).push(levelRemoveId);
+        (event.triggerFG.get('removedRules') as FormArray).controls.push(
+          levelRemoveId
+        );
       levelFA.removeAt(event.index);
     }
   }

@@ -112,28 +112,25 @@ export class DayTimeTriggerComponent {
   listenChanges(form: FormGroup) {
     const { hotelConfig } = form.controls;
     const levelsFA = hotelConfig as FormArray;
+    let customError = { startLessthanEnd: true };
     levelsFA.controls.forEach((levelFG: FormGroup) => {
       const { start, end, fromTime, toTime } = levelFG.controls;
-      let customError = { min: 'Start should be < End.' };
       start.valueChanges.subscribe((res) => {
         this.errorValidate(start, end, customError, 'first');
         DayTimeTriggerComponent.validateConfiguration(levelsFA);
       });
 
       end.valueChanges.subscribe((res) => {
-        customError = { min: 'End Should be > Start' };
         this.errorValidate(start, end, customError, 'second');
         DayTimeTriggerComponent.validateConfiguration(levelsFA);
       });
 
       fromTime.valueChanges.subscribe((res) => {
-        customError = { min: 'From Time should be < To Time' };
         this.errorValidate(fromTime, toTime, customError, 'first');
         DayTimeTriggerComponent.validateConfiguration(levelsFA);
       });
 
       toTime.valueChanges.subscribe((res) => {
-        customError = { min: 'To Time should be > From Time' };
         this.errorValidate(fromTime, toTime, customError, 'second');
         DayTimeTriggerComponent.validateConfiguration(levelsFA);
       });
@@ -150,7 +147,7 @@ export class DayTimeTriggerComponent {
   errorValidate(
     first: AbstractControl,
     second: AbstractControl,
-    customError: { min: string },
+    customError: { startLessthanEnd: boolean },
     applyError: 'first' | 'second'
   ) {
     const condition = +first.value > +second.value;

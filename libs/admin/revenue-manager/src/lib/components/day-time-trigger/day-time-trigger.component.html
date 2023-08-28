@@ -134,15 +134,14 @@
                       postControlName="end"
                       preFieldType="input"
                       postFieldType="input"
-                      [preMin]="1"
-                      [postMin]="1"
                       [defaultProps]="{
                         pre: {
                           placeholder: 'Start',
                           type: 'number',
                           errorMessages: {
                             required: 'This is required field',
-                            min: 'Start should be <= End.',
+                            min: 'Minimum Value should be 1',
+                            startLessthanEnd: 'Start should be <= End.',
                             collide: 'Collide, Fix it !'
                           }
                         },
@@ -151,7 +150,8 @@
                           type: 'number',
                           errorMessages: {
                             required: 'This is required field',
-                            min: 'End should be >= Start.',
+                            min: 'Minimum Value should be 1',
+                            startLessthanEnd: 'End should be >= Start.',
                             collide: 'Collide, Fix it !'
                           }
                         }
@@ -161,25 +161,7 @@
                       }"
                     >
                     </hospitality-bot-prefix-field>
-                    <!-- <hospitality-bot-input
-                      class="full-width"
-                      controlName="occupancyLowerLimit"
-                      [props]="{
-                        placeholder: 'Enter',
-                        type: 'number'
-                      }"
-                    ></hospitality-bot-input> -->
                   </div>
-                  <!-- <div style="width: 20%; padding: 0 1rem;">
-                    <hospitality-bot-input
-                      class="full-width"
-                      controlName="occupancyUpperLimit"
-                      [props]="{
-                        placeholder: 'Enter',
-                        type: 'number'
-                      }"
-                    ></hospitality-bot-input>
-                  </div> -->
                   <div
                     style="
                       width: 30%;
@@ -200,13 +182,15 @@
                       ></hospitality-bot-input>
                     </div>
                     <div
-                      style="
-                        color: red;
-                        font-size: 25px;
-                        cursor: pointer;
-                        border-width: 2px;
+                      class="remove"
+                      [ngClass]="
+                        triggerFG.get('hotelConfig').controls.length < 2 &&
+                        'disable'
                       "
-                      (click)="modifyLevelFG(triggerFG, '', j)"
+                      (click)="
+                        triggerFG.get('hotelConfig').controls.length > 1 &&
+                          modifyLevelFG(triggerFG, '', j)
+                      "
                     >
                       &#10006;
                     </div>

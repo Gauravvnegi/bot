@@ -94,7 +94,7 @@ export class RequestStats {
 
     const colors = ['#beaeff', '#5f38f9', 'rgb(197, 197, 197)', '#5f38f9'];
     this.requestStats = requestStatKeys
-      .filter((key) => key !== 'CANCELED')
+      .filter((key) => key !== 'CANCELLED')
       .map((key, index) => {
         return {
           label: key === 'TIMEOUT' ? 'Timed-out' : convertToTitleCase(key),

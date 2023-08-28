@@ -137,7 +137,7 @@ export class DynamicPricingService extends ApiService {
       }
     };
 
-    validateControlPair(fromTime, toTime);
+    // validateControlPair(fromTime, toTime); // TODO: if require in future
     validateControlPair(start, end);
 
     if (submit) {

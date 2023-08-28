@@ -17,3 +17,6 @@ COPY --from=build-step /app/dist/apps/admin /usr/share/nginx/html
 COPY ./deploy/nginx.conf /etc/nginx/conf.d/default.conf
 EXPOSE 80
 
+
+
+

@@ -5,42 +5,30 @@ import {
   ConfigType,
   DynamicPricingRequest,
   OccupancyFormControlsType,
-  OccupancyUpdateRequestType,
   ModeType,
   DynamicPricingResponse,
   ConfigCategory,
   RoomsConfigType,
   OccupancyRuleType,
+  DynamicPricingUpdateRequestType,
 } from '../types/dynamic-pricing.types';
 import { OccupancyComponent } from '../components/occupancy/occupancy.component';
 import { RoomTypes } from 'libs/admin/channel-manager/src/lib/models/bulk-update.models';
 import { DayTimeTriggerComponent } from '../components/day-time-trigger/day-time-trigger.component';
 import { Revenue } from '../constants/revenue-manager.const';
-import { DateService } from '@hospitality-bot/shared/utils';
 export class DynamicPricingFactory {
   static buildRequest(form: FormGroup, type: ConfigType, mode: ModeType) {
     let data:
       | DynamicPricingRequest
-      | OccupancyUpdateRequestType
+      | DynamicPricingUpdateRequestType
       | Record<string, string>;
-    switch (type) {
-      case 'OCCUPANCY':
-        data =
-          mode === 'add'
-            ? DynamicPricingFactory.getNewProperties(form)
-            : DynamicPricingFactory.getChangedProperties(form);
-        break;
-      case 'DAY_TIME_TRIGGER':
-        // add method for date time trigger
-        break;
-      case 'INVENTORY_REALLOCATION':
-        // add method for date time INVENTORY REALLOCATION
-        break;
-    }
-
+    data =
+      mode === 'add'
+        ? DynamicPricingFactory.getNewProperties(form, type)
+        : DynamicPricingFactory.getChangedProperties(form, type);
     return data;
   }
-  static getNewProperties(form: FormGroup) {
+  static getNewProperties(form: FormGroup, type: ConfigType) {
     const {
       fromDate,
       toDate,
@@ -89,8 +77,8 @@ export class DynamicPricingFactory {
     } as DynamicPricingRequest;
   }
 
-  static getChangedProperties(formGroup: FormGroup) {
-    let requestData: OccupancyUpdateRequestType = {};
+  static getChangedProperties(formGroup: FormGroup, type: ConfigType) {
+    let requestData: DynamicPricingUpdateRequestType = {};
     let removedRulesIds = [];
     Object.keys(formGroup.controls).forEach(
       (name: OccupancyFormControlsType) => {
@@ -194,10 +182,10 @@ export class DynamicPricingFactory {
   }
 
   static getOccupancyRules(rule: FormGroup): ConfigRuleType {
-    const { id, discount, end, rate, start } = rule.controls;
+    const { id, discount, end, rate, start, fromTime, toTime } = rule.controls;
     const status = true; //TODO, Future dependent
     return {
-      id: id?.value ?? undefined,
+      ...(id?.value && { id: id.value }),
       occupancyStart: +start?.value,
       occupancyEnd: +end?.value,
       status: status ? 'ACTIVE' : 'INACTIVE',
@@ -205,6 +193,8 @@ export class DynamicPricingFactory {
         type: 'PERCENTAGE',
         value: +discount?.value,
       },
+      ...(fromTime?.value && { fromTimeInMillis: +fromTime.value }),
+      ...(toTime?.value && { toTimeInMillis: +toTime.value }),
     };
   }
 }
@@ -319,8 +309,8 @@ export class DynamicPricingHandler {
       const triggerConfig =
         type == 'DAY_TIME_TRIGGER'
           ? {
-              fromTime: rule.fromTime,
-              toTime: rule.toTime,
+              fromTime: rule?.fromTime,
+              toTime: rule?.toTime,
             }
           : {};
       rule &&
@@ -357,7 +347,7 @@ export class DynamicPricingHandler {
     triggerFG.addControl(
       'hotelConfig',
       instance.fb.array(
-        Array.from({ length: item.hotelConfig.length }, () =>
+        Array.from({ length: item.hotelConfig.length - 1 }, () =>
           instance.modifyLevelFG(triggerFG, Revenue.add)
         )
       )
@@ -398,12 +388,12 @@ export class DynamicPricingForm {
     const getRules = (configRules) => {
       return (
         configRules.map((rule) => ({
-          id: rule?.id,
+          ...(rule?.id && { id: rule.id }),
           start: rule.occupancyStart,
           end: rule.occupancyEnd,
           discount: rule.discountOrMarkup.value,
-          fromTime: rule?.fromTimeInMillis,
-          toTime: rule?.toTimeInMillis,
+          ...(rule?.fromTimeInMillis && { fromTime: rule.fromTimeInMillis }),
+          ...(rule?.toTimeInMillis && { toTime: rule.toTimeInMillis }),
         })) ?? []
       );
     };

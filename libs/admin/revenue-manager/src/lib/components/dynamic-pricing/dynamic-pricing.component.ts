@@ -87,14 +87,15 @@ export class DynamicPricingComponent implements OnInit {
 
   getTriggerFG(data?: any): FormGroup {
     const triggerFG = this.fb.group({
-      id: [],
+      hotelId: [this.entityId],
       name: ['', [Validators.required]],
       fromDate: ['', [Validators.required]],
       toDate: ['', [Validators.required]],
       type: ['add'],
       removedRules: this.fb.array([]),
       selectedDays: [, [Validators.required]],
-      hotelConfig: this.fb.array([]),
+      configCategory: ['HOTEL'],
+      hotelConfig: this.fb.array([this.getLevelFG()]),
       status: [true, [Validators.required]],
     });
     if (data) triggerFG.patchValue(data);

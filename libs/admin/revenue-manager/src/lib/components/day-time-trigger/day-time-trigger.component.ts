@@ -15,15 +15,21 @@ import {
   QueryConfig,
 } from '@hospitality-bot/admin/shared';
 import { dayTimeResponse } from '../../constants/response.const';
-import { DynamicPricingHandler } from '../../models/dynamic-pricing.model';
+import {
+  DynamicPricingFactory,
+  DynamicPricingHandler,
+} from '../../models/dynamic-pricing.model';
 import { SnackBarService } from '@hospitality-bot/shared/material';
+import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 
 @Component({
   selector: 'hospitality-bot-day-time-trigger',
   templateUrl: './day-time-trigger.component.html',
   styleUrls: ['./day-time-trigger.component.scss'],
 })
-export class DayTimeTriggerComponent {
+export class DayTimeTriggerComponent implements OnInit {
+  entityId: string;
+
   parentFG: FormGroup;
   loading = false;
   $subscription = new Subscription();
@@ -47,8 +53,13 @@ export class DayTimeTriggerComponent {
     private dynamicPricingService: DynamicPricingService,
     private adminUtilityService: AdminUtilityService,
     private snackbarService: SnackBarService,
+    private globalFilter: GlobalFilterService,
     public fb: FormBuilder
   ) {}
+
+  ngOnInit(): void {
+    this.entityId = this.globalFilter.entityId;
+  }
 
   modifyTriggerFG(mode = Revenue.add, index?: number): void {
     this.modifyTriggerFGEvent.emit({ mode, index });
@@ -71,7 +82,6 @@ export class DayTimeTriggerComponent {
         .subscribe(
           (res) => {
             this.dynamicPricingControl.timeFA = this.fb.array([]);
-            res = dayTimeResponse; // remove after original data come
             if (!res.configDetails.length) {
               this.modifyTriggerFG(Revenue.add);
               this.listenChanges(
@@ -193,7 +203,50 @@ export class DayTimeTriggerComponent {
       );
       return;
     }
-    console.log(form);
+
+    this.loading = true;
+    const { hotelId, type } = form.controls;
+    const requestedData = DynamicPricingFactory.buildRequest(
+      form,
+      'DAY_TIME_TRIGGER',
+      form.get('type').value
+    );
+
+    if (!Object.keys(requestedData).length) {
+      this.snackbarService.openSnackBarAsText(
+        'Please make changes for the new updates.'
+      );
+      return;
+    }
+    const requestFunction =
+      Revenue[type.value] === Revenue['add']
+        ? this.dynamicPricingService.createDynamicPricing
+        : this.dynamicPricingService.updateDynamicPricing;
+    const request = requestFunction.bind(this.dynamicPricingService);
+    const requestParams = [
+      requestedData,
+      this.entityId,
+      this.getQueryConfig('DAY_TIME_TRIGGER'),
+      hotelId.value,
+    ];
+
+    this.$subscription.add(
+      request(...requestParams).subscribe(
+        (res) => {
+          this.snackbarService.openSnackBarAsText(
+            `Day/Time Trigger ${
+              form.get('type').value === 'add' ? 'Created ' : 'Updated '
+            } Successfully.`,
+            '',
+            { panelClass: 'success' }
+          );
+        },
+        (error) => {
+          this.loading = false;
+        },
+        this.handleFinal
+      )
+    );
   }
 
   getQueryConfig(type: ConfigType): QueryConfig {

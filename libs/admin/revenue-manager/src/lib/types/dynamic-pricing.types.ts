@@ -56,7 +56,7 @@ export type ConfigType =
 
 export type ModeType = 'add' | 'update';
 
-export type OccupancyUpdateRequestType = Record<
+export type DynamicPricingUpdateRequestType = Record<
   string,
   | string
   | number

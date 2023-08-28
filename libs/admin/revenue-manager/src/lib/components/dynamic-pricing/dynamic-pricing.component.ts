@@ -92,6 +92,7 @@ export class DynamicPricingComponent implements OnInit {
       fromDate: ['', [Validators.required]],
       toDate: ['', [Validators.required]],
       type: ['add'],
+      removedRules: this.fb.array([]),
       selectedDays: [, [Validators.required]],
       hotelConfig: this.fb.array([]),
       status: [true, [Validators.required]],
@@ -102,6 +103,7 @@ export class DynamicPricingComponent implements OnInit {
 
   getLevelFG(): FormGroup {
     return this.fb.group({
+      id: [],
       fromTime: ['', [Validators.required]],
       toTime: ['', [Validators.required]],
       start: ['', [Validators.min(1), Validators.required]],
@@ -176,7 +178,12 @@ export class DynamicPricingComponent implements OnInit {
   }): void {
     const levelFA = event.triggerFG?.get('hotelConfig') as FormArray;
     if (event.mode == Revenue.add) levelFA.controls.push(this.getLevelFG());
-    else levelFA.removeAt(event.index);
+    else {
+      const levelRemoveId = levelFA.at(event.index).value.id;
+      levelRemoveId &&
+        (event.triggerFG.get('removedRules') as FormArray).push(levelRemoveId);
+      levelFA.removeAt(event.index);
+    }
   }
 
   get dynamicPricingControl() {

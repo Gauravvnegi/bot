@@ -96,6 +96,7 @@
                   class="bottom weekdays__selector full-width"
                   label="Days"
                   controlName="selectedDays"
+                  [allChecked]="season.get('type').value == 'add' && true"
                   [options]="weeks"
                 >
                 </hospitality-bot-checkbox-selector>

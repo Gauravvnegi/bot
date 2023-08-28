@@ -27,7 +27,9 @@
                     <hospitality-bot-toggle-switch-with-label
                       class="toggle"
                       [isToggleOn]="triggerFG.get('status')?.value"
-                      (onToggleSwitch)="triggerStatusChange($event, i)"
+                      (onToggleSwitch)="
+                        triggerStatusChange($event, triggerFG.get('status'))
+                      "
                       click-stop-propagation
                     ></hospitality-bot-toggle-switch-with-label>
                   </div>
@@ -77,7 +79,7 @@
                   <hospitality-bot-checkbox-selector
                     class="bulk-update__week-days"
                     label="Days"
-                    [allChecked]="true"
+                    [allChecked]="triggerFG.get('type').value == 'add' && true"
                     [controlName]="'selectedDays'"
                     [options]="weeks"
                   >

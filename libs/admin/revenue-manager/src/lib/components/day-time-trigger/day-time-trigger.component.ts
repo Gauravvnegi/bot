@@ -92,8 +92,8 @@ export class DayTimeTriggerComponent {
     );
   }
 
-  triggerStatusChange($event, index) {
-    console.log('hii');
+  triggerStatusChange(event: boolean, status: AbstractControl) {
+    status.patchValue(event);
   }
 
   get dynamicPricingControl() {

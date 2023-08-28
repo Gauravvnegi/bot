@@ -192,11 +192,12 @@ export class RoomDataTableComponent extends BaseDatatableComponent
                   (this.formService.isBaseRoomType =
                     baseRoomType[0].isBaseRoomType);
               } else if (!this.values.length) {
+                // When there are no room types so the default is base room type
                 this.formService.isBaseRoomType = true;
               } else {
-                // Base room type to true when there is not baseRoomType
                 this.formService.isBaseRoomType = false;
               }
+
               // this.updateQuickReplyFilterCount(res.entityStateCounts);
               // this.updateTabFilterCount(res.entityTypeCounts, res.total);
               // this.updateTotalRecords();

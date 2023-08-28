@@ -7,6 +7,7 @@ import { ReservationSummary } from '../types/forms.types';
 import { map } from 'rxjs/operators';
 import { MenuItemListResponse } from 'libs/admin/all-outlets/src/lib/types/outlet';
 import { EntitySubType, QueryConfig } from '@hospitality-bot/admin/shared';
+import { AgentTableResponse } from 'libs/admin/agent/src/lib/types/response';
 
 @Injectable()
 export class ManageReservationService extends ApiService {

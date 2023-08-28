@@ -33,6 +33,7 @@ import { RoomTypeForm } from '../../models/room.model';
 import { RoomService } from '../../services/room.service';
 import { RatePlanOptions } from '../../types/room';
 import { FormService } from '../../services/form.service';
+import { RoomType } from '../../models/rooms-data-table.model';
 
 @Component({
   selector: 'hospitality-bot-room-type',
@@ -55,6 +56,8 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
   isPaidLoading: boolean = false;
   isPricingDynamic = false;
   isBaseRoomType = true;
+
+  baseRoomType: RoomType;
 
   plans: RatePlanOptions[] = [];
   removedRatePlans: string[] = [];
@@ -95,9 +98,13 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.entityId = this.globalService.entityId;
+    this.baseRoomType = this.formService.baseRoomType;
+    this.isBaseRoomType = this.formService.isBaseRoomType;
+
     this.isPricingDynamic = this.subscriptionPlanService.checkModuleSubscription(
       ModuleNames.DYNAMIC_PRICING
     );
+
     this.initForm();
     this.initOptionConfig();
   }
@@ -150,6 +157,8 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
     if (this.roomService.roomTypeFormState) {
       this.useForm.patchValue(this.roomService.roomTypeFormData);
     }
+
+    this.initBaseRoomTypeDetails();
 
     // Patch the form value if service id present
     if (this.roomTypeId) {
@@ -252,7 +261,7 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
             (res) => {
               let data = new RoomTypeForm().deserialize(res);
               const { staticRatePlans, dynamicRatePlans, ...rest } = data;
-              
+
               if (this.isPricingDynamic) {
                 this.useForm
                   .get('dynamicRatePlans')
@@ -299,6 +308,18 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
     };
 
     this.ratePlanArray.push(this.fb.group(addedRatePlan));
+  }
+
+  initBaseRoomTypeDetails() {
+    const ratePlanFormGroup = this.isPricingDynamic
+      ? (this.useForm.get('dynamicRatePlans') as FormGroup)
+      : (this.useForm.get('staticRatePlans') as FormGroup);
+
+    const basePrice = this.baseRoomType.price;
+    if (basePrice) {
+      ratePlanFormGroup.get('basePrice').setValue(basePrice);
+      ratePlanFormGroup.get('basePrice').disable();
+    }
   }
 
   /**

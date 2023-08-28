@@ -148,6 +148,9 @@
       ],
       "@hospitality-bot/admin/revenue-manager": [
         "libs/admin/revenue-manager/src/index.ts"
+      ],
+      "@hospitality-bot/admin/global-shared": [
+        "libs/admin/global-shared/src/index.ts"
       ]
     }
   },

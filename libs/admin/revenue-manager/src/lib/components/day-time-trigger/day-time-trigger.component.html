@@ -116,13 +116,14 @@
                         showLabel: false,
                         preErrorMessages: {
                           required: 'This is required field',
-                          min: 'From Time should be < To Time.',
-                          collide: 'Collide, Fix it !'
+                          collide: 'Collide, Fix it !',
+                          startError: 'From Time should be < To Time.'
                         },
                         postErrorMessages: {
                           required: 'This is required field',
                           min: 'To Time should be > From Time.',
-                          collide: 'Collide, Fix it !'
+                          collide: 'Collide, Fix it !',
+                          endError: 'From Time should be < To Time.'
                         }
                       }"
                     ></hospitality-bot-from-to-date>
@@ -141,7 +142,7 @@
                           errorMessages: {
                             required: 'This is required field',
                             min: 'Minimum Value should be 1',
-                            startLessthanEnd: 'Start should be <= End.',
+                            startError: 'Start should be <= End.',
                             collide: 'Collide, Fix it !'
                           }
                         },
@@ -151,7 +152,7 @@
                           errorMessages: {
                             required: 'This is required field',
                             min: 'Minimum Value should be 1',
-                            startLessthanEnd: 'End should be >= Start.',
+                            endError: 'End should be >= Start.',
                             collide: 'Collide, Fix it !'
                           }
                         }

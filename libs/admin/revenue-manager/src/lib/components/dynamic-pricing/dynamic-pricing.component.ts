@@ -102,14 +102,17 @@ export class DynamicPricingComponent implements OnInit {
   }
 
   getLevelFG(): FormGroup {
-    return this.fb.group({
-      id: [],
-      fromTime: ['', [Validators.required]],
-      toTime: ['', [Validators.required]],
-      start: ['', [Validators.min(1), Validators.required]],
-      end: ['', [Validators.min(1), Validators.required]],
-      discount: ['', [Validators.required]],
-    });
+    return this.fb.group(
+      {
+        id: [],
+        fromTime: ['', [Validators.required]],
+        toTime: ['', [Validators.required]],
+        start: ['', [Validators.min(1), Validators.required]],
+        end: ['', [Validators.min(1), Validators.required]],
+        discount: ['', [Validators.required]],
+      },
+      { validators: this.dynamicPricingService.triggerLevelValidator }
+    );
   }
 
   getInventoryAllocationFG(data?: any): FormGroup {

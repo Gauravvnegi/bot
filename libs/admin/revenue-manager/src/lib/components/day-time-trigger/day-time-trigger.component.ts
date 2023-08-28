@@ -116,56 +116,21 @@ export class DayTimeTriggerComponent {
     levelsFA.controls.forEach((levelFG: FormGroup) => {
       const { start, end, fromTime, toTime } = levelFG.controls;
       start.valueChanges.subscribe((res) => {
-        this.errorValidate(start, end, customError, 'first');
         DayTimeTriggerComponent.validateConfiguration(levelsFA);
       });
 
       end.valueChanges.subscribe((res) => {
-        this.errorValidate(start, end, customError, 'second');
         DayTimeTriggerComponent.validateConfiguration(levelsFA);
       });
 
       fromTime.valueChanges.subscribe((res) => {
-        this.errorValidate(fromTime, toTime, customError, 'first');
         DayTimeTriggerComponent.validateConfiguration(levelsFA);
       });
 
       toTime.valueChanges.subscribe((res) => {
-        this.errorValidate(fromTime, toTime, customError, 'second');
         DayTimeTriggerComponent.validateConfiguration(levelsFA);
       });
     });
-  }
-
-  /**
-   *
-   * @param first control
-   * @param second control
-   * @param customError message of the error
-   * @param applyError in which side we want to apply error
-   */
-  errorValidate(
-    first: AbstractControl,
-    second: AbstractControl,
-    customError: { startLessthanEnd: boolean },
-    applyError: 'first' | 'second'
-  ) {
-    const condition = +first.value > +second.value;
-    if (applyError == 'first') {
-      first.setErrors(condition ? customError : null);
-      second.setErrors(condition && null);
-    } else {
-      first.setErrors(condition && null);
-      second.setErrors(condition ? customError : null);
-    }
-
-    first.markAllAsTouched();
-    second.markAllAsTouched();
-
-    if (!condition) {
-      first.markAsUntouched();
-      second.markAsUntouched();
-    }
   }
 
   /**

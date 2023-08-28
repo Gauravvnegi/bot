@@ -216,7 +216,7 @@ export class OccupancyComponent implements OnInit {
         this.applyRulesConstraint(
           rule,
           +form.get('roomCount').value,
-          index == 0 ? 'first' : null
+          index == 0 ? 'first' : index == rule.controls.length ? 'last' : null
         );
         break;
       case 'hotel-occupancy':
@@ -229,7 +229,11 @@ export class OccupancyComponent implements OnInit {
         this.applyRulesConstraint(
           control,
           +form.get('roomCount').value,
-          index == 0 ? 'first' : null
+          index == 0
+            ? 'first'
+            : index == control.controls.length
+            ? 'last'
+            : null
         );
         break;
     }
@@ -353,6 +357,16 @@ export class OccupancyComponent implements OnInit {
       });
       return;
     }
+
+    if (deleteFrom && deleteFrom == 'last') {
+      rules
+        .at(rules.controls.length - 1)
+        ?.get('end')
+        .patchValue(roomCount, {
+          emitEvent: false,
+        });
+      return;
+    }
     rules.controls.reduce((acc: FormGroup, curr: FormGroup, index) => {
       const { start, end } = curr.controls;
       if (acc) {
@@ -362,10 +376,6 @@ export class OccupancyComponent implements OnInit {
         start.markAsDirty();
       }
 
-      if (index === rules.controls.length - 1) {
-        end.patchValue(roomCount, { emitEvent: false });
-        end.markAsDirty();
-      }
       // Validation
       if (+start.value > +end.value) {
         const customError = { min: 'Start should be <= End.' };

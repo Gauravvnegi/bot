@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { MatTabChangeEvent } from '@angular/material/tabs';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { LibraryItem, QueryConfig } from '@hospitality-bot/admin/library';
 import {
@@ -61,35 +61,24 @@ export class ServicesDataTableComponent extends BaseDatatableComponent {
     private globalFilterService: GlobalFilterService,
     protected snackbarService: SnackBarService, // private router: Router, // private modalService: ModalService
     private router: Router,
-    private _hotelDetailService: HotelDetailService
+    private _hotelDetailService: HotelDetailService,
+    private route: ActivatedRoute
   ) {
     super(fb, tabFilterService);
   }
 
   ngOnInit(): void {
     this.entityId = this.globalFilterService.entityId;
-    // this.listenToTableChange();
     this.listenForGlobalFilters();
   }
-
-  // /**
-  //  * @function listenToTableChange  To listen to table changes
-  //  */
-  // listenToTableChange() {
-  //   this.servicesService.selectedTable.subscribe((value) => {
-  //     this.selectedTable = value;
-  //     ;
-  //     this.initTableValue();
-  //   });
-  // }
 
   /**
    * @function onGlobalTabFilterChanges To listen to global tab filter changes
    * @param value
    */
 
-  onGlobalTabFilterChanges(value) {
-    this.entityId = value;
+  onGlobalTabFilterChanges(event) {
+    this.entityId = event.entityId[0];
     this.initTableValue();
   }
 
@@ -185,6 +174,13 @@ export class ServicesDataTableComponent extends BaseDatatableComponent {
           this.handleFinal
         )
     );
+  }
+
+  onCreateNewService() {
+    this.servicesService.entityId = this.entityId;
+    this.router.navigate([servicesRoutes.createService.route], {
+      relativeTo: this.route,
+    });
   }
 
   /**

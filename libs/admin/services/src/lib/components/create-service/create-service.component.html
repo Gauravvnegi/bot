@@ -22,10 +22,11 @@
     ></hospitality-bot-input>
 
     <hospitality-bot-select
+      *ngIf="!paramData?.entityId"
       [loading]="loading"
       class="half-width"
-      controlName="type"
-      label="Property / Outlet"
+      controlName="entityId"
+      label="Property"
       [options]="entityList"
       [props]="{
         placeholder: 'Select Type'
@@ -37,7 +38,6 @@
       class="half-width"
       type="SERVICE_CATEGORY"
       [entityId]="entityId"
-      [disabled]="!useForm.get('type').value"
     >
     </hospitality-bot-category>
 
@@ -76,7 +76,6 @@
         isAsync: true,
         createPrompt: '+ Create New Tax'
       }"
-      [disabled]="!useForm.get('type').value"
       (onCreate)="createTax()"
     ></hospitality-bot-multi-select>
     <hospitality-bot-input

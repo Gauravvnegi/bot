@@ -65,6 +65,8 @@ export class CreateServiceComponent implements OnInit {
   entityList: any[] = [];
 
   brandId: string;
+  hotelId: string;
+  paramData: any;
 
   constructor(
     private fb: FormBuilder,
@@ -87,24 +89,47 @@ export class CreateServiceComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    //to get the entityId from the query params
+    this.paramData = this.route.snapshot.queryParams;
+    this.entityId = this.paramData?.entityId;
+
+    //set the entityId in the service
     this.brandId = this.hotelDetailService.brandId;
+    this.hotelId = this.globalFilterService.entityId;
+
+    //if entityId is not present in the query params then set the entityId from the service
+    if (!this.serviceId && !this.paramData?.entityId)
+      this.entityId = this.servicesService.entityId ?? this.hotelId;
+
     this.initForm();
-    this.getEntityList();
+    this.getPropertyList();
     this.listenForTypeChange();
+    this.initOptionsConfig();
   }
 
-  getEntityList() {
-    this.entityList =
-      this.hotelDetailService.brands
-        .find((item) => item.id === this.brandId)
-        ?.entities.map((item) => ({
-          label: item.name,
-          value: item.id,
-        })) ?? [];
+  getPropertyList() {
+    const selectedHotel = this.hotelDetailService.hotels.find(
+      (item) => item.id === this.hotelId
+    );
+
+    if (!selectedHotel) {
+      this.entityList = [];
+      return;
+    }
+
+    this.entityList = selectedHotel.entities.map((entity) => ({
+      label: entity.name,
+      value: entity.id,
+    }));
+
+    this.entityList.unshift({
+      label: selectedHotel.name,
+      value: selectedHotel.id,
+    });
   }
 
   listenForTypeChange() {
-    this.useForm.get('type').valueChanges.subscribe((res) => {
+    this.useForm.get('entityId').valueChanges.subscribe((res) => {
       this.entityId = res;
       this.initOptionsConfig();
     });
@@ -118,7 +143,7 @@ export class CreateServiceComponent implements OnInit {
       active: [true],
       // currency: [''],
       parentId: ['', Validators.required],
-      type: ['', Validators.required],
+      entityId: [''],
       imageUrl: ['', Validators.required],
       name: ['', Validators.required],
       serviceType: [''],
@@ -128,6 +153,7 @@ export class CreateServiceComponent implements OnInit {
       taxIds: [[]],
       hsnCode: [''],
     });
+    if (!this.serviceId) this.useForm.get('entityId').setValue(this.entityId);
 
     this.updateFormControlSubscription();
 
@@ -198,6 +224,7 @@ export class CreateServiceComponent implements OnInit {
    * @returns void
    */
   getTax() {
+    debugger;
     this.$subscription.add(
       this.servicesService
         .getTaxList(this.entityId)

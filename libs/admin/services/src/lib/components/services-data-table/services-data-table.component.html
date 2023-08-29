@@ -1,9 +1,13 @@
-<hospitality-bot-feedback-types
+<hospitality-bot-entity-tab-filter
+  [config]="{
+    isSticky: true,
+    extraGap: 60,
+    scrollBoundary: 25,
+    isAllOutletTabFilter: false
+  }"
   class="tab-header"
-  (onTabFilterChange)="onGlobalTabFilterChanges($event)"
-  extraGap="60"
-  scrollBoundary="48"
-></hospitality-bot-feedback-types>
+  (onEntityTabFilterChanges)="onGlobalTabFilterChanges($event)"
+></hospitality-bot-entity-tab-filter>
 <div
   class="action-header"
   [ngClass]="{ 'action-header__sticky': isScrolledUp }"
@@ -19,7 +23,7 @@
     ></hospitality-bot-button>
     <hospitality-bot-button
       label="+ Create Service"
-      link="/pages/library/services/{{ servicesRoutes.createService.route }}"
+      (onClick)="onCreateNewService()"
     ></hospitality-bot-button>
     <hospitality-bot-export-list
       [isDisable]="values.length === 0"

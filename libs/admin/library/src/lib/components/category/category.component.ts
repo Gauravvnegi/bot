@@ -22,6 +22,7 @@ export class CategoryComponent implements OnInit {
   @Input() controlName: string;
   @Input() type: CategoryData['type'];
   @Input() entityId: string;
+  @Input() disabled: boolean;
   categoryOffSet = 0;
   loadingCategory = false;
   noMoreCategories = false;
@@ -46,7 +47,7 @@ export class CategoryComponent implements OnInit {
     this.inputControl = this.controlContainer.control.get(this.controlName);
     this.getCategories();
   }
-  
+
   /**
    * @function getCategories
    * @description get categories from server

@@ -2,6 +2,8 @@ export const chartConfig = {
   types: { bar: 'bar', line: 'line', doughnut: 'doughnut' },
   bookingStatus: {
     defaultData: [
+      { data: [], label: 'New', fill: false },
+      { data: [], label: 'Pre-checkin', fill: false },
       { data: [], label: 'Check-In', fill: false },
       { data: [], label: 'Checkout', fill: false },
     ],

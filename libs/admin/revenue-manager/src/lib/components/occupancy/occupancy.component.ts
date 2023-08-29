@@ -106,31 +106,35 @@ export class OccupancyComponent implements OnInit {
   }
 
   seasonStatusChange(status, seasonIndex: number) {
-    this.loading = true;
     const control = this.dynamicPricingControl.occupancyFA.at(seasonIndex);
-    this.$subscription.add(
-      this.dynamicPricingService
-        .updateDynamicPricing(
-          { status: status ? 'ACTIVE' : 'INACTIVE' },
-          this.entityId,
-          this.getQueryConfig('OCCUPANCY'),
-          control.get('id').value
-        )
-        .subscribe(
-          (res) => {
-            this.snackbarService.openSnackBarAsText(
-              `Status Updated Successfully.`,
-              '',
-              { panelClass: 'success' }
-            );
-            this.initSeason();
-          },
-          (error) => {
-            this.loading = false;
-          },
-          this.handleFinal
-        )
-    );
+    if (control.get('id').value) {
+      this.loading = true;
+      this.$subscription.add(
+        this.dynamicPricingService
+          .updateDynamicPricing(
+            { status: status ? 'ACTIVE' : 'INACTIVE' },
+            this.entityId,
+            this.getQueryConfig('OCCUPANCY'),
+            control.get('id').value
+          )
+          .subscribe(
+            (res) => {
+              this.snackbarService.openSnackBarAsText(
+                `Status Updated Successfully.`,
+                '',
+                { panelClass: 'success' }
+              );
+              this.initSeason();
+            },
+            (error) => {
+              this.loading = false;
+            },
+            this.handleFinal
+          )
+      );
+    } else {
+      control.patchValue({ status: status });
+    }
   }
 
   add(type: ControlTypes, form?: FormGroup | FormArray) {

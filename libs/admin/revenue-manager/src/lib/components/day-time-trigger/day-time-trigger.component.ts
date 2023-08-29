@@ -3,7 +3,6 @@ import {
   AbstractControl,
   FormArray,
   FormBuilder,
-  FormControl,
   FormGroup,
 } from '@angular/forms';
 import { Revenue, weeks } from '../../constants/revenue-manager.const';
@@ -61,8 +60,8 @@ export class DayTimeTriggerComponent implements OnInit {
   }
 
   modifyTriggerFG(mode = Revenue.add, index?: number): void {
+    const dayTimeFormArray = this.dynamicPricingControl.timeFA;
     if (mode != Revenue.add) {
-      const dayTimeFormArray = this.dynamicPricingControl.timeFA;
       const { type } = (dayTimeFormArray.at(index) as FormGroup).controls;
       if (type.value == 'update') {
         this.loading = true;
@@ -89,6 +88,9 @@ export class DayTimeTriggerComponent implements OnInit {
       }
     } else {
       this.modifyTriggerFGEvent.emit({ mode, index });
+      this.listenChanges(
+        dayTimeFormArray.at(dayTimeFormArray.controls.length - 1) as FormGroup
+      );
     }
   }
 
@@ -131,30 +133,34 @@ export class DayTimeTriggerComponent implements OnInit {
 
   triggerStatusChange(event: boolean, triggerFG: FormGroup) {
     const { id } = triggerFG.controls;
-    this.loading = true;
-    this.$subscription.add(
-      this.dynamicPricingService
-        .updateDynamicPricing(
-          { status: event ? 'ACTIVE' : 'INACTIVE' },
-          this.entityId,
-          this.getQueryConfig('DAY_TIME_TRIGGER'),
-          id.value
-        )
-        .subscribe(
-          (res) => {
-            this.snackbarService.openSnackBarAsText(
-              'Status Updated Successfully',
-              '',
-              { panelClass: 'success' }
-            );
-            this.loadTriggers();
-          },
-          (error) => {
-            this.loading = false;
-          },
-          this.handleFinal
-        )
-    );
+    if (id.value) {
+      this.loading = true;
+      this.$subscription.add(
+        this.dynamicPricingService
+          .updateDynamicPricing(
+            { status: event ? 'ACTIVE' : 'INACTIVE' },
+            this.entityId,
+            this.getQueryConfig('DAY_TIME_TRIGGER'),
+            id.value
+          )
+          .subscribe(
+            (res) => {
+              this.snackbarService.openSnackBarAsText(
+                'Status Updated Successfully',
+                '',
+                { panelClass: 'success' }
+              );
+              this.loadTriggers();
+            },
+            (error) => {
+              this.loading = false;
+            },
+            this.handleFinal
+          )
+      );
+    } else {
+      triggerFG.patchValue({ status: event });
+    }
   }
 
   get dynamicPricingControl() {
@@ -173,7 +179,17 @@ export class DayTimeTriggerComponent implements OnInit {
   listenChanges(form: FormGroup) {
     const { hotelConfig } = form.controls;
     const levelsFA = hotelConfig as FormArray;
-    let customError = { startLessthanEnd: true };
+    const resetSeconds = (
+      value: number,
+      control: AbstractControl,
+      isEmit = true
+    ) => {
+      // TODO : Need to be reset second
+      // const newTime = new Date(value);
+      // newTime.setSeconds(0);
+      // control.patchValue(newTime.getTime(), isEmit && { emitEvent: false });
+      control.patchValue(value, isEmit && { emitEvent: false });
+    };
     levelsFA.controls.forEach((levelFG: FormGroup) => {
       const { start, end, fromTime, toTime } = levelFG.controls;
       start.valueChanges.subscribe((res) => {
@@ -185,10 +201,13 @@ export class DayTimeTriggerComponent implements OnInit {
       });
 
       fromTime.valueChanges.subscribe((res) => {
+        resetSeconds(+res, fromTime);
+        resetSeconds(+res + 3600000, toTime, false);
         DayTimeTriggerComponent.validateConfiguration(levelsFA);
       });
 
       toTime.valueChanges.subscribe((res) => {
+        resetSeconds(+res, toTime);
         DayTimeTriggerComponent.validateConfiguration(levelsFA);
       });
     });
@@ -200,24 +219,20 @@ export class DayTimeTriggerComponent implements OnInit {
    * @returns configuration is valid or not
    */
   static validateConfiguration(formArray: FormArray): boolean | null {
+    // TODO : Checks... Should be verify
     let collide = null;
     formArray.controls.forEach((form: FormGroup, index) => {
+      const { start, end, fromTime, toTime } = form.controls;
       if (!collide) {
-        const { start, end, fromTime, toTime } = form.controls;
         let timeCollide = false;
         let occupancyCollide = false;
         collide = formArray.controls.find((item: FormGroup, itemIndex) => {
           const innerFromTimeValue = +item.get('fromTime').value;
-          const innerStartValue = +item.get('start').value;
+          const innerToTimeValue = +item.get('toTime').value;
           if (itemIndex != index) {
             timeCollide =
-              +fromTime.value < innerFromTimeValue &&
-              +toTime.value > innerFromTimeValue;
-
-            if (timeCollide) {
-              occupancyCollide =
-                +start.value < innerStartValue && +end.value > innerStartValue;
-            }
+              +fromTime.value > innerFromTimeValue &&
+              +fromTime.value < innerToTimeValue;
           }
           return timeCollide || occupancyCollide;
         });

@@ -365,7 +365,6 @@ export class DynamicPricingHandler {
     ) as FormGroup;
     triggerFG.patchValue({
       id: item.id,
-      hotelId: item.id,
       fromDate: item.fromDate,
       toDate: item.toDate,
       type: 'update',

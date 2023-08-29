@@ -249,7 +249,9 @@
 
               <div class="action">
                 <hospitality-bot-button
-                  label="Save"
+                  [label]="
+                    season.get('type').value == 'update' ? 'Update' : 'Save'
+                  "
                   (click)="handleSave(season)"
                 >
                 </hospitality-bot-button>

@@ -68,7 +68,7 @@ export class LibraryService extends ApiService {
     config?: QueryConfig
   ): Observable<CategoriesResponse> {
     return this.get(
-      `/api/v1/entity/${entityId}/categories/${config?.params ?? ''}`
+      `/api/v1/entity/${entityId}/categories${config?.params ?? ''}`
     );
   }
 

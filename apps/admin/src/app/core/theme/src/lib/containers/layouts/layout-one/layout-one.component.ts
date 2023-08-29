@@ -136,6 +136,7 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
     this.firebaseMessagingService.requestPermission(requestPermissionData);
     this.$firebaseMessagingSubscription.add(
       this.firebaseMessagingService.receiveMessage().subscribe((payload) => {
+        console.log(payload, 'payload message when notification trigger');
         const notificationPayload = payload;
         this.firebaseMessagingService.playNotificationSound();
         this.getNotificationUnreadCount();
@@ -205,10 +206,10 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
         entityName: selectedHotelData?.['id'],
       },
       feedback: {
-        feedbackType: this.checkForTransactionFeedbackSubscribed()
-          ? layoutConfig.feedback.transactional
-          : layoutConfig.feedback.stay,
+        feedbackType: layoutConfig.feedback.both,
       },
+      isAllOutletSelected: this.outlets.length !== 0,
+
       outlets: this.outlets.reduce(
         (acc, curr) => ((acc[curr.id] = true), acc),
         {}

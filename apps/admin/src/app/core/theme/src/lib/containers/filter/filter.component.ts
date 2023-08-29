@@ -17,6 +17,7 @@ import { ModuleNames } from '../../../../../../../../../../libs/admin/shared/src
 import { SnackBarService } from '../../../../../../../../../../libs/shared/material/src/index';
 import { SubscriptionPlanService } from '../../services/subscription-plan.service';
 import { TokenUpdateService } from '../../services/token-update.service';
+import { layoutConfig } from '../../constants/layout';
 
 @Component({
   selector: 'admin-filter',
@@ -32,7 +33,7 @@ export class FilterComponent implements OnChanges, OnInit {
   entityList = [];
   brandList = [];
   feedbackType;
-  outlets = [];
+  outlets = [{ name: 'All', id: 'ALL' }];
   hotelBasedToken = { key: null, value: null };
 
   filterForm: FormGroup;
@@ -46,6 +47,8 @@ export class FilterComponent implements OnChanges, OnInit {
     protected subscriptionService: SubscriptionPlanService
   ) {
     this.initFilterForm();
+    //to handle initial case when all outlets are selected
+    this.updateOutletsValue(true);
   }
 
   closePopup() {
@@ -70,13 +73,10 @@ export class FilterComponent implements OnChanges, OnInit {
         }),
       }),
       feedback: this._fb.group({
-        feedbackType: [
-          this.checkForTransactionFeedbackSubscribed()
-            ? 'TRANSACTIONALFEEDBACK'
-            : 'STAYFEEDBACK',
-        ],
+        feedbackType: [layoutConfig.feedback.both],
       }),
       outlets: this._fb.group({}),
+      isAllOutletSelected: [true], //to handel all outlet selection in entity tab filter
     });
   }
 
@@ -142,8 +142,8 @@ export class FilterComponent implements OnChanges, OnInit {
             .find((item) => item.id == brandName)
             ?.entities.find((item) => item.id === id).entities ?? [];
 
-        this.outlets = outlets;
-        this.updateOutletsFormControls(outlets);
+        this.outlets = [...this.outlets, ...outlets];
+        this.updateOutletsFormControls(this.outlets);
       });
   }
 
@@ -155,7 +155,8 @@ export class FilterComponent implements OnChanges, OnInit {
       outletFG.addControl(
         outlet.id,
         new FormControl(
-          this.feedbackFG.get('feedbackType').value === 'TRANSACTIONALFEEDBACK'
+          this.feedbackFG.get('feedbackType').value ===
+            layoutConfig.feedback.both
         )
       );
     });
@@ -186,11 +187,18 @@ export class FilterComponent implements OnChanges, OnInit {
         .map((key) => this.outletFG.value[key])
         .reduce((acc, red) => acc || red)
     ) {
-      this.snackbarService.openSnackBarAsText(
-        'Please select at-least one outlet.'
-      );
+      //when no outlet is selected then set the feedback type to stay and apply filter for hotel based token
+      this.feedbackFG.get('feedbackType').setValue(layoutConfig.feedback.stay);
+
+      this.onApplyFilter.next({
+        values: this.filterForm.getRawValue(),
+        token: this.hotelBasedToken,
+      });
+
       return;
     }
+
+    //when outlets are selected then set the feedback type to transactional
     this.onApplyFilter.next({
       values: this.filterForm.getRawValue(),
       token: this.hotelBasedToken,
@@ -224,17 +232,29 @@ export class FilterComponent implements OnChanges, OnInit {
     this.hotelBasedToken = { key: null, value: null };
   }
 
-  onOutletSelect(event) {
-    if (
-      event.checked &&
-      this.feedbackFG.get('feedbackType').value !== 'TRANSACTIONALFEEDBACK'
-    ) {
-      this.feedbackFG.patchValue({ feedbackType: 'TRANSACTIONALFEEDBACK' });
-    } else if (
-      !this.checkForNoOutletSelected(this.outletFG.value) &&
-      this.checkForStayFeedbackSubscribed()
-    ) {
-      this.feedbackFG.patchValue({ feedbackType: 'STAYFEEDBACK' });
+  /**
+   * @function onOutletSelect
+   * @description This function is used handle the outlet selection
+   * @param event
+   * @param outlet
+   */
+  onOutletSelect(event, outlet) {
+    //to handle the case when all outlets are selected
+    this.feedbackFG.get('feedbackType').setValue(layoutConfig.feedback.both);
+
+    if (outlet.id === 'ALL') {
+      this.updateOutletsValue(event.checked);
+      this.filterForm.get('isAllOutletSelected').setValue(event.checked);
+    } else {
+      const areAllOutletsSelected = Object.keys(this.outletFG.controls)
+        .filter((item) => item !== 'ALL')
+        .every((id) => this.outletFG.controls[id].value);
+
+      this.filterForm
+        .get('isAllOutletSelected')
+        .setValue(areAllOutletsSelected);
+
+      this.outletFG.get('ALL').setValue(areAllOutletsSelected);
     }
   }
 

@@ -118,7 +118,6 @@ export class AddressComponent extends FormComponent implements OnInit {
     if (text) {
       var placeServiceRequest = {
         input: text,
-        types: ['establishment'],
       };
       var service = new google.maps.places.AutocompleteService();
       service.getPlacePredictions(

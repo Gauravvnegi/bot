@@ -47,7 +47,7 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
   users = [];
   userList: Option[] = [];
   requestData: any;
-  departmentList: any[] = [];
+  departmentList: Option[] = [];
   constructor(
     private fb: FormBuilder,
     private globalFilterService: GlobalFilterService,
@@ -101,7 +101,6 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
       remarks: ['', [Validators.maxLength(200)]],
       quantity: [1],
       assigneeId: [''],
-      departmentName: [''],
     });
 
     this.requestFG.get('itemCode').valueChanges.subscribe((value) => {
@@ -146,12 +145,10 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
   listenForItemChanges(): void {
     this.requestFG.get('itemCode').valueChanges.subscribe((value) => {
       const itemId = this.items.find((d) => d.value === value).itemId;
-      this.requestFG.get('departmentName').setValue('', { emitEvent: false });
       this.requestFG.get('assigneeId').setValue('', { emitEvent: false });
       this.getItemDetails(itemId);
     });
   }
-
 
   getItemDetails(itemId) {
     this.$subscription.add(
@@ -165,7 +162,6 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
         })
     );
   }
-
 
   /**
    * @function raiseRequest To raise request.

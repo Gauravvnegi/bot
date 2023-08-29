@@ -18,6 +18,7 @@
         <div
           *ngFor="let field of fields"
           [style.flexBasis]="field.width ? field.width : width"
+          [style.width]="field.width ? field.width : width"
           [ngSwitch]="field.type"
         >
           <hospitality-bot-input
@@ -44,6 +45,7 @@
           ></hospitality-bot-auto-complete>
           <hospitality-bot-select
             *ngSwitchCase="'select'"
+            class="select"
             [controlName]="field.name"
             [options]="field.options"
             [disabled]="field.disabled"

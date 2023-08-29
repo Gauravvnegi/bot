@@ -12,6 +12,7 @@ export class MultiSelectComponent extends FormComponent {
   menuClass = 'p-multiselect-items-wrapper';
   searchInputClass = 'p-multiselect-filter';
 
+  placeholder: string = 'Select';
   showHeader = true;
   showChips = true;
   maxSelectedLabels = 20;

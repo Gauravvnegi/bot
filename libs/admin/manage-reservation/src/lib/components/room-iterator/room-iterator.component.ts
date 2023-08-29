@@ -19,10 +19,7 @@ import {
 } from '@angular/forms';
 import { GlobalFilterService, Item } from '@hospitality-bot/admin/core/theme';
 import { SnackBarService } from '@hospitality-bot/shared/material';
-import {
-  AdminUtilityService,
-  EntitySubType,
-} from 'libs/admin/shared/src';
+import { AdminUtilityService, EntitySubType } from 'libs/admin/shared/src';
 import { IteratorComponent } from 'libs/admin/shared/src/lib/components/iterator/iterator.component';
 import { Subscription } from 'rxjs';
 import { roomFields, RoomFieldTypeOption } from '../../constants/reservation';
@@ -210,10 +207,15 @@ export class RoomIteratorComponent extends IteratorComponent
               // Patch default Base rate plan when not in edit mode.
               const defaultPlan = ratePlanOptions.filter(
                 (item) => item.isBase
-              )[0].value;
-              this.roomControls[index]
-                .get('ratePlan')
-                .patchValue(defaultPlan, { emitEvent: false });
+              )[0]?.value;
+              // If there is no default plan patch first plan.
+              defaultPlan
+                ? this.roomControls[index]
+                    .get('ratePlan')
+                    .patchValue(defaultPlan, { emitEvent: false })
+                : this.roomControls[index]
+                    .get('ratePlan')
+                    .patchValue(ratePlanOptions[0].value, { emitEvent: false });
             }
           }
           this.updateFormValueAndValidity(index);

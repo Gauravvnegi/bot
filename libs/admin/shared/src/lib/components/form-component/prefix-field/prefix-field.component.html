@@ -12,6 +12,7 @@
           primary: layout === 'pre-main',
           secondary: layout === 'post-main'
         }"
+        [min]="preMin"
         [controlName]="preControlName"
         [props]="getProps('pre')"
         [disabled]="inputDisabled.pre || isDisabled"
@@ -61,6 +62,7 @@
       <hospitality-bot-input
         *ngSwitchCase="'input'"
         class="input post-input"
+        [min]="postMin"
         [ngClass]="{
           dashed: layout === 'dashed',
           secondary: layout === 'pre-main',
@@ -104,3 +106,4 @@
     </ng-container>
   </div>
 </div>
+<ng-content></ng-content>

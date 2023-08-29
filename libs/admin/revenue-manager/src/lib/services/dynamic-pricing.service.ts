@@ -6,7 +6,13 @@ import {
 } from '../types/dynamic-pricing.types';
 import { QueryConfig } from '@hospitality-bot/admin/shared';
 import { Observable } from 'rxjs';
-import { FormArray, FormGroup } from '@angular/forms';
+import {
+  AbstractControl,
+  FormArray,
+  FormGroup,
+  ValidationErrors,
+} from '@angular/forms';
+import { DayTimeTriggerComponent } from '../components/day-time-trigger/day-time-trigger.component';
 
 @Injectable()
 export class DynamicPricingService extends ApiService {
@@ -16,7 +22,7 @@ export class DynamicPricingService extends ApiService {
     config: QueryConfig
   ): Observable<DynamicPricingRequest> {
     return this.post(
-      `/api/v1/revenue/dynamic-pricing-configuration/${config.params}`,
+      `/api/v1/revenue/dynamic-pricing-configuration${config.params}`,
       data,
       {
         header: { 'entity-id': entityId },
@@ -25,7 +31,7 @@ export class DynamicPricingService extends ApiService {
   }
 
   updateDynamicPricing(
-    data: DynamicPricingRequest,
+    data: DynamicPricingRequest | { status: string },
     entityId: string,
     config: QueryConfig,
     updateId: string
@@ -88,5 +94,56 @@ export class DynamicPricingService extends ApiService {
       });
     }
     return isValid;
+  }
+
+  triggerValidate(form: FormGroup): boolean {
+    const { name, fromDate, toDate, selectedDays, hotelConfig } = form.controls;
+    if (
+      !name.valid ||
+      !fromDate.valid ||
+      !toDate.valid ||
+      !selectedDays.valid ||
+      DayTimeTriggerComponent.validateConfiguration(hotelConfig as FormArray)
+    ) {
+      return false;
+    }
+
+    return !(hotelConfig as FormArray).controls.some((config: FormGroup) =>
+      this.triggerLevelValidator(config, true)
+    );
+  }
+
+  triggerLevelValidator(
+    group: FormGroup,
+    submit = false
+  ): ValidationErrors | null | boolean {
+    const { fromTime, toTime, start, end } = group.controls;
+
+    const validateControlPair = (
+      control1: AbstractControl,
+      control2: AbstractControl
+    ): void => {
+      const isGreater = +control1.value > +control2.value;
+
+      if (control1.dirty) {
+        control1.setErrors(isGreater ? { startError: true } : null);
+        control2.setErrors(null);
+      } else if (control2.dirty) {
+        control2.setErrors(isGreater ? { endError: true } : null);
+        control1.setErrors(null);
+      } else {
+        control1.setErrors(control1.errors);
+        control2.setErrors(control2.errors);
+      }
+    };
+
+    // validateControlPair(fromTime, toTime); // TODO: if require in future
+    validateControlPair(start, end);
+
+    if (submit) {
+      return fromTime.errors || toTime.errors || start.errors || end.errors;
+    }
+
+    return null;
   }
 }

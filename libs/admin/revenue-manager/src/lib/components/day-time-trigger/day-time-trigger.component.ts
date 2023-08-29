@@ -3,7 +3,6 @@ import {
   AbstractControl,
   FormArray,
   FormBuilder,
-  FormControl,
   FormGroup,
 } from '@angular/forms';
 import { Revenue, weeks } from '../../constants/revenue-manager.const';
@@ -14,15 +13,21 @@ import {
   AdminUtilityService,
   QueryConfig,
 } from '@hospitality-bot/admin/shared';
-import { dayTimeResponse } from '../../constants/response.const';
-import { DynamicPricingHandler } from '../../models/dynamic-pricing.model';
+import {
+  DynamicPricingFactory,
+  DynamicPricingHandler,
+} from '../../models/dynamic-pricing.model';
+import { SnackBarService } from '@hospitality-bot/shared/material';
+import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 
 @Component({
   selector: 'hospitality-bot-day-time-trigger',
   templateUrl: './day-time-trigger.component.html',
   styleUrls: ['./day-time-trigger.component.scss'],
 })
-export class DayTimeTriggerComponent {
+export class DayTimeTriggerComponent implements OnInit {
+  entityId: string;
+
   parentFG: FormGroup;
   loading = false;
   $subscription = new Subscription();
@@ -45,11 +50,48 @@ export class DayTimeTriggerComponent {
   constructor(
     private dynamicPricingService: DynamicPricingService,
     private adminUtilityService: AdminUtilityService,
+    private snackbarService: SnackBarService,
+    private globalFilter: GlobalFilterService,
     public fb: FormBuilder
   ) {}
 
+  ngOnInit(): void {
+    this.entityId = this.globalFilter.entityId;
+  }
+
   modifyTriggerFG(mode = Revenue.add, index?: number): void {
-    this.modifyTriggerFGEvent.emit({ mode, index });
+    const dayTimeFormArray = this.dynamicPricingControl.timeFA;
+    if (mode != Revenue.add) {
+      const { type } = (dayTimeFormArray.at(index) as FormGroup).controls;
+      if (type.value == 'update') {
+        this.loading = true;
+        this.$subscription.add(
+          this.dynamicPricingService
+            .deleteDynamicPricing(dayTimeFormArray.at(index).get('id').value)
+            .subscribe(
+              (res) => {
+                this.snackbarService.openSnackBarAsText(
+                  ` Day/Time Trigger deleted Successfully.`,
+                  '',
+                  { panelClass: 'success' }
+                );
+                this.loadTriggers();
+              },
+              (error) => {
+                this.loading = false;
+              },
+              this.handleFinal
+            )
+        );
+      } else {
+        dayTimeFormArray.removeAt(index);
+      }
+    } else {
+      this.modifyTriggerFGEvent.emit({ mode, index });
+      this.listenChanges(
+        dayTimeFormArray.at(dayTimeFormArray.controls.length - 1) as FormGroup
+      );
+    }
   }
 
   modifyLevelFG(
@@ -69,7 +111,6 @@ export class DayTimeTriggerComponent {
         .subscribe(
           (res) => {
             this.dynamicPricingControl.timeFA = this.fb.array([]);
-            res = dayTimeResponse; // remove after original data come
             if (!res.configDetails.length) {
               this.modifyTriggerFG(Revenue.add);
               this.listenChanges(
@@ -90,8 +131,36 @@ export class DayTimeTriggerComponent {
     );
   }
 
-  triggerStatusChange($event, index) {
-    console.log('hii');
+  triggerStatusChange(event: boolean, triggerFG: FormGroup) {
+    const { id } = triggerFG.controls;
+    if (id.value) {
+      this.loading = true;
+      this.$subscription.add(
+        this.dynamicPricingService
+          .updateDynamicPricing(
+            { status: event ? 'ACTIVE' : 'INACTIVE' },
+            this.entityId,
+            this.getQueryConfig('DAY_TIME_TRIGGER'),
+            id.value
+          )
+          .subscribe(
+            (res) => {
+              this.snackbarService.openSnackBarAsText(
+                'Status Updated Successfully',
+                '',
+                { panelClass: 'success' }
+              );
+              this.loadTriggers();
+            },
+            (error) => {
+              this.loading = false;
+            },
+            this.handleFinal
+          )
+      );
+    } else {
+      triggerFG.patchValue({ status: event });
+    }
   }
 
   get dynamicPricingControl() {
@@ -103,94 +172,148 @@ export class DayTimeTriggerComponent {
     };
   }
 
+  /**
+   *
+   * @param form of Perticular the Day Time Trigger
+   */
   listenChanges(form: FormGroup) {
     const { hotelConfig } = form.controls;
     const levelsFA = hotelConfig as FormArray;
+    const resetSeconds = (
+      value: number,
+      control: AbstractControl,
+      isEmit = true
+    ) => {
+      // TODO : Need to be reset second
+      // const newTime = new Date(value);
+      // newTime.setSeconds(0);
+      // control.patchValue(newTime.getTime(), isEmit && { emitEvent: false });
+      control.patchValue(value, isEmit && { emitEvent: false });
+    };
     levelsFA.controls.forEach((levelFG: FormGroup) => {
       const { start, end, fromTime, toTime } = levelFG.controls;
-      let customError = { min: 'Start should be < End.' };
       start.valueChanges.subscribe((res) => {
-        this.errorValidate(start, end, customError, 'first');
-        this.validateConfiguration(levelsFA);
+        DayTimeTriggerComponent.validateConfiguration(levelsFA);
       });
 
       end.valueChanges.subscribe((res) => {
-        customError = { min: 'End Should be > Start' };
-        this.errorValidate(start, end, customError, 'second');
-        this.validateConfiguration(levelsFA);
+        DayTimeTriggerComponent.validateConfiguration(levelsFA);
       });
 
       fromTime.valueChanges.subscribe((res) => {
-        customError = { min: 'From Time should be < To Time' };
-        this.errorValidate(fromTime, toTime, customError, 'first');
-        this.validateConfiguration(levelsFA);
+        resetSeconds(+res, fromTime);
+        resetSeconds(+res + 3600000, toTime, false);
+        DayTimeTriggerComponent.validateConfiguration(levelsFA);
       });
 
       toTime.valueChanges.subscribe((res) => {
-        customError = { min: 'To Time should be > From Time' };
-        this.errorValidate(fromTime, toTime, customError, 'second');
-        this.validateConfiguration(levelsFA);
+        resetSeconds(+res, toTime);
+        DayTimeTriggerComponent.validateConfiguration(levelsFA);
       });
     });
   }
 
-  errorValidate(
-    first: AbstractControl,
-    second: AbstractControl,
-    customError: { min: string },
-    applyError: 'first' | 'second'
-  ) {
-    const condition = +first.value > +second.value;
-    if (applyError == 'first') {
-      first.setErrors(condition ? customError : null);
-      second.setErrors(condition && null);
-    } else {
-      first.setErrors(condition && null);
-      second.setErrors(condition ? customError : null);
-    }
-
-    first.markAllAsTouched();
-    second.markAllAsTouched();
-
-    if (!condition) {
-      first.markAsUntouched();
-      second.markAsUntouched();
-    }
-  }
-
-  validateConfiguration(formArray: FormArray) {
-    // TODO: Check all edge cases
-    console.log('validating...');
+  /**
+   *
+   * @param formArray should be the Array of the configuration
+   * @returns configuration is valid or not
+   */
+  static validateConfiguration(formArray: FormArray): boolean | null {
+    // TODO : Checks... Should be verify
+    let collide = null;
     formArray.controls.forEach((form: FormGroup, index) => {
       const { start, end, fromTime, toTime } = form.controls;
-      let timeCollide = false;
-      let occupancyCollide = false;
-      const collide = formArray.controls.find((item: FormGroup, itemIndex) => {
-        const innerFromTimeValue = +item.get('fromTime').value;
-        const innerStartValue = +item.get('start').value;
-        if (itemIndex != index) {
-          timeCollide =
-            +fromTime.value < innerFromTimeValue &&
-            +toTime.value > innerFromTimeValue;
-
-          occupancyCollide =
-            +start.value > innerStartValue && +end.value < innerStartValue;
-        }
-
-        return timeCollide || occupancyCollide;
-      });
-
-      if (collide) {
-        start.markAllAsTouched();
-        end.markAllAsTouched();
-        fromTime.markAllAsTouched();
-        toTime.markAllAsTouched();
+      if (!collide) {
+        let timeCollide = false;
+        let occupancyCollide = false;
+        collide = formArray.controls.find((item: FormGroup, itemIndex) => {
+          const innerFromTimeValue = +item.get('fromTime').value;
+          const innerToTimeValue = +item.get('toTime').value;
+          if (itemIndex != index) {
+            timeCollide =
+              +fromTime.value > innerFromTimeValue &&
+              +fromTime.value < innerToTimeValue;
+          }
+          return timeCollide || occupancyCollide;
+        });
       }
     });
+
+    if (collide) {
+      const { start, end, fromTime, toTime } = collide.controls;
+      start.setErrors({ collide: true });
+      end.setErrors({ collide: true });
+      fromTime.setErrors({ collide: true });
+      toTime.setErrors({ collide: true });
+      start.markAllAsTouched();
+      end.markAllAsTouched();
+      fromTime.markAllAsTouched();
+      toTime.markAllAsTouched();
+    } else {
+      formArray.controls.forEach((form: FormGroup) => {
+        const { start, end, fromTime, toTime } = form.controls;
+        start.markAsUntouched();
+        end.markAsUntouched();
+        fromTime.markAsUntouched();
+        toTime.markAsUntouched();
+      });
+    }
+    return collide ? true : false;
   }
 
   handleSave(form: FormGroup) {
-    console.log(form);
+    if (!this.dynamicPricingService.triggerValidate(form)) {
+      form.markAllAsTouched();
+      this.snackbarService.openSnackBarAsText(
+        'Invalid form: Please fix errors'
+      );
+      return;
+    }
+
+    this.loading = true;
+    const { id, type } = form.controls;
+    const requestedData = DynamicPricingFactory.buildRequest(
+      form,
+      'DAY_TIME_TRIGGER',
+      form.get('type').value
+    );
+
+    if (!Object.keys(requestedData).length) {
+      this.snackbarService.openSnackBarAsText(
+        'Please make changes for the new updates.'
+      );
+      return;
+    }
+    const requestFunction =
+      Revenue[type.value] === Revenue['add']
+        ? this.dynamicPricingService.createDynamicPricing
+        : this.dynamicPricingService.updateDynamicPricing;
+    const request = requestFunction.bind(this.dynamicPricingService);
+    const requestParams = [
+      requestedData,
+      this.entityId,
+      this.getQueryConfig('DAY_TIME_TRIGGER'),
+      id.value,
+    ];
+
+    this.$subscription.add(
+      request(...requestParams).subscribe(
+        (res) => {
+          this.snackbarService.openSnackBarAsText(
+            `Day/Time Trigger ${
+              form.get('type').value === 'add' ? 'Created ' : 'Updated '
+            } Successfully.`,
+            '',
+            { panelClass: 'success' }
+          );
+          this.loadTriggers();
+        },
+        (error) => {
+          this.loading = false;
+        },
+        this.handleFinal
+      )
+    );
   }
 
   getQueryConfig(type: ConfigType): QueryConfig {

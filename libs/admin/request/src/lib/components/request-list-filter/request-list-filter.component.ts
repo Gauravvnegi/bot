@@ -25,7 +25,7 @@ export class RequestListFilterComponent implements OnInit {
     this.useForm = this.fb.group({
       sortBy: new FormControl({}),
       filterBy: this.fb.array(this.filterData.map((x) => false)),
-      listType: new FormControl({}),
+      assignedTo: [''],
     });
   }
 
@@ -52,7 +52,7 @@ export class RequestListFilterComponent implements OnInit {
         sort: values.sortBy.label,
         order: values.sortBy.order,
         priorityType: values.filterBy,
-        entityType: values.listType.label,
+        assignedTo: values.assignedTo,
       },
     });
   }

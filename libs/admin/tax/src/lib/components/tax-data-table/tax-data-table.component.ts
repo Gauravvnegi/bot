@@ -55,8 +55,8 @@ export class TaxDataTableComponent extends BaseDatatableComponent
   }
 
   ngOnInit(): void {
-    this.entityId = this.globalFilterService.entityId;
-    this.initTableValue();
+    // this.entityId = this.globalFilterService.entityId;
+    // this.initTableValue();
   }
 
   /**
@@ -64,6 +64,11 @@ export class TaxDataTableComponent extends BaseDatatableComponent
    * @param event
    */
   loadData(event: LazyLoadEvent): void {
+    this.initTableValue();
+  }
+
+  onEntityTabFilterChanges(event): void {
+    this.entityId = event.entityId;
     this.initTableValue();
   }
 
@@ -108,6 +113,7 @@ export class TaxDataTableComponent extends BaseDatatableComponent
         {
           offset: this.first,
           limit: this.rowsPerPage,
+          entityId: this.entityId,
         },
       ]),
     };

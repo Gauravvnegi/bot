@@ -25,7 +25,7 @@ import {
   ConfigType,
   DynamicPricingForm,
 } from '../../types/dynamic-pricing.types';
-import { RoomTypes } from '../../models/bar-price.model';
+import { RoomTypes } from 'libs/admin/channel-manager/src/lib/models/bulk-update.models';
 
 export type ControlTypes = 'season' | 'occupancy' | 'hotel-occupancy';
 
@@ -90,7 +90,7 @@ export class OccupancyComponent implements OnInit {
     this.loading = true;
     this.$subscription.add(
       this.dynamicPricingService
-        .getOccupancyList(this.getQueryConfig('OCCUPANCY'))
+        .getDynamicPricingList(this.getQueryConfig('OCCUPANCY'))
         .subscribe((res) => {
           if (!res.configDetails.length) {
             this.add('season');
@@ -138,7 +138,7 @@ export class OccupancyComponent implements OnInit {
       toDate: [, [Validators.required]],
       configCategory: ['ROOM_TYPE', [Validators.required]],
       hotelConfig: this.fb.array([this.seasonOccupancyFG]),
-      hotelId: [],
+      hotelId: [this.entityId],
       basePrice: [],
       roomCount: [this.rooms.find((item) => item.isBase)?.roomCount ?? 0],
       roomType: [, [Validators.required]],
@@ -189,10 +189,7 @@ export class OccupancyComponent implements OnInit {
         const season = this.dynamicPricingControl.occupancyFA;
         this.$subscription.add(
           this.dynamicPricingService
-            .deleteDynamicPricing(
-              this.entityId,
-              season.at(index).get('id').value
-            )
+            .deleteDynamicPricing(season.at(index).get('id').value)
             .subscribe(
               (res) => {
                 this.snackbarService.openSnackBarAsText(
@@ -285,6 +282,7 @@ export class OccupancyComponent implements OnInit {
             };
             end.setErrors(condition ? customError : null);
             start.setErrors(condition && null);
+            this.applyRulesConstraint(ruleFA, roomCount);
           });
 
           // Restriction
@@ -292,7 +290,6 @@ export class OccupancyComponent implements OnInit {
           if (index === ruleFA.controls.length - 1) {
             end.patchValue(roomCount, { emitEvent: false });
           }
-          console.log('called...', ruleFA.controls.length);
         };
         configCategoryFG.valueChanges.subscribe((res: ConfigCategory) => {
           if (res) {
@@ -358,13 +355,27 @@ export class OccupancyComponent implements OnInit {
     }
     rules.controls.reduce((acc: FormGroup, curr: FormGroup, index) => {
       const { start, end } = curr.controls;
-      acc &&
+      if (acc) {
         start.patchValue(+acc.get('end').value + 1, {
           emitEvent: false,
         });
+        start.markAsDirty();
+      }
 
       if (index === rules.controls.length - 1) {
         end.patchValue(roomCount, { emitEvent: false });
+        end.markAsDirty();
+      }
+      // Validation
+      if (+start.value > +end.value) {
+        const customError = { min: 'Start should be <= End.' };
+        start.setErrors(+start.value > +end.value ? customError : null);
+        end.setErrors(+start.value > +end.value && null);
+        start.markAllAsTouched();
+        end.markAllAsTouched();
+      } else {
+        start.markAsUntouched();
+        end.markAsUntouched();
       }
       acc = curr;
       return curr;
@@ -386,6 +397,7 @@ export class OccupancyComponent implements OnInit {
       );
       return;
     }
+
     this.loading = true;
     const { id, type } = form.controls;
     const requestedData = DynamicPricingFactory.buildRequest(

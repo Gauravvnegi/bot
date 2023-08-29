@@ -4,8 +4,8 @@ import { FormComponent } from 'libs/admin/shared/src/lib/components/form-compone
 import { ControlContainer } from '@angular/forms';
 import { ChannelManagerFormService } from '../../services/channel-manager-form.service';
 import { Subscription } from 'rxjs';
-import { RoomTypes } from '../../types/channel-manager.types';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import { RoomTypes } from '../../models/bulk-update.models';
 
 @Component({
   selector: 'hospitality-bot-room-types',

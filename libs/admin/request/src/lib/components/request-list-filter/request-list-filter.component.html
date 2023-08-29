@@ -72,34 +72,15 @@
         </div>
         <div class="filterUnderline"></div>
         <div class="sortBy">
-          List By
+          Assigned To
         </div>
-        <div class="sortTypes">
-          <div
-            [ngStyle]="
-              listControl?.value.label === item.value
-                ? {
-                    background: '#5f38f9',
-                    border: '1px solid #5f38f9',
-                    color: '#ffffff',
-                    fontSize: '14px'
-                  }
-                : {
-                    background: '#ffffff',
-                    border: '1px solid #5f38f9',
-                    color: '#5f38f9',
-                    fontSize: '14px'
-                  }
-            "
-            class="sortItemWrapper"
-            *ngFor="let item of listData"
-            (click)="setListBy(item)"
-          >
-            <div class="sortItem">
-              {{ item.label }}
-            </div>
-          </div>
-        </div>
+        <hospitality-bot-select
+          label="Assigned To"
+          controlName="assignedTo"
+          [options]="assignedToList"
+          [stopEmission]="true"
+          [loading]="loading"
+        ></hospitality-bot-select>
       </div>
       <div class="applyBtnWrapper">
         <hospitality-bot-button

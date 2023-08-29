@@ -52,13 +52,22 @@
         label="Priority"
         controlName="priority"
       ></hospitality-bot-select>
+      <!-- <hospitality-bot-select
+        class="half-width"
+        [disabled]="!requestFG.get('itemCode').value"
+        [options]="departmentList"
+        label="Department"
+        controlName="departmentName"
+        [isGroupOptions]="true"
+      ></hospitality-bot-select> -->
 
       <hospitality-bot-select
         class="half-width"
         [disabled]="!requestFG.get('itemCode').value"
-        [options]="userList"
+        [options]="departmentList"
         label="Assign To"
         controlName="assigneeId"
+        [isGroupOptions]="true"
       ></hospitality-bot-select>
 
       <hospitality-bot-text-area

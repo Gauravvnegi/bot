@@ -64,6 +64,7 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
     this.listenForGlobalFilters();
     this.listenForRoomNumberChanges();
     this.listenForItemChanges();
+    this.listenForAddItemChanges();
   }
 
   /**
@@ -131,13 +132,24 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
 
   listenForItemChanges(): void {
     this.requestFG.get('itemCode').valueChanges.subscribe((value) => {
-      this.userList = this.requestData.cms_services
-        .find((item) => item.itemCode === value)
-        .requestItemUsers.map((user) => ({
-          label: `${user.firstName} ${user.lastName}`,
-          value: user.userId,
-        }));
+      const itemId = this.items.find((d) => d.value === value).itemId;
+      this.requestFG.get('departmentName').setValue('', { emitEvent: false });
+      this.requestFG.get('assigneeId').setValue('', { emitEvent: false });
+      this.getItemDetails(itemId);
     });
+  }
+
+  getItemDetails(itemId) {
+    this.$subscription.add(
+      this._requestService
+        .getItemDetails(this.entityId, itemId)
+        .subscribe((response) => {
+          const data = new DepartmentList().deserialize(
+            response?.requestItemUsers
+          );
+          this.departmentList = data.departmentWithUsers;
+        })
+    );
   }
 
   /**
@@ -252,7 +264,6 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
   }
 
   create() {
-
     //to open add new item pop up
 
     const dialogConfig = new MatDialogConfig();

@@ -38,11 +38,13 @@ export type ConfigRuleType = {
     value: number;
   };
   status: StatusType;
+  fromTimeInMillis?: number;
+  toTimeInMillis?: number;
 };
 export type StatusType = 'ACTIVE' | 'INACTIVE';
 export type ConfigType =
   | 'OCCUPANCY'
-  | 'DATE_TIME_TRIGGER'
+  | 'DAY_TIME_TRIGGER'
   | 'INVENTORY_REALLOCATION';
 export type ModeType = 'add' | 'update';
 export type OccupancyUpdateRequestType = Record<
@@ -80,6 +82,8 @@ export type OccupancyRuleType = {
   end: number;
   discount: number;
   rate?: number;
+  fromTime?: number;
+  toTime?: number;
 };
 export type DynamicPricingForm = {
   occupancyFA: FormArray;

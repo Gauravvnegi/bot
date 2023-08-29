@@ -266,7 +266,7 @@ export class CustomFileUploadComponent
           'error',
           null,
           'message.error.upload',
-          'The selected file does not meet the requirements'
+          'Upload failed: Unsupported format or file size over 5MB'
         );
       }
     }

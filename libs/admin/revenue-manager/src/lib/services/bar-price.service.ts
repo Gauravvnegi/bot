@@ -2,7 +2,10 @@ import { Injectable } from '@angular/core';
 import { ApiService } from '@hospitality-bot/shared/utils';
 import { BehaviorSubject } from 'rxjs';
 import { RoomTypeList } from 'libs/admin/room/src/lib/models/rooms-data-table.model';
-import { Rooms, RoomTypes } from '../models/bar-price.model';
+import {
+  Rooms,
+  RoomTypes,
+} from 'libs/admin/channel-manager/src/lib/models/bulk-update.models';
 
 @Injectable()
 export class BarPriceService extends ApiService {

@@ -5,6 +5,9 @@ import {
   Feedback,
   Room,
 } from '../../../../reservation/src/lib/models/reservation-table.model';
+import { DepartmentResponse, UserResponse } from '../types/request.type';
+import { convertToTitleCase } from 'libs/admin/shared/src/lib/utils/valueFormatter';
+import { Option } from '@hospitality-bot/admin/shared';
 
 export interface IDeserializable {
   deserialize(input: any, hotelNationality: string): this;
@@ -195,5 +198,43 @@ export class Request implements IDeserializable {
         timezone
       )}`;
     else '------';
+  }
+}
+
+export class DepartmentList {
+  departmentWithUsers: {
+    label: string;
+    value: string;
+    items: Option[];
+  }[] = [];
+
+  deserialize(input) {
+    input.forEach((user) => {
+      user.departments.forEach((department) => {
+        const existingDepartment = this.departmentWithUsers.find(
+          (d) => d.value === department.department
+        );
+
+        if (existingDepartment) {
+          existingDepartment.items.push({
+            label: `${user.firstName} ${user.lastName}`,
+            value: user.userId,
+          });
+        } else {
+          this.departmentWithUsers.push({
+            label: convertToTitleCase(department.department),
+            value: department.department,
+            items: [
+              {
+                label: `${user.firstName} ${user.lastName}`,
+                value: user.userId,
+              },
+            ],
+          });
+        }
+      });
+    });
+
+    return this;
   }
 }

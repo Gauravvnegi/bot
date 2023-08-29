@@ -13,6 +13,8 @@ export class RequestService extends ApiService {
   refreshData = new BehaviorSubject<boolean>(false);
   requestStatus = new BehaviorSubject<RequestStatus[]>([]); // ['TODO', 'RESOLVED', 'CANCELED', 'IN_PROGRESS', 'TIMEOUT']
   assigneeList = new BehaviorSubject<any[]>([]);
+  refreshItemList = new BehaviorSubject<boolean>(false);
+  requestListFilter = new BehaviorSubject<string>('');
 
   syncRequest(entityId: string): Observable<any> {
     return this.get(
@@ -150,5 +152,9 @@ export class RequestService extends ApiService {
 
   addServiceItem(entityId: string, data): Observable<any> {
     return this.post(`/api/v1/entity/${entityId}/cms-service`, data);
+  }
+
+  getStatusList(jobId: string): Observable<any> {
+    return this.get(`/api/v1/request/job/${jobId}`);
   }
 }

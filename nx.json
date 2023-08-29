@@ -215,6 +215,9 @@
     },
     "admin-revenue-manager": {
       "tags": []
+    },
+    "admin-global-shared": {
+      "tags": []
     }
   }
 }

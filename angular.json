@@ -2396,6 +2396,32 @@
           "style": "scss"
         }
       }
+    },
+    "admin-global-shared": {
+      "root": "libs/admin/global-shared",
+      "sourceRoot": "libs/admin/global-shared/src",
+      "projectType": "library",
+      "schematics": {},
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/admin/global-shared/tsconfig.lib.json",
+              "libs/admin/global-shared/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/admin/global-shared/**/*"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/admin/global-shared/jest.config.js",
+            "tsConfig": "libs/admin/global-shared/tsconfig.spec.json",
+            "passWithNoTests": true
+          }
+        }
+      }
     }
   },
   "cli": {

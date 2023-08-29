@@ -13,7 +13,7 @@ export class TaxService extends ApiService {
    * @returns
    */
   createTax(entityId: string, data: any): Observable<any> {
-    return this.post(`/api/v1/entity/${entityId}/tax`, data);
+    return this.post(`/api/v1/tax`, data);
   }
   /**
    * @getTaxCountry --to get all tax countries
@@ -27,7 +27,7 @@ export class TaxService extends ApiService {
     entityId: string,
     config?: QueryConfig
   ): Observable<TaxListResponse> {
-    return this.get(`/api/v1/entity/${entityId}/tax${config?.params ?? ''}`);
+    return this.get(`/api/v1/tax${config?.params ?? ''}`);
   }
 
   updateTax(
@@ -35,16 +35,16 @@ export class TaxService extends ApiService {
     taxId: string,
     data: any
   ): Observable<TaxListResponse> {
-    return this.patch(`/api/v1/entity/${entityId}/tax/${taxId}`, data);
+    return this.patch(`/api/v1/tax/${taxId}?entityId=${entityId}`, data);
   }
 
   getTaxById(entityId: string, taxId: string): Observable<any> {
-    return this.get(`/api/v1/entity/${entityId}/tax/${taxId}`);
+    return this.get(`/api/v1/tax/${taxId}?entityId=${entityId}`);
   }
 
   exportCSV(entityId: string, config: QueryConfig) {
     return this.get(
-      `/api/v1/entity/${entityId}/tax/export${config.params ?? ''}`,
+      `/api/v1/tax/export${config.params ?? ''}`,
       {
         responseType: 'blob',
       }

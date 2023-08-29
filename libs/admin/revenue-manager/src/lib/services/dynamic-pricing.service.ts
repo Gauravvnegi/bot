@@ -5,10 +5,9 @@ import {
   DynamicPricingResponse,
 } from '../types/dynamic-pricing.types';
 import { QueryConfig } from '@hospitality-bot/admin/shared';
-import { Observable, throwError } from 'rxjs';
+import { Observable } from 'rxjs';
 import { FormArray, FormGroup } from '@angular/forms';
-import { catchError, map } from 'rxjs/operators';
-import { OccupancyResponse } from '../constants/response.const';
+import { DayTimeTriggerComponent } from '../components/day-time-trigger/day-time-trigger.component';
 
 @Injectable()
 export class DynamicPricingService extends ApiService {
@@ -41,43 +40,65 @@ export class DynamicPricingService extends ApiService {
     );
   }
 
-  deleteDynamicPricing(entityId: string, deleteId: string) {
+  deleteDynamicPricing(deleteId: string) {
     return this.delete(
       `/api/v1/revenue/dynamic-pricing-configuration/${deleteId}`
     );
   }
 
-  getOccupancyList(config?: QueryConfig): Observable<DynamicPricingResponse> {
+  getDynamicPricingList(
+    config?: QueryConfig
+  ): Observable<DynamicPricingResponse> {
     return this.get(
       `/api/v1/revenue/dynamic-pricing-configuration${config.params}`
     );
   }
 
-  occupancyValidate(
-    form: FormGroup
-  ): { status: boolean; invalidList: number[] } {
+  occupancyValidate(form: FormGroup): boolean {
     const {
       name,
       fromDate,
       toDate,
-      roomType,
       selectedDays,
       roomTypes,
+      configCategory,
+      hotelConfig,
     } = form.controls;
+    let isValid =
+      name.valid && fromDate.valid && toDate.valid && selectedDays.valid;
+    const ruleValidate = (rule: FormGroup) => {
+      if (isValid) {
+        const { start, end } = rule.controls;
+        isValid = +start.value <= +end.value;
+      }
+    };
+    if (configCategory.value == 'ROOM_TYPE') {
+      (roomTypes as FormArray).controls.forEach((room: FormGroup, index) => {
+        if (room.get('isSelected').value) {
+          const rules = room.get('occupancy') as FormArray;
+          isValid = isValid ? rules.valid : false;
+          rules.controls.forEach((rule: FormGroup) => {
+            ruleValidate(rule);
+          });
+        }
+      });
+    } else {
+      (hotelConfig as FormArray).controls.forEach((rule: FormGroup) => {
+        isValid = isValid ? rule.valid : false;
+        ruleValidate(rule);
+      });
+    }
+    return isValid;
+  }
+
+  triggerValidate(form: FormGroup): boolean {
+    const { name, fromDate, toDate, selectedDays, hotelConfig } = form.controls;
     let isValid =
       name.valid &&
       fromDate.valid &&
       toDate.valid &&
-      roomType.valid &&
-      selectedDays.valid;
-
-    let invalidRoomIndex = [];
-    (roomTypes as FormArray).controls.forEach((room: FormGroup, index) => {
-      if (room.get('isSelected').value) {
-        isValid = isValid ? room.get('occupancy').valid : false;
-        invalidRoomIndex.push(index);
-      }
-    });
-    return { status: isValid, invalidList: invalidRoomIndex };
+      selectedDays.valid &&
+      !DayTimeTriggerComponent.validateConfiguration(hotelConfig as FormArray);
+    return isValid;
   }
 }

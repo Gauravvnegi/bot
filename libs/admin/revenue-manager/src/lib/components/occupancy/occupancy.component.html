@@ -25,12 +25,6 @@
                   }}
                 </div>
               </div>
-              <hospitality-bot-toggle-switch-with-label
-                class="toggle"
-                [isToggleOn]="season.get('status')?.value"
-                (onToggleSwitch)="seasonStatusChange($event, seasonIndex)"
-                click-stop-propagation
-              ></hospitality-bot-toggle-switch-with-label>
               <div class="date">
                 <span *ngIf="season.get('fromDate').value; else empty">{{
                   season.get('fromDate').value | date: 'dd/MM/yyyy'
@@ -40,6 +34,12 @@
                   season.get('toDate').value | date: 'dd/MM/yyyy'
                 }}</span>
               </div>
+              <hospitality-bot-toggle-switch-with-label
+                class="toggle"
+                [isToggleOn]="season.get('status')?.value"
+                (onToggleSwitch)="seasonStatusChange($event, seasonIndex)"
+                click-stop-propagation
+              ></hospitality-bot-toggle-switch-with-label>
             </div>
             <hospitality-bot-button
               click-stop-propagation
@@ -78,8 +78,11 @@
               <div class="right form-block">
                 <div class="top form-block no-padding">
                   <hospitality-bot-from-to-date
-                    [parentFG]="season"
                     class="half-width"
+                    [controlNames]="{
+                      from: 'fromDate',
+                      to: 'toDate'
+                    }"
                   ></hospitality-bot-from-to-date>
                   <hospitality-bot-select
                     class="half-width"
@@ -153,24 +156,26 @@
                               ></ng-container>
                             </ng-container>
                           </div>
-                          <div
-                            class="link"
-                            [ngClass]="
-                              isDisableAddNewRule(
-                                room.get('occupancy'),
-                                room.get('roomCount')
-                              )
-                                ? 'disable'
-                                : ''
-                            "
-                            (click)="
-                              !isDisableAddNewRule(
-                                room.get('occupancy'),
-                                room.get('roomCount')
-                              ) && add('occupancy', room)
-                            "
-                          >
-                            +Add More
+                          <div class="add-level">
+                            <div
+                              class="link"
+                              [ngClass]="
+                                isDisableAddNewRule(
+                                  room.get('occupancy'),
+                                  room.get('roomCount')
+                                )
+                                  ? 'disable'
+                                  : ''
+                              "
+                              (click)="
+                                !isDisableAddNewRule(
+                                  room.get('occupancy'),
+                                  room.get('roomCount')
+                                ) && add('occupancy', room)
+                              "
+                            >
+                              +Add More
+                            </div>
                           </div>
                         </div>
                       </p-accordionTab>
@@ -212,24 +217,27 @@
                           ></ng-container>
                         </ng-container>
                       </div>
-                      <div
-                        class="link"
-                        [ngClass]="
-                          isDisableAddNewRule(
-                            season.get('hotelConfig'),
-                            season.get('roomCount')
-                          )
-                            ? 'disable'
-                            : ''
-                        "
-                        (click)="
-                          !isDisableAddNewRule(
-                            season.get('hotelConfig'),
-                            season.get('roomCount')
-                          ) && add('hotel-occupancy', season.get('hotelConfig'))
-                        "
-                      >
-                        +Add More
+                      <div class="add-level">
+                        <div
+                          class="link"
+                          [ngClass]="
+                            isDisableAddNewRule(
+                              season.get('hotelConfig'),
+                              season.get('roomCount')
+                            )
+                              ? 'disable'
+                              : ''
+                          "
+                          (click)="
+                            !isDisableAddNewRule(
+                              season.get('hotelConfig'),
+                              season.get('roomCount')
+                            ) &&
+                              add('hotel-occupancy', season.get('hotelConfig'))
+                          "
+                        >
+                          +Add More
+                        </div>
                       </div>
                     </div>
                   </p-accordionTab>
@@ -341,7 +349,7 @@
         <br />
       </ng-container>
     </p-accordion>
-    <div class="add-season">
+    <div class="add-level">
       <div class="link" (click)="add('season')">
         +Add New Season
       </div>

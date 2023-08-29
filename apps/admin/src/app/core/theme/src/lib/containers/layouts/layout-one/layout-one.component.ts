@@ -205,10 +205,10 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
         entityName: selectedHotelData?.['id'],
       },
       feedback: {
-        feedbackType: this.checkForTransactionFeedbackSubscribed()
-          ? layoutConfig.feedback.transactional
-          : layoutConfig.feedback.stay,
+        feedbackType: layoutConfig.feedback.both,
       },
+      isAllOutletSelected: this.outlets.length !== 0,
+
       outlets: this.outlets.reduce(
         (acc, curr) => ((acc[curr.id] = true), acc),
         {}

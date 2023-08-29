@@ -80,76 +80,114 @@ export class DynamicPricingFactory {
   static getChangedProperties(formGroup: FormGroup, type: ConfigType) {
     let requestData: DynamicPricingUpdateRequestType = {};
     let removedRulesIds = [];
+    const otherDirtyMapper = (
+      currentControl,
+      name: OccupancyFormControlsType
+    ) => {
+      if (name === 'removedRules') {
+        removedRulesIds = [...removedRulesIds, ...currentControl['controls']];
+      } else if (
+        name == 'fromDate' ||
+        name == 'toDate' ||
+        name == 'selectedDays' ||
+        name == 'name'
+      ) {
+        const dependentControlList: OccupancyFormControlsType[] = [
+          'fromDate',
+          'toDate',
+          'selectedDays',
+        ];
+        if (dependentControlList.includes(name)) {
+          dependentControlList.forEach((item) => {
+            const days = formGroup.get(item).value;
+            if (item === 'selectedDays') {
+              requestData['daysIncluded'] = days;
+            } else {
+              requestData[item] = days;
+            }
+          });
+        }
+        requestData['name'] = currentControl.value;
+      } else if (name == 'status') {
+        requestData[name] = currentControl.value ? 'ACTIVE' : 'INACTIVE';
+      } else if (name == 'roomType') {
+        /**
+         * We are collecting bunch of occupancyRules which is exist in multiple rule, if any unselected
+         */
+        let unselectedRulesIds = (formGroup.controls[
+          'roomTypes'
+        ] as FormArray).controls
+          .filter(
+            (item: FormGroup) =>
+              !currentControl.value.includes(item.value.roomId)
+          )
+          .reduce((acc: string[], curr: FormGroup) => {
+            const occupancyRule = curr.get('occupancy') as FormArray;
+            return [
+              ...acc,
+              ...occupancyRule.controls.reduce(
+                (accRule: string[], rule: FormGroup) => {
+                  return [
+                    ...accRule,
+                    DynamicPricingFactory.getOccupancyRules(rule).id,
+                  ];
+                },
+                []
+              ),
+            ];
+          }, []);
+        removedRulesIds = [
+          ...removedRulesIds,
+          ...unselectedRulesIds.filter((item) => item),
+        ];
+      }
+    };
+
     Object.keys(formGroup.controls).forEach(
       (name: OccupancyFormControlsType) => {
         const currentControl = formGroup.controls[name];
         if (currentControl.dirty) {
-          const mapOtherControl = () => {
-            const dependentControlList: OccupancyFormControlsType[] = [
-              'fromDate',
-              'toDate',
-              'selectedDays',
-            ];
-            if (dependentControlList.includes(name)) {
-              dependentControlList.forEach((item) => {
-                requestData[item] = formGroup.get(item).value;
-              });
-            }
-
-            // if any other changes are remain then store it
-            name != 'hotelConfig' &&
-              (requestData[name] =
-                name == 'status'
-                  ? currentControl.value
-                    ? 'ACTIVE'
-                    : 'INACTIVE'
-                  : currentControl.value);
-          };
-
           if (formGroup.controls['configCategory'].value == 'ROOM_TYPE') {
-            // for room type
+            /**
+             * We are collect the updated occupancyRules
+             */
             if (name == 'roomTypes') {
-              let occupancyRuleData: ConfigRuleType[] = [];
-              (currentControl as FormArray).controls
-                .filter(
-                  (roomType: FormGroup) =>
-                    roomType.get('isSelected').value && roomType.dirty
-                )
-                .forEach((roomType: FormGroup) =>
-                  (roomType.get(
-                    'occupancy'
-                  ) as FormArray).controls.forEach((occupancyRule: FormGroup) =>
-                    occupancyRuleData.push(
-                      DynamicPricingFactory.getOccupancyRules(occupancyRule)
-                    )
-                  )
-                );
+              let occupancyRuleData: {
+                type: ConfigCategory;
+                id: string;
+                configRules: ConfigRuleType[];
+              }[] = [];
 
-              requestData['configItems'] = [
-                {
-                  type: 'ROOM_TYPE',
-                  id: '',
-                  configRules: [...occupancyRuleData],
-                },
+              const selectedRoomType = [
+                ...formGroup.controls['roomType'].value,
               ];
-            } else if (name === 'roomType') {
-              //Finding deleted rules who is unselected from roomTypes
-              const removedRules = (formGroup.controls[
-                'roomTypes'
-              ] as FormArray).controls
-                .filter((roomType) => !roomType.get('isSelected').value)
-                .map((roomType) =>
-                  (roomType.get('occupancy') as FormArray).controls
-                    .filter((rules) => rules.get('id')?.value)
-                    .map((rules) => rules.get('id').value)
+              occupancyRuleData = (currentControl as FormArray).controls
+                .filter((item: FormGroup) =>
+                  selectedRoomType.includes(item.get('roomId').value)
                 )
-                .reduce((acc, val) => acc.concat(val), []);
-              removedRulesIds = [...removedRulesIds, ...removedRules];
+                .reduce((accumulator, roomType: FormGroup) => {
+                  const { occupancy } = roomType.controls;
+                  if (roomType.dirty) {
+                    const rules = (occupancy as FormArray).controls.map(
+                      (occupancyRule: FormGroup) =>
+                        DynamicPricingFactory.getOccupancyRules(occupancyRule)
+                    );
+                    accumulator.push({
+                      type: 'ROOM_TYPE',
+                      id: roomType.get('roomId').value,
+                      configRules: rules,
+                    });
+                  }
+                  return accumulator;
+                }, occupancyRuleData);
+
+              if (occupancyRuleData.length) {
+                requestData['configItems'] = occupancyRuleData;
+              }
             } else {
-              mapOtherControl();
+              otherDirtyMapper(currentControl, name);
             }
           } else {
-            // for hotel type
             if (name == 'hotelConfig') {
               requestData['configItems'] = [
                 {
@@ -164,15 +202,9 @@ export class DynamicPricingFactory {
                   ],
                 },
               ];
+            } else {
+              otherDirtyMapper(currentControl, name);
             }
-            mapOtherControl();
-          }
-
-          if (name === 'removedRules') {
-            removedRulesIds = [
-              ...removedRulesIds,
-              ...currentControl['controls'],
-            ];
           }
         }
       }
@@ -230,7 +262,6 @@ export class DynamicPricingHandler {
       status: item.status,
       basePrice: item.basePrice,
     });
-
     season.get('configCategory').disable();
     if (item.configCategory == 'HOTEL') {
       season.patchValue({
@@ -283,6 +314,7 @@ export class DynamicPricingHandler {
 
         //patching all values of rules
         const { occupancy } = roomControl.controls;
+        item.roomTypes[index].occupancy.sort((a, b) => a.start - b.start);
         (occupancy as FormArray).controls.forEach(
           (occupancyControl: FormGroup, occupancyIndex) => {
             const rule = item.roomTypes[index]?.occupancy[occupancyIndex];

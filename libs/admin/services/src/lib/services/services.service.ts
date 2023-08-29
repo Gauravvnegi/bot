@@ -15,8 +15,8 @@ export class ServicesService extends LibraryService {
 
   getTaxList(
     entityId: string,
-    config: QueryConfig = { params: '?order=DESC&limit=100' }
+    config: QueryConfig = { params: `?entityId=${entityId}` }
   ): Observable<TaxListResponse> {
-    return this.get(`/api/v1/entity/${entityId}/tax${config?.params ?? ''}`);
+    return this.get(`/api/v1/tax${config?.params ?? ''}`);
   }
 }

@@ -49,7 +49,7 @@ export class EntityTabFilterComponent implements OnInit {
   ngOnInit(): void {
     this.listenForGlobalFilters();
     this.onEntityTabFilterChanges.emit({
-      entityId: this.tabFilterItems[this.tabFilterIdx].value,
+      entityId: [this.tabFilterItems[this.tabFilterIdx].value],
       feedbacktype: this.tabFilterItems[this.tabFilterIdx].type,
     });
   }
@@ -220,6 +220,8 @@ export class EntityTabFilterComponent implements OnInit {
 type EntityTabFilterResponse = {
   entityId: string[];
   feedbacktype: string;
+  entityType?: string;
+  entitySubType?: string;
 };
 
 type EntityTabFilterConfig = {

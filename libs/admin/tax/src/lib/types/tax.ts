@@ -6,4 +6,5 @@ export type TaxFormData = {
   taxType: string;
   category: string;
   taxValue: string;
+  entityId: string;
 };

@@ -80,11 +80,11 @@ export class FirebaseMessagingService {
 
   showNotificationAsSnackBar(payload: any) {
     if (payload.notification?.body) {
-      const title = payload.notification?.body.split(',')[0];
+      const title = payload.notification?.body.split('\n')[0];
       this._snackbarService.openSnackBarAsText(
-        `${payload.notification?.title}(${title}): ${decodeURIComponent(
+        `${payload.notification?.title}: ${decodeURIComponent(
           payload.notification?.body.substring(
-            payload.notification?.body.indexOf(',') + 1
+            payload.notification?.body.split('\n').join(' | ')
           )
         )}`,
         '',

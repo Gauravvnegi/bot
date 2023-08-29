@@ -1,4 +1,3 @@
-
 <div
   *ngIf="dynamicPricingFG"
   class="wrapper__occupancy"
@@ -69,6 +68,7 @@
                     placeholder: 'Enter'
                   }"
                 ></hospitality-bot-input>
+
                 <hospitality-bot-room-types
                   class="full-width"
                   [controlName]="'roomType'"
@@ -84,6 +84,7 @@
                       to: 'toDate'
                     }"
                   ></hospitality-bot-from-to-date>
+
                   <hospitality-bot-select
                     class="half-width"
                     [controlName]="'configCategory'"
@@ -183,6 +184,7 @@
                   </p-accordion>
                 </ng-container>
               </ng-container>
+
               <ng-template formArrayName="hotelConfig" #hotelCategory>
                 <p-accordion class="room-accordion">
                   <p-accordionTab [selected]="true" class="no-shadow">
@@ -243,6 +245,7 @@
                   </p-accordionTab>
                 </p-accordion>
               </ng-template>
+
               <div class="action">
                 <hospitality-bot-button
                   label="Save"
@@ -250,6 +253,7 @@
                 >
                 </hospitality-bot-button>
               </div>
+
               <ng-template #ruleHeading>
                 <div class="occupancy occupancy-header">
                   <span class="item">Start & End</span>
@@ -258,6 +262,7 @@
                   &nbsp;
                 </div>
               </ng-template>
+
               <ng-template
                 #ruleControls
                 let-form="form"
@@ -346,6 +351,7 @@
             </div>
           </div>
         </p-accordionTab>
+
         <br />
       </ng-container>
     </p-accordion>
@@ -358,6 +364,7 @@
   <div class="wrapper__occupancy-footer">
     <span><strong>Note:</strong> {{ footerNote }}</span>
   </div>
+
   <ng-template #emptyRoom>
     <div class="empty-room">
       Please select at least one room.

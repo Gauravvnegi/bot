@@ -181,7 +181,7 @@ export class DynamicPricingComponent implements OnInit {
 
   get dynamicPricingControl() {
     return this.dynamicPricingFG.controls as Record<
-      'inventoryAllocationFA' | 'timeFA' | 'occupancyFA',
+      keyof DynamicPricingForm,
       AbstractControl
     > & {
       inventoryAllocationFA: FormArray;

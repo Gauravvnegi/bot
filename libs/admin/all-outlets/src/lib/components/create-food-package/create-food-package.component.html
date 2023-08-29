@@ -24,13 +24,18 @@
           placeholder: 'Enter name'
         }"
       ></hospitality-bot-input>
-      <hospitality-bot-category
-        controlName="parentId"
+      <hospitality-bot-select
         class="half-width"
-        type="FOOD_PACKAGE_CATEGORY"
-        [entityId]="outletId"
-      >
-      </hospitality-bot-category>
+        label="Type"
+        controlName="parentId"
+        [options]="foodCategories"
+        [props]="{
+          placeholder: 'Select Type',
+          createPrompt: 'Add New Type',
+          inputPrompt: 'Enter Type'
+        }"
+        (onCreate)="createType($event)"
+      ></hospitality-bot-select>
       <hospitality-bot-discount-form
         [controls]="{
           originalPrice: 'rate'

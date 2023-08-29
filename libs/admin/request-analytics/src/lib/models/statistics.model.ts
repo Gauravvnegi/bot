@@ -94,11 +94,14 @@ export class RequestStats {
 
     const colors = ['#beaeff', '#5f38f9', 'rgb(197, 197, 197)', '#5f38f9'];
     this.requestStats = requestStatKeys
-      .filter((key) => key !== 'CANCELLED')
-      .map((key, index) => {
+      .filter((requestKey) => requestKey !== 'CANCELLED')
+      .map((requestKey, index) => {
         return {
-          label: key === 'TIMEOUT' ? 'Timed-out' : convertToTitleCase(key),
-          value: input.requestStats[key],
+          label:
+            requestKey === 'TIMEOUT'
+              ? 'Timed-out'
+              : convertToTitleCase(requestKey),
+          value: input.requestStats[requestKey],
           color: colors[index],
         };
       });
@@ -108,23 +111,22 @@ export class RequestStats {
 }
 
 export class AverageRequestStats {
-  averageStats: { label: string; value: number; title: string }[];
-
+  averageStats: { label: string; value: number | string; key: string }[];
+  createdTickets: number;
+  resolvedTickets: number;
   deserialize(input: AverageStats) {
     const statsData = Object.keys(input.averageStats);
     this.averageStats = statsData
-      .filter((key) => key !== 'timeoutTickets')
-      .map((key) => {
+      .filter((requestKey) => requestKey === 'averageTimePerJob')
+      .map((requestKey) => {
         return {
-          label:
-            key === 'averageTicketsPerDay'
-              ? 'Average Tickets/Day'
-              : 'Average Time Taken/Tickets',
-          value: input.averageStats[key],
-          title:
-            key === 'averageTicketsPerDay' ? 'AverageTicket' : 'AverageTime',
+          label: 'Average Time Taken/Tickets',
+          value: `${input.averageStats[requestKey]} Mins`,
+          key: 'AverageTime',
         };
       });
+    this.createdTickets = input.averageStats.averageCreatedJobs;
+    this.resolvedTickets = input.averageStats.averageResolvedJobs;
     return this;
   }
 }

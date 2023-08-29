@@ -7,7 +7,7 @@ $border-color: rgba(112, 112, 112, 0.35);
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-      width: 100px;
+      max-width: 300px;
     }
     .date {
       font-size: 16px;
@@ -52,6 +52,12 @@ $border-color: rgba(112, 112, 112, 0.35);
 }
 
 :host ::ng-deep {
+  .no-shadow {
+    box-shadow: unset;
+    .p-accordion-tab {
+      box-shadow: unset;
+    }
+  }
   .room-accordion {
     .header {
       font-size: 16px !important;
@@ -131,4 +137,8 @@ $border-color: rgba(112, 112, 112, 0.35);
   font-size: 16px;
   font-weight: 600;
   color: #5f38f9;
+}
+
+.no-padding {
+  padding: 0;
 }

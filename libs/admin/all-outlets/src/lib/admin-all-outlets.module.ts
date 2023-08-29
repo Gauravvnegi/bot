@@ -7,7 +7,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { OutletFormService } from './services/outlet-form.service';
 import { PageReloadService } from './services/page-reload.service.service';
 import { TaxService } from 'libs/admin/tax/src/lib/services/tax.service';
-import { AdminLibraryModule } from '@hospitality-bot/admin/library';
 
 @NgModule({
   imports: [
@@ -16,14 +15,8 @@ import { AdminLibraryModule } from '@hospitality-bot/admin/library';
     AdminAllOutletsRoutingModule,
     FormsModule,
     ReactiveFormsModule,
-    AdminLibraryModule,
   ],
   declarations: [...AdminAllOutletsRoutingModule.components],
-  providers: [
-    OutletService,
-    OutletFormService,
-    PageReloadService,
-    TaxService,
-  ],
+  providers: [OutletService, OutletFormService, PageReloadService, TaxService],
 })
 export class AdminAllOutletsModule {}

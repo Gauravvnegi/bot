@@ -1,6 +1,8 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormGroup, FormBuilder, FormControl, FormArray } from '@angular/forms';
 import { request } from '../../constants/request';
+import { Option, UserService } from '@hospitality-bot/admin/shared';
+import { ManagePermissionService } from 'libs/admin/roles-and-permissions/src/lib/services/manage-permission.service';
 
 @Component({
   selector: 'hospitality-bot-request-list-filter',
@@ -12,21 +14,42 @@ export class RequestListFilterComponent implements OnInit {
   @Output() filterApplied = new EventEmitter();
   sortList = request.sort;
   filterData = request.filter;
+  assignedToList: Option[] = [];
   @Output() close = new EventEmitter();
+  entityId: string;
 
   useForm: FormGroup;
 
   listData = request.listBy;
-  constructor(private fb: FormBuilder) {}
+  constructor(
+    private fb: FormBuilder,
+    private _managePermissionService: ManagePermissionService,
+    private _userService: UserService
+  ) {}
 
   ngOnInit(): void {
     this.initFG();
+    this.entityId = this._userService.getentityId();
+    this.getAssignedToList();
 
     this.useForm = this.fb.group({
       sortBy: new FormControl({}),
       filterBy: this.fb.array(this.filterData.map((x) => false)),
       assignedTo: [''],
     });
+  }
+
+  getAssignedToList() {
+    this._managePermissionService
+      .getAllUsers(this.entityId, {
+        params: '?status=true&mention=true',
+      })
+      .subscribe((data) => {
+        this.assignedToList = data.users.map((item) => ({
+          label: `${item.firstName} ${item.lastName}`,
+          value: item.id,
+        }));
+      });
   }
 
   /**

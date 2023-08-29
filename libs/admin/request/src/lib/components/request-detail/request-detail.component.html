@@ -53,9 +53,19 @@
     </div>
 
     <hospitality-bot-timer
-      *ngIf="data?.timeLeft !== undefined"
+      class="time-left"
+      *ngIf="
+        data?.timeLeft !== undefined &&
+        data?.action !== 'RESOLVED' &&
+        data?.action !== 'CANCELLED'
+      "
       [inputMilliseconds]="data.timeLeft"
     ></hospitality-bot-timer>
+
+    <span class="resolved-text" *ngIf="data?.action === 'RESOLVED'">
+      Resolved on:
+      {{ formattedClosedTimestamp }}
+    </span>
 
     <div class="request-items-body-subtitle">
       {{ data.remarks }}
@@ -153,4 +163,11 @@
       Please select a complaint to view
     </div>
   </div>
+</ng-template>
+
+<ng-template #date>
+  <span>
+    Resolved on:
+    {{ formattedDate() }}
+  </span>
 </ng-template>

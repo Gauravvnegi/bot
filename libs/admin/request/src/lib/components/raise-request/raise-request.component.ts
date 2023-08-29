@@ -24,6 +24,9 @@ import { Option } from '@hospitality-bot/admin/shared';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { AddItemComponent } from '../add-item/add-item.component';
+import { DepartmentList } from '../../data-models/request.model';
+import { convertToTitleCase } from 'libs/admin/shared/src/lib/utils/valueFormatter';
+import { ManagePermissionService } from 'libs/admin/roles-and-permissions/src/lib/services/manage-permission.service';
 
 @Component({
   selector: 'hospitality-bot-raise-request',
@@ -41,8 +44,10 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
   priorityList = request.priority;
   isRaisingRequest = false;
   requestConfig = request;
+  users = [];
   userList: Option[] = [];
   requestData: any;
+  departmentList: any[] = [];
   constructor(
     private fb: FormBuilder,
     private globalFilterService: GlobalFilterService,
@@ -52,7 +57,8 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
     private _translateService: TranslateService,
     private router: Router,
     private route: ActivatedRoute,
-    private _modalService: ModalService
+    private _modalService: ModalService,
+    private _managePermissionService: ManagePermissionService
   ) {}
 
   ngOnInit(): void {
@@ -95,6 +101,7 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
       remarks: ['', [Validators.maxLength(200)]],
       quantity: [1],
       assigneeId: [''],
+      departmentName: [''],
     });
 
     this.requestFG.get('itemCode').valueChanges.subscribe((value) => {
@@ -128,6 +135,12 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
             }));
         })
     );
+  }
+
+  listenForAddItemChanges() {
+    this._requestService.refreshItemList.subscribe((res) => {
+      if (res) this.initItemList();
+    });
   }
 
   listenForItemChanges(): void {

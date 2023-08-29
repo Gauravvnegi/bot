@@ -1,8 +1,9 @@
-
 import { FormArray } from '@angular/forms';
+
 export type DynamicPricingResponse = {
   configDetails: DynamicPricingRequest[];
 };
+
 export type DynamicPricingRequest = {
   id?: string;
   name: string;
@@ -15,6 +16,7 @@ export type DynamicPricingRequest = {
   configCategory: ConfigCategory;
   configItems: ConfigItemType[];
 };
+
 export type DaysType =
   | 'MONDAY'
   | 'TUESDAY'
@@ -23,12 +25,15 @@ export type DaysType =
   | 'FRIDAY'
   | 'SATURDAY'
   | 'SUNDAY';
+
 export type ConfigCategory = 'ROOM_TYPE' | 'HOTEL';
+
 export type ConfigItemType = {
   type: ConfigCategory;
   id: string;
   configRules: ConfigRuleType[];
 };
+
 export type ConfigRuleType = {
   id?: string;
   occupancyStart: number;
@@ -41,12 +46,16 @@ export type ConfigRuleType = {
   fromTimeInMillis?: number;
   toTimeInMillis?: number;
 };
+
 export type StatusType = 'ACTIVE' | 'INACTIVE';
+
 export type ConfigType =
   | 'OCCUPANCY'
   | 'DAY_TIME_TRIGGER'
   | 'INVENTORY_REALLOCATION';
+
 export type ModeType = 'add' | 'update';
+
 export type OccupancyUpdateRequestType = Record<
   string,
   | string
@@ -56,7 +65,9 @@ export type OccupancyUpdateRequestType = Record<
   | ConfigRuleType[]
   | ConfigCategory
 >;
+
 // occupancy types
+
 export type OccupancyFormControlsType =
   | 'id'
   | 'fromDate'
@@ -69,6 +80,7 @@ export type OccupancyFormControlsType =
   | 'status'
   | 'removedRules'
   | 'hotelConfig';
+
 export type RoomsConfigType = {
   isSelected: boolean;
   roomId: string;
@@ -76,6 +88,7 @@ export type RoomsConfigType = {
   basePrice: number;
   occupancy: OccupancyRuleType[];
 };
+
 export type OccupancyRuleType = {
   id?: string;
   start: number;
@@ -85,6 +98,7 @@ export type OccupancyRuleType = {
   fromTime?: number;
   toTime?: number;
 };
+
 export type DynamicPricingForm = {
   occupancyFA: FormArray;
   inventoryAllocationFA: FormArray;

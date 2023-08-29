@@ -63,12 +63,13 @@ export class UpdateInventory {
           (sum, curr) => sum + curr['available'],
           0
         ),
-        occupancy:
+        occupancy: (
           reduce(
             selectedAvailability,
             (sum, curr) => sum + curr['occupancy'],
             0
-          ) / totalSelectedRooms,
+          ) / totalSelectedRooms
+        ).toFixed(2),
       };
     });
     return perDayRoomAvailability;

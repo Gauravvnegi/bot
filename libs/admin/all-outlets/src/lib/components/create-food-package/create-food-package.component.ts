@@ -6,12 +6,12 @@ import { SnackBarService } from '@hospitality-bot/shared/material';
 import { Subscription } from 'rxjs';
 import { errorMessages } from '../../constants/form';
 import { OutletService } from '../../services/outlet.service';
+import { FoodPackageForm } from '../../types/outlet';
 import { OutletBaseComponent } from '../outlet-base.components';
 import { TaxService } from 'libs/admin/tax/src/lib/services/tax.service';
 import { IteratorField } from 'libs/admin/shared/src/lib/types/fields.type';
 import { foodPackageFields } from '../../constants/data';
 import { PageReloadService } from '../../services/page-reload.service.service';
-import { CategoryData, LibraryService } from '@hospitality-bot/admin/library';
 
 @Component({
   selector: 'hospitality-bot-create-food-package',
@@ -29,18 +29,12 @@ export class CreateFoodPackageComponent extends OutletBaseComponent
   navRoutes: NavRouteOptions;
   packageCode: string = '# will be auto generated';
   $subscription = new Subscription();
-
   loading: boolean = false;
+  taxes: Option[] = [];
   isPackageCreated = false;
 
-  taxes: Option[] = [];
-  types: Option[] = [
-    { label: 'Veg', value: 'VEG' },
-    { label: 'Non-veg', value: 'NONVEG' },
-    { label: 'Drinks', value: 'DRINKS' },
-    { label: 'Desserts', value: 'DESSERTS' },
-    ];
-   
+  foodCategories: Option[];
+
   constructor(
     private fb: FormBuilder,
     private snackbarService: SnackBarService,
@@ -48,8 +42,7 @@ export class CreateFoodPackageComponent extends OutletBaseComponent
     router: Router,
     private taxService: TaxService,
     private outletService: OutletService,
-    private pageReloadService: PageReloadService,
-    private libraryService: LibraryService
+    private pageReloadService: PageReloadService
   ) {
     super(router, route);
   }
@@ -60,6 +53,7 @@ export class CreateFoodPackageComponent extends OutletBaseComponent
     this.fields = foodPackageFields;
     this.initForm();
     this.getTax();
+    this.getFoodPackageCategory();
   }
 
   initForm(): void {
@@ -68,8 +62,8 @@ export class CreateFoodPackageComponent extends OutletBaseComponent
     this.useForm = this.fb.group({
       active: [true],
       name: ['', Validators.required],
-      type: ['', Validators.required],
-      originalPrice: ['', Validators.required],
+      parentId: ['', Validators.required],
+      rate: ['', Validators.required],
       currency: ['INR'],
       discountType: ['PERCENTAGE'],
       discountValue: ['', Validators.required],
@@ -159,9 +153,22 @@ export class CreateFoodPackageComponent extends OutletBaseComponent
     );
   }
 
+  getFoodPackageCategory() {
+    this.outletService
+      .getFoodPackageCategory(this.outletId)
+      .subscribe((res) => {
+        this.foodCategories = res?.records?.map((item) => ({
+          label: item.name,
+          value: item.id,
+        }));
+      });
+  }
+
   createTax() {
     this.router.navigate(['pages/settings/tax/create-tax']);
   }
+
+  createType(name: string) {}
 
   handleErrors = ({ error }) => {
     this.loading = false;

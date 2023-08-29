@@ -21,17 +21,18 @@ import {
   venueFields,
 } from '../../constants/reservation';
 import {
-  OfferList,
-  OfferData,
   SummaryData,
   ReservationFormData,
   BookingInfo,
+  OutletForm,
 } from '../../models/reservations.model';
 import { ManageReservationService } from '../../services/manage-reservation.service';
 import { ReservationForm } from '../../constants/form';
 import { BaseReservationComponent } from '../base-reservation.component';
 import { FormService } from '../../services/form.service';
 import { ReservationType } from '../../constants/reservation-table';
+import { debounceTime } from 'rxjs/operators';
+import { convertToTitleCase } from 'libs/admin/shared/src/lib/utils/valueFormatter';
 
 @Component({
   selector: 'hospitality-bot-venue-reservation',
@@ -50,6 +51,8 @@ export class VenueReservationComponent extends BaseReservationComponent
   eventOptions: Option[] = [];
   foodPackages: Option[] = [];
 
+  venueItemValues = [];
+
   constructor(
     private fb: FormBuilder,
     private adminUtilityService: AdminUtilityService,
@@ -65,6 +68,7 @@ export class VenueReservationComponent extends BaseReservationComponent
     this.initForm();
     this.initDetails();
     this.getReservationId();
+    this.listenForFormChanges();
   }
 
   initDetails() {
@@ -125,48 +129,21 @@ export class VenueReservationComponent extends BaseReservationComponent
    * @function listenForFormChanges Listen for form values changes.
    */
   listenForFormChanges(): void {
-    this.userForm
-      .get('roomInformation.roomTypeId')
-      ?.valueChanges.subscribe((res) => {
-        if (res) {
-          this.userForm.get('offerId').reset();
-          // this.getOfferByRoomType(res);
-          this.getSummaryData();
-        }
-      });
-    this.userForm
-      .get('roomInformation.roomCount')
-      ?.valueChanges.subscribe((res) => {
-        if (res) {
-          if (
-            this.userForm.get('roomInformation.roomCount').value >
-            this.userForm.get('roomInformation.adultCount').value
-          )
-            this.userForm
-              .get('roomInformation.adultCount')
-              .patchValue(this.userForm.get('roomInformation.roomCount').value);
-        }
+    this.inputControls.eventInformation.valueChanges
+      .pipe(debounceTime(100))
+      .subscribe((res) => {
+        this.getSummaryData();
       });
   }
 
   getReservationId(): void {
     if (this.reservationId) {
-      this.statusOptions = [
-        ...statusOptions,
-        { label: 'In Progress', value: 'IN_PROGRESS' },
-      ];
       this.getReservationDetails();
     } else {
       this.statusOptions = [
         ...editModeStatusOptions,
         { label: 'In Progress', value: 'IN_PROGRESS' },
       ];
-      this.userForm.valueChanges.subscribe((_) => {
-        if (!this.formValueChanges) {
-          this.formValueChanges = true;
-          this.listenForFormChanges();
-        }
-      });
     }
   }
 
@@ -176,74 +153,48 @@ export class VenueReservationComponent extends BaseReservationComponent
         .getReservationDataById(this.reservationId, this.entityId)
         .subscribe(
           (response) => {
-            const data = new ReservationFormData().deserialize(response);
-            this.userForm.patchValue(data);
-            this.summaryData = new SummaryData().deserialize(response);
-            this.setFormDisability(data.reservationInformation);
-            if (data.offerId)
-              // this.getOfferByRoomType(
-              //   this.userForm.get('roomInformation.roomTypeId').value
-              // );
-              this.userForm.valueChanges.subscribe((_) => {
-                if (!this.formValueChanges) {
-                  this.formValueChanges = true;
-                  this.listenForFormChanges();
-                }
-              });
+            const data = new OutletForm().deserialize(response);
+            const {
+              eventInformation: { venueInfo, ...eventInfo },
+              guestInformation,
+              nextStates,
+              ...formData
+            } = data;
+
+            if (nextStates)
+              this.statusOptions = nextStates.map((item) => ({
+                label: convertToTitleCase(item),
+                value: item,
+              }));
+
+            this.venueItemValues = venueInfo;
+            this.formService.guestInformation.next(guestInformation);
+
+            this.userForm.patchValue({
+              bookingInformation: eventInfo,
+              ...formData,
+            });
           },
           (error) => {}
         )
     );
   }
 
-  setFormDisability(data: BookingInfo): void {
-    this.userForm.get('reservationInformation.source').disable();
-    switch (true) {
-      case data.reservationType === ReservationType.CONFIRMED:
-        this.userForm.disable();
-        this.disabledForm = true;
-        break;
-      case data.reservationType === ReservationType.CANCELED:
-        this.userForm.disable();
-        this.disabledForm = true;
-        break;
-      case data.source === 'CREATE_WITH':
-        this.disabledForm = true;
-        break;
-      case data.source === 'OTHERS':
-        this.disabledForm = true;
-        break;
+  setFormDisability(): void {
+    // this.userForm.get('reservationInformation.source').disable();
+    if (this.reservationId) {
+      const reservationType = this.reservationInfoControls.status.value;
+      switch (true) {
+        case reservationType === ReservationType.CONFIRMED:
+          this.userForm.disable();
+          this.disabledForm = true;
+          break;
+        case reservationType === ReservationType.CANCELED:
+          this.userForm.disable();
+          this.disabledForm = true;
+          break;
+      }
     }
-  }
-
-  // getOfferByRoomType(id: string): void {
-  //   if (id)
-  //     this.$subscription.add(
-  //       this.manageReservationService
-  //         .getOfferByRoomType(this.entityId, id)
-  //         .subscribe(
-  //           (response) => {
-  //             this.offersList = new OfferList().deserialize(response);
-  //             if (this.userForm.get('offerId').value) {
-  //               this.selectedOffer = this.offersList.records.filter(
-  //                 (item) => item.id === this.userForm.get('offerId').value
-  //               )[0];
-  //             }
-  //           },
-  //           (error) => {}
-  //         )
-  //     );
-  // }
-
-  offerSelect(offerData?: OfferData): void {
-    if (offerData) {
-      this.userForm.patchValue({ offerId: offerData.id });
-      this.getSummaryData();
-    } else {
-      this.userForm.get('offerId').reset();
-      this.getSummaryData();
-    }
-    this.selectedOffer = offerData;
   }
 
   getSummaryData(): void {
@@ -274,7 +225,8 @@ export class VenueReservationComponent extends BaseReservationComponent
               .patchValue(this.summaryData?.totalAmount);
             this.deductedAmount = this.summaryData?.totalAmount;
           },
-          (error) => {}
+          (error) => {},
+          () => this.setFormDisability()
         )
     );
   }

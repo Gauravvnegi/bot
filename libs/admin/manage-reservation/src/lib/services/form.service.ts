@@ -55,24 +55,24 @@ export class FormService {
     const roomReservationData = new RoomReservationFormData();
     // Map Reservation Info
     roomReservationData.id = id ?? '';
-    roomReservationData.from =
-      input.reservationInformation?.dateAndTime ??
-      input.reservationInformation?.from;
-    roomReservationData.to =
-      input.reservationInformation?.dateAndTime ??
-      input.reservationInformation?.to;
+    roomReservationData.from = input.reservationInformation?.from;
+    roomReservationData.to = input.reservationInformation?.to;
     roomReservationData.reservationType =
-      input.reservationInformation?.reservationType ??
-      input.reservationInformation?.status;
+      input.reservationInformation?.reservationType;
     roomReservationData.sourceName = input.reservationInformation?.sourceName;
     roomReservationData.source = input.reservationInformation?.source;
     roomReservationData.marketSegment =
       input.reservationInformation?.marketSegment;
+      
     roomReservationData.paymentMethod =
       input.paymentMethod?.paymentMethod ?? '';
     roomReservationData.paymentRemark =
       input.paymentMethod?.paymentRemark ?? '';
+    roomReservationData.totalPaidAmount =
+      input.paymentMethod?.totalPaidAmount ?? 0;
+
     roomReservationData.guestId = input.guestInformation?.guestDetails;
+    roomReservationData.specialRequest = input.instructions.specialInstructions;
 
     // Map Booking Items
     if (input.roomInformation?.roomTypes) {
@@ -161,6 +161,7 @@ export class FormService {
     reservationData.offerId = input?.offerId ?? '';
     reservationData.outletType = outletType;
 
+    reservationData.specialRequest = input.instructions.specialInstructions;
     return reservationData;
   }
 }

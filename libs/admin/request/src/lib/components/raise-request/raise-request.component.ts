@@ -152,7 +152,6 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
     });
   }
 
-
   getItemDetails(itemId) {
     this.$subscription.add(
       this._requestService
@@ -165,7 +164,6 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
         })
     );
   }
-
 
   /**
    * @function raiseRequest To raise request.

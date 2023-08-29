@@ -99,7 +99,7 @@
       </td>
 
       <ng-container
-        *ngIf="values.length && values[0].roomNo"
+        *ngIf="values.length && values[0].foStatus"
         [ngTemplateOutlet]="roomCell"
         [ngTemplateOutletContext]="{ $implicit: rowData }"
       >

@@ -14,13 +14,7 @@ import {
   spaFields,
   statusOptions,
 } from '../../constants/reservation';
-import {
-  OfferList,
-  OfferData,
-  SummaryData,
-  BookingInfo,
-  OutletForm,
-} from '../../models/reservations.model';
+import { SummaryData, OutletForm } from '../../models/reservations.model';
 import { ManageReservationService } from '../../services/manage-reservation.service';
 import { FormService } from '../../services/form.service';
 import {
@@ -34,6 +28,7 @@ import { ServiceList } from 'libs/admin/services/src/lib/models/services.model';
 import { ServicesTypeValue } from 'libs/admin/room/src/lib/constant/form';
 import { BaseReservationComponent } from '../base-reservation.component';
 import { ReservationType } from '../../constants/reservation-table';
+import { convertToTitleCase } from 'libs/admin/shared/src/lib/utils/valueFormatter';
 
 @Component({
   selector: 'hospitality-bot-spa-reservation',
@@ -57,6 +52,8 @@ export class SpaReservationComponent extends BaseReservationComponent
   noMoreResults = false;
   services: (Option & { price: number })[] = [];
 
+  editMode: boolean = false;
+
   constructor(
     private fb: FormBuilder,
     private adminUtilityService: AdminUtilityService,
@@ -75,6 +72,7 @@ export class SpaReservationComponent extends BaseReservationComponent
     this.initDetails();
     this.getReservationId();
     this.getServices();
+    this.listenForFormChanges();
   }
 
   initDetails() {
@@ -121,11 +119,10 @@ export class SpaReservationComponent extends BaseReservationComponent
     this.formService.reservationDateAndTime.subscribe((res) => {
       if (res) this.setDateAndTime(res);
     });
-    this.userForm
-      .get('bookingInformation.numberOfAdults')
-      .valueChanges.pipe(debounceTime(1000))
+    this.inputControls.bookingInformation.valueChanges
+      .pipe(debounceTime(1000))
       .subscribe((res) => {
-        this.getSummaryData();
+        if (res.spaItems[0].serviceName.length) this.getSummaryData();
       });
   }
 
@@ -136,7 +133,8 @@ export class SpaReservationComponent extends BaseReservationComponent
   onItemsAdded(index: number): void {
     this.spaItemsControls[index]
       .get('serviceName')
-      .valueChanges.subscribe((res) => {
+      .valueChanges.pipe(debounceTime(1000))
+      .subscribe((res) => {
         const selectedService = this.services.find(
           (service) => service.value === res
         );
@@ -144,12 +142,7 @@ export class SpaReservationComponent extends BaseReservationComponent
           .get('amount')
           .setValue(selectedService?.price);
         this.spaItemsControls[index].get('unit').setValue(1);
-        this.getSummaryData();
       });
-    this.spaItemsControls[index]
-      .get('unit')
-      .valueChanges.pipe(debounceTime(1000))
-      .subscribe((res) => this.getSummaryData());
   }
 
   /**
@@ -169,22 +162,12 @@ export class SpaReservationComponent extends BaseReservationComponent
 
   getReservationId(): void {
     if (this.reservationId) {
-      this.statusOptions = [
-        ...statusOptions,
-        { label: 'In Session', value: 'INSESSION' },
-      ];
       this.getReservationDetails();
     } else {
       this.statusOptions = [
         ...editModeStatusOptions,
         { label: 'In Session', value: 'INSESSION' },
       ];
-      this.userForm.valueChanges.subscribe((_) => {
-        if (!this.formValueChanges) {
-          this.formValueChanges = true;
-          this.listenForFormChanges();
-        }
-      });
     }
   }
 
@@ -195,13 +178,22 @@ export class SpaReservationComponent extends BaseReservationComponent
         .subscribe(
           (response) => {
             const data = new OutletForm().deserialize(response);
-
             const {
               bookingInformation: { spaItems, ...spaInfo },
+              guestInformation,
+              nextStates,
               ...formData
             } = data;
 
+            if (nextStates)
+              this.statusOptions = nextStates.map((item) => ({
+                label: convertToTitleCase(item),
+                value: item,
+              }));
+
             this.spaItemsValues = spaItems;
+            this.formService.guestInformation.next(guestInformation);
+
             this.userForm.patchValue({
               bookingInformation: spaInfo,
               ...formData,
@@ -215,8 +207,7 @@ export class SpaReservationComponent extends BaseReservationComponent
   setFormDisability(): void {
     // this.userForm.get('reservationInformation.source').disable();
     if (this.reservationId) {
-      const reservationType = this.reservationInfoControls.reservationType
-        .value;
+      const reservationType = this.reservationInfoControls.status.value;
       switch (true) {
         case reservationType === ReservationType.CONFIRMED:
           this.userForm.disable();
@@ -226,25 +217,8 @@ export class SpaReservationComponent extends BaseReservationComponent
           this.userForm.disable();
           this.disabledForm = true;
           break;
-        // case data.source === 'CREATE_WITH':
-        //   this.disabledForm = true;
-        //   break;
-        // case data.source === 'OTHERS':
-        //   this.disabledForm = true;
-        //   break;
       }
     }
-  }
-
-  offerSelect(offerData?: OfferData): void {
-    if (offerData) {
-      this.userForm.patchValue({ offerId: offerData.id });
-      this.getSummaryData();
-    } else {
-      this.userForm.get('offerId').reset();
-      this.getSummaryData();
-    }
-    this.selectedOffer = offerData;
   }
 
   getSummaryData(): void {

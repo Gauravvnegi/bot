@@ -131,8 +131,6 @@ export class OccupancyComponent implements OnInit {
           this.handleFinal
         )
     );
-    // control.patchValue({ status: status });
-    // control.get('status').markAsDirty();
   }
 
   add(type: ControlTypes, form?: FormGroup | FormArray) {
@@ -401,7 +399,6 @@ export class OccupancyComponent implements OnInit {
         start.patchValue(+acc.get('end').value + 1, {
           emitEvent: false,
         });
-        start.markAsDirty();
       }
 
       // Validation

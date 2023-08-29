@@ -1,4 +1,4 @@
-import { AbstractControl, FormArray, FormGroup } from '@angular/forms';
+import { FormArray, FormGroup } from '@angular/forms';
 import {
   ConfigItemType,
   ConfigRuleType,
@@ -89,8 +89,7 @@ export class DynamicPricingFactory {
       } else if (
         name == 'fromDate' ||
         name == 'toDate' ||
-        name == 'selectedDays' ||
-        name == 'name'
+        name == 'selectedDays'
       ) {
         const dependentControlList: OccupancyFormControlsType[] = [
           'fromDate',
@@ -107,6 +106,7 @@ export class DynamicPricingFactory {
             }
           });
         }
+      } else if (name == 'name') {
         requestData['name'] = currentControl.value;
       } else if (name == 'status') {
         requestData[name] = currentControl.value ? 'ACTIVE' : 'INACTIVE';
@@ -157,7 +157,6 @@ export class DynamicPricingFactory {
                 id: string;
                 configRules: ConfigRuleType[];
               }[] = [];
-
               const selectedRoomType = [
                 ...formGroup.controls['roomType'].value,
               ];

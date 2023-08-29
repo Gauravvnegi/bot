@@ -176,10 +176,11 @@ export class DynamicPricingComponent implements OnInit {
     if (event.mode == Revenue.add) levelFA.controls.push(this.getLevelFG());
     else {
       const levelRemoveId = levelFA.at(event.index).value.id;
-      levelRemoveId &&
-        (event.triggerFG.get('removedRules') as FormArray).controls.push(
-          levelRemoveId
-        );
+      if (levelRemoveId) {
+        const removedRule = event.triggerFG.get('removedRules') as FormArray;
+        removedRule.controls.push(levelRemoveId);
+        removedRule.markAsDirty();
+      }
       levelFA.removeAt(event.index);
     }
   }

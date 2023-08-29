@@ -14,7 +14,6 @@ import {
   AdminUtilityService,
   QueryConfig,
 } from '@hospitality-bot/admin/shared';
-import { dayTimeResponse } from '../../constants/response.const';
 import {
   DynamicPricingFactory,
   DynamicPricingHandler,
@@ -104,6 +103,7 @@ export class DayTimeTriggerComponent implements OnInit {
 
   triggerStatusChange(event: boolean, status: AbstractControl) {
     status.patchValue(event);
+    status.markAsDirty();
   }
 
   get dynamicPricingControl() {

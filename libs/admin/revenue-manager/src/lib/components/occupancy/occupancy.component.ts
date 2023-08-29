@@ -291,7 +291,10 @@ export class OccupancyComponent implements OnInit {
 
           // Restriction
           start.disable();
-          if (index === ruleFA.controls.length - 1) {
+          if (
+            index === ruleFA.controls.length - 1 &&
+            (end.value == 0 || end.value == null)
+          ) {
             end.patchValue(roomCount, { emitEvent: false });
           }
         };
@@ -415,7 +418,6 @@ export class OccupancyComponent implements OnInit {
       'OCCUPANCY',
       form.get('type').value
     );
-
     if (!Object.keys(requestedData).length) {
       this.snackbarService.openSnackBarAsText(
         'Please make changes for the new updates.'

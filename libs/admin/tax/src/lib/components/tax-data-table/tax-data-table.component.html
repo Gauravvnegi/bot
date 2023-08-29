@@ -2,7 +2,8 @@
   [config]="{
     isSticky: true,
     extraGap: 60,
-    scrollBoundary: 25
+    scrollBoundary: 25,
+    isAllOutletTabFilter: false
   }"
   class="tab-filter"
   (onEntityTabFilterChanges)="onEntityTabFilterChanges($event)"
@@ -12,7 +13,7 @@
   <hospitality-bot-navigation-header [heading]="tableName" [routes]="navRoutes">
     <hospitality-bot-button
       label="+Create New Tax"
-      link="pages/settings/tax/{{ routes.createTax.route }}"
+      (onClick)="onCreateNewTax()"
     ></hospitality-bot-button>
     <hospitality-bot-export-list
       [additionalActionItems]="additionalActionItems"
@@ -76,7 +77,7 @@
     let-columns="columns"
     let-rowIndex="rowIndex"
   >
-    <tr class="table-row" (click)="editTax(rowData.id)">
+    <tr class="table-row" (click)="editTax(rowData)">
       <td class="table-row__checkbox">
         <p-tableCheckbox
           [value]="rowData"

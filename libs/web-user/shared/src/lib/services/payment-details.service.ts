@@ -66,7 +66,7 @@ export class PaymentDetailsService extends ApiService {
   //   );
   // }
 
-  getPaymentConfigurationV2(entityId: string) {
+  getPaymentConfigurationV2(entityId: string, journeyName: string) {
     return this.get(
       `/api/v1/payment/configurations/web?entity_id=${entityId}&journeyName=${journeyName}`
       // `/api/v1/entity/${entityId}/payment-configurations`

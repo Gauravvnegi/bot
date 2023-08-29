@@ -184,11 +184,9 @@ export class DayTimeTriggerComponent implements OnInit {
       control: AbstractControl,
       isEmit = true
     ) => {
-      // TODO : Need to be reset second
-      // const newTime = new Date(value);
-      // newTime.setSeconds(0);
-      // control.patchValue(newTime.getTime(), isEmit && { emitEvent: false });
-      control.patchValue(value, isEmit && { emitEvent: false });
+      const newTime = new Date(value);
+      newTime.setSeconds(0);
+      control.patchValue(newTime.getTime(), isEmit && { emitEvent: false });
     };
     levelsFA.controls.forEach((levelFG: FormGroup) => {
       const { start, end, fromTime, toTime } = levelFG.controls;
@@ -236,26 +234,51 @@ export class DayTimeTriggerComponent implements OnInit {
           }
           return timeCollide || occupancyCollide;
         });
+
+        /**
+         * TODO: IF Common time then occupancy should not be conflict
+         */
+        formArray.controls
+          .filter((item: FormGroup, itemIndex) => {
+            const innerFromTime = item.controls['fromTime'];
+            const innerToTime = item.controls['toTime'];
+            return (
+              itemIndex != index &&
+              +fromTime.value == +innerFromTime.value &&
+              +toTime.value == innerToTime.value
+            );
+          })
+          .forEach((item: FormGroup, itemIndex) => {
+            const innerStart = +item.controls['start'].value;
+            const innerEnd = +item.controls['end'].value;
+            // if (!collide) {
+            //   occupancyCollide =
+            //     +start.value > innerStart && +start.value < innerEnd;
+            //   collide = formArray.at(itemIndex);
+            // }
+          });
       }
     });
 
     if (collide) {
       const { start, end, fromTime, toTime } = collide.controls;
-      start.setErrors({ collide: true });
-      end.setErrors({ collide: true });
-      fromTime.setErrors({ collide: true });
-      toTime.setErrors({ collide: true });
-      start.markAllAsTouched();
-      end.markAllAsTouched();
-      fromTime.markAllAsTouched();
-      toTime.markAllAsTouched();
+      const controlList = [fromTime, toTime, start, end];
+      controlList.forEach((control: AbstractControl) => {
+        control.setErrors({ collide: true });
+      });
+      controlList.forEach((control: AbstractControl) => {
+        control.markAsTouched();
+      });
     } else {
       formArray.controls.forEach((form: FormGroup) => {
         const { start, end, fromTime, toTime } = form.controls;
-        start.markAsUntouched();
-        end.markAsUntouched();
-        fromTime.markAsUntouched();
-        toTime.markAsUntouched();
+        const controlList = [fromTime, toTime, start, end];
+        controlList.forEach((control: AbstractControl) => {
+          control.setErrors(null);
+        });
+        controlList.forEach((control: AbstractControl) => {
+          control.markAsUntouched();
+        });
       });
     }
     return collide ? true : false;

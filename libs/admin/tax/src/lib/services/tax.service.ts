@@ -6,6 +6,8 @@ import { QueryConfig } from '../types/tax';
 
 @Injectable()
 export class TaxService extends ApiService {
+  entityId: string;
+
   /**
    * @createTax --api call to create tax
    * @param entityId --string type
@@ -38,8 +40,8 @@ export class TaxService extends ApiService {
     return this.patch(`/api/v1/tax/${taxId}?entityId=${entityId}`, data);
   }
 
-  getTaxById(entityId: string, taxId: string): Observable<any> {
-    return this.get(`/api/v1/tax/${taxId}?entityId=${entityId}`);
+  getTaxById(taxId: string): Observable<any> {
+    return this.get(`/api/v1/tax/${taxId}`);
   }
 
   exportCSV(entityId: string, config: QueryConfig) {

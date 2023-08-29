@@ -8,6 +8,13 @@
       <img src="assets/images/tax.png" alt="tax image" />
     </div>
     <div class="half-width">
+       <hospitality-bot-select
+        *ngIf="!paramData?.entityId"
+        label="Property"
+        controlName="entityId"
+        [options]="propertyList"
+        [loading]="loading"
+      ></hospitality-bot-select>
       <hospitality-bot-select
         label="Country"
         controlName="country"

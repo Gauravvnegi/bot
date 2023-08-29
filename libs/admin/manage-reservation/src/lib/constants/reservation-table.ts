@@ -188,18 +188,17 @@ export const outletCols: Cols[] = [
     searchField: ['totalDueAmount', 'total'],
   },
   {
+    field: 'sourceName',
+    header: 'Source Name / Type',
+    sortType: 'string',
+    searchField: ['sourceName', 'source'],
+  },
+  {
     field: 'payment',
     header: 'Payment',
     sortType: 'string',
     isSearchDisabled: true,
   },
-  {
-    field: 'source',
-    header: 'Source',
-    sortType: 'string',
-    isSearchDisabled: true,
-  },
-
   {
     field: 'reservationType',
     header: 'Actions',

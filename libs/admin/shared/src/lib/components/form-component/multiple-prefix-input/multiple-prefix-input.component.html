@@ -8,6 +8,7 @@
   <div class="main">
     <hospitality-bot-select
       class="input pre-input"
+      [ngStyle]="{ 'flex-basis': additionalControlName.length ? '10%' : '14%' }"
       [controlName]="currencyControlName"
       [props]="getProps('pre')"
       [disabled]="inputDisabled.pre || isDisabled"
@@ -15,15 +16,26 @@
       [stopEmission]="stopEmission"
     ></hospitality-bot-select>
     <hospitality-bot-input
+      [ngStyle]="{ 'flex-basis': additionalControlName.length ? '30%' : '43%' }"
       class="input count-input"
       [label]="preCountLabel"
       [controlName]="preCountControlName"
       [props]="getProps('post')"
     ></hospitality-bot-input>
+    <span *ngIf="defaultProps.post.isPriceField"> + </span>
     <hospitality-bot-input
+      [ngStyle]="{ 'flex-basis': additionalControlName.length ? '30%' : '43%' }"
       class="input count-input"
       [label]="postCountLabel"
       [controlName]="postCountControlName"
+      [props]="getProps('post')"
+    ></hospitality-bot-input>
+    <hospitality-bot-input
+      *ngIf="additionalControlName.length"
+      [ngStyle]="{ 'flex-basis': '30%' }"
+      class="input count-input"
+      [label]="additionalLabel"
+      [controlName]="additionalControlName"
       [props]="getProps('post')"
     ></hospitality-bot-input>
   </div>

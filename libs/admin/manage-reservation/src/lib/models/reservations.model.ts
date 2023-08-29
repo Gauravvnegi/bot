@@ -206,7 +206,7 @@ export class ReservationFormData {
     this.guestInformation = new GuestInfo().deserialize(input.guest);
     // this.paymentMethod = new PaymentInfo().deserialize(input);
     this.offerId = input?.id;
-    this.nextStates = [input?.reservationType, ...input?.nextStates];
+    this.nextStates = [input.reservationType, ...input.nextStates];
 
     this.roomInformation = input?.bookingItems.map((item: BookingItems) => ({
       adultCount: item.occupancyDetails.maxAdult,
@@ -236,12 +236,14 @@ export class OutletForm {
   orderInformation?: OrderInfo;
   bookingInformation?: BookingInformation;
   eventInformation?: EventInformation;
+  nextStates: string[];
 
   deserialize(input: OutletFormData) {
     this.reservationInformation = new BookingInfo().deserialize(input);
     this.guestInformation = new GuestInfo().deserialize(input.guest);
     // this.paymentMethod = new PaymentInfo().deserialize(input);
     this.offerId = input?.offerId;
+    this.nextStates = [input.reservationType, ...input.nextStates];
     switch (input.outletType) {
       case EntitySubType.RESTAURANT:
         this.orderInformation = new OrderInfo().deserialize(input);

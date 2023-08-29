@@ -1,15 +1,41 @@
 <hospitality-bot-prefix-field
+  *ngIf="!isPriceControl"
   [class]="className"
   [options]="currencies"
   [label]="originalPriceLabel"
   [preControlName]="currency"
   [postControlName]="originalPrice"
   [defaultProps]="{
-    post: { type: 'number', placeholder: 'Enter price' }
+    post: { type: 'number', placeholder: 'Enter Base price' }
   }"
   [props]="{ errorMessages: errorMessages }"
->
-</hospitality-bot-prefix-field>
+></hospitality-bot-prefix-field>
+<hospitality-bot-multiple-prefix-input
+  *ngIf="isPriceControl"
+  [class]="className"
+  [controls]="{
+    currencyControlName: currency,
+    preCountControlName: originalPrice,
+    postCountControlName: price
+  }"
+  [labels]="{
+    mainLabel: originalPriceLabel,
+    preCountLabel: preCountLabel,
+    postCountLabel: postCountLabel
+  }"
+  [currencyOptions]="currencies"
+  [defaultProps]="{
+    post: {
+      type: 'number',
+      float: true,
+      errorMessages: {
+        required: 'This is a required field.',
+        min: 'Value must be greater than 0.'
+      },
+      isPriceField: true
+    }
+  }"
+></hospitality-bot-multiple-prefix-input>
 <hospitality-bot-prefix-field
   [class]="className"
   [options]="discountTypes"

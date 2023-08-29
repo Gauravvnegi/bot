@@ -121,7 +121,7 @@ export const spaFields: IteratorField[] = [
     label: 'Service Name',
     name: 'serviceName',
     type: 'select',
-    required: false,
+    required: true,
     options: [],
     placeholder: 'Search by name',
     width: '36%',
@@ -173,7 +173,6 @@ export const venueFields: IteratorField[] = [
     required: false,
     placeholder: 'Enter',
     width: '30%',
-    disabled: true,
     dataType: 'number',
   },
 ];

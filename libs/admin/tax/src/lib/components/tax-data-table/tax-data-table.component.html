@@ -1,3 +1,13 @@
+<hospitality-bot-entity-tab-filter
+  [config]="{
+    isSticky: true,
+    extraGap: 60,
+    scrollBoundary: 25
+  }"
+  class="tab-filter"
+  (onEntityTabFilterChanges)="onEntityTabFilterChanges($event)"
+></hospitality-bot-entity-tab-filter>
+
 <div [formGroup]="tableFG" class="wrapper">
   <hospitality-bot-navigation-header [heading]="tableName" [routes]="navRoutes">
     <hospitality-bot-button

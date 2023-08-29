@@ -5,7 +5,18 @@
   ></hospitality-bot-navigation-header>
   <form [formGroup]="useForm">
     <div class="room-info-wrapper">
-      <div class="header">Room Information</div>
+      <div class="header-wrapper">
+        <div class="header">
+          Room Information
+        </div>
+        <hospitality-bot-toggle-switch-with-label
+          [isToggleOn]="isBaseRoomType"
+          (onToggleSwitch)="onRoomTypeToggleSwitch($event)"
+          [config]="{
+            disableTurnOff: isBaseRoomType
+          }"
+        ></hospitality-bot-toggle-switch-with-label>
+      </div>
       <hr />
       <div class="room-info-form-wrapper">
         <div class="room-type-name">
@@ -146,20 +157,47 @@
                   placeholder: 'Enter'
                 }"
                 [settings]="{
-                  className: 'half-width'
+                  className: 'half-width',
+                  isPriceControl: true
                 }"
               >
+                <hospitality-bot-prefix-field
+                  class="half-width"
+                  [options]="currencies"
+                  label="Double Occupancy pricing"
+                  preControlName="doubleOccupancyCurrency"
+                  postControlName="doubleOccupancyPrice"
+                  [defaultProps]="{
+                    post: { type: 'number', placeholder: 'Enter Price' }
+                  }"
+                  [props]="{ errorMessages: errorMessages }"
+                >
+                </hospitality-bot-prefix-field>
+                <hospitality-bot-prefix-field
+                  class="half-width"
+                  [options]="currencies"
+                  label="Triple Occupancy pricing"
+                  preControlName="tripleOccupancyCurrency"
+                  postControlName="tripleOccupancyPrice"
+                  [defaultProps]="{
+                    post: { type: 'number', placeholder: 'Enter Price' }
+                  }"
+                  [props]="{ errorMessages: errorMessages }"
+                >
+                </hospitality-bot-prefix-field>
                 <hospitality-bot-multiple-prefix-input
                   class="half-width"
                   [controls]="{
                     currencyControlName: 'paxPriceCurrency',
                     preCountControlName: 'paxAdultPrice',
-                    postCountControlName: 'paxChildPrice'
+                    postCountControlName: 'paxChildPrice',
+                    additionalControlName: 'paxChildBelowFive'
                   }"
                   [labels]="{
                     mainLabel: 'Pax Additional Cost',
                     preCountLabel: 'Adult',
-                    postCountLabel: 'Child'
+                    postCountLabel: 'Child 5-12',
+                    additionalLabel: 'Child  5'
                   }"
                   [currencyOptions]="currencies"
                   [defaultProps]="{
@@ -186,23 +224,82 @@
                   }"
                 ></hospitality-bot-input>
                 <div class="half-width"></div>
-                <hospitality-bot-prefix-field
+                <hospitality-bot-multiple-prefix-input
                   class="half-width"
-                  label="Base Price-Single Occupancy"
-                  preControlName="basePriceCurrency"
-                  postControlName="basePrice"
-                  [options]="currencies"
+                  [controls]="{
+                    currencyControlName: 'basePriceCurrency',
+                    preCountControlName: 'basePrice',
+                    postCountControlName: 'price'
+                  }"
+                  [labels]="{
+                    mainLabel: 'Base Price-Single Occupancy',
+                    preCountLabel: 'Base Price',
+                    postCountLabel: 'Price'
+                  }"
+                  [currencyOptions]="currencies"
                   [defaultProps]="{
                     post: {
                       type: 'number',
-                      placeholder: 'Enter',
+                      float: true,
+                      errorMessages: {
+                        required: 'This is a required field.',
+                        min: 'Value must be greater than 0.'
+                      },
+                      isPriceField: true
+                    }
+                  }"
+                ></hospitality-bot-multiple-prefix-input>
+
+                <hospitality-bot-prefix-field
+                  class="half-width"
+                  [options]="currencies"
+                  label="Double Occupancy pricing"
+                  preControlName="doubleOccupancyCurrency"
+                  postControlName="doubleOccupancyPrice"
+                  [defaultProps]="{
+                    post: { type: 'number', placeholder: 'Enter Price' }
+                  }"
+                  [props]="{ errorMessages: errorMessages }"
+                >
+                </hospitality-bot-prefix-field>
+                <hospitality-bot-prefix-field
+                  class="half-width"
+                  [options]="currencies"
+                  label="Triple Occupancy pricing"
+                  preControlName="tripleOccupancyCurrency"
+                  postControlName="tripleOccupancyPrice"
+                  [defaultProps]="{
+                    post: { type: 'number', placeholder: 'Enter Price' }
+                  }"
+                  [props]="{ errorMessages: errorMessages }"
+                >
+                </hospitality-bot-prefix-field>
+                <hospitality-bot-multiple-prefix-input
+                  class="half-width"
+                  [controls]="{
+                    currencyControlName: 'paxPriceCurrency',
+                    preCountControlName: 'paxAdultPrice',
+                    postCountControlName: 'paxChildPrice',
+                    additionalControlName: 'paxChildBelowFive'
+                  }"
+                  [labels]="{
+                    mainLabel: 'Pax Additional Cost',
+                    preCountLabel: 'Adult',
+                    postCountLabel: 'Child 5-12',
+                    additionalLabel: 'Child  5'
+                  }"
+                  [currencyOptions]="currencies"
+                  [defaultProps]="{
+                    post: {
+                      type: 'number',
+                      float: true,
                       errorMessages: {
                         required: 'This is a required field.',
                         min: 'Value must be greater than 0.'
                       }
                     }
                   }"
-                ></hospitality-bot-prefix-field>
+                ></hospitality-bot-multiple-prefix-input>
                 <hospitality-bot-prefix-field
                   class="half-width"
                   preControlName="minPriceCurrency"
@@ -237,33 +334,6 @@
                     }
                   }"
                 ></hospitality-bot-prefix-field>
-                <!-- <hospitality-bot-prefix-field
-                  class="half-width"
-                  preControlName="paxPriceCurrency"
-                  postControlName="paxPrice"
-                  label="Pax Additional Cost"
-                  [options]="currencies"
-                  [defaultProps]="{
-                    post: { type: 'number' }
-                  }"
-                ></hospitality-bot-prefix-field> -->
-                <hospitality-bot-multiple-prefix-input
-                  class="half-width"
-                  [controls]="{
-                    currencyControlName: 'paxPriceCurrency',
-                    preCountControlName: 'paxAdultPrice',
-                    postCountControlName: 'paxChildPrice'
-                  }"
-                  [labels]="{
-                    mainLabel: 'Pax Additional Cost',
-                    preCountLabel: 'Adult',
-                    postCountLabel: 'Child'
-                  }"
-                  [currencyOptions]="currencies"
-                  [defaultProps]="{
-                    post: { type: 'number', float: true }
-                  }"
-                ></hospitality-bot-multiple-prefix-input>
               </div>
             </div>
           </p-accordionTab>
@@ -325,23 +395,31 @@
                   placeholder: 'Enter'
                 }"
               ></hospitality-bot-input>
-              <hospitality-bot-prefix-field
+              <hospitality-bot-multiple-prefix-input
                 class="half-width"
-                preControlName="currency"
-                postControlName="extraPrice"
-                label="Extra Price"
-                [options]="currencies"
+                [controls]="{
+                  currencyControlName: 'currency',
+                  preCountControlName: 'basePrice',
+                  postCountControlName: 'extraPrice'
+                }"
+                [labels]="{
+                  mainLabel: 'Extra Price',
+                  preCountLabel: 'Base Price',
+                  postCountLabel: 'Price'
+                }"
+                [currencyOptions]="currencies"
                 [defaultProps]="{
-                  post: { type: 'number' }
+                  post: {
+                    type: 'number',
+                    float: true,
+                    errorMessages: {
+                      required: 'This is a required field.',
+                      min: 'Value must be greater than 0.'
+                    },
+                    isPriceField: true
+                  }
                 }"
-                [props]="{
-                  errorMessages: {
-                    required: 'This is a required field.',
-                    min: 'Value must be greater than 0.'
-                  },
-                  placeholder: 'Enter'
-                }"
-              ></hospitality-bot-prefix-field>
+              ></hospitality-bot-multiple-prefix-input>
               <hospitality-bot-text-area
                 class="full-width"
                 controlName="description"

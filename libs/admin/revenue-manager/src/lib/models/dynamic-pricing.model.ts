@@ -412,7 +412,7 @@ export class DynamicPricingForm {
     this.fromDate = input.fromDate;
     this.toDate = input.toDate;
     this.selectedDays = input.daysIncluded;
-    this.basePrice = rooms && rooms.find((item) => item.isBase).price;
+    this.basePrice = rooms && rooms.find((item) => item.isBase)?.price;
 
     const getRules = (configRules) => {
       return (

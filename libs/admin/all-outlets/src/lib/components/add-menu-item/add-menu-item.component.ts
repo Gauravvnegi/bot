@@ -1,6 +1,6 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
 import {
   ConfigService,
   NavRouteOptions,
@@ -141,20 +141,29 @@ export class AddMenuItemComponent extends OutletBaseComponent
    */
   getTax() {
     this.$subscription.add(
-      this.taxService.getTaxList(this.outletId).subscribe(({ records }) => {
-        records = records.filter(
-          (item) => item.category === 'service' && item.status
-        );
-        this.taxes = records.map((item) => ({
-          label: item.taxType + ' ' + item.taxValue + '%',
-          value: item.id,
-        }));
-      })
+      this.taxService
+        .getTaxList(this.outletId, { params: `?entityId=${this.outletId}` })
+        .subscribe(({ records }) => {
+          records = records.filter(
+            (item) => item.category === 'service' && item.status
+          );
+          this.taxes = records.map((item) => ({
+            label: item.taxType + ' ' + item.taxValue + '%',
+            value: item.id,
+          }));
+        })
     );
   }
 
   createTax() {
-    this.router.navigate(['pages/settings/tax/create-tax']);
+    const dataToSend = {
+      entityId: this.outletId, // Replace with your actual data
+    };
+
+    const navigationExtras: NavigationExtras = {
+      queryParams: dataToSend,
+    };
+    this.router.navigate(['pages/settings/tax/create-tax'], navigationExtras);
   }
 
   // To be added from BE first

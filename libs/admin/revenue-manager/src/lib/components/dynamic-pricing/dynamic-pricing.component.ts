@@ -88,6 +88,7 @@ export class DynamicPricingComponent implements OnInit {
   getTriggerFG(data?: any): FormGroup {
     const triggerFG = this.fb.group({
       id: [],
+      hotelId: [],
       name: ['', [Validators.required]],
       fromDate: ['', [Validators.required]],
       toDate: ['', [Validators.required]],
@@ -164,15 +165,6 @@ export class DynamicPricingComponent implements OnInit {
   modifyTriggerFG(event: { mode: string; index?: number }): void {
     if (event.mode == Revenue.add)
       this.dynamicPricingControl.timeFA.controls.push(this.getTriggerFG());
-    else {
-      const dayTimeFormArray = this.dynamicPricingControl.timeFA;
-      this.removeDynamicPricing(
-        dayTimeFormArray.at(event.index).get('id').value,
-        dayTimeFormArray,
-        event.index,
-        'DAY_TIME_TRIGGER'
-      );
-    }
   }
 
   modifyLevelFG(event: {
@@ -205,31 +197,6 @@ export class DynamicPricingComponent implements OnInit {
 
   get dynamicPricingInstance(): DynamicPricingComponent {
     return this;
-  }
-
-  removeDynamicPricing(
-    hotelId: string,
-    formArray: FormArray,
-    index: number,
-    type: ConfigType
-  ) {
-    this.loading = true;
-    this.$subscription.add(
-      this.dynamicPricingService.deleteDynamicPricing(hotelId).subscribe(
-        (res) => {
-          this.snackbarService.openSnackBarAsText(
-            type.split('_').join(' ') + ` deleted Successfully.`,
-            '',
-            { panelClass: 'success' }
-          );
-          formArray.removeAt(index);
-        },
-        (error) => {
-          this.loading = false;
-        },
-        this.handleFinal
-      )
-    );
   }
 
   getQueryConfig(type: ConfigType): QueryConfig {

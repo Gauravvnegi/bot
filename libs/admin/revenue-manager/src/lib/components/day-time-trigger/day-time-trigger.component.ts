@@ -61,7 +61,35 @@ export class DayTimeTriggerComponent implements OnInit {
   }
 
   modifyTriggerFG(mode = Revenue.add, index?: number): void {
-    this.modifyTriggerFGEvent.emit({ mode, index });
+    if (mode != Revenue.add) {
+      const dayTimeFormArray = this.dynamicPricingControl.timeFA;
+      const { type } = (dayTimeFormArray.at(index) as FormGroup).controls;
+      if (type.value == 'update') {
+        this.loading = true;
+        this.$subscription.add(
+          this.dynamicPricingService
+            .deleteDynamicPricing(dayTimeFormArray.at(index).get('id').value)
+            .subscribe(
+              (res) => {
+                this.snackbarService.openSnackBarAsText(
+                  ` Day/Time Trigger deleted Successfully.`,
+                  '',
+                  { panelClass: 'success' }
+                );
+                this.loadTriggers();
+              },
+              (error) => {
+                this.loading = false;
+              },
+              this.handleFinal
+            )
+        );
+      } else {
+        dayTimeFormArray.removeAt(index);
+      }
+    } else {
+      this.modifyTriggerFGEvent.emit({ mode, index });
+    }
   }
 
   modifyLevelFG(
@@ -228,7 +256,7 @@ export class DayTimeTriggerComponent implements OnInit {
     }
 
     this.loading = true;
-    const { hotelId, type } = form.controls;
+    const { id, type } = form.controls;
     const requestedData = DynamicPricingFactory.buildRequest(
       form,
       'DAY_TIME_TRIGGER',
@@ -250,7 +278,7 @@ export class DayTimeTriggerComponent implements OnInit {
       requestedData,
       this.entityId,
       this.getQueryConfig('DAY_TIME_TRIGGER'),
-      hotelId.value,
+      id.value,
     ];
 
     this.$subscription.add(
@@ -263,6 +291,7 @@ export class DayTimeTriggerComponent implements OnInit {
             '',
             { panelClass: 'success' }
           );
+          this.loadTriggers();
         },
         (error) => {
           this.loading = false;

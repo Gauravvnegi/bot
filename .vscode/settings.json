@@ -1,6 +1,3 @@
 {
-  "editor.formatOnSave": true,
-  "cSpell.words": [
-    "feedbacktype"
-  ]
+  "editor.formatOnSave": true
 }

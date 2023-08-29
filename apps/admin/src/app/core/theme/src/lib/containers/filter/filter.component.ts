@@ -142,7 +142,7 @@ export class FilterComponent implements OnChanges, OnInit {
             .find((item) => item.id == brandName)
             ?.entities.find((item) => item.id === id).entities ?? [];
 
-        this.outlets = [...this.outlets, ...outlets]; 
+        this.outlets = [...this.outlets, ...outlets];
         this.updateOutletsFormControls(this.outlets);
       });
   }
@@ -187,7 +187,6 @@ export class FilterComponent implements OnChanges, OnInit {
         .map((key) => this.outletFG.value[key])
         .reduce((acc, red) => acc || red)
     ) {
-
       //when no outlet is selected then set the feedback type to stay and apply filter for hotel based token
       this.feedbackFG.get('feedbackType').setValue(layoutConfig.feedback.stay);
 
@@ -245,6 +244,7 @@ export class FilterComponent implements OnChanges, OnInit {
 
     if (outlet.id === 'ALL') {
       this.updateOutletsValue(event.checked);
+      this.filterForm.get('isAllOutletSelected').setValue(event.checked);
     } else {
       const areAllOutletsSelected = Object.keys(this.outletFG.controls)
         .filter((item) => item !== 'ALL')

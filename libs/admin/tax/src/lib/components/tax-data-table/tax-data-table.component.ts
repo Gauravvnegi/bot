@@ -5,7 +5,7 @@ import {
   NavRouteOptions,
 } from '@hospitality-bot/admin/shared';
 import { FormBuilder } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { TableService } from 'libs/admin/shared/src/lib/services/table.service';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { SnackBarService } from '@hospitality-bot/shared/material';
@@ -46,6 +46,7 @@ export class TaxDataTableComponent extends BaseDatatableComponent
     private adminUtilityService: AdminUtilityService,
     private taxService: TaxService,
     private router: Router,
+    private route: ActivatedRoute,
     protected tabFilterService: TableService
   ) {
     super(fb, tabFilterService);
@@ -68,7 +69,7 @@ export class TaxDataTableComponent extends BaseDatatableComponent
   }
 
   onEntityTabFilterChanges(event): void {
-    this.entityId = event.entityId;
+    this.entityId = event.entityId[0];
     this.initTableValue();
   }
 
@@ -176,14 +177,22 @@ export class TaxDataTableComponent extends BaseDatatableComponent
     );
   }
 
+  onCreateNewTax(): void {
+    this.taxService.entityId = this.entityId;
+    this.router.navigate([this.routes.createTax.route], {
+      relativeTo: this.route,
+    });
+  }
+
   /**
    * @function editTax
    * @description To edit the tax
    */
 
-  editTax(id: string): void {
+  editTax(data): void {
+    this.taxService.entityId = data.entityId;
     this.router.navigate([
-      `/pages/settings/tax/${this.routes.createTax.route}/${id}`,
+      `/pages/settings/tax/${this.routes.createTax.route}/${data?.id}`,
     ]);
   }
 

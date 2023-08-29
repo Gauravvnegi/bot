@@ -94,7 +94,9 @@
           ></hospitality-bot-text-area>
         </div>
       </p-accordionTab>
-      <hospitality-bot-guest-information></hospitality-bot-guest-information>
+      <hospitality-bot-guest-information
+        [reservationId]="reservationId"
+      ></hospitality-bot-guest-information>
       <!-- <hospitality-bot-billing-address></hospitality-bot-billing-address> -->
       <hospitality-bot-payment-rule
         [deductedAmount]="deductedAmount"

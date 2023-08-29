@@ -132,4 +132,5 @@ export type RoomReservationResponse = {
   offerAmount: number;
   nextStates: string[];
   bookingItems: BookingItems[];
+  specialRequest
 };

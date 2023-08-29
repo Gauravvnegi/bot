@@ -167,6 +167,8 @@ export class VenueReservationComponent extends BaseReservationComponent
                 value: item,
               }));
 
+            this.formValueChanges = true;
+
             this.venueItemValues = venueInfo;
             this.formService.guestInformation.next(guestInformation);
 
@@ -224,9 +226,13 @@ export class VenueReservationComponent extends BaseReservationComponent
               .get('paymentRule.deductedAmount')
               .patchValue(this.summaryData?.totalAmount);
             this.deductedAmount = this.summaryData?.totalAmount;
+
+            if (this.formValueChanges) {
+              this.setFormDisability();
+              this.formValueChanges = false;
+            }
           },
           (error) => {},
-          () => this.setFormDisability()
         )
     );
   }

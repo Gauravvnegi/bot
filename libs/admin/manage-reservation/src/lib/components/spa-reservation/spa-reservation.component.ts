@@ -191,6 +191,8 @@ export class SpaReservationComponent extends BaseReservationComponent
                 value: item,
               }));
 
+            this.formValueChanges = true;
+
             this.spaItemsValues = spaItems;
             this.formService.guestInformation.next(guestInformation);
 
@@ -254,9 +256,13 @@ export class SpaReservationComponent extends BaseReservationComponent
               .get('paymentRule.deductedAmount')
               .patchValue(this.summaryData?.totalAmount);
             this.deductedAmount = this.summaryData?.totalAmount;
+            
+            if (this.formValueChanges) {
+              this.setFormDisability();
+              this.formValueChanges = false;
+            }
           },
-          (error) => {},
-          () => this.setFormDisability()
+          (error) => {}
         )
     );
   }

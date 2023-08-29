@@ -152,6 +152,8 @@ export class AddReservationComponent extends BaseReservationComponent
                 value: item,
               }));
 
+            this.formValueChanges = true;
+            
             // Create options for room and guest if not already available
             // in room iterator and guest info component.
             this.roomTypeValues = roomInformation;
@@ -284,9 +286,13 @@ export class AddReservationComponent extends BaseReservationComponent
               .get('paymentRule.deductedAmount')
               .patchValue(this.summaryData?.totalAmount);
             this.deductedAmount = this.summaryData?.totalAmount;
+
+            if (this.formValueChanges) {
+              this.setFormDisability();
+              this.formValueChanges = false;
+            }
           },
-          (error) => {},
-          () => this.setFormDisability()
+          (error) => {}
         )
     );
   }

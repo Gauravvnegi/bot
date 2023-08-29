@@ -31,7 +31,7 @@ export class DynamicPricingService extends ApiService {
   }
 
   updateDynamicPricing(
-    data: DynamicPricingRequest,
+    data: DynamicPricingRequest | { status: string },
     entityId: string,
     config: QueryConfig,
     updateId: string

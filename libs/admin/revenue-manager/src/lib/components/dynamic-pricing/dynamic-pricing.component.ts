@@ -87,7 +87,7 @@ export class DynamicPricingComponent implements OnInit {
 
   getTriggerFG(data?: any): FormGroup {
     const triggerFG = this.fb.group({
-      hotelId: [this.entityId],
+      id: [],
       name: ['', [Validators.required]],
       fromDate: ['', [Validators.required]],
       toDate: ['', [Validators.required]],

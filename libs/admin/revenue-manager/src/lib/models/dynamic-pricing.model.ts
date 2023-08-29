@@ -249,7 +249,6 @@ export class DynamicPricingHandler {
     const season = instance.dynamicPricingControl.occupancyFA.at(
       seasonIndex
     ) as FormGroup;
-
     season.patchValue({
       id: item.id,
       fromDate: item.fromDate,
@@ -364,7 +363,6 @@ export class DynamicPricingHandler {
     const triggerFG = instance.dynamicPricingControl.timeFA.at(
       triggerIndex
     ) as FormGroup;
-
     triggerFG.patchValue({
       id: item.id,
       fromDate: item.fromDate,

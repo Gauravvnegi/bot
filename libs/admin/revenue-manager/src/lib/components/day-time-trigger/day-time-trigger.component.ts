@@ -101,9 +101,32 @@ export class DayTimeTriggerComponent implements OnInit {
     );
   }
 
-  triggerStatusChange(event: boolean, status: AbstractControl) {
-    status.patchValue(event);
-    status.markAsDirty();
+  triggerStatusChange(event: boolean, triggerFG: FormGroup) {
+    const { id } = triggerFG.controls;
+    this.loading = true;
+    this.$subscription.add(
+      this.dynamicPricingService
+        .updateDynamicPricing(
+          { status: event ? 'ACTIVE' : 'INACTIVE' },
+          this.entityId,
+          this.getQueryConfig('DAY_TIME_TRIGGER'),
+          id.value
+        )
+        .subscribe(
+          (res) => {
+            this.snackbarService.openSnackBarAsText(
+              'Status Updated Successfully',
+              '',
+              { panelClass: 'success' }
+            );
+            this.loadTriggers();
+          },
+          (error) => {
+            this.loading = false;
+          },
+          this.handleFinal
+        )
+    );
   }
 
   get dynamicPricingControl() {

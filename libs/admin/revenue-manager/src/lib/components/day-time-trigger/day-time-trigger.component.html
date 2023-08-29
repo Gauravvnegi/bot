@@ -9,7 +9,7 @@
         class="accordion-list"
       >
         <div [formGroupName]="i">
-          <p-accordionTab [selected]="i == 0">
+          <p-accordionTab>
             <p-header>
               <div class="accordion-header">
                 <div class="title item-center">
@@ -27,9 +27,7 @@
                     <hospitality-bot-toggle-switch-with-label
                       class="toggle"
                       [isToggleOn]="triggerFG.get('status')?.value"
-                      (onToggleSwitch)="
-                        triggerStatusChange($event, triggerFG.get('status'))
-                      "
+                      (onToggleSwitch)="triggerStatusChange($event, triggerFG)"
                       click-stop-propagation
                     ></hospitality-bot-toggle-switch-with-label>
                   </div>

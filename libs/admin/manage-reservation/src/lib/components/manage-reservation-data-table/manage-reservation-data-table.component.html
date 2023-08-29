@@ -128,8 +128,11 @@
         </div>
       </td>
       <td>
-        <div class="center-align">
-          <div class="primary-text">#{{ rowData?.confirmationNo }}</div>
+        <div
+          class="center-align"
+          *ngIf="rowData?.confirmationNumber; emptyCell"
+        >
+          <div class="primary-text">{{ rowData?.confirmationNumber }}</div>
         </div>
       </td>
 

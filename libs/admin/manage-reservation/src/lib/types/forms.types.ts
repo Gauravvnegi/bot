@@ -13,6 +13,8 @@ export class RoomReservationFormData {
   guestId: string;
   bookingItems: BookingItemFormData[];
   id?: string;
+  specialRequest: string;
+  totalPaidAmount: number;
 }
 
 export type BookingItemFormData = {
@@ -43,7 +45,7 @@ export type GuestDetails = {
 export class OutletFormData {
   occupancyDetails: {
     maxAdult: number;
-  }
+  };
   from: number;
   to: number;
   reservationType: string;
@@ -61,6 +63,8 @@ export class OutletFormData {
   items: ItemsData[];
   outletType: string;
   id?: string;
+  nextStates: string[];
+  specialRequest: string;
 }
 
 export type ItemsData = {
@@ -83,7 +87,7 @@ export type ReservationSummary = {
   };
   offer?: {
     id: string;
-  }
+  };
 };
 
 export type OccupancyDetails = {
@@ -96,4 +100,4 @@ export type InitialFormData = {
   cashierFirstName?: string;
   cashierLastName?: string;
   currency?: string;
-}
+};

@@ -28,6 +28,7 @@ import { ServiceList } from 'libs/admin/services/src/lib/models/services.model';
 import { ServicesTypeValue } from 'libs/admin/room/src/lib/constant/form';
 import { BaseReservationComponent } from '../base-reservation.component';
 import { ReservationType } from '../../constants/reservation-table';
+import { convertToTitleCase } from 'libs/admin/shared/src/lib/utils/valueFormatter';
 
 @Component({
   selector: 'hospitality-bot-spa-reservation',
@@ -161,10 +162,6 @@ export class SpaReservationComponent extends BaseReservationComponent
 
   getReservationId(): void {
     if (this.reservationId) {
-      this.statusOptions = [
-        ...statusOptions,
-        { label: 'In Session', value: 'INSESSION' },
-      ];
       this.getReservationDetails();
     } else {
       this.statusOptions = [
@@ -183,8 +180,15 @@ export class SpaReservationComponent extends BaseReservationComponent
             const data = new OutletForm().deserialize(response);
             const {
               bookingInformation: { spaItems, ...spaInfo },
+              nextStates,
               ...formData
             } = data;
+
+            if (nextStates)
+              this.statusOptions = nextStates.map((item) => ({
+                label: convertToTitleCase(item),
+                value: item,
+              }));
 
             this.spaItemsValues = spaItems;
             this.userForm.patchValue({
@@ -210,12 +214,6 @@ export class SpaReservationComponent extends BaseReservationComponent
           this.userForm.disable();
           this.disabledForm = true;
           break;
-        // case data.source === 'CREATE_WITH':
-        //   this.disabledForm = true;
-        //   break;
-        // case data.source === 'OTHERS':
-        //   this.disabledForm = true;
-        //   break;
       }
     }
   }

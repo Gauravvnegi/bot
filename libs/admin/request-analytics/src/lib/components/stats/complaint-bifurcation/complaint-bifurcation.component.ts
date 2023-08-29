@@ -7,7 +7,6 @@ import {
 import { chartConfig } from '../../../constant/chart';
 import { TranslateService } from '@ngx-translate/core';
 import { StatCard } from '../../../types/complaint.type';
-import { statCard } from '../../../constant/stats';
 import { Subscription, forkJoin } from 'rxjs';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { DateService } from '@hospitality-bot/shared/utils';

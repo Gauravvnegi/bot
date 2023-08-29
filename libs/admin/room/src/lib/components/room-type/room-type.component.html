@@ -10,7 +10,7 @@
           Room Information
         </div>
         <hospitality-bot-toggle-switch-with-label
-          [isToggleOn]="useForm.get('roomTypeStatus').value"
+          [isToggleOn]="isBaseRoomType"
           (onToggleSwitch)="onRoomTypeToggleSwitch($event)"
           [config]="{
             disableTurnOff: isBaseRoomType

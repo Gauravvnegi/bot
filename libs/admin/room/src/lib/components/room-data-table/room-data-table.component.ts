@@ -184,19 +184,6 @@ export class RoomDataTableComponent extends BaseDatatableComponent
             (res) => {
               const roomTypesList = new RoomTypeList().deserialize(res);
               this.values = roomTypesList.records;
-              const baseRoomType = roomTypesList.records.filter(
-                (item) => item.isBaseRoomType
-              );
-              if (baseRoomType) {
-                (this.formService.baseRoomType = baseRoomType[0]),
-                  (this.formService.isBaseRoomType =
-                    baseRoomType[0].isBaseRoomType);
-              } else if (!this.values.length) {
-                // When there are no room types so the default is base room type
-                this.formService.isBaseRoomType = true;
-              } else {
-                this.formService.isBaseRoomType = false;
-              }
 
               // this.updateQuickReplyFilterCount(res.entityStateCounts);
               // this.updateTabFilterCount(res.entityTypeCounts, res.total);

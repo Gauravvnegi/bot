@@ -98,13 +98,9 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.entityId = this.globalService.entityId;
-    this.baseRoomType = this.formService.baseRoomType;
-    this.isBaseRoomType = this.formService.isBaseRoomType;
-
     this.isPricingDynamic = this.subscriptionPlanService.checkModuleSubscription(
       ModuleNames.DYNAMIC_PRICING
     );
-
     this.initForm();
     this.initOptionConfig();
   }
@@ -128,7 +124,6 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
 
     this.useForm = this.fb.group({
       status: [true],
-      roomTypeStatus: [true],
       name: ['', [Validators.required]],
       imageUrls: [[], [Validators.required]],
       description: ['', [Validators.required]],
@@ -315,7 +310,7 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
       ? (this.useForm.get('dynamicRatePlans') as FormGroup)
       : (this.useForm.get('staticRatePlans') as FormGroup);
 
-    const basePrice = this.baseRoomType.price;
+    const basePrice = this.baseRoomType.price ?? 0;
     if (basePrice) {
       ratePlanFormGroup.get('basePrice').setValue(basePrice);
       ratePlanFormGroup.get('basePrice').disable();
@@ -535,7 +530,7 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
   }
 
   onRoomTypeToggleSwitch(isToggleOn: boolean) {
-    this.useForm.get('roomTypeStatus').setValue(isToggleOn);
+    // this.useForm.get('roomTypeStatus').setValue(isToggleOn);
   }
 
   resetForm() {

@@ -12,9 +12,6 @@ import { RoomType } from '../models/rooms-data-table.model';
 })
 export class FormService {
   roomStatus = new BehaviorSubject<string>(null);
-
-  baseRoomType: RoomType;
-  isBaseRoomType: boolean = false;
   
   getRoomTypeModData(
     roomTypeData: RoomTypeFormData,

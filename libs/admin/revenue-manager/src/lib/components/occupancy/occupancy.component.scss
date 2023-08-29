@@ -117,16 +117,6 @@ $border-color: rgba(112, 112, 112, 0.35);
   }
 }
 
-.disable {
-  opacity: 0.5;
-  cursor: not-allowed !important;
-}
-
-.remove {
-  color: red;
-  cursor: pointer;
-}
-
 .form-block {
   @include form-block;
   box-shadow: none !important;

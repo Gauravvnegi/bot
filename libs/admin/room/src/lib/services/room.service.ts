@@ -83,7 +83,12 @@ export class RoomService extends ApiService {
 
   updateRoomStatus(
     entityId: string,
-    data: { room: { id: string; status: RoomStatus } }
+    data: {
+      room: {
+        id: string;
+        statusDetailsList: [{ isCurrentStatus: boolean; status: RoomStatus }];
+      };
+    }
   ): Observable<RoomResponse> {
     return this.patch(`/api/v1/entity/${entityId}/inventory?type=ROOM`, data);
   }
@@ -107,7 +112,7 @@ export class RoomService extends ApiService {
 
   updateRoom(
     entityId: string,
-    data: { rooms: SingleRoom[] }
+    data: { room: SingleRoom }
   ): Observable<RoomResponse> {
     return this.put(`/api/v1/entity/${entityId}/inventory?type=ROOM`, data);
   }
@@ -116,9 +121,11 @@ export class RoomService extends ApiService {
     return this.get(`/api/v1/entity/${entityId}/inventory/${roomId}?type=ROOM`);
   }
 
-  exportCSV(entityId: string, config?: QueryConfig) {
+  exportCSV(entityId: string, table: TableValue, config?: QueryConfig) {
     return this.get(
-      `/api/v1/entity/${entityId}/inventory/export${config.params ?? ''}`,
+      `/api/v1/entity/${entityId}/inventory/${
+        table === TableValue.room ? 'room' : 'room-type'
+      }/export${config.params ?? ''}`,
       { responseType: 'blob' }
     );
   }

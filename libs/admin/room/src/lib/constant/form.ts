@@ -97,11 +97,17 @@ export type RatePlan = {
   paxPriceCurrency: string;
   paxChildPrice: number;
   paxAdultPrice: number;
+  paxChildBelowFive?: number;
+  price?: number;
   label: string;
   ratePlanId?: string | null;
   basePriceCurrency: string;
   basePrice: number;
   status?: boolean;
+  tripleOccupancyPrice?: number;
+  tripleOccupancyCurrency?: string;
+  doubleOccupancyPrice?: number;
+  doubleOccupancyCurrency?: string;
 };
 
 export type AddedRatePlans = {

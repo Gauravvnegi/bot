@@ -12,8 +12,9 @@ export class ToggleSwitchComponentLabel implements OnInit {
   toggleOffLabel: string = 'Inactive';
   toggleOnColor: string = '#65b340';
   toggleOffColor: string = '#e31717';
+  disableTurnOff: boolean = false;
 
-  @Input() set config(value) {
+  @Input() set config(value: ToggleSwitchConfig) {
     for (let key in value) {
       if (this.hasOwnProperty(key)) this[key] = value[key];
     }
@@ -26,3 +27,11 @@ export class ToggleSwitchComponentLabel implements OnInit {
     this.onToggleSwitch.emit(this.isToggleOn);
   }
 }
+
+type ToggleSwitchConfig = {
+  toggleOnLabel: string;
+  toggleOffLabel: string;
+  toggleOnColor: string;
+  toggleOffColor: string;
+  disableTurnOff: boolean;
+};

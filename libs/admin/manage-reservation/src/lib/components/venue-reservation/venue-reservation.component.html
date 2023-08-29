@@ -68,6 +68,8 @@
             [fields]="fields"
             [useFormArray]="venueBookingInfo"
             ctaLabel="+ Add Item"
+            [itemValues]="venueItemValues"
+            (removedIndex)="getSummaryData()"
           ></hospitality-bot-iterator>
         </div>
       </p-accordionTab>
@@ -81,11 +83,7 @@
     </p-accordion>
     <div class="bk-summary">
       <hospitality-bot-booking-summary
-        [selectedOffer]="selectedOffer"
         [summaryData]="summaryData"
-        [offersList]="offersList"
-        (onOfferItemSelect)="offerSelect($event)"
-        (onOfferSelect)="offerSelect()"
         (handleInitForm)="initForm()"
         [disabledForm]="disabledForm"
         [bookingInfo]="{

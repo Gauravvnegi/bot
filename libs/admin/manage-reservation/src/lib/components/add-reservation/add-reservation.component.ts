@@ -187,12 +187,6 @@ export class AddReservationComponent extends BaseReservationComponent
           this.userForm.disable({ emitEvent: false });
           this.disabledForm = true;
           break;
-        // case source.value === 'CREATE_WITH':
-        //   this.disabledForm = true;
-        //   break;
-        // case source.value === 'OTHERS':
-        //   this.disabledForm = true;
-        //   break;
       }
     }
   }

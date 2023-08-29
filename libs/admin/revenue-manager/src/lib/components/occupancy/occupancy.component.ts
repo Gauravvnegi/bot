@@ -43,10 +43,7 @@ export class OccupancyComponent implements OnInit {
   entityId = '';
 
   loading = false;
-  footerNote = `Lorem ipsum dolor sit amet consectetur adipisicing elit. Error eos
-  alias consequuntur necessitatibus dolore, fugit eligendi, exercitationem
-  quia iste nemo nulla eveniet, doloribus sit vero? Laboriosam inventore
-  deleniti autem illum!`;
+  footerNote = `Instruction Goes here...`;
   private parentForm: FormGroup;
 
   @Input() set dynamicPricingFG(form: FormGroup) {
@@ -92,6 +89,7 @@ export class OccupancyComponent implements OnInit {
       this.dynamicPricingService
         .getDynamicPricingList(this.getQueryConfig('OCCUPANCY'))
         .subscribe((res) => {
+          this.dynamicPricingControl.occupancyFA = this.fb.array([]);
           if (!res.configDetails.length) {
             this.add('season');
           } else {
@@ -109,8 +107,34 @@ export class OccupancyComponent implements OnInit {
 
   seasonStatusChange(status, seasonIndex: number) {
     const control = this.dynamicPricingControl.occupancyFA.at(seasonIndex);
-    control.patchValue({ status: status });
-    control.get('status').markAsDirty();
+    if (control.get('id').value) {
+      this.loading = true;
+      this.$subscription.add(
+        this.dynamicPricingService
+          .updateDynamicPricing(
+            { status: status ? 'ACTIVE' : 'INACTIVE' },
+            this.entityId,
+            this.getQueryConfig('OCCUPANCY'),
+            control.get('id').value
+          )
+          .subscribe(
+            (res) => {
+              this.snackbarService.openSnackBarAsText(
+                `Status Updated Successfully.`,
+                '',
+                { panelClass: 'success' }
+              );
+              this.initSeason();
+            },
+            (error) => {
+              this.loading = false;
+            },
+            this.handleFinal
+          )
+      );
+    } else {
+      control.patchValue({ status: status });
+    }
   }
 
   add(type: ControlTypes, form?: FormGroup | FormArray) {
@@ -187,24 +211,27 @@ export class OccupancyComponent implements OnInit {
       case 'season':
         this.loading = true;
         const season = this.dynamicPricingControl.occupancyFA;
-        this.$subscription.add(
-          this.dynamicPricingService
-            .deleteDynamicPricing(season.at(index).get('id').value)
-            .subscribe(
+        const { name, id, type } = (season.at(index) as FormGroup).controls;
+        if (type.value === 'update') {
+          this.$subscription.add(
+            this.dynamicPricingService.deleteDynamicPricing(id.value).subscribe(
               (res) => {
                 this.snackbarService.openSnackBarAsText(
-                  `Season deleted Successfully.`,
+                  `Season '${name.value}' deleted Successfully.`,
                   '',
                   { panelClass: 'success' }
                 );
-                season.removeAt(index);
+                this.initSeason();
               },
               (error) => {
                 this.loading = false;
               },
               this.handleFinal
             )
-        );
+          );
+        } else {
+          season.removeAt(index);
+        }
         break;
       case 'occupancy':
         const rule = form.get('occupancy') as FormArray;
@@ -216,7 +243,7 @@ export class OccupancyComponent implements OnInit {
         this.applyRulesConstraint(
           rule,
           +form.get('roomCount').value,
-          index == 0 ? 'first' : null
+          index == 0 ? 'first' : index == rule.controls.length ? 'last' : null
         );
         break;
       case 'hotel-occupancy':
@@ -229,7 +256,11 @@ export class OccupancyComponent implements OnInit {
         this.applyRulesConstraint(
           control,
           +form.get('roomCount').value,
-          index == 0 ? 'first' : null
+          index == 0
+            ? 'first'
+            : index == control.controls.length
+            ? 'last'
+            : null
         );
         break;
     }
@@ -287,7 +318,10 @@ export class OccupancyComponent implements OnInit {
 
           // Restriction
           start.disable();
-          if (index === ruleFA.controls.length - 1) {
+          if (
+            index === ruleFA.controls.length - 1 &&
+            (end.value == 0 || end.value == null)
+          ) {
             end.patchValue(roomCount, { emitEvent: false });
           }
         };
@@ -353,19 +387,24 @@ export class OccupancyComponent implements OnInit {
       });
       return;
     }
+
+    if (deleteFrom && deleteFrom == 'last') {
+      rules
+        .at(rules.controls.length - 1)
+        ?.get('end')
+        .patchValue(roomCount, {
+          emitEvent: false,
+        });
+      return;
+    }
     rules.controls.reduce((acc: FormGroup, curr: FormGroup, index) => {
       const { start, end } = curr.controls;
       if (acc) {
         start.patchValue(+acc.get('end').value + 1, {
           emitEvent: false,
         });
-        start.markAsDirty();
       }
 
-      if (index === rules.controls.length - 1) {
-        end.patchValue(roomCount, { emitEvent: false });
-        end.markAsDirty();
-      }
       // Validation
       if (+start.value > +end.value) {
         const customError = { min: 'Start should be <= End.' };
@@ -405,7 +444,6 @@ export class OccupancyComponent implements OnInit {
       'OCCUPANCY',
       form.get('type').value
     );
-
     if (!Object.keys(requestedData).length) {
       this.snackbarService.openSnackBarAsText(
         'Please make changes for the new updates.'
@@ -429,12 +467,13 @@ export class OccupancyComponent implements OnInit {
       request(...requestParams).subscribe(
         (res) => {
           this.snackbarService.openSnackBarAsText(
-            `Season ${
+            `Season '${form.get('name').value}' ${
               form.get('type').value === 'add' ? 'Created ' : 'Updated '
             } Successfully.`,
             '',
             { panelClass: 'success' }
           );
+          this.initSeason();
         },
         (error) => {
           this.loading = false;

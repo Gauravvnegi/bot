@@ -31,6 +31,9 @@ export class PrefixFieldComponent extends FormComponent implements OnInit {
   @Input() defaultProps: PrePostType<FormProps>;
   @Input() inputDisabled: PrePostType<boolean> = { pre: false, post: false };
 
+  @Input() preMin: number;
+  @Input() postMin: number;
+
   layout: 'default' | 'dashed' | 'pre-main' | 'post-main' = 'default';
 
   // @Input() isHyphenInput = true;

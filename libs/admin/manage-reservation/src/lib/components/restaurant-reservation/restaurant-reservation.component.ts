@@ -276,11 +276,14 @@ export class RestaurantReservationComponent extends BaseReservationComponent
             const data = new OutletForm().deserialize(response);
             const {
               orderInformation: { menuItems, ...orderInfo },
+              guestInformation,
               ...formData
             } = data;
 
             // Menu Items Array Values
             this.menuItemsValues = menuItems;
+            this.formService.guestInformation.next(guestInformation);
+
             this.userForm.patchValue({
               orderInformation: orderInfo,
               ...formData,
@@ -305,12 +308,6 @@ export class RestaurantReservationComponent extends BaseReservationComponent
           this.userForm.disable();
           this.disabledForm = true;
           break;
-        // case data.source === 'CREATE_WITH':
-        //   this.disabledForm = true;
-        //   break;
-        // case data.source === 'OTHERS':
-        //   this.disabledForm = true;
-        //   break;
       }
     }
   }
@@ -329,17 +326,6 @@ export class RestaurantReservationComponent extends BaseReservationComponent
           this.fields[0].options = this.menuItems;
         })
     );
-  }
-
-  offerSelect(offerData?: OfferData): void {
-    if (offerData) {
-      this.userForm.patchValue({ offerId: offerData.id });
-      this.getSummaryData();
-    } else {
-      this.userForm.get('offerId').reset();
-      this.getSummaryData();
-    }
-    this.selectedOffer = offerData;
   }
 
   getSummaryData(): void {

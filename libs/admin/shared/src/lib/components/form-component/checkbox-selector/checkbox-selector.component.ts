@@ -46,6 +46,7 @@ export class CheckboxSelectorComponent extends FormComponent {
 
   listenChanges() {
     this.checkBoxForm.valueChanges.subscribe((changedCheckbox) => {
+      this.controlContainer.control.get(this.controlName).markAsDirty();
       this.patchMyValues(changedCheckbox);
     });
   }
@@ -60,7 +61,6 @@ export class CheckboxSelectorComponent extends FormComponent {
 
     const control = this.controlContainer.control.get(this.controlName);
     control?.patchValue(selectedCheckbox);
-    control?.markAsDirty();
   }
 
   toggleSelectAll(): void {
@@ -87,10 +87,14 @@ export class CheckboxSelectorComponent extends FormComponent {
 
   setDefault() {
     const control = this.controlContainer.control.get(this.controlName);
-    if (control?.value?.length) {
+    const totalLength = control?.value?.length;
+    if (totalLength) {
+      if (this.menuOptions.length == totalLength) {
+        this.setControls(true);
+        return;
+      }
       control.value.forEach((item) => {
         this.checkBoxForm.patchValue({ [item]: true });
-        this.checkBoxForm.markAsDirty();
       });
     } else {
       this.setControls(this.defaultAllChecked);

@@ -153,7 +153,7 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
       this.useForm.patchValue(this.roomService.roomTypeFormData);
     }
 
-    this.initBaseRoomTypeDetails();
+    // this.initBaseRoomTypeDetails();
 
     // Patch the form value if service id present
     if (this.roomTypeId) {
@@ -305,17 +305,17 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
     this.ratePlanArray.push(this.fb.group(addedRatePlan));
   }
 
-  initBaseRoomTypeDetails() {
-    const ratePlanFormGroup = this.isPricingDynamic
-      ? (this.useForm.get('dynamicRatePlans') as FormGroup)
-      : (this.useForm.get('staticRatePlans') as FormGroup);
+  // initBaseRoomTypeDetails() {
+  //   const ratePlanFormGroup = this.isPricingDynamic
+  //     ? (this.useForm.get('dynamicRatePlans') as FormGroup)
+  //     : (this.useForm.get('staticRatePlans') as FormGroup);
 
-    const basePrice = this.baseRoomType.price ?? 0;
-    if (basePrice) {
-      ratePlanFormGroup.get('basePrice').setValue(basePrice);
-      ratePlanFormGroup.get('basePrice').disable();
-    }
-  }
+  //   const basePrice = this.baseRoomType.price ?? 0;
+  //   if (basePrice) {
+  //     ratePlanFormGroup.get('basePrice').setValue(basePrice);
+  //     ratePlanFormGroup.get('basePrice').disable();
+  //   }
+  // }
 
   /**
    * @function initFormSubscription Initialize the subscription of form value change

@@ -68,6 +68,8 @@
             [fields]="fields"
             [useFormArray]="venueBookingInfo"
             ctaLabel="+ Add Item"
+            [itemValues]="venueItemValues"
+            (removedIndex)="getSummaryData()"
           ></hospitality-bot-iterator>
         </div>
       </p-accordionTab>

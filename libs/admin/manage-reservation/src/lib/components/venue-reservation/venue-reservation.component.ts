@@ -24,6 +24,7 @@ import {
   SummaryData,
   ReservationFormData,
   BookingInfo,
+  OutletForm,
 } from '../../models/reservations.model';
 import { ManageReservationService } from '../../services/manage-reservation.service';
 import { ReservationForm } from '../../constants/form';
@@ -31,6 +32,7 @@ import { BaseReservationComponent } from '../base-reservation.component';
 import { FormService } from '../../services/form.service';
 import { ReservationType } from '../../constants/reservation-table';
 import { debounceTime } from 'rxjs/operators';
+import { convertToTitleCase } from 'libs/admin/shared/src/lib/utils/valueFormatter';
 
 @Component({
   selector: 'hospitality-bot-venue-reservation',
@@ -48,6 +50,8 @@ export class VenueReservationComponent extends BaseReservationComponent
   statusOptions: Option[] = [];
   eventOptions: Option[] = [];
   foodPackages: Option[] = [];
+
+  venueItemValues = [];
 
   constructor(
     private fb: FormBuilder,
@@ -134,10 +138,6 @@ export class VenueReservationComponent extends BaseReservationComponent
 
   getReservationId(): void {
     if (this.reservationId) {
-      this.statusOptions = [
-        ...statusOptions,
-        { label: 'In Progress', value: 'IN_PROGRESS' },
-      ];
       this.getReservationDetails();
     } else {
       this.statusOptions = [
@@ -153,9 +153,27 @@ export class VenueReservationComponent extends BaseReservationComponent
         .getReservationDataById(this.reservationId, this.entityId)
         .subscribe(
           (response) => {
-            const data = new ReservationFormData().deserialize(response);
-            this.userForm.patchValue(data);
-            this.summaryData = new SummaryData().deserialize(response);
+            const data = new OutletForm().deserialize(response);
+            const {
+              eventInformation: { venueInfo, ...eventInfo },
+              guestInformation,
+              nextStates,
+              ...formData
+            } = data;
+
+            if (nextStates)
+              this.statusOptions = nextStates.map((item) => ({
+                label: convertToTitleCase(item),
+                value: item,
+              }));
+
+            this.venueItemValues = venueInfo;
+            this.formService.guestInformation.next(guestInformation);
+
+            this.userForm.patchValue({
+              bookingInformation: eventInfo,
+              ...formData,
+            });
           },
           (error) => {}
         )
@@ -175,12 +193,6 @@ export class VenueReservationComponent extends BaseReservationComponent
           this.userForm.disable();
           this.disabledForm = true;
           break;
-        // case data.source === 'CREATE_WITH':
-        //   this.disabledForm = true;
-        //   break;
-        // case data.source === 'OTHERS':
-        //   this.disabledForm = true;
-        //   break;
       }
     }
   }

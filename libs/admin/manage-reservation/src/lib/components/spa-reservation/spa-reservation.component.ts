@@ -180,6 +180,7 @@ export class SpaReservationComponent extends BaseReservationComponent
             const data = new OutletForm().deserialize(response);
             const {
               bookingInformation: { spaItems, ...spaInfo },
+              guestInformation,
               nextStates,
               ...formData
             } = data;
@@ -191,6 +192,8 @@ export class SpaReservationComponent extends BaseReservationComponent
               }));
 
             this.spaItemsValues = spaItems;
+            this.formService.guestInformation.next(guestInformation);
+
             this.userForm.patchValue({
               bookingInformation: spaInfo,
               ...formData,

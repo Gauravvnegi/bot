@@ -20,12 +20,12 @@ import {
   DynamicPricingHandler,
 } from '../../models/dynamic-pricing.model';
 import { DynamicPricingService } from '../../services/dynamic-pricing.service';
-import { RoomTypes } from '../../types/bar-price.types';
 import {
   ConfigCategory,
   ConfigType,
   DynamicPricingForm,
 } from '../../types/dynamic-pricing.types';
+import { RoomTypes } from 'libs/admin/channel-manager/src/lib/models/bulk-update.models';
 
 export type ControlTypes = 'season' | 'occupancy' | 'hotel-occupancy';
 
@@ -89,19 +89,21 @@ export class OccupancyComponent implements OnInit {
   initSeason() {
     this.loading = true;
     this.$subscription.add(
-      this.dynamicPricingService.getOccupancyList().subscribe((res) => {
-        if (!res.configDetails.length) {
-          this.add('season');
-        } else {
-          const handler = new DynamicPricingHandler().deserialize(
-            res,
-            this.rooms
-          );
-          handler.dataList.forEach((item, index) => {
-            handler.mapOccupancy(index, item, this);
-          });
-        }
-      })
+      this.dynamicPricingService
+        .getDynamicPricingList(this.getQueryConfig('OCCUPANCY'))
+        .subscribe((res) => {
+          if (!res.configDetails.length) {
+            this.add('season');
+          } else {
+            const handler = new DynamicPricingHandler().deserialize(
+              res,
+              this.rooms
+            );
+            handler.dataList.forEach((item, index) => {
+              handler.mapOccupancy(index, item, this);
+            });
+          }
+        })
     );
   }
 
@@ -136,8 +138,9 @@ export class OccupancyComponent implements OnInit {
       toDate: [, [Validators.required]],
       configCategory: ['ROOM_TYPE', [Validators.required]],
       hotelConfig: this.fb.array([this.seasonOccupancyFG]),
-      hotelId: [],
+      hotelId: [this.entityId],
       basePrice: [],
+      roomCount: [this.rooms.find((item) => item.isBase)?.roomCount ?? 0],
       roomType: [, [Validators.required]],
       removedRules: this.fb.array([]),
       selectedDays: [, [Validators.required]],
@@ -151,7 +154,8 @@ export class OccupancyComponent implements OnInit {
         isSelected: [true],
         roomId: [room.value],
         roomName: [room.label],
-        basePrice: [room.price],
+        basePrice: [room?.price ?? 0],
+        roomCount: [room?.roomCount ?? 0],
         occupancy: this.fb.array([this.seasonOccupancyFG]),
       })
     );
@@ -160,7 +164,7 @@ export class OccupancyComponent implements OnInit {
   get seasonOccupancyFG(): FormGroup {
     return this.fb.group({
       id: [],
-      start: [, [Validators.min(0), Validators.required]],
+      start: [1, [Validators.min(0), Validators.required]],
       end: [, [Validators.min(0), Validators.required]],
       discount: [, [Validators.min(-100), Validators.required]],
       rate: [, [Validators.min(0), Validators.required]],
@@ -185,10 +189,7 @@ export class OccupancyComponent implements OnInit {
         const season = this.dynamicPricingControl.occupancyFA;
         this.$subscription.add(
           this.dynamicPricingService
-            .deleteDynamicPricing(
-              this.entityId,
-              season.at(index).get('id').value
-            )
+            .deleteDynamicPricing(season.at(index).get('id').value)
             .subscribe(
               (res) => {
                 this.snackbarService.openSnackBarAsText(
@@ -212,6 +213,11 @@ export class OccupancyComponent implements OnInit {
           saveRule(seasonFG, ruleId.value);
         }
         rule.removeAt(index);
+        this.applyRulesConstraint(
+          rule,
+          +form.get('roomCount').value,
+          index == 0 ? 'first' : null
+        );
         break;
       case 'hotel-occupancy':
         const control = form.get('hotelConfig') as FormArray;
@@ -220,6 +226,11 @@ export class OccupancyComponent implements OnInit {
           saveRule(form, ruleId.value);
         }
         control.removeAt(index);
+        this.applyRulesConstraint(
+          control,
+          +form.get('roomCount').value,
+          index == 0 ? 'first' : null
+        );
         break;
     }
   }
@@ -229,8 +240,15 @@ export class OccupancyComponent implements OnInit {
       (seasonFG: FormGroup) => {
         const roomTypeControl = seasonFG.get('roomType');
         const configCategoryFG = seasonFG.get('configCategory');
-        const ruleSubscription = (form: FormGroup, basePrice) => {
-          form.get('discount').valueChanges.subscribe((percentage) => {
+        const ruleSubscription = (
+          ruleFA: FormArray,
+          index: number,
+          basePrice: number,
+          roomCount: number
+        ) => {
+          const form = ruleFA.at(index) as FormGroup;
+          const { discount, rate, start, end } = form.controls;
+          discount.valueChanges.subscribe((percentage) => {
             const rate = (parseInt(percentage) * basePrice) / 100 + basePrice;
             form.patchValue(
               {
@@ -240,7 +258,7 @@ export class OccupancyComponent implements OnInit {
             );
           });
 
-          form.get('rate').valueChanges.subscribe((rate) => {
+          rate.valueChanges.subscribe((rate) => {
             const discount = ((parseInt(rate) - basePrice) / basePrice) * 100;
             form.patchValue(
               {
@@ -250,10 +268,9 @@ export class OccupancyComponent implements OnInit {
             );
           });
 
-          const { start, end } = form.controls;
           start.valueChanges.subscribe((startValue) => {
             const condition = end.value && +startValue > end.value;
-            const customError = { min: 'Start should be less than End.' };
+            const customError = { min: 'Start should be <= End.' };
             start.setErrors(condition ? customError : null);
             end.setErrors(condition && null);
           });
@@ -261,13 +278,19 @@ export class OccupancyComponent implements OnInit {
           end.valueChanges.subscribe((endValue) => {
             const condition = start.value && +endValue < start.value;
             const customError = {
-              min: 'End should be greater than Start.',
+              min: 'End should be >= Start.',
             };
             end.setErrors(condition ? customError : null);
             start.setErrors(condition && null);
+            this.applyRulesConstraint(ruleFA, roomCount);
           });
-        };
 
+          // Restriction
+          start.disable();
+          if (index === ruleFA.controls.length - 1) {
+            end.patchValue(roomCount, { emitEvent: false });
+          }
+        };
         configCategoryFG.valueChanges.subscribe((res: ConfigCategory) => {
           if (res) {
             res == 'HOTEL'
@@ -275,11 +298,20 @@ export class OccupancyComponent implements OnInit {
               : roomTypeControl.enable();
           }
         });
-        (seasonFG.get('hotelConfig') as FormArray).controls.forEach(
-          (rule: FormGroup) => {
-            ruleSubscription(rule, +seasonFG.get('basePrice').value);
-          }
+        const hotelConfigFA = seasonFG.get('hotelConfig') as FormArray;
+        hotelConfigFA.controls.forEach((rule: FormGroup, index) => {
+          ruleSubscription(
+            hotelConfigFA,
+            index,
+            +seasonFG.get('basePrice').value,
+            +seasonFG.get('roomCount').value
+          );
+        });
+        this.applyRulesConstraint(
+          hotelConfigFA,
+          +seasonFG.get('roomCount').value
         );
+
         if (configCategoryFG.value == 'ROOM_TYPE') {
           //roomType change listening
           const roomTypeFA = seasonFG.get('roomTypes') as FormArray;
@@ -297,16 +329,57 @@ export class OccupancyComponent implements OnInit {
 
           roomTypeFA.controls.forEach((roomTypeFG: FormGroup) => {
             const basePrice = roomTypeFG.get('basePrice').value;
+            const roomCount = roomTypeFG.get('roomCount').value;
             //occupancy change listening
-            (roomTypeFG.get('occupancy') as FormArray).controls.forEach(
-              (occupancyFG: FormGroup) => {
-                ruleSubscription(occupancyFG, basePrice);
-              }
-            );
+            const occupancyFA = roomTypeFG.get('occupancy') as FormArray;
+            occupancyFA.controls.forEach((occupancyFG: FormGroup, index) => {
+              ruleSubscription(occupancyFA, index, basePrice, roomCount);
+            });
+            this.applyRulesConstraint(occupancyFA, roomCount);
           });
         }
       }
     );
+  }
+
+  applyRulesConstraint(
+    rules: FormArray,
+    roomCount: number,
+    deleteFrom?: 'first' | 'mid' | 'last'
+  ) {
+    if (deleteFrom && deleteFrom === 'first') {
+      rules.at(0)?.get('start').patchValue(1, {
+        emitEvent: false,
+      });
+      return;
+    }
+    rules.controls.reduce((acc: FormGroup, curr: FormGroup, index) => {
+      const { start, end } = curr.controls;
+      if (acc) {
+        start.patchValue(+acc.get('end').value + 1, {
+          emitEvent: false,
+        });
+        start.markAsDirty();
+      }
+
+      if (index === rules.controls.length - 1) {
+        end.patchValue(roomCount, { emitEvent: false });
+        end.markAsDirty();
+      }
+      // Validation
+      if (+start.value > +end.value) {
+        const customError = { min: 'Start should be <= End.' };
+        start.setErrors(+start.value > +end.value ? customError : null);
+        end.setErrors(+start.value > +end.value && null);
+        start.markAllAsTouched();
+        end.markAllAsTouched();
+      } else {
+        start.markAsUntouched();
+        end.markAsUntouched();
+      }
+      acc = curr;
+      return curr;
+    });
   }
 
   selectedRoomIndex(seasonIndex: number): number {
@@ -324,6 +397,7 @@ export class OccupancyComponent implements OnInit {
       );
       return;
     }
+
     this.loading = true;
     const { id, type } = form.controls;
     const requestedData = DynamicPricingFactory.buildRequest(
@@ -361,7 +435,6 @@ export class OccupancyComponent implements OnInit {
             '',
             { panelClass: 'success' }
           );
-          console.log(res);
         },
         (error) => {
           this.loading = false;
@@ -369,6 +442,16 @@ export class OccupancyComponent implements OnInit {
         this.handleFinal
       )
     );
+  }
+
+  isDisableAddNewRule(ruleFA: FormArray, roomCountFG: FormGroup): boolean {
+    const isRulesValid = () => {
+      return ruleFA.controls.every(
+        (item: FormGroup) => +item.get('start').value <= +item.get('end').value
+      );
+    };
+    const end = +ruleFA.at(ruleFA.controls.length - 1).value.end;
+    return end >= +roomCountFG.value || !isRulesValid();
   }
 
   getQueryConfig(type: ConfigType): QueryConfig {

@@ -13,6 +13,8 @@ export class DateComponent extends FormComponent implements OnInit {
 
   /* Default Date Settings */
   enableTime = true;
+  isTimeOnly = false;
+  showIcon = true;
   enableSeconds = false;
   hourFormat: 12 | 24 = 12;
   dateFormat = 'd/m/yy';
@@ -83,6 +85,8 @@ export class DateComponent extends FormComponent implements OnInit {
  *
  */
 export type DateSetting = {
+  isTimeOnly: boolean;
+  showIcon: boolean;
   enableTime: boolean;
   enableSeconds: boolean;
   hourFormat: 12 | 24;

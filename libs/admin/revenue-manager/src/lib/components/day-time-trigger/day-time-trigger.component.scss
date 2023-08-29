@@ -17,6 +17,8 @@ $border-color: rgba(112, 112, 112, 0.35);
       font-size: 16px;
       color: $border-color;
       font-weight: 500;
+      display: flex;
+      gap: 10px;
     }
   }
   .status {
@@ -39,13 +41,6 @@ $border-color: rgba(112, 112, 112, 0.35);
       width: calc(100% - 400px);
     }
   }
-}
-
-.add-level {
-  padding: 20px 30px;
-  border-top: 1px solid $border-color;
-  display: flex;
-  justify-content: flex-end;
 }
 
 .add-trigger {
@@ -79,7 +74,6 @@ $border-color: rgba(112, 112, 112, 0.35);
     padding: 0 !important;
   }
   .button {
-    height: unset !important;
     padding: 0 10px !important;
   }
   .wrapper {

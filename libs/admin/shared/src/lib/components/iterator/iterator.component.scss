@@ -55,3 +55,9 @@
   display: flex;
   justify-content: flex-end;
 }
+
+:host ::ng-deep .select {
+  .option-items {
+    overflow: hidden;
+  }
+}

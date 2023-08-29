@@ -1,9 +1,11 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from '@hospitality-bot/shared/utils';
 import { BehaviorSubject } from 'rxjs';
-import { RoomTypes } from '../types/bar-price.types';
 import { RoomTypeList } from 'libs/admin/room/src/lib/models/rooms-data-table.model';
-import { makeRoomsData } from '../models/bar-price.model';
+import {
+  Rooms,
+  RoomTypes,
+} from 'libs/admin/channel-manager/src/lib/models/bulk-update.models';
 
 @Injectable()
 export class BarPriceService extends ApiService {
@@ -19,7 +21,7 @@ export class BarPriceService extends ApiService {
     this.getRoomDetails(entityId).subscribe((res) => {
       const rooms = new RoomTypeList().deserialize(res).records;
       this.isRoomDetailsLoaded = true;
-      this.roomDetails.next(makeRoomsData(rooms));
+      this.roomDetails.next(new Rooms().deserialize(rooms));
     });
   }
 }

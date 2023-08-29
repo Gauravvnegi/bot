@@ -12,8 +12,10 @@ import {
   QueryConfig,
 } from '@hospitality-bot/admin/shared';
 import { ChannelManagerFormService } from '../../services/channel-manager-form.service';
-import { CheckBoxTreeFactory } from '../../models/bulk-update.models';
-import { RoomTypes } from '../../types/channel-manager.types';
+import {
+  CheckBoxTreeFactory,
+  RoomTypes,
+} from '../../models/bulk-update.models';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { Subscription } from 'rxjs';
@@ -131,7 +133,7 @@ export class InventoryBulkUpdateComponent implements OnInit {
     this.$subscription.add(
       this.channelManagerService
         .updateChannelManager(
-          { updates: data },
+          { inventoryList: data },
           this.entityId,
           this.getQueryConfig()
         )

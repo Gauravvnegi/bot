@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { MatDialogConfig } from '@angular/material/dialog';
-import { Router } from '@angular/router';
+import { NavigationExtras, Router } from '@angular/router';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
   AdminUtilityService,
@@ -26,8 +26,8 @@ import {
   RoomListResponse,
   RoomStatus,
   RoomTypeListResponse,
-  RoomTypeStatus,
 } from '../../types/service-response';
+import { FormService } from '../../services/form.service';
 
 @Component({
   selector: 'hospitality-bot-room-data-table',
@@ -54,7 +54,8 @@ export class RoomDataTableComponent extends BaseDatatableComponent
     private globalFilterService: GlobalFilterService,
     protected snackbarService: SnackBarService,
     private router: Router,
-    private modalService: ModalService
+    private modalService: ModalService,
+    private formService: FormService
   ) {
     super(fb, tabFilterService);
   }
@@ -183,6 +184,7 @@ export class RoomDataTableComponent extends BaseDatatableComponent
             (res) => {
               const roomTypesList = new RoomTypeList().deserialize(res);
               this.values = roomTypesList.records;
+
               // this.updateQuickReplyFilterCount(res.entityStateCounts);
               // this.updateTabFilterCount(res.entityTypeCounts, res.total);
               // this.updateTotalRecords();
@@ -210,10 +212,23 @@ export class RoomDataTableComponent extends BaseDatatableComponent
    */
   handleRoomStatus(status: RoomStatus, id: string): void {
     this.loading = true;
+    if (status === 'OUT_OF_ORDER' || status === 'OUT_OF_SERVICE') {
+      this.formService.roomStatus.next(status);
+      this.router.navigate(
+        [`/pages/efrontdesk/room/${routes.addRoom}/single`],
+        {
+          queryParams: { id: id },
+        }
+      );
+      return;
+    }
     this.$subscription.add(
       this.roomService
         .updateRoomStatus(this.entityId, {
-          rooms: [{ id, status: status }],
+          room: {
+            id: id,
+            statusDetailsList: [{ isCurrentStatus: true, status: status }],
+          },
         })
         .subscribe(
           () => {
@@ -243,8 +258,10 @@ export class RoomDataTableComponent extends BaseDatatableComponent
     this.$subscription.add(
       this.roomService
         .updateRoomTypeStatus(this.entityId, {
-          id,
-          status,
+          roomType: {
+            id: id,
+            status: status,
+          },
         })
         .subscribe(
           () => this.getDataTableValue(),
@@ -274,7 +291,7 @@ export class RoomDataTableComponent extends BaseDatatableComponent
           dialogConfig
         );
 
-        const soldOut = rowData.roomCount.soldOut;
+        const soldOut = rowData?.roomCount?.soldOut;
 
         if (soldOut) {
           togglePopupCompRef.componentInstance.content = {
@@ -289,7 +306,7 @@ export class RoomDataTableComponent extends BaseDatatableComponent
           togglePopupCompRef.componentInstance.content = {
             heading: 'In-active Room Type',
             description: [
-              `There are ${rowData.roomCount} rooms in this room type`,
+              `There are ${rowData?.roomCount ?? 0} rooms in this room type`,
               'You are about to mark this room type in-active.',
               'Are you Sure?',
             ],
@@ -352,22 +369,23 @@ export class RoomDataTableComponent extends BaseDatatableComponent
     const config: QueryConfig = {
       params: this.adminUtilityService.makeQueryParams([
         ...this.selectedRows.map((item) => ({ ids: item.id })),
-        { type: this.selectedTab },
       ]),
     };
     this.$subscription.add(
-      this.roomService.exportCSV(this.entityId, config).subscribe(
-        (res) => {
-          FileSaver.saveAs(
-            res,
-            `${this.tableName.toLowerCase()}_export_${new Date().getTime()}.csv`
-          );
-        },
-        () => {},
-        () => {
-          this.loading = false;
-        }
-      )
+      this.roomService
+        .exportCSV(this.entityId, this.selectedTab, config)
+        .subscribe(
+          (res) => {
+            FileSaver.saveAs(
+              res,
+              `${this.tableName.toLowerCase()}_export_${new Date().getTime()}.csv`
+            );
+          },
+          () => {},
+          () => {
+            this.loading = false;
+          }
+        )
     );
   }
 

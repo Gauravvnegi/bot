@@ -36,6 +36,7 @@ export class RequestDetailComponent implements OnInit, OnDestroy {
   @Input() guestInfoEnable;
   closedTimestamp: number;
   formattedClosedTimestamp: string;
+  jobId: string;
 
   requestFG: FormGroup;
   constructor(
@@ -56,7 +57,6 @@ export class RequestDetailComponent implements OnInit, OnDestroy {
   registerListeners() {
     this.listenForGlobalFilters();
     this.listenForSelectedRequest();
-    this.listenForStatusValue();
   }
 
   /**
@@ -64,42 +64,60 @@ export class RequestDetailComponent implements OnInit, OnDestroy {
    */
   listenForSelectedRequest() {
     this.$subscription.add(
-      this._requestService.selectedRequest.subscribe(
-        (response: InhouseData) => {
-          if (response) {
-            this.data = response;
-            //need to patch assigne
-            this.requestFG.patchValue({
-              status: response.action,
-              assignee: response.assigneeId,
-            });
-            this.closedTimestamp = response?.closedTime;
-            this.getAssigneeList(response.itemId);
-            this.status = true;
-            this.formattedDate();
-          } else {
-            this.data = new InhouseData();
-            this.status = false;
-          }
+      this._requestService.selectedRequest.subscribe((res) => {
+        if (res) {
+          this.jobId = res;
+          this.getJobDetails();
         }
-      )
+      })
     );
   }
 
-  listenForStatusValue() {
+  /**
+   * @function getJobDetails To get the job details.
+   * @description This function is used to get the job details.
+   * @returns
+   **/
+  getJobDetails() {
     this.$subscription.add(
-      this._requestService.requestStatus.subscribe((response) => {
-        if (!!this.statusList.length) return;
-
-        response.forEach((item) => {
-          if (item !== RequestStatus.TIMEOUT)
-            this.statusList.push({
-              label: convertToTitleCase(item),
-              value: item,
-            });
-        });
+      this._requestService.getStatusList(this.jobId).subscribe((response) => {
+        if (response) {
+          this.data = new InhouseData().deserialize(response);
+          this.requestFG.patchValue({
+            status: response.action,
+            assignee: response.assigneeId,
+          });
+          this.closedTimestamp = response?.closedTime;
+          this.getAssigneeList(response.itemId);
+          this.getStatusList(response.nextStates);
+          this.status = true;
+          this.formattedDate();
+        } else {
+          this.data = new InhouseData();
+          this.status = false;
+        }
       })
     );
+  }
+
+  /**
+   * @function getStatusList To get the status list.
+   * @param status The status list from response.
+   * @description This function is used to get the status list.
+   * @returns
+   **/
+  getStatusList(status: string[]) {
+    this.statusList = status.map((item) => {
+      return {
+        label: convertToTitleCase(item),
+        value: item,
+      };
+    });
+
+    this.statusList.push({
+      label: convertToTitleCase(this.data.action),
+      value: this.data.action,
+    } as Option);
   }
 
   getAssigneeList(itemId) {
@@ -188,7 +206,7 @@ export class RequestDetailComponent implements OnInit, OnDestroy {
             );
             this.data.action = event.value;
             this.formattedDate();
-
+            this.getJobDetails(); // to refresh the data
             this._requestService.refreshData.next(true);
           },
           ({ error }) => {
@@ -204,8 +222,7 @@ export class RequestDetailComponent implements OnInit, OnDestroy {
       : new Date();
     this.formattedClosedTimestamp = this.datePipe.transform(
       dateObject,
-      "EEEE, MMMM d, y, 'at' HH:mm:ss",
-      'UTC'
+      "EEEE, MMMM d, y, 'at' h:mm a"
     );
   }
 
@@ -215,8 +232,12 @@ export class RequestDetailComponent implements OnInit, OnDestroy {
         assignedTo: event.value,
       })
       .subscribe(() => {
+        const user = this.assigneeList.find(
+          (item) => item.value === event.value
+        ).label;
+
         this.snackbarService.openSnackBarAsText(
-          `Assignee updated successfully`,
+          `Job ${this.data?.jobID} Assignee To ${user}  Successfully`,
           '',
           { panelClass: 'success' }
         );

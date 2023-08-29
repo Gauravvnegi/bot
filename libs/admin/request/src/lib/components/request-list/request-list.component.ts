@@ -79,6 +79,7 @@ export class RequestListComponent implements OnInit, OnDestroy {
     this.listenForGlobalFilters();
     this.listenForNotification();
     this.listenForRefreshData();
+    this.listenRequestFilter();
   }
 
   /**
@@ -102,6 +103,8 @@ export class RequestListComponent implements OnInit, OnDestroy {
             journeyType: this.entityType,
             actionType: this.tabFilterItems[this.tabFilterIdx]?.value,
             offset: 0,
+            sort: 'updated',
+            entityType: 'ALL',
             limit:
               this.listData && this.listData.length > 10
                 ? this.listData.length
@@ -110,6 +113,26 @@ export class RequestListComponent implements OnInit, OnDestroy {
         ]);
       })
     );
+  }
+
+  listenRequestFilter() {
+    this._requestService.requestListFilter.subscribe((res) => {
+      if (res) {
+        this._requestService.selectedRequest.next(null);
+        this.loadInitialRequestList([
+          ...this.globalQueries,
+          {
+            order: 'DESC',
+            journeyType: this.entityType,
+            actionType: this.tabFilterItems[this.tabFilterIdx].value,
+            offset: 0,
+            sort: 'updated',
+            limit: 10,
+            entityType: res,
+          },
+        ]);
+      }
+    });
   }
 
   /**
@@ -227,6 +250,8 @@ export class RequestListComponent implements OnInit, OnDestroy {
           offset,
           limit,
           journeyType: this.entityType,
+          sort: 'updated',
+
           actionType: this.tabFilterItems[this.tabFilterIdx].value,
         },
       ]).subscribe((response) => {
@@ -242,6 +267,9 @@ export class RequestListComponent implements OnInit, OnDestroy {
             ).values(),
           ];
         this.totalData = response.total;
+        clearInterval(this.timeInterval);
+        this.timeLeft = this.listData.map((item) => item.timeLeft);
+        this.startTimeLeftTimer();
         this.initTabFilter(response.entityStateCounts, response.total);
         this.loading = false;
       })
@@ -307,7 +335,7 @@ export class RequestListComponent implements OnInit, OnDestroy {
     // this logic will be removed api should be call to get the new data
 
     this.selectedRequest = request;
-    this._requestService.selectedRequest.next(request);
+    this._requestService.selectedRequest.next(request.id);
   }
 
   /**

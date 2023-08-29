@@ -112,7 +112,7 @@ export class HotelDataTableComponent extends BaseDatatableComponent
       .padStart(2, '0')}:${minutes.toString().padStart(2, '0')} ${period}`;
     return timeString;
   }
-  
+
   /**
    * To get query params
    */

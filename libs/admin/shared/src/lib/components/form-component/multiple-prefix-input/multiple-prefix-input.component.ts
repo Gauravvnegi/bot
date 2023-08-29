@@ -16,10 +16,12 @@ export class MultiplePrefixInputComponent extends FormComponent
   currencyControlName: string = '';
   preCountControlName: string = '';
   postCountControlName: string = '';
+  additionalControlName: string = '';
 
   mainLabel: string = '';
   preCountLabel: string = '';
   postCountLabel: string = '';
+  additionalLabel = '';
 
   @Input() set controls(value: ControlNames) {
     for (const key in value) {
@@ -59,10 +61,12 @@ type ControlNames = {
   currencyControlName: string;
   preCountControlName: string;
   postCountControlName: string;
+  additionalControlName?: string;
 };
 
 type Labels = {
   mainLabel: string;
   preCountLabel: string;
   postCountLabel: string;
+  additionalLabel?: string;
 };

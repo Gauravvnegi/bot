@@ -21,11 +21,7 @@ import { Subscription } from 'rxjs';
 export class CategoryComponent implements OnInit {
   @Input() controlName: string;
   @Input() type: CategoryData['type'];
-  @Input() set entityId(value: string) {
-    this._entityId = value;
-    this.getCategories(value);
-  }
-  @Input() disabled: string;
+  @Input() entityId: string;
   categoryOffSet = 0;
   loadingCategory = false;
   noMoreCategories = false;
@@ -45,7 +41,8 @@ export class CategoryComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    if (!this._entityId) this._entityId = this.globalFilterService.entityId;
+    if (!this.entityId) this.entityId = this.globalFilterService.entityId;
+
     this.inputControl = this.controlContainer.control.get(this.controlName);
     this.getCategories();
   }
@@ -133,6 +130,10 @@ export class CategoryComponent implements OnInit {
         })
         .subscribe(
           (res) => {
+            this.categories.push({
+              label: res?.name,
+              value: res?.id,
+            });
             this.inputControl.setValue(res.id);
           },
           () => {

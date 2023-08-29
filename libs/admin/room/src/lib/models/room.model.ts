@@ -5,7 +5,11 @@ import {
   ReservationRatePlan,
   StaticPricingRatePlan,
 } from '../constant/form';
-import { RoomStatus, RoomTypeResponse } from '../types/service-response';
+import {
+  RoomStatus,
+  RoomTypeResponse,
+  StatusDetails,
+} from '../types/service-response';
 import {
   MultipleRoomData,
   MultipleRoomForm,
@@ -35,20 +39,21 @@ export class SingleRoom {
   id: string;
   roomNumber: string;
   floorNumber: string;
-  status: RoomStatus;
   currency: string;
   price: number;
   roomTypeId: string;
   featureIds: string[];
   removeFeatures?: string[];
-  remark?: string;
-  currentStatusTo?: number;
-  currentStatusFrom?: number;
+  // status: RoomStatus;
+  // remark?: string;
+  // currentStatusTo?: number;
+  // currentStatusFrom?: number;
+  statusDetailsList?: StatusDetails[];
   deserialize(input: SingleRoomData) {
     this.id = input.id ?? '';
     this.roomNumber = input.roomNo ?? '';
     this.floorNumber = input.floorNo ?? '';
-    this.status = input.status;
+    // this.status = input.status;
     this.currency = input.currency ?? '';
     this.price = input.price ?? null;
     this.roomTypeId = input.roomTypeId ?? '';
@@ -56,9 +61,17 @@ export class SingleRoom {
     this.removeFeatures = input?.removeFeatures?.length
       ? input?.removeFeatures
       : null; //as per BE requirement
-    this.remark = input.remark ?? '';
-    this.currentStatusTo = input?.currentStatusTo;
-    this.currentStatusFrom = input?.currentStatusFrom;
+    // this.remark = input.remark ?? '';
+    // this.currentStatusTo = input?.currentStatusTo;
+    // this.currentStatusFrom = input?.currentStatusFrom;
+    if (input.statusDetails)
+      this.statusDetailsList = input.statusDetails.map((item) => ({
+        toDate: item.toDate,
+        fromDate: item.fromDate,
+        isCurrentStatus: item.isCurrentStatus,
+        status: item.status,
+        remark: item.remark,
+      }));
     return this;
   }
 }
@@ -135,34 +148,48 @@ export class RoomTypeForm {
     this.area = input.area;
 
     const defaultRatePlan = input?.ratePlans.filter((item) => item.isBase);
-    this.staticRatePlans = {
-      paxPriceCurrency: input.pricingDetails.currency,
-      paxAdultPrice: input.pricingDetails?.paxAdult,
-      paxChildPrice: input.pricingDetails?.paxChild,
-      discountType: defaultRatePlan[0].discount?.type ?? 'PERCENTAGE',
-      discountValue: defaultRatePlan[0].discount?.value ?? 0,
-      bestPriceCurrency: input.pricingDetails.currency,
-      bestAvailablePrice: input.pricingDetails?.bestAvailablePrice ?? 0,
-      label: defaultRatePlan[0].label,
-      basePrice: input.pricingDetails.base,
-      basePriceCurrency: input.pricingDetails.currency,
-      ratePlanId: defaultRatePlan[0].id,
-      status: defaultRatePlan[0].status,
-    };
-    this.dynamicRatePlans = {
-      paxPriceCurrency: input.pricingDetails.currency,
-      paxAdultPrice: input.pricingDetails.paxAdult,
-      paxChildPrice: input.pricingDetails.paxChild,
-      label: defaultRatePlan[0].label,
-      basePrice: input.pricingDetails.base,
-      basePriceCurrency: input.pricingDetails.currency,
-      maxPriceCurrency: input.pricingDetails.currency,
-      maxPrice: input.pricingDetails.max,
-      minPriceCurrency: input.pricingDetails.currency,
-      minPrice: input.pricingDetails.min,
-      ratePlanId: defaultRatePlan[0].id,
-      status: defaultRatePlan[0].status,
-    };
+    if (defaultRatePlan.length) {
+      this.staticRatePlans = {
+        paxPriceCurrency: input.pricingDetails.currency,
+        paxAdultPrice: input.pricingDetails?.paxAdult,
+        paxChildPrice: input.pricingDetails?.paxChildAboveFive,
+        paxChildBelowFive: input.pricingDetails?.paxChildBelowFive,
+        discountType: defaultRatePlan[0]?.discount?.type ?? 'PERCENTAGE',
+        discountValue: defaultRatePlan[0]?.discount?.value ?? 0,
+        bestPriceCurrency: input?.pricingDetails?.currency,
+        bestAvailablePrice: input?.pricingDetails?.bestAvailablePrice ?? 0,
+        price: defaultRatePlan[0]?.variablePrice ?? 0,
+        label: defaultRatePlan[0]?.label,
+        basePrice: input?.pricingDetails?.base,
+        basePriceCurrency: input?.pricingDetails?.currency,
+        ratePlanId: defaultRatePlan[0]?.id,
+        status: defaultRatePlan[0]?.status,
+        doubleOccupancyCurrency: input.pricingDetails.currency,
+        doubleOccupancyPrice: input.pricingDetails.paxDoubleOccupancy,
+        tripleOccupancyCurrency: input.pricingDetails.currency,
+        tripleOccupancyPrice: input.pricingDetails.paxTripleOccupancy,
+      };
+      this.dynamicRatePlans = {
+        paxPriceCurrency: input.pricingDetails.currency,
+        paxAdultPrice: input.pricingDetails.paxAdult,
+        paxChildPrice: input.pricingDetails?.paxChildAboveFive,
+        paxChildBelowFive: input.pricingDetails?.paxChildBelowFive,
+        label: defaultRatePlan[0]?.label,
+        basePrice: input.pricingDetails.base,
+        basePriceCurrency: input.pricingDetails.currency,
+        price: defaultRatePlan[0]?.variablePrice ?? 0,
+        maxPriceCurrency: input.pricingDetails.currency,
+        maxPrice: input.pricingDetails.max,
+        minPriceCurrency: input.pricingDetails.currency,
+        minPrice: input.pricingDetails.min,
+        ratePlanId: defaultRatePlan[0]?.id,
+        status: defaultRatePlan[0]?.status,
+        doubleOccupancyCurrency: input.pricingDetails.currency,
+        doubleOccupancyPrice: input.pricingDetails.paxDoubleOccupancy,
+        tripleOccupancyCurrency: input.pricingDetails.currency,
+        tripleOccupancyPrice: input.pricingDetails.paxTripleOccupancy,
+      };
+    }
 
     this.ratePlans = input.ratePlans
       .filter((item) => !item.isBase)

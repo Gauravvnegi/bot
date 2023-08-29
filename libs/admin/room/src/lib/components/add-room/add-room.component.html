@@ -89,24 +89,22 @@
           <div class="container" *ngIf="isDateRequired">
             <hospitality-bot-date
               class="half-width"
-              controlName="currentStatusFrom"
+              controlName="fromDate"
               label="From"
               [props]="{ placeholder: 'Select From Date' }"
               [settings]="{
                 enableTime: false,
-                dateValue: endMinDate,
                 isDisabled: false
               }"
               [minDate]="startMinDate"
             ></hospitality-bot-date>
             <hospitality-bot-date
               class="half-width"
-              controlName="currentStatusTo"
+              controlName="toDate"
               label="To"
               [props]="{ placeholder: 'Select To Date' }"
               [settings]="{
                 enableTime: false,
-                dateValue: endMinDate,
                 isDisabled: false
               }"
               [minDate]="endMinDate"

@@ -1,30 +1,40 @@
-<div class="dates">
+<div class="dates" [formGroup]="parentFG">
   <div class="field">
     <hospitality-bot-date
       class="bulk-update__date"
       [ngClass]="className"
-      controlName="fromDate"
-      label="From"
-      [props]="{ placeholder: 'Select From Date' }"
-      [settings]="{
-        enableTime: false
+      [controlName]="controlNames.from"
+      [label]="showLabel ? labels.from : ''"
+      [props]="{
+        placeholder: 'Select From ' + (isTimeOnly ? 'Time' : 'Date'),
+        errorMessages: preErrorMessages
       }"
-      [minDate]="startMinDate"
-      [maxDate]="startMaxDate"
+      [settings]="{
+        isTimeOnly: isTimeOnly,
+        enableTime: isTimeEnable,
+        showIcon: showIcon
+      }"
+      [minDate]="!isTimeOnly && startMinDate"
+      [maxDate]="!isTimeOnly && startMaxDate"
     ></hospitality-bot-date>
   </div>
   <div class="field">
     <hospitality-bot-date
       class="bulk-update__date"
       [ngClass]="className"
-      controlName="toDate"
-      label="To"
-      [props]="{ placeholder: 'Select To Date' }"
-      [settings]="{
-        enableTime: false
+      [controlName]="controlNames.to"
+      [label]="showLabel ? labels.to : ''"
+      [props]="{
+        placeholder: 'Select To ' + (isTimeOnly ? 'Time' : 'Date'),
+        errorMessages: postErrorMessages
       }"
-      [minDate]="endMinDate"
-      [maxDate]="endMaxDate"
+      [settings]="{
+        isTimeOnly: isTimeOnly,
+        enableTime: isTimeEnable,
+        showIcon: showIcon
+      }"
+      [minDate]="!isTimeOnly && endMinDate"
+      [maxDate]="!isTimeOnly && endMaxDate"
     ></hospitality-bot-date>
   </div>
 </div>

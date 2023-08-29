@@ -77,6 +77,7 @@ export class ComplaintAnalyticsComponent implements OnInit {
         ];
         this.statCard = [];
         this.getPerDayStats();
+        this.getAgentStats();
       })
     );
   }

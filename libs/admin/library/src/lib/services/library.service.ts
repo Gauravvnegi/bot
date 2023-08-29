@@ -70,10 +70,7 @@ export class LibraryService extends ApiService {
     config?: QueryConfig
   ): Observable<CategoriesResponse> {
     return this.get(
-      `/api/v1/entity/${entityId}/categories/${config?.params ?? ''}`,
-      {
-        headers: { 'entity-id': entityId },
-      }
+      `/api/v1/entity/${entityId}/categories${config?.params ?? ''}`
     );
   }
 

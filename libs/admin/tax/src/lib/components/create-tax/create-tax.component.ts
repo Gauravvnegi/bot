@@ -123,7 +123,10 @@ export class CreateTaxComponent implements OnInit {
       );
       return;
     }
-    const data = this.useForm.getRawValue() as TaxFormData;
+    const data = {
+      ...(this.useForm.getRawValue() as TaxFormData),
+      entityId: this.entityId,
+    };
 
     if (this.taxId) {
       this.$subscription.add(

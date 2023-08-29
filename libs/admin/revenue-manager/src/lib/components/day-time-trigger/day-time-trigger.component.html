@@ -12,11 +12,11 @@
           <p-accordionTab [selected]="i == 0">
             <p-header>
               <div class="accordion-header">
-                <div class="title">
+                <div class="title item-center">
                   <div>
                     {{ triggerFG.get('name').value || 'Time Based Trigger' }}
                   </div>
-                  <div class="date">
+                  <div class="date item-center">
                     <span *ngIf="triggerFG.get('fromDate').value; else empty">{{
                       triggerFG.get('fromDate').value | date: 'dd/MM/yyyy'
                     }}</span>
@@ -24,10 +24,16 @@
                     <span *ngIf="triggerFG.get('toDate').value; else empty">{{
                       triggerFG.get('toDate').value | date: 'dd/MM/yyyy'
                     }}</span>
+                    <hospitality-bot-toggle-switch-with-label
+                      class="toggle"
+                      [isToggleOn]="triggerFG.get('status')?.value"
+                      (onToggleSwitch)="triggerStatusChange($event, i)"
+                      click-stop-propagation
+                    ></hospitality-bot-toggle-switch-with-label>
                   </div>
                 </div>
                 <div class="status">
-                  <div>
+                  <!-- <div>
                     Status: {{ triggerFG.get('status').value ? 'On' : 'Off' }}
                   </div>
                   <div click-stop-propagation>
@@ -37,7 +43,7 @@
                       onLabel=""
                       offLabel=""
                     ></hospitality-bot-toggle-switch>
-                  </div>
+                  </div> -->
                   <hospitality-bot-button
                     click-stop-propagation
                     label="Remove"
@@ -62,7 +68,10 @@
               </div>
               <div class="date-days-field">
                 <hospitality-bot-from-to-date
-                  [parentFG]="triggerFG"
+                  [controlNames]="{
+                    from: 'fromDate',
+                    to: 'toDate'
+                  }"
                 ></hospitality-bot-from-to-date>
                 <div class="days">
                   <hospitality-bot-checkbox-selector
@@ -78,47 +87,97 @@
             </div>
             <div
               class="level-datatable"
-              formArrayName="levels"
+              formArrayName="hotelConfig"
               style="margin-top: 30px;"
             >
               <p-table>
                 <ng-template pTemplate="header">
                   <tr>
-                    <th style="width: 35%; padding-left: 30px;">Time</th>
-                    <th style="width: 15%;">Occupancy<</th>
-                    <th style="width: 20%;">Occupancy>=</th>
+                    <th style="width: 19%; padding-left: 30px;">From Time</th>
+                    <th style="width: 17.5%; padding-left: 30px;">To Time</th>
+                    <th style="width: 15%;">Start</th>
+                    <th style="width: 5%;"></th>
+                    <th style="width: 17.5%;">End</th>
                     <th style="width: 30%;">Discount/Markup</th>
                   </tr>
                 </ng-template>
               </p-table>
               <ng-container
                 *ngFor="
-                  let levelFG of triggerFG.get('levels')?.controls;
+                  let levelFG of triggerFG?.get('hotelConfig')?.controls;
                   let j = index
                 "
               >
                 <div
                   [formGroupName]="j"
-                  style="display: flex; padding: 15px 0;"
+                  style="display: flex; padding: 23px 0;"
                 >
                   <div style="width: 35%; padding-left: 30px;">
-                    <hospitality-bot-time-picker
-                      class="one-third-width"
-                      controlName="time"
-                      format="millisecond"
-                    ></hospitality-bot-time-picker>
+                    <hospitality-bot-from-to-date
+                      [controlNames]="{
+                        from: 'fromTime',
+                        to: 'toTime'
+                      }"
+                      [isTimeEnable]="true"
+                      [isTimeOnly]="true"
+                      [showIcon]="false"
+                      [props]="{
+                        showLabel: false,
+                        preErrorMessages: {
+                          required: 'This is required field',
+                          min: 'From Time should be < To Time.',
+                          collide: 'Collide, Fix it !'
+                        },
+                        postErrorMessages: {
+                          required: 'This is required field',
+                          min: 'To Time should be > From Time.',
+                          collide: 'Collide, Fix it !'
+                        }
+                      }"
+                    ></hospitality-bot-from-to-date>
                   </div>
-                  <div style="width: 15%; padding: 0 1rem;">
-                    <hospitality-bot-input
+                  <div style="width: 35%; padding: 0 1rem;" class="no-margin">
+                    <hospitality-bot-prefix-field
+                      class="one-fourth-width"
+                      preControlName="start"
+                      postControlName="end"
+                      preFieldType="input"
+                      postFieldType="input"
+                      [defaultProps]="{
+                        pre: {
+                          placeholder: 'Start',
+                          type: 'number',
+                          errorMessages: {
+                            required: 'This is required field',
+                            min: 'Start should be <= End.',
+                            collide: 'Collide, Fix it !'
+                          }
+                        },
+                        post: {
+                          placeholder: 'End',
+                          type: 'number',
+                          errorMessages: {
+                            required: 'This is required field',
+                            min: 'End should be >= Start.',
+                            collide: 'Collide, Fix it !'
+                          }
+                        }
+                      }"
+                      [settings]="{
+                        layout: 'dashed'
+                      }"
+                    >
+                    </hospitality-bot-prefix-field>
+                    <!-- <hospitality-bot-input
                       class="full-width"
                       controlName="occupancyLowerLimit"
                       [props]="{
                         placeholder: 'Enter',
                         type: 'number'
                       }"
-                    ></hospitality-bot-input>
+                    ></hospitality-bot-input> -->
                   </div>
-                  <div style="width: 20%; padding: 0 1rem;">
+                  <!-- <div style="width: 20%; padding: 0 1rem;">
                     <hospitality-bot-input
                       class="full-width"
                       controlName="occupancyUpperLimit"
@@ -127,7 +186,7 @@
                         type: 'number'
                       }"
                     ></hospitality-bot-input>
-                  </div>
+                  </div> -->
                   <div
                     style="
                       width: 30%;
@@ -166,6 +225,14 @@
               <div class="link" (click)="modifyLevelFG(triggerFG)">
                 +Add Level
               </div>
+            </div>
+
+            <div class="action">
+              <hospitality-bot-button
+                label="Save"
+                (click)="handleSave(triggerFG)"
+              >
+              </hospitality-bot-button>
             </div>
           </p-accordionTab>
         </div>

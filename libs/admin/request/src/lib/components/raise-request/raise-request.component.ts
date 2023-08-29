@@ -70,8 +70,6 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
     this.listenForGlobalFilters();
     this.listenForRoomNumberChanges();
     this.listenForItemChanges();
-    this.listenForDepartmentChanges();
-    this.getUserList();
     this.listenForAddItemChanges();
   }
 
@@ -154,19 +152,6 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
     });
   }
 
-  getUserList() {
-    this._managePermissionService
-      .getAllUsers(this.entityId, {
-        params: '?status=true&mention=true',
-      })
-      .subscribe((data) => {
-        this.users = data.users.map((item) => ({
-          label: `${item.firstName} ${item.lastName}`,
-          value: item.id,
-        }));
-      });
-  }
-
   getItemDetails(itemId) {
     this.$subscription.add(
       this._requestService
@@ -178,15 +163,6 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
           this.departmentList = data.departmentWithUsers;
         })
     );
-  }
-
-  listenForDepartmentChanges() {
-    this.requestFG.get('departmentName').valueChanges.subscribe((value) => {
-      const department = this.departmentList.find((d) => d.value === value);
-      this.userList = this.users.filter((user) => {
-        return department.users.includes(user.value);
-      });
-    });
   }
 
   /**

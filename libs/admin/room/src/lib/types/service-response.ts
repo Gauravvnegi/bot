@@ -28,11 +28,12 @@ export type RoomResponse = {
     unavailableRoomCount: number;
   };
   features: Features[];
-  status: RoomStatus;
+  statusDetailsList: StatusDetails[];
+  // status: RoomStatus;
   //--- can be modified
-  currentStatusFrom: number;
-  currentStatusTo: number;
-  remark: string;
+  // currentStatusFrom: number;
+  // currentStatusTo: number;
+  // remark: string;
 
   source?: string;
   price: number;
@@ -84,7 +85,7 @@ export type RoomTypeResponse = {
   originalPrice: number;
   currency: string;
   features: string[];
-  isBase: boolean;
+  isBaseRoomType: boolean;
 };
 
 export type RatePlanRes = {
@@ -106,6 +107,7 @@ export type RatePlanRes = {
 
 export type PricingDetails = {
   base: number;
+  basePrice: number;
   discountType?: string;
   discountValue?: number;
   bestAvailablePrice: number;
@@ -114,6 +116,15 @@ export type PricingDetails = {
   min: number;
   paxAdult: number;
   paxChild: number;
+  paxChildAboveFive: number;
+  paxChildBelowFive: number;
+  paxDoubleOccupancy: number;
+  paxTripleOccupancy: number;
+  taxAndFees: number;
+  taxAndFeesPerDay: number;
+  totalAmount: number;
+  totalPaidAmount: number;
+  totalDueAmount: number;
   discount: {
     type: string;
     value: number;
@@ -234,4 +245,12 @@ export type RoomsByRoomType = {
     name: string;
   };
   status: string;
+};
+
+export type StatusDetails = {
+  remark?: string;
+  status: RoomStatus;
+  toDate?: number;
+  fromDate?: number;
+  isCurrentStatus?: boolean;
 };

@@ -24,6 +24,7 @@ Deploy_Admin:
     - kubectl apply -f deployment.yaml --validate=false
   tags:
     - k8s-dev
+  timeout: 1h
 
 Deploy_Web:
   stage: deploy_web
@@ -49,5 +50,4 @@ Deploy_Web:
     - kubectl apply -f deployment.yaml --validate=false
   tags:
     - k8s-dev
-
-
+  timeout: 1h

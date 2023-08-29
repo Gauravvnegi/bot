@@ -52,9 +52,14 @@ export class Room {
     this.date = input.updated ?? input.created ?? null;
     this.price = input.price ?? null;
     this.currency = input.currency ?? '';
-    this.status = input.status ?? '';
+
+    const currentStatus = input.statusDetailsList.filter(
+      (item) => item.isCurrentStatus
+    )[0]?.status;
+
+    this.status = currentStatus;
     this.foStatus = input.frontOfficeState ?? '';
-    this.nextStates = [...input.nextStates, input.status];
+    this.nextStates = [...input.nextStates, currentStatus];
     return this;
   }
 
@@ -99,7 +104,7 @@ export class RoomType {
   status: boolean;
   price: number;
   currency: string;
-  isBase: boolean;
+  isBaseRoomType: boolean;
   nextStates: string[];
   ratePlans?: RatePlanRes[];
 
@@ -121,7 +126,7 @@ export class RoomType {
       input.pricingDetails?.base;
     this.currency = input.currency ?? '';
     this.ratePlans = input.ratePlans;
-    this.isBase = input.isBase ?? true; // TODO: need to add from BE
+    this.isBaseRoomType = input.isBaseRoomType ?? null; // TODO: need to add from BE
     return this;
   }
 }

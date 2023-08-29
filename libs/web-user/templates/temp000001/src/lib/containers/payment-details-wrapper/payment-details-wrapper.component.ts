@@ -90,8 +90,10 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
 
   // need to merge v1 into v2
   initPaymentDetailsDSV2() {
+    const journey = this._hotelService.getCurrentJourneyConfig();
+
     this._paymentDetailsService
-      .getPaymentConfigurationV2(this._hotelService.entityId)
+      .getPaymentConfigurationV2(this._hotelService.entityId, journey.name)
       .subscribe((data) => {
         const gatewayDetails = data?.paymentConfiguration?.map((gateway) => ({
           gatewayType: gateway?.type,

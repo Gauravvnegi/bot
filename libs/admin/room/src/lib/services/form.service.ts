@@ -4,11 +4,15 @@ import {
   RoomTypeFormData,
   StaticPricingMod,
 } from '../constant/form';
+import { BehaviorSubject } from 'rxjs';
+import { RoomType } from '../models/rooms-data-table.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class FormService {
+  roomStatus = new BehaviorSubject<string>(null);
+  
   getRoomTypeModData(
     roomTypeData: RoomTypeFormData,
     isPricingDynamic: boolean
@@ -109,19 +113,25 @@ export class FormService {
         currency: dynamicRatePlanModData?.maxPriceCurrency,
         base: dynamicRatePlanModData?.basePrice,
         paxAdult: dynamicRatePlanModData?.paxAdultPrice,
-        paxChild: dynamicRatePlanModData?.paxChildPrice,
+        paxChildAboveFive: dynamicRatePlanModData?.paxChildPrice,
+        paxChildBelowFive: dynamicRatePlanModData?.paxChildBelowFive,
+        paxDoubleOccupancy: dynamicRatePlanModData?.doubleOccupancyPrice,
+        paxTripleOccupancy: dynamicRatePlanModData?.tripleOccupancyPrice,
       };
     else
       roomTypeFormData.pricingDetails = {
         currency: staticRatePlanModData?.basePriceCurrency,
         base: staticRatePlanModData?.basePrice,
         paxAdult: staticRatePlanModData?.paxAdultPrice,
-        paxChild: staticRatePlanModData?.paxChildPrice,
+        paxChildAboveFive: staticRatePlanModData?.paxChildPrice,
+        paxChildBelowFive: staticRatePlanModData?.paxChildBelowFive,
+        paxDoubleOccupancy: staticRatePlanModData?.doubleOccupancyPrice,
+        paxTripleOccupancy: staticRatePlanModData?.tripleOccupancyPrice,
       };
     roomTypeFormData.ratePlans = [defaultPlan, ...addedRatePlans];
     roomTypeFormData.roomAmenityIds = data.roomAmenityIds;
     roomTypeFormData.status = data.status;
-
+    roomTypeFormData.isBaseRoomType;
     return roomTypeFormData;
   }
 }
@@ -142,12 +152,16 @@ export class RoomTypeData {
     currency: string;
     base: number;
     paxAdult: number;
-    paxChild: number;
+    paxChildAboveFive: number;
+    paxChildBelowFive: number;
+    paxDoubleOccupancy: number;
+    paxTripleOccupancy: number;
   };
   hsnCode: string;
   area: number;
   ratePlans: RatePlanFormData[];
   roomAmenityIds: string[];
+  isBaseRoomType?: boolean;
 }
 
 export type RatePlanFormData = {
@@ -160,4 +174,9 @@ export type RatePlanFormData = {
     value: number;
   };
   id?: string;
+};
+
+export type BaseRoomType = {
+  baseRoomPrice: number;
+  isBaseRoomType: boolean;
 };

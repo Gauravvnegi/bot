@@ -8,8 +8,6 @@ import {
 import { chartConfig } from '../../../constant/chart';
 import { TranslateService } from '@ngx-translate/core';
 import { Subscription, forkJoin } from 'rxjs';
-import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
-import { DateService } from '@hospitality-bot/shared/utils';
 import { AnalyticsService } from '../../../services/analytics.service';
 import { RequestStats } from '../../../models/statistics.model';
 import { RequestResponse } from '../../../types/response.types';
@@ -52,8 +50,6 @@ export class ComplaintBifurcationComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private _translateService: TranslateService,
-    private globalFilterService: GlobalFilterService,
-    private dateService: DateService,
     private analyticsService: AnalyticsService,
     private adminUtilityService: AdminUtilityService
   ) {}
@@ -155,7 +151,7 @@ export class ComplaintBifurcationComponent implements OnInit {
     if (defaultGraph) {
       this._translateService
         .get('no_data_chart')
-        .subscribe((message) => this.chart.labels.push(message));
+        .subscribe((message) => this.chart.labels.push("No Data"));
       this.chart.data[0].push(100);
       this.chart.colors[0].backgroundColor.push(chartConfig.defaultColor);
       this.chart.colors[0].borderColor.push(chartConfig.defaultColor);

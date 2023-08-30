@@ -170,7 +170,7 @@ export class RoomIteratorComponent extends IteratorComponent
         childCount: value.childCount,
         adultCount: value.adultCount,
         ratePlan: value.allRatePlans.value,
-        roomNumbers: value.roomNumbers,
+        roomNumbers: value?.roomNumbers,
         id: value?.id,
       });
     });
@@ -189,6 +189,7 @@ export class RoomIteratorComponent extends IteratorComponent
           const selectedRoomType = this.roomTypes.find(
             (item) => item.value === res
           );
+
           this.roomControls[index].get('roomNumbers').reset();
           if (selectedRoomType) {
             // Sets rate plan options according to the selected room type
@@ -240,10 +241,12 @@ export class RoomIteratorComponent extends IteratorComponent
     this.manageReservationService
       .getRoomNumber(this.entityId, config)
       .subscribe((res) => {
-        const roomNumberOptions = res.rooms.map((room: RoomsByRoomType) => ({
-          label: room.roomNumber,
-          value: room.roomNumber,
-        }));
+        const roomNumberOptions = res.rooms
+          .filter((room: RoomsByRoomType) => room.roomNumber.length)
+          .map((room: RoomsByRoomType) => ({
+            label: room.roomNumber,
+            value: room.roomNumber,
+          }));
         this.roomControls[index]
           .get('roomNumberOptions')
           .patchValue(roomNumberOptions, { emitEvent: false });

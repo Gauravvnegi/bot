@@ -33,6 +33,8 @@ export class IteratorComponent implements OnChanges {
   @Input() maxLimit = 0;
 
   ngOnChanges(changes: SimpleChanges): void {
+    this.createNewFields();
+
     const itemValues = changes?.itemValues?.currentValue;
     if (itemValues?.length) {
       if (itemValues.length > 1) {
@@ -46,16 +48,17 @@ export class IteratorComponent implements OnChanges {
     }
   }
 
-  ngOnInit(): void {
-    this.createNewFields();
-  }
-
   /**
    * @function createNewFields To get the initial value config
    */
   createNewFields() {
     const data = this.fields.reduce((prev, curr) => {
-      const value = curr.required ? ['', Validators.required] : [''];
+      let value;
+      if (curr.minValue) {
+        value = ['', [Validators.required, Validators.min(curr.minValue)]];
+      } else {
+        value = curr.required ? ['', Validators.required] : [''];
+      }
       prev[curr.name] = value;
       return prev;
     }, {});

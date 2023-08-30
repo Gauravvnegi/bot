@@ -97,7 +97,7 @@
             summaryData?.totalAmount -
               (paymentControls.totalPaidAmount.value
                 ? paymentControls.totalPaidAmount.value
-                : 0) | currency: 'INR'
+                : summaryData.totalPaidAmount) | currency: 'INR'
           }}
         </p>
       </div>

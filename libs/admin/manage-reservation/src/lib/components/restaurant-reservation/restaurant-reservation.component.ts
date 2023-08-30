@@ -80,6 +80,7 @@ export class RestaurantReservationComponent extends BaseReservationComponent
     this.getMenuItems();
     this.initOptions();
     this.getReservationId();
+    this.initFormData();
     this.listenForFormChanges();
   }
 
@@ -232,7 +233,10 @@ export class RestaurantReservationComponent extends BaseReservationComponent
             : selectedMenuItem?.dineInPrice;
 
         this.menuItemsControls[index].get('amount').setValue(selectedPrice);
-        this.menuItemsControls[index].get('unit').setValue(1);
+
+        // Do not patch in edit mode
+        if (this.menuItemsValues.length < index + 1)
+          this.menuItemsControls[index].get('unit').setValue(1);
       });
   }
 
@@ -250,6 +254,20 @@ export class RestaurantReservationComponent extends BaseReservationComponent
     // Update template variables
     this.date = date;
     this.time = time;
+  }
+
+  initFormData() {
+    if (this.formService.reservationForm) {
+      const {
+        orderInformation: { menuItems, ...orderInfo },
+        ...formData
+      } = this.formService.reservationForm;
+      this.menuItemsValues = menuItems;
+      this.userForm.patchValue({
+        orderInformation: orderInfo,
+        ...formData,
+      });
+    }
   }
 
   getReservationId(): void {
@@ -280,6 +298,8 @@ export class RestaurantReservationComponent extends BaseReservationComponent
               ...formData
             } = data;
 
+            this.formValueChanges = true;
+
             // Menu Items Array Values
             this.menuItemsValues = menuItems;
             this.formService.guestInformation.next(guestInformation);
@@ -292,24 +312,6 @@ export class RestaurantReservationComponent extends BaseReservationComponent
           (error) => {}
         )
     );
-  }
-
-  setFormDisability(): void {
-    // this.userForm.get('reservationInformation.source').disable();
-    if (this.reservationId) {
-      const reservationType = this.reservationInfoControls.reservationType
-        .value;
-      switch (true) {
-        case reservationType === ReservationType.CONFIRMED:
-          this.userForm.disable();
-          this.disabledForm = true;
-          break;
-        case reservationType === ReservationType.CANCELED:
-          this.userForm.disable();
-          this.disabledForm = true;
-          break;
-      }
-    }
   }
 
   getMenuItems() {
@@ -365,9 +367,13 @@ export class RestaurantReservationComponent extends BaseReservationComponent
               .get('paymentRule.deductedAmount')
               .patchValue(this.summaryData?.totalAmount);
             this.deductedAmount = this.summaryData?.totalAmount;
+
+            if (this.formValueChanges) {
+              this.setFormDisability();
+              this.formValueChanges = false;
+            }
           },
-          (error) => {},
-          () => this.setFormDisability()
+          (error) => {}
         )
     );
   }

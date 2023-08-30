@@ -28,7 +28,10 @@
             [props]="{
               placeholder: field.placeholder ? field.placeholder : '',
               fontSize: '14px',
-              type: field?.dataType
+              type: field?.dataType,
+              errorMessages: {
+                min: 'Value should be more than 0'
+              }
             }"
           ></hospitality-bot-input>
           <hospitality-bot-auto-complete

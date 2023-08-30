@@ -12,7 +12,7 @@ import {
   FormGroup,
   ValidationErrors,
 } from '@angular/forms';
-import { DayTimeTriggerComponent } from '../components/day-time-trigger/day-time-trigger.component';
+import { validateConfig } from '../models/dynamic-pricing.model';
 
 @Injectable()
 export class DynamicPricingService extends ApiService {
@@ -103,7 +103,7 @@ export class DynamicPricingService extends ApiService {
       !fromDate.valid ||
       !toDate.valid ||
       !selectedDays.valid ||
-      DayTimeTriggerComponent.validateConfiguration(hotelConfig as FormArray)
+      !validateConfig(hotelConfig as FormArray)
     ) {
       return false;
     }

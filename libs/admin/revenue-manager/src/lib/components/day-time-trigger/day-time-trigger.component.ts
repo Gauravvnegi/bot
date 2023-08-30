@@ -16,6 +16,7 @@ import {
 import {
   DynamicPricingFactory,
   DynamicPricingHandler,
+  validateConfig,
 } from '../../models/dynamic-pricing.model';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
@@ -187,101 +188,29 @@ export class DayTimeTriggerComponent implements OnInit {
       const newTime = new Date(value);
       newTime.setSeconds(0);
       control.patchValue(newTime.getTime(), isEmit && { emitEvent: false });
+      control.markAsDirty();
     };
     levelsFA.controls.forEach((levelFG: FormGroup) => {
       const { start, end, fromTime, toTime } = levelFG.controls;
       start.valueChanges.subscribe((res) => {
-        DayTimeTriggerComponent.validateConfiguration(levelsFA);
+        validateConfig(levelsFA);
       });
 
       end.valueChanges.subscribe((res) => {
-        DayTimeTriggerComponent.validateConfiguration(levelsFA);
+        validateConfig(levelsFA);
       });
 
       fromTime.valueChanges.subscribe((res) => {
         resetSeconds(+res, fromTime);
         resetSeconds(+res + 3600000, toTime, false);
-        DayTimeTriggerComponent.validateConfiguration(levelsFA);
+        validateConfig(levelsFA);
       });
 
       toTime.valueChanges.subscribe((res) => {
         resetSeconds(+res, toTime);
-        DayTimeTriggerComponent.validateConfiguration(levelsFA);
+        validateConfig(levelsFA);
       });
     });
-  }
-
-  /**
-   *
-   * @param formArray should be the Array of the configuration
-   * @returns configuration is valid or not
-   */
-  static validateConfiguration(formArray: FormArray): boolean | null {
-    // TODO : Checks... Should be verify
-    let collide = null;
-    formArray.controls.forEach((form: FormGroup, index) => {
-      const { start, end, fromTime, toTime } = form.controls;
-      if (!collide) {
-        let timeCollide = false;
-        let occupancyCollide = false;
-        collide = formArray.controls.find((item: FormGroup, itemIndex) => {
-          const innerFromTimeValue = +item.get('fromTime').value;
-          const innerToTimeValue = +item.get('toTime').value;
-          if (itemIndex != index) {
-            timeCollide =
-              +fromTime.value > innerFromTimeValue &&
-              +fromTime.value < innerToTimeValue;
-          }
-          return timeCollide || occupancyCollide;
-        });
-
-        /**
-         * TODO: IF Common time then occupancy should not be conflict
-         */
-        formArray.controls
-          .filter((item: FormGroup, itemIndex) => {
-            const innerFromTime = item.controls['fromTime'];
-            const innerToTime = item.controls['toTime'];
-            return (
-              itemIndex != index &&
-              +fromTime.value == +innerFromTime.value &&
-              +toTime.value == innerToTime.value
-            );
-          })
-          .forEach((item: FormGroup, itemIndex) => {
-            const innerStart = +item.controls['start'].value;
-            const innerEnd = +item.controls['end'].value;
-            // if (!collide) {
-            //   occupancyCollide =
-            //     +start.value > innerStart && +start.value < innerEnd;
-            //   collide = formArray.at(itemIndex);
-            // }
-          });
-      }
-    });
-
-    if (collide) {
-      const { start, end, fromTime, toTime } = collide.controls;
-      const controlList = [fromTime, toTime, start, end];
-      controlList.forEach((control: AbstractControl) => {
-        control.setErrors({ collide: true });
-      });
-      controlList.forEach((control: AbstractControl) => {
-        control.markAsTouched();
-      });
-    } else {
-      formArray.controls.forEach((form: FormGroup) => {
-        const { start, end, fromTime, toTime } = form.controls;
-        const controlList = [fromTime, toTime, start, end];
-        controlList.forEach((control: AbstractControl) => {
-          control.setErrors(null);
-        });
-        controlList.forEach((control: AbstractControl) => {
-          control.markAsUntouched();
-        });
-      });
-    }
-    return collide ? true : false;
   }
 
   handleSave(form: FormGroup) {

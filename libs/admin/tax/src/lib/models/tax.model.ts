@@ -18,6 +18,7 @@ export class Tax {
   category: string;
   taxRate: string;
   status: boolean;
+  entityId: string;
   deserialize(input: TaxResponse) {
     this.id = input?.id ?? '';
     this.countryName = input?.country ?? '';
@@ -25,6 +26,7 @@ export class Tax {
     this.category = input?.category ?? '';
     this.taxRate = input?.taxValue ?? '';
     this.status = input?.status ?? true;
+    this.entityId = input?.entityId ?? '';
     return this;
   }
 }

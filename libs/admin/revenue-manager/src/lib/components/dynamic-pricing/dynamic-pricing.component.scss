@@ -27,4 +27,12 @@ $border-color: rgba(112, 112, 112, 0.35);
       margin: 0;
     }
   }
+  .disable {
+    opacity: 0.5;
+    cursor: not-allowed !important;
+  }
+  .remove {
+    color: red;
+    cursor: pointer;
+  }
 }

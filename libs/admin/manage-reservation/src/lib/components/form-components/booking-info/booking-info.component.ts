@@ -199,7 +199,6 @@ export class BookingInfoComponent implements OnInit {
     // Get the toDate and fromDate values from the form service
     const toDateValue = this.formService.toDate;
     const fromDateValue = this.formService.fromDate;
-    debugger;
     if (toDateValue && fromDateValue) {
       // Calculate the date difference in days
       const dateDiffInMilliseconds =

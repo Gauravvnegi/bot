@@ -7,7 +7,7 @@ import {
   SummaryData,
 } from '../models/reservations.model';
 import { SelectedEntity } from '../types/reservation.type';
-import { NavRouteOptions } from '@hospitality-bot/admin/shared';
+import { EntitySubType, NavRouteOptions } from '@hospitality-bot/admin/shared';
 import { Subscription } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
@@ -61,7 +61,10 @@ export class BaseReservationComponent {
   setFormDisability(): void {
     // this.userForm.get('reservationInformation.source').disable();
     if (this.reservationId) {
-      const reservationType = this.reservationInfoControls.reservationType;
+      const reservationType =
+        this.bookingType === EntitySubType.ROOM_TYPE
+          ? this.reservationInfoControls.reservationType
+          : this.reservationInfoControls.status;
       switch (true) {
         case reservationType.value === ReservationType.CONFIRMED:
           this.userForm.disable();

@@ -33,6 +33,8 @@ export class IteratorComponent implements OnChanges {
   @Input() maxLimit = 0;
 
   ngOnChanges(changes: SimpleChanges): void {
+    this.createNewFields();
+
     const itemValues = changes?.itemValues?.currentValue;
     if (itemValues?.length) {
       if (itemValues.length > 1) {
@@ -44,10 +46,6 @@ export class IteratorComponent implements OnChanges {
       // Patch the new values to the form array
       this.useFormArray.patchValue(itemValues);
     }
-  }
-
-  ngOnInit(): void {
-    this.createNewFields();
   }
 
   /**

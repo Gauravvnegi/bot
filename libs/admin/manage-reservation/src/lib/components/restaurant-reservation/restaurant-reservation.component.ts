@@ -80,6 +80,7 @@ export class RestaurantReservationComponent extends BaseReservationComponent
     this.getMenuItems();
     this.initOptions();
     this.getReservationId();
+    this.initFormData();
     this.listenForFormChanges();
   }
 
@@ -253,6 +254,20 @@ export class RestaurantReservationComponent extends BaseReservationComponent
     // Update template variables
     this.date = date;
     this.time = time;
+  }
+
+  initFormData() {
+    if (this.formService.reservationForm) {
+      const {
+        orderInformation: { menuItems, ...orderInfo },
+        ...formData
+      } = this.formService.reservationForm;
+      this.menuItemsValues = menuItems;
+      this.userForm.patchValue({
+        orderInformation: orderInfo,
+        ...formData,
+      });
+    }
   }
 
   getReservationId(): void {

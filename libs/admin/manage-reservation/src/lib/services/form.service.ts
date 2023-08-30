@@ -48,6 +48,8 @@ export class FormService {
   selectedTab = ReservationTableValue.ALL;
   enableAccordion: boolean = false;
 
+  reservationForm: ReservationForm;
+
   mapRoomReservationData(
     input: ReservationForm,
     id?: string
@@ -83,9 +85,7 @@ export class FormService {
               ratePlan: { id: roomType.ratePlan },
               roomTypeId: roomType.roomTypeId,
               roomCount: roomType.roomCount,
-              roomNumbers: roomType?.roomNumbers
-                ? roomType?.roomNumbers
-                : [],
+              roomNumbers: roomType?.roomNumbers ? roomType?.roomNumbers : [],
             },
             occupancyDetails: {
               maxChildren: roomType.childCount,

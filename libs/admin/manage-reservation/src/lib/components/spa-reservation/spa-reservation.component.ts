@@ -9,11 +9,7 @@ import {
   EntitySubType,
 } from '@hospitality-bot/admin/shared';
 import { IteratorField } from 'libs/admin/shared/src/lib/types/fields.type';
-import {
-  editModeStatusOptions,
-  spaFields,
-  statusOptions,
-} from '../../constants/reservation';
+import { editModeStatusOptions, spaFields } from '../../constants/reservation';
 import { SummaryData, OutletForm } from '../../models/reservations.model';
 import { ManageReservationService } from '../../services/manage-reservation.service';
 import { FormService } from '../../services/form.service';
@@ -27,7 +23,6 @@ import { ServiceListResponse } from 'libs/admin/services/src/lib/types/response'
 import { ServiceList } from 'libs/admin/services/src/lib/models/services.model';
 import { ServicesTypeValue } from 'libs/admin/room/src/lib/constant/form';
 import { BaseReservationComponent } from '../base-reservation.component';
-import { ReservationType } from '../../constants/reservation-table';
 import { convertToTitleCase } from 'libs/admin/shared/src/lib/utils/valueFormatter';
 
 @Component({
@@ -70,6 +65,7 @@ export class SpaReservationComponent extends BaseReservationComponent
     this.initDetails();
     this.getReservationId();
     this.getServices();
+    this.initFormData();
     this.listenForFormChanges();
   }
 
@@ -124,6 +120,20 @@ export class SpaReservationComponent extends BaseReservationComponent
       });
   }
 
+  initFormData() {
+    if (this.formService.reservationForm) {
+      const {
+        bookingInformation: { spaItems, ...spaInfo },
+        ...formData
+      } = this.formService.reservationForm;
+      this.spaItemsValues = spaItems;
+      this.userForm.patchValue({
+        bookingInformation: spaInfo,
+        ...formData,
+      });
+    }
+  }
+  
   /**
    * @function onItemsAdded To keep track of the current index in the form array.
    * @param index current index

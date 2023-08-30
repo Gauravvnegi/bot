@@ -115,13 +115,17 @@
                         preErrorMessages: {
                           required: 'This is required field',
                           collide: 'Collide, Fix it !',
-                          startError: 'From Time should be < To Time.'
+                          startError: 'From Time should be < To Time.',
+                          timeGapError: 'At Least 1 Hrs Gap',
+                          sameTime: 'Occupancy Collide for same time, Fix it.'
                         },
                         postErrorMessages: {
                           required: 'This is required field',
                           min: 'To Time should be > From Time.',
                           collide: 'Collide, Fix it !',
-                          endError: 'From Time should be < To Time.'
+                          endError: 'From Time should be < To Time.',
+                          timeGapError: 'At Least 1 Hrs Gap',
+                          sameTime: 'Occupancy Collide for same time, Fix it.'
                         }
                       }"
                     ></hospitality-bot-from-to-date>
@@ -141,7 +145,8 @@
                             required: 'This is required field',
                             min: 'Minimum Value should be 1',
                             startError: 'Start should be <= End.',
-                            collide: 'Collide, Fix it !'
+                            collide: 'Collide, Fix it !',
+                            sameTime: 'Occupancy Collide for same time, Fix it.'
                           }
                         },
                         post: {
@@ -151,7 +156,8 @@
                             required: 'This is required field',
                             min: 'Minimum Value should be 1',
                             endError: 'End should be >= Start.',
-                            collide: 'Collide, Fix it !'
+                            collide: 'Collide, Fix it !',
+                            sameTime: 'Occupancy Collide for same time, Fix it.'
                           }
                         }
                       }"

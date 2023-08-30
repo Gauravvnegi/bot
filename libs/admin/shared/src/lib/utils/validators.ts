@@ -24,10 +24,19 @@ function requiredLength(length: number): ValidatorFn {
   };
 }
 
+function urlValidator(): ValidatorFn {
+  return (control: AbstractControl): { [key: string]: any } => {
+    const urlPattern = /^(http|https):\/\/[\w\-]+(\.[\w\-]+)+([\w\-.,@?^=%&:/~+#]*[\w\-@?^=%&/~+#])?$/;
+    const valid = urlPattern.test(control.value);
+    return valid ? null : { invalidUrl: control.value };
+  };
+}
+
 const CustomValidators = {
   minArrayValueLength,
   notAllowedChr,
   requiredLength,
+  urlValidator,
 };
 
 export default CustomValidators;

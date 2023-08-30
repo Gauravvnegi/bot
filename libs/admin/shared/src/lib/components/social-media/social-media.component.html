@@ -20,7 +20,10 @@
             controlName="redirectUrl"
             class="input"
             [props]="{
-              placeholder: 'Enter URL'
+              placeholder: 'Enter URL',
+              errorMessages: {
+                invalidUrl: 'Please enter valid url.'
+              }
             }"
           ></hospitality-bot-input>
           <img

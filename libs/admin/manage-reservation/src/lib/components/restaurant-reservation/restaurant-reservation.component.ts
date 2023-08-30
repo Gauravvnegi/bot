@@ -232,7 +232,10 @@ export class RestaurantReservationComponent extends BaseReservationComponent
             : selectedMenuItem?.dineInPrice;
 
         this.menuItemsControls[index].get('amount').setValue(selectedPrice);
-        this.menuItemsControls[index].get('unit').setValue(1);
+
+        // Do not patch in edit mode
+        if (this.menuItemsValues.length < index + 1)
+          this.menuItemsControls[index].get('unit').setValue(1);
       });
   }
 
@@ -294,24 +297,6 @@ export class RestaurantReservationComponent extends BaseReservationComponent
           (error) => {}
         )
     );
-  }
-
-  setFormDisability(): void {
-    // this.userForm.get('reservationInformation.source').disable();
-    if (this.reservationId) {
-      const reservationType = this.reservationInfoControls.reservationType
-        .value;
-      switch (true) {
-        case reservationType === ReservationType.CONFIRMED:
-          this.userForm.disable();
-          this.disabledForm = true;
-          break;
-        case reservationType === ReservationType.CANCELED:
-          this.userForm.disable();
-          this.disabledForm = true;
-          break;
-      }
-    }
   }
 
   getMenuItems() {

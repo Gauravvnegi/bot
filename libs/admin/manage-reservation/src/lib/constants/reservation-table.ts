@@ -166,7 +166,7 @@ export const outletCols: Cols[] = [
     field: 'bookingNo',
     header: 'Booking No',
     sortType: 'string',
-    searchField: ['bookingNo'],
+    searchField: ['confirmationNumber'],
   },
   {
     field: 'guest',

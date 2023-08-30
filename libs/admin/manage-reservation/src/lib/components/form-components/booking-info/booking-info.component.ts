@@ -112,10 +112,9 @@ export class BookingInfoComponent implements OnInit {
         const maxToLimit = new Date(res);
         this.formService.fromDate = maxToLimit;
         this.updateDateDifference();
-
         // Check if fromDate is greater than or equal to toDate before setting toDateControl
-        maxToLimit.setDate(maxToLimit.getDate() + 1);
         if (maxToLimit >= this.formService.toDate) {
+          maxToLimit.setDate(maxToLimit.getDate() + 1);
           // Calculate the date for one day later
           const nextDayTime = moment(maxToLimit).unix() * 1000;
           toDateControl.setValue(nextDayTime); // Set toDateControl to one day later
@@ -123,7 +122,6 @@ export class BookingInfoComponent implements OnInit {
 
         this.minToDate = new Date(maxToLimit); // Create a new date object
         this.minToDate.setDate(maxToLimit.getDate());
-        this.maxDate.setDate(maxToLimit.getDate() + 364);
 
         this.formService.reservationDate.next(res);
 
@@ -136,7 +134,6 @@ export class BookingInfoComponent implements OnInit {
         const maxLimit = new Date(res);
         this.formService.toDate = maxLimit;
         this.updateDateDifference();
-        this.maxDate.setDate(maxLimit.getDate() - 1);
         if (this.roomControls.valid) {
           this.getSummary.emit();
         }
@@ -202,7 +199,7 @@ export class BookingInfoComponent implements OnInit {
     // Get the toDate and fromDate values from the form service
     const toDateValue = this.formService.toDate;
     const fromDateValue = this.formService.fromDate;
-
+    debugger;
     if (toDateValue && fromDateValue) {
       // Calculate the date difference in days
       const dateDiffInMilliseconds =

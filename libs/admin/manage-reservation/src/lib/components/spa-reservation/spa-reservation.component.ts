@@ -52,8 +52,6 @@ export class SpaReservationComponent extends BaseReservationComponent
   noMoreResults = false;
   services: (Option & { price: number })[] = [];
 
-  editMode: boolean = false;
-
   constructor(
     private fb: FormBuilder,
     private adminUtilityService: AdminUtilityService,
@@ -141,7 +139,10 @@ export class SpaReservationComponent extends BaseReservationComponent
         this.spaItemsControls[index]
           .get('amount')
           .setValue(selectedService?.price);
-        this.spaItemsControls[index].get('unit').setValue(1);
+
+        // Do not patch in edit mode
+        if (this.spaItemsValues.length < index + 1)
+          this.spaItemsControls[index].get('unit').setValue(1);
       });
   }
 
@@ -206,23 +207,6 @@ export class SpaReservationComponent extends BaseReservationComponent
     );
   }
 
-  setFormDisability(): void {
-    // this.userForm.get('reservationInformation.source').disable();
-    if (this.reservationId) {
-      const reservationType = this.reservationInfoControls.status.value;
-      switch (true) {
-        case reservationType === ReservationType.CONFIRMED:
-          this.userForm.disable();
-          this.disabledForm = true;
-          break;
-        case reservationType === ReservationType.CANCELED:
-          this.userForm.disable();
-          this.disabledForm = true;
-          break;
-      }
-    }
-  }
-
   getSummaryData(): void {
     const config = {
       params: this.adminUtilityService.makeQueryParams([
@@ -256,7 +240,7 @@ export class SpaReservationComponent extends BaseReservationComponent
               .get('paymentRule.deductedAmount')
               .patchValue(this.summaryData?.totalAmount);
             this.deductedAmount = this.summaryData?.totalAmount;
-            
+
             if (this.formValueChanges) {
               this.setFormDisability();
               this.formValueChanges = false;

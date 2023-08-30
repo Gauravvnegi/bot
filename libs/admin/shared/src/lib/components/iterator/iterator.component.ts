@@ -55,7 +55,12 @@ export class IteratorComponent implements OnChanges {
    */
   createNewFields() {
     const data = this.fields.reduce((prev, curr) => {
-      const value = curr.required ? ['', Validators.required] : [''];
+      let value;
+      if (curr.minValue) {
+        value = ['', [Validators.required, Validators.min(curr.minValue)]];
+      } else {
+        value = curr.required ? ['', Validators.required] : [''];
+      }
       prev[curr.name] = value;
       return prev;
     }, {});

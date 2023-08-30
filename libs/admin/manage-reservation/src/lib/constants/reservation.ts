@@ -135,6 +135,7 @@ export const spaFields: IteratorField[] = [
     placeholder: 'Enter',
     width: '28%',
     dataType: 'number',
+    minValue: 1,
   },
   {
     label: 'Amount',

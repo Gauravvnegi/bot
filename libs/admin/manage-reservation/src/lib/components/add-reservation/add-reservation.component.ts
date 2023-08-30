@@ -176,27 +176,6 @@ export class AddReservationComponent extends BaseReservationComponent
     );
   }
 
-  // Sets form Disability according to the reservation type.
-  setFormDisability(): void {
-    // this.userForm.get('reservationInformation.source').disable();
-    if (this.reservationId) {
-      const reservationType = this.reservationInfoControls.reservationType
-        .value;
-      const source = this.reservationInfoControls.source;
-      source.disable({ emitEvent: false });
-      switch (true) {
-        case reservationType === ReservationType.CONFIRMED:
-          this.userForm.disable({ emitEvent: false });
-          this.disabledForm = true;
-          break;
-        case reservationType === ReservationType.CANCELED:
-          this.userForm.disable({ emitEvent: false });
-          this.disabledForm = true;
-          break;
-      }
-    }
-  }
-
   getOfferByRoomType(roomTypeIds: string[]): void {
     const config = {
       params: this.adminUtilityService.makeQueryParams([

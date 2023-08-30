@@ -13,6 +13,7 @@ import { ActivatedRoute } from '@angular/router';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { manageReservationRoutes } from '../constants/routes';
 import { ReservationForm } from '../constants/form';
+import { ReservationType } from '../constants/reservation-table';
 
 @Component({
   selector: 'hospitality-bot-outlet-base',
@@ -55,6 +56,24 @@ export class BaseReservationComponent {
     this.routes = navRoutes;
     this.pageTitle = title;
     this.summaryData = new SummaryData().deserialize();
+  }
+
+  setFormDisability(): void {
+    // this.userForm.get('reservationInformation.source').disable();
+    if (this.reservationId) {
+      const reservationType = this.reservationInfoControls.reservationType;
+      switch (true) {
+        case reservationType.value === ReservationType.CONFIRMED:
+          this.userForm.disable();
+          this.disabledForm = true;
+          break;
+        case reservationType.value === ReservationType.CANCELED:
+          this.userForm.disable();
+          this.disabledForm = true;
+          break;
+      }
+      reservationType.enable();
+    }
   }
 
   get reservationInfoControls() {

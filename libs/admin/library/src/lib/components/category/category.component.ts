@@ -21,7 +21,14 @@ import { Subscription } from 'rxjs';
 export class CategoryComponent implements OnInit {
   @Input() controlName: string;
   @Input() type: CategoryData['type'];
-  @Input() entityId: string;
+
+  @Input() set entityId(value: string) {
+    this._entityId = value;
+    this.categoryOffSet = 0;
+    this.categories = [];
+    this.getCategories();
+  }
+
   @Input() disabled: boolean;
   categoryOffSet = 0;
   loadingCategory = false;
@@ -42,10 +49,10 @@ export class CategoryComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    if (!this.entityId) this.entityId = this.globalFilterService.entityId;
+    // if (!this._entityId) this._entityId = this.globalFilterService.entityId;
 
     this.inputControl = this.controlContainer.control.get(this.controlName);
-    this.getCategories();
+    // this.getCategories();
   }
 
   /**

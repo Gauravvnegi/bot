@@ -254,7 +254,7 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
         return;
       } else if (features === 'service') {
         const dataToSend = {
-          entityId: this.outletId, // Replace with your actual data
+          entityId: this.outletId,
         };
         const navigationExtras: NavigationExtras = {
           queryParams: dataToSend,

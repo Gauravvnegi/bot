@@ -92,13 +92,12 @@ export class CreateServiceComponent implements OnInit {
     //to get the entityId from the query params
     this.paramData = this.route.snapshot.queryParams;
     this.entityId = this.paramData?.entityId;
-
     //set the entityId in the service
     this.brandId = this.hotelDetailService.brandId;
     this.hotelId = this.globalFilterService.entityId;
 
     //if entityId is not present in the query params then set the entityId from the service
-    if (!this.serviceId && !this.paramData?.entityId)
+    if (!this.paramData?.entityId)
       this.entityId = this.servicesService.entityId ?? this.hotelId;
 
     this.initForm();
@@ -141,19 +140,21 @@ export class CreateServiceComponent implements OnInit {
   initForm(): void {
     this.useForm = this.fb.group({
       active: [true],
-      // currency: [''],
+      currency: [''],
+
       parentId: ['', Validators.required],
       entityId: [''],
       imageUrl: ['', Validators.required],
       name: ['', Validators.required],
       serviceType: [''],
-      // rate: [''],
+      rate: [''],
+
       unit: ['', Validators.required],
       enableVisibility: [[], Validators.required],
       taxIds: [[]],
       hsnCode: [''],
     });
-    if (!this.serviceId) this.useForm.get('entityId').setValue(this.entityId);
+    this.useForm.get('entityId').setValue(this.entityId);
 
     this.updateFormControlSubscription();
 
@@ -224,7 +225,6 @@ export class CreateServiceComponent implements OnInit {
    * @returns void
    */
   getTax() {
-    debugger;
     this.$subscription.add(
       this.servicesService
         .getTaxList(this.entityId)
@@ -238,6 +238,15 @@ export class CreateServiceComponent implements OnInit {
           }));
         })
     );
+  }
+
+  isProperty() {
+    if (this.paramData?.entityId && this.serviceId) {
+      return true;
+    } else if (this.paramData?.entityId) {
+      return false;
+    }
+    return true;
   }
   /**
    * @function createCategory

@@ -22,7 +22,7 @@
     ></hospitality-bot-input>
 
     <hospitality-bot-select
-      *ngIf="!paramData?.entityId"
+      *ngIf="isProperty()"
       [loading]="loading"
       class="half-width"
       controlName="entityId"

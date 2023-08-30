@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { MatTabChangeEvent } from '@angular/material/tabs';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { LibraryItem, QueryConfig } from '@hospitality-bot/admin/library';
 import {
@@ -187,9 +187,13 @@ export class ServicesDataTableComponent extends BaseDatatableComponent {
    * @function editService To Edit the service
    */
   editService(id: string) {
-    this.router.navigate([
-      `/pages/library/services/${servicesRoutes.createService.route}/${id}`,
-    ]);
+    const navigationExtras: NavigationExtras = {
+      queryParams: { entityId: this.entityId },
+    };
+    this.router.navigate(
+      [`/pages/library/services/${servicesRoutes.createService.route}/${id}`],
+      navigationExtras
+    );
   }
 
   /**

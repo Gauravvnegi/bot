@@ -7,7 +7,7 @@ import { CategoryData, QueryConfig } from '../types/library';
 import {
   CategoriesResponse,
   CategoryResponse,
-  SearchResultResponse
+  SearchResultResponse,
 } from '../types/response';
 
 @Injectable()
@@ -44,7 +44,9 @@ export class LibraryService extends ApiService {
   }
 
   getLibraryItems<T>(entityId: string, config?: QueryConfig): Observable<T> {
-    return this.get(`/api/v1/entity/${entityId}/library${config?.params ?? ''}`);
+    return this.get(
+      `/api/v1/entity/${entityId}/library${config?.params ?? ''}`
+    );
   }
 
   getLibraryItemById<T>(
@@ -82,7 +84,10 @@ export class LibraryService extends ApiService {
     config?: QueryConfig
   ): Observable<SearchResultResponse> {
     return this.get(
-      `/api/v1/entity/${entityId}/library/search${config?.params ?? ''}`
+      `/api/v1/entity/${entityId}/library/search${config?.params ?? ''}`,
+      {
+        headers: { 'entity-id': entityId },
+      }
     );
   }
 

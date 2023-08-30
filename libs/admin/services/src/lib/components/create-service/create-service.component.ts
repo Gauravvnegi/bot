@@ -11,7 +11,10 @@ import {
   LibraryItem,
   ServiceTypeOptionValue,
 } from '@hospitality-bot/admin/library';
-import { ConfigService } from '@hospitality-bot/admin/shared';
+import {
+  ConfigService,
+  HotelDetailService,
+} from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { NavRouteOptions, Option } from 'libs/admin/shared/src';
 import { Subscription } from 'rxjs';
@@ -59,6 +62,12 @@ export class CreateServiceComponent implements OnInit {
 
   isSelectedTypePaid = false;
 
+  entityList: any[] = [];
+
+  brandId: string;
+  hotelId: string;
+  paramData: any;
+
   constructor(
     private fb: FormBuilder,
     private globalFilterService: GlobalFilterService,
@@ -66,7 +75,8 @@ export class CreateServiceComponent implements OnInit {
     private snackbarService: SnackBarService,
     private configService: ConfigService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private hotelDetailService: HotelDetailService
   ) {
     this.serviceId = this.route.snapshot.paramMap.get('id');
 
@@ -79,9 +89,49 @@ export class CreateServiceComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.entityId = this.globalFilterService.entityId;
+    //to get the entityId from the query params
+    this.paramData = this.route.snapshot.queryParams;
+    this.entityId = this.paramData?.entityId;
+    //set the entityId in the service
+    this.brandId = this.hotelDetailService.brandId;
+    this.hotelId = this.globalFilterService.entityId;
+
+    //if entityId is not present in the query params then set the entityId from the service
+    if (!this.paramData?.entityId)
+      this.entityId = this.servicesService.entityId ?? this.hotelId;
+
     this.initForm();
+    this.getPropertyList();
+    this.listenForTypeChange();
     this.initOptionsConfig();
+  }
+
+  getPropertyList() {
+    const selectedHotel = this.hotelDetailService.hotels.find(
+      (item) => item.id === this.hotelId
+    );
+
+    if (!selectedHotel) {
+      this.entityList = [];
+      return;
+    }
+
+    this.entityList = selectedHotel.entities.map((entity) => ({
+      label: entity.name,
+      value: entity.id,
+    }));
+
+    this.entityList.unshift({
+      label: selectedHotel.name,
+      value: selectedHotel.id,
+    });
+  }
+
+  listenForTypeChange() {
+    this.useForm.get('entityId').valueChanges.subscribe((res) => {
+      this.entityId = res;
+      this.initOptionsConfig();
+    });
   }
 
   /**
@@ -90,17 +140,21 @@ export class CreateServiceComponent implements OnInit {
   initForm(): void {
     this.useForm = this.fb.group({
       active: [true],
-      // currency: [''],
+      currency: [''],
+
       parentId: ['', Validators.required],
-      categoryName: [''],
+      entityId: [''],
       imageUrl: ['', Validators.required],
       name: ['', Validators.required],
-      serviceType: ['', Validators.required],
-      // rate: [''],
+      serviceType: [''],
+      rate: [''],
+
       unit: ['', Validators.required],
       enableVisibility: [[], Validators.required],
       taxIds: [[]],
+      hsnCode: [''],
     });
+    this.useForm.get('entityId').setValue(this.entityId);
 
     this.updateFormControlSubscription();
 
@@ -184,6 +238,15 @@ export class CreateServiceComponent implements OnInit {
           }));
         })
     );
+  }
+
+  isProperty() {
+    if (this.paramData?.entityId && this.serviceId) {
+      return true;
+    } else if (this.paramData?.entityId) {
+      return false;
+    }
+    return true;
   }
   /**
    * @function createCategory

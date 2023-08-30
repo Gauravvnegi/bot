@@ -7,6 +7,9 @@ import { TaxListResponse } from '../types/response';
 
 @Injectable()
 export class ServicesService extends LibraryService {
+
+  entityId: string;
+
   /**
    * Currently Selected Services table
    * It can either be 'ALL' | 'PAID' | 'COMPLIMENTARY'

@@ -28,6 +28,7 @@ export type RoomReservationRes = {
   nextStates: string[];
   bookingItems?: BookingItems[];
   pricingDetails: PricingDetails;
+  specialRequest: string;
 };
 
 export type PaymentConfigResponse = {
@@ -114,6 +115,13 @@ export type PricingDetails = {
   basePrice: number;
 };
 
+export type SummaryPricing = {
+  totalAmount: number;
+  totalPaidAmount: number;
+  totalDueAmount: number;
+  taxAndFees: number;
+};
+
 export type RoomReservationResponse = {
   id: string;
   from: number;
@@ -132,5 +140,6 @@ export type RoomReservationResponse = {
   offerAmount: number;
   nextStates: string[];
   bookingItems: BookingItems[];
-  specialRequest
+  pricingDetails?: PricingDetails;
+  specialRequest: string;
 };

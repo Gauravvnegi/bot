@@ -2,8 +2,10 @@ import {
   BookingItems,
   BookingItemsSummary,
   PaymentMethodConfig,
+  PricingDetails,
   ReservationListResponse,
   RoomReservationRes,
+  SummaryPricing,
   SummaryResponse,
 } from '../types/response.type';
 import {
@@ -201,6 +203,7 @@ export class ReservationFormData {
   roomInformation: RoomTypes[];
   instructions: Instructions;
   nextStates: string[];
+  totalPaidAmount: number;
   deserialize(input: RoomReservationResponse) {
     this.reservationInformation = new BookingInfo().deserialize(input);
     this.guestInformation = new GuestInfo().deserialize(input.guest);
@@ -221,8 +224,11 @@ export class ReservationFormData {
         sellingPrice: item?.roomDetails.ratePlan.sellingPrice,
       },
       id: item?.id,
-      roomNumbers: [item?.roomDetails.roomNumber],
+      roomNumbers: item?.roomDetails.roomNumber
+        ? [item?.roomDetails.roomNumber]
+        : [],
     }));
+    this.totalPaidAmount = input.pricingDetails.totalPaidAmount;
     return this;
   }
 }

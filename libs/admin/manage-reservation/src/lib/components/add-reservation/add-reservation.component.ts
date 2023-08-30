@@ -21,6 +21,7 @@ import { OccupancyDetails, ReservationSummary } from '../../types/forms.types';
 import {
   BookingItemsSummary,
   RoomReservationResponse,
+  SummaryPricing,
 } from '../../types/response.type';
 import { BaseReservationComponent } from '../base-reservation.component';
 import { ReservationType } from '../../constants/reservation-table';
@@ -44,6 +45,7 @@ export class AddReservationComponent extends BaseReservationComponent
     childCount: 0,
     roomCount: 0,
   };
+  totalPaidAmount = 0;
 
   constructor(
     private fb: FormBuilder,
@@ -143,6 +145,7 @@ export class AddReservationComponent extends BaseReservationComponent
               guestInformation,
               roomInformation,
               nextStates,
+              totalPaidAmount,
               ...formData
             } = data;
 
@@ -152,8 +155,9 @@ export class AddReservationComponent extends BaseReservationComponent
                 value: item,
               }));
 
+            this.totalPaidAmount = totalPaidAmount;
             this.formValueChanges = true;
-            
+
             // Create options for room and guest if not already available
             // in room iterator and guest info component.
             this.roomTypeValues = roomInformation;
@@ -269,6 +273,9 @@ export class AddReservationComponent extends BaseReservationComponent
         .subscribe(
           (res) => {
             this.summaryData = new SummaryData()?.deserialize(res);
+            if (this.totalPaidAmount) {
+              this.summaryData.totalPaidAmount = this.totalPaidAmount;
+            }
 
             // Modify data to show summary for occupancy details.
             this.updateBookingItemsCounts(this.summaryData.bookingItems);

@@ -1,4 +1,4 @@
-import { FormArray, FormGroup } from '@angular/forms';
+import { AbstractControl, FormArray, FormGroup } from '@angular/forms';
 import {
   ConfigItemType,
   ConfigRuleType,
@@ -454,4 +454,124 @@ export class DynamicPricingForm {
 
     return this;
   }
+}
+
+export function validateConfig(formArray: FormArray): boolean {
+  let isValid = true;
+  const resetError = () => {
+    formArray.controls.forEach((item: FormGroup) => {
+      const { start, end, fromTime, toTime } = item.controls;
+      [start, end, fromTime, toTime].forEach((data: AbstractControl) =>
+        data.setErrors(null)
+      );
+    });
+  };
+
+  formArray.controls.forEach((occupancy: FormGroup, occupancyIndex: number) => {
+    if (isValid) {
+      resetError();
+      isValid = validateOccupancy(formArray, occupancyIndex);
+    }
+  });
+
+  return isValid;
+}
+
+function validateOccupancy(occupancyArray: FormArray, occupancyIndex: number) {
+  const { start, end, fromTime, toTime } = (occupancyArray.at(
+    occupancyIndex
+  ) as FormGroup).controls;
+  /**
+   * Setting error to the control
+   */
+  const setError = (
+    [...list],
+    errorType: 'collide' | 'timeGapError' | 'sameTime'
+  ) => {
+    list.forEach((item: FormGroup) => {
+      item.setErrors({ [errorType]: true });
+      item.markAsTouched();
+    });
+  };
+
+  const resetError = ([...list]) => {
+    list.forEach((item: FormGroup) => {
+      item.setErrors(null);
+    });
+  };
+
+  const errorValidator = (
+    errorType: 'collide' | 'timeGapError' | 'sameTime'
+  ) => {
+    let hasError = false;
+    occupancyArray.controls
+      .filter((item, index) => index != occupancyIndex)
+      .forEach((occupancy: FormGroup, index) => {
+        const {
+          start: innerStart,
+          end: innerEnd,
+          fromTime: innerFromTime,
+          toTime: innerToTime,
+        } = occupancy.controls;
+
+        /**
+         * At Least 1 Hrs Gap
+         */
+        const outerGapCheck = +toTime.value >= +fromTime.value + 3600000;
+        const innerGapCheck =
+          +innerToTime.value >= +innerFromTime.value + 3600000;
+        if (errorType == 'timeGapError' && (outerGapCheck || innerGapCheck)) {
+          setError(
+            !outerGapCheck
+              ? [fromTime, toTime]
+              : !innerGapCheck
+              ? [innerToTime, innerFromTime]
+              : [],
+            'timeGapError'
+          );
+          hasError = !(outerGapCheck || innerGapCheck);
+        }
+
+        /**
+         * Set Error who is same time & same conflicting occupancy
+         */
+        if (
+          errorType == 'sameTime' &&
+          +fromTime.value == +innerFromTime.value &&
+          +toTime.value == +innerToTime.value
+        ) {
+          if (
+            (+start.value >= +innerStart.value &&
+              +start.value <= +innerEnd.value) ||
+            (+innerStart.value >= +start.value &&
+              innerStart.value <= +end.value)
+          ) {
+            setError(
+              [innerFromTime, innerToTime, start, end, innerStart, innerEnd],
+              errorType
+            );
+            hasError = true;
+          }
+        }
+
+        /**
+         * Time Collision Detection
+         */
+        if (
+          errorType === 'collide' &&
+          +fromTime.value > +innerFromTime.value &&
+          +fromTime.value < +innerToTime.value
+        ) {
+          hasError = true;
+          setError([fromTime, toTime, innerFromTime, innerToTime], errorType);
+        }
+      });
+    return hasError;
+  };
+
+  const timeGapError = errorValidator('timeGapError');
+  const sameTimeError = errorValidator('sameTime');
+  const collideError = errorValidator('collide');
+
+  return !(collideError || timeGapError || sameTimeError);
 }

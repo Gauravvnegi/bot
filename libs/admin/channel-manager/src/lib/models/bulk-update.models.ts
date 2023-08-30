@@ -81,6 +81,7 @@ export class Rooms {
 }
 
 export class RoomTypes {
+  id?: string;
   label: string;
   value: string;
   channels: Channel[];
@@ -96,6 +97,7 @@ export class RoomTypes {
       : input.ratePlans;
     this.label = input.name;
     this.value = input.id;
+    this.id = input.id;
     this.channels = [];
     this.price = input.price;
     this.isBase = input.isBaseRoomType;
@@ -109,6 +111,7 @@ export class RoomTypes {
 }
 
 export class RatePlans {
+  id: string;
   type: string;
   label: string;
   value: string;
@@ -119,6 +122,7 @@ export class RatePlans {
     this.type = input.label ?? '';
     this.label = input.label ?? '';
     this.value = input.id ?? '';
+    this.id = input.id ?? '';
     this.isBase = input.isBase ?? false;
     this.variablePrice = input.variablePrice;
     this.channels = [];

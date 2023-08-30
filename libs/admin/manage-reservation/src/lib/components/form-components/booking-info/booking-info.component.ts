@@ -210,7 +210,6 @@ export class BookingInfoComponent implements OnInit {
       const dateDiffInDays = Math.ceil(
         dateDiffInMilliseconds / (1000 * 60 * 60 * 24)
       );
-      debugger;
       // Update the dateDifference BehaviorSubject with the new value
       this.formService.dateDifference.next(dateDiffInDays);
     }

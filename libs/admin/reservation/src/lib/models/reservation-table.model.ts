@@ -61,16 +61,16 @@ export class Package implements IDeserializable {
     return this;
   }
 
-  getPaidPackagesLabels() {
-    // return this.paidPackages.map((paidPackage) => paidPackage.label).join(', ');
-    return this.paidPackages.length
-      ? `${this.paidPackages[0].label}${
-          this.paidPackages.length > 1
-            ? ` (+${this.paidPackages.length - 1})`
-            : ''
-        }`
-      : '';
-  }
+  // getPaidPackagesLabels() {
+  //   // return this.paidPackages.map((paidPackage) => paidPackage.label).join(', ');
+  //   return this.paidPackages.length
+  //     ? `${this.paidPackages[0].label}${
+  //         this.paidPackages.length > 1
+  //           ? ` (+${this.paidPackages.length - 1})`
+  //           : ''
+  //       }`
+  //     : '';
+  // }
 }
 
 export class PackageDetail implements IDeserializable {

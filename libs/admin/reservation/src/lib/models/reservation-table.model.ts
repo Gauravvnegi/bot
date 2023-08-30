@@ -30,8 +30,8 @@ export class Reservation implements IDeserializable {
     this.guests = new GuestType().deserialize(input.guestDetails);
     this.payment = new Payment().deserialize(input.paymentSummary);
     this.status = new Status().deserialize(input);
-    this.feedback = new Feedback().deserialize(input.feedback);
-    this.packages = new Package().deserialize(input.packages);
+    // this.feedback = new Feedback().deserialize(input.feedback);
+    // this.packages = new Package().deserialize(input.packages);
     this.currentJourney = new CurrentJourney().deserialize(input);
     return this;
   }
@@ -46,16 +46,16 @@ export class Package implements IDeserializable {
     return this;
   }
 
-  // getPaidPackagesLabels() {
-  //   // return this.paidPackages.map((paidPackage) => paidPackage.label).join(', ');
-  //   return this.paidPackages.length
-  //     ? `${this.paidPackages[0].label}${
-  //         this.paidPackages.length > 1
-  //           ? ` (+${this.paidPackages.length - 1})`
-  //           : ''
-  //       }`
-  //     : '';
-  // }
+  getPaidPackagesLabels() {
+    // return this.paidPackages.map((paidPackage) => paidPackage.label).join(', ');
+    return this.paidPackages.length
+      ? `${this.paidPackages[0].label}${
+          this.paidPackages.length > 1
+            ? ` (+${this.paidPackages.length - 1})`
+            : ''
+        }`
+      : '';
+  }
 }
 
 export class PackageDetail implements IDeserializable {

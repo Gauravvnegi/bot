@@ -94,7 +94,7 @@
             </td>
             <td>
               <p class="booking-number">{{ rowData.booking.bookingNumber }}</p>
-              <div
+              <!-- <div
                 *ngIf="['COMPLETED'].includes(rowData.feedback.status)"
                 class="booking-feedback"
                 [ngClass]="{
@@ -119,7 +119,7 @@
                 >
                   {{ rowData.feedback.comments }}
                 </div>
-              </div>
+              </div> -->
             </td>
             <td class="multi-cell-content">
               <div class="primary-text">
@@ -220,7 +220,7 @@
                 >{{ rowData.payment.dueAmount | currency: 'INR' }}</span
               >/ {{ rowData.payment.totalAmount | currency: 'INR' }}
             </td>
-            <td class="package">
+            <!-- <td class="package">
               <span
                 *ngIf="
                   rowData.packages.getPaidPackagesLabels().length;
@@ -228,7 +228,7 @@
                 "
                 >{{ rowData.packages.getPaidPackagesLabels() }}
               </span>
-            </td>
+            </td> -->
 
             <!-- status-image-initiated -->
             <td class="status-image">

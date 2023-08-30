@@ -7,6 +7,7 @@ import {
   UpdateInventoryResponse,
   UpdateRatesResponse,
 } from '../types/response.type';
+import { UpdateRatesType } from '../types/channel-manager.types';
 
 @Injectable()
 export class ChannelManagerService extends ApiService {
@@ -41,7 +42,7 @@ export class ChannelManagerService extends ApiService {
   getDynamicPricing(
     entityId,
     config?: QueryConfig
-  ): Observable<{ roomType: ChannelManagerResponse }> {
+  ): Observable<{ roomType: UpdateRatesType }> {
     return this.get(`/api/v1/entity/${entityId}/inventory${config.params}`);
   }
 }

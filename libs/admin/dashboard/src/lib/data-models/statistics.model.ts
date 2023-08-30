@@ -165,7 +165,7 @@ export class BookingStatus {
       this,
       set({}, 'new', get(statistics, ['newGuestStats'])),
       set({}, 'checkIn', get(statistics, ['checkinGuestStats'])),
-      set({}, 'preCheckIn', get(statistics, ['precheckinGuestStats'])),
+      set({}, 'preCheckIn', get(statistics, ['expressCheckinGuestStats'])),
       set({}, 'checkout', get(statistics, ['checkoutGuestStats']))
     );
     return this;

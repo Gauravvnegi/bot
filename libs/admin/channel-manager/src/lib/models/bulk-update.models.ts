@@ -1,6 +1,9 @@
 import { Option } from '@hospitality-bot/admin/shared';
 import { Variant } from '../types/bulk-update.types';
-import { RoomType } from 'libs/admin/room/src/lib/models/rooms-data-table.model';
+import {
+  PricingDetails,
+  RoomType,
+} from 'libs/admin/room/src/lib/models/rooms-data-table.model';
 
 export function makeRoomOption(...data) {
   return data.map((item) => {
@@ -85,6 +88,7 @@ export class RoomTypes {
   roomCount: number;
   isBase: boolean;
   ratePlans: RatePlans[];
+  pricingDetails: PricingDetails;
   deserialize(input: RoomType, used: UsedType) {
     const isChannelManager = used == 'channel-manager';
     const inputRatePlan = !isChannelManager
@@ -96,6 +100,7 @@ export class RoomTypes {
     this.price = input.price;
     this.isBase = input.isBaseRoomType;
     this.roomCount = input.roomCount;
+    this.pricingDetails = input.pricingDetails;
     this.ratePlans =
       inputRatePlan.map((item) => new RatePlans().deserialize(item)) ?? [];
     // Filter Room who have not any rate plan for channel-manager

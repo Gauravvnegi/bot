@@ -75,6 +75,10 @@ export class BaseReservationComponent {
           this.disabledForm = true;
           break;
       }
+      this.paymentControls.currency.enable();
+      this.paymentControls.totalPaidAmount.enable();
+      this.paymentControls.transactionId.enable();
+      this.paymentControls.paymentRemark.enable();
       reservationType.enable();
     }
   }
@@ -90,6 +94,13 @@ export class BaseReservationComponent {
   get inputControls() {
     return this.userForm.controls as Record<
       keyof ReservationForm,
+      AbstractControl
+    >;
+  }
+
+  get paymentControls() {
+    return (this.userForm.get('paymentMethod') as FormGroup).controls as Record<
+      keyof ReservationForm['paymentMethod'],
       AbstractControl
     >;
   }

@@ -107,6 +107,7 @@ export class RoomType {
   isBaseRoomType: boolean;
   nextStates: string[];
   ratePlans?: RatePlanRes[];
+  pricingDetails?: PricingDetails;
 
   deserialize(input: RoomTypeResponse) {
     this.id = input.id ?? '';
@@ -127,6 +128,20 @@ export class RoomType {
     this.currency = input.currency ?? '';
     this.ratePlans = input.ratePlans;
     this.isBaseRoomType = input.isBaseRoomType ?? null; // TODO: need to add from BE
+    this.pricingDetails = new PricingDetails().deserialize(input);
+    return this;
+  }
+}
+
+export class PricingDetails {
+  paxAdult: number;
+  paxChildAboveFive: number;
+  paxChildBelowFive: number;
+  paxDoubleOccupancy: number;
+  paxTripleOccupancy: number;
+  deserialize(input: RoomTypeResponse): PricingDetails {
+    const { pricingDetails } = input;
+    Object.assign(this, pricingDetails);
     return this;
   }
 }

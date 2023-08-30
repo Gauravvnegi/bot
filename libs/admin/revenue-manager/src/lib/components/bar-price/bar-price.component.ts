@@ -14,6 +14,7 @@ import { DateOption } from '../../types/bar-price.types';
 import { RatePlanRes } from 'libs/admin/room/src/lib/types/service-response';
 import { Accordion } from 'primeng/accordion';
 import { RoomTypes } from 'libs/admin/channel-manager/src/lib/models/bulk-update.models';
+import { PricingDetails } from 'libs/admin/room/src/lib/models/rooms-data-table.model';
 
 @Component({
   selector: 'hospitality-bot-bar-price',
@@ -110,11 +111,20 @@ export class BarPriceComponent implements OnInit {
     return this.fb.array(
       this.roomTypes.map((item) =>
         this.fb.group({
-          price: [item['price'], [Validators.min(0), Validators.required]],
-          ratePlans: this.addRatePlans(item.ratePlans),
-          childBelowFive: ['', [Validators.min(0), Validators.required]],
-          chileFiveToTwelve: ['', [Validators.min(0), Validators.required]],
-          adult: ['', [Validators.min(0), Validators.required]],
+          price: [item?.price, [Validators.min(0), Validators.required]],
+          ratePlans: this.addRatePlans(item.ratePlans, item.pricingDetails),
+          childBelowFive: [
+            item.pricingDetails.paxChildBelowFive,
+            [Validators.min(0), Validators.required],
+          ],
+          chileFiveToTwelve: [
+            item.pricingDetails.paxChildAboveFive,
+            [Validators.min(0), Validators.required],
+          ],
+          adult: [
+            item.pricingDetails.paxAdult,
+            [Validators.min(0), Validators.required],
+          ],
           exceptions: this.fb.array([]),
           id: [item.value],
           label: [item.label],
@@ -123,12 +133,12 @@ export class BarPriceComponent implements OnInit {
     );
   }
 
-  addRatePlans(ratePlans: RatePlanRes[]) {
+  addRatePlans(ratePlans: RatePlanRes[], priceDetails: PricingDetails) {
     return this.fb.array(
       [
         ...ratePlans,
-        { label: 'Double', variablePrice: '' },
-        { label: 'Triple', variablePrice: '' },
+        { label: 'Double', variablePrice: priceDetails.paxDoubleOccupancy },
+        { label: 'Triple', variablePrice: priceDetails.paxTripleOccupancy },
       ].map((item: RatePlanRes) =>
         this.fb.group({
           label: [item.label],

@@ -29,6 +29,7 @@ export type UpdateRatesType = Omit<UpdateInventoryType, 'rooms'> & {
     roomTypeId: string;
     rate: number;
     ratePlanId: string;
+    ratePlanCode?: string;
     dynamicPricing: boolean;
   }[];
 };

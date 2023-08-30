@@ -189,16 +189,14 @@ export class UpdateRates {
     return this;
   }
 
-  static buildDynamicPricing(input: ChannelManagerResponse) {
+  static buildDynamicPricing(input: UpdateRatesType) {
     let dynamicPricing = new Map<string, Map<string, number>>();
-    (input.roomTypes as UpdateRatesResponse[])?.forEach((currentData) => {
-      currentData.rates.forEach((ratePlans) => {
-        if (!dynamicPricing[ratePlans.roomTypeId]) {
-          dynamicPricing[ratePlans.roomTypeId] = new Map();
-        }
-        dynamicPricing[ratePlans.roomTypeId][ratePlans.ratePlanId] =
-          ratePlans.rate;
-      });
+    input.rates.forEach((ratePlans) => {
+      if (!dynamicPricing[ratePlans.roomTypeId]) {
+        dynamicPricing[ratePlans.roomTypeId] = new Map();
+      }
+      dynamicPricing[ratePlans.roomTypeId][ratePlans.ratePlanId] =
+        ratePlans.rate;
     });
     return dynamicPricing;
   }

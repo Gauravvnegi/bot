@@ -11,6 +11,7 @@ import {
   RoomsConfigType,
   OccupancyRuleType,
   DynamicPricingUpdateRequestType,
+  TriggerErrorTypes,
 } from '../types/dynamic-pricing.types';
 import { OccupancyComponent } from '../components/occupancy/occupancy.component';
 import { RoomTypes } from 'libs/admin/channel-manager/src/lib/models/bulk-update.models';
@@ -461,18 +462,19 @@ export function validateConfig(formArray: FormArray): boolean {
   const resetError = () => {
     formArray.controls.forEach((item: FormGroup) => {
       const { start, end, fromTime, toTime } = item.controls;
-      [start, end, fromTime, toTime].forEach((data: AbstractControl) =>
-        data.setErrors(null)
-      );
+      [start, end, fromTime, toTime].forEach((data: AbstractControl) => {
+        data.setErrors(
+          !data.value.toString().length ? { required: true } : null
+        );
+      });
     });
   };
 
   formArray.controls.forEach((occupancy: FormGroup, occupancyIndex: number) => {
-    if (isValid) {
-      resetError();
-      isValid = validateOccupancy(formArray, occupancyIndex);
-    }
+    isValid = validateOccupancy(formArray, occupancyIndex);
   });
+
+  isValid && resetError();
 
   return isValid;
 }
@@ -481,13 +483,11 @@ function validateOccupancy(occupancyArray: FormArray, occupancyIndex: number) {
   const { start, end, fromTime, toTime } = (occupancyArray.at(
     occupancyIndex
   ) as FormGroup).controls;
+
   /**
    * Setting error to the control
    */
-  const setError = (
-    [...list],
-    errorType: 'collide' | 'timeGapError' | 'sameTime'
-  ) => {
+  const setError = ([...list], errorType: TriggerErrorTypes) => {
     list.forEach((item: FormGroup) => {
       item.setErrors({ [errorType]: true });
       item.markAsTouched();
@@ -500,9 +500,7 @@ function validateOccupancy(occupancyArray: FormArray, occupancyIndex: number) {
     });
   };
 
-  const errorValidator = (
-    errorType: 'collide' | 'timeGapError' | 'sameTime'
-  ) => {
+  const errorValidator = (errorType: TriggerErrorTypes) => {
     let hasError = false;
     occupancyArray.controls
       .filter((item, index) => index != occupancyIndex)

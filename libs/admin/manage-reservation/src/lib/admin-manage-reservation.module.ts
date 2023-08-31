@@ -10,6 +10,7 @@ import { FormService } from './services/form.service';
 import { LibraryService } from '@hospitality-bot/admin/library';
 import { OutletService } from 'libs/admin/all-outlets/src/lib/services/outlet.service';
 import { InvoiceService } from 'libs/admin/invoice/src/lib/services/invoice.service';
+import { GlobalSharedModule } from '@hospitality-bot/admin/global-shared';
 
 @NgModule({
   imports: [
@@ -19,6 +20,7 @@ import { InvoiceService } from 'libs/admin/invoice/src/lib/services/invoice.serv
     FormsModule,
     ReactiveFormsModule,
     AdminManageReservationRoutingModule,
+    GlobalSharedModule,
   ],
   declarations: [...AdminManageReservationRoutingModule.components],
   providers: [

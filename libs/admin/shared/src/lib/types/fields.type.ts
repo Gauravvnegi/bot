@@ -16,6 +16,7 @@ export type IteratorField = {
   loading?: boolean | boolean[];
   noMoreResults?: boolean;
   dataType?: InputType;
+  minValue?: number;
 };
 
 export type ModalAction = {

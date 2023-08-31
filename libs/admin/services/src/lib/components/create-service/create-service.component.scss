@@ -3,3 +3,11 @@
 .form-block {
   @include form-block;
 }
+
+.type-wrapper {
+  display: flex;
+
+  .half-width {
+    flex-basis: 50%;
+  }
+}

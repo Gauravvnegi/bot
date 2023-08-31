@@ -106,21 +106,23 @@ export const hotelCols: Cols[] = [
     width: '13%',
   },
   {
-    field: 'confirmationNo',
-    header: 'Confirmation No',
+    field: 'confirmationNumber',
+    header: 'Booking Number',
     sortType: 'number',
+    searchField: ['confirmationNumber'],
   },
   {
-    field: 'fullName',
+    field: 'guestName',
     header: 'Guest / Company',
     sortType: 'string',
-    searchField: ['fullName', 'companyName'],
+    searchField: ['guestName', 'companyName'],
   },
   {
     field: 'from',
     header: 'Arrival / Departure',
     sortType: 'number',
     isSearchDisabled: true,
+    isSortDisabled: true,
   },
   {
     field: 'totalDueAmount',
@@ -139,6 +141,7 @@ export const hotelCols: Cols[] = [
     header: 'Payment',
     sortType: 'number',
     isSearchDisabled: true,
+    isSortDisabled: true,
   },
   {
     field: 'reservationType',
@@ -146,6 +149,7 @@ export const hotelCols: Cols[] = [
     sortType: 'string',
     width: '14%',
     isSearchDisabled: true,
+    isSortDisabled: true,
   },
 ];
 
@@ -159,33 +163,34 @@ export const outletCols: Cols[] = [
   {
     field: 'outletName',
     header: 'Outlet Name / Type',
-    sortType: 'string',
-    searchField: ['outletName', 'outletType'],
+    isSearchDisabled: true,
+    isSortDisabled: true,
   },
   {
-    field: 'bookingNo',
-    header: 'Booking No',
-    sortType: 'string',
-    searchField: ['bookingNo'],
+    field: 'confirmationNumber',
+    header: 'Booking Number',
+    sortType: 'number',
+    searchField: ['confirmationNumber'],
   },
   {
-    field: 'guest',
+    field: 'guestName',
     header: 'Guest / Company',
     sortType: 'string',
-    searchField: ['guest', 'company'],
+    searchField: ['guestName', 'companyName'],
   },
-
   {
     field: 'date',
     header: 'Date / Time',
     sortType: 'string',
-    searchField: ['date', 'time'],
+    isSearchDisabled: true,
+    isSortDisabled: true,
   },
   {
     field: 'totalDueAmount',
     header: 'Amount Due / Total (INR)',
     sortType: 'string',
-    searchField: ['totalDueAmount', 'total'],
+    isSearchDisabled: true,
+    isSortDisabled: true,
   },
   {
     field: 'sourceName',
@@ -198,6 +203,7 @@ export const outletCols: Cols[] = [
     header: 'Payment',
     sortType: 'string',
     isSearchDisabled: true,
+    isSortDisabled: true,
   },
   {
     field: 'reservationType',
@@ -205,6 +211,7 @@ export const outletCols: Cols[] = [
     sortType: 'string',
     width: '13%',
     isSearchDisabled: true,
+    isSortDisabled: true,
   },
 ];
 export const title = 'Reservation';

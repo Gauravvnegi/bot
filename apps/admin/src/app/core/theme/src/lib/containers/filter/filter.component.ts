@@ -280,10 +280,8 @@ export class FilterComponent implements OnChanges, OnInit {
     }
   }
 
-  checkForTransactionFeedbackSubscribed() {
-    return this.subscriptionService.checkModuleSubscription(
-      ModuleNames.FEEDBACK_TRANSACTIONAL
-    );
+  checkForOutlets() {
+    return this.outlets.length - 1;
   }
 
   checkForStayFeedbackSubscribed() {

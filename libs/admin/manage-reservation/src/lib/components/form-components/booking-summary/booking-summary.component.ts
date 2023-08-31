@@ -28,7 +28,7 @@ import { Subscription } from 'rxjs';
 import { PaymentMethod, ReservationForm } from '../../../constants/form';
 import { FormService } from '../../../services/form.service';
 import { EntitySubType, EntityType } from '@hospitality-bot/admin/shared';
-import { RoomReservationRes } from '../../../types/response.type';
+import { RoomReservationRes, SummaryPricing } from '../../../types/response.type';
 import {
   OccupancyDetails,
   RoomReservationFormData,

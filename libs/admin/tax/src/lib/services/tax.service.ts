@@ -46,7 +46,7 @@ export class TaxService extends ApiService {
 
   exportCSV(entityId: string, config: QueryConfig) {
     return this.get(
-      `/api/v1/tax/export${config.params ?? ''}`,
+      `/api/v1/entity/${entityId}/tax/export${config.params ?? ''}`,
       {
         responseType: 'blob',
       }

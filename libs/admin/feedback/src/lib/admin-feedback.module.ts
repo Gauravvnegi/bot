@@ -17,6 +17,7 @@ import { FeedbackTableService } from './services/table.service';
 import { CardService } from './services/card.service';
 import { StatisticsService } from './services/feedback-statistics.service';
 import { GaugeChartModule } from 'angular-gauge-chart';
+import { FeedbackTypesComponent } from './components/feedback-types/feedback-types.component';
 
 @NgModule({
   imports: [
@@ -33,6 +34,7 @@ import { GaugeChartModule } from 'angular-gauge-chart';
     NgCircleProgressModule.forRoot(),
     TranslateModule.forChild(getTranslationConfigs([HttpClient], ['feedback'])),
   ],
+  exports: [FeedbackTypesComponent],
   declarations: [...AdminFeedbackRoutingModule.components],
   providers: [StatisticsService, FeedbackTableService, CardService],
 })

@@ -8,7 +8,7 @@ export const cols = {
     },
     {
       field: 'booking.bookingNumber',
-      header: 'Booking No. / Feedback',
+      header: 'Booking No.',
       sortType: 'number',
       searchField: ['booking.bookingNumber', 'feedback.comments'],
     },
@@ -38,13 +38,13 @@ export const cols = {
       sortType: 'number',
       isSearchDisabled: true,
     },
-    {
-      field: 'package',
-      header: 'Add-ons',
-      isSortDisabled: true,
-      sortType: 'number',
-      isSearchDisabled: true,
-    },
+    // {
+    //   field: 'package',
+    //   header: 'Add-ons',
+    //   isSortDisabled: true,
+    //   sortType: 'number',
+    //   isSearchDisabled: true,
+    // },
     {
       field: 'stageAndourney',
       header: 'Stage/Journey',

@@ -345,13 +345,16 @@ export class DynamicPricingHandler {
             }
           : {};
       rule &&
-        hotelOccupancy.patchValue({
-          id: rule.id,
-          start: rule.start,
-          end: rule.end,
-          discount: rule.discount,
-          ...triggerConfig,
-        });
+        hotelOccupancy.patchValue(
+          {
+            id: rule.id,
+            start: rule.start,
+            end: rule.end,
+            discount: rule.discount,
+            ...triggerConfig,
+          },
+          { emitEvent: false }
+        );
     });
   }
 
@@ -471,7 +474,9 @@ export function validateConfig(formArray: FormArray): boolean {
   };
 
   formArray.controls.forEach((occupancy: FormGroup, occupancyIndex: number) => {
-    isValid = validateOccupancy(formArray, occupancyIndex);
+    if (isValid) {
+      isValid = validateOccupancy(formArray, occupancyIndex);
+    }
   });
 
   isValid && resetError();
@@ -494,10 +499,9 @@ function validateOccupancy(occupancyArray: FormArray, occupancyIndex: number) {
     });
   };
 
-  const resetError = ([...list]) => {
-    list.forEach((item: FormGroup) => {
-      item.setErrors(null);
-    });
+  const hasOneHourGap = (fromTime: number, toTime: number) => {
+    const oneHourInMilliseconds = 60 * 60 * 1000;
+    return Math.abs(toTime - fromTime) >= oneHourInMilliseconds;
   };
 
   const errorValidator = (errorType: TriggerErrorTypes) => {
@@ -515,19 +519,17 @@ function validateOccupancy(occupancyArray: FormArray, occupancyIndex: number) {
         /**
          * At Least 1 Hrs Gap
          */
-        const outerGapCheck = +toTime.value >= +fromTime.value + 3600000;
-        const innerGapCheck =
-          +innerToTime.value >= +innerFromTime.value + 3600000;
-        if (errorType == 'timeGapError' && (outerGapCheck || innerGapCheck)) {
+        const outerGapCheck = hasOneHourGap(+toTime.value, +fromTime.value);
+        const innerGapCheck = hasOneHourGap(
+          +innerToTime.value,
+          +innerFromTime.value
+        );
+        if (errorType == 'timeGapError' && (!outerGapCheck || !innerGapCheck)) {
           setError(
-            !outerGapCheck
-              ? [fromTime, toTime]
-              : !innerGapCheck
-              ? [innerToTime, innerFromTime]
-              : [],
+            !outerGapCheck ? [fromTime, toTime] : [innerToTime, innerFromTime],
             'timeGapError'
           );
-          hasError = !(outerGapCheck || innerGapCheck);
+          hasError = true;
         }
 
         /**
@@ -556,9 +558,11 @@ function validateOccupancy(occupancyArray: FormArray, occupancyIndex: number) {
          * Time Collision Detection
          */
         if (
-          errorType === 'collide' &&
-          +fromTime.value > +innerFromTime.value &&
-          +fromTime.value < +innerToTime.value
+          (errorType === 'collide' &&
+            +fromTime.value > +innerFromTime.value &&
+            +fromTime.value < +innerToTime.value) ||
+          (+innerFromTime.value > +fromTime.value &&
+            +innerFromTime.value < +toTime.value)
         ) {
           hasError = true;
           setError([fromTime, toTime, innerFromTime, innerToTime], errorType);
@@ -571,5 +575,5 @@ function validateOccupancy(occupancyArray: FormArray, occupancyIndex: number) {
   const sameTimeError = errorValidator('sameTime');
   const collideError = errorValidator('collide');
 
-  return !(collideError || timeGapError || sameTimeError);
+  return !collideError && !timeGapError && !sameTimeError;
 }

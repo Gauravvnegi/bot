@@ -151,12 +151,6 @@ export class TransactionHistoryDataTableComponent extends BaseDatatableComponent
   exportCSV(): void {
     this.loading = true;
 
-    // const config: QueryConfig = {
-    //   params: this.adminUtilityService.makeQueryParams([
-    //     ...this.selectedRows.map((item) => ({ ids: item.id })),
-    //
-    //   ]),
-    // };
     this.$subscription.add(
       this.financeService.exportCSV(this.entityId).subscribe(
         (res) => {

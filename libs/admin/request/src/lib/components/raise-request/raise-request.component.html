@@ -1,7 +1,7 @@
 <div class="container">
   <div class="header">
     <div class="button raise-request-btn">
-      {{ 'raiseRequest' | translate }}
+      {{ 'Raise Request' }}
     </div>
     <div (click)="close({ status: false })" class="close">
       <i class="fa fa-times" aria-hidden="true"></i>
@@ -29,7 +29,7 @@
           requestFG.get('roomNo').hasError('required')
         "
       >
-        {{ 'error.roomNoRequired' | translate }}
+        {{ 'Room No is required' }}
       </mat-error>
     </div>
     <div class="form-elements-groups" [formGroup]="requestFG">
@@ -52,7 +52,7 @@
             requestFG.get('firstName').hasError('required')
           "
         >
-          {{ 'error.firstNameRequired' | translate }}
+          {{ 'First Name is required' }}
         </mat-error>
       </div>
       <div class="form-elements-container">
@@ -73,7 +73,7 @@
             requestFG.get('lastName').hasError('required')
           "
         >
-          {{ 'error.lastNameRequired' | translate }}
+          {{ 'Last Name is required'}}
         </mat-error>
       </div>
       <div class="form-elements-container">
@@ -108,7 +108,7 @@
             requestFG.get('itemName').hasError('required')
           "
         >
-          {{ 'error.itemNameRequired' | translate }}
+          {{ 'Item Name is required' }}
         </mat-error>
       </div>
       <div class="form-elements-container">
@@ -135,7 +135,7 @@
             requestFG.get('itemName').hasError('required')
           "
         >
-          {{ 'error.itemCodeRequired' | translate }}
+          {{ 'Item Code is required'}}
         </mat-error>
       </div>
       <div class="form-elements-container">
@@ -161,7 +161,7 @@
             requestFG.get('priority').hasError('required')
           "
         >
-          {{ 'error.priorityCodeRequired' | translate }}
+          {{ 'Priority code is required' }}
         </mat-error>
       </div>
       <div class="form-elements-container">
@@ -179,7 +179,7 @@
           <mat-option
             *ngFor="let item of [].constructor(60); let i = index"
             [value]="i + 1"
-            >{{ i + 1 }} {{ 'minute' | translate }}</mat-option
+            >{{ i + 1 }} {{ 'minute' }}</mat-option
           >
         </mat-select>
       </div>

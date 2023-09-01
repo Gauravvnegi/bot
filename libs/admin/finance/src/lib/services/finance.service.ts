@@ -34,10 +34,15 @@ export class FinanceService extends ApiService {
     // );
   }
 
-  exportCSV(entityId: string): Observable<any> {
-    return this.get(`/api/v1/payment/export?entityId=${entityId}`, {
+  exportCSV(config: QueryConfig): Observable<any> {
+    return this.get(`/api/v1/payment/export${config.params}`, {
       responseType: 'blob',
-      headers: { 'entity-id': entityId },
+    });
+  }
+
+  exportInvoiceCSV(config: QueryConfig): Observable<any> {
+    return this.get(`/api/v1/invoice/export${config.params}`, {
+      responseType: 'blob',
     });
   }
 }

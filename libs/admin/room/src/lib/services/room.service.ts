@@ -123,10 +123,8 @@ export class RoomService extends ApiService {
 
   exportCSV(entityId: string, table: TableValue, config?: QueryConfig) {
     return this.get(
-      `/api/v1/entity/${entityId}/inventory/${
-        table === TableValue.room ? 'room' : 'room-type'
-      }/export${config.params ?? ''}`,
-      { responseType: 'blob' }
+      `/api/v1/entity/${entityId}/inventory/export${config.params ?? ''}`,
+      { responseType: 'blob' },
     );
   }
 

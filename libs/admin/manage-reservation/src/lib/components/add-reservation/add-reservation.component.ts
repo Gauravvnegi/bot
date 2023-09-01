@@ -61,8 +61,8 @@ export class AddReservationComponent extends BaseReservationComponent
   ngOnInit(): void {
     this.initForm();
     this.initDetails();
-    this.initFormData();
     if (this.reservationId) this.getReservationDetails();
+    this.initFormData();
   }
 
   initDetails() {
@@ -135,11 +135,15 @@ export class AddReservationComponent extends BaseReservationComponent
   }
 
   initFormData() {
-    if (this.formService.reservationForm) {
-      const { roomInformation, ...formData } = this.formService.reservationForm;
-      this.roomTypeValues = roomInformation.roomTypes;
-      this.userForm.patchValue(formData);
-    }
+    this.formService.reservationForm
+      .pipe(debounceTime(500))
+      .subscribe((res) => {
+        if (res) {
+          const { roomInformation, ...formData } = res;
+          this.roomTypeValues = roomInformation.roomTypes;
+          this.userForm.patchValue(formData);
+        }
+      });
   }
 
   getReservationDetails(): void {

@@ -113,7 +113,7 @@ export class GuestInformationComponent implements OnInit {
   }
 
   createGuest() {
-    this.formService.reservationForm = this.parentFormGroup.getRawValue();
+    this.formService.reservationForm.next(this.parentFormGroup.getRawValue());
     if (this.reservationId) {
       this.router.navigateByUrl(
         `/pages/members/guests/${manageGuestRoutes.editGuest.route}/${this.reservationId}`

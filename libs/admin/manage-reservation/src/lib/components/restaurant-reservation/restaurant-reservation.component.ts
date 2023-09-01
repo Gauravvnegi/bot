@@ -257,17 +257,21 @@ export class RestaurantReservationComponent extends BaseReservationComponent
   }
 
   initFormData() {
-    if (this.formService.reservationForm) {
-      const {
-        orderInformation: { menuItems, ...orderInfo },
-        ...formData
-      } = this.formService.reservationForm;
-      this.menuItemsValues = menuItems;
-      this.userForm.patchValue({
-        orderInformation: orderInfo,
-        ...formData,
+    this.formService.reservationForm
+      .pipe(debounceTime(500))
+      .subscribe((res) => {
+        if (res) {
+          const {
+            orderInformation: { menuItems, ...orderInfo },
+            ...formData
+          } = res;
+          this.menuItemsValues = menuItems;
+          this.userForm.patchValue({
+            orderInformation: orderInfo,
+            ...formData,
+          });
+        }
       });
-    }
   }
 
   getReservationId(): void {

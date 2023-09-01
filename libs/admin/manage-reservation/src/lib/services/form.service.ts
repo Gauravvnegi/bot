@@ -48,7 +48,7 @@ export class FormService {
   selectedTab = ReservationTableValue.ALL;
   enableAccordion: boolean = false;
 
-  reservationForm: ReservationForm;
+  reservationForm = new BehaviorSubject<ReservationForm>(null);
 
   mapRoomReservationData(
     input: ReservationForm,

@@ -169,7 +169,7 @@ export class RoomIteratorComponent extends IteratorComponent
         roomCount: value.roomCount,
         childCount: value.childCount,
         adultCount: value.adultCount,
-        ratePlan: value.allRatePlans.value,
+        ratePlan: value.allRatePlans?.value ?? value.ratePlan,
         roomNumbers: value?.roomNumbers,
         id: value?.id,
       });

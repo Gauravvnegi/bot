@@ -101,6 +101,7 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
     this.tableName = title;
     this.listenForGlobalFilters();
     this.listenForSelectedEntityChange();
+    this.formService.reservationForm.next(null); // Reset reservation form
   }
 
   /**

@@ -65,8 +65,8 @@ export class SpaReservationComponent extends BaseReservationComponent
     this.initDetails();
     this.getReservationId();
     this.getServices();
-    this.initFormData();
     this.listenForFormChanges();
+    this.initFormData();
   }
 
   initDetails() {
@@ -121,19 +121,23 @@ export class SpaReservationComponent extends BaseReservationComponent
   }
 
   initFormData() {
-    if (this.formService.reservationForm) {
-      const {
-        bookingInformation: { spaItems, ...spaInfo },
-        ...formData
-      } = this.formService.reservationForm;
-      this.spaItemsValues = spaItems;
-      this.userForm.patchValue({
-        bookingInformation: spaInfo,
-        ...formData,
+    this.formService.reservationForm
+      .pipe(debounceTime(500))
+      .subscribe((res) => {
+        if (res) {
+          const {
+            bookingInformation: { spaItems, ...spaInfo },
+            ...formData
+          } = res;
+          this.spaItemsValues = spaItems;
+          this.userForm.patchValue({
+            bookingInformation: spaInfo,
+            ...formData,
+          });
+        }
       });
-    }
   }
-  
+
   /**
    * @function onItemsAdded To keep track of the current index in the form array.
    * @param index current index
@@ -141,7 +145,7 @@ export class SpaReservationComponent extends BaseReservationComponent
   onItemsAdded(index: number): void {
     this.spaItemsControls[index]
       .get('serviceName')
-      .valueChanges.pipe(debounceTime(1000))
+      .valueChanges.pipe(debounceTime(500))
       .subscribe((res) => {
         const selectedService = this.services.find(
           (service) => service.value === res

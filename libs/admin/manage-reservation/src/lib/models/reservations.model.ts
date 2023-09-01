@@ -2,10 +2,8 @@ import {
   BookingItems,
   BookingItemsSummary,
   PaymentMethodConfig,
-  PricingDetails,
   ReservationListResponse,
   RoomReservationRes,
-  SummaryPricing,
   SummaryResponse,
 } from '../types/response.type';
 import {
@@ -236,8 +234,8 @@ export class ReservationFormData {
 export class OutletForm {
   reservationInformation: BookingInfo;
   guestInformation: GuestInfo;
-  // paymentMethod: PaymentInfo;
   offerId: string;
+  instructions: Instructions;
   orderInformation?: OrderInfo;
   bookingInformation?: BookingInformation;
   eventInformation?: EventInformation;
@@ -246,8 +244,8 @@ export class OutletForm {
   deserialize(input: OutletFormData) {
     this.reservationInformation = new BookingInfo().deserialize(input);
     this.guestInformation = new GuestInfo().deserialize(input.guest);
-    // this.paymentMethod = new PaymentInfo().deserialize(input);
     this.offerId = input?.offerId;
+    this.instructions = new Instructions().deserialize(input);
     this.nextStates = [input.reservationType, ...input.nextStates];
     switch (input.outletType) {
       case EntitySubType.RESTAURANT:

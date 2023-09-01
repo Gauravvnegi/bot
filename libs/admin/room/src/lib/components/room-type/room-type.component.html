@@ -10,11 +10,9 @@
           Room Information
         </div>
         <hospitality-bot-toggle-switch-with-label
-          [isToggleOn]="isBaseRoomType"
+          [isToggleOn]="useForm.get('isBaseRoomType').value"
           (onToggleSwitch)="onRoomTypeToggleSwitch($event)"
-          [config]="{
-            disableTurnOff: isBaseRoomType
-          }"
+          [isDisabled]="true"
         ></hospitality-bot-toggle-switch-with-label>
       </div>
       <hr />
@@ -286,7 +284,7 @@
                     mainLabel: 'Pax Additional Cost',
                     preCountLabel: 'Adult',
                     postCountLabel: 'Child 5-12',
-                    additionalLabel: 'Child  5'
+                    additionalLabel: 'Child < 5'
                   }"
                   [currencyOptions]="currencies"
                   [defaultProps]="{
@@ -395,31 +393,23 @@
                   placeholder: 'Enter'
                 }"
               ></hospitality-bot-input>
-              <hospitality-bot-multiple-prefix-input
+              <hospitality-bot-prefix-field
                 class="half-width"
-                [controls]="{
-                  currencyControlName: 'currency',
-                  preCountControlName: 'basePrice',
-                  postCountControlName: 'extraPrice'
-                }"
-                [labels]="{
-                  mainLabel: 'Extra Price',
-                  preCountLabel: 'Base Price',
-                  postCountLabel: 'Price'
-                }"
-                [currencyOptions]="currencies"
+                preControlName="currency"
+                postControlName="extraPrice"
+                label="Extra Price"
+                [options]="currencies"
                 [defaultProps]="{
                   post: {
                     type: 'number',
-                    float: true,
+                    placeholder: 'Enter',
                     errorMessages: {
                       required: 'This is a required field.',
                       min: 'Value must be greater than 0.'
-                    },
-                    isPriceField: true
+                    }
                   }
                 }"
-              ></hospitality-bot-multiple-prefix-input>
+              ></hospitality-bot-prefix-field>
               <hospitality-bot-text-area
                 class="full-width"
                 controlName="description"

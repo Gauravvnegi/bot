@@ -55,7 +55,7 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
   isCompLoading: boolean = false;
   isPaidLoading: boolean = false;
   isPricingDynamic = false;
-  isBaseRoomType = true;
+  disableRoomType = false;
 
   baseRoomType: RoomType;
 
@@ -142,6 +142,7 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
       area: ['', [Validators.required, Validators.min(0)]],
 
       ratePlans: new FormArray([]),
+      isBaseRoomType: [false],
     });
 
     this.addRatePlanType();
@@ -153,11 +154,11 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
       this.useForm.patchValue(this.roomService.roomTypeFormData);
     }
 
-    // this.initBaseRoomTypeDetails();
-
     // Patch the form value if service id present
     if (this.roomTypeId) {
       this.initFormDetails();
+    } else {
+      this.initBaseRoomType();
     }
 
     /* Value changes subscription */
@@ -187,6 +188,21 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
     this.getServices(ServicesTypeValue.COMPLIMENTARY);
   }
 
+  initBaseRoomType() {
+    this.roomService.getBaseRoomType(this.entityId).subscribe((res) => {
+      const ratePlanControl = this.isPricingDynamic
+        ? this.useForm.get('dynamicRatePlans.basePrice')
+        : this.useForm.get('staticRatePlans.basePrice');
+
+      if (res.length) {
+        ratePlanControl.setValue(res[0].pricingDetails.base);
+      } else {
+        this.useForm.get('isBaseRoomType').setValue(true);
+        ratePlanControl.enable();
+      }
+    });
+  }
+
   addRatePlanType() {
     if (this.isPricingDynamic)
       this.useForm.addControl(
@@ -197,7 +213,10 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
             [Validators.required, Validators.maxLength(60)],
           ],
           basePriceCurrency: ['INR', [Validators.required]],
-          basePrice: ['', [Validators.required, Validators.min(0)]],
+          basePrice: [
+            { value: '', disabled: true },
+            [Validators.required, Validators.min(0)],
+          ],
           price: ['', [Validators.required, Validators.min(0)]],
           minPriceCurrency: ['INR', [Validators.required]],
           minPrice: ['', [Validators.required, Validators.min(0)]],
@@ -256,7 +275,7 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
             (res) => {
               let data = new RoomTypeForm().deserialize(res);
               const { staticRatePlans, dynamicRatePlans, ...rest } = data;
-
+              this.disableRoomType = data.isBaseRoomType;
               if (this.isPricingDynamic) {
                 this.useForm
                   .get('dynamicRatePlans')
@@ -295,7 +314,7 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
   addNewRatePlan(id?: string, label?: string) {
     const addedRatePlan = {
       label: ['', [Validators.required, Validators.maxLength(60)]],
-      currency: ['INR'],
+      currency: ['INR', [Validators.required]],
       extraPrice: ['', [Validators.required, Validators.min(0)]],
       description: [''],
       ratePlanId: [''],
@@ -473,8 +492,11 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
       data,
       this.isPricingDynamic
     );
+    const roomTypeData = {
+      roomType: modifiedData,
+    };
     this.subscription$.add(
-      this.roomService.createRoomType(this.entityId, modifiedData).subscribe(
+      this.roomService.createRoomType(this.entityId, roomTypeData).subscribe(
         (res) => {
           this.loading = false;
           this.router.navigate([`/pages/efrontdesk/room/${routes.dashboard}`]);
@@ -494,14 +516,16 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
 
   updateDetails() {
     const data = this.useForm.getRawValue() as RoomTypeFormData;
-
     const modifiedData = {
       ...this.formService.getRoomTypeModData(data, this.isPricingDynamic),
       removeRatePlan: this.removedRatePlans,
       id: this.roomTypeId,
     };
+    const roomTypeData = {
+      roomType: modifiedData,
+    };
     this.subscription$.add(
-      this.roomService.updateRoomType(this.entityId, modifiedData).subscribe(
+      this.roomService.updateRoomType(this.entityId, roomTypeData).subscribe(
         (res) => {
           this.loading = false;
           this.router.navigate([`/pages/efrontdesk/room/${routes.dashboard}`]);
@@ -530,7 +554,15 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
   }
 
   onRoomTypeToggleSwitch(isToggleOn: boolean) {
-    // this.useForm.get('roomTypeStatus').setValue(isToggleOn);
+    const ratePlanControl = this.isPricingDynamic
+      ? this.useForm.get('dynamicRatePlans.basePrice')
+      : this.useForm.get('staticRatePlans.basePrice');
+    this.useForm.get('isBaseRoomType').setValue(isToggleOn);
+    if (isToggleOn) {
+      ratePlanControl.enable();
+    } else {
+      ratePlanControl.disable();
+    }
   }
 
   resetForm() {

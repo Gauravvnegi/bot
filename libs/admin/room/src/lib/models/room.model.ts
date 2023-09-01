@@ -6,6 +6,7 @@ import {
   StaticPricingRatePlan,
 } from '../constant/form';
 import {
+  ImageUrl,
   RoomStatus,
   RoomTypeResponse,
   StatusDetails,
@@ -119,7 +120,7 @@ export class MultipleRoom {
 export class RoomTypeForm {
   status: boolean;
   name: string;
-  imageUrls: string[];
+  imageUrls: ImageUrl[];
   description: string;
   complimentaryAmenities: string[];
   paidAmenities: string[];
@@ -132,12 +133,13 @@ export class RoomTypeForm {
   area: number;
   id?: string;
   allRatePlans?: ReservationRatePlan[];
+  isBaseRoomType?: boolean;
 
   deserialize(input: RoomTypeResponse) {
     this.id = input?.id;
     this.status = input.status;
     this.name = input.name;
-    this.imageUrls = input.imageUrls;
+    this.imageUrls = input.imageUrl;
     this.description = input.description;
     this.complimentaryAmenities =
       input.complimentaryAmenities?.map((item) => item.id) ?? [];
@@ -146,6 +148,7 @@ export class RoomTypeForm {
     this.maxChildren = input.occupancyDetails.maxChildren;
     this.maxAdult = input.occupancyDetails.maxAdult;
     this.area = input.area;
+    this.isBaseRoomType = input?.isBaseRoomType ?? false;
 
     const defaultRatePlan = input?.ratePlans.filter((item) => item.isBase);
     if (defaultRatePlan.length) {

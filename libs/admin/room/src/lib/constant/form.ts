@@ -57,6 +57,11 @@ export type RoomTypeFormData = {
   maxChildren: number;
   maxAdult: number;
   area: number;
+  isBaseRoomType: boolean;
+};
+
+export type RoomTypeForm = {
+  roomType: RoomTypeFormData;
 };
 
 // export type RoomTypeModData = Omit<RoomTypeData, 'ratePlans'> & {
@@ -124,6 +129,7 @@ export type AddedRatePlans = {
   status: boolean;
   total?: number;
   sellingPrice?: number;
+  variablePrice?: number;
 };
 
 export type ReservationRatePlan = {

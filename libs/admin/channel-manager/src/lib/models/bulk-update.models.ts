@@ -1,6 +1,9 @@
 import { Option } from '@hospitality-bot/admin/shared';
 import { Variant } from '../types/bulk-update.types';
-import { RoomType } from 'libs/admin/room/src/lib/models/rooms-data-table.model';
+import {
+  PricingDetails,
+  RoomType,
+} from 'libs/admin/room/src/lib/models/rooms-data-table.model';
 
 export function makeRoomOption(...data) {
   return data.map((item) => {
@@ -78,6 +81,7 @@ export class Rooms {
 }
 
 export class RoomTypes {
+  id?: string;
   label: string;
   value: string;
   channels: Channel[];
@@ -85,6 +89,7 @@ export class RoomTypes {
   roomCount: number;
   isBase: boolean;
   ratePlans: RatePlans[];
+  pricingDetails: PricingDetails;
   deserialize(input: RoomType, used: UsedType) {
     const isChannelManager = used == 'channel-manager';
     const inputRatePlan = !isChannelManager
@@ -92,10 +97,12 @@ export class RoomTypes {
       : input.ratePlans;
     this.label = input.name;
     this.value = input.id;
+    this.id = input.id;
     this.channels = [];
     this.price = input.price;
     this.isBase = input.isBaseRoomType;
     this.roomCount = input.roomCount;
+    this.pricingDetails = input.pricingDetails;
     this.ratePlans =
       inputRatePlan.map((item) => new RatePlans().deserialize(item)) ?? [];
     // Filter Room who have not any rate plan for channel-manager
@@ -104,6 +111,7 @@ export class RoomTypes {
 }
 
 export class RatePlans {
+  id: string;
   type: string;
   label: string;
   value: string;
@@ -114,6 +122,7 @@ export class RatePlans {
     this.type = input.label ?? '';
     this.label = input.label ?? '';
     this.value = input.id ?? '';
+    this.id = input.id ?? '';
     this.isBase = input.isBase ?? false;
     this.variablePrice = input.variablePrice;
     this.channels = [];

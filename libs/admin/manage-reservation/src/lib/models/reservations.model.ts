@@ -2,8 +2,10 @@ import {
   BookingItems,
   BookingItemsSummary,
   PaymentMethodConfig,
+  PricingDetails,
   ReservationListResponse,
   RoomReservationRes,
+  SummaryPricing,
   SummaryResponse,
 } from '../types/response.type';
 import {
@@ -197,17 +199,17 @@ export class OfferData {
 export class ReservationFormData {
   reservationInformation: BookingInfo;
   guestInformation: GuestInfo;
-  // paymentMethod: PaymentInfo;
   offerId: string;
   roomInformation: RoomTypes[];
+  instructions: Instructions;
   nextStates: string[];
+  totalPaidAmount: number;
   deserialize(input: RoomReservationResponse) {
     this.reservationInformation = new BookingInfo().deserialize(input);
     this.guestInformation = new GuestInfo().deserialize(input.guest);
-    // this.paymentMethod = new PaymentInfo().deserialize(input);
     this.offerId = input?.id;
     this.nextStates = [input.reservationType, ...input.nextStates];
-
+    this.instructions = new Instructions().deserialize(input);
     this.roomInformation = input?.bookingItems.map((item: BookingItems) => ({
       adultCount: item.occupancyDetails.maxAdult,
       childCount: item.occupancyDetails.maxChildren,
@@ -222,8 +224,11 @@ export class ReservationFormData {
         sellingPrice: item?.roomDetails.ratePlan.sellingPrice,
       },
       id: item?.id,
-      roomNumbers: [item?.roomDetails.roomNumber],
+      roomNumbers: item?.roomDetails.roomNumber
+        ? [item?.roomDetails.roomNumber]
+        : [],
     }));
+    this.totalPaidAmount = input.pricingDetails.totalPaidAmount;
     return this;
   }
 }
@@ -274,6 +279,15 @@ export class OrderInfo {
       amount: item?.amount ?? 0,
     }));
     this.tableNumber = input?.tableNumber ?? '';
+    return this;
+  }
+}
+
+export class Instructions {
+  specialInstructions: string;
+
+  deserialize(input) {
+    this.specialInstructions = input.specialRequest;
     return this;
   }
 }

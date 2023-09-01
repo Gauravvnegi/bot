@@ -172,7 +172,7 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
               res
             ).reservationData;
             this.initFilters(
-              this.reservationLists.entityTypeCounts,
+              {},
               this.reservationLists.entityStateCounts,
               this.reservationLists.total
             );

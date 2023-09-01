@@ -16,6 +16,7 @@ import {
 import {
   DynamicPricingFactory,
   DynamicPricingHandler,
+  validateConfig,
 } from '../../models/dynamic-pricing.model';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
@@ -184,81 +185,32 @@ export class DayTimeTriggerComponent implements OnInit {
       control: AbstractControl,
       isEmit = true
     ) => {
-      // TODO : Need to be reset second
-      // const newTime = new Date(value);
-      // newTime.setSeconds(0);
-      // control.patchValue(newTime.getTime(), isEmit && { emitEvent: false });
-      control.patchValue(value, isEmit && { emitEvent: false });
+      const newTime = new Date(value);
+      newTime.setSeconds(0);
+      control.patchValue(newTime.getTime(), isEmit && { emitEvent: false });
+      control.markAsDirty();
     };
     levelsFA.controls.forEach((levelFG: FormGroup) => {
       const { start, end, fromTime, toTime } = levelFG.controls;
       start.valueChanges.subscribe((res) => {
-        DayTimeTriggerComponent.validateConfiguration(levelsFA);
+        validateConfig(levelsFA);
       });
 
       end.valueChanges.subscribe((res) => {
-        DayTimeTriggerComponent.validateConfiguration(levelsFA);
+        validateConfig(levelsFA);
       });
 
       fromTime.valueChanges.subscribe((res) => {
         resetSeconds(+res, fromTime);
         resetSeconds(+res + 3600000, toTime, false);
-        DayTimeTriggerComponent.validateConfiguration(levelsFA);
+        validateConfig(levelsFA);
       });
 
       toTime.valueChanges.subscribe((res) => {
         resetSeconds(+res, toTime);
-        DayTimeTriggerComponent.validateConfiguration(levelsFA);
+        validateConfig(levelsFA);
       });
     });
-  }
-
-  /**
-   *
-   * @param formArray should be the Array of the configuration
-   * @returns configuration is valid or not
-   */
-  static validateConfiguration(formArray: FormArray): boolean | null {
-    // TODO : Checks... Should be verify
-    let collide = null;
-    formArray.controls.forEach((form: FormGroup, index) => {
-      const { start, end, fromTime, toTime } = form.controls;
-      if (!collide) {
-        let timeCollide = false;
-        let occupancyCollide = false;
-        collide = formArray.controls.find((item: FormGroup, itemIndex) => {
-          const innerFromTimeValue = +item.get('fromTime').value;
-          const innerToTimeValue = +item.get('toTime').value;
-          if (itemIndex != index) {
-            timeCollide =
-              +fromTime.value > innerFromTimeValue &&
-              +fromTime.value < innerToTimeValue;
-          }
-          return timeCollide || occupancyCollide;
-        });
-      }
-    });
-
-    if (collide) {
-      const { start, end, fromTime, toTime } = collide.controls;
-      start.setErrors({ collide: true });
-      end.setErrors({ collide: true });
-      fromTime.setErrors({ collide: true });
-      toTime.setErrors({ collide: true });
-      start.markAllAsTouched();
-      end.markAllAsTouched();
-      fromTime.markAllAsTouched();
-      toTime.markAllAsTouched();
-    } else {
-      formArray.controls.forEach((form: FormGroup) => {
-        const { start, end, fromTime, toTime } = form.controls;
-        start.markAsUntouched();
-        end.markAsUntouched();
-        fromTime.markAsUntouched();
-        toTime.markAsUntouched();
-      });
-    }
-    return collide ? true : false;
   }
 
   handleSave(form: FormGroup) {

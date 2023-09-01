@@ -41,7 +41,6 @@ export class TabHeaderComponent implements OnInit {
     const tabFilterElement = this.tabFilter?.nativeElement;
     if (tabFilterElement) {
       const { top } = tabFilterElement.getBoundingClientRect();
-      console.log(top);
       this.isScrolledUp = top < this.scrollBoundary;
     }
   };

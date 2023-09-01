@@ -9,11 +9,7 @@ import {
   EntitySubType,
 } from '@hospitality-bot/admin/shared';
 import { IteratorField } from 'libs/admin/shared/src/lib/types/fields.type';
-import {
-  editModeStatusOptions,
-  spaFields,
-  statusOptions,
-} from '../../constants/reservation';
+import { editModeStatusOptions, spaFields } from '../../constants/reservation';
 import { SummaryData, OutletForm } from '../../models/reservations.model';
 import { ManageReservationService } from '../../services/manage-reservation.service';
 import { FormService } from '../../services/form.service';
@@ -27,7 +23,6 @@ import { ServiceListResponse } from 'libs/admin/services/src/lib/types/response'
 import { ServiceList } from 'libs/admin/services/src/lib/models/services.model';
 import { ServicesTypeValue } from 'libs/admin/room/src/lib/constant/form';
 import { BaseReservationComponent } from '../base-reservation.component';
-import { ReservationType } from '../../constants/reservation-table';
 import { convertToTitleCase } from 'libs/admin/shared/src/lib/utils/valueFormatter';
 
 @Component({
@@ -52,8 +47,6 @@ export class SpaReservationComponent extends BaseReservationComponent
   noMoreResults = false;
   services: (Option & { price: number })[] = [];
 
-  editMode: boolean = false;
-
   constructor(
     private fb: FormBuilder,
     private adminUtilityService: AdminUtilityService,
@@ -72,6 +65,7 @@ export class SpaReservationComponent extends BaseReservationComponent
     this.initDetails();
     this.getReservationId();
     this.getServices();
+    this.initFormData();
     this.listenForFormChanges();
   }
 
@@ -126,6 +120,20 @@ export class SpaReservationComponent extends BaseReservationComponent
       });
   }
 
+  initFormData() {
+    if (this.formService.reservationForm) {
+      const {
+        bookingInformation: { spaItems, ...spaInfo },
+        ...formData
+      } = this.formService.reservationForm;
+      this.spaItemsValues = spaItems;
+      this.userForm.patchValue({
+        bookingInformation: spaInfo,
+        ...formData,
+      });
+    }
+  }
+  
   /**
    * @function onItemsAdded To keep track of the current index in the form array.
    * @param index current index
@@ -141,7 +149,10 @@ export class SpaReservationComponent extends BaseReservationComponent
         this.spaItemsControls[index]
           .get('amount')
           .setValue(selectedService?.price);
-        this.spaItemsControls[index].get('unit').setValue(1);
+
+        // Do not patch in edit mode
+        if (this.spaItemsValues.length < index + 1)
+          this.spaItemsControls[index].get('unit').setValue(1);
       });
   }
 
@@ -191,6 +202,8 @@ export class SpaReservationComponent extends BaseReservationComponent
                 value: item,
               }));
 
+            this.formValueChanges = true;
+
             this.spaItemsValues = spaItems;
             this.formService.guestInformation.next(guestInformation);
 
@@ -202,23 +215,6 @@ export class SpaReservationComponent extends BaseReservationComponent
           (error) => {}
         )
     );
-  }
-
-  setFormDisability(): void {
-    // this.userForm.get('reservationInformation.source').disable();
-    if (this.reservationId) {
-      const reservationType = this.reservationInfoControls.status.value;
-      switch (true) {
-        case reservationType === ReservationType.CONFIRMED:
-          this.userForm.disable();
-          this.disabledForm = true;
-          break;
-        case reservationType === ReservationType.CANCELED:
-          this.userForm.disable();
-          this.disabledForm = true;
-          break;
-      }
-    }
   }
 
   getSummaryData(): void {
@@ -254,9 +250,13 @@ export class SpaReservationComponent extends BaseReservationComponent
               .get('paymentRule.deductedAmount')
               .patchValue(this.summaryData?.totalAmount);
             this.deductedAmount = this.summaryData?.totalAmount;
+
+            if (this.formValueChanges) {
+              this.setFormDisability();
+              this.formValueChanges = false;
+            }
           },
-          (error) => {},
-          () => this.setFormDisability()
+          (error) => {}
         )
     );
   }

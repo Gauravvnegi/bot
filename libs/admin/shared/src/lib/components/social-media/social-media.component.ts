@@ -8,6 +8,7 @@ import {
 import { FormComponent } from 'libs/admin/shared/src/lib/components/form-component/form.components';
 import { Subscription } from 'rxjs';
 import { SocialMediaServices } from '../../services/social.media.service';
+import CustomValidators from '../../utils/validators';
 
 @Component({
   selector: 'hospitality-bot-social-media',
@@ -69,7 +70,7 @@ export class SocialMediaComponent extends FormComponent implements OnInit {
             this.fb.group({
               name: [element.name],
               imageUrl: [element.imageUrl],
-              redirectUrl: [''],
+              redirectUrl: ['', [CustomValidators.urlValidator()]],
             })
           );
         });

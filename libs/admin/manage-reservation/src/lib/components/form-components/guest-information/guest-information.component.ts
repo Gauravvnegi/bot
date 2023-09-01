@@ -113,6 +113,7 @@ export class GuestInformationComponent implements OnInit {
   }
 
   createGuest() {
+    this.formService.reservationForm = this.parentFormGroup.getRawValue();
     if (this.reservationId) {
       this.router.navigateByUrl(
         `/pages/members/guests/${manageGuestRoutes.editGuest.route}/${this.reservationId}`
@@ -147,24 +148,25 @@ export class GuestInformationComponent implements OnInit {
   }
 
   initGuestDetails() {
-    this.formService.guestInformation.subscribe((res) => {
-      if (res) {
-        if (
-          this.guestOptions.findIndex((item) => item.value === res.id) === -1
-        ) {
-          this.guestOptions.push({
-            label: `${res.firstName} ${res.lastName}`,
-            value: res.id,
-            phoneNumber: res.phoneNumber,
-            cc: res.cc,
-            email: res.email,
-          });
+    if (this.reservationId)
+      this.formService.guestInformation.subscribe((res) => {
+        if (res) {
+          if (
+            this.guestOptions.findIndex((item) => item.value === res.id) === -1
+          ) {
+            this.guestOptions.push({
+              label: `${res.firstName} ${res.lastName}`,
+              value: res.id,
+              phoneNumber: res.phoneNumber,
+              cc: res.cc,
+              email: res.email,
+            });
+          }
+          this.parentFormGroup
+            .get('guestInformation.guestDetails')
+            .patchValue(res.id);
         }
-        this.parentFormGroup
-          .get('guestInformation.guestDetails')
-          .patchValue(res.id);
-      }
-    });
+      });
   }
 
   getConfig() {

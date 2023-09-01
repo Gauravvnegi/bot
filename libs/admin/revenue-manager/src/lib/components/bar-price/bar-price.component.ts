@@ -10,10 +10,18 @@ import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { Subject, Subscription } from 'rxjs';
 import { debounceTime, tap } from 'rxjs/operators';
 import { BarPriceService } from '../../services/bar-price.service';
-import { DateOption } from '../../types/bar-price.types';
+import { DateOption, UpdateBarPriceRequest } from '../../types/bar-price.types';
 import { RatePlanRes } from 'libs/admin/room/src/lib/types/service-response';
 import { Accordion } from 'primeng/accordion';
 import { RoomTypes } from 'libs/admin/channel-manager/src/lib/models/bulk-update.models';
+import { PricingDetails } from 'libs/admin/room/src/lib/models/rooms-data-table.model';
+import {
+  AdminUtilityService,
+  QueryConfig,
+} from '@hospitality-bot/admin/shared';
+import { SnackBarService } from '@hospitality-bot/shared/material';
+import { BarPriceFactory } from '../../models/bar-price.model';
+import { BarPriceRatePlan } from '../../constants/barprice.const';
 
 @Component({
   selector: 'hospitality-bot-bar-price',
@@ -38,7 +46,9 @@ export class BarPriceComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private barPriceService: BarPriceService,
-    private globalFilter: GlobalFilterService
+    private globalFilter: GlobalFilterService,
+    private adminUtilityService: AdminUtilityService,
+    private snackbarService: SnackBarService
   ) {}
 
   ngOnInit(): void {
@@ -110,11 +120,20 @@ export class BarPriceComponent implements OnInit {
     return this.fb.array(
       this.roomTypes.map((item) =>
         this.fb.group({
-          price: [item['price'], [Validators.min(0), Validators.required]],
-          ratePlans: this.addRatePlans(item.ratePlans),
-          childBelowFive: ['', [Validators.min(0), Validators.required]],
-          chileFiveToTwelve: ['', [Validators.min(0), Validators.required]],
-          adult: ['', [Validators.min(0), Validators.required]],
+          price: [item?.price, [Validators.min(0), Validators.required]],
+          ratePlans: this.addRatePlans(item.ratePlans, item.pricingDetails),
+          childBelowFive: [
+            item.pricingDetails.paxChildBelowFive,
+            [Validators.min(0), Validators.required],
+          ],
+          chileFiveToTwelve: [
+            item.pricingDetails.paxChildAboveFive,
+            [Validators.min(0), Validators.required],
+          ],
+          adult: [
+            item.pricingDetails.paxAdult,
+            [Validators.min(0), Validators.required],
+          ],
           exceptions: this.fb.array([]),
           id: [item.value],
           label: [item.label],
@@ -123,14 +142,23 @@ export class BarPriceComponent implements OnInit {
     );
   }
 
-  addRatePlans(ratePlans: RatePlanRes[]) {
+  addRatePlans(ratePlans: RatePlanRes[], priceDetails: PricingDetails) {
     return this.fb.array(
       [
         ...ratePlans,
-        { label: 'Double', variablePrice: '' },
-        { label: 'Triple', variablePrice: '' },
+        {
+          id: '',
+          label: BarPriceRatePlan.double,
+          variablePrice: priceDetails.paxDoubleOccupancy,
+        },
+        {
+          id: '',
+          label: BarPriceRatePlan.triple,
+          variablePrice: priceDetails.paxTripleOccupancy,
+        },
       ].map((item: RatePlanRes) =>
         this.fb.group({
+          id: [item?.id],
           label: [item.label],
           value: [item.variablePrice, [Validators.min(0), Validators.required]],
         })
@@ -157,7 +185,33 @@ export class BarPriceComponent implements OnInit {
     if (this.useForm.invalid) {
       this.useForm.markAllAsTouched();
       this.openAllInvalidAccordion();
+      return;
     }
+    const data: UpdateBarPriceRequest = BarPriceFactory.buildRequest(
+      this.useForm.getRawValue()
+    );
+    this.loading = true;
+    this.$subscription.add(
+      this.barPriceService
+        .updateBarPrice(this.entityId, data, this.getQueryConfig())
+        .subscribe(
+          (res) => {
+            this.snackbarService.openSnackBarAsText(
+              `Bar Price Updated Successfully.`,
+              '',
+              { panelClass: 'success' }
+            );
+
+            this.barPriceService.resetRoomDetails();
+            this.barPriceService.loadRoomTypes(this.entityId);
+            this.loading = false;
+          },
+          (error) => {
+            this.loading = false;
+          },
+          this.handleFinal
+        )
+    );
   }
 
   openAllInvalidAccordion() {
@@ -167,6 +221,17 @@ export class BarPriceComponent implements OnInit {
           tab.selected = true;
       });
     }
+  }
+
+  getQueryConfig(): QueryConfig {
+    return {
+      params: this.adminUtilityService.makeQueryParams([
+        {
+          type: 'ROOM_TYPE',
+          inventoryUpdateType: 'SETUP_BAR_PRICE',
+        },
+      ]),
+    };
   }
 
   handleFinal() {

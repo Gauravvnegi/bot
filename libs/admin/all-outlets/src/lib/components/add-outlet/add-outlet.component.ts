@@ -8,7 +8,7 @@ import {
 } from '@angular/forms';
 
 import { MatDialogConfig } from '@angular/material/dialog';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
 import {
   HotelDetailService,
   Option,
@@ -253,10 +253,18 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
       if (features === 'save') {
         return;
       } else if (features === 'service') {
+        const dataToSend = {
+          entityId: this.outletId,
+        };
+        const navigationExtras: NavigationExtras = {
+          queryParams: dataToSend,
+        };
         //navigate to create service
-        this.router.navigate([`/pages/library/services/create-service`], {
-          relativeTo: this.route,
-        });
+        this.router.navigate(
+          [`/pages/library/services/create-service`],
+
+          navigationExtras
+        );
       } else {
         //navigate to respective feature
         this.router.navigate([features], {

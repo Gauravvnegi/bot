@@ -369,6 +369,7 @@ export class RoomDataTableComponent extends BaseDatatableComponent
     const config: QueryConfig = {
       params: this.adminUtilityService.makeQueryParams([
         ...this.selectedRows.map((item) => ({ ids: item.id })),
+        { type: this.selectedTab === TableValue.room ? 'ROOM' : 'ROOM_TYPE' },
       ]),
     };
     this.$subscription.add(
@@ -381,7 +382,9 @@ export class RoomDataTableComponent extends BaseDatatableComponent
               `${this.tableName.toLowerCase()}_export_${new Date().getTime()}.csv`
             );
           },
-          () => {},
+          (error) => {
+            this.loading = false;
+          },
           () => {
             this.loading = false;
           }

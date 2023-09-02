@@ -9,7 +9,7 @@
         class="accordion-list"
       >
         <div [formGroupName]="i">
-          <p-accordionTab>
+          <p-accordionTab [selected]="i == 0">
             <p-header>
               <div class="accordion-header">
                 <div class="title item-center">
@@ -211,7 +211,9 @@
 
             <div class="action">
               <hospitality-bot-button
-                label="Save"
+                [label]="
+                  triggerFG.get('type').value === 'update' ? 'Update' : 'Save'
+                "
                 (click)="handleSave(triggerFG)"
               >
               </hospitality-bot-button>

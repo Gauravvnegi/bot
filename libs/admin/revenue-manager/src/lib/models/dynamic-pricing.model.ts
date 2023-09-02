@@ -152,43 +152,57 @@ export class DynamicPricingFactory {
             /**
              * We are collect the updated occupancyRules
              */
-            if (name == 'roomTypes') {
-              let occupancyRuleData: {
-                type: ConfigCategory;
-                id: string;
-                configRules: ConfigRuleType[];
-              }[] = [];
-              const selectedRoomType = [
-                ...formGroup.controls['roomType'].value,
-              ];
-              occupancyRuleData = (currentControl as FormArray).controls
-                .filter((item: FormGroup) =>
-                  selectedRoomType.includes(item.get('roomId').value)
-                )
-                .reduce((accumulator, roomType: FormGroup) => {
-                  const { occupancy } = roomType.controls;
-                  if (roomType.dirty) {
-                    const rules = (occupancy as FormArray).controls.map(
-                      (occupancyRule: FormGroup) =>
-                        DynamicPricingFactory.getOccupancyRules(occupancyRule)
-                    );
-                    accumulator.push({
-                      type: 'ROOM_TYPE',
-                      id: roomType.get('roomId').value,
-                      configRules: rules,
-                    });
-                  }
-                  return accumulator;
-                }, occupancyRuleData);
+            if (name == 'roomTypes' || name == 'removedRules') {
+              if (name == 'removedRules') {
+                removedRulesIds = [
+                  ...removedRulesIds,
+                  ...currentControl['controls'],
+                ];
+              } else {
+                let occupancyRuleData: {
+                  type: ConfigCategory;
+                  id: string;
+                  configRules: ConfigRuleType[];
+                }[] = [];
+                const selectedRoomType = [
+                  ...formGroup.controls['roomType'].value,
+                ];
+                occupancyRuleData = (currentControl as FormArray).controls
+                  .filter((item: FormGroup) =>
+                    selectedRoomType.includes(item.get('roomId').value)
+                  )
+                  .reduce((accumulator, roomType: FormGroup) => {
+                    const { occupancy } = roomType.controls;
+                    if (roomType.dirty) {
+                      const rules = (occupancy as FormArray).controls.map(
+                        (occupancyRule: FormGroup) =>
+                          DynamicPricingFactory.getOccupancyRules(occupancyRule)
+                      );
+                      accumulator.push({
+                        type: 'ROOM_TYPE',
+                        id: roomType.get('roomId').value,
+                        configRules: rules,
+                      });
+                    }
+                    return accumulator;
+                  }, occupancyRuleData);
 
-              if (occupancyRuleData.length) {
-                requestData['configItems'] = occupancyRuleData;
+                if (occupancyRuleData.length) {
+                  requestData['configItems'] = occupancyRuleData;
+                }
               }
             } else {
               otherDirtyMapper(currentControl, name);
             }
           } else {
-            if (name == 'hotelConfig') {
+            if (name == 'hotelConfig' || name === 'removedRules') {
+              if (name === 'removedRules') {
+                removedRulesIds = [
+                  ...removedRulesIds,
+                  ...currentControl['controls'],
+                ];
+              }
+
               requestData['configItems'] = [
                 {
                   type: 'HOTEL',

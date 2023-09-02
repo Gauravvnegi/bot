@@ -3,7 +3,10 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { TableValue } from '../constants/data-table';
 import { ApiService } from '@hospitality-bot/shared/utils';
 import { map } from 'rxjs/operators';
-import { invoiceHistoryRes, transactionHistoryRes } from '../constants/response';
+import {
+  invoiceHistoryRes,
+  transactionHistoryRes,
+} from '../constants/response';
 import { QueryConfig } from '@hospitality-bot/admin/shared';
 
 @Injectable({
@@ -13,11 +16,8 @@ export class FinanceService extends ApiService {
   selectedTable = new BehaviorSubject<TableValue>(TableValue.ROOM);
   selectedTransactionTable = new BehaviorSubject<TableValue>(TableValue.ROOM);
 
-
   getInvoiceHistory(config?: QueryConfig): Observable<any> {
-    return this.get(
-      `/api/v1/invoices${config.params}`
-    )
+    return this.get(`/api/v1/invoices${config.params}`);
     // .pipe(
     //   map((res) => {
     //     return invoiceHistoryRes;
@@ -25,10 +25,8 @@ export class FinanceService extends ApiService {
     // );;
   }
 
-  getTransactionHistory(config?: QueryConfig): Observable<any>  {
-    return this.get(
-      `/api/v1/payment${config.params}`
-    )
+  getTransactionHistory(config?: QueryConfig): Observable<any> {
+    return this.get(`/api/v1/payment${config.params}`);
     // .pipe(
     //   map((res) => {
     //     return transactionHistoryRes;
@@ -36,8 +34,14 @@ export class FinanceService extends ApiService {
     // );
   }
 
-  exportCSV(entityId: string): Observable<any> {
-    return this.get(`/api/v1/entity/${entityId}/outlet/export`, {
+  exportCSV(config: QueryConfig): Observable<any> {
+    return this.get(`/api/v1/payment/export${config.params}`, {
+      responseType: 'blob',
+    });
+  }
+
+  exportInvoiceCSV(config: QueryConfig): Observable<any> {
+    return this.get(`/api/v1/invoice/export${config.params}`, {
       responseType: 'blob',
     });
   }

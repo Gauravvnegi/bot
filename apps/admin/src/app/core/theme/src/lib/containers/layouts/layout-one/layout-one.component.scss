@@ -378,3 +378,7 @@
   height: 5px;
   inset: 58px 0 auto 0;
 }
+
+:host ::ng-deep .p-sidebar {
+  padding: unset !important;
+}

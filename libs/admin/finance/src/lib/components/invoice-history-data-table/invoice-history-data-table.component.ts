@@ -13,6 +13,7 @@ import { DetailsComponent as BookingDetailComponent } from 'libs/admin/reservati
 import { ModalService } from 'libs/shared/material/src/lib/services/modal.service';
 import { LazyLoadEvent } from 'primeng/api';
 import { Subscription } from 'rxjs';
+import * as FileSaver from 'file-saver';
 import { cols, title } from '../../constants/data-table';
 import { InvoiceHistoryList } from '../../models/history.model';
 import { FinanceService } from '../../services/finance.service';
@@ -113,6 +114,32 @@ export class InvoiceHistoryDataTableComponent extends BaseDatatableComponent
       detailCompRef.componentInstance.onDetailsClose.subscribe((res) => {
         detailCompRef.close();
       })
+    );
+  }
+
+  /**
+   * @function exportCSV To export CSV report of the table.
+   */
+  exportCSV(): void {
+    this.loading = true;
+
+    const config: QueryConfig = {
+      params: this.adminUtilityService.makeQueryParams([
+        ...this.selectedRows.map((item) => ({ ids: item.id })),
+        { entitiyId: this.entityId },
+      ]),
+    };
+    this.$subscription.add(
+      this.financeService.exportInvoiceCSV(config).subscribe(
+        (res) => {
+          FileSaver.saveAs(
+            res,
+            `${this.tableName.toLowerCase()}_export_${new Date().getTime()}.csv`
+          );
+        },
+        () => {},
+        this.handleFinal
+      )
     );
   }
 

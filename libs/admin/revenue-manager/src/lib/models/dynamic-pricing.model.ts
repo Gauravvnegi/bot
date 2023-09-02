@@ -467,15 +467,19 @@ export function validateConfig(formArray: FormArray): boolean {
       const { start, end, fromTime, toTime } = item.controls;
       [start, end, fromTime, toTime].forEach((data: AbstractControl) => {
         data.setErrors(
-          !data.value.toString().length ? { required: true } : null
+          !data.value?.toString().length ? { required: true } : null
         );
       });
     });
   };
 
   formArray.controls.forEach((occupancy: FormGroup, occupancyIndex: number) => {
+    const otherOccupancy = formArray.controls.filter(
+      (item, index) => index != occupancyIndex
+    );
     if (isValid) {
-      isValid = validateOccupancy(formArray, occupancyIndex);
+      resetError();
+      isValid = validateOccupancy(otherOccupancy, occupancy);
     }
   });
 
@@ -484,17 +488,22 @@ export function validateConfig(formArray: FormArray): boolean {
   return isValid;
 }
 
-function validateOccupancy(occupancyArray: FormArray, occupancyIndex: number) {
-  const { start, end, fromTime, toTime } = (occupancyArray.at(
-    occupancyIndex
-  ) as FormGroup).controls;
+function validateOccupancy(
+  occupancyArray: AbstractControl[],
+  occupancy: FormGroup
+) {
+  const { start, end, fromTime, toTime } = occupancy.controls;
 
   /**
    * Setting error to the control
    */
   const setError = ([...list], errorType: TriggerErrorTypes) => {
     list.forEach((item: FormGroup) => {
-      item.setErrors({ [errorType]: true });
+      item.setErrors(
+        item.value?.toString().length
+          ? { [errorType]: true }
+          : { required: true }
+      );
       item.markAsTouched();
     });
   };
@@ -506,68 +515,65 @@ function validateOccupancy(occupancyArray: FormArray, occupancyIndex: number) {
 
   const errorValidator = (errorType: TriggerErrorTypes) => {
     let hasError = false;
-    occupancyArray.controls
-      .filter((item, index) => index != occupancyIndex)
-      .forEach((occupancy: FormGroup, index) => {
-        const {
-          start: innerStart,
-          end: innerEnd,
-          fromTime: innerFromTime,
-          toTime: innerToTime,
-        } = occupancy.controls;
 
-        /**
-         * At Least 1 Hrs Gap
-         */
-        const outerGapCheck = hasOneHourGap(+toTime.value, +fromTime.value);
-        const innerGapCheck = hasOneHourGap(
-          +innerToTime.value,
-          +innerFromTime.value
+    occupancyArray.forEach((occupancy: FormGroup) => {
+      const {
+        start: innerStart,
+        end: innerEnd,
+        fromTime: innerFromTime,
+        toTime: innerToTime,
+      } = occupancy.controls;
+
+      /**
+       * At Least 1 Hrs Gap
+       */
+      const outerGapCheck = hasOneHourGap(+toTime.value, +fromTime.value);
+      const innerGapCheck = hasOneHourGap(
+        +innerToTime.value,
+        +innerFromTime.value
+      );
+      if (errorType == 'timeGapError' && (!outerGapCheck || !innerGapCheck)) {
+        setError(
+          !outerGapCheck ? [fromTime, toTime] : [innerToTime, innerFromTime],
+          'timeGapError'
         );
-        if (errorType == 'timeGapError' && (!outerGapCheck || !innerGapCheck)) {
-          setError(
-            !outerGapCheck ? [fromTime, toTime] : [innerToTime, innerFromTime],
-            'timeGapError'
-          );
+        hasError = true;
+      }
+
+      /**
+       * Set Error who is same time & same conflicting occupancy
+       */
+      if (
+        errorType == 'sameTime' &&
+        +fromTime.value == +innerFromTime.value &&
+        +toTime.value == +innerToTime.value
+      ) {
+        if (
+          (+start.value >= +innerStart.value &&
+            +start.value <= +innerEnd.value) ||
+          (+innerStart.value >= +start.value && innerStart.value <= +end.value)
+        ) {
+          setError([start, end, innerStart, innerEnd], errorType);
           hasError = true;
         }
+      }
 
-        /**
-         * Set Error who is same time & same conflicting occupancy
-         */
-        if (
-          errorType == 'sameTime' &&
-          +fromTime.value == +innerFromTime.value &&
-          +toTime.value == +innerToTime.value
-        ) {
-          if (
-            (+start.value >= +innerStart.value &&
-              +start.value <= +innerEnd.value) ||
-            (+innerStart.value >= +start.value &&
-              innerStart.value <= +end.value)
-          ) {
-            setError(
-              [innerFromTime, innerToTime, start, end, innerStart, innerEnd],
-              errorType
-            );
-            hasError = true;
-          }
-        }
-
-        /**
-         * Time Collision Detection
-         */
-        if (
-          (errorType === 'collide' &&
-            +fromTime.value > +innerFromTime.value &&
-            +fromTime.value < +innerToTime.value) ||
-          (+innerFromTime.value > +fromTime.value &&
-            +innerFromTime.value < +toTime.value)
-        ) {
-          hasError = true;
-          setError([fromTime, toTime, innerFromTime, innerToTime], errorType);
-        }
-      });
+      /**
+       * Time Collision Detection
+       */
+      if (
+        errorType === 'collide' &&
+        ((+fromTime.value > +innerFromTime.value &&
+          +fromTime.value < +innerToTime.value) ||
+          (+toTime.value > +innerFromTime.value &&
+            +toTime.value < +innerToTime.value) ||
+          (+fromTime.value < +innerFromTime &&
+            +toTime.value > +innerToTime.value))
+      ) {
+        hasError = true;
+        setError([fromTime, toTime, innerFromTime, innerToTime], errorType);
+      }
+    });
     return hasError;
   };
 

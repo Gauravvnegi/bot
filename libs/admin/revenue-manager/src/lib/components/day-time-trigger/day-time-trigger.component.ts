@@ -202,7 +202,7 @@ export class DayTimeTriggerComponent implements OnInit {
 
       fromTime.valueChanges.subscribe((res) => {
         resetSeconds(+res, fromTime);
-        resetSeconds(+res + 3600000, toTime, false);
+        resetSeconds(+res + 60 * 60 * 1000, toTime, false);
         validateConfig(levelsFA);
       });
 

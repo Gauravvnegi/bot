@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
 import { NavRouteOptions, Option } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { Subscription } from 'rxjs';
@@ -74,6 +74,7 @@ export class CreateFoodPackageComponent extends OutletBaseComponent
       taxIds: [[]],
       foodItems: this.foodItemsArray,
       source: [1],
+      type: ['FOOD_PACKAGE']
     });
 
     if (this.foodPackageId) {
@@ -83,11 +84,15 @@ export class CreateFoodPackageComponent extends OutletBaseComponent
             params: '?type=FOOD_PACKAGE',
           })
           .subscribe((res) => {
-            const { taxes, ...rest } = res;
+            const { taxes,foodItem, ...rest } = res;
             this.useForm.patchValue({
               ...rest,
               taxIds: taxes.map((item) => item.id),
             });
+
+            debugger;
+
+            this.useForm.get('foodItems').setValue(foodItem);
           })
       );
     }
@@ -141,7 +146,7 @@ export class CreateFoodPackageComponent extends OutletBaseComponent
    */
   getTax() {
     this.$subscription.add(
-      this.taxService.getTaxList(this.outletId).subscribe(({ records }) => {
+      this.taxService.getTaxList(this.outletId , {params : `?entityId=${this.outletId}`}).subscribe(({ records }) => {
         records = records.filter(
           (item) => item.category === 'service' && item.status
         );
@@ -165,7 +170,14 @@ export class CreateFoodPackageComponent extends OutletBaseComponent
   }
 
   createTax() {
-    this.router.navigate(['pages/settings/tax/create-tax']);
+     const dataToSend = {
+       entityId: this.outletId, // Replace with your actual data
+     };
+
+     const navigationExtras: NavigationExtras = {
+       queryParams: dataToSend,
+     };
+     this.router.navigate(['pages/settings/tax/create-tax'], navigationExtras);
   }
 
   createType(name: string) {}

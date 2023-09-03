@@ -104,3 +104,9 @@ export type DynamicPricingForm = {
   inventoryAllocationFA: FormArray;
   timeFA: FormArray;
 };
+
+export type TriggerErrorTypes =
+  | 'collide'
+  | 'timeGapError'
+  | 'sameTime'
+  | 'required';

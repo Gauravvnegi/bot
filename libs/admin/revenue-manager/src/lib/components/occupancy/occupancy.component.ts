@@ -323,6 +323,7 @@ export class OccupancyComponent implements OnInit {
             (end.value == 0 || end.value == null)
           ) {
             end.patchValue(roomCount, { emitEvent: false });
+            end.markAsDirty();
           }
         };
         configCategoryFG.valueChanges.subscribe((res: ConfigCategory) => {
@@ -444,6 +445,7 @@ export class OccupancyComponent implements OnInit {
       'OCCUPANCY',
       form.get('type').value
     );
+
     if (!Object.keys(requestedData).length) {
       this.snackbarService.openSnackBarAsText(
         'Please make changes for the new updates.'

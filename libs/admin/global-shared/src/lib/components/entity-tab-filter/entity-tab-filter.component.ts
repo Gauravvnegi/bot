@@ -5,9 +5,9 @@ import {
 } from '@hospitality-bot/admin/core/theme';
 import { feedback } from '@hospitality-bot/admin/feedback';
 import { ModalService } from '@hospitality-bot/shared/material';
-import { Subject, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { HotelDetailService } from '../../../../../shared/src/lib/services/hotel-detail.service';
-import { filter, takeUntil } from 'rxjs/operators';
+import { EntityTabFilterResponse } from '@hospitality-bot/admin/shared';
 
 @Component({
   selector: 'hospitality-bot-entity-tab-filter',
@@ -51,41 +51,41 @@ export class EntityTabFilterComponent implements OnInit {
     this.onEntityTabFilterChanges.emit({
       entityId: [this.tabFilterItems[this.tabFilterIdx].value],
       feedbacktype: this.tabFilterItems[this.tabFilterIdx].type,
-      tabFilterItems: this.tabFilterItems,
+      label: this.tabFilterItems[this.tabFilterIdx].label,
+      outletType: this.tabFilterItems[this.tabFilterIdx]?.outletType,
     });
   }
 
   listenForGlobalFilters(): void {
-    const destroy$ = new Subject<void>();
-    let isFirstDateRangeChange = true;
 
     this.$subscription.add(
-      this.globalFilterService.globalFilter$.subscribe((data) => {
-        //set the entityId
-        this.entityId = this.globalFilterService.entityId;
+      this.globalFilterService.globalFilter$
+        .subscribe((data) => {
+          //set the entityId
+          this.entityId = this.globalFilterService.entityId;
 
-        this.isAllOutletSelected =
-          data['filter'].value?.isAllOutletSelected ?? true;
+          this.isAllOutletSelected =
+            data['filter'].value?.isAllOutletSelected ?? true;
 
-        //set the globalFeedbackFilterType
-        this.globalFeedbackFilterType =
-          data['filter'].value.feedback.feedbackType;
+          //set the globalFeedbackFilterType
+          this.globalFeedbackFilterType =
+            data['filter'].value.feedback.feedbackType;
 
-        if (
-          this.globalFeedbackFilterType === feedback.types.transactional ||
-          this.globalFeedbackFilterType === feedback.types.both
-        ) {
-          this.tabFilterIdx = 0;
+          if (
+            this.globalFeedbackFilterType === feedback.types.transactional ||
+            this.globalFeedbackFilterType === feedback.types.both
+          ) {
+            this.tabFilterIdx = 0;
 
-          //get the selected outlets
-          this.getOutletsSelected(
-            [...data['feedback'].queryValue],
-            data['filter'].value
-          );
-        } else {
-          this.setStayTabFilters(data['filter'].value);
-        }
-      })
+            //get the selected outlets
+            this.getOutletsSelected(
+              [...data['feedback'].queryValue],
+              data['filter'].value
+            );
+          } else {
+            this.setStayTabFilters(data['filter'].value);
+          }
+        })
     );
   }
 
@@ -215,20 +215,11 @@ export class EntityTabFilterComponent implements OnInit {
     this.onEntityTabFilterChanges.emit({
       entityId: outletIds,
       feedbacktype: feedbackType,
-      tabFilterItems: this.tabFilterItems,
-      tabFilterIdx: this.tabFilterIdx,
+      label: this.tabFilterItems[this.tabFilterIdx].label,
+      outletType: this.tabFilterItems[this.tabFilterIdx]?.outletType,
     });
   }
 }
-
-type EntityTabFilterResponse = {
-  entityId: string[];
-  feedbacktype: string;
-  tabFilterItems?: any[];
-  entityType?: string;
-  entitySubType?: string;
-  tabFilterIdx?: number;
-};
 
 type EntityTabFilterConfig = {
   isAllOutletTabFilter: boolean;

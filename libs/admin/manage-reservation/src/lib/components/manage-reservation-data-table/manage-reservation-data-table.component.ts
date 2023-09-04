@@ -8,6 +8,7 @@ import {
   BaseDatatableComponent as BaseDatableComponent,
   ConfigService,
   EntitySubType,
+  EntityTabFilterResponse,
   EntityType,
   Option,
   QueryConfig,
@@ -43,7 +44,6 @@ import { ManageReservationService } from '../../services/manage-reservation.serv
 import { ReservationListResponse } from '../../types/response.type';
 import { FormService } from '../../services/form.service';
 import { SelectedEntity } from '../../types/reservation.type';
-import { distinctUntilChanged, map, tap } from 'rxjs/operators';
 import { InvoiceService } from 'libs/admin/invoice/src/lib/services/invoice.service';
 
 @Component({
@@ -100,7 +100,6 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
   ngOnInit(): void {
     this.tableName = title;
     this.listenForGlobalFilters();
-    this.listenForSelectedEntityChange();
     this.formService.reservationForm.next(null); // Reset reservation form
   }
 
@@ -131,22 +130,17 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
     }
   }
 
-  listenForSelectedEntityChange() {
-    this.$selectedEntitySubscription.add(
-      this.formService.selectedEntity
-        .pipe(
-          distinctUntilChanged((prev, curr) => prev.subType === curr.subType), // Compare subType property for changes
-          tap((res) => {
-            this.selectedEntity = res;
-          })
-        )
-        .subscribe((res) => {
-          this.isSelectedEntityChanged = true; // Since we only get here when selectedEntity has changed
-          this.resetTableValues();
-          this.initDetails(this.selectedEntity);
-          this.initTableValue();
-        })
-    );
+  onEntityTabFilterChanges(event: EntityTabFilterResponse): void {
+    this.selectedEntity = {
+      id: event.entityId[0],
+      label: event.label,
+      type: event.outletType ? EntityType.OUTLET : EntityType.HOTEL,
+      subType: event.outletType ? event.outletType : EntitySubType.ROOM_TYPE,
+    };
+    this.isSelectedEntityChanged = true; // Since we only get here when selectedEntity has changed
+    this.resetTableValues();
+    this.initDetails(this.selectedEntity);
+    this.initTableValue();
   }
 
   /**

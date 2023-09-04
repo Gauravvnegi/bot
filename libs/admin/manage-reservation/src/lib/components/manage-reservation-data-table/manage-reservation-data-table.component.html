@@ -1,3 +1,15 @@
+
+<hospitality-bot-entity-tab-filter
+  [config]="{
+    isSticky: true,
+    extraGap: 60,
+    scrollBoundary: 25,
+    isAllOutletTabFilter: false
+  }"
+  class="tab-filter"
+  (onEntityTabFilterChanges)="onEntityTabFilterChanges($event)"
+></hospitality-bot-entity-tab-filter>
+
 <div
   class="action-header"
   [ngClass]="{ 'action-header__sticky': isScrolledUp }"

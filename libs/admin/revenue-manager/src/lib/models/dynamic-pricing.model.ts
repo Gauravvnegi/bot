@@ -239,8 +239,12 @@ export class DynamicPricingFactory {
         type: 'PERCENTAGE',
         value: +discount?.value,
       },
-      ...(fromTime?.value && { fromTimeInMillis: +fromTime.value }),
-      ...(toTime?.value && { toTimeInMillis: +toTime.value }),
+      ...(fromTime?.value && {
+        fromTimeInMillis: (+fromTime.value + 1000) % (24 * 60 * 60 * 1000),
+      }),
+      ...(toTime?.value && {
+        toTimeInMillis: +toTime.value % (24 * 60 * 60 * 1000),
+      }),
     };
   }
 }
@@ -349,13 +353,17 @@ export class DynamicPricingHandler {
     item: DynamicPricingForm,
     type: ConfigType
   ) {
+    const resetSecond = (time: number) => {
+      const newTime = new Date(time);
+      return newTime.getTime() % (24 * 60 * 60 * 1000);
+    };
     formArray.controls.forEach((hotelOccupancy: FormGroup, index) => {
       const rule = item.hotelConfig[index];
       const triggerConfig =
         type == 'DAY_TIME_TRIGGER'
           ? {
-              fromTime: rule?.fromTime,
-              toTime: rule?.toTime,
+              fromTime: resetSecond(rule?.fromTime),
+              toTime: resetSecond(rule?.toTime),
             }
           : {};
       rule &&

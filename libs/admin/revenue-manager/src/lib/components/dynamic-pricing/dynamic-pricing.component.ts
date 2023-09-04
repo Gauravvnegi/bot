@@ -173,8 +173,9 @@ export class DynamicPricingComponent implements OnInit {
     index?: number;
   }): void {
     const levelFA = event.triggerFG?.get('hotelConfig') as FormArray;
-    if (event.mode == Revenue.add) levelFA.controls.push(this.getLevelFG());
-    else {
+    if (event.mode == Revenue.add) {
+      levelFA.controls.push(this.getLevelFG());
+    } else {
       const levelRemoveId = levelFA.at(event.index).value.id;
       if (levelRemoveId) {
         const removedRule = event.triggerFG.get('removedRules') as FormArray;
@@ -183,6 +184,7 @@ export class DynamicPricingComponent implements OnInit {
       }
       levelFA.removeAt(event.index);
     }
+    levelFA.markAsDirty();
   }
 
   get dynamicPricingControl() {

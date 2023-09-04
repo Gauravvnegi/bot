@@ -187,7 +187,10 @@ export class DayTimeTriggerComponent implements OnInit {
     ) => {
       const newTime = new Date(value);
       newTime.setSeconds(0);
-      control.patchValue(newTime.getTime(), isEmit && { emitEvent: false });
+      control.patchValue(
+        newTime.getTime() % (24 * 60 * 60 * 1000),
+        isEmit && { emitEvent: false }
+      );
       control.markAsDirty();
     };
     levelsFA.controls.forEach((levelFG: FormGroup) => {

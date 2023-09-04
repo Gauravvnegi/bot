@@ -19,7 +19,7 @@
   ></hospitality-bot-custom-tooltip>
 
   <input
-    class="input"
+    [class]="subtitle ? 'input subtitle-padding' : 'input'"
     [ngClass]="inputNgClasses"
     [attr.disabled]="isDisabled || null"
     [formControlName]="controlName"

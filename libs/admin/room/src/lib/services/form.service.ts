@@ -100,7 +100,7 @@ export class FormService {
 
     roomTypeFormData.area = data.area ?? 0;
     roomTypeFormData.description = data.description ?? '';
-    roomTypeFormData.imageUrls = data.imageUrls;
+    roomTypeFormData.imageUrl = data.imageUrl;
     roomTypeFormData.name = data.name;
     roomTypeFormData.occupancyDetails = {
       maxAdult: data.maxAdult,
@@ -140,7 +140,7 @@ export class FormService {
 export class RoomTypeData {
   status: boolean;
   name: string;
-  imageUrls: string[];
+  imageUrl: string[];
   description: string;
   occupancyDetails: {
     maxOccupancy: number;

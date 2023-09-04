@@ -120,7 +120,7 @@ export class MultipleRoom {
 export class RoomTypeForm {
   status: boolean;
   name: string;
-  imageUrls: ImageUrl[];
+  imageUrl: ImageUrl[];
   description: string;
   complimentaryAmenities: string[];
   paidAmenities: string[];
@@ -139,7 +139,7 @@ export class RoomTypeForm {
     this.id = input?.id;
     this.status = input.status;
     this.name = input.name;
-    this.imageUrls = input.imageUrl;
+    this.imageUrl = input.imageUrl;
     this.description = input.description;
     this.complimentaryAmenities =
       input.complimentaryAmenities?.map((item) => item.id) ?? [];

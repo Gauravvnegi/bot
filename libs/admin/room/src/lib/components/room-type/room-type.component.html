@@ -12,7 +12,7 @@
         <hospitality-bot-toggle-switch-with-label
           [isToggleOn]="useForm.get('isBaseRoomType').value"
           (onToggleSwitch)="onRoomTypeToggleSwitch($event)"
-          [isDisabled]="true"
+          [isDisabled]="useForm.get('isBaseRoomType').value"
         ></hospitality-bot-toggle-switch-with-label>
       </div>
       <hr />
@@ -29,7 +29,7 @@
         </div>
         <div class="file-upload-wrapper">
           <hospitality-bot-custom-file-upload
-            formControlName="imageUrls"
+            formControlName="imageUrl"
             label="Image"
             description="Mandatory to add at least 1 image"
             [settings]="{
@@ -410,14 +410,21 @@
                   }
                 }"
               ></hospitality-bot-prefix-field>
-              <hospitality-bot-text-area
+
+              <hospitality-bot-template-editor
+                [parentFG]="ratePlanGroup"
+                [name]="'description'"
+                [height]="250"
+                class="full-width"
+              ></hospitality-bot-template-editor>
+              <!-- <hospitality-bot-text-area
                 class="full-width"
                 controlName="description"
                 label="Description"
                 [props]="{
                   placeholder: 'Enter'
                 }"
-              ></hospitality-bot-text-area>
+              ></hospitality-bot-text-area> -->
             </div>
           </p-accordionTab>
         </p-accordion>

@@ -34,6 +34,9 @@ import { RoomService } from '../../services/room.service';
 import { RatePlanOptions } from '../../types/room';
 import { FormService } from '../../services/form.service';
 import { RoomType } from '../../models/rooms-data-table.model';
+import { MatDialogConfig } from '@angular/material/dialog';
+import { ModalService } from '@hospitality-bot/shared/material';
+import { ModalComponent } from 'libs/admin/shared/src/lib/components/modal/modal.component';
 
 @Component({
   selector: 'hospitality-bot-room-type',
@@ -91,7 +94,8 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private snackbarService: SnackBarService,
     private formService: FormService,
-    private subscriptionPlanService: SubscriptionPlanService
+    private subscriptionPlanService: SubscriptionPlanService,
+    private modalService: ModalService
   ) {
     this.roomTypeId = this.route.snapshot.paramMap.get('id');
   }
@@ -125,7 +129,7 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
     this.useForm = this.fb.group({
       status: [true],
       name: ['', [Validators.required]],
-      imageUrls: [[], [Validators.required]],
+      imageUrl: [[], [Validators.required]],
       description: ['', [Validators.required]],
       complimentaryAmenities: [[], [Validators.required]],
       paidAmenities: [[]],
@@ -492,11 +496,8 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
       data,
       this.isPricingDynamic
     );
-    const roomTypeData = {
-      roomType: modifiedData,
-    };
     this.subscription$.add(
-      this.roomService.createRoomType(this.entityId, roomTypeData).subscribe(
+      this.roomService.createRoomType(this.entityId, modifiedData).subscribe(
         (res) => {
           this.loading = false;
           this.router.navigate([`/pages/efrontdesk/room/${routes.dashboard}`]);
@@ -557,10 +558,44 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
     const ratePlanControl = this.isPricingDynamic
       ? this.useForm.get('dynamicRatePlans.basePrice')
       : this.useForm.get('staticRatePlans.basePrice');
-    this.useForm.get('isBaseRoomType').setValue(isToggleOn);
+
     if (isToggleOn) {
+      const dialogConfig = new MatDialogConfig();
+      dialogConfig.disableClose = true;
+      const togglePopupCompRef = this.modalService.openDialog(
+        ModalComponent,
+        dialogConfig
+      );
+
+      togglePopupCompRef.componentInstance.content = {
+        heading: 'In-active Room Type',
+        description: [
+          'You are about to mark this room type in-active.',
+          'Are you Sure?',
+        ],
+      };
+      togglePopupCompRef.componentInstance.actions = [
+        {
+          label: 'No',
+          onClick: () => this.modalService.close(),
+          variant: 'outlined',
+        },
+        {
+          label: 'Yes',
+          onClick: () => {
+            this.useForm.get('isBaseRoomType').setValue(isToggleOn);
+            this.modalService.close();
+          },
+          variant: 'contained',
+        },
+      ];
+
+      togglePopupCompRef.componentInstance.onClose.subscribe(() => {
+        this.modalService.close();
+      });
       ratePlanControl.enable();
     } else {
+      this.useForm.get('isBaseRoomType').setValue(isToggleOn);
       ratePlanControl.disable();
     }
   }

@@ -46,7 +46,7 @@ export const iteratorFields: Record<AddRoomTypes, IteratorField[]> = {
 export type RoomTypeFormData = {
   status: boolean;
   name: string;
-  imageUrls: string[];
+  imageUrl: string[];
   description: string;
   complimentaryAmenities: string[];
   paidAmenities: string[];

@@ -63,12 +63,13 @@ export class DayTimeTriggerComponent implements OnInit {
   modifyTriggerFG(mode = Revenue.add, index?: number): void {
     const dayTimeFormArray = this.dynamicPricingControl.timeFA;
     if (mode != Revenue.add) {
-      const { type } = (dayTimeFormArray.at(index) as FormGroup).controls;
+      const triggerFG = dayTimeFormArray.at(index) as FormGroup;
+      const { type } = triggerFG.controls;
       if (type.value == 'update') {
         this.loading = true;
         this.$subscription.add(
           this.dynamicPricingService
-            .deleteDynamicPricing(dayTimeFormArray.at(index).get('id').value)
+            .deleteDynamicPricing(triggerFG.get('id').value)
             .subscribe(
               (res) => {
                 this.snackbarService.openSnackBarAsText(
@@ -76,7 +77,7 @@ export class DayTimeTriggerComponent implements OnInit {
                   '',
                   { panelClass: 'success' }
                 );
-                this.loadTriggers();
+                dayTimeFormArray.removeAt(index);
               },
               (error) => {
                 this.loading = false;
@@ -151,7 +152,8 @@ export class DayTimeTriggerComponent implements OnInit {
                 '',
                 { panelClass: 'success' }
               );
-              this.loadTriggers();
+              triggerFG.markAsUntouched();
+              triggerFG.markAsPristine();
             },
             (error) => {
               this.loading = false;
@@ -261,7 +263,15 @@ export class DayTimeTriggerComponent implements OnInit {
             '',
             { panelClass: 'success' }
           );
-          this.loadTriggers();
+          form.patchValue(
+            {
+              id: res.id,
+              type: 'update',
+            },
+            { emitEvent: false }
+          );
+          form.markAsUntouched();
+          form.markAsPristine();
         },
         (error) => {
           this.loading = false;

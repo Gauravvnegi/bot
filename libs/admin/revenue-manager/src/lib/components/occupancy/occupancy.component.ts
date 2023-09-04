@@ -222,8 +222,7 @@ export class OccupancyComponent implements OnInit {
                   '',
                   { panelClass: 'success' }
                 );
-                season.markAsUntouched();
-                season.markAsPristine();
+                season.removeAt(index);
               },
               (error) => {
                 this.loading = false;
@@ -476,6 +475,13 @@ export class OccupancyComponent implements OnInit {
             } Successfully.`,
             '',
             { panelClass: 'success' }
+          );
+          form.patchValue(
+            {
+              id: res.id,
+              type: 'update',
+            },
+            { emitEvent: false }
           );
           form.markAsUntouched();
           form.markAsPristine();

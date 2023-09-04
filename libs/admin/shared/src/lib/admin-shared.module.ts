@@ -118,6 +118,8 @@ import { StepperComponent } from './components/stepper/stepper.component';
 import { StepsModule } from 'primeng/steps';
 import { FromToDateComponent } from './components/from-to-date/from-to-date.component';
 import { TimerComponent } from './components/timer/timer.component';
+import { SidebarModule } from 'primeng/sidebar';
+
 
 @NgModule({
   imports: [
@@ -355,6 +357,7 @@ import { TimerComponent } from './components/timer/timer.component';
     StepperComponent,
     FromToDateComponent,
     TimerComponent,
+    SidebarModule,
   ],
 })
 export class AdminSharedModule {}

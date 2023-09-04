@@ -157,43 +157,16 @@ export class DateService {
 
   static getTimeInHMSZ(value: number, formate: 'millisecond' | 'second') {
     value = formate == 'millisecond' ? value : value * 1000;
-    const convertMilliseconds = (milliseconds: number) => {
-      const seconds = Math.floor(milliseconds / 1000);
-      const minutes = Math.floor(seconds / 60);
-      const hours = Math.floor(minutes / 60);
-      const remainingMilliseconds = milliseconds % 1000;
+    const date = new Date(value);
+    const hours = date.getHours();
+    const minutes = date.getMinutes();
+    const seconds = date.getSeconds();
+    const ampm = hours >= 12 ? 'PM' : 'AM';
 
-      return {
-        hours,
-        minutes: minutes % 60,
-        seconds: seconds % 60,
-        milliseconds: remainingMilliseconds,
-      };
-    };
-    const format12Hour = (hours: number) => {
-      if (hours === 0) {
-        return 12;
-      } else if (hours > 12) {
-        return hours - 12;
-      } else {
-        return hours;
-      }
-    };
-    const twoDigitFormat = (value: number) => {
-      return value.toString().padStart(2, '0');
-    };
+    const formattedHours = hours % 12 || 12; // Convert to 12-hour format
+    const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
+    const formattedSeconds = seconds < 10 ? `0${seconds}` : seconds;
 
-    const {
-      hours,
-      minutes,
-      seconds,
-      milliseconds: remainingMilliseconds,
-    } = convertMilliseconds(value);
-    const formattedHours = format12Hour(hours);
-    const formattedMinutes = twoDigitFormat(minutes);
-    const formattedSeconds = twoDigitFormat(seconds);
-    const amPm = hours < 12 ? 'AM' : 'PM';
-
-    return `${formattedHours}:${formattedMinutes}:${formattedSeconds} ${amPm}`;
+    return `${formattedHours}:${formattedMinutes}:${formattedSeconds} ${ampm}`;
   }
 }

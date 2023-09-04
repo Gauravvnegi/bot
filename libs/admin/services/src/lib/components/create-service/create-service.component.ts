@@ -141,12 +141,11 @@ export class CreateServiceComponent implements OnInit {
     this.useForm = this.fb.group({
       active: [true],
       currency: [''],
-
       parentId: ['', Validators.required],
       entityId: [''],
       imageUrl: ['', Validators.required],
       name: ['', Validators.required],
-      serviceType: [''],
+      serviceType: [ServiceTypeOptionValue.PAID],
       rate: [''],
 
       unit: ['', Validators.required],
@@ -156,7 +155,7 @@ export class CreateServiceComponent implements OnInit {
     });
     this.useForm.get('entityId').setValue(this.entityId);
 
-    this.updateFormControlSubscription();
+    // this.updateFormControlSubscription();
 
     /* Patch the form value if service id present */
     if (this.serviceId) {
@@ -172,33 +171,35 @@ export class CreateServiceComponent implements OnInit {
               ...rest,
               taxIds: taxes.map((item) => item.id),
             });
+            this.useForm.get('entityId').disable();
+
             this.code = res.packageCode;
           }, this.handleError)
       );
     }
   }
 
-  /**
-   * @function updateFormControlSubscription  Add and remove FormControl Based on service type selection
-   */
-  updateFormControlSubscription() {
-    this.useForm.get('serviceType').valueChanges.subscribe((res) => {
-      this.isSelectedTypePaid = res === this.types[1].value;
-      if (this.isSelectedTypePaid) {
-        this.useForm.addControl(
-          'rate',
-          new FormControl('', [Validators.required, Validators.min(0)])
-        );
-        this.useForm.addControl(
-          'currency',
-          new FormControl('', [Validators.required, Validators.min(1)])
-        );
-      } else {
-        this.useForm.removeControl('rate');
-        this.useForm.removeControl('currency');
-      }
-    });
-  }
+  // /**
+  //  * @function updateFormControlSubscription  Add and remove FormControl Based on service type selection
+  //  */
+  // updateFormControlSubscription() {
+  //   this.useForm.get('serviceType').valueChanges.subscribe((res) => {
+  //     this.isSelectedTypePaid = res === this.types[1].value;
+  //     if (this.isSelectedTypePaid) {
+  //       this.useForm.addControl(
+  //         'rate',
+  //         new FormControl('', [Validators.required, Validators.min(0)])
+  //       );
+  //       this.useForm.addControl(
+  //         'currency',
+  //         new FormControl('', [Validators.required, Validators.min(1)])
+  //       );
+  //     } else {
+  //       this.useForm.removeControl('rate');
+  //       this.useForm.removeControl('currency');
+  //     }
+  //   });
+  // }
 
   /**
    * @function initOptionsConfig To get all the dropdown options
@@ -270,6 +271,7 @@ export class CreateServiceComponent implements OnInit {
     }
 
     const data = this.useForm.getRawValue() as ServiceFormData;
+    debugger;
     this.loading = true;
     if (this.serviceId) {
       this.$subscription.add(

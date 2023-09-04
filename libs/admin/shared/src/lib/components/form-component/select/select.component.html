@@ -42,7 +42,11 @@
           class="option-image"
           [alt]="option.label"
         />
-        <span class="option-label">{{ option.label }}</span>
+        <span
+          [ngClass]="{ 'sub-items': isGroupOptions }"
+          class="option-label"
+          >{{ option.label }}</span
+        >
 
         <span *ngIf="option.phoneNumber && option.email" class="option-details">
           <span [ngStyle]="{ 'padding-right': '10px' }">{{

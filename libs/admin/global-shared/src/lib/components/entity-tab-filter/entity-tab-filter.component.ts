@@ -57,35 +57,33 @@ export class EntityTabFilterComponent implements OnInit {
   }
 
   listenForGlobalFilters(): void {
-
     this.$subscription.add(
-      this.globalFilterService.globalFilter$
-        .subscribe((data) => {
-          //set the entityId
-          this.entityId = this.globalFilterService.entityId;
+      this.globalFilterService.globalFilter$.subscribe((data) => {
+        //set the entityId
+        this.entityId = this.globalFilterService.entityId;
 
-          this.isAllOutletSelected =
-            data['filter'].value?.isAllOutletSelected ?? true;
+        this.isAllOutletSelected =
+          data['filter'].value?.isAllOutletSelected ?? true;
 
-          //set the globalFeedbackFilterType
-          this.globalFeedbackFilterType =
-            data['filter'].value.feedback.feedbackType;
+        //set the globalFeedbackFilterType
+        this.globalFeedbackFilterType =
+          data['filter'].value.feedback.feedbackType;
 
-          if (
-            this.globalFeedbackFilterType === feedback.types.transactional ||
-            this.globalFeedbackFilterType === feedback.types.both
-          ) {
-            this.tabFilterIdx = 0;
+        if (
+          this.globalFeedbackFilterType === feedback.types.transactional ||
+          this.globalFeedbackFilterType === feedback.types.both
+        ) {
+          this.tabFilterIdx = 0;
 
-            //get the selected outlets
-            this.getOutletsSelected(
-              [...data['feedback'].queryValue],
-              data['filter'].value
-            );
-          } else {
-            this.setStayTabFilters(data['filter'].value);
-          }
-        })
+          //get the selected outlets
+          this.getOutletsSelected(
+            [...data['feedback'].queryValue],
+            data['filter'].value
+          );
+        } else {
+          this.setStayTabFilters(data['filter'].value);
+        }
+      })
     );
   }
 

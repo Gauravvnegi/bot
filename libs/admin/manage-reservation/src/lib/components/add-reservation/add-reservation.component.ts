@@ -132,6 +132,16 @@ export class AddReservationComponent extends BaseReservationComponent
         }
       }
     );
+
+    // Call summary data on guest details changes for company discount
+    this.inputControls.guestInformation
+      .get('guestDetails')
+      .valueChanges.pipe(debounceTime(1000))
+      .subscribe((res) => {
+        if (res) {
+          this.getSummaryData();
+        }
+      });
   }
 
   initFormData() {
@@ -254,9 +264,8 @@ export class AddReservationComponent extends BaseReservationComponent
           maxAdult: item.get('adultCount').value,
         },
       })),
-      offer: {
-        id: this.inputControls.offerId.value,
-      },
+      offerId: this.inputControls.offerId.value,
+      guestId: this.inputControls.guestInformation.get('guestDetails')?.value,
     };
 
     this.$subscription.add(

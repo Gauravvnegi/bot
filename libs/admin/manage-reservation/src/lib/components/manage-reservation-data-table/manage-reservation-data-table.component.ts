@@ -124,7 +124,6 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
 
   loadData(event: LazyLoadEvent): void {
     this.formService.selectedTab = this.selectedTab;
-    // Only run if selectedEntity is not changed
     if (!this.isSelectedEntityChanged && this.selectedEntity) {
       this.initTableValue();
     }

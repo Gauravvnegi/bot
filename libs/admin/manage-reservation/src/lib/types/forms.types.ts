@@ -85,9 +85,8 @@ export type ReservationSummary = {
     maxChildren?: number;
     maxAdult: number;
   };
-  offer?: {
-    id: string;
-  };
+  offerId?: string;
+  guestId?: string;
 };
 
 export type OccupancyDetails = {

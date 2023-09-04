@@ -106,7 +106,9 @@ export class OccupancyComponent implements OnInit {
   }
 
   seasonStatusChange(status, seasonIndex: number) {
-    const control = this.dynamicPricingControl.occupancyFA.at(seasonIndex);
+    const control = this.dynamicPricingControl.occupancyFA.at(
+      seasonIndex
+    ) as FormGroup;
     if (control.get('id').value) {
       this.loading = true;
       this.$subscription.add(
@@ -124,7 +126,7 @@ export class OccupancyComponent implements OnInit {
                 '',
                 { panelClass: 'success' }
               );
-              this.initSeason();
+              DynamicPricingHandler.resetFormState(control, this.fb);
             },
             (error) => {
               this.loading = false;
@@ -163,7 +165,7 @@ export class OccupancyComponent implements OnInit {
       configCategory: ['ROOM_TYPE', [Validators.required]],
       hotelConfig: this.fb.array([this.seasonOccupancyFG]),
       hotelId: [this.entityId],
-      basePrice: [],
+      basePrice: [this.rooms.find((item) => item.isBase).price],
       roomCount: [this.rooms.find((item) => item.isBase)?.roomCount ?? 0],
       roomType: [, [Validators.required]],
       removedRules: this.fb.array([]),
@@ -221,7 +223,7 @@ export class OccupancyComponent implements OnInit {
                   '',
                   { panelClass: 'success' }
                 );
-                this.initSeason();
+                season.removeAt(index);
               },
               (error) => {
                 this.loading = false;
@@ -475,7 +477,7 @@ export class OccupancyComponent implements OnInit {
             '',
             { panelClass: 'success' }
           );
-          this.initSeason();
+          DynamicPricingHandler.resetFormState(form, this.fb);
         },
         (error) => {
           this.loading = false;

@@ -90,8 +90,6 @@ export class CreateFoodPackageComponent extends OutletBaseComponent
               taxIds: taxes.map((item) => item.id),
             });
 
-            debugger;
-
             this.useForm.get('foodItems').setValue(foodItem);
           })
       );

@@ -5,9 +5,9 @@ import {
 } from '@hospitality-bot/admin/core/theme';
 import { feedback } from '@hospitality-bot/admin/feedback';
 import { ModalService } from '@hospitality-bot/shared/material';
-import { Subscription } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
 import { HotelDetailService } from '../../../../../shared/src/lib/services/hotel-detail.service';
-import { filter } from 'lodash';
+import { filter, takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'hospitality-bot-entity-tab-filter',
@@ -51,10 +51,14 @@ export class EntityTabFilterComponent implements OnInit {
     this.onEntityTabFilterChanges.emit({
       entityId: [this.tabFilterItems[this.tabFilterIdx].value],
       feedbacktype: this.tabFilterItems[this.tabFilterIdx].type,
+      tabFilterItems: this.tabFilterItems,
     });
   }
 
   listenForGlobalFilters(): void {
+    const destroy$ = new Subject<void>();
+    let isFirstDateRangeChange = true;
+
     this.$subscription.add(
       this.globalFilterService.globalFilter$.subscribe((data) => {
         //set the entityId
@@ -185,6 +189,7 @@ export class EntityTabFilterComponent implements OnInit {
       disabled: false,
       chips: [],
       type: type,
+      outletType: item.type,
     };
   }
 
@@ -199,9 +204,7 @@ export class EntityTabFilterComponent implements OnInit {
 
   onSelectedTabFilterChange(event) {
     this.tabFilterIdx = event.index;
-
     const feedbackType = this.tabFilterItems[event.index].type;
-
     const outletIds =
       this.tabFilterItems[event.index].type === feedback.types.stay ||
       this.tabFilterItems[event.index].value !== 'ALL'
@@ -209,10 +212,11 @@ export class EntityTabFilterComponent implements OnInit {
         : this.tabFilterItems
             .map((item) => item.value)
             .filter((value) => value !== 'ALL');
-
     this.onEntityTabFilterChanges.emit({
       entityId: outletIds,
       feedbacktype: feedbackType,
+      tabFilterItems: this.tabFilterItems,
+      tabFilterIdx: this.tabFilterIdx,
     });
   }
 }
@@ -220,8 +224,10 @@ export class EntityTabFilterComponent implements OnInit {
 type EntityTabFilterResponse = {
   entityId: string[];
   feedbacktype: string;
+  tabFilterItems?: any[];
   entityType?: string;
   entitySubType?: string;
+  tabFilterIdx?: number;
 };
 
 type EntityTabFilterConfig = {

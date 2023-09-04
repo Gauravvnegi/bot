@@ -1,4 +1,4 @@
-<hospitality-bot-navigation-header
+<!-- <hospitality-bot-navigation-header
   [heading]="'Welcome To Reservation'"
   [routes]="navRoutes"
   [isBack]="false"
@@ -10,6 +10,16 @@
   (selectedTabChange)="onSelectedTabFilterChange($event)"
   [isSticky]="true"
   extraGap="70"
-></hospitality-bot-tab-header>
+></hospitality-bot-tab-header> -->
+<hospitality-bot-entity-tab-filter
+  [config]="{
+    isSticky: true,
+    extraGap: 60,
+    scrollBoundary: 25,
+    isAllOutletTabFilter: false
+  }"
+  class="tab-filter"
+  (onEntityTabFilterChanges)="onEntityTabFilterChanges($event)"
+></hospitality-bot-entity-tab-filter>
 
 <hospitality-bot-manage-reservation-data-table></hospitality-bot-manage-reservation-data-table>

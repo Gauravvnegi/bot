@@ -43,7 +43,7 @@ import { ManageReservationService } from '../../services/manage-reservation.serv
 import { ReservationListResponse } from '../../types/response.type';
 import { FormService } from '../../services/form.service';
 import { SelectedEntity } from '../../types/reservation.type';
-import { distinctUntilChanged, tap } from 'rxjs/operators';
+import { distinctUntilChanged, map, tap } from 'rxjs/operators';
 import { InvoiceService } from 'libs/admin/invoice/src/lib/services/invoice.service';
 
 @Component({
@@ -109,14 +109,17 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
    */
   listenForGlobalFilters(): void {
     this.entityId = this.globalFilterService.entityId;
-    this.globalQueries = [];
+    let previousDateRange = {};
     this.globalFilterService.globalFilter$.subscribe((data) => {
-      // set-global query everytime global filter changes
       this.globalQueries = [...data['dateRange'].queryValue];
-      // Only run if selectedEntity is not changed
-      if (!this.isSelectedEntityChanged && this.selectedEntity) {
-        this.initTableValue();
+      if (
+        JSON.stringify(data.dateRange) !== JSON.stringify(previousDateRange)
+      ) {
+        if (!this.isSelectedEntityChanged && this.selectedEntity) {
+          this.initTableValue();
+        }
       }
+      previousDateRange = { ...data.dateRange };
     });
   }
 

@@ -124,7 +124,8 @@ export class OccupancyComponent implements OnInit {
                 '',
                 { panelClass: 'success' }
               );
-              this.initSeason();
+              control.markAsUntouched();
+              control.markAsPristine();
             },
             (error) => {
               this.loading = false;
@@ -221,7 +222,8 @@ export class OccupancyComponent implements OnInit {
                   '',
                   { panelClass: 'success' }
                 );
-                this.initSeason();
+                season.markAsUntouched();
+                season.markAsPristine();
               },
               (error) => {
                 this.loading = false;
@@ -475,7 +477,8 @@ export class OccupancyComponent implements OnInit {
             '',
             { panelClass: 'success' }
           );
-          this.initSeason();
+          form.markAsUntouched();
+          form.markAsPristine();
         },
         (error) => {
           this.loading = false;

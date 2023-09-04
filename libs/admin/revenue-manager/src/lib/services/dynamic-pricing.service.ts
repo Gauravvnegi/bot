@@ -103,7 +103,7 @@ export class DynamicPricingService extends ApiService {
       !fromDate.valid ||
       !toDate.valid ||
       !selectedDays.valid ||
-      !validateConfig(hotelConfig as FormArray)
+      !validateConfig(hotelConfig as FormArray, true)
     ) {
       return false;
     }

@@ -132,3 +132,11 @@ $border-color: rgba(112, 112, 112, 0.35);
 .no-padding {
   padding: 0;
 }
+
+.no-decoration {
+  --row-gap: 0px;
+  --column-gap: 0%;
+  padding: 0px 4%;
+  row-gap: var(--row-gap);
+  column-gap: var(--column-gap);
+}

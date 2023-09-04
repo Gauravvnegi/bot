@@ -152,8 +152,7 @@ export class DayTimeTriggerComponent implements OnInit {
                 '',
                 { panelClass: 'success' }
               );
-              triggerFG.markAsUntouched();
-              triggerFG.markAsPristine();
+              DynamicPricingHandler.resetFormState(triggerFG, this.fb);
             },
             (error) => {
               this.loading = false;
@@ -263,15 +262,7 @@ export class DayTimeTriggerComponent implements OnInit {
             '',
             { panelClass: 'success' }
           );
-          form.patchValue(
-            {
-              id: res.id,
-              type: 'update',
-            },
-            { emitEvent: false }
-          );
-          form.markAsUntouched();
-          form.markAsPristine();
+          DynamicPricingHandler.resetFormState(form, this.fb, res);
         },
         (error) => {
           this.loading = false;

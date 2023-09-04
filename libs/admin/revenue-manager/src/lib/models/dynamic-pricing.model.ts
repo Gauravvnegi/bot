@@ -1,4 +1,9 @@
-import { AbstractControl, FormArray, FormGroup } from '@angular/forms';
+import {
+  AbstractControl,
+  FormArray,
+  FormBuilder,
+  FormGroup,
+} from '@angular/forms';
 import {
   ConfigItemType,
   ConfigRuleType,
@@ -353,17 +358,13 @@ export class DynamicPricingHandler {
     item: DynamicPricingForm,
     type: ConfigType
   ) {
-    const resetSecond = (time: number) => {
-      const newTime = new Date(time);
-      return newTime.getTime() % (24 * 60 * 60 * 1000);
-    };
     formArray.controls.forEach((hotelOccupancy: FormGroup, index) => {
       const rule = item.hotelConfig[index];
       const triggerConfig =
         type == 'DAY_TIME_TRIGGER'
           ? {
-              fromTime: resetSecond(rule?.fromTime),
-              toTime: resetSecond(rule?.toTime),
+              fromTime: rule?.fromTime - 1000,
+              toTime: rule?.toTime,
             }
           : {};
       rule &&
@@ -375,7 +376,7 @@ export class DynamicPricingHandler {
             discount: rule.discount,
             ...triggerConfig,
           },
-          { emitEvent: false }
+          type === 'DAY_TIME_TRIGGER' ? { emitEvent: false } : {}
         );
     });
   }
@@ -413,6 +414,33 @@ export class DynamicPricingHandler {
       item,
       'DAY_TIME_TRIGGER'
     );
+    DynamicPricingHandler.resetFormState(triggerFG, instance.fb);
+  }
+
+  static resetFormState(
+    form: FormGroup,
+    fb: FormBuilder,
+    response?: DynamicPricingRequest
+  ) {
+    const { hotelConfig } = form.controls;
+    form.removeControl('removedRules');
+    form.addControl('removedRules', fb.array([]));
+    form.markAsPristine();
+    form.markAsUntouched();
+    if (response) {
+      form.patchValue(
+        {
+          id: response.id,
+          type: 'update',
+        },
+        { emitEvent: false }
+      );
+    }
+
+    (hotelConfig as FormArray).controls.forEach((item) => {
+      item.markAsUntouched();
+      item.markAsPristine();
+    });
   }
 }
 
@@ -482,7 +510,10 @@ export class DynamicPricingForm {
   }
 }
 
-export function validateConfig(formArray: FormArray): boolean {
+export function validateConfig(
+  formArray: FormArray,
+  isVerifying = false
+): boolean {
   let isValid = true;
   const resetError = () => {
     formArray.controls.forEach((item: FormGroup) => {
@@ -506,7 +537,7 @@ export function validateConfig(formArray: FormArray): boolean {
   });
 
   isValid && resetError();
-
+  !isVerifying && formArray.markAsDirty();
   return isValid;
 }
 

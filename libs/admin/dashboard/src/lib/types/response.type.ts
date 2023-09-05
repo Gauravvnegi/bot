@@ -7,6 +7,10 @@ export type ReservationType =
   | 'PRECHECKININITIATED'
   | 'PRECHECKINFAILED'
   | 'PRECHECKINCOMPLETE'
-  | 'NEW';
+  | 'NEW'
+  | 'CHECKOUTCOMPLETED'
+  | 'CHECKOUTFAILED'
+  | 'CHECKOUTINITIATED'
+  | 'CHECKOUTPENDING';
 
 export type ReservationTab = 'INHOUSE' | 'ARRIVAL' | 'DEPARTURE';

@@ -1,7 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ControlContainer } from '@angular/forms';
-import { dimensions, days, hours } from '../../../constants/data';
-import { Feature } from '../../../types/outlet';
+import { Option } from '@hospitality-bot/admin/shared';
 import {
   noRecordActionForComp,
   noRecordActionForCompWithId,
@@ -10,6 +9,8 @@ import {
   noRecordActionForPaid,
   noRecordActionForPaidWithId,
 } from '../../../constants/form';
+import { OutletService } from '../../../services/outlet.service';
+import { Feature } from '../../../types/outlet';
 
 @Component({
   selector: 'hospitality-bot-banquet-form',
@@ -21,9 +22,9 @@ export class BanquetFormComponent implements OnInit {
   @Input() isPaidLoading = false;
   @Input() isCompLoading = false;
 
-  hours = hours;
-  days = days;
-  dimensions = dimensions;
+  hours: Option[] = [];
+  days: Option[] = [];
+  dimensions: Option[] = [];
   noRecordActionForComp = noRecordActionForComp;
   noRecordActionForMenu = noRecordActionForMenu;
   noRecordActionForPaid = noRecordActionForPaid;
@@ -38,9 +39,22 @@ export class BanquetFormComponent implements OnInit {
   @Input() compServices: any[] = [];
   @Input() paidServices: any[] = [];
   @Output() onCreateAndContinueFeature = new EventEmitter<Feature>();
-  constructor(public controlContainer: ControlContainer) {}
+  constructor(
+    public controlContainer: ControlContainer,
+    public outletService: OutletService
+  ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.getOutletConfig();
+  }
+
+  getOutletConfig() {
+    this.outletService.getOutletConfig().subscribe((res) => {
+      this.hours = res?.HOURS;
+      this.days = res?.WEEKDAYS;
+      this.dimensions = res?.DIMENSIONS;
+    });
+  }
 
   onCreateAndContinue(features: Feature) {
     this.onCreateAndContinueFeature.emit(features);

@@ -48,7 +48,11 @@
         preFieldType="select"
         postFieldType="select"
         [props]="{
-          placeholder: 'Select Days'
+          placeholder: 'Select Days',
+          errorMessages: {
+            required: 'This is a required field.',
+            sameValue: 'Please select different days.'
+          }
         }"
         [preOptions]="days"
         [postOptions]="days"
@@ -68,7 +72,11 @@
         [preOptions]="hours"
         [postOptions]="hours"
         [props]="{
-          placeholder: 'Select Timings'
+          placeholder: 'Select Timings',
+          errorMessages: {
+            required: 'This is a required field.',
+            sameValue: 'Please select different days.'
+          }
         }"
         [settings]="{
           layout: 'dashed'

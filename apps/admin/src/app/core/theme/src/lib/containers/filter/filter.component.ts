@@ -48,7 +48,7 @@ export class FilterComponent implements OnChanges, OnInit {
   ) {
     this.initFilterForm();
     //to handle initial case when all outlets are selected
-    this.updateOutletsValue(true);
+    // this.updateOutletsValue(true);
   }
 
   closePopup() {

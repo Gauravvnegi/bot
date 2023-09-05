@@ -44,31 +44,21 @@
             </div>
             <div>
               <div>
-                <mat-form-field>
-                  <mat-label>Select Brand</mat-label>
-                  <mat-select formControlName="brandName">
-                    <mat-option
-                      *ngFor="let entity of entityList"
-                      [value]="entity.value"
-                      >{{ entity.label }}</mat-option
-                    >
-                  </mat-select>
-                </mat-form-field>
+                <hospitality-bot-select
+                  class="half-width"
+                  controlName="brandName"
+                  label="Select Brand"
+                  [options]="entityList"
+                ></hospitality-bot-select>
               </div>
-              <div>
-                <mat-form-field>
-                  <mat-label>Select Property</mat-label>
-                  <mat-select
-                    formControlName="entityName"
-                    (selectionChange)="handleHotelChange($event.value)"
-                  >
-                    <mat-option
-                      *ngFor="let brand of brandList"
-                      [value]="brand.value"
-                      >{{ brand.label }}</mat-option
-                    >
-                  </mat-select>
-                </mat-form-field>
+              <div class="property">
+                <hospitality-bot-select
+                  class="half-width"
+                  controlName="entityName"
+                  label="Select Property"
+                  [options]="brandList"
+                  (itemSelection)="handleHotelChange($event.value)"
+                ></hospitality-bot-select>
               </div>
             </div>
           </div>
@@ -114,7 +104,7 @@
               <mat-checkbox
                 *ngIf="outletFG.controls[outlet.id]"
                 [formControlName]="outlet.id"
-                (change)="onOutletSelect($event , outlet)"
+                (change)="onOutletSelect($event, outlet)"
                 >{{ outlet.name }}</mat-checkbox
               >
             </div>

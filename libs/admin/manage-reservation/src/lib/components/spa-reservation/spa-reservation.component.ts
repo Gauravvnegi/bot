@@ -137,7 +137,7 @@ export class SpaReservationComponent extends BaseReservationComponent
             });
           }
         })
-    )
+    );
   }
 
   /**
@@ -209,7 +209,6 @@ export class SpaReservationComponent extends BaseReservationComponent
               }));
 
             this.formValueChanges = true;
-
             this.spaItemsValues = spaItems;
             this.formService.guestInformation.next(guestInformation);
 

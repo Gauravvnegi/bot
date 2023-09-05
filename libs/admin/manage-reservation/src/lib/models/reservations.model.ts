@@ -269,7 +269,7 @@ export class OrderInfo {
   tableNumber: string;
 
   deserialize(input) {
-    this.numberOfAdults = input?.numberOfAdults ?? 1;
+    this.numberOfAdults = input?.occupancyDetails.maxAdult ?? 1;
     this.kotInstructions = input?.kotInstructions ?? '';
     this.menuItems = input.items.map((item) => ({
       menuItems: item?.itemId,
@@ -314,7 +314,7 @@ export class BookingInformation {
   spaItems: SpaItems[];
 
   deserialize(input) {
-    this.numberOfAdults = input?.numberOfAdults ?? 1;
+    this.numberOfAdults = input?.occupancyDetails.maxAdult ?? 1;
     this.spaItems = input.items.map((item) => ({
       serviceName: item?.itemId,
       unit: item?.unit ?? 1,

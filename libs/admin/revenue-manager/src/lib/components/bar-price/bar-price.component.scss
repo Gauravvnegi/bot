@@ -10,6 +10,28 @@ $border-color: rgba(112, 112, 112, 0.35);
   }
 }
 
+:host ::ng-deep .header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+
+  .title-wrapper {
+    display: flex;
+    gap: 10px;
+  }
+
+  .action-wrapper {
+    margin-right: 20px;
+    margin-top: -2px;
+  }
+}
+
+:host ::ng-deep {
+  .p-accordion .p-accordion-header .p-accordion-header-link {
+    padding: 1.3rem 1.5rem 1rem;
+  }
+}
+
 .field {
   width: 340px;
 }

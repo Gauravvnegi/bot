@@ -90,6 +90,7 @@ export class BarPriceComponent implements OnInit {
   initRoomTypes() {
     this.barPriceService.roomDetails.subscribe((rooms: RoomTypes[]) => {
       if (this.barPriceService.isRoomDetailsLoaded) {
+        rooms.sort((a, b) => (a.isBase === b.isBase ? 0 : a.isBase ? -1 : 1));
         this.roomTypes = rooms;
         this.allRoomTypes = rooms;
         this.initForm();
@@ -118,9 +119,19 @@ export class BarPriceComponent implements OnInit {
    */
   getValuesArrayControl() {
     return this.fb.array(
-      this.roomTypes.map((item) =>
-        this.fb.group({
-          price: [item?.price, [Validators.min(0), Validators.required]],
+      this.roomTypes.map((item) => {
+        const baseDetail = item?.ratePlans.find((ratePlan) => ratePlan.isBase);
+        return this.fb.group({
+          isBase: [item.isBase],
+          price: [
+            { value: item?.price, disabled: true },
+            [Validators.min(0), Validators.required],
+          ],
+          baseId: [baseDetail?.id],
+          variablePrice: [
+            baseDetail?.variablePrice ?? null,
+            [Validators.min(0), Validators.required],
+          ],
           ratePlans: this.addRatePlans(item.ratePlans, item.pricingDetails),
           childBelowFive: [
             item.pricingDetails.paxChildBelowFive,
@@ -137,15 +148,15 @@ export class BarPriceComponent implements OnInit {
           exceptions: this.fb.array([]),
           id: [item.value],
           label: [item.label],
-        })
-      )
+        });
+      })
     );
   }
 
   addRatePlans(ratePlans: RatePlanRes[], priceDetails: PricingDetails) {
     return this.fb.array(
       [
-        ...ratePlans,
+        ...ratePlans.filter((item) => !item.isBase),
         {
           id: '',
           label: BarPriceRatePlan.double,
@@ -185,6 +196,9 @@ export class BarPriceComponent implements OnInit {
     if (this.useForm.invalid) {
       this.useForm.markAllAsTouched();
       this.openAllInvalidAccordion();
+      this.snackbarService.openSnackBarAsText(
+        'Invalid form: Please fix the errors.'
+      );
       return;
     }
     const data: UpdateBarPriceRequest = BarPriceFactory.buildRequest(
@@ -202,8 +216,14 @@ export class BarPriceComponent implements OnInit {
               { panelClass: 'success' }
             );
 
-            this.barPriceService.resetRoomDetails();
-            this.barPriceService.loadRoomTypes(this.entityId);
+            this.useFormControl.barPrices.controls.sort(
+              (control1: AbstractControl, control2: AbstractControl) =>
+                control1.get('isBase').value === control2.get('isBase').value
+                  ? 0
+                  : control1.get('isBase').value
+                  ? -1
+                  : 1
+            );
             this.loading = false;
           },
           (error) => {
@@ -261,6 +281,17 @@ export class BarPriceComponent implements OnInit {
   removeException(barPrice: FormGroup, index: number) {
     const fa = barPrice.controls.exceptions as FormArray;
     fa.removeAt(index);
+  }
+
+  statusUpdate(status: boolean, barPrice: AbstractControl) {
+    this.useFormControl.barPrices.controls.forEach((item) => {
+      item.patchValue({
+        isBase: false,
+      });
+    });
+    barPrice.patchValue({
+      isBase: status,
+    });
   }
 
   /** Getters */

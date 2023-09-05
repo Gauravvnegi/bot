@@ -1,4 +1,5 @@
-<div>
+<div class="toggle-wrapper">
+  <span *ngIf="preContent.length" class="pre-content">{{ preContent }}</span>
   <label class="toggle">
     <input
       type="checkbox"
@@ -8,6 +9,7 @@
     />
     <span
       class="slider"
+      [ngClass]="disableTurnOff ? 'disable' : ''"
       [ngStyle]="{
         'background-color': isToggleOn ? toggleOnColor : toggleOffColor
       }"

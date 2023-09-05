@@ -1,4 +1,7 @@
 export type OutletConfig = {
+  HOURS;
+  WEEKDAYS;
+  DIMENSIONS;
   type: ConfigTypes[];
 };
 
@@ -7,6 +10,7 @@ export type ConfigTypes = {
   subtype: string[];
   menu?: MenuConfig;
   value: string;
+  cuisinesTypes: string[];
 };
 
 export type MenuConfig = {

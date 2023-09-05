@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ControlContainer } from '@angular/forms';
-import { dimensions, days, hours } from '../../../constants/data';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Option } from '@hospitality-bot/admin/shared';
 import {
   noRecordActionForComp,
   noRecordActionForCompWithId,
@@ -8,8 +9,8 @@ import {
   noRecordActionForMenuWithId,
 } from '../../../constants/form';
 import { navRoutes } from '../../../constants/routes';
+import { OutletService } from '../../../services/outlet.service';
 import { Feature } from '../../../types/outlet';
-import { ActivatedRoute, Router } from '@angular/router';
 @Component({
   selector: 'hospitality-bot-restaurant-form',
   templateUrl: './restaurant-form.component.html',
@@ -33,17 +34,28 @@ export class RestaurantFormComponent implements OnInit {
   noRecordActionForComp = noRecordActionForComp;
   noRecordActionForMenu = noRecordActionForMenu;
 
-  days = days;
-  hours = hours;
-  dimensions = dimensions;
+  days: Option[] = [];
+  hours: Option[] = [];
+  dimensions: Option[] = [];
 
   constructor(
     public controlContainer: ControlContainer,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    public outletService: OutletService
   ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.getOutletConfig();
+  }
+
+  getOutletConfig() {
+    this.outletService.getOutletConfig().subscribe((res) => {
+      this.hours = res?.HOURS;
+      this.days = res?.WEEKDAYS;
+      this.dimensions = res?.DIMENSIONS;
+    });
+  }
 
   modifyNoRecordActions() {
     this.noRecordActionForComp = noRecordActionForCompWithId;

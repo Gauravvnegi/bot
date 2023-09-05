@@ -1,7 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ControlContainer } from '@angular/forms';
-import { days, hours } from '../../../constants/data';
-import { Feature } from '../../../types/outlet';
+import { Option } from '@hospitality-bot/admin/shared';
 import {
   noRecordActionForComp,
   noRecordActionForCompWithId,
@@ -10,6 +9,8 @@ import {
   noRecordActionForPaid,
   noRecordActionForPaidWithId,
 } from '../../../constants/form';
+import { OutletService } from '../../../services/outlet.service';
+import { Feature } from '../../../types/outlet';
 
 @Component({
   selector: 'hospitality-bot-spa-form',
@@ -17,8 +18,8 @@ import {
   styleUrls: ['./spa-form.component.scss'],
 })
 export class SpaFormComponent implements OnInit {
-  days = days;
-  hours = hours;
+  days: Option[] = [];
+  hours: Option[] = [];
   noRecordActionForComp = noRecordActionForComp;
   noRecordActionForMenu = noRecordActionForMenu;
   noRecordActionForPaid = noRecordActionForPaid;
@@ -33,9 +34,21 @@ export class SpaFormComponent implements OnInit {
   }
   @Output() onCreateAndContinueFeature = new EventEmitter<Feature>();
 
-  constructor(public controlContainer: ControlContainer) {}
+  constructor(
+    public controlContainer: ControlContainer,
+    private outletService: OutletService
+  ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.getOutletConfig();
+  }
+
+  getOutletConfig() {
+    this.outletService.getOutletConfig().subscribe((res) => {
+      this.hours = res?.HOURS;
+      this.days = res?.WEEKDAYS;
+    });
+  }
 
   onCreateAndContinue(features: Feature) {
     this.onCreateAndContinueFeature.emit(features);

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import {
   ControlContainer,
   FormBuilder,
@@ -14,6 +14,7 @@ import { Subscription } from 'rxjs';
 import { manageGuestRoutes } from 'libs/admin/guests/src/lib/constant/route';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { FormService } from '../../../services/form.service';
+import { debounceTime } from 'rxjs/operators';
 
 @Component({
   selector: 'hospitality-bot-guest-information',
@@ -35,6 +36,8 @@ export class GuestInformationComponent implements OnInit {
 
   @Input() reservationId: string;
 
+  @Output() getSummary: EventEmitter<any> = new EventEmitter<any>();
+
   constructor(
     private fb: FormBuilder,
     public controlContainer: ControlContainer,
@@ -48,6 +51,7 @@ export class GuestInformationComponent implements OnInit {
   ngOnInit(): void {
     this.entityId = this.globalFilterService.entityId;
     this.addFormGroup();
+    this.listenForGuestDetailsChange();
     this.listenForGlobalFilters();
     this.initGuestDetails();
   }
@@ -58,6 +62,18 @@ export class GuestInformationComponent implements OnInit {
       guestDetails: ['', [Validators.required]],
     };
     this.parentFormGroup.addControl('guestInformation', this.fb.group(data));
+  }
+
+  listenForGuestDetailsChange() {
+    // Call summary data on guest details changes for company discount
+    this.parentFormGroup
+      .get('guestInformation.guestDetails')
+      .valueChanges.pipe(debounceTime(1000))
+      .subscribe((res) => {
+        if (res) {
+          this.getSummary.emit();
+        }
+      });
   }
 
   /**

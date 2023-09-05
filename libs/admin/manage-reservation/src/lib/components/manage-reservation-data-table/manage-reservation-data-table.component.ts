@@ -136,6 +136,7 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
       type: event.outletType ? EntityType.OUTLET : EntityType.HOTEL,
       subType: event.outletType ? event.outletType : EntitySubType.ROOM_TYPE,
     };
+    this.formService.selectedEntity.next(this.selectedEntity);
     this.isSelectedEntityChanged = true; // Since we only get here when selectedEntity has changed
     this.resetTableValues();
     this.initDetails(this.selectedEntity);

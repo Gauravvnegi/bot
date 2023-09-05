@@ -21,7 +21,6 @@ import { OccupancyDetails, ReservationSummary } from '../../types/forms.types';
 import {
   BookingItemsSummary,
   RoomReservationResponse,
-  SummaryPricing,
 } from '../../types/response.type';
 import { BaseReservationComponent } from '../base-reservation.component';
 import { ReservationType } from '../../constants/reservation-table';
@@ -132,28 +131,20 @@ export class AddReservationComponent extends BaseReservationComponent
         }
       }
     );
-
-    // Call summary data on guest details changes for company discount
-    this.inputControls.guestInformation
-      .get('guestDetails')
-      .valueChanges.pipe(debounceTime(1000))
-      .subscribe((res) => {
-        if (res) {
-          this.getSummaryData();
-        }
-      });
   }
 
   initFormData() {
-    this.formService.reservationForm
-      .pipe(debounceTime(500))
-      .subscribe((res) => {
-        if (res) {
-          const { roomInformation, ...formData } = res;
-          this.roomTypeValues = roomInformation.roomTypes;
-          this.userForm.patchValue(formData);
-        }
-      });
+    this.$subscription.add(
+      this.formService.reservationForm
+        .pipe(debounceTime(500))
+        .subscribe((res) => {
+          if (res) {
+            const { roomInformation, ...formData } = res;
+            this.roomTypeValues = roomInformation.roomTypes;
+            this.userForm.patchValue(formData);
+          }
+        })
+    );
   }
 
   getReservationDetails(): void {

@@ -48,12 +48,12 @@
   height: 100%;
 }
 
-:host
-  ::ng-deep
-  .mat-tab-header-pagination-controls-enabled
-  .mat-tab-header-pagination {
-  display: none;
-}
+// :host
+//   ::ng-deep
+//   .mat-tab-header-pagination-controls-enabled
+//   .mat-tab-header-pagination {
+//   display: none;
+// }
 
 .tab-wrapper {
   background-color: $white;

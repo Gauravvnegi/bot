@@ -1,5 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import {
+  FeedbackQueryValue,
+  FilterValue,
   GlobalFilterService,
   SubscriptionPlanService,
 } from '@hospitality-bot/admin/core/theme';
@@ -7,7 +9,12 @@ import { feedback } from '@hospitality-bot/admin/feedback';
 import { ModalService } from '@hospitality-bot/shared/material';
 import { Subscription } from 'rxjs';
 import { HotelDetailService } from '../../../../../shared/src/lib/services/hotel-detail.service';
-import { filter } from 'lodash';
+import {
+  Branch,
+  EntityTabFilterConfig,
+  EntityTabFilterResponse,
+  FeedbackType,
+} from '../../types/entity-tab.type';
 
 @Component({
   selector: 'hospitality-bot-entity-tab-filter',
@@ -50,7 +57,7 @@ export class EntityTabFilterComponent implements OnInit {
     this.listenForGlobalFilters();
     this.onEntityTabFilterChanges.emit({
       entityId: [this.tabFilterItems[this.tabFilterIdx].value],
-      feedbacktype: this.tabFilterItems[this.tabFilterIdx].type,
+      feedbackType: this.tabFilterItems[this.tabFilterIdx].type,
     });
   }
 
@@ -60,8 +67,7 @@ export class EntityTabFilterComponent implements OnInit {
         //set the entityId
         this.entityId = this.globalFilterService.entityId;
 
-        this.isAllOutletSelected =
-          data['filter'].value?.isAllOutletSelected ?? true;
+        this.isAllOutletSelected = data['filter'].value?.isAllOutletSelected;
 
         //set the globalFeedbackFilterType
         this.globalFeedbackFilterType =
@@ -90,11 +96,11 @@ export class EntityTabFilterComponent implements OnInit {
    * @description set the tab filter items for stay feedback type
    * @param globalQueryValue
    */
-  setStayTabFilters(globalQueryValue) {
+  setStayTabFilters(globalQueryFilterValue: FilterValue) {
     const branch = this._hotelDetailService.brands
-      .find((brand) => brand.id === globalQueryValue.property.brandName)
+      .find((brand) => brand.id === globalQueryFilterValue.property.brandName)
       .entities.find(
-        (branch) => branch['id'] === globalQueryValue.property.entityName
+        (branch) => branch['id'] === globalQueryFilterValue.property.entityName
       );
     this.setTabFilterItems(branch);
   }
@@ -103,51 +109,59 @@ export class EntityTabFilterComponent implements OnInit {
    * @function getOutletsSelected
    * @description get the outlets selected
    */
-  getOutletsSelected(globalQueries, globalQueryValue) {
-    globalQueries.forEach((element) => {
+  getOutletsSelected(
+    globalFeedbackQueries: any[],
+    globalFilterQueryValue: FilterValue
+  ) {
+    //get the selected outlets this.outletIds = [{'outletId' : true}, ...]
+    globalFeedbackQueries.forEach((element) => {
       if (element.hasOwnProperty('outlets')) this.outletIds = element.outlets;
     });
+
+    //to get outlet details
     this.getOutlets(
-      globalQueryValue.property.entityName,
-      globalQueryValue.property.brandName
+      globalFilterQueryValue.property.brandName,
+      globalFilterQueryValue.property.entityName
     );
   }
 
   /**
    * @function getOutlets
-   * @description get the outlets
-   * @param branchId
+   * @description get the outlet details
+   * @param entityId
    * @param brandId
-   * @returns void
    */
-
-  getOutlets(branchId, brandId) {
+  getOutlets(brandId: string, entityId: string) {
     const branch = this._hotelDetailService.brands
       .find((brand) => brand.id === brandId)
-      .entities.find((branch) => branch['id'] === branchId);
+      .entities.find((branch) => branch['id'] === entityId);
 
     this.outlets = branch.entities;
-    this.setTabFilterItems(branch);
+
+    this.setTabFilterItems(branch); // brach = [{ id : '' ,  name : ''} , {...} , ...]
   }
 
   /**
    * @function setTabFilterItems
    * @description set the tab filter items
    * @param branch
-   * @returns void
    * @memberof EntityTabFilterComponent
    */
-  setTabFilterItems(branch) {
+  setTabFilterItems(branch: Branch) {
     //if the feedback type is stay then set the tab filter items
     if (this.globalFeedbackFilterType === feedback.types.stay) {
-      this.tabFilterItems = [this.getTabItem(branch, feedback.types.stay)];
+      this.tabFilterItems = [
+        this.getTabItem(branch, feedback.types.stay as FeedbackType),
+      ];
       return;
     }
     this.tabFilterItems = [];
 
     //if the feedback type is both then set the tab filter items
     if (this.globalFeedbackFilterType === feedback.types.both)
-      this.tabFilterItems.push(this.getTabItem(branch, feedback.types.stay));
+      this.tabFilterItems.push(
+        this.getTabItem(branch, feedback.types.stay as FeedbackType)
+      );
 
     if (this.isAllOutletTabFilter && this.isAllOutletSelected) {
       this.tabFilterItems.push({
@@ -159,11 +173,11 @@ export class EntityTabFilterComponent implements OnInit {
         type: feedback.types.transactional,
       });
     }
-
+    //check if the outlet is selected in the global filter and set the tab filter items
     this.outlets.forEach((outlet) => {
       if (this.outletIds[outlet.id]) {
         this.tabFilterItems.push(
-          this.getTabItem(outlet, feedback.types.transactional)
+          this.getTabItem(outlet, feedback.types.transactional as FeedbackType)
         );
       }
     });
@@ -177,7 +191,7 @@ export class EntityTabFilterComponent implements OnInit {
    * @returns tab item
    */
 
-  getTabItem(item, type) {
+  getTabItem(item, type: FeedbackType) {
     return {
       label: item.name,
       content: '',
@@ -191,43 +205,25 @@ export class EntityTabFilterComponent implements OnInit {
   /**
    * @function onSelectedTabFilterChange
    * @description emit the selected tab filter
-   * @param event
-   * @returns void
-   * @memberof EntityTabFilterComponent
-   * @example <hospitality-bot-entity-tab-filter (onEntityTabFilterChanges)="onSelectedTabFilterChange($event)"></hospitality-bot-entity-tab-filter>
+   * @example <hospitality-bot-entity-tab-filter (onEntityTabFilterChanges)="onSelectedTabFilterChange($"></hospitality-bot-entity-tab-filter>
    */
 
-  onSelectedTabFilterChange(event) {
-    this.tabFilterIdx = event.index;
-
-    const feedbackType = this.tabFilterItems[event.index].type;
+  onSelectedTabFilterChange(index: number) {
+    this.tabFilterIdx = index;
+    const feedbackType = this.tabFilterItems[index].type;
 
     const outletIds =
-      this.tabFilterItems[event.index].type === feedback.types.stay ||
-      this.tabFilterItems[event.index].value !== 'ALL'
-        ? [this.tabFilterItems[this.tabFilterIdx].value]
+      this.tabFilterItems[index].type === feedback.types.stay ||
+      this.tabFilterItems[index].value !== 'ALL'
+        ? [this.tabFilterItems[index].value]
         : this.tabFilterItems
             .map((item) => item.value)
             .filter((value) => value !== 'ALL');
 
+    //emit the selected tab filter value
     this.onEntityTabFilterChanges.emit({
       entityId: outletIds,
-      feedbacktype: feedbackType,
+      feedbackType: feedbackType,
     });
   }
 }
-
-type EntityTabFilterResponse = {
-  entityId: string[];
-  feedbacktype: string;
-  entityType?: string;
-  entitySubType?: string;
-};
-
-type EntityTabFilterConfig = {
-  isAllOutletTabFilter: boolean;
-  isSticky: boolean;
-  extraGap: number;
-  entityId: string;
-  globalFeedbackFilterType: string;
-};

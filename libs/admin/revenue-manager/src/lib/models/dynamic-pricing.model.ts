@@ -1,4 +1,9 @@
-import { AbstractControl, FormArray, FormGroup } from '@angular/forms';
+import {
+  AbstractControl,
+  FormArray,
+  FormBuilder,
+  FormGroup,
+} from '@angular/forms';
 import {
   ConfigItemType,
   ConfigRuleType,
@@ -239,8 +244,12 @@ export class DynamicPricingFactory {
         type: 'PERCENTAGE',
         value: +discount?.value,
       },
-      ...(fromTime?.value && { fromTimeInMillis: +fromTime.value }),
-      ...(toTime?.value && { toTimeInMillis: +toTime.value }),
+      ...(fromTime?.value && {
+        fromTimeInMillis: (+fromTime.value + 1000) % (24 * 60 * 60 * 1000),
+      }),
+      ...(toTime?.value && {
+        toTimeInMillis: +toTime.value % (24 * 60 * 60 * 1000),
+      }),
     };
   }
 }
@@ -354,7 +363,7 @@ export class DynamicPricingHandler {
       const triggerConfig =
         type == 'DAY_TIME_TRIGGER'
           ? {
-              fromTime: rule?.fromTime,
+              fromTime: rule?.fromTime - 1000,
               toTime: rule?.toTime,
             }
           : {};
@@ -367,7 +376,7 @@ export class DynamicPricingHandler {
             discount: rule.discount,
             ...triggerConfig,
           },
-          { emitEvent: false }
+          type === 'DAY_TIME_TRIGGER' ? { emitEvent: false } : {}
         );
     });
   }
@@ -405,6 +414,33 @@ export class DynamicPricingHandler {
       item,
       'DAY_TIME_TRIGGER'
     );
+    DynamicPricingHandler.resetFormState(triggerFG, instance.fb);
+  }
+
+  static resetFormState(
+    form: FormGroup,
+    fb: FormBuilder,
+    response?: DynamicPricingRequest
+  ) {
+    const { hotelConfig } = form.controls;
+    form.removeControl('removedRules');
+    form.addControl('removedRules', fb.array([]));
+    form.markAsPristine();
+    form.markAsUntouched();
+    if (response) {
+      form.patchValue(
+        {
+          id: response.id,
+          type: 'update',
+        },
+        { emitEvent: false }
+      );
+    }
+
+    (hotelConfig as FormArray).controls.forEach((item) => {
+      item.markAsUntouched();
+      item.markAsPristine();
+    });
   }
 }
 
@@ -474,7 +510,10 @@ export class DynamicPricingForm {
   }
 }
 
-export function validateConfig(formArray: FormArray): boolean {
+export function validateConfig(
+  formArray: FormArray,
+  isVerifying = false
+): boolean {
   let isValid = true;
   const resetError = () => {
     formArray.controls.forEach((item: FormGroup) => {
@@ -498,7 +537,7 @@ export function validateConfig(formArray: FormArray): boolean {
   });
 
   isValid && resetError();
-
+  !isVerifying && formArray.markAsDirty();
   return isValid;
 }
 

@@ -164,8 +164,6 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
             this.logoUrl = logo;
             this.redirectUrl = absoluteRoute;
             this.initOptionConfig(type);
-            debugger;
-
             this.useForm.get('type').setValue(type);
             this.useForm.get('startDay').setValue(operationalDays?.startDay);
             this.useForm.get('endDay').setValue(operationalDays?.endDay);
@@ -191,7 +189,6 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
       if (value === endDay.value) {
         startDay.setErrors({ sameValue: true });
         endDay.setErrors(null);
-        
       }
     });
 

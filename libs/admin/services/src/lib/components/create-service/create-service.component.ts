@@ -271,7 +271,6 @@ export class CreateServiceComponent implements OnInit {
     }
 
     const data = this.useForm.getRawValue() as ServiceFormData;
-    debugger;
     this.loading = true;
     if (this.serviceId) {
       this.$subscription.add(

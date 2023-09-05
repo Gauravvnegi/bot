@@ -41,7 +41,7 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
   types: Option[] = [];
   subType: Option[] = [];
   isTypeSelected = false;
-  cuisines = cuisinesType;
+  cuisines: Option[] = [];
   compServices: any[] = [];
   paidServices: any[] = [];
   menuList: any[] = [];
@@ -82,6 +82,7 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
     this.initOptions();
     this.initForm();
     this.initRoutes('outlet');
+    this.setValidators();
   }
 
   initOptions() {
@@ -91,6 +92,10 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
         value: item.value,
         subTypes: item.subtype,
         menu: item?.menu,
+        cuisinesTypes: item?.cuisinesTypes?.map((item) => ({
+          label: item,
+          value: item,
+        })),
       }));
       this.onTypeChange();
       this.getOutletData();
@@ -159,6 +164,7 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
             this.logoUrl = logo;
             this.redirectUrl = absoluteRoute;
             this.initOptionConfig(type);
+            debugger;
 
             this.useForm.get('type').setValue(type);
             this.useForm.get('startDay').setValue(operationalDays?.startDay);
@@ -176,6 +182,39 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
         );
       }
     }
+  }
+
+  setValidators() {
+    const { startDay, endDay, from, to } = this.formControls;
+
+    startDay.valueChanges.subscribe((value) => {
+      if (value === endDay.value) {
+        startDay.setErrors({ sameValue: true });
+        endDay.setErrors(null);
+        
+      }
+    });
+
+    endDay.valueChanges.subscribe((value) => {
+      if (value === startDay.value) {
+        endDay.setErrors({ sameValue: true });
+        startDay.setErrors(null);
+      }
+    });
+
+    from.valueChanges.subscribe((value) => {
+      if (value === to.value) {
+        from.setErrors({ sameValue: true });
+        to.setErrors(null);
+      }
+    });
+
+    to.valueChanges.subscribe((value) => {
+      if (value === from.value) {
+        to.setErrors({ sameValue: true });
+        from.setErrors(null);
+      }
+    });
   }
 
   initOptionConfig(type) {
@@ -196,6 +235,13 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
   onTypeChange() {
     const { type } = this.formControls;
     type.valueChanges.subscribe((type: OutletType) => {
+      //reset form except type
+
+      if (!this.outletId) {
+        this.useForm.reset({ type: type }, { emitEvent: false });
+        this.useForm.markAsUntouched();
+      }
+
       const selectedType = this.types.filter((item) => item.value === type);
 
       this.isTypeSelected = true;
@@ -210,6 +256,7 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
         case 'RESTAURANT':
           maximumOccupancy.setValidators([Validators.required]);
           minimumOccupancy.clearValidators();
+          this.cuisines = selectedType[0]?.cuisinesTypes;
           break;
 
         case 'VENUE':

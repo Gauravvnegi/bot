@@ -41,8 +41,10 @@ export class OutletService extends ApiService {
     return this.patch(`/api/v1/user/${outletId}/sites?status=${status}`, {});
   }
 
-  getOutletConfig(): Observable<OutletConfig> {
-    return this.get(`/api/v1/config?key=OUTLET_CONFIGURATION`);
+  getOutletConfig(
+    config = { params: `?key=OUTLET_CONFIGURATION` }
+  ): Observable<OutletConfig> {
+    return this.get(`/api/v1/config${config.params ?? ''}`);
   }
 
   getMenuItems(

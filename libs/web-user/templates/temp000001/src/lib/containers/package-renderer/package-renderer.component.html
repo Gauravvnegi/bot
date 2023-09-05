@@ -8,7 +8,9 @@
       *ngFor="let subPackageFormGroup of subPackages.controls; let i = index"
     >
       <div class="image">
-        <img src="{{ subPackageFormGroup.get('imgUrl').value }}" />
+        <img
+          src="{{ extractImage(subPackageFormGroup.get('imgUrl').value) }}"
+        />
       </div>
       <div class="text-container">
         <div class="text">

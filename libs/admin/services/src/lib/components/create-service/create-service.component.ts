@@ -22,6 +22,7 @@ import { servicesRoutes } from '../../constant/routes';
 import { ServicesService } from '../../services/services.service';
 import { ServiceResponse } from '../../types/response';
 import { ServiceData, ServiceFormData } from '../../types/service';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'hospitality-bot-create-service',
@@ -76,7 +77,8 @@ export class CreateServiceComponent implements OnInit {
     private configService: ConfigService,
     private router: Router,
     private route: ActivatedRoute,
-    private hotelDetailService: HotelDetailService
+    private hotelDetailService: HotelDetailService,
+    private location: Location
   ) {
     this.serviceId = this.route.snapshot.paramMap.get('id');
 
@@ -309,7 +311,8 @@ export class CreateServiceComponent implements OnInit {
       '',
       { panelClass: 'success' }
     );
-    this.router.navigate(['/pages/library/services']);
+    this.location.back();
+    // this.router.navigate(['/pages/library/services']);
   };
 
   closeLoading = () => {

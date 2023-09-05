@@ -121,21 +121,23 @@ export class SpaReservationComponent extends BaseReservationComponent
   }
 
   initFormData() {
-    this.formService.reservationForm
-      .pipe(debounceTime(500))
-      .subscribe((res) => {
-        if (res) {
-          const {
-            bookingInformation: { spaItems, ...spaInfo },
-            ...formData
-          } = res;
-          this.spaItemsValues = spaItems;
-          this.userForm.patchValue({
-            bookingInformation: spaInfo,
-            ...formData,
-          });
-        }
-      });
+    this.$subscription.add(
+      this.formService.reservationForm
+        .pipe(debounceTime(500))
+        .subscribe((res) => {
+          if (res) {
+            const {
+              bookingInformation: { spaItems, ...spaInfo },
+              ...formData
+            } = res;
+            this.spaItemsValues = spaItems;
+            this.userForm.patchValue({
+              bookingInformation: spaInfo,
+              ...formData,
+            });
+          }
+        })
+    )
   }
 
   /**
@@ -355,6 +357,7 @@ export class SpaReservationComponent extends BaseReservationComponent
    * @function create Reroute to create service or create package category
    */
   create() {
+    this.formService.reservationForm.next(this.userForm.getRawValue());
     this.router.navigate([`/pages/library/services/create-service`]);
   }
 

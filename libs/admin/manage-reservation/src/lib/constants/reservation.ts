@@ -126,6 +126,7 @@ export const spaFields: IteratorField[] = [
     placeholder: 'Search by name',
     width: '36%',
     isAsync: true,
+    createPrompt: '+ Add New Service'
   },
   {
     label: 'Quantity',

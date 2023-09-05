@@ -87,7 +87,7 @@ export class AddReservationComponent extends BaseReservationComponent
         to: ['', Validators.required],
         reservationType: ['', Validators.required],
         source: ['', Validators.required],
-        sourceName: ['', [Validators.required, Validators.maxLength(60)]],
+        sourceName: [''],
         marketSegment: ['', Validators.required],
       }),
       offerId: [''],
@@ -240,8 +240,8 @@ export class AddReservationComponent extends BaseReservationComponent
 
     // Summary data for booking summary
     const data: ReservationSummary = {
-      fromDate: this.reservationInfoControls.from.value,
-      toDate: this.reservationInfoControls.to.value,
+      from: this.reservationInfoControls.from.value,
+      to: this.reservationInfoControls.to.value,
       bookingItems: this.roomControls.map((item) => ({
         roomDetails: {
           ratePlan: {

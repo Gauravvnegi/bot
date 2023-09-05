@@ -189,8 +189,8 @@ export class VenueReservationComponent extends BaseReservationComponent
       ]),
     };
     const data = {
-      fromDate: this.reservationInfoControls.from.value,
-      toDate: this.reservationInfoControls.to.value,
+      from: this.reservationInfoControls.from.value,
+      to: this.reservationInfoControls.to.value,
       adultCount: this.eventInfoControls.numberOfAdults.value,
     };
     this.$subscription.add(

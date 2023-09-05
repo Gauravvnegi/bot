@@ -15,7 +15,6 @@ import { GuestInfo } from '../models/reservations.model';
   providedIn: 'root',
 })
 export class FormService {
-  outletIds = [];
   dateDifference = new BehaviorSubject(1);
   toDate: Date;
   fromDate: Date;
@@ -35,10 +34,6 @@ export class FormService {
   getSelectedEntity(): Observable<SelectedEntity> {
     return this.selectedEntity.asObservable().pipe(distinctUntilChanged());
   }
-
-  type: string;
-  $entityTypeChange = new BehaviorSubject({ status: false, type: '' });
-  $feedbackType = new BehaviorSubject('');
 
   reservationDate = new BehaviorSubject<Date>(null);
   reservationDateAndTime = new BehaviorSubject<number>(0);

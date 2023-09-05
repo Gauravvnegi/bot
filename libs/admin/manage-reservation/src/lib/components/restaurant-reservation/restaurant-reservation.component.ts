@@ -14,7 +14,7 @@ import {
   EntitySubType,
   EntityType,
 } from '@hospitality-bot/admin/shared';
-import { OfferData, SummaryData } from '../../models/reservations.model';
+import { SummaryData } from '../../models/reservations.model';
 import { ManageReservationService } from '../../services/manage-reservation.service';
 import {
   editModeStatusOptions,
@@ -26,7 +26,6 @@ import { ReservationForm } from '../../constants/form';
 import { FormService } from '../../services/form.service';
 import {
   OutletItems,
-  ReservationType,
 } from '../../constants/reservation-table';
 import { debounceTime } from 'rxjs/operators';
 import { OutletForm } from '../../models/reservations.model';
@@ -344,8 +343,8 @@ export class RestaurantReservationComponent extends BaseReservationComponent
     };
 
     const data: ReservationSummary = {
-      fromDate: this.reservationInfoControls.dateAndTime.value,
-      toDate: this.reservationInfoControls.dateAndTime.value,
+      from: this.reservationInfoControls.dateAndTime.value,
+      to: this.reservationInfoControls.dateAndTime.value,
       occupancyDetails: {
         maxAdult: this.orderInfoControls.numberOfAdults.value,
       },

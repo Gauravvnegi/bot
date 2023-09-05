@@ -455,7 +455,7 @@ export class SummaryData {
 
 export class BookingConfig {
   marketSegment: Option[] = [];
-  source: Option[] = [];
+  source: { label: string; value: string; type?: Option[] }[] = [];
   type: Option[] = [];
   deserialize(input): this {
     this.marketSegment = input?.marketSegment.map((item) => ({
@@ -466,10 +466,64 @@ export class BookingConfig {
       label: this.toCamelCase(item),
       value: item,
     }));
-    this.source = input?.source.map((item) => ({
-      label: this.toCamelCase(item),
-      value: item,
-    }));
+    // this.source = input?.source.map((item) => ({
+    //   label: this.toCamelCase(item),
+    //   value: item,
+    //   type: item?.type,
+    // }));
+
+    this.source = [
+      {
+        label: this.toCamelCase('OTA'),
+        value: 'OTA',
+        type: [
+          {
+            value: 'EASEMYTRIP',
+            label: 'Easemytrip',
+          },
+          {
+            value: 'YATRA',
+            label: 'Yatra',
+          },
+          {
+            value: 'AGODA',
+            label: 'Agoda',
+          },
+          {
+            value: 'BOOKINGDC',
+            label: 'Booking.com',
+          },
+          {
+            value: 'EXPDC',
+            label: 'Expedia',
+          },
+          {
+            value: 'ASO',
+            label: 'Airbnb',
+          },
+        ],
+      },
+      {
+        label: this.toCamelCase('AGENT'),
+        value: 'AGENT',
+      },
+      {
+        label: this.toCamelCase('WALK_IN'),
+        value: 'WALK_IN',
+      },
+      {
+        label: this.toCamelCase('OFFLINE_SALES'),
+        value: 'OFFLINE_SALES',
+      },
+      {
+        label: this.toCamelCase('CREATE_WITH'),
+        value: 'CREATE_WITH',
+      },
+      {
+        label: this.toCamelCase('OTHER'),
+        value: 'OTHER',
+      },
+    ];
     return this;
   }
 

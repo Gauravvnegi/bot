@@ -1,5 +1,9 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { AbstractControl, ControlContainer, FormGroup } from '@angular/forms';
+import {
+  AbstractControl,
+  ControlContainer,
+  FormGroup
+} from '@angular/forms';
 import {
   ConfigService,
   CountryCodeList,
@@ -25,9 +29,12 @@ export class BookingInfoComponent implements OnInit {
   @Input() eventTypes: Option[] = [];
   @Input() bookingType: string;
 
+  otaOptions: Option[] = [];
   @Output() getSummary: EventEmitter<any> = new EventEmitter<any>();
 
   configData: BookingConfig;
+
+  agentSource = false;
 
   entityId: string;
   startMinDate = new Date();
@@ -53,6 +60,8 @@ export class BookingInfoComponent implements OnInit {
         this.initDates();
       }
     });
+
+    this.listenForSourceChanges();
   }
 
   initDates() {
@@ -164,6 +173,21 @@ export class BookingInfoComponent implements OnInit {
     }
   }
 
+  listenForSourceChanges() {
+    const sourceControl = this.reservationInfoControls.source;
+    const sourceNameControl = this.reservationInfoControls.sourceName;
+
+    sourceControl.valueChanges.subscribe((res) => {
+      this.agentSource = res === 'AGENT';
+      this.otaOptions =
+        res === 'OTA'
+          ? this.configData.source.filter((item) => item.value === res)[0].type
+          : [];
+
+      sourceNameControl.reset();
+    });
+  }
+
   getCountryCode(): void {
     this.configService
       .getColorAndIconConfig(this.entityId)
@@ -172,17 +196,6 @@ export class BookingInfoComponent implements OnInit {
         this.configData = new BookingConfig().deserialize(
           response.bookingConfig
         );
-        this.configData.source = this.configData.source.filter(
-          (item) =>
-            item.value !== 'CREATE_WITH' &&
-            item.value !== 'OTHERS' &&
-            item.value !== 'OTA'
-        );
-        if (this.bookingType === EntitySubType.ROOM_TYPE)
-          this.configData.source = [
-            ...this.configData.source,
-            { label: 'OTA', value: 'OTA' },
-          ];
         if (this.bookingType === EntitySubType.RESTAURANT)
           this.configData.source = [
             ...this.configData.source,

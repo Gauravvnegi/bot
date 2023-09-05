@@ -74,8 +74,8 @@ export type ItemsData = {
 };
 
 export type ReservationSummary = {
-  fromDate: string;
-  toDate: string;
+  from: string;
+  to: string;
   adultCount?: number;
   outletType?: EntitySubType;
   bookingItems?: BookingItemFormData[];

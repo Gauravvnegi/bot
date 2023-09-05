@@ -14,16 +14,15 @@ import { PaymentMethodComponent } from './components/form-components/payment-met
 import { InstructionsComponent } from './components/form-components/instructions/instructions.component';
 import { GuestInformationComponent } from './components/form-components/guest-information/guest-information.component';
 import { BookingSummaryComponent } from './components/form-components/booking-summary/booking-summary.component';
-import { ReservationComponent } from './components/reservation/reservation.component';
 import { ReservationFormWrapperComponent } from './components/reservation-form-wrapper/reservation-form-wrapper.component';
 
 export const adminManageReservationRoutes: Route[] = [
   {
-    path: '',
+    path: manageReservationRoutes.manageReservation.route,
     component: MainComponent,
     children: [
       {
-        path: manageReservationRoutes.manageReservation.route,
+        path: '',
         component: ManageReservationDataTableComponent,
       },
       {
@@ -69,7 +68,6 @@ export class AdminManageReservationRoutingModule {
     InstructionsComponent,
     GuestInformationComponent,
     BookingSummaryComponent,
-    ReservationComponent,
     ReservationFormWrapperComponent,
   ];
 }

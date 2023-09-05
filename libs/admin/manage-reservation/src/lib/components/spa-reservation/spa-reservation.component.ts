@@ -229,8 +229,8 @@ export class SpaReservationComponent extends BaseReservationComponent
       ]),
     };
     const data: ReservationSummary = {
-      fromDate: this.reservationInfoControls.dateAndTime.value,
-      toDate: this.reservationInfoControls.dateAndTime.value,
+      from: this.reservationInfoControls.dateAndTime.value,
+      to: this.reservationInfoControls.dateAndTime.value,
       adultCount: this.userForm.get('bookingInformation.numberOfAdults').value,
       items: this.spaItemsControls.map((item) => ({
         itemId: item.get('serviceName').value,

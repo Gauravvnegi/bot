@@ -5,7 +5,6 @@ import {
 } from '@hospitality-bot/admin/shared';
 import { FormService } from '../../services/form.service';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
-import { initial } from 'lodash';
 import { SelectedEntity } from '../../types/reservation.type';
 
 @Component({

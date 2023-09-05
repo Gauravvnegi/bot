@@ -279,7 +279,7 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
             (res) => {
               let data = new RoomTypeForm().deserialize(res);
               const { staticRatePlans, dynamicRatePlans, ...rest } = data;
-              this.disableRoomType = data.isBaseRoomType;
+              this.setBasePriceDisability(data.isBaseRoomType);
               if (this.isPricingDynamic) {
                 this.useForm
                   .get('dynamicRatePlans')
@@ -554,13 +554,21 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
     this.ratePlanArray.at(index).get('status').setValue(isToogleOn);
   }
 
-  onRoomTypeToggleSwitch(isToggleOn: boolean) {
+  setBasePriceDisability(isBaseRoomType: boolean) {
     const ratePlanControl = this.isPricingDynamic
       ? this.useForm.get('dynamicRatePlans.basePrice')
       : this.useForm.get('staticRatePlans.basePrice');
 
-    this.useForm.get('isBaseRoomType').setValue(isToggleOn);
+    if (isBaseRoomType) {
+      ratePlanControl.enable();
+    } else {
+      ratePlanControl.disable();
+    }
+  }
 
+  onRoomTypeToggleSwitch(isToggleOn: boolean) {
+    this.useForm.get('isBaseRoomType').setValue(isToggleOn);
+    this.setBasePriceDisability(isToggleOn);
     if (isToggleOn) {
       // const dialogConfig = new MatDialogConfig();
       // dialogConfig.disableClose = true;
@@ -568,7 +576,6 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
       //   ModalComponent,
       //   dialogConfig
       // );
-
       // togglePopupCompRef.componentInstance.content = {
       //   heading: 'In-active Room Type',
       //   description: [
@@ -591,13 +598,9 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
       //     variant: 'contained',
       //   },
       // ];
-
       // togglePopupCompRef.componentInstance.onClose.subscribe(() => {
       //   this.modalService.close();
       // });
-      ratePlanControl.enable();
-    } else {
-      ratePlanControl.disable();
     }
   }
 

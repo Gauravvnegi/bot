@@ -302,6 +302,7 @@ export class DynamicPricingHandler {
           )
         )
       );
+      item.hotelConfig.sort((a, b) => a.start - b.end);
       instance.listenChanges();
       this.mapHotelConfig(
         season.get('hotelConfig') as FormArray,

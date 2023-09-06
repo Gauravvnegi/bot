@@ -133,7 +133,7 @@ export class SpaReservationComponent extends BaseReservationComponent
       });
     }
   }
-  
+
   /**
    * @function onItemsAdded To keep track of the current index in the form array.
    * @param index current index
@@ -270,7 +270,7 @@ export class SpaReservationComponent extends BaseReservationComponent
     this.loadingResults = true;
     this.$subscription.add(
       this.libraryService
-        .getLibraryItems<ServiceListResponse>(this.entityId, {
+        .getLibraryItems<ServiceListResponse>(this.outletId, {
           params: `?type=SERVICE&offset=${this.servicesOffSet}&limit=10&status=true&serviceType=${ServicesTypeValue.PAID}`,
         })
         .subscribe(
@@ -307,7 +307,7 @@ export class SpaReservationComponent extends BaseReservationComponent
     if (text) {
       this.loadingResults = true;
       this.libraryService
-        .searchLibraryItem(this.entityId, {
+        .searchLibraryItem(this.outletId, {
           params: `?key=${text}&type=${LibrarySearchItem.SERVICE}`,
         })
         .subscribe(

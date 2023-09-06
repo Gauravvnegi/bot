@@ -60,12 +60,13 @@
       }"
     ></hospitality-bot-input>
 
-    <hospitality-bot-company-list
+    <hospitality-bot-members-list
       class="half-width"
       controlName="company"
       type="COMPANY"
-      (createCompany)="createNewCompany()"
-    ></hospitality-bot-company-list>
+      label="Company Name"
+      (createMembers)="createNewCompany()"
+    ></hospitality-bot-members-list>
 
     <hospitality-bot-address-component
       class="half-width"

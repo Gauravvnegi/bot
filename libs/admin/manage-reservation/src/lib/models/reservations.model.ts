@@ -2,10 +2,8 @@ import {
   BookingItems,
   BookingItemsSummary,
   PaymentMethodConfig,
-  PricingDetails,
   ReservationListResponse,
   RoomReservationRes,
-  SummaryPricing,
   SummaryResponse,
 } from '../types/response.type';
 import {
@@ -207,7 +205,9 @@ export class ReservationFormData {
   deserialize(input: RoomReservationResponse) {
     this.reservationInformation = new BookingInfo().deserialize(input);
     this.guestInformation = new GuestInfo().deserialize(input.guest);
-    this.offerId = input?.id;
+    // this.offerId = input?.id;
+    // if(input)
+    this.offerId = input.offer.offerType === 'COMPANY' ? null : input.offer.id;
     this.nextStates = [input.reservationType, ...input.nextStates];
     this.instructions = new Instructions().deserialize(input);
     this.roomInformation = input?.bookingItems.map((item: BookingItems) => ({
@@ -236,8 +236,8 @@ export class ReservationFormData {
 export class OutletForm {
   reservationInformation: BookingInfo;
   guestInformation: GuestInfo;
-  // paymentMethod: PaymentInfo;
   offerId: string;
+  instructions: Instructions;
   orderInformation?: OrderInfo;
   bookingInformation?: BookingInformation;
   eventInformation?: EventInformation;
@@ -246,8 +246,8 @@ export class OutletForm {
   deserialize(input: OutletFormData) {
     this.reservationInformation = new BookingInfo().deserialize(input);
     this.guestInformation = new GuestInfo().deserialize(input.guest);
-    // this.paymentMethod = new PaymentInfo().deserialize(input);
     this.offerId = input?.offerId;
+    this.instructions = new Instructions().deserialize(input);
     this.nextStates = [input.reservationType, ...input.nextStates];
     switch (input.outletType) {
       case EntitySubType.RESTAURANT:
@@ -271,7 +271,7 @@ export class OrderInfo {
   tableNumber: string;
 
   deserialize(input) {
-    this.numberOfAdults = input?.numberOfAdults ?? 1;
+    this.numberOfAdults = input?.occupancyDetails.maxAdult ?? 1;
     this.kotInstructions = input?.kotInstructions ?? '';
     this.menuItems = input.items.map((item) => ({
       menuItems: item?.itemId,
@@ -316,7 +316,7 @@ export class BookingInformation {
   spaItems: SpaItems[];
 
   deserialize(input) {
-    this.numberOfAdults = input?.numberOfAdults ?? 1;
+    this.numberOfAdults = input?.occupancyDetails.maxAdult ?? 1;
     this.spaItems = input.items.map((item) => ({
       serviceName: item?.itemId,
       unit: item?.unit ?? 1,
@@ -457,7 +457,7 @@ export class SummaryData {
 
 export class BookingConfig {
   marketSegment: Option[] = [];
-  source: Option[] = [];
+  source: { label: string; value: string; type?: Option[] }[] = [];
   type: Option[] = [];
   deserialize(input): this {
     this.marketSegment = input?.marketSegment.map((item) => ({
@@ -468,10 +468,64 @@ export class BookingConfig {
       label: this.toCamelCase(item),
       value: item,
     }));
-    this.source = input?.source.map((item) => ({
-      label: this.toCamelCase(item),
-      value: item,
-    }));
+    // this.source = input?.source.map((item) => ({
+    //   label: this.toCamelCase(item),
+    //   value: item,
+    //   type: item?.type,
+    // }));
+
+    this.source = [
+      {
+        label: this.toCamelCase('OTA'),
+        value: 'OTA',
+        type: [
+          {
+            value: 'EASEMYTRIP',
+            label: 'Easemytrip',
+          },
+          {
+            value: 'YATRA',
+            label: 'Yatra',
+          },
+          {
+            value: 'AGODA',
+            label: 'Agoda',
+          },
+          {
+            value: 'BOOKINGDC',
+            label: 'Booking.com',
+          },
+          {
+            value: 'EXPDC',
+            label: 'Expedia',
+          },
+          {
+            value: 'ASO',
+            label: 'Airbnb',
+          },
+        ],
+      },
+      {
+        label: this.toCamelCase('AGENT'),
+        value: 'AGENT',
+      },
+      {
+        label: this.toCamelCase('WALK_IN'),
+        value: 'WALK_IN',
+      },
+      {
+        label: this.toCamelCase('OFFLINE_SALES'),
+        value: 'OFFLINE_SALES',
+      },
+      {
+        label: this.toCamelCase('CREATE_WITH'),
+        value: 'CREATE_WITH',
+      },
+      {
+        label: this.toCamelCase('OTHER'),
+        value: 'OTHER',
+      },
+    ];
     return this;
   }
 

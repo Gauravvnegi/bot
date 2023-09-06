@@ -64,7 +64,7 @@ export type RoomListResponse = {
 export type RoomTypeResponse = {
   id: string;
   name: string;
-  imageUrls: string[];
+  imageUrl: ImageUrl[];
   description: string;
   complimentaryAmenities: Amenity[];
   paidAmenities: Amenity[];
@@ -85,8 +85,9 @@ export type RoomTypeResponse = {
   originalPrice: number;
   currency: string;
   features: string[];
-  isBaseRoomType: boolean;
+  isBaseRoomType?: boolean;
 };
+
 
 export type RatePlanRes = {
   label?: string;
@@ -254,3 +255,8 @@ export type StatusDetails = {
   fromDate?: number;
   isCurrentStatus?: boolean;
 };
+
+export type ImageUrl = {
+  isFeatured: boolean;
+  url: string;
+}

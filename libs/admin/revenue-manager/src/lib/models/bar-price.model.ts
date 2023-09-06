@@ -33,22 +33,27 @@ export class BarPriceFactory {
 
       data.push({
         id: roomTypeId,
+        isBaseRoomType: currentBarPrice.isBase,
         pricingDetails: priceDetails,
-        ratePlans: currentBarPrice.ratePlans
-          .filter(
-            (item) =>
-              !(
-                item.label == BarPriceRatePlan.double ||
-                item.label == BarPriceRatePlan.triple
-              )
-          )
-          .map(
-            (item) =>
-              ({
-                id: item.id,
-                variablePrice: +item.value,
-              } as BarRatePlans)
-          ),
+        ratePlans: [
+          ...currentBarPrice.ratePlans
+            .filter(
+              (item) =>
+                !(
+                  item.label == BarPriceRatePlan.double ||
+                  item.label == BarPriceRatePlan.triple
+                )
+            )
+            .map((item) => ({
+              id: item.id,
+              variablePrice: +item.value,
+            })),
+          {
+            id: currentBarPrice.baseId,
+            variablePrice: +currentBarPrice.variablePrice,
+            isBase: true,
+          },
+        ],
       });
     });
 

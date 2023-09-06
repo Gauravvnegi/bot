@@ -15,7 +15,7 @@
   .wrapper {
     .label {
       margin-top: -0.5rem !important;
-      font-size: 1rem;
+      font-size: 14px;
       line-height: 1.07;
       letter-spacing: 0.84px;
       text-align: left;
@@ -28,9 +28,9 @@
 }
 
 :host ::ng-deep .p-float-label input.p-filled ~ label {
-  top: 0.1rem !important;
+  top: -2px !important;
 }
 
 :host ::ng-deep .p-float-label input:focus ~ label {
-  top: 0.1rem !important;
+  top: -2px !important;
 }

@@ -8,6 +8,7 @@ import {
   BaseDatatableComponent as BaseDatableComponent,
   ConfigService,
   EntitySubType,
+  EntityTabFilterResponse,
   EntityType,
   Option,
   QueryConfig,
@@ -43,8 +44,8 @@ import { ManageReservationService } from '../../services/manage-reservation.serv
 import { ReservationListResponse } from '../../types/response.type';
 import { FormService } from '../../services/form.service';
 import { SelectedEntity } from '../../types/reservation.type';
-import { distinctUntilChanged, tap } from 'rxjs/operators';
 import { InvoiceService } from 'libs/admin/invoice/src/lib/services/invoice.service';
+import { distinctUntilChanged, tap } from 'rxjs/operators';
 
 @Component({
   selector: 'hospitality-bot-manage-reservation-data-table',
@@ -77,8 +78,6 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
   isAllTabFilterRequired: boolean = true;
   isSelectedEntityChanged = false;
 
-  private destroy$ = new Subject<void>();
-
   menuOptions: Option[] = MenuOptions;
 
   constructor(
@@ -101,6 +100,7 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
     this.tableName = title;
     this.listenForGlobalFilters();
     this.listenForSelectedEntityChange();
+    this.formService.reservationForm.next(null); // Reset reservation form
   }
 
   /**
@@ -108,20 +108,22 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
    */
   listenForGlobalFilters(): void {
     this.entityId = this.globalFilterService.entityId;
-    this.globalQueries = [];
+    let previousDateRange = {};
     this.globalFilterService.globalFilter$.subscribe((data) => {
-      // set-global query everytime global filter changes
       this.globalQueries = [...data['dateRange'].queryValue];
-      // Only run if selectedEntity is not changed
-      if (!this.isSelectedEntityChanged && this.selectedEntity) {
-        this.initTableValue();
+      if (
+        JSON.stringify(data.dateRange) !== JSON.stringify(previousDateRange)
+      ) {
+        if (!this.isSelectedEntityChanged && this.selectedEntity) {
+          this.initTableValue();
+        }
       }
+      previousDateRange = { ...data.dateRange };
     });
   }
 
   loadData(event: LazyLoadEvent): void {
     this.formService.selectedTab = this.selectedTab;
-    // Only run if selectedEntity is not changed
     if (!this.isSelectedEntityChanged && this.selectedEntity) {
       this.initTableValue();
     }
@@ -386,7 +388,7 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
   ngOnDestroy(): void {
     this.$subscription.unsubscribe();
     this.$selectedEntitySubscription.unsubscribe();
-    this.destroy$.next();
-    this.destroy$.complete();
+    // this.destroy$.next();
+    // this.destroy$.complete();
   }
 }

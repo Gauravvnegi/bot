@@ -15,6 +15,7 @@ import {
   RoomTypeResponse,
   ServiceResponse,
 } from '../types/service-response';
+import { filter, map } from 'rxjs/operators';
 
 @Injectable()
 export class RoomService extends ApiService {
@@ -81,6 +82,17 @@ export class RoomService extends ApiService {
     );
   }
 
+  getBaseRoomType(entityId: string): Observable<RoomTypeResponse[]> {
+    return this.get(`/api/v1/entity/${entityId}/inventory?type=ROOM_TYPE`).pipe(
+      map((response: RoomTypeListResponse) => {
+        // Filter roomTypes where isBaseRoomType is true
+        return response.roomTypes.filter(
+          (roomType) => roomType.isBaseRoomType === true
+        );
+      })
+    );
+  }
+  
   updateRoomStatus(
     entityId: string,
     data: {

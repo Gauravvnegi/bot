@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import {
   ControlContainer,
   FormBuilder,
@@ -14,6 +14,7 @@ import { Subscription } from 'rxjs';
 import { manageGuestRoutes } from 'libs/admin/guests/src/lib/constant/route';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { FormService } from '../../../services/form.service';
+import { debounceTime } from 'rxjs/operators';
 
 @Component({
   selector: 'hospitality-bot-guest-information',
@@ -35,6 +36,8 @@ export class GuestInformationComponent implements OnInit {
 
   @Input() reservationId: string;
 
+  @Output() getSummary: EventEmitter<any> = new EventEmitter<any>();
+
   constructor(
     private fb: FormBuilder,
     public controlContainer: ControlContainer,
@@ -48,6 +51,7 @@ export class GuestInformationComponent implements OnInit {
   ngOnInit(): void {
     this.entityId = this.globalFilterService.entityId;
     this.addFormGroup();
+    this.listenForGuestDetailsChange();
     this.listenForGlobalFilters();
     this.initGuestDetails();
   }
@@ -58,6 +62,18 @@ export class GuestInformationComponent implements OnInit {
       guestDetails: ['', [Validators.required]],
     };
     this.parentFormGroup.addControl('guestInformation', this.fb.group(data));
+  }
+
+  listenForGuestDetailsChange() {
+    // Call summary data on guest details changes for company discount
+    this.parentFormGroup
+      .get('guestInformation.guestDetails')
+      .valueChanges.pipe(debounceTime(1000))
+      .subscribe((res) => {
+        if (res) {
+          this.getSummary.emit();
+        }
+      });
   }
 
   /**
@@ -113,7 +129,7 @@ export class GuestInformationComponent implements OnInit {
   }
 
   createGuest() {
-    this.formService.reservationForm = this.parentFormGroup.getRawValue();
+    this.formService.reservationForm.next(this.parentFormGroup.getRawValue());
     if (this.reservationId) {
       this.router.navigateByUrl(
         `/pages/members/guests/${manageGuestRoutes.editGuest.route}/${this.reservationId}`
@@ -149,24 +165,27 @@ export class GuestInformationComponent implements OnInit {
 
   initGuestDetails() {
     if (this.reservationId)
-      this.formService.guestInformation.subscribe((res) => {
-        if (res) {
-          if (
-            this.guestOptions.findIndex((item) => item.value === res.id) === -1
-          ) {
-            this.guestOptions.push({
-              label: `${res.firstName} ${res.lastName}`,
-              value: res.id,
-              phoneNumber: res.phoneNumber,
-              cc: res.cc,
-              email: res.email,
-            });
+      this.$subscription.add(
+        this.formService.guestInformation.subscribe((res) => {
+          if (res) {
+            if (
+              this.guestOptions.findIndex((item) => item.value === res.id) ===
+              -1
+            ) {
+              this.guestOptions.push({
+                label: `${res.firstName} ${res.lastName}`,
+                value: res.id,
+                phoneNumber: res.phoneNumber,
+                cc: res.cc,
+                email: res.email,
+              });
+            }
+            this.parentFormGroup
+              .get('guestInformation.guestDetails')
+              .patchValue(res.id);
           }
-          this.parentFormGroup
-            .get('guestInformation.guestDetails')
-            .patchValue(res.id);
-        }
-      });
+        })
+      );
   }
 
   getConfig() {
@@ -180,5 +199,12 @@ export class GuestInformationComponent implements OnInit {
       },
     ];
     return { params: this.adminUtilityService.makeQueryParams(config) };
+  }
+
+  /**
+   * @function ngOnDestroy to unsubscribe subscription.
+   */
+  ngOnDestroy(): void {
+    this.$subscription.unsubscribe();
   }
 }

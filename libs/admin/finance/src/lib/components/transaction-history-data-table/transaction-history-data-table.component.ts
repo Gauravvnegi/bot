@@ -165,8 +165,12 @@ export class TransactionHistoryDataTableComponent extends BaseDatatableComponent
             `${this.tableName.toLowerCase()}_export_${new Date().getTime()}.csv`
           );
         },
-        () => {},
-        this.handleFinal
+        (error) => {
+          this.loading = false;
+        },
+        () => {
+          this.loading = false;
+        }
       )
     );
   }

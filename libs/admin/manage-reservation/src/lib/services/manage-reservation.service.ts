@@ -46,7 +46,7 @@ export class ManageReservationService extends ApiService {
     bookingType: string
   ): Observable<K> {
     return this.put(
-      `/api/v1/booking/${reservationId}?bookingType=${bookingType}&entityId=${entityId}`,
+      `/api/v1/booking/${reservationId}?type=${bookingType}&entityId=${entityId}`,
       data
     );
   }

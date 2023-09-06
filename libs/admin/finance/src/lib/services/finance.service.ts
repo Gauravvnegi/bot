@@ -41,7 +41,7 @@ export class FinanceService extends ApiService {
   }
 
   exportInvoiceCSV(config: QueryConfig): Observable<any> {
-    return this.get(`/api/v1/invoice/export${config.params}`, {
+    return this.get(`/api/v1/invoices/export${config.params}`, {
       responseType: 'blob',
     });
   }

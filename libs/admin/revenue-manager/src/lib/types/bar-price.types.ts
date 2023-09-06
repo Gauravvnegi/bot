@@ -7,6 +7,7 @@ export type UpdateBarPriceRequest = {
 
 export type BarPriceTypes = {
   id: string;
+  isBaseRoomType: boolean;
   pricingDetails: PricingDetails;
   ratePlans: BarRatePlans[];
 };
@@ -14,6 +15,7 @@ export type BarPriceTypes = {
 export type BarRatePlans = {
   id: string;
   variablePrice: number;
+  isBase?: boolean;
 };
 
 export type BarPriceFormType = {
@@ -30,6 +32,9 @@ export type BarPrice = {
   id: string;
   label: string;
   price: number;
+  baseId: string;
+  isBase: boolean;
+  variablePrice: number;
   ratePlans: LabelValue<number>[];
 };
 

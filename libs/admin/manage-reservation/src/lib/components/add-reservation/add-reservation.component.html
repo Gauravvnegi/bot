@@ -23,6 +23,7 @@
       </p-accordionTab>
       <hospitality-bot-guest-information
         [reservationId]="reservationId"
+        (getSummary)="getSummaryData()"
       ></hospitality-bot-guest-information>
       <!-- <hospitality-bot-billing-address></hospitality-bot-billing-address> -->
       <hospitality-bot-instructions></hospitality-bot-instructions>

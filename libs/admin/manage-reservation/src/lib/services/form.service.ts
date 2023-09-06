@@ -16,8 +16,6 @@ import { GuestInfo } from '../models/reservations.model';
 })
 export class FormService {
   dateDifference = new BehaviorSubject(1);
-  toDate: Date;
-  fromDate: Date;
 
   setInitialDates = new BehaviorSubject<String>(null);
 
@@ -70,7 +68,7 @@ export class FormService {
 
     roomReservationData.guestId = input.guestInformation?.guestDetails;
     roomReservationData.specialRequest = input.instructions.specialInstructions;
-
+    roomReservationData.offerId = input.offerId ?? null;
     // Map Booking Items
     if (input.roomInformation?.roomTypes) {
       roomReservationData.bookingItems = input.roomInformation.roomTypes.map(

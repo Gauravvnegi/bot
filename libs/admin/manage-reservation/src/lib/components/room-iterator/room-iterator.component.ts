@@ -292,7 +292,7 @@ export class RoomIteratorComponent extends IteratorComponent
     this.roomControls[index]
       .get('roomNumbers')
       .valueChanges.subscribe((res) => {
-        if (res) {
+        if (res && res.length) {
           this.roomControls[index]
             .get('roomCount')
             .patchValue(res.length, { emitEvent: false });

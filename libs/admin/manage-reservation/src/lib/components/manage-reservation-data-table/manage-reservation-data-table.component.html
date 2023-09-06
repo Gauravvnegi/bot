@@ -1,21 +1,3 @@
-<hospitality-bot-navigation-header
-  [heading]="'Welcome To Reservation'"
-  [routes]="navRoutes"
-  [isBack]="false"
->
-</hospitality-bot-navigation-header>
-
-<hospitality-bot-entity-tab-filter
-  [config]="{
-    isSticky: true,
-    extraGap: 70,
-    scrollBoundary: 25,
-    isAllOutletTabFilter: false
-  }"
-  class="tab-filter"
-  (onEntityTabFilterChanges)="onEntityTabFilterChanges($event)"
-></hospitality-bot-entity-tab-filter>
-
 <div
   class="action-header"
   [ngClass]="{ 'action-header__sticky': isScrolledUp }"

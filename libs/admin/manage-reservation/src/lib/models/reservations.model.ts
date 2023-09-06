@@ -205,7 +205,9 @@ export class ReservationFormData {
   deserialize(input: RoomReservationResponse) {
     this.reservationInformation = new BookingInfo().deserialize(input);
     this.guestInformation = new GuestInfo().deserialize(input.guest);
-    this.offerId = input?.id;
+    // this.offerId = input?.id;
+    // if(input)
+    this.offerId = input.offer.offerType === 'COMPANY' ? null : input.offer.id;
     this.nextStates = [input.reservationType, ...input.nextStates];
     this.instructions = new Instructions().deserialize(input);
     this.roomInformation = input?.bookingItems.map((item: BookingItems) => ({

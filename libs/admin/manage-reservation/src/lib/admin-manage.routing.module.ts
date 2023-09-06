@@ -15,15 +15,16 @@ import { InstructionsComponent } from './components/form-components/instructions
 import { GuestInformationComponent } from './components/form-components/guest-information/guest-information.component';
 import { BookingSummaryComponent } from './components/form-components/booking-summary/booking-summary.component';
 import { ReservationFormWrapperComponent } from './components/reservation-form-wrapper/reservation-form-wrapper.component';
+import { ReservationComponent } from './components/reservation/reservation.component';
 
 export const adminManageReservationRoutes: Route[] = [
   {
-    path: manageReservationRoutes.manageReservation.route,
+    path: '',
     component: MainComponent,
     children: [
       {
-        path: '',
-        component: ManageReservationDataTableComponent,
+        path: manageReservationRoutes.manageReservation.route,
+        component: ReservationComponent,
       },
       {
         path: manageReservationRoutes.addReservation.route,
@@ -69,5 +70,6 @@ export class AdminManageReservationRoutingModule {
     GuestInformationComponent,
     BookingSummaryComponent,
     ReservationFormWrapperComponent,
+    ReservationComponent,
   ];
 }

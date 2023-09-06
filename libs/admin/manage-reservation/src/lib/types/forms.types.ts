@@ -15,6 +15,7 @@ export class RoomReservationFormData {
   id?: string;
   specialRequest: string;
   totalPaidAmount: number;
+  offerId?: string;
 }
 
 export type BookingItemFormData = {

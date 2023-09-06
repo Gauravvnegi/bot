@@ -45,6 +45,7 @@ import { ReservationListResponse } from '../../types/response.type';
 import { FormService } from '../../services/form.service';
 import { SelectedEntity } from '../../types/reservation.type';
 import { InvoiceService } from 'libs/admin/invoice/src/lib/services/invoice.service';
+import { distinctUntilChanged, tap } from 'rxjs/operators';
 
 @Component({
   selector: 'hospitality-bot-manage-reservation-data-table',
@@ -77,15 +78,7 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
   isAllTabFilterRequired: boolean = true;
   isSelectedEntityChanged = false;
 
-  private destroy$ = new Subject<void>();
-
   menuOptions: Option[] = MenuOptions;
-  navRoutes = [
-    {
-      label: 'Manage Reservation',
-      link: '/admin',
-    },
-  ];
 
   constructor(
     public fb: FormBuilder,
@@ -106,6 +99,7 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
   ngOnInit(): void {
     this.tableName = title;
     this.listenForGlobalFilters();
+    this.listenForSelectedEntityChange();
     this.formService.reservationForm.next(null); // Reset reservation form
   }
 
@@ -135,18 +129,22 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
     }
   }
 
-  onEntityTabFilterChanges(event: EntityTabFilterResponse): void {
-    this.selectedEntity = {
-      id: event.entityId[0],
-      label: event.label,
-      type: event.outletType ? EntityType.OUTLET : EntityType.HOTEL,
-      subType: event.outletType ? event.outletType : EntitySubType.ROOM_TYPE,
-    };
-    this.formService.selectedEntity.next(this.selectedEntity);
-    this.isSelectedEntityChanged = true; // Since we only get here when selectedEntity has changed
-    this.resetTableValues();
-    this.initDetails(this.selectedEntity);
-    this.initTableValue();
+  listenForSelectedEntityChange() {
+    this.$selectedEntitySubscription.add(
+      this.formService.selectedEntity
+        .pipe(
+          distinctUntilChanged((prev, curr) => prev.subType === curr.subType), // Compare subType property for changes
+          tap((res) => {
+            this.selectedEntity = res;
+          })
+        )
+        .subscribe((res) => {
+          this.isSelectedEntityChanged = true; // Since we only get here when selectedEntity has changed
+          this.resetTableValues();
+          this.initDetails(this.selectedEntity);
+          this.initTableValue();
+        })
+    );
   }
 
   /**
@@ -390,7 +388,7 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
   ngOnDestroy(): void {
     this.$subscription.unsubscribe();
     this.$selectedEntitySubscription.unsubscribe();
-    this.destroy$.next();
-    this.destroy$.complete();
+    // this.destroy$.next();
+    // this.destroy$.complete();
   }
 }

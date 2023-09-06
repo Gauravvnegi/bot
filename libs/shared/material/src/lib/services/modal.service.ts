@@ -7,15 +7,6 @@ export class ModalService {
   constructor(private _dialog: MatDialog) {}
 
   __config: QrCodeModalContent;
-
-  set config(value) {
-    this.__config = value;
-  }
-
-  get config() {
-    return this.__config;
-  }
-
   openDialog(component, config?): MatDialogRef<any> {
     return this._dialog.open(component, {
       width: config.width,

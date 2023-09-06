@@ -31,7 +31,6 @@ export class QrCodeModalComponent implements OnInit {
   ngOnInit(): void {
     const data = this.modalService.__config;
     Object.assign(this, data);
-    console.log(this.backgroundURl);
   }
 
   close(): void {

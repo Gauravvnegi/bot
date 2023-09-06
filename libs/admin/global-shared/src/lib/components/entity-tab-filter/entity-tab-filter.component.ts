@@ -1,6 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import {
-  FeedbackQueryValue,
   FilterValue,
   GlobalFilterService,
   SubscriptionPlanService,
@@ -9,10 +8,10 @@ import { feedback } from '@hospitality-bot/admin/feedback';
 import { ModalService } from '@hospitality-bot/shared/material';
 import { Subscription } from 'rxjs';
 import { HotelDetailService } from '../../../../../shared/src/lib/services/hotel-detail.service';
+import { EntityTabFilterResponse } from '@hospitality-bot/admin/shared';
 import {
   Branch,
   EntityTabFilterConfig,
-  EntityTabFilterResponse,
   FeedbackType,
 } from '../../types/entity-tab.type';
 
@@ -57,7 +56,9 @@ export class EntityTabFilterComponent implements OnInit {
     this.listenForGlobalFilters();
     this.onEntityTabFilterChanges.emit({
       entityId: [this.tabFilterItems[this.tabFilterIdx].value],
-      feedbackType: this.tabFilterItems[this.tabFilterIdx].type,
+      feedbacktype: this.tabFilterItems[this.tabFilterIdx].type,
+      label: this.tabFilterItems[this.tabFilterIdx].label,
+      outletType: this.tabFilterItems[this.tabFilterIdx]?.outletType,
     });
   }
 
@@ -199,6 +200,7 @@ export class EntityTabFilterComponent implements OnInit {
       disabled: false,
       chips: [],
       type: type,
+      outletType: item.type,
     };
   }
 
@@ -219,11 +221,11 @@ export class EntityTabFilterComponent implements OnInit {
         : this.tabFilterItems
             .map((item) => item.value)
             .filter((value) => value !== 'ALL');
-
-    //emit the selected tab filter value
     this.onEntityTabFilterChanges.emit({
       entityId: outletIds,
-      feedbackType: feedbackType,
+      feedbacktype: feedbackType,
+      label: this.tabFilterItems[this.tabFilterIdx].label,
+      outletType: this.tabFilterItems[this.tabFilterIdx]?.outletType,
     });
   }
 }

@@ -12,7 +12,7 @@ import { RoomType } from '../models/rooms-data-table.model';
 })
 export class FormService {
   roomStatus = new BehaviorSubject<string>(null);
-  
+
   getRoomTypeModData(
     roomTypeData: RoomTypeFormData,
     isPricingDynamic: boolean
@@ -88,6 +88,7 @@ export class FormService {
       isBase: true,
       id: defaultRatePlan.ratePlanId,
       status: defaultRatePlan.status,
+      variablePrice: defaultRatePlan.price,
       ...(!isPricingDynamic
         ? {
             discount: discount,
@@ -99,7 +100,7 @@ export class FormService {
 
     roomTypeFormData.area = data.area ?? 0;
     roomTypeFormData.description = data.description ?? '';
-    roomTypeFormData.imageUrls = data.imageUrls;
+    roomTypeFormData.imageUrl = data.imageUrl;
     roomTypeFormData.name = data.name;
     roomTypeFormData.occupancyDetails = {
       maxAdult: data.maxAdult,
@@ -131,7 +132,7 @@ export class FormService {
     roomTypeFormData.ratePlans = [defaultPlan, ...addedRatePlans];
     roomTypeFormData.roomAmenityIds = data.roomAmenityIds;
     roomTypeFormData.status = data.status;
-    roomTypeFormData.isBaseRoomType;
+    roomTypeFormData.isBaseRoomType = data.isBaseRoomType;
     return roomTypeFormData;
   }
 }
@@ -139,7 +140,7 @@ export class FormService {
 export class RoomTypeData {
   status: boolean;
   name: string;
-  imageUrls: string[];
+  imageUrl: string[];
   description: string;
   occupancyDetails: {
     maxOccupancy: number;

@@ -15,10 +15,7 @@ import { GuestInfo } from '../models/reservations.model';
   providedIn: 'root',
 })
 export class FormService {
-  outletIds = [];
   dateDifference = new BehaviorSubject(1);
-  toDate: Date;
-  fromDate: Date;
 
   setInitialDates = new BehaviorSubject<String>(null);
 
@@ -36,10 +33,6 @@ export class FormService {
     return this.selectedEntity.asObservable().pipe(distinctUntilChanged());
   }
 
-  type: string;
-  $entityTypeChange = new BehaviorSubject({ status: false, type: '' });
-  $feedbackType = new BehaviorSubject('');
-
   reservationDate = new BehaviorSubject<Date>(null);
   reservationDateAndTime = new BehaviorSubject<number>(0);
   getReservationDateAndTime(): Observable<Date> {
@@ -48,7 +41,7 @@ export class FormService {
   selectedTab = ReservationTableValue.ALL;
   enableAccordion: boolean = false;
 
-  reservationForm: ReservationForm;
+  reservationForm = new BehaviorSubject<ReservationForm>(null);
 
   mapRoomReservationData(
     input: ReservationForm,
@@ -75,7 +68,7 @@ export class FormService {
 
     roomReservationData.guestId = input.guestInformation?.guestDetails;
     roomReservationData.specialRequest = input.instructions.specialInstructions;
-
+    roomReservationData.offerId = input.offerId ?? null;
     // Map Booking Items
     if (input.roomInformation?.roomTypes) {
       roomReservationData.bookingItems = input.roomInformation.roomTypes.map(

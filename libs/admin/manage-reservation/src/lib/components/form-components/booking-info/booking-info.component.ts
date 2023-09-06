@@ -25,15 +25,21 @@ export class BookingInfoComponent implements OnInit {
   @Input() eventTypes: Option[] = [];
   @Input() bookingType: string;
 
+  otaOptions: Option[] = [];
   @Output() getSummary: EventEmitter<any> = new EventEmitter<any>();
 
   configData: BookingConfig;
+
+  agentSource = false;
 
   entityId: string;
   startMinDate = new Date();
   endMinDate = new Date();
   maxDate = new Date();
   minToDate = new Date();
+
+  fromDateValue = new Date();
+  toDateValue = new Date();
 
   constructor(
     public controlContainer: ControlContainer,
@@ -53,6 +59,8 @@ export class BookingInfoComponent implements OnInit {
         this.initDates();
       }
     });
+
+    this.listenForSourceChanges();
   }
 
   initDates() {
@@ -78,9 +86,8 @@ export class BookingInfoComponent implements OnInit {
     this.endMinDate.setDate(this.startMinDate.getDate() + 1);
     this.maxDate.setDate(this.endMinDate.getDate() - 1);
 
-    this.formService.fromDate = this.startMinDate;
-    this.formService.toDate = this.endMinDate;
-
+    this.fromDateValue = this.startMinDate;
+    this.toDateValue = this.endMinDate;
     // Reservation dates should be within 1 year time.
     if (this.bookingType === EntitySubType.ROOM_TYPE)
       this.maxDate.setDate(this.startMinDate.getDate() + 365);
@@ -110,19 +117,17 @@ export class BookingInfoComponent implements OnInit {
 
       fromDateControl.valueChanges.subscribe((res) => {
         const maxToLimit = new Date(res);
-        this.formService.fromDate = maxToLimit;
-        this.updateDateDifference();
+        this.fromDateValue = new Date(maxToLimit);
         // Check if fromDate is greater than or equal to toDate before setting toDateControl
-        if (maxToLimit >= this.formService.toDate) {
+        if (maxToLimit >= this.toDateValue) {
           maxToLimit.setDate(maxToLimit.getDate() + 1);
           // Calculate the date for one day later
           const nextDayTime = moment(maxToLimit).unix() * 1000;
           toDateControl.setValue(nextDayTime); // Set toDateControl to one day later
         }
-
+        this.updateDateDifference();
         this.minToDate = new Date(maxToLimit); // Create a new date object
         this.minToDate.setDate(maxToLimit.getDate());
-
         this.formService.reservationDate.next(res);
 
         if (this.roomControls.valid) {
@@ -131,8 +136,7 @@ export class BookingInfoComponent implements OnInit {
       });
 
       toDateControl.valueChanges.subscribe((res) => {
-        const maxLimit = new Date(res);
-        this.formService.toDate = maxLimit;
+        this.toDateValue = new Date(res);
         this.updateDateDifference();
         if (this.roomControls.valid) {
           this.getSummary.emit();
@@ -164,6 +168,21 @@ export class BookingInfoComponent implements OnInit {
     }
   }
 
+  listenForSourceChanges() {
+    const sourceControl = this.reservationInfoControls.source;
+    const sourceNameControl = this.reservationInfoControls.sourceName;
+
+    sourceControl.valueChanges.subscribe((res) => {
+      this.agentSource = res === 'AGENT';
+      this.otaOptions =
+        res === 'OTA'
+          ? this.configData.source.filter((item) => item.value === res)[0].type
+          : [];
+
+      sourceNameControl.reset();
+    });
+  }
+
   getCountryCode(): void {
     this.configService
       .getColorAndIconConfig(this.entityId)
@@ -172,17 +191,6 @@ export class BookingInfoComponent implements OnInit {
         this.configData = new BookingConfig().deserialize(
           response.bookingConfig
         );
-        this.configData.source = this.configData.source.filter(
-          (item) =>
-            item.value !== 'CREATE_WITH' &&
-            item.value !== 'OTHERS' &&
-            item.value !== 'OTA'
-        );
-        if (this.bookingType === EntitySubType.ROOM_TYPE)
-          this.configData.source = [
-            ...this.configData.source,
-            { label: 'OTA', value: 'OTA' },
-          ];
         if (this.bookingType === EntitySubType.RESTAURANT)
           this.configData.source = [
             ...this.configData.source,
@@ -197,12 +205,13 @@ export class BookingInfoComponent implements OnInit {
 
   updateDateDifference() {
     // Get the toDate and fromDate values from the form service
-    const toDateValue = this.formService.toDate;
-    const fromDateValue = this.formService.fromDate;
-    if (toDateValue && fromDateValue) {
+    // const toDateValue = this.formService.toDate;
+    // const fromDateValue = this.formService.fromDate;
+
+    if (this.fromDateValue && this.toDateValue) {
       // Calculate the date difference in days
       const dateDiffInMilliseconds =
-        toDateValue.getTime() - fromDateValue.getTime();
+        this.toDateValue.getTime() - this.fromDateValue.getTime();
       const dateDiffInDays = Math.ceil(
         dateDiffInMilliseconds / (1000 * 60 * 60 * 24)
       );

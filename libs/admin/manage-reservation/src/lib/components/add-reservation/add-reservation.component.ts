@@ -106,7 +106,6 @@ export class AddReservationComponent extends BaseReservationComponent
         const roomTypeIds = res.map((item) => item.roomTypeId);
         // check if the last added room type is selected
         if (res && res[res.length - 1].roomTypeId?.length) {
-          this.userForm.get('offerId').reset();
           this.getOfferByRoomType(roomTypeIds);
           this.getSummaryData();
         }
@@ -154,7 +153,6 @@ export class AddReservationComponent extends BaseReservationComponent
         .subscribe(
           (response: RoomReservationResponse) => {
             const data = new ReservationFormData().deserialize(response);
-
             const {
               guestInformation,
               roomInformation,
@@ -162,7 +160,6 @@ export class AddReservationComponent extends BaseReservationComponent
               totalPaidAmount,
               ...formData
             } = data;
-
             if (nextStates)
               this.reservationTypes = nextStates.map((item) => ({
                 label: convertToTitleCase(item),

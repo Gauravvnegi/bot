@@ -11,6 +11,8 @@ import * as moment from 'moment';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { FormService } from '../../../services/form.service';
 import { ReservationForm } from '../../../constants/form';
+import { debounce } from 'lodash';
+import { debounceTime } from 'rxjs/operators';
 
 @Component({
   selector: 'hospitality-bot-booking-info',
@@ -59,7 +61,6 @@ export class BookingInfoComponent implements OnInit {
         this.initDates();
       }
     });
-
     this.listenForSourceChanges();
   }
 
@@ -175,7 +176,7 @@ export class BookingInfoComponent implements OnInit {
     sourceControl.valueChanges.subscribe((res) => {
       this.agentSource = res === 'AGENT';
       this.otaOptions =
-        res === 'OTA'
+        res === 'OTA' && this.configData
           ? this.configData.source.filter((item) => item.value === res)[0].type
           : [];
 
@@ -191,11 +192,6 @@ export class BookingInfoComponent implements OnInit {
         this.configData = new BookingConfig().deserialize(
           response.bookingConfig
         );
-        if (this.bookingType === EntitySubType.RESTAURANT)
-          this.configData.source = [
-            ...this.configData.source,
-            { label: 'Online food order', value: 'ONLINE_FOOD_ORDER' },
-          ];
       });
     this.configService.getCountryCode().subscribe((res) => {
       const data = new CountryCodeList().deserialize(res);

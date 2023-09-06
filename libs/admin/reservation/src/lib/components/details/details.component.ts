@@ -202,17 +202,21 @@ export class DetailsComponent implements OnInit, OnDestroy {
     this.$subscription.add(
       this._reservationService.getReservationDetails(this.bookingId).subscribe(
         (response) => {
-          this.details = new Details().deserialize(
-            response,
-            this.globalFilterService.timezone
-          );
-          if (initGuestDetails) {
-            this.bookingNumber = response.number;
-            this.guestId = response.guestDetails.primaryGuest.id;
-            this.loadGuestInfo();
+          if (response) {
+            this.details = new Details().deserialize(
+              response,
+              this.globalFilterService.timezone
+            );
+            if (initGuestDetails) {
+              this.bookingNumber = response.number;
+              this.guestId = response.guestDetails.primaryGuest.id;
+              this.loadGuestInfo();
+            } else {
+              this.mapValuesInForm();
+              this.isReservationDetailFetched = true;
+            }
           } else {
-            this.mapValuesInForm();
-            this.isReservationDetailFetched = true;
+            this.closeDetails();
           }
         },
         ({ error }) => {

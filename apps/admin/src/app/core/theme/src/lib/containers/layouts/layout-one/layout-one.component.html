@@ -130,21 +130,26 @@
                   alt="filter"
                 />
               </div>
-              <div
-                class="filter-wrapper"
-                *ngIf="
-                  isGlobalFilterVisible &&
-                  (filterService.emitFilterValue$ | async) as initialFilterValue
-                "
-                [@slideInOut]
+              <p-sidebar
+                [visible]="isGlobalFilterVisible"
+                (onHide)="isGlobalFilterVisible = false"
+                [showCloseIcon]="false"
+                position="right"
               >
-                <admin-filter
-                  [initialFilterValue]="initialFilterValue"
-                  (onCloseFilter)="isGlobalFilterVisible = false"
-                  (onApplyFilter)="applyFilter($event)"
-                  (onResetFilter)="resetFilter($event)"
-                ></admin-filter>
-              </div>
+                <div
+                  *ngIf="
+                    isGlobalFilterVisible &&
+                    (filterService.emitFilterValue$ | async) as data
+                  "
+                >
+                  <admin-filter
+                    [initialFilterValue]="data"
+                    (onCloseFilter)="isGlobalFilterVisible = false"
+                    (onApplyFilter)="applyFilter($event)"
+                    (onResetFilter)="resetFilter($event)"
+                  ></admin-filter>
+                </div>
+              </p-sidebar>
             </div>
           </div>
         </div>

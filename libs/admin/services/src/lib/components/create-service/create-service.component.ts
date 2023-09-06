@@ -22,6 +22,7 @@ import { servicesRoutes } from '../../constant/routes';
 import { ServicesService } from '../../services/services.service';
 import { ServiceResponse } from '../../types/response';
 import { ServiceData, ServiceFormData } from '../../types/service';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'hospitality-bot-create-service',
@@ -76,7 +77,8 @@ export class CreateServiceComponent implements OnInit {
     private configService: ConfigService,
     private router: Router,
     private route: ActivatedRoute,
-    private hotelDetailService: HotelDetailService
+    private hotelDetailService: HotelDetailService,
+    private location: Location
   ) {
     this.serviceId = this.route.snapshot.paramMap.get('id');
 
@@ -141,12 +143,11 @@ export class CreateServiceComponent implements OnInit {
     this.useForm = this.fb.group({
       active: [true],
       currency: [''],
-
       parentId: ['', Validators.required],
       entityId: [''],
       imageUrl: ['', Validators.required],
       name: ['', Validators.required],
-      serviceType: [''],
+      serviceType: [ServiceTypeOptionValue.PAID],
       rate: [''],
 
       unit: ['', Validators.required],
@@ -156,7 +157,7 @@ export class CreateServiceComponent implements OnInit {
     });
     this.useForm.get('entityId').setValue(this.entityId);
 
-    this.updateFormControlSubscription();
+    // this.updateFormControlSubscription();
 
     /* Patch the form value if service id present */
     if (this.serviceId) {
@@ -172,33 +173,35 @@ export class CreateServiceComponent implements OnInit {
               ...rest,
               taxIds: taxes.map((item) => item.id),
             });
+            this.useForm.get('entityId').disable();
+
             this.code = res.packageCode;
           }, this.handleError)
       );
     }
   }
 
-  /**
-   * @function updateFormControlSubscription  Add and remove FormControl Based on service type selection
-   */
-  updateFormControlSubscription() {
-    this.useForm.get('serviceType').valueChanges.subscribe((res) => {
-      this.isSelectedTypePaid = res === this.types[1].value;
-      if (this.isSelectedTypePaid) {
-        this.useForm.addControl(
-          'rate',
-          new FormControl('', [Validators.required, Validators.min(0)])
-        );
-        this.useForm.addControl(
-          'currency',
-          new FormControl('', [Validators.required, Validators.min(1)])
-        );
-      } else {
-        this.useForm.removeControl('rate');
-        this.useForm.removeControl('currency');
-      }
-    });
-  }
+  // /**
+  //  * @function updateFormControlSubscription  Add and remove FormControl Based on service type selection
+  //  */
+  // updateFormControlSubscription() {
+  //   this.useForm.get('serviceType').valueChanges.subscribe((res) => {
+  //     this.isSelectedTypePaid = res === this.types[1].value;
+  //     if (this.isSelectedTypePaid) {
+  //       this.useForm.addControl(
+  //         'rate',
+  //         new FormControl('', [Validators.required, Validators.min(0)])
+  //       );
+  //       this.useForm.addControl(
+  //         'currency',
+  //         new FormControl('', [Validators.required, Validators.min(1)])
+  //       );
+  //     } else {
+  //       this.useForm.removeControl('rate');
+  //       this.useForm.removeControl('currency');
+  //     }
+  //   });
+  // }
 
   /**
    * @function initOptionsConfig To get all the dropdown options
@@ -308,7 +311,8 @@ export class CreateServiceComponent implements OnInit {
       '',
       { panelClass: 'success' }
     );
-    this.router.navigate(['/pages/library/services']);
+    this.location.back();
+    // this.router.navigate(['/pages/library/services']);
   };
 
   closeLoading = () => {

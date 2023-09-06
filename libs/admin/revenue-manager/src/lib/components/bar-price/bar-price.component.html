@@ -31,18 +31,55 @@
               *ngIf="checkForRoomTypeSelection(barPrice.get('id').value)"
             >
               <p-accordionTab [selected]="i == 0">
-                <p-header>{{ barPrice.get('label').value }}</p-header>
+                <p-header class="header">
+                  <div class="title-wrapper">
+                    <span class="title">
+                      {{ barPrice.get('label').value }}
+                    </span>
+                    <div *ngIf="barPrice.get('isBase').value" class="badge">
+                      <img
+                        src="assets/images/verified-badge.webp"
+                        alt="badge"
+                      />
+                    </div>
+                  </div>
+
+                  <hospitality-bot-toggle-switch-with-label
+                    class="toggle action-wrapper"
+                    [isToggleOn]="barPrice.get('isBase').value"
+                    [config]="{
+                      preContent: 'Base Room Type',
+                      disableTurnOff: barPrice.get('isBase').value
+                    }"
+                    (onToggleSwitch)="statusUpdate($event, barPrice)"
+                    click-stop-propagation
+                  ></hospitality-bot-toggle-switch-with-label>
+                </p-header>
                 <div [formGroupName]="i">
                   <div class="basic-detail">
                     <div class="field">
-                      <hospitality-bot-input
-                        label="Price"
-                        controlName="price"
-                        [props]="{
-                          type: 'number'
+                      <hospitality-bot-multiple-prefix-input
+                        [controls]="{
+                          preCountControlName: 'price',
+                          postCountControlName: 'variablePrice'
                         }"
-                        [disabled]="true"
-                      ></hospitality-bot-input>
+                        [labels]="{
+                          mainLabel: 'Price',
+                          preCountLabel: 'Base Price',
+                          postCountLabel: 'Price'
+                        }"
+                        [defaultProps]="{
+                          post: {
+                            type: 'number',
+                            float: true,
+                            errorMessages: {
+                              required: 'This is a required field.',
+                              min: 'Value must be greater than 0.'
+                            },
+                            isPriceField: true
+                          }
+                        }"
+                      ></hospitality-bot-multiple-prefix-input>
                     </div>
                     <div class="row-1" formArrayName="ratePlans">
                       <div
@@ -149,7 +186,7 @@
     [loading]="loading"
     [config]="{
       preHide: true,
-      postLabel: 'Save',
+      postLabel: 'Preview & Save',
       postDisable:
         (!isRoomsEmpty && loading) || loadingError || !allRoomTypes?.length
     }"

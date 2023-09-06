@@ -1,4 +1,9 @@
-import { AbstractControl, FormArray, FormGroup } from '@angular/forms';
+import {
+  AbstractControl,
+  FormArray,
+  FormBuilder,
+  FormGroup,
+} from '@angular/forms';
 import {
   ConfigItemType,
   ConfigRuleType,
@@ -11,6 +16,7 @@ import {
   RoomsConfigType,
   OccupancyRuleType,
   DynamicPricingUpdateRequestType,
+  TriggerErrorTypes,
 } from '../types/dynamic-pricing.types';
 import { OccupancyComponent } from '../components/occupancy/occupancy.component';
 import { RoomTypes } from 'libs/admin/channel-manager/src/lib/models/bulk-update.models';
@@ -151,43 +157,57 @@ export class DynamicPricingFactory {
             /**
              * We are collect the updated occupancyRules
              */
-            if (name == 'roomTypes') {
-              let occupancyRuleData: {
-                type: ConfigCategory;
-                id: string;
-                configRules: ConfigRuleType[];
-              }[] = [];
-              const selectedRoomType = [
-                ...formGroup.controls['roomType'].value,
-              ];
-              occupancyRuleData = (currentControl as FormArray).controls
-                .filter((item: FormGroup) =>
-                  selectedRoomType.includes(item.get('roomId').value)
-                )
-                .reduce((accumulator, roomType: FormGroup) => {
-                  const { occupancy } = roomType.controls;
-                  if (roomType.dirty) {
-                    const rules = (occupancy as FormArray).controls.map(
-                      (occupancyRule: FormGroup) =>
-                        DynamicPricingFactory.getOccupancyRules(occupancyRule)
-                    );
-                    accumulator.push({
-                      type: 'ROOM_TYPE',
-                      id: roomType.get('roomId').value,
-                      configRules: rules,
-                    });
-                  }
-                  return accumulator;
-                }, occupancyRuleData);
+            if (name == 'roomTypes' || name == 'removedRules') {
+              if (name == 'removedRules') {
+                removedRulesIds = [
+                  ...removedRulesIds,
+                  ...currentControl['controls'],
+                ];
+              } else {
+                let occupancyRuleData: {
+                  type: ConfigCategory;
+                  id: string;
+                  configRules: ConfigRuleType[];
+                }[] = [];
+                const selectedRoomType = [
+                  ...formGroup.controls['roomType'].value,
+                ];
+                occupancyRuleData = (currentControl as FormArray).controls
+                  .filter((item: FormGroup) =>
+                    selectedRoomType.includes(item.get('roomId').value)
+                  )
+                  .reduce((accumulator, roomType: FormGroup) => {
+                    const { occupancy } = roomType.controls;
+                    if (roomType.dirty) {
+                      const rules = (occupancy as FormArray).controls.map(
+                        (occupancyRule: FormGroup) =>
+                          DynamicPricingFactory.getOccupancyRules(occupancyRule)
+                      );
+                      accumulator.push({
+                        type: 'ROOM_TYPE',
+                        id: roomType.get('roomId').value,
+                        configRules: rules,
+                      });
+                    }
+                    return accumulator;
+                  }, occupancyRuleData);
 
-              if (occupancyRuleData.length) {
-                requestData['configItems'] = occupancyRuleData;
+                if (occupancyRuleData.length) {
+                  requestData['configItems'] = occupancyRuleData;
+                }
               }
             } else {
               otherDirtyMapper(currentControl, name);
             }
           } else {
-            if (name == 'hotelConfig') {
+            if (name == 'hotelConfig' || name === 'removedRules') {
+              if (name === 'removedRules') {
+                removedRulesIds = [
+                  ...removedRulesIds,
+                  ...currentControl['controls'],
+                ];
+              }
+
               requestData['configItems'] = [
                 {
                   type: 'HOTEL',
@@ -224,8 +244,12 @@ export class DynamicPricingFactory {
         type: 'PERCENTAGE',
         value: +discount?.value,
       },
-      ...(fromTime?.value && { fromTimeInMillis: +fromTime.value }),
-      ...(toTime?.value && { toTimeInMillis: +toTime.value }),
+      ...(fromTime?.value && {
+        fromTimeInMillis: (+fromTime.value + 1000) % (24 * 60 * 60 * 1000),
+      }),
+      ...(toTime?.value && {
+        toTimeInMillis: +toTime.value % (24 * 60 * 60 * 1000),
+      }),
     };
   }
 }
@@ -278,6 +302,7 @@ export class DynamicPricingHandler {
           )
         )
       );
+      item.hotelConfig.sort((a, b) => a.start - b.end);
       instance.listenChanges();
       this.mapHotelConfig(
         season.get('hotelConfig') as FormArray,
@@ -339,18 +364,21 @@ export class DynamicPricingHandler {
       const triggerConfig =
         type == 'DAY_TIME_TRIGGER'
           ? {
-              fromTime: rule?.fromTime,
+              fromTime: rule?.fromTime - 1000,
               toTime: rule?.toTime,
             }
           : {};
       rule &&
-        hotelOccupancy.patchValue({
-          id: rule.id,
-          start: rule.start,
-          end: rule.end,
-          discount: rule.discount,
-          ...triggerConfig,
-        });
+        hotelOccupancy.patchValue(
+          {
+            id: rule.id,
+            start: rule.start,
+            end: rule.end,
+            discount: rule.discount,
+            ...triggerConfig,
+          },
+          type === 'DAY_TIME_TRIGGER' ? { emitEvent: false } : {}
+        );
     });
   }
 
@@ -387,6 +415,33 @@ export class DynamicPricingHandler {
       item,
       'DAY_TIME_TRIGGER'
     );
+    DynamicPricingHandler.resetFormState(triggerFG, instance.fb);
+  }
+
+  static resetFormState(
+    form: FormGroup,
+    fb: FormBuilder,
+    response?: DynamicPricingRequest
+  ) {
+    const { hotelConfig } = form.controls;
+    form.removeControl('removedRules');
+    form.addControl('removedRules', fb.array([]));
+    form.markAsPristine();
+    form.markAsUntouched();
+    if (response) {
+      form.patchValue(
+        {
+          id: response.id,
+          type: 'update',
+        },
+        { emitEvent: false }
+      );
+    }
+
+    (hotelConfig as FormArray).controls.forEach((item) => {
+      item.markAsUntouched();
+      item.markAsPristine();
+    });
   }
 }
 
@@ -456,116 +511,123 @@ export class DynamicPricingForm {
   }
 }
 
-export function validateConfig(formArray: FormArray): boolean {
+export function validateConfig(
+  formArray: FormArray,
+  isVerifying = false
+): boolean {
   let isValid = true;
   const resetError = () => {
     formArray.controls.forEach((item: FormGroup) => {
       const { start, end, fromTime, toTime } = item.controls;
-      [start, end, fromTime, toTime].forEach((data: AbstractControl) =>
-        data.setErrors(null)
-      );
+      [start, end, fromTime, toTime].forEach((data: AbstractControl) => {
+        data.setErrors(
+          !data.value?.toString().length ? { required: true } : null
+        );
+      });
     });
   };
 
   formArray.controls.forEach((occupancy: FormGroup, occupancyIndex: number) => {
+    const otherOccupancy = formArray.controls.filter(
+      (item, index) => index != occupancyIndex
+    );
     if (isValid) {
       resetError();
-      isValid = validateOccupancy(formArray, occupancyIndex);
+      isValid = validateOccupancy(otherOccupancy, occupancy);
     }
   });
 
+  isValid && resetError();
+  !isVerifying && formArray.markAsDirty();
   return isValid;
 }
 
-function validateOccupancy(occupancyArray: FormArray, occupancyIndex: number) {
-  const { start, end, fromTime, toTime } = (occupancyArray.at(
-    occupancyIndex
-  ) as FormGroup).controls;
+function validateOccupancy(
+  occupancyArray: AbstractControl[],
+  occupancy: FormGroup
+) {
+  const { start, end, fromTime, toTime } = occupancy.controls;
+
   /**
    * Setting error to the control
    */
-  const setError = (
-    [...list],
-    errorType: 'collide' | 'timeGapError' | 'sameTime'
-  ) => {
+  const setError = ([...list], errorType: TriggerErrorTypes) => {
     list.forEach((item: FormGroup) => {
-      item.setErrors({ [errorType]: true });
+      item.setErrors(
+        item.value?.toString().length
+          ? { [errorType]: true }
+          : { required: true }
+      );
       item.markAsTouched();
     });
   };
 
-  const resetError = ([...list]) => {
-    list.forEach((item: FormGroup) => {
-      item.setErrors(null);
-    });
+  const hasOneHourGap = (fromTime: number, toTime: number) => {
+    const oneHourInMilliseconds = 60 * 60 * 1000;
+    return Math.abs(toTime - fromTime) >= oneHourInMilliseconds;
   };
 
-  const errorValidator = (
-    errorType: 'collide' | 'timeGapError' | 'sameTime'
-  ) => {
+  const errorValidator = (errorType: TriggerErrorTypes) => {
     let hasError = false;
-    occupancyArray.controls
-      .filter((item, index) => index != occupancyIndex)
-      .forEach((occupancy: FormGroup, index) => {
-        const {
-          start: innerStart,
-          end: innerEnd,
-          fromTime: innerFromTime,
-          toTime: innerToTime,
-        } = occupancy.controls;
 
-        /**
-         * At Least 1 Hrs Gap
-         */
-        const outerGapCheck = +toTime.value >= +fromTime.value + 3600000;
-        const innerGapCheck =
-          +innerToTime.value >= +innerFromTime.value + 3600000;
-        if (errorType == 'timeGapError' && (outerGapCheck || innerGapCheck)) {
-          setError(
-            !outerGapCheck
-              ? [fromTime, toTime]
-              : !innerGapCheck
-              ? [innerToTime, innerFromTime]
-              : [],
-            'timeGapError'
-          );
-          hasError = !(outerGapCheck || innerGapCheck);
-        }
+    occupancyArray.forEach((occupancy: FormGroup) => {
+      const {
+        start: innerStart,
+        end: innerEnd,
+        fromTime: innerFromTime,
+        toTime: innerToTime,
+      } = occupancy.controls;
 
-        /**
-         * Set Error who is same time & same conflicting occupancy
-         */
+      /**
+       * At Least 1 Hrs Gap
+       */
+      const outerGapCheck = hasOneHourGap(+toTime.value, +fromTime.value);
+      const innerGapCheck = hasOneHourGap(
+        +innerToTime.value,
+        +innerFromTime.value
+      );
+      if (errorType == 'timeGapError' && (!outerGapCheck || !innerGapCheck)) {
+        setError(
+          !outerGapCheck ? [fromTime, toTime] : [innerToTime, innerFromTime],
+          'timeGapError'
+        );
+        hasError = true;
+      }
+
+      /**
+       * Set Error who is same time & same conflicting occupancy
+       */
+      if (
+        errorType == 'sameTime' &&
+        +fromTime.value == +innerFromTime.value &&
+        +toTime.value == +innerToTime.value
+      ) {
         if (
-          errorType == 'sameTime' &&
-          +fromTime.value == +innerFromTime.value &&
-          +toTime.value == +innerToTime.value
+          (+start.value >= +innerStart.value &&
+            +start.value <= +innerEnd.value) ||
+          (+innerStart.value >= +start.value && innerStart.value <= +end.value)
         ) {
-          if (
-            (+start.value >= +innerStart.value &&
-              +start.value <= +innerEnd.value) ||
-            (+innerStart.value >= +start.value &&
-              innerStart.value <= +end.value)
-          ) {
-            setError(
-              [innerFromTime, innerToTime, start, end, innerStart, innerEnd],
-              errorType
-            );
-            hasError = true;
-          }
-        }
-
-        /**
-         * Time Collision Detection
-         */
-        if (
-          errorType === 'collide' &&
-          +fromTime.value > +innerFromTime.value &&
-          +fromTime.value < +innerToTime.value
-        ) {
+          setError([start, end, innerStart, innerEnd], errorType);
           hasError = true;
-          setError([fromTime, toTime, innerFromTime, innerToTime], errorType);
         }
-      });
+      }
+
+      /**
+       * Time Collision Detection
+       */
+      if (
+        errorType === 'collide' &&
+        ((+fromTime.value > +innerFromTime.value &&
+          +fromTime.value < +innerToTime.value) ||
+          (+toTime.value > +innerFromTime.value &&
+            +toTime.value < +innerToTime.value) ||
+          (+fromTime.value < +innerFromTime &&
+            +toTime.value > +innerToTime.value))
+      ) {
+        hasError = true;
+        setError([fromTime, toTime, innerFromTime, innerToTime], errorType);
+      }
+    });
     return hasError;
   };
 
@@ -573,5 +635,5 @@ function validateOccupancy(occupancyArray: FormArray, occupancyIndex: number) {
   const sameTimeError = errorValidator('sameTime');
   const collideError = errorValidator('collide');
 
-  return !(collideError || timeGapError || sameTimeError);
+  return !collideError && !timeGapError && !sameTimeError;
 }

@@ -65,8 +65,8 @@ export class SpaReservationComponent extends BaseReservationComponent
     this.initDetails();
     this.getReservationId();
     this.getServices();
-    this.initFormData();
     this.listenForFormChanges();
+    this.initFormData();
   }
 
   initDetails() {
@@ -110,9 +110,11 @@ export class SpaReservationComponent extends BaseReservationComponent
    * @function listenForFormChanges Listen for form values changes.
    */
   listenForFormChanges(): void {
-    this.formService.reservationDateAndTime.subscribe((res) => {
-      if (res) this.setDateAndTime(res);
-    });
+    this.$subscription.add(
+      this.formService.reservationDateAndTime.subscribe((res) => {
+        if (res) this.setDateAndTime(res);
+      })
+    );
     this.inputControls.bookingInformation.valueChanges
       .pipe(debounceTime(1000))
       .subscribe((res) => {
@@ -121,17 +123,23 @@ export class SpaReservationComponent extends BaseReservationComponent
   }
 
   initFormData() {
-    if (this.formService.reservationForm) {
-      const {
-        bookingInformation: { spaItems, ...spaInfo },
-        ...formData
-      } = this.formService.reservationForm;
-      this.spaItemsValues = spaItems;
-      this.userForm.patchValue({
-        bookingInformation: spaInfo,
-        ...formData,
-      });
-    }
+    this.$subscription.add(
+      this.formService.reservationForm
+        .pipe(debounceTime(500))
+        .subscribe((res) => {
+          if (res) {
+            const {
+              bookingInformation: { spaItems, ...spaInfo },
+              ...formData
+            } = res;
+            this.spaItemsValues = spaItems;
+            this.userForm.patchValue({
+              bookingInformation: spaInfo,
+              ...formData,
+            });
+          }
+        })
+    );
   }
 
   /**
@@ -141,7 +149,7 @@ export class SpaReservationComponent extends BaseReservationComponent
   onItemsAdded(index: number): void {
     this.spaItemsControls[index]
       .get('serviceName')
-      .valueChanges.pipe(debounceTime(1000))
+      .valueChanges.pipe(debounceTime(500))
       .subscribe((res) => {
         const selectedService = this.services.find(
           (service) => service.value === res
@@ -203,7 +211,6 @@ export class SpaReservationComponent extends BaseReservationComponent
               }));
 
             this.formValueChanges = true;
-
             this.spaItemsValues = spaItems;
             this.formService.guestInformation.next(guestInformation);
 
@@ -224,8 +231,8 @@ export class SpaReservationComponent extends BaseReservationComponent
       ]),
     };
     const data: ReservationSummary = {
-      fromDate: this.reservationInfoControls.dateAndTime.value,
-      toDate: this.reservationInfoControls.dateAndTime.value,
+      from: this.reservationInfoControls.dateAndTime.value,
+      to: this.reservationInfoControls.dateAndTime.value,
       adultCount: this.userForm.get('bookingInformation.numberOfAdults').value,
       items: this.spaItemsControls.map((item) => ({
         itemId: item.get('serviceName').value,
@@ -351,6 +358,7 @@ export class SpaReservationComponent extends BaseReservationComponent
    * @function create Reroute to create service or create package category
    */
   create() {
+    this.formService.reservationForm.next(this.userForm.getRawValue());
     this.router.navigate([`/pages/library/services/create-service`]);
   }
 
@@ -358,6 +366,13 @@ export class SpaReservationComponent extends BaseReservationComponent
     return ((this.userForm.get('bookingInformation') as FormGroup).get(
       'spaItems'
     ) as FormArray).controls;
+  }
+
+  /**
+   * @function ngOnDestroy to unsubscribe subscription.
+   */
+  ngOnDestroy(): void {
+    this.$subscription.unsubscribe();
   }
 
   /**

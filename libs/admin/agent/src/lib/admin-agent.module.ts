@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { AdminSharedModule } from '@hospitality-bot/admin/shared';
 import { AdminAgentRoutingModule } from './admin-agent.routing.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { CompanyListComponent } from './components/company-list/company-list.component';
+import { MembersListComponent } from './components/members-list/members-list.component';
 
 @NgModule({
   imports: [
@@ -13,7 +13,7 @@ import { CompanyListComponent } from './components/company-list/company-list.com
     FormsModule,
     ReactiveFormsModule,
   ],
-  exports: [CompanyListComponent],
+  exports: [MembersListComponent],
   declarations: [...AdminAgentRoutingModule.components],
 })
 export class AdminAgentModule {}

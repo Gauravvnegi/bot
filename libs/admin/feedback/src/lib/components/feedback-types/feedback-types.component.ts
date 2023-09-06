@@ -19,6 +19,7 @@ export class FeedbackTypesComponent implements OnInit {
   @Output() onTabFilterChange = new EventEmitter();
   @Input() extraGap = 60;
   @Input() scrollBoundary = 120;
+  isAllOutletSelected = true;
 
   entityId = '';
   tabFilterIdx = 0;
@@ -62,6 +63,10 @@ export class FeedbackTypesComponent implements OnInit {
         this.entityId = this.globalFilterService.entityId;
         this.globalFeedbackFilterType =
           data['filter'].value.feedback.feedbackType;
+
+        this.isAllOutletSelected =
+          data['filter'].value?.isAllOutletSelected ?? true;
+
         if (
           this.globalFeedbackFilterType === feedback.types.transactional ||
           this.globalFeedbackFilterType === feedback.types.both
@@ -122,14 +127,17 @@ export class FeedbackTypesComponent implements OnInit {
     this.tabFilterItems = [];
     if (this.globalFeedbackFilterType === feedback.types.both)
       this.tabFilterItems.push(this.getTabItem(branch, feedback.types.stay));
-    this.tabFilterItems.push({
-      label: 'All Outlets',
-      content: '',
-      value: 'ALL',
-      disabled: false,
-      chips: [],
-      type: feedback.types.transactional,
-    });
+    if (this.isAllOutletSelected) {
+      this.tabFilterItems.push({
+        label: 'All Outlets',
+        content: '',
+        value: 'ALL',
+        disabled: false,
+        chips: [],
+        type: feedback.types.transactional,
+      });
+    }
+
     this.outlets.forEach((outlet) => {
       if (this.outletIds[outlet.id]) {
         this.tabFilterItems.push(

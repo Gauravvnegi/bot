@@ -34,6 +34,9 @@ import { RoomService } from '../../services/room.service';
 import { RatePlanOptions } from '../../types/room';
 import { FormService } from '../../services/form.service';
 import { RoomType } from '../../models/rooms-data-table.model';
+import { MatDialogConfig } from '@angular/material/dialog';
+import { ModalService } from '@hospitality-bot/shared/material';
+import { ModalComponent } from 'libs/admin/shared/src/lib/components/modal/modal.component';
 
 @Component({
   selector: 'hospitality-bot-room-type',
@@ -55,7 +58,7 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
   isCompLoading: boolean = false;
   isPaidLoading: boolean = false;
   isPricingDynamic = false;
-  isBaseRoomType = true;
+  disableRoomType = false;
 
   baseRoomType: RoomType;
 
@@ -91,7 +94,8 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private snackbarService: SnackBarService,
     private formService: FormService,
-    private subscriptionPlanService: SubscriptionPlanService
+    private subscriptionPlanService: SubscriptionPlanService,
+    private modalService: ModalService
   ) {
     this.roomTypeId = this.route.snapshot.paramMap.get('id');
   }
@@ -125,7 +129,7 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
     this.useForm = this.fb.group({
       status: [true],
       name: ['', [Validators.required]],
-      imageUrls: [[], [Validators.required]],
+      imageUrl: [[], [Validators.required]],
       description: ['', [Validators.required]],
       complimentaryAmenities: [[], [Validators.required]],
       paidAmenities: [[]],
@@ -142,6 +146,7 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
       area: ['', [Validators.required, Validators.min(0)]],
 
       ratePlans: new FormArray([]),
+      isBaseRoomType: [false],
     });
 
     this.addRatePlanType();
@@ -153,11 +158,11 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
       this.useForm.patchValue(this.roomService.roomTypeFormData);
     }
 
-    // this.initBaseRoomTypeDetails();
-
     // Patch the form value if service id present
     if (this.roomTypeId) {
       this.initFormDetails();
+    } else {
+      this.initBaseRoomType();
     }
 
     /* Value changes subscription */
@@ -187,6 +192,21 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
     this.getServices(ServicesTypeValue.COMPLIMENTARY);
   }
 
+  initBaseRoomType() {
+    this.roomService.getBaseRoomType(this.entityId).subscribe((res) => {
+      const ratePlanControl = this.isPricingDynamic
+        ? this.useForm.get('dynamicRatePlans.basePrice')
+        : this.useForm.get('staticRatePlans.basePrice');
+
+      if (res.length) {
+        ratePlanControl.setValue(res[0].pricingDetails.base);
+      } else {
+        this.useForm.get('isBaseRoomType').setValue(true);
+        ratePlanControl.enable();
+      }
+    });
+  }
+
   addRatePlanType() {
     if (this.isPricingDynamic)
       this.useForm.addControl(
@@ -197,7 +217,10 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
             [Validators.required, Validators.maxLength(60)],
           ],
           basePriceCurrency: ['INR', [Validators.required]],
-          basePrice: ['', [Validators.required, Validators.min(0)]],
+          basePrice: [
+            { value: '', disabled: true },
+            [Validators.required, Validators.min(0)],
+          ],
           price: ['', [Validators.required, Validators.min(0)]],
           minPriceCurrency: ['INR', [Validators.required]],
           minPrice: ['', [Validators.required, Validators.min(0)]],
@@ -256,7 +279,8 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
             (res) => {
               let data = new RoomTypeForm().deserialize(res);
               const { staticRatePlans, dynamicRatePlans, ...rest } = data;
-
+              this.setBasePriceDisability(data.isBaseRoomType);
+              this.disableRoomType = data.isBaseRoomType;
               if (this.isPricingDynamic) {
                 this.useForm
                   .get('dynamicRatePlans')
@@ -295,7 +319,7 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
   addNewRatePlan(id?: string, label?: string) {
     const addedRatePlan = {
       label: ['', [Validators.required, Validators.maxLength(60)]],
-      currency: ['INR'],
+      currency: ['INR', [Validators.required]],
       extraPrice: ['', [Validators.required, Validators.min(0)]],
       description: [''],
       ratePlanId: [''],
@@ -494,14 +518,16 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
 
   updateDetails() {
     const data = this.useForm.getRawValue() as RoomTypeFormData;
-
     const modifiedData = {
       ...this.formService.getRoomTypeModData(data, this.isPricingDynamic),
       removeRatePlan: this.removedRatePlans,
       id: this.roomTypeId,
     };
+    const roomTypeData = {
+      roomType: modifiedData,
+    };
     this.subscription$.add(
-      this.roomService.updateRoomType(this.entityId, modifiedData).subscribe(
+      this.roomService.updateRoomType(this.entityId, roomTypeData).subscribe(
         (res) => {
           this.loading = false;
           this.router.navigate([`/pages/efrontdesk/room/${routes.dashboard}`]);
@@ -529,8 +555,57 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
     this.ratePlanArray.at(index).get('status').setValue(isToogleOn);
   }
 
+  setBasePriceDisability(isBaseRoomType: boolean) {
+    const ratePlanControl = this.isPricingDynamic
+      ? this.useForm.get('dynamicRatePlans.basePrice')
+      : this.useForm.get('staticRatePlans.basePrice');
+
+    if (isBaseRoomType) {
+      ratePlanControl.enable();
+    } else {
+      ratePlanControl.disable();
+    }
+  }
+
   onRoomTypeToggleSwitch(isToggleOn: boolean) {
-    // this.useForm.get('roomTypeStatus').setValue(isToggleOn);
+    this.useForm.get('isBaseRoomType').setValue(isToggleOn);
+    this.setBasePriceDisability(isToggleOn);
+
+    if (isToggleOn) {
+      // const dialogConfig = new MatDialogConfig();
+      // dialogConfig.disableClose = true;
+      // const togglePopupCompRef = this.modalService.openDialog(
+      //   ModalComponent,
+      //   dialogConfig
+      // );
+      // togglePopupCompRef.componentInstance.content = {
+      //   heading: 'In-active Room Type',
+      //   description: [
+      //     'You are about to mark this room type in-active.',
+      //     'Are you Sure?',
+      //   ],
+      // };
+      // togglePopupCompRef.componentInstance.actions = [
+      //   {
+      //     label: 'No',
+      //     onClick: () => this.modalService.close(),
+      //     variant: 'outlined',
+      //   },
+      //   {
+      //     label: 'Yes',
+      //     onClick: () => {
+      //       this.useForm.get('isBaseRoomType').setValue(isToggleOn);
+      //       this.modalService.close();
+      //     },
+      //     variant: 'contained',
+      //   },
+      // ];
+      // togglePopupCompRef.componentInstance.onClose.subscribe(() => {
+      //   this.modalService.close();
+      // });
+    } else {
+      this.initBaseRoomType();
+    }
   }
 
   resetForm() {

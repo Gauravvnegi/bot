@@ -63,12 +63,13 @@ export class DayTimeTriggerComponent implements OnInit {
   modifyTriggerFG(mode = Revenue.add, index?: number): void {
     const dayTimeFormArray = this.dynamicPricingControl.timeFA;
     if (mode != Revenue.add) {
-      const { type } = (dayTimeFormArray.at(index) as FormGroup).controls;
+      const triggerFG = dayTimeFormArray.at(index) as FormGroup;
+      const { type } = triggerFG.controls;
       if (type.value == 'update') {
         this.loading = true;
         this.$subscription.add(
           this.dynamicPricingService
-            .deleteDynamicPricing(dayTimeFormArray.at(index).get('id').value)
+            .deleteDynamicPricing(triggerFG.get('id').value)
             .subscribe(
               (res) => {
                 this.snackbarService.openSnackBarAsText(
@@ -76,7 +77,7 @@ export class DayTimeTriggerComponent implements OnInit {
                   '',
                   { panelClass: 'success' }
                 );
-                this.loadTriggers();
+                dayTimeFormArray.removeAt(index);
               },
               (error) => {
                 this.loading = false;
@@ -151,7 +152,7 @@ export class DayTimeTriggerComponent implements OnInit {
                 '',
                 { panelClass: 'success' }
               );
-              this.loadTriggers();
+              DynamicPricingHandler.resetFormState(triggerFG, this.fb);
             },
             (error) => {
               this.loading = false;
@@ -187,7 +188,10 @@ export class DayTimeTriggerComponent implements OnInit {
     ) => {
       const newTime = new Date(value);
       newTime.setSeconds(0);
-      control.patchValue(newTime.getTime(), isEmit && { emitEvent: false });
+      control.patchValue(
+        newTime.getTime() % (24 * 60 * 60 * 1000),
+        isEmit && { emitEvent: false }
+      );
       control.markAsDirty();
     };
     levelsFA.controls.forEach((levelFG: FormGroup) => {
@@ -202,7 +206,7 @@ export class DayTimeTriggerComponent implements OnInit {
 
       fromTime.valueChanges.subscribe((res) => {
         resetSeconds(+res, fromTime);
-        resetSeconds(+res + 3600000, toTime, false);
+        resetSeconds(+res + 60 * 60 * 1000, toTime, false);
         validateConfig(levelsFA);
       });
 
@@ -258,7 +262,7 @@ export class DayTimeTriggerComponent implements OnInit {
             '',
             { panelClass: 'success' }
           );
-          this.loadTriggers();
+          DynamicPricingHandler.resetFormState(form, this.fb, res);
         },
         (error) => {
           this.loading = false;

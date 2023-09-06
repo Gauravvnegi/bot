@@ -12,6 +12,12 @@
         postFieldType="select"
         [preOptions]="days"
         [postOptions]="days"
+        [props]="{
+          errorMessages: {
+            required: 'This is a required field.',
+            sameValue: 'Please select different days.'
+          }
+        }"
         [defaultProps]="{
           pre: {
             placeholder: 'From'
@@ -35,6 +41,12 @@
         postFieldType="select"
         [preOptions]="hours"
         [postOptions]="hours"
+        [props]="{
+          errorMessages: {
+            required: 'This is a required field.',
+            sameValue: 'Please select different hours.'
+          }
+        }"
         [defaultProps]="{
           pre: {
             placeholder: 'From'

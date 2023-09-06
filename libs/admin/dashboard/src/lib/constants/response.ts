@@ -54,4 +54,20 @@ export const reservationStatus: Record<
     label: 'New',
     type: 'active',
   },
+  CHECKOUTCOMPLETED: {
+    label: 'Check_Out_Completed',
+    type: 'completed',
+  },
+  CHECKOUTFAILED: {
+    label: 'Check_Out_Failed',
+    type: 'failed',
+  },
+  CHECKOUTINITIATED: {
+    label: 'Check_Out_Initiated',
+    type: 'active',
+  },
+  CHECKOUTPENDING: {
+    label: 'Check_Out_Pending',
+    type: 'draft',
+  },
 };

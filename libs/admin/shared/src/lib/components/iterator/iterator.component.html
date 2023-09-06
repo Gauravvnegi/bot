@@ -55,7 +55,8 @@
             [props]="{
               placeholder: field.placeholder ? field.placeholder : '',
               fontSize: '14px',
-              isAsync: field.isAsync
+              isAsync: field.isAsync,
+              createPrompt: field.createPrompt
             }"
             [loading]="field?.loadingResults"
             (paginate)="field?.loadMoreResults()"

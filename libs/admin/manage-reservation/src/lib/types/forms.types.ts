@@ -15,6 +15,7 @@ export class RoomReservationFormData {
   id?: string;
   specialRequest: string;
   totalPaidAmount: number;
+  offerId?: string;
 }
 
 export type BookingItemFormData = {
@@ -74,8 +75,8 @@ export type ItemsData = {
 };
 
 export type ReservationSummary = {
-  fromDate: string;
-  toDate: string;
+  from: string;
+  to: string;
   adultCount?: number;
   outletType?: EntitySubType;
   bookingItems?: BookingItemFormData[];
@@ -85,9 +86,8 @@ export type ReservationSummary = {
     maxChildren?: number;
     maxAdult: number;
   };
-  offer?: {
-    id: string;
-  };
+  offerId?: string;
+  guestId?: string;
 };
 
 export type OccupancyDetails = {

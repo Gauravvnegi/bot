@@ -5,11 +5,16 @@
   height: $form-input-height;
   margin-left: 0%;
   font-size: inherit;
-
   .p-inputtext {
     padding: $input-padding;
     width: 100%;
     height: 100%;
+    &::placeholder {
+      font-size: 14px;
+      line-height: 1.07;
+      letter-spacing: 0.84px;
+      text-align: left;
+    }
   }
 }
 

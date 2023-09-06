@@ -189,7 +189,6 @@ export class RoomIteratorComponent extends IteratorComponent
           const selectedRoomType = this.roomTypes.find(
             (item) => item.value === res
           );
-
           this.roomControls[index].get('roomNumbers').reset();
           if (selectedRoomType) {
             // Sets rate plan options according to the selected room type

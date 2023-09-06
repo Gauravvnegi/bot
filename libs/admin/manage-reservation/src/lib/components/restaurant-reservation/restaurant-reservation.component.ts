@@ -298,8 +298,18 @@ export class RestaurantReservationComponent extends BaseReservationComponent
             const {
               orderInformation: { menuItems, ...orderInfo },
               guestInformation,
+              reservationInformation: {
+                source,
+                sourceName,
+                ...reservationInfo
+              },
               ...formData
             } = data;
+
+            this.formService.sourceData.next({
+              source: source,
+              sourceName: sourceName,
+            });
 
             this.formValueChanges = true;
 
@@ -308,6 +318,7 @@ export class RestaurantReservationComponent extends BaseReservationComponent
             this.formService.guestInformation.next(guestInformation);
 
             this.userForm.patchValue({
+              reservationInformation: reservationInfo,
               orderInformation: orderInfo,
               ...formData,
             });
@@ -387,7 +398,7 @@ export class RestaurantReservationComponent extends BaseReservationComponent
   ngOnDestroy(): void {
     this.$subscription.unsubscribe();
   }
-  
+
   get orderInfoControls() {
     return (this.userForm.get('orderInformation') as FormGroup)
       .controls as Record<

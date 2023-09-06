@@ -11,8 +11,7 @@ import * as moment from 'moment';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { FormService } from '../../../services/form.service';
 import { ReservationForm } from '../../../constants/form';
-import { debounce } from 'lodash';
-import { debounceTime } from 'rxjs/operators';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'hospitality-bot-booking-info',
@@ -43,6 +42,7 @@ export class BookingInfoComponent implements OnInit {
   fromDateValue = new Date();
   toDateValue = new Date();
 
+  $susbcription = new Subscription();
   constructor(
     public controlContainer: ControlContainer,
     private configService: ConfigService,
@@ -56,11 +56,13 @@ export class BookingInfoComponent implements OnInit {
     this.initDates();
 
     // listening changes after the form is created for continue reservation.
-    this.formService.setInitialDates.subscribe((res) => {
-      if (res !== null) {
-        this.initDates();
-      }
-    });
+    this.$susbcription.add(
+      this.formService.setInitialDates.subscribe((res) => {
+        if (res !== null) {
+          this.initDates();
+        }
+      })
+    );
     this.listenForSourceChanges();
   }
 
@@ -182,6 +184,15 @@ export class BookingInfoComponent implements OnInit {
 
       sourceNameControl.reset();
     });
+
+    this.$susbcription.add(
+      this.formService.sourceData.subscribe((res) => {
+        if (res) {
+          sourceControl.setValue(res.source);
+          sourceNameControl.setValue(res.sourceName);
+        }
+      })
+    );
   }
 
   getCountryCode(): void {
@@ -192,6 +203,7 @@ export class BookingInfoComponent implements OnInit {
         this.configData = new BookingConfig().deserialize(
           response.bookingConfig
         );
+        this.listenForSourceChanges();
       });
     this.configService.getCountryCode().subscribe((res) => {
       const data = new CountryCodeList().deserialize(res);
@@ -223,6 +235,10 @@ export class BookingInfoComponent implements OnInit {
       keyof ReservationForm['reservationInformation'],
       AbstractControl
     >;
+  }
+
+  ngOnDestroy() {
+    this.$susbcription.unsubscribe();
   }
 
   get roomControls() {

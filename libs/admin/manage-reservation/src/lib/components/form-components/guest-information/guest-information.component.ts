@@ -70,7 +70,7 @@ export class GuestInformationComponent implements OnInit {
       .get('guestInformation.guestDetails')
       .valueChanges.pipe(debounceTime(1000))
       .subscribe((res) => {
-        if (res) {
+        if (res && this.roomControls.valid) {
           this.getSummary.emit();
         }
       });
@@ -199,6 +199,10 @@ export class GuestInformationComponent implements OnInit {
       },
     ];
     return { params: this.adminUtilityService.makeQueryParams(config) };
+  }
+
+  get roomControls() {
+    return this.controlContainer.control.get('roomInformation') as FormGroup;
   }
 
   /**

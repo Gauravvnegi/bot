@@ -132,7 +132,7 @@ export class SpaReservationComponent extends BaseReservationComponent
               bookingInformation: { spaItems, ...spaInfo },
               ...formData
             } = res;
-            this.spaItemsValues = spaItems;
+            if (spaItems[0].serviceName) this.spaItemsValues = spaItems;
             this.userForm.patchValue({
               bookingInformation: spaInfo,
               ...formData,
@@ -201,8 +201,18 @@ export class SpaReservationComponent extends BaseReservationComponent
               bookingInformation: { spaItems, ...spaInfo },
               guestInformation,
               nextStates,
+              reservationInformation: {
+                source,
+                sourceName,
+                ...reservationInfo
+              },
               ...formData
             } = data;
+
+            this.formService.sourceData.next({
+              source: source,
+              sourceName: sourceName,
+            });
 
             if (nextStates)
               this.statusOptions = nextStates.map((item) => ({
@@ -216,6 +226,7 @@ export class SpaReservationComponent extends BaseReservationComponent
 
             this.userForm.patchValue({
               bookingInformation: spaInfo,
+              reservationInformation: reservationInfo,
               ...formData,
             });
           },

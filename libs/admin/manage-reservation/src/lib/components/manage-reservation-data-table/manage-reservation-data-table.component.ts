@@ -6,9 +6,7 @@ import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
   AdminUtilityService,
   BaseDatatableComponent as BaseDatableComponent,
-  ConfigService,
   EntitySubType,
-  EntityTabFilterResponse,
   EntityType,
   Option,
   QueryConfig,
@@ -22,7 +20,7 @@ import {
 import * as FileSaver from 'file-saver';
 import { ModalComponent } from 'libs/admin/shared/src/lib/components/modal/modal.component';
 import { LazyLoadEvent } from 'primeng/api';
-import { Subject, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 import {
   HotelMenuOptions,
   MenuOptions,
@@ -89,7 +87,6 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
     private globalFilterService: GlobalFilterService,
     protected snackbarService: SnackBarService,
     private router: Router,
-    private configService: ConfigService,
     private modalService: ModalService,
     private invoiceService: InvoiceService
   ) {
@@ -100,7 +97,7 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
     this.tableName = title;
     this.listenForGlobalFilters();
     this.listenForSelectedEntityChange();
-    this.formService.reservationForm.next(null); // Reset reservation form
+    this.formService.resetData();
   }
 
   /**

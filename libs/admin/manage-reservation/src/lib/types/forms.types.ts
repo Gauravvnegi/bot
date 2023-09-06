@@ -15,7 +15,9 @@ export class RoomReservationFormData {
   id?: string;
   specialRequest: string;
   totalPaidAmount: number;
-  offerId?: string;
+  offer?: {
+    id: string;
+  };
 }
 
 export type BookingItemFormData = {
@@ -100,4 +102,9 @@ export type InitialFormData = {
   cashierFirstName?: string;
   cashierLastName?: string;
   currency?: string;
+};
+
+export type SourceData = {
+  source: string;
+  sourceName: string;
 };

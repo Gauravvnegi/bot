@@ -149,3 +149,8 @@ export type RoomReservationResponse = {
     offerType: string;
   };
 };
+
+export type SourceResponse = {
+  name: string;
+  type?: { code: string; label: string }[];
+};

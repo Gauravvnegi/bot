@@ -139,7 +139,9 @@ export class AddReservationComponent extends BaseReservationComponent
         .subscribe((res) => {
           if (res) {
             const { roomInformation, ...formData } = res;
-            this.roomTypeValues = roomInformation.roomTypes;
+            // check if room type was patched
+            if (roomInformation.roomTypes[0].roomTypeId.length)
+              this.roomTypeValues = roomInformation.roomTypes;
             this.userForm.patchValue(formData);
           }
         })
@@ -158,8 +160,19 @@ export class AddReservationComponent extends BaseReservationComponent
               roomInformation,
               nextStates,
               totalPaidAmount,
+              reservationInformation: {
+                source,
+                sourceName,
+                ...reservationInfo
+              },
               ...formData
             } = data;
+
+            this.formService.sourceData.next({
+              source: source,
+              sourceName: sourceName,
+            });
+
             if (nextStates)
               this.reservationTypes = nextStates.map((item) => ({
                 label: convertToTitleCase(item),
@@ -173,7 +186,11 @@ export class AddReservationComponent extends BaseReservationComponent
             // in room iterator and guest info component.
             this.roomTypeValues = roomInformation;
             this.formService.guestInformation.next(guestInformation);
-            this.userForm.patchValue(formData);
+
+            this.userForm.patchValue({
+              reservationInformation: reservationInfo,
+              formData,
+            });
 
             if (data.offerId) {
               const roomTypeIds = roomInformation.map(

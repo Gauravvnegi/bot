@@ -104,11 +104,4 @@ export class BaseReservationComponent {
       AbstractControl
     >;
   }
-
-  /**
-   * @function ngOnDestroy to unsubscribe subscription.
-   */
-  ngOnDestroy(): void {
-    this.$subscription.unsubscribe();
-  }
 }

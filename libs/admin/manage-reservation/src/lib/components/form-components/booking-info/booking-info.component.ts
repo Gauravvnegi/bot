@@ -1,9 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import {
-  AbstractControl,
-  ControlContainer,
-  FormGroup
-} from '@angular/forms';
+import { AbstractControl, ControlContainer, FormGroup } from '@angular/forms';
 import {
   ConfigService,
   CountryCodeList,
@@ -41,6 +37,9 @@ export class BookingInfoComponent implements OnInit {
   endMinDate = new Date();
   maxDate = new Date();
   minToDate = new Date();
+
+  fromDateValue = new Date();
+  toDateValue = new Date();
 
   constructor(
     public controlContainer: ControlContainer,
@@ -87,9 +86,8 @@ export class BookingInfoComponent implements OnInit {
     this.endMinDate.setDate(this.startMinDate.getDate() + 1);
     this.maxDate.setDate(this.endMinDate.getDate() - 1);
 
-    this.formService.fromDate = this.startMinDate;
-    this.formService.toDate = this.endMinDate;
-
+    this.fromDateValue = this.startMinDate;
+    this.toDateValue = this.endMinDate;
     // Reservation dates should be within 1 year time.
     if (this.bookingType === EntitySubType.ROOM_TYPE)
       this.maxDate.setDate(this.startMinDate.getDate() + 365);
@@ -119,19 +117,17 @@ export class BookingInfoComponent implements OnInit {
 
       fromDateControl.valueChanges.subscribe((res) => {
         const maxToLimit = new Date(res);
-        this.formService.fromDate = maxToLimit;
-        this.updateDateDifference();
+        this.fromDateValue = new Date(maxToLimit);
         // Check if fromDate is greater than or equal to toDate before setting toDateControl
-        if (maxToLimit >= this.formService.toDate) {
+        if (maxToLimit >= this.toDateValue) {
           maxToLimit.setDate(maxToLimit.getDate() + 1);
           // Calculate the date for one day later
           const nextDayTime = moment(maxToLimit).unix() * 1000;
           toDateControl.setValue(nextDayTime); // Set toDateControl to one day later
         }
-
+        this.updateDateDifference();
         this.minToDate = new Date(maxToLimit); // Create a new date object
         this.minToDate.setDate(maxToLimit.getDate());
-
         this.formService.reservationDate.next(res);
 
         if (this.roomControls.valid) {
@@ -140,8 +136,7 @@ export class BookingInfoComponent implements OnInit {
       });
 
       toDateControl.valueChanges.subscribe((res) => {
-        const maxLimit = new Date(res);
-        this.formService.toDate = maxLimit;
+        this.toDateValue = new Date(res);
         this.updateDateDifference();
         if (this.roomControls.valid) {
           this.getSummary.emit();
@@ -210,12 +205,13 @@ export class BookingInfoComponent implements OnInit {
 
   updateDateDifference() {
     // Get the toDate and fromDate values from the form service
-    const toDateValue = this.formService.toDate;
-    const fromDateValue = this.formService.fromDate;
-    if (toDateValue && fromDateValue) {
+    // const toDateValue = this.formService.toDate;
+    // const fromDateValue = this.formService.fromDate;
+
+    if (this.fromDateValue && this.toDateValue) {
       // Calculate the date difference in days
       const dateDiffInMilliseconds =
-        toDateValue.getTime() - fromDateValue.getTime();
+        this.toDateValue.getTime() - this.fromDateValue.getTime();
       const dateDiffInDays = Math.ceil(
         dateDiffInMilliseconds / (1000 * 60 * 60 * 24)
       );

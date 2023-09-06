@@ -24,9 +24,7 @@ import {
 } from '../../constants/reservation';
 import { ReservationForm } from '../../constants/form';
 import { FormService } from '../../services/form.service';
-import {
-  OutletItems,
-} from '../../constants/reservation-table';
+import { OutletItems } from '../../constants/reservation-table';
 import { debounceTime } from 'rxjs/operators';
 import { OutletForm } from '../../models/reservations.model';
 import { ReservationSummary } from '../../types/forms.types';
@@ -272,7 +270,7 @@ export class RestaurantReservationComponent extends BaseReservationComponent
             });
           }
         })
-    )
+    );
   }
 
   getReservationId(): void {
@@ -383,6 +381,13 @@ export class RestaurantReservationComponent extends BaseReservationComponent
     );
   }
 
+  /**
+   * @function ngOnDestroy to unsubscribe subscription.
+   */
+  ngOnDestroy(): void {
+    this.$subscription.unsubscribe();
+  }
+  
   get orderInfoControls() {
     return (this.userForm.get('orderInformation') as FormGroup)
       .controls as Record<

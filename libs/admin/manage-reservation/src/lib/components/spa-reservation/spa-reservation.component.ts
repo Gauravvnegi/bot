@@ -110,9 +110,11 @@ export class SpaReservationComponent extends BaseReservationComponent
    * @function listenForFormChanges Listen for form values changes.
    */
   listenForFormChanges(): void {
-    this.formService.reservationDateAndTime.subscribe((res) => {
-      if (res) this.setDateAndTime(res);
-    });
+    this.$subscription.add(
+      this.formService.reservationDateAndTime.subscribe((res) => {
+        if (res) this.setDateAndTime(res);
+      })
+    );
     this.inputControls.bookingInformation.valueChanges
       .pipe(debounceTime(1000))
       .subscribe((res) => {
@@ -364,6 +366,13 @@ export class SpaReservationComponent extends BaseReservationComponent
     return ((this.userForm.get('bookingInformation') as FormGroup).get(
       'spaItems'
     ) as FormArray).controls;
+  }
+
+  /**
+   * @function ngOnDestroy to unsubscribe subscription.
+   */
+  ngOnDestroy(): void {
+    this.$subscription.unsubscribe();
   }
 
   /**

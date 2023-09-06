@@ -220,6 +220,13 @@ export class VenueReservationComponent extends BaseReservationComponent
     );
   }
 
+  /**
+   * @function ngOnDestroy to unsubscribe subscription.
+   */
+  ngOnDestroy(): void {
+    this.$subscription.unsubscribe();
+  }
+
   get eventInfoControls() {
     return (this.userForm.get('eventInformation') as FormGroup)
       .controls as Record<

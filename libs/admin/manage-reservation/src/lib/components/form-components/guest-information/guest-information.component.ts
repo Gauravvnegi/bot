@@ -165,24 +165,27 @@ export class GuestInformationComponent implements OnInit {
 
   initGuestDetails() {
     if (this.reservationId)
-      this.formService.guestInformation.subscribe((res) => {
-        if (res) {
-          if (
-            this.guestOptions.findIndex((item) => item.value === res.id) === -1
-          ) {
-            this.guestOptions.push({
-              label: `${res.firstName} ${res.lastName}`,
-              value: res.id,
-              phoneNumber: res.phoneNumber,
-              cc: res.cc,
-              email: res.email,
-            });
+      this.$subscription.add(
+        this.formService.guestInformation.subscribe((res) => {
+          if (res) {
+            if (
+              this.guestOptions.findIndex((item) => item.value === res.id) ===
+              -1
+            ) {
+              this.guestOptions.push({
+                label: `${res.firstName} ${res.lastName}`,
+                value: res.id,
+                phoneNumber: res.phoneNumber,
+                cc: res.cc,
+                email: res.email,
+              });
+            }
+            this.parentFormGroup
+              .get('guestInformation.guestDetails')
+              .patchValue(res.id);
           }
-          this.parentFormGroup
-            .get('guestInformation.guestDetails')
-            .patchValue(res.id);
-        }
-      });
+        })
+      );
   }
 
   getConfig() {
@@ -196,5 +199,12 @@ export class GuestInformationComponent implements OnInit {
       },
     ];
     return { params: this.adminUtilityService.makeQueryParams(config) };
+  }
+
+  /**
+   * @function ngOnDestroy to unsubscribe subscription.
+   */
+  ngOnDestroy(): void {
+    this.$subscription.unsubscribe();
   }
 }

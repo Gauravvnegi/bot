@@ -32,6 +32,8 @@ export class CreateFoodPackageComponent extends OutletBaseComponent
   loading: boolean = false;
   taxes: Option[] = [];
   isPackageCreated = false;
+  foodItemValues = [];
+  foodItemIds = [];
 
   foodCategories: Option[];
 
@@ -74,7 +76,7 @@ export class CreateFoodPackageComponent extends OutletBaseComponent
       taxIds: [[]],
       foodItems: this.foodItemsArray,
       source: [1],
-      type: ['FOOD_PACKAGE']
+      type: ['FOOD_PACKAGE'],
     });
 
     if (this.foodPackageId) {
@@ -84,13 +86,16 @@ export class CreateFoodPackageComponent extends OutletBaseComponent
             params: '?type=FOOD_PACKAGE',
           })
           .subscribe((res) => {
-            const { taxes,foodItem, ...rest } = res;
+            const { taxes, foodItem, imageUrl, images, ...rest } = res;
+            this.useForm.get('imageUrl').setValue(images[0].url);
+            // ;
             this.useForm.patchValue({
               ...rest,
               taxIds: taxes.map((item) => item.id),
             });
+            this.foodItemIds = foodItem.map((item) => item.id);
 
-            this.useForm.get('foodItems').setValue(foodItem);
+            this.foodItemValues = foodItem;
           })
       );
     }
@@ -107,7 +112,8 @@ export class CreateFoodPackageComponent extends OutletBaseComponent
       return;
     }
 
-    let data = this.useForm.getRawValue();
+    let { imageUrl, foodItems, ...rest } = this.useForm.getRawValue();
+    let data = { images: [{ isFeatured: true, url: imageUrl }], ...rest };
 
     if (this.foodPackageId) {
       data = { ...data, id: this.foodPackageId };
@@ -144,15 +150,17 @@ export class CreateFoodPackageComponent extends OutletBaseComponent
    */
   getTax() {
     this.$subscription.add(
-      this.taxService.getTaxList(this.outletId , {params : `?entityId=${this.outletId}`}).subscribe(({ records }) => {
-        records = records.filter(
-          (item) => item.category === 'service' && item.status
-        );
-        this.taxes = records.map((item) => ({
-          label: item.taxType + ' ' + item.taxValue + '%',
-          value: item.id,
-        }));
-      })
+      this.taxService
+        .getTaxList(this.outletId, { params: `?entityId=${this.outletId}` })
+        .subscribe(({ records }) => {
+          records = records.filter(
+            (item) => item.category === 'service' && item.status
+          );
+          this.taxes = records.map((item) => ({
+            label: item.taxType + ' ' + item.taxValue + '%',
+            value: item.id,
+          }));
+        })
     );
   }
 
@@ -168,14 +176,14 @@ export class CreateFoodPackageComponent extends OutletBaseComponent
   }
 
   createTax() {
-     const dataToSend = {
-       entityId: this.outletId, // Replace with your actual data
-     };
+    const dataToSend = {
+      entityId: this.outletId, // Replace with your actual data
+    };
 
-     const navigationExtras: NavigationExtras = {
-       queryParams: dataToSend,
-     };
-     this.router.navigate(['pages/settings/tax/create-tax'], navigationExtras);
+    const navigationExtras: NavigationExtras = {
+      queryParams: dataToSend,
+    };
+    this.router.navigate(['pages/settings/tax/create-tax'], navigationExtras);
   }
 
   createType(name: string) {}
@@ -202,6 +210,10 @@ export class CreateFoodPackageComponent extends OutletBaseComponent
 
   handleSave() {
     const { foodItems } = this.useForm.getRawValue();
+    const activeFoodItemIds = foodItems.map((item) => item.id);
+    const removeFoodItemIds = this.foodItemIds.filter(
+      (item) => !activeFoodItemIds.includes(item)
+    );
     this.$subscription.add(
       this.outletService
         .updateFoodPackage(
@@ -209,6 +221,7 @@ export class CreateFoodPackageComponent extends OutletBaseComponent
           this.foodPackageId,
 
           {
+            removeFoodItemIds,
             foodItems,
             type: 'FOOD_PACKAGE',
             source: 1,

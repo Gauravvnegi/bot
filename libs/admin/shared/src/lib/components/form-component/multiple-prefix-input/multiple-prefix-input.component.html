@@ -7,6 +7,7 @@
   >
   <div class="main">
     <hospitality-bot-select
+      *ngIf="currencyControlName.length"
       class="input pre-input"
       [ngStyle]="{ 'flex-basis': additionalControlName.length ? '10%' : '14%' }"
       [controlName]="currencyControlName"

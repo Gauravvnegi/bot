@@ -8,6 +8,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 export class ToggleSwitchComponentLabel implements OnInit {
   @Input() isToggleOn: boolean = false;
   @Output() onToggleSwitch = new EventEmitter<boolean>();
+  preContent = '';
   toggleOnLabel: string = 'Active';
   toggleOffLabel: string = 'Inactive';
   toggleOnColor: string = '#65b340';
@@ -31,6 +32,7 @@ export class ToggleSwitchComponentLabel implements OnInit {
 }
 
 type ToggleSwitchConfig = {
+  preContent: string;
   toggleOnLabel: string;
   toggleOffLabel: string;
   toggleOnColor: string;

@@ -189,7 +189,6 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
       if (value === endDay.value) {
         startDay.setErrors({ sameValue: true });
         endDay.setErrors(null);
-        
       }
     });
 

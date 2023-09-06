@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { ModalContent } from '../../types/fields.type';
+import { ModalService } from '@hospitality-bot/shared/material';
 import jsPDF from 'jspdf';
 
 @Component({
@@ -9,43 +9,30 @@ import jsPDF from 'jspdf';
 })
 export class QrCodeModalComponent implements OnInit {
   heading = 'Print QR Code';
-
-  //for background image
   backgroundURl = 'assets/images/auth-banner.webp';
-
-  //for logo
   logoUrl = 'assets/images/leela-logo.png';
-
-  //for BOTSHOT logo
   botshotUrl = 'assets/images/botshotlogo-color.png';
-
-  //for route to redirect after scan
   route = 'https://www.test.menu.com/';
-
-  //for description heading
   descriptionsHeading = 'HOW TO ORDER';
-
-  //for description points
-  descriptionsPoints: string[] = [
+  descriptionsPoints = [
     'Scan the QR code to access the menu',
     'Browse the menu and place your order',
     'Place your orders',
   ];
 
-  //event close modal
   @Output() onClose = new EventEmitter();
 
   @Input() set content(value: QrCodeModalContent) {
-    for (const key in value) {
-      if (Object.prototype.hasOwnProperty.call(value, key)) {
-        this[key] = value[key];
-      }
-    }
+    Object.assign(this, value);
   }
 
-  constructor() {}
+  constructor(private modalService: ModalService) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    const data = this.modalService.__config;
+    Object.assign(this, data);
+    console.log(this.backgroundURl);
+  }
 
   close(): void {
     this.onClose.emit();
@@ -55,7 +42,6 @@ export class QrCodeModalComponent implements OnInit {
     const pdf = new jsPDF();
     const container = document.getElementById('qr-code-modal');
 
-    // Generate PDF from HTML using the html() method of jsPDF
     pdf.html(container, {
       callback: (pdf) => {
         pdf.save('qr-code.pdf');
@@ -65,7 +51,7 @@ export class QrCodeModalComponent implements OnInit {
 }
 
 export type QrCodeModalContent = {
-  heading: string;
+  heading?: string;
   backgroundURl?: string;
   logoUrl?: string;
   route?: string;

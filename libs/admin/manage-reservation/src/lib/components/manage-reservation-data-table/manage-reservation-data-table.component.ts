@@ -80,6 +80,12 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
   private destroy$ = new Subject<void>();
 
   menuOptions: Option[] = MenuOptions;
+  navRoutes = [
+    {
+      label: 'Manage Reservation',
+      link: '/admin',
+    },
+  ];
 
   constructor(
     public fb: FormBuilder,

@@ -120,9 +120,8 @@ export const hotelCols: Cols[] = [
   {
     field: 'from',
     header: 'Arrival / Departure',
-    sortType: 'number',
+    sortType: 'date',
     isSearchDisabled: true,
-    isSortDisabled: true,
   },
   {
     field: 'totalDueAmount',
@@ -140,8 +139,7 @@ export const hotelCols: Cols[] = [
     field: 'totalPaidAmount',
     header: 'Payment',
     sortType: 'number',
-    isSearchDisabled: true,
-    isSortDisabled: true,
+    searchField: ['totalPaidAmount'],
   },
   {
     field: 'reservationType',
@@ -179,18 +177,16 @@ export const outletCols: Cols[] = [
     searchField: ['guestName', 'companyName'],
   },
   {
-    field: 'date',
+    field: 'from',
     header: 'Date / Time',
-    sortType: 'string',
+    sortType: 'date',
     isSearchDisabled: true,
-    isSortDisabled: true,
   },
   {
     field: 'totalDueAmount',
     header: 'Amount Due / Total (INR)',
-    sortType: 'string',
+    sortType: 'number',
     isSearchDisabled: true,
-    isSortDisabled: true,
   },
   {
     field: 'sourceName',
@@ -199,11 +195,10 @@ export const outletCols: Cols[] = [
     searchField: ['sourceName', 'source'],
   },
   {
-    field: 'payment',
+    field: 'totalPaidAmount',
     header: 'Payment',
     sortType: 'string',
-    isSearchDisabled: true,
-    isSortDisabled: true,
+    searchField: ['totalPaidAmount'],
   },
   {
     field: 'reservationType',

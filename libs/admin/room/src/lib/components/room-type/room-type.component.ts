@@ -280,6 +280,7 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
               let data = new RoomTypeForm().deserialize(res);
               const { staticRatePlans, dynamicRatePlans, ...rest } = data;
               this.setBasePriceDisability(data.isBaseRoomType);
+              this.disableRoomType = data.isBaseRoomType;
               if (this.isPricingDynamic) {
                 this.useForm
                   .get('dynamicRatePlans')
@@ -569,6 +570,7 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
   onRoomTypeToggleSwitch(isToggleOn: boolean) {
     this.useForm.get('isBaseRoomType').setValue(isToggleOn);
     this.setBasePriceDisability(isToggleOn);
+
     if (isToggleOn) {
       // const dialogConfig = new MatDialogConfig();
       // dialogConfig.disableClose = true;
@@ -601,6 +603,8 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
       // togglePopupCompRef.componentInstance.onClose.subscribe(() => {
       //   this.modalService.close();
       // });
+    } else {
+      this.initBaseRoomType();
     }
   }
 

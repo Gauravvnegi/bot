@@ -14,6 +14,7 @@ export class ToggleSwitchComponentLabel implements OnInit {
   toggleOnColor: string = '#65b340';
   toggleOffColor: string = '#e31717';
   @Input() isDisabled: boolean = false;
+  disableTurnOff: boolean = false;
 
   @Input() set config(value: ToggleSwitchConfig) {
     for (let key in value) {

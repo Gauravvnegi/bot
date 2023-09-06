@@ -12,7 +12,11 @@
         <hospitality-bot-toggle-switch-with-label
           [isToggleOn]="useForm.get('isBaseRoomType').value"
           (onToggleSwitch)="onRoomTypeToggleSwitch($event)"
-          [isDisabled]="useForm.get('isBaseRoomType').value"
+          [config]="{
+            disableTurnOff: disableRoomType,
+            preContent: 'Base Room Type'
+          }"
+          [isDisabled]="disableRoomType"
         ></hospitality-bot-toggle-switch-with-label>
       </div>
       <hr />

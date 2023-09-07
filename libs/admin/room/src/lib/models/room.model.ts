@@ -52,8 +52,8 @@ export class SingleRoom {
   statusDetailsList?: StatusDetails[];
   deserialize(input: SingleRoomData) {
     this.id = input.id ?? '';
-    this.roomNumber = input.roomNo ?? '';
-    this.floorNumber = input.floorNo ?? '';
+    this.roomNumber = input.rooms[0].roomNo ?? null;
+    this.floorNumber = input.rooms[0].floorNo ?? '';
     // this.status = input.status;
     this.currency = input.currency ?? '';
     this.price = input.price ?? null;
@@ -65,13 +65,13 @@ export class SingleRoom {
     // this.remark = input.remark ?? '';
     // this.currentStatusTo = input?.currentStatusTo;
     // this.currentStatusFrom = input?.currentStatusFrom;
-    if (input.statusDetails)
-      this.statusDetailsList = input.statusDetails.map((item) => ({
+    if (input.statusDetailsList)
+      this.statusDetailsList = input.statusDetailsList.map((item) => ({
         toDate: item.toDate,
         fromDate: item.fromDate,
         isCurrentStatus: item.isCurrentStatus,
         status: item.status,
-        remark: item.remark,
+        remarks: item.remark,
       }));
     return this;
   }

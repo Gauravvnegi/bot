@@ -36,6 +36,8 @@ export class EntityTabFilterComponent implements OnInit {
     EntityTabFilterResponse
   >();
   isAllOutletSelected = true;
+  previousDateRange = {};
+  isFirstTime = true;
 
   @Input() set config(configData: EntityTabFilterConfig) {
     for (const key in configData) {
@@ -56,7 +58,7 @@ export class EntityTabFilterComponent implements OnInit {
     this.listenForGlobalFilters();
     this.onEntityTabFilterChanges.emit({
       entityId: [this.tabFilterItems[this.tabFilterIdx].value],
-      feedbacktype: this.tabFilterItems[this.tabFilterIdx].type,
+      feedbackType: this.tabFilterItems[this.tabFilterIdx].type,
       label: this.tabFilterItems[this.tabFilterIdx].label,
       outletType: this.tabFilterItems[this.tabFilterIdx]?.outletType,
     });
@@ -65,6 +67,24 @@ export class EntityTabFilterComponent implements OnInit {
   listenForGlobalFilters(): void {
     this.$subscription.add(
       this.globalFilterService.globalFilter$.subscribe((data) => {
+        if (this.isFirstTime) {
+          //set the previous date range if it is first time
+          this.previousDateRange = { ...data.dateRange };
+          this.isFirstTime = false;
+        }
+
+        //check if the date range is changed and return if it is changed
+        if (
+          JSON.stringify(data.dateRange) !==
+          JSON.stringify(this.previousDateRange)
+        ) {
+          this.previousDateRange = { ...data.dateRange };
+          //As this component should not be updated if the date range is changed so return if the date range is changed
+          return;
+        }
+        //maintain the previous date range
+        this.previousDateRange = { ...data.dateRange };
+
         //set the entityId
         this.entityId = this.globalFilterService.entityId;
 
@@ -86,6 +106,7 @@ export class EntityTabFilterComponent implements OnInit {
             data['filter'].value
           );
         } else {
+          //set the tab filter items for stay feedback type i.e Hotel
           this.setStayTabFilters(data['filter'].value);
         }
       })
@@ -223,7 +244,7 @@ export class EntityTabFilterComponent implements OnInit {
             .filter((value) => value !== 'ALL');
     this.onEntityTabFilterChanges.emit({
       entityId: outletIds,
-      feedbacktype: feedbackType,
+      feedbackType: feedbackType,
       label: this.tabFilterItems[this.tabFilterIdx].label,
       outletType: this.tabFilterItems[this.tabFilterIdx]?.outletType,
     });

@@ -479,6 +479,7 @@ export class AddRoomComponent implements OnInit, OnDestroy {
             id: this.roomId,
             removeFeatures: removeFeatures,
             ...data,
+            roomNo: null,
             statusDetailsList: [{ ...statusData, isCurrentStatus: true }],
           }),
         })

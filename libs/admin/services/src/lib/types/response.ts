@@ -18,7 +18,7 @@ export type ServiceResponse = {
   active: boolean;
   currency: string;
   packageCode: string;
-  imageUrl: string;
+  images;
   entityId: string;
   source: string;
   type: string;

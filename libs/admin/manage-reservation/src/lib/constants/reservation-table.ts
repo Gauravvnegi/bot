@@ -1,6 +1,9 @@
 import { Cols, FlagType, Option } from '@hospitality-bot/admin/shared';
 import { Chip } from '@hospitality-bot/admin/shared';
-import { ReservationStatus } from '../types/reservation.type';
+import {
+  OutletReservationStatus,
+  ReservationStatus,
+} from '../types/reservation.type';
 /**
  * Reservation item type value
  */
@@ -71,6 +74,29 @@ export const reservationStatusDetails: Record<
   CANCELED: {
     label: 'Canceled',
     type: 'failed',
+  },
+};
+
+export const outletReservationStatusDetails: Record<
+  OutletReservationStatus,
+  { label: string; type: FlagType }
+> = {
+  ...reservationStatusDetails,
+  COMPLETED: {
+    label: 'Completed',
+    type: 'completed',
+  },
+  NOSHOW: {
+    label: 'No Show',
+    type: 'failed',
+  },
+  IN: {
+    label: 'In',
+    type: 'active',
+  },
+  WAITLISTED: {
+    label: 'Waitlisted',
+    type: 'active',
   },
 };
 

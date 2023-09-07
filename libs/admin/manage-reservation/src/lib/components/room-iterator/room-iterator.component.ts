@@ -278,11 +278,6 @@ export class RoomIteratorComponent extends IteratorComponent
         .get('childCount')
         .patchValue(0, { emitEvent: false });
     }
-
-    // Default Room Types can be updated once patched.
-    if (index >= this.itemValuesCount - 1) {
-      this.isDefaultRoomType = false;
-    }
   }
 
   /**

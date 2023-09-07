@@ -14,6 +14,13 @@ export type CategoryData = {
 
 export type ReservationStatus = 'DRAFT' | 'CONFIRMED' | 'CANCELED';
 
+export type OutletReservationStatus =
+  | ReservationStatus
+  | 'NOSHOW'
+  | 'WAITLISTED'
+  | 'COMPLETED'
+  | 'IN';
+
 export type SelectedEntity = {
   id: string;
   type: EntityType;

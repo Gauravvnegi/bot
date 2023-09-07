@@ -30,6 +30,8 @@ import { OutletForm } from '../../models/reservations.model';
 import { ReservationSummary } from '../../types/forms.types';
 import { MenuItemListResponse } from 'libs/admin/all-outlets/src/lib/types/outlet';
 import { BaseReservationComponent } from '../base-reservation.component';
+import { OutletService } from 'libs/admin/all-outlets/src/lib/services/outlet.service';
+import { FoodPackageList } from 'libs/admin/all-outlets/src/lib/models/outlet.model';
 
 @Component({
   selector: 'hospitality-bot-restaurant-reservation',
@@ -66,6 +68,7 @@ export class RestaurantReservationComponent extends BaseReservationComponent
     protected globalFilterService: GlobalFilterService,
     private manageReservationService: ManageReservationService,
     protected activatedRoute: ActivatedRoute,
+    private outletService: OutletService,
     private formService: FormService
   ) {
     super(globalFilterService, activatedRoute);
@@ -79,6 +82,7 @@ export class RestaurantReservationComponent extends BaseReservationComponent
     this.getReservationId();
     this.initFormData();
     this.listenForFormChanges();
+    this.getFoodPackages();
   }
 
   initDetails() {
@@ -394,6 +398,24 @@ export class RestaurantReservationComponent extends BaseReservationComponent
           (error) => {}
         )
     );
+  }
+
+  getFoodPackages() {
+    this.outletService
+      .getFoodPackageList(this.outletId, {
+        params: `?type=FOOD_PACKAGE&pagination=false`,
+      })
+      .subscribe(
+        (res) => {
+          this.foodPackages = new FoodPackageList()
+            .deserialize(res)
+            .records.map((foodPackage) => ({
+              label: foodPackage.name,
+              value: foodPackage.id,
+            }));
+        },
+        (err) => {}
+      );
   }
 
   /**

@@ -30,6 +30,7 @@ import {
   RestaurantMenuOptions,
   hotelCols,
   outletCols,
+  outletReservationStatusDetails,
   reservationStatusDetails,
   title,
 } from '../../constants/reservation-table';
@@ -158,11 +159,16 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
           // Process the response and update the data
           this.reservationLists = new ReservationList().deserialize(res);
           this.values = this.reservationLists.reservationData;
+          const statusDetails =
+            this.selectedEntity.type === EntityType.HOTEL
+              ? reservationStatusDetails
+              : outletReservationStatusDetails;
+
           this.initFilters(
             this.reservationLists.entityTypeCounts,
             this.reservationLists.entityStateCounts,
             this.reservationLists.total,
-            this.reservationStatusDetails
+            statusDetails
           );
         },
         (error) => {

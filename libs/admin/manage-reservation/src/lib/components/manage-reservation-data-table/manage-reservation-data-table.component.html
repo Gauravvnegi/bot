@@ -109,9 +109,9 @@
       <td *ngIf="selectedEntity.subType === 'ROOM_TYPE'">
         <div class="multi-cell-content" [roomStatus]="rowData?.roomStatus">
           <div>
-            {{ (rowData?.roomTypes)[0] || '--' }}&nbsp;-&nbsp;{{
+            {{
               (rowData?.bookingItems)[0]?.roomDetails.roomNumber || '--'
-            }}
+            }}&nbsp;-&nbsp;{{ (rowData?.roomTypes)[0] || '--' }}
           </div>
           <b class="rowData">
             {{ rowData.getRoomTypeDisplay().countString }}

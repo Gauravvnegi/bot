@@ -107,7 +107,11 @@
         </div>
       </td>
       <td *ngIf="selectedEntity.subType === 'ROOM_TYPE'">
-        <div class="multi-cell-content" [roomStatus]="rowData?.roomStatus">
+        <div
+          class="multi-cell-content"
+          *ngIf="rowData?.roomTypes; else emptyCell"
+          [roomStatus]="rowData?.roomStatus"
+        >
           <div>
             {{
               (rowData?.bookingItems)[0]?.roomDetails.roomNumber || '--'

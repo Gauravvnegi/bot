@@ -271,7 +271,7 @@ export class OrderInfo {
 
   deserialize(input) {
     this.numberOfAdults = input?.occupancyDetails.maxAdult ?? 1;
-    this.kotInstructions = input?.kotInstructions ?? '';
+    this.kotInstructions = input?.specialRequest ?? '';
     this.menuItems = input.items.map((item) => ({
       menuItems: item?.itemId,
       unit: item?.unit ?? 1,

@@ -163,7 +163,11 @@ export class FormService {
     reservationData.offerId = input?.offerId ?? '';
     reservationData.outletType = outletType;
 
-    reservationData.specialRequest = input.instructions.specialInstructions;
+    reservationData.specialRequest =
+      outletType === 'RESTAURANT'
+        ? input.orderInformation.kotInstructions
+        : input.instructions?.specialInstructions;
+
     return reservationData;
   }
 

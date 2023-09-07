@@ -187,32 +187,39 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
 
   setValidators() {
     const { startDay, endDay, from, to } = this.formControls;
+    this.setupSameValueValidator(startDay, endDay);
+    this.setupSameValueValidator(from, to);
+  }
 
-    startDay.valueChanges.subscribe((value) => {
-      if (value === endDay.value) {
-        startDay.setErrors({ sameValue: true });
-        endDay.setErrors(null);
+  /**
+   * @function setupSameValueValidator
+   * @description sets up same value validator if two fields have same value
+   * @param control1
+   * @param control2
+   * @returns void
+   */
+  setupSameValueValidator(
+    control1: AbstractControl,
+    control2: AbstractControl
+  ) {
+    //set same value validator
+    control1.valueChanges.subscribe((value) => {
+      if (value === control2.value) {
+        const errors = { ...control1.errors, sameValue: false };
+        control1.setErrors(errors);
+        control2.setErrors(control2.errors);
+      } else {
+        control2.setErrors(control2.errors);
       }
     });
 
-    endDay.valueChanges.subscribe((value) => {
-      if (value === startDay.value) {
-        endDay.setErrors({ sameValue: true });
-        startDay.setErrors(null);
-      }
-    });
-
-    from.valueChanges.subscribe((value) => {
-      if (value === to.value) {
-        from.setErrors({ sameValue: true });
-        to.setErrors(null);
-      }
-    });
-
-    to.valueChanges.subscribe((value) => {
-      if (value === from.value) {
-        to.setErrors({ sameValue: true });
-        from.setErrors(null);
+    control2.valueChanges.subscribe((value) => {
+      if (value === control1.value) {
+        const errors = { ...control2.errors, sameValue: false };
+        control2.setErrors(errors);
+        control1.setErrors(control1.errors);
+      } else {
+        control1.setErrors(control1.errors);
       }
     });
   }
@@ -238,7 +245,6 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
       //reset form except type
 
       if (!this.outletId) {
-        this.useForm.reset({ type: type }, { emitEvent: false });
         this.useForm.markAsUntouched();
       }
 
@@ -325,7 +331,7 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
     if (this.useForm.invalid) {
       this.useForm.markAllAsTouched();
       this.snackbarService.openSnackBarAsText(
-        'Please fill all the required fields'
+        'Please review the form and correct the highlighted fields.'
       );
       return;
     }

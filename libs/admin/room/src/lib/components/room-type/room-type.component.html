@@ -170,9 +170,15 @@
                   preControlName="doubleOccupancyCurrency"
                   postControlName="doubleOccupancyPrice"
                   [defaultProps]="{
-                    post: { type: 'number', placeholder: 'Enter Price' }
+                    post: {
+                      type: 'number',
+                      placeholder: 'Enter Price',
+                      errorMessages: {
+                        required: 'This is a required field.',
+                        min: 'Value must be greater than 0.'
+                      }
+                    }
                   }"
-                  [props]="{ errorMessages: errorMessages }"
                 >
                 </hospitality-bot-prefix-field>
                 <hospitality-bot-prefix-field
@@ -182,9 +188,15 @@
                   preControlName="tripleOccupancyCurrency"
                   postControlName="tripleOccupancyPrice"
                   [defaultProps]="{
-                    post: { type: 'number', placeholder: 'Enter Price' }
+                    post: {
+                      type: 'number',
+                      placeholder: 'Enter Price',
+                      errorMessages: {
+                        required: 'This is a required field.',
+                        min: 'Value must be greater than 0.'
+                      }
+                    }
                   }"
-                  [props]="{ errorMessages: errorMessages }"
                 >
                 </hospitality-bot-prefix-field>
                 <hospitality-bot-multiple-prefix-input
@@ -259,9 +271,15 @@
                   preControlName="doubleOccupancyCurrency"
                   postControlName="doubleOccupancyPrice"
                   [defaultProps]="{
-                    post: { type: 'number', placeholder: 'Enter Price' }
+                    post: {
+                      type: 'number',
+                      placeholder: 'Enter Price',
+                      errorMessages: {
+                        required: 'This is a required field.',
+                        min: 'Value must be greater than 0.'
+                      }
+                    }
                   }"
-                  [props]="{ errorMessages: errorMessages }"
                 >
                 </hospitality-bot-prefix-field>
                 <hospitality-bot-prefix-field
@@ -271,9 +289,15 @@
                   preControlName="tripleOccupancyCurrency"
                   postControlName="tripleOccupancyPrice"
                   [defaultProps]="{
-                    post: { type: 'number', placeholder: 'Enter Price' }
+                    post: {
+                      type: 'number',
+                      placeholder: 'Enter Price',
+                      errorMessages: {
+                        required: 'This is a required field.',
+                        min: 'Value must be greater than 0.'
+                      }
+                    }
                   }"
-                  [props]="{ errorMessages: errorMessages }"
                 >
                 </hospitality-bot-prefix-field>
                 <hospitality-bot-multiple-prefix-input

@@ -12,9 +12,10 @@ export type BaseRoomForm = {
   featureIds: string[];
   removeFeatures?: string[];
   remark?: string;
-  statusDetails?: StatusDetails[];
+  statusDetailsList?: StatusDetails[];
   currentStatusTo?: number;
   currentStatusFrom?: number;
+  rooms?: any;
 };
 
 //  ******** Single Room Interface ********

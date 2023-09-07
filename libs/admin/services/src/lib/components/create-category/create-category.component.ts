@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { CategoryFormValue, NavRouteOptions } from 'libs/admin/shared/src';
@@ -15,6 +15,7 @@ import { ServicesService } from '../../services/services.service';
 export class CreateCategoryComponent implements OnInit {
   readonly navRoute = servicesRoutes.createCategory.navRoutes;
   readonly pageTitle = servicesRoutes.createCategory.title;
+  paramData: any;
 
   entityId: string;
   $subscription = new Subscription();
@@ -23,11 +24,13 @@ export class CreateCategoryComponent implements OnInit {
     private globalFilterService: GlobalFilterService,
     private servicesService: ServicesService,
     private snackbarService: SnackBarService,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
-    this.entityId = this.globalFilterService.entityId;
+    this.paramData = this.route.snapshot.queryParams;
+    this.entityId = this.paramData?.entityId;
   }
 
   handleSubmit(value: CategoryFormValue) {
@@ -47,7 +50,7 @@ export class CreateCategoryComponent implements OnInit {
             );
             this.router.navigate(['/pages/library/services']);
           },
-          ({ error }) => { }
+          ({ error }) => {}
         )
     );
   }

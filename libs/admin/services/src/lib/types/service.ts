@@ -2,7 +2,7 @@ export type ServiceFormData = {
   type: 'SERVICE';
   name: string;
   parentId: string;
-  imageUrl: string;
+  images;
   serviceType: string;
   currency: string;
   rate: number;

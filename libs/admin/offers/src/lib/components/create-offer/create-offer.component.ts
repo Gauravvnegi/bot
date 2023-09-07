@@ -77,7 +77,7 @@ export class CreateOfferComponent implements OnInit {
       active: [true],
       name: ['', [Validators.required]],
       libraryItems: [[], [Validators.required]],
-      imageUrl: ['', [Validators.required]],
+      images: ['', [Validators.required]],
       description: ['', [Validators.required]],
       startDate: ['', [Validators.required]],
       endDate: ['', [Validators.required]],
@@ -268,8 +268,13 @@ export class CreateOfferComponent implements OnInit {
 
     const {
       libraryItems,
+      images,
       ...restFormData
     } = this.useForm.getRawValue() as OfferFormData;
+    const data = {
+      images: [{ url: images, isFeatured: true }],
+      ...restFormData,
+    };
 
     const libraryIds: OffersOnEntity = libraryItems.reduce(
       (prev, curr) => {
@@ -301,7 +306,7 @@ export class CreateOfferComponent implements OnInit {
             this.entityId,
             this.offerId,
             {
-              ...restFormData,
+              ...data,
               ...libraryIds,
               type: 'OFFER',
               source: 1,
@@ -314,7 +319,7 @@ export class CreateOfferComponent implements OnInit {
       this.subscription$.add(
         this.offerService
           .createLibraryItem<OfferData, OfferResponse>(this.entityId, {
-            ...restFormData,
+            ...data,
             ...libraryIds,
             type: 'OFFER',
             source: 1,
@@ -334,10 +339,17 @@ export class CreateOfferComponent implements OnInit {
         .subscribe((res) => {
           this.loading = false;
           this.routes[2].label = 'Edit Offer';
-          let { packageCode, subPackages, roomTypes, ...restData } = res;
+          let {
+            packageCode,
+            subPackages,
+            roomTypes,
+            images,
+            ...restData
+          } = res;
 
           const data: OfferFormData = {
             ...restData,
+            images: images?.[0]?.url,
             libraryItems: [
               ...subPackages?.map((item) => ({
                 label: `${item.name} ${

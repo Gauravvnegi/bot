@@ -21,7 +21,7 @@ export class Offer {
     this.name = input.name;
     this.description = input.description;
     this.packageCode = input.packageCode;
-    this.imageUrl = input.imageUrl;
+    this.imageUrl = input.images[0].url;
     this.source = input.source;
     this.startDate = input.startDate;
     this.endDate = input.endDate;

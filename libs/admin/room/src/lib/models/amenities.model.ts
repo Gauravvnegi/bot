@@ -21,7 +21,7 @@ export class Service {
   deserialize(input: Amenity) {
     this.id = input.id;
     this.name = input.name;
-    this.imageUrl = input.imageUrl;
+    this.imageUrl = input.images[0]?.url;
     this.type = input.type;
     this.rate = `${input.currency}${input.rate}`;
     return this;

@@ -75,13 +75,6 @@ export class BookingInfoComponent implements OnInit {
     this.initDefaultDates();
     this.listenForDateChange();
   }
-
-  // listenFormChanges() {
-  //   this.reservationInfoControls.source.valueChanges.subscribe((res) => {
-  //     this.reservationInfoControls.sourceName.setValue('');
-  //   });
-  // }
-
   /**
    * Set default to and from dates.
    */
@@ -122,8 +115,8 @@ export class BookingInfoComponent implements OnInit {
         const maxToLimit = new Date(res);
         this.fromDateValue = new Date(maxToLimit);
         // Check if fromDate is greater than or equal to toDate before setting toDateControl
+        maxToLimit.setDate(maxToLimit.getDate() + 1);
         if (maxToLimit >= this.toDateValue) {
-          maxToLimit.setDate(maxToLimit.getDate() + 1);
           // Calculate the date for one day later
           const nextDayTime = moment(maxToLimit).unix() * 1000;
           toDateControl.setValue(nextDayTime); // Set toDateControl to one day later
@@ -199,7 +192,6 @@ export class BookingInfoComponent implements OnInit {
     this.configService
       .getColorAndIconConfig(this.entityId)
       .subscribe((response) => {
-        // Config data -> OTA only for rooms, Online Order for restaurant
         this.configData = new BookingConfig().deserialize(
           response.bookingConfig
         );
@@ -213,8 +205,6 @@ export class BookingInfoComponent implements OnInit {
 
   updateDateDifference() {
     // Get the toDate and fromDate values from the form service
-    // const toDateValue = this.formService.toDate;
-    // const fromDateValue = this.formService.fromDate;
 
     if (this.fromDateValue && this.toDateValue) {
       // Calculate the date difference in days

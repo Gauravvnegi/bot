@@ -95,11 +95,9 @@ export class BookingSummaryComponent implements OnInit {
     this.reservationId = this.activatedRoute.snapshot.paramMap.get('id');
     this.parentFormGroup = this.controlContainer.control as FormGroup;
 
-    // this.$subscription.add(
     this.formService.dateDifference.subscribe((res) => {
       this.dateDifference = res;
     });
-    // );
   }
 
   offerSelect(item?: any): void {

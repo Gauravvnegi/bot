@@ -158,7 +158,11 @@ export class RestaurantReservationComponent extends BaseReservationComponent
     this.inputControls.orderInformation.valueChanges
       .pipe(debounceTime(1000))
       .subscribe((res) => {
-        if (res && res.menuItems[res.menuItems?.length - 1].menuItems?.length) {
+        if (res.menuItems[0].menuItems === null) {
+          this.summaryData = new SummaryData().deserialize();
+          return;
+        }
+        if (res.menuItems[res.menuItems?.length - 1].menuItems?.length) {
           this.getSummaryData();
         }
       });

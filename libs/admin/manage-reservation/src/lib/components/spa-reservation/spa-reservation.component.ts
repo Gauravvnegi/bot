@@ -118,7 +118,12 @@ export class SpaReservationComponent extends BaseReservationComponent
     this.inputControls.bookingInformation.valueChanges
       .pipe(debounceTime(1000))
       .subscribe((res) => {
-        if (res.spaItems[0].serviceName.length) this.getSummaryData();
+        if (res.spaItems[0].serviceName === null) {
+          this.summaryData = new SummaryData().deserialize();
+          return;
+        }
+        if (res.spaItems[res.spaItems?.length - 1].serviceName.length)
+          this.getSummaryData();
       });
   }
 
@@ -151,16 +156,18 @@ export class SpaReservationComponent extends BaseReservationComponent
       .get('serviceName')
       .valueChanges.pipe(debounceTime(500))
       .subscribe((res) => {
-        const selectedService = this.services.find(
-          (service) => service.value === res
-        );
-        this.spaItemsControls[index]
-          .get('amount')
-          .setValue(selectedService?.price);
+        if (res) {
+          const selectedService = this.services.find(
+            (service) => service.value === res
+          );
+          this.spaItemsControls[index]
+            .get('amount')
+            .setValue(selectedService?.price);
 
-        // Do not patch in edit mode
-        if (this.spaItemsValues.length < index + 1)
-          this.spaItemsControls[index].get('unit').setValue(1);
+          // Do not patch in edit mode
+          if (this.spaItemsValues.length < index + 1)
+            this.spaItemsControls[index].get('unit').setValue(1);
+        }
       });
   }
 

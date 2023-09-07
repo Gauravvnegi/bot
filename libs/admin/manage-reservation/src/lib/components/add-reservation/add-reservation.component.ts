@@ -269,7 +269,9 @@ export class AddReservationComponent extends BaseReservationComponent
           maxAdult: item.get('adultCount').value,
         },
       })),
-      offerId: this.inputControls.offerId.value,
+      offerId: this.inputControls.offerId.value
+        ? this.inputControls.offerId.value
+        : null,
       guestId: this.inputControls.guestInformation.get('guestDetails')?.value,
     };
 

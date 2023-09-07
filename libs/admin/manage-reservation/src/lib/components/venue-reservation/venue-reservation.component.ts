@@ -234,4 +234,8 @@ export class VenueReservationComponent extends BaseReservationComponent
       AbstractControl
     >;
   }
+
+  get venueItemsControl() {
+    return this.userForm.get('eventInformation') as FormGroup;
+  }
 }

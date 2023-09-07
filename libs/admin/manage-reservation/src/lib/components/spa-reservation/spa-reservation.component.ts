@@ -379,6 +379,10 @@ export class SpaReservationComponent extends BaseReservationComponent
     ) as FormArray).controls;
   }
 
+  get spaControls() {
+    return this.userForm.get('bookingInformation') as FormGroup;
+  }
+
   /**
    * @function ngOnDestroy to unsubscribe subscription.
    */

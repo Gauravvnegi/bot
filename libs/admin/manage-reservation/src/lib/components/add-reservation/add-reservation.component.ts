@@ -337,4 +337,8 @@ export class AddReservationComponent extends BaseReservationComponent
       'roomTypes'
     ) as FormArray).controls;
   }
+
+  get roomInfoControls() {
+    return this.userForm.get('roomInformation') as FormGroup;
+  }
 }

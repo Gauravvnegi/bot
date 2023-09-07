@@ -412,4 +412,8 @@ export class RestaurantReservationComponent extends BaseReservationComponent
       'menuItems'
     ) as FormArray).controls;
   }
+
+  get menuControls() {
+    return this.userForm.get('orderInformation') as FormGroup;
+  }
 }

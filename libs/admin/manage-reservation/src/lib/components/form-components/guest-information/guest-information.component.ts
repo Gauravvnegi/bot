@@ -35,7 +35,7 @@ export class GuestInformationComponent implements OnInit {
   parentFormGroup: FormGroup;
 
   @Input() reservationId: string;
-
+  @Input() bookingItemValidity = false;
   @Output() getSummary: EventEmitter<any> = new EventEmitter<any>();
 
   constructor(
@@ -70,7 +70,7 @@ export class GuestInformationComponent implements OnInit {
       .get('guestInformation.guestDetails')
       .valueChanges.pipe(debounceTime(1000))
       .subscribe((res) => {
-        if (res && this.roomControls.valid) {
+        if (res && this.bookingItemValidity) {
           this.getSummary.emit();
         }
       });
@@ -199,10 +199,6 @@ export class GuestInformationComponent implements OnInit {
       },
     ];
     return { params: this.adminUtilityService.makeQueryParams(config) };
-  }
-
-  get roomControls() {
-    return this.controlContainer.control.get('roomInformation') as FormGroup;
   }
 
   /**

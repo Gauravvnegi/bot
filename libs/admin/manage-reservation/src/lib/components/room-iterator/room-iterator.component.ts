@@ -28,6 +28,7 @@ import { RoomTypeOptionList } from '../../models/reservations.model';
 import { RoomTypeForm } from 'libs/admin/room/src/lib/models/room.model';
 import { ReservationForm, RoomTypes } from '../../constants/form';
 import { RoomsByRoomType } from 'libs/admin/room/src/lib/types/service-response';
+import { IteratorField } from 'libs/admin/shared/src/lib/types/fields.type';
 @Component({
   selector: 'hospitality-bot-room-iterator',
   templateUrl: './room-iterator.component.html',
@@ -124,10 +125,10 @@ export class RoomIteratorComponent extends IteratorComponent
     const data = {
       roomTypeId: ['', [Validators.required]],
       ratePlan: [{ value: '', disabled: true }],
-      roomCount: ['', [Validators.required]],
+      roomCount: ['', [Validators.required, Validators.min(1)]],
       roomNumbers: [{ value: [], disabled: true }],
-      adultCount: ['', [Validators.required]],
-      childCount: [''],
+      adultCount: ['', [Validators.required, Validators.min(1)]],
+      childCount: ['', [Validators.min(0)]],
       ratePlanOptions: [[]],
       roomNumberOptions: [[]],
       id: [''],
@@ -466,5 +467,9 @@ export class RoomIteratorComponent extends IteratorComponent
     return ((this.parentFormGroup.get('roomInformation') as FormGroup).get(
       'roomTypes'
     ) as FormArray).controls;
+  }
+
+  errorMessage(field: IteratorField) {
+    return `Value should be more than ${field.minValue}`;
   }
 }

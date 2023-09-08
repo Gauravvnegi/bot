@@ -26,7 +26,10 @@
               [controlName]="field.name"
               [props]="{
                 placeholder: field.placeholder,
-                type: 'number'
+                type: 'number',
+                errorMessages: {
+                  min: errorMessage(field)
+                }
               }"
               [disabled]="field.disabled"
             ></hospitality-bot-input>

@@ -159,23 +159,7 @@
                             </ng-container>
                           </div>
                           <div class="add-level">
-                            <div
-                              class="link"
-                              [ngClass]="
-                                isDisableAddNewRule(
-                                  room.get('occupancy'),
-                                  room.get('roomCount')
-                                )
-                                  ? 'disable'
-                                  : ''
-                              "
-                              (click)="
-                                !isDisableAddNewRule(
-                                  room.get('occupancy'),
-                                  room.get('roomCount')
-                                ) && add('occupancy', room)
-                              "
-                            >
+                            <div class="link" (click)="add('occupancy', room)">
                               +Add More
                             </div>
                           </div>
@@ -223,20 +207,8 @@
                       <div class="add-level">
                         <div
                           class="link"
-                          [ngClass]="
-                            isDisableAddNewRule(
-                              season.get('hotelConfig'),
-                              season.get('roomCount')
-                            )
-                              ? 'disable'
-                              : ''
-                          "
                           (click)="
-                            !isDisableAddNewRule(
-                              season.get('hotelConfig'),
-                              season.get('roomCount')
-                            ) &&
-                              add('hotel-occupancy', season.get('hotelConfig'))
+                            add('hotel-occupancy', season.get('hotelConfig'))
                           "
                         >
                           +Add More

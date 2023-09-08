@@ -303,12 +303,9 @@ export class DynamicPricingHandler {
         )
       );
       item.hotelConfig.sort((a, b) => a.start - b.end);
-      instance.listenChanges();
-      this.mapHotelConfig(
-        season.get('hotelConfig') as FormArray,
-        item,
-        'OCCUPANCY'
-      );
+      const { hotelConfig } = season.controls;
+      this.mapHotelConfig(hotelConfig as FormArray, item, 'OCCUPANCY');
+      instance.listenOccupancy(hotelConfig as FormArray);
     } else {
       //filtering rooms who has at least one rule
       season.patchValue({
@@ -332,12 +329,11 @@ export class DynamicPricingHandler {
             )
           )
         );
-        //subscribing new occupancy rules
-        instance.listenChanges();
 
         //patching all values of rules
         const { occupancy } = roomControl.controls;
         item.roomTypes[index].occupancy.sort((a, b) => a.start - b.start);
+        instance.listenOccupancy(occupancy as FormArray);
         (occupancy as FormArray).controls.forEach(
           (occupancyControl: FormGroup, occupancyIndex) => {
             const rule = item.roomTypes[index]?.occupancy[occupancyIndex];

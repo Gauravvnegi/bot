@@ -95,7 +95,7 @@ export class SpaReservationComponent extends BaseReservationComponent
         dateAndTime: ['', Validators.required],
         status: ['', Validators.required],
         source: ['', Validators.required],
-        sourceName: ['', [Validators.required, Validators.maxLength(60)]],
+        sourceName: [''],
         marketSegment: ['', Validators.required],
       }),
       bookingInformation: this.fb.group({

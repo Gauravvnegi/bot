@@ -1,5 +1,10 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { AbstractControl, ControlContainer, FormGroup } from '@angular/forms';
+import {
+  AbstractControl,
+  ControlContainer,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import {
   ConfigService,
   CountryCodeList,
@@ -31,7 +36,7 @@ export class BookingInfoComponent implements OnInit {
 
   configData: BookingConfig;
 
-  agentSource = false;
+  // agentSource = false;
 
   entityId: string;
   startMinDate = new Date();
@@ -169,12 +174,22 @@ export class BookingInfoComponent implements OnInit {
     const sourceNameControl = this.reservationInfoControls.sourceName;
 
     sourceControl.valueChanges.subscribe((res) => {
-      this.agentSource = res === 'AGENT';
+      // this.agentSource = res === 'AGENT';
       this.otaOptions =
         res === 'OTA' && this.configData
           ? this.configData.source.filter((item) => item.value === res)[0].type
           : [];
-
+      if (res === 'OTA') {
+        sourceNameControl.clearValidators();
+        sourceNameControl.setValidators([Validators.required]);
+      } else {
+        sourceNameControl.clearValidators();
+        sourceNameControl.updateValueAndValidity();
+        sourceNameControl.setValidators([
+          Validators.required,
+          Validators.maxLength(60),
+        ]);
+      }
       sourceNameControl.reset();
     });
 

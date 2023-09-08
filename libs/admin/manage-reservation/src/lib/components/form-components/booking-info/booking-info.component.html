@@ -93,8 +93,9 @@
       [options]="configData?.source"
       [props]="{ placeholder: 'Select' }"
     ></hospitality-bot-select>
+    <!-- *ngIf="!agentSource && !otaOptions.length" -->
     <hospitality-bot-input
-      *ngIf="!agentSource && !otaOptions.length"
+      *ngIf="!otaOptions.length"
       class="half-width maxlength"
       controlName="sourceName"
       label="Booking Source Name"
@@ -114,20 +115,19 @@
       label="Booking Source Name"
       [options]="otaOptions"
       [props]="{
-        placeholder: 'Enter',
+        placeholder: 'Select',
         errorMessages: {
-          required: 'This is a required field.',
-          maxlength: 'Maximum character limit is upto 60.'
+          required: 'This is a required field.'
         }
       }"
     ></hospitality-bot-select>
-    <hospitality-bot-members-list
+    <!-- <hospitality-bot-members-list
       *ngIf="agentSource"
       class="half-width"
       controlName="sourceName"
       type="AGENT"
       label="Booking Source Name"
-    ></hospitality-bot-members-list>
+    ></hospitality-bot-members-list> -->
     <!-- (createMembers)="createNewAgent()" -->
     <hospitality-bot-select
       class="half-width"

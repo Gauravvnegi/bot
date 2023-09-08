@@ -66,7 +66,7 @@ export class CreateFoodPackageComponent extends OutletBaseComponent
       name: ['', Validators.required],
       parentId: ['', Validators.required],
       rate: ['', Validators.required],
-      currency: ['INR'],
+      currency: ['INR', [Validators.required]],
       discountType: ['PERCENTAGE'],
       discountValue: ['', Validators.required],
       discountedPrice: ['', { disabled: true }],

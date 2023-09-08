@@ -18,8 +18,6 @@ import { Feature } from '../../../types/outlet';
   styleUrls: ['./spa-form.component.scss'],
 })
 export class SpaFormComponent implements OnInit {
-  days: Option[] = [];
-  hours: Option[] = [];
   noRecordActionForComp = noRecordActionForComp;
   noRecordActionForMenu = noRecordActionForMenu;
   noRecordActionForPaid = noRecordActionForPaid;
@@ -40,14 +38,6 @@ export class SpaFormComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.getOutletConfig();
-  }
-
-  getOutletConfig() {
-    this.outletService.getOutletConfig().subscribe((res) => {
-      this.hours = res?.HOURS;
-      this.days = res?.WEEKDAYS;
-    });
   }
 
   onCreateAndContinue(features: Feature) {

@@ -319,14 +319,14 @@ export const analytics = {
       isSearchDisabled: true,
       width: '18%',
     },
-    {
-      field: '',
-      header: 'Actions',
-      isSortDisabled: true,
-      sortType: '',
-      isSearchDisabled: true,
-      width: '13%',
-    },
+    // {
+    //   field: '',
+    //   header: 'Actions',
+    //   isSortDisabled: true,
+    //   sortType: '',
+    //   isSearchDisabled: true,
+    //   width: '13%',
+    // },
   ],
 
   PreArrivaltabFilterItems: [

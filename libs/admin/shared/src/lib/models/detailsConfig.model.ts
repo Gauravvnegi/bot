@@ -637,7 +637,6 @@ export class Package implements IDeserializable {
       set({}, 'description', get(input, ['description'])),
       set({}, 'name', get(input, ['name'])),
       set({}, 'id', get(input, ['id'])),
-      set({}, 'imgUrl', get(input, ['imageUrl'])),
       set({}, 'metaData', get(input, ['metaData'])),
       set({}, 'quantity', get(input, ['quantity'])),
       set({}, 'rate', get(input, ['rate'])),
@@ -648,6 +647,7 @@ export class Package implements IDeserializable {
       set({}, 'status', get(input, ['statusMessage', 'state'])),
       set({}, 'remarks', get(input, ['statusMessage', 'remarks']))
     );
+    this.imgUrl = input.images[0].url ?? '';
     return this;
   }
 }

@@ -7,7 +7,6 @@ import {
   Validators,
 } from '@angular/forms';
 
-import { MatDialogConfig } from '@angular/material/dialog';
 import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
 import {
   HotelDetailService,
@@ -17,20 +16,18 @@ import {
 import { ModalService } from '@hospitality-bot/shared/material';
 import { QrCodeModalComponent } from 'libs/admin/shared/src/lib/components/qr-code-modal/qr-code-modal.component';
 import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.service';
+import { DialogService } from 'primeng/dynamicdialog';
 import { Subscription } from 'rxjs';
-import { cuisinesType } from '../../constants/data';
 import { outletBusinessRoutes } from '../../constants/routes';
 import {
-  FoodPackageList,
   MenuList,
-  OutletFormData,
+  OutletFormData
 } from '../../models/outlet.model';
 import { Services } from '../../models/services';
 import { OutletFormService } from '../../services/outlet-form.service';
 import { OutletService } from '../../services/outlet.service';
 import { Feature, OutletForm, OutletType } from '../../types/outlet';
 import { OutletBaseComponent } from '../outlet-base.components';
-import { DialogService } from 'primeng/dynamicdialog';
 
 @Component({
   selector: 'hospitality-bot-add-outlet',
@@ -43,6 +40,7 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
   types: Option[] = [];
   subType: Option[] = [];
   isTypeSelected = false;
+  isSpaSelected = false;
   cuisines: Option[] = [];
   compServices: any[] = [];
   paidServices: any[] = [];
@@ -56,6 +54,10 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
   siteId: string;
   logoUrl: string;
   redirectUrl: string;
+
+  hours: Option[] = [];
+  days: Option[] = [];
+  dimensions: Option[] = [];
 
   @HostListener('window:beforeunload', ['$event'])
   handleBeforeUnload(event: BeforeUnloadEvent) {
@@ -85,7 +87,6 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
     this.initOptions();
     this.initForm();
     this.initRoutes('outlet');
-    this.setValidators();
   }
 
   initOptions() {
@@ -102,6 +103,7 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
       }));
       this.onTypeChange();
       this.getOutletData();
+      this.getOutletConfig();
     });
   }
 
@@ -185,45 +187,6 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
     }
   }
 
-  setValidators() {
-    const { startDay, endDay, from, to } = this.formControls;
-    this.setupSameValueValidator(startDay, endDay);
-    this.setupSameValueValidator(from, to);
-  }
-
-  /**
-   * @function setupSameValueValidator
-   * @description sets up same value validator if two fields have same value
-   * @param control1
-   * @param control2
-   * @returns void
-   */
-  setupSameValueValidator(
-    control1: AbstractControl,
-    control2: AbstractControl
-  ) {
-    //set same value validator
-    control1.valueChanges.subscribe((value) => {
-      if (value === control2.value) {
-        const errors = { ...control1.errors, sameValue: false };
-        control1.setErrors(errors);
-        control2.setErrors(control2.errors);
-      } else {
-        control2.setErrors(control2.errors);
-      }
-    });
-
-    control2.valueChanges.subscribe((value) => {
-      if (value === control1.value) {
-        const errors = { ...control2.errors, sameValue: false };
-        control2.setErrors(errors);
-        control1.setErrors(control1.errors);
-      } else {
-        control1.setErrors(control1.errors);
-      }
-    });
-  }
-
   initOptionConfig(type) {
     switch (type) {
       case 'RESTAURANT':
@@ -239,15 +202,33 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
     }
   }
 
+  filterValues(control, values) {
+    const value = control?.value;
+    return value !== undefined
+      ? values.filter((item) => item.value !== value)
+      : values;
+  }
+
+  get startDays() {
+    return this.filterValues(this.formControls.endDay, this.days);
+  }
+
+  get endDays() {
+    return this.filterValues(this.formControls.startDay, this.days);
+  }
+
+  get fromTime() {
+    return this.filterValues(this.formControls.to, this.hours);
+  }
+
+  get toTime() {
+    return this.filterValues(this.formControls.from, this.hours);
+  }
+
   onTypeChange() {
     const { type } = this.formControls;
     type.valueChanges.subscribe((type: OutletType) => {
-      //reset form except type
-
-      if (!this.outletId) {
-        this.useForm.markAsUntouched();
-      }
-
+      this.isSpaSelected = type === 'SPA';
       const selectedType = this.types.filter((item) => item.value === type);
 
       this.isTypeSelected = true;
@@ -257,7 +238,7 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
       }));
 
       //set form validation on type change
-      const { maximumOccupancy, minimumOccupancy } = this.formControls;
+      const { maximumOccupancy, minimumOccupancy, endDay } = this.formControls;
       switch (type) {
         case 'RESTAURANT':
           maximumOccupancy.setValidators([Validators.required]);
@@ -274,6 +255,16 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
           maximumOccupancy.clearValidators();
           minimumOccupancy.clearValidators();
       }
+      minimumOccupancy.updateValueAndValidity();
+      maximumOccupancy.updateValueAndValidity();
+    });
+  }
+
+  getOutletConfig() {
+    this.outletService.getOutletConfig().subscribe((res) => {
+      this.hours = res?.HOURS;
+      this.days = res?.WEEKDAYS;
+      this.dimensions = res?.DIMENSIONS;
     });
   }
 

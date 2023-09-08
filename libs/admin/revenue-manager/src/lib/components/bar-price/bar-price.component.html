@@ -47,6 +47,7 @@
                   <hospitality-bot-toggle-switch-with-label
                     class="toggle action-wrapper"
                     [isToggleOn]="barPrice.get('isBase').value"
+                    [isDisabled]="barPrice.get('isBase').value"
                     [config]="{
                       preContent: 'Base Room Type',
                       disableTurnOff: barPrice.get('isBase').value

@@ -179,7 +179,21 @@ export class DayTimeTriggerComponent implements OnInit {
    * @param form of Perticular the Day Time Trigger
    */
   listenChanges(form: FormGroup) {
-    const { hotelConfig } = form.controls;
+    const { hotelConfig, fromDate, toDate } = form.controls;
+    const resetHMS = (control: AbstractControl, value: number) => {
+      const selectedDate = new Date(value);
+      selectedDate.setHours(0, 0, 0, 0);
+      control.patchValue(selectedDate.getTime(), { emitEvent: false });
+    };
+
+    fromDate.valueChanges.subscribe((res) => {
+      resetHMS(fromDate, +res);
+    });
+
+    toDate.valueChanges.subscribe((res) => {
+      resetHMS(toDate, +res);
+    });
+
     const levelsFA = hotelConfig as FormArray;
     const resetSeconds = (
       value: number,

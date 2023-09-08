@@ -106,6 +106,20 @@ export class UpdateRatesComponent implements OnInit {
   initRoomTypes() {
     this.channelMangerForm.roomDetails.subscribe((rooms: RoomTypes[]) => {
       if (this.channelMangerForm.isRoomDetailsLoaded) {
+        rooms = rooms.map((room: RoomTypes) => {
+          // baseRatePlan should be at the top of the list in ratePlan
+          room.ratePlans.sort((ratePlan1, ratePlan2) => {
+            if (ratePlan1.isBase && !ratePlan2.isBase) {
+              return -1; // ratePlan1 should come before ratePlan2
+            } else if (!ratePlan1.isBase && ratePlan2.isBase) {
+              return 1; // ratePlan2 should come before ratePlan1
+            } else {
+              return 0; // no preference if both are base or both are not base
+            }
+          });
+          return room;
+        });
+
         this.roomTypes = rooms;
         this.allRoomTypes = rooms;
         this.initForm();

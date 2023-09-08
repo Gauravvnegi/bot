@@ -197,8 +197,7 @@ export class CompanyDataTableComponent extends BaseDatatableComponent
       })
       .subscribe((res) => {
         this.values =
-          res?.records?.map((item) => new CompanyModel().deserialize(item)) ??
-          [];
+          res?.map((item) => new CompanyModel().deserialize(item)) ?? [];
         this.loading = false;
       });
   }

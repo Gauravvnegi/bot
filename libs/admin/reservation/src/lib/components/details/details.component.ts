@@ -37,7 +37,7 @@ import { SendMessageComponent } from 'libs/admin/notification/src/lib/components
   styleUrls: ['./details.component.scss'],
 })
 export class DetailsComponent implements OnInit, OnDestroy {
-  @Input() tabKey = 'guest_details';
+  @Input() tabKey: DetailsTabOptions = 'guest_details';
   @Output() onDetailsClose = new EventEmitter();
   @ViewChild('adminDocumentsDetailsComponent')
   documentDetailComponent: AdminDocumentsDetailsComponent;
@@ -66,7 +66,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
     { iconUrl: 'assets/svg/email.svg', label: 'Email', value: 'email' },
   ];
 
-  detailsConfig = [
+  detailsConfig: { key: DetailsTabOptions; index: number }[] = [
     {
       key: 'guest_details',
       index: 0,
@@ -815,3 +815,11 @@ export class DetailsComponent implements OnInit, OnDestroy {
     this.isFirstTimeFetch = true;
   }
 }
+
+export type DetailsTabOptions =
+  | 'guest_details'
+  | 'document_details'
+  | 'stay_details'
+  | 'package_details'
+  | 'payment_details'
+  | 'request_details';

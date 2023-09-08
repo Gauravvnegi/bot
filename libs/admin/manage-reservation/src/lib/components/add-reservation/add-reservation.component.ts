@@ -113,6 +113,11 @@ export class AddReservationComponent extends BaseReservationComponent
         // Reset summary when all items are removed from roomArray.
         if (res[res.length - 1].roomTypeId === null) {
           this.summaryData = new SummaryData().deserialize();
+          this.occupancyDetails = {
+            adultCount: 0,
+            childCount: 0,
+            roomCount: 0,
+          };
         }
       });
 

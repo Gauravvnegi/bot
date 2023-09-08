@@ -3,7 +3,6 @@ import { Observable } from 'rxjs';
 import { ApiService } from '@hospitality-bot/shared/utils';
 import { QueryConfig } from '@hospitality-bot/admin/library';
 import { CompanyListResponse, CompanyResponseType } from '../types/response';
-
 @Injectable()
 export class CompanyService extends ApiService {
   getCompanyDetails(config?: QueryConfig): Observable<CompanyListResponse> {
@@ -29,8 +28,8 @@ export class CompanyService extends ApiService {
     return this.get(`/api/v1/members/${companyId}`);
   }
 
-  searchCompany(queryParams?: QueryConfig) {
-    return this.get(`/api/v1/members${queryParams.params}`);
+  searchCompany(queryParams?: QueryConfig): Observable<CompanyResponseType[]> {
+    return this.get(`/api/v1/search/members${queryParams.params}`);
   }
 
   exportCSV(config: QueryConfig): Observable<any> {

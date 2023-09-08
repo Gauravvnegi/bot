@@ -159,16 +159,16 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
           // Process the response and update the data
           this.reservationLists = new ReservationList().deserialize(res);
           this.values = this.reservationLists.reservationData;
-          const statusDetails =
-            this.selectedEntity.type === EntityType.HOTEL
-              ? reservationStatusDetails
-              : outletReservationStatusDetails;
+          // const statusDetails =
+          //   this.selectedEntity.type === EntityType.HOTEL
+          //     ? reservationStatusDetails
+          //     : outletReservationStatusDetails;
 
           this.initFilters(
             this.reservationLists.entityTypeCounts,
             this.reservationLists.entityStateCounts,
             this.reservationLists.total,
-            statusDetails
+            reservationStatusDetails
           );
         },
         (error) => {
@@ -322,11 +322,11 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
       case 'PRINT_INVOICE':
         this.invoiceService.handleInvoiceDownload(id);
         break;
-      case 'ASSIGN_ROOM':
-      case 'ASSIGN_TABLE':
-        this.formService.enableAccordion = true;
-        this.editReservation(id);
-        break;
+      // case 'ASSIGN_ROOM':
+      // case 'ASSIGN_TABLE':
+      //   this.formService.enableAccordion = true;
+      //   this.editReservation(id);
+      //   break;
     }
   }
 

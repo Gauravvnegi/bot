@@ -91,7 +91,7 @@ export class InhouseData {
       this.requestTime,
       'h:mm a',
       timezone
-    )}`;
+      )}`;
   }
 
   getClosedTime(timezone = '+05:30') {

@@ -53,7 +53,7 @@ class Menu {
   deserialize(input: MenuResponse) {
     this.id = input.id;
     this.name = input.name;
-    this.imageUrl = input.images[0].url;
+    this.imageUrl = input.imageUrl;
     this.description = input.description;
     this.status = input.status;
     this.entityId = input.entityId;

@@ -377,7 +377,11 @@ export class SpaReservationComponent extends BaseReservationComponent
    */
   create() {
     this.formService.reservationForm.next(this.userForm.getRawValue());
-    this.router.navigate([`/pages/library/services/create-service`]);
+    this.router.navigate([`/pages/library/services/create-service`], {
+      queryParams: {
+        entityId: this.outletId,
+      },
+    });
   }
 
   get spaItemsControls() {

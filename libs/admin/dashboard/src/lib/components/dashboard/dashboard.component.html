@@ -3,6 +3,10 @@
   [routes]="navRoutes"
   [isBack]="false"
 >
+  <hospitality-bot-button
+    label="View Pre-Arrival Request"
+    (onClick)="onViewPreArrivalRequest()"
+  ></hospitality-bot-button>
 </hospitality-bot-navigation-header>
 
 <hospitality-bot-statistics class="statistics"></hospitality-bot-statistics>

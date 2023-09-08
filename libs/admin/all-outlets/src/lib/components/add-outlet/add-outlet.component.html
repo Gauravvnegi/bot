@@ -109,6 +109,86 @@
     </div>
 
     <!-- //ng ngSwitch it will operate on the basis of type -->
+    <div class="container-wrapper" *ngIf="isTypeSelected">
+      <div class="header">Other Details</div>
+      <hr />
+      <div class="details-wrapper">
+        <hospitality-bot-prefix-field
+          *ngIf="!isSpaSelected"
+          label="Occupancy"
+          class="half-width"
+          preControlName="maximumOccupancy"
+          postControlName="minimumOccupancy"
+          preFieldType="input"
+          postFieldType="input"
+          [defaultProps]="{
+            pre: {
+              placeholder: 'Min'
+            },
+            post: {
+              placeholder: 'Max'
+            }
+          }"
+          [settings]="{
+            layout: 'dashed',
+            preProps: { type: 'number' },
+            postProps: { type: 'number' }
+          }"
+        >
+        </hospitality-bot-prefix-field>
+        <hospitality-bot-prefix-field
+          *ngIf="!isSpaSelected"
+          preControlName="area"
+          postControlName="dimension"
+          class="half-width"
+          [props]="{
+            placeholder: 'Enter'
+          }"
+          label="Area"
+          [settings]="{
+            preFieldType: 'input',
+            postFieldType: 'select',
+            layout: 'pre-main',
+            postOptions: dimensions
+          }"
+        ></hospitality-bot-prefix-field>
+        <hospitality-bot-prefix-field
+          label="Days Of operation"
+          class="half-width"
+          preControlName="startDay"
+          postControlName="endDay"
+          preFieldType="select"
+          postFieldType="select"
+          [props]="{
+            placeholder: 'Select Days'
+          }"
+          [preOptions]="startDays"
+          [postOptions]="endDays"
+          [settings]="{
+            layout: 'dashed'
+          }"
+        >
+        </hospitality-bot-prefix-field>
+
+        <hospitality-bot-prefix-field
+          label="Timings"
+          class="half-width"
+          preControlName="from"
+          postControlName="to"
+          preFieldType="select"
+          postFieldType="select"
+          [preOptions]="fromTime"
+          [postOptions]="toTime"
+          [props]="{
+            placeholder: 'Select Timings'
+          }"
+          [settings]="{
+            layout: 'dashed'
+          }"
+        >
+        </hospitality-bot-prefix-field>
+      </div>
+    </div>
 
     <ng-container [ngSwitch]="useForm.get('type').value">
       <hospitality-bot-restaurant-form

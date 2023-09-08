@@ -24,6 +24,7 @@
     <hospitality-bot-select
       *ngIf="isProperty()"
       [loading]="loading"
+      [disabled]="serviceId"
       class="half-width"
       controlName="entityId"
       label="Property"

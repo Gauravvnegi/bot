@@ -22,6 +22,7 @@ import { ReservationDatatableComponent } from './components/datatable/reservatio
 import { ReservationDatatableModalComponent } from './components/modal/reservation-datatable-modal/reservation-datatable-modal.component';
 import { StatisticsComponent } from './components/statistics/statistics.component';
 import { StatisticsService } from './services/statistics.service';
+import { AnalyticsService } from 'libs/admin/request-analytics/src/lib/services/analytics.service';
 
 export const adminDashboardRoutes: Route[] = [
   {
@@ -60,6 +61,6 @@ export const adminDashboardRoutes: Route[] = [
     MessagesComponent,
   ],
   exports: [RouterModule],
-  providers: [StatisticsService],
+  providers: [StatisticsService, AnalyticsService],
 })
 export class AdminDashboardModule {}

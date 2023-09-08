@@ -11,18 +11,25 @@ import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/servi
 import { BaseDatatableComponent } from 'libs/admin/shared/src/lib/components/datatable/base-datatable.component';
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
 import { TableService } from 'libs/admin/shared/src/lib/services/table.service';
-import { SnackBarService } from 'libs/shared/material/src';
+import { ModalService, SnackBarService } from 'libs/shared/material/src';
 import { DateService } from '@hospitality-bot/shared/utils';
 import { LazyLoadEvent, SortEvent } from 'primeng/api';
 import { Subscription, Observable } from 'rxjs';
 import { InhouseTable } from '../../models/inhouse-datatable.model';
 import { AnalyticsService } from '../../services/analytics.service';
 import * as FileSaver from 'file-saver';
-import { analytics } from '@hospitality-bot/admin/shared';
+import { analytics, sharedConfig } from '@hospitality-bot/admin/shared';
 import { ChipType, inhouseStatus } from '../../constant/datatable';
 import { RequestService } from 'libs/admin/request/src/lib/services/request.service';
 import { convertToTitleCase } from 'libs/admin/shared/src/lib/utils/valueFormatter';
 import { RequestStatus } from 'libs/admin/request/src/lib/constants/request';
+import {
+  DetailsComponent,
+  DetailsTabOptions,
+  Reservation,
+} from '@hospitality-bot/admin/reservation';
+import { MatDialogConfig } from '@angular/material/dialog';
+import { ReservationService } from '@hospitality-bot/admin/dashboard';
 
 @Component({
   selector: 'hospitality-bot-pre-arrival-datatable',
@@ -34,7 +41,6 @@ import { RequestStatus } from 'libs/admin/request/src/lib/constants/request';
 })
 export class PreArrivalDatatableComponent extends BaseDatatableComponent
   implements OnInit, OnDestroy {
-  isAllTabFilterRequired = true;
   @Input() entityType = 'pre-arrival';
   optionLabels = [];
   @Input() packageId: string;
@@ -49,7 +55,9 @@ export class PreArrivalDatatableComponent extends BaseDatatableComponent
     private snackbarService: SnackBarService,
     private analyticsService: AnalyticsService,
     protected tabFilterService: TableService,
-    private _requestService: RequestService
+    private _requestService: RequestService,
+    private _modal: ModalService,
+    private _reservationService: ReservationService
   ) {
     super(fb, tabFilterService);
   }
@@ -85,6 +93,7 @@ export class PreArrivalDatatableComponent extends BaseDatatableComponent
             order: 'DESC',
             entityType: this.entityType,
             packageId: this.packageId,
+            journeyType: 'pre-arrival',
           },
           ...this.getSelectedQuickReplyFilters({
             key: 'actionType',
@@ -102,6 +111,7 @@ export class PreArrivalDatatableComponent extends BaseDatatableComponent
           order: 'DESC',
           entityType: this.entityType,
           packageId: this.packageId,
+          journeyType: 'pre-arrival',
         },
         ...this.getSelectedQuickReplyFilters({ key: 'actionType' }),
       ],
@@ -177,6 +187,7 @@ export class PreArrivalDatatableComponent extends BaseDatatableComponent
             order: 'DESC',
             entityType: this.entityType,
             packageId: this.packageId,
+            journeyType: 'pre-arrival',
           },
           ...this.getSelectedQuickReplyFilters({
             key: 'actionType',
@@ -296,6 +307,61 @@ export class PreArrivalDatatableComponent extends BaseDatatableComponent
 
     value = value && value.trim();
     this.table.filter(value, field, matchMode);
+  }
+
+  /**
+   * @function openDetailPage To open the detail modal for a reservation.
+   * @param event The mouse click event.
+   * @param rowData The data of the clicked row.
+   * @param tabKey The key of the tab to be opened in detail modal.
+   */
+  openDetailPage(
+    event?: MouseEvent,
+    rowData?: any,
+    tabKey: DetailsTabOptions = 'package_details',
+    guestData?
+  ): void {
+    event?.stopPropagation();
+    // if (!rowData && !guestData) return;
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = true;
+    dialogConfig.width = '100%';
+    const detailCompRef = this._modal.openDialog(
+      DetailsComponent,
+      dialogConfig
+    );
+
+    detailCompRef.componentInstance.guestId =
+      rowData?.guestDetails?.primaryGuest?.id ?? guestData?.id;
+
+    detailCompRef.componentInstance.bookingNumber =
+      rowData?.booking?.bookingNumber ?? guestData?.number;
+    tabKey && (detailCompRef.componentInstance.tabKey = tabKey);
+    this.$subscription.add(
+      detailCompRef.componentInstance.onDetailsClose.subscribe((res) => {
+        if (res) {
+          this.loadInitialData(
+            [
+              ...this.globalQueries,
+              {
+                order: sharedConfig.defaultOrder,
+                entityType: this.tabFilterItems[this.tabFilterIdx]?.value,
+                journeyType: 'pre-arrival',
+              },
+              ...this.getSelectedQuickReplyFilters({ key: 'entityState' }),
+            ],
+            false,
+            {
+              offset: this.tempFirst,
+              limit: this.tempRowsPerPage
+                ? this.tempRowsPerPage
+                : this.rowsPerPage,
+            }
+          );
+        }
+        detailCompRef.close();
+      })
+    );
   }
 
   ngOnDestroy(): void {

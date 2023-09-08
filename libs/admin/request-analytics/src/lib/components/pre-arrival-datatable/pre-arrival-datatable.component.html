@@ -74,7 +74,10 @@
         let-columns="columns"
         let-rowIndex="rowIndex"
       >
-        <tr class="data-table-row table-row">
+        <tr
+          class="data-table-row table-row"
+          (click)="openDetailPage($event, rowData)"
+        >
           <td class="table--checkbox">
             <p-tableCheckbox
               [value]="rowData"
@@ -147,7 +150,7 @@
               </p>
             </div>
           </td>
-          <td>
+          <!-- <td>
             <div class="gcenter-align">
               <mat-select
                 class="form-elements"
@@ -162,7 +165,7 @@
                 >
               </mat-select>
             </div>
-          </td>
+          </td> -->
         </tr>
       </ng-template>
 

@@ -3,6 +3,7 @@ import { Form, FormBuilder, FormGroup } from '@angular/forms';
 import { Subscription, forkJoin } from 'rxjs';
 import { ImportService } from '../../services/import-service.service';
 import { QueryConfig } from '../../types/table.type';
+import { Services } from '../../models/import-service.model';
 
 @Component({
   selector: 'hospitality-bot-import-service-container',
@@ -88,9 +89,14 @@ export class ImportServiceContainerComponent implements OnInit {
       ([api1Data, api2Data]) => {
         api2Data = api2Data.complimentaryPackages.map((res) => res.id);
 
-        this.compServices = api1Data.service.filter(
+        this.compServices = new Services().deserialize(
+          api1Data.service
+        ).services;
+        // remove the attached services from the default services
+        this.compServices = this.compServices.filter(
           (res) => !api2Data.includes(res.id)
         );
+        // set the default services to the form
         this.filteredServices = this.compServices;
       },
       (err) => {},

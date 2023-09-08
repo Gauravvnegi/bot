@@ -46,16 +46,8 @@ export class RestaurantFormComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.getOutletConfig();
   }
 
-  getOutletConfig() {
-    this.outletService.getOutletConfig().subscribe((res) => {
-      this.hours = res?.HOURS;
-      this.days = res?.WEEKDAYS;
-      this.dimensions = res?.DIMENSIONS;
-    });
-  }
 
   modifyNoRecordActions() {
     this.noRecordActionForComp = noRecordActionForCompWithId;

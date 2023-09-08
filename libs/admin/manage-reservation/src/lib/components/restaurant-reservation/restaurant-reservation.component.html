@@ -97,6 +97,7 @@
       <hospitality-bot-guest-information
         [reservationId]="reservationId"
         (getSummary)="getSummaryData()"
+        [bookingItemValidity]="menuControls.valid"
       ></hospitality-bot-guest-information>
       <!-- <hospitality-bot-billing-address></hospitality-bot-billing-address> -->
       <hospitality-bot-payment-rule

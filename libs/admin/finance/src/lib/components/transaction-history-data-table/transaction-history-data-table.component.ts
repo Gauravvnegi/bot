@@ -154,7 +154,12 @@ export class TransactionHistoryDataTableComponent extends BaseDatatableComponent
     const config: QueryConfig = {
       params: this.adminUtilityService.makeQueryParams([
         ...this.selectedRows.map((item) => ({ ids: item.id })),
-        { entitiyId: this.entityId },
+        {
+          entitiyId: this.entityId,
+          pagination: true,
+          limit: this.totalRecords,
+        },
+        ...this.globalQueries,
       ]),
     };
     this.$subscription.add(

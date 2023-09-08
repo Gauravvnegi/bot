@@ -16,7 +16,7 @@ export type OfferResponse = {
   endDate: number;
   active: boolean;
   packageCode: string;
-  imageUrl: string;
+  images;
   source: string;
   entityId: string;
   autoAccept: boolean;

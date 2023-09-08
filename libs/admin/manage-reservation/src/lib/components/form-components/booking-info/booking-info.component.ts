@@ -1,5 +1,10 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { AbstractControl, ControlContainer, FormGroup } from '@angular/forms';
+import {
+  AbstractControl,
+  ControlContainer,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import {
   ConfigService,
   CountryCodeList,
@@ -11,6 +16,7 @@ import * as moment from 'moment';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { FormService } from '../../../services/form.service';
 import { ReservationForm } from '../../../constants/form';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'hospitality-bot-booking-info',
@@ -30,7 +36,7 @@ export class BookingInfoComponent implements OnInit {
 
   configData: BookingConfig;
 
-  agentSource = false;
+  // agentSource = false;
 
   entityId: string;
   startMinDate = new Date();
@@ -41,6 +47,7 @@ export class BookingInfoComponent implements OnInit {
   fromDateValue = new Date();
   toDateValue = new Date();
 
+  $susbcription = new Subscription();
   constructor(
     public controlContainer: ControlContainer,
     private configService: ConfigService,
@@ -54,12 +61,13 @@ export class BookingInfoComponent implements OnInit {
     this.initDates();
 
     // listening changes after the form is created for continue reservation.
-    this.formService.setInitialDates.subscribe((res) => {
-      if (res !== null) {
-        this.initDates();
-      }
-    });
-
+    this.$susbcription.add(
+      this.formService.setInitialDates.subscribe((res) => {
+        if (res !== null) {
+          this.initDates();
+        }
+      })
+    );
     this.listenForSourceChanges();
   }
 
@@ -72,13 +80,6 @@ export class BookingInfoComponent implements OnInit {
     this.initDefaultDates();
     this.listenForDateChange();
   }
-
-  // listenFormChanges() {
-  //   this.reservationInfoControls.source.valueChanges.subscribe((res) => {
-  //     this.reservationInfoControls.sourceName.setValue('');
-  //   });
-  // }
-
   /**
    * Set default to and from dates.
    */
@@ -119,8 +120,8 @@ export class BookingInfoComponent implements OnInit {
         const maxToLimit = new Date(res);
         this.fromDateValue = new Date(maxToLimit);
         // Check if fromDate is greater than or equal to toDate before setting toDateControl
+        maxToLimit.setDate(maxToLimit.getDate() + 1);
         if (maxToLimit >= this.toDateValue) {
-          maxToLimit.setDate(maxToLimit.getDate() + 1);
           // Calculate the date for one day later
           const nextDayTime = moment(maxToLimit).unix() * 1000;
           toDateControl.setValue(nextDayTime); // Set toDateControl to one day later
@@ -173,29 +174,43 @@ export class BookingInfoComponent implements OnInit {
     const sourceNameControl = this.reservationInfoControls.sourceName;
 
     sourceControl.valueChanges.subscribe((res) => {
-      this.agentSource = res === 'AGENT';
+      // this.agentSource = res === 'AGENT';
       this.otaOptions =
-        res === 'OTA'
+        res === 'OTA' && this.configData
           ? this.configData.source.filter((item) => item.value === res)[0].type
           : [];
-
+      if (res === 'OTA') {
+        sourceNameControl.clearValidators();
+        sourceNameControl.setValidators([Validators.required]);
+      } else {
+        sourceNameControl.clearValidators();
+        sourceNameControl.updateValueAndValidity();
+        sourceNameControl.setValidators([
+          Validators.required,
+          Validators.maxLength(60),
+        ]);
+      }
       sourceNameControl.reset();
     });
+
+    this.$susbcription.add(
+      this.formService.sourceData.subscribe((res) => {
+        if (res) {
+          sourceControl.setValue(res.source);
+          sourceNameControl.setValue(res.sourceName);
+        }
+      })
+    );
   }
 
   getCountryCode(): void {
     this.configService
       .getColorAndIconConfig(this.entityId)
       .subscribe((response) => {
-        // Config data -> OTA only for rooms, Online Order for restaurant
         this.configData = new BookingConfig().deserialize(
           response.bookingConfig
         );
-        if (this.bookingType === EntitySubType.RESTAURANT)
-          this.configData.source = [
-            ...this.configData.source,
-            { label: 'Online food order', value: 'ONLINE_FOOD_ORDER' },
-          ];
+        this.listenForSourceChanges();
       });
     this.configService.getCountryCode().subscribe((res) => {
       const data = new CountryCodeList().deserialize(res);
@@ -205,8 +220,6 @@ export class BookingInfoComponent implements OnInit {
 
   updateDateDifference() {
     // Get the toDate and fromDate values from the form service
-    // const toDateValue = this.formService.toDate;
-    // const fromDateValue = this.formService.fromDate;
 
     if (this.fromDateValue && this.toDateValue) {
       // Calculate the date difference in days
@@ -227,6 +240,10 @@ export class BookingInfoComponent implements OnInit {
       keyof ReservationForm['reservationInformation'],
       AbstractControl
     >;
+  }
+
+  ngOnDestroy() {
+    this.$susbcription.unsubscribe();
   }
 
   get roomControls() {

@@ -13,7 +13,7 @@ import {
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import * as FileSaver from 'file-saver';
 import { LazyLoadEvent } from 'primeng/api';
-import { Subscription } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
 import {
   chips,
   cols,
@@ -27,6 +27,8 @@ import { ServicesService } from '../../services/services.service';
 import { ServiceListResponse, ServiceResponse } from '../../types/response';
 import { ServiceData } from '../../types/service';
 import { feedback } from '@hospitality-bot/admin/feedback';
+import { takeUntil } from 'rxjs/operators';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'hospitality-bot-services-data-table',
@@ -50,6 +52,8 @@ export class ServicesDataTableComponent extends BaseDatatableComponent {
   feedbackType: string;
   brandId: string;
   branchId: string;
+  private cancelRequests$ = new Subject<void>();
+  isRestaurant: boolean = false;
 
   $subscription = new Subscription();
 
@@ -78,6 +82,9 @@ export class ServicesDataTableComponent extends BaseDatatableComponent {
    */
 
   onGlobalTabFilterChanges(event) {
+    //to cancel previous api call in between when tab filter changes
+    this.cancelRequests$.next();
+    this.isRestaurant = event.outletType === 'RESTAURANT' ? true : false;
     this.entityId = event.entityId[0];
     this.initTableValue();
   }
@@ -116,6 +123,10 @@ export class ServicesDataTableComponent extends BaseDatatableComponent {
         this.entityId,
         this.getQueryConfig()
       )
+      .pipe(
+        //to cancel api call between using take until
+        takeUntil(this.cancelRequests$)
+      )
       .subscribe(
         (res) => {
           const serviceList = new ServiceList().deserialize(res);
@@ -129,6 +140,13 @@ export class ServicesDataTableComponent extends BaseDatatableComponent {
             case TableValue.COMPLIMENTARY:
               this.values = serviceList.complimentaryService;
               break;
+          }
+
+          if (this.isRestaurant) {
+            serviceList.entityTypeCounts = _.omit(
+              serviceList.entityTypeCounts,
+              'PAID'
+            );
           }
 
           this.initFilters(
@@ -176,6 +194,16 @@ export class ServicesDataTableComponent extends BaseDatatableComponent {
     );
   }
 
+  onCreateNewCategory() {
+    const navigationExtras: NavigationExtras = {
+      queryParams: { entityId: this.entityId },
+    };
+
+    this.router.navigate([servicesRoutes.createCategory.route], {
+      relativeTo: this.route,
+      ...navigationExtras,
+    });
+  }
   onCreateNewService() {
     this.servicesService.entityId = this.entityId;
     this.router.navigate([servicesRoutes.createService.route], {

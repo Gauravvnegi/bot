@@ -106,7 +106,6 @@ export class AddReservationComponent extends BaseReservationComponent
         const roomTypeIds = res.map((item) => item.roomTypeId);
         // check if the last added room type is selected
         if (res && res[res.length - 1].roomTypeId?.length) {
-          this.userForm.get('offerId').reset();
           this.getOfferByRoomType(roomTypeIds);
           this.getSummaryData();
         }
@@ -114,6 +113,11 @@ export class AddReservationComponent extends BaseReservationComponent
         // Reset summary when all items are removed from roomArray.
         if (res[res.length - 1].roomTypeId === null) {
           this.summaryData = new SummaryData().deserialize();
+          this.occupancyDetails = {
+            adultCount: 0,
+            childCount: 0,
+            roomCount: 0,
+          };
         }
       });
 
@@ -140,7 +144,9 @@ export class AddReservationComponent extends BaseReservationComponent
         .subscribe((res) => {
           if (res) {
             const { roomInformation, ...formData } = res;
-            this.roomTypeValues = roomInformation.roomTypes;
+            // check if room type was patched
+            if (roomInformation.roomTypes[0].roomTypeId.length)
+              this.roomTypeValues = roomInformation.roomTypes;
             this.userForm.patchValue(formData);
           }
         })
@@ -154,14 +160,23 @@ export class AddReservationComponent extends BaseReservationComponent
         .subscribe(
           (response: RoomReservationResponse) => {
             const data = new ReservationFormData().deserialize(response);
-
             const {
               guestInformation,
               roomInformation,
               nextStates,
               totalPaidAmount,
+              reservationInformation: {
+                source,
+                sourceName,
+                ...reservationInfo
+              },
               ...formData
             } = data;
+
+            this.formService.sourceData.next({
+              source: source,
+              sourceName: sourceName,
+            });
 
             if (nextStates)
               this.reservationTypes = nextStates.map((item) => ({
@@ -176,7 +191,11 @@ export class AddReservationComponent extends BaseReservationComponent
             // in room iterator and guest info component.
             this.roomTypeValues = roomInformation;
             this.formService.guestInformation.next(guestInformation);
-            this.userForm.patchValue(formData);
+
+            this.userForm.patchValue({
+              reservationInformation: reservationInfo,
+              formData,
+            });
 
             if (data.offerId) {
               const roomTypeIds = roomInformation.map(
@@ -255,7 +274,9 @@ export class AddReservationComponent extends BaseReservationComponent
           maxAdult: item.get('adultCount').value,
         },
       })),
-      offerId: this.inputControls.offerId.value,
+      offerId: this.inputControls.offerId.value
+        ? this.inputControls.offerId.value
+        : null,
       guestId: this.inputControls.guestInformation.get('guestDetails')?.value,
     };
 
@@ -322,5 +343,9 @@ export class AddReservationComponent extends BaseReservationComponent
     return ((this.userForm.get('roomInformation') as FormGroup).get(
       'roomTypes'
     ) as FormArray).controls;
+  }
+
+  get roomInfoControls() {
+    return this.userForm.get('roomInformation') as FormGroup;
   }
 }

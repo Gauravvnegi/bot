@@ -7,6 +7,7 @@ import {
   InitialFormData,
   OutletFormData,
   RoomReservationFormData,
+  SourceData,
 } from '../types/forms.types';
 import { ReservationForm } from '../constants/form';
 import { GuestInfo } from '../models/reservations.model';
@@ -24,6 +25,10 @@ export class FormService {
   >({});
 
   guestInformation: BehaviorSubject<GuestInfo> = new BehaviorSubject<GuestInfo>(
+    null
+  );
+
+  sourceData: BehaviorSubject<SourceData> = new BehaviorSubject<SourceData>(
     null
   );
 
@@ -68,7 +73,9 @@ export class FormService {
 
     roomReservationData.guestId = input.guestInformation?.guestDetails;
     roomReservationData.specialRequest = input.instructions.specialInstructions;
-    roomReservationData.offerId = input.offerId ?? null;
+    roomReservationData.offer = {
+      id: input.offerId ?? null,
+    };
     // Map Booking Items
     if (input.roomInformation?.roomTypes) {
       roomReservationData.bookingItems = input.roomInformation.roomTypes.map(
@@ -156,7 +163,16 @@ export class FormService {
     reservationData.offerId = input?.offerId ?? '';
     reservationData.outletType = outletType;
 
-    reservationData.specialRequest = input.instructions.specialInstructions;
+    reservationData.specialRequest =
+      outletType === 'RESTAURANT'
+        ? input.orderInformation.kotInstructions
+        : input.instructions?.specialInstructions;
+
     return reservationData;
+  }
+
+  resetData() {
+    this.reservationForm.next(null);
+    this.sourceData.next(null);
   }
 }

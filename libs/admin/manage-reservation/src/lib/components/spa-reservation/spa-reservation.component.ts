@@ -95,7 +95,7 @@ export class SpaReservationComponent extends BaseReservationComponent
         dateAndTime: ['', Validators.required],
         status: ['', Validators.required],
         source: ['', Validators.required],
-        sourceName: ['', [Validators.required, Validators.maxLength(60)]],
+        sourceName: [''],
         marketSegment: ['', Validators.required],
       }),
       bookingInformation: this.fb.group({
@@ -118,7 +118,12 @@ export class SpaReservationComponent extends BaseReservationComponent
     this.inputControls.bookingInformation.valueChanges
       .pipe(debounceTime(1000))
       .subscribe((res) => {
-        if (res.spaItems[0].serviceName.length) this.getSummaryData();
+        if (res.spaItems[0].serviceName === null) {
+          this.summaryData = new SummaryData().deserialize();
+          return;
+        }
+        if (res.spaItems[res.spaItems?.length - 1].serviceName.length)
+          this.getSummaryData();
       });
   }
 
@@ -132,7 +137,7 @@ export class SpaReservationComponent extends BaseReservationComponent
               bookingInformation: { spaItems, ...spaInfo },
               ...formData
             } = res;
-            this.spaItemsValues = spaItems;
+            if (spaItems[0].serviceName) this.spaItemsValues = spaItems;
             this.userForm.patchValue({
               bookingInformation: spaInfo,
               ...formData,
@@ -151,16 +156,18 @@ export class SpaReservationComponent extends BaseReservationComponent
       .get('serviceName')
       .valueChanges.pipe(debounceTime(500))
       .subscribe((res) => {
-        const selectedService = this.services.find(
-          (service) => service.value === res
-        );
-        this.spaItemsControls[index]
-          .get('amount')
-          .setValue(selectedService?.price);
+        if (res) {
+          const selectedService = this.services.find(
+            (service) => service.value === res
+          );
+          this.spaItemsControls[index]
+            .get('amount')
+            .setValue(selectedService?.price);
 
-        // Do not patch in edit mode
-        if (this.spaItemsValues.length < index + 1)
-          this.spaItemsControls[index].get('unit').setValue(1);
+          // Do not patch in edit mode
+          if (this.spaItemsValues.length < index + 1)
+            this.spaItemsControls[index].get('unit').setValue(1);
+        }
       });
   }
 
@@ -201,8 +208,18 @@ export class SpaReservationComponent extends BaseReservationComponent
               bookingInformation: { spaItems, ...spaInfo },
               guestInformation,
               nextStates,
+              reservationInformation: {
+                source,
+                sourceName,
+                ...reservationInfo
+              },
               ...formData
             } = data;
+
+            this.formService.sourceData.next({
+              source: source,
+              sourceName: sourceName,
+            });
 
             if (nextStates)
               this.statusOptions = nextStates.map((item) => ({
@@ -216,6 +233,7 @@ export class SpaReservationComponent extends BaseReservationComponent
 
             this.userForm.patchValue({
               bookingInformation: spaInfo,
+              reservationInformation: reservationInfo,
               ...formData,
             });
           },
@@ -277,7 +295,7 @@ export class SpaReservationComponent extends BaseReservationComponent
     this.loadingResults = true;
     this.$subscription.add(
       this.libraryService
-        .getLibraryItems<ServiceListResponse>(this.entityId, {
+        .getLibraryItems<ServiceListResponse>(this.outletId, {
           params: `?type=SERVICE&offset=${this.servicesOffSet}&limit=10&status=true&serviceType=${ServicesTypeValue.PAID}`,
         })
         .subscribe(
@@ -314,7 +332,7 @@ export class SpaReservationComponent extends BaseReservationComponent
     if (text) {
       this.loadingResults = true;
       this.libraryService
-        .searchLibraryItem(this.entityId, {
+        .searchLibraryItem(this.outletId, {
           params: `?key=${text}&type=${LibrarySearchItem.SERVICE}`,
         })
         .subscribe(
@@ -359,13 +377,21 @@ export class SpaReservationComponent extends BaseReservationComponent
    */
   create() {
     this.formService.reservationForm.next(this.userForm.getRawValue());
-    this.router.navigate([`/pages/library/services/create-service`]);
+    this.router.navigate([`/pages/library/services/create-service`], {
+      queryParams: {
+        entityId: this.outletId,
+      },
+    });
   }
 
   get spaItemsControls() {
     return ((this.userForm.get('bookingInformation') as FormGroup).get(
       'spaItems'
     ) as FormArray).controls;
+  }
+
+  get spaControls() {
+    return this.userForm.get('bookingInformation') as FormGroup;
   }
 
   /**

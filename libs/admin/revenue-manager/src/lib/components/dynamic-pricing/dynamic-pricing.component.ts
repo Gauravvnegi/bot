@@ -37,8 +37,6 @@ export class DynamicPricingComponent implements OnInit {
   allRooms: RoomTypes[];
   entityId: string;
   dynamicPricingFG: FormGroup;
-  currentDay = new Date();
-  seventhDay = new Date();
   itemList: MenuItem[] = [
     { label: 'Occupancy' },
     { label: 'Day/Time Trigger' },
@@ -58,9 +56,6 @@ export class DynamicPricingComponent implements OnInit {
 
   ngOnInit(): void {
     this.entityId = this.globalFilter.entityId;
-    this.currentDay.setHours(0, 0, 0, 0);
-    this.seventhDay.setHours(0, 0, 0, 0);
-    this.seventhDay.setDate(this.seventhDay.getDate() + 7);
     this.initRoom();
   }
 

@@ -56,7 +56,7 @@ export type MenuListResponse = {
 export type MenuResponse = {
   id: string;
   name: string;
-  imageUrl: string;
+  images: { isFeatured: boolean; url: string }[];
   description: string;
   status: boolean;
   entityId: string;

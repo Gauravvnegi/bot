@@ -4,6 +4,7 @@ import {
   PaymentMethodConfig,
   ReservationListResponse,
   RoomReservationRes,
+  SourceResponse,
   SummaryResponse,
 } from '../types/response.type';
 import {
@@ -205,9 +206,7 @@ export class ReservationFormData {
   deserialize(input: RoomReservationResponse) {
     this.reservationInformation = new BookingInfo().deserialize(input);
     this.guestInformation = new GuestInfo().deserialize(input.guest);
-    // this.offerId = input?.id;
-    // if(input)
-    this.offerId = input.offer.offerType === 'COMPANY' ? null : input.offer.id;
+    this.offerId = input.offer ? input.offer?.id : null;
     this.nextStates = [input.reservationType, ...input.nextStates];
     this.instructions = new Instructions().deserialize(input);
     this.roomInformation = input?.bookingItems.map((item: BookingItems) => ({
@@ -272,7 +271,7 @@ export class OrderInfo {
 
   deserialize(input) {
     this.numberOfAdults = input?.occupancyDetails.maxAdult ?? 1;
-    this.kotInstructions = input?.kotInstructions ?? '';
+    this.kotInstructions = input?.specialRequest ?? '';
     this.menuItems = input.items.map((item) => ({
       menuItems: item?.itemId,
       unit: item?.unit ?? 1,
@@ -468,64 +467,16 @@ export class BookingConfig {
       label: this.toCamelCase(item),
       value: item,
     }));
-    // this.source = input?.source.map((item) => ({
-    //   label: this.toCamelCase(item),
-    //   value: item,
-    //   type: item?.type,
-    // }));
-
-    this.source = [
-      {
-        label: this.toCamelCase('OTA'),
-        value: 'OTA',
-        type: [
-          {
-            value: 'EASEMYTRIP',
-            label: 'Easemytrip',
-          },
-          {
-            value: 'YATRA',
-            label: 'Yatra',
-          },
-          {
-            value: 'AGODA',
-            label: 'Agoda',
-          },
-          {
-            value: 'BOOKINGDC',
-            label: 'Booking.com',
-          },
-          {
-            value: 'EXPDC',
-            label: 'Expedia',
-          },
-          {
-            value: 'ASO',
-            label: 'Airbnb',
-          },
-        ],
-      },
-      {
-        label: this.toCamelCase('AGENT'),
-        value: 'AGENT',
-      },
-      {
-        label: this.toCamelCase('WALK_IN'),
-        value: 'WALK_IN',
-      },
-      {
-        label: this.toCamelCase('OFFLINE_SALES'),
-        value: 'OFFLINE_SALES',
-      },
-      {
-        label: this.toCamelCase('CREATE_WITH'),
-        value: 'CREATE_WITH',
-      },
-      {
-        label: this.toCamelCase('OTHER'),
-        value: 'OTHER',
-      },
-    ];
+    this.source = input?.source.map((item: SourceResponse) => ({
+      label: this.toCamelCase(item.name),
+      value: item.name,
+      type: item.type
+        ? item.type.map((type) => ({
+            label: type.label,
+            value: type.code,
+          }))
+        : [],
+    }));
     return this;
   }
 

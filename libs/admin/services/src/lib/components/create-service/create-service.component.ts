@@ -142,10 +142,10 @@ export class CreateServiceComponent implements OnInit {
   initForm(): void {
     this.useForm = this.fb.group({
       active: [true],
-      currency: [''],
+      currency: ['INR'],
       parentId: ['', Validators.required],
       entityId: [''],
-      imageUrl: ['', Validators.required],
+      images: ['', Validators.required],
       name: ['', Validators.required],
       serviceType: [ServiceTypeOptionValue.PAID],
       rate: [''],
@@ -167,13 +167,14 @@ export class CreateServiceComponent implements OnInit {
             params: `?type=${LibraryItem.service}`,
           })
           .subscribe((res) => {
-            const { type, taxes, ...rest } = res;
+            const { type, images, taxes, enableVisibility, ...rest } = res;
             this.useForm.patchValue({
               serviceType: type,
               ...rest,
+              images: images[0]?.url,
               taxIds: taxes.map((item) => item.id),
             });
-            this.useForm.get('entityId').disable();
+            this.useForm.get('enableVisibility').setValue(enableVisibility);
 
             this.code = res.packageCode;
           }, this.handleError)
@@ -272,7 +273,8 @@ export class CreateServiceComponent implements OnInit {
       return;
     }
 
-    const data = this.useForm.getRawValue() as ServiceFormData;
+    const { images, ...rest } = this.useForm.getRawValue() as ServiceFormData;
+    const data = { images: [{ url: images, isFeatured: true }], ...rest };
     this.loading = true;
     if (this.serviceId) {
       this.$subscription.add(

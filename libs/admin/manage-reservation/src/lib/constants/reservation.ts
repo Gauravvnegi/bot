@@ -31,6 +31,7 @@ export const roomFields: IteratorField[] = [
     required: true,
     placeholder: 'Enter',
     width: '10%',
+    minValue: 1,
   },
   {
     label: 'Room Number',
@@ -46,6 +47,7 @@ export const roomFields: IteratorField[] = [
     type: 'input',
     placeholder: 'Enter',
     width: '10%',
+    minValue: 1,
   },
   {
     label: 'Kids',
@@ -53,6 +55,7 @@ export const roomFields: IteratorField[] = [
     type: 'input',
     placeholder: 'Enter',
     width: '10%',
+    minValue: 0,
   },
 ];
 
@@ -103,6 +106,7 @@ export const menuItemFields: IteratorField[] = [
     placeholder: 'Enter',
     width: '25%',
     dataType: 'number',
+    minValue: 1,
   },
   {
     label: 'Amount',
@@ -126,7 +130,7 @@ export const spaFields: IteratorField[] = [
     placeholder: 'Search by name',
     width: '36%',
     isAsync: true,
-    createPrompt: '+ Add New Service'
+    createPrompt: '+ Add New Service',
   },
   {
     label: 'Quantity',
@@ -167,6 +171,7 @@ export const venueFields: IteratorField[] = [
     placeholder: 'Enter',
     width: '30%',
     dataType: 'number',
+    minValue: 1,
   },
   {
     label: 'Amount',

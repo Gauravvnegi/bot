@@ -68,7 +68,7 @@ export type FoodPackageResponse = {
   active: boolean;
   currency: string;
   packageCode: string;
-  imageUrl: string;
+  images;
   source: string;
   hotelId: string;
   category: string;

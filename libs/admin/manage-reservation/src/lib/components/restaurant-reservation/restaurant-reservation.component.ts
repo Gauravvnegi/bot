@@ -30,6 +30,8 @@ import { OutletForm } from '../../models/reservations.model';
 import { ReservationSummary } from '../../types/forms.types';
 import { MenuItemListResponse } from 'libs/admin/all-outlets/src/lib/types/outlet';
 import { BaseReservationComponent } from '../base-reservation.component';
+import { OutletService } from 'libs/admin/all-outlets/src/lib/services/outlet.service';
+import { FoodPackageList } from 'libs/admin/all-outlets/src/lib/models/outlet.model';
 
 @Component({
   selector: 'hospitality-bot-restaurant-reservation',
@@ -66,6 +68,7 @@ export class RestaurantReservationComponent extends BaseReservationComponent
     protected globalFilterService: GlobalFilterService,
     private manageReservationService: ManageReservationService,
     protected activatedRoute: ActivatedRoute,
+    private outletService: OutletService,
     private formService: FormService
   ) {
     super(globalFilterService, activatedRoute);
@@ -79,6 +82,7 @@ export class RestaurantReservationComponent extends BaseReservationComponent
     this.getReservationId();
     this.initFormData();
     this.listenForFormChanges();
+    this.getFoodPackages();
   }
 
   initDetails() {
@@ -114,7 +118,7 @@ export class RestaurantReservationComponent extends BaseReservationComponent
         reservationType: ['', Validators.required],
         status: ['', Validators.required],
         source: ['', Validators.required],
-        sourceName: ['', [Validators.required, Validators.maxLength(60)]],
+        sourceName: [''],
         marketSegment: ['', Validators.required],
       }),
       orderInformation: this.fb.group({
@@ -158,7 +162,11 @@ export class RestaurantReservationComponent extends BaseReservationComponent
     this.inputControls.orderInformation.valueChanges
       .pipe(debounceTime(1000))
       .subscribe((res) => {
-        if (res && res.menuItems[res.menuItems?.length - 1].menuItems?.length) {
+        if (res.menuItems[0].menuItems === null) {
+          this.summaryData = new SummaryData().deserialize();
+          return;
+        }
+        if (res.menuItems[res.menuItems?.length - 1].menuItems?.length) {
           this.getSummaryData();
         }
       });
@@ -298,8 +306,18 @@ export class RestaurantReservationComponent extends BaseReservationComponent
             const {
               orderInformation: { menuItems, ...orderInfo },
               guestInformation,
+              reservationInformation: {
+                source,
+                sourceName,
+                ...reservationInfo
+              },
               ...formData
             } = data;
+
+            this.formService.sourceData.next({
+              source: source,
+              sourceName: sourceName,
+            });
 
             this.formValueChanges = true;
 
@@ -308,6 +326,7 @@ export class RestaurantReservationComponent extends BaseReservationComponent
             this.formService.guestInformation.next(guestInformation);
 
             this.userForm.patchValue({
+              reservationInformation: reservationInfo,
               orderInformation: orderInfo,
               ...formData,
             });
@@ -381,13 +400,31 @@ export class RestaurantReservationComponent extends BaseReservationComponent
     );
   }
 
+  getFoodPackages() {
+    this.outletService
+      .getFoodPackageList(this.outletId, {
+        params: `?type=FOOD_PACKAGE&pagination=false`,
+      })
+      .subscribe(
+        (res) => {
+          this.foodPackages = new FoodPackageList()
+            .deserialize(res)
+            .records.map((foodPackage) => ({
+              label: foodPackage.name,
+              value: foodPackage.id,
+            }));
+        },
+        (err) => {}
+      );
+  }
+
   /**
    * @function ngOnDestroy to unsubscribe subscription.
    */
   ngOnDestroy(): void {
     this.$subscription.unsubscribe();
   }
-  
+
   get orderInfoControls() {
     return (this.userForm.get('orderInformation') as FormGroup)
       .controls as Record<
@@ -400,5 +437,9 @@ export class RestaurantReservationComponent extends BaseReservationComponent
     return ((this.userForm.get('orderInformation') as FormGroup).get(
       'menuItems'
     ) as FormArray).controls;
+  }
+
+  get menuControls() {
+    return this.userForm.get('orderInformation') as FormGroup;
   }
 }

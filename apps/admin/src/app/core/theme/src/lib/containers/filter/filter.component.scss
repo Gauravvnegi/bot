@@ -157,6 +157,8 @@
   @include normal-sm-text;
   border-bottom: 1px solid $primary-cta;
   &__padding {
+    overflow: auto;
+    height: 77vh;
     padding: 15px;
   }
 }

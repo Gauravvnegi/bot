@@ -11,7 +11,7 @@ export type PackageResponse = {
   active: boolean;
   currency: string;
   packageCode: string;
-  imageUrl: string;
+  images: { isFeatured: boolean; url: string }[];
   source: string;
   entityId: string;
   type: string;

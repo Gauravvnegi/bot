@@ -122,7 +122,7 @@ export enum EntitySubType {
 
 export type EntityTabFilterResponse = {
   entityId: string[];
-  feedbacktype: string;
+  feedbackType: string;
   label: string;
   outletType: EntitySubType;
 };

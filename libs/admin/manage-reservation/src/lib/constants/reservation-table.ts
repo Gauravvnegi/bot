@@ -1,6 +1,9 @@
 import { Cols, FlagType, Option } from '@hospitality-bot/admin/shared';
 import { Chip } from '@hospitality-bot/admin/shared';
-import { ReservationStatus } from '../types/reservation.type';
+import {
+  OutletReservationStatus,
+  ReservationStatus,
+} from '../types/reservation.type';
 /**
  * Reservation item type value
  */
@@ -74,6 +77,29 @@ export const reservationStatusDetails: Record<
   },
 };
 
+export const outletReservationStatusDetails: Record<
+  OutletReservationStatus,
+  { label: string; type: FlagType }
+> = {
+  ...reservationStatusDetails,
+  COMPLETED: {
+    label: 'Completed',
+    type: 'completed',
+  },
+  NOSHOW: {
+    label: 'No Show',
+    type: 'failed',
+  },
+  IN: {
+    label: 'In',
+    type: 'active',
+  },
+  WAITLISTED: {
+    label: 'Waitlisted',
+    type: 'active',
+  },
+};
+
 export const entityTabGroup: Record<EntityTabGroup, Option> = {
   HOTEL: { label: 'Hotel', value: 'HOTEL' },
   RESTAURANT_AND_BAR: { label: 'Res & Bar', value: 'RESTAURANT_AND_BAR' },
@@ -120,9 +146,8 @@ export const hotelCols: Cols[] = [
   {
     field: 'from',
     header: 'Arrival / Departure',
-    sortType: 'number',
+    sortType: 'date',
     isSearchDisabled: true,
-    isSortDisabled: true,
   },
   {
     field: 'totalDueAmount',
@@ -140,8 +165,7 @@ export const hotelCols: Cols[] = [
     field: 'totalPaidAmount',
     header: 'Payment',
     sortType: 'number',
-    isSearchDisabled: true,
-    isSortDisabled: true,
+    searchField: ['totalPaidAmount'],
   },
   {
     field: 'reservationType',
@@ -179,18 +203,16 @@ export const outletCols: Cols[] = [
     searchField: ['guestName', 'companyName'],
   },
   {
-    field: 'date',
+    field: 'from',
     header: 'Date / Time',
-    sortType: 'string',
+    sortType: 'date',
     isSearchDisabled: true,
-    isSortDisabled: true,
   },
   {
     field: 'totalDueAmount',
     header: 'Amount Due / Total (INR)',
-    sortType: 'string',
+    sortType: 'number',
     isSearchDisabled: true,
-    isSortDisabled: true,
   },
   {
     field: 'sourceName',
@@ -199,11 +221,10 @@ export const outletCols: Cols[] = [
     searchField: ['sourceName', 'source'],
   },
   {
-    field: 'payment',
+    field: 'totalPaidAmount',
     header: 'Payment',
     sortType: 'string',
-    isSearchDisabled: true,
-    isSortDisabled: true,
+    searchField: ['totalPaidAmount'],
   },
   {
     field: 'reservationType',

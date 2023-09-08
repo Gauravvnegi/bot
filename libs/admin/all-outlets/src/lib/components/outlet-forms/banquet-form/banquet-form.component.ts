@@ -21,10 +21,6 @@ export class BanquetFormComponent implements OnInit {
   @Input() isLoading = false;
   @Input() isPaidLoading = false;
   @Input() isCompLoading = false;
-
-  hours: Option[] = [];
-  days: Option[] = [];
-  dimensions: Option[] = [];
   noRecordActionForComp = noRecordActionForComp;
   noRecordActionForMenu = noRecordActionForMenu;
   noRecordActionForPaid = noRecordActionForPaid;
@@ -44,17 +40,7 @@ export class BanquetFormComponent implements OnInit {
     public outletService: OutletService
   ) {}
 
-  ngOnInit(): void {
-    this.getOutletConfig();
-  }
-
-  getOutletConfig() {
-    this.outletService.getOutletConfig().subscribe((res) => {
-      this.hours = res?.HOURS;
-      this.days = res?.WEEKDAYS;
-      this.dimensions = res?.DIMENSIONS;
-    });
-  }
+  ngOnInit(): void {}
 
   onCreateAndContinue(features: Feature) {
     this.onCreateAndContinueFeature.emit(features);

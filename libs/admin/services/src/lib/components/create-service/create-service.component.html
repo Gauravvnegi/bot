@@ -24,6 +24,7 @@
     <hospitality-bot-select
       *ngIf="isProperty()"
       [loading]="loading"
+      [disabled]="serviceId"
       class="half-width"
       controlName="entityId"
       label="Property"
@@ -43,7 +44,7 @@
 
     <hospitality-bot-custom-file-upload
       class="upload"
-      formControlName="imageUrl"
+      formControlName="images"
       [entityId]="entityId"
     ></hospitality-bot-custom-file-upload>
     <hospitality-bot-prefix-field

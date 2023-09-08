@@ -92,7 +92,7 @@ export class CreatePackageComponent implements OnInit {
         [],
         [Validators.required, CustomValidators.minArrayValueLength(2)],
       ],
-      imageUrl: ['', Validators.required],
+      images: ['', Validators.required],
       currency: ['', Validators.required],
       rate: ['0', [Validators.required, Validators.min(0)]],
       discountType: ['PERCENTAGE', Validators.required],
@@ -111,7 +111,7 @@ export class CreatePackageComponent implements OnInit {
           })
           .subscribe(
             (res) => {
-              const { packageCode, subPackages } = res;
+              const { packageCode, subPackages, images } = res;
               const currentServices =
                 subPackages?.map((item) => {
                   let price = item.rate;
@@ -136,8 +136,10 @@ export class CreatePackageComponent implements OnInit {
                   this.selectedServicePrice[item.value] = item.price;
                 }
               });
-
-              this.useForm.patchValue({ ...res });
+              if (images && images.length > 0) {
+                var imageUrl = images[0].url;
+              }
+              this.useForm.patchValue({ ...res, images: imageUrl });
 
               this.useForm.get('serviceIds').setValue(
                 currentServices.map((item) => item.value),
@@ -396,8 +398,10 @@ export class CreatePackageComponent implements OnInit {
 
     const {
       discountedCurrency,
+      images,
       ...rest
     } = this.useForm.getRawValue() as PackageFormData;
+    const data = { images: [{ isFeatured: true, url: images }], ...rest };
     this.loading = true;
     if (this.packageId) {
       this.$subscription.add(
@@ -406,7 +410,7 @@ export class CreatePackageComponent implements OnInit {
             this.entityId,
             this.packageId,
             {
-              ...rest,
+              ...data,
               type: 'PACKAGE',
               source: 1,
             },
@@ -418,7 +422,7 @@ export class CreatePackageComponent implements OnInit {
       this.$subscription.add(
         this.packagesService
           .createLibraryItem<PackageData, PackageResponse>(this.entityId, {
-            ...rest,
+            ...data,
             type: 'PACKAGE',
             source: 1,
           })

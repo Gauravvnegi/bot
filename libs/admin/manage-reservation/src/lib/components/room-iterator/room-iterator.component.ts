@@ -91,7 +91,7 @@ export class RoomIteratorComponent extends IteratorComponent
     this.entityId = this.globalFilterService.entityId;
     this.initDetails();
     this.listenForGlobalFilters();
-    this.createNewFields();
+    this.createNewFields(true);
     this.listenForFormChanges();
   }
 
@@ -121,7 +121,7 @@ export class RoomIteratorComponent extends IteratorComponent
   /**
    * @function createNewFields To get the initial value config
    */
-  createNewFields(): void {
+  createNewFields(initialField = false): void {
     const data = {
       roomTypeId: ['', [Validators.required]],
       ratePlan: [{ value: '', disabled: true }],
@@ -136,13 +136,15 @@ export class RoomIteratorComponent extends IteratorComponent
 
     const formGroup = this.fb.group(data);
     this.roomTypeArray.push(formGroup);
-
     // Index for keeping track of roomTypes array.
     const index = this.roomTypeArray.controls.indexOf(formGroup);
-    const roomInformationGroup = this.fb.group({
-      roomTypes: this.roomTypeArray,
-    });
-    this.parentFormGroup.addControl('roomInformation', roomInformationGroup);
+
+    if (initialField) {
+      const roomInformationGroup = this.fb.group({
+        roomTypes: this.roomTypeArray,
+      });
+      this.parentFormGroup.addControl('roomInformation', roomInformationGroup);
+    }
 
     this.listenRoomFormChanges(index);
   }

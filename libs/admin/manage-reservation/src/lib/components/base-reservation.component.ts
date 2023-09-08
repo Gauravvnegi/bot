@@ -61,25 +61,25 @@ export class BaseReservationComponent {
   setFormDisability(): void {
     // this.userForm.get('reservationInformation.source').disable();
     if (this.reservationId) {
-      const reservationType =
-        this.bookingType === EntitySubType.ROOM_TYPE
-          ? this.reservationInfoControls.reservationType
-          : this.reservationInfoControls.status;
-      switch (true) {
-        case reservationType.value === ReservationType.CONFIRMED:
-          this.userForm.disable();
-          this.disabledForm = true;
-          break;
-        case reservationType.value === ReservationType.CANCELED:
-          this.userForm.disable();
-          this.disabledForm = true;
-          break;
-      }
-      this.paymentControls.currency.enable();
-      this.paymentControls.totalPaidAmount.enable();
-      this.paymentControls.transactionId.enable();
-      this.paymentControls.paymentRemark.enable();
-      reservationType.enable();
+      this.userForm.disable();
+      // const reservationType =
+      //   this.bookingType === EntitySubType.ROOM_TYPE
+      //     ? this.reservationInfoControls.reservationType
+      //     : this.reservationInfoControls.status;
+      // switch (true) {
+      //   case reservationType.value === ReservationType.CONFIRMED:
+      //     this.disabledForm = true;
+      //     break;
+      //   case reservationType.value === ReservationType.CANCELED:
+      //     this.userForm.disable();
+      //     this.disabledForm = true;
+      //     break;
+      // }
+      // this.paymentControls.currency.enable();
+      // this.paymentControls.totalPaidAmount.enable();
+      // this.paymentControls.transactionId.enable();
+      // this.paymentControls.paymentRemark.enable();
+      // reservationType.enable();
     }
   }
 

@@ -167,14 +167,14 @@ export class CreateServiceComponent implements OnInit {
             params: `?type=${LibraryItem.service}`,
           })
           .subscribe((res) => {
-            const { type, images, taxes, ...rest } = res;
+            const { type, images, taxes, enableVisibility, ...rest } = res;
             this.useForm.patchValue({
               serviceType: type,
               ...rest,
               images: images[0]?.url,
               taxIds: taxes.map((item) => item.id),
             });
-            this.useForm.get('entityId').disable();
+            this.useForm.get('enableVisibility').setValue(enableVisibility);
 
             this.code = res.packageCode;
           }, this.handleError)

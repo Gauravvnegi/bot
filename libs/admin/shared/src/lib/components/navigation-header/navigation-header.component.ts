@@ -74,9 +74,9 @@ export class NavigationHeaderComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.document
-      .getElementById('main-layout')
-      ?.removeEventListener('scroll', this.onScroll);
+    // this.document
+    //   .getElementById('main-layout')
+    //   ?.removeEventListener('scroll', this.onScroll);
   }
 
   onScroll = () => {

@@ -21,7 +21,6 @@ import { OccupancyDetails, ReservationSummary } from '../../types/forms.types';
 import {
   BookingItemsSummary,
   RoomReservationResponse,
-  SummaryPricing,
 } from '../../types/response.type';
 import { BaseReservationComponent } from '../base-reservation.component';
 import { ReservationType } from '../../constants/reservation-table';
@@ -61,8 +60,8 @@ export class AddReservationComponent extends BaseReservationComponent
   ngOnInit(): void {
     this.initForm();
     this.initDetails();
-    this.initFormData();
     if (this.reservationId) this.getReservationDetails();
+    this.initFormData();
   }
 
   initDetails() {
@@ -88,7 +87,7 @@ export class AddReservationComponent extends BaseReservationComponent
         to: ['', Validators.required],
         reservationType: ['', Validators.required],
         source: ['', Validators.required],
-        sourceName: ['', [Validators.required, Validators.maxLength(60)]],
+        sourceName: [''],
         marketSegment: ['', Validators.required],
       }),
       offerId: [''],
@@ -107,7 +106,6 @@ export class AddReservationComponent extends BaseReservationComponent
         const roomTypeIds = res.map((item) => item.roomTypeId);
         // check if the last added room type is selected
         if (res && res[res.length - 1].roomTypeId?.length) {
-          this.userForm.get('offerId').reset();
           this.getOfferByRoomType(roomTypeIds);
           this.getSummaryData();
         }
@@ -135,11 +133,19 @@ export class AddReservationComponent extends BaseReservationComponent
   }
 
   initFormData() {
-    if (this.formService.reservationForm) {
-      const { roomInformation, ...formData } = this.formService.reservationForm;
-      this.roomTypeValues = roomInformation.roomTypes;
-      this.userForm.patchValue(formData);
-    }
+    this.$subscription.add(
+      this.formService.reservationForm
+        .pipe(debounceTime(500))
+        .subscribe((res) => {
+          if (res) {
+            const { roomInformation, ...formData } = res;
+            // check if room type was patched
+            if (roomInformation.roomTypes[0].roomTypeId.length)
+              this.roomTypeValues = roomInformation.roomTypes;
+            this.userForm.patchValue(formData);
+          }
+        })
+    );
   }
 
   getReservationDetails(): void {
@@ -149,14 +155,23 @@ export class AddReservationComponent extends BaseReservationComponent
         .subscribe(
           (response: RoomReservationResponse) => {
             const data = new ReservationFormData().deserialize(response);
-
             const {
               guestInformation,
               roomInformation,
               nextStates,
               totalPaidAmount,
+              reservationInformation: {
+                source,
+                sourceName,
+                ...reservationInfo
+              },
               ...formData
             } = data;
+
+            this.formService.sourceData.next({
+              source: source,
+              sourceName: sourceName,
+            });
 
             if (nextStates)
               this.reservationTypes = nextStates.map((item) => ({
@@ -171,7 +186,11 @@ export class AddReservationComponent extends BaseReservationComponent
             // in room iterator and guest info component.
             this.roomTypeValues = roomInformation;
             this.formService.guestInformation.next(guestInformation);
-            this.userForm.patchValue(formData);
+
+            this.userForm.patchValue({
+              reservationInformation: reservationInfo,
+              formData,
+            });
 
             if (data.offerId) {
               const roomTypeIds = roomInformation.map(
@@ -235,8 +254,8 @@ export class AddReservationComponent extends BaseReservationComponent
 
     // Summary data for booking summary
     const data: ReservationSummary = {
-      fromDate: this.reservationInfoControls.from.value,
-      toDate: this.reservationInfoControls.to.value,
+      from: this.reservationInfoControls.from.value,
+      to: this.reservationInfoControls.to.value,
       bookingItems: this.roomControls.map((item) => ({
         roomDetails: {
           ratePlan: {
@@ -250,9 +269,10 @@ export class AddReservationComponent extends BaseReservationComponent
           maxAdult: item.get('adultCount').value,
         },
       })),
-      offer: {
-        id: this.inputControls.offerId.value,
-      },
+      offerId: this.inputControls.offerId.value
+        ? this.inputControls.offerId.value
+        : null,
+      guestId: this.inputControls.guestInformation.get('guestDetails')?.value,
     };
 
     this.$subscription.add(
@@ -318,5 +338,9 @@ export class AddReservationComponent extends BaseReservationComponent
     return ((this.userForm.get('roomInformation') as FormGroup).get(
       'roomTypes'
     ) as FormArray).controls;
+  }
+
+  get roomInfoControls() {
+    return this.userForm.get('roomInformation') as FormGroup;
   }
 }

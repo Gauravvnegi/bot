@@ -17,6 +17,7 @@ export type IteratorField = {
   noMoreResults?: boolean;
   dataType?: InputType;
   minValue?: number;
+  createPrompt?: string;
 };
 
 export type ModalAction = {

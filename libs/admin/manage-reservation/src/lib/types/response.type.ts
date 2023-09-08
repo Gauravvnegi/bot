@@ -142,4 +142,15 @@ export type RoomReservationResponse = {
   bookingItems: BookingItems[];
   pricingDetails?: PricingDetails;
   specialRequest: string;
+  offer: {
+    id: string;
+    created: number;
+    updated: number;
+    offerType: string;
+  };
+};
+
+export type SourceResponse = {
+  name: string;
+  type?: { code: string; label: string }[];
 };

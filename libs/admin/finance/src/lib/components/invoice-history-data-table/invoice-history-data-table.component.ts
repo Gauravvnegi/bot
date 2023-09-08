@@ -125,8 +125,13 @@ export class InvoiceHistoryDataTableComponent extends BaseDatatableComponent
 
     const config: QueryConfig = {
       params: this.adminUtilityService.makeQueryParams([
-        ...this.selectedRows.map((item) => ({ ids: item.id })),
-        { entitiyId: this.entityId },
+        ...this.selectedRows.map((item) => ({ ids: item.reservationId })),
+        {
+          entitiyId: this.entityId,
+          pagination: true,
+          limit: this.totalRecords,
+        },
+        ...this.globalQueries,
       ]),
     };
     this.$subscription.add(
@@ -137,8 +142,12 @@ export class InvoiceHistoryDataTableComponent extends BaseDatatableComponent
             `${this.tableName.toLowerCase()}_export_${new Date().getTime()}.csv`
           );
         },
-        () => {},
-        this.handleFinal
+        (error) => {
+          this.loading = false;
+        },
+        () => {
+          this.loading = false;
+        }
       )
     );
   }

@@ -30,11 +30,13 @@ import { OutletFormService } from '../../services/outlet-form.service';
 import { OutletService } from '../../services/outlet.service';
 import { Feature, OutletForm, OutletType } from '../../types/outlet';
 import { OutletBaseComponent } from '../outlet-base.components';
+import { DialogService } from 'primeng/dynamicdialog';
 
 @Component({
   selector: 'hospitality-bot-add-outlet',
   templateUrl: './add-outlet.component.html',
   styleUrls: ['./add-outlet.component.scss'],
+  providers: [DialogService],
 })
 export class AddOutletComponent extends OutletBaseComponent implements OnInit {
   useForm: FormGroup;
@@ -70,6 +72,7 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
     private OutletFormService: OutletFormService,
     private location: Location,
     private modalService: ModalService,
+    private dialogService: DialogService,
 
     router: Router,
     route: ActivatedRoute
@@ -164,8 +167,6 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
             this.logoUrl = logo;
             this.redirectUrl = absoluteRoute;
             this.initOptionConfig(type);
-            debugger;
-
             this.useForm.get('type').setValue(type);
             this.useForm.get('startDay').setValue(operationalDays?.startDay);
             this.useForm.get('endDay').setValue(operationalDays?.endDay);
@@ -186,33 +187,39 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
 
   setValidators() {
     const { startDay, endDay, from, to } = this.formControls;
+    this.setupSameValueValidator(startDay, endDay);
+    this.setupSameValueValidator(from, to);
+  }
 
-    startDay.valueChanges.subscribe((value) => {
-      if (value === endDay.value) {
-        startDay.setErrors({ sameValue: true });
-        endDay.setErrors(null);
-        
+  /**
+   * @function setupSameValueValidator
+   * @description sets up same value validator if two fields have same value
+   * @param control1
+   * @param control2
+   * @returns void
+   */
+  setupSameValueValidator(
+    control1: AbstractControl,
+    control2: AbstractControl
+  ) {
+    //set same value validator
+    control1.valueChanges.subscribe((value) => {
+      if (value === control2.value) {
+        const errors = { ...control1.errors, sameValue: false };
+        control1.setErrors(errors);
+        control2.setErrors(control2.errors);
+      } else {
+        control2.setErrors(control2.errors);
       }
     });
 
-    endDay.valueChanges.subscribe((value) => {
-      if (value === startDay.value) {
-        endDay.setErrors({ sameValue: true });
-        startDay.setErrors(null);
-      }
-    });
-
-    from.valueChanges.subscribe((value) => {
-      if (value === to.value) {
-        from.setErrors({ sameValue: true });
-        to.setErrors(null);
-      }
-    });
-
-    to.valueChanges.subscribe((value) => {
-      if (value === from.value) {
-        to.setErrors({ sameValue: true });
-        from.setErrors(null);
+    control2.valueChanges.subscribe((value) => {
+      if (value === control1.value) {
+        const errors = { ...control2.errors, sameValue: false };
+        control2.setErrors(errors);
+        control1.setErrors(control1.errors);
+      } else {
+        control1.setErrors(control1.errors);
       }
     });
   }
@@ -238,7 +245,6 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
       //reset form except type
 
       if (!this.outletId) {
-        this.useForm.reset({ type: type }, { emitEvent: false });
         this.useForm.markAsUntouched();
       }
 
@@ -325,7 +331,7 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
     if (this.useForm.invalid) {
       this.useForm.markAllAsTouched();
       this.snackbarService.openSnackBarAsText(
-        'Please fill all the required fields'
+        'Please review the form and correct the highlighted fields.'
       );
       return;
     }
@@ -429,21 +435,20 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
    * @returns void
    */
   onPrintQrCode() {
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.width = '40vw';
-    dialogConfig.disableClose = true;
-    const togglePopupCompRef = this.modalService.openDialog(
-      QrCodeModalComponent,
-      dialogConfig
-    );
+    const dialogConfig: any = {
+      header: 'QR Code',
+      width: '40vw',
+      closable: true,
+      // contentStyle: { 'max-height': '500px', overflow: 'auto' },
+    };
 
+    const ref = this.dialogService.open(QrCodeModalComponent, dialogConfig);
     const { imageUrl } = this.formControls;
 
-    togglePopupCompRef.componentInstance.content = {
+    this.modalService.__config = {
       backgroundURl: imageUrl?.value.filter((item) => item.isFeatured)?.[0]
         ?.url,
-
-      descriptionHeading: 'HOW TO ORDER',
+      descriptionsHeading: 'HOW TO ORDER',
       descriptionsPoints: [
         'Scan the QR code to access the menu',
         'Browse the menu and place your order',
@@ -452,8 +457,10 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
       route: this.redirectUrl ?? 'https://www.test.menu.com/',
       logoUrl: this.logoUrl,
     };
-    togglePopupCompRef.componentInstance.onClose.subscribe(() => {
-      this.modalService.close();
+
+    ref.onClose.subscribe(() => {
+      // Handle dialog close event
+      ref.close();
     });
   }
 

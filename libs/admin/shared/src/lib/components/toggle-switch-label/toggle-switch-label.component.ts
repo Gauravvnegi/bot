@@ -13,6 +13,7 @@ export class ToggleSwitchComponentLabel implements OnInit {
   toggleOffLabel: string = 'Inactive';
   toggleOnColor: string = '#65b340';
   toggleOffColor: string = '#e31717';
+  @Input() isDisabled: boolean = false;
   disableTurnOff: boolean = false;
 
   @Input() set config(value: ToggleSwitchConfig) {
@@ -24,8 +25,10 @@ export class ToggleSwitchComponentLabel implements OnInit {
   ngOnInit(): void {}
 
   toggleSwitch() {
-    this.isToggleOn = !this.isToggleOn;
-    this.onToggleSwitch.emit(this.isToggleOn);
+    if (!this.isDisabled) {
+      this.isToggleOn = !this.isToggleOn;
+      this.onToggleSwitch.emit(this.isToggleOn);
+    }
   }
 }
 

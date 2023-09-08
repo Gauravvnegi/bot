@@ -8,6 +8,7 @@ import {
 import * as moment from 'moment';
 import { ReservationForm } from '../../../constants/form';
 import { FormService } from '../../../services/form.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'hospitality-bot-payment-rule',
@@ -21,6 +22,8 @@ export class PaymentRuleComponent implements OnInit {
   @Input() deductedAmount = 0;
   parentFormGroup: FormGroup;
 
+  $subscription = new Subscription();
+
   constructor(
     private fb: FormBuilder,
     public controlContainer: ControlContainer,
@@ -28,9 +31,11 @@ export class PaymentRuleComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.formService.reservationDate.subscribe((res) => {
-      if (res) this.startMinDate = new Date(res);
-    });
+    this.$subscription.add(
+      this.formService.reservationDate.subscribe((res) => {
+        if (res) this.startMinDate = new Date(res);
+      })
+    );
     this.addFormGroup();
     this.registerPaymentRuleChange();
   }
@@ -55,6 +60,13 @@ export class PaymentRuleComponent implements OnInit {
       const newDeductedAmount = this.deductedAmount - +res;
       this.inputControl.deductedAmount.setValue(newDeductedAmount);
     });
+  }
+
+  /**
+   * @function ngOnDestroy to unsubscribe subscription.
+   */
+  ngOnDestroy(): void {
+    this.$subscription.unsubscribe();
   }
 
   get inputControl() {

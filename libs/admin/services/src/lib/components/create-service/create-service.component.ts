@@ -22,6 +22,7 @@ import { servicesRoutes } from '../../constant/routes';
 import { ServicesService } from '../../services/services.service';
 import { ServiceResponse } from '../../types/response';
 import { ServiceData, ServiceFormData } from '../../types/service';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'hospitality-bot-create-service',
@@ -76,7 +77,8 @@ export class CreateServiceComponent implements OnInit {
     private configService: ConfigService,
     private router: Router,
     private route: ActivatedRoute,
-    private hotelDetailService: HotelDetailService
+    private hotelDetailService: HotelDetailService,
+    private location: Location
   ) {
     this.serviceId = this.route.snapshot.paramMap.get('id');
 
@@ -140,10 +142,10 @@ export class CreateServiceComponent implements OnInit {
   initForm(): void {
     this.useForm = this.fb.group({
       active: [true],
-      currency: [''],
+      currency: ['INR'],
       parentId: ['', Validators.required],
       entityId: [''],
-      imageUrl: ['', Validators.required],
+      images: ['', Validators.required],
       name: ['', Validators.required],
       serviceType: [ServiceTypeOptionValue.PAID],
       rate: [''],
@@ -165,10 +167,11 @@ export class CreateServiceComponent implements OnInit {
             params: `?type=${LibraryItem.service}`,
           })
           .subscribe((res) => {
-            const { type, taxes, ...rest } = res;
+            const { type, images, taxes, ...rest } = res;
             this.useForm.patchValue({
               serviceType: type,
               ...rest,
+              images: images[0]?.url,
               taxIds: taxes.map((item) => item.id),
             });
             this.useForm.get('entityId').disable();
@@ -270,8 +273,8 @@ export class CreateServiceComponent implements OnInit {
       return;
     }
 
-    const data = this.useForm.getRawValue() as ServiceFormData;
-    debugger;
+    const { images, ...rest } = this.useForm.getRawValue() as ServiceFormData;
+    const data = { images: [{ url: images, isFeatured: true }], ...rest };
     this.loading = true;
     if (this.serviceId) {
       this.$subscription.add(
@@ -310,7 +313,8 @@ export class CreateServiceComponent implements OnInit {
       '',
       { panelClass: 'success' }
     );
-    this.router.navigate(['/pages/library/services']);
+    this.location.back();
+    // this.router.navigate(['/pages/library/services']);
   };
 
   closeLoading = () => {

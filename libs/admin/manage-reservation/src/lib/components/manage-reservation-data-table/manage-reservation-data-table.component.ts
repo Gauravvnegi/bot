@@ -6,7 +6,6 @@ import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
   AdminUtilityService,
   BaseDatatableComponent as BaseDatableComponent,
-  ConfigService,
   EntitySubType,
   EntityType,
   Option,
@@ -21,7 +20,7 @@ import {
 import * as FileSaver from 'file-saver';
 import { ModalComponent } from 'libs/admin/shared/src/lib/components/modal/modal.component';
 import { LazyLoadEvent } from 'primeng/api';
-import { Subject, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 import {
   HotelMenuOptions,
   MenuOptions,
@@ -31,6 +30,7 @@ import {
   RestaurantMenuOptions,
   hotelCols,
   outletCols,
+  outletReservationStatusDetails,
   reservationStatusDetails,
   title,
 } from '../../constants/reservation-table';
@@ -43,8 +43,8 @@ import { ManageReservationService } from '../../services/manage-reservation.serv
 import { ReservationListResponse } from '../../types/response.type';
 import { FormService } from '../../services/form.service';
 import { SelectedEntity } from '../../types/reservation.type';
-import { distinctUntilChanged, tap } from 'rxjs/operators';
 import { InvoiceService } from 'libs/admin/invoice/src/lib/services/invoice.service';
+import { distinctUntilChanged, tap } from 'rxjs/operators';
 
 @Component({
   selector: 'hospitality-bot-manage-reservation-data-table',
@@ -58,7 +58,6 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
   readonly manageReservationRoutes = manageReservationRoutes;
   readonly reservationStatusDetails = reservationStatusDetails;
   readonly reservationType = ReservationType;
-  scrollTargetPoint: number = 150;
 
   entityId!: string;
 
@@ -77,8 +76,6 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
   isAllTabFilterRequired: boolean = true;
   isSelectedEntityChanged = false;
 
-  private destroy$ = new Subject<void>();
-
   menuOptions: Option[] = MenuOptions;
 
   constructor(
@@ -90,7 +87,6 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
     private globalFilterService: GlobalFilterService,
     protected snackbarService: SnackBarService,
     private router: Router,
-    private configService: ConfigService,
     private modalService: ModalService,
     private invoiceService: InvoiceService
   ) {
@@ -101,6 +97,7 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
     this.tableName = title;
     this.listenForGlobalFilters();
     this.listenForSelectedEntityChange();
+    this.formService.resetData();
   }
 
   /**
@@ -108,20 +105,22 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
    */
   listenForGlobalFilters(): void {
     this.entityId = this.globalFilterService.entityId;
-    this.globalQueries = [];
+    let previousDateRange = {};
     this.globalFilterService.globalFilter$.subscribe((data) => {
-      // set-global query everytime global filter changes
       this.globalQueries = [...data['dateRange'].queryValue];
-      // Only run if selectedEntity is not changed
-      if (!this.isSelectedEntityChanged && this.selectedEntity) {
-        this.initTableValue();
+      if (
+        JSON.stringify(data.dateRange) !== JSON.stringify(previousDateRange)
+      ) {
+        if (!this.isSelectedEntityChanged && this.selectedEntity) {
+          this.initTableValue();
+        }
       }
+      previousDateRange = { ...data.dateRange };
     });
   }
 
   loadData(event: LazyLoadEvent): void {
     this.formService.selectedTab = this.selectedTab;
-    // Only run if selectedEntity is not changed
     if (!this.isSelectedEntityChanged && this.selectedEntity) {
       this.initTableValue();
     }
@@ -138,7 +137,7 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
         )
         .subscribe((res) => {
           this.isSelectedEntityChanged = true; // Since we only get here when selectedEntity has changed
-          this.resetTableValues();
+          // this.resetTableValues();
           this.initDetails(this.selectedEntity);
           this.initTableValue();
         })
@@ -159,24 +158,18 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
         (res) => {
           // Process the response and update the data
           this.reservationLists = new ReservationList().deserialize(res);
-          if (this.selectedEntity.subType === EntitySubType.ROOM_TYPE) {
-            this.values = this.reservationLists.reservationData;
-            this.initFilters(
-              this.reservationLists.entityTypeCounts,
-              this.reservationLists.entityStateCounts,
-              this.reservationLists.total,
-              this.reservationStatusDetails
-            );
-          } else {
-            this.values = new ReservationList().deserialize(
-              res
-            ).reservationData;
-            this.initFilters(
-              {},
-              this.reservationLists.entityStateCounts,
-              this.reservationLists.total
-            );
-          }
+          this.values = this.reservationLists.reservationData;
+          const statusDetails =
+            this.selectedEntity.type === EntityType.HOTEL
+              ? reservationStatusDetails
+              : outletReservationStatusDetails;
+
+          this.initFilters(
+            this.reservationLists.entityTypeCounts,
+            this.reservationLists.entityStateCounts,
+            this.reservationLists.total,
+            statusDetails
+          );
         },
         (error) => {
           // Handle error if needed
@@ -191,22 +184,17 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
   }
 
   initDetails(selectedEntity: SelectedEntity) {
+    this.selectedTab = ReservationTableValue.ALL;
     if (selectedEntity.subType === EntitySubType.ROOM_TYPE) {
-      this.selectedTab = ReservationTableValue.ALL;
       this.cols = hotelCols;
       this.menuOptions = HotelMenuOptions;
-      this.isAllTabFilterRequired = true;
-      this.isTabFilters = true;
     } else {
       this.cols = outletCols;
-      this.isTabFilters = false;
-      this.isAllTabFilterRequired = false;
       this.menuOptions = MenuOptions;
       if (selectedEntity.subType === EntitySubType.RESTAURANT) {
         this.menuOptions = RestaurantMenuOptions;
       }
     }
-    this.rowsPerPage = 200;
   }
 
   /**
@@ -386,7 +374,7 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
   ngOnDestroy(): void {
     this.$subscription.unsubscribe();
     this.$selectedEntitySubscription.unsubscribe();
-    this.destroy$.next();
-    this.destroy$.complete();
+    // this.destroy$.next();
+    // this.destroy$.complete();
   }
 }

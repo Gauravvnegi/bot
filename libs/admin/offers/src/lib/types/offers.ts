@@ -9,7 +9,7 @@ export type OfferFormData = {
     type: LibrarySearchItem;
     price: number;
   }[];
-  imageUrl: string;
+  images;
   description: string;
   startDate: number;
   endDate: number;

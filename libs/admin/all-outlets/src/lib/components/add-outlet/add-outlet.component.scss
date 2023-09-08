@@ -48,3 +48,11 @@
 :host ::ng-deep mat-dialog-container .mat-dialog-container {
   width: 52vw !important;
 }
+
+::ng-deep .p-dialog .p-dialog-content {
+  padding: 0 1rem 1.5rem 1rem !important;
+}
+
+::ng-deep .p-dialog .p-dialog-header {
+  padding: 0.1rem 1rem !important;
+}

@@ -102,7 +102,7 @@ export class FormActionComponent implements OnInit {
   }
 
   ngOnDestroy() {
-    this.mainLayout?.removeEventListener('scroll', this.onScroll.bind(this));
+    // this.mainLayout?.removeEventListener('scroll', this.onScroll.bind(this));
   }
 }
 

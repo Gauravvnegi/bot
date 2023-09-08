@@ -102,7 +102,7 @@ export class DiscountFormComponent extends FormComponent implements OnInit {
      * @returns error type
      */
     const setDiscountValueAndErrors = () => {
-      const price = +originalPrice.value + +(priceControl.value ?? 0) ?? 0;
+      const price = +originalPrice.value + +(priceControl?.value ?? 0) ?? 0;
       const discount = +(discountValue.value ?? 0);
       const type = discountType.value;
 

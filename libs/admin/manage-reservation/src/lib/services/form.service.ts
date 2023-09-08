@@ -7,6 +7,7 @@ import {
   InitialFormData,
   OutletFormData,
   RoomReservationFormData,
+  SourceData,
 } from '../types/forms.types';
 import { ReservationForm } from '../constants/form';
 import { GuestInfo } from '../models/reservations.model';
@@ -15,10 +16,7 @@ import { GuestInfo } from '../models/reservations.model';
   providedIn: 'root',
 })
 export class FormService {
-  outletIds = [];
   dateDifference = new BehaviorSubject(1);
-  toDate: Date;
-  fromDate: Date;
 
   setInitialDates = new BehaviorSubject<String>(null);
 
@@ -30,15 +28,15 @@ export class FormService {
     null
   );
 
+  sourceData: BehaviorSubject<SourceData> = new BehaviorSubject<SourceData>(
+    null
+  );
+
   public selectedEntity = new BehaviorSubject<SelectedEntity>(null);
 
   getSelectedEntity(): Observable<SelectedEntity> {
     return this.selectedEntity.asObservable().pipe(distinctUntilChanged());
   }
-
-  type: string;
-  $entityTypeChange = new BehaviorSubject({ status: false, type: '' });
-  $feedbackType = new BehaviorSubject('');
 
   reservationDate = new BehaviorSubject<Date>(null);
   reservationDateAndTime = new BehaviorSubject<number>(0);
@@ -48,7 +46,7 @@ export class FormService {
   selectedTab = ReservationTableValue.ALL;
   enableAccordion: boolean = false;
 
-  reservationForm: ReservationForm;
+  reservationForm = new BehaviorSubject<ReservationForm>(null);
 
   mapRoomReservationData(
     input: ReservationForm,
@@ -75,7 +73,9 @@ export class FormService {
 
     roomReservationData.guestId = input.guestInformation?.guestDetails;
     roomReservationData.specialRequest = input.instructions.specialInstructions;
-
+    roomReservationData.offer = {
+      id: input.offerId ?? null,
+    };
     // Map Booking Items
     if (input.roomInformation?.roomTypes) {
       roomReservationData.bookingItems = input.roomInformation.roomTypes.map(
@@ -163,7 +163,16 @@ export class FormService {
     reservationData.offerId = input?.offerId ?? '';
     reservationData.outletType = outletType;
 
-    reservationData.specialRequest = input.instructions.specialInstructions;
+    reservationData.specialRequest =
+      outletType === 'RESTAURANT'
+        ? input.orderInformation.kotInstructions
+        : input.instructions?.specialInstructions;
+
     return reservationData;
+  }
+
+  resetData() {
+    this.reservationForm.next(null);
+    this.sourceData.next(null);
   }
 }

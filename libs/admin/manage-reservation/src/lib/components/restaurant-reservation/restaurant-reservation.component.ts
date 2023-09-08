@@ -14,7 +14,7 @@ import {
   EntitySubType,
   EntityType,
 } from '@hospitality-bot/admin/shared';
-import { OfferData, SummaryData } from '../../models/reservations.model';
+import { SummaryData } from '../../models/reservations.model';
 import { ManageReservationService } from '../../services/manage-reservation.service';
 import {
   editModeStatusOptions,
@@ -24,15 +24,14 @@ import {
 } from '../../constants/reservation';
 import { ReservationForm } from '../../constants/form';
 import { FormService } from '../../services/form.service';
-import {
-  OutletItems,
-  ReservationType,
-} from '../../constants/reservation-table';
+import { OutletItems } from '../../constants/reservation-table';
 import { debounceTime } from 'rxjs/operators';
 import { OutletForm } from '../../models/reservations.model';
 import { ReservationSummary } from '../../types/forms.types';
 import { MenuItemListResponse } from 'libs/admin/all-outlets/src/lib/types/outlet';
 import { BaseReservationComponent } from '../base-reservation.component';
+import { OutletService } from 'libs/admin/all-outlets/src/lib/services/outlet.service';
+import { FoodPackageList } from 'libs/admin/all-outlets/src/lib/models/outlet.model';
 
 @Component({
   selector: 'hospitality-bot-restaurant-reservation',
@@ -69,6 +68,7 @@ export class RestaurantReservationComponent extends BaseReservationComponent
     protected globalFilterService: GlobalFilterService,
     private manageReservationService: ManageReservationService,
     protected activatedRoute: ActivatedRoute,
+    private outletService: OutletService,
     private formService: FormService
   ) {
     super(globalFilterService, activatedRoute);
@@ -82,6 +82,7 @@ export class RestaurantReservationComponent extends BaseReservationComponent
     this.getReservationId();
     this.initFormData();
     this.listenForFormChanges();
+    this.getFoodPackages();
   }
 
   initDetails() {
@@ -161,7 +162,11 @@ export class RestaurantReservationComponent extends BaseReservationComponent
     this.inputControls.orderInformation.valueChanges
       .pipe(debounceTime(1000))
       .subscribe((res) => {
-        if (res && res.menuItems[res.menuItems?.length - 1].menuItems?.length) {
+        if (res.menuItems[0].menuItems === null) {
+          this.summaryData = new SummaryData().deserialize();
+          return;
+        }
+        if (res.menuItems[res.menuItems?.length - 1].menuItems?.length) {
           this.getSummaryData();
         }
       });
@@ -257,17 +262,23 @@ export class RestaurantReservationComponent extends BaseReservationComponent
   }
 
   initFormData() {
-    if (this.formService.reservationForm) {
-      const {
-        orderInformation: { menuItems, ...orderInfo },
-        ...formData
-      } = this.formService.reservationForm;
-      this.menuItemsValues = menuItems;
-      this.userForm.patchValue({
-        orderInformation: orderInfo,
-        ...formData,
-      });
-    }
+    this.$subscription.add(
+      this.formService.reservationForm
+        .pipe(debounceTime(500))
+        .subscribe((res) => {
+          if (res) {
+            const {
+              orderInformation: { menuItems, ...orderInfo },
+              ...formData
+            } = res;
+            this.menuItemsValues = menuItems;
+            this.userForm.patchValue({
+              orderInformation: orderInfo,
+              ...formData,
+            });
+          }
+        })
+    );
   }
 
   getReservationId(): void {
@@ -295,8 +306,18 @@ export class RestaurantReservationComponent extends BaseReservationComponent
             const {
               orderInformation: { menuItems, ...orderInfo },
               guestInformation,
+              reservationInformation: {
+                source,
+                sourceName,
+                ...reservationInfo
+              },
               ...formData
             } = data;
+
+            this.formService.sourceData.next({
+              source: source,
+              sourceName: sourceName,
+            });
 
             this.formValueChanges = true;
 
@@ -305,6 +326,7 @@ export class RestaurantReservationComponent extends BaseReservationComponent
             this.formService.guestInformation.next(guestInformation);
 
             this.userForm.patchValue({
+              reservationInformation: reservationInfo,
               orderInformation: orderInfo,
               ...formData,
             });
@@ -338,8 +360,8 @@ export class RestaurantReservationComponent extends BaseReservationComponent
     };
 
     const data: ReservationSummary = {
-      fromDate: this.reservationInfoControls.dateAndTime.value,
-      toDate: this.reservationInfoControls.dateAndTime.value,
+      from: this.reservationInfoControls.dateAndTime.value,
+      to: this.reservationInfoControls.dateAndTime.value,
       occupancyDetails: {
         maxAdult: this.orderInfoControls.numberOfAdults.value,
       },
@@ -378,6 +400,31 @@ export class RestaurantReservationComponent extends BaseReservationComponent
     );
   }
 
+  getFoodPackages() {
+    this.outletService
+      .getFoodPackageList(this.outletId, {
+        params: `?type=FOOD_PACKAGE&pagination=false`,
+      })
+      .subscribe(
+        (res) => {
+          this.foodPackages = new FoodPackageList()
+            .deserialize(res)
+            .records.map((foodPackage) => ({
+              label: foodPackage.name,
+              value: foodPackage.id,
+            }));
+        },
+        (err) => {}
+      );
+  }
+
+  /**
+   * @function ngOnDestroy to unsubscribe subscription.
+   */
+  ngOnDestroy(): void {
+    this.$subscription.unsubscribe();
+  }
+
   get orderInfoControls() {
     return (this.userForm.get('orderInformation') as FormGroup)
       .controls as Record<
@@ -390,5 +437,9 @@ export class RestaurantReservationComponent extends BaseReservationComponent
     return ((this.userForm.get('orderInformation') as FormGroup).get(
       'menuItems'
     ) as FormArray).controls;
+  }
+
+  get menuControls() {
+    return this.userForm.get('orderInformation') as FormGroup;
   }
 }

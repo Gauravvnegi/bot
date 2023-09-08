@@ -26,7 +26,9 @@
         </p>
       </div> -->
       <div class="image">
-        <img src="{{ subPackageFormGroup.get('imgUrl').value }}" />
+        <img
+          src="{{ extractImage(subPackageFormGroup.get('imgUrl').value) }}"
+        />
       </div>
       <div class="text-container">
         <div class="text">

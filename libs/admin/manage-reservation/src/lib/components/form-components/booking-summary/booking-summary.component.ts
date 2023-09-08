@@ -28,7 +28,7 @@ import { Subscription } from 'rxjs';
 import { PaymentMethod, ReservationForm } from '../../../constants/form';
 import { FormService } from '../../../services/form.service';
 import { EntitySubType, EntityType } from '@hospitality-bot/admin/shared';
-import { RoomReservationRes, SummaryPricing } from '../../../types/response.type';
+import { RoomReservationRes } from '../../../types/response.type';
 import {
   OccupancyDetails,
   RoomReservationFormData,
@@ -246,16 +246,18 @@ export class BookingSummaryComponent implements OnInit {
   }
 
   initDefaultData() {
-    this.formService.initialData.subscribe((res) => {
-      if (res) {
-        this.inputControls.paymentMethod.patchValue({
-          cashierFirstName: res.cashierFirstName,
-          cashierLastName: res.cashierLastName,
-          currency: res.currency,
-          totalPaidAmount: 0,
-        });
-      }
-    });
+    this.$subscription.add(
+      this.formService.initialData.subscribe((res) => {
+        if (res) {
+          this.inputControls.paymentMethod.patchValue({
+            cashierFirstName: res.cashierFirstName,
+            cashierLastName: res.cashierLastName,
+            currency: res.currency,
+            totalPaidAmount: 0,
+          });
+        }
+      })
+    );
     this.formService.setInitialDates.next('');
   }
 
@@ -269,6 +271,10 @@ export class BookingSummaryComponent implements OnInit {
   get paymentControls() {
     return (this.parentFormGroup.get('paymentMethod') as FormGroup)
       .controls as Record<keyof PaymentMethod, AbstractControl>;
+  }
+
+  ngOnDestroy() {
+    this.$subscription.unsubscribe();
   }
 }
 

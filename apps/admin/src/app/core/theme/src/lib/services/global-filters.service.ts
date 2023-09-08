@@ -127,3 +127,42 @@ type GlobalFilterData = {
     queryValue: any[];
   };
 };
+
+export type FilterValue = {
+  property: {
+    brandName: string;
+    entityName: string;
+  };
+  feedback: {
+    feedbackType: string;
+  };
+  isAllOutletSelected: boolean;
+  outlets: {
+    [outletId: string]: boolean;
+  };
+};
+
+export type FilterQueryValue = {
+  entityId?: string;
+  guestType?: string | null;
+  guestCategory?: string | null;
+};
+
+
+export type DateRangeValue = {
+  end: string; // Assuming end is always a string in ISO 8601 format
+  label: string;
+  start: string; // Assuming start is always a string in ISO 8601 format
+};
+
+export type DateRangeQueryValue = {
+  toDate?: number;
+  fromDate?: number;
+};
+
+export type FeedbackQueryValue = {
+  type?: string;
+  outlets?: {
+    [outletId: string]: boolean;
+  };
+}

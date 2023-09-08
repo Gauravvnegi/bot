@@ -119,3 +119,10 @@ export enum EntitySubType {
   VENUE = 'VENUE',
   SPA = 'SPA',
 }
+
+export type EntityTabFilterResponse = {
+  entityId: string[];
+  feedbackType: string;
+  label: string;
+  outletType: EntitySubType;
+};

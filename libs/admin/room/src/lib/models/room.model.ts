@@ -6,6 +6,7 @@ import {
   StaticPricingRatePlan,
 } from '../constant/form';
 import {
+  ImageUrl,
   RoomStatus,
   RoomTypeResponse,
   StatusDetails,
@@ -51,8 +52,8 @@ export class SingleRoom {
   statusDetailsList?: StatusDetails[];
   deserialize(input: SingleRoomData) {
     this.id = input.id ?? '';
-    this.roomNumber = input.roomNo ?? '';
-    this.floorNumber = input.floorNo ?? '';
+    this.roomNumber = input.rooms[0].roomNo ?? null;
+    this.floorNumber = input.rooms[0].floorNo ?? '';
     // this.status = input.status;
     this.currency = input.currency ?? '';
     this.price = input.price ?? null;
@@ -64,13 +65,13 @@ export class SingleRoom {
     // this.remark = input.remark ?? '';
     // this.currentStatusTo = input?.currentStatusTo;
     // this.currentStatusFrom = input?.currentStatusFrom;
-    if (input.statusDetails)
-      this.statusDetailsList = input.statusDetails.map((item) => ({
+    if (input.statusDetailsList)
+      this.statusDetailsList = input.statusDetailsList.map((item) => ({
         toDate: item.toDate,
         fromDate: item.fromDate,
         isCurrentStatus: item.isCurrentStatus,
         status: item.status,
-        remark: item.remark,
+        remarks: item.remark,
       }));
     return this;
   }
@@ -119,7 +120,7 @@ export class MultipleRoom {
 export class RoomTypeForm {
   status: boolean;
   name: string;
-  imageUrls: string[];
+  imageUrl: ImageUrl[];
   description: string;
   complimentaryAmenities: string[];
   paidAmenities: string[];
@@ -132,12 +133,13 @@ export class RoomTypeForm {
   area: number;
   id?: string;
   allRatePlans?: ReservationRatePlan[];
+  isBaseRoomType?: boolean;
 
   deserialize(input: RoomTypeResponse) {
     this.id = input?.id;
     this.status = input.status;
     this.name = input.name;
-    this.imageUrls = input.imageUrls;
+    this.imageUrl = input.imageUrl;
     this.description = input.description;
     this.complimentaryAmenities =
       input.complimentaryAmenities?.map((item) => item.id) ?? [];
@@ -146,6 +148,7 @@ export class RoomTypeForm {
     this.maxChildren = input.occupancyDetails.maxChildren;
     this.maxAdult = input.occupancyDetails.maxAdult;
     this.area = input.area;
+    this.isBaseRoomType = input?.isBaseRoomType ?? false;
 
     const defaultRatePlan = input?.ratePlans.filter((item) => item.isBase);
     if (defaultRatePlan.length) {

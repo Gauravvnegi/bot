@@ -12,6 +12,7 @@ import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { LibraryItem, QueryConfig } from '@hospitality-bot/admin/library';
 import {
   AdminUtilityService,
+  EntitySubType,
   NavRouteOptions,
   Option,
   UserService,
@@ -39,7 +40,12 @@ import {
 
 import { cols } from '../../constants/payment';
 import { invoiceRoutes } from '../../constants/routes';
-import { Invoice, Service, ServiceList } from '../../models/invoice.model';
+import {
+  Invoice,
+  MenuItemsList,
+  Service,
+  ServiceList,
+} from '../../models/invoice.model';
 import { InvoiceService } from '../../services/invoice.service';
 import {
   BillItemFields,
@@ -48,6 +54,9 @@ import {
 } from '../../types/forms.types';
 import { AddDiscountComponent } from '../add-discount/add-discount.component';
 import { AddRefundComponent } from '../add-refund/add-refund.component';
+import {
+  MenuItemListResponse,
+} from 'libs/admin/all-outlets/src/lib/types/outlet';
 
 @Component({
   selector: 'hospitality-bot-invoice',
@@ -63,6 +72,7 @@ export class InvoiceComponent implements OnInit {
   reservationId: string;
   guestId: string;
   bookingNumber: string;
+  entityType: EntitySubType;
 
   tableFormArray: FormArray;
   useForm: FormGroup;
@@ -131,6 +141,7 @@ export class InvoiceComponent implements OnInit {
     this.entityId = paramData.entityId
       ? paramData.entityId
       : this.globalFilterService.entityId;
+    this.entityType = paramData.type;
     this.initForm();
     this.initOptions();
   }
@@ -932,21 +943,35 @@ export class InvoiceComponent implements OnInit {
   getDescriptionOptions() {
     this.loadingDescription = true;
 
-    this.servicesService
-      .getLibraryItems<ServiceListResponse>(this.entityId, {
-        params: `?&type=${LibraryItem.service}&serviceType=PAID&limit=10&offset=${this.descriptionOffSet}&status=true`,
-      })
-      .subscribe(
-        (res) => {
-          const data = new ServiceList().deserialize(res).allService;
+    if (this.entityType === EntitySubType.RESTAURANT) {
+      this.manageReservationService.getMenuList(this.entityId).subscribe(
+        (items: MenuItemListResponse) => {
+          const data = new MenuItemsList().deserialize(items).menuItems;
           this.descriptionOptions = [...this.descriptionOptions, ...data];
-          this.noMoreDescription = res.paidPackages.length < 10;
+          this.noMoreDescription = items.records.length < 10;
           this.loadingDescription = false;
         },
         (err) => {
           this.loadingDescription = false;
         }
       );
+    } else {
+      this.servicesService
+        .getLibraryItems<ServiceListResponse>(this.entityId, {
+          params: `?&type=${LibraryItem.service}&serviceType=PAID&limit=10&offset=${this.descriptionOffSet}&status=true`,
+        })
+        .subscribe(
+          (res) => {
+            const data = new ServiceList().deserialize(res).allService;
+            this.descriptionOptions = [...this.descriptionOptions, ...data];
+            this.noMoreDescription = res.paidPackages.length < 10;
+            this.loadingDescription = false;
+          },
+          (err) => {
+            this.loadingDescription = false;
+          }
+        );
+    }
   }
 
   /**

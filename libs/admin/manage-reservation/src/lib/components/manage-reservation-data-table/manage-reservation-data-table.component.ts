@@ -321,7 +321,10 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
     switch (value) {
       case 'MANAGE_INVOICE':
         this.router.navigate([`/pages/efrontdesk/invoice/${id}`], {
-          queryParams: { entityId: this.selectedEntity.id },
+          queryParams: {
+            entityId: this.selectedEntity.id,
+            type: this.selectedEntity.subType,
+          },
         });
         // this.router.navigateByUrl(`pages/efrontdesk/invoice/${id}`);
         break;

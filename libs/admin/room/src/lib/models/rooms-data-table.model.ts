@@ -134,6 +134,7 @@ export class RoomType {
 }
 
 export class PricingDetails {
+  base: number;
   paxAdult: number;
   paxChildAboveFive: number;
   paxChildBelowFive: number;

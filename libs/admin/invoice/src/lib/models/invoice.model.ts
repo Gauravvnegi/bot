@@ -1,5 +1,9 @@
 import { ServiceListResponse } from 'libs/admin/services/src/lib/types/response';
 import { BillItem, BillSummaryData } from '../types/invoice.type';
+import {
+  MenuItemListResponse,
+  MenuItemResponse,
+} from 'libs/admin/all-outlets/src/lib/types/outlet';
 
 export class Invoice {
   invoiceNumber: string;
@@ -134,6 +138,38 @@ export class Tax {
     this.taxType = input.taxType;
     this.taxValue = input.taxValue;
     this.id = input.id;
+    return this;
+  }
+}
+
+export class MenuItems {
+  value: string;
+  label: string;
+  amount: number;
+  currency: string;
+  taxes: Tax[];
+
+  deserialize(input: MenuItemResponse) {
+    this.value = input.id;
+    this.label = input.name;
+
+    this.amount = input.dineInPrice;
+    this.taxes = input.taxes?.map((item) => new Tax().deserialize(item)) || [];
+
+    return this;
+  }
+}
+
+export class MenuItemsList {
+  menuItems: MenuItems[];
+
+  deserialize(input: MenuItemListResponse) {
+    this.menuItems = new Array<MenuItems>();
+
+    input.records?.forEach((item) => {
+      this.menuItems.push(new MenuItems().deserialize(item));
+    });
+
     return this;
   }
 }

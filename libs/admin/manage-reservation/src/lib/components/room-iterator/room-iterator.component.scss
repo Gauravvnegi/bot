@@ -72,3 +72,8 @@
     overflow: hidden;
   }
 }
+
+.disabled-btn {
+  opacity: 0.5;
+  pointer-events: none;
+}

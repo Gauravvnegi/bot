@@ -97,7 +97,11 @@ export class ReservationList {
       input.records?.map((item) => new RoomReservation().deserialize(item)) ??
       [];
     this.total = input.total;
-    this.entityStateCounts = input.entityStateCounts;
+    this.entityStateCounts = {
+      CONFIRMED: input.entityStateCounts.CONFIRMED,
+      CANCELED: input.entityStateCounts.CANCELED,
+      DRAFT: input.entityStateCounts.DRAFT,
+    };
     this.entityTypeCounts = input.entityTypeCounts;
     return this;
   }

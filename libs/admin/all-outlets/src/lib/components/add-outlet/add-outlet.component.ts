@@ -201,7 +201,14 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
         this.getServices('PAID');
     }
   }
-
+  
+  /**
+   * @Function filterValues
+   * @description filters the values
+   * @param control 
+   * @param values 
+   * @returns 
+   */
   filterValues(control, values) {
     const value = control?.value;
     return value !== undefined
@@ -238,7 +245,7 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
       }));
 
       //set form validation on type change
-      const { maximumOccupancy, minimumOccupancy, endDay } = this.formControls;
+      const { maximumOccupancy, minimumOccupancy } = this.formControls;
       switch (type) {
         case 'RESTAURANT':
           maximumOccupancy.setValidators([Validators.required]);

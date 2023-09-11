@@ -12,7 +12,10 @@ import {
   Option,
   QueryConfig,
 } from '@hospitality-bot/admin/shared';
-import { SnackBarService } from '@hospitality-bot/shared/material';
+import {
+  ModalService,
+  SnackBarService,
+} from '@hospitality-bot/shared/material';
 import { Subscription } from 'rxjs';
 import { Revenue, weeks } from '../../constants/revenue-manager.const';
 import {
@@ -26,6 +29,8 @@ import {
   DynamicPricingForm,
 } from '../../types/dynamic-pricing.types';
 import { RoomTypes } from 'libs/admin/channel-manager/src/lib/models/bulk-update.models';
+import { ModalComponent } from 'libs/admin/shared/src/lib/components/modal/modal.component';
+import { MatDialogConfig } from '@angular/material/dialog';
 
 export type ControlTypes = 'season' | 'occupancy' | 'hotel-occupancy';
 
@@ -76,7 +81,8 @@ export class OccupancyComponent implements OnInit {
     private dynamicPricingService: DynamicPricingService,
     private adminUtilityService: AdminUtilityService,
     private snackbarService: SnackBarService,
-    public fb: FormBuilder
+    public fb: FormBuilder,
+    private modalService: ModalService
   ) {}
 
   ngOnInit(): void {
@@ -146,9 +152,10 @@ export class OccupancyComponent implements OnInit {
         this.listenChanges();
         break;
       case 'occupancy':
-        const rulesFA = form?.get('occupancy') as FormArray;
+        const { roomStrikeAmount, occupancy } = (form as FormGroup).controls;
+        const rulesFA = occupancy as FormArray;
         rulesFA.push(this.seasonOccupancyFG);
-        this.listenOccupancy(rulesFA);
+        this.listenOccupancy(rulesFA, roomStrikeAmount.value);
         break;
       case 'hotel-occupancy':
         (form as FormArray).controls.push(this.seasonOccupancyFG);
@@ -184,6 +191,10 @@ export class OccupancyComponent implements OnInit {
         roomId: [room.value],
         roomName: [room.label],
         basePrice: [room?.price ?? 0],
+        roomStrikeAmount: [
+          room.pricingDetails.base +
+            room.ratePlans.find((item) => item.isBase)?.variablePrice ?? 0,
+        ],
         roomCount: [room?.roomCount ?? 0],
         occupancy: this.fb.array([this.seasonOccupancyFG]),
       })
@@ -222,22 +233,54 @@ export class OccupancyComponent implements OnInit {
         const season = this.dynamicPricingControl.occupancyFA;
         const { name, id, type } = (season.at(index) as FormGroup).controls;
         if (type.value === 'update') {
-          this.$subscription.add(
-            this.dynamicPricingService.deleteDynamicPricing(id.value).subscribe(
-              (res) => {
-                this.snackbarService.openSnackBarAsText(
-                  `Season '${name.value}' deleted Successfully.`,
-                  '',
-                  { panelClass: 'success' }
-                );
-                season.removeAt(index);
-              },
-              (error) => {
-                this.loading = false;
-              },
-              this.handleFinal
-            )
+          const dialogConfig = new MatDialogConfig();
+          dialogConfig.disableClose = true;
+          const togglePopupCompRef = this.modalService.openDialog(
+            ModalComponent,
+            dialogConfig
           );
+          togglePopupCompRef.componentInstance.content = {
+            heading: 'Remove Season',
+            description: [
+              'Do you want to remove this season.',
+              'Are you Sure?',
+            ],
+          };
+          togglePopupCompRef.componentInstance.actions = [
+            {
+              label: 'No',
+              onClick: () => this.modalService.close(),
+              variant: 'outlined',
+            },
+            {
+              label: 'Yes',
+              onClick: () => {
+                this.$subscription.add(
+                  this.dynamicPricingService
+                    .deleteDynamicPricing(id.value)
+                    .subscribe(
+                      (res) => {
+                        this.snackbarService.openSnackBarAsText(
+                          `Season '${name.value}' deleted Successfully.`,
+                          '',
+                          { panelClass: 'success' }
+                        );
+                        season.removeAt(index);
+                      },
+                      (error) => {
+                        this.loading = false;
+                      },
+                      this.handleFinal
+                    )
+                );
+                this.modalService.close();
+              },
+              variant: 'contained',
+            },
+          ];
+          togglePopupCompRef.componentInstance.onClose.subscribe(() => {
+            this.modalService.close();
+          });
         } else {
           season.removeAt(index);
         }
@@ -297,9 +340,10 @@ export class OccupancyComponent implements OnInit {
 
           roomTypeFA.controls.forEach((roomTypeFG: FormGroup) => {
             //occupancy change listening
+            const { roomStrikeAmount } = roomTypeFG.controls;
             const occupancyFA = roomTypeFG.get('occupancy') as FormArray;
             occupancyFA.controls.forEach((occupancyFG: FormGroup, index) => {
-              this.ruleSubscription(occupancyFG);
+              this.ruleSubscription(occupancyFG, null, roomStrikeAmount.value);
             });
           });
         }
@@ -309,18 +353,21 @@ export class OccupancyComponent implements OnInit {
 
   ruleSubscription = (
     ruleFG: FormGroup,
-    pointer?: { previous: FormGroup; next: FormGroup }
+    pointer?: { previous: FormGroup; next: FormGroup },
+    baseAmount?: number
   ) => {
     const { discount, rate, start, end, basePrice } = ruleFG.controls;
+    if (!baseAmount) {
+      baseAmount = +basePrice.value;
+    }
+
     discount.valueChanges.subscribe((percentage) => {
-      const totalRate =
-        (parseInt(percentage) * +basePrice.value) / 100 + +basePrice.value;
+      const totalRate = (parseInt(percentage) * baseAmount) / 100 + baseAmount;
       rate.patchValue(totalRate.toFixed(2), { emitEvent: false });
     });
 
     rate.valueChanges.subscribe((rate) => {
-      const totalDiscount =
-        ((parseInt(rate) - +basePrice.value) / +basePrice.value) * 100;
+      const totalDiscount = ((parseInt(rate) - baseAmount) / baseAmount) * 100;
       discount.patchValue(totalDiscount.toFixed(2), { emitEvent: false });
     });
 
@@ -343,11 +390,15 @@ export class OccupancyComponent implements OnInit {
     }
   };
 
-  listenOccupancy(rulesFA: FormArray) {
+  listenOccupancy(rulesFA: FormArray, strikeAmount?: number) {
     let previousRule: FormGroup;
     rulesFA.controls.forEach((rule: FormGroup, index: number) => {
       const nextRule = rulesFA.at(index + 1) as FormGroup;
-      this.ruleSubscription(rule, { previous: previousRule, next: nextRule });
+      this.ruleSubscription(
+        rule,
+        { previous: previousRule, next: nextRule },
+        strikeAmount
+      );
       previousRule = rule;
     });
   }
@@ -371,13 +422,6 @@ export class OccupancyComponent implements OnInit {
       acc = curr;
       return curr;
     });
-  }
-
-  selectedRoomIndex(seasonIndex: number): number {
-    const roomId = this.dynamicPricingControl.occupancyFA
-      .at(seasonIndex)
-      .get('roomType').value[0];
-    return this.rooms.findIndex((item) => item.value === roomId);
   }
 
   handleSave(form: FormGroup) {

@@ -14,7 +14,7 @@ export const servicesRoutes: Record<
 > = {
   services: {
     route: '',
-    navRoutes: [],
+    navRoutes: [navRoute.library, navRoute.services],
     title: 'Services',
   },
   createService: {

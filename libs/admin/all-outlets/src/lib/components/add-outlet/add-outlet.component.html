@@ -113,8 +113,22 @@
       <div class="header">Other Details</div>
       <hr />
       <div class="details-wrapper">
+        <hospitality-bot-input
+          *ngIf="useForm.get('type').value === 'RESTAURANT'"
+          [loading]="loading"
+          class="half-width"
+          controlName="maximumOccupancy"
+          label="Max Occupancy"
+          maxLength="60"
+          [props]="{
+            placeholder: 'Enter'
+          }"
+        ></hospitality-bot-input>
         <hospitality-bot-prefix-field
-          *ngIf="!isSpaSelected"
+          *ngIf="
+            useForm.get('type').value !== 'SPA' &&
+            useForm.get('type').value !== 'RESTAURANT'
+          "
           label="Occupancy"
           class="half-width"
           preControlName="maximumOccupancy"
@@ -137,7 +151,7 @@
         >
         </hospitality-bot-prefix-field>
         <hospitality-bot-prefix-field
-          *ngIf="!isSpaSelected"
+          *ngIf="useForm.get('type').value !== 'SPA'"
           preControlName="area"
           postControlName="dimension"
           class="half-width"

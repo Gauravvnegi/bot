@@ -49,10 +49,8 @@ export class CategoryComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // if (!this._entityId) this._entityId = this.globalFilterService.entityId;
 
     this.inputControl = this.controlContainer.control.get(this.controlName);
-    // this.getCategories();
   }
 
   /**

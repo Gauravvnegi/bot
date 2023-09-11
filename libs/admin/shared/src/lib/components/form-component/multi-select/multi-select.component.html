@@ -11,7 +11,7 @@
   >
 
   <p-multiSelect
-    class="input"
+    [class]="isEmpty ? 'input no-select' : 'input'"
     [ngClass]="inputNgClasses"
     [disabled]="isDisabled || null"
     [formControlName]="controlName"

@@ -306,16 +306,16 @@ export const chips: Chip<
 
 export const MenuOptions: Option[] = [
   { label: 'Manage Invoice', value: 'MANAGE_INVOICE' },
-  { label: 'Edit Reservation', value: 'EDIT_RESERVATION' },
+  { label: 'View Reservation', value: 'EDIT_RESERVATION' },
   { label: 'Print Invoice', value: 'PRINT_INVOICE' },
 ];
 
 export const HotelMenuOptions: Option[] = [
   ...MenuOptions,
-  { label: 'Assign Room', value: 'ASSIGN_ROOM' },
+  // { label: 'Assign Room', value: 'ASSIGN_ROOM' },
 ];
 
 export const RestaurantMenuOptions: Option[] = [
   ...MenuOptions,
-  { label: 'Assign Table', value: 'ASSIGN_TABLE' },
+  // { label: 'Assign Table', value: 'ASSIGN_TABLE' },
 ];

@@ -331,9 +331,12 @@ export class DynamicPricingHandler {
         );
 
         //patching all values of rules
-        const { occupancy } = roomControl.controls;
+        const { occupancy, roomStrikeAmount } = roomControl.controls;
         item.roomTypes[index].occupancy.sort((a, b) => a.start - b.start);
-        instance.listenOccupancy(occupancy as FormArray);
+        instance.listenOccupancy(
+          occupancy as FormArray,
+          roomStrikeAmount.value
+        );
         (occupancy as FormArray).controls.forEach(
           (occupancyControl: FormGroup, occupancyIndex) => {
             const rule = item.roomTypes[index]?.occupancy[occupancyIndex];

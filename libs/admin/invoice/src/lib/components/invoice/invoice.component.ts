@@ -996,7 +996,11 @@ export class InvoiceComponent implements OnInit {
    * Navigate to service form
    */
   createService() {
-    this.router.navigateByUrl('pages/library/services/create-service');
+    this.router.navigate([`/pages/library/services/create-service`], {
+      queryParams: {
+        entityId: this.entityId,
+      },
+    });
   }
 
   /**

@@ -132,7 +132,9 @@ export class VenueReservationComponent extends BaseReservationComponent
     this.inputControls.eventInformation.valueChanges
       .pipe(debounceTime(100))
       .subscribe((res) => {
-        this.getSummaryData();
+        if (res) {
+          this.getSummaryData();
+        }
       });
   }
 
@@ -141,8 +143,8 @@ export class VenueReservationComponent extends BaseReservationComponent
       this.getReservationDetails();
     } else {
       this.statusOptions = [
-        ...editModeStatusOptions,
-        { label: 'In Progress', value: 'IN_PROGRESS' },
+        ...statusOptions,
+        // { label: 'In Progress', value: 'IN_PROGRESS' },
       ];
     }
   }

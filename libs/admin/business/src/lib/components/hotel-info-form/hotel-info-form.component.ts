@@ -15,7 +15,7 @@ import {
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { Subscription } from 'rxjs';
 import { businessRoute } from '../../constant/routes';
-import { SegmentList, Service } from '../../models/hotel.models';
+import { SegmentList, Service, Services } from '../../models/hotel.models';
 import { BusinessService } from '../../services/business.service';
 import { HotelFormDataService } from '../../services/hotel-form.service';
 import { noRecordActionForCompWithId } from 'libs/admin/all-outlets/src/lib/constants/form';
@@ -137,18 +137,17 @@ export class HotelInfoFormComponent implements OnInit {
           params: '?type=SERVICE&serviceType=COMPLIMENTARY&pagination=false',
         })
         .subscribe((res) => {
-          this.allServices = res.complimentaryPackages.map((item) => item.id);
+          res = new Services().deserialize(res.complimentaryPackages).services;
+          this.allServices = res.map((item) => item.id);
 
-          this.compServices = res.complimentaryPackages.slice(0, 5);
+          this.compServices = res.slice(0, 5);
 
           this.hotelFormDataService.initHotelInfoFormData(
             { services: this.compServices },
             false
           );
 
-          const data = res.complimentaryPackages
-            .filter((item) => item.active)
-            .map((item) => item.id);
+          const data = res.filter((item) => item.active).map((item) => item.id);
 
           this.useForm.get('entity.serviceIds').patchValue(data);
         });

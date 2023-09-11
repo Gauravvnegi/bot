@@ -283,15 +283,11 @@ export class RestaurantReservationComponent extends BaseReservationComponent
 
   getReservationId(): void {
     if (this.reservationId) {
-      this.statusOptions = [
-        ...statusOptions,
-        { label: 'Seated', value: 'SEATED' },
-      ];
       this.getReservationDetails();
     } else {
       this.statusOptions = [
-        ...editModeStatusOptions,
-        { label: 'Seated', value: 'SEATED' },
+        ...statusOptions,
+        // { label: 'Seated', value: 'SEATED' },
       ];
     }
   }

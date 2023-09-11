@@ -8,6 +8,7 @@ import {
   AdminUtilityService,
   BaseDatatableComponent,
   HotelDetailService,
+  NavRouteOptions,
   TableService,
 } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
@@ -54,6 +55,7 @@ export class ServicesDataTableComponent extends BaseDatatableComponent {
   branchId: string;
   private cancelRequests$ = new Subject<void>();
   isRestaurant: boolean = false;
+  navRoutes: NavRouteOptions;
 
   $subscription = new Subscription();
 
@@ -73,6 +75,8 @@ export class ServicesDataTableComponent extends BaseDatatableComponent {
 
   ngOnInit(): void {
     this.entityId = this.globalFilterService.entityId;
+    const { navRoutes } = servicesRoutes['services'];
+    this.navRoutes = navRoutes;
     this.listenForGlobalFilters();
   }
 

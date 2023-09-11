@@ -39,16 +39,12 @@ export class FromToDateComponent extends FormComponent implements OnInit {
   ngOnInit() {
     this.parentFG.get(this.controlNames.from)?.valueChanges.subscribe((res) => {
       if (!this.isTimeOnly) {
-        if (this.parentFG.value.toDate < res)
-          this.parentFG.patchValue({ toDate: '' }, { emitEvent: false });
+        if (this.parentFG.value.toDate < res) {
+          const nextDate = new Date(res);
+          nextDate.setDate(nextDate.getDate() + 1);
+          this.parentFG.patchValue({ [this.controlNames.to]: nextDate });
+        }
         this.endMinDate = new Date(res);
-      }
-    });
-    this.parentFG.get(this.controlNames.to)?.valueChanges.subscribe((res) => {
-      if (!this.isTimeOnly) {
-        this.startMaxDate = new Date(res);
-        if (this.parentFG.value.fromDate > res)
-          this.parentFG.patchValue({ fromDate: '' }, { emitEvent: false });
       }
     });
   }

@@ -97,9 +97,21 @@ export class FormComponent implements OnInit {
    * To update the value of default [setting] props
    */
   @Input() set props(values: FormProps) {
-    map(values, (val, key) => {
-      this[key] = val;
-    });
+    for (const key in values) {
+      if (values.hasOwnProperty(key)) {
+        const val = values[key];
+        if (key === 'errorMessages') {
+          // To update error messages
+          this.errorMessages = {
+            ...this.errorMessages,
+            ...val,
+          };
+        } else {
+          // Set other properties
+          this[key] = val;
+        }
+      }
+    }
   }
 
   constructor(public controlContainer: ControlContainer) {}

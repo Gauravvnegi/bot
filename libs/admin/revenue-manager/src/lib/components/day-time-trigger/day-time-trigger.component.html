@@ -38,7 +38,11 @@
                     label="Remove"
                     variant="text"
                     severity="reset"
-                    (onClick)="modifyTriggerFG('', i)"
+                    [disabled]="dynamicPricingControl.timeFA.length < 2"
+                    (onClick)="
+                      dynamicPricingControl.timeFA.length > 1 &&
+                        modifyTriggerFG('', i)
+                    "
                   ></hospitality-bot-button>
                 </div>
               </div>
@@ -101,7 +105,10 @@
                   [formGroupName]="j"
                   style="display: flex; padding: 23px 0;"
                 >
-                  <div style="width: 35%; padding-left: 30px;">
+                  <div
+                    class="time-range-field"
+                    style="width: 35%; padding-left: 30px;"
+                  >
                     <hospitality-bot-from-to-date
                       [controlNames]="{
                         from: 'fromTime',
@@ -114,18 +121,20 @@
                         showLabel: false,
                         preErrorMessages: {
                           required: 'This is required field',
-                          collide: 'Collide, Fix it !',
+                          collide: 'Trigger Conflict, choose different time.',
                           startError: 'From Time should be < To Time.',
                           timeGapError: 'At Least 1 Hrs Gap',
-                          sameTime: 'Occupancy Collide for same time, Fix it.'
+                          sameTime:
+                            'Occupancy conflict, choose different range.'
                         },
                         postErrorMessages: {
                           required: 'This is required field',
                           min: 'To Time should be > From Time.',
-                          collide: 'Collide, Fix it !',
+                          collide: 'Trigger Conflict, choose different time',
                           endError: 'From Time should be < To Time.',
                           timeGapError: 'At Least 1 Hrs Gap',
-                          sameTime: 'Occupancy Collide for same time, Fix it.'
+                          sameTime:
+                            'Occupancy conflict, choose different range.'
                         }
                       }"
                     ></hospitality-bot-from-to-date>
@@ -146,7 +155,8 @@
                             min: 'Minimum Value should be 1',
                             startError: 'Start should be <= End.',
                             collide: 'Collide, Fix it !',
-                            sameTime: 'Occupancy Collide for same time, Fix it.'
+                            sameTime:
+                              'Occupancy conflict, choose different range.'
                           }
                         },
                         post: {
@@ -157,7 +167,8 @@
                             min: 'Minimum Value should be 1',
                             endError: 'End should be >= Start.',
                             collide: 'Collide, Fix it !',
-                            sameTime: 'Occupancy Collide for same time, Fix it.'
+                            sameTime:
+                              'Occupancy conflict, choose different range.'
                           }
                         }
                       }"

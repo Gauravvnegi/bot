@@ -45,6 +45,7 @@ export class CreateServiceComponent implements OnInit {
   categoryOffSet = 0;
   loadingCategory = false;
   noMoreCategories = false;
+  isComplimentaryService: boolean = false;
 
   // ** All the dropdown value to be from configuration api **
   types: Option[] = [
@@ -168,6 +169,7 @@ export class CreateServiceComponent implements OnInit {
           })
           .subscribe((res) => {
             const { type, images, taxes, enableVisibility, ...rest } = res;
+            this.isComplimentaryService = type === 'Complimentary';
             this.useForm.patchValue({
               serviceType: type,
               ...rest,
@@ -303,7 +305,9 @@ export class CreateServiceComponent implements OnInit {
   }
 
   createTax() {
-    this.router.navigate(['pages/settings/tax/create-tax']);
+    this.router.navigate(['pages/settings/tax/create-tax'], {
+      queryParams: { entityId: this.entityId },
+    });
   }
 
   handleSuccess = () => {

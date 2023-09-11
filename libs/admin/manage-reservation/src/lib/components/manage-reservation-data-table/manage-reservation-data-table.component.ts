@@ -20,7 +20,7 @@ import {
 import * as FileSaver from 'file-saver';
 import { ModalComponent } from 'libs/admin/shared/src/lib/components/modal/modal.component';
 import { LazyLoadEvent } from 'primeng/api';
-import { Subscription } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
 import {
   HotelMenuOptions,
   MenuOptions,
@@ -44,7 +44,7 @@ import { ReservationListResponse } from '../../types/response.type';
 import { FormService } from '../../services/form.service';
 import { SelectedEntity } from '../../types/reservation.type';
 import { InvoiceService } from 'libs/admin/invoice/src/lib/services/invoice.service';
-import { distinctUntilChanged, tap } from 'rxjs/operators';
+import { distinctUntilChanged, takeUntil, tap } from 'rxjs/operators';
 
 @Component({
   selector: 'hospitality-bot-manage-reservation-data-table',
@@ -77,6 +77,7 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
   isSelectedEntityChanged = false;
 
   menuOptions: Option[] = MenuOptions;
+  private cancelRequests$ = new Subject<void>();
 
   constructor(
     public fb: FormBuilder,
@@ -136,6 +137,7 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
           })
         )
         .subscribe((res) => {
+          this.cancelRequests$.next();
           this.isSelectedEntityChanged = true; // Since we only get here when selectedEntity has changed
           // this.resetTableValues();
           this.initDetails(this.selectedEntity);
@@ -153,6 +155,10 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
       .getReservationItems<ReservationListResponse>(
         this.getQueryConfig(),
         this.selectedEntity.id
+      )
+      .pipe(
+        //to cancel api call between using take until
+        takeUntil(this.cancelRequests$)
       )
       .subscribe(
         (res) => {
@@ -314,7 +320,10 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
   handleMenuClick(value: string, id: string) {
     switch (value) {
       case 'MANAGE_INVOICE':
-        this.router.navigateByUrl(`pages/efrontdesk/invoice/${id}`);
+        this.router.navigate([`/pages/efrontdesk/invoice/${id}`], {
+          queryParams: { entityId: this.selectedEntity.id },
+        });
+        // this.router.navigateByUrl(`pages/efrontdesk/invoice/${id}`);
         break;
       case 'EDIT_RESERVATION':
         this.editReservation(id);

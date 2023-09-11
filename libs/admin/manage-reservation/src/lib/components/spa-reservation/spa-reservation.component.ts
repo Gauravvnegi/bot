@@ -9,7 +9,11 @@ import {
   EntitySubType,
 } from '@hospitality-bot/admin/shared';
 import { IteratorField } from 'libs/admin/shared/src/lib/types/fields.type';
-import { editModeStatusOptions, spaFields } from '../../constants/reservation';
+import {
+  editModeStatusOptions,
+  spaFields,
+  statusOptions,
+} from '../../constants/reservation';
 import { SummaryData, OutletForm } from '../../models/reservations.model';
 import { ManageReservationService } from '../../services/manage-reservation.service';
 import { FormService } from '../../services/form.service';
@@ -190,10 +194,7 @@ export class SpaReservationComponent extends BaseReservationComponent
     if (this.reservationId) {
       this.getReservationDetails();
     } else {
-      this.statusOptions = [
-        ...editModeStatusOptions,
-        { label: 'In Session', value: 'INSESSION' },
-      ];
+      this.statusOptions = statusOptions;
     }
   }
 

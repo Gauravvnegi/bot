@@ -48,6 +48,7 @@
       [entityId]="entityId"
     ></hospitality-bot-custom-file-upload>
     <hospitality-bot-prefix-field
+      *ngIf="!isComplimentaryService"
       class="one-third-width"
       [options]="currencies"
       label="Original Price"
@@ -69,6 +70,7 @@
       [options]="units"
     ></hospitality-bot-select>
     <hospitality-bot-multi-select
+      *ngIf="!isComplimentaryService"
       class="one-third-width"
       controlName="taxIds"
       label="Tax"
@@ -80,6 +82,7 @@
       (onCreate)="createTax()"
     ></hospitality-bot-multi-select>
     <hospitality-bot-input
+      *ngIf="!isComplimentaryService"
       class="one-third-width"
       controlName="hsnCode"
       label="HSN Code"

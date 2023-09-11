@@ -40,3 +40,8 @@
   font-size: 13px;
   opacity: 0.8;
 }
+
+.disabled-btn {
+  opacity: 0.5;
+  pointer-events: none;
+}

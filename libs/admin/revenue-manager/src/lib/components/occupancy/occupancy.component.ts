@@ -278,6 +278,9 @@ export class OccupancyComponent implements OnInit {
               variant: 'contained',
             },
           ];
+          togglePopupCompRef.componentInstance.onClose.subscribe(() => {
+            this.modalService.close();
+          });
         } else {
           season.removeAt(index);
         }

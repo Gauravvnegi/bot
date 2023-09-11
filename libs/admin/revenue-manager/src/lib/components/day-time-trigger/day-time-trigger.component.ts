@@ -115,6 +115,9 @@ export class DayTimeTriggerComponent implements OnInit {
             variant: 'contained',
           },
         ];
+        togglePopupCompRef.componentInstance.onClose.subscribe(() => {
+          this.modalService.close();
+        });
       } else {
         dayTimeFormArray.removeAt(index);
       }

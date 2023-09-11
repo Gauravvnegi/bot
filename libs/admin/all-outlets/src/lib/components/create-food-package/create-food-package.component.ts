@@ -86,16 +86,16 @@ export class CreateFoodPackageComponent extends OutletBaseComponent
             params: '?type=FOOD_PACKAGE',
           })
           .subscribe((res) => {
-            const { taxes, foodItem, imageUrl, images, ...rest } = res;
+            const { taxes, foodItems, imageUrl, images, ...rest } = res;
             this.useForm.get('imageUrl').setValue(images[0].url);
             // ;
             this.useForm.patchValue({
               ...rest,
               taxIds: taxes.map((item) => item.id),
             });
-            this.foodItemIds = foodItem.map((item) => item.id);
+            this.foodItemIds = foodItems.map((item) => item.id);
 
-            this.foodItemValues = foodItem;
+            this.foodItemValues = foodItems;
           })
       );
     }

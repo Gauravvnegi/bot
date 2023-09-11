@@ -101,11 +101,13 @@ export class BookingSummaryComponent implements OnInit {
   }
 
   offerSelect(item?: any): void {
-    if (item) {
-      this.displayBookingOffer = !this.displayBookingOffer;
-      this.onOfferItemSelect.emit(item);
-    } else {
-      this.onOfferSelect.emit();
+    if(!this.reservationId){
+      if (item) {
+        this.displayBookingOffer = !this.displayBookingOffer;
+        this.onOfferItemSelect.emit(item);
+      } else {
+        this.onOfferSelect.emit();
+      }
     }
   }
 

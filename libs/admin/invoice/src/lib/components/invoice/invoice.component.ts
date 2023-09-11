@@ -127,7 +127,10 @@ export class InvoiceComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.entityId = this.globalFilterService.entityId;
+    const paramData = this.route.snapshot.queryParams;
+    this.entityId = paramData.entityId
+      ? paramData.entityId
+      : this.globalFilterService.entityId;
     this.initForm();
     this.initOptions();
   }

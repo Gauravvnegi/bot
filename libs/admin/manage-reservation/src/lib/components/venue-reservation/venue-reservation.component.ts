@@ -132,7 +132,9 @@ export class VenueReservationComponent extends BaseReservationComponent
     this.inputControls.eventInformation.valueChanges
       .pipe(debounceTime(100))
       .subscribe((res) => {
-        this.getSummaryData();
+        if (res) {
+          this.getSummaryData();
+        }
       });
   }
 

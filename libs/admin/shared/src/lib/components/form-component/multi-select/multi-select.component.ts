@@ -46,6 +46,12 @@ export class MultiSelectComponent extends FormComponent {
       return prev;
     }, {});
   }
+
+  get isEmpty() {
+    return !(
+      this.controlContainer.control.get(this.controlName).value?.length ?? 0
+    );
+  }
 }
 
 type MultiSelectSettings = {

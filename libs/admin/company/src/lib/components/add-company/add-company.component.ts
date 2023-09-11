@@ -85,7 +85,7 @@ export class AddCompanyComponent implements OnInit {
 
       const validationRules = {
         [companyDiscount.PERCENTAGE]:
-          discount >= 100 ? { moreThan100: true } : null,
+          discount > 100 ? { moreThan100: true } : null,
       };
 
       if (discount < 0) {

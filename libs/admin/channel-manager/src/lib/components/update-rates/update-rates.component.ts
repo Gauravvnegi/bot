@@ -510,6 +510,7 @@ export class UpdateRatesComponent implements OnInit {
                   })
                 ),
               ],
+              rootDynamicPrice: control,
             });
           }
         });
@@ -666,6 +667,7 @@ export class UpdateRatesComponent implements OnInit {
     value: boolean;
     roomControls: { roomTypeFG: FormGroup }[];
     index: number;
+    rootDynamicPrice?: AbstractControl;
   }) {
     this.loading = true;
     let roomTypeIds = dynamicPrice.roomControls
@@ -716,6 +718,14 @@ export class UpdateRatesComponent implements OnInit {
                 { value: false }
               );
             });
+            if (dynamicPrice?.rootDynamicPrice) {
+              dynamicPrice.rootDynamicPrice.patchValue(
+                { value: false },
+                {
+                  emitEvent: false,
+                }
+              );
+            }
           },
           this.handleFinal
         )

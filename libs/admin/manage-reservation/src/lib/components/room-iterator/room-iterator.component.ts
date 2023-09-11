@@ -435,11 +435,13 @@ export class RoomIteratorComponent extends IteratorComponent
    * @param index position at which value is to be removed
    */
   removeField(index: number) {
-    if (this.roomTypeArray.length === 1) {
-      this.roomTypeArray.at(0).reset({ value: null, emitEvent: false });
-      return;
+    if(!this.itemValues.length){
+      if (this.roomTypeArray.length === 1) {
+        this.roomTypeArray.at(0).reset({ value: null, emitEvent: false });
+        return;
+      }
+      this.roomTypeArray.removeAt(index);
     }
-    this.roomTypeArray.removeAt(index);
   }
 
   /**

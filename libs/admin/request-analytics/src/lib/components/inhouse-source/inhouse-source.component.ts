@@ -2,7 +2,6 @@ import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { analytics } from 'libs/admin/shared/src/lib/constants/charts';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
-import { SnackBarService } from 'libs/shared/material/src';
 import { Subscription } from 'rxjs';
 import { InhouseSource } from '../../models/statistics.model';
 import { AnalyticsService } from '../../services/analytics.service';
@@ -19,11 +18,12 @@ export class InhouseSourceComponent implements OnInit, OnDestroy {
   globalFilters;
   graphData;
   chart = analytics.inhouseSourceChart;
+  loadingGraph = false;
+
   constructor(
     private _adminUtilityService: AdminUtilityService,
     private globalFilterService: GlobalFilterService,
-    private analyticsService: AnalyticsService,
-    private snackbarService: SnackBarService
+    private analyticsService: AnalyticsService
   ) {}
 
   ngOnInit(): void {
@@ -54,7 +54,7 @@ export class InhouseSourceComponent implements OnInit, OnDestroy {
     const config = {
       queryObj: this._adminUtilityService.makeQueryParams(this.globalFilters),
     };
-
+    this.loadingGraph = true;
     this.$subscription.add(
       this.analyticsService.getSourceStats(config).subscribe(
         (response) => {
@@ -64,7 +64,7 @@ export class InhouseSourceComponent implements OnInit, OnDestroy {
           );
           this.initGraphData();
         },
-        ({ error }) =>{ }
+        ({ error }) => {this.loadingGraph = false}
       )
     );
   }
@@ -99,6 +99,7 @@ export class InhouseSourceComponent implements OnInit, OnDestroy {
       ];
       this.chart.labels = ['No data'];
     }
+    this.loadingGraph = false;
   }
 
   get stats() {

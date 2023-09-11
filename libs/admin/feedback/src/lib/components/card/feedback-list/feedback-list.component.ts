@@ -37,7 +37,7 @@ export class FeedbackListComponent implements OnInit, OnDestroy {
   cardTabFilterItems = card.list.tabFilterItems;
   selectedFeedback;
   tabFilterIdx = 0;
-  hotelId: string;
+  entityId: string;
   $subscription = new Subscription();
   globalQueries = [];
   enableSearchField = false;
@@ -100,7 +100,7 @@ export class FeedbackListComponent implements OnInit, OnDestroy {
           ...data['filter'].queryValue,
           ...data['dateRange'].queryValue,
         ];
-        this.hotelId = this.globalFilterService.hotelId;
+        this.entityId = this.globalFilterService.entityId;
         this.cardService.$selectedFeedback.next(null);
         this.pagination = {
           offset: 0,
@@ -236,7 +236,7 @@ export class FeedbackListComponent implements OnInit, OnDestroy {
 
           this.paginationDisabled =
             this.pagination.limit > response.records.length;
-            this.loading = false;
+          this.loading = false;
         },
         ({ error }) => {
           this.loading = false;
@@ -264,7 +264,7 @@ export class FeedbackListComponent implements OnInit, OnDestroy {
     const config = {
       queryObj: this._adminUtilityService.makeQueryParams([
         ...queries,
-        { entityIds: this.setEntityId() },
+        { entityIds: this.setEntityId(), sort: 'updated' },
       ]),
     };
     return this.cardService.getFeedbackList(config);
@@ -277,7 +277,7 @@ export class FeedbackListComponent implements OnInit, OnDestroy {
   setEntityId() {
     if (this.feedbackType === feedback.types.transactional)
       return this.statisticService.outletIds;
-    return this.hotelId;
+    return this.entityId;
   }
 
   /**
@@ -364,7 +364,7 @@ export class FeedbackListComponent implements OnInit, OnDestroy {
             queryObj: this._adminUtilityService.makeQueryParams([
               ...this.globalQueries,
               this.filterData,
-              { key: this.search },
+              { key: this.search, sort: 'updated' },
             ]),
           })
           .subscribe(
@@ -375,7 +375,7 @@ export class FeedbackListComponent implements OnInit, OnDestroy {
                 this.feedbackType,
                 this.colorMap
               ).records),
-            ({ error }) =>{
+            ({ error }) => {
               this.loading = false;
             }
           )

@@ -1,0 +1,118 @@
+<div class="wrapper" [id]="fa.referenceId">
+  <hospitality-bot-navigation-header
+    [heading]="pageTitle"
+    [routes]="navRoutes"
+  ></hospitality-bot-navigation-header>
+
+  <div class="form-block" [formGroup]="guestForm">
+    <hospitality-bot-input
+      class="half-width"
+      controlName="firstName"
+      label="First Name"
+      maxLength="60"
+      [props]="{
+        placeholder: 'Enter',
+        errorMessages: {
+          required: 'This is a required field.',
+          maxlength: 'Maximum character limit is upto 60.'
+        }
+      }"
+    ></hospitality-bot-input>
+    <hospitality-bot-input
+      class="half-width"
+      controlName="lastName"
+      label="Last Name"
+      maxLength="60"
+      [props]="{
+        placeholder: 'Enter',
+        errorMessages: {
+          required: 'This is a required field.',
+          maxlength: 'Maximum character limit is upto 60.'
+        }
+      }"
+    ></hospitality-bot-input>
+    <hospitality-bot-input
+      class="half-width"
+      controlName="email"
+      label="Email"
+      [props]="{
+        type: 'email',
+        errorMessages: {
+          required: 'This is a required field.',
+          pattern: 'Please enter a valid email address.'
+        },
+        placeholder: 'Enter'
+      }"
+    ></hospitality-bot-input>
+    <hospitality-bot-phone-number
+      class="half-width"
+      preControlName="cc"
+      postControlName="phoneNo"
+      [props]="{
+        placeholder: 'Enter',
+        errorMessages: {
+          required: 'This is a required field.'
+        }
+      }"
+    ></hospitality-bot-phone-number>
+    <hospitality-bot-address-component
+      class="half-width"
+      controlName="address"
+      [props]="{
+        errorMessages: {
+          required: 'This is a required field.'
+        }
+      }"
+    >
+    </hospitality-bot-address-component>
+    <hospitality-bot-members-list
+      class="half-width"
+      controlName="company"
+      type="COMPANY"
+      label="Company Name"
+      (createCompany)="createNewCompany()"
+    ></hospitality-bot-members-list>
+    <hospitality-bot-date
+      class="half-width"
+      controlName="dateOfBirth"
+      label="Date of Birth"
+      [settings]="{
+        enableTime: false,
+        yearRange: '1900:' + ageRestriction.getFullYear()
+      }"
+      [props]="{
+        placeholder: 'DD/MM/YYYY'
+      }"
+      [maxDate]="ageRestriction"
+    ></hospitality-bot-date>
+    <hospitality-bot-input
+      class="half-width"
+      controlName="age"
+      label="Age"
+      [props]="{
+        placeholder: 'Enter'
+      }"
+    ></hospitality-bot-input>
+    <hospitality-bot-select
+      class="half-width"
+      controlName="gender"
+      [options]="genders"
+      label="Gender"
+      [props]="{
+        placeholder: 'Select'
+      }"
+    ></hospitality-bot-select>
+    <hospitality-bot-form-action
+      class="full-width"
+      [loading]="loading"
+      [isId]="guestId"
+      (onPreAction)="resetForm()"
+      (onPostAction)="handleSubmit()"
+      [config]="{
+        type: 'non-sticky'
+      }"
+      #fa
+    >
+    </hospitality-bot-form-action>
+  </div>
+</div>

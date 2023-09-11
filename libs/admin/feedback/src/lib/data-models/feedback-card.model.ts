@@ -4,7 +4,7 @@ import { get, set, trim } from 'lodash';
 import * as moment from 'moment';
 import { feedback } from '../constants/feedback';
 import { Feedback, Remark, StayFeedback } from './feedback-datatable.model';
-import { IDeserializable } from '@hospitality-bot/admin/shared';
+import { EntityState, IDeserializable } from '@hospitality-bot/admin/shared';
 import { colors } from '@hospitality-bot/admin/shared';
 
 export class FeedbackList {
@@ -234,7 +234,7 @@ export class Reservation {
 
 export class Guest implements IDeserializable {
   id;
-  nameTitle;
+  salutation;
   name: string;
   firstName: string;
   lastName: string;
@@ -251,7 +251,7 @@ export class Guest implements IDeserializable {
       this,
 
       set({}, 'id', get(input, ['id'])),
-      set({}, 'nameTitle', get(input, ['nameTitle'], '')),
+      set({}, 'salutation', get(input, ['salutation'], '')),
       set({}, 'name', get(input, ['name'])),
       set({}, 'firstName', trim(get(input, ['firstName'], 'No'))),
       set({}, 'lastName', trim(get(input, ['lastName'], 'Name'))),
@@ -370,13 +370,14 @@ export class Request implements IDeserializable {
 
 export class Departmentpermissions {
   records: Departmentpermission[];
-
+  entityTypeCounts: EntityState<string>;
+  entityStateCounts: EntityState<string>;
+  total: number;
   deserialize(input) {
     this.records = new Array<Departmentpermission>();
     input.forEach((item) =>
       this.records.push(new Departmentpermission().deserialize(item))
     );
-
     return this.records;
   }
 }

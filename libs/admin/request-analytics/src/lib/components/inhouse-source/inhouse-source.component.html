@@ -1,5 +1,5 @@
 <div class="graphContainer">
-  <div class="messageAnalytics" *ngIf="graphData">
+  <div class="messageAnalytics">
     <hospitality-bot-custom-tooltip
       [text]="' Total number of requests in a selected time frame.'"
     >
@@ -9,6 +9,13 @@
       <div class="graph-container">
         <div class="graph">
           <canvas
+            *skeleton="
+              graphData == undefined || loadingGraph;
+              height: '180px';
+              width: '180px';
+              borderRadius: '50%';
+              margin: '0 0 20px 70px'
+            "
             baseChart
             [data]="chart.data"
             [labels]="chart.labels"
@@ -19,7 +26,10 @@
           >
           </canvas>
         </div>
-        <div class="labels">
+        <div
+          class="labels"
+          *skeleton="graphData == undefined; height: '0'; width: '0'"
+        >
           <div class="val">{{ graphData.totalCount }}</div>
           <div class="label">
             Total<br />
@@ -28,7 +38,15 @@
         </div>
       </div>
     </div>
-    <div class="stat-val-container">
+    <div
+      class="stat-val-container"
+      *skeleton="
+        graphData == undefined || loadingGraph;
+        height: '25px';
+        width: '90%';
+        margin: '0 0 10px 0'
+      "
+    >
       <div
         class="stat-val"
         *ngFor="let val of stats"

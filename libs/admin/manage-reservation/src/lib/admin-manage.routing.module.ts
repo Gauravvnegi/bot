@@ -4,29 +4,47 @@ import { AddReservationComponent } from './components/add-reservation/add-reserv
 import { MainComponent } from './components/main/main.component';
 import { ManageReservationDataTableComponent } from './components/manage-reservation-data-table/manage-reservation-data-table.component';
 import { manageReservationRoutes } from './constants/routes';
-import { InvoiceComponent } from './components/invoice/invoice.component';
 import { RoomIteratorComponent } from './components/room-iterator/room-iterator.component';
+import { BookingInfoComponent } from './components/form-components/booking-info/booking-info.component';
+import { SpaReservationComponent } from './components/spa-reservation/spa-reservation.component';
+import { RestaurantReservationComponent } from './components/restaurant-reservation/restaurant-reservation.component';
+import { VenueReservationComponent } from './components/venue-reservation/venue-reservation.component';
+import { PaymentRuleComponent } from './components/form-components/payment-rule/payment-rule.component';
+import { PaymentMethodComponent } from './components/form-components/payment-method/payment-method.component';
+import { InstructionsComponent } from './components/form-components/instructions/instructions.component';
+import { GuestInformationComponent } from './components/form-components/guest-information/guest-information.component';
+import { BookingSummaryComponent } from './components/form-components/booking-summary/booking-summary.component';
+import { ReservationFormWrapperComponent } from './components/reservation-form-wrapper/reservation-form-wrapper.component';
+import { ReservationComponent } from './components/reservation/reservation.component';
 
 export const adminManageReservationRoutes: Route[] = [
   {
-    path: manageReservationRoutes.manageReservation.route,
+    path: '',
     component: MainComponent,
     children: [
       {
-        path: '',
-        component: ManageReservationDataTableComponent,
+        path: manageReservationRoutes.manageReservation.route,
+        component: ReservationComponent,
       },
       {
         path: manageReservationRoutes.addReservation.route,
-        component: AddReservationComponent,
+        component: MainComponent,
+        children: [
+          {
+            path: '',
+            component: ReservationFormWrapperComponent,
+          },
+        ],
       },
       {
         path: `${manageReservationRoutes.editReservation.route}/:id`,
-        component: AddReservationComponent,
-      },
-      {
-        path: manageReservationRoutes.invoice.route,
-        component: InvoiceComponent,
+        component: MainComponent,
+        children: [
+          {
+            path: '',
+            component: ReservationFormWrapperComponent,
+          },
+        ],
       },
     ],
   },
@@ -41,7 +59,17 @@ export class AdminManageReservationRoutingModule {
     AddReservationComponent,
     MainComponent,
     ManageReservationDataTableComponent,
-    InvoiceComponent,
     RoomIteratorComponent,
+    BookingInfoComponent,
+    PaymentRuleComponent,
+    PaymentMethodComponent,
+    SpaReservationComponent,
+    RestaurantReservationComponent,
+    VenueReservationComponent,
+    InstructionsComponent,
+    GuestInformationComponent,
+    BookingSummaryComponent,
+    ReservationFormWrapperComponent,
+    ReservationComponent,
   ];
 }

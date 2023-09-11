@@ -7,6 +7,8 @@ import { SharedMaterialModule } from 'libs/shared/material/src/lib/shared-materi
 import { ChartsModule } from 'ng2-charts';
 import { NgCircleProgressModule } from 'ng-circle-progress';
 import { AnalyticsService } from './services/analytics.service';
+import { AdminRequestModule } from 'libs/admin/request/src/lib/admin-request.module';
+import { RequestService } from 'libs/admin/request/src/lib/services/request.service';
 
 @NgModule({
   imports: [
@@ -17,9 +19,10 @@ import { AnalyticsService } from './services/analytics.service';
     ReactiveFormsModule,
     SharedMaterialModule,
     AdminSharedModule,
+    AdminRequestModule,
     NgCircleProgressModule.forRoot(),
   ],
   declarations: [...AdminRequestAnalyticsRoutingModule.components],
-  providers: [AnalyticsService],
+  providers: [AnalyticsService,RequestService],
 })
 export class AdminRequestAnalyticsModule {}

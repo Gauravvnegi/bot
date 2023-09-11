@@ -1,32 +1,10 @@
-<div
-  class="action-header"
-  [ngClass]="{ 'action-header__sticky': isScrolledUp }"
-  [formGroup]="tableFG"
->
-  <div class="heading">
-    {{ tableName }}
-  </div>
-  <div class="action-wrapper">
-    <!-- <div class="btn read" *ngIf="selectedRows.length > 0">
-      <img
-        [src]="globalFeedbackConfig.images.datatable.mark_as_read.url"
-        [alt]="globalFeedbackConfig.images.datatable.mark_as_read.alt"
-        (click)="updateFeedbackStatus(true)"
-      />
-      <span class="btn_text">
-        {{ 'datatable.mark_as_read' | translate }}
-      </span>
-    </div> -->
-    <!-- <div class="btn" *ngIf="selectedRows.length > 0">
-      <img
-        [src]="globalFeedbackConfig.images.datatable.mark_as_unread.url"
-        [alt]="globalFeedbackConfig.images.datatable.mark_as_unread.alt"
-        (click)="this.updateFeedbackStatus(false)"
-      />
-      <span class="btn_text">
-        {{ 'datatable.mark_as_unread' | translate }}
-      </span>
-    </div> -->
+<div [formGroup]="tableFG">
+  <hospitality-bot-navigation-header
+    [heading]="tableName"
+    [routes]="navRoutes"
+    [isBack]="false"
+    extraGap="60"
+  >
     <div class="pull-right">
       <label class="labl" *ngFor="let option of tableTypes">
         <input
@@ -45,9 +23,12 @@
       [documentTypes]="documentTypes"
       [documentActionTypes]="documentActionTypes"
     ></hospitality-bot-export-list>
-  </div>
+  </hospitality-bot-navigation-header>
 </div>
 
+<hospitality-bot-feedback-types></hospitality-bot-feedback-types>
+
+<div class="mt-20"></div>
 <ng-container
   *ngIf="tableFG?.get('tableType').value === 'card'; else tableView"
 >
@@ -80,7 +61,7 @@
     (sortFunction)="customSort($event)"
     [customSort]="isCustomSort"
     (onFilter)="onDataFilter($event)"
-    *ngIf="tabFilterItems[tabFilterIdx]?.total; else emptyTable"
+    *ngIf="!isEmpty; else emptyTable"
   >
     <!-- <ng-template pTemplate="caption"> </ng-template> -->
     <ng-template pTemplate="caption">
@@ -107,8 +88,9 @@
 
         <hospitality-bot-filter-chips
           *ngIf="isQuickFilters && tableFG?.get('tableType').value !== 'card'"
-          [chips]="tabFilterItems[tabFilterIdx].chips"
+          [chips]="filterChips"
           (onChange)="toggleQuickReplyFilter($event)"
+          [selectedChips]="selectedFilterChips"
         ></hospitality-bot-filter-chips>
       </div>
     </ng-template>

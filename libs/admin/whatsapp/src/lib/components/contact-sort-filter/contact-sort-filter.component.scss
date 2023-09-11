@@ -7,7 +7,7 @@
   @include flex-space-between-cen-Algn;
 
   &-heading {
-    @include normal-text;
+    @include normal-sm-text;
     color: $secondary;
   }
   &-clear {
@@ -18,7 +18,7 @@
       cursor: pointer;
       .filter {
         font-size: 14px;
-        font-weight: 500;
+        font-weight: $bold;
         letter-spacing: 0.56px;
         color: $grayMedium;
         margin-right: 5px;
@@ -52,7 +52,7 @@
     border-bottom: 1px solid $grayMedium;
     padding: 15px;
     .sortBy {
-      font: normal normal bold 10px/13px Roboto;
+      font: normal normal $bold 10px/13px Poppins;
       letter-spacing: 0.6px;
       color: $grayLight;
       margin-bottom: 10px;
@@ -69,7 +69,6 @@
         padding: 8px 15px;
         cursor: pointer;
         .sortItem {
-          font-family: 'Roboto';
           font-size: 14;
           letter-spacing: 0.84px;
           text-align: left;
@@ -81,7 +80,7 @@
       margin: 20px 0;
     }
     .filterBy {
-      font: normal normal bold 10px/13px Roboto;
+      font: normal normal $bold 10px/13px Poppins;
       letter-spacing: 0.6px;
       color: $grayLight;
       margin-bottom: 10px;
@@ -96,7 +95,7 @@
       width: 20px;
     }
     .filterItem {
-      font: normal normal normal 14px/19px Roboto;
+      font: normal normal $medium 14px/19px Poppins;
       letter-spacing: 0.84px;
       color: $secondary;
       opacity: 1;
@@ -113,7 +112,6 @@
     @include flex-all-center;
 
     &-text {
-      font-family: 'Roboto';
       font-size: 14px;
       letter-spacing: 0.66px;
       text-align: left;

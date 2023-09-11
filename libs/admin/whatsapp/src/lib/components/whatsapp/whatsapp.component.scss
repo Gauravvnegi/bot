@@ -1,12 +1,10 @@
 @import 'main';
 
 .whatsapp-wrapper {
-  height: 100%;
   display: flex;
   width: 100%;
   border-radius: 5px 5px 0px 0px;
-  height: calc(100vh - 133px);
-  // margin: -10px;
+  height: calc(100vh - 135px);
 
   @media (max-width: $tablet) {
     margin: -10px;
@@ -48,7 +46,7 @@
     &__title {
       margin: 12px 0;
       font-size: 16px;
-      font-weight: bold;
+      font-weight: $bold;
       font-stretch: normal;
       font-style: normal;
       line-height: normal;
@@ -58,7 +56,7 @@
     }
     &__description {
       font-size: 12px;
-      font-weight: bold;
+      font-weight: $bold;
       font-stretch: normal;
       font-style: normal;
       line-height: normal;

@@ -60,19 +60,23 @@ export class DocumentDetailsService extends ApiService {
 
   setDocumentFileConfig(required, documentTypeLabel?) {
     let fileSchema = {};
+
+    // For visa type document -> visa page is front and visa stamp is back
+    const notVisaType = documentTypeLabel != 'VISA';
+
     fileSchema['documentFileFront'] = new FieldSchema().deserialize({
-      label: `${documentTypeLabel} ${
-        documentTypeLabel != 'VISA' ? 'FIRST' : ''
-      } PAGE`,
+      label: `${documentTypeLabel} ${notVisaType ? 'FIRST' : ''} PAGE`,
       type: 'front',
       disable: false,
       required,
     });
     fileSchema['documentFileBack'] = new FieldSchema().deserialize({
-      label: `${documentTypeLabel} BACK PAGE`,
+      label: notVisaType
+        ? `${documentTypeLabel} BACK PAGE`
+        : 'VISA ARRIVAL STAMP PAGE',
       type: 'back',
       disable: false,
-      required,
+      required: notVisaType ? required : false,
     });
     return fileSchema as FileDetailConfigI;
   }
@@ -151,9 +155,9 @@ export class DocumentDetailsService extends ApiService {
     return this.get(`/api/v1/countries`);
   }
 
-  getDocumentsByNationality(hotelId, nationality) {
+  getDocumentsByNationality(entityId, nationality) {
     return this.get(
-      `/api/v1/hotel/${hotelId}/support-documents?nationality=${nationality}`
+      `/api/v1/entity/${entityId}/support-documents?nationality=${nationality}`
     ).pipe(
       map((res) => {
         // modified the result for no content (for the wrong nationality)
@@ -180,7 +184,7 @@ export class DocumentDetailsService extends ApiService {
     data.firstName = 'Test';
     data.lastName = 'Test';
     data.email = 'test2gmail.com';
-    data.nameTitle = 'Mr.';
+    data.salutation = 'Mr.';
     data.type = value.selectedDocument;
     data.nationality = this.getCountryByKey(value.country);
     data.contactDetails = new ContactDetails();

@@ -1,5 +1,11 @@
 @import 'main';
-
+:host ::ng-deep {
+  .option-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+}
 .wrapper {
   @include form-block();
   padding: 0;
@@ -7,7 +13,7 @@
   align-items: flex-start;
   &-header {
     padding: 32px 23px 23px;
-    font-weight: 600;
+    font-weight: $bolder;
     line-height: 0.94;
     letter-spacing: 0.96px;
     border-bottom: 1px solid #cdcdcd;

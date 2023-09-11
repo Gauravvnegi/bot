@@ -12,7 +12,10 @@ export class MultiSelectComponent extends FormComponent {
   menuClass = 'p-multiselect-items-wrapper';
   searchInputClass = 'p-multiselect-filter';
 
+  placeholder: string = 'Select';
   showHeader = true;
+  showChips = true;
+  maxSelectedLabels = 20;
 
   /**
    * @Input to change default date setting
@@ -30,7 +33,7 @@ export class MultiSelectComponent extends FormComponent {
   dictionary: Record<string, string> = {};
 
   handleClear(value: string) {
-    if (!this.isDisabled)
+    if (!this.isDisabled && this.inputControl.status !== 'DISABLED')
       this.inputControl.setValue(
         (this.inputControl.value as string[])?.filter((item) => item !== value)
       );
@@ -43,8 +46,16 @@ export class MultiSelectComponent extends FormComponent {
       return prev;
     }, {});
   }
+
+  get isEmpty() {
+    return !(
+      this.controlContainer.control.get(this.controlName).value?.length ?? 0
+    );
+  }
 }
 
 type MultiSelectSettings = {
   showHeader: boolean;
+  maxSelectedLabels: number;
+  showChips: boolean;
 };

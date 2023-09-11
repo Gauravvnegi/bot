@@ -20,7 +20,7 @@ import { SelectOption } from '../../../types/dashboard.type';
 })
 export class NotificationsComponent implements OnInit, OnDestroy {
   $subscription = new Subscription();
-  @Input() hotelId: string;
+  @Input() entityId: string;
   @Input() channelOptions: SelectOption[];
   messageOverallAnalytics: IMessageOverallAnalytics;
   globalQueries;
@@ -61,7 +61,7 @@ export class NotificationsComponent implements OnInit, OnDestroy {
           ...data['filter'].queryValue,
           ...data['dateRange'].queryValue,
         ];
-        this.hotelId = this.globalFilterService.hotelId;
+        this.entityId = this.globalFilterService.entityId;
         this.getConversationStats([
           ...this.globalQueries,
           {
@@ -83,7 +83,7 @@ export class NotificationsComponent implements OnInit, OnDestroy {
     };
     this.$subscription.add(
       this.statisticsService
-        .getConversationStats(this.hotelId, config)
+        .getConversationStats(this.entityId, config)
         .subscribe(
           (response) =>
             (this.messageOverallAnalytics = new MessageOverallAnalytics().deserialize(

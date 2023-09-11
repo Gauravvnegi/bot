@@ -11,6 +11,8 @@ import {
   ViewChild,
 } from '@angular/core';
 import {
+  AbstractControl,
+  ControlContainer,
   ControlValueAccessor,
   FormArray,
   FormBuilder,
@@ -39,13 +41,14 @@ export class CustomFileUploadComponent
 
   @ViewChild('fileInput') input: ElementRef;
   @Input() path = 'static-content/files';
-  @Input() hotelId: string;
+  @Input() entityId: string;
   @Input() limit: number = 1;
+  @Input() formControlName: string;
   unit: number = 1;
   isMultiple: boolean = false;
   @Input() parentFG: FormGroup;
   @Input() isDisable = false;
-
+  exceedFeatureLimit: boolean = false;
   @Input() baseType: keyof typeof fileUploadConfiguration = 'image';
 
   @Input() set settings(value: {
@@ -61,7 +64,7 @@ export class CustomFileUploadComponent
   }
 
   defaultValue: UploadFileData = {
-    maxFileSize: 3145728,
+    maxFileSize: 5242880,
     fileType: fileUploadConfiguration[this.baseType],
   };
 
@@ -77,7 +80,7 @@ export class CustomFileUploadComponent
 
   @Input() label: string = '';
   @Input() description: string = 'Mandatory to add at least 1 image';
-  @Input() hint: string = 'Recommended Ratio : 16:9 | 3 MB Max Size';
+  @Input() hint: string = 'Recommended Ratio : 16:9 | 5 MB Max Size';
   @Input() validationErrMsg: string = 'Image is required.';
   indexToBeUpload: number;
   fileUrls: string[];
@@ -85,28 +88,51 @@ export class CustomFileUploadComponent
   @Input() isFeatureView: boolean = false;
   useForm: FormGroup;
   formArray: FormArray;
+  inputControl: AbstractControl;
+
+  @ViewChild('checkbox') checkbox: ElementRef;
 
   constructor(
     private snackbarService: SnackBarService,
     private userDetailsService: UserService,
     private fb: FormBuilder,
-    @Self() @Optional() public control: NgControl
+    @Self() @Optional() public control: NgControl,
+    private controlContainer: ControlContainer
   ) {
     if (this.control) this.control.valueAccessor = this;
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.inputControl = this.controlContainer.control.get(this.formControlName);
+    if (this.inputControl.disabled) this.isDisable = this.inputControl.disabled;
+    this.addRequiredAsterisk();
+  }
 
+  addRequiredAsterisk() {
+    const validators = this.inputControl?.validator;
+    const isRequired =
+      validators && validators({} as AbstractControl)?.required;
+    if (this.label && isRequired) {
+      this.label = this.label + ' *';
+    }
+  }
   /**
    * @function processCheckboxChange
    * @description process checkbox change
    * @param event
    * @param index
+   *
    */
   processCheckboxChange(event, index) {
     if (event.target.checked) {
       this.featureValueIndex.push(index);
+
+      if (this.featureValueIndex.length >= 4) {
+        this.exceedFeatureLimit = true;
+      }
     } else {
+      this.exceedFeatureLimit = false;
+
       this.featureValueIndex = this.featureValueIndex?.filter(
         (item) => item !== index
       );
@@ -131,7 +157,7 @@ export class CustomFileUploadComponent
       this.fileUrls = [controlValue];
     } else if (typeof controlValue === 'object' && controlValue?.length) {
       if (this.isFeatureView) this.featureValueIndex = [];
-      this.fileUrls = Array(this.getImageLength(controlValue.length, this.unit))
+      this.fileUrls = Array(this.getImageCount(controlValue.length, this.unit))
         .fill(this.defaultImage)
         .map((item, idx) => {
           const value = controlValue[idx];
@@ -146,10 +172,11 @@ export class CustomFileUploadComponent
             return item;
           }
         });
+      this.exceedFeatureLimit = this.featureValueIndex.length >= 4;
     }
   }
 
-  getImageLength(currentLength: number, interval: number) {
+  getImageCount(currentLength: number, interval: number) {
     if (currentLength >= 1 && currentLength <= interval) {
       return interval;
     } else {
@@ -171,7 +198,7 @@ export class CustomFileUploadComponent
     formData.append('files', event.file);
     this.subscription$.add(
       this.userDetailsService
-        .uploadImage(this.hotelId, formData, this.path)
+        .uploadImage(this.entityId, formData, this.path)
         .subscribe(
           (response) => {
             if (this.unit == 1) {
@@ -240,7 +267,7 @@ export class CustomFileUploadComponent
           'error',
           null,
           'message.error.upload',
-          'File size can not be more than 3 MB'
+          'Upload failed: Unsupported format or file size over 5MB'
         );
       }
     }
@@ -285,12 +312,12 @@ export class CustomFileUploadComponent
     this.subscription$.add(
       forkJoin({
         videoFile: this.userDetailsService.uploadImage(
-          this.hotelId,
+          this.entityId,
           formData,
           this.path
         ),
         thumbnail: this.userDetailsService.uploadImage(
-          this.hotelId,
+          this.entityId,
           thumbnailData,
           this.path
         ),
@@ -306,7 +333,7 @@ export class CustomFileUploadComponent
   }
 
   checkFileType(extension: string) {
-    return this.uploadFileData.fileType.includes(extension);
+    return this.uploadFileData.fileType.includes(extension.toLocaleLowerCase());
   }
 
   removeImage(index: number) {
@@ -362,11 +389,11 @@ export class CustomFileUploadComponent
 
   getChangedData() {
     if (this.isFeatureView) {
-      const data: FeatureValue = this.fileUrls.map((item, index) => ({
+      let data: FeatureValue = this.fileUrls.map((item, index) => ({
         url: item,
         isFeatured: this.featureValueIndex.includes(index),
       }));
-      data.filter((item) => item.url !== this.defaultImage);
+      data = data.filter((item) => item.url !== this.defaultImage);
       return data;
     }
     const fileUrls = this.fileUrls.filter((item) => item !== this.defaultImage);

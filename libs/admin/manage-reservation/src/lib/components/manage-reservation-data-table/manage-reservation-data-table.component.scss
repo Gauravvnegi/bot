@@ -14,3 +14,38 @@
 .txtSize {
   font-size: 12px !important;
 }
+
+:host ::ng-deep {
+  .p-datatable {
+    @include tableHeadingStickyPosition(114px);
+  }
+}
+
+:host ::ng-deep .status-toggle {
+  .wrapper {
+    display: flex;
+  }
+}
+
+.rowData {
+  font-weight: $medium;
+  position: absolute;
+  right: 5px;
+  top: 8px;
+}
+
+.room-type-cell {
+  div {
+    padding: 3px;
+    &:hover {
+      color: $initiated-2;
+    }
+  }
+  width: 50% !important;
+  left: 75% !important;
+  bottom: -5px !important;
+}
+
+.tab-filter {
+  display: block;
+}

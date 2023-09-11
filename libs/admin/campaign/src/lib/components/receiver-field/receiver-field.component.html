@@ -35,7 +35,7 @@
       <div class="dropdown" *ngIf="enableDropdown" click-stop-propagation>
         <hospitality-bot-to-dropdown
           [value]="receiverField?.nativeElement?.value"
-          [hotelId]="hotelId"
+          [entityId]="entityId"
           [search]="search"
           [searchList]="searchList"
           (selectedList)="addItemFromDropdown($event)"

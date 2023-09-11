@@ -7,11 +7,13 @@ import { InhouseSentimentsComponent } from './components/inhouse-sentiments/inho
 import { InhouseSourceComponent } from './components/inhouse-source/inhouse-source.component';
 import { PreArrivalDatatableComponent } from './components/pre-arrival-datatable/pre-arrival-datatable.component';
 import { PreArrivalPackagesComponent } from './components/pre-arrival-packages/pre-arrival-packages.component';
+import { ComplaintAnalyticsComponent } from './components/complaint-analytics/complaint-analytics.component';
+import { ComplaintBifurcationComponent } from './components/stats/complaint-bifurcation/complaint-bifurcation.component';
 
 const appRoutes: Route[] = [
   {
     path: '',
-    component: AnalyticsComponent,
+    component: ComplaintAnalyticsComponent,
   },
 ];
 
@@ -28,5 +30,7 @@ export class AdminRequestAnalyticsRoutingModule {
     InhouseRequestDatatableComponent,
     PreArrivalPackagesComponent,
     PreArrivalDatatableComponent,
+    ComplaintAnalyticsComponent,
+    ComplaintBifurcationComponent,
   ];
 }

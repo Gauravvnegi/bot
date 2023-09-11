@@ -90,6 +90,15 @@ export class PackageRendererComponent
     // }
   }
 
+  extractImage(
+    images: {
+      isFeatured: boolean;
+      url: string;
+    }[]
+  ) {
+    return images?.find((item) => item.isFeatured)?.url;
+  }
+
   setSubPackageConfiguration() {
     this.subPackages?.controls?.forEach(() => {
       this.subPackageFieldConfig.push(this.setFieldConfiguration());

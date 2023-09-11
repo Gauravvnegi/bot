@@ -1,17 +1,23 @@
 import { Injectable } from '@angular/core';
 import { get } from 'lodash';
 import { BehaviorSubject } from 'rxjs';
-import { ModuleNames } from 'libs/admin/shared/src/index';
+import {
+  EntitySubType,
+  EntityType,
+  ModuleNames,
+} from 'libs/admin/shared/src/index';
 import { DateRangeFilterService } from './daterange-filter.service';
 import { FilterService } from './filter.service';
 
 @Injectable({ providedIn: 'root' })
 export class GlobalFilterService {
   selectedModule = new BehaviorSubject<ModuleNames | ''>('');
-  globalFilter$ = new BehaviorSubject({});
+  globalFilter$ = new BehaviorSubject<Partial<GlobalFilterData>>({});
   timezone: string;
-  hotelId: string;
-  globalFilterObj = {
+  entityId: string;
+  entityType: EntityType; //category
+  entitySubType: EntitySubType; // type
+  globalFilterObj: GlobalFilterData = {
     filter: {
       value: {},
       queryValue: [],
@@ -52,46 +58,111 @@ export class GlobalFilterService {
       }
     });
 
-    this.filterService.emitFilterValue$.subscribe((data) => {
-      if (Object.keys(data).length) {
-        this.globalFilterObj.filter.value = data;
-        this.globalFilterObj.filter.queryValue = [
-          { hotelId: get(data, ['property', 'branchName']) },
-          {
-            guestType: get(data, ['guest', 'guestType', 'isVip'])
-              ? 'VIP'
-              : null,
-          },
-          {
-            guestType: get(data, ['guest', 'guestType', 'isGeneral'])
-              ? 'GENERAL'
-              : null,
-          },
-          {
-            guestCategory: get(data, [
-              'guest',
-              'guestCategory',
-              'isRepeatedGuest',
-            ])
-              ? 'REPEATGUEST'
-              : null,
-          },
-          {
-            guestCategory: get(data, ['guest', 'guestCategory', 'isNewGuest'])
-              ? 'NEWGUEST'
-              : null,
-          },
-        ];
-        this.globalFilterObj.feedback.queryValue = [
-          {
-            type: get(data, ['feedback', 'feedbackType']),
-          },
-          {
-            outlets: get(data, ['outlets']),
-          },
-        ];
-        this.globalFilter$.next(this.globalFilterObj);
+    this.filterService.emitFilterValue$.subscribe(
+      (data: Partial<GlobalFilterData>) => {
+        if (Object.keys(data).length) {
+          this.globalFilterObj.filter.value = data;
+          this.globalFilterObj.filter.queryValue = [
+            { entityId: get(data, ['property', 'entityName']) },
+            {
+              guestType: get(data, ['guest', 'guestType', 'isVip'])
+                ? 'VIP'
+                : null,
+            },
+            {
+              guestType: get(data, ['guest', 'guestType', 'isGeneral'])
+                ? 'GENERAL'
+                : null,
+            },
+            {
+              guestCategory: get(data, [
+                'guest',
+                'guestCategory',
+                'isRepeatedGuest',
+              ])
+                ? 'REPEATGUEST'
+                : null,
+            },
+            {
+              guestCategory: get(data, ['guest', 'guestCategory', 'isNewGuest'])
+                ? 'NEWGUEST'
+                : null,
+            },
+          ];
+          this.globalFilterObj.feedback.queryValue = [
+            {
+              type: get(data, ['feedback', 'feedbackType']),
+            },
+            {
+              outlets: get(data, ['outlets']),
+            },
+          ];
+          this.globalFilter$.next(this.globalFilterObj);
+        }
       }
-    });
+    );
   }
+}
+
+type GlobalFilterData = {
+  filter: {
+    value: any;
+    queryValue: any[];
+  };
+  dateRange: {
+    value: any;
+    queryValue: any[];
+  };
+  feedback: {
+    value?: {
+      property?: {
+        brandName: string; //hotelName (prev)
+        entityName: string; //branchName (prev)
+      };
+      feedback?: {
+        feedbackType: string; //'STAYFEEDBACK'; 'TRANSACTIONALFEEDBACK', ALL
+      };
+      outlets?: any;
+    };
+    queryValue: any[];
+  };
+};
+
+export type FilterValue = {
+  property: {
+    brandName: string;
+    entityName: string;
+  };
+  feedback: {
+    feedbackType: string;
+  };
+  isAllOutletSelected: boolean;
+  outlets: {
+    [outletId: string]: boolean;
+  };
+};
+
+export type FilterQueryValue = {
+  entityId?: string;
+  guestType?: string | null;
+  guestCategory?: string | null;
+};
+
+
+export type DateRangeValue = {
+  end: string; // Assuming end is always a string in ISO 8601 format
+  label: string;
+  start: string; // Assuming start is always a string in ISO 8601 format
+};
+
+export type DateRangeQueryValue = {
+  toDate?: number;
+  fromDate?: number;
+};
+
+export type FeedbackQueryValue = {
+  type?: string;
+  outlets?: {
+    [outletId: string]: boolean;
+  };
 }

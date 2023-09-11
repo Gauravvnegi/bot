@@ -65,7 +65,7 @@ export class MainComponent implements OnInit, OnDestroy {
   listenForGlobalFilters(): void {
     this.$subscription.add(
       this.globalFilterService.globalFilter$.subscribe((data) => {
-        this.getOutlets(data['filter'].value.property.branchName);
+        this.getOutlets(data['filter'].value.property.entityName);
         this.feedbackType = data['filter'].value.feedback.feedbackType;
       })
     );
@@ -110,7 +110,7 @@ export class MainComponent implements OnInit, OnDestroy {
   getOutlets(branchId: string): void {
     this.outlets = this._hotelDetailService.hotels.find(
       (branch) => branch['id'] === branchId
-    ).outlets;
+    ).entities;
     this.outlets = [
       ...this.outlets,
       ...this._hotelDetailService.hotels.filter(

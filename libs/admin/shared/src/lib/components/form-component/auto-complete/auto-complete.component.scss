@@ -44,6 +44,13 @@
     inset: 0 0 0 0;
     border-color: $border-color;
 
+    &::placeholder {
+      font-size: 15px !important;
+      line-height: 1.07;
+      letter-spacing: 0.84px;
+      text-align: left;
+    }
+
     &:hover {
       border-color: $primary-form-color !important;
     }
@@ -111,7 +118,6 @@
     }
     display: flex;
     background-color: #e8e2ff !important;
-    font-family: Roboto;
     font-size: 0.7em;
     padding: 0.4em 0.6em !important;
     letter-spacing: 0.08em;
@@ -136,4 +142,19 @@
     color: $secondary-text-color;
     text-align: right;
   }
+}
+
+:host ::ng-deep input {
+  border-color: $border-color;
+
+  &::placeholder {
+    font-size: 15px !important;
+    line-height: 1.07 !important;
+    letter-spacing: 0.84px !important;
+    text-align: left !important;
+  }
+}
+
+.p-error {
+  bottom: -1.3em;
 }

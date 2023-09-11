@@ -7,6 +7,7 @@ import { SharedMaterialModule } from '@hospitality-bot/shared/material';
 import { NgCircleProgressModule } from 'ng-circle-progress';
 import { ChartsModule } from 'ng2-charts';
 import { AnalyticsService } from 'libs/admin/request-analytics/src/lib/services/analytics.service';
+import { AdminMessagesModule } from 'libs/admin/messages/src/lib/admin-messages.module';
 
 @NgModule({
   imports: [
@@ -17,6 +18,7 @@ import { AnalyticsService } from 'libs/admin/request-analytics/src/lib/services/
     ReactiveFormsModule,
     SharedMaterialModule,
     AdminSharedModule,
+    AdminMessagesModule,
     NgCircleProgressModule.forRoot(),
   ],
   declarations: [...AdminConversationAnalyticsRoutingModule.components],

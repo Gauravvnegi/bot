@@ -4,51 +4,26 @@ export const request = {
     { label: 'High', value: 'HIGH' },
     { label: 'ASAP', value: 'ASAP' },
   ],
-  status: [
-    { label: 'To-Do', value: 'Immediate' },
-    { label: 'Timeout', value: 'Timeout' },
-    { label: 'Closed', value: 'Closed' },
+
+  listBy: [
+    { label: 'All', value: 'ALL' },
+    { label: 'FOCUSED', value: 'FOCUSED' },
   ],
-  tabFilter: [
-    {
-      label: 'All',
-      content: '',
-      value: 'ALL',
-      disabled: false,
-      total: 0,
-      chips: [],
-    },
-    {
-      label: 'To-Do',
-      content: '',
-      value: 'Pending',
-      disabled: false,
-      total: 0,
-      chips: [],
-    },
-    {
-      label: 'Closed',
-      content: '',
-      value: 'Closed',
-      disabled: false,
-      total: 0,
-      chips: [],
-    },
-    {
-      label: 'Timed-Out',
-      content: '',
-      value: 'Timeout',
-      disabled: false,
-      total: 0,
-      chips: [],
-    },
-  ],
+
+  // status: [
+  //   { label: 'To-Do', value: 'Todo' },
+  //   // { label: 'To-Do', value: 'Immediate' },
+  //   { label: 'Timeout', value: 'Timeout' },
+  //   { label: 'Closed', value: 'Closed' },
+  // ],
+
+  defaultTabFilter: [{ label: 'All', value: 'ALL' }],
   filter: ['ASAP', 'High', 'Medium'],
   sort: [
     { label: 'Latest', value: '', order: '' },
-    { label: 'Room Ascending', value: 'roomNo', order: 'ASC' },
-    { label: 'Room Descending', value: 'roomNo', order: 'DESC' },
-    { label: 'Function Code', value: 'itemCode', order: 'ASC' },
+    { label: 'Room Ascending', value: 'room_number', order: 'ASC' },
+    { label: 'Room Descending', value: 'room_number', order: 'DESC' },
+    // { label: 'Function Code', value: 'itemCode', order: 'ASC' },
   ],
   cmsServices: 'cms services',
   kiosk: 'KIOSK',
@@ -82,3 +57,11 @@ export const request = {
     comment: { url: 'assets/svg/comments.svg', alt: 'comment' },
   },
 };
+
+export enum RequestStatus {
+  TODO = 'TODO',
+  IN_PROGRESS = 'IN_PROGRESS',
+  RESOLVED = 'RESOLVED',
+  CANCELED = 'CANCELED',
+  TIMEOUT = 'TIMEOUT',
+}

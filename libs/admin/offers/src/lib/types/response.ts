@@ -1,10 +1,10 @@
-import { EntityStateCountsResponse } from 'libs/admin/library/src/lib/types/response';
+import { EntityState } from '@hospitality-bot/admin/shared';
 
 export type OfferListResponse = {
   offers: OfferResponse[];
   total: number;
-  entityStateCounts: EntityStateCountsResponse;
-  entityTypeCounts: any;
+  entityStateCounts: EntityState<string>;
+  entityTypeCounts: EntityState<string>;
 };
 
 export type OfferResponse = {
@@ -16,9 +16,9 @@ export type OfferResponse = {
   endDate: number;
   active: boolean;
   packageCode: string;
-  imageUrl: string;
+  images;
   source: string;
-  hotelId: string;
+  entityId: string;
   autoAccept: boolean;
   hasChild: boolean;
   discountType: string;

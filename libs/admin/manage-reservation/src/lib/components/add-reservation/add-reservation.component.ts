@@ -1,195 +1,96 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
-import { Clipboard } from '@angular/cdk/clipboard';
 import {
-  ModalService,
-  SnackBarService,
-} from '@hospitality-bot/shared/material';
-import { RoomTypeListResponse } from 'libs/admin/room/src/lib/types/service-response';
-import {
-  AdminUtilityService,
-  ConfigService,
-  CountryCodeList,
-  NavRouteOptions,
-  Option,
-  Regex,
-} from 'libs/admin/shared/src';
-import { Subscription, forkJoin } from 'rxjs';
-import { roomFields, RoomFieldTypeOption } from '../../constants/reservation';
-import { ManageReservationService } from '../../services/manage-reservation.service';
-import {
-  BookingConfig,
-  BookingInfo,
   OfferData,
   OfferList,
-  PaymentMethodList,
-  RoomTypeOption,
-  RoomTypeOptionList,
+  ReservationFormData,
   SummaryData,
 } from '../../models/reservations.model';
-import { Location } from '@angular/common';
-import { ActivatedRoute, Router } from '@angular/router';
-import { ReservationFormData } from '../../models/reservations.model';
-import * as moment from 'moment';
-import { MatDialogConfig } from '@angular/material/dialog';
-import { ModalComponent } from 'libs/admin/shared/src/lib/components/modal/modal.component';
-import { ReservationResponse } from '../../types/response.type';
-import { manageReservationRoutes } from '../../constants/routes';
+import { ManageReservationService } from '../../services/manage-reservation.service';
+import {
+  AdminUtilityService,
+  EntitySubType,
+  Option,
+} from '@hospitality-bot/admin/shared';
+import { roomFields, roomReservationTypes } from '../../constants/reservation';
+import { FormService } from '../../services/form.service';
+import { debounceTime } from 'rxjs/operators';
+import { OccupancyDetails, ReservationSummary } from '../../types/forms.types';
+import {
+  BookingItemsSummary,
+  RoomReservationResponse,
+} from '../../types/response.type';
+import { BaseReservationComponent } from '../base-reservation.component';
+import { ReservationType } from '../../constants/reservation-table';
+import { convertToTitleCase } from 'libs/admin/shared/src/lib/utils/valueFormatter';
 
 @Component({
   selector: 'hospitality-bot-add-reservation',
   templateUrl: './add-reservation.component.html',
-  styleUrls: ['./add-reservation.component.scss'],
+  styleUrls: ['./add-reservation.component.scss', '../reservation.styles.scss'],
 })
-export class AddReservationComponent implements OnInit {
-  userForm: FormGroup;
-  hotelId: string;
-  reservationId: string;
-  roomTypes: RoomFieldTypeOption[] = [];
-  paymentOptions: Option[] = [];
-  currencies: Option[] = [];
+export class AddReservationComponent extends BaseReservationComponent
+  implements OnInit, OnDestroy {
+  roomTypeValues = [];
   reservationTypes: Option[] = [];
-  offersList: OfferList;
-  selectedOffer: OfferData;
-  globalQueries = [];
-  roomTypeOffSet = 0;
-  roomTypeLimit = 10;
-  countries: Option[] = [];
-  summaryData: SummaryData;
-  configData: BookingConfig;
-  roomFields = roomFields;
-  loading = false;
-  displayBookingOffer: boolean = false;
-  formValueChanges = false;
-  disabledForm = false;
-  startMinDate = new Date();
-  endMinDate = new Date();
-  isBooking = false;
+  roomTypeIds: string[] = [];
+  expandAccordion = false;
 
-  pageTitle = 'Add Booking';
-  routes: NavRouteOptions = [
-    { label: 'eFrontdesk', link: './' },
-    { label: 'Booking', link: '/pages/efrontdesk/manage-reservation' },
-    { label: 'Add Booking', link: './' },
-  ];
+  // Booking Summary props
+  occupancyDetails: OccupancyDetails = {
+    adultCount: 0,
+    childCount: 0,
+    roomCount: 0,
+  };
+  totalPaidAmount = 0;
 
-  $subscription = new Subscription();
   constructor(
     private fb: FormBuilder,
     private adminUtilityService: AdminUtilityService,
-    private globalFilterService: GlobalFilterService,
-    private snackbarService: SnackBarService,
+    protected globalFilterService: GlobalFilterService,
     private manageReservationService: ManageReservationService,
-    private location: Location,
-    private router: Router,
     protected activatedRoute: ActivatedRoute,
-    private configService: ConfigService,
-    private modalService: ModalService,
-    private _clipboard: Clipboard
+    private formService: FormService
   ) {
-    this.endMinDate.setDate(this.startMinDate.getDate() + 1);
-    this.endMinDate.setTime(this.endMinDate.getTime() - 5 * 60 * 1000);
-    this.initForm();
+    super(globalFilterService, activatedRoute);
   }
 
   ngOnInit(): void {
-    this.hotelId = this.globalFilterService.hotelId;
-    this.getCountryCode();
-    this.listenForGlobalFilters();
+    this.initForm();
+    this.initDetails();
+    if (this.reservationId) this.getReservationDetails();
+    this.initFormData();
+  }
+
+  initDetails() {
+    this.expandAccordion = this.formService.enableAccordion;
+
+    // Expand accordion for assign room from reservation table.
+    if (this.expandAccordion) {
+      this.formService.enableAccordion = false;
+    }
+
+    this.reservationTypes = roomReservationTypes;
+    this.fields = roomFields;
+    this.bookingType = EntitySubType.ROOM_TYPE;
   }
 
   /**
    * @function initForm Initialize form
    */
   initForm(): void {
-    const startTime = moment(this.startMinDate).unix() * 1000;
-    const endTime = moment(this.endMinDate).unix() * 1000;
-
     this.userForm = this.fb.group({
-      bookingInformation: this.fb.group({
-        from: [startTime, Validators.required],
-        to: [endTime, Validators.required],
+      reservationInformation: this.fb.group({
+        from: ['', Validators.required],
+        to: ['', Validators.required],
         reservationType: ['', Validators.required],
         source: ['', Validators.required],
-        sourceName: ['', [Validators.required, Validators.maxLength(60)]],
+        sourceName: [''],
         marketSegment: ['', Validators.required],
       }),
-      guestInformation: this.fb.group({
-        firstName: ['', [Validators.required, Validators.maxLength(60)]],
-        lastName: ['', [Validators.required, Validators.maxLength(60)]],
-        email: [
-          '',
-          [Validators.required, Validators.pattern(Regex.EMAIL_REGEX)],
-        ],
-        countryCode: ['', Validators.required],
-        phoneNumber: [
-          '',
-          [Validators.required, Validators.pattern(Regex.NUMBER_REGEX)],
-        ],
-      }),
-      address: this.fb.group({
-        addressLine1: ['', [Validators.required]],
-        city: ['', [Validators.required]],
-        countryCode: ['', [Validators.required]],
-        state: ['', [Validators.required]],
-        postalCode: ['', [Validators.required]],
-      }),
-      paymentMethod: this.fb.group({
-        totalPaidAmount: [
-          '',
-          [Validators.pattern(Regex.DECIMAL_REGEX), Validators.min(1)],
-        ],
-        currency: [''],
-        paymentMethod: [''],
-        paymentRemark: ['', [Validators.maxLength(60)]],
-      }),
       offerId: [''],
-    });
-  }
-
-  getCountryCode(): void {
-    this.configService
-      .getColorAndIconConfig(this.hotelId)
-      .subscribe((response) => {
-        this.configData = new BookingConfig().deserialize(
-          response.bookingConfig
-        );
-        this.configData.source = this.configData.source.filter(
-          (item) => item.value !== 'CREATE_WITH' && item.value !== 'OTHERS'
-        );
-      });
-    this.configService.getCountryCode().subscribe((res) => {
-      const data = new CountryCodeList().deserialize(res);
-      this.countries = data.records;
-    });
-    this.configService.$config.subscribe((value) => {
-      if (value) {
-        const { currencyConfiguration } = value;
-        this.currencies = currencyConfiguration.map(({ key, value }) => ({
-          label: key,
-          value,
-        }));
-        this.userForm.get('paymentMethod').patchValue({
-          currency: this.currencies[0].value,
-        });
-      }
-    });
-  }
-
-  /**
-   * @function listenForGlobalFilters To listen for global filters and load data when filter value is changed.
-   */
-  listenForGlobalFilters(): void {
-    this.globalFilterService.globalFilter$.subscribe((data) => {
-      // set-global query everytime global filter changes
-      this.globalQueries = [
-        ...data['filter'].queryValue,
-        ...data['dateRange'].queryValue,
-      ];
-      this.getInitialData();
-      this.getRoomType(this.globalQueries);
-      this.getReservationId();
     });
   }
 
@@ -197,130 +98,133 @@ export class AddReservationComponent implements OnInit {
    * @function listenForFormChanges Listen for form values changes.
    */
   listenForFormChanges(): void {
-    this.userForm
-      .get('roomInformation.roomTypeId')
-      ?.valueChanges.subscribe((res) => {
-        if (res) {
-          this.userForm.get('offerId').reset();
-          this.getOfferByRoomType(res);
+    this.formValueChanges = true;
+    this.inputControls.roomInformation
+      .get('roomTypes')
+      .valueChanges.pipe(debounceTime(1000))
+      .subscribe((res) => {
+        const roomTypeIds = res.map((item) => item.roomTypeId);
+        // check if the last added room type is selected
+        if (res && res[res.length - 1].roomTypeId?.length) {
+          this.getOfferByRoomType(roomTypeIds);
           this.getSummaryData();
         }
-      });
-    this.userForm
-      .get('roomInformation.roomCount')
-      ?.valueChanges.subscribe((res) => {
-        if (res) {
-          if (
-            this.userForm.get('roomInformation.roomCount').value >
-            this.userForm.get('roomInformation.adultCount').value
-          )
-            this.userForm
-              .get('roomInformation.adultCount')
-              .patchValue(this.userForm.get('roomInformation.roomCount').value);
+
+        // Reset summary when all items are removed from roomArray.
+        if (res[res.length - 1].roomTypeId === null) {
+          this.summaryData = new SummaryData().deserialize();
+          this.occupancyDetails = {
+            adultCount: 0,
+            childCount: 0,
+            roomCount: 0,
+          };
         }
       });
-  }
 
-  getInitialData(): void {
-    this.$subscription.add(
-      this.manageReservationService.getPaymentMethod(this.hotelId).subscribe(
-        (response) => {
-          const types = new PaymentMethodList()
-            .deserialize(response)
-            .records.map((item) => item.type);
-          const labels = [].concat(
-            ...types.map((array) => array.map((item) => item.label))
-          );
-          this.paymentOptions = labels.map((label) => ({
-            label: label,
-            value: label,
-          }));
-        },
-        (error) => {}
-      )
+    // Listen changes in reservation Type.
+    this.reservationInfoControls.reservationType.valueChanges.subscribe(
+      (res) => {
+        // Disable roomNumber field if the reservation type is draft.
+        if (res === ReservationType.DRAFT) {
+          this.roomControls.forEach((item) => {
+            item.get('roomNumbers').patchValue([], { emitEvent: false });
+          });
+          this.fields[3].disabled = true;
+        } else {
+          this.fields[3].disabled = false;
+        }
+      }
     );
   }
 
-  getReservationId(): void {
+  initFormData() {
     this.$subscription.add(
-      this.activatedRoute.params.subscribe((params) => {
-        if (params['id']) {
-          this.reservationId = params['id'];
-          this.pageTitle = 'Edit Booking';
-          this.routes[2].label = 'Edit Booking';
-          this.reservationTypes = [
-            { label: 'Draft', value: 'DRAFT' },
-            { label: 'Confirmed', value: 'CONFIRMED' },
-            { label: 'Cancelled', value: 'CANCELED' },
-          ];
-          this.getReservationDetails();
-        } else {
-          this.reservationTypes = [
-            { label: 'Draft', value: 'DRAFT' },
-            { label: 'Confirmed', value: 'CONFIRMED' },
-          ];
-          this.userForm.valueChanges.subscribe((_) => {
-            if (!this.formValueChanges) {
-              this.formValueChanges = true;
-              this.listenForFormChanges();
-            }
-          });
-        }
-      })
+      this.formService.reservationForm
+        .pipe(debounceTime(500))
+        .subscribe((res) => {
+          if (res) {
+            const { roomInformation, ...formData } = res;
+            // check if room type was patched
+            if (roomInformation.roomTypes[0].roomTypeId.length)
+              this.roomTypeValues = roomInformation.roomTypes;
+            this.userForm.patchValue(formData);
+          }
+        })
     );
   }
 
   getReservationDetails(): void {
     this.$subscription.add(
       this.manageReservationService
-        .getReservationDataById(this.reservationId, this.hotelId)
+        .getReservationDataById(this.reservationId, this.entityId)
         .subscribe(
-          (response) => {
+          (response: RoomReservationResponse) => {
             const data = new ReservationFormData().deserialize(response);
-            this.userForm.patchValue(data);
-            this.summaryData = new SummaryData().deserialize(response);
-            this.setFormDisability(data.bookingInformation);
-            if (data.offerId)
-              this.getOfferByRoomType(
-                this.userForm.get('roomInformation.roomTypeId').value
-              );
-            this.userForm.valueChanges.subscribe((_) => {
-              if (!this.formValueChanges) {
-                this.formValueChanges = true;
-                this.listenForFormChanges();
-              }
+            const {
+              guestInformation,
+              roomInformation,
+              nextStates,
+              totalPaidAmount,
+              reservationInformation: {
+                source,
+                sourceName,
+                ...reservationInfo
+              },
+              ...formData
+            } = data;
+
+            this.formService.sourceData.next({
+              source: source,
+              sourceName: sourceName,
             });
+
+            if (nextStates)
+              this.reservationTypes = nextStates.map((item) => ({
+                label: convertToTitleCase(item),
+                value: item,
+              }));
+
+            this.totalPaidAmount = totalPaidAmount;
+            this.formValueChanges = true;
+
+            // Create options for room and guest if not already available
+            // in room iterator and guest info component.
+            this.roomTypeValues = roomInformation;
+            this.formService.guestInformation.next(guestInformation);
+
+            this.userForm.patchValue({
+              reservationInformation: reservationInfo,
+              formData,
+            });
+            this.inputControls.offerId.patchValue(data.offerId);
+            if (data.offerId) {
+              const roomTypeIds = roomInformation.map(
+                (item) => item.roomTypeId
+              );
+              this.getOfferByRoomType(roomTypeIds);
+            }
           },
           (error) => {}
         )
     );
   }
 
-  setFormDisability(data: BookingInfo): void {
-    this.userForm.get('bookingInformation.source').disable();
-    switch (true) {
-      case data.reservationType === 'CONFIRMED':
-        this.userForm.disable();
-        this.disabledForm = true;
-        break;
-      case data.reservationType === 'CANCELED':
-        this.userForm.disable();
-        this.disabledForm = true;
-        break;
-      case data.source === 'CREATE_WITH':
-        this.disabledForm = true;
-        break;
-      case data.source === 'OTHERS':
-        this.disabledForm = true;
-        break;
-    }
-  }
-
-  getOfferByRoomType(id: string): void {
-    if (id)
+  getOfferByRoomType(roomTypeIds: string[]): void {
+    const config = {
+      params: this.adminUtilityService.makeQueryParams([
+        {
+          pagination: false,
+          type: 'OFFER',
+          source: 1,
+          serviceIds: roomTypeIds,
+        },
+      ]),
+    };
+    // get offers for all roomTypes
+    if (roomTypeIds.length)
       this.$subscription.add(
         this.manageReservationService
-          .getOfferByRoomType(this.hotelId, id)
+          .getOfferByRoomType(this.entityId, config)
           .subscribe(
             (response) => {
               this.offersList = new OfferList().deserialize(response);
@@ -337,7 +241,6 @@ export class AddReservationComponent implements OnInit {
 
   offerSelect(offerData?: OfferData): void {
     if (offerData) {
-      this.displayBookingOffer = !this.displayBookingOffer;
       this.userForm.patchValue({ offerId: offerData.id });
       this.getSummaryData();
     } else {
@@ -348,232 +251,85 @@ export class AddReservationComponent implements OnInit {
   }
 
   getSummaryData(): void {
-    const defaultProps = [
-      {
-        type: 'ROOM_TYPE',
-        fromDate: this.userForm.get('bookingInformation.from')?.value,
-        toDate: this.userForm.get('bookingInformation.to')?.value,
-        adultCount: this.userForm.get('roomInformation.adultCount')?.value || 1,
-        roomCount: this.userForm.get('roomInformation.roomCount')?.value || 1,
-        childCount: this.userForm.get('roomInformation.childCount')?.value || 0,
-        roomType: this.userForm.get('roomInformation.roomTypeId')?.value,
-        offerId: this.userForm.get('offerId')?.value,
-        entityId: this.hotelId,
-      },
-    ];
     const config = {
-      params: this.adminUtilityService.makeQueryParams(defaultProps),
+      params: this.adminUtilityService.makeQueryParams([
+        { type: EntitySubType.ROOM_TYPE },
+      ]),
     };
-    if (this.userForm.get('roomInformation.roomTypeId')?.value)
-      this.$subscription.add(
-        this.manageReservationService.getSummaryData(config).subscribe(
+
+    // Summary data for booking summary
+    const data: ReservationSummary = {
+      from: this.reservationInfoControls.from.value,
+      to: this.reservationInfoControls.to.value,
+      bookingItems: this.roomControls.map((item) => ({
+        roomDetails: {
+          ratePlan: {
+            id: item.get('ratePlan').value,
+          },
+          roomTypeId: item.get('roomTypeId').value,
+          roomCount: item.get('roomCount').value,
+        },
+        occupancyDetails: {
+          maxChildren: item.get('childCount').value,
+          maxAdult: item.get('adultCount').value,
+        },
+      })),
+      offerId: this.inputControls.offerId.value
+        ? this.inputControls.offerId.value
+        : null,
+      guestId: this.inputControls.guestInformation.get('guestDetails')?.value,
+    };
+
+    this.$subscription.add(
+      this.manageReservationService
+        .getSummaryData(this.entityId, data, config)
+        .subscribe(
           (res) => {
-            this.summaryData = new SummaryData().deserialize(res);
-            this.userForm
-              .get('roomInformation')
-              .patchValue(this.summaryData, { emitEvent: false });
+            this.summaryData = new SummaryData()?.deserialize(res);
+            if (this.totalPaidAmount) {
+              this.summaryData.totalPaidAmount = this.totalPaidAmount;
+            }
+
+            // Modify data to show summary for occupancy details.
+            this.updateBookingItemsCounts(this.summaryData.bookingItems);
+
+            // Set value and validators for payment according to the summaryData.
             this.userForm
               .get('paymentMethod.totalPaidAmount')
-              .setValidators([Validators.max(this.summaryData.totalAmount)]);
+              .setValidators([Validators.max(this.summaryData?.totalAmount)]);
             this.userForm
               .get('paymentMethod.totalPaidAmount')
               .updateValueAndValidity();
+
+            // Needs to be changed according to api.
+            this.userForm
+              .get('paymentRule.deductedAmount')
+              .patchValue(this.summaryData?.totalAmount);
+            this.deductedAmount = this.summaryData?.totalAmount;
+
+            if (this.formValueChanges) {
+              this.setFormDisability();
+              this.formValueChanges = false;
+            }
           },
           (error) => {}
         )
-      );
-  }
-
-  handleBooking(): void {
-    this.isBooking = true;
-    const data = this.manageReservationService.mapReservationData(
-      this.userForm.getRawValue()
-    );
-    if (this.reservationId) this.updateReservation(data);
-    else this.createReservation(data);
-  }
-
-  createReservation(data): void {
-    this.$subscription.add(
-      this.manageReservationService
-        .createReservation(this.hotelId, data)
-        .subscribe(
-          (res: ReservationResponse) => {
-            this.bookingConfirmationPopup(res?.reservationNumber);
-          },
-          (error) => {
-            this.isBooking = false;
-          },
-          () => {
-            this.isBooking = false;
-          }
-        )
     );
   }
 
-  updateReservation(data): void {
-    this.$subscription.add(
-      this.manageReservationService
-        .updateReservation(this.hotelId, this.reservationId, data)
-        .subscribe(
-          (res: ReservationResponse) => {
-            this.bookingConfirmationPopup(res?.reservationNumber);
-          },
-          (error) => {
-            this.isBooking = false;
-          },
-          () => {
-            this.isBooking = false;
-          }
-        )
-    );
-  }
-
-  /**
-   * @function bookingConfirmationPopup
-   */
-  bookingConfirmationPopup(number?): void {
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.disableClose = true;
-    const togglePopupCompRef = this.modalService.openDialog(
-      ModalComponent,
-      dialogConfig
-    );
-    togglePopupCompRef.componentInstance.content = {
-      heading: `Booking ${
-        this.reservationId ? 'Updated' : 'Created'
-      } Successfully`,
-
-      description: [
-        `Congratulations! Your booking has been ${
-          this.reservationId ? 'updated' : 'created'
-        } successfully.`,
-        ` Your confirmation number is ${number}.`,
-        // "Keep this number safe as you'll need it for any future inquiries or changes to your reservation.",
-      ],
-    };
-    togglePopupCompRef.componentInstance.actions = [
-      {
-        label: 'Continue Booking',
-        onClick: () => {
-          this.router.navigate(
-            [
-              `/pages/efrontdesk/manage-reservation/${manageReservationRoutes.addReservation.route}`,
-            ],
-            { replaceUrl: true }
-          );
-          // this.userForm.reset();
-          this.initForm();
-          this.modalService.close();
-        },
-        variant: 'outlined',
+  // Get room adult and child count for all room types
+  updateBookingItemsCounts(bookingItems: BookingItemsSummary[]) {
+    const totalValues = bookingItems.reduce(
+      (acc, bookingItem) => {
+        acc.adultCount += bookingItem.maxAdult;
+        acc.childCount += bookingItem.maxChildren;
+        acc.roomCount += bookingItem.roomCount;
+        return acc;
       },
-      {
-        label: 'Copy Confirmation number',
-        onClick: () => {
-          this.copiedConfirmationNumber(number);
-          this.modalService.close();
-          this.location.back();
-        },
-        variant: 'contained',
-      },
-    ];
-    togglePopupCompRef.componentInstance.onClose.subscribe(() => {
-      this.modalService.close();
-      this.location.back();
-    });
-  }
-
-  copiedConfirmationNumber(number): void {
-    this._clipboard.copy(number);
-    this.snackbarService.openSnackBarAsText('Confirmation number copied', '', {
-      panelClass: 'success',
-    });
-  }
-
-  /**
-   * @function handleOfferView handle offer view.
-   */
-  handleOfferView(): void {
-    this.displayBookingOffer = !this.displayBookingOffer;
-  }
-
-  /**
-   * @function searchRoomTypes To search categories
-   * @param text search text
-   */
-  searchRoomTypes(text: string): void {
-    if (text) {
-      this.manageReservationService
-        .searchLibraryItem(this.hotelId, {
-          params: `?key=${text}&type=ROOM_TYPE`,
-        })
-        .subscribe(
-          (res: any) => {
-            const data = res;
-            this.roomTypes =
-              data.ROOM_TYPE?.filter((item) => item.status).map((item) => {
-                new RoomTypeOption().deserialize(item);
-                return {
-                  label: item.name,
-                  value: item.id,
-                  roomCount: item.roomCount,
-                  maxChildren: item.maxChildren,
-                  maxAdult: item.maxAdult,
-                };
-              }) ?? [];
-            roomFields[0].options = this.roomTypes;
-          },
-          (error) => {}
-        );
-    } else {
-      this.roomTypeOffSet = 0;
-      this.roomTypes = [];
-      this.getRoomType(this.globalQueries);
-    }
-  }
-
-  /**
-   * @function loadMoreRoomTypes load more categories options
-   */
-  loadMoreRoomTypes(): void {
-    this.roomTypeOffSet = this.roomTypeOffSet + 10;
-    this.getRoomType(this.globalQueries);
-  }
-
-  /**
-   * @function getRoomType to get room types.
-   * @param queries global Queries.
-   */
-  getRoomType(queries): void {
-    queries = [
-      ...queries,
-      {
-        type: 'ROOM_TYPE',
-        offset: this.roomTypeOffSet,
-        limit: this.roomTypeLimit,
-      },
-    ];
-    const config = {
-      params: this.adminUtilityService.makeQueryParams(queries),
-    };
-    this.$subscription.add(
-      this.manageReservationService
-        .getRoomTypeList<RoomTypeListResponse>(this.hotelId, config)
-        .subscribe((response) => {
-          const data = new RoomTypeOptionList()
-            .deserialize(response)
-            .records.map((item) => ({
-              label: item.name,
-              value: item.id,
-              roomCount: item.roomCount,
-              maxChildren: item.maxChildren,
-              maxAdult: item.maxAdult,
-            }));
-          this.roomTypes = [...this.roomTypes, ...data];
-          roomFields[0].options = this.roomTypes;
-        })
+      { adultCount: 0, childCount: 0, roomCount: 0 } // Initial values for reduce
     );
+    this.occupancyDetails = totalValues;
+    // set occupancy details to display in summary.
   }
 
   /**
@@ -581,5 +337,15 @@ export class AddReservationComponent implements OnInit {
    */
   ngOnDestroy(): void {
     this.$subscription.unsubscribe();
+  }
+
+  get roomControls() {
+    return ((this.userForm.get('roomInformation') as FormGroup).get(
+      'roomTypes'
+    ) as FormArray).controls;
+  }
+
+  get roomInfoControls() {
+    return this.userForm.get('roomInformation') as FormGroup;
   }
 }

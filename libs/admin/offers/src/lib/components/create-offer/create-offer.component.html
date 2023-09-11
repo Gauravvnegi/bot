@@ -1,4 +1,4 @@
-<div class="wrapper">
+<div class="wrapper" [id]="fa.referenceId">
   <hospitality-bot-navigation-header
     [heading]="offerId ? 'Edit Offer' : 'Create Offer'"
     [routes]="routes"
@@ -33,8 +33,8 @@
 
     <hospitality-bot-custom-file-upload
       class="full-width"
-      formControlName="imageUrl"
-      [hotelId]="hotelId"
+      formControlName="images"
+      [entityId]="entityId"
       [label]="'Image'"
       [description]="
         'This image will also reflect on Webapp and on your services'
@@ -72,7 +72,7 @@
       class="half-width"
       preControlName="discountType"
       postControlName="discountValue"
-      label="Discount Type"
+      label="Discount"
       [options]="discount"
       [defaultProps]="{ post: { type: 'number' } }"
       [props]="{
@@ -85,19 +85,22 @@
       }"
     ></hospitality-bot-prefix-field>
 
-    <hospitality-bot-view-input
+    <!-- <hospitality-bot-view-input
       class="half-width"
       label="Discount Price"
       controlName="discountedPrice"
       [strikeValue]="useForm.get('rate').value"
       [suffix]="currency"
     >
-    </hospitality-bot-view-input>
-
-    <hospitality-bot-button
-      class="create-btn"
-      [label]="offerId ? 'Update' : 'Create'"
-      (onClick)="handleSubmit()"
-    ></hospitality-bot-button>
+    </hospitality-bot-view-input> -->
+    <hospitality-bot-form-action
+      class="full-width"
+      [loading]="loading"
+      [isId]="offerId"
+      (onPreAction)="resetForm()"
+      (onPostAction)="handleSubmit()"
+      #fa
+    >
+    </hospitality-bot-form-action>
   </div>
 </div>

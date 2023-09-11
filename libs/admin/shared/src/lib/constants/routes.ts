@@ -15,20 +15,23 @@ export const routes = {
   // Front Desk
   [ModuleNames.FRONT_DESK]: 'efrontdesk',
   [ModuleNames.FRONT_DESK_DASHBOARD]: 'efrontdesk/dashboard',
-  [ModuleNames.REQUEST_DASHBOARD]: 'efrontdesk/request-analytics',
-  [ModuleNames.REQUEST]: 'efrontdesk/request',
-  [ModuleNames.ADD_RESERVATION]: 'efrontdesk/manage-reservation',
+  [ModuleNames.IN_HOUSE_GUEST]: 'efrontdesk/in-house-guest',
+  [ModuleNames.REQUEST_DASHBOARD]: 'efrontdesk/complaint-analytics',
+  [ModuleNames.REQUEST]: 'efrontdesk/complaint',
+  [ModuleNames.ADD_RESERVATION]: 'efrontdesk/reservation',
+  [ModuleNames.ROOM]: 'efrontdesk/room',
 
   // Freddie
   [ModuleNames.FREDDIE]: 'freddie',
   [ModuleNames.CONVERSATION_DASHBOARD]: 'freddie/conversation-analytics',
   [ModuleNames.LIVE_MESSAGING]: 'freddie/messages',
-  [ModuleNames.SENTIMENTAL_ANALYSIS_FREDDIE]: 'freddie/sentimental-analysis',
+  // [ModuleNames.SENTIMENTAL_ANALYSIS_FREDDIE]: 'freddie/sentimental-analysis',
 
   // Hedda
   [ModuleNames.HEDA]: 'heda',
   [ModuleNames.HEDA_DASHBOARD]: 'heda/analytics',
   [ModuleNames.SENTIMENTAL_ANALYSIS_HEDA]: 'heda/sentimental-analysis',
+  [ModuleNames.FEEDBACK]: 'heda/feedback',
 
   // eMarkt_IT
   [ModuleNames.EMARK_IT]: 'marketing',
@@ -49,17 +52,38 @@ export const routes = {
 
   // Inventory
   [ModuleNames.INVENTORY]: 'inventory',
-  [ModuleNames.ROOM]: 'inventory/room',
+  // [ModuleNames.ROOM]: 'inventory/room',
 
   // FINANCE
   [ModuleNames.FINANCE]: 'finance',
+  [ModuleNames.INVOICE]: 'finance/invoice',
+  [ModuleNames.TRANSACTIONS]: 'finance/transactions',
 
-  // GUESTS
-  [ModuleNames.GUESTS]: 'guest',
-  [ModuleNames.GUESTS_DASHBOARD]: 'guest/dashboard',
+  // MEMBERS
+  [ModuleNames.MEMBERS]: 'members',
+  [ModuleNames.GUESTS]: 'members/guests',
+  [ModuleNames.GUEST_DASHBOARD]: 'members/guest-dashboard',
+  [ModuleNames.AGENT]: 'members/agent',
+  [ModuleNames.COMPANY]: 'members/company',
 
   // SETTINGS
   [ModuleNames.SETTINGS]: 'settings',
+
+  //OUTLET
+  // [ModuleNames.OUTLET]: 'outlet',
+  // [ModuleNames.OUTLETS_DASHBOARD]: 'outlet/dashboard',
+  // [ModuleNames.ALL_OUTLETS]: 'outlet/all-outlets',
+
+  //CHANNEL_MANAGER
+  [ModuleNames.CHANNEL_MANAGER]: 'channel-manager',
+  [ModuleNames.MANAGE_RATE]: 'channel-manager/update-rates',
+  [ModuleNames.MANAGE_INVENTORY]: 'channel-manager/update-inventory',
+  [ModuleNames.DYNAMIC_PRICING]: 'channel-manager/dynamic-pricing',
+
+  //REVENUE_MANAGER
+  [ModuleNames.REVENUE_MANAGER]: 'revenue-manager',
+  [ModuleNames.REVENUE_DYNAMIC_PRICING]: 'revenue-manager/dynamic-pricing',
+  [ModuleNames.REVENUE_SETUP_BAR_PRICE]: 'revenue-manager/setup-bar-price',
 
   RoleAndPermission: 'roles-permissions',
 };

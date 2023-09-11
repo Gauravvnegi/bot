@@ -22,9 +22,9 @@ export const cols: Cols[] = [
     isSearchDisabled: true,
   },
   {
-    field: 'package',
+    field: 'status',
     header: 'Active',
-    isSortDisabled: true,
+    sortType: 'number',
     isSearchDisabled: true,
   },
 ];

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
@@ -7,10 +7,11 @@ import {
   NavRouteOptions,
 } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
+import { OutletFormService } from 'libs/admin/all-outlets/src/lib/services/outlet-form.service';
 import { Subscription } from 'rxjs';
 import { businessRoute } from '../../constant/routes';
-import { BrandResponse } from '../../models/brand.model';
 import { BusinessService } from '../../services/business.service';
+import { HotelFormDataService } from '../../services/hotel-form.service';
 import { BrandFormData } from '../../types/brand.type';
 
 @Component({
@@ -23,7 +24,7 @@ export class BrandInfoFormComponent implements OnInit {
   code: string = '# will be auto generated';
   useForm: FormGroup;
   $subscription = new Subscription();
-  hotelId: string;
+  entityId: string;
   loading: boolean = false;
   brandId: string = '';
   isBrandCreated: boolean = false;
@@ -38,7 +39,9 @@ export class BrandInfoFormComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private hotelDetailService: HotelDetailService,
-    private businessService: BusinessService
+    private businessService: BusinessService,
+    private hotelFormDataService: HotelFormDataService,
+    private outletFormService: OutletFormService
   ) {
     this.brandId = this.route.snapshot.paramMap.get('brandId');
     const { navRoutes, title } = businessRoute[
@@ -46,10 +49,12 @@ export class BrandInfoFormComponent implements OnInit {
     ];
     this.pageTitle = title;
     this.navRoutes = navRoutes;
+    this.hotelFormDataService.resetHotelInfoFormData();
+    this.outletFormService.resetOutletFormData();
   }
 
   ngOnInit(): void {
-    this.hotelId = this.globalFilterService.hotelId;
+    this.entityId = this.globalFilterService.entityId;
     this.siteId = this.hotelDetailService.siteId;
     this.initForm();
   }
@@ -73,15 +78,19 @@ export class BrandInfoFormComponent implements OnInit {
     if (this.brandId) {
       this.loading = true;
       this.$subscription.add(
-        this.businessService.getBrandById(this.brandId).subscribe((res) => {
-          this.useForm.get('brand').patchValue(res);
-          this.code = res.brandCode;
-        }, this.handelError)
+        this.businessService.getBrandById(this.brandId).subscribe(
+          (res) => {
+            this.useForm.get('brand').patchValue(res);
+            this.code = res.brandCode;
+          },
+          this.handelError,
+          this.handelFinal
+        )
       );
     }
   }
 
-  handleSubmit() {
+  submitForm() {
     if (this.useForm.invalid) {
       this.useForm.markAllAsTouched();
       this.snackbarService.openSnackBarAsText(
@@ -104,20 +113,16 @@ export class BrandInfoFormComponent implements OnInit {
       );
     } else {
       this.$subscription.add(
-        this.businessService.createBrand(data).subscribe(
-          (res) => {
-            this.handleSuccess();
-            this.router.navigate([
-              `pages/settings/business-info/brand/${res.id}`,
-            ]);
-          },
-          this.handelError,
-          this.handleSuccess
-        )
+        this.businessService.createBrand(data).subscribe((res) => {
+          this.handleSuccess();
+          this.router.navigate([
+            `pages/settings/business-info/brand/${res.id}`,
+          ]);
+        }, this.handelError)
       );
     }
   }
-  handleReset() {
+  resetForm() {
     this.useForm.reset();
   }
 

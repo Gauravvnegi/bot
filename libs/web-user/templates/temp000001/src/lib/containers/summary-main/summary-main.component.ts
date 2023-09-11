@@ -29,7 +29,7 @@ export class SummaryMainComponent implements OnInit, OnDestroy {
     const journey = this._hotelService.getCurrentJourneyConfig();
     this.$subscription.add(
       this._paymentDetailsService
-        .getPaymentConfiguration(this.reservationData.hotel.id, journey.name)
+        .getPaymentConfiguration(this.reservationData.entity.id, journey.name)
         .subscribe((response) => {
           this._paymentDetailsService.initPaymentDetailDS(
             this.reservationData,
@@ -44,8 +44,8 @@ export class SummaryMainComponent implements OnInit, OnDestroy {
       this._reservationService
         .getReservationDetails(this._reservationService.reservationId)
         .subscribe((reservationData) => {
-          this._hotelService.hotelConfig = reservationData['hotel'];
-          this._hotelService.titleConfig$.next(reservationData['hotel']);
+          this._hotelService.hotelConfig = reservationData['entity'];
+          this._hotelService.titleConfig$.next(reservationData['entity']);
           this.isReservationData = true;
           this._templateLoadingService.isTemplateLoading$.next(false);
           this.reservationData = reservationData;

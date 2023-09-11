@@ -21,9 +21,8 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    font-family: Poppins;
     font-size: 16px;
-    font-weight: 600;
+    font-weight: $bolder;
     color: $secondary;
     opacity: 0.6;
     letter-spacing: 0.96px;
@@ -54,7 +53,7 @@
   gap: 10px;
   padding: 23px;
   font-size: 16px;
-  font-weight: 600;
+  font-weight: $bolder;
   color: $secondary;
   letter-spacing: 0.96px;
   border-bottom: 1px solid #cdcdcd;
@@ -71,4 +70,11 @@
 :host ::ng-deep .action-header__sticky {
   margin: 0px -16px 0 -80px;
   padding: 20px 45px 20px 20px;
+}
+
+:host ::ng-deep .status-toggle {
+  .wrapper {
+    display: flex;
+    gap: 10px;
+  }
 }

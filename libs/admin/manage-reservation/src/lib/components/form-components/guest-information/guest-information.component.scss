@@ -1,0 +1,7 @@
+:host ::ng-deep .select-block {
+  .option-items {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

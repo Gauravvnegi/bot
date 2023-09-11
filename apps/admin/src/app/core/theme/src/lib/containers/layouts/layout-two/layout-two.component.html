@@ -1,7 +1,13 @@
 <div class="wrapper">
   <div class="app-header">
-    <div class="logo-wrapper">
-      <img src="assets/images/botshot-logo.png" alt="botshot-logo" />
+    <div class="route-wrapper">
+      <div class="logo-wrapper">
+        <img src="assets/images/botshot-logo.png" alt="botshot-logo" />
+      </div>
+      <div class="back-btn">
+        <i (click)="back()" class="pi pi-arrow-left"></i>
+        <div class="label" (click)="back()">Go Back</div>
+      </div>
     </div>
     <div class="profile-wrapper">
       <admin-profile-dropdown></admin-profile-dropdown>

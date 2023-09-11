@@ -27,7 +27,7 @@
   },
   "noRequestFound": "No requests found",
   "raiseRequest": "Raise Request",
-  "searchPlaceHolder": "Search by Name, Number...",
+  "searchPlaceHolder": "Search by Item Name, Room No...",
   "minute": "minute",
   "success": {
     "requestCreated": "Request created."

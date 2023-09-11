@@ -32,20 +32,14 @@ import { AssetService } from '../../../services/asset.service';
 export class AssetDatatableComponent extends BaseDatatableComponent
   implements OnInit, OnDestroy {
   tableName = assetConfig.datatable.title;
-  @Input() tabFilterItems;
-  @Input() tabFilterIdx = 0;
   actionButtons = true;
-  isQuickFilters = true;
-  isTabFilters = true;
   isResizableColumns = true;
   isAutoLayout = false;
-  isCustomSort = true;
+  isAllTabFilterRequired = true;
   triggerInitialData = false;
-  rowsPerPageOptions = [5, 10, 25, 50, 200];
-  rowsPerPage = 5;
   globalQueries = [];
   $subscription = new Subscription();
-  hotelId: any;
+  entityId: any;
 
   cols = assetConfig.datatable.cols;
 
@@ -78,15 +72,15 @@ export class AssetDatatableComponent extends BaseDatatableComponent
         ...data['filter'].queryValue,
         ...data['dateRange'].queryValue,
       ];
-      this.hotelId = this.globalFilterService.hotelId;
+      this.entityId = this.globalFilterService.entityId;
       //fetch-api for records
       this.loadInitialData([
         ...this.globalQueries,
         {
           order: sharedConfig.defaultOrder,
-          entityType: this.tabFilterItems[this.tabFilterIdx].value,
+          entityType: this.selectedTab,
         },
-        ...this.getSelectedQuickReplyFilters(),
+        ...this.getSelectedQuickReplyFilters({ isStatusBoolean: true }),
       ]);
     });
   }
@@ -117,10 +111,13 @@ export class AssetDatatableComponent extends BaseDatatableComponent
    * @param data The data is a response which comes from an api call.
    */
   setRecords(data): void {
-    this.values = new Assets().deserialize(data).records;
-    this.updateTabFilterCount(data.entityTypeCounts, data.total);
-    this.updateQuickReplyFilterCount(data.entityStateCounts);
-    this.updateTotalRecords();
+    const modifiedData = new Assets().deserialize(data);
+    this.values = modifiedData.records;
+    this.initFilters(
+      modifiedData.entityTypeCounts,
+      modifiedData.entityStateCounts,
+      modifiedData.total
+    );
     this.loading = false;
   }
 
@@ -138,7 +135,7 @@ export class AssetDatatableComponent extends BaseDatatableComponent
     const config = {
       queryObj: this.adminUtilityService.makeQueryParams(queries),
     };
-    return this.assetService.getHotelAsset(config, this.hotelId);
+    return this.assetService.getHotelAsset(config, this.entityId);
   }
 
   /**
@@ -153,9 +150,9 @@ export class AssetDatatableComponent extends BaseDatatableComponent
           ...this.globalQueries,
           {
             order: sharedConfig.defaultOrder,
-            entityType: this.tabFilterItems[this.tabFilterIdx].value,
+            entityType: this.selectedTab,
           },
-          ...this.getSelectedQuickReplyFilters(),
+          ...this.getSelectedQuickReplyFilters({ isStatusBoolean: true }),
         ],
         {
           offset: this.first,
@@ -189,27 +186,6 @@ export class AssetDatatableComponent extends BaseDatatableComponent
   }
 
   /**
-   * @function getSelectedQuickReplyFilters To return the selected chip list.
-   * @returns The selected chips.
-   */
-  getSelectedQuickReplyFilters(): SelectedEntityState[] {
-    return this.tabFilterItems[this.tabFilterIdx].chips
-      .filter((item) => item.isSelected)
-      .map((item) => ({
-        entityState: item.value,
-      }));
-  }
-
-  /**
-   * @function updatePaginations To update the pagination variable values.
-   * @param event The lazy load event for the table.
-   */
-  updatePaginations(event): void {
-    this.first = event.first;
-    this.rowsPerPage = event.rows;
-  }
-
-  /**
    * @function exportCSV To export CSV report of the table.
    */
   exportCSV(): void {
@@ -225,7 +201,7 @@ export class AssetDatatableComponent extends BaseDatatableComponent
       ]),
     };
     this.$subscription.add(
-      this.assetService.exportCSV(config, this.hotelId).subscribe(
+      this.assetService.exportCSV(config, this.entityId).subscribe(
         (res) => {
           FileSaver.saveAs(
             res,
@@ -246,11 +222,14 @@ export class AssetDatatableComponent extends BaseDatatableComponent
    * @param event active and inactive event check.
    */
   updateAssetStatus(event, assetId): void {
+    this.loading = true;
     const data = {
       active: event.checked,
     };
-    this.assetService.updateAssetStatus(this.hotelId, data, assetId).subscribe(
+    this.assetService.updateAssetStatus(this.entityId, data, assetId).subscribe(
       (response) => {
+        this.loading = false;
+        this.loadData();
         this.snackbarService
           .openSnackBarWithTranslate(
             {
@@ -263,19 +242,12 @@ export class AssetDatatableComponent extends BaseDatatableComponent
             }
           )
           .subscribe();
-        this.changePage(this.currentPage);
       },
-      ({ error }) => {}
+      ({ error }) => {
+        this.values = [];
+        this.loading = false;
+      }
     );
-  }
-
-  /**
-   * @function onSelectedTabFilterChange To handle the tab filter change.
-   * @param event The material tab change event.
-   */
-  onSelectedTabFilterChange(event: MatTabChangeEvent): void {
-    this.tabFilterIdx = event.index;
-    this.loadData();
   }
 
   /**

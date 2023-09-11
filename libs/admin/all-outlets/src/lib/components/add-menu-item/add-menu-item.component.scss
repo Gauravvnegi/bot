@@ -1,0 +1,11 @@
+@import 'main';
+
+.form-block {
+  @include form-block;
+}
+
+.btn {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}

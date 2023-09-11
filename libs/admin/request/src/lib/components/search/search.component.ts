@@ -13,13 +13,14 @@ import { RequestService } from '../../services/request.service';
 })
 export class SearchComponent implements OnInit {
   @Input() parentFG: FormGroup;
-  @Input() hotelId: string;
+  @Input() entityId: string;
   @Input() globalQueries;
   @Input() filterData;
   @Input() entityType: string;
   @Output() clear = new EventEmitter();
   @Output() search = new EventEmitter();
   searchValue = false;
+  textLimit = 3;
   constructor(
     private _requestService: RequestService,
     private _adminUtilityService: AdminUtilityService,
@@ -36,7 +37,7 @@ export class SearchComponent implements OnInit {
   listenForSearchChanges(): void {
     const formChanges$ = this.parentFG.valueChanges;
     const findSearch$ = ({ search }: { search: string }) =>
-      this._requestService.searchRequest(this.hotelId, {
+      this._requestService.searchRequest(this.entityId, {
         queryObj: this._adminUtilityService.makeQueryParams([
           ...this.globalQueries,
           {
@@ -50,7 +51,8 @@ export class SearchComponent implements OnInit {
       .pipe(
         debounceTime(1000),
         switchMap((formValue) => {
-          if (formValue.search.trim().length)
+          
+          if (formValue.search.trim().length >= this.textLimit)
             return findSearch$(formValue).pipe(catchError((err) => empty()));
           else return of(null);
         })
@@ -58,7 +60,7 @@ export class SearchComponent implements OnInit {
       .subscribe(
         (response) =>
           this.search.emit({
-            status: this.parentFG.get('search').value.trim().length,
+            status: this.parentFG.get('search').value.trim().length >= this.textLimit,
             response,
           }) 
       );

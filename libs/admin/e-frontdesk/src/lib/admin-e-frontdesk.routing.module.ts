@@ -20,16 +20,23 @@ const appRoutes: CRoutes = [
           ),
       },
       {
-        path: 'request-analytics',
+        path: 'in-house-guest',
+        name: ModuleNames.IN_HOUSE_GUEST,
+        loadChildren: () =>
+          import('@hospitality-bot/admin/guest-dashboard').then(
+            (m) => m.AdminGuestDashboardModule
+          ),
+      },
+      {
+        path: 'complaint-analytics',
         name: ModuleNames.REQUEST_DASHBOARD,
         loadChildren: () =>
           import('@hospitality-bot/admin/request-analytics').then(
             (m) => m.AdminRequestAnalyticsModule
           ),
       },
-
       {
-        path: 'request',
+        path: 'complaint',
         name: ModuleNames.REQUEST,
         loadChildren: () =>
           import('@hospitality-bot/admin/request').then(
@@ -37,12 +44,18 @@ const appRoutes: CRoutes = [
           ),
       },
       {
-        path: 'manage-reservation',
+        path: 'reservation',
         name: ModuleNames.ADD_RESERVATION,
         loadChildren: () =>
           import('@hospitality-bot/admin/manage-reservation').then(
             (m) => m.AdminManageReservationModule
           ),
+      },
+      {
+        path: 'room',
+        name: ModuleNames.ROOM,
+        loadChildren: () =>
+          import('@hospitality-bot/admin/room').then((m) => m.AdminRoomModule),
       },
       {
         path: 'invoice',

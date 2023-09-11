@@ -1,1 +1,17 @@
 @import 'main';
+
+.type {
+  display: flex;
+  align-items: center;
+  flex-direction: row !important;
+  gap: 8px;
+
+  .img {
+    height: 20px;
+  }
+}
+.prop {
+  .primary-text {
+    -webkit-box-orient: horizontal !important;
+  }
+}

@@ -1,0 +1,46 @@
+<span class="p-input-icon-right search__container">
+  <form [formGroup]="controlContainer.control">
+    <input
+      type="text"
+      pInputText
+      [formControlName]="controlName"
+      [placeholder]="placeholder.length ? placeholder : 'Search...'"
+      (focus)="onBlurSearch($event)"
+    />
+    <!-- (blur)="onBlurSearch($event); clearSearch()" -->
+    <!-- For collapsed search bar, put it into input & uncomment searchbar
+      [ngStyle]="
+        isClearShow ? { 'border-radius': '4px' } : { 'border-radius': '50px' }
+      "
+      #searchBar
+      (blur)="onBlurSearch($event); clearSearch()"
+      (focus)="onBlurSearch($event)"
+      (keyup)="valueChange($event, searchBar.value)" 
+      *ngIf="isClearShow" // ADD it into pi-times-circle icon
+    -->
+
+    <i
+      [ngClass]="!isInputEmpty ? 'pi pi-times-circle search-icon' : ''"
+      (click)="!isInputEmpty && clearSearch()"
+    ></i>
+    <!-- <i
+      class="pi pi-search search-bar-icon"
+      (click)="searchBar.blur(); searchBar.focus()"
+      *ngIf="!isClearShow"
+    ></i> -->
+    <div
+      *ngIf="hasSuggestion && isClearShow"
+      [ngClass]="scattered ? 'suggestions scattered' : 'suggestions'"
+    >
+      <ng-container *ngFor="let item of suggestionList">
+        <button
+          (click)="suggestClick(item)"
+          class="btn"
+          [ngClass]="item === selectedItem ? 'active' : ''"
+        >
+          {{ item }}
+        </button>
+      </ng-container>
+    </div>
+  </form>
+</span>

@@ -1,4 +1,5 @@
 import { ValueFormatter } from '../utils/valueFormatter';
+import * as Chart from 'chart.js';
 
 export const analytics = {
   chart: {
@@ -58,7 +59,7 @@ export const analytics = {
     },
     {
       field: 'itemName',
-      header: 'Item Name / Desc. / Status / Job Duration',
+      header: 'Desc. / Status / Job Duration',
       isSortDisabled: true,
       sortType: 'string',
       searchField: ['itemName', 'remarks', 'action', 'jobDuration'],
@@ -210,6 +211,9 @@ export const analytics = {
         titleMarginBottom: 5,
         xPadding: 10,
         yPadding: 10,
+        callbacks: {
+          label: getNoDataLabel,
+        },
       },
       responsive: true,
       cutoutPercentage: 75,
@@ -275,16 +279,19 @@ export const analytics = {
       field: 'itemCode',
       header: 'Item & Priority Code / Qty',
       sortType: 'number',
+      width: '18%',
     },
     {
       field: 'confirmationNumber',
       header: 'Booking No. / Rooms',
       sortType: 'number',
+      width: '18%',
     },
     {
       field: 'guestDetails.primaryGuest.getFullName()',
       header: 'Guest / company',
       sortType: 'string',
+      width: '18%',
     },
     {
       field: 'guestDetails.primaryGuest.phoneNumber',
@@ -295,12 +302,14 @@ export const analytics = {
         'guestDetails.primaryGuest.phoneNumber',
         'guestDetails.primaryGuest.email',
       ],
+      width: '18%',
     },
     {
       field: 'itemName',
       header: 'Item Name / Desc. / Status / Job Duration',
       sortType: 'string',
       searchField: ['itemName', 'remarks', 'status', 'jobDuration'],
+      width: '18%',
     },
     {
       field: '',
@@ -308,14 +317,16 @@ export const analytics = {
       isSortDisabled: true,
       sortType: 'string',
       isSearchDisabled: true,
+      width: '18%',
     },
-    {
-      field: '',
-      header: 'Actions',
-      isSortDisabled: true,
-      sortType: '',
-      isSearchDisabled: true,
-    },
+    // {
+    //   field: '',
+    //   header: 'Actions',
+    //   isSortDisabled: true,
+    //   sortType: '',
+    //   isSearchDisabled: true,
+    //   width: '13%',
+    // },
   ],
 
   PreArrivaltabFilterItems: [
@@ -615,3 +626,17 @@ export const analytics = {
     type: 'line',
   },
 };
+
+export function getNoDataLabel(
+  ttItem: Chart.ChartTooltipItem,
+  data: Chart.ChartData
+) {
+  const label = data.labels[ttItem.index];
+  const value = data.datasets[ttItem.datasetIndex].data[ttItem.index];
+
+  if (label === 'No Data' && value === 100) {
+    return label;
+  } else {
+    return `${label}: ${value}`;
+  }
+}

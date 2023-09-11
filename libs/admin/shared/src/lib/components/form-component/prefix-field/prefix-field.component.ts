@@ -1,4 +1,10 @@
-import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnChanges,
+  OnInit,
+  SimpleChanges,
+} from '@angular/core';
 import { ControlContainer } from '@angular/forms';
 import { FormProps, Option } from '../../../types/form.type';
 import { FormComponent } from '../form.components';
@@ -8,7 +14,7 @@ import { FormComponent } from '../form.components';
   templateUrl: './prefix-field.component.html',
   styleUrls: ['./prefix-field.component.scss'],
 })
-export class PrefixFieldComponent extends FormComponent {
+export class PrefixFieldComponent extends FormComponent implements OnInit {
   constructor(public controlContainer: ControlContainer) {
     super(controlContainer);
   }
@@ -24,6 +30,25 @@ export class PrefixFieldComponent extends FormComponent {
 
   @Input() defaultProps: PrePostType<FormProps>;
   @Input() inputDisabled: PrePostType<boolean> = { pre: false, post: false };
+
+  @Input() preMin: number;
+  @Input() postMin: number;
+
+  layout: 'default' | 'dashed' | 'pre-main' | 'post-main' = 'default';
+
+  // @Input() isHyphenInput = true;
+
+  @Input() set settings(value: Settings) {
+    for (const key in value) {
+      if (Object.prototype.hasOwnProperty.call(value, key)) {
+        this[key] = value[key];
+      }
+    }
+  }
+
+  ngOnInit(): void {
+    this.initInputControl(this.preControlName);
+  }
 
   /**
    * Handle options setting if only of them is select type
@@ -45,6 +70,10 @@ export class PrefixFieldComponent extends FormComponent {
   }
 }
 
-type InputFieldTypes = 'input' | 'select';
+type InputFieldTypes = 'input' | 'select' | 'autocomplete';
 
 type PrePostType<T> = { pre?: T; post?: T };
+
+type Settings = {
+  layout: 'default' | 'dashed' | 'pre-main' | 'post-main';
+};

@@ -112,9 +112,9 @@ export class GuestUsageComponent implements OnInit {
 
     const limit =
       this.productData
-        .find((product) => product.name === ModuleNames.GUESTS)
+        .find((product) => product.name === ModuleNames.MEMBERS)
         ?.config.find(
-          (subProduct) => subProduct.name === ModuleNames.GUESTS_DASHBOARD
+          (subProduct) => subProduct.name === ModuleNames.GUESTS
         ).cost.usageLimit || 0;
 
     this.chartData.forEach((data) => {

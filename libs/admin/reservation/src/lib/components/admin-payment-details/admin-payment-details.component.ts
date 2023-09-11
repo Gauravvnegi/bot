@@ -82,9 +82,9 @@ export class AdminPaymentDetailsComponent implements OnInit {
           paymentMode,
           remarks,
           amount,
+          currency,
         } = transaction;
         const { firstName, lastName } = this.userService.userDetails;
-
         const cashierName = firstName;
 
         return {
@@ -95,6 +95,7 @@ export class AdminPaymentDetailsComponent implements OnInit {
           remarks,
           cashierName,
           amount,
+          currency
         };
       }
     );
@@ -155,10 +156,10 @@ export class AdminPaymentDetailsComponent implements OnInit {
     const paidAmount = this.detailsData.paymentDetails.paidAmount;
     if (dueAmount === 0) {
       return 'COMPLETED';
-    } else if(paidAmount === 0) {
+    } else if (paidAmount === 0) {
       return 'PENDING';
-    } else{
-      return 'INITIATED'
+    } else {
+      return 'INITIATED';
     }
   }
 

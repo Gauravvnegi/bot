@@ -14,16 +14,25 @@
           class="form-elements"
           placeholder="Status"
           formControlName="status"
-          [disabled]="
-            requestFG?.get('status').value === 'Closed' ||
-            requestFG?.get('status').value === 'Timeout'
-          "
           (selectionChange)="handleStatusChange($event)"
         >
           <mat-option
             *ngFor="let status of statusList"
             [value]="status.value"
-            [disabled]="status.value === 'Timeout'"
+            >{{ status.label }}</mat-option
+          >
+        </mat-select>
+      </div>
+      <div class="form-elements-container">
+        <mat-select
+          class="form-elements"
+          placeholder="Assignee"
+          formControlName="assignee"
+          (selectionChange)="handleAssigneeChange($event)"
+        >
+          <mat-option
+            *ngFor="let status of assigneeList"
+            [value]="status.value"
             >{{ status.label }}</mat-option
           >
         </mat-select>
@@ -42,21 +51,37 @@
     <div class="request-items-body-title">
       {{ data.itemName }}
     </div>
+
+    <hospitality-bot-timer
+      class="time-left"
+      *ngIf="
+        data?.timeLeft !== undefined &&
+        data?.action !== 'RESOLVED' &&
+        data?.action !== 'CANCELLED'
+      "
+      [inputMilliseconds]="data.timeLeft"
+    ></hospitality-bot-timer>
+
+    <span class="resolved-text" *ngIf="data?.action === 'RESOLVED'">
+      Resolved on:
+      {{ formattedClosedTimestamp }}
+    </span>
+
     <div class="request-items-body-subtitle">
       {{ data.remarks }}
     </div>
     <div class="request-items-body-card">
       <table>
         <tr class="tr">
-          <th>{{ 'requestDetail.priorityCode' | translate }}</th>
-          <th>{{ 'requestDetail.bookingRoomNo' | translate }}</th>
-          <th>{{ 'requestDetail.company' | translate }}</th>
-          <th>{{ 'requestDetail.contactInfo' | translate }}</th>
+          <th>Job No. / Priority</th>
+          <th>Room No. / Type</th>
+          <th>Source</th>
+          <th>Phone No. / Email</th>
         </tr>
         <tr>
           <td>
-            <div>
-              {{ data.itemCode }}
+            <div class="jobno-wrapper">
+              {{ data.jobNo }}
             </div>
             <div
               class="request-items-body-card-status"
@@ -71,17 +96,26 @@
             </div>
           </td>
           <td>
-            <div>{{ data.confirmationNumber }}</div>
-            <div class="request-items-body-card-booking">
-              {{ data.rooms[0]?.getRoomNumberAndType() }}
-            </div>
+            <span
+              [roomStatus]="data.rooms[0]?.status"
+              class="request-items-body-card-booking"
+            >
+              {{ data.rooms[0]?.roomNumber || '--' }}&nbsp;-&nbsp;{{
+                data.rooms[0]?.type || '--'
+              }}
+            </span>
           </td>
-          <td>-</td>
+          <td>{{ data.source }}</td>
           <td>
-            <a href="tel:{{data.guestDetails.getPhoneNumbers()}}">
-            <div>
-              {{ data.guestDetails.getPhoneNumbers() }}
-            </div>
+            <a href="tel:{{ data.guestDetails.getPhoneNumbers() }}">
+              <div>
+                {{ data.guestDetails.getPhoneNumbers() }}
+              </div>
+            </a>
+            <a href="mailto: {{ data.guestDetails.primaryGuest.email }}">
+              <div>
+                {{ data.guestDetails.primaryGuest.email }}
+              </div>
             </a>
           </td>
         </tr>
@@ -123,10 +157,17 @@
       <img src="assets/svg/no_request.svg" alt="No Request" />
     </div>
     <div class="no-data__title">
-      No Requests
+      No Complaints
     </div>
     <div class="no-data__description">
-      Please select a request to view
+      Please select a complaint to view
     </div>
   </div>
+</ng-template>
+
+<ng-template #date>
+  <span>
+    Resolved on:
+    {{ formattedDate() }}
+  </span>
 </ng-template>

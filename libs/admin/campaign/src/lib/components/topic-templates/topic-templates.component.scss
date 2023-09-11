@@ -8,9 +8,8 @@
   p {
     height: 33px;
     margin: 44px 58px 31px 0;
-    font-family: 'Roboto';
     font-size: 25px;
-    font-weight: bold;
+    font-weight: $bold;
     letter-spacing: 1.5px;
     color: $secondary;
   }
@@ -63,7 +62,7 @@
     border-radius: 23px;
     box-shadow: $button-shadow;
     border: solid 1px $button-blue;
-    @include normal-text;
+    @include normal-sm-text;
     color: $button-blue;
     background-color: $white;
     cursor: pointer;

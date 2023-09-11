@@ -1,10 +1,11 @@
 import { Directive, ElementRef, HostListener, Input } from '@angular/core';
+import { RoomStatus } from 'libs/admin/room/src/lib/types/service-response';
 
 @Directive({
   selector: '[roomStatus]',
 })
 export class RoomTypeDirective {
-  @Input('roomStatus') roomStatus: string;
+  @Input('roomStatus') roomStatus: RoomStatus;
 
   constructor(private elementRef: ElementRef) {}
 
@@ -45,34 +46,34 @@ export class RoomTypeDirective {
     );
   }
 
-  getColorByStatus(status: string): any {
+  getColorByStatus(status: RoomStatus): any {
     switch (status) {
-      case 'clean':
+      case 'CLEAN':
         return '#1468f9';
-      case 'dirty':
+      case 'DIRTY':
         return '#ff8f00';
-      case 'inspected':
+      case 'INSPECTED':
         return '#52b33f';
-      case 'out_of_order':
+      case 'OUT_OF_ORDER':
         return '#ff0000';
-      case 'out_of_service':
+      case 'OUT_OF_SERVICE':
         return '#ff0000';
       default:
         return '#ff8f00';
     }
   }
 
-  getBackgroundColorByStatus(status: string): any {
+  getBackgroundColorByStatus(status: RoomStatus): any {
     switch (status) {
-      case 'clean':
+      case 'CLEAN':
         return '#ddeafe';
-      case 'dirty':
+      case 'DIRTY':
         return '#fdebd1';
-      case 'inspected':
-        return '#52b33f';
-      case 'out_of_order':
+      case 'INSPECTED':
+        return '#52b33f2e';
+      case 'OUT_OF_ORDER':
         return '#f6d6dc';
-      case 'out_of_service':
+      case 'OUT_OF_SERVICE':
         return '#f6d6dc';
       default:
         return '#fdebd1';

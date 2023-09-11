@@ -46,33 +46,104 @@ export const iteratorFields: Record<AddRoomTypes, IteratorField[]> = {
 export type RoomTypeFormData = {
   status: boolean;
   name: string;
-  imageUrls: string[];
+  imageUrl: string[];
   description: string;
   complimentaryAmenities: string[];
   paidAmenities: string[];
-  originalPrice: number;
-  discountType: string;
-  discountValue: number;
-  discountedPrice: number;
-  variablePriceCurrency: string;
-  currency: string;
-  variableAmount: number;
-  discountedPriceCurrency: string;
+  staticRatePlans?: StaticPricingRatePlan;
+  dynamicRatePlans?: DynamicPricingRatePlan;
+  ratePlans: AddedRatePlans[];
   maxOccupancy: number;
   maxChildren: number;
   maxAdult: number;
   area: number;
+  isBaseRoomType: boolean;
+};
+
+export type RoomTypeForm = {
+  roomType: RoomTypeFormData;
+};
+
+// export type RoomTypeModData = Omit<RoomTypeData, 'ratePlans'> & {
+//   ratePlans: StaticPricingMod[];
+// };
+
+// export type StaticPricingMod = Omit<
+//   StaticPricingRatePlan,
+//   'discountType' | 'discountValue' | 'label'
+// > & {
+//   discount: {
+//     type: string;
+//     value: number;
+//   };
+//   id: string;
+// };
+
+export type StaticPricingMod = Omit<
+  StaticPricingRatePlan,
+  'discountType' | 'discountValue'
+>;
+
+export type StaticPricingRatePlan = RatePlan & {
+  discountType: string;
+  discountValue: number;
+  bestPriceCurrency: string;
+  bestAvailablePrice: number;
+};
+
+export type DynamicPricingRatePlan = RatePlan & {
+  maxPriceCurrency: string;
+  maxPrice: number;
+  minPriceCurrency: string;
+  minPrice: number;
+};
+
+export type RatePlan = {
+  paxPriceCurrency: string;
+  paxChildPrice: number;
+  paxAdultPrice: number;
+  paxChildBelowFive?: number;
+  price?: number;
+  label: string;
+  ratePlanId?: string | null;
+  basePriceCurrency: string;
+  basePrice: number;
+  status?: boolean;
+  tripleOccupancyPrice?: number;
+  tripleOccupancyCurrency?: string;
+  doubleOccupancyPrice?: number;
+  doubleOccupancyCurrency?: string;
+};
+
+export type AddedRatePlans = {
+  label: string;
+  description?: string;
+  currency: string;
+  extraPrice: number;
+  isBase: boolean;
+  discount?: {
+    type: string;
+    value: number;
+  };
+  ratePlanId?: string;
+  status: boolean;
+  total?: number;
+  sellingPrice?: number;
+  variablePrice?: number;
+};
+
+export type ReservationRatePlan = {
+  label: string;
+  value: string;
+  isBase: boolean;
+  sellingPrice: number;
 };
 
 export type RoomTypeData = Omit<
   RoomTypeFormData,
-  | 'complimentaryAmenities'
-  | 'paidAmenities'
-  | 'variablePriceCurrency'
-  | 'discountedPriceCurrency'
+  'complimentaryAmenities' | 'paidAmenities'
 > & {
   roomAmenityIds: string[];
-  status: boolean;
 };
 
 export const errorMessages = {
@@ -88,8 +159,19 @@ export const errorMessages = {
 
 export const noRecordAction = {
   actionName: '+Create New Service',
-  link: '/pages/library/services/create-service',
   imageSrc: 'assets/images/empty-table-service.png',
   description:
     'No services found. Tap the +Create Services to create & manage the services offered by your hotel',
+};
+
+export const noRecordActionForComp = {
+  actionName: '+Import Services',
+  imageSrc: 'assets/images/empty-table-service.png',
+  description:
+    'No services found. Tap the +Import Services to Import & manage the services offered by your hotel',
+};
+
+export const noRecordsActionForFeatures = {
+  imageSrc: 'assets/images/empty-table-service.png',
+  description: 'No services found.',
 };

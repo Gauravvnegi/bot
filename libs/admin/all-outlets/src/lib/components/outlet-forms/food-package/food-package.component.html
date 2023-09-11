@@ -1,0 +1,50 @@
+<p-accordion [multiple]="false">
+  <p-accordionTab class="accordion-header" header="Food Packages">
+    <div class="sub-container-wrapper">
+      <div class="wrapper">
+        <div class="header">
+          <div>
+            <div class="heading">Food Packages</div>
+            <div class="sub-heading">
+              Do not forget to add this cost in addition to the room cost + Add
+              Package
+            </div>
+          </div>
+          <div class="btn-wrapper">
+            <hospitality-bot-button
+              label="+ Add Package"
+              variant="outlined"
+              (onClick)="onCreateAndContinue('food-package')"
+            ></hospitality-bot-button>
+          </div>
+        </div>
+        <div class="item-boxes" *ngIf="!!foodPackages.length; else emptyTable">
+          <ng-container *ngFor="let item of foodPackages; index as i">
+            <div class="item-box" (click)="selectItems(item.id)">
+              <div class="image-type" [ngClass]="{ selected: !item.status }">
+                <img
+                  alt="image"
+                  [src]="item.imageUrl"
+                  class="show-image"
+                  [alt]="item.imageUrl"
+                />
+              </div>
+              <div class="text">
+                <span>{{ item.name }}</span>
+              </div>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+    <ng-template #emptyTable>
+      <hospitality-bot-empty-table
+        [height]="fullView ? '51vh' : 'fit-content'"
+        [isLoading]="loading"
+        [content]="noRecordActionForFood"
+        (action)="onCreateAndContinue('food-package')"
+      >
+      </hospitality-bot-empty-table>
+    </ng-template>
+  </p-accordionTab>
+</p-accordion>

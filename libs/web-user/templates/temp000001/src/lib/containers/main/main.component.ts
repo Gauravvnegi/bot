@@ -4,8 +4,8 @@ import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { SnackBarService } from '@hospitality-bot/shared/material';
-import { ModalService } from 'libs/shared/material/src/lib/services/modal.service';
 import { DateService } from '@hospitality-bot/shared/utils';
+import { ModalService } from 'libs/shared/material/src/lib/services/modal.service';
 import { ReservationDetails } from 'libs/web-user/shared/src/lib/data-models/reservationDetails';
 import { CheckinDateAlertComponent } from 'libs/web-user/shared/src/lib/presentational/checkin-date-alert/checkin-date-alert.component';
 import { ReservationService } from 'libs/web-user/shared/src/lib/services/booking.service';
@@ -16,6 +16,7 @@ import { TemplateLoaderService } from 'libs/web-user/shared/src/lib/services/tem
 import { TemplateService } from 'libs/web-user/shared/src/lib/services/template.service';
 import { ITemplateTemp000001 } from 'libs/web-user/shared/src/lib/types/temp000001';
 import { Subscription } from 'rxjs';
+import { stepsIndexData } from 'libs/web-user/shared/src/lib/constants/common';
 import { Temp000001StepperComponent } from '../../presentational/temp000001-stepper/temp000001-stepper.component';
 
 @Component({
@@ -61,16 +62,22 @@ export class MainComponent implements OnInit, OnDestroy {
         .getReservationDetails(this._reservationService.reservationId)
         .subscribe(
           (reservationData) => {
-            this._hotelService.hotelConfig = reservationData['hotel'];
-            this.checkForExpiry(reservationData['hotel']);
+            this._hotelService.hotelConfig = reservationData['entity'];
+            this.checkForExpiry(reservationData['entity']);
             this.isReservationData = true;
             this.stepperData = this._templateService.templateData[
               this._templateService.templateId
             ];
-            this._hotelService.titleConfig$.next(reservationData['hotel']);
+            this._hotelService.titleConfig$.next(reservationData['entity']);
             this.getStepperData();
             this.listenForStepperChange();
             this.reservationData = reservationData;
+
+            const stepIndex =
+              stepsIndexData[reservationData.stateCompletedSteps] ?? 0;
+
+            this.reservationData.stateCompletedSteps =
+              stepIndex === -1 ? 0 : stepIndex;
             this._reservationService.reservationData = reservationData;
           },
           ({ error }) => {
@@ -121,26 +128,28 @@ export class MainComponent implements OnInit, OnDestroy {
   }
 
   getHotelDataById(errorType) {
-    this._hotelService.getHotelConfigById(this._hotelService.hotelId).subscribe(
-      (hotel) => {
-        this._hotelService.hotelConfig = hotel;
-        this._hotelService.titleConfig$.next(hotel);
-        switch (errorType) {
-          case 'BOOKING_CANCELED':
-            this.router.navigate(['booking-cancel'], {
-              queryParamsHandling: 'preserve',
-            });
-            break;
-          case 'expiry':
-            this.router.navigate(['booking-expired'], {
-              queryParamsHandling: 'preserve',
-            });
-            break;
-        }
-        this._templateLoadingService.isTemplateLoading$.next(false);
-      },
-      ({ error }) => this.snackbarService.openSnackBarAsText(error.message)
-    );
+    this._hotelService
+      .getHotelConfigById(this._hotelService.entityId)
+      .subscribe(
+        (hotel) => {
+          this._hotelService.hotelConfig = hotel;
+          this._hotelService.titleConfig$.next(hotel);
+          switch (errorType) {
+            case 'BOOKING_CANCELED':
+              this.router.navigate(['booking-cancel'], {
+                queryParamsHandling: 'preserve',
+              });
+              break;
+            case 'expiry':
+              this.router.navigate(['booking-expired'], {
+                queryParamsHandling: 'preserve',
+              });
+              break;
+          }
+          this._templateLoadingService.isTemplateLoading$.next(false);
+        },
+        ({ error }) => this.snackbarService.openSnackBarAsText(error.message)
+      );
   }
 
   registerListeners() {

@@ -19,7 +19,7 @@
 
   &__default {
     font-size: 14px;
-    font-weight: 500;
+    font-weight: $bold;
     letter-spacing: 0.84px;
     color: $secondary;
     margin: auto;
@@ -51,7 +51,7 @@
       letter-spacing: 0.84px;
       color: $secondary;
       &_heading {
-        font-weight: 500;
+        font-weight: $bold;
         margin-bottom: 10px;
       }
 

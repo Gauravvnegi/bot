@@ -20,23 +20,28 @@
     }"
     [inputId]="controlName"
     [(ngModel)]="dateValue"
+    [selectOtherMonths]="true"
     (ngModelChange)="onDateChange($event)"
     [showTime]="enableTime"
     [showSeconds]="enableSeconds"
-    [minDate]="minDate"
+    [readonlyInput]="true"
     [maxDate]="maxDate"
+    [minDate]="minDate"
     [dateFormat]="dateFormat"
     [hourFormat]="hourFormat"
     [showButtonBar]="enableButtonBar"
     [monthNavigator]="true"
     [yearNavigator]="true"
-    yearRange="2000:2030"
+    [yearRange]="yearRange"
     (onBlur)="markAsTouched()"
     [disabled]="isDisabled"
+    [placeholder]="placeholder"
+    [showIcon]="showIcon"
+    [timeOnly]="isTimeOnly"
   ></p-calendar>
   <small *ngIf="error" class="p-error">{{ error }} </small>
 
   <label *ngIf="label && float" [for]="controlName">{{ label }}</label>
 
-  <i class="pi" [ngClass]="modIconNgClasses"></i>
+  <!-- <i class="pi" [ngClass]="modIconNgClasses"></i> -->
 </div>

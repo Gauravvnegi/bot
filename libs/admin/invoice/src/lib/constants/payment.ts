@@ -1,14 +1,19 @@
-import { PaymentField } from '../types/forms.types';
+import { BillItemFields } from '../types/forms.types';
 
 export const cols: {
-  field: keyof PaymentField | 'menu';
+  field: keyof BillItemFields | 'menu';
   header: string;
   width: string;
 }[] = [
   {
+    field: 'date',
+    header: 'Date',
+    width: '20%',
+  },
+  {
     field: 'description',
     header: 'Description',
-    width: '28%',
+    width: '30%',
   },
   {
     field: 'unit',
@@ -16,24 +21,14 @@ export const cols: {
     width: '10%',
   },
   {
-    field: 'unitValue',
-    header: 'Unit Value',
-    width: '10%',
+    field: 'debitAmount',
+    header: 'Debit',
+    width: '15%',
   },
   {
-    field: 'amount',
-    header: 'Amount',
-    width: '10%',
-  },
-  {
-    field: 'tax',
-    header: 'Tax',
-    width: '20%',
-  },
-  {
-    field: 'totalAmount',
-    header: 'TotalAmount',
-    width: '14%',
+    field: 'creditAmount',
+    header: 'Credit',
+    width: '15%',
   },
   {
     field: 'menu',
@@ -41,3 +36,5 @@ export const cols: {
     width: '5%',
   },
 ];
+
+const data = '[123-123] Chill Room';

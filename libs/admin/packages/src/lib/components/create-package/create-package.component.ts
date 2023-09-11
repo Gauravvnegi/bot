@@ -26,7 +26,7 @@ export class CreatePackageComponent implements OnInit {
   readonly errorMessages = errorMessages;
 
   packageId: string;
-  hotelId: string;
+  entityId: string;
   useForm: FormGroup;
   code: string = '# will be auto generated';
 
@@ -74,7 +74,7 @@ export class CreatePackageComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.hotelId = this.globalFilterService.hotelId;
+    this.entityId = this.globalFilterService.entityId;
     this.initForm();
     this.initOptionsConfig();
   }
@@ -92,9 +92,9 @@ export class CreatePackageComponent implements OnInit {
         [],
         [Validators.required, CustomValidators.minArrayValueLength(2)],
       ],
-      imageUrl: ['', Validators.required],
+      images: ['', Validators.required],
       currency: ['', Validators.required],
-      rate: ['', Validators.required],
+      rate: ['0', [Validators.required, Validators.min(0)]],
       discountType: ['PERCENTAGE', Validators.required],
       discountValue: ['0', [Validators.required, Validators.min(0)]],
       discountedCurrency: ['', Validators.required],
@@ -106,12 +106,12 @@ export class CreatePackageComponent implements OnInit {
     if (this.packageId) {
       this.$subscription.add(
         this.packagesService
-          .getLibraryItemById<PackageResponse>(this.hotelId, this.packageId, {
+          .getLibraryItemById<PackageResponse>(this.entityId, this.packageId, {
             params: `?type=${LibraryItem.package}`,
           })
           .subscribe(
             (res) => {
-              const { packageCode, subPackages } = res;
+              const { packageCode, subPackages, images } = res;
               const currentServices =
                 subPackages?.map((item) => {
                   let price = item.rate;
@@ -136,8 +136,10 @@ export class CreatePackageComponent implements OnInit {
                   this.selectedServicePrice[item.value] = item.price;
                 }
               });
-
-              this.useForm.patchValue({ ...res });
+              if (images && images.length > 0) {
+                var imageUrl = images[0].url;
+              }
+              this.useForm.patchValue({ ...res, images: imageUrl });
 
               this.useForm.get('serviceIds').setValue(
                 currentServices.map((item) => item.value),
@@ -174,7 +176,9 @@ export class CreatePackageComponent implements OnInit {
           value,
         }));
         this.useForm.get('currency').setValue(this.currencies[0].value);
-        this.useForm.get('discountedCurrency').setValue(this.currencies[0].value);
+        this.useForm
+          .get('discountedCurrency')
+          .setValue(this.currencies[0].value);
       }
     });
     this.getServices();
@@ -248,7 +252,6 @@ export class CreatePackageComponent implements OnInit {
     };
 
     const clearError = () => {
-      if (rate.value) rate.setErrors(null);
       if (discountValue.value > 0) discountValue.setErrors(null);
     };
 
@@ -295,7 +298,7 @@ export class CreatePackageComponent implements OnInit {
     this.loadingServices = true;
     this.$subscription.add(
       this.packagesService
-        .getLibraryItems<ServiceListResponse>(this.hotelId, {
+        .getLibraryItems<ServiceListResponse>(this.entityId, {
           params: `?type=SERVICE&offset=${this.servicesOffSet}&limit=10&status=true&serviceType=${ServicesTypeValue.PAID}`,
         })
         .subscribe(
@@ -331,7 +334,7 @@ export class CreatePackageComponent implements OnInit {
     if (text) {
       this.loadingServices = true;
       this.packagesService
-        .searchLibraryItem(this.hotelId, {
+        .searchLibraryItem(this.entityId, {
           params: `?key=${text}&type=${LibrarySearchItem.SERVICE}`,
         })
         .subscribe(
@@ -395,17 +398,19 @@ export class CreatePackageComponent implements OnInit {
 
     const {
       discountedCurrency,
+      images,
       ...rest
     } = this.useForm.getRawValue() as PackageFormData;
-
+    const data = { images: [{ isFeatured: true, url: images }], ...rest };
+    this.loading = true;
     if (this.packageId) {
       this.$subscription.add(
         this.packagesService
           .updateLibraryItem<Partial<PackageData>, PackageResponse>(
-            this.hotelId,
+            this.entityId,
             this.packageId,
             {
-              ...rest,
+              ...data,
               type: 'PACKAGE',
               source: 1,
             },
@@ -416,14 +421,18 @@ export class CreatePackageComponent implements OnInit {
     } else {
       this.$subscription.add(
         this.packagesService
-          .createLibraryItem<PackageData, PackageResponse>(this.hotelId, {
-            ...rest,
+          .createLibraryItem<PackageData, PackageResponse>(this.entityId, {
+            ...data,
             type: 'PACKAGE',
             source: 1,
           })
           .subscribe(this.handleSuccess, this.handleError, this.handleFinal)
       );
     }
+  }
+
+  resetForm() {
+    this.useForm.reset();
   }
 
   /**

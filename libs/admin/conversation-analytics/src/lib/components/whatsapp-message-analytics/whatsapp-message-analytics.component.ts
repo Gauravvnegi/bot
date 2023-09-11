@@ -21,7 +21,7 @@ export class WhatsappMessageAnalyticsComponent implements OnInit, OnDestroy {
   @ViewChild(BaseChartDirective) baseChart: BaseChartDirective;
   messageOverallAnalytics: IMessageOverallAnalytics;
   sentReceivedChartData: ISentdeliveredChart;
-  hotelId: string;
+  entityId: string;
   $subscription = new Subscription();
 
   legendData = analytics.whatsappLegendData;
@@ -57,7 +57,7 @@ export class WhatsappMessageAnalyticsComponent implements OnInit, OnDestroy {
   listenForGlobalFilters(): void {
     this.$subscription.add(
       this.globalFilterService.globalFilter$.subscribe((data) => {
-        this.hotelId = this.globalFilterService.hotelId;
+        this.entityId = this.globalFilterService.entityId;
         this.getConversationStats();
         this.getSentReceivedChartData();
       })
@@ -86,7 +86,7 @@ export class WhatsappMessageAnalyticsComponent implements OnInit, OnDestroy {
   getSentReceivedChartData() {
     this.$subscription.add(
       this.analyticsService
-        .getSentReceivedStat(this.hotelId)
+        .getSentReceivedStat(this.entityId)
         .subscribe((response) => {
           this.sentReceivedChartData = new SentdeliveredChart().deserialize(
             response

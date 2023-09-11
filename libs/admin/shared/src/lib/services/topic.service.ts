@@ -6,10 +6,10 @@ export class TopicService extends ApiService {
   /**
    * @function getHotelTopic get topic list from api.
    * @param config dynamically getting global query filter into api.
-   * @param hotelId dynamically getting hotelId into api.
+   * @param entityId dynamically getting entityId into api.
    * @returns get api of topic lists.
    */
-  getHotelTopic(config, hotelId) {
-    return this.get(`/api/v1/entity/${hotelId}/topics${config.queryObj}`);
+  getHotelTopic(config, entityId) {
+    return this.get(`/api/v1/entity/${entityId}/topics${config.queryObj}`);
   }
 }

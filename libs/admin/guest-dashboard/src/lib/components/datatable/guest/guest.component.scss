@@ -1,0 +1,219 @@
+@import 'main';
+
+.documentItemLabel {
+  margin-left: 0.5em;
+  font-weight: $bold;
+}
+
+.tableHead {
+  width: 5%;
+  background-color: $accordian-header !important;
+  @include align-checkbox;
+}
+
+.icon-wrapper {
+  @include flex-space-between;
+  flex-wrap: wrap;
+
+  position: relative;
+  .icon {
+    width: 32%;
+    margin: 6% 0.5%;
+    @include flex-item-center;
+    flex-direction: column;
+
+    .table-body-journey-icon {
+      height: 14px;
+      width: 14px;
+      &:hover {
+        cursor: pointer;
+      }
+      @media screen and (max-width: 800px) {
+        height: 10px;
+        width: 10px;
+      }
+    }
+    .label {
+      font-size: 6px;
+      margin-top: 3px;
+      @media screen and (max-width: 800px) {
+        font-size: 3px;
+      }
+    }
+  }
+  .extra-width {
+    width: 24%;
+  }
+  .line {
+    position: absolute;
+    height: 2px;
+    width: 72%;
+    background-color: $whiteDeep;
+    right: 17px;
+    @media screen and (max-width: 800px) {
+      width: 62%;
+    }
+  }
+  .first {
+    top: 15%;
+    @media screen and (max-width: $L) {
+      top: 20%;
+    }
+  }
+  .second {
+    top: 65%;
+    @media screen and (max-width: $L) {
+      top: 78%;
+    }
+  }
+}
+
+:host ::ng-deep .arrival-time {
+  font-size: 12px;
+  color: $tabStats;
+  margin-top: 2px;
+  @media screen and (max-width: 800px) {
+    font-size: 8px;
+  }
+}
+
+:host ::ng-deep .arrival-date {
+  font-size: 12px;
+  color: $subtitle;
+  @media screen and (max-width: 800px) {
+    font-size: 8px;
+  }
+}
+
+:host ::ng-deep .status-image {
+  padding: 5px !important;
+}
+
+:host ::ng-deep .booking-number {
+  color: $subtitle;
+  font-size: 12px;
+  text-align: center;
+  @media screen and (max-width: 800px) {
+    font-size: 8px;
+  }
+}
+
+:host ::ng-deep .package {
+  color: $subtitle;
+  font-size: 12px;
+  position: relative;
+  @media screen and (max-width: 800px) {
+    font-size: 10px;
+  }
+  span {
+    @media screen and (max-width: 540px) {
+      display: inline-block;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 46px;
+    }
+  }
+}
+
+:host ::ng-deep .amount {
+  font-size: 12px;
+  @media screen and (max-width: 800px) {
+    font-size: 8px;
+  }
+}
+
+:host ::ng-deep .tabel-room-no {
+  padding: 7px;
+  font-size: 12px;
+  background-color: rgb(72, 192, 72, 0.2);
+  border-radius: 25px;
+  text-align: center;
+  @media screen and (max-width: 800px) {
+    font-size: 10px;
+    padding: 5px;
+  }
+}
+
+:host ::ng-deep .booking-feedback {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 7px;
+  margin: 0 10px;
+  margin-top: 7px;
+  border-radius: 25px;
+  position: relative;
+  &:hover {
+    cursor: pointer;
+    .feedback-msg {
+      display: block;
+    }
+  }
+  .feedback-msg {
+    position: absolute;
+    width: 100%;
+    top: 50%;
+    font-size: 12px;
+    color: $subtitle;
+    background-color: $white;
+    left: 0%;
+    padding: 7px;
+    box-shadow: 0px 0px 5px 0px $whiteDeep;
+    border-radius: 5px;
+    display: none;
+  }
+  .feedback-icon {
+    height: 14px;
+    margin: 0 2px;
+  }
+  .number {
+    padding: 4px 0;
+    color: $white;
+    margin: 0 2px;
+    text-align: center;
+    min-width: 23px;
+    border-radius: 50%;
+    font-size: 12px;
+  }
+  @media screen and (max-width: 1050px) {
+    margin: 0;
+    margin-top: 7px;
+    .feedback-icon {
+      height: 12px;
+    }
+    .number {
+      font-size: 10px;
+      padding: 2px 0;
+      min-width: 15px;
+    }
+  }
+}
+
+:host ::ng-deep input[disabled='true'] {
+  opacity: 0.5;
+}
+
+:host ::ng-deep .mat-tab-label-active .mat-tab-label-content {
+  color: $primary-cta !important;
+}
+
+:host ::ng-deep .data-table-row {
+  &:hover {
+    cursor: pointer;
+    background: $hoverBG !important;
+  }
+}
+
+:host ::ng-deep .heading {
+  color: $secondary !important;
+  font-size: 16px;
+  font-weight: $bold;
+}
+:host ::ng-deep .table-header-text {
+  color: $secondary !important;
+}
+
+// *** over ride the table style ***
+:host ::ng-deep .p-datatable {
+  @include tableCellPadding(0.3em);
+}

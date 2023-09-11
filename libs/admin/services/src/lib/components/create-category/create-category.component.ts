@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { CategoryFormValue, NavRouteOptions } from 'libs/admin/shared/src';
@@ -15,25 +15,28 @@ import { ServicesService } from '../../services/services.service';
 export class CreateCategoryComponent implements OnInit {
   readonly navRoute = servicesRoutes.createCategory.navRoutes;
   readonly pageTitle = servicesRoutes.createCategory.title;
+  paramData: any;
 
-  hotelId: string;
+  entityId: string;
   $subscription = new Subscription();
 
   constructor(
     private globalFilterService: GlobalFilterService,
     private servicesService: ServicesService,
     private snackbarService: SnackBarService,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
-    this.hotelId = this.globalFilterService.hotelId;
+    this.paramData = this.route.snapshot.queryParams;
+    this.entityId = this.paramData?.entityId;
   }
 
   handleSubmit(value: CategoryFormValue) {
     this.$subscription.add(
       this.servicesService
-        .createCategory(this.hotelId, {
+        .createCategory(this.entityId, {
           ...value,
           type: 'SERVICE_CATEGORY',
           source: 1,
@@ -47,7 +50,7 @@ export class CreateCategoryComponent implements OnInit {
             );
             this.router.navigate(['/pages/library/services']);
           },
-          ({ error }) => { }
+          ({ error }) => {}
         )
     );
   }

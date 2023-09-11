@@ -7,7 +7,7 @@
   opacity: 1;
   display: flex;
   justify-content: space-between;
-  font: normal normal bold 20px/26px Roboto;
+  font: normal normal $bold 20px/26px Poppins;
   letter-spacing: 1.2px;
   color: $white;
   &__title {
@@ -30,7 +30,7 @@
       width: 113px;
       height: 35px;
       border-radius: 18px;
-      font: normal normal normal 13px/18px Roboto;
+      font: normal normal $medium 13px/18px Poppins;
       letter-spacing: 0.78px;
       opacity: 1;
       text-align: center;

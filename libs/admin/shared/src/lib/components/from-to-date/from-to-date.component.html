@@ -1,0 +1,40 @@
+<div class="dates" [formGroup]="parentFG">
+  <div class="field">
+    <hospitality-bot-date
+      class="bulk-update__date"
+      [ngClass]="className"
+      [controlName]="controlNames.from"
+      [label]="showLabel ? labels.from : ''"
+      [props]="{
+        placeholder: 'Select From ' + (isTimeOnly ? 'Time' : 'Date'),
+        errorMessages: preErrorMessages
+      }"
+      [settings]="{
+        isTimeOnly: isTimeOnly,
+        enableTime: isTimeEnable,
+        showIcon: showIcon
+      }"
+      [minDate]="!isTimeOnly && startMinDate"
+      [maxDate]="!isTimeOnly && startMaxDate"
+    ></hospitality-bot-date>
+  </div>
+  <div class="field">
+    <hospitality-bot-date
+      class="bulk-update__date"
+      [ngClass]="className"
+      [controlName]="controlNames.to"
+      [label]="showLabel ? labels.to : ''"
+      [props]="{
+        placeholder: 'Select To ' + (isTimeOnly ? 'Time' : 'Date'),
+        errorMessages: postErrorMessages
+      }"
+      [settings]="{
+        isTimeOnly: isTimeOnly,
+        enableTime: isTimeEnable,
+        showIcon: showIcon
+      }"
+      [minDate]="!isTimeOnly && endMinDate"
+      [maxDate]="!isTimeOnly && endMaxDate"
+    ></hospitality-bot-date>
+  </div>
+</div>

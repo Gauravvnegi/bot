@@ -1,3 +1,5 @@
+import { labels } from '../constants/config';
+
 export const ValueFormatter = (num, digits) => {
   const units = [
     { value: 1, symbol: '' },
@@ -16,3 +18,20 @@ export const ValueFormatter = (num, digits) => {
     units[i].symbol
   }`;
 };
+
+/**
+ * Handle conversion of the key to label format
+ * @param str key value
+ * @returns label value
+ */
+export function convertToTitleCase(str: string) {
+  const value = labels[str];
+
+  return value
+    ? value
+    : str
+        .toLowerCase()
+        .split('_')
+        .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(' ');
+}

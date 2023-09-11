@@ -23,7 +23,7 @@ import { listingConfig } from '../../constants/listing';
 export class EditListingComponent implements OnInit, OnDestroy {
   listFG: FormGroup;
   listData: IList;
-  hotelId: string;
+  entityId: string;
   listId: string;
   isSaving = false;
   loading = false;
@@ -77,8 +77,8 @@ export class EditListingComponent implements OnInit, OnDestroy {
           ...data['filter'].queryValue,
           ...data['dateRange'].queryValue,
         ];
-        this.hotelId = this.globalFilterService.hotelId;
-        this.getTopicList(this.hotelId);
+        this.entityId = this.globalFilterService.entityId;
+        this.getTopicList(this.entityId);
         this.getListingId();
       })
     );
@@ -86,9 +86,9 @@ export class EditListingComponent implements OnInit, OnDestroy {
 
   /**
    * @function getTopicList To get topic record list.
-   * @param hotelId The hotel id for which getTopicList will be done.
+   * @param entityId The hotel id for which getTopicList will be done.
    */
-  getTopicList(hotelId) {
+  getTopicList(entityId) {
     const config = {
       queryObj: this.adminUtilityService.makeQueryParams([
         {
@@ -98,8 +98,9 @@ export class EditListingComponent implements OnInit, OnDestroy {
       ]),
     };
     this.$subscription.add(
-      this._listingService.getTopicList(hotelId, config).subscribe(
-        (response) => {
+      this._listingService
+        .getTopicList(entityId, config)
+        .subscribe((response) => {
           const data = new Topics()
             .deserialize(response)
             .records.map((item) => ({ label: item.name, value: item.id }));
@@ -131,17 +132,26 @@ export class EditListingComponent implements OnInit, OnDestroy {
   getListDetails(id) {
     this.loading = true;
     this.$subscription.add(
-      this._listingService.getListById(this.hotelId, id).subscribe(
+      this._listingService.getListById(this.entityId, id).subscribe(
         (response) => {
           this.loading = false;
           this.listData = new List().deserialize(response, 0);
           this.listFG.patchValue(this.listData);
         },
         ({ error }) => {
-          this.loading = false; 
+          this.loading = false;
         }
       )
     );
+  }
+
+  resetForm() {
+    this.listFG.reset();
+  }
+
+  handleSubmit() {
+    if (this.listId) this.updateList();
+    else this.createList();
   }
 
   /**
@@ -183,7 +193,7 @@ export class EditListingComponent implements OnInit, OnDestroy {
       };
     });
     this.isSaving = true;
-    this._listingService.createList(this.hotelId, data).subscribe(
+    this._listingService.createList(this.entityId, data).subscribe(
       (response) => {
         this.snackbarService
           .openSnackBarWithTranslate(
@@ -199,7 +209,7 @@ export class EditListingComponent implements OnInit, OnDestroy {
           .subscribe();
         this._router.navigate([`pages/library/listing`]);
       },
-      ({ error }) => { },
+      ({ error }) => {},
       () => (this.isSaving = false)
     );
   }
@@ -243,7 +253,7 @@ export class EditListingComponent implements OnInit, OnDestroy {
       };
     });
     this.isSaving = true;
-    this._listingService.updateList(this.hotelId, this.listId, data).subscribe(
+    this._listingService.updateList(this.entityId, this.listId, data).subscribe(
       (response) => {
         this.snackbarService
           .openSnackBarWithTranslate(
@@ -257,7 +267,7 @@ export class EditListingComponent implements OnInit, OnDestroy {
           .subscribe();
         this._router.navigate([`pages/library/listing`]);
       },
-      ({ error }) => {  },
+      ({ error }) => {},
       () => (this.isSaving = false)
     );
   }

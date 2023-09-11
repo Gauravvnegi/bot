@@ -8,6 +8,7 @@ import { AdminMessagesRoutingModule } from './admin-messages.routing.module';
 import { SharedModule } from 'primeng/api';
 import { AdminWhatsappModule } from 'libs/admin/whatsapp/src/lib/admin-whatsapp.module';
 import { MessageService } from 'libs/admin/whatsapp/src/lib/services/messages.service';
+import { ThemeModule } from '@hospitality-bot/admin/core/theme';
 
 @NgModule({
   imports: [
@@ -18,8 +19,10 @@ import { MessageService } from 'libs/admin/whatsapp/src/lib/services/messages.se
     SharedModule,
     SharedMaterialModule,
     ReactiveFormsModule,
+    ThemeModule,
     FormsModule,
   ],
+  exports: [MessagesComponent],
   declarations: [MessagesComponent],
   providers: [MessageService],
 })

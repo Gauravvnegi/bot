@@ -1,0 +1,255 @@
+<div [id]="fd.referenceId">
+  <hospitality-bot-navigation-header [heading]="pageTitle" [routes]="navRoutes">
+    <hospitality-bot-button
+      label="Print QR Code"
+      (onClick)="onPrintQrCode()"
+      [disabled]="!outletId || loading"
+    ></hospitality-bot-button>
+  </hospitality-bot-navigation-header>
+
+  <div [formGroup]="useForm">
+    <div class="hotel-header">
+      <div class="header__title">Outlet Information</div>
+    </div>
+    <div class="form-block">
+      <hospitality-bot-input
+        [loading]="loading"
+        class="half-width"
+        controlName="name"
+        label="Name"
+        maxLength="60"
+        [props]="{
+          placeholder: 'Enter'
+        }"
+      ></hospitality-bot-input>
+      <div class="half-width type-wrapper">
+        <hospitality-bot-select
+          [loading]="loading"
+          class="half-width"
+          controlName="type"
+          label="Type"
+          [options]="types"
+          [props]="{
+            placeholder: 'Select Type'
+          }"
+        ></hospitality-bot-select>
+        <hospitality-bot-select
+          [loading]="loading"
+          class="half-width"
+          controlName="subType"
+          label="Sub Type"
+          [options]="subType"
+          [disabled]="!isTypeSelected"
+          [props]="{
+            placeholder: 'Select Sub Type'
+          }"
+        ></hospitality-bot-select>
+      </div>
+      <hospitality-bot-input
+        [loading]="loading"
+        class="half-width"
+        controlName="emailId"
+        label="Email"
+        [props]="{
+          placeholder: 'Enter',
+          errorMessages: {
+            required: 'This is a required field.',
+            pattern: 'Please enter a valid email address.'
+          }
+        }"
+      ></hospitality-bot-input>
+      <div class="half-width" [formGroup]="useForm.get('contact')">
+        <hospitality-bot-phone-number
+          [loading]="loading"
+          preControlName="countryCode"
+          postControlName="number"
+        ></hospitality-bot-phone-number>
+      </div>
+
+      <hospitality-bot-address-component
+        class="half-width"
+        controlName="address"
+      >
+      </hospitality-bot-address-component>
+
+      <hospitality-bot-multi-select
+        [loading]="loading"
+        class="half-width"
+        controlName="cuisinesType"
+        label="Cuisines Type"
+        [options]="cuisines"
+        *ngIf="useForm.get('type').value === 'RESTAURANT'"
+      ></hospitality-bot-multi-select>
+
+      <div class="file-upload-wrapper">
+        <hospitality-bot-custom-file-upload
+          formControlName="imageUrl"
+          label="Image"
+          isFeatureView="true"
+          description="Mandatory to add at least 1 image"
+          [settings]="{
+            limit: 1,
+            unit: 4,
+            isMultiple: true
+          }"
+          [entityId]=""
+          path="static-content/room-types"
+        ></hospitality-bot-custom-file-upload>
+      </div>
+      <div class="des-template">
+        <div class="des-template__label">Description</div>
+        <div class="des-template__input">
+          <hospitality-bot-template-editor
+            [parentFG]="useForm"
+            [name]="'description'"
+            [height]="250"
+          ></hospitality-bot-template-editor>
+        </div>
+      </div>
+    </div>
+
+    <!-- //ng ngSwitch it will operate on the basis of type -->
+    <div class="container-wrapper" *ngIf="isTypeSelected">
+      <div class="header">Other Details</div>
+      <hr />
+      <div class="details-wrapper">
+        <hospitality-bot-input
+          *ngIf="useForm.get('type').value === 'RESTAURANT'"
+          [loading]="loading"
+          class="half-width"
+          controlName="maximumOccupancy"
+          label="Max Occupancy"
+          maxLength="60"
+          [props]="{
+            placeholder: 'Enter'
+          }"
+        ></hospitality-bot-input>
+        <hospitality-bot-prefix-field
+          *ngIf="
+            useForm.get('type').value !== 'SPA' &&
+            useForm.get('type').value !== 'RESTAURANT'
+          "
+          label="Occupancy"
+          class="half-width"
+          preControlName="maximumOccupancy"
+          postControlName="minimumOccupancy"
+          preFieldType="input"
+          postFieldType="input"
+          [defaultProps]="{
+            pre: {
+              placeholder: 'Min'
+            },
+            post: {
+              placeholder: 'Max'
+            }
+          }"
+          [settings]="{
+            layout: 'dashed',
+            preProps: { type: 'number' },
+            postProps: { type: 'number' }
+          }"
+        >
+        </hospitality-bot-prefix-field>
+        <hospitality-bot-prefix-field
+          *ngIf="useForm.get('type').value !== 'SPA'"
+          preControlName="area"
+          postControlName="dimension"
+          class="half-width"
+          [props]="{
+            placeholder: 'Enter'
+          }"
+          label="Area"
+          [settings]="{
+            preFieldType: 'input',
+            postFieldType: 'select',
+            layout: 'pre-main',
+            postOptions: dimensions
+          }"
+        ></hospitality-bot-prefix-field>
+        <hospitality-bot-prefix-field
+          label="Days Of operation"
+          class="half-width"
+          preControlName="startDay"
+          postControlName="endDay"
+          preFieldType="select"
+          postFieldType="select"
+          [props]="{
+            placeholder: 'Select Days'
+          }"
+          [preOptions]="startDays"
+          [postOptions]="endDays"
+          [settings]="{
+            layout: 'dashed'
+          }"
+        >
+        </hospitality-bot-prefix-field>
+
+        <hospitality-bot-prefix-field
+          label="Timings"
+          class="half-width"
+          preControlName="from"
+          postControlName="to"
+          preFieldType="select"
+          postFieldType="select"
+          [preOptions]="fromTime"
+          [postOptions]="toTime"
+          [props]="{
+            placeholder: 'Select Timings'
+          }"
+          [settings]="{
+            layout: 'dashed'
+          }"
+        >
+        </hospitality-bot-prefix-field>
+      </div>
+    </div>
+
+    <ng-container [ngSwitch]="useForm.get('type').value">
+      <hospitality-bot-restaurant-form
+        [compServices]="compServices"
+        [menuList]="menuList"
+        [outletId]="outletId"
+        *ngSwitchCase="'RESTAURANT'"
+        class="full-width"
+        [isLoading]="loading"
+        (onCreateAndContinueFeature)="submitForm($event)"
+      ></hospitality-bot-restaurant-form>
+      <hospitality-bot-spa-form
+        [isLoading]="loading"
+        [paidServices]="paidServices"
+        [outletId]="outletId"
+        *ngSwitchCase="'SPA'"
+        (onCreateAndContinueFeature)="submitForm($event)"
+        class="full-width"
+      >
+      </hospitality-bot-spa-form>
+      <hospitality-bot-banquet-form
+        [isLoading]="loading"
+        [compServices]="compServices"
+        [paidServices]="paidServices"
+        [isPaidLoading]="isPaidLoading"
+        [isCompLoading]="isCompLoading"
+        [outletId]="outletId"
+        (onCreateAndContinueFeature)="submitForm($event)"
+        *ngSwitchCase="'VENUE'"
+        class="full-width"
+      >
+      </hospitality-bot-banquet-form>
+    </ng-container>
+
+    <hospitality-bot-social-media
+      *ngIf="useForm.get('type').value.length"
+      controlName="socialPlatforms"
+    ></hospitality-bot-social-media>
+
+    <hospitality-bot-form-action
+      class="full-width"
+      [loading]="loading"
+      [isId]="outletId"
+      (onPreAction)="resetForm()"
+      (onPostAction)="submitForm(entityId ? 'hotel' : 'brand')"
+      #fd
+    >
+    </hospitality-bot-form-action>
+  </div>
+</div>

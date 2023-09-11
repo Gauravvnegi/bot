@@ -34,7 +34,7 @@ export const cols: Cols[] = [
   {
     field: 'status',
     header: 'Actions',
-    isSortDisabled: true,
+    sortType: 'number',
     isSearchDisabled: true,
 
     width: '23.75%',
@@ -63,7 +63,7 @@ export const filtersChips: Chip<'ALL' | 'ACTIVE' | 'INACTIVE'>[] = [
     value: 'ACTIVE',
     total: 0,
     isSelected: false,
-    type: 'new',
+    type: 'active',
   },
   {
     label: 'Inactive ',

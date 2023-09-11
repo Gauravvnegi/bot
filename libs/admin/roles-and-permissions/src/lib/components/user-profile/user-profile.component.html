@@ -14,7 +14,7 @@
     <hospitality-bot-custom-file-upload
       class="two-third-width"
       formControlName="profileUrl"
-      [hotelId]="loggedInUserId"
+      [entityId]="loggedInUserId"
       path="static-content/user-profile"
       description="Add your profile image"
     ></hospitality-bot-custom-file-upload>
@@ -50,10 +50,10 @@
 
     <div
       class="one-third-width managed-by"
-      *ngIf="hasPageState('addNewUser') && userToModDetails"
+      *ngIf="hasPageState('addNewUser', 'editUser')"
     >
-      Manage By: {{ userToModDetails.firstName }}
-      {{ userToModDetails.lastName }}, Admin
+      Manage By: {{ adminToModDetails.firstName }}
+      {{ adminToModDetails.lastName }}, Admin
     </div>
     <div
       class="one-third-width"
@@ -108,6 +108,13 @@
       controlName="branchName"
       [options]="branchNames"
       label="Hotel"
+    ></hospitality-bot-select>
+
+    <hospitality-bot-select
+      class="one-third-width"
+      controlName="reportingTo"
+      [options]="userList"
+      label="Reporting To"
     ></hospitality-bot-select>
 
     <hospitality-bot-multi-select
@@ -240,7 +247,10 @@
           </div>
         </mat-expansion-panel>
       </mat-accordion>
-      <div class="permission-button-wrapper">
+      <div
+        class="permission-button-wrapper"
+        *ngIf="doesNotHasPageSate('viewUser')"
+      >
         <hospitality-bot-button
           [label]="isUpdatingPermissions ? 'Saving...' : 'Save'"
           (click)="savePermission()"

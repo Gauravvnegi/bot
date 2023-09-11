@@ -57,8 +57,8 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
   @ViewChild('cardComponent') cardComponent: MainComponent;
   @Input() globalFeedbackFilterType: string;
   @Input() tableName = feedback.table.name;
-  @Input() tabFilterIdx = 0;
-  @Input() tabFilterItems = [];
+  // tabFilterIdx = 0;
+  // @Input() tabFilterItems = [];
   globalFeedbackConfig = feedback;
   outlets = [];
   actionButtons = true;
@@ -68,17 +68,18 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
   isAutoLayout = false;
   isCustomSort = true;
   triggerInitialData = false;
-  hotelId: string;
-  rowsPerPage = 25;
+  entityId: string;
   colorMap;
   responseRate;
   cols: Cols[] = feedback.cols.feedbackDatatable.transactional;
   stayCols = feedback.cols.feedbackDatatable.stay;
-  tableTypes = [feedback.tableTypes.table, feedback.tableTypes.card];
+  tableTypes = [feedback.tableTypes.card, feedback.tableTypes.table];
   chips = feedback.chips.feedbackDatatable;
   globalQueries = [];
   $subscription = new Subscription();
   userPermissions: Departmentpermission[];
+  feedbackType = '';
+  navRoutes = [{ label: 'Feedback', link: './' }];
   constructor(
     public fb: FormBuilder,
     protected _adminUtilityService: AdminUtilityService,
@@ -98,7 +99,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
   }
 
   ngOnInit(): void {
-    this.tableFG?.addControl('tableType', new FormControl('table'));
+    this.tableFG?.addControl('tableType', new FormControl('card'));
     this.registerListeners();
     this.documentActionTypes.push({
       label: `Export Summary`,
@@ -106,6 +107,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
       type: '',
       defaultLabel: 'Export Summary',
     });
+    this.selectedTab = this.tabFilterItems[this.tabFilterIdx]?.value;
   }
 
   registerListeners(): void {
@@ -164,8 +166,8 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
           ...data['filter'].queryValue,
           ...data['dateRange'].queryValue,
         ];
-        this.hotelId = this.globalFilterService.hotelId;
-        this.getOutlets(data['filter'].value.property.branchName);
+        this.entityId = this.globalFilterService.entityId;
+        this.getOutlets(data['filter'].value.property.entityName);
         const feedbackType = data['filter'].value.feedback.feedbackType;
 
         if (this.tableFG?.get('tableType').value !== 'card') {
@@ -213,9 +215,9 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
    */
   listenForFeedbackTypeChanged(): void {
     this.$subscription.add(
-      this.tableService.$feedbackType.subscribe((response) =>
-        this.setTabFilters(response)
-      )
+      this.tableService.$feedbackType.subscribe((response) => {
+        this.setTabFilters(response);
+      })
     );
   }
 
@@ -227,6 +229,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
     if (feedbackType === feedback.types.transactional)
       this.tabFilterItems = feedback.tabFilterItems.datatable.transactional;
     else this.tabFilterItems = feedback.tabFilterItems.datatable.stay;
+    this.feedbackType = feedbackType;
     this.setTableCols();
     this.getUserPermission(this.tabFilterItems[this.tabFilterIdx].value);
   }
@@ -236,8 +239,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
    */
   setTableCols(): void {
     this.cols =
-      this.tabFilterItems[this.tabFilterIdx]?.value ===
-      this.globalFeedbackConfig.types.stay
+      this.feedbackType === this.globalFeedbackConfig.types.stay
         ? this.globalFeedbackConfig.cols.feedbackDatatable.stay
         : this.globalFeedbackConfig.cols.feedbackDatatable.transactional;
   }
@@ -250,7 +252,8 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
     this.outlets =
       this._hotelDetailService.hotels.find(
         (branch) => branch['id'] === branchId
-      )?.outlets ?? [];
+      )?.entities ?? [];
+
     this.outlets = [
       ...this.outlets,
       ...this._hotelDetailService.hotels.filter(
@@ -281,18 +284,6 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
   }
 
   /**
-   * @function getSelectedQuickReplyFilters To get the selected chips.
-   * @returns The selected chips.
-   */
-  getSelectedQuickReplyFilters(): SelectedChip[] {
-    return this.tabFilterItems[this.tabFilterIdx].chips
-      .filter((item) => item.isSelected === true)
-      .map((item) => ({
-        entityType: item.value,
-      }));
-  }
-
-  /**
    * @function fetchDataFrom To fetch api data.
    * @param queries The filter data.
    * @param defaultProps The default page data.
@@ -308,7 +299,8 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
       queryObj: this._adminUtilityService.makeQueryParams([
         ...queries,
         {
-          feedbackType: this.tabFilterItems[this.tabFilterIdx].value,
+          feedbackType: this.feedbackType,
+          entityType: this.selectedTab,
           entityIds: this.setEntityId(),
         },
       ]),
@@ -326,7 +318,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
       this.globalFeedbackConfig.types.transactional
     )
       return this.statisticService.outletIds;
-    else return this.hotelId;
+    else return this.entityId;
   }
 
   /**
@@ -360,56 +352,26 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
    * @param data The api response data for feedback.
    */
   setRecords(data): void {
+    let modifiedData;
     if (
       this.tabFilterItems[this.tabFilterIdx].value ===
       this.globalFeedbackConfig.types.transactional
     )
-      this.values = new FeedbackTable().deserialize(data, this.outlets).records;
+      modifiedData = new FeedbackTable().deserialize(data, this.outlets);
     else
-      this.values = new StayFeedbackTable().deserialize(
+      modifiedData = new StayFeedbackTable().deserialize(
         data,
         this.outlets,
         this.colorMap
-      ).records;
-    this.totalRecords =
-      data.entityTypeCounts[
-        this.tabFilterItems[this.tabFilterIdx].chips.filter(
-          (item) => item.isSelected
-        )[0].value
-      ];
-    this.tabFilterItems[this.tabFilterIdx].total = data.total;
-    data.entityTypeCounts &&
-      this.updateQuickReplyFilterCount(data.entityTypeCounts);
-    this.updateTotalRecords();
+      );
+
+    this.values = modifiedData.records;
+    this.initFilters(
+      modifiedData.entityTypeCounts,
+      modifiedData.entityStateCounts,
+      modifiedData.totalRecord
+    );
     this.loading = false;
-  }
-
-  updateQuickReplyFilterCount(countObj: any): void {
-    if (countObj) {
-      if (this.tabFilterItems[this.tabFilterIdx]?.chips?.length) {
-        this.setFilterChips(
-          this.tabFilterItems[this.tabFilterIdx]?.chips,
-          countObj
-        );
-      } else if (this.filterChips?.length) {
-        this.setFilterChips(this.filterChips, countObj);
-      }
-    }
-  }
-
-  /**
-   * @function setFilterChips To set the total count for the chips.
-   * @param chips The chips array.
-   * @param countObj The object with count for all the chip.
-   */
-  setFilterChips(chips, countObj) {
-    countObj = Object.entries(countObj).reduce((acc, [key, value]) => {
-      acc[key.toUpperCase()] = value;
-      return acc;
-    }, {});
-    chips.forEach((chip) => {
-      chip.total = countObj[chip.value] ?? 0;
-    });
   }
 
   updateFeedbackState(event) {
@@ -441,23 +403,6 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
   }
 
   /**
-   * @function updatePaginations To handle page change event.
-   * @param event The lazy load event.
-   */
-  updatePaginations(event: LazyLoadEvent): void {
-    this.first = event.first;
-    this.rowsPerPage = event.rows;
-  }
-
-  /**
-   * @function updatePaginationForFilterItems To update the page number for a tab.
-   * @param pageEvent The page number.
-   */
-  updatePaginationForFilterItems(pageEvent: number): void {
-    this.tabFilterItems[this.tabFilterIdx].lastPage = pageEvent;
-  }
-
-  /**
    * @function customSort To handle table sort click.
    * @param event The sort event for the table.
    */
@@ -470,19 +415,6 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
     event.data.sort((data1, data2) =>
       this.sortOrder(event, field, data1, data2, col)
     );
-  }
-
-  /**
-   * @function onSelectedTabFilterChange To handle tab filter selection.
-   * @param event The material tab change event.
-   */
-  onSelectedTabFilterChange(event: MatTabChangeEvent): void {
-    this.tabFilterIdx = event.index;
-    if (this.tableFG?.get('tableType').value !== 'card') {
-      this.setTableCols();
-      this.values = [];
-      this.loadData();
-    }
   }
 
   /**
@@ -519,7 +451,8 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
       ...this.globalQueries,
       {
         order: sharedConfig.defaultOrder,
-        feedbackType: this.tabFilterItems[this.tabFilterIdx].value,
+        feedbackType: this.feedbackType,
+        entityType: this.selectedTab,
         entityIds: this.setEntityId(),
       },
       ...this.getSelectedQuickReplyFilters(),
@@ -570,7 +503,8 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
         ...this.globalQueries,
         {
           order: sharedConfig.defaultOrder,
-          feedbackType: this.tabFilterItems[this.tabFilterIdx].value,
+          feedbackType: this.feedbackType,
+          entityType: this.selectedTab,
         },
         ...this.getSelectedQuickReplyFilters(),
       ]),
@@ -648,7 +582,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
       FeedbackNotificationComponent,
       dialogConfig
     );
-    detailCompRef.componentInstance.hotelId = this.hotelId;
+    detailCompRef.componentInstance.entityId = this.entityId;
     detailCompRef.componentInstance.email = [
       ...new Set(this.selectedRows.map((item) => item.guest.emailId)),
     ];
@@ -675,7 +609,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
     dialogConfig.data = {
       feedback: rowData,
       colorMap: this.colorMap,
-      feedbackType: this.tabFilterItems[this.tabFilterIdx].value,
+      feedbackType: this.feedbackType,
       isModal: true,
       globalQueries: this.globalQueries,
     };

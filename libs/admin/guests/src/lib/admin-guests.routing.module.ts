@@ -1,54 +1,39 @@
 import { NgModule } from '@angular/core';
-import { RouterModule, ROUTES } from '@angular/router';
-import { SubscriptionPlanService } from '@hospitality-bot/admin/core/theme';
-import {
-  CRoutes,
-  ModuleNames,
-  routesFactory,
-} from '@hospitality-bot/admin/shared';
-import { ChartsModule } from 'ng2-charts';
-import {
-  GuestComponent,
-  GuestDatatableComponent,
-  GuestDatatableModalComponent,
-  GuestDocumentsStatisticsComponent,
-  GuestPaymentsStatisticsComponent,
-  SourceStatisticsComponent,
-  StatisticsComponent,
-  TypeGuestStatisticsComponent,
-} from './components';
+import { Route, RouterModule } from '@angular/router';
+import { AddGuestComponent } from './components';
+import { MainComponent } from './components/main/main.component';
+import { manageGuestRoutes } from './constant/route';
+import { GuestDatatableComponent } from './components/guest-datatable/guest-datatable.component';
 
-const appRoutes: CRoutes = [
-  { path: '', redirectTo: 'dashboard' },
+const appRoutes: Route[] = [
   {
-    path: 'dashboard',
-    name: ModuleNames.GUESTS_DASHBOARD,
-    component: GuestComponent,
+    path: '',
+    component: MainComponent,
+    children: [
+      {
+        path: '',
+        component: GuestDatatableComponent,
+      },
+      {
+        path: manageGuestRoutes.addGuest.route,
+        component: AddGuestComponent,
+      },
+      {
+        path: `${manageGuestRoutes.editGuest.route}/:id`,
+        component: AddGuestComponent,
+      },
+    ],
   },
 ];
 
 @NgModule({
-  imports: [RouterModule.forChild([]), ChartsModule],
-  providers: [
-    {
-      provide: ROUTES,
-      useFactory: (subscriptionService: SubscriptionPlanService) =>
-        routesFactory(appRoutes, [subscriptionService]),
-      multi: true,
-      deps: [SubscriptionPlanService],
-    },
-  ],
+  imports: [RouterModule.forChild(appRoutes)],
   exports: [RouterModule],
 })
 export class AdminGuestsRoutingModule {
   static components = [
-    GuestComponent,
-    StatisticsComponent,
-    GuestDocumentsStatisticsComponent,
-    GuestPaymentsStatisticsComponent,
-    SourceStatisticsComponent,
-    TypeGuestStatisticsComponent,
     GuestDatatableComponent,
-    GuestDatatableModalComponent,
+    AddGuestComponent,
+    MainComponent,
   ];
 }

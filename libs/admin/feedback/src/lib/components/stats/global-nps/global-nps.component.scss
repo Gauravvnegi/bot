@@ -1,6 +1,6 @@
 @import 'main';
 .stat-title {
-  font: normal normal bold 16px/19px Roboto;
+  font: normal normal $bolder 16px/19px Poppins;
   letter-spacing: 0.96px;
   color: $secondary;
   opacity: 1;
@@ -41,7 +41,7 @@
       width: 100%;
 
       .val {
-        font: normal normal bold 25px/30px Roboto;
+        font: normal normal $bolder 25px/30px Poppins;
         letter-spacing: 1.5px;
         color: $secondary;
         opacity: 1;
@@ -53,7 +53,7 @@
         }
       }
       .comparisonPercent {
-        font: normal normal normal 10px/14px Roboto;
+        font: normal normal $medium 10px/14px Poppins;
         letter-spacing: 0.72px;
         color: $posCompare;
         margin-left: 10px;
@@ -62,7 +62,7 @@
           display: block;
           color: $grayLight;
           letter-spacing: 0.72px;
-          font: normal normal normal 10px/14px Roboto;
+          font: normal normal $medium 10px/14px Poppins;
         }
 
         @media screen and (max-width: $L) {
@@ -71,7 +71,7 @@
       }
     }
     .label {
-      font: normal normal bold 12px/14px Roboto;
+      font: normal normal $bolder 12px/14px Poppins;
       letter-spacing: 0.72px;
       color: $subtitle;
       opacity: 1;
@@ -111,7 +111,7 @@
     }
     .stat-lable {
       text-align: center;
-      font: normal normal normal 12px/14px Roboto;
+      font: normal normal $medium 12px/14px Poppins;
       letter-spacing: 0.72px;
       color: $subtitle;
       opacity: 1;
@@ -120,7 +120,7 @@
       }
     }
     .stat-comparisonPercent {
-      font: normal normal normal 12px/14px Roboto;
+      font: normal normal $medium 12px/14px Poppins;
       letter-spacing: 0.72px;
       color: $posCompare;
       margin: 10px 0;
@@ -132,7 +132,7 @@
       text-align: right;
       text-align: right;
       padding: 5px;
-      font: normal normal bold 20px/30px Roboto;
+      font: normal normal $bolder 20px/30px Poppins;
       letter-spacing: 1.5px;
       color: $primary-cta;
       @media (max-width: 1024px) {

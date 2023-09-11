@@ -1,0 +1,146 @@
+<div class="wrapper" [id]="fa.referenceId">
+  <hospitality-bot-navigation-header
+    [heading]="pageTitle"
+    [routes]="navRoutes"
+  ></hospitality-bot-navigation-header>
+
+  <div class="form-block" [formGroup]="useForm">
+    <div class="code">
+      <span class="code__label">Code: </span>
+      <span class="code__hash">{{ packageCode }}</span>
+    </div>
+    <hospitality-bot-toggle-switch
+      class="status"
+      controlName="status"
+      label="Status"
+    ></hospitality-bot-toggle-switch>
+    <hospitality-bot-input
+      class="one-third-width"
+      controlName="name"
+      label="Name"
+      maxLength="60"
+      [props]="{
+        placeholder: 'Enter name'
+      }"
+    ></hospitality-bot-input>
+    <hospitality-bot-select
+      class="one-third-width"
+      controlName="mealPreference"
+      [options]="mealPreferences"
+      label="Meal Preference"
+      [props]="{
+        placeholder: 'Select Meal Preference',
+        createPrompt: 'Add New Meal Preference',
+        inputPrompt: 'Enter Meal Preference'
+      }"
+      (onCreate)="createMealPreference($event)"
+    ></hospitality-bot-select>
+    <hospitality-bot-select
+      class="one-third-width"
+      controlName="category"
+      [options]="categories"
+      label="Category"
+      [props]="{
+        placeholder: 'Select Category',
+        createPrompt: 'Add New Category',
+        inputPrompt: 'Enter Category'
+      }"
+      (onCreate)="createCategory($event)"
+    ></hospitality-bot-select>
+    <hospitality-bot-select
+      class="one-third-width"
+      controlName="type"
+      [options]="types"
+      label="Type"
+      [props]="{
+        placeholder: 'Select Type',
+        createPrompt: 'Add New Type',
+        inputPrompt: 'Enter Type'
+      }"
+      (onCreate)="createType($event)"
+    ></hospitality-bot-select>
+    <hospitality-bot-time-picker
+      class="one-third-width"
+      controlName="preparationTime"
+      label="Preparation Time"
+      format="millisecond"
+    ></hospitality-bot-time-picker>
+    <hospitality-bot-prefix-field
+      class="one-third-width"
+      preControlName="quantity"
+      postControlName="unit"
+      label="Qty/Unit"
+      [props]="{
+        placeholder: 'Enter unit',
+        type: 'number'
+      }"
+      [settings]="{
+        preFieldType: 'input',
+        postFieldType: 'select',
+        layout: 'pre-main',
+        postOptions: unitOptions
+      }"
+    ></hospitality-bot-prefix-field>
+    <hospitality-bot-prefix-field
+      *ngIf="currencies.length"
+      class="one-third-width"
+      preControlName="dineInPriceCurrency"
+      postControlName="dineInPrice"
+      [options]="currencies"
+      label="Dine In Price"
+      [props]="{
+        placeholder: 'Enter Dine in price'
+      }"
+    ></hospitality-bot-prefix-field>
+    <hospitality-bot-prefix-field
+      *ngIf="currencies.length"
+      class="one-third-width"
+      preControlName="deliveryPriceCurrency"
+      postControlName="deliveryPrice"
+      [options]="currencies"
+      label="Delivery Price"
+      [props]="{
+        placeholder: 'Enter delivery price'
+      }"
+    ></hospitality-bot-prefix-field>
+    <hospitality-bot-input
+      class="one-third-width"
+      controlName="hsnCode"
+      label="HSN Code"
+      [props]="{
+        placeholder: 'Enter HSN Code'
+      }"
+    ></hospitality-bot-input>
+    <hospitality-bot-multi-select
+      label="Tax"
+      class="one-third-width"
+      controlName="taxIds"
+      [props]="{
+        isAsync: true,
+        createPrompt: '+ Create New Tax',
+        placeholder: 'Select Tax'
+      }"
+      (onCreate)="createTax()"
+      [options]="taxes"
+    ></hospitality-bot-multi-select>
+    <div class="des-template">
+      <div class="des-template__label">Notes</div>
+      <div class="des-template__input">
+        <hospitality-bot-template-editor
+          [parentFG]="useForm"
+          [name]="'description'"
+          [height]="250"
+        ></hospitality-bot-template-editor>
+      </div>
+    </div>
+    <hospitality-bot-form-action
+      class="full-width"
+      [loading]="loading"
+      [isId]="menuItemId"
+      (onPreAction)="handleReset()"
+      (onPostAction)="handleSubmit()"
+      #fa
+    >
+    </hospitality-bot-form-action>
+  </div>
+</div>

@@ -264,6 +264,7 @@
       .router__wrapper {
         padding: 0 20px 20px 20px;
         min-height: calc(100vh - 110px);
+        // min-height: calc(100vh - 130px);
         @media only screen and (max-width: 1100px) {
           min-height: calc(100vh - 9.5vh);
         }
@@ -376,4 +377,8 @@
   position: absolute;
   height: 5px;
   inset: 58px 0 auto 0;
+}
+
+:host ::ng-deep .p-sidebar {
+  padding: unset !important;
 }

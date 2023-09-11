@@ -1,14 +1,6 @@
 import { filtersChips } from '@hospitality-bot/admin/library';
 import { Cols } from '@hospitality-bot/admin/shared';
-export const tabFilterItems = [
-  {
-    label: 'All',
-    content: '',
-    value: 'ALL',
-    disabled: false,
-    total: 0,
-  },
-];
+
 export const cols: Cols[] = [
   {
     field: 'name',
@@ -34,7 +26,7 @@ export const cols: Cols[] = [
   {
     field: 'status',
     header: 'Action',
-    sortType: 'string',
+    sortType: 'number',
     width: '20%',
     isSearchDisabled: true,
   },
@@ -43,3 +35,8 @@ export const cols: Cols[] = [
 export const chips = filtersChips.map((item) => ({ ...item }));
 
 export const title = 'Offers';
+
+export enum DiscountType {
+  PERCENTAGE = '%OFF',
+  NUMBER = 'FLAT',
+}

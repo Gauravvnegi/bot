@@ -7,11 +7,13 @@ import {
 import { Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { isEmpty } from 'lodash';
+import { TokensConfig } from 'apps/web-user/src/app/core/types/common.types';
 
 @Injectable()
 export class SharedTokenInterceptor implements HttpInterceptor {
   private tokenHeaderName: string;
   private tokenValue: string;
+  private entityId: string;
 
   intercept(
     req: HttpRequest<any>,
@@ -21,6 +23,7 @@ export class SharedTokenInterceptor implements HttpInterceptor {
       const modifiedRequest = req.clone({
         setHeaders: {
           [`${this.tokenHeaderName}`]: this.tokenValue,
+          ...(this.entityId ? { 'entity-id': this.entityId } : {}),
         },
       });
       return next.handle(modifiedRequest);
@@ -32,7 +35,12 @@ export class SharedTokenInterceptor implements HttpInterceptor {
     this.tokenHeaderName = headerName;
   }
 
-  setTokenValue(tokenValue: string) {
-    this.tokenValue = tokenValue;
+  setTokenValue(tokenValue: TokensConfig) {
+    this.tokenValue = tokenValue.accessToken;
+    this.entityId = tokenValue.entityId;
+  }
+
+  setEntityId(value: string) {
+    this.entityId = value;
   }
 }

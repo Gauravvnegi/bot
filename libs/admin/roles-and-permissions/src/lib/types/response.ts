@@ -1,4 +1,4 @@
-import { Department, HotelAccess } from ".";
+import { Department, HotelAccess } from '.';
 
 export type UserResponse = {
   id: string;
@@ -26,10 +26,13 @@ export type UserResponse = {
 
   agent: boolean;
   hotelAccess: HotelAccess;
+  reportingTo: string;
 };
 
 export type UserListResponse = {
   total: number;
   entityTypeCounts: {};
+  entityStateCounts: {};
   records: UserResponse[];
+  users?: UserResponse[];
 };

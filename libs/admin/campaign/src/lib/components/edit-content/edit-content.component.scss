@@ -8,8 +8,7 @@
     @include flex-space-between-cen-Algn;
     color: $tooltip;
     margin-bottom: 3px;
-    @include normal-text;
-    font-weight: normal;
+    @include light-sm-text;
   }
   &__container {
     width: 100%;
@@ -39,7 +38,7 @@
   padding: 0;
   align-items: flex-start;
   .one-fourth {
-    flex-basis: 8%;
+    flex-basis: 9%;
   }
   .one-third-width {
     flex-basis: 85%;

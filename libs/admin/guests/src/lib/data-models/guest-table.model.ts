@@ -7,65 +7,67 @@ import {
   Room,
   Status,
 } from '../../../../reservation/src/lib/models/reservation-table.model';
+import { EntityState } from '@hospitality-bot/admin/shared';
+import { DateService } from '@hospitality-bot/shared/utils';
 
 export interface IDeserializable {
   deserialize(input: any, hotelNationality: string): this;
 }
 
 export class GuestTable implements IDeserializable {
-  total: number;
-  entityTypeCounts: EntityTypeCounts;
-  entityStateCounts: EntityStateCounts;
-  records: Guest[];
+  totalRecord: number;
+  entityTypeCounts: EntityState<string>;
+  entityStateCounts: EntityState<string>;
+  records: GuestData[];
 
   deserialize(input: any) {
-    Object.assign(this, set({}, 'total', get(input, ['total'])));
-    this.entityTypeCounts = new EntityTypeCounts().deserialize(
-      input.entityTypeCounts,
-      input.total
-    );
-    this.entityStateCounts = new EntityStateCounts().deserialize(
-      input.entityStateCounts
-    );
     this.records = input.records.map((record) =>
-      new Guest().deserialize(record)
+      new GuestData().deserialize(record)
     );
+
+    this.entityTypeCounts = input.entityTypeCounts;
+    this.entityStateCounts = input.entityStateCounts;
+
+    this.totalRecord = input.total;
     return this;
   }
 }
 
-export class EntityTypeCounts {
-  ALL: number;
-  ARRIVAL: number;
-  OUTGUEST: number;
-  INHOUSE: number;
-  DEPARTURE: number;
+export class GuestData {
+  id: string;
+  code: string;
+  age: number;
+  mobileNumber: string;
+  email: string;
+  name: string;
+  isVerified: boolean;
+  dob: number;
+  created: number;
+  dobString: string;
+  createdString: string;
+  status: boolean;
+  type: string;
 
-  deserialize(data, total) {
-    Object.assign(
-      this,
-      set({}, 'ARRIVAL', get(data, ['ARRIVAL'])),
-      set({}, 'OUTGUEST', get(data, ['OUTGUEST'])),
-      set({}, 'INHOUSE', get(data, ['INHOUSE'])),
-      set({}, 'DEPARTURE', get(data, ['DEPARTURE']))
-    );
-    this.ALL = total ?? 0;
-    return this;
-  }
-}
-
-export class EntityStateCounts {
-  HIGHPOTENTIAL: number;
-  VIP: number;
-  HIGHRISK: number;
-
-  deserialize(data) {
-    Object.assign(
-      this,
-      set({}, 'HIGHPOTENTIAL', get(data, ['HIGHPOTENTIAL'])),
-      set({}, 'VIP', get(data, ['VIP'])),
-      set({}, 'HIGHRISK', get(data, ['HIGHRISK']))
-    );
+  deserialize(input) {
+    const contact = input['contactDetails'];
+    Object.assign(this, {
+      age: input['age'],
+      mobileNumber:
+        contact['cc'] && contact['contactNumber']
+          ? contact['cc'] + '-' + contact['contactNumber']
+          : '',
+      email: contact['emailId'],
+      name: input['firstName'] + ' ' + (input['lastName'] ?? ''),
+      id: input['id'],
+      isVerified: input['isVerified'],
+      status: input['status'],
+      type: input['type'],
+      code: input['code'],
+      dob: input['dateOfBirth'],
+      created: input['created'],
+      dobString: DateService.getDateMDY(input['dateOfBirth']),
+      createdString: DateService.getDateMDY(input['created']),
+    });
     return this;
   }
 }
@@ -76,7 +78,7 @@ export class Guest implements IDeserializable {
   firstName: string;
   id: string;
   lastName: string;
-  nameTitle: string;
+  salutation: string;
   nationality: string;
   countryCode: string;
   phoneNumber: string;
@@ -91,6 +93,7 @@ export class Guest implements IDeserializable {
   documents: any[];
   vip: boolean;
   fullName: string;
+  companyName: string;
   deserialize(input: any) {
     Object.assign(
       this,
@@ -107,7 +110,7 @@ export class Guest implements IDeserializable {
           get(input, ['lastName'], 'Name')
         )}`
       ),
-      set({}, 'nameTitle', get(input, ['nameTitle'], '')),
+      set({}, 'salutation', get(input, ['salutation'], '')),
       set({}, 'nationality', get(input, ['nationality'])),
       set(
         {},
@@ -117,6 +120,9 @@ export class Guest implements IDeserializable {
       set({}, 'phoneNumber', get(input, ['contactDetails', 'contactNumber'])),
       set({}, 'email', get(input, ['contactDetails', 'emailId']))
     );
+
+    this.companyName = 'Company Name';
+
     this.guestAttributes = new GuestAttributes().deserialize(input.attributes);
     if (input.reservation[0]) {
       const reservation = input.reservation[0];

@@ -32,13 +32,13 @@ export class CookiesSettingsService {
   ) {}
 
   initCookiesForPlatform() {
-    const hotelId =
-      this.globalFilterService.hotelId ??
-      localStorage.getItem(tokensConfig.hotelId);
+    const entityId =
+      this.globalFilterService.entityId ??
+      localStorage.getItem(tokensConfig.entityId);
     const siteId =
       this.hotelDetailsService.siteId ?? this.hotelDetailsService.getSiteId();
 
-    if (!hotelId) {
+    if (!entityId) {
       this.$isPlatformCookiesLoaded.next(false);
       return;
     }
@@ -56,7 +56,7 @@ export class CookiesSettingsService {
         email: userDetails.email,
       }),
       'x-userId': this._authService.getTokenByName('x-userId'),
-      hotelId: hotelId,
+      entityId: entityId,
       siteId: siteId,
       brandId: this.hotelDetailsService.brandId,
     };
@@ -90,13 +90,13 @@ export class CookiesSettingsService {
     const brands = currentSite?.brands;
     if (brands?.length) {
       // finding the brand which has hotel
-      const currentBrand = brands.find((item) => !!item.hotels?.length);
-      const hotels = currentBrand?.hotels;
+      const currentBrand = brands.find((item) => !!item.entities?.length);
+      const hotels = currentBrand?.entities;
 
       if (hotels.length) {
-        const hotelId = hotels[0].id;
+        const entityId = hotels[0].id;
 
-        this.tokenUpdateService.getUpdatedToken(hotelId).subscribe(
+        this.tokenUpdateService.getUpdatedToken(entityId).subscribe(
           (response) => {
             const key = Object.keys(response)[0];
             const hotelBasedToken = { key, value: response[key] };
@@ -104,13 +104,12 @@ export class CookiesSettingsService {
               this.hotelDetailsService.updateBusinessSession(
                 {
                   [tokensConfig.accessToken]: hotelBasedToken.value,
-                  [tokensConfig.hotelId]: hotelId,
+                  [tokensConfig.entityId]: entityId,
                   [tokensConfig.brandId]: currentBrand.id,
                   [tokensConfig.siteId]: currentSite.id,
                 },
                 redirectUrl
               );
-
             } else
               this.snackbarService.openSnackBarAsText(
                 'Do not have access to the site.'

@@ -1,0 +1,41 @@
+<div class="wrapper">
+  <div class="header">
+    <div class="header__title">
+      <div>Refund Amount</div>
+    </div>
+    <div (click)="close()" class="header__close">
+      <i class="fa fa-times" aria-hidden="true"></i>
+    </div>
+  </div>
+  <div class="form-block" [formGroup]="userForm">
+    <hospitality-bot-input
+      class="half-width"
+      controlName="refundAmount"
+      label="Amount"
+      [props]="{
+        type: 'number',
+        errorMessages: {
+          max: 'Needs to be less than the excessive paid amount'
+        }
+      }"
+      [max]="maxAmount"
+    ></hospitality-bot-input>
+    <hospitality-bot-input
+      class="full-width"
+      controlName="remarks"
+      label="Add Remarks"
+    ></hospitality-bot-input>
+  </div>
+  <div class="buttons">
+    <hospitality-bot-button
+      label="Cancel"
+      (onClick)="handleCancel()"
+      variant="outlined"
+    ></hospitality-bot-button>
+    <hospitality-bot-button
+      label="Apply"
+      [disabled]="userForm.invalid"
+      (onClick)="handleApply()"
+    ></hospitality-bot-button>
+  </div>
+</div>

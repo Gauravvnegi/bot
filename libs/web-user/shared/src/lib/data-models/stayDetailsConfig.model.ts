@@ -51,7 +51,8 @@ export class StayDetail implements Deserializable {
         'departureTime',
         moment(get(input, ['departureTime'])).utcOffset(timezone)
       ),
-      set({}, 'roomType', get(input, ['roomType'])),
+      // set({}, 'roomType', get(input, ['roomType'])),
+      set({}, 'roomType', get(get(input, ['room']), ['type'])),
       set({}, 'kidsCount', get(input, ['kidsCount'])),
       set({}, 'adultsCount', get(input, ['adultsCount']))
     );

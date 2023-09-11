@@ -33,9 +33,9 @@ import {
 } from '../../../data-models/feedback-datatable.model';
 import { StatisticsService } from '../../../services/feedback-statistics.service';
 import { FeedbackTableService } from '../../../services/table.service';
-import { SelectedChip } from '../../../types/feedback.type';
 import { FeedbackDatatableComponent } from '../../datatable/feedback-datatable/feedback-datatable.component';
 import { FeedbackDetailModalComponent } from '../feedback-detail-modal/feedback-detail.component';
+import { feedbackStatus } from '../../../constants/feedback';
 
 @Component({
   selector: 'hospitality-bot-feedback-datatable-modal',
@@ -109,7 +109,6 @@ export class FeedbackDatatableModalComponent extends FeedbackDatatableComponent
     this.config = this.data.config;
     this.feedbackGraph = this.config[0].feedbackGraph;
     this.feedbackType = this.data.feedbackType;
-    this.rowsPerPage = 5;
     if (this.tableName === 'Response Rate')
       this.isNotVisible =
         this.tabFilterIdx === 0 || this.tabFilterIdx === 2 ? true : false;
@@ -159,8 +158,8 @@ export class FeedbackDatatableModalComponent extends FeedbackDatatableComponent
           ...data['dateRange'].queryValue,
           ...this.config,
         ];
-        this.hotelId = this.globalFilterService.hotelId;
-        this.getOutlets(data['filter'].value.property.branchName);
+        this.entityId = this.globalFilterService.entityId;
+        this.getOutlets(data['filter'].value.property.entityName);
         //fetch-api for records
         this.loadInitialData([
           ...this.globalQueries,
@@ -208,20 +207,22 @@ export class FeedbackDatatableModalComponent extends FeedbackDatatableComponent
    * @param data The api response data for feedback.
    */
   setRecords(data): void {
+    let feedback;
     if (this.feedbackType === this.globalFeedbackConfig.types.transactional)
-      this.values = new FeedbackTable().deserialize(data, this.outlets).records;
+      feedback = new FeedbackTable().deserialize(data, this.outlets);
     else
-      this.values = new StayFeedbackTable().deserialize(
+      feedback = new StayFeedbackTable().deserialize(
         data,
         this.outlets,
         this.colorMap
-      ).records;
-    data.entityTypeCounts &&
-      this.updateTabFilterCount(data.entityTypeCounts, data.total);
-    data.entityStateCounts &&
-      this.updateQuickReplyFilterCount(data.entityStateCounts);
-    this.updateTotalRecords();
-
+      );
+    this.values = feedback.records;
+    this.initFilters(
+      feedback.entityTypeCounts,
+      feedback.entityStateCounts,
+      feedback.total,
+      feedbackStatus
+    );
     this.loading = false;
   }
 
@@ -266,7 +267,7 @@ export class FeedbackDatatableModalComponent extends FeedbackDatatableComponent
       this.feedbackType === ''
     )
       return this.statisticService.outletIds;
-    else return this.hotelId;
+    else return this.entityId;
   }
 
   /**
@@ -331,18 +332,6 @@ export class FeedbackDatatableModalComponent extends FeedbackDatatableComponent
         }
       )
     );
-  }
-
-  /**
-   * @function getSelectedQuickReplyFilters To get the selected chips.
-   * @returns The selected chips.
-   */
-  getSelectedQuickReplyFilters(): SelectedChip[] {
-    return this.tabFilterItems[this.tabFilterIdx].chips
-      .filter((item) => item.isSelected === true)
-      .map((item) => ({
-        entityState: item.value,
-      }));
   }
 
   /**

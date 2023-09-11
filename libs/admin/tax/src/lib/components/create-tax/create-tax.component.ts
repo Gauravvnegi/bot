@@ -1,5 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { ConfigService, NavRouteOptions, Option } from 'libs/admin/shared/src';
+import {
+  ConfigService,
+  HotelDetailService,
+  NavRouteOptions,
+  Option,
+} from 'libs/admin/shared/src';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { SnackBarService } from '@hospitality-bot/shared/material';
@@ -9,6 +14,8 @@ import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/servi
 import { TaxService } from '../../services/tax.service';
 import { TaxCountryList } from '../../models/tax.model';
 import { TaxFormData } from '../../types/tax';
+import { Location } from '@angular/common';
+
 @Component({
   selector: 'hospitality-bot-create-tax',
   templateUrl: './create-tax.component.html',
@@ -17,17 +24,21 @@ import { TaxFormData } from '../../types/tax';
 export class CreateTaxComponent implements OnInit {
   globalCountryData: TaxCountryList;
   taxId: string;
-  hotelId: string;
+  entityId: string;
   $subscription = new Subscription();
   useForm: FormGroup;
   pageTitle = 'Create Tax';
   loading = false;
   navRoutes: NavRouteOptions;
+  propertyList: Option[] = [];
 
   countries: Option[] = [];
   taxTypeList: Option[] = [];
   categoryList: Option[] = [];
   taxValueList: Option[] = [];
+  brandId: string;
+  hotelId: string;
+  paramData: any;
 
   constructor(
     private fb: FormBuilder,
@@ -35,7 +46,9 @@ export class CreateTaxComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private globalFilterService: GlobalFilterService,
-    private taxService: TaxService
+    private taxService: TaxService,
+    private hotelDetailService: HotelDetailService,
+    private location: Location
   ) {
     this.taxId = this.route.snapshot.paramMap.get('id');
     const { navRoutes, title } = taxRoutes[
@@ -46,8 +59,20 @@ export class CreateTaxComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.hotelId = this.globalFilterService.hotelId;
+    //to handel case when entity id is coming from query params
+    this.paramData = this.route.snapshot.queryParams;
+    this.entityId = this.paramData?.entityId;
+    
+    //set hotel id and brand id
+    this.hotelId = this.globalFilterService.entityId;
+    this.brandId = this.hotelDetailService.brandId;
+
+    //to handel case when user is coming from tax list page
+    if (!this.taxId && !this.paramData.entityId)
+      this.entityId = this.taxService.entityId ?? this.hotelId;
+
     this.getTaxCountry();
+    this.getPropertyList();
     this.initForm();
   }
 
@@ -57,16 +82,47 @@ export class CreateTaxComponent implements OnInit {
    */
   initForm(): void {
     this.useForm = this.fb.group({
+      entityId: [''],
       country: ['', Validators.required],
       taxType: ['', Validators.required],
       category: ['', Validators.required],
       taxValue: ['', Validators.required],
     });
+    //to set entity id in form
+    this.useForm.get('entityId').setValue(this.entityId);
+
     this.initFormSubscription();
   }
 
+  listenForPropertyChange(): void {
+    this.useForm.get('entityId').valueChanges.subscribe((val) => {
+      this.entityId = val;
+    });
+  }
+
+  getPropertyList() {
+    const selectedHotel = this.hotelDetailService.hotels.find(
+      (item) => item.id === this.hotelId
+    );
+
+    if (!selectedHotel) {
+      this.propertyList = [];
+      return;
+    }
+
+    this.propertyList = selectedHotel.entities.map((entity) => ({
+      label: entity.name,
+      value: entity.id,
+    }));
+
+    this.propertyList.unshift({
+      label: selectedHotel.name,
+      value: selectedHotel.id,
+    });
+  }
+
   /**
-   * @function getTax To get tax details if taxId is present
+   * @function getTax when items created successfully get tax details if taxId is present
    * @returns void
    * @description If taxId is present then it will call getTaxById api to get tax details and patch value in form
    */
@@ -74,9 +130,13 @@ export class CreateTaxComponent implements OnInit {
     this.loading = true;
     this.$subscription.add(
       this.taxService
-        .getTaxById(this.hotelId, this.taxId)
+        .getTaxById(this.taxId)
         .subscribe((res: TaxFormData) => {
+          this.entityId = res.entityId;
+          this.useForm.get('entityId').setValue(res.entityId);
+          this.useForm.get('entityId').disable();
           this.useForm.get('country').setValue(res.country);
+          this.useForm.get('country').disable();
           this.useForm.get('taxType').setValue(res.taxType);
           this.useForm.get('category').setValue(res.category);
           this.useForm.get('taxValue').setValue(res.taxValue);
@@ -122,18 +182,19 @@ export class CreateTaxComponent implements OnInit {
       );
       return;
     }
-    const data = this.useForm.getRawValue() as TaxFormData;
+    const data = this.useForm.getRawValue() as TaxFormData
+   
 
     if (this.taxId) {
       this.$subscription.add(
         this.taxService
-          .updateTax(this.hotelId, this.taxId, data)
+          .updateTax(this.entityId, this.taxId, data)
           .subscribe(this.handleSuccess, this.handelError)
       );
     } else {
       this.$subscription.add(
         this.taxService
-          .createTax(this.hotelId, data)
+          .createTax(this.entityId, data)
           .subscribe(this.handleSuccess, this.handelError)
       );
     }
@@ -175,6 +236,9 @@ export class CreateTaxComponent implements OnInit {
       '',
       { panelClass: 'success' }
     );
+
+    if (this.paramData?.entityId) this.location.back();
+
     this.router.navigate(['pages/settings/tax']);
   };
 

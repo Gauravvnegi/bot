@@ -11,14 +11,14 @@
     height: calc(100vh - 85px);
     .label {
       color: $primary-black;
-      font-weight: 500;
+      font-weight: $bold;
       letter-spacing: 0.84px;
       font-size: 18px;
       margin-top: 25px;
     }
     .note {
       color: $grayMedium;
-      font-weight: 500;
+      font-weight: $bold;
       letter-spacing: 0.84px;
       margin-top: 10px;
       font-size: 14px;

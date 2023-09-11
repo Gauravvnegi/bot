@@ -82,4 +82,8 @@ export class AdminUtilityService {
       ? 'MMM YYYY'
       : '';
   }
+
+  getEpsilonValue(floatNumber: number) {
+    return Math.round((floatNumber + Number.EPSILON) * 100) / 100;
+  }
 }

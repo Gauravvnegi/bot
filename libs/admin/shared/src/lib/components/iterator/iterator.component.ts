@@ -1,14 +1,15 @@
 import {
   Component,
   ElementRef,
+  EventEmitter,
   Input,
   OnChanges,
+  Output,
   SimpleChanges,
   ViewChild,
 } from '@angular/core';
 import { FormArray, FormBuilder, Validators } from '@angular/forms';
 import { IteratorField } from '../../types/fields.type';
-import { FormProps } from '../../types/form.type';
 
 @Component({
   selector: 'hospitality-bot-iterator',
@@ -18,22 +19,35 @@ import { FormProps } from '../../types/form.type';
 export class IteratorComponent implements OnChanges {
   constructor(protected fb: FormBuilder) {}
 
-  props: FormProps = {
-    fontSize: '14px',
-  };
+  @Output() currentIndex: EventEmitter<number> = new EventEmitter<number>();
+  @Output() removedIndex: EventEmitter<number> = new EventEmitter<number>();
 
   @Input() fields: IteratorField[];
   @Input() useFormArray: FormArray;
   @Input() ctaLabel: '+ Add More';
+  @Input() itemValues = [];
+
   @ViewChild('main') main: ElementRef;
 
   // Zero maxLimit means there is no limit
   @Input() maxLimit = 0;
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (!changes?.useFormArray?.currentValue.length) {
-      this.createNewFields();
+    const itemValues = changes?.itemValues?.currentValue;
+    if (itemValues?.length) {
+      if (itemValues.length > 1) {
+        // Create new form fields for each item in the array
+        itemValues.slice(1).forEach((item) => {
+          this.createNewFields();
+        });
+      }
+      // Patch the new values to the form array
+      this.useFormArray.patchValue(itemValues);
     }
+  }
+
+  ngOnInit() {
+    this.createNewFields();
   }
 
   /**
@@ -41,11 +55,20 @@ export class IteratorComponent implements OnChanges {
    */
   createNewFields() {
     const data = this.fields.reduce((prev, curr) => {
-      const value = curr.required ? ['', Validators.required] : [''];
+      let value;
+      if (curr.minValue) {
+        value = ['', [Validators.required, Validators.min(curr.minValue)]];
+      } else {
+        value = curr.required ? ['', Validators.required] : [''];
+      }
       prev[curr.name] = value;
       return prev;
     }, {});
-    this.useFormArray.push(this.fb.group(data));
+
+    const formGroup = this.fb.group(data);
+    this.useFormArray.push(formGroup);
+    const index = this.useFormArray.controls.indexOf(formGroup);
+    this.currentIndex.emit(index);
   }
 
   get width() {
@@ -62,10 +85,10 @@ export class IteratorComponent implements OnChanges {
       return;
     }
     this.createNewFields();
-    setTimeout(() => {
-      this.main.nativeElement.scrollIntoView({ behavior: 'smooth' });
-      this.main.nativeElement.scrollTop = this.main.nativeElement.scrollHeight;
-    }, 1000);
+    // setTimeout(() => {
+    //   this.main.nativeElement.scrollIntoView({ behavior: 'smooth' });
+    //   this.main.nativeElement.scrollTop = this.main.nativeElement.scrollHeight;
+    // }, 1000);
   }
 
   /**
@@ -74,9 +97,10 @@ export class IteratorComponent implements OnChanges {
    */
   removeField(index: number) {
     if (this.useFormArray.length === 1) {
-      this.useFormArray.at(0).reset();
+      if (this.useFormArray.valid) this.useFormArray.at(0).reset();
       return;
     }
     this.useFormArray.removeAt(index);
+    this.removedIndex.emit(index);
   }
 }

@@ -8,12 +8,15 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 export class ToggleSwitchComponentLabel implements OnInit {
   @Input() isToggleOn: boolean = false;
   @Output() onToggleSwitch = new EventEmitter<boolean>();
-  toggleOnLabel: string = 'Accept';
-  toggleOffLabel: string = 'Reject';
+  preContent = '';
+  toggleOnLabel: string = 'Active';
+  toggleOffLabel: string = 'Inactive';
   toggleOnColor: string = '#65b340';
-  toggleOffColor: string = '#ccc';
+  toggleOffColor: string = '#e31717';
+  @Input() isDisabled: boolean = false;
+  disableTurnOff: boolean = false;
 
-  @Input() set config(value) {
+  @Input() set config(value: ToggleSwitchConfig) {
     for (let key in value) {
       if (this.hasOwnProperty(key)) this[key] = value[key];
     }
@@ -22,7 +25,18 @@ export class ToggleSwitchComponentLabel implements OnInit {
   ngOnInit(): void {}
 
   toggleSwitch() {
-    this.isToggleOn = !this.isToggleOn;
-    this.onToggleSwitch.emit(this.isToggleOn);
+    if (!this.isDisabled) {
+      this.isToggleOn = !this.isToggleOn;
+      this.onToggleSwitch.emit(this.isToggleOn);
+    }
   }
 }
+
+type ToggleSwitchConfig = {
+  preContent: string;
+  toggleOnLabel: string;
+  toggleOffLabel: string;
+  toggleOnColor: string;
+  toggleOffColor: string;
+  disableTurnOff: boolean;
+};

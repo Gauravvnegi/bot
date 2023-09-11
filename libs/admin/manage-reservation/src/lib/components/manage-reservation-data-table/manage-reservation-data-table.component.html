@@ -6,8 +6,8 @@
   <div class="heading">{{ tableName }}</div>
   <div class="action-wrapper">
     <hospitality-bot-button
-      label="+ Create Booking"
-      link="/pages/efrontdesk/manage-reservation/{{
+      label="+ Create Reservation"
+      link="/pages/efrontdesk/reservation/{{
         manageReservationRoutes.addReservation.route
       }}"
     ></hospitality-bot-button>
@@ -23,6 +23,7 @@
 <div [ngClass]="{ 'sticky-header-gap': isScrolledUp }"></div>
 
 <p-table
+  [ngClass]="{ 'dynamic-height': isReachedEnd }"
   #dt
   [styleClass]="tableConfig.styleClass"
   [resizableColumns]="isResizableColumns"
@@ -45,17 +46,17 @@
   (sortFunction)="customSort($event)"
   [customSort]="isCustomSort"
   (onFilter)="onDataFilter()"
-  *ngIf="tabFilterItems[tabFilterIdx].total; else emptyTable"
+  *ngIf="!isEmpty; else emptyTable"
 >
   <ng-template pTemplate="caption">
     <div class="caption__wrapper" [formGroup]="tableFG">
       <ng-container [ngTemplateOutlet]="tabFilter"> </ng-container>
 
       <hospitality-bot-filter-chips
-        class="filterIcon"
         *ngIf="isQuickFilters"
         [chips]="filterChips"
         (onChange)="toggleQuickReplyFilter($event)"
+        [selectedChips]="selectedFilterChips"
       ></hospitality-bot-filter-chips>
     </div>
   </ng-template>
@@ -68,6 +69,7 @@
   <!-- *******************************HEADER WITH SEARCH******************************* -->
   <ng-template pTemplate="header" let-columns #header>
     <tr
+      #tableHeader
       hospitality-bot-table-header
       [columns]="columns"
       [showCheckbox]="isSelectable"
@@ -90,62 +92,117 @@
         ></p-tableCheckbox>
       </td>
       <td>
-        <div [roomStatus]="rowData?.roomStatus">
-          <div>
-            {{ rowData.roomNumber || '--' }}&nbsp;-&nbsp;{{
-              rowData.roomType || '--'
-            }}
-          </div>
-        </div>
-      </td>
-      <td>
-        <div class="center-align">
-          <div class="primary-text">#{{ rowData.confirmationNo }}</div>
-        </div>
-      </td>
-
-      <td>
-        <div class="cell-content">
+        <div class="cell-content" *ngIf="rowData?.invoiceId; else emptyCell">
           <div class="primary-text">
-            {{ rowData.fullName }}
+            {{ rowData?.invoiceId || '--' }}
           </div>
+        </div>
+      </td>
+      <td *ngIf="selectedEntity.subType !== 'ROOM_TYPE'">
+        <div class="primary-text">
+          <div>{{ this.selectedEntity.label }}</div>
+        </div>
+        <div class="secondary-text">
+          {{ this.selectedEntity.subType }}
+        </div>
+      </td>
+      <td *ngIf="selectedEntity.subType === 'ROOM_TYPE'">
+        <div
+          class="multi-cell-content"
+          *ngIf="rowData?.roomTypes; else emptyCell"
+          [roomStatus]="rowData?.roomStatus"
+        >
+          <div>
+            {{
+              (rowData?.bookingItems)[0]?.roomDetails.roomNumber || '--'
+            }}&nbsp;-&nbsp;{{ (rowData?.roomTypes)[0] || '--' }}
+          </div>
+          <b class="rowData">
+            {{ rowData.getRoomTypeDisplay().countString }}
+          </b>
+          <div
+            *ngIf="rowData?.roomTypes.length > 1"
+            class="room-type-cell"
+            [ngClass]="{ demo: rowData?.roomTypes.length > 1 }"
+          >
+            <div *ngFor="let roomType of rowData?.roomTypes; let i = index">
+              <ng-container *ngIf="i !== 0">{{ roomType }}</ng-container>
+            </div>
+          </div>
+        </div>
+      </td>
+      <td>
+        <div
+          class="center-align"
+          *ngIf="rowData?.confirmationNumber; emptyCell"
+        >
+          <div class="primary-text">{{ rowData?.confirmationNumber }}</div>
         </div>
       </td>
 
       <td>
-        <div class="center-align">
-          <div class="primary-text txtSize">
-            {{ rowData.from | date: 'dd/MM/yy' }}-{{
-              rowData.to | date: 'dd/MM/yy'
-            }}
+        <div
+          class="cell-content"
+          *ngIf="rowData?.guestName.length; else emptyCell"
+        >
+          <div class="primary-text">
+            {{ rowData.guestName }}
           </div>
           <div class="secondary-text">
-            {{ rowData.from | date: 'HH:mm' }}-{{ rowData.to | date: 'HH:mm' }}
+            {{ rowData?.companyName || '--' }}
           </div>
         </div>
       </td>
-      <td>
+
+      <td *ngIf="selectedEntity.subType !== 'ROOM_TYPE'">
         <div class="center-align">
+          <div class="primary-text txtSize">
+            {{ rowData?.from | date: 'dd/MM/yy' }}
+          </div>
+          <div class="secondary-text">
+            {{ rowData?.from | date: 'HH:mm' }}
+          </div>
+        </div>
+      </td>
+      <td *ngIf="selectedEntity.subType === 'ROOM_TYPE'">
+        <div class="center-align">
+          <div class="primary-text txtSize">
+            {{ rowData?.from | date: 'dd/MM/yy' }}-{{
+              rowData?.to | date: 'dd/MM/yy'
+            }}
+          </div>
+          <!-- <div class="secondary-text">
+            {{ rowData?.from | date: 'HH:mm' }}-{{
+              rowData?.to | date: 'HH:mm'
+            }}
+          </div> -->
+        </div>
+      </td>
+      <td>
+        <div
+          class="center-align"
+          *ngIf="rowData.totalDueAmount && rowData.totalAmount"
+        >
           <div class="primary-text txtSize">
             <span
               [ngClass]="{
                 'status-text-reject':
-                  rowData.totalDueAmount > 0 &&
-                  rowData.totalDueAmount <= rowData.totalAmount
+                  rowData?.totalDueAmount > 0 &&
+                  rowData?.totalDueAmount <= rowData?.totalAmount
               }"
-              >{{ rowData.totalDueAmount | currency: 'INR' }}</span
+              >{{ rowData?.totalDueAmount | currency: 'INR' }}</span
             >
-            /{{ rowData.totalAmount | currency: 'INR' }}
+            /{{ rowData?.totalAmount | currency: 'INR' }}
           </div>
         </div>
       </td>
       <td>
-        <div class="center-align">
+        <div class="center-align" *ngIf="rowData.sourceName; else emptyCell">
           <div class="primary-text">
-            {{ rowData.sourceName }}
+            {{ rowData?.sourceName }}
           </div>
           <div class="secondary-text">
-            {{ rowData.source }}
+            {{ rowData?.source }}
           </div>
         </div>
       </td>
@@ -153,22 +210,23 @@
       <td>
         <div class="center-align">
           <div class="primary-text">
-            {{ rowData.paymentMethod }}
-          </div>
-          <div class="secondary-text">
-            {{ rowData.totalPaidAmount | currency: 'INR' }}
+            {{ rowData?.totalPaidAmount | currency: 'INR' }}
           </div>
         </div>
       </td>
 
       <td>
-        <div class="" *ngIf="rowData.reservationType; else emptyCell">
-          <hospitality-bot-toggle-dropdown
-            [listItem]="rowData.statusValues"
+        <div *ngIf="rowData.reservationType; else emptyCell">
+          <hospitality-bot-status-dropdown-toggle
+            class="status-toggle"
+            [nextStates]="rowData.nextStates"
             (onClick)="handleStatus($event, rowData)"
-            [status]="rowData.reservationType"
+            [state]="rowData.reservationType"
+            [recordSetting]="reservationStatusDetails"
+            [menuOptions]="menuOptions"
+            (onMenuItemClick)="handleMenuClick($event, rowData.id)"
           >
-          </hospitality-bot-toggle-dropdown>
+          </hospitality-bot-status-dropdown-toggle>
         </div>
       </td>
     </tr>
@@ -187,16 +245,17 @@
     ></p-paginator>
   </ng-template>
 </p-table>
-<ng-template #emptyTable>
+<ng-template [ngClass]="{ 'dynamic-height': isReachedEnd }" #emptyTable>
   <hospitality-bot-empty-table
+    [height]="'62vh'"
     [isLoading]="loading"
-    link="/pages/efrontdesk/manage-reservation/{{
+    link="/pages/efrontdesk/reservation/{{
       manageReservationRoutes.addReservation.route
     }}"
     [content]="{
       description:
-        'No Booking found. Tap the +Create Booking to create & manage the booking offered by your hotel',
-      actionName: '+ Create Booking',
+        'No Reservation found. Tap the +Create Reservation to create & manage the reservation offered by your hotel',
+      actionName: '+ Create Reservation',
       imageSrc: 'assets/images/empty-table-package.png'
     }"
   >
@@ -210,4 +269,8 @@
     [listItems]="tabFilterItems"
     (selectedTabChange)="onSelectedTabFilterChange($event)"
   ></hospitality-bot-tab-group>
+</ng-template>
+
+<ng-template #emptyCell>
+  <div class="emptyCell">&mdash;</div>
 </ng-template>

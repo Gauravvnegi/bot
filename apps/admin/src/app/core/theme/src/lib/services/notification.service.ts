@@ -11,7 +11,7 @@ export class NotificationService extends ApiService {
   $whatsappNotification = new BehaviorSubject(null);
   getNotificationHistory(userId: string, config): Observable<any> {
     return this.get(
-      `/api/v1/user/${userId}/push-notification-history/${config.queryObj}`
+      `/api/v1/user/${userId}/push-notification-history${config.queryObj}`
     );
   }
 
@@ -25,14 +25,14 @@ export class NotificationService extends ApiService {
     status: boolean
   ) {
     return this.patch(
-      `/api/v1/user/${userId}/push-notification-setting/${settingId}?status=${status}`,
+      `/api/v1/user/${userId}/settings/${settingId}?status=${status}`,
       {}
     );
   }
 
   deleteNotification(userId: string, config) {
     return this.delete(
-      `/api/v1/user/${userId}/push-notification-history/${config.queryObj}`
+      `/api/v1/user/${userId}/push-notification-history${config.queryObj}`
     );
   }
 

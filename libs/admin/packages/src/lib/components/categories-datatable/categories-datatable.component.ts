@@ -31,7 +31,7 @@ export class CategoriesDatatableComponent extends BaseDatatableComponent
   globalQueries = [];
   tabFilterIdx = 1;
   $subscription = new Subscription();
-  hotelId;
+  entityId;
   isQuickFilters = false;
 
   cols = [
@@ -79,7 +79,7 @@ export class CategoriesDatatableComponent extends BaseDatatableComponent
         ...data['filter'].queryValue,
         ...data['dateRange'].queryValue,
       ];
-      this.hotelId = this.globalFilterService.hotelId;
+      this.entityId = this.globalFilterService.entityId;
       //fetch-api for records
       this.loadInitialData([
         ...this.globalQueries,

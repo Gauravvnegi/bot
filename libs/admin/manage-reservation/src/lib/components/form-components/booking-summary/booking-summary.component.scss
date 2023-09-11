@@ -1,0 +1,47 @@
+@import 'main';
+
+.empty-offer-view {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 28vh;
+}
+
+:host ::ng-deep .view-details-btn {
+  display: flex;
+  justify-content: flex-end;
+  .btn {
+    .button {
+      min-width: 0px;
+      padding: 0px;
+    }
+  }
+}
+
+.container {
+  overflow: auto;
+  padding: 0 16px;
+  max-height: calc(100vh - 400px);
+}
+
+.footer {
+  padding: 0 16px;
+}
+
+.page-heading {
+  border-bottom: 1px solid $grayMedium;
+  opacity: 0.5;
+  padding: 16px;
+  margin-bottom: 17.5px;
+}
+
+.room-count {
+  font-size: 13px;
+  opacity: 0.8;
+}
+
+.disabled-btn {
+  opacity: 0.5;
+  pointer-events: none;
+}

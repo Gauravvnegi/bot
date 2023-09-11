@@ -31,7 +31,7 @@
   margin-bottom: 15px;
   margin-top: 15px;
   .heading {
-    @include normal-text;
+    @include normal-sm-text;
     font-weight: $bolder;
     color: $secondary;
   }

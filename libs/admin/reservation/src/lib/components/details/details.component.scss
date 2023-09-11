@@ -26,10 +26,12 @@
 
 .details-wrapper {
   background-color: $white;
+  height: 85vh;
   // max-height: 100%;
   // @media screen and (max-width: 1100px) {
-    height: 85vh;
+  // height: 85vh;
   // }
+  padding-bottom: 10px;
 }
 
 :host ::ng-deep .p-dropdown .p-inputtext {
@@ -121,7 +123,7 @@
         .label {
           letter-spacing: 0.84px;
           font-size: 14px;
-          font-weight: bold;
+          font-weight: $bold;
           text-align: left;
         }
         .value {
@@ -129,7 +131,7 @@
           color: $grayLight;
           letter-spacing: 0.66px;
           margin-top: 5px;
-          font-weight: 500;
+          font-weight: $bold;
         }
       }
     }
@@ -211,7 +213,7 @@
         @include flex-item-center;
         border-radius: 5px;
         padding: 6px 20px;
-        @include normal-text;
+        @include normal-sm-text;
         text-align: center;
         color: $white;
         .material-icons {
@@ -241,7 +243,7 @@
 
 mat-option {
   color: black !important;
-}  
+}
 
 :host ::ng-deep .mat-select-panel:not([class*='mat-elevation-z']) {
   margin: 30px 0 0 15px !important;
@@ -296,7 +298,7 @@ mat-option {
       margin-left: 30px;
       color: $white;
       font-size: 12px;
-      font-weight: bold;
+      font-weight: $bold;
       padding-top: 7px;
     }
     li.contant {
@@ -305,7 +307,7 @@ mat-option {
       margin-left: 25px;
       padding-top: 8px;
       margin-right: 10px;
-      font-weight: bold;
+      font-weight: $bold;
     }
     button {
       border: none;
@@ -428,16 +430,10 @@ mat-option {
   width: 77%;
   margin: 20px 25px;
   margin-right: 0;
-  height: 48vh;
   border-right: 2px solid $whiteDeep;
   padding-right: 15px;
   overflow-y: auto;
-  @media screen and (min-resolution: 125dpi) {
-    height: calc(53vh - 105px);
-  }
-  @media screen and (max-resolution: 110dpi) {
-    height: 52vh;
-  }
+  height: calc(85vh - 279px);
 }
 
 :host ::ng-deep .mat-group {
@@ -470,14 +466,14 @@ mat-option {
     }
     .label {
       color: $primary-black;
-      font-weight: 500;
+      font-weight: $bold;
       letter-spacing: 0.84px;
       font-size: 10px;
       margin-top: 12px;
     }
     .note {
       color: $grayMedium;
-      font-weight: 500;
+      font-weight: $bold;
       letter-spacing: 0.84px;
       margin-top: 10px;
       font-size: 12px;
@@ -491,11 +487,14 @@ mat-option {
   position: absolute;
   top: 62px;
   right: 10px;
-  height: 97%;
+  height: 87%;
   z-index: 1;
   background-color: $white;
   overflow-y: auto;
   overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   .contact {
     font-size: 11px;
     color: $grayMedium;
@@ -503,9 +502,13 @@ mat-option {
     margin-bottom: 7px;
   }
   .button-wrapper {
-    @include flex-col-all-Center;
+    flex-grow: 1;
+    // @include flex-col-justify-center;
+    @include flex-all-center;
+    @include flex-col;
     height: 32vh;
-    gap: 15px;
+    gap: 8px;
+    overflow-y: auto;
 
     .button {
       height: 46px;
@@ -513,7 +516,7 @@ mat-option {
       border: 1px solid $primary-cta;
       padding: 9.5px 18.5px;
       font-size: 12px;
-      font-weight: 500;
+      font-weight: $bold;
       border-radius: 4px;
       @include flex-all-center;
       color: $primary-cta;
@@ -627,7 +630,7 @@ mat-option {
 
 :host ::ng-deep {
   .mat-select-value-text {
-    @include normal-text;
+    @include normal-sm-text;
     color: $white;
   }
   .mat-select-arrow {
@@ -648,15 +651,13 @@ mat-option {
 
 :host ::ng-deep .button {
   font-size: 12px !important;
-  min-width: 200px !important;
+  // min-width: 200px !important;
   border-radius: 25px !important;
   max-width: 200px;
-  @media screen and (max-width: 1450px) {
-    min-width: 175px !important;
-  }
+
+  width: 175px !important;
 }
-:host ::ng-deep .tab-buttons{
+:host ::ng-deep .tab-buttons {
   right: 0;
   width: 20%;
 }
-

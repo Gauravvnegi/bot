@@ -13,7 +13,7 @@ export class StatisticsService extends ApiService {
    * @returns An Observable with stats data.
    */
   getStatistics(config): Observable<any> {
-    return this.get(`/api/v1/dashboard-stats/${config.queryObj}`);
+    return this.get(`/api/v1/dashboard-stats${config.queryObj}`);
   }
 
   /**
@@ -32,7 +32,7 @@ export class StatisticsService extends ApiService {
    */
   getBookingStatusStatistics(config): Observable<any> {
     return this.get(
-      `/api/v1/dashboard-stats/reservations/status/${config.queryObj}`
+      `/api/v1/dashboard-stats/reservations/status${config.queryObj}`
     );
   }
 
@@ -42,7 +42,7 @@ export class StatisticsService extends ApiService {
    * @returns An Observable with stats data.
    */
   getReservationStatistics(config): Observable<any> {
-    return this.get(`/api/v1/dashboard-stats/reservations/${config.queryObj}`);
+    return this.get(`/api/v1/dashboard-stats/reservations${config.queryObj}`);
   }
 
   /**
@@ -50,7 +50,7 @@ export class StatisticsService extends ApiService {
    * @param config The config for query parameters.
    * @returns An Observable with stats data.
    */
-  getConversationStats(hotelId: string, config): Observable<any> {
+  getConversationStats(entityId: string, config): Observable<any> {
     return this.get(
       `/api/v1/dashboard-stats/conversations-stats/counts${config.queryObj}`
     );
@@ -61,7 +61,7 @@ export class StatisticsService extends ApiService {
    * @param config The config for query parameters.
    * @returns An Observable with active channel list for the hotel.
    */
-  getHotelChannels(hotelId): Observable<any> {
-    return this.get(`/api/v1/hotel/${hotelId}/channels`);
+  getHotelChannels(entityId): Observable<any> {
+    return this.get(`/api/v1/entity/${entityId}/channels`);
   }
 }

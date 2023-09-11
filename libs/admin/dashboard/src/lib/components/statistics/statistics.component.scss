@@ -28,7 +28,7 @@
 :host ::ng-deep .stat-title {
   letter-spacing: 0.96px;
   color: $secondary;
-  font-weight: 700;
+  font-weight: $bolder;
   @media screen and (max-width: 800px) {
     font-size: 12px;
   }

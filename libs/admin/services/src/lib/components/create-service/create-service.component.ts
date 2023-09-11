@@ -11,7 +11,10 @@ import {
   LibraryItem,
   ServiceTypeOptionValue,
 } from '@hospitality-bot/admin/library';
-import { ConfigService } from '@hospitality-bot/admin/shared';
+import {
+  ConfigService,
+  HotelDetailService,
+} from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { NavRouteOptions, Option } from 'libs/admin/shared/src';
 import { Subscription } from 'rxjs';
@@ -19,6 +22,7 @@ import { servicesRoutes } from '../../constant/routes';
 import { ServicesService } from '../../services/services.service';
 import { ServiceResponse } from '../../types/response';
 import { ServiceData, ServiceFormData } from '../../types/service';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'hospitality-bot-create-service',
@@ -27,7 +31,7 @@ import { ServiceData, ServiceFormData } from '../../types/service';
 })
 export class CreateServiceComponent implements OnInit {
   serviceId: string;
-  hotelId: string;
+  entityId: string;
   useForm: FormGroup;
   code: string = '# will be auto generated';
 
@@ -41,6 +45,7 @@ export class CreateServiceComponent implements OnInit {
   categoryOffSet = 0;
   loadingCategory = false;
   noMoreCategories = false;
+  isComplimentaryService: boolean = false;
 
   // ** All the dropdown value to be from configuration api **
   types: Option[] = [
@@ -59,6 +64,12 @@ export class CreateServiceComponent implements OnInit {
 
   isSelectedTypePaid = false;
 
+  entityList: any[] = [];
+
+  brandId: string;
+  hotelId: string;
+  paramData: any;
+
   constructor(
     private fb: FormBuilder,
     private globalFilterService: GlobalFilterService,
@@ -66,7 +77,9 @@ export class CreateServiceComponent implements OnInit {
     private snackbarService: SnackBarService,
     private configService: ConfigService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private hotelDetailService: HotelDetailService,
+    private location: Location
   ) {
     this.serviceId = this.route.snapshot.paramMap.get('id');
 
@@ -79,9 +92,49 @@ export class CreateServiceComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.hotelId = this.globalFilterService.hotelId;
+    //to get the entityId from the query params
+    this.paramData = this.route.snapshot.queryParams;
+    this.entityId = this.paramData?.entityId;
+    //set the entityId in the service
+    this.brandId = this.hotelDetailService.brandId;
+    this.hotelId = this.globalFilterService.entityId;
+
+    //if entityId is not present in the query params then set the entityId from the service
+    if (!this.paramData?.entityId)
+      this.entityId = this.servicesService.entityId ?? this.hotelId;
+
     this.initForm();
+    this.getPropertyList();
+    this.listenForTypeChange();
     this.initOptionsConfig();
+  }
+
+  getPropertyList() {
+    const selectedHotel = this.hotelDetailService.hotels.find(
+      (item) => item.id === this.hotelId
+    );
+
+    if (!selectedHotel) {
+      this.entityList = [];
+      return;
+    }
+
+    this.entityList = selectedHotel.entities.map((entity) => ({
+      label: entity.name,
+      value: entity.id,
+    }));
+
+    this.entityList.unshift({
+      label: selectedHotel.name,
+      value: selectedHotel.id,
+    });
+  }
+
+  listenForTypeChange() {
+    this.useForm.get('entityId').valueChanges.subscribe((res) => {
+      this.entityId = res;
+      this.initOptionsConfig();
+    });
   }
 
   /**
@@ -90,61 +143,68 @@ export class CreateServiceComponent implements OnInit {
   initForm(): void {
     this.useForm = this.fb.group({
       active: [true],
-      // currency: [''],
+      currency: ['INR'],
       parentId: ['', Validators.required],
-      categoryName: [''],
-      imageUrl: ['', Validators.required],
+      entityId: [''],
+      images: ['', Validators.required],
       name: ['', Validators.required],
-      serviceType: ['', Validators.required],
-      // rate: [''],
+      serviceType: [ServiceTypeOptionValue.PAID],
+      rate: [''],
+
       unit: ['', Validators.required],
       enableVisibility: [[], Validators.required],
       taxIds: [[]],
+      hsnCode: [''],
     });
+    this.useForm.get('entityId').setValue(this.entityId);
 
-    this.updateFormControlSubscription();
+    // this.updateFormControlSubscription();
 
     /* Patch the form value if service id present */
     if (this.serviceId) {
       this.$subscription.add(
         this.servicesService
-          .getLibraryItemById<ServiceResponse>(this.hotelId, this.serviceId, {
+          .getLibraryItemById<ServiceResponse>(this.entityId, this.serviceId, {
             params: `?type=${LibraryItem.service}`,
           })
           .subscribe((res) => {
-            const { type, taxes, ...rest } = res;
+            const { type, images, taxes, enableVisibility, ...rest } = res;
+            this.isComplimentaryService = type === 'Complimentary';
             this.useForm.patchValue({
               serviceType: type,
               ...rest,
+              images: images[0]?.url,
               taxIds: taxes.map((item) => item.id),
             });
+            this.useForm.get('enableVisibility').setValue(enableVisibility);
+
             this.code = res.packageCode;
           }, this.handleError)
       );
     }
   }
 
-  /**
-   * @function updateFormControlSubscription  Add and remove FormControl Based on service type selection
-   */
-  updateFormControlSubscription() {
-    this.useForm.get('serviceType').valueChanges.subscribe((res) => {
-      this.isSelectedTypePaid = res === this.types[1].value;
-      if (this.isSelectedTypePaid) {
-        this.useForm.addControl(
-          'rate',
-          new FormControl('', Validators.required)
-        );
-        this.useForm.addControl(
-          'currency',
-          new FormControl('', [Validators.required, Validators.min(1)])
-        );
-      } else {
-        this.useForm.removeControl('rate');
-        this.useForm.removeControl('currency');
-      }
-    });
-  }
+  // /**
+  //  * @function updateFormControlSubscription  Add and remove FormControl Based on service type selection
+  //  */
+  // updateFormControlSubscription() {
+  //   this.useForm.get('serviceType').valueChanges.subscribe((res) => {
+  //     this.isSelectedTypePaid = res === this.types[1].value;
+  //     if (this.isSelectedTypePaid) {
+  //       this.useForm.addControl(
+  //         'rate',
+  //         new FormControl('', [Validators.required, Validators.min(0)])
+  //       );
+  //       this.useForm.addControl(
+  //         'currency',
+  //         new FormControl('', [Validators.required, Validators.min(1)])
+  //       );
+  //     } else {
+  //       this.useForm.removeControl('rate');
+  //       this.useForm.removeControl('currency');
+  //     }
+  //   });
+  // }
 
   /**
    * @function initOptionsConfig To get all the dropdown options
@@ -172,16 +232,27 @@ export class CreateServiceComponent implements OnInit {
    */
   getTax() {
     this.$subscription.add(
-      this.servicesService.getTaxList(this.hotelId).subscribe(({ records }) => {
-        records = records.filter(
-          (item) => item.category === 'service' && item.status
-        );
-        this.tax = records.map((item) => ({
-          label: item.taxType + ' ' + item.taxValue + '%',
-          value: item.id,
-        }));
-      })
+      this.servicesService
+        .getTaxList(this.entityId)
+        .subscribe(({ records }) => {
+          records = records.filter(
+            (item) => item.category === 'service' && item.status
+          );
+          this.tax = records.map((item) => ({
+            label: item.taxType + ' ' + item.taxValue + '%',
+            value: item.id,
+          }));
+        })
     );
+  }
+
+  isProperty() {
+    if (this.paramData?.entityId && this.serviceId) {
+      return true;
+    } else if (this.paramData?.entityId) {
+      return false;
+    }
+    return true;
   }
   /**
    * @function createCategory
@@ -204,13 +275,15 @@ export class CreateServiceComponent implements OnInit {
       return;
     }
 
-    const data = this.useForm.getRawValue() as ServiceFormData;
+    const { images, ...rest } = this.useForm.getRawValue() as ServiceFormData;
+    const data = { images: [{ url: images, isFeatured: true }], ...rest };
+    this.loading = true;
     if (this.serviceId) {
       this.$subscription.add(
         // ** refactor ** patch not working
         this.servicesService
           .updateLibraryItem<Partial<ServiceData>, ServiceResponse>(
-            this.hotelId,
+            this.entityId,
             this.serviceId,
             data,
             { params: '?type=SERVICE' }
@@ -221,7 +294,7 @@ export class CreateServiceComponent implements OnInit {
     } else {
       this.$subscription.add(
         this.servicesService
-          .createLibraryItem<ServiceData, ServiceResponse>(this.hotelId, {
+          .createLibraryItem<ServiceData, ServiceResponse>(this.entityId, {
             ...data,
             type: 'SERVICE',
             source: 1,
@@ -232,22 +305,30 @@ export class CreateServiceComponent implements OnInit {
   }
 
   createTax() {
-    this.router.navigate(['pages/settings/tax/create-tax']);
+    this.router.navigate(['pages/settings/tax/create-tax'], {
+      queryParams: { entityId: this.entityId },
+    });
   }
 
   handleSuccess = () => {
+    this.closeLoading();
     this.snackbarService.openSnackBarAsText(
       `Service ${this.serviceId ? 'edited' : 'created'} successfully`,
       '',
       { panelClass: 'success' }
     );
-    this.router.navigate(['/pages/library/services']);
+    this.location.back();
+    // this.router.navigate(['/pages/library/services']);
   };
 
   closeLoading = () => {
     this.loadingCategory = false;
     this.loading = false;
   };
+
+  resetForm() {
+    this.useForm.reset();
+  }
 
   /**
    * @function handleError to show the error

@@ -2,12 +2,10 @@
 
 .history-container {
   padding: 12px 15px;
-  font-family: Roboto;
   height: 488px;
   .title {
-    font-family: Roboto;
     font-size: 14px;
-    font-weight: bold;
+    font-weight: $bolder;
   }
   .feedback-container {
     padding: 15px 0;
@@ -18,17 +16,17 @@
     .room-no {
       font-size: 14px;
       color: $inActiveTab;
-      font-weight: bold;
+      font-weight: $bolder;
     }
   }
   .status {
     font-size: 12px;
-    font-weight: 500;
+    font-weight: $bolder;
     margin-top: 16px;
   }
   .comment {
     font-size: 12px;
-    font-weight: 500;
+    font-weight: $bolder;
     color: $subtitle;
     margin: 10px 0;
   }

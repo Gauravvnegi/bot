@@ -1,0 +1,38 @@
+<div
+  class="wrapper"
+  [style.fontSize]="fontSize"
+  [ngClass]="wrapperNgClasses"
+  [formGroup]="timePickerFG"
+>
+  <label
+    *ngIf="label && !float"
+    class="label label__static"
+    [for]="controlName"
+    >{{ label }}</label
+  >
+  <div class="time-picker-input__wrapper" [ngClass]="inputNgClasses">
+    <hospitality-bot-input
+      class="time-picker__time"
+      controlName="hh"
+      [min]="0"
+      [max]="23"
+      [props]="{
+        type: 'number',
+        placeholder: 'HH'
+      }"
+      (onKeyDown)="handleKeyPress($event, 'HH')"
+    ></hospitality-bot-input>
+
+    <hospitality-bot-input
+      class="time-picker__time"
+      controlName="mm"
+      [min]="0"
+      [max]="59"
+      [props]="{
+        type: 'number',
+        placeholder: 'MM'
+      }"
+      (onKeyDown)="handleKeyPress($event, 'MM')"
+    ></hospitality-bot-input>
+  </div>
+</div>

@@ -1,18 +1,19 @@
 <div class="wrapper">
   <div class="header">
     <div>
-      <div class="heading" *ngIf="label">
-        {{ label }}
-      </div>
+      <div class="heading" *ngIf="label">{{ label }}</div>
       <div class="sub-heading" *ngIf="description">
         {{ description }}
       </div>
     </div>
-    <div *ngIf="!fullView && options.length">
+    <div class="btn-wrapper" *ngIf="!fullView && !noMoreData">
+      <ng-content></ng-content>
+
       <hospitality-bot-button
+        *ngIf="options.length"
         label="View All"
         (onClick)="viewAll.emit()"
-        variant="contained"
+        variant="outlined"
       ></hospitality-bot-button>
     </div>
   </div>
@@ -30,12 +31,16 @@
           <img src="assets/svg/tick.svg" *ngIf="item.checked" alt="checked" />
         </div>
         <div
-          class="image-wrapper"
-          [ngClass]="{ selected: item.checked == true }"
+          [ngClass]="{
+            'icon-type': type === 'icon',
+            'image-type': type === 'image',
+            selected: item.checked
+          }"
         >
           <img
             [src]="item.imageUrl"
             class="show-image"
+            *ngIf="options.length"
             [alt]="item.imageUrl"
             appImage
           />
@@ -46,11 +51,12 @@
       </div>
     </ng-container>
   </div>
-
   <ng-template #emptyTable>
     <hospitality-bot-empty-table
+      [height]="fullView ? '51vh' : 'fit-content'"
       [isLoading]="loading"
       [content]="noRecordsAction"
+      (action)="onEmptyViewAction.emit()"
     >
     </hospitality-bot-empty-table>
   </ng-template>

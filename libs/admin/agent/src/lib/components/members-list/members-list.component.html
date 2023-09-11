@@ -1,0 +1,16 @@
+<hospitality-bot-select
+  class="half-width"
+  [controlName]="controlName"
+  [label]="label"
+  [options]="membersList"
+  [props]="{
+    placeholder: placeholder,
+    isAsync: true,
+    createPrompt: createPrompt
+  }"
+  [loading]="loadingMembers"
+  (paginate)="loadMoreMembers()"
+  (onSearch)="searchMembers($event)"
+  [stopEmission]="noMoreMembers"
+  (onCreate)="createNewMember($event)"
+></hospitality-bot-select>

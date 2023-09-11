@@ -14,7 +14,7 @@
     width: 100%;
     @include flex-item-center;
     font-size: 12px;
-    font-weight: bold;
+    font-weight: $bolder;
     letter-spacing: 0.72px;
 
     color: $grayMedium;
@@ -73,7 +73,7 @@
 
       p {
         font-size: 14px;
-        font-weight: 500;
+        font-weight: $bolder;
         line-height: 1.07;
         letter-spacing: 0.84px;
         color: $primary-cta;
@@ -97,7 +97,7 @@
     }
     &__text {
       font-size: 14px;
-      font-weight: 500;
+      font-weight: $bolder;
       line-height: 1.07;
       letter-spacing: 0.84px;
       color: $primary-cta;
@@ -135,7 +135,7 @@
   padding: 0px 160px;
   .rating__name {
     font-size: 16px;
-    font-weight: bold;
+    font-weight: $bolder;
     letter-spacing: 0.32px;
 
     color: $grayMedium;
@@ -286,14 +286,14 @@
   }
   &__title {
     margin: 12px 0;
-    @include normal-text;
+    @include normal-sm-text;
 
-    font-weight: bold;
+    font-weight: $bolder;
     color: $secondary;
   }
   &__description {
     font-size: 12px;
-    font-weight: bold;
+    font-weight: $bolder;
     letter-spacing: 0.72px;
 
     color: $grayLight;
@@ -510,7 +510,7 @@
     padding: 4px 9.3px 5.3px 10px;
     border: solid 1px $darkRed;
     font-size: 12px;
-    font-weight: 500;
+    font-weight: $bolder;
     letter-spacing: 0.72px;
     text-align: center;
     color: $white;

@@ -7,13 +7,14 @@ import {
   ServiceTypeOptionValue,
 } from '@hospitality-bot/admin/library';
 import { SnackBarService } from '@hospitality-bot/shared/material';
-import { DiscountType, NavRouteOptions, Option } from 'libs/admin/shared/src';
+import { NavRouteOptions, Option } from 'libs/admin/shared/src';
 import { ConfigService } from 'libs/admin/shared/src/lib/services/config.service';
 import { Subscription } from 'rxjs';
 import routes from '../../constant/routes';
 import { OffersServices } from '../../services/offers.service';
 import { OfferData, OfferFormData, OffersOnEntity } from '../../types/offers';
 import { OfferResponse, SearchResult } from '../../types/response';
+import { DiscountType } from '../../constant/data-table';
 
 @Component({
   selector: 'hospitality-bot-create-offer',
@@ -21,7 +22,7 @@ import { OfferResponse, SearchResult } from '../../types/response';
   styleUrls: ['./create-offer.component.scss'],
 })
 export class CreateOfferComponent implements OnInit {
-  hotelId: string;
+  entityId: string;
   offerId: string;
   packageCode: string = '# will be auto generated';
 
@@ -66,7 +67,7 @@ export class CreateOfferComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.hotelId = this.globalService.hotelId;
+    this.entityId = this.globalService.entityId;
     this.initUseForm();
     this.initOptionsConfig();
   }
@@ -76,7 +77,7 @@ export class CreateOfferComponent implements OnInit {
       active: [true],
       name: ['', [Validators.required]],
       libraryItems: [[], [Validators.required]],
-      imageUrl: ['', [Validators.required]],
+      images: ['', [Validators.required]],
       description: ['', [Validators.required]],
       startDate: ['', [Validators.required]],
       endDate: ['', [Validators.required]],
@@ -122,9 +123,9 @@ export class CreateOfferComponent implements OnInit {
                 }`,
         });
 
-      if (type === 'NUMBER' && discount > price) {
-        return 'isNumError';
-      }
+      // if (type === 'NUMBER' && discount > price) {
+      //   return 'isNumError';
+      // }
 
       if (type === 'PERCENTAGE' && discount > 100) {
         return 'isPercentError';
@@ -163,7 +164,7 @@ export class CreateOfferComponent implements OnInit {
    */
   registerServicesSelectedChange() {
     this.useForm.get('libraryItems').valueChanges.subscribe((res) => {
-      this.setDiscountPrice(res);
+      if (res.length) this.setDiscountPrice(res);
     });
   }
 
@@ -179,32 +180,32 @@ export class CreateOfferComponent implements OnInit {
       }
       return prev + this.selectedServicePrice[curr.value];
     }, 0);
-    this.useForm.get('rate').setValue(totalPrice);
-    const rateValue = +this.useForm.get('rate').value;
+    // this.useForm.get('rate').setValue(totalPrice);
+    // const rateValue = +this.useForm.get('rate').value;
     const discountType = this.useForm.get('discountType').value;
     const discountValue = +this.useForm.get('discountValue').value;
 
-    if (rateValue && discountType) {
-      const discountedPrice =
-        discountType === 'NUMBER'
-          ? `${rateValue - discountValue}`
-          : `${
-              Math.round(
-                (rateValue -
-                  (rateValue * discountValue) / 100 +
-                  Number.EPSILON) *
-                  100
-              ) / 100
-            }`;
-      this.useForm.get('discountedPrice').setValue(discountedPrice);
-    }
+    // if (rateValue && discountType) {
+    //   const discountedPrice =
+    //     discountType === 'NUMBER'
+    //       ? `${rateValue - discountValue}`
+    //       : `${
+    //           Math.round(
+    //             (rateValue -
+    //               (rateValue * discountValue) / 100 +
+    //               Number.EPSILON) *
+    //               100
+    //           ) / 100
+    //         }`;
+    //   this.useForm.get('discountedPrice').setValue(discountedPrice);
+    // }
   }
 
   searchOptions(text: string) {
     if (text) {
       this.loading = true;
       this.offerService
-        .searchLibraryItem(this.hotelId, {
+        .searchLibraryItem(this.entityId, {
           params: `?key=${text}&type=${this.searchItems.join(',')}`,
         })
         .subscribe((res) => {
@@ -267,8 +268,13 @@ export class CreateOfferComponent implements OnInit {
 
     const {
       libraryItems,
+      images,
       ...restFormData
     } = this.useForm.getRawValue() as OfferFormData;
+    const data = {
+      images: [{ url: images, isFeatured: true }],
+      ...restFormData,
+    };
 
     const libraryIds: OffersOnEntity = libraryItems.reduce(
       (prev, curr) => {
@@ -292,15 +298,15 @@ export class CreateOfferComponent implements OnInit {
         roomTypeIds: [],
       }
     );
-
+    this.loading = true;
     if (!!this.offerId) {
       this.subscription$.add(
         this.offerService
           .updateLibraryItem<OfferData, OfferResponse>(
-            this.hotelId,
+            this.entityId,
             this.offerId,
             {
-              ...restFormData,
+              ...data,
               ...libraryIds,
               type: 'OFFER',
               source: 1,
@@ -312,8 +318,8 @@ export class CreateOfferComponent implements OnInit {
     } else {
       this.subscription$.add(
         this.offerService
-          .createLibraryItem<OfferData, OfferResponse>(this.hotelId, {
-            ...restFormData,
+          .createLibraryItem<OfferData, OfferResponse>(this.entityId, {
+            ...data,
             ...libraryIds,
             type: 'OFFER',
             source: 1,
@@ -324,17 +330,26 @@ export class CreateOfferComponent implements OnInit {
   }
 
   getOfferById() {
+    this.loading = true;
     this.subscription$.add(
       this.offerService
-        .getLibraryItemById<OfferResponse>(this.hotelId, this.offerId, {
+        .getLibraryItemById<OfferResponse>(this.entityId, this.offerId, {
           params: '?type=OFFER',
         })
         .subscribe((res) => {
+          this.loading = false;
           this.routes[2].label = 'Edit Offer';
-          let { packageCode, subPackages, roomTypes, ...restData } = res;
+          let {
+            packageCode,
+            subPackages,
+            roomTypes,
+            images,
+            ...restData
+          } = res;
 
           const data: OfferFormData = {
             ...restData,
+            images: images?.[0]?.url,
             libraryItems: [
               ...subPackages?.map((item) => ({
                 label: `${item.name} ${
@@ -399,6 +414,12 @@ export class CreateOfferComponent implements OnInit {
   handleFinal = () => {
     this.loading = false;
   };
+
+  resetForm() {
+    this.useForm.reset();
+    this.libraryItems = [];
+    this.selectedServicePrice = {};
+  }
 
   /**
    * Unsubscribe when component is getting removed

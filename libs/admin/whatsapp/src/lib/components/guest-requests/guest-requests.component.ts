@@ -12,7 +12,7 @@ import { MessageService } from '../../services/messages.service';
 })
 export class GuestRequestsComponent implements OnChanges {
   @Input() requestList;
-  @Input() hotelId;
+  @Input() entityId;
   requestFG: FormGroup;
   constructor(
     private snackbarService: SnackBarService,
@@ -47,8 +47,8 @@ export class GuestRequestsComponent implements OnChanges {
       const config = {
         queryObj: this._adminUtilityService.makeQueryParams([
           {
-            cmsUserType: 'Bot',
-            hotelId: this.hotelId,
+            cmsUserType: 'Admin',
+            entityId: this.entityId,
           },
         ]),
       };

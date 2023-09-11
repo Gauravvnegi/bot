@@ -5,6 +5,7 @@ import * as JSZip from 'jszip';
 import * as JSZipUtils from 'jszip-utils';
 import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.service';
 import { ReservationService } from '../../services/reservation.service';
+import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 
 @Component({
   selector: 'hospitality-bot-admin-documents-details',
@@ -21,6 +22,8 @@ export class AdminDocumentsDetailsComponent implements OnInit {
     fileType: ['png', 'jpg'],
   };
 
+  entityId: string;
+
   @Input() parentForm;
   @Input('data') detailsData;
   @Output() addFGEvent = new EventEmitter();
@@ -28,10 +31,13 @@ export class AdminDocumentsDetailsComponent implements OnInit {
   constructor(
     private _fb: FormBuilder,
     private _reservationService: ReservationService,
-    private snackbarService: SnackBarService
+    private snackbarService: SnackBarService,
+    private globalFilterService: GlobalFilterService
   ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.entityId = this.globalFilterService.entityId;
+  }
 
   ngOnChanges() {
     this.getLOV();
@@ -79,10 +85,7 @@ export class AdminDocumentsDetailsComponent implements OnInit {
 
   getDocumentsByCountry(nationality) {
     this._reservationService
-      .getDocumentsByNationality(
-        this.detailsData.reservationDetails.hotelId,
-        nationality
-      )
+      .getDocumentsByNationality(this.entityId, nationality)
       .subscribe((response) => {
         this.documentsList = response.documentList;
         // this._adminDetailsService.guestNationality = response.verifyAllDocuments;

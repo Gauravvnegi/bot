@@ -6,7 +6,7 @@
   .person-title {
     font-size: 14px;
     letter-spacing: 0.84px;
-    font-weight: bold;
+    font-weight: $bolder;
     color: $secondary;
   }
   .person-image {
@@ -51,7 +51,7 @@
     text-align: left;
     color: $grayMedium;
     margin-top: 15px;
-    font-weight: bold;
+    font-weight: $bolder;
   }
   .label-text {
     font-size: 12px;

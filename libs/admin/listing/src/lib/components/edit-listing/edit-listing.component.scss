@@ -31,7 +31,7 @@
     align-items: center;
     &__value {
       font-size: 16px;
-      font-weight: normal;
+      font-weight: $medium;
       letter-spacing: 0.96px;
       text-align: left;
       color: $secondary;
@@ -39,11 +39,11 @@
     }
     &__text {
       font-size: 16px;
-      font-weight: normal;
+      font-weight: $medium;
       letter-spacing: 0.96px;
       text-align: center;
       color: $secondary;
-      font-weight: normal;
+      font-weight: $medium;
       opacity: 0.5;
     }
   }

@@ -86,14 +86,14 @@ export class SidenavComponent implements OnInit, OnDestroy {
     );
     this.$subscription.add(
       this.globalFilterService.globalFilter$.subscribe((data) => {
-        const { hotelName: brandId, branchName: branchId } = data[
+        const { brandName: brandId, entityName: branchId } = data[
           'filter'
         ].value.property;
 
         const brandConfig = this._hotelDetailService.brands.find(
           (brand) => brand.id === brandId
         );
-        this.branchConfig = brandConfig.hotels.find(
+        this.branchConfig = brandConfig.entities.find(
           (branch) => branch.id === branchId
         );
       })
@@ -111,9 +111,10 @@ export class SidenavComponent implements OnInit, OnDestroy {
   }
 
   setSelectedModuleBasedOnRoute() {
-    this.selectedModule = this.menuItems.find((item) =>
-      this.router.url.includes(item?.path)
-    )?.name;
+    this.selectedModule = this.menuItems.find((item) => {
+      const paths = this.router.url.split('/');
+      return paths.includes(item?.path);
+    })?.name;
   }
 
   listenForTabPortrait() {
@@ -175,7 +176,8 @@ export class SidenavComponent implements OnInit, OnDestroy {
   }
 
   isSameModule(path: string) {
-    return this.router.url.includes(path);
+    const paths = this.router.url.split('/');
+    return paths.includes(path);
   }
 
   handleRouteChange(menuItem) {

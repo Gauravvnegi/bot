@@ -17,6 +17,7 @@ import { FirebaseMessagingService } from '../../../services/messaging.service';
 import { NotificationService } from '../../../services/notification.service';
 import { ProgressSpinnerService } from '../../../services/progress-spinner.service';
 import { SubscriptionPlanService } from '../../../services/subscription-plan.service';
+import { NavigationEnd } from '@angular/router';
 
 @Component({
   selector: 'admin-layout-one',
@@ -103,6 +104,17 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
         }
       })
     );
+    //reset scroll to top on route change
+    this._router.events.subscribe((event) => {
+      if (event instanceof NavigationEnd) {
+        this.scrollToTop();
+      }
+    });
+  }
+
+  scrollToTop() {
+    const mainLayout = document.getElementById('main-layout');
+    mainLayout.scrollTo(0, 0);
   }
 
   initNotification() {
@@ -118,12 +130,13 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
 
   initFirebaseMessaging(entityId?) {
     const requestPermissionData = {
-      hotelId: entityId,
+      entityId: entityId,
       userId: this._userService.getLoggedInUserId(),
     };
     this.firebaseMessagingService.requestPermission(requestPermissionData);
     this.$firebaseMessagingSubscription.add(
       this.firebaseMessagingService.receiveMessage().subscribe((payload) => {
+        console.log(payload, 'payload message when notification trigger');
         const notificationPayload = payload;
         this.firebaseMessagingService.playNotificationSound();
         this.getNotificationUnreadCount();
@@ -173,9 +186,9 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
 
   setInitialFilterValue() {
     const selectedSiteId = this._hotelDetailService.siteId;
-    const selectedHotelId = this._hotelDetailService.hotelId;
+    const selectedentityId = this._hotelDetailService.entityId;
     const selectedHotelData = this._hotelDetailService.hotels.find(
-      (item) => item.id === selectedHotelId
+      (item) => item.id === selectedentityId
     );
     const selectedBrandId = this._hotelDetailService.brandId;
     const selectedBrandData = this._hotelDetailService.brands.find(
@@ -184,19 +197,19 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
 
     this.logoUrl = selectedHotelData?.['logoUrl'];
     this.bgColor = selectedHotelData?.['headerBgColor'];
-    this.outlets = selectedHotelData?.['outlets'] ?? [];
+    this.outlets = selectedHotelData?.['entities'] ?? [];
     this.filterConfig.brandName = selectedBrandData?.['name'];
     this.filterConfig.branchName = selectedHotelData?.['name'];
     this.filterService.emitFilterValue$.next({
       property: {
-        hotelName: selectedBrandData?.['id'],
-        branchName: selectedHotelData?.['id'],
+        brandName: selectedBrandData?.['id'],
+        entityName: selectedHotelData?.['id'],
       },
       feedback: {
-        feedbackType: this.checkForTransactionFeedbackSubscribed()
-          ? layoutConfig.feedback.transactional
-          : layoutConfig.feedback.stay,
+        feedbackType: layoutConfig.feedback.both,
       },
+      isAllOutletSelected: this.outlets.length !== 0,
+
       outlets: this.outlets.reduce(
         (acc, curr) => ((acc[curr.id] = true), acc),
         {}
@@ -205,7 +218,9 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
     this.initFirebaseMessaging(selectedHotelData?.['id']);
     this.timezone = selectedHotelData?.['timezone'];
     this.globalFilterService.timezone = this.timezone;
-    this.globalFilterService.hotelId = selectedHotelId;
+    this.globalFilterService.entityId = selectedentityId;
+    this.globalFilterService.entityType = selectedHotelData.category;
+    this.globalFilterService.entitySubType = selectedHotelData.type;
     this.isSitesAvailable =
       !!selectedSiteId && !!this._hotelDetailService.sites?.length;
   }
@@ -252,15 +267,15 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
 
   applyFilter(event) {
     const values = event.values;
-    const hotelId = values.property.branchName;
-    const brandId = values.property.hotelName;
-    if (event.token.key && event.token.value && hotelId && brandId) {
+    const entityId = values.property.entityName;
+    const brandId = values.property.brandName;
+    if (event.token.key && event.token.value && entityId && brandId) {
       /**
        * Update business session will update the local storage and reload to reset the data
        */
       this._hotelDetailService.updateBusinessSession({
         [tokensConfig.accessToken]: event.token.value,
-        [tokensConfig.hotelId]: hotelId,
+        [tokensConfig.entityId]: entityId,
         [tokensConfig.brandId]: brandId,
       });
     }

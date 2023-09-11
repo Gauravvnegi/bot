@@ -27,11 +27,11 @@
 .stat-label-title {
   height: 16px;
   text-align: left;
-  font: normal normal normal 10px/16px Roboto;
+  font: normal normal $medium 10px/16px Poppins;
   letter-spacing: 0.72px;
   color: $subtitle;
   @media screen and (max-width: 1070px) {
-    font: normal normal normal 8px/16px Roboto;
+    font: normal normal $medium 8px/16px Poppins;
     letter-spacing: 0;
   }
 }
@@ -67,8 +67,8 @@
 
 .graphTitle {
   color: #002046;
-  @include normal-text;
-  font-weight: bold;
+  @include normal-sm-text;
+  font-weight: $bolder;
 }
 
 .labelWrapper {

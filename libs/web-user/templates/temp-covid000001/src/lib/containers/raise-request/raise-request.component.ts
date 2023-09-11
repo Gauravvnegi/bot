@@ -64,7 +64,7 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
     const data = this.raiseRequestForm.getRawValue();
     this.$subscription.add(
       this._raiseRequestService
-      .saveRaiseRequest(this._hotelService.hotelId, data)
+      .saveRaiseRequest(this._hotelService.entityId, data)
       .subscribe((response) => {
         this._translateService
           .get(`MESSAGES.SUCCESS.REQUEST_RAISE_COMPLETE`)

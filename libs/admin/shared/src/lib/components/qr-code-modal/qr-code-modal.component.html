@@ -1,0 +1,63 @@
+<!-- header -->
+<!-- <div class="header">
+  <div class="header__title">
+    <mat-icon class="alert">warning</mat-icon>
+    <div>{{ heading }}</div>
+  </div>
+  <div class="button-wrapper">
+    <hospitality-bot-button
+      label="Download"
+      (onClick)="generatePdf()"
+      variant="text"
+    ></hospitality-bot-button>
+    <div (click)="close()" class="header__close">
+      <i class="fa fa-times" aria-hidden="true"></i>
+    </div>
+  </div>
+</div> -->
+<!-- /..../ -->
+<div id="qr-code-modal" class="container">
+  <div class="background-image">
+    <img [src]="backgroundURl" [alt]="backgroundURl" />
+  </div>
+  <div class="logo-container">
+    <div class="logo-wrapper">
+      <img [src]="logoUrl" alt="logo" class="logo" />
+    </div>
+  </div>
+
+  <div class="wrapper">
+    <div class="description">
+      <p class="description__heading">{{ descriptionsHeading }}</p>
+      <div>
+        <ol class="custom-counter">
+          <li *ngFor="let item of descriptionsPoints">
+            {{ item }}
+          </li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="qr-container">
+      <div class="qr-code">
+        <qrcode
+          [qrdata]="route"
+          [width]="200"
+          [errorCorrectionLevel]="'M'"
+        ></qrcode>
+      </div>
+      <div class="url">
+        <span>
+          Please Visit
+        </span>
+        <a href="">{{ route }}</a>
+      </div>
+    </div>
+    <div class="footer">
+      <span class="footer__text">Powered By</span>
+      <div class="botshot-logo-container">
+        <img class="logo" [src]="botshotUrl" alt="botshot" />
+      </div>
+    </div>
+  </div>
+</div>

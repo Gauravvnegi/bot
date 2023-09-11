@@ -1,0 +1,106 @@
+<div class="wrapper" [id]="fa.referenceId">
+  <hospitality-bot-navigation-header
+    [heading]="pageTitle"
+    [routes]="navRoutes"
+  ></hospitality-bot-navigation-header>
+
+  <div class="form-block" [formGroup]="companyForm">
+    <div class="code half-width">
+      <span class="code__label"> Code: </span>
+      <span class="code__hash"> {{ packageCode }} </span>
+    </div>
+    <hospitality-bot-toggle-switch
+      class="status half-width"
+      controlName="status"
+      label="Status:"
+      onLabel="Active"
+      offLabel="Inactive"
+    ></hospitality-bot-toggle-switch>
+
+    <hospitality-bot-input
+      class="half-width"
+      controlName="name"
+      maxLength="60"
+      label="Name"
+      [props]="{
+        placeholder: 'Enter'
+      }"
+    ></hospitality-bot-input>
+
+    <hospitality-bot-input
+      class="half-width"
+      controlName="email"
+      label="Email"
+      [props]="{
+        type: 'email',
+        errorMessages: {
+          required: 'This is a required field.',
+          pattern: 'Please enter a valid email address.'
+        },
+        placeholder: 'Enter'
+      }"
+    ></hospitality-bot-input>
+
+    <hospitality-bot-phone-number
+      class="half-width"
+      preControlName="cc"
+      postControlName="phoneNo"
+    ></hospitality-bot-phone-number>
+
+    <hospitality-bot-address-component
+      class="half-width"
+      controlName="address"
+      [props]="{
+        errorMessages: {
+          required: 'This is a required field.'
+        }
+      }"
+    >
+    </hospitality-bot-address-component>
+
+    <hospitality-bot-input
+      class="half-width"
+      controlName="salePersonName"
+      maxLength="60"
+      label="Sales Person Name"
+      [props]="{
+        placeholder: 'Enter'
+      }"
+    ></hospitality-bot-input>
+
+    <hospitality-bot-phone-number
+      class="half-width"
+      label="Sales Person No."
+      preControlName="salePersonCC"
+      postControlName="salePersonNo"
+    ></hospitality-bot-phone-number>
+
+    <hospitality-bot-prefix-field
+      class="half-width"
+      [options]="discountType"
+      label="Discount"
+      preControlName="discountType"
+      postControlName="discount"
+      [defaultProps]="{ post: { type: 'number' } }"
+      [props]="{
+        type: 'number',
+        errorMessages: {
+          required: 'This is a required field.',
+          moreThan100: 'Cannot be more than 100%.',
+          notAllowedChr: 'Decimal are not allowed.',
+          min: 'Value can not be less than 0.'
+        },
+        placeholder: 'Enter'
+      }"
+    ></hospitality-bot-prefix-field>
+  </div>
+  <hospitality-bot-form-action
+    class="full-width"
+    [loading]="loading"
+    [isId]="companyId"
+    (onPreAction)="reset()"
+    (onPostAction)="handleSubmit()"
+    #fa
+  >
+  </hospitality-bot-form-action>
+</div>

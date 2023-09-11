@@ -3,6 +3,8 @@
 @import url('https://fonts.googleapis.com/icon?family=Material+Icons&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 @import '~@fortawesome/fontawesome-free/css/all.min.css';
+// @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
 @import 'main.scss';
 
 * {
@@ -213,3 +215,105 @@ body {
     background-color: hsl(200, 20%, 95%);
   }
 }
+
+.status-cell {
+  @include status-chip;
+}
+
+// Global styling for chips (status indicator)
+.chip {
+  &-outlined {
+    &-default {
+      border: 1px solid $default-state;
+      color: $default-state;
+    }
+    &-active {
+      border: 1px solid $active-state;
+      color: $active-state;
+    }
+    &-failed {
+      border: 1px solid $failed-state;
+      color: $failed-state;
+    }
+    &-inactive {
+      border: 1px solid $inactive-state;
+      color: $inactive-state;
+    }
+    &-draft {
+      border: 1px solid $draft-state;
+      color: $draft-state;
+    }
+    &-completed {
+      border: 1px solid $completed-state;
+      color: $completed-state;
+    }
+    &-success {
+      border: 1px solid $success-state;
+      color: $success-state;
+    }
+    &-warning {
+      border: 1px solid $warning-state;
+      color: $warning-state;
+    }
+    &-unavailable {
+      border: 1px solid $unavailable-state;
+      color: $unavailable-state;
+    }
+    &-paid {
+      border: 1px solid $paid-state;
+      color: $paid-state;
+    }
+    &-unpaid {
+      border: 1px solid $unpaid-state;
+      color:$unpaid-state;
+    }
+  }
+  
+  &-contained {
+    &-default {
+      background-color: $default-state;
+      color: white;
+    }
+    &-active {
+      background-color: $active-state;
+      color: white;
+    }
+    &-failed {
+      background-color: $failed-state;
+      color: white;
+    }
+    &-inactive {
+      background-color: $inactive-state;
+      color: white;
+    }
+    &-draft {
+      background-color: $draft-state;
+      color: white;
+    }
+    &-completed {
+      background-color: $completed-state;
+      color: white;
+    }
+    &-success {
+      background-color: $success-state;
+      color: white;
+    }
+    &-warning {
+      background-color: $warning-state;
+      color: white;
+    }
+    &-unavailable {
+      background-color: $unavailable-state;
+      color: white;
+    }
+    &-paid {
+      background-color: $paid-state;
+      color: white;
+    }
+    &-unpaid {
+      background-color: $unpaid-state;
+      color: white;
+    }
+  }
+}
+

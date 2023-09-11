@@ -24,7 +24,7 @@ import { agentRecords, companyRecords } from '../../constants/response';
   ],
 })
 export class BookingSourceDataTableComponent extends BaseDatatableComponent {
-  hotelId: string;
+  entityId: string;
   $subscription = new Subscription();
   cols: Cols[] = cols[TableValue.COMPANY];
   tableName = title;
@@ -45,7 +45,7 @@ export class BookingSourceDataTableComponent extends BaseDatatableComponent {
   }
 
   ngOnInit(): void {
-    this.hotelId = this.globalFilterService.hotelId; 
+    this.entityId = this.globalFilterService.entityId; 
     this.selectedTable = TableValue.COMPANY;
     this.getDataTableValue(this.selectedTable);
     // this.bookingSourceService.selectedTable.subscribe((value)=>{
@@ -149,7 +149,7 @@ export class BookingSourceDataTableComponent extends BaseDatatableComponent {
       };
       // this.$subscription.add(
       //   this.bookingService
-      //     .exportCSV(this.hotelId, this.selectedTable, config)
+      //     .exportCSV(this.entityId, this.selectedTable, config)
       //     .subscribe((res) => {
       //       FileSaver.saveAs(
       //         res,

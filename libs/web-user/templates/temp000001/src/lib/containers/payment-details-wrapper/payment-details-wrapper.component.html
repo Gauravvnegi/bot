@@ -8,6 +8,7 @@
     >
       <ng-container
         *ngFor="let header of hotelPaymentConfig.paymentHeaders; let i = index"
+        [label]="header?.type"
       >
         <mat-tab
           *ngIf="
@@ -79,7 +80,7 @@
     </mat-tab-group>
   </div>
 
-  <div *ngIf="selectedIndex === 0" class="main-template-button">
+  <div *ngIf="!isSubmitDisabled" class="main-template-button">
     <ng-container
       button-renderer
       [config]="getUpdatedBtnConfig()"
@@ -87,7 +88,7 @@
     >
     </ng-container>
   </div>
-  <div *ngIf="selectedIndex === 1" class="main-template-button">
+  <div *ngIf="isSubmitDisabled" class="main-template-button">
     <ng-container
       button-renderer
       [config]="getUpdatedBtnConfig(true)"

@@ -44,7 +44,7 @@
   (sortFunction)="customSort($event)"
   [customSort]="isCustomSort"
   (onFilter)="onDataFilter()"
-  *ngIf="tabFilterItems[tabFilterIdx]?.total; else emptyTable"
+  *ngIf="!isEmpty; else emptyTable"
 >
   <ng-template pTemplate="caption">
     <div class="caption__wrapper" [formGroup]="tableFG">
@@ -52,8 +52,9 @@
 
       <hospitality-bot-filter-chips
         *ngIf="isQuickFilters"
-        [chips]="tabFilterItems[tabFilterIdx].chips"
+        [chips]="filterChips"
         (onChange)="toggleQuickReplyFilter($event)"
+        [selectedChips]="selectedFilterChips"
       ></hospitality-bot-filter-chips>
     </div>
   </ng-template>
@@ -132,41 +133,18 @@
       </td>
 
       <td>
-        <div class="cell-content" (click)="onCheckboxClicked($event)">
-          <hospitality-bot-toggle-dropdown
+        <div
+          class="cell-content status-toggle"
+          (click)="onCheckboxClicked($event)"
+        >
+          <hospitality-bot-status-dropdown-toggle
             class="toggle-btn"
             (onClick)="updateCampaignStatus($event, rowData)"
-            [status]="rowData.status"
+            [menuOptions]="menuOptions"
+            (onMenuItemClick)="handleMenuClick($event, rowData)"
+            [state]="rowData.status"
           >
-          </hospitality-bot-toggle-dropdown>
-        </div>
-      </td>
-
-      <td class="action">
-        <div class="option">
-          <div class="icon"></div>
-          <div class="icon"></div>
-          <div class="icon"></div>
-          <div
-            class="dropdown"
-            (click)="handleDropdownClick($event)"
-            [style.top]="rowIndex === 0 ? '100%' : ''"
-            [style.bottom]="rowIndex !== 0 ? '100%' : ''"
-          >
-            <div
-              class="dropdown__item"
-              (click)="cloneCampaign(rowData.id, rowData)"
-            >
-              {{ 'campaign.clone' | translate }}
-            </div>
-            <div
-              *ngIf="!rowData.isDraft"
-              class="dropdown__item"
-              (click)="archiveCampaign(rowData.id, rowData)"
-            >
-              {{ 'campaign.archive' | translate }}
-            </div>
-          </div>
+          </hospitality-bot-status-dropdown-toggle>
         </div>
       </td>
     </tr>

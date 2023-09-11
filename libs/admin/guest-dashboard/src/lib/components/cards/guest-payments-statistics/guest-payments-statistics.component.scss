@@ -1,0 +1,78 @@
+@import 'main';
+.stat-title {
+  font: normal normal $bolder 16px/19px Poppins;
+  letter-spacing: 0.96px;
+  color: $secondary;
+  opacity: 1;
+}
+
+.graph-container {
+  position: relative;
+  display: flex;
+  justify-content: space-around;
+  height: 138px;
+  @media screen and (max-width: $L) {
+    padding: 20px 0;
+  }
+  .graph {
+    width: 50%;
+    @include flex-all-center;
+    canvas {
+      height: 100% !important;
+      width: auto !important;
+    }
+  }
+  .detail-container {
+    .val {
+      font: normal normal $bolder 25px/30px Poppins;
+      letter-spacing: 1.5px;
+      color: $secondary;
+      opacity: 1;
+    }
+    .label {
+      font: normal normal $bolder 12px/14px Poppins;
+      letter-spacing: 0.72px;
+      opacity: 1;
+      color: $grayMedium;
+    }
+    width: 50%;
+    @include flex-all-center;
+  }
+}
+
+.stat-vals-container {
+  display: flex;
+  justify-content: space-between;
+  .stat-val-container {
+    width: 100%;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    font: normal normal $medium 12px/14px Poppins;
+    padding: 5px 0;
+    .icon {
+      width: 14px;
+      height: 14px;
+      opacity: 1;
+    }
+    .stat-lable {
+      text-align: center;
+      font: normal normal $medium 12px/14px Poppins;
+      letter-spacing: 0.72px;
+      color: $subtitle;
+      opacity: 1;
+    }
+    .stat-val {
+      text-align: right;
+      text-align: right;
+      padding: 5px;
+      font: normal normal $bolder 25px/30px Poppins;
+      letter-spacing: 1.5px;
+      color: $primary-cta;
+    }
+  }
+}
+
+.graph-base-chart {
+  height: 138px;
+}

@@ -1,4 +1,4 @@
-import { RoomStatus } from './service-response';
+import { RoomFoStatus, RoomStatus, StatusDetails } from './service-response';
 
 /**
  * Base Room Form Structure
@@ -8,7 +8,14 @@ export type BaseRoomForm = {
   roomTypeId: string;
   price: number;
   currency: string;
-  status: RoomStatus;
+  status?: RoomStatus;
+  featureIds: string[];
+  removeFeatures?: string[];
+  remark?: string;
+  statusDetailsList?: StatusDetails[];
+  currentStatusTo?: number;
+  currentStatusFrom?: number;
+  rooms?: any;
 };
 
 //  ******** Single Room Interface ********
@@ -34,3 +41,11 @@ export type MultipleRoomForm = BaseRoomForm & {
 };
 
 export type MultipleRoomData = MultipleRoomBase & BaseRoomForm;
+
+export type StatusQuoForm = {
+  status: RoomStatus;
+  remark: string;
+  foStatus: RoomFoStatus;
+  toDate: string;
+  fromDate: string;
+};

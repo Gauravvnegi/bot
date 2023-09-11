@@ -16,7 +16,7 @@ export type CategoryResponse = {
   active: boolean;
   packageCode: string;
   imageUrl: string;
-  hotelId: string;
+  entityId: string;
   hasChild: boolean;
   subPackages: any[];
 };

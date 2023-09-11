@@ -23,7 +23,7 @@ export class EditCategoryComponent implements OnInit, OnDestroy {
   categoryForm: FormGroup;
   hotelCategory: CategoryDetail;
   categoryId: string;
-  hotelId: string;
+  entityId: string;
   isSavingCategory = false;
   subPackages: IPackage[];
   globalQueries = [];
@@ -71,7 +71,7 @@ export class EditCategoryComponent implements OnInit, OnDestroy {
           ...data['dateRange'].queryValue,
         ];
 
-        this.hotelId = this.globalFilterService.hotelId;
+        this.entityId = this.globalFilterService.entityId;
         this.getCategoryId();
       })
     );
@@ -91,7 +91,7 @@ export class EditCategoryComponent implements OnInit, OnDestroy {
   getCategoryDetails(categoryId): void {
     this.$subscription.add(
       this.categoriesService
-        .getCategoryDetails(this.hotelId, categoryId)
+        .getCategoryDetails(this.entityId, categoryId)
         .subscribe((response) => {
           this.hotelCategory = new CategoryDetail().deserialize(response);
           this.categoryForm.patchValue(this.hotelCategory.category);
@@ -129,7 +129,7 @@ export class EditCategoryComponent implements OnInit, OnDestroy {
       this.categoryForm.getRawValue()
     );
     this.$subscription.add(
-      this.categoriesService.addCategory(this.hotelId, data).subscribe(
+      this.categoriesService.addCategory(this.entityId, data).subscribe(
         (response) => {
           this.hotelCategory = new CategoryDetail().deserialize(response);
           this.categoryForm.patchValue(this.hotelCategory);
@@ -173,7 +173,7 @@ export class EditCategoryComponent implements OnInit, OnDestroy {
     );
     this.$subscription.add(
       this.categoriesService
-        .updateCategory(this.hotelId, this.hotelCategory.category.id, data)
+        .updateCategory(this.entityId, this.hotelCategory.category.id, data)
         .subscribe(
           (response) => {
             this.snackbarService

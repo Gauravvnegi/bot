@@ -2,19 +2,18 @@ import { DateService } from '@hospitality-bot/shared/utils';
 import { get, set, trim } from 'lodash';
 import * as moment from 'moment';
 import { feedback } from '../constants/feedback';
-import { IDeserializable } from '@hospitality-bot/admin/shared';
+import { EntityState, IDeserializable } from '@hospitality-bot/admin/shared';
 
 export class FeedbackTable {
   total: number;
-  entityTypeCounts;
-  entityStateCounts: EntityStateCounts;
+  entityTypeCounts: EntityState<string>;
+  entityStateCounts: EntityState<string>;
   records: Feedback[];
 
   deserialize(input, outlets) {
     Object.assign(this, set({}, 'total', get(input, ['total'])));
-    this.entityStateCounts = new EntityStateCounts().deserialize(
-      input.entityStateCounts
-    );
+    this.entityStateCounts = input['entityStateCounts'];
+    this.entityTypeCounts = input['entityTypeCounts'];
 
     this.records = new Array<Feedback>();
     input.records.forEach((item) => {
@@ -49,7 +48,7 @@ export class Feedback {
   feedback;
   guestData: StayGuestData;
   guest: Guest;
-  hotelId: string;
+  entityId: string;
   id: string;
   outlet: string;
   ratings: number;
@@ -89,7 +88,7 @@ export class Feedback {
         'feedback',
         input.feedback ? JSON.parse(get(input, ['feedback'])) : {}
       ),
-      set({}, 'hotelId', get(input, ['hotelId'])),
+      set({}, 'entityId', get(input, ['entityId'])),
       set({}, 'id', get(input, ['id'])),
       set({}, 'ratings', get(input, ['ratings'])),
       set({}, 'read', get(input, ['read'])),
@@ -274,7 +273,7 @@ export class Guest {
   firstName: string;
   id: string;
   lastName: string;
-  nameTitle: string;
+  salutation: string;
   phoneNumber: string;
   place: string;
   spouseBirthDate: string;
@@ -298,7 +297,7 @@ export class Guest {
           get(input, ['lastName'], 'Name')
         )}`
       ),
-      set({}, 'nameTitle', get(input, ['nameTitle'], '')),
+      set({}, 'salutation', get(input, ['salutation'], '')),
       set({}, 'place', get(input, ['place'], '')),
       set({}, 'spouseBirthDate', get(input, ['spouseBirthDate'], '')),
       set({}, 'updated', get(input, ['updated'], '')),
@@ -308,7 +307,7 @@ export class Guest {
   }
 
   getFullName() {
-    return `${this.nameTitle ? this.nameTitle + ' ' : ''}${this.firstName} ${
+    return `${this.salutation ? this.salutation + ' ' : ''}${this.firstName} ${
       this.lastName
     }`;
   }
@@ -354,15 +353,14 @@ export class Notes {
 
 export class StayFeedbackTable {
   total: number;
-  entityTypeCounts;
-  entityStateCounts: EntityStateCounts;
+  entityTypeCounts: EntityState<string>;
+  entityStateCounts: EntityState<string>;
   records: StayFeedback[];
 
   deserialize(input, outlets, colorMap) {
     Object.assign(this, set({}, 'total', get(input, ['total'])));
-    this.entityStateCounts = new EntityStateCounts().deserialize(
-      input.entityStateCounts
-    );
+    this.entityStateCounts = input['entityStateCounts'];
+    this.entityTypeCounts = input['entityTypeCounts'];
     this.records = new Array<StayFeedback>();
     input.records.forEach((item) => {
       this.records.push(

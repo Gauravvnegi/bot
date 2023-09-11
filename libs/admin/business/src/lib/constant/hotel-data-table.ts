@@ -1,43 +1,42 @@
+export const BrandTableName = 'Property / Outlet';
+export const HotelTableName = 'Outlet';
+
 export const cols = [
   {
     field: 'name',
-    header: 'Name',
+    header: 'Name / Type',
     sortType: 'string',
     searchField: ['name'],
-    width: '23.75%',
+    width: '29%',
   },
   {
-    field: 'segment',
-    header: 'Segment',
+    field: 'workingDays',
+    header: 'Working days / Timings',
     sortType: 'string',
-    searchField: ['propertyCategory.label'],
+    searchField: ['startDay', 'endDay', 'from', 'to'],
     width: '23.75%',
-  },
-  {
-    field: 'address',
-    header: 'Address',
-    sortType: 'string',
-    searchField: ['address.city'],
-    width: '23.75%',
-  },
-  {
-    field: 'email',
-    header: 'Email',
-    sortType: 'string',
-    searchField: ['emailId'],
-    width: '23.75%',
+    isSortDisabled: true,
   },
   {
     field: 'contact',
-    header: 'contact',
+    header: 'Contact / Email',
     sortType: 'string',
-    searchField: ['contact?.number'],
+    searchField: ['contact.number', 'contact.countryCode', 'emailId'],
     width: '23.75%',
+    isSortDisabled: true,
+  },
+  {
+    field: 'url',
+    header: 'URL',
+    sortType: 'string',
+    width: '23.75%',
+    isSearchDisabled: true,
+    isSortDisabled: true,
   },
   {
     field: 'status',
     header: 'Actions',
-    isSortDisabled: true,
+    sortType: 'number',
     isSearchDisabled: true,
 
     width: '23.75%',

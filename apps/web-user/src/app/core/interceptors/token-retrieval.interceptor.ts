@@ -21,8 +21,12 @@ export class TokenRetrievalInterceptor implements HttpInterceptor {
       map((event: HttpEvent<any>) => {
         if (event instanceof HttpResponse && req.url.includes('decrypt')) {
           const accessToken = event.headers.get('x-access-token');
+
           if (!isEmpty(accessToken)) {
-            this._accessTokenService.setAccessToken(accessToken);
+            this._accessTokenService.setAccessToken(
+              accessToken,
+              event.body['hotelId']
+            );
           }
         }
         return event;

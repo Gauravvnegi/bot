@@ -34,7 +34,7 @@
 }
 
 .overlay-container {
-  width: 100vw;
+  width: calc(100vw - 88px);
   height: 100vh;
   position: absolute;
   inset: 0 0 0 0;
@@ -46,7 +46,7 @@
   background-color: $headingBg;
   border-bottom: 1px solid $grayLight;
   font-size: 18px;
-  font-weight: 500;
+  font-weight: 400;
   letter-spacing: 1.08px;
   text-align: left;
   color: $black;

@@ -13,7 +13,7 @@
     &__title {
       @include flex-item-center;
       font-size: 16px;
-      font-weight: 500;
+      font-weight: $medium;
       color: $tooltip;
       .alert {
         margin-right: 10px;
@@ -34,7 +34,7 @@
       margin-bottom: 20px;
       gap: 10px;
       font-size: 14px;
-      font-weight: 500;
+      font-weight: $medium;
       color: $tooltip;
       .text {
         text-align: center;

@@ -13,10 +13,7 @@ import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialogConfig } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { SubscriptionPlanService } from '@hospitality-bot/admin/core/theme';
-import {
-  MarketingNotificationComponent,
-  NotificationComponent,
-} from '@hospitality-bot/admin/notification';
+import { MarketingNotificationComponent } from '@hospitality-bot/admin/notification';
 import { ConfigService, ModuleNames } from '@hospitality-bot/admin/shared';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 import * as FileSaver from 'file-saver';
@@ -40,12 +37,12 @@ import { SendMessageComponent } from 'libs/admin/notification/src/lib/components
   styleUrls: ['./details.component.scss'],
 })
 export class DetailsComponent implements OnInit, OnDestroy {
-  @Input() tabKey = 'guest_details';
+  @Input() tabKey: DetailsTabOptions = 'guest_details';
   @Output() onDetailsClose = new EventEmitter();
   @ViewChild('adminDocumentsDetailsComponent')
   documentDetailComponent: AdminDocumentsDetailsComponent;
   self;
-  hotelId: string;
+  entityId: string;
   detailsForm: FormGroup;
   details;
   isGuestInfoPatched = false;
@@ -60,7 +57,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
     { label: 'Advance Booking', icon: '' },
     { label: 'Current Booking', icon: '' },
   ];
-  bookingId;
+  @Input('bookingId') bookingId: string; //reservationId
   branchConfig;
   $subscription = new Subscription();
 
@@ -69,7 +66,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
     { iconUrl: 'assets/svg/email.svg', label: 'Email', value: 'email' },
   ];
 
-  detailsConfig = [
+  detailsConfig: { key: DetailsTabOptions; index: number }[] = [
     {
       key: 'guest_details',
       index: 0,
@@ -136,17 +133,21 @@ export class DetailsComponent implements OnInit, OnDestroy {
   listenForGlobalFilters(): void {
     this.$subscription.add(
       this.globalFilterService.globalFilter$.subscribe((data) => {
-        this.hotelId = this.globalFilterService.hotelId;
-        const { hotelName: brandId, branchName: branchId } = data[
+        this.entityId = this.globalFilterService.entityId;
+        const { brandName: brandId, entityName: branchId } = data[
           'filter'
         ].value.property;
         const brandConfig = this._hotelDetailService.brands.find(
           (brand) => brand.id === brandId
         );
-        this.branchConfig = brandConfig.hotels.find(
+        this.branchConfig = brandConfig.entities.find(
           (branch) => branch.id === branchId
         );
-        this.loadGuestInfo();
+        if (this.bookingId) {
+          this.getReservationDetails(true);
+        } else {
+          this.loadGuestInfo();
+        }
       })
     );
   }
@@ -193,16 +194,30 @@ export class DetailsComponent implements OnInit, OnDestroy {
     );
   }
 
-  getReservationDetails() {
+  /**
+   * Handle getting th reservation data based on reservation ID (bookingId)
+   * @param initGuestDetails Init guest details is use to fetch guest data after reservation data
+   */
+  getReservationDetails(initGuestDetails = false) {
     this.$subscription.add(
       this._reservationService.getReservationDetails(this.bookingId).subscribe(
         (response) => {
-          this.details = new Details().deserialize(
-            response,
-            this.globalFilterService.timezone
-          );
-          this.mapValuesInForm();
-          this.isReservationDetailFetched = true;
+          if (response) {
+            this.details = new Details().deserialize(
+              response,
+              this.globalFilterService.timezone
+            );
+            if (initGuestDetails) {
+              this.bookingNumber = response.number;
+              this.guestId = response.guestDetails.primaryGuest.id;
+              this.loadGuestInfo();
+            } else {
+              this.mapValuesInForm();
+              this.isReservationDetailFetched = true;
+            }
+          } else {
+            this.closeDetails();
+          }
         },
         ({ error }) => {
           this.closeDetails();
@@ -364,6 +379,13 @@ export class DetailsComponent implements OnInit, OnDestroy {
     this.router.navigateByUrl(`pages/efrontdesk/invoice/${this.bookingId}`);
   }
 
+  editBooking() {
+    this.onDetailsClose.next(false);
+    this.router.navigateByUrl(
+      `pages/efrontdesk/reservation/edit-reservation/${this.bookingId}`
+    );
+  }
+
   prepareInvoice() {
     if (!this.branchConfig.pmsEnable) {
       this.manageInvoice();
@@ -414,14 +436,11 @@ export class DetailsComponent implements OnInit, OnDestroy {
     }
   }
 
-  generateFeedback(journeyName) {
+  generateFeedback() {
     this._reservationService
-      .generateJourneyLink(
-        this.reservationDetailsFG.get('bookingId').value,
-        journeyName
-      )
+      .generateFeedback(this.reservationDetailsFG.get('bookingId').value)
       .subscribe((res) => {
-        this._clipboard.copy(`${res.domain}?token=${res.journey.token}`);
+        this._clipboard.copy(`${res.domain}${res.feedback.token}`);
         this.snackbarService.openSnackBarAsText(
           'Link copied successfully',
           '',
@@ -616,15 +635,15 @@ export class DetailsComponent implements OnInit, OnDestroy {
       );
   }
 
-  getPrimaryGuestDetails() {
-    if (this.guestReservationDropdownList.length)
-      this.details.guestDetails.forEach((guest) => {
-        if (guest.isPrimary === true) {
-          this.primaryGuest = guest;
-          return;
-        }
-      });
-  }
+  // getPrimaryGuestDetails() {
+  //   if (this.guestReservationDropdownList.length)
+  //     this.details.guestDetails.forEach((guest) => {
+  //       if (guest.isPrimary === true) {
+  //         this.primaryGuest = guest;
+  //         return;
+  //       }
+  //     });
+  // }
 
   openSendNotification(channel) {
     if (channel) {
@@ -654,7 +673,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
         );
       }
 
-      notificationCompRef.componentInstance.hotelId = this.hotelId;
+      notificationCompRef.componentInstance.entityId = this.entityId;
       notificationCompRef.componentInstance.roomNumber = this.details.stayDetails.roomNumber;
       notificationCompRef.componentInstance.isModal = true;
       notificationCompRef.componentInstance.onModalClose.subscribe((res) => {
@@ -681,21 +700,27 @@ export class DetailsComponent implements OnInit, OnDestroy {
         });
       }
     });
-    if (this.guestReservationDropdownList.length) {
-      if (this.bookingNumber)
-        this.bookingId = this.guestReservationDropdownList.filter(
-          (booking) => booking.bookingNumber === this.bookingNumber
-        )[0].bookingId;
-      else {
-        this.bookingNumber = this.guestReservationDropdownList[0]?.bookingNumber;
-        this.bookingId = this.guestReservationDropdownList[0]?.bookingId;
-      }
-      this.bookingFG.get('booking').setValue(this.bookingId);
-      this.getReservationDetails();
-    } else {
+
+    if (this.bookingId) {
+      this.mapValuesInForm();
       this.isReservationDetailFetched = true;
-      this.isGuestInfoPatched = true;
+    } else {
+      if (this.guestReservationDropdownList.length) {
+        if (this.bookingNumber)
+          this.bookingId = this.guestReservationDropdownList.filter(
+            (booking) => booking.bookingNumber === this.bookingNumber
+          )[0].bookingId;
+        else {
+          this.bookingNumber = this.guestReservationDropdownList[0]?.bookingNumber;
+          this.bookingId = this.guestReservationDropdownList[0]?.bookingId;
+        }
+        this.getReservationDetails();
+      } else {
+        this.isReservationDetailFetched = true;
+        this.isGuestInfoPatched = true;
+      }
     }
+    this.bookingFG.get('booking').setValue(this.bookingId);
   }
 
   handleBookingChange(event) {
@@ -720,14 +745,10 @@ export class DetailsComponent implements OnInit, OnDestroy {
     const sharedIcon = this.shareIconList.find(
       (icon) => icon.label === channelLabel
     );
-
-    if(sharedIcon){
-      return channel.isSubscribed
-      ? sharedIcon.iconUrl
-      : sharedIcon.iconUrl;
+    if (sharedIcon) {
+      return channel.isSubscribed ? sharedIcon.iconUrl : sharedIcon.iconUrl;
     }
-
-    return ''
+    return '';
   }
 
   checkForTransactionFeedbackSubscribed() {
@@ -794,3 +815,11 @@ export class DetailsComponent implements OnInit, OnDestroy {
     this.isFirstTimeFetch = true;
   }
 }
+
+export type DetailsTabOptions =
+  | 'guest_details'
+  | 'document_details'
+  | 'stay_details'
+  | 'package_details'
+  | 'payment_details'
+  | 'request_details';

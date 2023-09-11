@@ -134,10 +134,10 @@ export class NpsAcrossDepartmentsComponent implements OnInit, OnDestroy {
       ];
     else {
       this.globalQueries.forEach((element) => {
-        if (element.hasOwnProperty('hotelId')) {
+        if (element.hasOwnProperty('entityId')) {
           this.globalQueries = [
             ...this.globalQueries,
-            { entityIds: element.hotelId },
+            { entityIds: element.entityId },
           ];
         }
       });
@@ -164,7 +164,7 @@ export class NpsAcrossDepartmentsComponent implements OnInit, OnDestroy {
   }
 
   getNPSDepartments() {
-    if (!this.tabFilterItems.length) return;
+    // if (!this.tabFilterItems.length) return;
     this.loading = true;
     const config = {
       queryObj: this._adminUtilityService.makeQueryParams([
@@ -346,7 +346,9 @@ export class NpsAcrossDepartmentsComponent implements OnInit, OnDestroy {
               this.tabFilterItems[this.tabFilterIdx].chips = res;
             });
         },
-        ({ error }) => {},
+        ({ error }) => {
+          this.loading = false;
+        },
         () => {
           this.loading = false;
         }

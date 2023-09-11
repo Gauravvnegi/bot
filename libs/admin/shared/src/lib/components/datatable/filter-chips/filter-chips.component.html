@@ -11,32 +11,50 @@
         selectable="true"
         (click)="toggleQuickReplyFilter(chipIdx)"
         [ngClass]="{
-          chipSelected: chip.isSelected,
-          'chip-default': chip.type === 'default',
-          'chip-selected-default': chip.type === 'default' && chip.isSelected,
+          'chip-outlined-default': chip.type === 'default',
+          'chip-contained-default':
+            chip.type === 'default' &&
+            (chip.isSelected || selectedChips.has(chip.value)),
 
-          'chip-new': chip.type === 'new',
-          'chip-selected-new': chip.type === 'new' && chip.isSelected,
+          'chip-outlined-active': chip.type === 'active',
+          'chip-contained-active':
+            chip.type === 'active' &&
+            (chip.isSelected || selectedChips.has(chip.value)),
 
-          'chip-initiated': chip.type === 'initiated',
-          'chip-selected-initiated':
-            chip.type === 'initiated' && chip.isSelected,
+          'chip-outlined-failed': chip.type === 'failed',
+          'chip-contained-failed':
+            chip.type === 'failed' &&
+            (chip.isSelected || selectedChips.has(chip.value)),
 
-          'chip-pending': chip.type === 'pending',
-          'chip-selected-pending': chip.type === 'pending' && chip.isSelected,
+          'chip-outlined-inactive': chip.type === 'inactive',
+          'chip-contained-inactive':
+            chip.type === 'inactive' &&
+            (chip.isSelected || selectedChips.has(chip.value)),
 
-          'chip-completed': chip.type === 'completed',
-          'chip-selected-completed':
-            chip.type === 'completed' && chip.isSelected,
+          'chip-outlined-draft': chip.type === 'draft',
+          'chip-contained-draft':
+            chip.type === 'draft' &&
+            (chip.isSelected || selectedChips.has(chip.value)),
 
-          'chip-reject': chip.type === 'failed',
-          'chip-selected-reject': chip.type === 'failed' && chip.isSelected,
+          'chip-outlined-completed': chip.type === 'completed',
+          'chip-contained-completed':
+            chip.type === 'completed' &&
+            (chip.isSelected || selectedChips.has(chip.value)),
 
-          'chip-warning': chip.type === 'warning',
-          'chip-selected-warning': chip.type === 'warning' && chip.isSelected,
+          'chip-outlined-success': chip.type === 'success',
+          'chip-contained-success':
+            chip.type === 'success' &&
+            (chip.isSelected || selectedChips.has(chip.value)),
 
-          'chip-standard': chip.type === 'standard',
-          'chip-selected-standard': chip.type === 'standard' && chip.isSelected
+          'chip-outlined-warning': chip.type === 'warning',
+          'chip-contained-warning':
+            chip.type === 'warning' &&
+            (chip.isSelected || selectedChips.has(chip.value)),
+
+          'chip-outlined-unavailable': chip.type === 'unavailable',
+          'chip-contained-unavailable':
+            chip.type === 'unavailable' &&
+            (chip.isSelected || selectedChips.has(chip.value))
         }"
       >
         <span> {{ chip.label }}</span>

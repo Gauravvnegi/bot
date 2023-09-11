@@ -30,10 +30,18 @@ import { Option, NavRouteOptions } from '@hospitality-bot/admin/shared';
   styleUrls: ['./campaign-form.component.scss'],
 })
 export class CampaignFormComponent implements OnInit, OnDestroy {
-  @Input() hotelId: string;
+  @Input() entityId: string;
   @Input() campaignId: string;
   @Input() campaignFG: FormGroup;
-  @Input() campaign: Campaign;
+  _campaign: Campaign;
+  @Input() set campaign(value: Campaign) {
+    this._campaign = value;
+    if (this.campaignId) {
+      this.pageTitle = 'Edit Campaign';
+      this.navRoutes[2].label = 'Edit Campaign';
+    }
+    this.draftDate = this._campaign?.updatedAt ?? this._campaign?.createdAt;
+  }
   @Output() changeStep = new EventEmitter();
   @Output() save = new EventEmitter();
   templateData = '';
@@ -67,11 +75,6 @@ export class CampaignFormComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    if (this.campaignId) {
-      this.pageTitle = 'Edit Campaign';
-      this.navRoutes[2].label = 'Edit Campaign';
-    }
-    this.draftDate = this.campaign?.updatedAt ?? this.campaign?.createdAt;
     this.getFromEmails();
   }
 
@@ -80,13 +83,11 @@ export class CampaignFormComponent implements OnInit, OnDestroy {
    */
   getFromEmails() {
     this.$subscription.add(
-      this._emailService.getFromEmail(this.hotelId).subscribe(
-        (response) => {
-          this.fromEmailList = new EmailList()
-            .deserialize(response)
-            .map((item) => ({ label: item.email, value: item.id }));
-        } 
-      )
+      this._emailService.getFromEmail(this.entityId).subscribe((response) => {
+        this.fromEmailList = new EmailList()
+          .deserialize(response)
+          .map((item) => ({ label: item.email, value: item.id }));
+      })
     );
   }
 
@@ -118,8 +119,9 @@ export class CampaignFormComponent implements OnInit, OnDestroy {
             );
             reqData.message = this.getTemplateMessage(reqData);
             this.$subscription.add(
-              this._emailService.sendTest(this.hotelId, reqData).subscribe(
-                (response) => {
+              this._emailService
+                .sendTest(this.entityId, reqData)
+                .subscribe((response) => {
                   this.snackbarService
                     .openSnackBarWithTranslate(
                       {
@@ -132,8 +134,7 @@ export class CampaignFormComponent implements OnInit, OnDestroy {
                       }
                     )
                     .subscribe();
-                }
-              )
+                })
             );
           }
           sendTestCampaignCompRef.close();
@@ -148,23 +149,21 @@ export class CampaignFormComponent implements OnInit, OnDestroy {
   archiveCampaign() {
     this.$subscription.add(
       this.campaignService
-        .archiveCampaign(this.hotelId, {}, this.campaignId)
-        .subscribe(
-          (response) => {
-            this.snackbarService
-              .openSnackBarWithTranslate(
-                {
-                  translateKey: 'messages.success.campaignArchived',
-                  priorityMessage: 'Campaign Archived',
-                },
-                '',
-                {
-                  panelClass: 'success',
-                }
-              )
-              .subscribe();
-          }
-        )
+        .archiveCampaign(this.entityId, {}, this.campaignId)
+        .subscribe((response) => {
+          this.snackbarService
+            .openSnackBarWithTranslate(
+              {
+                translateKey: 'messages.success.campaignArchived',
+                priorityMessage: 'Campaign Archived',
+              },
+              '',
+              {
+                panelClass: 'success',
+              }
+            )
+            .subscribe();
+        })
     );
   }
 

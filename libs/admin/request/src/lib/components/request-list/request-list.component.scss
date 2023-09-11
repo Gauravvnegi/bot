@@ -1,23 +1,40 @@
 @import 'main';
 
 .priority-low {
-  background-color: $success-state;
+  background-color: $completed-state;
 }
+
+.priority-low-text {
+  color: $completed-state;
+}
+
 
 .priority-medium {
   background-color: $priority-medium;
+}
+
+.priority-medium-text {
+  color: $priority-medium;
 }
 
 .priority-high {
   background-color: $priority-high;
 }
 
+.priority-high-text {
+  color: $priority-high;
+}
+
 .priority-asap {
   background-color: $darkRed;
 }
 
+.priority-asap-text {
+  color: $darkRed;
+}
+
 .sla-new {
-  color: $success-state;
+  color: $completed-state;
 }
 
 .sla-pending {
@@ -55,7 +72,7 @@
     }
   }
   &-body {
-    height: calc(100% - 112px);
+   
     overflow: auto;
     border-right: solid 1px $grayLight;
 
@@ -90,7 +107,7 @@
       &__title {
         margin: 12px 0;
         font-size: 16px;
-        font-weight: bold;
+        font-weight: $bold;
         font-stretch: normal;
         font-style: normal;
         line-height: normal;
@@ -100,7 +117,7 @@
       }
       &__description {
         font-size: 12px;
-        font-weight: bold;
+        font-weight: $bold;
         font-stretch: normal;
         font-style: normal;
         line-height: normal;
@@ -123,7 +140,7 @@
   justify-content: space-between;
   align-items: center;
   &-text {
-    font: normal normal medium 16px/21px Roboto;
+    font: normal normal $medium 16px/21px Poppins;
     letter-spacing: 0.64px;
     color: $secondary;
     opacity: 1;
@@ -135,7 +152,7 @@
 }
 .content-wrap-subtitle {
   color: $secondary;
-  font-weight: 500;
+  font-weight: $bold;
   margin-bottom: 5px;
 }
 .right-side-subheader {
@@ -165,5 +182,5 @@
   ::ng-deep
   .mat-tab-header-pagination-controls-enabled
   .mat-tab-header-pagination {
-  display: none;
+  display: flex !important;
 }

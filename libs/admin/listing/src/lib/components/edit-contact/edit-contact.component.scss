@@ -28,9 +28,8 @@ td {
   padding: 30px 40px;
   height: 80vh;
   .add-contact {
-    font-family: 'Roboto';
     font-size: 20px;
-    font-weight: bold;
+    font-weight: $bold;
     letter-spacing: 1.2px;
     color: $secondary;
   }
@@ -68,7 +67,7 @@ td {
     background-color: $primary-cta;
     cursor: pointer;
     .save {
-      @include normal-text;
+      @include normal-sm-text;
       color: $white;
     }
   }

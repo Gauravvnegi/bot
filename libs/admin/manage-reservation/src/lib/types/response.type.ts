@@ -1,46 +1,34 @@
 import {
   EntityStateCountsResponse,
   EntityTypeCountsResponse,
-  Status,
 } from '../models/reservations.model';
+import { GuestType } from 'libs/admin/guests/src/lib/types/guest.type';
+import { RatePlanRes } from 'libs/admin/room/src/lib/types/service-response';
+import { ItemsData } from './forms.types';
+
 /* Reservation List Response Types deceleration */
 export type ReservationListResponse = {
-  reservationData?: ReservationResponse[];
+  records?: RoomReservationRes[];
   total: number;
   entityStateCounts: EntityStateCountsResponse;
   entityTypeCounts: EntityTypeCountsResponse;
 };
 
-/* Reservation Response Types Deceleration*/
-export type ReservationResponse = {
+export type RoomReservationRes = {
   id: string;
-  hotelId: string;
-  rooms: number;
-  roomType: string;
-  confirmationNo: string;
-  name: string;
-  company: string;
-  date: string;
-  amount: number;
-  source: string;
-  payment: string;
-  status: string;
-  reservationTypes: string;
-  reservationNumber: string;
-  totalDueAmount: number;
-  firstName: string;
-  lastName: string;
-  paymentMethod: string;
-  totalPaidAmount: number;
-  roomCount: number;
-  reservationType: string;
   from: number;
   to: number;
-  totalAmount: number;
-  fullName: string;
-  roomNumber: number;
-  statusValues: Status[];
+  source: string;
+  reservationType: string;
   sourceName: string;
+  reservationNumber: string;
+  status: string;
+  guest: GuestType;
+  created: number;
+  nextStates: string[];
+  bookingItems?: BookingItems[];
+  pricingDetails: PricingDetails;
+  specialRequest: string;
 };
 
 export type PaymentConfigResponse = {
@@ -52,7 +40,7 @@ export type PaymentConfigResponse = {
 
 export type PaymentMethodConfig = {
   id: string;
-  hotelId: string;
+  entityId: string;
   merchantId?: string;
   accessCode?: string;
   chainId?: string;
@@ -66,4 +54,103 @@ export type PaymentMethodConfig = {
   imageUrl?: string;
   label: string;
   instructions?: any;
+};
+
+export type SummaryResponse = {
+  bookingItems?: BookingItems[];
+  items?: ItemsData[];
+  from: number;
+  to: number;
+  occupancyDetails?: { maxAdult: number };
+  location: string;
+  pricingDetails: PricingDetails;
+  offer: { discountedPrice: number };
+};
+
+export type BookingItems = {
+  roomDetails: {
+    ratePlan: RatePlanRes;
+    roomNumber: string;
+    roomTypeId: string;
+    roomTypeLabel: string;
+    roomCount: number;
+  };
+  pricingDetails: PricingDetails;
+  occupancyDetails: {
+    maxChildren: number;
+    maxAdult: number;
+  };
+  id?: string;
+};
+
+export type BookingItemsSummary = {
+  ratePlan: RatePlanRes;
+  roomNumber: string;
+  roomTypeId: string;
+  roomTypeLabel: string;
+  roomCount: number;
+  totalPaidAmount: number;
+  totalAmount: number;
+  taxAndFees: number;
+  basePrice: number;
+  totalDueAmount: number;
+  maxChildren: number;
+  maxAdult: number;
+  min: number;
+  max: number;
+  base: number;
+  id: string;
+};
+
+export type PricingDetails = {
+  max: number;
+  min: number;
+  base: number;
+  paxChild: number;
+  paxAdult: number;
+  totalAmount: number;
+  totalPaidAmount: number;
+  totalDueAmount: number;
+  taxAndFees: number;
+  basePrice: number;
+};
+
+export type SummaryPricing = {
+  totalAmount: number;
+  totalPaidAmount: number;
+  totalDueAmount: number;
+  taxAndFees: number;
+};
+
+export type RoomReservationResponse = {
+  id: string;
+  from: number;
+  to: number;
+  totalAmount: number;
+  source: string;
+  reservationType: string;
+  sourceName: string;
+  marketSegment: string;
+  totalPaidAmount: number;
+  totalDueAmount: number;
+  reservationNumber: string;
+  status: string;
+  guest: GuestType;
+  created: number;
+  offerAmount: number;
+  nextStates: string[];
+  bookingItems: BookingItems[];
+  pricingDetails?: PricingDetails;
+  specialRequest: string;
+  offer: {
+    id: string;
+    created: number;
+    updated: number;
+    offerType: string;
+  };
+};
+
+export type SourceResponse = {
+  name: string;
+  type?: { code: string; label: string }[];
 };

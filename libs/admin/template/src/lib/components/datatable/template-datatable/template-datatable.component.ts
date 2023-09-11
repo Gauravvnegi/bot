@@ -14,10 +14,9 @@ import {
 import { TranslateService } from '@ngx-translate/core';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 import * as FileSaver from 'file-saver';
-import { SelectedEntityState } from 'libs/admin/dashboard/src/lib/types/dashboard.type';
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
 import { TopicService } from 'libs/admin/shared/src/lib/services/topic.service';
-import { LazyLoadEvent, SortEvent } from 'primeng/api';
+import { SortEvent } from 'primeng/api';
 import { Observable, Subscription } from 'rxjs';
 import { templateConfig } from '../../../constants/template';
 import { Templates } from '../../../data-models/templateConfig.model';
@@ -34,22 +33,17 @@ import { TemplateService } from '../../../services/template.service';
 export class TemplateDatatableComponent extends BaseDatatableComponent
   implements OnInit, OnDestroy {
   tableName = templateConfig.datatable.title;
-  @Input() tabFilterItems;
-  @Input() tabFilterIdx = 0;
   actionButtons = true;
-  isQuickFilters = true;
-  isTabFilters = true;
   isResizableColumns = true;
   isAutoLayout = false;
   isCustomSort = true;
   triggerInitialData = false;
-  rowsPerPageOptions = [5, 10, 25, 50, 200];
-  rowsPerPage = templateConfig.rowsPerPage.datatableLimit;
+  isAllTabFilterRequired = true;
   globalQueries = [];
   $subscription = new Subscription();
-  hotelId: any;
+  entityId: any;
   cols = templateConfig.datatable.cols;
-  chips = templateConfig.datatable.chips;
+  isAllATabItem = true;
 
   constructor(
     public fb: FormBuilder,
@@ -81,25 +75,16 @@ export class TemplateDatatableComponent extends BaseDatatableComponent
         ...data['filter'].queryValue,
         ...data['dateRange'].queryValue,
       ];
-      this.hotelId = this.globalFilterService.hotelId;
-      this.setTabFilterItems();
+      this.entityId = this.globalFilterService.entityId;
+      this.loadTableValue();
     });
   }
 
   /**
-   * @function setTabFilterItems function to set tab filter items.
+   * @function loadTableValue function to set tab filter items.
    */
-  setTabFilterItems() {
-    this.tabFilterItems = [
-      {
-        label: 'All',
-        content: '',
-        value: 'ALL',
-        disabled: false,
-        total: 0,
-        chips: this.chips,
-      },
-    ];
+  loadTableValue() {
+    this.loading = true;
     const topicConfig = {
       queryObj: this.adminUtilityService.makeQueryParams([
         {
@@ -110,25 +95,15 @@ export class TemplateDatatableComponent extends BaseDatatableComponent
     };
     this.$subscription.add(
       this._topicService
-        .getHotelTopic(topicConfig, this.hotelId)
+        .getHotelTopic(topicConfig, this.entityId)
         .subscribe((response) => {
-          response.records.forEach((topic) =>
-            this.tabFilterItems.push({
-              label: topic.name,
-              content: '',
-              value: topic.name,
-              disabled: false,
-              total: 0,
-              lastPage: 0,
-              chips: this.chips,
-            })
-          );
+          this.loading = false;
           this.loadInitialData([
             {
               order: sharedConfig.defaultOrder,
-              entityType: this.tabFilterItems[this.tabFilterIdx]?.value,
+              entityType: this.selectedTab,
             },
-            ...this.getSelectedQuickReplyFilters(),
+            ...this.getSelectedQuickReplyFilters({ isStatusBoolean: true }),
           ]);
         })
     );
@@ -161,11 +136,12 @@ export class TemplateDatatableComponent extends BaseDatatableComponent
   setRecords(data): void {
     const responseData = new Templates().deserialize(data);
     this.values = responseData.records;
-    data.entityTypeCounts &&
-      this.updateTabFilterCount(data.entityTypeCounts, data.total);
-    data.entityStateCounts &&
-      this.updateQuickReplyFilterCount(data.entityStateCounts);
-    this.updateTotalRecords();
+    this.initFilters(
+      responseData.entityTypeCounts,
+      responseData.entityStateCounts,
+      responseData.total
+    );
+
     this.loading = false;
   }
 
@@ -183,7 +159,7 @@ export class TemplateDatatableComponent extends BaseDatatableComponent
     const config = {
       queryObj: this.adminUtilityService.makeQueryParams(queries),
     };
-    return this.templateService.getHotelTemplate(config, this.hotelId);
+    return this.templateService.getHotelTemplate(config, this.entityId);
   }
 
   /**
@@ -192,20 +168,15 @@ export class TemplateDatatableComponent extends BaseDatatableComponent
    * @param templateId The template id for which status update action will be done.
    */
   updateTemplateStatus(status, userData): void {
+    this.loading = true;
     const data = {
       active: status,
     };
     this.templateService
-      .updateTemplateStatus(this.hotelId, data, userData.id)
+      .updateTemplateStatus(this.entityId, data, userData.id)
       .subscribe(
         (_) => {
-          const statusValue = (val: boolean) => (val ? 'ACTIVE' : 'INACTIVE');
-          this.updateStatusAndCount(
-            statusValue(userData.status),
-            statusValue(status)
-          );
-          this.values.find((item) => item.id === userData.id).status = status;
-
+          this.loadInitialData();
           this.snackbarService.openSnackBarWithTranslate(
             {
               translateKey: `messages.SUCCESS.STATUS_UPDATED`,
@@ -214,7 +185,6 @@ export class TemplateDatatableComponent extends BaseDatatableComponent
             '',
             { panelClass: 'success' }
           );
-          this.changePage(this.currentPage);
         },
         ({ error }) => {
           this.loading = false;
@@ -238,18 +208,6 @@ export class TemplateDatatableComponent extends BaseDatatableComponent
   }
 
   /**
-   * @function getSelectedQuickReplyFilters To return the selected chip list.
-   * @returns The selected chips value.
-   */
-  getSelectedQuickReplyFilters(): SelectedEntityState[] {
-    return this.tabFilterItems[this.tabFilterIdx].chips
-      .filter((item) => item.isSelected === true)
-      .map((item) => ({
-        entityState: item.value,
-      }));
-  }
-
-  /**
    * @function loadData To load data for the table after any event.
    * @param event The lazy load event for the table.
    */
@@ -261,9 +219,9 @@ export class TemplateDatatableComponent extends BaseDatatableComponent
         [
           {
             order: sharedConfig.defaultOrder,
-            entityType: this.tabFilterItems[this.tabFilterIdx]?.value,
+            entityType: this.selectedTab,
           },
-          ...this.getSelectedQuickReplyFilters(),
+          ...this.getSelectedQuickReplyFilters({ isStatusBoolean: true }),
         ],
         {
           offset: this.first,
@@ -282,15 +240,6 @@ export class TemplateDatatableComponent extends BaseDatatableComponent
   }
 
   /**
-   * @function updatePaginations To update the pagination variable values.
-   * @param event The lazy load event for the table.
-   */
-  updatePaginations(event): void {
-    this.first = event.first;
-    this.rowsPerPage = event.rows;
-  }
-
-  /**
    * @function customSort To sort the rows of the table.
    * @param eventThe The event for sort click action.
    */
@@ -303,40 +252,6 @@ export class TemplateDatatableComponent extends BaseDatatableComponent
     event.data.sort((data1, data2) =>
       this.sortOrder(event, field, data1, data2, col)
     );
-  }
-
-  /**
-   * @function onSelectedTabFilterChange To handle the tab filter change.
-   * @param event The material tab change event.
-   */
-  onSelectedTabFilterChange(event: MatTabChangeEvent): void {
-    this.tabFilterIdx = event.index;
-    this.loadData();
-  }
-
-  /**
-   * @function onFilterTypeTextChange To handle the search for each column of the table.
-   * @param value The value of the search field.
-   * @param field The name of the field across which filter is done.
-   * @param matchMode The mode by which filter is to be done.
-   */
-  onFilterTypeTextChange(
-    value: string,
-    field: string,
-    matchMode = 'startsWith'
-  ): void {
-    if (!!value && !this.isSearchSet) {
-      this.tempFirst = this.first;
-      this.tempRowsPerPage = this.rowsPerPage;
-      this.isSearchSet = true;
-    } else if (!!!value) {
-      this.isSearchSet = false;
-      this.first = this.tempFirst;
-      this.rowsPerPage = this.tempRowsPerPage;
-    }
-
-    value = value && value.trim();
-    this.table.filter(value, field, matchMode);
   }
 
   /**
@@ -355,7 +270,7 @@ export class TemplateDatatableComponent extends BaseDatatableComponent
       ]),
     };
     this.$subscription.add(
-      this.templateService.exportCSV(this.hotelId, config).subscribe(
+      this.templateService.exportCSV(this.entityId, config).subscribe(
         (response) => {
           FileSaver.saveAs(
             response,

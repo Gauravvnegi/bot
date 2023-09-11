@@ -24,7 +24,7 @@ import { FeedbackTableService } from '../../../services/table.service';
 })
 export class FeedbackListFilterComponent implements OnInit, OnDestroy {
   @Input() parentFG: FormGroup;
-  @Input() hotelId: string;
+  @Input() entityId: string;
   @Output() filterApplied = new EventEmitter();
   @Output() close = new EventEmitter();
   sortList = card.sortList;
@@ -83,7 +83,7 @@ export class FeedbackListFilterComponent implements OnInit, OnDestroy {
     this.$subscription.add(
       this.cardService
         .getDepartmentList(
-          this.hotelId,
+          this.entityId,
           this.feedbackType === '' ? feedback.types.stay : this.feedbackType
         )
         .subscribe((response) => {

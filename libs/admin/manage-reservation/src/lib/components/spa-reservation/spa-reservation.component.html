@@ -1,0 +1,77 @@
+<div [formGroup]="userForm" class="wrapper">
+  <hospitality-bot-navigation-header [heading]="pageTitle" [routes]="routes">
+  </hospitality-bot-navigation-header>
+  <div class="main">
+    <p-accordion [multiple]="true">
+      <hospitality-bot-booking-info
+        [statusOptions]="statusOptions"
+        [bookingType]="bookingType"
+      ></hospitality-bot-booking-info>
+      <p-accordionTab header="Booking Information">
+        <div class="form-block" formGroupName="bookingInformation">
+          <hospitality-bot-input
+            class="half-width"
+            controlName="numberOfAdults"
+            label="No. of Adults"
+            [props]="{
+              errorMessages: {
+                required: 'This is a required field.',
+                min: 'Value should be more than 0'
+              },
+              type: 'number'
+            }"
+          ></hospitality-bot-input>
+          <hospitality-bot-iterator
+            class="iterator full-width"
+            [fields]="fields"
+            [useFormArray]="spaBookingInfo"
+            ctaLabel="+ Add Item"
+            (currentIndex)="onItemsAdded($event)"
+            (removedIndex)="getSummaryData()"
+            [itemValues]="spaItemsValues"
+          ></hospitality-bot-iterator>
+        </div>
+      </p-accordionTab>
+      <hospitality-bot-guest-information
+        [reservationId]="reservationId"
+        (getSummary)="getSummaryData()"
+        [bookingItemValidity]="spaControls.valid"
+      ></hospitality-bot-guest-information>
+      <!-- <hospitality-bot-billing-address></hospitality-bot-billing-address> -->
+      <hospitality-bot-instructions></hospitality-bot-instructions>
+      <hospitality-bot-payment-rule
+        [deductedAmount]="deductedAmount"
+      ></hospitality-bot-payment-rule>
+      <hospitality-bot-payment-method></hospitality-bot-payment-method>
+    </p-accordion>
+    <div class="bk-summary">
+      <hospitality-bot-booking-summary
+        [selectedOffer]="selectedOffer"
+        [summaryData]="summaryData"
+        [offersList]="offersList"
+        (handleInitForm)="initForm()"
+        [disabledForm]="disabledForm"
+        [bookingInfo]="{
+          bookingType: bookingType,
+          outletId: outletId,
+          heading: selectedEntity.label
+        }"
+      >
+        <div class="bk-summary_spaDateInfo">
+          <p class="bk-summary_spaDateInfo_heading">
+            Date
+          </p>
+          <p class="bk-summary_spaDateInfo_subText">{{ date }} {{ time }}</p>
+        </div>
+        <!-- <div class="bk-summary_roomInfo_guestInfo">
+          <p class="bk-summary_roomInfo_guestInfo_heading">
+            Duration
+          </p>
+          <p class="bk-summary_roomInfo_guestInfo_subText">
+            30 Mins
+          </p>
+        </div> -->
+      </hospitality-bot-booking-summary>
+    </div>
+  </div>
+</div>

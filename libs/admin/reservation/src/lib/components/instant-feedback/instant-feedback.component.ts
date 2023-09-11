@@ -44,11 +44,11 @@ export class InstantFeedbackComponent implements OnInit, OnDestroy {
 
   getOutlets(globalQueryValue) {
     const branch = this._hotelDetailService.brands
-      .find((brand) => brand.id === globalQueryValue.property.hotelName)
-      .hotels.find(
-        (branch) => branch['id'] === globalQueryValue.property.branchName
+      .find((brand) => brand.id === globalQueryValue.property.brandName)
+      .entities.find(
+        (branch) => branch['id'] === globalQueryValue.property.entityName
       );
-    this.outlets = branch.outlets;
+    this.outlets = branch.entities;
   }
 
   getOutlet(id) {

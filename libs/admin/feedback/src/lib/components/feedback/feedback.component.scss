@@ -18,7 +18,7 @@
 .gtmContainer {
   display: flex;
   width: 100%;
-  margin: 15px 0;
+  margin: 1% 0;
   .gtm {
     width: 45%;
   }
@@ -36,7 +36,7 @@
 
 :host ::ng-deep .dropdown-label {
   margin-left: 0.5em;
-  font-weight: 500;
+  font-weight: $medium;
 }
 
 :host ::ng-deep .mat-chip-list {
@@ -54,15 +54,10 @@
   }
 }
 
-:host ::ng-deep .dropdown-label {
-  margin-left: 0.5em;
-  font-weight: 500;
-}
-
 :host ::ng-deep .container {
   width: 100%;
   padding: 15px;
-  margin-bottom: 10px;
+  margin-bottom: 1%;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -87,7 +82,7 @@
 :host ::ng-deep .stat-title {
   letter-spacing: 0.96px;
   color: $secondary;
-  font-weight: 700;
+  font-weight: $bolder;
   @media screen and (max-width: 800px) {
     font-size: 12px;
   }
@@ -119,17 +114,39 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  margin-bottom: 5px;
-  .stats {
-    // height: 360px;
-    width: 32.33%;
-    margin: 0.5%;
-    background: $white;
-    border: solid 1px $borderCol;
-    box-shadow: 0px 3px 6px $boxShadow;
-    border-radius: 5px;
-    @media screen and (max-width: 800px) {
-      // height: 185px;
+  margin-bottom: 0.5%;
+  .stats-container {
+    display: flex;
+    margin: 0.5% 0;
+    gap: 1%;
+    width: 100%;
+    .stats {
+      // height: 360px;
+      width: 32.66%;
+      background: $white;
+      border: solid 1px $borderCol;
+      box-shadow: 0px 3px 6px $boxShadow;
+      border-radius: 5px;
+      @media screen and (max-width: 800px) {
+        // height: 185px;
+      }
+    }
+  }
+  .bifurcation-stats {
+    width: 100%;
+    margin-bottom: 0.5%;
+  }
+  .shared-container {
+    width: 100%;
+    display: flex;
+    gap: 1%;
+    .shared-stats {
+      width: 49.5%;
+      margin: 0.5% 0;
+      background: $white;
+      border: solid 1px $borderCol;
+      box-shadow: 0px 3px 6px $boxShadow;
+      border-radius: 5px;
     }
   }
   .change-height {
@@ -143,11 +160,6 @@
   }
 }
 
-.bifurcation-container{
-  width: 100%;
-  margin: 20px 0;
-}
-
 .request-btn {
   width: 148px;
   height: 36px;
@@ -159,7 +171,6 @@
     transform: scale(0.95);
   }
   &__wrap {
-    font-family: Roboto;
     font-size: 11px;
 
     letter-spacing: 0.66px;
@@ -174,7 +185,6 @@
   border: 1px solid $primary-cta;
   border-radius: 5px;
 }
-
 
 :host ::ng-deep .data-table-row {
   &:hover {

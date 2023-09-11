@@ -27,22 +27,53 @@ export class ApiService {
   /**
    * GET request
    */
-  get(uri: string, config = {}): Observable<any> {
+  get(uri: string, config: any = {}): Observable<any> {
+    let headers = this.httpOptions.headers;
+
+    if (config?.headers) {
+      Object.entries(config.headers).forEach(
+        ([key, value]: [string, string]) => {
+          headers = headers.set(key, value);
+        }
+      );
+    }
+
     return this.httpClient
-      .get(this.getBaseUrl() + uri, config)
+      .get(this.getBaseUrl() + uri, {
+        ...config,
+        headers,
+      })
       .pipe(catchError(this.handleError));
   }
+
+  // get(uri: string, config = {}): Observable<any> {
+  //   return this.httpClient
+  //     .get(this.getBaseUrl() + uri, config)
+  //     .pipe(catchError(this.handleError));
+  // }
 
   /**
    * PATCH request
    */
-  patch(uri: string, data: any): Observable<any> {
+  patch(uri: string, data: any, config: any = {}): Observable<any> {
     // this.httpOptions.headers.append(
     //   'Content-Type',
     //   'application/json;charset=UTF-8'
     // );
+    let headers = this.httpOptions.headers;
+
+    if (config?.headers) {
+      Object.entries(config.headers).forEach(
+        ([key, value]: [string, string]) => {
+          headers = headers.set(key, value);
+        }
+      );
+    }
     return this.httpClient
-      .patch(this.getBaseUrl() + uri, data, this.httpOptions)
+      .patch(this.getBaseUrl() + uri, data, {
+        ...config,
+        headers,
+      })
       .pipe(catchError((err) => this.handleError(err)));
   }
 
@@ -62,10 +93,20 @@ export class ApiService {
   /**
    * POST request
    */
-  post(uri: string, data: any): Observable<any> {
+  post(uri: string, data: any, config: any = {}): Observable<any> {
+    let headers = this.httpOptions.headers;
+
+    if (config?.headers) {
+      Object.entries(config.headers).forEach(
+        ([key, value]: [string, string]) => {
+          headers = headers.set(key, value);
+        }
+      );
+    }
+
     // this.httpOptions.headers.append('oauth-token', '');
     return this.httpClient
-      .post(this.getBaseUrl() + uri, data, this.httpOptions)
+      .post(this.getBaseUrl() + uri, data, { ...config, headers })
       .pipe(catchError((err) => this.handleError(err)));
   }
 

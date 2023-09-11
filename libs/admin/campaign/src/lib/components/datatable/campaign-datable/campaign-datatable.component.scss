@@ -72,7 +72,7 @@
 :host ::ng-deep .header {
   color: $secondary !important;
   font-size: 16px;
-  font-weight: bold;
+  font-weight: $bolder;
 }
 
 :host ::ng-deep .table-data-head {
@@ -194,4 +194,10 @@
 // *** over ride the table style ***
 :host ::ng-deep .p-datatable {
   @include tableCellPadding(1em);
+}
+
+:host ::ng-deep .status-toggle {
+  .wrapper {
+    display: flex;
+  }
 }

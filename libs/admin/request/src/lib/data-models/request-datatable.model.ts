@@ -118,7 +118,7 @@ export class GuestType implements IDeserializable {
 
 export class Guest implements IDeserializable {
   id;
-  nameTitle;
+  salutation;
   firstName: string;
   lastName: string;
   contactDetails;
@@ -127,7 +127,7 @@ export class Guest implements IDeserializable {
     Object.assign(
       this,
       set({}, 'id', get(input, ['id'])),
-      set({}, 'nameTitle', get(input, ['nameTitle'], '')),
+      set({}, 'salutation', get(input, ['salutation'], '')),
       set({}, 'firstName', get(input, ['firstName'])),
       set({}, 'lastName', get(input, ['lastName']))
     );

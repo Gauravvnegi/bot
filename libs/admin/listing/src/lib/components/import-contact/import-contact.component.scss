@@ -11,7 +11,7 @@
   padding: 11px 22px 14px 20px;
   border-radius: 23px;
   background-color: $button-blue;
-  @include normal-text;
+  @include normal-sm-text;
   color: $white;
   cursor: pointer;
 }
@@ -34,9 +34,8 @@
     right: 3%;
   }
   .import-contact {
-    font-family: 'Roboto';
     font-size: 20px;
-    font-weight: bold;
+    font-weight: $bold;
     letter-spacing: 1.2px;
     color: $primary-black;
     background: $whiteDeep;
@@ -71,7 +70,7 @@
       background-color: $button-blue;
       cursor: pointer;
       .save {
-        @include normal-text;
+        @include normal-sm-text;
         color: $white;
       }
     }
@@ -170,9 +169,8 @@
     background-color: transparent;
   }
   .add-contact {
-    font-family: 'Roboto';
     font-size: 20px;
-    font-weight: bold;
+    font-weight: $bold;
     color: $secondary;
     padding-top: 20px;
   }

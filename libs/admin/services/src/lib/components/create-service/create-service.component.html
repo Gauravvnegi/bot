@@ -1,4 +1,4 @@
-<div class="wrapper">
+<div class="wrapper" [id]="fa.referenceId">
   <hospitality-bot-navigation-header [heading]="pageTitle" [routes]="navRoutes">
   </hospitality-bot-navigation-header>
   <div class="form-block" [formGroup]="useForm">
@@ -16,29 +16,39 @@
       controlName="name"
       label="Service Name"
       maxLength="60"
+      [props]="{
+        placeholder: 'Enter'
+      }"
     ></hospitality-bot-input>
+
+    <hospitality-bot-select
+      *ngIf="isProperty()"
+      [loading]="loading"
+      [disabled]="serviceId"
+      class="half-width"
+      controlName="entityId"
+      label="Property"
+      [options]="entityList"
+      [props]="{
+        placeholder: 'Select Type'
+      }"
+    ></hospitality-bot-select>
+
     <hospitality-bot-category
       controlName="parentId"
       class="half-width"
       type="SERVICE_CATEGORY"
+      [entityId]="entityId"
     >
     </hospitality-bot-category>
+
     <hospitality-bot-custom-file-upload
       class="upload"
-      formControlName="imageUrl"
-      [hotelId]="hotelId"
+      formControlName="images"
+      [entityId]="entityId"
     ></hospitality-bot-custom-file-upload>
-    <hospitality-bot-select
-      [ngClass]="{
-        'one-third-width': isSelectedTypePaid,
-        'half-width': !isSelectedTypePaid
-      }"
-      controlName="serviceType"
-      label="Type"
-      [options]="types"
-    ></hospitality-bot-select>
     <hospitality-bot-prefix-field
-      *ngIf="isSelectedTypePaid"
+      *ngIf="!isComplimentaryService"
       class="one-third-width"
       [options]="currencies"
       label="Original Price"
@@ -54,40 +64,47 @@
     >
     </hospitality-bot-prefix-field>
     <hospitality-bot-select
-      [ngClass]="{
-        'one-third-width': isSelectedTypePaid,
-        'half-width': !isSelectedTypePaid
-      }"
+      class="one-third-width"
       controlName="unit"
       label="Unit"
       [options]="units"
     ></hospitality-bot-select>
+    <hospitality-bot-multi-select
+      *ngIf="!isComplimentaryService"
+      class="one-third-width"
+      controlName="taxIds"
+      label="Tax"
+      [options]="tax"
+      [props]="{
+        isAsync: true,
+        createPrompt: '+ Create New Tax'
+      }"
+      (onCreate)="createTax()"
+    ></hospitality-bot-multi-select>
+    <hospitality-bot-input
+      *ngIf="!isComplimentaryService"
+      class="one-third-width"
+      controlName="hsnCode"
+      label="HSN Code"
+      maxLength="60"
+    ></hospitality-bot-input>
     <div class="container">
-      <hospitality-bot-multi-select
-        *ngIf="isSelectedTypePaid"
-        class="one-third-width"
-        controlName="taxIds"
-        label="Tax"
-        [options]="tax"
-        [props]="{
-          isAsync: true,
-          createPrompt: '+ Create New Tax'
-        }"
-        (onCreate)="createTax()"
-      ></hospitality-bot-multi-select>
+      <hospitality-bot-select-group
+        class="half-width"
+        controlName="enableVisibility"
+        label="Visibility On"
+        [options]="visibilities"
+        fieldType="checkbox"
+      ></hospitality-bot-select-group>
     </div>
-    <hospitality-bot-select-group
-      class="half-width"
-      controlName="enableVisibility"
-      label="Visibility On"
-      [options]="visibilities"
-      fieldType="checkbox"
-    ></hospitality-bot-select-group>
-
-    <hospitality-bot-button
-      class="create-btn"
-      [label]="serviceId ? 'Update' : 'Create'"
-      (onClick)="handleSubmit()"
-    ></hospitality-bot-button>
+    <hospitality-bot-form-action
+      class="full-width"
+      [loading]="loading"
+      [isId]="serviceId"
+      (onPreAction)="resetForm()"
+      (onPostAction)="handleSubmit()"
+      #fa
+    >
+    </hospitality-bot-form-action>
   </div>
 </div>

@@ -12,7 +12,7 @@
   display: flex;
   align-items: center;
   cursor: pointer;
-  font: normal normal medium 14px/19px Roboto;
+  font: normal normal $medium 14px/19px Poppins;
   letter-spacing: 0.56px;
   color: $grayMedium;
 }
@@ -43,16 +43,14 @@
       font-weight: $medium;
     }
     .question {
-      font-family: Roboto;
       font-size: 12px;
-      font-weight: bold;
+      font-weight: $bold;
 
       letter-spacing: 0.24px;
       color: $question;
       margin: 5px 0;
     }
     .answer {
-      font-family: Roboto;
       font-size: 12px;
 
       line-height: 1.67;
@@ -81,7 +79,7 @@
   align-items: center;
   justify-content: space-between;
   color: $primary-black;
-  font-weight: 500;
+  font-weight: $bold;
   letter-spacing: 0.84px;
   margin-right: 0 !important;
   .booking_number:hover {
@@ -205,9 +203,8 @@
   justify-content: left;
   align-items: center;
   &__text {
-    font-family: Roboto;
     font-size: 11px;
-    font-weight: bold;
+    font-weight: $bold;
     font-stretch: normal;
     font-style: normal;
     line-height: normal;

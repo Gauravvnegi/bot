@@ -1,12 +1,15 @@
+import { animate, style, transition, trigger } from '@angular/animations';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialogConfig } from '@angular/material/dialog';
 import { MatTabChangeEvent } from '@angular/material/tabs';
+import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import { SnackBarService } from 'libs/shared/material/src';
 import { ModalService } from 'libs/shared/material/src/lib/services/modal.service';
 import { Subscription } from 'rxjs';
 import { request } from '../../constants/request';
 import { RequestService } from '../../services/request.service';
 import { RaiseRequestComponent } from '../raise-request/raise-request.component';
-import { trigger, transition, animate, style } from '@angular/animations';
+import { SubscriptionPlanService } from 'apps/admin/src/app/core/theme/src/lib/services/subscription-plan.service';
 
 @Component({
   selector: 'hospitality-bot-request-wrapper',
@@ -25,6 +28,7 @@ import { trigger, transition, animate, style } from '@angular/animations';
   ],
 })
 export class RequestWrapperComponent implements OnInit, OnDestroy {
+  pageTitle = 'Complaints';
   guestInfoEnable = false;
   private $subscription = new Subscription();
   requestConfig = request;
@@ -39,18 +43,37 @@ export class RequestWrapperComponent implements OnInit, OnDestroy {
   ];
 
   tabFilterIdx = 0;
+  requestTabFilterIdx = 0;
+
+  listByFilterItems = [
+    {
+      label: 'All',
+      value: 'ALL',
+    },
+    {
+      label: 'Focused',
+      value: 'FOCUSED',
+    },
+  ];
 
   selectedIndex = 0;
   buttonConfig = [
-    { button: true, label: 'Raise Request', icon: 'assets/svg/requests.svg' },
+    { button: true, label: 'Raise Complaint', icon: 'assets/svg/requests.svg' },
   ];
 
   constructor(
     private _modal: ModalService,
-    private _requestService: RequestService
+    private _requestService: RequestService,
+    private _globalFilterService: GlobalFilterService,
+    private snackbarService: SnackBarService,
+    private subscriptionService: SubscriptionPlanService
   ) {}
 
   ngOnInit(): void {}
+
+  get hasComplaintManagementSystem() {
+    return this.subscriptionService.hasComplaintManagementSystem();
+  }
 
   /**
    * @function onSelectedTabFilterChange To handle tab filter change.
@@ -58,6 +81,12 @@ export class RequestWrapperComponent implements OnInit, OnDestroy {
    */
   onSelectedTabFilterChange(event: MatTabChangeEvent): void {
     this.tabFilterIdx = event.index;
+  }
+
+  onTabFilterChange(event) {
+    this._requestService.requestListFilter.next(
+      this.listByFilterItems[event.index].value
+    );
   }
 
   openGuestInfo(event) {
@@ -72,13 +101,30 @@ export class RequestWrapperComponent implements OnInit, OnDestroy {
     }
   }
 
+  syncRequest() {
+    this.$subscription.add(
+      this._requestService
+        .syncRequest(this._globalFilterService.entityId)
+        .subscribe((res) => {
+          this.snackbarService.openSnackBarAsText(`Syncing successful`, '', {
+            panelClass: 'success',
+          });
+          this._globalFilterService.globalFilter$.next(
+            this._globalFilterService.globalFilterObj
+          );
+        })
+    );
+  }
+
   /**
    * @function openRaiseRequest To open raise request modal.
    */
   openRaiseRequest() {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;
-    dialogConfig.width = '50%';
+    dialogConfig.width = '500px';
+    dialogConfig.height = '90vh';
+
     const raiseRequestCompRef = this._modal.openDialog(
       RaiseRequestComponent,
       dialogConfig

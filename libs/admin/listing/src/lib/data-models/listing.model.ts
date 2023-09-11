@@ -1,9 +1,11 @@
 import { get, set } from 'lodash';
-import { IDeserializable } from '@hospitality-bot/admin/shared';
+import { EntityState, IDeserializable } from '@hospitality-bot/admin/shared';
 
 export class ListTable {
   records: IList[];
   total: number;
+  entityStateCounts: EntityState<string>;
+  entityTypeCounts: EntityState<string>;
 
   deserialize(input) {
     this.records = new Array<IList>();
@@ -11,6 +13,8 @@ export class ListTable {
       this.records.push(new List().deserialize(list, i))
     );
     this.total = input.total;
+    this.entityStateCounts = input?.entityStateCounts;
+    this.entityTypeCounts = input?.entityTypeCounts;
     return this;
   }
 }
@@ -124,7 +128,7 @@ export class Topic {
   status: boolean;
   description: string;
   name: string;
-  hotelId: string;
+  entityId: string;
   active: boolean;
 
   deserialize(input: any) {
@@ -134,7 +138,7 @@ export class Topic {
       set({}, 'name', get(input, ['name'])),
       set({}, 'status', get(input, ['active'])),
       set({}, 'description', get(input, ['description'])),
-      set({}, 'hotelId', get(input, ['hotelId'])),
+      set({}, 'entityId', get(input, ['entityId'])),
       set({}, 'active', get(input, ['active']))
     );
     return this;

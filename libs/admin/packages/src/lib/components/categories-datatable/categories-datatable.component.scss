@@ -3,7 +3,7 @@
 .categoriesItemLabel {
   vertical-align: middle;
   margin-left: 0.5em;
-  font-weight: 500;
+  font-weight: $bold;
 }
 .categorieTableHead {
   width: 5%;
@@ -130,7 +130,7 @@
 :host ::ng-deep .heading {
   color: $secondary;
   font-size: 16px;
-  font-weight: bold;
+  font-weight: $bold;
 }
 
 :host ::ng-deep .table-header-text {

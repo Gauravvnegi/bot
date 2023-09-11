@@ -34,7 +34,7 @@ export class EditCampaignComponent implements OnInit, OnDestroy {
   campaignFG: FormGroup;
   scheduleFG: FormGroup;
   templateData = '';
-  hotelId: string;
+  entityId: string;
   templateList = [];
   globalQueries = [];
   fromEmailList = [];
@@ -113,7 +113,7 @@ export class EditCampaignComponent implements OnInit, OnDestroy {
           ...data['filter'].queryValue,
           ...data['dateRange'].queryValue,
         ];
-        this.hotelId = this.globalFilterService.hotelId;
+        this.entityId = this.globalFilterService.entityId;
         this.getTemplateId();
       })
     );
@@ -151,23 +151,21 @@ export class EditCampaignComponent implements OnInit, OnDestroy {
           return of(null);
         })
       )
-      .subscribe(
-        (response) => {
-          if (this.campaignId) {
-            console.log('Saved');
-            this.setDataAfterUpdate(response);
-          } else {
-            this.campaignFG.patchValue({ id: response.id });
-            this.campaignId = response.id;
-            this.location.replaceState(
-              `/pages/marketing/campaign/edit/${response.id}`
-            );
-            this.setDataAfterSave(response);
-          }
-          this.$formChangeDetection.unsubscribe();
-          this.listenForAutoSave();
+      .subscribe((response) => {
+        if (this.campaignId) {
+          console.log('Saved');
+          this.setDataAfterUpdate(response);
+        } else {
+          this.campaignFG.patchValue({ id: response.id });
+          this.campaignId = response.id;
+          this.location.replaceState(
+            `/pages/marketing/campaign/edit/${response.id}`
+          );
+          this.setDataAfterSave(response);
         }
-      );
+        this.$formChangeDetection.unsubscribe();
+        this.listenForAutoSave();
+      });
   }
 
   /**
@@ -177,9 +175,10 @@ export class EditCampaignComponent implements OnInit, OnDestroy {
   getCampaignDetails(id: string) {
     this.$subscription.add(
       this._campaignService
-        .getCampaignById(this.hotelId, id)
+        .getCampaignById(this.entityId, id)
         .subscribe((response) => {
           this.campaign = new Campaign().deserialize(response);
+          console.log(this.campaign, 'this.campaign');
           if (this.campaign.cc && this.campaign.cc.length)
             this.campaignFG.addControl('cc', this._fb.array([]));
           if (this.campaign.bcc && this.campaign.bcc.length)
@@ -266,20 +265,18 @@ export class EditCampaignComponent implements OnInit, OnDestroy {
   listenForAutoSave() {
     this.$autoSaveSubscription.add(
       interval(campaignConfig.autosave.time).subscribe(() => {
-        this.autoSave(this.campaignFG.getRawValue()).subscribe(
-          (response) => {
-            if (this.campaignId) {
-              this.setDataAfterUpdate(response);
-            } else {
-              this.campaignFG.patchValue({ id: response.id });
-              this.campaignId = response.id;
-              this.setDataAfterSave(response);
-              this.location.replaceState(
-                `/pages/marketing/campaign/edit/${response.id}`
-              );
-            }
-          } 
-        );
+        this.autoSave(this.campaignFG.getRawValue()).subscribe((response) => {
+          if (this.campaignId) {
+            this.setDataAfterUpdate(response);
+          } else {
+            this.campaignFG.patchValue({ id: response.id });
+            this.campaignId = response.id;
+            this.setDataAfterSave(response);
+            this.location.replaceState(
+              `/pages/marketing/campaign/edit/${response.id}`
+            );
+          }
+        });
       })
     );
   }
@@ -291,7 +288,7 @@ export class EditCampaignComponent implements OnInit, OnDestroy {
    */
   autoSave(data: any) {
     return this._campaignService.save(
-      this.hotelId,
+      this.entityId,
       this._emailService.createRequestData(data),
       this.campaignId
     );
@@ -361,7 +358,7 @@ export class EditCampaignComponent implements OnInit, OnDestroy {
       this.$subscription.add(
         this.autoSave(this.campaignFG.getRawValue()).subscribe(
           (_response) => this._router.navigate(['/pages/marketing/campaign']),
-          ({ error }) => { 
+          ({ error }) => {
             this._router.navigate(['/pages/marketing/campaign']);
           }
         )
@@ -396,25 +393,23 @@ export class EditCampaignComponent implements OnInit, OnDestroy {
         this.$subscription.add(
           this._emailService
             .scheduleCampaign(
-              this.hotelId,
+              this.entityId,
               this._emailService.createScheduleRequestData(
                 this.campaignFG.getRawValue(),
                 this.scheduleFG.get('time').value
               )
             )
-            .subscribe(
-              (response) => {
-                this.snackbarService.openSnackBarWithTranslate(
-                  {
-                    translateKey: `messages.SUCCESS.CAMPAIGN_SCEDULED`,
-                    priorityMessage: 'Campaign scheduled.',
-                  },
-                  '',
-                  { panelClass: 'success' }
-                );
-                this._router.navigate(['pages/marketing/campaign']);
-              } 
-            )
+            .subscribe((response) => {
+              this.snackbarService.openSnackBarWithTranslate(
+                {
+                  translateKey: `messages.SUCCESS.CAMPAIGN_SCEDULED`,
+                  priorityMessage: 'Campaign scheduled.',
+                },
+                '',
+                { panelClass: 'success' }
+              );
+              this._router.navigate(['pages/marketing/campaign']);
+            })
         );
       } else this.scheduleFG.reset();
       detailCompRef.close();
@@ -442,7 +437,7 @@ export class EditCampaignComponent implements OnInit, OnDestroy {
     reqData.isDraft = false;
     this.isSending = true;
     this.$subscription.add(
-      this._emailService.sendEmail(this.hotelId, reqData).subscribe(
+      this._emailService.sendEmail(this.entityId, reqData).subscribe(
         (response) => {
           this.snackbarService
             .openSnackBarWithTranslate(
@@ -458,7 +453,9 @@ export class EditCampaignComponent implements OnInit, OnDestroy {
             .subscribe();
           this._router.navigate(['pages/marketing/campaign']);
         },
-        ({ error }) => {this.isSending = false}
+        ({ error }) => {
+          this.isSending = false;
+        }
       )
     );
   }

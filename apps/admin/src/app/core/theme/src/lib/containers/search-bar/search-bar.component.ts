@@ -1,25 +1,25 @@
 import {
   Component,
+  ElementRef,
   EventEmitter,
   Input,
-  OnInit,
   OnDestroy,
+  OnInit,
   Output,
   ViewChild,
-  ElementRef,
 } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { MatDialogConfig } from '@angular/material/dialog';
+import { Router } from '@angular/router';
 import { DetailsComponent as BookingDetailComponent } from 'libs/admin/reservation/src/lib/components/details/details.component';
 import { HotelDetailService } from 'libs/admin/shared/src/lib/services/hotel-detail.service';
 import { ModalService } from 'libs/shared/material/src/lib/services/modal.service';
-import { empty, Subscription, of } from 'rxjs';
+import { Subscription, empty, of } from 'rxjs';
 import { catchError, debounceTime, switchMap } from 'rxjs/operators';
 import { SnackBarService } from '../../../../../../../../../../libs/shared/material/src/lib/services/snackbar.service';
 import { SearchResultDetail } from '../../data-models/search-bar-config.model';
-import { SearchService } from '../../services/search.service';
-import { Router } from '@angular/router';
 import { GlobalFilterService } from '../../services/global-filters.service';
+import { SearchService } from '../../services/search.service';
 
 @Component({
   selector: 'admin-search-bar',
@@ -34,7 +34,7 @@ export class SearchBarComponent implements OnInit, OnDestroy {
   @ViewChild('searchResult') searchResult;
   @ViewChild('searchBar') searchBar: ElementRef;
 
-  hotelId: string;
+  entityId: string;
 
   searchOptions: SearchResultDetail[];
   results: any;
@@ -66,8 +66,8 @@ export class SearchBarComponent implements OnInit, OnDestroy {
   listenForGlobalFilters(): void {
     this.$subscription.add(
       this.globalFilterService.globalFilter$.subscribe((data) => {
-        const { branchName: branchId } = data['filter'].value.property;
-        this.hotelId = branchId;
+        const { entityName: entityId } = data['filter'].value.property;
+        this.entityId = entityId;
       })
     );
   }
@@ -75,7 +75,10 @@ export class SearchBarComponent implements OnInit, OnDestroy {
   listenForSearchChanges(): void {
     const formChanges$ = this.parentForm.valueChanges;
     const findSearch$ = ({ search }: { search: string }) =>
-      this.searchService.search(search.trim(), this.hotelDetailService.hotelId);
+      this.searchService.search(
+        search.trim(),
+        this.hotelDetailService.entityId
+      );
     formChanges$
       .pipe(
         debounceTime(1000),
@@ -92,6 +95,8 @@ export class SearchBarComponent implements OnInit, OnDestroy {
       .subscribe(
         (response) => {
           if (response === 'minThreeChar') {
+            this.searchDropdownVisible = false;
+            this.searchValue = false;
             return;
           }
           this.results = new SearchResultDetail().deserialize(response);

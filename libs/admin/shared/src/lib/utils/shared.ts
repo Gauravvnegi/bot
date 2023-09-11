@@ -13,7 +13,7 @@ export const discountCalculation = (
   if (!discountType) return null;
 
   const { price, discountValue, discountedPrice } = data;
-  const isNum = discountType === DiscountType.NUMBER;
+  const isNum = discountType === DiscountType.FLAT;
 
   if (price && discountValue) {
     return {

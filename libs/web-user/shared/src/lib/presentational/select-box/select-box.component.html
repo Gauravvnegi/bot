@@ -28,8 +28,8 @@
         >
           <mat-option
             *ngFor="let option of settings.options; trackBy: trackByFn"
-            [value]="option.key"
-            >{{ option.value }}</mat-option
+            [value]="option?.key"
+            >{{ option?.value }}</mat-option
           >
         </ng-container>
 
@@ -37,16 +37,16 @@
           <ng-container *ngIf="!(onOpenedChange | async); else opendOptions">
             <mat-option
               *ngFor="let option of settings.optionsClosed; trackBy: trackByFn"
-              [value]="option.key"
-              >{{ option.value }}</mat-option
+              [value]="option?.key"
+              >{{ option?.value }}</mat-option
             >
           </ng-container>
 
           <ng-template #opendOptions>
             <mat-option
               *ngFor="let option of settings.optionsOpened; trackBy: trackByFn"
-              [value]="option.key"
-              >{{ option.value }}</mat-option
+              [value]="option?.key"
+              >{{ option?.value }}</mat-option
             >
           </ng-template>
         </ng-template>

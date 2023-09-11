@@ -1,7 +1,7 @@
 <div
   class="wrapper p-field"
   [style.fontSize]="fontSize"
-  [ngClass]="wrapperNgClasses"
+  [ngClass]="wrapperNgClasses(isHideSpinners)"
   [formGroup]="controlContainer.control"
 >
   <label
@@ -19,7 +19,7 @@
   ></hospitality-bot-custom-tooltip>
 
   <input
-    class="input"
+    [class]="subtitle ? 'input subtitle-padding' : 'input'"
     [ngClass]="inputNgClasses"
     [attr.disabled]="isDisabled || null"
     [formControlName]="controlName"
@@ -30,12 +30,21 @@
     [min]="min"
     [max]="max"
     [placeholder]="placeholder"
+    (keydown)="handleKeyDown($event)"
+    [tabindex]="tabIndex"
   />
 
   <ng-container *ngIf="!isLoading">
-    <small *ngIf="subtitle" class="subtitle">{{ subtitle }}</small>
+    <small *ngIf="subtitle" class="subtitle"
+      ><ng-container *ngIf="!strike; else strikeText">{{
+        subtitle
+      }}</ng-container>
+    </small>
+    <ng-template #strikeText>
+      <del>{{ subtitle }}</del>
+    </ng-template>
   </ng-container>
-  
+
   <small *ngIf="error" class="p-error"> {{ error }}</small>
 
   <label *ngIf="label && float" [for]="controlName" class="label">{{

@@ -5,12 +5,11 @@
     border-bottom: 1px solid $grayMedium !important;
   }
   .mat-tab-label-content {
-    @include normal-text;
-    font-weight: normal;
+    @include normal-sm-text;
     color: $inActiveTab;
   }
   .mat-tab-label-active > .mat-tab-label-content {
-    @include normal-text;
+    @include normal-sm-text;
     color: $button-blue !important;
   }
   .mat-form-field-underline {
@@ -44,8 +43,8 @@
 }
 
 .container {
-  @include normal-text;
-  font-weight: normal;
+  @include normal-sm-text;
+  font-weight: $medium;
   .header {
     @include flex-item-center;
     width: 100%;
@@ -83,7 +82,7 @@
   }
   .info-message {
     font-size: 15px;
-    font-weight: 500;
+    font-weight: $bold;
     line-height: 1.67;
     letter-spacing: 0.9px;
     text-align: center;
@@ -100,7 +99,7 @@
     color: $load-more;
     cursor: pointer;
     text-align: center;
-    font-weight: bold;
+    font-weight: $bold;
     &:hover {
       background-color: #eaf3fa;
     }

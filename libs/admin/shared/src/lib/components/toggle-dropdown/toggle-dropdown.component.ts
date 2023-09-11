@@ -18,7 +18,7 @@ export class ToggleDropdownComponent {
         if (!this.value) this.onClick.emit(true);
       },
       value: true,
-      type: 'new',
+      type: 'active',
     },
     {
       label: 'Inactive',

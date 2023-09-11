@@ -1,4 +1,5 @@
 import { DateService } from '@hospitality-bot/shared/utils';
+import { stepsIndexData } from 'libs/web-user/shared/src/lib/constants/common';
 import { get, set } from 'lodash';
 import { GuestTypes, GuestRole } from '../constants/guest';
 
@@ -23,9 +24,12 @@ export class SummaryDetails implements Deserializable {
       set({}, 'id', get(summary, ['id'])),
       set({}, 'arrivalTime', get(summary, ['arrivalTime'])),
       set({}, 'departureTime', get(summary, ['departureTime'])),
-      set({}, 'stateCompletedSteps', get(summary, ['stateCompletedSteps'])),
+      // set({}, 'stateCompletedSteps', get(summary, ['stateCompletedSteps'])),
       set({}, 'termsStatus', get(summary, ['termsStatus'], false))
     );
+
+    this.stateCompletedSteps = stepsIndexData[summary.stateCompletedSteps] ?? 0;
+
     this.guestDetails = new GuestDetails().deserialize(summary.guestDetails);
     this.healthDeclaration = new Health().deserialize(
       summary.healthDeclaration
@@ -103,7 +107,7 @@ export class StayDetails {
 
 export class Guest {
   id: string;
-  nameTitle: string;
+  salutation: string;
   firstName: string;
   lastName: string;
   contactDetails: ContactDetails;
@@ -123,7 +127,7 @@ export class Guest {
     Object.assign(
       this,
       set({}, 'id', get(summary, ['id'])),
-      set({}, 'nameTitle', get(summary, ['nameTitle'])),
+      set({}, 'salutation', get(summary, ['salutation'])),
       set({}, 'firstName', get(summary, ['firstName'])),
       set({}, 'lastName', get(summary, ['lastName'])),
       set({}, 'statusMessage', get(summary, ['statusMessage'])),

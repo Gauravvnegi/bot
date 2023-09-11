@@ -11,7 +11,7 @@
   >
 
   <p-multiSelect
-    class="input"
+    [class]="isEmpty ? 'input no-select' : 'input'"
     [ngClass]="inputNgClasses"
     [disabled]="isDisabled || null"
     [formControlName]="controlName"
@@ -21,9 +21,11 @@
     (onPanelShow)="onMenuOpen()"
     (onPanelHide)="onMenuClose()"
     [showHeader]="showHeader"
+    [defaultLabel]="placeholder"
     [resetFilterOnHide]="true"
+    [maxSelectedLabels]="maxSelectedLabels"
   >
-    <ng-template let-value pTemplate="selectedItems">
+    <ng-template *ngIf="showChips" let-value pTemplate="selectedItems">
       <div class="chips">
         <div class="chip" [click-stop-propagation] *ngFor="let val of value">
           <div>{{ dictionary[val] }}</div>

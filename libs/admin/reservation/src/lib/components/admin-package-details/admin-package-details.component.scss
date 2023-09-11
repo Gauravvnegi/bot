@@ -49,8 +49,12 @@
 
 .package-label {
   color: $secondary;
-  @include normal-text;
-  font-weight: 600;
+  @include normal-sm-text;
+  font-weight: $bolder;
+}
+
+.paid-wrapper {
+  margin-bottom: 15px;
 }
 
 .special-request-wrapper {

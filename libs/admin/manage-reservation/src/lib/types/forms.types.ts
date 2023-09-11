@@ -1,65 +1,110 @@
-import { C } from '@angular/cdk/keycodes';
+import { EntitySubType } from '@hospitality-bot/admin/shared';
+import { GuestType } from 'libs/admin/guests/src/lib/types/guest.type';
 
-export type InvoiceForm = {
-  invoiceNumber: string;
-  confirmationNumber: string;
-  guestName: string;
-  companyName: string;
-  invoiceDate: string;
-  arrivalDate: string;
-  departureDate: string;
-  roomNumber: string;
-  roomType: string;
-  adults: string;
-  children: string;
-};
-
-export type PaymentField = {
-  description: string;
-  unit: number;
-  unitPrice: number;
-  amount: number;
-  tax: string;
-  totalAmount: number;
-};
-
-export type PaymentForm = {
-  table: {
-    de;
-  };
-};
-
-export class ReservationFormData {
-  firstName: string;
-  lastName: string;
-  email: string;
-  contact: Contact;
-  roomTypeId: string;
-  adultCount: number;
-  childCount: number;
-  roomCount: number;
+export class RoomReservationFormData {
   from: number;
   to: number;
   reservationType: string;
   source: string;
   sourceName: string;
-  paymentMethod: string;
   marketSegment: string;
-  address: Address;
-  totalPaidAmount: number;
+  paymentMethod: string;
   paymentRemark: string;
-  offerId: string;
+  guestId: string;
+  bookingItems: BookingItemFormData[];
+  id?: string;
+  specialRequest: string;
+  totalPaidAmount: number;
+  offer?: {
+    id: string;
+  };
 }
 
-export class Contact {
-  countryCode: string;
+export type BookingItemFormData = {
+  roomDetails: {
+    ratePlan: {
+      id: string;
+    };
+    roomTypeId: string;
+    roomCount: number;
+    roomTypeLabel?: string;
+    roomNumbers?: string[];
+  };
+  occupancyDetails: {
+    maxChildren: number;
+    maxAdult: number;
+  };
+  id?: string;
+};
+
+export type GuestDetails = {
+  label: string;
+  value: string;
+  cc: string;
   phoneNumber: string;
+  email: string;
+};
+
+export class OutletFormData {
+  occupancyDetails: {
+    maxAdult: number;
+  };
+  from: number;
+  to: number;
+  reservationType: string;
+  status: string;
+  source: string;
+  sourceName: string;
+  marketSegment: string;
+  paymentMethod: string;
+  totalPaidAmount: number;
+  offerId: string;
+  paymentRemark: string;
+  eventType: string;
+  guestId: string;
+  guest: GuestType;
+  items: ItemsData[];
+  outletType: string;
+  id?: string;
+  nextStates: string[];
+  specialRequest: string;
 }
 
-export class Address {
-  addressLine1: any;
-  city: string;
-  state: string;
-  countryCode: string;
-  postalCode: string;
-}
+export type ItemsData = {
+  itemId: string;
+  unit: number;
+  amount: number;
+};
+
+export type ReservationSummary = {
+  from: string;
+  to: string;
+  adultCount?: number;
+  outletType?: EntitySubType;
+  bookingItems?: BookingItemFormData[];
+  items?: ItemsData[];
+  tableNumberOrRoomNumber?: number;
+  occupancyDetails?: {
+    maxChildren?: number;
+    maxAdult: number;
+  };
+  offerId?: string;
+  guestId?: string;
+};
+
+export type OccupancyDetails = {
+  adultCount: number;
+  roomCount: number;
+  childCount: number;
+};
+
+export type InitialFormData = {
+  cashierFirstName?: string;
+  cashierLastName?: string;
+  currency?: string;
+};
+
+export type SourceData = {
+  source: string;
+  sourceName: string;
+};

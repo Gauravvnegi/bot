@@ -14,7 +14,7 @@
     justify-content: space-between;
     flex-direction: column;
     .analyticsHeading {
-      font: normal normal bold 16px/21px Roboto;
+      font: normal normal $bold 16px/21px Poppins;
       letter-spacing: 0.96px;
       color: $secondary;
       opacity: 1;
@@ -49,7 +49,7 @@
           align-items: center;
           color: $secondary;
           .val {
-            font: normal normal bold 25px/30px Roboto;
+            font: normal normal $bold 25px/30px Poppins;
             letter-spacing: 1.5px;
             color: $secondary;
             opacity: 1;
@@ -57,7 +57,7 @@
           }
           .label {
             margin-top: 4px;
-            font: normal normal bold 12px/14px Roboto;
+            font: normal normal $bold 12px/14px Poppins;
             letter-spacing: 0.72px;
             opacity: 1;
             line-height: 1.17;
@@ -78,19 +78,18 @@
         background-color: $headingBg;
         align-items: center;
         justify-content: space-between;
-        font-family: Roboto;
         font-stretch: normal;
         font-style: normal;
         line-height: normal;
         .label {
           font-size: 10px;
-          font-weight: 500;
+          font-weight: $bold;
           letter-spacing: 0.6px;
           color: $subtitle;
         }
         .value {
           font-size: 12px;
-          font-weight: bold;
+          font-weight: $bold;
           letter-spacing: 0.72px;
           text-align: right;
           color: $secondary;
@@ -99,9 +98,8 @@
     }
   }
   .days-label {
-    font-family: Roboto;
     font-size: 10px;
-    font-weight: 500;
+    font-weight: $bold;
     font-stretch: normal;
     font-style: normal;
     line-height: normal;

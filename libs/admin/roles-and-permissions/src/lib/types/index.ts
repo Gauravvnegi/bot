@@ -24,7 +24,7 @@ export type PageState = keyof typeof managePermissionRoutes;
 export type QueryConfig = {
   queryObj?: string;
   loggedInUserId?: string;
-  hotelId?: string;
+  entityId?: string;
 };
 
 export type Department = {
@@ -47,7 +47,7 @@ export type HotelAccess = {
   brands: {
     id: string;
     name: string;
-    hotels: {
+    entities: {
       id: string;
       name: string;
       imageUrl: string;
@@ -62,4 +62,21 @@ export type HotelAccess = {
       pmsEnable: boolean;
     }[];
   }[];
+};
+
+export type UserForm = {
+  id: string;
+  firstName: string;
+  lastName: string;
+  jobTitle: string;
+  brandName: string;
+  products: string[];
+  departments: string[];
+  branchName: string[];
+  cc: string;
+  phoneNumber: string;
+  email: string;
+  profileUrl: string;
+  permissionConfigs: any;
+  reportingTo: string;
 };

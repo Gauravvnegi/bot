@@ -7,6 +7,9 @@ import { TaxListResponse } from '../types/response';
 
 @Injectable()
 export class ServicesService extends LibraryService {
+
+  entityId: string;
+
   /**
    * Currently Selected Services table
    * It can either be 'ALL' | 'PAID' | 'COMPLIMENTARY'
@@ -14,9 +17,9 @@ export class ServicesService extends LibraryService {
   selectedTable = new BehaviorSubject<TableValue>(TableValue.ALL);
 
   getTaxList(
-    hotelId: string,
-    config: QueryConfig = { params: '?order=DESC&limit=100' }
+    entityId: string,
+    config: QueryConfig = { params: `?entityId=${entityId}` }
   ): Observable<TaxListResponse> {
-    return this.get(`/api/v1/entity/${hotelId}/tax${config?.params ?? ''}`);
+    return this.get(`/api/v1/tax${config?.params ?? ''}`);
   }
 }

@@ -146,4 +146,27 @@ export class DateService {
   getCurrentTimeStamp(timezone = '+05:30') {
     return moment().utcOffset(timezone).unix() * 1000;
   }
+
+  static getDateMDY(date: number) {
+    return new Date(date)?.toLocaleString('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+    });
+  }
+
+  static getTimeInHMSZ(value: number, formate: 'millisecond' | 'second') {
+    value = formate == 'millisecond' ? value : value * 1000;
+    const date = new Date(value);
+    const hours = date.getHours();
+    const minutes = date.getMinutes();
+    const seconds = date.getSeconds();
+    const ampm = hours >= 12 ? 'PM' : 'AM';
+
+    const formattedHours = hours % 12 || 12; // Convert to 12-hour format
+    const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
+    const formattedSeconds = seconds < 10 ? `0${seconds}` : seconds;
+
+    return `${formattedHours}:${formattedMinutes}:${formattedSeconds} ${ampm}`;
+  }
 }

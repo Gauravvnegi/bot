@@ -96,7 +96,7 @@
                         ? ' FRONT'
                         : ''
                     }}
-                    PAGE<b class="red-color">*</b>
+                    PAGE
                   </p>
                 </div>
                 <div class="upload-image" *ngIf="document.get('backUrl').value">
@@ -108,10 +108,13 @@
                   >
                   </hospitality-bot-upload-file>
                   <p class="text">
-                    {{ document.get('documentType').value }} BACK PAGE<b
-                      class="red-color"
-                      >*</b
-                    >
+                    {{ document.get('documentType').value }}
+                    {{
+                      document.get('documentType').value !== 'VISA'
+                        ? ' BACK'
+                        : ' ARRIVAL STAMP'
+                    }}
+                    PAGE
                   </p>
                 </div>
               </div>

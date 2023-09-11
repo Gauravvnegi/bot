@@ -12,9 +12,8 @@
   &-guest-wrap {
     display: flex;
     align-items: center;
-    font-family: Roboto;
     font-size: 14px;
-    font-weight: 500;
+    font-weight: $bolder;
     letter-spacing: 0.84px;
     color: $secondary;
   }
@@ -23,9 +22,8 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    font-family: 'Roboto';
     font-size: 12px;
-    font-weight: bold;
+    font-weight: $bolder;
 
     letter-spacing: 0.72px;
 
@@ -63,13 +61,13 @@
   justify-content: center;
   align-items: center;
   .label {
-    font: normal normal normal 12px/16px Roboto;
+    font: normal normal $medium 12px/16px Poppins;
     text-overflow: ellipsis;
     overflow: hidden;
   }
 }
 .selectedChat {
-  font: normal normal medium 14px/19px Roboto;
+  font: normal normal $medium 14px/19px Poppins;
   letter-spacing: 0.84px;
   color: $secondary;
   opacity: 1;
@@ -86,9 +84,8 @@
       display: flex;
       align-items: center;
       p {
-        font-family: Roboto;
         font-size: 14px;
-        font-weight: 500;
+        font-weight: $bolder;
 
         line-height: 1.07;
         letter-spacing: 0.84px;
@@ -111,9 +108,8 @@
       margin-right: 5px;
     }
     &__text {
-      font-family: 'Roboto';
       font-size: 14px;
-      font-weight: 500;
+      font-weight: $bolder;
 
       line-height: 1.07;
       letter-spacing: 0.84px;
@@ -142,7 +138,7 @@
       }
 
       .guestInfoEditText {
-        font: normal normal normal 11px/15px Roboto;
+        font: normal normal $medium 11px/15px Poppins;
         letter-spacing: 0.66px;
         color: $white;
         opacity: 1;
@@ -154,9 +150,8 @@
 .rating__card {
   padding-top: 20px;
   .rating__name {
-    font-family: 'Roboto';
     font-size: 16px;
-    font-weight: bold;
+    font-weight: $bolder;
 
     letter-spacing: 0.32px;
 
@@ -209,7 +204,6 @@
   .time {
     width: 47px;
     height: 13px;
-    font-family: Roboto;
     font-size: 10px;
 
     letter-spacing: 0.6px;
@@ -220,7 +214,6 @@
   .comment {
     display: flex;
     align-items: center;
-    font-family: 'Roboto';
     font-size: 12px;
     word-break: break-all;
     letter-spacing: 0.72px;
@@ -252,7 +245,6 @@
 .chatDate {
   text-align: center;
   margin-bottom: 10px;
-  font-family: 'Roboto';
   font-size: 12px;
 
   letter-spacing: 0.72px;
@@ -280,13 +272,13 @@
   }
   &__title {
     margin: 12px 0;
-    @include normal-text;
-    font-weight: bold;
+    @include normal-sm-text;
+    font-weight: $bolder;
     color: $secondary;
   }
   &__description {
     font-size: 12px;
-    font-weight: bold;
+    font-weight: $bolder;
 
     letter-spacing: 0.72px;
 
@@ -325,7 +317,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font: normal normal normal 14px/19px Roboto;
+  font: normal normal $medium 14px/19px Poppins;
   letter-spacing: 0.84px;
   color: $lightRed;
 }
@@ -521,7 +513,7 @@
     padding: 4px 9.3px 5.3px 10px;
     border: solid 1px $darkRed;
     font-size: 12px;
-    font-weight: 500;
+    font-weight: $bolder;
     letter-spacing: 0.72px;
     text-align: center;
     color: $white;
@@ -570,9 +562,9 @@
   padding: 20px 15px;
 }
 .txt {
-  @include normal-text;
+  @include normal-sm-text;
   color: $secondary;
-  font-weight: bold;
+  font-weight: $bolder;
 }
 
 .click {
@@ -621,7 +613,6 @@
   box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.2);
   background: $white;
   .time {
-    font-family: 'Roboto';
     font-size: 10px;
     letter-spacing: 0.6px;
     text-align: right;
@@ -631,7 +622,6 @@
   .comment {
     display: flex;
     align-items: center;
-    font-family: 'Roboto';
     font-size: 12px;
 
     letter-spacing: 0.72px;

@@ -1,13 +1,10 @@
 import {
-  EntityStateCounts,
-  EntityTypeCounts,
-} from '@hospitality-bot/admin/library';
-import {
   ServiceListResponse,
   ServiceResponse,
   TaxListResponse,
   TaxResponse,
 } from '../types/response';
+import { EntityState } from '@hospitality-bot/admin/shared';
 
 export class Service {
   id: string;
@@ -41,8 +38,8 @@ export class ServiceList {
   paidService: Service[];
   complimentaryService: Service[];
   total: number;
-  entityStateCounts: EntityStateCounts;
-  entityTypeCounts: EntityTypeCounts;
+  entityStateCounts: EntityState<string>;
+  entityTypeCounts: EntityState<string>;
 
   deserialize(input: ServiceListResponse) {
     this.allService =
@@ -57,16 +54,8 @@ export class ServiceList {
       ) ?? [];
 
     this.total = input.total;
-
-    this.entityStateCounts = new EntityStateCounts().deserialize(
-      input.entityStateCounts,
-      input.total
-    );
-    this.entityTypeCounts = new EntityTypeCounts().deserialize(
-      input.entityTypeCounts,
-      input.total
-    );
-
+    this.entityStateCounts = input?.entityStateCounts;
+    this.entityTypeCounts = input?.entityTypeCounts;
     return this;
   }
 }
@@ -91,15 +80,14 @@ export class Tax {
 export class TaxList {
   records: Tax[];
   total: number;
-  entityStateCounts: EntityStateCounts;
+  entityStateCounts: EntityState<string>;
+  entityTypeCounts: EntityState<string>;
   deserialize(input: TaxListResponse) {
     this.records =
       input?.records?.map((item) => new Tax().deserialize(item)) ?? [];
     this.total = input?.total ?? 0;
-    this.entityStateCounts = new EntityStateCounts().deserialize(
-      input?.entityStateCounts,
-      input?.total
-    );
+    this.entityStateCounts = input?.entityStateCounts;
+    this.entityTypeCounts = input?.entityTypeCounts;
     return this;
   }
 }

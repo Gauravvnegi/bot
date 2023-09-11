@@ -11,7 +11,7 @@ import { Subscription } from 'rxjs';
 })
 export class GuestBookingInfoComponent implements OnInit, OnChanges, OnDestroy {
   @Input() data;
-  @Input() hotelId;
+  @Input() entityId;
   @Input() reservationData;
   currentBooking = [];
   pastBooking = [];
@@ -22,15 +22,15 @@ export class GuestBookingInfoComponent implements OnInit, OnChanges, OnDestroy {
   ngOnInit(): void {}
 
   ngOnChanges() {
-    this.pastBooking = this.reservationData.records.filter(
+    this.pastBooking = this.reservationData?.records.filter(
       (item) => item.reservation.type === 'PAST'
     );
 
-    this.currentBooking = this.reservationData.records.filter(
+    this.currentBooking = this.reservationData?.records.filter(
       (item) => item.reservation.type === 'CURRENT'
     );
 
-    this.upcomingBooking = this.reservationData.records.filter(
+    this.upcomingBooking = this.reservationData?.records.filter(
       (item) => item.reservation.type === 'UPCOMING'
     );
   }

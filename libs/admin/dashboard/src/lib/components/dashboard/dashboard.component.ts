@@ -8,6 +8,7 @@ import {
 import { NavRouteOptions } from '@hospitality-bot/admin/shared';
 import { ModalService } from '@hospitality-bot/shared/material';
 import { NotificationService } from 'apps/admin/src/app/core/theme/src/lib/services/notification.service';
+import { PreArrivalDatatableComponent } from 'libs/admin/request-analytics/src/lib/components/pre-arrival-datatable/pre-arrival-datatable.component';
 import { ReservationService } from 'libs/admin/reservation/src/lib/services/reservation.service';
 import {
   ModuleNames,
@@ -80,6 +81,24 @@ export class DashboardComponent implements OnInit, OnDestroy {
       detailCompRef.componentInstance.onDetailsClose.subscribe((_) => {
         detailCompRef.close();
       })
+    );
+  }
+
+  onViewPreArrivalRequest() {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = true;
+    dialogConfig.width = '100%';
+    const detailCompRef = this.modalService.openDialog(
+      PreArrivalDatatableComponent,
+      dialogConfig
+    );
+
+    detailCompRef.componentInstance.tableName = 'Pre-arrival Request';
+    detailCompRef.componentInstance.entityType = 'ALL';
+    detailCompRef.componentInstance.tabFilterIdx = 0;
+
+    detailCompRef.componentInstance.onModalClose.subscribe((res) =>
+      detailCompRef.close()
     );
   }
 

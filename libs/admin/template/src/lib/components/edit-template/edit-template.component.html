@@ -1,126 +1,131 @@
-<hospitality-bot-navigation-header
-  [heading]="pageTitle"
-  [routes]="navRoutes"
-  [dateTime]="draftDate"
->
-</hospitality-bot-navigation-header>
+<div [id]="fa.referenceId">
+  <hospitality-bot-navigation-header
+    [heading]="pageTitle"
+    [routes]="navRoutes"
+    [dateTime]="draftDate"
+  >
+  </hospitality-bot-navigation-header>
 
-<form class="form-block" [formGroup]="templateForm">
-  <div class="half-width"></div>
-  <hospitality-bot-toggle-switch
-    class="status"
-    controlName="status"
-    label="Status:"
-  ></hospitality-bot-toggle-switch>
-  <hospitality-bot-input
-    class="half-width"
-    controlName="name"
-    label="Name"
-    maxLength="60"
-  ></hospitality-bot-input>
-  <hospitality-bot-select
-    class="half-width"
-    label="Topic"
-    controlName="topicId"
-    [options]="topicList"
-  ></hospitality-bot-select>
-  <div class="des-template">
-    <div class="des-template__label">Description</div>
-    <div class="des-template__input">
-      <hospitality-bot-template-editor
-        [parentFG]="templateForm"
-        [name]="'description'"
-        [isSimpleEditor]="true"
-      ></hospitality-bot-template-editor>
+  <form class="form-block" [formGroup]="templateForm">
+    <div class="half-width"></div>
+    <hospitality-bot-toggle-switch
+      class="status"
+      controlName="status"
+      label="Status:"
+    ></hospitality-bot-toggle-switch>
+    <hospitality-bot-input
+      class="half-width"
+      controlName="name"
+      label="Name"
+      maxLength="60"
+    ></hospitality-bot-input>
+    <hospitality-bot-select
+      class="half-width"
+      label="Topic"
+      controlName="topicId"
+      [options]="topicList"
+    ></hospitality-bot-select>
+    <div class="des-template">
+      <div class="des-template__label">Description</div>
+      <div class="des-template__input">
+        <hospitality-bot-template-editor
+          [parentFG]="templateForm"
+          [name]="'description'"
+          [isSimpleEditor]="true"
+        ></hospitality-bot-template-editor>
+      </div>
     </div>
-  </div>
 
-  <ng-container *ngIf="htmlTemplate?.value; else createContent">
-    <div class="full-width">
-      <div>
-        {{ 'contentForm.editContent' | translate }}
-      </div>
-      <div class="manually-add">
-        <div class="manually-add-templates">
-          <div class="manually-add-templates-import">
-            <div [innerHTML]="htmlTemplate?.value"></div>
-          </div>
-          <div class="logos">
-            <div mat-raised-button (click)="moveToEditor(true)">
-              <img
-                [src]="templateConfiguration.images.view.url"
-                [alt]="templateConfiguration.images.view.alt"
-              />
+    <ng-container *ngIf="htmlTemplate?.value; else createContent">
+      <div class="full-width">
+        <div>
+          {{ 'contentForm.editContent' | translate }}
+        </div>
+        <div class="manually-add">
+          <div class="manually-add-templates">
+            <div class="manually-add-templates-import">
+              <div [innerHTML]="htmlTemplate?.value"></div>
             </div>
-            <div mat-raised-button (click)="moveToEditor(false)">
-              <img
-                [src]="templateConfiguration.images.edit.url"
-                [alt]="templateConfiguration.images.edit.alt"
-              />
+            <div class="logos">
+              <div mat-raised-button (click)="moveToEditor(true)">
+                <img
+                  [src]="templateConfiguration.images.view.url"
+                  [alt]="templateConfiguration.images.view.alt"
+                />
+              </div>
+              <div mat-raised-button (click)="moveToEditor(false)">
+                <img
+                  [src]="templateConfiguration.images.edit.url"
+                  [alt]="templateConfiguration.images.edit.alt"
+                />
+              </div>
+              <div (click)="deleteTemplate()">
+                <img
+                  [src]="templateConfiguration.images.delete.url"
+                  [alt]="templateConfiguration.images.delete.alt"
+                />
+              </div>
             </div>
-            <div (click)="deleteTemplate()">
-              <img
-                [src]="templateConfiguration.images.delete.url"
-                [alt]="templateConfiguration.images.delete.alt"
-              />
+          </div>
+        </div>
+      </div>
+    </ng-container>
+    <ng-template #createContent>
+      <div class="full-width">
+        <div>
+          {{ 'contentForm.createContent' | translate }}
+        </div>
+        <div class="manually-add">
+          <div
+            class="manually-add-templates"
+            mat-raised-button
+            (click)="openCreateContent(false, 'SAVEDTEMPLATE')"
+          >
+            <img
+              [src]="templateConfiguration.images.saved.url"
+              [alt]="templateConfiguration.images.saved.alt"
+            />
+            <div>
+              {{ 'createContent.savedTemplate' | translate }}
+            </div>
+          </div>
+          <div
+            class="manually-add-templates"
+            mat-raised-button
+            (click)="openCreateContent(false, 'PREDESIGNTEMPLATE')"
+          >
+            <img
+              [src]="templateConfiguration.images.inbuilt.url"
+              [alt]="templateConfiguration.images.inbuilt.alt"
+            />
+            <div>
+              {{ 'createContent.inBuiltTemplate' | translate }}
+            </div>
+          </div>
+          <div
+            class="manually-add-templates"
+            mat-raised-button
+            (click)="openCreateContent(true)"
+          >
+            <img
+              [src]="templateConfiguration.images.editTemplate.url"
+              [alt]="templateConfiguration.images.editTemplate.alt"
+            />
+            <div class="manually-import">
+              {{ 'createContent.createNew' | translate }}
             </div>
           </div>
         </div>
       </div>
-    </div>
-  </ng-container>
-  <ng-template #createContent>
-    <div class="full-width">
-      <div>
-        {{ 'contentForm.createContent' | translate }}
-      </div>
-      <div class="manually-add">
-        <div
-          class="manually-add-templates"
-          mat-raised-button
-          (click)="openCreateContent(false, 'SAVEDTEMPLATE')"
-        >
-          <img
-            [src]="templateConfiguration.images.saved.url"
-            [alt]="templateConfiguration.images.saved.alt"
-          />
-          <div>
-            {{ 'createContent.savedTemplate' | translate }}
-          </div>
-        </div>
-        <div
-          class="manually-add-templates"
-          mat-raised-button
-          (click)="openCreateContent(false, 'PREDESIGNTEMPLATE')"
-        >
-          <img
-            [src]="templateConfiguration.images.inbuilt.url"
-            [alt]="templateConfiguration.images.inbuilt.alt"
-          />
-          <div>
-            {{ 'createContent.inBuiltTemplate' | translate }}
-          </div>
-        </div>
-        <div
-          class="manually-add-templates"
-          mat-raised-button
-          (click)="openCreateContent(true)"
-        >
-          <img
-            [src]="templateConfiguration.images.editTemplate.url"
-            [alt]="templateConfiguration.images.editTemplate.alt"
-          />
-          <div class="manually-import">
-            {{ 'createContent.createNew' | translate }}
-          </div>
-        </div>
-      </div>
-    </div>
-  </ng-template>
-  <hospitality-bot-button
-    class="create-btn"
-    [label]="isSaving ? 'Saving' : 'Save'"
-    [ngClass]="{ active: !isSaving, disabled: isSaving }"
-    (click)="handleSubmit($event)"
-  ></hospitality-bot-button>
-</form>
+    </ng-template>
+    <hospitality-bot-form-action
+      class="full-width"
+      [loading]="isSaving"
+      [isId]="templateId"
+      (onPreAction)="resetForm()"
+      (onPostAction)="handleSubmit($event)"
+      #fa
+    >
+    </hospitality-bot-form-action>
+  </form>
+</div>

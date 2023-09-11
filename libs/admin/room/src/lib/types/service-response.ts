@@ -1,22 +1,40 @@
-export type RoomStatus = 'ACTIVE' | 'UNAVAILABLE' | 'SOLD_OUT' | 'INACTIVE';
+export type RoomStatus =
+  | 'CLEAN'
+  | 'INSPECTED'
+  | 'OUT_OF_SERVICE'
+  | 'OUT_OF_ORDER'
+  | 'DIRTY';
+
+export type RoomTypeStatus = 'ACTIVE' | 'INACTIVE';
+
+export type RoomFoStatus = 'VACANT' | 'OCCUPIED';
 
 export type RoomResponse = {
   id: string;
   roomNumber: string;
   floorNumber: string;
+  nextStates: RoomStatus[];
+  frontOfficeState: RoomFoStatus;
   roomTypeDetails: {
     id: string;
     name: string;
     roomCount: number;
     maxChildren: number;
     maxAdult: number;
-    totalOccupancy?: number; // Is it not required
+    totalOccupancy?: number;
     activeRoomCount: number;
     soldOutCount: number;
     soldOut: boolean;
     unavailableRoomCount: number;
   };
-  roomStatus: RoomStatus;
+  features: Features[];
+  statusDetailsList: StatusDetails[];
+  // status: RoomStatus;
+  //--- can be modified
+  // currentStatusFrom: number;
+  // currentStatusTo: number;
+  // remark: string;
+
   source?: string;
   price: number;
   currency: string;
@@ -39,37 +57,79 @@ export type RoomListResponse = {
     ROOM_TYPE: number;
     ROOM: number;
   };
-  entityStateCounts: {
-    ALL: number;
-    ACTIVE: number;
-    SOLD_OUT: number;
-    UNAVAILABLE: number;
-  };
+  entityStateCounts: Record<RoomStatus | RoomFoStatus, number>;
   total: number;
 };
 
 export type RoomTypeResponse = {
   id: string;
   name: string;
-  imageUrls: string[];
+  imageUrl: ImageUrl[];
   description: string;
   complimentaryAmenities: Amenity[];
   paidAmenities: Amenity[];
-  currency: string;
-  originalPrice: number;
-  discountedPrice: number;
   roomCount: number;
   activeRoomCount: number;
   unavailableRoomCount: number;
+  pricingDetails: PricingDetails;
+  ratePlans: RatePlanRes[];
   soldOutCount: number;
-  maxChildren: number;
-  maxAdult: number;
+  occupancyDetails: {
+    maxChildren: number;
+    maxAdult: number;
+    maxOccupancy: number;
+  };
   area: number;
   status: boolean;
-  maxOccupancy: number;
-  discountType: string;
-  discountValue: number;
-  variableAmount: number;
+  discountedPrice: number;
+  originalPrice: number;
+  currency: string;
+  features: string[];
+  isBaseRoomType?: boolean;
+};
+
+
+export type RatePlanRes = {
+  label?: string;
+  type?: string;
+  variablePrice: number;
+  currency?: string;
+  isBase: boolean;
+  description?: string;
+  discount?: {
+    type: string;
+    value: number;
+  };
+  id?: string;
+  status?: boolean;
+  sellingPrice?: number;
+  total?: number;
+};
+
+export type PricingDetails = {
+  base: number;
+  basePrice: number;
+  discountType?: string;
+  discountValue?: number;
+  bestAvailablePrice: number;
+  currency: string;
+  max: number;
+  min: number;
+  paxAdult: number;
+  paxChild: number;
+  paxChildAboveFive: number;
+  paxChildBelowFive: number;
+  paxDoubleOccupancy: number;
+  paxTripleOccupancy: number;
+  taxAndFees: number;
+  taxAndFeesPerDay: number;
+  totalAmount: number;
+  totalPaidAmount: number;
+  totalDueAmount: number;
+  discount: {
+    type: string;
+    value: number;
+  };
 };
 
 export type RoomTypeListResponse = {
@@ -79,7 +139,6 @@ export type RoomTypeListResponse = {
     ROOM: number;
   };
   entityStateCounts: {
-    ALL: number;
     ACTIVE: number;
     INACTIVE: number;
   };
@@ -116,9 +175,9 @@ export type Amenity = {
   active: boolean;
   currency: string;
   packageCode: string;
-  imageUrl: string;
+  images;
   source: string;
-  hotelId: string;
+  entityId: string;
   type: string;
   unit: string;
   category: string;
@@ -134,7 +193,7 @@ export interface AverageRoomRateResponse {
   averageRoomRateGraph: any;
 }
 
-export interface OccupancyResponse{
+export interface OccupancyResponse {
   label: string;
   score: number;
   comparisonPercent: number;
@@ -147,7 +206,7 @@ export interface InventoryRemainingResponse {
   remaining: number;
 }
 
-export interface InventoryCostRemainingResponse{
+export interface InventoryCostRemainingResponse {
   label: string;
   spent: number;
   remaining: number;
@@ -156,4 +215,48 @@ export interface InventoryCostRemainingResponse{
 export type GraphData = {
   label: string;
   value: number;
+};
+
+export type RatePlanResponse = {
+  id: string;
+  label: string;
+  key: string;
+  isDefault: boolean;
+};
+
+export type Features = {
+  id: string;
+  name: string;
+  imageUrl: string;
+  created: number;
+  updated: number;
+};
+
+export type RoomsByRoomType = {
+  currentStatusFrom: number;
+  currentStatusTo: number;
+  floorNumber: string;
+  frontOfficeState: string;
+  id: string;
+  nextStates: string[];
+  remark: string;
+  roomNumber: string;
+  roomTypeDetails: {
+    id: string;
+    name: string;
+  };
+  status: string;
+};
+
+export type StatusDetails = {
+  remark?: string;
+  status: RoomStatus;
+  toDate?: number;
+  fromDate?: number;
+  isCurrentStatus?: boolean;
+};
+
+export type ImageUrl = {
+  isFeatured: boolean;
+  url: string;
 }

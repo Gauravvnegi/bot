@@ -1,4 +1,34 @@
-import { Chip, Cols, Filter } from '../types/table.type';
+import {
+  Cols,
+  EntityStateRecord,
+  Filter,
+  QuickReplyFilterConfig,
+} from '../types/table.type';
+
+export const quickReplyFilterDefaultConfig: QuickReplyFilterConfig = {
+  key: 'status',
+  isAllAType: false,
+  isStatusBoolean: false,
+  activeStateKey: 'ACTIVE',
+};
+
+export const defaultFilterChipValue = { label: 'All', value: 'ALL' } as const;
+export const defaultRecordJson: EntityStateRecord<
+  'ACTIVE' | 'INACTIVE' | typeof defaultFilterChipValue['value']
+> = {
+  ACTIVE: {
+    label: 'Active',
+    type: 'active',
+  },
+  INACTIVE: {
+    label: 'Inactive',
+    type: 'inactive',
+  },
+  ALL: {
+    label: defaultFilterChipValue.label,
+    type: 'default',
+  },
+};
 
 export type TableValue = 'users' | 'hotels';
 export const columns: Record<TableValue, Cols[]> = {
@@ -62,14 +92,14 @@ export const filters: Filter<TableValue, string>[] = [
         value: 'new',
         total: 0,
         isSelected: false,
-        type: 'new',
+        type: 'active',
       },
       {
         label: 'Pending ',
-        value: 'pending',
+        value: 'draft',
         total: 0,
         isSelected: false,
-        type: 'pending',
+        type: 'draft',
       },
       {
         label: 'Failed',
@@ -97,14 +127,7 @@ export const filters: Filter<TableValue, string>[] = [
         value: 'initiated',
         total: 0,
         isSelected: false,
-        type: 'initiated',
-      },
-      {
-        label: 'Standard ',
-        value: 'standard',
-        total: 0,
-        isSelected: false,
-        type: 'standard',
+        type: 'active',
       },
     ],
   },
@@ -128,14 +151,14 @@ export const filters: Filter<TableValue, string>[] = [
         value: 'active',
         total: 0,
         isSelected: false,
-        type: 'new',
+        type: 'active',
       },
       {
         label: 'Unavailable ',
         value: 'unavailable',
         total: 0,
         isSelected: false,
-        type: 'pending',
+        type: 'draft',
       },
       {
         label: 'Sold Out',

@@ -19,7 +19,7 @@
       display: flex;
       align-items: center;
       .label {
-        font: normal normal normal 12px/16px Roboto;
+        font: normal normal $medium 12px/16px Poppins;
         letter-spacing: 0.72px;
         color: rgba(0, 32, 70, 1);
       }
@@ -100,13 +100,13 @@
                 background-color: $white;
                 padding: 10px;
                 .journey {
-                  font: normal normal bold 16px/19px Roboto;
+                  font: normal normal $bolder 16px/19px Poppins;
                   letter-spacing: 0.96px;
                   color: $grayLight;
                   margin-bottom: 5px;
                 }
                 .service {
-                  font: normal normal bold 16px/19px Roboto;
+                  font: normal normal $bolder 16px/19px Poppins;
                   letter-spacing: 0.96px;
                   color: $secondary;
                 }
@@ -123,13 +123,13 @@
                       background-color: $mediumRed    ;
                     }
                     &__label {
-                      font: normal normal normal 12px/14px Roboto;
+                      font: normal normal $medium 12px/14px Poppins;
                       letter-spacing: 0.72px;
                       color: $subtitle;
                       margin: 0 8px;
                     }
                     .percentage {
-                      font: normal normal bold 12px/14px Roboto;
+                      font: normal normal $bolder 12px/14px Poppins;
                       letter-spacing: 0.72px;
                       color: $secondary;
                     }
@@ -142,7 +142,7 @@
       }
       .label {
         text-align: center;
-        font: normal normal bold 12px/14px Roboto;
+        font: normal normal $bolder 12px/14px Poppins;
         letter-spacing: 0.72px;
         color: rgba(0, 32, 70, 1);
         margin: 10px 0;

@@ -44,7 +44,7 @@
   (onRowSelect)="onRowSelect($event)"
   (onRowUnselect)="onRowUnselect($event)"
   (onHeaderCheckboxToggle)="onToggleSelectAll($event)"
-  *ngIf="tabFilterItems[tabFilterIdx]?.total; else emptyTable"
+  *ngIf="!isEmpty; else emptyTable"
 >
   <ng-template pTemplate="caption">
     <div class="caption__wrapper" [formGroup]="tableFG">
@@ -109,7 +109,7 @@
         <div class="cell-content" *ngIf="rowData.amount; else emptyCell">
           <div class="primary-text">
             <div *ngIf="rowData.discountedPrice" class="primary-text">
-              {{ rowData.currency }} {{ rowData.discountedPrice }}
+              {{ rowData.discountedPrice | currency: rowData.currency }}
             </div>
             <div
               [ngClass]="{
@@ -118,19 +118,19 @@
                 'primary-text': !rowData.discountedPrice
               }"
             >
-              {{ rowData.currency }} {{ rowData.amount }}
+              {{ rowData.amount | currency: rowData.currency }}
             </div>
           </div>
         </div>
       </td>
       <td>
         <div class="cell-content">
-          <hospitality-bot-toggle-dropdown
+          <hospitality-bot-status-dropdown-toggle
             class="toggle-btn"
             (onClick)="handleStatus($event, rowData)"
-            [status]="rowData.status"
+            [state]="rowData.status"
           >
-          </hospitality-bot-toggle-dropdown>
+          </hospitality-bot-status-dropdown-toggle>
         </div>
       </td>
     </tr>

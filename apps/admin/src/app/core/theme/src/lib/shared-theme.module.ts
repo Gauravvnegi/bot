@@ -86,6 +86,7 @@ import { ScrollPagination } from './directives/scroll-pagination.directive';
     NotificationPopupComponent,
     NotificationComponent,
     ScrollPagination,
+    MessageTabMenuComponent,
   ],
 })
 export class ThemeModule {}

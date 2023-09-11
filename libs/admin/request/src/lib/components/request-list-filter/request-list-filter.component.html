@@ -15,8 +15,8 @@
     </div>
   </div>
   <div class="right-side-list-filter">
-    <div class="sortFilterWrapper" *ngIf="parentFG">
-      <div class="sortFilterContainer" [formGroup]="parentFG">
+    <div class="sortFilterWrapper" *ngIf="useForm">
+      <div class="sortFilterContainer" [formGroup]="useForm">
         <div class="sortBy">
           Sort By
         </div>
@@ -70,6 +70,17 @@
             {{ filter }}
           </div>
         </div>
+        <div class="filterUnderline"></div>
+        <div class="sortBy">
+          Assigned To
+        </div>
+        <hospitality-bot-select
+          label="Assigned To"
+          controlName="assignedTo"
+          [options]="assignedToList"
+          [stopEmission]="true"
+          [loading]="loading"
+        ></hospitality-bot-select>
       </div>
       <div class="applyBtnWrapper">
         <hospitality-bot-button

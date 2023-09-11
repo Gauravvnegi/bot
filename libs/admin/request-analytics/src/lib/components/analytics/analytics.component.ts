@@ -10,10 +10,10 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./analytics.component.scss'],
 })
 export class AnalyticsComponent implements OnInit, OnDestroy {
-  welcomeMessage = 'Welcome To Request Analytics';
-  navRoutes = [{ label: 'Request Analytics', link: './' }];
+  welcomeMessage = 'Welcome To Complaint Analytics';
+  navRoutes = [{ label: 'Complaint Analytics', link: './' }];
 
-  hotelId: string;
+  entityId: string;
   requestConfiguration: RequestConfiguration = {
     preArrival: [],
     inhouse: [],
@@ -38,7 +38,7 @@ export class AnalyticsComponent implements OnInit, OnDestroy {
     this.$subscription.add(
       this.globalFilterService.globalFilter$.subscribe((data) => {
         //set-global query every time global filter changes
-        this.hotelId = this.globalFilterService.hotelId;
+        this.entityId = this.globalFilterService.entityId;
       })
     );
   }
@@ -51,7 +51,7 @@ export class AnalyticsComponent implements OnInit, OnDestroy {
       const configuration = (data: ConfigurationResponse) => {
         if (!data?.requestModuleConfiguration) {
           this.snackBarService.openSnackBarAsText(
-            'Problem getting Request Module Configuration'
+            'Problem getting Complaint Module Configuration'
           );
         }
         return Object.values(data.requestModuleConfiguration).reduce(
@@ -70,7 +70,7 @@ export class AnalyticsComponent implements OnInit, OnDestroy {
       }
       // getting configuration is already not present
       this.configService
-        .getColorAndIconConfig(this.hotelId)
+        .getColorAndIconConfig(this.entityId)
         .subscribe((response: ConfigurationResponse) => {
           this.requestConfiguration = configuration(response);
         });

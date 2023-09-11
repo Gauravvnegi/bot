@@ -17,9 +17,10 @@ export class SubscriptionPlanService extends ApiService {
   private productSubscription: ProductSubscription;
   settings: SettingsMenuItem[];
 
-  getSubscriptionPlan(hotelId: string): Observable<any> {
-    return this.get(`/api/v1/hotel/${hotelId}/subscriptions/`).pipe(
+  getSubscriptionPlan(entityId: string): Observable<any> {
+    return this.get(`/api/v1/entity/${entityId}/subscriptions/`).pipe(
       map((res) => {
+        res.products = [...res.products, customModule.revenueManager];
         return res;
       })
     );
@@ -48,15 +49,15 @@ export class SubscriptionPlanService extends ApiService {
     return this.productSubscription.subscribedModules;
   }
 
-  getSubscriptionUsage(hotelId: string, config: any): Observable<any> {
+  getSubscriptionUsage(entityId: string, config: any): Observable<any> {
     return this.get(
-      `/api/v1/hotel/${hotelId}/subscriptions/usage/${config.queryObj}`
+      `/api/v1/entity/${entityId}/subscriptions/usage${config.queryObj}`
     );
   }
 
-  getSubscriptionUsagePercentage(hotelId: string, config): Observable<any> {
+  getSubscriptionUsagePercentage(entityId: string, config): Observable<any> {
     return this.get(
-      `/api/v1/hotel/${hotelId}/subscriptions/usage/percentage${config.queryObj}`
+      `/api/v1/entity/${entityId}/subscriptions/usage/percentage${config.queryObj}`
     );
   }
 
@@ -78,5 +79,12 @@ export class SubscriptionPlanService extends ApiService {
       ) ?? [];
 
     return this;
+  }
+
+  hasComplaintManagementSystem() {
+    const requestManagementSystems = ['FCS'];
+    return requestManagementSystems.reduce((prev, curr) => {
+      return prev || this.productSubscription.subscribedIntegrations.has(curr);
+    }, false);
   }
 }

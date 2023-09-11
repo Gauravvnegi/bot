@@ -62,7 +62,7 @@
       transform: scale(0.97);
     }
     &__text {
-      @include normal-text;
+      @include normal-sm-text;
       color: $primary-cta;
     }
   }
@@ -76,7 +76,7 @@
       transform: scale(0.97);
     }
     &__text {
-      @include normal-text;
+      @include normal-sm-text;
       color: $white;
     }
   }

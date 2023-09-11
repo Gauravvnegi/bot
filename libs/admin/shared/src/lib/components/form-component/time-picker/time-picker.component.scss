@@ -1,0 +1,19 @@
+@import '../form.component.scss';
+
+:host ::ng-deep {
+  .time-picker {
+    &-input__wrapper {
+      margin-top: 0.75em;
+      @include flex-space-between();
+      input {
+        text-align: center;
+        &::placeholder {
+          text-align: center;
+        }
+      }
+    }
+    &__time {
+      width: 48%;
+    }
+  }
+}

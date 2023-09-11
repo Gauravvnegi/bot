@@ -14,6 +14,7 @@
     button__img: icon
   }"
 >
+  <i *ngIf="piIcon" [class]="piIcon"></i>
   <i *ngIf="isLoading" class="fa fa-spinner fa-spin"></i>
   <img [src]="icon" alt="buttonImage" *ngIf="icon" /> {{ label }}
 </button>

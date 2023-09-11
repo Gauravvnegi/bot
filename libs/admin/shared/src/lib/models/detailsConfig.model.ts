@@ -2,9 +2,7 @@ import { get, set } from 'lodash';
 import * as moment from 'moment';
 import { DateService } from '@hospitality-bot/shared/utils';
 import { GuestRole } from '../constants/guest';
-import {
-  TransactionHistoryResponse,
-} from '../types/response';
+import { TransactionHistoryResponse } from '../types/response';
 
 export interface IDeserializable {
   deserialize(input: any, hotelNationality: string): this;
@@ -24,10 +22,12 @@ export class Details implements IDeserializable {
   roomsDetails: RoomsDetails;
   feedbackDetails: FeedbackDetails;
   invoicePrepareRequest: boolean;
+  pmsBooking: boolean;
 
   deserialize(input: any, timezone) {
-    const hotelNationality = input.hotel.address.countryCode;
+    const hotelNationality = input?.hotel?.address?.countryCode;
     this.invoicePrepareRequest = input.invoicePrepareRequest || false;
+    this.pmsBooking = input.pmsBooking || false;
     this.guestDetails = new GuestDetailDS().deserialize(
       input.guestDetails,
       hotelNationality
@@ -224,7 +224,7 @@ export class GuestDetailsConfig implements IDeserializable {
       this,
       set({}, 'id', get(input, ['id'])),
       set({}, 'code', get(input, ['code'])),
-      set({}, 'title', get(input, ['nameTitle'], '')),
+      set({}, 'title', get(input, ['salutation'], '')),
       set({}, 'firstName', get(input, ['firstName'])),
       set({}, 'lastName', get(input, ['lastName'])),
       set({}, 'countryCode', this.getNationality(get(contactDetails, ['cc']))),
@@ -434,14 +434,14 @@ export class HealthDeclarationConfig implements IDeserializable {
 export class ReservationDetailsConfig implements IDeserializable {
   bookingNumber: string;
   bookingId: string;
-  hotelId: string;
+  entityId: string;
 
   deserialize(input: any) {
     Object.assign(
       this,
       set({}, 'bookingNumber', get(input, ['number'])),
       set({}, 'bookingId', get(input, ['id'])),
-      set({}, 'hotelId', get(input.hotel, ['id']))
+      set({}, 'entityId', get(input.hotel, ['id']))
     );
     return this;
   }
@@ -508,8 +508,9 @@ export class PaymentDetailsConfig implements IDeserializable {
     //to-do
     this.roomRates = new RoomRateConfig().deserialize(input.roomRates);
     if (Array.isArray(input.transactionsHistory)) {
-      this.transactionHistory = input.transactionsHistory.map((item: TransactionHistoryResponse) =>
-        new TransactionHistory().deserialize(item)
+      this.transactionHistory = input.transactionsHistory.map(
+        (item: TransactionHistoryResponse) =>
+          new TransactionHistory().deserialize(item)
       );
     } else {
       this.transactionHistory = [];
@@ -636,7 +637,6 @@ export class Package implements IDeserializable {
       set({}, 'description', get(input, ['description'])),
       set({}, 'name', get(input, ['name'])),
       set({}, 'id', get(input, ['id'])),
-      set({}, 'imgUrl', get(input, ['imageUrl'])),
       set({}, 'metaData', get(input, ['metaData'])),
       set({}, 'quantity', get(input, ['quantity'])),
       set({}, 'rate', get(input, ['rate'])),
@@ -644,9 +644,11 @@ export class Package implements IDeserializable {
       set({}, 'packageCode', get(input, ['packageCode'])),
       set({}, 'unit', get(input, ['unit'])),
       set({}, 'currency', get(input, ['currency'])),
-      set({}, 'status', get(input, ['statusMessage', 'status'])),
+      set({}, 'status', get(input, ['statusMessage', 'state'])),
       set({}, 'remarks', get(input, ['statusMessage', 'remarks']))
     );
+    if (input.images && input.images.length)
+      this.imgUrl = input.images[0].url ?? '';
     return this;
   }
 }

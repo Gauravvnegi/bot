@@ -32,10 +32,13 @@
       <form [formGroup]="useForm">
         <hospitality-bot-custom-select
           formControlName="serviceIds"
-          [itemList]="filteredServices"
+          [itemList]="compServices"
           [fullView]="true"
+          [noMoreData]="noMoreServices"
           [noRecordsAction]="noRecordAction"
+          (loadMoreData)="loadMore()"
           [loading]="loading"
+          type="icon"
         ></hospitality-bot-custom-select>
       </form>
     </div>

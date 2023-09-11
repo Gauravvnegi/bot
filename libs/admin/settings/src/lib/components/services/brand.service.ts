@@ -6,9 +6,9 @@ import { Observable } from 'rxjs';
 @Injectable()
 export class BrandService extends ApiService {
 
-  createBrand(hotelId: string, data: any): Observable<any> {
+  createBrand(entityId: string, data: any): Observable<any> {
     return this.post(
-      `/api/v2/entity/onboarding?source=CREATE_WITH&onboardingType=BRAND`,
+      `/api/v1/entity/onboarding?source=CREATE_WITH&onboardingType=BRAND`,
       data
     );
   }

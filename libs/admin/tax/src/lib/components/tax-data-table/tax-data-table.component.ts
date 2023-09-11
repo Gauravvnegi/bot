@@ -5,17 +5,12 @@ import {
   NavRouteOptions,
 } from '@hospitality-bot/admin/shared';
 import { FormBuilder } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { TableService } from 'libs/admin/shared/src/lib/services/table.service';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { taxRoutes } from '../../constants/routes';
-import {
-  cols,
-  title,
-  filtersChips,
-  tabFilterItems,
-} from '../../constants/data-table';
+import { cols, title } from '../../constants/data-table';
 import { Subscription } from 'rxjs';
 import { TaxService } from '../../services/tax.service';
 import { LazyLoadEvent } from 'primeng/api/public_api';
@@ -34,17 +29,15 @@ import * as FileSaver from 'file-saver';
 export class TaxDataTableComponent extends BaseDatatableComponent
   implements OnInit, OnDestroy {
   readonly routes = taxRoutes;
-  hotelId: string;
+  entityId: string;
   tableName = title;
   cols = cols;
   isCustomSort = true;
   triggerInitialData = false;
-  filterChips = filtersChips;
-  tabFilterIdx = 0;
+  isAllTabFilterRequired = true;
   globalQueries = [];
   $subscription = new Subscription();
   navRoutes: NavRouteOptions;
-  tabFilterItems = tabFilterItems;
 
   constructor(
     public fb: FormBuilder,
@@ -53,6 +46,7 @@ export class TaxDataTableComponent extends BaseDatatableComponent
     private adminUtilityService: AdminUtilityService,
     private taxService: TaxService,
     private router: Router,
+    private route: ActivatedRoute,
     protected tabFilterService: TableService
   ) {
     super(fb, tabFilterService);
@@ -62,8 +56,8 @@ export class TaxDataTableComponent extends BaseDatatableComponent
   }
 
   ngOnInit(): void {
-    this.hotelId = this.globalFilterService.hotelId;
-    this.initTableValue();
+    // this.entityId = this.globalFilterService.entityId;
+    // this.initTableValue();
   }
 
   /**
@@ -71,6 +65,11 @@ export class TaxDataTableComponent extends BaseDatatableComponent
    * @param event
    */
   loadData(event: LazyLoadEvent): void {
+    this.initTableValue();
+  }
+
+  onEntityTabFilterChanges(event): void {
+    this.entityId = event.entityId[0];
     this.initTableValue();
   }
 
@@ -82,21 +81,25 @@ export class TaxDataTableComponent extends BaseDatatableComponent
   initTableValue(): void {
     this.loading = true;
     this.$subscription.add(
-      this.taxService.getTaxList(this.hotelId, this.getQueryConfig()).subscribe(
-        (res) => {
-          const taxList = new TaxList().deserialize(res);
+      this.taxService
+        .getTaxList(this.entityId, this.getQueryConfig())
+        .subscribe(
+          (res) => {
+            const taxList = new TaxList().deserialize(res);
 
-          this.values = taxList.records;
-          this.updateTabFilterCount(res.entityTypeCounts, res.total);
-          this.updateQuickReplyFilterCount(res.entityStateCounts);
-          this.updateTotalRecords();
-        },
-        ({ error }) => {
-          this.values = [];
-          this.loading = false;
-        },
-        this.handleFinal
-      )
+            this.values = taxList.records;
+            this.initFilters(
+              taxList.entityTypeCounts,
+              taxList.entityStateCounts,
+              taxList.total
+            );
+          },
+          ({ error }) => {
+            this.values = [];
+            this.loading = false;
+          },
+          this.handleFinal
+        )
     );
   }
 
@@ -106,31 +109,17 @@ export class TaxDataTableComponent extends BaseDatatableComponent
   getQueryConfig(): QueryConfig {
     const config = {
       params: this.adminUtilityService.makeQueryParams([
-        ...this.getSelectedQuickReplyFilters(),
+        ...this.getSelectedQuickReplyFilters({ isStatusBoolean: true }),
         ...[...this.globalQueries, { order: 'DESC' }],
         {
           offset: this.first,
           limit: this.rowsPerPage,
+          entityId: this.entityId,
         },
       ]),
     };
 
     return config;
-  }
-
-  /**
-   * @function getSelectedQuickReplyFilters To return the selected chip list.
-   * @returns The selected chips.
-   */
-  getSelectedQuickReplyFilters() {
-    const chips = this.filterChips.filter(
-      (item) => item.isSelected && item.value !== 'ALL'
-    );
-    return [
-      chips.length !== 1
-        ? { entityState: null }
-        : { entityState: chips[0].value === 'ACTIVE' },
-    ];
   }
 
   /**
@@ -141,22 +130,20 @@ export class TaxDataTableComponent extends BaseDatatableComponent
   handleStatus(status: boolean, rowData): void {
     this.loading = true;
     this.taxService
-      .updateTax(this.hotelId, rowData.id, { status: status })
+      .updateTax(this.entityId, rowData.id, { status: status })
       .subscribe(
         (res) => {
-          const statusValue = (val: boolean) => (val ? 'ACTIVE' : 'INACTIVE');
-          this.updateStatusAndCount(
-            statusValue(rowData.status),
-            statusValue(status)
-          );
-          this.values.find((item) => item.id === rowData.id).status = status;
+          this.initTableValue();
           this.snackbarService.openSnackBarAsText(
             'Status changes successfully',
             '',
             { panelClass: 'success' }
           );
         },
-        ({ error }) => {},
+        ({ error }) => {
+          this.loading = false;
+          this.values = [];
+        },
         this.handleFinal
       );
   }
@@ -177,13 +164,24 @@ export class TaxDataTableComponent extends BaseDatatableComponent
     };
 
     this.$subscription.add(
-      this.taxService.exportCSV(this.hotelId, config).subscribe((res) => {
-        FileSaver.saveAs(
-          res,
-          `${this.tableName.toLowerCase()}_export_${new Date().getTime()}.csv`
-        );
-      }, this.handleFinal)
+      this.taxService.exportCSV(this.entityId, config).subscribe(
+        (res) => {
+          FileSaver.saveAs(
+            res,
+            `${this.tableName.toLowerCase()}_export_${new Date().getTime()}.csv`
+          );
+        },
+        () => {},
+        this.handleFinal
+      )
     );
+  }
+
+  onCreateNewTax(): void {
+    this.taxService.entityId = this.entityId;
+    this.router.navigate([this.routes.createTax.route], {
+      relativeTo: this.route,
+    });
   }
 
   /**
@@ -191,9 +189,10 @@ export class TaxDataTableComponent extends BaseDatatableComponent
    * @description To edit the tax
    */
 
-  editTax(id: string): void {
+  editTax(data): void {
+    this.taxService.entityId = data.entityId;
     this.router.navigate([
-      `/pages/settings/tax/${this.routes.createTax.route}/${id}`,
+      `/pages/settings/tax/${this.routes.createTax.route}/${data?.id}`,
     ]);
   }
 

@@ -7,17 +7,26 @@
     {{ tableName }}
   </div>
   <div class="action-wrapper">
+    <hospitality-bot-button
+      label="+Add Outlet"
+      variant="text"
+      [routerLink]="[routerLink.outlet.route]"
+      preserveQueryParams="true"
+    ></hospitality-bot-button>
+    <hospitality-bot-button
+      *ngIf="!entityId"
+      label="+Add Hotel"
+      [routerLink]="[routerLink.hotel.route]"
+      preserveQueryParams="true"
+    ></hospitality-bot-button>
+
     <hospitality-bot-export-list
       [additionalActionItems]="additionalActionItems"
       (onDocumentActions)="onDocumentActions()"
       [documentTypes]="documentTypes"
       [documentActionTypes]="documentActionTypes"
-      [isDisable]="values.length === 0"
+      [isDisable]="values?.length === 0"
     ></hospitality-bot-export-list>
-    <hospitality-bot-button
-      label="+Add Hotels"
-      link="pages/settings/business-info/brand/{{ brandId }}/hotel"
-    ></hospitality-bot-button>
   </div>
 </div>
 <p-table
@@ -44,7 +53,7 @@
   (sortFunction)="customSort($event)"
   [customSort]="isCustomSort"
   (onFilter)="onDataFilter($event)"
-  *ngIf="values.length; else emptyTable"
+  *ngIf="values?.length; else emptyTable"
 >
   <!-- *******************************HEADER WITH SEARCH******************************* -->
   <ng-template pTemplate="header" let-columns>
@@ -62,7 +71,7 @@
     let-columns="columns"
     let-rowIndex="rowIndex"
   >
-    <tr class="table-row" (click)="editHotel(rowData.id)">
+    <tr class="table-row" (click)="editHotel(rowData)">
       <td class="table-row__checkbox">
         <p-tableCheckbox
           [value]="rowData"
@@ -71,60 +80,78 @@
         ></p-tableCheckbox>
       </td>
       <td>
-        <div class="cell-content" *ngIf="rowData?.name; else emptyCell">
-          <div class="primary-text">
+        <div class="cell-content prop" *ngIf="rowData?.name; else emptyCell">
+          <div class="primary-text type">
             {{ rowData?.name }}
-          </div>
-        </div>
-      </td>
-      <td>
-        <div
-          class="cell-content"
-          *ngIf="rowData?.propertyCategory?.label; else emptyCell"
-        >
-          <div class="primary-text">
-            {{ rowData?.propertyCategory?.label }}
-          </div>
-        </div>
-      </td>
-      <td>
-        <div class="" *ngIf="rowData?.address?.city; else emptyCell">
-          <div class="primary-text">
-            {{ rowData?.address?.city }}
-          </div>
-        </div>
-      </td>
-      <td>
-        <div class="cell-content" *ngIf="rowData?.emailId; else emptyCell">
-          <div class="primary-text">
-            {{ rowData?.emailId }}
-          </div>
-        </div>
-      </td>
-      <td>
-        <div
-          class="cell-content"
-          *ngIf="rowData?.contact?.number; else emptyCell"
-        >
-          <a
-            href="tel:{{ rowData?.contact?.countryCode }}
-            {{ rowData?.contact?.number }}"
-          >
-            <div class="primary-text">
-              {{ rowData?.contact?.countryCode || '-' }}-
-              {{ rowData?.contact?.number || '-' }}
+            <div *ngIf="rowData?.propertyCategory">
+              <img
+                class="img"
+                [src]="getSrc(rowData?.propertyCategory?.iconCount)"
+                [alt]="img"
+              />
             </div>
-          </a>
+          </div>
+          <div class="secondary-text">
+            {{ rowData?.type || rowData?.category }}
+          </div>
+        </div>
+      </td>
+      <td>
+        <div
+          class="cell-content"
+          *ngIf="rowData?.operationalDays?.startDay; else emptyCell"
+        >
+          <div class="primary-text">
+            {{ rowData?.operationalDays?.startDay }} -
+            {{ rowData?.operationalDays?.endDay }}
+          </div>
+          <div class="primary-text">
+            {{ secondsToAMPMTime(rowData?.operationalDays?.from) }} -
+            {{ secondsToAMPMTime(rowData?.operationalDays?.to) }}
+          </div>
+        </div>
+      </td>
+      <td>
+        <div
+          class="cell-content"
+          *ngIf="rowData?.contact?.number || rowData?.emailId; else emptyCell"
+        >
+          <div class="primary-text" *ngIf="rowData?.contact?.number">
+            <a
+              (click)="$event.stopPropagation()"
+              href="tel:{{
+                rowData?.contact?.countryCode + rowData?.contact?.number
+              }}"
+              >{{ rowData?.contact?.countryCode }}-{{
+                rowData?.contact?.number
+              }}</a
+            >
+          </div>
+          <div class="primary-text" *ngIf="rowData?.emailId">
+            <a
+              (click)="$event.stopPropagation()"
+              href="mailto: {{ rowData?.emailId }}"
+            >
+              {{ rowData?.emailId }}</a
+            >
+          </div>
+        </div>
+      </td>
+      <td>
+        <div class="cell-content" *ngIf="rowData?.url; else emptyCell">
+          <hospitality-bot-copy-link
+            [url]="rowData?.url"
+          ></hospitality-bot-copy-link>
         </div>
       </td>
       <td>
         <div class="cell-content">
-          <hospitality-bot-toggle-dropdown
+          <hospitality-bot-status-dropdown-toggle
             class="toggle-btn"
             (onClick)="handleStatus($event, rowData)"
-            [status]="rowData.status"
+            [state]="rowData.status"
           >
-          </hospitality-bot-toggle-dropdown>
+          </hospitality-bot-status-dropdown-toggle>
         </div>
       </td>
     </tr>
@@ -142,6 +169,10 @@
     ></p-paginator>
   </ng-template>
 </p-table>
+
+<ng-template #emptyCell>
+  <div class="emptyCell">&mdash;</div>
+</ng-template>
 
 <ng-template #emptyTable>
   <hospitality-bot-empty-table

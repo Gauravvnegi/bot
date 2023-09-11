@@ -1,7 +1,7 @@
 @import 'main';
 :host ::ng-deep {
   .mat-tab-label {
-    font: normal normal bold 14px/19px Roboto;
+    font: normal normal $bolder 14px/19px Poppins;
     height: 40px;
     letter-spacing: 0.84px;
     color: $inActiveTab;
@@ -22,12 +22,12 @@
     @include flex-space-between-cen-Algn;
     .dropdown-label {
       margin-left: 0.5em;
-      font-weight: 500;
+      font-weight: $bold;
     }
     .title-container {
       @include flex-item-center;
 
-      font: normal normal bold 16px/21px Roboto;
+      font: normal normal 600 16px/21px Poppins;
       letter-spacing: 0.96px;
       color: $secondary;
       opacity: 1;
@@ -113,7 +113,7 @@
     .reset-link {
       color: $reset-link;
       font-size: 14px;
-      font-weight: 700;
+      font-weight: $bolder;
     }
   }
   .graphWrapper {

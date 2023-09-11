@@ -57,6 +57,13 @@ $border-color: rgba(112, 112, 112, 0.35);
 }
 
 :host ::ng-deep {
+  .time-range-field {
+    .input {
+      .p-inputtext {
+        border: 1px solid rgba(0, 0, 0, 0.18);
+      }
+    }
+  }
   .p-multiselect .p-multiselect-panel {
     min-width: 255px;
   }

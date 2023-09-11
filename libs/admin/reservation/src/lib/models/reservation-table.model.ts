@@ -45,8 +45,8 @@ export class Reservation implements IDeserializable {
     this.guests = new GuestType().deserialize(input.guestDetails);
     this.payment = new Payment().deserialize(input.paymentSummary);
     this.status = new Status().deserialize(input);
-    this.feedback = new Feedback().deserialize(input.feedback);
-    this.packages = new Package().deserialize(input.packages);
+    // this.feedback = new Feedback().deserialize(input.feedback);
+    // this.packages = new Package().deserialize(input.packages);
     this.currentJourney = new CurrentJourney().deserialize(input);
     return this;
   }

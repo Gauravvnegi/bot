@@ -114,8 +114,10 @@ export class BookingStatusComponent implements OnInit, OnDestroy {
             : null
         )
       );
-      this.chart.data[0].data.push(this.customerData.checkIn[timestamp]);
-      this.chart.data[1].data.push(this.customerData.checkout[timestamp]);
+      this.chart.data[0].data.push(this.customerData.new[timestamp]);
+      this.chart.data[1].data.push(this.customerData.preCheckIn[timestamp]);
+      this.chart.data[2].data.push(this.customerData.checkIn[timestamp]);
+      this.chart.data[3].data.push(this.customerData.checkout[timestamp]);
     });
     this.setChartColors();
   }
@@ -164,12 +166,12 @@ export class BookingStatusComponent implements OnInit, OnDestroy {
       queryObj: this._adminUtilityService.makeQueryParams(this.globalQueries),
     };
     this.$subscription.add(
-      this._statisticService.getBookingStatusStatistics(config).subscribe(
-        (res) => {
+      this._statisticService
+        .getBookingStatusStatistics(config)
+        .subscribe((res) => {
           this.customerData = new BookingStatus().deserialize(res);
           this.initGraphData();
-        }
-      )
+        })
     );
   }
 

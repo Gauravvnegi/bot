@@ -52,6 +52,16 @@ export const dashboard = {
   legend: {
     bookingStatus: [
       {
+        label: 'New',
+        borderColor: '#4bc0c0',
+        backgroundColor: '#4bc0c0',
+      },
+      {
+        label: 'Pre Check-in',
+        borderColor: '#82a3fd',
+        backgroundColor: '#82a3fd',
+      },
+      {
         label: 'Check-In',
         borderColor: '#0ea47a',
         backgroundColor: '#0ea47a',
@@ -166,6 +176,12 @@ export const dashboard = {
     },
     color: {
       bookingStatus: [
+        {
+          borderColor: '#4bc0c0',
+        },
+        {
+          borderColor: '#82a3fd',
+        },
         {
           borderColor: '#0ea47a',
         },

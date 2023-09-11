@@ -119,7 +119,7 @@
                       [formGroupName]="roomIndex"
                     >
                       <p-accordionTab
-                        [selected]="roomIndex == selectedRoomIndex(seasonIndex)"
+                        [selected]="true"
                         *ngIf="room.get('isSelected').value"
                       >
                         <p-header>
@@ -148,7 +148,8 @@
                                     roomConfig: {
                                       room: room
                                     },
-                                    basePrice: room.get('basePrice').value,
+                                    basePrice: room.get('roomStrikeAmount')
+                                      .value,
                                     occupancyLength: room.get('occupancy')
                                       .controls.length,
                                     index: occupancyIndex,

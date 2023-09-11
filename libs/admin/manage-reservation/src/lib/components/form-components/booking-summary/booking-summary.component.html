@@ -198,7 +198,9 @@
       <ng-template #selectOffer>
         <p *ngIf="index === undefined">
           Have an Offer?
-          <span (click)="displayBookingOffer = !displayBookingOffer"
+          <span
+            [ngClass]="reservationId ? 'disabled-btn' : ''"
+            (click)="applyOffer()"
             >Apply Offer</span
           >
         </p>

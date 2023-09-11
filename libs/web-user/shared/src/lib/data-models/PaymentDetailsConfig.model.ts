@@ -35,15 +35,28 @@ export class PaymentSummary {
   depositRules: paymentType.IDepositRule;
 
   deserialize(paymentSummary: any) {
+    const printRate = get(paymentSummary, ['printRate']);
     Object.assign(
       this,
-      set({}, 'totalAmount', get(paymentSummary, ['totalAmount'])),
+      set(
+        {},
+        'totalAmount',
+        printRate ? get(paymentSummary, ['totalAmount']) : 0
+      ),
       set({}, 'taxAmount', get(paymentSummary, ['taxAmount'])),
       set({}, 'totalDiscount', get(paymentSummary, ['totalDiscount'])),
       set({}, 'subtotal', get(paymentSummary, ['subtotal'])),
-      set({}, 'paidAmount', get(paymentSummary, ['paidAmount'])),
-      set({}, 'dueAmount', get(paymentSummary, ['dueAmount'])),
-      set({}, 'payableAmount', get(paymentSummary, ['payableAmount'])),
+      set(
+        {},
+        'paidAmount',
+        printRate ? get(paymentSummary, ['paidAmount']) : 0
+      ),
+      set({}, 'dueAmount', printRate ? get(paymentSummary, ['dueAmount']) : 0),
+      set(
+        {},
+        'payableAmount',
+        printRate ? get(paymentSummary, ['payableAmount']) : 0
+      ),
       set({}, 'currencyCode', get(paymentSummary, ['currency'])),
       set({}, 'roomRates', get(paymentSummary, ['roomRates'])),
       set({}, 'packages', get(paymentSummary, ['packages'])),
@@ -55,7 +68,7 @@ export class PaymentSummary {
         get(paymentSummary, ['transactionsHistory'])
       ),
       set({}, 'depositRules', get(paymentSummary, ['depositRules'])),
-      set({}, 'printRate', get(paymentSummary, ['printRate']))
+      set({}, 'printRate', printRate)
     );
     return this;
   }

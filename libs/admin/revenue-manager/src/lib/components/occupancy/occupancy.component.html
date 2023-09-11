@@ -42,13 +42,10 @@
             </div>
             <hospitality-bot-button
               click-stop-propagation
-              [class]="
-                dynamicPricingControl.occupancyFA.length > 1
-                  ? 'remove'
-                  : 'remove disable'
-              "
+              class="remove"
               label="Remove"
               variant="text"
+              [disabled]="dynamicPricingControl.occupancyFA.length < 2"
               severity="reset"
               (onClick)="
                 dynamicPricingControl.occupancyFA.length > 1 &&

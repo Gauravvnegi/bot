@@ -187,17 +187,18 @@ export const venueFields: IteratorField[] = [
 export const statusOptions = [
   { label: 'Draft', value: 'DRAFT' },
   { label: 'Confirmed', value: 'CONFIRMED' },
-  { label: 'Waitlisted', value: 'WAITLISTED' },
-  { label: 'Canceled', value: 'CANCELED' },
-  { label: 'No Show', value: 'NOSHOW' },
-  { label: 'Completed', value: 'COMPLETED' },
+  // { label: 'Waitlisted', value: 'WAITLISTED' },
+  // { label: 'Canceled', value: 'CANCELED' },
+  // { label: 'No Show', value: 'NOSHOW' },
+  // { label: 'Completed', value: 'COMPLETED' },
 ];
 
 export const editModeStatusOptions = [
   { label: 'Draft', value: 'DRAFT' },
   { label: 'Confirmed', value: 'CONFIRMED' },
-  { label: 'Waitlisted', value: 'WAITLISTED' },
-  { label: 'Completed', value: 'COMPLETED' },
+  { label: 'Canceled', value: 'CANCELED' },
+  // { label: 'Waitlisted', value: 'WAITLISTED' },
+  // { label: 'Completed', value: 'COMPLETED' },
 ];
 
 export const eventOptions = [

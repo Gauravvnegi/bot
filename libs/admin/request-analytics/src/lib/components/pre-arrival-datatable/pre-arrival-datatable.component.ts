@@ -348,7 +348,7 @@ export class PreArrivalDatatableComponent extends BaseDatatableComponent
                 entityType: this.tabFilterItems[this.tabFilterIdx]?.value,
                 journeyType: 'pre-arrival',
               },
-              ...this.getSelectedQuickReplyFilters({ key: 'entityState' }),
+              ...this.getSelectedQuickReplyFilters({ key: 'actionType' }),
             ],
             false,
             {

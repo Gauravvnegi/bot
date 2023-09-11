@@ -99,7 +99,7 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
       priority: ['', Validators.required],
       jobDuration: [''],
       remarks: ['', [Validators.maxLength(200)]],
-      quantity: [1],
+      quantity: [1 , [Validators.required, Validators.min(1)]],
       assigneeId: [''],
     });
 

@@ -8,13 +8,9 @@
   class="tab-header"
   (onEntityTabFilterChanges)="onGlobalTabFilterChanges($event)"
 ></hospitality-bot-entity-tab-filter>
-<div
-  class="action-header"
-  [ngClass]="{ 'action-header__sticky': isScrolledUp }"
-  [formGroup]="tableFG"
->
-  <div class="heading">{{ tableName }}</div>
-  <div class="action-wrapper">
+
+<div [formGroup]="tableFG" class="wrapper">
+  <hospitality-bot-navigation-header [heading]="tableName" [routes]="navRoutes">
     <hospitality-bot-button
       label="+ Create Category"
       variant="text"
@@ -22,7 +18,7 @@
       (onClick)="onCreateNewCategory()"
     ></hospitality-bot-button>
     <hospitality-bot-button
-     [disabled]="isRestaurant"
+      [disabled]="isRestaurant"
       label="+ Create Service"
       (onClick)="onCreateNewService()"
     ></hospitality-bot-button>
@@ -33,9 +29,8 @@
       [documentTypes]="documentTypes"
       [documentActionTypes]="documentActionTypes"
     ></hospitality-bot-export-list>
-  </div>
+  </hospitality-bot-navigation-header>
 </div>
-<div [ngClass]="{ 'sticky-header-gap': isScrolledUp }"></div>
 
 <p-table
   #dt

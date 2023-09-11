@@ -1,20 +1,20 @@
-import { Component, HostListener, OnInit } from '@angular/core';
+import { Location } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
+import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
   ConfigService,
   NavRouteOptions,
   Option,
 } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
+import { TaxService } from 'libs/admin/tax/src/lib/services/tax.service';
 import { Subscription } from 'rxjs';
 import { OutletService } from '../../services/outlet.service';
+import { PageReloadService } from '../../services/page-reload.service.service';
 import { MenuItemForm, MenuItemResponse } from '../../types/outlet';
 import { OutletBaseComponent } from '../outlet-base.components';
-import { PageReloadService } from '../../services/page-reload.service.service';
-import { TaxService } from 'libs/admin/tax/src/lib/services/tax.service';
-import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
-import { Location } from '@angular/common';
 
 @Component({
   selector: 'hospitality-bot-add-menu-item',

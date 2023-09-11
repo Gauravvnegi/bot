@@ -66,7 +66,9 @@ export class Service {
   deserialize(input) {
     this.id = input.id;
     this.name = input.name;
-    this.imageUrl = input.imageUrl;
+    if (input.images && input.images.length > 0)
+      this.imageUrl = input.images[0].url;
+    
     this.type = input.serviceType;
     this.rate = `${input.currency}${input.rate}`;
     this.active = input.active;

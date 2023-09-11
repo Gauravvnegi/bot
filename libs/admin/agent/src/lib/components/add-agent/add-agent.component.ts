@@ -103,7 +103,7 @@ export class AddAgentComponent implements OnInit {
 
       const validationRules = {
         [commissionType.PERCENTAGE]:
-          commission >= 100 ? { moreThan100: true } : null,
+          commission > 100 ? { moreThan100: true } : null,
       };
 
       if (commission < 0) {

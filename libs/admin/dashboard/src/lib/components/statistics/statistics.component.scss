@@ -39,7 +39,7 @@
 
 .stats--wrapper {
   @include flex-space-btw-wrap;
-  gap: 15px;
+  gap: 25px 15px;
   @media (max-width: $tablet) {
     gap: 10px;
   }
@@ -109,6 +109,6 @@
     width: 37.85%;
   }
   .mr-top {
-    margin: 15px 0 0 0 !important;
+    margin: 25px 0 0 0 !important;
   }
 }

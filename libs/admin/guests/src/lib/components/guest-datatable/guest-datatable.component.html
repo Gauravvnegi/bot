@@ -88,8 +88,12 @@
       </td>
       <td>
         <div class="cell-content">
-          <span class="primary-text">{{ rowData.name }}</span>
-          <span class="secondary-text">{{ rowData.code }}</span>
+          <span class="primary-text" *ngIf="rowData.name; else emptyCell">{{
+            rowData.name
+          }}</span>
+          <span class="secondary-text" *ngIf="rowData.code; else emptyCell">{{
+            rowData.code
+          }}</span>
         </div>
       </td>
       <td>

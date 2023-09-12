@@ -82,8 +82,8 @@ export class FeedbackRecord {
 
   getTableOrRoomNo(feedbackType) {
     return feedbackType === feedback.types.stay
-      ? `Room No/Table No: ${this.feedback.tableOrRoomNumber}`
-      : `TNO: ${this.feedback.tableOrRoomNumber}`;
+      ? `Room No/Table No: ${this.feedback.tableOrRoomNumber.roomNumber}`
+      : `TNO: ${this.feedback.tableOrRoomNumber.roomNumber}`;
   }
 
   getProfileNickName() {

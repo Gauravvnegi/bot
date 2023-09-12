@@ -68,7 +68,7 @@ export class Feedback {
   remarks: Remark[];
   timeOut: boolean;
   feedbackId: string;
-  tableOrRoomNumber: string;
+  tableOrRoomNumber;
   deserialize(input, outlets) {
     this.remarks = new Array<Remark>();
     const bookingDetails = get(input, ['bookingDetails']);
@@ -404,7 +404,7 @@ export class StayFeedback {
   services: Service[];
   session: string;
   size: number;
-  tableOrRoomNumber: string;
+  tableOrRoomNumber;
   transactionalService: string;
   outlet: string;
   status: string;

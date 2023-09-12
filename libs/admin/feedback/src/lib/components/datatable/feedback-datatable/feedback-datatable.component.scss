@@ -590,3 +590,7 @@ img {
 .mt-20 {
   margin-top: 20px;
 }
+
+:host ::ng-deep .p-datatable .p-datatable-thead {
+  top: 114px !important;
+}

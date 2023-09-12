@@ -59,6 +59,9 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
   @Input() tableName = feedback.table.name;
   // tabFilterIdx = 0;
   // @Input() tabFilterItems = [];
+  feedbackTypeFilterItem = [];
+  feedbackTypeFilterIdx = 0;
+  defaultFeedbackType;
   globalFeedbackConfig = feedback;
   outlets = [];
   actionButtons = true;
@@ -107,7 +110,9 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
       type: '',
       defaultLabel: 'Export Summary',
     });
-    this.selectedTab = this.tabFilterItems[this.tabFilterIdx]?.value;
+    // this.selectedTab = this.feedbackTypeFilterItem[
+    //   this.feedbackTypeFilterIdx
+    // ]?.value;
   }
 
   registerListeners(): void {
@@ -141,7 +146,9 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
         { order: sharedConfig.defaultOrder },
         ...this.getSelectedQuickReplyFilters(),
       ]);
-      this.getUserPermission(this.tabFilterItems[this.tabFilterIdx]?.value);
+      this.getUserPermission(
+        this.feedbackTypeFilterItem[this.feedbackTypeFilterIdx]?.value
+      );
     } else this.selectedRows = [];
   }
 
@@ -169,14 +176,24 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
         this.entityId = this.globalFilterService.entityId;
         this.getOutlets(data['filter'].value.property.entityName);
         const feedbackType = data['filter'].value.feedback.feedbackType;
+        this.defaultFeedbackType =
+          data['filter'].value.feedback.feedbackType === 'ALL'
+            ? feedback.types.stay
+            : data['filter'].value.feedback.feedbackType;
+
+        this.setTabFilters(
+          feedbackType === feedback.types.transactional
+            ? feedback.types.transactional
+            : feedback.types.stay
+        );
 
         if (this.tableFG?.get('tableType').value !== 'card') {
-          if (this.tabFilterItems.length === 0)
-            this.setTabFilters(
-              feedbackType === feedback.types.transactional
-                ? feedback.types.transactional
-                : feedback.types.stay
-            );
+          // if (this.feedbackTypeFilterItem.length === 0)
+          // this.setTabFilters(
+          //   feedbackType === feedback.types.transactional
+          //     ? feedback.types.transactional
+          //     : feedback.types.stay
+          // );
           this.loadInitialData([
             ...this.globalQueries,
             { order: sharedConfig.defaultOrder },
@@ -227,11 +244,14 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
    */
   setTabFilters(feedbackType): void {
     if (feedbackType === feedback.types.transactional)
-      this.tabFilterItems = feedback.tabFilterItems.datatable.transactional;
-    else this.tabFilterItems = feedback.tabFilterItems.datatable.stay;
-    this.feedbackType = feedbackType;
+      this.feedbackTypeFilterItem =
+        feedback.tabFilterItems.datatable.transactional;
+    else this.feedbackTypeFilterItem = feedback.tabFilterItems.datatable.stay;
+    this.feedbackType = feedbackType || this.defaultFeedbackType;
     this.setTableCols();
-    this.getUserPermission(this.tabFilterItems[this.tabFilterIdx].value);
+    this.getUserPermission(
+      this.feedbackTypeFilterItem[this.feedbackTypeFilterIdx].value
+    );
   }
 
   /**
@@ -295,12 +315,13 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
   ): Observable<any> {
     this.resetRowSelection();
     queries.push(defaultProps);
+
     const config = {
       queryObj: this._adminUtilityService.makeQueryParams([
         ...queries,
         {
           feedbackType: this.feedbackType,
-          entityType: this.selectedTab,
+          entityType: this.selectedTab ?? 'ALL',
           entityIds: this.setEntityId(),
         },
       ]),
@@ -314,7 +335,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
    */
   setEntityId() {
     if (
-      this.tabFilterItems[this.tabFilterIdx].value ===
+      this.feedbackTypeFilterItem[this.feedbackTypeFilterIdx].value ===
       this.globalFeedbackConfig.types.transactional
     )
       return this.statisticService.outletIds;
@@ -354,7 +375,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
   setRecords(data): void {
     let modifiedData;
     if (
-      this.tabFilterItems[this.tabFilterIdx].value ===
+      this.feedbackTypeFilterItem[this.feedbackTypeFilterIdx].value ===
       this.globalFeedbackConfig.types.transactional
     )
       modifiedData = new FeedbackTable().deserialize(data, this.outlets);
@@ -643,9 +664,12 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
   }
 
   getRowDataNegativeServices(rowData) {
-    if (this.tabFilterItems[this.tabFilterIdx]?.value && !this.loading) {
+    if (
+      this.feedbackTypeFilterItem[this.feedbackTypeFilterIdx]?.value &&
+      !this.loading
+    ) {
       if (
-        this.tabFilterItems[this.tabFilterIdx]?.value ===
+        this.feedbackTypeFilterItem[this.feedbackTypeFilterIdx]?.value ===
         feedback.types.transactional
       )
         return rowData.services.getNegativeRatedService();

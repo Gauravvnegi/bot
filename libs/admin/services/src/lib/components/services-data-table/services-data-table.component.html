@@ -103,7 +103,7 @@
           <div class="primary-text">
             {{ rowData.name }}
           </div>
-          <div class="secondary-text" *ngIf="rowData.category">
+          <div class="secondary-text" *ngIf="rowData.category; else emptyCell">
             {{ rowData.category }}
           </div>
         </div>

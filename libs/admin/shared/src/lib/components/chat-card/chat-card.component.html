@@ -111,7 +111,11 @@
         {{ formatTime(taskStatus.timeLeft) }}
       </div>
     </div>
-    <div class="card-wrapper_time" [ngStyle]="{ float: 'right' }">
+    <div
+      *ngIf="!cardType === 'feedback'"
+      class="card-wrapper_time"
+      [ngStyle]="{ float: 'right' }"
+    >
       {{ time }}
     </div>
   </div>

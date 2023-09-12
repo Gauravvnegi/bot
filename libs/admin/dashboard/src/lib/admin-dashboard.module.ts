@@ -23,6 +23,7 @@ import { ReservationDatatableModalComponent } from './components/modal/reservati
 import { StatisticsComponent } from './components/statistics/statistics.component';
 import { StatisticsService } from './services/statistics.service';
 import { AnalyticsService } from 'libs/admin/request-analytics/src/lib/services/analytics.service';
+import { AdminGuestDashboardModule } from '@hospitality-bot/admin/guest-dashboard';
 
 export const adminDashboardRoutes: Route[] = [
   {
@@ -40,10 +41,11 @@ export const adminDashboardRoutes: Route[] = [
     SharedMaterialModule,
     AdminReservationModule,
     ChartsModule,
+    AdminGuestDashboardModule,
     NgCircleProgressModule.forRoot(),
     RouterModule.forChild(adminDashboardRoutes),
     TranslateModule.forChild(
-      getTranslationConfigs([HttpClient], ['dashboard'])
+      getTranslationConfigs([HttpClient], ['dashboard', 'guests'])
     ),
   ],
   declarations: [

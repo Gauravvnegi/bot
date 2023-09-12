@@ -7,8 +7,8 @@ import {
   GuestDatatableModalComponent,
   GuestDocumentsStatisticsComponent,
   GuestPaymentsStatisticsComponent,
+  GuestStatisticsComponent,
   SourceStatisticsComponent,
-  StatisticsComponent,
   TypeGuestStatisticsComponent,
 } from './components';
 
@@ -21,7 +21,7 @@ const appRoutes: Route[] = [{ path: '', component: GuestComponent }];
 export class AdminGuestDashboardRoutingModule {
   static components = [
     GuestComponent,
-    StatisticsComponent,
+    GuestStatisticsComponent,
     GuestDocumentsStatisticsComponent,
     GuestPaymentsStatisticsComponent,
     SourceStatisticsComponent,

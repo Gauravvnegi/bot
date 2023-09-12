@@ -20,7 +20,7 @@ import { StatisticsService } from './services/statistics.service';
     CommonModule,
     FormsModule,
     RouterModule,
-    AdminGuestDashboardRoutingModule,
+    // AdminGuestDashboardRoutingModule,
     ChartsModule,
     ReactiveFormsModule,
     SharedMaterialModule,

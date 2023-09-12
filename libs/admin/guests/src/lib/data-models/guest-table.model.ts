@@ -58,7 +58,10 @@ export class GuestData {
           ? contact.cc + '-' + contact.contactNumber
           : '',
       email: contact.emailId,
-      name: (input?.firstName ?? '') + ' ' + (input.lastName ?? ''),
+      name:
+        input?.firstName || input?.lastName
+          ? input?.firstName + ' ' + (input?.lastName ?? '')
+          : '',
       id: input.id,
       isVerified: input.isVerified,
       status: input.status,

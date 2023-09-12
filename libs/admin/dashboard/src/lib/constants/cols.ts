@@ -22,9 +22,9 @@ export const cols = {
       ],
     },
     {
-      field: `guests.primaryGuest.phoneNumber`,
+      field: `guests.primaryGuest.getPhoneNumber()`,
       header: 'Phone No.',
-      sortType: 'number',
+      sortType: 'string',
     },
     {
       field: 'booking.getArrivalTimeStamp()',

@@ -77,7 +77,7 @@ export class StayDetails {
       set({}, 'statusMessage', get(summary, ['statusMessage'])),
       set({}, 'arrivalTime', get(summary, ['arrivalTime'])),
       set({}, 'departureTime', get(summary, ['departureTime'])),
-      set({}, 'roomType', get(summary, ['roomType'])),
+      set({}, 'roomType', get(summary, ['room', 'type'])),
       set({}, 'adultsCount', get(summary, ['adultsCount'])),
       set({}, 'kidsCount', get(summary, ['kidsCount'])),
       set({}, 'comments', get(summary, ['comments'])),

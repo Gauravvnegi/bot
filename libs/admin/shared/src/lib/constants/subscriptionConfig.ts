@@ -147,8 +147,9 @@ export enum Communication {
   MICRO = 'MICRO_SITES',
   TELEGRAM = 'TELEGRAM_BOT',
   WHATSAPP_LITE = 'WHATSAPP_LITE',
-  MESSENGER = 'MESSANGER_SUPPORT',
+  MESSENGER = 'MESSENGER_SUPPORT',
   EMAIL = 'EMAIL',
+  EMAIL_SUPPORT = 'EMAIL_SUPPORT',
 }
 
 export const CommunicationConfig = {
@@ -177,6 +178,10 @@ export const CommunicationConfig = {
     disabledImageUrl: 'assets/svg/telegram.svg',
   },
   [Communication.EMAIL]: {
+    disabledImageUrl: 'assets/svg/email-02.svg',
+    imageUrl: 'assets/svg/email-02.svg',
+  },
+  [Communication.EMAIL_SUPPORT]: {
     disabledImageUrl: 'assets/svg/email-02.svg',
     imageUrl: 'assets/svg/email-02.svg',
   },

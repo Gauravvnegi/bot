@@ -49,10 +49,7 @@ type discard =
   | 'nationality'
   | 'priceModifier'
   | 'priceModifierValue'
-  | 'iataNumber'
-  | 'isVerified'
-  | 'status'
-  | 'code';
+  | 'iataNumber';
 export type GuestType = Omit<AgentTableResponse, discard>;
 
 export type GuestListResponse = {

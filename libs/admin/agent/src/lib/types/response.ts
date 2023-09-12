@@ -29,7 +29,7 @@ export type AgentTableResponse = {
   companyId: string;
   company?: AgentTableResponse;
   gender?: string;
-  dateOfBirth?: string;
+  dateOfBirth?: number;
   created?: number;
 };
 

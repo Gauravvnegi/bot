@@ -39,7 +39,7 @@
 
 .stats--wrapper {
   @include flex-space-btw-wrap;
-  gap: 15px;
+  gap: 25px 15px;
   @media (max-width: $tablet) {
     gap: 10px;
   }
@@ -72,5 +72,43 @@
     @media (max-width: $tablet) {
       width: 38%;
     }
+  }
+}
+
+.guest-stats--wrapper {
+  @include flex-justify-center-wrap();
+  .stats-row {
+    @include flex-space-btw-wrap();
+    width: 100%;
+    @media (max-width: $tablet) {
+      gap: 1.3%;
+      justify-content: center;
+      margin-bottom: 15px;
+    }
+    .guest-stats {
+      width: 32.33%;
+      margin: 0.5%;
+    }
+  }
+  .full-width {
+    width: 100%;
+  }
+  .one-third {
+    width: 32% !important;
+    @media (max-width: $tablet) {
+      width: 32.4% !important;
+    }
+  }
+  .change-height {
+    height: 324px;
+  }
+  .inc-width-xl {
+    width: 59%;
+  }
+  .inc-width-l {
+    width: 37.85%;
+  }
+  .mr-top {
+    margin: 25px 0 0 0 !important;
   }
 }

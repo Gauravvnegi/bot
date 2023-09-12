@@ -92,6 +92,14 @@ export class FeedbackDetailComponent implements OnInit, OnDestroy {
             ],
             response.departmentName
           );
+          if (!this.assigneeList.length) {
+            this.assigneeList = [
+              {
+                label: response?.userName,
+                value: response?.userId,
+              },
+            ];
+          }
         }
       })
     );
@@ -106,14 +114,12 @@ export class FeedbackDetailComponent implements OnInit, OnDestroy {
         .getUserPermission(
           this.feedbackType === '' ? feedback.types.stay : this.feedbackType
         )
-        .subscribe(
-          (response) => {
-            this.userPermissions = new Departmentpermissions().deserialize(
-              response.userCategoryPermission
-            );
-            this.userService.userPermissions = response;
-          }
-        )
+        .subscribe((response) => {
+          this.userPermissions = new Departmentpermissions().deserialize(
+            response.userCategoryPermission
+          );
+          this.userService.userPermissions = response;
+        })
     );
   }
 
@@ -132,19 +138,17 @@ export class FeedbackDetailComponent implements OnInit, OnDestroy {
     this.$subscription.add(
       this.cardService
         .updateFeedbackAssignee(this.feedback.id, event.value)
-        .subscribe(
-          (response) => {
-            this.cardService.$assigneeChange.next({ status: true });
-            this.snackbarService.openSnackBarWithTranslate(
-              {
-                translateKey: `messages.SUCCESS.ASSIGNEE_UPDATED`,
-                priorityMessage: 'Assignee updated.',
-              },
-              '',
-              { panelClass: 'success' }
-            );
-          } 
-        )
+        .subscribe((response) => {
+          this.cardService.$assigneeChange.next({ status: true });
+          this.snackbarService.openSnackBarWithTranslate(
+            {
+              translateKey: `messages.SUCCESS.ASSIGNEE_UPDATED`,
+              priorityMessage: 'Assignee updated.',
+            },
+            '',
+            { panelClass: 'success' }
+          );
+        })
     );
   }
 
@@ -171,14 +175,12 @@ export class FeedbackDetailComponent implements OnInit, OnDestroy {
       queryObj: this._adminUtilityService.makeQueryParams(queries),
     };
     this.$subscription.add(
-      this.tableService.exportCSV(config).subscribe(
-        (response) => {
-          FileSaver.saveAs(
-            response,
-            `Feedback_export_${new Date().getTime()}.csv`
-          );
-        } 
-      )
+      this.tableService.exportCSV(config).subscribe((response) => {
+        FileSaver.saveAs(
+          response,
+          `Feedback_export_${new Date().getTime()}.csv`
+        );
+      })
     );
   }
 
@@ -187,8 +189,9 @@ export class FeedbackDetailComponent implements OnInit, OnDestroy {
       status: card.feedbackState.resolved,
       notes: event.data.comment,
     };
-    this.tableService.updateFeedbackState(this.feedback.id, data).subscribe(
-      (response) => {
+    this.tableService
+      .updateFeedbackState(this.feedback.id, data)
+      .subscribe((response) => {
         this.snackbarService.openSnackBarWithTranslate(
           {
             translateKey: `messages.SUCCESS.STATUS_UPDATED`,
@@ -199,8 +202,7 @@ export class FeedbackDetailComponent implements OnInit, OnDestroy {
         );
         this.refreshFeedbackData(true);
         this.cardService.$refreshList.next(true);
-      }
-    );
+      });
   }
 
   addComment(event) {
@@ -240,38 +242,34 @@ export class FeedbackDetailComponent implements OnInit, OnDestroy {
 
     this.tableService
       .updateFeedbackState(this.feedback.id, data, queryObj)
-      .subscribe(
-        (_) => {
-          this.snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: 'messages.SUCCESS.MESSAGE_SENT',
-                priorityMessage: 'Message sent Successfully.',
-              },
-              '',
-              { panelClass: 'success' }
-            )
-            .subscribe();
-          this.feedbackFG.patchValue({ comment: '' });
-          this.refreshFeedbackData(true);
-          this.cardService.$refreshList.next(true);
-        }
-      );
+      .subscribe((_) => {
+        this.snackbarService
+          .openSnackBarWithTranslate(
+            {
+              translateKey: 'messages.SUCCESS.MESSAGE_SENT',
+              priorityMessage: 'Message sent Successfully.',
+            },
+            '',
+            { panelClass: 'success' }
+          )
+          .subscribe();
+        this.feedbackFG.patchValue({ comment: '' });
+        this.refreshFeedbackData(true);
+        this.cardService.$refreshList.next(true);
+      });
   }
 
   downloadFeedback(event, id) {
     event.stopPropagation();
     this.$subscription.add(
-      this.cardService.getFeedbackPdf(id).subscribe(
-        (response) => {
-          const link = document.createElement('a');
-          link.href = response.fileDownloadUri;
-          link.target = '_blank';
-          link.download = response.fileName;
-          link.click();
-          link.remove();
-        } 
-      )
+      this.cardService.getFeedbackPdf(id).subscribe((response) => {
+        const link = document.createElement('a');
+        link.href = response.fileDownloadUri;
+        link.target = '_blank';
+        link.download = response.fileName;
+        link.click();
+        link.remove();
+      })
     );
   }
 

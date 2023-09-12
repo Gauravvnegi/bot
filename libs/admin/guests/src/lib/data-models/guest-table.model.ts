@@ -9,6 +9,7 @@ import {
 } from '../../../../reservation/src/lib/models/reservation-table.model';
 import { EntityState } from '@hospitality-bot/admin/shared';
 import { DateService } from '@hospitality-bot/shared/utils';
+import { GuestListResponse, GuestType } from '../types/guest.type';
 
 export interface IDeserializable {
   deserialize(input: any, hotelNationality: string): this;
@@ -20,7 +21,7 @@ export class GuestTable implements IDeserializable {
   entityStateCounts: EntityState<string>;
   records: GuestData[];
 
-  deserialize(input: any) {
+  deserialize(input: GuestListResponse) {
     this.records = input.records.map((record) =>
       new GuestData().deserialize(record)
     );
@@ -48,25 +49,28 @@ export class GuestData {
   status: boolean;
   type: string;
 
-  deserialize(input) {
-    const contact = input['contactDetails'];
+  deserialize(input: GuestType) {
+    const contact = input.contactDetails;
     Object.assign(this, {
-      age: input['age'],
+      age: input.age,
       mobileNumber:
-        contact['cc'] && contact['contactNumber']
-          ? contact['cc'] + '-' + contact['contactNumber']
+        contact.cc && contact.contactNumber
+          ? contact.cc + '-' + contact.contactNumber
           : '',
-      email: contact['emailId'],
-      name: input['firstName'] + ' ' + (input['lastName'] ?? ''),
-      id: input['id'],
-      isVerified: input['isVerified'],
-      status: input['status'],
-      type: input['type'],
-      code: input['code'],
-      dob: input['dateOfBirth'],
-      created: input['created'],
-      dobString: DateService.getDateMDY(input['dateOfBirth']),
-      createdString: DateService.getDateMDY(input['created']),
+      email: contact.emailId,
+      name:
+        input?.firstName || input?.lastName
+          ? input?.firstName + ' ' + (input?.lastName ?? '')
+          : '',
+      id: input.id,
+      isVerified: input.isVerified,
+      status: input.status,
+      type: input.type,
+      code: input.code,
+      dob: input.dateOfBirth,
+      created: input.created,
+      dobString: DateService.getDateMDY(input.dateOfBirth),
+      createdString: DateService.getDateMDY(input.created),
     });
     return this;
   }

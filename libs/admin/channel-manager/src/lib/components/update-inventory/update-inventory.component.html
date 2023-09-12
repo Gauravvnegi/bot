@@ -300,11 +300,12 @@
     <hospitality-bot-form-action
       class="full-width"
       [loading]="loading"
+      [disabled]="
+        loading || loadingError || !(!isRoomsEmpty && allRoomTypes?.length)
+      "
       [config]="{
         preHide: true,
-        postLabel: 'Save',
-        postDisable:
-          loading || loadingError || !(!isRoomsEmpty && allRoomTypes?.length)
+        postLabel: 'Save'
       }"
       (onPostAction)="handleSave()"
       #fa

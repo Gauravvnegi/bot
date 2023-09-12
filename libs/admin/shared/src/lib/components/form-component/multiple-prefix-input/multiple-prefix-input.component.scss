@@ -27,10 +27,11 @@
   }
 }
 
-:host ::ng-deep .p-float-label input.p-filled ~ label {
-  top: -2px !important;
-}
-
-:host ::ng-deep .p-float-label input:focus ~ label {
-  top: -2px !important;
+:host ::ng-deep {
+  .p-float-label input.p-filled ~ label,
+  .p-float-label input:focus ~ label,
+  .p-float-label input.ng-touched ~ label {
+    top: -2px !important;
+    background-color: white;
+  }
 }

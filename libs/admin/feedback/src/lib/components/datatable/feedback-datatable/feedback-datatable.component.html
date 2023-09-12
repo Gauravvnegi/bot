@@ -135,7 +135,7 @@
               <img src="assets/svg/timeout.svg" alt="timeout" />
             </div>
             <div class="guest-name">
-              {{ rowData?.bookingDetails.tableOrRoomNumber }}
+              {{ rowData?.bookingDetails?.tableOrRoomNumber?.roomNumber }}
             </div>
             <div class="guest-phone">{{ rowData?.outlet }}</div>
           </td>
@@ -356,11 +356,11 @@
             </p-tableCheckbox>
           </td>
           <td>
-            <div [roomStatus]="rowData.roomStatus">
+            <div [roomStatus]="rowData?.tableOrRoomNumber?.status">
               <div>
-                {{ rowData?.tableOrRoomNumber || '--' }}&nbsp;-&nbsp;{{
-                  rowData?.roomType || '--'
-                }}
+                {{
+                  rowData?.tableOrRoomNumber?.roomNumber || '--'
+                }}&nbsp;-&nbsp;{{ rowData?.tableOrRoomNumber?.type || '--' }}
               </div>
             </div>
           </td>
@@ -396,7 +396,9 @@
                   </div>
                   <ng-container
                     *ngFor="
-                      let service of rowData?.getNegativeRatedService();
+                      let service of rowData?.getNegativeRatedService
+                        ? rowData?.getNegativeRatedService()
+                        : [];
                       let i = index
                     "
                   >

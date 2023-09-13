@@ -117,30 +117,33 @@ export class BookingInfoComponent implements OnInit {
       toDateControl.setValue(endTime);
 
       fromDateControl.valueChanges.subscribe((res) => {
-        const maxToLimit = new Date(res);
-        this.fromDateValue = new Date(maxToLimit);
-        // Check if fromDate is greater than or equal to toDate before setting toDateControl
-        maxToLimit.setDate(maxToLimit.getDate() + 1);
-        if (maxToLimit >= this.toDateValue) {
-          // Calculate the date for one day later
-          const nextDayTime = moment(maxToLimit).unix() * 1000;
-          toDateControl.setValue(nextDayTime); // Set toDateControl to one day later
-        }
-        this.updateDateDifference();
-        this.minToDate = new Date(maxToLimit); // Create a new date object
-        this.minToDate.setDate(maxToLimit.getDate());
-        this.formService.reservationDate.next(res);
-
-        if (this.roomControls.valid) {
-          this.getSummary.emit();
+        if (res) {
+          const maxToLimit = new Date(res);
+          this.fromDateValue = new Date(maxToLimit);
+          // Check if fromDate is greater than or equal to toDate before setting toDateControl
+          maxToLimit.setDate(maxToLimit.getDate() + 1);
+          if (maxToLimit >= this.toDateValue) {
+            // Calculate the date for one day later
+            const nextDayTime = moment(maxToLimit).unix() * 1000;
+            toDateControl.setValue(nextDayTime); // Set toDateControl to one day later
+          }
+          this.updateDateDifference();
+          this.minToDate = new Date(maxToLimit); // Create a new date object
+          this.minToDate.setDate(maxToLimit.getDate());
+          this.formService.reservationDate.next(res);
+          if (this.roomControls.valid) {
+            this.getSummary.emit();
+          }
         }
       });
 
       toDateControl.valueChanges.subscribe((res) => {
-        this.toDateValue = new Date(res);
-        this.updateDateDifference();
-        if (this.roomControls.valid) {
-          this.getSummary.emit();
+        if (res) {
+          this.toDateValue = new Date(res);
+          this.updateDateDifference();
+          if (this.roomControls.valid) {
+            this.getSummary.emit();
+          }
         }
       });
     }
@@ -179,17 +182,7 @@ export class BookingInfoComponent implements OnInit {
         res === 'OTA' && this.configData
           ? this.configData.source.filter((item) => item.value === res)[0].type
           : [];
-      if (res === 'OTA') {
-        sourceNameControl.clearValidators();
-        sourceNameControl.setValidators([Validators.required]);
-      } else {
-        sourceNameControl.clearValidators();
-        sourceNameControl.updateValueAndValidity();
-        sourceNameControl.setValidators([
-          Validators.required,
-          Validators.maxLength(60),
-        ]);
-      }
+      sourceNameControl.clearValidators();
       sourceNameControl.reset();
     });
 

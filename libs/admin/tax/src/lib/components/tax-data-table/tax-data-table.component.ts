@@ -158,7 +158,7 @@ export class TaxDataTableComponent extends BaseDatatableComponent
     const config: QueryConfig = {
       params: this.adminUtilityService.makeQueryParams([
         ...this.globalQueries,
-        { order: 'DESC' },
+        { order: 'DESC', entityId: this.entityId },
         ...this.selectedRows.map((item) => ({ ids: item.id })),
       ]),
     };

@@ -179,16 +179,19 @@
 }
 
 .guestComment {
-  @include flex-space-between;
-  width: 313px;
+  @include flex-space-between-cen-Algn;
+  width: 43%;
+  min-width: 43%;
+  align-items: center;
   margin: 14.6px 7px 17.4px 14px;
   padding: 8px 8px 8px 8px;
   border-radius: 10px;
   box-shadow: 0 3px 6px 0 $boxShadow;
   background: $white;
+  gap: 1em;
   .time {
+    width: 7em;
     font-size: 10px;
-    padding: 0 10px;
     letter-spacing: 0.6px;
     text-align: right;
     color: $grayLight;
@@ -204,25 +207,24 @@
   }
   .userImage {
     @include flex-all-center;
-
     width: 35px;
-    padding: 8px 6px;
+    min-width: 35px;
+    height: 35px;
     border-radius: 100%;
-    background-color: $dark-warning;
+    background-color: #fc9d03;
     margin-left: 2px;
   }
 }
 
 .userComments {
   @include flex-space-between-cen-Algn;
-  width: 313px;
+  width: 43%;
   margin: 14.6px 7px 17.4px 14px;
   padding: 8px 8px 8px 8px;
   border-radius: 10px;
   box-shadow: 0 3px 6px 0 rgba(97, 115, 244, 0.05);
   background: $chat-background;
   .time {
-    width: 47px;
     height: 13px;
     font-size: 10px;
     letter-spacing: 0.6px;
@@ -389,7 +391,7 @@
     border-radius: 10px;
   }
   &__ratings {
-    height: 367px;
+    height: fit-content;
     margin: 15px 7px 5px 12px;
     padding: 20px 0 20px 25px;
     background-color: $message-background;

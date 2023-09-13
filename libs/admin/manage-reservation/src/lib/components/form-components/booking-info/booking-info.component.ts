@@ -35,7 +35,7 @@ export class BookingInfoComponent implements OnInit {
   @Output() getSummary: EventEmitter<any> = new EventEmitter<any>();
 
   configData: BookingConfig;
-
+  editMode: boolean = false;
   // agentSource = false;
 
   entityId: string;
@@ -59,15 +59,6 @@ export class BookingInfoComponent implements OnInit {
     this.entityId = this.globalFilterService.entityId;
     this.getCountryCode();
     this.initDates();
-
-    // listening changes after the form is created for continue reservation.
-    this.$susbcription.add(
-      this.formService.setInitialDates.subscribe((res) => {
-        if (res !== null) {
-          this.initDates();
-        }
-      })
-    );
     this.listenForSourceChanges();
   }
 
@@ -183,12 +174,15 @@ export class BookingInfoComponent implements OnInit {
           ? this.configData.source.filter((item) => item.value === res)[0].type
           : [];
       sourceNameControl.clearValidators();
-      sourceNameControl.reset();
+      if (!this.editMode) {
+        sourceNameControl.reset();
+      }
     });
 
     this.$susbcription.add(
       this.formService.sourceData.subscribe((res) => {
-        if (res) {
+        if (res && this.configData) {
+          this.editMode = true;
           sourceControl.setValue(res.source);
           sourceNameControl.setValue(res.sourceName);
         }

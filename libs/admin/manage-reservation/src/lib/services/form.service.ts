@@ -4,7 +4,6 @@ import { distinctUntilChanged } from 'rxjs/operators';
 import { ReservationTableValue } from '../constants/reservation-table';
 import { SelectedEntity } from '../types/reservation.type';
 import {
-  InitialFormData,
   OutletFormData,
   RoomReservationFormData,
   SourceData,
@@ -17,12 +16,6 @@ import { GuestInfo } from '../models/reservations.model';
 })
 export class FormService {
   dateDifference = new BehaviorSubject(1);
-
-  setInitialDates = new BehaviorSubject<String>(null);
-
-  initialData: BehaviorSubject<InitialFormData> = new BehaviorSubject<
-    InitialFormData
-  >({});
 
   guestInformation: BehaviorSubject<GuestInfo> = new BehaviorSubject<GuestInfo>(
     null

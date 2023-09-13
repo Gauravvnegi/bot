@@ -144,7 +144,7 @@ export class UserList {
     input?.forEach((item) => {
       if (
         item.userCategoryPermission.filter(
-          (permission) => permission.department === department
+          (permission) => permission?.department === department
         ).length
       )
         this.records.push(new User().deserialize(item, department));

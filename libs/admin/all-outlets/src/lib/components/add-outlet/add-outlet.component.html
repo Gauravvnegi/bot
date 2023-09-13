@@ -96,6 +96,15 @@
           path="static-content/room-types"
         ></hospitality-bot-custom-file-upload>
       </div>
+      <hospitality-bot-input
+        label="Short Description"
+        class="full-width"
+        controlName="shortDescription"
+        maxLength="120"
+        [props]="{
+          placeholder: 'Enter Short Description'
+        }"
+      ></hospitality-bot-input>
       <div class="des-template">
         <div class="des-template__label">Description</div>
         <div class="des-template__input">

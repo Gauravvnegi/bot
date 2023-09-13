@@ -87,7 +87,7 @@ export class AddReservationComponent extends BaseReservationComponent
         to: ['', Validators.required],
         reservationType: ['', Validators.required],
         source: ['', Validators.required],
-        sourceName: [''],
+        sourceName: ['', [Validators.required, Validators.maxLength(60)]],
         marketSegment: ['', Validators.required],
       }),
       offerId: [''],
@@ -110,14 +110,9 @@ export class AddReservationComponent extends BaseReservationComponent
           this.getSummaryData();
         }
 
-        // Reset summary when all items are removed from roomArray.
+        // Reset form data when all items are removed from roomArray.
         if (res[res.length - 1].roomTypeId === null) {
-          this.summaryData = new SummaryData().deserialize();
-          this.occupancyDetails = {
-            adultCount: 0,
-            childCount: 0,
-            roomCount: 0,
-          };
+          this.resetFormData();
         }
       });
 
@@ -330,6 +325,17 @@ export class AddReservationComponent extends BaseReservationComponent
     );
     this.occupancyDetails = totalValues;
     // set occupancy details to display in summary.
+  }
+
+  resetFormData() {
+    this.summaryData = new SummaryData().deserialize();
+    this.occupancyDetails = {
+      adultCount: 0,
+      childCount: 0,
+      roomCount: 0,
+    };
+    this.inputControls.offerId.reset();
+    this.offersList.records = [];
   }
 
   /**

@@ -92,10 +92,23 @@ export class FeedbackDetailModalComponent implements OnInit, OnDestroy {
           this.userPermissions = new Departmentpermissions().deserialize(
             response.userCategoryPermission
           );
-          this.assigneeList = new UserList().deserialize(
-            [response, ...response.childUser],
-            this.data.feedback.departmentName
-          );
+          this.assigneeList =
+            new UserList().deserialize(
+              [response, ...(response.childUser ?? [])],
+              this.data.feedback.departmentName
+            ) ?? [];
+
+          if (!this.assigneeList?.length) {
+            const data = this.data.feedback.userName.split(' ');
+            this.assigneeList = [
+              {
+                firstName: data[0],
+                lastName: data[1],
+                id: this.data.feedback.userId,
+              },
+            ];
+          }
+
           this.feedbackFG?.patchValue({ assignee: this.data.feedback?.userId });
         })
     );
@@ -118,14 +131,12 @@ export class FeedbackDetailModalComponent implements OnInit, OnDestroy {
       queryObj: this._adminUtilityService.makeQueryParams(queries),
     };
     this.$subscription.add(
-      this.tableService.exportCSV(config).subscribe(
-        (response) => {
-          FileSaver.saveAs(
-            response,
-            `Feedback_export_${new Date().getTime()}.csv`
-          );
-        }
-      )
+      this.tableService.exportCSV(config).subscribe((response) => {
+        FileSaver.saveAs(
+          response,
+          `Feedback_export_${new Date().getTime()}.csv`
+        );
+      })
     );
   }
 
@@ -152,7 +163,7 @@ export class FeedbackDetailModalComponent implements OnInit, OnDestroy {
           this.cardService.$assigneeChange.next({ status: true });
           this.refreshFeedbackData();
         },
-        ({ error }) => { }
+        ({ error }) => {}
       );
   }
 
@@ -208,7 +219,7 @@ export class FeedbackDetailModalComponent implements OnInit, OnDestroy {
           this.feedbackFG.patchValue({ comment: '' });
           this.refreshFeedbackData();
         },
-        ({ error }) => { }
+        ({ error }) => {}
       );
   }
 
@@ -292,7 +303,7 @@ export class FeedbackDetailModalComponent implements OnInit, OnDestroy {
           link.click();
           link.remove();
         },
-        ({ error }) =>{}
+        ({ error }) => {}
       )
     );
   }
@@ -305,20 +316,19 @@ export class FeedbackDetailModalComponent implements OnInit, OnDestroy {
     this.$subscription.add(
       this.cardService
         .updateFeedbackAssignee(this.data.feedback.departmentId, event.value)
-        .subscribe(
-          (response) => {
-            this.cardService.$assigneeChange.next({ status: true });
-            this.snackbarService
-              .openSnackBarWithTranslate(
-                {
-                  translateKey: 'messages.SUCCESS.ASSIGNEE_UPDATED',
-                  priorityMessage: 'Assignee updated.',
-                },
-                '',
-                { panelClass: 'success' }
-              )
-              .subscribe();
-          })
+        .subscribe((response) => {
+          this.cardService.$assigneeChange.next({ status: true });
+          this.snackbarService
+            .openSnackBarWithTranslate(
+              {
+                translateKey: 'messages.SUCCESS.ASSIGNEE_UPDATED',
+                priorityMessage: 'Assignee updated.',
+              },
+              '',
+              { panelClass: 'success' }
+            )
+            .subscribe();
+        })
     );
   }
 

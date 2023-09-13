@@ -215,16 +215,17 @@ export class BookingSummaryComponent implements OnInit {
       {
         label: 'Continue Reservation',
         onClick: () => {
-          this.router.navigate(
-            [
-              `/pages/efrontdesk/reservation/${manageReservationRoutes.addReservation.route}`,
-            ],
-            { replaceUrl: true }
-          );
-          // this.handleInitForm.emit();
-          this.parentFormGroup.reset();
-          this.handleInitForm.emit();
-          this.initDefaultData();
+          // Route but don't change location
+          this.router
+            .navigateByUrl('/pages/efrontdesk/reservation', {
+              skipLocationChange: true,
+            })
+            .then(() => {
+              // Route again to reload all form and service values.
+              this.router.navigate([
+                `/pages/efrontdesk/reservation/${manageReservationRoutes.addReservation.route}`,
+              ]);
+            });
           this.modalService.close();
         },
         variant: 'outlined',
@@ -250,22 +251,6 @@ export class BookingSummaryComponent implements OnInit {
     this.snackbarService.openSnackBarAsText('Confirmation number copied', '', {
       panelClass: 'success',
     });
-  }
-
-  initDefaultData() {
-    this.$subscription.add(
-      this.formService.initialData.subscribe((res) => {
-        if (res) {
-          this.inputControls.paymentMethod.patchValue({
-            cashierFirstName: res.cashierFirstName,
-            cashierLastName: res.cashierLastName,
-            currency: res.currency,
-            totalPaidAmount: 0,
-          });
-        }
-      })
-    );
-    this.formService.setInitialDates.next('');
   }
 
   get inputControls() {

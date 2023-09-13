@@ -51,7 +51,6 @@ export class TaxDataTableComponent extends BaseDatatableComponent
   ) {
     super(fb, tabFilterService);
     const { navRoutes } = taxRoutes['tax'];
-    navRoutes[1].isDisabled = true;
     this.navRoutes = navRoutes;
   }
 
@@ -158,7 +157,7 @@ export class TaxDataTableComponent extends BaseDatatableComponent
     const config: QueryConfig = {
       params: this.adminUtilityService.makeQueryParams([
         ...this.globalQueries,
-        { order: 'DESC' },
+        { order: 'DESC', entityId: this.entityId },
         ...this.selectedRows.map((item) => ({ ids: item.id })),
       ]),
     };

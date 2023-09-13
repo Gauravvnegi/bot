@@ -35,7 +35,7 @@
       padding: 5.6px 12.8px 6.4px 8px;
       opacity: 0.1;
       border-radius: 14px;
-      background-color:  #0030b51a;
+      background-color: #0030b51a;
     }
 
     .feedback-container {
@@ -380,7 +380,7 @@
     border-radius: 10px;
   }
   &__ratings {
-    height: 367px;
+    height: fit-content;
     margin: 15px 15px 5px 12px;
     padding: 20px 0 20px 25px;
     background-color: $whiteDeep;
@@ -606,18 +606,19 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 313px;
+  width: 43%;
+  min-width: 43%;
   margin: 14.6px 7px 17.4px 14px;
   padding: 8px 8px 8px 8px;
   border-radius: 10px;
   box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.2);
   background: $white;
   .time {
+    width: 7em;
     font-size: 10px;
     letter-spacing: 0.6px;
     text-align: right;
     color: $grayLight;
-    padding: 0 10px;
   }
   .comment {
     display: flex;

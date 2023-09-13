@@ -118,7 +118,7 @@ export class RestaurantReservationComponent extends BaseReservationComponent
         reservationType: ['', Validators.required],
         status: ['', Validators.required],
         source: ['', Validators.required],
-        sourceName: [''],
+        sourceName: ['', [Validators.required, Validators.maxLength(60)]],
         marketSegment: ['', Validators.required],
       }),
       orderInformation: this.fb.group({

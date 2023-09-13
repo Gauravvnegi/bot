@@ -102,7 +102,7 @@
             </p>
             <ng-template #feedback>
               <div class="feedback">
-                <div class="wrapper">
+                <div class="wrapper" *ngIf="rowData.message.overAllRating">
                   <div class="overall">
                     <img src="assets/images/overall.png" alt="" />
                   </div>
@@ -121,7 +121,7 @@
                     </div>
                   </div>
                 </div>
-                <div class="feedback__pdf">
+                <div class="feedback__pdf" *ngIf="rowData.message.feedbackPdf">
                   <img
                     src="assets/svg/file-download.svg"
                     alt="download pdf"

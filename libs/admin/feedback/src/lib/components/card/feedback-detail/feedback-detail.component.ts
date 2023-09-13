@@ -85,18 +85,22 @@ export class FeedbackDetailComponent implements OnInit, OnDestroy {
         this.feedbackFG?.patchValue({ assignee: response?.userId });
         if (response) {
           this.refreshFeedbackData(false);
-          this.assigneeList = new UserList().deserialize(
-            [
-              this.userService.userPermissions,
-              ...this.userService.userPermissions.childUser,
-            ],
-            response.departmentName
-          );
+
+          this.assigneeList =
+            new UserList().deserialize(
+              [
+                this.userService?.userPermissions,
+                ...(this.userService?.userPermissions?.childUser ?? []),
+              ],
+              response.departmentName
+            ) ?? [];
           if (!this.assigneeList.length) {
+            const data = response?.userName?.split(' ');
             this.assigneeList = [
               {
-                label: response?.userName,
-                value: response?.userId,
+                firstName: data[0] ?? '',
+                lastName: data[1] ?? '',
+                id: response?.userId,
               },
             ];
           }

@@ -221,9 +221,7 @@ export class BookingSummaryComponent implements OnInit {
             ],
             { replaceUrl: true }
           );
-          // this.handleInitForm.emit();
           this.parentFormGroup.reset();
-          this.handleInitForm.emit();
           this.initDefaultData();
           this.modalService.close();
         },

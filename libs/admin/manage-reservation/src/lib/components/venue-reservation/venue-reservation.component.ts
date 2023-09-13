@@ -90,7 +90,7 @@ export class VenueReservationComponent extends BaseReservationComponent
         to: ['', Validators.required],
         status: ['', Validators.required],
         source: ['', Validators.required],
-        sourceName: [''],
+        sourceName: ['', [Validators.required, Validators.maxLength(60)]],
         marketSegment: ['', Validators.required],
         eventType: ['', [Validators.required]],
       }),

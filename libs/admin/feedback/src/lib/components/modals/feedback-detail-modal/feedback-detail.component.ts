@@ -92,10 +92,23 @@ export class FeedbackDetailModalComponent implements OnInit, OnDestroy {
           this.userPermissions = new Departmentpermissions().deserialize(
             response.userCategoryPermission
           );
-          this.assigneeList = new UserList().deserialize(
-            [response, ...(response.childUser ?? [])],
-            this.data.feedback.departmentName
-          );
+          this.assigneeList =
+            new UserList().deserialize(
+              [response, ...(response.childUser ?? [])],
+              this.data.feedback.departmentName
+            ) ?? [];
+
+          if (!this.assigneeList?.length) {
+            const data = this.data.feedback.userName.split(' ');
+            this.assigneeList = [
+              {
+                firstName: data[0],
+                lastName: data[1],
+                id: this.data.feedback.userId,
+              },
+            ];
+          }
+
           this.feedbackFG?.patchValue({ assignee: this.data.feedback?.userId });
         })
     );

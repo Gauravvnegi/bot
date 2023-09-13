@@ -151,8 +151,8 @@ export class Feedback {
 
   getTableOrRoomNo(feedbackType) {
     return feedbackType === feedback.types.stay
-      ? `Room No/Table No: ${this.tableOrRoomNumber}`
-      : `TNO: ${this.tableOrRoomNumber}`;
+      ? `Room No/Table No: ${this.tableOrRoomNumber?.roomNumber}`
+      : `TNO: ${this.tableOrRoomNumber?.roomNumber}`;
   }
 
   getProfileNickName() {
@@ -301,7 +301,7 @@ export class Guest {
       set({}, 'place', get(input, ['place'], '')),
       set({}, 'spouseBirthDate', get(input, ['spouseBirthDate'], '')),
       set({}, 'updated', get(input, ['updated'], '')),
-      (this.phoneNumber = input.countryCode + ' ' + input.phoneNumber)
+      set({}, 'phoneNumber', get(input, ['phoneNumber'], ''))
     );
     return this;
   }
@@ -508,8 +508,8 @@ export class StayFeedback {
 
   getTableOrRoomNo(feedbackType) {
     return feedbackType === feedback.types.stay
-      ? `Room No/Table No: ${this.tableOrRoomNumber}`
-      : `TNO: ${this.tableOrRoomNumber}`;
+      ? `Room No/Table No: ${this.tableOrRoomNumber?.roomNumber}`
+      : `TNO: ${this.tableOrRoomNumber.roomNumber}`;
   }
 
   getProfileNickName() {

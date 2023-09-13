@@ -70,12 +70,11 @@ export class FeedbackListFilterComponent implements OnInit, OnDestroy {
         .getUserPermission(
           this.feedbackType === '' ? feedback.types.stay : this.feedbackType
         )
-        .subscribe(
-          (response) => {
-            this.assigneeList = response.childUser;
-            this.userService.userPermissions = response;
-          }
-        )
+        .subscribe((response) => {
+          const childUser = response.childUser ?? [];
+          this.assigneeList = childUser;
+          this.userService.userPermissions = { ...response, childUser };
+        })
     );
   }
 

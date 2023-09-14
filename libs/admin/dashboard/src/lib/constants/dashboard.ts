@@ -1,4 +1,4 @@
-import { getNoDataLabel } from "@hospitality-bot/admin/shared";
+import { getNoDataLabel } from '@hospitality-bot/admin/shared';
 
 export const dashboard = {
   images: {
@@ -118,6 +118,9 @@ export const dashboard = {
           titleMarginBottom: 5,
           xPadding: 10,
           yPadding: 10,
+          callbacks: {
+            label: getNoDataLabel,
+          },
         },
         responsive: true,
         elements: {

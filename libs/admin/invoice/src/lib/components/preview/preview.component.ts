@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { InvoiceService } from '../../services/invoice.service';
 import { ActivatedRoute } from '@angular/router';
-import { invoiceRoutes } from '../../constants/routes';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 
 @Component({
@@ -16,6 +15,7 @@ export class PreviewComponent implements OnInit {
   isLoading = true;
   navRoutes = [];
   isInvoiceGenerated = false;
+  failedToLoad = false;
   // items = [
   //   {
   //     label: 'Generate Proforma',
@@ -49,10 +49,16 @@ export class PreviewComponent implements OnInit {
 
   getPreviewUrl() {
     this.loadingPdf = true;
-    this.invoiceService.downloadPDF(this.reservationId).subscribe((res) => {
-      this.previewUrl = res.file_download_url;
-      this.loadingPdf = false;
-    });
+    this.invoiceService.downloadPDF(this.reservationId).subscribe(
+      (res) => {
+        this.previewUrl = res.file_download_url;
+        this.loadingPdf = false;
+      },
+      (error) => {
+        this.loadingPdf = false;
+        this.failedToLoad = true;
+      }
+    );
   }
 
   updateNavRoutes(): void {
@@ -83,7 +89,7 @@ export class PreviewComponent implements OnInit {
   }
 
   handleDownload() {
-    this.invoiceService.handleInvoiceDownload(this.reservationId)
+    this.invoiceService.handleInvoiceDownload(this.reservationId);
   }
 
   handleEmailInvoice() {

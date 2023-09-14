@@ -80,6 +80,11 @@ export type BookingItems = {
     maxChildren: number;
     maxAdult: number;
   };
+  offer?:{
+    id: string;
+    discountedPrice: number;
+    offerType: string;
+  };
   id?: string;
 };
 
@@ -100,6 +105,8 @@ export type BookingItemsSummary = {
   max: number;
   base: number;
   id: string;
+  offerId?: string;
+  discountedPrice?: string;
 };
 
 export type PricingDetails = {
@@ -113,6 +120,7 @@ export type PricingDetails = {
   totalDueAmount: number;
   taxAndFees: number;
   basePrice: number;
+  discountedAmount?: number;
 };
 
 export type SummaryPricing = {

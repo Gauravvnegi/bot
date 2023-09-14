@@ -434,6 +434,7 @@ export class SummaryData {
         ...item?.occupancyDetails,
         ...item?.pricingDetails,
         id: item?.id,
+        offerId: item?.offer?.id ?? null,
       })) ?? [];
     this.items =
       input?.items?.map((item) => ({

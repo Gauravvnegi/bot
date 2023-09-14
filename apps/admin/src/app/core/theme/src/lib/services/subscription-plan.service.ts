@@ -2,8 +2,6 @@ import { Injectable } from '@angular/core';
 import { ModuleNames } from '@hospitality-bot/admin/shared';
 import { ApiService } from 'libs/shared/utils/src/lib/services/api.service';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
-import { customModule } from '../constants/layout';
 import {
   ProductSubscription,
   SettingsMenuItem,
@@ -18,12 +16,7 @@ export class SubscriptionPlanService extends ApiService {
   settings: SettingsMenuItem[];
 
   getSubscriptionPlan(entityId: string): Observable<any> {
-    return this.get(`/api/v1/entity/${entityId}/subscriptions/`).pipe(
-      map((res) => {
-        res.products = [...res.products, customModule.revenueManager];
-        return res;
-      })
-    );
+    return this.get(`/api/v1/entity/${entityId}/subscriptions/`);
   }
 
   initSubscriptionDetails(data) {

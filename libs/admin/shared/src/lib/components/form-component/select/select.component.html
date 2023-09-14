@@ -35,7 +35,11 @@
     [group]="isGroupOptions"
   >
     <ng-template let-option pTemplate="item">
-      <div class="option-items" *ngIf="!option.hidden">
+      <div
+        class="option-items"
+        *ngIf="!option.hidden"
+        [ngStyle]="{ display: option.icon ? 'flex' : 'unset' }"
+      >
         <img
           *ngIf="option.icon"
           [src]="option.icon"
@@ -57,8 +61,11 @@
       </div>
     </ng-template>
 
-    <ng-template let-option pTemplate="selectedItem" [ngClass]="">
-      <div class="option-items">
+    <ng-template let-option pTemplate="selectedItem">
+      <div
+        class="selected-item"
+        [ngStyle]="{ display: option?.icon ? 'flex' : 'unset' }"
+      >
         <div *ngIf="option.icon">
           <img
             [src]="option.icon"

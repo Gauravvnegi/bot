@@ -130,6 +130,7 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
       status: [true],
       name: ['', [Validators.required]],
       imageUrl: [[], [Validators.required]],
+      shortDescription: [''],
       description: ['', [Validators.required]],
       complimentaryAmenities: [[], [Validators.required]],
       paidAmenities: [[]],

@@ -2,6 +2,7 @@ import {
   Component,
   ElementRef,
   EventEmitter,
+  Input,
   OnChanges,
   OnDestroy,
   OnInit,
@@ -42,6 +43,7 @@ export class RoomIteratorComponent extends IteratorComponent
   @Output() refreshData = new EventEmitter();
   @Output() listenChanges = new EventEmitter();
 
+  @Input() reservationId: string;
   fields = roomFields;
 
   entityId: string;
@@ -435,7 +437,7 @@ export class RoomIteratorComponent extends IteratorComponent
    * @param index position at which value is to be removed
    */
   removeField(index: number) {
-    if(!this.itemValues.length){
+    if (!this.itemValues.length) {
       if (this.roomTypeArray.length === 1) {
         this.roomTypeArray.at(0).reset({ value: null, emitEvent: false });
         return;

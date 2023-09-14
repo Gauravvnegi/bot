@@ -131,7 +131,7 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
     this.$selectedEntitySubscription.add(
       this.formService.selectedEntity
         .pipe(
-          distinctUntilChanged((prev, curr) => prev.subType === curr.subType), // Compare subType property for changes
+          distinctUntilChanged((prev, curr) => prev.id === curr.id), // Compare subType property for changes
           tap((res) => {
             this.selectedEntity = res;
           })

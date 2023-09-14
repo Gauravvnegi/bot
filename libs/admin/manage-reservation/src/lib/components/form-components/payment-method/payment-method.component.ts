@@ -54,12 +54,6 @@ export class PaymentMethodComponent implements OnInit {
     this.paymentControls.cashierFirstName.setValue(firstName);
     this.paymentControls.cashierLastName.setValue(lastName);
 
-    // Set initial data for continue reservation after confirm booking.
-    this.formService.initialData.next({
-      ...this.formService.initialData.getValue(), // Get the current values
-      cashierFirstName: firstName,
-      cashierLastName: lastName,
-    });
   }
 
   addFormGroup() {
@@ -90,12 +84,6 @@ export class PaymentMethodComponent implements OnInit {
           value,
         }));
         this.controlContainer.control.get('paymentMethod').patchValue({
-          currency: this.currencies[0].value,
-        });
-
-        // Set initial data for continue reservation after confirm booking.
-        this.formService.initialData.next({
-          ...this.formService.initialData.getValue(), // Get the current values
           currency: this.currencies[0].value,
         });
       }

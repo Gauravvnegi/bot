@@ -212,6 +212,7 @@ export class AdminDocumentsDetailsComponent implements OnInit {
       (data) => data.id === this.selectedGuestId
     )[0];
     const name = `${guest.firstName}_${guest.lastName}`;
+
     documents.forEach((doc) => {
       urls.push(doc.frontUrl);
       fileNames.push(`${name}_${doc.documentType}_frontURL`);
@@ -220,27 +221,41 @@ export class AdminDocumentsDetailsComponent implements OnInit {
         fileNames.push(`${name}_${doc.documentType}_backURL`);
       }
     });
+
     const zipFile = new JSZip();
     let count = 0;
+
+    // Function to fetch and add files to the zip
+    async function fetchAndAddFile(url, fileName) {
+      try {
+        const response = await fetch(url);
+        if (!response.ok) {
+          throw new Error(
+            `Failed to fetch ${url}: ${response.status} ${response.statusText}`
+          );
+        }
+        const data = await response.arrayBuffer();
+        zipFile.file(fileName, data);
+        count++;
+
+        if (count === urls.length) {
+          const content = await zipFile.generateAsync({ type: 'blob' });
+          saveAs(content, `${guest.firstName}_${guest.lastName}.zip`);
+        }
+      } catch (err) {
+        this.snackbarService.openSnackBarAsText(err);
+        console.error(err);
+      }
+    }
+
+    // Fetch and add files
     urls.forEach((url, i) => {
       let fileName = urls[i];
       const index = fileName.lastIndexOf('/');
       fileName = fileName.slice(index + 1);
       fileName = decodeURIComponent(fileName);
       fileName = `${fileNames[i]}_${fileName}`;
-      JSZipUtils.getBinaryContent(url, (err, data) => {
-        if (err) {
-          this.snackbarService.openSnackBarAsText(err);
-          throw err;
-        }
-        zipFile.file(fileName, data, { binary: true });
-        count++;
-        if (count === urls.length) {
-          zipFile.generateAsync({ type: 'blob' }).then((content) => {
-            saveAs(content, `${guest.firstName}_${guest.lastName}.zip`);
-          });
-        }
-      });
+      fetchAndAddFile(url, fileName);
     });
   }
 

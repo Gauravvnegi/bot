@@ -19,10 +19,7 @@ import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.
 import { DialogService } from 'primeng/dynamicdialog';
 import { Subscription } from 'rxjs';
 import { outletBusinessRoutes } from '../../constants/routes';
-import {
-  MenuList,
-  OutletFormData
-} from '../../models/outlet.model';
+import { MenuList, OutletFormData } from '../../models/outlet.model';
 import { Services } from '../../models/services';
 import { OutletFormService } from '../../services/outlet-form.service';
 import { OutletService } from '../../services/outlet.service';
@@ -132,6 +129,7 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
       paidServiceIds: [[]],
       menuIds: [[]],
       foodPackageIds: [[]],
+      shortDescription: [''],
 
       socialPlatforms: [[]],
       maximumOccupancy: [''],
@@ -201,13 +199,13 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
         this.getServices('PAID');
     }
   }
-  
+
   /**
    * @Function filterValues
    * @description filters the values
-   * @param control 
-   * @param values 
-   * @returns 
+   * @param control
+   * @param values
+   * @returns
    */
   filterValues(control, values) {
     const value = control?.value;

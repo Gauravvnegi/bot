@@ -212,6 +212,7 @@ export class UserProfileComponent implements OnInit {
           this.userForm.enable();
         } else {
           this.userForm.disable();
+          this.userForm.get('profileUrl').enable();
           this.userForm.get('firstName').enable();
           this.userForm.get('lastName').enable();
           this.userForm.get('cc').enable();

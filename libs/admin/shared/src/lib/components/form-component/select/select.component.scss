@@ -1,10 +1,27 @@
 @import '../form.component.scss';
 
-:host ::ng-deep .option-items {
-  display: inline-flex;
+@mixin option() {
+  width: 100%;
   align-items: center;
   gap: 4%;
-  // overflow: hidden;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+:host ::ng-deep .option-items {
+  @include option();
+  letter-spacing: 0.84px;
+  overflow: visible;
+  word-break: break-word;
+  text-overflow: unset;
+  white-space: normal;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.selected-item {
+  @include option();
 }
 
 :host ::ng-deep .p-dropdown-empty-message {
@@ -15,6 +32,7 @@
   width: 2em;
   height: 2em;
 }
+
 :host ::ng-deep .selected-image {
   width: 3em;
   height: 3em;

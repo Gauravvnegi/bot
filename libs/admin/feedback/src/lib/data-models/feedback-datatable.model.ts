@@ -68,7 +68,7 @@ export class Feedback {
   remarks: Remark[];
   timeOut: boolean;
   feedbackId: string;
-  tableOrRoomNumber: string;
+  tableOrRoomNumber;
   deserialize(input, outlets) {
     this.remarks = new Array<Remark>();
     const bookingDetails = get(input, ['bookingDetails']);
@@ -151,8 +151,8 @@ export class Feedback {
 
   getTableOrRoomNo(feedbackType) {
     return feedbackType === feedback.types.stay
-      ? `Room No/Table No: ${this.tableOrRoomNumber}`
-      : `TNO: ${this.tableOrRoomNumber}`;
+      ? `Room No/Table No: ${this.tableOrRoomNumber?.roomNumber}`
+      : `TNO: ${this.tableOrRoomNumber?.roomNumber}`;
   }
 
   getProfileNickName() {
@@ -301,7 +301,7 @@ export class Guest {
       set({}, 'place', get(input, ['place'], '')),
       set({}, 'spouseBirthDate', get(input, ['spouseBirthDate'], '')),
       set({}, 'updated', get(input, ['updated'], '')),
-      (this.phoneNumber = input.countryCode + ' ' + input.phoneNumber)
+      set({}, 'phoneNumber', get(input, ['phoneNumber'], ''))
     );
     return this;
   }
@@ -404,7 +404,7 @@ export class StayFeedback {
   services: Service[];
   session: string;
   size: number;
-  tableOrRoomNumber: string;
+  tableOrRoomNumber;
   transactionalService: string;
   outlet: string;
   status: string;
@@ -508,8 +508,8 @@ export class StayFeedback {
 
   getTableOrRoomNo(feedbackType) {
     return feedbackType === feedback.types.stay
-      ? `Room No/Table No: ${this.tableOrRoomNumber}`
-      : `TNO: ${this.tableOrRoomNumber}`;
+      ? `Room No/Table No: ${this.tableOrRoomNumber?.roomNumber}`
+      : `TNO: ${this.tableOrRoomNumber.roomNumber}`;
   }
 
   getProfileNickName() {

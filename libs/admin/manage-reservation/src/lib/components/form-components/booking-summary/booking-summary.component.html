@@ -174,7 +174,10 @@
       {{ bookingItem?.roomTypeLabel }}
       <span class="room-count"> x{{ bookingItem?.roomCount }} </span>
     </div>
-    <div class="bk-summary_offerInfo" *ngIf="bookingType === 'ROOM_TYPE'">
+    <div
+      class="bk-summary_offerInfo"
+      *ngIf="bookingType === 'ROOM_TYPE' && index === undefined"
+    >
       <ng-container
         *ngIf="
           inputControls?.offerId.value && selectedOffer?.name;
@@ -235,12 +238,26 @@
         {{ bookingItem?.basePrice | currency: 'INR' }}
       </span>
     </p>
-    <p class="bk-summary_priceInfo_taxFair" *ngIf="summaryData?.offerAmount">
+    <p
+      class="bk-summary_priceInfo_taxFair"
+      *ngIf="summaryData?.offerAmount && index === undefined"
+    >
       <span class="bk-summary_priceInfo_perNight_label"
         >Discount<i class="fa fa-info-circle" aria-hidden="true"></i
       ></span>
       <span class="bk-summary_priceInfo_perNight_amount">{{
         summaryData?.offerAmount | currency: 'INR'
+      }}</span>
+    </p>
+    <p
+      class="bk-summary_priceInfo_taxFair"
+      *ngIf="bookingItem?.discountedAmount && index !== undefined"
+    >
+      <span class="bk-summary_priceInfo_perNight_label"
+        >Discount<i class="fa fa-info-circle" aria-hidden="true"></i
+      ></span>
+      <span class="bk-summary_priceInfo_perNight_amount">{{
+        bookingItem?.discountedAmount | currency: 'INR'
       }}</span>
     </p>
     <p class="bk-summary_priceInfo_taxFair">

@@ -135,7 +135,7 @@
               <img src="assets/svg/timeout.svg" alt="timeout" />
             </div>
             <div class="guest-name">
-              {{ rowData?.bookingDetails.tableOrRoomNumber }}
+              {{ rowData?.bookingDetails?.tableOrRoomNumber?.roomNumber }}
             </div>
             <div class="guest-phone">{{ rowData?.outlet }}</div>
           </td>
@@ -356,11 +356,11 @@
             </p-tableCheckbox>
           </td>
           <td>
-            <div [roomStatus]="rowData.roomStatus">
+            <div [roomStatus]="rowData?.tableOrRoomNumber?.status">
               <div>
-                {{ rowData?.tableOrRoomNumber || '--' }}&nbsp;-&nbsp;{{
-                  rowData?.roomType || '--'
-                }}
+                {{
+                  rowData?.tableOrRoomNumber?.roomNumber || '--'
+                }}&nbsp;-&nbsp;{{ rowData?.tableOrRoomNumber?.type || '--' }}
               </div>
             </div>
           </td>
@@ -396,7 +396,9 @@
                   </div>
                   <ng-container
                     *ngFor="
-                      let service of rowData?.getNegativeRatedService();
+                      let service of rowData?.getNegativeRatedService
+                        ? rowData?.getNegativeRatedService()
+                        : [];
                       let i = index
                     "
                   >
@@ -478,14 +480,28 @@
               </div>
             </div>
           </td>
-          <td class="guest">
+          <td class="guest cell-content">
             <div class="guest-name">{{ rowData?.guest.getFullName() }}</div>
-            <a href="tel:{{ rowData?.guest.getPhoneNumber() }}">
-              <div class="guest-phone">
-                {{ rowData?.guest.getPhoneNumber() }}
-              </div>
-            </a>
-            <div class="guest-phone">{{ rowData?.guest.emailId }}</div>
+
+            <div class="primary-text" *ngIf="rowData?.guest?.phoneNumber">
+              <a
+                (click)="$event.stopPropagation()"
+                href="tel:{{
+                  rowData?.guest?.countryCode + rowData?.guest?.phoneNumber
+                }}"
+                >{{ rowData?.guest?.countryCode }}-{{
+                  rowData?.guest?.phoneNumber
+                }}</a
+              >
+            </div>
+            <div class="primary-text" *ngIf="rowData?.guest?.emailId">
+              <a
+                (click)="$event.stopPropagation()"
+                href="mailto: {{ rowData?.guest?.emailId }}"
+              >
+                {{ rowData?.guest?.emailId }}</a
+              >
+            </div>
           </td>
           <td class="package">
             <p class="arrival-date">
@@ -545,6 +561,7 @@
       description: 'No data available to view',
       imageSrc: 'assets/images/empty-table-feedback.png'
     }"
+    [isLoading]="loading"
   >
     <ng-container [ngTemplateOutlet]="tabFilter"> </ng-container>
   </hospitality-bot-empty-table>

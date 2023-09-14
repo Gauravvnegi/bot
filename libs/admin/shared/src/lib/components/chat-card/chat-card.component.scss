@@ -236,11 +236,12 @@
   width: 100%;
 }
 .feedback_time {
-  height: 115px;
+  position: absolute;
   display: flex;
   flex-direction: column-reverse;
   justify-content: space-between;
   align-items: flex-end;
+  right: 0;
 }
 
 .time-left {

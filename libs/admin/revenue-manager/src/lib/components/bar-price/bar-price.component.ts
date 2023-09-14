@@ -106,6 +106,7 @@ export class BarPriceComponent implements OnInit {
       barPrices: this.getValuesArrayControl(),
     });
     this.addRoomsControl();
+    this.useForm.markAllAsTouched();
   }
 
   addRoomsControl() {

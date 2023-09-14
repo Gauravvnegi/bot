@@ -4,25 +4,25 @@ import { GuestMemberForm, GuestType } from '../types/guest.type';
 export class GuestFactory {
   static mapFormData(formData: GuestMemberForm) {
     return {
-      firstName: formData['firstName'] ?? '',
-      lastName: formData['lastName'] ?? '',
+      firstName: formData.firstName ?? '',
+      lastName: formData.lastName ?? '',
       contactDetails: {
-        cc: formData['cc'] ?? '',
-        contactNumber: formData['phoneNo'] ?? '',
-        emailId: formData['email'] ?? '',
+        cc: formData.cc ?? '',
+        contactNumber: formData.phoneNo ?? '',
+        emailId: formData.email ?? '',
       },
-      age: +formData['age'] ?? '',
-      companyId: formData['company'] ?? '',
-      gender: formData['gender'] ?? '',
-      dateOfBirth: formData['dateOfBirth'] ?? '',
+      age: formData.age ?? '',
+      companyId: formData.company ?? '',
+      gender: formData.gender ?? '',
+      dateOfBirth: formData.dateOfBirth ?? '',
       address: {
-        addressLine1: formData.address['formattedAddress'] ?? '',
-        city: formData.address['city'] ?? '',
-        state: formData.address['state'] ?? '',
-        countryCode: formData.address['country'] ?? '',
-        postalCode: formData.address['postalCode'] ?? '',
+        addressLine1: formData.address.formattedAddress ?? '',
+        city: formData.address.city ?? '',
+        state: formData.address.state ?? '',
+        countryCode: formData.address.countryCode ?? '',
+        postalCode: formData.address.postalCode ?? '',
       },
-    } as GuestType;
+    };
   }
   static patchEditView(form: FormGroup, input: GuestType) {
     const contact = input.contactDetails;

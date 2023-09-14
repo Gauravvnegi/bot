@@ -98,12 +98,6 @@ export type OccupancyDetails = {
   childCount: number;
 };
 
-export type InitialFormData = {
-  cashierFirstName?: string;
-  cashierLastName?: string;
-  currency?: string;
-};
-
 export type SourceData = {
   source: string;
   sourceName: string;

@@ -661,3 +661,7 @@ mat-option {
   right: 0;
   width: 20%;
 }
+
+:host ::ng-deep .mat-select-value {
+  max-width: unset !important;
+}

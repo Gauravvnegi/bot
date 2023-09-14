@@ -90,6 +90,7 @@ export class ServicesDataTableComponent extends BaseDatatableComponent {
     this.cancelRequests$.next();
     this.isRestaurant = event.outletType === 'RESTAURANT' ? true : false;
     this.entityId = event.entityId[0];
+    this.tabFilterIdx = 0;
     this.initTableValue();
   }
 

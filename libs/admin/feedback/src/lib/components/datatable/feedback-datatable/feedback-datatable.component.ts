@@ -144,7 +144,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
       this.loadInitialData([
         ...this.globalQueries,
         { order: sharedConfig.defaultOrder },
-        ...this.getSelectedQuickReplyFilters(),
+        ...this.getSelectedQuickReplyFilters({ key: 'entityState' }),
       ]);
       this.getUserPermission(
         this.feedbackTypeFilterItem[this.feedbackTypeFilterIdx]?.value
@@ -197,7 +197,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
           this.loadInitialData([
             ...this.globalQueries,
             { order: sharedConfig.defaultOrder },
-            ...this.getSelectedQuickReplyFilters(),
+            ...this.getSelectedQuickReplyFilters({ key: 'entityState' }),
           ]);
         }
       })
@@ -220,7 +220,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
             this.loadInitialData([
               ...this.globalQueries,
               { order: sharedConfig.defaultOrder },
-              ...this.getSelectedQuickReplyFilters(),
+              ...this.getSelectedQuickReplyFilters({ key: 'entityState' }),
             ]);
         }
       })
@@ -353,7 +353,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
         [
           ...this.globalQueries,
           { order: sharedConfig.defaultOrder },
-          ...this.getSelectedQuickReplyFilters(),
+          ...this.getSelectedQuickReplyFilters({ key: 'entityState' }),
         ],
         { offset: this.first, limit: this.rowsPerPage }
       ).subscribe(
@@ -418,7 +418,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
       this.loadInitialData([
         ...this.globalQueries,
         { order: sharedConfig.defaultOrder },
-        ...this.getSelectedQuickReplyFilters(),
+        ...this.getSelectedQuickReplyFilters({ key: 'entityState' }),
       ]);
     });
   }
@@ -476,7 +476,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
         entityType: this.selectedTab,
         entityIds: this.setEntityId(),
       },
-      ...this.getSelectedQuickReplyFilters(),
+      ...this.getSelectedQuickReplyFilters({ key: 'entityState' }),
       ...this.selectedRows.map((item) => ({ ids: item.id })),
     ];
     if (
@@ -527,7 +527,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
           feedbackType: this.feedbackType,
           entityType: this.selectedTab,
         },
-        ...this.getSelectedQuickReplyFilters(),
+        ...this.getSelectedQuickReplyFilters({ key: 'entityState' }),
       ]),
     };
 
@@ -653,7 +653,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
       [
         ...this.globalQueries,
         { order: sharedConfig.defaultOrder },
-        ...this.getSelectedQuickReplyFilters(),
+        ...this.getSelectedQuickReplyFilters({ key: 'entityState' }),
       ],
       false
     );

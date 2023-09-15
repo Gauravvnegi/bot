@@ -113,6 +113,7 @@ export class CreateMenuComponent extends OutletBaseComponent implements OnInit {
     this.pageReloadService.disablePageReloadConfirmation();
     this.router.navigate([id], {
       relativeTo: this.route,
+      replaceUrl: true,
     });
   };
 

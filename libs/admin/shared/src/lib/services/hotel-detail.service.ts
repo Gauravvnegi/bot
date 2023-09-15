@@ -6,6 +6,7 @@ import {
   SiteConfig,
 } from '../models/entityConfig.model';
 import { UserResponse } from '../types/user.type';
+import { EntitySubType } from '../types/table.type';
 
 @Injectable({ providedIn: 'root' })
 export class HotelDetailService {
@@ -76,13 +77,13 @@ export class HotelDetailService {
     propertyList = selectedHotel.entities.map((entity) => ({
       label: entity.name,
       value: entity.id,
-      type: entity.type,
+      type: entity.type ? entity.type : EntitySubType.ROOM_TYPE,
     }));
 
     propertyList.unshift({
       label: selectedHotel.name,
       value: selectedHotel.id,
-      type: selectedHotel.type,
+      type: selectedHotel.type ? selectedHotel.type : EntitySubType.ROOM_TYPE,
     });
 
     return propertyList;

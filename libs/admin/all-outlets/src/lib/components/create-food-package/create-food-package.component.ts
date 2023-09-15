@@ -205,6 +205,7 @@ export class CreateFoodPackageComponent extends OutletBaseComponent
     this.pageReloadService.disablePageReloadConfirmation();
     this.router.navigate([id], {
       relativeTo: this.route,
+      replaceUrl: true,
     });
   };
 

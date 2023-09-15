@@ -58,6 +58,35 @@ export class HotelDetailService {
   getentityId() {
     return localStorage.getItem(tokensConfig.entityId);
   }
+
+  /**
+   * @function getPropertyList
+   * @description get the all the properties list
+   * @returns propertyList [{ label : '' , value : '' , type : ''} , {...} , ...}]
+   * @memberof HotelDetailService
+   */
+  getPropertyList() {
+    let propertyList = [];
+    const selectedHotel = this.hotels.find((item) => item.id === this.entityId);
+
+    if (!selectedHotel) {
+      propertyList = [];
+      return;
+    }
+    propertyList = selectedHotel.entities.map((entity) => ({
+      label: entity.name,
+      value: entity.id,
+      type: entity.type,
+    }));
+
+    propertyList.unshift({
+      label: selectedHotel.name,
+      value: selectedHotel.id,
+      type: selectedHotel.type,
+    });
+
+    return propertyList;
+  }
 }
 
 type Sites = UserResponse['sites'][0];

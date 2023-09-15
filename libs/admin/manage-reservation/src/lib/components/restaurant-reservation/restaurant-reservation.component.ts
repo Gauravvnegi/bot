@@ -13,6 +13,7 @@ import {
   Option,
   EntitySubType,
   EntityType,
+  HotelDetailService,
 } from '@hospitality-bot/admin/shared';
 import { SummaryData } from '../../models/reservations.model';
 import { ManageReservationService } from '../../services/manage-reservation.service';
@@ -69,12 +70,12 @@ export class RestaurantReservationComponent extends BaseReservationComponent
     private manageReservationService: ManageReservationService,
     protected activatedRoute: ActivatedRoute,
     private outletService: OutletService,
-    private formService: FormService
+    private formService: FormService,
+    protected hotelDetailService: HotelDetailService
   ) {
-    super(globalFilterService, activatedRoute);
+    super(globalFilterService, activatedRoute, hotelDetailService);
     this.initForm();
   }
-
   ngOnInit(): void {
     this.initDetails();
     this.getMenuItems();
@@ -87,7 +88,7 @@ export class RestaurantReservationComponent extends BaseReservationComponent
 
   initDetails() {
     this.bookingType = EntitySubType.RESTAURANT;
-    this.outletId = this.selectedEntity.id;
+    this.outletId = this.selectedEntity.value;
     this.fields = menuItemFields;
     this.outletItems = [OutletItems.MENU_ITEM, OutletItems.FOOD_PACKAGE];
     this.expandAccordion = this.formService.enableAccordion;

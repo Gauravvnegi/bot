@@ -284,9 +284,16 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
    * @function editReservation To navigate to the edit page
    */
   editReservation(id: string) {
-    this.router.navigate([
-      `/pages/efrontdesk/reservation/${manageReservationRoutes.editReservation.route}/${id}`,
-    ]);
+    this.router.navigate(
+      [
+        `/pages/efrontdesk/reservation/${manageReservationRoutes.editReservation.route}/${id}`,
+      ],
+      {
+        queryParams: {
+          entityId: this.selectedEntity.id,
+        },
+      }
+    );
   }
 
   /**
@@ -340,6 +347,19 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
       //   this.editReservation(id);
       //   break;
     }
+  }
+
+  createReservation() {
+    this.router.navigate(
+      [
+        `/pages/efrontdesk/reservation/${manageReservationRoutes.addReservation.route}`,
+      ],
+      {
+        queryParams: {
+          entityId: this.selectedEntity.id,
+        },
+      }
+    );
   }
 
   /**

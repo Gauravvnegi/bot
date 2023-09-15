@@ -29,6 +29,7 @@ export class ReservationComponent implements OnInit {
       label: item.label,
       type: item.outletType ? EntityType.OUTLET : EntityType.HOTEL,
       subType: item.outletType ? item.outletType : EntitySubType.ROOM_TYPE,
+      value: item.entityId[0]
     };
   }
 

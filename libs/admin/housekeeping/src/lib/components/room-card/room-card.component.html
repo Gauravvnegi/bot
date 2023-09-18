@@ -1,0 +1,33 @@
+<div class="wrapper">
+  <div class="room">
+    <div class="room-features">
+      <div *ngFor="let feature of roomFeature">
+        <img [src]="feature.url" [alt]="" />
+      </div>
+    </div>
+    <div
+      class="room-status"
+      [ngStyle]="{
+        color: frontOfficeState === 'VACANT' ? '#52b33f' : '#ef1d45'
+      }"
+    >
+      {{ frontOfficeState }}
+    </div>
+  </div>
+
+  <div class="room-number">
+    <div [roomStatus]="status">
+      <div>{{ roomNo || '--' }}&nbsp;-&nbsp;{{ roomType || '---' }}</div>
+    </div>
+  </div>
+
+  <div class="room-state">
+    <hospitality-bot-status-dropdown-toggle
+      [nextStates]="nextStates"
+      (onClick)="handleStatus($event, {})"
+      [state]="status"
+      [recordSetting]="recordSetting"
+    >
+    </hospitality-bot-status-dropdown-toggle>
+  </div>
+</div>

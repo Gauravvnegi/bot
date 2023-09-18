@@ -121,6 +121,7 @@ import { TimerComponent } from './components/timer/timer.component';
 import { SidebarModule } from 'primeng/sidebar';
 
 
+
 @NgModule({
   imports: [
     CommonModule,

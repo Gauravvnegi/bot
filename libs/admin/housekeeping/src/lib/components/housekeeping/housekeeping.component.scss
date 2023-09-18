@@ -1,0 +1,101 @@
+@import 'main';
+
+.card-width {
+  flex-basis: 14.282%;
+  // flex: 1 1 14.28%;
+}
+
+.btn-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1em;
+  margin-bottom: 1em;
+}
+
+.wrapper {
+  @include form-block();
+  row-gap: 0;
+  column-gap: 0;
+  padding: 22px 0;
+}
+
+:host ::ng-deep .p-datatable-tbody {
+  display: flex;
+  flex-wrap: wrap;
+  overflow: hidden;
+  border: 1px solid #e4e4e4;
+  border-top: none;
+}
+
+.icon {
+  cursor: pointer;
+}
+
+.filter {
+  position: relative;
+}
+
+:host ::ng-deep .p-dialog-mask {
+  height: unset !important;
+  width: unset !important;
+  right: 0 !important;
+  left: unset !important;
+  top: 53px !important;
+
+  position: absolute !important;
+}
+
+.info-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2em;
+}
+
+.title {
+  padding: 10px;
+  margin: 5px 0;
+  background-color: aqua;
+}
+
+.circle {
+  width: 1em;
+  height: 1em;
+  border-radius: 50%;
+  display: block;
+}
+
+.room-status {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1em;
+}
+
+.status {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  flex-basis: 45%;
+}
+
+//     width: unset;
+//     height: unset !important;
+//     right: 0;
+//     position: absolute;
+// }
+
+// <style>
+// .p-dialog-mask {
+//     -ms-flex-align: center;
+//     -ms-flex-pack: center;
+//     /* align-items: center; */
+//     background-color: rgba(0,0,0,0);
+//     display: -ms-flexbox;
+//     display: flex;
+//     /* height: 100%; */
+//     /* justify-content: center; */
+//     /* left: 0; */
+//     pointer-events: none;
+//     position: fixed;
+//     /* top: 0; */
+//     transition-property: background-color;
+//     width: 100%;

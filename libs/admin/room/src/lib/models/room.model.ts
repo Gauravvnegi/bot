@@ -150,7 +150,7 @@ export class RoomTypeForm {
     this.area = input.area;
     this.isBaseRoomType = input?.isBaseRoomType ?? false;
 
-    const defaultRatePlan = input?.ratePlans.filter((item) => item.isBase);
+    const defaultRatePlan = input?.ratePlans?.filter((item) => item.isBase);
     if (defaultRatePlan.length) {
       this.staticRatePlans = {
         paxPriceCurrency: input.pricingDetails.currency,

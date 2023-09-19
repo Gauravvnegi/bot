@@ -1,5 +1,11 @@
+.wrapper {
+  position: relative;
+}
+
 .grid-container {
   display: grid;
+  position: absolute;
+  top: 0;
   // width: 800px; //will depend on number of cell move to ng style
   // height: 400px;
 }
@@ -18,7 +24,8 @@
 .drag-grid {
   // border: 1px solid red;
   // width: 80px;
-  position: relative;
+  // position: absolute;
+  // top: -15px;
   // height: 80px;
   // padding: 10px;
 }

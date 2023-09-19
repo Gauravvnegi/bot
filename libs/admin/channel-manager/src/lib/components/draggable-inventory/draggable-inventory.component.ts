@@ -12,6 +12,11 @@ import { IPosition } from 'angular2-draggable';
 // [bounds]="myBounds"
 // [inBounds]="true"
 
+// above is working now
+
+// handle method
+// onEmptyCellClick onDragDrop onResize menuItem
+
 @Component({
   selector: 'hospitality-bot-draggable-inventory',
   templateUrl: './draggable-inventory.component.html',
@@ -46,6 +51,10 @@ export class DraggableInventoryComponent implements OnInit {
       value: 103,
     },
   ];
+
+  get noOfRow() {
+    return this.gridRows.length;
+  }
 
   @Input() data: Record<Key, Record<Key, CellData>> = {
     101: {

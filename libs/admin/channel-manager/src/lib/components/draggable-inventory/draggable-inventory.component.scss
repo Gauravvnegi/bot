@@ -3,7 +3,7 @@
 
 .grid-container {
   display: grid;
-  width: 400px;
+  width: 800px; //will depend on number of cell
 }
 
 .grid-cell {
@@ -27,8 +27,9 @@
 
 .cell-data {
   height: 60px;
-  background-color: rgb(150, 66, 66);
-  border: 1px solid rgba(128, 128, 128, 0.369);
+  background-color: #fdecec;
+  border: 1px solid #d91615;
+  border-radius: 4px;
 }
 
 .non-drag-grid {
@@ -39,4 +40,5 @@
   width: 60px;
   height: 60px;
   margin: 10px;
+  border-radius: 4px;
 }

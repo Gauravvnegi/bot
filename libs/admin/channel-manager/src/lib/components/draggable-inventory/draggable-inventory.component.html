@@ -1,4 +1,6 @@
 <div class="drag" ngDraggable ngResizable>Drag me!</div>
+{{ offset | json }}
+{{ size | json }}
 <div class="grid-container" #myBounds>
   <!-- Draggable block -->
   <div
@@ -17,29 +19,28 @@
     <p>Drag 1</p>
   </div>
 
-  <!-- Draw grids -->
-  <!-- <div
-        [ngDraggable]="false"
-        [preventDefaultEvent]="true"
-        class="grid"
-        zIndex="1"></div> -->
-
-  <div *ngFor="let x of grids" class="grid-row">
-    <div *ngFor="let y of grids; let i = index" class="grid-cell">
+  <div *ngFor="let x of gridRows" class="grid-row">
+    <div *ngFor="let y of gridsCols; let i = index" class="grid-cell">
       <div
+        *ngIf="i % 2 === 0"
         ngDraggable
         ngResizable
         [rzGrid]="80"
         [bounds]="myBounds"
+        [position]="{ x: 0, y: 0 }"
         [inBounds]="true"
         [gridSize]="80"
         zIndex="100"
+        zIndexMoving="1000"
         [preventDefaultEvent]="true"
         class="drag-grid"
         rzHandles="e,w"
+        (rzStop)="handleResizing($event)"
+        (endOffset)="handleDrag($event)"
       >
         <div class="cell-data">Drag {{ i }}</div>
       </div>
+      <!-- for grid view -->
       <div
         [ngDraggable]="false"
         [preventDefaultEvent]="true"
@@ -63,3 +64,53 @@
     </div>
   </nz-col>
 </nz-row> -->
+
+<div class="grid-container" #myBoundsNew>
+  <!-- Draggable block -->
+  <div
+    ngDraggable
+    ngResizable
+    [rzGrid]="50"
+    [bounds]="myBoundsNew"
+    [inBounds]="true"
+    [gridSize]="100"
+    zIndex="100"
+    [position]="50"
+    [preventDefaultEvent]="true"
+    class="drag-grid"
+    rzHandles="e,w"
+  >
+    <p>Drag 2</p>
+  </div>
+
+  <div *ngFor="let x of gridRows" class="grid-row">
+    <div *ngFor="let y of gridsCols; let i = index" class="grid-cell">
+      <div
+        *ngIf="i % 2 === 0"
+        ngDraggable
+        ngResizable
+        [rzGrid]="80"
+        [bounds]="myBoundsNew"
+        [position]="{ x: 0, y: 0 }"
+        [inBounds]="true"
+        [gridSize]="80"
+        zIndex="100"
+        zIndexMoving="1000"
+        [preventDefaultEvent]="true"
+        class="drag-grid"
+        rzHandles="e,w"
+        (rzStop)="handleResizing($event)"
+        (endOffset)="handleDrag($event)"
+      >
+        <div class="cell-data">Drag {{ i }}</div>
+      </div>
+      <!-- for grid view -->
+      <div
+        [ngDraggable]="false"
+        [preventDefaultEvent]="true"
+        class="non-drag-grid"
+        zIndex="1"
+      ></div>
+    </div>
+  </div>
+</div>

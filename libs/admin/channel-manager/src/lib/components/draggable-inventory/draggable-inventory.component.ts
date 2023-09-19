@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ElementRef } from '@angular/core';
 import { restrictionsRecord } from '../../constants/data';
 import { IResizeEvent } from 'angular2-draggable/lib/models/resize-event';
 import { IPosition } from 'angular2-draggable';
@@ -15,7 +15,7 @@ export class DraggableInventoryComponent implements OnInit {
   gridRows = [1, 2, 3, 4, 5];
   gridsCols = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
-  constructor() {}
+  constructor(private el: ElementRef) {}
 
   ngOnInit(): void {}
 
@@ -30,5 +30,9 @@ export class DraggableInventoryComponent implements OnInit {
   handleDrag(event: IPosition) {
     console.log(event, 'drag event');
     this.offset = event;
+  }
+
+  getElementById(id: string): HTMLElement | null {
+    return this.el.nativeElement.querySelector(`#myContainment_${id}`);
   }
 }

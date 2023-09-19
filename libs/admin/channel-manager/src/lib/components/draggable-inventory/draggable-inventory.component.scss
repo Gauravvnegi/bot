@@ -1,9 +1,15 @@
 .drag {
 }
 
+.alone {
+  border: 1px solid brown;
+  height: 80px;
+}
+
 .grid-container {
   display: grid;
   width: 800px; //will depend on number of cell
+  height: 400px;
 }
 
 .grid-cell {
@@ -41,4 +47,15 @@
   height: 60px;
   margin: 10px;
   border-radius: 4px;
+}
+
+// Drag handles style update - to make them not overlap each other
+:host ::ng-deep .ng-resizable-handle.ng-resizable-e {
+  inset: 10px 5px 10px auto;
+  height: 60px;
+}
+
+:host ::ng-deep .ng-resizable-handle.ng-resizable-w {
+  inset: 10px auto 10px 5px;
+  height: 60px;
 }

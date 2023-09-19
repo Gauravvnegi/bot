@@ -56,18 +56,24 @@ export class DraggableInventoryComponent implements OnInit {
     return this.gridRows.length;
   }
 
-  @Input() data: Record<Key, Record<Key, CellData>> = {
+  @Input() set value(input) {
+    this.data = input;
+  }
+
+  data: Record<Key, Record<Key, CellData>> = {
     101: {
       1: {
         cellOccupied: 3,
         name: 'Dhruv',
         hasNext: false,
         hasPrev: false,
+        endCell: 4,
       },
       6: {
         cellOccupied: 2,
         name: 'Jag',
-        hasNext: true,
+        endCell: 8,
+        hasNext: false,
         hasPrev: false,
       },
     },
@@ -75,6 +81,7 @@ export class DraggableInventoryComponent implements OnInit {
       6: {
         cellOccupied: 2,
         name: 'Tony Stark',
+        endCell: 8,
         hasNext: false,
         hasPrev: false,
       },
@@ -126,4 +133,5 @@ type CellData = {
   name: string;
   hasNext: boolean;
   hasPrev: boolean;
+  endCell?: Key;
 };

@@ -29,6 +29,7 @@ export class DraggableInventoryComponent implements OnInit {
   cellSize = 80;
   cellGap = 5;
 
+  // columnMapper will have the same keys in the that are in the per row data
   @Input() columnMapper = this.getArray(14);
   // columnMapper = ['18Mon', '19True', '20Wed', '21Thus'];
 
@@ -37,7 +38,7 @@ export class DraggableInventoryComponent implements OnInit {
   }
 
   gridSize = 50;
-  @Input() gridRows = [
+  @Input() gridRows: RowData[] = [
     {
       label: '101',
       value: 101,
@@ -57,22 +58,39 @@ export class DraggableInventoryComponent implements OnInit {
   }
 
   @Input() set value(input) {
+    // add conversion logic
+    // hasNext, hasPrev, array to object conversion
+
     this.data = input;
+  }
+
+  // x: data[row.value][y]?.hasPrev ? cellSize / 2 : 1,
+
+  //
+  hasNext(row: RowData, key: Key) {
+    const currentRowData = this.data[row.value];
+    const currentCellData = currentRowData[key];
+    const endPoint = currentCellData.endPoint;
+    const hasNext = !!currentRowData[endPoint];
   }
 
   data: Record<Key, Record<Key, CellData>> = {
     101: {
       1: {
         cellOccupied: 3,
-        name: 'Dhruv',
-        hasNext: false,
+        name: 'Dhruv 101',
+        hasNext: true,
         hasPrev: false,
-        endCell: 4,
+      },
+      3: {
+        cellOccupied: 2,
+        name: 'Akash 101',
+        hasNext: false,
+        hasPrev: true,
       },
       6: {
         cellOccupied: 2,
-        name: 'Jag',
-        endCell: 8,
+        name: 'Jag 101',
         hasNext: false,
         hasPrev: false,
       },
@@ -80,8 +98,15 @@ export class DraggableInventoryComponent implements OnInit {
     102: {
       6: {
         cellOccupied: 2,
-        name: 'Tony Stark',
-        endCell: 8,
+        name: 'Tony Stark 102',
+        hasNext: false,
+        hasPrev: false,
+      },
+    },
+    103: {
+      3: {
+        cellOccupied: 4,
+        name: 'Steve Rogers 103',
         hasNext: false,
         hasPrev: false,
       },
@@ -133,5 +158,9 @@ type CellData = {
   name: string;
   hasNext: boolean;
   hasPrev: boolean;
-  endCell?: Key;
+  endPoint?: Key;
+};
+type RowData = {
+  value: Key;
+  label: string;
 };

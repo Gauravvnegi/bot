@@ -13,6 +13,7 @@ import { LazyLoadEvent } from 'primeng/api';
 import { Subscription } from 'rxjs';
 import { roomStatusDetails } from '../../constant/room';
 import { HousekeepingService } from '../../services/housekeeping.service';
+import { houseKeepingRoutes } from '../../constant/routes';
 
 @Component({
   selector: 'hospitality-bot-housekeeping',
@@ -33,7 +34,12 @@ export class HousekeepingComponent extends BaseDatatableComponent
   entityId: string;
   roomStatusDetails = roomStatusDetails;
   $subscription = new Subscription();
-  roomTypes: any[] = [];
+  roomTypes: any[] = [
+    {
+      label: 'All',
+      value: '',
+    },
+  ];
   roomTypeOffSet = 0;
   roomTypeLimit = 10;
   dateValue = {};
@@ -77,6 +83,7 @@ export class HousekeepingComponent extends BaseDatatableComponent
     this.getRoomList();
     this.getRoomType();
     this.listenForRoomTypeChange();
+    this.navRoutes = houseKeepingRoutes['HouseKeeping'].navRoutes;
   }
 
   loadData(event: LazyLoadEvent): void {
@@ -165,7 +172,7 @@ export class HousekeepingComponent extends BaseDatatableComponent
         );
     } else {
       this.roomTypeOffSet = 0;
-      this.roomTypes = [];
+      this.roomTypes = [{ label: 'All', value: ''}];
       this.getRoomType();
     }
   }

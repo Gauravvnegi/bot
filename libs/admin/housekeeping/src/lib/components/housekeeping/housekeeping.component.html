@@ -1,8 +1,4 @@
-<hospitality-bot-navigation-header
-  isBack="false"
-  [heading]="pageTitle"
-  [routes]="navRoutes"
->
+<hospitality-bot-navigation-header [heading]="pageTitle" [routes]="navRoutes">
 </hospitality-bot-navigation-header>
 <div [formGroup]="useForm" class="btn-wrapper">
   <hospitality-bot-date
@@ -63,8 +59,9 @@
       >
         <i
           class="pi pi-info-circle icon"
-          (mouseover)="showContent = !showContent"
-          style="font-size: 2rem;"
+          (mouseenter)="showContent = true"
+          (mouseleave)="showContent = false"
+          style="font-size: 2rem; color: blue;"
         ></i>
       </hospitality-bot-filter-chips>
       <ng-container *ngIf="showContent" [ngTemplateOutlet]="info">
@@ -82,18 +79,18 @@
     let-columns="columns"
     let-rowIndex="rowIndex"
   >
-    <td class="card-width">
-      <hospitality-bot-room-card
-        [roomNo]="rowData.roomNo"
-        [roomType]="rowData?.type"
-        [status]="rowData?.status"
-        [frontOfficeState]="rowData?.foStatus"
-        [nextStates]="rowData.nextStates"
-        [recordSetting]="roomStatusDetails"
-        class="card-width"
-      >
-      </hospitality-bot-room-card>
-    </td>
+    <!-- <td > -->
+    <hospitality-bot-room-card
+      [roomNo]="rowData.roomNo"
+      [roomType]="rowData?.type"
+      [status]="rowData?.status"
+      [frontOfficeState]="rowData?.foStatus"
+      [nextStates]="rowData.nextStates"
+      [recordSetting]="roomStatusDetails"
+      class="card-width"
+    >
+    </hospitality-bot-room-card>
+    <!-- </td> -->
   </ng-template>
 
   <!-- *********************************FOOTER******************************* -->

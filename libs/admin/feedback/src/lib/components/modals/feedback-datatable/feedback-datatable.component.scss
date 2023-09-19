@@ -79,7 +79,6 @@
 :host ::ng-deep .p-datatable {
   margin: 10px 1.5% !important;
   .p-datatable-thead {
-    top: 0;
+    top: 0 !important;
   }
 }
-

@@ -1,0 +1,65 @@
+<div class="drag" ngDraggable ngResizable>Drag me!</div>
+<div class="grid-container" #myBounds>
+  <!-- Draggable block -->
+  <div
+    ngDraggable
+    ngResizable
+    [rzGrid]="50"
+    [bounds]="myBounds"
+    [inBounds]="true"
+    [gridSize]="100"
+    zIndex="100"
+    [position]="50"
+    [preventDefaultEvent]="true"
+    class="drag-grid"
+    rzHandles="e,w"
+  >
+    <p>Drag 1</p>
+  </div>
+
+  <!-- Draw grids -->
+  <!-- <div
+        [ngDraggable]="false"
+        [preventDefaultEvent]="true"
+        class="grid"
+        zIndex="1"></div> -->
+
+  <div *ngFor="let x of grids" class="grid-row">
+    <div *ngFor="let y of grids; let i = index" class="grid-cell">
+      <div
+        ngDraggable
+        ngResizable
+        [rzGrid]="80"
+        [bounds]="myBounds"
+        [inBounds]="true"
+        [gridSize]="80"
+        zIndex="100"
+        [preventDefaultEvent]="true"
+        class="drag-grid"
+        rzHandles="e,w"
+      >
+        <div class="cell-data">Drag {{ i }}</div>
+      </div>
+      <div
+        [ngDraggable]="false"
+        [preventDefaultEvent]="true"
+        class="non-drag-grid"
+        zIndex="1"
+      ></div>
+    </div>
+  </div>
+</div>
+<!-- <nz-row>
+  <nz-col [nzSpan]="12" style="min-height: 200px;">
+    <div ngResizable [rzGrid]="50" class="resizable-widget">
+      <h4 class="widget-header">Resizable</h4>
+      <div>[rzGrid]=50</div>
+    </div>
+  </nz-col>
+  <nz-col [nzSpan]="12" style="min-height: 200px;">
+    <div ngResizable [rzGrid]="[50, 100]" class="resizable-widget">
+      <h4 class="widget-header">Resizable</h4>
+      <div>[rzGrid]=[50, 100]</div>
+    </div>
+  </nz-col>
+</nz-row> -->

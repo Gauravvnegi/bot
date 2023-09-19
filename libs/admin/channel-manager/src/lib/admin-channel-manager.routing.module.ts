@@ -16,6 +16,7 @@ import { RatesNestedCheckboxTreeComponent } from './components/rates-nested-chec
 import { NestedPanelComponent } from './components/rates-nested-checkbox-tree/nested-panel/nested-panel.component';
 import { InventoryNestedCheckboxTreeComponent } from './components/inventory-nested-checkbox-tree/inventory-nested-checkbox-tree.component';
 import { RoomTypesComponent } from './components/room-types/room-types.component';
+import { DraggableInventoryComponent } from './components/draggable-inventory/draggable-inventory.component';
 
 const appRoutes: CRoutes = [
   {
@@ -86,5 +87,6 @@ export class AdminChannelMangerRoutingModule {
     InventoryBulkUpdateComponent,
     InventoryNestedCheckboxTreeComponent,
     RoomTypesComponent,
+    DraggableInventoryComponent,
   ];
 }

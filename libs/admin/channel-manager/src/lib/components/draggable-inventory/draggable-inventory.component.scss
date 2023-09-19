@@ -1,0 +1,42 @@
+.drag {
+}
+
+.grid-container {
+  display: grid;
+  width: 400px;
+}
+
+.grid-cell {
+  width: 80px;
+  height: 80px;
+  position: relative;
+}
+
+.grid-row {
+  display: grid;
+  // grid-template-areas: 'grid-cell grid-cell grid-cell grid-cell grid-cell';
+  grid-auto-flow: column;
+}
+
+.drag-grid {
+  // border: 1px solid red;
+  // width: 80px;
+  height: 80px;
+  padding: 10px;
+}
+
+.cell-data {
+  height: 60px;
+  background-color: rgb(150, 66, 66);
+  border: 1px solid rgba(128, 128, 128, 0.369);
+}
+
+.non-drag-grid {
+  border: 1px solid rgba(128, 128, 128, 0.369);
+  // background-color: rgb(136, 168, 107);
+  position: absolute;
+  top: 0;
+  width: 60px;
+  height: 60px;
+  margin: 10px;
+}

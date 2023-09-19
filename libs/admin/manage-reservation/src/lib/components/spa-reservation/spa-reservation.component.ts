@@ -7,6 +7,7 @@ import {
   Option,
   EntityType,
   EntitySubType,
+  HotelDetailService,
 } from '@hospitality-bot/admin/shared';
 import { IteratorField } from 'libs/admin/shared/src/lib/types/fields.type';
 import {
@@ -59,11 +60,11 @@ export class SpaReservationComponent extends BaseReservationComponent
     protected activatedRoute: ActivatedRoute,
     private formService: FormService,
     private libraryService: LibraryService,
-    private router: Router
+    private router: Router,
+    protected hotelDetailService: HotelDetailService
   ) {
-    super(globalFilterService, activatedRoute);
+    super(globalFilterService, activatedRoute, hotelDetailService);
   }
-
   ngOnInit(): void {
     this.initForm();
     this.initDetails();
@@ -75,7 +76,7 @@ export class SpaReservationComponent extends BaseReservationComponent
 
   initDetails() {
     this.bookingType = EntitySubType.SPA;
-    this.outletId = this.selectedEntity.id;
+    this.outletId = this.selectedEntity.value;
     this.fields = spaFields;
     // Update Fields for search in select component
     this.fields[0] = {

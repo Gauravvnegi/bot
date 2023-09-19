@@ -1,114 +1,115 @@
-<hospitality-bot-navigation-header
-  heading="Update rates"
-  [routes]="[{ label: 'Update rates', link: './' }]"
-  [isStickyTitle]="false"
-  [isBack]="false"
->
-  <hospitality-bot-button
-    label="Bulk update"
-    [link]="'/pages/channel-manager/update-rates/rates-bulk-update'"
-  ></hospitality-bot-button>
-</hospitality-bot-navigation-header>
-<div class="main-wrapper" [id]="fa?.referenceId">
-  <div class="inventory-form" *ngIf="!!useForm; else loader">
-    <div
-      [ngClass]="
-        !isRoomsEmpty && allRoomTypes?.length
-          ? 'wrapper'
-          : 'wrapper reduce-height'
-      "
-      [formGroup]="useForm"
-    >
-      <!-- LEFT SECTION -->
-      <div class="left">
-        <div class="left__main">
-          <div class="main-header main-header__left date-header-sticky">
-            <hospitality-bot-room-types
-              class="room-types-select"
-              [controlName]="'roomType'"
-              [props]="{
-                isAllSelected: true
-              }"
-            >
-            </hospitality-bot-room-types>
-            <div class="date-wrapper">
-              <hospitality-bot-date
-                controlName="date"
-                [settings]="{ enableTime: false, dateFormat: 'M dd, yy' }"
-                [minDate]="currentDate"
-                [disabled]="isRoomsEmpty || !allRoomTypes?.length"
+<div [id]="fa?.referenceId">
+  <hospitality-bot-navigation-header
+    heading="Update rates"
+    [routes]="[{ label: 'Update rates', link: './' }]"
+    [isStickyTitle]="false"
+    [isBack]="false"
+  >
+    <hospitality-bot-button
+      label="Bulk update"
+      [link]="'/pages/channel-manager/update-rates/rates-bulk-update'"
+    ></hospitality-bot-button>
+  </hospitality-bot-navigation-header>
+  <div class="main-wrapper">
+    <div class="inventory-form" *ngIf="!!useForm; else loader">
+      <div
+        [ngClass]="
+          !isRoomsEmpty && allRoomTypes?.length
+            ? 'wrapper'
+            : 'wrapper reduce-height'
+        "
+        [formGroup]="useForm"
+      >
+        <!-- LEFT SECTION -->
+        <div class="left">
+          <div class="left__main">
+            <div class="main-header main-header__left date-header-sticky">
+              <hospitality-bot-room-types
+                class="room-types-select"
+                [controlName]="'roomType'"
+                [props]="{
+                  isAllSelected: true
+                }"
               >
-              </hospitality-bot-date>
+              </hospitality-bot-room-types>
+              <div class="date-wrapper">
+                <hospitality-bot-date
+                  controlName="date"
+                  [settings]="{ enableTime: false, dateFormat: 'M dd, yy' }"
+                  [minDate]="currentDate"
+                  [disabled]="isRoomsEmpty || !allRoomTypes?.length"
+                >
+                </hospitality-bot-date>
+              </div>
             </div>
-          </div>
-          <div
-            class="main-section"
-            *ngIf="!isRoomsEmpty && allRoomTypes?.length"
-          >
             <div
-              loader
-              [isVisible]="isLoaderVisible"
-              [props]="{
-                showLoader: false
-              }"
-            ></div>
-            <div
-              *ngIf="hasDynamicPricing"
-              class="dynamic-section left-main-cell dynamic-pricing-header-sticky"
+              class="main-section"
+              *ngIf="!isRoomsEmpty && allRoomTypes?.length"
             >
-              <span class="text">
-                Dynamic Pricing
-              </span>
-            </div>
-            <ng-container formArrayName="roomTypes">
-              <ng-container
-                *ngFor="
-                  let roomType of roomTypesControl;
-                  let roomTypeIdx = index
-                "
-                [formGroupName]="roomTypeIdx"
+              <div
+                loader
+                [isVisible]="isLoaderVisible"
+                [props]="{
+                  showLoader: false
+                }"
+              ></div>
+              <div
+                *ngIf="hasDynamicPricing"
+                class="dynamic-section left-main-cell dynamic-pricing-header-sticky"
               >
-                <ng-container formArrayName="ratePlans">
-                  <div class="heading-section left-main-cell">
-                    <div class="left-main-cell__left main-text">
-                      {{ roomType.get('label').value }}
-                    </div>
-                    <div class="left-main-cell__right head-cell ttp">
-                      <div class="main-text">
-                        Available
+                <span class="text">
+                  Dynamic Pricing
+                </span>
+              </div>
+              <ng-container formArrayName="roomTypes">
+                <ng-container
+                  *ngFor="
+                    let roomType of roomTypesControl;
+                    let roomTypeIdx = index
+                  "
+                  [formGroupName]="roomTypeIdx"
+                >
+                  <ng-container formArrayName="ratePlans">
+                    <div class="heading-section left-main-cell">
+                      <div class="left-main-cell__left main-text">
+                        {{ roomType.get('label').value }}
                       </div>
-                      <div class="main-text">
-                        (Occupancy%)
-                      </div>
-                    </div>
-                  </div>
-                  <div
-                    *ngIf="hasDynamicPricing"
-                    class="room-dynamic-section left-main-cell"
-                  >
-                    <span class="text">
-                      Dynamic Pricing
-                    </span>
-                  </div>
-                  <ng-container
-                    *ngFor="
-                      let ratePlan of roomTypesControl[roomTypeIdx].get(
-                        'ratePlans'
-                      ).controls;
-                      let ratePlanIdx = index
-                    "
-                    [formGroupName]="ratePlanIdx"
-                  >
-                    <div class="input-content-section left-main-cell">
-                      <div class="left-main-cell__left">
-                        <div class="room-type">
-                          <!-- <div>{{ ratePlan.get('type').value }}</div> -->
-                          <div class="room-type__subtitle">
-                            {{ ratePlan.get('label').value }}
-                          </div>
+                      <div class="left-main-cell__right head-cell ttp">
+                        <div class="main-text">
+                          Available
                         </div>
-                        <!-- TODO: This feature may be used in future -->
-                        <!-- <p-toggleButton
+                        <div class="main-text">
+                          (Occupancy%)
+                        </div>
+                      </div>
+                    </div>
+                    <div
+                      *ngIf="hasDynamicPricing"
+                      class="room-dynamic-section left-main-cell"
+                    >
+                      <span class="text">
+                        Dynamic Pricing
+                      </span>
+                    </div>
+                    <ng-container
+                      *ngFor="
+                        let ratePlan of roomTypesControl[roomTypeIdx].get(
+                          'ratePlans'
+                        ).controls;
+                        let ratePlanIdx = index
+                      "
+                      [formGroupName]="ratePlanIdx"
+                    >
+                      <div class="input-content-section left-main-cell">
+                        <div class="left-main-cell__left">
+                          <div class="room-type">
+                            <!-- <div>{{ ratePlan.get('type').value }}</div> -->
+                            <div class="room-type__subtitle">
+                              {{ ratePlan.get('label').value }}
+                            </div>
+                          </div>
+                          <!-- TODO: This feature may be used in future -->
+                          <!-- <p-toggleButton
                         class="channel-btn"
                         formControlName="showChannels"
                         [offIcon]="'pi pi-angle-down'"
@@ -122,309 +123,317 @@
                         iconPos="right"
                       >
                       </p-toggleButton> -->
-                      </div>
-                      <div class="left-main-cell__right row-cell ltr">
-                        <div class="rates">
-                          <p-dropdown
-                            formControlName="selectedRestriction"
-                            [options]="restrictions"
-                            [disabled]="true"
-                          ></p-dropdown>
                         </div>
-                        <p-toggleButton
-                          class="link"
-                          formControlName="linked"
-                          [offIcon]="'pi pi-link'"
-                          [onIcon]="'pi pi-link'"
-                        ></p-toggleButton>
+                        <div class="left-main-cell__right row-cell ltr">
+                          <div class="rates">
+                            <p-dropdown
+                              formControlName="selectedRestriction"
+                              [options]="restrictions"
+                              [disabled]="true"
+                            ></p-dropdown>
+                          </div>
+                          <p-toggleButton
+                            class="link"
+                            formControlName="linked"
+                            [offIcon]="'pi pi-link'"
+                            [onIcon]="'pi pi-link'"
+                          ></p-toggleButton>
+                        </div>
                       </div>
-                    </div>
-                    <ng-container
-                      *ngIf="ratePlan.get('showChannels').value"
-                      formArrayName="channels"
-                    >
                       <ng-container
-                        *ngFor="
-                          let channel of ratePlan.get('channels').controls;
-                          let channelIdx = index
-                        "
-                        [formGroupName]="channelIdx"
+                        *ngIf="ratePlan.get('showChannels').value"
+                        formArrayName="channels"
                       >
-                        <div class="input-content-section left-main-cell p-bg">
-                          <div class="left-main-cell__left">
-                            <div class="channel">
-                              <div class="channel-name">
-                                {{ channel.get('label').value }}
+                        <ng-container
+                          *ngFor="
+                            let channel of ratePlan.get('channels').controls;
+                            let channelIdx = index
+                          "
+                          [formGroupName]="channelIdx"
+                        >
+                          <div
+                            class="input-content-section left-main-cell p-bg"
+                          >
+                            <div class="left-main-cell__left">
+                              <div class="channel">
+                                <div class="channel-name">
+                                  {{ channel.get('label').value }}
+                                </div>
+                                <img
+                                  class="channel-icon"
+                                  src="assets/svg/tick.svg"
+                                  alt="check"
+                                />
                               </div>
-                              <img
-                                class="channel-icon"
-                                src="assets/svg/tick.svg"
-                                alt="check"
-                              />
+                            </div>
+                            <div
+                              class="left-main-cell__right row-cell ltr w-bg"
+                            >
+                              <div class="rates">
+                                <p-dropdown
+                                  formControlName="selectedRestriction"
+                                  [options]="restrictions"
+                                ></p-dropdown>
+                              </div>
+                              <p-toggleButton
+                                class="link"
+                                formControlName="linked"
+                                [offIcon]="'pi pi-link'"
+                                [onIcon]="'pi pi-link'"
+                              ></p-toggleButton>
                             </div>
                           </div>
-                          <div class="left-main-cell__right row-cell ltr w-bg">
-                            <div class="rates">
-                              <p-dropdown
-                                formControlName="selectedRestriction"
-                                [options]="restrictions"
-                              ></p-dropdown>
-                            </div>
-                            <p-toggleButton
-                              class="link"
-                              formControlName="linked"
-                              [offIcon]="'pi pi-link'"
-                              [onIcon]="'pi pi-link'"
-                            ></p-toggleButton>
-                          </div>
-                        </div>
+                        </ng-container>
                       </ng-container>
                     </ng-container>
                   </ng-container>
                 </ng-container>
               </ng-container>
-            </ng-container>
+            </div>
           </div>
         </div>
-      </div>
 
-      <!-- RIGHT SECTION -->
-      <div class="right">
-        <div class="right__main">
-          <div class="main-header main-header__right date-header-sticky">
-            <div class="date-wrapper dates-header">
-              <div
-                *ngFor="let date of dates"
-                class="dates-cell cell"
-                [ngClass]="getWeekendBG(date.day)"
-              >
-                <div>{{ date.day }}</div>
-                <div>{{ date.date }}</div>
+        <!-- RIGHT SECTION -->
+        <div class="right">
+          <div class="right__main">
+            <div class="main-header main-header__right date-header-sticky">
+              <div class="date-wrapper dates-header">
+                <div
+                  *ngFor="let date of dates"
+                  class="dates-cell cell"
+                  [ngClass]="getWeekendBG(date.day)"
+                >
+                  <div>{{ date.day }}</div>
+                  <div>{{ date.date }}</div>
+                </div>
               </div>
             </div>
-          </div>
-          <div
-            class="main-section"
-            *ngIf="!isRoomsEmpty && allRoomTypes?.length"
-          >
             <div
-              loader
-              [isVisible]="isLoaderVisible"
-              [props]="{
-                top: '50%',
-                left: '25%'
-              }"
-            ></div>
-            <div
-              *ngIf="hasDynamicPricing"
-              class="data-cell-wrapper dynamic-pricing-header-sticky"
-              formArrayName="dynamicPricing"
+              class="main-section"
+              *ngIf="!isRoomsEmpty && allRoomTypes?.length"
             >
-              <div class="data-cell dynamic-section">
-                <div
-                  class="cell"
-                  *ngFor="let date of dates; let controlIdx = index"
-                  [formGroupName]="controlIdx"
-                >
-                  <hospitality-bot-input-switch
-                    controlName="value"
-                  ></hospitality-bot-input-switch>
+              <div
+                loader
+                [isVisible]="isLoaderVisible"
+                [props]="{
+                  top: '50%',
+                  left: '25%'
+                }"
+              ></div>
+              <div
+                *ngIf="hasDynamicPricing"
+                class="data-cell-wrapper dynamic-pricing-header-sticky"
+                formArrayName="dynamicPricing"
+              >
+                <div class="data-cell dynamic-section">
+                  <div
+                    class="cell"
+                    *ngFor="let date of dates; let controlIdx = index"
+                    [formGroupName]="controlIdx"
+                  >
+                    <hospitality-bot-input-switch
+                      controlName="value"
+                    ></hospitality-bot-input-switch>
+                  </div>
                 </div>
               </div>
-            </div>
-            <ng-container formArrayName="roomTypes">
-              <ng-container
-                *ngFor="
-                  let roomType of roomTypesControl;
-                  let roomTypeIdx = index
-                "
-                [formGroupName]="roomTypeIdx"
-              >
-                <div class="data-cell-wrapper">
-                  <div class="data-cell heading-section">
-                    <div
-                      class="cell"
-                      *ngFor="let date of dates; let dateIndex = index"
-                      [ngClass]="getWeekendBG(date.day, true)"
-                    >
-                      <div class="main-text">
-                        {{
-                          getAvailability(
-                            dateIndex,
-                            'quantity',
-                            roomType.value.value
-                          )
-                        }}
-                      </div>
-                      <div class="seconday-text">
-                        {{
-                          getAvailability(
-                            dateIndex,
-                            'occupancy',
-                            roomType.value.value
-                          )
-                        }}%
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div
-                  *ngIf="hasDynamicPricing"
-                  class="data-cell-wrapper"
-                  formArrayName="dynamicPrice"
+              <ng-container formArrayName="roomTypes">
+                <ng-container
+                  *ngFor="
+                    let roomType of roomTypesControl;
+                    let roomTypeIdx = index
+                  "
+                  [formGroupName]="roomTypeIdx"
                 >
-                  <div class="data-cell room-dynamic-section">
-                    <div
-                      class="cell"
-                      *ngFor="let date of dates; let dynamicPriceIndx = index"
-                      [ngClass]="getWeekendBG(date.day, true)"
-                      [formGroupName]="dynamicPriceIndx"
-                    >
-                      <hospitality-bot-input-switch
-                        controlName="value"
-                      ></hospitality-bot-input-switch>
+                  <div class="data-cell-wrapper">
+                    <div class="data-cell heading-section">
+                      <div
+                        class="cell"
+                        *ngFor="let date of dates; let dateIndex = index"
+                        [ngClass]="getWeekendBG(date.day, true)"
+                      >
+                        <div class="main-text">
+                          {{
+                            getAvailability(
+                              dateIndex,
+                              'quantity',
+                              roomType.value.value
+                            )
+                          }}
+                        </div>
+                        <div class="seconday-text">
+                          {{
+                            getAvailability(
+                              dateIndex,
+                              'occupancy',
+                              roomType.value.value
+                            )
+                          }}%
+                        </div>
+                      </div>
                     </div>
                   </div>
-                </div>
-                <ng-container formArrayName="ratePlans">
-                  <ng-container
-                    *ngFor="
-                      let ratePlan of roomTypesControl[roomTypeIdx].get(
-                        'ratePlans'
-                      ).controls;
-                      let ratePlanIdx = index
-                    "
-                    [formGroupName]="ratePlanIdx"
+                  <div
+                    *ngIf="hasDynamicPricing"
+                    class="data-cell-wrapper"
+                    formArrayName="dynamicPrice"
                   >
-                    <div
-                      class="data-cell-wrapper"
-                      [formArrayName]="
-                        ratePlan.get('selectedRestriction').value
+                    <div class="data-cell room-dynamic-section">
+                      <div
+                        class="cell"
+                        *ngFor="let date of dates; let dynamicPriceIndx = index"
+                        [ngClass]="getWeekendBG(date.day, true)"
+                        [formGroupName]="dynamicPriceIndx"
+                      >
+                        <hospitality-bot-input-switch
+                          controlName="value"
+                        ></hospitality-bot-input-switch>
+                      </div>
+                    </div>
+                  </div>
+                  <ng-container formArrayName="ratePlans">
+                    <ng-container
+                      *ngFor="
+                        let ratePlan of roomTypesControl[roomTypeIdx].get(
+                          'ratePlans'
+                        ).controls;
+                        let ratePlanIdx = index
                       "
+                      [formGroupName]="ratePlanIdx"
                     >
-                      <div class="data-cell input-content-section">
-                        <div
-                          class="cell"
-                          *ngFor="let date of dates; let controlIdx = index"
-                          [formGroupName]="controlIdx"
-                          [ngClass]="getWeekendBG(date.day)"
+                      <div
+                        class="data-cell-wrapper"
+                        [formArrayName]="
+                          ratePlan.get('selectedRestriction').value
+                        "
+                      >
+                        <div class="data-cell input-content-section">
+                          <div
+                            class="cell"
+                            *ngFor="let date of dates; let controlIdx = index"
+                            [formGroupName]="controlIdx"
+                            [ngClass]="getWeekendBG(date.day)"
+                          >
+                            <ng-container
+                              [ngSwitch]="
+                                restrictionsRecord[
+                                  ratePlan.get('selectedRestriction').value
+                                ].type
+                              "
+                            >
+                              <hospitality-bot-input
+                                *ngSwitchCase="'number'"
+                                controlName="value"
+                                min="0"
+                                [props]="{
+                                  type: 'number',
+                                  errorMessages: {
+                                    min: 'Invalid'
+                                  }
+                                }"
+                                [isHideSpinners]="true"
+                              ></hospitality-bot-input>
+                              <hospitality-bot-input-switch
+                                *ngSwitchCase="'boolean'"
+                                controlName="value"
+                              >
+                              </hospitality-bot-input-switch>
+                            </ng-container>
+                          </div>
+                        </div>
+                      </div>
+                      <ng-container
+                        *ngIf="ratePlan.get('showChannels').value"
+                        formArrayName="channels"
+                      >
+                        <ng-container
+                          *ngFor="
+                            let channel of ratePlan.get('channels').controls;
+                            let channelIdx = index
+                          "
+                          [formGroupName]="channelIdx"
                         >
-                          <ng-container
-                            [ngSwitch]="
-                              restrictionsRecord[
-                                ratePlan.get('selectedRestriction').value
-                              ].type
+                          <div
+                            class="data-cell-wrapper"
+                            [formArrayName]="
+                              channel.get('selectedRestriction').value
                             "
                           >
-                            <hospitality-bot-input
-                              *ngSwitchCase="'number'"
-                              controlName="value"
-                              min="0"
-                              [props]="{
-                                type: 'number',
-                                errorMessages: {
-                                  min: 'Invalid'
-                                }
-                              }"
-                              [isHideSpinners]="true"
-                            ></hospitality-bot-input>
-                            <hospitality-bot-input-switch
-                              *ngSwitchCase="'boolean'"
-                              controlName="value"
-                            >
-                            </hospitality-bot-input-switch>
-                          </ng-container>
-                        </div>
-                      </div>
-                    </div>
-                    <ng-container
-                      *ngIf="ratePlan.get('showChannels').value"
-                      formArrayName="channels"
-                    >
-                      <ng-container
-                        *ngFor="
-                          let channel of ratePlan.get('channels').controls;
-                          let channelIdx = index
-                        "
-                        [formGroupName]="channelIdx"
-                      >
-                        <div
-                          class="data-cell-wrapper"
-                          [formArrayName]="
-                            channel.get('selectedRestriction').value
-                          "
-                        >
-                          <div class="data-cell input-content-section">
-                            <div
-                              class="cell"
-                              *ngFor="let date of dates; let controlIdx = index"
-                              [formGroupName]="controlIdx"
-                              [ngClass]="getWeekendBG(date.day)"
-                            >
-                              <ng-container
-                                [ngSwitch]="
-                                  restrictionsRecord[
-                                    channel.get('selectedRestriction').value
-                                  ].type
+                            <div class="data-cell input-content-section">
+                              <div
+                                class="cell"
+                                *ngFor="
+                                  let date of dates;
+                                  let controlIdx = index
                                 "
+                                [formGroupName]="controlIdx"
+                                [ngClass]="getWeekendBG(date.day)"
                               >
-                                <hospitality-bot-input
-                                  *ngSwitchCase="'number'"
-                                  controlName="value"
-                                  [isHideSpinners]="true"
-                                ></hospitality-bot-input>
-                                <hospitality-bot-input-switch
-                                  *ngSwitchCase="'boolean'"
-                                  controlName="value"
+                                <ng-container
+                                  [ngSwitch]="
+                                    restrictionsRecord[
+                                      channel.get('selectedRestriction').value
+                                    ].type
+                                  "
                                 >
-                                </hospitality-bot-input-switch>
-                              </ng-container>
+                                  <hospitality-bot-input
+                                    *ngSwitchCase="'number'"
+                                    controlName="value"
+                                    [isHideSpinners]="true"
+                                  ></hospitality-bot-input>
+                                  <hospitality-bot-input-switch
+                                    *ngSwitchCase="'boolean'"
+                                    controlName="value"
+                                  >
+                                  </hospitality-bot-input-switch>
+                                </ng-container>
+                              </div>
                             </div>
                           </div>
-                        </div>
+                        </ng-container>
                       </ng-container>
                     </ng-container>
                   </ng-container>
                 </ng-container>
               </ng-container>
-            </ng-container>
+            </div>
           </div>
         </div>
       </div>
+
+      <ng-container
+        *ngIf="!isRoomsEmpty && allRoomTypes?.length; else emptyView"
+      ></ng-container>
     </div>
+    <ng-template #loader>
+      <hospitality-bot-loader-bounce></hospitality-bot-loader-bounce>
+    </ng-template>
+    <ng-template #emptyView>
+      <hospitality-bot-empty-table
+        [isLoading]="loading"
+        [content]="{
+          description: allRoomTypes?.length
+            ? 'Please select at least one rooms'
+            : 'There is no room available',
+          imageSrc: 'assets/images/empty-table-service.png'
+        }"
+      >
+      </hospitality-bot-empty-table>
+    </ng-template>
 
-    <ng-container
-      *ngIf="!isRoomsEmpty && allRoomTypes?.length; else emptyView"
-    ></ng-container>
-  </div>
-  <ng-template #loader>
-    <hospitality-bot-loader-bounce></hospitality-bot-loader-bounce>
-  </ng-template>
-  <ng-template #emptyView>
-    <hospitality-bot-empty-table
-      [isLoading]="loading"
-      [content]="{
-        description: allRoomTypes?.length
-          ? 'Please select at least one rooms'
-          : 'There is no room available',
-        imageSrc: 'assets/images/empty-table-service.png'
+    <hospitality-bot-form-action
+      class="full-width"
+      [loading]="loading"
+      [disabled]="
+        loading || loadingError || !(!isRoomsEmpty && allRoomTypes?.length)
+      "
+      [config]="{
+        preHide: true,
+        postLabel: 'Save'
       }"
+      (onPostAction)="handleSave()"
+      #fa
     >
-    </hospitality-bot-empty-table>
-  </ng-template>
-
-  <hospitality-bot-form-action
-    class="full-width"
-    [loading]="loading"
-    [disabled]="
-      loading || loadingError || !(!isRoomsEmpty && allRoomTypes?.length)
-    "
-    [config]="{
-      preHide: true,
-      postLabel: 'Save'
-    }"
-    (onPostAction)="handleSave()"
-    #fa
-  >
-  </hospitality-bot-form-action>
+    </hospitality-bot-form-action>
+  </div>
 </div>

@@ -79,12 +79,11 @@ export const routes = {
   [ModuleNames.CHANNEL_MANAGER]: 'channel-manager',
   [ModuleNames.MANAGE_RATE]: 'channel-manager/update-rates',
   [ModuleNames.MANAGE_INVENTORY]: 'channel-manager/update-inventory',
-  [ModuleNames.DYNAMIC_PRICING]: 'channel-manager/dynamic-pricing',
 
   //REVENUE_MANAGER
   [ModuleNames.REVENUE_MANAGER]: 'revenue-manager',
-  [ModuleNames.REVENUE_DYNAMIC_PRICING]: 'revenue-manager/dynamic-pricing',
-  [ModuleNames.REVENUE_SETUP_BAR_PRICE]: 'revenue-manager/setup-bar-price',
+  [ModuleNames.DYNAMIC_PRICING]: 'revenue-manager/dynamic-pricing',
+  [ModuleNames.SETUP_BAR_PRICE]: 'revenue-manager/setup-bar-price',
 
   RoleAndPermission: 'roles-permissions',
 };

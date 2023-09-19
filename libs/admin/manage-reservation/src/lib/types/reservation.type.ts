@@ -22,8 +22,9 @@ export type OutletReservationStatus =
   | 'IN';
 
 export type SelectedEntity = {
-  id: string;
-  type: EntityType;
-  subType: EntitySubType;
+  id?: string;
+  type?: EntityType;
+  subType?: EntitySubType;
   label: string;
+  value?: string;
 };

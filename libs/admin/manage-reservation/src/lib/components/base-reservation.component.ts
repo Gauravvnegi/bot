@@ -7,13 +7,15 @@ import {
   SummaryData,
 } from '../models/reservations.model';
 import { SelectedEntity } from '../types/reservation.type';
-import { EntitySubType, NavRouteOptions } from '@hospitality-bot/admin/shared';
+import {
+  HotelDetailService,
+  NavRouteOptions,
+} from '@hospitality-bot/admin/shared';
 import { Subscription } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { manageReservationRoutes } from '../constants/routes';
 import { ReservationForm } from '../constants/form';
-import { ReservationType } from '../constants/reservation-table';
 
 @Component({
   selector: 'hospitality-bot-outlet-base',
@@ -40,13 +42,14 @@ export class BaseReservationComponent {
   offersList: OfferList;
   selectedOffer: OfferData;
 
-  @Input() selectedEntity: SelectedEntity;
+  selectedEntity: SelectedEntity;
 
   $subscription = new Subscription();
 
   constructor(
     protected globalFilterService: GlobalFilterService,
-    protected activatedRoute: ActivatedRoute
+    protected activatedRoute: ActivatedRoute,
+    protected hotelDetailService: HotelDetailService
   ) {
     this.reservationId = this.activatedRoute.snapshot.paramMap.get('id');
     this.entityId = this.globalFilterService.entityId;
@@ -56,6 +59,16 @@ export class BaseReservationComponent {
     this.routes = navRoutes;
     this.pageTitle = title;
     this.summaryData = new SummaryData().deserialize();
+    this.getSelectedEntity();
+  }
+
+  getSelectedEntity() {
+    const outletId = this.activatedRoute.snapshot.queryParams.entityId;
+
+    const properties = this.hotelDetailService.getPropertyList();
+    const selectedOutlet = properties.filter((item) => item.value === outletId);
+
+    this.selectedEntity = selectedOutlet[0];
   }
 
   setFormDisability(): void {

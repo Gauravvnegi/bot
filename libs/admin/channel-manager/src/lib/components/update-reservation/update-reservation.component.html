@@ -1,0 +1,27 @@
+<hospitality-bot-navigation-header
+  heading="Update inventory"
+  [routes]="[{ label: 'Update inventory', link: './' }]"
+  [isStickyTitle]="false"
+  [isBack]="false"
+>
+  <hospitality-bot-button
+    label="Bulk update"
+    [link]="'/pages/channel-manager/update-inventory/inventory-bulk-update'"
+  ></hospitality-bot-button>
+</hospitality-bot-navigation-header>
+
+<div class="wrapper">
+  <div class="room-type">
+    <div *ngFor="let row of gridRows; let i = index" class="room">
+      {{ row.label }}
+    </div>
+  </div>
+
+  <div>
+    <hospitality-bot-draggable-inventory
+      [gridRows]="gridRows"
+      [data]="data"
+    ></hospitality-bot-draggable-inventory>
+    <div></div>
+  </div>
+</div>

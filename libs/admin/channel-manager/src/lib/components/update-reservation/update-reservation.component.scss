@@ -1,0 +1,18 @@
+.wrapper {
+  display: flex;
+}
+
+.room-type {
+  flex-basis: 300px;
+  display: flex;
+  flex-direction: column;
+}
+
+.room {
+  height: 80px;
+  background-color: white;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  text-indent: 20px;
+}

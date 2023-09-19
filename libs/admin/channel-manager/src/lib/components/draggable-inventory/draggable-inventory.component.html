@@ -1,14 +1,10 @@
-<div class="drag" ngDraggable ngResizable>Drag me!</div>
-{{ offset | json }}
-{{ size | json }}
-{{ position | json }}
 <div
   class="grid-container"
   #myBounds
   [ngStyle]="{ width: noOfColumn * cellSize + 'px' }"
 >
   <div
-    *ngFor="let x of gridRows; let i = index"
+    *ngFor="let row of gridRows; let i = index"
     class="grid-row"
     [id]="'myContainment_' + i"
   >
@@ -21,17 +17,19 @@
       }"
     >
       <div
-        *ngIf="j % 4 === 0"
+        *ngIf="data[row.value] && data[row.value][y]"
         ngDraggable
         ngResizable
-        [rzMinWidth]="60"
-        [rzGrid]="cellSize"
-        [bounds]="myBounds"
-        [position]="{ x: 0, y: 0 }"
-        [inBounds]="true"
-        [gridSize]="cellSize"
+        [rzMinWidth]="cellSize / 2"
+        [rzGrid]="cellSize / 2"
+        [position]="{ x: data[row.value][y]?.hasPrev ? cellSize / 2 : 1, y: 0 }"
+        [gridSize]="cellSize / 2"
         [ngStyle]="{
-          width: '160px',
+          width:
+            cellSize * data[row.value][y]?.cellOccupied -
+            (data[row.value][y]?.hasNext ? cellSize / 2 : 0) -
+            (data[row.value][y]?.hasPrev ? cellSize / 2 : 0) +
+            'px',
           height: cellSize + 'px',
           padding: cellGap + 'px'
         }"
@@ -41,7 +39,12 @@
         class="drag-grid"
         rzHandles="e,w"
         (rzStop)="handleResizing($event)"
-        (endOffset)="handleDrag($event)"
+        (endOffset)="
+          handleDrag($event, {
+            rv: row.value,
+            cv: y
+          })
+        "
       >
         <div
           class="cell-data"
@@ -49,7 +52,7 @@
             height: cellSize - 2 * cellGap + 'px'
           }"
         >
-          Drag {{ i }}{{ j }}
+          {{ data[row.value][y]?.name }}
         </div>
       </div>
       <!-- for grid view -->
@@ -81,3 +84,27 @@
     </div>
   </nz-col>
 </nz-row> -->
+
+<div>
+  {{ offset | json }}
+</div>
+
+<div>
+  {{ position | json }}
+</div>
+
+<div>
+  {{ size | json }}
+</div>
+
+<div>
+  {{ columnMapper | json }}
+</div>
+
+<div>
+  {{ gridRows | json }}
+</div>
+
+<div>
+  {{ data | json }}
+</div>

@@ -17,6 +17,7 @@ import { NestedPanelComponent } from './components/rates-nested-checkbox-tree/ne
 import { InventoryNestedCheckboxTreeComponent } from './components/inventory-nested-checkbox-tree/inventory-nested-checkbox-tree.component';
 import { RoomTypesComponent } from './components/room-types/room-types.component';
 import { DraggableInventoryComponent } from './components/draggable-inventory/draggable-inventory.component';
+import { UpdateReservationComponent } from './components/update-reservation/update-reservation.component';
 
 const appRoutes: CRoutes = [
   {
@@ -58,6 +59,19 @@ const appRoutes: CRoutes = [
           },
         ],
       },
+      {
+        // will be removed
+        path: 'update-reservation',
+        name: ModuleNames.MANAGE_INVENTORY,
+        component: MainComponent,
+        children: [
+          {
+            path: '',
+            component: UpdateReservationComponent,
+            name: ModuleNames.MANAGE_INVENTORY,
+          },
+        ],
+      },
     ],
   },
 ];
@@ -77,6 +91,7 @@ const appRoutes: CRoutes = [
 })
 export class AdminChannelMangerRoutingModule {
   static components = [
+    UpdateReservationComponent,
     UpdateRatesComponent,
     UpdateInventoryComponent,
     BulkUpdateFormComponent,

@@ -1,11 +1,16 @@
-import { Component, OnInit, ElementRef } from '@angular/core';
+import { Component, OnInit, ElementRef, Input } from '@angular/core';
 import { restrictionsRecord } from '../../constants/data';
 import { IResizeEvent } from 'angular2-draggable/lib/models/resize-event';
 import { IPosition } from 'angular2-draggable';
 
+// drag-grid props
 // <!-- [rzContainment]="getElementById(i)" -->
 // <!-- [rzContainment]="myBounds" -->
 // <!-- bound not working: need to  -->
+
+// Below are also causing issue
+// [bounds]="myBounds"
+// [inBounds]="true"
 
 @Component({
   selector: 'hospitality-bot-draggable-inventory',
@@ -17,9 +22,9 @@ export class DraggableInventoryComponent implements OnInit {
 
   // all in pixels
   cellSize = 80;
-  cellGap = 10;
+  cellGap = 5;
 
-  columnMapper = this.getArray(12);
+  @Input() columnMapper = this.getArray(14);
   // columnMapper = ['18Mon', '19True', '20Wed', '21Thus'];
 
   get noOfColumn() {
@@ -27,7 +32,7 @@ export class DraggableInventoryComponent implements OnInit {
   }
 
   gridSize = 50;
-  gridRows = [
+  @Input() gridRows = [
     {
       label: '101',
       value: 101,
@@ -40,28 +45,31 @@ export class DraggableInventoryComponent implements OnInit {
       label: '103',
       value: 103,
     },
-    {
-      label: '104',
-      value: 104,
-    },
-    {
-      label: '105',
-      value: 105,
-    },
   ];
 
-  data = {
+  @Input() data: Record<Key, Record<Key, CellData>> = {
     101: {
-      '18Mon': {
+      1: {
         cellOccupied: 3,
-        label: 'Dhruv',
+        name: 'Dhruv',
+        hasNext: false,
+        hasPrev: false,
       },
-      '21Thus': {
+      6: {
         cellOccupied: 2,
-        label: 'Jag',
+        name: 'Jag',
+        hasNext: true,
+        hasPrev: false,
       },
     },
-    103: {},
+    102: {
+      6: {
+        cellOccupied: 2,
+        name: 'Tony Stark',
+        hasNext: false,
+        hasPrev: false,
+      },
+    },
   };
 
   constructor(private el: ElementRef) {}
@@ -82,8 +90,15 @@ export class DraggableInventoryComponent implements OnInit {
   // [rzContainment]="getElementById(i)"
   // [id]="'myContainment_' + i"
 
-  handleDrag(event: IPosition) {
-    console.log(event, 'drag event');
+  handleDrag(
+    event: IPosition,
+    query: {
+      rv: Key;
+      cv: Key;
+    }
+  ) {
+    const { rv, cv } = query;
+    console.log(event, 'drag event', this.data[rv][cv]);
     this.offset = event;
   }
 
@@ -92,6 +107,14 @@ export class DraggableInventoryComponent implements OnInit {
   }
 
   getArray(length: number) {
-    return Array.from({ length }, (_, index) => index);
+    return Array.from({ length }, (_, index) => index + 1);
   }
 }
+
+type Key = string | number;
+type CellData = {
+  cellOccupied: number;
+  name: string;
+  hasNext: boolean;
+  hasPrev: boolean;
+};

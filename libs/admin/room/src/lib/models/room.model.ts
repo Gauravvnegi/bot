@@ -52,8 +52,13 @@ export class SingleRoom {
   statusDetailsList?: StatusDetails[];
   deserialize(input: SingleRoomData) {
     this.id = input.id ?? '';
-    this.roomNumber = input.rooms[0].roomNo ?? null;
-    this.floorNumber = input.rooms[0].floorNo ?? '';
+    if (this.id) {
+      this.roomNumber = input.rooms[0].roomNo ?? null;
+      this.floorNumber = input.rooms[0].floorNo ?? '';
+    } else {
+      this.roomNumber = input.roomNo ?? null;
+      this.floorNumber = input.floorNo ?? '';
+    }
     // this.status = input.status;
     this.currency = input.currency ?? '';
     this.price = input.price ?? null;

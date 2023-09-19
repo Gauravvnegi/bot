@@ -8,6 +8,8 @@
         label="Email Invoice"
         variant="outlined"
         (onClick)="handleEmailInvoice()"
+        [isLoading]="loadingPdf"
+        [disabled]="failedToLoad"
       ></hospitality-bot-button>
 
       <hospitality-bot-button
@@ -15,6 +17,8 @@
         variant="text"
         label="Download PDF"
         (onClick)="handleDownload()"
+        [isLoading]="loadingPdf"
+        [disabled]="failedToLoad"
       ></hospitality-bot-button>
 
       <!-- <p-splitButton
@@ -27,6 +31,8 @@
         *ngIf="!isInvoiceGenerated"
         label="Generate Invoice"
         (onClick)="handleGenerateInvoice()"
+        [isLoading]="loadingPdf"
+        [disabled]="failedToLoad"
       ></hospitality-bot-button>
     </ng-container>
   </hospitality-bot-navigation-header>

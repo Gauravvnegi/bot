@@ -222,9 +222,16 @@ export class BookingSummaryComponent implements OnInit {
             })
             .then(() => {
               // Route again to reload all form and service values.
-              this.router.navigate([
-                `/pages/efrontdesk/reservation/${manageReservationRoutes.addReservation.route}`,
-              ]);
+              this.router.navigate(
+                [
+                  `/pages/efrontdesk/reservation/${manageReservationRoutes.addReservation.route}`,
+                ],
+                {
+                  queryParams: {
+                    entityId: this.outletId ? this.outletId : this.entityId,
+                  },
+                }
+              );
             });
           this.modalService.close();
         },

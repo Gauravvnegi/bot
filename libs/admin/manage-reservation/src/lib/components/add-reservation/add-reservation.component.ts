@@ -12,6 +12,7 @@ import { ManageReservationService } from '../../services/manage-reservation.serv
 import {
   AdminUtilityService,
   EntitySubType,
+  HotelDetailService,
   Option,
 } from '@hospitality-bot/admin/shared';
 import { roomFields, roomReservationTypes } from '../../constants/reservation';
@@ -52,9 +53,10 @@ export class AddReservationComponent extends BaseReservationComponent
     protected globalFilterService: GlobalFilterService,
     private manageReservationService: ManageReservationService,
     protected activatedRoute: ActivatedRoute,
-    private formService: FormService
+    private formService: FormService,
+    protected hotelDetailService: HotelDetailService
   ) {
-    super(globalFilterService, activatedRoute);
+    super(globalFilterService, activatedRoute, hotelDetailService);
   }
 
   ngOnInit(): void {

@@ -6,6 +6,7 @@ import {
   SiteConfig,
 } from '../models/entityConfig.model';
 import { UserResponse } from '../types/user.type';
+import { EntitySubType } from '../types/table.type';
 
 @Injectable({ providedIn: 'root' })
 export class HotelDetailService {
@@ -57,6 +58,35 @@ export class HotelDetailService {
 
   getentityId() {
     return localStorage.getItem(tokensConfig.entityId);
+  }
+
+  /**
+   * @function getPropertyList
+   * @description get the all the properties list
+   * @returns propertyList [{ label : '' , value : '' , type : ''} , {...} , ...}]
+   * @memberof HotelDetailService
+   */
+  getPropertyList() {
+    let propertyList = [];
+    const selectedHotel = this.hotels.find((item) => item.id === this.entityId);
+
+    if (!selectedHotel) {
+      propertyList = [];
+      return;
+    }
+    propertyList = selectedHotel.entities.map((entity) => ({
+      label: entity.name,
+      value: entity.id,
+      type: entity.type ? entity.type : EntitySubType.ROOM_TYPE,
+    }));
+
+    propertyList.unshift({
+      label: selectedHotel.name,
+      value: selectedHotel.id,
+      type: selectedHotel.type ? selectedHotel.type : EntitySubType.ROOM_TYPE,
+    });
+
+    return propertyList;
   }
 }
 

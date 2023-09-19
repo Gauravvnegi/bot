@@ -1,41 +1,36 @@
-.drag {
-}
-
-.alone {
-  border: 1px solid brown;
-  height: 80px;
-}
-
 .grid-container {
   display: grid;
-  width: 800px; //will depend on number of cell
-  height: 400px;
-}
-
-.grid-cell {
-  width: 80px;
-  height: 80px;
-  position: relative;
+  // width: 800px; //will depend on number of cell move to ng style
+  // height: 400px;
 }
 
 .grid-row {
+  position: relative;
   display: grid;
   // grid-template-areas: 'grid-cell grid-cell grid-cell grid-cell grid-cell';
   grid-auto-flow: column;
 }
 
+.grid-cell {
+  position: relative;
+}
+
 .drag-grid {
   // border: 1px solid red;
   // width: 80px;
-  height: 80px;
-  padding: 10px;
+  position: relative;
+  // height: 80px;
+  // padding: 10px;
 }
 
 .cell-data {
-  height: 60px;
+  // height: 60px;
   background-color: #fdecec;
   border: 1px solid #d91615;
   border-radius: 4px;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
 }
 
 .non-drag-grid {
@@ -43,12 +38,13 @@
   // background-color: rgb(136, 168, 107);
   position: absolute;
   top: 0;
-  width: 60px;
-  height: 60px;
-  margin: 10px;
+  // width: 60px;
+  // height: 60px;
+  // margin: 10px;
   border-radius: 4px;
 }
 
+// Need to handle height and inset based on the gap and height
 // Drag handles style update - to make them not overlap each other
 :host ::ng-deep .ng-resizable-handle.ng-resizable-e {
   inset: 10px 5px 10px auto;

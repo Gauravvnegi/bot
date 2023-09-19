@@ -1,45 +1,39 @@
 <div class="drag" ngDraggable ngResizable>Drag me!</div>
 {{ offset | json }}
 {{ size | json }}
-<div class="grid-container" #myBounds>
-  <!-- Draggable block -->
-  <div
-    ngDraggable
-    ngResizable
-    [rzContainment]="myBounds"
-    [rzGrid]="50"
-    [bounds]="myBounds"
-    [inBounds]="true"
-    [gridSize]="100"
-    zIndex="100"
-    [position]="50"
-    [preventDefaultEvent]="true"
-    class="alone"
-    rzHandles="e,w"
-  >
-    <p>Drag 1</p>
-  </div>
-
+{{ position | json }}
+<div
+  class="grid-container"
+  #myBounds
+  [ngStyle]="{ width: noOfColumn * cellSize + 'px' }"
+>
   <div
     *ngFor="let x of gridRows; let i = index"
     class="grid-row"
     [id]="'myContainment_' + i"
   >
-    <div *ngFor="let y of gridsCols; let j = index" class="grid-cell">
-      <!-- [rzContainment]="getElementById(i)" -->
-      <!-- bound not working -->
+    <div
+      *ngFor="let y of columnMapper; let j = index"
+      class="grid-cell"
+      [ngStyle]="{
+        width: cellSize + 'px',
+        height: cellSize + 'px'
+      }"
+    >
       <div
         *ngIf="j % 4 === 0"
         ngDraggable
         ngResizable
-        [rzMinWidth]="80"
-        [rzGrid]="80"
+        [rzMinWidth]="60"
+        [rzGrid]="cellSize"
         [bounds]="myBounds"
         [position]="{ x: 0, y: 0 }"
         [inBounds]="true"
-        [gridSize]="80"
+        [gridSize]="cellSize"
         [ngStyle]="{
-          width: '160px'
+          width: '160px',
+          height: cellSize + 'px',
+          padding: cellGap + 'px'
         }"
         zIndex="100"
         zIndexMoving="1000"
@@ -49,7 +43,14 @@
         (rzStop)="handleResizing($event)"
         (endOffset)="handleDrag($event)"
       >
-        <div class="cell-data">Drag {{ i }}{{ j }}</div>
+        <div
+          class="cell-data"
+          [ngStyle]="{
+            height: cellSize - 2 * cellGap + 'px'
+          }"
+        >
+          Drag {{ i }}{{ j }}
+        </div>
       </div>
       <!-- for grid view -->
       <div
@@ -57,6 +58,11 @@
         [preventDefaultEvent]="true"
         class="non-drag-grid"
         zIndex="1"
+        [ngStyle]="{
+          width: cellSize - 2 * cellGap + 'px',
+          height: cellSize - 2 * cellGap + 'px',
+          margin: cellGap + 'px'
+        }"
       ></div>
     </div>
   </div>

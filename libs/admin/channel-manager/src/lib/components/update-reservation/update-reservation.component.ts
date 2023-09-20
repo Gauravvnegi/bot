@@ -29,81 +29,38 @@ export class UpdateReservationComponent implements OnInit {
     },
   ];
 
-  data = {
-    101: {
-      1: {
-        id: '1011',
-        cellOccupied: 3,
-        name: 'Dhruv',
-        hasNext: false,
-        hasPrev: false,
-      },
-      6: {
-        id: '1012',
-        cellOccupied: 2,
-        name: 'Jag',
-        hasNext: true,
-        hasPrev: false,
-      },
-
-      7: {
-        id: '1013',
-        cellOccupied: 3,
-        name: 'Ayush',
-        hasNext: false,
-        hasPrev: true,
-      },
+  data = [
+    {
+      content: 'Dhruv 101',
+      startPos: 1,
+      endPos: 3,
+      rowValue: 101,
     },
-    102: {
-      6: {
-        id: '1021',
-        cellOccupied: 5,
-        name: 'Tony Stark',
-        hasNext: false,
-        hasPrev: false,
-      },
+    {
+      content: 'Akash 101',
+      startPos: 3,
+      endPos: 4,
+      rowValue: 101,
     },
-    104: {
-      2: {
-        id: '1041',
-        cellOccupied: 4,
-        name: 'Shivendra',
-        hasNext: false,
-        hasPrev: false,
-      },
-      6: {
-        id: '1042',
-        cellOccupied: 2,
-        name: 'Satya',
-        hasNext: false,
-        hasPrev: false,
-      },
-
-      8: {
-        id: '1043',
-        cellOccupied: 3,
-        name: 'Saurav',
-        hasNext: false,
-        hasPrev: false,
-      },
-      11: {
-        id: '1044',
-        cellOccupied: 3,
-        name: 'Bruce',
-        hasNext: false,
-        hasPrev: false,
-      },
+    {
+      content: 'Jag 101',
+      startPos: 6,
+      endPos: 7,
+      rowValue: 101,
     },
-    105: {
-      9: {
-        id: '1051',
-        cellOccupied: 3,
-        name: 'Sanjay Singhania',
-        hasNext: false,
-        hasPrev: false,
-      },
+    {
+      content: 'Tony Stark 102',
+      startPos: 6,
+      endPos: 7,
+      rowValue: 102,
     },
-  };
+    {
+      content: 'Steve Rogers 103',
+      startPos: 3,
+      endPos: 6,
+      rowValue: 103,
+    },
+  ];
 
   constructor() {}
 

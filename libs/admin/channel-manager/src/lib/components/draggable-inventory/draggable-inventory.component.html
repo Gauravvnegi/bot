@@ -7,7 +7,7 @@
     }"
   >
     <ng-container *ngFor="let row of gridRows; let rowIdx = index">
-      <ng-container *ngFor="let y of columnMapper; let colIdx = index">
+      <ng-container *ngFor="let y of gridColumns; let colIdx = index">
         <div
           class="drag-grid"
           [bounds]="myBounds"
@@ -52,7 +52,7 @@
               height: cellSize - 2 * cellGap + 'px'
             }"
           >
-            {{ data[row.value][y]?.name }}
+            {{ data[row.value][y]?.content }}
           </div>
         </div>
       </ng-container>
@@ -70,7 +70,7 @@
       [id]="'myContainment_' + i"
     >
       <div
-        *ngFor="let y of columnMapper; let colIdx = index"
+        *ngFor="let y of gridColumns; let colIdx = index"
         class="grid-cell"
         [ngStyle]="{
           width: cellSize + 'px',
@@ -106,7 +106,7 @@
 </div>
 
 <div>
-  {{ columnMapper | json }}
+  {{ gridColumns | json }}
 </div>
 
 <div>

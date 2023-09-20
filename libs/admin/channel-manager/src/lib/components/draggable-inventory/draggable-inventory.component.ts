@@ -1,18 +1,7 @@
-import { Component, OnInit, ElementRef, Input } from '@angular/core';
-import { restrictionsRecord } from '../../constants/data';
-import { IResizeEvent } from 'angular2-draggable/lib/models/resize-event';
+import { Component, ElementRef, Input, OnInit } from '@angular/core';
 import { IPosition } from 'angular2-draggable';
-
-// drag-grid props
-// <!-- [rzContainment]="getElementById(i)" -->
-// <!-- [rzContainment]="myBounds" -->
-// <!-- bound not working: need to  -->
-
-// Below are also causing issue
-// [bounds]="myBounds"
-// [inBounds]="true"
-
-// above is working now
+import { IResizeEvent } from 'angular2-draggable/lib/models/resize-event';
+import { restrictionsRecord } from '../../constants/data';
 
 // handle method
 // onEmptyCellClick onDragDrop onResize menuItem
@@ -29,89 +18,82 @@ export class DraggableInventoryComponent implements OnInit {
   cellSize = 80;
   cellGap = 5;
 
-  // columnMapper will have the same keys in the that are in the per row data
-  @Input() columnMapper = this.getArray(14);
-  // columnMapper = ['18Mon', '19True', '20Wed', '21Thus'];
+  // gridColumns will have the same keys in the that are in the per row data
+  @Input() gridColumns = this.getArray(14);
+  // gridColumns = ['18Mon', '19True', '20Wed', '21Thus'];
 
   get noOfColumn() {
-    return this.columnMapper.length;
+    return this.gridColumns.length;
   }
 
   gridSize = 50;
-  @Input() gridRows: RowData[] = [
-    {
-      label: '101',
-      value: 101,
-    },
-    {
-      label: '102',
-      value: 102,
-    },
-    {
-      label: '103',
-      value: 103,
-    },
-  ];
+  @Input() gridRows: IGRowData[] = exampleRowData;
 
   get noOfRow() {
     return this.gridRows.length;
   }
 
-  @Input() set value(input) {
-    // add conversion logic
-    // hasNext, hasPrev, array to object conversion
+  @Input() set gridData(input: IGValue[]) {
+    const inputPerRow: Record<IDKey, IGValue[]> = input.reduce(
+      (value, item, idx) => {
+        value = {
+          ...value,
+          [item.rowValue]: [...(value[item.rowValue] ?? []), item],
+        };
+        return value;
+      },
+      {}
+    );
 
-    this.data = input;
+    const colIndices = this.gridColumns.reduce((p, c, i) => {
+      p = { ...p, [c]: i };
+      return p;
+    }, {});
+
+    let resultData: IGData = {};
+
+    for (let item in inputPerRow) {
+      const rowValues = inputPerRow[item];
+      const { startPos, endPos } = rowValues.reduce(
+        (value, item) => {
+          value.endPos.add(item.endPos);
+          value.startPos.add(item.startPos);
+          return value;
+        },
+        {
+          startPos: new Set(),
+          endPos: new Set(),
+        }
+      );
+
+      let rowResult: IGData[IDKey] = {};
+
+      rowValues.forEach((item) => {
+        const dataKey = item.startPos;
+        const hasPrev = endPos.has(item.startPos);
+        const hasNext = startPos.has(item.endPos);
+        const cellOccupied =
+          colIndices[item.endPos] - colIndices[item.startPos] + 1;
+
+        rowResult = {
+          ...(rowResult ?? {}),
+          [dataKey]: {
+            cellOccupied,
+            hasNext,
+            hasPrev,
+            content: item.content,
+          },
+        };
+      });
+
+      resultData = { ...resultData, [item]: rowResult };
+    }
+
+    this.data = resultData;
   }
 
-  // x: data[row.value][y]?.hasPrev ? cellSize / 2 : 1,
-
-  //
-  hasNext(row: RowData, key: Key) {
-    const currentRowData = this.data[row.value];
-    const currentCellData = currentRowData[key];
-    const endPoint = currentCellData.endPoint;
-    const hasNext = !!currentRowData[endPoint];
-  }
-
-  data: Record<Key, Record<Key, CellData>> = {
-    101: {
-      1: {
-        cellOccupied: 3,
-        name: 'Dhruv 101',
-        hasNext: true,
-        hasPrev: false,
-      },
-      3: {
-        cellOccupied: 2,
-        name: 'Akash 101',
-        hasNext: false,
-        hasPrev: true,
-      },
-      6: {
-        cellOccupied: 2,
-        name: 'Jag 101',
-        hasNext: false,
-        hasPrev: false,
-      },
-    },
-    102: {
-      6: {
-        cellOccupied: 2,
-        name: 'Tony Stark 102',
-        hasNext: false,
-        hasPrev: false,
-      },
-    },
-    103: {
-      3: {
-        cellOccupied: 4,
-        name: 'Steve Rogers 103',
-        hasNext: false,
-        hasPrev: false,
-      },
-    },
-  };
+  // Below present is the example data
+  data: IGData = exampleData;
 
   constructor(private el: ElementRef) {}
 
@@ -128,14 +110,11 @@ export class DraggableInventoryComponent implements OnInit {
     this.position = event.position;
   }
 
-  // [rzContainment]="getElementById(i)"
-  // [id]="'myContainment_' + i"
-
   handleDrag(
     event: IPosition,
     query: {
-      rv: Key;
-      cv: Key;
+      rv: IDKey;
+      cv: IDKey;
     }
   ) {
     const { rv, cv } = query;
@@ -152,15 +131,80 @@ export class DraggableInventoryComponent implements OnInit {
   }
 }
 
-type Key = string | number;
-type CellData = {
+export type IDKey = string | number;
+
+export type IGCellData = {
   cellOccupied: number;
-  name: string;
+  content: string;
   hasNext: boolean;
   hasPrev: boolean;
-  endPoint?: Key;
+  endPoint?: IDKey;
 };
-type RowData = {
-  value: Key;
+
+export type IGRowData = {
+  value: IDKey;
   label: string;
 };
+
+export type IGData = Record<IDKey, Record<IDKey, IGCellData>>;
+
+export type IGValue = {
+  startPos: IDKey;
+  endPos: IDKey;
+  content: string;
+  rowValue: IDKey;
+};
+
+const exampleData: IGData = {
+  101: {
+    1: {
+      cellOccupied: 3,
+      content: 'Dhruv 101',
+      hasNext: true,
+      hasPrev: false,
+    },
+    3: {
+      cellOccupied: 2,
+      content: 'Akash 101',
+      hasNext: false,
+      hasPrev: true,
+    },
+    6: {
+      cellOccupied: 2,
+      content: 'Jag 101',
+      hasNext: false,
+      hasPrev: false,
+    },
+  },
+  102: {
+    6: {
+      cellOccupied: 2,
+      content: 'Tony Stark 102',
+      hasNext: false,
+      hasPrev: false,
+    },
+  },
+  103: {
+    3: {
+      cellOccupied: 4,
+      content: 'Steve Rogers 103',
+      hasNext: false,
+      hasPrev: false,
+    },
+  },
+};
+
+const exampleRowData: IGRowData[] = [
+  {
+    label: '101',
+    value: 101,
+  },
+  {
+    label: '102',
+    value: 102,
+  },
+  {
+    label: '103',
+    value: 103,
+  },
+];

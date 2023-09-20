@@ -7,11 +7,11 @@ import { restrictionsRecord } from '../../constants/data';
 // onEmptyCellClick onDragDrop onResize menuItem
 
 @Component({
-  selector: 'hospitality-bot-draggable-inventory',
-  templateUrl: './draggable-inventory.component.html',
-  styleUrls: ['./draggable-inventory.component.scss'],
+  selector: 'hospitality-bot-interactive-grid',
+  templateUrl: './interactive-grid.component.html',
+  styleUrls: ['./interactive-grid.component.scss'],
 })
-export class DraggableInventoryComponent implements OnInit {
+export class InteractiveGridComponent implements OnInit {
   readonly restrictionsRecord = restrictionsRecord;
 
   // all in pixels

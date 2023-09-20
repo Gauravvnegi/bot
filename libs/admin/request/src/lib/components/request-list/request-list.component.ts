@@ -127,7 +127,6 @@ export class RequestListComponent implements OnInit, OnDestroy {
             actionType: this.tabFilterItems[this.tabFilterIdx].value,
             offset: 0,
             sort: 'updated',
-            limit: 10,
             entityType: res,
           },
         ]);

@@ -131,7 +131,7 @@ export class InteractiveGridComponent {
     return this.gridRows.length;
   }
 
-  @Output() onChange = new EventEmitter<IGOnChangeEventData>();
+  @Output() onChange = new EventEmitter<IGEventData>();
 
   getCurrentDataInfo(
     query: IGQueryEvent
@@ -163,7 +163,7 @@ export class InteractiveGridComponent {
     const endPos = startPos + data.cellOccupied - 1;
 
     // Current Data - which will be update as per calculation below
-    let currentData: IGOnChangeEventData = {
+    let currentData: IGEventData = {
       id: id,
       rowValue,
       endPos: this.gridColumns[endPos],
@@ -218,7 +218,7 @@ export class InteractiveGridComponent {
     const endPos = startPos + data.cellOccupied - 1;
 
     // Current Data - which will be update as per calculation below
-    let currentData: IGOnChangeEventData = {
+    let currentData: IGEventData = {
       id: id,
       rowValue,
       endPos: this.gridColumns[endPos],
@@ -233,6 +233,7 @@ export class InteractiveGridComponent {
 
     const xDiffIdx = (newPosX - currentPosX) / this.cellSize;
 
+    // Calculating new start and end pos
     const interimStartPos = startPos + (data.hasPrev ? 0.5 : 0);
     const interimEndPos = endPos - (data.hasNext ? 0.5 : 0);
 
@@ -254,7 +255,7 @@ export class InteractiveGridComponent {
   }
 
   getPosition({ rowIdx, colIdx, rowValue, colValue }: IGQueryEvent): IPosition {
-    // cannot use this in template as it reset it
+    // cannot use this in template as it reset the position
     return {
       x:
         colIdx * this.cellSize +
@@ -263,6 +264,9 @@ export class InteractiveGridComponent {
     };
   }
 
+  /**
+   * To get the width of interactive cell
+   */
   getWidth({ rowValue, colValue }: IGQueryEvent): number {
     const width =
       this.cellSize * this.data[rowValue][colValue]?.cellOccupied -
@@ -335,18 +339,33 @@ export class InteractiveGridComponent {
   }
 }
 
+/**
+ * @type Defines grid column or row value
+ */
 export type IGKey = string | number;
 
+/**
+ * @type Defines Cell data to create interactive gird cell
+ */
 export type IGCellData = Pick<IGValue, 'id' | 'content'> & {
   cellOccupied: number;
   hasNext: boolean;
   hasPrev: boolean;
 };
 
-export type IGOnChangeEventData = Omit<IGValue, 'content'>;
+/**
+ * @type Update single data value of interactive grid
+ */
+export type IGEventData = Omit<IGValue, 'content'>;
 
-export type IGData = Record<IGKey, Record<IGKey, IGCellData>>;
+/**
+ * @type Defines Grid data structure
+ */
+type IGData = Record<IGKey, Record<IGKey, IGCellData>>;
 
+/**
+ * @type Defines Input Grid value
+ */
 export type IGValue = {
   id: string;
   content: string;
@@ -355,7 +374,10 @@ export type IGValue = {
   rowValue: IGKey;
 };
 
-export type IGQueryEvent = {
+/**
+ * @type Query Event type
+ */
+type IGQueryEvent = {
   rowIdx: number;
   colIdx: number;
   rowValue: IGKey;

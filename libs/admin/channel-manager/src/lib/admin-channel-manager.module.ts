@@ -1,4 +1,3 @@
-import { AngularDraggableModule } from 'angular2-draggable';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -12,7 +11,6 @@ import { ChannelManagerService } from './services/channel-manager.service';
 
 @NgModule({
   imports: [
-    AngularDraggableModule,
     CommonModule,
     PanelModule,
     AdminSharedModule,

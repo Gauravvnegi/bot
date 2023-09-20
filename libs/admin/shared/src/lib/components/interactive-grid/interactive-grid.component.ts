@@ -1,7 +1,6 @@
 import { Component, ElementRef, Input, OnInit } from '@angular/core';
 import { IPosition } from 'angular2-draggable';
 import { IResizeEvent } from 'angular2-draggable/lib/models/resize-event';
-import { restrictionsRecord } from '../../constants/data';
 
 // handle method
 // onEmptyCellClick onDragDrop onResize menuItem
@@ -12,8 +11,6 @@ import { restrictionsRecord } from '../../constants/data';
   styleUrls: ['./interactive-grid.component.scss'],
 })
 export class InteractiveGridComponent implements OnInit {
-  readonly restrictionsRecord = restrictionsRecord;
-
   // all in pixels
   cellSize = 80;
   cellGap = 5;

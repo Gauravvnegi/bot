@@ -1,4 +1,31 @@
+@import 'main';
+
 .statistics {
   display: block;
   margin-bottom: 20px;
+}
+
+::ng-deep .p-sidebar-mask,
+.p-sidebar-mask-leave.p-component-overlay {
+  background-color: rgba(0, 0, 0, 0) !important;
+}
+
+::ng-deep .p-component-overlay {
+  z-index: 400 !important;
+}
+
+:host ::ng-deep .p-sidebar {
+  top: 65px;
+  width: 27rem;
+}
+
+:host ::ng-deep .nav-header {
+  .nav-wrapper {
+    .nav-actions {
+      z-index: 470 !important;
+    }
+  }
+  .nav-wrapper__sticky {
+    z-index: 470 !important;
+  }
 }

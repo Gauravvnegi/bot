@@ -1,0 +1,32 @@
+@import 'main';
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  .heading {
+    @include bold-lg-text;
+    padding: 10px;
+  }
+  .close {
+    padding: 10px;
+    .close-icon {
+      cursor: pointer;
+    }
+  }
+}
+
+.container {
+  background-color: #f4f5f7;
+  height: 82vh;
+  gap: 10px;
+  padding: 10px 15px;
+  display: flex;
+  flex-direction: column;
+  .content {
+    padding: 10px 15px;
+    width: 100%;
+    background-color: #f0ecff;
+    border: solid 1px #5f38f9;
+    border-radius: 10px;
+  }
+}

@@ -25,6 +25,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
   tables = TableNames;
   welcomeMessage = 'Welcome To Your Dashboard';
   navRoutes: NavRouteOptions = [{ label: 'eFrontdesk Dashboard', link: './' }];
+  isSidebarVisible: boolean = false;
+
   private $subscription = new Subscription();
   constructor(
     private reservationService: ReservationService,

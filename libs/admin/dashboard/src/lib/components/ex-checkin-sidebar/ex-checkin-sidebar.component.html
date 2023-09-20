@@ -1,0 +1,35 @@
+<div class="wrapper">
+  <div class="header">
+    <h1 class="heading">Ex. Check in</h1>
+    <div class="close">
+      <i
+        (click)="onCloseSidebar.emit()"
+        class="fa fa-times close-icon"
+        aria-hidden="true"
+      ></i>
+    </div>
+  </div>
+  <hospitality-bot-tab-header
+    [listItems]="tabFilterItems"
+    [selectedIndex]="tabFilterIdx"
+    (selectedTabChange)="onSelectedTabFilterChange($event.index)"
+  ></hospitality-bot-tab-header>
+
+  <div class="container">
+    <div class="content">
+      Some content here
+    </div>
+    <div class="content">
+      Some content here
+    </div>
+    <div class="content">
+      Some content here
+    </div>
+    <div class="content">
+      Some content here
+    </div>
+    <div class="content">
+      Some content here
+    </div>
+  </div>
+</div>

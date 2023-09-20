@@ -2,11 +2,31 @@
   [heading]="welcomeMessage"
   [routes]="navRoutes"
   [isBack]="false"
+  class="nav-header"
 >
-  <hospitality-bot-button
+  <!-- <hospitality-bot-button
     label="View Pre-Arrival Request"
     (onClick)="onViewPreArrivalRequest()"
-  ></hospitality-bot-button>
+  ></hospitality-bot-button> -->
+  <div class="sidebar-wrapper">
+    <p-sidebar
+      [visible]="isSidebarVisible"
+      (onHide)="isSidebarVisible = false"
+      class="sidebar"
+      [showCloseIcon]="false"
+      position="right"
+    >
+      <div *ngIf="isSidebarVisible">
+        <hospitality-bot-ex-checkin-sidebar
+          (onCloseSidebar)="isSidebarVisible = false"
+        ></hospitality-bot-ex-checkin-sidebar>
+      </div>
+    </p-sidebar>
+    <hospitality-bot-button
+      label="Ex Checkin"
+      (onClick)="isSidebarVisible = true"
+    ></hospitality-bot-button>
+  </div>
 </hospitality-bot-navigation-header>
 
 <hospitality-bot-statistics class="statistics"></hospitality-bot-statistics>

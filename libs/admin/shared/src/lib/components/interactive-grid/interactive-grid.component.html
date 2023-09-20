@@ -18,10 +18,14 @@
           ngResizable
           [rzMinWidth]="cellSize / 2"
           [rzGrid]="cellSize / 2"
-          [position]="{
-            x: colIdx * cellSize + (data[row][col]?.hasPrev ? cellSize / 2 : 0),
-            y: rowIdx * cellSize
-          }"
+          [position]="
+            getPosition({
+              rowValue: row,
+              colValue: col,
+              colIdx: colIdx,
+              rowIdx: rowIdx
+            })
+          "
           [gridSize]="cellSize / 2"
           [ngStyle]="{
             width:
@@ -38,14 +42,18 @@
           rzHandles="e,w"
           (rzStop)="
             handleResizing($event, {
-              rv: row,
-              cv: col
+              rowValue: row,
+              colValue: col,
+              colIdx: colIdx,
+              rowIdx: rowIdx
             })
           "
-          (stopped)="
+          (endOffset)="
             handleDrag($event, {
-              rv: row,
-              cv: col
+              rowValue: row,
+              colValue: col,
+              colIdx: colIdx,
+              rowIdx: rowIdx
             })
           "
         >

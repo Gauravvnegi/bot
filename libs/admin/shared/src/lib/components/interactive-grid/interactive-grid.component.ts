@@ -59,7 +59,7 @@ export class InteractiveGridComponent {
     this.data = this.getModdedData(input);
   }
 
-  @Output() onChange = new EventEmitter<{}>();
+  @Output() onChange = new EventEmitter<IGOnChangeEvent>();
 
   console: any = {};
   offset: IPosition = { x: 0, y: 0 };
@@ -67,13 +67,28 @@ export class InteractiveGridComponent {
   size: IResizeEvent['size'] = { height: 80, width: 80 };
 
   handleResizing(event: IResizeEvent, query: IGQueryEvent) {
-    console.log(event, ' resize event ', query);
+    const { rowValue, colValue } = query;
+    const data = this.data[rowValue][colValue];
+    const id = data.id;
+
+    console.log('---resized----', id);
+
+    console.log('event: ', {
+      pos: event.position,
+      size: event.size,
+      direction: event.direction,
+    });
+    console.log('data: ', data);
+    console.log('----------');
+
     this.size = event.size;
     this.position = event.position;
 
     this.onChange.emit({
-      size: this.size,
-      position: this.position,
+      id: id,
+      rowValue: rowValue,
+      endPos: 1,
+      startPos: 1,
     });
 
     this.console = {
@@ -85,13 +100,30 @@ export class InteractiveGridComponent {
   }
 
   handleDrag(event: IPosition, query: IGQueryEvent) {
-    const { rv, cv } = query;
-    console.log(event, ' drag event ', this.data[rv][cv]);
+    const { rowValue, colValue } = query;
+    const data = this.data[rowValue][colValue];
+    const id = data.id;
+
+    console.log('---dragged----', id);
+    console.log('current position: ', this.getPosition(query));
+    console.log('event: ', event);
+    console.log('data: ', data);
+    console.log('----------');
+
     this.offset = event;
 
     this.console = {
       event,
       query,
+    };
+  }
+
+  getPosition({ rowIdx, colIdx, rowValue, colValue }: IGQueryEvent): IPosition {
+    return {
+      x:
+        colIdx * this.cellSize +
+        (this.data[rowValue][colValue]?.hasPrev ? this.cellSize / 2 : 0),
+      y: rowIdx * this.cellSize,
     };
   }
 
@@ -165,26 +197,29 @@ export class InteractiveGridComponent {
 
 export type IGKey = string | number;
 
-export type IGCellData = {
-  id: string;
+export type IGCellData = Pick<IGValue, 'id' | 'content'> & {
   cellOccupied: number;
-  content: string;
   hasNext: boolean;
   hasPrev: boolean;
-  endPoint?: IGKey;
 };
+
+export type IGOnChangeEvent = Omit<IGValue, 'content'>;
 
 export type IGData = Record<IGKey, Record<IGKey, IGCellData>>;
 
 export type IGValue = {
+  id: string;
+  content: string;
   startPos: IGKey;
   endPos: IGKey;
   rowValue: IGKey;
-} & Pick<IGCellData, 'id' | 'content'>;
+};
 
 export type IGQueryEvent = {
-  rv: IGKey;
-  cv: IGKey;
+  rowIdx: number;
+  colIdx: number;
+  rowValue: IGKey;
+  colValue: IGKey;
 };
 
 const exampleData: IGData = {

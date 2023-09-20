@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { IPosition } from 'angular2-draggable';
 import { IResizeEvent } from 'angular2-draggable/lib/models/resize-event';
 
@@ -11,27 +11,52 @@ import { IResizeEvent } from 'angular2-draggable/lib/models/resize-event';
   styleUrls: ['./interactive-grid.component.scss'],
 })
 export class InteractiveGridComponent implements OnInit {
-  // all in pixels
-  cellSize = 80;
-  cellGap = 5;
+  /**
+   * Data to map the interactive grid cell
+   */
+  data: IGData = exampleData;
 
-  // gridColumns will have the same keys in the that are in the per row data
+  /**
+   *Cell Size is grid height and width including the gap
+   */
+  @Input() cellSize: number = 80;
+
+  /**
+   * Cell gap will decide the spaces between the grid blocks
+   */
+  @Input() cellGap: number = 5;
+
+  /**
+   * Array of gird column value and also decide the no of column based on the length
+   * @example ['18Mon', '19Tue', '20Wed', '21Thus'] or [1, 2, 3, 4]
+   */
   @Input() gridColumns = this.getArray(14);
-  // gridColumns = ['18Mon', '19True', '20Wed', '21Thus'];
 
+  /**
+   * Return no of columns
+   */
   get noOfColumn() {
     return this.gridColumns.length;
   }
 
-  gridSize = 50;
-  @Input() gridRows: IGRowData[] = exampleRowData;
+  /**
+   * Array of grid rows value and also decide the no of row based on the length
+   * @example ['LU101', 'LU102', 'LU103', 'LU104', 'LU105'] or [101, 102, 103, 104]
+   */
+  @Input() gridRows: IGKey[] = exampleRowData;
 
+  /**
+   * Return no of rows
+   */
   get noOfRow() {
     return this.gridRows.length;
   }
 
+  /**
+   * Array of data to be shown
+   */
   @Input() set gridData(input: IGValue[]) {
-    const inputPerRow: Record<IDKey, IGValue[]> = input.reduce(
+    const inputPerRow: Record<IGKey, IGValue[]> = input.reduce(
       (value, item, idx) => {
         value = {
           ...value,
@@ -63,7 +88,7 @@ export class InteractiveGridComponent implements OnInit {
         }
       );
 
-      let rowResult: IGData[IDKey] = {};
+      let rowResult: IGData[IGKey] = {};
 
       rowValues.forEach((item) => {
         const dataKey = item.startPos;
@@ -89,10 +114,7 @@ export class InteractiveGridComponent implements OnInit {
     this.data = resultData;
   }
 
-  // Below present is the example data
-  data: IGData = exampleData;
-
-  constructor(private el: ElementRef) {}
+  constructor() {}
 
   ngOnInit(): void {}
 
@@ -110,8 +132,8 @@ export class InteractiveGridComponent implements OnInit {
   handleDrag(
     event: IPosition,
     query: {
-      rv: IDKey;
-      cv: IDKey;
+      rv: IGKey;
+      cv: IGKey;
     }
   ) {
     const { rv, cv } = query;
@@ -119,37 +141,28 @@ export class InteractiveGridComponent implements OnInit {
     this.offset = event;
   }
 
-  getElementById(id: string): HTMLElement | null {
-    return this.el.nativeElement.querySelector(`#myContainment_${id}`);
-  }
-
   getArray(length: number) {
     return Array.from({ length }, (_, index) => index + 1);
   }
 }
 
-export type IDKey = string | number;
+export type IGKey = string | number;
 
 export type IGCellData = {
   cellOccupied: number;
   content: string;
   hasNext: boolean;
   hasPrev: boolean;
-  endPoint?: IDKey;
+  endPoint?: IGKey;
 };
 
-export type IGRowData = {
-  value: IDKey;
-  label: string;
-};
-
-export type IGData = Record<IDKey, Record<IDKey, IGCellData>>;
+export type IGData = Record<IGKey, Record<IGKey, IGCellData>>;
 
 export type IGValue = {
-  startPos: IDKey;
-  endPos: IDKey;
+  startPos: IGKey;
+  endPos: IGKey;
   content: string;
-  rowValue: IDKey;
+  rowValue: IGKey;
 };
 
 const exampleData: IGData = {
@@ -191,17 +204,4 @@ const exampleData: IGData = {
   },
 };
 
-const exampleRowData: IGRowData[] = [
-  {
-    label: '101',
-    value: 101,
-  },
-  {
-    label: '102',
-    value: 102,
-  },
-  {
-    label: '103',
-    value: 103,
-  },
-];
+const exampleRowData: IGKey[] = [101, 102, 103];

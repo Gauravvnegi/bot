@@ -6,28 +6,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./update-reservation.component.scss'],
 })
 export class UpdateReservationComponent implements OnInit {
-  gridRows = [
-    {
-      label: '101',
-      value: 101,
-    },
-    {
-      label: '102',
-      value: 102,
-    },
-    {
-      label: '103',
-      value: 103,
-    },
-    {
-      label: '104',
-      value: 104,
-    },
-    {
-      label: '105',
-      value: 105,
-    },
-  ];
+  gridRows = [101, 102, 103, 104, 105];
 
   data = [
     {

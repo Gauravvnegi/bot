@@ -7,29 +7,27 @@
     }"
   >
     <ng-container *ngFor="let row of gridRows; let rowIdx = index">
-      <ng-container *ngFor="let y of gridColumns; let colIdx = index">
+      <ng-container *ngFor="let col of gridColumns; let colIdx = index">
         <div
           class="drag-grid"
           [bounds]="myBounds"
           [rzContainment]="myBounds"
           [inBounds]="true"
-          *ngIf="data[row.value] && data[row.value][y]"
+          *ngIf="data[row] && data[row][col]"
           ngDraggable
           ngResizable
           [rzMinWidth]="cellSize / 2"
           [rzGrid]="cellSize / 2"
           [position]="{
-            x:
-              colIdx * cellSize +
-              (data[row.value][y]?.hasPrev ? cellSize / 2 : 0),
+            x: colIdx * cellSize + (data[row][col]?.hasPrev ? cellSize / 2 : 0),
             y: rowIdx * cellSize
           }"
           [gridSize]="cellSize / 2"
           [ngStyle]="{
             width:
-              cellSize * data[row.value][y]?.cellOccupied -
-              (data[row.value][y]?.hasNext ? cellSize / 2 : 0) -
-              (data[row.value][y]?.hasPrev ? cellSize / 2 : 0) +
+              cellSize * data[row][col]?.cellOccupied -
+              (data[row][col]?.hasNext ? cellSize / 2 : 0) -
+              (data[row][col]?.hasPrev ? cellSize / 2 : 0) +
               'px',
             height: cellSize + 'px',
             padding: cellGap + 'px'
@@ -41,8 +39,8 @@
           (rzStop)="handleResizing($event)"
           (endOffset)="
             handleDrag($event, {
-              rv: row.value,
-              cv: y
+              rv: row,
+              cv: col
             })
           "
         >
@@ -52,7 +50,7 @@
               height: cellSize - 2 * cellGap + 'px'
             }"
           >
-            {{ data[row.value][y]?.content }}
+            {{ data[row][col]?.content }}
           </div>
         </div>
       </ng-container>
@@ -70,7 +68,7 @@
       [id]="'myContainment_' + i"
     >
       <div
-        *ngFor="let y of gridColumns; let colIdx = index"
+        *ngFor="let col of gridColumns; let colIdx = index"
         class="grid-cell"
         [ngStyle]="{
           width: cellSize + 'px',

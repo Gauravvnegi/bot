@@ -2,23 +2,24 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { IPosition } from 'angular2-draggable';
 import { IResizeEvent } from 'angular2-draggable/lib/models/resize-event';
 
-// handle method - resize and drag
-// onEmptyCellClick onDragDrop onResize menuItem
-// data reinitialize handle function
+/**
+ * @class InteractiveGridComponent
+ * @todo data reinitialize handle function (reset functionality)
+ * @todo empty cell event
+ * @todo Progress spinner (onChange event in progress loading)
+ * @todo Tool tip on content
+ */
 @Component({
   selector: 'hospitality-bot-interactive-grid',
   templateUrl: './interactive-grid.component.html',
   styleUrls: ['./interactive-grid.component.scss'],
 })
 export class InteractiveGridComponent {
+  /**
+   * Set true to see the column data in last cell
+   * Only for development purpose
+   */
   @Input() devMode = false;
-  eventData: IGOnChangeEvent = {
-    endPos: null,
-    id: null,
-    rowValue: null,
-    startPos: null,
-  };
-  // Above code is for development only
 
   /**
    *Cell Size is grid height and width including the gap
@@ -31,7 +32,28 @@ export class InteractiveGridComponent {
   @Input() cellGap: number = 5;
 
   /**
-   * Grid Data setter
+   * Grid Data setter to set he grid rows and column data with the available value
+   * @example
+   * const gridData = {
+   *    rows: [101, 102, 103 ,104, 105],
+   *    column: ['18Mon', '19Tue', '20Wed', '21Thus'],
+   *    values: [
+   *      {
+   *        id: 'RES001',
+   *        content: 'Guest 001',
+   *        startPos: '01Mon',
+   *        endPos: '03Wed',
+   *        rowValue: 101,
+   *      },
+   *      {
+   *        id: 'RES002',
+   *        content: 'Guest 002',
+   *        startPos: '03Wed',
+   *        endPos: '04Thu',
+   *        rowValue: 102,
+   *      },
+   *    ]
+   *  }
    */
   @Input() set gridData(data: {
     rows: IGKey[];
@@ -50,6 +72,34 @@ export class InteractiveGridComponent {
 
   /**
    * Data to map the interactive grid cell
+   * @example
+   * const data = {
+   *   101: {
+   *     1: {
+   *       id: 'RES001',
+   *       cellOccupied: 3,
+   *       content: 'Guest 1',
+   *       hasNext: true,
+   *       hasPrev: false,
+   *     },
+   *     3: {
+   *       id: 'RES002',
+   *       cellOccupied: 2,
+   *       content: 'Guest 2',
+   *       hasNext: false,
+   *       hasPrev: true,
+   *     },
+   *   },
+   *   103: {
+   *     3: {
+   *       id: 'RES005',
+   *       cellOccupied: 4,
+   *       content: 'Guest 3',
+   *       hasNext: false,
+   *       hasPrev: false,
+   *     },
+   *   },
+   * };
    */
   data: IGData = {};
 
@@ -81,7 +131,7 @@ export class InteractiveGridComponent {
     return this.gridRows.length;
   }
 
-  @Output() onChange = new EventEmitter<IGOnChangeEvent>();
+  @Output() onChange = new EventEmitter<IGOnChangeEventData>();
 
   getCurrentDataInfo(
     query: IGQueryEvent
@@ -107,19 +157,21 @@ export class InteractiveGridComponent {
 
     const isLeft = !event.direction.e;
 
-    const width = event.size.width;
-    const currentWidth = this.getWidth(query);
     const currentPos = this.getPosition(query).x;
     const currentStartIdx = currentPos / this.cellSize + 1;
     const startPos = Math.trunc(currentStartIdx) - 1;
     const endPos = startPos + data.cellOccupied - 1;
 
-    let currentData = {
+    // Current Data - which will be update as per calculation below
+    let currentData: IGOnChangeEventData = {
       id: id,
       rowValue,
       endPos: this.gridColumns[endPos],
       startPos: this.gridColumns[startPos],
     };
+
+    const width = event.size.width;
+    const currentWidth = this.getWidth(query);
 
     if (isLeft) {
       // left is already negative
@@ -149,18 +201,56 @@ export class InteractiveGridComponent {
       };
     }
 
-    this.eventData = currentData;
     this.onChange.emit(currentData);
   }
 
+  /**
+   * @function handleDrag To handle drag and drop event
+   * @summary If cell is dropped half-way (in-between row) then next bottom row value will be considered
+   */
   handleDrag(event: IPosition, query: IGQueryEvent) {
     const { data, id } = this.getCurrentDataInfo(query);
+    const { x: currentPosX, y: currentPosY } = this.getPosition(query);
+    const { x: newPosX, y: newPosY } = event;
+    const { rowValue } = query;
 
-    console.log('---dragged----', id);
-    console.log('current position: ', this.getPosition(query));
-    console.log('event: ', event);
-    console.log('data: ', data);
-    console.log('----------');
+    const startPos = Math.trunc(currentPosX / this.cellSize);
+    const endPos = startPos + data.cellOccupied - 1;
+
+    // Current Data - which will be update as per calculation below
+    let currentData: IGOnChangeEventData = {
+      id: id,
+      rowValue,
+      endPos: this.gridColumns[endPos],
+      startPos: this.gridColumns[startPos],
+    };
+
+    // Calculating new row value
+    const currentYIdx = Math.round(currentPosY / this.cellSize);
+    const yDiff = newPosY - currentPosY; // Vertical change
+    const yDiffIdx = Math.round(yDiff / this.cellSize);
+    const newYIdx = currentYIdx + yDiffIdx;
+
+    const xDiffIdx = (newPosX - currentPosX) / this.cellSize;
+
+    const interimStartPos = startPos + (data.hasPrev ? 0.5 : 0);
+    const interimEndPos = endPos - (data.hasNext ? 0.5 : 0);
+
+    const newStartPosInDecimal = interimStartPos + xDiffIdx; // can be in decimal (0.5)
+    const newStartPos = Math.trunc(newStartPosInDecimal); // removed 0.5 as 2 or 2.5 will always be 2
+
+    const newEndPosInDecimal = interimEndPos + xDiffIdx; // can be in decimal (0.5)
+    const newEndPos = Math.round(newEndPosInDecimal); // round of as 2.5 or 3 is same for the end that will be 3
+
+    // Updated data
+    currentData = {
+      ...currentData,
+      rowValue: this.gridRows[newYIdx],
+      startPos: this.gridColumns[newStartPos],
+      endPos: this.gridColumns[newEndPos],
+    };
+
+    this.onChange.emit(currentData);
   }
 
   getPosition({ rowIdx, colIdx, rowValue, colValue }: IGQueryEvent): IPosition {
@@ -187,7 +277,7 @@ export class InteractiveGridComponent {
    */
   getModdedData(input: IGValue[]): IGData {
     const inputPerRow: Record<IGKey, IGValue[]> = input.reduce(
-      (value, item, idx) => {
+      (value, item) => {
         value = {
           ...value,
           [item.rowValue]: [...(value[item.rowValue] ?? []), item],
@@ -253,7 +343,7 @@ export type IGCellData = Pick<IGValue, 'id' | 'content'> & {
   hasPrev: boolean;
 };
 
-export type IGOnChangeEvent = Omit<IGValue, 'content'>;
+export type IGOnChangeEventData = Omit<IGValue, 'content'>;
 
 export type IGData = Record<IGKey, Record<IGKey, IGCellData>>;
 
@@ -271,49 +361,3 @@ export type IGQueryEvent = {
   rowValue: IGKey;
   colValue: IGKey;
 };
-
-const exampleData: IGData = {
-  101: {
-    1: {
-      id: 'RES001',
-      cellOccupied: 3,
-      content: 'Dhruv 101',
-      hasNext: true,
-      hasPrev: false,
-    },
-    3: {
-      id: 'RES002',
-      cellOccupied: 2,
-      content: 'Akash 101',
-      hasNext: false,
-      hasPrev: true,
-    },
-    6: {
-      id: 'RES003',
-      cellOccupied: 2,
-      content: 'Jag 101',
-      hasNext: false,
-      hasPrev: false,
-    },
-  },
-  102: {
-    6: {
-      id: 'RES004',
-      cellOccupied: 2,
-      content: 'Tony Stark 102',
-      hasNext: false,
-      hasPrev: false,
-    },
-  },
-  103: {
-    3: {
-      id: 'RES005',
-      cellOccupied: 4,
-      content: 'Steve Rogers 103',
-      hasNext: false,
-      hasPrev: false,
-    },
-  },
-};
-
-const exampleRowData: IGKey[] = [101, 102, 103];

@@ -10,7 +10,7 @@ import {
   styleUrls: ['./update-reservation.component.scss'],
 })
 export class UpdateReservationComponent implements OnInit {
-  gridRows: IGKey[] = [101, 102, 103, 104, 105];
+  gridRows: IGKey[] = [101, 102, 103, 104, 105, 106, 107, 108, 109, 110];
 
   // gridCols = [Array.from({ length: 14 }, (_, index) => index + 1)];
   gridCols: IGKey[] = [
@@ -90,6 +90,13 @@ export class UpdateReservationComponent implements OnInit {
       // endPos: 7,
       startPos: '05Fri',
       endPos: '07Sun',
+      rowValue: 104,
+    },
+    {
+      id: 'RES007',
+      content: 'Ayush 104',
+      startPos: '07Sun',
+      endPos: '09Tue',
       rowValue: 104,
     },
   ];

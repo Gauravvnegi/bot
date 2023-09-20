@@ -17,6 +17,8 @@ import { GuestInfo } from '../models/reservations.model';
 export class FormService {
   dateDifference = new BehaviorSubject(1);
 
+  disableBtn: boolean = false;
+
   guestInformation: BehaviorSubject<GuestInfo> = new BehaviorSubject<GuestInfo>(
     null
   );
@@ -167,5 +169,6 @@ export class FormService {
   resetData() {
     this.reservationForm.next(null);
     this.sourceData.next(null);
+    this.disableBtn = false;
   }
 }

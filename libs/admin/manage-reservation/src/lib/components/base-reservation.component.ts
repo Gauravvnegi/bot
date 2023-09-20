@@ -8,6 +8,7 @@ import {
 } from '../models/reservations.model';
 import { SelectedEntity } from '../types/reservation.type';
 import {
+  EntitySubType,
   HotelDetailService,
   NavRouteOptions,
 } from '@hospitality-bot/admin/shared';
@@ -16,6 +17,9 @@ import { ActivatedRoute } from '@angular/router';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { manageReservationRoutes } from '../constants/routes';
 import { ReservationForm } from '../constants/form';
+import { JourneyState } from '../constants/reservation';
+import { ReservationType } from '../constants/reservation-table';
+import { FormService } from '../services/form.service';
 
 @Component({
   selector: 'hospitality-bot-outlet-base',
@@ -49,7 +53,8 @@ export class BaseReservationComponent {
   constructor(
     protected globalFilterService: GlobalFilterService,
     protected activatedRoute: ActivatedRoute,
-    protected hotelDetailService: HotelDetailService
+    protected hotelDetailService: HotelDetailService,
+    protected formService: FormService
   ) {
     this.reservationId = this.activatedRoute.snapshot.paramMap.get('id');
     this.entityId = this.globalFilterService.entityId;
@@ -71,28 +76,35 @@ export class BaseReservationComponent {
     this.selectedEntity = selectedOutlet[0];
   }
 
-  setFormDisability(): void {
+  setFormDisability(journeyState?: JourneyState): void {
     // this.userForm.get('reservationInformation.source').disable();
     if (this.reservationId) {
-      this.userForm.disable();
-      // const reservationType =
-      //   this.bookingType === EntitySubType.ROOM_TYPE
-      //     ? this.reservationInfoControls.reservationType
-      //     : this.reservationInfoControls.status;
-      // switch (true) {
-      //   case reservationType.value === ReservationType.CONFIRMED:
-      //     this.disabledForm = true;
-      //     break;
-      //   case reservationType.value === ReservationType.CANCELED:
-      //     this.userForm.disable();
-      //     this.disabledForm = true;
-      //     break;
-      // }
-      // this.paymentControls.currency.enable();
-      // this.paymentControls.totalPaidAmount.enable();
-      // this.paymentControls.transactionId.enable();
-      // this.paymentControls.paymentRemark.enable();
-      // reservationType.enable();
+      const reservationType =
+        this.bookingType === EntitySubType.ROOM_TYPE
+          ? this.reservationInfoControls.reservationType
+          : this.reservationInfoControls.status;
+      switch (true) {
+        case this.bookingType !== EntitySubType.ROOM_TYPE ||
+          reservationType.value === ReservationType.CANCELED:
+          this.userForm.disable();
+          this.disabledForm = true;
+          this.formService.disableBtn = true;
+          break;
+
+        case journeyState !== JourneyState.COMPLETED:
+          if (reservationType.value === ReservationType.CONFIRMED) {
+            this.formService.disableBtn = true;
+            this.inputControls.guestInformation.get('guestDetails').disable();
+            this.inputControls.roomInformation.get('roomTypes').disable();
+          }
+          break;
+      }
+      for (const controlName in this.paymentControls) {
+        // if (paymentControls.hasOwnProperty(controlName)) {
+        this.paymentControls[controlName].enable();
+        // }
+      }
+      reservationType.enable();
     }
   }
 

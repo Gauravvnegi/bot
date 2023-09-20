@@ -30,6 +30,7 @@ import { RoomTypeForm } from 'libs/admin/room/src/lib/models/room.model';
 import { ReservationForm, RoomTypes } from '../../constants/form';
 import { RoomsByRoomType } from 'libs/admin/room/src/lib/types/service-response';
 import { IteratorField } from 'libs/admin/shared/src/lib/types/fields.type';
+import { FormService } from '../../services/form.service';
 @Component({
   selector: 'hospitality-bot-room-iterator',
   templateUrl: './room-iterator.component.html',
@@ -70,7 +71,8 @@ export class RoomIteratorComponent extends IteratorComponent
     private adminUtilityService: AdminUtilityService,
     private manageReservationService: ManageReservationService,
     private snackbarService: SnackBarService,
-    private controlContainer: ControlContainer
+    private controlContainer: ControlContainer,
+    public formService: FormService
   ) {
     super(fb);
   }
@@ -283,6 +285,8 @@ export class RoomIteratorComponent extends IteratorComponent
         .get('childCount')
         .patchValue(0, { emitEvent: false });
     }
+
+    this.isDefaultRoomType = false;
   }
 
   /**

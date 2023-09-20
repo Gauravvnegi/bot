@@ -82,7 +82,7 @@ export class BookingSummaryComponent implements OnInit {
     protected activatedRoute: ActivatedRoute,
     private modalService: ModalService,
     private _clipboard: Clipboard,
-    private formService: FormService
+    public formService: FormService
   ) {}
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -101,7 +101,8 @@ export class BookingSummaryComponent implements OnInit {
   }
 
   offerSelect(item?: any): void {
-    if (!this.reservationId) {
+    if (!this.formService.disableBtn) {
+      // Disable button when checkin completed
       if (item) {
         this.displayBookingOffer = !this.displayBookingOffer;
         this.onOfferItemSelect.emit(item);
@@ -112,7 +113,7 @@ export class BookingSummaryComponent implements OnInit {
   }
 
   applyOffer() {
-    if (!this.reservationId)
+    if (!this.formService.disableBtn)
       this.displayBookingOffer = !this.displayBookingOffer;
   }
 

@@ -1,7 +1,5 @@
 import { IteratorField } from 'libs/admin/shared/src/lib/types/fields.type';
-import { RatePlanData } from '../models/reservations.model';
 import {
-  AddedRatePlans,
   ReservationRatePlan,
 } from 'libs/admin/room/src/lib/constant/form';
 
@@ -219,3 +217,17 @@ export const roomReservationTypes = [
   { label: 'Draft', value: 'DRAFT' },
   { label: 'Confirmed', value: 'CONFIRMED' },
 ];
+
+export enum JourneyState {
+  COMPLETED = 'COMPLETED',
+  PENDING = 'PENDING',
+  INITIATED = 'INITIATED',
+  REJECTED = 'REJECTED',
+}
+
+export enum JourneyType {
+  CHECKIN = 'CHECKIN',
+  CHECKOUT = 'CHECKOUT',
+  PRECHECKIN = 'PRECHECKIN',
+  NEW = 'NEW'
+}

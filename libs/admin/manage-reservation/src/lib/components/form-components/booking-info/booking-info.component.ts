@@ -30,6 +30,7 @@ export class BookingInfoComponent implements OnInit {
   @Input() statusOptions: Option[] = [];
   @Input() eventTypes: Option[] = [];
   @Input() bookingType: string;
+  @Input() reservationId: string;
 
   otaOptions: Option[] = [];
   @Output() getSummary: EventEmitter<any> = new EventEmitter<any>();

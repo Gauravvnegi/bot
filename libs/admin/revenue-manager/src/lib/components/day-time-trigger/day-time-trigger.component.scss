@@ -99,3 +99,9 @@ th {
   letter-spacing: 0.96px !important;
   font-weight: 600 !important;
 }
+
+:host ::ng-deep .p-field {
+  .main {
+    gap: 2em;
+  }
+}

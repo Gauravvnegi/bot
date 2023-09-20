@@ -1,13 +1,16 @@
 import { Injectable } from '@angular/core';
 import { QueryConfig } from '@hospitality-bot/admin/shared';
 import { ApiService } from '@hospitality-bot/shared/utils';
-import { SearchResultResponse } from 'libs/admin/library/src/lib/types/response';
 import { RoomTypeListResponse } from 'libs/admin/room/src/lib/types/service-response';
-import { extend } from 'lodash';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 @Injectable()
 export class HousekeepingService extends ApiService {
+   
+  refreshData = new BehaviorSubject<boolean>(false); // to refresh the data
+
+
+
   getList<RoomListResponse>(
     entityId: string,
     config?: QueryConfig

@@ -2,7 +2,7 @@
 </hospitality-bot-navigation-header>
 <div [formGroup]="useForm" class="btn-wrapper">
   <hospitality-bot-date
-    class="half-width"
+    class="btn-width"
     controlName="date"
     label="Date"
     [props]="{ placeholder: 'Select From Date' }"
@@ -13,7 +13,7 @@
   ></hospitality-bot-date>
 
   <hospitality-bot-select
-    class="half-width"
+    class="btn-width"
     controlName="roomType"
     label="Room Type"
     [options]="roomTypes"
@@ -81,12 +81,9 @@
   >
     <!-- <td > -->
     <hospitality-bot-room-card
-      [roomNo]="rowData.roomNo"
-      [roomType]="rowData?.type"
-      [status]="rowData?.status"
-      [frontOfficeState]="rowData?.foStatus"
-      [nextStates]="rowData.nextStates"
+      [data]="rowData"
       [recordSetting]="roomStatusDetails"
+      [entityId]="entityId"
       class="card-width"
     >
     </hospitality-bot-room-card>

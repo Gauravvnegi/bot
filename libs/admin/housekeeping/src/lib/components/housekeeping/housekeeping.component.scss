@@ -2,7 +2,10 @@
 
 .card-width {
   flex-basis: 14.282%;
-  // flex: 1 1 14.28%;
+}
+
+.btn-width {
+  flex-basis: 20%;
 }
 
 .btn-wrapper {
@@ -76,26 +79,3 @@
   gap: 0.5em;
   flex-basis: 45%;
 }
-
-//     width: unset;
-//     height: unset !important;
-//     right: 0;
-//     position: absolute;
-// }
-
-// <style>
-// .p-dialog-mask {
-//     -ms-flex-align: center;
-//     -ms-flex-pack: center;
-//     /* align-items: center; */
-//     background-color: rgba(0,0,0,0);
-//     display: -ms-flexbox;
-//     display: flex;
-//     /* height: 100%; */
-//     /* justify-content: center; */
-//     /* left: 0; */
-//     pointer-events: none;
-//     position: fixed;
-//     /* top: 0; */
-//     transition-property: background-color;
-//     width: 100%;

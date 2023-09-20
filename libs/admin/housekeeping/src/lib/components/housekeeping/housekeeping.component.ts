@@ -4,6 +4,7 @@ import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
   AdminUtilityService,
   BaseDatatableComponent,
+  Option,
   QueryConfig,
   TableService,
 } from '@hospitality-bot/admin/shared';
@@ -12,8 +13,8 @@ import { RoomList } from 'libs/admin/room/src/lib/models/rooms-data-table.model'
 import { LazyLoadEvent } from 'primeng/api';
 import { Subscription } from 'rxjs';
 import { roomStatusDetails } from '../../constant/room';
-import { HousekeepingService } from '../../services/housekeeping.service';
 import { houseKeepingRoutes } from '../../constant/routes';
+import { HousekeepingService } from '../../services/housekeeping.service';
 
 @Component({
   selector: 'hospitality-bot-housekeeping',
@@ -29,12 +30,11 @@ export class HousekeepingComponent extends BaseDatatableComponent
   navRoutes = [];
   useForm: FormGroup;
   first = 0;
-  rowsPerPage = 14;
   loading: boolean = false;
   entityId: string;
   roomStatusDetails = roomStatusDetails;
   $subscription = new Subscription();
-  roomTypes: any[] = [
+  roomTypes: Option[] = [
     {
       label: 'All',
       value: '',
@@ -83,6 +83,7 @@ export class HousekeepingComponent extends BaseDatatableComponent
     this.getRoomList();
     this.getRoomType();
     this.listenForRoomTypeChange();
+    this.listenForRefreshData();
     this.navRoutes = houseKeepingRoutes['HouseKeeping'].navRoutes;
   }
 
@@ -94,6 +95,15 @@ export class HousekeepingComponent extends BaseDatatableComponent
     this.useForm = this.fb.group({
       date: [new Date(), []],
       roomType: [''],
+    });
+  }
+
+
+  listenForRefreshData(): void {
+    this.housekeepingService.refreshData.subscribe((value) => {
+      if (value) {
+        this.getRoomList();
+      }
     });
   }
 
@@ -153,7 +163,7 @@ export class HousekeepingComponent extends BaseDatatableComponent
           params: `?key=${text}&type=ROOM_TYPE`,
         })
         .subscribe(
-          (res: any) => {
+          (res) => {
             if (!res) {
               this.roomTypes = [];
               return;
@@ -172,7 +182,7 @@ export class HousekeepingComponent extends BaseDatatableComponent
         );
     } else {
       this.roomTypeOffSet = 0;
-      this.roomTypes = [{ label: 'All', value: ''}];
+      this.roomTypes = [{ label: 'All', value: '' }];
       this.getRoomType();
     }
   }

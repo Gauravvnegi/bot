@@ -5,6 +5,7 @@ import { RouterModule } from '@angular/router';
 import { AdminSharedModule } from '@hospitality-bot/admin/shared';
 import { AdminHousekeepingRoutingModule } from './admin-housekeeping.routing.module';
 import { DialogModule } from 'primeng/dialog';
+import { RoomService } from 'libs/admin/room/src/lib/services/room.service';
 
 @NgModule({
   imports: [
@@ -18,5 +19,6 @@ import { DialogModule } from 'primeng/dialog';
     AdminHousekeepingRoutingModule,
   ],
   declarations: [...AdminHousekeepingRoutingModule.components],
+  providers: [RoomService],
 })
 export class AdminHousekeepingModule {}

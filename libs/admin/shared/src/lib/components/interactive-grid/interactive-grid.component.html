@@ -36,8 +36,13 @@
           zIndexMoving="1000"
           [preventDefaultEvent]="true"
           rzHandles="e,w"
-          (rzStop)="handleResizing($event)"
-          (endOffset)="
+          (rzStop)="
+            handleResizing($event, {
+              rv: row,
+              cv: col
+            })
+          "
+          (stopped)="
             handleDrag($event, {
               rv: row,
               cv: col
@@ -90,6 +95,8 @@
     </div>
   </div>
 </div>
+
+<h3>{{ console | json }}</h3>
 
 <div>
   {{ offset | json }}

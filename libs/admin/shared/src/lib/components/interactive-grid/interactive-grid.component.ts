@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { IPosition } from 'angular2-draggable';
 import { IResizeEvent } from 'angular2-draggable/lib/models/resize-event';
 
@@ -10,7 +10,7 @@ import { IResizeEvent } from 'angular2-draggable/lib/models/resize-event';
   templateUrl: './interactive-grid.component.html',
   styleUrls: ['./interactive-grid.component.scss'],
 })
-export class InteractiveGridComponent implements OnInit {
+export class InteractiveGridComponent {
   /**
    * Data to map the interactive grid cell
    */
@@ -56,6 +56,49 @@ export class InteractiveGridComponent implements OnInit {
    * Array of data to be shown
    */
   @Input() set gridData(input: IGValue[]) {
+    this.data = this.getModdedData(input);
+  }
+
+  @Output() onChange = new EventEmitter<{}>();
+
+  console: any = {};
+  offset: IPosition = { x: 0, y: 0 };
+  position: IResizeEvent['position'] = { top: 0, left: 0 };
+  size: IResizeEvent['size'] = { height: 80, width: 80 };
+
+  handleResizing(event: IResizeEvent, query: IGQueryEvent) {
+    console.log(event, ' resize event ', query);
+    this.size = event.size;
+    this.position = event.position;
+
+    this.onChange.emit({
+      size: this.size,
+      position: this.position,
+    });
+
+    this.console = {
+      pos: event.position,
+      size: event.size,
+      direction: event.direction,
+      query,
+    };
+  }
+
+  handleDrag(event: IPosition, query: IGQueryEvent) {
+    const { rv, cv } = query;
+    console.log(event, ' drag event ', this.data[rv][cv]);
+    this.offset = event;
+
+    this.console = {
+      event,
+      query,
+    };
+  }
+
+  /**
+   * To get the desired formatted data
+   */
+  getModdedData(input: IGValue[]): IGData {
     const inputPerRow: Record<IGKey, IGValue[]> = input.reduce(
       (value, item, idx) => {
         value = {
@@ -104,6 +147,7 @@ export class InteractiveGridComponent implements OnInit {
             hasNext,
             hasPrev,
             content: item.content,
+            id: item.id,
           },
         };
       });
@@ -111,34 +155,7 @@ export class InteractiveGridComponent implements OnInit {
       resultData = { ...resultData, [item]: rowResult };
     }
 
-    this.data = resultData;
-  }
-
-  constructor() {}
-
-  ngOnInit(): void {}
-
-  offset: IPosition = { x: 0, y: 0 };
-
-  position: IResizeEvent['position'] = { top: 0, left: 0 };
-  size: IResizeEvent['size'] = { height: 80, width: 80 };
-
-  handleResizing(event: IResizeEvent) {
-    console.log(event, 'resize event');
-    this.size = event.size;
-    this.position = event.position;
-  }
-
-  handleDrag(
-    event: IPosition,
-    query: {
-      rv: IGKey;
-      cv: IGKey;
-    }
-  ) {
-    const { rv, cv } = query;
-    console.log(event, 'drag event', this.data[rv][cv]);
-    this.offset = event;
+    return resultData;
   }
 
   getArray(length: number) {
@@ -149,6 +166,7 @@ export class InteractiveGridComponent implements OnInit {
 export type IGKey = string | number;
 
 export type IGCellData = {
+  id: string;
   cellOccupied: number;
   content: string;
   hasNext: boolean;
@@ -161,25 +179,32 @@ export type IGData = Record<IGKey, Record<IGKey, IGCellData>>;
 export type IGValue = {
   startPos: IGKey;
   endPos: IGKey;
-  content: string;
   rowValue: IGKey;
+} & Pick<IGCellData, 'id' | 'content'>;
+
+export type IGQueryEvent = {
+  rv: IGKey;
+  cv: IGKey;
 };
 
 const exampleData: IGData = {
   101: {
     1: {
+      id: 'RES001',
       cellOccupied: 3,
       content: 'Dhruv 101',
       hasNext: true,
       hasPrev: false,
     },
     3: {
+      id: 'RES002',
       cellOccupied: 2,
       content: 'Akash 101',
       hasNext: false,
       hasPrev: true,
     },
     6: {
+      id: 'RES003',
       cellOccupied: 2,
       content: 'Jag 101',
       hasNext: false,
@@ -188,6 +213,7 @@ const exampleData: IGData = {
   },
   102: {
     6: {
+      id: 'RES004',
       cellOccupied: 2,
       content: 'Tony Stark 102',
       hasNext: false,
@@ -196,6 +222,7 @@ const exampleData: IGData = {
   },
   103: {
     3: {
+      id: 'RES005',
       cellOccupied: 4,
       content: 'Steve Rogers 103',
       hasNext: false,

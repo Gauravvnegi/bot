@@ -21,6 +21,8 @@
     <hospitality-bot-interactive-grid
       [gridRows]="gridRows"
       [gridData]="data"
+      [gridColumns]="girdCols"
+      (onChange)="handleChange($event)"
     ></hospitality-bot-interactive-grid>
     <div></div>
   </div>

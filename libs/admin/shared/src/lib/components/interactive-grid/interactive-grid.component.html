@@ -18,14 +18,10 @@
           ngResizable
           [rzMinWidth]="cellSize / 2"
           [rzGrid]="cellSize / 2"
-          [position]="
-            getPosition({
-              rowValue: row,
-              colValue: col,
-              colIdx: colIdx,
-              rowIdx: rowIdx
-            })
-          "
+          [position]="{
+            x: colIdx * cellSize + (data[row][col]?.hasPrev ? cellSize / 2 : 0),
+            y: rowIdx * cellSize
+          }"
           [gridSize]="cellSize / 2"
           [ngStyle]="{
             width:
@@ -100,34 +96,21 @@
             height: cellSize - 2 * cellGap + 'px',
             margin: cellGap + 'px'
           }"
-        ></div>
+        >
+          <ng-container *ngIf="devMode && rowIdx === gridRows.length - 1">
+            <div>
+              {{ colIdx }}
+            </div>
+            <div>
+              {{ col }}
+            </div>
+          </ng-container>
+        </div>
       </div>
     </div>
   </div>
 </div>
 
-<h3>{{ console | json }}</h3>
-
-<div>
-  {{ offset | json }}
-</div>
-
-<div>
-  {{ position | json }}
-</div>
-
-<div>
-  {{ size | json }}
-</div>
-
-<div>
-  {{ gridColumns | json }}
-</div>
-
-<div>
-  {{ gridRows | json }}
-</div>
-
-<div>
-  {{ data | json }}
-</div>
+<ng-container *ngIf="devMode">
+  <h2>{{ eventData | json }}</h2>
+</ng-container>

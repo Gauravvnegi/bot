@@ -2,15 +2,24 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { IPosition } from 'angular2-draggable';
 import { IResizeEvent } from 'angular2-draggable/lib/models/resize-event';
 
-// handle method
+// handle method - resize and drag
 // onEmptyCellClick onDragDrop onResize menuItem
-
+// data reinitialize handle function
 @Component({
   selector: 'hospitality-bot-interactive-grid',
   templateUrl: './interactive-grid.component.html',
   styleUrls: ['./interactive-grid.component.scss'],
 })
 export class InteractiveGridComponent {
+  @Input() devMode = false;
+  eventData: IGOnChangeEvent = {
+    endPos: null,
+    id: null,
+    rowValue: null,
+    startPos: null,
+  };
+  // Above code is for development only
+
   /**
    *Cell Size is grid height and width including the gap
    */
@@ -29,7 +38,6 @@ export class InteractiveGridComponent {
     columns: IGKey[];
     values: IGValue[];
   }) {
-    console.log(data, 'data');
     this.gridColumns = data.columns;
     this.gridRows = data.rows;
     this.colIndices = this.gridColumns.reduce((p, c, i) => {
@@ -75,11 +83,6 @@ export class InteractiveGridComponent {
 
   @Output() onChange = new EventEmitter<IGOnChangeEvent>();
 
-  console: any = {};
-  offset: IPosition = { x: 0, y: 0 };
-  position: IResizeEvent['position'] = { top: 0, left: 0 };
-  size: IResizeEvent['size'] = { height: 80, width: 80 };
-
   getCurrentDataInfo(
     query: IGQueryEvent
   ): {
@@ -100,42 +103,54 @@ export class InteractiveGridComponent {
    */
   handleResizing(event: IResizeEvent, query: IGQueryEvent) {
     const { data, id } = this.getCurrentDataInfo(query);
+    const { rowValue } = query;
 
-    console.log('---resized----', id);
-
-    const width = event.size.width;
-    const left = event.position.left;
     const isLeft = !event.direction.e;
 
-    const currentPos = this.getPosition(query);
+    const width = event.size.width;
     const currentWidth = this.getWidth(query);
+    const currentPos = this.getPosition(query).x;
+    const currentStartIdx = currentPos / this.cellSize + 1;
+    const startPos = Math.trunc(currentStartIdx) - 1;
+    const endPos = startPos + data.cellOccupied - 1;
 
-    console.log('event: ', {
-      width,
-      left,
-      isLeft,
-      currentPos,
-      currentWidth,
-    });
-
-    console.log('----------');
-
-    this.size = event.size;
-    this.position = event.position;
-
-    this.onChange.emit({
+    let currentData = {
       id: id,
-      rowValue: query.rowValue,
-      endPos: 1,
-      startPos: 1,
-    });
-
-    this.console = {
-      pos: event.position,
-      size: event.size,
-      direction: event.direction,
-      query,
+      rowValue,
+      endPos: this.gridColumns[endPos],
+      startPos: this.gridColumns[startPos],
     };
+
+    if (isLeft) {
+      // left is already negative
+      const left = event.position.left;
+      const newStartIdx = currentStartIdx + left / this.cellSize;
+      const newStartPos = Math.trunc(newStartIdx) - 1;
+
+      /**
+       * Updating new start data
+       */
+      currentData = {
+        ...currentData,
+        startPos: this.gridColumns[newStartPos],
+      };
+    } else {
+      const isEndHalf = data.hasNext;
+      const newEndPos = Math.round(
+        endPos + (width - currentWidth) / this.cellSize - (isEndHalf ? 0.5 : 0)
+      );
+
+      /**
+       * Updating new end data
+       */
+      currentData = {
+        ...currentData,
+        endPos: this.gridColumns[newEndPos],
+      };
+    }
+
+    this.eventData = currentData;
+    this.onChange.emit(currentData);
   }
 
   handleDrag(event: IPosition, query: IGQueryEvent) {
@@ -146,16 +161,10 @@ export class InteractiveGridComponent {
     console.log('event: ', event);
     console.log('data: ', data);
     console.log('----------');
-
-    this.offset = event;
-
-    this.console = {
-      event,
-      query,
-    };
   }
 
   getPosition({ rowIdx, colIdx, rowValue, colValue }: IGQueryEvent): IPosition {
+    // cannot use this in template as it reset it
     return {
       x:
         colIdx * this.cellSize +

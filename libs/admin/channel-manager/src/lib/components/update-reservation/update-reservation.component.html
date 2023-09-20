@@ -21,10 +21,11 @@
     <hospitality-bot-interactive-grid
       [gridData]="{
         rows: gridRows,
-        columns: girdCols,
+        columns: gridCols,
         values: data
       }"
       (onChange)="handleChange($event)"
+      [devMode]="true"
     ></hospitality-bot-interactive-grid>
     <div></div>
   </div>

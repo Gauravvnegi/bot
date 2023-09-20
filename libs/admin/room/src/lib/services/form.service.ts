@@ -133,6 +133,7 @@ export class FormService {
     roomTypeFormData.roomAmenityIds = data.roomAmenityIds;
     roomTypeFormData.status = data.status;
     roomTypeFormData.isBaseRoomType = data.isBaseRoomType;
+    roomTypeFormData.shortDescription = data.shortDescription;
     return roomTypeFormData;
   }
 }
@@ -163,6 +164,7 @@ export class RoomTypeData {
   ratePlans: RatePlanFormData[];
   roomAmenityIds: string[];
   isBaseRoomType?: boolean;
+  shortDescription?: string;
 }
 
 export type RatePlanFormData = {

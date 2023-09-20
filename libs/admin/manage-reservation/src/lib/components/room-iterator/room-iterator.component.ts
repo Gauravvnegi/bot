@@ -52,7 +52,7 @@ export class RoomIteratorComponent extends IteratorComponent
   errorMessages = {};
 
   roomTypeOffSet = 0;
-  roomTypeLimit = 20;
+  roomTypeLimit = 50;
 
   roomTypes: RoomFieldTypeOption[] = [];
 

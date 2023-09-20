@@ -86,6 +86,7 @@ export type RoomTypeResponse = {
   currency: string;
   features: string[];
   isBaseRoomType?: boolean;
+  shortDescription: string;
 };
 
 

@@ -527,6 +527,7 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
     const roomTypeData = {
       roomType: modifiedData,
     };
+
     this.subscription$.add(
       this.roomService.updateRoomType(this.entityId, roomTypeData).subscribe(
         (res) => {

@@ -16,6 +16,8 @@ export class InteractiveGridComponent {
    */
   data: IGData = exampleData;
 
+  colIndices: Record<IGKey, number> = {};
+
   /**
    *Cell Size is grid height and width including the gap
    */
@@ -30,7 +32,7 @@ export class InteractiveGridComponent {
    * Array of gird column value and also decide the no of column based on the length
    * @example ['18Mon', '19Tue', '20Wed', '21Thus'] or [1, 2, 3, 4]
    */
-  @Input() gridColumns = this.getArray(14);
+  @Input() gridColumns: IGKey[] = this.getArray(14);
 
   /**
    * Return no of columns
@@ -66,19 +68,44 @@ export class InteractiveGridComponent {
   position: IResizeEvent['position'] = { top: 0, left: 0 };
   size: IResizeEvent['size'] = { height: 80, width: 80 };
 
-  handleResizing(event: IResizeEvent, query: IGQueryEvent) {
+  getCurrentDataInfo(
+    query: IGQueryEvent
+  ): {
+    data: IGCellData;
+    id: string;
+  } {
     const { rowValue, colValue } = query;
     const data = this.data[rowValue][colValue];
-    const id = data.id;
+
+    return {
+      data,
+      id: data.id,
+    };
+  }
+
+  /**
+   * Handle resize change and emit onChange
+   */
+  handleResizing(event: IResizeEvent, query: IGQueryEvent) {
+    const { data, id } = this.getCurrentDataInfo(query);
 
     console.log('---resized----', id);
 
+    const width = event.size.width;
+    const left = event.position.left;
+    const isLeft = !event.direction.e;
+
+    const currentPos = this.getPosition(query);
+    const currentWidth = this.getWidth(query);
+
     console.log('event: ', {
-      pos: event.position,
-      size: event.size,
-      direction: event.direction,
+      width,
+      left,
+      isLeft,
+      currentPos,
+      currentWidth,
     });
-    console.log('data: ', data);
+
     console.log('----------');
 
     this.size = event.size;
@@ -86,7 +113,7 @@ export class InteractiveGridComponent {
 
     this.onChange.emit({
       id: id,
-      rowValue: rowValue,
+      rowValue: query.rowValue,
       endPos: 1,
       startPos: 1,
     });
@@ -100,9 +127,7 @@ export class InteractiveGridComponent {
   }
 
   handleDrag(event: IPosition, query: IGQueryEvent) {
-    const { rowValue, colValue } = query;
-    const data = this.data[rowValue][colValue];
-    const id = data.id;
+    const { data, id } = this.getCurrentDataInfo(query);
 
     console.log('---dragged----', id);
     console.log('current position: ', this.getPosition(query));
@@ -125,6 +150,15 @@ export class InteractiveGridComponent {
         (this.data[rowValue][colValue]?.hasPrev ? this.cellSize / 2 : 0),
       y: rowIdx * this.cellSize,
     };
+  }
+
+  getWidth({ rowValue, colValue }: IGQueryEvent): number {
+    const width =
+      this.cellSize * this.data[rowValue][colValue]?.cellOccupied -
+      (this.data[rowValue][colValue]?.hasNext ? this.cellSize / 2 : 0) -
+      (this.data[rowValue][colValue]?.hasPrev ? this.cellSize / 2 : 0);
+
+    return width;
   }
 
   /**

@@ -29,10 +29,12 @@
           [gridSize]="cellSize / 2"
           [ngStyle]="{
             width:
-              cellSize * data[row][col]?.cellOccupied -
-              (data[row][col]?.hasNext ? cellSize / 2 : 0) -
-              (data[row][col]?.hasPrev ? cellSize / 2 : 0) +
-              'px',
+              getWidth({
+                rowValue: row,
+                colValue: col,
+                colIdx: colIdx,
+                rowIdx: rowIdx
+              }) + 'px',
             height: cellSize + 'px',
             padding: cellGap + 'px'
           }"

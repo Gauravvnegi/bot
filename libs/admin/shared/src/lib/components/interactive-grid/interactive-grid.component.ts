@@ -12,13 +12,6 @@ import { IResizeEvent } from 'angular2-draggable/lib/models/resize-event';
 })
 export class InteractiveGridComponent {
   /**
-   * Data to map the interactive grid cell
-   */
-  data: IGData = exampleData;
-
-  colIndices: Record<IGKey, number> = {};
-
-  /**
    *Cell Size is grid height and width including the gap
    */
   @Input() cellSize: number = 80;
@@ -29,10 +22,36 @@ export class InteractiveGridComponent {
   @Input() cellGap: number = 5;
 
   /**
+   * Grid Data setter
+   */
+  @Input() set gridData(data: {
+    rows: IGKey[];
+    columns: IGKey[];
+    values: IGValue[];
+  }) {
+    console.log(data, 'data');
+    this.gridColumns = data.columns;
+    this.gridRows = data.rows;
+    this.colIndices = this.gridColumns.reduce((p, c, i) => {
+      p = { ...p, [c]: i };
+      return p;
+    }, {});
+
+    this.data = this.getModdedData(data.values);
+  }
+
+  /**
+   * Data to map the interactive grid cell
+   */
+  data: IGData = {};
+
+  colIndices: Record<IGKey, number> = {};
+
+  /**
    * Array of gird column value and also decide the no of column based on the length
    * @example ['18Mon', '19Tue', '20Wed', '21Thus'] or [1, 2, 3, 4]
    */
-  @Input() gridColumns: IGKey[] = this.getArray(14);
+  gridColumns: IGKey[] = [];
 
   /**
    * Return no of columns
@@ -45,20 +64,13 @@ export class InteractiveGridComponent {
    * Array of grid rows value and also decide the no of row based on the length
    * @example ['LU101', 'LU102', 'LU103', 'LU104', 'LU105'] or [101, 102, 103, 104]
    */
-  @Input() gridRows: IGKey[] = exampleRowData;
+  gridRows: IGKey[] = [];
 
   /**
    * Return no of rows
    */
   get noOfRow() {
     return this.gridRows.length;
-  }
-
-  /**
-   * Array of data to be shown
-   */
-  @Input() set gridData(input: IGValue[]) {
-    this.data = this.getModdedData(input);
   }
 
   @Output() onChange = new EventEmitter<IGOnChangeEvent>();
@@ -176,11 +188,6 @@ export class InteractiveGridComponent {
       {}
     );
 
-    const colIndices = this.gridColumns.reduce((p, c, i) => {
-      p = { ...p, [c]: i };
-      return p;
-    }, {});
-
     let resultData: IGData = {};
 
     for (let item in inputPerRow) {
@@ -204,7 +211,7 @@ export class InteractiveGridComponent {
         const hasPrev = endPos.has(item.startPos);
         const hasNext = startPos.has(item.endPos);
         const cellOccupied =
-          colIndices[item.endPos] - colIndices[item.startPos] + 1;
+          this.colIndices[item.endPos] - this.colIndices[item.startPos] + 1;
 
         rowResult = {
           ...(rowResult ?? {}),

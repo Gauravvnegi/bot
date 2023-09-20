@@ -19,12 +19,16 @@
 
   <div>
     <hospitality-bot-interactive-grid
+      [props]="{
+        createNewToolTipInfo: 'Create New Reservation'
+      }"
       [gridData]="{
         rows: gridRows,
         columns: gridCols,
         values: data
       }"
       (onChange)="handleChange($event)"
+      (onCreate)="handleCreate($event)"
       [devMode]="true"
     ></hospitality-bot-interactive-grid>
     <div></div>

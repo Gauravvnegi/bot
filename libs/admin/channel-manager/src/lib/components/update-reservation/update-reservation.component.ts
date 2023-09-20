@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {
+  IGChangedData,
+  IGCreateData,
   IGKey,
   IGValue,
 } from 'libs/admin/shared/src/lib/components/interactive-grid/interactive-grid.component';
@@ -105,7 +107,11 @@ export class UpdateReservationComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  handleChange(event) {
-    console.log(event, 'parent event');
+  handleChange(event: IGChangedData) {
+    console.log(event, 'onChange event');
+  }
+
+  handleCreate(event: IGCreateData) {
+    console.log(event, 'onCreate event');
   }
 }

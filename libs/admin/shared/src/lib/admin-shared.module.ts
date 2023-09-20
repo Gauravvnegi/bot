@@ -121,6 +121,7 @@ import { TimerComponent } from './components/timer/timer.component';
 import { SidebarModule } from 'primeng/sidebar';
 import { InteractiveGridComponent } from './components/interactive-grid/interactive-grid.component';
 import { AngularDraggableModule } from 'angular2-draggable';
+import { TooltipModule } from 'primeng/tooltip';
 
 @NgModule({
   imports: [
@@ -153,6 +154,7 @@ import { AngularDraggableModule } from 'angular2-draggable';
     QRCodeModule,
     StepsModule,
     AngularDraggableModule,
+    TooltipModule,
   ],
   declarations: [
     DatatableComponent,
@@ -361,9 +363,9 @@ import { AngularDraggableModule } from 'angular2-draggable';
     FromToDateComponent,
     TimerComponent,
     SidebarModule,
-
     InteractiveGridComponent,
     AngularDraggableModule,
+    TooltipModule,
   ],
 })
 export class AdminSharedModule {}

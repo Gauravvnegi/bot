@@ -2,18 +2,33 @@
   position: relative;
 }
 
+.interactive-grid-wrapper {
+  position: relative;
+}
+
 .grid-container {
   display: grid;
   position: absolute;
   top: 0;
-  // width: 800px; //will depend on number of cell move to ng style
-  // height: 400px;
+}
+
+.spinner-wrapper {
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(128, 128, 128, 0.417);
+  & .pi-spinner {
+    height: 50px;
+    width: 50px;
+    font-size: 50px;
+    color: #636f7c;
+  }
 }
 
 .grid-row {
   position: relative;
   display: grid;
-  // grid-template-areas: 'grid-cell grid-cell grid-cell grid-cell grid-cell';
   grid-auto-flow: column;
 }
 
@@ -22,33 +37,25 @@
 }
 
 .drag-grid {
-  // border: 1px solid red;
-  // width: 80px;
   position: absolute;
-  // top: -15px;
-  // height: 80px;
-  // padding: 10px;
 }
 
 .cell-data {
-  // height: 60px;
   background-color: #fdecec;
   border: 1px solid #d91615;
   border-radius: 4px;
   display: flex;
   align-items: center;
   justify-content: center;
+  cursor: move;
 }
 
 .non-drag-grid {
   border: 1px solid rgba(128, 128, 128, 0.369);
-  // background-color: rgb(136, 168, 107);
   position: absolute;
   top: 0;
-  // width: 60px;
-  // height: 60px;
-  // margin: 10px;
   border-radius: 4px;
+  cursor: pointer;
 }
 
 // Need to handle height and inset based on the gap and height

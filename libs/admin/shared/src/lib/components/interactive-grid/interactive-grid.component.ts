@@ -8,6 +8,7 @@ import { IResizeEvent } from 'angular2-draggable/lib/models/resize-event';
  * @todo empty cell event
  * @todo Progress spinner (onChange event in progress loading)
  * @todo Tool tip on content
+ * @todo Handle edge (drag event on click is an issue)
  */
 @Component({
   selector: 'hospitality-bot-interactive-grid',
@@ -22,6 +23,11 @@ export class InteractiveGridComponent {
   @Input() devMode = false;
 
   /**
+   * To show the spinner
+   */
+  @Input() isProcessing = false;
+
+  /**
    *Cell Size is grid height and width including the gap
    */
   @Input() cellSize: number = 80;
@@ -30,6 +36,18 @@ export class InteractiveGridComponent {
    * Cell gap will decide the spaces between the grid blocks
    */
   @Input() cellGap: number = 5;
+
+  /**
+   * Props to show extra information
+   * @todo Need to handle label for col and row to show information
+   */
+  @Input() props: {
+    createNewToolTipInfo?: string;
+    rowName?: string;
+    colName?: string;
+  } = {
+    createNewToolTipInfo: 'Create New Entry',
+  };
 
   /**
    * Grid Data setter to set he grid rows and column data with the available value
@@ -131,7 +149,8 @@ export class InteractiveGridComponent {
     return this.gridRows.length;
   }
 
-  @Output() onChange = new EventEmitter<IGEventData>();
+  @Output() onChange = new EventEmitter<IGChangedData>();
+  @Output() onCreate = new EventEmitter<IGCreateData>();
 
   getCurrentDataInfo(
     query: IGQueryEvent
@@ -163,7 +182,7 @@ export class InteractiveGridComponent {
     const endPos = startPos + data.cellOccupied - 1;
 
     // Current Data - which will be update as per calculation below
-    let currentData: IGEventData = {
+    let currentData: IGChangedData = {
       id: id,
       rowValue,
       endPos: this.gridColumns[endPos],
@@ -218,7 +237,7 @@ export class InteractiveGridComponent {
     const endPos = startPos + data.cellOccupied - 1;
 
     // Current Data - which will be update as per calculation below
-    let currentData: IGEventData = {
+    let currentData: IGChangedData = {
       id: id,
       rowValue,
       endPos: this.gridColumns[endPos],
@@ -252,6 +271,13 @@ export class InteractiveGridComponent {
     };
 
     this.onChange.emit(currentData);
+  }
+
+  /**
+   * Handle emission of new data to be created
+   */
+  handleCreate(event: IGCreateData) {
+    this.onCreate.emit(event);
   }
 
   getPosition({ rowIdx, colIdx, rowValue, colValue }: IGQueryEvent): IPosition {
@@ -356,7 +382,15 @@ export type IGCellData = Pick<IGValue, 'id' | 'content'> & {
 /**
  * @type Update single data value of interactive grid
  */
-export type IGEventData = Omit<IGValue, 'content'>;
+export type IGChangedData = Omit<IGValue, 'content'>;
+
+/**
+ * @type Define row and value to new data
+ */
+export type IGCreateData = {
+  rowValue: IGKey;
+  colValue: IGKey;
+};
 
 /**
  * @type Defines Grid data structure
@@ -380,6 +414,4 @@ export type IGValue = {
 type IGQueryEvent = {
   rowIdx: number;
   colIdx: number;
-  rowValue: IGKey;
-  colValue: IGKey;
-};
+} & IGCreateData;

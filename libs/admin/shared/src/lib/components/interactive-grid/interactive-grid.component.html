@@ -1,10 +1,12 @@
 <div class="wrapper">
+  <!-- Interactive grid view -->
   <div
     #myBounds
     [ngStyle]="{
       width: noOfColumn * cellSize + 'px',
       height: noOfRow * cellSize + 'px'
     }"
+    class="interactive-grid-wrapper"
   >
     <ng-container *ngFor="let row of gridRows; let rowIdx = index">
       <ng-container *ngFor="let col of gridColumns; let colIdx = index">
@@ -34,8 +36,8 @@
             height: cellSize + 'px',
             padding: cellGap + 'px'
           }"
-          zIndex="100"
-          zIndexMoving="1000"
+          zIndex="10"
+          zIndexMoving="100"
           [preventDefaultEvent]="true"
           rzHandles="e,w"
           (rzStop)="
@@ -68,7 +70,7 @@
     </ng-container>
   </div>
 
-  <!-- for grid view -->
+  <!-- Presentation grid view -->
   <div
     class="grid-container"
     [ngStyle]="{ width: noOfColumn * cellSize + 'px' }"
@@ -96,6 +98,14 @@
             height: cellSize - 2 * cellGap + 'px',
             margin: cellGap + 'px'
           }"
+          (click)="
+            handleCreate({
+              rowValue: row,
+              colValue: col
+            })
+          "
+          [pTooltip]="props.createNewToolTipInfo"
+          tooltipPosition="top"
         >
           <ng-container *ngIf="devMode && rowIdx === gridRows.length - 1">
             <div>
@@ -108,5 +118,17 @@
         </div>
       </div>
     </div>
+  </div>
+
+  <!-- Spinner -->
+  <div
+    class="grid-container spinner-wrapper"
+    [ngStyle]="{
+      width: noOfColumn * cellSize + 'px',
+      height: noOfRow * cellSize + 'px'
+    }"
+    *ngIf="isProcessing"
+  >
+    <i class="pi pi-spin pi-spinner" [ngClass]="iconNgClass"></i>
   </div>
 </div>

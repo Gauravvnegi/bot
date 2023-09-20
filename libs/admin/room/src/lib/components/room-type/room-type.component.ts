@@ -617,4 +617,8 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.subscription$.unsubscribe();
   }
+
+  get childBelowFive(): string {
+    return 'Child < 5';
+  }
 }

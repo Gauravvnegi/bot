@@ -240,11 +240,12 @@ export class BookingInfoComponent implements OnInit {
           },
         ]),
       };
-      roomTypeGroup.get('roomNumbers').reset();
+
       this.formService.getRooms(
         this.entityId,
         config,
-        roomTypeGroup.get('roomNumberOptions')
+        roomTypeGroup.get('roomNumberOptions'),
+        roomTypeGroup.get('roomNumbers')
       );
     });
   }

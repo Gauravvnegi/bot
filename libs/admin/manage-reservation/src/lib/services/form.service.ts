@@ -11,7 +11,7 @@ import {
 import { ReservationForm } from '../constants/form';
 import { GuestInfo } from '../models/reservations.model';
 import { ManageReservationService } from './manage-reservation.service';
-import { QueryConfig } from '@hospitality-bot/admin/shared';
+import { Option, QueryConfig } from '@hospitality-bot/admin/shared';
 import { RoomsByRoomType } from 'libs/admin/room/src/lib/types/service-response';
 import { AbstractControl } from '@angular/forms';
 
@@ -177,7 +177,8 @@ export class FormService {
   getRooms(
     entityId: string,
     config: QueryConfig,
-    roomNumbersControl: AbstractControl
+    roomNumbersControl: AbstractControl,
+    roomNumbers?: AbstractControl
   ) {
     this.manageReservationService
       .getRoomNumber(entityId, config)
@@ -189,6 +190,18 @@ export class FormService {
             value: room.roomNumber,
           }));
         // this.fields[3].loading[index] = false;
+
+        // Check if the roomNumber control has the room number in roomNumberOptions
+        if (roomNumbers && roomNumbers.value) {
+          const roomNumbersValue = roomNumbers.value;
+          // Filter the roomNumbersValue to keep only those values that exist in roomNumberOptions
+          const filteredRoomNumbers = roomNumbersValue.filter((value: string) =>
+            roomNumberOptions.some((option: Option) => option.value === value)
+          );
+
+          // Reset the roomNumbers control with the filtered values
+          roomNumbers.setValue(filteredRoomNumbers);
+        }
         roomNumbersControl.patchValue(roomNumberOptions, { emitEvent: false });
       });
   }

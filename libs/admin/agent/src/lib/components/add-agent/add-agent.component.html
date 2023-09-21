@@ -7,7 +7,7 @@
   <div class="form-block" [formGroup]="agentForm">
     <div class="code half-width">
       <span class="code__label"> Code: </span>
-      <span class="code__hash"> {{ packageCode }} </span>
+      <span class="code__hash"> {{ agentForm.get('packageCode').value }} </span>
     </div>
     <hospitality-bot-toggle-switch
       class="status half-width"
@@ -97,6 +97,38 @@
         placeholder: 'Enter'
       }"
     ></hospitality-bot-prefix-field>
+    <hospitality-bot-select
+      class="half-width"
+      label="Market Segment"
+      controlName="marketSegment"
+      [options]="marketSegment"
+      [props]="{
+        placeholder: 'Select'
+      }"
+    >
+    </hospitality-bot-select>
+
+    <hospitality-bot-select
+      class="half-width"
+      label="Business Source"
+      controlName="businessSource"
+      [options]="businessSource"
+      [props]="{
+        placeholder: 'Select'
+      }"
+    >
+    </hospitality-bot-select>
+
+    <hospitality-bot-select
+      class="half-width"
+      label="Billing Instruction"
+      controlName="billingInstruction"
+      [options]="billingInstruction"
+      [props]="{
+        placeholder: 'Select'
+      }"
+    >
+    </hospitality-bot-select>
   </div>
 
   <hospitality-bot-form-action

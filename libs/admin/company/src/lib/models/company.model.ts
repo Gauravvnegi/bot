@@ -2,6 +2,7 @@ import { EntityState } from '@hospitality-bot/admin/shared';
 import { CompanyFormType } from '../types/form.types';
 import { CompanyListResponse, CompanyResponseType } from '../types/response';
 import { DateService } from '@hospitality-bot/shared/utils';
+import { FormGroup } from '@angular/forms';
 
 export class CompanyModel {
   id: string;
@@ -38,8 +39,41 @@ export class CompanyModel {
       priceModifier: form.discountType ?? '',
       priceModifierValue: form.discount ?? '',
       status: form.status,
+      taxId: form.taxId,
+      creditLimit: form.creditLimit,
+      marketSegment: form.marketSegment,
+      businessSource: form.businessSource,
+      billingInstruction: form.billingInstruction,
     };
     return data;
+  }
+
+  static updateForm(form: FormGroup, data: CompanyResponseType) {
+    const address = data.address;
+    form.patchValue({
+      packageCode: '#' + data.code,
+      name: data.firstName,
+      email: data.contactDetails.emailId,
+      cc: data.contactDetails.cc,
+      phoneNo: data.contactDetails.contactNumber,
+      address: {
+        formattedAddress: `${address.addressLine1}, ${address.city}, ${address.countryCode}, ${address.postalCode}, ${address.state}`,
+        city: address.city,
+        state: address.state,
+        countryCode: address.countryCode,
+        postalCode: address.postalCode,
+      },
+      salePersonName: data.salesPersonName,
+      salePersonNo: data.salesPersonPhone,
+      discountType: data.priceModifier,
+      discount: data.priceModifierValue,
+      status: data.status,
+      taxId: data?.taxId,
+      creditLimit: data?.creditLimit,
+      marketSegment: data?.marketSegment,
+      businessSource: data?.businessSource,
+      billingInstruction: data?.billingInstruction,
+    });
   }
 
   deserialize(input: CompanyResponseType) {

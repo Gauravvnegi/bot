@@ -189,10 +189,10 @@
           <span
             *ngIf="index === undefined"
             class="remove-btn"
+            [ngClass]="formService.disableBtn ? 'disabled-btn' : ''"
             (click)="offerSelect()"
-            [ngClass]="reservationId ? 'disabled-btn' : ''"
             >Remove</span
-          >
+            >
         </div>
         <div class="offer">
           <div class="offerName">{{ selectedOffer?.name }}</div>
@@ -202,9 +202,9 @@
         <p *ngIf="index === undefined">
           Have an Offer?
           <span
-            [ngClass]="reservationId ? 'disabled-btn' : ''"
-            (click)="applyOffer()"
-            >Apply Offer</span
+          (click)="applyOffer()"
+          [ngClass]="formService.disableBtn ? 'disabled-btn' : ''"
+          >Apply Offer</span
           >
         </p>
       </ng-template>

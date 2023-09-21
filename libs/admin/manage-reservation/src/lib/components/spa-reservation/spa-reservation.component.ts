@@ -58,12 +58,12 @@ export class SpaReservationComponent extends BaseReservationComponent
     protected globalFilterService: GlobalFilterService,
     private manageReservationService: ManageReservationService,
     protected activatedRoute: ActivatedRoute,
-    private formService: FormService,
+    protected formService: FormService,
     private libraryService: LibraryService,
     private router: Router,
     protected hotelDetailService: HotelDetailService
   ) {
-    super(globalFilterService, activatedRoute, hotelDetailService);
+    super(globalFilterService, activatedRoute, hotelDetailService, formService);
   }
   ngOnInit(): void {
     this.initForm();
@@ -269,7 +269,10 @@ export class SpaReservationComponent extends BaseReservationComponent
             this.summaryData = new SummaryData()?.deserialize(res);
             this.userForm
               .get('paymentMethod.totalPaidAmount')
-              .setValidators([Validators.max(this.summaryData?.totalAmount)]);
+              .setValidators([
+                Validators.max(this.summaryData?.totalAmount),
+                Validators.min(0),
+              ]);
             this.userForm
               .get('paymentMethod.totalPaidAmount')
               .updateValueAndValidity();

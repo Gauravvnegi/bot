@@ -63,8 +63,9 @@ export class FormService {
       input.paymentMethod?.paymentMethod ?? '';
     roomReservationData.paymentRemark =
       input.paymentMethod?.paymentRemark ?? '';
-    roomReservationData.pricingDetails.totalPaidAmount =
-      input.paymentMethod?.totalPaidAmount ?? 0;
+    roomReservationData.pricingDetails = {
+      totalPaidAmount: input.paymentMethod?.totalPaidAmount ?? 0,
+    };
 
     roomReservationData.guestId = input.guestInformation?.guestDetails;
     roomReservationData.specialRequest = input.instructions.specialInstructions;
@@ -152,8 +153,9 @@ export class FormService {
     // Payment Info
     reservationData.paymentMethod = input.paymentMethod?.paymentMethod ?? '';
     reservationData.paymentRemark = input.paymentMethod?.paymentRemark ?? '';
-    reservationData.pricingDetails.totalPaidAmount =
-      input.paymentMethod?.totalPaidAmount ?? 0;
+    reservationData.pricingDetails = {
+      totalPaidAmount: input.paymentMethod?.totalPaidAmount ?? 0,
+    };
 
     reservationData.guestId = input.guestInformation?.guestDetails;
     reservationData.offerId = input?.offerId ?? '';

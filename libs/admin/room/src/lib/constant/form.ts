@@ -58,6 +58,7 @@ export type RoomTypeFormData = {
   maxAdult: number;
   area: number;
   isBaseRoomType: boolean;
+  shortDescription: string;
 };
 
 export type RoomTypeForm = {

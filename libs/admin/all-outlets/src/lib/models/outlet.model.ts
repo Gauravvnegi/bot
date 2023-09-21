@@ -190,6 +190,7 @@ export class OutletFormData {
   paidServiceIds?;
   menuIds?;
   foodPackageIds?;
+  shortDescription: string;
 
   deserialize(input: OutletForm) {
     this.status = input?.status;
@@ -218,6 +219,7 @@ export class OutletFormData {
     this.paidServiceIds = input?.paidServiceIds;
     this.menuIds = input?.menuIds;
     this.foodPackageIds = input?.foodPackageIds;
+    this.shortDescription = input?.shortDescription;
     return this;
   }
 }

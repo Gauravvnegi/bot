@@ -10,11 +10,16 @@ import {
 } from '../types/forms.types';
 import { ReservationForm } from '../constants/form';
 import { GuestInfo } from '../models/reservations.model';
+import { ManageReservationService } from './manage-reservation.service';
+import { QueryConfig } from '@hospitality-bot/admin/shared';
+import { RoomsByRoomType } from 'libs/admin/room/src/lib/types/service-response';
+import { AbstractControl } from '@angular/forms';
 
 @Injectable({
   providedIn: 'root',
 })
 export class FormService {
+  constructor(public manageReservationService: ManageReservationService) {}
   dateDifference = new BehaviorSubject(1);
 
   disableBtn: boolean = false;
@@ -167,6 +172,25 @@ export class FormService {
         : input.instructions?.specialInstructions;
 
     return reservationData;
+  }
+
+  getRooms(
+    entityId: string,
+    config: QueryConfig,
+    roomNumbersControl: AbstractControl
+  ) {
+    this.manageReservationService
+      .getRoomNumber(entityId, config)
+      .subscribe((res) => {
+        const roomNumberOptions = res.rooms
+          .filter((room: RoomsByRoomType) => room.roomNumber.length)
+          .map((room: RoomsByRoomType) => ({
+            label: room.roomNumber,
+            value: room.roomNumber,
+          }));
+        // this.fields[3].loading[index] = false;
+        roomNumbersControl.patchValue(roomNumberOptions, { emitEvent: false });
+      });
   }
 
   resetData() {

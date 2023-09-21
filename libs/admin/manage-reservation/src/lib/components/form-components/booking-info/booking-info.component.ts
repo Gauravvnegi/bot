@@ -2,10 +2,12 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import {
   AbstractControl,
   ControlContainer,
+  FormArray,
   FormGroup,
   Validators,
 } from '@angular/forms';
 import {
+  AdminUtilityService,
   ConfigService,
   CountryCodeList,
   EntitySubType,
@@ -53,7 +55,8 @@ export class BookingInfoComponent implements OnInit {
     public controlContainer: ControlContainer,
     private configService: ConfigService,
     private globalFilterService: GlobalFilterService,
-    private formService: FormService
+    private formService: FormService,
+    private adminUtilityService: AdminUtilityService
   ) {}
 
   ngOnInit(): void {
@@ -124,6 +127,7 @@ export class BookingInfoComponent implements OnInit {
           this.minToDate.setDate(maxToLimit.getDate());
           this.formService.reservationDate.next(res);
           if (this.roomControls.valid) {
+            this.getRoomsForAllRoomTypes();
             this.getSummary.emit();
           }
         }
@@ -134,6 +138,7 @@ export class BookingInfoComponent implements OnInit {
           this.toDateValue = new Date(res);
           this.updateDateDifference();
           if (this.roomControls.valid) {
+            this.getRoomsForAllRoomTypes();
             this.getSummary.emit();
           }
         }
@@ -221,6 +226,29 @@ export class BookingInfoComponent implements OnInit {
     }
   }
 
+  getRoomsForAllRoomTypes() {
+    this.roomTypeArray.forEach((roomTypeGroup, index) => {
+      const roomTypeId = roomTypeGroup.get('roomTypeId').value;
+      const config = {
+        params: this.adminUtilityService.makeQueryParams([
+          {
+            from: this.reservationInfoControls.from.value,
+            to: this.reservationInfoControls.to.value,
+            type: 'ROOM',
+            createBooking: true,
+            roomTypeId: roomTypeId,
+          },
+        ]),
+      };
+      roomTypeGroup.get('roomNumbers').reset();
+      this.formService.getRooms(
+        this.entityId,
+        config,
+        roomTypeGroup.get('roomNumberOptions')
+      );
+    });
+  }
+
   get reservationInfoControls() {
     return (this.controlContainer.control.get(
       'reservationInformation'
@@ -230,11 +258,17 @@ export class BookingInfoComponent implements OnInit {
     >;
   }
 
-  ngOnDestroy() {
-    this.$susbcription.unsubscribe();
-  }
-
   get roomControls() {
     return this.controlContainer.control.get('roomInformation') as FormGroup;
+  }
+
+  get roomTypeArray() {
+    return ((this.controlContainer.control.get(
+      'roomInformation'
+    ) as FormGroup).get('roomTypes') as FormArray).controls;
+  }
+
+  ngOnDestroy() {
+    this.$susbcription.unsubscribe();
   }
 }

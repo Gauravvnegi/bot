@@ -249,20 +249,12 @@ export class RoomIteratorComponent extends IteratorComponent
     };
     // Set loading for roomNumber
     this.fields[3].loading[index] = true;
-    this.manageReservationService
-      .getRoomNumber(this.entityId, config)
-      .subscribe((res) => {
-        const roomNumberOptions = res.rooms
-          .filter((room: RoomsByRoomType) => room.roomNumber.length)
-          .map((room: RoomsByRoomType) => ({
-            label: room.roomNumber,
-            value: room.roomNumber,
-          }));
-        this.roomControls[index]
-          .get('roomNumberOptions')
-          .patchValue(roomNumberOptions, { emitEvent: false });
-        this.fields[3].loading[index] = false;
-      });
+    this.formService.getRooms(
+      this.entityId,
+      config,
+      this.roomControls[index].get('roomNumberOptions')
+    );
+    this.fields[3].loading[index] = false;
   }
 
   /**

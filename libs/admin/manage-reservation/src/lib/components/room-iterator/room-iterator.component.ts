@@ -62,6 +62,7 @@ export class RoomIteratorComponent extends IteratorComponent
   isDefaultRoomType = false;
 
   itemValuesCount = 0;
+  selectedRoomNumbers = [];
 
   @ViewChild('main') main: ElementRef;
 
@@ -184,6 +185,7 @@ export class RoomIteratorComponent extends IteratorComponent
         roomNumbers: value?.roomNumbers,
         id: value?.id,
       });
+      this.selectedRoomNumbers = value.roomNumbers;
     });
   }
 
@@ -211,7 +213,6 @@ export class RoomIteratorComponent extends IteratorComponent
             this.roomControls[index]
               .get('ratePlanOptions')
               .patchValue(ratePlanOptions, { emitEvent: false });
-
             this.getRoomsByRoomType(res, index);
 
             if (!this.isDefaultRoomType) {
@@ -252,9 +253,12 @@ export class RoomIteratorComponent extends IteratorComponent
     this.formService.getRooms(
       this.entityId,
       config,
-      this.roomControls[index].get('roomNumberOptions')
+      this.roomControls[index].get('roomNumberOptions'),
+      this.roomControls[index].get('roomNumbers'),
+      this.selectedRoomNumbers,
     );
     this.fields[3].loading[index] = false;
+    
   }
 
   /**

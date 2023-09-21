@@ -111,6 +111,12 @@ export class AddReservationComponent extends BaseReservationComponent
       .get('roomTypes')
       .valueChanges.pipe(debounceTime(1000))
       .subscribe((res) => {
+        const data = this.inputControls.roomInformation.get(
+          'roomTypes'
+        ) as FormGroup;
+        res = data.getRawValue();
+        // Get raw value to get disabled control values as well
+
         const roomTypeIds = res.map((item) => item.roomTypeId);
         // check if the last added room type is selected
         if (res && res[res.length - 1].roomTypeId?.length) {
@@ -302,7 +308,7 @@ export class AddReservationComponent extends BaseReservationComponent
               .get('paymentMethod.totalPaidAmount')
               .setValidators([
                 Validators.max(this.summaryData?.totalAmount),
-                Validators.min(0)
+                Validators.min(0),
               ]);
             this.userForm
               .get('paymentMethod.totalPaidAmount')

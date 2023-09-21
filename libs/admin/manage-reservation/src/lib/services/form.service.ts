@@ -87,6 +87,7 @@ export class FormService {
               roomTypeId: roomType.roomTypeId,
               roomCount: roomType.roomCount,
               roomNumbers: roomType?.roomNumbers ? roomType?.roomNumbers : [],
+              roomNumber: roomType?.roomNumbers ? roomType?.roomNumbers[0] : '',
             },
             occupancyDetails: {
               maxChildren: roomType.childCount,
@@ -178,7 +179,8 @@ export class FormService {
     entityId: string,
     config: QueryConfig,
     roomNumbersControl: AbstractControl,
-    roomNumbers?: AbstractControl
+    roomNumbers?: AbstractControl,
+    defaultRoomNumbers?: string[]
   ) {
     this.manageReservationService
       .getRoomNumber(entityId, config)
@@ -192,16 +194,21 @@ export class FormService {
         // this.fields[3].loading[index] = false;
 
         // Check if the roomNumber control has the room number in roomNumberOptions
-        if (roomNumbers && roomNumbers.value) {
+        if (roomNumbers && roomNumbers.value && !defaultRoomNumbers) {
           const roomNumbersValue = roomNumbers.value;
           // Filter the roomNumbersValue to keep only those values that exist in roomNumberOptions
           const filteredRoomNumbers = roomNumbersValue.filter((value: string) =>
             roomNumberOptions.some((option: Option) => option.value === value)
           );
 
-          // Reset the roomNumbers control with the filtered values
           roomNumbers.setValue(filteredRoomNumbers);
         }
+
+        // Patch the roomNumbers when the room number options are initialized
+        if (defaultRoomNumbers.length) {
+          roomNumbers.setValue(defaultRoomNumbers);
+        }
+
         roomNumbersControl.patchValue(roomNumberOptions, { emitEvent: false });
       });
   }

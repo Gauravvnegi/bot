@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { AbstractControl, FormGroup } from '@angular/forms';
+import { AbstractControl, FormArray, FormGroup } from '@angular/forms';
 import { IteratorField } from 'libs/admin/shared/src/lib/types/fields.type';
 import {
   OfferData,
@@ -95,7 +95,15 @@ export class BaseReservationComponent {
           if (reservationType.value === ReservationType.CONFIRMED) {
             this.formService.disableBtn = true;
             this.inputControls.guestInformation.get('guestDetails').disable();
-            this.inputControls.roomInformation.get('roomTypes').disable();
+            const roomTypeArray = ((this.inputControls
+              .roomInformation as FormGroup).get('roomTypes') as FormArray)
+              .controls;
+            roomTypeArray[0].disable();
+
+            // Enable the controls you don't want to disable
+            ['roomNumbers', 'adultCount', 'childCount'].forEach((controlName) =>
+              roomTypeArray[0].get(controlName).enable()
+            );
           }
           break;
       }

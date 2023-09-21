@@ -111,6 +111,8 @@ export class BookingInfoComponent implements OnInit {
       fromDateControl.setValue(startTime);
       toDateControl.setValue(endTime);
 
+      let multipleDateChange = false;
+
       fromDateControl.valueChanges.subscribe((res) => {
         if (res) {
           const maxToLimit = new Date(res);
@@ -120,6 +122,7 @@ export class BookingInfoComponent implements OnInit {
           if (maxToLimit >= this.toDateValue) {
             // Calculate the date for one day later
             const nextDayTime = moment(maxToLimit).unix() * 1000;
+            multipleDateChange = true;
             toDateControl.setValue(nextDayTime); // Set toDateControl to one day later
           }
           this.updateDateDifference();
@@ -137,10 +140,11 @@ export class BookingInfoComponent implements OnInit {
         if (res) {
           this.toDateValue = new Date(res);
           this.updateDateDifference();
-          if (this.roomControls.valid) {
+          if (this.roomControls.valid && !multipleDateChange) {
             this.getRoomsForAllRoomTypes();
             this.getSummary.emit();
           }
+          multipleDateChange = false;
         }
       });
     }

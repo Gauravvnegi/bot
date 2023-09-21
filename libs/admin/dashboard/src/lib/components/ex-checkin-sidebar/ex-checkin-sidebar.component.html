@@ -15,21 +15,33 @@
     (selectedTabChange)="onSelectedTabFilterChange($event.index)"
   ></hospitality-bot-tab-header>
 
-  <div class="container">
-    <div class="content">
-      Some content here
-    </div>
-    <div class="content">
-      Some content here
-    </div>
-    <div class="content">
-      Some content here
-    </div>
-    <div class="content">
-      Some content here
-    </div>
-    <div class="content">
-      Some content here
+  <div class="container" *ngIf="!loading else loader">
+    <div *ngFor="let item of preArrivalRequestList">
+      <ng-container
+        [ngTemplateOutlet]="card"
+        [ngTemplateOutletContext]="{ $implicit: item }"
+      >
+      </ng-container>
     </div>
   </div>
 </div>
+
+<ng-template #card let-data>
+  <div class="content">
+    <div class="title">
+      <span class="item-name">Request for a {{ data.itemName }}</span>
+      <span class="booking-no">{{ data.bookingNo }}</span>
+    </div>
+    <div class="name-section">
+      <span class="name">{{ data.customerName }}</span>
+    </div>
+    <div class="footer">
+      <span class="desc">{{ data.description }}</span>
+      <span>{{ data.time * 1000 | date: 'HH:mm a' }}</span>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #loader>
+  <hospitality-bot-loader-bounce class="loader"></hospitality-bot-loader-bounce>
+</ng-template>

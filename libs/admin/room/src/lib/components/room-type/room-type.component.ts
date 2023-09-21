@@ -527,6 +527,7 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
     const roomTypeData = {
       roomType: modifiedData,
     };
+
     this.subscription$.add(
       this.roomService.updateRoomType(this.entityId, roomTypeData).subscribe(
         (res) => {
@@ -615,5 +616,9 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.subscription$.unsubscribe();
+  }
+
+  get childBelowFive(): string {
+    return 'Child < 5';
   }
 }

@@ -1,4 +1,6 @@
-export type AgentFormType = {
+import { AdditionalFeature } from 'libs/admin/company/src/lib/types/response';
+
+export type AgentFormType = AdditionalFeature & {
   status: boolean;
   name: string;
   email: string;

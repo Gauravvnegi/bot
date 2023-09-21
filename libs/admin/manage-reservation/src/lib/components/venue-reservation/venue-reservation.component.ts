@@ -60,10 +60,10 @@ export class VenueReservationComponent extends BaseReservationComponent
     protected globalFilterService: GlobalFilterService,
     private manageReservationService: ManageReservationService,
     protected activatedRoute: ActivatedRoute,
-    private formService: FormService,
-    protected hotelDetailService: HotelDetailService
+    protected formService: FormService,
+    protected hotelDetailService: HotelDetailService,
   ) {
-    super(globalFilterService, activatedRoute, hotelDetailService);
+    super(globalFilterService, activatedRoute, hotelDetailService, formService);
   }
 
   ngOnInit(): void {

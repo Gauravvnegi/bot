@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
   AdminUtilityService,
+  ConfigService,
   NavRouteOptions,
   Option,
   QueryConfig,
@@ -21,6 +22,11 @@ import { AgentFormType } from '../../types/form.types';
 import { AgentModel } from '../../models/agent.model';
 import { AgentTableResponse } from '../../types/response';
 import { commissionType } from '../../types/agent';
+import {
+  billingInstruction,
+  businessSource,
+  discountTypes,
+} from 'libs/admin/company/src/lib/constants/company';
 @Component({
   selector: 'hospitality-bot-add-agent',
   templateUrl: './add-agent.component.html',
@@ -31,7 +37,6 @@ export class AddAgentComponent implements OnInit {
   agentId: string;
   pageTitle: string;
   navRoutes: NavRouteOptions;
-  packageCode: string = '# will be auto generated';
 
   agentForm: FormGroup;
 
@@ -50,6 +55,9 @@ export class AddAgentComponent implements OnInit {
     { label: '%OFF', value: commissionType.PERCENTAGE },
     { label: 'Flat', value: commissionType.COMMISSION },
   ];
+  businessSource = businessSource;
+  billingInstruction = billingInstruction;
+  marketSegment: Option[] = [];
 
   constructor(
     public fb: FormBuilder,
@@ -60,9 +68,9 @@ export class AddAgentComponent implements OnInit {
     private snackbarService: SnackBarService,
     private route: ActivatedRoute,
     private router: Router,
-    private formService: FormService
+    private formService: FormService,
+    private configService: ConfigService
   ) {
-    // super(fb, tabFilter);
     this.agentId = this.route.snapshot.paramMap.get('id');
     const { navRoutes, title } = agentRoutes[
       this.agentId ? 'editAgent' : 'addAgent'
@@ -79,6 +87,7 @@ export class AddAgentComponent implements OnInit {
 
   initAgentForm() {
     this.agentForm = this.fb.group({
+      packageCode: ['# will be auto generated'],
       status: [true],
       name: ['', [Validators.required]],
       email: ['', [Validators.required, Validators.pattern(Regex.EMAIL_REGEX)]],
@@ -89,9 +98,27 @@ export class AddAgentComponent implements OnInit {
       address: ['', [Validators.required]],
       commissionType: [commissionType.PERCENTAGE, [Validators.required]],
       commission: ['', [Validators.required, Validators.min(0)]],
+      marketSegment: [''],
+      businessSource: [''],
+      billingInstruction: [''],
     });
+    this.loadMarketSegment();
     this.listenChanges();
     if (this.agentId) this.getAgentById();
+  }
+
+  loadMarketSegment() {
+    this.subscription$.add(
+      this.configService
+        .getColorAndIconConfig(this.entityId)
+        .subscribe((response) => {
+          this.marketSegment =
+            response.bookingConfig.marketSegment.map((item) => ({
+              label: item,
+              value: item,
+            })) ?? [];
+        })
+    );
   }
 
   listenChanges() {
@@ -138,27 +165,8 @@ export class AddAgentComponent implements OnInit {
         .getAgentById(this.agentId, {
           params: `?type=AGENT&entityId=${this.entityId}`,
         })
-        .subscribe((response: AgentTableResponse) => {
-          this.packageCode = '#' + response.code;
-          const address = response.address;
-          this.agentForm.patchValue({
-            name: response.firstName,
-            email: response.contactDetails.emailId,
-            cc: response.contactDetails.cc,
-            phoneNo: response.contactDetails.contactNumber,
-            iataNo: response.iataNumber,
-            company: response.companyId,
-            address: {
-              formattedAddress: `${address.addressLine1}, ${address.city}, ${address.countryCode}, ${address.postalCode}, ${address.state}`,
-              city: address.city,
-              state: address.state,
-              countryCode: address.countryCode,
-              postalCode: address.postalCode,
-            },
-            commissionType: response.priceModifier,
-            commission: response.priceModifierValue,
-            status: response.status,
-          });
+        .subscribe((response) => {
+          AgentModel.updateForm(this.agentForm, response);
           this.loading = false;
         }, this.handleFinal)
     );
@@ -194,15 +202,7 @@ export class AddAgentComponent implements OnInit {
   }
 
   reset() {
-    this.agentForm.patchValue({
-      name: '',
-      email: '',
-      phoneNo: '',
-      iataNo: '',
-      company: '',
-      address: {},
-      commission: '',
-    });
+    AgentModel.resetForm(this.agentForm);
   }
 
   /**

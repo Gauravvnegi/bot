@@ -78,12 +78,14 @@ export class HotelDetailService {
       label: entity.name,
       value: entity.id,
       type: entity.type ? entity.type : EntitySubType.ROOM_TYPE,
+      id: entity.id,
     }));
 
     propertyList.unshift({
       label: selectedHotel.name,
       value: selectedHotel.id,
       type: selectedHotel.type ? selectedHotel.type : EntitySubType.ROOM_TYPE,
+      id: selectedHotel.id,
     });
 
     return propertyList;

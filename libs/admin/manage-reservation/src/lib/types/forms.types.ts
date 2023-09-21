@@ -14,7 +14,9 @@ export class RoomReservationFormData {
   bookingItems: BookingItemFormData[];
   id?: string;
   specialRequest: string;
-  totalPaidAmount: number;
+  pricingDetails: {
+    totalPaidAmount: number;
+  };
   offer?: {
     id: string;
   };
@@ -57,7 +59,9 @@ export class OutletFormData {
   sourceName: string;
   marketSegment: string;
   paymentMethod: string;
-  totalPaidAmount: number;
+  pricingDetails: {
+    totalPaidAmount: number;
+  };
   offerId: string;
   paymentRemark: string;
   eventType: string;

@@ -1,6 +1,7 @@
 import { EntityState } from '@hospitality-bot/admin/shared';
+import { AdditionalFeature } from 'libs/admin/company/src/lib/types/response';
 
-export type AgentTableResponse = {
+export type AgentTableResponse = AdditionalFeature & {
   id?: string;
   salutation?: string;
   firstName: string;

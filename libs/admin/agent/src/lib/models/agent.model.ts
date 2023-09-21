@@ -3,6 +3,7 @@ import { AgentFormType } from '../types/form.types';
 import { AgentListResponse, AgentTableResponse } from '../types/response';
 import { CompanyResponseType } from 'libs/admin/company/src/lib/types/response';
 import { DateService } from '@hospitality-bot/shared/utils';
+import { FormGroup } from '@angular/forms';
 export class AgentModel {
   id: string;
   name: string;
@@ -44,9 +45,50 @@ export class AgentModel {
       },
       companyId: form.company,
       status: form.status,
+      marketSegment: form.marketSegment,
+      businessSource: form.businessSource,
+      billingInstruction: form.billingInstruction,
     };
 
     return data;
+  }
+
+  static updateForm(form: FormGroup, data: AgentTableResponse) {
+    const address = data.address;
+    form.patchValue({
+      packageCode: '#' + data.code,
+      name: data.firstName,
+      email: data.contactDetails.emailId,
+      cc: data.contactDetails.cc,
+      phoneNo: data.contactDetails.contactNumber,
+      iataNo: data.iataNumber,
+      company: data.companyId,
+      address: {
+        formattedAddress: `${address.addressLine1}, ${address.city}, ${address.countryCode}, ${address.postalCode}, ${address.state}`,
+        city: address.city,
+        state: address.state,
+        countryCode: address.countryCode,
+        postalCode: address.postalCode,
+      },
+      commissionType: data.priceModifier,
+      commission: data.priceModifierValue,
+      status: data.status,
+      marketSegment: data.marketSegment,
+      businessSource: data.businessSource,
+      billingInstruction: data.billingInstruction,
+    });
+  }
+
+  static resetForm(form: FormGroup) {
+    form.patchValue({
+      name: '',
+      email: '',
+      phoneNo: '',
+      iataNo: '',
+      company: '',
+      address: {},
+      commission: '',
+    });
   }
 
   deserialize(input: AgentTableResponse) {

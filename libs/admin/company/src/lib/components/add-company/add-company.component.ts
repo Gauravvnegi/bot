@@ -1,7 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
-import { NavRouteOptions, Option, Regex } from '@hospitality-bot/admin/shared';
+import {
+  ConfigService,
+  NavRouteOptions,
+  Option,
+  Regex,
+} from '@hospitality-bot/admin/shared';
 import { CompanyService } from '../../services/company.service';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { ActivatedRoute } from '@angular/router';
@@ -9,7 +14,12 @@ import { Subscription } from 'rxjs';
 import { companyRoutes } from '../../constants/route';
 import { CompanyModel } from '../../models/company.model';
 import { CompanyResponseType } from '../../types/response';
-import { companyDiscount } from '../../constants/company';
+import {
+  billingInstruction,
+  businessSource,
+  companyDiscount,
+  discountTypes,
+} from '../../constants/company';
 import { Location } from '@angular/common';
 import { FormService } from 'libs/admin/members/src/lib/services/form.service';
 @Component({
@@ -18,22 +28,20 @@ import { FormService } from 'libs/admin/members/src/lib/services/form.service';
   styleUrls: ['./add-company.component.scss'],
 })
 export class AddCompanyComponent implements OnInit {
+  readonly discountType = discountTypes;
+  businessSource = businessSource;
+  billingInstruction = billingInstruction;
+  marketSegment: Option[] = [];
+
   entityId: string;
   companyId: string;
   pageTitle: string;
   navRoutes: NavRouteOptions;
-  packageCode: string = '# will be auto generated';
-
   companyForm: FormGroup;
-
   routes = companyRoutes;
   loading = false;
-  subscription$ = new Subscription();
 
-  discountType: Option[] = [
-    { label: '%OFF', value: companyDiscount.PERCENTAGE },
-    { label: 'Flat', value: companyDiscount.DISCOUNT },
-  ];
+  subscription$ = new Subscription();
 
   constructor(
     private fb: FormBuilder,
@@ -42,7 +50,8 @@ export class AddCompanyComponent implements OnInit {
     private snackbarService: SnackBarService,
     private route: ActivatedRoute,
     private location: Location,
-    private formService: FormService
+    private formService: FormService,
+    private configService: ConfigService
   ) {
     this.companyId = this.route.snapshot.paramMap.get('id');
     const { navRoutes, title } = companyRoutes[
@@ -60,6 +69,7 @@ export class AddCompanyComponent implements OnInit {
 
   initCompanyForm() {
     this.companyForm = this.fb.group({
+      packageCode: ['# will be auto generated'],
       status: [true],
       name: ['', [Validators.required]],
       email: ['', [Validators.required, Validators.pattern(Regex.EMAIL_REGEX)]],
@@ -71,9 +81,28 @@ export class AddCompanyComponent implements OnInit {
       salePersonNo: [''],
       discountType: [companyDiscount.PERCENTAGE, [Validators.required]],
       discount: ['', [Validators.required, Validators.min(0)]],
+      taxId: [''],
+      creditLimit: [''],
+      marketSegment: [''],
+      businessSource: [''],
+      billingInstruction: [''],
     });
-
+    this.loadMarketSegment();
     if (this.companyId) this.getCompanyById();
+  }
+
+  loadMarketSegment() {
+    this.subscription$.add(
+      this.configService
+        .getColorAndIconConfig(this.entityId)
+        .subscribe((response) => {
+          this.marketSegment =
+            response.bookingConfig.marketSegment.map((item) => ({
+              label: item,
+              value: item,
+            })) ?? [];
+        })
+    );
   }
 
   listenChanges() {
@@ -113,27 +142,8 @@ export class AddCompanyComponent implements OnInit {
     this.loading = true;
     this.subscription$.add(
       this.companyService.getCompanyById(this.companyId).subscribe(
-        (response: CompanyResponseType) => {
-          this.packageCode = '#' + response.code;
-          const address = response.address;
-          this.companyForm.patchValue({
-            name: response.firstName,
-            email: response.contactDetails.emailId,
-            cc: response.contactDetails.cc,
-            phoneNo: response.contactDetails.contactNumber,
-            address: {
-              formattedAddress: `${address.addressLine1}, ${address.city}, ${address.countryCode}, ${address.postalCode}, ${address.state}`,
-              city: address.city,
-              state: address.state,
-              countryCode: address.countryCode,
-              postalCode: address.postalCode,
-            },
-            salePersonName: response.salesPersonName,
-            salePersonNo: response.salesPersonPhone,
-            discountType: response.priceModifier,
-            discount: response.priceModifierValue,
-            status: response.status,
-          });
+        (response) => {
+          CompanyModel.updateForm(this.companyForm, response);
         },
         (error) => {
           this.loading = false;

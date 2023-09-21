@@ -212,15 +212,15 @@
                   class="half-width"
                   [controls]="{
                     currencyControlName: 'paxPriceCurrency',
-                    preCountControlName: 'paxAdultPrice',
+                    preCountControlName: 'paxChildBelowFive',
                     postCountControlName: 'paxChildPrice',
-                    additionalControlName: 'paxChildBelowFive'
+                    additionalControlName: 'paxAdultPrice'
                   }"
                   [labels]="{
                     mainLabel: 'Pax Additional Cost',
-                    preCountLabel: 'Adult',
+                    preCountLabel: childBelowFive,
                     postCountLabel: 'Child 5-12',
-                    additionalLabel: 'Child  5'
+                    additionalLabel: 'Adult'
                   }"
                   [currencyOptions]="currencies"
                   [defaultProps]="{
@@ -319,9 +319,9 @@
                   }"
                   [labels]="{
                     mainLabel: 'Pax Additional Cost',
-                    preCountLabel: 'Adult',
+                    preCountLabel: childBelowFive,
                     postCountLabel: 'Child 5-12',
-                    additionalLabel: 'Child < 5'
+                    additionalLabel: 'Adult'
                   }"
                   [currencyOptions]="currencies"
                   [defaultProps]="{

@@ -1,4 +1,6 @@
-export type CompanyFormType = {
+import { AdditionalFeature } from './response';
+
+export type CompanyFormType = AdditionalFeature & {
   status: boolean;
   name: string;
   email: string;

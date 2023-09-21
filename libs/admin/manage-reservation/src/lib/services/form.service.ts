@@ -10,12 +10,19 @@ import {
 } from '../types/forms.types';
 import { ReservationForm } from '../constants/form';
 import { GuestInfo } from '../models/reservations.model';
+import { ManageReservationService } from './manage-reservation.service';
+import { Option, QueryConfig } from '@hospitality-bot/admin/shared';
+import { RoomsByRoomType } from 'libs/admin/room/src/lib/types/service-response';
+import { AbstractControl } from '@angular/forms';
 
 @Injectable({
   providedIn: 'root',
 })
 export class FormService {
+  constructor(public manageReservationService: ManageReservationService) {}
   dateDifference = new BehaviorSubject(1);
+
+  disableBtn: boolean = false;
 
   guestInformation: BehaviorSubject<GuestInfo> = new BehaviorSubject<GuestInfo>(
     null
@@ -61,8 +68,9 @@ export class FormService {
       input.paymentMethod?.paymentMethod ?? '';
     roomReservationData.paymentRemark =
       input.paymentMethod?.paymentRemark ?? '';
-    roomReservationData.totalPaidAmount =
-      input.paymentMethod?.totalPaidAmount ?? 0;
+    roomReservationData.pricingDetails = {
+      totalPaidAmount: input.paymentMethod?.totalPaidAmount ?? 0,
+    };
 
     roomReservationData.guestId = input.guestInformation?.guestDetails;
     roomReservationData.specialRequest = input.instructions.specialInstructions;
@@ -79,6 +87,7 @@ export class FormService {
               roomTypeId: roomType.roomTypeId,
               roomCount: roomType.roomCount,
               roomNumbers: roomType?.roomNumbers ? roomType?.roomNumbers : [],
+              roomNumber: roomType?.roomNumbers ? roomType?.roomNumbers[0] : '',
             },
             occupancyDetails: {
               maxChildren: roomType.childCount,
@@ -150,7 +159,9 @@ export class FormService {
     // Payment Info
     reservationData.paymentMethod = input.paymentMethod?.paymentMethod ?? '';
     reservationData.paymentRemark = input.paymentMethod?.paymentRemark ?? '';
-    reservationData.totalPaidAmount = input.paymentMethod?.totalPaidAmount ?? 0;
+    reservationData.pricingDetails = {
+      totalPaidAmount: input.paymentMethod?.totalPaidAmount ?? 0,
+    };
 
     reservationData.guestId = input.guestInformation?.guestDetails;
     reservationData.offerId = input?.offerId ?? '';
@@ -164,8 +175,47 @@ export class FormService {
     return reservationData;
   }
 
+  getRooms(
+    entityId: string,
+    config: QueryConfig,
+    roomNumbersControl: AbstractControl,
+    roomNumbers?: AbstractControl,
+    defaultRoomNumbers?: string[]
+  ) {
+    this.manageReservationService
+      .getRoomNumber(entityId, config)
+      .subscribe((res) => {
+        const roomNumberOptions = res.rooms
+          .filter((room: RoomsByRoomType) => room.roomNumber.length)
+          .map((room: RoomsByRoomType) => ({
+            label: room.roomNumber,
+            value: room.roomNumber,
+          }));
+        // this.fields[3].loading[index] = false;
+
+        // Check if the roomNumber control has the room number in roomNumberOptions
+        if (roomNumbers && roomNumbers.value && !defaultRoomNumbers) {
+          const roomNumbersValue = roomNumbers.value;
+          // Filter the roomNumbersValue to keep only those values that exist in roomNumberOptions
+          const filteredRoomNumbers = roomNumbersValue.filter((value: string) =>
+            roomNumberOptions.some((option: Option) => option.value === value)
+          );
+
+          roomNumbers.setValue(filteredRoomNumbers);
+        }
+
+        // Patch the roomNumbers when the room number options are initialized
+        if (defaultRoomNumbers.length) {
+          roomNumbers.setValue(defaultRoomNumbers);
+        }
+
+        roomNumbersControl.patchValue(roomNumberOptions, { emitEvent: false });
+      });
+  }
+
   resetData() {
     this.reservationForm.next(null);
     this.sourceData.next(null);
+    this.disableBtn = false;
   }
 }

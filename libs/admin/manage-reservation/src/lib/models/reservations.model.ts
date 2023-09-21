@@ -21,6 +21,7 @@ import { MenuItemsData, RoomTypes, SpaItems } from '../constants/form';
 import { ItemsData, OutletFormData } from '../types/forms.types';
 import { RoomReservationResponse } from '../types/response.type';
 import { RoomTypeForm } from 'libs/admin/room/src/lib/models/room.model';
+import { JourneyState } from '../constants/reservation';
 /* Reservation */
 
 export class RoomReservation {
@@ -207,6 +208,8 @@ export class ReservationFormData {
   instructions: Instructions;
   nextStates: string[];
   totalPaidAmount: number;
+  journeyState: JourneyState;
+
   deserialize(input: RoomReservationResponse) {
     this.reservationInformation = new BookingInfo().deserialize(input);
     this.guestInformation = new GuestInfo().deserialize(input.guest);
@@ -232,6 +235,7 @@ export class ReservationFormData {
         : [],
     }));
     this.totalPaidAmount = input.pricingDetails.totalPaidAmount;
+    this.journeyState = input.journeysStatus.CHECKIN;
     return this;
   }
 }

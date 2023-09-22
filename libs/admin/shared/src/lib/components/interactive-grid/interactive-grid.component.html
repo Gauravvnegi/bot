@@ -18,8 +18,8 @@
           *ngIf="data[row] && data[row][col]"
           ngDraggable
           ngResizable
-          [rzMinWidth]="cellSize / 2"
-          [rzGrid]="cellSize / 2"
+          [rzMinWidth]="cellSize / delimiter"
+          [rzGrid]="cellSize / delimiter"
           [position]="{
             x: colIdx * cellSize + (data[row][col]?.hasPrev ? cellSize / 2 : 0),
             y: rowIdx * cellSize
@@ -60,7 +60,9 @@
           <div
             class="cell-data"
             [ngStyle]="{
-              height: cellSize - 2 * cellGap + 'px'
+              height: cellSize - 2 * cellGap + 'px',
+              borderLeft: data[row][col].hasStart ? null : 0,
+              borderRight: data[row][col].hasEnd ? null : 0
             }"
           >
             {{ data[row][col]?.content }}
@@ -104,7 +106,8 @@
               colValue: col
             })
           "
-          [pTooltip]="props.createNewToolTipInfo"
+          [pTooltip]="createNewToolTipInfo"
+          showDelay="500"
           tooltipPosition="top"
         >
           <ng-container *ngIf="devMode && rowIdx === gridRows.length - 1">

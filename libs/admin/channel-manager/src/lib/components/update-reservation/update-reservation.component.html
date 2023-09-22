@@ -1,5 +1,5 @@
 <hospitality-bot-navigation-header
-  heading="Update inventory"
+  [heading]="heading"
   [routes]="[{ label: 'Update inventory', link: './' }]"
   [isStickyTitle]="false"
   [isBack]="false"
@@ -29,6 +29,7 @@
       }"
       (onChange)="handleChange($event)"
       (onCreate)="handleCreate($event)"
+      (onEdit)="handleEdit($event)"
       [devMode]="true"
     ></hospitality-bot-interactive-grid>
     <div></div>

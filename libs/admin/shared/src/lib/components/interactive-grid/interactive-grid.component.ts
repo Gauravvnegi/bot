@@ -5,10 +5,8 @@ import { IResizeEvent } from 'angular2-draggable/lib/models/resize-event';
 /**
  * @class InteractiveGridComponent
  * @todo data reinitialize handle function (reset functionality)
- * @todo empty cell event
- * @todo Progress spinner (onChange event in progress loading)
- * @todo Tool tip on content
- * @todo Handle edge (drag event on click is an issue)
+ * @todo Tool tip on content - need to refactor
+ * @todo [sameStartEndPos] need to handle same start and end pos (breaking single cell grid data)
  */
 @Component({
   selector: 'hospitality-bot-interactive-grid',
@@ -27,34 +25,35 @@ export class InteractiveGridComponent {
    */
   @Input() isProcessing = false;
 
-  /**
-   *Cell Size is grid height and width including the gap
-   */
-  @Input() cellSize: number = 80;
-
-  /**
-   * Cell gap will decide the spaces between the grid blocks
-   */
-  @Input() cellGap: number = 5;
+  cellSize: IGProps['cellSize'] = 80; //Cell Size is grid height and width including the gap
+  cellGap: IGProps['cellGap'] = 5; // Cell gap will decide the spaces between the grid blocks
+  createNewToolTipInfo: IGProps['createNewToolTipInfo'] = 'Create New Entry';
+  rowName: IGProps['rowName'];
+  colName: IGProps['colName'];
+  minWidth: IGProps['minWidth'] = 'half';
+  resizeWidth: IGProps['resizeWidth'] = 'half';
 
   /**
    * Props to show extra information
    * @todo Need to handle label for col and row to show information
    */
-  @Input() props: {
-    createNewToolTipInfo?: string;
-    rowName?: string;
-    colName?: string;
-  } = {
-    createNewToolTipInfo: 'Create New Entry',
-  };
+  @Input() set props(value: IGProps) {
+    for (const key in value) {
+      const val = value[key];
+      this[key] = val;
+    }
+  }
+
+  get delimiter() {
+    return this.resizeWidth === 'half' ? 2 : 1;
+  }
 
   /**
    * Grid Data setter to set he grid rows and column data with the available value
    * @example
    * const gridData = {
    *    rows: [101, 102, 103 ,104, 105],
-   *    column: ['18Mon', '19Tue', '20Wed', '21Thus'],
+   *    column: [110, 120, 130, 140],
    *    values: [
    *      {
    *        id: 'RES001',
@@ -74,12 +73,14 @@ export class InteractiveGridComponent {
    *  }
    */
   @Input() set gridData(data: {
-    rows: IGKey[];
-    columns: IGKey[];
+    rows: IGRow[];
+    columns: IGCol[];
     values: IGValue[];
   }) {
     this.gridColumns = data.columns;
     this.gridRows = data.rows;
+    this.colStart = this.gridColumns[0];
+    this.colDiff = this.gridColumns[1] - this.gridColumns[0];
     this.colIndices = this.gridColumns.reduce((p, c, i) => {
       p = { ...p, [c]: i };
       return p;
@@ -121,13 +122,14 @@ export class InteractiveGridComponent {
    */
   data: IGData = {};
 
-  colIndices: Record<IGKey, number> = {};
-
   /**
    * Array of gird column value and also decide the no of column based on the length
-   * @example ['18Mon', '19Tue', '20Wed', '21Thus'] or [1, 2, 3, 4]
+   * @example  or [110, 120, 130, 140]
    */
-  gridColumns: IGKey[] = [];
+  gridColumns: IGCol[] = [];
+  colStart: IGCol;
+  colDiff: number;
+  colIndices: Record<IGCol, number> = {}; // One time mapping of index (to reduce find of index)
 
   /**
    * Return no of columns
@@ -140,7 +142,7 @@ export class InteractiveGridComponent {
    * Array of grid rows value and also decide the no of row based on the length
    * @example ['LU101', 'LU102', 'LU103', 'LU104', 'LU105'] or [101, 102, 103, 104]
    */
-  gridRows: IGKey[] = [];
+  gridRows: IGRow[] = [];
 
   /**
    * Return no of rows
@@ -149,13 +151,25 @@ export class InteractiveGridComponent {
     return this.gridRows.length;
   }
 
-  @Output() onChange = new EventEmitter<IGChangedData>();
-  @Output() onCreate = new EventEmitter<IGCreateData>();
+  /**
+   * When gird info cell is moved or resized
+   */
+  @Output() onChange = new EventEmitter<IGChangeEvent>();
+
+  /**
+   * When grid info cell is clicked
+   */
+  @Output() onEdit = new EventEmitter<IGEditEvent>();
+
+  /**
+   * When empty grid cell is clicked
+   */
+  @Output() onCreate = new EventEmitter<IGCreateEvent>();
 
   getCurrentDataInfo(
     query: IGQueryEvent
   ): {
-    data: IGCellData;
+    data: IGCellInfo;
     id: string;
   } {
     const { rowValue, colValue } = query;
@@ -181,8 +195,10 @@ export class InteractiveGridComponent {
     const startPos = Math.trunc(currentStartIdx) - 1;
     const endPos = startPos + data.cellOccupied - 1;
 
+    console.log(currentPos, startPos);
+
     // Current Data - which will be update as per calculation below
-    let currentData: IGChangedData = {
+    let currentData: IGChangeEvent = {
       id: id,
       rowValue,
       endPos: this.gridColumns[endPos],
@@ -237,7 +253,7 @@ export class InteractiveGridComponent {
     const endPos = startPos + data.cellOccupied - 1;
 
     // Current Data - which will be update as per calculation below
-    let currentData: IGChangedData = {
+    let currentData: IGChangeEvent = {
       id: id,
       rowValue,
       endPos: this.gridColumns[endPos],
@@ -262,21 +278,31 @@ export class InteractiveGridComponent {
     const newEndPosInDecimal = interimEndPos + xDiffIdx; // can be in decimal (0.5)
     const newEndPos = Math.round(newEndPosInDecimal); // round of as 2.5 or 3 is same for the end that will be 3
 
-    // Updated data
-    currentData = {
-      ...currentData,
-      rowValue: this.gridRows[newYIdx],
-      startPos: this.gridColumns[newStartPos],
-      endPos: this.gridColumns[newEndPos],
-    };
-
-    this.onChange.emit(currentData);
+    /**
+     * Drag event is emitted even if it is not moved (on click)
+     * So emit onChange if something is changed else trigger onClick event
+     */
+    if (
+      endPos !== newEndPos ||
+      startPos !== newStartPos ||
+      rowValue !== this.gridRows[newYIdx]
+    ) {
+      currentData = {
+        ...currentData,
+        rowValue: this.gridRows[newYIdx],
+        startPos: this.gridColumns[newStartPos],
+        endPos: this.gridColumns[newEndPos],
+      };
+      this.onChange.emit(currentData);
+    } else {
+      this.onEdit.emit({ id: currentData.id });
+    }
   }
 
   /**
    * Handle emission of new data to be created
    */
-  handleCreate(event: IGCreateData) {
+  handleCreate(event: IGCreateEvent) {
     this.onCreate.emit(event);
   }
 
@@ -306,15 +332,22 @@ export class InteractiveGridComponent {
    * To get the desired formatted data
    */
   getModdedData(input: IGValue[]): IGData {
-    const inputPerRow: Record<IGKey, IGValue[]> = input.reduce(
+    const inputPerRow: Record<IGRow, IGValue[]> = input.reduce(
       (value, item) => {
         value = {
           ...value,
-          [item.rowValue]: [...(value[item.rowValue] ?? []), item],
+          [item.rowValue]: [
+            ...(value[item.rowValue] ?? []),
+            {
+              ...item,
+              startPos: item.startPos,
+              endPos: item.endPos,
+            },
+          ],
         };
         return value;
       },
-      {}
+      {} as Record<IGRow, IGValue[]>
     );
 
     let resultData: IGData = {};
@@ -323,6 +356,7 @@ export class InteractiveGridComponent {
       const rowValues = inputPerRow[item];
       const { startPos, endPos } = rowValues.reduce(
         (value, item) => {
+          // todo - sameStartEndPos
           value.endPos.add(item.endPos);
           value.startPos.add(item.startPos);
           return value;
@@ -333,23 +367,35 @@ export class InteractiveGridComponent {
         }
       );
 
-      let rowResult: IGData[IGKey] = {};
+      let rowResult: IGData[IGRow] = {};
 
       rowValues.forEach((item) => {
-        const dataKey = item.startPos;
+        const hasStart = this.gridColumns.includes(item.startPos);
+        const hasEnd = this.gridColumns.includes(item.endPos);
+        const dataKey = hasStart ? item.startPos : this.gridColumns[0];
         const hasPrev = endPos.has(item.startPos);
         const hasNext = startPos.has(item.endPos);
-        const cellOccupied =
-          this.colIndices[item.endPos] - this.colIndices[item.startPos] + 1;
 
+        // Start and end position could be out of bound
+        const cellOccupied =
+          1 +
+          (hasEnd
+            ? this.colIndices[item.endPos]
+            : this.gridColumns.length - 1) -
+          (hasStart ? this.colIndices[item.startPos] : 0);
+
+        console.log(item.id, cellOccupied);
         rowResult = {
           ...(rowResult ?? {}),
           [dataKey]: {
-            cellOccupied,
-            hasNext,
-            hasPrev,
             content: item.content,
             id: item.id,
+            cellOccupied,
+            hasNext, // if end position has new item with same point as start
+            hasPrev, // if start position has new item with same point as end
+            hasStart, // if start point is out of bound (left)
+            hasEnd, // if end point is out of bound (right)
+            extraSpace: 40,
           },
         };
       });
@@ -368,34 +414,47 @@ export class InteractiveGridComponent {
 /**
  * @type Defines grid column or row value
  */
-export type IGKey = string | number;
+export type IGRow = string | number;
+
+/**
+ * @type Defines grid column or row value
+ */
+export type IGCol = number;
 
 /**
  * @type Defines Cell data to create interactive gird cell
  */
-export type IGCellData = Pick<IGValue, 'id' | 'content'> & {
+export type IGCellInfo = Pick<IGValue, 'id' | 'content'> & {
   cellOccupied: number;
   hasNext: boolean;
   hasPrev: boolean;
+  hasStart: boolean;
+  hasEnd: boolean;
+  extraSpace?: number;
 };
 
 /**
- * @type Update single data value of interactive grid
+ * @type Defines On Change event data
  */
-export type IGChangedData = Omit<IGValue, 'content'>;
+export type IGChangeEvent = Omit<IGValue, 'content'>;
 
 /**
- * @type Define row and value to new data
+ * @type Defines on create event data
  */
-export type IGCreateData = {
-  rowValue: IGKey;
-  colValue: IGKey;
+export type IGCreateEvent = {
+  rowValue: IGRow;
+  colValue: IGCol;
 };
+
+/**
+ * @type Define on edit event data
+ */
+export type IGEditEvent = Pick<IGValue, 'id'>;
 
 /**
  * @type Defines Grid data structure
  */
-type IGData = Record<IGKey, Record<IGKey, IGCellData>>;
+type IGData = Record<IGRow, Record<IGRow, IGCellInfo>>;
 
 /**
  * @type Defines Input Grid value
@@ -403,9 +462,19 @@ type IGData = Record<IGKey, Record<IGKey, IGCellData>>;
 export type IGValue = {
   id: string;
   content: string;
-  startPos: IGKey;
-  endPos: IGKey;
-  rowValue: IGKey;
+  startPos: IGCol;
+  endPos: IGCol;
+  rowValue: IGRow;
+};
+
+export type IGProps = {
+  createNewToolTipInfo?: string;
+  rowName?: string;
+  colName?: string;
+  minWidth?: GridBreakPoints;
+  resizeWidth?: GridBreakPoints;
+  cellSize?: number;
+  cellGap?: number;
 };
 
 /**
@@ -414,4 +483,6 @@ export type IGValue = {
 type IGQueryEvent = {
   rowIdx: number;
   colIdx: number;
-} & IGCreateData;
+} & IGCreateEvent;
+
+type GridBreakPoints = 'half' | 'full';

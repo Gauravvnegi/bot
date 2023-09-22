@@ -5,10 +5,8 @@ import { IResizeEvent } from 'angular2-draggable/lib/models/resize-event';
 /**
  * @class InteractiveGridComponent
  * @todo data reinitialize handle function (reset functionality)
- * @todo empty cell event
- * @todo Progress spinner (onChange event in progress loading)
- * @todo Tool tip on content
- * @todo Handle edge (drag event on click is an issue)
+ * @todo Tool tip on content - need to refactor
+ * @todo [sameStartEndPos] need to handle same start and end pos (breaking single cell grid data)
  */
 @Component({
   selector: 'hospitality-bot-interactive-grid',
@@ -29,11 +27,11 @@ export class InteractiveGridComponent {
 
   cellSize: IGProps['cellSize'] = 80; //Cell Size is grid height and width including the gap
   cellGap: IGProps['cellGap'] = 5; // Cell gap will decide the spaces between the grid blocks
-  createNewToolTipInfo?: IGProps['createNewToolTipInfo'] = 'Create New Entry';
-  rowName?: IGProps['rowName'];
-  colName?: IGProps['colName'];
-  minWidth?: IGProps['minWidth'] = 'half';
-  resizeWidth?: IGProps['resizeWidth'] = 'half';
+  createNewToolTipInfo: IGProps['createNewToolTipInfo'] = 'Create New Entry';
+  rowName: IGProps['rowName'];
+  colName: IGProps['colName'];
+  minWidth: IGProps['minWidth'] = 'half';
+  resizeWidth: IGProps['resizeWidth'] = 'half';
 
   /**
    * Props to show extra information
@@ -55,7 +53,7 @@ export class InteractiveGridComponent {
    * @example
    * const gridData = {
    *    rows: [101, 102, 103 ,104, 105],
-   *    column: ['18Mon', '19Tue', '20Wed', '21Thus'],
+   *    column: [110, 120, 130, 140],
    *    values: [
    *      {
    *        id: 'RES001',
@@ -81,6 +79,8 @@ export class InteractiveGridComponent {
   }) {
     this.gridColumns = data.columns;
     this.gridRows = data.rows;
+    this.colStart = this.gridColumns[0];
+    this.colDiff = this.gridColumns[1] - this.gridColumns[0];
     this.colIndices = this.gridColumns.reduce((p, c, i) => {
       p = { ...p, [c]: i };
       return p;
@@ -122,13 +122,14 @@ export class InteractiveGridComponent {
    */
   data: IGData = {};
 
-  colIndices: Record<IGCol, number> = {};
-
   /**
    * Array of gird column value and also decide the no of column based on the length
-   * @example ['18Mon', '19Tue', '20Wed', '21Thus'] or [1, 2, 3, 4]
+   * @example  or [110, 120, 130, 140]
    */
   gridColumns: IGCol[] = [];
+  colStart: IGCol;
+  colDiff: number;
+  colIndices: Record<IGCol, number> = {}; // One time mapping of index (to reduce find of index)
 
   /**
    * Return no of columns
@@ -355,6 +356,7 @@ export class InteractiveGridComponent {
       const rowValues = inputPerRow[item];
       const { startPos, endPos } = rowValues.reduce(
         (value, item) => {
+          // todo - sameStartEndPos
           value.endPos.add(item.endPos);
           value.startPos.add(item.startPos);
           return value;

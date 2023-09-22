@@ -52,6 +52,7 @@
     </ng-container>
 
     <div
+      *ngIf="dashHidden != true"
       class="disabled"
       [ngClass]="{
         hypen: layout === 'dashed'

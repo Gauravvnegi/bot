@@ -195,6 +195,8 @@ export class InteractiveGridComponent {
     const startPos = Math.trunc(currentStartIdx) - 1;
     const endPos = startPos + data.cellOccupied - 1;
 
+    console.log(currentPos, startPos);
+
     // Current Data - which will be update as per calculation below
     let currentData: IGChangeEvent = {
       id: id,
@@ -372,13 +374,15 @@ export class InteractiveGridComponent {
         const dataKey = hasStart ? item.startPos : this.gridColumns[0];
         const hasPrev = endPos.has(item.startPos);
         const hasNext = startPos.has(item.endPos);
+        // Start and end position could be out of bound
         const cellOccupied =
           1 +
-          // if end position is out of bound
-          this.colIndices[
-            hasEnd ? item.endPos : this.gridColumns[this.gridColumns.length - 1]
-          ] -
-          this.colIndices[item.startPos];
+          (hasEnd
+            ? this.colIndices[item.endPos]
+            : this.gridColumns.length - 1) -
+          (hasStart ? this.colIndices[item.startPos] : 0);
+
+        console.log(item.id, cellOccupied);
         rowResult = {
           ...(rowResult ?? {}),
           [dataKey]: {

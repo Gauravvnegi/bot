@@ -36,8 +36,6 @@ export class UpdateReservationComponent implements OnInit {
     {
       id: 'RES000',
       content: 'Out left 105',
-      // startPos: 1,
-      // endPos: 3,
       startPos: '31Sun',
       endPos: '03Wed',
       rowValue: 105,
@@ -45,8 +43,6 @@ export class UpdateReservationComponent implements OnInit {
     {
       id: 'RES000',
       content: 'Out right 105',
-      // startPos: 1,
-      // endPos: 3,
       startPos: '11Thu',
       endPos: '14Sun',
       rowValue: 105,
@@ -54,8 +50,6 @@ export class UpdateReservationComponent implements OnInit {
     {
       id: 'RES001',
       content: 'Dhruv 101',
-      // startPos: 1,
-      // endPos: 3,
       startPos: '01Mon',
       endPos: '03Wed',
       rowValue: 101,
@@ -63,8 +57,6 @@ export class UpdateReservationComponent implements OnInit {
     {
       id: 'RES002',
       content: 'Akash 101',
-      // startPos: 3,
-      // endPos: 4,
       startPos: '03Wed',
       endPos: '04Thu',
       rowValue: 101,
@@ -72,8 +64,6 @@ export class UpdateReservationComponent implements OnInit {
     {
       id: 'RES003',
       content: 'Jag 101',
-      // startPos: 6,
-      // endPos: 7,
       startPos: '06Sat',
       endPos: '08Mon',
       rowValue: 101,
@@ -81,8 +71,6 @@ export class UpdateReservationComponent implements OnInit {
     {
       id: 'RES004',
       content: 'Tony Stark 102',
-      // startPos: 6,
-      // endPos: 7,
       startPos: '06Sat',
       endPos: '08Mon',
       rowValue: 102,
@@ -90,8 +78,6 @@ export class UpdateReservationComponent implements OnInit {
     {
       id: 'RES006',
       content: 'Steve Rogers 103',
-      // startPos: 3,
-      // endPos: 6,
       startPos: '03Wed',
       endPos: '06Sat',
       rowValue: 103,
@@ -99,8 +85,6 @@ export class UpdateReservationComponent implements OnInit {
     {
       id: 'RES007',
       content: 'Pradeep 104',
-      // startPos: 2,
-      // endPos: 5,
       startPos: '02Tue',
       endPos: '05Fri',
       rowValue: 104,
@@ -108,8 +92,6 @@ export class UpdateReservationComponent implements OnInit {
     {
       id: 'RES008',
       content: 'Ayush 104',
-      // startPos: 5,
-      // endPos: 7,
       startPos: '05Fri',
       endPos: '07Sun',
       rowValue: 104,

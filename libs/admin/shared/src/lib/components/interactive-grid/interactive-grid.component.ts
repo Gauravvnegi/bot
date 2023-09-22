@@ -22,6 +22,8 @@ export class InteractiveGridComponent {
    */
   @Input() devMode = false;
 
+  @Input() calc = (value) => {};
+
   /**
    * To show the spinner
    */
@@ -332,11 +334,18 @@ export class InteractiveGridComponent {
       (value, item) => {
         value = {
           ...value,
-          [item.rowValue]: [...(value[item.rowValue] ?? []), item],
+          [item.rowValue]: [
+            ...(value[item.rowValue] ?? []),
+            {
+              ...item,
+              startPos: item.startPos,
+              endPos: item.endPos,
+            },
+          ],
         };
         return value;
       },
-      {}
+      {} as Record<IGKey, IGValue[]>
     );
 
     let resultData: IGData = {};
@@ -358,20 +367,28 @@ export class InteractiveGridComponent {
       let rowResult: IGData[IGKey] = {};
 
       rowValues.forEach((item) => {
-        const dataKey = item.startPos;
+        const hasStart = this.gridColumns.includes(item.startPos);
+        const hasEnd = this.gridColumns.includes(item.endPos);
+        const dataKey = hasStart ? item.startPos : this.gridColumns[0];
         const hasPrev = endPos.has(item.startPos);
         const hasNext = startPos.has(item.endPos);
         const cellOccupied =
-          this.colIndices[item.endPos] - this.colIndices[item.startPos] + 1;
-
+          1 +
+          // if end position is out of bound
+          this.colIndices[
+            hasEnd ? item.endPos : this.gridColumns[this.gridColumns.length - 1]
+          ] -
+          this.colIndices[item.startPos];
         rowResult = {
           ...(rowResult ?? {}),
           [dataKey]: {
-            cellOccupied,
-            hasNext,
-            hasPrev,
             content: item.content,
             id: item.id,
+            cellOccupied,
+            hasNext, // if end position has new item with same point as start
+            hasPrev, // if start position has new item with same point as end
+            hasStart, // if start point is out of bound (left)
+            hasEnd, // if end point is out of bound (right)
           },
         };
       });
@@ -399,6 +416,8 @@ export type IGCellInfo = Pick<IGValue, 'id' | 'content'> & {
   cellOccupied: number;
   hasNext: boolean;
   hasPrev: boolean;
+  hasStart: boolean;
+  hasEnd: boolean;
 };
 
 /**

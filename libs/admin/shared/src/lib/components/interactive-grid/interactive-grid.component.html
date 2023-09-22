@@ -60,7 +60,9 @@
           <div
             class="cell-data"
             [ngStyle]="{
-              height: cellSize - 2 * cellGap + 'px'
+              height: cellSize - 2 * cellGap + 'px',
+              borderLeft: data[row][col].hasStart ? null : 0,
+              borderRight: data[row][col].hasEnd ? null : 0
             }"
           >
             {{ data[row][col]?.content }}

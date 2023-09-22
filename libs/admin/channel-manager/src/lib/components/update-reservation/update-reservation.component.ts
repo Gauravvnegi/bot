@@ -13,6 +13,7 @@ import {
   styleUrls: ['./update-reservation.component.scss'],
 })
 export class UpdateReservationComponent implements OnInit {
+  heading = 'Update inventory';
   gridRows: IGKey[] = [101, 102, 103, 104, 105, 106, 107, 108, 109, 110];
 
   // gridCols = [Array.from({ length: 14 }, (_, index) => index + 1)];
@@ -32,6 +33,24 @@ export class UpdateReservationComponent implements OnInit {
   ];
 
   data: IGValue[] = [
+    {
+      id: 'RES000',
+      content: 'Out left 105',
+      // startPos: 1,
+      // endPos: 3,
+      startPos: '31Sun',
+      endPos: '03Wed',
+      rowValue: 105,
+    },
+    {
+      id: 'RES000',
+      content: 'Out right 105',
+      // startPos: 1,
+      // endPos: 3,
+      startPos: '11Thu',
+      endPos: '14Sun',
+      rowValue: 105,
+    },
     {
       id: 'RES001',
       content: 'Dhruv 101',
@@ -118,5 +137,9 @@ export class UpdateReservationComponent implements OnInit {
 
   handleEdit(event: IGEditEvent) {
     console.log(event, 'onEdit event');
+  }
+
+  calculateSpace(value) {
+    console.log('hello', value);
   }
 }

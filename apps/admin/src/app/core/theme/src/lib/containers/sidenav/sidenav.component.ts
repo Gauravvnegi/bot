@@ -216,4 +216,8 @@ export class SidenavComponent implements OnInit, OnDestroy {
       this.setSelectedModuleBasedOnRoute();
     }
   }
+
+  onExplore() {
+    this.isMenuBarVisible = !this.isMenuBarVisible;
+  }
 }

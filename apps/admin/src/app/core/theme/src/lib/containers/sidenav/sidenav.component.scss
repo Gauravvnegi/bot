@@ -15,7 +15,7 @@
   @include flex-all-center;
   width: 100%;
   padding: 10px 15px;
-  // background: $nav-bg-color;
+  background: $nav-bg-color;
   height: 68px;
   .logo {
     height: 40px;
@@ -254,18 +254,21 @@
 }
 
 // tablet
-// ::ng-deep .p-sidebar-mask {
-//   z-index: 1000 !important;
+//  ::ng-deep .p-sidebar-mask {
+//   z-index: 1003 !important;
 // }
 ::ng-deep .p-sidebar-mask.p-component-overlay {
-  display: none !important;
+  z-index: 130 !important;
 }
 
 :host ::ng-deep .p-sidebar-content {
-  padding: 20px !important;
+  padding: 20px;
 }
 
 .wrapper {
+  gap: 1em;
+  display: flex;
+  flex-direction: column;
   .header {
     display: flex;
     justify-content: space-between;
@@ -275,15 +278,25 @@
     }
 
     .explore {
+      display: inline-flex;
+      align-items: center;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 500;
+      line-height: 1.25;
+      letter-spacing: 0.72px;
+      text-align: left;
+      color: #00162b;
+      i {
+        margin-left: 3px;
+      }
     }
   }
 
   .menu-wrapper {
-    margin-top: 12px;
-
     .bot-logo {
-      width: 112px;
-      height: 40px;
+      width: 124px;
+      height: 54px;
 
       img {
         width: 100%;
@@ -296,6 +309,7 @@
       flex-wrap: wrap;
       height: 100%;
       gap: 2%;
+      row-gap: 1em;
 
       .menu {
         flex-basis: 49%;
@@ -321,5 +335,13 @@
   }
 
   .footer {
+    .header {
+      font-size: 18px;
+      font-weight: 600;
+      line-height: 0.83;
+      letter-spacing: 1.08px;
+      text-align: left;
+      color: #00162b;
+    }
   }
 }

@@ -1,13 +1,6 @@
-<div
-  class="logo text-uppercase"
-  [style.color]="normalFontColor"
-  [style.background-color]="isExpanded ? '#010034' : '#5f38f9'"
->
+<div class="logo text-uppercase" [style.color]="normalFontColor">
   <!-- Botshot new collapse logo-->
-  <div
-    class="sidenav-header"
-    [style.background-color]="isExpanded ? '#010034' : '#5f38f9'"
-  >
+  <div class="sidenav-header">
     <!-- <div [style.display]="status ? 'none' : ''" class="logo">
       <img
         src="assets/images/botshot_collapse.png"
@@ -16,12 +9,27 @@
       />
     </div> -->
     <!-- Side nav menu icon collapse-->
-    <div
-      *ngIf="!isExpanded"
-      class="menu_button"
-      (click)="isMenuBarVisible = true"
-    >
-      <img src="assets/images/main-menu.png" alt="" />
+    <div *ngIf="!isExpanded" class="menu_button">
+      <img
+        #botLogo
+        class="bot-logo"
+        src="assets/images/botshot_collapse.png"
+        alt=""
+        (mouseenter)="
+          botLogo.style.display = 'none'; productMenu.style.display = 'block'
+        "
+        (mouseleave)="
+          botLogo.style.display = 'block'; productMenu.style.display = 'none'
+        "
+      />
+      <img
+        (click)="isMenuBarVisible = true"
+        class="product-menu"
+        src="assets/images/main-menu.png"
+        alt=""
+        style="display: none;"
+        #productMenu
+      />
     </div>
   </div>
 </div>
@@ -91,11 +99,20 @@
     <div class="header">
       <div class="cross">
         <div (click)="isMenuBarVisible = false" class="close">
-          <i class="fa fa-times" aria-hidden="true"></i>
+          <i
+            class="fa fa-times"
+            style="color: rgba(0, 0, 0, 0.25);"
+            aria-hidden="true"
+          ></i>
         </div>
       </div>
-      <div class="exlpore">
+      <div (click)="onExplore()" class="explore">
         Explore
+        <i
+          class="pi pi-arrow-right"
+          style="color: #5f38f9;"
+          aria-hidden="true"
+        ></i>
       </div>
     </div>
     <div class="menu-wrapper">
@@ -114,6 +131,8 @@
         </div>
       </div>
     </div>
-    <div class="footer"></div>
+    <div class="footer">
+      <div class="header">Free Hotel Resource</div>
+    </div>
   </div>
 </ng-template>

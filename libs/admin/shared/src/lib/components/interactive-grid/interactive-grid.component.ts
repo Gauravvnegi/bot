@@ -55,6 +55,10 @@ export class InteractiveGridComponent {
     resizeWidth: 'half',
   };
 
+  get delimiter() {
+    return this.props.resizeWidth === 'half' ? 2 : 1;
+  }
+
   /**
    * Grid Data setter to set he grid rows and column data with the available value
    * @example

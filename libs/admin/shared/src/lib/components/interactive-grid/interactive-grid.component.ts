@@ -47,8 +47,12 @@ export class InteractiveGridComponent {
     createNewToolTipInfo?: string;
     rowName?: string;
     colName?: string;
+    minWidth?: GridBreakPoints;
+    resizeWidth?: GridBreakPoints;
   } = {
     createNewToolTipInfo: 'Create New Entry',
+    minWidth: 'half',
+    resizeWidth: 'half',
   };
 
   /**
@@ -465,3 +469,5 @@ type IGQueryEvent = {
   rowIdx: number;
   colIdx: number;
 } & IGCreateEvent;
+
+type GridBreakPoints = 'half' | 'full';

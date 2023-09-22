@@ -18,8 +18,8 @@
           *ngIf="data[row] && data[row][col]"
           ngDraggable
           ngResizable
-          [rzMinWidth]="cellSize / 2"
-          [rzGrid]="cellSize / 2"
+          [rzMinWidth]="cellSize / delimiter"
+          [rzGrid]="cellSize / delimiter"
           [position]="{
             x: colIdx * cellSize + (data[row][col]?.hasPrev ? cellSize / 2 : 0),
             y: rowIdx * cellSize

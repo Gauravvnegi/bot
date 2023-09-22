@@ -149,9 +149,20 @@ export class InteractiveGridComponent {
     return this.gridRows.length;
   }
 
-  @Output() onChange = new EventEmitter<IGCellData>();
-  @Output() onClick = new EventEmitter<IGCellData>();
-  @Output() onCreate = new EventEmitter<IGCreateData>();
+  /**
+   * When gird info cell is moved or resized
+   */
+  @Output() onChange = new EventEmitter<IGChangeEvent>();
+
+  /**
+   * When grid info cell is clicked
+   */
+  @Output() onEdit = new EventEmitter<IGEditEvent>();
+
+  /**
+   * When empty grid cell is clicked
+   */
+  @Output() onCreate = new EventEmitter<IGCreateEvent>();
 
   getCurrentDataInfo(
     query: IGQueryEvent
@@ -183,7 +194,7 @@ export class InteractiveGridComponent {
     const endPos = startPos + data.cellOccupied - 1;
 
     // Current Data - which will be update as per calculation below
-    let currentData: IGCellData = {
+    let currentData: IGChangeEvent = {
       id: id,
       rowValue,
       endPos: this.gridColumns[endPos],
@@ -238,7 +249,7 @@ export class InteractiveGridComponent {
     const endPos = startPos + data.cellOccupied - 1;
 
     // Current Data - which will be update as per calculation below
-    let currentData: IGCellData = {
+    let currentData: IGChangeEvent = {
       id: id,
       rowValue,
       endPos: this.gridColumns[endPos],
@@ -263,21 +274,31 @@ export class InteractiveGridComponent {
     const newEndPosInDecimal = interimEndPos + xDiffIdx; // can be in decimal (0.5)
     const newEndPos = Math.round(newEndPosInDecimal); // round of as 2.5 or 3 is same for the end that will be 3
 
-    // Updated data
-    currentData = {
-      ...currentData,
-      rowValue: this.gridRows[newYIdx],
-      startPos: this.gridColumns[newStartPos],
-      endPos: this.gridColumns[newEndPos],
-    };
-
-    this.onChange.emit(currentData);
+    /**
+     * Drag event is emitted even if it is not moved (on click)
+     * So emit onChange if something is changed else trigger onClick event
+     */
+    if (
+      endPos !== newEndPos ||
+      startPos !== newStartPos ||
+      rowValue !== this.gridRows[newYIdx]
+    ) {
+      currentData = {
+        ...currentData,
+        rowValue: this.gridRows[newYIdx],
+        startPos: this.gridColumns[newStartPos],
+        endPos: this.gridColumns[newEndPos],
+      };
+      this.onChange.emit(currentData);
+    } else {
+      this.onEdit.emit({ id: currentData.id });
+    }
   }
 
   /**
    * Handle emission of new data to be created
    */
-  handleCreate(event: IGCreateData) {
+  handleCreate(event: IGCreateEvent) {
     this.onCreate.emit(event);
   }
 
@@ -381,17 +402,22 @@ export type IGCellInfo = Pick<IGValue, 'id' | 'content'> & {
 };
 
 /**
- * @type Update single data value of interactive grid
+ * @type Defines On Change event data
  */
-export type IGCellData = Omit<IGValue, 'content'>;
+export type IGChangeEvent = Omit<IGValue, 'content'>;
 
 /**
- * @type Define row and value to new data
+ * @type Defines on create event data
  */
-export type IGCreateData = {
+export type IGCreateEvent = {
   rowValue: IGKey;
   colValue: IGKey;
 };
+
+/**
+ * @type Define on edit event data
+ */
+export type IGEditEvent = Pick<IGValue, 'id'>;
 
 /**
  * @type Defines Grid data structure
@@ -415,4 +441,4 @@ export type IGValue = {
 type IGQueryEvent = {
   rowIdx: number;
   colIdx: number;
-} & IGCreateData;
+} & IGCreateEvent;

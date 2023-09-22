@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import {
-  IGCellData,
-  IGCreateData,
+  IGCreateEvent,
+  IGChangeEvent,
+  IGEditEvent,
   IGKey,
   IGValue,
 } from 'libs/admin/shared/src/lib/components/interactive-grid/interactive-grid.component';
@@ -107,11 +108,15 @@ export class UpdateReservationComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  handleChange(event: IGCellData) {
+  handleChange(event: IGChangeEvent) {
     console.log(event, 'onChange event');
   }
 
-  handleCreate(event: IGCreateData) {
+  handleCreate(event: IGCreateEvent) {
     console.log(event, 'onCreate event');
+  }
+
+  handleEdit(event: IGEditEvent) {
+    console.log(event, 'onEdit event');
   }
 }

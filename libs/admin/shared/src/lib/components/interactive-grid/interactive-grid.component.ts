@@ -149,13 +149,14 @@ export class InteractiveGridComponent {
     return this.gridRows.length;
   }
 
-  @Output() onChange = new EventEmitter<IGChangedData>();
+  @Output() onChange = new EventEmitter<IGCellData>();
+  @Output() onClick = new EventEmitter<IGCellData>();
   @Output() onCreate = new EventEmitter<IGCreateData>();
 
   getCurrentDataInfo(
     query: IGQueryEvent
   ): {
-    data: IGCellData;
+    data: IGCellInfo;
     id: string;
   } {
     const { rowValue, colValue } = query;
@@ -182,7 +183,7 @@ export class InteractiveGridComponent {
     const endPos = startPos + data.cellOccupied - 1;
 
     // Current Data - which will be update as per calculation below
-    let currentData: IGChangedData = {
+    let currentData: IGCellData = {
       id: id,
       rowValue,
       endPos: this.gridColumns[endPos],
@@ -237,7 +238,7 @@ export class InteractiveGridComponent {
     const endPos = startPos + data.cellOccupied - 1;
 
     // Current Data - which will be update as per calculation below
-    let currentData: IGChangedData = {
+    let currentData: IGCellData = {
       id: id,
       rowValue,
       endPos: this.gridColumns[endPos],
@@ -373,7 +374,7 @@ export type IGKey = string | number;
 /**
  * @type Defines Cell data to create interactive gird cell
  */
-export type IGCellData = Pick<IGValue, 'id' | 'content'> & {
+export type IGCellInfo = Pick<IGValue, 'id' | 'content'> & {
   cellOccupied: number;
   hasNext: boolean;
   hasPrev: boolean;
@@ -382,7 +383,7 @@ export type IGCellData = Pick<IGValue, 'id' | 'content'> & {
 /**
  * @type Update single data value of interactive grid
  */
-export type IGChangedData = Omit<IGValue, 'content'>;
+export type IGCellData = Omit<IGValue, 'content'>;
 
 /**
  * @type Define row and value to new data
@@ -395,7 +396,7 @@ export type IGCreateData = {
 /**
  * @type Defines Grid data structure
  */
-type IGData = Record<IGKey, Record<IGKey, IGCellData>>;
+type IGData = Record<IGKey, Record<IGKey, IGCellInfo>>;
 
 /**
  * @type Defines Input Grid value

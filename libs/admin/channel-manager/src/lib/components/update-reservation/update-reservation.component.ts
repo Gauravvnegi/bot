@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {
-  IGChangedData,
+  IGCellData,
   IGCreateData,
   IGKey,
   IGValue,
@@ -107,7 +107,7 @@ export class UpdateReservationComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  handleChange(event: IGChangedData) {
+  handleChange(event: IGCellData) {
     console.log(event, 'onChange event');
   }
 

@@ -22,41 +22,32 @@ export class InteractiveGridComponent {
    */
   @Input() devMode = false;
 
-  @Input() calc = (value) => {};
-
   /**
    * To show the spinner
    */
   @Input() isProcessing = false;
 
-  /**
-   *Cell Size is grid height and width including the gap
-   */
-  @Input() cellSize: number = 80;
-
-  /**
-   * Cell gap will decide the spaces between the grid blocks
-   */
-  @Input() cellGap: number = 5;
+  cellSize: IGProps['cellSize'] = 80; //Cell Size is grid height and width including the gap
+  cellGap: IGProps['cellGap'] = 5; // Cell gap will decide the spaces between the grid blocks
+  createNewToolTipInfo?: IGProps['createNewToolTipInfo'] = 'Create New Entry';
+  rowName?: IGProps['rowName'];
+  colName?: IGProps['colName'];
+  minWidth?: IGProps['minWidth'] = 'half';
+  resizeWidth?: IGProps['resizeWidth'] = 'half';
 
   /**
    * Props to show extra information
    * @todo Need to handle label for col and row to show information
    */
-  @Input() props: {
-    createNewToolTipInfo?: string;
-    rowName?: string;
-    colName?: string;
-    minWidth?: GridBreakPoints;
-    resizeWidth?: GridBreakPoints;
-  } = {
-    createNewToolTipInfo: 'Create New Entry',
-    minWidth: 'half',
-    resizeWidth: 'half',
-  };
+  @Input() set props(value: IGProps) {
+    for (const key in value) {
+      const val = value[key];
+      this[key] = val;
+    }
+  }
 
   get delimiter() {
-    return this.props.resizeWidth === 'half' ? 2 : 1;
+    return this.resizeWidth === 'half' ? 2 : 1;
   }
 
   /**
@@ -84,8 +75,8 @@ export class InteractiveGridComponent {
    *  }
    */
   @Input() set gridData(data: {
-    rows: IGKey[];
-    columns: IGKey[];
+    rows: IGRow[];
+    columns: IGCol[];
     values: IGValue[];
   }) {
     this.gridColumns = data.columns;
@@ -131,13 +122,13 @@ export class InteractiveGridComponent {
    */
   data: IGData = {};
 
-  colIndices: Record<IGKey, number> = {};
+  colIndices: Record<IGCol, number> = {};
 
   /**
    * Array of gird column value and also decide the no of column based on the length
    * @example ['18Mon', '19Tue', '20Wed', '21Thus'] or [1, 2, 3, 4]
    */
-  gridColumns: IGKey[] = [];
+  gridColumns: IGCol[] = [];
 
   /**
    * Return no of columns
@@ -150,7 +141,7 @@ export class InteractiveGridComponent {
    * Array of grid rows value and also decide the no of row based on the length
    * @example ['LU101', 'LU102', 'LU103', 'LU104', 'LU105'] or [101, 102, 103, 104]
    */
-  gridRows: IGKey[] = [];
+  gridRows: IGRow[] = [];
 
   /**
    * Return no of rows
@@ -340,7 +331,7 @@ export class InteractiveGridComponent {
    * To get the desired formatted data
    */
   getModdedData(input: IGValue[]): IGData {
-    const inputPerRow: Record<IGKey, IGValue[]> = input.reduce(
+    const inputPerRow: Record<IGRow, IGValue[]> = input.reduce(
       (value, item) => {
         value = {
           ...value,
@@ -355,7 +346,7 @@ export class InteractiveGridComponent {
         };
         return value;
       },
-      {} as Record<IGKey, IGValue[]>
+      {} as Record<IGRow, IGValue[]>
     );
 
     let resultData: IGData = {};
@@ -374,7 +365,7 @@ export class InteractiveGridComponent {
         }
       );
 
-      let rowResult: IGData[IGKey] = {};
+      let rowResult: IGData[IGRow] = {};
 
       rowValues.forEach((item) => {
         const hasStart = this.gridColumns.includes(item.startPos);
@@ -382,6 +373,7 @@ export class InteractiveGridComponent {
         const dataKey = hasStart ? item.startPos : this.gridColumns[0];
         const hasPrev = endPos.has(item.startPos);
         const hasNext = startPos.has(item.endPos);
+
         // Start and end position could be out of bound
         const cellOccupied =
           1 +
@@ -401,6 +393,7 @@ export class InteractiveGridComponent {
             hasPrev, // if start position has new item with same point as end
             hasStart, // if start point is out of bound (left)
             hasEnd, // if end point is out of bound (right)
+            extraSpace: 40,
           },
         };
       });
@@ -419,7 +412,12 @@ export class InteractiveGridComponent {
 /**
  * @type Defines grid column or row value
  */
-export type IGKey = string | number;
+export type IGRow = string | number;
+
+/**
+ * @type Defines grid column or row value
+ */
+export type IGCol = number;
 
 /**
  * @type Defines Cell data to create interactive gird cell
@@ -430,6 +428,7 @@ export type IGCellInfo = Pick<IGValue, 'id' | 'content'> & {
   hasPrev: boolean;
   hasStart: boolean;
   hasEnd: boolean;
+  extraSpace?: number;
 };
 
 /**
@@ -441,8 +440,8 @@ export type IGChangeEvent = Omit<IGValue, 'content'>;
  * @type Defines on create event data
  */
 export type IGCreateEvent = {
-  rowValue: IGKey;
-  colValue: IGKey;
+  rowValue: IGRow;
+  colValue: IGCol;
 };
 
 /**
@@ -453,7 +452,7 @@ export type IGEditEvent = Pick<IGValue, 'id'>;
 /**
  * @type Defines Grid data structure
  */
-type IGData = Record<IGKey, Record<IGKey, IGCellInfo>>;
+type IGData = Record<IGRow, Record<IGRow, IGCellInfo>>;
 
 /**
  * @type Defines Input Grid value
@@ -461,9 +460,19 @@ type IGData = Record<IGKey, Record<IGKey, IGCellInfo>>;
 export type IGValue = {
   id: string;
   content: string;
-  startPos: IGKey;
-  endPos: IGKey;
-  rowValue: IGKey;
+  startPos: IGCol;
+  endPos: IGCol;
+  rowValue: IGRow;
+};
+
+export type IGProps = {
+  createNewToolTipInfo?: string;
+  rowName?: string;
+  colName?: string;
+  minWidth?: GridBreakPoints;
+  resizeWidth?: GridBreakPoints;
+  cellSize?: number;
+  cellGap?: number;
 };
 
 /**

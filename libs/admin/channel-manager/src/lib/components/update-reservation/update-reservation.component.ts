@@ -3,7 +3,8 @@ import {
   IGCreateEvent,
   IGChangeEvent,
   IGEditEvent,
-  IGKey,
+  IGRow,
+  IGCol,
   IGValue,
 } from 'libs/admin/shared/src/lib/components/interactive-grid/interactive-grid.component';
 
@@ -14,93 +15,80 @@ import {
 })
 export class UpdateReservationComponent implements OnInit {
   heading = 'Update inventory';
-  gridRows: IGKey[] = [101, 102, 103, 104, 105, 106, 107, 108, 109, 110];
+  gridRows: IGRow[] = [101, 102, 103, 104, 105, 106, 107, 108, 109, 110];
 
   // gridCols = [Array.from({ length: 14 }, (_, index) => index + 1)];
-  gridCols: IGKey[] = [
-    '01Mon',
-    '02Tue',
-    '03Wed',
-    '04Thu',
-    '05Fri',
-    '06Sat',
-    '07Sun',
-    '08Mon',
-    '09Tue',
-    '10Wed',
-    '11Thu',
-    '12Fri',
-  ];
+  gridCols: IGCol[] = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21];
 
   data: IGValue[] = [
     {
       id: 'RES000',
       content: 'Out left 105',
-      startPos: '31Sun',
-      endPos: '03Wed',
+      startPos: 8,
+      endPos: 10,
       rowValue: 105,
     },
     {
       id: 'RES000',
       content: 'Out right 105',
-      startPos: '11Thu',
-      endPos: '14Sun',
+      startPos: 11,
+      endPos: 14,
       rowValue: 105,
     },
     {
       id: 'RES001',
       content: 'Dhruv 101',
-      startPos: '01Mon',
-      endPos: '03Wed',
+      startPos: 14,
+      endPos: 16,
       rowValue: 101,
     },
     {
       id: 'RES002',
       content: 'Akash 101',
-      startPos: '03Wed',
-      endPos: '04Thu',
+      startPos: 17,
+      endPos: 19,
       rowValue: 101,
     },
     {
       id: 'RES003',
       content: 'Jag 101',
-      startPos: '06Sat',
-      endPos: '08Mon',
+      startPos: 20,
+      endPos: 20,
       rowValue: 101,
     },
     {
       id: 'RES004',
       content: 'Tony Stark 102',
-      startPos: '06Sat',
-      endPos: '08Mon',
+      startPos: 10,
+      endPos: 15,
       rowValue: 102,
     },
     {
       id: 'RES006',
       content: 'Steve Rogers 103',
-      startPos: '03Wed',
-      endPos: '06Sat',
+      startPos: 11,
+      endPos: 15,
       rowValue: 103,
     },
     {
       id: 'RES007',
       content: 'Pradeep 104',
-      startPos: '02Tue',
-      endPos: '05Fri',
+      startPos: 11,
+      endPos: 19,
       rowValue: 104,
     },
     {
       id: 'RES008',
       content: 'Ayush 104',
-      startPos: '05Fri',
-      endPos: '07Sun',
+      startPos: 19,
+      endPos: 20,
       rowValue: 104,
     },
     {
       id: 'RES007',
       content: 'Ayush 104',
-      startPos: '07Sun',
-      endPos: '09Tue',
+      startPos: 21,
+      endPos: 30,
       rowValue: 104,
     },
   ];

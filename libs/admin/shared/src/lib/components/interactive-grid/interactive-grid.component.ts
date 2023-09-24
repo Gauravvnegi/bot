@@ -90,6 +90,21 @@ export class InteractiveGridComponent {
   }
 
   /**
+   * When gird info cell is moved or resized
+   */
+  @Output() onChange = new EventEmitter<IGChangeEvent>();
+
+  /**
+   * When grid info cell is clicked
+   */
+  @Output() onEdit = new EventEmitter<IGEditEvent>();
+
+  /**
+   * When empty grid cell is clicked
+   */
+  @Output() onCreate = new EventEmitter<IGCreateEvent>();
+
+  /**
    * Data to map the interactive grid cell
    * @example
    * const data = {
@@ -152,19 +167,9 @@ export class InteractiveGridComponent {
   }
 
   /**
-   * When gird info cell is moved or resized
+   * Information about the out of bound records
    */
-  @Output() onChange = new EventEmitter<IGChangeEvent>();
-
-  /**
-   * When grid info cell is clicked
-   */
-  @Output() onEdit = new EventEmitter<IGEditEvent>();
-
-  /**
-   * When empty grid cell is clicked
-   */
-  @Output() onCreate = new EventEmitter<IGCreateEvent>();
+  outOfBoundRecord: OutOfBoundRecord = {};
 
   getCurrentDataInfo(
     query: IGQueryEvent
@@ -331,8 +336,6 @@ export class InteractiveGridComponent {
     );
   }
 
-  outOfBoundRecord: OutOfBoundRecord = {};
-
   onMoving(event: IPosition, query: IGQueryEvent) {
     const { data } = this.getCurrentDataInfo(query);
 
@@ -342,6 +345,9 @@ export class InteractiveGridComponent {
     const cPos = this.getPosition(query).x;
     const qPos = event.x;
 
+    /**
+     * If IGCell is out of bound to the left
+     */
     if (startOOB) {
       const diff = qPos - cPos;
 
@@ -356,6 +362,9 @@ export class InteractiveGridComponent {
       }
     }
 
+    /**
+     * If IGCell is out of bound to the right
+     */
     if (endOOB) {
       const diff = cPos - qPos;
 

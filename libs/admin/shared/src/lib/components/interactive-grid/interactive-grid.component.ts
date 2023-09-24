@@ -319,15 +319,19 @@ export class InteractiveGridComponent {
    */
   getWidth(query: IGQueryEvent): number {
     const { data } = this.getCurrentDataInfo(query);
+
+    const currentOutOfBoundRecord = this.outOfBoundRecord[data.id];
     const width =
       this.cellSize * data.cellOccupied -
       (data?.hasNext ? this.cellSize / 2 : 0) -
       (data.hasPrev ? this.cellSize / 2 : 0);
 
-    return width + this.extraSizeRecord[data.id];
+    return (
+      width + currentOutOfBoundRecord.lSpace + currentOutOfBoundRecord.rSpace
+    );
   }
 
-  extraSizeRecord: Record<IGValue['id'], number> = {};
+  outOfBoundRecord: OutOfBoundRecord = {};
 
   onMoving(event: IPosition, query: IGQueryEvent) {
     const { data } = this.getCurrentDataInfo(query);
@@ -338,14 +342,32 @@ export class InteractiveGridComponent {
     const cPos = this.getPosition(query).x;
     const qPos = event.x;
 
-    // Updating space based on position and original position
-    const noOfCell =
-      (this.gridColumns[data.startPosIdx] - data.oStartPos) / this.colDiff;
-
     if (startOOB) {
-      const startDiff = qPos - cPos;
-      if (startDiff <= noOfCell * this.cellSize)
-        this.extraSizeRecord[data.id] = startDiff;
+      const diff = qPos - cPos;
+
+      const noOfCell =
+        (this.gridColumns[data.startPosIdx] - data.oStartPos) / this.colDiff;
+
+      this.outOfBoundRecord[data.id].hasLeftBorder =
+        diff >= noOfCell * this.cellSize;
+
+      if (diff <= noOfCell * this.cellSize) {
+        this.outOfBoundRecord[data.id].lSpace = diff;
+      }
+    }
+
+    if (endOOB) {
+      const diff = cPos - qPos;
+
+      const noOfCell =
+        (data.oEndPos - this.gridColumns[data.endPosIdx]) / this.colDiff;
+
+      this.outOfBoundRecord[data.id].hasRightBorder =
+        diff >= noOfCell * this.cellSize;
+
+      if (diff <= noOfCell * this.cellSize) {
+        this.outOfBoundRecord[data.id].rSpace = diff;
+      }
     }
   }
 
@@ -402,9 +424,14 @@ export class InteractiveGridComponent {
         const hasPrev = endPos.has(item.startPos);
         const hasNext = startPos.has(item.endPos);
 
-        this.extraSizeRecord = {
-          ...this.extraSizeRecord,
-          [item.id]: 0,
+        this.outOfBoundRecord = {
+          ...this.outOfBoundRecord,
+          [item.id]: {
+            lSpace: 0,
+            rSpace: 0,
+            hasLeftBorder: hasStart,
+            hasRightBorder: hasEnd,
+          },
         };
 
         // Start and end position could be out of bound
@@ -518,3 +545,13 @@ type IGQueryEvent = {
 } & IGCreateEvent;
 
 type GridBreakPoints = 'half' | 'full';
+
+type OutOfBoundRecord = Record<
+  IGValue['id'],
+  {
+    lSpace: number;
+    rSpace: number;
+    hasLeftBorder: boolean;
+    hasRightBorder: boolean;
+  }
+>;

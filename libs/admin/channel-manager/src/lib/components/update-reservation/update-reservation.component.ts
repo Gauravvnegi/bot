@@ -71,7 +71,7 @@ export class UpdateReservationComponent implements OnInit {
       rowValue: 103,
     },
     {
-      id: 'RES007',
+      id: 'RES0071',
       content: 'Pradeep 104',
       startPos: 11,
       endPos: 19,

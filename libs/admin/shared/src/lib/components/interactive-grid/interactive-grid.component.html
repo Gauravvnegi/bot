@@ -21,10 +21,7 @@
           [rzMinWidth]="cellSize / delimiter"
           [rzGrid]="cellSize / delimiter"
           [position]="{
-            x:
-              colIdx * cellSize +
-              (data[row][col]?.hasPrev ? cellSize / 2 : 0) -
-              extraSizeRecord[data[row][col].id],
+            x: colIdx * cellSize + (data[row][col]?.hasPrev ? cellSize / 2 : 0),
             y: rowIdx * cellSize
           }"
           [gridSize]="cellSize / 2"
@@ -38,7 +35,7 @@
               }) + 'px',
             height: cellSize + 'px',
             padding: cellGap + 'px',
-            marginLeft: '-' + extraSizeRecord[data[row][col].id] + 'px'
+            marginLeft: '-' + outOfBoundRecord[data[row][col].id].lSpace + 'px'
           }"
           zIndex="10"
           zIndexMoving="100"
@@ -73,8 +70,12 @@
             class="cell-data"
             [ngStyle]="{
               height: cellSize - 2 * cellGap + 'px',
-              borderLeft: data[row][col].hasStart ? null : 0,
-              borderRight: data[row][col].hasEnd ? null : 0
+              borderLeft: outOfBoundRecord[data[row][col].id].hasLeftBorder
+                ? null
+                : 0,
+              borderRight: outOfBoundRecord[data[row][col].id].hasRightBorder
+                ? null
+                : 0
             }"
           >
             {{ data[row][col]?.content }}

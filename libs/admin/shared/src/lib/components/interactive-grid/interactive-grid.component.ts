@@ -195,8 +195,6 @@ export class InteractiveGridComponent {
     const startPos = Math.trunc(currentStartIdx) - 1;
     const endPos = startPos + data.cellOccupied - 1;
 
-    console.log(currentPos, startPos);
-
     // Current Data - which will be update as per calculation below
     let currentData: IGChangeEvent = {
       id: id,
@@ -249,15 +247,15 @@ export class InteractiveGridComponent {
     const { x: newPosX, y: newPosY } = event;
     const { rowValue } = query;
 
-    const startPos = Math.trunc(currentPosX / this.cellSize);
-    const endPos = startPos + data.cellOccupied - 1;
+    const startPosIdx = data.startPosIdx;
+    const endPosIdx = data.endPosIdx;
 
     // Current Data - which will be update as per calculation below
     let currentData: IGChangeEvent = {
       id: id,
       rowValue,
-      endPos: this.gridColumns[endPos],
-      startPos: this.gridColumns[startPos],
+      endPos: this.gridColumns[endPosIdx],
+      startPos: this.gridColumns[startPosIdx],
     };
 
     // Calculating new row value
@@ -269,29 +267,29 @@ export class InteractiveGridComponent {
     const xDiffIdx = (newPosX - currentPosX) / this.cellSize;
 
     // Calculating new start and end pos
-    const interimStartPos = startPos + (data.hasPrev ? 0.5 : 0);
-    const interimEndPos = endPos - (data.hasNext ? 0.5 : 0);
+    const interimStartPos = startPosIdx + (data.hasPrev ? 0.5 : 0);
+    const interimEndPos = endPosIdx - (data.hasNext ? 0.5 : 0);
 
     const newStartPosInDecimal = interimStartPos + xDiffIdx; // can be in decimal (0.5)
-    const newStartPos = Math.trunc(newStartPosInDecimal); // removed 0.5 as 2 or 2.5 will always be 2
+    const newStartPosIdx = Math.trunc(newStartPosInDecimal); // removed 0.5 as 2 or 2.5 will always be 2
 
     const newEndPosInDecimal = interimEndPos + xDiffIdx; // can be in decimal (0.5)
-    const newEndPos = Math.round(newEndPosInDecimal); // round of as 2.5 or 3 is same for the end that will be 3
+    const newEndPosIdx = Math.round(newEndPosInDecimal); // round of as 2.5 or 3 is same for the end that will be 3
 
     /**
      * Drag event is emitted even if it is not moved (on click)
      * So emit onChange if something is changed else trigger onClick event
      */
     if (
-      endPos !== newEndPos ||
-      startPos !== newStartPos ||
+      endPosIdx !== newEndPosIdx ||
+      startPosIdx !== newStartPosIdx ||
       rowValue !== this.gridRows[newYIdx]
     ) {
       currentData = {
         ...currentData,
         rowValue: this.gridRows[newYIdx],
-        startPos: this.gridColumns[newStartPos],
-        endPos: this.gridColumns[newEndPos],
+        startPos: this.gridColumns[newStartPosIdx],
+        endPos: this.gridColumns[newEndPosIdx],
       };
       this.onChange.emit(currentData);
     } else {
@@ -324,8 +322,23 @@ export class InteractiveGridComponent {
       this.cellSize * this.data[rowValue][colValue]?.cellOccupied -
       (this.data[rowValue][colValue]?.hasNext ? this.cellSize / 2 : 0) -
       (this.data[rowValue][colValue]?.hasPrev ? this.cellSize / 2 : 0);
+    const isMoving = this.data[rowValue][colValue]?.id === this.movingBlock.id;
+    return width + (isMoving ? 0 : 0);
+  }
 
-    return width;
+  movingBlock: {
+    id: string;
+    space: string;
+  } = {
+    id: '',
+    space: null,
+  };
+
+  onMoving(e: IPosition, query: IGQueryEvent) {
+    const { data } = this.getCurrentDataInfo(query);
+    console.log(data.hasStart, 'hello', e.x, query);
+
+    this.movingBlock.id = data.id;
   }
 
   /**
@@ -370,32 +383,35 @@ export class InteractiveGridComponent {
       let rowResult: IGData[IGRow] = {};
 
       rowValues.forEach((item) => {
-        const hasStart = this.gridColumns.includes(item.startPos);
-        const hasEnd = this.gridColumns.includes(item.endPos);
-        const dataKey = hasStart ? item.startPos : this.gridColumns[0];
+        const hasStart = this.gridColumns.includes(item.startPos); // if start is within the bound
+        const hasEnd = this.gridColumns.includes(item.endPos); // if end is within the bound
+
+        const boundStartPos = hasStart ? item.startPos : this.gridColumns[0];
+        const boundEndPos = hasEnd
+          ? item.endPos
+          : this.gridColumns[this.gridColumns.length - 1];
+
         const hasPrev = endPos.has(item.startPos);
         const hasNext = startPos.has(item.endPos);
 
         // Start and end position could be out of bound
         const cellOccupied =
-          1 +
-          (hasEnd
-            ? this.colIndices[item.endPos]
-            : this.gridColumns.length - 1) -
-          (hasStart ? this.colIndices[item.startPos] : 0);
+          1 + this.colIndices[boundEndPos] - this.colIndices[boundStartPos];
 
-        console.log(item.id, cellOccupied);
         rowResult = {
           ...(rowResult ?? {}),
-          [dataKey]: {
+          [boundStartPos]: {
             content: item.content,
             id: item.id,
             cellOccupied,
+            startPosIdx: this.colIndices[boundStartPos],
+            endPosIdx: this.colIndices[boundEndPos],
+            oStartPos: item.startPos,
+            oEndPos: item.endPos,
             hasNext, // if end position has new item with same point as start
             hasPrev, // if start position has new item with same point as end
             hasStart, // if start point is out of bound (left)
             hasEnd, // if end point is out of bound (right)
-            extraSpace: 40,
           },
         };
       });
@@ -430,7 +446,10 @@ export type IGCellInfo = Pick<IGValue, 'id' | 'content'> & {
   hasPrev: boolean;
   hasStart: boolean;
   hasEnd: boolean;
-  extraSpace?: number;
+  startPosIdx: number;
+  endPosIdx: number;
+  oStartPos: IGCol;
+  oEndPos: IGCol;
 };
 
 /**

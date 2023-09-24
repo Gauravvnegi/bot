@@ -56,6 +56,14 @@
               rowIdx: rowIdx
             })
           "
+          (movingOffset)="
+            onMoving($event, {
+              rowValue: row,
+              colValue: col,
+              colIdx: colIdx,
+              rowIdx: rowIdx
+            })
+          "
         >
           <div
             class="cell-data"

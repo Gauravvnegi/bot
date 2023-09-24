@@ -197,15 +197,15 @@ export class InteractiveGridComponent {
 
     const currentPos = this.getPosition(query).x;
     const currentStartIdx = currentPos / this.cellSize + 1;
-    const startPos = Math.trunc(currentStartIdx) - 1;
-    const endPos = startPos + data.cellOccupied - 1;
+    const startPosIdx = Math.trunc(currentStartIdx) - 1;
+    const endPosIdx = startPosIdx + data.cellOccupied - 1;
 
     // Current Data - which will be update as per calculation below
     let currentData: IGChangeEvent = {
       id: id,
       rowValue,
-      endPos: this.gridColumns[endPos],
-      startPos: this.gridColumns[startPos],
+      startPos: data.hasStart ? this.gridColumns[startPosIdx] : data.oStartPos,
+      endPos: data.hasEnd ? this.gridColumns[endPosIdx] : data.oEndPos,
     };
 
     const width = event.size.width;
@@ -227,7 +227,9 @@ export class InteractiveGridComponent {
     } else {
       const isEndHalf = data.hasNext;
       const newEndPos = Math.round(
-        endPos + (width - currentWidth) / this.cellSize - (isEndHalf ? 0.5 : 0)
+        endPosIdx +
+          (width - currentWidth) / this.cellSize -
+          (isEndHalf ? 0.5 : 0)
       );
 
       /**
@@ -331,6 +333,7 @@ export class InteractiveGridComponent {
       (data?.hasNext ? this.cellSize / 2 : 0) -
       (data.hasPrev ? this.cellSize / 2 : 0);
 
+    // Left margin is used in the html for start of bound
     return (
       width + currentOutOfBoundRecord.lSpace + currentOutOfBoundRecord.rSpace
     );

@@ -317,28 +317,36 @@ export class InteractiveGridComponent {
   /**
    * To get the width of interactive cell
    */
-  getWidth({ rowValue, colValue }: IGQueryEvent): number {
+  getWidth(query: IGQueryEvent): number {
+    const { data } = this.getCurrentDataInfo(query);
     const width =
-      this.cellSize * this.data[rowValue][colValue]?.cellOccupied -
-      (this.data[rowValue][colValue]?.hasNext ? this.cellSize / 2 : 0) -
-      (this.data[rowValue][colValue]?.hasPrev ? this.cellSize / 2 : 0);
-    const isMoving = this.data[rowValue][colValue]?.id === this.movingBlock.id;
-    return width + (isMoving ? 0 : 0);
+      this.cellSize * data.cellOccupied -
+      (data?.hasNext ? this.cellSize / 2 : 0) -
+      (data.hasPrev ? this.cellSize / 2 : 0);
+
+    return width + this.extraSizeRecord[data.id];
   }
 
-  movingBlock: {
-    id: string;
-    space: string;
-  } = {
-    id: '',
-    space: null,
-  };
+  extraSizeRecord: Record<IGValue['id'], number> = {};
 
-  onMoving(e: IPosition, query: IGQueryEvent) {
+  onMoving(event: IPosition, query: IGQueryEvent) {
     const { data } = this.getCurrentDataInfo(query);
-    console.log(data.hasStart, 'hello', e.x, query);
 
-    this.movingBlock.id = data.id;
+    const startOOB = !data.hasStart;
+    const endOOB = !data.hasEnd;
+
+    const cPos = this.getPosition(query).x;
+    const qPos = event.x;
+
+    // Updating space based on position and original position
+    const noOfCell =
+      (this.gridColumns[data.startPosIdx] - data.oStartPos) / this.colDiff;
+
+    if (startOOB) {
+      const startDiff = qPos - cPos;
+      if (startDiff <= noOfCell * this.cellSize)
+        this.extraSizeRecord[data.id] = startDiff;
+    }
   }
 
   /**
@@ -393,6 +401,11 @@ export class InteractiveGridComponent {
 
         const hasPrev = endPos.has(item.startPos);
         const hasNext = startPos.has(item.endPos);
+
+        this.extraSizeRecord = {
+          ...this.extraSizeRecord,
+          [item.id]: 0,
+        };
 
         // Start and end position could be out of bound
         const cellOccupied =

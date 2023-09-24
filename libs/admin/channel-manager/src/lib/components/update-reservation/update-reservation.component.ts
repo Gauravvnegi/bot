@@ -29,10 +29,10 @@ export class UpdateReservationComponent implements OnInit {
       rowValue: 105,
     },
     {
-      id: 'RES000',
+      id: 'RES01000',
       content: 'Out right 105',
-      startPos: 11,
-      endPos: 14,
+      startPos: 19,
+      endPos: 22,
       rowValue: 105,
     },
     {

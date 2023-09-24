@@ -21,7 +21,10 @@
           [rzMinWidth]="cellSize / delimiter"
           [rzGrid]="cellSize / delimiter"
           [position]="{
-            x: colIdx * cellSize + (data[row][col]?.hasPrev ? cellSize / 2 : 0),
+            x:
+              colIdx * cellSize +
+              (data[row][col]?.hasPrev ? cellSize / 2 : 0) -
+              extraSizeRecord[data[row][col].id],
             y: rowIdx * cellSize
           }"
           [gridSize]="cellSize / 2"
@@ -34,7 +37,8 @@
                 rowIdx: rowIdx
               }) + 'px',
             height: cellSize + 'px',
-            padding: cellGap + 'px'
+            padding: cellGap + 'px',
+            marginLeft: '-' + extraSizeRecord[data[row][col].id] + 'px'
           }"
           zIndex="10"
           zIndexMoving="100"
@@ -120,10 +124,10 @@
         >
           <ng-container *ngIf="devMode && rowIdx === gridRows.length - 1">
             <div>
-              {{ colIdx }}
+              idx: <b>{{ colIdx }}</b>
             </div>
             <div>
-              {{ col }}
+              val: <b>{{ col }}</b>
             </div>
           </ng-container>
         </div>

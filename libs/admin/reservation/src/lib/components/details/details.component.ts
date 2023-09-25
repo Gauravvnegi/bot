@@ -767,6 +767,12 @@ export class DetailsComponent implements OnInit, OnDestroy {
     return this.subscriptionService.checkModuleSubscription(ModuleNames.HEDA);
   }
 
+  checkForReservationSubs() {
+   return this.subscriptionService.checkModuleSubscription(
+      ModuleNames.ADD_RESERVATION
+    );
+  }
+
   setTab(event) {
     this.tabKey = this.detailsConfig.find(
       (tabConfig) => tabConfig.index === event.index

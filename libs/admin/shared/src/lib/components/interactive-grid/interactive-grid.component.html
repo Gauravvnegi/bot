@@ -34,7 +34,8 @@
                 rowIdx: rowIdx
               }) + 'px',
             height: cellSize + 'px',
-            padding: cellGap + 'px'
+            padding: cellGap + 'px',
+            marginLeft: '-' + outOfBoundRecord[data[row][col].id].lSpace + 'px'
           }"
           zIndex="10"
           zIndexMoving="100"
@@ -56,13 +57,25 @@
               rowIdx: rowIdx
             })
           "
+          (movingOffset)="
+            onMoving($event, {
+              rowValue: row,
+              colValue: col,
+              colIdx: colIdx,
+              rowIdx: rowIdx
+            })
+          "
         >
           <div
             class="cell-data"
             [ngStyle]="{
               height: cellSize - 2 * cellGap + 'px',
-              borderLeft: data[row][col].hasStart ? null : 0,
-              borderRight: data[row][col].hasEnd ? null : 0
+              borderLeft: outOfBoundRecord[data[row][col].id].hasLeftBorder
+                ? null
+                : 0,
+              borderRight: outOfBoundRecord[data[row][col].id].hasRightBorder
+                ? null
+                : 0
             }"
           >
             {{ data[row][col]?.content }}
@@ -112,10 +125,10 @@
         >
           <ng-container *ngIf="devMode && rowIdx === gridRows.length - 1">
             <div>
-              {{ colIdx }}
+              idx: <b>{{ colIdx }}</b>
             </div>
             <div>
-              {{ col }}
+              val: <b>{{ col }}</b>
             </div>
           </ng-container>
         </div>

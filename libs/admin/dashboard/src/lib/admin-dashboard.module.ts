@@ -28,6 +28,7 @@ import { ReservationCalendarViewComponent } from './components/reservation-calen
 import { ManageReservationService } from 'libs/admin/manage-reservation/src/lib/services/manage-reservation.service';
 import { RoomService } from 'libs/admin/room/src/lib/services/room.service';
 import { RoomTypesComponent } from './components/room-types/room-types.component';
+import { FormService } from 'libs/admin/manage-reservation/src/lib/services/form.service';
 
 export const adminDashboardRoutes: Route[] = [
   {
@@ -74,6 +75,7 @@ export const adminDashboardRoutes: Route[] = [
     AnalyticsService,
     ManageReservationService,
     RoomService,
+    FormService
   ],
 })
 export class AdminDashboardModule {}

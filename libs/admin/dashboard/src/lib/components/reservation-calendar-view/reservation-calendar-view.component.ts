@@ -16,7 +16,12 @@ import {
   RoomTypes,
   getWeekendBG,
 } from 'libs/admin/channel-manager/src/lib/models/bulk-update.models';
-import { ReservationList } from 'libs/admin/manage-reservation/src/lib/models/reservations.model';
+import {
+  ReservationFormData,
+  ReservationList,
+  RoomReservation,
+} from 'libs/admin/manage-reservation/src/lib/models/reservations.model';
+import { FormService } from 'libs/admin/manage-reservation/src/lib/services/form.service';
 import { ManageReservationService } from 'libs/admin/manage-reservation/src/lib/services/manage-reservation.service';
 import { ReservationListResponse } from 'libs/admin/manage-reservation/src/lib/types/response.type';
 import {
@@ -58,6 +63,8 @@ export class ReservationCalendarViewComponent implements OnInit {
 
   isRoomsEmpty = false;
   loading = false;
+
+  reservationListData: RoomReservation[];
 
   $subscription = new Subscription();
 
@@ -139,7 +146,8 @@ export class ReservationCalendarViewComponent implements OnInit {
     private manageReservationService: ManageReservationService,
     private globalFilterService: GlobalFilterService,
     private roomService: RoomService,
-    private adminUtilityService: AdminUtilityService
+    private adminUtilityService: AdminUtilityService,
+    private formService: FormService
   ) {}
 
   ngOnInit(): void {
@@ -165,7 +173,6 @@ export class ReservationCalendarViewComponent implements OnInit {
           }));
           this.allRoomTypes = this.roomTypes;
           this.loading = false;
-          this.initReservationData();
         })
     );
   }
@@ -177,9 +184,10 @@ export class ReservationCalendarViewComponent implements OnInit {
         this.entityId
       )
       .subscribe((res) => {
-        const reservationData = new ReservationList().deserialize(res)
-          .reservationData;
-        this.data = reservationData.map((data) => ({
+        this.reservationListData = new ReservationList().deserialize(
+          res
+        ).reservationData;
+        this.data = this.reservationListData.map((data) => ({
           id: data.id,
           content: data.guestName,
           startPos: this.getDate(data.from),
@@ -193,7 +201,7 @@ export class ReservationCalendarViewComponent implements OnInit {
     const data = new Date(date);
     return data.setHours(0, 0, 0, 0);
   }
-  
+
   /**
    * @function getQueryConfig to configuration
    */
@@ -237,6 +245,7 @@ export class ReservationCalendarViewComponent implements OnInit {
       { fromDate: this.gridCols[0] },
       { toDate: this.gridCols[13] },
     ];
+    this.initReservationData();
   }
 
   initForm() {
@@ -268,13 +277,28 @@ export class ReservationCalendarViewComponent implements OnInit {
   }
 
   handleChange(event: IGChangeEvent) {
-    debugger;
+    const updateData = this.formService.mapCalendarViewData(
+      this.reservationListData.filter((item) => item.id === event.id)[0],
+      event.id,
+      event.startPos,
+      event.endPos,
+      event.rowValue
+    );
+    this.manageReservationService
+      .updateReservation(this.entityId, event.id, updateData, 'ROOM_TYPE')
+      .subscribe(
+        (res) => {},
+        (error) => {
+          this.loading = false;
+        },
+        () => {
+          this.loading = false;
+        }
+      );
     console.log(event, 'onChange event');
   }
 
   handleCreate(event: IGCreateEvent) {
-    debugger;
-    
     console.log(event, 'onCreate event');
   }
 

@@ -274,24 +274,9 @@
                 {{ 'datatable.document' | translate }}
               </div>
             </div>
-          </div>
-          <div
-            (click)="openDetailPage($event, rowData, 'payment_details')"
-            class="icon margin-left"
-          >
-            <img
-              class="table-body-journey-icon"
-              [src]="dashboardConfig.images.payment.url"
-              [alt]="dashboardConfig.images.payment.alt"
-              [ngClass]="
-                getStatusStyle(rowData.status.stepsStatus.payment, 'image')
-              "
-            />
-            <p
-              class="label"
-              [ngClass]="
-                getStatusStyle(rowData.status.stepsStatus.payment, 'text')
-              "
+            <div
+              (click)="openDetailPage($event, rowData, 'payment_details')"
+              class="icon margin-left"
             >
               <img
                 class="table-body-journey-icon"
@@ -334,7 +319,7 @@
               {{ 'datatable.feedback' | translate }}
             </div>
           </div> -->
-          <!-- <div class="icon extra-width">
+            <!-- <div class="icon extra-width">
             <img
               class="table-body-journey-icon"
               [src]="dashboardConfig.images.newJourney.url"
@@ -354,24 +339,33 @@
               {{ 'datatable.new' | translate }}
             </div>
           </div> -->
-          <div class="icon extra-width">
-            <img
-              class="table-body-journey-icon"
-              [src]="dashboardConfig.images.preCheckin.url"
-              [alt]="dashboardConfig.images.preCheckin.alt"
-              [ngClass]="
-                getStatusStyle(rowData.status.journeyStatus.preCheckin, 'image')
-              "
-            />
-            <p
-              *ngIf="rowData.currentJourney.currentJourneyName === 'PRECHECKIN'"
-              class="label"
-              [ngClass]="
-                getStatusStyle(rowData.status.journeyStatus.preCheckin, 'text')
-              "
-            ></p>
-            <div class="tooltip">
-              {{ 'datatable.pre_checkin' | translate }}
+            <div class="icon extra-width">
+              <img
+                class="table-body-journey-icon"
+                [src]="dashboardConfig.images.preCheckin.url"
+                [alt]="dashboardConfig.images.preCheckin.alt"
+                [ngClass]="
+                  getStatusStyle(
+                    rowData.status.journeyStatus.preCheckin,
+                    'image'
+                  )
+                "
+              />
+              <p
+                *ngIf="
+                  rowData.currentJourney.currentJourneyName === 'PRECHECKIN'
+                "
+                class="label"
+                [ngClass]="
+                  getStatusStyle(
+                    rowData.status.journeyStatus.preCheckin,
+                    'text'
+                  )
+                "
+              ></p>
+              <div class="tooltip">
+                {{ 'datatable.pre_checkin' | translate }}
+              </div>
             </div>
             <div class="icon extra-width">
               <img

@@ -268,10 +268,13 @@ export class ReservationCalendarViewComponent implements OnInit {
   }
 
   handleChange(event: IGChangeEvent) {
+    debugger;
     console.log(event, 'onChange event');
   }
 
   handleCreate(event: IGCreateEvent) {
+    debugger;
+    
     console.log(event, 'onCreate event');
   }
 

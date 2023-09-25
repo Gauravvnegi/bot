@@ -5,6 +5,7 @@ import {
 import { GuestType } from 'libs/admin/guests/src/lib/types/guest.type';
 import { RatePlanRes } from 'libs/admin/room/src/lib/types/service-response';
 import { ItemsData } from './forms.types';
+import { JourneyState } from '../constants/reservation';
 
 /* Reservation List Response Types deceleration */
 export type ReservationListResponse = {
@@ -80,7 +81,7 @@ export type BookingItems = {
     maxChildren: number;
     maxAdult: number;
   };
-  offer?:{
+  offer?: {
     id: string;
     discountedPrice: number;
     offerType: string;
@@ -155,6 +156,9 @@ export type RoomReservationResponse = {
     created: number;
     updated: number;
     offerType: string;
+  };
+  journeysStatus: {
+    CHECKIN: JourneyState;
   };
 };
 

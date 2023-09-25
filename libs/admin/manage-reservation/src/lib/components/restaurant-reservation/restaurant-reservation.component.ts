@@ -70,10 +70,10 @@ export class RestaurantReservationComponent extends BaseReservationComponent
     private manageReservationService: ManageReservationService,
     protected activatedRoute: ActivatedRoute,
     private outletService: OutletService,
-    private formService: FormService,
+    protected formService: FormService,
     protected hotelDetailService: HotelDetailService
   ) {
-    super(globalFilterService, activatedRoute, hotelDetailService);
+    super(globalFilterService, activatedRoute, hotelDetailService, formService);
     this.initForm();
   }
   ngOnInit(): void {

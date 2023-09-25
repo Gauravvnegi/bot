@@ -72,7 +72,7 @@
           >
             <mat-icon
               class="delete"
-              [ngClass]="reservationId ? 'disabled-btn' : ''"
+              [ngClass]="formService.disableBtn ? 'disabled-btn' : ''"
               (click)="removeField(i)"
               >clear</mat-icon
             >
@@ -85,7 +85,7 @@
     class="action-btn"
     label="+ Add More Rooms"
     (onClick)="addNewField()"
-    [disabled]="reservationId"
+    [disabled]="formService.disableBtn"
     variant="text"
   ></hospitality-bot-button>
 </div>

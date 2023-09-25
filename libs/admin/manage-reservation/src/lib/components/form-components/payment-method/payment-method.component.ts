@@ -64,7 +64,7 @@ export class PaymentMethodComponent implements OnInit {
       cashierLastName: [{ value: '', disabled: true }],
       totalPaidAmount: [
         0,
-        [Validators.pattern(Regex.DECIMAL_REGEX), Validators.min(1)],
+        [Validators.min(0)],
       ],
       currency: [''],
       paymentMethod: [''],

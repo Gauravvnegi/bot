@@ -1,6 +1,14 @@
 import { EntityState } from '@hospitality-bot/admin/shared';
 
-export type CompanyResponseType = {
+export type AdditionalFeature = {
+  taxId?: string;
+  creditLimit?: number;
+  marketSegment?: string;
+  businessSource?: string;
+  billingInstruction?: string;
+};
+
+export type CompanyResponseType = AdditionalFeature & {
   id?: string;
   code?: string;
   salutation?: string;

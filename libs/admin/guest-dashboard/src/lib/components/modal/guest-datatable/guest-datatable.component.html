@@ -75,7 +75,7 @@
         let-rowIndex="rowIndex"
       >
         <tr
-          class="data-table-row hover-background"
+          class="data-table-row table-row hover-background"
           (click)="openDetailPage($event, rowData)"
         >
           <td class="table--checkbox">
@@ -86,8 +86,8 @@
             >
             </p-tableCheckbox>
           </td>
-          <td class="guest">
-            <span>{{ rowData.getFullName() }}</span>
+          <td class="cell-content center-align justify-center">
+            <span class="primary-text">{{ rowData.getFullName() }}</span>
           </td>
           <td>
             <p class="arrival-date">
@@ -268,7 +268,7 @@
                   Document
                 </div>
               </div>
-              <div class="icon">
+              <div class="icon margin-left">
                 <img
                   class="table-body-journey-icon"
                   src="assets/svg/Payment.svg"
@@ -288,7 +288,7 @@
                   Payment
                 </div>
               </div>
-              <div class="icon">
+              <!-- <div class="icon">
                 <img
                   class="table-body-journey-icon"
                   src="assets/svg/Feedback.svg"
@@ -307,8 +307,8 @@
                 <div class="tooltip">
                   Feedback
                 </div>
-              </div>
-              <div class="icon extra-width">
+              </div> -->
+              <!-- <div class="icon extra-width">
                 <img
                   class="table-body-journey-icon"
                   src="assets/svg/New-Journey.svg"
@@ -328,7 +328,7 @@
                 <div class="tooltip">
                   New
                 </div>
-              </div>
+              </div> -->
               <div class="icon extra-width">
                 <img
                   class="table-body-journey-icon"

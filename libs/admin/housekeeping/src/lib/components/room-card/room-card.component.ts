@@ -26,6 +26,10 @@ export class RoomCardComponent implements OnInit {
 
   ngOnInit(): void {}
 
+  ngOnChanges(): void {
+    console.log(this.data);
+  }
+
   /**
    * @function handleRoomStatus handle the room status toggle
    * @param status room status

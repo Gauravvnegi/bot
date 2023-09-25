@@ -1,8 +1,8 @@
 <div class="wrapper">
   <div class="room">
     <div class="room-features">
-      <div *ngFor="let feature of data.roomFeature">
-        <img [src]="feature.url" [alt]="" />
+      <div *ngFor="let feature of data.features" class="room-feature-icon">
+        <img [src]="feature.images[0].url" [alt]="" />
       </div>
     </div>
     <div
@@ -17,9 +17,7 @@
 
   <div class="room-number">
     <div [roomStatus]="data.status">
-      <div>
-        {{ data.roomNo || '--' }}&nbsp;-&nbsp;{{ data.type || '---' }}
-      </div>
+      <div>{{ data.roomNo || '--' }}&nbsp;-&nbsp;{{ data.type || '---' }}</div>
     </div>
   </div>
 

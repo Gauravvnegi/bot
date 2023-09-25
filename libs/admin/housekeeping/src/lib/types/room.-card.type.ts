@@ -10,4 +10,5 @@ export type RoomCardData = {
   foStatus: string;
   nextStates: string[];
   roomFeature: any[];
+  features;
 };

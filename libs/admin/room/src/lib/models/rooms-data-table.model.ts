@@ -43,6 +43,7 @@ export class Room {
   status: string;
   foStatus: string;
   nextStates: string[];
+  features;
 
   deserialize(input: RoomResponse) {
     this.id = input.id ?? '';
@@ -60,6 +61,7 @@ export class Room {
     this.status = currentStatus;
     this.foStatus = input.frontOfficeState ?? '';
     this.nextStates = [...input.nextStates, currentStatus];
+    this.features = input.features ?? [];
     return this;
   }
 

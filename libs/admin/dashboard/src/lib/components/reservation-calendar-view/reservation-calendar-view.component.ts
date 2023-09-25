@@ -47,7 +47,7 @@ import { debounceTime } from 'rxjs/operators';
 export class ReservationCalendarViewComponent implements OnInit {
   // gridRows: IGRow[] = [101, 102, 103, 104, 105, 106, 107, 108, 109, 110];
   gridCols: IGCol[] = [];
-  allRoomTypes: RoomTypes[] = [];
+  allRoomTypes: IGRoomType[] = [];
   roomTypes: IGRoomType[] = [];
   dates: { day: string; date: number }[];
   globalQueries = [];
@@ -143,22 +143,11 @@ export class ReservationCalendarViewComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.entityId = this.globalFilterService.entityId;
     this.initForm();
     this.initDates(Date.now());
-    this.listenForGlobalFilters();
-    // this.listenChanges();
-  }
-
-  /**
-   * @function listenForGlobalFilters To listen for global filters and load data when filter value is changed.
-   */
-  listenForGlobalFilters(): void {
-    this.entityId = this.globalFilterService.entityId;
-    let previousDateRange = {};
-    this.globalFilterService.globalFilter$.subscribe((data) => {
-      this.globalQueries = [...data['dateRange'].queryValue];
-      this.initRoomTypes();
-    });
+    this.initRoomTypes();
+    this.listenChanges();
   }
 
   initRoomTypes() {
@@ -174,6 +163,7 @@ export class ReservationCalendarViewComponent implements OnInit {
             roomTypeId: roomTypeData.id,
             roomNumbers: roomTypeData.roomNumbers,
           }));
+          this.allRoomTypes = this.roomTypes;
           this.loading = false;
           this.initReservationData();
         })
@@ -196,10 +186,6 @@ export class ReservationCalendarViewComponent implements OnInit {
           endPos: this.getDate(data.to),
           rowValue: data.bookingItems[0].roomDetails.roomNumber,
         }));
-
-        console.log(this.data);
-        console.log(this.gridCols);
-        debugger;
       });
   }
 
@@ -207,6 +193,7 @@ export class ReservationCalendarViewComponent implements OnInit {
     const data = new Date(date);
     return data.setHours(0, 0, 0, 0);
   }
+  
   /**
    * @function getQueryConfig to configuration
    */
@@ -246,6 +233,10 @@ export class ReservationCalendarViewComponent implements OnInit {
 
     this.dates = dates;
     this.gridCols = cols;
+    this.globalQueries = [
+      { fromDate: this.gridCols[0] },
+      { toDate: this.gridCols[13] },
+    ];
   }
 
   initForm() {
@@ -256,18 +247,21 @@ export class ReservationCalendarViewComponent implements OnInit {
     });
   }
 
-  // listenChanges() {
-  //   this.useForm
-  //     .get('roomType')
-  //     .valueChanges.pipe(debounceTime(500))
-  //     .subscribe((res: string[]) => {
-  //       this.roomTypes = this.allRoomTypes.filter((item) =>
-  //         res.includes(item.value)
-  //       );
-  //       this.isRoomsEmpty = !res.length;
-  //       this.setRoomDetails();
-  //     });
-  // }
+  listenChanges() {
+    this.useForm.get('date').valueChanges.subscribe((res) => {
+      this.initDates(res);
+    });
+
+    this.useForm
+      .get('roomType')
+      .valueChanges.pipe(debounceTime(500))
+      .subscribe((res: string[]) => {
+        this.roomTypes = this.allRoomTypes.filter((item) =>
+          res.includes(item.roomTypeId)
+        );
+        this.isRoomsEmpty = !res.length;
+      });
+  }
 
   getWeekendBG(day: string, isOccupancy = false) {
     return getWeekendBG(day, isOccupancy);

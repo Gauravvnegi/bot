@@ -53,7 +53,13 @@ export class RoomTypesComponent extends FormComponent {
         })
         .subscribe((res) => {
           const roomTypesList = new RoomTypeList().deserialize(res).records;
-          this.roomTypes = roomTypesList.map((roomType: RoomType) => ({
+          const activeRoomTypes = roomTypesList.filter((roomType) => {
+            const roomCount = roomType.roomCount;
+            const isActive = roomType.status; // Replace with the actual property name for room type status
+
+            return roomCount > 0 && isActive;
+          });
+          this.roomTypes = activeRoomTypes.map((roomType: RoomType) => ({
             label: roomType.name,
             value: roomType.id,
             roomCount: roomType.roomCount,

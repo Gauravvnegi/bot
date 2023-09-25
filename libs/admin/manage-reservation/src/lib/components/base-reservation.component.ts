@@ -108,9 +108,12 @@ export class BaseReservationComponent {
           break;
       }
       for (const controlName in this.paymentControls) {
-        // if (paymentControls.hasOwnProperty(controlName)) {
-        this.paymentControls[controlName].enable();
-        // }
+        if (
+          controlName !== 'cashierFirstName' &&
+          controlName !== 'cashierLastName'
+        ) {
+          this.paymentControls[controlName].enable();
+        }
       }
       reservationType.enable();
     }

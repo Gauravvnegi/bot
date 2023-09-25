@@ -306,7 +306,7 @@ export const chips: Chip<
 
 export const MenuOptions: Option[] = [
   { label: 'Manage Invoice', value: 'MANAGE_INVOICE' },
-  { label: 'View Reservation', value: 'EDIT_RESERVATION' },
+  { label: 'Edit Reservation', value: 'EDIT_RESERVATION' },
   { label: 'Print Invoice', value: 'PRINT_INVOICE' },
 ];
 

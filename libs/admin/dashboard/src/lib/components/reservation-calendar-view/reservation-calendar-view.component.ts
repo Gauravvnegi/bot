@@ -62,7 +62,6 @@ export class ReservationCalendarViewComponent implements OnInit {
   currentDate = new Date();
 
   isRoomsEmpty = false;
-  loading = false;
 
   reservationListData: RoomReservation[];
 
@@ -159,7 +158,6 @@ export class ReservationCalendarViewComponent implements OnInit {
   }
 
   initRoomTypes() {
-    this.loading = true;
     this.$subscription.add(
       this.roomService
         .getRoomTypesAndNumbers(this.entityId, {
@@ -170,9 +168,10 @@ export class ReservationCalendarViewComponent implements OnInit {
             label: roomTypeData.name,
             roomTypeId: roomTypeData.id,
             roomNumbers: roomTypeData.roomNumbers,
+            loading: false,
           }));
           this.allRoomTypes = this.roomTypes;
-          this.loading = false;
+          this.initReservationData();
         })
     );
   }
@@ -187,13 +186,30 @@ export class ReservationCalendarViewComponent implements OnInit {
         this.reservationListData = new ReservationList().deserialize(
           res
         ).reservationData;
-        this.data = this.reservationListData.map((data) => ({
-          id: data.id,
-          content: data.guestName,
-          startPos: this.getDate(data.from),
-          endPos: this.getDate(data.to),
-          rowValue: data.bookingItems[0].roomDetails.roomNumber,
-        }));
+        // Step 3: Update the data field in the corresponding IGRoomType object
+        this.roomTypes.forEach((roomType) => {
+          if (roomType.roomNumbers) {
+            const matchingReservations = this.reservationListData.filter(
+              (reservation) =>
+                roomType.roomNumbers.some((roomNumber) =>
+                  reservation.bookingItems.some(
+                    (bookingItem) =>
+                      bookingItem.roomDetails.roomNumber === roomNumber
+                  )
+                )
+            );
+
+            // Update the data field with matching reservations
+            roomType.data = matchingReservations.map((reservation) => ({
+              id: reservation.id,
+              content: reservation.guestName,
+              startPos: this.getDate(reservation.from),
+              endPos: this.getDate(reservation.to),
+              rowValue: reservation.bookingItems[0].roomDetails.roomNumber,
+            }));
+          }
+        });
+        console.log(this.roomTypes);
       });
   }
 
@@ -245,7 +261,6 @@ export class ReservationCalendarViewComponent implements OnInit {
       { fromDate: this.gridCols[0] },
       { toDate: this.gridCols[13] },
     ];
-    this.initReservationData();
   }
 
   initForm() {
@@ -284,15 +299,20 @@ export class ReservationCalendarViewComponent implements OnInit {
       event.endPos,
       event.rowValue
     );
+    const selectedRoomType = this.roomTypes.find((roomType) => {
+      return roomType.roomNumbers.includes(event.rowValue);
+    });
+    selectedRoomType.loading = true;
     this.manageReservationService
       .updateReservation(this.entityId, event.id, updateData, 'ROOM_TYPE')
       .subscribe(
         (res) => {},
         (error) => {
-          this.loading = false;
+          selectedRoomType.loading = false;
+          this.resetData(event.id);
         },
         () => {
-          this.loading = false;
+          selectedRoomType.loading = false;
         }
       );
     console.log(event, 'onChange event');
@@ -305,10 +325,18 @@ export class ReservationCalendarViewComponent implements OnInit {
   handleEdit(event: IGEditEvent) {
     console.log(event, 'onEdit event');
   }
+
+  resetData(id: string) {
+    
+  }
+
+  getRoomsByRoomType() {}
 }
 
 type IGRoomType = {
   label: string;
   roomTypeId: string;
-  roomNumbers?: string[];
+  roomNumbers?: IGRow[];
+  loading?: boolean;
+  data?: IGValue[];
 };

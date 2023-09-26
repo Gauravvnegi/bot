@@ -132,9 +132,9 @@
                     [gridData]="{
                       rows: roomType.roomNumbers,
                       columns: gridCols,
-                      values: data
+                      values: roomType?.data ? roomType.data : []
                     }"
-                    [isProcessing]="loading"
+                    [isProcessing]="roomType.loading"
                     (onChange)="handleChange($event)"
                     (onCreate)="handleCreate($event)"
                   ></hospitality-bot-interactive-grid>

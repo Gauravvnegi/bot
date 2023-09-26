@@ -159,7 +159,7 @@
 .menu_button {
   width: 35px;
   height: 65px;
-  margin-top: 15px;
+  // margin-top: 15px;
   .onHoverHide {
     display: none;
   }
@@ -172,6 +172,7 @@
     }
   }
   img {
+    object-fit: contain;
     @include full-img;
   }
 }
@@ -253,3 +254,94 @@
 }
 
 // tablet
+//  ::ng-deep .p-sidebar-mask {
+//   z-index: 1003 !important;
+// }
+::ng-deep .p-sidebar-mask.p-component-overlay {
+  z-index: 130 !important;
+}
+
+:host ::ng-deep .p-sidebar-content {
+  padding: 20px;
+}
+
+.wrapper {
+  gap: 1em;
+  display: flex;
+  flex-direction: column;
+  .header {
+    display: flex;
+    justify-content: space-between;
+
+    .cross {
+      cursor: pointer;
+    }
+
+    .explore {
+      display: inline-flex;
+      align-items: center;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 500;
+      line-height: 1.25;
+      letter-spacing: 0.72px;
+      text-align: left;
+      color: #00162b;
+      i {
+        margin-left: 3px;
+      }
+    }
+  }
+
+  .menu-wrapper {
+    .bot-logo {
+      width: 124px;
+      height: 54px;
+
+      img {
+        width: 100%;
+        height: 100%;
+      }
+    }
+
+    .menu-container {
+      display: flex;
+      flex-wrap: wrap;
+      height: 100%;
+      gap: 2%;
+      row-gap: 1em;
+
+      .menu {
+        flex-basis: 49%;
+        cursor: pointer !important;
+
+        img {
+          width: 22px;
+          height: 22px;
+          margin: 26px 8px 0 0;
+          padding: 1.1px 0.4px 0 0.7px;
+          background-color: #fff;
+        }
+        .menu-label {
+          opacity: 0.6;
+          font-size: 14px;
+          line-height: 1.07;
+          letter-spacing: 0.84px;
+          text-align: left;
+          color: #001037;
+        }
+      }
+    }
+  }
+
+  .footer {
+    .header {
+      font-size: 18px;
+      font-weight: 600;
+      line-height: 0.83;
+      letter-spacing: 1.08px;
+      text-align: left;
+      color: #00162b;
+    }
+  }
+}

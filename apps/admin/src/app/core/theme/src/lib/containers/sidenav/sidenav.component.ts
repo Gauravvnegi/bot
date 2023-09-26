@@ -14,6 +14,8 @@ import { ModalService } from 'libs/shared/material/src/lib/services/modal.servic
 import { Subscription } from 'rxjs';
 import {
   ModuleNames,
+  ProductMenu,
+  productMenu,
   routes,
 } from '../../../../../../../../../../libs/admin/shared/src/index';
 import { MenuItem } from '../../data-models/menu.model';
@@ -41,6 +43,8 @@ export class SidenavComponent implements OnInit, OnDestroy {
   @Output() submenuItems = new EventEmitter<any>();
   @Output() navToggle = new EventEmitter<boolean>();
   selectedModule: ModuleNames;
+  isMenuBarVisible: boolean = false;
+  readonly productList = productMenu;
 
   constructor(
     private _breakpointObserver: BreakpointObserver,
@@ -135,16 +139,16 @@ export class SidenavComponent implements OnInit, OnDestroy {
     dialogConfig.width = '450px';
     this._modal.openDialog(OrientationPopupComponent, dialogConfig);
   }
-
+  products;
   private initSideNavConfigs(config = {}) {
     this.activeFontColor = '#ffffff';
     this.normalFontColor = '#ffffff';
     this.dividerBgColor = 'white';
     this.list_item_colour = '#E8EEF5';
     this.headerBgColor = config['headerBgColor'] || '#4B56C0';
-    let products = this.subscriptionPlanService.getSubscription()['products'];
+    this.products = this.subscriptionPlanService.getSubscription()['products'];
 
-    this.menuItems = products
+    this.menuItems = this.products
       .filter((item) => item.isView)
       .map((product) => {
         let menuItem = new MenuItem().deserialize(product);
@@ -171,6 +175,25 @@ export class SidenavComponent implements OnInit, OnDestroy {
     this.submenuItems.emit(data);
   }
 
+  // Intial -> Selected Product (priority sequence)
+  // IsView
+
+  onMenuCLick(data: ProductMenu) {
+    const moduleList = data.module.map((module) => module.name);
+
+    this.menuItems = this.products
+      .filter((item) => item.isView)
+      .map((product) => {
+        let menuItem = new MenuItem().deserialize(product, {
+          moduleList: moduleList,
+          moduleData: data.module,
+        });
+        return menuItem;
+      })
+      .filter((item) => item);
+    this.isMenuBarVisible = false;
+  }
+
   ngOnDestroy() {
     this.$subscription.unsubscribe();
   }
@@ -192,5 +215,9 @@ export class SidenavComponent implements OnInit, OnDestroy {
     if (!this.isExpanded) {
       this.setSelectedModuleBasedOnRoute();
     }
+  }
+
+  onExplore() {
+    this.isMenuBarVisible = !this.isMenuBarVisible;
   }
 }

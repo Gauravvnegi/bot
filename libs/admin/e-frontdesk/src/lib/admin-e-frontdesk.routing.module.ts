@@ -58,6 +58,14 @@ const appRoutes: CRoutes = [
           import('@hospitality-bot/admin/room').then((m) => m.AdminRoomModule),
       },
       {
+        path: 'housekeeping',
+        name: ModuleNames.HOUSEKEEPING,
+        loadChildren: () =>
+          import('@hospitality-bot/admin/housekeeping').then(
+            (m) => m.AdminHousekeepingModule
+          ),
+      },
+      {
         path: 'invoice',
         name: ModuleNames.ADD_RESERVATION,
         loadChildren: () =>

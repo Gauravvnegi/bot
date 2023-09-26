@@ -218,6 +218,9 @@
     },
     "admin-global-shared": {
       "tags": []
+    },
+    "admin-housekeeping": {
+      "tags": []
     }
   }
 }

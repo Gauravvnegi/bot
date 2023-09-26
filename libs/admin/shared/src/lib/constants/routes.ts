@@ -20,6 +20,7 @@ export const routes = {
   [ModuleNames.REQUEST]: 'efrontdesk/complaint',
   [ModuleNames.ADD_RESERVATION]: 'efrontdesk/reservation',
   [ModuleNames.ROOM]: 'efrontdesk/room',
+  [ModuleNames.HOUSEKEEPING]: 'efrontdesk/housekeeping',
 
   // Freddie
   [ModuleNames.FREDDIE]: 'freddie',

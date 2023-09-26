@@ -151,6 +151,9 @@
       ],
       "@hospitality-bot/admin/global-shared": [
         "libs/admin/global-shared/src/index.ts"
+      ],
+      "@hospitality-bot/admin/housekeeping": [
+        "libs/admin/housekeeping/src/index.ts"
       ]
     }
   },

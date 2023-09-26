@@ -20,6 +20,7 @@ import { SubscriptionPlanService } from '../../../services/subscription-plan.ser
 import { NavigationEnd } from '@angular/router';
 import { MenuItem } from 'primeng/api';
 import { manageReservationRoutes } from 'libs/admin/manage-reservation/src/lib/constants/routes';
+import { RaiseRequestComponent } from 'libs/admin/request/src/lib/components/raise-request/raise-request.component';
 import {
   navRoute,
   manageGuestRoutes,
@@ -378,7 +379,7 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
         ? {
             label: 'New Booking',
             icon: 'pi pi-calendar',
-            ...(false
+            ...(!!propertyList.length
               ? {
                   items: propertyList.map((item) => ({
                     label: item.label,

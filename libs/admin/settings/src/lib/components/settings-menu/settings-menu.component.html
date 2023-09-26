@@ -1,5 +1,7 @@
 <div class="wrapper">
-  <div class="heading">Settings</div>
+  <div class="heading" [ngStyle]="isSideBar && { 'margin-left': '50px' }">
+    Settings
+  </div>
   <div class="main">
     <ng-container *ngFor="let setting of settings">
       <div

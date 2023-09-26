@@ -1,6 +1,7 @@
 import {
   Component,
   EventEmitter,
+  Input,
   OnDestroy,
   OnInit,
   Output,
@@ -48,6 +49,7 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
   userList: Option[] = [];
   requestData: any;
   departmentList: Option[] = [];
+  @Input() isSideBar = false;
   constructor(
     private fb: FormBuilder,
     private globalFilterService: GlobalFilterService,
@@ -99,7 +101,7 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
       priority: ['', Validators.required],
       jobDuration: [''],
       remarks: ['', [Validators.maxLength(200)]],
-      quantity: [1 , [Validators.required, Validators.min(1)]],
+      quantity: [1, [Validators.required, Validators.min(1)]],
       assigneeId: [''],
     });
 

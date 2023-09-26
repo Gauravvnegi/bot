@@ -389,3 +389,27 @@
     width: 22px;
   }
 }
+
+:host ::ng-deep {
+  .complaint {
+    .body {
+      height: 82vh;
+    }
+    .p-sidebar-right {
+      width: 40rem;
+    }
+  }
+
+  .settings {
+    .p-sidebar-right {
+      width: 40rem;
+    }
+    .main {
+      margin-top: 0;
+    }
+    .p-sidebar-close {
+      margin-top: 15px;
+      margin-right: 37px;
+    }
+  }
+}

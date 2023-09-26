@@ -1,5 +1,13 @@
 import { animate, style, transition, trigger } from '@angular/animations';
-import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
+import {
+  Component,
+  HostListener,
+  OnDestroy,
+  OnInit,
+  ComponentFactoryResolver,
+  ViewContainerRef,
+  ViewChild,
+} from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ConfigService, UserService } from '@hospitality-bot/admin/shared';
@@ -25,6 +33,7 @@ import {
   navRoute,
   manageGuestRoutes,
 } from 'libs/admin/guests/src/lib/constant/route';
+import { SettingsMenuComponent } from '../../../../../../../../../../../libs/admin/settings/src/lib/components/settings-menu/settings-menu.component';
 
 @Component({
   selector: 'admin-layout-one',
@@ -79,6 +88,10 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
   isGlobalSearchVisible = true;
   isSitesAvailable: boolean;
   bookingOptions: MenuItem[];
+  sidebarVisible: boolean;
+  @ViewChild('sidebarSlide', { read: ViewContainerRef })
+  sidebarSlide: ViewContainerRef;
+  sidebarType: 'complaint' | 'settings' = 'complaint';
 
   constructor(
     private _router: Router,
@@ -94,7 +107,8 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
     private loadingService: LoadingService,
     private notificationService: NotificationService,
     private configService: ConfigService,
-    private hotelDetailService: HotelDetailService
+    private hotelDetailService: HotelDetailService,
+    private resolver: ComponentFactoryResolver
   ) {
     this.initFG();
   }
@@ -406,12 +420,35 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
         : null,
       this.checkModuleSubscription(ModuleNames.REQUEST)
         ? {
-            label: 'View Complaint',
+            label: 'New Complaint',
             icon: 'pi pi-exclamation-circle',
-            command: () => window.open(`/pages/efrontdesk/complaint`),
+            command: () => {
+              this.sidebarVisible = true;
+              this.sidebarType = 'complaint';
+              const factory = this.resolver.resolveComponentFactory(
+                RaiseRequestComponent
+              );
+              this.sidebarSlide.clear();
+              const componentRef = this.sidebarSlide.createComponent(factory);
+              componentRef.instance.isSideBar = true;
+              componentRef.instance.onRaiseRequestClose.subscribe((res) => {
+                this.sidebarVisible = false;
+              });
+            },
           }
         : null,
     ].filter((item) => item);
+  }
+
+  openSettings() {
+    this.sidebarVisible = true;
+    const factory = this.resolver.resolveComponentFactory(
+      SettingsMenuComponent
+    );
+    this.sidebarSlide.clear();
+    this.sidebarType = 'settings';
+    const componentRef = this.sidebarSlide.createComponent(factory);
+    componentRef.instance.isSideBar = true;
   }
 
   checkModuleSubscription(module) {

@@ -30,6 +30,15 @@
     ></hospitality-bot-sidenav-expand>
   </div>
 
+  <p-sidebar
+    class="sidebar-slide"
+    [ngClass]="sidebarType"
+    [(visible)]="sidebarVisible"
+    position="right"
+  >
+    <ng-container #sidebarSlide></ng-container>
+  </p-sidebar>
+
   <div class="main-panel" id="main-panel">
     <div class="main-panel--header">
       <!-- message header -->
@@ -99,7 +108,7 @@
               alt="calendar"
             />
           </div>
-          <div class="header--button quick-action">
+          <div class="header--button quick-action" (click)="openSettings()">
             <img
               class="filter-icon"
               src="assets/svg/setting-dark.svg"

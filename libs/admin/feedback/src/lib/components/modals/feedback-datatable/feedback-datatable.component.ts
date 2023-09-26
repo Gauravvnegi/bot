@@ -342,6 +342,8 @@ export class FeedbackDatatableModalComponent extends FeedbackDatatableComponent
    */
   onSelectedTabFilterChange(event: MatTabChangeEvent): void {
     this.tabFilterIdx = event.index;
+    this.selectedTab = this.tabFilterItems[event.index].value;
+
     if (this.tableName === 'Response Rate')
       this.isNotVisible =
         this.tabFilterIdx === 0 || this.tabFilterIdx === 2 ? true : false;

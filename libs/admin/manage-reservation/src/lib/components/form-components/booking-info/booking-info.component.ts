@@ -35,7 +35,6 @@ export class BookingInfoComponent implements OnInit {
   @Input() reservationId: string;
 
   otaOptions: Option[] = [];
-  @Output() getSummary: EventEmitter<any> = new EventEmitter<any>();
 
   configData: BookingConfig;
   editMode: boolean = false;
@@ -131,7 +130,7 @@ export class BookingInfoComponent implements OnInit {
           this.formService.reservationDate.next(res);
           if (this.roomControls.valid) {
             this.getRoomsForAllRoomTypes();
-            this.getSummary.emit();
+            this.formService.getSummary.next();
           }
         }
       });
@@ -142,7 +141,7 @@ export class BookingInfoComponent implements OnInit {
           this.updateDateDifference();
           if (this.roomControls.valid && !multipleDateChange) {
             this.getRoomsForAllRoomTypes();
-            this.getSummary.emit();
+            this.formService.getSummary.next();
           }
           multipleDateChange = false;
         }

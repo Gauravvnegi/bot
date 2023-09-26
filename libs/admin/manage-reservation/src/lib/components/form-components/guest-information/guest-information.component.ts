@@ -35,8 +35,6 @@ export class GuestInformationComponent implements OnInit {
   parentFormGroup: FormGroup;
 
   @Input() reservationId: string;
-  @Input() bookingItemValidity = false;
-  @Output() getSummary: EventEmitter<any> = new EventEmitter<any>();
 
   constructor(
     private fb: FormBuilder,
@@ -69,8 +67,8 @@ export class GuestInformationComponent implements OnInit {
     this.parentFormGroup
       .get('guestInformation.guestDetails')
       .valueChanges.subscribe((res) => {
-        if (res && this.bookingItemValidity) {
-          this.getSummary.emit();
+        if (res) {
+          this.formService.getSummary.next();
         }
       });
   }

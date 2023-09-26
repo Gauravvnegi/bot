@@ -67,6 +67,9 @@ export class VenueReservationComponent extends BaseReservationComponent
   ngOnInit(): void {
     this.initForm();
     this.initDetails();
+    this.formService.getSummary.subscribe((res) => {
+      if (this.venueItemsControl.value) this.getSummaryData();
+    });
     this.getReservationId();
     this.listenForFormChanges();
   }
@@ -100,6 +103,9 @@ export class VenueReservationComponent extends BaseReservationComponent
         venueInfo: this.venueBookingInfo,
       }),
       offerId: [''],
+      instructions: this.fb.group({
+        specialInstructions: [''],
+      }),
     });
     // Add food package items to the form
     this.foodPackageArray = this.userForm.get(
@@ -185,30 +191,15 @@ export class VenueReservationComponent extends BaseReservationComponent
   }
 
   getSummaryData(): void {
-    const config = {
-      params: this.adminUtilityService.makeQueryParams([
-        { type: EntityType.OUTLET },
-      ]),
-    };
-    const data = {
-      from: this.reservationInfoControls.from.value,
-      to: this.reservationInfoControls.to.value,
-      adultCount: this.eventInfoControls.numberOfAdults.value,
-    };
     this.$subscription.add(
       this.manageReservationService
-        .getSummaryData(this.outletId, data, config)
+        .getSummaryData(this.outletId, this.getFormData(), {
+          params: `?type=${EntityType.OUTLET}`,
+        })
         .subscribe(
           (res) => {
             this.summaryData = new SummaryData()?.deserialize(res);
-            this.paymentControls.totalPaidAmount.setValidators([
-              Validators.max(this.summaryData?.totalAmount),
-              Validators.min(0),
-            ]);
-            this.paymentControls.totalPaidAmount.updateValueAndValidity();
-            this.paymentRuleControls.deductedAmount.patchValue(
-              this.summaryData?.totalAmount
-            );
+            this.updatePaymentData();
             if (this.formValueChanges) {
               this.setFormDisability();
               this.formValueChanges = false;
@@ -217,6 +208,16 @@ export class VenueReservationComponent extends BaseReservationComponent
           (error) => {}
         )
     );
+  }
+
+  getFormData() {
+    const data = {
+      from: this.reservationInfoControls.from.value,
+      to: this.reservationInfoControls.to.value,
+      adultCount: this.eventInfoControls.numberOfAdults.value,
+    };
+
+    return data;
   }
 
   /**

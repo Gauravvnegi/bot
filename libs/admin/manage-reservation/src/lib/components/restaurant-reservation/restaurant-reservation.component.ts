@@ -76,8 +76,9 @@ export class RestaurantReservationComponent extends BaseReservationComponent
   ngOnInit(): void {
     this.initDetails();
     this.getMenuItems();
+    this.listenFormServiceChanges();
     this.initOptions();
-    this.getReservationId();
+    if (this.reservationId) this.getReservationDetails();
     this.initFormData();
     this.listenForFormChanges();
     this.getFoodPackages();
@@ -88,10 +89,17 @@ export class RestaurantReservationComponent extends BaseReservationComponent
     this.outletId = this.selectedEntity.value;
     this.fields = menuItemFields;
     this.outletItems = [OutletItems.MENU_ITEM, OutletItems.FOOD_PACKAGE];
+  }
+
+  listenFormServiceChanges() {
     this.expandAccordion = this.formService.enableAccordion;
+    // Expand accordion for assign room from reservation table.
     if (this.expandAccordion) {
       this.formService.enableAccordion = false;
     }
+    this.formService.getSummary.subscribe((res) => {
+      if (this.menuControls.valid) this.getSummaryData();
+    });
   }
 
   initOptions() {
@@ -127,6 +135,9 @@ export class RestaurantReservationComponent extends BaseReservationComponent
         kotInstructions: [''],
       }),
       offerId: [''],
+      instructions: this.fb.group({
+        specialInstructions: [''],
+      }),
     });
 
     // Add food package items to the form
@@ -279,17 +290,6 @@ export class RestaurantReservationComponent extends BaseReservationComponent
     );
   }
 
-  getReservationId(): void {
-    if (this.reservationId) {
-      this.getReservationDetails();
-    } else {
-      this.statusOptions = [
-        ...statusOptions,
-        // { label: 'Seated', value: 'SEATED' },
-      ];
-    }
-  }
-
   getReservationDetails(): void {
     this.$subscription.add(
       this.manageReservationService
@@ -347,12 +347,26 @@ export class RestaurantReservationComponent extends BaseReservationComponent
   }
 
   getSummaryData(): void {
-    const config = {
-      params: this.adminUtilityService.makeQueryParams([
-        { type: EntityType.OUTLET },
-      ]),
-    };
+    this.$subscription.add(
+      this.manageReservationService
+        .getSummaryData(this.outletId, this.getFormData(), {
+          params: `?type=${EntityType.OUTLET}`,
+        })
+        .subscribe(
+          (res) => {
+            this.summaryData = new SummaryData()?.deserialize(res);
+            this.updatePaymentData();
+            if (this.formValueChanges) {
+              this.setFormDisability();
+              this.formValueChanges = false;
+            }
+          },
+          (error) => {}
+        )
+    );
+  }
 
+  getFormData() {
     const data: ReservationSummary = {
       from: this.reservationInfoControls.dateAndTime.value,
       to: this.reservationInfoControls.dateAndTime.value,
@@ -367,28 +381,7 @@ export class RestaurantReservationComponent extends BaseReservationComponent
       outletType: EntitySubType.RESTAURANT,
     };
 
-    this.$subscription.add(
-      this.manageReservationService
-        .getSummaryData(this.outletId, data, config)
-        .subscribe(
-          (res) => {
-            this.summaryData = new SummaryData()?.deserialize(res);
-            this.paymentControls.totalPaidAmount.setValidators([
-              Validators.max(this.summaryData?.totalAmount),
-              Validators.min(0),
-            ]);
-            this.paymentControls.totalPaidAmount.updateValueAndValidity();
-            this.paymentRuleControls.deductedAmount.patchValue(
-              this.summaryData?.totalAmount
-            );
-            if (this.formValueChanges) {
-              this.setFormDisability();
-              this.formValueChanges = false;
-            }
-          },
-          (error) => {}
-        )
-    );
+    return data;
   }
 
   getFoodPackages() {

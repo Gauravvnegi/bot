@@ -85,6 +85,9 @@ export class SpaReservationComponent extends BaseReservationComponent
       searchResults: this.searchResults.bind(this),
       loadMoreResults: this.loadingMoreResults.bind(this),
     };
+    this.formService.getSummary.subscribe((res) => {
+      if (this.spaControls.valid) this.getSummaryData();
+    });
   }
 
   /**
@@ -106,6 +109,9 @@ export class SpaReservationComponent extends BaseReservationComponent
         spaItems: this.spaBookingInfo,
       }),
       offerId: [''],
+      instructions: this.fb.group({
+        specialInstructions: [''],
+      }),
     });
   }
 
@@ -243,11 +249,26 @@ export class SpaReservationComponent extends BaseReservationComponent
   }
 
   getSummaryData(): void {
-    const config = {
-      params: this.adminUtilityService.makeQueryParams([
-        { type: EntityType.OUTLET },
-      ]),
-    };
+    this.$subscription.add(
+      this.manageReservationService
+        .getSummaryData(this.outletId, this.getFormData(), {
+          params: `?type=${EntityType.OUTLET}`,
+        })
+        .subscribe(
+          (res) => {
+            this.summaryData = new SummaryData()?.deserialize(res);
+            this.updatePaymentData();
+            if (this.formValueChanges) {
+              this.setFormDisability();
+              this.formValueChanges = false;
+            }
+          },
+          (error) => {}
+        )
+    );
+  }
+
+  getFormData() {
     const data: ReservationSummary = {
       from: this.reservationInfoControls.dateAndTime.value,
       to: this.reservationInfoControls.dateAndTime.value,
@@ -259,28 +280,8 @@ export class SpaReservationComponent extends BaseReservationComponent
       })),
       outletType: EntitySubType.SPA,
     };
-    this.$subscription.add(
-      this.manageReservationService
-        .getSummaryData(this.outletId, data, config)
-        .subscribe(
-          (res) => {
-            this.summaryData = new SummaryData()?.deserialize(res);
-            this.paymentControls.totalPaidAmount.setValidators([
-              Validators.max(this.summaryData?.totalAmount),
-              Validators.min(0),
-            ]);
-            this.paymentControls.totalPaidAmount.updateValueAndValidity();
-            this.paymentRuleControls.deductedAmount.patchValue(
-              this.summaryData?.totalAmount
-            );
-            if (this.formValueChanges) {
-              this.setFormDisability();
-              this.formValueChanges = false;
-            }
-          },
-          (error) => {}
-        )
-    );
+
+    return data;
   }
 
   // Service

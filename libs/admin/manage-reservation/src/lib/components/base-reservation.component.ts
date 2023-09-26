@@ -1,5 +1,10 @@
 import { Component, Input } from '@angular/core';
-import { AbstractControl, FormArray, FormGroup } from '@angular/forms';
+import {
+  AbstractControl,
+  FormArray,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import { IteratorField } from 'libs/admin/shared/src/lib/types/fields.type';
 import {
   OfferData,
@@ -32,6 +37,7 @@ export class BaseReservationComponent {
   outletId?: string;
   reservationId: string;
   bookingType: string;
+  totalPaidAmount = 0;
 
   summaryData: SummaryData;
   formValueChanges: boolean = false;
@@ -114,6 +120,23 @@ export class BaseReservationComponent {
       }
       reservationType.enable();
     }
+  }
+
+  updatePaymentData() {
+    if (this.totalPaidAmount) {
+      this.summaryData.totalPaidAmount = this.totalPaidAmount;
+    }
+    // Set value and validators for payment according to the summaryData.
+    this.paymentControls.totalPaidAmount.setValidators([
+      Validators.max(this.summaryData?.totalAmount),
+      Validators.min(0),
+    ]);
+    this.paymentControls.totalPaidAmount.updateValueAndValidity();
+
+    // Needs to be changed according to api.
+    this.paymentRuleControls.deductedAmount.patchValue(
+      this.summaryData?.totalAmount
+    );
   }
 
   get reservationInfoControls() {

@@ -20,7 +20,7 @@ import {
   roomReservationTypes,
 } from '../../constants/reservation';
 import { FormService } from '../../services/form.service';
-import { debounceTime, takeUntil, throttleTime } from 'rxjs/operators';
+import { debounceTime, takeUntil } from 'rxjs/operators';
 import { OccupancyDetails, ReservationSummary } from '../../types/forms.types';
 import {
   BookingItemsSummary,
@@ -49,7 +49,6 @@ export class AddReservationComponent extends BaseReservationComponent
     childCount: 0,
     roomCount: 0,
   };
-  totalPaidAmount = 0;
 
   checkinJourneyState: JourneyState;
   cancelOfferRequests$ = new Subject<void>();
@@ -73,16 +72,21 @@ export class AddReservationComponent extends BaseReservationComponent
   }
 
   initDetails() {
-    this.expandAccordion = this.formService.enableAccordion;
+    this.listenFormServiceChanges();
+    this.reservationTypes = roomReservationTypes;
+    this.fields = roomFields;
+    this.bookingType = EntitySubType.ROOM_TYPE;
+  }
 
+  listenFormServiceChanges() {
+    this.expandAccordion = this.formService.enableAccordion;
     // Expand accordion for assign room from reservation table.
     if (this.expandAccordion) {
       this.formService.enableAccordion = false;
     }
-
-    this.reservationTypes = roomReservationTypes;
-    this.fields = roomFields;
-    this.bookingType = EntitySubType.ROOM_TYPE;
+    this.formService.getSummary.subscribe((res) => {
+      if (this.roomInfoControls.valid) this.getSummaryData();
+    });
   }
 
   /**
@@ -99,6 +103,9 @@ export class AddReservationComponent extends BaseReservationComponent
         marketSegment: ['', Validators.required],
       }),
       offerId: [''],
+      instructions: this.fb.group({
+        specialInstructions: [''],
+      }),
     });
   }
 
@@ -149,7 +156,7 @@ export class AddReservationComponent extends BaseReservationComponent
   initFormData() {
     this.$subscription.add(
       this.formService.reservationForm
-        .pipe(debounceTime(500))
+        .pipe(debounceTime(100))
         .subscribe((res) => {
           if (res) {
             const { roomInformation, ...formData } = res;
@@ -269,12 +276,36 @@ export class AddReservationComponent extends BaseReservationComponent
   }
 
   getSummaryData(): void {
-    const config = {
-      params: this.adminUtilityService.makeQueryParams([
-        { type: EntitySubType.ROOM_TYPE },
-      ]),
-    };
+    this.cancelRequests$.next();
+    this.$subscription.add(
+      this.manageReservationService
+        .getSummaryData(this.selectedEntity.id, this.getFormData(), {
+          params: `?type=${EntitySubType.ROOM_TYPE}`,
+        })
+        .pipe(
+          //to cancel api call between using take until
+          takeUntil(this.cancelRequests$)
+        )
+        .subscribe(
+          (res) => {
+            this.summaryData = new SummaryData()?.deserialize(res);
+            // Modify data to show summary for occupancy details.
+            this.updateBookingItemsCounts(this.summaryData.bookingItems);
+            this.updatePaymentData();
 
+            if (this.formValueChanges) {
+              this.reservationId
+                ? this.setFormDisability(this.checkinJourneyState)
+                : this.setFormDisability;
+              this.formValueChanges = false;
+            }
+          },
+          (error) => {}
+        )
+    );
+  }
+
+  getFormData() {
     // Summary data for booking summary
     const data: ReservationSummary = {
       from: this.reservationInfoControls.from.value,
@@ -299,49 +330,10 @@ export class AddReservationComponent extends BaseReservationComponent
       guestId: this.inputControls.guestInformation.get('guestDetails')?.value,
     };
 
-    this.cancelRequests$.next();
-
-    this.$subscription.add(
-      this.manageReservationService
-        .getSummaryData(this.selectedEntity.id, data, config)
-        .pipe(
-          //to cancel api call between using take until
-          takeUntil(this.cancelRequests$)
-        )
-        .subscribe(
-          (res) => {
-            this.summaryData = new SummaryData()?.deserialize(res);
-            if (this.totalPaidAmount) {
-              this.summaryData.totalPaidAmount = this.totalPaidAmount;
-            }
-            // Modify data to show summary for occupancy details.
-            this.updateBookingItemsCounts(this.summaryData.bookingItems);
-
-            // Set value and validators for payment according to the summaryData.
-            this.paymentControls.totalPaidAmount.setValidators([
-              Validators.max(this.summaryData?.totalAmount),
-              Validators.min(0),
-            ]);
-            this.paymentControls.totalPaidAmount.updateValueAndValidity();
-
-            // Needs to be changed according to api.
-            this.paymentRuleControls.deductedAmount.patchValue(
-              this.summaryData?.totalAmount
-            );
-
-            if (this.formValueChanges) {
-              this.reservationId
-                ? this.setFormDisability(this.checkinJourneyState)
-                : this.setFormDisability;
-              this.formValueChanges = false;
-            }
-          },
-          (error) => {}
-        )
-    );
+    return data;
   }
 
-  // Get room, adult and child count for all room types
+  // Get total room, adult and child count for all room types
   updateBookingItemsCounts(bookingItems: BookingItemsSummary[]) {
     const totalValues = bookingItems.reduce(
       (acc, bookingItem) => {

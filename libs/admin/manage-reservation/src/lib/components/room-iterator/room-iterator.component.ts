@@ -41,7 +41,6 @@ export class RoomIteratorComponent extends IteratorComponent
   parentFormGroup: FormGroup;
   roomTypeArray: FormArray;
 
-  @Output() refreshData = new EventEmitter();
   @Output() listenChanges = new EventEmitter();
 
   @Input() reservationId: string;
@@ -361,10 +360,6 @@ export class RoomIteratorComponent extends IteratorComponent
       this.roomTypes = [];
       this.getRoomType(this.globalQueries);
     }
-  }
-
-  getSummaryData(): void {
-    this.refreshData.emit();
   }
 
   listenForFormChanges(): void {

@@ -18,6 +18,12 @@ import { NotificationService } from '../../../services/notification.service';
 import { ProgressSpinnerService } from '../../../services/progress-spinner.service';
 import { SubscriptionPlanService } from '../../../services/subscription-plan.service';
 import { NavigationEnd } from '@angular/router';
+import { MenuItem } from 'primeng/api';
+import { manageReservationRoutes } from 'libs/admin/manage-reservation/src/lib/constants/routes';
+import {
+  navRoute,
+  manageGuestRoutes,
+} from 'libs/admin/guests/src/lib/constant/route';
 
 @Component({
   selector: 'admin-layout-one',
@@ -71,6 +77,7 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
   private $firebaseMessagingSubscription = new Subscription();
   isGlobalSearchVisible = true;
   isSitesAvailable: boolean;
+  bookingOptions: MenuItem[];
 
   constructor(
     private _router: Router,
@@ -85,7 +92,8 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
     private subscriptionPlanService: SubscriptionPlanService,
     private loadingService: LoadingService,
     private notificationService: NotificationService,
-    private configService: ConfigService
+    private configService: ConfigService,
+    private hotelDetailService: HotelDetailService
   ) {
     this.initFG();
   }
@@ -110,6 +118,7 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
         this.scrollToTop();
       }
     });
+    this.initBookingOption();
   }
 
   scrollToTop() {
@@ -360,6 +369,36 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
     this.notificationService
       .getUnreadCount(this._userService.getLoggedInUserId())
       .subscribe((response) => (this.unreadCount = response?.unreadCount));
+  }
+
+  initBookingOption() {
+    const propertyList = this.hotelDetailService.getPropertyList();
+    this.bookingOptions = [
+      {
+        label: 'New Booking',
+        icon: 'pi pi-calendar',
+        items: propertyList.map((item) => ({
+          label: item.label,
+          command: () =>
+            window.open(
+              `/pages/efrontdesk/reservation/${manageReservationRoutes.addReservation.route}?entityId=${item.value}`
+            ),
+        })),
+      },
+      {
+        label: 'New Guest',
+        icon: 'pi pi-user-plus',
+        command: () =>
+          window.open(
+            `${navRoute.guest.link}/${manageGuestRoutes.addGuest.route}`
+          ),
+      },
+      {
+        label: 'View Complaint',
+        icon: 'pi pi-exclamation-circle',
+        command: () => window.open(`/pages/efrontdesk/complaint`),
+      },
+    ];
   }
 
   ngOnDestroy() {

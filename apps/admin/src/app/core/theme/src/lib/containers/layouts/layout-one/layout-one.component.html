@@ -63,6 +63,10 @@
         "
       >
         <div class="options1" [ngClass]="{ disabled: isGlobalFilterVisible }">
+          <hospitality-bot-tiered-menu-button
+            label="New booking"
+            [items]="bookingOptions"
+          ></hospitality-bot-tiered-menu-button>
           <div class="global_search">
             <admin-search-bar
               [parentForm]="searchFG"

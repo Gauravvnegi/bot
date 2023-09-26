@@ -382,3 +382,10 @@
 :host ::ng-deep .p-sidebar {
   padding: unset !important;
 }
+
+.quick-action {
+  @include flex-item-center;
+  img {
+    width: 22px;
+  }
+}

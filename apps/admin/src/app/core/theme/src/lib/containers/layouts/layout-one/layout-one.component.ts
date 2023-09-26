@@ -374,31 +374,49 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
   initBookingOption() {
     const propertyList = this.hotelDetailService.getPropertyList();
     this.bookingOptions = [
-      {
-        label: 'New Booking',
-        icon: 'pi pi-calendar',
-        items: propertyList.map((item) => ({
-          label: item.label,
-          command: () =>
-            window.open(
-              `/pages/efrontdesk/reservation/${manageReservationRoutes.addReservation.route}?entityId=${item.value}`
-            ),
-        })),
-      },
-      {
-        label: 'New Guest',
-        icon: 'pi pi-user-plus',
-        command: () =>
-          window.open(
-            `${navRoute.guest.link}/${manageGuestRoutes.addGuest.route}`
-          ),
-      },
-      {
-        label: 'View Complaint',
-        icon: 'pi pi-exclamation-circle',
-        command: () => window.open(`/pages/efrontdesk/complaint`),
-      },
-    ];
+      this.checkModuleSubscription(ModuleNames.ADD_RESERVATION)
+        ? {
+            label: 'New Booking',
+            icon: 'pi pi-calendar',
+            ...(false
+              ? {
+                  items: propertyList.map((item) => ({
+                    label: item.label,
+                    command: () => {
+                      const url = `/pages/efrontdesk/reservation/${manageReservationRoutes.addReservation.route}?entityId=${item.value}`;
+                      window.open(url);
+                    },
+                  })),
+                }
+              : {
+                  command: () => window.open(`/pages/efrontdesk/reservation`),
+                }),
+          }
+        : null,
+      this.checkModuleSubscription(ModuleNames.GUESTS)
+        ? {
+            label: 'New Guest',
+            icon: 'pi pi-user-plus',
+            command: () =>
+              window.open(
+                `${navRoute.guest.link}/${manageGuestRoutes.addGuest.route}`
+              ),
+          }
+        : null,
+      this.checkModuleSubscription(ModuleNames.REQUEST)
+        ? {
+            label: 'View Complaint',
+            icon: 'pi pi-exclamation-circle',
+            command: () => window.open(`/pages/efrontdesk/complaint`),
+          }
+        : null,
+    ].filter((item) => item);
+  }
+
+  checkModuleSubscription(module) {
+    return this.subscriptionPlanService.checkModuleSubscription(
+      ModuleNames.MEMBERS
+    );
   }
 
   ngOnDestroy() {

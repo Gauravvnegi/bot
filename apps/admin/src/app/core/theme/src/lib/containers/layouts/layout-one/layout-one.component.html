@@ -64,6 +64,7 @@
       >
         <div class="options1" [ngClass]="{ disabled: isGlobalFilterVisible }">
           <hospitality-bot-tiered-menu-button
+            *ngIf="!!bookingOptions?.length"
             label="New booking"
             [items]="bookingOptions"
           ></hospitality-bot-tiered-menu-button>
@@ -91,6 +92,21 @@
           </div>
         </div>
         <div class="options2">
+          <div class="header--button quick-action">
+            <img
+              class="filter-icon"
+              src="assets/svg/calendar-dark.svg"
+              alt="calendar"
+            />
+          </div>
+          <div class="header--button quick-action">
+            <img
+              class="filter-icon"
+              src="assets/svg/setting-dark.svg"
+              alt="setting"
+              title="Settings"
+            />
+          </div>
           <div class="notification-wrapper">
             <div class="temp-width">
               <div

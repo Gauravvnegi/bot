@@ -1,20 +1,35 @@
-<div
-  class="logo text-uppercase"
-  [style.color]="normalFontColor"
-  [style.background-color]="headerBgColor"
->
+<div class="logo text-uppercase" [style.color]="normalFontColor">
   <!-- Botshot new collapse logo-->
   <div class="sidenav-header">
-    <div [style.display]="status ? 'none' : ''" class="logo">
+    <!-- <div [style.display]="status ? 'none' : ''" class="logo">
       <img
         src="assets/images/botshot_collapse.png"
         onerror="this.src='assets/images/botshot_expand.png';"
         alt=""
       />
-    </div>
+    </div> -->
     <!-- Side nav menu icon collapse-->
-    <div class="menu_button">
-      <img src="assets/images/botshot_collapse.png" alt="" />
+    <div *ngIf="!isExpanded" class="menu_button">
+      <img
+        #botLogo
+        class="bot-logo"
+        src="assets/images/botshot_collapse.png"
+        alt=""
+        (mouseenter)="
+          botLogo.style.display = 'none'; productMenu.style.display = 'block'
+        "
+        (mouseleave)="
+          botLogo.style.display = 'block'; productMenu.style.display = 'none'
+        "
+      />
+      <img
+        (click)="isMenuBarVisible = true"
+        class="product-menu"
+        src="assets/images/main-menu.png"
+        alt=""
+        style="display: none;"
+        #productMenu
+      />
     </div>
   </div>
 </div>
@@ -64,3 +79,60 @@
     </div>
   </div>
 </div>
+
+<ng-container>
+  <p-sidebar
+    [visible]="isMenuBarVisible"
+    (onHide)="isMenuBarVisible = false"
+    [showCloseIcon]="false"
+    position="left"
+  >
+    <ng-template
+      *ngIf="isMenuBarVisible"
+      [ngTemplateOutlet]="sidebar"
+    ></ng-template>
+  </p-sidebar>
+</ng-container>
+
+<ng-template #sidebar>
+  <div class="wrapper">
+    <div class="header">
+      <div class="cross">
+        <div (click)="isMenuBarVisible = false" class="close">
+          <i
+            class="fa fa-times"
+            style="color: rgba(0, 0, 0, 0.25);"
+            aria-hidden="true"
+          ></i>
+        </div>
+      </div>
+      <div (click)="onExplore()" class="explore">
+        Explore
+        <i
+          class="pi pi-arrow-right"
+          style="color: #5f38f9;"
+          aria-hidden="true"
+        ></i>
+      </div>
+    </div>
+    <div class="menu-wrapper">
+      <div class="bot-logo">
+        <img src="assets/images/botshotlogo-color.png" alt="" />
+      </div>
+
+      <div class="menu-container">
+        <div
+          *ngFor="let product of productList"
+          class="menu"
+          (click)="onMenuCLick(product)"
+        >
+          <img [src]="product.icon" alt="" />
+          <div class="menu-label">{{ product.label }}</div>
+        </div>
+      </div>
+    </div>
+    <div class="footer">
+      <div class="header">Free Hotel Resource</div>
+    </div>
+  </div>
+</ng-template>

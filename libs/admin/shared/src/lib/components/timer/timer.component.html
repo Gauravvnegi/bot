@@ -1,5 +1,5 @@
 <div class="time-left">
-  <img src="assets/images/timer.webp" alt="timer" />
+  <img [src]="getTimerImage()" alt="timer" />
 
   <div class="timer">
     <ng-container *ngIf="minutes > 0 || seconds > 0">

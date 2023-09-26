@@ -121,6 +121,7 @@ import { TimerComponent } from './components/timer/timer.component';
 import { SidebarModule } from 'primeng/sidebar';
 import { TieredMenuModule } from 'primeng/tieredmenu';
 import { TieredMenuButtonComponent } from './components/tiered-menu-button/tiered-menu-button.component';
+
 @NgModule({
   imports: [
     CommonModule,

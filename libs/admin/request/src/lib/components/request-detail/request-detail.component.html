@@ -60,6 +60,7 @@
         data?.action !== 'CANCELLED'
       "
       [inputMilliseconds]="data.timeLeft"
+      [sla]="data.sla"
     ></hospitality-bot-timer>
 
     <span class="resolved-text" *ngIf="data?.action === 'RESOLVED'">

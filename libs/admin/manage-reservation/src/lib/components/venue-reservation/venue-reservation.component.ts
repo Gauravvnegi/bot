@@ -7,7 +7,6 @@ import {
   AbstractControl,
 } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
   AdminUtilityService,
   Option,
@@ -57,13 +56,12 @@ export class VenueReservationComponent extends BaseReservationComponent
   constructor(
     private fb: FormBuilder,
     private adminUtilityService: AdminUtilityService,
-    protected globalFilterService: GlobalFilterService,
     private manageReservationService: ManageReservationService,
     protected activatedRoute: ActivatedRoute,
     protected formService: FormService,
-    protected hotelDetailService: HotelDetailService,
+    protected hotelDetailService: HotelDetailService
   ) {
-    super(globalFilterService, activatedRoute, hotelDetailService, formService);
+    super(activatedRoute, hotelDetailService, formService);
   }
 
   ngOnInit(): void {
@@ -154,7 +152,7 @@ export class VenueReservationComponent extends BaseReservationComponent
   getReservationDetails(): void {
     this.$subscription.add(
       this.manageReservationService
-        .getReservationDataById(this.reservationId, this.entityId)
+        .getReservationDataById(this.reservationId, this.outletId)
         .subscribe(
           (response) => {
             const data = new OutletForm().deserialize(response);
@@ -199,21 +197,18 @@ export class VenueReservationComponent extends BaseReservationComponent
     };
     this.$subscription.add(
       this.manageReservationService
-        .getSummaryData(this.entityId, data, config)
+        .getSummaryData(this.outletId, data, config)
         .subscribe(
           (res) => {
             this.summaryData = new SummaryData()?.deserialize(res);
-            this.userForm
-              .get('paymentMethod.totalPaidAmount')
-              .setValidators([Validators.max(this.summaryData?.totalAmount)]);
-            this.userForm
-              .get('paymentMethod.totalPaidAmount')
-              .updateValueAndValidity();
-            this.userForm
-              .get('paymentRule.deductedAmount')
-              .patchValue(this.summaryData?.totalAmount);
-            this.deductedAmount = this.summaryData?.totalAmount;
-
+            this.paymentControls.totalPaidAmount.setValidators([
+              Validators.max(this.summaryData?.totalAmount),
+              Validators.min(0),
+            ]);
+            this.paymentControls.totalPaidAmount.updateValueAndValidity();
+            this.paymentRuleControls.deductedAmount.patchValue(
+              this.summaryData?.totalAmount
+            );
             if (this.formValueChanges) {
               this.setFormDisability();
               this.formValueChanges = false;

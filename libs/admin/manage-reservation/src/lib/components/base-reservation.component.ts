@@ -12,9 +12,8 @@ import {
   HotelDetailService,
   NavRouteOptions,
 } from '@hospitality-bot/admin/shared';
-import { Subscription } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
-import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { manageReservationRoutes } from '../constants/routes';
 import { ReservationForm } from '../constants/form';
 import { JourneyState } from '../constants/reservation';
@@ -37,7 +36,6 @@ export class BaseReservationComponent {
   summaryData: SummaryData;
   formValueChanges: boolean = false;
   disabledForm = false;
-  deductedAmount = 0;
 
   pageTitle: string;
   routes: NavRouteOptions = [];
@@ -49,15 +47,14 @@ export class BaseReservationComponent {
   selectedEntity: SelectedEntity;
 
   $subscription = new Subscription();
+  cancelRequests$ = new Subject<void>();
 
   constructor(
-    protected globalFilterService: GlobalFilterService,
     protected activatedRoute: ActivatedRoute,
     protected hotelDetailService: HotelDetailService,
     protected formService: FormService
   ) {
     this.reservationId = this.activatedRoute.snapshot.paramMap.get('id');
-    this.entityId = this.globalFilterService.entityId;
     const { navRoutes, title } = manageReservationRoutes[
       this.reservationId ? 'editReservation' : 'addReservation'
     ];
@@ -137,6 +134,13 @@ export class BaseReservationComponent {
   get paymentControls() {
     return (this.userForm.get('paymentMethod') as FormGroup).controls as Record<
       keyof ReservationForm['paymentMethod'],
+      AbstractControl
+    >;
+  }
+
+  get paymentRuleControls() {
+    return (this.userForm.get('paymentRule') as FormGroup).controls as Record<
+      keyof ReservationForm['paymentRule'],
       AbstractControl
     >;
   }

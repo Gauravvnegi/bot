@@ -68,8 +68,7 @@ export class GuestInformationComponent implements OnInit {
     // Call summary data on guest details changes for company discount
     this.parentFormGroup
       .get('guestInformation.guestDetails')
-      .valueChanges.pipe(debounceTime(1000))
-      .subscribe((res) => {
+      .valueChanges.subscribe((res) => {
         if (res && this.bookingItemValidity) {
           this.getSummary.emit();
         }

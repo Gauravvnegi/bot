@@ -149,10 +149,15 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
                 );
               break;
             case 'In-house Request':
-              if (this._router.url.includes('request'))
+              if (this._router.url.includes('complaint')) {
                 this.firebaseMessagingService.newInhouseRequest.next(
                   notificationPayload
                 );
+              } else {
+                this.firebaseMessagingService.showNotificationAsSnackBar(
+                  payload
+                );
+              }
               break;
             default:
               if (this.checkForMessageRoute())

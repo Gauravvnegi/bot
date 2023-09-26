@@ -4,7 +4,7 @@
     #myBounds
     [ngStyle]="{
       width: noOfColumn * cellSize + 'px',
-      height: noOfRow * cellSize + 'px'
+      height: noOfRow * height + 'px'
     }"
     class="interactive-grid-wrapper"
   >
@@ -18,11 +18,11 @@
           *ngIf="data[row] && data[row][col]"
           ngDraggable
           ngResizable
-          [rzMinWidth]="cellSize / delimiter"
-          [rzGrid]="cellSize / delimiter"
+          [rzMinWidth]="cellSize / resizeDelimiter"
+          [rzGrid]="cellSize / resizeDelimiter"
           [position]="{
             x: colIdx * cellSize + (data[row][col]?.hasPrev ? cellSize / 2 : 0),
-            y: rowIdx * cellSize
+            y: rowIdx * height
           }"
           [gridSize]="cellSize / 2"
           [ngStyle]="{
@@ -33,7 +33,7 @@
                 colIdx: colIdx,
                 rowIdx: rowIdx
               }) + 'px',
-            height: cellSize + 'px',
+            height: height + 'px',
             padding: cellGap + 'px',
             marginLeft: '-' + outOfBoundRecord[data[row][col].id].lSpace + 'px'
           }"
@@ -69,7 +69,7 @@
           <div
             class="cell-data"
             [ngStyle]="{
-              height: cellSize - 2 * cellGap + 'px',
+              height: height - 2 * cellGap + 'px',
               borderLeft: outOfBoundRecord[data[row][col].id].hasLeftBorder
                 ? null
                 : 0,
@@ -100,7 +100,7 @@
         class="grid-cell"
         [ngStyle]="{
           width: cellSize + 'px',
-          height: cellSize + 'px'
+          height: height + 'px'
         }"
       >
         <div
@@ -110,7 +110,7 @@
           zIndex="1"
           [ngStyle]="{
             width: cellSize - 2 * cellGap + 'px',
-            height: cellSize - 2 * cellGap + 'px',
+            height: height - 2 * cellGap + 'px',
             margin: cellGap + 'px'
           }"
           (click)="
@@ -141,7 +141,7 @@
     class="grid-container spinner-wrapper"
     [ngStyle]="{
       width: noOfColumn * cellSize + 'px',
-      height: noOfRow * cellSize + 'px'
+      height: noOfRow * height + 'px'
     }"
     *ngIf="isProcessing"
   >

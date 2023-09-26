@@ -25,13 +25,14 @@ export class InteractiveGridComponent {
    */
   @Input() isProcessing = false;
 
-  cellSize: IGProps['cellSize'] = 80; //Cell Size is grid height and width including the gap
+  cellSize: IGProps['cellSize'] = 90; //Cell Size is grid height and width including the gap
   cellGap: IGProps['cellGap'] = 5; // Cell gap will decide the spaces between the grid blocks
   createNewToolTipInfo: IGProps['createNewToolTipInfo'] = 'Create New Entry';
   rowName: IGProps['rowName'];
   colName: IGProps['colName'];
   minWidth: IGProps['minWidth'] = 'half';
   resizeWidth: IGProps['resizeWidth'] = 'half';
+  gridHeight: IGProps['resizeWidth'] = 'half';
 
   /**
    * Props to show extra information
@@ -44,8 +45,16 @@ export class InteractiveGridComponent {
     }
   }
 
-  get delimiter() {
+  get resizeDelimiter() {
     return this.resizeWidth === 'half' ? 2 : 1;
+  }
+
+  get heightDelimiter() {
+    return this.gridHeight === 'half' ? 2 : 1;
+  }
+
+  get height() {
+    return this.cellSize / this.heightDelimiter;
   }
 
   /**
@@ -266,9 +275,9 @@ export class InteractiveGridComponent {
     };
 
     // Calculating new row value
-    const currentYIdx = Math.round(currentPosY / this.cellSize);
+    const currentYIdx = Math.round(currentPosY / this.height);
     const yDiff = newPosY - currentPosY; // Vertical change
-    const yDiffIdx = Math.round(yDiff / this.cellSize);
+    const yDiffIdx = Math.round(yDiff / this.height);
     const newYIdx = currentYIdx + yDiffIdx;
 
     const xDiffIdx = (newPosX - currentPosX) / this.cellSize;
@@ -317,7 +326,7 @@ export class InteractiveGridComponent {
       x:
         colIdx * this.cellSize +
         (this.data[rowValue][colValue]?.hasPrev ? this.cellSize / 2 : 0),
-      y: rowIdx * this.cellSize,
+      y: rowIdx * this.height,
     };
   }
 

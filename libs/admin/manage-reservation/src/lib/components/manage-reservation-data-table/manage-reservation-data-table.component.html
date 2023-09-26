@@ -7,9 +7,7 @@
   <div class="action-wrapper">
     <hospitality-bot-button
       label="+ Create Reservation"
-      link="/pages/efrontdesk/reservation/{{
-        manageReservationRoutes.addReservation.route
-      }}"
+      (onClick)="createReservation()"
     ></hospitality-bot-button>
     <hospitality-bot-export-list
       [additionalActionItems]="additionalActionItems"
@@ -249,9 +247,7 @@
   <hospitality-bot-empty-table
     [height]="'62vh'"
     [isLoading]="loading"
-    link="/pages/efrontdesk/reservation/{{
-      manageReservationRoutes.addReservation.route
-    }}"
+    (onClick)="createReservation()"
     [content]="{
       description:
         'No Reservation found. Tap the +Create Reservation to create & manage the reservation offered by your hotel',

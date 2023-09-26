@@ -62,7 +62,7 @@ export class CreateTaxComponent implements OnInit {
     //to handel case when entity id is coming from query params
     this.paramData = this.route.snapshot.queryParams;
     this.entityId = this.paramData?.entityId;
-    
+
     //set hotel id and brand id
     this.hotelId = this.globalFilterService.entityId;
     this.brandId = this.hotelDetailService.brandId;
@@ -101,24 +101,7 @@ export class CreateTaxComponent implements OnInit {
   }
 
   getPropertyList() {
-    const selectedHotel = this.hotelDetailService.hotels.find(
-      (item) => item.id === this.hotelId
-    );
-
-    if (!selectedHotel) {
-      this.propertyList = [];
-      return;
-    }
-
-    this.propertyList = selectedHotel.entities.map((entity) => ({
-      label: entity.name,
-      value: entity.id,
-    }));
-
-    this.propertyList.unshift({
-      label: selectedHotel.name,
-      value: selectedHotel.id,
-    });
+    this.propertyList = this.hotelDetailService.getPropertyList();
   }
 
   /**
@@ -129,18 +112,16 @@ export class CreateTaxComponent implements OnInit {
   getTax() {
     this.loading = true;
     this.$subscription.add(
-      this.taxService
-        .getTaxById(this.taxId)
-        .subscribe((res: TaxFormData) => {
-          this.entityId = res.entityId;
-          this.useForm.get('entityId').setValue(res.entityId);
-          this.useForm.get('entityId').disable();
-          this.useForm.get('country').setValue(res.country);
-          this.useForm.get('country').disable();
-          this.useForm.get('taxType').setValue(res.taxType);
-          this.useForm.get('category').setValue(res.category);
-          this.useForm.get('taxValue').setValue(res.taxValue);
-        }, this.handelError)
+      this.taxService.getTaxById(this.taxId).subscribe((res: TaxFormData) => {
+        this.entityId = res.entityId;
+        this.useForm.get('entityId').setValue(res.entityId);
+        this.useForm.get('entityId').disable();
+        this.useForm.get('country').setValue(res.country);
+        this.useForm.get('country').disable();
+        this.useForm.get('taxType').setValue(res.taxType);
+        this.useForm.get('category').setValue(res.category);
+        this.useForm.get('taxValue').setValue(res.taxValue);
+      }, this.handelError)
     );
   }
 
@@ -182,8 +163,7 @@ export class CreateTaxComponent implements OnInit {
       );
       return;
     }
-    const data = this.useForm.getRawValue() as TaxFormData
-   
+    const data = this.useForm.getRawValue() as TaxFormData;
 
     if (this.taxId) {
       this.$subscription.add(

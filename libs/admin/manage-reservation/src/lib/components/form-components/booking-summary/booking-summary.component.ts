@@ -82,7 +82,7 @@ export class BookingSummaryComponent implements OnInit {
     protected activatedRoute: ActivatedRoute,
     private modalService: ModalService,
     private _clipboard: Clipboard,
-    private formService: FormService
+    public formService: FormService
   ) {}
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -101,7 +101,8 @@ export class BookingSummaryComponent implements OnInit {
   }
 
   offerSelect(item?: any): void {
-    if (!this.reservationId) {
+    if (!this.formService.disableBtn) {
+      // Disable button when checkin completed
       if (item) {
         this.displayBookingOffer = !this.displayBookingOffer;
         this.onOfferItemSelect.emit(item);
@@ -112,7 +113,7 @@ export class BookingSummaryComponent implements OnInit {
   }
 
   applyOffer() {
-    if (!this.reservationId)
+    if (!this.formService.disableBtn)
       this.displayBookingOffer = !this.displayBookingOffer;
   }
 
@@ -131,7 +132,7 @@ export class BookingSummaryComponent implements OnInit {
     if (this.bookingType === EntitySubType.ROOM_TYPE)
       data = this.formService.mapRoomReservationData(
         this.parentFormGroup.getRawValue(),
-        id
+        id,
       );
     else
       data = this.formService.mapOutletReservationData(
@@ -222,9 +223,16 @@ export class BookingSummaryComponent implements OnInit {
             })
             .then(() => {
               // Route again to reload all form and service values.
-              this.router.navigate([
-                `/pages/efrontdesk/reservation/${manageReservationRoutes.addReservation.route}`,
-              ]);
+              this.router.navigate(
+                [
+                  `/pages/efrontdesk/reservation/${manageReservationRoutes.addReservation.route}`,
+                ],
+                {
+                  queryParams: {
+                    entityId: this.outletId ? this.outletId : this.entityId,
+                  },
+                }
+              );
             });
           this.modalService.close();
         },

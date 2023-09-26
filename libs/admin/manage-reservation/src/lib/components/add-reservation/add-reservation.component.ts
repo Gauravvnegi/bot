@@ -12,9 +12,14 @@ import { ManageReservationService } from '../../services/manage-reservation.serv
 import {
   AdminUtilityService,
   EntitySubType,
+  HotelDetailService,
   Option,
 } from '@hospitality-bot/admin/shared';
-import { roomFields, roomReservationTypes } from '../../constants/reservation';
+import {
+  JourneyState,
+  roomFields,
+  roomReservationTypes,
+} from '../../constants/reservation';
 import { FormService } from '../../services/form.service';
 import { debounceTime } from 'rxjs/operators';
 import { OccupancyDetails, ReservationSummary } from '../../types/forms.types';
@@ -46,15 +51,18 @@ export class AddReservationComponent extends BaseReservationComponent
   };
   totalPaidAmount = 0;
 
+  checkingJourneyState: JourneyState;
+
   constructor(
     private fb: FormBuilder,
     private adminUtilityService: AdminUtilityService,
     protected globalFilterService: GlobalFilterService,
     private manageReservationService: ManageReservationService,
     protected activatedRoute: ActivatedRoute,
-    private formService: FormService
+    protected formService: FormService,
+    protected hotelDetailService: HotelDetailService
   ) {
-    super(globalFilterService, activatedRoute);
+    super(globalFilterService, activatedRoute, hotelDetailService, formService);
   }
 
   ngOnInit(): void {
@@ -103,6 +111,12 @@ export class AddReservationComponent extends BaseReservationComponent
       .get('roomTypes')
       .valueChanges.pipe(debounceTime(1000))
       .subscribe((res) => {
+        const data = this.inputControls.roomInformation.get(
+          'roomTypes'
+        ) as FormGroup;
+        res = data.getRawValue();
+        // Get raw value to get disabled control values as well
+
         const roomTypeIds = res.map((item) => item.roomTypeId);
         // check if the last added room type is selected
         if (res && res[res.length - 1].roomTypeId?.length) {
@@ -167,6 +181,8 @@ export class AddReservationComponent extends BaseReservationComponent
               },
               ...formData
             } = data;
+
+            this.checkingJourneyState = data.journeyState;
 
             this.formService.sourceData.next({
               source: source,
@@ -284,14 +300,16 @@ export class AddReservationComponent extends BaseReservationComponent
             if (this.totalPaidAmount) {
               this.summaryData.totalPaidAmount = this.totalPaidAmount;
             }
-
             // Modify data to show summary for occupancy details.
             this.updateBookingItemsCounts(this.summaryData.bookingItems);
 
             // Set value and validators for payment according to the summaryData.
             this.userForm
               .get('paymentMethod.totalPaidAmount')
-              .setValidators([Validators.max(this.summaryData?.totalAmount)]);
+              .setValidators([
+                Validators.max(this.summaryData?.totalAmount),
+                Validators.min(0),
+              ]);
             this.userForm
               .get('paymentMethod.totalPaidAmount')
               .updateValueAndValidity();
@@ -303,7 +321,9 @@ export class AddReservationComponent extends BaseReservationComponent
             this.deductedAmount = this.summaryData?.totalAmount;
 
             if (this.formValueChanges) {
-              this.setFormDisability();
+              this.reservationId
+                ? this.setFormDisability(this.checkingJourneyState)
+                : this.setFormDisability;
               this.formValueChanges = false;
             }
           },

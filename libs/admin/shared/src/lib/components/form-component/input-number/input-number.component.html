@@ -1,9 +1,13 @@
 <div class="wrapper" [formGroup]="controlContainer.control">
   <hospitality-bot-input
     [controlName]="controlName"
+    class="input"
     [disabled]="isDisabled"
     [props]="{
-      tabIndex: '-1'
+      tabIndex: '-1',
+      errorMessages: {
+        min: 'Value must be greater than 1.'
+      }
     }"
   ></hospitality-bot-input>
   <div class="buttons">

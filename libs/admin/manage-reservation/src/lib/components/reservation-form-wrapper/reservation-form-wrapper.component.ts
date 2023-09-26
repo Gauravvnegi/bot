@@ -3,9 +3,8 @@ import {
   EntitySubType,
   HotelDetailService,
 } from '@hospitality-bot/admin/shared';
-import { FormService } from '../../services/form.service';
-import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { SelectedEntity } from '../../types/reservation.type';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'hospitality-bot-reservation-form-wrapper',
@@ -20,40 +19,18 @@ export class ReservationFormWrapperComponent implements OnInit {
   selectedEntity: SelectedEntity;
 
   constructor(
-    private formService: FormService,
-    private globalFilterService: GlobalFilterService,
-    private hotelDetailService: HotelDetailService
+    private hotelDetailService: HotelDetailService,
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
-    this.listenForGlobalFilters();
-    this.formService.getSelectedEntity().subscribe((value) => {
-      this.selectedEntity = value ?? this.intitalEntity;
-      this.selectedOutlet = value?.subType ?? this.initialSubType;
-    });
+    this.getSelectedEntity();
   }
 
-  listenForGlobalFilters(): void {
-    this.globalFilterService.globalFilter$.subscribe((data) => {
-      this.getSelectedOutlet(
-        data['filter'].value.property.entityName,
-        data['filter'].value.property.brandName
-      );
-    });
-  }
-
-  getSelectedOutlet(branchId: string, brandId: string) {
-    const brand = this.hotelDetailService.brands.find(
-      (brand) => brand.id === brandId
-    );
-
-    const branch = brand.entities.find((branch) => branch.id === branchId);
-    this.initialSubType = branch.type ? branch.type : EntitySubType.ROOM_TYPE;
-    this.intitalEntity = {
-      label: branch.name,
-      type: branch.category,
-      subType: branch.type,
-      id: branch.id,
-    };
+  getSelectedEntity() {
+    const outletId = this.route.snapshot.queryParams.entityId;
+    const properties = this.hotelDetailService.getPropertyList();
+    const selectedOutlet = properties.filter((item) => item.value === outletId);
+    this.selectedOutlet = selectedOutlet[0].type;
   }
 }

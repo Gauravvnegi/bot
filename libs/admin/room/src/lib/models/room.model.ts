@@ -52,8 +52,13 @@ export class SingleRoom {
   statusDetailsList?: StatusDetails[];
   deserialize(input: SingleRoomData) {
     this.id = input.id ?? '';
-    this.roomNumber = input.rooms[0].roomNo ?? null;
-    this.floorNumber = input.rooms[0].floorNo ?? '';
+    if (this.id) {
+      this.roomNumber = input.rooms[0].roomNo ?? null;
+      this.floorNumber = input.rooms[0].floorNo ?? '';
+    } else {
+      this.roomNumber = input.roomNo ?? null;
+      this.floorNumber = input.floorNo ?? '';
+    }
     // this.status = input.status;
     this.currency = input.currency ?? '';
     this.price = input.price ?? null;
@@ -134,6 +139,7 @@ export class RoomTypeForm {
   id?: string;
   allRatePlans?: ReservationRatePlan[];
   isBaseRoomType?: boolean;
+  shortDescription?: string;
 
   deserialize(input: RoomTypeResponse) {
     this.id = input?.id;
@@ -149,6 +155,7 @@ export class RoomTypeForm {
     this.maxAdult = input.occupancyDetails.maxAdult;
     this.area = input.area;
     this.isBaseRoomType = input?.isBaseRoomType ?? false;
+    this.shortDescription = input?.shortDescription ?? '';
 
     const defaultRatePlan = input?.ratePlans.filter((item) => item.isBase);
     if (defaultRatePlan.length) {

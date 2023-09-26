@@ -27,7 +27,7 @@ export class AddDiscountComponent implements OnInit {
   totalDiscount: number;
   discountForm: FormGroup;
   discountOptions: Option[] = [
-    { label: 'Flat', value: 'FLAT' },
+    { label: 'Flat', value: 'NUMBER' },
     { label: '%Off', value: 'PERCENTAGE' },
   ];
 

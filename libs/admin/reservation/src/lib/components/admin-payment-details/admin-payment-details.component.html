@@ -86,12 +86,9 @@
         </mat-expansion-panel-header>
         <table mat-table [dataSource]="dataSource">
           <ng-container matColumnDef="label">
-            <th mat-header-cell *matHeaderCellDef>Description</th>
+            <th mat-header-cell *matHeaderCellDef>Room Type</th>
             <td mat-cell *matCellDef="let element">
               {{ element.label }}
-              <p class="adminPayDesc">
-                {{ element.description }}
-              </p>
             </td>
           </ng-container>
 
@@ -296,7 +293,10 @@
     <hr class="data-seperator" /> -->
     <ng-container *ngFor="let transaction of transactionHistory">
       <ng-container
-        *ngIf="detailsData.paymentDetails.transactionHistory.length > 0 && transaction.amount"
+        *ngIf="
+          detailsData.paymentDetails.transactionHistory.length > 0 &&
+          transaction.amount
+        "
       >
         <hr class="data-seperator" />
         <div class="payment-header">

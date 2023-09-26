@@ -51,3 +51,11 @@ button[disabled] {
   opacity: 1;
   cursor: not-allowed;
 }
+
+:host ::ng-deep .input {
+  .p-error {
+    font-size: 0.65em;
+    width: 100px;
+    bottom: -1.4em;
+  }
+}

@@ -13,6 +13,7 @@ import {
   Option,
   EntityType,
   EntitySubType,
+  HotelDetailService,
 } from '@hospitality-bot/admin/shared';
 import {
   editModeStatusOptions,
@@ -59,9 +60,10 @@ export class VenueReservationComponent extends BaseReservationComponent
     protected globalFilterService: GlobalFilterService,
     private manageReservationService: ManageReservationService,
     protected activatedRoute: ActivatedRoute,
-    private formService: FormService
+    protected formService: FormService,
+    protected hotelDetailService: HotelDetailService,
   ) {
-    super(globalFilterService, activatedRoute);
+    super(globalFilterService, activatedRoute, hotelDetailService, formService);
   }
 
   ngOnInit(): void {

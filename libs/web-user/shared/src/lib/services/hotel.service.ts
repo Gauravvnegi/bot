@@ -35,7 +35,6 @@ export class HotelService extends ApiService {
   }
 
   set hotelConfig(hotelConfig) {
-    debugger;
     this._hotelConfig = hotelConfig;
   }
 

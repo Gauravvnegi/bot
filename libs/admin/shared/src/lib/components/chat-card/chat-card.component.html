@@ -82,15 +82,21 @@
   </div>
 
   <div
-    *ngIf="cardType === 'feedback'"
+    *ngIf="cardType === 'feedback' || cardType === 'message'"
     class="card-wrapper_time"
     [ngClass]="cardType === 'feedback' ? 'feedback_time' : ''"
   >
     {{ time }}
-    <div class="card-wrapper_time_unread-count" *ngIf="unReadCount">
+    <div
+      class="card-wrapper_time_unread-count"
+      *ngIf="unReadCount && cardType === 'message'"
+    >
       {{ unReadCount }}
     </div>
-    <div class="card-wrapper_time_serviceTag" *ngIf="cardType === 'feedback'">
+    <div
+      class="card-wrapper_time_serviceTag"
+      *ngIf="serviceTag && cardType === 'feedback'"
+    >
       {{ serviceTag }}
     </div>
   </div>

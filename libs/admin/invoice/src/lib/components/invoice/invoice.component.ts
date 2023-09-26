@@ -54,9 +54,7 @@ import {
 } from '../../types/forms.types';
 import { AddDiscountComponent } from '../add-discount/add-discount.component';
 import { AddRefundComponent } from '../add-refund/add-refund.component';
-import {
-  MenuItemListResponse,
-} from 'libs/admin/all-outlets/src/lib/types/outlet';
+import { MenuItemListResponse } from 'libs/admin/all-outlets/src/lib/types/outlet';
 
 @Component({
   selector: 'hospitality-bot-invoice',

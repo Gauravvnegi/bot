@@ -46,7 +46,7 @@ export class MembersListComponent implements OnInit {
       this.type === 'COMPANY' ? 'Select Company' : 'Select Agent';
     this.createPrompt = this.type === 'COMPANY' ? '+ Add New Company' : '';
   }
-  
+
   /**
    * @function getMembers
    * @description get Members from server
@@ -113,7 +113,7 @@ export class MembersListComponent implements OnInit {
           this.companyService
             .searchCompany({ params: `?key=${text}&type=${this.type}` })
             .subscribe((res) => {
-              const data = AgentModel.getCompanyList(res['records']);
+              const data = AgentModel.getCompanyList(res);
               this.membersList = data;
               this.loadingMembers = false;
             })

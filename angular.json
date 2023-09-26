@@ -2423,6 +2423,38 @@
           }
         }
       }
+    },
+    "admin-housekeeping": {
+      "projectType": "library",
+      "root": "libs/admin/housekeeping",
+      "sourceRoot": "libs/admin/housekeeping/src",
+      "prefix": "hospitality-bot",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/admin/housekeeping/tsconfig.lib.json",
+              "libs/admin/housekeeping/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/admin/housekeeping/**/*"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/admin/housekeeping/jest.config.js",
+            "tsConfig": "libs/admin/housekeeping/tsconfig.spec.json",
+            "passWithNoTests": true,
+            "setupFile": "libs/admin/housekeeping/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "style": "scss"
+        }
+      }
     }
   },
   "cli": {

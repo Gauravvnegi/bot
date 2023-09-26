@@ -146,10 +146,11 @@ export class CreateServiceComponent implements OnInit {
       currency: ['INR'],
       parentId: ['', Validators.required],
       entityId: [''],
-      images: ['', Validators.required],
+      images: [[], Validators.required],
       name: ['', Validators.required],
       serviceType: [ServiceTypeOptionValue.PAID],
       rate: [''],
+      description: [''],
 
       unit: ['', Validators.required],
       enableVisibility: [[], Validators.required],
@@ -168,12 +169,11 @@ export class CreateServiceComponent implements OnInit {
             params: `?type=${LibraryItem.service}`,
           })
           .subscribe((res) => {
-            const { type, images, taxes, enableVisibility, ...rest } = res;
+            const { type, taxes, enableVisibility, ...rest } = res;
             this.isComplimentaryService = type === 'Complimentary';
             this.useForm.patchValue({
               serviceType: type,
               ...rest,
-              images: images[0]?.url,
               taxIds: taxes.map((item) => item.id),
             });
             this.useForm.get('enableVisibility').setValue(enableVisibility);
@@ -275,8 +275,7 @@ export class CreateServiceComponent implements OnInit {
       return;
     }
 
-    const { images, ...rest } = this.useForm.getRawValue() as ServiceFormData;
-    const data = { images: [{ url: images, isFeatured: true }], ...rest };
+    const data = this.useForm.getRawValue() as ServiceFormData;
     this.loading = true;
     if (this.serviceId) {
       this.$subscription.add(

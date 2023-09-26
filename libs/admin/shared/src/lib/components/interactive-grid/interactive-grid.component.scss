@@ -41,13 +41,31 @@
 }
 
 .cell-data {
-  background-color: #fdecec;
-  border: 1px solid #d91615;
-  border-radius: 4px;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: move;
+  border-radius: 4px;
+  border-width: 1px;
+  border-style: solid;
+
+  background-color: #9fb3cb;
+  border-color: #1570d9;
+
+  &.active-cell {
+    background-color: #6191c7;
+    border-color: #1570d9;
+  }
+
+  &.failed-cell {
+    background-color: #fdecec;
+    border-color: #d91615;
+  }
+
+  &.draft-cell {
+    border-color: #3b3b3b;
+    background-color: #d5d5d5;
+  }
 }
 
 .non-drag-grid {

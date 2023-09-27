@@ -217,9 +217,7 @@ export class ReservationCalendarViewComponent implements OnInit {
       event.rowValue
     );
 
-    const selectedRoomType = this.roomTypes.find((roomType) => {
-      return roomType.rooms.some((room) => room.roomNumber === event.rowValue);
-    });
+    const selectedRoomType = this.getSelectedRoomType(event.rowValue);
 
     selectedRoomType.loading = true;
     this.manageReservationService
@@ -238,11 +236,15 @@ export class ReservationCalendarViewComponent implements OnInit {
   }
 
   handleCreate(event: IGCreateEvent) {
-    const gridData = btoa(JSON.stringify(event));
+    const gridData = {
+      date: event.colValue,
+      room: event.rowValue,
+      roomTypeId: this.getSelectedRoomType(event.rowValue).roomTypeId,
+    };
     this.router.navigate([`/pages/efrontdesk/reservation/add-reservation`], {
       queryParams: {
         entityId: this.entityId,
-        data: gridData,
+        data: btoa(JSON.stringify(gridData)),
       },
     });
     console.log(event, 'onCreate event');
@@ -250,6 +252,13 @@ export class ReservationCalendarViewComponent implements OnInit {
 
   handleEdit(event: IGEditEvent) {
     console.log(event, 'onEdit event');
+  }
+
+  getSelectedRoomType(room: IGRow) {
+    const selectedRoomType = this.roomTypes.find((roomType) => {
+      return roomType.rooms.some((room) => room.roomNumber === room.roomNumber);
+    });
+    return selectedRoomType;
   }
 
   getRooms(rooms: IGRoom[]) {
@@ -271,5 +280,11 @@ type IGRoomType = {
 
 type IGRoom = {
   roomNumber: IGRow;
-  feature?;
+  feature?: Features[];
+};
+
+export type CalendarViewData = {
+  date: number;
+  room: string;
+  roomTypeId: string;
 };

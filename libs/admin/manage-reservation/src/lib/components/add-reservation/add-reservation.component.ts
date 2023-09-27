@@ -30,6 +30,7 @@ import { BaseReservationComponent } from '../base-reservation.component';
 import { ReservationType } from '../../constants/reservation-table';
 import { convertToTitleCase } from 'libs/admin/shared/src/lib/utils/valueFormatter';
 import { Subject } from 'rxjs';
+import { CalendarViewData } from 'libs/admin/dashboard/src/lib/components/reservation-calendar-view/reservation-calendar-view.component';
 
 @Component({
   selector: 'hospitality-bot-add-reservation',
@@ -49,7 +50,7 @@ export class AddReservationComponent extends BaseReservationComponent
     childCount: 0,
     roomCount: 0,
   };
-
+  paramsData: CalendarViewData;
   checkinJourneyState: JourneyState;
   cancelOfferRequests$ = new Subject<void>();
 
@@ -67,18 +68,29 @@ export class AddReservationComponent extends BaseReservationComponent
   ngOnInit(): void {
     this.initForm();
     this.initDetails();
-    this.listenRouteData();
     if (this.reservationId) this.getReservationDetails();
     this.initFormData();
+    this.listenRouteData();
   }
 
   listenRouteData() {
-    this.activatedRoute.queryParams.subscribe((queryParams) => {
-      if (queryParams.data) {
-        const data = queryParams.data;
-        const decodedData = JSON.parse(atob(data));
-      }
+    this.activatedRoute.queryParams
+      .pipe(debounceTime(100))
+      .subscribe((queryParams) => {
+        if (queryParams.data) {
+          const data = queryParams.data;
+          const paramsData = JSON.parse(atob(data));
+          this.initParamsData(paramsData);
+        }
+      });
+  }
+
+  initParamsData(paramsData: CalendarViewData) {
+    this.inputControls.reservationInformation.patchValue({
+      from: paramsData.date,
+      reservationType: ReservationType.CONFIRMED,
     });
+    this.paramsData = paramsData;
   }
 
   initDetails() {

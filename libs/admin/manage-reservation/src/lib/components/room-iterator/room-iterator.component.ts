@@ -28,9 +28,9 @@ import { ManageReservationService } from '../../services/manage-reservation.serv
 import { RoomTypeOptionList } from '../../models/reservations.model';
 import { RoomTypeForm } from 'libs/admin/room/src/lib/models/room.model';
 import { ReservationForm, RoomTypes } from '../../constants/form';
-import { RoomsByRoomType } from 'libs/admin/room/src/lib/types/service-response';
 import { IteratorField } from 'libs/admin/shared/src/lib/types/fields.type';
 import { FormService } from '../../services/form.service';
+import { CalendarViewData } from 'libs/admin/dashboard/src/lib/components/reservation-calendar-view/reservation-calendar-view.component';
 @Component({
   selector: 'hospitality-bot-room-iterator',
   templateUrl: './room-iterator.component.html',
@@ -44,6 +44,7 @@ export class RoomIteratorComponent extends IteratorComponent
   @Output() listenChanges = new EventEmitter();
 
   @Input() reservationId: string;
+  @Input() paramsData: CalendarViewData;
   fields = roomFields;
 
   entityId: string;
@@ -79,6 +80,8 @@ export class RoomIteratorComponent extends IteratorComponent
 
   ngOnChanges(changes: SimpleChanges): void {
     const itemValues = changes?.itemValues?.currentValue;
+    this.selectedRoomNumbers = [changes?.paramsData?.currentValue?.room];
+
     if (itemValues?.length) {
       if (itemValues.length > 1) {
         // Create new form fields for each item in the array
@@ -410,6 +413,10 @@ export class RoomIteratorComponent extends IteratorComponent
           },
           () => {
             this.loadingRoomTypes[index ?? 0] = false;
+            if (this.paramsData.roomTypeId)
+              this.roomControls[0]
+                .get('roomTypeId')
+                .patchValue(this.paramsData.roomTypeId);
           }
         )
     );

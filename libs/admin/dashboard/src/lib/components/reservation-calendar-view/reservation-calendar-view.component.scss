@@ -37,7 +37,7 @@ $border-color: rgba(112, 112, 112, 0.35);
 
 .left {
   min-width: 200px;
-  flex-basis: 30%;
+  flex-basis: 25%;
 
   &__main {
     width: 100%;
@@ -45,7 +45,7 @@ $border-color: rgba(112, 112, 112, 0.35);
 }
 
 .right {
-  flex-basis: 70%;
+  flex-basis: 75%;
   // overflow: auto;
   overflow: hidden; /* Hides the scrollbar */
 
@@ -209,7 +209,7 @@ $border-color: rgba(112, 112, 112, 0.35);
 .cell {
   width: 65px;
   min-width: 65px;
-  max-width: 80px;
+  max-width: 90px;
   height: 100%;
   // max-width: 65px;
   flex-grow: 1;

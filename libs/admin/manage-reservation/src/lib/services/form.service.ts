@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { distinctUntilChanged } from 'rxjs/operators';
 import { ReservationTableValue } from '../constants/reservation-table';
 import { SelectedEntity } from '../types/reservation.type';
@@ -24,6 +24,8 @@ export class FormService {
 
   disableBtn: boolean = false;
 
+  getSummary = new Subject<void>();
+  
   guestInformation: BehaviorSubject<GuestInfo> = new BehaviorSubject<GuestInfo>(
     null
   );

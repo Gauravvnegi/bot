@@ -100,7 +100,7 @@ export class AddReservationComponent extends BaseReservationComponent
         reservationType: ['', Validators.required],
         source: ['', Validators.required],
         sourceName: ['', [Validators.required, Validators.maxLength(60)]],
-        marketSegment: [''],
+        marketSegment: ['', Validators.required],
       }),
       offerId: [''],
       instructions: this.fb.group({

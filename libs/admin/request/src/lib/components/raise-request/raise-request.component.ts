@@ -1,10 +1,13 @@
 import {
   Component,
+  ComponentFactoryResolver,
   EventEmitter,
   Input,
   OnDestroy,
   OnInit,
   Output,
+  ViewChild,
+  ViewContainerRef,
 } from '@angular/core';
 import {
   FormBuilder,
@@ -49,7 +52,10 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
   userList: Option[] = [];
   requestData: any;
   departmentList: Option[] = [];
+  sidebarVisible = false;
   @Input() isSideBar = false;
+  @ViewChild('sidebarSlide', { read: ViewContainerRef })
+  sidebarSlide: ViewContainerRef;
   constructor(
     private fb: FormBuilder,
     private globalFilterService: GlobalFilterService,
@@ -60,7 +66,8 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
     private router: Router,
     private route: ActivatedRoute,
     private _modalService: ModalService,
-    private _managePermissionService: ManagePermissionService
+    private _managePermissionService: ManagePermissionService,
+    private resolver: ComponentFactoryResolver
   ) {}
 
   ngOnInit(): void {
@@ -278,22 +285,32 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
 
   create() {
     //to open add new item pop up
-
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.disableClose = true;
-    dialogConfig.width = '500px';
-    dialogConfig.height = '90vh';
-
-    const addItemCompRef = this._modalService.openDialog(
-      AddItemComponent,
-      dialogConfig
-    );
-
-    this.$subscription.add(
-      addItemCompRef.componentInstance.onClose.subscribe(() => {
-        addItemCompRef.close();
-      })
-    );
+    if (this.isSideBar) {
+      this.sidebarVisible = true;
+      const factory = this.resolver.resolveComponentFactory(AddItemComponent);
+      this.sidebarSlide.clear();
+      const componentRef = this.sidebarSlide.createComponent(factory);
+      this.$subscription.add(
+        componentRef.instance.onClose.subscribe((res) => {
+          this.sidebarVisible = false;
+        })
+      );
+    } else {
+      // In-future pop-up will be remove from everywhere
+      const dialogConfig = new MatDialogConfig();
+      dialogConfig.disableClose = true;
+      dialogConfig.width = '500px';
+      dialogConfig.height = '90vh';
+      const addItemCompRef = this._modalService.openDialog(
+        AddItemComponent,
+        dialogConfig
+      );
+      this.$subscription.add(
+        addItemCompRef.componentInstance.onClose.subscribe(() => {
+          addItemCompRef.close();
+        })
+      );
+    }
   }
 
   ngOnDestroy(): void {

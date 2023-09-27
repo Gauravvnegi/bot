@@ -7,7 +7,6 @@
         [reservationTypes]="reservationTypes"
         [bookingType]="bookingType"
         [expandAccordion]="expandAccordion"
-        (getSummary)="getSummaryData()"
         [reservationId]="reservationId"
       ></hospitality-bot-booking-info>
       <p-accordionTab
@@ -16,7 +15,6 @@
         header="Room Information"
       >
         <hospitality-bot-room-iterator
-          (refreshData)="getSummaryData()"
           (listenChanges)="listenForFormChanges()"
           [itemValues]="roomTypeValues"
           [reservationId]="reservationId"
@@ -25,14 +23,20 @@
       </p-accordionTab>
       <hospitality-bot-guest-information
         [reservationId]="reservationId"
-        (getSummary)="getSummaryData()"
-        [bookingItemValidity]="roomInfoControls.valid"
       ></hospitality-bot-guest-information>
       <!-- <hospitality-bot-billing-address></hospitality-bot-billing-address> -->
-      <hospitality-bot-instructions></hospitality-bot-instructions>
-      <hospitality-bot-payment-rule
-        [deductedAmount]="deductedAmount"
-      ></hospitality-bot-payment-rule>
+      <p-accordionTab header="Special Instructions">
+        <div class="form-block" formGroupName="instructions">
+          <hospitality-bot-text-area
+            class="full-width"
+            controlName="specialInstructions"
+            [props]="{
+              placeholder: 'Enter'
+            }"
+          ></hospitality-bot-text-area>
+        </div>
+      </p-accordionTab>
+      <hospitality-bot-payment-rule></hospitality-bot-payment-rule>
       <hospitality-bot-payment-method></hospitality-bot-payment-method>
     </p-accordion>
     <div class="bk-summary">

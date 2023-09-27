@@ -1,5 +1,13 @@
 import { animate, style, transition, trigger } from '@angular/animations';
-import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
+import {
+  Component,
+  HostListener,
+  OnDestroy,
+  OnInit,
+  ComponentFactoryResolver,
+  ViewContainerRef,
+  ViewChild,
+} from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ConfigService, UserService } from '@hospitality-bot/admin/shared';
@@ -18,6 +26,14 @@ import { NotificationService } from '../../../services/notification.service';
 import { ProgressSpinnerService } from '../../../services/progress-spinner.service';
 import { SubscriptionPlanService } from '../../../services/subscription-plan.service';
 import { NavigationEnd } from '@angular/router';
+import { MenuItem } from 'primeng/api';
+import { manageReservationRoutes } from 'libs/admin/manage-reservation/src/lib/constants/routes';
+import { RaiseRequestComponent } from 'libs/admin/request/src/lib/components/raise-request/raise-request.component';
+import {
+  navRoute,
+  manageGuestRoutes,
+} from 'libs/admin/guests/src/lib/constant/route';
+import { SettingsMenuComponent } from '../../../../../../../../../../../libs/admin/settings/src/lib/components/settings-menu/settings-menu.component';
 
 @Component({
   selector: 'admin-layout-one',
@@ -36,6 +52,7 @@ import { NavigationEnd } from '@angular/router';
   ],
 })
 export class LayoutOneComponent implements OnInit, OnDestroy {
+  readonly moduleNames = ModuleNames;
   backgroundColor: string;
   background_image: string;
   menuItem: any;
@@ -71,6 +88,11 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
   private $firebaseMessagingSubscription = new Subscription();
   isGlobalSearchVisible = true;
   isSitesAvailable: boolean;
+  bookingOptions: MenuItem[];
+  sidebarVisible: boolean;
+  @ViewChild('sidebarSlide', { read: ViewContainerRef })
+  sidebarSlide: ViewContainerRef;
+  sidebarType: 'complaint' | 'settings' = 'complaint';
 
   constructor(
     private _router: Router,
@@ -85,7 +107,9 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
     private subscriptionPlanService: SubscriptionPlanService,
     private loadingService: LoadingService,
     private notificationService: NotificationService,
-    private configService: ConfigService
+    private configService: ConfigService,
+    private hotelDetailService: HotelDetailService,
+    private resolver: ComponentFactoryResolver
   ) {
     this.initFG();
   }
@@ -110,6 +134,7 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
         this.scrollToTop();
       }
     });
+    this.initBookingOption();
   }
 
   scrollToTop() {
@@ -365,6 +390,86 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
     this.notificationService
       .getUnreadCount(this._userService.getLoggedInUserId())
       .subscribe((response) => (this.unreadCount = response?.unreadCount));
+  }
+
+  initBookingOption() {
+    const propertyList = this.hotelDetailService.getPropertyList();
+    this.bookingOptions = [
+      this.checkModuleSubscription(ModuleNames.ADD_RESERVATION)
+        ? {
+            label: 'New Booking',
+            icon: 'pi pi-calendar',
+            ...(!!propertyList.length
+              ? {
+                  items: propertyList.map((item) => ({
+                    label: item.label,
+                    command: () => {
+                      this.openNewWindow(
+                        `/pages/efrontdesk/reservation/${manageReservationRoutes.addReservation.route}?entityId=${item.value}`
+                      );
+                    },
+                  })),
+                }
+              : {
+                  command: () =>
+                    this.openNewWindow(`/pages/efrontdesk/reservation`),
+                }),
+          }
+        : null,
+      this.checkModuleSubscription(ModuleNames.GUESTS)
+        ? {
+            label: 'New Guest',
+            icon: 'pi pi-user-plus',
+            command: () =>
+              this.openNewWindow(
+                `${navRoute.guest.link}/${manageGuestRoutes.addGuest.route}`
+              ),
+          }
+        : null,
+      this.checkModuleSubscription(ModuleNames.REQUEST)
+        ? {
+            label: 'New Complaint',
+            icon: 'pi pi-exclamation-circle',
+            command: () => {
+              this.sidebarVisible = true;
+              this.sidebarType = 'complaint';
+              const factory = this.resolver.resolveComponentFactory(
+                RaiseRequestComponent
+              );
+              this.sidebarSlide.clear();
+              const componentRef = this.sidebarSlide.createComponent(factory);
+              componentRef.instance.isSideBar = true;
+              componentRef.instance.onRaiseRequestClose.subscribe((res) => {
+                this.sidebarVisible = false;
+              });
+            },
+          }
+        : null,
+    ].filter((item) => item);
+  }
+
+  openNewWindow(url: string) {
+    window.open(url);
+  }
+
+  openSettings() {
+    this.sidebarVisible = true;
+    const factory = this.resolver.resolveComponentFactory(
+      SettingsMenuComponent
+    );
+    this.sidebarSlide.clear();
+    this.sidebarType = 'settings';
+    const componentRef = this.sidebarSlide.createComponent(factory);
+    componentRef.instance.isSideBar = true;
+    componentRef.instance.closeEvent.subscribe((res) => {
+      this.sidebarVisible = false;
+    });
+  }
+
+  checkModuleSubscription(module) {
+    return this.subscriptionPlanService.checkModuleSubscription(
+      ModuleNames.MEMBERS
+    );
   }
 
   ngOnDestroy() {

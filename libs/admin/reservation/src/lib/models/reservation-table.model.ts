@@ -19,12 +19,7 @@ export class ReservationTable implements IDeserializable {
       new Reservation().deserialize(record, timezone)
     );
     this.entityStateCounts = input?.entityStateCounts;
-    const entityType = input?.entityTypeCounts;
-    this.entityTypeCounts = {
-      [TableValue.inHouse]: entityType[TableValue.inHouse],
-      [TableValue.arrival]: entityType[TableValue.arrival],
-      [TableValue.departure]: entityType[TableValue.departure],
-    };
+    this.entityTypeCounts = input?.entityTypeCounts;
     this.totalRecord = input?.total;
     return this;
   }

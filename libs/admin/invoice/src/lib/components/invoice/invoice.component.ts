@@ -106,6 +106,7 @@ export class InvoiceComponent implements OnInit {
   focusedDescriptionId: string;
 
   loadingData = false;
+  isInitialized = false;
 
   /**Table Variable */
   selectedRows = [];
@@ -245,6 +246,7 @@ export class InvoiceComponent implements OnInit {
           this.invoicePrepareRequest = res.invoicePrepareRequest;
           this.pmsBooking = res.pmsBooking;
           if (this.pmsBooking) this.disableInvoice();
+          this.isInitialized = true;
         })
     );
 

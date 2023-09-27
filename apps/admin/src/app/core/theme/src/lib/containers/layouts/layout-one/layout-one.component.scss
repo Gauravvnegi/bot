@@ -390,22 +390,46 @@
   }
 }
 
+@mixin sidebarTopBorder() {
+  border-top-left-radius: 10px;
+}
+
+@mixin sidebar-design($width) {
+  @include sidebarTopBorder;
+  margin-top: 4px;
+  width: $width;
+}
+
 :host ::ng-deep {
   .complaint {
     .body {
       height: 82vh;
     }
     .p-sidebar-right {
-      width: 40rem;
+      @include sidebar-design(40rem);
+    }
+    .header {
+      @include sidebarTopBorder;
     }
   }
 
   .settings {
     .p-sidebar-right {
-      width: 40rem;
+      @include sidebar-design(33rem);
+    }
+    .heading {
+      padding: 15px 27px;
+      font-size: 19px;
     }
     .main {
       margin-top: 0;
+      border-top: 2px solid rgba(112, 112, 112, 0.25);
+      border-radius: 0;
+      padding-top: 10px;
+      .setting {
+        width: 237px;
+        zoom: 0.9;
+      }
     }
     .p-sidebar-close {
       margin-top: 15px;

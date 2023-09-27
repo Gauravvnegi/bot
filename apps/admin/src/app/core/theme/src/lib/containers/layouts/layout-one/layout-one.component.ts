@@ -52,6 +52,7 @@ import { SettingsMenuComponent } from '../../../../../../../../../../../libs/adm
   ],
 })
 export class LayoutOneComponent implements OnInit, OnDestroy {
+  readonly moduleNames = ModuleNames;
   backgroundColor: string;
   background_image: string;
   menuItem: any;
@@ -403,13 +404,15 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
                   items: propertyList.map((item) => ({
                     label: item.label,
                     command: () => {
-                      const url = `/pages/efrontdesk/reservation/${manageReservationRoutes.addReservation.route}?entityId=${item.value}`;
-                      window.open(url);
+                      this.openNewWindow(
+                        `/pages/efrontdesk/reservation/${manageReservationRoutes.addReservation.route}?entityId=${item.value}`
+                      );
                     },
                   })),
                 }
               : {
-                  command: () => window.open(`/pages/efrontdesk/reservation`),
+                  command: () =>
+                    this.openNewWindow(`/pages/efrontdesk/reservation`),
                 }),
           }
         : null,
@@ -418,7 +421,7 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
             label: 'New Guest',
             icon: 'pi pi-user-plus',
             command: () =>
-              window.open(
+              this.openNewWindow(
                 `${navRoute.guest.link}/${manageGuestRoutes.addGuest.route}`
               ),
           }
@@ -445,6 +448,10 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
     ].filter((item) => item);
   }
 
+  openNewWindow(url: string) {
+    window.open(url);
+  }
+
   openSettings() {
     this.sidebarVisible = true;
     const factory = this.resolver.resolveComponentFactory(
@@ -454,6 +461,9 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
     this.sidebarType = 'settings';
     const componentRef = this.sidebarSlide.createComponent(factory);
     componentRef.instance.isSideBar = true;
+    componentRef.instance.closeEvent.subscribe((res) => {
+      this.sidebarVisible = false;
+    });
   }
 
   checkModuleSubscription(module) {

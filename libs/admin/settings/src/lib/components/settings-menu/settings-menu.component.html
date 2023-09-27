@@ -1,5 +1,5 @@
 <div class="wrapper">
-  <div class="heading" [ngStyle]="isSideBar && { 'margin-left': '50px' }">
+  <div class="heading">
     Settings
   </div>
   <div class="main">
@@ -8,7 +8,7 @@
         *ngIf="setting.isActive"
         class="setting"
         [ngClass]="{ setting__disabled: setting.isDisabled }"
-        (click)="selectSetting(setting.name, setting.isDisabled)"
+        (click)="selectSetting(setting.name, setting.isDisabled); close()"
       >
         <div class="setting__header">
           <div

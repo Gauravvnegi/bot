@@ -101,11 +101,36 @@
           </div>
         </div>
         <div class="options2">
+          <div
+            *ngIf="checkModuleSubscription(moduleNames.LIVE_MESSAGING)"
+            class="header--button quick-action"
+            (click)="openNewWindow('/pages/freddie/messages')"
+          >
+            <img
+              class="filter-icon"
+              src="assets/svg/Chats.svg"
+              alt="chats"
+              title="Chats"
+            />
+          </div>
           <div class="header--button quick-action">
+            <img
+              class="filter-icon"
+              src="assets/svg/Arrival.svg"
+              alt="arrival"
+              title="Arrival"
+            />
+          </div>
+          <div
+            *ngIf="checkModuleSubscription(moduleNames.ADD_RESERVATION)"
+            class="header--button quick-action"
+            (click)="openNewWindow('/pages/efrontdesk/reservation')"
+          >
             <img
               class="filter-icon"
               src="assets/svg/calendar-dark.svg"
               alt="calendar"
+              title="Calender Reservation"
             />
           </div>
           <div class="header--button quick-action" (click)="openSettings()">
@@ -126,6 +151,7 @@
                   class="filter-icon"
                   src="assets/svg/notification-bell.svg"
                   alt="notification"
+                  title="Notification"
                 />
                 <div
                   class="notification-count"

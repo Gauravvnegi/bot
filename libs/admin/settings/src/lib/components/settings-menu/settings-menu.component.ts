@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import {
   SettingsMenuItem,
@@ -15,6 +15,7 @@ export class SettingsMenuComponent implements OnInit {
   settings: SettingsMenuItem[];
   isImageLoaded = false;
   isSideBar = false;
+  @Output() closeEvent = new EventEmitter(false);
 
   constructor(
     private router: Router,
@@ -37,6 +38,10 @@ export class SettingsMenuComponent implements OnInit {
         this.router.navigate([`/pages/settings/${routeUrl[settingName]}`]);
         break;
     }
+  }
+
+  close() {
+    this.closeEvent.emit(false);
   }
 
   onImageLoad() {

@@ -67,8 +67,18 @@ export class AddReservationComponent extends BaseReservationComponent
   ngOnInit(): void {
     this.initForm();
     this.initDetails();
+    this.listenRouteData();
     if (this.reservationId) this.getReservationDetails();
     this.initFormData();
+  }
+
+  listenRouteData() {
+    this.activatedRoute.queryParams.subscribe((queryParams) => {
+      if (queryParams.data) {
+        const data = queryParams.data;
+        const decodedData = JSON.parse(atob(data));
+      }
+    });
   }
 
   initDetails() {

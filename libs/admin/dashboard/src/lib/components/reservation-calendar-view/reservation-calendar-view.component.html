@@ -1,5 +1,5 @@
 <div class="main-wrapper">
-  <div class="inventory-form" *ngIf="!!useForm; else loader">
+  <div class="inventory-form" *ngIf="!!useForm && roomsLoaded; else loader">
     <div class="wrapper">
       <!-- LEFT SECTION -->
       <div class="left">
@@ -53,17 +53,17 @@
                     </div>
                   </div>
                   <ng-container
-                    *ngFor="
-                      let roomNumber of roomType.roomNumbers;
-                      let ratePlanIdx = index
-                    "
+                    *ngFor="let room of roomType.rooms; let ratePlanIdx = index"
                   >
                     <div class="input-content-section left-main-cell">
                       <div class="left-main-cell__left">
                         <div class="room-type">
                           <div class="room-type__subtitle">
-                            {{ roomNumber }}
+                            {{ room.roomNumber }}
                           </div>
+                          <!-- <div class="room-features">
+                            {{ getFeatureImage(room.feature) }}
+                          </div> -->
                         </div>
                       </div>
                     </div>
@@ -130,7 +130,7 @@
                       createNewToolTipInfo: 'Create New Reservation'
                     }"
                     [gridData]="{
-                      rows: roomType.roomNumbers,
+                      rows: getRooms(roomType.rooms),
                       columns: gridCols,
                       values: roomType?.data ? roomType.data : []
                     }"

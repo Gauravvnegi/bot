@@ -119,8 +119,8 @@ import { StepsModule } from 'primeng/steps';
 import { FromToDateComponent } from './components/from-to-date/from-to-date.component';
 import { TimerComponent } from './components/timer/timer.component';
 import { SidebarModule } from 'primeng/sidebar';
-
-
+import { TieredMenuModule } from 'primeng/tieredmenu';
+import { TieredMenuButtonComponent } from './components/tiered-menu-button/tiered-menu-button.component';
 
 @NgModule({
   imports: [
@@ -152,6 +152,7 @@ import { SidebarModule } from 'primeng/sidebar';
     InputNumberModule,
     QRCodeModule,
     StepsModule,
+    TieredMenuModule,
   ],
   declarations: [
     DatatableComponent,
@@ -246,6 +247,7 @@ import { SidebarModule } from 'primeng/sidebar';
     StepperComponent,
     FromToDateComponent,
     TimerComponent,
+    TieredMenuButtonComponent,
   ],
 
   exports: [
@@ -359,6 +361,7 @@ import { SidebarModule } from 'primeng/sidebar';
     FromToDateComponent,
     TimerComponent,
     SidebarModule,
+    TieredMenuButtonComponent,
   ],
 })
 export class AdminSharedModule {}

@@ -23,6 +23,7 @@ export class AddItemComponent implements OnInit {
   userList;
   useForm: FormGroup;
   entityId: string;
+  isSidebar = false;
   @Output() onClose = new EventEmitter();
 
   constructor(

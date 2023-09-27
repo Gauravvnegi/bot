@@ -16,7 +16,10 @@
       {{ 'Raise Complaint' | translate }}
     </div>
     <div (click)="close({ status: false })" class="close">
-      <i class="fa fa-times" aria-hidden="true"></i>
+      <i
+        [ngClass]="!isSideBar ? 'fa fa-times' : 'pi pi-arrow-right'"
+        aria-hidden="true"
+      ></i>
     </div>
   </div>
   <div class="body">

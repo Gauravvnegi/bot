@@ -400,26 +400,42 @@
   width: $width;
 }
 
+@mixin close-design() {
+  .close {
+    color: $primary-cta !important;
+  }
+}
+
+@mixin default-close() {
+  .p-sidebar-close {
+    display: none;
+  }
+}
+
 :host ::ng-deep {
   .complaint {
+    @include default-close;
     .body {
       height: 82vh;
     }
     .p-sidebar-right {
-      @include sidebar-design(40rem);
+      @include sidebar-design(30rem);
     }
     .header {
       @include sidebarTopBorder;
+      @include close-design;
     }
   }
 
   .settings {
+    @include default-close;
     .p-sidebar-right {
       @include sidebar-design(33rem);
     }
     .heading {
       padding: 15px 27px;
       font-size: 19px;
+      @include close-design;
     }
     .main {
       margin-top: 0;

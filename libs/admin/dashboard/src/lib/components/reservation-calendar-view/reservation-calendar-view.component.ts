@@ -1,38 +1,20 @@
 import { Component, OnInit } from '@angular/core';
-import {
-  AbstractControl,
-  FormArray,
-  FormBuilder,
-  FormGroup,
-} from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
   AdminUtilityService,
-  Option,
   QueryConfig,
   daysOfWeek,
 } from '@hospitality-bot/admin/shared';
+import { getWeekendBG } from 'libs/admin/channel-manager/src/lib/models/bulk-update.models';
 import {
-  RoomTypes,
-  getWeekendBG,
-} from 'libs/admin/channel-manager/src/lib/models/bulk-update.models';
-import {
-  ReservationFormData,
   ReservationList,
   RoomReservation,
 } from 'libs/admin/manage-reservation/src/lib/models/reservations.model';
 import { FormService } from 'libs/admin/manage-reservation/src/lib/services/form.service';
 import { ManageReservationService } from 'libs/admin/manage-reservation/src/lib/services/manage-reservation.service';
 import { ReservationListResponse } from 'libs/admin/manage-reservation/src/lib/types/response.type';
-import {
-  RoomList,
-  RoomTypeList,
-} from 'libs/admin/room/src/lib/models/rooms-data-table.model';
 import { RoomService } from 'libs/admin/room/src/lib/services/room.service';
-import {
-  RoomListResponse,
-  RoomTypeListResponse,
-} from 'libs/admin/room/src/lib/types/service-response';
 import {
   IGChangeEvent,
   IGCol,
@@ -57,88 +39,13 @@ export class ReservationCalendarViewComponent implements OnInit {
   dates: { day: string; date: number }[];
   globalQueries = [];
   entityId: string;
-
   useForm: FormGroup;
   currentDate = new Date();
 
   isRoomsEmpty = false;
 
   reservationListData: RoomReservation[];
-
   $subscription = new Subscription();
-
-  data: IGValue[] = [
-    //   {
-    //     id: 'RES001',
-    //     content: 'Dhruv 101',
-    //     // startPos: 1,
-    //     // endPos: 3,
-    //     startPos: '01Mon',
-    //     endPos: '03Wed',
-    //     rowValue: 101,
-    //   },
-    //   {
-    //     id: 'RES002',
-    //     content: 'Akash 101',
-    //     // startPos: 3,
-    //     // endPos: 4,
-    //     startPos: '03Wed',
-    //     endPos: '04Thu',
-    //     rowValue: 101,
-    //   },
-    //   {
-    //     id: 'RES003',
-    //     content: 'Jag 101',
-    //     // startPos: 6,
-    //     // endPos: 7,
-    //     startPos: '06Sat',
-    //     endPos: '08Mon',
-    //     rowValue: 101,
-    //   },
-    //   {
-    //     id: 'RES004',
-    //     content: 'Tony Stark 102',
-    //     // startPos: 6,
-    //     // endPos: 7,
-    //     startPos: '06Sat',
-    //     endPos: '08Mon',
-    //     rowValue: 102,
-    //   },
-    //   {
-    //     id: 'RES006',
-    //     content: 'Steve Rogers 103',
-    //     // startPos: 3,
-    //     // endPos: 6,
-    //     startPos: '03Wed',
-    //     endPos: '06Sat',
-    //     rowValue: 103,
-    //   },
-    //   {
-    //     id: 'RES007',
-    //     content: 'Pradeep 104',
-    //     // startPos: 2,
-    //     // endPos: 5,
-    //     startPos: '02Tue',
-    //     endPos: '05Fri',
-    //     rowValue: 104,
-    //   },
-    //   {
-    //     id: 'RES008',
-    //     content: 'Ayush 104',
-    //     // startPos: 5,
-    //     // endPos: 7,
-    //     startPos: '05Fri',
-    //     endPos: '07Sun',
-    //     rowValue: 104,
-    //   },
-    //   {
-    //     id: 'RES007',
-    //     content: 'Ayush 104',
-    //     startPos: '07Sun',
-    //     endPos: '09Tue',
-    //     rowValue: 104,
-    //   },
-  ];
 
   constructor(
     private fb: FormBuilder,
@@ -170,7 +77,6 @@ export class ReservationCalendarViewComponent implements OnInit {
             roomNumbers: roomTypeData.roomNumbers,
             loading: false,
           }));
-          this.allRoomTypes = this.roomTypes;
           this.initReservationData();
         })
     );
@@ -186,31 +92,33 @@ export class ReservationCalendarViewComponent implements OnInit {
         this.reservationListData = new ReservationList().deserialize(
           res
         ).reservationData;
-        // Step 3: Update the data field in the corresponding IGRoomType object
         this.roomTypes.forEach((roomType) => {
-          if (roomType.roomNumbers) {
-            const matchingReservations = this.reservationListData.filter(
-              (reservation) =>
-                roomType.roomNumbers.some((roomNumber) =>
-                  reservation.bookingItems.some(
-                    (bookingItem) =>
-                      bookingItem.roomDetails.roomNumber === roomNumber
-                  )
-                )
-            );
-
-            // Update the data field with matching reservations
-            roomType.data = matchingReservations.map((reservation) => ({
-              id: reservation.id,
-              content: reservation.guestName,
-              startPos: this.getDate(reservation.from),
-              endPos: this.getDate(reservation.to),
-              rowValue: reservation.bookingItems[0].roomDetails.roomNumber,
-            }));
-          }
+          this.mapReservationsData(roomType);
         });
-        console.log(this.roomTypes);
       });
+  }
+
+  mapReservationsData(roomType: IGRoomType) {
+    if (roomType.roomNumbers) {
+      const matchingReservations = this.reservationListData.filter(
+        (reservation) =>
+          roomType.roomNumbers.some((roomNumber) =>
+            reservation.bookingItems.some(
+              (bookingItem) => bookingItem.roomDetails.roomNumber === roomNumber
+            )
+          )
+      );
+      // Update the data field with matching reservations
+      roomType.data = matchingReservations.map((reservation) => ({
+        id: reservation.id,
+        content: reservation.guestName,
+        startPos: this.getDate(reservation.from),
+        endPos: this.getDate(reservation.to),
+        rowValue: reservation.bookingItems[0].roomDetails.roomNumber,
+      }));
+
+      this.allRoomTypes = this.roomTypes;
+    }
   }
 
   getDate(date: number) {
@@ -309,7 +217,7 @@ export class ReservationCalendarViewComponent implements OnInit {
         (res) => {},
         (error) => {
           selectedRoomType.loading = false;
-          this.resetData(event.id);
+          this.initReservationData();
         },
         () => {
           selectedRoomType.loading = false;
@@ -324,10 +232,6 @@ export class ReservationCalendarViewComponent implements OnInit {
 
   handleEdit(event: IGEditEvent) {
     console.log(event, 'onEdit event');
-  }
-
-  resetData(id: string) {
-    
   }
 
   getRoomsByRoomType() {}

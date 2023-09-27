@@ -65,7 +65,7 @@ export class FormService {
     roomReservationData.source = input?.source;
     // roomReservationData.marketSegment =
     //   input?.marketSegment;
-
+    roomReservationData.guestId = input.guestId;
     // Map Booking Items
     if (input?.bookingItems) {
       roomReservationData.bookingItems = input.bookingItems.map((roomType) => {

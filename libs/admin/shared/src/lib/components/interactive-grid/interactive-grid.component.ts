@@ -94,7 +94,6 @@ export class InteractiveGridComponent {
       p = { ...p, [c]: i };
       return p;
     }, {});
-
     this.data = this.getModdedData(data.values);
   }
 

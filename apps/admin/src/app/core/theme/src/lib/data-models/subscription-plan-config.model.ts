@@ -37,7 +37,6 @@ export class Subscriptions {
   integration: Feature[];
   essentials: Feature[];
   communication: Feature[];
-
   products: Products[];
   active: boolean;
   planUpgradable: boolean;
@@ -106,7 +105,7 @@ export class Products {
       set({}, 'isView', get(input, ['isView']))
     );
     input.config?.forEach((subProduct) => {
-      this.config.push(new SubProducts().deserialize(subProduct));
+      this.config?.push(new SubProducts().deserialize(subProduct));
     });
 
     return this;
@@ -122,8 +121,11 @@ export class SubProducts {
   currentUsage: number;
   isSubscribed: true;
   isView: true;
+  config: SubProducts[];
 
   deserialize(input: any) {
+    this.config = new Array<SubProducts>();
+
     Object.assign(
       this,
       set({}, 'name', get(input, ['name'])),
@@ -134,6 +136,10 @@ export class SubProducts {
       set({}, 'isSubscribed', get(input, ['isSubscribed'])),
       set({}, 'isView', get(input, ['isView']))
     );
+    if (input.config)
+      input.config?.forEach((subProduct) => {
+        this.config.push(new SubProducts().deserialize(subProduct));
+      });
 
     this.cost = new Cost().deserialize(input.cost);
 
@@ -180,18 +186,25 @@ export class Feature {
 }
 
 export class ProductSubscription {
+  subscribedProducts: ModuleNames[];
   subscribedModules: ModuleNames[];
   modules: Partial<Modules>;
   subscribedIntegrations: Set<string>;
 
   deserialize(input: any) {
     this.subscribedModules = new Array<ModuleNames>();
+    this.subscribedProducts = new Array<ModuleNames>();
+
     this.modules = new Object();
 
     input.products?.forEach((product) => {
-      this.setConfig(product);
+      if (product.isSubscribed) this.subscribedProducts.push(product.name);
+
       product.config?.forEach((subProduct) => {
         this.setConfig(subProduct);
+        subProduct.config?.forEach((subSubProduct) => {
+          this.setConfig(subSubProduct);
+        });
       });
     });
 

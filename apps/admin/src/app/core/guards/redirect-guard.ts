@@ -19,10 +19,10 @@ export class RedirectGuard implements CanActivate {
     state: RouterStateSnapshot
   ): boolean {
     const subscription = this.subscriptionService.getSubscription();
+    const prioritySubscribedModuleName = subscription?.products
+      ?.find((item) => item.isSubscribed)
+      .config.find((item) => item.isSubscribed)?.name;
 
-    const prioritySubscribedModuleName = subscription?.products?.find(
-      (item) => item.isSubscribed
-    )?.name;
     const routeUrl = routes[prioritySubscribedModuleName];
     this.router.navigate([`pages/${routeUrl}`]);
 

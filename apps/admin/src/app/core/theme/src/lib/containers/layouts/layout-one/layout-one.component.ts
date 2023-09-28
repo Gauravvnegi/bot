@@ -34,6 +34,7 @@ import {
   manageGuestRoutes,
 } from 'libs/admin/guests/src/lib/constant/route';
 import { SettingsMenuComponent } from '../../../../../../../../../../../libs/admin/settings/src/lib/components/settings-menu/settings-menu.component';
+import { convertToTitleCase } from 'libs/admin/shared/src/lib/utils/valueFormatter';
 
 @Component({
   selector: 'admin-layout-one',
@@ -480,5 +481,9 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
     return this.subscriptionPlanService.checkModuleSubscription(
       ModuleNames.CREATE_WITH
     );
+  }
+
+  get SelectedProduct() {
+    return convertToTitleCase(this.subscriptionPlanService.selectedProduct);
   }
 }

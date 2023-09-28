@@ -272,23 +272,25 @@
   .header {
     display: flex;
     justify-content: space-between;
+    align-items: center;
 
     .cross {
       cursor: pointer;
+      &:hover {
+        filter: invert(0.5) sepia(1) saturate(5) hue-rotate(175deg);
+      }
     }
 
-    .explore {
-      display: inline-flex;
-      align-items: center;
+    .bot-logo {
+      width: 5em;
+      height: 2em;
       cursor: pointer;
-      font-size: 12px;
-      font-weight: 500;
-      line-height: 1.25;
-      letter-spacing: 0.72px;
-      text-align: left;
-      color: #00162b;
-      i {
-        margin-left: 3px;
+      &:hover {
+        filter: invert(0.5) sepia(1) saturate(5) hue-rotate(175deg);
+      }
+      img {
+        width: 100%;
+        height: 100%;
       }
     }
   }

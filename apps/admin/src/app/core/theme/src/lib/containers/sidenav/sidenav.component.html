@@ -107,20 +107,13 @@
           ></i>
         </div>
       </div>
-      <div (click)="onExplore()" class="explore">
-        Botshot
-        <i
-          class="pi pi-arrow-right"
-          style="color: #5f38f9;"
-          aria-hidden="true"
-        ></i>
+      <div class="bot-logo">
+        <a href="https://botshot.ai/" target="_blank" rel="noopener">
+          <img src="assets/images/botshotlogo-color.png" alt="" />
+        </a>
       </div>
     </div>
     <div class="menu-wrapper">
-      <div class="bot-logo">
-        <img src="assets/images/botshotlogo-color.png" alt="" />
-      </div>
-
       <div class="menu-container">
         <div
           *ngFor="let product of productList; let i = index"

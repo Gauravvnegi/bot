@@ -42,12 +42,12 @@ export class UpdateReservationComponent implements OnInit {
     },
     {
       id: 'RES001',
-      content: 'Dhruv 101',
+      content: 'Room not available',
       startPos: 14,
       endPos: 16,
       rowValue: 101,
       colorCode: 'draft',
-      icons: ['assets/svg/View.svg'],
+      nonInteractive: true,
     },
     {
       id: 'RES002',

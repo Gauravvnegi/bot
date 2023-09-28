@@ -55,6 +55,10 @@
   background-color: $primary-text-bg;
   border-color: $primary;
 
+  &.non-interactive-cell {
+    cursor: not-allowed;
+  }
+
   &__content {
     font-size: small;
     @include no-break-hidden-text;

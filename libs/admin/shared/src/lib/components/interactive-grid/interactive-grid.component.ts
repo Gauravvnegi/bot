@@ -591,6 +591,7 @@ type ExtraGridInformation = {
   additionContent?: string;
   colorCode?: FlagType;
   icons?: string[];
+  nonInteractive?: boolean;
 };
 
 type ExtraGridInformationKeys = keyof ExtraGridInformation;

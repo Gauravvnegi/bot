@@ -19,7 +19,6 @@ export class PaymentRuleComponent implements OnInit {
   startMinDate = new Date();
   startTime: number;
   viewAmountToPay = false;
-  @Input() deductedAmount = 0;
   parentFormGroup: FormGroup;
 
   $subscription = new Subscription();
@@ -57,7 +56,7 @@ export class PaymentRuleComponent implements OnInit {
     this.inputControl.makePaymentBefore.setValue(this.startTime);
 
     this.inputControl.amountToPay.valueChanges.subscribe((res) => {
-      const newDeductedAmount = this.deductedAmount - +res;
+      const newDeductedAmount = this.inputControl.deductedAmount.value - +res;
       this.inputControl.deductedAmount.setValue(newDeductedAmount);
     });
   }

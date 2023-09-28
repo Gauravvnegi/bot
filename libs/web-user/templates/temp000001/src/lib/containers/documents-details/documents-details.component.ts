@@ -475,7 +475,9 @@ export class DocumentsDetailsComponent implements OnInit, OnDestroy {
               this._translateService
                 .get(`MESSAGES.ERROR.${error.type}`)
                 .subscribe((translatedMsg) => {
-                  this._snackBarService.openSnackBarAsText(translatedMsg);
+                  this._snackBarService.openSnackBarAsText(
+                    error.message ?? translatedMsg
+                  );
                 });
             }
           )

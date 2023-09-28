@@ -7,7 +7,6 @@ import {
   AbstractControl,
 } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
   AdminUtilityService,
   Option,
@@ -57,18 +56,20 @@ export class VenueReservationComponent extends BaseReservationComponent
   constructor(
     private fb: FormBuilder,
     private adminUtilityService: AdminUtilityService,
-    protected globalFilterService: GlobalFilterService,
     private manageReservationService: ManageReservationService,
     protected activatedRoute: ActivatedRoute,
     protected formService: FormService,
-    protected hotelDetailService: HotelDetailService,
+    protected hotelDetailService: HotelDetailService
   ) {
-    super(globalFilterService, activatedRoute, hotelDetailService, formService);
+    super(activatedRoute, hotelDetailService, formService);
   }
 
   ngOnInit(): void {
     this.initForm();
     this.initDetails();
+    this.formService.getSummary.subscribe((res) => {
+      if (this.venueItemsControl.value) this.getSummaryData();
+    });
     this.getReservationId();
     this.listenForFormChanges();
   }
@@ -102,6 +103,9 @@ export class VenueReservationComponent extends BaseReservationComponent
         venueInfo: this.venueBookingInfo,
       }),
       offerId: [''],
+      instructions: this.fb.group({
+        specialInstructions: [''],
+      }),
     });
     // Add food package items to the form
     this.foodPackageArray = this.userForm.get(
@@ -154,7 +158,7 @@ export class VenueReservationComponent extends BaseReservationComponent
   getReservationDetails(): void {
     this.$subscription.add(
       this.manageReservationService
-        .getReservationDataById(this.reservationId, this.entityId)
+        .getReservationDataById(this.reservationId, this.outletId)
         .subscribe(
           (response) => {
             const data = new OutletForm().deserialize(response);
@@ -187,33 +191,15 @@ export class VenueReservationComponent extends BaseReservationComponent
   }
 
   getSummaryData(): void {
-    const config = {
-      params: this.adminUtilityService.makeQueryParams([
-        { type: EntityType.OUTLET },
-      ]),
-    };
-    const data = {
-      from: this.reservationInfoControls.from.value,
-      to: this.reservationInfoControls.to.value,
-      adultCount: this.eventInfoControls.numberOfAdults.value,
-    };
     this.$subscription.add(
       this.manageReservationService
-        .getSummaryData(this.entityId, data, config)
+        .getSummaryData(this.outletId, this.getFormData(), {
+          params: `?type=${EntityType.OUTLET}`,
+        })
         .subscribe(
           (res) => {
             this.summaryData = new SummaryData()?.deserialize(res);
-            this.userForm
-              .get('paymentMethod.totalPaidAmount')
-              .setValidators([Validators.max(this.summaryData?.totalAmount)]);
-            this.userForm
-              .get('paymentMethod.totalPaidAmount')
-              .updateValueAndValidity();
-            this.userForm
-              .get('paymentRule.deductedAmount')
-              .patchValue(this.summaryData?.totalAmount);
-            this.deductedAmount = this.summaryData?.totalAmount;
-
+            this.updatePaymentData();
             if (this.formValueChanges) {
               this.setFormDisability();
               this.formValueChanges = false;
@@ -222,6 +208,16 @@ export class VenueReservationComponent extends BaseReservationComponent
           (error) => {}
         )
     );
+  }
+
+  getFormData() {
+    const data = {
+      from: this.reservationInfoControls.from.value,
+      to: this.reservationInfoControls.to.value,
+      adultCount: this.eventInfoControls.numberOfAdults.value,
+    };
+
+    return data;
   }
 
   /**

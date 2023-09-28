@@ -497,6 +497,7 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
       case 'service':
         this.router.navigate([`/pages/library/services/create-service`], {
           relativeTo: this.route,
+          queryParams: { entityId: this.outletId },
         });
         break;
       //to navigate  to create import service page

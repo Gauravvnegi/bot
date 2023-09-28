@@ -34,7 +34,9 @@ export class PrefixFieldComponent extends FormComponent implements OnInit {
   @Input() preMin: number;
   @Input() postMin: number;
 
-  layout: 'default' | 'dashed' | 'pre-main' | 'post-main' = 'default';
+  layout: 'default' | 'dashed' | 'pre-main' | 'post-main' | 'no-dashed' =
+    'default';
+  dashHidden = false;
 
   // @Input() isHyphenInput = true;
 

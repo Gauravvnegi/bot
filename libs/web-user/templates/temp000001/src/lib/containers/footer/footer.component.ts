@@ -43,6 +43,7 @@ export class FooterComponent implements OnInit {
     let {
       footerLogo,
       contactDetails,
+      contact,
       privacyPolicyUrl,
       socialPlatforms,
       termsUrl,
@@ -50,6 +51,15 @@ export class FooterComponent implements OnInit {
     // TO-DO: remove union when backend fixes the hotelConfig data
     let { emailId, contactNumber, cc } =
       contactDetails || this._hotelService.hotelConfig;
+
+    // not sure why contactDetail was mapped
+    if (!contactNumber) {
+      contactNumber = contact?.number;
+    }
+    if (!cc) {
+      cc = contact.countryCode;
+    }
+
     this.footerConfig.social = socialPlatforms;
     this.footerConfig.footerLogo = footerLogo;
     this.footerConfig.contactDetails.contactNo = cc + ' ' + contactNumber;

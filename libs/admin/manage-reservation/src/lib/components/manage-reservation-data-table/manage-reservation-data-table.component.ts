@@ -30,7 +30,6 @@ import {
   RestaurantMenuOptions,
   hotelCols,
   outletCols,
-  outletReservationStatusDetails,
   reservationStatusDetails,
   title,
 } from '../../constants/reservation-table';

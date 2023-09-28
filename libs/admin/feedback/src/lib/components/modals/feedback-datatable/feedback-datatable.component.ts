@@ -36,6 +36,7 @@ import { FeedbackTableService } from '../../../services/table.service';
 import { FeedbackDatatableComponent } from '../../datatable/feedback-datatable/feedback-datatable.component';
 import { FeedbackDetailModalComponent } from '../feedback-detail-modal/feedback-detail.component';
 import { feedbackStatus } from '../../../constants/feedback';
+import { transactionHistoryRes } from 'libs/admin/finance/src/lib/constants/response';
 
 @Component({
   selector: 'hospitality-bot-feedback-datatable-modal',
@@ -105,6 +106,7 @@ export class FeedbackDatatableModalComponent extends FeedbackDatatableComponent
     this.tableName = this.data.tableName;
     this.tabFilterItems = this.data.tabFilterItems;
     this.tabFilterIdx = this.data.tabFilterIdx;
+    this.selectedTab = this.data.tabFilterItems[this.tabFilterIdx].value;
     this.globalFeedbackFilterType = this.data.globalFeedbackFilterType;
     this.config = this.data.config;
     this.feedbackGraph = this.config[0].feedbackGraph;
@@ -188,7 +190,7 @@ export class FeedbackDatatableModalComponent extends FeedbackDatatableComponent
         {
           feedbackType: this.feedbackType,
           entityIds: this.setEntityId(),
-          entityType: this.tabFilterItems[this.tabFilterIdx].value,
+          entityType: this.selectedTab,
         },
       ]),
     };
@@ -340,6 +342,8 @@ export class FeedbackDatatableModalComponent extends FeedbackDatatableComponent
    */
   onSelectedTabFilterChange(event: MatTabChangeEvent): void {
     this.tabFilterIdx = event.index;
+    this.selectedTab = this.tabFilterItems[event.index].value;
+
     if (this.tableName === 'Response Rate')
       this.isNotVisible =
         this.tabFilterIdx === 0 || this.tabFilterIdx === 2 ? true : false;

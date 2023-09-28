@@ -67,12 +67,10 @@
               [loading]="field.options ? loadingRoomTypes[i] : false"
             ></hospitality-bot-select>
           </div>
-          <ng-container
-            *ngIf="(controls.get('roomTypeId').value && i === 0) || i !== 0"
-          >
+          <ng-container *ngIf="roomTypeArray.length > 1">
             <mat-icon
               class="delete"
-              [ngClass]="reservationId ? 'disabled-btn' : ''"
+              [ngClass]="formService.disableBtn ? 'disabled-btn' : ''"
               (click)="removeField(i)"
               >clear</mat-icon
             >
@@ -85,7 +83,7 @@
     class="action-btn"
     label="+ Add More Rooms"
     (onClick)="addNewField()"
-    [disabled]="reservationId"
+    [disabled]="formService.disableBtn"
     variant="text"
   ></hospitality-bot-button>
 </div>

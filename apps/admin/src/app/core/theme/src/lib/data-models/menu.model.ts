@@ -1,5 +1,5 @@
-import { get, set } from 'lodash';
 import { ModuleNames, routes } from 'libs/admin/shared/src/index';
+import { get, set } from 'lodash';
 
 export class SubMenuItem {
   path: string;
@@ -28,7 +28,17 @@ export class MenuItem {
   children: SubMenuItem[];
   url: string;
 
-  deserialize(input: any) {
+  deserialize(
+    input: any,
+    configuration?: {
+      moduleList: any;
+      moduleData: any;
+    }
+  ) {
+    if (configuration && !configuration?.moduleList.includes(input.name)) {
+      return;
+    }
+
     this.children = new Array<SubMenuItem>();
 
     Object.assign(
@@ -40,9 +50,19 @@ export class MenuItem {
 
     this.path = routes[input.name];
 
+    const subModule = configuration
+      ? configuration.moduleData.find((item) => item.name === input.name)
+          ?.child || []
+      : [];
+
     input.config?.forEach((subMenu) => {
-      if (routes[subMenu.name] && subMenu.isView)
-        this.children.push(new SubMenuItem().deserialize(subMenu));
+      if (routes[subMenu.name] && subMenu.isView) {
+        if (subModule && subModule.includes(subMenu.name)) {
+          this.children.push(new SubMenuItem().deserialize(subMenu));
+        } else if (!subModule.length) {
+          this.children.push(new SubMenuItem().deserialize(subMenu));
+        }
+      }
     });
 
     return this;

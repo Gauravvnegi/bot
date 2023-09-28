@@ -431,7 +431,7 @@ export class BaseDatatableComponent implements OnInit {
       );
       if (selectedTabIndex !== -1 && selectedTabIndex !== this.tabFilterIdx) {
         // changing the selected tab filter index as api response can give different order
-        this.tabFilterIdx === selectedTabIndex;
+        this.tabFilterIdx = selectedTabIndex;
       }
 
       totalCount = this.tabFilterItems[this.tabFilterIdx].total;

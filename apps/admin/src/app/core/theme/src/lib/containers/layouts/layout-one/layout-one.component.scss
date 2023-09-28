@@ -382,3 +382,74 @@
 :host ::ng-deep .p-sidebar {
   padding: unset !important;
 }
+
+.quick-action {
+  @include flex-item-center;
+  img {
+    width: 22px;
+  }
+}
+
+@mixin sidebarTopBorder() {
+  border-top-left-radius: 10px;
+}
+
+@mixin sidebar-design($width) {
+  @include sidebarTopBorder;
+  margin-top: 4px;
+  width: $width;
+}
+
+@mixin close-design() {
+  .close {
+    color: $primary-cta !important;
+  }
+}
+
+@mixin default-close() {
+  .p-sidebar-close {
+    display: none;
+  }
+}
+
+:host ::ng-deep {
+  .complaint {
+    @include default-close;
+    .body {
+      height: 82vh;
+    }
+    .p-sidebar-right {
+      @include sidebar-design(30rem);
+    }
+    .header {
+      @include sidebarTopBorder;
+      @include close-design;
+    }
+  }
+
+  .settings {
+    @include default-close;
+    .p-sidebar-right {
+      @include sidebar-design(33rem);
+    }
+    .heading {
+      padding: 15px 27px;
+      font-size: 19px;
+      @include close-design;
+    }
+    .main {
+      margin-top: 0;
+      border-top: 2px solid rgba(112, 112, 112, 0.25);
+      border-radius: 0;
+      padding-top: 10px;
+      .setting {
+        width: 237px;
+        zoom: 0.9;
+      }
+    }
+    .p-sidebar-close {
+      margin-top: 15px;
+      margin-right: 37px;
+    }
+  }
+}

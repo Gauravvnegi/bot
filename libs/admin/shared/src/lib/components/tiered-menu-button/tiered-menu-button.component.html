@@ -1,0 +1,7 @@
+<div class="tiered__wrapper">
+  <div #btn class="tiered-button" (click)="menu.toggle($event)">
+    <span class="label">{{ label }}</span
+    ><span class="icon"><i [ngClass]="'pi pi-chevron-down'"></i></span>
+  </div>
+  <p-tieredMenu #menu [model]="items" [popup]="true"></p-tieredMenu>
+</div>

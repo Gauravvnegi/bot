@@ -46,7 +46,23 @@
       class="upload"
       formControlName="images"
       [entityId]="entityId"
+      [settings]="{
+        limit: 1,
+        unit: 4,
+        isMultiple: true
+      }"
+      [isFeatureView]="true"
     ></hospitality-bot-custom-file-upload>
+    <div class="des-template">
+      <div class="des-template__label">Service Description</div>
+      <div class="des-template__input">
+        <hospitality-bot-template-editor
+          [parentFG]="useForm"
+          [name]="'description'"
+          [height]="250"
+        ></hospitality-bot-template-editor>
+      </div>
+    </div>
     <hospitality-bot-prefix-field
       *ngIf="!isComplimentaryService"
       class="one-third-width"

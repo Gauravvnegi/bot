@@ -139,6 +139,7 @@ export class RoomTypeForm {
   id?: string;
   allRatePlans?: ReservationRatePlan[];
   isBaseRoomType?: boolean;
+  shortDescription?: string;
 
   deserialize(input: RoomTypeResponse) {
     this.id = input?.id;
@@ -154,8 +155,9 @@ export class RoomTypeForm {
     this.maxAdult = input.occupancyDetails.maxAdult;
     this.area = input.area;
     this.isBaseRoomType = input?.isBaseRoomType ?? false;
+    this.shortDescription = input?.shortDescription ?? '';
 
-    const defaultRatePlan = input?.ratePlans.filter((item) => item.isBase);
+    const defaultRatePlan = input?.ratePlans?.filter((item) => item.isBase);
     if (defaultRatePlan.length) {
       this.staticRatePlans = {
         paxPriceCurrency: input.pricingDetails.currency,

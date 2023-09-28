@@ -35,6 +35,6 @@
 
   .p-tieredmenu .p-menuitem-active > p-tieredmenusub > .p-submenu-list {
     overflow-y: auto;
-    height: 300px;
+    max-height: 300px;
   }
 }

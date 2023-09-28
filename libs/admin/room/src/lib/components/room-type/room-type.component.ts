@@ -346,6 +346,8 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
    * @function initFormSubscription Initialize the subscription of form value change
    */
   initFormSubscription() {
+    this.getServices(ServicesTypeValue.PAID);
+    this.getServices(ServicesTypeValue.COMPLIMENTARY);
     this.registerOccupancyChanges();
   }
 

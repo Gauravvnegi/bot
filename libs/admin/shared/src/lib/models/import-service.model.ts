@@ -16,12 +16,14 @@ export class Service {
   imageUrl: string;
   type: string;
   rate?: string;
+  packageCode?: string;
   deserialize(input: Amenity) {
     this.id = input.id;
     this.name = input.name;
     this.imageUrl = input.images[0]?.url;
     this.type = input.type;
     this.rate = `${input.currency}${input.rate}`;
+    this.packageCode = input.packageCode;
     return this;
   }
 }

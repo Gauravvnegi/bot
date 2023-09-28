@@ -10,6 +10,19 @@
   ></hospitality-bot-button>
 </hospitality-bot-navigation-header>
 
+<div class="buttons">
+  <hospitality-bot-button
+    label="Resend Data"
+    (onClick)="handleReset()"
+  ></hospitality-bot-button>
+
+  <hospitality-bot-button
+    label="Reinitialize"
+    [variant]="'outlined'"
+    (onClick)="handleReinitialize()"
+  ></hospitality-bot-button>
+</div>
+
 <div class="wrapper">
   <div class="room-type">
     <div *ngFor="let row of gridRows; let i = index" class="room">
@@ -27,6 +40,8 @@
         columns: gridCols,
         values: data
       }"
+      [isProcessing]="loading"
+      [reinitialize]="reset"
       (onChange)="handleChange($event)"
       (onCreate)="handleCreate($event)"
       (onEdit)="handleEdit($event)"

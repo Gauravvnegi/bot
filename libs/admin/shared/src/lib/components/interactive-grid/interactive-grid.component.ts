@@ -5,7 +5,6 @@ import { FlagType } from '../../types/table.type';
 
 /**
  * @class InteractiveGridComponent
- * @todo data reinitialize handle function (reset functionality)
  * @todo Tool tip on content - need to refactor
  * @todo [sameStartEndPos] need to handle same start and end pos (breaking single cell grid data)
  */
@@ -59,6 +58,18 @@ export class InteractiveGridComponent {
   }
 
   /**
+   * Used to reset the grids data
+   */
+  showDataGrid = true;
+
+  @Input() set reinitialize(_value: any) {
+    this.showDataGrid = false;
+    setTimeout(() => {
+      this.showDataGrid = true;
+    }, 0);
+  }
+
+  /**
    * Grid Data setter to set he grid rows and column data with the available value
    * @example
    * const gridData = {
@@ -87,6 +98,9 @@ export class InteractiveGridComponent {
     columns: IGCol[];
     values: IGValue[];
   }) {
+    this.showDataGrid = false;
+    this.isProcessing = true;
+
     this.gridColumns = data.columns;
     this.gridRows = data.rows;
     this.colStart = this.gridColumns[0];
@@ -97,6 +111,11 @@ export class InteractiveGridComponent {
     }, {});
 
     this.data = this.getModdedData(data.values ?? []);
+
+    setTimeout(() => {
+      this.showDataGrid = true;
+      this.isProcessing = false;
+    }, 0);
   }
 
   /**

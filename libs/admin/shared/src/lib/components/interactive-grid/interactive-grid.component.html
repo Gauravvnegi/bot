@@ -7,6 +7,7 @@
       height: noOfRow * height + 'px'
     }"
     class="interactive-grid-wrapper"
+    *ngIf="showDataGrid"
   >
     <ng-container *ngFor="let row of gridRows; let rowIdx = index">
       <ng-container *ngFor="let col of gridColumns; let colIdx = index">

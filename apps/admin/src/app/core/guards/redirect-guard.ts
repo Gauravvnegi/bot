@@ -21,7 +21,6 @@ export class RedirectGuard implements CanActivate {
     state: RouterStateSnapshot
   ): boolean {
     const subscription = this.subscriptionService.getSubscription();
-
     const selectedProduct = this.authService.getTokenByName('selectedProduct');
     
     let prioritySubscribedModuleName;

@@ -73,11 +73,11 @@
       >
         <div class="options1" [ngClass]="{ disabled: isGlobalFilterVisible }">
           <div class="selected-product">
-            <img [src]="selectedProductIcon" alt="">
+            <img [src]="selectedProductIcon" alt="" />
           </div>
           <hospitality-bot-tiered-menu-button
             *ngIf="!!bookingOptions?.length"
-            label="New booking"
+            label="Quick booking"
             [items]="bookingOptions"
           ></hospitality-bot-tiered-menu-button>
           <div class="global_search">

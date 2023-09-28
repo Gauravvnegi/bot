@@ -68,6 +68,16 @@
         >
           <div
             class="cell-data"
+            [ngClass]="{
+              'active-cell': data[row][col]?.color === 'active',
+              'completed-cell': data[row][col]?.color === 'completed',
+              'draft-cell': data[row][col]?.color === 'draft',
+              'failed-cell': data[row][col]?.color === 'failed',
+              'inactive-cell': data[row][col]?.color === 'inactive',
+              'warning-cell': data[row][col]?.color === 'warning',
+              'unavailable-cell': data[row][col]?.color === 'unavailable',
+              'success-cell': data[row][col]?.color === 'success'
+            }"
             [ngStyle]="{
               height: height - 2 * cellGap + 'px',
               borderLeft: outOfBoundRecord[data[row][col].id].hasLeftBorder

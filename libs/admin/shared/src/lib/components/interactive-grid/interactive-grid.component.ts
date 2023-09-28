@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { IPosition } from 'angular2-draggable';
 import { IResizeEvent } from 'angular2-draggable/lib/models/resize-event';
+import { FlagType } from '../../types/table.type';
 
 /**
  * @class InteractiveGridComponent
@@ -94,7 +95,8 @@ export class InteractiveGridComponent {
       p = { ...p, [c]: i };
       return p;
     }, {});
-    this.data = this.getModdedData(data.values);
+
+    this.data = this.getModdedData(data.values ?? []);
   }
 
   /**
@@ -420,8 +422,11 @@ export class InteractiveGridComponent {
       const { startPos, endPos } = rowValues.reduce(
         (value, item) => {
           // todo - sameStartEndPos
-          value.endPos.add(item.endPos);
           value.startPos.add(item.startPos);
+          // if (item.startPos !== item.endPos) {
+          //   // not pushing for same start and
+          value.endPos.add(item.endPos);
+          // }
           return value;
         },
         {
@@ -462,6 +467,7 @@ export class InteractiveGridComponent {
           ...(rowResult ?? {}),
           [boundStartPos]: {
             content: item.content,
+            colorCode: item.colorCode,
             id: item.id,
             cellOccupied,
             startPosIdx: this.colIndices[boundStartPos],
@@ -500,7 +506,7 @@ export type IGCol = number;
 /**
  * @type Defines Cell data to create interactive gird cell
  */
-export type IGCellInfo = Pick<IGValue, 'id' | 'content'> & {
+export type IGCellInfo = Pick<IGValue, 'id' | ExtraGridInformationKeys> & {
   cellOccupied: number;
   hasNext: boolean;
   hasPrev: boolean;
@@ -515,7 +521,7 @@ export type IGCellInfo = Pick<IGValue, 'id' | 'content'> & {
 /**
  * @type Defines On Change event data
  */
-export type IGChangeEvent = Omit<IGValue, 'content'>;
+export type IGChangeEvent = Omit<IGValue, ExtraGridInformationKeys>;
 
 /**
  * @type Defines on create event data
@@ -540,11 +546,10 @@ type IGData = Record<IGRow, Record<IGRow, IGCellInfo>>;
  */
 export type IGValue = {
   id: string;
-  content: string;
   startPos: IGCol;
   endPos: IGCol;
   rowValue: IGRow;
-};
+} & ExtraGridInformation;
 
 export type IGProps = {
   createNewToolTipInfo?: string;
@@ -554,6 +559,7 @@ export type IGProps = {
   resizeWidth?: GridBreakPoints;
   cellSize?: number;
   cellGap?: number;
+  gridHeight?: GridBreakPoints;
 };
 
 /**
@@ -575,3 +581,10 @@ type OutOfBoundRecord = Record<
     hasRightBorder: boolean;
   }
 >;
+
+type ExtraGridInformation = {
+  content: string;
+  colorCode: FlagType;
+};
+
+type ExtraGridInformationKeys = keyof ExtraGridInformation;

@@ -1,34 +1,11 @@
 <div class="logo text-uppercase" [style.color]="normalFontColor">
   <!-- Botshot new collapse logo-->
   <div class="sidenav-header">
-    <!-- <div [style.display]="status ? 'none' : ''" class="logo">
-      <img
-        src="assets/images/botshot_collapse.png"
-        onerror="this.src='assets/images/botshot_expand.png';"
-        alt=""
-      />
-    </div> -->
-    <!-- Side nav menu icon collapse-->
     <div *ngIf="!isExpanded" class="menu_button">
-      <img
-        #botLogo
-        class="bot-logo"
-        src="assets/images/botshot_collapse.png"
-        alt=""
-        (mouseenter)="
-          botLogo.style.display = 'none'; productMenu.style.display = 'block'
-        "
-        (mouseleave)="
-          botLogo.style.display = 'block'; productMenu.style.display = 'none'
-        "
-      />
       <img
         (click)="isMenuBarVisible = true"
         class="product-menu"
         src="assets/images/main-menu.png"
-        alt=""
-        style="display: none;"
-        #productMenu
       />
     </div>
   </div>

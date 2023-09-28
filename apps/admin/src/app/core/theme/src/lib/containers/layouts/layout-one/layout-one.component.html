@@ -72,7 +72,9 @@
         "
       >
         <div class="options1" [ngClass]="{ disabled: isGlobalFilterVisible }">
-          <div class="selected-product">{{ SelectedProduct }}</div>
+          <div class="selected-product">
+            <img [src]="selectedProductIcon" alt="">
+          </div>
           <hospitality-bot-tiered-menu-button
             *ngIf="!!bookingOptions?.length"
             label="New booking"

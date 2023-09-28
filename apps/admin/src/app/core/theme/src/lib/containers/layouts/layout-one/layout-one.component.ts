@@ -483,7 +483,11 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
     );
   }
 
-  get SelectedProduct() {
-    return convertToTitleCase(this.subscriptionPlanService.selectedProduct);
+  get selectedProductIcon() {
+    return this.subscriptionPlanService
+      .getSubscription()
+      .products.find(
+        (item) => item.name === this.subscriptionPlanService.selectedProduct
+      ).icon;
   }
 }

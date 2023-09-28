@@ -26,6 +26,7 @@ export class AuthService extends ApiService {
     'x-siteId',
     'x-brandId',
     'x-entityId',
+    'selectedProduct'
   ];
 
   /**

@@ -31,10 +31,8 @@ export const routesFactory = (
         name as ModuleNames
       );
 
-      const productsConfig = subscriptionService
-        .getSubscription()
-        .products.find((item) => item.name === name)?.config;
-
+      const newP = subscriptionService.getSelectedProduct();
+      const productsConfig = newP.find((item) => item.name === name)?.config;
       // getting the first subscribed sub module
       if (children && productsConfig) {
         let subscribedConfigsName = productsConfig
@@ -83,7 +81,6 @@ export const routesFactory = (
       newChildren.push({ path: '**', pathMatch: 'full', redirectTo: '404' });
       newChildren.push({ path: '404', component: DashboardErrorComponent });
     }
-
     return newChildren;
   }
 

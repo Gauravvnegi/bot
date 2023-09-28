@@ -85,6 +85,7 @@
     [visible]="isMenuBarVisible"
     (onHide)="isMenuBarVisible = false"
     [showCloseIcon]="false"
+    [style]="{ width: '25em' }"
     position="left"
   >
     <ng-template
@@ -107,7 +108,7 @@
         </div>
       </div>
       <div (click)="onExplore()" class="explore">
-        Explore
+        Botshot
         <i
           class="pi pi-arrow-right"
           style="color: #5f38f9;"
@@ -122,17 +123,18 @@
 
       <div class="menu-container">
         <div
-          *ngFor="let product of productList"
+          *ngFor="let product of productList; let i = index"
           class="menu"
+          [ngClass]="{ selected: product.name === selectedProduct }"
           (click)="onMenuCLick(product)"
         >
-          <img [src]="product.icon" alt="" />
-          <div class="menu-label">{{ product.label }}</div>
+          <img [src]="product.url" alt="" />
+          <div class="menu-label">{{ product.title }}</div>
         </div>
       </div>
     </div>
-    <div class="footer">
+    <!-- <div class="footer">
       <div class="header">Free Hotel Resource</div>
-    </div>
+    </div> -->
   </div>
 </ng-template>

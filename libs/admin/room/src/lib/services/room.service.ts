@@ -161,9 +161,9 @@ export class RoomService extends ApiService {
             const roomTypesAndNumbers = activeRoomTypes.map(
               (roomType, index) => ({
                 ...roomType,
-                roomNumbers: roomNumbersArray[index].rooms.map(
-                  (room) => room.roomNumber
-                ),
+                rooms: roomNumbersArray[index].rooms.map(
+                  (room) => ({roomNumber: room.roomNumber, feature: room.features})
+                )
               })
             );
 

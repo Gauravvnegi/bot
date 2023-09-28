@@ -28,9 +28,9 @@ import { ManageReservationService } from '../../services/manage-reservation.serv
 import { RoomTypeOptionList } from '../../models/reservations.model';
 import { RoomTypeForm } from 'libs/admin/room/src/lib/models/room.model';
 import { ReservationForm, RoomTypes } from '../../constants/form';
-import { RoomsByRoomType } from 'libs/admin/room/src/lib/types/service-response';
 import { IteratorField } from 'libs/admin/shared/src/lib/types/fields.type';
 import { FormService } from '../../services/form.service';
+import { CalendarViewData } from 'libs/admin/dashboard/src/lib/components/reservation-calendar-view/reservation-calendar-view.component';
 @Component({
   selector: 'hospitality-bot-room-iterator',
   templateUrl: './room-iterator.component.html',
@@ -41,10 +41,10 @@ export class RoomIteratorComponent extends IteratorComponent
   parentFormGroup: FormGroup;
   roomTypeArray: FormArray;
 
-  @Output() refreshData = new EventEmitter();
   @Output() listenChanges = new EventEmitter();
 
   @Input() reservationId: string;
+  @Input() paramsData: CalendarViewData;
   fields = roomFields;
 
   entityId: string;
@@ -80,6 +80,8 @@ export class RoomIteratorComponent extends IteratorComponent
 
   ngOnChanges(changes: SimpleChanges): void {
     const itemValues = changes?.itemValues?.currentValue;
+    this.selectedRoomNumbers = [changes?.paramsData?.currentValue?.room];
+
     if (itemValues?.length) {
       if (itemValues.length > 1) {
         // Create new form fields for each item in the array
@@ -255,10 +257,9 @@ export class RoomIteratorComponent extends IteratorComponent
       config,
       this.roomControls[index].get('roomNumberOptions'),
       this.roomControls[index].get('roomNumbers'),
-      this.selectedRoomNumbers,
+      this.selectedRoomNumbers
     );
     this.fields[3].loading[index] = false;
-    
   }
 
   /**
@@ -268,7 +269,6 @@ export class RoomIteratorComponent extends IteratorComponent
     this.roomControls[index].get('ratePlan').enable();
     if (this.reservationInfoControls.reservationType.value !== 'DRAFT')
       this.roomControls[index].get('roomNumbers').enable();
-
     if (!this.isDefaultRoomType) {
       // Patch default count values only if not in edit mode
       this.roomControls[index]
@@ -282,7 +282,9 @@ export class RoomIteratorComponent extends IteratorComponent
         .patchValue(0, { emitEvent: false });
     }
 
-    this.isDefaultRoomType = false;
+    setTimeout(() => {
+      this.isDefaultRoomType = false;
+    }, 2000);
   }
 
   /**
@@ -363,10 +365,6 @@ export class RoomIteratorComponent extends IteratorComponent
     }
   }
 
-  getSummaryData(): void {
-    this.refreshData.emit();
-  }
-
   listenForFormChanges(): void {
     this.listenChanges.emit();
   }
@@ -415,6 +413,10 @@ export class RoomIteratorComponent extends IteratorComponent
           },
           () => {
             this.loadingRoomTypes[index ?? 0] = false;
+            if (this.paramsData.roomTypeId)
+              this.roomControls[0]
+                .get('roomTypeId')
+                .patchValue(this.paramsData.roomTypeId);
           }
         )
     );
@@ -437,13 +439,11 @@ export class RoomIteratorComponent extends IteratorComponent
    * @param index position at which value is to be removed
    */
   removeField(index: number) {
-    if (!this.itemValues.length) {
-      if (this.roomTypeArray.length === 1) {
-        this.roomTypeArray.at(0).reset({ value: null, emitEvent: false });
-        return;
-      }
-      this.roomTypeArray.removeAt(index);
+    if (this.roomTypeArray.length === 1) {
+      this.roomTypeArray.at(0).reset({ value: null, emitEvent: false });
+      return;
     }
+    this.roomTypeArray.removeAt(index);
   }
 
   /**

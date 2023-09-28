@@ -18,6 +18,12 @@
   font-weight: $bolder;
   letter-spacing: 1.56px;
   color: $secondary2;
+  display: flex;
+  justify-content: space-between;
+}
+
+.close {
+  cursor: pointer;
 }
 
 .setting {

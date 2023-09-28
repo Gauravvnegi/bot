@@ -1,38 +1,23 @@
 import { Component, OnInit } from '@angular/core';
-import {
-  AbstractControl,
-  FormArray,
-  FormBuilder,
-  FormGroup,
-} from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { Router } from '@angular/router';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
   AdminUtilityService,
-  Option,
   QueryConfig,
   daysOfWeek,
 } from '@hospitality-bot/admin/shared';
+import { getWeekendBG } from 'libs/admin/channel-manager/src/lib/models/bulk-update.models';
+import { ReservationType } from 'libs/admin/manage-reservation/src/lib/constants/reservation-table';
 import {
-  RoomTypes,
-  getWeekendBG,
-} from 'libs/admin/channel-manager/src/lib/models/bulk-update.models';
-import {
-  ReservationFormData,
   ReservationList,
   RoomReservation,
 } from 'libs/admin/manage-reservation/src/lib/models/reservations.model';
 import { FormService } from 'libs/admin/manage-reservation/src/lib/services/form.service';
 import { ManageReservationService } from 'libs/admin/manage-reservation/src/lib/services/manage-reservation.service';
 import { ReservationListResponse } from 'libs/admin/manage-reservation/src/lib/types/response.type';
-import {
-  RoomList,
-  RoomTypeList,
-} from 'libs/admin/room/src/lib/models/rooms-data-table.model';
 import { RoomService } from 'libs/admin/room/src/lib/services/room.service';
-import {
-  RoomListResponse,
-  RoomTypeListResponse,
-} from 'libs/admin/room/src/lib/types/service-response';
+import { Features } from 'libs/admin/room/src/lib/types/service-response';
 import {
   IGChangeEvent,
   IGCol,
@@ -57,89 +42,14 @@ export class ReservationCalendarViewComponent implements OnInit {
   dates: { day: string; date: number }[];
   globalQueries = [];
   entityId: string;
-
   useForm: FormGroup;
   currentDate = new Date();
 
   isRoomsEmpty = false;
-  loading = false;
-
+  roomsLoaded = false;
   reservationListData: RoomReservation[];
-
   $subscription = new Subscription();
-
-  data: IGValue[] = [
-    //   {
-    //     id: 'RES001',
-    //     content: 'Dhruv 101',
-    //     // startPos: 1,
-    //     // endPos: 3,
-    //     startPos: '01Mon',
-    //     endPos: '03Wed',
-    //     rowValue: 101,
-    //   },
-    //   {
-    //     id: 'RES002',
-    //     content: 'Akash 101',
-    //     // startPos: 3,
-    //     // endPos: 4,
-    //     startPos: '03Wed',
-    //     endPos: '04Thu',
-    //     rowValue: 101,
-    //   },
-    //   {
-    //     id: 'RES003',
-    //     content: 'Jag 101',
-    //     // startPos: 6,
-    //     // endPos: 7,
-    //     startPos: '06Sat',
-    //     endPos: '08Mon',
-    //     rowValue: 101,
-    //   },
-    //   {
-    //     id: 'RES004',
-    //     content: 'Tony Stark 102',
-    //     // startPos: 6,
-    //     // endPos: 7,
-    //     startPos: '06Sat',
-    //     endPos: '08Mon',
-    //     rowValue: 102,
-    //   },
-    //   {
-    //     id: 'RES006',
-    //     content: 'Steve Rogers 103',
-    //     // startPos: 3,
-    //     // endPos: 6,
-    //     startPos: '03Wed',
-    //     endPos: '06Sat',
-    //     rowValue: 103,
-    //   },
-    //   {
-    //     id: 'RES007',
-    //     content: 'Pradeep 104',
-    //     // startPos: 2,
-    //     // endPos: 5,
-    //     startPos: '02Tue',
-    //     endPos: '05Fri',
-    //     rowValue: 104,
-    //   },
-    //   {
-    //     id: 'RES008',
-    //     content: 'Ayush 104',
-    //     // startPos: 5,
-    //     // endPos: 7,
-    //     startPos: '05Fri',
-    //     endPos: '07Sun',
-    //     rowValue: 104,
-    //   },
-    //   {
-    //     id: 'RES007',
-    //     content: 'Ayush 104',
-    //     startPos: '07Sun',
-    //     endPos: '09Tue',
-    //     rowValue: 104,
-    //   },
-  ];
+  previousData: IGValue[] = [];
 
   constructor(
     private fb: FormBuilder,
@@ -147,7 +57,8 @@ export class ReservationCalendarViewComponent implements OnInit {
     private globalFilterService: GlobalFilterService,
     private roomService: RoomService,
     private adminUtilityService: AdminUtilityService,
-    private formService: FormService
+    private formService: FormService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -159,7 +70,6 @@ export class ReservationCalendarViewComponent implements OnInit {
   }
 
   initRoomTypes() {
-    this.loading = true;
     this.$subscription.add(
       this.roomService
         .getRoomTypesAndNumbers(this.entityId, {
@@ -169,10 +79,16 @@ export class ReservationCalendarViewComponent implements OnInit {
           this.roomTypes = res.map((roomTypeData) => ({
             label: roomTypeData.name,
             roomTypeId: roomTypeData.id,
-            roomNumbers: roomTypeData.roomNumbers,
+            rooms: roomTypeData.rooms,
+            loading: false,
+            data: {
+              rows: [],
+              columns: [],
+              values: [],
+            },
           }));
-          this.allRoomTypes = this.roomTypes;
-          this.loading = false;
+          this.roomsLoaded = true;
+          this.initReservationData();
         })
     );
   }
@@ -184,17 +100,43 @@ export class ReservationCalendarViewComponent implements OnInit {
         this.entityId
       )
       .subscribe((res) => {
-        this.reservationListData = new ReservationList().deserialize(
-          res
-        ).reservationData;
-        this.data = this.reservationListData.map((data) => ({
-          id: data.id,
-          content: data.guestName,
-          startPos: this.getDate(data.from),
-          endPos: this.getDate(data.to),
-          rowValue: data.bookingItems[0].roomDetails.roomNumber,
-        }));
+        this.reservationListData = new ReservationList()
+          .deserialize(res)
+          .reservationData.filter(
+            (reservation) =>
+              reservation.reservationType === ReservationType.CONFIRMED
+          );
+        this.roomTypes.forEach((roomType) => {
+          this.mapReservationsData(roomType);
+        });
       });
+  }
+
+  mapReservationsData(roomType: IGRoomType) {
+    if (roomType.rooms) {
+      const matchingReservations = this.reservationListData.filter(
+        (reservation) =>
+          roomType.rooms.some((room) =>
+            reservation.bookingItems.some(
+              (bookingItem) =>
+                bookingItem.roomDetails.roomNumber === room.roomNumber
+            )
+          )
+      );
+      // Update the data field with matching reservations
+      roomType.data = {
+        rows: this.getRooms(roomType.rooms),
+        columns: this.gridCols,
+        values: matchingReservations.map((reservation) => ({
+          id: reservation.id,
+          content: reservation.guestName,
+          startPos: this.getDate(reservation.from),
+          endPos: this.getDate(reservation.to),
+          rowValue: reservation.bookingItems[0].roomDetails.roomNumber,
+        })),
+      };
+      this.allRoomTypes = this.roomTypes;
+    }
   }
 
   getDate(date: number) {
@@ -245,7 +187,6 @@ export class ReservationCalendarViewComponent implements OnInit {
       { fromDate: this.gridCols[0] },
       { toDate: this.gridCols[13] },
     ];
-    this.initReservationData();
   }
 
   initForm() {
@@ -284,31 +225,81 @@ export class ReservationCalendarViewComponent implements OnInit {
       event.endPos,
       event.rowValue
     );
+
+    const selectedRoomType = this.getSelectedRoomType(event.rowValue);
+
+    selectedRoomType.loading = true;
     this.manageReservationService
       .updateReservation(this.entityId, event.id, updateData, 'ROOM_TYPE')
       .subscribe(
         (res) => {},
         (error) => {
-          this.loading = false;
+          selectedRoomType.loading = false;
+          selectedRoomType.data = { ...selectedRoomType.data };
         },
         () => {
-          this.loading = false;
+          selectedRoomType.loading = false;
         }
       );
     console.log(event, 'onChange event');
   }
 
   handleCreate(event: IGCreateEvent) {
+    const gridData = {
+      date: event.colValue,
+      room: event.rowValue,
+      roomTypeId: this.getSelectedRoomType(event.rowValue).roomTypeId,
+    };
+    this.router.navigate([`/pages/efrontdesk/reservation/add-reservation`], {
+      queryParams: {
+        entityId: this.entityId,
+        data: btoa(JSON.stringify(gridData)),
+      },
+    });
     console.log(event, 'onCreate event');
   }
 
   handleEdit(event: IGEditEvent) {
     console.log(event, 'onEdit event');
   }
+
+  getSelectedRoomType(roomNumber: IGRow) {
+    const selectedRoomType = this.roomTypes.find((roomType) => {
+      return roomType.rooms.some((room) => room.roomNumber === roomNumber);
+    });
+    return selectedRoomType;
+  }
+
+  getRooms(rooms: IGRoom[]) {
+    return rooms.map((room) => room.roomNumber);
+  }
+
+  getFeatureImage(features: Features[]) {
+    return features.map((feature) => feature.imageUrl);
+  }
 }
 
 type IGRoomType = {
   label: string;
   roomTypeId: string;
-  roomNumbers?: string[];
+  rooms?: IGRoom[];
+  loading?: boolean;
+  data?: GridData;
+};
+
+type GridData = {
+  rows: IGRow[];
+  columns: IGCol[];
+  values: IGValue[];
+};
+
+type IGRoom = {
+  roomNumber: IGRow;
+  feature?: Features[];
+};
+
+export type CalendarViewData = {
+  date: number;
+  room: string;
+  roomTypeId: string;
 };

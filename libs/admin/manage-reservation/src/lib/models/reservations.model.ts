@@ -42,6 +42,7 @@ export class RoomReservation {
   totalAmount: number;
   totalDueAmount: number;
   totalPaidAmount: number;
+  guestId: string;
 
   deserialize(input: RoomReservationRes) {
     this.id = input.id;
@@ -56,6 +57,7 @@ export class RoomReservation {
     this.guestName = input.guest.firstName
       ? input.guest?.firstName + ' ' + (input.guest?.lastName ?? '')
       : '';
+    this.guestId = input.guest.id;
     this.companyName = input.guest?.company?.firstName ?? '';
     this.created = input.created;
     this.nextStates = [input.reservationType, ...input.nextStates];

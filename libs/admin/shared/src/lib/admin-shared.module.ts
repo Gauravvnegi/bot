@@ -123,6 +123,8 @@ import { InteractiveGridComponent } from './components/interactive-grid/interact
 import { AngularDraggableModule } from 'angular2-draggable';
 import { TooltipModule } from 'primeng/tooltip';
 
+import { TieredMenuModule } from 'primeng/tieredmenu';
+import { TieredMenuButtonComponent } from './components/tiered-menu-button/tiered-menu-button.component';
 
 @NgModule({
   imports: [
@@ -156,6 +158,7 @@ import { TooltipModule } from 'primeng/tooltip';
     StepsModule,
     AngularDraggableModule,
     TooltipModule,
+    TieredMenuModule,
   ],
   declarations: [
     DatatableComponent,
@@ -251,6 +254,7 @@ import { TooltipModule } from 'primeng/tooltip';
     FromToDateComponent,
     TimerComponent,
     InteractiveGridComponent,
+    TieredMenuButtonComponent,
   ],
 
   exports: [
@@ -367,6 +371,7 @@ import { TooltipModule } from 'primeng/tooltip';
     InteractiveGridComponent,
     AngularDraggableModule,
     TooltipModule,
+    TieredMenuButtonComponent,
   ],
 })
 export class AdminSharedModule {}

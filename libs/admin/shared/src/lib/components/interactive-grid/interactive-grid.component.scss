@@ -1,3 +1,5 @@
+@import 'main';
+
 .wrapper {
   position: relative;
 }
@@ -40,31 +42,58 @@
   position: absolute;
 }
 
+.no-break-text {
+}
+
 .cell-data {
-  display: flex;
-  align-items: center;
-  justify-content: center;
   cursor: move;
-  border-radius: 4px;
-  border-width: 1px;
+
+  padding: 0 5px;
+  border-width: 0 0 0 5px;
   border-style: solid;
 
-  background-color: #9fb3cb;
-  border-color: #1570d9;
+  background-color: $primary-text-bg;
+  border-color: $primary;
 
-  &.active-cell {
-    background-color: #6191c7;
-    border-color: #1570d9;
+  &__content {
+    font-size: small;
+    @include no-break-hidden-text;
   }
 
-  &.failed-cell {
-    background-color: #fdecec;
-    border-color: #d91615;
+  &__icon {
+    height: 10px;
+    margin-right: 5px;
+  }
+
+  &__additional-content {
+    font-size: x-small;
+    color: $grayMedium;
+    @include no-break-hidden-text;
+  }
+
+  &.success-cell {
+    background-color: #dcf6d3;
+    border-color: #72cf4d;
+  }
+
+  &.active-cell {
+    background-color: #e2eafd;
+    border-color: #3166f0;
+  }
+
+  &.inactive-cell {
+    border-color: #d13b30;
+    background-color: #fce3e3;
+  }
+
+  &.warning-cell {
+    border-color: #550000;
+    background-color: #f9bda4;
   }
 
   &.draft-cell {
-    border-color: #3b3b3b;
-    background-color: #d5d5d5;
+    background-color: #d1d1d1;
+    border-color: #555555;
   }
 }
 

@@ -69,14 +69,12 @@
           <div
             class="cell-data"
             [ngClass]="{
-              'active-cell': data[row][col]?.color === 'active',
-              'completed-cell': data[row][col]?.color === 'completed',
-              'draft-cell': data[row][col]?.color === 'draft',
-              'failed-cell': data[row][col]?.color === 'failed',
-              'inactive-cell': data[row][col]?.color === 'inactive',
-              'warning-cell': data[row][col]?.color === 'warning',
-              'unavailable-cell': data[row][col]?.color === 'unavailable',
-              'success-cell': data[row][col]?.color === 'success'
+              'success-cell': data[row][col]?.colorCode === 'success',
+              'active-cell': data[row][col]?.colorCode === 'active',
+              'inactive-cell': data[row][col]?.colorCode === 'inactive',
+              'failed-cell': data[row][col]?.colorCode === 'failed',
+              'warning-cell': data[row][col]?.colorCode === 'warning',
+              'draft-cell': data[row][col]?.colorCode === 'draft'
             }"
             [ngStyle]="{
               height: height - 2 * cellGap + 'px',
@@ -88,7 +86,20 @@
                 : 0
             }"
           >
-            {{ data[row][col]?.content }}
+            <div class="cell-data__content">
+              <ng-container *ngIf="data[row][col]?.icons">
+                <img
+                  *ngFor="let icon of data[row][col]?.icons"
+                  [src]="icon"
+                  alt="cell-icon"
+                  class="cell-data__icon"
+                />
+              </ng-container>
+              {{ data[row][col]?.content }}
+            </div>
+            <div class="cell-data__additional-content">
+              {{ data[row][col]?.additionContent }}
+            </div>
           </div>
         </div>
       </ng-container>

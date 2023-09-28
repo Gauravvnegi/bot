@@ -466,8 +466,7 @@ export class InteractiveGridComponent {
         rowResult = {
           ...(rowResult ?? {}),
           [boundStartPos]: {
-            content: item.content,
-            colorCode: item.colorCode,
+            ...item,
             id: item.id,
             cellOccupied,
             startPosIdx: this.colIndices[boundStartPos],
@@ -582,9 +581,16 @@ type OutOfBoundRecord = Record<
   }
 >;
 
+/**
+ * @argument content - Text to be shown
+ * @argument colorCode - 'success' | 'active' | 'inactive' | 'draft' | 'warning'
+ * @argument additionContent - Addition Text to be shown
+ */
 type ExtraGridInformation = {
-  content: string;
-  colorCode: FlagType;
+  content?: string;
+  additionContent?: string;
+  colorCode?: FlagType;
+  icons?: string[];
 };
 
 type ExtraGridInformationKeys = keyof ExtraGridInformation;

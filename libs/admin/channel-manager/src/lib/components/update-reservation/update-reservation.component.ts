@@ -27,6 +27,9 @@ export class UpdateReservationComponent implements OnInit {
       startPos: 8,
       endPos: 10,
       rowValue: 105,
+      colorCode: 'warning',
+      icons: ['assets/svg/View.svg', 'assets/svg/copy.svg'],
+      additionContent: 'BigOh private ltd.',
     },
     {
       id: 'RES01000',
@@ -34,6 +37,8 @@ export class UpdateReservationComponent implements OnInit {
       startPos: 19,
       endPos: 22,
       rowValue: 105,
+      colorCode: 'active',
+      icons: ['assets/svg/copy.svg'],
     },
     {
       id: 'RES001',
@@ -41,6 +46,8 @@ export class UpdateReservationComponent implements OnInit {
       startPos: 14,
       endPos: 16,
       rowValue: 101,
+      colorCode: 'draft',
+      icons: ['assets/svg/View.svg'],
     },
     {
       id: 'RES002',
@@ -48,20 +55,29 @@ export class UpdateReservationComponent implements OnInit {
       startPos: 17,
       endPos: 19,
       rowValue: 101,
+      colorCode: 'warning',
+      icons: ['assets/svg/View.svg', 'assets/svg/copy.svg'],
+      additionContent: 'BigOh private ltd.',
     },
     {
       id: 'RES003',
       content: 'Jag 101',
       startPos: 20,
-      endPos: 20,
+      endPos: 21,
       rowValue: 101,
+      colorCode: 'success',
+      additionContent: 'BigOh private ltd.',
     },
     {
       id: 'RES004',
       content: 'Tony Stark 102',
       startPos: 10,
       endPos: 15,
+
       rowValue: 102,
+      colorCode: 'success',
+      icons: ['assets/svg/copy.svg'],
+      additionContent: 'BigOh private ltd.',
     },
     {
       id: 'RES006',
@@ -69,13 +85,19 @@ export class UpdateReservationComponent implements OnInit {
       startPos: 11,
       endPos: 15,
       rowValue: 103,
+      colorCode: 'active',
     },
+
     {
       id: 'RES0071',
       content: 'Pradeep 104',
       startPos: 11,
       endPos: 19,
       rowValue: 104,
+      colorCode: 'inactive',
+      icons: ['assets/svg/copy.svg', 'assets/svg/View.svg'],
+
+      additionContent: 'BigOh private ltd.',
     },
     {
       id: 'RES008',
@@ -83,6 +105,8 @@ export class UpdateReservationComponent implements OnInit {
       startPos: 19,
       endPos: 20,
       rowValue: 104,
+      colorCode: 'active',
+      additionContent: 'BigOh private ltd.',
     },
     {
       id: 'RES007',
@@ -90,6 +114,7 @@ export class UpdateReservationComponent implements OnInit {
       startPos: 21,
       endPos: 30,
       rowValue: 104,
+      colorCode: 'inactive',
     },
   ];
 

@@ -49,6 +49,7 @@ export class ReservationCalendarViewComponent implements OnInit {
   roomsLoaded = false;
   reservationListData: RoomReservation[];
   $subscription = new Subscription();
+  previousData: IGValue[] = [];
 
   constructor(
     private fb: FormBuilder,
@@ -80,6 +81,11 @@ export class ReservationCalendarViewComponent implements OnInit {
             roomTypeId: roomTypeData.id,
             rooms: roomTypeData.rooms,
             loading: false,
+            data: {
+              rows: [],
+              columns: [],
+              values: [],
+            },
           }));
           this.roomsLoaded = true;
           this.initReservationData();
@@ -118,14 +124,17 @@ export class ReservationCalendarViewComponent implements OnInit {
           )
       );
       // Update the data field with matching reservations
-      roomType.data = matchingReservations.map((reservation) => ({
-        id: reservation.id,
-        content: reservation.guestName,
-        startPos: this.getDate(reservation.from),
-        endPos: this.getDate(reservation.to),
-        rowValue: reservation.bookingItems[0].roomDetails.roomNumber,
-      }));
-
+      roomType.data = {
+        rows: this.getRooms(roomType.rooms),
+        columns: this.gridCols,
+        values: matchingReservations.map((reservation) => ({
+          id: reservation.id,
+          content: reservation.guestName,
+          startPos: this.getDate(reservation.from),
+          endPos: this.getDate(reservation.to),
+          rowValue: reservation.bookingItems[0].roomDetails.roomNumber,
+        })),
+      };
       this.allRoomTypes = this.roomTypes;
     }
   }
@@ -226,7 +235,7 @@ export class ReservationCalendarViewComponent implements OnInit {
         (res) => {},
         (error) => {
           selectedRoomType.loading = false;
-          this.initReservationData();
+          selectedRoomType.data = { ...selectedRoomType.data };
         },
         () => {
           selectedRoomType.loading = false;
@@ -254,9 +263,9 @@ export class ReservationCalendarViewComponent implements OnInit {
     console.log(event, 'onEdit event');
   }
 
-  getSelectedRoomType(room: IGRow) {
+  getSelectedRoomType(roomNumber: IGRow) {
     const selectedRoomType = this.roomTypes.find((roomType) => {
-      return roomType.rooms.some((room) => room.roomNumber === room.roomNumber);
+      return roomType.rooms.some((room) => room.roomNumber === roomNumber);
     });
     return selectedRoomType;
   }
@@ -275,7 +284,13 @@ type IGRoomType = {
   roomTypeId: string;
   rooms?: IGRoom[];
   loading?: boolean;
-  data?: IGValue[];
+  data?: GridData;
+};
+
+type GridData = {
+  rows: IGRow[];
+  columns: IGCol[];
+  values: IGValue[];
 };
 
 type IGRoom = {

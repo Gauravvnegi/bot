@@ -129,11 +129,7 @@
                     [props]="{
                       createNewToolTipInfo: 'Create New Reservation'
                     }"
-                    [gridData]="{
-                      rows: getRooms(roomType.rooms),
-                      columns: gridCols,
-                      values: roomType?.data ? roomType.data : []
-                    }"
+                    [gridData]="roomType.data"
                     [isProcessing]="roomType.loading"
                     (onChange)="handleChange($event)"
                     (onCreate)="handleCreate($event)"

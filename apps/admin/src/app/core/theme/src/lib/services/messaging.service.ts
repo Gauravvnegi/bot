@@ -84,7 +84,7 @@ export class FirebaseMessagingService {
       const snackBarRef = this._snackbarService.openSnackBarAsComponent(
         NotificationSnackbarComponent,
         {
-          panelClass: 'notification',
+          panelClass: 'whatsapp-notification',
           duration: 5000,
           horizontalPosition: 'right',
           verticalPosition: 'top',

@@ -8,7 +8,7 @@ import { TableValue } from '../constants/tabFilterItem';
  */
 @Injectable({ providedIn: 'root' })
 export class ReservationService extends ApiService {
-  selectedTable = TableValue.inHouse;
+  selectedTable = TableValue.arrival;
   bookingNumber: string;
   guestId: string;
 

@@ -124,3 +124,9 @@
 .disabled-btn {
   pointer-events: none;
 }
+
+:host ::ng-deep .sidebar-slide {
+  .p-sidebar {
+    margin-top: 0;
+  }
+}

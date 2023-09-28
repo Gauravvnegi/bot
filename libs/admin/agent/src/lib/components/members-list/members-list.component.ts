@@ -42,9 +42,15 @@ export class MembersListComponent implements OnInit {
   ngOnInit(): void {
     this.entityId = this.globalFilterService.entityId;
     this.getMembers();
+    const isAgency = this.label.toLocaleLowerCase().includes('agency');
     this.placeholder =
-      this.type === 'COMPANY' ? 'Select Company' : 'Select Agent';
-    this.createPrompt = this.type === 'COMPANY' ? '+ Add New Company' : '';
+      this.type === 'COMPANY'
+        ? `Select ${isAgency ? 'Agency' : 'Company'}`
+        : 'Select Agent';
+    this.createPrompt =
+      this.type === 'COMPANY'
+        ? `+ Add New  ${isAgency ? 'Agency' : 'Company'}`
+        : '';
   }
 
   /**

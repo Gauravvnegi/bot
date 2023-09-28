@@ -7,7 +7,6 @@ import {
   AbstractControl,
 } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
   AdminUtilityService,
   Option,
@@ -18,7 +17,6 @@ import {
 import { SummaryData } from '../../models/reservations.model';
 import { ManageReservationService } from '../../services/manage-reservation.service';
 import {
-  editModeStatusOptions,
   menuItemFields,
   restaurantReservationTypes,
   statusOptions,
@@ -66,21 +64,21 @@ export class RestaurantReservationComponent extends BaseReservationComponent
   constructor(
     private fb: FormBuilder,
     private adminUtilityService: AdminUtilityService,
-    protected globalFilterService: GlobalFilterService,
     private manageReservationService: ManageReservationService,
     protected activatedRoute: ActivatedRoute,
     private outletService: OutletService,
     protected formService: FormService,
     protected hotelDetailService: HotelDetailService
   ) {
-    super(globalFilterService, activatedRoute, hotelDetailService, formService);
+    super(activatedRoute, hotelDetailService, formService);
     this.initForm();
   }
   ngOnInit(): void {
     this.initDetails();
     this.getMenuItems();
+    this.listenFormServiceChanges();
     this.initOptions();
-    this.getReservationId();
+    if (this.reservationId) this.getReservationDetails();
     this.initFormData();
     this.listenForFormChanges();
     this.getFoodPackages();
@@ -91,10 +89,17 @@ export class RestaurantReservationComponent extends BaseReservationComponent
     this.outletId = this.selectedEntity.value;
     this.fields = menuItemFields;
     this.outletItems = [OutletItems.MENU_ITEM, OutletItems.FOOD_PACKAGE];
+  }
+
+  listenFormServiceChanges() {
     this.expandAccordion = this.formService.enableAccordion;
+    // Expand accordion for assign room from reservation table.
     if (this.expandAccordion) {
       this.formService.enableAccordion = false;
     }
+    this.formService.getSummary.subscribe((res) => {
+      if (this.menuControls.valid) this.getSummaryData();
+    });
   }
 
   initOptions() {
@@ -130,6 +135,9 @@ export class RestaurantReservationComponent extends BaseReservationComponent
         kotInstructions: [''],
       }),
       offerId: [''],
+      instructions: this.fb.group({
+        specialInstructions: [''],
+      }),
     });
 
     // Add food package items to the form
@@ -282,21 +290,10 @@ export class RestaurantReservationComponent extends BaseReservationComponent
     );
   }
 
-  getReservationId(): void {
-    if (this.reservationId) {
-      this.getReservationDetails();
-    } else {
-      this.statusOptions = [
-        ...statusOptions,
-        // { label: 'Seated', value: 'SEATED' },
-      ];
-    }
-  }
-
   getReservationDetails(): void {
     this.$subscription.add(
       this.manageReservationService
-        .getReservationDataById(this.reservationId, this.entityId)
+        .getReservationDataById(this.reservationId, this.outletId)
         .subscribe(
           (response) => {
             const data = new OutletForm().deserialize(response);
@@ -350,12 +347,26 @@ export class RestaurantReservationComponent extends BaseReservationComponent
   }
 
   getSummaryData(): void {
-    const config = {
-      params: this.adminUtilityService.makeQueryParams([
-        { type: EntityType.OUTLET },
-      ]),
-    };
+    this.$subscription.add(
+      this.manageReservationService
+        .getSummaryData(this.outletId, this.getFormData(), {
+          params: `?type=${EntityType.OUTLET}`,
+        })
+        .subscribe(
+          (res) => {
+            this.summaryData = new SummaryData()?.deserialize(res);
+            this.updatePaymentData();
+            if (this.formValueChanges) {
+              this.setFormDisability();
+              this.formValueChanges = false;
+            }
+          },
+          (error) => {}
+        )
+    );
+  }
 
+  getFormData() {
     const data: ReservationSummary = {
       from: this.reservationInfoControls.dateAndTime.value,
       to: this.reservationInfoControls.dateAndTime.value,
@@ -370,31 +381,7 @@ export class RestaurantReservationComponent extends BaseReservationComponent
       outletType: EntitySubType.RESTAURANT,
     };
 
-    this.$subscription.add(
-      this.manageReservationService
-        .getSummaryData(this.outletId, data, config)
-        .subscribe(
-          (res) => {
-            this.summaryData = new SummaryData()?.deserialize(res);
-            this.userForm
-              .get('paymentMethod.totalPaidAmount')
-              .setValidators([Validators.max(this.summaryData?.totalAmount)]);
-            this.userForm
-              .get('paymentMethod.totalPaidAmount')
-              .updateValueAndValidity();
-            this.userForm
-              .get('paymentRule.deductedAmount')
-              .patchValue(this.summaryData?.totalAmount);
-            this.deductedAmount = this.summaryData?.totalAmount;
-
-            if (this.formValueChanges) {
-              this.setFormDisability();
-              this.formValueChanges = false;
-            }
-          },
-          (error) => {}
-        )
-    );
+    return data;
   }
 
   getFoodPackages() {

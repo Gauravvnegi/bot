@@ -25,7 +25,7 @@ export class FormService {
   disableBtn: boolean = false;
 
   getSummary = new Subject<void>();
-  
+
   guestInformation: BehaviorSubject<GuestInfo> = new BehaviorSubject<GuestInfo>(
     null
   );
@@ -66,14 +66,15 @@ export class FormService {
     roomReservationData.marketSegment =
       input.reservationInformation?.marketSegment;
 
-    roomReservationData.paymentMethod =
+    roomReservationData.paymentDetails.paymentMethod =
       input.paymentMethod?.paymentMethod ?? '';
-    roomReservationData.paymentRemark =
+    roomReservationData.paymentDetails.remarks =
       input.paymentMethod?.paymentRemark ?? '';
-    roomReservationData.pricingDetails = {
-      totalPaidAmount: input.paymentMethod?.totalPaidAmount ?? 0,
-    };
-
+    roomReservationData.paymentDetails.amount =
+      input.paymentMethod?.totalPaidAmount ?? 0;
+    roomReservationData.paymentDetails.transactionId =
+      input.paymentMethod.transactionId;
+      
     roomReservationData.guestId = input.guestInformation?.guestDetails;
     roomReservationData.specialRequest = input.instructions.specialInstructions;
     roomReservationData.offer = {

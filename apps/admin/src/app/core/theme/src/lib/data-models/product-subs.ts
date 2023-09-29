@@ -815,6 +815,15 @@ export const productMenuSubs: any[] = [
             isSubscribed: true,
             isView: true,
           },
+          {
+            featureId: '91bb3761-7c3b-47a7-bcef-20b6e4f3f543',
+            name: 'ROOM',
+            label: 'Room',
+            icon:
+              'https://nyc3.digitaloceanspaces.com/botfiles/bot/subscription_icons/library.svg',
+            isSubscribed: true,
+            isView: true,
+          },
         ],
         isSubscribed: true,
         isView: true,

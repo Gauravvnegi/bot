@@ -8,17 +8,18 @@ export class RoomReservationFormData {
   source: string;
   sourceName: string;
   marketSegment: string;
-  paymentMethod: string;
-  paymentRemark: string;
   guestId: string;
   bookingItems: BookingItemFormData[];
   id?: string;
   specialRequest: string;
-  pricingDetails: {
-    totalPaidAmount: number;
-  };
   offer?: {
     id: string;
+  };
+  paymentDetails: {
+    amount: number;
+    paymentMethod: string;
+    remarks: string;
+    transactionId: string;
   };
 }
 

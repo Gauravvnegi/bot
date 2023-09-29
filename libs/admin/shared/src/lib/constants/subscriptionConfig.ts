@@ -104,127 +104,7 @@ export enum ModuleNames {
   HOTEL_IN_BOX = 'HOTEL_IN_BOX',
 }
 
-export const productMenu: ProductMenu[] = [
-  //productMenu
-  {
-    label: 'efrontdesk',
-    name: ModuleNames.FRONT_DESK,
-    icon: 'assets/images/efrontdesk.png',
-    module: [
-      {
-        name: ModuleNames.FRONT_DESK,
-        child: [
-          // ModuleNames.FRONT_DESK,
-          ModuleNames.FRONT_DESK_DASHBOARD,
-          ModuleNames.REQUEST,
-        ],
-      },
-      {
-        name: ModuleNames.MEMBERS,
-        child: [ModuleNames.GUESTS],
-      },
-      {
-        name: ModuleNames.FINANCE,
-        child: [ModuleNames.INVOICE, ModuleNames.TRANSACTIONS],
-      },
-      {
-        name: ModuleNames.LIBRARY,
-        child: [ModuleNames.PACKAGES, ModuleNames.OFFERS, ModuleNames.SERVICES],
-      },
-    ],
-  },
-  {
-    label: 'heda',
-    name: ModuleNames.HEDA,
-    icon: 'assets/images/efrontdesk.png',
-    module: [
-      {
-        name: ModuleNames.HEDA,
-        child: [ModuleNames.HEDA_DASHBOARD, ModuleNames.FEEDBACK],
-      },
-      {
-        name: ModuleNames.MEMBERS,
-        child: [ModuleNames.GUESTS],
-      },
-    ],
-  },
-  {
-    label: 'Hotel in a Box',
-    name: ModuleNames.HOTEL_IN_BOX,
-    icon: 'assets/images/hotel-in-box.png',
-    module: [
-      {
-        name: ModuleNames.MEMBERS,
-        child: [ModuleNames.GUESTS],
-      },
 
-      {
-        name: ModuleNames.LIBRARY,
-        child: [ModuleNames.PACKAGES, ModuleNames.OFFERS, ModuleNames.SERVICES],
-      },
-    ],
-  },
-  {
-    label: 'RevMaxi',
-    name: ModuleNames.REVMAXI,
-    icon: 'assets/images/createwith.png',
-    module: [],
-  },
-  {
-    label: 'BookConnectLive',
-    name: ModuleNames.BOOKCONNECT_LIVE,
-    icon: 'assets/images/bookConnectLive.png',
-    module: [],
-  },
-  {
-    label: 'eMark-IT',
-    name: ModuleNames.EMARK_IT,
-    icon: 'assets/images/hotel-in-box.png',
-    module: [
-      {
-        name: ModuleNames.EMARK_IT,
-        child: [ModuleNames.EMARK_IT_DASHBOARD, ModuleNames.CAMPAIGN],
-      },
-    ],
-  },
-  {
-    label: 'Createwith',
-    name: ModuleNames.CREATE_WITH,
-    icon: 'assets/images/hotel-in-box.png',
-    module: [
-      {
-        name: ModuleNames.CREATE_WITH,
-        child: [
-          ModuleNames.CREATE_WITH_DASHBOARD,
-          ModuleNames.PAGES,
-          ModuleNames.BLOG,
-          ModuleNames.MARKETING_SEO,
-          ModuleNames.BUILDER,
-        ],
-      },
-      {
-        name: ModuleNames.MEMBERS,
-        child: [ModuleNames.GUESTS],
-      },
-      {
-        name: ModuleNames.LIBRARY,
-        child: [ModuleNames.PACKAGES, ModuleNames.OFFERS, ModuleNames.SERVICES],
-      },
-    ],
-  },
-  {
-    label: 'ComplaintTrackr',
-    name: ModuleNames.COMPLAINT_TRACKR,
-    icon: 'assets/images/bookConnectLive.png',
-    module: [],
-  },
-  {
-    label: 'PredictoPMS',
-    name: ModuleNames.PREDICT_PMS,
-    icon: 'assets/images/hotel-in-box.png',
-    module: [],
-  },
-];
 
 export enum Integrations {
   OCR = 'ocr',
@@ -434,10 +314,10 @@ export const ModuleConfig = {
   },
 };
 export type ProductMenu = {
-  label: string;
+  title: string;
   name: ModuleNames;
   icon: string;
-  module?: Module[];
+  children?: ProductMenu[];
 };
 
 type Module = {

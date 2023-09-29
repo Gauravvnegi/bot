@@ -30,6 +30,7 @@ import { RoomTypeForm } from 'libs/admin/room/src/lib/models/room.model';
 import { ReservationForm, RoomTypes } from '../../constants/form';
 import { RoomsByRoomType } from 'libs/admin/room/src/lib/types/service-response';
 import { IteratorField } from 'libs/admin/shared/src/lib/types/fields.type';
+import { FormService } from '../../services/form.service';
 @Component({
   selector: 'hospitality-bot-room-iterator',
   templateUrl: './room-iterator.component.html',
@@ -40,7 +41,6 @@ export class RoomIteratorComponent extends IteratorComponent
   parentFormGroup: FormGroup;
   roomTypeArray: FormArray;
 
-  @Output() refreshData = new EventEmitter();
   @Output() listenChanges = new EventEmitter();
 
   @Input() reservationId: string;
@@ -51,7 +51,7 @@ export class RoomIteratorComponent extends IteratorComponent
   errorMessages = {};
 
   roomTypeOffSet = 0;
-  roomTypeLimit = 20;
+  roomTypeLimit = 50;
 
   roomTypes: RoomFieldTypeOption[] = [];
 
@@ -61,6 +61,7 @@ export class RoomIteratorComponent extends IteratorComponent
   isDefaultRoomType = false;
 
   itemValuesCount = 0;
+  selectedRoomNumbers = [];
 
   @ViewChild('main') main: ElementRef;
 
@@ -70,7 +71,8 @@ export class RoomIteratorComponent extends IteratorComponent
     private adminUtilityService: AdminUtilityService,
     private manageReservationService: ManageReservationService,
     private snackbarService: SnackBarService,
-    private controlContainer: ControlContainer
+    private controlContainer: ControlContainer,
+    public formService: FormService
   ) {
     super(fb);
   }
@@ -182,6 +184,7 @@ export class RoomIteratorComponent extends IteratorComponent
         roomNumbers: value?.roomNumbers,
         id: value?.id,
       });
+      this.selectedRoomNumbers = value.roomNumbers;
     });
   }
 
@@ -209,7 +212,6 @@ export class RoomIteratorComponent extends IteratorComponent
             this.roomControls[index]
               .get('ratePlanOptions')
               .patchValue(ratePlanOptions, { emitEvent: false });
-
             this.getRoomsByRoomType(res, index);
 
             if (!this.isDefaultRoomType) {
@@ -247,20 +249,14 @@ export class RoomIteratorComponent extends IteratorComponent
     };
     // Set loading for roomNumber
     this.fields[3].loading[index] = true;
-    this.manageReservationService
-      .getRoomNumber(this.entityId, config)
-      .subscribe((res) => {
-        const roomNumberOptions = res.rooms
-          .filter((room: RoomsByRoomType) => room.roomNumber.length)
-          .map((room: RoomsByRoomType) => ({
-            label: room.roomNumber,
-            value: room.roomNumber,
-          }));
-        this.roomControls[index]
-          .get('roomNumberOptions')
-          .patchValue(roomNumberOptions, { emitEvent: false });
-        this.fields[3].loading[index] = false;
-      });
+    this.formService.getRooms(
+      this.entityId,
+      config,
+      this.roomControls[index].get('roomNumberOptions'),
+      this.roomControls[index].get('roomNumbers'),
+      this.selectedRoomNumbers
+    );
+    this.fields[3].loading[index] = false;
   }
 
   /**
@@ -270,7 +266,6 @@ export class RoomIteratorComponent extends IteratorComponent
     this.roomControls[index].get('ratePlan').enable();
     if (this.reservationInfoControls.reservationType.value !== 'DRAFT')
       this.roomControls[index].get('roomNumbers').enable();
-
     if (!this.isDefaultRoomType) {
       // Patch default count values only if not in edit mode
       this.roomControls[index]
@@ -283,6 +278,10 @@ export class RoomIteratorComponent extends IteratorComponent
         .get('childCount')
         .patchValue(0, { emitEvent: false });
     }
+
+    setTimeout(() => {
+      this.isDefaultRoomType = false;
+    }, 2000);
   }
 
   /**
@@ -363,10 +362,6 @@ export class RoomIteratorComponent extends IteratorComponent
     }
   }
 
-  getSummaryData(): void {
-    this.refreshData.emit();
-  }
-
   listenForFormChanges(): void {
     this.listenChanges.emit();
   }
@@ -437,13 +432,11 @@ export class RoomIteratorComponent extends IteratorComponent
    * @param index position at which value is to be removed
    */
   removeField(index: number) {
-    if (!this.itemValues.length) {
-      if (this.roomTypeArray.length === 1) {
-        this.roomTypeArray.at(0).reset({ value: null, emitEvent: false });
-        return;
-      }
-      this.roomTypeArray.removeAt(index);
+    if (this.roomTypeArray.length === 1) {
+      this.roomTypeArray.at(0).reset({ value: null, emitEvent: false });
+      return;
     }
+    this.roomTypeArray.removeAt(index);
   }
 
   /**

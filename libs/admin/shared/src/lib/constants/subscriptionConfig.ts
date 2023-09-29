@@ -9,6 +9,8 @@ export enum ModuleNames {
   PAGES = 'PAGES',
   BLOG = 'BLOG',
   BOOKING_ENGINE = 'BOOKING_ENGINE',
+  MARKETING_SEO = 'MARKETING_SEO',
+  BUILDER = 'BUILDER',
 
   // Front Desk
   FRONT_DESK = 'FRONT_DESK',
@@ -18,6 +20,7 @@ export enum ModuleNames {
   REQUEST = 'REQUEST',
   RESERVATION = 'RESERVATION',
   ADD_RESERVATION = 'ADD_RESERVATION',
+  HOUSEKEEPING = 'HOUSEKEEPING',
 
   // Freddie
   FREDDIE = 'FREDDIE',
@@ -84,7 +87,24 @@ export enum ModuleNames {
   //Settings
   SETTINGS = 'SETTINGS',
   SUBSCRIPTION = 'SUBSCRIPTION',
+
+  //RevMaxi
+  REVMAXI = 'REVMAXI',
+
+  //BookConnectLive
+  BOOKCONNECT_LIVE = 'BOOKCONNECT_LIVE',
+
+  //ComplaintTrackr
+  COMPLAINT_TRACKR = 'COMPLAINT_TRACKR',
+
+  //PredictoPMS
+  PREDICT_PMS = 'PREDICT_PMS',
+
+  //hotel-in-box
+  HOTEL_IN_BOX = 'HOTEL_IN_BOX',
 }
+
+
 
 export enum Integrations {
   OCR = 'ocr',
@@ -292,4 +312,15 @@ export const ModuleConfig = {
       },
     },
   },
+};
+export type ProductMenu = {
+  title: string;
+  name: ModuleNames;
+  icon: string;
+  children?: ProductMenu[];
+};
+
+type Module = {
+  name: ModuleNames;
+  child?: ModuleNames[];
 };

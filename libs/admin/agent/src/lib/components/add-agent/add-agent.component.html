@@ -7,7 +7,7 @@
   <div class="form-block" [formGroup]="agentForm">
     <div class="code half-width">
       <span class="code__label"> Code: </span>
-      <span class="code__hash"> {{ packageCode }} </span>
+      <span class="code__hash"> {{ agentForm.get('packageCode').value }} </span>
     </div>
     <hospitality-bot-toggle-switch
       class="status half-width"
@@ -20,7 +20,7 @@
     <hospitality-bot-input
       class="half-width"
       controlName="name"
-      label="Agent Name"
+      label="Sales Person Name"
       maxLength="60"
       [props]="{
         placeholder: 'Enter'
@@ -50,10 +50,10 @@
     <hospitality-bot-input
       class="half-width"
       controlName="iataNo"
-      label="IATA No."
+      label="Reg No."
       maxLength="14"
       [props]="{
-        placeholder: 'Enter 14 digit IATA No.',
+        placeholder: 'Enter 14 digit Reg No.',
         errorMessages: {
           requiredLength: 'Length should be 14 digit.'
         }
@@ -64,7 +64,7 @@
       class="half-width"
       controlName="company"
       type="COMPANY"
-      label="Company Name"
+      label="Agency Name"
       (createMembers)="createNewCompany()"
     ></hospitality-bot-members-list>
 
@@ -97,6 +97,38 @@
         placeholder: 'Enter'
       }"
     ></hospitality-bot-prefix-field>
+    <hospitality-bot-select
+      class="half-width"
+      label="Market Segment"
+      controlName="marketSegment"
+      [options]="marketSegment"
+      [props]="{
+        placeholder: 'Select'
+      }"
+    >
+    </hospitality-bot-select>
+
+    <hospitality-bot-select
+      class="half-width"
+      label="Business Source"
+      controlName="businessSource"
+      [options]="businessSource"
+      [props]="{
+        placeholder: 'Select'
+      }"
+    >
+    </hospitality-bot-select>
+
+    <hospitality-bot-select
+      class="half-width"
+      label="Billing Instruction"
+      controlName="billingInstruction"
+      [options]="billingInstruction"
+      [props]="{
+        placeholder: 'Select'
+      }"
+    >
+    </hospitality-bot-select>
   </div>
 
   <hospitality-bot-form-action

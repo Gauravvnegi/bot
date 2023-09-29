@@ -9,4 +9,5 @@ export const tokensConfig = t({
   siteId: 'x-siteId',
   brandId: 'x-brandId',
   entityId: 'x-entityId',
+  selectedProduct: 'selectedProduct',
 });

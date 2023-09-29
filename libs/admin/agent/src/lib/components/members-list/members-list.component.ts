@@ -42,11 +42,17 @@ export class MembersListComponent implements OnInit {
   ngOnInit(): void {
     this.entityId = this.globalFilterService.entityId;
     this.getMembers();
+    const isAgency = this.label.toLocaleLowerCase().includes('agency');
     this.placeholder =
-      this.type === 'COMPANY' ? 'Select Company' : 'Select Agent';
-    this.createPrompt = this.type === 'COMPANY' ? '+ Add New Company' : '';
+      this.type === 'COMPANY'
+        ? `Select ${isAgency ? 'Agency' : 'Company'}`
+        : 'Select Agent';
+    this.createPrompt =
+      this.type === 'COMPANY'
+        ? `+ Add New  ${isAgency ? 'Agency' : 'Company'}`
+        : '';
   }
-  
+
   /**
    * @function getMembers
    * @description get Members from server
@@ -113,7 +119,7 @@ export class MembersListComponent implements OnInit {
           this.companyService
             .searchCompany({ params: `?key=${text}&type=${this.type}` })
             .subscribe((res) => {
-              const data = AgentModel.getCompanyList(res['records']);
+              const data = AgentModel.getCompanyList(res);
               this.membersList = data;
               this.loadingMembers = false;
             })

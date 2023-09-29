@@ -54,9 +54,7 @@ import {
 } from '../../types/forms.types';
 import { AddDiscountComponent } from '../add-discount/add-discount.component';
 import { AddRefundComponent } from '../add-refund/add-refund.component';
-import {
-  MenuItemListResponse,
-} from 'libs/admin/all-outlets/src/lib/types/outlet';
+import { MenuItemListResponse } from 'libs/admin/all-outlets/src/lib/types/outlet';
 
 @Component({
   selector: 'hospitality-bot-invoice',
@@ -108,6 +106,7 @@ export class InvoiceComponent implements OnInit {
   focusedDescriptionId: string;
 
   loadingData = false;
+  isInitialized = false;
 
   /**Table Variable */
   selectedRows = [];
@@ -247,6 +246,7 @@ export class InvoiceComponent implements OnInit {
           this.invoicePrepareRequest = res.invoicePrepareRequest;
           this.pmsBooking = res.pmsBooking;
           if (this.pmsBooking) this.disableInvoice();
+          this.isInitialized = true;
         })
     );
 

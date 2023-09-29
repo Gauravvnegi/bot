@@ -25,6 +25,7 @@ export type OutletForm = {
   paidServiceIds?;
   menuIds?;
   foodPackageIds?;
+  shortDescription: string;
 };
 
 type OutletItems = {

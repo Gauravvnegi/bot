@@ -14,12 +14,14 @@ import { ModalService } from 'libs/shared/material/src/lib/services/modal.servic
 import { Subscription } from 'rxjs';
 import {
   ModuleNames,
+  ProductMenu,
   routes,
 } from '../../../../../../../../../../libs/admin/shared/src/index';
 import { MenuItem } from '../../data-models/menu.model';
 import { GlobalFilterService } from '../../services/global-filters.service';
 import { SubscriptionPlanService } from '../../services/subscription-plan.service';
 import { OrientationPopupComponent } from '../orientation-popup/orientation-popup.component';
+import { AuthService } from '../../../../../auth/services/auth.service';
 
 @Component({
   selector: 'hospitality-bot-sidenav',
@@ -41,6 +43,9 @@ export class SidenavComponent implements OnInit, OnDestroy {
   @Output() submenuItems = new EventEmitter<any>();
   @Output() navToggle = new EventEmitter<boolean>();
   selectedModule: ModuleNames;
+  isMenuBarVisible: boolean = false;
+  productList = [];
+  selectedProduct: ModuleNames;
 
   constructor(
     private _breakpointObserver: BreakpointObserver,
@@ -48,10 +53,14 @@ export class SidenavComponent implements OnInit, OnDestroy {
     private globalFilterService: GlobalFilterService,
     private _hotelDetailService: HotelDetailService,
     private subscriptionPlanService: SubscriptionPlanService,
-    private router: Router
+    private router: Router,
+    private authService: AuthService
   ) {}
 
   ngOnInit() {
+    this.selectedProduct = this.authService.getTokenByName(
+      'selectedProduct'
+    ) as ModuleNames;
     this.registerListeners();
     this.initSideNavConfigs({
       headerBgColor: this.branchConfig.headerBgColor,
@@ -135,21 +144,29 @@ export class SidenavComponent implements OnInit, OnDestroy {
     dialogConfig.width = '450px';
     this._modal.openDialog(OrientationPopupComponent, dialogConfig);
   }
-
+  products;
   private initSideNavConfigs(config = {}) {
     this.activeFontColor = '#ffffff';
     this.normalFontColor = '#ffffff';
     this.dividerBgColor = 'white';
     this.list_item_colour = '#E8EEF5';
     this.headerBgColor = config['headerBgColor'] || '#4B56C0';
-    let products = this.subscriptionPlanService.getSubscription()['products'];
-
-    this.menuItems = products
+    this.products = this.subscriptionPlanService.getSubscription()['products'];
+    this.productList = this.products
       .filter((item) => item.isView)
       .map((product) => {
         let menuItem = new MenuItem().deserialize(product);
         return menuItem;
       });
+    const selectedModule = this.selectedProduct
+      ? this.productList.find((item) => item.name === this.selectedProduct)
+      : this.productList.find((item) => item.isSubscribed);
+
+    if (selectedModule) {
+      this.selectedProduct = selectedModule.name;
+      this.subscriptionPlanService.selectedProduct = this.selectedProduct;
+      this.menuItems = selectedModule.children;
+    }
 
     this.setSelectedModuleBasedOnRoute();
   }
@@ -169,6 +186,24 @@ export class SidenavComponent implements OnInit, OnDestroy {
       list: items,
     };
     this.submenuItems.emit(data);
+  }
+
+  // Intial -> Selected Product (priority sequence)
+  // IsView
+
+  onMenuCLick(data: any) {
+    this.selectedProduct = data.name;
+    this.menuItems = data.children;
+    this.subscriptionPlanService.selectedProduct = this.selectedProduct;
+    this.authService.setTokenByName('selectedProduct', this.selectedProduct);
+
+    this.setSelectedModuleBasedOnRoute();
+    //route to first child of first product
+    const childRoute = data.children.find(
+      (item) => item.isView && item.isSubscribed
+    );
+    this.router.navigate([`pages/${routes[childRoute.name]}`]);
+    this.isMenuBarVisible = false;
   }
 
   ngOnDestroy() {
@@ -192,5 +227,9 @@ export class SidenavComponent implements OnInit, OnDestroy {
     if (!this.isExpanded) {
       this.setSelectedModuleBasedOnRoute();
     }
+  }
+
+  onExplore() {
+    this.isMenuBarVisible = !this.isMenuBarVisible;
   }
 }

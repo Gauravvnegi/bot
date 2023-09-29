@@ -54,7 +54,9 @@
           <div class="value">Churn Probability</div>
         </div> -->
         <div class="guest_data__field">
-          <div class="label">{{ guestData.guestAttributes.totalSpend | currency: 'INR'  }}</div>
+          <div class="label">
+            {{ guestData.guestAttributes.totalSpend | currency: 'INR' }}
+          </div>
           <div class="value">Overall Spent</div>
         </div>
         <div class="guest_data__field">
@@ -426,11 +428,7 @@
                   <ng-container
                     *ngIf="details.pmsBooking; else activateAndGenerateCheckout"
                   >
-                    <ng-container
-                      *ngIf="
-                        details.invoicePrepareRequest;
-                      "
-                    >
+                    <ng-container *ngIf="details.invoicePrepareRequest">
                       <hospitality-bot-button
                         label="Activate & Generate Checkout"
                         (click)="activateAndgenerateJourney('CHECKOUT')"

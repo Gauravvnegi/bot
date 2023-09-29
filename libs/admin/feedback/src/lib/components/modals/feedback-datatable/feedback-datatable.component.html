@@ -94,12 +94,12 @@
                 </p-tableCheckbox>
               </td>
               <td>
-                <div [roomStatus]="rowData.roomStatus">
+                <div [roomStatus]="rowData?.tableOrRoomNumber?.status">
                   <div>
                     {{
-                      rowData.bookingDetails.tableOrRoomNumber || '--'
+                      rowData.bookingDetails.tableOrRoomNumber.roomNumber || '--'
                     }}&nbsp;-&nbsp;{{
-                      rowData?.bookingDetails?.roomType || '--'
+                      rowData?.bookingDetails?.tableOrRoomNumber?.roomType || '--'
                     }}
                   </div>
                 </div>
@@ -373,10 +373,10 @@
                 </p-tableCheckbox>
               </td>
               <td>
-                <div [roomStatus]="rowData.roomStatus">
+                <div [roomStatus]="rowData?.tableOrRoomNumber?.status">
                   <div>
-                    {{ rowData?.tableOrRoomNumber || '--' }}&nbsp;-&nbsp;{{
-                      rowData?.roomType || '--'
+                    {{ rowData?.tableOrRoomNumber?.roomNumber || '--' }}&nbsp;-&nbsp;{{
+                      rowData?.tableOrRoomNumber?.type || '--'
                     }}
                   </div>
                 </div>

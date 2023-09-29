@@ -76,12 +76,14 @@
             [settings]="{ showHeader: false }"
           ></hospitality-bot-multi-select>
         </div>
-        <mat-icon
-          *ngIf="ctaLabel && (!maxLimit || maxLimit > useFormArray.length)"
-          class="delete"
-          (click)="removeField(i)"
-          >clear</mat-icon
-        >
+        <ng-container *ngIf="useFormArray.length > 1">
+          <mat-icon
+            *ngIf="ctaLabel && (!maxLimit || maxLimit > useFormArray.length)"
+            class="delete"
+            (click)="removeField(i)"
+            >clear</mat-icon
+          >
+        </ng-container>
       </div>
     </div>
   </div>

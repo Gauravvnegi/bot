@@ -6,16 +6,29 @@ export class SubMenuItem {
   title: string;
   name: ModuleNames;
   url: string;
+  isSubscribed: boolean;
+  isView: boolean;
+  children: SubMenuItem[];
 
   deserialize(input: any) {
+    this.children = new Array<SubMenuItem>();
+
     Object.assign(
       this,
       set({}, 'title', get(input, ['label'])),
       set({}, 'name', get(input, ['name'])),
       set({}, 'url', get(input, ['icon']))
     );
+    this.isSubscribed = input.isSubscribed;
+    this.isView = input.isView;
 
     this.path = routes[input.name];
+
+    input.config?.forEach((subMenu) => {
+      if (routes[subMenu.name] && subMenu.isView) {
+        this.children.push(new SubMenuItem().deserialize(subMenu));
+      }
+    });
 
     return this;
   }
@@ -25,6 +38,9 @@ export class MenuItem {
   path: string;
   title: string;
   name: ModuleNames;
+  isSubscribed: boolean;
+  isView: boolean;
+
   children: SubMenuItem[];
   url: string;
 
@@ -35,10 +51,6 @@ export class MenuItem {
       moduleData: any;
     }
   ) {
-    if (configuration && !configuration?.moduleList.includes(input.name)) {
-      return;
-    }
-
     this.children = new Array<SubMenuItem>();
 
     Object.assign(
@@ -47,21 +59,14 @@ export class MenuItem {
       set({}, 'name', get(input, ['name'])),
       set({}, 'url', get(input, ['icon']))
     );
+    this.isSubscribed = input.isSubscribed;
+    this.isView = input.isView;
 
     this.path = routes[input.name];
 
-    const subModule = configuration
-      ? configuration.moduleData.find((item) => item.name === input.name)
-          ?.child || []
-      : [];
-
     input.config?.forEach((subMenu) => {
       if (routes[subMenu.name] && subMenu.isView) {
-        if (subModule && subModule.includes(subMenu.name)) {
-          this.children.push(new SubMenuItem().deserialize(subMenu));
-        } else if (!subModule.length) {
-          this.children.push(new SubMenuItem().deserialize(subMenu));
-        }
+        this.children.push(new SubMenuItem().deserialize(subMenu));
       }
     });
 

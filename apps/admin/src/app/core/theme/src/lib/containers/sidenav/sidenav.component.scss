@@ -272,31 +272,33 @@
   .header {
     display: flex;
     justify-content: space-between;
+    align-items: center;
 
     .cross {
       cursor: pointer;
+      &:hover {
+        filter: invert(0.5) sepia(1) saturate(5) hue-rotate(175deg);
+      }
     }
 
-    .explore {
-      display: inline-flex;
-      align-items: center;
+    .bot-logo {
+      width: 5em;
+      height: 2em;
       cursor: pointer;
-      font-size: 12px;
-      font-weight: 500;
-      line-height: 1.25;
-      letter-spacing: 0.72px;
-      text-align: left;
-      color: #00162b;
-      i {
-        margin-left: 3px;
+      &:hover {
+        filter: invert(0.5) sepia(1) saturate(5) hue-rotate(175deg);
+      }
+      img {
+        width: 100%;
+        height: 100%;
       }
     }
   }
 
   .menu-wrapper {
     .bot-logo {
-      width: 124px;
-      height: 54px;
+      width: 7em;
+      margin-bottom: 24px;
 
       img {
         width: 100%;
@@ -309,18 +311,30 @@
       flex-wrap: wrap;
       height: 100%;
       gap: 2%;
-      row-gap: 1em;
+      row-gap: 2em;
 
       .menu {
         flex-basis: 49%;
         cursor: pointer !important;
+        padding: 9px 12px;
+
+        &:hover {
+          background-color: #f2f0ff;
+          border-radius: 8px;
+
+          img {
+            filter: invert(0.5) sepia(1) saturate(5) hue-rotate(175deg);
+          }
+        }
+
+        .selected {
+          background-color: #5f38f9;
+          color: white;
+          border-radius: 8px;
+        }
 
         img {
-          width: 22px;
-          height: 22px;
-          margin: 26px 8px 0 0;
-          padding: 1.1px 0.4px 0 0.7px;
-          background-color: #fff;
+          width: 1.5em;
         }
         .menu-label {
           opacity: 0.6;
@@ -343,5 +357,20 @@
       text-align: left;
       color: #00162b;
     }
+  }
+}
+.selected {
+  background-color: #5f38f9 !important;
+  border-radius: 8px !important;
+
+  img {
+    //filter when item is selected for white color
+    filter: brightness(0) invert(1) !important;
+  }
+
+  .menu-label {
+    color: white !important;
+    opacity: 1 !important;
+    font-weight: 600 !important;
   }
 }

@@ -192,6 +192,11 @@ body {
   max-width: 396px !important;
 }
 
+.whatsapp-notification.mat-snack-bar-container {
+  padding: 0;
+  min-width: auto;
+}
+
 .danger {
   background-color: #fee6e9 !important;
   color: $mediumRed;
@@ -265,10 +270,10 @@ body {
     }
     &-unpaid {
       border: 1px solid $unpaid-state;
-      color:$unpaid-state;
+      color: $unpaid-state;
     }
   }
-  
+
   &-contained {
     &-default {
       background-color: $default-state;
@@ -316,4 +321,3 @@ body {
     }
   }
 }
-

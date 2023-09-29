@@ -7,6 +7,8 @@ import {
   SettingsMenuItem,
   Subscriptions,
 } from '../data-models/subscription-plan-config.model';
+import { productMenuSubs } from '../data-models/product-subs';
+import { map } from 'rxjs/operators';
 
 @Injectable({ providedIn: 'root' })
 export class SubscriptionPlanService extends ApiService {
@@ -14,9 +16,15 @@ export class SubscriptionPlanService extends ApiService {
   private subscriptions: Subscriptions;
   private productSubscription: ProductSubscription;
   settings: SettingsMenuItem[];
+  selectedProduct: ModuleNames;
 
   getSubscriptionPlan(entityId: string): Observable<any> {
-    return this.get(`/api/v1/entity/${entityId}/subscriptions/`);
+    return this.get(`/api/v1/entity/${entityId}/subscriptions/`).pipe(
+      map((response) => {
+        response.products = productMenuSubs;
+        return response;
+      })
+    );
   }
 
   initSubscriptionDetails(data) {
@@ -46,6 +54,18 @@ export class SubscriptionPlanService extends ApiService {
     return this.get(
       `/api/v1/entity/${entityId}/subscriptions/usage${config.queryObj}`
     );
+  }
+
+  getSelectedProduct() {
+    if (this.selectedProduct) {
+      return this.subscriptions.products.find(
+        (item) => item.name === this.selectedProduct
+      ).config;
+    }
+
+    return this.subscriptions.products.find(
+      (item) => item.isView && item.isSubscribed
+    ).config;
   }
 
   getSubscriptionUsagePercentage(entityId: string, config): Observable<any> {

@@ -583,8 +583,8 @@ type OutOfBoundRecord = Record<
 >;
 
 type ExtraGridInformation = {
-  content: string;
-  colorCode: FlagType;
+  content?: string;
+  colorCode?: FlagType;
 };
 
 type ExtraGridInformationKeys = keyof ExtraGridInformation;

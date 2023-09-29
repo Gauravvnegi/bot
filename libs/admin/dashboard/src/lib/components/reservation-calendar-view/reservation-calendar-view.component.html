@@ -133,9 +133,27 @@
                     [isProcessing]="roomType.loading"
                     (onChange)="handleChange($event)"
                     (onCreate)="handleCreate($event)"
+                    (onEdit)="handleEdit($event)"
                   ></hospitality-bot-interactive-grid>
                 </ng-container>
               </ng-container>
+              <p-sidebar
+                [visible]="viewEditForm"
+                (onHide)="viewEditForm = false"
+                class="sidebar"
+                [showCloseIcon]="false"
+                position="right"
+              >
+                <div class="quick-form">
+                  <hospitality-bot-quick-reservation-form
+                    (onCloseSidebar)="viewEditForm = false"
+                    [reservationId]="selectedReservationId"
+                  ></hospitality-bot-quick-reservation-form>
+                  <!-- (onCloseFilter)="isGlobalFilterVisible = false"
+                  (onApplyFilter)="applyFilter($event)"
+                  (onResetFilter)="resetFilter($event)" -->
+                </div>
+              </p-sidebar>
             </ng-container>
           </div>
         </div>

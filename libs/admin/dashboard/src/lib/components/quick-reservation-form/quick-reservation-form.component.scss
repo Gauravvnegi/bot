@@ -1,0 +1,47 @@
+@import 'main';
+
+.form-block {
+  @include form-block;
+  zoom: 0.9;
+}
+
+.header {
+  @include flex-space-between-cen-Algn;
+  padding: 10px;
+  .heading {
+    color: #a8a8a8;
+    @include light-sm-text;
+  }
+  .buttons {
+    @include flex-space-between-cen-Algn;
+    gap: 10px;
+  }
+}
+
+.guest-data {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  padding: 10px;
+  .guest-name {
+    @include normal-lg-text;
+  }
+  .due-amount {
+    text-align: right;
+    @include normal-lg-text;
+  }
+  .contact-details {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    width: 50px;
+    gap: 10px;
+    padding: 10px 0;
+  }
+}
+
+:host ::ng-deep .p-dropdown {
+  border: 1px solid rgba(0, 0, 0, 0.38);
+}
+
+.close {
+  cursor: pointer;
+}

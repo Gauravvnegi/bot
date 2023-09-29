@@ -47,7 +47,7 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
   triggerInitialData = false;
   cols = cols.reservation;
   selectedTab: TableValue;
-  tableTypes = [tableTypes.table, tableTypes.calendar];
+  tableTypes = [tableTypes.calendar, tableTypes.table];
 
   globalQueries = [];
   $subscription = new Subscription();
@@ -76,7 +76,7 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
 
   registerListeners(): void {
     this.tableFG?.addControl('tableType', new FormControl('calendar'));
-    this.tableFG.patchValue({ tableType: 'table' });
+    this.tableFG.patchValue({ tableType: 'calendar' });
     this.listenForGlobalFilters();
     this.listenGuestDetails();
   }

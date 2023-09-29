@@ -1,0 +1,116 @@
+<div class="container">
+  <div class="header">
+    <div class="heading">
+      Booking Information
+    </div>
+    <div class="buttons">
+      <hospitality-bot-button
+        label="Edit"
+        (onClick)="editForm()"
+      ></hospitality-bot-button>
+      <div (click)="close()" class="close">
+        <i [ngClass]="'pi pi-arrow-right'" aria-hidden="true"></i>
+      </div>
+    </div>
+  </div>
+  <div class="guest-data">
+    <div class="guest-name">Guest Name</div>
+    <div class="due-amount">Due Amount - 42000</div>
+    <div class="contact-details">
+      <img class="icons" [src]="'assets/svg/email-circle.svg'" alt="" />
+      <p class="number">8931288978</p>
+      <img class="icons" [src]="'assets/svg/whatsapp.svg'" alt="" />
+      <p class="email">some@mail.com</p>
+    </div>
+  </div>
+  <div class="body">
+    <div class="form-block" [formGroup]="useForm">
+      <hospitality-bot-date
+        class="half-width"
+        controlName="from"
+        label="Check-In Date"
+        [settings]="{
+          enableTime: false
+        }"
+      ></hospitality-bot-date>
+      <hospitality-bot-date
+        class="half-width"
+        controlName="to"
+        label="Check-Out Date"
+        [settings]="{
+          enableTime: false
+        }"
+      ></hospitality-bot-date>
+
+      <hospitality-bot-select
+        class="half-width"
+        controlName="source"
+        label="Booking Source"
+        [options]="configData.source"
+        [props]="{ placeholder: 'Select' }"
+      ></hospitality-bot-select>
+      <hospitality-bot-input
+        class="half-width"
+        controlName="sourceName"
+        label="Booking Source Name"
+        maxLength="60"
+        [props]="{
+          placeholder: 'Enter',
+          errorMessages: {
+            required: 'This is a required field.',
+            maxlength: 'Maximum character limit is upto 60.'
+          }
+        }"
+      ></hospitality-bot-input>
+      <hospitality-bot-select
+        class="half-width"
+        controlName="marketSegment"
+        label="Market Segment"
+        [options]="configData.marketSegment"
+        [props]="{
+          placeholder: 'Enter'
+        }"
+      ></hospitality-bot-select>
+      <hospitality-bot-select
+        class="half-width"
+        controlName="rooms"
+        label="Rooms"
+        [props]="{
+          placeholder: 'Select'
+        }"
+      ></hospitality-bot-select>
+      <hospitality-bot-input
+        class="half-width"
+        controlName="adultCount"
+        label="Adult"
+        [props]="{
+          placeholder: 'Enter'
+        }"
+      ></hospitality-bot-input>
+      <hospitality-bot-input
+        class="half-width"
+        controlName="childCount"
+        label="Child"
+        [props]="{
+          placeholder: 'Enter'
+        }"
+      ></hospitality-bot-input>
+      <hospitality-bot-text-area
+        class="full-width"
+        controlName="specialInstructions"
+        label="Special Instructions"
+        [props]="{
+          placeholder: 'Enter'
+        }"
+      ></hospitality-bot-text-area>
+      <hospitality-bot-input
+        class="half-width"
+        controlName="price"
+        label="Price"
+        [props]="{
+          placeholder: 'Enter'
+        }"
+      ></hospitality-bot-input>
+    </div>
+  </div>
+</div>

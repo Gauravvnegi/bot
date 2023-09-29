@@ -47,9 +47,12 @@ export class ReservationCalendarViewComponent implements OnInit {
 
   isRoomsEmpty = false;
   roomsLoaded = false;
+  viewEditForm = false;
+
   reservationListData: RoomReservation[];
   $subscription = new Subscription();
   previousData: IGValue[] = [];
+  selectedReservationId: string;
 
   constructor(
     private fb: FormBuilder,
@@ -87,7 +90,6 @@ export class ReservationCalendarViewComponent implements OnInit {
               values: [],
             },
           }));
-          this.roomsLoaded = true;
           this.initReservationData();
         })
     );
@@ -109,6 +111,7 @@ export class ReservationCalendarViewComponent implements OnInit {
         this.roomTypes.forEach((roomType) => {
           this.mapReservationsData(roomType);
         });
+        this.roomsLoaded = true;
       });
   }
 
@@ -260,6 +263,8 @@ export class ReservationCalendarViewComponent implements OnInit {
   }
 
   handleEdit(event: IGEditEvent) {
+    this.viewEditForm = true;
+    this.selectedReservationId = event.id;
     console.log(event, 'onEdit event');
   }
 
@@ -284,6 +289,7 @@ type IGRoomType = {
   roomTypeId: string;
   rooms?: IGRoom[];
   loading?: boolean;
+  reinitialize?: boolean;
   data?: GridData;
 };
 

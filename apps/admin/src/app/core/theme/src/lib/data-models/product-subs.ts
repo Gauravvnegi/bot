@@ -32,6 +32,31 @@ export const productMenuSubs: any[] = [
             isSubscribed: true,
             isView: true,
           },
+          {
+            featureId: 'ee8373a4-5ddb-4253-87e7-1bbe093fe220',
+            name: 'REQUEST_DASHBOARD',
+            label: 'Complaint Analytics',
+            icon:
+              'https://nyc3.digitaloceanspaces.com/botfiles/bot/subscription_icons/Analytics.svg',
+            isSubscribed: true,
+            isView: true,
+          },
+          {
+            featureId: '09a8bbbf-5ab2-43f4-9830-ec201a360e70',
+            name: 'REQUEST',
+            label: 'Complaint',
+            description:
+              'Never miss an opportunity to connect with guests by automating communication and strengthening guest relationships',
+            cost: {
+              cost: 0.0,
+              usageLimit: 20000,
+            },
+            currentUsage: 0,
+            icon:
+              'https://nyc3.digitaloceanspaces.com/botfiles/bot/subscription_icons/request.svg',
+            isSubscribed: true,
+            isView: true,
+          },
         ],
       },
       {
@@ -230,13 +255,19 @@ export const productMenuSubs: any[] = [
         isView: true,
         config: [
           {
-            name: 'HEDA',
-            label: 'Heda',
+            featureId: '62f89549-928d-4cf7-9c9a-3140972166d2',
+            name: 'HEDA_DASHBOARD',
+            label: 'Dashboard',
             description:
-              'Never miss an opportunity to connect with guests by automating ',
+              'Never miss an opportunity to connect with guests by automating communication and strengthening guest relationships',
+            cost: {
+              cost: 0.0,
+              usageLimit: 20000,
+            },
+            currentUsage: 0,
             icon:
-              'https://nyc3.digitaloceanspaces.com/botfiles/bot/subscription_icons/Heda.svg',
-            isSubscribed: false,
+              'https://nyc3.digitaloceanspaces.com/botfiles/bot/subscription_icons/Analytics.svg',
+            isSubscribed: true,
             isView: true,
           },
           {
@@ -679,33 +710,6 @@ export const productMenuSubs: any[] = [
     isView: true,
     config: [
       {
-        name: 'MEMBERS',
-        label: 'Members',
-        description: 'Members Module',
-        icon:
-          'https://nyc3.digitaloceanspaces.com/botfiles/bot/subscription_icons/subscription_.svg',
-        isSubscribed: true,
-        isView: true,
-        config: [
-          {
-            featureId: 'ed0d7a6e-1655-493b-84a2-2d90965328f6',
-            name: 'GUESTS',
-            label: 'Guest ',
-            description:
-              'Never miss an opportunity to connect with guests by automating ',
-            cost: {
-              cost: 0.0,
-              usageLimit: 0,
-            },
-            currentUsage: 0,
-            icon:
-              'https://nyc3.digitaloceanspaces.com/botfiles/bot/subscription_icons/user.svg',
-            isSubscribed: true,
-            isView: true,
-          },
-        ],
-      },
-      {
         name: 'FRONT_DESK',
         label: 'eFrontdesk',
         description:
@@ -713,23 +717,6 @@ export const productMenuSubs: any[] = [
         icon:
           'https://nyc3.digitaloceanspaces.com/botfiles/bot/subscription_icons/FrontDesk.svg',
         config: [
-          {
-            featureId: 'ed5b8542-49d1-47a3-9bf4-cfa4e73fc668',
-            name: 'ADD_RESERVATION',
-            label: 'Reservations',
-            description:
-              'Never miss an opportunity to connect with guests by automating communication and strengthening guest relationships',
-            cost: {
-              cost: 0,
-              usageLimit: 20000,
-            },
-            currentUsage: 0,
-            icon:
-              'https://nyc3.digitaloceanspaces.com/botfiles/bot/subscription_icons/box.svg',
-            isSubscribed: true,
-            isView: true,
-          },
-
           {
             featureId: 'ee8373a4-5ddb-4253-87e7-1bbe093fe220',
             name: 'REQUEST_DASHBOARD',
@@ -841,15 +828,99 @@ export const productMenuSubs: any[] = [
             featureId: 'ed0d7a6e-1655-493b-84a2-2d90965328f6',
             name: 'GUESTS',
             label: 'Guest ',
+            icon:
+              'https://nyc3.digitaloceanspaces.com/botfiles/bot/subscription_icons/user.svg',
+            isSubscribed: true,
+            isView: true,
+          },
+        ],
+      },
+      {
+        name: 'LIBRARY',
+        label: 'Library',
+        description:
+          'Never miss an opportunity to connect with guests by automating ',
+        icon:
+          'https://nyc3.digitaloceanspaces.com/botfiles/bot/subscription_icons/library.svg',
+        config: [
+          {
+            featureId: '3211f5fe-f482-49a9-ba02-230c6c802b0c',
+            name: 'OFFERS',
+            label: 'Offers',
             description:
-              'Never miss an opportunity to connect with guests by automating ',
+              'Never miss an opportunity to connect with guests by automating communication and strengthening guest relationships',
             cost: {
-              cost: 0.0,
-              usageLimit: 0,
+              cost: 0,
+              usageLimit: 20000,
             },
             currentUsage: 0,
             icon:
-              'https://nyc3.digitaloceanspaces.com/botfiles/bot/subscription_icons/user.svg',
+              'https://nyc3.digitaloceanspaces.com/botfiles/bot/subscription_icons/box.svg',
+            isSubscribed: true,
+            isView: true,
+          },
+          {
+            featureId: '8e9b7a06-aad9-435e-b338-2c2d42882396',
+            name: 'SERVICES',
+            label: 'Services',
+            description:
+              'Never miss an opportunity to connect with guests by automating communication and strengthening guest relationships',
+            cost: {
+              cost: 0,
+              usageLimit: 20000,
+            },
+            currentUsage: 0,
+            icon:
+              'https://nyc3.digitaloceanspaces.com/botfiles/bot/subscription_icons/box.svg',
+            isSubscribed: true,
+            isView: true,
+          },
+          {
+            featureId: 'eb78d39a-5000-45b7-a75f-05d273ca9980',
+            name: 'PACKAGES',
+            label: 'Packages',
+            description:
+              'Never miss an opportunity to connect with guests by automating communication and strengthening guest relationships',
+            cost: {
+              cost: 0,
+              usageLimit: 20000,
+            },
+            currentUsage: 0,
+            icon:
+              'https://nyc3.digitaloceanspaces.com/botfiles/bot/subscription_icons/box.svg',
+            isSubscribed: true,
+            isView: true,
+          },
+        ],
+        isSubscribed: true,
+        isView: true,
+      },
+      {
+        name: 'FINANCE',
+        label: 'Finance',
+        description: 'Finance Module',
+        icon:
+          'https://nyc3.digitaloceanspaces.com/botfiles/bot/subscription_icons/money.svg',
+        isSubscribed: true,
+        isView: true,
+
+        config: [
+          {
+            featureId: '4164c823-ea1f-427a-ac63-8885f25a7012',
+            name: 'INVOICE',
+            label: 'Invoice',
+
+            icon:
+              'https://nyc3.digitaloceanspaces.com/botfiles/bot/subscription_icons/subscription_.svg',
+            isSubscribed: true,
+            isView: true,
+          },
+          {
+            featureId: '4264c823-ea1f-427a-ac63-8885f25a7012',
+            name: 'TRANSACTIONS',
+            label: 'Transaction',
+            icon:
+              'https://nyc3.digitaloceanspaces.com/botfiles/bot/subscription_icons/subscription_.svg',
             isSubscribed: true,
             isView: true,
           },

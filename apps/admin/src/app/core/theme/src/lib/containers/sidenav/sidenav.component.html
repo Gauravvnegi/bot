@@ -1,34 +1,11 @@
 <div class="logo text-uppercase" [style.color]="normalFontColor">
   <!-- Botshot new collapse logo-->
   <div class="sidenav-header">
-    <!-- <div [style.display]="status ? 'none' : ''" class="logo">
-      <img
-        src="assets/images/botshot_collapse.png"
-        onerror="this.src='assets/images/botshot_expand.png';"
-        alt=""
-      />
-    </div> -->
-    <!-- Side nav menu icon collapse-->
     <div *ngIf="!isExpanded" class="menu_button">
-      <img
-        #botLogo
-        class="bot-logo"
-        src="assets/images/botshot_collapse.png"
-        alt=""
-        (mouseenter)="
-          botLogo.style.display = 'none'; productMenu.style.display = 'block'
-        "
-        (mouseleave)="
-          botLogo.style.display = 'block'; productMenu.style.display = 'none'
-        "
-      />
       <img
         (click)="isMenuBarVisible = true"
         class="product-menu"
         src="assets/images/main-menu.png"
-        alt=""
-        style="display: none;"
-        #productMenu
       />
     </div>
   </div>
@@ -85,6 +62,7 @@
     [visible]="isMenuBarVisible"
     (onHide)="isMenuBarVisible = false"
     [showCloseIcon]="false"
+    [style]="{ width: '25em' }"
     position="left"
   >
     <ng-template
@@ -106,33 +84,27 @@
           ></i>
         </div>
       </div>
-      <div (click)="onExplore()" class="explore">
-        Explore
-        <i
-          class="pi pi-arrow-right"
-          style="color: #5f38f9;"
-          aria-hidden="true"
-        ></i>
+      <div class="bot-logo">
+        <a href="https://botshot.ai/" target="_blank" rel="noopener">
+          <img src="assets/images/botshotlogo-color.png" alt="" />
+        </a>
       </div>
     </div>
     <div class="menu-wrapper">
-      <div class="bot-logo">
-        <img src="assets/images/botshotlogo-color.png" alt="" />
-      </div>
-
       <div class="menu-container">
         <div
-          *ngFor="let product of productList"
+          *ngFor="let product of productList; let i = index"
           class="menu"
+          [ngClass]="{ selected: product.name === selectedProduct }"
           (click)="onMenuCLick(product)"
         >
-          <img [src]="product.icon" alt="" />
-          <div class="menu-label">{{ product.label }}</div>
+          <img [src]="product.url" alt="" />
+          <div class="menu-label">{{ product.title }}</div>
         </div>
       </div>
     </div>
-    <div class="footer">
+    <!-- <div class="footer">
       <div class="header">Free Hotel Resource</div>
-    </div>
+    </div> -->
   </div>
 </ng-template>

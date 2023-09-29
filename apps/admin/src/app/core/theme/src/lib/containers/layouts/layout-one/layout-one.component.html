@@ -30,6 +30,15 @@
     ></hospitality-bot-sidenav-expand>
   </div>
 
+  <p-sidebar
+    class="sidebar-slide"
+    [ngClass]="sidebarType"
+    [(visible)]="sidebarVisible"
+    position="right"
+  >
+    <ng-container #sidebarSlide></ng-container>
+  </p-sidebar>
+
   <div class="main-panel" id="main-panel">
     <div class="main-panel--header">
       <!-- message header -->
@@ -63,6 +72,14 @@
         "
       >
         <div class="options1" [ngClass]="{ disabled: isGlobalFilterVisible }">
+          <div class="selected-product">
+            <img [src]="selectedProductIcon" alt="" />
+          </div>
+          <hospitality-bot-tiered-menu-button
+            *ngIf="!!bookingOptions?.length"
+            label="Quick booking"
+            [items]="bookingOptions"
+          ></hospitality-bot-tiered-menu-button>
           <div class="global_search">
             <admin-search-bar
               [parentForm]="searchFG"
@@ -87,6 +104,47 @@
           </div>
         </div>
         <div class="options2">
+          <div
+            *ngIf="checkModuleSubscription(moduleNames.LIVE_MESSAGING)"
+            class="header--button quick-action"
+            (click)="openNewWindow('/pages/freddie/messages')"
+          >
+            <img
+              class="filter-icon"
+              src="assets/svg/Chats.svg"
+              alt="chats"
+              title="Chats"
+            />
+          </div>
+          <!-- TODO: Route after completing arrival & departure.... -->
+          <!-- <div class="header--button quick-action">
+            <img
+              class="filter-icon"
+              src="assets/svg/Arrival.svg"
+              alt="arrival"
+              title="Arrival"
+            />
+          </div> -->
+          <div
+            *ngIf="checkModuleSubscription(moduleNames.ADD_RESERVATION)"
+            class="header--button quick-action"
+            (click)="openNewWindow('/pages/efrontdesk/reservation')"
+          >
+            <img
+              class="filter-icon"
+              src="assets/svg/calendar-dark.svg"
+              alt="calendar"
+              title="Calender Reservation"
+            />
+          </div>
+          <div class="header--button quick-action" (click)="openSettings()">
+            <img
+              class="filter-icon"
+              src="assets/svg/setting-dark.svg"
+              alt="setting"
+              title="Settings"
+            />
+          </div>
           <div class="notification-wrapper">
             <div class="temp-width">
               <div
@@ -97,6 +155,7 @@
                   class="filter-icon"
                   src="assets/svg/notification-bell.svg"
                   alt="notification"
+                  title="Notification"
                 />
                 <div
                   class="notification-count"

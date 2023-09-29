@@ -20,7 +20,7 @@
     <hospitality-bot-input
       class="half-width"
       controlName="name"
-      label="Agent Name"
+      label="Sales Person Name"
       maxLength="60"
       [props]="{
         placeholder: 'Enter'
@@ -50,10 +50,10 @@
     <hospitality-bot-input
       class="half-width"
       controlName="iataNo"
-      label="IATA No."
+      label="Reg No."
       maxLength="14"
       [props]="{
-        placeholder: 'Enter 14 digit IATA No.',
+        placeholder: 'Enter 14 digit Reg No.',
         errorMessages: {
           requiredLength: 'Length should be 14 digit.'
         }
@@ -64,7 +64,7 @@
       class="half-width"
       controlName="company"
       type="COMPANY"
-      label="Company Name"
+      label="Agency Name"
       (createMembers)="createNewCompany()"
     ></hospitality-bot-members-list>
 

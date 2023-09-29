@@ -4,7 +4,10 @@
       {{ 'Add Item' | translate }}
     </div>
     <div (click)="close()" class="close">
-      <i class="fa fa-times" aria-hidden="true"></i>
+      <i
+        [ngClass]="isSidebar ? 'pi pi-arrow-right' : 'fa fa-times'"
+        aria-hidden="true"
+      ></i>
     </div>
   </div>
   <div class="body">

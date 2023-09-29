@@ -28,4 +28,5 @@ export * from './lib/types/form.type';
 export * from './lib/utils/shared';
 export * from './lib/utils/validators';
 export * from './lib/types/user.type';
-export * from './lib/components/button/button.component'
+export * from './lib/components/button/button.component';
+export * from './lib/components/tiered-menu-button/tiered-menu-button.component';

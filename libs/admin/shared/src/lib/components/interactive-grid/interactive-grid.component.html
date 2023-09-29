@@ -7,6 +7,7 @@
       height: noOfRow * height + 'px'
     }"
     class="interactive-grid-wrapper"
+    *ngIf="showDataGrid"
   >
     <ng-container *ngFor="let row of gridRows; let rowIdx = index">
       <ng-container *ngFor="let col of gridColumns; let colIdx = index">
@@ -16,8 +17,8 @@
           [rzContainment]="myBounds"
           [inBounds]="true"
           *ngIf="data[row] && data[row][col]"
-          ngDraggable
-          ngResizable
+          [ngDraggable]="!data[row][col].nonInteractive"
+          [ngResizable]="!data[row][col].nonInteractive"
           [rzMinWidth]="cellSize / resizeDelimiter"
           [rzGrid]="cellSize / resizeDelimiter"
           [position]="{
@@ -69,14 +70,13 @@
           <div
             class="cell-data"
             [ngClass]="{
-              'active-cell': data[row][col]?.color === 'active',
-              'completed-cell': data[row][col]?.color === 'completed',
-              'draft-cell': data[row][col]?.color === 'draft',
-              'failed-cell': data[row][col]?.color === 'failed',
-              'inactive-cell': data[row][col]?.color === 'inactive',
-              'warning-cell': data[row][col]?.color === 'warning',
-              'unavailable-cell': data[row][col]?.color === 'unavailable',
-              'success-cell': data[row][col]?.color === 'success'
+              'non-interactive-cell': data[row][col]?.nonInteractive,
+              'success-cell': data[row][col]?.colorCode === 'success',
+              'active-cell': data[row][col]?.colorCode === 'active',
+              'inactive-cell': data[row][col]?.colorCode === 'inactive',
+              'failed-cell': data[row][col]?.colorCode === 'failed',
+              'warning-cell': data[row][col]?.colorCode === 'warning',
+              'draft-cell': data[row][col]?.colorCode === 'draft'
             }"
             [ngStyle]="{
               height: height - 2 * cellGap + 'px',
@@ -88,7 +88,25 @@
                 : 0
             }"
           >
-            {{ data[row][col]?.content }}
+            <div
+              class="cell-data__content"
+              [ngStyle]="{
+                whiteSpace: data[row][col]?.nonInteractive ? 'wrap' : 'nowrap'
+              }"
+            >
+              <ng-container *ngIf="data[row][col]?.icons">
+                <img
+                  *ngFor="let icon of data[row][col]?.icons"
+                  [src]="icon"
+                  alt="cell-icon"
+                  class="cell-data__icon"
+                />
+              </ng-container>
+              {{ data[row][col]?.content }}
+            </div>
+            <div class="cell-data__additional-content">
+              {{ data[row][col]?.additionContent }}
+            </div>
           </div>
         </div>
       </ng-container>

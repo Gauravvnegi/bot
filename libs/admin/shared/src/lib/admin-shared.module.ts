@@ -121,6 +121,7 @@ import { TimerComponent } from './components/timer/timer.component';
 import { SidebarModule } from 'primeng/sidebar';
 import { TieredMenuModule } from 'primeng/tieredmenu';
 import { TieredMenuButtonComponent } from './components/tiered-menu-button/tiered-menu-button.component';
+import { TabbedSidebarComponent } from './components/tabbed-sidebar/tabbed-sidebar.component';
 
 @NgModule({
   imports: [
@@ -248,6 +249,7 @@ import { TieredMenuButtonComponent } from './components/tiered-menu-button/tiere
     FromToDateComponent,
     TimerComponent,
     TieredMenuButtonComponent,
+    TabbedSidebarComponent,
   ],
 
   exports: [
@@ -362,6 +364,7 @@ import { TieredMenuButtonComponent } from './components/tiered-menu-button/tiere
     TimerComponent,
     SidebarModule,
     TieredMenuButtonComponent,
+    TabbedSidebarComponent,
   ],
 })
 export class AdminSharedModule {}

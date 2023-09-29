@@ -24,7 +24,6 @@ import { StatisticsComponent } from './components/statistics/statistics.componen
 import { StatisticsService } from './services/statistics.service';
 import { AnalyticsService } from 'libs/admin/request-analytics/src/lib/services/analytics.service';
 import { AdminGuestDashboardModule } from '@hospitality-bot/admin/guest-dashboard';
-import { ExCheckinSidebarComponent } from './components/ex-checkin-sidebar/ex-checkin-sidebar.component';
 
 export const adminDashboardRoutes: Route[] = [
   {
@@ -62,7 +61,6 @@ export const adminDashboardRoutes: Route[] = [
     BookingStatusComponent,
     NotificationsComponent,
     MessagesComponent,
-    ExCheckinSidebarComponent,
   ],
   exports: [RouterModule],
   providers: [StatisticsService, AnalyticsService],

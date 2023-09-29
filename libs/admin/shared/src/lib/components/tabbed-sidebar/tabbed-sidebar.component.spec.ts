@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ExCheckinSidebarComponent } from './ex-checkin-sidebar.component';
+import { TabbedSidebarComponent } from './tabbed-sidebar.component';
 
-describe('ExCheckinSidebarComponent', () => {
-  let component: ExCheckinSidebarComponent;
-  let fixture: ComponentFixture<ExCheckinSidebarComponent>;
+describe('TabbedSidebarComponent', () => {
+  let component: TabbedSidebarComponent;
+  let fixture: ComponentFixture<TabbedSidebarComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ExCheckinSidebarComponent ]
+      declarations: [ TabbedSidebarComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ExCheckinSidebarComponent);
+    fixture = TestBed.createComponent(TabbedSidebarComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

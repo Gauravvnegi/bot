@@ -5,7 +5,10 @@ import {
   DetailsComponent,
   Reservation,
 } from '@hospitality-bot/admin/reservation';
-import { NavRouteOptions } from '@hospitality-bot/admin/shared';
+import {
+  AdminUtilityService,
+  NavRouteOptions,
+} from '@hospitality-bot/admin/shared';
 import { ModalService } from '@hospitality-bot/shared/material';
 import { NotificationService } from 'apps/admin/src/app/core/theme/src/lib/services/notification.service';
 import { PreArrivalDatatableComponent } from 'libs/admin/request-analytics/src/lib/components/pre-arrival-datatable/pre-arrival-datatable.component';
@@ -15,6 +18,10 @@ import {
   TableNames,
 } from 'libs/admin/shared/src/lib/constants/subscriptionConfig';
 import { Subscription } from 'rxjs';
+import * as moment from 'moment';
+import { AnalyticsService } from 'libs/admin/request-analytics/src/lib/services/analytics.service';
+import { PreArrivalRequestList } from '../../data-models/ex-checkin.model';
+import { dashboardPopUpTabs } from '../../constants/dashboard';
 
 @Component({
   selector: 'hospitality-bot-dashboard',
@@ -26,16 +33,24 @@ export class DashboardComponent implements OnInit, OnDestroy {
   welcomeMessage = 'Welcome To Your Dashboard';
   navRoutes: NavRouteOptions = [{ label: 'eFrontdesk Dashboard', link: './' }];
   isSidebarVisible: boolean = false;
-
+  entityId: string;
+  loading: boolean = false;
+  options: any[] = [];
+  tabFilterItems = dashboardPopUpTabs;
+  tabFilterIdx = 0;
   private $subscription = new Subscription();
   constructor(
     private reservationService: ReservationService,
     private globalFilterService: GlobalFilterService,
     private modalService: ModalService,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private _adminUtilityService: AdminUtilityService,
+    private analyticsService: AnalyticsService
   ) {}
 
   ngOnInit(): void {
+    this.entityId = this.globalFilterService.entityId;
+
     this.listenForStateData();
   }
 
@@ -104,6 +119,38 @@ export class DashboardComponent implements OnInit, OnDestroy {
     );
   }
 
+  getPreArrivalRequest() {
+    this.loading = true;
+    const query = {
+      queryObj: this._adminUtilityService.makeQueryParams([
+        {
+          fromDate: moment.utc().startOf('day').valueOf(),
+          toDate: moment.utc().endOf('day').valueOf(),
+          order: 'DESC',
+          entityType: 'ALL',
+          journeyType: 'pre-arrival',
+          entityId: this.entityId,
+        },
+      ]),
+    };
+
+    this.analyticsService.getInhouseRequest(query).subscribe((res) => {
+      this.options = new PreArrivalRequestList().deserialize(
+        res
+      ).PreArrivalRequest;
+      this.loading = false;
+    });
+  }
+
+  onSelectedTabFilterChange(index: number) {
+    this.tabFilterIdx = index;
+
+    if (this.tabFilterItems[index].value === dashboardPopUpTabs[1].value) {
+      this.getPreArrivalRequest();
+    } else {dashboardPopUpTabs;
+      this.options = [];
+    }
+  }
   ngOnDestroy(): void {
     this.$subscription.unsubscribe();
   }

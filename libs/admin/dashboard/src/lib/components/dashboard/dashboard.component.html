@@ -15,11 +15,19 @@
       class="sidebar"
       [showCloseIcon]="false"
       position="right"
+      [style]="{ width: '23em' }"
     >
       <div *ngIf="isSidebarVisible">
-        <hospitality-bot-ex-checkin-sidebar
+        <hospitality-bot-tabbed-sidebar
+          [loading]="loading"
+          [tabFilterItems]="tabFilterItems"
+          (selectedTabFilterChange)="onSelectedTabFilterChange($event)"
+          [options]="options"
+          header="Ex Checkin"
+          [template]="excard"
           (onCloseSidebar)="isSidebarVisible = false"
-        ></hospitality-bot-ex-checkin-sidebar>
+        >
+        </hospitality-bot-tabbed-sidebar>
       </div>
     </p-sidebar>
     <hospitality-bot-button
@@ -32,3 +40,19 @@
 <hospitality-bot-statistics class="statistics"></hospitality-bot-statistics>
 <!-- <hospitality-bot-datatable></hospitality-bot-datatable> -->
 <hospitality-bot-reservation-datatable></hospitality-bot-reservation-datatable>
+
+<ng-template #excard let-data>
+  <div class="content">
+    <div class="title">
+      <span class="item-name">Request for a {{ data.itemName }}</span>
+      <span class="booking-no">{{ data.bookingNo }}</span>
+    </div>
+    <div class="name-section">
+      <span class="name">{{ data.customerName }}</span>
+    </div>
+    <div class="footer">
+      <span class="desc">{{ data.description }}</span>
+      <span>{{ data.time * 1000 | date: 'HH:mm a' }}</span>
+    </div>
+  </div>
+</ng-template>

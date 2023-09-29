@@ -24,9 +24,13 @@ import * as FileSaver from 'file-saver';
 import { Observable, Subscription } from 'rxjs';
 import { cols } from '../../../constants/cols';
 import { dashboard } from '../../../constants/dashboard';
-import { TableValue } from '../../../constants/tabFilterItem';
+import {
+  TableValue,
+  popupTabFilterItems,
+} from '../../../constants/tabFilterItem';
 import { ReservationService } from '../../../services/reservation.service';
 import { reservationStatus } from '../../../constants/response';
+import * as moment from 'moment';
 @Component({
   selector: 'hospitality-bot-reservation-datatable',
   templateUrl: './reservation.component.html',
@@ -47,9 +51,13 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
   triggerInitialData = false;
   cols = cols.reservation;
   selectedTab: TableValue;
-
+  isSidebarVisible = false;
+  popTabFilterItems = popupTabFilterItems;
   globalQueries = [];
   $subscription = new Subscription();
+  entityId: string;
+  options: any[] = [];
+  isPopUploading: boolean = false;
 
   constructor(
     public fb: FormBuilder,
@@ -71,6 +79,7 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
       TableNames.RESERVATION,
       this.tabFilterItems
     );
+    this.entityId = this.globalFilterService.entityId;
   }
 
   registerListeners(): void {
@@ -315,6 +324,49 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
         }
         detailCompRef.close();
       })
+    );
+  }
+
+  /**
+   * @function onSelectedTab To load the data for the selected pop tab change.
+   * @param event The tab change event.
+   */
+  onSelectedTab(event) {
+    this.isPopUploading = true;
+    let config = {};
+    const queryObj = {
+      entityId: this.entityId,
+      fromDate: moment.utc().startOf('day').valueOf(),
+      toDate: moment.utc().endOf('day').valueOf(),
+      order: 'DESC',
+      entityType: '',
+      entityState: '',
+    };
+
+    if (this.popTabFilterItems[event].value === popupTabFilterItems[0].value) {
+      queryObj.entityType = 'ARRIVAL';
+      queryObj.entityState = popupTabFilterItems[0].value;
+    } else if (
+      this.popTabFilterItems[event].value === popupTabFilterItems[1].value
+    ) {
+      queryObj.entityType = popupTabFilterItems[1].value;
+    }
+
+    config = {
+      queryObj: this._adminUtilityService.makeQueryParams([queryObj]),
+    };
+
+    this._reservationService.getReservationDetails(config).subscribe(
+      (res) => {
+        this.options = new ReservationTable().deserialize(
+          res,
+          this.globalFilterService.timezone
+        ).records;
+        this.isPopUploading = false;
+      },
+      (error) => {
+        this.isPopUploading = false;
+      }
     );
   }
 

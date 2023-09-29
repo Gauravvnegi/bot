@@ -313,3 +313,8 @@ export const tabFilterItems = {
     },
   ],
 };
+
+export const popupTabFilterItems = [
+  { label: 'Pre-CheckIn', value: 'CHECKINPENDING' },
+  { label: 'In House', value: 'INHOUSE' },
+];

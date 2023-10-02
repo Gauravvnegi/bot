@@ -84,7 +84,7 @@ export class SubscriptionPlanService extends ApiService {
 
   setSettings(input) {
     const settingModule =
-      input.products.find((item) => item.name === ModuleNames.SETTINGS) ?? [];
+      input.products.find((item) => item?.name === ModuleNames?.SETTINGS) ?? [];
 
     this.settings =
       settingModule?.config?.map((item) =>

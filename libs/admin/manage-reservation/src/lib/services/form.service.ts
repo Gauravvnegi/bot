@@ -121,7 +121,7 @@ export class FormService {
       input.paymentMethod?.totalPaidAmount ?? 0;
     roomReservationData.paymentDetails.transactionId =
       input.paymentMethod.transactionId;
-      
+
     roomReservationData.guestId = input.guestInformation?.guestDetails;
     roomReservationData.specialRequest = input.instructions.specialInstructions;
     roomReservationData.offer = {
@@ -225,13 +225,15 @@ export class FormService {
     return reservationData;
   }
 
-  getRooms(
-    entityId: string,
-    config: QueryConfig,
-    roomNumbersControl: AbstractControl,
-    roomNumbers?: AbstractControl,
-    defaultRoomNumbers?: string[]
-  ) {
+  getRooms(roomsConfig: GetRoomsConfig) {
+    const {
+      entityId,
+      config,
+      roomControl,
+      roomNumbersControl,
+      defaultRoomNumbers,
+      type,
+    } = roomsConfig;
     this.manageReservationService
       .getRoomNumber(entityId, config)
       .subscribe((res) => {
@@ -242,24 +244,28 @@ export class FormService {
             value: room.roomNumber,
           }));
         // this.fields[3].loading[index] = false;
-
         // Check if the roomNumber control has the room number in roomNumberOptions
-        if (roomNumbers && roomNumbers.value && !defaultRoomNumbers) {
-          const roomNumbersValue = roomNumbers.value;
+        if (
+          roomControl &&
+          roomControl.value.length &&
+          !defaultRoomNumbers.length
+        ) {
+          const roomNumbersValue = roomControl.value;
           // Filter the roomNumbersValue to keep only those values that exist in roomNumberOptions
           const filteredRoomNumbers = roomNumbersValue.filter((value: string) =>
             roomNumberOptions.some((option: Option) => option.value === value)
           );
-
-          roomNumbers.setValue(filteredRoomNumbers);
-        }
-
-        // Patch the roomNumbers when the room number options are initialized
-        if (defaultRoomNumbers.length) {
-          roomNumbers.setValue(defaultRoomNumbers);
+          roomControl.setValue(filteredRoomNumbers);
         }
 
         roomNumbersControl.patchValue(roomNumberOptions, { emitEvent: false });
+
+        // Patch the roomNumbers when the room number options are initialized
+        if (defaultRoomNumbers.length) {
+          type === 'array'
+            ? roomControl.setValue(defaultRoomNumbers)
+            : roomControl.setValue(defaultRoomNumbers[0]);
+        }
       });
   }
 
@@ -269,3 +275,12 @@ export class FormService {
     this.disableBtn = false;
   }
 }
+
+export type GetRoomsConfig = {
+  entityId: string;
+  config: QueryConfig;
+  type: 'string' | 'array';
+  roomControl: AbstractControl;
+  roomNumbersControl?: AbstractControl;
+  defaultRoomNumbers?: string[];
+};

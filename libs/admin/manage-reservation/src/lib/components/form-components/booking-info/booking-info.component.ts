@@ -244,12 +244,13 @@ export class BookingInfoComponent implements OnInit {
         ]),
       };
 
-      this.formService.getRooms(
-        this.entityId,
-        config,
-        roomTypeGroup.get('roomNumberOptions'),
-        roomTypeGroup.get('roomNumbers')
-      );
+      this.formService.getRooms({
+        entityId: this.entityId,
+        config: config,
+        type: 'array',
+        roomControl: this.roomControls[index].get('roomNumberOptions'),
+        roomNumbersControl: this.roomControls[index].get('roomNumbers'),
+      });
     });
   }
 

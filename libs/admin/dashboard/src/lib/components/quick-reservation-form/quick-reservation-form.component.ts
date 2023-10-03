@@ -1,10 +1,18 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
-import { ConfigService } from '@hospitality-bot/admin/shared';
+import {
+  AdminUtilityService,
+  ConfigService,
+} from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { BookingConfig } from 'libs/admin/manage-reservation/src/lib/models/reservations.model';
+import { ManageReservationService } from 'libs/admin/manage-reservation/src/lib/services/manage-reservation.service';
+import {
+  GuestDetails,
+  QuickReservation,
+} from '../../data-models/reservation.model';
+import { FormService } from 'libs/admin/manage-reservation/src/lib/services/form.service';
 
 @Component({
   selector: 'hospitality-bot-quick-reservation-form',
@@ -19,37 +27,54 @@ export class QuickReservationFormComponent implements OnInit {
   useForm: FormGroup;
   entityId: string;
   isSidebar = false;
+  guestDetails: GuestDetails;
   @Output() onCloseSidebar = new EventEmitter();
+  @Input() set reservationConfig(value: QuickReservationConfig) {
+    for (const key in value) {
+      const val = value[key];
+      this[key] = val;
+    }
+    if (this.reservationId) {
+      this.getCountryCode();
+      this.initReservationDetails();
+    }
+    if (this.selectedRoom) {
+      this.initRooms();
+    }
+  }
+
+  reservationId: string;
+  roomTypeId: string;
+  selectedRoom: string;
   configData: BookingConfig;
+  reservationData: QuickReservation;
 
   constructor(
     private fb: FormBuilder,
     private snackbarService: SnackBarService,
     private globalFilterService: GlobalFilterService,
-    private router: Router,
-    private configService: ConfigService
+    private configService: ConfigService,
+    private manageReservationService: ManageReservationService,
+    private formService: FormService,
+    private adminUtilityService: AdminUtilityService
   ) {}
 
   ngOnInit(): void {
     this.entityId = this.globalFilterService.entityId;
     this.initForm();
-    this.getData();
-  }
-
-  getData() {
-    this.getCountryCode();
   }
 
   initForm() {
     this.useForm = this.fb.group({
       from: [''],
       to: [''],
-      rooms: [[]],
+      room: [''],
+      roomsOptions: [[]],
       marketSegment: [''],
       adultCount: [''],
       childCount: [''],
-      bookingSource: [''],
-      bookingSourceName: [''],
+      source: [''],
+      sourceName: [''],
       specialInstructions: [''],
       price: [''],
     });
@@ -60,6 +85,39 @@ export class QuickReservationFormComponent implements OnInit {
   }
 
   editForm() {}
+
+  initReservationDetails() {
+    this.manageReservationService
+      .getReservationDataById(this.reservationId, this.entityId)
+      .subscribe((res) => {
+        this.reservationData = new QuickReservation().deserialize(res);
+        const { guestDetails, ...data } = this.reservationData;
+        this.guestDetails = guestDetails;
+        this.useForm.patchValue(data);
+      });
+  }
+
+  initRooms() {
+    const config = {
+      params: this.adminUtilityService.makeQueryParams([
+        {
+          from: this.useForm.get('from').value,
+          to: this.useForm.get('to').value,
+          type: 'ROOM',
+          createBooking: true,
+          roomTypeId: this.roomTypeId,
+        },
+      ]),
+    };
+    this.formService.getRooms({
+      entityId: this.entityId,
+      config: config,
+      type: 'string',
+      roomControl: this.useForm.get('room'),
+      roomNumbersControl: this.useForm.get('roomsOptions'),
+      defaultRoomNumbers: [this.selectedRoom],
+    });
+  }
 
   getCountryCode(): void {
     this.configService
@@ -102,3 +160,9 @@ export class QuickReservationFormComponent implements OnInit {
     this.useForm.reset();
   }
 }
+
+export type QuickReservationConfig = {
+  reservationId: string;
+  roomTypeId: string;
+  selectedRoom: string;
+};

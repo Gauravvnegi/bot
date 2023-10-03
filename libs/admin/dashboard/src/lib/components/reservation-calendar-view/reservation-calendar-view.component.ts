@@ -52,7 +52,9 @@ export class ReservationCalendarViewComponent implements OnInit {
   reservationListData: RoomReservation[];
   $subscription = new Subscription();
   previousData: IGValue[] = [];
+
   selectedReservationId: string;
+  selectedRoom: string | number;
 
   constructor(
     private fb: FormBuilder,
@@ -220,7 +222,7 @@ export class ReservationCalendarViewComponent implements OnInit {
     return getWeekendBG(day, isOccupancy);
   }
 
-  handleChange(event: IGChangeEvent) {
+  handleChange(event: IGChangeEvent, roomType: IGRoomType) {
     const updateData = this.formService.mapCalendarViewData(
       this.reservationListData.filter((item) => item.id === event.id)[0],
       event.id,
@@ -229,29 +231,27 @@ export class ReservationCalendarViewComponent implements OnInit {
       event.rowValue
     );
 
-    const selectedRoomType = this.getSelectedRoomType(event.rowValue);
-
-    selectedRoomType.loading = true;
+    roomType.loading = true;
     this.manageReservationService
       .updateReservation(this.entityId, event.id, updateData, 'ROOM_TYPE')
       .subscribe(
         (res) => {},
         (error) => {
-          selectedRoomType.loading = false;
-          selectedRoomType.data = { ...selectedRoomType.data };
+          roomType.loading = false;
+          roomType.data = { ...roomType.data };
         },
         () => {
-          selectedRoomType.loading = false;
+          roomType.loading = false;
         }
       );
     console.log(event, 'onChange event');
   }
 
-  handleCreate(event: IGCreateEvent) {
+  handleCreate(event: IGCreateEvent, roomType: IGRoomType) {
     const gridData = {
       date: event.colValue,
       room: event.rowValue,
-      roomTypeId: this.getSelectedRoomType(event.rowValue).roomTypeId,
+      roomTypeId: roomType.roomTypeId,
     };
     this.router.navigate([`/pages/efrontdesk/reservation/add-reservation`], {
       queryParams: {
@@ -262,17 +262,13 @@ export class ReservationCalendarViewComponent implements OnInit {
     console.log(event, 'onCreate event');
   }
 
-  handleEdit(event: IGEditEvent) {
-    this.viewEditForm = true;
+  handleEdit(event: IGEditEvent, roomType: IGRoomType) {
     this.selectedReservationId = event.id;
+    this.viewEditForm = true;
+    this.selectedRoom = roomType.data.values.find(
+      (value) => value.id === event.id
+    ).rowValue;
     console.log(event, 'onEdit event');
-  }
-
-  getSelectedRoomType(roomNumber: IGRow) {
-    const selectedRoomType = this.roomTypes.find((roomType) => {
-      return roomType.rooms.some((room) => room.roomNumber === roomNumber);
-    });
-    return selectedRoomType;
   }
 
   getRooms(rooms: IGRoom[]) {

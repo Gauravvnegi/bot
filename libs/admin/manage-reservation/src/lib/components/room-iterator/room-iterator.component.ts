@@ -31,6 +31,7 @@ import { ReservationForm, RoomTypes } from '../../constants/form';
 import { IteratorField } from 'libs/admin/shared/src/lib/types/fields.type';
 import { FormService } from '../../services/form.service';
 import { CalendarViewData } from 'libs/admin/dashboard/src/lib/components/reservation-calendar-view/reservation-calendar-view.component';
+import { ReservationType } from '../../constants/reservation-table';
 @Component({
   selector: 'hospitality-bot-room-iterator',
   templateUrl: './room-iterator.component.html',
@@ -80,7 +81,6 @@ export class RoomIteratorComponent extends IteratorComponent
 
   ngOnChanges(changes: SimpleChanges): void {
     const itemValues = changes?.itemValues?.currentValue;
-    this.selectedRoomNumbers = [changes?.paramsData?.currentValue?.room];
 
     if (itemValues?.length) {
       if (itemValues.length > 1) {
@@ -242,8 +242,8 @@ export class RoomIteratorComponent extends IteratorComponent
     const config = {
       params: this.adminUtilityService.makeQueryParams([
         {
-          from: this.inputControls.reservationInformation.get('from').value,
-          to: this.inputControls.reservationInformation.get('to').value,
+          fromDate: this.inputControls.reservationInformation.get('from').value,
+          toDate: this.inputControls.reservationInformation.get('to').value,
           type: 'ROOM',
           createBooking: true,
           roomTypeId: roomTypeId,
@@ -252,13 +252,14 @@ export class RoomIteratorComponent extends IteratorComponent
     };
     // Set loading for roomNumber
     this.fields[3].loading[index] = true;
-    this.formService.getRooms(
-      this.entityId,
-      config,
-      this.roomControls[index].get('roomNumberOptions'),
-      this.roomControls[index].get('roomNumbers'),
-      this.selectedRoomNumbers
-    );
+    this.formService.getRooms({
+      entityId: this.entityId,
+      config: config,
+      type: 'array',
+      roomControl: this.roomControls[index].get('roomNumbers'),
+      roomNumbersControl: this.roomControls[index].get('roomNumberOptions'),
+      defaultRoomNumbers: this.selectedRoomNumbers,
+    });
     this.fields[3].loading[index] = false;
   }
 
@@ -267,8 +268,12 @@ export class RoomIteratorComponent extends IteratorComponent
    */
   updateFormValueAndValidity(index: number) {
     this.roomControls[index].get('ratePlan').enable();
-    if (this.reservationInfoControls.reservationType.value !== 'DRAFT')
+    if (
+      this.reservationInfoControls.reservationType.value ===
+      ReservationType.CONFIRMED
+    ) {
       this.roomControls[index].get('roomNumbers').enable();
+    }
     if (!this.isDefaultRoomType) {
       // Patch default count values only if not in edit mode
       this.roomControls[index]
@@ -413,10 +418,6 @@ export class RoomIteratorComponent extends IteratorComponent
           },
           () => {
             this.loadingRoomTypes[index ?? 0] = false;
-            if (this.paramsData.roomTypeId)
-              this.roomControls[0]
-                .get('roomTypeId')
-                .patchValue(this.paramsData.roomTypeId);
           }
         )
     );

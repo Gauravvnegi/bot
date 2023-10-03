@@ -14,13 +14,13 @@
     </div>
   </div>
   <div class="guest-data">
-    <div class="guest-name">Guest Name</div>
+    <div class="guest-name">{{ guestDetails?.guestName }}</div>
     <div class="due-amount">Due Amount - 42000</div>
     <div class="contact-details">
       <img class="icons" [src]="'assets/svg/email-circle.svg'" alt="" />
-      <p class="number">8931288978</p>
+      <p class="number">{{ guestDetails?.phoneNumber }}</p>
       <img class="icons" [src]="'assets/svg/whatsapp.svg'" alt="" />
-      <p class="email">some@mail.com</p>
+      <p class="email">{{ guestDetails?.email }}</p>
     </div>
   </div>
   <div class="body">
@@ -46,7 +46,7 @@
         class="half-width"
         controlName="source"
         label="Booking Source"
-        [options]="configData.source"
+        [options]="configData?.source"
         [props]="{ placeholder: 'Select' }"
       ></hospitality-bot-select>
       <hospitality-bot-input
@@ -66,15 +66,16 @@
         class="half-width"
         controlName="marketSegment"
         label="Market Segment"
-        [options]="configData.marketSegment"
+        [options]="configData?.marketSegment"
         [props]="{
           placeholder: 'Enter'
         }"
       ></hospitality-bot-select>
       <hospitality-bot-select
         class="half-width"
-        controlName="rooms"
+        controlName="room"
         label="Rooms"
+        [options]="this.useForm.get('roomsOptions').value"
         [props]="{
           placeholder: 'Select'
         }"

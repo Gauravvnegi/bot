@@ -70,20 +70,20 @@ export class AddReservationComponent extends BaseReservationComponent
     this.initDetails();
     if (this.reservationId) this.getReservationDetails();
     this.initFormData();
-    this.listenRouteData();
+    // this.listenRouteData();
   }
 
-  listenRouteData() {
-    this.activatedRoute.queryParams
-      .pipe(debounceTime(100))
-      .subscribe((queryParams) => {
-        if (queryParams.data) {
-          const data = queryParams.data;
-          const paramsData = JSON.parse(atob(data));
-          this.initParamsData(paramsData);
-        }
-      });
-  }
+  // listenRouteData() {
+  //   this.activatedRoute.queryParams
+  //     .pipe(debounceTime(100))
+  //     .subscribe((queryParams) => {
+  //       if (queryParams.data) {
+  //         const data = queryParams.data;
+  //         const paramsData = JSON.parse(atob(data));
+  //         this.initParamsData(paramsData);
+  //       }
+  //     });
+  // }
 
   initParamsData(paramsData: CalendarViewData) {
     this.inputControls.reservationInformation.patchValue({

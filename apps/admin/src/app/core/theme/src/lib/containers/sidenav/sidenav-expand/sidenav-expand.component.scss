@@ -19,18 +19,18 @@
   }
 
   &_expanded {
-    margin-left: -68px;
     background-color: rgb(1, 0, 52);
     margin-top: 9px;
+    margin-right: 12px;
+
     @media screen and (max-width: 1180px) {
-      margin-left: 6px;
     }
   }
 }
 
 .sideNav-expand-box {
   position: absolute;
-  z-index: $left-side-panel-z;
+  z-index: $left-side-panel-lower-z;
 }
 
 .overlay-container {

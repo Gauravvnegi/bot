@@ -71,16 +71,9 @@ export class ImportServiceComponent implements OnInit {
 
   manageRoutes() {}
 
-  saveForm(serviceData) {
-    serviceData.serviceIds = [
-      ...this.roomService.roomTypeFormData.services.map(
-        (service) => service.id
-      ),
-      ...serviceData?.serviceId?.serviceIds,
-    ];
-
+  saveForm(data: { serviceIds: string[]; packageCode: string }) {
     this.roomService
-      .updateHotel(this.entityId, serviceData.serviceId)
+      .updateHotel(this.entityId, { serviceIds: data.serviceIds })
       .subscribe(this.handleSuccess, this.handelError);
   }
 

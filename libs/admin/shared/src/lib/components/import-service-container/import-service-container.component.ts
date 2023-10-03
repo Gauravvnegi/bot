@@ -122,6 +122,7 @@ export class ImportServiceContainerComponent implements OnInit {
     const attachedServiceIds = this.allComplimentaryServices.filter((res) =>
       this.attachedServicesPackageCode.includes(res.packageCode)
     );
+
     const data = this.useForm.getRawValue();
     data.serviceIds = [
       ...data.serviceIds,
@@ -132,7 +133,7 @@ export class ImportServiceContainerComponent implements OnInit {
       .filter((res) => data.serviceIds.includes(res.id))
       .map((res) => res.packageCode);
 
-    this.OnSave.emit({ serviceId: data, packageCode: packageCode });
+    this.OnSave.emit({ serviceIds: data.serviceIds, packageCode: packageCode });
   }
 
   /**

@@ -186,6 +186,7 @@ export class Feature {
 }
 
 export class ProductSubscription {
+  subscribedModuleProductBased: Partial<Record<ModuleNames, ModuleNames[]>>;
   subscribedProducts: ModuleNames[];
   subscribedModules: ModuleNames[];
   modules: Partial<Modules>;
@@ -194,15 +195,25 @@ export class ProductSubscription {
   deserialize(input: any) {
     this.subscribedModules = new Array<ModuleNames>();
     this.subscribedProducts = new Array<ModuleNames>();
+    this.subscribedModuleProductBased = {};
 
     this.modules = new Object();
 
     input.products?.forEach((product) => {
-      if (product.isSubscribed) this.subscribedProducts.push(product.name);
+      const productName = product.name;
+      if (product.isSubscribed) this.subscribedProducts.push(productName);
+
+      this.subscribedModuleProductBased = {
+        ...this.subscribedModuleProductBased,
+        [productName]: [],
+      };
 
       product.config?.forEach((subProduct) => {
         this.setConfig(subProduct);
+        this.subscribedModuleProductBased[productName].push(subProduct.name);
         subProduct.config?.forEach((subSubProduct) => {
+          this.subscribedModuleProductBased[productName].push(subProduct.name);
+
           this.setConfig(subSubProduct);
         });
       });

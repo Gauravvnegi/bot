@@ -196,13 +196,14 @@ export class SidenavComponent implements OnInit, OnDestroy {
     this.menuItems = data.children;
     this.subscriptionPlanService.selectedProduct = this.selectedProduct;
     this.authService.setTokenByName('selectedProduct', this.selectedProduct);
-
     this.setSelectedModuleBasedOnRoute();
     //route to first child of first product
-    const childRoute = data.children.find(
-      (item) => item.isView && item.isSubscribed
-    );
-    this.router.navigate([`pages/${routes[childRoute.name]}`]);
+    const childRoute = data.children
+      .find((item) => item.isView && item.isSubscribed)
+      .children.find((item) => item.isView && item.isSubscribed);
+    this.router.navigate([`pages/${routes[childRoute.name]}`], {
+      replaceUrl: true,
+    });
     this.isMenuBarVisible = false;
   }
 

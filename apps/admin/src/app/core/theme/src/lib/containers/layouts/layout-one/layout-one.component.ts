@@ -363,11 +363,11 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
     this.dateRangeFilterService.emitDateRangeFilterValue$.next(event);
   }
 
-  checkForTransactionFeedbackSubscribed() {
-    return this.subscriptionPlanService.checkModuleSubscription(
-      ModuleNames.FEEDBACK_TRANSACTIONAL
-    );
-  }
+  // checkForTransactionFeedbackSubscribed() {
+  //   return this.subscriptionPlanService.checkModuleSubscription(
+  //     ModuleNames.FEEDBACK_TRANSACTIONAL
+  //   );
+  // }
 
   @HostListener('document:visibilitychange', ['$event'])
   visibilitychange() {

@@ -215,12 +215,10 @@ export class RoomDataTableComponent extends BaseDatatableComponent
     this.loading = true;
     if (status === 'OUT_OF_ORDER' || status === 'OUT_OF_SERVICE') {
       this.formService.roomStatus.next(status);
-      this.router.navigate(
-        [`/pages/efrontdesk/room/${routes.addRoom}/single`],
-        {
-          queryParams: { id: id },
-        }
-      );
+      this.router.navigate([routes.addSingleRoom], {
+        queryParams: { id: id },
+        relativeTo: this.route,
+      });
       return;
     }
     this.$subscription.add(

@@ -191,11 +191,13 @@ export class ProductSubscription {
   subscribedModules: ModuleNames[];
   modules: Partial<Modules>;
   subscribedIntegrations: Set<string>;
+  moduleProductMapping: Partial<Record<ModuleNames, ModuleNames>>;
 
   deserialize(input: any) {
     this.subscribedModules = new Array<ModuleNames>();
     this.subscribedProducts = new Array<ModuleNames>();
     this.subscribedModuleProductBased = {};
+    this.moduleProductMapping = {};
 
     this.modules = new Object();
 
@@ -211,9 +213,31 @@ export class ProductSubscription {
       product.config?.forEach((subProduct) => {
         this.setConfig(subProduct);
         this.subscribedModuleProductBased[productName].push(subProduct.name);
+
+        // Only sub module with initial subscribed product
+        if (
+          subProduct.isSubscribed &&
+          subProduct.isView &&
+          !this.moduleProductMapping[subProduct.name]
+        ) {
+          this.moduleProductMapping = {
+            ...this.moduleProductMapping,
+            [subProduct.name]: productName,
+          };
+        }
+
         subProduct.config?.forEach((subSubProduct) => {
           this.subscribedModuleProductBased[productName].push(subProduct.name);
-
+          if (
+            subSubProduct.isSubscribed &&
+            subSubProduct.isView &&
+            !this.moduleProductMapping[subSubProduct.name]
+          ) {
+            this.moduleProductMapping = {
+              ...this.moduleProductMapping,
+              [subSubProduct.name]: productName,
+            };
+          }
           this.setConfig(subSubProduct);
         });
       });

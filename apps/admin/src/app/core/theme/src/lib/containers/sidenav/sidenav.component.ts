@@ -55,12 +55,29 @@ export class SidenavComponent implements OnInit, OnDestroy {
     private subscriptionPlanService: SubscriptionPlanService,
     private router: Router,
     private authService: AuthService
-  ) {}
+  ) {
+    this.router.events.subscribe((res: any) => {
+      // For the first time product find if
+      if (this.selectedProduct) return;
+
+      if (res?.urlAfterRedirects && res.urlAfterRedirects.includes('/pages')) {
+        for (let moduleName in routes) {
+          if (
+            routes[moduleName] === res.urlAfterRedirects.split('/pages/')[1]
+          ) {
+            const productMapping = this.subscriptionPlanService.getModuleProductMapping();
+            this.selectedProduct = productMapping[moduleName];
+            // set setting based on product
+          }
+        }
+      }
+    });
+  }
 
   ngOnInit() {
-    this.selectedProduct = this.authService.getTokenByName(
-      'selectedProduct'
-    ) as ModuleNames;
+    // this.selectedProduct = this.authService.getTokenByName(
+    //   'selectedProduct'
+    // ) as ModuleNames;
     this.registerListeners();
     this.initSideNavConfigs({
       headerBgColor: this.branchConfig.headerBgColor,
@@ -158,6 +175,7 @@ export class SidenavComponent implements OnInit, OnDestroy {
         let menuItem = new MenuItem().deserialize(product);
         return menuItem;
       });
+
     const selectedModule = this.selectedProduct
       ? this.productList.find((item) => item.name === this.selectedProduct)
       : this.productList.find((item) => item.isSubscribed);
@@ -200,7 +218,10 @@ export class SidenavComponent implements OnInit, OnDestroy {
     //route to first child of first product
     const childRoute = data.children
       .find((item) => item.isView && item.isSubscribed)
-      .children.find((item) => item.isView && item.isSubscribed);
+      ?.children?.find((item) => item.isView && item.isSubscribed);
+
+    // update setting based on product
+
     this.router.navigate([`pages/${routes[childRoute.name]}`], {
       replaceUrl: true,
     });

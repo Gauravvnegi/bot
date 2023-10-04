@@ -1,0 +1,141 @@
+@import 'main';
+$border-color: rgba(112, 112, 112, 0.35);
+.wrapper__occupancy {
+  &-content {
+    .header {
+      font-size: 18px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .date {
+      font-size: 16px;
+      color: $border-color;
+      font-weight: 500;
+    }
+    .season-header {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+    }
+
+    .header-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      .toggle {
+        margin-top: 5px;
+      }
+    }
+  }
+
+  &-footer {
+    margin-top: 30px;
+  }
+  .season-form {
+    display: flex;
+  }
+  .left {
+    width: 35%;
+  }
+  .right {
+    width: 65%;
+  }
+  .weekdays__selector {
+    margin-top: 10px;
+  }
+  .empty-room {
+    text-align: center;
+    padding: 30px;
+  }
+}
+
+:host ::ng-deep {
+  .no-shadow {
+    box-shadow: unset;
+    .p-accordion-tab {
+      box-shadow: unset;
+    }
+  }
+  .room-accordion {
+    .header {
+      font-size: 16px !important;
+      font-weight: 600;
+      color: #fff;
+    }
+
+    .occupancy {
+      display: flex;
+      justify-content: space-around;
+      border-radius: unset;
+      &-header {
+        font-weight: 600;
+        font-stretch: normal;
+        color: #787c9e;
+        margin-top: -10px;
+        background: white;
+        padding: 10px 0px;
+        background-color: #f1f2f7 !important;
+      }
+      .item {
+        &__discount {
+          margin-left: 3%;
+        }
+      }
+    }
+
+    .p-accordion p-accordiontab .p-accordion-header .p-accordion-header-link {
+      background-color: #4b4d54 !important;
+      color: white !important;
+      margin-bottom: 6px;
+    }
+    .p-accordion .p-accordion-header .p-accordion-header-link {
+      padding: 0.5rem 1.5rem;
+    }
+    .p-accordion p-accordiontab .p-accordion-header .p-accordion-header-link,
+    .p-accordion p-accordiontab .p-accordion-content {
+      border-top-right-radius: 0px !important;
+      border-top-left-radius: 0px !important;
+    }
+
+    .p-accordion p-accordiontab .p-accordion-header .p-accordion-header-link {
+      border-top-right-radius: 0px !important;
+      border-top-left-radius: 0px !important;
+    }
+    .pi-chevron-right:before,
+    .pi-chevron-down:before {
+      color: white;
+    }
+
+    .p-accordion .p-accordion-tab {
+      box-shadow: unset;
+    }
+  }
+  .p-accordion .p-accordion-header .p-accordion-header-link {
+    padding: 0.6rem 1.5rem;
+  }
+}
+
+.form-block {
+  @include form-block;
+  box-shadow: none !important;
+}
+
+.link {
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 600;
+  color: #5f38f9;
+}
+
+.no-padding {
+  padding: 0;
+}
+
+.no-decoration {
+  --row-gap: 0px;
+  --column-gap: 0%;
+  padding: 0px 4%;
+  row-gap: var(--row-gap);
+  column-gap: var(--column-gap);
+}

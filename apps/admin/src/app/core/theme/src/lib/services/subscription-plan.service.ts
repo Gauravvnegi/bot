@@ -21,7 +21,7 @@ export class SubscriptionPlanService extends ApiService {
   getSubscriptionPlan(entityId: string): Observable<any> {
     return this.get(`/api/v1/entity/${entityId}/subscriptions/`).pipe(
       map((response) => {
-        response.products = productMenuSubs;
+        // response.products = productMenuSubs;
         return response;
       })
     );

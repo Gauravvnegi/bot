@@ -176,7 +176,7 @@ export type Amenity = {
   active: boolean;
   currency: string;
   packageCode: string;
-  images;
+  imageUrl;
   source: string;
   entityId: string;
   type: string;

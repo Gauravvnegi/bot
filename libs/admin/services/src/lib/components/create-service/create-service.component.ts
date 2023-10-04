@@ -146,7 +146,7 @@ export class CreateServiceComponent implements OnInit {
       currency: ['INR'],
       parentId: ['', Validators.required],
       entityId: [''],
-      images: [[], Validators.required],
+      imageUrl: [[], Validators.required],
       name: ['', Validators.required],
       serviceType: [ServiceTypeOptionValue.PAID],
       rate: [''],

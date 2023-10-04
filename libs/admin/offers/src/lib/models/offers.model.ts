@@ -21,13 +21,13 @@ export class Offer {
     this.name = input.name;
     this.description = input.description;
     this.packageCode = input.packageCode;
-    this.imageUrl = input.images[0].url;
     this.source = input.source;
     this.startDate = input.startDate;
     this.endDate = input.endDate;
     this.status = input.active;
     this.discountType = input.discountType;
     this.discountValue = input.discountValue;
+    if (input.imageUrl?.length > 0) this.imageUrl = input.imageUrl[0].url;
 
     const appliedOnNames = [];
     input.subPackages?.forEach((item) => appliedOnNames.push(item.name));
@@ -52,6 +52,7 @@ export class OfferList {
   entityTypeCounts: EntityState<string>;
 
   deserialize(input: OfferListResponse) {
+    debugger;
     this.records = input.offers?.map((item) => new Offer().deserialize(item));
     this.totalRecord = input.total;
     this.entityStateCounts = input.entityStateCounts;

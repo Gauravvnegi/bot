@@ -247,7 +247,22 @@ export class ReservationCalendarViewComponent implements OnInit {
       .updateCalendarView(event.id, updateData, 'ROOM_TYPE')
       .subscribe(
         (res) => {
-          this.mapReservationsData(roomType);
+          const updatedValues = roomType.data.values.map((item) => {
+            if (item.id === event.id) {
+              return {
+                ...item,
+                rowValue: event.rowValue,
+                startPos: event.startPos,
+                endPos: event.endPos,
+              };
+            }
+            return item; // Keep other items unchanged
+          });
+
+          roomType.data = {
+            ...roomType.data,
+            values: updatedValues,
+          };
         },
         (error) => {
           roomType.loading = false;

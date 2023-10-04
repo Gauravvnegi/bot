@@ -21,15 +21,31 @@ const appRoutes: CRoutes = [
     component: MainComponent,
     name: ModuleNames.REVENUE_MANAGER,
     children: [
+      // {
+      //   path: 'setup-bar-price',
+      //   component: BarPriceComponent,
+      //   name: ModuleNames.SETUP_BAR_PRICE,
+      // },
+      // {
+      //   path: 'dynamic-pricing',
+      //   name: ModuleNames.DYNAMIC_PRICING,
+      //   component: DynamicPricingComponent,
+      // },
       {
         path: 'setup-bar-price',
-        component: BarPriceComponent,
         name: ModuleNames.SETUP_BAR_PRICE,
+        loadChildren: () =>
+          import('@hospitality-bot/admin/setup-bar-price').then(
+            (m) => m.AdminSetupBarPriceModule
+          ),
       },
       {
         path: 'dynamic-pricing',
         name: ModuleNames.DYNAMIC_PRICING,
-        component: DynamicPricingComponent,
+        loadChildren: () =>
+          import('@hospitality-bot/admin/dynamic-pricing').then(
+            (m) => m.AdminDynamicPricingModule
+          ),
       },
     ],
   },

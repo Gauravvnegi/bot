@@ -87,8 +87,8 @@ export type RoomTypeResponse = {
   features: string[];
   isBaseRoomType?: boolean;
   shortDescription: string;
+  rooms?: RoomResponse[];
 };
-
 
 export type RatePlanRes = {
   label?: string;
@@ -260,4 +260,4 @@ export type StatusDetails = {
 export type ImageUrl = {
   isFeatured: boolean;
   url: string;
-}
+};

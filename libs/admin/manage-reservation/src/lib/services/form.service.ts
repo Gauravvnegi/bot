@@ -9,7 +9,7 @@ import {
   SourceData,
 } from '../types/forms.types';
 import { ReservationForm } from '../constants/form';
-import { GuestInfo } from '../models/reservations.model';
+import { GuestInfo, RoomReservation } from '../models/reservations.model';
 import { ManageReservationService } from './manage-reservation.service';
 import { Option, QueryConfig } from '@hospitality-bot/admin/shared';
 import { RoomsByRoomType } from 'libs/admin/room/src/lib/types/service-response';
@@ -50,9 +50,57 @@ export class FormService {
 
   reservationForm = new BehaviorSubject<ReservationForm>(null);
 
+  mapCalendarViewData(
+    input: RoomReservation,
+    id: string,
+    fromDate: number,
+    toDate: number,
+    roomNumber: string | number
+  ) {
+    const roomReservationData = new RoomReservationFormData();
+    // Map Reservation Info
+    roomReservationData.id = id ?? '';
+    roomReservationData.from = fromDate;
+    roomReservationData.to = toDate;
+    roomReservationData.reservationType = input?.reservationType;
+    roomReservationData.sourceName = input?.sourceName;
+    roomReservationData.source = input?.source;
+    // roomReservationData.marketSegment =
+    //   input?.marketSegment;
+    roomReservationData.guestId = input.guestId;
+    // Map Booking Items
+    if (input?.bookingItems) {
+      roomReservationData.bookingItems = input.bookingItems.map((roomType) => {
+        const bookingItem: any = {
+          roomDetails: {
+            ratePlan: { id: roomType.roomDetails.ratePlan },
+            roomTypeId: roomType.roomDetails.roomTypeId,
+            roomCount: roomType.roomDetails.roomCount,
+            roomNumber: roomNumber,
+          },
+          occupancyDetails: {
+            maxChildren: roomType.occupancyDetails.maxChildren,
+            maxAdult: roomType.occupancyDetails.maxAdult,
+          },
+        };
+
+        if (roomType.id.length) {
+          bookingItem.id = roomType.id;
+        }
+
+        return bookingItem;
+      });
+    } else {
+      roomReservationData.bookingItems = [];
+    }
+
+    return roomReservationData;
+  }
+
   mapRoomReservationData(
     input: ReservationForm,
-    id?: string
+    id?: string,
+    type: 'full' | 'quick' = 'full'
   ): RoomReservationFormData {
     const roomReservationData = new RoomReservationFormData();
     // Map Reservation Info
@@ -60,26 +108,25 @@ export class FormService {
     roomReservationData.from = input.reservationInformation?.from;
     roomReservationData.to = input.reservationInformation?.to;
     roomReservationData.reservationType =
-      input.reservationInformation?.reservationType;
+      input.reservationInformation?.reservationType ?? 'CONFIRMED';
     roomReservationData.sourceName = input.reservationInformation?.sourceName;
     roomReservationData.source = input.reservationInformation?.source;
     roomReservationData.marketSegment =
       input.reservationInformation?.marketSegment;
 
-    roomReservationData.paymentDetails.paymentMethod =
-      input.paymentMethod?.paymentMethod ?? '';
-    roomReservationData.paymentDetails.remarks =
-      input.paymentMethod?.paymentRemark ?? '';
-    roomReservationData.paymentDetails.amount =
-      input.paymentMethod?.totalPaidAmount ?? 0;
-    roomReservationData.paymentDetails.transactionId =
-      input.paymentMethod.transactionId;
-      
+    roomReservationData.paymentDetails = {
+      paymentMethod: input.paymentMethod?.paymentMethod ?? '',
+      remarks: input.paymentMethod?.paymentRemark ?? '',
+      amount: input.paymentMethod?.totalPaidAmount ?? 0,
+      transactionId: input.paymentMethod.transactionId ?? '',
+    };
+
     roomReservationData.guestId = input.guestInformation?.guestDetails;
     roomReservationData.specialRequest = input.instructions.specialInstructions;
     roomReservationData.offer = {
       id: input.offerId ?? null,
     };
+
     // Map Booking Items
     if (input.roomInformation?.roomTypes) {
       roomReservationData.bookingItems = input.roomInformation.roomTypes.map(
@@ -88,7 +135,7 @@ export class FormService {
             roomDetails: {
               ratePlan: { id: roomType.ratePlan },
               roomTypeId: roomType.roomTypeId,
-              roomCount: roomType.roomCount,
+              roomCount: roomType?.roomCount ? roomType.roomCount : 1,
               roomNumbers: roomType?.roomNumbers ? roomType?.roomNumbers : [],
               roomNumber: roomType?.roomNumbers ? roomType?.roomNumbers[0] : '',
             },
@@ -105,6 +152,20 @@ export class FormService {
           return bookingItem;
         }
       );
+    } else if (type === 'quick') {
+      roomReservationData.bookingItems[0] = {
+        roomDetails: {
+          ratePlan: { id: input.roomInformation.ratePlan },
+          roomTypeId: input.roomInformation.roomTypeId,
+          roomCount: 1,
+          roomNumbers: id ? [] : [input.roomInformation.roomNumber],
+          roomNumber: input.roomInformation.roomNumber ?? '',
+        },
+        occupancyDetails: {
+          maxChildren: input.roomInformation.adultCount,
+          maxAdult: input.roomInformation.childCount,
+        },
+      };
     } else {
       roomReservationData.bookingItems = [];
     }
@@ -178,13 +239,15 @@ export class FormService {
     return reservationData;
   }
 
-  getRooms(
-    entityId: string,
-    config: QueryConfig,
-    roomNumbersControl: AbstractControl,
-    roomNumbers?: AbstractControl,
-    defaultRoomNumbers?: string[]
-  ) {
+  getRooms(roomsConfig: GetRoomsConfig) {
+    const {
+      entityId,
+      config,
+      roomControl,
+      roomNumbersControl,
+      defaultRoomNumbers,
+      type,
+    } = roomsConfig;
     this.manageReservationService
       .getRoomNumber(entityId, config)
       .subscribe((res) => {
@@ -195,24 +258,27 @@ export class FormService {
             value: room.roomNumber,
           }));
         // this.fields[3].loading[index] = false;
-
         // Check if the roomNumber control has the room number in roomNumberOptions
-        if (roomNumbers && roomNumbers.value && !defaultRoomNumbers) {
-          const roomNumbersValue = roomNumbers.value;
+        if (
+          roomControl &&
+          roomControl?.value?.length &&
+          !defaultRoomNumbers?.length
+        ) {
+          const roomNumbersValue = roomControl.value;
           // Filter the roomNumbersValue to keep only those values that exist in roomNumberOptions
           const filteredRoomNumbers = roomNumbersValue.filter((value: string) =>
             roomNumberOptions.some((option: Option) => option.value === value)
           );
-
-          roomNumbers.setValue(filteredRoomNumbers);
-        }
-
-        // Patch the roomNumbers when the room number options are initialized
-        if (defaultRoomNumbers.length) {
-          roomNumbers.setValue(defaultRoomNumbers);
+          roomControl.setValue(filteredRoomNumbers);
         }
 
         roomNumbersControl.patchValue(roomNumberOptions, { emitEvent: false });
+        // Patch the roomNumbers when the room number options are initialized
+        if (defaultRoomNumbers.length) {
+          type === 'array'
+            ? roomControl.setValue(defaultRoomNumbers)
+            : roomControl.setValue(defaultRoomNumbers[0]);
+        }
       });
   }
 
@@ -222,3 +288,12 @@ export class FormService {
     this.disableBtn = false;
   }
 }
+
+export type GetRoomsConfig = {
+  entityId: string;
+  config: QueryConfig;
+  type: 'string' | 'array';
+  roomControl: AbstractControl;
+  roomNumbersControl?: AbstractControl;
+  defaultRoomNumbers?: string[];
+};

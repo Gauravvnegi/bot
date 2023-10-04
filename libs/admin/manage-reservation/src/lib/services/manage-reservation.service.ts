@@ -50,6 +50,13 @@ export class ManageReservationService extends ApiService {
     );
   }
 
+  updateCalendarView(reservationId: string, data: any, bookingType: string) {
+    return this.patch(
+      `/api/v1/booking/${reservationId}?type=${bookingType}`,
+      data
+    );
+  }
+
   /**
    * @function searchLibraryItem To search library item
    * @param config  Will have type and search query

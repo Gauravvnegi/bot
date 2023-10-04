@@ -119,6 +119,10 @@ import { StepsModule } from 'primeng/steps';
 import { FromToDateComponent } from './components/from-to-date/from-to-date.component';
 import { TimerComponent } from './components/timer/timer.component';
 import { SidebarModule } from 'primeng/sidebar';
+import { InteractiveGridComponent } from './components/interactive-grid/interactive-grid.component';
+import { AngularDraggableModule } from 'angular2-draggable';
+import { TooltipModule } from 'primeng/tooltip';
+
 import { TieredMenuModule } from 'primeng/tieredmenu';
 import { TieredMenuButtonComponent } from './components/tiered-menu-button/tiered-menu-button.component';
 
@@ -152,6 +156,8 @@ import { TieredMenuButtonComponent } from './components/tiered-menu-button/tiere
     InputNumberModule,
     QRCodeModule,
     StepsModule,
+    AngularDraggableModule,
+    TooltipModule,
     TieredMenuModule,
   ],
   declarations: [
@@ -247,6 +253,7 @@ import { TieredMenuButtonComponent } from './components/tiered-menu-button/tiere
     StepperComponent,
     FromToDateComponent,
     TimerComponent,
+    InteractiveGridComponent,
     TieredMenuButtonComponent,
   ],
 
@@ -361,6 +368,9 @@ import { TieredMenuButtonComponent } from './components/tiered-menu-button/tiere
     FromToDateComponent,
     TimerComponent,
     SidebarModule,
+    InteractiveGridComponent,
+    AngularDraggableModule,
+    TooltipModule,
     TieredMenuButtonComponent,
   ],
 })

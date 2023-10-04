@@ -9,7 +9,7 @@ export class RoomReservationFormData {
   sourceName: string;
   marketSegment: string;
   guestId: string;
-  bookingItems: BookingItemFormData[];
+  bookingItems: BookingItemFormData[] = [];
   id?: string;
   specialRequest: string;
   offer?: {
@@ -32,6 +32,7 @@ export type BookingItemFormData = {
     roomCount: number;
     roomTypeLabel?: string;
     roomNumbers?: string[];
+    roomNumber?: string;
   };
   occupancyDetails: {
     maxChildren: number;

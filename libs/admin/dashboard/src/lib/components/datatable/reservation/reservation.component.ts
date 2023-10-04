@@ -1,5 +1,5 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, FormControl } from '@angular/forms';
 import { MatDialogConfig } from '@angular/material/dialog';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
@@ -22,7 +22,7 @@ import {
 } from '@hospitality-bot/shared/material';
 import * as FileSaver from 'file-saver';
 import { Observable, Subscription } from 'rxjs';
-import { cols } from '../../../constants/cols';
+import { cols, tableTypes } from '../../../constants/cols';
 import { dashboard } from '../../../constants/dashboard';
 import { TableValue } from '../../../constants/tabFilterItem';
 import { ReservationService } from '../../../services/reservation.service';
@@ -47,6 +47,7 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
   triggerInitialData = false;
   cols = cols.reservation;
   selectedTab: TableValue;
+  tableTypes = [tableTypes.calendar, tableTypes.table];
 
   globalQueries = [];
   $subscription = new Subscription();
@@ -74,6 +75,8 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
   }
 
   registerListeners(): void {
+    this.tableFG?.addControl('tableType', new FormControl('calendar'));
+    this.tableFG.patchValue({ tableType: 'calendar' });
     this.listenForGlobalFilters();
     this.listenGuestDetails();
   }
@@ -342,6 +345,21 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
       case 'PI':
         return 'status-text-pending';
     }
+  }
+
+  setTableType(value) {
+    this.tableFG.patchValue({ tableType: value });
+    // if (value === tableTypes.table.value) {
+    //   this.cardComponent.$subscription.unsubscribe();
+    //   this.loadInitialData([
+    //     ...this.globalQueries,
+    //     { order: sharedConfig.defaultOrder },
+    //     ...this.getSelectedQuickReplyFilters({ key: 'entityState' }),
+    //   ]);
+    //   this.getUserPermission(
+    //     this.feedbackTypeFilterItem[this.feedbackTypeFilterIdx]?.value
+    //   );
+    // } else this.selectedRows = [];
   }
 
   ngOnDestroy(): void {

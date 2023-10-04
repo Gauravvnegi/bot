@@ -533,3 +533,9 @@
   max-width: fit-content;
   text-transform: capitalize;
 }
+
+@mixin no-break-hidden-text {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}

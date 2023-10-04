@@ -36,7 +36,7 @@ export class ProfileDropdownComponent implements OnInit {
   ngOnInit(): void {
     const isSiteAvailable = !!this.hotelDetailsService.sites?.length;
 
-    const isCreateWithSubscribed = this.subscriptionPlanService.checkModuleSubscription(
+    const isCreateWithSubscribed = this.subscriptionPlanService.checkProductSubscription(
       ModuleNames.CREATE_WITH
     );
 

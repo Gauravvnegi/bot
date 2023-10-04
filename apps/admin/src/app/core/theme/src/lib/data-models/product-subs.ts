@@ -70,7 +70,7 @@ export const productMenuSubs: any[] = [
 
             icon:
               'https://nyc3.digitaloceanspaces.com/botfiles/bot/subscription_icons/subscription_.svg',
-            isSubscribed: true,
+            isSubscribed: false,
             isView: true,
           },
           {
@@ -124,6 +124,139 @@ export const productMenuSubs: any[] = [
             isView: true,
           },
         ],
+      },
+      {
+        name: 'SETTINGS',
+        label: 'Settings',
+        description: 'Compare website plans and upgrade your subscription.',
+        icon:
+          'https://botfiles.nyc3.cdn.digitaloceanspaces.com/bot/subscription_icon/settings.png',
+        config: [
+          {
+            featureId: '5472e19d-b819-4bf7-8397-59d4b09799cb',
+            name: 'BUSINESS_INFO',
+            label: 'Business info',
+            description:
+              'Set your business name, logo, location and contact info.',
+            cost: {
+              cost: 0,
+              usageLimit: 20000,
+            },
+            currentUsage: 0,
+            icon:
+              'https://botfiles.nyc3.cdn.digitaloceanspaces.com/bot/subscription_icons/briefcase.svg',
+            isSubscribed: true,
+            isView: true,
+          },
+          {
+            featureId: 'c0945b71-a173-4818-b1f4-1527547accd5',
+            name: 'WEBSITE_SETTINGS',
+            label: 'Website settings',
+            description: 'Manage your site’s name, URL, favicon and more.',
+            cost: {
+              cost: 0,
+              usageLimit: 20000,
+            },
+            currentUsage: 0,
+            icon:
+              'https://botfiles.nyc3.cdn.digitaloceanspaces.com/bot/subscription_icons/internet.svg',
+            isSubscribed: true,
+            isView: true,
+          },
+          {
+            featureId: 'b9e74d5d-13ee-400c-96ce-f6cb06f07992',
+            name: 'ACCEPT_PAYMENTS',
+            label: 'Accept payments',
+            description: 'Choose the way you get paid by customers.',
+            cost: {
+              cost: 0,
+              usageLimit: 20000,
+            },
+            currentUsage: 0,
+            icon:
+              'https://botfiles.nyc3.cdn.digitaloceanspaces.com/bot/subscription_icons/dollar-currency-symbol.svg',
+            isSubscribed: true,
+            isView: true,
+          },
+          {
+            featureId: 'fd0769c2-7170-4108-9b75-5b6d176fc285',
+            name: 'NOTIFICATION',
+            label: 'Notifications',
+            description: 'Choose which notifications you get from us.',
+            cost: {
+              cost: 0,
+              usageLimit: 20000,
+            },
+            currentUsage: 0,
+            icon:
+              'https://botfiles.nyc3.cdn.digitaloceanspaces.com/bot/subscription_icons/bell-setting.svg',
+            isSubscribed: true,
+            isView: false,
+          },
+          {
+            featureId: '51679c45-2aa6-439f-a345-f52ea16b9673',
+            name: 'SUBSCRIPTION',
+            label: 'Subscription',
+            description: 'Compare website plans and upgrade your subscription.',
+            cost: {
+              cost: 0,
+              usageLimit: 20000,
+            },
+            currentUsage: 0,
+            icon:
+              'https://botfiles.nyc3.cdn.digitaloceanspaces.com/bot/subscription_icons/businessman.svg',
+            isSubscribed: true,
+            isView: true,
+          },
+          {
+            featureId: '8051d7ff-58e2-435a-8bd0-7ce8795acb92',
+            name: 'ROLES_AND_PERMISSION',
+            label: 'Roles & permissions',
+            description:
+              'Edit profiles, Add new users, Assign roles and permissions.',
+            cost: {
+              cost: 0,
+              usageLimit: 20000,
+            },
+            currentUsage: 0,
+            icon:
+              'https://botfiles.nyc3.cdn.digitaloceanspaces.com/bot/subscription_icons/lock.svg',
+            isSubscribed: true,
+            isView: true,
+          },
+          {
+            featureId: '31cacc76-3034-4ef3-90d4-5de81f02eb4c',
+            name: 'LEGAL_POLICIES',
+            label: 'Legal Policies',
+            description: 'Streamline Privacy Policies and Terms of Usage',
+            cost: {
+              cost: 0,
+              usageLimit: 20000,
+            },
+            currentUsage: 0,
+            icon:
+              'https://botfiles.nyc3.cdn.digitaloceanspaces.com/bot/subscription_icons/insurance.svg',
+            isSubscribed: true,
+            isView: true,
+          },
+          {
+            featureId: '7c43c68c-bfcc-4b72-8884-aa669f755ccb',
+            name: 'TAX',
+            label: 'Tax',
+            description: 'Effortlessly manage tax settings',
+            cost: {
+              cost: 0,
+              usageLimit: 20000,
+            },
+            currentUsage: 0,
+            icon:
+              'https://botfiles.nyc3.cdn.digitaloceanspaces.com/bot/subscription_icons/taxes.svg',
+            isSubscribed: true,
+            isView: true,
+          },
+        ],
+        isSubscribed: true,
+        isView: true,
       },
     ],
   },
@@ -357,17 +490,16 @@ export const productMenuSubs: any[] = [
       },
     ],
   },
-  ,
   {
     label: 'RevMaxi',
-    name: 'REVENUE_MANAGER',
+    name: 'REV_MAXI',
     icon: 'assets/images/createwith.png',
     isSubscribed: true,
     isView: true,
     config: [
       {
-        name: 'REVENUE_MANAGER_HOME',
-        label: 'Home',
+        name: 'REVENUE_MANAGER',
+        label: 'Revenue Manager',
         description:
           'Never miss an opportunity to connect with guests by automating communication and strengthening guest relationships',
         icon:
@@ -560,6 +692,20 @@ export const productMenuSubs: any[] = [
             label: 'Room',
             icon:
               'https://nyc3.digitaloceanspaces.com/botfiles/bot/subscription_icons/library.svg',
+            isSubscribed: true,
+            isView: true,
+          },
+          {
+            featureId: '2064c823-ea1f-427a-ac63-8885f25a7013',
+            name: 'SETUP_BAR_PRICE',
+            label: 'Setup Bar Price',
+            description: 'Set up Bar Price',
+            cost: {
+              cost: 0.0,
+              usageLimit: 20000,
+            },
+            currentUsage: 0,
+            icon: '',
             isSubscribed: true,
             isView: true,
           },
@@ -882,6 +1028,22 @@ export const productMenuSubs: any[] = [
             isView: true,
           },
           {
+            featureId: '951a6698-3850-4dca-bcfd-0a2a3b6859f4',
+            name: 'HOUSEKEEPING',
+            label: 'Housekeeping',
+            description:
+              'Never miss an opportunity to connect with guests by automating communication and strengthening guest relationships',
+            cost: {
+              cost: 0,
+              usageLimit: 20000,
+            },
+            currentUsage: 0,
+            icon:
+              'https://nyc3.digitaloceanspaces.com/botfiles/bot/subscription_icons/Analytics.svg',
+            isSubscribed: true,
+            isView: true,
+          },
+          {
             featureId: 'ed5b8542-49d1-47a3-9bf4-cfa4e73fc668',
             name: 'ADD_RESERVATION',
             label: 'Reservations',
@@ -923,6 +1085,24 @@ export const productMenuSubs: any[] = [
             featureId: 'ed0d7a6e-1655-493b-84a2-2d90965328f6',
             name: 'GUESTS',
             label: 'Guest ',
+            icon:
+              'https://nyc3.digitaloceanspaces.com/botfiles/bot/subscription_icons/user.svg',
+            isSubscribed: true,
+            isView: true,
+          },
+          {
+            featureId: 'ed0d7a6e-1655-493b-84a2-2d90965328f6',
+            name: 'COMPANY',
+            label: 'Company',
+            icon:
+              'https://nyc3.digitaloceanspaces.com/botfiles/bot/subscription_icons/user.svg',
+            isSubscribed: true,
+            isView: true,
+          },
+          {
+            featureId: 'ed0d7a6e-1655-493b-84a2-2d90965328f6',
+            name: 'AGENT',
+            label: 'Agent',
             icon:
               'https://nyc3.digitaloceanspaces.com/botfiles/bot/subscription_icons/user.svg',
             isSubscribed: true,

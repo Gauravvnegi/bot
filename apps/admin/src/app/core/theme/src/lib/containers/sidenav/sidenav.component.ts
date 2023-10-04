@@ -216,11 +216,19 @@ export class SidenavComponent implements OnInit, OnDestroy {
       this.menuItems = data.children;
       this.setSelectedModuleBasedOnRoute();
       //route to first child of first product
-      const childRoute = data.children
-        .find((item) => item.isView && item.isSubscribed)
-        ?.children?.find((item) => item.isView && item.isSubscribed);
+      const childRoute = data.children.find(
+        (item) => item.isView && item.isSubscribed
+      );
+      // ?.children?.find((item) => item.isView && item.isSubscribed);
 
-      this.router.navigate([`pages/${routes[childRoute.name]}`], {
+      const childPath = routes[childRoute.name];
+
+      const pathUrl = `pages/${routes[childRoute.name].replace(
+        '{{product}}',
+        routes[this.selectedProduct]
+      )}`;
+
+      this.router.navigate([pathUrl], {
         replaceUrl: true,
       });
     } else {

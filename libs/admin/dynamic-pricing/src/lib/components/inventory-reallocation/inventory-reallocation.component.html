@@ -1,0 +1,154 @@
+<div [formGroup]="dynamicPricingFG" *ngIf="!!dynamicPricingFG">
+  <p-accordion class="accordion" formArrayName="inventoryAllocationFA">
+    <div
+      *ngFor="
+        let inventoryAllocationFG of dynamicPricingControl.inventoryAllocationFA
+          ?.controls;
+        let i = index
+      "
+      class="accordion-list"
+    >
+      <p-accordionTab [selected]="i == 0" [formGroupName]="i">
+        <p-header>
+          <div class="accordion-header">
+            <div class="title">
+              <div>
+                {{
+                  inventoryAllocationFG.get('name').value ||
+                    'Inventory Reallocation'
+                }}
+              </div>
+              <div class="date">
+                <span
+                  *ngIf="
+                    inventoryAllocationFG.get('fromDate').value;
+                    else empty
+                  "
+                  >{{
+                    inventoryAllocationFG.get('fromDate').value
+                      | date: 'dd/MM/yyyy'
+                  }}</span
+                >
+                to
+                <span
+                  *ngIf="inventoryAllocationFG.get('toDate').value; else empty"
+                  >{{
+                    inventoryAllocationFG.get('toDate').value
+                      | date: 'dd/MM/yyyy'
+                  }}</span
+                >
+              </div>
+            </div>
+            <div class="status">
+              <div>
+                Status:
+                {{ inventoryAllocationFG.get('status').value ? 'On' : 'Off' }}
+              </div>
+              <div click-stop-propagation>
+                <hospitality-bot-toggle-switch
+                  class="status"
+                  controlName="status"
+                  onLabel=""
+                  offLabel=""
+                ></hospitality-bot-toggle-switch>
+              </div>
+              <hospitality-bot-button
+                click-stop-propagation
+                label="Remove"
+                variant="text"
+                severity="reset"
+                (onClick)="modifyInventoryAllocationFG('', i)"
+              ></hospitality-bot-button>
+            </div>
+          </div>
+        </p-header>
+        <div class="accordion-body">
+          <div class="name-field">
+            <hospitality-bot-input
+              class="full-width"
+              controlName="name"
+              maxLength="60"
+              label="Name"
+              [props]="{
+                placeholder: 'Enter Name'
+              }"
+            ></hospitality-bot-input>
+          </div>
+          <div class="date-days-field">
+            <hospitality-bot-from-to-date
+              [parentFG]="inventoryAllocationFG"
+            ></hospitality-bot-from-to-date>
+            <div class="days">
+              <hospitality-bot-checkbox-selector
+                class="bulk-update__week-days"
+                label="Days"
+                [allChecked]="true"
+                [controlName]="'selectedDays'"
+                [options]="weeks"
+              >
+              </hospitality-bot-checkbox-selector>
+            </div>
+          </div>
+        </div>
+        <div
+          class="level-datatable"
+          formArrayName="reallocations"
+          style="margin-top: 30px;"
+        >
+          <p-table>
+            <ng-template pTemplate="header">
+              <tr>
+                <th style="width: 30%; padding-left: 30px;">Room Type</th>
+                <th style="width: 30%;">Reallocation%</th>
+                <th style="width: 40%;">Count</th>
+              </tr>
+            </ng-template>
+          </p-table>
+          <ng-container
+            *ngFor="
+              let reallocation of inventoryAllocationFG.get('reallocations')
+                ?.controls;
+              let j = index
+            "
+          >
+            <div
+              [formGroupName]="j"
+              style="
+                display: flex;
+                padding: 15px 0;
+                align-items: center;
+                border-bottom: 1px solid rgba(112, 112, 112, 0.35);
+              "
+            >
+              <div style="width: 30%; padding-left: 30px;">
+                {{ reallocation.value.label }}
+              </div>
+              <div style="width: 30%; padding: 0 1rem;">
+                <hospitality-bot-input
+                  controlName="percentage"
+                  [props]="{
+                    placeholder: 'Enter',
+                    type: 'number'
+                  }"
+                ></hospitality-bot-input>
+              </div>
+              <div style="width: 40%; padding: 0 1rem;">
+                <hospitality-bot-input
+                  controlName="count"
+                  [props]="{
+                    placeholder: 'Enter',
+                    type: 'number'
+                  }"
+                ></hospitality-bot-input>
+              </div>
+            </div>
+          </ng-container>
+        </div>
+      </p-accordionTab>
+    </div>
+    <div class="add-trigger">
+      <div class="link" (click)="modifyInventoryAllocationFG()">+Add New</div>
+    </div>
+  </p-accordion>
+</div>
+<ng-template #empty>--/--/----</ng-template>

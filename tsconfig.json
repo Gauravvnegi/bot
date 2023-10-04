@@ -157,6 +157,12 @@
       ],
       "@hospitality-bot/admin/complaint-tacker": [
         "libs/admin/complaint-tacker/src/index.ts"
+      ],
+      "@hospitality-bot/admin/setup-bar-price": [
+        "libs/admin/setup-bar-price/src/index.ts"
+      ],
+      "@hospitality-bot/admin/dynamic-pricing": [
+        "libs/admin/dynamic-pricing/src/index.ts"
       ]
     }
   },

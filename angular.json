@@ -2490,6 +2490,76 @@
           "style": "scss"
         }
       }
+    },
+    "admin-setup-bar-price": {
+      "projectType": "library",
+      "root": "libs/admin/setup-bar-price",
+      "sourceRoot": "libs/admin/setup-bar-price/src",
+      "prefix": "hospitality-bot",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/admin/setup-bar-price/tsconfig.lib.json",
+              "libs/admin/setup-bar-price/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/admin/setup-bar-price/**/*"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/admin/setup-bar-price/jest.config.js",
+            "tsConfig": "libs/admin/setup-bar-price/tsconfig.spec.json",
+            "passWithNoTests": true,
+            "setupFile": "libs/admin/setup-bar-price/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "style": "scss"
+        }
+      }
+    },
+    "admin-dynamic-pricing": {
+      "projectType": "library",
+      "root": "libs/admin/dynamic-pricing",
+      "sourceRoot": "libs/admin/dynamic-pricing/src",
+      "prefix": "hospitality-bot",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/admin/dynamic-pricing/tsconfig.lib.json",
+              "libs/admin/dynamic-pricing/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/admin/dynamic-pricing/**/*"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/admin/dynamic-pricing/jest.config.js",
+            "tsConfig": "libs/admin/dynamic-pricing/tsconfig.spec.json",
+            "passWithNoTests": true,
+            "setupFile": "libs/admin/dynamic-pricing/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "style": "scss"
+        }
+      }
     }
   },
   "cli": {

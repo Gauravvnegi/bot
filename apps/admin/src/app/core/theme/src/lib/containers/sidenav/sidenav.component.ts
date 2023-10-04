@@ -169,6 +169,7 @@ export class SidenavComponent implements OnInit, OnDestroy {
     this.list_item_colour = '#E8EEF5';
     this.headerBgColor = config['headerBgColor'] || '#4B56C0';
     this.products = this.subscriptionPlanService.getSubscription()['products'];
+
     this.productList = this.products
       .filter((item) => item.isView)
       .map((product) => {
@@ -211,20 +212,26 @@ export class SidenavComponent implements OnInit, OnDestroy {
 
   onMenuCLick(data: any) {
     this.selectedProduct = data.name;
-    this.menuItems = data.children;
+
     this.subscriptionPlanService.selectedProduct = this.selectedProduct;
-    this.authService.setTokenByName('selectedProduct', this.selectedProduct);
-    this.setSelectedModuleBasedOnRoute();
-    //route to first child of first product
-    const childRoute = data.children
-      .find((item) => item.isView && item.isSubscribed)
-      ?.children?.find((item) => item.isView && item.isSubscribed);
 
-    // update setting based on product
+    if (data.isSubscribed) {
+      this.menuItems = data.children;
+      this.setSelectedModuleBasedOnRoute();
+      //route to first child of first product
+      const childRoute = data.children
+        .find((item) => item.isView && item.isSubscribed)
+        ?.children?.find((item) => item.isView && item.isSubscribed);
 
-    this.router.navigate([`pages/${routes[childRoute.name]}`], {
-      replaceUrl: true,
-    });
+      this.router.navigate([`pages/${routes[childRoute.name]}`], {
+        replaceUrl: true,
+      });
+    } else {
+      this.menuItems = [];
+      this.router.navigate([`pages/redirect`]);
+    }
+
+    this.subscriptionPlanService.setSettings();
     this.isMenuBarVisible = false;
   }
 

@@ -9,7 +9,7 @@ const appRoutes: CRoutes = [
   {
     path: '',
     component: EFrontDeskComponent,
-    name: ModuleNames.FRONT_DESK,
+    name: ModuleNames.FRONT_DESK_HOME,
     children: [
       {
         path: 'dashboard',
@@ -29,7 +29,7 @@ const appRoutes: CRoutes = [
       },
       {
         path: 'complaint-analytics',
-        name: ModuleNames.REQUEST_DASHBOARD,
+        name: ModuleNames.COMPLAINT_DASHBOARD,
         loadChildren: () =>
           import('@hospitality-bot/admin/request-analytics').then(
             (m) => m.AdminRequestAnalyticsModule
@@ -37,7 +37,7 @@ const appRoutes: CRoutes = [
       },
       {
         path: 'complaint',
-        name: ModuleNames.REQUEST,
+        name: ModuleNames.COMPLAINTS,
         loadChildren: () =>
           import('@hospitality-bot/admin/request').then(
             (m) => m.AdminRequestModule

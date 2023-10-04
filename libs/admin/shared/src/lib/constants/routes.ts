@@ -5,7 +5,7 @@ export const routes = {
   [ModuleNames.Home]: 'home',
 
   // Create with
-  [ModuleNames.CREATE_WITH]: 'create-with',
+  [ModuleNames.CREATE_WITH_HOME]: 'create-with',
   [ModuleNames.CREATE_WITH_DASHBOARD]: 'create-with/dashboard',
   [ModuleNames.SEO_FRIENDLY]: 'create-with/marketing-seo',
   [ModuleNames.PAGES]: 'create-with/page',
@@ -13,29 +13,29 @@ export const routes = {
   [ModuleNames.BOOKING_ENGINE]: 'create-with/booking-engine',
 
   // Front Desk
-  [ModuleNames.FRONT_DESK]: 'efrontdesk',
+  [ModuleNames.FRONT_DESK_HOME]: 'efrontdesk',
   [ModuleNames.FRONT_DESK_DASHBOARD]: 'efrontdesk/dashboard',
   [ModuleNames.IN_HOUSE_GUEST]: 'efrontdesk/in-house-guest',
-  [ModuleNames.REQUEST_DASHBOARD]: 'efrontdesk/complaint-analytics',
-  [ModuleNames.REQUEST]: 'efrontdesk/complaint',
+  [ModuleNames.COMPLAINT_DASHBOARD]: 'efrontdesk/complaint-analytics',
+  [ModuleNames.COMPLAINTS]: 'efrontdesk/complaint',
   [ModuleNames.ADD_RESERVATION]: 'efrontdesk/reservation',
   [ModuleNames.ROOM]: 'efrontdesk/room',
   [ModuleNames.HOUSEKEEPING]: 'efrontdesk/housekeeping',
 
   // Freddie
-  [ModuleNames.FREDDIE]: 'freddie',
+  [ModuleNames.FREDDIE_HOME]: 'freddie',
   [ModuleNames.CONVERSATION_DASHBOARD]: 'freddie/conversation-analytics',
   [ModuleNames.LIVE_MESSAGING]: 'freddie/messages',
   // [ModuleNames.SENTIMENTAL_ANALYSIS_FREDDIE]: 'freddie/sentimental-analysis',
 
   // Hedda
-  [ModuleNames.HEDA]: 'heda',
+  [ModuleNames.HEDA_HOME]: 'heda',
   [ModuleNames.HEDA_DASHBOARD]: 'heda/analytics',
   [ModuleNames.SENTIMENTAL_ANALYSIS_HEDA]: 'heda/sentimental-analysis',
   [ModuleNames.FEEDBACK]: 'heda/feedback',
 
   // eMarkt_IT
-  [ModuleNames.EMARK_IT]: 'marketing',
+  [ModuleNames.eMARK_IT_HOME]: 'marketing',
   [ModuleNames.EMARK_IT_DASHBOARD]: 'marketing/analytics',
   [ModuleNames.CAMPAIGN]: 'marketing/campaign',
 
@@ -76,7 +76,7 @@ export const routes = {
   // [ModuleNames.ALL_OUTLETS]: 'outlet/all-outlets',
 
   //CHANNEL_MANAGER
-  [ModuleNames.CHANNEL_MANAGER]: 'channel-manager',
+  [ModuleNames.CHANNEL_MANAGER_HOME]: 'channel-manager',
   [ModuleNames.MANAGE_RATE]: 'channel-manager/update-rates',
   [ModuleNames.MANAGE_INVENTORY]: 'channel-manager/update-inventory',
 

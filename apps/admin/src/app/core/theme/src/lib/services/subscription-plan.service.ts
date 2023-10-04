@@ -78,8 +78,16 @@ export class SubscriptionPlanService extends ApiService {
     return this.subscriptions.channels;
   }
 
-  checkModuleSubscription(productName: ModuleNames) {
-    return this.productSubscription.subscribedModules.indexOf(productName) > -1;
+  checkModuleSubscription(moduleName: ModuleNames) {
+    return this.productSubscription.subscribedModules.indexOf(moduleName) > -1;
+  }
+
+  checkModuleSubscriptionBasedOnProduct(productName, moduleName) {
+    return (
+      this.productSubscription.subscribedModuleProductBased[
+        productName
+      ]?.indexOf(moduleName) === -1
+    );
   }
 
   setSettings(input) {

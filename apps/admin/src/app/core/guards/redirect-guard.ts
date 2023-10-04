@@ -22,7 +22,7 @@ export class RedirectGuard implements CanActivate {
   ): boolean {
     const subscription = this.subscriptionService.getSubscription();
     const selectedProduct = this.authService.getTokenByName('selectedProduct');
-    
+
     let prioritySubscribedModuleName;
 
     const findSubscribedModule = (products) => {

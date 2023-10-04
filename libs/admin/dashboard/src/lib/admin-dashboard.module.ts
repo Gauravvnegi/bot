@@ -30,6 +30,7 @@ import { RoomService } from 'libs/admin/room/src/lib/services/room.service';
 import { RoomTypesComponent } from './components/room-types/room-types.component';
 import { FormService } from 'libs/admin/manage-reservation/src/lib/services/form.service';
 import { QuickReservationFormComponent } from './components/quick-reservation-form/quick-reservation-form.component';
+import { GuestTableService } from 'libs/admin/guests/src/lib/services/guest-table.service';
 
 export const adminDashboardRoutes: Route[] = [
   {
@@ -77,7 +78,8 @@ export const adminDashboardRoutes: Route[] = [
     AnalyticsService,
     ManageReservationService,
     RoomService,
-    FormService
+    FormService,
+    GuestTableService,
   ],
 })
 export class AdminDashboardModule {}

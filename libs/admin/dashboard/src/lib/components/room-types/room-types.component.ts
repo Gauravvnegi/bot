@@ -49,7 +49,7 @@ export class RoomTypesComponent extends FormComponent {
     this.$subscription.add(
       this.roomService
         .getList<RoomTypeListResponse>(this.entityId, {
-          params: '?type=ROOM_TYPE&offset=0&limit=50',
+          params: '?type=ROOM_TYPE&offset=0&limit=200',
         })
         .subscribe((res) => {
           const roomTypesList = new RoomTypeList().deserialize(res).records;

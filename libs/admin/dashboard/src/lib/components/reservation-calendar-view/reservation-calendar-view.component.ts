@@ -17,7 +17,10 @@ import { FormService } from 'libs/admin/manage-reservation/src/lib/services/form
 import { ManageReservationService } from 'libs/admin/manage-reservation/src/lib/services/manage-reservation.service';
 import { ReservationListResponse } from 'libs/admin/manage-reservation/src/lib/types/response.type';
 import { RoomService } from 'libs/admin/room/src/lib/services/room.service';
-import { Features } from 'libs/admin/room/src/lib/types/service-response';
+import {
+  Features,
+  RoomTypeListResponse,
+} from 'libs/admin/room/src/lib/types/service-response';
 import {
   IGChangeEvent,
   IGCol,
@@ -47,14 +50,13 @@ export class ReservationCalendarViewComponent implements OnInit {
 
   isRoomsEmpty = false;
   roomsLoaded = false;
-  viewEditForm = false;
+  viewReservationForm = false;
 
   reservationListData: RoomReservation[];
   $subscription = new Subscription();
   previousData: IGValue[] = [];
 
-  selectedReservationId: string;
-  selectedRoom: string | number;
+  formProps: QuickFormProps;
 
   constructor(
     private fb: FormBuilder,
@@ -77,14 +79,18 @@ export class ReservationCalendarViewComponent implements OnInit {
   initRoomTypes() {
     this.$subscription.add(
       this.roomService
-        .getRoomTypesAndNumbers(this.entityId, {
-          params: '?type=ROOM_TYPE&offset=0&limit=50',
+        .getList<RoomTypeListResponse>(this.entityId, {
+          params:
+            '?type=ROOM_TYPE&offset=0&limit=200&raw=true&roomTypeStatus=true',
         })
         .subscribe((res) => {
-          this.roomTypes = res.map((roomTypeData) => ({
+          this.roomTypes = res.roomTypes.map((roomTypeData) => ({
             label: roomTypeData.name,
-            roomTypeId: roomTypeData.id,
-            rooms: roomTypeData.rooms,
+            value: roomTypeData.id,
+            rooms: roomTypeData.rooms.map((room) => ({
+              roomNumber: room.roomNumber,
+              features: room.features,
+            })),
             loading: false,
             data: {
               rows: [],
@@ -212,7 +218,7 @@ export class ReservationCalendarViewComponent implements OnInit {
       .valueChanges.pipe(debounceTime(500))
       .subscribe((res: string[]) => {
         this.roomTypes = this.allRoomTypes.filter((item) =>
-          res.includes(item.roomTypeId)
+          res.includes(item.value)
         );
         this.isRoomsEmpty = !res.length;
       });
@@ -248,27 +254,25 @@ export class ReservationCalendarViewComponent implements OnInit {
   }
 
   handleCreate(event: IGCreateEvent, roomType: IGRoomType) {
-    const gridData = {
-      date: event.colValue,
-      room: event.rowValue,
-      roomTypeId: roomType.roomTypeId,
-    };
-    this.router.navigate([`/pages/efrontdesk/reservation/add-reservation`], {
-      queryParams: {
-        entityId: this.entityId,
-        data: btoa(JSON.stringify(gridData)),
-      },
-    });
+    this.viewQuickForm(roomType, undefined, event);
     console.log(event, 'onCreate event');
   }
 
   handleEdit(event: IGEditEvent, roomType: IGRoomType) {
-    this.selectedReservationId = event.id;
-    this.viewEditForm = true;
-    this.selectedRoom = roomType.data.values.find(
-      (value) => value.id === event.id
-    ).rowValue;
+    this.viewQuickForm(roomType, event.id, undefined);
     console.log(event, 'onEdit event');
+  }
+
+  viewQuickForm(roomType: IGRoomType, id: string, event: IGCreateEvent) {
+    this.formProps = {
+      reservationId: id,
+      room:
+        roomType.data.values.find((value) => value.id === id)?.rowValue ??
+        event.rowValue,
+      roomType: roomType,
+      date: event.colValue,
+    };
+    this.viewReservationForm = true;
   }
 
   getRooms(rooms: IGRoom[]) {
@@ -280,9 +284,9 @@ export class ReservationCalendarViewComponent implements OnInit {
   }
 }
 
-type IGRoomType = {
+export type IGRoomType = {
   label: string;
-  roomTypeId: string;
+  value: string;
   rooms?: IGRoom[];
   loading?: boolean;
   reinitialize?: boolean;
@@ -297,11 +301,18 @@ type GridData = {
 
 type IGRoom = {
   roomNumber: IGRow;
-  feature?: Features[];
+  features?: Features[];
 };
 
 export type CalendarViewData = {
   date: number;
   room: string;
-  roomTypeId: string;
+  value: string;
+};
+
+export type QuickFormProps = {
+  reservationId: string;
+  room: string | number;
+  date: number | string;
+  roomType: IGRoomType;
 };

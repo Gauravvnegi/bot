@@ -135,30 +135,6 @@
                     (onCreate)="handleCreate($event, roomType)"
                     (onEdit)="handleEdit($event, roomType)"
                   ></hospitality-bot-interactive-grid>
-                  <p-sidebar
-                    [visible]="viewEditForm"
-                    (onHide)="viewEditForm = false"
-                    class="sidebar"
-                    [showCloseIcon]="false"
-                    position="right"
-                  >
-                    <div class="quick-form">
-                      <hospitality-bot-quick-reservation-form
-                        (onCloseSidebar)="viewEditForm = false"
-                        [reservationConfig]="{
-                          reservationId: selectedReservationId,
-                          roomTypeId: roomType.roomTypeId,
-                          selectedRoom: selectedRoom
-                        }"
-                        [reservationId]="selectedReservationId"
-                        [roomTypeId]="roomType.roomTypeId"
-                        [selectedRoom]="selectedRoom"
-                      ></hospitality-bot-quick-reservation-form>
-                      <!-- (onCloseFilter)="isGlobalFilterVisible = false"
-                      (onApplyFilter)="applyFilter($event)"
-                      (onResetFilter)="resetFilter($event)" -->
-                    </div>
-                  </p-sidebar>
                 </ng-container>
               </ng-container>
             </ng-container>
@@ -171,6 +147,27 @@
       *ngIf="!isRoomsEmpty && roomTypes?.length; else emptyView"
     ></ng-container>
   </div>
+  <p-sidebar
+    *ngIf="viewReservationForm"
+    [visible]="viewReservationForm"
+    (onHide)="viewReservationForm = false"
+    class="sidebar"
+    [showCloseIcon]="false"
+    position="right"
+  >
+    <div class="quick-form">
+      <hospitality-bot-quick-reservation-form
+        (onCloseSidebar)="viewReservationForm = false"
+        [reservationConfig]="{
+          reservationId: formProps?.reservationId,
+          selectedRoomType: formProps?.roomType,
+          selectedRoom: formProps?.room,
+          roomTypes: roomTypes,
+          date: formProps?.date
+        }"
+      ></hospitality-bot-quick-reservation-form>
+    </div>
+  </p-sidebar>
   <!-- <div class="room-type">
           <div *ngFor="let row of gridRows; let i = index" class="room">
             {{ row }} Some content goes over here

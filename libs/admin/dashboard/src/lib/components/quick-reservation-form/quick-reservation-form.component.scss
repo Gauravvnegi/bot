@@ -7,14 +7,19 @@
 
 .header {
   @include flex-space-between-cen-Algn;
-  padding: 10px;
+  background-color: $primary-cta;
+  padding: 15px 10px;
+  color: white;
+  border-bottom: 1px solid $primary-cta;
   .heading {
-    color: #a8a8a8;
     @include light-sm-text;
   }
   .buttons {
     @include flex-space-between-cen-Algn;
     gap: 10px;
+    .expand {
+      cursor: pointer;
+    }
   }
 }
 
@@ -40,8 +45,30 @@
 
 :host ::ng-deep .p-dropdown {
   border: 1px solid rgba(0, 0, 0, 0.38);
+  &:hover {
+    border-color: $primary-cta !important;
+  }
+  &:focus {
+    border-color: $primary-cta !important;
+  }
+}
+
+:host ::ng-deep .select {
+  .option-items {
+    overflow: hidden !important;
+  }
 }
 
 .close {
   cursor: pointer;
+}
+
+.btn-wrapper {
+  @include flex-justify-center;
+}
+
+:host ::ng-deep .select {
+  .p-dropdown-panel {
+    left: 0px !important;
+  }
 }

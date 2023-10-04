@@ -235,6 +235,7 @@ export class ReservationFormData {
       roomNumbers: item?.roomDetails.roomNumber
         ? [item?.roomDetails.roomNumber]
         : [],
+      roomNumber: item?.roomDetails.roomNumber ?? '',
     }));
     this.totalPaidAmount = input.pricingDetails.totalPaidAmount;
     this.journeyState = input.journeysStatus.CHECKIN;

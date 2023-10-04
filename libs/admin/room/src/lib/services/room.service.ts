@@ -134,46 +134,6 @@ export class RoomService extends ApiService {
     return this.get(`/api/v1/entity/${entityId}/inventory/${roomId}?type=ROOM`);
   }
 
-  //  To be removed
-  getRoomTypesAndNumbers(entityId: string, roomTypeConfig: QueryConfig) {
-    return this.getList(entityId, roomTypeConfig).pipe(
-      switchMap((roomTypes: RoomTypeListResponse) => {
-        // Filter room types that have no room number or are inactive
-        const activeRoomTypes = roomTypes.roomTypes.filter((roomType) => {
-          const roomCount = roomType.roomCount;
-          const isActive = roomType.status; // Replace with the actual property name for room type status
-
-          return roomCount > 0 && isActive;
-        });
-
-        const roomTypeIds = activeRoomTypes.map((roomType) => roomType.id);
-
-        const requests: Observable<RoomListResponse>[] = roomTypeIds.map(
-          (roomTypeId) =>
-            this.getList(entityId, {
-              params: `?type=ROOM&roomTypeId=${roomTypeId}&offset=0&limit=50`, // Adjust the query parameters as needed
-            })
-        );
-
-        return forkJoin(requests).pipe(
-          // Combine roomTypes and roomNumbers
-          map((roomNumbersArray, index) => {
-            const roomTypesAndNumbers = activeRoomTypes.map(
-              (roomType, index) => ({
-                ...roomType,
-                rooms: roomNumbersArray[index].rooms.map(
-                  (room) => ({roomNumber: room.roomNumber, feature: room.features})
-                )
-              })
-            );
-
-            return roomTypesAndNumbers;
-          })
-        );
-      })
-    );
-  }
-
   exportCSV(entityId: string, table: TableValue, config?: QueryConfig) {
     return this.get(
       `/api/v1/entity/${entityId}/inventory/export${config.params ?? ''}`,

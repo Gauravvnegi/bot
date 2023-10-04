@@ -107,20 +107,18 @@ export class FormService {
     roomReservationData.from = input.reservationInformation?.from;
     roomReservationData.to = input.reservationInformation?.to;
     roomReservationData.reservationType =
-      input.reservationInformation?.reservationType;
+      input.reservationInformation?.reservationType ?? 'CONFIRMED';
     roomReservationData.sourceName = input.reservationInformation?.sourceName;
     roomReservationData.source = input.reservationInformation?.source;
     roomReservationData.marketSegment =
       input.reservationInformation?.marketSegment;
 
-    roomReservationData.paymentDetails.paymentMethod =
-      input.paymentMethod?.paymentMethod ?? '';
-    roomReservationData.paymentDetails.remarks =
-      input.paymentMethod?.paymentRemark ?? '';
-    roomReservationData.paymentDetails.amount =
-      input.paymentMethod?.totalPaidAmount ?? 0;
-    roomReservationData.paymentDetails.transactionId =
-      input.paymentMethod.transactionId;
+    roomReservationData.paymentDetails = {
+      paymentMethod: input.paymentMethod?.paymentMethod ?? '',
+      remarks: input.paymentMethod?.paymentRemark ?? '',
+      amount: input.paymentMethod?.totalPaidAmount ?? 0,
+      transactionId: input.paymentMethod.transactionId,
+    };
 
     roomReservationData.guestId = input.guestInformation?.guestDetails;
     roomReservationData.specialRequest = input.instructions.specialInstructions;
@@ -135,7 +133,7 @@ export class FormService {
             roomDetails: {
               ratePlan: { id: roomType.ratePlan },
               roomTypeId: roomType.roomTypeId,
-              roomCount: roomType.roomCount,
+              roomCount: roomType?.roomCount ? roomType.roomCount : 1,
               roomNumbers: roomType?.roomNumbers ? roomType?.roomNumbers : [],
               roomNumber: roomType?.roomNumbers ? roomType?.roomNumbers[0] : '',
             },
@@ -247,8 +245,8 @@ export class FormService {
         // Check if the roomNumber control has the room number in roomNumberOptions
         if (
           roomControl &&
-          roomControl.value.length &&
-          !defaultRoomNumbers.length
+          roomControl?.value?.length &&
+          !defaultRoomNumbers?.length
         ) {
           const roomNumbersValue = roomControl.value;
           // Filter the roomNumbersValue to keep only those values that exist in roomNumberOptions

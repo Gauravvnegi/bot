@@ -10,7 +10,6 @@ export class QuickReservation {
   source: string;
   sourceName: string;
   specialInstructions: string;
-  guestDetails: GuestDetails;
 
   deserialize(input: RoomReservationRes) {
     this.from = input.from;
@@ -22,18 +21,6 @@ export class QuickReservation {
     this.sourceName = input.sourceName;
     this.specialInstructions = input.specialRequest;
     this.marketSegment = input.marketSegment;
-    this.guestDetails = {
-      guestName:
-        input.guest.firstName +
-        ' ' +
-        (input.guest?.lastName ? input.guest.lastName : ''),
-      phoneNumber:
-        input.guest.contactDetails?.cc +
-        '' +
-        input.guest?.contactDetails?.contactNumber,
-      id: input.guest?.id ?? '',
-      email: input.guest?.contactDetails?.emailId,
-    };
     return this;
   }
 }

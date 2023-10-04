@@ -129,7 +129,7 @@ export class BookingInfoComponent implements OnInit {
           this.minToDate.setDate(maxToLimit.getDate());
           this.formService.reservationDate.next(res);
           if (this.roomControls.valid) {
-            this.getRoomsForAllRoomTypes();
+            // this.getRoomsForAllRoomTypes();
             this.formService.getSummary.next();
           }
         }
@@ -140,7 +140,7 @@ export class BookingInfoComponent implements OnInit {
           this.toDateValue = new Date(res);
           this.updateDateDifference();
           if (this.roomControls.valid && !multipleDateChange) {
-            this.getRoomsForAllRoomTypes();
+            // this.getRoomsForAllRoomTypes();
             this.formService.getSummary.next();
           }
           multipleDateChange = false;

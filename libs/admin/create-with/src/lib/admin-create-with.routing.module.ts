@@ -16,7 +16,7 @@ import { PagesComponent } from './components/pages/pages.component';
 const appRoutes: CRoutes = [
   {
     path: '',
-    name: ModuleNames.CREATE_WITH,
+    name: ModuleNames.CREATE_WITH_HOME,
     component: MainComponent,
     children: [
       {

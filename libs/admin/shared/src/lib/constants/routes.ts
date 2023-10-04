@@ -16,8 +16,6 @@ export const routes = {
   [ModuleNames.FRONT_DESK_HOME]: 'efrontdesk',
   [ModuleNames.FRONT_DESK_DASHBOARD]: 'efrontdesk/dashboard',
   [ModuleNames.IN_HOUSE_GUEST]: 'efrontdesk/in-house-guest',
-  [ModuleNames.COMPLAINT_DASHBOARD]: 'efrontdesk/complaint-analytics',
-  [ModuleNames.COMPLAINTS]: 'efrontdesk/complaint',
   [ModuleNames.ADD_RESERVATION]: 'efrontdesk/reservation',
   [ModuleNames.ROOM]: 'efrontdesk/room',
   [ModuleNames.HOUSEKEEPING]: 'efrontdesk/housekeeping',
@@ -66,6 +64,11 @@ export const routes = {
   [ModuleNames.GUEST_DASHBOARD]: 'members/guest-dashboard',
   [ModuleNames.AGENT]: 'members/agent',
   [ModuleNames.COMPANY]: 'members/company',
+
+  //COMPLAINT TRACKER
+  [ModuleNames.COMPLAINT_HOME]: 'complaint-tracker',
+  [ModuleNames.COMPLAINT_DASHBOARD]: 'complaint-tracker/complaint-analytics',
+  [ModuleNames.COMPLAINTS]: 'complaint-tracker/complaint',
 
   // SETTINGS
   [ModuleNames.SETTINGS]: 'settings',

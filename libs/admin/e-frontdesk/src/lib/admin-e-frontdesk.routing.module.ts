@@ -28,22 +28,6 @@ const appRoutes: CRoutes = [
           ),
       },
       {
-        path: 'complaint-analytics',
-        name: ModuleNames.COMPLAINT_DASHBOARD,
-        loadChildren: () =>
-          import('@hospitality-bot/admin/request-analytics').then(
-            (m) => m.AdminRequestAnalyticsModule
-          ),
-      },
-      {
-        path: 'complaint',
-        name: ModuleNames.COMPLAINTS,
-        loadChildren: () =>
-          import('@hospitality-bot/admin/request').then(
-            (m) => m.AdminRequestModule
-          ),
-      },
-      {
         path: 'reservation',
         name: ModuleNames.ADD_RESERVATION,
         loadChildren: () =>

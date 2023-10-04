@@ -147,6 +147,15 @@ const appRoutes: Route[] = [
         canActivate: [CanActivateGuard],
       },
       {
+        path: 'complaint-tracker',
+        loadChildren: () =>
+          import('@hospitality-bot/admin/complaint-tacker').then(
+            (m) => m.AdminComplaintTackerModule
+          ),
+        canLoad: [CanLoadGuard],
+        canActivate: [CanActivateGuard],
+      },
+      {
         path: 'finance',
         loadChildren: () =>
           import('@hospitality-bot/admin/finance').then(

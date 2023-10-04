@@ -62,9 +62,7 @@ export class SidenavComponent implements OnInit, OnDestroy {
 
       if (res?.urlAfterRedirects && res.urlAfterRedirects.includes('/pages')) {
         for (let moduleName in routes) {
-          if (
-            routes[moduleName] === res.urlAfterRedirects.split('/pages/')[1]
-          ) {
+          if (routes[moduleName] === res.urlAfterRedirects.split('/')[2]) {
             const productMapping = this.subscriptionPlanService.getModuleProductMapping();
             this.selectedProduct = productMapping[moduleName];
             // set setting based on product
@@ -169,7 +167,6 @@ export class SidenavComponent implements OnInit, OnDestroy {
     this.list_item_colour = '#E8EEF5';
     this.headerBgColor = config['headerBgColor'] || '#4B56C0';
     this.products = this.subscriptionPlanService.getSubscription()['products'];
-
     this.productList = this.products
       .filter((item) => item.isView)
       .map((product) => {

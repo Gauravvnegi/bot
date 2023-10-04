@@ -17,7 +17,7 @@ export const routes = {
   [ModuleNames.FRONT_DESK_DASHBOARD]: 'efrontdesk/dashboard',
   [ModuleNames.IN_HOUSE_GUEST]: 'efrontdesk/in-house-guest',
   [ModuleNames.ADD_RESERVATION]: 'efrontdesk/reservation',
-  [ModuleNames.ROOM]: 'efrontdesk/room',
+  [ModuleNames.ROOM]: '{{product}}/room', // dynamic route
   [ModuleNames.HOUSEKEEPING]: 'efrontdesk/housekeeping',
 
   // Freddie

@@ -212,6 +212,7 @@ export class ReservationCalendarViewComponent implements OnInit {
   listenChanges() {
     this.useForm.get('date').valueChanges.subscribe((res) => {
       this.initDates(res);
+      this.initRoomTypes();
     });
 
     this.useForm

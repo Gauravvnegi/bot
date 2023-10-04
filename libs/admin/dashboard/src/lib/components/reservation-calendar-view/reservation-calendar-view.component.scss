@@ -262,6 +262,9 @@ $border-color: rgba(112, 112, 112, 0.35);
   .p-sidebar {
     width: 35rem;
   }
+  .p-sidebar-content {
+    height: 100%;
+  }
 }
 
 .features {
@@ -272,4 +275,8 @@ $border-color: rgba(112, 112, 112, 0.35);
     height: 25px;
     width: 25px;
   }
+}
+
+.quick-form {
+  height: 100%;
 }

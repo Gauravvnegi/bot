@@ -1,5 +1,12 @@
 @import 'main';
 
+.container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
 .form-block {
   @include form-block;
   zoom: 0.9;
@@ -27,6 +34,8 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   padding: 10px;
+  box-shadow: 0px 7px 8px -6px #b5b5b5;
+  z-index: 1;
   .guest-name {
     @include normal-lg-text;
   }
@@ -47,6 +56,11 @@
       gap: 5px;
     }
   }
+}
+
+.body {
+  overflow: auto;
+  max-height: 85vh;
 }
 
 :host ::ng-deep .p-dropdown {
@@ -71,6 +85,9 @@
 
 .btn-wrapper {
   @include flex-justify-center;
+  padding: 10px;
+  box-shadow: 0px 0px 5px 0px #b5b5b5;
+  z-index: 1;
 }
 
 :host ::ng-deep .select {

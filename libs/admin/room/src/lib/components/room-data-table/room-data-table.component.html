@@ -9,17 +9,20 @@
       *ngIf="selectedTab === 'ROOM'"
       label="{{ 'room.addSingle' | translate }}"
       variant="text"
-      [routerLink]="routes.addRoom"
+      [routerLink]="routes.addSingleRoom"
+      preserveQueryParams="true"
     ></hospitality-bot-button>
     <hospitality-bot-button
       *ngIf="selectedTab === 'ROOM_TYPE'"
       label="{{ 'room.createType' | translate }}"
       [routerLink]="routes.addRoomType"
+      preserveQueryParams="true"
     ></hospitality-bot-button>
     <hospitality-bot-button
       *ngIf="selectedTab === 'ROOM'"
       label="{{ 'room.addMultiple' | translate }}"
-      [routerLink]="routes.addRoomMultiple"
+      [routerLink]="routes.addMultipleRoom"
+      preserveQueryParams="true"
     ></hospitality-bot-button>
     <hospitality-bot-export-list
       [additionalActionItems]="additionalActionItems"

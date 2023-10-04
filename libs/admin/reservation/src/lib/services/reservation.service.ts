@@ -4,9 +4,6 @@ import { Observable } from 'rxjs';
 
 @Injectable()
 export class ReservationService extends ApiService {
-
-
-
   getReservationDetails(reservationId): Observable<any> {
     return this.get(`/api/v1/reservation/${reservationId}?raw=true`);
   }
@@ -59,7 +56,7 @@ export class ReservationService extends ApiService {
   generateFeedback(reservationId): Observable<any> {
     return this.get(
       `/api/v1/reservation/${reservationId}/generate-link?surveyType=FEEDBACK`
-    )
+    );
   }
 
   checkCurrentWindow(reservationId): Observable<any> {
@@ -85,6 +82,13 @@ export class ReservationService extends ApiService {
     return this.post(
       `/api/v1/reservation/${reservationId}/manual-checkin`,
       data
+    );
+  }
+
+  manualCheckout(reservationId) {
+    return this.post(
+      `/api/v1/reservation/${reservationId}/manual-checkout`,
+      {}
     );
   }
 

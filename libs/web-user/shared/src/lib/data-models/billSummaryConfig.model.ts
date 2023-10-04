@@ -19,10 +19,11 @@ export class BillSummaryDetailDS implements Deserializable {
   deserialize(input: any, paymentData: any, timezone = '+05:30') {
     //Rooms index is hardcoded as we are not sure about the api response , it should either be not an array or the whole api response should be changed
     // It is submitted as query as this data comes from PMS . once api response is confirmed , structure would be changed
-    if (input.rooms && paymentData) {
+    const room = input.stayDetails.room;
+    if (room && paymentData) {
       this.staySummary = new StaySummaryDetail().deserialize(
         input,
-        input.rooms[0],
+        room,
         input.stayDetails,
         input.guestDetails.primaryGuest,
         timezone

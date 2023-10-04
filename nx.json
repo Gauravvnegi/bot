@@ -224,6 +224,12 @@
     },
     "admin-complaint-tacker": {
       "tags": []
+    },
+    "admin-setup-bar-price": {
+      "tags": []
+    },
+    "admin-dynamic-pricing": {
+      "tags": []
     }
   }
 }

@@ -99,7 +99,8 @@ export class FormService {
 
   mapRoomReservationData(
     input: ReservationForm,
-    id?: string
+    id?: string,
+    type: 'full' | 'quick' = 'full'
   ): RoomReservationFormData {
     const roomReservationData = new RoomReservationFormData();
     // Map Reservation Info
@@ -117,7 +118,7 @@ export class FormService {
       paymentMethod: input.paymentMethod?.paymentMethod ?? '',
       remarks: input.paymentMethod?.paymentRemark ?? '',
       amount: input.paymentMethod?.totalPaidAmount ?? 0,
-      transactionId: input.paymentMethod.transactionId,
+      transactionId: input.paymentMethod.transactionId ?? '',
     };
 
     roomReservationData.guestId = input.guestInformation?.guestDetails;
@@ -125,6 +126,7 @@ export class FormService {
     roomReservationData.offer = {
       id: input.offerId ?? null,
     };
+
     // Map Booking Items
     if (input.roomInformation?.roomTypes) {
       roomReservationData.bookingItems = input.roomInformation.roomTypes.map(
@@ -150,6 +152,20 @@ export class FormService {
           return bookingItem;
         }
       );
+    } else if (type === 'quick') {
+      roomReservationData.bookingItems[0] = {
+        roomDetails: {
+          ratePlan: { id: input.roomInformation.ratePlan },
+          roomTypeId: input.roomInformation.roomTypeId,
+          roomCount: 1,
+          roomNumbers: id ? [] : [input.roomInformation.roomNumber],
+          roomNumber: input.roomInformation.roomNumber ?? '',
+        },
+        occupancyDetails: {
+          maxChildren: input.roomInformation.adultCount,
+          maxAdult: input.roomInformation.childCount,
+        },
+      };
     } else {
       roomReservationData.bookingItems = [];
     }
@@ -257,7 +273,6 @@ export class FormService {
         }
 
         roomNumbersControl.patchValue(roomNumberOptions, { emitEvent: false });
-
         // Patch the roomNumbers when the room number options are initialized
         if (defaultRoomNumbers.length) {
           type === 'array'

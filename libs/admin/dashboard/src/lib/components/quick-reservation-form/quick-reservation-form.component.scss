@@ -16,7 +16,7 @@
   }
   .buttons {
     @include flex-space-between-cen-Algn;
-    gap: 10px;
+    gap: 15px;
     .expand {
       cursor: pointer;
     }
@@ -35,11 +35,17 @@
     @include normal-lg-text;
   }
   .contact-details {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
     width: 50px;
     gap: 10px;
     padding: 10px 0;
+    .phone-number {
+      @include flex-item-center;
+      gap: 5px;
+    }
+    .email-id {
+      @include flex-item-center;
+      gap: 5px;
+    }
   }
 }
 

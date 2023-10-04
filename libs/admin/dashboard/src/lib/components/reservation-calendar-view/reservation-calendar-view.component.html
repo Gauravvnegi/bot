@@ -61,9 +61,20 @@
                           <div class="room-type__subtitle">
                             {{ room.roomNumber }}
                           </div>
-                          <!-- <div class="room-features">
-                            {{ getFeatureImage(room.feature) }}
-                          </div> -->
+                          <div class="features">
+                            <div
+                              class="room-features"
+                              *ngFor="
+                                let imageUrl of getFeatureImage(room.features)
+                              "
+                            >
+                              <img
+                                *ngIf="imageUrl[0]?.url"
+                                class="feature-image"
+                                [src]="imageUrl[0].url"
+                              />
+                            </div>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -157,7 +168,7 @@
   >
     <div class="quick-form">
       <hospitality-bot-quick-reservation-form
-        (onCloseSidebar)="viewReservationForm = false"
+        (onCloseSidebar)="handleCloseSidebar($event)"
         [reservationConfig]="{
           reservationId: formProps?.reservationId,
           selectedRoomType: formProps?.roomType,

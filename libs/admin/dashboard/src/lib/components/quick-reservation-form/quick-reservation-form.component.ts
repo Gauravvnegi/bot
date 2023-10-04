@@ -48,6 +48,7 @@ export class QuickReservationFormComponent implements OnInit {
   loading: boolean = false;
   isSidebar = false;
   isCreateForm = false;
+  isBooking = false;
 
   selectedRoomType: IGRoomType;
   selectedRoom: string;
@@ -59,7 +60,7 @@ export class QuickReservationFormComponent implements OnInit {
 
   $subscription = new Subscription();
 
-  @Output() onCloseSidebar = new EventEmitter();
+  @Output() onCloseSidebar = new EventEmitter<boolean>();
   @Input() set reservationConfig(value: QuickReservationConfig) {
     for (const key in value) {
       const val = value[key];
@@ -134,8 +135,8 @@ export class QuickReservationFormComponent implements OnInit {
     toDate.setDate(fromDate.getDate() + 1); // Add 1 day
 
     this.useForm.get('reservationInformation').patchValue({
-      from: fromDate,
-      to: toDate,
+      from: fromDate.getTime(),
+      to: toDate.getTime(),
     });
   }
 
@@ -152,7 +153,6 @@ export class QuickReservationFormComponent implements OnInit {
       roomInformation: this.fb.group({
         roomTypeId: ['', [Validators.required]],
         ratePlan: [''],
-        roomCount: ['', [Validators.required, Validators.min(1)]],
         roomNumber: [''],
         adultCount: ['', [Validators.required, Validators.min(1)]],
         childCount: ['', [Validators.min(0)]],
@@ -179,7 +179,7 @@ export class QuickReservationFormComponent implements OnInit {
   }
 
   close(): void {
-    this.onCloseSidebar.emit();
+    this.onCloseSidebar.emit(false);
   }
 
   editForm() {
@@ -191,25 +191,40 @@ export class QuickReservationFormComponent implements OnInit {
   }
 
   initReservationDetails() {
+    this.loading = true;
     this.$subscription.add(
       this.manageReservationService
         .getReservationDataById(this.reservationId, this.entityId)
-        .subscribe((res) => {
-          const reservationData = new ReservationFormData().deserialize(res);
-          this.guestDetails = {
-            guestName:
-              res.guest.firstName +
-              ' ' +
-              (res.guest?.lastName ? res.guest.lastName : ''),
-            phoneNumber:
-              res.guest.contactDetails?.cc +
-              '' +
-              res.guest?.contactDetails?.contactNumber,
-            id: res.guest?.id ?? '',
-            email: res.guest?.contactDetails?.emailId,
-          };
-          this.useForm.patchValue(reservationData);
-        })
+        .subscribe(
+          (res) => {
+            const reservationData = new ReservationFormData().deserialize(res);
+            const { roomInformation, ...data } = reservationData;
+            this.guestDetails = {
+              guestName:
+                res.guest.firstName +
+                ' ' +
+                (res.guest?.lastName ? res.guest.lastName : ''),
+              phoneNumber:
+                res.guest.contactDetails?.cc +
+                '' +
+                res.guest?.contactDetails?.contactNumber,
+              id: res.guest?.id ?? '',
+              email: res.guest?.contactDetails?.emailId,
+            };
+
+            this.useForm.patchValue(data);
+            this.useForm.get('roomInformation').patchValue(roomInformation[0]);
+            this.useForm
+              .get('guestInformation.guestDetails')
+              .patchValue(res.guest.id);
+          },
+          (error) => {
+            this.loading = false;
+          },
+          () => {
+            this.loading = false;
+          }
+        )
     );
   }
 
@@ -260,7 +275,7 @@ export class QuickReservationFormComponent implements OnInit {
       entityId: this.entityId,
       config: config,
       type: 'string',
-      roomControl: this.useForm.get('roomInformation.room'),
+      roomControl: this.useForm.get('roomInformation.roomNumber'),
       roomNumbersControl: this.useForm.get('roomInformation.roomsOptions'),
       defaultRoomNumbers: [this.selectedRoom],
     });
@@ -307,7 +322,7 @@ export class QuickReservationFormComponent implements OnInit {
   }
 
   handleSubmit() {
-    if (this.useForm.invalid) {
+    if (this.useForm.invalid && !this.reservationId) {
       this.useForm.markAllAsTouched();
       this.snackbarService.openSnackBarAsText(
         'Invalid form: Please fix errors'
@@ -315,19 +330,65 @@ export class QuickReservationFormComponent implements OnInit {
       return;
     }
 
-    const data = this.useForm.getRawValue();
-    this.formService.mapRoomReservationData(data);
+    const data = this.formService.mapRoomReservationData(
+      this.useForm.getRawValue(),
+      this.entityId,
+      'quick'
+    );
     this.loading = true;
+
+    if (this.reservationId) {
+      this.updateReservation(data);
+    } else this.createReservation(data);
+  }
+
+  createReservation(data: any): void {
+    this.isBooking = true;
+    const { id, ...formData } = data;
+    this.$subscription.add(
+      this.manageReservationService
+        .createReservation(this.entityId, formData, 'ROOM_TYPE')
+        .subscribe(
+          (res) => {
+            this.handleSuccess();
+          },
+          (error) => {
+            this.isBooking = false;
+          },
+          () => {
+            this.isBooking = false;
+          }
+        )
+    );
+  }
+
+  updateReservation(data: any): void {
+    this.isBooking = true;
+    this.$subscription.add(
+      this.manageReservationService
+        .updateReservation(this.entityId, this.reservationId, data, 'ROOM_TYPE')
+        .subscribe(
+          (res) => {
+            this.handleSuccess();
+          },
+          (error) => {
+            this.isBooking = false;
+          },
+          () => {
+            this.isBooking = false;
+          }
+        )
+    );
   }
 
   handleSuccess = () => {
     this.loading = false;
     this.snackbarService.openSnackBarAsText(
-      `Service Created successfully`,
+      `Reservation ${this.reservationId ? 'Updated' : 'Created'} Successfully`,
       '',
       { panelClass: 'success' }
     );
-    this.onCloseSidebar.emit();
+    this.onCloseSidebar.emit(true);
   };
 
   handleError = (error) => {
@@ -351,5 +412,5 @@ export type QuickReservationConfig = {
   selectedRoom?: string;
   roomTypes?: Option[];
   selectedRoomType?: IGRoomType;
-  date: IGCol;
+  date?: IGCol;
 };

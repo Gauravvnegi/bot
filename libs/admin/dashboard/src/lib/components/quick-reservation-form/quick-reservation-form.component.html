@@ -20,10 +20,14 @@
     <div class="guest-name">{{ guestDetails?.guestName }}</div>
     <div class="due-amount">Due Amount - 42000</div>
     <div class="contact-details">
-      <img class="icons" [src]="'assets/svg/email-circle.svg'" alt="" />
-      <p class="number">{{ guestDetails?.phoneNumber }}</p>
-      <img class="icons" [src]="'assets/svg/whatsapp.svg'" alt="" />
-      <p class="email">{{ guestDetails?.email }}</p>
+      <div class="phone-number">
+        <img [src]="'assets/svg/email-circle.svg'" alt="" />
+        <p>{{ guestDetails?.phoneNumber }}</p>
+      </div>
+      <div class="email-id">
+        <img [src]="'assets/svg/whatsapp.svg'" alt="" />
+        <p>{{ guestDetails?.email }}</p>
+      </div>
     </div>
   </div>
   <div class="body">
@@ -162,8 +166,9 @@
   <div class="btn-wrapper">
     <hospitality-bot-button
       [label]="reservationId ? 'Update Reservation' : 'Confirm Reservation'"
-      [disabled]="useForm.invalid"
       (onClick)="handleSubmit()"
+      [isLoading]="isBooking"
+      [disabled]="!reservationId && useForm.invalid"
     ></hospitality-bot-button>
   </div>
 </div>

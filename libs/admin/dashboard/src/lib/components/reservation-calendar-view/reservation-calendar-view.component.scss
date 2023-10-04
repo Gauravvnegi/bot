@@ -107,7 +107,7 @@ $border-color: rgba(112, 112, 112, 0.35);
   background-color: #f1f2f7;
   height: 80px;
   color: $title;
-
+  border-bottom: none !important;
   .main-text {
     @include normal-sm-text;
   }
@@ -126,6 +126,10 @@ $border-color: rgba(112, 112, 112, 0.35);
 
   .room-type {
     font-size: 14px;
+    gap: 50px;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
     &__subtitle {
       font-size: 12px;
     }
@@ -167,6 +171,7 @@ $border-color: rgba(112, 112, 112, 0.35);
 .left-main-cell {
   width: 100%;
   padding-left: 4%;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.15);
   @include item-center-with-space;
 
   &__left {
@@ -256,5 +261,15 @@ $border-color: rgba(112, 112, 112, 0.35);
 :host ::ng-deep.sidebar {
   .p-sidebar {
     width: 35rem;
+  }
+}
+
+.features {
+  display: flex;
+  gap: 5px;
+  padding: 0px 10px;
+  .feature-image {
+    height: 25px;
+    width: 25px;
   }
 }

@@ -77,6 +77,7 @@ export class ReservationCalendarViewComponent implements OnInit {
   }
 
   initRoomTypes() {
+    this.roomsLoaded = false;
     this.$subscription.add(
       this.roomService
         .getList<RoomTypeListResponse>(this.entityId, {
@@ -229,19 +230,25 @@ export class ReservationCalendarViewComponent implements OnInit {
   }
 
   handleChange(event: IGChangeEvent, roomType: IGRoomType) {
-    const updateData = this.formService.mapCalendarViewData(
-      this.reservationListData.filter((item) => item.id === event.id)[0],
-      event.id,
-      event.startPos,
-      event.endPos,
-      event.rowValue
-    );
+    const updateData = {
+      from: event.startPos,
+      to: event.endPos,
+      bookingItems: [
+        {
+          roomDetails: {
+            roomNumber: event.rowValue,
+          },
+        },
+      ],
+    };
 
     roomType.loading = true;
     this.manageReservationService
-      .updateReservation(this.entityId, event.id, updateData, 'ROOM_TYPE')
+      .updateCalendarView(event.id, updateData, 'ROOM_TYPE')
       .subscribe(
-        (res) => {},
+        (res) => {
+          this.mapReservationsData(roomType);
+        },
         (error) => {
           roomType.loading = false;
           roomType.data = { ...roomType.data };
@@ -270,9 +277,16 @@ export class ReservationCalendarViewComponent implements OnInit {
         roomType.data.values.find((value) => value.id === id)?.rowValue ??
         event.rowValue,
       roomType: roomType,
-      date: event.colValue,
+      date: event?.colValue,
     };
     this.viewReservationForm = true;
+  }
+
+  handleCloseSidebar(resetData: boolean) {
+    this.viewReservationForm = false;
+    if (resetData) {
+      this.ngOnInit();
+    }
   }
 
   getRooms(rooms: IGRoom[]) {
@@ -280,7 +294,8 @@ export class ReservationCalendarViewComponent implements OnInit {
   }
 
   getFeatureImage(features: Features[]) {
-    return features.map((feature) => feature.imageUrl);
+    if (features) return features.map((feature) => feature.imageUrl);
+    else return;
   }
 }
 
@@ -313,6 +328,6 @@ export type CalendarViewData = {
 export type QuickFormProps = {
   reservationId: string;
   room: string | number;
-  date: number | string;
+  date?: number | string;
   roomType: IGRoomType;
 };

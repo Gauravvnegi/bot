@@ -493,14 +493,14 @@ export const productMenuSubs: any[] = [
   ,
   {
     label: 'RevMaxi',
-    name: 'REVENUE_MANAGER',
+    name: 'REV_MAXI',
     icon: 'assets/images/createwith.png',
     isSubscribed: true,
     isView: true,
     config: [
       {
-        name: 'REVENUE_MANAGER_HOME',
-        label: 'Home',
+        name: 'REVENUE_MANAGER',
+        label: 'Revenue Manager',
         description:
           'Never miss an opportunity to connect with guests by automating communication and strengthening guest relationships',
         icon:
@@ -693,6 +693,20 @@ export const productMenuSubs: any[] = [
             label: 'Room',
             icon:
               'https://nyc3.digitaloceanspaces.com/botfiles/bot/subscription_icons/library.svg',
+            isSubscribed: true,
+            isView: true,
+          },
+          {
+            featureId: '2064c823-ea1f-427a-ac63-8885f25a7013',
+            name: 'SETUP_BAR_PRICE',
+            label: 'Setup Bar Price',
+            description: 'Set up Bar Price',
+            cost: {
+              cost: 0.0,
+              usageLimit: 20000,
+            },
+            currentUsage: 0,
+            icon: '',
             isSubscribed: true,
             isView: true,
           },
@@ -1015,6 +1029,22 @@ export const productMenuSubs: any[] = [
             isView: true,
           },
           {
+            featureId: '951a6698-3850-4dca-bcfd-0a2a3b6859f4',
+            name: 'HOUSEKEEPING',
+            label: 'Housekeeping',
+            description:
+              'Never miss an opportunity to connect with guests by automating communication and strengthening guest relationships',
+            cost: {
+              cost: 0,
+              usageLimit: 20000,
+            },
+            currentUsage: 0,
+            icon:
+              'https://nyc3.digitaloceanspaces.com/botfiles/bot/subscription_icons/Analytics.svg',
+            isSubscribed: true,
+            isView: true,
+          },
+          {
             featureId: 'ed5b8542-49d1-47a3-9bf4-cfa4e73fc668',
             name: 'ADD_RESERVATION',
             label: 'Reservations',
@@ -1056,6 +1086,24 @@ export const productMenuSubs: any[] = [
             featureId: 'ed0d7a6e-1655-493b-84a2-2d90965328f6',
             name: 'GUESTS',
             label: 'Guest ',
+            icon:
+              'https://nyc3.digitaloceanspaces.com/botfiles/bot/subscription_icons/user.svg',
+            isSubscribed: true,
+            isView: true,
+          },
+          {
+            featureId: 'ed0d7a6e-1655-493b-84a2-2d90965328f6',
+            name: 'COMPANY',
+            label: 'Company',
+            icon:
+              'https://nyc3.digitaloceanspaces.com/botfiles/bot/subscription_icons/user.svg',
+            isSubscribed: true,
+            isView: true,
+          },
+          {
+            featureId: 'ed0d7a6e-1655-493b-84a2-2d90965328f6',
+            name: 'AGENT',
+            label: 'Agent',
             icon:
               'https://nyc3.digitaloceanspaces.com/botfiles/bot/subscription_icons/user.svg',
             isSubscribed: true,

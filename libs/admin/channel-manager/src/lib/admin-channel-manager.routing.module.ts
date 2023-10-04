@@ -64,6 +64,14 @@ const appRoutes: CRoutes = [
         loadChildren: () =>
           import('@hospitality-bot/admin/room').then((m) => m.AdminRoomModule),
       },
+      {
+        path: 'setup-bar-price',
+        name: ModuleNames.SETUP_BAR_PRICE,
+        loadChildren: () =>
+          import('@hospitality-bot/admin/revenue-manager').then(
+            (m) => m.AdminRevenueManagerModule
+          ),
+      },
     ],
   },
 ];

@@ -29,14 +29,7 @@ const appRoutes: CRoutes = [
       {
         path: 'dynamic-pricing',
         name: ModuleNames.DYNAMIC_PRICING,
-        component: MainComponent,
-        children: [
-          {
-            path: '',
-            component: DynamicPricingComponent,
-            name: ModuleNames.DYNAMIC_PRICING,
-          },
-        ],
+        component: DynamicPricingComponent,
       },
     ],
   },

@@ -77,7 +77,7 @@ export class CreateOfferComponent implements OnInit {
       active: [true],
       name: ['', [Validators.required]],
       libraryItems: [[], [Validators.required]],
-      images: ['', [Validators.required]],
+      imageUrl: ['', [Validators.required]],
       description: ['', [Validators.required]],
       startDate: ['', [Validators.required]],
       endDate: ['', [Validators.required]],
@@ -268,11 +268,11 @@ export class CreateOfferComponent implements OnInit {
 
     const {
       libraryItems,
-      images,
+      imageUrl,
       ...restFormData
     } = this.useForm.getRawValue() as OfferFormData;
     const data = {
-      images: [{ url: images, isFeatured: true }],
+      imageUrl: [{ url: imageUrl, isFeatured: true }],
       ...restFormData,
     };
 
@@ -343,13 +343,13 @@ export class CreateOfferComponent implements OnInit {
             packageCode,
             subPackages,
             roomTypes,
-            images,
+            imageUrl,
             ...restData
           } = res;
 
           const data: OfferFormData = {
             ...restData,
-            images: images?.[0]?.url,
+            imageUrl: imageUrl?.[0]?.url,
             libraryItems: [
               ...subPackages?.map((item) => ({
                 label: `${item.name} ${

@@ -221,6 +221,9 @@
     },
     "admin-housekeeping": {
       "tags": []
+    },
+    "admin-complaint-tacker": {
+      "tags": []
     }
   }
 }

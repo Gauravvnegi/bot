@@ -10,7 +10,7 @@ export class SubMenuItem {
   isView: boolean;
   children: SubMenuItem[];
 
-  deserialize(input: any) {
+  deserialize(input: any, productName?: string) {
     this.children = new Array<SubMenuItem>();
 
     Object.assign(
@@ -22,11 +22,11 @@ export class SubMenuItem {
     this.isSubscribed = input.isSubscribed;
     this.isView = input.isView;
 
-    this.path = routes[input.name];
+    this.path = routes[input.name].replace('{{product}}', routes[productName]);
 
     input.config?.forEach((subMenu) => {
       if (routes[subMenu.name] && subMenu.isView) {
-        this.children.push(new SubMenuItem().deserialize(subMenu));
+        this.children.push(new SubMenuItem().deserialize(subMenu, input.name));
       }
     });
 
@@ -66,7 +66,7 @@ export class MenuItem {
 
     input.config?.forEach((subMenu) => {
       if (routes[subMenu.name] && subMenu.isView) {
-        this.children.push(new SubMenuItem().deserialize(subMenu));
+        this.children.push(new SubMenuItem().deserialize(subMenu, input.name));
       }
     });
 

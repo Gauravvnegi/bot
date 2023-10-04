@@ -2455,6 +2455,41 @@
           "style": "scss"
         }
       }
+    },
+    "admin-complaint-tacker": {
+      "projectType": "library",
+      "root": "libs/admin/complaint-tacker",
+      "sourceRoot": "libs/admin/complaint-tacker/src",
+      "prefix": "hospitality-bot",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/admin/complaint-tacker/tsconfig.lib.json",
+              "libs/admin/complaint-tacker/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/admin/complaint-tacker/**/*"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/admin/complaint-tacker/jest.config.js",
+            "tsConfig": "libs/admin/complaint-tacker/tsconfig.spec.json",
+            "passWithNoTests": true,
+            "setupFile": "libs/admin/complaint-tacker/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "style": "scss"
+        }
+      }
     }
   },
   "cli": {

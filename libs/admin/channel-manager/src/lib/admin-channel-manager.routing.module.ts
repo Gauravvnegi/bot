@@ -22,7 +22,7 @@ const appRoutes: CRoutes = [
   {
     path: '',
     component: MainComponent,
-    name: ModuleNames.CHANNEL_MANAGER,
+    name: ModuleNames.CHANNEL_MANAGER_HOME,
     children: [
       {
         path: 'update-rates',
@@ -59,17 +59,10 @@ const appRoutes: CRoutes = [
         ],
       },
       {
-        // will be removed
-        path: 'update-reservation',
-        name: ModuleNames.MANAGE_INVENTORY,
-        component: MainComponent,
-        children: [
-          {
-            path: '',
-            component: UpdateReservationComponent,
-            name: ModuleNames.MANAGE_INVENTORY,
-          },
-        ],
+        path: 'room',
+        name: ModuleNames.ROOM,
+        loadChildren: () =>
+          import('@hospitality-bot/admin/room').then((m) => m.AdminRoomModule),
       },
     ],
   },

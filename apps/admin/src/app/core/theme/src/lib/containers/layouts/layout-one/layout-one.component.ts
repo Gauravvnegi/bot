@@ -427,7 +427,7 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
               ),
           }
         : null,
-      this.checkModuleSubscription(ModuleNames.REQUEST)
+      this.checkModuleSubscription(ModuleNames.COMPLAINT_TRACKER)
         ? {
             label: 'New Complaint',
             icon: 'pi pi-exclamation-circle',
@@ -451,6 +451,10 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
 
   openNewWindow(url: string) {
     window.open(url);
+  }
+
+  checkForSettings() {
+    return !!this.subscriptionPlanService.settings?.length;
   }
 
   openSettings() {

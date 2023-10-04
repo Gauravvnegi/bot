@@ -142,7 +142,11 @@
               title="Calender Reservation"
             />
           </div>
-          <div class="header--button quick-action" (click)="openSettings()">
+          <div
+            *ngIf="checkForSettings()"
+            class="header--button quick-action"
+            (click)="openSettings()"
+          >
             <img
               class="filter-icon"
               src="assets/svg/setting-dark.svg"

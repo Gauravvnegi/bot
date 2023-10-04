@@ -67,12 +67,15 @@ $border-color: rgba(112, 112, 112, 0.35);
   color: $title;
   gap: 10%;
 
-  .room-types-select {
-    max-width: 180px;
-  }
-
   &__left {
     justify-content: space-between;
+  }
+}
+
+:host ::ng-deep .room-types-select {
+  max-width: 130px;
+  & .p-multiselect-label-container {
+    overflow: hidden;
   }
 }
 
@@ -107,7 +110,7 @@ $border-color: rgba(112, 112, 112, 0.35);
   background-color: #f1f2f7;
   height: 80px;
   color: $title;
-  border-bottom: none !important;
+
   .main-text {
     @include normal-sm-text;
   }
@@ -131,7 +134,8 @@ $border-color: rgba(112, 112, 112, 0.35);
     justify-content: space-between;
     align-items: center;
     &__subtitle {
-      font-size: 12px;
+      font-size: 14px;
+      font-weight: 500;
     }
   }
 
@@ -171,7 +175,7 @@ $border-color: rgba(112, 112, 112, 0.35);
 .left-main-cell {
   width: 100%;
   padding-left: 4%;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+
   @include item-center-with-space;
 
   &__left {
@@ -201,6 +205,19 @@ $border-color: rgba(112, 112, 112, 0.35);
 
 //------------- Data Cell Styling -------
 
+.border-x {
+  border-bottom: 1px solid #8080802e;
+  border-top: 1px solid #8080802e;
+}
+
+.border-bottom {
+  border-bottom: 1px solid #8080802e;
+}
+
+.border-right {
+  border-right: 1px solid #8080802e;
+}
+
 .data-cell-wrapper {
   display: flex;
 }
@@ -212,8 +229,8 @@ $border-color: rgba(112, 112, 112, 0.35);
 }
 
 .cell {
-  width: 65px;
-  min-width: 65px;
+  width: 90px;
+  min-width: 90px;
   max-width: 90px;
   height: 100%;
   // max-width: 65px;
@@ -269,7 +286,8 @@ $border-color: rgba(112, 112, 112, 0.35);
   gap: 5px;
   padding: 0px 10px;
   .feature-image {
-    height: 25px;
-    width: 25px;
+    height: 22px;
+    width: 22px;
+    opacity: 0.8;
   }
 }

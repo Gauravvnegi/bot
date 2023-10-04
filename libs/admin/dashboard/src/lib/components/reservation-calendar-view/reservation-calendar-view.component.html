@@ -26,7 +26,10 @@
               </hospitality-bot-date>
             </div>
           </div>
-          <div class="main-section" *ngIf="!isRoomsEmpty && roomTypes?.length">
+          <div
+            class="main-section border-right"
+            *ngIf="!isRoomsEmpty && roomTypes?.length"
+          >
             <div
               loader
               [isVisible]="isLoaderVisible"
@@ -39,7 +42,7 @@
                 *ngFor="let roomType of roomTypes; let roomTypeIdx = index"
               >
                 <ng-container>
-                  <div class="heading-section left-main-cell">
+                  <div class="heading-section left-main-cell border-x">
                     <div class="left-main-cell__left main-text">
                       {{ roomType.label }}
                     </div>
@@ -55,15 +58,19 @@
                   <ng-container
                     *ngFor="let room of roomType.rooms; let ratePlanIdx = index"
                   >
-                    <div class="input-content-section left-main-cell">
+                    <div
+                      class="input-content-section left-main-cell"
+                      [ngClass]="{
+                        'border-bottom': ratePlanIdx < roomType.rooms.length - 1
+                      }"
+                    >
                       <div class="left-main-cell__left">
                         <div class="room-type">
                           <div class="room-type__subtitle">
                             {{ room.roomNumber }}
                           </div>
                           <div class="features">
-                            <div
-                              class="room-features"
+                            <ng-container
                               *ngFor="
                                 let imageUrl of getFeatureImage(room.features)
                               "
@@ -72,8 +79,9 @@
                                 *ngIf="imageUrl[0]?.url"
                                 class="feature-image"
                                 [src]="imageUrl[0].url"
+                                alt="'room-feature"
                               />
-                            </div>
+                            </ng-container>
                           </div>
                         </div>
                       </div>
@@ -109,7 +117,7 @@
                 <div class="data-cell-wrapper">
                   <div class="data-cell heading-section">
                     <div
-                      class="cell"
+                      class="cell border-x"
                       *ngFor="let date of dates; let dateIndex = index"
                     >
                       <div class="main-text">

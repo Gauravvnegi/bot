@@ -503,9 +503,9 @@ export class DetailsComponent implements OnInit, OnDestroy {
               break;
             case 'LATECHECKIN ':
               this.openJourneyDialog({
-                title: 'Early Check-In Request',
+                title: 'Late Check-In Request',
                 description:
-                  'Guest checkin request is after checkin request window.',
+                  'Guest checkin request is before scheduled arrival time.',
                 buttons: {
                   cancel: {
                     label: 'Cancel',
@@ -523,15 +523,102 @@ export class DetailsComponent implements OnInit, OnDestroy {
               });
               break;
             case 'EARLYCHECKOUT':
+              this.openJourneyDialog({
+                title: 'Early Check-Out Request',
+                description:
+                  'Guest checkout request is before scheduled departure time.',
+
+                buttons: {
+                  cancel: {
+                    label: 'Cancel',
+                    context: '',
+                  },
+                  accept: {
+                    label: 'Accept',
+                    context: this,
+                    handler: {
+                      fn_name: 'verifyJourney',
+                      args: ['CHECKOUT', 'ACCEPT'],
+                    },
+                  },
+                },
+              });
               break;
             case 'CHECKOUT':
+              this.openJourneyDialog({
+                title: 'Check-Out Request',
+                description: 'Guest is about to checkout.',
+                buttons: {
+                  cancel: {
+                    label: 'Cancel',
+                    context: '',
+                  },
+                  accept: {
+                    label: 'Accept',
+                    context: this,
+                    handler: {
+                      fn_name: 'verifyJourney',
+                      args: ['CHECKOUT', 'ACCEPT'],
+                    },
+                  },
+                },
+              });
               break;
             case 'LATECHECKOUT':
+              this.openJourneyDialog({
+                title: 'Late Check-Out Request',
+                description:
+                  'Guest checkout request is after checkout request window.',
+                buttons: {
+                  cancel: {
+                    label: 'Cancel',
+                    context: '',
+                  },
+                  accept: {
+                    label: 'Accept',
+                    context: this,
+                    handler: {
+                      fn_name: 'verifyJourney',
+                      args: ['CHECKOUT', 'ACCEPT'],
+                    },
+                  },
+                },
+              });
               break;
           }
         },
         ({ error }) => {}
       );
+  }
+
+  manualCheckout() {
+    this.openJourneyDialog({
+      title: 'Manual Checkout',
+      description: 'Guest is about to checkout',
+      question: 'Are you sure you want to continue?',
+      buttons: {
+        cancel: {
+          label: 'Cancel',
+          context: '',
+        },
+        accept: {
+          label: 'Accept',
+          context: this,
+          handler: {
+            fn_name: 'manualCheckoutfn',
+            args: [],
+          },
+        },
+      },
+    });
+  }
+
+  manualCheckoutfn() {
+    this._reservationService
+      .manualCheckout(this.reservationDetailsFG.get('bookingId').value)
+      .subscribe((res) => {
+        this.snackbarService.openSnackBarAsText('Checkout completed.');
+      });
   }
 
   manualCheckin() {
@@ -768,7 +855,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
   }
 
   checkForReservationSubs() {
-   return this.subscriptionService.checkModuleSubscription(
+    return this.subscriptionService.checkModuleSubscription(
       ModuleNames.ADD_RESERVATION
     );
   }

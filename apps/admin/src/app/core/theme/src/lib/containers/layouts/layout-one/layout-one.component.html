@@ -110,7 +110,7 @@
         </div>
         <div class="options2">
           <div
-            *ngIf="checkModuleSubscription(moduleNames.LIVE_MESSAGING)"
+            *ngIf="isFreddieSubscribed"
             class="header--button quick-action"
             (click)="openNewWindow('/pages/freddie/messages')"
           >
@@ -131,7 +131,7 @@
             />
           </div> -->
           <div
-            *ngIf="checkModuleSubscription(moduleNames.ADD_RESERVATION)"
+            *ngIf="isQuickReservationAvailable"
             class="header--button quick-action"
             (click)="openNewWindow('/pages/efrontdesk/reservation')"
           >
@@ -143,7 +143,7 @@
             />
           </div>
           <div
-            *ngIf="checkForSettings()"
+            *ngIf="isSettingAvailable"
             class="header--button quick-action"
             (click)="openSettings()"
           >

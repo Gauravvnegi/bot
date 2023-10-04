@@ -95,11 +95,15 @@ export class SubscriptionPlanService extends ApiService {
     return this.productSubscription.subscribedModules.indexOf(moduleName) > -1;
   }
 
-  checkModuleSubscriptionBasedOnProduct(productName, moduleName) {
+  checkProductSubscription(moduleName: ModuleNames) {
+    //should be productNames
+    return this.productSubscription.subscribedProducts.indexOf(moduleName) > -1;
+  }
+
+  checkProductOrModuleSubscription(moduleName: ModuleNames) {
     return (
-      this.productSubscription.subscribedModuleProductBased[
-        productName
-      ]?.indexOf(moduleName) === -1
+      this.checkProductSubscription(moduleName) ||
+      this.checkModuleSubscription(moduleName)
     );
   }
 

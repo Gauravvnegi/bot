@@ -70,7 +70,7 @@ export const productMenuSubs: any[] = [
 
             icon:
               'https://nyc3.digitaloceanspaces.com/botfiles/bot/subscription_icons/subscription_.svg',
-            isSubscribed: true,
+            isSubscribed: false,
             isView: true,
           },
           {
@@ -490,7 +490,6 @@ export const productMenuSubs: any[] = [
       },
     ],
   },
-  ,
   {
     label: 'RevMaxi',
     name: 'REV_MAXI',

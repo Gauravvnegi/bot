@@ -84,6 +84,7 @@ export const routes = {
   [ModuleNames.MANAGE_INVENTORY]: 'channel-manager/update-inventory',
 
   //REVENUE_MANAGER
+  [ModuleNames.REV_MAXI]: 'revenue-manager',
   [ModuleNames.REVENUE_MANAGER]: 'revenue-manager',
   [ModuleNames.DYNAMIC_PRICING]: 'revenue-manager/dynamic-pricing',
   [ModuleNames.SETUP_BAR_PRICE]: '{{product}}/setup-bar-price',

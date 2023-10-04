@@ -16,8 +16,10 @@ import {
   DiscountType,
   ModuleNames,
 } from '@hospitality-bot/admin/shared';
+import { ModalService } from '@hospitality-bot/shared/material';
 import { NavRouteOptions, Option } from 'libs/admin/shared/src';
 import CustomValidators from 'libs/admin/shared/src/lib/utils/validators';
+import { convertToTitleCase } from 'libs/admin/shared/src/lib/utils/valueFormatter';
 import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.service';
 import { Subscription } from 'rxjs';
 import {
@@ -30,13 +32,10 @@ import {
 import routes from '../../constant/routes';
 import { Service, Services } from '../../models/amenities.model';
 import { RoomTypeForm } from '../../models/room.model';
+import { RoomType } from '../../models/rooms-data-table.model';
+import { FormService } from '../../services/form.service';
 import { RoomService } from '../../services/room.service';
 import { RatePlanOptions } from '../../types/room';
-import { FormService } from '../../services/form.service';
-import { RoomType } from '../../models/rooms-data-table.model';
-import { MatDialogConfig } from '@angular/material/dialog';
-import { ModalService } from '@hospitality-bot/shared/material';
-import { ModalComponent } from 'libs/admin/shared/src/lib/components/modal/modal.component';
 
 @Component({
   selector: 'hospitality-bot-room-type',
@@ -107,6 +106,15 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
     );
     this.initForm();
     this.initOptionConfig();
+    this.updateNavRoutes();
+  }
+
+  updateNavRoutes() {
+    const initialRouteName = this.subscriptionPlanService.selectedProduct;
+    this.navRoutes[0].label = convertToTitleCase(initialRouteName).replace(
+      'Home',
+      ''
+    );
   }
 
   get inputControl() {

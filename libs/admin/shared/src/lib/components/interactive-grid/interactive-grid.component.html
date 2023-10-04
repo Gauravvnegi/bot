@@ -1,0 +1,178 @@
+<div class="wrapper">
+  <!-- Interactive grid view -->
+  <div
+    #myBounds
+    [ngStyle]="{
+      width: noOfColumn * cellSize + 'px',
+      height: noOfRow * height + 'px'
+    }"
+    class="interactive-grid-wrapper"
+    *ngIf="showDataGrid"
+  >
+    <ng-container *ngFor="let row of gridRows; let rowIdx = index">
+      <ng-container *ngFor="let col of gridColumns; let colIdx = index">
+        <div
+          class="drag-grid"
+          [bounds]="myBounds"
+          [rzContainment]="myBounds"
+          [inBounds]="true"
+          *ngIf="data[row] && data[row][col]"
+          [ngDraggable]="!data[row][col].nonInteractive"
+          [ngResizable]="!data[row][col].nonInteractive"
+          [rzMinWidth]="cellSize / resizeDelimiter"
+          [rzGrid]="cellSize / resizeDelimiter"
+          [position]="{
+            x: colIdx * cellSize + (data[row][col]?.hasPrev ? cellSize / 2 : 0),
+            y: rowIdx * height
+          }"
+          [gridSize]="cellSize / 2"
+          [ngStyle]="{
+            width:
+              getWidth({
+                rowValue: row,
+                colValue: col,
+                colIdx: colIdx,
+                rowIdx: rowIdx
+              }) + 'px',
+            height: height + 'px',
+            padding: cellGap + 'px',
+            marginLeft: '-' + outOfBoundRecord[data[row][col].id].lSpace + 'px'
+          }"
+          zIndex="10"
+          zIndexMoving="100"
+          [preventDefaultEvent]="true"
+          rzHandles="e,w"
+          (rzStop)="
+            handleResizing($event, {
+              rowValue: row,
+              colValue: col,
+              colIdx: colIdx,
+              rowIdx: rowIdx
+            })
+          "
+          (endOffset)="
+            handleDrag($event, {
+              rowValue: row,
+              colValue: col,
+              colIdx: colIdx,
+              rowIdx: rowIdx
+            })
+          "
+          (movingOffset)="
+            onMoving($event, {
+              rowValue: row,
+              colValue: col,
+              colIdx: colIdx,
+              rowIdx: rowIdx
+            })
+          "
+        >
+          <div
+            class="cell-data"
+            [ngClass]="{
+              'non-interactive-cell': data[row][col]?.nonInteractive,
+              'success-cell': data[row][col]?.colorCode === 'success',
+              'active-cell': data[row][col]?.colorCode === 'active',
+              'inactive-cell': data[row][col]?.colorCode === 'inactive',
+              'failed-cell': data[row][col]?.colorCode === 'failed',
+              'warning-cell': data[row][col]?.colorCode === 'warning',
+              'draft-cell': data[row][col]?.colorCode === 'draft'
+            }"
+            [ngStyle]="{
+              height: height - 2 * cellGap + 'px',
+              borderLeft: outOfBoundRecord[data[row][col].id].hasLeftBorder
+                ? null
+                : 0,
+              borderRight: outOfBoundRecord[data[row][col].id].hasRightBorder
+                ? null
+                : 0
+            }"
+          >
+            <div
+              class="cell-data__content"
+              [ngStyle]="{
+                whiteSpace: data[row][col]?.nonInteractive ? 'wrap' : 'nowrap'
+              }"
+            >
+              <ng-container *ngIf="data[row][col]?.icons">
+                <img
+                  *ngFor="let icon of data[row][col]?.icons"
+                  [src]="icon"
+                  alt="cell-icon"
+                  class="cell-data__icon"
+                />
+              </ng-container>
+              {{ data[row][col]?.content }}
+            </div>
+            <div class="cell-data__additional-content">
+              {{ data[row][col]?.additionContent }}
+            </div>
+          </div>
+        </div>
+      </ng-container>
+    </ng-container>
+  </div>
+
+  <!-- Presentation grid view -->
+  <div
+    class="grid-container"
+    [ngStyle]="{ width: noOfColumn * cellSize + 'px' }"
+  >
+    <div
+      *ngFor="let row of gridRows; let rowIdx = index"
+      class="grid-row"
+      [id]="'myContainment_' + i"
+    >
+      <div
+        *ngFor="let col of gridColumns; let colIdx = index"
+        class="grid-cell"
+        [ngStyle]="{
+          width: cellSize + 'px',
+          height: height + 'px'
+        }"
+      >
+        <div
+          [ngDraggable]="false"
+          [preventDefaultEvent]="true"
+          class="non-drag-grid"
+          zIndex="1"
+          [ngStyle]="{
+            width: cellSize - 2 * cellGap + 'px',
+            height: height - 2 * cellGap + 'px',
+            margin: cellGap + 'px'
+          }"
+          (click)="
+            handleCreate({
+              rowValue: row,
+              colValue: col
+            })
+          "
+          [pTooltip]="createNewToolTipInfo"
+          showDelay="500"
+          tooltipPosition="top"
+        >
+          <ng-container *ngIf="devMode && rowIdx === gridRows.length - 1">
+            <div>
+              idx: <b>{{ colIdx }}</b>
+            </div>
+            <div>
+              val: <b>{{ col }}</b>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Spinner -->
+  <div
+    class="grid-container spinner-wrapper"
+    [ngStyle]="{
+      width: noOfColumn * cellSize + 'px',
+      height: noOfRow * height + 'px'
+    }"
+    *ngIf="isProcessing"
+  >
+    <i class="pi pi-spin pi-spinner" [ngClass]="iconNgClass"></i>
+  </div>
+</div>

@@ -15,7 +15,8 @@ import {
   RoomTypeResponse,
   ServiceResponse,
 } from '../types/service-response';
-import { filter, map } from 'rxjs/operators';
+import { map, switchMap } from 'rxjs/operators';
+import { forkJoin } from 'rxjs';
 
 @Injectable()
 export class RoomService extends ApiService {
@@ -92,7 +93,7 @@ export class RoomService extends ApiService {
       })
     );
   }
-  
+
   updateRoomStatus(
     entityId: string,
     data: {
@@ -136,7 +137,7 @@ export class RoomService extends ApiService {
   exportCSV(entityId: string, table: TableValue, config?: QueryConfig) {
     return this.get(
       `/api/v1/entity/${entityId}/inventory/export${config.params ?? ''}`,
-      { responseType: 'blob' },
+      { responseType: 'blob' }
     );
   }
 

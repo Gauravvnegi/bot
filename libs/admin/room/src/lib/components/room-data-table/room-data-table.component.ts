@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { MatDialogConfig } from '@angular/material/dialog';
-import { NavigationExtras, Router } from '@angular/router';
+import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
   AdminUtilityService,
@@ -55,7 +55,8 @@ export class RoomDataTableComponent extends BaseDatatableComponent
     protected snackbarService: SnackBarService,
     private router: Router,
     private modalService: ModalService,
-    private formService: FormService
+    private formService: FormService,
+    private route: ActivatedRoute
   ) {
     super(fb, tabFilterService);
   }
@@ -346,17 +347,15 @@ export class RoomDataTableComponent extends BaseDatatableComponent
    */
   openEditForm(rowData): void {
     if (this.selectedTab === TableValue.room) {
-      this.router.navigate(
-        [`/pages/efrontdesk/room/${routes.addRoom}/single`],
-        {
-          queryParams: { id: rowData.id },
-        }
-      );
+      this.router.navigate([routes.addSingleRoom], {
+        queryParams: { id: rowData.id },
+        relativeTo: this.route,
+      });
     }
     if (this.selectedTab === TableValue.roomType) {
-      this.router.navigate([
-        `/pages/efrontdesk/room/${routes.addRoomType}/${rowData.id}`,
-      ]);
+      this.router.navigate([`${routes.addRoomType}/${rowData.id}`], {
+        relativeTo: this.route,
+      });
     }
   }
 

@@ -54,7 +54,7 @@ export class RequestsTableComponent extends BaseDatatableComponent {
   ngOnInit() {
     this.loadInitialData();
     this.getSubscribedFilters(
-      ModuleNames.REQUEST,
+      ModuleNames.COMPLAINTS,
       TableNames.REQUEST,
       this.tabFilterItems
     );

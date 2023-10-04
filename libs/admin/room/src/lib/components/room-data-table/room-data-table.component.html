@@ -9,17 +9,17 @@
       *ngIf="selectedTab === 'ROOM'"
       label="{{ 'room.addSingle' | translate }}"
       variant="text"
-      link="/pages/efrontdesk/room/{{ routes.addRoom }}/single"
+      [routerLink]="routes.addRoom"
     ></hospitality-bot-button>
     <hospitality-bot-button
       *ngIf="selectedTab === 'ROOM_TYPE'"
       label="{{ 'room.createType' | translate }}"
-      link="/pages/efrontdesk/room/{{ routes.addRoomType }}"
+      [routerLink]="routes.addRoomType"
     ></hospitality-bot-button>
     <hospitality-bot-button
       *ngIf="selectedTab === 'ROOM'"
       label="{{ 'room.addMultiple' | translate }}"
-      link="/pages/efrontdesk/room/{{ routes.addRoom }}/multiple"
+      [routerLink]="routes.addRoomMultiple"
     ></hospitality-bot-button>
     <hospitality-bot-export-list
       [additionalActionItems]="additionalActionItems"

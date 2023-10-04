@@ -1,7 +1,5 @@
 import { IteratorField } from 'libs/admin/shared/src/lib/types/fields.type';
-import {
-  ReservationRatePlan,
-} from 'libs/admin/room/src/lib/constant/form';
+import { ReservationRatePlan } from 'libs/admin/room/src/lib/constant/form';
 
 export const roomFields: IteratorField[] = [
   {
@@ -107,7 +105,7 @@ export const menuItemFields: IteratorField[] = [
     minValue: 1,
   },
   {
-    label: 'Amount',
+    label: 'Amount Per Unit',
     name: 'amount',
     type: 'input',
     required: false,
@@ -141,7 +139,7 @@ export const spaFields: IteratorField[] = [
     minValue: 1,
   },
   {
-    label: 'Amount',
+    label: 'Amount Per Unit',
     name: 'amount',
     type: 'input',
     required: false,
@@ -172,7 +170,7 @@ export const venueFields: IteratorField[] = [
     minValue: 1,
   },
   {
-    label: 'Amount',
+    label: 'Amount Per Unit',
     name: 'amount',
     type: 'input',
     required: false,
@@ -229,5 +227,5 @@ export enum JourneyType {
   CHECKIN = 'CHECKIN',
   CHECKOUT = 'CHECKOUT',
   PRECHECKIN = 'PRECHECKIN',
-  NEW = 'NEW'
+  NEW = 'NEW',
 }

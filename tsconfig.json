@@ -154,6 +154,9 @@
       ],
       "@hospitality-bot/admin/housekeeping": [
         "libs/admin/housekeeping/src/index.ts"
+      ],
+      "@hospitality-bot/admin/complaint-tacker": [
+        "libs/admin/complaint-tacker/src/index.ts"
       ]
     }
   },

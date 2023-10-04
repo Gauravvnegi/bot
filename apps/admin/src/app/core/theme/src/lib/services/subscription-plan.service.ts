@@ -21,7 +21,7 @@ export class SubscriptionPlanService extends ApiService {
   getSubscriptionPlan(entityId: string): Observable<any> {
     return this.get(`/api/v1/entity/${entityId}/subscriptions/`).pipe(
       map((response) => {
-        response.products = productMenuSubs;
+        // response.products = productMenuSubs;
         return response;
       })
     );
@@ -29,7 +29,6 @@ export class SubscriptionPlanService extends ApiService {
 
   initSubscriptionDetails(data) {
     this.setSubscription(data);
-    this.setSettings(data);
     this.subscription$.next(new ProductSubscription().deserialize(data));
   }
 
@@ -56,16 +55,30 @@ export class SubscriptionPlanService extends ApiService {
     );
   }
 
-  getSelectedProduct() {
+  getModuleProductMapping() {
+    return this.productSubscription.moduleProductMapping;
+  }
+
+  getSelectedProductData() {
     if (this.selectedProduct) {
       return this.subscriptions.products.find(
         (item) => item.name === this.selectedProduct
-      ).config;
+      );
     }
 
-    return this.subscriptions.products.find(
-      (item) => item.isView && item.isSubscribed
-    ).config;
+    return this.getFirstSubscribedProduct();
+  }
+
+  private getFirstSubscribedProduct() {
+    const firstSelectedProduct = this.subscriptions.products.find((item) => {
+      return item.isSubscribed && item.isView && !!item.config?.length;
+    });
+
+    // setting product
+    this.selectedProduct = firstSelectedProduct.name as ModuleNames;
+    this.setSettings();
+
+    return firstSelectedProduct;
   }
 
   getSubscriptionUsagePercentage(entityId: string, config): Observable<any> {
@@ -90,9 +103,10 @@ export class SubscriptionPlanService extends ApiService {
     );
   }
 
-  setSettings(input) {
-    const settingModule =
-      input.products.find((item) => item?.name === ModuleNames?.SETTINGS) ?? [];
+  setSettings() {
+    const settingModule = this.subscriptions.products
+      .find((item) => item.name === this.selectedProduct)
+      .config.find((item) => item?.name === ModuleNames?.SETTINGS);
 
     this.settings =
       settingModule?.config?.map((item) =>

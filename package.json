@@ -62,6 +62,7 @@
     "angular-gauge": "^4.0.0",
     "angular-gauge-chart": "^0.7.2",
     "angular-svg-icon": "^10.0.0",
+    "angular2-draggable": "^2.3.2",
     "angular2-signaturepad": "^2.11.0",
     "angular2-text-mask": "^9.0.0",
     "angularx-qrcode": "~2.3.7",

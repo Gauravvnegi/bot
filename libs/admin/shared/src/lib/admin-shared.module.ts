@@ -127,6 +127,7 @@ import { TieredMenuModule } from 'primeng/tieredmenu';
 import { TieredMenuButtonComponent } from './components/tiered-menu-button/tiered-menu-button.component';
 import { TabbedSidebarComponent } from './components/tabbed-sidebar/tabbed-sidebar.component';
 import { InfoPanelComponent } from './components/info-panel/info-panel.component';
+import { QuickSelectComponent } from './view/quick-select/quick-select.component';
 
 @NgModule({
   imports: [
@@ -259,6 +260,7 @@ import { InfoPanelComponent } from './components/info-panel/info-panel.component
     TieredMenuButtonComponent,
     TabbedSidebarComponent,
     InfoPanelComponent,
+    QuickSelectComponent,
   ],
 
   exports: [
@@ -378,6 +380,7 @@ import { InfoPanelComponent } from './components/info-panel/info-panel.component
     TieredMenuButtonComponent,
     TabbedSidebarComponent,
     InfoPanelComponent,
+    QuickSelectComponent,
   ],
 })
 export class AdminSharedModule {}

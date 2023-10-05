@@ -21,7 +21,8 @@ export type FormProps = {
   isAsync?: boolean;
   dropdownIcon?: string;
   additionalInfo?: string;
-  addNewPrompt?: string;
+  inputPrompt?: string;
+  createPrompt?: string;
   subtitle?: string;
   isAutoFocusFilter?: boolean;
   tabIndex?: string;

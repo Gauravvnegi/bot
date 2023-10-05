@@ -71,3 +71,29 @@ export const reservationStatus: Record<
     type: 'draft',
   },
 };
+
+export const campaignStatus: Record<
+  'CHECKIN' | 'CHECKOUT' | 'NEW' | 'QUEUED',
+  { label: string; type: FlagType }
+> = {
+  CHECKIN: {
+    label: 'Checkin',
+    type: 'completed',
+  },
+  CHECKOUT: {
+    label: 'Checkout',
+    type: 'inactive',
+  },
+  NEW: {
+    label: 'New',
+    type: 'success',
+  },
+  QUEUED: {
+    label: 'Queued',
+    type: 'success',
+  },
+};
+
+export function getColorCode(jouryneyStatus: string) {
+  if (jouryneyStatus) return campaignStatus[jouryneyStatus].type;
+}

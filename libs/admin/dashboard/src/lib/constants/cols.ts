@@ -65,7 +65,7 @@ export const tableTypes = {
   calendar: {
     name: 'calendar',
     value: 'calendar',
-    url: 'assets/svg/table_card.svg',
+    url: 'assets/svg/calendar-dark.svg',
     backgroundColor: '#DEFFF3',
   },
 };

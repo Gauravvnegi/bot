@@ -31,6 +31,7 @@ import {
 } from 'libs/admin/shared/src/lib/components/interactive-grid/interactive-grid.component';
 import { Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
+import { getColorCode } from '../../constants/response';
 
 @Component({
   selector: 'hospitality-bot-reservation-calendar-view',
@@ -145,6 +146,7 @@ export class ReservationCalendarViewComponent implements OnInit {
           startPos: this.getDate(reservation.from),
           endPos: this.getDate(reservation.to),
           rowValue: reservation.bookingItems[0].roomDetails.roomNumber,
+          colorCode: getColorCode(reservation.currentJourney),
         })),
       };
       this.allRoomTypes = this.roomTypes;
@@ -212,7 +214,7 @@ export class ReservationCalendarViewComponent implements OnInit {
   listenChanges() {
     this.useForm.get('date').valueChanges.subscribe((res) => {
       this.initDates(res);
-      this.initRoomTypes();
+      this.initReservationData();
     });
 
     this.useForm

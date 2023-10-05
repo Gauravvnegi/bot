@@ -30,7 +30,16 @@ export class MembersListComponent implements OnInit {
   $subscription = new Subscription();
   entityId: string;
   servicesService: any;
+  _defaultMember: Option;
   @Output() createMembers = new EventEmitter();
+
+  @Input() set defaultMember(value: Option) {
+    this.setDefaultMember(value);
+  }
+
+  get defaultMember() {
+    return this._defaultMember;
+  }
 
   constructor(
     private agentService: AgentService,
@@ -143,6 +152,13 @@ export class MembersListComponent implements OnInit {
       this.membersOffSet = 0;
       this.membersList = [];
       this.getMembers();
+    }
+  }
+
+  setDefaultMember(member: Option) {
+    const uniqueIds = new Set(this.membersList.map((member) => member.value));
+    if (!uniqueIds.has(member?.value)) {
+      this.membersList = [...this.membersList, member];
     }
   }
 

@@ -1,10 +1,11 @@
 <div class="wrapper" [id]="fa.referenceId">
   <hospitality-bot-navigation-header
+    *ngIf="!isSideBar; else sidebarHeader"
     [heading]="pageTitle"
     [routes]="navRoutes"
   ></hospitality-bot-navigation-header>
 
-  <div class="form-block" [formGroup]="companyForm">
+  <div class="form-block body" [formGroup]="companyForm">
     <div class="code half-width">
       <span class="code__label"> Code: </span>
       <span class="code__hash">
@@ -149,13 +150,23 @@
     >
     </hospitality-bot-select>
   </div>
-  <hospitality-bot-form-action
-    class="full-width"
-    [loading]="loading"
-    [isId]="companyId"
-    (onPreAction)="reset()"
-    (onPostAction)="handleSubmit()"
-    #fa
-  >
-  </hospitality-bot-form-action>
 </div>
+
+<ng-template #sidebarHeader>
+  <div class="sidebar-slide-header">
+    <span class="title">{{ pageTitle }}</span>
+    <span class="close-icon" (click)="closeSidebar()">
+      <i class="pi pi-arrow-right" aria-hidden="true"></i>
+    </span>
+  </div>
+</ng-template>
+
+<hospitality-bot-form-action
+  class="full-width"
+  [loading]="loading"
+  [isId]="companyId"
+  (onPreAction)="reset()"
+  (onPostAction)="handleSubmit()"
+  #fa
+>
+</hospitality-bot-form-action>

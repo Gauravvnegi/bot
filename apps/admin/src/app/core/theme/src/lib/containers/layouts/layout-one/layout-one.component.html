@@ -84,6 +84,9 @@
           <hospitality-bot-tiered-menu-button
             *ngIf="!!bookingOptions?.length"
             label="Quick booking"
+            [splitButton]="true"
+            [link]="quickDropdownLink"
+            [openNewWindow]="true"
             [items]="bookingOptions"
           ></hospitality-bot-tiered-menu-button>
           <div class="global_search">

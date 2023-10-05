@@ -8,7 +8,7 @@ import { FormGroup } from '@angular/forms';
 import { BehaviorSubject } from 'rxjs';
 type ComponentTypes = 'agent' | 'company' | 'guest';
 type SetFormTypes = AgentFormType | CompanyFormType | GuestFormType;
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class FormService {
   companyRedirectRoute = '';
   agentForm: AgentFormType;

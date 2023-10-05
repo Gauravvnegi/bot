@@ -54,3 +54,21 @@
     transform: rotate(360deg);
   }
 }
+
+.sidebar-slide-header {
+  display: flex;
+  justify-content: space-between;
+  padding: 15px 30px;
+  background-color: $primary;
+  .title {
+    font-size: 16px;
+    font-weight: 500;
+    color: $white;
+  }
+  .close-icon {
+    color: $white;
+    &:hover {
+      cursor: pointer;
+    }
+  }
+}

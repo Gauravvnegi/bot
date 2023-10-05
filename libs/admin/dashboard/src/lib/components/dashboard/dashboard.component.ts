@@ -156,9 +156,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.tabFilterIdx = index;
 
     if (this.tabFilterItems[index].value === dashboardPopUpTabs[1].value) {
+      this.options = [];
       //GET PRE ARRIVAL REQUEST DATA
       this.getPreArrivalRequest();
     } else {
+      this.options = [];
       //GET PRE CHECK-IN GUEST DATA
       this.getPreCheckinGuest();
     }
@@ -172,7 +174,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       toDate: moment.utc().endOf('day').valueOf(),
       order: 'DESC',
       entityType: 'ARRIVAL',
-      entityState: '',
+      entityState: 'EXPRESSCHECKIN',
     };
     const config = {
       queryObj: this._adminUtilityService.makeQueryParams([queryObj]),

@@ -23,9 +23,11 @@
   }
   .buttons {
     @include flex-space-between-cen-Algn;
-    gap: 15px;
+    gap: 20px;
     .expand {
       cursor: pointer;
+      height: 20px;
+      width: 20px;
     }
   }
 }
@@ -34,19 +36,26 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   padding: 10px;
-  box-shadow: 0px 7px 8px -6px #b5b5b5;
+  box-shadow: 0px 7px 5px -7px #b5b5b5;
   z-index: 1;
   .guest-name {
     @include normal-lg-text;
   }
   .due-amount {
     text-align: right;
-    @include normal-lg-text;
+    color: $subtitle;
+    @include normal-sm-text;
+    .amount {
+      color: black;
+      @include normal-md-text;
+    }
   }
   .contact-details {
     width: 50px;
     gap: 10px;
+    display: flex;
     padding: 10px 0;
+    flex-direction: column;
     .phone-number {
       @include flex-item-center;
       gap: 5px;

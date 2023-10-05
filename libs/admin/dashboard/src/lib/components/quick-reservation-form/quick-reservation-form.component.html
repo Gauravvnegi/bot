@@ -8,17 +8,25 @@
         label="Edit Full Reservation"
         (onClick)="editForm()"
       ></hospitality-bot-button> -->
-      <div (click)="editForm()" class="expand">
-        <i [ngClass]="'fas fa-expand-alt'"></i>
-      </div>
+      <img
+        (click)="editForm()"
+        class="expand"
+        [src]="'assets/svg/expand-white.svg'"
+        alt=""
+      />
       <div (click)="close()" class="close">
         <i [ngClass]="'pi pi-arrow-right'" aria-hidden="true"></i>
       </div>
     </div>
   </div>
-  <div class="guest-data" *ngIf="!isCreateForm">
+  <div class="guest-data" *ngIf="reservationId">
     <div class="guest-name">{{ guestDetails?.guestName }}</div>
-    <div class="due-amount">Due Amount - 42000</div>
+    <div class="due-amount">
+      Due Amount -
+      <span class="amount">{{
+        reservationData?.totalDueAmount | currency: 'INR'
+      }}</span>
+    </div>
     <div class="contact-details">
       <div class="phone-number">
         <img [src]="'assets/svg/email-circle.svg'" alt="" />
@@ -82,19 +90,24 @@
       </ng-container>
 
       <!-- Guest Information -->
-      <ng-container *ngIf="isCreateForm" formGroupName="guestInformation">
+      <ng-container *ngIf="!reservationId" formGroupName="guestInformation">
         <hospitality-bot-select
           class="half-width select"
           controlName="guestDetails"
           label="Guest"
-          [props]="{ placeholder: 'Select' }"
+          [props]="{
+            isAsync: false,
+            createPrompt: '+ Add New Guest',
+            placeholder: 'Search'
+          }"
           [options]="guestOptions"
+          (onCreate)="createGuest()"
         ></hospitality-bot-select>
       </ng-container>
 
       <!-- Room Information -->
       <ng-container formGroupName="roomInformation">
-        <ng-container *ngIf="isCreateForm">
+        <ng-container *ngIf="!reservationId">
           <hospitality-bot-select
             class="half-width select"
             controlName="roomTypeId"
@@ -138,18 +151,6 @@
         ></hospitality-bot-input>
       </ng-container>
 
-      <!-- Payment Method -->
-      <ng-container formGroupName="paymentMethod">
-        <hospitality-bot-input
-          class="half-width"
-          controlName="totalPaidAmount"
-          label="Price"
-          [props]="{
-            placeholder: 'Enter'
-          }"
-        ></hospitality-bot-input>
-      </ng-container>
-
       <!-- Instructions -->
       <ng-container formGroupName="instructions">
         <hospitality-bot-text-area
@@ -161,6 +162,17 @@
           }"
         ></hospitality-bot-text-area>
       </ng-container>
+
+      <!-- Daily Price -->
+      <hospitality-bot-input
+        *ngIf="reservationId"
+        class="half-width"
+        controlName="dailyPrice"
+        label="Daily Price"
+        [props]="{
+          placeholder: 'Enter'
+        }"
+      ></hospitality-bot-input>
     </div>
   </div>
   <div class="btn-wrapper">

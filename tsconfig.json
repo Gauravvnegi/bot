@@ -163,6 +163,9 @@
       ],
       "@hospitality-bot/admin/dynamic-pricing": [
         "libs/admin/dynamic-pricing/src/index.ts"
+      ],
+      "@hospitality-bot/admin/booking-engine": [
+        "libs/admin/booking-engine/src/index.ts"
       ]
     }
   },

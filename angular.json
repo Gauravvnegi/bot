@@ -2560,6 +2560,38 @@
           "style": "scss"
         }
       }
+    },
+    "admin-booking-engine": {
+      "projectType": "library",
+      "root": "libs/admin/booking-engine",
+      "sourceRoot": "libs/admin/booking-engine/src",
+      "prefix": "hospitality-bot",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/admin/booking-engine/tsconfig.lib.json",
+              "libs/admin/booking-engine/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/admin/booking-engine/**/*"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/admin/booking-engine/jest.config.js",
+            "tsConfig": "libs/admin/booking-engine/tsconfig.spec.json",
+            "passWithNoTests": true,
+            "setupFile": "libs/admin/booking-engine/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "style": "scss"
+        }
+      }
     }
   },
   "cli": {

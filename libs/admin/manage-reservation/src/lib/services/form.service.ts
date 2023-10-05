@@ -50,53 +50,6 @@ export class FormService {
 
   reservationForm = new BehaviorSubject<ReservationForm>(null);
 
-  mapCalendarViewData(
-    input: RoomReservation,
-    id: string,
-    fromDate: number,
-    toDate: number,
-    roomNumber: string | number
-  ) {
-    const roomReservationData = new RoomReservationFormData();
-    // Map Reservation Info
-    roomReservationData.id = id ?? '';
-    roomReservationData.from = fromDate;
-    roomReservationData.to = toDate;
-    roomReservationData.reservationType = input?.reservationType;
-    roomReservationData.sourceName = input?.sourceName;
-    roomReservationData.source = input?.source;
-    // roomReservationData.marketSegment =
-    //   input?.marketSegment;
-    roomReservationData.guestId = input.guestId;
-    // Map Booking Items
-    if (input?.bookingItems) {
-      roomReservationData.bookingItems = input.bookingItems.map((roomType) => {
-        const bookingItem: any = {
-          roomDetails: {
-            ratePlan: { id: roomType.roomDetails.ratePlan },
-            roomTypeId: roomType.roomDetails.roomTypeId,
-            roomCount: roomType.roomDetails.roomCount,
-            roomNumber: roomNumber,
-          },
-          occupancyDetails: {
-            maxChildren: roomType.occupancyDetails.maxChildren,
-            maxAdult: roomType.occupancyDetails.maxAdult,
-          },
-        };
-
-        if (roomType.id.length) {
-          bookingItem.id = roomType.id;
-        }
-
-        return bookingItem;
-      });
-    } else {
-      roomReservationData.bookingItems = [];
-    }
-
-    return roomReservationData;
-  }
-
   mapRoomReservationData(
     input: ReservationForm,
     id?: string,
@@ -115,10 +68,10 @@ export class FormService {
       input.reservationInformation?.marketSegment;
 
     roomReservationData.paymentDetails = {
-      paymentMethod: input.paymentMethod?.paymentMethod ?? '',
-      remarks: input.paymentMethod?.paymentRemark ?? '',
-      amount: input.paymentMethod?.totalPaidAmount ?? 0,
-      transactionId: input.paymentMethod.transactionId ?? '',
+      paymentMethod: input?.paymentMethod?.paymentMethod ?? '',
+      remarks: input?.paymentMethod?.paymentRemark ?? '',
+      amount: input?.paymentMethod?.totalPaidAmount ?? 0,
+      transactionId: input?.paymentMethod?.transactionId ?? '',
     };
 
     roomReservationData.guestId = input.guestInformation?.guestDetails;
@@ -158,7 +111,7 @@ export class FormService {
           ratePlan: { id: input.roomInformation.ratePlan },
           roomTypeId: input.roomInformation.roomTypeId,
           roomCount: 1,
-          roomNumbers: id ? [] : [input.roomInformation.roomNumber],
+          roomNumbers: [input.roomInformation.roomNumber],
           roomNumber: input.roomInformation.roomNumber ?? '',
         },
         occupancyDetails: {

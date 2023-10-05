@@ -63,6 +63,15 @@ const appRoutes: Route[] = [
         canActivate: [CanActivateGuard],
       },
       {
+        path: 'booking-engine',
+        loadChildren: () =>
+          import('@hospitality-bot/admin/booking-engine').then(
+            (m) => m.AdminBookingEngineModule
+          ),
+        canLoad: [CanLoadGuard],
+        canActivate: [CanActivateGuard],
+      },
+      {
         path: 'efrontdesk',
         loadChildren: () =>
           import('@hospitality-bot/admin/e-frontdesk').then(

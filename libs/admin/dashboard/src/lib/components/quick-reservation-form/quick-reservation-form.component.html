@@ -95,8 +95,13 @@
           class="half-width select"
           controlName="guestDetails"
           label="Guest"
-          [props]="{ placeholder: 'Select' }"
+          [props]="{
+            isAsync: false,
+            createPrompt: '+ Add New Guest',
+            placeholder: 'Search'
+          }"
           [options]="guestOptions"
+          (onCreate)="createGuest()"
         ></hospitality-bot-select>
       </ng-container>
 

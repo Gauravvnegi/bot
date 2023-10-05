@@ -260,6 +260,7 @@ import { QuickSelectComponent } from './view/quick-select/quick-select.component
     TieredMenuButtonComponent,
     TabbedSidebarComponent,
     InfoPanelComponent,
+    QuickSelectComponent,
   ],
 
   exports: [

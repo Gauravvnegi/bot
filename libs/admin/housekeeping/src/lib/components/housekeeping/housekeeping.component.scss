@@ -48,34 +48,9 @@
   position: absolute !important;
 }
 
-.info-container {
-  display: flex;
-  flex-direction: column;
-  gap: 2em;
-}
-
-.title {
-  padding: 10px;
-  margin: 5px 0;
-  background-color: aqua;
-}
-
-.circle {
-  width: 1em;
-  height: 1em;
-  border-radius: 50%;
-  display: block;
-}
-
-.room-status {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1em;
-}
-
-.status {
-  display: flex;
-  align-items: center;
-  gap: 0.5em;
-  flex-basis: 45%;
+:host ::ng-deep .p-splitbutton .p-splitbutton-defaultbutton {
+  white-space: nowrap;
+  font-size: 14px;
+  margin: 0;
+  max-width: 115px;
 }

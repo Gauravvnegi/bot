@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
   AdminUtilityService,
@@ -39,7 +39,8 @@ export class RoomDetailsDataTableComponent extends BaseDatatableComponent
     private roomService: RoomService,
     private globalFilterService: GlobalFilterService,
     private adminUtilityService: AdminUtilityService,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute
   ) {
     super(fb, tabFilterService);
   }
@@ -75,11 +76,7 @@ export class RoomDetailsDataTableComponent extends BaseDatatableComponent
         (res) => {
           const roomList = new RoomList().deserialize(res);
           this.values = roomList.records;
-          this.initFilters(
-            {},
-            {},
-            roomList.totalRecord
-          );
+          this.initFilters({}, {}, roomList.totalRecord);
           this.loading = false;
         },
         () => {
@@ -90,8 +87,9 @@ export class RoomDetailsDataTableComponent extends BaseDatatableComponent
   }
 
   onEditRoom(id: string) {
-    this.router.navigate([`/pages/efrontdesk/room/${routes.addRoom}/single`], {
+    this.router.navigate([routes.addSingleRoom], {
       queryParams: { id },
+      relativeTo: this.route,
     });
   }
 }

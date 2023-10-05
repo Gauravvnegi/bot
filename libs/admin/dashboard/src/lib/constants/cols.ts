@@ -54,3 +54,18 @@ export const cols = {
     },
   ],
 };
+
+export const tableTypes = {
+  table: {
+    name: 'table',
+    value: 'table',
+    url: 'assets/svg/tablet.svg',
+    backgroundColor: '#1AB99F',
+  },
+  calendar: {
+    name: 'calendar',
+    value: 'calendar',
+    url: 'assets/svg/calendar-dark.svg',
+    backgroundColor: '#DEFFF3',
+  },
+};

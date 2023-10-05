@@ -31,8 +31,9 @@ export const routesFactory = (
         name as ModuleNames
       );
 
-      const newP = subscriptionService.getSelectedProduct();
-      const productsConfig = newP.find((item) => item.name === name)?.config;
+      const productsConfig =
+        subscriptionService.getModuleData(name)?.config ?? [];
+
       // getting the first subscribed sub module
       if (children && productsConfig) {
         let subscribedConfigsName = productsConfig

@@ -119,9 +119,14 @@ import { StepsModule } from 'primeng/steps';
 import { FromToDateComponent } from './components/from-to-date/from-to-date.component';
 import { TimerComponent } from './components/timer/timer.component';
 import { SidebarModule } from 'primeng/sidebar';
+import { InteractiveGridComponent } from './components/interactive-grid/interactive-grid.component';
+import { AngularDraggableModule } from 'angular2-draggable';
+import { TooltipModule } from 'primeng/tooltip';
+
 import { TieredMenuModule } from 'primeng/tieredmenu';
 import { TieredMenuButtonComponent } from './components/tiered-menu-button/tiered-menu-button.component';
 import { TabbedSidebarComponent } from './components/tabbed-sidebar/tabbed-sidebar.component';
+import { InfoPanelComponent } from './components/info-panel/info-panel.component';
 
 @NgModule({
   imports: [
@@ -153,6 +158,8 @@ import { TabbedSidebarComponent } from './components/tabbed-sidebar/tabbed-sideb
     InputNumberModule,
     QRCodeModule,
     StepsModule,
+    AngularDraggableModule,
+    TooltipModule,
     TieredMenuModule,
   ],
   declarations: [
@@ -248,8 +255,10 @@ import { TabbedSidebarComponent } from './components/tabbed-sidebar/tabbed-sideb
     StepperComponent,
     FromToDateComponent,
     TimerComponent,
+    InteractiveGridComponent,
     TieredMenuButtonComponent,
     TabbedSidebarComponent,
+    InfoPanelComponent,
   ],
 
   exports: [
@@ -363,8 +372,12 @@ import { TabbedSidebarComponent } from './components/tabbed-sidebar/tabbed-sideb
     FromToDateComponent,
     TimerComponent,
     SidebarModule,
+    InteractiveGridComponent,
+    AngularDraggableModule,
+    TooltipModule,
     TieredMenuButtonComponent,
     TabbedSidebarComponent,
+    InfoPanelComponent,
   ],
 })
 export class AdminSharedModule {}

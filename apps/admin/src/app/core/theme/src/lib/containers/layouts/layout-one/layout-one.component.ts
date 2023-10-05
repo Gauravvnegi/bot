@@ -252,6 +252,7 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
     this.globalFilterService.entityId = selectedentityId;
     this.globalFilterService.entityType = selectedHotelData.category;
     this.globalFilterService.entitySubType = selectedHotelData.type;
+
     this.isSitesAvailable =
       !!selectedSiteId && !!this._hotelDetailService.sites?.length;
   }
@@ -363,11 +364,11 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
     this.dateRangeFilterService.emitDateRangeFilterValue$.next(event);
   }
 
-  checkForTransactionFeedbackSubscribed() {
-    return this.subscriptionPlanService.checkModuleSubscription(
-      ModuleNames.FEEDBACK_TRANSACTIONAL
-    );
-  }
+  // checkForTransactionFeedbackSubscribed() {
+  //   return this.subscriptionPlanService.checkModuleSubscription(
+  //     ModuleNames.FEEDBACK_TRANSACTIONAL
+  //   );
+  // }
 
   @HostListener('document:visibilitychange', ['$event'])
   visibilitychange() {
@@ -396,7 +397,7 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
   initBookingOption() {
     const propertyList = this.hotelDetailService.getPropertyList();
     this.bookingOptions = [
-      this.checkModuleSubscription(ModuleNames.ADD_RESERVATION)
+      this.isAddReservationSubscribed
         ? {
             label: 'New Booking',
             icon: 'pi pi-calendar',
@@ -417,7 +418,7 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
                 }),
           }
         : null,
-      this.checkModuleSubscription(ModuleNames.GUESTS)
+      this.isGuestSubscribed
         ? {
             label: 'New Guest',
             icon: 'pi pi-user-plus',
@@ -427,7 +428,7 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
               ),
           }
         : null,
-      this.checkModuleSubscription(ModuleNames.REQUEST)
+      this.isComplaintTrackerSubscribed
         ? {
             label: 'New Complaint',
             icon: 'pi pi-exclamation-circle',
@@ -451,6 +452,10 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
 
   openNewWindow(url: string) {
     window.open(url);
+  }
+
+  get isSettingAvailable() {
+    return !!this.subscriptionPlanService.settings?.length;
   }
 
   openSettings() {
@@ -477,17 +482,43 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
     this.firebaseMessagingService.destroySubscription();
   }
 
-  get isCreateWithSubscribed() {
+  get isComplaintTrackerSubscribed() {
+    return this.subscriptionPlanService.checkProductSubscription(
+      ModuleNames.COMPLAINT_TRACKER
+    );
+  }
+
+  get isAddReservationSubscribed() {
+    return this.subscriptionPlanService.checkProductSubscription(
+      ModuleNames.PREDICTO_PMS
+    );
+  }
+
+  get isGuestSubscribed() {
     return this.subscriptionPlanService.checkModuleSubscription(
+      ModuleNames.GUESTS
+    );
+  }
+
+  get isFreddieSubscribed() {
+    return this.subscriptionPlanService.checkProductSubscription(
+      ModuleNames.FREDDIE
+    );
+  }
+
+  get isCreateWithSubscribed() {
+    return this.subscriptionPlanService.checkProductSubscription(
       ModuleNames.CREATE_WITH
     );
   }
 
-  get selectedProductIcon() {
-    return this.subscriptionPlanService
-      .getSubscription()
-      .products.find(
-        (item) => item.name === this.subscriptionPlanService.selectedProduct
-      ).icon;
+  get isQuickReservationAvailable() {
+    return this.subscriptionPlanService.checkModuleSubscription(
+      ModuleNames.ADD_RESERVATION
+    );
+  }
+
+  get selectedProduct() {
+    return this.subscriptionPlanService.getSelectedProductData();
   }
 }

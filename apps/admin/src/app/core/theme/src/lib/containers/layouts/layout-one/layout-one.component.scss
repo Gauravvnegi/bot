@@ -23,7 +23,8 @@
 .sidebar-panel {
   position: relative;
   height: 100%;
-  z-index: $left-side-panel-z;
+  // z-index: $left-side-panel-lower-z;
+
   -webkit-transition: all 500ms;
   -moz-transition: all 500ms;
   -ms-transition: all 500ms;
@@ -31,7 +32,14 @@
   transition: all 500ms;
   @media (max-width: $tablet) {
     position: absolute;
-    z-index: $left-side-panel-z;
+  }
+
+  &.lower {
+    z-index: $left-side-panel-lower-z;
+  }
+
+  &.upper {
+    z-index: $left-side-panel-upper-z;
   }
 }
 
@@ -386,7 +394,7 @@
 .quick-action {
   @include flex-item-center;
   img {
-    width: 22px;
+    height: 22px;
   }
 }
 

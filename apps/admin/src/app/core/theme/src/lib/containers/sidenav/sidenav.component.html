@@ -1,9 +1,9 @@
 <div class="logo text-uppercase" [style.color]="normalFontColor">
   <!-- Botshot new collapse logo-->
   <div class="sidenav-header">
-    <div *ngIf="!isExpanded" class="menu_button">
+    <div class="menu_button">
       <img
-        (click)="isMenuBarVisible = true"
+        (click)="isMenuBarVisible = true; navToggle.emit(false)"
         class="product-menu"
         src="assets/images/main-menu.png"
       />
@@ -78,8 +78,8 @@
       <div class="cross">
         <div (click)="isMenuBarVisible = false" class="close">
           <i
-            class="fa fa-times"
-            style="color: rgba(0, 0, 0, 0.25);"
+            class="pi pi-arrow-left"
+            style="color: #5f38f9;"
             aria-hidden="true"
           ></i>
         </div>

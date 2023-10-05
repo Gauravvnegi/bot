@@ -63,6 +63,15 @@ const appRoutes: Route[] = [
         canActivate: [CanActivateGuard],
       },
       {
+        path: 'booking-engine',
+        loadChildren: () =>
+          import('@hospitality-bot/admin/booking-engine').then(
+            (m) => m.AdminBookingEngineModule
+          ),
+        canLoad: [CanLoadGuard],
+        canActivate: [CanActivateGuard],
+      },
+      {
         path: 'efrontdesk',
         loadChildren: () =>
           import('@hospitality-bot/admin/e-frontdesk').then(
@@ -142,6 +151,15 @@ const appRoutes: Route[] = [
         loadChildren: () =>
           import('@hospitality-bot/admin/inventory').then(
             (m) => m.AdminInventoryModule
+          ),
+        canLoad: [CanLoadGuard],
+        canActivate: [CanActivateGuard],
+      },
+      {
+        path: 'complaint-tracker',
+        loadChildren: () =>
+          import('@hospitality-bot/admin/complaint-tacker').then(
+            (m) => m.AdminComplaintTackerModule
           ),
         canLoad: [CanLoadGuard],
         canActivate: [CanActivateGuard],

@@ -186,23 +186,58 @@ export class Feature {
 }
 
 export class ProductSubscription {
+  subscribedModuleProductBased: Partial<Record<ModuleNames, ModuleNames[]>>;
   subscribedProducts: ModuleNames[];
   subscribedModules: ModuleNames[];
   modules: Partial<Modules>;
   subscribedIntegrations: Set<string>;
+  moduleProductMapping: Partial<Record<ModuleNames, ModuleNames>>;
 
   deserialize(input: any) {
     this.subscribedModules = new Array<ModuleNames>();
     this.subscribedProducts = new Array<ModuleNames>();
+    this.subscribedModuleProductBased = {};
+    this.moduleProductMapping = {};
 
     this.modules = new Object();
 
     input.products?.forEach((product) => {
-      if (product.isSubscribed) this.subscribedProducts.push(product.name);
+      const productName = product.name;
+      if (product.isSubscribed) this.subscribedProducts.push(productName);
+
+      this.subscribedModuleProductBased = {
+        ...this.subscribedModuleProductBased,
+        [productName]: [],
+      };
 
       product.config?.forEach((subProduct) => {
         this.setConfig(subProduct);
+        this.subscribedModuleProductBased[productName].push(subProduct.name);
+
+        // Only sub module with initial subscribed product
+        if (
+          subProduct.isSubscribed &&
+          subProduct.isView &&
+          !this.moduleProductMapping[subProduct.name]
+        ) {
+          this.moduleProductMapping = {
+            ...this.moduleProductMapping,
+            [subProduct.name]: productName,
+          };
+        }
+
         subProduct.config?.forEach((subSubProduct) => {
+          this.subscribedModuleProductBased[productName].push(subProduct.name);
+          if (
+            subSubProduct.isSubscribed &&
+            subSubProduct.isView &&
+            !this.moduleProductMapping[subSubProduct.name]
+          ) {
+            this.moduleProductMapping = {
+              ...this.moduleProductMapping,
+              [subSubProduct.name]: productName,
+            };
+          }
           this.setConfig(subSubProduct);
         });
       });

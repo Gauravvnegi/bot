@@ -90,7 +90,7 @@ export class ChatComponent
   get productName() {
     return {
       whatsappBot: ModuleNames.WHATSAPP_BOT,
-      request: ModuleNames.REQUEST,
+      request: ModuleNames.COMPLAINTS,
     };
   }
 

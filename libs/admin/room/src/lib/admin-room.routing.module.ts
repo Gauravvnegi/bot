@@ -39,7 +39,17 @@ export const adminRoomRoutes: Route[] = [
           },
           {
             path: ':id',
-            component: RoomTypeComponent,
+            component: MainComponent,
+            children: [
+              {
+                path: '',
+                component: RoomTypeComponent,
+              },
+              {
+                path: 'import-services',
+                component: ImportServiceComponent,
+              },
+            ],
           },
           {
             path: '',

@@ -125,6 +125,7 @@ import { TooltipModule } from 'primeng/tooltip';
 
 import { TieredMenuModule } from 'primeng/tieredmenu';
 import { TieredMenuButtonComponent } from './components/tiered-menu-button/tiered-menu-button.component';
+import { TabbedSidebarComponent } from './components/tabbed-sidebar/tabbed-sidebar.component';
 import { InfoPanelComponent } from './components/info-panel/info-panel.component';
 
 @NgModule({
@@ -256,6 +257,7 @@ import { InfoPanelComponent } from './components/info-panel/info-panel.component
     TimerComponent,
     InteractiveGridComponent,
     TieredMenuButtonComponent,
+    TabbedSidebarComponent,
     InfoPanelComponent,
   ],
 
@@ -374,6 +376,7 @@ import { InfoPanelComponent } from './components/info-panel/info-panel.component
     AngularDraggableModule,
     TooltipModule,
     TieredMenuButtonComponent,
+    TabbedSidebarComponent,
     InfoPanelComponent,
   ],
 })

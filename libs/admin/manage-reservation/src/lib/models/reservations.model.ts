@@ -21,7 +21,7 @@ import { MenuItemsData, RoomTypes, SpaItems } from '../constants/form';
 import { ItemsData, OutletFormData } from '../types/forms.types';
 import { RoomReservationResponse } from '../types/response.type';
 import { RoomTypeForm } from 'libs/admin/room/src/lib/models/room.model';
-import { JourneyState } from '../constants/reservation';
+import { JourneyState, JourneyType } from '../constants/reservation';
 /* Reservation */
 
 export class RoomReservation {
@@ -43,6 +43,7 @@ export class RoomReservation {
   totalDueAmount: number;
   totalPaidAmount: number;
   guestId: string;
+  journeysStatus: Record<JourneyType, JourneyState>;
 
   deserialize(input: RoomReservationRes) {
     this.id = input.id;
@@ -70,6 +71,8 @@ export class RoomReservation {
         input?.bookingItems.map((item) => item?.roomDetails?.roomTypeLabel) ??
         [];
     }
+    this.journeysStatus = input.journeysStatus;
+
     return this;
   }
 
@@ -210,6 +213,8 @@ export class ReservationFormData {
   instructions: Instructions;
   nextStates: string[];
   totalPaidAmount: number;
+  totalDueAmount: number;
+  totalAmount: number;
   journeyState: JourneyState;
 
   deserialize(input: RoomReservationResponse) {
@@ -237,7 +242,9 @@ export class ReservationFormData {
         : [],
       roomNumber: item?.roomDetails.roomNumber ?? '',
     }));
-    this.totalPaidAmount = input.pricingDetails.totalPaidAmount;
+    this.totalPaidAmount = input.pricingDetails?.totalPaidAmount ?? 0;
+    this.totalDueAmount = input.pricingDetails?.totalDueAmount ?? 0;
+    this.totalAmount = input.pricingDetails.totalAmount ?? 0;
     this.journeyState = input.journeysStatus.CHECKIN;
     return this;
   }

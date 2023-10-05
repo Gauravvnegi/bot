@@ -75,8 +75,9 @@
           <div class="selected-product">
             <img
               [src]="selectedProduct.icon"
-              title="{{ selectedProduct.label }}"
-              alt=""
+              [pTooltip]="selectedProduct.label"
+              [alt]="selectedProduct.label"
+              tooltipPosition="bottom"
             />
           </div>
 
@@ -121,7 +122,8 @@
               class="filter-icon"
               src="assets/svg/Chats.svg"
               alt="chats"
-              title="Chats"
+              pTooltip="Chats"
+              tooltipPosition="bottom"
             />
           </div>
           <!-- TODO: Route after completing arrival & departure.... -->
@@ -142,7 +144,8 @@
               class="filter-icon"
               src="assets/svg/calendar-dark.svg"
               alt="calendar"
-              title="Calender Reservation"
+              pTooltip="View Reservation"
+              tooltipPosition="bottom"
             />
           </div>
           <div
@@ -154,7 +157,8 @@
               class="filter-icon"
               src="assets/svg/setting-dark.svg"
               alt="setting"
-              title="Settings"
+              pTooltip="Settings"
+              tooltipPosition="bottom"
             />
           </div>
           <div class="notification-wrapper">
@@ -167,7 +171,8 @@
                   class="filter-icon"
                   src="assets/svg/notification-bell.svg"
                   alt="notification"
-                  title="Notification"
+                  pTooltip="Notification"
+                  tooltipPosition="bottom"
                 />
                 <div
                   class="notification-count"
@@ -199,6 +204,8 @@
                   class="filter-icon"
                   src="assets/svg/Filter-Icon.svg"
                   alt="filter"
+                  pTooltip="filter"
+                  tooltipPosition="bottom"
                 />
               </div>
               <p-sidebar

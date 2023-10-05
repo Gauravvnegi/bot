@@ -68,7 +68,7 @@
   display: block;
   padding: 20px;
   opacity: 1;
-  height: auto;
+  height: 3.9em;
   color: $grayLight;
   min-width: 3rem !important;
   .svg path {
@@ -84,7 +84,6 @@
   background-color: $accordian-background !important;
   color: $primary-cta;
   border-bottom: 1px solid $primary-cta;
-  border-top: 1px solid $primary-cta;
   .svg path {
     fill: $primary-cta !important;
   }

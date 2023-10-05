@@ -420,6 +420,8 @@ export class Room implements IDeserializable {
   chargeCode;
   status;
   roomClass;
+  adultCount?: number;
+  kidsCount?: number;
   deserialize(input: any) {
     this.roomNumber = input?.room?.roomNumber;
     this.type = input.room?.type;
@@ -427,6 +429,9 @@ export class Room implements IDeserializable {
     this.chargeCode = input?.room?.chargeCode;
     this.status = input.room?.status;
     this.roomClass = input.room?.roomClass;
+    this.adultCount = input?.adultsCount;
+    this.kidsCount = input?.kidsCount;
+
 
     return this;
   }

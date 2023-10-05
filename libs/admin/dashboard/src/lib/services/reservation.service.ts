@@ -12,6 +12,9 @@ export class ReservationService extends ApiService {
   bookingNumber: string;
   guestId: string;
 
+  getReservationDetailsById(reservationId): Observable<any> {
+    return this.get(`/api/v1/reservation/${reservationId}?raw=true`);
+  }
   /**
    * @function getReservationDetails To get reservation list for the current filters.
    * @param config The config for query parameters.

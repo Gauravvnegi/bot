@@ -7,6 +7,7 @@ import {
 } from '../constant/form';
 import {
   ImageUrl,
+  RoomResponse,
   RoomStatus,
   RoomTypeResponse,
   StatusDetails,
@@ -17,6 +18,7 @@ import {
   SingleRoomData,
   SingleRoomForm,
 } from '../types/use-form';
+import { Room } from './rooms-data-table.model';
 
 export class SingleRoomList {
   list: SingleRoom[];
@@ -140,6 +142,7 @@ export class RoomTypeForm {
   allRatePlans?: ReservationRatePlan[];
   isBaseRoomType?: boolean;
   shortDescription?: string;
+  rooms?: RoomResponse[];
 
   deserialize(input: RoomTypeResponse) {
     this.id = input?.id;
@@ -156,6 +159,7 @@ export class RoomTypeForm {
     this.area = input.area;
     this.isBaseRoomType = input?.isBaseRoomType ?? false;
     this.shortDescription = input?.shortDescription ?? '';
+    this.rooms = input?.rooms ?? [];
 
     const defaultRatePlan = input?.ratePlans?.filter((item) => item.isBase);
     if (defaultRatePlan.length) {

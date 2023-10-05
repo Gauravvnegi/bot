@@ -1,7 +1,10 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormControl } from '@angular/forms';
 import { MatDialogConfig } from '@angular/material/dialog';
-import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import {
+  GlobalFilterService,
+  SubscriptionPlanService,
+} from '@hospitality-bot/admin/core/theme';
 import {
   DetailsComponent,
   Reservation,
@@ -24,9 +27,12 @@ import * as FileSaver from 'file-saver';
 import { Observable, Subscription } from 'rxjs';
 import { cols, tableTypes } from '../../../constants/cols';
 import { dashboard } from '../../../constants/dashboard';
-import { TableValue } from '../../../constants/tabFilterItem';
+import {
+  TableValue,
+} from '../../../constants/tabFilterItem';
 import { ReservationService } from '../../../services/reservation.service';
 import { reservationStatus } from '../../../constants/response';
+import * as moment from 'moment';
 @Component({
   selector: 'hospitality-bot-reservation-datatable',
   templateUrl: './reservation.component.html',
@@ -47,10 +53,14 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
   triggerInitialData = false;
   cols = cols.reservation;
   selectedTab: TableValue;
+  isSidebarVisible = false;
   tableTypes = [tableTypes.calendar, tableTypes.table];
 
   globalQueries = [];
   $subscription = new Subscription();
+  entityId: string;
+  options: any[] = [];
+  isPopUploading: boolean = false;
 
   constructor(
     public fb: FormBuilder,
@@ -60,7 +70,8 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
     protected snackbarService: SnackBarService,
     protected _modal: ModalService,
     public feedbackService: FeedbackService,
-    protected tabFilterService: TableService
+    protected tabFilterService: TableService,
+    protected subscriptionPlanService: SubscriptionPlanService
   ) {
     super(fb, tabFilterService);
   }
@@ -72,13 +83,28 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
       TableNames.RESERVATION,
       this.tabFilterItems
     );
+    this.entityId = this.globalFilterService.entityId;
   }
 
   registerListeners(): void {
-    this.tableFG?.addControl('tableType', new FormControl('calendar'));
-    this.tableFG.patchValue({ tableType: 'calendar' });
+    this.checkReservationSubscription();
     this.listenForGlobalFilters();
     this.listenGuestDetails();
+  }
+
+  checkReservationSubscription() {
+    if (
+      !this.subscriptionPlanService.checkModuleSubscription(
+        ModuleNames.ADD_RESERVATION
+      )
+    ) {
+      this.tableTypes = [tableTypes.table];
+      this.tableFG?.addControl('tableType', new FormControl('table'));
+      this.tableFG.patchValue({ tableType: 'table' });
+    } else {
+      this.tableFG?.addControl('tableType', new FormControl('calendar'));
+      this.tableFG.patchValue({ tableType: 'calendar' });
+    }
   }
 
   /**

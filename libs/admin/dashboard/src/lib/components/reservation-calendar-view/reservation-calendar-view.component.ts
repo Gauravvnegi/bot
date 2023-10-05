@@ -31,6 +31,7 @@ import {
 } from 'libs/admin/shared/src/lib/components/interactive-grid/interactive-grid.component';
 import { Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
+import { getColorCode } from '../../constants/response';
 
 @Component({
   selector: 'hospitality-bot-reservation-calendar-view',
@@ -85,20 +86,22 @@ export class ReservationCalendarViewComponent implements OnInit {
             '?type=ROOM_TYPE&offset=0&limit=200&raw=true&roomTypeStatus=true',
         })
         .subscribe((res) => {
-          this.roomTypes = res.roomTypes.map((roomTypeData) => ({
-            label: roomTypeData.name,
-            value: roomTypeData.id,
-            rooms: roomTypeData.rooms.map((room) => ({
-              roomNumber: room.roomNumber,
-              features: room.features,
-            })),
-            loading: false,
-            data: {
-              rows: [],
-              columns: [],
-              values: [],
-            },
-          }));
+          this.roomTypes = res.roomTypes
+            .filter((roomType) => roomType.rooms.length)
+            .map((roomTypeData) => ({
+              label: roomTypeData.name,
+              value: roomTypeData.id,
+              rooms: roomTypeData.rooms.map((room) => ({
+                roomNumber: room.roomNumber,
+                features: room.features,
+              })),
+              loading: false,
+              data: {
+                rows: [],
+                columns: [],
+                values: [],
+              },
+            }));
           this.initReservationData();
         })
     );
@@ -117,6 +120,7 @@ export class ReservationCalendarViewComponent implements OnInit {
             (reservation) =>
               reservation.reservationType === ReservationType.CONFIRMED
           );
+
         this.roomTypes.forEach((roomType) => {
           this.mapReservationsData(roomType);
         });
@@ -145,6 +149,8 @@ export class ReservationCalendarViewComponent implements OnInit {
           startPos: this.getDate(reservation.from),
           endPos: this.getDate(reservation.to),
           rowValue: reservation.bookingItems[0].roomDetails.roomNumber,
+          colorCode: getColorCode(reservation.journeysStatus),
+          nonInteractive: reservation.journeysStatus.CHECKOUT === 'COMPLETED',
         })),
       };
       this.allRoomTypes = this.roomTypes;
@@ -212,7 +218,7 @@ export class ReservationCalendarViewComponent implements OnInit {
   listenChanges() {
     this.useForm.get('date').valueChanges.subscribe((res) => {
       this.initDates(res);
-      this.initRoomTypes();
+      this.initReservationData();
     });
 
     this.useForm

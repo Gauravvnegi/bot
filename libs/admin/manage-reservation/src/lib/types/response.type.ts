@@ -5,7 +5,7 @@ import {
 import { GuestType } from 'libs/admin/guests/src/lib/types/guest.type';
 import { RatePlanRes } from 'libs/admin/room/src/lib/types/service-response';
 import { ItemsData } from './forms.types';
-import { JourneyState } from '../constants/reservation';
+import { JourneyState, JourneyType } from '../constants/reservation';
 
 /* Reservation List Response Types deceleration */
 export type ReservationListResponse = {
@@ -31,6 +31,7 @@ export type RoomReservationRes = {
   pricingDetails: PricingDetails;
   specialRequest: string;
   marketSegment?: string;
+  journeysStatus: Record<JourneyType, JourneyState>;
 };
 
 export type PaymentConfigResponse = {

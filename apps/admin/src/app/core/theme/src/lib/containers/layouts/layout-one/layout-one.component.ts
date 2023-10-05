@@ -490,7 +490,7 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
 
   get isAddReservationSubscribed() {
     return this.subscriptionPlanService.checkProductSubscription(
-      ModuleNames.PREDICT_PMS
+      ModuleNames.PREDICTO_PMS
     );
   }
 

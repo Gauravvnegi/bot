@@ -97,8 +97,6 @@ export enum ModuleNames {
   COMPLAINT_DASHBOARD = 'COMPLAINT_DASHBOARD',
   COMPLAINTS = 'COMPLAINTS',
 
-
-
   //Settings
   SETTINGS = 'SETTINGS',
   SUBSCRIPTION = 'SUBSCRIPTION',
@@ -115,7 +113,7 @@ export enum ModuleNames {
   BOOKCONNECT_LIVE = 'BOOKCONNECT_LIVE',
 
   //PredictoPMS
-  PREDICT_PMS = 'PREDICT_PMS',
+  PREDICTO_PMS = 'PREDICTO_PMS',
 
   //hotel-in-box
   HOTEL_IN_BOX = 'HOTEL_IN_BOX',

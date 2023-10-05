@@ -32,6 +32,7 @@ import { SidenavExpandComponent } from './containers/sidenav/sidenav-expand/side
 import { SidenavComponent } from './containers/sidenav/sidenav.component';
 import { SiteActionComponent } from './containers/site-action/site-action.component';
 import { ScrollPagination } from './directives/scroll-pagination.directive';
+import { TooltipModule } from 'primeng/tooltip';
 
 @NgModule({
   imports: [
@@ -48,6 +49,7 @@ import { ScrollPagination } from './directives/scroll-pagination.directive';
     OverlayPanelModule,
     MenuModule,
     AngularFireMessagingModule,
+    TooltipModule,
   ],
   declarations: [
     SidenavComponent,
@@ -90,6 +92,7 @@ import { ScrollPagination } from './directives/scroll-pagination.directive';
     NotificationComponent,
     ScrollPagination,
     MessageTabMenuComponent,
+    TooltipModule,
   ],
 })
 export class ThemeModule {}

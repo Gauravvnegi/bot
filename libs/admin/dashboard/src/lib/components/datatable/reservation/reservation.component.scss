@@ -215,6 +215,7 @@
 
 .pull-right {
   @include flex-item-center;
+  gap: 5px;
 
   margin: 0 20px;
   .type-label {
@@ -247,4 +248,13 @@
       filter: invert(0);
     }
   }
+}
+
+:host ::ng-deep .p-dialog-mask {
+  height: unset !important;
+  width: unset !important;
+  right: 0 !important;
+  left: 44em !important;
+  top: 53px !important;
+  position: absolute !important;
 }

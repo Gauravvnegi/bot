@@ -252,6 +252,7 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
     this.globalFilterService.entityId = selectedentityId;
     this.globalFilterService.entityType = selectedHotelData.category;
     this.globalFilterService.entitySubType = selectedHotelData.type;
+
     this.isSitesAvailable =
       !!selectedSiteId && !!this._hotelDetailService.sites?.length;
   }
@@ -453,7 +454,7 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
     window.open(url);
   }
 
-  checkForSettings() {
+  get isSettingAvailable() {
     return !!this.subscriptionPlanService.settings?.length;
   }
 
@@ -481,17 +482,25 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
     this.firebaseMessagingService.destroySubscription();
   }
 
+  get isFreddieSubscribed() {
+    return this.subscriptionPlanService.checkProductSubscription(
+      ModuleNames.FREDDIE
+    );
+  }
+
   get isCreateWithSubscribed() {
-    return this.subscriptionPlanService.checkModuleSubscription(
+    return this.subscriptionPlanService.checkProductSubscription(
       ModuleNames.CREATE_WITH
     );
   }
 
+  get isQuickReservationAvailable() {
+    return this.subscriptionPlanService.checkModuleSubscription(
+      ModuleNames.ADD_RESERVATION
+    );
+  }
+
   get selectedProduct() {
-    return this.subscriptionPlanService
-      .getSubscription()
-      .products.find(
-        (item) => item.name === this.subscriptionPlanService.selectedProduct
-      );
+    return this.subscriptionPlanService.getSelectedProductData();
   }
 }

@@ -10,7 +10,8 @@ export const routes = {
   [ModuleNames.SEO_FRIENDLY]: 'create-with/marketing-seo',
   [ModuleNames.PAGES]: 'create-with/page',
   [ModuleNames.BLOG]: 'create-with/blog',
-  [ModuleNames.BOOKING_ENGINE]: 'create-with/booking-engine',
+
+  [ModuleNames.BOOKING_ENGINE]: 'booking-engine',
 
   // Front Desk
   [ModuleNames.FRONT_DESK_HOME]: 'efrontdesk',

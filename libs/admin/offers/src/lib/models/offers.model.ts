@@ -52,7 +52,6 @@ export class OfferList {
   entityTypeCounts: EntityState<string>;
 
   deserialize(input: OfferListResponse) {
-    debugger;
     this.records = input.offers?.map((item) => new Offer().deserialize(item));
     this.totalRecord = input.total;
     this.entityStateCounts = input.entityStateCounts;

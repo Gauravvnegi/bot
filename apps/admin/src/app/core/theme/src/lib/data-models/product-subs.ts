@@ -256,7 +256,7 @@ export const productMenuSubs: any[] = [
           },
         ],
         isSubscribed: true,
-        isView: true,
+        isView: false,
       },
     ],
   },

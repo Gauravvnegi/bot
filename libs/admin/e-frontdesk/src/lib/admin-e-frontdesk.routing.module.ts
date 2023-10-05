@@ -20,14 +20,6 @@ const appRoutes: CRoutes = [
           ),
       },
       {
-        path: 'in-house-guest',
-        name: ModuleNames.IN_HOUSE_GUEST,
-        loadChildren: () =>
-          import('@hospitality-bot/admin/guest-dashboard').then(
-            (m) => m.AdminGuestDashboardModule
-          ),
-      },
-      {
         path: 'reservation',
         name: ModuleNames.ADD_RESERVATION,
         loadChildren: () =>

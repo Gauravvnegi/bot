@@ -230,6 +230,9 @@
     },
     "admin-dynamic-pricing": {
       "tags": []
+    },
+    "admin-booking-engine": {
+      "tags": []
     }
   }
 }

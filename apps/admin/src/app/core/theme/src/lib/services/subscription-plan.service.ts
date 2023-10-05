@@ -69,6 +69,15 @@ export class SubscriptionPlanService extends ApiService {
     return this.getFirstSubscribedProduct();
   }
 
+  getModuleData(moduleName) {
+    const productName = this.productSubscription.moduleProductMapping[
+      moduleName
+    ];
+    return this.subscriptions.products
+      .find((item) => item.name === productName)
+      ?.config?.find((item) => item.name === moduleName);
+  }
+
   private getFirstSubscribedProduct() {
     const firstSelectedProduct = this.subscriptions.products.find((item) => {
       return item.isSubscribed && item.isView && !!item.config?.length;
@@ -95,11 +104,15 @@ export class SubscriptionPlanService extends ApiService {
     return this.productSubscription.subscribedModules.indexOf(moduleName) > -1;
   }
 
-  checkModuleSubscriptionBasedOnProduct(productName, moduleName) {
+  checkProductSubscription(moduleName: ModuleNames) {
+    //should be productNames
+    return this.productSubscription.subscribedProducts.indexOf(moduleName) > -1;
+  }
+
+  checkProductOrModuleSubscription(moduleName: ModuleNames) {
     return (
-      this.productSubscription.subscribedModuleProductBased[
-        productName
-      ]?.indexOf(moduleName) === -1
+      this.checkProductSubscription(moduleName) ||
+      this.checkModuleSubscription(moduleName)
     );
   }
 

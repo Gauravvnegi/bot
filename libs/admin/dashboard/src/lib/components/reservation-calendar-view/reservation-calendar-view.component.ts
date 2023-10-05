@@ -120,6 +120,7 @@ export class ReservationCalendarViewComponent implements OnInit {
             (reservation) =>
               reservation.reservationType === ReservationType.CONFIRMED
           );
+
         this.roomTypes.forEach((roomType) => {
           this.mapReservationsData(roomType);
         });
@@ -148,7 +149,8 @@ export class ReservationCalendarViewComponent implements OnInit {
           startPos: this.getDate(reservation.from),
           endPos: this.getDate(reservation.to),
           rowValue: reservation.bookingItems[0].roomDetails.roomNumber,
-          colorCode: getColorCode(reservation.currentJourney),
+          colorCode: getColorCode(reservation.journeysStatus),
+          nonInteractive: reservation.journeysStatus.CHECKOUT === 'COMPLETED',
         })),
       };
       this.allRoomTypes = this.roomTypes;

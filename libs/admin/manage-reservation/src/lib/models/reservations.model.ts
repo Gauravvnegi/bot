@@ -21,7 +21,7 @@ import { MenuItemsData, RoomTypes, SpaItems } from '../constants/form';
 import { ItemsData, OutletFormData } from '../types/forms.types';
 import { RoomReservationResponse } from '../types/response.type';
 import { RoomTypeForm } from 'libs/admin/room/src/lib/models/room.model';
-import { JourneyState } from '../constants/reservation';
+import { JourneyState, JourneyType } from '../constants/reservation';
 /* Reservation */
 
 export class RoomReservation {
@@ -43,9 +43,7 @@ export class RoomReservation {
   totalDueAmount: number;
   totalPaidAmount: number;
   guestId: string;
-  currentJoureyStatus: string;
-  currentJourney: string;
-  currentJourneyState: string;
+  journeysStatus: Record<JourneyType, JourneyState>;
 
   deserialize(input: RoomReservationRes) {
     this.id = input.id;
@@ -73,9 +71,8 @@ export class RoomReservation {
         input?.bookingItems.map((item) => item?.roomDetails?.roomTypeLabel) ??
         [];
     }
-    this.currentJoureyStatus = input.currentJoureyStatus;
-    this.currentJourney = input.currentJourney;
-    this.currentJourneyState = input.currentJourneyState;
+    this.journeysStatus = input.journeysStatus;
+
     return this;
   }
 

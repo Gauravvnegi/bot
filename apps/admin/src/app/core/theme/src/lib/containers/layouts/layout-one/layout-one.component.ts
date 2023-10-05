@@ -91,6 +91,7 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
   @ViewChild('sidebarSlide', { read: ViewContainerRef })
   sidebarSlide: ViewContainerRef;
   sidebarType: 'complaint' | 'settings' | 'guest-sidebar' = 'complaint';
+  propertyList: any[];
 
   constructor(
     private _router: Router,
@@ -393,15 +394,15 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
   }
 
   initBookingOption() {
-    const propertyList = this.hotelDetailService.getPropertyList();
+    this.propertyList = this.hotelDetailService.getPropertyList();
     this.bookingOptions = [
       this.checkModuleSubscription(ModuleNames.ADD_RESERVATION)
         ? {
             label: 'New Booking',
             icon: 'pi pi-calendar',
-            ...(!!propertyList.length
+            ...(!!this.propertyList.length
               ? {
-                  items: propertyList.map((item) => ({
+                  items: this.propertyList.map((item) => ({
                     label: item.label,
                     command: () => {
                       this.openNewWindow(
@@ -475,6 +476,12 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
 
   openNewWindow(url: string) {
     window.open(url);
+  }
+
+  get quickDropdownLink() {
+    return `/pages/efrontdesk/reservation/${
+      manageReservationRoutes.addReservation.route
+    }${this.propertyList[0] ? '?entityId=' + this.propertyList[0].value : ''}`;
   }
 
   get isSettingAvailable() {

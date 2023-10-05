@@ -45,28 +45,7 @@ export class HousekeepingComponent extends BaseDatatableComponent
   dateValue = {};
   showContent = false;
 
-  roomStatus = [
-    {
-      name: 'Occupied',
-      color: '#ef1d45',
-    },
-    {
-      name: 'Vacant',
-      color: '#52b33f',
-    },
-    {
-      name: 'Clean',
-      color: '#52b33f',
-    },
-    {
-      name: 'Due Out',
-      color: '#500',
-    },
-    {
-      name: 'Dirty',
-      color: '#ff8f00',
-    },
-  ];
+ 
   constructor(
     private fb: FormBuilder,
     private adminUtilityService: AdminUtilityService,

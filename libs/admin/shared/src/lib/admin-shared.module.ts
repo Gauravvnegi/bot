@@ -125,6 +125,7 @@ import { TooltipModule } from 'primeng/tooltip';
 
 import { TieredMenuModule } from 'primeng/tieredmenu';
 import { TieredMenuButtonComponent } from './components/tiered-menu-button/tiered-menu-button.component';
+import { InfoPanelComponent } from './components/info-panel/info-panel.component';
 
 @NgModule({
   imports: [
@@ -255,6 +256,7 @@ import { TieredMenuButtonComponent } from './components/tiered-menu-button/tiere
     TimerComponent,
     InteractiveGridComponent,
     TieredMenuButtonComponent,
+    InfoPanelComponent,
   ],
 
   exports: [
@@ -372,6 +374,7 @@ import { TieredMenuButtonComponent } from './components/tiered-menu-button/tiere
     AngularDraggableModule,
     TooltipModule,
     TieredMenuButtonComponent,
+    InfoPanelComponent,
   ],
 })
 export class AdminSharedModule {}

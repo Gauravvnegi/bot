@@ -1,4 +1,14 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  Compiler,
+  Component,
+  ComponentFactoryResolver,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  ViewChild,
+  ViewContainerRef,
+} from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
@@ -25,6 +35,7 @@ import { debounceTime } from 'rxjs/operators';
 import { GuestTableService } from 'libs/admin/guests/src/lib/services/guest-table.service';
 import { Subscription } from 'rxjs';
 import { manageGuestRoutes } from 'libs/admin/guests/src/lib/constant/route';
+import { AddGuestComponent } from 'libs/admin/guests/src/lib/components';
 
 @Component({
   selector: 'hospitality-bot-quick-reservation-form',
@@ -60,6 +71,10 @@ export class QuickReservationFormComponent implements OnInit {
 
   $subscription = new Subscription();
 
+  sidebarVisible: boolean = false;
+  @ViewChild('sidebarSlide', { read: ViewContainerRef })
+  sidebarSlide: ViewContainerRef;
+
   @Output() onCloseSidebar = new EventEmitter<boolean>();
   @Input() set reservationConfig(value: QuickReservationConfig) {
     for (const key in value) {
@@ -79,7 +94,9 @@ export class QuickReservationFormComponent implements OnInit {
     private formService: FormService,
     private adminUtilityService: AdminUtilityService,
     private roomService: RoomService,
-    private guestService: GuestTableService
+    private guestService: GuestTableService,
+    private compiler: Compiler,
+    private resolver: ComponentFactoryResolver
   ) {
     this.initForm();
   }
@@ -386,6 +403,28 @@ export class QuickReservationFormComponent implements OnInit {
   }
 
   createGuest() {
+    // const lazyModulePromise = import(
+    //   'libs/admin/guests/src/lib/admin-guests.module'
+    // )
+    //   .then((module) => {
+    //     return this.compiler.compileModuleAsync(module.AdminGuestsModule);
+    //   })
+
+    //   .catch((error) => {
+    //     console.error('Error loading the lazy module:', error);
+    //   });
+
+    // lazyModulePromise.then((moduleFactory) => {
+    //   this.sidebarVisible = true;
+    //   const factory = this.resolver.resolveComponentFactory(AddGuestComponent);
+    //   this.sidebarSlide.clear();
+    //   const componentRef = this.sidebarSlide.createComponent(factory);
+    //   componentRef.instance.isSideBar = true;
+    //   componentRef.instance.onClose.subscribe((res) => {
+    //     this.sidebarVisible = false;
+    //     componentRef.destroy();
+    //   });
+    // });
     this.router.navigateByUrl(
       `/pages/members/guests/${manageGuestRoutes.addGuest.route}`
     );

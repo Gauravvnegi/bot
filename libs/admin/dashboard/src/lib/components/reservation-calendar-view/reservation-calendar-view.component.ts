@@ -86,20 +86,22 @@ export class ReservationCalendarViewComponent implements OnInit {
             '?type=ROOM_TYPE&offset=0&limit=200&raw=true&roomTypeStatus=true',
         })
         .subscribe((res) => {
-          this.roomTypes = res.roomTypes.map((roomTypeData) => ({
-            label: roomTypeData.name,
-            value: roomTypeData.id,
-            rooms: roomTypeData.rooms.map((room) => ({
-              roomNumber: room.roomNumber,
-              features: room.features,
-            })),
-            loading: false,
-            data: {
-              rows: [],
-              columns: [],
-              values: [],
-            },
-          }));
+          this.roomTypes = res.roomTypes
+            .filter((roomType) => roomType.rooms.length)
+            .map((roomTypeData) => ({
+              label: roomTypeData.name,
+              value: roomTypeData.id,
+              rooms: roomTypeData.rooms.map((room) => ({
+                roomNumber: room.roomNumber,
+                features: room.features,
+              })),
+              loading: false,
+              data: {
+                rows: [],
+                columns: [],
+                values: [],
+              },
+            }));
           this.initReservationData();
         })
     );

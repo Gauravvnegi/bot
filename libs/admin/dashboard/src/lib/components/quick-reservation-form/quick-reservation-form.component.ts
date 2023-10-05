@@ -24,6 +24,7 @@ import { IGCol } from 'libs/admin/shared/src/lib/components/interactive-grid/int
 import { debounceTime } from 'rxjs/operators';
 import { GuestTableService } from 'libs/admin/guests/src/lib/services/guest-table.service';
 import { Subscription } from 'rxjs';
+import { manageGuestRoutes } from 'libs/admin/guests/src/lib/constant/route';
 
 @Component({
   selector: 'hospitality-bot-quick-reservation-form',
@@ -381,6 +382,12 @@ export class QuickReservationFormComponent implements OnInit {
             this.isBooking = false;
           }
         )
+    );
+  }
+
+  createGuest() {
+    this.router.navigateByUrl(
+      `/pages/members/guests/${manageGuestRoutes.addGuest.route}`
     );
   }
 

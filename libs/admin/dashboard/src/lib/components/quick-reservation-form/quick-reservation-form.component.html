@@ -102,7 +102,7 @@
 
       <!-- Room Information -->
       <ng-container formGroupName="roomInformation">
-        <ng-container *ngIf="reservationId">
+        <ng-container *ngIf="!reservationId">
           <hospitality-bot-select
             class="half-width select"
             controlName="roomTypeId"

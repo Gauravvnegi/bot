@@ -54,7 +54,7 @@ export class MultiSelectComponent extends FormComponent {
   }
 }
 
-type MultiSelectSettings = {
+export type MultiSelectSettings = {
   showHeader: boolean;
   maxSelectedLabels: number;
   showChips: boolean;

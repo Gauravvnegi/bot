@@ -217,7 +217,7 @@ hospitality-bot-tab-group .icon {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #001037;
+  background-color: #5f38f9;
   cursor: pointer;
   padding: 10px;
   height: 4em;
@@ -264,22 +264,7 @@ hospitality-bot-tab-group .icon {
       color: $title;
     }
   }
-  .name-section {
-    display: inline-flex;
-    justify-content: space-between;
-    align-items: center;
-    .name {
-      font-size: 12px;
-      letter-spacing: 0.72px;
-      text-align: left;
-      color: $title;
-      font-weight: 500;
-    }
-    .counts {
-      display: inline-flex;
-      gap: 1em;
-    }
-  }
+  
 
   .footer {
     display: inline-flex;

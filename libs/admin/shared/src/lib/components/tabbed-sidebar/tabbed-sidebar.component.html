@@ -1,15 +1,20 @@
 <div class="wrapper">
   <div class="header">
     <div class="heading-wrapper">
-      <h1 *ngIf="header" class="heading">{{ header }}</h1>
+      <div class="title">
+        <h1 *ngIf="header" class="heading">{{ header }}</h1>
+        <div class="close" (click)="onCloseSidebar.emit()">
+          <i
+            class="pi pi-arrow-right"
+            style="color: white; font-weight: 600;"
+          ></i>
+        </div>
+      </div>
       <hospitality-bot-tab-header
         [listItems]="tabFilterItems"
         [selectedIndex]="tabFilterIdx"
         (selectedTabChange)="selectedTabFilterChange.emit($event.index)"
       ></hospitality-bot-tab-header>
-    </div>
-    <div class="close" (click)="onCloseSidebar.emit()">
-      <i class="pi pi-arrow-right" style="color: white; font-weight: 600;"></i>
     </div>
   </div>
 

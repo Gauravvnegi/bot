@@ -89,3 +89,28 @@
     }
   }
 }
+
+.guest {
+  cursor: pointer;
+  gap: 1em;
+  .name-section {
+    display: inline-flex;
+    justify-content: space-between;
+    align-items: center;
+    .name {
+      font-size: 12px;
+      letter-spacing: 0.72px;
+      text-align: left;
+      color: $title;
+      font-weight: 500;
+    }
+  }
+  .counts {
+    display: inline-flex;
+    gap: 1em;
+  }
+}
+
+svg {
+  filter: invert(1);
+}

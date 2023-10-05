@@ -397,7 +397,7 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
   initBookingOption() {
     const propertyList = this.hotelDetailService.getPropertyList();
     this.bookingOptions = [
-      this.checkModuleSubscription(ModuleNames.ADD_RESERVATION)
+      this.isAddReservationSubscribed
         ? {
             label: 'New Booking',
             icon: 'pi pi-calendar',
@@ -418,7 +418,7 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
                 }),
           }
         : null,
-      this.checkModuleSubscription(ModuleNames.GUESTS)
+      this.isGuestSubscribed
         ? {
             label: 'New Guest',
             icon: 'pi pi-user-plus',
@@ -428,7 +428,7 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
               ),
           }
         : null,
-      this.checkModuleSubscription(ModuleNames.COMPLAINT_TRACKER)
+      this.isComplaintTrackerSubscribed
         ? {
             label: 'New Complaint',
             icon: 'pi pi-exclamation-circle',
@@ -480,6 +480,24 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.firebaseMessagingService.destroySubscription();
+  }
+
+  get isComplaintTrackerSubscribed() {
+    return this.subscriptionPlanService.checkProductSubscription(
+      ModuleNames.COMPLAINT_TRACKER
+    );
+  }
+
+  get isAddReservationSubscribed() {
+    return this.subscriptionPlanService.checkProductSubscription(
+      ModuleNames.PREDICT_PMS
+    );
+  }
+
+  get isGuestSubscribed() {
+    return this.subscriptionPlanService.checkModuleSubscription(
+      ModuleNames.GUESTS
+    );
   }
 
   get isFreddieSubscribed() {

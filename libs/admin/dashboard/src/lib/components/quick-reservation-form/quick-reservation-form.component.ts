@@ -47,7 +47,6 @@ export class QuickReservationFormComponent implements OnInit {
 
   loading: boolean = false;
   isSidebar = false;
-  isCreateForm = false;
   isBooking = false;
 
   selectedRoomType: IGRoomType;
@@ -56,7 +55,7 @@ export class QuickReservationFormComponent implements OnInit {
 
   guestDetails: GuestDetails;
   configData: BookingConfig;
-  reservationData: QuickReservation;
+  reservationData: ReservationFormData;
 
   $subscription = new Subscription();
 
@@ -90,10 +89,8 @@ export class QuickReservationFormComponent implements OnInit {
     this.getCountryCode();
 
     if (this.reservationId) {
-      this.isCreateForm = false;
       this.initReservationDetails();
     } else {
-      this.isCreateForm = true;
       this.initRatePlans();
       this.useForm
         .get('roomInformation.roomTypeId')
@@ -164,15 +161,11 @@ export class QuickReservationFormComponent implements OnInit {
         specialInstructions: [''],
       }),
 
-      paymentMethod: this.fb.group({
-        totalPaidAmount: [0, [Validators.min(0)]],
-        currency: ['INR'],
-        paymentMethod: ['Cash Payment'],
-      }),
-
       guestInformation: this.fb.group({
         guestDetails: ['', [Validators.required]],
       }),
+
+      dailyPrice: [''],
     });
 
     this.entityId = this.globalFilterService.entityId;
@@ -183,11 +176,18 @@ export class QuickReservationFormComponent implements OnInit {
   }
 
   editForm() {
-    this.router.navigate([`/pages/efrontdesk/reservation/add-reservation`], {
-      queryParams: {
-        entityId: this.entityId,
-      },
-    });
+    this.router.navigate(
+      [
+        this.reservationId
+          ? `/pages/efrontdesk/reservation/edit-reservation/${this.reservationId}`
+          : `/pages/efrontdesk/reservation/add-reservation`,
+      ],
+      {
+        queryParams: {
+          entityId: this.entityId,
+        },
+      }
+    );
   }
 
   initReservationDetails() {
@@ -197,8 +197,10 @@ export class QuickReservationFormComponent implements OnInit {
         .getReservationDataById(this.reservationId, this.entityId)
         .subscribe(
           (res) => {
-            const reservationData = new ReservationFormData().deserialize(res);
-            const { roomInformation, ...data } = reservationData;
+            const formData = new ReservationFormData().deserialize(res);
+            this.reservationData = formData;
+            this.calculateDailyPrice();
+            const { roomInformation, ...data } = formData;
             this.guestDetails = {
               guestName:
                 res.guest.firstName +
@@ -319,6 +321,26 @@ export class QuickReservationFormComponent implements OnInit {
           );
         })
     );
+  }
+
+  calculateDailyPrice() {
+    const fromDate = this.reservationData.reservationInformation.from;
+    const toDate = this.reservationData.reservationInformation.to;
+
+    if (fromDate !== null && toDate !== null) {
+      // Calculate the difference in days
+      const millisecondsPerDay = 24 * 60 * 60 * 1000;
+      const daysDifference = Math.round(
+        (toDate - fromDate) / millisecondsPerDay
+      );
+      const totalAmount = this.reservationData?.totalAmount;
+      const dailyPrice = daysDifference > 0 ? totalAmount / daysDifference : 0;
+
+      this.useForm.patchValue({
+        dailyPrice: dailyPrice.toFixed(2), // Optionally format to two decimal places
+      });
+      this.useForm.get('dailyPrice').disable();
+    }
   }
 
   handleSubmit() {

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
@@ -40,6 +40,11 @@ export class AddCompanyComponent implements OnInit {
   companyForm: FormGroup;
   routes = companyRoutes;
   loading = false;
+
+  isSideBar = false;
+  @Output() onClose = new EventEmitter<
+    Pick<CompanyResponseType, 'id' | 'companyName'> | boolean
+  >();
 
   subscription$ = new Subscription();
 
@@ -178,7 +183,11 @@ export class AddCompanyComponent implements OnInit {
             '',
             { panelClass: 'success' }
           );
-          this.location.back();
+          if (this.isSideBar) {
+            this.onClose.emit({ id: res.id, companyName: res.companyName });
+          } else {
+            this.location.back();
+          }
         },
         (error) => {
           this.loading = false;
@@ -206,6 +215,10 @@ export class AddCompanyComponent implements OnInit {
   handleFinal = () => {
     this.loading = false;
   };
+
+  closeSidebar() {
+    this.onClose.emit(true);
+  }
 
   /**
    * Unsubscribe when component is getting removed

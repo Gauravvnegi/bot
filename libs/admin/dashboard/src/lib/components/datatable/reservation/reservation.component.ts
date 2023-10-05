@@ -1,7 +1,10 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormControl } from '@angular/forms';
 import { MatDialogConfig } from '@angular/material/dialog';
-import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import {
+  GlobalFilterService,
+  SubscriptionPlanService,
+} from '@hospitality-bot/admin/core/theme';
 import {
   DetailsComponent,
   Reservation,
@@ -60,7 +63,8 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
     protected snackbarService: SnackBarService,
     protected _modal: ModalService,
     public feedbackService: FeedbackService,
-    protected tabFilterService: TableService
+    protected tabFilterService: TableService,
+    protected subscriptionPlanService: SubscriptionPlanService
   ) {
     super(fb, tabFilterService);
   }
@@ -75,10 +79,24 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
   }
 
   registerListeners(): void {
-    this.tableFG?.addControl('tableType', new FormControl('calendar'));
-    this.tableFG.patchValue({ tableType: 'calendar' });
+    this.checkReservationSubscription();
     this.listenForGlobalFilters();
     this.listenGuestDetails();
+  }
+
+  checkReservationSubscription() {
+    if (
+      !this.subscriptionPlanService.checkModuleSubscription(
+        ModuleNames.ADD_RESERVATION
+      )
+    ) {
+      this.tableTypes = [tableTypes.table];
+      this.tableFG?.addControl('tableType', new FormControl('table'));
+      this.tableFG.patchValue({ tableType: 'table' });
+    } else {
+      this.tableFG?.addControl('tableType', new FormControl('calendar'));
+      this.tableFG.patchValue({ tableType: 'calendar' });
+    }
   }
 
   /**

@@ -43,6 +43,9 @@ export class RoomReservation {
   totalDueAmount: number;
   totalPaidAmount: number;
   guestId: string;
+  currentJoureyStatus: string;
+  currentJourney: string;
+  currentJourneyState: string;
 
   deserialize(input: RoomReservationRes) {
     this.id = input.id;
@@ -70,6 +73,9 @@ export class RoomReservation {
         input?.bookingItems.map((item) => item?.roomDetails?.roomTypeLabel) ??
         [];
     }
+    this.currentJoureyStatus = input.currentJoureyStatus;
+    this.currentJourney = input.currentJourney;
+    this.currentJourneyState = input.currentJourneyState;
     return this;
   }
 
@@ -210,6 +216,8 @@ export class ReservationFormData {
   instructions: Instructions;
   nextStates: string[];
   totalPaidAmount: number;
+  totalDueAmount: number;
+  totalAmount: number;
   journeyState: JourneyState;
 
   deserialize(input: RoomReservationResponse) {
@@ -237,7 +245,9 @@ export class ReservationFormData {
         : [],
       roomNumber: item?.roomDetails.roomNumber ?? '',
     }));
-    this.totalPaidAmount = input.pricingDetails.totalPaidAmount;
+    this.totalPaidAmount = input.pricingDetails?.totalPaidAmount ?? 0;
+    this.totalDueAmount = input.pricingDetails?.totalDueAmount ?? 0;
+    this.totalAmount = input.pricingDetails.totalAmount ?? 0;
     this.journeyState = input.journeysStatus.CHECKIN;
     return this;
   }

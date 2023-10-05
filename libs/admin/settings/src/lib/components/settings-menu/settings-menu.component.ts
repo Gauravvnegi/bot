@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import {
   SettingsMenuItem,
@@ -14,6 +14,8 @@ import { routeUrl, SettingOptions } from '../../constant/settings-menu';
 export class SettingsMenuComponent implements OnInit {
   settings: SettingsMenuItem[];
   isImageLoaded = false;
+  isSideBar = false;
+  @Output() closeEvent = new EventEmitter(false);
 
   constructor(
     private router: Router,
@@ -38,9 +40,11 @@ export class SettingsMenuComponent implements OnInit {
     }
   }
 
-  onImageLoad() {
-    this.isImageLoaded = true; 
-    
+  close() {
+    this.closeEvent.emit(false);
   }
 
+  onImageLoad() {
+    this.isImageLoaded = true;
+  }
 }

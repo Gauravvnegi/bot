@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormArray, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
   AdminUtilityService,
   Option,
@@ -55,7 +54,6 @@ export class SpaReservationComponent extends BaseReservationComponent
   constructor(
     private fb: FormBuilder,
     private adminUtilityService: AdminUtilityService,
-    protected globalFilterService: GlobalFilterService,
     private manageReservationService: ManageReservationService,
     protected activatedRoute: ActivatedRoute,
     protected formService: FormService,
@@ -63,7 +61,7 @@ export class SpaReservationComponent extends BaseReservationComponent
     private router: Router,
     protected hotelDetailService: HotelDetailService
   ) {
-    super(globalFilterService, activatedRoute, hotelDetailService, formService);
+    super(activatedRoute, hotelDetailService, formService);
   }
   ngOnInit(): void {
     this.initForm();
@@ -87,6 +85,9 @@ export class SpaReservationComponent extends BaseReservationComponent
       searchResults: this.searchResults.bind(this),
       loadMoreResults: this.loadingMoreResults.bind(this),
     };
+    this.formService.getSummary.subscribe((res) => {
+      if (this.spaControls.valid) this.getSummaryData();
+    });
   }
 
   /**
@@ -108,6 +109,9 @@ export class SpaReservationComponent extends BaseReservationComponent
         spaItems: this.spaBookingInfo,
       }),
       offerId: [''],
+      instructions: this.fb.group({
+        specialInstructions: [''],
+      }),
     });
   }
 
@@ -202,7 +206,7 @@ export class SpaReservationComponent extends BaseReservationComponent
   getReservationDetails(): void {
     this.$subscription.add(
       this.manageReservationService
-        .getReservationDataById(this.reservationId, this.entityId)
+        .getReservationDataById(this.reservationId, this.outletId)
         .subscribe(
           (response) => {
             const data = new OutletForm().deserialize(response);
@@ -245,11 +249,26 @@ export class SpaReservationComponent extends BaseReservationComponent
   }
 
   getSummaryData(): void {
-    const config = {
-      params: this.adminUtilityService.makeQueryParams([
-        { type: EntityType.OUTLET },
-      ]),
-    };
+    this.$subscription.add(
+      this.manageReservationService
+        .getSummaryData(this.outletId, this.getFormData(), {
+          params: `?type=${EntityType.OUTLET}`,
+        })
+        .subscribe(
+          (res) => {
+            this.summaryData = new SummaryData()?.deserialize(res);
+            this.updatePaymentData();
+            if (this.formValueChanges) {
+              this.setFormDisability();
+              this.formValueChanges = false;
+            }
+          },
+          (error) => {}
+        )
+    );
+  }
+
+  getFormData() {
     const data: ReservationSummary = {
       from: this.reservationInfoControls.dateAndTime.value,
       to: this.reservationInfoControls.dateAndTime.value,
@@ -261,34 +280,8 @@ export class SpaReservationComponent extends BaseReservationComponent
       })),
       outletType: EntitySubType.SPA,
     };
-    this.$subscription.add(
-      this.manageReservationService
-        .getSummaryData(this.outletId, data, config)
-        .subscribe(
-          (res) => {
-            this.summaryData = new SummaryData()?.deserialize(res);
-            this.userForm
-              .get('paymentMethod.totalPaidAmount')
-              .setValidators([
-                Validators.max(this.summaryData?.totalAmount),
-                Validators.min(0),
-              ]);
-            this.userForm
-              .get('paymentMethod.totalPaidAmount')
-              .updateValueAndValidity();
-            this.userForm
-              .get('paymentRule.deductedAmount')
-              .patchValue(this.summaryData?.totalAmount);
-            this.deductedAmount = this.summaryData?.totalAmount;
 
-            if (this.formValueChanges) {
-              this.setFormDisability();
-              this.formValueChanges = false;
-            }
-          },
-          (error) => {}
-        )
-    );
+    return data;
   }
 
   // Service

@@ -119,7 +119,13 @@ import { StepsModule } from 'primeng/steps';
 import { FromToDateComponent } from './components/from-to-date/from-to-date.component';
 import { TimerComponent } from './components/timer/timer.component';
 import { SidebarModule } from 'primeng/sidebar';
+import { InteractiveGridComponent } from './components/interactive-grid/interactive-grid.component';
+import { AngularDraggableModule } from 'angular2-draggable';
+import { TooltipModule } from 'primeng/tooltip';
 
+import { TieredMenuModule } from 'primeng/tieredmenu';
+import { TieredMenuButtonComponent } from './components/tiered-menu-button/tiered-menu-button.component';
+import { InfoPanelComponent } from './components/info-panel/info-panel.component';
 
 @NgModule({
   imports: [
@@ -151,6 +157,9 @@ import { SidebarModule } from 'primeng/sidebar';
     InputNumberModule,
     QRCodeModule,
     StepsModule,
+    AngularDraggableModule,
+    TooltipModule,
+    TieredMenuModule,
   ],
   declarations: [
     DatatableComponent,
@@ -245,6 +254,9 @@ import { SidebarModule } from 'primeng/sidebar';
     StepperComponent,
     FromToDateComponent,
     TimerComponent,
+    InteractiveGridComponent,
+    TieredMenuButtonComponent,
+    InfoPanelComponent,
   ],
 
   exports: [
@@ -358,6 +370,11 @@ import { SidebarModule } from 'primeng/sidebar';
     FromToDateComponent,
     TimerComponent,
     SidebarModule,
+    InteractiveGridComponent,
+    AngularDraggableModule,
+    TooltipModule,
+    TieredMenuButtonComponent,
+    InfoPanelComponent,
   ],
 })
 export class AdminSharedModule {}

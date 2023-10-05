@@ -2,7 +2,7 @@ export type PackageFormData = {
   name: string;
   parentId: string;
   serviceIds: string[];
-  images;
+  imageUrl;
   currency: string;
   rate: number;
   discountedCurrency: string;

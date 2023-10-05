@@ -161,12 +161,12 @@ export const hotelCols: Cols[] = [
     sortType: 'string',
     searchField: ['sourceName', 'source'],
   },
-  {
-    field: 'totalPaidAmount',
-    header: 'Payment',
-    sortType: 'number',
-    searchField: ['totalPaidAmount'],
-  },
+  // {
+  //   field: 'totalPaidAmount',
+  //   header: 'Payment',
+  //   sortType: 'number',
+  //   searchField: ['totalPaidAmount'],
+  // },
   {
     field: 'reservationType',
     header: 'Actions',
@@ -220,12 +220,12 @@ export const outletCols: Cols[] = [
     sortType: 'string',
     searchField: ['sourceName', 'source'],
   },
-  {
-    field: 'totalPaidAmount',
-    header: 'Payment',
-    sortType: 'string',
-    searchField: ['totalPaidAmount'],
-  },
+  // {
+  //   field: 'totalPaidAmount',
+  //   header: 'Payment',
+  //   sortType: 'string',
+  //   searchField: ['totalPaidAmount'],
+  // },
   {
     field: 'reservationType',
     header: 'Actions',
@@ -306,7 +306,7 @@ export const chips: Chip<
 
 export const MenuOptions: Option[] = [
   { label: 'Manage Invoice', value: 'MANAGE_INVOICE' },
-  { label: 'View Reservation', value: 'EDIT_RESERVATION' },
+  { label: 'Edit Reservation', value: 'EDIT_RESERVATION' },
   { label: 'Print Invoice', value: 'PRINT_INVOICE' },
 ];
 

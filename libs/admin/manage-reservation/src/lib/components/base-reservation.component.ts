@@ -1,5 +1,10 @@
 import { Component, Input } from '@angular/core';
-import { AbstractControl, FormArray, FormGroup } from '@angular/forms';
+import {
+  AbstractControl,
+  FormArray,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import { IteratorField } from 'libs/admin/shared/src/lib/types/fields.type';
 import {
   OfferData,
@@ -12,9 +17,8 @@ import {
   HotelDetailService,
   NavRouteOptions,
 } from '@hospitality-bot/admin/shared';
-import { Subscription } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
-import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { manageReservationRoutes } from '../constants/routes';
 import { ReservationForm } from '../constants/form';
 import { JourneyState } from '../constants/reservation';
@@ -33,11 +37,11 @@ export class BaseReservationComponent {
   outletId?: string;
   reservationId: string;
   bookingType: string;
+  totalPaidAmount = 0;
 
   summaryData: SummaryData;
   formValueChanges: boolean = false;
   disabledForm = false;
-  deductedAmount = 0;
 
   pageTitle: string;
   routes: NavRouteOptions = [];
@@ -49,15 +53,14 @@ export class BaseReservationComponent {
   selectedEntity: SelectedEntity;
 
   $subscription = new Subscription();
+  cancelRequests$ = new Subject<void>();
 
   constructor(
-    protected globalFilterService: GlobalFilterService,
     protected activatedRoute: ActivatedRoute,
     protected hotelDetailService: HotelDetailService,
     protected formService: FormService
   ) {
     this.reservationId = this.activatedRoute.snapshot.paramMap.get('id');
-    this.entityId = this.globalFilterService.entityId;
     const { navRoutes, title } = manageReservationRoutes[
       this.reservationId ? 'editReservation' : 'addReservation'
     ];
@@ -108,12 +111,32 @@ export class BaseReservationComponent {
           break;
       }
       for (const controlName in this.paymentControls) {
-        // if (paymentControls.hasOwnProperty(controlName)) {
-        this.paymentControls[controlName].enable();
-        // }
+        if (
+          controlName !== 'cashierFirstName' &&
+          controlName !== 'cashierLastName'
+        ) {
+          this.paymentControls[controlName].enable();
+        }
       }
       reservationType.enable();
     }
+  }
+
+  updatePaymentData() {
+    if (this.totalPaidAmount) {
+      this.summaryData.totalPaidAmount = this.totalPaidAmount;
+    }
+    // Set value and validators for payment according to the summaryData.
+    this.paymentControls.totalPaidAmount.setValidators([
+      Validators.max(this.summaryData?.totalAmount),
+      Validators.min(0),
+    ]);
+    this.paymentControls.totalPaidAmount.updateValueAndValidity();
+
+    // Needs to be changed according to api.
+    this.paymentRuleControls.deductedAmount.patchValue(
+      this.summaryData?.totalAmount
+    );
   }
 
   get reservationInfoControls() {
@@ -134,6 +157,13 @@ export class BaseReservationComponent {
   get paymentControls() {
     return (this.userForm.get('paymentMethod') as FormGroup).controls as Record<
       keyof ReservationForm['paymentMethod'],
+      AbstractControl
+    >;
+  }
+
+  get paymentRuleControls() {
+    return (this.userForm.get('paymentRule') as FormGroup).controls as Record<
+      keyof ReservationForm['paymentRule'],
       AbstractControl
     >;
   }

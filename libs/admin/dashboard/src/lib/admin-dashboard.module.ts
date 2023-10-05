@@ -24,6 +24,13 @@ import { StatisticsComponent } from './components/statistics/statistics.componen
 import { StatisticsService } from './services/statistics.service';
 import { AnalyticsService } from 'libs/admin/request-analytics/src/lib/services/analytics.service';
 import { AdminGuestDashboardModule } from '@hospitality-bot/admin/guest-dashboard';
+import { ReservationCalendarViewComponent } from './components/reservation-calendar-view/reservation-calendar-view.component';
+import { ManageReservationService } from 'libs/admin/manage-reservation/src/lib/services/manage-reservation.service';
+import { RoomService } from 'libs/admin/room/src/lib/services/room.service';
+import { RoomTypesComponent } from './components/room-types/room-types.component';
+import { FormService } from 'libs/admin/manage-reservation/src/lib/services/form.service';
+import { QuickReservationFormComponent } from './components/quick-reservation-form/quick-reservation-form.component';
+import { GuestTableService } from 'libs/admin/guests/src/lib/services/guest-table.service';
 
 export const adminDashboardRoutes: Route[] = [
   {
@@ -61,8 +68,18 @@ export const adminDashboardRoutes: Route[] = [
     BookingStatusComponent,
     NotificationsComponent,
     MessagesComponent,
+    ReservationCalendarViewComponent,
+    RoomTypesComponent,
+    QuickReservationFormComponent,
   ],
   exports: [RouterModule],
-  providers: [StatisticsService, AnalyticsService],
+  providers: [
+    StatisticsService,
+    AnalyticsService,
+    ManageReservationService,
+    RoomService,
+    FormService,
+    GuestTableService,
+  ],
 })
 export class AdminDashboardModule {}

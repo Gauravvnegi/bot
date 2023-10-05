@@ -1,0 +1,56 @@
+@import 'main';
+
+.card-width {
+  flex-basis: 14.282%;
+}
+
+.btn-width {
+  flex-basis: 20%;
+}
+
+.btn-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1em;
+  margin-bottom: 1em;
+}
+
+.wrapper {
+  @include form-block();
+  row-gap: 0;
+  column-gap: 0;
+  padding: 22px 0;
+}
+
+:host ::ng-deep .p-datatable-tbody {
+  display: flex;
+  flex-wrap: wrap;
+  overflow: hidden;
+  border: 1px solid #e4e4e4;
+  border-top: none;
+}
+
+.icon {
+  cursor: pointer;
+}
+
+.filter {
+  position: relative;
+}
+
+:host ::ng-deep .p-dialog-mask {
+  height: unset !important;
+  width: unset !important;
+  right: 0 !important;
+  left: unset !important;
+  top: 53px !important;
+
+  position: absolute !important;
+}
+
+:host ::ng-deep .p-splitbutton .p-splitbutton-defaultbutton {
+  white-space: nowrap;
+  font-size: 14px;
+  margin: 0;
+  max-width: 115px;
+}

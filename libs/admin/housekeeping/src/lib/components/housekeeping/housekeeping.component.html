@@ -1,0 +1,113 @@
+<hospitality-bot-navigation-header [heading]="pageTitle" [routes]="navRoutes">
+</hospitality-bot-navigation-header>
+<div [formGroup]="useForm" class="btn-wrapper">
+  <hospitality-bot-date
+    class="btn-width"
+    controlName="date"
+    label="Date"
+    [props]="{ placeholder: 'Select From Date' }"
+    [settings]="{
+      enableTime: false
+    }"
+    [disabled]="true"
+  ></hospitality-bot-date>
+
+  <hospitality-bot-select
+    class="btn-width"
+    controlName="roomType"
+    label="Room Type"
+    [options]="roomTypes"
+    [props]="{ placeholder: 'Select Room Type', isAsync: true }"
+    (paginate)="loadMoreRoomTypes($event)"
+    (onSearch)="searchRoomTypes($event)"
+  >
+  </hospitality-bot-select>
+</div>
+
+<p-table
+  #dt
+  [styleClass]="tableConfig.styleClass"
+  [resizableColumns]="isResizableColumns"
+  [autoLayout]="isAutoLayout"
+  [loading]="loading"
+  [columns]="cols"
+  [value]="values"
+  [paginator]="isPaginator"
+  [rows]="rowsPerPage"
+  [showCurrentPageReport]="showCurrentPageReport"
+  [rowsPerPageOptions]="rowsPerPageOptions"
+  [(first)]="first"
+  [totalRecords]="totalRecords"
+  [filterDelay]="0"
+  [selectionMode]="selectionMode"
+  [(selection)]="selectedRows"
+  (onRowSelect)="onRowSelect($event)"
+  (onRowUnselect)="onRowUnselect($event)"
+  (onHeaderCheckboxToggle)="onToggleSelectAll($event)"
+  (sortFunction)="customSort($event)"
+  [customSort]="isCustomSort"
+  (onFilter)="onDataFilter()"
+  *ngIf="values?.length > 0; else emptyTable"
+>
+  <ng-template pTemplate="caption">
+    <div class="caption__wrapper" [formGroup]="tableFG">
+      <hospitality-bot-filter-chips
+        class="filter"
+        [chips]="filterChips"
+        (onChange)="toggleQuickReplyFilter($event)"
+        [selectedChips]="selectedFilterChips"
+      >
+      <hospitality-bot-info-panel></hospitality-bot-info-panel>
+      </hospitality-bot-filter-chips>
+    </div>
+  </ng-template>
+  <ng-template pTemplate="emptymessage">
+    <tr hospitality-bot-empty-view [noOfColumns]="cols.length"></tr>
+  </ng-template>
+
+  <!-- **************************************BODY********************************* -->
+  <ng-template
+    pTemplate="body"
+    let-rowData
+    let-columns="columns"
+    let-rowIndex="rowIndex"
+  >
+    <!-- <td > -->
+    <hospitality-bot-room-card
+      [data]="rowData"
+      [recordSetting]="roomStatusDetails"
+      [entityId]="entityId"
+      class="card-width"
+    >
+    </hospitality-bot-room-card>
+    <!-- </td> -->
+  </ng-template>
+
+  <!-- *********************************FOOTER******************************* -->
+  <ng-template pTemplate="summary">
+    <p-paginator
+      #paginator
+      [rows]="rowsPerPage"
+      [totalRecords]="totalRecords"
+      [rowsPerPageOptions]="rowsPerPageOptions"
+      (onPageChange)="paginate($event)"
+      [currentPageReportTemplate]="reportTemplate"
+      showCurrentPageReport="true"
+    ></p-paginator>
+  </ng-template>
+</p-table>
+
+<ng-template #emptyTable>
+  <hospitality-bot-empty-table
+    [isLoading]="loading"
+    link="/pages/inventory/room/add-room/multiple"
+    [content]="{
+      description:
+        'No rooms found. Tap the +Add Multiple Rooms to Manage and track your hotel\'s room inventory, rates, and availability',
+      actionName: '+ Add Multiple Rooms',
+      imageSrc: 'assets/images/empty-table-room-types.png'
+    }"
+  >
+  </hospitality-bot-empty-table>
+</ng-template>
+

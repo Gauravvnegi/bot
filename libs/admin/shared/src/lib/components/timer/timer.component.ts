@@ -10,6 +10,7 @@ export class TimerComponent implements OnInit {
   @Input() inputMilliseconds: number = 0; // Input in milliseconds
   minutes: number = 0;
   seconds: number = 0;
+  @Input() sla: number = 20; // Input in minutes
   private subscription: Subscription | undefined;
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -42,6 +43,24 @@ export class TimerComponent implements OnInit {
     }
     this.minutes = Math.floor(this.inputMilliseconds / 60000);
     this.seconds = Math.floor((this.inputMilliseconds % 60000) / 1000);
+  }
+
+  get getTimerPercentage(): number {
+    return +(this.inputMilliseconds / (this.sla * 60000)) * 100;
+  }
+
+  getTimerImage() {
+    if (this.getTimerPercentage > 75) {
+      return 'assets/images/timer 1.png';
+    } else if (this.getTimerPercentage > 50) {
+      return 'assets/images/timer 2.png';
+    } else if (this.getTimerPercentage > 25) {
+      return 'assets/images/timer 3.png';
+    } else if (this.getTimerPercentage > 0) {
+      return 'assets/images/timer 4.png';
+    } else {
+      return 'assets/images/timer 5.png';
+    }
   }
 
   ngOnDestroy(): void {

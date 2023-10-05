@@ -16,12 +16,13 @@ import { RatesNestedCheckboxTreeComponent } from './components/rates-nested-chec
 import { NestedPanelComponent } from './components/rates-nested-checkbox-tree/nested-panel/nested-panel.component';
 import { InventoryNestedCheckboxTreeComponent } from './components/inventory-nested-checkbox-tree/inventory-nested-checkbox-tree.component';
 import { RoomTypesComponent } from './components/room-types/room-types.component';
+import { UpdateReservationComponent } from './components/update-reservation/update-reservation.component';
 
 const appRoutes: CRoutes = [
   {
     path: '',
     component: MainComponent,
-    name: ModuleNames.CHANNEL_MANAGER,
+    name: ModuleNames.CHANNEL_MANAGER_HOME,
     children: [
       {
         path: 'update-rates',
@@ -57,6 +58,20 @@ const appRoutes: CRoutes = [
           },
         ],
       },
+      {
+        path: 'room',
+        name: ModuleNames.ROOM,
+        loadChildren: () =>
+          import('@hospitality-bot/admin/room').then((m) => m.AdminRoomModule),
+      },
+      {
+        path: 'setup-bar-price',
+        name: ModuleNames.SETUP_BAR_PRICE,
+        loadChildren: () =>
+          import('@hospitality-bot/admin/setup-bar-price').then(
+            (m) => m.AdminSetupBarPriceModule
+          ),
+      },
     ],
   },
 ];
@@ -76,6 +91,7 @@ const appRoutes: CRoutes = [
 })
 export class AdminChannelMangerRoutingModule {
   static components = [
+    UpdateReservationComponent,
     UpdateRatesComponent,
     UpdateInventoryComponent,
     BulkUpdateFormComponent,

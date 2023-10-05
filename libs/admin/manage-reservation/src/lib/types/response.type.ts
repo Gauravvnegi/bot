@@ -30,6 +30,10 @@ export type RoomReservationRes = {
   bookingItems?: BookingItems[];
   pricingDetails: PricingDetails;
   specialRequest: string;
+  marketSegment?: string;
+  currentJoureyStatus?: string;
+  currentJourney?: string;
+  currentJourneyState?: string;
 };
 
 export type PaymentConfigResponse = {

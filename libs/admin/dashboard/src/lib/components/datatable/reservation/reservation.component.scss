@@ -208,3 +208,53 @@
 :host ::ng-deep .p-datatable {
   @include tableCellPadding(0.3em);
 }
+
+.margin-left {
+  margin-left: 20px !important;
+}
+
+.pull-right {
+  @include flex-item-center;
+  gap: 5px;
+
+  margin: 0 20px;
+  .type-label {
+    margin: 0 1%;
+  }
+
+  .type-label > .image {
+    height: 38px;
+    width: 38px;
+    @include flex-all-center;
+    border-radius: 50%;
+    img {
+      height: 15px;
+    }
+  }
+  .type-label > input {
+    /* HIDE RADIO */
+    visibility: hidden; /* Makes input not-clickable */
+    position: absolute; /* Remove input from document flow */
+  }
+
+  .type-label > input + .image {
+    position: relative;
+    cursor: pointer;
+  }
+
+  .type-label > input:checked + .image {
+    background-color: $primary-cta;
+    img {
+      filter: invert(0);
+    }
+  }
+}
+
+:host ::ng-deep .p-dialog-mask {
+  height: unset !important;
+  width: unset !important;
+  right: 0 !important;
+  left: 44em !important;
+  top: 53px !important;
+  position: absolute !important;
+}

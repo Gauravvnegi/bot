@@ -5,7 +5,10 @@ import {
   FeedbackService,
   TableService,
 } from '@hospitality-bot/admin/shared';
-import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import {
+  GlobalFilterService,
+  SubscriptionPlanService,
+} from '@hospitality-bot/admin/core/theme';
 import {
   ModalService,
   SnackBarService,
@@ -38,6 +41,7 @@ export class ReservationDatatableModalComponent
     protected tabFilterService: TableService,
     public feedbackService: FeedbackService,
     private router: Router,
+    protected subscriptionPlanService: SubscriptionPlanService
   ) {
     super(
       fb,
@@ -47,17 +51,18 @@ export class ReservationDatatableModalComponent
       snackbarService,
       _modal,
       feedbackService,
-      tabFilterService
+      tabFilterService,
+      subscriptionPlanService
     );
   }
 
   ngOnInit(): void {
     this.registerListeners();
     this.router.events
-    .pipe(filter(event => event instanceof NavigationEnd))
-    .subscribe(() => {
-      this.closeModal();
-    });
+      .pipe(filter((event) => event instanceof NavigationEnd))
+      .subscribe(() => {
+        this.closeModal();
+      });
   }
 
   /**

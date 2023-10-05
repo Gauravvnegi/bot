@@ -4,7 +4,6 @@ import { SearchResultResponse } from 'libs/admin/library/src/lib/types/response'
 import { RoomTypeListResponse } from 'libs/admin/room/src/lib/types/service-response';
 import { Observable } from 'rxjs';
 import { ReservationSummary } from '../types/forms.types';
-import { map } from 'rxjs/operators';
 import { MenuItemListResponse } from 'libs/admin/all-outlets/src/lib/types/outlet';
 import { EntitySubType, QueryConfig } from '@hospitality-bot/admin/shared';
 import { AgentTableResponse } from 'libs/admin/agent/src/lib/types/response';
@@ -47,6 +46,13 @@ export class ManageReservationService extends ApiService {
   ): Observable<K> {
     return this.put(
       `/api/v1/booking/${reservationId}?type=${bookingType}&entityId=${entityId}`,
+      data
+    );
+  }
+
+  updateCalendarView(reservationId: string, data: any, bookingType: string) {
+    return this.patch(
+      `/api/v1/booking/${reservationId}?type=${bookingType}`,
       data
     );
   }

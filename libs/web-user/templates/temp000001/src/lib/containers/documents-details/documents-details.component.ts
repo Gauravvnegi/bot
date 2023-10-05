@@ -19,6 +19,7 @@ import { DocumentDetailsService } from './../../../../../../shared/src/lib/servi
 import { SnackBarService } from 'libs/shared/material/src';
 import { TranslateService } from '@ngx-translate/core';
 import { GuestRole } from 'libs/web-user/shared/src/lib/constants/guest';
+import { GuestDetailsService } from 'libs/web-user/shared/src/lib/services/guest-details.service';
 
 @Component({
   selector: 'hospitality-bot-documents-details',
@@ -55,12 +56,24 @@ export class DocumentsDetailsComponent implements OnInit, OnDestroy {
   constructor(
     protected _fb: FormBuilder,
     public _documentDetailService: DocumentDetailsService,
+    public _guestDetailService: GuestDetailsService,
     protected _reservationService: ReservationService,
     protected _hotelService: HotelService,
     protected _snackBarService: SnackBarService,
     protected _translateService: TranslateService
   ) {
     this.initDocumentDetailForm();
+    this._guestDetailService.guestInfo.subscribe((data) => {
+      (this.documentDetailsForm.get('guests') as FormArray).controls.forEach(
+        (element) => {
+          const guestData = data[element.get('id').value];
+          if (guestData && guestData.firstName) {
+            const name = `${guestData.firstName} ${guestData.lastName}`;
+            element.patchValue({ name });
+          }
+        }
+      );
+    });
   }
 
   /**
@@ -343,6 +356,7 @@ export class DocumentsDetailsComponent implements OnInit, OnDestroy {
       isInternational: ['', Validators.required],
       documents: this._fb.array([]),
       label: [''],
+      name: [''],
       role: [''],
       Optional: [false],
       uploadStatus: [false],
@@ -381,6 +395,7 @@ export class DocumentsDetailsComponent implements OnInit, OnDestroy {
         isInternational: [''],
         documents: this._fb.array([]),
         label: [''],
+        name: [''],
         role: [''],
         Optional: [true],
         uploadStatus: [false],
@@ -475,7 +490,9 @@ export class DocumentsDetailsComponent implements OnInit, OnDestroy {
               this._translateService
                 .get(`MESSAGES.ERROR.${error.type}`)
                 .subscribe((translatedMsg) => {
-                  this._snackBarService.openSnackBarAsText(translatedMsg);
+                  this._snackBarService.openSnackBarAsText(
+                    error.message ?? translatedMsg
+                  );
                 });
             }
           )

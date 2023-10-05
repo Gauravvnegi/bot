@@ -60,6 +60,7 @@ export class SnackBarService {
   ): MatSnackBarRef<any> {
     return this._snackBar.openFromComponent(component, {
       duration: config.duration || 2000,
+      ...config,
     });
   }
 

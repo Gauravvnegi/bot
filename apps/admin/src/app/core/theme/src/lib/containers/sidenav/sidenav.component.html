@@ -1,20 +1,12 @@
-<div
-  class="logo text-uppercase"
-  [style.color]="normalFontColor"
-  [style.background-color]="headerBgColor"
->
+<div class="logo text-uppercase" [style.color]="normalFontColor">
   <!-- Botshot new collapse logo-->
   <div class="sidenav-header">
-    <div [style.display]="status ? 'none' : ''" class="logo">
-      <img
-        src="assets/images/botshot_collapse.png"
-        onerror="this.src='assets/images/botshot_expand.png';"
-        alt=""
-      />
-    </div>
-    <!-- Side nav menu icon collapse-->
     <div class="menu_button">
-      <img src="assets/images/botshot_collapse.png" alt="" />
+      <img
+        (click)="isMenuBarVisible = true; navToggle.emit(false)"
+        class="product-menu"
+        src="assets/images/main-menu.png"
+      />
     </div>
   </div>
 </div>
@@ -64,3 +56,55 @@
     </div>
   </div>
 </div>
+
+<ng-container>
+  <p-sidebar
+    [visible]="isMenuBarVisible"
+    (onHide)="isMenuBarVisible = false"
+    [showCloseIcon]="false"
+    [style]="{ width: '25em' }"
+    position="left"
+  >
+    <ng-template
+      *ngIf="isMenuBarVisible"
+      [ngTemplateOutlet]="sidebar"
+    ></ng-template>
+  </p-sidebar>
+</ng-container>
+
+<ng-template #sidebar>
+  <div class="wrapper">
+    <div class="header">
+      <div class="cross">
+        <div (click)="isMenuBarVisible = false" class="close">
+          <i
+            class="pi pi-arrow-left"
+            style="color: #5f38f9;"
+            aria-hidden="true"
+          ></i>
+        </div>
+      </div>
+      <div class="bot-logo">
+        <a href="https://botshot.ai/" target="_blank" rel="noopener">
+          <img src="assets/images/botshotlogo-color.png" alt="" />
+        </a>
+      </div>
+    </div>
+    <div class="menu-wrapper">
+      <div class="menu-container">
+        <div
+          *ngFor="let product of productList; let i = index"
+          class="menu"
+          [ngClass]="{ selected: product.name === selectedProduct }"
+          (click)="onMenuCLick(product)"
+        >
+          <img [src]="product.url" alt="" />
+          <div class="menu-label">{{ product.title }}</div>
+        </div>
+      </div>
+    </div>
+    <!-- <div class="footer">
+      <div class="header">Free Hotel Resource</div>
+    </div> -->
+  </div>
+</ng-template>

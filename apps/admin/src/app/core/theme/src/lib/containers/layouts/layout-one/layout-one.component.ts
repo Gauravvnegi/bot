@@ -1,5 +1,13 @@
 import { animate, style, transition, trigger } from '@angular/animations';
-import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
+import {
+  Component,
+  HostListener,
+  OnDestroy,
+  OnInit,
+  ComponentFactoryResolver,
+  ViewContainerRef,
+  ViewChild,
+} from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ConfigService, UserService } from '@hospitality-bot/admin/shared';
@@ -18,6 +26,15 @@ import { NotificationService } from '../../../services/notification.service';
 import { ProgressSpinnerService } from '../../../services/progress-spinner.service';
 import { SubscriptionPlanService } from '../../../services/subscription-plan.service';
 import { NavigationEnd } from '@angular/router';
+import { MenuItem } from 'primeng/api';
+import { manageReservationRoutes } from 'libs/admin/manage-reservation/src/lib/constants/routes';
+import { RaiseRequestComponent } from 'libs/admin/request/src/lib/components/raise-request/raise-request.component';
+import {
+  navRoute,
+  manageGuestRoutes,
+} from 'libs/admin/guests/src/lib/constant/route';
+import { SettingsMenuComponent } from '../../../../../../../../../../../libs/admin/settings/src/lib/components/settings-menu/settings-menu.component';
+import { convertToTitleCase } from 'libs/admin/shared/src/lib/utils/valueFormatter';
 
 @Component({
   selector: 'admin-layout-one',
@@ -36,6 +53,7 @@ import { NavigationEnd } from '@angular/router';
   ],
 })
 export class LayoutOneComponent implements OnInit, OnDestroy {
+  readonly moduleNames = ModuleNames;
   backgroundColor: string;
   background_image: string;
   menuItem: any;
@@ -71,6 +89,11 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
   private $firebaseMessagingSubscription = new Subscription();
   isGlobalSearchVisible = true;
   isSitesAvailable: boolean;
+  bookingOptions: MenuItem[];
+  sidebarVisible: boolean;
+  @ViewChild('sidebarSlide', { read: ViewContainerRef })
+  sidebarSlide: ViewContainerRef;
+  sidebarType: 'complaint' | 'settings' = 'complaint';
 
   constructor(
     private _router: Router,
@@ -85,7 +108,9 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
     private subscriptionPlanService: SubscriptionPlanService,
     private loadingService: LoadingService,
     private notificationService: NotificationService,
-    private configService: ConfigService
+    private configService: ConfigService,
+    private hotelDetailService: HotelDetailService,
+    private resolver: ComponentFactoryResolver
   ) {
     this.initFG();
   }
@@ -110,6 +135,7 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
         this.scrollToTop();
       }
     });
+    this.initBookingOption();
   }
 
   scrollToTop() {
@@ -149,10 +175,15 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
                 );
               break;
             case 'In-house Request':
-              if (this._router.url.includes('request'))
+              if (this._router.url.includes('complaint')) {
                 this.firebaseMessagingService.newInhouseRequest.next(
                   notificationPayload
                 );
+              } else {
+                this.firebaseMessagingService.showNotificationAsSnackBar(
+                  payload
+                );
+              }
               break;
             default:
               if (this.checkForMessageRoute())
@@ -221,6 +252,7 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
     this.globalFilterService.entityId = selectedentityId;
     this.globalFilterService.entityType = selectedHotelData.category;
     this.globalFilterService.entitySubType = selectedHotelData.type;
+
     this.isSitesAvailable =
       !!selectedSiteId && !!this._hotelDetailService.sites?.length;
   }
@@ -332,11 +364,11 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
     this.dateRangeFilterService.emitDateRangeFilterValue$.next(event);
   }
 
-  checkForTransactionFeedbackSubscribed() {
-    return this.subscriptionPlanService.checkModuleSubscription(
-      ModuleNames.FEEDBACK_TRANSACTIONAL
-    );
-  }
+  // checkForTransactionFeedbackSubscribed() {
+  //   return this.subscriptionPlanService.checkModuleSubscription(
+  //     ModuleNames.FEEDBACK_TRANSACTIONAL
+  //   );
+  // }
 
   @HostListener('document:visibilitychange', ['$event'])
   visibilitychange() {
@@ -362,13 +394,131 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
       .subscribe((response) => (this.unreadCount = response?.unreadCount));
   }
 
+  initBookingOption() {
+    const propertyList = this.hotelDetailService.getPropertyList();
+    this.bookingOptions = [
+      this.isAddReservationSubscribed
+        ? {
+            label: 'New Booking',
+            icon: 'pi pi-calendar',
+            ...(!!propertyList.length
+              ? {
+                  items: propertyList.map((item) => ({
+                    label: item.label,
+                    command: () => {
+                      this.openNewWindow(
+                        `/pages/efrontdesk/reservation/${manageReservationRoutes.addReservation.route}?entityId=${item.value}`
+                      );
+                    },
+                  })),
+                }
+              : {
+                  command: () =>
+                    this.openNewWindow(`/pages/efrontdesk/reservation`),
+                }),
+          }
+        : null,
+      this.isGuestSubscribed
+        ? {
+            label: 'New Guest',
+            icon: 'pi pi-user-plus',
+            command: () =>
+              this.openNewWindow(
+                `${navRoute.guest.link}/${manageGuestRoutes.addGuest.route}`
+              ),
+          }
+        : null,
+      this.isComplaintTrackerSubscribed
+        ? {
+            label: 'New Complaint',
+            icon: 'pi pi-exclamation-circle',
+            command: () => {
+              this.sidebarVisible = true;
+              this.sidebarType = 'complaint';
+              const factory = this.resolver.resolveComponentFactory(
+                RaiseRequestComponent
+              );
+              this.sidebarSlide.clear();
+              const componentRef = this.sidebarSlide.createComponent(factory);
+              componentRef.instance.isSideBar = true;
+              componentRef.instance.onRaiseRequestClose.subscribe((res) => {
+                this.sidebarVisible = false;
+              });
+            },
+          }
+        : null,
+    ].filter((item) => item);
+  }
+
+  openNewWindow(url: string) {
+    window.open(url);
+  }
+
+  get isSettingAvailable() {
+    return !!this.subscriptionPlanService.settings?.length;
+  }
+
+  openSettings() {
+    this.sidebarVisible = true;
+    const factory = this.resolver.resolveComponentFactory(
+      SettingsMenuComponent
+    );
+    this.sidebarSlide.clear();
+    this.sidebarType = 'settings';
+    const componentRef = this.sidebarSlide.createComponent(factory);
+    componentRef.instance.isSideBar = true;
+    componentRef.instance.closeEvent.subscribe((res) => {
+      this.sidebarVisible = false;
+    });
+  }
+
+  checkModuleSubscription(module) {
+    return this.subscriptionPlanService.checkModuleSubscription(
+      ModuleNames.MEMBERS
+    );
+  }
+
   ngOnDestroy() {
     this.firebaseMessagingService.destroySubscription();
   }
 
-  get isCreateWithSubscribed() {
+  get isComplaintTrackerSubscribed() {
+    return this.subscriptionPlanService.checkProductSubscription(
+      ModuleNames.COMPLAINT_TRACKER
+    );
+  }
+
+  get isAddReservationSubscribed() {
+    return this.subscriptionPlanService.checkProductSubscription(
+      ModuleNames.PREDICTO_PMS
+    );
+  }
+
+  get isGuestSubscribed() {
     return this.subscriptionPlanService.checkModuleSubscription(
+      ModuleNames.GUESTS
+    );
+  }
+
+  get isFreddieSubscribed() {
+    return this.subscriptionPlanService.checkProductSubscription(
+      ModuleNames.FREDDIE
+    );
+  }
+
+  get isCreateWithSubscribed() {
+    return this.subscriptionPlanService.checkProductSubscription(
       ModuleNames.CREATE_WITH
     );
+  }
+
+  get isQuickReservationAvailable() {
+    return this.subscriptionPlanService.checkModuleSubscription(
+      ModuleNames.ADD_RESERVATION
+    );
+  }
+
+  get selectedProduct() {
+    return this.subscriptionPlanService.getSelectedProductData();
   }
 }

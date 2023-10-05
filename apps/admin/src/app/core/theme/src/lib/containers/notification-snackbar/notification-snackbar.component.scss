@@ -1,0 +1,23 @@
+@import 'main';
+
+.wrapper {
+  background-color: #dcf6d3;
+  border-width: 0 0 0 5px;
+  padding: 14px 16px;
+  border-color: #72cf4d;
+  border-style: solid;
+  color: black;
+  min-width: 350px;
+  max-width: 350px;
+  overflow: hidden;
+  word-break: break-word;
+}
+
+.title {
+  font-weight: 500;
+}
+
+.watsapp {
+  margin-right: 5px;
+  margin-bottom: -2px;
+}

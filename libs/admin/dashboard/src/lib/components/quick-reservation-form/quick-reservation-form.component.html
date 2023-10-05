@@ -1,0 +1,186 @@
+<div class="container">
+  <div class="header">
+    <div class="heading">
+      Booking Information
+    </div>
+    <div class="buttons">
+      <!-- <hospitality-bot-button
+        label="Edit Full Reservation"
+        (onClick)="editForm()"
+      ></hospitality-bot-button> -->
+      <img
+        (click)="editForm()"
+        class="expand"
+        [src]="'assets/svg/expand-white.svg'"
+        alt=""
+      />
+      <div (click)="close()" class="close">
+        <i [ngClass]="'pi pi-arrow-right'" aria-hidden="true"></i>
+      </div>
+    </div>
+  </div>
+  <div class="guest-data" *ngIf="reservationId">
+    <div class="guest-name">{{ guestDetails?.guestName }}</div>
+    <div class="due-amount">
+      Due Amount -
+      <span class="amount">{{
+        reservationData?.totalDueAmount | currency: 'INR'
+      }}</span>
+    </div>
+    <div class="contact-details">
+      <div class="phone-number">
+        <img [src]="'assets/svg/email-circle.svg'" alt="" />
+        <p>{{ guestDetails?.phoneNumber }}</p>
+      </div>
+      <div class="email-id">
+        <img [src]="'assets/svg/whatsapp.svg'" alt="" />
+        <p>{{ guestDetails?.email }}</p>
+      </div>
+    </div>
+  </div>
+  <div class="body">
+    <div class="form-block" [formGroup]="useForm">
+      <!-- Reservation Information -->
+      <ng-container formGroupName="reservationInformation">
+        <hospitality-bot-date
+          class="half-width"
+          controlName="from"
+          label="Check-In Date"
+          [settings]="{
+            enableTime: false
+          }"
+        ></hospitality-bot-date>
+        <hospitality-bot-date
+          class="half-width"
+          controlName="to"
+          label="Check-Out Date"
+          [settings]="{
+            enableTime: false
+          }"
+        ></hospitality-bot-date>
+        <hospitality-bot-select
+          class="half-width"
+          controlName="source"
+          label="Booking Source"
+          [options]="configData?.source"
+          [props]="{ placeholder: 'Select' }"
+        ></hospitality-bot-select>
+        <hospitality-bot-input
+          class="half-width"
+          controlName="sourceName"
+          label="Booking Source Name"
+          maxLength="60"
+          [props]="{
+            placeholder: 'Enter',
+            errorMessages: {
+              required: 'This is a required field.',
+              maxlength: 'Maximum character limit is upto 60.'
+            }
+          }"
+        ></hospitality-bot-input>
+        <hospitality-bot-select
+          class="half-width"
+          controlName="marketSegment"
+          label="Market Segment"
+          [options]="configData?.marketSegment"
+          [props]="{
+            placeholder: 'Enter'
+          }"
+        ></hospitality-bot-select>
+      </ng-container>
+
+      <!-- Guest Information -->
+      <ng-container *ngIf="!reservationId" formGroupName="guestInformation">
+        <hospitality-bot-select
+          class="half-width select"
+          controlName="guestDetails"
+          label="Guest"
+          [props]="{
+            isAsync: false,
+            createPrompt: '+ Add New Guest',
+            placeholder: 'Search'
+          }"
+          [options]="guestOptions"
+          (onCreate)="createGuest()"
+        ></hospitality-bot-select>
+      </ng-container>
+
+      <!-- Room Information -->
+      <ng-container formGroupName="roomInformation">
+        <ng-container *ngIf="!reservationId">
+          <hospitality-bot-select
+            class="half-width select"
+            controlName="roomTypeId"
+            label="Room Type"
+            [props]="{ placeholder: 'Select' }"
+            [options]="roomTypes"
+          ></hospitality-bot-select>
+          <hospitality-bot-select
+            class="half-width select"
+            controlName="ratePlan"
+            label="Rate Plans"
+            [props]="{ placeholder: 'Select' }"
+            [options]="ratePlans"
+          ></hospitality-bot-select>
+        </ng-container>
+
+        <hospitality-bot-select
+          class="half-width"
+          controlName="roomNumber"
+          label="Room Number"
+          [options]="this.useForm.get('roomInformation.roomsOptions').value"
+          [props]="{
+            placeholder: 'Select'
+          }"
+        ></hospitality-bot-select>
+        <hospitality-bot-input
+          class="half-width"
+          controlName="adultCount"
+          label="Adult"
+          [props]="{
+            placeholder: 'Enter'
+          }"
+        ></hospitality-bot-input>
+        <hospitality-bot-input
+          class="half-width"
+          controlName="childCount"
+          label="Child"
+          [props]="{
+            placeholder: 'Enter'
+          }"
+        ></hospitality-bot-input>
+      </ng-container>
+
+      <!-- Instructions -->
+      <ng-container formGroupName="instructions">
+        <hospitality-bot-text-area
+          class="full-width"
+          controlName="specialInstructions"
+          label="Special Instructions"
+          [props]="{
+            placeholder: 'Enter'
+          }"
+        ></hospitality-bot-text-area>
+      </ng-container>
+
+      <!-- Daily Price -->
+      <hospitality-bot-input
+        *ngIf="reservationId"
+        class="half-width"
+        controlName="dailyPrice"
+        label="Daily Price"
+        [props]="{
+          placeholder: 'Enter'
+        }"
+      ></hospitality-bot-input>
+    </div>
+  </div>
+  <div class="btn-wrapper">
+    <hospitality-bot-button
+      [label]="reservationId ? 'Update Reservation' : 'Confirm Reservation'"
+      (onClick)="handleSubmit()"
+      [isLoading]="isBooking"
+      [disabled]="!reservationId && useForm.invalid"
+    ></hospitality-bot-button>
+  </div>
+</div>

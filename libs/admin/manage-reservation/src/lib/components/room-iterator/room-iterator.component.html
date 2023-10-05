@@ -67,9 +67,7 @@
               [loading]="field.options ? loadingRoomTypes[i] : false"
             ></hospitality-bot-select>
           </div>
-          <ng-container
-            *ngIf="(controls.get('roomTypeId').value && i === 0) || i !== 0"
-          >
+          <ng-container *ngIf="roomTypeArray.length > 1">
             <mat-icon
               class="delete"
               [ngClass]="formService.disableBtn ? 'disabled-btn' : ''"

@@ -1,6 +1,4 @@
-import {
-  ReservationRatePlan,
-} from 'libs/admin/room/src/lib/constant/form';
+import { ReservationRatePlan } from 'libs/admin/room/src/lib/constant/form';
 
 export type ReservationForm = {
   reservationInformation: ReservationInformation;
@@ -49,6 +47,14 @@ type Instructions = {
 
 type RoomInformation = {
   roomTypes: RoomTypes[];
+
+  // For quick form
+  roomTypeId?: string;
+  ratePlan?: string;
+  roomNumber?: string;
+  adultCount?: number;
+  childCount?: number;
+  id?: string;
 };
 
 export type RoomTypes = {

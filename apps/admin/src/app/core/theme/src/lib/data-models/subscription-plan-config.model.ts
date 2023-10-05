@@ -37,7 +37,6 @@ export class Subscriptions {
   integration: Feature[];
   essentials: Feature[];
   communication: Feature[];
-
   products: Products[];
   active: boolean;
   planUpgradable: boolean;
@@ -106,7 +105,7 @@ export class Products {
       set({}, 'isView', get(input, ['isView']))
     );
     input.config?.forEach((subProduct) => {
-      this.config.push(new SubProducts().deserialize(subProduct));
+      this.config?.push(new SubProducts().deserialize(subProduct));
     });
 
     return this;
@@ -122,8 +121,11 @@ export class SubProducts {
   currentUsage: number;
   isSubscribed: true;
   isView: true;
+  config: SubProducts[];
 
   deserialize(input: any) {
+    this.config = new Array<SubProducts>();
+
     Object.assign(
       this,
       set({}, 'name', get(input, ['name'])),
@@ -134,6 +136,10 @@ export class SubProducts {
       set({}, 'isSubscribed', get(input, ['isSubscribed'])),
       set({}, 'isView', get(input, ['isView']))
     );
+    if (input.config)
+      input.config?.forEach((subProduct) => {
+        this.config.push(new SubProducts().deserialize(subProduct));
+      });
 
     this.cost = new Cost().deserialize(input.cost);
 
@@ -180,18 +186,60 @@ export class Feature {
 }
 
 export class ProductSubscription {
+  subscribedModuleProductBased: Partial<Record<ModuleNames, ModuleNames[]>>;
+  subscribedProducts: ModuleNames[];
   subscribedModules: ModuleNames[];
   modules: Partial<Modules>;
   subscribedIntegrations: Set<string>;
+  moduleProductMapping: Partial<Record<ModuleNames, ModuleNames>>;
 
   deserialize(input: any) {
     this.subscribedModules = new Array<ModuleNames>();
+    this.subscribedProducts = new Array<ModuleNames>();
+    this.subscribedModuleProductBased = {};
+    this.moduleProductMapping = {};
+
     this.modules = new Object();
 
     input.products?.forEach((product) => {
-      this.setConfig(product);
+      const productName = product.name;
+      if (product.isSubscribed) this.subscribedProducts.push(productName);
+
+      this.subscribedModuleProductBased = {
+        ...this.subscribedModuleProductBased,
+        [productName]: [],
+      };
+
       product.config?.forEach((subProduct) => {
         this.setConfig(subProduct);
+        this.subscribedModuleProductBased[productName].push(subProduct.name);
+
+        // Only sub module with initial subscribed product
+        if (
+          subProduct.isSubscribed &&
+          subProduct.isView &&
+          !this.moduleProductMapping[subProduct.name]
+        ) {
+          this.moduleProductMapping = {
+            ...this.moduleProductMapping,
+            [subProduct.name]: productName,
+          };
+        }
+
+        subProduct.config?.forEach((subSubProduct) => {
+          this.subscribedModuleProductBased[productName].push(subProduct.name);
+          if (
+            subSubProduct.isSubscribed &&
+            subSubProduct.isView &&
+            !this.moduleProductMapping[subSubProduct.name]
+          ) {
+            this.moduleProductMapping = {
+              ...this.moduleProductMapping,
+              [subSubProduct.name]: productName,
+            };
+          }
+          this.setConfig(subSubProduct);
+        });
       });
     });
 

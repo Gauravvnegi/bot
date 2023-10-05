@@ -205,13 +205,13 @@
         </div>
       </td>
 
-      <td>
+      <!-- <td>
         <div class="center-align">
           <div class="primary-text">
             {{ rowData?.totalPaidAmount | currency: 'INR' }}
           </div>
         </div>
-      </td>
+      </td> -->
 
       <td>
         <div *ngIf="rowData.reservationType; else emptyCell">
@@ -221,7 +221,11 @@
             (onClick)="handleStatus($event, rowData)"
             [state]="rowData.reservationType"
             [recordSetting]="reservationStatusDetails"
-            [menuOptions]="menuOptions"
+            [menuOptions]="
+              rowData.reservationType === 'DRAFT'
+                ? [{ label: 'Edit Reservation', value: 'EDIT_RESERVATION' }]
+                : menuOptions
+            "
             (onMenuItemClick)="handleMenuClick($event, rowData.id)"
           >
           </hospitality-bot-status-dropdown-toggle>
@@ -247,7 +251,7 @@
   <hospitality-bot-empty-table
     [height]="'62vh'"
     [isLoading]="loading"
-    (onClick)="createReservation()"
+    (action)="createReservation()"
     [content]="{
       description:
         'No Reservation found. Tap the +Create Reservation to create & manage the reservation offered by your hotel',

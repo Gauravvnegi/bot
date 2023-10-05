@@ -176,11 +176,18 @@ export class QuickReservationFormComponent implements OnInit {
   }
 
   editForm() {
-    this.router.navigate([`/pages/efrontdesk/reservation/add-reservation`], {
-      queryParams: {
-        entityId: this.entityId,
-      },
-    });
+    this.router.navigate(
+      [
+        this.reservationId
+          ? `/pages/efrontdesk/reservation/edit-reservation/${this.reservationId}`
+          : `/pages/efrontdesk/reservation/add-reservation`,
+      ],
+      {
+        queryParams: {
+          entityId: this.entityId,
+        },
+      }
+    );
   }
 
   initReservationDetails() {

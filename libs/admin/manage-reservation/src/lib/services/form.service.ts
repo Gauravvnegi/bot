@@ -115,10 +115,10 @@ export class FormService {
       input.reservationInformation?.marketSegment;
 
     roomReservationData.paymentDetails = {
-      paymentMethod: input.paymentMethod?.paymentMethod ?? '',
-      remarks: input.paymentMethod?.paymentRemark ?? '',
-      amount: input.paymentMethod?.totalPaidAmount ?? 0,
-      transactionId: input.paymentMethod.transactionId ?? '',
+      paymentMethod: input?.paymentMethod?.paymentMethod ?? '',
+      remarks: input?.paymentMethod?.paymentRemark ?? '',
+      amount: input?.paymentMethod?.totalPaidAmount ?? 0,
+      transactionId: input?.paymentMethod?.transactionId ?? '',
     };
 
     roomReservationData.guestId = input.guestInformation?.guestDetails;

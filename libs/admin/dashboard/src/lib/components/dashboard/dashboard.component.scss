@@ -1,4 +1,116 @@
+@import 'main';
+
 .statistics {
   display: block;
   margin-bottom: 20px;
+}
+
+::ng-deep .p-sidebar-mask,
+.p-sidebar-mask-leave.p-component-overlay {
+  background-color: rgba(0, 0, 0, 0) !important;
+}
+
+::ng-deep .p-component-overlay {
+  z-index: 400 !important;
+}
+
+// :host ::ng-deep .p-sidebar {
+//   top: 65px;
+//   width: 27rem;
+// }
+
+:host ::ng-deep .nav-header {
+  .nav-wrapper {
+    .nav-actions {
+      z-index: 490 !important;
+    }
+  }
+  .nav-wrapper__sticky {
+    z-index: 470 !important;
+  }
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  padding: 6px 10px;
+  width: 100%;
+  background-color: #f0ecff;
+  border: solid 1px $primary;
+  border-radius: 4px;
+
+  .title {
+    display: flex;
+    justify-content: space-between;
+    .item-name {
+      margin: 0 7px 4.7px 0;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.72px;
+      text-align: left;
+      color: $title;
+    }
+
+    .booking-no {
+      margin: 1px 19.5px 5.7px 7px;
+      opacity: 0.73;
+      font-size: 10px;
+      letter-spacing: 0.6px;
+      text-align: left;
+      color: $title;
+    }
+  }
+  .name-section {
+    .name {
+      font-size: 12px;
+      letter-spacing: 0.72px;
+      text-align: left;
+      color: $title;
+      font-weight: 500;
+    }
+  }
+
+  .footer {
+    display: inline-flex;
+    justify-content: space-between;
+    .desc {
+      margin: 3.6px 29.5px 7.4px 1px;
+      font-size: 10px;
+      letter-spacing: 0.6px;
+      text-align: left;
+      color: $title;
+    }
+    .time {
+      opacity: 0.73;
+      font-size: 10px;
+      letter-spacing: 0.6px;
+      text-align: left;
+      color: $title;
+    }
+  }
+}
+
+.guest {
+  cursor: pointer;
+  gap: 1em;
+  .name-section {
+    display: inline-flex;
+    justify-content: space-between;
+    align-items: center;
+    .name {
+      font-size: 12px;
+      letter-spacing: 0.72px;
+      text-align: left;
+      color: $title;
+      font-weight: 500;
+    }
+  }
+  .counts {
+    display: inline-flex;
+    gap: 1em;
+  }
+}
+
+svg {
+  filter: invert(1);
 }

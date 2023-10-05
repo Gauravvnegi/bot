@@ -27,9 +27,12 @@ import * as FileSaver from 'file-saver';
 import { Observable, Subscription } from 'rxjs';
 import { cols, tableTypes } from '../../../constants/cols';
 import { dashboard } from '../../../constants/dashboard';
-import { TableValue } from '../../../constants/tabFilterItem';
+import {
+  TableValue,
+} from '../../../constants/tabFilterItem';
 import { ReservationService } from '../../../services/reservation.service';
 import { reservationStatus } from '../../../constants/response';
+import * as moment from 'moment';
 @Component({
   selector: 'hospitality-bot-reservation-datatable',
   templateUrl: './reservation.component.html',
@@ -50,10 +53,14 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
   triggerInitialData = false;
   cols = cols.reservation;
   selectedTab: TableValue;
+  isSidebarVisible = false;
   tableTypes = [tableTypes.calendar, tableTypes.table];
 
   globalQueries = [];
   $subscription = new Subscription();
+  entityId: string;
+  options: any[] = [];
+  isPopUploading: boolean = false;
 
   constructor(
     public fb: FormBuilder,
@@ -76,6 +83,7 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
       TableNames.RESERVATION,
       this.tabFilterItems
     );
+    this.entityId = this.globalFilterService.entityId;
   }
 
   registerListeners(): void {

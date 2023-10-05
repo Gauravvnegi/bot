@@ -1,31 +1,31 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
+import { ROUTES, RouterModule } from '@angular/router';
+import { SubscriptionPlanService } from '@hospitality-bot/admin/core/theme';
 import {
   CRoutes,
   ModuleNames,
   routesFactory,
 } from '@hospitality-bot/admin/shared';
-import { ROUTES, Router, RouterModule } from '@angular/router';
-import { ComplaintTrackerComponent } from './component/complaint-tracker/complaint-tracker.component';
-import { SubscriptionPlanService } from '@hospitality-bot/admin/core/theme';
+import { MainComponent } from './component/main/main.component';
 
 const appRoutes: CRoutes = [
   {
     path: '',
-    component: ComplaintTrackerComponent,
-    name: ModuleNames.COMPLAINT_HOME,
+    component: MainComponent,
+    name: ModuleNames.BOOKING_ENGINE,
     children: [
       {
-        path: 'complaint-analytics',
-        name: ModuleNames.COMPLAINT_DASHBOARD,
+        path: 'room',
+        name: ModuleNames.ROOM,
         loadChildren: () =>
           import('@hospitality-bot/admin/request-analytics').then(
             (m) => m.AdminRequestAnalyticsModule
           ),
       },
       {
-        path: 'complaint',
-        name: ModuleNames.COMPLAINTS,
+        path: 'reservation',
+        name: ModuleNames.ADD_RESERVATION,
         loadChildren: () =>
           import('@hospitality-bot/admin/request').then(
             (m) => m.AdminRequestModule
@@ -46,6 +46,6 @@ const appRoutes: CRoutes = [
       deps: [SubscriptionPlanService],
     },
   ],
-  declarations: [ComplaintTrackerComponent],
+  declarations: [MainComponent],
 })
-export class AdminComplaintTackerModule {}
+export class AdminBookingEngineModule {}

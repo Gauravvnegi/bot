@@ -3,7 +3,7 @@ import { ButtonVariant, InputType, Option } from './form.type';
 export type IteratorField = {
   label?: string;
   name: string;
-  type: 'input' | 'select' | 'multi-select' | 'auto-complete';
+  type: 'input' | 'select' | 'multi-select' | 'auto-complete' | 'quick-select';
   options?: Option[];
   required?: boolean;
   disabled?: boolean;

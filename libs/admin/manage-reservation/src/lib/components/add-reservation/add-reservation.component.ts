@@ -73,26 +73,6 @@ export class AddReservationComponent extends BaseReservationComponent
     // this.listenRouteData();
   }
 
-  // listenRouteData() {
-  //   this.activatedRoute.queryParams
-  //     .pipe(debounceTime(100))
-  //     .subscribe((queryParams) => {
-  //       if (queryParams.data) {
-  //         const data = queryParams.data;
-  //         const paramsData = JSON.parse(atob(data));
-  //         this.initParamsData(paramsData);
-  //       }
-  //     });
-  // }
-
-  initParamsData(paramsData: CalendarViewData) {
-    this.inputControls.reservationInformation.patchValue({
-      from: paramsData.date,
-      reservationType: ReservationType.CONFIRMED,
-    });
-    this.paramsData = paramsData;
-  }
-
   initDetails() {
     this.listenFormServiceChanges();
     this.reservationTypes = roomReservationTypes;
@@ -138,7 +118,7 @@ export class AddReservationComponent extends BaseReservationComponent
     this.formValueChanges = true;
     this.inputControls.roomInformation
       .get('roomTypes')
-      .valueChanges.pipe(debounceTime(100))
+      .valueChanges.pipe(debounceTime(300))
       .subscribe((res) => {
         const data = this.inputControls.roomInformation.get(
           'roomTypes'

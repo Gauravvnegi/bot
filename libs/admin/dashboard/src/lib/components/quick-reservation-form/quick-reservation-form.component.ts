@@ -403,31 +403,31 @@ export class QuickReservationFormComponent implements OnInit {
   }
 
   createGuest() {
-    // const lazyModulePromise = import(
-    //   'libs/admin/guests/src/lib/admin-guests.module'
-    // )
-    //   .then((module) => {
-    //     return this.compiler.compileModuleAsync(module.AdminGuestsModule);
-    //   })
+    const lazyModulePromise = import(
+      'libs/admin/guests/src/lib/admin-guests.module'
+    )
+      .then((module) => {
+        return this.compiler.compileModuleAsync(module.AdminGuestsModule);
+      })
 
-    //   .catch((error) => {
-    //     console.error('Error loading the lazy module:', error);
-    //   });
+      .catch((error) => {
+        console.error('Error loading the lazy module:', error);
+      });
 
-    // lazyModulePromise.then((moduleFactory) => {
-    //   this.sidebarVisible = true;
-    //   const factory = this.resolver.resolveComponentFactory(AddGuestComponent);
-    //   this.sidebarSlide.clear();
-    //   const componentRef = this.sidebarSlide.createComponent(factory);
-    //   componentRef.instance.isSideBar = true;
-    //   componentRef.instance.onClose.subscribe((res) => {
-    //     this.sidebarVisible = false;
-    //     componentRef.destroy();
-    //   });
-    // });
-    this.router.navigateByUrl(
-      `/pages/members/guests/${manageGuestRoutes.addGuest.route}`
-    );
+    lazyModulePromise.then((moduleFactory) => {
+      this.sidebarVisible = true;
+      const factory = this.resolver.resolveComponentFactory(AddGuestComponent);
+      this.sidebarSlide.clear();
+      const componentRef = this.sidebarSlide.createComponent(factory);
+      componentRef.instance.isSideBar = true;
+      componentRef.instance.onClose.subscribe((res) => {
+        this.sidebarVisible = false;
+        componentRef.destroy();
+      });
+    });
+    // this.router.navigateByUrl(
+    //   `/pages/members/guests/${manageGuestRoutes.addGuest.route}`
+    // );
   }
 
   updateReservation(data: any): void {

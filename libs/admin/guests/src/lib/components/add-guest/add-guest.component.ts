@@ -165,7 +165,10 @@ export class AddGuestComponent implements OnInit {
       componentRef.instance.isSideBar = true;
       componentRef.instance.onClose.subscribe((res) => {
         if (typeof res !== 'boolean') {
-          this.selectedMember = { label: res.id, value: res.companyName };
+          this.selectedMember = {
+            label: res.companyName,
+            value: res.id,
+          };
         }
         this.sidebarVisible = false;
         componentRef.destroy();

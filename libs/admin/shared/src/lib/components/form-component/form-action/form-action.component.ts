@@ -7,6 +7,8 @@ import {
   OnInit,
   Output,
 } from '@angular/core';
+import { ButtonVariant } from '../../../types/form.type';
+import { ButtonSeverity } from '../../button/button.component';
 
 @Component({
   selector: 'hospitality-bot-form-action',
@@ -108,8 +110,10 @@ export class FormActionComponent implements OnInit {
 export type FormActionConfig = {
   preLabel: string;
   postLabel: string;
-  preVariant: string;
-  postVariant: string;
+  preVariant: ButtonVariant;
+  postVariant: ButtonVariant;
+  postSeverity: ButtonSeverity;
+  preSeverity: ButtonSeverity;
   PreLabelWithId: string;
   postLabelWithId: string;
   isSticky: boolean;

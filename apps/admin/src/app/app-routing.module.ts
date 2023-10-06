@@ -35,11 +35,11 @@ const appRoutes: Route[] = [
       },
     ],
   },
-  {
-    path: 'pages',
-    loadChildren: () =>
-      import('./core/pages/pages.module').then((m) => m.PagesModule),
-  },
+  // {
+  //   path: 'pages',
+  //   loadChildren: () =>
+  //     import('./core/pages/pages.module').then((m) => m.PagesModule),
+  // },
   {
     path: 'dashboard',
     loadChildren: () =>
@@ -49,8 +49,8 @@ const appRoutes: Route[] = [
   },
   {
     path: '',
-    redirectTo: 'pages',
-    pathMatch: 'full',
+    loadChildren: () =>
+      import('./core/pages/pages.module').then((m) => m.PagesModule),
   },
 ];
 

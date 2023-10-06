@@ -10,8 +10,20 @@ import { RedirectGuard } from '../guards/redirect-guard';
 import { PagesComponent } from './containers/pages/pages.component';
 import { TemporaryRedirectPageComponent } from './containers/trp/temporary-redirect-page/temporary-redirect-page.component';
 import { AdminDetailResolver } from './resolvers/admin-detail.resolver';
+import { MainComponent } from './containers/main/main.component';
 
 const appRoutes: Route[] = [
+  {
+    path: 'pages',
+    component: MainComponent,
+    children: [
+      {
+        path: 'trp',
+        component: TemporaryRedirectPageComponent,
+        pathMatch: 'full',
+      },
+    ],
+  },
   {
     path: 'trp',
     component: TemporaryRedirectPageComponent,
@@ -23,6 +35,7 @@ const appRoutes: Route[] = [
     resolve: {
       adminDetails: AdminDetailResolver,
     },
+
     canLoad: [CanLoadGuard],
     children: [
       {
@@ -200,10 +213,24 @@ const appRoutes: Route[] = [
         canLoad: [CanLoadGuard],
         canActivate: [RedirectGuard],
       },
+      // {
+      //   path: '',
+      //   redirectTo: 'redirect',
+      //   pathMatch: 'full',
+      // },
       {
         path: '',
-        redirectTo: 'redirect',
-        pathMatch: 'full',
+        loadChildren: () =>
+          import('../product/product.module').then((m) => m.ProductModule),
+        canLoad: [CanLoadGuard],
+        canActivate: [CanActivateGuard],
+      },
+      {
+        path: 'product',
+        loadChildren: () =>
+          import('../product/product.module').then((m) => m.ProductModule),
+        canLoad: [CanLoadGuard],
+        canActivate: [CanActivateGuard],
       },
       { path: '**', redirectTo: '404' },
       { path: '404', component: DashboardErrorComponent },
@@ -214,12 +241,12 @@ const appRoutes: Route[] = [
 /**
  * To view all the shared components for development
  */
-if (!environment.production) {
-  appRoutes[1].children.unshift({
-    path: 'components',
-    component: ViewSharedComponentsComponent,
-  });
-}
+// if (!environment.production) {
+//   appRoutes[1].children.unshift({
+//     path: 'components',
+//     component: ViewSharedComponentsComponent,
+//   });
+// }
 
 @NgModule({
   imports: [RouterModule.forChild(appRoutes)],

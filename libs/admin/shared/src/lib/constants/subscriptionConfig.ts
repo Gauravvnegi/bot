@@ -1,3 +1,29 @@
+export enum ProductNames {
+  CREATE_WITH = 'CREATE_WITH',
+  FRONT_DESK = 'FRONT_DESK',
+  FREDDIE = 'FREDDIE',
+  HEDA = 'HEDA',
+  eMARK_IT = 'eMARK_IT',
+  REV_MAXI = 'REV_MAXI', // Product
+  COMPLAINT_TRACKER = 'COMPLAINT_TRACKER',
+  CHANNEL_MANAGER = 'CHANNEL_MANAGER', // Product
+  PREDICTO_PMS = 'PREDICTO_PMS',
+}
+
+export enum RouteModulesName {
+  // create With
+
+  // front deskModule
+  FRONT_DESK_DASHBOARD = 'FRONT_DESK_DASHBOARD',
+
+  ADD_RESERVATION = 'ADD_RESERVATION',
+  HOUSEKEEPING = 'HOUSEKEEPING',
+
+  // freddie
+  CONVERSATION_DASHBOARD = 'CONVERSATION_DASHBOARD',
+  LIVE_MESSAGING = 'LIVE_MESSAGING',
+}
+
 export enum ModuleNames {
   //Dashboard
   Home = 'HOME',

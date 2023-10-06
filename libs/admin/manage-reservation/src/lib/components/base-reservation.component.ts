@@ -88,7 +88,8 @@ export class BaseReservationComponent {
           : this.reservationInfoControls.status;
       switch (true) {
         case this.bookingType !== EntitySubType.ROOM_TYPE ||
-          reservationType.value === ReservationType.CANCELED:
+          reservationType.value === ReservationType.CANCELED ||
+          journeyState === JourneyState.COMPLETED:
           this.userForm.disable();
           this.disabledForm = true;
           this.formService.disableBtn = true;
@@ -118,7 +119,7 @@ export class BaseReservationComponent {
           this.paymentControls[controlName].enable();
         }
       }
-      reservationType.enable();
+      // reservationType.enable();
     }
   }
 
@@ -134,9 +135,9 @@ export class BaseReservationComponent {
     this.paymentControls.totalPaidAmount.updateValueAndValidity();
 
     // Needs to be changed according to api.
-    this.paymentRuleControls.deductedAmount.patchValue(
-      this.summaryData?.totalAmount
-    );
+    // this.paymentRuleControls.deductedAmount.patchValue(
+    //   this.summaryData?.totalAmount
+    // );
   }
 
   get reservationInfoControls() {
@@ -161,10 +162,10 @@ export class BaseReservationComponent {
     >;
   }
 
-  get paymentRuleControls() {
-    return (this.userForm.get('paymentRule') as FormGroup).controls as Record<
-      keyof ReservationForm['paymentRule'],
-      AbstractControl
-    >;
-  }
+  // get paymentRuleControls() {
+  //   return (this.userForm.get('paymentRule') as FormGroup).controls as Record<
+  //     keyof ReservationForm['paymentRule'],
+  //     AbstractControl
+  //   >;
+  // }
 }

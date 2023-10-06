@@ -133,6 +133,7 @@ export class RoomIteratorComponent extends IteratorComponent
       roomTypeId: ['', [Validators.required]],
       ratePlan: [{ value: '', disabled: true }],
       roomCount: ['', [Validators.required, Validators.min(1)]],
+      roomNumber: [''],
       roomNumbers: [{ value: [], disabled: true }],
       adultCount: ['', [Validators.required, Validators.min(1)]],
       childCount: ['', [Validators.min(0)]],
@@ -162,6 +163,7 @@ export class RoomIteratorComponent extends IteratorComponent
     this.itemValuesCount = itemValues.length;
     itemValues.forEach((value, index) => {
       // Check if the room type option is present
+      this.selectedRoomNumbers = value.roomNumbers;
       if (
         this.roomTypes.findIndex((item) => item.value === value.roomTypeId) ===
         -1
@@ -176,7 +178,6 @@ export class RoomIteratorComponent extends IteratorComponent
           id: value?.id,
         });
       }
-
       // Patch room details in the form array
       this.roomControls[index].patchValue({
         roomTypeId: value.roomTypeId,
@@ -187,7 +188,6 @@ export class RoomIteratorComponent extends IteratorComponent
         roomNumbers: value?.roomNumbers,
         id: value?.id,
       });
-      this.selectedRoomNumbers = value.roomNumbers;
     });
   }
 
@@ -255,10 +255,10 @@ export class RoomIteratorComponent extends IteratorComponent
     this.formService.getRooms({
       entityId: this.entityId,
       config: config,
-      type: 'array',
       roomControl: this.roomControls[index].get('roomNumbers'),
       roomNumbersControl: this.roomControls[index].get('roomNumberOptions'),
       defaultRoomNumbers: this.selectedRoomNumbers,
+      type: 'array',
     });
     this.fields[3].loading[index] = false;
   }
@@ -386,6 +386,8 @@ export class RoomIteratorComponent extends IteratorComponent
         offset: this.roomTypeOffSet,
         limit: this.roomTypeLimit,
         createBooking: true,
+        raw: true,
+        roomTypeStatus: true,
       },
     ];
 

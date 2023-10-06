@@ -1,0 +1,32 @@
+<div class="wrapper" [id]="fa?.referenceId">
+  <!-- header -->
+  <ng-container *ngTemplateOutlet="sidebarHeader"></ng-container>
+  <!-- content -->
+  <div class="content"></div>
+  <!-- Action Button -->
+  <hospitality-bot-form-action
+    class="full-width"
+    [loading]="loading"
+    [disabled]="loading"
+    [config]="{
+      preHide: true,
+      postLabel: 'Save'
+    }"
+    (onPostAction)="handleSave()"
+    #fa
+  >
+  </hospitality-bot-form-action>
+</div>
+
+<ng-template #sidebarHeader>
+  <div class="sidebar-slide-header">
+    <span class="title">{{ pageTitle }}</span>
+    <span class="center-item">
+      <img src="assets/svg/calendar-dark.svg" alt="date" class="white-icon" />
+      {{ currentDate | date: 'dd/MM/yyyy' }}</span
+    >
+    <span class="close-icon" (click)="close()">
+      <i class="pi pi-arrow-right" aria-hidden="true"></i>
+    </span>
+  </div>
+</ng-template>

@@ -1,0 +1,6 @@
+@import 'main';
+:host ::ng-deep {
+  .p-sidebar-close {
+    display: none;
+  }
+}

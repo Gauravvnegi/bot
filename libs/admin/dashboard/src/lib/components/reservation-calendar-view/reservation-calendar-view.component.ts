@@ -65,8 +65,6 @@ export class ReservationCalendarViewComponent implements OnInit {
     private globalFilterService: GlobalFilterService,
     private roomService: RoomService,
     private adminUtilityService: AdminUtilityService,
-    private formService: FormService,
-    private router: Router
   ) {}
 
   ngOnInit(): void {

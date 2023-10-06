@@ -1,11 +1,12 @@
 import { IteratorField } from 'libs/admin/shared/src/lib/types/fields.type';
 import { ReservationRatePlan } from 'libs/admin/room/src/lib/constant/form';
+import { Option } from '@hospitality-bot/admin/shared';
 
 export const roomFields: IteratorField[] = [
   {
     label: 'Room Type',
     name: 'roomTypeId',
-    type: 'select',
+    type: 'quick-select',
     options: [],
     required: true,
     placeholder: 'Select',
@@ -63,6 +64,7 @@ export type RoomFieldTypeOption = {
   maxChildren: number;
   maxAdult: number;
   id?: string;
+  rooms?: Option[];
 };
 
 export const Reservation = {

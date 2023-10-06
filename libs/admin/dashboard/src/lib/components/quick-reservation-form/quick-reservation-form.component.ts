@@ -75,6 +75,8 @@ export class QuickReservationFormComponent implements OnInit {
   @ViewChild('sidebarSlide', { read: ViewContainerRef })
   sidebarSlide: ViewContainerRef;
 
+  errorMessage: string;
+
   @Output() onCloseSidebar = new EventEmitter<boolean>();
   @Input() set reservationConfig(value: QuickReservationConfig) {
     for (const key in value) {
@@ -394,6 +396,7 @@ export class QuickReservationFormComponent implements OnInit {
           },
           (error) => {
             this.isBooking = false;
+            this.errorMessage = error.error.message;
           },
           () => {
             this.isBooking = false;
@@ -441,6 +444,7 @@ export class QuickReservationFormComponent implements OnInit {
           },
           (error) => {
             this.isBooking = false;
+            this.errorMessage = error.error.message;
           },
           () => {
             this.isBooking = false;

@@ -20,6 +20,5 @@ import { AuditSummaryComponent } from './components/night-audit/components/audit
     AuditSummaryComponent,
   ],
   exports: [EntityTabFilterComponent],
-  providers: [NightAuditService],
 })
 export class GlobalSharedModule {}

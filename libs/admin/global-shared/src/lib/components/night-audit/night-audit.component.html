@@ -2,17 +2,36 @@
   <!-- header -->
   <ng-container *ngTemplateOutlet="sidebarHeader"></ng-container>
   <!-- content -->
-  <div class="content"></div>
+  <div class="content">
+    <hospitality-bot-stepper
+      [stepList]="itemList"
+      [readOnly]="true"
+      [activeIndex]="activeStep"
+      (onActive)="onActive($event)"
+    ></hospitality-bot-stepper>
+    <ng-container [ngSwitch]="activeStep">
+      <hospitality-bot-manage-login-users
+        *ngSwitchCase="0"
+      ></hospitality-bot-manage-login-users>
+      <hospitality-bot-checkin-reservations
+        *ngSwitchCase="1"
+      ></hospitality-bot-checkin-reservations>
+      <hospitality-bot-checkout-reservations
+        *ngSwitchCase="2"
+      ></hospitality-bot-checkout-reservations>
+      <hospitality-bot-audit-summary
+        *ngSwitchCase="3"
+      ></hospitality-bot-audit-summary>
+    </ng-container>
+  </div>
   <!-- Action Button -->
   <hospitality-bot-form-action
-    class="full-width"
+    class="full-width action-button"
     [loading]="loading"
     [disabled]="loading"
-    [config]="{
-      preHide: true,
-      postLabel: 'Save'
-    }"
-    (onPostAction)="handleSave()"
+    [config]="actionConfig"
+    (onPostAction)="handleNext()"
+    (onPreAction)="handlePrev()"
     #fa
   >
   </hospitality-bot-form-action>

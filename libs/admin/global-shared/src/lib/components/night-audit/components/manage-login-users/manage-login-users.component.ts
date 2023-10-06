@@ -1,15 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'manage-login-users',
+  selector: 'hospitality-bot-manage-login-users',
   templateUrl: './manage-login-users.component.html',
-  styleUrls: ['./manage-login-users.component.css']
+  styleUrls: ['./manage-login-users.component.scss'],
 })
 export class ManageLoginUsersComponent implements OnInit {
+  constructor() {}
 
-  constructor() { }
-
-  ngOnInit(): void {
-  }
-
+  ngOnInit(): void {}
 }

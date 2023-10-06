@@ -1,15 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'audit-summary',
+  selector: 'hospitality-bot-audit-summary',
   templateUrl: './audit-summary.component.html',
-  styleUrls: ['./audit-summary.component.css']
+  styleUrls: ['./audit-summary.component.scss'],
 })
 export class AuditSummaryComponent implements OnInit {
+  constructor() {}
 
-  constructor() { }
-
-  ngOnInit(): void {
-  }
-
+  ngOnInit(): void {}
 }

@@ -1,15 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'checkout-reservations',
+  selector: 'hospitality-bot-checkout-reservations',
   templateUrl: './checkout-reservations.component.html',
-  styleUrls: ['./checkout-reservations.component.css']
+  styleUrls: ['./checkout-reservations.component.scss'],
 })
 export class CheckoutReservationsComponent implements OnInit {
+  constructor() {}
 
-  constructor() { }
-
-  ngOnInit(): void {
-  }
-
+  ngOnInit(): void {}
 }

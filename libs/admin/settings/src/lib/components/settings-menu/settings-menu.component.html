@@ -1,5 +1,5 @@
 <div class="wrapper">
-  <div class="heading">
+  <div *ngIf="!isSideBar; else sidebarHeader">
     <div class="header">
       Settings
     </div>
@@ -38,3 +38,12 @@
     </ng-container>
   </div>
 </div>
+
+<ng-template #sidebarHeader>
+  <div class="sidebar-slide-header">
+    <span class="title">Settings</span>
+    <span class="close-icon" (click)="close()">
+      <i class="pi pi-arrow-right" aria-hidden="true"></i>
+    </span>
+  </div>
+</ng-template>

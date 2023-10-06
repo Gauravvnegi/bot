@@ -7,6 +7,7 @@ import {
   ComponentFactoryResolver,
   ViewContainerRef,
   ViewChild,
+  Compiler,
 } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -29,12 +30,8 @@ import { NavigationEnd } from '@angular/router';
 import { MenuItem } from 'primeng/api';
 import { manageReservationRoutes } from 'libs/admin/manage-reservation/src/lib/constants/routes';
 import { RaiseRequestComponent } from 'libs/admin/request/src/lib/components/raise-request/raise-request.component';
-import {
-  navRoute,
-  manageGuestRoutes,
-} from 'libs/admin/guests/src/lib/constant/route';
-import { SettingsMenuComponent } from '../../../../../../../../../../../libs/admin/settings/src/lib/components/settings-menu/settings-menu.component';
-import { convertToTitleCase } from 'libs/admin/shared/src/lib/utils/valueFormatter';
+import { AddGuestComponent } from 'libs/admin/guests/src/lib/components/add-guest/add-guest.component';
+import { SettingsMenuComponent } from 'libs/admin/settings/src/lib/components/settings-menu/settings-menu.component';
 
 @Component({
   selector: 'admin-layout-one',
@@ -93,7 +90,8 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
   sidebarVisible: boolean;
   @ViewChild('sidebarSlide', { read: ViewContainerRef })
   sidebarSlide: ViewContainerRef;
-  sidebarType: 'complaint' | 'settings' = 'complaint';
+  sidebarType: 'complaint' | 'settings' | 'guest-sidebar' = 'complaint';
+  propertyList: any[];
 
   constructor(
     private _router: Router,
@@ -110,7 +108,8 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
     private notificationService: NotificationService,
     private configService: ConfigService,
     private hotelDetailService: HotelDetailService,
-    private resolver: ComponentFactoryResolver
+    private resolver: ComponentFactoryResolver,
+    private compiler: Compiler
   ) {
     this.initFG();
   }
@@ -395,15 +394,15 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
   }
 
   initBookingOption() {
-    const propertyList = this.hotelDetailService.getPropertyList();
+    this.propertyList = this.hotelDetailService.getPropertyList();
     this.bookingOptions = [
       this.isAddReservationSubscribed
         ? {
             label: 'New Booking',
             icon: 'pi pi-calendar',
-            ...(!!propertyList.length
+            ...(!!this.propertyList.length
               ? {
-                  items: propertyList.map((item) => ({
+                  items: this.propertyList.map((item) => ({
                     label: item.label,
                     command: () => {
                       this.openNewWindow(
@@ -422,10 +421,9 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
         ? {
             label: 'New Guest',
             icon: 'pi pi-user-plus',
-            command: () =>
-              this.openNewWindow(
-                `${navRoute.guest.link}/${manageGuestRoutes.addGuest.route}`
-              ),
+            command: () => {
+              this.showAddGuest();
+            },
           }
         : null,
       this.isComplaintTrackerSubscribed
@@ -443,6 +441,7 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
               componentRef.instance.isSideBar = true;
               componentRef.instance.onRaiseRequestClose.subscribe((res) => {
                 this.sidebarVisible = false;
+                componentRef.destroy();
               });
             },
           }
@@ -450,8 +449,39 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
     ].filter((item) => item);
   }
 
+  showAddGuest() {
+    const lazyModulePromise = import(
+      'libs/admin/guests/src/lib/admin-guests.module'
+    )
+      .then((module) => {
+        return this.compiler.compileModuleAsync(module.AdminGuestsModule);
+      })
+      .catch((error) => {
+        console.error('Error loading the lazy module:', error);
+      });
+
+    lazyModulePromise.then((moduleFactory) => {
+      this.sidebarVisible = true;
+      this.sidebarType = 'guest-sidebar';
+      const factory = this.resolver.resolveComponentFactory(AddGuestComponent);
+      this.sidebarSlide.clear();
+      const componentRef = this.sidebarSlide.createComponent(factory);
+      componentRef.instance.isSideBar = true;
+      componentRef.instance.onClose.subscribe((res) => {
+        this.sidebarVisible = false;
+        componentRef.destroy();
+      });
+    });
+  }
+
   openNewWindow(url: string) {
     window.open(url);
+  }
+
+  get quickDropdownLink() {
+    return `/pages/efrontdesk/reservation/${
+      manageReservationRoutes.addReservation.route
+    }${this.propertyList[0] ? '?entityId=' + this.propertyList[0].value : ''}`;
   }
 
   get isSettingAvailable() {
@@ -473,9 +503,7 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
   }
 
   checkModuleSubscription(module) {
-    return this.subscriptionPlanService.checkModuleSubscription(
-      ModuleNames.MEMBERS
-    );
+    return this.subscriptionPlanService.checkModuleSubscription(module);
   }
 
   ngOnDestroy() {

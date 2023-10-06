@@ -8,7 +8,7 @@ import {
 } from '../types/guest.type';
 import { QueryConfig } from '@hospitality-bot/admin/shared';
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class GuestTableService extends ApiService {
   getGuestList(config: QueryConfig): Observable<GuestListResponse> {
     return this.get(`/api/v1/members${config.params}`);

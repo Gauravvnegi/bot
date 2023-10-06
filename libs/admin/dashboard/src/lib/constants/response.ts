@@ -1,5 +1,9 @@
 import { FlagType } from '@hospitality-bot/admin/shared';
 import { ReservationTab, ReservationType } from '../types/response.type';
+import {
+  JourneyType,
+  JourneyState,
+} from 'libs/admin/manage-reservation/src/lib/constants/reservation';
 
 export const reservationStatus: Record<
   ReservationType | ReservationTab,
@@ -94,6 +98,15 @@ export const campaignStatus: Record<
   },
 };
 
-export function getColorCode(jouryneyStatus: string) {
-  if (jouryneyStatus) return campaignStatus[jouryneyStatus].type;
+export function getColorCode(
+  jouryneyStatus: Record<JourneyType, JourneyState>
+) {
+  if (jouryneyStatus) {
+    if (jouryneyStatus.CHECKOUT === JourneyState.COMPLETED) return 'inactive';
+    else if (jouryneyStatus.CHECKIN === JourneyState.COMPLETED) return 'active';
+    else if (jouryneyStatus.PRECHECKIN === JourneyState.COMPLETED)
+      return 'success';
+    else if (jouryneyStatus.NEW === JourneyState.COMPLETED) return 'success';
+    else return 'success';
+  }
 }

@@ -1,6 +1,7 @@
 {
   "extends": "../../../tsconfig.json",
   "compilerOptions": {
+    "module": "esnext",
     "experimentalDecorators": true,
     "target": "es2015",
     "types": ["node", "jest"],

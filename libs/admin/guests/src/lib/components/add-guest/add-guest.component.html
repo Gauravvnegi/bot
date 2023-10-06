@@ -1,10 +1,11 @@
 <div class="wrapper" [id]="fa.referenceId">
   <hospitality-bot-navigation-header
+    *ngIf="!isSideBar; else sidebarHeader"
     [heading]="pageTitle"
     [routes]="navRoutes"
   ></hospitality-bot-navigation-header>
 
-  <div class="form-block" [formGroup]="guestForm">
+  <div class="form-block body" [formGroup]="guestForm">
     <hospitality-bot-input
       class="half-width"
       controlName="firstName"
@@ -70,7 +71,8 @@
       controlName="company"
       type="COMPANY"
       label="Company Name"
-      (createCompany)="createNewCompany()"
+      [defaultMember]="selectedMember"
+      (createMembers)="createNewCompany()"
     ></hospitality-bot-members-list>
     <hospitality-bot-date
       class="half-width"
@@ -102,17 +104,36 @@
         placeholder: 'Select'
       }"
     ></hospitality-bot-select>
-    <hospitality-bot-form-action
-      class="full-width"
-      [loading]="loading"
-      [isId]="guestId"
-      (onPreAction)="resetForm()"
-      (onPostAction)="handleSubmit()"
-      [config]="{
-        type: 'non-sticky'
-      }"
-      #fa
-    >
-    </hospitality-bot-form-action>
   </div>
 </div>
+
+<p-sidebar
+  class="sidebar-slide"
+  [ngClass]="'guest-sidebar'"
+  [(visible)]="sidebarVisible"
+  position="right"
+>
+  <ng-container #sidebarSlide></ng-container>
+</p-sidebar>
+
+<ng-template #sidebarHeader>
+  <div class="sidebar-slide-header">
+    <span class="title">{{ pageTitle }}</span>
+    <span class="close-icon" (click)="closeSidebar()">
+      <i class="pi pi-arrow-right" aria-hidden="true"></i>
+    </span>
+  </div>
+</ng-template>
+
+<hospitality-bot-form-action
+  class="full-width"
+  [loading]="loading"
+  [isId]="guestId"
+  (onPreAction)="resetForm()"
+  (onPostAction)="handleSubmit()"
+  [config]="{
+    type: 'non-sticky'
+  }"
+  #fa
+>
+</hospitality-bot-form-action>

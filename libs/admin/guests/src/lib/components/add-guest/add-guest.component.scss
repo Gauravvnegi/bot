@@ -8,3 +8,13 @@
   left: 0 !important;
   box-shadow: 1px 7px 7px #b5b5b5 !important;
 }
+
+:host ::ng-deep {
+  .guest-sidebar .body {
+    height: unset !important;
+  }
+
+  .form-block {
+    box-shadow: unset;
+  }
+}

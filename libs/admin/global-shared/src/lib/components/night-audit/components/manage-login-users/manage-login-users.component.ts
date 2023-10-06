@@ -7,9 +7,9 @@ import { cols, title, usersList } from '../../constants/manage-login.table';
   styleUrls: ['./manage-login-users.component.scss'],
 })
 export class ManageLoginUsersComponent implements OnInit {
-  columns = cols;
+  cols = cols;
   title = title;
-  usersList = usersList;
+  users = usersList;
   constructor() {}
 
   ngOnInit(): void {}

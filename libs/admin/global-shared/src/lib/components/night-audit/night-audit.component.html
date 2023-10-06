@@ -1,8 +1,8 @@
-<div class="wrapper" [id]="fa?.referenceId">
+<div class="audit-wrapper" [id]="fa?.referenceId">
   <!-- header -->
-  <ng-container *ngTemplateOutlet="sidebarHeader"></ng-container>
+  <ng-template *ngTemplateOutlet="sidebarHeader"></ng-template>
   <!-- content -->
-  <div class="content">
+  <div class="audit-content_wrapper">
     <hospitality-bot-stepper
       [stepList]="itemList"
       [readOnly]="true"
@@ -11,15 +11,19 @@
     ></hospitality-bot-stepper>
     <ng-container [ngSwitch]="activeStep">
       <hospitality-bot-manage-login-users
+        class="audit-content"
         *ngSwitchCase="0"
       ></hospitality-bot-manage-login-users>
       <hospitality-bot-checkin-reservations
+        class="audit-content"
         *ngSwitchCase="1"
       ></hospitality-bot-checkin-reservations>
       <hospitality-bot-checkout-reservations
+        class="audit-content"
         *ngSwitchCase="2"
       ></hospitality-bot-checkout-reservations>
       <hospitality-bot-audit-summary
+        class="audit-content"
         *ngSwitchCase="3"
       ></hospitality-bot-audit-summary>
     </ng-container>

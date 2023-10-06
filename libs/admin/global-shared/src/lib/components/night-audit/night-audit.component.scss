@@ -1,5 +1,5 @@
 @import 'main';
-:host ::ng-deep {
+:host ::ng-deep .audit-wrapper {
   .p-sidebar-close {
     display: none;
   }
@@ -36,5 +36,9 @@
 
   .p-steps .p-steps-item.p-highlight .p-steps-number {
     background-color: $primary-cta;
+  }
+
+  .main__wrapper {
+    padding: 0 40px;
   }
 }

@@ -10,10 +10,13 @@
       (onActive)="onActive($event)"
     ></hospitality-bot-stepper>
     <ng-container [ngSwitch]="activeStep">
-      <hospitality-bot-manage-login-users
+      <!-- <hospitality-bot-manage-login-users
         class="audit-content"
         *ngSwitchCase="0"
-      ></hospitality-bot-manage-login-users>
+      ></hospitality-bot-manage-login-users> -->
+      <div class="audit-content">
+        manage login users working..
+      </div>
       <hospitality-bot-checkin-reservations
         class="audit-content"
         *ngSwitchCase="1"

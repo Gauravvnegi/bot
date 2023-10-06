@@ -473,6 +473,13 @@
       max-height: 130px !important;
     }
   }
+
+  .night-audit {
+    @include default-close;
+    .p-sidebar-right {
+      @include sidebar-design(50rem);
+    }
+  }
 }
 
 .selected-product {

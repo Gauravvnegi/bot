@@ -477,15 +477,29 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
   }
 
   openNightAudit() {
-    this.sidebarVisible = true;
-    this.sidebarType = 'night-audit';
-    const factory = this.resolver.resolveComponentFactory(NightAuditComponent);
-    this.sidebarSlide.clear();
-    const componentRef = this.sidebarSlide.createComponent(factory);
-    componentRef.instance.isSidebar = true;
-    componentRef.instance.onClose.subscribe((res) => {
-      this.sidebarVisible = false;
-      componentRef.destroy();
+    const lazyModulePromise = import(
+      'libs/admin/global-shared/src/lib/admin-global-shared.module'
+    )
+      .then((module) => {
+        return this.compiler.compileModuleAsync(module.GlobalSharedModule);
+      })
+      .catch((error) => {
+        console.error('Error loading the lazy module:', error);
+      });
+
+    lazyModulePromise.then((moduleFactory) => {
+      this.sidebarVisible = true;
+      this.sidebarType = 'night-audit';
+      const factory = this.resolver.resolveComponentFactory(
+        NightAuditComponent
+      );
+      this.sidebarSlide.clear();
+      const componentRef = this.sidebarSlide.createComponent(factory);
+      componentRef.instance.isSidebar = true;
+      componentRef.instance.onClose.subscribe((res) => {
+        this.sidebarVisible = false;
+        componentRef.destroy();
+      });
     });
   }
 

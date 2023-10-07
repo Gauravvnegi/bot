@@ -24,52 +24,66 @@ export const title = 'Logged-in Users';
 // Dummy Data
 export const usersList = [
   {
-    nama: 'John Doe',
-    phoneNumber: '1234567890',
-    email: 'john.doe@example.com',
+    name: 'John Doe',
     department: 'IT',
+    contact: {
+      phoneNumber: '1234567890',
+      email: 'john.doe@example.com',
+    },
     jobTitle: 'Software Engineer',
   },
   {
-    nama: 'Jane Smith',
-    phoneNumber: '9876543210',
-    email: 'jane.smith@example.com',
+    name: 'Jane Smith',
     department: 'HR',
     jobTitle: 'HR Manager',
+    contact: {
+      phoneNumber: '9876543210',
+      email: 'jane.smith@example.com',
+    },
   },
   {
-    nama: 'Michael Johnson',
-    phoneNumber: '5555555555',
-    email: 'michael.johnson@example.com',
+    name: 'Michael Johnson',
     department: 'Finance',
     jobTitle: 'Financial Analyst',
+    contact: {
+      phoneNumber: '5555555555',
+      email: 'michael.johnson@example.com',
+    },
   },
   {
-    nama: 'Sarah Davis',
-    phoneNumber: '4444444444',
-    email: 'sarah.davis@example.com',
+    name: 'Sarah Davis',
+    contact: {
+      phoneNumber: '4444444444',
+      email: 'sarah.davis@example.com',
+    },
     department: 'Marketing',
     jobTitle: 'Marketing Specialist',
   },
   {
-    nama: 'Ryan Wilson',
-    phoneNumber: '3333333333',
-    email: 'ryan.wilson@example.com',
+    name: 'Ryan Wilson',
+    contact: {
+      phoneNumber: '3333333333',
+      email: 'ryan.wilson@example.com',
+    },
     department: 'Sales',
     jobTitle: 'Sales Representative',
   },
   {
-    nama: 'Amanda Brown',
-    phoneNumber: '2222222222',
-    email: 'amanda.brown@example.com',
+    name: 'Amanda Brown',
     department: 'Operations',
     jobTitle: 'Operations Manager',
+    contact: {
+      phoneNumber: '2222222222',
+      email: 'amanda.brown@example.com',
+    },
   },
   {
-    nama: 'Emily Miller',
-    phoneNumber: '1111111111',
-    email: 'emily.miller@example.com',
+    name: 'Emily Miller',
     department: 'HR',
     jobTitle: 'HR Coordinator',
+    contact: {
+      phoneNumber: '1111111111',
+      email: 'emily.miller@example.com',
+    },
   },
 ];

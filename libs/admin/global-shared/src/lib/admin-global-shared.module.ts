@@ -7,6 +7,7 @@ import { CheckinReservationsComponent } from './components/night-audit/component
 import { CheckoutReservationsComponent } from './components/night-audit/components/checkout-reservations/checkout-reservations.component';
 import { AuditSummaryComponent } from './components/night-audit/components/audit-summary/audit-summary.component';
 import { ManageLoggedUsersComponent } from './components/night-audit/components/manage-logged-users/manage-logged-users.component';
+import { TableViewComponent } from './components/table-view/table-view.component';
 
 @NgModule({
   imports: [CommonModule, AdminSharedModule],
@@ -17,6 +18,7 @@ import { ManageLoggedUsersComponent } from './components/night-audit/components/
     CheckoutReservationsComponent,
     AuditSummaryComponent,
     ManageLoggedUsersComponent,
+    TableViewComponent,
   ],
   exports: [EntityTabFilterComponent],
 })

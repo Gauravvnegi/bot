@@ -1,0 +1,63 @@
+<div class="table-view__wrapper">
+  <div class="header">{{ header || '' }}</div>
+  <div class="content">
+    <p-table
+      [value]="items"
+      responsiveLayout="scroll"
+      *ngIf="items?.length; else emptyTable"
+    >
+      <!-- ************ Header *************** -->
+      <ng-template pTemplate="header">
+        <tr>
+          <ng-container *ngFor="let col of columns">
+            <th>{{ col.header }}</th>
+          </ng-container>
+        </tr>
+      </ng-template>
+      <!-- ************ BODY *************** -->
+      <ng-template pTemplate="body" let-rowData>
+        <tr>
+          <td *ngFor="let col of columns">
+            <div
+              class="cell-content"
+              *ngIf="rowData[col.field]; else emptyCell"
+            >
+              <ng-container
+                *ngFor="
+                  let objectData of getKeysValues(rowData[col.field]);
+                  let keyIndex = index
+                "
+              >
+                <div
+                  [ngClass]="{
+                    'primary-text': keyIndex == 0,
+                    'secondary-text': keyIndex != 0
+                  }"
+                  class="truncate-text"
+                >
+                  {{ objectData.value }}
+                </div>
+              </ng-container>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+      <!-- ************ Empty Cell *************** -->
+      <ng-template #emptyCell>
+        <div class="emptyCell">&mdash;</div>
+      </ng-template>
+    </p-table>
+  </div>
+</div>
+
+<ng-template #emptyTable>
+  <div class="caption__wrapper">
+    <hospitality-bot-empty-table
+      [isLoading]="loading"
+      link="link"
+      [content]="content"
+    >
+      <!-- <ng-container [ngTemplateOutlet]="tabFilter"> </ng-container> -->
+    </hospitality-bot-empty-table>
+  </div>
+</ng-template>

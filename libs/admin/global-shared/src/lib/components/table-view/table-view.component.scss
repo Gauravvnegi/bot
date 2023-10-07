@@ -1,0 +1,34 @@
+@import 'main';
+// Design
+.table-view__wrapper {
+  .header {
+    font-size: 16px;
+    font-weight: 600;
+    padding: 10px 0;
+  }
+  .truncate-text {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 150px;
+  }
+}
+
+// Style Override
+:host ::ng-deep .table-view__wrapper {
+  thead {
+    background: #f1f2f7;
+  }
+  .p-datatable .p-datatable-thead > tr > th {
+    background: unset;
+    font-size: 14px;
+    font-weight: 700;
+    color: #787c9e;
+  }
+  .p-datatable .p-datatable-tbody > tr > td {
+    font-size: 13px;
+  }
+  .secondary-text {
+    font-size: 12px;
+  }
+}

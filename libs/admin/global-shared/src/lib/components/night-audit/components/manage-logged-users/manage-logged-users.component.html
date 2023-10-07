@@ -14,10 +14,15 @@
     </div>
   </div>
   <div class="content__wrapper">
-    <div class="header">{{ title }}</div>
-    <div class="content">
-      Lorem ipsum dolor sit amet consectetur adipisicing elit. Nostrum,
-      aspernatur.
-    </div>
+    <hospitality-bot-table-view
+      [header]="'Manage Log-in Users'"
+      [columns]="cols"
+      [items]="users"
+      [emptyViewConfig]="{
+        content: {
+          description: 'There are no users logged in except for you.'
+        }
+      }"
+    ></hospitality-bot-table-view>
   </div>
 </div>

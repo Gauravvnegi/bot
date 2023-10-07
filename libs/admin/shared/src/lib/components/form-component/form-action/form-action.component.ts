@@ -33,8 +33,7 @@ export class FormActionComponent implements OnInit {
   postHide = false;
 
   @Input() disabled: boolean = false;
-
-  type: StickyFormActionType = 'sticky';
+  @Input() isSticky: boolean = true; //props to make the form action sticky or non-sticky
 
   id: boolean = false;
   referenceId: string = 'form-layout';
@@ -108,8 +107,6 @@ export class FormActionComponent implements OnInit {
   }
 }
 
-export type StickyFormActionType = 'sticky' | 'non-sticky';
-
 export type FormActionConfig = {
   preLabel: string;
   postLabel: string;
@@ -119,7 +116,7 @@ export type FormActionConfig = {
   preSeverity: ButtonSeverity;
   PreLabelWithId: string;
   postLabelWithId: string;
-  type: StickyFormActionType;
+  isSticky: boolean;
   id: boolean;
   referenceId: string;
 };

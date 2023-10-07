@@ -75,6 +75,8 @@ export class QuickReservationFormComponent implements OnInit {
   @ViewChild('sidebarSlide', { read: ViewContainerRef })
   sidebarSlide: ViewContainerRef;
 
+  errorMessage: string;
+
   @Output() onCloseSidebar = new EventEmitter<boolean>();
   @Input() set reservationConfig(value: QuickReservationConfig) {
     for (const key in value) {
@@ -394,6 +396,7 @@ export class QuickReservationFormComponent implements OnInit {
           },
           (error) => {
             this.isBooking = false;
+            this.errorMessage = error.error.message;
           },
           () => {
             this.isBooking = false;
@@ -403,31 +406,31 @@ export class QuickReservationFormComponent implements OnInit {
   }
 
   createGuest() {
-    // const lazyModulePromise = import(
-    //   'libs/admin/guests/src/lib/admin-guests.module'
-    // )
-    //   .then((module) => {
-    //     return this.compiler.compileModuleAsync(module.AdminGuestsModule);
-    //   })
+    const lazyModulePromise = import(
+      'libs/admin/guests/src/lib/admin-guests.module'
+    )
+      .then((module) => {
+        return this.compiler.compileModuleAsync(module.AdminGuestsModule);
+      })
 
-    //   .catch((error) => {
-    //     console.error('Error loading the lazy module:', error);
-    //   });
+      .catch((error) => {
+        console.error('Error loading the lazy module:', error);
+      });
 
-    // lazyModulePromise.then((moduleFactory) => {
-    //   this.sidebarVisible = true;
-    //   const factory = this.resolver.resolveComponentFactory(AddGuestComponent);
-    //   this.sidebarSlide.clear();
-    //   const componentRef = this.sidebarSlide.createComponent(factory);
-    //   componentRef.instance.isSideBar = true;
-    //   componentRef.instance.onClose.subscribe((res) => {
-    //     this.sidebarVisible = false;
-    //     componentRef.destroy();
-    //   });
-    // });
-    this.router.navigateByUrl(
-      `/pages/members/guests/${manageGuestRoutes.addGuest.route}`
-    );
+    lazyModulePromise.then((moduleFactory) => {
+      this.sidebarVisible = true;
+      const factory = this.resolver.resolveComponentFactory(AddGuestComponent);
+      this.sidebarSlide.clear();
+      const componentRef = this.sidebarSlide.createComponent(factory);
+      componentRef.instance.isSideBar = true;
+      componentRef.instance.onClose.subscribe((res) => {
+        this.sidebarVisible = false;
+        componentRef.destroy();
+      });
+    });
+    // this.router.navigateByUrl(
+    //   `/pages/members/guests/${manageGuestRoutes.addGuest.route}`
+    // );
   }
 
   updateReservation(data: any): void {
@@ -441,6 +444,7 @@ export class QuickReservationFormComponent implements OnInit {
           },
           (error) => {
             this.isBooking = false;
+            this.errorMessage = error.error.message;
           },
           () => {
             this.isBooking = false;

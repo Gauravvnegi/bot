@@ -2,7 +2,7 @@
   <ng-content></ng-content>
   <div
     class="footer-buttons"
-    [ngClass]="{ fixed: isFixed && type === 'sticky' }"
+    [ngClass]="{ fixed: isFixed && isSticky }"
     #fd
   >
     <hospitality-bot-button

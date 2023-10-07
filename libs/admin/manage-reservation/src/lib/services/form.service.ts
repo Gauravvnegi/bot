@@ -90,13 +90,17 @@ export class FormService {
               roomTypeId: roomType.roomTypeId,
               roomCount: roomType?.roomCount ? roomType.roomCount : 1,
               roomNumbers: roomType?.roomNumbers ? roomType?.roomNumbers : [],
-              roomNumber: roomType?.roomNumbers ? roomType?.roomNumbers[0] : '',
             },
             occupancyDetails: {
               maxChildren: roomType.childCount,
               maxAdult: roomType.adultCount,
             },
           };
+          if (id) {
+            bookingItem.roomDetails.roomNumber = roomType?.roomNumber
+              ? roomType?.roomNumber
+              : '';
+          }
 
           if (roomType.id.length) {
             bookingItem.id = roomType.id;
@@ -115,8 +119,8 @@ export class FormService {
           roomNumber: input.roomInformation.roomNumber ?? '',
         },
         occupancyDetails: {
-          maxChildren: input.roomInformation.adultCount,
-          maxAdult: input.roomInformation.childCount,
+          maxChildren: input.roomInformation.childCount,
+          maxAdult: input.roomInformation.adultCount,
         },
       };
     } else {

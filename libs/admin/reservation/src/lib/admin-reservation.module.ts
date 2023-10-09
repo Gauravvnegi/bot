@@ -26,6 +26,9 @@ import { StayFeedbackComponent } from './components/stay-feedback/stay-feedback.
 import { ButtonDependencyDirective } from './directives/button-dependency.directive';
 import { AdminDetailsService } from './services/admin-details.service';
 import { ReservationService } from './services/reservation.service';
+import { QuickReservationFormComponent } from './components/quick-reservation-form/quick-reservation-form.component';
+import { ManageReservationService } from 'libs/admin/manage-reservation/src/lib/services/manage-reservation.service';
+import { FormService } from 'libs/admin/manage-reservation/src/lib/services/form.service';
 
 export const adminReservationRoutes: Route[] = [];
 
@@ -56,6 +59,7 @@ export const adminReservationRoutes: Route[] = [];
     StayDetailsComponent,
     StayFeedbackComponent,
     InstantFeedbackComponent,
+    QuickReservationFormComponent,
   ],
   exports: [
     AdminSharedModule,
@@ -73,7 +77,13 @@ export const adminReservationRoutes: Route[] = [];
     StayDetailsComponent,
     StayFeedbackComponent,
     InstantFeedbackComponent,
+    QuickReservationFormComponent,
   ],
-  providers: [ReservationService, AdminDetailsService],
+  providers: [
+    ReservationService,
+    AdminDetailsService,
+    ManageReservationService,
+    FormService,
+  ],
 })
 export class AdminReservationModule {}

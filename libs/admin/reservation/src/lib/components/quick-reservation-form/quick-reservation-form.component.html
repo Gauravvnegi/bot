@@ -32,11 +32,11 @@
     </div>
     <div class="contact-details">
       <div class="phone-number">
-        <img [src]="'assets/svg/email-circle.svg'" alt="" />
+        <img [src]="'assets/svg/whatsapp.svg'" alt="" />
         <p>{{ guestDetails?.phoneNumber }}</p>
       </div>
       <div class="email-id">
-        <img [src]="'assets/svg/whatsapp.svg'" alt="" />
+        <img [src]="'assets/svg/email-circle.svg'" alt="" />
         <p>{{ guestDetails?.email }}</p>
       </div>
     </div>
@@ -95,7 +95,7 @@
 
       <!-- Guest Information -->
       <ng-container *ngIf="!reservationId" formGroupName="guestInformation">
-        <hospitality-bot-select
+        <!-- <hospitality-bot-select
           class="half-width select"
           controlName="guestDetails"
           label="Guest"
@@ -106,19 +106,62 @@
           }"
           [options]="guestOptions"
           (onCreate)="createGuest()"
-        ></hospitality-bot-select>
+        ></hospitality-bot-select> -->
+
+        <hospitality-bot-quick-select
+          class="half-width select"
+          controlName="guestDetails"
+          label="Guest"
+          [inputType]="'select'"
+          [props]="{
+            showChips: false,
+            isAsync: true,
+            placeholder: 'Select'
+          }"
+          [apiConfig]="{
+            apiEndPoint: '/api/v1/members',
+            dataModel: {
+              key: 'records',
+              values: {
+                label: ['firstName', 'lastName'],
+                value: 'id'
+              }
+            },
+            queryParams: getGuestConfig()
+          }"
+          [paginationConfig]="{
+            isPagination: true
+          }"
+          (clickedOption)="guestChange($event)"
+        ></hospitality-bot-quick-select>
       </ng-container>
 
       <!-- Room Information -->
       <ng-container formGroupName="roomInformation">
         <ng-container *ngIf="!reservationId">
-          <hospitality-bot-select
-            class="half-width select"
+          <hospitality-bot-quick-select
             controlName="roomTypeId"
+            class="half-width select"
             label="Room Type"
-            [props]="{ placeholder: 'Select' }"
-            [options]="roomTypes"
-          ></hospitality-bot-select>
+            [inputType]="'select'"
+            [props]="{
+              showChips: false,
+              isAsync: true,
+              placeholder: 'Select'
+            }"
+            [apiConfig]="{
+              entityId: entityId,
+              apiEndPoint: 'inventory',
+              dataModel: {
+                key: 'roomTypes'
+              },
+              queryParams: getRoomTypeConfig()
+            }"
+            [paginationConfig]="{
+              isPagination: true
+            }"
+            (clickedOption)="roomTypeChange($event)"
+          ></hospitality-bot-quick-select>
           <hospitality-bot-select
             class="half-width select"
             controlName="ratePlan"
@@ -132,7 +175,7 @@
           class="half-width"
           controlName="roomNumber"
           label="Room Number"
-          [options]="this.useForm.get('roomInformation.roomsOptions').value"
+          [options]="roomOptions"
           [props]="{
             placeholder: 'Select'
           }"

@@ -3,17 +3,21 @@ import {
   Component,
   ComponentFactoryResolver,
   EventEmitter,
-  Input,
   OnInit,
   Output,
   ViewChild,
   ViewContainerRef,
 } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {
+  AbstractControl,
+  FormBuilder,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
-  AdminUtilityService,
   ConfigService,
+  EntitySubType,
   Option,
 } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
@@ -24,18 +28,18 @@ import {
 import { ManageReservationService } from 'libs/admin/manage-reservation/src/lib/services/manage-reservation.service';
 import {
   GuestDetails,
-  QuickReservation,
-} from '../../data-models/reservation.model';
+  QuickReservationForm,
+} from '../../../../../dashboard/src/lib/data-models/reservation.model';
 import { FormService } from 'libs/admin/manage-reservation/src/lib/services/form.service';
 import { Router } from '@angular/router';
-import { RoomService } from 'libs/admin/room/src/lib/services/room.service';
-import { IGRoomType } from '../reservation-calendar-view/reservation-calendar-view.component';
+import { IGRoomType } from '../../../../../dashboard/src/lib/components/reservation-calendar-view/reservation-calendar-view.component';
 import { IGCol } from 'libs/admin/shared/src/lib/components/interactive-grid/interactive-grid.component';
 import { debounceTime } from 'rxjs/operators';
-import { GuestTableService } from 'libs/admin/guests/src/lib/services/guest-table.service';
 import { Subscription } from 'rxjs';
-import { manageGuestRoutes } from 'libs/admin/guests/src/lib/constant/route';
 import { AddGuestComponent } from 'libs/admin/guests/src/lib/components';
+import { RoomTypeResponse } from 'libs/admin/room/src/lib/types/service-response';
+import { RoomTypeForm } from 'libs/admin/room/src/lib/models/room.model';
+import { GuestType } from 'libs/admin/guests/src/lib/types/guest.type';
 
 @Component({
   selector: 'hospitality-bot-quick-reservation-form',
@@ -51,17 +55,16 @@ export class QuickReservationFormComponent implements OnInit {
   entityId: string;
   reservationId: string;
 
-  roomTypes: Option[] = [];
   ratePlans: Option[] = [];
-  guests: Option[] = [];
-  guestOptions: Option[] = [];
+  roomOptions: Option[] = [];
   globalQueries = [];
 
   loading: boolean = false;
-  isSidebar = false;
   isBooking = false;
 
-  selectedRoomType: IGRoomType;
+  selectedGuest: GuestType;
+  defaultRoomType: IGRoomType;
+
   selectedRoom: string;
   date: IGCol;
 
@@ -71,20 +74,22 @@ export class QuickReservationFormComponent implements OnInit {
 
   $subscription = new Subscription();
 
+  isSidebar = false;
   sidebarVisible: boolean = false;
   @ViewChild('sidebarSlide', { read: ViewContainerRef })
   sidebarSlide: ViewContainerRef;
 
   errorMessage: string;
 
-  @Output() onCloseSidebar = new EventEmitter<boolean>();
-  @Input() set reservationConfig(value: QuickReservationConfig) {
-    for (const key in value) {
-      const val = value[key];
-      this[key] = val;
-    }
-    if (this.selectedRoomType) this.initDetails();
-  }
+  @Output() onCloseSidebar = new EventEmitter<boolean>(false);
+  // @Input() set reservationConfig(value: QuickReservationConfig) {
+  //   for (const key in value) {
+  //     const val = value[key];
+  //     this[key] = val;
+  //   }
+
+  //   if (this.defaultRoomType) this.initDetails();
+  // }
 
   constructor(
     private fb: FormBuilder,
@@ -94,34 +99,28 @@ export class QuickReservationFormComponent implements OnInit {
     private router: Router,
     private manageReservationService: ManageReservationService,
     private formService: FormService,
-    private adminUtilityService: AdminUtilityService,
-    private roomService: RoomService,
-    private guestService: GuestTableService,
     private compiler: Compiler,
     private resolver: ComponentFactoryResolver
   ) {
     this.initForm();
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.listenForGlobalFilters();
+    this.getCountryCode();
+  }
 
   initDetails() {
-    this.getCountryCode();
-
     if (this.reservationId) {
       this.initReservationDetails();
     } else {
-      this.initRatePlans();
-      this.useForm
-        .get('roomInformation.roomTypeId')
-        .patchValue(this.selectedRoomType.value);
-      this.listenForRoomTypeChanges();
-      this.initDefaultDate();
+      this.inputControls.roomInformation.patchValue({
+        roomTypeId: this.defaultRoomType.value,
+        roomNumber: this.selectedRoom,
+      });
+      this.setRoomInfo(this.defaultRoomType);
     }
-
-    this.initRooms();
-    this.listenForGlobalFilters();
-    this.getGuests();
+    this.initDefaultDate();
   }
 
   /**
@@ -130,18 +129,8 @@ export class QuickReservationFormComponent implements OnInit {
   listenForGlobalFilters(): void {
     this.$subscription.add(
       this.globalFilterService.globalFilter$.subscribe((data) => {
-        this.globalQueries = [
-          ...data['filter'].queryValue,
-          ...data['dateRange'].queryValue,
-        ];
+        this.globalQueries = [...data['dateRange'].queryValue];
         this.entityId = this.globalFilterService.entityId;
-        this.globalQueries = [
-          ...this.globalQueries,
-          {
-            order: 'DESC',
-            entityType: 'DUEIN',
-          },
-        ];
       })
     );
   }
@@ -150,8 +139,7 @@ export class QuickReservationFormComponent implements OnInit {
     const fromDate = new Date(this.date); // Convert epoch to milliseconds
     const toDate = new Date(fromDate);
     toDate.setDate(fromDate.getDate() + 1); // Add 1 day
-
-    this.useForm.get('reservationInformation').patchValue({
+    this.inputControls.reservationInformation.patchValue({
       from: fromDate.getTime(),
       to: toDate.getTime(),
     });
@@ -169,11 +157,10 @@ export class QuickReservationFormComponent implements OnInit {
 
       roomInformation: this.fb.group({
         roomTypeId: ['', [Validators.required]],
-        ratePlan: [''],
-        roomNumber: [''],
+        ratePlan: [{ value: '', disabled: false }],
+        roomNumber: [{ value: '', disabled: false }],
         adultCount: ['', [Validators.required, Validators.min(1)]],
         childCount: ['', [Validators.min(0)]],
-        roomsOptions: [[]],
         id: [''],
       }),
 
@@ -219,6 +206,7 @@ export class QuickReservationFormComponent implements OnInit {
           (res) => {
             const formData = new ReservationFormData().deserialize(res);
             this.reservationData = formData;
+            this.roomControls.roomNumber.enable();
             this.calculateDailyPrice();
             const { roomInformation, ...data } = formData;
             this.guestDetails = {
@@ -233,12 +221,18 @@ export class QuickReservationFormComponent implements OnInit {
               id: res.guest?.id ?? '',
               email: res.guest?.contactDetails?.emailId,
             };
+            this.inputControls.guestInformation
+              .get('guestDetails')
+              .patchValue(res.guest.id);
+
+            this.roomOptions = this.defaultRoomType.rooms.map((room) => ({
+              label: room.roomNumber.toString(),
+              value: room.roomNumber.toString(),
+            }));
 
             this.useForm.patchValue(data);
-            this.useForm.get('roomInformation').patchValue(roomInformation[0]);
-            this.useForm
-              .get('guestInformation.guestDetails')
-              .patchValue(res.guest.id);
+
+            this.inputControls.roomInformation.patchValue(roomInformation[0]);
           },
           (error) => {
             this.loading = false;
@@ -250,85 +244,35 @@ export class QuickReservationFormComponent implements OnInit {
     );
   }
 
-  initRatePlans() {
-    this.$subscription.add(
-      this.roomService
-        .getRoomTypeById(this.entityId, this.selectedRoomType.value)
-        .subscribe((res) => {
-          this.ratePlans = res.ratePlans.map((res) => ({
-            label: res.label,
-            value: res.id,
-          }));
-          this.useForm.get('roomInformation').patchValue({
-            ratePlan: this.ratePlans[0].value,
-          });
-        })
-    );
-  }
-
   listenForRoomTypeChanges() {
-    this.useForm
-      .get('roomInformation.roomTypeId')
-      .valueChanges.pipe(debounceTime(500))
+    this.roomControls.roomTypeId.valueChanges
+      .pipe(debounceTime(500))
       .subscribe((res) => {
         if (res) {
-          this.selectedRoomType = this.roomTypes.find(
-            (roomType) => roomType.value === res
-          );
-          this.initRooms();
-          this.initRatePlans();
         }
       });
   }
 
-  initRooms() {
-    const config = {
-      params: this.adminUtilityService.makeQueryParams([
-        {
-          from: this.useForm.get('reservationInformation.from').value,
-          to: this.useForm.get('reservationInformation.to').value,
-          type: 'ROOM',
-          createBooking: true,
-          roomTypeId: this.selectedRoomType.value,
-        },
-      ]),
-    };
-    this.formService.getRooms({
+  getGuestConfig() {
+    const queries = {
       entityId: this.entityId,
-      config: config,
-      type: 'string',
-      roomControl: this.useForm.get('roomInformation.roomNumber'),
-      roomNumbersControl: this.useForm.get('roomInformation.roomsOptions'),
-      defaultRoomNumbers: [this.selectedRoom],
-    });
+      toDate: this.globalQueries[0].toDate,
+      fromDate: this.globalQueries[1].fromDate,
+      entityState: 'ALL',
+      type: 'GUEST',
+    };
+    return queries;
   }
 
-  getGuests() {
-    this.$subscription.add(
-      this.guestService.getGuestList(this.getConfig()).subscribe((res) => {
-        const guests = res.records;
-        this.guestOptions = guests.map((guest) => ({
-          label: `${guest.firstName} ${guest.lastName}`,
-          value: guest.id,
-          phoneNumber: guest.contactDetails.contactNumber,
-          cc: guest.contactDetails.cc,
-          email: guest.contactDetails.emailId,
-        }));
-      })
-    );
-  }
-
-  getConfig() {
-    const config = [
-      ...this.globalQueries,
-      {
-        entityState: 'ALL',
-        offset: 0,
-        limit: 10,
-        type: 'GUEST',
-      },
-    ];
-    return { params: this.adminUtilityService.makeQueryParams(config) };
+  getRoomTypeConfig() {
+    const queries = {
+      type: EntitySubType.ROOM_TYPE,
+      toDate: this.globalQueries[0].toDate,
+      fromDate: this.globalQueries[1].fromDate,
+      raw: true,
+      roomTypeStatus: true,
+    };
+    return queries;
   }
 
   getCountryCode(): void {
@@ -341,6 +285,41 @@ export class QuickReservationFormComponent implements OnInit {
           );
         })
     );
+  }
+
+  // Patch data for selected room type
+  roomTypeChange(event: RoomTypeResponse) {
+    if (event) {
+      const data = new RoomTypeForm().deserialize(event);
+      this.setRoomInfo(data);
+    }
+  }
+
+  setRoomInfo(selectedRoomType) {
+    this.roomControls.roomNumber.enable();
+    this.roomControls.ratePlan.enable();
+
+    this.ratePlans = selectedRoomType?.allRatePlans.map((res) => ({
+      label: res.label,
+      value: res.value,
+    }));
+    this.roomOptions = selectedRoomType?.rooms.map((room) => ({
+      label: room.roomNumber,
+      value: room.roomNumber,
+    }));
+    this.inputControls.roomInformation.patchValue({
+      ratePlan: this.ratePlans[0].value,
+    });
+  }
+
+  guestChange(event: GuestType) {
+    // this.selectedGuest = {
+    //   label: `${event.firstName} ${event.lastName}`,
+    //   value: event.id,
+    //   phoneNumber: event.contactDetails.contactNumber,
+    //   cc: event.contactDetails.cc,
+    //   email: event.contactDetails.emailId,
+    // };
   }
 
   calculateDailyPrice() {
@@ -359,7 +338,7 @@ export class QuickReservationFormComponent implements OnInit {
       this.useForm.patchValue({
         dailyPrice: dailyPrice.toFixed(2), // Optionally format to two decimal places
       });
-      this.useForm.get('dailyPrice').disable();
+      this.inputControls.dailyPrice.disable();
     }
   }
 
@@ -406,31 +385,28 @@ export class QuickReservationFormComponent implements OnInit {
   }
 
   createGuest() {
-    const lazyModulePromise = import(
-      'libs/admin/guests/src/lib/admin-guests.module'
-    )
-      .then((module) => {
-        return this.compiler.compileModuleAsync(module.AdminGuestsModule);
-      })
+    // const lazyModulePromise = import(
+    //   'libs/admin/guests/src/lib/admin-guests.module'
+    // )
+    //   .then((module) => {
+    //     return this.compiler.compileModuleAsync(module.AdminGuestsModule);
+    //   })
 
-      .catch((error) => {
-        console.error('Error loading the lazy module:', error);
-      });
+    //   .catch((error) => {
+    //     console.error('Error loading the lazy module:', error);
+    //   });
 
-    lazyModulePromise.then((moduleFactory) => {
-      this.sidebarVisible = true;
-      const factory = this.resolver.resolveComponentFactory(AddGuestComponent);
-      this.sidebarSlide.clear();
-      const componentRef = this.sidebarSlide.createComponent(factory);
-      componentRef.instance.isSideBar = true;
-      componentRef.instance.onClose.subscribe((res) => {
-        this.sidebarVisible = false;
-        componentRef.destroy();
-      });
-    });
-    // this.router.navigateByUrl(
-    //   `/pages/members/guests/${manageGuestRoutes.addGuest.route}`
-    // );
+    // lazyModulePromise.then((moduleFactory) => {
+    //   this.sidebarVisible = true;
+    //   const factory = this.resolver.resolveComponentFactory(AddGuestComponent);
+    //   this.sidebarSlide.clear();
+    //   const componentRef = this.sidebarSlide.createComponent(factory);
+    //   componentRef.instance.isSideBar = true;
+    //   componentRef.instance.onClose.subscribe((res) => {
+    //     this.sidebarVisible = false;
+    //     componentRef.destroy();
+    //   });
+    // });
   }
 
   updateReservation(data: any): void {
@@ -477,12 +453,34 @@ export class QuickReservationFormComponent implements OnInit {
   ngOnDestroy(): void {
     this.$subscription.unsubscribe();
   }
+
+  get inputControls() {
+    return this.useForm.controls as Record<
+      keyof QuickReservationForm,
+      AbstractControl
+    >;
+  }
+
+  get reservationInfoControls() {
+    return (this.useForm.get('reservationInformation') as FormGroup)
+      .controls as Record<
+      keyof QuickReservationForm['reservationInformation'],
+      AbstractControl
+    >;
+  }
+
+  get roomControls() {
+    return (this.useForm.get('roomInformation') as FormGroup)
+      .controls as Record<
+      keyof QuickReservationForm['roomInformation'],
+      AbstractControl
+    >;
+  }
 }
 
 export type QuickReservationConfig = {
-  reservationId: string;
+  reservationId?: string;
   selectedRoom?: string;
-  roomTypes?: Option[];
-  selectedRoomType?: IGRoomType;
+  defaultRoomType?: IGRoomType;
   date?: IGCol;
 };

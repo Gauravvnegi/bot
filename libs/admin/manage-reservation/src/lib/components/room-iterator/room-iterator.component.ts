@@ -20,7 +20,11 @@ import {
 } from '@angular/forms';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { SnackBarService } from '@hospitality-bot/shared/material';
-import { AdminUtilityService, EntitySubType } from 'libs/admin/shared/src';
+import {
+  AdminUtilityService,
+  EntitySubType,
+  Option,
+} from 'libs/admin/shared/src';
 import { IteratorComponent } from 'libs/admin/shared/src/lib/components/iterator/iterator.component';
 import { Subscription } from 'rxjs';
 import { roomFields, RoomFieldTypeOption } from '../../constants/reservation';
@@ -150,6 +154,7 @@ export class RoomIteratorComponent extends IteratorComponent
     itemValues.forEach((value, index) => {
       // Rooms number is not multi-select in edit mode.
       if (this.reservationInfoControls.reservationType.value !== 'DRAFT') {
+        debugger;
         this.fields[3].name = 'roomNumber';
         this.fields[3].type = 'select';
       }
@@ -165,6 +170,7 @@ export class RoomIteratorComponent extends IteratorComponent
         roomNumber: value?.roomNumber,
         id: value?.id,
       });
+      debugger;
     });
   }
 
@@ -274,6 +280,7 @@ export class RoomIteratorComponent extends IteratorComponent
   // Patch data for selected room type
   roomTypeChange(event: RoomTypeResponse, index: number) {
     if (event) {
+      debugger;
       const data = new RoomTypeForm().deserialize(event);
       this.roomTypes[index] = {
         label: data.name,

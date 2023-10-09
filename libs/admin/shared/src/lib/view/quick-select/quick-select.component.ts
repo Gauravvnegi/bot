@@ -100,6 +100,7 @@ export class QuickSelectComponent extends FormComponent implements OnInit {
 
   ngOnInit(): void {
     this.getItems();
+    this.listenControl();
   }
 
   /**
@@ -206,7 +207,6 @@ export class QuickSelectComponent extends FormComponent implements OnInit {
         (error) => {},
         () => {
           this.qsLoading = false;
-          this.listenControl();
         }
       );
   }
@@ -220,11 +220,16 @@ export class QuickSelectComponent extends FormComponent implements OnInit {
   getOptions(res, model) {
     const items = res ? (model?.key ? res[model.key] : res) : [];
     return (
-      items.map((item) => ({
-        ...item,
-        label: convertToTitleCase(item[model.values.label] ?? ''),
-        value: item[model.values.value] ?? '',
-      })) ?? []
+      items.map((item) => {
+        const label = Array.isArray(model.values?.label)
+          ? `${item[model.values?.label[0]]} ${item[model.values?.label[1]]}` // Concatenate labels in case of an array
+          : item[model.values?.label];
+        return {
+          ...item,
+          label: convertToTitleCase(label ?? ''),
+          value: item[model.values.value] ?? '',
+        };
+      }) ?? []
     );
   }
 
@@ -262,7 +267,11 @@ export class QuickSelectComponent extends FormComponent implements OnInit {
             // push created option
             this.menuOptions.push({
               ...res,
-              label: res[model.values.label],
+              label: Array.isArray(model.values?.label)
+                ? `${res[model.values?.label[0]]} ${
+                    res[model.values?.label[1]]
+                  }` // Concatenate labels in case of an array
+                : res[model.values?.label],
               value: res[model.values.value],
             });
             this.controlContainer.control
@@ -360,6 +369,6 @@ export type QSProps = FormProps & {
  */
 export type DataModel = {
   key?: string;
-  values: { label: string; value: string } | Record<string, string>;
+  values: { label: string | string[]; value: string } | Record<string, string>;
   data?: Record<string, string>;
 };

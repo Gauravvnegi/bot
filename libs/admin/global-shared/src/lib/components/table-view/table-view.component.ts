@@ -10,6 +10,7 @@ export class TableViewComponent implements OnInit {
   @Input() header: string;
   @Input() columns: Cols[];
   @Input() items;
+  @Input() headerSticky = false;
   loading = false;
 
   // EmptyView config

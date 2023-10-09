@@ -12,6 +12,12 @@
     text-overflow: ellipsis;
     max-width: 150px;
   }
+  .sticky-header {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    background: #f1f2f7 !important;
+  }
 }
 
 // Style Override

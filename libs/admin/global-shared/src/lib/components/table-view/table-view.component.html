@@ -10,7 +10,9 @@
       <ng-template pTemplate="header">
         <tr>
           <ng-container *ngFor="let col of columns">
-            <th>{{ col.header }}</th>
+            <th [ngClass]="{ 'sticky-header': headerSticky }">
+              {{ col.header }}
+            </th>
           </ng-container>
         </tr>
       </ng-template>
@@ -52,12 +54,27 @@
 
 <ng-template #emptyTable>
   <div class="caption__wrapper">
-    <hospitality-bot-empty-table
-      [isLoading]="loading"
-      link="link"
-      [content]="content"
-    >
-      <!-- <ng-container [ngTemplateOutlet]="tabFilter"> </ng-container> -->
-    </hospitality-bot-empty-table>
+    <div class="table-header empty-datatable">
+      <p-table [value]="[]">
+        <!-- ************ Header *************** -->
+        <ng-template pTemplate="header">
+          <tr>
+            <ng-container *ngFor="let col of columns">
+              <th [ngClass]="{ 'sticky-header': headerSticky }">
+                {{ col.header }}
+              </th>
+            </ng-container>
+          </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-rowData> </ng-template>
+      </p-table>
+      <hospitality-bot-empty-table
+        [isLoading]="loading"
+        link="link"
+        [content]="content"
+      >
+      </hospitality-bot-empty-table>
+    </div>
   </div>
 </ng-template>

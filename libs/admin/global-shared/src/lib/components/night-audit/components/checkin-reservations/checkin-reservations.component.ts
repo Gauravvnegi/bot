@@ -1,7 +1,10 @@
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { ActionConfigType } from '../../../../types/night-audit.type';
-import { cols, usersList } from '../../constants/manage-login.table';
 import { MenuItem } from 'primeng/api';
+import {
+  cols,
+  checkedInList,
+} from '../../constants/checked-in-reservation.table';
 
 @Component({
   selector: 'hospitality-bot-checkin-reservations',
@@ -12,9 +15,9 @@ import { MenuItem } from 'primeng/api';
   ],
 })
 export class CheckinReservationsComponent implements OnInit {
-  title = 'CheckIn Reservation';
+  title = 'Pending Check-ins';
   cols = cols;
-  users = usersList;
+  users = checkedInList;
   loading = false;
   actionConfig: ActionConfigType;
 
@@ -25,7 +28,14 @@ export class CheckinReservationsComponent implements OnInit {
   constructor() {}
 
   ngOnInit(): void {
+    this.initTable();
     this.initActionConfig();
+  }
+
+  initTable() {
+    this.loading = true;
+    this.users = checkedInList;
+    this.loading = false;
   }
 
   initActionConfig(postLabel?: string) {

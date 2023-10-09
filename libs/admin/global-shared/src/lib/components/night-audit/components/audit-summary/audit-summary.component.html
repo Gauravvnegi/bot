@@ -1,28 +1,19 @@
 <div class="main__wrapper" [id]="fa?.referenceId">
-  <div class="message__wrapper">
-    <div class="message">
-      The night audit will wrap up the current day accounting, transactions and
-      operations. Once the night audit is finished, you are free to begin the
-      accounting and operations for the next day.
-    </div>
-    <div class="warning">
-      <i class="pi pi-info-circle"></i>
-      <span class="text"
-        >Other users should not log in to the system at the time of night
-        audit.</span
-      >
-    </div>
+  <div class="header">
+    Night audit is completed for {{ today | date: 'dd/MM/yyy' }}
   </div>
   <div class="content__wrapper">
     <hospitality-bot-table-view
-      [header]="title"
-      [columns]="cols"
-      [items]="users"
+      *ngFor="let col of columns; let i = index"
+      [header]="values[col].title"
+      [columns]="cols[col]"
+      [items]="values[col].values"
       [emptyViewConfig]="{
         content: {
           description: 'There are no users logged in except for you.'
         }
       }"
+      (actionClicked)="initTable()"
     ></hospitality-bot-table-view>
   </div>
 

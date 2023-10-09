@@ -19,6 +19,7 @@ export class ManageLoggedUsersComponent implements OnInit {
   loading = false;
   actionConfig: ActionConfigType;
   usersLoggedOut: boolean;
+  isTimerStart = false;
 
   @Input() activeIndex = 0;
   @Input() stepList: MenuItem[];
@@ -45,10 +46,10 @@ export class ManageLoggedUsersComponent implements OnInit {
   }
 
   handleNext() {
-    if (this.activeIndex == 0) {
+    if (!this.isTimerStart && this.activeIndex == 0) {
       // this.handleMangeLoggedIn(); // TODO: Uncomment for timer
       //these below line should be removed, after uncommenting above line
-      this.usersLoggedOut = false;
+      this.isTimerStart = true;
       this.initActionConfig('Next', false);
       this.users = [];
     } else if (this.activeIndex + 1 < this.stepList.length)
@@ -64,6 +65,7 @@ export class ManageLoggedUsersComponent implements OnInit {
    */
   handleMangeLoggedIn() {
     this.usersLoggedOut = true;
+    this.isTimerStart = true;
     const targetTime = Date.now() + 5 * 60 * 1000;
     // Update the display every second
     timer(0, 1000).subscribe(() => {

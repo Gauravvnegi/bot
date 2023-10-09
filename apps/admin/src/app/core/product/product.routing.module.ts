@@ -29,7 +29,6 @@ const appRoutes: Route[] = [
       provide: ROUTES,
       useFactory: (subscriptionService: SubscriptionPlanService) => {
         const routes = routeFactoryNew(appRoutes, [subscriptionService]);
-
         return routes;
       },
       multi: true,

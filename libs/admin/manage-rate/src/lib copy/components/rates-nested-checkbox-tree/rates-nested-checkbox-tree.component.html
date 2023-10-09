@@ -1,0 +1,8 @@
+<div class="panel-tree__wrapper">
+  <hospitality-bot-nested-panel
+    *ngFor="let room of roomsData; let i = index"
+    class="nested-panel"
+    [roomsData]="room"
+    (objectUpdated)="onRoomChange($event, i)"
+  ></hospitality-bot-nested-panel>
+</div>

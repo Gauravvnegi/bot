@@ -1,52 +1,31 @@
 import { Route, Routes } from '@angular/router';
-import { RouteModulesName } from 'libs/admin/shared/src/index';
+import { ModuleNames, SubscriptionConfig } from 'libs/admin/shared/src/index';
+import { convertNameToRoute } from 'libs/admin/shared/src/lib/utils/valueFormatter';
 import { SubscriptionPlanService } from '../theme/src/lib/services/subscription-plan.service';
-
-interface SubscriptionConfig {
-  config: SubscriptionConfig[];
-  name: string;
-  label: string;
-  description: string;
-  icon: string;
-  isSubscribed: boolean;
-  isView: boolean;
-}
+import { moduleConfig } from '../pages/config/config.module';
+import { ComingSoonComponent } from 'libs/admin/shared/src/lib/components/coming-soon/coming-soon.component';
 
 type ModulePromise<T extends any> = () => Promise<T>;
-
-const moduleConfig: Record<RouteModulesName, any> = {
-  // front desk
-  ADD_RESERVATION: () =>
-    import('@hospitality-bot/admin/manage-reservation').then(
-      (m) => m.AdminManageReservationModule
-    ),
-  FRONT_DESK_DASHBOARD: () =>
-    import('@hospitality-bot/admin/dashboard').then(
-      (m) => m.AdminDashboardModule
-    ),
-  HOUSEKEEPING: () =>
-    import('@hospitality-bot/admin/housekeeping').then(
-      (m) => m.AdminHousekeepingModule
-    ),
-
-  //freddie
-  CONVERSATION_DASHBOARD: () =>
-    import('@hospitality-bot/admin/conversation-analytics').then(
-      (m) => m.AdminConversationAnalyticsModule
-    ),
-  LIVE_MESSAGING: () => () =>
-    import('@hospitality-bot/admin/messages').then(
-      (m) => m.AdminMessagesModule
-    ),
-};
 
 const UnsubscribedModule = () =>
   import('@hospitality-bot/admin/unsubscribed').then(
     (m) => m.AdminUnsubscribedModule
   );
 
-const convertToRoute = (name) => {
-  return name.toLowerCase().split('_').join('-');
+const getRedirectRouteConfig = (
+  path: string,
+  firstSubscribedChildrenPath: string,
+  isSubscribed: boolean
+) => {
+  const moduleRouteConfig: Route = {
+    path: path,
+    redirectTo: isSubscribed ? firstSubscribedChildrenPath : undefined,
+    loadChildren: isSubscribed ? undefined : UnsubscribedModule,
+    component: firstSubscribedChildrenPath ? undefined : ComingSoonComponent,
+    pathMatch: 'full',
+  };
+
+  return moduleRouteConfig;
 };
 
 export const routeFactoryNew = (
@@ -61,39 +40,91 @@ export const routeFactoryNew = (
   const product: SubscriptionConfig[] = subscription.products;
 
   /**
-   * Product Loop
+   * Product Config Iteration
    */
   product.forEach((product) => {
     const productName = product.name;
-    if (productName && product.isView) {
-      const productPath = convertToRoute(productName);
+    const isProductSubscribed = product.isSubscribed;
+    const isProductInView = product.isView;
+
+    if (productName && isProductInView) {
+      const productRoute = convertNameToRoute(productName);
+
+      var firstSubscribedModulePath = undefined;
 
       /**
-       * Module Loop
+       * Module Config Iteration
        */
       product.config.forEach((module) => {
         const moduleName = module.name;
+
         if (moduleName && module.isView) {
-          const modulePath = convertToRoute(module.name);
+          const moduleRoute = convertNameToRoute(module.name);
+          const modulePath = `${productRoute}/${moduleRoute}`;
+          const isModuleSubscribed = module.isSubscribed;
+          var firstSubscribedSubModulePath = undefined;
+
+          // Getting first subscribed module path (Creating circular loop)
+          // if (!firstSubscribedModulePath && isModuleSubscribed) {
+          //   firstSubscribedModulePath = modulePath;
+          // }
 
           /**
-           *Sub Module Loop
+           * Sub Module Config Iteration
            */
           module.config.forEach((subModule) => {
             const subModuleName = subModule.name;
+            const isSubModuleSubscribed = subModule.isSubscribed;
+            const isSubModuleInView = subModule.isView;
 
-            if (subModuleName && subModule.isView) {
-              const subModulePath = convertToRoute(subModule.name);
-              const routeModule: Route = {
-                path: `${productPath}/${modulePath}/${subModulePath}`,
-                loadChildren: moduleConfig[subModuleName] ?? UnsubscribedModule,
+            if (subModuleName && isSubModuleInView) {
+              const subModuleRoute = convertNameToRoute(subModule.name);
+              const subModulePath = `${productRoute}/${moduleRoute}/${subModuleRoute}`;
+
+              // Getting first subscribed sub module path
+              if (!firstSubscribedSubModulePath && isSubModuleSubscribed) {
+                firstSubscribedSubModulePath = subModulePath;
+              }
+
+              if (
+                // redirect to redirect wont work (creates loop to self route) that why full route even for product
+                !firstSubscribedModulePath &&
+                isModuleSubscribed &&
+                isSubModuleSubscribed
+              ) {
+                firstSubscribedModulePath = subModulePath;
+              }
+
+              const loadSubModule = moduleConfig[subModuleName]; // Module Load
+              const subModuleRouteConfig: Route = {
+                path: subModulePath,
+                loadChildren: isSubModuleSubscribed
+                  ? loadSubModule
+                  : UnsubscribedModule,
+                component: loadSubModule ? undefined : ComingSoonComponent,
               };
 
-              routes[0].children.push(routeModule);
+              routes[0].children.push(subModuleRouteConfig);
             }
           });
+
+          routes[0].children.push(
+            getRedirectRouteConfig(
+              modulePath,
+              firstSubscribedSubModulePath,
+              isModuleSubscribed
+            )
+          );
         }
       });
+
+      routes[0].children.unshift(
+        getRedirectRouteConfig(
+          productRoute,
+          firstSubscribedModulePath,
+          isProductSubscribed
+        )
+      );
     }
   });
 

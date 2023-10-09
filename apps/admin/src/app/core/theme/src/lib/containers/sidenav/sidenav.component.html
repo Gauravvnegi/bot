@@ -48,7 +48,11 @@
             />
           </ng-container>
           <ng-template #imageUrl>
-            <img [src]="menuItem.url" class="svg-icon" [alt]="menuItem.name" />
+            <img
+              [src]="menuItem.iconUrl"
+              class="svg-icon"
+              [alt]="menuItem.name"
+            />
           </ng-template>
         </div>
         <div class="icon-label">{{ menuItem.title }}</div>
@@ -96,9 +100,9 @@
           *ngFor="let product of productList; let i = index"
           class="menu"
           [ngClass]="{ selected: product.name === selectedProduct }"
-          (click)="onMenuCLick(product)"
+          [routerLink]="[product.path]"
         >
-          <img [src]="product.url" alt="" />
+          <img [src]="product.iconUrl" alt="" />
           <div class="menu-label">{{ product.title }}</div>
         </div>
       </div>

@@ -23,6 +23,7 @@ export * from './lib/interfaces/deserializable.interface';
 export * from './lib/constants/routes';
 export * from './lib/utils/routesFactory';
 export * from './lib/types/table.type';
+export * from './lib/types/subscription.type';
 export * from './lib/types/common.type';
 export * from './lib/types/form.type';
 export * from './lib/utils/shared';

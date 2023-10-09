@@ -9,6 +9,7 @@ import {
 } from '../data-models/subscription-plan-config.model';
 import { productMenuSubs } from '../data-models/product-subs';
 import { map } from 'rxjs/operators';
+import { ProductNames } from 'libs/admin/shared/src/index';
 
 @Injectable({ providedIn: 'root' })
 export class SubscriptionPlanService extends ApiService {
@@ -16,7 +17,7 @@ export class SubscriptionPlanService extends ApiService {
   private subscriptions: Subscriptions;
   private productSubscription: ProductSubscription;
   settings: SettingsMenuItem[];
-  selectedProduct: ModuleNames;
+  selectedProduct: ProductNames;
 
   getSubscriptionPlan(entityId: string): Observable<any> {
     return this.get(`/api/v1/entity/${entityId}/subscriptions/`).pipe(
@@ -84,7 +85,7 @@ export class SubscriptionPlanService extends ApiService {
     });
 
     // setting product
-    this.selectedProduct = firstSelectedProduct.name as ModuleNames;
+    this.selectedProduct = firstSelectedProduct.name;
     this.setSettings();
 
     return firstSelectedProduct;

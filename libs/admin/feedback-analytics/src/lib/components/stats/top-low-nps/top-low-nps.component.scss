@@ -1,0 +1,128 @@
+@import 'main';
+.container {
+  justify-content: flex-start;
+  position: relative;
+}
+
+.key-container {
+  display: flex;
+  margin: 0 10px;
+  align-items: center;
+  .icon {
+    width: 14px;
+    height: 14px;
+    opacity: 1;
+  }
+  .stat-lable {
+    text-align: center;
+    letter-spacing: 0.6px;
+    color: $subtitle;
+    opacity: 1;
+  }
+}
+
+.stat-body {
+  display: flex;
+  justify-content: space-around;
+  flex-direction: column;
+  &-container {
+    display: flex;
+    flex-direction: column;
+    margin: 5px;
+    .progress-container {
+      display: flex;
+      flex-direction: row;
+      margin: 7px 0;
+      align-items: center;
+      @media (max-width: 1024px) {
+        margin: 4px 0;
+      }
+      .label {
+        width: 50%;
+        margin-right: 10px;
+        font-size: 12px;
+        letter-spacing: 0.72px;
+        color: $subtitle;
+        @media (max-width: 1024px) {
+          font-size: 10px;
+        }
+      }
+      .progress {
+        display: flex;
+        width: 50%;
+        position: relative;
+        align-items: center;
+        .value {
+          position: absolute;
+          font-size: 12px;
+          letter-spacing: 0.72px;
+        }
+      }
+    }
+  }
+  &__key {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    &__container {
+      display: flex;
+      margin: 0 10px;
+      align-items: center;
+      .icon {
+        width: 14px;
+        height: 14px;
+        opacity: 1;
+        margin-right: 6px;
+        border-radius: 2px;
+      }
+      .label {
+        text-align: center;
+        font-size: 11px;
+        font-weight: $bolder;
+        letter-spacing: 0.6px;
+        color: $subtitle;
+      }
+    }
+  }
+}
+
+.progress-value {
+  margin-left: 5px;
+  min-height: 20px;
+}
+
+.progress {
+  .value {
+    font-size: 13px;
+  }
+}
+
+:host ::ng-deep .mat-tab-label {
+  flex-grow: inherit !important;
+  min-width: 50% !important;
+  padding: 0 !important;
+  @media (max-width: $L) {
+    min-width: 15vw !important;
+  }
+}
+
+:host ::ng-deep .mat-tab-header {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+:host ::ng-deep .mat-tab-label-active .mat-tab-label-content {
+  color: $primary-cta !important;
+  @media screen and (max-width: $L) {
+    font-size: 14px !important;
+  }
+}
+
+:host ::ng-deep .stat-body-container {
+  overflow-y: auto;
+  height: 225px;
+  margin-bottom: 20px;
+}
+:host ::ng-deep .mat-tab-labels {
+  display: flex;
+  justify-content: space-around;
+}

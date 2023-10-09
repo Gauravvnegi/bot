@@ -15,9 +15,14 @@ import { Subscription } from 'rxjs';
 import {
   ModuleNames,
   ProductMenu,
+  ProductNames,
   routes,
 } from '../../../../../../../../../../libs/admin/shared/src/index';
-import { MenuItem } from '../../data-models/menu.model';
+import {
+  Product,
+  ProductItem,
+  SubMenuItem,
+} from '../../data-models/menu.model';
 import { GlobalFilterService } from '../../services/global-filters.service';
 import { SubscriptionPlanService } from '../../services/subscription-plan.service';
 import { OrientationPopupComponent } from '../orientation-popup/orientation-popup.component';
@@ -44,8 +49,8 @@ export class SidenavComponent implements OnInit, OnDestroy {
   @Output() navToggle = new EventEmitter<boolean>();
   selectedModule: ModuleNames;
   isMenuBarVisible: boolean = false;
-  productList = [];
-  selectedProduct: ModuleNames;
+  productList: ProductItem[] = [];
+  selectedProduct: ProductNames;
 
   constructor(
     private _breakpointObserver: BreakpointObserver,
@@ -76,6 +81,7 @@ export class SidenavComponent implements OnInit, OnDestroy {
     // this.selectedProduct = this.authService.getTokenByName(
     //   'selectedProduct'
     // ) as ModuleNames;
+
     this.registerListeners();
     this.initSideNavConfigs({
       headerBgColor: this.branchConfig.headerBgColor,
@@ -100,7 +106,7 @@ export class SidenavComponent implements OnInit, OnDestroy {
    */
   listenForGlobalFilters(): void {
     this.$subscription.add(
-      this.globalFilterService.selectedModule.subscribe((name) => {
+      this.globalFilterService.selectedModule.subscribe((name: ModuleNames) => {
         if (name) {
           this.selectedModule = name;
         } else {
@@ -166,13 +172,10 @@ export class SidenavComponent implements OnInit, OnDestroy {
     this.dividerBgColor = 'white';
     this.list_item_colour = '#E8EEF5';
     this.headerBgColor = config['headerBgColor'] || '#4B56C0';
-    this.products = this.subscriptionPlanService.getSubscription()['products'];
-    this.productList = this.products
-      .filter((item) => item.isView)
-      .map((product) => {
-        let menuItem = new MenuItem().deserialize(product);
-        return menuItem;
-      });
+
+    this.productList = new Product().deserialize(
+      this.subscriptionPlanService.getSubscription()['products']
+    ).productItems;
 
     const selectedModule = this.selectedProduct
       ? this.productList.find((item) => item.name === this.selectedProduct)
@@ -187,10 +190,7 @@ export class SidenavComponent implements OnInit, OnDestroy {
     this.setSelectedModuleBasedOnRoute();
   }
 
-  toggleMenuButton(menuItem?: MenuItem) {
-    if (menuItem?.name === ModuleNames.SETTINGS) {
-      this.router.navigate([`/pages/${routes.SETTINGS}`]);
-    }
+  toggleMenuButton(menuItem?: SubMenuItem) {
     this.globalFilterService.selectedModule.next(menuItem?.name ?? '');
     this.isExpanded = !this.isExpanded;
     this.navToggle.emit(this.isExpanded);
@@ -204,41 +204,38 @@ export class SidenavComponent implements OnInit, OnDestroy {
     this.submenuItems.emit(data);
   }
 
-  // Intial -> Selected Product (priority sequence)
-  // IsView
+  // onMenuCLick(data: any) {
+  //   this.selectedProduct = data.name;
 
-  onMenuCLick(data: any) {
-    this.selectedProduct = data.name;
+  //   this.subscriptionPlanService.selectedProduct = this.selectedProduct;
 
-    this.subscriptionPlanService.selectedProduct = this.selectedProduct;
+  //   if (data.isSubscribed) {
+  //     this.menuItems = data.children;
+  //     this.setSelectedModuleBasedOnRoute();
+  //     //route to first child of first product
+  //     const childRoute = data.children.find(
+  //       (item) => item.isView && item.isSubscribed
+  //     );
+  //     // ?.children?.find((item) => item.isView && item.isSubscribed);
 
-    if (data.isSubscribed) {
-      this.menuItems = data.children;
-      this.setSelectedModuleBasedOnRoute();
-      //route to first child of first product
-      const childRoute = data.children.find(
-        (item) => item.isView && item.isSubscribed
-      );
-      // ?.children?.find((item) => item.isView && item.isSubscribed);
+  //     const childPath = routes[childRoute.name];
 
-      const childPath = routes[childRoute.name];
+  //     const pathUrl = `pages/${routes[childRoute.name].replace(
+  //       '{{product}}',
+  //       routes[this.selectedProduct]
+  //     )}`;
 
-      const pathUrl = `pages/${routes[childRoute.name].replace(
-        '{{product}}',
-        routes[this.selectedProduct]
-      )}`;
+  //     this.router.navigate([pathUrl], {
+  //       replaceUrl: true,
+  //     });
+  //   } else {
+  //     this.menuItems = [];
+  //     this.router.navigate([`pages/redirect`]);
+  //   }
 
-      this.router.navigate([pathUrl], {
-        replaceUrl: true,
-      });
-    } else {
-      this.menuItems = [];
-      this.router.navigate([`pages/redirect`]);
-    }
-
-    this.subscriptionPlanService.setSettings();
-    this.isMenuBarVisible = false;
-  }
+  //   this.subscriptionPlanService.setSettings();
+  //   this.isMenuBarVisible = false;
+  // }
 
   ngOnDestroy() {
     this.$subscription.unsubscribe();

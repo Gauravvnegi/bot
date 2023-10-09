@@ -10,20 +10,6 @@ export enum ProductNames {
   PREDICTO_PMS = 'PREDICTO_PMS',
 }
 
-export enum RouteModulesName {
-  // create With
-
-  // front deskModule
-  FRONT_DESK_DASHBOARD = 'FRONT_DESK_DASHBOARD',
-
-  ADD_RESERVATION = 'ADD_RESERVATION',
-  HOUSEKEEPING = 'HOUSEKEEPING',
-
-  // freddie
-  CONVERSATION_DASHBOARD = 'CONVERSATION_DASHBOARD',
-  LIVE_MESSAGING = 'LIVE_MESSAGING',
-}
-
 export enum ModuleNames {
   //Dashboard
   Home = 'HOME',

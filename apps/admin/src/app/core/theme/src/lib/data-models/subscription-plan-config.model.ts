@@ -2,6 +2,7 @@ import {
   CardNames,
   ModuleConfig,
   ModuleNames,
+  ProductNames,
   TableNames,
 } from 'libs/admin/shared/src/lib/constants/subscriptionConfig';
 import { get, set } from 'lodash';
@@ -84,7 +85,7 @@ export class Subscriptions {
 }
 
 export class Products {
-  name: string;
+  name: ProductNames;
   label: string;
   description: string;
   icon: string;
@@ -113,7 +114,7 @@ export class Products {
 }
 
 export class SubProducts {
-  name: string;
+  name: ModuleNames;
   label: string;
   description: string;
   icon: string;

@@ -1,0 +1,107 @@
+@import 'main';
+
+.container {
+  // box-shadow: 0px 3px 6px $blackPrime;
+  padding: 0 20px 0 20px;
+
+  // border: 1px solid $borderCol;
+  .header {
+    height: 65px;
+    background: 0% 0% no-repeat padding-box $white;
+    opacity: 1;
+  }
+  .body {
+    background: $borderCol;
+    &__container {
+      // margin-top: 20px;
+      border: 1px solid lightgray;
+      height: calc(100vh - 230px);
+      background: 0% 0% no-repeat padding-box $white;
+      // box-shadow: 0px 3px 6px $blackPrime;
+      border-radius: 5px 5px 0px 0px;
+      opacity: 1;
+      display: flex;
+
+      .feedback-body-left {
+        position: relative;
+        width: 28% !important;
+
+        @media only screen and (max-width: 1180px) {
+          width: 35%;
+        }
+        @media only screen and (min-width: 1450px) {
+          width: 25%;
+        }
+      }
+
+      .feedback-body-right {
+        position: relative;
+        width: 72%;
+        @media only screen and (max-width: 1180px) {
+          width: 65%;
+        }
+        @media only screen and (min-width: 1450px) {
+          width: 75%;
+        }
+      }
+      .guest-info-enable {
+        position: absolute;
+        right: 24px;
+        background: $white;
+        width: 57%;
+        max-width: 259px;
+        border-radius: 5px;
+        box-shadow: 0 3px 12px 0 rgba(0, 0, 0, 0.12);
+        height: 655px;
+        z-index: 5;
+      }
+    }
+  }
+}
+
+:host ::ng-deep {
+  .mat-tab-group {
+    padding: 0 20px;
+  }
+  .mat-tab-label {
+    min-width: fit-content !important;
+    height: 65px !important;
+  }
+  .mat-tab-label-active {
+    border-bottom: 2px solid $primary-cta;
+    color: $primary-cta;
+  }
+  .mat-tab-header {
+    border-bottom: none !important;
+  }
+}
+.disabled {
+  pointer-events: none;
+  .blackscreen {
+    display: block !important;
+  }
+}
+
+.empty {
+  height: 100%;
+  width: 100%;
+  @include flex-col-all-Center;
+  &__img {
+    img {
+      width: 192px;
+      margin-bottom: 10px;
+    }
+  }
+  &__title {
+    margin: 12px 0;
+    @include normal-sm-text;
+    font-weight: $bolder;
+    color: $secondary;
+  }
+  &__description {
+    font-size: 12px;
+    font-weight: $bolder;
+    letter-spacing: 0.72px;
+    color: $grayLight;
+  }
+}

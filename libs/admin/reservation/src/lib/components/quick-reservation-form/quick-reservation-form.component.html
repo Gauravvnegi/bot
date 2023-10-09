@@ -53,6 +53,7 @@
           [settings]="{
             enableTime: false
           }"
+          [minDate]="startMinDate"
         ></hospitality-bot-date>
         <hospitality-bot-date
           class="half-width"
@@ -61,6 +62,7 @@
           [settings]="{
             enableTime: false
           }"
+          [minDate]="endMinDate"
         ></hospitality-bot-date>
         <hospitality-bot-select
           class="half-width"
@@ -203,7 +205,7 @@
         <hospitality-bot-text-area
           class="full-width"
           controlName="specialInstructions"
-          label="Special Instructions"
+          label="Remarks"
           [props]="{
             placeholder: 'Enter'
           }"

@@ -35,7 +35,6 @@ import { FormService } from 'libs/admin/manage-reservation/src/lib/services/form
 import { Router } from '@angular/router';
 import { IGRoomType } from '../../../../../dashboard/src/lib/components/reservation-calendar-view/reservation-calendar-view.component';
 import { IGCol } from 'libs/admin/shared/src/lib/components/interactive-grid/interactive-grid.component';
-import { debounceTime } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
 import { AddGuestComponent } from 'libs/admin/guests/src/lib/components';
 import { RoomTypeResponse } from 'libs/admin/room/src/lib/types/service-response';
@@ -52,6 +51,9 @@ export class QuickReservationFormComponent implements OnInit {
   navRoutes = [{ label: 'Add Item', link: './' }];
 
   useForm: FormGroup;
+
+  startMinDate = new Date();
+  endMinDate = new Date();
 
   entityId: string;
   reservationId: string;
@@ -137,8 +139,10 @@ export class QuickReservationFormComponent implements OnInit {
   }
 
   initDefaultDate() {
-    const fromDate = new Date(this.date); // Convert epoch to milliseconds
+    const fromDate = this.date ? new Date(this.date) : new Date(); // Convert epoch to milliseconds
     const toDate = new Date(fromDate);
+    this.startMinDate = fromDate;
+    this.endMinDate = toDate;
     toDate.setDate(fromDate.getDate() + 1); // Add 1 day
     this.inputControls.reservationInformation.patchValue({
       from: fromDate.getTime(),
@@ -245,15 +249,6 @@ export class QuickReservationFormComponent implements OnInit {
     );
   }
 
-  listenForRoomTypeChanges() {
-    this.roomControls.roomTypeId.valueChanges
-      .pipe(debounceTime(500))
-      .subscribe((res) => {
-        if (res) {
-        }
-      });
-  }
-
   getGuestConfig() {
     const queries = {
       entityId: this.entityId,
@@ -311,6 +306,7 @@ export class QuickReservationFormComponent implements OnInit {
     }));
     this.inputControls.roomInformation.patchValue({
       ratePlan: this.ratePlans[0].value,
+      adultCount: 1,
     });
   }
 

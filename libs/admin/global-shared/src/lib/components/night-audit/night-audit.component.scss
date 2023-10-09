@@ -1,7 +1,12 @@
 @import 'main';
+/** Main Stepper Desing */
 :host ::ng-deep .audit-wrapper {
   .p-sidebar-close {
     display: none;
+  }
+
+  .audit-content_wrapper {
+    margin-top: 30px;
   }
 
   .fixed {
@@ -40,5 +45,63 @@
 
   .main__wrapper {
     padding: 0 40px;
+  }
+}
+
+// Steps Component Common Design
+.main__wrapper {
+  .warning-message {
+    position: absolute;
+    top: 60px;
+    right: 9px;
+    color: #457cbf;
+    font-size: 13px;
+    background-color: #ebf1f8;
+  }
+
+  .message__wrapper {
+    font-size: 14px;
+    .message {
+      color: #8b8b8b;
+    }
+    .warning {
+      display: flex;
+      align-items: center;
+      font-size: 12px;
+      font-weight: 600;
+      gap: 10px;
+      padding: 10px 0;
+    }
+  }
+}
+
+:host ::ng-deep .main__wrapper {
+  // EmptyView design Override
+  .wrapper__standard {
+    &-img {
+      height: 100px;
+    }
+    &-subText {
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.96px;
+      color: #868686;
+      line-height: 0px;
+      margin-top: -10px;
+    }
+  }
+  .p-datatable {
+    height: 47vh;
+    overflow: auto;
+  }
+
+  .empty-datatable {
+    .p-datatable {
+      height: unset;
+      overflow: auto;
+    }
+    .wrapper {
+      min-height: 40vh !important;
+    }
   }
 }

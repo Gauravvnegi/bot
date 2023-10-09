@@ -17,7 +17,7 @@
       routerLinkActive
       #rla="routerLinkActive"
       [routerLinkActiveOptions]="{ exact: false }"
-      [ngClass]="selectedModule == menuItem.name ? 'active' : ''"
+      [ngClass]="menuItem.path === currentRoute.module ? 'active' : ''"
       (mouseenter)="handleRouteChange(menuItem)"
       (mouseleave)="handleRouteChangeOnLeave()"
     >
@@ -30,12 +30,14 @@
         class="main_heading_anchor"
         [routerLink]="[menuItem.path]"
         [style.background-color]="
-          selectedModule == menuItem.name
+          menuItem.path === currentRoute.module
             ? 'rgba(255, 255, 255, 0.24)'
             : 'transparent'
         "
         [style.color]="
-          selectedModule == menuItem.name ? activeFontColor : normalFontColor
+          menuItem.path === currentRoute.module
+            ? activeFontColor
+            : normalFontColor
         "
         [style.padding]="'10px 0px'"
         (click)="handleRouteChange(menuItem)"
@@ -99,7 +101,7 @@
         <div
           *ngFor="let product of productList; let i = index"
           class="menu"
-          [ngClass]="{ selected: product.name === selectedProduct }"
+          [ngClass]="{ selected: product.path === currentRoute.product }"
           [routerLink]="[product.path]"
         >
           <img [src]="product.iconUrl" alt="" />

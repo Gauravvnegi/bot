@@ -38,6 +38,11 @@ export class SubscriptionPlanService extends ApiService {
     this.productSubscription = new ProductSubscription().deserialize(data);
   }
 
+  setSelectedProduct(productName: ProductNames) {
+    this.selectedProduct = productName;
+    this.setSettings();
+  }
+
   getSubscription(): Subscriptions {
     return this.subscriptions;
   }

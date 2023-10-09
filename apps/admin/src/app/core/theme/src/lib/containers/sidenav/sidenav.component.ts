@@ -27,6 +27,7 @@ import { GlobalFilterService } from '../../services/global-filters.service';
 import { SubscriptionPlanService } from '../../services/subscription-plan.service';
 import { OrientationPopupComponent } from '../orientation-popup/orientation-popup.component';
 import { AuthService } from '../../../../../auth/services/auth.service';
+import { RoutesConfigService } from '../../services/routes-config.service';
 
 @Component({
   selector: 'hospitality-bot-sidenav',
@@ -58,34 +59,69 @@ export class SidenavComponent implements OnInit, OnDestroy {
     private globalFilterService: GlobalFilterService,
     private _hotelDetailService: HotelDetailService,
     private subscriptionPlanService: SubscriptionPlanService,
+    private routeConfigService: RoutesConfigService,
     private router: Router,
     private authService: AuthService
-  ) {
-    this.router.events.subscribe((res: any) => {
-      // For the first time product find if
-      if (this.selectedProduct) return;
-
-      if (res?.urlAfterRedirects && res.urlAfterRedirects.includes('/pages')) {
-        for (let moduleName in routes) {
-          if (routes[moduleName] === res.urlAfterRedirects.split('/')[2]) {
-            const productMapping = this.subscriptionPlanService.getModuleProductMapping();
-            this.selectedProduct = productMapping[moduleName];
-            // set setting based on product
-          }
-        }
-      }
-    });
-  }
+  ) {}
 
   ngOnInit() {
-    // this.selectedProduct = this.authService.getTokenByName(
-    //   'selectedProduct'
-    // ) as ModuleNames;
+    this.initProductList();
 
     this.registerListeners();
     this.initSideNavConfigs({
       headerBgColor: this.branchConfig.headerBgColor,
     });
+  }
+
+  /**
+   * Initiating Product Selection
+   */
+  initProductList() {
+    this.productList = new Product().deserialize(
+      this.subscriptionPlanService.getSubscription()['products']
+    ).productItems;
+
+    // First load route setup
+    this.initRouteConfig(this.router.url);
+    // Route Subscription
+    this.router.events.subscribe((res: any) => {
+      if (res?.urlAfterRedirects) {
+        this.initRouteConfig(res.urlAfterRedirects);
+      }
+    });
+  }
+
+  get currentRoute() {
+    return this.routeConfigService.activeRouteConfig;
+  }
+
+  /**
+   * Setting route configuration
+   */
+  initRouteConfig(finalRoute: string) {
+    const routesArr = finalRoute.split('/');
+    this.routeConfigService.initActiveRoute({
+      product: `/${routesArr[1]}` ?? '',
+      module: `/${routesArr[1]}/${routesArr[2]}` ?? '',
+      submodule: `/${routesArr[1]}/${routesArr[3]}/${routesArr[3]}` ?? '',
+    });
+
+    const currentProduct = this.productList.find(
+      (item) => item.path === this.currentRoute.product
+    );
+
+    /**
+     * Updating menu item based on route
+     */
+    this.menuItems = currentProduct.children ?? [];
+
+    /**
+     * Updating selected product
+     */
+    this.subscriptionPlanService.setSelectedProduct(currentProduct.name);
+
+    // Closing product menu on route change
+    this.isMenuBarVisible = false;
   }
 
   registerListeners() {
@@ -184,7 +220,7 @@ export class SidenavComponent implements OnInit, OnDestroy {
     if (selectedModule) {
       this.selectedProduct = selectedModule.name;
       this.subscriptionPlanService.selectedProduct = this.selectedProduct;
-      this.menuItems = selectedModule.children;
+      // this.menuItems = selectedModule.children;
     }
 
     this.setSelectedModuleBasedOnRoute();

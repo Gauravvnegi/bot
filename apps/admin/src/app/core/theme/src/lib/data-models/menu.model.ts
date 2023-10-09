@@ -1,7 +1,7 @@
 import { ModuleNames, ProductNames, routes } from 'libs/admin/shared/src/index';
 import { get, set } from 'lodash';
 import { Products, SubProducts } from './subscription-plan-config.model';
-import { convertNameToRoute } from '../../../../../../../../../libs/admin/shared/src/lib/utils/valueFormatter';
+import { RoutesConfigService } from '../services/routes-config.service';
 
 export class SubMenuItem {
   path: string;
@@ -13,6 +13,8 @@ export class SubMenuItem {
   children: SubMenuItem[];
 
   deserialize(input: SubProducts, prevRoute: string) {
+    const routeService = new RoutesConfigService();
+
     this.children = new Array<SubMenuItem>();
 
     this.title = input.label;
@@ -21,7 +23,7 @@ export class SubMenuItem {
     this.isSubscribed = input.isSubscribed;
     this.isView = input.isView;
 
-    this.path = prevRoute + '/' + convertNameToRoute(input.name);
+    this.path = prevRoute + '/' + routeService.getRouteFromName(input.name);
 
     input.config?.forEach((subMenu) => {
       if (subMenu.isView) {
@@ -43,6 +45,8 @@ export class ProductItem {
   children: SubMenuItem[];
 
   deserialize(input: Products) {
+    const routeService = new RoutesConfigService();
+
     this.children = new Array<SubMenuItem>();
 
     this.name = input.name;
@@ -50,7 +54,7 @@ export class ProductItem {
     this.iconUrl = input.icon;
     this.isSubscribed = input.isSubscribed;
     this.isView = input.isView;
-    this.path = '/' + convertNameToRoute(input.name);
+    this.path = '/' + routeService.getRouteFromName(input.name);
 
     input.config?.forEach((subMenu) => {
       if (subMenu.isView) {

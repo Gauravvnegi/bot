@@ -36,16 +36,3 @@ export function convertToTitleCase(str: string) {
         .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
         .join(' ');
 }
-
-/**
- * Convert module/product name to route (underScore to dash)
- * Also checks if module name is attached with route
- * @param name Module or product name
- * @returns route
- */
-export const convertNameToRoute = (name: ModuleNames | ProductNames) => {
-  const route = routesConfig[name];
-  if (route) return route;
-
-  return name.toLowerCase().split('_').join('-');
-};

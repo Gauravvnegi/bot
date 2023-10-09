@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { ROUTES, Route, RouterModule } from '@angular/router';
-import { SubscriptionPlanService } from '../theme/src';
+import { RoutesConfigService, SubscriptionPlanService } from '../theme/src';
 import { routeFactoryNew } from '../utils/routesFactory.module';
 import { MainComponent } from './component/main/main.component';
 
@@ -11,11 +11,7 @@ const appRoutes: Route[] = [
     children: [
       {
         path: '',
-        component: MainComponent,
-      },
-      {
-        path: 'asd',
-        component: MainComponent,
+        component: MainComponent, // handle Redirection
       },
     ],
   },
@@ -27,12 +23,18 @@ const appRoutes: Route[] = [
   providers: [
     {
       provide: ROUTES,
-      useFactory: (subscriptionService: SubscriptionPlanService) => {
-        const routes = routeFactoryNew(appRoutes, [subscriptionService]);
+      useFactory: (
+        subscriptionService: SubscriptionPlanService,
+        routesConfigService: RoutesConfigService
+      ) => {
+        const routes = routeFactoryNew(appRoutes, [
+          subscriptionService,
+          routesConfigService,
+        ]);
         return routes;
       },
       multi: true,
-      deps: [SubscriptionPlanService],
+      deps: [SubscriptionPlanService, RoutesConfigService],
     },
   ],
 })

@@ -1,9 +1,8 @@
 import { Route, Routes } from '@angular/router';
-import { ModuleNames, SubscriptionConfig } from 'libs/admin/shared/src/index';
-import { convertNameToRoute } from 'libs/admin/shared/src/lib/utils/valueFormatter';
-import { SubscriptionPlanService } from '../theme/src/lib/services/subscription-plan.service';
-import { moduleConfig } from '../pages/config/config.module';
+import { SubscriptionConfig } from 'libs/admin/shared/src/index';
 import { ComingSoonComponent } from 'libs/admin/shared/src/lib/components/coming-soon/coming-soon.component';
+import { moduleConfig } from '../pages/config/config.module';
+import { RoutesConfigService, SubscriptionPlanService } from '../theme/src';
 
 type ModulePromise<T extends any> = () => Promise<T>;
 
@@ -30,10 +29,10 @@ const getRedirectRouteConfig = (
 
 export const routeFactoryNew = (
   routes: Routes,
-  deps: [SubscriptionPlanService],
+  deps: [SubscriptionPlanService, RoutesConfigService],
   config = {}
 ): Routes => {
-  let [subscriptionService] = deps;
+  let [subscriptionService, routesConfigService] = deps;
 
   const subscription = subscriptionService.getSubscription();
 
@@ -48,7 +47,7 @@ export const routeFactoryNew = (
     const isProductInView = product.isView;
 
     if (productName && isProductInView) {
-      const productRoute = convertNameToRoute(productName);
+      const productRoute = routesConfigService.getRouteFromName(productName);
 
       var firstSubscribedModulePath = undefined;
 
@@ -59,7 +58,7 @@ export const routeFactoryNew = (
         const moduleName = module.name;
 
         if (moduleName && module.isView) {
-          const moduleRoute = convertNameToRoute(module.name);
+          const moduleRoute = routesConfigService.getRouteFromName(module.name);
           const modulePath = `${productRoute}/${moduleRoute}`;
           const isModuleSubscribed = module.isSubscribed;
           var firstSubscribedSubModulePath = undefined;
@@ -78,7 +77,9 @@ export const routeFactoryNew = (
             const isSubModuleInView = subModule.isView;
 
             if (subModuleName && isSubModuleInView) {
-              const subModuleRoute = convertNameToRoute(subModule.name);
+              const subModuleRoute = routesConfigService.getRouteFromName(
+                subModule.name
+              );
               const subModulePath = `${productRoute}/${moduleRoute}/${subModuleRoute}`;
 
               // Getting first subscribed sub module path

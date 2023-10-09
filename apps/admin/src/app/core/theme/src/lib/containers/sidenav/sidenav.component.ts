@@ -124,15 +124,23 @@ export class SidenavComponent implements OnInit, OnDestroy {
       (item) => item.path === this.currentRoute.product.fullPath
     );
 
-    /**
-     * Updating menu item based on route
-     */
-    this.menuItems = currentProduct?.children ?? [];
+    if (currentProduct) {
+      /**
+       * Updating menu item based on route
+       */
+      this.menuItems = currentProduct.children ?? [];
 
-    /**
-     * Updating selected product
-     */
-    this.subscriptionPlanService.setSelectedProduct(currentProduct.name);
+      /**
+       * Updating selected product
+       */
+      this.subscriptionPlanService.setSelectedProduct(currentProduct.name);
+    } else {
+      console.error('Error getting product', {
+        fullPath: this.currentRoute.product.fullPath,
+        routesArr,
+        productList: this.productList,
+      });
+    }
 
     // Closing product menu on route change
     this.isMenuBarVisible = false;

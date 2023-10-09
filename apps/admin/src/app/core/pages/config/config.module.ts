@@ -26,10 +26,14 @@ export const moduleConfig: Partial<Record<ModuleNames, any>> = {
   [ModuleNames.BLOG]: CreateWithSubModule,
 
   //Create With
-  [ModuleNames.BUSINESS_INFO]: CreateWithSubModule,
+
   [ModuleNames.WEBSITE_SETTINGS]: CreateWithSubModule,
   [ModuleNames.ACCEPT_PAYMENTS]: CreateWithSubModule,
   [ModuleNames.LEGAL_POLICIES]: CreateWithSubModule,
+  [ModuleNames.BUSINESS_INFO]: () =>
+    import('@hospitality-bot/admin/business').then(
+      (m) => m.AdminBusinessModule
+    ),
 
   // front desk
   [ModuleNames.ADD_RESERVATION]: () =>

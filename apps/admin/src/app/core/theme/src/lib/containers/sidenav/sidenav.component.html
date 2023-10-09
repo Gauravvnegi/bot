@@ -98,7 +98,18 @@
           [ngClass]="{ selected: product.name === selectedProduct }"
           (click)="onMenuCLick(product)"
         >
-          <img [src]="product.url" alt="" />
+          <div
+            class="product-icon"
+            [ngClass]="{
+              'empty-img-view': !isImageLoaded
+            }"
+          >
+            <img
+              (load)="onImageLoad()"
+              [src]="product.url"
+              [alt]="product.name"
+            />
+          </div>
           <div class="menu-label">{{ product.title }}</div>
         </div>
       </div>

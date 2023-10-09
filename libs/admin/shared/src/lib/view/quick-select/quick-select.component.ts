@@ -202,6 +202,13 @@ export class QuickSelectComponent extends FormComponent implements OnInit {
               ? [this._qsProps.selectedOption]
               : []),
           ]);
+
+          // To be improved later.
+          this.controlContainer.control
+            .get(this.controlName)
+            .setValue(
+              this.controlContainer.control.get(this.controlName).value
+            );
           this.noMoreData = data.length < this.limit;
         },
         (error) => {},
@@ -325,9 +332,11 @@ export class QuickSelectComponent extends FormComponent implements OnInit {
     this.controlContainer.control
       .get(this.controlName)
       .valueChanges.subscribe((res) => {
-        this.clickedOption.emit(
-          this.menuOptions.find((item) => item.value == res)
-        );
+        if (res?.length) {
+          this.clickedOption.emit(
+            this.menuOptions.find((item) => item.value == res)
+          );
+        }
       });
   }
 }

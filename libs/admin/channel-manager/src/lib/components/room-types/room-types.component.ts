@@ -42,9 +42,13 @@ export class RoomTypesComponent extends FormComponent {
   }
 
   initRoomTypes() {
-    // this.channelMangerForm.loadRoomTypes(this.entityId);
+    this.channelMangerForm.loadRoomTypes(this.entityId);
     this.channelMangerForm.roomDetails.subscribe((rooms: RoomTypes[]) => {
-      this.roomTypes = rooms;
+      if (this.channelMangerForm.isRoomDetailsLoaded) {
+        this.roomTypes = rooms;
+      } else {
+        this.channelMangerForm.loadRoomTypes(this.entityId);
+      }
       this.isAllSelected && this.defaultSelect();
     });
   }

@@ -1,4 +1,4 @@
-<hospitality-bot-navigation-header [heading]="pageTitle" [routes]="navRoutes">
+<hospitality-bot-navigation-header [heading]="pageTitle" [isBack]="false" [routes]="navRoutes">
 </hospitality-bot-navigation-header>
 <div [formGroup]="useForm" class="btn-wrapper">
   <hospitality-bot-date
@@ -11,17 +11,14 @@
     }"
     [disabled]="true"
   ></hospitality-bot-date>
-
-  <hospitality-bot-select
+  <hospitality-bot-room-types
     class="btn-width"
     controlName="roomType"
-    label="Room Type"
-    [options]="roomTypes"
-    [props]="{ placeholder: 'Select Room Type', isAsync: true }"
-    (paginate)="loadMoreRoomTypes($event)"
-    (onSearch)="searchRoomTypes($event)"
+    [props]="{
+      isAllSelected: true
+    }"
   >
-  </hospitality-bot-select>
+  </hospitality-bot-room-types>
 </div>
 
 <p-table
@@ -57,7 +54,7 @@
         (onChange)="toggleQuickReplyFilter($event)"
         [selectedChips]="selectedFilterChips"
       >
-      <hospitality-bot-info-panel></hospitality-bot-info-panel>
+        <hospitality-bot-info-panel></hospitality-bot-info-panel>
       </hospitality-bot-filter-chips>
     </div>
   </ng-template>
@@ -110,4 +107,3 @@
   >
   </hospitality-bot-empty-table>
 </ng-template>
-

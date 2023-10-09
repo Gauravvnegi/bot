@@ -46,6 +46,7 @@ export class SidenavComponent implements OnInit, OnDestroy {
   isMenuBarVisible: boolean = false;
   productList = [];
   selectedProduct: ModuleNames;
+  isImageLoaded: boolean = false;
 
   constructor(
     private _breakpointObserver: BreakpointObserver,
@@ -265,5 +266,8 @@ export class SidenavComponent implements OnInit, OnDestroy {
 
   onExplore() {
     this.isMenuBarVisible = !this.isMenuBarVisible;
+  }
+  onImageLoad() {
+    this.isImageLoaded = true;
   }
 }

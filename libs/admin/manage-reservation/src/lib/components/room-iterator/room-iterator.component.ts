@@ -224,7 +224,6 @@ export class RoomIteratorComponent extends IteratorComponent
               },
               { emitEvent: false }
             );
-            debugger;
             this.roomControls[index].get('ratePlan').enable();
           }
 
@@ -233,7 +232,6 @@ export class RoomIteratorComponent extends IteratorComponent
             this.isDefaultRoomType &&
             this.reservationInfoControls.reservationType.value === 'DRAFT'
           ) {
-            debugger;
             this.roomControls[index].get('ratePlan').enable();
           }
           setTimeout(() => {

@@ -154,7 +154,6 @@ export class RoomIteratorComponent extends IteratorComponent
     itemValues.forEach((value, index) => {
       // Rooms number is not multi-select in edit mode.
       if (this.reservationInfoControls.reservationType.value !== 'DRAFT') {
-        debugger;
         this.fields[3].name = 'roomNumber';
         this.fields[3].type = 'select';
       }
@@ -170,7 +169,6 @@ export class RoomIteratorComponent extends IteratorComponent
         roomNumber: value?.roomNumber,
         id: value?.id,
       });
-      debugger;
     });
   }
 
@@ -186,7 +184,7 @@ export class RoomIteratorComponent extends IteratorComponent
   listenRoomTypeChanges(index: number) {
     this.roomControls[index]
       .get('roomTypeId')
-      ?.valueChanges.pipe(debounceTime(100))
+      ?.valueChanges.pipe()
       .subscribe((res) => {
         if (res && this.roomTypes.length) {
           // Sets rate plan options according to the selected room type
@@ -230,7 +228,6 @@ export class RoomIteratorComponent extends IteratorComponent
               },
               { emitEvent: false }
             );
-            debugger;
             this.roomControls[index].get('ratePlan').enable();
           }
 
@@ -239,7 +236,6 @@ export class RoomIteratorComponent extends IteratorComponent
             this.isDefaultRoomType &&
             this.reservationInfoControls.reservationType.value === 'DRAFT'
           ) {
-            debugger;
             this.roomControls[index].get('ratePlan').enable();
           }
           setTimeout(() => {
@@ -280,7 +276,6 @@ export class RoomIteratorComponent extends IteratorComponent
   // Patch data for selected room type
   roomTypeChange(event: RoomTypeResponse, index: number) {
     if (event) {
-      debugger;
       const data = new RoomTypeForm().deserialize(event);
       this.roomTypes[index] = {
         label: data.name,
@@ -320,6 +315,8 @@ export class RoomIteratorComponent extends IteratorComponent
     }
     this.roomTypeArray.removeAt(index);
   }
+
+  // getRoomTypeById
 
   /**
    * @function ngOnDestroy to unsubscribe subscription.

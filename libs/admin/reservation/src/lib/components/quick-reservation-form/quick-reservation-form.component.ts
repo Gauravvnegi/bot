@@ -3,6 +3,7 @@ import {
   Component,
   ComponentFactoryResolver,
   EventEmitter,
+  Input,
   OnInit,
   Output,
   ViewChild,
@@ -82,14 +83,14 @@ export class QuickReservationFormComponent implements OnInit {
   errorMessage: string;
 
   @Output() onCloseSidebar = new EventEmitter<boolean>(false);
-  // @Input() set reservationConfig(value: QuickReservationConfig) {
-  //   for (const key in value) {
-  //     const val = value[key];
-  //     this[key] = val;
-  //   }
+  @Input() set reservationConfig(value: QuickReservationConfig) {
+    for (const key in value) {
+      const val = value[key];
+      this[key] = val;
+    }
 
-  //   if (this.defaultRoomType) this.initDetails();
-  // }
+    if (this.defaultRoomType) this.initDetails();
+  }
 
   constructor(
     private fb: FormBuilder,
@@ -108,6 +109,7 @@ export class QuickReservationFormComponent implements OnInit {
   ngOnInit(): void {
     this.listenForGlobalFilters();
     this.getCountryCode();
+    this.initDefaultDate();
   }
 
   initDetails() {
@@ -120,7 +122,6 @@ export class QuickReservationFormComponent implements OnInit {
       });
       this.setRoomInfo(this.defaultRoomType);
     }
-    this.initDefaultDate();
   }
 
   /**
@@ -157,8 +158,8 @@ export class QuickReservationFormComponent implements OnInit {
 
       roomInformation: this.fb.group({
         roomTypeId: ['', [Validators.required]],
-        ratePlan: [{ value: '', disabled: false }],
-        roomNumber: [{ value: '', disabled: false }],
+        ratePlan: [{ value: '', disabled: true }],
+        roomNumber: [{ value: '', disabled: true }],
         adultCount: ['', [Validators.required, Validators.min(1)]],
         childCount: ['', [Validators.min(0)]],
         id: [''],
@@ -269,6 +270,7 @@ export class QuickReservationFormComponent implements OnInit {
       type: EntitySubType.ROOM_TYPE,
       toDate: this.globalQueries[0].toDate,
       fromDate: this.globalQueries[1].fromDate,
+      createBooking: true,
       raw: true,
       roomTypeStatus: true,
     };
@@ -391,11 +393,9 @@ export class QuickReservationFormComponent implements OnInit {
     //   .then((module) => {
     //     return this.compiler.compileModuleAsync(module.AdminGuestsModule);
     //   })
-
     //   .catch((error) => {
     //     console.error('Error loading the lazy module:', error);
     //   });
-
     // lazyModulePromise.then((moduleFactory) => {
     //   this.sidebarVisible = true;
     //   const factory = this.resolver.resolveComponentFactory(AddGuestComponent);

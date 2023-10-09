@@ -8,7 +8,7 @@ import {
   Output,
 } from '@angular/core';
 import { MatDialogConfig } from '@angular/material/dialog';
-import { Router } from '@angular/router';
+import { Router, NavigationEnd } from '@angular/router';
 import { HotelDetailService } from 'libs/admin/shared/src/lib/services/hotel-detail.service';
 import { ModalService } from 'libs/shared/material/src/lib/services/modal.service';
 import { Subscription } from 'rxjs';
@@ -84,9 +84,13 @@ export class SidenavComponent implements OnInit, OnDestroy {
     // First load route setup
     this.initRouteConfig(this.router.url);
     // Route Subscription
-    this.router.events.subscribe((res: any) => {
-      if (res?.urlAfterRedirects) {
-        this.initRouteConfig(res.urlAfterRedirects);
+    this.router.events.subscribe((event) => {
+      if (event instanceof NavigationEnd) {
+        // This block will be executed when navigation to a new route has completed.
+        // You can trigger your function or perform any necessary actions here.
+        if (event?.urlAfterRedirects) {
+          this.initRouteConfig(event.urlAfterRedirects);
+        }
       }
     });
   }
@@ -113,7 +117,7 @@ export class SidenavComponent implements OnInit, OnDestroy {
     /**
      * Updating menu item based on route
      */
-    this.menuItems = currentProduct.children ?? [];
+    this.menuItems = currentProduct?.children ?? [];
 
     /**
      * Updating selected product

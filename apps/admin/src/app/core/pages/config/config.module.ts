@@ -111,4 +111,11 @@ export const moduleConfig: Partial<Record<ModuleNames, any>> = {
     import('@hospitality-bot/admin/agent').then((m) => m.AdminAgentModule),
   [ModuleNames.COMPANY]: () =>
     import('@hospitality-bot/admin/company').then((m) => m.AdminCompanyModule),
+
+  // Finance
+  [ModuleNames.INVOICE]: () =>
+    import('@hospitality-bot/admin/invoice').then((m) => m.AdminInvoiceModule),
+  [ModuleNames.TRANSACTIONS]: () =>
+    // This module to be rename as Transaction module
+    import('@hospitality-bot/admin/finance').then((m) => m.AdminFinanceModule),
 };

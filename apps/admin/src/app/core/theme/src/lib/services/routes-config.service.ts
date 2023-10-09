@@ -6,9 +6,18 @@ export class RoutesConfigService {
   readonly routesConfig = routesConfig;
 
   private _activeRoute: ActiveRouteConfig = {
-    product: '',
-    module: '',
-    submodule: '',
+    product: {
+      shortPath: '', // create-with
+      fullPath: '', // create-with
+    },
+    module: {
+      shortPath: '', // create-with-home
+      fullPath: '', // create-with/create-with-home
+    },
+    submodule: {
+      shortPath: '', // create-wth-dashboard
+      fullPath: '', // create-with/create-with-home/create-wth-dashboard
+    },
   };
 
   initActiveRoute(config: ActiveRouteConfig) {
@@ -36,10 +45,15 @@ export class RoutesConfigService {
   }
 }
 
+type PathConfig = {
+  shortPath: string;
+  fullPath: string;
+};
+
 type ActiveRouteConfig = {
-  product: string;
-  module: string;
-  submodule: string;
+  product: PathConfig;
+  module: PathConfig;
+  submodule: PathConfig;
 };
 
 const routesConfig = {};

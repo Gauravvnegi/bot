@@ -105,13 +105,22 @@ export class SidenavComponent implements OnInit, OnDestroy {
   initRouteConfig(finalRoute: string) {
     const routesArr = finalRoute.split('/');
     this.routeConfigService.initActiveRoute({
-      product: `/${routesArr[1]}` ?? '',
-      module: `/${routesArr[1]}/${routesArr[2]}` ?? '',
-      submodule: `/${routesArr[1]}/${routesArr[3]}/${routesArr[3]}` ?? '',
+      product: {
+        shortPath: routesArr[1] ?? '',
+        fullPath: `/${routesArr[1]}` ?? '',
+      },
+      module: {
+        shortPath: routesArr[2] ?? '',
+        fullPath: `/${routesArr[1]}/${routesArr[2]}` ?? '',
+      },
+      submodule: {
+        shortPath: routesArr[3] ?? '',
+        fullPath: `/${routesArr[1]}/${routesArr[3]}/${routesArr[3]}` ?? '',
+      },
     });
 
     const currentProduct = this.productList.find(
-      (item) => item.path === this.currentRoute.product
+      (item) => item.path === this.currentRoute.product.fullPath
     );
 
     /**

@@ -1,6 +1,24 @@
 import { ModuleNames, SubscriptionConfig } from 'libs/admin/shared/src/index';
 
 export const moduleConfig: Partial<Record<ModuleNames, any>> = {
+  //Create With - all submodule will have same module as the external (Iframe)
+  [ModuleNames.CREATE_WITH_DASHBOARD]: () =>
+    import('@hospitality-bot/admin/create-with').then(
+      (m) => m.AdminCreateWithModule
+    ),
+  [ModuleNames.SEO_FRIENDLY]: () =>
+    import('@hospitality-bot/admin/create-with').then(
+      (m) => m.AdminCreateWithModule
+    ),
+  [ModuleNames.PAGES]: () =>
+    import('@hospitality-bot/admin/create-with').then(
+      (m) => m.AdminCreateWithModule
+    ),
+  [ModuleNames.BLOG]: () =>
+    import('@hospitality-bot/admin/create-with').then(
+      (m) => m.AdminCreateWithModule
+    ),
+
   // front desk
   [ModuleNames.ADD_RESERVATION]: () =>
     import('@hospitality-bot/admin/manage-reservation').then(

@@ -295,8 +295,10 @@ export class SettingsMenuItem {
   icon: string;
   isActive: boolean;
   isDisabled: boolean;
+  path: string;
 
-  deserialize(input) {
+  deserialize(input, route: string) {
+    this.path = route;
     Object.assign(
       this,
       set({}, 'name', get(input, ['name'])),

@@ -7,6 +7,7 @@ import { MainComponent } from './containers/main/main.component';
 import { PagesComponent } from './containers/pages/pages.component';
 import { TemporaryRedirectPageComponent } from './containers/trp/temporary-redirect-page/temporary-redirect-page.component';
 import { AdminDetailResolver } from './resolvers/admin-detail.resolver';
+import { DashboardErrorComponent } from '@hospitality-bot/admin/shared';
 
 const appRoutes: Route[] = [
   {
@@ -42,6 +43,23 @@ const appRoutes: Route[] = [
         canActivate: [CanActivateGuard],
       },
       {
+        path: 'roles-permissions',
+        loadChildren: () =>
+          import('@hospitality-bot/admin/roles-and-permissions').then(
+            (m) => m.AdminRolesAndPermissionsModule
+          ),
+        canActivate: [CanActivateGuard],
+      },
+      {
+        path: 'settings',
+        loadChildren: () =>
+          import('@hospitality-bot/admin/settings').then(
+            (m) => m.AdminSettingsModule
+          ),
+        canLoad: [CanLoadGuard],
+        canActivate: [CanActivateGuard],
+      },
+      {
         path: 'test', // will be removed (as direct imported in admin as of now)
         loadChildren: () =>
           import('@hospitality-bot/admin/complaint-tacker').then(
@@ -50,26 +68,9 @@ const appRoutes: Route[] = [
         canLoad: [CanLoadGuard],
         canActivate: [CanActivateGuard],
       },
+      { path: '**', redirectTo: '404' },
+      { path: '404', component: DashboardErrorComponent },
     ],
-    // children: [
-    //   {
-    //     path: 'redirect',
-    //     loadChildren: () =>
-    //       import('@hospitality-bot/admin/unsubscribed').then(
-    //         (m) => m.AdminUnsubscribedModule
-    //       ),
-    //     canLoad: [CanLoadGuard],
-    //     canActivate: [RedirectGuard],
-    //   },
-    //   // {
-    //   //   path: '',
-    //   //   redirectTo: 'redirect',
-    //   //   pathMatch: 'full',
-    //   // },
-
-    //   { path: '**', redirectTo: '404' },
-    //   { path: '404', component: DashboardErrorComponent },
-    // ],
   },
 ];
 

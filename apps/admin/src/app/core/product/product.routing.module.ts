@@ -31,6 +31,7 @@ const appRoutes: Route[] = [
           subscriptionService,
           routesConfigService,
         ]);
+
         return routes;
       },
       multi: true,

@@ -1,23 +1,35 @@
 import { ModuleNames, SubscriptionConfig } from 'libs/admin/shared/src/index';
 
+const CreateWithSubModule = () =>
+  import('@hospitality-bot/admin/create-with').then(
+    (m) => m.AdminCreateWithModule
+  );
+
 export const moduleConfig: Partial<Record<ModuleNames, any>> = {
-  //Create With - all submodule will have same module as the external (Iframe)
-  [ModuleNames.CREATE_WITH_DASHBOARD]: () =>
-    import('@hospitality-bot/admin/create-with').then(
-      (m) => m.AdminCreateWithModule
+  // Settings Module
+  [ModuleNames.TAX]: () =>
+    import('@hospitality-bot/admin/tax').then((m) => m.AdminTaxModule),
+  [ModuleNames.SUBSCRIPTION]: () =>
+    import('@hospitality-bot/admin/subscription').then(
+      (m) => m.AdminSubscriptionModule
     ),
-  [ModuleNames.SEO_FRIENDLY]: () =>
-    import('@hospitality-bot/admin/create-with').then(
-      (m) => m.AdminCreateWithModule
+  [ModuleNames.ROLES_AND_PERMISSIONS]: () =>
+    import('@hospitality-bot/admin/roles-and-permissions').then(
+      (m) => m.AdminRolesAndPermissionsModule
     ),
-  [ModuleNames.PAGES]: () =>
-    import('@hospitality-bot/admin/create-with').then(
-      (m) => m.AdminCreateWithModule
-    ),
-  [ModuleNames.BLOG]: () =>
-    import('@hospitality-bot/admin/create-with').then(
-      (m) => m.AdminCreateWithModule
-    ),
+
+  // All submodule of create-with will have same module as the external (Iframe)
+  // Create with setting modules
+  [ModuleNames.CREATE_WITH_DASHBOARD]: CreateWithSubModule,
+  [ModuleNames.SEO_FRIENDLY]: CreateWithSubModule,
+  [ModuleNames.PAGES]: CreateWithSubModule,
+  [ModuleNames.BLOG]: CreateWithSubModule,
+
+  //Create With
+  [ModuleNames.BUSINESS_INFO]: CreateWithSubModule,
+  [ModuleNames.WEBSITE_SETTINGS]: CreateWithSubModule,
+  [ModuleNames.ACCEPT_PAYMENTS]: CreateWithSubModule,
+  [ModuleNames.LEGAL_POLICIES]: CreateWithSubModule,
 
   // front desk
   [ModuleNames.ADD_RESERVATION]: () =>

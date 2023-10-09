@@ -1,5 +1,5 @@
 import { Route, Routes } from '@angular/router';
-import { SubscriptionConfig } from 'libs/admin/shared/src/index';
+import { ModuleNames, SubscriptionConfig } from 'libs/admin/shared/src/index';
 import { ComingSoonComponent } from 'libs/admin/shared/src/lib/components/coming-soon/coming-soon.component';
 import { moduleConfig } from '../pages/config/config.module';
 import { RoutesConfigService, SubscriptionPlanService } from '../theme/src';
@@ -57,10 +57,15 @@ export const routeFactoryNew = (
       product.config.forEach((module) => {
         const moduleName = module.name;
 
-        if (moduleName && module.isView) {
+        const isSettingModule = moduleName === ModuleNames.SETTINGS;
+        // Is Setting Module - Does not necessarily required isView
+        // If setting module, is View can be ignore for routing manufacturing
+        const isModuleInView = module.isView || isSettingModule;
+        const isModuleSubscribed = module.isSubscribed;
+
+        if (moduleName && isModuleInView) {
           const moduleRoute = routesConfigService.getRouteFromName(module.name);
           const modulePath = `${productRoute}/${moduleRoute}`;
-          const isModuleSubscribed = module.isSubscribed;
           var firstSubscribedSubModulePath = undefined;
 
           // Getting first subscribed module path (Creating circular loop)
@@ -74,7 +79,7 @@ export const routeFactoryNew = (
           module.config.forEach((subModule) => {
             const subModuleName = subModule.name;
             const isSubModuleSubscribed = subModule.isSubscribed;
-            const isSubModuleInView = subModule.isView;
+            const isSubModuleInView = subModule.isView || isSettingModule;
 
             if (subModuleName && isSubModuleInView) {
               const subModuleRoute = routesConfigService.getRouteFromName(
@@ -96,13 +101,14 @@ export const routeFactoryNew = (
                 firstSubscribedModulePath = subModulePath;
               }
 
-              const loadSubModule = moduleConfig[subModuleName]; // Module Load
+              const LoadSubModule = moduleConfig[subModuleName]; // Module Load
+
               const subModuleRouteConfig: Route = {
                 path: subModulePath,
                 loadChildren: isSubModuleSubscribed
-                  ? loadSubModule
+                  ? LoadSubModule
                   : UnsubscribedModule,
-                component: loadSubModule ? undefined : ComingSoonComponent,
+                component: LoadSubModule ? undefined : ComingSoonComponent,
               };
 
               routes[0].children.push(subModuleRouteConfig);

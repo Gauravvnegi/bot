@@ -20,6 +20,24 @@ export class MainComponent implements OnInit, AfterViewInit, OnDestroy {
     { name: ModuleNames.SEO_FRIENDLY, path: '/admin/marketing-seo' },
     { name: ModuleNames.PAGES, path: '/admin/page' },
     { name: ModuleNames.BLOG, path: '/admin/blog' },
+
+    //Settings
+    {
+      name: ModuleNames.BUSINESS_INFO,
+      path: '/admin/dashboard/edit-business-info',
+    },
+    {
+      name: ModuleNames.WEBSITE_SETTINGS,
+      path: '/admin/website-settings',
+    },
+    {
+      name: ModuleNames.ACCEPT_PAYMENTS,
+      path: '/admin/onboard-payment',
+    },
+    {
+      name: ModuleNames.LEGAL_POLICIES,
+      path: '/admin/legal-policy',
+    },
   ];
 
   constructor(

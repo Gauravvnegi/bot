@@ -19,21 +19,18 @@ import {
   Validators,
 } from '@angular/forms';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
-import { SnackBarService } from '@hospitality-bot/shared/material';
-import { AdminUtilityService, EntitySubType } from 'libs/admin/shared/src';
+import {
+  EntitySubType,
+} from 'libs/admin/shared/src';
 import { IteratorComponent } from 'libs/admin/shared/src/lib/components/iterator/iterator.component';
 import { Subscription } from 'rxjs';
 import { roomFields, RoomFieldTypeOption } from '../../constants/reservation';
-import { ManageReservationService } from '../../services/manage-reservation.service';
-import { RoomTypeOptionList } from '../../models/reservations.model';
 import { RoomTypeForm } from 'libs/admin/room/src/lib/models/room.model';
 import { ReservationForm, RoomTypes } from '../../constants/form';
 import { IteratorField } from 'libs/admin/shared/src/lib/types/fields.type';
 import { FormService } from '../../services/form.service';
 import { CalendarViewData } from 'libs/admin/dashboard/src/lib/components/reservation-calendar-view/reservation-calendar-view.component';
-import { ReservationType } from '../../constants/reservation-table';
 import { RoomTypeResponse } from 'libs/admin/room/src/lib/types/service-response';
-import { debounce, debounceTime } from 'rxjs/operators';
 
 @Component({
   selector: 'hospitality-bot-room-iterator',
@@ -139,8 +136,6 @@ export class RoomIteratorComponent extends IteratorComponent
       });
       this.parentFormGroup.addControl('roomInformation', roomInformationGroup);
     }
-
-    this.listenRoomFormChanges(index);
   }
 
   // Init Room Details
@@ -168,89 +163,65 @@ export class RoomIteratorComponent extends IteratorComponent
     });
   }
 
-  listenRoomFormChanges(index: number) {
-    this.listenRoomTypeChanges(index);
-    this.listenRoomNumbersChanges(index);
-  }
-
   /**
    * @function listenRoomTypeChanges Listen changes in room type
    * @param index to keep track of the form array.
    */
   listenRoomTypeChanges(index: number) {
-    this.roomControls[index]
-      .get('roomTypeId')
-      ?.valueChanges.pipe(debounceTime(100))
-      .subscribe((res) => {
-        if (res && this.roomTypes.length) {
-          // Sets rate plan options according to the selected room type
-          const ratePlanOptions = this.roomTypes[index].ratePlan.map(
-            (item) => ({
-              label: item.label,
-              value: item.value,
-              sellingprice: item.sellingPrice,
-              isBase: item.isBase,
-            })
-          );
+    if (this.roomTypes.length) {
+      // Sets rate plan options according to the selected room type
+      const ratePlanOptions = this.roomTypes[index].ratePlan.map((item) => ({
+        label: item.label,
+        value: item.value,
+        sellingprice: item.sellingPrice,
+        isBase: item.isBase,
+      }));
 
-          // Patch the selected room number if available.
-          this.roomControls[index].patchValue(
-            {
-              ratePlanOptions: ratePlanOptions,
-              roomNumberOptions: this.selectedRoomNumber.length
-                ? [
-                    {
-                      label: this.selectedRoomNumber,
-                      value: this.selectedRoomNumber,
-                    },
-                    ...this.roomTypes[index].rooms,
-                  ]
-                : this.roomTypes[index].rooms,
-            },
-            { emitEvent: false }
-          );
+      // Patch the selected room number if available.
+      this.roomControls[index].patchValue(
+        {
+          ratePlanOptions: ratePlanOptions,
+          roomNumberOptions: this.selectedRoomNumber.length
+            ? [
+                {
+                  label: this.selectedRoomNumber,
+                  value: this.selectedRoomNumber,
+                },
+                ...this.roomTypes[index].rooms,
+              ]
+            : this.roomTypes[index].rooms,
+        },
+        { emitEvent: false }
+      );
 
-          if (!this.isDefaultRoomType) {
-            this.roomControls[index].get('roomNumbers').reset();
-            // Patch default Base rate plan when not in edit mode.
-            const defaultPlan = ratePlanOptions.filter((item) => item.isBase)[0]
-              ?.value;
-            this.roomControls[index].patchValue(
-              {
-                ratePlan: defaultPlan ? defaultPlan : ratePlanOptions[0].value,
-                adultCount: 1,
-                roomCount: 1,
-                childCount: 0,
-              },
-              { emitEvent: false }
-            );
-            this.roomControls[index].get('ratePlan').enable();
-          }
+      if (!this.isDefaultRoomType) {
+        this.roomControls[index].get('roomNumbers').reset();
+        // Patch default Base rate plan when not in edit mode.
+        const defaultPlan = ratePlanOptions.filter((item) => item.isBase)[0]
+          ?.value;
+        this.roomControls[index].patchValue(
+          {
+            ratePlan: defaultPlan ? defaultPlan : ratePlanOptions[0].value,
+            adultCount: 1,
+            roomCount: 1,
+            childCount: 0,
+          },
+          { emitEvent: false }
+        );
+        this.roomControls[index].get('ratePlan').enable();
+      }
 
-          // Enable Rate plan in Draft Booking in edit mode
-          if (
-            this.isDefaultRoomType &&
-            this.reservationInfoControls.reservationType.value === 'DRAFT'
-          ) {
-            this.roomControls[index].get('ratePlan').enable();
-          }
-          setTimeout(() => {
-            this.isDefaultRoomType = false;
-          }, 2000);
-        }
-      });
-  }
-
-  listenRoomNumbersChanges(index: number) {
-    this.roomControls[index]
-      .get('roomNumbers')
-      .valueChanges.subscribe((res: string[]) => {
-        if (res && res.length) {
-          this.roomControls[index]
-            .get('roomCount')
-            .patchValue(res.length, { emitEvent: false });
-        }
-      });
+      // Enable Rate plan in Draft Booking in edit mode
+      if (
+        this.isDefaultRoomType &&
+        this.reservationInfoControls.reservationType.value === 'DRAFT'
+      ) {
+        this.roomControls[index].get('ratePlan').enable();
+      }
+      setTimeout(() => {
+        this.isDefaultRoomType = false;
+      }, 2000);
+    }
   }
 
   listenForFormChanges(): void {
@@ -285,6 +256,7 @@ export class RoomIteratorComponent extends IteratorComponent
           value: room.roomNumber,
         })),
       };
+      this.listenRoomTypeChanges(index);
     }
   }
 
@@ -311,6 +283,8 @@ export class RoomIteratorComponent extends IteratorComponent
     }
     this.roomTypeArray.removeAt(index);
   }
+
+  // getRoomTypeById
 
   /**
    * @function ngOnDestroy to unsubscribe subscription.

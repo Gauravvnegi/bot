@@ -48,7 +48,7 @@ export class TieredMenuButtonComponent implements OnInit {
   labelClickedAction() {
     if (this.link && this.openNewWindow) {
       window.open(this.link);
-    } else {
+    } else if (this.link) {
       this.router.navigate([this.link]);
     }
     this.clicked.emit(true);

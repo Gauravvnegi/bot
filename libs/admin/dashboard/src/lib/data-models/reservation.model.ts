@@ -1,3 +1,8 @@
+import {
+  GuestInformation,
+  Instructions,
+  ReservationInformation,
+} from 'libs/admin/manage-reservation/src/lib/constants/form';
 import { RoomReservationRes } from 'libs/admin/manage-reservation/src/lib/types/response.type';
 
 export class QuickReservation {
@@ -30,4 +35,22 @@ export type GuestDetails = {
   guestName: string;
   phoneNumber: string;
   email: string;
+};
+
+export type QuickReservationForm = {
+  reservationInformation: ReservationInformation;
+  guestInformation: GuestInformation;
+  roomInformation?: RoomInformation;
+  instructions?: Instructions;
+  dailyPrice: string;
+};
+
+type RoomInformation = {
+  // For quick form
+  roomTypeId?: string;
+  ratePlan?: string;
+  roomNumber?: string;
+  adultCount?: number;
+  childCount?: number;
+  id?: string;
 };

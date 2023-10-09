@@ -178,9 +178,8 @@
         (onCloseSidebar)="handleCloseSidebar($event)"
         [reservationConfig]="{
           reservationId: formProps?.reservationId,
-          selectedRoomType: formProps?.roomType,
+          defaultRoomType: formProps?.roomType,
           selectedRoom: formProps?.room,
-          roomTypes: roomTypes,
           date: formProps?.date
         }"
       ></hospitality-bot-quick-reservation-form>

@@ -45,7 +45,6 @@ export class HousekeepingComponent extends BaseDatatableComponent
   dateValue = {};
   showContent = false;
 
- 
   constructor(
     private fb: FormBuilder,
     private adminUtilityService: AdminUtilityService,
@@ -76,7 +75,6 @@ export class HousekeepingComponent extends BaseDatatableComponent
       roomType: [''],
     });
   }
-
 
   listenForRefreshData(): void {
     this.housekeepingService.refreshData.subscribe((value) => {
@@ -124,7 +122,7 @@ export class HousekeepingComponent extends BaseDatatableComponent
           type: 'ROOM',
           offset: this.first,
           limit: this.rowsPerPage,
-          roomTypeId: this.useForm.get('roomType').value ?? '',
+          roomTypeId: this.useForm.get('roomType').value ?? [],
         },
       ]),
     };

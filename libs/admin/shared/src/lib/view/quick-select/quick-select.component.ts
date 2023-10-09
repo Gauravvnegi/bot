@@ -100,7 +100,6 @@ export class QuickSelectComponent extends FormComponent implements OnInit {
 
   ngOnInit(): void {
     this.getItems();
-    this.listenControl();
   }
 
   /**
@@ -207,6 +206,7 @@ export class QuickSelectComponent extends FormComponent implements OnInit {
         (error) => {},
         () => {
           this.qsLoading = false;
+          this.listenControl();
         }
       );
   }

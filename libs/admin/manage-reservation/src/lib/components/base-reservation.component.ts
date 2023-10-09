@@ -105,7 +105,12 @@ export class BaseReservationComponent {
             roomTypeArray[0].disable();
 
             // Enable the controls you don't want to disable
-            ['roomNumbers', 'adultCount', 'childCount'].forEach((controlName) =>
+            [
+              'roomNumbers',
+              'roomNumber',
+              'adultCount',
+              'childCount',
+            ].forEach((controlName) =>
               roomTypeArray[0].get(controlName).enable()
             );
           }

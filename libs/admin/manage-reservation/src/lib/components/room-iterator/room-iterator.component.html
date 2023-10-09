@@ -56,16 +56,39 @@
                 placeholder: field.placeholder,
                 isAsync: field.isAsync
               }"
-              (paginate)="loadMoreRoomTypes(i)"
-              (onSearch)="searchRoomTypes($event)"
               [options]="
                 field.options
                   ? field.options
-                  : controls.get('ratePlanOptions').value
+                  : field.name === 'ratePlan'
+                  ? controls.get('ratePlanOptions').value
+                  : controls.get('roomNumberOptions').value
               "
               [disabled]="field.disabled"
               [loading]="field.options ? loadingRoomTypes[i] : false"
             ></hospitality-bot-select>
+            <hospitality-bot-quick-select
+              *ngSwitchCase="'quick-select'"
+              [controlName]="field.name"
+              class="select"
+              [inputType]="'select'"
+              [props]="{
+                showChips: false,
+                isAsync: true,
+                placeholder: field.placeholder
+              }"
+              [apiConfig]="{
+                entityId: entityId,
+                apiEndPoint: 'inventory',
+                dataModel: {
+                  key: 'roomTypes'
+                },
+                queryParams: getConfig()
+              }"
+              [paginationConfig]="{
+                isPagination: true
+              }"
+              (clickedOption)="roomTypeChange($event, i)"
+            ></hospitality-bot-quick-select>
           </div>
           <ng-container *ngIf="roomTypeArray.length > 1">
             <mat-icon

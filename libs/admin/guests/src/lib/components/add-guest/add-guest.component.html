@@ -32,6 +32,17 @@
         }
       }"
     ></hospitality-bot-input>
+    <hospitality-bot-phone-number
+      [ngClass]="{ 'full-width': isSideBar, 'half-width': !isSideBar }"
+      preControlName="cc"
+      postControlName="phoneNo"
+      [props]="{
+        placeholder: 'Enter',
+        errorMessages: {
+          required: 'This is a required field.'
+        }
+      }"
+    ></hospitality-bot-phone-number>
     <hospitality-bot-input
       class="half-width"
       controlName="email"
@@ -45,17 +56,7 @@
         placeholder: 'Enter'
       }"
     ></hospitality-bot-input>
-    <hospitality-bot-phone-number
-      class="half-width"
-      preControlName="cc"
-      postControlName="phoneNo"
-      [props]="{
-        placeholder: 'Enter',
-        errorMessages: {
-          required: 'This is a required field.'
-        }
-      }"
-    ></hospitality-bot-phone-number>
+
     <hospitality-bot-address-component
       class="half-width"
       controlName="address"
@@ -131,9 +132,7 @@
   [isId]="guestId"
   (onPreAction)="resetForm()"
   (onPostAction)="handleSubmit()"
-  [config]="{
-    type: 'non-sticky'
-  }"
+  [isSticky]="true"
   #fa
 >
 </hospitality-bot-form-action>

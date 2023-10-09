@@ -1,5 +1,10 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {
+  AbstractControl,
+  FormBuilder,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
   ConfigService,
@@ -110,6 +115,33 @@ export class AddCompanyComponent implements OnInit {
     );
   }
 
+  /**
+   * @function isVisible
+   * @param field as form control name
+   * @returns true if the control has a "required" validator and isSideBar is true
+   * @else return false
+   * @description to hide the field which is not required in sidebar
+   */
+  isVisible(field: string) {
+    if (!this.isSideBar) {
+      return true;
+    }
+    // Get the form control for the specified field
+    const control = this.companyForm.get(field);
+
+    if (control) {
+      // Check if the control has the "required" validator
+      const hasRequiredValidator =
+        control.validator && control.validator({} as AbstractControl)?.required;
+
+      // Return true if the control has a "required" validator
+      return hasRequiredValidator
+    }
+
+    // Return false if the control doesn't exist or has no "required" validator
+    return false;
+  }
+
   listenChanges() {
     const discountControl = this.companyForm.get('discountType');
     const discountValueControl = this.companyForm.get('discount');
@@ -184,7 +216,7 @@ export class AddCompanyComponent implements OnInit {
             { panelClass: 'success' }
           );
           if (this.isSideBar) {
-            this.onClose.emit({ id: res.id, companyName: res.companyName });
+            this.onClose.emit({ id: res.id, companyName: res.firstName });
           } else {
             this.location.back();
           }

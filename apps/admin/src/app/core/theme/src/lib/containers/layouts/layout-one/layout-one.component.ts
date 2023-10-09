@@ -32,6 +32,7 @@ import { manageReservationRoutes } from 'libs/admin/manage-reservation/src/lib/c
 import { RaiseRequestComponent } from 'libs/admin/request/src/lib/components/raise-request/raise-request.component';
 import { AddGuestComponent } from 'libs/admin/guests/src/lib/components/add-guest/add-guest.component';
 import { SettingsMenuComponent } from 'libs/admin/settings/src/lib/components/settings-menu/settings-menu.component';
+import { NightAuditComponent } from '../../../../../../../../../../../libs/admin/global-shared/src/lib/components/night-audit/night-audit.component';
 
 @Component({
   selector: 'admin-layout-one',
@@ -90,7 +91,8 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
   sidebarVisible: boolean;
   @ViewChild('sidebarSlide', { read: ViewContainerRef })
   sidebarSlide: ViewContainerRef;
-  sidebarType: 'complaint' | 'settings' | 'guest-sidebar' = 'complaint';
+  sidebarType: 'complaint' | 'settings' | 'guest-sidebar' | 'night-audit' =
+    'complaint';
   propertyList: any[];
 
   constructor(
@@ -467,6 +469,33 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
       this.sidebarSlide.clear();
       const componentRef = this.sidebarSlide.createComponent(factory);
       componentRef.instance.isSideBar = true;
+      componentRef.instance.onClose.subscribe((res) => {
+        this.sidebarVisible = false;
+        componentRef.destroy();
+      });
+    });
+  }
+
+  openNightAudit() {
+    const lazyModulePromise = import(
+      'libs/admin/global-shared/src/lib/admin-global-shared.module'
+    )
+      .then((module) => {
+        return this.compiler.compileModuleAsync(module.GlobalSharedModule);
+      })
+      .catch((error) => {
+        console.error('Error loading the lazy module:', error);
+      });
+
+    lazyModulePromise.then((moduleFactory) => {
+      this.sidebarVisible = true;
+      this.sidebarType = 'night-audit';
+      const factory = this.resolver.resolveComponentFactory(
+        NightAuditComponent
+      );
+      this.sidebarSlide.clear();
+      const componentRef = this.sidebarSlide.createComponent(factory);
+      componentRef.instance.isSidebar = true;
       componentRef.instance.onClose.subscribe((res) => {
         this.sidebarVisible = false;
         componentRef.destroy();

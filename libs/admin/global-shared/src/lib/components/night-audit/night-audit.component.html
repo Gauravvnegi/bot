@@ -1,0 +1,55 @@
+<div class="audit-wrapper" [id]="fa?.referenceId">
+  <!-- header -->
+  <ng-template *ngTemplateOutlet="sidebarHeader"></ng-template>
+  <!-- content -->
+  <div class="audit-content_wrapper">
+    <hospitality-bot-stepper
+      [stepList]="itemList"
+      [readOnly]="true"
+      [activeIndex]="activeStep"
+      (onActive)="onActive($event)"
+    ></hospitality-bot-stepper>
+    <ng-container [ngSwitch]="activeStep">
+      <hospitality-bot-manage-logged-users
+        class="audit-content"
+        *ngSwitchCase="0"
+      ></hospitality-bot-manage-logged-users>
+      <hospitality-bot-checkin-reservations
+        class="audit-content"
+        *ngSwitchCase="1"
+      ></hospitality-bot-checkin-reservations>
+      <hospitality-bot-checkout-reservations
+        class="audit-content"
+        *ngSwitchCase="2"
+      ></hospitality-bot-checkout-reservations>
+      <hospitality-bot-audit-summary
+        class="audit-content"
+        *ngSwitchCase="3"
+      ></hospitality-bot-audit-summary>
+    </ng-container>
+  </div>
+  <!-- Action Button -->
+  <hospitality-bot-form-action
+    class="full-width action-button"
+    [loading]="loading"
+    [disabled]="loading"
+    [config]="actionConfig"
+    (onPostAction)="handleNext()"
+    (onPreAction)="handlePrev()"
+    #fa
+  >
+  </hospitality-bot-form-action>
+</div>
+
+<ng-template #sidebarHeader>
+  <div class="sidebar-slide-header">
+    <span class="title">{{ pageTitle }}</span>
+    <span class="center-item">
+      <img src="assets/svg/calendar-dark.svg" alt="date" class="white-icon" />
+      {{ currentDate | date: 'dd/MM/yyyy' }}</span
+    >
+    <span class="close-icon" (click)="close()">
+      <i class="pi pi-arrow-right" aria-hidden="true"></i>
+    </span>
+  </div>
+</ng-template>

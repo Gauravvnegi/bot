@@ -10,6 +10,7 @@ export type StepperEmitType = { item: MenuItem; index: number };
 export class StepperComponent implements OnInit {
   @Input() stepList: MenuItem[];
   @Input() activeIndex = 0;
+  @Input() readOnly = false;
   @Output() onActive = new EventEmitter<StepperEmitType>();
   constructor() {}
 

@@ -1,4 +1,9 @@
-<div class="main__wrapper">
+<div class="main__wrapper" [id]="fa?.referenceId">
+  <!-- content -->
+  <div *ngIf="usersLoggedOut" class="warning-message">
+    All users are being notified that Night Audit is going to start. They will
+    be logged out forcefully in
+  </div>
   <div class="message__wrapper">
     <div class="message">
       The night audit will wrap up the current day accounting, transactions and
@@ -15,14 +20,28 @@
   </div>
   <div class="content__wrapper">
     <hospitality-bot-table-view
-      [header]="'Manage Log-in Users'"
+      [header]="title"
       [columns]="cols"
       [items]="users"
+      [headerSticky]="true"
       [emptyViewConfig]="{
         content: {
+          imageSrc: 'assets/svg/Success.svg',
           description: 'There are no users logged in except for you.'
         }
       }"
     ></hospitality-bot-table-view>
   </div>
+
+  <!-- Action Button -->
+  <hospitality-bot-form-action
+    class="full-width action-button"
+    [loading]="loading"
+    [disabled]="loading"
+    [config]="actionConfig"
+    (onPostAction)="handleNext()"
+    (onPreAction)="handlePrev()"
+    #fa
+  >
+  </hospitality-bot-form-action>
 </div>

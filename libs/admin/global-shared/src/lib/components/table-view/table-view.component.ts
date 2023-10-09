@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Cols } from '@hospitality-bot/admin/shared';
 import { EmptyContent } from 'libs/admin/shared/src/lib/components/datatable/empty-table/empty-table.component';
 @Component({
@@ -10,6 +10,8 @@ export class TableViewComponent implements OnInit {
   @Input() header: string;
   @Input() columns: Cols[];
   @Input() items;
+  @Input() headerSticky = false;
+  @Input() action: string;
   loading = false;
 
   // EmptyView config
@@ -31,6 +33,8 @@ export class TableViewComponent implements OnInit {
     });
   }
 
+  @Output() actionClicked = new EventEmitter();
+
   constructor() {}
 
   ngOnInit(): void {}
@@ -45,6 +49,10 @@ export class TableViewComponent implements OnInit {
     } else {
       return [{ key: data.toString(), value: data }];
     }
+  }
+
+  onActionClicked() {
+    this.actionClicked.emit(true);
   }
 }
 

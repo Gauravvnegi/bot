@@ -5,12 +5,32 @@
     font-size: 16px;
     font-weight: 600;
     padding: 10px 0;
+    display: flex;
+    justify-content: space-between;
+    .action {
+      color: $primary-cta;
+      font-size: 12px;
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      gap: 5px;
+      font-weight: 700;
+      img {
+        width: 12px;
+      }
+    }
   }
   .truncate-text {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     max-width: 150px;
+  }
+  .sticky-header {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    background: #f1f2f7 !important;
   }
 }
 

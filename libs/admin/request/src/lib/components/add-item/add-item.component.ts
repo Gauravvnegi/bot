@@ -17,7 +17,7 @@ import { Router } from '@angular/router';
 })
 export class AddItemComponent implements OnInit {
   pageTitle = 'Add Item';
-  navRoutes = [{ label: 'Add Item', link: './' }];
+  navRoutes = [{ label: 'Add Service Item', link: './' }];
 
   loading: boolean = false;
   userList;

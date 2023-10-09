@@ -35,6 +35,8 @@ export class MarketingNotificationComponent extends NotificationComponent
   isSending = false;
   template = '';
   isTemplateDisabled = true;
+  reservationId: string = '';
+  packageId: string = '';
 
   @ViewChild('attachmentComponent') updateAttachment: any;
 
@@ -60,14 +62,18 @@ export class MarketingNotificationComponent extends NotificationComponent
 
   ngOnInit(): void {
     this.getConfigData(this.entityId);
+    this.getAllTemplates();
+    this.initFG();
+    this.listenForTemplateChange();
   }
 
   getConfigData(entityId): void {
-    this.requestService.getNotificationConfig(entityId).subscribe((response) => {
-      this.config = new RequestConfig().deserialize(response);
-      this.initFG();
-      this.initOptions();
-    });
+    this.requestService
+      .getNotificationConfig(entityId)
+      .subscribe((response) => {
+        this.config = new RequestConfig().deserialize(response);
+        this.initOptions();
+      });
   }
 
   initOptions() {
@@ -101,23 +107,21 @@ export class MarketingNotificationComponent extends NotificationComponent
     this.emailFG.get('emailIds').patchValue(this.to.map((item) => item.value));
   }
 
-  fetchTemplate(event) {
-    const topic = this.templateList.filter(
-      (item) => item.value === event.value
-    );
-    const config = {
-      queryObj: this._adminUtilityService.makeQueryParams([
-        { templateType: topic[0].label },
-      ]),
-    };
+  getAllTemplates() {
     this.$subscription.add(
-      this.requestService
-        .getTemplate(this.entityId, event.value, config)
+      this._emailService
+        .getAllTemplates(this.entityId, {
+          params: this._adminUtilityService.makeQueryParams([
+            { channelType: 'EMAIL' },
+            { allTemplates: 'true' },
+          ]),
+        })
         .subscribe(
           (response) => {
-            this.emailFG
-              .get('message')
-              .patchValue(this.modifyTemplate(response.template));
+            this.templateList = response.templates.map((template) => ({
+              label: template.label,
+              value: template.name,
+            }));
           },
           (error) => {
             this.emailFG.get('message').patchValue('');
@@ -126,23 +130,46 @@ export class MarketingNotificationComponent extends NotificationComponent
     );
   }
 
-  onTopicChange(selectedMessageType: string) {
-    const topic = this.topicList.find(
-      (type) => type.value === selectedMessageType
-    );
-    this.emailFG.get('templateId').patchValue('')
-    this.templateList = [];
-    if (topic && topic.templateIds) {
-      this.isTemplateDisabled = false;
-      this.templateList = topic.templateIds.map((template) => ({
-        label: template.name,
-        value: template.id,
-      }));
-    } else {
-      this.isTemplateDisabled = true;
-      this.templateList = [];
-    }
+  listenForTemplateChange() {
+    this.emailFG.get('templateId').valueChanges.subscribe((res) => {
+      this.getTemplateDetails(res);
+    });
   }
+
+  getTemplateDetails(template) {
+    console.log(this.reservationId, 'reservationId');
+    this.$subscription.add(
+      this._emailService
+        .getTemplateDetails(this.entityId, {
+          params: this._adminUtilityService.makeQueryParams([
+            { templateType: template },
+            { reservationId: this.reservationId },
+            { packageId: '' },
+          ]),
+        })
+        .subscribe((response) => {
+          this.emailFG.get('message').patchValue(response.template);
+        })
+    );
+  }
+
+  // onTopicChange(selectedMessageType: string) {
+  //   const topic = this.topicList.find(
+  //     (type) => type.value === selectedMessageType
+  //   );
+  //   this.emailFG.get('templateId').patchValue('');
+  //   this.templateList = [];
+  //   if (topic && topic.templateIds) {
+  //     this.isTemplateDisabled = false;
+  //     this.templateList = topic.templateIds.map((template) => ({
+  //       label: template.name,
+  //       value: template.id,
+  //     }));
+  //   } else {
+  //     this.isTemplateDisabled = true;
+  //     this.templateList = [];
+  //   }
+  // }
 
   // getTopicList() {
   //   this.$subscription.add(
@@ -204,7 +231,7 @@ export class MarketingNotificationComponent extends NotificationComponent
   //       label: 'No Data',
   //       value: 'noData',
   //     });
-  //     
+  //
   //     this.emailFG.get('templateId').setValue(this.templateList[0].value);
   //   }
   // }
@@ -267,7 +294,7 @@ export class MarketingNotificationComponent extends NotificationComponent
     const {
       fromId,
       emailIds,
-      message,
+      message: htmlTemplate,
       subject,
       previewText,
       topicId,
@@ -275,7 +302,7 @@ export class MarketingNotificationComponent extends NotificationComponent
     const reqData = {
       fromId,
       emailIds,
-      message,
+      htmlTemplate,
       subject,
       previewText,
       topicId,

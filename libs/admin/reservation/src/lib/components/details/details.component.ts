@@ -750,6 +750,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
       if (channel === 'EMAIL') {
         notificationCompRef.componentInstance.isEmail = true;
         notificationCompRef.componentInstance.email = this.primaryGuest.email;
+        notificationCompRef.componentInstance.reservationId = this.bookingId;
       } else {
         notificationCompRef.componentInstance.isEmail = false;
         notificationCompRef.componentInstance.channel = channel.replace(

@@ -15,16 +15,15 @@
       class="half-width"
     ></hospitality-bot-select> -->
     <!-- <div class="half-width"></div> -->
-    <hospitality-bot-select
+    <!-- <hospitality-bot-select
       label="Topic"
       controlName="topicId"
       [props]="{ placeholder: 'Select Topic' }"
       class="half-width"
       [options]="topicList"
       (itemSelection)="onTopicChange($event.value)"
-    ></hospitality-bot-select>
+    ></hospitality-bot-select> -->
     <hospitality-bot-select
-      [disabled]="isTemplateDisabled"
       label="Template"
       controlName="templateId"
       [options]="templateList"

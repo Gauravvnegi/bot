@@ -477,7 +477,7 @@
   .night-audit {
     @include default-close;
     .p-sidebar-right {
-      @include sidebar-design(50rem);
+      @include sidebar-design(60rem);
     }
   }
 }

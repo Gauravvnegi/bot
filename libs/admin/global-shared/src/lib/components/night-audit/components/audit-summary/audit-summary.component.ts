@@ -17,6 +17,7 @@ export class AuditSummaryComponent implements OnInit {
   values = dummyData;
   loading = false;
   actionConfig: ActionConfigType;
+  today = new Date();
 
   @Input() activeIndex = 0;
   @Input() stepList: MenuItem[];

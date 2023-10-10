@@ -7,7 +7,7 @@ import { BehaviorSubject } from 'rxjs';
 const defaultNavigateConfig: NavigateConfig = {
   additionalPath: '',
   queryParams: {},
-  isRespectiveToProduct: true,
+  isRespectiveToProduct: true, // Route will first open with respect to product
   isRelative: false,
 };
 

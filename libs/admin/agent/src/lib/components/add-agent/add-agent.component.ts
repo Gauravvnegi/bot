@@ -1,9 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import {
+  GlobalFilterService,
+  RoutesConfigService,
+} from '@hospitality-bot/admin/core/theme';
 import {
   AdminUtilityService,
   ConfigService,
+  ModuleNames,
   NavRouteOptions,
   Option,
   QueryConfig,
@@ -71,6 +75,7 @@ export class AddAgentComponent implements OnInit {
     private router: Router,
     private formService: FormService,
     private configService: ConfigService,
+    private routesConfigService: RoutesConfigService,
     private location: Location
   ) {
     this.agentId = this.route.snapshot.paramMap.get('id');
@@ -212,9 +217,10 @@ export class AddAgentComponent implements OnInit {
    */
   createNewCompany() {
     this.saveForm();
-    this.router.navigate([
-      `/pages/members/company/${companyRoutes.addCompany.route}`,
-    ]);
+    this.routesConfigService.navigate({
+      subModuleName: ModuleNames.COMPANY,
+      additionalPath: companyRoutes.addCompany.route,
+    });
   }
 
   saveForm() {

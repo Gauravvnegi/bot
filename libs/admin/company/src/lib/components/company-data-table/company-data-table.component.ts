@@ -55,7 +55,7 @@ export class CompanyDataTableComponent extends BaseDatatableComponent
     private router: Router,
     private companyService: CompanyService,
     private globalFilterService: GlobalFilterService,
-    private navigationService: RoutesConfigService
+    private routesConfigService: RoutesConfigService
   ) {
     super(fb, tabFilterService);
   }
@@ -176,7 +176,7 @@ export class CompanyDataTableComponent extends BaseDatatableComponent
    * @params rowData
    */
   editCompany(rowData) {
-    this.navigationService.navigate({
+    this.routesConfigService.navigate({
       additionalPath: `${this.companyRoutes.editCompany.route}/${rowData.id}`,
     });
   }

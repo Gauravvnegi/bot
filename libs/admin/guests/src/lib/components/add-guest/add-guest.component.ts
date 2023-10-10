@@ -11,8 +11,16 @@ import {
 import { manageGuestRoutes } from '../../constant/route';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
-import { NavRouteOptions, Option, Regex } from '@hospitality-bot/admin/shared';
+import {
+  GlobalFilterService,
+  RoutesConfigService,
+} from '@hospitality-bot/admin/core/theme';
+import {
+  ModuleNames,
+  NavRouteOptions,
+  Option,
+  Regex,
+} from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { Subscription } from 'rxjs';
 import { Location } from '@angular/common';
@@ -71,8 +79,9 @@ export class AddGuestComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private location: Location,
     private formService: FormService,
+    private routesConfigService: RoutesConfigService,
     private resolver: ComponentFactoryResolver,
-    private compiler: Compiler,
+    private compiler: Compiler
   ) {}
 
   ngOnInit(): void {
@@ -139,7 +148,10 @@ export class AddGuestComponent implements OnInit {
       this.openCompanyFromSide();
     } else {
       this.saveForm();
-      this.router.navigateByUrl('pages/members/company/add-company');
+      this.routesConfigService.navigate({
+        subModuleName: ModuleNames.COMPANY,
+        additionalPath: 'add-company',
+      });
     }
   }
 

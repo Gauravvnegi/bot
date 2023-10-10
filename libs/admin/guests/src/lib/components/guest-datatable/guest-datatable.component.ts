@@ -53,7 +53,7 @@ export class GuestDatatableComponent extends BaseDatatableComponent
     protected globalFilterService: GlobalFilterService,
     protected tabFilterService: TableService,
     private router: Router,
-    private navigationService: RoutesConfigService
+    private routesConfigService: RoutesConfigService
   ) {
     super(fb, tabFilterService);
   }
@@ -145,7 +145,7 @@ export class GuestDatatableComponent extends BaseDatatableComponent
   }
 
   editGuest(event, rowData) {
-    this.navigationService.navigate({
+    this.routesConfigService.navigate({
       additionalPath: `${manageGuestRoutes.editGuest.route}/${rowData.id}`,
     });
   }

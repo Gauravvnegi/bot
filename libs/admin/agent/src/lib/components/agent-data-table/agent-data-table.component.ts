@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import {
   AdminUtilityService,
   BaseDatatableComponent,
+  ModuleNames,
   TableService,
 } from '@hospitality-bot/admin/shared';
 import { Subscription } from 'rxjs';
@@ -49,7 +50,7 @@ export class AgentDataTableComponent extends BaseDatatableComponent
     private snackbarService: SnackBarService,
     private router: Router,
     private route: ActivatedRoute,
-    private navigationService: RoutesConfigService
+    private routesConfigService: RoutesConfigService
   ) {
     super(fb, tabFilterService);
   }
@@ -149,15 +150,16 @@ export class AgentDataTableComponent extends BaseDatatableComponent
    * @params rowData
    */
   editAgent(rowData) {
-    this.navigationService.navigate({
+    this.routesConfigService.navigate({
       additionalPath: `${this.routes.editAgent.route}/${rowData.id}`,
     });
   }
 
   openCompany(rowData) {
-    this.router.navigate([
-      `/pages/members/company/${this.routes.editCompany.route}/${rowData.companyId}`,
-    ]);
+    this.routesConfigService.navigate({
+      subModuleName: ModuleNames.COMPANY,
+      additionalPath: `${this.routes.editCompany.route}/${rowData.companyId}`,
+    });
   }
 
   /**

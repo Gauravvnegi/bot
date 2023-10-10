@@ -1,1 +1,31 @@
-<p>audit-summary works!</p>
+<div class="main__wrapper" [id]="fa?.referenceId">
+  <div class="header">
+    Night audit is completed for {{ today | date: 'dd/MM/yyy' }}
+  </div>
+  <div class="content__wrapper">
+    <hospitality-bot-table-view
+      *ngFor="let col of columns; let i = index"
+      [header]="values[col].title"
+      [columns]="cols[col]"
+      [items]="values[col].values"
+      [emptyViewConfig]="{
+        content: {
+          description: 'There are no users logged in except for you.'
+        }
+      }"
+      (actionClicked)="initTable()"
+    ></hospitality-bot-table-view>
+  </div>
+
+  <!-- Action Button -->
+  <hospitality-bot-form-action
+    class="full-width action-button"
+    [loading]="loading"
+    [disabled]="loading"
+    [config]="actionConfig"
+    (onPostAction)="handleNext()"
+    (onPreAction)="handlePrev()"
+    #fa
+  >
+  </hospitality-bot-form-action>
+</div>

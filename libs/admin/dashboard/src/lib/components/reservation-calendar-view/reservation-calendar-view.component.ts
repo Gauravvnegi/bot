@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { Router } from '@angular/router';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
   AdminUtilityService,
+  Option,
   QueryConfig,
   daysOfWeek,
 } from '@hospitality-bot/admin/shared';
@@ -13,7 +13,6 @@ import {
   ReservationList,
   RoomReservation,
 } from 'libs/admin/manage-reservation/src/lib/models/reservations.model';
-import { FormService } from 'libs/admin/manage-reservation/src/lib/services/form.service';
 import { ManageReservationService } from 'libs/admin/manage-reservation/src/lib/services/manage-reservation.service';
 import { ReservationListResponse } from 'libs/admin/manage-reservation/src/lib/types/response.type';
 import { RoomService } from 'libs/admin/room/src/lib/services/room.service';
@@ -64,7 +63,7 @@ export class ReservationCalendarViewComponent implements OnInit {
     private manageReservationService: ManageReservationService,
     private globalFilterService: GlobalFilterService,
     private roomService: RoomService,
-    private adminUtilityService: AdminUtilityService,
+    private adminUtilityService: AdminUtilityService
   ) {}
 
   ngOnInit(): void {
@@ -99,6 +98,10 @@ export class ReservationCalendarViewComponent implements OnInit {
                 columns: [],
                 values: [],
               },
+              allRatePlans: roomTypeData.ratePlans.map((item) => ({
+                label: item.label,
+                value: item.id,
+              })),
             }));
           this.initReservationData();
         })
@@ -326,6 +329,7 @@ export type IGRoomType = {
   loading?: boolean;
   reinitialize?: boolean;
   data?: GridData;
+  allRatePlans?: Option[];
 };
 
 type GridData = {
@@ -335,8 +339,10 @@ type GridData = {
 };
 
 type IGRoom = {
-  roomNumber: IGRow;
+  roomNumber?: IGRow;
   features?: Features[];
+  label?: string;
+  value?: string;
 };
 
 export type CalendarViewData = {

@@ -11,12 +11,15 @@ import {
 } from '@hospitality-bot/admin/shared';
 import * as FileSaver from 'file-saver';
 import { CompanyService } from '../../services/company.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { LazyLoadEvent } from 'primeng/api';
 import { CompanyModel, CompanyResponseModel } from '../../models/company.model';
 import { CompanyListResponse } from '../../types/response';
-import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import {
+  GlobalFilterService,
+  RoutesConfigService,
+} from '@hospitality-bot/admin/core/theme';
 import {
   SortBy,
   SortFilterList,
@@ -51,7 +54,8 @@ export class CompanyDataTableComponent extends BaseDatatableComponent
     protected snackbarService: SnackBarService,
     private router: Router,
     private companyService: CompanyService,
-    private globalFilterService: GlobalFilterService
+    private globalFilterService: GlobalFilterService,
+    private navigationService: RoutesConfigService
   ) {
     super(fb, tabFilterService);
   }
@@ -172,9 +176,9 @@ export class CompanyDataTableComponent extends BaseDatatableComponent
    * @params rowData
    */
   editCompany(rowData) {
-    this.router.navigate([
-      `/pages/members/company/${this.companyRoutes.editCompany.route}/${rowData.id}`,
-    ]);
+    this.navigationService.navigate({
+      additionalPath: `${this.companyRoutes.editCompany.route}/${rowData.id}`,
+    });
   }
 
   searchCompany(key: string) {

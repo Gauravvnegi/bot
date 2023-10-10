@@ -1,6 +1,9 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
-import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import {
+  GlobalFilterService,
+  RoutesConfigService,
+} from '@hospitality-bot/admin/core/theme';
 import {
   AdminUtilityService,
   BaseDatatableComponent,
@@ -49,7 +52,8 @@ export class GuestDatatableComponent extends BaseDatatableComponent
     protected guestTableService: GuestTableService,
     protected globalFilterService: GlobalFilterService,
     protected tabFilterService: TableService,
-    private router: Router
+    private router: Router,
+    private navigationService: RoutesConfigService
   ) {
     super(fb, tabFilterService);
   }
@@ -141,9 +145,9 @@ export class GuestDatatableComponent extends BaseDatatableComponent
   }
 
   editGuest(event, rowData) {
-    this.router.navigate([
-      `/pages/members/guests/${manageGuestRoutes.editGuest.route}/${rowData.id}`,
-    ]);
+    this.navigationService.navigate({
+      additionalPath: `${manageGuestRoutes.editGuest.route}/${rowData.id}`,
+    });
   }
 
   searchGuest(key: string) {

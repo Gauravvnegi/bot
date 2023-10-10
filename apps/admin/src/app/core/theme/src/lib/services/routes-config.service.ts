@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { ModuleNames, ProductNames } from '@hospitality-bot/admin/shared';
 import { Subject, BehaviorSubject } from 'rxjs';
 import { NavRouteOption } from 'libs/admin/shared/src/index';
+import { Router } from '@angular/router';
 
 /**
  * Example of a PathConfig object:
@@ -22,6 +23,8 @@ const pathConfig: PathConfig = {
 
 @Injectable({ providedIn: 'root' })
 export class RoutesConfigService {
+  constructor(private router: Router) {}
+
   readonly routesConfig = routesConfig;
   readonly reverseRouteConfig = Object.keys(routesConfig).reduce(
     (reversed, key) => {
@@ -40,6 +43,15 @@ export class RoutesConfigService {
   });
 
   private $navRoutes = new BehaviorSubject<NavRouteOption[]>([]);
+
+  navigate(moduleName: ModuleNames, config = {}) {
+    const path = this.modulePathConfig[moduleName];
+
+    if (path) {
+      this.router.navigate([path]);
+      // this.router.navigate(['create-with/settings/roles-and-permission']);
+    }
+  }
 
   initActiveRoute(config: ActiveRouteConfig) {
     this.$activeRoute.next({ ...config });

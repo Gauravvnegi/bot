@@ -135,7 +135,7 @@ export const routeFactoryNew = (
               if (isSubModuleSubscribed && !modulePathConfig[subModuleName]) {
                 modulePathConfig = {
                   ...modulePathConfig,
-                  [subModuleName]: subModulePath,
+                  [subModuleName]: `/${subModulePath}`,
                 };
               }
 
@@ -146,7 +146,7 @@ export const routeFactoryNew = (
           if (isModuleSubscribed) {
             modulePathConfig = {
               ...modulePathConfig,
-              [moduleName]: modulePath,
+              [moduleName]: `/${modulePath}`,
             };
           }
 
@@ -163,7 +163,7 @@ export const routeFactoryNew = (
       if (isProductSubscribed) {
         modulePathConfig = {
           ...modulePathConfig,
-          [productName]: productRoute,
+          [productName]: `/${productRoute}`,
         };
       }
 

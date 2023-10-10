@@ -152,18 +152,18 @@ export class SidenavComponent implements OnInit, OnDestroy {
       this.routeConfigService.initActiveRoute({
         product: {
           ...activeRouteConfig.product,
-          name: currentProduct.name,
-          label: currentProduct.title,
+          name: currentProduct?.name,
+          label: currentProduct?.title,
         },
         module: {
           ...activeRouteConfig.module,
-          name: currentModule.name,
-          label: currentModule.title,
+          name: currentModule?.name,
+          label: currentModule?.title,
         },
         submodule: {
           ...activeRouteConfig.submodule,
-          name: currentSubModule.name,
-          label: currentSubModule.title,
+          name: currentSubModule?.name,
+          label: currentSubModule?.title,
         },
       });
     } else {

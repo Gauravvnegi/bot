@@ -11,6 +11,7 @@ import { AuthService } from '../../../../../auth/services/auth.service';
 import { layoutConfig, UserDropdown } from '../../constants/layout';
 import { FirebaseMessagingService } from '../../services/messaging.service';
 import { SubscriptionPlanService } from '../../services/subscription-plan.service';
+import { RoutesConfigService } from '../../services/routes-config.service';
 
 @Component({
   selector: 'admin-profile-dropdown',
@@ -28,7 +29,8 @@ export class ProfileDropdownComponent implements OnInit {
     private firebaseMessagingService: FirebaseMessagingService,
     private cookieService: CookieService,
     private hotelDetailsService: HotelDetailService,
-    private subscriptionPlanService: SubscriptionPlanService
+    private subscriptionPlanService: SubscriptionPlanService,
+    private routesConfigService: RoutesConfigService
   ) {
     this.onManageSite = this._router.url.includes('manage-sites');
   }
@@ -71,9 +73,7 @@ export class ProfileDropdownComponent implements OnInit {
     if (this.onManageSite) {
       this._router.navigate([`/dashboard/manage-sites/user-profile`]);
     } else {
-      this._router.navigate([
-        `/pages/${routes.RoleAndPermission}/manage-profile`,
-      ]);
+      this.routesConfigService.navigate(ModuleNames.ROLES_AND_PERMISSION);
     }
   }
 

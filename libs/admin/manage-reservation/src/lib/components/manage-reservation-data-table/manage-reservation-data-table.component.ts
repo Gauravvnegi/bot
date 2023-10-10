@@ -82,7 +82,9 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
 
   menuOptions: Option[] = MenuOptions;
 
-  tableTypes = [tableTypes.table, tableTypes.calendar];
+  tableTypes = [tableTypes.calendar, tableTypes.table];
+
+  selectedTableType: string;
 
   private cancelRequests$ = new Subject<void>();
 
@@ -111,22 +113,14 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
   }
 
   checkReservationSubscription() {
-    if (
-      !this.subscriptionPlanService.checkModuleSubscription(
-        ModuleNames.ADD_RESERVATION
-      )
-    ) {
-      this.tableTypes = [tableTypes.table];
-      this.tableFG?.addControl('tableType', new FormControl('table'));
-    } else {
-      this.tableFG?.addControl('tableType', new FormControl('calendar'));
-    }
-    this.tableFG.patchValue({ tableType: 'table' });
+    this.tableFG?.addControl('tableType', new FormControl('calendar'));
+    this.tableFG.patchValue({ tableType: 'calendar' });
+    this.selectedTableType = 'calendar';
   }
 
-  setTableType(value) {
+  setTableType(value: string) {
+    this.selectedTableType = value;
     this.tableFG.patchValue({ tableType: value });
-    debugger;
   }
 
   /**
@@ -170,6 +164,10 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
           // this.resetTableValues();
           this.initDetails(this.selectedEntity);
           this.initTableValue();
+          if (this.selectedEntity.subType !== 'ROOM_TYPE') {
+            this.selectedTableType = 'table';
+            this.tableFG.patchValue({ tableType: 'table' });
+          }
         })
     );
   }

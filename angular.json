@@ -2592,6 +2592,108 @@
           "style": "scss"
         }
       }
+    },
+    "admin-feedback-analytics": {
+      "projectType": "library",
+      "root": "libs/admin/feedback-analytics",
+      "sourceRoot": "libs/admin/feedback-analytics/src",
+      "prefix": "hospitality-bot",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/admin/feedback-analytics/tsconfig.lib.json",
+              "libs/admin/feedback-analytics/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/admin/feedback-analytics/**/*"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/admin/feedback-analytics/jest.config.js",
+            "tsConfig": "libs/admin/feedback-analytics/tsconfig.spec.json",
+            "passWithNoTests": true,
+            "setupFile": "libs/admin/feedback-analytics/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "style": "scss"
+        }
+      }
+    },
+    "admin-manage-rate": {
+      "projectType": "library",
+      "root": "libs/admin/manage-rate",
+      "sourceRoot": "libs/admin/manage-rate/src",
+      "prefix": "hospitality-bot",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/admin/manage-rate/tsconfig.lib.json",
+              "libs/admin/manage-rate/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/admin/manage-rate/**/*"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/admin/manage-rate/jest.config.js",
+            "tsConfig": "libs/admin/manage-rate/tsconfig.spec.json",
+            "passWithNoTests": true,
+            "setupFile": "libs/admin/manage-rate/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "style": "scss"
+        }
+      }
+    },
+    "admin-manage-inventory": {
+      "projectType": "library",
+      "root": "libs/admin/manage-inventory",
+      "sourceRoot": "libs/admin/manage-inventory/src",
+      "prefix": "hospitality-bot",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/admin/manage-inventory/tsconfig.lib.json",
+              "libs/admin/manage-inventory/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/admin/manage-inventory/**/*"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/admin/manage-inventory/jest.config.js",
+            "tsConfig": "libs/admin/manage-inventory/tsconfig.spec.json",
+            "passWithNoTests": true,
+            "setupFile": "libs/admin/manage-inventory/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "style": "scss"
+        }
+      }
     }
   },
   "cli": {

@@ -17,7 +17,7 @@
       routerLinkActive
       #rla="routerLinkActive"
       [routerLinkActiveOptions]="{ exact: false }"
-      [ngClass]="selectedModule == menuItem.name ? 'active' : ''"
+      [ngClass]="menuItem.path === currentRoute.module.fullPath ? 'active' : ''"
       (mouseenter)="handleRouteChange(menuItem)"
       (mouseleave)="handleRouteChangeOnLeave()"
     >
@@ -30,12 +30,14 @@
         class="main_heading_anchor"
         [routerLink]="[menuItem.path]"
         [style.background-color]="
-          selectedModule == menuItem.name
+          menuItem.path === currentRoute.module.fullPath
             ? 'rgba(255, 255, 255, 0.24)'
             : 'transparent'
         "
         [style.color]="
-          selectedModule == menuItem.name ? activeFontColor : normalFontColor
+          menuItem.path === currentRoute.module.fullPath
+            ? activeFontColor
+            : normalFontColor
         "
         [style.padding]="'10px 0px'"
         (click)="handleRouteChange(menuItem)"
@@ -48,7 +50,11 @@
             />
           </ng-container>
           <ng-template #imageUrl>
-            <img [src]="menuItem.url" class="svg-icon" [alt]="menuItem.name" />
+            <img
+              [src]="menuItem.iconUrl"
+              class="svg-icon"
+              [alt]="menuItem.name"
+            />
           </ng-template>
         </div>
         <div class="icon-label">{{ menuItem.title }}</div>
@@ -95,8 +101,10 @@
         <div
           *ngFor="let product of productList; let i = index"
           class="menu"
-          [ngClass]="{ selected: product.name === selectedProduct }"
-          (click)="onMenuCLick(product)"
+          [ngClass]="{
+            selected: product.path === currentRoute.product.fullPath
+          }"
+          [routerLink]="[product.path]"
         >
           <div
             class="product-icon"
@@ -106,7 +114,7 @@
           >
             <img
               (load)="onImageLoad()"
-              [src]="product.url"
+              [src]="product.iconUrl"
               [alt]="product.name"
             />
           </div>

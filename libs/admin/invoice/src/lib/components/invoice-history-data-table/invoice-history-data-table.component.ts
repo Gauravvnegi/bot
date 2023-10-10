@@ -16,7 +16,7 @@ import { Subscription } from 'rxjs';
 import * as FileSaver from 'file-saver';
 import { cols, title } from '../../constants/data-table';
 import { InvoiceHistoryList } from '../../models/history.model';
-import { FinanceService } from '../../services/finance.service';
+import { InvoiceService } from '../../services/invoice.service';
 
 @Component({
   selector: 'hospitality-bot-invoice-history-data-table',
@@ -42,7 +42,8 @@ export class InvoiceHistoryDataTableComponent extends BaseDatatableComponent
     private adminUtilityService: AdminUtilityService,
     private globalFilterService: GlobalFilterService,
     protected snackbarService: SnackBarService, // private router: Router, // private modalService: ModalService
-    private financeService: FinanceService,
+    // private financeService: FinanceService,
+    private invoiceService: InvoiceService,
     private modalService: ModalService
   ) {
     super(fb, tabFilterService);
@@ -59,7 +60,7 @@ export class InvoiceHistoryDataTableComponent extends BaseDatatableComponent
 
   initTableValue() {
     this.loading = true;
-    this.financeService.getInvoiceHistory(this.getQueryConfig()).subscribe(
+    this.invoiceService.getInvoiceHistory(this.getQueryConfig()).subscribe(
       (res) => {
         this.values = new InvoiceHistoryList().deserialize(res).records;
         this.totalRecords = res.total;
@@ -135,7 +136,7 @@ export class InvoiceHistoryDataTableComponent extends BaseDatatableComponent
       ]),
     };
     this.$subscription.add(
-      this.financeService.exportInvoiceCSV(config).subscribe(
+      this.invoiceService.exportInvoiceCSV(config).subscribe(
         (res) => {
           FileSaver.saveAs(
             res,

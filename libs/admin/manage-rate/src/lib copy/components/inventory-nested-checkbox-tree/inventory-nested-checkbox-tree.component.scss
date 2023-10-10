@@ -1,0 +1,93 @@
+@import 'main';
+.panel-tree {
+  padding: 10px;
+}
+
+.panel-tree p-header,
+.varient__heading,
+.panel-tree__header-checkbox,
+.panel-tree {
+  padding: 5px;
+  font-size: 16px;
+  font-weight: 600;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 0.94;
+  letter-spacing: 0.96px;
+  text-align: left;
+  color: #00162b;
+}
+
+.varient__heading,
+.variant-wrapper,
+.panel-tree__header-checkbox {
+  display: flex;
+  align-items: center;
+}
+
+.panel-tree__header-checkbox .custom-checkbox {
+  margin-right: 5px;
+}
+
+.channel {
+  font-size: 14px;
+  font-weight: 500;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.5;
+  letter-spacing: 0.84px;
+  color: #5f38f9;
+  padding: 8px;
+  background-color: #e8e2ff;
+  cursor: pointer;
+}
+
+.channel-heading {
+  padding: 5px 10px;
+  border-radius: 3px;
+  margin-left: 10px;
+  zoom: 0.82;
+}
+
+label.channel {
+  display: block;
+  padding: 0.1rem 22px;
+}
+
+:host ::ng-deep {
+  .p-accordion .p-accordion-content {
+    padding: unset;
+    gap: 4px;
+    display: flex;
+    flex-direction: column;
+  }
+  .p-accordion-toggle-icon {
+    pointer-events: auto;
+  }
+  .p-accordion .p-accordion-header .p-accordion-header-link {
+    padding: 0 19px 0 12px;
+  }
+  .p-accordion .p-accordion-tab.p-accordion-tab-active {
+    margin-bottom: unset;
+  }
+}
+
+.disable-parent {
+  pointer-events: none;
+}
+
+.enable-child {
+  pointer-events: auto;
+}
+
+.checkbox {
+  height: 1.4em;
+  background: $grayLight;
+  width: 1.4em;
+  border-radius: 2px;
+  opacity: 0.8;
+  &__img {
+    height: 100%;
+    width: 100%;
+  }
+}

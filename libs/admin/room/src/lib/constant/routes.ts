@@ -1,4 +1,4 @@
-const routes = {
+const roomRoutes = {
   dashboard: '',
   addRoom: 'add-room',
   addSingleRoom: 'add-room/single',
@@ -10,6 +10,12 @@ const routes = {
   importServices: 'import-services',
 };
 
+export const navRoutesConfig = {
+  addRoomType: {
+    label: 'Add Room Type',
+    link: roomRoutes.addRoomType,
+  },
+};
 //---- refactor--- add navigation route
 
-export default routes;
+export default roomRoutes;

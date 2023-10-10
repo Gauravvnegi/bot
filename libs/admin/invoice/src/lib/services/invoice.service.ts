@@ -4,7 +4,7 @@ import { ApiService } from '@hospitality-bot/shared/utils';
 import * as moment from 'moment';
 import { Observable } from 'rxjs';
 import { BillItemFields, UseForm } from '../types/forms.types';
-import { BillItem, BillSummaryData } from '../types/invoice.type';
+import { BillItem, BillSummaryData, QueryConfig } from '../types/invoice.type';
 
 @Injectable()
 export class InvoiceService extends ApiService {
@@ -19,6 +19,21 @@ export class InvoiceService extends ApiService {
 
   initInvoiceData(input: BillSummaryData) {
     this.invoiceData = input;
+  }
+
+  exportInvoiceCSV(config: QueryConfig): Observable<any> {
+    return this.get(`/api/v1/invoices/export${config.params}`, {
+      responseType: 'blob',
+    });
+  }
+
+  getInvoiceHistory(config?: QueryConfig): Observable<any> {
+    return this.get(`/api/v1/invoices${config.params}`);
+    // .pipe(
+    //   map((res) => {
+    //     return invoiceHistoryRes;
+    //   })
+    // );;
   }
 
   getReservationDetail(reservationId: string): Observable<any> {
@@ -171,7 +186,7 @@ export class InvoiceService extends ApiService {
     return res;
   }
 
-  handleInvoiceDownload(reservationId: string){
+  handleInvoiceDownload(reservationId: string) {
     this.downloadPDF(reservationId).subscribe((res) => {
       const fileUrl = res.file_download_url;
       const xhr = new XMLHttpRequest();

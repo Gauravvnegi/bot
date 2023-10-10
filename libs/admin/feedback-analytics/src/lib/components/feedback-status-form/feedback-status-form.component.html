@@ -1,0 +1,31 @@
+<form [formGroup]="feedbackStatusFG">
+  <div class="example-list" (click)="$event.stopPropagation()">
+    <mat-form-field
+      appearance="outline"
+      class="textarea"
+      [ngClass]="{ disabled: !getDepartmentAllowed }"
+    >
+      <textarea
+        matInput
+        formControlName="comment"
+        placeholder="Type your comment"
+      ></textarea>
+    </mat-form-field>
+    <div
+      [ngClass]="{
+        disabled:
+          !getDepartmentAllowed ||
+          !feedbackStatusFG.get('comment')?.value?.length
+      }"
+      class="example-list-status"
+    >
+      <div class="example-list-status_text" (click)="updateStatus()">
+        {{ type }}
+      </div>
+    </div>
+    <div class="example-list-horizontalLine"></div>
+    <div class="example-list-viewDetails" (click)="openDetailPage($event)">
+      {{ 'viewDetail' | translate }}
+    </div>
+  </div>
+</form>

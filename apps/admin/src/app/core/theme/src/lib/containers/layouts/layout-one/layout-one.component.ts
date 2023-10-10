@@ -1,21 +1,28 @@
 import { animate, style, transition, trigger } from '@angular/animations';
 import {
+  Compiler,
   Component,
+  ComponentFactoryResolver,
   HostListener,
   OnDestroy,
   OnInit,
-  ComponentFactoryResolver,
-  ViewContainerRef,
   ViewChild,
-  Compiler,
+  ViewContainerRef,
 } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { Router } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
 import { ConfigService, UserService } from '@hospitality-bot/admin/shared';
 import { DateService } from '@hospitality-bot/shared/utils';
+import { AddGuestComponent } from 'libs/admin/guests/src/lib/components/add-guest/add-guest.component';
+import { manageReservationRoutes } from 'libs/admin/manage-reservation/src/lib/constants/routes';
+import { RaiseRequestComponent } from 'libs/admin/request/src/lib/components/raise-request/raise-request.component';
+import { SettingsMenuComponent } from 'libs/admin/settings/src/lib/components/settings-menu/settings-menu.component';
 import { ModuleNames } from 'libs/admin/shared/src/lib/constants/subscriptionConfig';
 import { HotelDetailService } from 'libs/admin/shared/src/lib/services/hotel-detail.service';
+import { MenuItem } from 'primeng/api';
 import { Subscription } from 'rxjs';
+import { NightAuditComponent } from '../../../../../../../../../../../libs/admin/global-shared/src/lib/components/night-audit/night-audit.component';
+import { QuickReservationFormComponent } from '../../../../../../../../../../../libs/admin/reservation/src/lib/components/quick-reservation-form/quick-reservation-form.component';
 import { tokensConfig } from '../../../../../../../../../../../libs/admin/shared/src/lib/constants/common';
 import { layoutConfig } from '../../../constants/layout';
 import { DateRangeFilterService } from '../../../services/daterange-filter.service';
@@ -25,15 +32,8 @@ import { LoadingService } from '../../../services/loader.service';
 import { FirebaseMessagingService } from '../../../services/messaging.service';
 import { NotificationService } from '../../../services/notification.service';
 import { ProgressSpinnerService } from '../../../services/progress-spinner.service';
+import { RoutesConfigService } from '../../../services/routes-config.service';
 import { SubscriptionPlanService } from '../../../services/subscription-plan.service';
-import { NavigationEnd } from '@angular/router';
-import { MenuItem } from 'primeng/api';
-import { manageReservationRoutes } from 'libs/admin/manage-reservation/src/lib/constants/routes';
-import { RaiseRequestComponent } from 'libs/admin/request/src/lib/components/raise-request/raise-request.component';
-import { AddGuestComponent } from 'libs/admin/guests/src/lib/components/add-guest/add-guest.component';
-import { SettingsMenuComponent } from 'libs/admin/settings/src/lib/components/settings-menu/settings-menu.component';
-import { NightAuditComponent } from '../../../../../../../../../../../libs/admin/global-shared/src/lib/components/night-audit/night-audit.component';
-import { QuickReservationFormComponent } from '../../../../../../../../../../../libs/admin/reservation/src/lib/components/quick-reservation-form/quick-reservation-form.component';
 
 @Component({
   selector: 'admin-layout-one',
@@ -116,7 +116,8 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
     private configService: ConfigService,
     private hotelDetailService: HotelDetailService,
     private resolver: ComponentFactoryResolver,
-    private compiler: Compiler
+    private compiler: Compiler,
+    private routesConfigService: RoutesConfigService
   ) {
     this.initFG();
   }
@@ -413,14 +414,15 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
                     label: item.label,
                     command: () => {
                       this.openNewWindow(
-                        `/pages/efrontdesk/reservation/${manageReservationRoutes.addReservation.route}?entityId=${item.value}`
+                        ModuleNames.ADD_RESERVATION,
+                        `/${manageReservationRoutes.addReservation.route}?entityId=${item.value}`
                       );
                     },
                   })),
                 }
               : {
                   command: () =>
-                    this.openNewWindow(`/pages/efrontdesk/reservation`),
+                    this.openNewWindow(ModuleNames.ADD_RESERVATION),
                 }),
           }
         : null,
@@ -535,8 +537,14 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
     });
   }
 
-  openNewWindow(url: string) {
+  openNewWindow(moduleName: ModuleNames, additionalPath = '') {
+    const url =
+      this.routesConfigService.modulePathConfig[moduleName] + additionalPath;
     window.open(url);
+  }
+
+  openFreddie() {
+    this.openNewWindow(ModuleNames.LIVE_MESSAGING);
   }
 
   quickDropdownLink() {

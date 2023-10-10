@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Regex, UserService } from '@hospitality-bot/admin/shared';
+import { ModuleNames, Regex, UserService } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { authConstants } from '../../constants/auth';
 import { AuthService } from '../../services/auth.service';
+import { RoutesConfigService } from '../../../theme/src/lib/services/routes-config.service';
 
 /**
  * @class Login Component
@@ -27,7 +28,8 @@ export class LoginComponent implements OnInit {
     private _authService: AuthService,
     private _userService: UserService,
     private _snackbarService: SnackBarService,
-    private _activatedRoute: ActivatedRoute
+    private _activatedRoute: ActivatedRoute,
+    private routesConfigService: RoutesConfigService
   ) {
     this.initLoginForm();
   }
@@ -35,7 +37,7 @@ export class LoginComponent implements OnInit {
   ngOnInit(): void {
     this.checkForAccessToken();
     if (this._authService.isAuthenticated()) {
-      this._router.navigate([`/pages`]);
+      this._router.navigate([`/`]);
     }
   }
 
@@ -56,8 +58,11 @@ export class LoginComponent implements OnInit {
     };
 
     this._authService.verifyPlatformAccessToken(data).subscribe((response) => {
-      if (this.platformReferer == 'CREATE_WITH') {
-        this._router.navigate(['/pages/create-with']);
+      if (this.platformReferer == ModuleNames.CREATE_WITH) {
+        const createWithRoute = this.routesConfigService.modulePathConfig[
+          ModuleNames.CREATE_WITH
+        ];
+        this._router.navigate([createWithRoute ?? '/create-with']);
       }
     });
   }
@@ -95,7 +100,7 @@ export class LoginComponent implements OnInit {
         const hasSites = !!response.sites?.length;
 
         if (hasSites) {
-          this._router.navigate([`/pages`]);
+          this._router.navigate([`/`]);
         } else {
           this._router.navigate([`/dashboard`]);
         }

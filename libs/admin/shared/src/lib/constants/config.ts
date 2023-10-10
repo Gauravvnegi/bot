@@ -1,3 +1,5 @@
 export const labels = {
-    TODO : 'To-Do'
-}
+  TODO: 'To-Do',
+};
+
+export const routesConfig = {};

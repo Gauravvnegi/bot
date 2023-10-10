@@ -1,0 +1,41 @@
+<div class="wrapper">
+  <p class="heading">{{ settings.label }}</p>
+  <div class="gaugeChart">
+    <rg-gauge-chart
+      [canvasWidth]="canvasWidth"
+      [needleValue]="needleValue"
+      [centralLabel]="centralLabel"
+      [options]="options"
+    ></rg-gauge-chart>
+  </div>
+
+  <div class="smiley-wrapper">
+    <div class="smiley">
+      <div class="image">
+        <img
+          [src]="feedbackConfig.images.happy.url"
+          [alt]="feedbackConfig.images.happy.alt"
+        />
+      </div>
+      <div class="label">{{ settings.positive }}</div>
+    </div>
+    <div class="smiley">
+      <div class="image">
+        <img
+          [src]="feedbackConfig.images.sceptic.url"
+          [alt]="feedbackConfig.images.sceptic.alt"
+        />
+      </div>
+      <div class="label">{{ settings.neutral }}</div>
+    </div>
+    <div class="smiley">
+      <div class="image">
+        <img
+          [src]="feedbackConfig.images.sad.url"
+          [alt]="feedbackConfig.images.sad.alt"
+        />
+      </div>
+      <div class="label">{{ settings.negative }}</div>
+    </div>
+  </div>
+</div>

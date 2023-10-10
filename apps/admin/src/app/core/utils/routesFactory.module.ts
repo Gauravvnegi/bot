@@ -49,13 +49,17 @@ export const routeFactoryNew = (
 
   let initialRedirectPath = undefined;
 
+  // View not in use to create route ,
+  // use module declaration if not in view and loadModule is also not present the don't make route
+  const letTheViewRouteAlsoBeMade = true;
+
   /**
    * Product Config Iteration
    */
   product.forEach((product) => {
     const productName = product.name;
     const isProductSubscribed = product.isSubscribed;
-    const isProductInView = product.isView;
+    const isProductInView = product.isView || letTheViewRouteAlsoBeMade;
 
     if (productName && isProductInView) {
       const productRoute = routesConfigService.getRouteFromName(productName);
@@ -71,7 +75,8 @@ export const routeFactoryNew = (
         const isSettingModule = moduleName === ModuleNames.SETTINGS;
         // Is Setting Module - Does not necessarily required isView
         // If setting module, is View can be ignore for routing manufacturing
-        const isModuleInView = module.isView || isSettingModule;
+        const isModuleInView =
+          module.isView || isSettingModule || letTheViewRouteAlsoBeMade;
         const isModuleSubscribed = module.isSubscribed;
 
         if (moduleName && isModuleInView) {
@@ -90,7 +95,9 @@ export const routeFactoryNew = (
           module.config.forEach((subModule) => {
             const subModuleName = subModule.name;
             const isSubModuleSubscribed = subModule.isSubscribed;
-            const isSubModuleInView = subModule.isView || isSettingModule;
+
+            const isSubModuleInView =
+              subModule.isView || isSettingModule || letTheViewRouteAlsoBeMade;
 
             if (subModuleName && isSubModuleInView) {
               const subModuleRoute = routesConfigService.getRouteFromName(
@@ -153,13 +160,21 @@ export const routeFactoryNew = (
 
               const LoadSubModule = moduleConfig[subModuleName]; // Module Load
 
-              const subModuleRouteConfig: Route = {
-                path: subModulePath,
-                loadChildren: isSubModuleSubscribed
-                  ? LoadSubModule
-                  : UnsubscribedModule,
-                component: LoadSubModule ? undefined : ComingSoonComponent,
-              };
+              /**
+               * Only view check is here
+               * For the case of module not in view but has Load Module then only make the routes
+               * Else only make route for those module in view
+               */
+              if (subModule.isView || (!subModule.isView && LoadSubModule)) {
+                const subModuleRouteConfig: Route = {
+                  path: subModulePath,
+                  loadChildren: isSubModuleSubscribed
+                    ? LoadSubModule
+                    : UnsubscribedModule,
+                  component: LoadSubModule ? undefined : ComingSoonComponent,
+                };
+                routes[0].children.push(subModuleRouteConfig);
+              }
 
               // Pushing sub module path config
               if (isSubModuleSubscribed && !modulePathConfig[subModuleName]) {
@@ -168,8 +183,6 @@ export const routeFactoryNew = (
                   [subModuleName]: `/${subModulePath}`,
                 };
               }
-
-              routes[0].children.push(subModuleRouteConfig);
             }
           });
 

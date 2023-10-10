@@ -23,6 +23,7 @@ import { ManagePermissionService } from '../../services/manage-permission.servic
 import { PageState, Permission, PermissionMod, UserForm } from '../../types';
 import { UserPermissionDatatableComponent } from '../user-permission-datatable/user-permission-datatable.component';
 import { UserPermissionTable } from '../../models/user-permission-table.model';
+import { RoutesConfigService } from '@hospitality-bot/admin/core/theme';
 
 @Component({
   selector: 'hospitality-bot-user-profile',
@@ -86,7 +87,8 @@ export class UserProfileComponent implements OnInit {
     private _managePermissionService: ManagePermissionService,
     private snackbarService: SnackBarService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private routesConfigService: RoutesConfigService
   ) {
     this.initUserForm();
   }
@@ -572,7 +574,12 @@ export class UserProfileComponent implements OnInit {
   }
 
   addUser() {
-    this.router.navigate([navRoute.addNewUser.link]);
+    // this.router.navigate([navRoute.addNewUser.link],{
+    //   relativeTo:true
+    // });
+    this.routesConfigService.navigate({
+      additionalPath: managePermissionRoutes.addNewUser.route,
+    });
   }
 
   handleManage(event) {

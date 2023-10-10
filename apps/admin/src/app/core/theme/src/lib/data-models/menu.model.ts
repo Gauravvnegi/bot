@@ -2,6 +2,7 @@ import { ModuleNames, ProductNames, routes } from 'libs/admin/shared/src/index';
 import { get, set } from 'lodash';
 import { Products, SubProducts } from './subscription-plan-config.model';
 import { RoutesConfigService } from '../services/routes-config.service';
+import { Router } from '@angular/router';
 
 export class SubMenuItem {
   path: string;
@@ -13,7 +14,7 @@ export class SubMenuItem {
   children: SubMenuItem[];
 
   deserialize(input: SubProducts, prevRoute: string) {
-    const routeService = new RoutesConfigService();
+    const routeService = new RoutesConfigService(Router);
 
     this.children = new Array<SubMenuItem>();
 
@@ -26,7 +27,7 @@ export class SubMenuItem {
     this.path = prevRoute + '/' + routeService.getRouteFromName(input.name);
 
     input.config?.forEach((subMenu) => {
-      if (subMenu.isView) {
+      if (subMenu.name) {
         this.children.push(new SubMenuItem().deserialize(subMenu, this.path));
       }
     });
@@ -45,7 +46,7 @@ export class ProductItem {
   children: SubMenuItem[];
 
   deserialize(input: Products) {
-    const routeService = new RoutesConfigService();
+    const routeService = new RoutesConfigService(Router);
 
     this.children = new Array<SubMenuItem>();
 
@@ -57,7 +58,7 @@ export class ProductItem {
     this.path = '/' + routeService.getRouteFromName(input.name);
 
     input.config?.forEach((subMenu) => {
-      if (subMenu.isView) {
+      if (subMenu.name) {
         this.children.push(new SubMenuItem().deserialize(subMenu, this.path));
       }
     });
@@ -73,7 +74,7 @@ export class Product {
     this.productItems = new Array<ProductItem>();
 
     input.forEach((menu) => {
-      if (menu.isView)
+      if (menu.name)
         this.productItems.push(new ProductItem().deserialize(menu));
     });
 

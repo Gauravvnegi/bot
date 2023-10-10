@@ -59,11 +59,22 @@ export class RoutesConfigService {
       additionalPath,
       queryParams,
       isRespectiveToProduct,
+      isRelative,
     }: NavigateConfig = {
       ...defaultNavigateConfig,
       subModuleName: this.subModuleName,
       ...config,
     };
+
+    // if relative to current path (Re think as it will Activated Route)
+    // if (isRelative) {
+    //   this.router.navigate([additionalPath], {
+    //     queryParams: queryParams,
+    //     relativeTo: ActivateRoute,
+    //   });
+
+    //   return;
+    // }
 
     let path = this.modulePathConfig[subModuleName];
 
@@ -202,6 +213,7 @@ export type NavigateConfig = {
   additionalPath: string;
   queryParams: any;
   isRespectiveToProduct: boolean;
+  isRelative: boolean;
 };
 
 export type ModuleOfSubModuleWithRespectToProduct = Partial<
@@ -212,6 +224,7 @@ const defaultNavigateConfig: NavigateConfig = {
   additionalPath: '',
   queryParams: {},
   isRespectiveToProduct: false,
+  isRelative: false,
 };
 
 // Need to fix... Module Names cannot be read here (Circular dependency)

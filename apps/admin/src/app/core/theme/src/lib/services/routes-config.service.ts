@@ -7,7 +7,7 @@ import { BehaviorSubject } from 'rxjs';
 const defaultNavigateConfig: NavigateConfig = {
   additionalPath: '',
   queryParams: {},
-  isRespectiveToProduct: false,
+  isRespectiveToProduct: true,
   isRelative: false,
 };
 

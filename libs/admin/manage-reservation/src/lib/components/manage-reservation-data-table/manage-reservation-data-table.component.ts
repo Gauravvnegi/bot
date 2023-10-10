@@ -126,7 +126,6 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
 
   setTableType(value) {
     this.tableFG.patchValue({ tableType: value });
-    debugger;
   }
 
   /**

@@ -184,7 +184,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
     this.reservationService.getReservationDetails(config).subscribe(
       (res) => {
-        debugger;
         this.options = new ReservationTable().deserialize(
           res,
           this.globalFilterService.timezone
@@ -199,7 +198,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   getStatusStyle(type: string): string {
-    debugger;
     switch (type) {
       case 'INITIATED':
         return 'status-text-initiated';

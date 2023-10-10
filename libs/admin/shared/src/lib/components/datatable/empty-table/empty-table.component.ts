@@ -18,7 +18,7 @@ export class EmptyTableComponent implements OnInit {
   /**
    * Set Content of the empty view.
    */
-  @Input() set content(value: Content) {
+  @Input() set content(value: EmptyContent) {
     Object.entries(value).forEach(([key, value]) => {
       this[key] = value;
     });
@@ -38,7 +38,7 @@ export class EmptyTableComponent implements OnInit {
   }
 }
 
-type Content = {
+export type EmptyContent = {
   imageSrc?: string;
   heading?: string;
   description?: string;

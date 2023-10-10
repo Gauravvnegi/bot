@@ -35,6 +35,7 @@
     [ngClass]="sidebarType"
     [(visible)]="sidebarVisible"
     position="right"
+    [showCloseIcon]="false"
   >
     <ng-container #sidebarSlide></ng-container>
   </p-sidebar>
@@ -85,7 +86,7 @@
             *ngIf="!!bookingOptions?.length"
             label="Quick booking"
             [splitButton]="true"
-            [link]="quickDropdownLink"
+            (clicked)="showQuickReservation()"
             [openNewWindow]="true"
             [items]="bookingOptions"
           ></hospitality-bot-tiered-menu-button>
@@ -158,6 +159,15 @@
               src="assets/svg/setting-dark.svg"
               alt="setting"
               pTooltip="Settings"
+              tooltipPosition="bottom"
+            />
+          </div>
+          <div class="header--button quick-action" (click)="openNightAudit()">
+            <img
+              class="filter-icon"
+              src="assets/svg/allocation.svg"
+              alt="audit"
+              pTooltip="Night Audit"
               tooltipPosition="bottom"
             />
           </div>

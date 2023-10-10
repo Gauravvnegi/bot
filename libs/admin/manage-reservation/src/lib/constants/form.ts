@@ -14,7 +14,7 @@ export type ReservationForm = {
   offerId: string;
 };
 
-type ReservationInformation = {
+export type ReservationInformation = {
   from?: number;
   to?: number;
   dateAndTime: number;
@@ -26,7 +26,7 @@ type ReservationInformation = {
   eventType?: string;
 };
 
-type GuestInformation = {
+export type GuestInformation = {
   guestDetails: string;
 };
 
@@ -41,11 +41,11 @@ export type SpaItems = {
   amount: number;
 };
 
-type Instructions = {
+export type Instructions = {
   specialInstructions?: string;
 };
 
-type RoomInformation = {
+export type RoomInformation = {
   roomTypes: RoomTypes[];
 
   // For quick form

@@ -97,6 +97,10 @@
     display: inline-flex;
     justify-content: space-between;
     align-items: center;
+
+    svg {
+      filter: invert(1);
+    }
     .name {
       font-size: 12px;
       letter-spacing: 0.72px;
@@ -111,6 +115,26 @@
   }
 }
 
-svg {
-  filter: invert(1);
+.status {
+  font-size: 12px;
+  letter-spacing: 0.72px;
+  text-align: left;
+  color: $title;
+  font-weight: 500;
+}
+
+.status-text-initiated {
+  color: $initiated !important;
+}
+
+.status-text-reject {
+  color: $mediumRed !important;
+}
+
+.status-text-success {
+  color: #2a8853 !important;
+}
+
+.status-text-pending {
+  color: $draft-state !important;
 }

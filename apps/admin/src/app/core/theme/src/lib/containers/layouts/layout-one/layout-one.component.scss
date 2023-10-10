@@ -473,6 +473,20 @@
       max-height: 130px !important;
     }
   }
+
+  .night-audit {
+    @include default-close;
+    .p-sidebar-right {
+      @include sidebar-design(60rem);
+    }
+  }
+
+  .booking {
+    @include default-close;
+    .p-sidebar-right {
+      width: 35rem;
+    }
+  }
 }
 
 .selected-product {

@@ -44,8 +44,8 @@ export class HousekeepingComponent extends BaseDatatableComponent
   roomTypeLimit = 10;
   dateValue = {};
   showContent = false;
+  isQuickFilterInEmptyView: boolean = false;
 
- 
   constructor(
     private fb: FormBuilder,
     private adminUtilityService: AdminUtilityService,
@@ -77,7 +77,6 @@ export class HousekeepingComponent extends BaseDatatableComponent
     });
   }
 
-
   listenForRefreshData(): void {
     this.housekeepingService.refreshData.subscribe((value) => {
       if (value) {
@@ -100,6 +99,10 @@ export class HousekeepingComponent extends BaseDatatableComponent
             roomList.totalRecord,
             this.roomStatusDetails
           );
+          this.values.length > 0
+            ? (this.isQuickFilterInEmptyView = false)
+            : (this.isQuickFilterInEmptyView = true);
+
           this.loading = false;
         },
         () => {
@@ -124,7 +127,8 @@ export class HousekeepingComponent extends BaseDatatableComponent
           type: 'ROOM',
           offset: this.first,
           limit: this.rowsPerPage,
-          roomTypeId: this.useForm.get('roomType').value ?? '',
+          roomTypeIds: this.useForm.get('roomType').value ?? [],
+          raw: true,
         },
       ]),
     };

@@ -146,23 +146,23 @@ export class RoomTypeForm {
 
   deserialize(input: RoomTypeResponse) {
     this.id = input?.id;
-    this.status = input.status;
-    this.name = input.name;
-    this.imageUrl = input.imageUrl;
-    this.description = input.description;
+    this.status = input?.status;
+    this.name = input?.name;
+    this.imageUrl = input?.imageUrl;
+    this.description = input?.description;
     this.complimentaryAmenities =
-      input.complimentaryAmenities?.map((item) => item.id) ?? [];
-    this.paidAmenities = input.paidAmenities?.map((item) => item.id) ?? [];
-    this.maxOccupancy = input.occupancyDetails.maxOccupancy;
-    this.maxChildren = input.occupancyDetails.maxChildren;
-    this.maxAdult = input.occupancyDetails.maxAdult;
-    this.area = input.area;
+      input?.complimentaryAmenities?.map((item) => item.id) ?? [];
+    this.paidAmenities = input?.paidAmenities?.map((item) => item.id) ?? [];
+    this.maxOccupancy = input?.occupancyDetails?.maxOccupancy;
+    this.maxChildren = input?.occupancyDetails?.maxChildren;
+    this.maxAdult = input?.occupancyDetails?.maxAdult;
+    this.area = input?.area;
     this.isBaseRoomType = input?.isBaseRoomType ?? false;
     this.shortDescription = input?.shortDescription ?? '';
     this.rooms = input?.rooms ?? [];
 
     const defaultRatePlan = input?.ratePlans?.filter((item) => item.isBase);
-    if (defaultRatePlan.length) {
+    if (defaultRatePlan?.length) {
       this.staticRatePlans = {
         paxPriceCurrency: input.pricingDetails.currency,
         paxAdultPrice: input.pricingDetails?.paxAdult,
@@ -205,7 +205,7 @@ export class RoomTypeForm {
       };
     }
 
-    this.ratePlans = input.ratePlans
+    this.ratePlans = input?.ratePlans
       .filter((item) => !item.isBase)
       .map((item) => ({
         label: item.label,
@@ -220,7 +220,7 @@ export class RoomTypeForm {
       }));
 
     // For Reservation
-    this.allRatePlans = input.ratePlans.map((item) => ({
+    this.allRatePlans = input?.ratePlans.map((item) => ({
       label: item.label,
       value: item.id,
       isBase: item.isBase,

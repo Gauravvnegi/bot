@@ -275,7 +275,7 @@ $border-color: rgba(112, 112, 112, 0.35);
   z-index: 400 !important;
 }
 
-:host ::ng-deep.sidebar {
+:host ::ng-deep .sidebar {
   .p-sidebar {
     width: 35rem;
   }

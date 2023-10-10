@@ -47,6 +47,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
   tabFilterItems = dashboardPopUpTabs;
   tabFilterIdx = 0;
   selectedTab: string = dashboardPopUpTabs[0].value;
+  @ViewChild('request') preArrivalRequestTemplateRef: TemplateRef<any>;
+  @ViewChild('guest') preCheckinGuestTemplateRef: TemplateRef<any>;
 
   private $subscription = new Subscription();
   constructor(
@@ -186,6 +188,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
           res,
           this.globalFilterService.timezone
         ).records;
+
         this.loading = false;
       },
       (error) => {
@@ -194,8 +197,18 @@ export class DashboardComponent implements OnInit, OnDestroy {
     );
   }
 
-  @ViewChild('request') preArrivalRequestTemplateRef: TemplateRef<any>;
-  @ViewChild('guest') preCheckinGuestTemplateRef: TemplateRef<any>;
+  getStatusStyle(type: string): string {
+    switch (type) {
+      case 'INITIATED':
+        return 'status-text-initiated';
+      case 'PENDING':
+        return 'status-text-pending';
+      case 'FAILED':
+        return 'status-text-reject';
+      case 'COMPLETED':
+        return 'status-text-success';
+    }
+  }
 
   getTemplate() {
     return this.tabFilterItems[this.tabFilterIdx].value ===

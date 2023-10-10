@@ -90,7 +90,7 @@ export class BaseDatatableComponent implements OnInit {
 
   filterChips: Chip<string>[] | any = []; //Chips setting, When there is no tabItem
   selectedFilterChips = new Set<string>([defaultFilterChipValue.value]);
-
+  isQuickFilterInEmptyView = false;
   values = [];
 
   TabItems: MenuItem[] = [];
@@ -384,6 +384,8 @@ export class BaseDatatableComponent implements OnInit {
   }): void {
     this.selectedFilterChips = selectedChips;
     this.changePage(0);
+    //to handle the case when there is no tab filter and filter chips are inside the empty view
+    if (this.isQuickFilterInEmptyView) this.loadData({});
   }
 
   onSelectedTabFilterChange(event: MatTabChangeEvent) {

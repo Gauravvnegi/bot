@@ -3,6 +3,7 @@ import { ModuleNames, SubscriptionConfig } from 'libs/admin/shared/src/index';
 import { ComingSoonComponent } from 'libs/admin/shared/src/lib/components/coming-soon/coming-soon.component';
 import { moduleConfig } from '../pages/config/config.module';
 import {
+  HierarchicalPathConfig,
   ModulePathConfig,
   RoutesConfigService,
   SubscriptionPlanService,
@@ -42,6 +43,7 @@ export const routeFactoryNew = (
 
   const product: SubscriptionConfig[] = subscription.products;
   let modulePathConfig: ModulePathConfig = {};
+  let hierarchicalPathConfig: HierarchicalPathConfig = {};
 
   let initialRedirectPath = undefined;
 
@@ -121,6 +123,24 @@ export const routeFactoryNew = (
                 initialRedirectPath = subModulePath;
               }
 
+              if (
+                isProductSubscribed &&
+                isModuleSubscribed &&
+                isSubModuleSubscribed
+              ) {
+                hierarchicalPathConfig = {
+                  ...hierarchicalPathConfig,
+                  [productName]: {
+                    ...(hierarchicalPathConfig[productName] ?? {}),
+                    [moduleName]: {
+                      ...(hierarchicalPathConfig[productName]?.[moduleName] ??
+                        {}),
+                      [subModuleName]: subModulePath,
+                    },
+                  },
+                };
+              }
+
               const LoadSubModule = moduleConfig[subModuleName]; // Module Load
 
               const subModuleRouteConfig: Route = {
@@ -174,13 +194,16 @@ export const routeFactoryNew = (
           isProductSubscribed
         )
       );
-
-      /**
-       * Create Record of routes for subscribed submodules
-       */
-      routesConfigService.initModulePathConfig(modulePathConfig);
     }
   });
+
+  /**
+   * Create Record of routes for subscribed submodules
+   */
+  routesConfigService.initModulePathConfig(
+    modulePathConfig,
+    hierarchicalPathConfig
+  );
 
   routes[0].children.unshift({
     path: '',

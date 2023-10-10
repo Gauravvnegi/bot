@@ -42,14 +42,22 @@ export class ProfileDropdownComponent implements OnInit {
       ModuleNames.CREATE_WITH
     );
 
-    // filtering out the manage site - either on mange site or sites not available or createWith not subscribed
-    this.items = layoutConfig.profile.filter(
-      (item) =>
-        !(
-          item.value === UserDropdown.MANAGE_SITES &&
-          (this.onManageSite || !isSiteAvailable || !isCreateWithSubscribed)
-        )
+    const isRolesAndPermissionSubscribed = this.subscriptionPlanService.checkModuleSubscription(
+      ModuleNames.ROLES_AND_PERMISSION
     );
+
+    this.items = layoutConfig.profile.filter((item) => {
+      if (
+        // filtering out the manage site - either on mange site or sites not available or createWith not subscribed
+        (item.value === UserDropdown.MANAGE_SITES &&
+          (this.onManageSite || !isSiteAvailable || !isCreateWithSubscribed)) ||
+        // filtering out manage profile if not subscribed
+        (item.value === UserDropdown.PROFILE && !isRolesAndPermissionSubscribed)
+      ) {
+        return false;
+      }
+      return true;
+    });
   }
 
   profileAction(event) {
@@ -73,7 +81,9 @@ export class ProfileDropdownComponent implements OnInit {
     if (this.onManageSite) {
       this._router.navigate([`/dashboard/manage-sites/user-profile`]);
     } else {
-      this.routesConfigService.navigate(ModuleNames.ROLES_AND_PERMISSION);
+      this.routesConfigService.navigate(ModuleNames.ROLES_AND_PERMISSION, {
+        moduleName: ModuleNames.SETTINGS,
+      });
     }
   }
 

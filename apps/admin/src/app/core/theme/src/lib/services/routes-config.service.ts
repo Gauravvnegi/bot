@@ -34,7 +34,14 @@ export class RoutesConfigService {
     {}
   );
 
+  /**
+   * If same subModule in multiple product then first subscribed route respective to sub module name will be attached
+   */
   modulePathConfig: ModulePathConfig = {};
+  /**
+   * Contains record of hierarchical route
+   */
+  hierarchicalPathConfig: HierarchicalPathConfig = {};
 
   private $activeRoute = new BehaviorSubject<ActiveRouteConfig>({
     product: { ...pathConfig },
@@ -44,8 +51,27 @@ export class RoutesConfigService {
 
   private $navRoutes = new BehaviorSubject<NavRouteOption[]>([]);
 
-  navigate(moduleName: ModuleNames, config = {}) {
-    const path = this.modulePathConfig[moduleName];
+  navigate(
+    subModuleName: ModuleNames,
+    config: {
+      moduleName?: ModuleNames;
+    } = {}
+  ) {
+    let path = this.modulePathConfig[subModuleName];
+    debugger;
+
+    /**
+     * If given module name then route will open respective to product
+     */
+    if (config.moduleName) {
+      const newPath = this.hierarchicalPathConfig[
+        this.activeRouteConfig.product.name
+      ]?.[config.moduleName]?.[subModuleName];
+
+      if (newPath) {
+        path = newPath;
+      }
+    }
 
     if (path) {
       this.router.navigate([path]);
@@ -71,8 +97,9 @@ export class RoutesConfigService {
     this.$navRoutes.next(navRoutes);
   }
 
-  initModulePathConfig(res: ModulePathConfig) {
+  initModulePathConfig(res: ModulePathConfig, hRes: HierarchicalPathConfig) {
     this.modulePathConfig = res;
+    this.hierarchicalPathConfig = hRes;
   }
 
   get activeRouteConfigSubscription() {
@@ -122,5 +149,10 @@ export type ActiveRouteConfig = {
 };
 
 export type ModulePathConfig = Partial<Record<ModuleNames, string>>;
-
+export type HierarchicalPathConfig = Partial<
+  Record<
+    ProductNames,
+    Partial<Record<ModuleNames, Partial<Record<ModuleNames, string>>>>
+  >
+>;
 const routesConfig = {};

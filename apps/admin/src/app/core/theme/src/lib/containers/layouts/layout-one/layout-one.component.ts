@@ -547,6 +547,10 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
     this.openNewWindow(ModuleNames.LIVE_MESSAGING);
   }
 
+  openViewReservation() {
+    this.openNewWindow(ModuleNames.ADD_RESERVATION);
+  }
+
   quickDropdownLink() {
     this.showQuickReservation();
   }

@@ -221,7 +221,7 @@ export class BookingInfoComponent implements OnInit {
       // Calculate the date difference in days
       const dateDiffInMilliseconds =
         this.toDateValue.getTime() - this.fromDateValue.getTime();
-      const dateDiffInDays = Math.floor(
+      const dateDiffInDays = Math.ceil(
         dateDiffInMilliseconds / (1000 * 60 * 60 * 24)
       );
       // Update the dateDifference BehaviorSubject with the new value

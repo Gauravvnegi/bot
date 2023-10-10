@@ -2,7 +2,11 @@ import { Route, Routes } from '@angular/router';
 import { ModuleNames, SubscriptionConfig } from 'libs/admin/shared/src/index';
 import { ComingSoonComponent } from 'libs/admin/shared/src/lib/components/coming-soon/coming-soon.component';
 import { moduleConfig } from '../pages/config/config.module';
-import { RoutesConfigService, SubscriptionPlanService } from '../theme/src';
+import {
+  ModulePathConfig,
+  RoutesConfigService,
+  SubscriptionPlanService,
+} from '../theme/src';
 
 type ModulePromise<T extends any> = () => Promise<T>;
 
@@ -37,7 +41,9 @@ export const routeFactoryNew = (
   const subscription = subscriptionService.getSubscription();
 
   const product: SubscriptionConfig[] = subscription.products;
+  let modulePathConfig: ModulePathConfig = {};
 
+  let initialRedirectPath = undefined;
   /**
    * Product Config Iteration
    */
@@ -49,7 +55,7 @@ export const routeFactoryNew = (
     if (productName && isProductInView) {
       const productRoute = routesConfigService.getRouteFromName(productName);
 
-      var firstSubscribedModulePath = undefined;
+      let firstSubscribedModulePath = undefined;
 
       /**
        * Module Config Iteration
@@ -66,7 +72,7 @@ export const routeFactoryNew = (
         if (moduleName && isModuleInView) {
           const moduleRoute = routesConfigService.getRouteFromName(module.name);
           const modulePath = `${productRoute}/${moduleRoute}`;
-          var firstSubscribedSubModulePath = undefined;
+          let firstSubscribedSubModulePath = undefined;
 
           // Getting first subscribed module path (Creating circular loop)
           // if (!firstSubscribedModulePath && isModuleSubscribed) {
@@ -101,6 +107,19 @@ export const routeFactoryNew = (
                 firstSubscribedModulePath = subModulePath;
               }
 
+              /**
+               * Initial redirect path
+               */
+              if (
+                !initialRedirectPath &&
+                isProductSubscribed &&
+                isModuleSubscribed &&
+                isSubModuleSubscribed &&
+                !isSettingModule
+              ) {
+                initialRedirectPath = subModulePath;
+              }
+
               const LoadSubModule = moduleConfig[subModuleName]; // Module Load
 
               const subModuleRouteConfig: Route = {
@@ -110,6 +129,14 @@ export const routeFactoryNew = (
                   : UnsubscribedModule,
                 component: LoadSubModule ? undefined : ComingSoonComponent,
               };
+
+              //
+              if (isSubModuleSubscribed) {
+                modulePathConfig = {
+                  ...modulePathConfig,
+                  [subModuleName]: subModulePath,
+                };
+              }
 
               routes[0].children.push(subModuleRouteConfig);
             }
@@ -132,7 +159,17 @@ export const routeFactoryNew = (
           isProductSubscribed
         )
       );
+
+      /**
+       * Create Record of routes for subscribed submodules
+       */
+      routesConfigService.initModulePathConfig(modulePathConfig);
     }
+
+    routes[0].children.unshift({
+      path: '',
+      redirectTo: initialRedirectPath,
+    });
   });
 
   return routes;

@@ -60,7 +60,7 @@ const appRoutes: Route[] = [
         canActivate: [CanActivateGuard],
       },
       {
-        path: 'test', // will be removed (as direct imported in admin as of now)
+        path: 'test-test-test-do-not-open', // will be removed (as direct imported in admin as of now for side view)
         loadChildren: () =>
           import('@hospitality-bot/admin/complaint-tacker').then(
             (m) => m.AdminComplaintTackerModule

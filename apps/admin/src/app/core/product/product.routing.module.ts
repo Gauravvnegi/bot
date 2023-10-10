@@ -8,12 +8,7 @@ const appRoutes: Route[] = [
   {
     path: '',
     component: MainComponent,
-    children: [
-      {
-        path: '',
-        component: MainComponent, // handle Redirection
-      },
-    ],
+    children: [],
   },
 ];
 

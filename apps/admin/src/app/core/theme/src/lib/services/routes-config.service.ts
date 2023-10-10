@@ -31,6 +31,8 @@ export class RoutesConfigService {
     {}
   );
 
+  modulePathConfig: ModulePathConfig = {};
+
   private $activeRoute = new BehaviorSubject<ActiveRouteConfig>({
     product: { ...pathConfig },
     module: { ...pathConfig },
@@ -55,6 +57,10 @@ export class RoutesConfigService {
     }
 
     this.$navRoutes.next(navRoutes);
+  }
+
+  initModulePathConfig(res: ModulePathConfig) {
+    this.modulePathConfig = res;
   }
 
   get activeRouteConfigSubscription() {
@@ -102,5 +108,7 @@ export type ActiveRouteConfig = {
   module: PathConfig;
   submodule: PathConfig;
 };
+
+export type ModulePathConfig = Partial<Record<ModuleNames, string>>;
 
 const routesConfig = {};

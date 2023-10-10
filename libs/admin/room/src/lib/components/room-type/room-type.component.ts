@@ -9,6 +9,7 @@ import {
 import { ActivatedRoute, Router } from '@angular/router';
 import {
   GlobalFilterService,
+  RoutesConfigService,
   SubscriptionPlanService,
 } from '@hospitality-bot/admin/core/theme';
 import {
@@ -29,7 +30,7 @@ import {
   noRecordAction,
   noRecordActionForComp,
 } from '../../constant/form';
-import routes from '../../constant/routes';
+import routes, { navRoutesConfig } from '../../constant/routes';
 import { Service, Services } from '../../models/amenities.model';
 import { RoomTypeForm } from '../../models/room.model';
 import { RoomType } from '../../models/rooms-data-table.model';
@@ -95,7 +96,8 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
     private formService: FormService,
     private subscriptionPlanService: SubscriptionPlanService,
     private modalService: ModalService,
-    private location: Location
+    private location: Location,
+    private routesConfigService: RoutesConfigService
   ) {
     this.roomTypeId = this.route.snapshot.paramMap.get('id');
   }
@@ -107,15 +109,15 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
     );
     this.initForm();
     this.initOptionConfig();
-    this.updateNavRoutes();
+    this.initNavRoutes();
   }
 
-  updateNavRoutes() {
-    const initialRouteName = this.subscriptionPlanService.selectedProduct;
-    this.navRoutes[0].label = convertToTitleCase(initialRouteName).replace(
-      'Home',
-      ''
-    );
+  initNavRoutes() {
+    this.routesConfigService.navRoutesChanges.subscribe((navRoutesRes) => {
+      const navRoutes = navRoutesRes;
+      navRoutes.push(navRoutesConfig.addRoomType);
+      this.navRoutes = navRoutes;
+    });
   }
 
   get inputControl() {

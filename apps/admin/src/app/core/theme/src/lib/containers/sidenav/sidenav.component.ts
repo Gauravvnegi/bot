@@ -27,7 +27,10 @@ import { GlobalFilterService } from '../../services/global-filters.service';
 import { SubscriptionPlanService } from '../../services/subscription-plan.service';
 import { OrientationPopupComponent } from '../orientation-popup/orientation-popup.component';
 import { AuthService } from '../../../../../auth/services/auth.service';
-import { RoutesConfigService } from '../../services/routes-config.service';
+import {
+  ActiveRouteConfig,
+  RoutesConfigService,
+} from '../../services/routes-config.service';
 
 @Component({
   selector: 'hospitality-bot-sidenav',
@@ -36,7 +39,7 @@ import { RoutesConfigService } from '../../services/routes-config.service';
 })
 export class SidenavComponent implements OnInit, OnDestroy {
   public list_item_colour: string;
-  public menuItems = [];
+  public menuItems: SubMenuItem[] = [];
   public activeFontColor: string;
   public normalFontColor: string;
   public dividerBgColor: string;
@@ -105,23 +108,24 @@ export class SidenavComponent implements OnInit, OnDestroy {
    */
   initRouteConfig(finalRoute: string) {
     const routesArr = finalRoute.split('/');
-    this.routeConfigService.initActiveRoute({
+
+    const activeRouteConfig: ActiveRouteConfig = {
       product: {
         shortPath: routesArr[1] ?? '',
-        fullPath: `/${routesArr[1]}` ?? '',
+        fullPath: `/${routesArr[1]}`,
       },
       module: {
         shortPath: routesArr[2] ?? '',
-        fullPath: `/${routesArr[1]}/${routesArr[2]}` ?? '',
+        fullPath: `/${routesArr[1]}/${routesArr[2]}`,
       },
       submodule: {
         shortPath: routesArr[3] ?? '',
-        fullPath: `/${routesArr[1]}/${routesArr[3]}/${routesArr[3]}` ?? '',
+        fullPath: `/${routesArr[1]}/${routesArr[2]}/${routesArr[3]}`,
       },
-    });
+    };
 
     const currentProduct = this.productList.find(
-      (item) => item.path === this.currentRoute.product.fullPath
+      (item) => item.path === activeRouteConfig.product.fullPath
     );
 
     if (currentProduct) {
@@ -134,6 +138,34 @@ export class SidenavComponent implements OnInit, OnDestroy {
        * Updating selected product
        */
       this.subscriptionPlanService.setSelectedProduct(currentProduct.name);
+
+      const currentModule = this.menuItems?.find(
+        (item) => item.path === activeRouteConfig.module.fullPath
+      );
+      const currentSubModule = currentModule?.children?.find(
+        (item) => item.path === activeRouteConfig.submodule.fullPath
+      );
+
+      /**
+       * Init Route Config (name, label, routes)
+       */
+      this.routeConfigService.initActiveRoute({
+        product: {
+          ...activeRouteConfig.product,
+          name: currentProduct.name,
+          label: currentProduct.title,
+        },
+        module: {
+          ...activeRouteConfig.module,
+          name: currentModule.name,
+          label: currentModule.title,
+        },
+        submodule: {
+          ...activeRouteConfig.submodule,
+          name: currentSubModule.name,
+          label: currentSubModule.title,
+        },
+      });
     } else {
       console.error('Error getting product', {
         fullPath: this.currentRoute.product.fullPath,

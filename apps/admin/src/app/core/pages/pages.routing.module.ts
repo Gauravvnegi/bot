@@ -11,7 +11,7 @@ import { DashboardErrorComponent } from '@hospitality-bot/admin/shared';
 
 const appRoutes: Route[] = [
   {
-    path: 'pages',
+    path: 'pages', // Previously maintained route
     component: MainComponent,
     children: [
       {
@@ -20,11 +20,6 @@ const appRoutes: Route[] = [
         pathMatch: 'full',
       },
     ],
-  },
-  {
-    path: 'trp',
-    component: TemporaryRedirectPageComponent,
-    pathMatch: 'full',
   },
   {
     path: '',

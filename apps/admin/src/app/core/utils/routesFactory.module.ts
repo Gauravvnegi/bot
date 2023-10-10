@@ -130,7 +130,7 @@ export const routeFactoryNew = (
                 component: LoadSubModule ? undefined : ComingSoonComponent,
               };
 
-              //
+              // Pushing sub module path config
               if (isSubModuleSubscribed) {
                 modulePathConfig = {
                   ...modulePathConfig,
@@ -142,6 +142,13 @@ export const routeFactoryNew = (
             }
           });
 
+          if (isModuleSubscribed) {
+            modulePathConfig = {
+              ...modulePathConfig,
+              [moduleName]: modulePath,
+            };
+          }
+
           routes[0].children.push(
             getRedirectRouteConfig(
               modulePath,
@@ -151,6 +158,13 @@ export const routeFactoryNew = (
           );
         }
       });
+
+      if (isProductSubscribed) {
+        modulePathConfig = {
+          ...modulePathConfig,
+          [productName]: productRoute,
+        };
+      }
 
       routes[0].children.unshift(
         getRedirectRouteConfig(

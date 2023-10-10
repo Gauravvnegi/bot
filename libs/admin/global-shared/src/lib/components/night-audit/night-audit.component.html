@@ -3,10 +3,10 @@
   <ng-template *ngTemplateOutlet="sidebarHeader"></ng-template>
   <div class="audit-content_wrapper">
     <hospitality-bot-stepper
+      [completedStyle]="'dark'"
       [stepList]="itemList"
       [readOnly]="true"
       [activeIndex]="activeStep"
-      (onActive)="onActive($event)"
     ></hospitality-bot-stepper>
     <ng-container [ngSwitch]="activeStep">
       <hospitality-bot-manage-logged-users

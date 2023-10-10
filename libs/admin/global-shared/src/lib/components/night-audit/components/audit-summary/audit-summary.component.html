@@ -3,18 +3,24 @@
     Night audit is completed for {{ today | date: 'dd/MM/yyy' }}
   </div>
   <div class="content__wrapper">
-    <hospitality-bot-table-view
-      *ngFor="let col of columns; let i = index"
-      [header]="values[col].title"
-      [columns]="cols[col]"
-      [items]="values[col].values"
-      [emptyViewConfig]="{
-        content: {
-          description: 'There are no users logged in except for you.'
-        }
-      }"
-      (actionClicked)="initTable()"
-    ></hospitality-bot-table-view>
+    <p-accordion [multiple]="true">
+      <p-accordionTab
+        *ngFor="let col of columns; let i = index"
+        [selected]="true"
+        [header]="values[col].title"
+      >
+        <hospitality-bot-table-view
+          [columns]="cols[col]"
+          [items]="values[col].values"
+          [emptyViewConfig]="{
+            content: {
+              description: 'There are no users logged in except for you.'
+            }
+          }"
+          (actionClicked)="initTable()"
+        ></hospitality-bot-table-view>
+      </p-accordionTab>
+    </p-accordion>
   </div>
 
   <!-- Action Button -->

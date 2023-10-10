@@ -480,7 +480,9 @@ export class AddRoomComponent implements OnInit, OnDestroy {
             removeFeatures: removeFeatures,
             ...data,
             roomNo: null,
-            statusDetailsList: [{ ...statusData, isCurrentStatus: true }],
+            statusDetailsList: [
+              { ...statusData, isCurrentStatus: this.checkCurrentStatus() },
+            ],
           }),
         })
         .subscribe(
@@ -554,6 +556,15 @@ export class AddRoomComponent implements OnInit, OnDestroy {
           (error) => {}
         )
     );
+  }
+
+  checkCurrentStatus() {
+    const todayEpoch = new Date().setHours(0, 0, 0, 0); // Get today's date in epoch format, setting time to midnight
+    const fromDate = new Date(
+      this.statusQuoFormControls.fromDate.value
+    ).setHours(0, 0, 0, 0);
+    // Compare the epoch values
+    return fromDate === todayEpoch ? true : false;
   }
 
   ngOnDestroy(): void {

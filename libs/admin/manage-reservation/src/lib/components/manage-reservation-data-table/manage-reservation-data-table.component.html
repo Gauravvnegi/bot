@@ -38,11 +38,11 @@
 </div>
 <div [ngClass]="{ 'sticky-header-gap': isScrolledUp }"></div>
 
-<ng-template
+<ng-container
   *ngIf="tableFG?.get('tableType').value === 'calendar'; else tableView"
 >
   <hospitality-bot-reservation-calendar-view></hospitality-bot-reservation-calendar-view>
-</ng-template>
+</ng-container>
 
 <ng-template #tableView>
   <p-table

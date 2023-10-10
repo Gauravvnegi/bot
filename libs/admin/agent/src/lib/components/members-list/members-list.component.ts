@@ -34,7 +34,7 @@ export class MembersListComponent implements OnInit {
   @Output() createMembers = new EventEmitter();
 
   @Input() set defaultMember(value: Option) {
-    this.setDefaultMember(value);
+    if (value) this.setDefaultMember(value);
   }
 
   get defaultMember() {

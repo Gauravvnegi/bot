@@ -46,8 +46,9 @@ export const checkedInList = [
   {
     invoiceId: 'INV001',
     roomInfo: {
-      roomNumber: '101',
-      type: 'Single',
+      icon: 'pi pi-users',
+      styleClass: 'active-text',
+      roomNumber: '101 - Single',
     },
     bookingNo: 'BN001',
     stakeHolder: {
@@ -72,8 +73,9 @@ export const checkedInList = [
   {
     invoiceId: 'INV002',
     roomInfo: {
-      roomNumber: '102',
-      type: 'Double',
+      icon: 'pi pi-users',
+      styleClass: 'active-text',
+      roomNumber: '102 - Double',
     },
     bookingNo: 'BN002',
     stakeHolder: {
@@ -98,8 +100,9 @@ export const checkedInList = [
   {
     invoiceId: 'INV003',
     roomInfo: {
-      roomNumber: '102',
-      type: 'Suite',
+      icon: 'pi pi-users',
+      styleClass: 'active-text',
+      roomNumber: '102 - Suite',
     },
     bookingNo: 'BN003',
     stakeHolder: {
@@ -124,8 +127,9 @@ export const checkedInList = [
   {
     invoiceId: 'INV004',
     roomInfo: {
-      roomNumber: '103',
-      type: 'Double',
+      icon: 'pi pi-users',
+      styleClass: 'active-text',
+      roomNumber: '103 - Double',
     },
     bookingNo: 'BN004',
     stakeHolder: {

@@ -33,8 +33,6 @@ const appRoutes: Route[] = [
           routesConfigService,
         ]);
 
-        debugger;
-
         routes[0].children.push({ path: '**', redirectTo: '404' });
         routes[0].children.push({
           path: '404',

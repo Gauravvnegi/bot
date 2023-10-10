@@ -7,7 +7,8 @@
   >
     <hospitality-bot-button
       label="Bulk update"
-      [link]="'/pages/channel-manager/update-inventory/inventory-bulk-update'"
+      [routerLink]="['inventory-bulk-update']"
+      preserveQueryParams="true"
     ></hospitality-bot-button>
   </hospitality-bot-navigation-header>
   <div class="main-wrapper">

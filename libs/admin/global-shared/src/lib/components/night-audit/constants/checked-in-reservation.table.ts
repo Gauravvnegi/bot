@@ -8,6 +8,7 @@ export const cols: Cols[] = [
   {
     field: 'roomInfo',
     header: 'Room No / Type',
+    width: '14%',
   },
   {
     field: 'bookingNo',
@@ -24,6 +25,7 @@ export const cols: Cols[] = [
   {
     field: 'expenses',
     header: 'Amount Due / Total (INR)',
+    width: '13%',
   },
   {
     field: 'sourceName',

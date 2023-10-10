@@ -1,0 +1,14 @@
+.main__wrapper {
+  .message__wrapper {
+    color: #a3a3a3;
+  }
+}
+
+// Table design
+:host ::ng-deep {
+  .table-view__wrapper {
+    .header {
+      padding-top: 0 !important;
+    }
+  }
+}

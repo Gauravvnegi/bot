@@ -1,5 +1,5 @@
 <div class="table-view__wrapper">
-  <div class="header">
+  <div *ngIf="header" class="header">
     <span class="text">{{ header || '' }}</span>
     <span *ngIf="action" (click)="actionClicked()" class="action"
       >{{ action }} <img src="assets/svg/refresh.svg" alt="refresh"
@@ -15,7 +15,10 @@
       <ng-template pTemplate="header">
         <tr>
           <ng-container *ngFor="let col of columns">
-            <th [ngClass]="{ 'sticky-header': headerSticky }">
+            <th
+              [ngStyle]="col?.width && { width: col.width }"
+              [ngClass]="{ 'sticky-header': headerSticky }"
+            >
               {{ col.header }}
             </th>
           </ng-container>

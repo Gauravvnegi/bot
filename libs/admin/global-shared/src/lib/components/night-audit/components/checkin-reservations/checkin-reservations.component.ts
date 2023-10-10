@@ -11,6 +11,7 @@ import {
   templateUrl: './checkin-reservations.component.html',
   styleUrls: [
     '../../night-audit.component.scss',
+    '../checkout-reservations/checkout-reservations.component.scss',
     './checkin-reservations.component.scss',
   ],
 })

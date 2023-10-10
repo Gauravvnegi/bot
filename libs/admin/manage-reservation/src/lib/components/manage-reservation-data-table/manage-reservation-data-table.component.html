@@ -38,11 +38,11 @@
 </div>
 <div [ngClass]="{ 'sticky-header-gap': isScrolledUp }"></div>
 
-<ng-template
+<ng-container
   *ngIf="tableFG?.get('tableType').value === 'calendar'; else tableView"
 >
   <hospitality-bot-reservation-calendar-view></hospitality-bot-reservation-calendar-view>
-</ng-template>
+</ng-container>
 
 <ng-template #tableView>
   <p-table
@@ -220,9 +220,9 @@
           </div>
         </td>
         <td>
-          <div class="center-align" *ngIf="rowData.sourceName; else emptyCell">
+          <div class="center-align" *ngIf="rowData.source; else emptyCell">
             <div class="primary-text">
-              {{ rowData?.sourceName }}
+              {{ rowData?.sourceName || '--' }}
             </div>
             <div class="secondary-text">
               {{ rowData?.source }}

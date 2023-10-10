@@ -1,4 +1,11 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  SimpleChanges,
+} from '@angular/core';
 import { FormProps, Option } from '../../types/form.type';
 import { Router } from '@angular/router';
 import { ApiService } from '@hospitality-bot/shared/utils';
@@ -9,6 +16,7 @@ import { FormComponent } from '../../components/form-component/form.components';
 import { MultiSelectSettings } from '../../components/form-component/multi-select/multi-select.component';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { convertToTitleCase } from '../../utils/valueFormatter';
+
 @Component({
   selector: 'hospitality-bot-quick-select',
   templateUrl: './quick-select.component.html',
@@ -53,6 +61,7 @@ export class QuickSelectComponent extends FormComponent implements OnInit {
   dataModel: DataModel = { ...this.model };
   baseURL: string;
   entityId = '';
+  createType: string;
   apiEndPoint: string;
   queryParams: Record<string, string>;
 
@@ -85,6 +94,7 @@ export class QuickSelectComponent extends FormComponent implements OnInit {
   }
 
   @Output() clickedOption = new EventEmitter<Option>();
+  @Output() openSidebar = new EventEmitter<boolean>();
 
   $subscription: Subscription;
 
@@ -101,6 +111,12 @@ export class QuickSelectComponent extends FormComponent implements OnInit {
   ngOnInit(): void {
     this.getItems();
     this.listenControl();
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['props']?.currentValue?.selectedOption) {
+      this.getItems();
+    }
   }
 
   /**
@@ -253,6 +269,10 @@ export class QuickSelectComponent extends FormComponent implements OnInit {
    * @instance inputPrompt POST API will be call & data will be reload
    */
   create(event) {
+    if (this.createType === 'sidebar') {
+      this.openSidebar.emit(true);
+      return;
+    }
     if (event?.length) {
       //Case When inputPrompt haven't to redirect...
       if (this._qsProps.inputPrompt) {
@@ -332,7 +352,7 @@ export class QuickSelectComponent extends FormComponent implements OnInit {
     this.controlContainer.control
       .get(this.controlName)
       .valueChanges.subscribe((res) => {
-        if (res?.length) {
+        if (res?.length && this.menuOptions.length) {
           this.clickedOption.emit(
             this.menuOptions.find((item) => item.value == res)
           );
@@ -370,6 +390,7 @@ export type QSProps = FormProps & {
   promptLink: string;
   selectedOption: Option;
   showChips: boolean;
+  createType?: string;
 };
 
 /**

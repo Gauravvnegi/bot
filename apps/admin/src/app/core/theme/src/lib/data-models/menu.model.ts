@@ -1,7 +1,7 @@
 import { ModuleNames, ProductNames, routes } from 'libs/admin/shared/src/index';
 import { get, set } from 'lodash';
 import { Products, SubProducts } from './subscription-plan-config.model';
-import { RoutesConfigService } from '../services/routes-config.service';
+import { RouteConfigPathService } from '../services/routes-config.service';
 import { Router } from '@angular/router';
 
 export class SubMenuItem {
@@ -14,7 +14,7 @@ export class SubMenuItem {
   children: SubMenuItem[];
 
   deserialize(input: SubProducts, prevRoute: string) {
-    const routeService = new RoutesConfigService(Router);
+    const routeService = new RouteConfigPathService();
 
     this.children = new Array<SubMenuItem>();
 
@@ -46,7 +46,7 @@ export class ProductItem {
   children: SubMenuItem[];
 
   deserialize(input: Products) {
-    const routeService = new RoutesConfigService(Router);
+    const routeService = new RouteConfigPathService();
 
     this.children = new Array<SubMenuItem>();
 

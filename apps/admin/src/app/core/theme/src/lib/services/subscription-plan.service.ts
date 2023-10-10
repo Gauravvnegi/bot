@@ -10,7 +10,7 @@ import {
 import { productMenuSubs } from '../data-models/product-subs';
 import { map } from 'rxjs/operators';
 import { ProductNames } from 'libs/admin/shared/src/index';
-import { RoutesConfigService } from './routes-config.service';
+import { RouteConfigPathService } from './routes-config.service';
 
 @Injectable({ providedIn: 'root' })
 export class SubscriptionPlanService extends ApiService {
@@ -124,14 +124,14 @@ export class SubscriptionPlanService extends ApiService {
   }
 
   setSettings() {
-    const routesConfigService = new RoutesConfigService();
+    const routesConfigPathService = new RouteConfigPathService();
 
     // parent route for settings based on product
     const route =
       '/' +
-      routesConfigService.getRouteFromName(this.selectedProduct) +
+      routesConfigPathService.getRouteFromName(this.selectedProduct) +
       '/' +
-      routesConfigService.getRouteFromName(ModuleNames.SETTINGS);
+      routesConfigPathService.getRouteFromName(ModuleNames.SETTINGS);
 
     const settingModule = this.subscriptions.products
       .find((item) => item.name === this.selectedProduct)
@@ -141,7 +141,7 @@ export class SubscriptionPlanService extends ApiService {
       settingModule?.config?.map((item) =>
         new SettingsMenuItem().deserialize(
           item,
-          route + '/' + routesConfigService.getRouteFromName(item.name)
+          route + '/' + routesConfigPathService.getRouteFromName(item.name)
         )
       ) ?? [];
 

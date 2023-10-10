@@ -477,12 +477,17 @@ export class UserProfileComponent implements OnInit {
       (res: { userId?: string; isView?: boolean }) => {
         tableCompRef.close();
         if (res?.userId) {
-          this.router.navigate([
-            navRoute[res?.isView ? 'viewUser' : 'editUser'].link.replace(
-              ':userId',
-              res.userId
-            ),
-          ]);
+          this.routesConfigService.navigate({
+            additionalPath: managePermissionRoutes[
+              res?.isView ? 'viewUser' : 'editUser'
+            ].route.replace(':id', res.userId),
+          });
+          // this.router.navigate([
+          //   navRoute[res?.isView ? 'viewUser' : 'editUser'].link.replace(
+          //     ':userId',
+          //     res.userId
+          //   ),
+          // ]);
         }
       }
     );
@@ -574,9 +579,6 @@ export class UserProfileComponent implements OnInit {
   }
 
   addUser() {
-    // this.router.navigate([navRoute.addNewUser.link],{
-    //   relativeTo:true
-    // });
     this.routesConfigService.navigate({
       additionalPath: managePermissionRoutes.addNewUser.route,
     });

@@ -30,6 +30,7 @@ import { AdminDocumentsDetailsComponent } from '../admin-documents-details/admin
 import { JourneyDialogComponent } from '../journey-dialog/journey-dialog.component';
 import { ManualCheckinComponent } from '../manual-checkin/manual-checkin.component';
 import { SendMessageComponent } from 'libs/admin/notification/src/lib/components/send-message/send-message.component';
+import { MenuItem } from 'primeng/api';
 
 @Component({
   selector: 'hospitality-bot-details',
@@ -98,6 +99,21 @@ export class DetailsComponent implements OnInit, OnDestroy {
   @Input() guestId: string;
   @Input() bookingNumber: string;
   bookingFG: FormGroup;
+  checkInOptions: MenuItem[] = [
+    {
+      label: 'Generate Link',
+      command: () => {
+        this.activateAndgenerateJourney('CHECKIN');
+      },
+    },
+  ];
+
+  checkOutOptions: MenuItem[] = [
+    {
+      label: 'Generate Link',
+      command: () => this.activateAndgenerateJourney('CHECKOUT'),
+    },
+  ];
 
   constructor(
     private _fb: FormBuilder,
@@ -622,56 +638,91 @@ export class DetailsComponent implements OnInit, OnDestroy {
   }
 
   manualCheckin() {
-    const config = {
-      title: 'Manual Checkin',
-      description: '',
-    };
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.disableClose = true;
-    dialogConfig.width = '450px';
-    const manualCheckinCompRef = this._modal.openDialog(
-      ManualCheckinComponent,
-      dialogConfig
-    );
-
-    manualCheckinCompRef.componentInstance.guest = this.primaryGuest;
-    manualCheckinCompRef.componentInstance.config = config;
-    manualCheckinCompRef.componentInstance.loading = false;
-
-    manualCheckinCompRef.componentInstance.onDetailsClose.subscribe((res) => {
-      if (res?.status) {
-        if (res.data.phoneNumber.length === 0) res.data.cc = '';
-        manualCheckinCompRef.componentInstance.loading = true;
-        this.$subscription.add(
-          this._reservationService
-            .manualCheckin(
-              this.reservationDetailsFG.get('bookingId').value,
-              res.data
-            )
-            .subscribe(
-              (response) => {
-                manualCheckinCompRef.componentInstance.loading = false;
-                this.snackbarService
-                  .openSnackBarWithTranslate(
-                    {
-                      translateKey: 'messages.SUCCESS.GUEST_MANUAL_CHECKIN',
-                      priorityMessage: 'Guest Manually Checked In.',
-                    },
-                    '',
-                    { panelClass: 'success' }
-                  )
-                  .subscribe();
-                manualCheckinCompRef.close();
-                this.closeDetails();
-              },
-              ({ error }) => {
-                manualCheckinCompRef.componentInstance.loading = false;
-              }
-            )
-        );
-      } else res && manualCheckinCompRef.close();
+    this.openJourneyDialog({
+      title: 'Check-In',
+      description: 'Guest is about to checkin',
+      question: 'Are you sure you want to continue?',
+      buttons: {
+        cancel: {
+          label: 'Cancel',
+          context: '',
+        },
+        accept: {
+          label: 'Accept',
+          context: this,
+          handler: {
+            fn_name: 'checkInfn',
+            args: [],
+          },
+        },
+      },
     });
   }
+
+  checkInfn() {
+    this.$subscription.add(
+      this._reservationService
+        .manualCheckin(this.reservationDetailsFG.get('bookingId').value, {
+          cc: this.primaryGuest.countryCode,
+          phoneNumber: this.primaryGuest.phoneNumber,
+        })
+        .subscribe((res) => {
+          this.snackbarService.openSnackBarAsText('Checkin completed.');
+        })
+    );
+  }
+
+  // manualCheckin() {
+  //   const config = {
+  //     title: 'Manual Checkin',
+  //     description: '',
+  //   };
+  //   const dialogConfig = new MatDialogConfig();
+  //   dialogConfig.disableClose = true;
+  //   dialogConfig.width = '450px';
+  //   const manualCheckinCompRef = this._modal.openDialog(
+  //     ManualCheckinComponent,
+  //     dialogConfig
+  //   );
+
+  //   manualCheckinCompRef.componentInstance.guest = this.primaryGuest;
+  //   manualCheckinCompRef.componentInstance.config = config;
+  //   manualCheckinCompRef.componentInstance.loading = false;
+
+  //   manualCheckinCompRef.componentInstance.onDetailsClose.subscribe((res) => {
+  //     if (res?.status) {
+  //       if (res.data.phoneNumber.length === 0) res.data.cc = '';
+  //       manualCheckinCompRef.componentInstance.loading = true;
+  //       this.$subscription.add(
+  //         this._reservationService
+  //           .manualCheckin(
+  //             this.reservationDetailsFG.get('bookingId').value,
+  //             res.data
+  //           )
+  //           .subscribe(
+  //             (response) => {
+  //               manualCheckinCompRef.componentInstance.loading = false;
+  //               this.snackbarService
+  //                 .openSnackBarWithTranslate(
+  //                   {
+  //                     translateKey: 'messages.SUCCESS.GUEST_MANUAL_CHECKIN',
+  //                     priorityMessage: 'Guest Manually Checked In.',
+  //                   },
+  //                   '',
+  //                   { panelClass: 'success' }
+  //                 )
+  //                 .subscribe();
+  //               manualCheckinCompRef.close();
+  //               this.closeDetails();
+  //             },
+  //             ({ error }) => {
+  //               manualCheckinCompRef.componentInstance.loading = false;
+  //             }
+  //           )
+  //       );
+  //     } else res && manualCheckinCompRef.close();
+  //   });
+  // }
 
   openJourneyDialog(config) {
     const dialogConfig = new MatDialogConfig();

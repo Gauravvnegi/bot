@@ -3,12 +3,18 @@ import { ROUTES, Route, RouterModule } from '@angular/router';
 import { RoutesConfigService, SubscriptionPlanService } from '../theme/src';
 import { routeFactoryNew } from '../utils/routesFactory.module';
 import { MainComponent } from './component/main/main.component';
+import { DashboardErrorComponent } from '@hospitality-bot/admin/shared';
 
 const appRoutes: Route[] = [
   {
     path: '',
     component: MainComponent,
     children: [],
+  },
+  { path: '**', redirectTo: '404' },
+  {
+    path: '404',
+    component: DashboardErrorComponent,
   },
 ];
 
@@ -26,6 +32,12 @@ const appRoutes: Route[] = [
           subscriptionService,
           routesConfigService,
         ]);
+
+        routes[0].children.push({ path: '**', redirectTo: '404' });
+        routes[0].children.push({
+          path: '404',
+          component: DashboardErrorComponent,
+        });
 
         return routes;
       },

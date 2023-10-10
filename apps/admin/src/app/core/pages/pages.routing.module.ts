@@ -31,13 +31,6 @@ const appRoutes: Route[] = [
     canLoad: [CanLoadGuard],
     children: [
       {
-        path: '',
-        loadChildren: () =>
-          import('../product/product.module').then((m) => m.ProductModule),
-        canLoad: [CanLoadGuard],
-        canActivate: [CanActivateGuard],
-      },
-      {
         path: 'roles-permissions',
         loadChildren: () =>
           import('@hospitality-bot/admin/roles-and-permissions').then(
@@ -60,6 +53,13 @@ const appRoutes: Route[] = [
           import('@hospitality-bot/admin/complaint-tacker').then(
             (m) => m.AdminComplaintTackerModule
           ),
+        canLoad: [CanLoadGuard],
+        canActivate: [CanActivateGuard],
+      },
+      {
+        path: '',
+        loadChildren: () =>
+          import('../product/product.module').then((m) => m.ProductModule),
         canLoad: [CanLoadGuard],
         canActivate: [CanActivateGuard],
       },

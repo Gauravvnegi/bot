@@ -44,6 +44,7 @@ export const routeFactoryNew = (
   let modulePathConfig: ModulePathConfig = {};
 
   let initialRedirectPath = undefined;
+
   /**
    * Product Config Iteration
    */
@@ -131,7 +132,7 @@ export const routeFactoryNew = (
               };
 
               // Pushing sub module path config
-              if (isSubModuleSubscribed) {
+              if (isSubModuleSubscribed && !modulePathConfig[subModuleName]) {
                 modulePathConfig = {
                   ...modulePathConfig,
                   [subModuleName]: subModulePath,
@@ -179,11 +180,12 @@ export const routeFactoryNew = (
        */
       routesConfigService.initModulePathConfig(modulePathConfig);
     }
+  });
 
-    routes[0].children.unshift({
-      path: '',
-      redirectTo: initialRedirectPath,
-    });
+  routes[0].children.unshift({
+    path: '',
+    redirectTo: initialRedirectPath,
+    pathMatch: 'full',
   });
 
   return routes;

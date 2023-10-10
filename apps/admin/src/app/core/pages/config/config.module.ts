@@ -13,7 +13,7 @@ export const moduleConfig: Partial<Record<ModuleNames, any>> = {
     import('@hospitality-bot/admin/subscription').then(
       (m) => m.AdminSubscriptionModule
     ),
-  [ModuleNames.ROLES_AND_PERMISSIONS]: () =>
+  [ModuleNames.ROLES_AND_PERMISSION]: () =>
     import('@hospitality-bot/admin/roles-and-permissions').then(
       (m) => m.AdminRolesAndPermissionsModule
     ),

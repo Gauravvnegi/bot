@@ -41,7 +41,10 @@
       </div>
     </div>
   </div>
-  <div class="body">
+  <div
+    class="body"
+    [ngStyle]="{ 'max-height': reservationId ? '70vh' : '85vh' }"
+  >
     <small class="error-message" *ngIf="errorMessage">{{ errorMessage }}</small>
     <div class="form-block" [formGroup]="useForm">
       <!-- Reservation Information -->
@@ -224,14 +227,14 @@
       ></hospitality-bot-input>
     </div>
   </div>
-  <div class="btn-wrapper">
+  <!-- <div class="btn-wrapper">
     <hospitality-bot-button
       [label]="reservationId ? 'Update Reservation' : 'Confirm Reservation'"
       (onClick)="handleSubmit()"
       [isLoading]="isBooking"
       [disabled]="!reservationId && useForm.invalid"
     ></hospitality-bot-button>
-  </div>
+  </div> -->
 </div>
 
 <ng-container>
@@ -244,3 +247,18 @@
     <ng-container #sidebarSlide></ng-container>
   </p-sidebar>
 </ng-container>
+
+<hospitality-bot-form-action
+  class="full-width"
+  [loading]="loading"
+  [isId]="reservationId"
+  (onPostAction)="handleSubmit()"
+  [disabled]="!reservationId && useForm.invalid"
+  [isSticky]="true"
+  [config]="{
+    postLabel: reservationId ? 'Update Reservation' : 'Create Reservation',
+    preHide: true
+  }"
+  #fa
+>
+</hospitality-bot-form-action>

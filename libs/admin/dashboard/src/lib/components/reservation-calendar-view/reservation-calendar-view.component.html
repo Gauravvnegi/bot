@@ -1,6 +1,12 @@
 <div class="main-wrapper">
   <div class="inventory-form" *ngIf="!!useForm && roomsLoaded; else loader">
-    <div class="wrapper">
+    <div
+      [ngClass]="
+        !isRoomsEmpty && allRoomTypes?.length
+          ? 'wrapper'
+          : 'wrapper reduce-height'
+      "
+    >
       <!-- LEFT SECTION -->
       <div class="left">
         <div class="left__main">
@@ -173,17 +179,15 @@
     [showCloseIcon]="false"
     position="right"
   >
-    <div class="quick-form">
-      <hospitality-bot-quick-reservation-form
-        (onCloseSidebar)="handleCloseSidebar($event)"
-        [reservationConfig]="{
-          reservationId: formProps?.reservationId,
-          defaultRoomType: formProps?.roomType,
-          selectedRoom: formProps?.room,
-          date: formProps?.date
-        }"
-      ></hospitality-bot-quick-reservation-form>
-    </div>
+    <hospitality-bot-quick-reservation-form
+      (onCloseSidebar)="handleCloseSidebar($event)"
+      [reservationConfig]="{
+        reservationId: formProps?.reservationId,
+        defaultRoomType: formProps?.roomType,
+        selectedRoom: formProps?.room,
+        date: formProps?.date
+      }"
+    ></hospitality-bot-quick-reservation-form>
   </p-sidebar>
   <!-- <div class="room-type">
           <div *ngFor="let row of gridRows; let i = index" class="room">
@@ -197,6 +201,20 @@
   <ng-template #loader>
     <hospitality-bot-loader-bounce></hospitality-bot-loader-bounce>
   </ng-template>
+
+  <ng-template #emptyView>
+    <hospitality-bot-empty-table
+      [isLoading]="loading"
+      [content]="{
+        description: allRoomTypes?.length
+          ? 'Please select at least one rooms'
+          : 'There is no room available',
+        imageSrc: 'assets/images/empty-table-service.png'
+      }"
+    >
+    </hospitality-bot-empty-table>
+  </ng-template>
+
   <!-- <ng-template #emptyView>
     <hospitality-bot-empty-table
       [isLoading]="loading"

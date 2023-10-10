@@ -2,9 +2,9 @@
 // Design
 .table-view__wrapper {
   .header {
-    font-size: 16px;
+    font-size: 22px;
     font-weight: 600;
-    padding: 10px 0;
+    padding: 15px 0;
     display: flex;
     justify-content: space-between;
     .action {
@@ -31,6 +31,26 @@
     top: 0;
     z-index: 1;
     background: #f1f2f7 !important;
+  }
+
+  // decoration
+  .active-text {
+    background-color: #e8e2ff;
+    color: $primary-cta;
+    padding: 5px 7px;
+    border-radius: 5px;
+    font-size: 10px;
+    display: flex;
+    gap: 6px;
+    align-items: center;
+  }
+
+  .pre-text-color {
+    color: red;
+  }
+
+  .post-text-color {
+    color: red;
   }
 }
 

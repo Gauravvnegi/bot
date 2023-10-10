@@ -1,6 +1,7 @@
 import {
   AfterViewChecked,
   Component,
+  ComponentFactoryResolver,
   ElementRef,
   EventEmitter,
   HostListener,
@@ -10,6 +11,7 @@ import {
   OnInit,
   Output,
   ViewChild,
+  ViewContainerRef,
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ModalService, SnackBarService } from 'libs/shared/material/src';
@@ -44,6 +46,7 @@ export class ChatComponent
   isLoading = false;
   limit = 20;
   paginationDisabled = false;
+  sidebarVisible: boolean = false;
 
   $subscription = new Subscription();
   scrollBottom = true;
@@ -53,6 +56,10 @@ export class ChatComponent
   buttonConfig = [
     { button: true, label: 'Raise Request', icon: 'assets/svg/requests.svg' },
   ];
+  @ViewChild('sidebarSlide', { read: ViewContainerRef })
+  sidebarSlide: ViewContainerRef;
+  sidebarType;
+
   constructor(
     private modalService: ModalService,
     private messageService: MessageService,
@@ -60,7 +67,8 @@ export class ChatComponent
     private snackbarService: SnackBarService,
     private adminUtilityService: AdminUtilityService,
     private globalFilterService: GlobalFilterService,
-    private _firebaseMessagingService: FirebaseMessagingService
+    private _firebaseMessagingService: FirebaseMessagingService,
+    private resolver: ComponentFactoryResolver
   ) {}
 
   ngOnInit(): void {
@@ -355,38 +363,35 @@ export class ChatComponent
         this.requestList = new RequestList().deserialize(response).data;
       })
     );
+  
   }
   openRaiseRequest() {
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.disableClose = true;
-    dialogConfig.width = '500px';
-    dialogConfig.height = '90vh';
+    this.sidebarVisible = true;
+    this.sidebarType = 'complaint';
 
-    const raiseRequestCompRef = this.modalService.openDialog(
-      RaiseRequestComponent,
-      dialogConfig
+    const factory = this.resolver.resolveComponentFactory(
+      RaiseRequestComponent
     );
-
-    this.$subscription.add(
-      raiseRequestCompRef.componentInstance.onRaiseRequestClose.subscribe(
-        (res) => {
-          if (res.status) {
-            this.getRequestList();
-            const values = {
-              reservationId: res.data.number,
-            };
-            this.$subscription.add(
-              this.messageService
-                .updateGuestDetail(this.entityId, this.data.receiverId, values)
-                .subscribe((response) => {
-                  this.messageService.refreshData$.next(true);
-                })
-            );
-          }
-          raiseRequestCompRef.close();
-        }
-      )
-    );
+    this.sidebarSlide.clear();
+    const componentRef = this.sidebarSlide.createComponent(factory);
+    componentRef.instance.isSideBar = true;
+    componentRef.instance.onRaiseRequestClose.subscribe((res) => {
+      if (res.status) {
+        this.getRequestList();
+        const values = {
+          reservationId: res.data.number,
+        };
+        this.$subscription.add(
+          this.messageService
+            .updateGuestDetail(this.entityId, this.data.receiverId, values)
+            .subscribe((response) => {
+              this.messageService.refreshData$.next(true);
+            })
+        );
+      }
+      this.sidebarVisible = false;
+      componentRef.destroy();
+    });
   }
 
   exportChat() {

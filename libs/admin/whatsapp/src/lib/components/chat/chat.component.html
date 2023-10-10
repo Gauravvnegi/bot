@@ -138,3 +138,13 @@
     ></hospitality-bot-message-box>
   </ng-container>
 </div>
+
+<p-sidebar
+  class="sidebar-slide"
+  [ngClass]="sidebarType"
+  [(visible)]="sidebarVisible"
+  position="right"
+  [showCloseIcon]="false"
+>
+  <ng-container #sidebarSlide></ng-container>
+</p-sidebar>

@@ -1,7 +1,6 @@
-<div class="audit-wrapper" [id]="fa?.referenceId">
+<div class="audit-wrapper">
   <!-- header -->
   <ng-template *ngTemplateOutlet="sidebarHeader"></ng-template>
-  <!-- content -->
   <div class="audit-content_wrapper">
     <hospitality-bot-stepper
       [stepList]="itemList"
@@ -12,33 +11,34 @@
     <ng-container [ngSwitch]="activeStep">
       <hospitality-bot-manage-logged-users
         class="audit-content"
+        [activeIndex]="activeStep"
+        [stepList]="itemList"
+        (indexChange)="activeStep = $event"
         *ngSwitchCase="0"
       ></hospitality-bot-manage-logged-users>
       <hospitality-bot-checkin-reservations
         class="audit-content"
+        [activeIndex]="activeStep"
+        [stepList]="itemList"
+        (indexChange)="activeStep = $event"
         *ngSwitchCase="1"
       ></hospitality-bot-checkin-reservations>
       <hospitality-bot-checkout-reservations
         class="audit-content"
+        [activeIndex]="activeStep"
+        [stepList]="itemList"
+        (indexChange)="activeStep = $event"
         *ngSwitchCase="2"
       ></hospitality-bot-checkout-reservations>
       <hospitality-bot-audit-summary
         class="audit-content"
+        [activeIndex]="activeStep"
+        [stepList]="itemList"
+        (indexChange)="activeStep = $event"
         *ngSwitchCase="3"
       ></hospitality-bot-audit-summary>
     </ng-container>
   </div>
-  <!-- Action Button -->
-  <hospitality-bot-form-action
-    class="full-width action-button"
-    [loading]="loading"
-    [disabled]="loading"
-    [config]="actionConfig"
-    (onPostAction)="handleNext()"
-    (onPreAction)="handlePrev()"
-    #fa
-  >
-  </hospitality-bot-form-action>
 </div>
 
 <ng-template #sidebarHeader>

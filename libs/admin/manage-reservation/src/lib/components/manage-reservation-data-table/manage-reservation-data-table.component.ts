@@ -1,13 +1,17 @@
 import { Component } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, FormControl } from '@angular/forms';
 import { MatDialogConfig } from '@angular/material/dialog';
 import { Router } from '@angular/router';
-import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import {
+  GlobalFilterService,
+  SubscriptionPlanService,
+} from '@hospitality-bot/admin/core/theme';
 import {
   AdminUtilityService,
   BaseDatatableComponent as BaseDatableComponent,
   EntitySubType,
   EntityType,
+  ModuleNames,
   Option,
   QueryConfig,
   TableService,
@@ -44,6 +48,7 @@ import { FormService } from '../../services/form.service';
 import { SelectedEntity } from '../../types/reservation.type';
 import { InvoiceService } from 'libs/admin/invoice/src/lib/services/invoice.service';
 import { distinctUntilChanged, takeUntil, tap } from 'rxjs/operators';
+import { tableTypes } from 'libs/admin/dashboard/src/lib/constants/cols';
 
 @Component({
   selector: 'hospitality-bot-manage-reservation-data-table',
@@ -76,6 +81,9 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
   isSelectedEntityChanged = false;
 
   menuOptions: Option[] = MenuOptions;
+
+  tableTypes = [tableTypes.table, tableTypes.calendar];
+
   private cancelRequests$ = new Subject<void>();
 
   constructor(
@@ -88,7 +96,8 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
     protected snackbarService: SnackBarService,
     private router: Router,
     private modalService: ModalService,
-    private invoiceService: InvoiceService
+    private invoiceService: InvoiceService,
+    private subscriptionPlanService: SubscriptionPlanService
   ) {
     super(fb, tabFilterService);
   }
@@ -96,8 +105,28 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
   ngOnInit(): void {
     this.tableName = title;
     this.listenForGlobalFilters();
+    this.checkReservationSubscription();
     this.listenForSelectedEntityChange();
     this.formService.resetData();
+  }
+
+  checkReservationSubscription() {
+    if (
+      !this.subscriptionPlanService.checkModuleSubscription(
+        ModuleNames.ADD_RESERVATION
+      )
+    ) {
+      this.tableTypes = [tableTypes.table];
+      this.tableFG?.addControl('tableType', new FormControl('table'));
+    } else {
+      this.tableFG?.addControl('tableType', new FormControl('calendar'));
+    }
+    this.tableFG.patchValue({ tableType: 'table' });
+  }
+
+  setTableType(value) {
+    this.tableFG.patchValue({ tableType: value });
+    debugger;
   }
 
   /**

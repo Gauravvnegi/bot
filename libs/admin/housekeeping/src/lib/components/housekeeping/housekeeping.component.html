@@ -1,4 +1,8 @@
-<hospitality-bot-navigation-header [heading]="pageTitle" [isBack]="false" [routes]="navRoutes">
+<hospitality-bot-navigation-header
+  [heading]="pageTitle"
+  [isBack]="false"
+  [routes]="navRoutes"
+>
 </hospitality-bot-navigation-header>
 <div [formGroup]="useForm" class="btn-wrapper">
   <hospitality-bot-date
@@ -48,14 +52,7 @@
 >
   <ng-template pTemplate="caption">
     <div class="caption__wrapper" [formGroup]="tableFG">
-      <hospitality-bot-filter-chips
-        class="filter"
-        [chips]="filterChips"
-        (onChange)="toggleQuickReplyFilter($event)"
-        [selectedChips]="selectedFilterChips"
-      >
-        <hospitality-bot-info-panel></hospitality-bot-info-panel>
-      </hospitality-bot-filter-chips>
+      <ng-container [ngTemplateOutlet]="filter"> </ng-container>
     </div>
   </ng-template>
   <ng-template pTemplate="emptymessage">
@@ -105,5 +102,19 @@
       imageSrc: 'assets/images/empty-table-room-types.png'
     }"
   >
+    <ng-container [ngTemplateOutlet]="filter"> </ng-container>
   </hospitality-bot-empty-table>
+</ng-template>
+
+<ng-template #filter>
+  <ng-container [formGroup]="tableFG">
+    <hospitality-bot-filter-chips
+      class="filter"
+      [chips]="filterChips"
+      (onChange)="toggleQuickReplyFilter($event)"
+      [selectedChips]="selectedFilterChips"
+    >
+      <hospitality-bot-info-panel></hospitality-bot-info-panel>
+    </hospitality-bot-filter-chips>
+  </ng-container>
 </ng-template>

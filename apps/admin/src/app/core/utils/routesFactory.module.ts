@@ -4,6 +4,7 @@ import { ComingSoonComponent } from 'libs/admin/shared/src/lib/components/coming
 import { moduleConfig } from '../pages/config/config.module';
 import {
   HierarchicalPathConfig,
+  ModuleOfSubModuleWithRespectToProduct,
   ModulePathConfig,
   RoutesConfigService,
   SubscriptionPlanService,
@@ -44,6 +45,7 @@ export const routeFactoryNew = (
   const product: SubscriptionConfig[] = subscription.products;
   let modulePathConfig: ModulePathConfig = {};
   let hierarchicalPathConfig: HierarchicalPathConfig = {};
+  let moduleOfSubModuleWithRespectToProduct: ModuleOfSubModuleWithRespectToProduct = {};
 
   let initialRedirectPath = undefined;
 
@@ -141,6 +143,14 @@ export const routeFactoryNew = (
                 };
               }
 
+              moduleOfSubModuleWithRespectToProduct = {
+                ...moduleOfSubModuleWithRespectToProduct,
+                [productName]: {
+                  ...(moduleOfSubModuleWithRespectToProduct[productName] ?? {}),
+                  [subModuleName]: moduleName,
+                },
+              };
+
               const LoadSubModule = moduleConfig[subModuleName]; // Module Load
 
               const subModuleRouteConfig: Route = {
@@ -202,7 +212,8 @@ export const routeFactoryNew = (
    */
   routesConfigService.initModulePathConfig(
     modulePathConfig,
-    hierarchicalPathConfig
+    hierarchicalPathConfig,
+    moduleOfSubModuleWithRespectToProduct
   );
 
   routes[0].children.unshift({

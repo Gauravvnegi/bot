@@ -81,7 +81,8 @@ export class ProfileDropdownComponent implements OnInit {
     if (this.onManageSite) {
       this._router.navigate([`/dashboard/manage-sites/user-profile`]);
     } else {
-      this.routesConfigService.navigate(ModuleNames.ROLES_AND_PERMISSION, {
+      this.routesConfigService.navigate({
+        subModuleName: ModuleNames.ROLES_AND_PERMISSION,
         moduleName: ModuleNames.SETTINGS,
       });
     }

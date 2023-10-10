@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { ModuleNames, ProductNames } from '@hospitality-bot/admin/shared';
-import { Subject, BehaviorSubject } from 'rxjs';
-import { NavRouteOption } from 'libs/admin/shared/src/index';
 import { Router } from '@angular/router';
+import { ModuleNames, ProductNames } from '@hospitality-bot/admin/shared';
+import { NavRouteOption } from 'libs/admin/shared/src/index';
+import { BehaviorSubject } from 'rxjs';
 
 /**
  * Example of a PathConfig object:
@@ -43,6 +43,8 @@ export class RoutesConfigService {
    */
   hierarchicalPathConfig: HierarchicalPathConfig = {};
 
+  moduleOfSubModuleWithRespectToProduct: ModuleOfSubModuleWithRespectToProduct = {};
+
   private $activeRoute = new BehaviorSubject<ActiveRouteConfig>({
     product: { ...pathConfig },
     module: { ...pathConfig },
@@ -51,22 +53,35 @@ export class RoutesConfigService {
 
   private $navRoutes = new BehaviorSubject<NavRouteOption[]>([]);
 
-  navigate(
-    subModuleName: ModuleNames,
-    config: {
-      moduleName?: ModuleNames;
-    } = {}
-  ) {
+  navigate(config: Partial<NavigateConfig> = {}) {
+    const {
+      subModuleName,
+      additionalPath,
+      queryParams,
+      isRespectiveToProduct,
+    }: NavigateConfig = {
+      ...defaultNavigateConfig,
+      subModuleName: this.subModuleName,
+      ...config,
+    };
+
     let path = this.modulePathConfig[subModuleName];
-    debugger;
+
+    let moduleName = config.moduleName; // Directly from params
+    // If is respective to product then find module
+    if (isRespectiveToProduct && this.productName && !moduleName) {
+      moduleName = this.moduleOfSubModuleWithRespectToProduct[
+        this.productName
+      ]?.[subModuleName];
+    }
 
     /**
-     * If given module name then route will open respective to product
+     * If module name then route will open respective to product
      */
-    if (config.moduleName) {
-      const newPath = this.hierarchicalPathConfig[
-        this.activeRouteConfig.product.name
-      ]?.[config.moduleName]?.[subModuleName];
+    if (moduleName) {
+      const newPath = this.hierarchicalPathConfig[this.productName]?.[
+        moduleName
+      ]?.[subModuleName];
 
       if (newPath) {
         path = newPath;
@@ -74,8 +89,16 @@ export class RoutesConfigService {
     }
 
     if (path) {
-      this.router.navigate([path]);
-      // this.router.navigate(['create-with/settings/roles-and-permission']);
+      this.router.navigate(
+        [`${path}${additionalPath ? `/${additionalPath}` : ''}`],
+        { queryParams: queryParams }
+      );
+    } else {
+      console.error(
+        'CANNOT NAVIGATE: Error in finding th path',
+        config,
+        subModuleName
+      );
     }
   }
 
@@ -97,9 +120,14 @@ export class RoutesConfigService {
     this.$navRoutes.next(navRoutes);
   }
 
-  initModulePathConfig(res: ModulePathConfig, hRes: HierarchicalPathConfig) {
+  initModulePathConfig(
+    res: ModulePathConfig,
+    hRes: HierarchicalPathConfig,
+    psmRes: ModuleOfSubModuleWithRespectToProduct
+  ) {
     this.modulePathConfig = res;
     this.hierarchicalPathConfig = hRes;
+    this.moduleOfSubModuleWithRespectToProduct = psmRes;
   }
 
   get activeRouteConfigSubscription() {
@@ -133,6 +161,18 @@ export class RoutesConfigService {
   get activeRouteConfig() {
     return this.$activeRoute.value;
   }
+
+  get productName() {
+    return this.activeRouteConfig.product.name;
+  }
+
+  get moduleName() {
+    return this.activeRouteConfig.module.name;
+  }
+
+  get subModuleName() {
+    return this.activeRouteConfig.submodule.name;
+  }
 }
 
 export type PathConfig = {
@@ -155,4 +195,26 @@ export type HierarchicalPathConfig = Partial<
     Partial<Record<ModuleNames, Partial<Record<ModuleNames, string>>>>
   >
 >;
-const routesConfig = {};
+
+export type NavigateConfig = {
+  subModuleName?: ModuleNames;
+  moduleName?: ModuleNames;
+  additionalPath: string;
+  queryParams: any;
+  isRespectiveToProduct: boolean;
+};
+
+export type ModuleOfSubModuleWithRespectToProduct = Partial<
+  Record<ProductNames, Partial<Record<ModuleNames, ModuleNames>>>
+>;
+
+const defaultNavigateConfig: NavigateConfig = {
+  additionalPath: '',
+  queryParams: {},
+  isRespectiveToProduct: false,
+};
+
+// Need to fix... Module Names cannot be read here (Circular dependency)
+const routesConfig = {
+  ADD_RESERVATION: 'manage-reservation',
+};

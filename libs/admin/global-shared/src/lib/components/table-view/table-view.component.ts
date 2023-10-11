@@ -45,7 +45,22 @@ export class TableViewComponent implements OnInit {
 
   getKeysValues(data) {
     if (typeof data === 'object' && data !== null) {
-      return Object.entries(data).map(([key, value]) => ({ key, value }));
+      let objectData = Object.entries(data)
+        .filter(([key, value]) => !['icon', 'styleClass'].includes(key))
+        .map(([key, value]) => ({ key: key, value: value }));
+      if (data?.icon) {
+        objectData = objectData.map((item) => ({ ...item, icon: data.icon }));
+      }
+
+      if (data?.styleClass) {
+        objectData = objectData.map((item) => ({
+          ...item,
+          styleClass: data.styleClass,
+        }));
+      }
+
+      console.log(objectData);
+      return objectData;
     } else {
       return [{ key: data.toString(), value: data }];
     }

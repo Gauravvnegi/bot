@@ -237,6 +237,21 @@
   </div> -->
 </div>
 
+<hospitality-bot-form-action
+  class="full-width"
+  [loading]="loading"
+  [isId]="reservationId"
+  (onPostAction)="handleSubmit()"
+  [disabled]="!reservationId && useForm.invalid"
+  [isSticky]="true"
+  [config]="{
+    postLabel: reservationId ? 'Update Reservation' : 'Create Reservation',
+    preHide: true
+  }"
+  #fa
+>
+</hospitality-bot-form-action>
+
 <ng-container>
   <p-sidebar
     class="sidebar-slide"

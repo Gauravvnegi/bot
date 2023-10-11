@@ -29,8 +29,8 @@ import { RoomTypeForm } from 'libs/admin/room/src/lib/models/room.model';
 import { ReservationForm, RoomTypes } from '../../constants/form';
 import { IteratorField } from 'libs/admin/shared/src/lib/types/fields.type';
 import { FormService } from '../../services/form.service';
-import { CalendarViewData } from 'libs/admin/dashboard/src/lib/components/reservation-calendar-view/reservation-calendar-view.component';
 import { RoomTypeResponse } from 'libs/admin/room/src/lib/types/service-response';
+import { CalendarViewData } from 'libs/admin/reservation/src/lib/components/reservation-calendar-view/reservation-calendar-view.component';
 
 @Component({
   selector: 'hospitality-bot-room-iterator',

@@ -30,7 +30,7 @@ import {
 } from 'libs/admin/shared/src/lib/components/interactive-grid/interactive-grid.component';
 import { Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
-import { getColorCode } from '../../constants/response';
+import { getColorCode } from '../../constants/reservation';
 
 @Component({
   selector: 'hospitality-bot-reservation-calendar-view',

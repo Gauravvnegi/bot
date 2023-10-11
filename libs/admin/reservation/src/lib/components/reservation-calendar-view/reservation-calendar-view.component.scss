@@ -46,6 +46,7 @@ $border-color: rgba(112, 112, 112, 0.35);
 
 .right {
   flex-basis: 75%;
+  // overflow: auto;
   overflow-x: auto; /* Hides the scrollbar */
   overflow-y: hidden;
   scrollbar-width: none; /* Hide the default scrollbar for Firefox */
@@ -256,6 +257,7 @@ $border-color: rgba(112, 112, 112, 0.35);
     min-width: 255px;
   }
 }
+
 .reduce-height {
   min-height: 13vh;
   height: 0;
@@ -285,9 +287,4 @@ $border-color: rgba(112, 112, 112, 0.35);
     width: 22px;
     opacity: 0.8;
   }
-}
-
-.reduce-height {
-  min-height: 13vh;
-  height: 0;
 }

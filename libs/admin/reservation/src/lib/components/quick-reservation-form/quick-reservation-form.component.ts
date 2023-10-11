@@ -33,7 +33,7 @@ import {
 } from '../../../../../dashboard/src/lib/data-models/reservation.model';
 import { FormService } from 'libs/admin/manage-reservation/src/lib/services/form.service';
 import { Router } from '@angular/router';
-import { IGRoomType } from '../../../../../dashboard/src/lib/components/reservation-calendar-view/reservation-calendar-view.component';
+import { IGRoomType } from '../reservation-calendar-view/reservation-calendar-view.component';
 import { IGCol } from 'libs/admin/shared/src/lib/components/interactive-grid/interactive-grid.component';
 import { Subscription } from 'rxjs';
 import { AddGuestComponent } from 'libs/admin/guests/src/lib/components';

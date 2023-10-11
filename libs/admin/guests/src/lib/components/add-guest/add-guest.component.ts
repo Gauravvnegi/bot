@@ -29,6 +29,8 @@ import { GuestFactory } from '../../data-models/guest.model';
 import { FormService } from 'libs/admin/members/src/lib/services/form.service';
 import { GuestFormType } from 'libs/admin/agent/src/lib/types/form.types';
 import { AddCompanyComponent } from 'libs/admin/company/src/lib/components/add-company/add-company.component';
+import { GuestType } from '../../types/guest.type';
+
 @Component({
   selector: 'hospitality-bot-add-guest',
   templateUrl: './add-guest.component.html',
@@ -65,7 +67,7 @@ export class AddGuestComponent implements OnInit {
   //Sidebar configuration
   isSideBar = false;
   sidebarVisible = false;
-  @Output() onClose = new EventEmitter(false);
+  @Output() onClose = new EventEmitter<GuestType | boolean>(false);
   @ViewChild('sidebarSlide', { read: ViewContainerRef })
   sidebarSlide: ViewContainerRef;
   selectedMember: Option;
@@ -224,7 +226,7 @@ export class AddGuestComponent implements OnInit {
           this.loading = false;
 
           if (this.isSideBar) {
-            this.onClose.emit(true);
+            this.onClose.emit(res);
           } else {
             this.location.back();
           }

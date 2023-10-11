@@ -44,7 +44,7 @@
   }
 
   .main__wrapper {
-    padding: 0 40px;
+    padding: 0 20px;
   }
 }
 
@@ -59,10 +59,16 @@
     background-color: #ebf1f8;
   }
 
+  .header {
+    font-size: 22px;
+    font-weight: 600;
+  }
+
   .message__wrapper {
     font-size: 14px;
     .message {
-      color: #8b8b8b;
+      color: #a3a3a3;
+      margin-top: 15px;
     }
     .warning {
       display: flex;
@@ -70,7 +76,7 @@
       font-size: 12px;
       font-weight: 600;
       gap: 10px;
-      padding: 10px 0;
+      padding: 14px 0;
     }
   }
 }
@@ -91,7 +97,7 @@
     }
   }
   .p-datatable {
-    height: 47vh;
+    height: 43vh;
     overflow: auto;
   }
 
@@ -101,8 +107,56 @@
       overflow: auto;
     }
     .wrapper {
-      min-height: 40vh !important;
-      // border-radius: 0 0 10px 10px
+      min-height: 37vh !important;
     }
+  }
+}
+
+:host ::ng-deep {
+  .sidebar-slide-header {
+    padding: 10px 30px;
+  }
+  .audit-wrapper {
+    .stepper {
+      .p-steps .p-steps-item {
+        &:before {
+          border-width: 2px;
+          width: 283%;
+        }
+        &:last-child:before {
+          width: 43%;
+        }
+        &:first-child:before {
+          width: 231%;
+          left: 52%;
+        }
+        flex: unset;
+      }
+      ul {
+        padding: 0 20px;
+      }
+    }
+  }
+
+  .p-datatable {
+    .p-datatable-tbody > tr > td {
+      border-width: 0 0 2px 0;
+    }
+  }
+
+  //Accordion Style
+  .p-accordion-toggle-icon {
+    color: $primary-cta;
+  }
+  .p-accordion-tab {
+    margin: 20px 0;
+  }
+  .p-accordion .p-accordion-content {
+    padding-top: 0;
+  }
+  .p-accordion-header-text {
+    font-size: 14px;
+    font-weight: 600;
+    color: #787c9e;
   }
 }

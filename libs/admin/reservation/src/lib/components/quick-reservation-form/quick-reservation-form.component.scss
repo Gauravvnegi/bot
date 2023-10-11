@@ -32,6 +32,8 @@
   box-shadow: 0px 7px 5px -7px #b5b5b5;
   position: sticky;
   z-index: 1;
+  position: sticky;
+
   .guest-name {
     @include normal-lg-text;
   }
@@ -83,13 +85,6 @@
 
 .close {
   cursor: pointer;
-}
-
-.btn-wrapper {
-  @include flex-justify-center;
-  padding: 10px;
-  box-shadow: 0px 0px 5px 0px #b5b5b5;
-  z-index: 1;
 }
 
 :host ::ng-deep .select {

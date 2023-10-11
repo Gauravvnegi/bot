@@ -24,10 +24,6 @@ export class NightAuditComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  onActive(event) {
-    this.activeStep = event.index;
-  }
-
   close() {
     this.onClose.emit(false);
   }

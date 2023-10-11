@@ -67,14 +67,6 @@
       }"
     >
     </hospitality-bot-address-component>
-    <hospitality-bot-members-list
-      class="half-width"
-      controlName="company"
-      type="COMPANY"
-      label="Company Name"
-      [defaultMember]="selectedMember"
-      (createMembers)="createNewCompany()"
-    ></hospitality-bot-members-list>
     <hospitality-bot-date
       class="half-width"
       controlName="dateOfBirth"
@@ -105,6 +97,14 @@
         placeholder: 'Select'
       }"
     ></hospitality-bot-select>
+    <hospitality-bot-members-list
+    class="half-width"
+    controlName="company"
+    type="COMPANY"
+    label="Company Name"
+    [defaultMember]="selectedMember"
+    (createMembers)="createNewCompany()"
+  ></hospitality-bot-members-list>
   </div>
 </div>
 

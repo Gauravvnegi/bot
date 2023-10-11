@@ -20,6 +20,7 @@ import { assetConfig } from '../../../constants/asset';
 import { AssetsRoutes } from '../../../constants/routes';
 import { Assets } from '../../../data-models/assetConfig.model';
 import { AssetService } from '../../../services/asset.service';
+import { RoutesConfigService } from '@hospitality-bot/admin/core/theme';
 
 @Component({
   selector: 'hospitality-bot-asset-datatable',
@@ -52,7 +53,8 @@ export class AssetDatatableComponent extends BaseDatatableComponent
     protected snackbarService: SnackBarService,
     protected tabFilterService: TableService,
     private assetService: AssetService,
-    protected _translateService: TranslateService
+    protected _translateService: TranslateService,
+    private routesConfigService: RoutesConfigService
   ) {
     super(fb, tabFilterService);
   }
@@ -287,8 +289,8 @@ export class AssetDatatableComponent extends BaseDatatableComponent
    * @function openCreateAsset navigate to create Asset form.
    */
   openCreateAsset() {
-    this._router.navigate([AssetsRoutes.createAssets.route], {
-      relativeTo: this.route,
+    this.routesConfigService.navigate({
+      additionalPath: AssetsRoutes.createAssets.route,
     });
   }
 
@@ -299,12 +301,9 @@ export class AssetDatatableComponent extends BaseDatatableComponent
    */
   openAssetDetails(asset, event): void {
     event.stopPropagation();
-    this._router.navigate(
-      [AssetsRoutes.editAssets.route.replace(':id', asset.id)],
-      {
-        relativeTo: this.route,
-      }
-    );
+    this.routesConfigService.navigate({
+      additionalPath: AssetsRoutes.editAssets.route.replace(':id', asset.id),
+    });
   }
 
   /**

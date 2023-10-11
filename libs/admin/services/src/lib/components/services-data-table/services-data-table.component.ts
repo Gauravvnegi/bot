@@ -2,7 +2,10 @@ import { Component } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
-import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import {
+  GlobalFilterService,
+  RoutesConfigService,
+} from '@hospitality-bot/admin/core/theme';
 import { LibraryItem, QueryConfig } from '@hospitality-bot/admin/library';
 import {
   AdminUtilityService,
@@ -68,7 +71,8 @@ export class ServicesDataTableComponent extends BaseDatatableComponent {
     protected snackbarService: SnackBarService, // private router: Router, // private modalService: ModalService
     private router: Router,
     private _hotelDetailService: HotelDetailService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private routesConfigService: RoutesConfigService
   ) {
     super(fb, tabFilterService);
   }
@@ -200,19 +204,15 @@ export class ServicesDataTableComponent extends BaseDatatableComponent {
   }
 
   onCreateNewCategory() {
-    const navigationExtras: NavigationExtras = {
+    this.routesConfigService.navigate({
+      additionalPath: servicesRoutes.createCategory.route,
       queryParams: { entityId: this.entityId },
-    };
-
-    this.router.navigate([servicesRoutes.createCategory.route], {
-      relativeTo: this.route,
-      ...navigationExtras,
     });
   }
   onCreateNewService() {
     this.servicesService.entityId = this.entityId;
-    this.router.navigate([servicesRoutes.createService.route], {
-      relativeTo: this.route,
+    this.routesConfigService.navigate({
+      additionalPath: servicesRoutes.createService.route,
     });
   }
 
@@ -220,13 +220,10 @@ export class ServicesDataTableComponent extends BaseDatatableComponent {
    * @function editService To Edit the service
    */
   editService(id: string) {
-    const navigationExtras: NavigationExtras = {
+    this.routesConfigService.navigate({
+      additionalPath: servicesRoutes.editService.route.replace(':id', id),
       queryParams: { entityId: this.entityId },
-    };
-    this.router.navigate(
-      [`/pages/library/services/${servicesRoutes.createService.route}/${id}`],
-      navigationExtras
-    );
+    });
   }
 
   /**

@@ -1,9 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import {
+  GlobalFilterService,
+  RoutesConfigService,
+} from '@hospitality-bot/admin/core/theme';
 import { LibraryItem, LibrarySearchItem } from '@hospitality-bot/admin/library';
-import { ConfigService, DiscountType } from '@hospitality-bot/admin/shared';
+import {
+  ConfigService,
+  DiscountType,
+  ModuleNames,
+} from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { ServicesTypeValue } from 'libs/admin/room/src/lib/constant/form';
 import { ServiceList } from 'libs/admin/services/src/lib/models/services.model';
@@ -63,7 +70,8 @@ export class CreatePackageComponent implements OnInit {
     private snackbarService: SnackBarService,
     private configService: ConfigService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private routesConfigService: RoutesConfigService
   ) {
     this.packageId = this.route.snapshot.paramMap.get('id');
     const { navRoutes, title } = packagesRoutes[
@@ -378,11 +386,17 @@ export class CreatePackageComponent implements OnInit {
    * @function create Reroute to create service or create package category
    */
   create(path: 'service' | 'category') {
-    this.router.navigate([
+    this.routesConfigService.navigate(
       path === 'category'
-        ? `/pages/library/packages/${packagesRoutes.createCategory.route}`
-        : `/pages/library/services/create-service`,
-    ]);
+        ? {
+            subModuleName: ModuleNames.PACKAGES,
+            additionalPath: packagesRoutes.createCategory.route,
+          }
+        : {
+            subModuleName: ModuleNames.SERVICES,
+            additionalPath: 'create-service',
+          }
+    );
   }
 
   /**
@@ -446,7 +460,7 @@ export class CreatePackageComponent implements OnInit {
       '',
       { panelClass: 'success' }
     );
-    this.router.navigate(['/pages/library/packages']);
+    this.routesConfigService.goBack();
   };
 
   /**

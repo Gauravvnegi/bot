@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { ModuleNames, ProductNames } from '@hospitality-bot/admin/shared';
 import { NavRouteOption } from 'libs/admin/shared/src/index';
 import { BehaviorSubject } from 'rxjs';
+import { Location } from '@angular/common';
 
 const defaultNavigateConfig: NavigateConfig = {
   additionalPath: '',
@@ -48,7 +49,7 @@ export class RouteConfigPathService {
 
 @Injectable({ providedIn: 'root' })
 export class RoutesConfigService extends RouteConfigPathService {
-  constructor(private router: Router) {
+  constructor(private router: Router, private location: Location) {
     super();
   }
 
@@ -138,6 +139,10 @@ export class RoutesConfigService extends RouteConfigPathService {
         subModuleName
       );
     }
+  }
+
+  goBack() {
+    this.location.back();
   }
 
   initActiveRoute(config: ActiveRouteConfig) {

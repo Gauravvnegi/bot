@@ -9,7 +9,10 @@ import {
 } from '@angular/forms';
 import { MatDialogConfig } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
-import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import {
+  GlobalFilterService,
+  RoutesConfigService,
+} from '@hospitality-bot/admin/core/theme';
 import {
   LibrarySearchItem,
   LibraryService,
@@ -18,7 +21,12 @@ import {
   ModalService,
   SnackBarService,
 } from '@hospitality-bot/shared/material';
-import { FlagType, NavRouteOptions, Option } from 'libs/admin/shared/src';
+import {
+  FlagType,
+  ModuleNames,
+  NavRouteOptions,
+  Option,
+} from 'libs/admin/shared/src';
 import { ModalComponent } from 'libs/admin/shared/src/lib/components/modal/modal.component';
 import { IteratorField } from 'libs/admin/shared/src/lib/types/fields.type';
 import { Subscription } from 'rxjs';
@@ -109,7 +117,8 @@ export class AddRoomComponent implements OnInit, OnDestroy {
     private location: Location,
     private modalService: ModalService,
     private libraryService: LibraryService,
-    private formService: FormService
+    private formService: FormService,
+    private routesConfigService: RoutesConfigService
   ) {
     this.submissionType = this.route.snapshot.paramMap.get(
       'type'
@@ -438,7 +447,10 @@ export class AddRoomComponent implements OnInit, OnDestroy {
    * @function addRoomType Add room type
    */
   createRoomType() {
-    this.router.navigate([`/pages/efrontdesk/room/${routes.addRoomType}`]);
+    this.routesConfigService.navigate({
+      subModuleName: ModuleNames.ROOM,
+      additionalPath: routes.addRoomType,
+    });
   }
 
   /**

@@ -455,9 +455,7 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
   saveRoomTypeData(serviceType) {
     const data = this.useForm.getRawValue();
     this.roomService.initRoomTypeFormData(data, serviceType, true);
-    this.router.navigate([routes.services], {
-      relativeTo: this.route,
-    });
+    this.routesConfigService.navigate({ additionalPath: routes.services });
   }
 
   /**
@@ -475,10 +473,13 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
     );
 
     if (serviceType === 'PAID') {
-      this.router.navigate(['pages/library/services/create-service']);
+      this.routesConfigService.navigate({
+        subModuleName: ModuleNames.SERVICES,
+        additionalPath: routes.createService,
+      });
     } else {
-      this.router.navigate([routes.importServices], {
-        relativeTo: this.route,
+      this.routesConfigService.navigate({
+        additionalPath: routes.importServices,
       });
     }
   }

@@ -22,7 +22,7 @@ export const templateRoutes: Record<
     title: 'Create Template',
   },
   EditTemplate: {
-    route: 'edit-template',
+    route: 'edit-template/:id',
     navRoutes: [],
     title: '',
   },

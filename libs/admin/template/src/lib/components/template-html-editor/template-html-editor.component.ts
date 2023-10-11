@@ -3,12 +3,17 @@ import { FormBuilder } from '@angular/forms';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { templateConfig } from '../../constants/template';
 import { TranslateService } from '@ngx-translate/core';
-import { AdminUtilityService, NavRouteOptions } from 'libs/admin/shared/src';
+import {
+  AdminUtilityService,
+  ModuleNames,
+  NavRouteOptions,
+} from 'libs/admin/shared/src';
 import { EditTemplateComponent } from '../edit-template/edit-template.component';
 import { Router, ActivatedRoute } from '@angular/router';
-import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import { GlobalFilterService, RoutesConfigService } from '@hospitality-bot/admin/core/theme';
 import { TemplateService } from '../../services/template.service';
 import { trim } from 'lodash';
+import { templateRoutes } from '../../constants/routes';
 
 @Component({
   selector: 'hospitality-bot-template-html-editor',
@@ -36,7 +41,8 @@ export class TemplateHtmlEditorComponent extends EditTemplateComponent {
     protected _router: Router,
     protected activatedRoute: ActivatedRoute,
     protected translateService: TranslateService,
-    protected adminUtilityService: AdminUtilityService
+    protected adminUtilityService: AdminUtilityService,
+    protected routesConfigService: RoutesConfigService
   ) {
     super(
       _fb,
@@ -46,7 +52,8 @@ export class TemplateHtmlEditorComponent extends EditTemplateComponent {
       _router,
       activatedRoute,
       translateService,
-      adminUtilityService
+      adminUtilityService,
+      routesConfigService
     );
   }
 
@@ -75,7 +82,10 @@ export class TemplateHtmlEditorComponent extends EditTemplateComponent {
           this.templateForm?.patchValue(response);
           this.pageTitle = this.templateForm?.get('name').value;
         } else {
-          this._router.navigate(['/pages/library/template/create']);
+          this.routesConfigService.navigate({
+            subModuleName: ModuleNames.TEMPLATE,
+            additionalPath: templateRoutes.CreateTemplate.route,
+          });
         }
       })
     );

@@ -194,7 +194,7 @@ export class BookingInfoComponent implements OnInit {
         res === 'OTA' && this.configData
           ? this.configData.source.filter((item) => item.value === res)[0].type
           : [];
-      sourceNameControl.clearValidators();
+      // sourceNameControl.clearValidators();
       if (!this.editMode) {
         sourceNameControl.reset();
       }

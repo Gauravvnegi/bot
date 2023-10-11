@@ -128,6 +128,7 @@ import { TieredMenuButtonComponent } from './components/tiered-menu-button/tiere
 import { TabbedSidebarComponent } from './components/tabbed-sidebar/tabbed-sidebar.component';
 import { InfoPanelComponent } from './components/info-panel/info-panel.component';
 import { QuickSelectComponent } from './view/quick-select/quick-select.component';
+import { ToggleMenuComponent } from './components/toggle-menu/toggle-menu.component';
 
 @NgModule({
   imports: [
@@ -261,6 +262,7 @@ import { QuickSelectComponent } from './view/quick-select/quick-select.component
     TabbedSidebarComponent,
     InfoPanelComponent,
     QuickSelectComponent,
+    ToggleMenuComponent,
   ],
 
   exports: [
@@ -381,6 +383,7 @@ import { QuickSelectComponent } from './view/quick-select/quick-select.component
     TabbedSidebarComponent,
     InfoPanelComponent,
     QuickSelectComponent,
+    ToggleMenuComponent,
   ],
 })
 export class AdminSharedModule {}

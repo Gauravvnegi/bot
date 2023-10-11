@@ -107,7 +107,8 @@ export class SidenavComponent implements OnInit, OnDestroy {
    * Setting route configuration
    */
   initRouteConfig(finalRoute: string) {
-    const routesArr = finalRoute.split('/');
+    const routesArrayWithoutQuery = finalRoute.split('?');
+    const routesArr = routesArrayWithoutQuery[0].split('/');
 
     const activeRouteConfig: ActiveRouteConfig = {
       product: {

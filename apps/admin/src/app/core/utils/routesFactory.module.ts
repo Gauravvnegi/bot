@@ -180,6 +180,25 @@ export const routeFactoryNew = (
                   component: LoadSubModule ? undefined : ComingSoonComponent,
                 };
                 routes[0].children.push(subModuleRouteConfig);
+
+                /**
+                 * To Do not working
+                 * Adding wild card route entry for create with home modules
+                 */
+                // if (moduleName === ModuleNames.CREATE_WITH_HOME) {
+                //   const wildCardCreateRouteConfig: Route = {
+                //     path: `${subModulePath}/**`,
+                //     loadChildren:
+                //       isProductSubscribed &&
+                //       isModuleSubscribed &&
+                //       isSubModuleSubscribed
+                //         ? LoadSubModule
+                //         : UnsubscribedModule,
+                //     component: LoadSubModule ? undefined : ComingSoonComponent,
+                //     pathMatch: 'full',
+                //   };
+                //   routes[0].children.push(wildCardCreateRouteConfig);
+                // }
               }
 
               // Pushing sub module path config

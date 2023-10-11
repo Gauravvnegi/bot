@@ -146,9 +146,7 @@ export class RoutesConfigService extends RouteConfigPathService {
   }
 
   getQueryValue(key: string) {
-    debugger;
-    const test = this.router.routerState.snapshot.root.queryParams[key] ?? '';
-    return test;
+    return this.router.routerState.snapshot.root.queryParams[key] ?? '';
   }
 
   initActiveRoute(config: ActiveRouteConfig) {
@@ -185,6 +183,10 @@ export class RoutesConfigService extends RouteConfigPathService {
 
   get navRoutesChanges() {
     return this.$navRoutes;
+  }
+
+  get defaultNavRouteOptions() {
+    return this.$navRoutes.value;
   }
 
   get activeRouteConfig() {

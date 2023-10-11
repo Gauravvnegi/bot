@@ -84,11 +84,7 @@ export class AddRoomComponent implements OnInit, OnDestroy {
   featureIds: string[] = [];
 
   pageTitle = 'Add rooms';
-  navRoutes: NavRouteOptions = [
-    { label: 'efrontdesk', link: './' },
-    { label: 'Rooms', link: '/pages/efrontdesk/room' },
-    { label: 'Add Rooms', link: './' },
-  ];
+  navRoutes: NavRouteOptions = [];
 
   isRoomInfoLoading = false;
   isLoadingFeatures = false;
@@ -131,8 +127,8 @@ export class AddRoomComponent implements OnInit, OnDestroy {
         this.roomId = res.id;
         this.fields[0].disabled = true;
         this.pageTitle = 'Edit Room';
-        this.navRoutes[2].label = 'Edit Room';
       }
+      this.initNavRoutes(!!res.id);
     });
   }
 
@@ -142,6 +138,16 @@ export class AddRoomComponent implements OnInit, OnDestroy {
     this.initForm();
     this.initOptionsConfig();
     if (this.roomId) this.initRoomDetails();
+  }
+
+  initNavRoutes(isEdit: boolean) {
+    this.routesConfigService.navRoutesChanges.subscribe((navRoutesRes) => {
+      this.navRoutes = [...navRoutesRes];
+      this.navRoutes.push({
+        label: isEdit ? 'Edit Room' : 'Add Room',
+        link: './',
+      });
+    });
   }
 
   /**

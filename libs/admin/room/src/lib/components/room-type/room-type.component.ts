@@ -74,11 +74,7 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
 
   defaultImage: string = 'assets/images/image-upload.png';
   pageTitle = 'Add Room Type';
-  navRoutes: NavRouteOptions = [
-    { label: 'efrontdesk', link: './' },
-    { label: 'Rooms', link: '/pages/efrontdesk/room' },
-    { label: 'Add Room Type', link: './' },
-  ];
+  navRoutes: NavRouteOptions = [];
 
   /* Dropdown Options */
   paidServices: Service[] = [];
@@ -114,9 +110,8 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
 
   initNavRoutes() {
     this.routesConfigService.navRoutesChanges.subscribe((navRoutesRes) => {
-      const navRoutes = navRoutesRes;
-      navRoutes.push(navRoutesConfig.addRoomType);
-      this.navRoutes = navRoutes;
+      this.navRoutes = [...navRoutesRes];
+      this.navRoutes.push(navRoutesConfig.addRoomType);
     });
   }
 

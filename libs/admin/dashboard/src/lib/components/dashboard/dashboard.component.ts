@@ -152,6 +152,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     };
 
     this.analyticsService.getInhouseRequest(query).subscribe((res) => {
+      debugger;
       this.options = new PreArrivalRequestList().deserialize(
         res
       ).PreArrivalRequest;
@@ -189,6 +190,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
     this.reservationService.getReservationDetails(config).subscribe(
       (res) => {
+        debugger;
         this.options = new ReservationTable().deserialize(
           res,
           this.globalFilterService.timezone
@@ -202,16 +204,16 @@ export class DashboardComponent implements OnInit, OnDestroy {
     );
   }
 
-  getStatusStyle(type: string): string {
+  getStatusStyle(type: string, state: string): string {
     switch (type) {
       case 'INITIATED':
-        return 'status-text-initiated';
+        return `status-background-initiated`;
       case 'PENDING':
-        return 'status-text-pending';
+        return `status-background-pending`;
       case 'FAILED':
-        return 'status-text-reject';
+        return `status-background-reject`;
       case 'COMPLETED':
-        return 'status-text-success';
+        return `status-background-success`;
     }
   }
 

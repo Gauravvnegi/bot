@@ -10,6 +10,7 @@ const defaultNavigateConfig: NavigateConfig = {
   queryParams: {},
   isRespectiveToProduct: true, // Route will first open with respect to product
   isRelative: false,
+  openInNewWindow: false,
 };
 
 // Need to fix... Module Names cannot be read here (Circular dependency)
@@ -87,6 +88,7 @@ export class RoutesConfigService extends RouteConfigPathService {
       additionalPath,
       queryParams,
       isRespectiveToProduct,
+      openInNewWindow,
       isRelative,
     }: NavigateConfig = {
       ...defaultNavigateConfig,
@@ -128,10 +130,19 @@ export class RoutesConfigService extends RouteConfigPathService {
     }
 
     if (path) {
-      this.router.navigate(
-        [`${path}${additionalPath ? `/${additionalPath}` : ''}`],
-        { queryParams: queryParams }
-      );
+      if (openInNewWindow) {
+        const queryParamsStr = this.getQueryParamValue(queryParams);
+        const url = `${path}${
+          additionalPath ? `/${additionalPath}` : ''
+        }${queryParamsStr}`;
+
+        window.open(url);
+      } else {
+        this.router.navigate(
+          [`${path}${additionalPath ? `/${additionalPath}` : ''}`],
+          { queryParams: queryParams }
+        );
+      }
     } else {
       console.error(
         'CANNOT NAVIGATE: Error in finding th path',
@@ -139,6 +150,18 @@ export class RoutesConfigService extends RouteConfigPathService {
         subModuleName
       );
     }
+  }
+
+  getQueryParamValue(queryParams: NavigateConfig['queryParams']) {
+    let queryParamsStr = '';
+    if (queryParams) {
+      queryParamsStr = '?';
+      for (let queryKey in queryParams) {
+        queryParamsStr =
+          queryParamsStr + `${queryKey}=${queryParams[queryKey]}`;
+      }
+    }
+    return queryParamsStr;
   }
 
   goBack() {
@@ -244,6 +267,7 @@ export type NavigateConfig = {
   queryParams: any;
   isRespectiveToProduct: boolean;
   isRelative: boolean;
+  openInNewWindow: boolean;
 };
 
 export type ModuleOfSubModuleWithRespectToProduct = Partial<

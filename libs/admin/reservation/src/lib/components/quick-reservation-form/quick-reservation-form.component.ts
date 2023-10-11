@@ -15,10 +15,14 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
-import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import {
+  GlobalFilterService,
+  RoutesConfigService,
+} from '@hospitality-bot/admin/core/theme';
 import {
   ConfigService,
   EntitySubType,
+  ModuleNames,
   Option,
 } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
@@ -105,7 +109,8 @@ export class QuickReservationFormComponent implements OnInit {
     private manageReservationService: ManageReservationService,
     private formService: FormService,
     private compiler: Compiler,
-    private resolver: ComponentFactoryResolver
+    private resolver: ComponentFactoryResolver,
+    private routesConfigService: RoutesConfigService
   ) {
     this.initForm();
   }
@@ -191,20 +196,16 @@ export class QuickReservationFormComponent implements OnInit {
   }
 
   editForm() {
-    this.router.navigate(
-      [
-        this.reservationId
-          ? this.openNewWindow(
-              `/pages/efrontdesk/reservation/edit-reservation/${this.reservationId}`
-            )
-          : this.openNewWindow(`/pages/efrontdesk/reservation/add-reservation`),
-      ],
-      {
-        queryParams: {
-          entityId: this.entityId,
-        },
-      }
-    );
+    this.routesConfigService.navigate({
+      subModuleName: ModuleNames.ADD_RESERVATION,
+      additionalPath: this.reservationId
+        ? `edit-reservation/${this.reservationId}`
+        : `add-reservation`,
+      queryParams: {
+        entityId: this.entityId,
+      },
+      openInNewWindow: true,
+    });
   }
 
   initReservationDetails() {

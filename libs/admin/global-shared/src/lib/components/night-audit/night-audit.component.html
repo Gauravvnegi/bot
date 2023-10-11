@@ -12,6 +12,7 @@
       <hospitality-bot-manage-logged-users
         class="audit-content"
         [activeIndex]="activeStep"
+        [items]="loggedInUsers"
         [stepList]="itemList"
         (indexChange)="activeStep = $event"
         *ngSwitchCase="0"
@@ -19,14 +20,18 @@
       <hospitality-bot-checkin-reservations
         class="audit-content"
         [activeIndex]="activeStep"
+        [items]="checkedInReservation"
         [stepList]="itemList"
+        (reload)="initData()"
         (indexChange)="activeStep = $event"
         *ngSwitchCase="1"
       ></hospitality-bot-checkin-reservations>
       <hospitality-bot-checkout-reservations
         class="audit-content"
+        [items]="checkedOutReservation"
         [activeIndex]="activeStep"
         [stepList]="itemList"
+        (reload)="initData()"
         (indexChange)="activeStep = $event"
         *ngSwitchCase="2"
       ></hospitality-bot-checkout-reservations>
@@ -34,7 +39,7 @@
         class="audit-content"
         [activeIndex]="activeStep"
         [stepList]="itemList"
-        (indexChange)="activeStep = $event"
+        (indexChange)="finish($event)"
         *ngSwitchCase="3"
       ></hospitality-bot-audit-summary>
     </ng-container>

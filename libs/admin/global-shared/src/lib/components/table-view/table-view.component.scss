@@ -44,14 +44,6 @@
     gap: 6px;
     align-items: center;
   }
-
-  .pre-text-color {
-    color: red;
-  }
-
-  .post-text-color {
-    color: red;
-  }
 }
 
 // Style Override
@@ -70,5 +62,33 @@
   }
   .secondary-text {
     font-size: 12px;
+  }
+  .primary-text,
+  .text {
+    color: #6d7580;
+  }
+  .warning-text {
+    color: $warning-state;
+  }
+  .danger-text {
+    color: $inactive-state;
+  }
+  .completed-text {
+    color: $success-state;
+  }
+  .tiny-text {
+    font-size: 11px;
+    color: #cdcdcd;
+  }
+  .status-toggle {
+    white-space: nowrap;
+    font-size: 12px;
+    margin: 0;
+    .wrapper {
+      display: flex;
+    }
+  }
+  .p-menu {
+    padding: 0;
   }
 }

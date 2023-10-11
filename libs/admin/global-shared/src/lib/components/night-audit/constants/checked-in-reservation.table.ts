@@ -1,4 +1,5 @@
 import { Cols } from '@hospitality-bot/admin/shared';
+import { TableViewDataType } from '../../../types/table-view.type';
 
 export const cols: Cols[] = [
   {
@@ -38,11 +39,12 @@ export const cols: Cols[] = [
   {
     field: 'action',
     header: 'Actions',
+    width: '16%',
   },
 ];
 
-// Dummy Data
-export const checkedInList = [
+// For the decoration, it must use TableViewDataType Type...
+export const checkedInList: TableViewDataType[] = [
   {
     invoiceId: 'INV001',
     roomInfo: {
@@ -54,20 +56,28 @@ export const checkedInList = [
     stakeHolder: {
       guest: 'Guest',
       company: 'Google',
+      postText: 'tiny-text',
     },
     visitStatus: '03/03/2023',
-    expenses: '5000/7000',
+    expenses: {
+      dueAmount: 5000,
+      total: 7000,
+      preText: 'danger-text',
+      textSeparator: '/',
+      textInlineBlock: true,
+    },
     sourceName: {
       source: 'Ameer',
       name: 'Agent',
+      postText: 'tiny-text',
     },
     amount: '5000',
     action: {
-      dropDown: [
-        { label: 'No Show', value: 'no-show' },
-        { label: 'Cancel', value: 'cancel' },
-      ],
-      quick: [{ label: 'Reservation', value: 'reservation' }],
+      dropDown: {
+        currentState: 'NoShow',
+        nextStates: ['NoShow', 'CANCEL'],
+      },
+      quick: [{ label: 'Edit Reservation', value: 'edit-reservation' }],
     },
   },
   {
@@ -81,19 +91,21 @@ export const checkedInList = [
     stakeHolder: {
       guest: 'Gourav',
       company: 'Google',
+      postText: 'tiny-text',
     },
     visitStatus: '03/03/2023',
     expenses: '5000/8000',
     sourceName: {
       source: 'Ameer',
       name: 'Agent',
+      postText: 'tiny-text',
     },
     amount: '8000',
     action: {
-      dropDown: [
-        { label: 'No Show', value: 'no-show' },
-        { label: 'Cancel', value: 'cancel' },
-      ],
+      dropDown: {
+        currentState: 'NoShow',
+        nextStates: ['NoShow', 'CANCEL'],
+      },
       quick: [{ label: 'Reservation', value: 'reservation' }],
     },
   },
@@ -108,19 +120,21 @@ export const checkedInList = [
     stakeHolder: {
       guest: 'Gourav',
       company: 'Google',
+      postText: 'tiny-text',
     },
     visitStatus: '03/03/2023',
     expenses: '9000/9000',
     sourceName: {
       source: 'Ameer',
       name: 'Agent',
+      postText: 'tiny-text',
     },
     amount: '6000',
     action: {
-      dropDown: [
-        { label: 'No Show', value: 'no-show' },
-        { label: 'Cancel', value: 'cancel' },
-      ],
+      dropDown: {
+        currentState: 'CANCEL',
+        nextStates: ['NoShow', 'CANCEL'],
+      },
       quick: [{ label: 'Reservation', value: 'reservation' }],
     },
   },
@@ -135,16 +149,21 @@ export const checkedInList = [
     stakeHolder: {
       guest: 'Sourav',
       company: 'BigOh',
+      postText: 'tiny-text',
     },
     visitStatus: '03/03/2023',
     expenses: '6000/7000',
-    sourceName: 'Walk-in',
+    sourceName: {
+      source: 'Ameer',
+      name: 'Agent',
+      postText: 'tiny-text',
+    },
     amount: '7000',
     action: {
-      dropDown: [
-        { label: 'No Show', value: 'no-show' },
-        { label: 'Cancel', value: 'cancel' },
-      ],
+      dropDown: {
+        currentState: 'NoShow',
+        nextStates: ['NoShow', 'CANCEL'],
+      },
       quick: [{ label: 'Reservation', value: 'reservation' }],
     },
   },

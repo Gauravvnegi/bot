@@ -51,7 +51,7 @@ export const routeFactoryNew = (
 
   // View not in use to create route ,
   // use module declaration if not in view and loadModule is also not present the don't make route
-  const letTheViewRouteAlsoBeMade = true;
+  const makeRouteEvenIfIsViewIsFalse = true;
 
   /**
    * Product Config Iteration
@@ -59,7 +59,7 @@ export const routeFactoryNew = (
   product.forEach((product) => {
     const productName = product.name;
     const isProductSubscribed = product.isSubscribed;
-    const isProductInView = product.isView || letTheViewRouteAlsoBeMade;
+    const isProductInView = product.isView || makeRouteEvenIfIsViewIsFalse;
 
     if (productName && isProductInView) {
       const productRoute = routesConfigService.getRouteFromName(productName);
@@ -76,7 +76,7 @@ export const routeFactoryNew = (
         // Is Setting Module - Does not necessarily required isView
         // If setting module, is View can be ignore for routing manufacturing
         const isModuleInView =
-          module.isView || isSettingModule || letTheViewRouteAlsoBeMade;
+          module.isView || isSettingModule || makeRouteEvenIfIsViewIsFalse;
         const isModuleSubscribed = module.isSubscribed;
 
         if (moduleName && isModuleInView) {
@@ -97,7 +97,9 @@ export const routeFactoryNew = (
             const isSubModuleSubscribed = subModule.isSubscribed;
 
             const isSubModuleInView =
-              subModule.isView || isSettingModule || letTheViewRouteAlsoBeMade;
+              subModule.isView ||
+              isSettingModule ||
+              makeRouteEvenIfIsViewIsFalse;
 
             if (subModuleName && isSubModuleInView) {
               const subModuleRoute = routesConfigService.getRouteFromName(
@@ -164,13 +166,17 @@ export const routeFactoryNew = (
                * Only view check is here
                * For the case of module not in view but has Load Module then only make the routes
                * Else only make route for those module in view
+               * loadChildren will only load if subModule is subscribed all the way thru (hierarchical)
                */
               if (subModule.isView || (!subModule.isView && LoadSubModule)) {
                 const subModuleRouteConfig: Route = {
                   path: subModulePath,
-                  loadChildren: isSubModuleSubscribed
-                    ? LoadSubModule
-                    : UnsubscribedModule,
+                  loadChildren:
+                    isProductSubscribed &&
+                    isModuleSubscribed &&
+                    isSubModuleSubscribed
+                      ? LoadSubModule
+                      : UnsubscribedModule,
                   component: LoadSubModule ? undefined : ComingSoonComponent,
                 };
                 routes[0].children.push(subModuleRouteConfig);

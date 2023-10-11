@@ -15,6 +15,7 @@ import { TaxService } from '../../services/tax.service';
 import { TaxCountryList } from '../../models/tax.model';
 import { TaxFormData } from '../../types/tax';
 import { Location } from '@angular/common';
+import { RoutesConfigService } from '@hospitality-bot/admin/core/theme';
 
 @Component({
   selector: 'hospitality-bot-create-tax',
@@ -48,7 +49,8 @@ export class CreateTaxComponent implements OnInit {
     private globalFilterService: GlobalFilterService,
     private taxService: TaxService,
     private hotelDetailService: HotelDetailService,
-    private location: Location
+    private location: Location,
+    private routesConfigService: RoutesConfigService
   ) {
     this.taxId = this.route.snapshot.paramMap.get('id');
     const { navRoutes, title } = taxRoutes[
@@ -217,9 +219,7 @@ export class CreateTaxComponent implements OnInit {
       { panelClass: 'success' }
     );
 
-    if (this.paramData?.entityId) this.location.back();
-
-    this.router.navigate(['pages/settings/tax']);
+    this.routesConfigService.goBack();
   };
 
   /**

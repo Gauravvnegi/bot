@@ -2,7 +2,7 @@ import { Location } from '@angular/common';
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import { GlobalFilterService, RoutesConfigService } from '@hospitality-bot/admin/core/theme';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { forkJoin, Subscription } from 'rxjs';
 import { NavRouteOptions, Option } from 'libs/admin/shared/src';
@@ -51,7 +51,8 @@ export class EditAssetComponent implements OnInit, OnDestroy {
     private assetService: AssetService,
     protected _translateService: TranslateService,
     private globalFilterService: GlobalFilterService,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private routesConfigService: RoutesConfigService
   ) {}
 
   ngOnInit(): void {
@@ -171,8 +172,7 @@ export class EditAssetComponent implements OnInit, OnDestroy {
               }
             )
             .subscribe();
-          this.router.navigate(['/pages/library/assets']);
-
+          this.routesConfigService.goBack();
           this.isSavingasset = false;
         },
         ({ error }) => {

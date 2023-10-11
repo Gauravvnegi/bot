@@ -6,7 +6,7 @@ const roomRoutes = {
   editRoomType: 'add-room-type/:id',
   addRoomType: 'add-room-type',
   services: 'services',
-  createService: 'services/create-service',
+  createService: 'create-service',
   importServices: 'import-services',
 };
 

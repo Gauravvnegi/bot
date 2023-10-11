@@ -1,6 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import {
+  GlobalFilterService,
+  RoutesConfigService,
+} from '@hospitality-bot/admin/core/theme';
 import { Subscription } from 'rxjs';
 import { TemplateService } from '../../services/template.service';
 import { SnackBarService } from '@hospitality-bot/shared/material';
@@ -50,7 +53,8 @@ export class EditTemplateComponent implements OnInit, OnDestroy {
     protected _router: Router,
     protected activatedRoute: ActivatedRoute,
     protected translateService: TranslateService,
-    protected adminUtilityService: AdminUtilityService
+    protected adminUtilityService: AdminUtilityService,
+    protected routesConfigService: RoutesConfigService
   ) {
     this.initFG();
   }
@@ -199,7 +203,7 @@ export class EditTemplateComponent implements OnInit, OnDestroy {
               )
               .subscribe();
             this.templateForm.patchValue(response);
-            if (!event.data) this._router.navigate(['/pages/library/template']);
+            if (!event.data) this.routesConfigService.goBack();
             if (event.data.preview) this.isDisabled = true;
           },
           ({ error }) => {},
@@ -223,7 +227,7 @@ export class EditTemplateComponent implements OnInit, OnDestroy {
                 }
               )
               .subscribe();
-            this._router.navigate(['/pages/library/template']);
+            this.routesConfigService.goBack();
           },
           ({ error }) => {},
           () => (this.isSaving = false)
@@ -270,13 +274,9 @@ export class EditTemplateComponent implements OnInit, OnDestroy {
       this.templateForm?.getRawValue()
     );
     if (disabled) {
-      this._router.navigate(['view/html-editor'], {
-        relativeTo: this.activatedRoute,
-      });
+      this.routesConfigService.navigate({ additionalPath: 'view/html-editor' });
     } else {
-      this._router.navigate(['edit/html-editor'], {
-        relativeTo: this.activatedRoute,
-      });
+      this.routesConfigService.navigate({ additionalPath: 'edit/html-editor' });
     }
   }
 
@@ -328,16 +328,12 @@ export class EditTemplateComponent implements OnInit, OnDestroy {
       this.templateForm?.getRawValue()
     );
     if (newContent) {
-      this._router.navigate(['html-editor'], {
-        relativeTo: this.activatedRoute,
-      });
+      this.routesConfigService.navigate({ additionalPath: 'html-editor' });
     }
     if (!newContent && type === 'SAVEDTEMPLATE') {
-      this._router.navigate(['saved'], { relativeTo: this.activatedRoute });
+      this.routesConfigService.navigate({ additionalPath: 'saved' });
     } else if (!newContent)
-      this._router.navigate(['pre-designed'], {
-        relativeTo: this.activatedRoute,
-      });
+      this.routesConfigService.navigate({ additionalPath: 'pre-designed' });
   }
 
   // /**
@@ -352,7 +348,7 @@ export class EditTemplateComponent implements OnInit, OnDestroy {
   //   this.move(0);
   // }
 
-  resetForm(){
+  resetForm() {
     this.templateForm.reset();
   }
 

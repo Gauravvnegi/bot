@@ -16,6 +16,7 @@ import { PackagesService } from '../../services/packages.service';
 import { PackageData } from '../../types/package';
 import { PackageListResponse, PackageResponse } from '../../types/response';
 import { packagesRoutes } from '../../constant/routes';
+import { RoutesConfigService } from '@hospitality-bot/admin/core/theme';
 
 @Component({
   selector: 'hospitality-bot-package-datatable',
@@ -48,7 +49,8 @@ export class PackageDataTableComponent extends BaseDatatableComponent
     private globalFilterService: GlobalFilterService,
     private snackbarService: SnackBarService,
     private router: Router,
-    protected tabFilterService: TableService
+    protected tabFilterService: TableService,
+    private routesConfigService: RoutesConfigService
   ) {
     super(fb, tabFilterService);
   }
@@ -186,9 +188,9 @@ export class PackageDataTableComponent extends BaseDatatableComponent
    * @function editPackage To Edit the service
    */
   editPackage(id: string) {
-    this.router.navigate([
-      `/pages/library/packages/${packagesRoutes.createPackage.route}/${id}`,
-    ]);
+    this.routesConfigService.navigate({
+      additionalPath: packagesRoutes.editPackage.route.replace(':id', id),
+    });
   }
 
   handleFinal = () => {

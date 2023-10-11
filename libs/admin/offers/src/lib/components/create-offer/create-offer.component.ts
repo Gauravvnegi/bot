@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import { GlobalFilterService, RoutesConfigService } from '@hospitality-bot/admin/core/theme';
 import {
   LibrarySearchItem,
   ServiceTypeOptionValue,
@@ -56,7 +56,8 @@ export class CreateOfferComponent implements OnInit {
     private offerService: OffersServices,
     private snackbarService: SnackBarService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private routesConfigService: RoutesConfigService
   ) {
     this.offerId = this.route.snapshot.paramMap.get('id');
     this.searchItems = [
@@ -406,7 +407,7 @@ export class CreateOfferComponent implements OnInit {
       '',
       { panelClass: 'success' }
     );
-    this.router.navigate([`pages/library/${routes.offers}`]);
+    this.routesConfigService.goBack();
   };
 
   /**

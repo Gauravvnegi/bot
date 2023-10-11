@@ -81,6 +81,9 @@
     color: #cdcdcd;
   }
   .status-toggle {
+    white-space: nowrap;
+    font-size: 12px;
+    margin: 0;
     .wrapper {
       display: flex;
     }

@@ -1,7 +1,7 @@
 <div class="table-view__wrapper">
   <div *ngIf="header" class="header">
     <span class="text">{{ header || '' }}</span>
-    <span *ngIf="action" (click)="actionClicked()" class="action"
+    <span *ngIf="action" (click)="onActionClicked()" class="action"
       >{{ action }} <img src="assets/svg/refresh.svg" alt="refresh"
     /></span>
   </div>

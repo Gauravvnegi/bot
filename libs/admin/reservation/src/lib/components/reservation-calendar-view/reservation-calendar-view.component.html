@@ -1,0 +1,217 @@
+<div class="main-wrapper">
+  <div class="inventory-form" *ngIf="!!useForm && roomsLoaded; else loader">
+    <div
+      [ngClass]="
+        !isRoomsEmpty && allRoomTypes?.length
+          ? 'wrapper'
+          : 'wrapper reduce-height'
+      "
+    >
+      <!-- LEFT SECTION -->
+      <div class="left">
+        <div class="left__main">
+          <div
+            class="main-header main-header__left date-header-sticky"
+            [formGroup]="useForm"
+          >
+            <hospitality-bot-room-types
+              class="room-types-select"
+              controlName="roomType"
+              [props]="{
+                isAllSelected: true
+              }"
+            >
+            </hospitality-bot-room-types>
+            <div class="date-wrapper">
+              <hospitality-bot-date
+                controlName="date"
+                [settings]="{ enableTime: false, dateFormat: 'M dd, yy' }"
+                [disabled]="isRoomsEmpty || !roomTypes?.length"
+              >
+              </hospitality-bot-date>
+            </div>
+          </div>
+          <div
+            class="main-section border-right"
+            *ngIf="!isRoomsEmpty && roomTypes?.length"
+          >
+            <div
+              loader
+              [isVisible]="isLoaderVisible"
+              [props]="{
+                showLoader: false
+              }"
+            ></div>
+            <ng-container>
+              <ng-container
+                *ngFor="let roomType of roomTypes; let roomTypeIdx = index"
+              >
+                <ng-container>
+                  <div class="heading-section left-main-cell border-x">
+                    <div class="left-main-cell__left main-text">
+                      {{ roomType.label }}
+                    </div>
+                    <div class="left-main-cell__right head-cell ttp">
+                      <div class="main-text">
+                        Available
+                      </div>
+                      <div class="main-text">
+                        (Occupancy%)
+                      </div>
+                    </div>
+                  </div>
+                  <ng-container
+                    *ngFor="let room of roomType.rooms; let ratePlanIdx = index"
+                  >
+                    <div
+                      class="input-content-section left-main-cell"
+                      [ngClass]="{
+                        'border-bottom': ratePlanIdx < roomType.rooms.length - 1
+                      }"
+                    >
+                      <div class="left-main-cell__left">
+                        <div class="room-type">
+                          <div class="room-type__subtitle">
+                            {{ room.roomNumber }}
+                          </div>
+                          <div class="features">
+                            <ng-container
+                              *ngFor="
+                                let imageUrl of getFeatureImage(room.features)
+                              "
+                            >
+                              <img
+                                *ngIf="imageUrl[0]?.url"
+                                class="feature-image"
+                                [src]="imageUrl[0].url"
+                                alt="'room-feature"
+                              />
+                            </ng-container>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </ng-container>
+                </ng-container>
+              </ng-container>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT SECTION -->
+      <div class="right">
+        <div class="right__main">
+          <div class="main-header main-header__right date-header-sticky">
+            <div class="date-wrapper dates-header">
+              <div
+                *ngFor="let date of dates"
+                class="dates-cell cell"
+                [ngClass]="getWeekendBG(date.day)"
+              >
+                <div>{{ date.day }}</div>
+                <div>{{ date.date }}</div>
+              </div>
+            </div>
+          </div>
+          <div class="main-section" *ngIf="!isRoomsEmpty && roomTypes?.length">
+            <ng-container>
+              <ng-container
+                *ngFor="let roomType of roomTypes; let roomTypeIdx = index"
+              >
+                <div class="data-cell-wrapper">
+                  <div class="data-cell heading-section">
+                    <div
+                      class="cell border-x"
+                      *ngFor="let date of dates; let dateIndex = index"
+                    >
+                      <div class="main-text">
+                        <!-- {{
+                            getAvailability(
+                              dateIndex,
+                              'quantity',
+                              roomType.value.value
+                            )
+                          }} -->
+                        0
+                      </div>
+                      <div class="seconday-text">
+                        <!-- {{
+                            getAvailability(
+                              dateIndex,
+                              'occupancy',
+                              roomType.value.value
+                            )
+                          }}% -->
+                        0%
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <ng-container>
+                  <hospitality-bot-interactive-grid
+                    [props]="{
+                      createNewToolTipInfo: 'Create New Reservation'
+                    }"
+                    [gridData]="roomType.data"
+                    [isProcessing]="roomType.loading"
+                    (onChange)="handleChange($event, roomType)"
+                    (onCreate)="handleCreate($event, roomType)"
+                    (onEdit)="handleEdit($event, roomType)"
+                  ></hospitality-bot-interactive-grid>
+                </ng-container>
+              </ng-container>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <ng-container
+      *ngIf="!isRoomsEmpty && roomTypes?.length; else emptyView"
+    ></ng-container>
+  </div>
+  <p-sidebar
+    *ngIf="viewReservationForm"
+    [visible]="viewReservationForm"
+    (onHide)="viewReservationForm = false"
+    class="sidebar"
+    [showCloseIcon]="false"
+    position="right"
+  >
+    <hospitality-bot-quick-reservation-form
+      (onCloseSidebar)="handleCloseSidebar($event)"
+      [reservationConfig]="{
+        reservationId: formProps?.reservationId,
+        defaultRoomType: formProps?.roomType,
+        selectedRoom: formProps?.room,
+        date: formProps?.date
+      }"
+    ></hospitality-bot-quick-reservation-form>
+  </p-sidebar>
+  <!-- <div class="room-type">
+          <div *ngFor="let row of gridRows; let i = index" class="room">
+            {{ row }} Some content goes over here
+          </div>
+        </div>
+        <div>
+ -->
+  <div></div>
+
+  <ng-template #loader>
+    <hospitality-bot-loader-bounce></hospitality-bot-loader-bounce>
+  </ng-template>
+
+  <ng-template #emptyView>
+    <hospitality-bot-empty-table
+      [isLoading]="loading"
+      [content]="{
+        description: allRoomTypes?.length
+          ? 'Please select at least one rooms'
+          : 'There is no room available',
+        imageSrc: 'assets/images/empty-table-service.png'
+      }"
+    >
+    </hospitality-bot-empty-table>
+  </ng-template>
+</div>

@@ -9,7 +9,10 @@ import {
 } from '@angular/forms';
 import { MatDialogConfig } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
-import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import {
+  GlobalFilterService,
+  RoutesConfigService,
+} from '@hospitality-bot/admin/core/theme';
 import {
   LibrarySearchItem,
   LibraryService,
@@ -18,7 +21,12 @@ import {
   ModalService,
   SnackBarService,
 } from '@hospitality-bot/shared/material';
-import { FlagType, NavRouteOptions, Option } from 'libs/admin/shared/src';
+import {
+  FlagType,
+  ModuleNames,
+  NavRouteOptions,
+  Option,
+} from 'libs/admin/shared/src';
 import { ModalComponent } from 'libs/admin/shared/src/lib/components/modal/modal.component';
 import { IteratorField } from 'libs/admin/shared/src/lib/types/fields.type';
 import { Subscription } from 'rxjs';
@@ -76,11 +84,7 @@ export class AddRoomComponent implements OnInit, OnDestroy {
   featureIds: string[] = [];
 
   pageTitle = 'Add rooms';
-  navRoutes: NavRouteOptions = [
-    { label: 'efrontdesk', link: './' },
-    { label: 'Rooms', link: '/pages/efrontdesk/room' },
-    { label: 'Add Rooms', link: './' },
-  ];
+  navRoutes: NavRouteOptions = [];
 
   isRoomInfoLoading = false;
   isLoadingFeatures = false;
@@ -109,7 +113,8 @@ export class AddRoomComponent implements OnInit, OnDestroy {
     private location: Location,
     private modalService: ModalService,
     private libraryService: LibraryService,
-    private formService: FormService
+    private formService: FormService,
+    private routesConfigService: RoutesConfigService
   ) {
     this.submissionType = this.route.snapshot.paramMap.get(
       'type'
@@ -122,8 +127,8 @@ export class AddRoomComponent implements OnInit, OnDestroy {
         this.roomId = res.id;
         this.fields[0].disabled = true;
         this.pageTitle = 'Edit Room';
-        this.navRoutes[2].label = 'Edit Room';
       }
+      this.initNavRoutes(!!res.id);
     });
   }
 
@@ -133,6 +138,16 @@ export class AddRoomComponent implements OnInit, OnDestroy {
     this.initForm();
     this.initOptionsConfig();
     if (this.roomId) this.initRoomDetails();
+  }
+
+  initNavRoutes(isEdit: boolean) {
+    this.routesConfigService.navRoutesChanges.subscribe((navRoutesRes) => {
+      this.navRoutes = [...navRoutesRes];
+      this.navRoutes.push({
+        label: isEdit ? 'Edit Room' : 'Add Room',
+        link: './',
+      });
+    });
   }
 
   /**
@@ -438,7 +453,10 @@ export class AddRoomComponent implements OnInit, OnDestroy {
    * @function addRoomType Add room type
    */
   createRoomType() {
-    this.router.navigate([`/pages/efrontdesk/room/${routes.addRoomType}`]);
+    this.routesConfigService.navigate({
+      subModuleName: ModuleNames.ROOM,
+      additionalPath: routes.addRoomType,
+    });
   }
 
   /**
@@ -480,7 +498,9 @@ export class AddRoomComponent implements OnInit, OnDestroy {
             removeFeatures: removeFeatures,
             ...data,
             roomNo: null,
-            statusDetailsList: [{ ...statusData, isCurrentStatus: true }],
+            statusDetailsList: [
+              { ...statusData, isCurrentStatus: this.checkCurrentStatus() },
+            ],
           }),
         })
         .subscribe(
@@ -554,6 +574,15 @@ export class AddRoomComponent implements OnInit, OnDestroy {
           (error) => {}
         )
     );
+  }
+
+  checkCurrentStatus() {
+    const todayEpoch = new Date().setHours(0, 0, 0, 0); // Get today's date in epoch format, setting time to midnight
+    const fromDate = new Date(
+      this.statusQuoFormControls.fromDate.value
+    ).setHours(0, 0, 0, 0);
+    // Compare the epoch values
+    return fromDate === todayEpoch ? true : false;
   }
 
   ngOnDestroy(): void {

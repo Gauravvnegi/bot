@@ -1,0 +1,82 @@
+<!-- TODO: Test & Remove when response is not empty -->
+<!-- <hospitality-bot-tab-header
+  [listItems]="tabFilterItems"
+  [selectedIndex]="tabFilterIdx"
+  (selectedTabChange)="onSelectedTabFilterChange($event)"
+  isSticky="true"
+  extraGap="60"
+></hospitality-bot-tab-header> -->
+
+<hospitality-bot-feedback-types></hospitality-bot-feedback-types>
+
+<div class="feedback-container mb-20">
+  <div class="stats--wrapper">
+    <div class="bifurcation-stats">
+      <hospitality-bot-bifurcation-stats
+        [globalFeedbackFilterType]="globalFeedbackFilterType"
+      ></hospitality-bot-bifurcation-stats>
+    </div>
+    <div class="stats-container">
+      <div class="stats">
+        <hospitality-bot-global-nps
+          [globalFeedbackFilterType]="globalFeedbackFilterType"
+        >
+        </hospitality-bot-global-nps>
+      </div>
+      <div class="stats">
+        <hospitality-bot-top-low-nps
+          [globalFeedbackFilterType]="globalFeedbackFilterType"
+        >
+        </hospitality-bot-top-low-nps>
+      </div>
+      <div class="stats">
+        <hospitality-bot-feedback-distribution
+          [globalFeedbackFilterType]="globalFeedbackFilterType"
+        ></hospitality-bot-feedback-distribution>
+      </div>
+    </div>
+    <div class="shared-container">
+      <div class="shared-stats">
+        <hospitality-bot-response-rate
+          [globalFeedbackFilterType]="globalFeedbackFilterType"
+        >
+        </hospitality-bot-response-rate>
+      </div>
+      <div class="shared-stats">
+        <hospitality-bot-received-breakdown
+          [globalFeedbackFilterType]="globalFeedbackFilterType"
+        ></hospitality-bot-received-breakdown>
+      </div>
+    </div>
+  </div>
+  <hospitality-bot-net-promoter-score
+    [globalFeedbackFilterType]="globalFeedbackFilterType"
+  ></hospitality-bot-net-promoter-score>
+  <hospitality-bot-nps-across-departments
+    [globalFeedbackFilterType]="globalFeedbackFilterType"
+  >
+  </hospitality-bot-nps-across-departments>
+
+  <div class="gtmContainer">
+    <div class="gtm">
+      <hospitality-bot-gtm-across-services
+        [globalFeedbackFilterType]="globalFeedbackFilterType"
+      >
+      </hospitality-bot-gtm-across-services>
+    </div>
+    <div class="art">
+      <hospitality-bot-art
+        [globalFeedbackFilterType]="globalFeedbackFilterType"
+      >
+      </hospitality-bot-art>
+    </div>
+  </div>
+  <hospitality-bot-disengagement
+    [globalFeedbackFilterType]="globalFeedbackFilterType"
+  ></hospitality-bot-disengagement>
+</div>
+
+<!-- <hospitality-bot-feedback-datatable
+  [globalFeedbackFilterType]="globalFeedbackFilterType"
+>
+</hospitality-bot-feedback-datatable> -->

@@ -11,8 +11,9 @@ import { LibraryService } from '@hospitality-bot/admin/library';
 import { OutletService } from 'libs/admin/all-outlets/src/lib/services/outlet.service';
 import { InvoiceService } from 'libs/admin/invoice/src/lib/services/invoice.service';
 import { GlobalSharedModule } from '@hospitality-bot/admin/global-shared';
-import { MembersListComponent } from 'libs/admin/agent/src/lib/components/members-list/members-list.component';
 import { AdminAgentModule } from '@hospitality-bot/admin/agent';
+import { AdminReservationModule } from '@hospitality-bot/admin/reservation';
+import { RoomService } from 'libs/admin/room/src/lib/services/room.service';
 
 @NgModule({
   imports: [
@@ -24,6 +25,7 @@ import { AdminAgentModule } from '@hospitality-bot/admin/agent';
     AdminManageReservationRoutingModule,
     GlobalSharedModule,
     AdminAgentModule,
+    AdminReservationModule,
   ],
   declarations: [...AdminManageReservationRoutingModule.components],
   providers: [
@@ -33,6 +35,7 @@ import { AdminAgentModule } from '@hospitality-bot/admin/agent';
     LibraryService,
     OutletService,
     InvoiceService,
+    RoomService,
   ],
 })
 export class AdminManageReservationModule {}

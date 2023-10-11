@@ -18,6 +18,7 @@ import { Offer, OfferList } from '../../models/offers.model';
 import { OffersServices } from '../../services/offers.service';
 import { OfferData } from '../../types/offers';
 import { OfferListResponse, OfferResponse } from '../../types/response';
+import { RoutesConfigService } from '@hospitality-bot/admin/core/theme';
 
 @Component({
   selector: 'hospitality-bot-offers-data-table',
@@ -36,7 +37,8 @@ export class OffersDataTableComponent extends BaseDatatableComponent
     private snackbarService: SnackBarService,
     private offerService: OffersServices,
     private adminUtilityService: AdminUtilityService,
-    private router: Router
+    private router: Router,
+    private routesConfigService: RoutesConfigService
   ) {
     super(fb, tabFilterService);
   }
@@ -138,9 +140,9 @@ export class OffersDataTableComponent extends BaseDatatableComponent
    * @params rowData
    */
   editOffer(rowData: OfferResponse) {
-    this.router.navigate([
-      `/pages/library/offers/${routes.createOffer}/${rowData.id}`,
-    ]);
+    this.routesConfigService.navigate({
+      additionalPath: `${routes.createOffer}/${rowData.id}`,
+    });
   }
 
   /**

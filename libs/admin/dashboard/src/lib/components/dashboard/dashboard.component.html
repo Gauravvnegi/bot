@@ -42,7 +42,7 @@
 <hospitality-bot-reservation-datatable></hospitality-bot-reservation-datatable>
 
 <ng-template #request let-data>
-  <div class="content">
+  <div class="content" (click)="openDetailPage(data, 'package_details')">
     <div class="title">
       <span class="item-name">Request for a {{ data.itemName }}</span>
       <span class="booking-no">{{ data?.bookingNo }}</span>

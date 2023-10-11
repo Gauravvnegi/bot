@@ -38,6 +38,7 @@
   background-color: #f0ecff;
   border: solid 1px $primary;
   border-radius: 4px;
+  cursor: pointer;
 
   .title {
     display: flex;
@@ -91,7 +92,6 @@
 }
 
 .guest {
-  cursor: pointer;
   gap: 1em;
   .name-section {
     display: inline-flex;

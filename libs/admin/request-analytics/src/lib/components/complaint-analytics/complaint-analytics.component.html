@@ -9,10 +9,20 @@
     severity="primary"
     (onClick)="createServiceItem()"
   ></hospitality-bot-button>
-  <hospitality-bot-button
+  <!-- <hospitality-bot-button
     label="+ Raise Complaint"
     (onClick)="raiseRequest()"
-  ></hospitality-bot-button>
+  ></hospitality-bot-button> -->
+   <div
+      class="guestInfoEditContainer"
+      *ngIf="buttonConfig[0].button"
+      (click)="raiseRequest()"
+    >
+      <img [src]="buttonConfig[0].icon" alt="" />
+      <div class="guestInfoEditText">
+        {{ buttonConfig[0].label }}
+      </div>
+    </div>
 </hospitality-bot-navigation-header>
 
 <div class="feedback-container mb-20">

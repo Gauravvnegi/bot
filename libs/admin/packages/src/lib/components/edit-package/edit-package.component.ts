@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Location } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
-import { Regex } from '@hospitality-bot/admin/shared';
+import { ModuleNames, Regex } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.service';
 import { Subscription } from 'rxjs';
 import { Category } from '../../data-models/categoryConfig.model';
@@ -15,6 +15,8 @@ import {
 import { PackageService } from '../../services/package.service';
 import { ConfigService } from '@hospitality-bot/admin/shared';
 import { FileUploadType } from 'libs/admin/shared/src/lib/models/file-upload-type.model';
+import { RoutesConfigService } from '@hospitality-bot/admin/core/theme';
+import { packagesRoutes } from '../../constant/routes';
 
 @Component({
   selector: 'hospitality-bot-edit-package',
@@ -56,7 +58,8 @@ export class EditPackageComponent implements OnInit, OnDestroy {
     private globalFilterService: GlobalFilterService,
     private packageService: PackageService,
     private _location: Location,
-    private configService: ConfigService
+    private configService: ConfigService,
+    private routesConfigService: RoutesConfigService
   ) {
     this.initAddPackageForm();
   }
@@ -246,13 +249,12 @@ export class EditPackageComponent implements OnInit, OnDestroy {
               { panelClass: 'success' }
             )
             .subscribe();
-          this.router.navigate([
-            '/pages/library/packages/edit',
-            this.hotelPackage.amenityPackage.id,
-          ]);
+          this.routesConfigService.navigate({
+            additionalPath: packagesRoutes.editPackage.route.replace('id', this.hotelPackage.amenityPackage.id),
+          });
           this.isSavingPackage = false;
         },
-        ({ error }) => { 
+        ({ error }) => {
           this.isSavingPackage = false;
         }
       )
@@ -260,7 +262,11 @@ export class EditPackageComponent implements OnInit, OnDestroy {
   }
 
   redirectToPackages() {
-    this.router.navigate(['/pages/library/packages']);
+    this.routesConfigService.navigate({
+      subModuleName: ModuleNames.PACKAGES,
+      additionalPath: packagesRoutes.packages.route,
+
+    });
   }
 
   updatePackage(): void {
@@ -293,13 +299,15 @@ export class EditPackageComponent implements OnInit, OnDestroy {
                 { panelClass: 'success' }
               )
               .subscribe();
-            this.router.navigate([
-              '/pages/library/packages/edit',
-              this.hotelPackage.amenityPackage.id,
-            ]);
+            this.routesConfigService.navigate({
+              additionalPath: packagesRoutes.editPackage.route.replace(
+                'id',
+                this.hotelPackage.amenityPackage.id
+              ),
+            });
             this.isSavingPackage = false;
           },
-          ({ error }) => { 
+          ({ error }) => {
             this.isSavingPackage = false;
           }
         )

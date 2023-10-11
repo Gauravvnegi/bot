@@ -9,6 +9,7 @@ import {
 import { ActivatedRoute, Router } from '@angular/router';
 import {
   GlobalFilterService,
+  RoutesConfigService,
   SubscriptionPlanService,
 } from '@hospitality-bot/admin/core/theme';
 import {
@@ -29,7 +30,7 @@ import {
   noRecordAction,
   noRecordActionForComp,
 } from '../../constant/form';
-import routes from '../../constant/routes';
+import routes, { navRoutesConfig } from '../../constant/routes';
 import { Service, Services } from '../../models/amenities.model';
 import { RoomTypeForm } from '../../models/room.model';
 import { RoomType } from '../../models/rooms-data-table.model';
@@ -73,11 +74,7 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
 
   defaultImage: string = 'assets/images/image-upload.png';
   pageTitle = 'Add Room Type';
-  navRoutes: NavRouteOptions = [
-    { label: 'efrontdesk', link: './' },
-    { label: 'Rooms', link: '/pages/efrontdesk/room' },
-    { label: 'Add Room Type', link: './' },
-  ];
+  navRoutes: NavRouteOptions = [];
 
   /* Dropdown Options */
   paidServices: Service[] = [];
@@ -95,7 +92,8 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
     private formService: FormService,
     private subscriptionPlanService: SubscriptionPlanService,
     private modalService: ModalService,
-    private location: Location
+    private location: Location,
+    private routesConfigService: RoutesConfigService
   ) {
     this.roomTypeId = this.route.snapshot.paramMap.get('id');
   }
@@ -107,15 +105,14 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
     );
     this.initForm();
     this.initOptionConfig();
-    this.updateNavRoutes();
+    this.initNavRoutes();
   }
 
-  updateNavRoutes() {
-    const initialRouteName = this.subscriptionPlanService.selectedProduct;
-    this.navRoutes[0].label = convertToTitleCase(initialRouteName).replace(
-      'Home',
-      ''
-    );
+  initNavRoutes() {
+    this.routesConfigService.navRoutesChanges.subscribe((navRoutesRes) => {
+      this.navRoutes = [...navRoutesRes];
+      this.navRoutes.push(navRoutesConfig.addRoomType);
+    });
   }
 
   get inputControl() {
@@ -453,9 +450,7 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
   saveRoomTypeData(serviceType) {
     const data = this.useForm.getRawValue();
     this.roomService.initRoomTypeFormData(data, serviceType, true);
-    this.router.navigate([routes.services], {
-      relativeTo: this.route,
-    });
+    this.routesConfigService.navigate({ additionalPath: routes.services });
   }
 
   /**
@@ -473,10 +468,13 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
     );
 
     if (serviceType === 'PAID') {
-      this.router.navigate(['pages/library/services/create-service']);
+      this.routesConfigService.navigate({
+        subModuleName: ModuleNames.SERVICES,
+        additionalPath: routes.createService,
+      });
     } else {
-      this.router.navigate([routes.importServices], {
-        relativeTo: this.route,
+      this.routesConfigService.navigate({
+        additionalPath: routes.importServices,
       });
     }
   }

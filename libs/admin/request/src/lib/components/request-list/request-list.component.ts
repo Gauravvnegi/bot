@@ -104,7 +104,7 @@ export class RequestListComponent implements OnInit, OnDestroy {
             actionType: this.tabFilterItems[this.tabFilterIdx]?.value,
             offset: 0,
             sort: 'updated',
-            entityType: 'ALL',
+            entityType: 'FOCUSED',
             limit:
               this.listData && this.listData.length > 10
                 ? this.listData.length

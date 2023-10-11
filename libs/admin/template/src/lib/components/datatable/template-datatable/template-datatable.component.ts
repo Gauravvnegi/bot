@@ -21,6 +21,8 @@ import { Observable, Subscription } from 'rxjs';
 import { templateConfig } from '../../../constants/template';
 import { Templates } from '../../../data-models/templateConfig.model';
 import { TemplateService } from '../../../services/template.service';
+import { RoutesConfigService } from '@hospitality-bot/admin/core/theme';
+import { templateRoutes } from '../../../constants/routes';
 
 @Component({
   selector: 'hospitality-bot-template-datatable',
@@ -56,7 +58,8 @@ export class TemplateDatatableComponent extends BaseDatatableComponent
     private route: ActivatedRoute,
     private templateService: TemplateService,
     private _topicService: TopicService,
-    protected _translateService: TranslateService
+    protected _translateService: TranslateService,
+    private routesConfigServices: RoutesConfigService
   ) {
     super(fb, tabFilterService);
   }
@@ -196,7 +199,9 @@ export class TemplateDatatableComponent extends BaseDatatableComponent
    * @function openCreateTemlplate navigate to create template page.
    */
   openCreateTemplate() {
-    this._router.navigate(['create'], { relativeTo: this.route });
+    this.routesConfigServices.navigate({
+      additionalPath: templateRoutes.CreateTemplate.route,
+    });
   }
 
   /**
@@ -204,7 +209,12 @@ export class TemplateDatatableComponent extends BaseDatatableComponent
    */
   openEditTemplate(event, template): void {
     event.stopPropagation();
-    this._router.navigate([`edit/${template.id}`], { relativeTo: this.route });
+    this.routesConfigServices.navigate({
+      additionalPath: templateRoutes.CreateTemplate.route.replace(
+        ':id',
+        template.id
+      ),
+    });
   }
 
   /**

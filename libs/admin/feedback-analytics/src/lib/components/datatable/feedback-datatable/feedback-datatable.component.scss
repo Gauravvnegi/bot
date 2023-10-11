@@ -1,0 +1,596 @@
+@import 'main';
+
+.icon-wrapper {
+  @include flex-space-btw-wrap();
+  position: relative;
+  .icon {
+    width: 32%;
+    margin: 6% 0.5%;
+    @include flex-col-center-algn();
+    z-index: 2;
+    .table-body-journey-icon {
+      height: 14px;
+      width: 14px;
+      &:hover {
+        cursor: pointer;
+      }
+      @media screen and (max-width: 800px) {
+        height: 10px;
+        width: 10px;
+      }
+    }
+    .label {
+      font-size: 6px;
+      margin-top: 3px;
+      @media screen and (max-width: 800px) {
+        font-size: 3px;
+      }
+    }
+  }
+  .extra-width {
+    width: 24%;
+  }
+  .line {
+    position: absolute;
+    height: 2px;
+    width: 72%;
+    background-color: $whiteDeep;
+    right: 17px;
+    @media screen and (max-width: 800px) {
+      width: 62%;
+    }
+  }
+  .first {
+    top: 15%;
+  }
+  .second {
+    top: 65%;
+  }
+}
+
+:host ::ng-deep .arrival-time {
+  font-size: 12px;
+  color: $tabStats;
+  margin-top: 2px;
+  @media screen and (max-width: 800px) {
+    font-size: 8;
+  }
+}
+.sideMargin {
+  margin: 0 -20px;
+}
+img {
+  width: 28px;
+  height: 28px;
+}
+
+:host ::ng-deep .arrival-date {
+  font-size: 12px;
+  color: $subtitle;
+  @media screen and (max-width: 800px) {
+    font-size: 8;
+  }
+}
+
+:host ::ng-deep .status-image {
+  padding: 5px !important;
+  text-align: center !important;
+  button {
+    padding-left: 15px;
+  }
+}
+
+:host ::ng-deep .booking-number {
+  color: $subtitle;
+  font-size: 12px;
+  text-align: center;
+  @media screen and (max-width: 800px) {
+    font-size: 8px;
+  }
+}
+
+:host ::ng-deep .package {
+  color: $subtitle;
+  font-size: 12px;
+  position: relative;
+  @media screen and (max-width: 800px) {
+    font-size: 10px;
+  }
+}
+
+:host ::ng-deep .amount {
+  font-size: 12px;
+  @media screen and (max-width: 800px) {
+    font-size: 8px;
+  }
+}
+
+:host ::ng-deep .tabel-room-no {
+  padding: 7px;
+  font-size: 12px;
+  background-color: $table-room-bg;
+  border-radius: 25px;
+  text-align: center;
+  @media screen and (max-width: 800px) {
+    font-size: 10px;
+    padding: 5px;
+  }
+}
+
+:host ::ng-deep .booking-feedback {
+  @include flex-all-center;
+  padding: 7px;
+  margin: 0 10px;
+  margin-top: 7px;
+  border-radius: 25px;
+  position: relative;
+  &:hover {
+    cursor: pointer;
+    .feedback-msg {
+      display: block;
+    }
+  }
+  .feedback-msg {
+    position: absolute;
+    width: 100%;
+    top: 50%;
+    font-size: 12px;
+    color: $subtitle;
+    background-color: $white;
+    left: 0%;
+    padding: 7px;
+    box-shadow: 0px 0px 5px 0px $grayLight;
+    border-radius: 5px;
+    display: none;
+  }
+  .feedback-icon {
+    height: 14px;
+    margin: 0 2px;
+  }
+  .number {
+    padding: 4px 0;
+    color: $white;
+    margin: 0 2px;
+    text-align: center;
+    min-width: 23px;
+    border-radius: 50%;
+    font-size: 12px;
+  }
+  @media screen and (max-width: 1050px) {
+    margin: 0;
+    margin-top: 7px;
+    .feedback-icon {
+      height: 12px;
+    }
+    .number {
+      font-size: 10px;
+      padding: 2px 0;
+      min-width: 15px;
+    }
+  }
+}
+
+.headImg {
+  margin-right: 10px;
+}
+.documentActionItemLabel {
+  margin-left: 0.5em;
+  font-weight: $bolder;
+}
+.tableHeading {
+  width: 5%;
+  background-color: $whiteDeep !important;
+  @include align-checkbox;
+}
+
+:host ::ng-deep input[disabled='true'] {
+  opacity: 0.5;
+}
+
+:host ::ng-deep .mat-tab-label {
+  min-width: 200px;
+}
+
+.view-notes {
+  width: 87px;
+  padding: 6px 2px 6px 2px;
+  border-radius: 14px;
+  border: solid 1px $primary-cta;
+  background-color: $white;
+  font-size: 12px;
+  font-weight: $bolder;
+  line-height: 1.25;
+  letter-spacing: 0.72px;
+  text-align: center;
+  color: $primary-cta;
+}
+
+.add-notes {
+  width: 75px;
+  padding: 6px 2px 6px 2px;
+  border-radius: 14px;
+  background-color: $primary-cta;
+  font-size: 12px;
+  font-weight: $bolder;
+  line-height: 1.25;
+  letter-spacing: 0.72px;
+  text-align: center;
+  color: $white;
+}
+
+.guest {
+  color: $subtitle;
+  font-weight: $bolder;
+  &-status {
+    margin-bottom: 6px;
+  }
+  &-name {
+    color: $subtitle;
+  }
+  &-phone {
+    color: $tabStats;
+    font-weight: $medium;
+    margin-top: 8px;
+    overflow-x: hidden;
+  }
+}
+.service-feedback {
+  width: 30%;
+  &-service {
+    @include flex-space-between-cen-Algn;
+    .booking-feedback {
+      padding: 7px 7px 7px 0px;
+      margin: 0;
+    }
+    .amount {
+      color: $subtitle;
+    }
+  }
+  &-amount-wrapper {
+    @include flex-space-btw-wrap;
+    &-amount {
+      color: $grayLight;
+      font-size: 12px;
+    }
+  }
+}
+
+.package {
+  &-date {
+    color: $subtitle;
+    font-size: 12px;
+  }
+  &-city {
+    color: $grayLight;
+    font-size: 12px;
+    margin-top: 8px;
+  }
+}
+.comments {
+  color: $subtitle;
+  font-size: 12px;
+  text-align: left;
+}
+.status-image {
+  .view-notes {
+    letter-spacing: inherit;
+    margin: auto;
+  }
+  .add-notes {
+    letter-spacing: inherit;
+    margin: auto;
+  }
+}
+
+.mark-btn-container {
+  @include flex-center-algn-justify-end;
+  flex: 1;
+  @media (max-width: 992px) {
+    min-width: 193px;
+    overflow-x: auto;
+    height: 75px;
+  }
+  .btn {
+    cursor: pointer;
+    position: relative;
+    display: inline-block;
+    .btn_text {
+      visibility: hidden;
+      width: 120px;
+      background-color: $white;
+      border: 1px solid $grayLight;
+      color: $black;
+      text-align: center;
+      border-radius: 6px;
+      padding: 5px;
+      position: absolute;
+      z-index: 1;
+      bottom: 150%;
+      left: 50%;
+      margin-left: -60px;
+      &::after {
+        content: '';
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        margin-left: -5px;
+        border-width: 5px;
+        border-style: solid;
+        border-color: $grayLight transparent transparent transparent;
+      }
+    }
+
+    &:hover .btn_text {
+      visibility: visible;
+    }
+  }
+
+  .read {
+    margin-right: 10px;
+  }
+}
+.request-btn {
+  width: 148px;
+  height: 36px;
+  padding: 11px 0 10px;
+  border-radius: 100px;
+  background-color: $primary-cta;
+  cursor: pointer;
+  margin-right: 10px;
+  &:active {
+    transform: scale(0.95);
+  }
+  &__wrap {
+    font-size: 11px;
+    letter-spacing: 0.66px;
+    text-align: center;
+    color: $white;
+  }
+}
+.import-guests-btn {
+  width: 124px;
+  height: 36px;
+  border-radius: 100px;
+  border: solid 1px $borderCol;
+  background-color: $whiteDeep;
+  @include flex-all-center;
+  margin-right: 10px;
+  cursor: pointer;
+  img {
+    margin-right: 4px;
+  }
+  &:active {
+    transform: scale(0.95);
+  }
+  &__wrap {
+    font-size: 11px;
+    letter-spacing: 0.66px;
+    text-align: center;
+    color: $secondary;
+    @include flex-space-between-cen-Algn;
+  }
+}
+
+.header-background {
+  box-shadow: 0px 0px 5px 0px lightgrey;
+  margin: 0 1px;
+}
+
+.feedback {
+  @include flex-item-center;
+  .pdf {
+    width: 10%;
+  }
+}
+.feedback-service {
+  @include flex-wrap-center-algn;
+  &__container {
+    @include flex-item-center;
+    padding: 2px 0;
+    position: relative;
+    &:hover {
+      .service-list-popup {
+        display: block;
+      }
+    }
+    &__label {
+      font-size: 11px;
+      letter-spacing: 0.66px;
+      text-align: center;
+      border-radius: 20px;
+      background-color: #cfd9f5;
+      padding: 4px 10px;
+      max-width: 100%;
+      &__text {
+        color: $primary-cta;
+        padding-top: 2px;
+        word-break: break-word;
+        white-space: normal;
+        text-align: left;
+      }
+    }
+    &__comment {
+      display: none;
+      font-size: 11px;
+      letter-spacing: 0.66px;
+      text-align: center;
+      border-radius: 14px;
+      background-color: $whiteDeep;
+      padding: 3px;
+    }
+    &__extra {
+      position: relative;
+      .label {
+        font-size: 11px;
+        line-height: 0;
+        letter-spacing: 0.66px;
+        text-align: center;
+        text-decoration: underline;
+        color: $primary-cta;
+      }
+      &:hover {
+        .service-list-popup {
+          display: block;
+        }
+      }
+    }
+  }
+}
+
+.stay-booking-feedback {
+  @include flex-all-center;
+  padding: 0px;
+  border-radius: 10px;
+  position: relative;
+  background-color: $primaryBlue;
+  min-width: 18px;
+  height: 18px;
+  margin: 0 3px;
+  &:hover {
+    cursor: pointer;
+    .feedback-msg {
+      display: block;
+    }
+  }
+  .feedback-msg {
+    position: absolute;
+    width: 100%;
+    top: 50%;
+    font-size: 12px;
+    color: $subtitle;
+    background-color: $white;
+    left: 0%;
+    padding: 7px;
+    box-shadow: 0px 0px 5px 0px $grayLight;
+    border-radius: 5px;
+    display: none;
+  }
+  .feedback-icon {
+    height: 14px;
+    margin: 0 2px;
+  }
+  .number {
+    color: $white;
+    margin: 0 0px;
+    text-align: center;
+    min-width: 18px;
+    border-radius: 50%;
+    font-size: 8px;
+    height: 100%;
+    @include flex-all-center;
+  }
+
+  @media screen and (max-width: 1050px) {
+    margin: 0;
+    .feedback-icon {
+      height: 12px;
+    }
+    .number {
+      font-size: 10px;
+      padding: 2px 0;
+      min-width: 15px;
+    }
+  }
+}
+
+.service-list-popup {
+  border: 1px solid $borderCol;
+  border-radius: 12px;
+  padding: 5px;
+  z-index: 1;
+  display: none;
+  position: absolute;
+  background-color: $white;
+  top: 75%;
+  left: 10px;
+}
+
+.others {
+  @include flex-item-center;
+}
+
+:host ::ng-deep .mat-tab-label-active .mat-tab-label-content {
+  color: $primary-cta !important;
+}
+:host ::ng-deep .heading {
+  color: $secondary !important;
+  font-size: 16px;
+  font-weight: $bolder;
+}
+
+:host ::ng-deep .p-datatable {
+  box-shadow: 0 5px 5px 0 lightgray;
+}
+
+.pull-right {
+  @include flex-item-center;
+
+  margin: 0 20px;
+}
+
+.labl {
+  margin: 0 1%;
+}
+
+.labl > .image {
+  height: 38px;
+  width: 38px;
+  @include flex-all-center;
+  border-radius: 50%;
+  img {
+    height: 15px;
+  }
+}
+.labl > input {
+  /* HIDE RADIO */
+  visibility: hidden; /* Makes input not-clickable */
+  position: absolute; /* Remove input from document flow */
+}
+
+.legends:checked ~ p {
+  text-decoration: line-through;
+}
+
+.labl > input + .image {
+  position: relative;
+  cursor: pointer;
+}
+
+.labl > input:checked + .image {
+  background-color: $primary-cta;
+  img {
+    filter: invert(0);
+  }
+}
+
+.detailPage {
+  display: flex;
+  outline: none;
+  width: fit-content;
+  border-radius: 24px;
+  font-size: 14px;
+  border: solid 1px $button-blue;
+  background-color: $white;
+  padding: 4px 10px;
+  color: $button-blue;
+  cursor: pointer;
+
+  @media screen and (max-width: $L) {
+    font-size: 12px;
+    height: 28px;
+    align-items: center;
+  }
+}
+
+// *** over ride the table style ***
+:host ::ng-deep .p-datatable {
+  @include tableCellPadding(0.3em);
+}
+
+.mt-20 {
+  margin-top: 20px;
+}
+
+:host ::ng-deep .p-datatable .p-datatable-thead {
+  top: 114px !important;
+}

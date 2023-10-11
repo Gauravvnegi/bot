@@ -5,6 +5,7 @@ import {
   EntitySubType,
   EntityType,
   ModuleNames,
+  ProductNames,
 } from 'libs/admin/shared/src/index';
 import { DateRangeFilterService } from './daterange-filter.service';
 import { FilterService } from './filter.service';
@@ -148,7 +149,6 @@ export type FilterQueryValue = {
   guestCategory?: string | null;
 };
 
-
 export type DateRangeValue = {
   end: string; // Assuming end is always a string in ISO 8601 format
   label: string;
@@ -165,4 +165,4 @@ export type FeedbackQueryValue = {
   outlets?: {
     [outletId: string]: boolean;
   };
-}
+};

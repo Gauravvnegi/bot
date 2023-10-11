@@ -16,7 +16,8 @@
         *ngIf="setting.isActive"
         class="setting"
         [ngClass]="{ setting__disabled: setting.isDisabled }"
-        (click)="selectSetting(setting.name, setting.isDisabled); close()"
+        [routerLink]="setting.isDisabled ? null : [setting.path]"
+        (click)="setting.isDisabled ? $event.preventDefault() : close()"
       >
         <div class="setting__header">
           <div

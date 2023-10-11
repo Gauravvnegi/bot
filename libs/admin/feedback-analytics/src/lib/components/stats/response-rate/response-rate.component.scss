@@ -1,0 +1,196 @@
+@import 'main';
+
+.stats {
+  display: flex;
+  flex-direction: column;
+  border-radius: 5px;
+  padding: 20px;
+  height: 100%;
+  @media screen and (max-width: 800px) {
+    height: 185px;
+  }
+  &__head {
+    display: flex;
+    justify-content: space-between;
+    &__title {
+      font: normal normal $bolder 16px/21px Poppins;
+      letter-spacing: 0.96px;
+      color: $secondary;
+      @media screen and (max-width: 1024px) {
+        font-size: 12px;
+      }
+    }
+    &__select {
+      width: 115px;
+      padding: 3px 11px 3px;
+      border-radius: 5px;
+      border: solid 1px $borderCol;
+      top: 0;
+      right: 0;
+    }
+  }
+  &__subheading {
+    font: normal normal $medium 12px/16px Poppins;
+    letter-spacing: 0px;
+    color: $subtitle;
+    margin: 10px 0;
+    @media screen and (max-width: 1024px) {
+      font-size: 10px;
+    }
+  }
+
+  &__body {
+    display: flex;
+    @media screen and (max-width: 1024px) {
+      flex-direction: column;
+      justify-content: center;
+    }
+    .graph-container {
+      width: 50%;
+      height: 200px;
+      margin: 10px 0;
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      @media screen and (max-width: 1024px) {
+        width: auto;
+      }
+      &__graph {
+        position: absolute;
+        left: -95px;
+        top: 0;
+        @media screen and (max-width: 1024px) {
+          top: 25px;
+          left: -75px;
+        }
+        &-canvas {
+          height: 200px;
+          @media screen and (max-width: 1024px) {
+            height: 185px;
+          }
+        }
+      }
+      .graphcontainer__graph {
+        canvas {
+          @media screen and (max-width: $L) {
+            height: 220px !important;
+            width: auto !important;
+          }
+        }
+        @media screen and (max-width: $L) {
+          position: absolute;
+          left: -110px;
+          overflow: hidden;
+        }
+      }
+      @media screen and (max-width: $L) {
+        width: 55%;
+        height: 100%;
+        @include flex-all-center;
+      }
+    }
+    &__detail {
+      width: 50%;
+      @media screen and (max-width: 1024px) {
+        width: auto;
+        margin-left: 30px;
+      }
+      &__shared {
+        font: normal normal $bolder 35px/46px Poppins;
+        letter-spacing: 2.1px;
+        color: $secondary;
+      }
+      &__sharedtitle {
+        font: normal normal $bolder 12px/16px Poppins;
+        letter-spacing: 0.72px;
+        color: $subtitle;
+      }
+      @media screen and (max-width: $L) {
+        width: 45%;
+      }
+    }
+  }
+}
+.received-wrap {
+  margin-top: 20px;
+  &__container {
+    display: flex;
+    align-items: center;
+    &__dot {
+      width: 14px;
+      height: 14px;
+      background: $resolved 0% 0% no-repeat padding-box;
+      border-radius: 2px;
+    }
+    &__count {
+      font: normal normal $bolder 16px/21px Poppins;
+      letter-spacing: 0px;
+      color: $secondary;
+      margin: 0 5px;
+    }
+    &__percentChange-img {
+      margin-left: 5px;
+    }
+    &__date {
+      font: normal normal $medium 10px/14px Poppins;
+      letter-spacing: 0.72px;
+      color: $subtitle;
+      margin: 0 5px;
+    }
+  }
+  &__recived-title {
+    font: normal normal $medium 12px/16px Poppins;
+    letter-spacing: 0.72px;
+    color: $subtitle;
+  }
+  &__no-recived {
+    margin-top: 20px;
+    &__container {
+      display: flex;
+      align-items: center;
+      &__dot {
+        width: 14px;
+        height: 14px;
+        background: $no-received 0% 0% no-repeat padding-box;
+        border-radius: 2px;
+      }
+      &__count {
+        font: normal normal $bolder 16px/21px Poppins;
+        letter-spacing: 0px;
+        color: $secondary;
+        margin: 0 5px;
+      }
+      &__date {
+        font: normal normal $medium 10px/14px Poppins;
+        letter-spacing: 0.72px;
+        color: $subtitle;
+        margin: 0 5px;
+      }
+    }
+    &__title {
+      font: normal normal $medium 12px/16px Poppins;
+      letter-spacing: 0.72px;
+      color: $subtitle;
+    }
+  }
+}
+
+.comparison-negative {
+  color: $darkRed;
+}
+
+.comparison-positive {
+  color: $posCompare;
+}
+:host ::ng-deep .mat-select-value-text {
+  white-space: nowrap;
+  overflow: hidden;
+  width: 46px;
+  height: 19px;
+  margin: 0 28px 0 0;
+  font-size: 14px;
+  @include normal-sm-text;
+  color: #00162b;
+  text-overflow: ellipsis;
+}

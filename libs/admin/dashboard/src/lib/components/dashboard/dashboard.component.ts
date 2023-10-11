@@ -9,6 +9,7 @@ import { MatDialogConfig } from '@angular/material/dialog';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
   DetailsComponent,
+  DetailsTabOptions,
   Reservation,
   ReservationTable,
 } from '@hospitality-bot/admin/reservation';
@@ -75,10 +76,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
   listenForStateData(): void {
     this.$subscription.add(
       this.notificationService.$reservationNotification.subscribe(
-        (response) => {
-          if (response) {
+        (reservationId) => {
+          if (reservationId) {
             this.reservationService
-              .getReservationDetails(response)
+              .getReservationDetailsById(reservationId)
               .subscribe((response) => {
                 const data = new Reservation().deserialize(
                   response,
@@ -93,7 +94,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     );
   }
 
-  openDetailPage(rowData): void {
+  openDetailPage(rowData, tabKey?: DetailsTabOptions): void {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;
     dialogConfig.width = '100%';
@@ -101,10 +102,14 @@ export class DashboardComponent implements OnInit, OnDestroy {
       DetailsComponent,
       dialogConfig
     );
+    detailCompRef.componentInstance.bookingNumber =
+      rowData?.booking?.bookingNumber;
 
     detailCompRef.componentInstance.guestId = rowData.guests.primaryGuest.id;
     detailCompRef.componentInstance.bookingNumber =
       rowData.booking.bookingNumber;
+
+    tabKey && (detailCompRef.componentInstance.tabKey = tabKey);
 
     this.$subscription.add(
       detailCompRef.componentInstance.onDetailsClose.subscribe((_) => {

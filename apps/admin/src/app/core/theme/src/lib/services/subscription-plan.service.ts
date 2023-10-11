@@ -63,7 +63,7 @@ export class SubscriptionPlanService extends ApiService {
   }
 
   getModuleProductMapping() {
-    return this.productSubscription.moduleProductMapping;
+    return this.productSubscription?.moduleProductMapping;
   }
 
   getSelectedProductData() {

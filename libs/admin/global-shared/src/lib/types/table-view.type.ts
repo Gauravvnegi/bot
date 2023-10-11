@@ -29,7 +29,9 @@ export interface ActionDataType {
   quick?: ItemValue[];
 }
 
+export type TableDataType = number | string | TableObjectData | ActionDataType;
+
 export interface TableViewDataType {
-  [key: string]: string | TableObjectData | ActionDataType;
+  [key: string]: TableDataType;
   action?: ActionDataType;
 }

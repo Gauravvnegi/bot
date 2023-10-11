@@ -185,6 +185,10 @@ export class RoutesConfigService extends RouteConfigPathService {
     return this.$navRoutes;
   }
 
+  get defaultNavRouteOptions() {
+    return this.$navRoutes.value;
+  }
+
   get activeRouteConfig() {
     return this.$activeRoute.value;
   }

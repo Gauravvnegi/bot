@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import {
   Component,
   EventEmitter,
@@ -9,15 +10,14 @@ import {
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Option } from '@hospitality-bot/admin/shared';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
+import { NotificationService } from 'apps/admin/src/app/core/theme/src/lib/services/notification.service';
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
 import { convertToTitleCase } from 'libs/admin/shared/src/lib/utils/valueFormatter';
 import { SnackBarService } from 'libs/shared/material/src';
 import { Subscription } from 'rxjs';
-import { RequestStatus } from '../../constants/request';
 import { InhouseData } from '../../data-models/inhouse-list.model';
 import { RequestService } from '../../services/request.service';
 import { CMSUpdateJobData } from '../../types/request.type';
-import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'hospitality-bot-request-detail',
@@ -45,6 +45,7 @@ export class RequestDetailComponent implements OnInit, OnDestroy {
     private adminUtilityService: AdminUtilityService,
     private snackbarService: SnackBarService,
     private globalFilterService: GlobalFilterService,
+    private notificationService: NotificationService,
     private datePipe: DatePipe
   ) {}
 
@@ -57,6 +58,7 @@ export class RequestDetailComponent implements OnInit, OnDestroy {
   registerListeners() {
     this.listenForGlobalFilters();
     this.listenForSelectedRequest();
+    this.listenForNotificationRequest();
   }
 
   /**
@@ -71,6 +73,15 @@ export class RequestDetailComponent implements OnInit, OnDestroy {
         }
       })
     );
+  }
+
+  listenForNotificationRequest() {
+    this.notificationService.$requestNotification.subscribe((requestId) => {
+      if (requestId) {
+        this.jobId = requestId;
+        this.getJobDetails();
+      }
+    });
   }
 
   /**

@@ -10,6 +10,7 @@ import { MatDialogConfig } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
   CountryCode,
+  ModuleNames,
   NavRouteOptions,
   Option,
   Regex,
@@ -543,8 +544,12 @@ export class UserProfileComponent implements OnInit {
         { panelClass: 'success' }
       );
       this.isUpdatingPermissions = false;
-      if (this.state !== 'editUser')
-        this.router.navigate([navRoute.userProfile.link]);
+
+      // if (this.state === 'editUser')
+      // this.router.navigate([navRoute.userProfile.link]);
+      this.routesConfigService.navigate({
+        subModuleName: ModuleNames.ROLES_AND_PERMISSION,
+      });
     };
 
     this.isUpdatingPermissions = true;

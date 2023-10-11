@@ -12,7 +12,10 @@ import {
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialogConfig } from '@angular/material/dialog';
 import { Router } from '@angular/router';
-import { SubscriptionPlanService } from '@hospitality-bot/admin/core/theme';
+import {
+  RoutesConfigService,
+  SubscriptionPlanService,
+} from '@hospitality-bot/admin/core/theme';
 import { MarketingNotificationComponent } from '@hospitality-bot/admin/notification';
 import { ConfigService, ModuleNames } from '@hospitality-bot/admin/shared';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
@@ -127,7 +130,8 @@ export class DetailsComponent implements OnInit, OnDestroy {
     private _hotelDetailService: HotelDetailService,
     private globalFilterService: GlobalFilterService,
     private subscriptionService: SubscriptionPlanService,
-    private configService: ConfigService
+    private configService: ConfigService,
+    private routesConfigService: RoutesConfigService
   ) {
     this.self = this;
     this.initDetailsForm();
@@ -390,16 +394,27 @@ export class DetailsComponent implements OnInit, OnDestroy {
     );
   }
 
+  get isManageBookingSubscribed() {
+    return this.subscriptionService.checkModuleSubscription(
+      ModuleNames.ADD_RESERVATION
+    );
+  }
+
   manageInvoice() {
     this.onDetailsClose.next(false);
-    this.router.navigateByUrl(`pages/efrontdesk/invoice/${this.bookingId}`);
+    this.routesConfigService.navigate({
+      subModuleName: ModuleNames.INVOICE,
+      additionalPath: `${this.bookingId}`,
+    });
   }
 
   editBooking() {
     this.onDetailsClose.next(false);
-    this.router.navigateByUrl(
-      `pages/efrontdesk/reservation/edit-reservation/${this.bookingId}`
-    );
+    this.routesConfigService.navigate({
+      subModuleName: ModuleNames.ADD_RESERVATION,
+      additionalPath: `edit-reservation/${this.bookingId}`,
+      queryParams: { entityId: this.entityId },
+    });
   }
 
   prepareInvoice() {
@@ -796,7 +811,10 @@ export class DetailsComponent implements OnInit, OnDestroy {
       );
       if (channel === 'WHATSAPP_LITE') {
         this._modal.close();
-        this.router.navigateByUrl('/pages/freddie/messages');
+
+        this.routesConfigService.navigate({
+          subModuleName: ModuleNames.LIVE_MESSAGING,
+        });
       }
       if (channel === 'EMAIL') {
         notificationCompRef.componentInstance.isEmail = true;
@@ -818,9 +836,6 @@ export class DetailsComponent implements OnInit, OnDestroy {
       notificationCompRef.componentInstance.onModalClose.subscribe((res) => {
         notificationCompRef.close();
       });
-    } else {
-      this._modal.close();
-      this.router.navigateByUrl('/pages/conversation/request');
     }
   }
 

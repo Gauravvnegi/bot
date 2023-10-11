@@ -5,6 +5,7 @@ import {
   cols,
   checkedInList,
 } from '../../constants/checked-in-reservation.table';
+import { CheckedInReservation } from '../../models/night-audit.model';
 
 @Component({
   selector: 'hospitality-bot-checkin-reservations',
@@ -18,25 +19,19 @@ import {
 export class CheckinReservationsComponent implements OnInit {
   title = 'Pending Check-ins';
   cols = cols;
-  users = checkedInList;
   loading = false;
   actionConfig: ActionConfigType;
 
+  @Input() items: CheckedInReservation[] = [];
   @Input() activeIndex = 0;
   @Input() stepList: MenuItem[];
   @Output() indexChange = new EventEmitter<number>();
+  @Output() reload = new EventEmitter();
 
   constructor() {}
 
   ngOnInit(): void {
-    this.initTable();
     this.initActionConfig();
-  }
-
-  initTable() {
-    this.loading = true;
-    this.users = checkedInList;
-    this.loading = false;
   }
 
   initActionConfig(postLabel?: string) {
@@ -46,6 +41,10 @@ export class CheckinReservationsComponent implements OnInit {
       postLabel: 'Next',
       preSeverity: 'primary',
     };
+  }
+
+  reloadTable() {
+    this.reload.emit(true);
   }
 
   handleNext() {

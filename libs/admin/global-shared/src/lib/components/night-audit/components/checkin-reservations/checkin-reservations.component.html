@@ -3,14 +3,15 @@
     <hospitality-bot-table-view
       [header]="title"
       [columns]="cols"
-      [items]="users"
+      [items]="items"
+      [headerSticky]="true"
       [action]="'Refresh'"
       [emptyViewConfig]="{
         content: {
           description: 'There are no users logged in except for you.'
         }
       }"
-      (actionClicked)="initTable()"
+      (actionClicked)="reloadTable()"
     ></hospitality-bot-table-view>
   </div>
 

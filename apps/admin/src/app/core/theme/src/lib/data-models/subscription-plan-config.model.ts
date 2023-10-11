@@ -211,35 +211,38 @@ export class ProductSubscription {
         [productName]: [],
       };
 
-      product.config?.forEach((subProduct) => {
-        this.setConfig(subProduct);
-        this.subscribedModuleProductBased[productName].push(subProduct.name);
+      product.config?.forEach((module) => {
+        this.setConfig(module, product.isSubscribed);
+        this.subscribedModuleProductBased[productName].push(module.name);
 
         // Only sub module with initial subscribed product
         if (
-          subProduct.isSubscribed &&
-          subProduct.isView &&
-          !this.moduleProductMapping[subProduct.name]
+          module.isSubscribed &&
+          module.isView &&
+          !this.moduleProductMapping[module.name]
         ) {
           this.moduleProductMapping = {
             ...this.moduleProductMapping,
-            [subProduct.name]: productName,
+            [module.name]: productName,
           };
         }
 
-        subProduct.config?.forEach((subSubProduct) => {
-          this.subscribedModuleProductBased[productName].push(subProduct.name);
+        module.config?.forEach((subModule) => {
+          this.subscribedModuleProductBased[productName].push(module.name);
           if (
-            subSubProduct.isSubscribed &&
-            subSubProduct.isView &&
-            !this.moduleProductMapping[subSubProduct.name]
+            subModule.isSubscribed &&
+            subModule.isView &&
+            !this.moduleProductMapping[subModule.name]
           ) {
             this.moduleProductMapping = {
               ...this.moduleProductMapping,
-              [subSubProduct.name]: productName,
+              [subModule.name]: productName,
             };
           }
-          this.setConfig(subSubProduct);
+          this.setConfig(
+            subModule,
+            product.isSubscribed && module.isSubscribed
+          );
         });
       });
     });
@@ -254,33 +257,34 @@ export class ProductSubscription {
     return this;
   }
 
-  setConfig(product: Product) {
-    if (product.isSubscribed) this.subscribedModules.push(product.name);
+  setConfig(module: Product, isParentSubscribed: boolean) {
+    if (module.isSubscribed && isParentSubscribed)
+      this.subscribedModules.push(module.name);
 
-    const productName: ModuleNames = product.name;
+    const productName: ModuleNames = module.name;
     let moduleProduct = ModuleConfig[productName];
     if (moduleProduct) {
       const tempCards: Partial<Cards> = new Object();
       moduleProduct.cards.forEach((card: CardNames) => {
         tempCards[card] = {
-          isSubscribed: product.isSubscribed,
-          isView: product.isView,
+          isSubscribed: module.isSubscribed,
+          isView: module.isView,
         };
       });
 
       const tempTables: Partial<Tables> = new Object();
       moduleProduct.tables.forEach((table: TableNames) => {
         tempTables[table] = {
-          isSubscribed: product.isSubscribed,
-          isView: product.isView,
+          isSubscribed: module.isSubscribed,
+          isView: module.isView,
           tabFilters:
-            ModuleConfig[ModuleNames[product.name]]?.filters[table].tabFilters,
+            ModuleConfig[ModuleNames[module.name]]?.filters[table].tabFilters,
         };
       });
 
       this.modules[productName] = {
-        isView: product.isView,
-        isSubscribed: product.isSubscribed,
+        isView: module.isView,
+        isSubscribed: module.isSubscribed,
         cards: tempCards,
         tables: tempTables,
       };

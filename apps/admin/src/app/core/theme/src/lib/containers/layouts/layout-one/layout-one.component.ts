@@ -599,9 +599,9 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
     );
   }
 
-  get isFreddieSubscribed() {
-    return this.subscriptionPlanService.checkProductSubscription(
-      ModuleNames.FREDDIE
+  get isLiveMessagingSubscribed() {
+    return this.subscriptionPlanService.checkModuleSubscription(
+      ModuleNames.LIVE_MESSAGING
     );
   }
 

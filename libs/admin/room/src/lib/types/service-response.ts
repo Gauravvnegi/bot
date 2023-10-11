@@ -250,7 +250,7 @@ export type RoomsByRoomType = {
 };
 
 export type StatusDetails = {
-  remark?: string;
+  remarks?: string;
   status: RoomStatus;
   toDate?: number;
   fromDate?: number;

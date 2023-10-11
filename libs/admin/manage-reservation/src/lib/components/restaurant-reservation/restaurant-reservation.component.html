@@ -4,10 +4,13 @@
   <div class="main">
     <p-accordion [multiple]="true">
       <hospitality-bot-booking-info
-        [reservationTypes]="reservationTypes"
-        [statusOptions]="statusOptions"
-        [bookingType]="bookingType"
-        [reservationId]="reservationId"
+        [props]="{
+          reservationTypes: reservationTypes,
+          bookingType: bookingType,
+          statusOptions: statusOptions,
+          reservationId: reservationId,
+          disabledForm: disabledForm
+        }"
       ></hospitality-bot-booking-info>
       <p-accordionTab header="Order Information" [selected]="expandAccordion">
         <div class="form-block" formGroupName="orderInformation">

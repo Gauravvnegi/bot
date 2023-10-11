@@ -30,7 +30,6 @@ import { dashboard } from '../../../constants/dashboard';
 import { TableValue } from '../../../constants/tabFilterItem';
 import { ReservationService } from '../../../services/reservation.service';
 import { reservationStatus } from '../../../constants/response';
-import * as moment from 'moment';
 @Component({
   selector: 'hospitality-bot-reservation-datatable',
   templateUrl: './reservation.component.html',
@@ -52,7 +51,10 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
   cols = cols.reservation;
   selectedTab: TableValue;
   isSidebarVisible = false;
-  tableTypes = [tableTypes.table, tableTypes.calendar];
+  tableTypes = [
+    tableTypes.table,
+    tableTypes.calendar
+  ];
 
   globalQueries = [];
   $subscription = new Subscription();
@@ -60,6 +62,7 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
   options: any[] = [];
   isPopUploading: boolean = false;
   selectedTableType: string;
+  visible: boolean = false;
 
   constructor(
     public fb: FormBuilder,
@@ -374,7 +377,8 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
 
   setTableType(value: string) {
     this.selectedTableType = value;
-    this.tableFG.patchValue({ tableType: value });
+    // this.tableFG.patchValue({ tableType: value });
+    if (value === 'calendarMaximize') this.visible = true;
   }
 
   ngOnDestroy(): void {

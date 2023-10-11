@@ -37,7 +37,7 @@
     </ng-container>
   </hospitality-bot-navigation-header>
 
-  <ng-container *ngIf="!loadingPdf; else loader">
+  <ng-container *ngIf="!loadingPdf && previewUrl; else loader">
     <iframe
       class="iframe"
       [src]="previewUrl | safeUrl"

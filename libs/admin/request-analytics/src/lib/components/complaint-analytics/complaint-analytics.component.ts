@@ -48,6 +48,10 @@ export class ComplaintAnalyticsComponent implements OnInit {
   sidebarSlide: ViewContainerRef;
   sidebarType;
 
+  buttonConfig = [
+    { button: true, label: 'Raise Complaint', icon: 'assets/svg/requests.svg' },
+  ];
+
   $subscription = new Subscription();
 
   constructor(

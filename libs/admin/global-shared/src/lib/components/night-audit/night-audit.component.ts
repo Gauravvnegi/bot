@@ -1,8 +1,18 @@
-import { Component, EventEmitter, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { NightAuditService } from '../../services/night-audit.service';
-import { FormActionConfig } from 'libs/admin/shared/src/lib/components/form-component/form-action/form-action.component';
 import { itemList } from '../../constants/night-audit.const';
-import { timer } from 'rxjs';
+import { Subscription, timer } from 'rxjs';
+import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import {
+  AdminUtilityService,
+  QueryConfig,
+} from '@hospitality-bot/admin/shared';
+import {
+  CheckedInReservation,
+  CheckedOutReservation,
+  LoggedInUsers,
+  NightAudit,
+} from './models/night-audit.model';
 
 @Component({
   selector: 'night-audit',
@@ -10,21 +20,73 @@ import { timer } from 'rxjs';
   styleUrls: ['./night-audit.component.scss'],
 })
 export class NightAuditComponent implements OnInit {
-  constructor() {}
+  constructor(
+    private nightAuditService: NightAuditService,
+    private globalFilterService: GlobalFilterService,
+    private adminUtilityService: AdminUtilityService
+  ) {}
   @Input() isSidebar = true;
-  @Input() onClose = new EventEmitter();
+  @Output() onClose = new EventEmitter();
   pageTitle = 'Night Audit';
   currentDate = new Date();
   itemList = itemList;
   activeStep = 0;
   loading = false;
+  entityId: string;
 
   // Manage logged config
   usersLoggedOut = false;
+  $subscription = new Subscription();
 
-  ngOnInit(): void {}
+  // DataList
+  loggedInUsers: LoggedInUsers[] = [];
+  checkedInReservation: CheckedInReservation[] = [];
+  checkedOutReservation: CheckedOutReservation[] = [];
+
+  ngOnInit(): void {
+    this.entityId = this.globalFilterService.entityId;
+    this.initData();
+  }
+
+  initData() {
+    this.loading = true;
+    this.$subscription.add(
+      this.nightAuditService
+        .getNightAudit(this.entityId, this.getQueryConfig())
+        .subscribe(
+          (res) => {
+            const {
+              loggedInUsers,
+              checkedInReservation,
+              checkedOutReservation,
+            } = new NightAudit().deserialize(res);
+            this.loggedInUsers = loggedInUsers;
+            this.checkedOutReservation = checkedOutReservation;
+            this.checkedInReservation = checkedInReservation;
+            this.loading = false;
+          },
+          (error) => {
+            this.loading = false;
+          }
+        )
+    );
+  }
 
   close() {
     this.onClose.emit(false);
+  }
+
+  finish(index) {
+    this.onClose.emit(true);
+  }
+
+  getQueryConfig(): QueryConfig {
+    return {
+      params: this.adminUtilityService.makeQueryParams([
+        {
+          auditDate: new Date().getTime(),
+        },
+      ]),
+    };
   }
 }

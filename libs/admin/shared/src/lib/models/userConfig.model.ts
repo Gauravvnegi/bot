@@ -160,3 +160,10 @@ export class Hotel {
     return this;
   }
 }
+
+export class UserPermissions {
+  deserialize(input: UserResponse['permissions']) {
+    // need to complete (To DO)
+    return this;
+  }
+}

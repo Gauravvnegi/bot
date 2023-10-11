@@ -10,7 +10,11 @@
   }
 
   .p-datatable {
-    height: unset;
-    overflow: unset;
+    height: 62vh;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+  .sticky-header {
+    top: -1px !important;
   }
 }

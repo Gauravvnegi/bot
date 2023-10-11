@@ -30,7 +30,6 @@ import { dashboard } from '../../../constants/dashboard';
 import { TableValue } from '../../../constants/tabFilterItem';
 import { ReservationService } from '../../../services/reservation.service';
 import { reservationStatus } from '../../../constants/response';
-import * as moment from 'moment';
 @Component({
   selector: 'hospitality-bot-reservation-datatable',
   templateUrl: './reservation.component.html',
@@ -54,8 +53,7 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
   isSidebarVisible = false;
   tableTypes = [
     tableTypes.table,
-    tableTypes.calendar,
-    tableTypes.calendarMaximize,
+    tableTypes.calendar
   ];
 
   globalQueries = [];
@@ -106,10 +104,6 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
       this.tableFG?.addControl('tableType', new FormControl('table'));
     } else {
       this.tableFG?.addControl('tableType', new FormControl('calendar'));
-      this.tableFG?.addControl(
-        'tableType',
-        new FormControl('calendarMaximize')
-      );
     }
     this.tableFG.patchValue({ tableType: 'table' });
     this.selectedTableType = 'table';
@@ -383,7 +377,7 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
 
   setTableType(value: string) {
     this.selectedTableType = value;
-    this.tableFG.patchValue({ tableType: value });
+    // this.tableFG.patchValue({ tableType: value });
     if (value === 'calendarMaximize') this.visible = true;
   }
 

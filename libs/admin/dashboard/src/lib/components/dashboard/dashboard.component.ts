@@ -76,10 +76,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
   listenForStateData(): void {
     this.$subscription.add(
       this.notificationService.$reservationNotification.subscribe(
-        (response) => {
-          if (response) {
+        (reservationId) => {
+          if (reservationId) {
             this.reservationService
-              .getReservationDetails(response)
+              .getReservationDetailsById(reservationId)
               .subscribe((response) => {
                 const data = new Reservation().deserialize(
                   response,

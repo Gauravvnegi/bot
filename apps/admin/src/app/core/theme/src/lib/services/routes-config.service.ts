@@ -145,6 +145,12 @@ export class RoutesConfigService extends RouteConfigPathService {
     this.location.back();
   }
 
+  getQueryValue(key: string) {
+    debugger;
+    const test = this.router.routerState.snapshot.root.queryParams[key] ?? '';
+    return test;
+  }
+
   initActiveRoute(config: ActiveRouteConfig) {
     this.$activeRoute.next({ ...config });
 

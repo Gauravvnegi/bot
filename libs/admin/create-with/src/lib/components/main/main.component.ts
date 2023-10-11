@@ -48,13 +48,14 @@ export class MainComponent implements OnInit, AfterViewInit, OnDestroy {
   ngOnInit(): void {
     const currentModuleRoute = this.routesConfigService.activeRouteConfig
       .submodule;
+    const additionalPath = this.routesConfigService.getQueryValue('redirect');
 
     this.urlMapping.forEach((item) => {
       if (
         this.routesConfigService.getRouteFromName(item.name) ===
         currentModuleRoute.shortPath
       ) {
-        this.onboardingUrl = `${environment.createWithUrl}${item.path}`;
+        this.onboardingUrl = `${environment.createWithUrl}${item.path}/${additionalPath}`;
       }
     });
 

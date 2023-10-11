@@ -32,6 +32,7 @@ import { AddGuestComponent } from 'libs/admin/guests/src/lib/components';
 export class GuestInformationComponent implements OnInit {
   globalQueries = [];
   $subscription = new Subscription();
+
   entityId: string;
   parentFormGroup: FormGroup;
 
@@ -89,7 +90,6 @@ export class GuestInformationComponent implements OnInit {
       .catch((error) => {
         console.error('Error loading the lazy module:', error);
       });
-
     lazyModulePromise.then((moduleFactory) => {
       this.sidebarVisible = true;
       const factory = this.resolver.resolveComponentFactory(AddGuestComponent);

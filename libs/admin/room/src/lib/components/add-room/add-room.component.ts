@@ -415,7 +415,7 @@ export class AddRoomComponent implements OnInit, OnDestroy {
           }
 
           this.statusQuoForm.patchValue({
-            remark: statusDetails.remark,
+            remark: statusDetails.remarks,
             foStatus: roomDetails.frontOfficeState,
           });
 

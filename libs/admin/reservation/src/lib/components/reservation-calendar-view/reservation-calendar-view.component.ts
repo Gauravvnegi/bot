@@ -19,6 +19,7 @@ import { RoomService } from 'libs/admin/room/src/lib/services/room.service';
 import {
   Features,
   RoomTypeListResponse,
+  StatusDetails,
 } from 'libs/admin/room/src/lib/types/service-response';
 import {
   IGChangeEvent,
@@ -91,6 +92,7 @@ export class ReservationCalendarViewComponent implements OnInit {
               rooms: roomTypeData.rooms.map((room) => ({
                 roomNumber: room.roomNumber,
                 features: room.features,
+                statusDetails: room?.statusDetailsList ?? [],
               })),
               loading: false,
               data: {
@@ -123,13 +125,13 @@ export class ReservationCalendarViewComponent implements OnInit {
           );
 
         this.roomTypes.forEach((roomType) => {
-          this.mapReservationsData(roomType);
+          this.mapGridData(roomType);
         });
         this.roomsLoaded = true;
       });
   }
 
-  mapReservationsData(roomType: IGRoomType) {
+  mapGridData(roomType: IGRoomType) {
     if (roomType.rooms) {
       const matchingReservations = this.reservationListData.filter(
         (reservation) =>
@@ -140,27 +142,159 @@ export class ReservationCalendarViewComponent implements OnInit {
             )
           )
       );
-      // Update the data field with matching reservations
+
+      const unavailableRooms = roomType.rooms.filter((room) => {
+        const hasUnavailableStatus = room?.statusDetails.some(
+          (statusDetail) =>
+            statusDetail.status === 'OUT_OF_ORDER' ||
+            statusDetail.status === 'OUT_OF_SERVICE'
+        );
+
+        return hasUnavailableStatus;
+      });
+
+      // Map data for matching reservations
+      const matchingData = matchingReservations.map((reservation) => ({
+        id: reservation.id,
+        content: reservation.guestName,
+        startPos: this.getDate(reservation.from),
+        endPos: this.getDate(reservation.to),
+        rowValue: reservation.bookingItems[0].roomDetails.roomNumber,
+        colorCode: getColorCode(reservation.journeysStatus),
+        nonInteractive: reservation.journeysStatus.CHECKOUT === 'COMPLETED',
+        additionContent: reservation?.companyName ?? '',
+      }));
+
+      // Map data for unavailable rooms
+      const unavailableData = unavailableRooms.reduce((result, room) => {
+        const unavailableStatusDetails = room.statusDetails.filter(
+          (status) =>
+            status.status === 'OUT_OF_ORDER' ||
+            status.status === 'OUT_OF_SERVICE'
+        );
+
+        const roomValues = unavailableStatusDetails
+          .filter((status) => {
+            const endDate = this.getStatusDate(status.toDate);
+            return endDate !== null;
+          })
+          .map((status) => ({
+            id: null, // Set id as needed for unavailable rooms
+            content: status?.status,
+            startPos: this.getDate(status.fromDate),
+            endPos: this.getStatusDate(status.toDate),
+            rowValue: room.roomNumber,
+            colorCode: 'draft',
+            nonInteractive: true,
+            additionContent: status?.remarks,
+          }));
+
+        return [...result, ...roomValues];
+      }, []);
+
+      // Combine data for matching reservations and unavailable rooms
       roomType.data = {
         rows: this.getRooms(roomType.rooms),
         columns: this.gridCols,
-        values: matchingReservations.map((reservation) => ({
-          id: reservation.id,
-          content: reservation.guestName,
-          startPos: this.getDate(reservation.from),
-          endPos: this.getDate(reservation.to),
-          rowValue: reservation.bookingItems[0].roomDetails.roomNumber,
-          colorCode: getColorCode(reservation.journeysStatus),
-          nonInteractive: reservation.journeysStatus.CHECKOUT === 'COMPLETED',
-        })),
+        values: [...matchingData, ...unavailableData],
       };
+
       this.allRoomTypes = this.roomTypes;
     }
   }
+  // mapGridData(roomType: IGRoomType) {
+  //   if (roomType.rooms) {
+  //     const matchingReservations = this.reservationListData.filter(
+  //       (reservation) =>
+  //         roomType.rooms.some((room) =>
+  //           reservation.bookingItems.some(
+  //             (bookingItem) =>
+  //               bookingItem.roomDetails.roomNumber === room.roomNumber
+  //           )
+  //         )
+  //     );
+
+  //     const unavailableRooms = roomType.rooms.filter((room) => {
+  //       // Check if any statusDetail has a status of 'OUT_OF_ORDER' or 'OUT_OF_SERVICE'
+  //       const hasUnavailableStatus = room?.statusDetails.some(
+  //         (statusDetail) =>
+  //           statusDetail.status === 'OUT_OF_ORDER' ||
+  //           statusDetail.status === 'OUT_OF_SERVICE'
+  //       );
+
+  //       // Include the room in the result if it does not have an unavailable status
+  //       return hasUnavailableStatus;
+  //     });
+
+  //     // Update the data field with matching reservations
+  //     this.mapRoomTypeData(roomType, matchingReservations);
+  //     this.mapUnavailableRoomData(roomType, unavailableRooms);
+  //     this.allRoomTypes = this.roomTypes;
+  //   }
+  // }
+
+  // mapUnavailableRoomData(roomType: IGRoomType, unavailableRooms: IGRoom[]) {
+  //   roomType.data = {
+  //     rows: this.getRooms(roomType.rooms),
+  //     columns: this.gridCols,
+  //     values: unavailableRooms.reduce((result, room) => {
+  //       const unavailableStatusDetails = room.statusDetails.filter(
+  //         (status) =>
+  //           status.status === 'OUT_OF_ORDER' ||
+  //           status.status === 'OUT_OF_SERVICE'
+  //       );
+
+  //       const roomValues = unavailableStatusDetails.map((status) => ({
+  //         content: status?.remark,
+  //         startPos: this.getDate(status.fromDate),
+  //         endPos: this.getDate(status.toDate),
+  //         rowValue: room.roomNumber,
+  //         colorCode: 'draft',
+  //         nonInteractive: true,
+  //       }));
+
+  //       return [...result, ...roomValues];
+  //     }, []),
+  //   };
+  // }
+
+  // mapRoomTypeData(roomType: IGRoomType, matchingReservations) {
+  //   roomType.data = {
+  //     rows: this.getRooms(roomType.rooms),
+  //     columns: this.gridCols,
+  //     values: matchingReservations.map((reservation) => ({
+  //       id: reservation.id,
+  //       content: reservation.guestName,
+  //       startPos: this.getDate(reservation.from),
+  //       endPos: this.getDate(reservation.to),
+  //       rowValue: reservation.bookingItems[0].roomDetails.roomNumber,
+  //       colorCode: getColorCode(reservation.journeysStatus),
+  //       nonInteractive: reservation.journeysStatus.CHECKOUT === 'COMPLETED',
+  //       additionContent: reservation?.companyName ?? '',
+  //     })),
+  //   };
+  // }
 
   getDate(date: number) {
     const data = new Date(date);
     return data.setHours(0, 0, 0, 0);
+  }
+
+  getStatusDate(date: number) {
+    const today = new Date();
+    const statusDate = new Date(date);
+
+    // Set both dates to midnight to compare only the dates
+    today.setHours(0, 0, 0, 0);
+    statusDate.setHours(0, 0, 0, 0);
+
+    // Compare the dates
+    if (statusDate >= today) {
+      return date; // Return the date if it's on or after today
+    }
+
+    // Return null to skip the status if toDate is before today
+    return null;
   }
 
   /**
@@ -343,6 +477,7 @@ type IGRoom = {
   features?: Features[];
   label?: string;
   value?: string;
+  statusDetails: StatusDetails[];
 };
 
 export type CalendarViewData = {

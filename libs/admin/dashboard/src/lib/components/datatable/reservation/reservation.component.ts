@@ -52,7 +52,11 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
   cols = cols.reservation;
   selectedTab: TableValue;
   isSidebarVisible = false;
-  tableTypes = [tableTypes.table, tableTypes.calendar];
+  tableTypes = [
+    tableTypes.table,
+    tableTypes.calendar,
+    tableTypes.calendarMaximize,
+  ];
 
   globalQueries = [];
   $subscription = new Subscription();
@@ -60,6 +64,7 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
   options: any[] = [];
   isPopUploading: boolean = false;
   selectedTableType: string;
+  visible: boolean = false;
 
   constructor(
     public fb: FormBuilder,
@@ -101,6 +106,10 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
       this.tableFG?.addControl('tableType', new FormControl('table'));
     } else {
       this.tableFG?.addControl('tableType', new FormControl('calendar'));
+      this.tableFG?.addControl(
+        'tableType',
+        new FormControl('calendarMaximize')
+      );
     }
     this.tableFG.patchValue({ tableType: 'table' });
     this.selectedTableType = 'table';
@@ -375,6 +384,7 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
   setTableType(value: string) {
     this.selectedTableType = value;
     this.tableFG.patchValue({ tableType: value });
+    if (value === 'calendarMaximize') this.visible = true;
   }
 
   ngOnDestroy(): void {

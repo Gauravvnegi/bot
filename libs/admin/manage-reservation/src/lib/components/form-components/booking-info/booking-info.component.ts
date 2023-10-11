@@ -27,12 +27,24 @@ import { Subscription } from 'rxjs';
 })
 export class BookingInfoComponent implements OnInit {
   countries: Option[];
-  @Input() expandAccordion: boolean = false;
-  @Input() reservationTypes: Option[] = [];
-  @Input() statusOptions: Option[] = [];
-  @Input() eventTypes: Option[] = [];
-  @Input() bookingType: string;
-  @Input() reservationId: string;
+  expandAccordion: boolean = false;
+  reservationTypes: Option[] = [];
+  statusOptions: Option[] = [];
+  eventTypes: Option[] = [];
+  bookingType: string;
+  reservationId: string;
+  disabledForm: string;
+
+  /**
+   * Props to show extra information
+   * @todo Need to handle label for col and row to show information
+   */
+  @Input() set props(value: BookingInfoProps) {
+    for (const key in value) {
+      const val = value[key];
+      this[key] = val;
+    }
+  }
 
   otaOptions: Option[] = [];
 
@@ -49,7 +61,7 @@ export class BookingInfoComponent implements OnInit {
   fromDateValue = new Date();
   toDateValue = new Date();
 
-  $susbcription = new Subscription();
+  $subscription = new Subscription();
   constructor(
     public controlContainer: ControlContainer,
     private configService: ConfigService,
@@ -188,7 +200,7 @@ export class BookingInfoComponent implements OnInit {
       }
     });
 
-    this.$susbcription.add(
+    this.$subscription.add(
       this.formService.sourceData.subscribe((res) => {
         if (res && this.configData) {
           this.editMode = true;
@@ -274,6 +286,16 @@ export class BookingInfoComponent implements OnInit {
   }
 
   ngOnDestroy() {
-    this.$susbcription.unsubscribe();
+    this.$subscription.unsubscribe();
   }
 }
+
+type BookingInfoProps = {
+  expandAccordion?: boolean;
+  reservationTypes?: Option[];
+  statusOptions?: Option[];
+  eventTypes?: Option[];
+  bookingType?: string;
+  reservationId?: string;
+  disabledForm?: string;
+};

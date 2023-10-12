@@ -18,12 +18,12 @@ export const AssetsRoutes: Record<
   },
   createAssets: {
     route: 'create-asset',
-    navRoutes: [navRoutes.library, navRoutes.assets, navRoutes.createAssets],
+    navRoutes: [navRoutes.createAssets],
     title: 'Create Assets',
   },
   editAssets: {
     route: 'edit-asset/:id',
-    navRoutes: [navRoutes.library, navRoutes.assets, navRoutes.editAssets],
+    navRoutes: [navRoutes.editAssets],
     title: 'Edit Assets',
   },
 };

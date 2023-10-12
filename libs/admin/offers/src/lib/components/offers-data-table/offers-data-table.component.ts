@@ -13,12 +13,12 @@ import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.
 import { LazyLoadEvent } from 'primeng/api/lazyloadevent';
 import { Subscription } from 'rxjs';
 import { chips, cols, title } from '../../constant/data-table';
-import routes from '../../constant/routes';
 import { Offer, OfferList } from '../../models/offers.model';
 import { OffersServices } from '../../services/offers.service';
 import { OfferData } from '../../types/offers';
 import { OfferListResponse, OfferResponse } from '../../types/response';
 import { RoutesConfigService } from '@hospitality-bot/admin/core/theme';
+import { offersRoutes } from '../../constant/routes';
 
 @Component({
   selector: 'hospitality-bot-offers-data-table',
@@ -47,7 +47,7 @@ export class OffersDataTableComponent extends BaseDatatableComponent
   tableName = title;
   cols = cols;
   filterChips = chips;
-  readonly routes = routes;
+  readonly routes = offersRoutes;
   iQuickFilters = true;
   isAllTabFilterRequired = true;
   subscription$ = new Subscription();
@@ -141,7 +141,7 @@ export class OffersDataTableComponent extends BaseDatatableComponent
    */
   editOffer(rowData: OfferResponse) {
     this.routesConfigService.navigate({
-      additionalPath: `${routes.createOffer}/${rowData.id}`,
+      additionalPath: `${this.routes.createOffer.route}/${rowData.id}`,
     });
   }
 

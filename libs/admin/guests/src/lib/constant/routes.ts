@@ -18,12 +18,12 @@ export const manageGuestRoutes: Record<
   addGuest: {
     title: 'Add Guest',
     route: 'add-guest',
-    navRoutes: [navRoute.guest, navRoute.addGuest],
+    navRoutes: [navRoute.addGuest],
   },
 
   editGuest: {
     title: 'Edit Guest',
     route: 'edit-guest',
-    navRoutes: [navRoute.guest, navRoute.editGuest],
+    navRoutes: [navRoute.editGuest],
   },
 };

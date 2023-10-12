@@ -9,6 +9,7 @@ import {
   AdminUtilityService,
   BaseDatatableComponent,
   FlagType,
+  ModuleNames,
   TableService,
 } from '@hospitality-bot/admin/shared';
 import { LazyLoadEvent } from 'primeng/api';
@@ -92,6 +93,7 @@ export class RoomDetailsDataTableComponent extends BaseDatatableComponent
 
   onEditRoom(id: string) {
     this.routesConfigService.navigate({
+      subModuleName: ModuleNames.ROOM,
       additionalPath: routes.addSingleRoom,
       queryParams: { id },
     });

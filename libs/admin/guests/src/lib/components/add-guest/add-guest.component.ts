@@ -8,7 +8,7 @@ import {
   ComponentFactoryResolver,
   Compiler,
 } from '@angular/core';
-import { manageGuestRoutes } from '../../constant/route';
+import { manageGuestRoutes } from '../../constant/routes';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
@@ -100,6 +100,7 @@ export class AddGuestComponent implements OnInit {
     });
     this.listenChanges();
     this.formService.restoreForm(this.guestForm, 'guest');
+    this.initNavRoutes();
   }
 
   initGuestForm() {
@@ -143,6 +144,12 @@ export class AddGuestComponent implements OnInit {
         }
       )
     );
+  }
+
+  initNavRoutes() {
+    this.routesConfigService.navRoutesChanges.subscribe((navRoutesRes) => {
+      this.navRoutes = [...navRoutesRes, ...this.navRoutes];
+    });
   }
 
   createNewCompany() {

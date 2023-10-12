@@ -5,7 +5,7 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
-import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import { GlobalFilterService, RoutesConfigService } from '@hospitality-bot/admin/core/theme';
 import {
   ConfigService,
   NavRouteOptions,
@@ -61,7 +61,8 @@ export class AddCompanyComponent implements OnInit {
     private route: ActivatedRoute,
     private location: Location,
     private formService: FormService,
-    private configService: ConfigService
+    private configService: ConfigService,
+    private routesConfigService: RoutesConfigService
   ) {
     this.companyId = this.route.snapshot.paramMap.get('id');
     const { navRoutes, title } = companyRoutes[
@@ -75,6 +76,7 @@ export class AddCompanyComponent implements OnInit {
     this.entityId = this.globalService.entityId;
     this.initCompanyForm();
     this.listenChanges();
+    this.initNavRoutes();
   }
 
   initCompanyForm() {
@@ -115,6 +117,12 @@ export class AddCompanyComponent implements OnInit {
     );
   }
 
+  initNavRoutes() {
+    this.routesConfigService.navRoutesChanges.subscribe((navRoutesRes) => {
+      this.navRoutes = [...navRoutesRes, ...this.navRoutes];
+    });
+  }
+
   /**
    * @function isVisible
    * @param field as form control name
@@ -135,7 +143,7 @@ export class AddCompanyComponent implements OnInit {
         control.validator && control.validator({} as AbstractControl)?.required;
 
       // Return true if the control has a "required" validator
-      return hasRequiredValidator
+      return hasRequiredValidator;
     }
 
     // Return false if the control doesn't exist or has no "required" validator

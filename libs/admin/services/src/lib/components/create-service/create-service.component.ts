@@ -112,6 +112,7 @@ export class CreateServiceComponent implements OnInit {
     this.getPropertyList();
     this.listenForTypeChange();
     this.initOptionsConfig();
+    this.initNavRoutes();
   }
 
   getPropertyList() {
@@ -187,6 +188,12 @@ export class CreateServiceComponent implements OnInit {
           }, this.handleError)
       );
     }
+  }
+
+  initNavRoutes() {
+    this.routesConfigService.navRoutesChanges.subscribe((navRoutesRes) => {
+      this.navRoutes = [...navRoutesRes, ...this.navRoutes];
+    });
   }
 
   // /**

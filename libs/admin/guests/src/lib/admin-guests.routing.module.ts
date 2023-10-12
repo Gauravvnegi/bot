@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { Route, RouterModule } from '@angular/router';
 import { AddGuestComponent } from './components';
 import { MainComponent } from './components/main/main.component';
-import { manageGuestRoutes } from './constant/route';
+import { manageGuestRoutes } from './constant/routes';
 import { GuestDatatableComponent } from './components/guest-datatable/guest-datatable.component';
 
 const appRoutes: Route[] = [

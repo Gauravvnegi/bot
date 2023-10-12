@@ -6,6 +6,8 @@ import { RoomService } from 'libs/admin/room/src/lib/services/room.service';
 import { RoomStatus } from 'libs/admin/room/src/lib/types/service-response';
 import { HousekeepingService } from '../../services/housekeeping.service';
 import { RoomCardData } from '../../types/room.-card.type';
+import { RoutesConfigService } from '@hospitality-bot/admin/core/theme';
+import { ModuleNames } from '@hospitality-bot/admin/shared';
 
 @Component({
   selector: 'hospitality-bot-room-card',
@@ -21,7 +23,8 @@ export class RoomCardComponent implements OnInit {
     private router: Router,
     private roomService: RoomService,
     private snackbarService: SnackBarService,
-    private housekeepingService: HousekeepingService
+    private housekeepingService: HousekeepingService,
+    private routesConfigService: RoutesConfigService
   ) {}
 
   ngOnInit(): void {}
@@ -35,12 +38,11 @@ export class RoomCardComponent implements OnInit {
    */
   handleRoomStatus(status: RoomStatus, id: string): void {
     if (status === 'OUT_OF_ORDER' || status === 'OUT_OF_SERVICE') {
-      this.router.navigate(
-        [`/pages/efrontdesk/room/${routes.addRoom}/single`],
-        {
-          queryParams: { id: id },
-        }
-      );
+      this.routesConfigService.navigate({
+        subModuleName: ModuleNames.ROOM,
+        additionalPath: `${routes.addRoom}/single`,
+        queryParams: { id: id },
+      });
       return;
     }
     this.roomService

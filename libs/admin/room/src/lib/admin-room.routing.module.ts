@@ -33,12 +33,12 @@ export const adminRoomRoutes: Route[] = [
             pathMatch: 'full',
           },
           {
-            path: 'import-services',
+            path: routes.importServices,
             component: ImportServiceComponent,
             pathMatch: 'full',
           },
           {
-            path: ':id',
+            path: ':roomTypeId',
             component: MainComponent,
             children: [
               {
@@ -46,8 +46,14 @@ export const adminRoomRoutes: Route[] = [
                 component: RoomTypeComponent,
               },
               {
-                path: 'import-services',
+                path: routes.importServices,
                 component: ImportServiceComponent,
+                pathMatch: 'full',
+              },
+              {
+                path: routes.services,
+                component: ServicesComponent,
+                pathMatch: 'full',
               },
             ],
           },

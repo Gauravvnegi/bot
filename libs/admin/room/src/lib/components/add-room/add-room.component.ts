@@ -35,7 +35,7 @@ import {
   noRecordsActionForFeatures,
 } from '../../constant/form';
 import { roomStatusDetails } from '../../constant/response';
-import routes from '../../constant/routes';
+import routes, { roomRoutesConfig } from '../../constant/routes';
 import {
   MultipleRoomList,
   SingleRoom,
@@ -143,10 +143,11 @@ export class AddRoomComponent implements OnInit, OnDestroy {
   initNavRoutes(isEdit: boolean) {
     this.routesConfigService.navRoutesChanges.subscribe((navRoutesRes) => {
       this.navRoutes = [...navRoutesRes];
-      this.navRoutes.push({
-        label: isEdit ? 'Edit Room' : 'Add Room',
-        link: './',
-      });
+      if (isEdit) {
+        this.navRoutes.push(...roomRoutesConfig.editRoom.navRoutes);
+        return;
+      }
+      this.navRoutes.push(...roomRoutesConfig.room.navRoutes);
     });
   }
 

@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { Cols } from '@hospitality-bot/admin/shared';
+import { Cols, FlagType } from '@hospitality-bot/admin/shared';
 import { EmptyContent } from 'libs/admin/shared/src/lib/components/datatable/empty-table/empty-table.component';
 import { ActionDataType, TableObjectData } from '../../types/table-view.type';
 import { TableObjectStyleKeys } from '../../constants/table-view.const';
@@ -15,6 +15,8 @@ export class TableViewComponent implements OnInit {
   @Input() headerSticky = false;
   @Input() action: string;
   @Input() loading = false;
+  @Input() statusConfig: Record<string, { label: string; type: FlagType }>;
+
   // Style Keys
   styleKeys = Object.values(TableObjectStyleKeys) as string[];
 
@@ -89,11 +91,11 @@ export class TableViewComponent implements OnInit {
   }
 
   handleStatus(event, data) {
-    this.dropDownChange.emit(event);
+    this.dropDownChange.emit({ value: event, details: data });
   }
 
   handleMenuClick(event, data) {
-    this.quickChange.emit(event);
+    this.quickChange.emit({ value: event, details: data });
   }
 }
 

@@ -7,6 +7,7 @@
       [loading]="loading"
       [headerSticky]="true"
       [action]="'Refresh'"
+      [statusConfig]="reservationStatusConfig"
       [emptyViewConfig]="{
         content: {
           description: 'There are no Checked-in Reservations.'
@@ -14,6 +15,7 @@
       }"
       (actionClicked)="reloadTable()"
       (dropDownChange)="statusChange($event)"
+      (quickChange)="editReservation($event.details.id)"
     ></hospitality-bot-table-view>
   </div>
 

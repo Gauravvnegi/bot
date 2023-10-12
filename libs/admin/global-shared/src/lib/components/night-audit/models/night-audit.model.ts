@@ -6,22 +6,9 @@ import {
 import { CheckoutPendingResponse } from '../types/checkout-pending.type';
 import { dateTimeWithFormat } from '../../../../../../../web-user/shared/src/lib/utils/date-utils';
 import { CheckInResponseType } from '../types/checkin-pending.type';
-import { User } from 'libs/admin/roles-and-permissions/src/lib/models/user-permission-table.model';
 /**
  * Table ViewData implement for the styling recommendation
  */
-export class LoggedInUsers implements TableViewDataType {
-  [key: string]: TableDataType;
-  constructor(input: User) {
-    this['name'] = input.firstName + input.lastName;
-    this['department'] = input['department']; // TODO: Need to change, data not coming from api
-    this['contact'] = {
-      phoneNumber: input.phoneNumber,
-      email: input.email,
-    };
-    this['jobTitle'] = input.jobTitle;
-  }
-}
 
 export class CheckedOutReservation implements TableViewDataType {
   [key: string]: TableDataType;
@@ -29,7 +16,7 @@ export class CheckedOutReservation implements TableViewDataType {
     const roomDetails = input.stayDetails.room;
     const primaryGuest = input.guestDetails.primaryGuest;
     const companyDetails = primaryGuest?.company;
-
+    this['id'] = input.id;
     this['invoiceId'] = input?.invoiceCode || '';
     this['roomInfo'] = {
       icon: 'pi pi-users',
@@ -66,8 +53,8 @@ export class CheckedOutReservation implements TableViewDataType {
     // Action
     this['action'] = {
       dropDown: {
-        currentState: 'Confirmed',
-        nextStates: ['Confirmed'],
+        currentState: 'CONFIRMED',
+        nextStates: ['CONFIRMED'],
         disabled: true,
       },
       quick: [
@@ -84,7 +71,7 @@ export class CheckedInReservation implements TableViewDataType {
     const roomDetails = input.stayDetails.room;
     const primaryGuest = input.guestDetails.primaryGuest;
     const companyDetails = primaryGuest?.company;
-
+    this['id'] = input.id;
     this['invoiceId'] = input?.invoiceCode || '';
     this['roomInfo'] = {
       icon: 'pi pi-users',
@@ -121,8 +108,8 @@ export class CheckedInReservation implements TableViewDataType {
     // Action
     this['action'] = {
       dropDown: {
-        currentState: 'No Show',
-        nextStates: ['No Show', 'Cancel'],
+        currentState: 'NO_SHOW',
+        nextStates: ['NO_SHOW', 'CANCELED'],
       },
       quick: [{ label: 'Edit Reservation', value: 'edit-reservation' }],
     };

@@ -10,7 +10,6 @@ import {
 import {
   CheckedInReservation,
   CheckedOutReservation,
-  LoggedInUsers,
   NightAudit,
 } from './models/night-audit.model';
 
@@ -44,7 +43,6 @@ export class NightAuditComponent implements OnInit {
 
   ngOnInit(): void {
     this.entityId = this.globalFilterService.entityId;
-    this.initData();
   }
 
   initData() {

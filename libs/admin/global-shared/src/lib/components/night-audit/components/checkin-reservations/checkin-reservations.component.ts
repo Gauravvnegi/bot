@@ -36,6 +36,7 @@ export class CheckinReservationsComponent implements OnInit {
 
   ngOnInit(): void {
     this.initActionConfig();
+    this.initTable();
   }
 
   initActionConfig(postLabel?: string) {
@@ -45,6 +46,10 @@ export class CheckinReservationsComponent implements OnInit {
       postLabel: 'Next',
       preSeverity: 'primary',
     };
+  }
+
+  initTable() {
+    if (!this.items.length) this.reloadTable();
   }
 
   reloadTable() {

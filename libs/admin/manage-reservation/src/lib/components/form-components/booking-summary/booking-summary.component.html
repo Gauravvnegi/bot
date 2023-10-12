@@ -240,13 +240,18 @@
     </p>
     <p
       class="bk-summary_priceInfo_taxFair"
-      *ngIf="summaryData?.offerAmount && index === undefined"
+      *ngIf="
+        (summaryData?.offerAmount || summaryData.discountedAmount) &&
+        index === undefined
+      "
     >
       <span class="bk-summary_priceInfo_perNight_label"
         >Discount<i class="fa fa-info-circle" aria-hidden="true"></i
       ></span>
       <span class="bk-summary_priceInfo_perNight_amount">{{
-        summaryData?.offerAmount | currency: 'INR'
+        summaryData?.offerAmount
+          ? summaryData?.offerAmount
+          : (summaryData?.discountedAmount | currency: 'INR')
       }}</span>
     </p>
     <p

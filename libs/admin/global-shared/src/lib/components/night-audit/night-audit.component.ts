@@ -39,7 +39,6 @@ export class NightAuditComponent implements OnInit {
   $subscription = new Subscription();
 
   // DataList
-  loggedInUsers: LoggedInUsers[] = [];
   checkedInReservation: CheckedInReservation[] = [];
   checkedOutReservation: CheckedOutReservation[] = [];
 
@@ -56,11 +55,9 @@ export class NightAuditComponent implements OnInit {
         .subscribe(
           (res) => {
             const {
-              loggedInUsers,
               checkedInReservation,
               checkedOutReservation,
             } = new NightAudit().deserialize(res);
-            this.loggedInUsers = loggedInUsers;
             this.checkedOutReservation = checkedOutReservation;
             this.checkedInReservation = checkedInReservation;
             this.loading = false;

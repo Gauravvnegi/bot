@@ -36,6 +36,8 @@ import {
   defaultMenu,
   MenuActionItem,
   editDiscountMenu,
+  AdditionalChargesType,
+  additionalChargesDetails,
 } from '../../constants/invoice.constant';
 
 import { cols } from '../../constants/payment';
@@ -49,6 +51,7 @@ import {
 import { InvoiceService } from '../../services/invoice.service';
 import {
   BillItemFields,
+  ChargesType,
   DescriptionOption,
   UseForm,
 } from '../../types/forms.types';
@@ -460,7 +463,7 @@ export class InvoiceComponent implements OnInit {
       isNew: [isNewEntry],
       taxId: [''],
       isDiscount: [false],
-      isRefundOrPayment: [false],
+      isNonEditableBillItem: [false],
       isAddOn: [true],
     };
 
@@ -1132,7 +1135,7 @@ export class InvoiceComponent implements OnInit {
     itemId: string;
     value: string;
     entryIdx?: number;
-    type: 'discount' | 'refund' | 'other';
+    type: ChargesType;
   }) {
     const { type, amount, itemId, value, entryIdx, transactionType } = {
       entryIdx: this.tableFormArray.length,
@@ -1157,7 +1160,7 @@ export class InvoiceComponent implements OnInit {
       billItemId: value,
       description: value,
       isDiscount: type === 'discount',
-      isRefundOrPayment: type === 'refund',
+      isNonEditableBillItem: type === 'refund' || type === 'miscellaneous',
       itemId,
       transactionType: transactionType,
     });
@@ -1166,12 +1169,22 @@ export class InvoiceComponent implements OnInit {
   }
 
   handleRefund() {
+    this.handleAdditionalCharges(AdditionalChargesType.REFUND);
+  }
+
+  handleMiscellaneous() {
+    this.handleAdditionalCharges(AdditionalChargesType.MISCELLANEOUS);
+  }
+
+  handleAdditionalCharges(chargesType: AdditionalChargesType) {
     if (this.isTableInvalid()) return;
+    const additionalChargeDetails = additionalChargesDetails[chargesType];
 
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = false;
     dialogConfig.width = '40%';
     const discountComponentRef = this.modalService.openDialog(
+      // Rename this component to Additional Charge Component
       AddRefundComponent,
       dialogConfig
     );
@@ -1181,18 +1194,21 @@ export class InvoiceComponent implements OnInit {
      */
     discountComponentRef.componentInstance.maxAmount = -this.inputControl
       .dueAmount.value;
+    discountComponentRef.componentInstance.heading = `Add ${additionalChargeDetails.label} Amount`;
 
     discountComponentRef.componentInstance.onClose.subscribe(
       (res: { refundAmount: number; remarks: string }) => {
-        console.log(res);
-
         if (res) {
           this.addNonBillItem({
             amount: res.refundAmount,
-            itemId: `refund-${moment(new Date()).unix() * 1000}`,
-            transactionType: 'DEBIT',
-            type: 'refund',
-            value: 'Paid Out' + `${res.remarks ? ` (${res.remarks})` : ''}`,
+            itemId: `${additionalChargeDetails.value}-${
+              moment(new Date()).unix() * 1000
+            }`,
+            transactionType: additionalChargeDetails.transactionType,
+            type: additionalChargeDetails.type,
+            value:
+              additionalChargesDetails[chargesType].value +
+              `${res.remarks ? ` (${res.remarks})` : ''}`,
           });
         }
 

@@ -15,3 +15,5 @@ export type PaymentForm = {
 export type UseForm = InvoiceForm & PaymentForm;
 
 export type DescriptionOption = Option & Partial<Service>;
+
+export type ChargesType = 'discount' | 'refund' | 'miscellaneous' | 'other';

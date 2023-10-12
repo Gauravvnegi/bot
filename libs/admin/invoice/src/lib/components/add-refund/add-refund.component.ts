@@ -2,12 +2,16 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Option } from '@hospitality-bot/admin/shared';
 
+/**
+ * @todo Make this component as additional charge component
+ */
 @Component({
   selector: 'hospitality-bot-add-refund',
   templateUrl: './add-refund.component.html',
   styleUrls: ['./add-refund.component.scss'],
 })
 export class AddRefundComponent implements OnInit {
+  @Input() heading = 'Additional Charges Amount';
   @Input() maxAmount: number;
   userForm: FormGroup;
 

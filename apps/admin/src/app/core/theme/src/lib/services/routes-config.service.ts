@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, NavigationExtras } from '@angular/router';
 import { ModuleNames, ProductNames } from '@hospitality-bot/admin/shared';
 import { NavRouteOption } from 'libs/admin/shared/src/index';
 import { BehaviorSubject } from 'rxjs';
@@ -90,6 +90,7 @@ export class RoutesConfigService extends RouteConfigPathService {
       isRespectiveToProduct,
       openInNewWindow,
       isRelative,
+      ...restNavigationOption
     }: NavigateConfig = {
       ...defaultNavigateConfig,
       subModuleName: this.subModuleName,
@@ -138,9 +139,9 @@ export class RoutesConfigService extends RouteConfigPathService {
 
         window.open(url);
       } else {
-        this.router.navigate(
+        return this.router.navigate(
           [`${path}${additionalPath ? `/${additionalPath}` : ''}`],
-          { queryParams: queryParams }
+          { queryParams: queryParams, ...restNavigationOption }
         );
       }
     } else {
@@ -268,7 +269,7 @@ export type NavigateConfig = {
   isRespectiveToProduct: boolean;
   isRelative: boolean;
   openInNewWindow: boolean;
-};
+} & NavigationExtras;
 
 export type ModuleOfSubModuleWithRespectToProduct = Partial<
   Record<ProductNames, Partial<Record<ModuleNames, ModuleNames>>>

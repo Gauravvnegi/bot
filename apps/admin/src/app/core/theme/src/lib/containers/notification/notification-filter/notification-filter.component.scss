@@ -56,6 +56,12 @@
   }
 }
 
+.filter-heading {
+  color: $grayAuth;
+  font-weight: 500;
+  font-size: 14px;
+}
+
 .status {
   @include flex-col;
   margin-top: 10px;

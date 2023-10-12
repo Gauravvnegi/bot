@@ -2,7 +2,10 @@ import { Location } from '@angular/common';
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { GlobalFilterService, RoutesConfigService } from '@hospitality-bot/admin/core/theme';
+import {
+  GlobalFilterService,
+  RoutesConfigService,
+} from '@hospitality-bot/admin/core/theme';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { forkJoin, Subscription } from 'rxjs';
 import { NavRouteOptions, Option } from 'libs/admin/shared/src';
@@ -11,6 +14,7 @@ import { AssetService } from '../../services/asset.service';
 import { TranslateService } from '@ngx-translate/core';
 import { assetConfig } from '../../constants/asset';
 import { FileUploadType } from 'libs/admin/shared/src/lib/models/file-upload-type.model';
+import { AssetsRoutes } from '../../constants/routes';
 
 @Component({
   selector: 'hospitality-bot-edit-asset',
@@ -32,12 +36,7 @@ export class EditAssetComponent implements OnInit, OnDestroy {
   pathToUploadFile = 'static-content/assets';
   pageTitle = 'Create Asset';
 
-  navRoutes: NavRouteOptions = [
-    { label: 'Library', link: './' },
-    { label: 'Assets', link: '/pages/library/assets' },
-    { label: 'Create Asset', link: './' },
-  ];
-
+  navRoutes: NavRouteOptions = [];
   fileType: Option[] = [
     { label: 'Image', value: 'Image' },
     { label: 'Video', value: 'Video' },
@@ -58,6 +57,12 @@ export class EditAssetComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.initFg();
     this.listenForGlobalFilters();
+    const { navRoutes, title } = AssetsRoutes[
+      this.assetId ? 'editAssets' : 'createAssets'
+    ];
+    this.navRoutes = navRoutes;
+    this.pageTitle = title;
+    this.initNavRoutes();
   }
 
   initFg(): void {
@@ -68,6 +73,12 @@ export class EditAssetComponent implements OnInit, OnDestroy {
       url: ['', [Validators.required]],
       status: [true, [Validators.required]],
       thumbnailUrl: [''],
+    });
+  }
+
+  initNavRoutes() {
+    this.routesConfigService.navRoutesChanges.subscribe((navRoutesRes) => {
+      this.navRoutes = [...navRoutesRes, ...this.navRoutes];
     });
   }
 
@@ -119,8 +130,6 @@ export class EditAssetComponent implements OnInit, OnDestroy {
         if (params['id']) {
           this.assetId = params['id'];
           this.getAssetDetails(this.assetId);
-          this.pageTitle = 'Edit Asset';
-          this.navRoutes[2].label = 'Edit Asset';
         } else if (this.id) {
           this.assetId = this.id;
           this.getAssetDetails(this.assetId);

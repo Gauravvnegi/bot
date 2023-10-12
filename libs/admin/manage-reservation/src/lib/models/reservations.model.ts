@@ -434,6 +434,7 @@ export class SummaryData {
   totalAmount?: number;
   totalPaidAmount: number;
   totalDueAmount: number;
+  discountedAmount: number;
   taxAndFees: number;
   basePrice: number;
   offerAmount: number;
@@ -465,6 +466,7 @@ export class SummaryData {
     this.basePrice = input?.pricingDetails?.basePrice ?? 0;
     this.totalPaidAmount = input?.pricingDetails?.totalPaidAmount ?? 0;
     this.totalDueAmount = input?.pricingDetails?.totalDueAmount ?? 0;
+    this.discountedAmount = input?.pricingDetails?.discountedAmount ?? 0;
     this.min = input?.pricingDetails?.min ?? 0;
     this.max = input?.pricingDetails?.max ?? 0;
     this.paxChild = input?.pricingDetails?.paxChild ?? 0;

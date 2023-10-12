@@ -24,6 +24,7 @@ import { ReservationForm } from '../constants/form';
 import { JourneyState } from '../constants/reservation';
 import { ReservationType } from '../constants/reservation-table';
 import { FormService } from '../services/form.service';
+import { RoutesConfigService } from '@hospitality-bot/admin/core/theme';
 
 @Component({
   selector: 'hospitality-bot-outlet-base',
@@ -58,7 +59,8 @@ export class BaseReservationComponent {
   constructor(
     protected activatedRoute: ActivatedRoute,
     protected hotelDetailService: HotelDetailService,
-    protected formService: FormService
+    protected formService: FormService,
+    protected routesConfigService: RoutesConfigService
   ) {
     this.reservationId = this.activatedRoute.snapshot.paramMap.get('id');
     const { navRoutes, title } = manageReservationRoutes[
@@ -68,6 +70,7 @@ export class BaseReservationComponent {
     this.pageTitle = title;
     this.summaryData = new SummaryData().deserialize();
     this.getSelectedEntity();
+    this.initNavRoutes();
   }
 
   getSelectedEntity() {
@@ -77,6 +80,12 @@ export class BaseReservationComponent {
     const selectedOutlet = properties.filter((item) => item.value === outletId);
 
     this.selectedEntity = selectedOutlet[0];
+  }
+
+  initNavRoutes() {
+    this.routesConfigService.navRoutesChanges.subscribe((navRoutesRes) => {
+      this.routes = [...navRoutesRes, ...this.routes];
+    });
   }
 
   setFormDisability(journeyState?: JourneyState): void {

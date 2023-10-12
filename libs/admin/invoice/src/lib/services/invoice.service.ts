@@ -82,7 +82,7 @@ export class InvoiceService extends ApiService {
       description: '',
       isDisabled: false,
       isDiscount: false,
-      isRefundOrPayment: false,
+      isNonEditableBillItem: false,
       isNew: true,
       itemId: '',
       taxId: null,
@@ -122,7 +122,7 @@ export class InvoiceService extends ApiService {
         debitAmount: +item.debitAmount,
         transactionType: item.transactionType,
         id: item.isNew ? null : item.billItemId,
-        itemId: item.isRefundOrPayment ? null : item.itemId,
+        itemId: item.isNonEditableBillItem ? null : item.itemId,
         taxId: item.taxId,
         isCoupon: item.isDiscount,
       };

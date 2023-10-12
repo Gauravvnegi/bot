@@ -84,7 +84,7 @@ export class TemplateHtmlEditorComponent extends EditTemplateComponent {
         } else {
           this.routesConfigService.navigate({
             subModuleName: ModuleNames.TEMPLATE,
-            additionalPath: templateRoutes.CreateTemplate.route,
+            additionalPath: templateRoutes.createTemplate.route,
           });
         }
       })

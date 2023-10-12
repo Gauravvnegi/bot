@@ -16,6 +16,7 @@ import {
   NavRouteOptions,
   Option,
 } from 'libs/admin/shared/src';
+import { templateRoutes } from '../../constants/routes';
 
 @Component({
   selector: 'hospitality-bot-edit-template',
@@ -61,6 +62,13 @@ export class EditTemplateComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.listenForGlobalFilters();
+
+    const { navRoutes, title } = templateRoutes[
+      this.templateId ? 'editTemplate' : 'createTemplate'
+    ];
+    this.pageTitle = title;
+    this.navRoutes = navRoutes;
+    this.initNavRoutes();
   }
 
   initFG(): void {
@@ -117,6 +125,12 @@ export class EditTemplateComponent implements OnInit, OnDestroy {
     );
   }
 
+  initNavRoutes() {
+    this.routesConfigService.navRoutesChanges.subscribe((navRoutesRes) => {
+      this.navRoutes = [...navRoutesRes, ...this.navRoutes];
+    });
+  }
+
   /**
    * @function getTemplateId to get template Id from routes query param.
    */
@@ -125,8 +139,6 @@ export class EditTemplateComponent implements OnInit, OnDestroy {
       this.activatedRoute.params.subscribe((params) => {
         if (params['id']) {
           this.templateId = params['id'];
-          this.pageTitle = 'Edit Template';
-          this.navRoutes[2].label = 'Edit Template';
           this.getTemplateDetails(this.templateId);
         } else if (this.id) {
           this.templateId = this.id;

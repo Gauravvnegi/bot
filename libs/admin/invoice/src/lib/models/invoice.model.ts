@@ -104,7 +104,7 @@ export class TableData {
   date: number;
   isNew: boolean;
   isDiscount: boolean;
-  isRefundOrPayment: boolean;
+  isNonEditableBillItem: boolean;
   isDisabled: boolean;
   isAddOn: boolean;
 
@@ -122,7 +122,7 @@ export class TableData {
     this.isNew = false;
     this.isDisabled = !input.isAddOn || !!input.taxId;
     this.isDiscount = !!input.isCoupon;
-    this.isRefundOrPayment = !input.itemId;
+    this.isNonEditableBillItem = !input.itemId;
     this.isAddOn = input.isAddOn;
 
     return this;

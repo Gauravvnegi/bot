@@ -90,6 +90,7 @@ export class AddAgentComponent implements OnInit {
     this.entityId = this.globalService.entityId;
     this.initAgentForm();
     this.formService.restoreForm(this.agentForm, 'agent');
+    this.initNavRoutes();
   }
 
   initAgentForm() {
@@ -112,6 +113,12 @@ export class AddAgentComponent implements OnInit {
     this.loadMarketSegment();
     this.listenChanges();
     if (this.agentId) this.getAgentById();
+  }
+
+  initNavRoutes() {
+    this.routesConfigService.navRoutesChanges.subscribe((navRoutesRes) => {
+      this.navRoutes = [...navRoutesRes, ...this.navRoutes];
+    });
   }
 
   loadMarketSegment() {

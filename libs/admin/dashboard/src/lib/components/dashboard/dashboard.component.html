@@ -45,31 +45,33 @@
   <div class="container" (click)="openDetailPage(data, 'package_details')">
     <div class="guest-container">
       <div class="header">
-        <span class="booking-no">#{{ data?.bookingNo }}</span>
+        <span class="booking-no">#{{ data?.confirmationNumber }}</span>
 
         <div class="header-left">
-          <span class="time">{{ data?.time * 1000 | date: 'HH:mm a' }}</span>
+          <span class="time">{{
+            data?.stayDetails?.arrivalTime * 1000 | date: 'HH:mm a'
+          }}</span>
         </div>
       </div>
       <div class="info-section">
-        <div class="title">Request for a {{ data.itemName }}</div>
+        <div class="title">Request for a {{ data?.itemName }}</div>
         <div class="name-wrapper">
           <span class="name-title">
             by:
           </span>
-          <span class="name">{{ data?.customerName }}</span>
+          <span class="name"
+            >{{ data?.guestDetails?.primaryGuest?.name }}
+            {{ data?.guestDetails?.primaryGuest?.lastName }}</span
+          >
         </div>
         <div class="contact">
           <div class="social">
             <img class="icon" src="assets/svg/phone.svg" alt="" />
-            9845374289
+            {{ data?.guestDetails?.primaryGuest?.phoneNumber }}
           </div>
           <div class="social">
-            <img
-              class="icon"
-              src="assets/svg/message.svg"
-              alt=""
-            />Vsaurav026@gmail.com
+            <img class="icon" src="assets/svg/message.svg" alt="" />
+            {{ data?.guestDetails?.primaryGuest?.email }}
           </div>
         </div>
       </div>

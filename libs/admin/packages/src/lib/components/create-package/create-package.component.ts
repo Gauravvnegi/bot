@@ -85,6 +85,7 @@ export class CreatePackageComponent implements OnInit {
     this.entityId = this.globalFilterService.entityId;
     this.initForm();
     this.initOptionsConfig();
+    this.initNavRoutes();
   }
 
   /**
@@ -163,6 +164,12 @@ export class CreatePackageComponent implements OnInit {
 
     /* Value changes subscription */
     this.initFormSubscription();
+  }
+
+  initNavRoutes() {
+    this.routesConfigService.navRoutesChanges.subscribe((navRoutesRes) => {
+      this.navRoutes = [...navRoutesRes, ...this.navRoutes];
+    });
   }
 
   /**

@@ -5,4 +5,5 @@ export enum TableObjectStyleKeys {
   textSeparator = 'textSeparator',
   preText = 'preText',
   postText = 'postText',
+  disabled = 'disabled',
 }

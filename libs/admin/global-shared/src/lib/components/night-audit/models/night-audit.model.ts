@@ -66,10 +66,14 @@ export class CheckedOutReservation implements TableViewDataType {
     // Action
     this['action'] = {
       dropDown: {
-        currentState: 'No Show',
-        nextStates: ['No Show', 'Cancel'],
+        currentState: 'Confirmed',
+        nextStates: ['Confirmed'],
+        disabled: true,
       },
-      quick: [{ label: 'Edit Reservation', value: 'edit-reservation' }],
+      quick: [
+        { label: 'Modify', value: 'modify' },
+        { label: 'Settlement', value: 'settlement' },
+      ],
     };
   }
 }

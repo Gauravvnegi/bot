@@ -8,6 +8,7 @@
   <div class="content">
     <p-table
       [value]="items"
+      [loading]="loading"
       responsiveLayout="scroll"
       *ngIf="items?.length; else emptyTable"
     >

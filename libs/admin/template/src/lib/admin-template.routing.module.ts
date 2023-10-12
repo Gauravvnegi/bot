@@ -16,7 +16,7 @@ const appRoutes: Route[] = [
     children: [
       { path: '', component: TemplateDatatableComponent },
       {
-        path: templateRoutes.CreateTemplate.route,
+        path: templateRoutes.createTemplate.route,
         component: TemplateComponent,
         children: [
           { path: '', component: EditTemplateComponent },
@@ -26,7 +26,7 @@ const appRoutes: Route[] = [
         ],
       },
       {
-        path: templateRoutes.EditTemplate.route,
+        path: templateRoutes.editTemplate.route,
         component: TemplateComponent,
         children: [
           { path: '', component: EditTemplateComponent },

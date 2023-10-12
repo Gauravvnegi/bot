@@ -14,22 +14,22 @@ export const servicesRoutes: Record<
 > = {
   services: {
     route: '',
-    navRoutes: [navRoute.library, navRoute.services],
+    navRoutes: [navRoute.services],
     title: 'Services',
   },
   createService: {
     route: 'create-service',
-    navRoutes: [navRoute.library, navRoute.services, navRoute.createServices],
+    navRoutes: [navRoute.createServices],
     title: 'Create Service',
   },
   createCategory: {
     route: 'create-category',
-    navRoutes: [navRoute.library, navRoute.services, navRoute.createCategory],
+    navRoutes: [navRoute.createCategory],
     title: 'Create Category',
   },
   editService: {
     route: 'create-service/:id',
-    navRoutes: [navRoute.library, navRoute.services, navRoute.editServices],
+    navRoutes: [navRoute.editServices],
     title: 'Edit Service',
   },
 };

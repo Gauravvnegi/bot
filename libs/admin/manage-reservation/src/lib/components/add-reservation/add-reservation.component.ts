@@ -31,6 +31,7 @@ import { ReservationType } from '../../constants/reservation-table';
 import { convertToTitleCase } from 'libs/admin/shared/src/lib/utils/valueFormatter';
 import { Subject } from 'rxjs';
 import { CalendarViewData } from 'libs/admin/reservation/src/lib/components/reservation-calendar-view/reservation-calendar-view.component';
+import { RoutesConfigService } from '@hospitality-bot/admin/core/theme';
 
 @Component({
   selector: 'hospitality-bot-add-reservation',
@@ -60,9 +61,10 @@ export class AddReservationComponent extends BaseReservationComponent
     private manageReservationService: ManageReservationService,
     protected activatedRoute: ActivatedRoute,
     protected formService: FormService,
-    protected hotelDetailService: HotelDetailService
+    protected hotelDetailService: HotelDetailService,
+    protected routesConfigService: RoutesConfigService
   ) {
-    super(activatedRoute, hotelDetailService, formService);
+    super(activatedRoute, hotelDetailService, formService, routesConfigService);
   }
 
   ngOnInit(): void {

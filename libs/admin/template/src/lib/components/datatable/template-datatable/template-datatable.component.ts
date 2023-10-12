@@ -200,7 +200,7 @@ export class TemplateDatatableComponent extends BaseDatatableComponent
    */
   openCreateTemplate() {
     this.routesConfigServices.navigate({
-      additionalPath: templateRoutes.CreateTemplate.route,
+      additionalPath: templateRoutes.createTemplate.route,
     });
   }
 
@@ -210,7 +210,7 @@ export class TemplateDatatableComponent extends BaseDatatableComponent
   openEditTemplate(event, template): void {
     event.stopPropagation();
     this.routesConfigServices.navigate({
-      additionalPath: templateRoutes.CreateTemplate.route.replace(
+      additionalPath: templateRoutes.createTemplate.route.replace(
         ':id',
         template.id
       ),

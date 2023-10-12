@@ -84,13 +84,13 @@
           (viewAll)="saveRoomTypeData('COMPLIMENTARY')"
           [noRecordsAction]="noRecordActionForComp"
           [loading]="isCompLoading"
-          (onEmptyViewAction)="openImportService('COMPLIMENTARY')"
+          (onEmptyViewAction)="openService('COMPLIMENTARY')"
           type="icon"
         >
           <hospitality-bot-button
             label="+Import Services"
             variant="text"
-            (onClick)="openImportService('COMPLIMENTARY')"
+            (onClick)="openService('COMPLIMENTARY')"
           ></hospitality-bot-button>
         </hospitality-bot-custom-select>
         <div class="paid-services">
@@ -99,7 +99,7 @@
             description="Do not forget to add this cost in addition to the room cost"
             formControlName="paidAmenities"
             [itemList]="paidServices"
-            (onEmptyViewAction)="openImportService('PAID')"
+            (onEmptyViewAction)="openService('PAID')"
             (viewAll)="saveRoomTypeData('PAID')"
             [noRecordsAction]="noRecordAction"
             [loading]="isPaidLoading"

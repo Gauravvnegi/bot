@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { GlobalFilterService, RoutesConfigService } from '@hospitality-bot/admin/core/theme';
+import {
+  GlobalFilterService,
+  RoutesConfigService,
+} from '@hospitality-bot/admin/core/theme';
 import {
   LibrarySearchItem,
   ServiceTypeOptionValue,
@@ -10,7 +13,7 @@ import { SnackBarService } from '@hospitality-bot/shared/material';
 import { NavRouteOptions, Option } from 'libs/admin/shared/src';
 import { ConfigService } from 'libs/admin/shared/src/lib/services/config.service';
 import { Subscription } from 'rxjs';
-import routes from '../../constant/routes';
+import { offersRoutes } from '../../constant/routes';
 import { OffersServices } from '../../services/offers.service';
 import { OfferData, OfferFormData, OffersOnEntity } from '../../types/offers';
 import { OfferResponse, SearchResult } from '../../types/response';
@@ -24,15 +27,12 @@ import { DiscountType } from '../../constant/data-table';
 export class CreateOfferComponent implements OnInit {
   entityId: string;
   offerId: string;
+  pageTitle = 'Create Offer';
   packageCode: string = '# will be auto generated';
 
   useForm: FormGroup;
 
-  routes: NavRouteOptions = [
-    { label: 'Library', link: './' },
-    { label: 'Offers', link: '/pages/library/offers' },
-    { label: 'Create Offer', link: './' },
-  ];
+  navRoutes: NavRouteOptions = [];
 
   loading = false;
   searchItems: LibrarySearchItem[];
@@ -59,7 +59,16 @@ export class CreateOfferComponent implements OnInit {
     private router: Router,
     private routesConfigService: RoutesConfigService
   ) {
-    this.offerId = this.route.snapshot.paramMap.get('id');
+    this.route.params.subscribe((params) => {
+      this.offerId = params['id'];
+    });
+    const { navRoutes, title } = offersRoutes[
+      this.offerId ? 'editOffer' : 'createOffer'
+    ];
+
+    this.navRoutes = navRoutes;
+    this.pageTitle = title;
+
     this.searchItems = [
       LibrarySearchItem.SERVICE,
       LibrarySearchItem.PACKAGE,
@@ -71,6 +80,7 @@ export class CreateOfferComponent implements OnInit {
     this.entityId = this.globalService.entityId;
     this.initUseForm();
     this.initOptionsConfig();
+    this.initNavRoutes();
   }
 
   initUseForm() {
@@ -91,6 +101,12 @@ export class CreateOfferComponent implements OnInit {
     this.initFormSubscription();
 
     if (this.offerId) this.getOfferById();
+  }
+
+  initNavRoutes() {
+    this.routesConfigService.navRoutesChanges.subscribe((navRoutesRes) => {
+      this.navRoutes = [...navRoutesRes, ...this.navRoutes];
+    });
   }
 
   /**
@@ -340,7 +356,6 @@ export class CreateOfferComponent implements OnInit {
         })
         .subscribe((res) => {
           this.loading = false;
-          this.routes[2].label = 'Edit Offer';
           let {
             packageCode,
             subPackages,

@@ -30,7 +30,10 @@ import {
   noRecordAction,
   noRecordActionForComp,
 } from '../../constant/form';
-import routes, { navRoutesConfig } from '../../constant/routes';
+import routes, {
+  navRoutesConfig,
+  roomRoutesConfig,
+} from '../../constant/routes';
 import { Service, Services } from '../../models/amenities.model';
 import { RoomTypeForm } from '../../models/room.model';
 import { RoomType } from '../../models/rooms-data-table.model';
@@ -111,7 +114,7 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
   initNavRoutes() {
     this.routesConfigService.navRoutesChanges.subscribe((navRoutesRes) => {
       this.navRoutes = [...navRoutesRes];
-      this.navRoutes.push(navRoutesConfig.addRoomType);
+      this.navRoutes.push(...roomRoutesConfig.roomType.navRoutes);
     });
   }
 
@@ -275,8 +278,8 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
   }
 
   initFormDetails() {
-    this.pageTitle = 'Update Room Type';
-    this.navRoutes[2].label = 'Update Room Type';
+    // this.pageTitle = 'Update Room Type';
+    // this.navRoutes[2].label = 'Update Room Type';
 
     if (!this.roomService.roomTypeFormState) {
       this.subscription$.add(
@@ -290,11 +293,13 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
               this.disableRoomType = data.isBaseRoomType;
               if (this.isPricingDynamic) {
                 this.useForm
-                  .get('dynamicRatePlans')
-                  .patchValue(dynamicRatePlans);
+                  ?.get('dynamicRatePlans')
+                  ?.patchValue(dynamicRatePlans);
                 this.defaultRatePlanStatus = dynamicRatePlans.status;
               } else {
-                this.useForm.get('staticRatePlans').patchValue(staticRatePlans);
+                this.useForm
+                  .get('staticRatePlans')
+                  ?.patchValue(staticRatePlans);
                 this.defaultRatePlanStatus = dynamicRatePlans.status;
               }
 
@@ -450,7 +455,9 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
   saveRoomTypeData(serviceType) {
     const data = this.useForm.getRawValue();
     this.roomService.initRoomTypeFormData(data, serviceType, true);
-    this.routesConfigService.navigate({ additionalPath: routes.services });
+    this.router.navigate([routes.services], {
+      relativeTo: this.route,
+    });
   }
 
   /**
@@ -459,7 +466,7 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
    * @param serviceType
    * @returns
    */
-  openImportService(serviceType) {
+  openService(serviceType) {
     const data = this.useForm.getRawValue();
     this.roomService.initRoomTypeFormData(
       { ...data, services: this.compServices },
@@ -467,14 +474,15 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
       true
     );
 
+    this.roomService.selectedService = serviceType;
     if (serviceType === 'PAID') {
       this.routesConfigService.navigate({
         subModuleName: ModuleNames.SERVICES,
         additionalPath: routes.createService,
       });
     } else {
-      this.routesConfigService.navigate({
-        additionalPath: routes.importServices,
+      this.router.navigate([routes.importServices], {
+        relativeTo: this.route,
       });
     }
   }

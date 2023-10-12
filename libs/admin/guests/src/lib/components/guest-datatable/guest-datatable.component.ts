@@ -14,7 +14,7 @@ import * as FileSaver from 'file-saver';
 import { Subscription } from 'rxjs';
 import { GuestData, GuestTable } from '../../data-models/guest-table.model';
 import { GuestTableService } from '../../services/guest-table.service';
-import { manageGuestRoutes } from '../../constant/route';
+import { manageGuestRoutes } from '../../constant/routes';
 import { guestCols } from '../../constant/guest';
 import { LazyLoadEvent } from 'primeng/api';
 import { Router } from '@angular/router';

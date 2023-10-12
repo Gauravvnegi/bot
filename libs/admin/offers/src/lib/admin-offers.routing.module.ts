@@ -3,7 +3,7 @@ import { Route, RouterModule } from '@angular/router';
 import { CreateOfferComponent } from './components/create-offer/create-offer.component';
 import { MainComponent } from './components/main/main.component';
 import { OffersDataTableComponent } from './components/offers-data-table/offers-data-table.component';
-import routes from './constant/routes';
+import { offersRoutes } from './constant/routes';
 
 export const adminOffersRoutes: Route[] = [
   {
@@ -15,7 +15,7 @@ export const adminOffersRoutes: Route[] = [
         component: OffersDataTableComponent,
       },
       {
-        path: routes.createOffer,
+        path: offersRoutes.createOffer.route,
         component: MainComponent,
         children: [
           {

@@ -78,7 +78,7 @@ export class SingleRoom {
         fromDate: item.fromDate,
         isCurrentStatus: item.isCurrentStatus,
         status: item.status,
-        remarks: item.remark,
+        remarks: item.remarks,
       }));
     return this;
   }

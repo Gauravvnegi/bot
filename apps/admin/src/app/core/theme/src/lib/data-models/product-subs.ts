@@ -1401,16 +1401,16 @@ export const productMenuSubs: any[] = [
     isView: true,
   },
   {
-    name: 'eMARK_IT',
+    name: 'EMARK_IT',
     label: 'eMark-IT',
     description:
-      'eMARK_IT Product: Never miss an opportunity to connect with guests by automating ',
+      'EMARK_IT Product: Never miss an opportunity to connect with guests by automating ',
     icon:
       'https://botfiles.nyc3.cdn.digitaloceanspaces.com/bot/logo/eMarkIt.svg',
     config: [
       {
         featureId: '1bc1fe1a-4bbf-482e-a32e-795af6bddba9',
-        name: 'eMARK_IT_HOME',
+        name: 'EMARK_IT_HOME',
         label: 'Home',
         description:
           'Never miss an opportunity to connect with guests by automating communication and strengthening guest relationships',
@@ -1420,7 +1420,7 @@ export const productMenuSubs: any[] = [
         config: [
           {
             featureId: '07bdbd20-787e-4981-88b1-8edd54bf42aa',
-            name: 'eMARK_IT_DASHBOARD',
+            name: 'EMARK_IT_DASHBOARD',
             label: 'Analytics',
             description:
               'Never miss an opportunity to connect with guests by automating communication and strengthening guest relationships',

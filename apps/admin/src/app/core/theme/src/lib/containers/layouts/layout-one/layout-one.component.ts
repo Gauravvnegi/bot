@@ -214,7 +214,9 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
   }
 
   checkForMessageRoute() {
-    return this._router.url.includes('messages');
+    return (
+      this.routesConfigService.subModuleName === ModuleNames.LIVE_MESSAGING
+    );
   }
 
   initLayoutConfigs() {

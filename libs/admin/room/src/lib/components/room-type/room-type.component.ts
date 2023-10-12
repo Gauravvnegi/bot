@@ -98,7 +98,7 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
     private location: Location,
     private routesConfigService: RoutesConfigService
   ) {
-    this.roomTypeId = this.route.snapshot.paramMap.get('id');
+    this.roomTypeId = this.route.snapshot.paramMap.get('roomTypeId');
   }
 
   ngOnInit(): void {

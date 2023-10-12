@@ -145,16 +145,22 @@
         font-weight: $medium;
         margin-right: 15px;
       }
+      &__icon {
+        height: 15px;
+      }
       &--details {
         @include flex-col-center-algn();
         gap: 5px;
-        width: calc(100% - 53px);
+        // width: calc(100% - 53px);
+        width: 100%;
         .title--container {
           @include flex-between-center;
           width: 100%;
           .title {
             font-size: 12px;
             font-weight: $bolder;
+            flex-grow: 1;
+            padding: 0 5px;
           }
           .time {
             font-size: 10px;
@@ -176,6 +182,7 @@
       }
       &:hover {
         .title--container {
+          height: 18px;
           .time {
             display: none;
           }

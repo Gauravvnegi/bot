@@ -39,7 +39,8 @@ export class Notification {
     this.updated = input.updated || '';
     this.data = input.data;
     this.icon =
-      notificationIconMapping[input.notificationType?.toUpperCase()] ?? '';
+      notificationIconMapping[input.notificationType?.toUpperCase()] ??
+      'assets/svg/request-add-btn.svg';
     return this;
   }
 

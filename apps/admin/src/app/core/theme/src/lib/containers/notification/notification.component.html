@@ -61,12 +61,21 @@
         (click)="openNotifications($event, item)"
         [ngClass]="{ unread: !item.read }"
       >
-        <div class="profile">
+        <!-- <div class="profile">
           {{ userService.userDetails.getProfileNickName() }}
-        </div>
+        </div> -->
+
         <div class="notification--item--details">
           <div class="title--container">
-            <div class="title">{{ item.notificationType | titlecase }}</div>
+            <img
+              [src]="item.icon"
+              alt="icon"
+              class="notification--item__icon"
+            />
+
+            <div class="title">
+              {{ item.notificationType | titlecase }}
+            </div>
             <div class="time">
               {{ item.getTime(globalFilterService.timezone) }}
             </div>

@@ -3,7 +3,6 @@ import { cols, title } from '../../constants/manage-login.table';
 import { ActionConfigType } from '../../../../types/night-audit.type';
 import { MenuItem } from 'primeng/api';
 import { Subscription, timer } from 'rxjs';
-import { LoggedInUsers } from '../../models/night-audit.model';
 import { NightAuditService } from '../../../../services/night-audit.service';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
@@ -11,6 +10,7 @@ import {
   QueryConfig,
 } from '@hospitality-bot/admin/shared';
 import { UserPermissionTable } from 'libs/admin/roles-and-permissions/src/lib/models/user-permission-table.model';
+import { LoggedInUsers } from '../../models/logged-users.model';
 
 @Component({
   selector: 'hospitality-bot-manage-logged-users',

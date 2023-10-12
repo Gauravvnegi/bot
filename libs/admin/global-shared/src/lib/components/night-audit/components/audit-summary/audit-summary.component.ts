@@ -2,6 +2,15 @@ import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { ActionConfigType } from '../../../../types/night-audit.type';
 import { MenuItem } from 'primeng/api';
 import { cols, dummyData } from '../../constants/audit-summary.table';
+import { NightAuditService } from '../../../../services/night-audit.service';
+import { Subscription } from 'rxjs';
+import {
+  AdminUtilityService,
+  QueryConfig,
+} from '@hospitality-bot/admin/shared';
+import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import { AuditSummary } from '../../models/audit-summary.model';
+import { AuditViewType } from '../../types/audit-summary.type';
 
 @Component({
   selector: 'hospitality-bot-audit-summary',
@@ -12,10 +21,12 @@ import { cols, dummyData } from '../../constants/audit-summary.table';
   ],
 })
 export class AuditSummaryComponent implements OnInit {
+  entityId = '';
   title = 'Audit Summary';
   cols = cols;
-  values = dummyData;
+  values: AuditViewType;
   loading = false;
+  isNoAuditFound = false;
   actionConfig: ActionConfigType;
   today = new Date();
 
@@ -23,17 +34,36 @@ export class AuditSummaryComponent implements OnInit {
   @Input() stepList: MenuItem[];
   @Output() indexChange = new EventEmitter<any>();
 
-  constructor() {}
+  $subscription = new Subscription();
+
+  constructor(
+    private nightAuditService: NightAuditService,
+    private globalFilterService: GlobalFilterService,
+    private adminUtilityService: AdminUtilityService
+  ) {}
 
   ngOnInit(): void {
+    this.entityId = this.globalFilterService.entityId;
     this.initTable();
     this.initActionConfig();
   }
 
   initTable() {
     this.loading = true;
-    this.values = dummyData;
-    this.loading = false;
+    this.$subscription.add(
+      this.nightAuditService
+        .getAuditSummary(this.entityId, this.getQueryConfig())
+        .subscribe(
+          (res) => {
+            this.values = new AuditSummary().deserialize(res).records;
+            this.loading = false;
+          },
+          (error) => {
+            this.loading = false;
+            this.isNoAuditFound = true;
+          }
+        )
+    );
   }
 
   initActionConfig(postLabel?: string) {
@@ -53,6 +83,16 @@ export class AuditSummaryComponent implements OnInit {
   handlePrev() {
     if (this.activeIndex > 0)
       this.indexChange.emit({ index: this.activeIndex - 1, isPrev: true });
+  }
+
+  getQueryConfig(): QueryConfig {
+    return {
+      params: this.adminUtilityService.makeQueryParams([
+        {
+          auditDate: new Date().getTime(),
+        },
+      ]),
+    };
   }
 
   get columns() {

@@ -4,6 +4,7 @@ import { ApiService } from '@hospitality-bot/shared/utils';
 import { Observable } from 'rxjs';
 import { NightAuditResponse } from '../types/night-audit.type';
 import { UserListResponse } from 'libs/admin/roles-and-permissions/src/lib/types/response';
+import { AuditSummaryResponse } from '../components/night-audit/types/audit-summary.type';
 
 @Injectable({
   providedIn: 'root',
@@ -11,14 +12,26 @@ import { UserListResponse } from 'libs/admin/roles-and-permissions/src/lib/types
 export class NightAuditService extends ApiService {
   getNightAudit(
     entityId: string,
-    queryConfig?: QueryConfig
+    config?: QueryConfig
   ): Observable<NightAuditResponse> {
     return this.get(
-      `/api/v1/entity/${entityId}/audits/checks${queryConfig?.params}`
+      `/api/v1/entity/${entityId}/audits/checks${config?.params}`
     );
   }
 
-  getAllUsers(entityId: string, config): Observable<UserListResponse> {
-    return this.get(`/api/v1/entity/${entityId}/users${config.params ?? ''}`);
+  getAllUsers(
+    entityId: string,
+    config?: QueryConfig
+  ): Observable<UserListResponse> {
+    return this.get(`/api/v1/entity/${entityId}/users${config?.params}`);
+  }
+
+  getAuditSummary(
+    entityId,
+    config?: QueryConfig
+  ): Observable<AuditSummaryResponse> {
+    return this.get(
+      `/api/v1/entity/${entityId}/audits/perform${config?.params}`
+    );
   }
 }

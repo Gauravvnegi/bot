@@ -1,3 +1,4 @@
+@import 'main';
 :host ::ng-deep .main__wrapper {
   .p-datatable {
     tr {
@@ -22,5 +23,9 @@
   }
   .sticky-header {
     top: -1px !important;
+  }
+
+  .activeButton .p-button {
+    background-color: $primary-cta;
   }
 }

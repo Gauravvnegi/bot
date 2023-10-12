@@ -48,7 +48,7 @@ export class ManageLoggedUsersComponent implements OnInit {
     this.initTable();
   }
 
-  initActionConfig(postLabel?: string, postDisabled?: boolean) {
+  initActionConfig(postLabel?: string) {
     this.actionConfig = {
       preHide: this.activeIndex == 0,
       preLabel: this.activeIndex != 0 ? 'Back' : undefined,
@@ -57,7 +57,6 @@ export class ManageLoggedUsersComponent implements OnInit {
         : this.activeIndex == 0
         ? 'Forcefully Logout Users >'
         : 'Next',
-      ...(postDisabled && { postDisabled: true }),
       preSeverity: 'primary',
     };
   }
@@ -83,11 +82,7 @@ export class ManageLoggedUsersComponent implements OnInit {
 
   handleNext() {
     if (!this.isTimerStart && this.activeIndex == 0) {
-      // this.handleMangeLoggedIn(); // TODO: Uncomment for timer
-      //these below line should be removed, after uncommenting above line
-      this.isTimerStart = true;
-      this.initActionConfig('Next', false);
-      this.items = [];
+      this.handleMangeLoggedIn();
     } else if (this.activeIndex + 1 < this.stepList.length)
       this.indexChange.emit(this.activeIndex + 1);
   }
@@ -102,23 +97,21 @@ export class ManageLoggedUsersComponent implements OnInit {
   handleMangeLoggedIn() {
     this.usersLoggedOut = true;
     this.isTimerStart = true;
-    const targetTime = Date.now() + 5 * 60 * 1000;
+    const targetTime = Date.now() + 2 * 1000; //Date.now() + 5 * 60 * 1000; //<=== 5 Minute
     // Update the display every second
     timer(0, 1000).subscribe(() => {
       const now = Date.now();
       const remainingTime = targetTime - now;
 
       if (remainingTime <= 0) {
-        // call api
+        this.initActionConfig('Next');
         this.usersLoggedOut = false;
-        this.initActionConfig('Next', false);
         this.items = [];
       } else {
         const minutes = Math.floor(remainingTime / 60000);
         const seconds = Math.floor((remainingTime % 60000) / 1000);
         this.initActionConfig(
-          `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`,
-          true
+          `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`
         );
       }
     });

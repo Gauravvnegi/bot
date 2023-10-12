@@ -16,7 +16,7 @@ export class CheckedOutReservation implements TableViewDataType {
     const roomDetails = input.stayDetails.room;
     const primaryGuest = input.guestDetails.primaryGuest;
     const companyDetails = primaryGuest?.company;
-
+    this['id'] = input.id;
     this['invoiceId'] = input?.invoiceCode || '';
     this['roomInfo'] = {
       icon: 'pi pi-users',
@@ -53,8 +53,8 @@ export class CheckedOutReservation implements TableViewDataType {
     // Action
     this['action'] = {
       dropDown: {
-        currentState: 'Confirmed',
-        nextStates: ['Confirmed'],
+        currentState: 'CONFIRMED',
+        nextStates: ['CONFIRMED'],
         disabled: true,
       },
       quick: [
@@ -71,7 +71,7 @@ export class CheckedInReservation implements TableViewDataType {
     const roomDetails = input.stayDetails.room;
     const primaryGuest = input.guestDetails.primaryGuest;
     const companyDetails = primaryGuest?.company;
-
+    this['id'] = input.id;
     this['invoiceId'] = input?.invoiceCode || '';
     this['roomInfo'] = {
       icon: 'pi pi-users',
@@ -108,8 +108,8 @@ export class CheckedInReservation implements TableViewDataType {
     // Action
     this['action'] = {
       dropDown: {
-        currentState: 'No Show',
-        nextStates: ['No Show', 'Cancel'],
+        currentState: 'NO_SHOW',
+        nextStates: ['NO_SHOW', 'CANCELED'],
       },
       quick: [{ label: 'Edit Reservation', value: 'edit-reservation' }],
     };

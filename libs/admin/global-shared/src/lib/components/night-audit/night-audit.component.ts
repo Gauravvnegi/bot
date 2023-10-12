@@ -67,7 +67,7 @@ export class NightAuditComponent implements OnInit {
     );
   }
 
-  close() {
+  close(event?: boolean) {
     this.onClose.emit(false);
   }
 

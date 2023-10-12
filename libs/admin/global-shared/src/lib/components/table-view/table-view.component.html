@@ -8,6 +8,7 @@
   <div class="content">
     <p-table
       [value]="items"
+      [loading]="loading"
       responsiveLayout="scroll"
       *ngIf="items?.length; else emptyTable"
     >
@@ -81,6 +82,7 @@
                 <hospitality-bot-status-dropdown-toggle
                   class="status-toggle"
                   [nextStates]="rowData[col.field]?.dropDown.nextStates"
+                  [disabled]="rowData[col.field]?.dropDown.disabled"
                   [toggleMenu]="true"
                   [state]="rowData[col.field]?.dropDown.currentState"
                   (onClick)="handleStatus($event, rowData[col.field]?.dropDown)"

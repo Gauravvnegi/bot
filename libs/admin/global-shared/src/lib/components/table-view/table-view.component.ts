@@ -14,7 +14,7 @@ export class TableViewComponent implements OnInit {
   @Input() items;
   @Input() headerSticky = false;
   @Input() action: string;
-  loading = false;
+  @Input() loading = false;
   // Style Keys
   styleKeys = Object.values(TableObjectStyleKeys) as string[];
 
@@ -69,7 +69,6 @@ export class TableViewComponent implements OnInit {
           }));
         }
       });
-      console.log(objectData);
       return objectData;
     } else {
       return [{ key: data.toString(), value: data }];

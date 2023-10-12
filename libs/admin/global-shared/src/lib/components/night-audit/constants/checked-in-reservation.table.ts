@@ -33,10 +33,6 @@ export const cols: Cols[] = [
     header: 'Source / Name',
   },
   {
-    field: 'amount',
-    header: 'Amount Due',
-  },
-  {
     field: 'action',
     header: 'Actions',
     width: '16%',

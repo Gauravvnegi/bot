@@ -2,8 +2,15 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { cols, title } from '../../constants/manage-login.table';
 import { ActionConfigType } from '../../../../types/night-audit.type';
 import { MenuItem } from 'primeng/api';
-import { timer } from 'rxjs';
+import { Subscription, timer } from 'rxjs';
 import { LoggedInUsers } from '../../models/night-audit.model';
+import { NightAuditService } from '../../../../services/night-audit.service';
+import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import {
+  AdminUtilityService,
+  QueryConfig,
+} from '@hospitality-bot/admin/shared';
+import { UserPermissionTable } from 'libs/admin/roles-and-permissions/src/lib/models/user-permission-table.model';
 
 @Component({
   selector: 'hospitality-bot-manage-logged-users',
@@ -14,6 +21,7 @@ import { LoggedInUsers } from '../../models/night-audit.model';
   ],
 })
 export class ManageLoggedUsersComponent implements OnInit {
+  entityId: string;
   title = title;
   cols = cols;
   loading = false;
@@ -26,10 +34,18 @@ export class ManageLoggedUsersComponent implements OnInit {
   @Input() stepList: MenuItem[];
   @Output() indexChange = new EventEmitter<number>();
 
-  constructor() {}
+  $subscription = new Subscription();
+
+  constructor(
+    private nightAuditService: NightAuditService,
+    private globalFilterService: GlobalFilterService,
+    private adminUtilityService: AdminUtilityService
+  ) {}
 
   ngOnInit(): void {
+    this.entityId = this.globalFilterService.entityId;
     this.initActionConfig();
+    this.initTable();
   }
 
   initActionConfig(postLabel?: string, postDisabled?: boolean) {
@@ -44,6 +60,25 @@ export class ManageLoggedUsersComponent implements OnInit {
       ...(postDisabled && { postDisabled: true }),
       preSeverity: 'primary',
     };
+  }
+
+  initTable() {
+    this.loading = true;
+    this.$subscription.add(
+      this.nightAuditService
+        .getAllUsers(this.entityId, this.getQueryConfig())
+        .subscribe(
+          (loggedUsers) => {
+            const users = new UserPermissionTable().deserialize(loggedUsers)
+              .records;
+            this.items = users.map((user) => new LoggedInUsers(user));
+            this.loading = false;
+          },
+          (error) => {
+            this.loading = false;
+          }
+        )
+    );
   }
 
   handleNext() {
@@ -87,5 +122,15 @@ export class ManageLoggedUsersComponent implements OnInit {
         );
       }
     });
+  }
+
+  getQueryConfig(): QueryConfig {
+    return {
+      params: this.adminUtilityService.makeQueryParams([
+        {
+          loggedInUser: true,
+        },
+      ]),
+    };
   }
 }

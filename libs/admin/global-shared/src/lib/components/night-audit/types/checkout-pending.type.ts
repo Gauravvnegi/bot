@@ -141,6 +141,8 @@ export interface CheckoutPendingResponse {
   totalPaidAmount: number;
   totalAmount: number;
   vip: boolean;
+  source: string;
+  sourceName: string;
   pmsBooking: boolean;
   invoicePrepareRequest: boolean;
   invoiceCode?: string;

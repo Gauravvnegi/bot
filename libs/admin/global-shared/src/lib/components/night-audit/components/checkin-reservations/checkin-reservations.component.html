@@ -4,16 +4,21 @@
       [header]="title"
       [columns]="cols"
       [items]="items"
+      [loading]="loading"
       [headerSticky]="true"
       [action]="'Refresh'"
       [emptyViewConfig]="{
         content: {
-          description: 'There are no users logged in except for you.'
+          description: 'There are no Checked-in Reservations.'
         }
       }"
       (actionClicked)="reloadTable()"
+      (dropDownChange)="statusChange($event)"
     ></hospitality-bot-table-view>
   </div>
+
+  <!-- Confirm Dialog -->
+  <hospitality-bot-confirm-dialog></hospitality-bot-confirm-dialog>
 
   <!-- Action Button -->
   <hospitality-bot-form-action

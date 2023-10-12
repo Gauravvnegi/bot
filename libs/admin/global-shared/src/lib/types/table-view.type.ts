@@ -12,6 +12,7 @@ interface DropDownItem {
   currentState: string;
   nextStates: string[];
   items?: ItemValue[];
+  disabled?: boolean;
 }
 
 export interface TableObjectData {

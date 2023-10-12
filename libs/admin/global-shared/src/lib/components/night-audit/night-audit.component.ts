@@ -10,7 +10,6 @@ import {
 import {
   CheckedInReservation,
   CheckedOutReservation,
-  LoggedInUsers,
   NightAudit,
 } from './models/night-audit.model';
 
@@ -39,13 +38,11 @@ export class NightAuditComponent implements OnInit {
   $subscription = new Subscription();
 
   // DataList
-  loggedInUsers: LoggedInUsers[] = [];
   checkedInReservation: CheckedInReservation[] = [];
   checkedOutReservation: CheckedOutReservation[] = [];
 
   ngOnInit(): void {
     this.entityId = this.globalFilterService.entityId;
-    this.initData();
   }
 
   initData() {
@@ -56,11 +53,9 @@ export class NightAuditComponent implements OnInit {
         .subscribe(
           (res) => {
             const {
-              loggedInUsers,
               checkedInReservation,
               checkedOutReservation,
             } = new NightAudit().deserialize(res);
-            this.loggedInUsers = loggedInUsers;
             this.checkedOutReservation = checkedOutReservation;
             this.checkedInReservation = checkedInReservation;
             this.loading = false;
@@ -76,8 +71,12 @@ export class NightAuditComponent implements OnInit {
     this.onClose.emit(false);
   }
 
-  finish(index) {
-    this.onClose.emit(true);
+  finish(event) {
+    if (typeof event == 'number') {
+      this.close();
+    } else {
+      this.activeStep = event.index;
+    }
   }
 
   getQueryConfig(): QueryConfig {

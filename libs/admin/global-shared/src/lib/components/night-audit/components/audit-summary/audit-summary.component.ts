@@ -21,7 +21,7 @@ export class AuditSummaryComponent implements OnInit {
 
   @Input() activeIndex = 0;
   @Input() stepList: MenuItem[];
-  @Output() indexChange = new EventEmitter<number>();
+  @Output() indexChange = new EventEmitter<any>();
 
   constructor() {}
 
@@ -51,7 +51,8 @@ export class AuditSummaryComponent implements OnInit {
   }
 
   handlePrev() {
-    if (this.activeIndex > 0) this.indexChange.emit(this.activeIndex - 1);
+    if (this.activeIndex > 0)
+      this.indexChange.emit({ index: this.activeIndex - 1, isPrev: true });
   }
 
   get columns() {

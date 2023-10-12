@@ -4,22 +4,22 @@ import {
   TableViewDataType,
 } from '../../../types/table-view.type';
 import { CheckoutPendingResponse } from '../types/checkout-pending.type';
-import { LoggedInUsersResponse } from '../types/loggedin-users.type';
 import { dateTimeWithFormat } from '../../../../../../../web-user/shared/src/lib/utils/date-utils';
 import { CheckInResponseType } from '../types/checkin-pending.type';
+import { User } from 'libs/admin/roles-and-permissions/src/lib/models/user-permission-table.model';
 /**
  * Table ViewData implement for the styling recommendation
  */
 export class LoggedInUsers implements TableViewDataType {
   [key: string]: TableDataType;
-  constructor(input: LoggedInUsersResponse) {
+  constructor(input: User) {
     this['name'] = input.firstName + input.lastName;
     this['department'] = input['department']; // TODO: Need to change, data not coming from api
     this['contact'] = {
       phoneNumber: input.phoneNumber,
       email: input.email,
     };
-    this['jobTitle'] = input.title;
+    this['jobTitle'] = input.jobTitle;
   }
 }
 
@@ -58,20 +58,22 @@ export class CheckedOutReservation implements TableViewDataType {
 
     // Map data
     this['sourceName'] = {
-      source: '-',
-      name: '--',
+      source: input.source,
+      name: input.sourceName,
       postText: 'tiny-text',
     };
-
-    this['dueAmount'] = input.paymentSummary.dueAmount;
 
     // Action
     this['action'] = {
       dropDown: {
-        currentState: 'No Show',
-        nextStates: ['No Show', 'Cancel'],
+        currentState: 'Confirmed',
+        nextStates: ['Confirmed'],
+        disabled: true,
       },
-      quick: [{ label: 'Edit Reservation', value: 'edit-reservation' }],
+      quick: [
+        { label: 'Modify', value: 'modify' },
+        { label: 'Settlement', value: 'settlement' },
+      ],
     };
   }
 }
@@ -111,12 +113,10 @@ export class CheckedInReservation implements TableViewDataType {
 
     // Map data
     this['sourceName'] = {
-      source: '-',
-      name: '--',
+      source: input.source,
+      name: input.sourceName,
       postText: 'tiny-text',
     };
-
-    this['dueAmount'] = input.paymentSummary.dueAmount;
 
     // Action
     this['action'] = {
@@ -130,15 +130,10 @@ export class CheckedInReservation implements TableViewDataType {
 }
 
 export class NightAudit {
-  loggedInUsers: LoggedInUsers[];
   checkedOutReservation: CheckedOutReservation[];
   checkedInReservation: CheckedInReservation[];
   //   auditSummary: AuditSummary[];
   deserialize(input: NightAuditResponse) {
-    this.loggedInUsers = input.LoggedInUsers.map(
-      (item) => new LoggedInUsers(item)
-    );
-
     this.checkedInReservation = input.CheckInPending.map(
       (item) => new CheckedInReservation(item)
     );

@@ -80,11 +80,16 @@
       </ng-container>
       <p
         class="bk-summary_priceInfo_perNight"
-        *ngIf="paymentControls?.totalPaidAmount.value"
+        *ngIf="
+          paymentControls?.totalPaidAmount.value || summaryData?.totalPaidAmount
+        "
       >
         <span class="bk-summary_priceInfo_perNight_label">Paid Amount</span>
         <span class="bk-summary_priceInfo_perNight_amount"
-          >-{{ paymentControls.totalPaidAmount.value | currency: 'INR' }}</span
+          >-{{
+            +paymentControls.totalPaidAmount.value +
+              +summaryData.totalPaidAmount | currency: 'INR'
+          }}</span
         >
       </p>
     </div>
@@ -93,12 +98,7 @@
       <div class="bk-summary_total">
         <p class="bk-summary_total_label">Total Amount to be paid</p>
         <p class="bk-summary_total_amount">
-          {{
-            summaryData?.totalAmount -
-              (paymentControls.totalPaidAmount.value
-                ? paymentControls.totalPaidAmount.value
-                : summaryData.totalPaidAmount) | currency: 'INR'
-          }}
+          {{ calculateAmountToBePaid(summaryData) | currency: 'INR' }}
         </p>
       </div>
       <div class="bk-summary_btn-wrapper">
@@ -192,7 +192,7 @@
             [ngClass]="formService.disableBtn ? 'disabled-btn' : ''"
             (click)="offerSelect()"
             >Remove</span
-            >
+          >
         </div>
         <div class="offer">
           <div class="offerName">{{ selectedOffer?.name }}</div>
@@ -202,9 +202,9 @@
         <p *ngIf="index === undefined">
           Have an Offer?
           <span
-          (click)="applyOffer()"
-          [ngClass]="formService.disableBtn ? 'disabled-btn' : ''"
-          >Apply Offer</span
+            (click)="applyOffer()"
+            [ngClass]="formService.disableBtn ? 'disabled-btn' : ''"
+            >Apply Offer</span
           >
         </p>
       </ng-template>

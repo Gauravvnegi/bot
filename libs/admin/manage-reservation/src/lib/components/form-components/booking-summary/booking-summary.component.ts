@@ -270,6 +270,13 @@ export class BookingSummaryComponent implements OnInit {
     });
   }
 
+  calculateAmountToBePaid(summaryData) {
+    const totalAmount = summaryData.totalDueAmount
+      ? summaryData.totalDueAmount
+      : summaryData.totalAmount;
+    return totalAmount - this.paymentControls.totalPaidAmount.value;
+  }
+
   copiedConfirmationNumber(number): void {
     this._clipboard.copy(number);
     this.snackbarService.openSnackBarAsText('Confirmation number copied', '', {

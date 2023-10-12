@@ -99,7 +99,7 @@ export class FeedbackDetailModalComponent implements OnInit, OnDestroy {
             ) ?? [];
 
           if (!this.assigneeList?.length) {
-            const data = this.data.feedback.userName.split(' ');
+            const data = this.data.feedback.userName?.split(' ') ?? [];
             this.assigneeList = [
               {
                 firstName: data[0],

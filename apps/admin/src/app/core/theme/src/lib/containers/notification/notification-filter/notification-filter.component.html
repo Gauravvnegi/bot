@@ -23,19 +23,22 @@
       <div>Date</div>
       <div class="fields">
         <mat-form-field appearance="outline" class="date-field">
+          <mat-label>From</mat-label>
           <input
             matInput
             [matDatepicker]="datepicker"
             formControlName="fromDate"
             [max]="fromMaxDate"
+            la
           />
           <mat-datepicker-toggle matSuffix [for]="datepicker"
             ><img src="assets/svg/calendar.svg" class="calendar-image"
           /></mat-datepicker-toggle>
           <mat-datepicker #datepicker> </mat-datepicker>
         </mat-form-field>
-        <div>to</div>
+
         <mat-form-field appearance="outline" class="date-field">
+          <mat-label>To</mat-label>
           <input
             matInput
             [matDatepicker]="datepicker1"

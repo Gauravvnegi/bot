@@ -49,7 +49,7 @@ export class CheckinReservationsComponent implements OnInit {
       acceptButtonStyleClass: 'accept-button',
       rejectButtonStyleClass: 'reject-button-outlined',
       accept: () => {
-        debugger;
+        // debugger;
       },
     });
   }

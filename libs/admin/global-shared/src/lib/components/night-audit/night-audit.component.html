@@ -19,6 +19,7 @@
       <hospitality-bot-checkin-reservations
         class="audit-content"
         [activeIndex]="activeStep"
+        [loading]="loading"
         [items]="checkedInReservation"
         [stepList]="itemList"
         (reload)="initData()"
@@ -28,6 +29,7 @@
       <hospitality-bot-checkout-reservations
         class="audit-content"
         [items]="checkedOutReservation"
+        [loading]="loading"
         [activeIndex]="activeStep"
         [stepList]="itemList"
         (reload)="initData()"

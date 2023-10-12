@@ -1,10 +1,14 @@
-import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnInit,
+  Output,
+  EventEmitter,
+  SimpleChanges,
+} from '@angular/core';
 import { ActionConfigType } from '../../../../types/night-audit.type';
 import { MenuItem } from 'primeng/api';
-import {
-  cols,
-  checkedInList,
-} from '../../constants/checked-in-reservation.table';
+import { cols } from '../../constants/checked-in-reservation.table';
 import { CheckedOutReservation } from '../../models/night-audit.model';
 
 @Component({
@@ -18,7 +22,7 @@ import { CheckedOutReservation } from '../../models/night-audit.model';
 export class CheckoutReservationsComponent implements OnInit {
   title = 'Pending Check-out';
   cols = cols;
-  loading = false;
+  @Input() loading = false;
   actionConfig: ActionConfigType;
 
   @Input() items: CheckedOutReservation[] = [];

@@ -58,12 +58,10 @@ export class CheckedOutReservation implements TableViewDataType {
 
     // Map data
     this['sourceName'] = {
-      source: '-',
-      name: '--',
+      source: input.source,
+      name: input.sourceName,
       postText: 'tiny-text',
     };
-
-    this['dueAmount'] = input.paymentSummary.dueAmount;
 
     // Action
     this['action'] = {
@@ -111,12 +109,10 @@ export class CheckedInReservation implements TableViewDataType {
 
     // Map data
     this['sourceName'] = {
-      source: '-',
-      name: '--',
+      source: input.source,
+      name: input.sourceName,
       postText: 'tiny-text',
     };
-
-    this['dueAmount'] = input.paymentSummary.dueAmount;
 
     // Action
     this['action'] = {

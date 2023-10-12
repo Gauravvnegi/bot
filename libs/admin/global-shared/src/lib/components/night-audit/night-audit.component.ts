@@ -71,8 +71,12 @@ export class NightAuditComponent implements OnInit {
     this.onClose.emit(false);
   }
 
-  finish(index) {
-    this.onClose.emit(true);
+  finish(event) {
+    if (typeof event == 'number') {
+      this.close();
+    } else {
+      this.activeStep = event.index;
+    }
   }
 
   getQueryConfig(): QueryConfig {

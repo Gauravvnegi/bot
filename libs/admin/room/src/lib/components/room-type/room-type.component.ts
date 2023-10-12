@@ -98,7 +98,8 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
     private location: Location,
     private routesConfigService: RoutesConfigService
   ) {
-    this.roomTypeId = this.route.snapshot.paramMap.get('id');
+    this.roomTypeId = this.route.snapshot.paramMap.get('roomTypeId');
+    debugger;
   }
 
   ngOnInit(): void {
@@ -169,6 +170,7 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
     }
 
     // Patch the form value if service id present
+    debugger;
     if (this.roomTypeId) {
       this.initFormDetails();
     } else {
@@ -288,6 +290,7 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
           .subscribe(
             (res) => {
               let data = new RoomTypeForm().deserialize(res);
+              debugger;
               const { staticRatePlans, dynamicRatePlans, ...rest } = data;
               this.setBasePriceDisability(data.isBaseRoomType);
               this.disableRoomType = data.isBaseRoomType;

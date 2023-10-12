@@ -82,11 +82,7 @@
             class="message"
             [ngStyle]="{ color: item.read ? '#002046' : '#4b56c0' }"
           >
-            {{
-              item.message.length > 33
-                ? item.message.substring(0, 33) + '...'
-                : item.message
-            }}
+            {{ item.message }}
           </div>
         </div>
       </div>

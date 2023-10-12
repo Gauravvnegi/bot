@@ -152,7 +152,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
     };
 
     this.analyticsService.getInhouseRequest(query).subscribe((res) => {
-      debugger;
       this.options = new PreArrivalRequestList().deserialize(
         res
       ).PreArrivalRequest;
@@ -190,7 +189,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
     this.reservationService.getReservationDetails(config).subscribe(
       (res) => {
-        debugger;
         this.options = new ReservationTable().deserialize(
           res,
           this.globalFilterService.timezone

@@ -1,0 +1,27 @@
+@import 'main';
+:host ::ng-deep {
+  .accept-button {
+    color: white;
+    background-color: $primary-cta;
+    padding: 6px 20px;
+  }
+  .reject-button {
+    color: white;
+    background-color: $failed-state !important;
+    padding: 6px 20px;
+  }
+
+  .reject-button-outlined {
+    border: 1px solid #e31717 !important;
+    padding: 6px 20px;
+    background: unset;
+    color: red;
+  }
+
+  .p-dialog .p-dialog-header {
+    padding: 15px 33px;
+  }
+  .p-dialog .p-dialog-content {
+    padding-bottom: 5px;
+  }
+}

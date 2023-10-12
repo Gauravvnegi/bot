@@ -69,7 +69,6 @@ export class TableViewComponent implements OnInit {
           }));
         }
       });
-      console.log(objectData);
       return objectData;
     } else {
       return [{ key: data.toString(), value: data }];

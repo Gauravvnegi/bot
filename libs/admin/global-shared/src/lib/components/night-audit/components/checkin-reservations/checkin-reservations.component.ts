@@ -1,13 +1,6 @@
-import {
-  Component,
-  Input,
-  OnInit,
-  Output,
-  EventEmitter,
-  SimpleChanges,
-} from '@angular/core';
+import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { ActionConfigType } from '../../../../types/night-audit.type';
-import { MenuItem } from 'primeng/api';
+import { ConfirmationService, MenuItem } from 'primeng/api';
 import { cols } from '../../constants/checked-in-reservation.table';
 import { CheckedInReservation } from '../../models/night-audit.model';
 
@@ -19,20 +12,21 @@ import { CheckedInReservation } from '../../models/night-audit.model';
     '../checkout-reservations/checkout-reservations.component.scss',
     './checkin-reservations.component.scss',
   ],
+  providers: [ConfirmationService],
 })
 export class CheckinReservationsComponent implements OnInit {
   title = 'Pending Check-ins';
   cols = cols;
-  @Input() loading = false;
   actionConfig: ActionConfigType;
 
+  @Input() loading = false;
   @Input() items: CheckedInReservation[] = [];
   @Input() activeIndex = 0;
   @Input() stepList: MenuItem[];
   @Output() indexChange = new EventEmitter<number>();
   @Output() reload = new EventEmitter();
 
-  constructor() {}
+  constructor(private confirmationService: ConfirmationService) {}
 
   ngOnInit(): void {
     this.initActionConfig();
@@ -46,6 +40,18 @@ export class CheckinReservationsComponent implements OnInit {
       postLabel: 'Next',
       preSeverity: 'primary',
     };
+  }
+
+  statusChange(event) {
+    this.confirmationService.confirm({
+      header: `Status Change ${event}`,
+      message: 'Do You want to continue ?',
+      acceptButtonStyleClass: 'accept-button',
+      rejectButtonStyleClass: 'reject-button-outlined',
+      accept: () => {
+        debugger;
+      },
+    });
   }
 
   initTable() {

@@ -13,8 +13,12 @@
         }
       }"
       (actionClicked)="reloadTable()"
+      (dropDownChange)="statusChange($event)"
     ></hospitality-bot-table-view>
   </div>
+
+  <!-- Confirm Dialog -->
+  <hospitality-bot-confirm-dialog></hospitality-bot-confirm-dialog>
 
   <!-- Action Button -->
   <hospitality-bot-form-action

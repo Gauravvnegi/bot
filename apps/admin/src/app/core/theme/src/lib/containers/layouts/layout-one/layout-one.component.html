@@ -191,17 +191,20 @@
                   {{ unreadCount }}
                 </div>
               </div>
-              <div
-                class="notification"
-                *ngIf="isNotificationVisible"
-                [@slideInOut]
+              <p-sidebar
+                [visible]="isNotificationVisible"
+                (onHide)="isNotificationVisible = false"
+                [showCloseIcon]="false"
+                position="right"
               >
-                <admin-notification
-                  [notificationFilterData]="notificationFilterData"
-                  (onCloseNotification)="closeNotification()"
-                  (filterData)="setNotificationFilterData($event)"
-                ></admin-notification>
-              </div>
+                <div class="notification" *ngIf="isNotificationVisible">
+                  <admin-notification
+                    [notificationFilterData]="notificationFilterData"
+                    (onCloseNotification)="isNotificationVisible = false"
+                    (filterData)="setNotificationFilterData($event)"
+                  ></admin-notification>
+                </div>
+              </p-sidebar>
             </div>
           </div>
           <div class="dropdown-wrapper">

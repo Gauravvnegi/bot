@@ -6,11 +6,18 @@
     <img
       src="assets/svg/notification-filter.svg"
       alt="filter"
+      pTooltip="filter"
+      tooltipPosition="bottom"
       (click)="openFilterForm()"
     />
-    <mat-icon (click)="closePopup()" class="material-icon" matSuffix
-      >cancel</mat-icon
-    >
+    <i
+      class="pi pi-arrow-right"
+      style="color: #fff;"
+      (click)="closePopup()"
+      aria-hidden="true"
+      pTooltip="Close"
+      tooltipPosition="bottom"
+    ></i>
   </div>
 </div>
 <ng-container

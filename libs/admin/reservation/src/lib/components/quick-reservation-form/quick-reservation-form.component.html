@@ -41,7 +41,10 @@
       </div>
     </div>
   </div>
-  <div class="body">
+  <div
+    class="body"
+    [ngStyle]="{ 'max-height': reservationId ? '70vh' : '85vh' }"
+  >
     <small class="error-message" *ngIf="errorMessage">{{ errorMessage }}</small>
     <div class="form-block" [formGroup]="useForm">
       <!-- Reservation Information -->
@@ -72,7 +75,8 @@
           [props]="{ placeholder: 'Select' }"
         ></hospitality-bot-select>
         <hospitality-bot-input
-          class="half-width"
+          *ngIf="!otaOptions.length"
+          class="half-width maxlength"
           controlName="sourceName"
           label="Booking Source Name"
           maxLength="60"
@@ -84,6 +88,19 @@
             }
           }"
         ></hospitality-bot-input>
+        <hospitality-bot-select
+          *ngIf="otaOptions.length"
+          class="half-width maxlength"
+          controlName="sourceName"
+          label="Booking Source Name"
+          [options]="otaOptions"
+          [props]="{
+            placeholder: 'Select',
+            errorMessages: {
+              required: 'This is a required field.'
+            }
+          }"
+        ></hospitality-bot-select>
         <hospitality-bot-select
           class="half-width"
           controlName="marketSegment"
@@ -97,19 +114,6 @@
 
       <!-- Guest Information -->
       <ng-container *ngIf="!reservationId" formGroupName="guestInformation">
-        <!-- <hospitality-bot-select
-          class="half-width select"
-          controlName="guestDetails"
-          label="Guest"
-          [props]="{
-            isAsync: false,
-            createPrompt: '+ Add New Guest',
-            placeholder: 'Search'
-          }"
-          [options]="guestOptions"
-          (onCreate)="createGuest()"
-        ></hospitality-bot-select> -->
-
         <hospitality-bot-quick-select
           class="half-width select"
           controlName="guestDetails"
@@ -118,7 +122,10 @@
           [props]="{
             showChips: false,
             isAsync: true,
-            placeholder: 'Select'
+            placeholder: 'Select',
+            createPrompt: '+ Add New Guest',
+            selectedOption: selectedGuest,
+            createType: 'sidebar'
           }"
           [apiConfig]="{
             apiEndPoint: '/api/v1/members',
@@ -135,6 +142,7 @@
             isPagination: true
           }"
           (clickedOption)="guestChange($event)"
+          (openSidebar)="createGuest()"
         ></hospitality-bot-quick-select>
       </ng-container>
 
@@ -224,15 +232,30 @@
       ></hospitality-bot-input>
     </div>
   </div>
-  <div class="btn-wrapper">
+  <!-- <div class="btn-wrapper">
     <hospitality-bot-button
       [label]="reservationId ? 'Update Reservation' : 'Confirm Reservation'"
       (onClick)="handleSubmit()"
       [isLoading]="isBooking"
       [disabled]="!reservationId && useForm.invalid"
     ></hospitality-bot-button>
-  </div>
+  </div> -->
 </div>
+
+<hospitality-bot-form-action
+  class="full-width"
+  [loading]="isBooking"
+  [isId]="reservationId"
+  (onPostAction)="handleSubmit()"
+  [disabled]="!reservationId && useForm.invalid"
+  [isSticky]="true"
+  [config]="{
+    postLabel: reservationId ? 'Update Reservation' : 'Create Reservation',
+    preHide: true
+  }"
+  #fa
+>
+</hospitality-bot-form-action>
 
 <ng-container>
   <p-sidebar
@@ -244,3 +267,18 @@
     <ng-container #sidebarSlide></ng-container>
   </p-sidebar>
 </ng-container>
+
+<hospitality-bot-form-action
+  class="full-width"
+  [loading]="loading"
+  [isId]="reservationId"
+  (onPostAction)="handleSubmit()"
+  [disabled]="!reservationId && useForm.invalid"
+  [isSticky]="true"
+  [config]="{
+    postLabel: reservationId ? 'Update Reservation' : 'Create Reservation',
+    preHide: true
+  }"
+  #fa
+>
+</hospitality-bot-form-action>

@@ -16,7 +16,12 @@
           (click)="setTableType(option.value)"
         />
         <div class="image">
-          <img [src]="option.url" [alt]="option.value" />
+          <img
+            [src]="
+              selectedTableType === option.value ? option.whiteUrl : option.url
+            "
+            [alt]="option.value"
+          />
         </div>
       </label>
     </div>
@@ -29,13 +34,23 @@
 </div>
 <div [ngClass]="{ 'sticky-header-gap': isScrolledUp }"></div>
 
-<ng-container
-  *ngIf="tableFG?.get('tableType').value === 'calendar'; else tableView"
->
+<ng-container *ngIf="tableFG?.get('tableType').value === 'calendar'">
   <hospitality-bot-reservation-calendar-view></hospitality-bot-reservation-calendar-view>
 </ng-container>
 
-<ng-template #tableView>
+<ng-container *ngIf="tableFG?.get('tableType').value === 'calendarMaximize'">
+  <p-dialog
+    header="Header"
+    [modal]="true"
+    [(visible)]="visible"
+    [style]="{ width: '50vw' }"
+    [maximizable]="true"
+  >
+    <hospitality-bot-reservation-calendar-view></hospitality-bot-reservation-calendar-view>
+  </p-dialog>
+</ng-container>
+
+<ng-container *ngIf="tableFG?.get('tableType').value === 'table'">
   <p-table
     #dt
     [styleClass]="tableConfig.styleClass"
@@ -426,7 +441,7 @@
       ></p-paginator>
     </ng-template>
   </p-table>
-</ng-template>
+</ng-container>
 
 <ng-template #emptyCell>
   <div class="emptyCell">&mdash;</div>

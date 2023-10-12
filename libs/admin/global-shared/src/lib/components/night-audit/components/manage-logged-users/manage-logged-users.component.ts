@@ -1,8 +1,9 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { cols, title, usersList } from '../../constants/manage-login.table';
+import { cols, title } from '../../constants/manage-login.table';
 import { ActionConfigType } from '../../../../types/night-audit.type';
 import { MenuItem } from 'primeng/api';
 import { timer } from 'rxjs';
+import { LoggedInUsers } from '../../models/night-audit.model';
 
 @Component({
   selector: 'hospitality-bot-manage-logged-users',
@@ -15,12 +16,12 @@ import { timer } from 'rxjs';
 export class ManageLoggedUsersComponent implements OnInit {
   title = title;
   cols = cols;
-  users = usersList;
   loading = false;
   actionConfig: ActionConfigType;
   usersLoggedOut: boolean;
   isTimerStart = false;
 
+  @Input() items: LoggedInUsers[];
   @Input() activeIndex = 0;
   @Input() stepList: MenuItem[];
   @Output() indexChange = new EventEmitter<number>();
@@ -51,7 +52,7 @@ export class ManageLoggedUsersComponent implements OnInit {
       //these below line should be removed, after uncommenting above line
       this.isTimerStart = true;
       this.initActionConfig('Next', false);
-      this.users = [];
+      this.items = [];
     } else if (this.activeIndex + 1 < this.stepList.length)
       this.indexChange.emit(this.activeIndex + 1);
   }
@@ -76,7 +77,7 @@ export class ManageLoggedUsersComponent implements OnInit {
         // call api
         this.usersLoggedOut = false;
         this.initActionConfig('Next', false);
-        this.users = [];
+        this.items = [];
       } else {
         const minutes = Math.floor(remainingTime / 60000);
         const seconds = Math.floor((remainingTime % 60000) / 1000);

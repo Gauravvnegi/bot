@@ -1,6 +1,8 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Cols } from '@hospitality-bot/admin/shared';
 import { EmptyContent } from 'libs/admin/shared/src/lib/components/datatable/empty-table/empty-table.component';
+import { ActionDataType, TableObjectData } from '../../types/table-view.type';
+import { TableObjectStyleKeys } from '../../constants/table-view.const';
 @Component({
   selector: 'hospitality-bot-table-view',
   templateUrl: './table-view.component.html',
@@ -13,6 +15,8 @@ export class TableViewComponent implements OnInit {
   @Input() headerSticky = false;
   @Input() action: string;
   loading = false;
+  // Style Keys
+  styleKeys = Object.values(TableObjectStyleKeys) as string[];
 
   // EmptyView config
   link: string;
@@ -34,6 +38,8 @@ export class TableViewComponent implements OnInit {
   }
 
   @Output() actionClicked = new EventEmitter();
+  @Output() dropDownChange = new EventEmitter();
+  @Output() quickChange = new EventEmitter();
 
   constructor() {}
 
@@ -43,16 +49,52 @@ export class TableViewComponent implements OnInit {
     return this.columns.find((data) => data.field == item.field);
   }
 
-  getKeysValues(data) {
+  /**
+   *
+   * @param data table <td>{{value}}</td>
+   * @returns list of the [{key:'keys',value:'value',styleClass:'',icon:''}] for every item
+   */
+  getKeysValues(data: string | TableObjectData) {
     if (typeof data === 'object' && data !== null) {
-      return Object.entries(data).map(([key, value]) => ({ key, value }));
+      let objectData = Object.entries(data)
+        .filter(([key, value]) => !this.styleKeys.includes(key))
+        .map(([key, value]) => ({ key: key, value: value }));
+
+      // adding all style in every items
+      this.styleKeys.forEach((styleKey) => {
+        if (data[styleKey]) {
+          objectData = objectData.map((item) => ({
+            ...item,
+            [styleKey]: data[styleKey],
+          }));
+        }
+      });
+      console.log(objectData);
+      return objectData;
     } else {
       return [{ key: data.toString(), value: data }];
     }
   }
 
+  /**
+   *
+   * @param data value of data table
+   * @returns check it is style or simple text
+   */
+  isStyle(data: string) {
+    return this.styleKeys.find((item) => item == data);
+  }
+
   onActionClicked() {
     this.actionClicked.emit(true);
+  }
+
+  handleStatus(event, data) {
+    this.dropDownChange.emit(event);
+  }
+
+  handleMenuClick(event, data) {
+    this.quickChange.emit(event);
   }
 }
 

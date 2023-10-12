@@ -1,0 +1,20 @@
+:host ::ng-deep .main__wrapper {
+  .p-datatable {
+    .p-datatable-thead > tr > th {
+      padding: 6px 5px;
+    }
+    table {
+      border: 1px solid #e4e4e4;
+      border-width: 2px;
+    }
+  }
+
+  .p-datatable {
+    height: 62vh;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+  .sticky-header {
+    top: -1px !important;
+  }
+}

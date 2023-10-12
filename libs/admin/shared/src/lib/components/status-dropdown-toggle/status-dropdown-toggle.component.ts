@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { defaultRecordJson } from '../../constants/datatable';
 import { EntityStateRecord, FlagType } from '../../types/table.type';
 import { convertToTitleCase } from '../../utils/valueFormatter';
@@ -9,11 +9,12 @@ import { Option } from '../../types/form.type';
   templateUrl: './status-dropdown-toggle.component.html',
   styleUrls: ['./status-dropdown-toggle.component.scss'],
 })
-export class StatusDropdownToggleComponent {
+export class StatusDropdownToggleComponent implements OnInit {
   label = 'Active';
   value: string | boolean;
   styleClass = 'activeButton';
   items: (Status & { command: () => void })[] = [];
+  @Input() toggleMenu: boolean;
 
   booleanKeys: BooleanKeys = {
     forTrue: 'ACTIVE',
@@ -119,6 +120,11 @@ export class StatusDropdownToggleComponent {
 
   stopEvent(event: Event) {
     event.stopPropagation();
+  }
+
+  ngOnInit(): void {
+    // this.menuOptions;
+    // debugger;
   }
 
   /**

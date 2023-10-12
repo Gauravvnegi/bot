@@ -11,6 +11,8 @@ import { LazyLoadEvent, SortEvent } from 'primeng/api/public_api';
 import { Observable, Subscription } from 'rxjs';
 import { Categories } from '../../data-models/categoryConfig.model';
 import { CategoriesService } from '../../services/category.service';
+import { RoutesConfigService } from '@hospitality-bot/admin/core/theme';
+import { packagesRoutes } from '../../constant/routes';
 
 @Component({
   selector: 'hospitality-bot-categories-datatable',
@@ -60,7 +62,8 @@ export class CategoriesDatatableComponent extends BaseDatatableComponent
     private globalFilterService: GlobalFilterService,
     private snackbarService: SnackBarService,
     private router: Router,
-    protected tabFilterService: TableService
+    protected tabFilterService: TableService,
+    private routesConfigService: RoutesConfigService
   ) {
     super(fb, tabFilterService);
   }
@@ -113,7 +116,7 @@ export class CategoriesDatatableComponent extends BaseDatatableComponent
         },
         ({ error }) => {
           this.values = [];
-          this.loading = false; 
+          this.loading = false;
         }
       )
     );
@@ -155,7 +158,7 @@ export class CategoriesDatatableComponent extends BaseDatatableComponent
         },
         ({ error }) => {
           this.values = [];
-          this.loading = false; 
+          this.loading = false;
         }
       )
     );
@@ -188,18 +191,22 @@ export class CategoriesDatatableComponent extends BaseDatatableComponent
           this.loading = false;
         },
         ({ error }) => {
-          this.loading = false; 
+          this.loading = false;
         }
       )
     );
   }
 
   redirectToAddCategory(): void {
-    this.router.navigate(['category'], { relativeTo: this.route });
+    this.routesConfigService.navigate({
+      additionalPath: packagesRoutes.createCategory.route,
+    });
   }
 
   openCategoryDetails(category): void {
-    this.router.navigate(['category', category.id], { relativeTo: this.route });
+    this.routesConfigService.navigate({
+      additionalPath: `${packagesRoutes.createCategory.route}/${category.id}`,
+    });
   }
 
   onFilterTypeTextChange(value, field, matchMode = 'startsWith'): void {

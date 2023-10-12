@@ -8,7 +8,8 @@
     <ng-container [ngTemplateOutlet]="search"></ng-container>
     <hospitality-bot-button
       label="+ Add Company"
-      link="/pages/members/company/{{ companyRoutes.addCompany.route }}"
+      [routerLink]="companyRoutes.addCompany.route"
+      preserveQueryParams="true"
     ></hospitality-bot-button>
     <hospitality-bot-export-list
       [additionalActionItems]="additionalActionItems"

@@ -1,3 +1,5 @@
+import { JourneyState, JourneyType } from "libs/admin/manage-reservation/src/lib/constants/reservation";
+
 const actionBtnConfig = [
   {
     label: 'Activate & Generate PreCheckIn',
@@ -16,3 +18,16 @@ export const actionConfig = {
     type: 'ACTIVATE_AND_GENERATE',
   },
 };
+
+export function getColorCode(
+  jouryneyStatus: Record<JourneyType, JourneyState>
+) {
+  if (jouryneyStatus) {
+    if (jouryneyStatus.CHECKOUT === JourneyState.COMPLETED) return 'inactive';
+    else if (jouryneyStatus.CHECKIN === JourneyState.COMPLETED) return 'active';
+    else if (jouryneyStatus.PRECHECKIN === JourneyState.COMPLETED)
+      return 'success';
+    else if (jouryneyStatus.NEW === JourneyState.COMPLETED) return 'success';
+    else return 'success';
+  }
+}

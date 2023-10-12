@@ -47,12 +47,12 @@ export class RequestWrapperComponent implements OnInit, OnDestroy {
 
   listByFilterItems = [
     {
-      label: 'All',
-      value: 'ALL',
-    },
-    {
       label: 'Focused',
       value: 'FOCUSED',
+    },
+    {
+      label: 'All',
+      value: 'ALL',
     },
   ];
 

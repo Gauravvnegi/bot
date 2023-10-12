@@ -1,0 +1,49 @@
+@import 'main';
+button {
+  outline: none;
+  min-width: 124px;
+  @include flex-space-between-cen-Algn;
+  border-radius: 24px;
+  font-size: 11px;
+  border: solid 1px $button-blue;
+  background-color: $white;
+  padding: 4px;
+  color: $button-blue;
+  padding-left: 16px;
+  cursor: pointer;
+  @media screen and (max-width: $L) {
+    font-size: 10px;
+    min-width: 87px;
+    max-width: 87px;
+    height: 28px;
+  }
+}
+
+.example-list {
+  text-align: center;
+  width: 175px;
+  padding: 7px 8px 7px 8px;
+  border-radius: 4px;
+  box-shadow: 2px 6px 12px 0 $boxShadow;
+  background-color: $white;
+  @include flex-col-space-between-center-algn;
+}
+
+.comment {
+  width: 100%;
+}
+
+.material-icons {
+  cursor: pointer;
+  color: $button-blue;
+  -webkit-transform: rotate(90deg);
+  -moz-transform: rotate(90deg);
+  -ms-transform: rotate(90deg);
+  -o-transform: rotate(90deg);
+  transform: rotate(90deg);
+}
+
+.disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}

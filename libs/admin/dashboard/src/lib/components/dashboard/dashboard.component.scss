@@ -38,6 +38,7 @@
   background-color: #f0ecff;
   border: solid 1px $primary;
   border-radius: 4px;
+  cursor: pointer;
 
   .title {
     display: flex;
@@ -91,12 +92,15 @@
 }
 
 .guest {
-  cursor: pointer;
   gap: 1em;
   .name-section {
     display: inline-flex;
     justify-content: space-between;
     align-items: center;
+
+    svg {
+      filter: invert(1);
+    }
     .name {
       font-size: 12px;
       letter-spacing: 0.72px;
@@ -111,6 +115,146 @@
   }
 }
 
-svg {
-  filter: invert(1);
+.status {
+  font-size: 12px;
+  letter-spacing: 0.72px;
+  text-align: left;
+  color: $title;
+  font-weight: 500;
+}
+
+.status-text-initiated {
+  color: $initiated !important;
+}
+
+.status-text-reject {
+  color: $mediumRed !important;
+}
+
+.status-text-success {
+  color: #2a8853 !important;
+}
+
+.status-text-pending {
+  color: $draft-state !important;
+}
+.container {
+  width: 100%;
+  background-color: #f0ecff;
+  border-radius: 4px;
+  width: 100%;
+
+  .guest-container {
+    display: flex;
+    flex-direction: column;
+    padding: 6px 10px;
+    width: 100%;
+    background-color: #f0ecff;
+    border-radius: 4px;
+    cursor: pointer;
+    .header {
+      display: flex;
+      justify-content: space-between;
+
+      .booking-no {
+        opacity: 0.73;
+        font-size: 10px;
+        letter-spacing: 0.6px;
+        text-align: left;
+        color: $title;
+      }
+
+      .header-left {
+        font-size: 12px;
+        text-align: right;
+        color: rgba(0, 16, 55, 0.6);
+        display: flex;
+        gap: 0.5em;
+        justify-content: center;
+        align-items: center;
+
+        .status {
+          padding: 4px 11px;
+          text-align: center;
+          border-radius: 26px;
+          color: #fff;
+          font-size: 10px;
+        }
+
+        .time {
+          font-size: 10px;
+          letter-spacing: 0.6px;
+          color: $title;
+        }
+      }
+    }
+
+    .info-section {
+      display: flex;
+      flex-direction: column;
+      row-gap: 0.2em;
+      .title {
+        font-size: 12px;
+        font-weight: 600;
+        letter-spacing: 0.72px;
+        color: $title;
+      }
+
+      .name-wrapper {
+        .name-title {
+          font-size: 12px;
+          letter-spacing: 0.72px;
+          color: rgba(39, 39, 39, 0.7);
+        }
+        .name {
+          font-size: 12px;
+          letter-spacing: 0.72px;
+          color: $title;
+          font-weight: 500;
+        }
+      }
+
+      .contact {
+        display: inline-flex;
+        gap: 0.5em;
+        font-size: 10px;
+        letter-spacing: 0.6px;
+        color: rgba(39, 39, 39, 0.7);
+        .social {
+          display: flex;
+          gap: 0.3em;
+          align-items: center;
+          justify-content: center;
+        }
+      }
+    }
+  }
+  .footer {
+    border-top: 1px solid #00000029;
+    display: flex;
+    justify-content: flex-end;
+
+    .count-wrapper {
+      display: flex;
+      gap: 0.3em;
+      padding: 6px;
+
+      .item {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        .count {
+          font-size: 12px;
+          letter-spacing: 0.6px;
+          color: rgba(0, 0, 0, 0.7);
+          font-weight: 600;
+        }
+      }
+
+      svg {
+        filter: invert(1);
+      }
+    }
+  }
 }

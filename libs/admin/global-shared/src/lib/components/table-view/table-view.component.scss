@@ -2,9 +2,9 @@
 // Design
 .table-view__wrapper {
   .header {
-    font-size: 16px;
+    font-size: 22px;
     font-weight: 600;
-    padding: 10px 0;
+    padding: 15px 0;
     display: flex;
     justify-content: space-between;
     .action {
@@ -32,6 +32,18 @@
     z-index: 1;
     background: #f1f2f7 !important;
   }
+
+  // decoration
+  .active-text {
+    background-color: #e8e2ff;
+    color: $primary-cta;
+    padding: 5px 7px;
+    border-radius: 5px;
+    font-size: 10px;
+    display: flex;
+    gap: 6px;
+    align-items: center;
+  }
 }
 
 // Style Override
@@ -50,5 +62,33 @@
   }
   .secondary-text {
     font-size: 12px;
+  }
+  .primary-text,
+  .text {
+    color: #6d7580;
+  }
+  .warning-text {
+    color: $warning-state;
+  }
+  .danger-text {
+    color: $inactive-state;
+  }
+  .completed-text {
+    color: $success-state;
+  }
+  .tiny-text {
+    font-size: 11px;
+    color: #cdcdcd;
+  }
+  .status-toggle {
+    white-space: nowrap;
+    font-size: 12px;
+    margin: 0;
+    .wrapper {
+      display: flex;
+    }
+  }
+  .p-menu {
+    padding: 0;
   }
 }

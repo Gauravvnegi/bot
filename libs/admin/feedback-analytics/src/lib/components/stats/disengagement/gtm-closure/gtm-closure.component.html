@@ -1,0 +1,40 @@
+<div
+  class="graphTitle"
+  *skeleton="data == undefined; height: '25px'; width: '75%'"
+>
+  How is Guest to Meet & Closure Rate varying over a period of time ?
+</div>
+<div style="margin-top: 25px;">
+  <canvas
+    *skeleton="data == undefined; height: '18vw'; width: '100%'"
+    baseChart
+    #lineChart
+    [datasets]="lineGraph.chartData"
+    [labels]="lineGraph.chartLabels"
+    [options]="lineGraph.chartOptions"
+    [colors]="lineGraph.chartColors"
+    [legend]="lineGraph.chartLegend"
+    [chartType]="lineGraph.chartType"
+  >
+  </canvas>
+</div>
+<div
+  class="labelWrapper"
+  *skeleton="
+    data == undefined;
+    height: '30px';
+    width: '150px';
+    margin: '20px 0 0 0'
+  "
+>
+  <ng-container *ngFor="let legend of legends; let legendIndex = index">
+    <div class="stat-label" (click)="legendOnClick(legendIndex)">
+      <input class="legends" type="checkbox" />
+      <div
+        class="legend-border"
+        [style.border-color]="legend.borderColor"
+      ></div>
+      <p class="stat-label-title">{{ legend.label }}</p>
+    </div>
+  </ng-container>
+</div>

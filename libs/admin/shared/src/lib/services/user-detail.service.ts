@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import {
   Hotels,
   UserConfig,
+  UserPermissions,
 } from '../../../../shared/src/lib/models/userConfig.model';
 import { tokensConfig } from '../constants/common';
 import { UserResponse } from '../types/user.type';
@@ -70,5 +71,14 @@ export class UserService extends ApiService {
       `/api/v1/uploads?folder_name=entity/${entityId}/${path}`,
       data
     );
+  }
+
+  initUserPermissionDetails(input: UserResponse['permissions']) {
+    // this.userPermissions = new UserPermissions().deserialize(input);
+    this.userPermissions = input;
+  }
+
+  get userPermissionDetails() {
+    return this.userPermissions;
   }
 }

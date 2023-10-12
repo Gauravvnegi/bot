@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import {
+  GlobalFilterService,
+  RoutesConfigService,
+} from '@hospitality-bot/admin/core/theme';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { CategoryFormValue, NavRouteOptions } from 'libs/admin/shared/src';
 import { Subscription } from 'rxjs';
@@ -25,7 +28,8 @@ export class CreateCategoryComponent implements OnInit {
     private servicesService: ServicesService,
     private snackbarService: SnackBarService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private routesConfigService: RoutesConfigService
   ) {}
 
   ngOnInit(): void {
@@ -34,9 +38,11 @@ export class CreateCategoryComponent implements OnInit {
   }
 
   handleSubmit(value: CategoryFormValue) {
+    const { imageUrl } = value;
     this.$subscription.add(
       this.servicesService
         .createCategory(this.entityId, {
+          imageUrl: [{ url: imageUrl, isFeatured: true }],
           ...value,
           type: 'SERVICE_CATEGORY',
           source: 1,
@@ -48,7 +54,7 @@ export class CreateCategoryComponent implements OnInit {
               '',
               { panelClass: 'success' }
             );
-            this.router.navigate(['/pages/library/services']);
+            this.routesConfigService.goBack();
           },
           ({ error }) => {}
         )

@@ -27,12 +27,9 @@ import * as FileSaver from 'file-saver';
 import { Observable, Subscription } from 'rxjs';
 import { cols, tableTypes } from '../../../constants/cols';
 import { dashboard } from '../../../constants/dashboard';
-import {
-  TableValue,
-} from '../../../constants/tabFilterItem';
+import { TableValue } from '../../../constants/tabFilterItem';
 import { ReservationService } from '../../../services/reservation.service';
 import { reservationStatus } from '../../../constants/response';
-import * as moment from 'moment';
 @Component({
   selector: 'hospitality-bot-reservation-datatable',
   templateUrl: './reservation.component.html',
@@ -54,13 +51,18 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
   cols = cols.reservation;
   selectedTab: TableValue;
   isSidebarVisible = false;
-  tableTypes = [tableTypes.calendar, tableTypes.table];
+  tableTypes = [
+    tableTypes.table,
+    tableTypes.calendar
+  ];
 
   globalQueries = [];
   $subscription = new Subscription();
   entityId: string;
   options: any[] = [];
   isPopUploading: boolean = false;
+  selectedTableType: string;
+  visible: boolean = false;
 
   constructor(
     public fb: FormBuilder,
@@ -100,11 +102,11 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
     ) {
       this.tableTypes = [tableTypes.table];
       this.tableFG?.addControl('tableType', new FormControl('table'));
-      this.tableFG.patchValue({ tableType: 'table' });
     } else {
       this.tableFG?.addControl('tableType', new FormControl('calendar'));
-      this.tableFG.patchValue({ tableType: 'calendar' });
     }
+    this.tableFG.patchValue({ tableType: 'table' });
+    this.selectedTableType = 'table';
   }
 
   /**
@@ -373,19 +375,10 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
     }
   }
 
-  setTableType(value) {
-    this.tableFG.patchValue({ tableType: value });
-    // if (value === tableTypes.table.value) {
-    //   this.cardComponent.$subscription.unsubscribe();
-    //   this.loadInitialData([
-    //     ...this.globalQueries,
-    //     { order: sharedConfig.defaultOrder },
-    //     ...this.getSelectedQuickReplyFilters({ key: 'entityState' }),
-    //   ]);
-    //   this.getUserPermission(
-    //     this.feedbackTypeFilterItem[this.feedbackTypeFilterIdx]?.value
-    //   );
-    // } else this.selectedRows = [];
+  setTableType(value: string) {
+    this.selectedTableType = value;
+    // this.tableFG.patchValue({ tableType: value });
+    if (value === 'calendarMaximize') this.visible = true;
   }
 
   ngOnDestroy(): void {

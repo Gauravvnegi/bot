@@ -2,7 +2,10 @@ import { Location } from '@angular/common';
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import {
+  GlobalFilterService,
+  RoutesConfigService,
+} from '@hospitality-bot/admin/core/theme';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { TranslateService } from '@ngx-translate/core';
 import { NavRouteOptions } from 'libs/admin/shared/src/lib/types/common.type';
@@ -42,7 +45,8 @@ export class EditTopicComponent implements OnInit, OnDestroy {
     private globalFilterService: GlobalFilterService,
     private topicService: TopicService,
     private _router: Router,
-    protected _translateService: TranslateService
+    protected _translateService: TranslateService,
+    private routesConfigService: RoutesConfigService
   ) {
     this.initFG();
   }
@@ -128,7 +132,7 @@ export class EditTopicComponent implements OnInit, OnDestroy {
               }
             )
             .subscribe();
-          this._router.navigate(['/pages/library/topic']);
+          this.routesConfigService.goBack();
           this.isSavingTopic = false;
         },
         ({ error }) => {
@@ -217,7 +221,7 @@ export class EditTopicComponent implements OnInit, OnDestroy {
    * @function redirectToTable To navigate to data table page.
    */
   redirectToTable() {
-    this.location.back();
+    this.routesConfigService.goBack();
   }
 
   /**

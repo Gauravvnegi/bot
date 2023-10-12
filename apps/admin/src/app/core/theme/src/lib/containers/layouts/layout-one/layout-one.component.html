@@ -115,9 +115,9 @@
         </div>
         <div class="options2">
           <div
-            *ngIf="isFreddieSubscribed"
+            *ngIf="isLiveMessagingSubscribed"
             class="header--button quick-action"
-            (click)="openNewWindow('/pages/freddie/messages')"
+            (click)="openFreddie()"
           >
             <img
               class="filter-icon"
@@ -139,7 +139,7 @@
           <div
             *ngIf="isQuickReservationAvailable"
             class="header--button quick-action"
-            (click)="openNewWindow('/pages/efrontdesk/reservation')"
+            (click)="openViewReservation()"
           >
             <img
               class="filter-icon"

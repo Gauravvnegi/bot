@@ -47,8 +47,7 @@ export class AuditSummaryComponent implements OnInit {
   }
 
   handleNext() {
-    if (this.activeIndex + 1 < this.stepList.length)
-      this.indexChange.emit(this.activeIndex + 1);
+    this.indexChange.emit(this.activeIndex + 1);
   }
 
   handlePrev() {

@@ -2,7 +2,10 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { MatDialogConfig } from '@angular/material/dialog';
 import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
-import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import {
+  GlobalFilterService,
+  RoutesConfigService,
+} from '@hospitality-bot/admin/core/theme';
 import {
   AdminUtilityService,
   BaseDatatableComponent,
@@ -56,7 +59,8 @@ export class RoomDataTableComponent extends BaseDatatableComponent
     private router: Router,
     private modalService: ModalService,
     private formService: FormService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private routesConfigService: RoutesConfigService
   ) {
     super(fb, tabFilterService);
   }
@@ -215,9 +219,9 @@ export class RoomDataTableComponent extends BaseDatatableComponent
     this.loading = true;
     if (status === 'OUT_OF_ORDER' || status === 'OUT_OF_SERVICE') {
       this.formService.roomStatus.next(status);
-      this.router.navigate([routes.addSingleRoom], {
+      this.routesConfigService.navigate({
+        additionalPath: routes.addSingleRoom,
         queryParams: { id: id },
-        relativeTo: this.route,
       });
       return;
     }
@@ -345,14 +349,14 @@ export class RoomDataTableComponent extends BaseDatatableComponent
    */
   openEditForm(rowData): void {
     if (this.selectedTab === TableValue.room) {
-      this.router.navigate([routes.addSingleRoom], {
+      this.routesConfigService.navigate({
+        additionalPath: `${routes.addSingleRoom}`,
         queryParams: { id: rowData.id },
-        relativeTo: this.route,
       });
     }
     if (this.selectedTab === TableValue.roomType) {
-      this.router.navigate([`${routes.addRoomType}/${rowData.id}`], {
-        relativeTo: this.route,
+      this.routesConfigService.navigate({
+        additionalPath: `${routes.addRoomType}/${rowData.id}`,
       });
     }
   }

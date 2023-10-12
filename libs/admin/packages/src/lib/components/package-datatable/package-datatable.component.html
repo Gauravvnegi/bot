@@ -9,10 +9,12 @@
       label="+ Create Category"
       variant="text"
       severity="secondary"
-      link="/pages/library/packages/{{ routes.createCategory.route }}"
+      [routerLink]="routes.createCategory.route"
+      preserveQueryParams="true"
     ></hospitality-bot-button>
     <hospitality-bot-button
-      link="/pages/library/packages/{{ routes.createPackage.route }}"
+      [routerLink]="routes.createPackage.route"
+      preserveQueryParams="true"
       label="+ Add Package"
     ></hospitality-bot-button>
     <hospitality-bot-export-list

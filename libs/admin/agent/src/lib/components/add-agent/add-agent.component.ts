@@ -1,9 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import {
+  GlobalFilterService,
+  RoutesConfigService,
+} from '@hospitality-bot/admin/core/theme';
 import {
   AdminUtilityService,
   ConfigService,
+  ModuleNames,
   NavRouteOptions,
   Option,
   QueryConfig,
@@ -27,6 +31,7 @@ import {
   businessSource,
   discountTypes,
 } from 'libs/admin/company/src/lib/constants/company';
+import { Location } from '@angular/common';
 @Component({
   selector: 'hospitality-bot-add-agent',
   templateUrl: './add-agent.component.html',
@@ -69,7 +74,9 @@ export class AddAgentComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private formService: FormService,
-    private configService: ConfigService
+    private configService: ConfigService,
+    private routesConfigService: RoutesConfigService,
+    private location: Location
   ) {
     this.agentId = this.route.snapshot.paramMap.get('id');
     const { navRoutes, title } = agentRoutes[
@@ -210,9 +217,10 @@ export class AddAgentComponent implements OnInit {
    */
   createNewCompany() {
     this.saveForm();
-    this.router.navigate([
-      `/pages/members/company/${companyRoutes.addCompany.route}`,
-    ]);
+    this.routesConfigService.navigate({
+      subModuleName: ModuleNames.COMPANY,
+      additionalPath: companyRoutes.addCompany.route,
+    });
   }
 
   saveForm() {
@@ -250,7 +258,7 @@ export class AddAgentComponent implements OnInit {
       '',
       { panelClass: 'success' }
     );
-    this.router.navigate([`pages/members/agent/${this.routes.agent.route}`]);
+    this.location.back();
   };
 
   /**

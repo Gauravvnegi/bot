@@ -15,6 +15,7 @@ export type AgentTableResponse = AdditionalFeature & {
   age?: number;
   type: string;
   priceModifier: string;
+  priceModifierType: string;
   priceModifierValue: string;
   iataNumber: string;
   isVerified: boolean;

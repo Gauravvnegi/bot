@@ -5,3 +5,20 @@
     align-items: flex-start;
   }
 }
+
+:host ::ng-deep .sidebar {
+  .p-sidebar-close {
+    display: none;
+  }
+  .body {
+    height: 83vh;
+    overflow: auto;
+  }
+  .p-sidebar-right {
+    border-top-left-radius: 10px;
+    width: 40rem;
+  }
+  .p-dropdown-items-wrapper {
+    max-height: 130px !important;
+  }
+}

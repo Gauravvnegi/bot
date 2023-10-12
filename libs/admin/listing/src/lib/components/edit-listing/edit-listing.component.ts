@@ -1,8 +1,8 @@
 import { Location } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
-import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import { ActivatedRoute, Route, Router } from '@angular/router';
+import { GlobalFilterService, RoutesConfigService } from '@hospitality-bot/admin/core/theme';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { Subscription } from 'rxjs';
 import { IList, List, Topics } from '../../data-models/listing.model';
@@ -47,7 +47,8 @@ export class EditListingComponent implements OnInit, OnDestroy {
     private _location: Location,
     protected _translateService: TranslateService,
     private _router: Router,
-    private adminUtilityService: AdminUtilityService
+    private adminUtilityService: AdminUtilityService,
+    private routesConfigService: RoutesConfigService
   ) {
     this.initFG();
   }
@@ -207,7 +208,7 @@ export class EditListingComponent implements OnInit, OnDestroy {
             }
           )
           .subscribe();
-        this._router.navigate([`pages/library/listing`]);
+        this.routesConfigService.goBack();
       },
       ({ error }) => {},
       () => (this.isSaving = false)
@@ -265,7 +266,7 @@ export class EditListingComponent implements OnInit, OnDestroy {
             { panelClass: 'success' }
           )
           .subscribe();
-        this._router.navigate([`pages/library/listing`]);
+        this.routesConfigService.goBack();
       },
       ({ error }) => {},
       () => (this.isSaving = false)

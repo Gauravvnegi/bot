@@ -243,6 +243,10 @@ export class FormService {
     this.reservationForm.next(null);
     this.sourceData.next(null);
     this.disableBtn = false;
+    this.dateDifference.next(1);
+    this.guestInformation.next(null);
+    this.enableAccordion = false;
+    this.reservationForm.next(null);
   }
 }
 

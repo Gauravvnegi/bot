@@ -9,6 +9,8 @@ import {
 } from '../data-models/subscription-plan-config.model';
 import { productMenuSubs } from '../data-models/product-subs';
 import { map } from 'rxjs/operators';
+import { ProductNames } from 'libs/admin/shared/src/index';
+import { RouteConfigPathService } from './routes-config.service';
 
 @Injectable({ providedIn: 'root' })
 export class SubscriptionPlanService extends ApiService {
@@ -16,7 +18,7 @@ export class SubscriptionPlanService extends ApiService {
   private subscriptions: Subscriptions;
   private productSubscription: ProductSubscription;
   settings: SettingsMenuItem[];
-  selectedProduct: ModuleNames;
+  selectedProduct: ProductNames;
 
   getSubscriptionPlan(entityId: string): Observable<any> {
     return this.get(`/api/v1/entity/${entityId}/subscriptions/`).pipe(
@@ -35,6 +37,11 @@ export class SubscriptionPlanService extends ApiService {
   setSubscription(data) {
     this.subscriptions = new Subscriptions().deserialize(data);
     this.productSubscription = new ProductSubscription().deserialize(data);
+  }
+
+  setSelectedProduct(productName: ProductNames) {
+    this.selectedProduct = productName;
+    this.setSettings();
   }
 
   getSubscription(): Subscriptions {
@@ -56,7 +63,7 @@ export class SubscriptionPlanService extends ApiService {
   }
 
   getModuleProductMapping() {
-    return this.productSubscription.moduleProductMapping;
+    return this.productSubscription?.moduleProductMapping;
   }
 
   getSelectedProductData() {
@@ -84,7 +91,7 @@ export class SubscriptionPlanService extends ApiService {
     });
 
     // setting product
-    this.selectedProduct = firstSelectedProduct.name as ModuleNames;
+    this.selectedProduct = firstSelectedProduct.name;
     this.setSettings();
 
     return firstSelectedProduct;
@@ -117,13 +124,25 @@ export class SubscriptionPlanService extends ApiService {
   }
 
   setSettings() {
+    const routesConfigPathService = new RouteConfigPathService();
+
+    // parent route for settings based on product
+    const route =
+      '/' +
+      routesConfigPathService.getRouteFromName(this.selectedProduct) +
+      '/' +
+      routesConfigPathService.getRouteFromName(ModuleNames.SETTINGS);
+
     const settingModule = this.subscriptions.products
       .find((item) => item.name === this.selectedProduct)
-      .config.find((item) => item?.name === ModuleNames?.SETTINGS);
+      ?.config.find((item) => item?.name === ModuleNames.SETTINGS);
 
     this.settings =
       settingModule?.config?.map((item) =>
-        new SettingsMenuItem().deserialize(item)
+        new SettingsMenuItem().deserialize(
+          item,
+          route + '/' + routesConfigPathService.getRouteFromName(item.name)
+        )
       ) ?? [];
 
     return this;

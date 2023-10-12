@@ -1,7 +1,7 @@
 <div class="table-view__wrapper">
-  <div class="header">
+  <div *ngIf="header" class="header">
     <span class="text">{{ header || '' }}</span>
-    <span *ngIf="action" (click)="actionClicked()" class="action"
+    <span *ngIf="action" (click)="onActionClicked()" class="action"
       >{{ action }} <img src="assets/svg/refresh.svg" alt="refresh"
     /></span>
   </div>
@@ -15,7 +15,10 @@
       <ng-template pTemplate="header">
         <tr>
           <ng-container *ngFor="let col of columns">
-            <th [ngClass]="{ 'sticky-header': headerSticky }">
+            <th
+              [ngStyle]="col?.width && { width: col.width }"
+              [ngClass]="{ 'sticky-header': headerSticky }"
+            >
               {{ col.header }}
             </th>
           </ng-container>
@@ -28,23 +31,66 @@
             <div
               class="cell-content"
               *ngIf="rowData[col.field]; else emptyCell"
+              [ngStyle]="
+                getKeysValues(rowData[col.field])[0]?.textInlineBlock && {
+                  display: 'flex'
+                }
+              "
             >
-              <ng-container
-                *ngFor="
-                  let objectData of getKeysValues(rowData[col.field]);
-                  let keyIndex = index
-                "
-              >
-                <div
-                  [ngClass]="{
-                    'primary-text': keyIndex == 0,
-                    'secondary-text': keyIndex != 0
-                  }"
-                  class="truncate-text"
+              <!-- For Action Menu -->
+              <ng-container *ngIf="col.field != 'action'; else action">
+                <!-- Table Data can be more than one with various style -->
+                <ng-container
+                  *ngFor="
+                    let objectData of getKeysValues(rowData[col.field]);
+                    let keyIndex = index
+                  "
                 >
-                  {{ objectData.value }}
-                </div>
+                  <span
+                    class="text"
+                    *ngIf="keyIndex != 0 && objectData?.textSeparator"
+                    >{{ objectData.textSeparator }}</span
+                  >
+                  <div
+                    [ngClass]="{
+                      'primary-text': keyIndex == 0,
+                      'secondary-text':
+                        keyIndex != 0 && !objectData?.textInlineBlock
+                    }"
+                    class="truncate-text {{
+                      objectData?.styleClass && keyIndex == 0
+                        ? objectData.styleClass
+                        : ''
+                    }}"
+                  >
+                    <i
+                      *ngIf="objectData?.icon && keyIndex == 0"
+                      [ngClass]="objectData.icon"
+                    ></i>
+                    <span
+                      class="text {{ keyIndex == 0 && objectData?.preText }} {{
+                        keyIndex != 0 && objectData?.postText
+                      }}"
+                      >{{ objectData.value }}</span
+                    >
+                  </div>
+                </ng-container>
               </ng-container>
+
+              <ng-template #action>
+                <hospitality-bot-status-dropdown-toggle
+                  class="status-toggle"
+                  [nextStates]="rowData[col.field]?.dropDown.nextStates"
+                  [toggleMenu]="true"
+                  [state]="rowData[col.field]?.dropDown.currentState"
+                  (onClick)="handleStatus($event, rowData[col.field]?.dropDown)"
+                  [menuOptions]="rowData[col.field]?.quick"
+                  (onMenuItemClick)="
+                    handleMenuClick($event, rowData[col.field]?.quick)
+                  "
+                >
+                </hospitality-bot-status-dropdown-toggle>
+              </ng-template>
             </div>
           </td>
         </tr>

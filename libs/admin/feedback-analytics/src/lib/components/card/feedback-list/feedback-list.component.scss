@@ -1,0 +1,173 @@
+@import 'main';
+.list-container {
+  height: 100%;
+  opacity: 1;
+  border-right: 2px solid $borderCol;
+  .header {
+    @include flex-space-between-cen-Algn;
+    padding: 10px;
+    border-bottom: 2px solid $borderCol;
+    &__search {
+      flex-grow: 0.85;
+    }
+    &__filter {
+      cursor: pointer;
+      margin: 0 3px;
+    }
+  }
+  .body {
+    overflow-y: auto;
+    &::-webkit-scrollbar {
+      width: 4px;
+    }
+    &::-webkit-scrollbar-track {
+      background: $whiteDeep;
+    }
+    &::-webkit-scrollbar-thumb {
+      background: $grayLight;
+      border-radius: 10px;
+    }
+    .item {
+      border-bottom: 1px solid $borderCol;
+      padding: 10px 5px;
+      display: flex;
+      cursor: pointer;
+      &__logo {
+        height: 45px;
+        width: 45px;
+        border-radius: 50%;
+        background-color: olivedrab;
+        @include flex-all-center;
+      }
+      &__body {
+        width: calc(100% - 65px);
+        @include flex-col-space-between;
+        margin-left: 10px;
+        font-size: 12px;
+        font-weight: $bolder;
+        letter-spacing: 0.72px;
+        &__roomAndService {
+          @include flex-space-between-base-Algn;
+        }
+        &__room {
+          gap: 10px;
+          font-size: 10px;
+          font-weight: $bolder;
+
+          letter-spacing: 0.6px;
+          color: $grayMedium;
+          margin-top: 3px;
+          margin-bottom: 13px;
+          @include flex-item-center;
+          .rating {
+            padding: 4.5px 8px;
+            border-radius: 5px;
+            color: $white;
+          }
+        }
+        &__services {
+          font-size: 10px;
+          letter-spacing: 0.66px;
+          text-align: center;
+          border-radius: 20px;
+          background-color: $whiteDeep;
+          padding: 4px 10px;
+          gap: 7px;
+          @include flex-item-center;
+          &__name {
+            color: $initiated-2;
+          }
+          &__length {
+            padding: 5px;
+            color: $white;
+            margin: 0 0px;
+            text-align: center;
+            border-radius: 50%;
+            font-size: 9px;
+            background-color: $initiated-2;
+          }
+        }
+        &__name {
+          font-size: 12px;
+          font-weight: $bolder;
+          letter-spacing: 0.72px;
+          color: $secondary;
+          margin-bottom: 5px;
+        }
+        .labels {
+          display: flex;
+          gap: 20px;
+          font-size: 12px;
+        }
+        &__remarks {
+          color: $secondary;
+        }
+        &__status {
+          @include flex-item-center;
+          .divider {
+            height: 15px;
+            border: 1px solid $grayLight;
+            margin: 0 10px;
+          }
+        }
+        &__assignee {
+          @include flex-space-between-cen-Algn;
+          color: $grayMedium;
+          &__date {
+            width: 62px;
+          }
+        }
+      }
+    }
+  }
+}
+
+:host ::ng-deep {
+  .mat-tab-group {
+    padding: 0;
+  }
+  .mat-tab-label {
+    min-width: fit-content !important;
+    height: 53px !important;
+  }
+  .mat-tab-label-active {
+    border-bottom: none;
+    color: $primary-cta;
+  }
+  .mat-tab-header {
+    border-bottom: 2px solid $borderCol !important;
+  }
+}
+
+.no-contact {
+  height: 100%;
+  @include flex-col-all-Center;
+  font-size: 14px;
+  line-height: 20px;
+  text-align: center;
+  &__img {
+    img {
+      width: 134.2px;
+      margin-bottom: 10px;
+    }
+  }
+  &__title {
+    margin: 12px 0;
+    @include normal-sm-text;
+    font-weight: $bolder;
+    color: $secondary;
+  }
+  &__description {
+    font-size: 12px;
+    font-weight: $bolder;
+    letter-spacing: 0.72px;
+    color: $grayLight;
+  }
+}
+
+:host
+  ::ng-deep
+  .mat-tab-header-pagination-controls-enabled
+  .mat-tab-header-pagination {
+  display: flex;
+}

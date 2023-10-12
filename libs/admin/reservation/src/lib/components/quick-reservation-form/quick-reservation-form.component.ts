@@ -15,10 +15,14 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
-import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import {
+  GlobalFilterService,
+  RoutesConfigService,
+} from '@hospitality-bot/admin/core/theme';
 import {
   ConfigService,
   EntitySubType,
+  ModuleNames,
   Option,
 } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
@@ -33,14 +37,13 @@ import {
 } from '../../../../../dashboard/src/lib/data-models/reservation.model';
 import { FormService } from 'libs/admin/manage-reservation/src/lib/services/form.service';
 import { Router } from '@angular/router';
-import { IGRoomType } from '../../../../../dashboard/src/lib/components/reservation-calendar-view/reservation-calendar-view.component';
+import { IGRoomType } from '../reservation-calendar-view/reservation-calendar-view.component';
 import { IGCol } from 'libs/admin/shared/src/lib/components/interactive-grid/interactive-grid.component';
 import { Subscription } from 'rxjs';
-import { AddGuestComponent } from 'libs/admin/guests/src/lib/components';
+import { AddGuestComponent } from 'libs/admin/guests/src/lib/components/add-guest/add-guest.component';
 import { RoomTypeResponse } from 'libs/admin/room/src/lib/types/service-response';
 import { RoomTypeForm } from 'libs/admin/room/src/lib/models/room.model';
 import { GuestType } from 'libs/admin/guests/src/lib/types/guest.type';
-
 @Component({
   selector: 'hospitality-bot-quick-reservation-form',
   templateUrl: './quick-reservation-form.component.html',
@@ -60,12 +63,15 @@ export class QuickReservationFormComponent implements OnInit {
 
   ratePlans: Option[] = [];
   roomOptions: Option[] = [];
+  otaOptions: Option[] = [];
+
   globalQueries = [];
 
   loading: boolean = false;
   isBooking = false;
+  editMode = false;
 
-  selectedGuest: GuestType;
+  selectedGuest: Option;
   defaultRoomType: IGRoomType;
 
   selectedRoom: string;
@@ -103,7 +109,8 @@ export class QuickReservationFormComponent implements OnInit {
     private manageReservationService: ManageReservationService,
     private formService: FormService,
     private compiler: Compiler,
-    private resolver: ComponentFactoryResolver
+    private resolver: ComponentFactoryResolver,
+    private routesConfigService: RoutesConfigService
   ) {
     this.initForm();
   }
@@ -112,6 +119,7 @@ export class QuickReservationFormComponent implements OnInit {
     this.listenForGlobalFilters();
     this.getCountryCode();
     this.initDefaultDate();
+    this.listenForSourceChanges();
   }
 
   initDetails() {
@@ -141,8 +149,8 @@ export class QuickReservationFormComponent implements OnInit {
   initDefaultDate() {
     const fromDate = this.date ? new Date(this.date) : new Date(); // Convert epoch to milliseconds
     const toDate = new Date(fromDate);
-    this.startMinDate = fromDate;
-    this.endMinDate = toDate;
+    this.startMinDate = new Date();
+    this.endMinDate.setDate(new Date().getDate() + 1);
     toDate.setDate(fromDate.getDate() + 1); // Add 1 day
     this.inputControls.reservationInformation.patchValue({
       from: fromDate.getTime(),
@@ -188,18 +196,16 @@ export class QuickReservationFormComponent implements OnInit {
   }
 
   editForm() {
-    this.router.navigate(
-      [
-        this.reservationId
-          ? `/pages/efrontdesk/reservation/edit-reservation/${this.reservationId}`
-          : `/pages/efrontdesk/reservation/add-reservation`,
-      ],
-      {
-        queryParams: {
-          entityId: this.entityId,
-        },
-      }
-    );
+    this.routesConfigService.navigate({
+      subModuleName: ModuleNames.ADD_RESERVATION,
+      additionalPath: this.reservationId
+        ? `edit-reservation/${this.reservationId}`
+        : `add-reservation`,
+      queryParams: {
+        entityId: this.entityId,
+      },
+      openInNewWindow: true,
+    });
   }
 
   initReservationDetails() {
@@ -252,8 +258,8 @@ export class QuickReservationFormComponent implements OnInit {
   getGuestConfig() {
     const queries = {
       entityId: this.entityId,
-      toDate: this.globalQueries[0].toDate,
-      fromDate: this.globalQueries[1].fromDate,
+      toDate: this.reservationInfoControls.to.value,
+      fromDate: this.reservationInfoControls.from.value,
       entityState: 'ALL',
       type: 'GUEST',
     };
@@ -263,8 +269,8 @@ export class QuickReservationFormComponent implements OnInit {
   getRoomTypeConfig() {
     const queries = {
       type: EntitySubType.ROOM_TYPE,
-      toDate: this.globalQueries[0].toDate,
-      fromDate: this.globalQueries[1].fromDate,
+      toDate: this.reservationInfoControls.to.value,
+      fromDate: this.reservationInfoControls.from.value,
       createBooking: true,
       raw: true,
       roomTypeStatus: true,
@@ -318,6 +324,32 @@ export class QuickReservationFormComponent implements OnInit {
     //   cc: event.contactDetails.cc,
     //   email: event.contactDetails.emailId,
     // };
+  }
+
+  listenForSourceChanges() {
+    const sourceControl = this.reservationInfoControls.source;
+    const sourceNameControl = this.reservationInfoControls.sourceName;
+
+    sourceControl.valueChanges.subscribe((res) => {
+      // this.agentSource = res === 'AGENT';
+      this.otaOptions =
+        res === 'OTA' && this.configData
+          ? this.configData.source.filter((item) => item.value === res)[0].type
+          : [];
+      if (!this.editMode) {
+        sourceNameControl.reset();
+      }
+    });
+
+    this.$subscription.add(
+      this.formService.sourceData.subscribe((res) => {
+        if (res && this.configData) {
+          this.editMode = true;
+          sourceControl.setValue(res.source);
+          sourceNameControl.setValue(res.sourceName);
+        }
+      })
+    );
   }
 
   calculateDailyPrice() {
@@ -383,26 +415,38 @@ export class QuickReservationFormComponent implements OnInit {
   }
 
   createGuest() {
-    // const lazyModulePromise = import(
-    //   'libs/admin/guests/src/lib/admin-guests.module'
-    // )
-    //   .then((module) => {
-    //     return this.compiler.compileModuleAsync(module.AdminGuestsModule);
-    //   })
-    //   .catch((error) => {
-    //     console.error('Error loading the lazy module:', error);
-    //   });
-    // lazyModulePromise.then((moduleFactory) => {
-    //   this.sidebarVisible = true;
-    //   const factory = this.resolver.resolveComponentFactory(AddGuestComponent);
-    //   this.sidebarSlide.clear();
-    //   const componentRef = this.sidebarSlide.createComponent(factory);
-    //   componentRef.instance.isSideBar = true;
-    //   componentRef.instance.onClose.subscribe((res) => {
-    //     this.sidebarVisible = false;
-    //     componentRef.destroy();
-    //   });
-    // });
+    const lazyModulePromise = import(
+      'libs/admin/guests/src/lib/admin-guests.module'
+    )
+      .then((module) => {
+        return this.compiler.compileModuleAsync(module.AdminGuestsModule);
+      })
+      .catch((error) => {
+        console.error('Error loading the lazy module:', error);
+      });
+    lazyModulePromise.then((moduleFactory) => {
+      this.sidebarVisible = true;
+      const factory = this.resolver.resolveComponentFactory(AddGuestComponent);
+      this.sidebarSlide.clear();
+      const componentRef = this.sidebarSlide.createComponent(factory);
+      componentRef.instance.isSideBar = true;
+      componentRef.instance.onClose.subscribe((res) => {
+        this.sidebarVisible = false;
+        if (typeof res !== 'boolean') {
+          this.selectedGuest = {
+            label: `${res.firstName} ${res.lastName}`,
+            value: res.id,
+            phoneNumber: res.contactDetails.contactNumber,
+            cc: res.contactDetails.cc,
+            email: res.contactDetails.emailId,
+          };
+          this.inputControls.guestInformation
+            .get('guestDetails')
+            .patchValue(res.id);
+        }
+        componentRef.destroy();
+      });
+    });
   }
 
   updateReservation(data: any): void {
@@ -423,6 +467,10 @@ export class QuickReservationFormComponent implements OnInit {
           }
         )
     );
+  }
+
+  openNewWindow(url: string) {
+    window.open(url);
   }
 
   handleSuccess = () => {

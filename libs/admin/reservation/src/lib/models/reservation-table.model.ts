@@ -128,10 +128,12 @@ export class Status implements IDeserializable {
 
 export class CurrentJourney implements IDeserializable {
   currentJourneyName;
+  currentJourneyStatus;
   deserialize(input) {
     Object.assign(
       this,
-      set({}, 'currentJourneyName', get(input, ['currentJourney']))
+      set({}, 'currentJourneyName', get(input, ['currentJourney'])),
+      set({}, 'currentJourneyStatus', get(input, ['currentJourneyState']))
     );
     return this;
   }

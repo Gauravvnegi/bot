@@ -1,0 +1,52 @@
+<hospitality-bot-navigation-header
+  [heading]="heading"
+  [routes]="[{ label: 'Update inventory', link: './' }]"
+  [isStickyTitle]="false"
+  [isBack]="false"
+>
+  <hospitality-bot-button
+    label="Bulk update"
+    [link]="'/pages/channel-manager/update-inventory/inventory-bulk-update'"
+  ></hospitality-bot-button>
+</hospitality-bot-navigation-header>
+
+<div class="buttons">
+  <hospitality-bot-button
+    label="Resend Data"
+    (onClick)="handleReset()"
+  ></hospitality-bot-button>
+
+  <hospitality-bot-button
+    label="Reinitialize"
+    [variant]="'outlined'"
+    (onClick)="handleReinitialize()"
+  ></hospitality-bot-button>
+</div>
+
+<div class="wrapper">
+  <div class="room-type">
+    <div *ngFor="let row of gridRows; let i = index" class="room">
+      {{ row }}
+    </div>
+  </div>
+
+  <div>
+    <hospitality-bot-interactive-grid
+      [props]="{
+        createNewToolTipInfo: 'Create New Reservation'
+      }"
+      [gridData]="{
+        rows: gridRows,
+        columns: gridCols,
+        values: data
+      }"
+      [isProcessing]="loading"
+      [reinitialize]="reset"
+      (onChange)="handleChange($event)"
+      (onCreate)="handleCreate($event)"
+      (onEdit)="handleEdit($event)"
+      [devMode]="true"
+    ></hospitality-bot-interactive-grid>
+    <div></div>
+  </div>
+</div>

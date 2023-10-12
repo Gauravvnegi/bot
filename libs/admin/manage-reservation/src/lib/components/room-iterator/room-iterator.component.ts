@@ -19,9 +19,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
-import {
-  EntitySubType,
-} from 'libs/admin/shared/src';
+import { EntitySubType } from 'libs/admin/shared/src';
 import { IteratorComponent } from 'libs/admin/shared/src/lib/components/iterator/iterator.component';
 import { Subscription } from 'rxjs';
 import { roomFields, RoomFieldTypeOption } from '../../constants/reservation';
@@ -231,8 +229,8 @@ export class RoomIteratorComponent extends IteratorComponent
   getConfig() {
     const queries = {
       type: EntitySubType.ROOM_TYPE,
-      toDate: this.globalQueries[0].toDate,
-      fromDate: this.globalQueries[1].fromDate,
+      toDate: this.reservationInfoControls.to?.value,
+      fromDate: this.reservationInfoControls.from?.value,
       createBooking: true,
       raw: true,
       roomTypeStatus: true,

@@ -145,9 +145,7 @@ export class ReservationCalendarViewComponent implements OnInit {
 
       const unavailableRooms = roomType.rooms.filter((room) => {
         const hasUnavailableStatus = room?.statusDetails.some(
-          (statusDetail) =>
-            statusDetail.status === 'OUT_OF_ORDER' ||
-            statusDetail.status === 'OUT_OF_SERVICE'
+          (statusDetail) => statusDetail.status === 'OUT_OF_SERVICE'
         );
 
         return hasUnavailableStatus;
@@ -168,9 +166,7 @@ export class ReservationCalendarViewComponent implements OnInit {
       // Map data for unavailable rooms
       const unavailableData = unavailableRooms.reduce((result, room) => {
         const unavailableStatusDetails = room.statusDetails.filter(
-          (status) =>
-            status.status === 'OUT_OF_ORDER' ||
-            status.status === 'OUT_OF_SERVICE'
+          (status) => status.status === 'OUT_OF_SERVICE'
         );
 
         const roomValues = unavailableStatusDetails

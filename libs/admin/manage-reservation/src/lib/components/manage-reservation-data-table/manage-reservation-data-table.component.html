@@ -3,7 +3,14 @@
   [ngClass]="{ 'action-header__sticky': isScrolledUp }"
   [formGroup]="tableFG"
 >
-  <div class="heading">{{ tableName }}</div>
+  <div class="heading-wrapper">
+    <div class="heading">{{ tableName }}</div>
+    <hospitality-bot-info-panel
+      type="booking"
+      *ngIf="tableFG?.get('tableType').value === 'calendar'"
+    ></hospitality-bot-info-panel>
+  </div>
+
   <div class="action-wrapper">
     <div class="pull-right" *ngIf="selectedEntity.subType === 'ROOM_TYPE'">
       <label class="type-label" *ngFor="let option of tableTypes">
@@ -32,7 +39,9 @@
       (onDocumentActions)="onDocumentActions()"
       [documentTypes]="documentTypes"
       [documentActionTypes]="documentActionTypes"
-      [isDisable]="values.length === 0"
+      [isDisable]="
+        values.length === 0 || tableFG?.get('tableType').value === 'calendar'
+      "
     ></hospitality-bot-export-list>
   </div>
 </div>

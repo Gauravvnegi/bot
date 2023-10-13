@@ -1,2 +1,20 @@
-<p>reports works!</p>
+<p-sidebar
+  styleClass="reports-menu"
+  [visible]="openMenu"
+  [position]="'left'"
+  [showCloseIcon]="false"
+  [modal]="false"
+>
+  <!-- Sidebar content goes here -->
+  <div class="menu-header">
+    <div>{{ reportTitle }}</div>
+    <i
+      class="pi pi-angle-double-left"
+      (click)="toggleMenu()"
+      aria-hidden="true"
+    ></i>
+  </div>
+</p-sidebar>
+
+<p>Frontdesk > Reports > Reservation > No show reports</p>
 <hospitality-bot-reports-data-table></hospitality-bot-reports-data-table>

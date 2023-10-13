@@ -1,0 +1,24 @@
+@import 'main';
+
+::ng-deep .reports-menu {
+  &.p-sidebar-left {
+    top: $top-nav-height;
+    z-index: $main-menu-z !important;
+
+    &.p-sidebar-active {
+      transform: translateX($left-nav-height);
+    }
+  }
+}
+
+.menu-header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.pi-angle-double-left {
+  color: $primary;
+  background-color: $primary-text-bg;
+  padding: 5px;
+  border-radius: 4px;
+}

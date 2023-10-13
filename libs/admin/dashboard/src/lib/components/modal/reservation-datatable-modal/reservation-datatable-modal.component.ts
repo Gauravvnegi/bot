@@ -7,6 +7,7 @@ import {
 } from '@hospitality-bot/admin/shared';
 import {
   GlobalFilterService,
+  RoutesConfigService,
   SubscriptionPlanService,
 } from '@hospitality-bot/admin/core/theme';
 import {
@@ -41,7 +42,8 @@ export class ReservationDatatableModalComponent
     protected tabFilterService: TableService,
     public feedbackService: FeedbackService,
     private router: Router,
-    protected subscriptionPlanService: SubscriptionPlanService
+    protected subscriptionPlanService: SubscriptionPlanService,
+    protected routesConfigService: RoutesConfigService
   ) {
     super(
       fb,
@@ -52,7 +54,8 @@ export class ReservationDatatableModalComponent
       _modal,
       feedbackService,
       tabFilterService,
-      subscriptionPlanService
+      subscriptionPlanService,
+      routesConfigService
     );
   }
 

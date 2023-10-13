@@ -72,7 +72,7 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
     public feedbackService: FeedbackService,
     protected tabFilterService: TableService,
     protected subscriptionPlanService: SubscriptionPlanService,
-    private routesConfigService: RoutesConfigService
+    protected routesConfigService: RoutesConfigService
   ) {
     super(fb, tabFilterService);
   }

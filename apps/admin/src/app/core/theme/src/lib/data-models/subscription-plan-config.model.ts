@@ -204,20 +204,27 @@ export class ProductSubscription {
 
     input.products?.forEach((product) => {
       const productName = product.name;
-      if (product.isSubscribed) this.subscribedProducts.push(productName);
+      const isProductSubscribed = product.isSubscribed;
 
-      this.subscribedModuleProductBased = {
-        ...this.subscribedModuleProductBased,
-        [productName]: [],
-      };
+      if (isProductSubscribed) {
+        this.subscribedProducts.push(productName);
+        this.subscribedModuleProductBased = {
+          ...this.subscribedModuleProductBased,
+          [productName]: [],
+        };
+      }
 
       product.config?.forEach((module) => {
-        this.setConfig(module, product.isSubscribed);
-        this.subscribedModuleProductBased[productName].push(module.name);
+        this.setConfig(module, isProductSubscribed);
+        const isModuleSubscribed = module.isSubscribed;
+
+        if (isProductSubscribed && isModuleSubscribed) {
+          this.subscribedModuleProductBased[productName].push(module.name);
+        }
 
         // Only sub module with initial subscribed product
         if (
-          module.isSubscribed &&
+          isModuleSubscribed &&
           module.isView &&
           !this.moduleProductMapping[module.name]
         ) {
@@ -228,7 +235,12 @@ export class ProductSubscription {
         }
 
         module.config?.forEach((subModule) => {
-          this.subscribedModuleProductBased[productName].push(subModule.name);
+          const isSubModuleSubscribed = subModule.isSubscribed;
+
+          if (isProductSubscribed && isSubModuleSubscribed) {
+            this.subscribedModuleProductBased[productName].push(subModule.name);
+          }
+
           if (
             subModule.isSubscribed &&
             subModule.isView &&
@@ -239,10 +251,7 @@ export class ProductSubscription {
               [subModule.name]: productName,
             };
           }
-          this.setConfig(
-            subModule,
-            product.isSubscribed && module.isSubscribed
-          );
+          this.setConfig(subModule, isProductSubscribed && isModuleSubscribed);
         });
       });
     });

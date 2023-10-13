@@ -8,7 +8,7 @@
     <ng-container *ngIf="tableFG?.get('tableType').value === 'calendar'">
       <hospitality-bot-info-panel type="booking"></hospitality-bot-info-panel>
       <!-- <img
-        (click)="showFullView = true"
+        (click)="showFullView()"
         class="expand"
         [src]="'assets/svg/expand.svg'"
         alt=""

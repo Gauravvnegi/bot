@@ -23,6 +23,7 @@ export class FormService {
   dateDifference = new BehaviorSubject(1);
 
   disableBtn: boolean = false;
+  calendarView: boolean = false;
 
   getSummary = new Subject<void>();
 

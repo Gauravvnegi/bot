@@ -8,6 +8,7 @@
     class="sidebar-panel upper"
     id="sidebar"
     [style.background-color]="backgroundColor"
+    *ngIf="!fullView"
   >
     <hospitality-bot-sidenav
       (submenuItems)="subMenuItem($event)"
@@ -71,6 +72,7 @@
             ? { visibility: 'visible' }
             : { visibility: 'hidden', height: '0px' }
         "
+        *ngIf="!fullView"
       >
         <div class="options1" [ngClass]="{ disabled: isGlobalFilterVisible }">
           <div class="selected-product">

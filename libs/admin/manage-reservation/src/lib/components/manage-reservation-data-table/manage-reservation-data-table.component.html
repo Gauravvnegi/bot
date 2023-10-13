@@ -5,10 +5,16 @@
 >
   <div class="heading-wrapper">
     <div class="heading">{{ tableName }}</div>
-    <hospitality-bot-info-panel
-      type="booking"
-      *ngIf="tableFG?.get('tableType').value === 'calendar'"
-    ></hospitality-bot-info-panel>
+    <ng-container *ngIf="tableFG?.get('tableType').value === 'calendar'">
+      <hospitality-bot-info-panel type="booking"></hospitality-bot-info-panel>
+      <!-- <img
+        (click)="showFullView = true"
+        class="expand"
+        [src]="'assets/svg/expand.svg'"
+        alt=""
+        [pTooltip]="'Full View'"
+      /> -->
+    </ng-container>
   </div>
 
   <div class="action-wrapper">

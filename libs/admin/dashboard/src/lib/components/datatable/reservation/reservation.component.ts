@@ -72,7 +72,7 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
     public feedbackService: FeedbackService,
     protected tabFilterService: TableService,
     protected subscriptionPlanService: SubscriptionPlanService,
-    private routesConfigService: RoutesConfigService
+    protected routesConfigService: RoutesConfigService
   ) {
     super(fb, tabFilterService);
   }
@@ -101,13 +101,13 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
   }
 
   checkReservationSubscription() {
-    if (!this.isCalendarViewAvailable) {
-      this.tableTypes = [tableTypes.table];
+    this.tableFG?.addControl('tableType', new FormControl('calendar'));
+    if (this.isCalendarViewAvailable) {
+      this.tableFG.patchValue({ tableType: 'table' });
+      this.selectedTableType = 'table';
     } else {
-      this.tableFG?.addControl('tableType', new FormControl('calendar'));
+      this.tableTypes = [];
     }
-    this.tableFG.patchValue({ tableType: 'table' });
-    this.selectedTableType = 'table';
   }
 
   /**
@@ -378,7 +378,6 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
 
   setTableType(value: string) {
     this.selectedTableType = value;
-    debugger;
     this.tableFG.patchValue({ tableType: value });
   }
 

@@ -6,6 +6,7 @@ import {
 import { CheckoutPendingResponse } from '../types/checkout-pending.type';
 import { dateTimeWithFormat } from '../../../../../../../web-user/shared/src/lib/utils/date-utils';
 import { CheckInResponseType } from '../types/checkin-pending.type';
+import { quickActions } from '../constants/checked-in-reservation.table';
 /**
  * Table ViewData implement for the styling recommendation
  */
@@ -57,10 +58,10 @@ export class CheckedOutReservation implements TableViewDataType {
         nextStates: ['CONFIRMED'],
         disabled: true,
       },
-      quick: [
-        { label: 'Modify', value: 'modify' },
-        { label: 'Settlement', value: 'settlement' },
-      ],
+      quick: Object.entries(quickActions).map(([key, value]) => ({
+        label: key.toUpperCase(),
+        value: value,
+      })),
     };
   }
 }
@@ -105,11 +106,11 @@ export class CheckedInReservation implements TableViewDataType {
       postText: 'tiny-text',
     };
 
-    // Action
+    // TODO : Action => need to map with backend, remove condition after configuration from backend
     this['action'] = {
       dropDown: {
-        currentState: 'NO_SHOW',
-        nextStates: ['NO_SHOW', 'CANCELED'],
+        currentState: 'NOSHOW',
+        nextStates: ['NOSHOW', 'CANCELED'],
       },
       quick: [{ label: 'Edit Reservation', value: 'edit-reservation' }],
     };

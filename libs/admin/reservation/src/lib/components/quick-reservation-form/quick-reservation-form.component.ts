@@ -327,6 +327,7 @@ export class QuickReservationFormComponent implements OnInit {
     this.inputControls.roomInformation.patchValue({
       ratePlan: this.ratePlans[0].value,
       adultCount: 1,
+      childCount: 0,
     });
   }
 

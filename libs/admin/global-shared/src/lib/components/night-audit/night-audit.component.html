@@ -26,6 +26,7 @@
         (reload)="initData()"
         (onClose)="close($event)"
         (indexChange)="activeStep = $event"
+        (onNavigate)="onNavigate($event)"
       ></hospitality-bot-checkin-reservations>
       <hospitality-bot-checkout-reservations
         *ngSwitchCase="2"
@@ -36,6 +37,7 @@
         [stepList]="itemList"
         (reload)="initData()"
         (indexChange)="activeStep = $event"
+        (onNavigate)="onNavigate($event)"
       ></hospitality-bot-checkout-reservations>
       <hospitality-bot-audit-summary
         *ngSwitchCase="3"

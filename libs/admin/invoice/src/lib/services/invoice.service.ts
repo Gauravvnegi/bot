@@ -181,6 +181,16 @@ export class InvoiceService extends ApiService {
       invoiceGenerated: false,
       cashier: invoiceFormData.cashierName,
       remarks: invoiceFormData.additionalNote,
+
+      // Payment info (BE related - to maintain history)
+      ...(invoiceFormData.receivedPayment
+        ? {
+            paymentRemarks: invoiceFormData.remarks,
+            paymentMethod: invoiceFormData.paymentMethod,
+            transactionId: invoiceFormData.transactionId,
+            paymentAmount: invoiceFormData.receivedPayment,
+          }
+        : {}),
     };
 
     return res;

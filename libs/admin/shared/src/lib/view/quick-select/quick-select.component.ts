@@ -223,7 +223,6 @@ export class QuickSelectComponent extends FormComponent implements OnInit {
               ? [this._qsProps.selectedOption]
               : []),
           ]);
-          debugger;
           // To be improved later.
           this.controlContainer.control
             .get(this.controlName)

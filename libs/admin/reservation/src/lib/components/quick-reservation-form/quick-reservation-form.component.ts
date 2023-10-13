@@ -333,7 +333,6 @@ export class QuickReservationFormComponent implements OnInit {
 
   guestChange(event: GuestType) {
     if (event && event?.id) {
-      debugger;
       this.selectedGuest = {
         label: `${event.firstName} ${event.lastName}`,
         value: event.id,

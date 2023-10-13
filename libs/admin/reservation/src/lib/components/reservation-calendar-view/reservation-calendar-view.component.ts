@@ -14,7 +14,10 @@ import {
   RoomReservation,
 } from 'libs/admin/manage-reservation/src/lib/models/reservations.model';
 import { ManageReservationService } from 'libs/admin/manage-reservation/src/lib/services/manage-reservation.service';
-import { ReservationListResponse } from 'libs/admin/manage-reservation/src/lib/types/response.type';
+import {
+  BookingItems,
+  ReservationListResponse,
+} from 'libs/admin/manage-reservation/src/lib/types/response.type';
 import { RoomService } from 'libs/admin/room/src/lib/services/room.service';
 import {
   Features,
@@ -154,7 +157,9 @@ export class ReservationCalendarViewComponent implements OnInit {
       // Map data for matching reservations
       const matchingData = matchingReservations.map((reservation) => ({
         id: reservation.id,
-        content: reservation.guestName,
+        content: `${reservation.guestName} (${this.getOccupancy(
+          reservation.bookingItems
+        )})`,
         startPos: this.getDate(reservation.from),
         endPos: this.getDate(reservation.to),
         rowValue: reservation.bookingItems[0].roomDetails.roomNumber,
@@ -176,7 +181,7 @@ export class ReservationCalendarViewComponent implements OnInit {
           })
           .map((status) => ({
             id: null, // Set id as needed for unavailable rooms
-            content: status?.status,
+            content: 'Out Of Service',
             startPos: this.getDate(status.fromDate),
             endPos: this.getStatusDate(status.toDate),
             rowValue: room.roomNumber,
@@ -293,6 +298,14 @@ export class ReservationCalendarViewComponent implements OnInit {
 
   getWeekendBG(day: string, isOccupancy = false) {
     return getWeekendBG(day, isOccupancy);
+  }
+
+  getOccupancy(bookingItems: BookingItems[]) {
+    const totalGuests = bookingItems.map(
+      (item) =>
+        +item.occupancyDetails.maxAdult + +item.occupancyDetails.maxChildren
+    );
+    return totalGuests;
   }
 
   handleChange(event: IGChangeEvent, roomType: IGRoomType) {

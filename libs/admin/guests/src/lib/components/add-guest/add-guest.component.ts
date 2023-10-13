@@ -123,6 +123,10 @@ export class AddGuestComponent implements OnInit {
       ((this.loading = true),
       this.subscription$.add(
         this.guestService.getGuestById(this.guestId).subscribe((res) => {
+          this.selectedMember = {
+            label: `${res?.company.firstName} ${res?.company.lastName || ''}`,
+            value: res?.companyId,
+          };
           GuestFactory.patchEditView(this.guestForm, res);
           this.loading = false;
         }, this.handleFinal)

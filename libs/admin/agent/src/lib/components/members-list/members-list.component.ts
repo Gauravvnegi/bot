@@ -24,6 +24,7 @@ export class MembersListComponent implements OnInit {
   placeholder: string;
 
   membersOffSet = 0;
+  limit = 50;
   loadingMembers = false;
   noMoreMembers = false;
   membersList: Option[] = [];
@@ -75,8 +76,11 @@ export class MembersListComponent implements OnInit {
           .subscribe(
             (res) => {
               const data = AgentModel.getCompanyList(res['records']);
-              this.membersList = data;
-              this.noMoreMembers = data.length < 1;
+              this.membersList = this.removeDuplicate([
+                ...this.membersList,
+                ...data,
+              ]);
+              this.noMoreMembers = data.length < this.limit;
             },
             (error) => {},
             () => {
@@ -171,11 +175,21 @@ export class MembersListComponent implements OnInit {
     this.createMembers.emit();
   }
 
+  removeDuplicate(data: Option[]) {
+    const uniqueDataMap: Record<string, Option> = {};
+    for (const item of data) {
+      uniqueDataMap[item.value] = item;
+    }
+    return Object.values(uniqueDataMap);
+  }
+
   getQueryConfig(type = 'AGENT'): QueryConfig {
     const config = {
       params: this.adminUtilityService.makeQueryParams([
         {
           type: type,
+          offset: this.membersOffSet,
+          limit: this.limit,
         },
       ]),
     };

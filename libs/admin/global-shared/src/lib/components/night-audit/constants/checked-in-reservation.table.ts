@@ -1,4 +1,4 @@
-import { Cols } from '@hospitality-bot/admin/shared';
+import { Cols, FlagType } from '@hospitality-bot/admin/shared';
 import { TableViewDataType } from '../../../types/table-view.type';
 
 export const cols: Cols[] = [
@@ -39,128 +39,20 @@ export const cols: Cols[] = [
   },
 ];
 
-// For the decoration, it must use TableViewDataType Type...
-export const checkedInList: TableViewDataType[] = [
-  {
-    invoiceId: 'INV001',
-    roomInfo: {
-      icon: 'pi pi-users',
-      styleClass: 'active-text',
-      roomNumber: '101 - Single',
-    },
-    bookingNo: 'BN001',
-    stakeHolder: {
-      guest: 'Guest',
-      company: 'Google',
-      postText: 'tiny-text',
-    },
-    visitStatus: '03/03/2023',
-    expenses: {
-      dueAmount: 5000,
-      total: 7000,
-      preText: 'danger-text',
-      textSeparator: '/',
-      textInlineBlock: true,
-    },
-    sourceName: {
-      source: 'Ameer',
-      name: 'Agent',
-      postText: 'tiny-text',
-    },
-    amount: '5000',
-    action: {
-      dropDown: {
-        currentState: 'NoShow',
-        nextStates: ['NoShow', 'CANCEL'],
-      },
-      quick: [{ label: 'Edit Reservation', value: 'edit-reservation' }],
-    },
+export const reservationStatus: Record<
+  'NO_SHOW' | 'CONFIRMED' | 'CANCELED',
+  { label: string; type: FlagType }
+> = {
+  NO_SHOW: {
+    label: 'No Show',
+    type: 'active',
   },
-  {
-    invoiceId: 'INV002',
-    roomInfo: {
-      icon: 'pi pi-users',
-      styleClass: 'active-text',
-      roomNumber: '102 - Double',
-    },
-    bookingNo: 'BN002',
-    stakeHolder: {
-      guest: 'Gourav',
-      company: 'Google',
-      postText: 'tiny-text',
-    },
-    visitStatus: '03/03/2023',
-    expenses: '5000/8000',
-    sourceName: {
-      source: 'Ameer',
-      name: 'Agent',
-      postText: 'tiny-text',
-    },
-    amount: '8000',
-    action: {
-      dropDown: {
-        currentState: 'NoShow',
-        nextStates: ['NoShow', 'CANCEL'],
-      },
-      quick: [{ label: 'Reservation', value: 'reservation' }],
-    },
+  CONFIRMED: {
+    label: 'Confirmed',
+    type: 'completed',
   },
-  {
-    invoiceId: 'INV003',
-    roomInfo: {
-      icon: 'pi pi-users',
-      styleClass: 'active-text',
-      roomNumber: '102 - Suite',
-    },
-    bookingNo: 'BN003',
-    stakeHolder: {
-      guest: 'Gourav',
-      company: 'Google',
-      postText: 'tiny-text',
-    },
-    visitStatus: '03/03/2023',
-    expenses: '9000/9000',
-    sourceName: {
-      source: 'Ameer',
-      name: 'Agent',
-      postText: 'tiny-text',
-    },
-    amount: '6000',
-    action: {
-      dropDown: {
-        currentState: 'CANCEL',
-        nextStates: ['NoShow', 'CANCEL'],
-      },
-      quick: [{ label: 'Reservation', value: 'reservation' }],
-    },
+  CANCELED: {
+    label: 'Canceled',
+    type: 'failed',
   },
-  {
-    invoiceId: 'INV004',
-    roomInfo: {
-      icon: 'pi pi-users',
-      styleClass: 'active-text',
-      roomNumber: '103 - Double',
-    },
-    bookingNo: 'BN004',
-    stakeHolder: {
-      guest: 'Sourav',
-      company: 'BigOh',
-      postText: 'tiny-text',
-    },
-    visitStatus: '03/03/2023',
-    expenses: '6000/7000',
-    sourceName: {
-      source: 'Ameer',
-      name: 'Agent',
-      postText: 'tiny-text',
-    },
-    amount: '7000',
-    action: {
-      dropDown: {
-        currentState: 'NoShow',
-        nextStates: ['NoShow', 'CANCEL'],
-      },
-      quick: [{ label: 'Reservation', value: 'reservation' }],
-    },
-  },
-];
+};

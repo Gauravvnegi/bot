@@ -8,6 +8,10 @@
 
 .form-block {
   @include form-block;
+  row-gap: 14px;
+  box-shadow: unset;
+  border-radius: unset;
+  border-bottom: 1px solid #d9d9d9;
 }
 
 .button {
@@ -143,6 +147,12 @@
 }
 
 :host ::ng-deep .p-datatable {
+  .p-datatable-thead {
+    position: sticky;
+    top: 60px; //65px
+    z-index: 10;
+    background-color: $table-header;
+  }
   .p-datatable-thead {
     tr > th {
       background: transparent;

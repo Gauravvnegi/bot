@@ -24,8 +24,6 @@ export class PreArrivalRequest {
       input.guestDetails.primaryGuest.firstName +
       ' ' +
       input.guestDetails.primaryGuest.lastName;
-
-    this.description = 'test';
     this.time = input.stayDetails.arrivalTime;
     return this;
   }

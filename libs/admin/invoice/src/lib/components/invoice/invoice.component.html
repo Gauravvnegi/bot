@@ -18,8 +18,9 @@
     </ng-container>
   </hospitality-bot-navigation-header>
   <div class="form-wrapper" [formGroup]="useForm">
-    <div class="form-block">
-      <div class="half-width">
+    <!-- <div class="form-block">
+       Merging this to payment details -->
+    <!-- <div class="half-width">
         <span class="code__label"> Invoice Number: </span>
         <span class="code__hash">
           {{ inputControl.invoiceNumber.value }}
@@ -37,14 +38,14 @@
         label="Guest Name"
         maxLength="60"
         [disabled]="true"
-      ></hospitality-bot-input>
-      <!-- <hospitality-bot-input
+      ></hospitality-bot-input> -->
+    <!-- <hospitality-bot-input
         class="half-width"
         controlName="companyName"
         label="Company"
         maxLength="60"
       ></hospitality-bot-input> -->
-    </div>
+    <!-- </div> -->
 
     <!-- <div class="form-block">
       <div class="full-width header">
@@ -112,6 +113,47 @@
     </div> -->
 
     <div class="payment-form">
+      <div class="form-block">
+        <!-- Merging this to payment details -->
+        <div class="half-width">
+          <span class="code__label"> Invoice Number: </span>
+          <span class="code__hash">
+            {{ inputControl.invoiceNumber.value }}
+          </span>
+        </div>
+        <div class="half-width code__right">
+          <span class="code__label"> Confirmation Number: </span>
+          <span class="code__hash">
+            {{ bookingNumber }}
+          </span>
+        </div>
+        <div class="half-width">
+          <span class="code__label"> Guest Name: </span>
+          <span class="code__hash">
+            {{ inputControl.guestName.value }}
+          </span>
+        </div>
+        <div *ngIf="inputControl.companyName.value" class="half-width code__right">
+          <span class="code__label"> Company Name: </span>
+          <span class="code__hash">
+            {{ inputControl.companyName.value }}
+          </span>
+        </div>
+
+        <!-- <hospitality-bot-input
+          class="half-width"
+          controlName="guestName"
+          label="Guest Name"
+          maxLength="60"
+          [disabled]="true"
+        ></hospitality-bot-input> -->
+        <!-- <hospitality-bot-input
+        class="half-width"
+        controlName="companyName"
+        label="Company"
+        maxLength="60"
+      ></hospitality-bot-input> -->
+      </div>
       <div class="payment-form__header">
         <span>Payment Detail</span>
         <div

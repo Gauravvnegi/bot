@@ -1,6 +1,9 @@
 @import 'main';
 
+$reports-menu-padding: 16px;
+
 ::ng-deep .reports-menu {
+  border-top-right-radius: 8px;
   &.p-sidebar-left {
     top: $top-nav-height;
     z-index: $main-menu-z !important;
@@ -9,11 +12,33 @@
       transform: translateX($left-nav-height);
     }
   }
+
+  // Menu Wrapper
+  &.p-sidebar-content {
+  }
 }
 
 .menu-header {
   display: flex;
   justify-content: space-between;
+  padding: $reports-menu-padding;
+  font-size: 16px;
+  font-weight: 600;
+  color: $title;
+}
+
+.menu-option {
+  padding: $reports-menu-padding;
+  border-width: 1px 0 0 0;
+  border-style: solid;
+  border-color: $border;
+  font-size: 14px;
+  font-weight: 500;
+  color: $title;
+  cursor: pointer;
+  &.selected {
+    background-color: $primary-text-bg;
+  }
 }
 
 .pi-angle-double-left {
@@ -21,4 +46,5 @@
   background-color: $primary-text-bg;
   padding: 5px;
   border-radius: 4px;
+  cursor: pointer;
 }

@@ -6,6 +6,7 @@
   [modal]="false"
 >
   <!-- Sidebar content goes here -->
+
   <div class="menu-header">
     <div>{{ reportTitle }}</div>
     <i
@@ -13,6 +14,14 @@
       (click)="toggleMenu()"
       aria-hidden="true"
     ></i>
+  </div>
+  <div
+    class="menu-option"
+    [ngClass]="{ selected: reportOption.value === selectedReport }"
+    *ngFor="let reportOption of reportsMenuOptions"
+    (onclick)="selectReport(reportsMenuOptions.value)"
+  >
+    {{ reportOption.label }}
   </div>
 </p-sidebar>
 

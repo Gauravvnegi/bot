@@ -9,6 +9,21 @@ import { ReportsService } from '../../services/reports.service';
 export class ReportsComponent implements OnInit {
   openMenu = false;
   reportTitle = 'Reservation';
+  selectedReport = 'arrivalReport';
+  reportsMenuOptions = [
+    {
+      label: 'Arrival',
+      value: 'arrivalReport',
+    },
+    {
+      label: 'Departure',
+      value: 'departureReport',
+    },
+    {
+      label: 'No Show',
+      value: 'noShowReport',
+    },
+  ];
   constructor(private reportsService: ReportsService) {}
 
   ngOnInit(): void {
@@ -24,4 +39,6 @@ export class ReportsComponent implements OnInit {
   toggleMenu() {
     this.reportsService.toggleMenu();
   }
+
+  selectReport() {}
 }

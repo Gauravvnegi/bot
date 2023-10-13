@@ -179,7 +179,7 @@ export class SearchBarComponent implements OnInit, OnDestroy {
 
     this.routesConfigService.navigate({
       subModuleName: ModuleNames.PACKAGES,
-      path: `${packagesRoutes.createPackage}/${id}`,
+      additionalPath: `${packagesRoutes.createPackage}/${id}`,
     });
   }
 

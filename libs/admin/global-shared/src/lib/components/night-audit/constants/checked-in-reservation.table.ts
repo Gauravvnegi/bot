@@ -40,10 +40,10 @@ export const cols: Cols[] = [
 ];
 
 export const reservationStatus: Record<
-  'NO_SHOW' | 'CONFIRMED' | 'CANCELED',
+  'NOSHOW' | 'CONFIRMED' | 'CANCELED',
   { label: string; type: FlagType }
 > = {
-  NO_SHOW: {
+  NOSHOW: {
     label: 'No Show',
     type: 'active',
   },
@@ -55,4 +55,9 @@ export const reservationStatus: Record<
     label: 'Canceled',
     type: 'failed',
   },
+};
+
+export const quickActions = {
+  modify: 'modify',
+  settlement: 'settlement',
 };

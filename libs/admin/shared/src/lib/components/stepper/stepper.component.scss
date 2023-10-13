@@ -1,3 +1,4 @@
+@import 'main';
 ::ng-deep .stepper {
   .p-steps {
     ul {
@@ -20,6 +21,14 @@
   .active-progress {
     font-weight: bold;
   }
+
+  .disable {
+    pointer-events: none;
+  }
+
+  .enable {
+    pointer-events: visible;
+  }
 }
 
 :host ::ng-deep {
@@ -29,6 +38,15 @@
     }
     .p-steps-title {
       color: #313131 !important;
+    }
+  }
+
+  .p-steps-current {
+    .p-steps-number {
+      background-color: $primary-cta !important;
+    }
+    .p-steps-title {
+      color: $primary-cta !important;
     }
   }
 }

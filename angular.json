@@ -2694,6 +2694,38 @@
           "style": "scss"
         }
       }
+    },
+    "admin-reports": {
+      "projectType": "library",
+      "root": "libs/admin/reports",
+      "sourceRoot": "libs/admin/reports/src",
+      "prefix": "hospitality-bot",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/admin/reports/tsconfig.lib.json",
+              "libs/admin/reports/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/admin/reports/**/*"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/admin/reports/jest.config.js",
+            "tsConfig": "libs/admin/reports/tsconfig.spec.json",
+            "passWithNoTests": true,
+            "setupFile": "libs/admin/reports/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "style": "scss"
+        }
+      }
     }
   },
   "cli": {

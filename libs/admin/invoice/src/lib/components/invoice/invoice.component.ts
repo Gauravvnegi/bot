@@ -8,11 +8,15 @@ import {
 } from '@angular/forms';
 import { MatDialogConfig } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
-import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import {
+  GlobalFilterService,
+  RoutesConfigService,
+} from '@hospitality-bot/admin/core/theme';
 import { LibraryItem, QueryConfig } from '@hospitality-bot/admin/library';
 import {
   AdminUtilityService,
   EntitySubType,
+  ModuleNames,
   NavRouteOptions,
   Option,
   UserService,
@@ -53,6 +57,7 @@ import {
   BillItemFields,
   ChargesType,
   DescriptionOption,
+  PaymentForm,
   UseForm,
 } from '../../types/forms.types';
 import { AddDiscountComponent } from '../add-discount/add-discount.component';
@@ -128,7 +133,8 @@ export class InvoiceComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private manageReservationService: ManageReservationService,
-    private reservationService: ReservationService
+    private reservationService: ReservationService,
+    private routesConfigService: RoutesConfigService
   ) {
     this.reservationId = this.activatedRoute.snapshot.paramMap.get('id');
     this.initPageHeaders();
@@ -311,7 +317,9 @@ export class InvoiceComponent implements OnInit {
           this.getDescriptionOptions();
         },
         (error) => {
-          this.router.navigateByUrl('/pages/efrontdesk');
+          this.routesConfigService.navigate({
+            subModuleName: ModuleNames.INVOICE,
+          });
         },
         () => {
           this.loadingData = false;
@@ -789,7 +797,8 @@ export class InvoiceComponent implements OnInit {
   }
 
   handleSave(): void {
-    if (!this.addGST) this.gstValidation(false);
+    // Commenting it as GST Code is commented as of now
+    // if (!this.addGST) this.gstValidation(false);
 
     this.markAsTouched(this.useForm);
     this.markAsTouched(this.tableFormArray);
@@ -835,6 +844,7 @@ export class InvoiceComponent implements OnInit {
     this.paymentValidation(false);
     this.tableFormArray.clear();
     this.tableFormArray.updateValueAndValidity();
+    this.resetPaymentForm();
     this.useForm.updateValueAndValidity();
     this.getBillingSummary();
   }
@@ -847,6 +857,16 @@ export class InvoiceComponent implements OnInit {
           console.log('Invoice Created');
         })
     );
+  }
+
+  resetPaymentForm() {
+    const paymentConfig: PaymentForm = {
+      remarks: '',
+      paymentMethod: '',
+      receivedPayment: null,
+      transactionId: '',
+    };
+    this.useForm.patchValue(paymentConfig);
   }
 
   onAddGST() {
@@ -1024,7 +1044,9 @@ export class InvoiceComponent implements OnInit {
    * Navigate to service form
    */
   createService() {
-    this.router.navigate([`/pages/library/services/create-service`], {
+    this.routesConfigService.navigate({
+      subModuleName: ModuleNames.SERVICES,
+      additionalPath: 'create-service',
       queryParams: {
         entityId: this.entityId,
       },

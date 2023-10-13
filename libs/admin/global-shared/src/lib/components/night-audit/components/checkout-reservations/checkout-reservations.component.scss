@@ -1,6 +1,9 @@
 @import 'main';
 :host ::ng-deep .main__wrapper {
   .p-datatable {
+    height: 62vh;
+    overflow-x: hidden;
+    overflow-y: auto;
     tr {
       th {
         padding: 6px 5px;
@@ -16,11 +19,10 @@
     }
   }
 
-  .p-datatable {
-    height: 62vh;
-    overflow-x: hidden;
-    overflow-y: auto;
+  .empty-datatable .wrapper {
+    min-height: 53vh !important;
   }
+
   .sticky-header {
     top: -1px !important;
   }

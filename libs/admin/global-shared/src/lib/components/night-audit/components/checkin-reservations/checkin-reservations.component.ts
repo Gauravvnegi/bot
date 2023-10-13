@@ -9,7 +9,7 @@ import { CheckedInReservation } from '../../models/night-audit.model';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { Subscription } from 'rxjs';
 import { NightAuditService } from '../../../../services/night-audit.service';
-import { EntityType } from '@hospitality-bot/admin/shared';
+import { EntityType, ModuleNames } from '@hospitality-bot/admin/shared';
 import {
   GlobalFilterService,
   RoutesConfigService,
@@ -110,8 +110,8 @@ export class CheckinReservationsComponent implements OnInit {
   editReservation(id: string) {
     this.onClose.emit(true);
     this.routesConfigService.navigate({
-      isRespectiveToProduct: true,
-      additionalPath: `/predicto-pms/front-desk-home/manage-reservation/${manageReservationRoutes.editReservation.route}/${id}`,
+      subModuleName: ModuleNames.RESERVATION,
+      additionalPath: `${manageReservationRoutes.editReservation.route}/${id}`,
       queryParams: {
         entityId: this.entityId,
       },

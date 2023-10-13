@@ -242,6 +242,9 @@
     },
     "admin-manage-inventory": {
       "tags": []
+    },
+    "admin-reports": {
+      "tags": []
     }
   }
 }

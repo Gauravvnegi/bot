@@ -1,7 +1,11 @@
 import { Route, Routes } from '@angular/router';
 import { ModuleNames, SubscriptionConfig } from 'libs/admin/shared/src/index';
 import { ComingSoonComponent } from 'libs/admin/shared/src/lib/components/coming-soon/coming-soon.component';
-import { moduleConfig } from '../pages/config/config.module';
+import {
+  moduleConfig,
+  productConfig,
+  subModuleConfig,
+} from '../pages/config/config.module';
 import {
   HierarchicalPathConfig,
   ModuleOfSubModuleWithRespectToProduct,
@@ -160,7 +164,19 @@ export const routeFactoryNew = (
                 },
               };
 
-              const LoadSubModule = moduleConfig[subModuleName]; // Module Load
+              /**
+               * Module Load
+               * Choosing sub module config first
+               * And if not present then check in module config
+               * last from product config
+               */
+              let LoadSubModule = subModuleConfig[subModuleName];
+              if (!LoadSubModule) {
+                LoadSubModule = moduleConfig[moduleName];
+              }
+              if (!LoadSubModule) {
+                LoadSubModule = productConfig[productName];
+              }
 
               /**
                * Only view check is here

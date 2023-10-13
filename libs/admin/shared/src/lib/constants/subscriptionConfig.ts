@@ -120,6 +120,9 @@ export enum ModuleNames {
   ROLES_AND_PERMISSION = 'ROLES_AND_PERMISSION',
   LEGAL_POLICIES = 'LEGAL_POLICIES',
 
+  //Reports
+  REPORTS = 'REPORTS',
+
   REVMAXI = 'REVMAXI',
 
   //BookConnectLive

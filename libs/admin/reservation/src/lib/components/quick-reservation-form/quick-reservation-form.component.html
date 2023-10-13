@@ -195,7 +195,8 @@
           controlName="adultCount"
           label="Adult"
           [props]="{
-            placeholder: 'Enter'
+            placeholder: 'Enter',
+            type: 'number'
           }"
         ></hospitality-bot-input>
         <hospitality-bot-input
@@ -203,7 +204,8 @@
           controlName="childCount"
           label="Child"
           [props]="{
-            placeholder: 'Enter'
+            placeholder: 'Enter',
+            type: 'number'
           }"
         ></hospitality-bot-input>
       </ng-container>
@@ -270,7 +272,7 @@
 
 <hospitality-bot-form-action
   class="full-width"
-  [loading]="loading"
+  [loading]="isBooking"
   [isId]="reservationId"
   (onPostAction)="handleSubmit()"
   [disabled]="!reservationId && useForm.invalid"

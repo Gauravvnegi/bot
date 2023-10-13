@@ -114,24 +114,33 @@ export class ReservationCalendarViewComponent implements OnInit {
   }
 
   initReservationData() {
+    this.roomTypes.map((roomType) => (roomType.loading = true));
     this.manageReservationService
       .getReservationItems<ReservationListResponse>(
         this.getQueryConfig(),
         this.entityId
       )
-      .subscribe((res) => {
-        this.reservationListData = new ReservationList()
-          .deserialize(res)
-          .reservationData.filter(
-            (reservation) =>
-              reservation.reservationType === ReservationType.CONFIRMED
-          );
+      .subscribe(
+        (res) => {
+          this.reservationListData = new ReservationList()
+            .deserialize(res)
+            .reservationData.filter(
+              (reservation) =>
+                reservation.reservationType === ReservationType.CONFIRMED
+            );
 
-        this.roomTypes.forEach((roomType) => {
-          this.mapGridData(roomType);
-        });
-        this.roomsLoaded = true;
-      });
+          this.roomTypes.forEach((roomType) => {
+            this.mapGridData(roomType);
+          });
+          this.roomsLoaded = true;
+        },
+        (error) => {
+          this.roomTypes.map((roomType) => (roomType.loading = false));
+        },
+        () => {
+          this.roomTypes.map((roomType) => (roomType.loading = false));
+        }
+      );
   }
 
   mapGridData(roomType: IGRoomType) {
@@ -379,7 +388,7 @@ export class ReservationCalendarViewComponent implements OnInit {
   handleCloseSidebar(resetData: boolean) {
     this.viewReservationForm = false;
     if (resetData) {
-      this.ngOnInit();
+      this.initReservationData();
     }
   }
 

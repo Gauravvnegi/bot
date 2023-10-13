@@ -6,6 +6,7 @@
   gap: 4%;
   white-space: nowrap;
   text-overflow: ellipsis;
+  overflow: hidden;
 }
 
 :host ::ng-deep .option-items {
@@ -16,7 +17,6 @@
   text-overflow: unset;
   white-space: normal;
   -webkit-box-orient: vertical;
-  overflow: hidden;
 }
 
 .selected-item {
@@ -47,7 +47,7 @@
   padding: 0;
   overflow: visible;
   font-size: 15px;
-  line-height: 1.07;
+  line-height: 1.4;
   letter-spacing: 0.84px;
   text-align: left;
   &.p-disabled {

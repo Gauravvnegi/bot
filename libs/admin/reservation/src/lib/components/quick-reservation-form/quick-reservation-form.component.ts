@@ -69,6 +69,7 @@ export class QuickReservationFormComponent implements OnInit {
   globalQueries = [];
 
   loading: boolean = false;
+  isDataLoaded: boolean = false;
   isBooking = false;
   editMode = false;
 
@@ -89,8 +90,6 @@ export class QuickReservationFormComponent implements OnInit {
   sidebarVisible: boolean = false;
   @ViewChild('sidebarSlide', { read: ViewContainerRef })
   sidebarSlide: ViewContainerRef;
-
-  errorMessage: string;
 
   @Output() onCloseSidebar = new EventEmitter<boolean>(false);
   @Input() set reservationConfig(value: QuickReservationConfig) {
@@ -128,6 +127,7 @@ export class QuickReservationFormComponent implements OnInit {
     if (this.reservationId) {
       this.initReservationDetails();
     } else {
+      this.isDataLoaded = true;
       this.inputControls.roomInformation.patchValue({
         roomTypeId: this.defaultRoomType.value,
         roomNumber: this.selectedRoom,
@@ -244,8 +244,9 @@ export class QuickReservationFormComponent implements OnInit {
             }));
 
             this.useForm.patchValue(data);
-
             this.inputControls.roomInformation.patchValue(roomInformation[0]);
+
+            this.isDataLoaded = true;
           },
           (error) => {
             this.loading = false;
@@ -422,7 +423,6 @@ export class QuickReservationFormComponent implements OnInit {
           },
           (error) => {
             this.isBooking = false;
-            this.errorMessage = error.error.message;
           },
           () => {
             this.isBooking = false;
@@ -477,7 +477,6 @@ export class QuickReservationFormComponent implements OnInit {
           },
           (error) => {
             this.isBooking = false;
-            this.errorMessage = error.error.message;
           },
           () => {
             this.isBooking = false;

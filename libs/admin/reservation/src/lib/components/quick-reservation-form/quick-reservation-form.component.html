@@ -270,7 +270,7 @@
 
 <hospitality-bot-form-action
   class="full-width"
-  [loading]="loading"
+  [loading]="isBooking"
   [isId]="reservationId"
   (onPostAction)="handleSubmit()"
   [disabled]="!reservationId && useForm.invalid"

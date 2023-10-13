@@ -3,6 +3,7 @@ import { FormBuilder, FormControl } from '@angular/forms';
 import { MatDialogConfig } from '@angular/material/dialog';
 import {
   GlobalFilterService,
+  RoutesConfigService,
   SubscriptionPlanService,
 } from '@hospitality-bot/admin/core/theme';
 import {
@@ -51,10 +52,7 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
   cols = cols.reservation;
   selectedTab: TableValue;
   isSidebarVisible = false;
-  tableTypes = [
-    tableTypes.table,
-    tableTypes.calendar
-  ];
+  tableTypes = [tableTypes.table, tableTypes.calendar];
 
   globalQueries = [];
   $subscription = new Subscription();
@@ -73,7 +71,8 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
     protected _modal: ModalService,
     public feedbackService: FeedbackService,
     protected tabFilterService: TableService,
-    protected subscriptionPlanService: SubscriptionPlanService
+    protected subscriptionPlanService: SubscriptionPlanService,
+    private routesConfigService: RoutesConfigService
   ) {
     super(fb, tabFilterService);
   }
@@ -94,12 +93,15 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
     this.listenGuestDetails();
   }
 
+  get isCalendarViewAvailable() {
+    return this.subscriptionPlanService.checkModuleSubscriptionWithRespectiveToProduct(
+      this.routesConfigService.productName,
+      ModuleNames.ADD_RESERVATION
+    );
+  }
+
   checkReservationSubscription() {
-    if (
-      !this.subscriptionPlanService.checkModuleSubscription(
-        ModuleNames.ADD_RESERVATION
-      )
-    ) {
+    if (!this.isCalendarViewAvailable) {
       this.tableTypes = [tableTypes.table];
       this.tableFG?.addControl('tableType', new FormControl('table'));
     } else {

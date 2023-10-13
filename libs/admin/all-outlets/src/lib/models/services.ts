@@ -19,6 +19,7 @@ export class Service {
   type: string;
   rate?: string;
   active?: boolean;
+  packageCode?: string;
   deserialize(input: Amenity) {
     this.id = input.id;
     this.name = input.name;
@@ -29,6 +30,7 @@ export class Service {
     this.type = input.type;
     this.rate = `${input.currency}${input.rate}`;
     this.active = input.active;
+    this.packageCode = input.packageCode;
     return this;
   }
 }

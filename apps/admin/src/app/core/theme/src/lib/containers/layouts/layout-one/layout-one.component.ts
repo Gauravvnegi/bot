@@ -61,12 +61,15 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
   bgColor: string;
   outlets = [];
   lastUpdatedAt: string;
+
   isGlobalFilterVisible = false;
   showNotification = false;
-  flashNotification: any;
-  delayTime = layoutConfig.notificationDelayTime;
   isDetailPageVisible = false;
   isNotificationVisible = false;
+  fullView: boolean = false;
+
+  flashNotification: any;
+  delayTime = layoutConfig.notificationDelayTime;
   private $subscription = new Subscription();
   searchFG: FormGroup;
   timezone: string;
@@ -125,6 +128,9 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.initLayoutConfigs();
     this.globalFilterService.listenForGlobalFilterChange();
+    this.globalFilterService.showFullView.subscribe(
+      (res: boolean) => (this.fullView = res)
+    );
     this.setInitialFilterValue();
     this.loadingService.close();
     this.getNotificationUnreadCount();

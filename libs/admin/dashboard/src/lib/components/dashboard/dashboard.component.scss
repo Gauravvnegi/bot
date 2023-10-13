@@ -11,7 +11,7 @@
 }
 
 ::ng-deep .p-component-overlay {
-  z-index: 400 !important;
+  display: none !important;
 }
 
 // :host ::ng-deep .p-sidebar {
@@ -122,21 +122,6 @@
   font-weight: 500;
 }
 
-.status-text-initiated {
-  color: $initiated !important;
-}
-
-.status-text-reject {
-  color: $mediumRed !important;
-}
-
-.status-text-success {
-  color: #2a8853 !important;
-}
-
-.status-text-pending {
-  color: $draft-state !important;
-}
 .container {
   width: 100%;
   background-color: #f0ecff;
@@ -257,3 +242,8 @@
     }
   }
 }
+
+:host ::ng-deep .action-header__sticky {
+  z-index: 490 !important;
+}
+

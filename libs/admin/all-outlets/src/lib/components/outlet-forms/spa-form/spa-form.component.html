@@ -6,7 +6,7 @@
       <hospitality-bot-custom-select
         label="Services"
         description="Do not forget to add this cost in addition to the room cost"
-        formControlName="serviceIds"
+        formControlName="paidServiceIds"
         [itemList]="paidServices"
         [loading]="isLoading"
         (viewAll)="onCreateAndContinue('services')"

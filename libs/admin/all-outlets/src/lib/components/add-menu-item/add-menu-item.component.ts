@@ -173,7 +173,6 @@ export class AddMenuItemComponent extends OutletBaseComponent
     const navigationExtras: NavigationExtras = {
       queryParams: dataToSend,
     };
-    // this.router.navigate(['pages/settings/tax/create-tax'], navigationExtras);
     this.routesConfigService.navigate({
       subModuleName: ModuleNames.TAX,
       additionalPath: 'create-tax',

@@ -326,6 +326,11 @@ hospitality-bot-tab-group .icon {
   justify-content: space-between;
   align-items: center;
   gap: 0.5em;
+  .expand {
+    cursor: pointer;
+    height: 20px;
+    width: 20px;
+  }
 }
 
 :host ::ng-deep .p-dialog-mask {

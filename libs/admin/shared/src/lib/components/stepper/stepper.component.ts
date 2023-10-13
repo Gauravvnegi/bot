@@ -28,7 +28,6 @@ export class StepperComponent implements OnInit {
   ngOnChanges(changes: SimpleChanges): void {
     this.handleDisabilityStyle(changes);
     this.handleActiveStyle(changes);
-    this.handleCompletedSteps(changes);
   }
 
   ngOnInit(): void {
@@ -66,8 +65,6 @@ export class StepperComponent implements OnInit {
       changes['activeIndex'] &&
       !changes.activeIndex.firstChange
     ) {
-      const isCompletedStep =
-        this.completedStep < changes.activeIndex.currentValue;
       this.stepList = this.stepList.map((item, index) => ({
         ...item,
         ...{
@@ -85,26 +82,7 @@ export class StepperComponent implements OnInit {
           }`,
         },
       }));
-
-      // Storing previous state
-      if (isCompletedStep) {
-        this.completedStep = changes.activeIndex.currentValue;
-      }
     }
-  }
-
-  handleCompletedSteps(change: SimpleChanges) {
-    // if (
-    //   change['activeIndex'] &&
-    //   !change.activeIndex.firstChange &&
-    //   this.completedStep < change.activeIndex.currentValue &&
-    //   this.completedStyle
-    // ) {
-    //   this.stepList = this.stepList.map((item, index) => ({
-    //     ...item,
-    //     styleClass: '',
-    //   }));
-    // }
   }
 
   onActiveIndexChange(index) {

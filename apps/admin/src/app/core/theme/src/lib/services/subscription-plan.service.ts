@@ -123,6 +123,17 @@ export class SubscriptionPlanService extends ApiService {
     );
   }
 
+  checkModuleSubscriptionWithRespectiveToProduct(
+    productName: ProductNames,
+    moduleName: ModuleNames
+  ) {
+    return (
+      this.productSubscription.subscribedModuleProductBased[
+        productName
+      ]?.indexOf(moduleName) !== -1
+    );
+  }
+
   setSettings() {
     const routesConfigPathService = new RouteConfigPathService();
 

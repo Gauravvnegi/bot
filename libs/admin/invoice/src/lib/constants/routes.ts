@@ -16,7 +16,7 @@ export const invoiceRoutes: Record<
 > = {
   invoice: {
     route: '',
-    navRoutes: [navRoute.eFrontdesk, navRoute.invoice],
+    navRoutes: [],
     title: 'Manage Invoice',
   },
 
@@ -28,13 +28,13 @@ export const invoiceRoutes: Record<
 
   previewInvoice: {
     route: 'preview-invoice',
-    navRoutes: [navRoute.eFrontdesk, navRoute.invoice, navRoute.previewInvoice],
+    navRoutes: [navRoute.previewInvoice],
     title: 'Preview Invoice',
   },
 
   paymentHistory: {
     route: 'payment-history',
-    navRoutes: [navRoute.eFrontdesk, navRoute.invoice, navRoute.paymentHistory],
+    navRoutes: [navRoute.paymentHistory],
     title: 'Payment History',    
   }
 };

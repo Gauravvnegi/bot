@@ -152,6 +152,7 @@ export class InvoiceComponent implements OnInit {
     this.entityType = paramData.type;
     this.initForm();
     this.initOptions();
+    this.initNavRoutes();
   }
 
   initOptions() {
@@ -176,6 +177,12 @@ export class InvoiceComponent implements OnInit {
         (error) => {}
       )
     );
+  }
+
+  initNavRoutes() {
+    this.routesConfigService.navRoutesChanges.subscribe((navRoutesRes) => {
+      this.navRoutes = [...navRoutesRes, ...this.navRoutes];
+    });
   }
 
   /**
@@ -248,6 +255,9 @@ export class InvoiceComponent implements OnInit {
           const guestData = res.guestDetails.primaryGuest;
           this.inputControl.guestName.patchValue(
             `${guestData.firstName} ${guestData.lastName}`
+          );
+          this.inputControl.companyName.patchValue(
+            guestData?.companyName || ''
           );
 
           this.guestId = guestData.id;

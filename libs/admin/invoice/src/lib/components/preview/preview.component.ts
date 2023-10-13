@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { InvoiceService } from '../../services/invoice.service';
 import { ActivatedRoute } from '@angular/router';
 import { SnackBarService } from '@hospitality-bot/shared/material';
+import { RoutesConfigService } from '@hospitality-bot/admin/core/theme';
+import { invoiceRoutes } from '../../constants/routes';
 
 @Component({
   selector: 'hospitality-bot-preview',
@@ -16,6 +18,7 @@ export class PreviewComponent implements OnInit {
   navRoutes = [];
   isInvoiceGenerated = false;
   failedToLoad = false;
+  pageTitle = 'Preview Invoice';
   // items = [
   //   {
   //     label: 'Generate Proforma',
@@ -27,15 +30,19 @@ export class PreviewComponent implements OnInit {
   constructor(
     private invoiceService: InvoiceService,
     private activatedRoute: ActivatedRoute,
-    private snackbarService: SnackBarService
+    private snackbarService: SnackBarService,
+    private routesConfigService: RoutesConfigService
   ) {}
 
   ngOnInit(): void {
     const id = this.activatedRoute.snapshot.paramMap.get('id');
+    const { navRoutes, title } = invoiceRoutes['previewInvoice'];
+    this.navRoutes = navRoutes;
+    this.pageTitle = title;
     this.reservationId = id;
-    this.updateNavRoutes();
     this.getPreviewUrl();
     this.getInvoiceData();
+    this.initNavRoutes();
   }
 
   getInvoiceData() {
@@ -61,14 +68,10 @@ export class PreviewComponent implements OnInit {
     );
   }
 
-  updateNavRoutes(): void {
-    const invoiceRoute = `/pages/efrontdesk/invoice/${this.reservationId}`;
-
-    this.navRoutes = [
-      { label: 'eFrontdesk', link: '/pages/efrontdesk' },
-      { label: 'Invoice', link: invoiceRoute },
-      { label: 'Preview Invoice', link: './' },
-    ];
+  initNavRoutes() {
+    this.routesConfigService.navRoutesChanges.subscribe((navRoutesRes) => {
+      this.navRoutes = [...navRoutesRes, ...this.navRoutes];
+    });
   }
 
   handleGenerateInvoice() {

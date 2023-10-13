@@ -15,6 +15,18 @@
   font-size: 12px !important;
 }
 
+.heading-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5em;
+  .expand {
+    cursor: pointer;
+    height: 20px;
+    width: 20px;
+  }
+}
+
 :host ::ng-deep {
   .p-datatable {
     @include tableHeadingStickyPosition(114px);
@@ -85,4 +97,13 @@
       filter: invert(0);
     }
   }
+}
+
+:host ::ng-deep .p-dialog-mask {
+  height: unset !important;
+  width: unset !important;
+  left: 214px !important;
+
+  top: 53px !important;
+  position: absolute !important;
 }

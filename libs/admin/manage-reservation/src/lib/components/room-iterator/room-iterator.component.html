@@ -74,7 +74,8 @@
               [props]="{
                 showChips: false,
                 isAsync: true,
-                placeholder: field.placeholder
+                placeholder: field.placeholder,
+                selectedOption: roomTypes[index]
               }"
               [apiConfig]="{
                 entityId: entityId,
@@ -82,12 +83,18 @@
                 dataModel: {
                   key: 'roomTypes'
                 },
-                queryParams: getConfig()
+                queryParams: getConfig(),
+                searchAPIEndPoint: 'library/search',
+                searchModel: {
+                  key: 'ROOM_TYPE'
+                },
+                searchQueryParams: { type: 'ROOM_TYPE' }
               }"
               [paginationConfig]="{
                 isPagination: true
               }"
               (clickedOption)="roomTypeChange($event, i)"
+              [reinitialize]="reinitializeRooms"
             ></hospitality-bot-quick-select>
           </div>
           <ng-container *ngIf="roomTypeArray.length > 1">

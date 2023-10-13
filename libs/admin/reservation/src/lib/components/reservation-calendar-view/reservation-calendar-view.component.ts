@@ -14,7 +14,10 @@ import {
   RoomReservation,
 } from 'libs/admin/manage-reservation/src/lib/models/reservations.model';
 import { ManageReservationService } from 'libs/admin/manage-reservation/src/lib/services/manage-reservation.service';
-import { ReservationListResponse } from 'libs/admin/manage-reservation/src/lib/types/response.type';
+import {
+  BookingItems,
+  ReservationListResponse,
+} from 'libs/admin/manage-reservation/src/lib/types/response.type';
 import { RoomService } from 'libs/admin/room/src/lib/services/room.service';
 import {
   Features,
@@ -111,24 +114,33 @@ export class ReservationCalendarViewComponent implements OnInit {
   }
 
   initReservationData() {
+    this.roomTypes.map((roomType) => (roomType.loading = true));
     this.manageReservationService
       .getReservationItems<ReservationListResponse>(
         this.getQueryConfig(),
         this.entityId
       )
-      .subscribe((res) => {
-        this.reservationListData = new ReservationList()
-          .deserialize(res)
-          .reservationData.filter(
-            (reservation) =>
-              reservation.reservationType === ReservationType.CONFIRMED
-          );
+      .subscribe(
+        (res) => {
+          this.reservationListData = new ReservationList()
+            .deserialize(res)
+            .reservationData.filter(
+              (reservation) =>
+                reservation.reservationType === ReservationType.CONFIRMED
+            );
 
-        this.roomTypes.forEach((roomType) => {
-          this.mapGridData(roomType);
-        });
-        this.roomsLoaded = true;
-      });
+          this.roomTypes.forEach((roomType) => {
+            this.mapGridData(roomType);
+          });
+          this.roomsLoaded = true;
+        },
+        (error) => {
+          this.roomTypes.map((roomType) => (roomType.loading = false));
+        },
+        () => {
+          this.roomTypes.map((roomType) => (roomType.loading = false));
+        }
+      );
   }
 
   mapGridData(roomType: IGRoomType) {
@@ -154,7 +166,9 @@ export class ReservationCalendarViewComponent implements OnInit {
       // Map data for matching reservations
       const matchingData = matchingReservations.map((reservation) => ({
         id: reservation.id,
-        content: reservation.guestName,
+        content: `${reservation.guestName} (${this.getOccupancy(
+          reservation.bookingItems
+        )})`,
         startPos: this.getDate(reservation.from),
         endPos: this.getDate(reservation.to),
         rowValue: reservation.bookingItems[0].roomDetails.roomNumber,
@@ -176,7 +190,7 @@ export class ReservationCalendarViewComponent implements OnInit {
           })
           .map((status) => ({
             id: null, // Set id as needed for unavailable rooms
-            content: status?.status,
+            content: 'Out Of Service',
             startPos: this.getDate(status.fromDate),
             endPos: this.getStatusDate(status.toDate),
             rowValue: room.roomNumber,
@@ -198,78 +212,6 @@ export class ReservationCalendarViewComponent implements OnInit {
       this.allRoomTypes = this.roomTypes;
     }
   }
-  // mapGridData(roomType: IGRoomType) {
-  //   if (roomType.rooms) {
-  //     const matchingReservations = this.reservationListData.filter(
-  //       (reservation) =>
-  //         roomType.rooms.some((room) =>
-  //           reservation.bookingItems.some(
-  //             (bookingItem) =>
-  //               bookingItem.roomDetails.roomNumber === room.roomNumber
-  //           )
-  //         )
-  //     );
-
-  //     const unavailableRooms = roomType.rooms.filter((room) => {
-  //       // Check if any statusDetail has a status of 'OUT_OF_ORDER' or 'OUT_OF_SERVICE'
-  //       const hasUnavailableStatus = room?.statusDetails.some(
-  //         (statusDetail) =>
-  //           statusDetail.status === 'OUT_OF_ORDER' ||
-  //           statusDetail.status === 'OUT_OF_SERVICE'
-  //       );
-
-  //       // Include the room in the result if it does not have an unavailable status
-  //       return hasUnavailableStatus;
-  //     });
-
-  //     // Update the data field with matching reservations
-  //     this.mapRoomTypeData(roomType, matchingReservations);
-  //     this.mapUnavailableRoomData(roomType, unavailableRooms);
-  //     this.allRoomTypes = this.roomTypes;
-  //   }
-  // }
-
-  // mapUnavailableRoomData(roomType: IGRoomType, unavailableRooms: IGRoom[]) {
-  //   roomType.data = {
-  //     rows: this.getRooms(roomType.rooms),
-  //     columns: this.gridCols,
-  //     values: unavailableRooms.reduce((result, room) => {
-  //       const unavailableStatusDetails = room.statusDetails.filter(
-  //         (status) =>
-  //           status.status === 'OUT_OF_ORDER' ||
-  //           status.status === 'OUT_OF_SERVICE'
-  //       );
-
-  //       const roomValues = unavailableStatusDetails.map((status) => ({
-  //         content: status?.remark,
-  //         startPos: this.getDate(status.fromDate),
-  //         endPos: this.getDate(status.toDate),
-  //         rowValue: room.roomNumber,
-  //         colorCode: 'draft',
-  //         nonInteractive: true,
-  //       }));
-
-  //       return [...result, ...roomValues];
-  //     }, []),
-  //   };
-  // }
-
-  // mapRoomTypeData(roomType: IGRoomType, matchingReservations) {
-  //   roomType.data = {
-  //     rows: this.getRooms(roomType.rooms),
-  //     columns: this.gridCols,
-  //     values: matchingReservations.map((reservation) => ({
-  //       id: reservation.id,
-  //       content: reservation.guestName,
-  //       startPos: this.getDate(reservation.from),
-  //       endPos: this.getDate(reservation.to),
-  //       rowValue: reservation.bookingItems[0].roomDetails.roomNumber,
-  //       colorCode: getColorCode(reservation.journeysStatus),
-  //       nonInteractive: reservation.journeysStatus.CHECKOUT === 'COMPLETED',
-  //       additionContent: reservation?.companyName ?? '',
-  //     })),
-  //   };
-  // }
 
   getDate(date: number) {
     const data = new Date(date);
@@ -367,6 +309,14 @@ export class ReservationCalendarViewComponent implements OnInit {
     return getWeekendBG(day, isOccupancy);
   }
 
+  getOccupancy(bookingItems: BookingItems[]) {
+    const totalGuests = bookingItems.map(
+      (item) =>
+        +item.occupancyDetails.maxAdult + +item.occupancyDetails.maxChildren
+    );
+    return totalGuests;
+  }
+
   handleChange(event: IGChangeEvent, roomType: IGRoomType) {
     const updateData = {
       from: event.startPos,
@@ -438,7 +388,7 @@ export class ReservationCalendarViewComponent implements OnInit {
   handleCloseSidebar(resetData: boolean) {
     this.viewReservationForm = false;
     if (resetData) {
-      this.ngOnInit();
+      this.initReservationData();
     }
   }
 

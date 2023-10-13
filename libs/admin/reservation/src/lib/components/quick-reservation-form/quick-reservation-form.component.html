@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container" *ngIf="isDataLoaded; else loader">
   <div class="header">
     <div class="heading">
       Booking Information
@@ -45,7 +45,6 @@
     class="body"
     [ngStyle]="{ 'max-height': reservationId ? '70vh' : '85vh' }"
   >
-    <small class="error-message" *ngIf="errorMessage">{{ errorMessage }}</small>
     <div class="form-block" [formGroup]="useForm">
       <!-- Reservation Information -->
       <ng-container formGroupName="reservationInformation">
@@ -136,7 +135,16 @@
                 value: 'id'
               }
             },
-            queryParams: getGuestConfig()
+            queryParams: getGuestConfig(),
+            searchAPIEndPoint: '/api/v1/search/members',
+            searchModel: {
+              response: true,
+              values: {
+                label: ['firstName', 'lastName'],
+                value: 'id'
+              }
+            },
+            searchQueryParams: { type: 'GUEST' }
           }"
           [paginationConfig]="{
             isPagination: true
@@ -284,3 +292,7 @@
   #fa
 >
 </hospitality-bot-form-action>
+
+<ng-template #loader>
+  <hospitality-bot-loader-bounce class="loader"></hospitality-bot-loader-bounce>
+</ng-template>

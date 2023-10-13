@@ -49,6 +49,7 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
   isCustomSort = true;
   rowsPerPage = 100;
   triggerInitialData = false;
+  showFullView = false;
   cols = cols.reservation;
   selectedTab: TableValue;
   isSidebarVisible = false;
@@ -60,7 +61,6 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
   options: any[] = [];
   isPopUploading: boolean = false;
   selectedTableType: string;
-  visible: boolean = false;
 
   constructor(
     public fb: FormBuilder,
@@ -101,14 +101,13 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
   }
 
   checkReservationSubscription() {
-    if (!this.isCalendarViewAvailable) {
-      this.tableTypes = [tableTypes.table];
-      this.tableFG?.addControl('tableType', new FormControl('table'));
+    this.tableFG?.addControl('tableType', new FormControl('calendar'));
+    if (this.isCalendarViewAvailable) {
+      this.tableFG.patchValue({ tableType: 'table' });
+      this.selectedTableType = 'table';
     } else {
-      this.tableFG?.addControl('tableType', new FormControl('calendar'));
+      this.tableTypes = [];
     }
-    this.tableFG.patchValue({ tableType: 'table' });
-    this.selectedTableType = 'table';
   }
 
   /**
@@ -379,8 +378,7 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
 
   setTableType(value: string) {
     this.selectedTableType = value;
-    // this.tableFG.patchValue({ tableType: value });
-    if (value === 'calendarMaximize') this.visible = true;
+    this.tableFG.patchValue({ tableType: value });
   }
 
   ngOnDestroy(): void {

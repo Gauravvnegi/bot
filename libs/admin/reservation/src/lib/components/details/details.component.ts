@@ -401,7 +401,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
   }
 
   manageInvoice() {
-    this.onDetailsClose.next(false);
+    this.onDetailsClose.next(true);
     this.routesConfigService.navigate({
       subModuleName: ModuleNames.INVOICE,
       additionalPath: `${this.bookingId}`,
@@ -906,7 +906,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
     if (sharedIcon) {
       return channel.isSubscribed ? sharedIcon.iconUrl : sharedIcon.iconUrl;
     }
-    return '';
+    return null;
   }
 
   checkForTransactionFeedbackSubscribed() {

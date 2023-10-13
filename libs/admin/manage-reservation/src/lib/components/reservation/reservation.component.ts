@@ -5,6 +5,7 @@ import {
   EntitySubType,
   EntityTabFilterResponse,
 } from '@hospitality-bot/admin/shared';
+import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 
 @Component({
   selector: 'hospitality-bot-reservation',
@@ -18,10 +19,18 @@ export class ReservationComponent implements OnInit {
       link: '/admin',
     },
   ];
+  showCalendarView: boolean;
 
-  constructor(private formService: FormService) {}
+  constructor(
+    private formService: FormService,
+    private globalFilterService: GlobalFilterService
+  ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.globalFilterService.showFullView.subscribe((res: boolean) => {
+      this.showCalendarView = res;
+    });
+  }
 
   getFormServiceEntity(item: EntityTabFilterResponse) {
     return {
@@ -29,7 +38,7 @@ export class ReservationComponent implements OnInit {
       label: item.label,
       type: item.outletType ? EntityType.OUTLET : EntityType.HOTEL,
       subType: item.outletType ? item.outletType : EntitySubType.ROOM_TYPE,
-      value: item.entityId[0]
+      value: item.entityId[0],
     };
   }
 

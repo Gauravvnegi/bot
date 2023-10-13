@@ -91,3 +91,12 @@
     }
   }
 }
+
+:host ::ng-deep .p-dialog-mask {
+  height: unset !important;
+  width: unset !important;
+  left: 214px !important;
+
+  top: 53px !important;
+  position: absolute !important;
+}

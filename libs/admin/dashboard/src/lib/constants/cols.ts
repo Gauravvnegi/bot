@@ -70,11 +70,4 @@ export const tableTypes = {
     whiteUrl: 'assets/svg/calendar-white.svg',
     backgroundColor: '#DEFFF3',
   },
-  calendarMaximize: {
-    name: 'calendarMaximize',
-    value: 'calendarMaximize',
-    url: 'assets/svg/calendar-dark.svg',
-    whiteUrl: 'assets/svg/calendar-white.svg',
-    backgroundColor: '#DEFFF3',
-  },
 };

@@ -1,21 +1,5 @@
 <p-accordionTab header="Guest Information" [formGroup]="parentFormGroup">
   <div class="form-block" formGroupName="guestInformation">
-    <!-- <hospitality-bot-select
-        class="half-width select-block"
-        controlName="guestDetails"
-        label="Guest Name"
-        [options]="guestOptions"
-        [props]="{
-          isAsync: true,
-          createPrompt: '+ Add New Guest',
-          placeholder: 'Search'
-        }"
-        [loading]="loadingGuests"
-        (paginate)="loadMoreGuests()"
-        (onSearch)="searchGuests($event)"
-        [stopEmission]="noMoreGuests"
-        (onCreate)="createGuest()"
-      ></hospitality-bot-select> -->
     <hospitality-bot-quick-select
       class="half-width select"
       controlName="guestDetails"
@@ -38,7 +22,16 @@
             value: 'id'
           }
         },
-        queryParams: getConfig()
+        queryParams: getConfig(),
+        searchAPIEndPoint: '/api/v1/search/members',
+        searchModel: {
+          response: true,
+          values: {
+            label: ['firstName', 'lastName'],
+            value: 'id'
+          }
+        },
+        searchQueryParams: { type: 'GUEST' }
       }"
       [paginationConfig]="{
         isPagination: true

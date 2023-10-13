@@ -142,12 +142,20 @@ export class GuestInformationComponent implements OnInit {
   }
 
   guestChange(event: GuestType) {
-    if (event) {
+    if (event && event?.id) {
+      this.selectedGuest = {
+        label: `${event.firstName} ${event.lastName}`,
+        value: event.id,
+        phoneNumber: event.contactDetails.contactNumber,
+        cc: event.contactDetails.cc,
+        email: event.contactDetails.emailId,
+      };
       this.formService.getSummary.next();
     }
   }
 
-  getConfig() {
+  getConfig(type = 'get') {
+    if (type === 'search') return { type: 'GUEST' };
     const queries = {
       entityId: this.entityId,
       toDate: this.globalQueries[0].toDate,

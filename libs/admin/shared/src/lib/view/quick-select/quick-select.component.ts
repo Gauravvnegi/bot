@@ -57,6 +57,7 @@ export class QuickSelectComponent extends FormComponent implements OnInit {
       label: 'name',
       value: 'id',
     },
+    response: false,
   };
   dataModel: DataModel = { ...this.model };
   baseURL: string;
@@ -71,7 +72,7 @@ export class QuickSelectComponent extends FormComponent implements OnInit {
 
   postAPIEndPoint?: string;
   postQueryParams?: Record<string, string>;
-  postModel?: DataModel = { ...this.model };
+  postModel?: DataModel;
 
   // Settings variables
   showHeader = true;
@@ -241,7 +242,13 @@ export class QuickSelectComponent extends FormComponent implements OnInit {
    * @returns list of option[]
    */
   getOptions(res, model) {
-    const items = res ? (model?.key ? res[model.key] : res) : [];
+    const items = res
+      ? model.response
+        ? res
+        : model?.key
+        ? res[model.key]
+        : res
+      : [];
     return (
       items.map((item) => {
         const label = Array.isArray(model.values?.label)
@@ -401,4 +408,5 @@ export type DataModel = {
   key?: string;
   values: { label: string | string[]; value: string } | Record<string, string>;
   data?: Record<string, string>;
+  response?: boolean;
 };

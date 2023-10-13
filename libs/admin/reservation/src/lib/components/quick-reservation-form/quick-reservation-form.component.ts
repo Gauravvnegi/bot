@@ -44,6 +44,7 @@ import { AddGuestComponent } from 'libs/admin/guests/src/lib/components/add-gues
 import { RoomTypeResponse } from 'libs/admin/room/src/lib/types/service-response';
 import { RoomTypeForm } from 'libs/admin/room/src/lib/models/room.model';
 import { GuestType } from 'libs/admin/guests/src/lib/types/guest.type';
+import { RoomFieldTypeOption } from 'libs/admin/manage-reservation/src/lib/constants/reservation';
 @Component({
   selector: 'hospitality-bot-quick-reservation-form',
   templateUrl: './quick-reservation-form.component.html',
@@ -73,6 +74,7 @@ export class QuickReservationFormComponent implements OnInit {
 
   selectedGuest: Option;
   defaultRoomType: IGRoomType;
+  selectedRoomType: RoomFieldTypeOption;
 
   selectedRoom: string;
   date: IGCol;
@@ -292,8 +294,20 @@ export class QuickReservationFormComponent implements OnInit {
 
   // Patch data for selected room type
   roomTypeChange(event: RoomTypeResponse) {
-    if (event) {
+    if (event && event.id) {
       const data = new RoomTypeForm().deserialize(event);
+      this.selectedRoomType = {
+        label: data.name,
+        value: data.id,
+        ratePlan: data.allRatePlans,
+        roomCount: 1,
+        maxChildren: data.maxChildren,
+        maxAdult: data.maxAdult,
+        rooms: data.rooms.map((room) => ({
+          label: room.roomNumber,
+          value: room.roomNumber,
+        })),
+      };
       this.setRoomInfo(data);
     }
   }
@@ -317,13 +331,15 @@ export class QuickReservationFormComponent implements OnInit {
   }
 
   guestChange(event: GuestType) {
-    // this.selectedGuest = {
-    //   label: `${event.firstName} ${event.lastName}`,
-    //   value: event.id,
-    //   phoneNumber: event.contactDetails.contactNumber,
-    //   cc: event.contactDetails.cc,
-    //   email: event.contactDetails.emailId,
-    // };
+    if (event && event?.id) {
+      this.selectedGuest = {
+        label: `${event.firstName} ${event.lastName}`,
+        value: event.id,
+        phoneNumber: event.contactDetails.contactNumber,
+        cc: event.contactDetails.cc,
+        email: event.contactDetails.emailId,
+      };
+    }
   }
 
   listenForSourceChanges() {

@@ -136,7 +136,16 @@
                 value: 'id'
               }
             },
-            queryParams: getGuestConfig()
+            queryParams: getGuestConfig(),
+            searchAPIEndPoint: '/api/v1/search/members',
+            searchModel: {
+              response: true,
+              values: {
+                label: ['firstName', 'lastName'],
+                value: 'id'
+              }
+            },
+            searchQueryParams: { type: 'GUEST' }
           }"
           [paginationConfig]="{
             isPagination: true

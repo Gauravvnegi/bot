@@ -50,4 +50,11 @@ export type BillSummaryData = {
   invoiceGenerated: boolean;
   invoiceDate: number;
   pdfUrl: string;
+} & PaymentData;
+
+export type PaymentData = {
+  paymentRemarks: string;
+  paymentMethod: string;
+  transactionId: string;
+  paymentAmount: string | number;
 };

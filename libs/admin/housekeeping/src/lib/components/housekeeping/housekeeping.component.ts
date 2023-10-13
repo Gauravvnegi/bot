@@ -55,18 +55,21 @@ export class HousekeepingComponent extends BaseDatatableComponent
     private housekeepingService: HousekeepingService
   ) {
     super(fb, tabFilterService);
+    this.initForm();
   }
 
   ngOnInit(): void {
     this.entityId = this.globalFilterService.entityId;
-    this.initForm();
-    this.getRoomList();
     this.listenForRoomTypeChange();
     this.listenForRefreshData();
     this.navRoutes = houseKeepingRoutes['HouseKeeping'].navRoutes;
   }
 
   loadData(event: LazyLoadEvent): void {
+    this.getRoomList();
+  }
+
+  ngAfterViewInit(): void {
     this.getRoomList();
   }
 

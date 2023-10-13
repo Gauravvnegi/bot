@@ -1,5 +1,12 @@
 import { animate, style, transition, trigger } from '@angular/animations';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import {
+  Component,
+  ComponentFactoryResolver,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+  ViewContainerRef,
+} from '@angular/core';
 import { MatDialogConfig } from '@angular/material/dialog';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
@@ -61,12 +68,18 @@ export class RequestWrapperComponent implements OnInit, OnDestroy {
     { button: true, label: 'Raise Complaint', icon: 'assets/svg/requests.svg' },
   ];
 
+  @ViewChild('sidebarSlide', { read: ViewContainerRef })
+  sidebarSlide: ViewContainerRef;
+  sidebarVisible: boolean = false;
+  sidebarType;
+
   constructor(
     private _modal: ModalService,
     private _requestService: RequestService,
     private _globalFilterService: GlobalFilterService,
     private snackbarService: SnackBarService,
-    private subscriptionService: SubscriptionPlanService
+    private subscriptionService: SubscriptionPlanService,
+    private resolver: ComponentFactoryResolver
   ) {}
 
   ngOnInit(): void {}
@@ -115,29 +128,24 @@ export class RequestWrapperComponent implements OnInit, OnDestroy {
         })
     );
   }
-
   /**
    * @function openRaiseRequest To open raise request modal.
    */
   openRaiseRequest() {
     const dialogConfig = new MatDialogConfig();
-    dialogConfig.disableClose = true;
-    dialogConfig.width = '500px';
-    dialogConfig.height = '90vh';
+    this.sidebarVisible = true;
+    this.sidebarType = 'complaint';
 
-    const raiseRequestCompRef = this._modal.openDialog(
-      RaiseRequestComponent,
-      dialogConfig
+    const factory = this.resolver.resolveComponentFactory(
+      RaiseRequestComponent
     );
-
-    this.$subscription.add(
-      raiseRequestCompRef.componentInstance.onRaiseRequestClose.subscribe(
-        (res) => {
-          if (res.load) this._requestService.refreshData.next(res.load);
-          raiseRequestCompRef.close();
-        }
-      )
-    );
+    this.sidebarSlide.clear();
+    const componentRef = this.sidebarSlide.createComponent(factory);
+    componentRef.instance.isSideBar = true;
+    componentRef.instance.onRaiseRequestClose.subscribe((res) => {
+      this.sidebarVisible = false;
+      componentRef.destroy();
+    });
   }
 
   ngOnDestroy(): void {

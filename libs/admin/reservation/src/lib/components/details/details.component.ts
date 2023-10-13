@@ -648,7 +648,9 @@ export class DetailsComponent implements OnInit, OnDestroy {
     this._reservationService
       .manualCheckout(this.reservationDetailsFG.get('bookingId').value)
       .subscribe((res) => {
-        this.snackbarService.openSnackBarAsText('Checkout completed.');
+        this.snackbarService.openSnackBarAsText('Checkout completed.', '', {
+          panelClass: 'success',
+        });
       });
   }
 
@@ -682,7 +684,9 @@ export class DetailsComponent implements OnInit, OnDestroy {
           phoneNumber: this.primaryGuest.phoneNumber,
         })
         .subscribe((res) => {
-          this.snackbarService.openSnackBarAsText('Checkin completed.');
+          this.snackbarService.openSnackBarAsText('Checkin completed.', '', {
+            panelClass: 'success',
+          });
         })
     );
   }

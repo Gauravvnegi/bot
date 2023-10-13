@@ -43,6 +43,7 @@ export class CheckoutReservationsComponent implements OnInit {
       preLabel: this.activeIndex != 0 ? 'Back' : undefined,
       postLabel: 'Next',
       preSeverity: 'primary',
+      postDisabled: !!this.items?.length,
     };
   }
 

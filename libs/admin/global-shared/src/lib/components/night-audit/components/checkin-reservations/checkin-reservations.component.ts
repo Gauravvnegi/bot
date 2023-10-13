@@ -1,4 +1,11 @@
-import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnInit,
+  Output,
+  EventEmitter,
+  SimpleChanges,
+} from '@angular/core';
 import { ActionConfigType } from '../../../../types/night-audit.type';
 import { ConfirmationService, MenuItem } from 'primeng/api';
 import {
@@ -49,10 +56,16 @@ export class CheckinReservationsComponent implements OnInit {
     private globalFilterService: GlobalFilterService
   ) {}
 
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['items']) {
+      this.initActionConfig();
+    }
+  }
+
   ngOnInit(): void {
     this.entityId = this.globalFilterService.entityId;
-    this.initActionConfig();
     this.initTable();
+    this.initActionConfig();
   }
 
   initActionConfig(postLabel?: string) {
@@ -61,6 +74,7 @@ export class CheckinReservationsComponent implements OnInit {
       preLabel: this.activeIndex != 0 ? 'Back' : undefined,
       postLabel: 'Next',
       preSeverity: 'primary',
+      postDisabled: this.isSomeConfirmed(),
     };
   }
 
@@ -106,6 +120,12 @@ export class CheckinReservationsComponent implements OnInit {
       additionalPath: `${manageReservationRoutes.editReservation.route}/${event.details.id}`,
       subModuleName: ModuleNames.ADD_RESERVATION,
     });
+  }
+
+  isSomeConfirmed() {
+    return this.items.some(
+      (item) => item.action.dropDown.currentState == 'CONFIRMED'
+    );
   }
 
   initTable() {

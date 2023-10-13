@@ -44,17 +44,28 @@ export class ManageLoggedUsersComponent implements OnInit {
 
   ngOnInit(): void {
     this.entityId = this.globalFilterService.entityId;
-    this.initActionConfig();
+    this.initAction(); // TODO: Replace with @function initActionConfig();, after forcefully loggin implement
     this.initTable();
   }
 
+  /**
+   * TODO: Remove after forcefully loggin implement
+   */
+  initAction() {
+    this.usersLoggedOut = false;
+    this.isTimerStart = true;
+    this.initActionConfig('Next');
+  }
+
   initActionConfig(postLabel?: string) {
-    const buttonLabelCondition =
-      this.items?.length && (postLabel ? postLabel : this.activeIndex == 0);
     this.actionConfig = {
       preHide: this.activeIndex == 0,
       preLabel: this.activeIndex != 0 ? 'Back' : undefined,
-      postLabel: buttonLabelCondition ? 'Forcefully Logout Users >' : 'Next',
+      postLabel: postLabel
+        ? postLabel
+        : this.activeIndex == 0
+        ? 'Forcefully Logout Users >'
+        : 'Next',
       preSeverity: 'primary',
     };
   }
@@ -68,7 +79,7 @@ export class ManageLoggedUsersComponent implements OnInit {
           (loggedUsers) => {
             const users = new UserPermissionTable().deserialize(loggedUsers)
               .records;
-            // this.items = users.map((user) => new LoggedInUsers(user));
+            this.items = users.map((user) => new LoggedInUsers(user));
             this.loading = false;
           },
           (error) => {

@@ -3,7 +3,10 @@ import { CheckoutPendingResponse } from '../components/night-audit/types/checkou
 import { CheckInResponseType } from '../components/night-audit/types/checkin-pending.type';
 
 export type ActionConfigType =
-  | Pick<FormActionConfig, 'preLabel' | 'postLabel' | 'preSeverity'>
+  | Pick<
+      FormActionConfig,
+      'preLabel' | 'postLabel' | 'preSeverity' | 'preDisabled' | 'postDisabled'
+    >
   | Record<string, string | boolean>;
 
 export interface NightAuditResponse {

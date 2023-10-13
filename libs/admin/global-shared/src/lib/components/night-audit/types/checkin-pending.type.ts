@@ -1,3 +1,3 @@
-import { CheckoutPendingResponse } from './checkout-pending.type';
+import { BookingResponse } from './booking.type';
 
-export type CheckInResponseType = CheckoutPendingResponse & {};
+export type CheckInResponseType = BookingResponse & {};

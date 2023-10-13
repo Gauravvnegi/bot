@@ -35,7 +35,6 @@ export class CheckoutReservationsComponent implements OnInit {
 
   ngOnInit(): void {
     this.initActionConfig();
-    this.initTable();
   }
 
   initActionConfig(postLabel?: string) {
@@ -59,10 +58,6 @@ export class CheckoutReservationsComponent implements OnInit {
       additionalPath: path,
       subModuleName: submodule,
     });
-  }
-
-  initTable() {
-    if (!this.items.length) this.reloadTable();
   }
 
   reloadTable() {

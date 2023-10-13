@@ -1,8 +1,5 @@
 import { NightAuditResponse } from '../../../types/night-audit.type';
-import {
-  TableDataType,
-  TableViewDataType,
-} from '../../../types/table-view.type';
+import { ActionDataType, TableDataType } from '../../../types/table-view.type';
 import { CheckoutPendingResponse } from '../types/checkout-pending.type';
 import { dateTimeWithFormat } from '../../../../../../../web-user/shared/src/lib/utils/date-utils';
 import { CheckInResponseType } from '../types/checkin-pending.type';
@@ -11,108 +8,78 @@ import { quickActions } from '../constants/checked-in-reservation.table';
  * Table ViewData implement for the styling recommendation
  */
 
-export class CheckedOutReservation implements TableViewDataType {
-  [key: string]: TableDataType;
-  constructor(input: CheckoutPendingResponse) {
-    const roomDetails = input.stayDetails.room;
-    const primaryGuest = input.guestDetails.primaryGuest;
-    const companyDetails = primaryGuest?.company;
-    this['id'] = input.id;
-    this['invoiceId'] = input?.invoiceCode || '';
-    this['roomInfo'] = {
+export class CheckedInReservation {
+  id: string;
+  invoiceId: TableDataType;
+  bookingNo: string;
+  roomInfo: TableDataType;
+  stakeHolder: TableDataType;
+  visitStatus: TableDataType;
+  expenses: TableDataType;
+  sourceName: TableDataType;
+  action: ActionDataType;
+
+  constructor(input: CheckInResponseType) {
+    const roomDetails = input.bookingItems[0]?.roomDetails;
+    const guest = input?.guest;
+    this.id = input.id ?? '';
+    this.invoiceId = input?.invoiceCode ?? '';
+    this.roomInfo = roomDetails?.roomNumber && {
       icon: 'pi pi-users',
       styleClass: 'active-text',
-      room: roomDetails.roomNumber + ' - ' + roomDetails.type,
+      room: `${roomDetails.roomNumber + ' - ' + roomDetails.roomTypeLabel}`,
     };
-    this['bookingNo'] = '#' + input.number;
-    this['stakeHolder'] = {
-      guest: primaryGuest?.firstName + ' ' + primaryGuest?.firstName,
-      company: primaryGuest?.company
-        ? primaryGuest?.company.firstName + ' ' + primaryGuest?.company.lastName
+    this.bookingNo = `#${input?.reservationNumber ?? ''}`;
+    this.stakeHolder = {
+      guest: guest?.firstName + ' ' + guest?.firstName,
+      company: guest?.company
+        ? guest?.company?.firstName ?? '' + ' ' + guest?.company?.lastName ?? ''
         : '',
       postText: 'tiny-text',
     };
-    this['visitStatus'] = dateTimeWithFormat(
-      input.stayDetails.arrivalTime,
-      'DD/MM/YYYY'
-    );
-    this['expenses'] = {
-      dueAmount: input.paymentSummary.dueAmount,
-      total: input.paymentSummary.totalAmount,
+    this.visitStatus = {
+      fromTime: dateTimeWithFormat(input.from ?? 0, 'DD/MM/YYYY'),
+      toTime: dateTimeWithFormat(input.to ?? 0, 'DD/MM/YYYY'),
+      postText: 'tiny-text',
+    };
+    this.expenses = {
+      dueAmount: input?.pricingDetails?.totalDueAmount ?? 0,
+      total: input?.pricingDetails?.totalAmount ?? 0,
       preText: 'danger-text',
       textSeparator: '/',
       textInlineBlock: true,
     };
 
     // Map data
-    this['sourceName'] = {
-      source: input.source,
-      name: input.sourceName,
+    this.sourceName = {
+      source: input.source ?? '',
+      name: input.sourceName ?? '',
       postText: 'tiny-text',
     };
 
-    // Action
-    this['action'] = {
+    this.action = {
       dropDown: {
-        currentState: 'CONFIRMED',
-        nextStates: ['CONFIRMED'],
+        currentState: input.reservationType,
+        nextStates: [input.reservationType, ...input.nextStates],
+      },
+      quick: [{ label: 'Edit Reservation', value: 'edit-reservation' }],
+    };
+  }
+}
+
+export class CheckedOutReservation extends CheckedInReservation {
+  constructor(input: CheckoutPendingResponse) {
+    super(input as CheckInResponseType);
+    // Action
+    this.action = {
+      dropDown: {
+        ...this.action.dropDown,
         disabled: true,
       },
       quick: Object.entries(quickActions).map(([key, value]) => ({
         label: key.toUpperCase(),
         value: value,
       })),
-    };
-  }
-}
-
-export class CheckedInReservation implements TableViewDataType {
-  [key: string]: TableDataType;
-  constructor(input: CheckInResponseType) {
-    const roomDetails = input.stayDetails.room;
-    const primaryGuest = input.guestDetails.primaryGuest;
-    const companyDetails = primaryGuest?.company;
-    this['id'] = input.id;
-    this['invoiceId'] = input?.invoiceCode || '';
-    this['roomInfo'] = {
-      icon: 'pi pi-users',
-      styleClass: 'active-text',
-      room: roomDetails.roomNumber + ' - ' + roomDetails.type,
-    };
-    this['bookingNo'] = '#' + input.number;
-    this['stakeHolder'] = {
-      guest: primaryGuest?.firstName + ' ' + primaryGuest?.firstName,
-      company: primaryGuest?.company
-        ? primaryGuest?.company.firstName + ' ' + primaryGuest?.company.lastName
-        : '',
-      postText: 'tiny-text',
-    };
-    this['visitStatus'] = dateTimeWithFormat(
-      input.stayDetails.arrivalTime,
-      'DD/MM/YYYY'
-    );
-    this['expenses'] = {
-      dueAmount: input.paymentSummary.dueAmount,
-      total: input.paymentSummary.totalAmount,
-      preText: 'danger-text',
-      textSeparator: '/',
-      textInlineBlock: true,
-    };
-
-    // Map data
-    this['sourceName'] = {
-      source: input.source,
-      name: input.sourceName,
-      postText: 'tiny-text',
-    };
-
-    // TODO : Action => need to map with backend, remove condition after configuration from backend
-    this['action'] = {
-      dropDown: {
-        currentState: 'NOSHOW',
-        nextStates: ['NOSHOW', 'CANCELED'],
-      },
-      quick: [{ label: 'Edit Reservation', value: 'edit-reservation' }],
     };
   }
 }

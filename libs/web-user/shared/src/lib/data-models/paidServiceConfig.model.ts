@@ -77,7 +77,7 @@ export class PaidServiceDetail implements Deserializable {
       set({}, 'packageCode', get(input, ['packageCode'])),
       set({}, 'label', get(input, ['name'])),
       set({}, 'quantity', get(input, ['quantity']) || 1),
-      set({}, 'imgUrl', get(input, ['images'])),
+      set({}, 'imgUrl', get(input, ['imageUrl'])),
       set({}, 'description', get(input, ['description'])),
       set({}, 'metaData', get(input, ['metaData'])),
       set({}, 'remarks', get(input, ['remarks'])),

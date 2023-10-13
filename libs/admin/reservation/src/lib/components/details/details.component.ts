@@ -12,7 +12,10 @@ import {
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialogConfig } from '@angular/material/dialog';
 import { Router } from '@angular/router';
-import { SubscriptionPlanService } from '@hospitality-bot/admin/core/theme';
+import {
+  RoutesConfigService,
+  SubscriptionPlanService,
+} from '@hospitality-bot/admin/core/theme';
 import { MarketingNotificationComponent } from '@hospitality-bot/admin/notification';
 import { ConfigService, ModuleNames } from '@hospitality-bot/admin/shared';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
@@ -30,6 +33,7 @@ import { AdminDocumentsDetailsComponent } from '../admin-documents-details/admin
 import { JourneyDialogComponent } from '../journey-dialog/journey-dialog.component';
 import { ManualCheckinComponent } from '../manual-checkin/manual-checkin.component';
 import { SendMessageComponent } from 'libs/admin/notification/src/lib/components/send-message/send-message.component';
+import { MenuItem } from 'primeng/api';
 
 @Component({
   selector: 'hospitality-bot-details',
@@ -98,6 +102,21 @@ export class DetailsComponent implements OnInit, OnDestroy {
   @Input() guestId: string;
   @Input() bookingNumber: string;
   bookingFG: FormGroup;
+  checkInOptions: MenuItem[] = [
+    {
+      label: 'Generate Link',
+      command: () => {
+        this.activateAndgenerateJourney('CHECKIN');
+      },
+    },
+  ];
+
+  checkOutOptions: MenuItem[] = [
+    {
+      label: 'Generate Link',
+      command: () => this.activateAndgenerateJourney('CHECKOUT'),
+    },
+  ];
 
   constructor(
     private _fb: FormBuilder,
@@ -111,7 +130,8 @@ export class DetailsComponent implements OnInit, OnDestroy {
     private _hotelDetailService: HotelDetailService,
     private globalFilterService: GlobalFilterService,
     private subscriptionService: SubscriptionPlanService,
-    private configService: ConfigService
+    private configService: ConfigService,
+    private routesConfigService: RoutesConfigService
   ) {
     this.self = this;
     this.initDetailsForm();
@@ -374,16 +394,27 @@ export class DetailsComponent implements OnInit, OnDestroy {
     );
   }
 
+  get isManageBookingSubscribed() {
+    return this.subscriptionService.checkModuleSubscription(
+      ModuleNames.ADD_RESERVATION
+    );
+  }
+
   manageInvoice() {
-    this.onDetailsClose.next(false);
-    this.router.navigateByUrl(`pages/efrontdesk/invoice/${this.bookingId}`);
+    this.onDetailsClose.next(true);
+    this.routesConfigService.navigate({
+      subModuleName: ModuleNames.INVOICE,
+      additionalPath: `${this.bookingId}`,
+    });
   }
 
   editBooking() {
     this.onDetailsClose.next(false);
-    this.router.navigateByUrl(
-      `pages/efrontdesk/reservation/edit-reservation/${this.bookingId}`
-    );
+    this.routesConfigService.navigate({
+      subModuleName: ModuleNames.ADD_RESERVATION,
+      additionalPath: `edit-reservation/${this.bookingId}`,
+      queryParams: { entityId: this.entityId },
+    });
   }
 
   prepareInvoice() {
@@ -503,9 +534,9 @@ export class DetailsComponent implements OnInit, OnDestroy {
               break;
             case 'LATECHECKIN ':
               this.openJourneyDialog({
-                title: 'Early Check-In Request',
+                title: 'Late Check-In Request',
                 description:
-                  'Guest checkin request is after checkin request window.',
+                  'Guest checkin request is before scheduled arrival time.',
                 buttons: {
                   cancel: {
                     label: 'Cancel',
@@ -523,10 +554,67 @@ export class DetailsComponent implements OnInit, OnDestroy {
               });
               break;
             case 'EARLYCHECKOUT':
+              this.openJourneyDialog({
+                title: 'Early Check-Out Request',
+                description:
+                  'Guest checkout request is before scheduled departure time.',
+
+                buttons: {
+                  cancel: {
+                    label: 'Cancel',
+                    context: '',
+                  },
+                  accept: {
+                    label: 'Accept',
+                    context: this,
+                    handler: {
+                      fn_name: 'verifyJourney',
+                      args: ['CHECKOUT', 'ACCEPT'],
+                    },
+                  },
+                },
+              });
               break;
             case 'CHECKOUT':
+              this.openJourneyDialog({
+                title: 'Check-Out Request',
+                description: 'Guest is about to checkout.',
+                buttons: {
+                  cancel: {
+                    label: 'Cancel',
+                    context: '',
+                  },
+                  accept: {
+                    label: 'Accept',
+                    context: this,
+                    handler: {
+                      fn_name: 'verifyJourney',
+                      args: ['CHECKOUT', 'ACCEPT'],
+                    },
+                  },
+                },
+              });
               break;
             case 'LATECHECKOUT':
+              this.openJourneyDialog({
+                title: 'Late Check-Out Request',
+                description:
+                  'Guest checkout request is after checkout request window.',
+                buttons: {
+                  cancel: {
+                    label: 'Cancel',
+                    context: '',
+                  },
+                  accept: {
+                    label: 'Accept',
+                    context: this,
+                    handler: {
+                      fn_name: 'verifyJourney',
+                      args: ['CHECKOUT', 'ACCEPT'],
+                    },
+                  },
+                },
+              });
               break;
           }
         },
@@ -534,57 +622,126 @@ export class DetailsComponent implements OnInit, OnDestroy {
       );
   }
 
-  manualCheckin() {
-    const config = {
-      title: 'Manual Checkin',
-      description: '',
-    };
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.disableClose = true;
-    dialogConfig.width = '450px';
-    const manualCheckinCompRef = this._modal.openDialog(
-      ManualCheckinComponent,
-      dialogConfig
-    );
-
-    manualCheckinCompRef.componentInstance.guest = this.primaryGuest;
-    manualCheckinCompRef.componentInstance.config = config;
-    manualCheckinCompRef.componentInstance.loading = false;
-
-    manualCheckinCompRef.componentInstance.onDetailsClose.subscribe((res) => {
-      if (res?.status) {
-        if (res.data.phoneNumber.length === 0) res.data.cc = '';
-        manualCheckinCompRef.componentInstance.loading = true;
-        this.$subscription.add(
-          this._reservationService
-            .manualCheckin(
-              this.reservationDetailsFG.get('bookingId').value,
-              res.data
-            )
-            .subscribe(
-              (response) => {
-                manualCheckinCompRef.componentInstance.loading = false;
-                this.snackbarService
-                  .openSnackBarWithTranslate(
-                    {
-                      translateKey: 'messages.SUCCESS.GUEST_MANUAL_CHECKIN',
-                      priorityMessage: 'Guest Manually Checked In.',
-                    },
-                    '',
-                    { panelClass: 'success' }
-                  )
-                  .subscribe();
-                manualCheckinCompRef.close();
-                this.closeDetails();
-              },
-              ({ error }) => {
-                manualCheckinCompRef.componentInstance.loading = false;
-              }
-            )
-        );
-      } else res && manualCheckinCompRef.close();
+  manualCheckout() {
+    this.openJourneyDialog({
+      title: 'Manual Checkout',
+      description: 'Guest is about to checkout',
+      question: 'Are you sure you want to continue?',
+      buttons: {
+        cancel: {
+          label: 'Cancel',
+          context: '',
+        },
+        accept: {
+          label: 'Accept',
+          context: this,
+          handler: {
+            fn_name: 'manualCheckoutfn',
+            args: [],
+          },
+        },
+      },
     });
   }
+
+  manualCheckoutfn() {
+    this._reservationService
+      .manualCheckout(this.reservationDetailsFG.get('bookingId').value)
+      .subscribe((res) => {
+        this.snackbarService.openSnackBarAsText('Checkout completed.', '', {
+          panelClass: 'success',
+        });
+      });
+  }
+
+  manualCheckin() {
+    this.openJourneyDialog({
+      title: 'Check-In',
+      description: 'Guest is about to checkin',
+      question: 'Are you sure you want to continue?',
+      buttons: {
+        cancel: {
+          label: 'Cancel',
+          context: '',
+        },
+        accept: {
+          label: 'Accept',
+          context: this,
+          handler: {
+            fn_name: 'checkInfn',
+            args: [],
+          },
+        },
+      },
+    });
+  }
+
+  checkInfn() {
+    this.$subscription.add(
+      this._reservationService
+        .manualCheckin(this.reservationDetailsFG.get('bookingId').value, {
+          cc: this.primaryGuest.countryCode,
+          phoneNumber: this.primaryGuest.phoneNumber,
+        })
+        .subscribe((res) => {
+          this.snackbarService.openSnackBarAsText('Checkin completed.', '', {
+            panelClass: 'success',
+          });
+        })
+    );
+  }
+
+  // manualCheckin() {
+  //   const config = {
+  //     title: 'Manual Checkin',
+  //     description: '',
+  //   };
+  //   const dialogConfig = new MatDialogConfig();
+  //   dialogConfig.disableClose = true;
+  //   dialogConfig.width = '450px';
+  //   const manualCheckinCompRef = this._modal.openDialog(
+  //     ManualCheckinComponent,
+  //     dialogConfig
+  //   );
+
+  //   manualCheckinCompRef.componentInstance.guest = this.primaryGuest;
+  //   manualCheckinCompRef.componentInstance.config = config;
+  //   manualCheckinCompRef.componentInstance.loading = false;
+
+  //   manualCheckinCompRef.componentInstance.onDetailsClose.subscribe((res) => {
+  //     if (res?.status) {
+  //       if (res.data.phoneNumber.length === 0) res.data.cc = '';
+  //       manualCheckinCompRef.componentInstance.loading = true;
+  //       this.$subscription.add(
+  //         this._reservationService
+  //           .manualCheckin(
+  //             this.reservationDetailsFG.get('bookingId').value,
+  //             res.data
+  //           )
+  //           .subscribe(
+  //             (response) => {
+  //               manualCheckinCompRef.componentInstance.loading = false;
+  //               this.snackbarService
+  //                 .openSnackBarWithTranslate(
+  //                   {
+  //                     translateKey: 'messages.SUCCESS.GUEST_MANUAL_CHECKIN',
+  //                     priorityMessage: 'Guest Manually Checked In.',
+  //                   },
+  //                   '',
+  //                   { panelClass: 'success' }
+  //                 )
+  //                 .subscribe();
+  //               manualCheckinCompRef.close();
+  //               this.closeDetails();
+  //             },
+  //             ({ error }) => {
+  //               manualCheckinCompRef.componentInstance.loading = false;
+  //             }
+  //           )
+  //       );
+  //     } else res && manualCheckinCompRef.close();
+  //   });
+  // }
 
   openJourneyDialog(config) {
     const dialogConfig = new MatDialogConfig();
@@ -658,11 +815,15 @@ export class DetailsComponent implements OnInit, OnDestroy {
       );
       if (channel === 'WHATSAPP_LITE') {
         this._modal.close();
-        this.router.navigateByUrl('/pages/freddie/messages');
+
+        this.routesConfigService.navigate({
+          subModuleName: ModuleNames.LIVE_MESSAGING,
+        });
       }
       if (channel === 'EMAIL') {
         notificationCompRef.componentInstance.isEmail = true;
         notificationCompRef.componentInstance.email = this.primaryGuest.email;
+        notificationCompRef.componentInstance.reservationId = this.bookingId;
       } else {
         notificationCompRef.componentInstance.isEmail = false;
         notificationCompRef.componentInstance.channel = channel.replace(
@@ -679,9 +840,6 @@ export class DetailsComponent implements OnInit, OnDestroy {
       notificationCompRef.componentInstance.onModalClose.subscribe((res) => {
         notificationCompRef.close();
       });
-    } else {
-      this._modal.close();
-      this.router.navigateByUrl('/pages/conversation/request');
     }
   }
 
@@ -748,7 +906,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
     if (sharedIcon) {
       return channel.isSubscribed ? sharedIcon.iconUrl : sharedIcon.iconUrl;
     }
-    return '';
+    return null;
   }
 
   checkForTransactionFeedbackSubscribed() {
@@ -768,7 +926,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
   }
 
   checkForReservationSubs() {
-   return this.subscriptionService.checkModuleSubscription(
+    return this.subscriptionService.checkModuleSubscription(
       ModuleNames.ADD_RESERVATION
     );
   }

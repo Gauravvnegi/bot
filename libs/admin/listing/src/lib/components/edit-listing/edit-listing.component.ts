@@ -1,8 +1,11 @@
 import { Location } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
-import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import { ActivatedRoute, Route, Router } from '@angular/router';
+import {
+  GlobalFilterService,
+  RoutesConfigService,
+} from '@hospitality-bot/admin/core/theme';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { Subscription } from 'rxjs';
 import { IList, List, Topics } from '../../data-models/listing.model';
@@ -14,6 +17,7 @@ import {
   Option,
 } from 'libs/admin/shared/src';
 import { listingConfig } from '../../constants/listing';
+import { listingRoutes } from '../../constants/routes';
 
 @Component({
   selector: 'hospitality-bot-edit-listing',
@@ -31,11 +35,7 @@ export class EditListingComponent implements OnInit, OnDestroy {
   topicList: Option[] = [];
 
   pageTitle = 'Create Listing';
-  navRoutes: NavRouteOptions = [
-    { label: 'Library', link: './' },
-    { label: 'Listing', link: '/pages/library/listing' },
-    { label: 'Create Listing', link: './' },
-  ];
+  navRoutes: NavRouteOptions = [];
   private $subscription = new Subscription();
 
   constructor(
@@ -47,7 +47,8 @@ export class EditListingComponent implements OnInit, OnDestroy {
     private _location: Location,
     protected _translateService: TranslateService,
     private _router: Router,
-    private adminUtilityService: AdminUtilityService
+    private adminUtilityService: AdminUtilityService,
+    private routesConfigService: RoutesConfigService
   ) {
     this.initFG();
   }
@@ -84,6 +85,12 @@ export class EditListingComponent implements OnInit, OnDestroy {
     );
   }
 
+  initNavRoutes() {
+    this.routesConfigService.navRoutesChanges.subscribe((navRoutesRes) => {
+      this.navRoutes = [...navRoutesRes, ...this.navRoutes];
+    });
+  }
+
   /**
    * @function getTopicList To get topic record list.
    * @param entityId The hotel id for which getTopicList will be done.
@@ -118,9 +125,13 @@ export class EditListingComponent implements OnInit, OnDestroy {
         if (params['id']) {
           this.listId = params['id'];
           this.getListDetails(this.listId);
-          this.pageTitle = 'Edit Listing';
-          this.navRoutes[2].label = 'Edit Listing';
         }
+        const { navRoutes, title } = listingRoutes[
+          this.listId ? 'editListing' : 'createListing'
+        ];
+        this.pageTitle = title;
+        this.navRoutes = navRoutes;
+        this.initNavRoutes();
       })
     );
   }
@@ -207,7 +218,7 @@ export class EditListingComponent implements OnInit, OnDestroy {
             }
           )
           .subscribe();
-        this._router.navigate([`pages/library/listing`]);
+        this.routesConfigService.goBack();
       },
       ({ error }) => {},
       () => (this.isSaving = false)
@@ -265,7 +276,7 @@ export class EditListingComponent implements OnInit, OnDestroy {
             { panelClass: 'success' }
           )
           .subscribe();
-        this._router.navigate([`pages/library/listing`]);
+        this.routesConfigService.goBack();
       },
       ({ error }) => {},
       () => (this.isSaving = false)

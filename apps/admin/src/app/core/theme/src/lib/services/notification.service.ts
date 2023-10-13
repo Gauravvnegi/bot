@@ -9,6 +9,8 @@ export class NotificationService extends ApiService {
   $reservationNotification = new BehaviorSubject(null);
   $feedbackNotification = new BehaviorSubject(null);
   $whatsappNotification = new BehaviorSubject(null);
+  $requestNotification = new BehaviorSubject(null);
+
   getNotificationHistory(userId: string, config): Observable<any> {
     return this.get(
       `/api/v1/user/${userId}/push-notification-history${config.queryObj}`

@@ -4,10 +4,13 @@
   <div class="main">
     <p-accordion [multiple]="true">
       <hospitality-bot-booking-info
-        [statusOptions]="statusOptions"
-        [bookingType]="bookingType"
-        [eventTypes]="eventOptions"
-        [reservationId]="reservationId"
+        [props]="{
+          eventTypes: eventOptions,
+          bookingType: bookingType,
+          statusOptions: statusOptions,
+          reservationId: reservationId,
+          disabledForm: disabledForm
+        }"
       ></hospitality-bot-booking-info>
       <p-accordionTab header="Event Information">
         <div class="form-block" formGroupName="eventInformation">
@@ -88,7 +91,7 @@
           ></hospitality-bot-text-area>
         </div>
       </p-accordionTab>
-      <hospitality-bot-payment-rule></hospitality-bot-payment-rule>
+      <!-- <hospitality-bot-payment-rule></hospitality-bot-payment-rule> -->
       <hospitality-bot-payment-method></hospitality-bot-payment-method>
     </p-accordion>
     <div class="bk-summary">

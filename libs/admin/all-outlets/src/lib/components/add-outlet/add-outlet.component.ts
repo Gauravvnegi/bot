@@ -10,6 +10,7 @@ import {
 import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
 import {
   HotelDetailService,
+  ModuleNames,
   Option,
   Regex,
 } from '@hospitality-bot/admin/shared';
@@ -25,6 +26,7 @@ import { OutletFormService } from '../../services/outlet-form.service';
 import { OutletService } from '../../services/outlet.service';
 import { Feature, OutletForm, OutletType } from '../../types/outlet';
 import { OutletBaseComponent } from '../outlet-base.components';
+import { RoutesConfigService } from '@hospitality-bot/admin/core/theme';
 
 @Component({
   selector: 'hospitality-bot-add-outlet',
@@ -72,6 +74,7 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
     private location: Location,
     private modalService: ModalService,
     private dialogService: DialogService,
+    private routesConfigService: RoutesConfigService,
 
     router: Router,
     route: ActivatedRoute
@@ -308,11 +311,11 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
           queryParams: dataToSend,
         };
         //navigate to create service
-        this.router.navigate(
-          [`/pages/library/services/create-service`],
-
-          navigationExtras
-        );
+          this.routesConfigService.navigate({
+            subModuleName: ModuleNames.SERVICES,
+            additionalPath: 'create-service',
+            queryParams: dataToSend,
+          });
       } else {
         //navigate to respective feature
         this.router.navigate([features], {
@@ -509,9 +512,9 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
         break;
       //to navigate to create service page
       case 'service':
-        this.router.navigate([`/pages/library/services/create-service`], {
-          relativeTo: this.route,
-          queryParams: { entityId: this.outletId },
+        this.routesConfigService.navigate({
+          subModuleName: ModuleNames.SERVICES,
+          additionalPath: 'create-service',
         });
         break;
       //to navigate  to create import service page
@@ -535,7 +538,7 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
       //to navigate back to edit brand page
       case 'brand':
         this.router.navigate(
-          [`/pages/settings/business-info/brand/${this.brandId}`],
+          [`/create-with/settings/business-info/brand/${this.brandId}`],
           { relativeTo: this.route }
         );
         break;
@@ -543,7 +546,7 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
       case 'hotel':
         this.router.navigate(
           [
-            `/pages/settings/business-info/brand/${this.brandId}/hotel/${this.entityId}`,
+            `/create-with/settings/business-info/brand/${this.brandId}/hotel/${this.entityId}`,
           ],
           {
             relativeTo: this.route,

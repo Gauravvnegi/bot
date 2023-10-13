@@ -1,0 +1,189 @@
+<div class="container">
+  <div
+    class="title-container"
+    *skeleton="
+      globalNps == undefined;
+      height: '25px';
+      width: '150px';
+      margin: '0 0 20px 0'
+    "
+  >
+    <div class="icon">
+      <img
+        [src]="feedbackConfig.images.globalNPS.url"
+        [alt]="feedbackConfig.images.globalNPS.alt"
+      />
+    </div>
+    <div class="stat-title">{{ 'global_nps.title' | translate }}</div>
+  </div>
+  <div class="graph-container">
+    <div class="graph">
+      <canvas
+        *skeleton="
+          globalNps == undefined;
+          height: '150px';
+          width: '150px';
+          borderRadius: '50%';
+          margin: '0 0 0 40px'
+        "
+        class="height-138"
+        baseChart
+        [data]="chart.data"
+        [labels]="chart.labels"
+        [chartType]="chart.type"
+        [legend]="chart.legend"
+        [colors]="chart.colors"
+        [options]="chart.options"
+      >
+      </canvas>
+    </div>
+    <div class="detail-container">
+      <div
+        class="wrapper-stats"
+        *skeleton="globalNps == undefined; height: '30px'; width: '80px'"
+      >
+        <div class="val">{{ roundValue(globalNps.score) }}</div>
+        <div
+          class="comparisonPercent"
+          [ngClass]="{
+            'comparison-positive': roundValue(globalNps.comparisonPercent) >= 0,
+            'comparison-negative': roundValue(globalNps.comparisonPercent) < 0
+          }"
+        >
+          ({{ roundValue(globalNps.comparisonPercent) }}%)
+          <img
+            [src]="
+              globalNps.comparisonPercent >= 0
+                ? 'assets/svg/uparrow.svg'
+                : 'assets/svg/down-percentage.svg'
+            "
+            alt="uparrow"
+          />
+          <span>{{ 'in_thirty_days' | translate }}</span>
+        </div>
+      </div>
+      <div class="label">
+        {{ 'global_nps.title' | translate }}
+      </div>
+    </div>
+  </div>
+  <div class="stat-vals-container">
+    <div class="stat-val-container">
+      <div class="icon" [style.background]="'#EF1D45'"></div>
+      <div
+        class="stat-val"
+        *skeleton="
+          globalNps == undefined;
+          height: '30px';
+          width: '30px';
+          margin: '5px 0'
+        "
+      >
+        {{ roundValue(globalNps.negative.score) }}%
+      </div>
+      <div class="stat-lable">Negative</div>
+      <div
+        class="stat-comparisonPercent"
+        [ngClass]="{
+          'comparison-positive': globalNps.negative.comparisonPercent >= 0,
+          'comparison-negative': globalNps.negative.comparisonPercent < 0
+        }"
+        *skeleton="
+          globalNps == undefined;
+          height: '15px';
+          width: '40px';
+          margin: '10px 0'
+        "
+      >
+        ({{ roundValue(globalNps.negative.comparisonPercent) }}%)
+        <img
+          [src]="
+            globalNps.negative.comparisonPercent >= 0
+              ? 'assets/svg/uparrow.svg'
+              : 'assets/svg/down-percentage.svg'
+          "
+          alt="uparrow"
+        />
+      </div>
+    </div>
+    <div class="stat-val-container">
+      <div class="icon" [style.background]="'#ff8f00'"></div>
+      <div
+        class="stat-val"
+        *skeleton="
+          globalNps == undefined;
+          height: '30px';
+          width: '30px';
+          margin: '5px 0'
+        "
+      >
+        {{ roundValue(globalNps.neutral.score) }}%
+      </div>
+      <div class="stat-lable">Neutral</div>
+      <div
+        class="stat-comparisonPercent"
+        [ngClass]="{
+          'comparison-positive': globalNps.neutral.comparisonPercent >= 0,
+          'comparison-negative': globalNps.neutral.comparisonPercent < 0
+        }"
+        *skeleton="
+          globalNps == undefined;
+          height: '15px';
+          width: '40px';
+          margin: '10px 0'
+        "
+      >
+        ({{ roundValue(globalNps.neutral.comparisonPercent) }}%)
+        <img
+          [src]="
+            globalNps.neutral.comparisonPercent >= 0
+              ? 'assets/svg/uparrow.svg'
+              : 'assets/svg/down-percentage.svg'
+          "
+          alt="uparrow"
+        />
+      </div>
+    </div>
+    <div class="stat-val-container">
+      <div class="icon" [style.background]="'#508919'"></div>
+      <div
+        class="stat-val"
+        *skeleton="
+          globalNps == undefined;
+          height: '30px';
+          width: '30px';
+          margin: '5px 0'
+        "
+      >
+        {{ roundValue(globalNps.positive.score) }}%
+      </div>
+      <div class="stat-lable">Positive</div>
+      <div
+        class="stat-comparisonPercent"
+        [ngClass]="{
+          'comparison-positive': globalNps.positive.comparisonPercent >= 0,
+          'comparison-negative': globalNps.positive.comparisonPercent < 0
+        }"
+        *skeleton="
+          globalNps == undefined;
+          height: '15px';
+          width: '40px';
+          margin: '10px 0'
+        "
+      >
+        ({{ roundValue(globalNps.positive.comparisonPercent) }}%)
+        <img
+          [src]="
+            globalNps.positive.comparisonPercent >= 0
+              ? 'assets/svg/uparrow.svg'
+              : 'assets/svg/down-percentage.svg'
+          "
+          alt="uparrow"
+        />
+      </div>
+    </div>
+  </div>
+  <div class="thirty__days">
+    <span>{{ 'in_thirty_days' | translate }}</span>
+  </div>
+</div>

@@ -1,0 +1,50 @@
+@import 'main';
+.footer {
+  width: 100%;
+  @include flex-space-evenly-cen-Algn;
+  padding-left: 15px;
+  padding-right: 15px;
+
+  .nickname {
+    padding: 8px 6px;
+    background-color: #feba1b;
+    border-radius: 100%;
+    @include flex-all-center;
+    width: 38px;
+    height: 38px;
+  }
+  .button {
+    @include primary-button;
+    width: 112px;
+    height: 30px;
+    padding: 9px 10px;
+    margin: 0 15px;
+    font-size: 12px;
+    @include flex-item-center;
+    cursor: pointer;
+  }
+  .input {
+    width: calc(100% - 213px);
+    height: 42px;
+    margin: 0 17px 0 0;
+    padding: 13px 20px;
+    border-radius: 21px;
+    border: solid 1px $borderCol;
+    background-color: $white;
+    outline: none;
+  }
+  .sendMessage {
+    img {
+      width: 28px;
+      height: 24px;
+      margin: 9px 0 9px 17px;
+      object-fit: contain;
+      cursor: pointer;
+    }
+  }
+}
+
+.disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}

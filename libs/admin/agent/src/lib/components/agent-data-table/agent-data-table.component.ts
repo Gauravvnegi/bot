@@ -3,13 +3,14 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import {
   AdminUtilityService,
   BaseDatatableComponent,
+  ModuleNames,
   TableService,
 } from '@hospitality-bot/admin/shared';
 import { Subscription } from 'rxjs';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 import { cols, title } from '../../constant/data-table';
 import { AgentService } from '../../services/agent.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { agentRoutes } from '../../constant/routes';
 import * as FileSaver from 'file-saver';
 import { MemberSortTypes, QueryConfig, SortingOrder } from '../../types/agent';
@@ -19,6 +20,7 @@ import { LazyLoadEvent } from 'primeng/api';
 import { companyRoutes } from 'libs/admin/company/src/lib/constants/route';
 import { SortBy, SortFilterList } from '../../constant/response';
 import { AgentListResponse } from '../../types/response';
+import { RoutesConfigService } from '@hospitality-bot/admin/core/theme';
 
 @Component({
   selector: 'hospitality-bot-agent-data-table',
@@ -46,7 +48,9 @@ export class AgentDataTableComponent extends BaseDatatableComponent
     private agentService: AgentService,
     private adminUtilityService: AdminUtilityService,
     private snackbarService: SnackBarService,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute,
+    private routesConfigService: RoutesConfigService
   ) {
     super(fb, tabFilterService);
   }
@@ -146,15 +150,16 @@ export class AgentDataTableComponent extends BaseDatatableComponent
    * @params rowData
    */
   editAgent(rowData) {
-    this.router.navigate([
-      `/pages/members/agent/${this.routes.editAgent.route}/${rowData.id}`,
-    ]);
+    this.routesConfigService.navigate({
+      additionalPath: `${this.routes.editAgent.route}/${rowData.id}`,
+    });
   }
 
   openCompany(rowData) {
-    this.router.navigate([
-      `/pages/members/company/${this.routes.editCompany.route}/${rowData.companyId}`,
-    ]);
+    this.routesConfigService.navigate({
+      subModuleName: ModuleNames.COMPANY,
+      additionalPath: `${this.routes.editCompany.route}/${rowData.companyId}`,
+    });
   }
 
   /**

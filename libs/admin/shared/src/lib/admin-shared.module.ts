@@ -119,9 +119,18 @@ import { StepsModule } from 'primeng/steps';
 import { FromToDateComponent } from './components/from-to-date/from-to-date.component';
 import { TimerComponent } from './components/timer/timer.component';
 import { SidebarModule } from 'primeng/sidebar';
+import { InteractiveGridComponent } from './components/interactive-grid/interactive-grid.component';
+import { AngularDraggableModule } from 'angular2-draggable';
+import { TooltipModule } from 'primeng/tooltip';
+
 import { TieredMenuModule } from 'primeng/tieredmenu';
 import { TieredMenuButtonComponent } from './components/tiered-menu-button/tiered-menu-button.component';
-
+import { TabbedSidebarComponent } from './components/tabbed-sidebar/tabbed-sidebar.component';
+import { InfoPanelComponent } from './components/info-panel/info-panel.component';
+import { QuickSelectComponent } from './view/quick-select/quick-select.component';
+import { ToggleMenuComponent } from './components/toggle-menu/toggle-menu.component';
+import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
 @NgModule({
   imports: [
     CommonModule,
@@ -152,7 +161,10 @@ import { TieredMenuButtonComponent } from './components/tiered-menu-button/tiere
     InputNumberModule,
     QRCodeModule,
     StepsModule,
+    AngularDraggableModule,
+    TooltipModule,
     TieredMenuModule,
+    ConfirmDialogModule,
   ],
   declarations: [
     DatatableComponent,
@@ -247,7 +259,13 @@ import { TieredMenuButtonComponent } from './components/tiered-menu-button/tiere
     StepperComponent,
     FromToDateComponent,
     TimerComponent,
+    InteractiveGridComponent,
     TieredMenuButtonComponent,
+    TabbedSidebarComponent,
+    InfoPanelComponent,
+    QuickSelectComponent,
+    ToggleMenuComponent,
+    ConfirmDialogComponent,
   ],
 
   exports: [
@@ -361,7 +379,15 @@ import { TieredMenuButtonComponent } from './components/tiered-menu-button/tiere
     FromToDateComponent,
     TimerComponent,
     SidebarModule,
+    InteractiveGridComponent,
+    AngularDraggableModule,
+    TooltipModule,
     TieredMenuButtonComponent,
+    TabbedSidebarComponent,
+    InfoPanelComponent,
+    QuickSelectComponent,
+    ToggleMenuComponent,
+    ConfirmDialogComponent,
   ],
 })
 export class AdminSharedModule {}

@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 import { ApiService } from '@hospitality-bot/shared/utils';
 import { QueryConfig } from '@hospitality-bot/admin/library';
 import { CompanyListResponse, CompanyResponseType } from '../types/response';
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class CompanyService extends ApiService {
   getCompanyDetails(config?: QueryConfig): Observable<CompanyListResponse> {
     return this.get(`/api/v1/members${config.params}`);

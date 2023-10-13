@@ -1,5 +1,6 @@
 // ** z-indexes ** [Should not be above 999]
-$left-side-panel-z: 620;
+$left-side-panel-upper-z: 640;
+$left-side-panel-lower-z: 620;
 $right-side-panel-z: 620;
 $global-header-z: 420;
 $main-overlay-z: 220;
@@ -8,6 +9,7 @@ $nav-action-header-z: 120;
 $form-action-z: 121;
 $progress-bar-z: 480;
 $nav-action-sub-header: 110;
+$main-menu-z: 400;
 // Breakpoint variables
 
 $S: 480px;
@@ -29,3 +31,7 @@ $form-padding-x: 4%;
 
 //datatable and form
 $sticky-header-height: 61px;
+
+// Layout setting
+$top-nav-height: 68px;
+$left-nav-height: 82px;

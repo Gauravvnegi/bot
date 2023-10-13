@@ -44,29 +44,9 @@ export class HousekeepingComponent extends BaseDatatableComponent
   roomTypeLimit = 10;
   dateValue = {};
   showContent = false;
+  isQuickFilterInEmptyView: boolean = false;
+  isTabFilters: boolean = false;
 
-  roomStatus = [
-    {
-      name: 'Occupied',
-      color: '#ef1d45',
-    },
-    {
-      name: 'Vacant',
-      color: '#52b33f',
-    },
-    {
-      name: 'Clean',
-      color: '#52b33f',
-    },
-    {
-      name: 'Due Out',
-      color: '#500',
-    },
-    {
-      name: 'Dirty',
-      color: '#ff8f00',
-    },
-  ];
   constructor(
     private fb: FormBuilder,
     private adminUtilityService: AdminUtilityService,
@@ -75,13 +55,11 @@ export class HousekeepingComponent extends BaseDatatableComponent
     private housekeepingService: HousekeepingService
   ) {
     super(fb, tabFilterService);
+    this.initForm();
   }
 
   ngOnInit(): void {
     this.entityId = this.globalFilterService.entityId;
-    this.initForm();
-    this.getRoomList();
-    this.getRoomType();
     this.listenForRoomTypeChange();
     this.listenForRefreshData();
     this.navRoutes = houseKeepingRoutes['HouseKeeping'].navRoutes;
@@ -91,13 +69,16 @@ export class HousekeepingComponent extends BaseDatatableComponent
     this.getRoomList();
   }
 
+  ngAfterViewInit(): void {
+    this.getRoomList();
+  }
+
   initForm(): void {
     this.useForm = this.fb.group({
       date: [new Date(), []],
       roomType: [''],
     });
   }
-
 
   listenForRefreshData(): void {
     this.housekeepingService.refreshData.subscribe((value) => {
@@ -116,11 +97,15 @@ export class HousekeepingComponent extends BaseDatatableComponent
           const roomList = new RoomList().deserialize(res);
           this.values = roomList.records;
           this.initFilters(
-            roomList.entityTypeCounts,
+            {},
             roomList.entityStateCounts,
             roomList.totalRecord,
             this.roomStatusDetails
           );
+          this.values.length > 0
+            ? (this.isQuickFilterInEmptyView = false)
+            : (this.isQuickFilterInEmptyView = true);
+
           this.loading = false;
         },
         () => {
@@ -145,96 +130,17 @@ export class HousekeepingComponent extends BaseDatatableComponent
           type: 'ROOM',
           offset: this.first,
           limit: this.rowsPerPage,
-          roomTypeId: this.useForm.get('roomType').value ?? '',
+          roomTypeIds: this.useForm.get('roomType').value ?? [],
+          raw: true,
         },
       ]),
     };
     return config;
   }
 
-  /**
-   * @function searchRoomTypes To search categories
-   * @param text search text
-   */
-  searchRoomTypes(text: string): void {
-    if (text) {
-      this.housekeepingService
-        .searchLibraryItem(this.entityId, {
-          params: `?key=${text}&type=ROOM_TYPE`,
-        })
-        .subscribe(
-          (res) => {
-            if (!res) {
-              this.roomTypes = [];
-              return;
-            }
-            const data = res;
-            this.roomTypes =
-              data.ROOM_TYPE?.filter((item) => item.status)?.map((item) => {
-                return {
-                  label: item.name,
-                  value: item.id,
-                };
-              }) ?? [];
-          },
-          ({ error }) => {},
-          () => {}
-        );
-    } else {
-      this.roomTypeOffSet = 0;
-      this.roomTypes = [{ label: 'All', value: '' }];
-      this.getRoomType();
-    }
-  }
-
   listenForRoomTypeChange(): void {
     this.useForm.get('roomType').valueChanges.subscribe((value) => {
       this.getRoomList();
     });
-  }
-
-  /**
-   * @function loadMoreRoomTypes To load more categories
-   * @param index offset
-   */
-
-  loadMoreRoomTypes(index): void {
-    this.roomTypeOffSet = index;
-    this.getRoomType();
-  }
-
-  /**
-   * @function getRoomType to get room types.
-   * @param queries global Queries.
-   */
-  getRoomType(): void {
-    const queries = [
-      {
-        type: 'ROOM_TYPE',
-        offset: this.roomTypeOffSet,
-        limit: this.roomTypeLimit,
-        createBooking: true,
-      },
-    ];
-
-    const config = {
-      params: this.adminUtilityService.makeQueryParams(queries),
-    };
-
-    this.$subscription.add(
-      this.housekeepingService.getRoomTypeList(this.entityId, config).subscribe(
-        (response) => {
-          const data = new RoomTypeOptionList()
-            .deserialize(response)
-            .records.map((item) => ({
-              label: item.name,
-              value: item.id,
-            }));
-          this.roomTypes = [...this.roomTypes, ...data];
-        },
-        ({ error }) => {},
-        () => {}
-      )
-    );
   }
 }

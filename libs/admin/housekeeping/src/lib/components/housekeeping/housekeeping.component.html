@@ -1,4 +1,8 @@
-<hospitality-bot-navigation-header [heading]="pageTitle" [routes]="navRoutes">
+<hospitality-bot-navigation-header
+  [heading]="pageTitle"
+  [isBack]="false"
+  [routes]="navRoutes"
+>
 </hospitality-bot-navigation-header>
 <div [formGroup]="useForm" class="btn-wrapper">
   <hospitality-bot-date
@@ -11,17 +15,14 @@
     }"
     [disabled]="true"
   ></hospitality-bot-date>
-
-  <hospitality-bot-select
+  <hospitality-bot-room-types
     class="btn-width"
     controlName="roomType"
-    label="Room Type"
-    [options]="roomTypes"
-    [props]="{ placeholder: 'Select Room Type', isAsync: true }"
-    (paginate)="loadMoreRoomTypes($event)"
-    (onSearch)="searchRoomTypes($event)"
+    [props]="{
+      isAllSelected: true
+    }"
   >
-  </hospitality-bot-select>
+  </hospitality-bot-room-types>
 </div>
 
 <p-table
@@ -51,21 +52,7 @@
 >
   <ng-template pTemplate="caption">
     <div class="caption__wrapper" [formGroup]="tableFG">
-      <hospitality-bot-filter-chips
-        class="filter"
-        [chips]="filterChips"
-        (onChange)="toggleQuickReplyFilter($event)"
-        [selectedChips]="selectedFilterChips"
-      >
-        <i
-          class="pi pi-info-circle icon"
-          (mouseenter)="showContent = true"
-          (mouseleave)="showContent = false"
-          style="font-size: 2rem; color: blue;"
-        ></i>
-      </hospitality-bot-filter-chips>
-      <ng-container *ngIf="showContent" [ngTemplateOutlet]="info">
-      </ng-container>
+      <ng-container [ngTemplateOutlet]="filter"> </ng-container>
     </div>
   </ng-template>
   <ng-template pTemplate="emptymessage">
@@ -115,53 +102,19 @@
       imageSrc: 'assets/images/empty-table-room-types.png'
     }"
   >
+    <ng-container [ngTemplateOutlet]="filter"> </ng-container>
   </hospitality-bot-empty-table>
 </ng-template>
 
-<ng-template #info>
-  <p-dialog
-    header="Header"
-    [showHeader]="false"
-    [visible]="showContent"
-    [style]="{ width: '22vw' }"
-  >
-    <div class="info-container">
-      <div class="sub-continer">
-        <div class="title">Room Status</div>
-        <div class="room-status">
-          <div class="status" *ngFor="let status of roomStatus">
-            <span
-              class="circle"
-              [ngStyle]="{ backgroundColor: status.color }"
-            ></span>
-            <span>{{ status.name }}</span>
-          </div>
-        </div>
-      </div>
-      <div class="sub-continer">
-        <div class="title">Booking Indicators</div>
-        <div class="room-status">
-          <div class="status" *ngFor="let status of roomStatus">
-            <span
-              class="circle"
-              [ngStyle]="{ backgroundColor: status.color }"
-            ></span>
-            <span>{{ status.name }}</span>
-          </div>
-        </div>
-      </div>
-      <div class="sub-continer">
-        <div class="title">Room Features</div>
-        <div class="room-status">
-          <div class="status" *ngFor="let status of roomStatus">
-            <span
-              class="circle"
-              [ngStyle]="{ backgroundColor: status.color }"
-            ></span>
-            <span>{{ status.name }}</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </p-dialog>
+<ng-template #filter>
+  <ng-container [formGroup]="tableFG">
+    <hospitality-bot-filter-chips
+      class="filter"
+      [chips]="filterChips"
+      (onChange)="toggleQuickReplyFilter($event)"
+      [selectedChips]="selectedFilterChips"
+    >
+      <hospitality-bot-info-panel></hospitality-bot-info-panel>
+    </hospitality-bot-filter-chips>
+  </ng-container>
 </ng-template>

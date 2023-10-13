@@ -5,9 +5,10 @@
     </p>
   </div>
   <div
-    class="sidebar-panel"
+    class="sidebar-panel upper"
     id="sidebar"
     [style.background-color]="backgroundColor"
+    *ngIf="!fullView"
   >
     <hospitality-bot-sidenav
       (submenuItems)="subMenuItem($event)"
@@ -16,7 +17,7 @@
     ></hospitality-bot-sidenav>
   </div>
   <div
-    class="sidebar-panel"
+    class="sidebar-panel lower"
     id="sidebar"
     [style.background-color]="backgroundColor"
   >
@@ -35,6 +36,7 @@
     [ngClass]="sidebarType"
     [(visible)]="sidebarVisible"
     position="right"
+    [showCloseIcon]="false"
   >
     <ng-container #sidebarSlide></ng-container>
   </p-sidebar>
@@ -70,14 +72,24 @@
             ? { visibility: 'visible' }
             : { visibility: 'hidden', height: '0px' }
         "
+        *ngIf="!fullView"
       >
         <div class="options1" [ngClass]="{ disabled: isGlobalFilterVisible }">
           <div class="selected-product">
-            <img [src]="selectedProductIcon" alt="" />
+            <img
+              [src]="selectedProduct.icon"
+              [pTooltip]="selectedProduct.label"
+              [alt]="selectedProduct.label"
+              tooltipPosition="bottom"
+            />
           </div>
+
           <hospitality-bot-tiered-menu-button
             *ngIf="!!bookingOptions?.length"
             label="Quick booking"
+            [splitButton]="true"
+            (clicked)="showQuickReservation()"
+            [openNewWindow]="true"
             [items]="bookingOptions"
           ></hospitality-bot-tiered-menu-button>
           <div class="global_search">
@@ -105,15 +117,16 @@
         </div>
         <div class="options2">
           <div
-            *ngIf="checkModuleSubscription(moduleNames.LIVE_MESSAGING)"
+            *ngIf="isLiveMessagingSubscribed"
             class="header--button quick-action"
-            (click)="openNewWindow('/pages/freddie/messages')"
+            (click)="openFreddie()"
           >
             <img
               class="filter-icon"
               src="assets/svg/Chats.svg"
               alt="chats"
-              title="Chats"
+              pTooltip="Chats"
+              tooltipPosition="bottom"
             />
           </div>
           <!-- TODO: Route after completing arrival & departure.... -->
@@ -126,23 +139,38 @@
             />
           </div> -->
           <div
-            *ngIf="checkModuleSubscription(moduleNames.ADD_RESERVATION)"
+            *ngIf="isQuickReservationAvailable"
             class="header--button quick-action"
-            (click)="openNewWindow('/pages/efrontdesk/reservation')"
+            (click)="openViewReservation()"
           >
             <img
               class="filter-icon"
               src="assets/svg/calendar-dark.svg"
               alt="calendar"
-              title="Calender Reservation"
+              pTooltip="View Reservation"
+              tooltipPosition="bottom"
             />
           </div>
-          <div class="header--button quick-action" (click)="openSettings()">
+          <div
+            *ngIf="isSettingAvailable"
+            class="header--button quick-action"
+            (click)="openSettings()"
+          >
             <img
               class="filter-icon"
               src="assets/svg/setting-dark.svg"
               alt="setting"
-              title="Settings"
+              pTooltip="Settings"
+              tooltipPosition="bottom"
+            />
+          </div>
+          <div class="header--button quick-action" (click)="openNightAudit()">
+            <img
+              class="filter-icon"
+              src="assets/svg/allocation.svg"
+              alt="audit"
+              pTooltip="Night Audit"
+              tooltipPosition="bottom"
             />
           </div>
           <div class="notification-wrapper">
@@ -155,7 +183,8 @@
                   class="filter-icon"
                   src="assets/svg/notification-bell.svg"
                   alt="notification"
-                  title="Notification"
+                  pTooltip="Notification"
+                  tooltipPosition="bottom"
                 />
                 <div
                   class="notification-count"
@@ -164,17 +193,20 @@
                   {{ unreadCount }}
                 </div>
               </div>
-              <div
-                class="notification"
-                *ngIf="isNotificationVisible"
-                [@slideInOut]
+              <p-sidebar
+                [visible]="isNotificationVisible"
+                (onHide)="isNotificationVisible = false"
+                [showCloseIcon]="false"
+                position="right"
               >
-                <admin-notification
-                  [notificationFilterData]="notificationFilterData"
-                  (onCloseNotification)="closeNotification()"
-                  (filterData)="setNotificationFilterData($event)"
-                ></admin-notification>
-              </div>
+                <div class="notification" *ngIf="isNotificationVisible">
+                  <admin-notification
+                    [notificationFilterData]="notificationFilterData"
+                    (onCloseNotification)="isNotificationVisible = false"
+                    (filterData)="setNotificationFilterData($event)"
+                  ></admin-notification>
+                </div>
+              </p-sidebar>
             </div>
           </div>
           <div class="dropdown-wrapper">
@@ -187,6 +219,8 @@
                   class="filter-icon"
                   src="assets/svg/Filter-Icon.svg"
                   alt="filter"
+                  pTooltip="filter"
+                  tooltipPosition="bottom"
                 />
               </div>
               <p-sidebar

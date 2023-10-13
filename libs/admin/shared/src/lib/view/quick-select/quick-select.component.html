@@ -1,0 +1,30 @@
+<ng-container [ngSwitch]="inputType">
+  <hospitality-bot-multi-select
+    *ngSwitchCase="'multiselect'"
+    [ngClass]="class"
+    [controlName]="controlName"
+    [label]="label"
+    [options]="menuOptions"
+    [settings]="settings"
+    [props]="_qsProps"
+    [loading]="qsLoading"
+    (paginate)="loadMoreData()"
+    (onSearch)="search($event)"
+    [stopEmission]="noMoreData"
+    (onCreate)="create($event)"
+  ></hospitality-bot-multi-select>
+
+  <hospitality-bot-select
+    *ngSwitchDefault
+    [ngClass]="class"
+    [controlName]="controlName"
+    [label]="label"
+    [options]="menuOptions"
+    [props]="_qsProps"
+    [loading]="qsLoading"
+    (paginate)="loadMoreData()"
+    (onSearch)="search($event)"
+    [stopEmission]="noMoreData"
+    (onCreate)="create($event)"
+  ></hospitality-bot-select>
+</ng-container>

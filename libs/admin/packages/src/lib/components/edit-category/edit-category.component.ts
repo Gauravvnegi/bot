@@ -12,6 +12,9 @@ import { Package } from '../../data-models/packageConfig.model';
 import { CategoriesService } from '../../services/category.service';
 import { PackageService } from '../../services/package.service';
 import { FileUploadType } from 'libs/admin/shared/src/lib/models/file-upload-type.model';
+import { packagesRoutes } from '../../constant/routes';
+import { ModuleNames } from '@hospitality-bot/admin/shared';
+import { RoutesConfigService } from '@hospitality-bot/admin/core/theme';
 
 @Component({
   selector: 'hospitality-bot-edit-category',
@@ -37,7 +40,8 @@ export class EditCategoryComponent implements OnInit, OnDestroy {
     private activatedRoute: ActivatedRoute,
     private snackbarService: SnackBarService,
     private globalFilterService: GlobalFilterService,
-    private categoriesService: CategoriesService
+    private categoriesService: CategoriesService,
+    private routesConfigService: RoutesConfigService
   ) {
     this.initAddCategoryForm();
   }
@@ -143,13 +147,15 @@ export class EditCategoryComponent implements OnInit, OnDestroy {
               { panelClass: 'success' }
             )
             .subscribe();
-          this.router.navigate([
-            '/pages/library/packages/category',
-            this.hotelCategory.category.id,
-          ]);
+          this.routesConfigService.navigate({
+            additionalPath: packagesRoutes.editPackage.route.replace(
+              ':id',
+              this.hotelCategory.category.id
+            ),
+          });
           this.isSavingCategory = false;
         },
-        ({ error }) => { 
+        ({ error }) => {
           this.isSavingCategory = false;
         }
       )
@@ -186,13 +192,15 @@ export class EditCategoryComponent implements OnInit, OnDestroy {
                 { panelClass: 'success' }
               )
               .subscribe();
-            this.router.navigate([
-              '/pages/library/packages/category',
-              this.hotelCategory.category.id,
-            ]);
+            this.routesConfigService.navigate({
+              additionalPath: packagesRoutes.editPackage.route.replace(
+                ':id',
+                this.hotelCategory.category.id
+              ),
+            });
             this.isSavingCategory = false;
           },
-          ({ error }) => { 
+          ({ error }) => {
             this.isSavingCategory = false;
           }
         )
@@ -204,7 +212,10 @@ export class EditCategoryComponent implements OnInit, OnDestroy {
   }
 
   redirectToCategories() {
-    this.router.navigate(['/pages/library/packages/']);
+    this.routesConfigService.navigate({
+      subModuleName: ModuleNames.PACKAGES,
+      additionalPath: packagesRoutes.packages.route,
+    });
   }
 
   private performActionIfNotValid(status: any[]): any[] {

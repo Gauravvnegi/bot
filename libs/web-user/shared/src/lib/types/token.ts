@@ -8,5 +8,4 @@ export interface ITokenInfo {
   journey: string;
   reservationId: string;
   entityId: string;
-  selectedProducts: string;
 }

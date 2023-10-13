@@ -212,3 +212,132 @@
 .margin-left {
   margin-left: 20px !important;
 }
+
+hospitality-bot-tab-group .icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #5f38f9;
+  cursor: pointer;
+  padding: 10px;
+  height: 4em;
+}
+
+:host ::ng-deep .mat-tab-label {
+  min-width: unset !important;
+}
+
+.sidebar
+  hospitality-bot-tabbed-sidebar
+  .mat-tab-header-pagination-controls-enabled
+  .mat-tab-header-pagination {
+  display: none !important;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  padding: 6px 10px;
+  width: 100%;
+  background-color: #f0ecff;
+  border: solid 1px $primary;
+  border-radius: 4px;
+
+  .title {
+    display: flex;
+    justify-content: space-between;
+    .item-name {
+      margin: 0 7px 4.7px 0;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.72px;
+      text-align: left;
+      color: $title;
+    }
+
+    .booking-no {
+      margin: 1px 19.5px 5.7px 7px;
+      opacity: 0.73;
+      font-size: 10px;
+      letter-spacing: 0.6px;
+      text-align: left;
+      color: $title;
+    }
+  }
+
+  .footer {
+    display: inline-flex;
+    justify-content: space-between;
+    .desc {
+      margin: 3.6px 29.5px 7.4px 1px;
+      font-size: 10px;
+      letter-spacing: 0.6px;
+      text-align: left;
+      color: $title;
+    }
+    .time {
+      opacity: 0.73;
+      font-size: 10px;
+      letter-spacing: 0.6px;
+      text-align: left;
+      color: $title;
+    }
+  }
+}
+.pull-right {
+  @include flex-item-center;
+  gap: 5px;
+
+  margin: 0 20px;
+  .type-label {
+    margin: 0 1%;
+  }
+
+  .type-label > .image {
+    height: 38px;
+    width: 38px;
+    @include flex-all-center;
+    border-radius: 50%;
+    img {
+      height: 15px;
+    }
+  }
+  .type-label > input {
+    /* HIDE RADIO */
+    visibility: hidden; /* Makes input not-clickable */
+    position: absolute; /* Remove input from document flow */
+  }
+
+  .type-label > input + .image {
+    position: relative;
+    cursor: pointer;
+  }
+
+  .type-label > input:checked + .image {
+    background-color: $primary-cta;
+    img {
+      filter: invert(0);
+    }
+  }
+}
+
+.heading-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5em;
+  .expand {
+    cursor: pointer;
+    height: 20px;
+    width: 20px;
+  }
+}
+
+:host ::ng-deep .p-dialog-mask {
+  height: unset !important;
+  width: unset !important;
+  left: 214px !important;
+
+  top: 53px !important;
+  position: absolute !important;
+}

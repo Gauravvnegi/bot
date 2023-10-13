@@ -20,7 +20,7 @@ export class Service {
   deserialize(input: Amenity) {
     this.id = input.id;
     this.name = input.name;
-    this.imageUrl = input.images[0]?.url;
+    this.imageUrl = input.imageUrl[0]?.url;
     this.type = input.type;
     this.rate = `${input.currency}${input.rate}`;
     this.packageCode = input.packageCode;
@@ -38,7 +38,7 @@ export type Amenity = {
   active: boolean;
   currency: string;
   packageCode: string;
-  images;
+  imageUrl;
   source: string;
   entityId: string;
   type: string;

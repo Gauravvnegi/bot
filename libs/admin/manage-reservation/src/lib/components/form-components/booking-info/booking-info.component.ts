@@ -4,10 +4,8 @@ import {
   ControlContainer,
   FormArray,
   FormGroup,
-  Validators,
 } from '@angular/forms';
 import {
-  AdminUtilityService,
   ConfigService,
   CountryCodeList,
   EntitySubType,
@@ -27,12 +25,24 @@ import { Subscription } from 'rxjs';
 })
 export class BookingInfoComponent implements OnInit {
   countries: Option[];
-  @Input() expandAccordion: boolean = false;
-  @Input() reservationTypes: Option[] = [];
-  @Input() statusOptions: Option[] = [];
-  @Input() eventTypes: Option[] = [];
-  @Input() bookingType: string;
-  @Input() reservationId: string;
+  expandAccordion: boolean = false;
+  reservationTypes: Option[] = [];
+  statusOptions: Option[] = [];
+  eventTypes: Option[] = [];
+  bookingType: string;
+  reservationId: string;
+  disabledForm: string;
+
+  /**
+   * Props to show extra information
+   * @todo Need to handle label for col and row to show information
+   */
+  @Input() set props(value: BookingInfoProps) {
+    for (const key in value) {
+      const val = value[key];
+      this[key] = val;
+    }
+  }
 
   otaOptions: Option[] = [];
 
@@ -49,13 +59,12 @@ export class BookingInfoComponent implements OnInit {
   fromDateValue = new Date();
   toDateValue = new Date();
 
-  $susbcription = new Subscription();
+  $subscription = new Subscription();
   constructor(
     public controlContainer: ControlContainer,
     private configService: ConfigService,
     private globalFilterService: GlobalFilterService,
-    private formService: FormService,
-    private adminUtilityService: AdminUtilityService
+    private formService: FormService
   ) {}
 
   ngOnInit(): void {
@@ -129,7 +138,6 @@ export class BookingInfoComponent implements OnInit {
           this.minToDate.setDate(maxToLimit.getDate());
           this.formService.reservationDate.next(res);
           if (this.roomControls.valid) {
-            this.getRoomsForAllRoomTypes();
             this.formService.getSummary.next();
           }
         }
@@ -140,7 +148,6 @@ export class BookingInfoComponent implements OnInit {
           this.toDateValue = new Date(res);
           this.updateDateDifference();
           if (this.roomControls.valid && !multipleDateChange) {
-            this.getRoomsForAllRoomTypes();
             this.formService.getSummary.next();
           }
           multipleDateChange = false;
@@ -182,13 +189,13 @@ export class BookingInfoComponent implements OnInit {
         res === 'OTA' && this.configData
           ? this.configData.source.filter((item) => item.value === res)[0].type
           : [];
-      sourceNameControl.clearValidators();
+      // sourceNameControl.clearValidators();
       if (!this.editMode) {
         sourceNameControl.reset();
       }
     });
 
-    this.$susbcription.add(
+    this.$subscription.add(
       this.formService.sourceData.subscribe((res) => {
         if (res && this.configData) {
           this.editMode = true;
@@ -229,30 +236,6 @@ export class BookingInfoComponent implements OnInit {
     }
   }
 
-  getRoomsForAllRoomTypes() {
-    this.roomTypeArray.forEach((roomTypeGroup, index) => {
-      const roomTypeId = roomTypeGroup.get('roomTypeId').value;
-      const config = {
-        params: this.adminUtilityService.makeQueryParams([
-          {
-            from: this.reservationInfoControls.from.value,
-            to: this.reservationInfoControls.to.value,
-            type: 'ROOM',
-            createBooking: true,
-            roomTypeId: roomTypeId,
-          },
-        ]),
-      };
-
-      this.formService.getRooms(
-        this.entityId,
-        config,
-        roomTypeGroup.get('roomNumberOptions'),
-        roomTypeGroup.get('roomNumbers')
-      );
-    });
-  }
-
   get reservationInfoControls() {
     return (this.controlContainer.control.get(
       'reservationInformation'
@@ -273,6 +256,16 @@ export class BookingInfoComponent implements OnInit {
   }
 
   ngOnDestroy() {
-    this.$susbcription.unsubscribe();
+    this.$subscription.unsubscribe();
   }
 }
+
+type BookingInfoProps = {
+  expandAccordion?: boolean;
+  reservationTypes?: Option[];
+  statusOptions?: Option[];
+  eventTypes?: Option[];
+  bookingType?: string;
+  reservationId?: string;
+  disabledForm?: string;
+};

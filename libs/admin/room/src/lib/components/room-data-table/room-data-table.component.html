@@ -9,17 +9,20 @@
       *ngIf="selectedTab === 'ROOM'"
       label="{{ 'room.addSingle' | translate }}"
       variant="text"
-      link="/pages/efrontdesk/room/{{ routes.addRoom }}/single"
+      [routerLink]="routes.addSingleRoom"
+      preserveQueryParams="true"
     ></hospitality-bot-button>
     <hospitality-bot-button
       *ngIf="selectedTab === 'ROOM_TYPE'"
       label="{{ 'room.createType' | translate }}"
-      link="/pages/efrontdesk/room/{{ routes.addRoomType }}"
+      [routerLink]="routes.addRoomType"
+      preserveQueryParams="true"
     ></hospitality-bot-button>
     <hospitality-bot-button
       *ngIf="selectedTab === 'ROOM'"
       label="{{ 'room.addMultiple' | translate }}"
-      link="/pages/efrontdesk/room/{{ routes.addRoom }}/multiple"
+      [routerLink]="routes.addMultipleRoom"
+      preserveQueryParams="true"
     ></hospitality-bot-button>
     <hospitality-bot-export-list
       [additionalActionItems]="additionalActionItems"
@@ -143,11 +146,7 @@
 <ng-template #roomCell let-rowData>
   <td>
     <div [roomStatus]="rowData.status" *ngIf="rowData.type; else emptyCell">
-      <div>
-        {{ rowData.roomNo || '--' }}&nbsp;-&nbsp;{{
-          rowData.type || 'Executive Room'
-        }}
-      </div>
+      {{ rowData.roomNo || '--' }}&nbsp;-&nbsp;{{ rowData.type || '--' }}
     </div>
   </td>
   <td>

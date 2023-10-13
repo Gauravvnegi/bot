@@ -1,20 +1,52 @@
 <p-accordionTab header="Guest Information" [formGroup]="parentFormGroup">
-    <div class="form-block" formGroupName="guestInformation">
-      <hospitality-bot-select
-        class="half-width select-block"
-        controlName="guestDetails"
-        label="Guest Name"
-        [options]="guestOptions"
-        [props]="{
-          isAsync: true,
-          createPrompt: '+ Add New Guest',
-          placeholder: 'Search'
-        }"
-        [loading]="loadingGuests"
-        (paginate)="loadMoreGuests()"
-        (onSearch)="searchGuests($event)"
-        [stopEmission]="noMoreGuests"
-        (onCreate)="createGuest()"
-      ></hospitality-bot-select>
-    </div>
-  </p-accordionTab>
+  <div class="form-block" formGroupName="guestInformation">
+    <hospitality-bot-quick-select
+      class="half-width select"
+      controlName="guestDetails"
+      label="Guest"
+      [inputType]="'select'"
+      [props]="{
+        showChips: false,
+        isAsync: true,
+        placeholder: 'Select',
+        createPrompt: '+ Add New Guest',
+        selectedOption: selectedGuest,
+        createType: 'sidebar'
+      }"
+      [apiConfig]="{
+        apiEndPoint: '/api/v1/members',
+        dataModel: {
+          key: 'records',
+          values: {
+            label: ['firstName', 'lastName'],
+            value: 'id'
+          }
+        },
+        queryParams: getConfig(),
+        searchAPIEndPoint: '/api/v1/search/members',
+        searchModel: {
+          response: true,
+          values: {
+            label: ['firstName', 'lastName'],
+            value: 'id'
+          }
+        },
+        searchQueryParams: { type: 'GUEST' }
+      }"
+      [paginationConfig]="{
+        isPagination: true
+      }"
+      (clickedOption)="guestChange($event)"
+      (openSidebar)="showGuests()"
+    ></hospitality-bot-quick-select>
+  </div>
+</p-accordionTab>
+
+<p-sidebar
+  class="sidebar"
+  [(visible)]="sidebarVisible"
+  position="right"
+  [showCloseIcon]="false"
+>
+  <ng-container #sidebarSlide></ng-container>
+</p-sidebar>

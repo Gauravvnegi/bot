@@ -12,7 +12,7 @@
   <div class="title">Filter by</div>
   <div class="filter--form" [formGroup]="filterFG">
     <div class="messages" formGroupName="status">
-      <div>Messages</div>
+      <div class="filter-heading">Messages</div>
       <div class="status">
         <mat-checkbox formControlName="read">Read</mat-checkbox>
         <mat-checkbox formControlName="unread">Unread</mat-checkbox>
@@ -20,22 +20,25 @@
       </div>
     </div>
     <div class="date">
-      <div>Date</div>
+      <div class="filter-heading">Date</div>
       <div class="fields">
         <mat-form-field appearance="outline" class="date-field">
+          <mat-label>From</mat-label>
           <input
             matInput
             [matDatepicker]="datepicker"
             formControlName="fromDate"
             [max]="fromMaxDate"
+            la
           />
           <mat-datepicker-toggle matSuffix [for]="datepicker"
             ><img src="assets/svg/calendar.svg" class="calendar-image"
           /></mat-datepicker-toggle>
           <mat-datepicker #datepicker> </mat-datepicker>
         </mat-form-field>
-        <div>to</div>
+
         <mat-form-field appearance="outline" class="date-field">
+          <mat-label>To</mat-label>
           <input
             matInput
             [matDatepicker]="datepicker1"

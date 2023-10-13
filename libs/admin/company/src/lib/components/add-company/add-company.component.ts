@@ -1,6 +1,11 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import {
+  AbstractControl,
+  FormBuilder,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
+import { GlobalFilterService, RoutesConfigService } from '@hospitality-bot/admin/core/theme';
 import {
   ConfigService,
   NavRouteOptions,
@@ -41,6 +46,11 @@ export class AddCompanyComponent implements OnInit {
   routes = companyRoutes;
   loading = false;
 
+  isSideBar = false;
+  @Output() onClose = new EventEmitter<
+    Pick<CompanyResponseType, 'id' | 'companyName'> | boolean
+  >();
+
   subscription$ = new Subscription();
 
   constructor(
@@ -51,7 +61,8 @@ export class AddCompanyComponent implements OnInit {
     private route: ActivatedRoute,
     private location: Location,
     private formService: FormService,
-    private configService: ConfigService
+    private configService: ConfigService,
+    private routesConfigService: RoutesConfigService
   ) {
     this.companyId = this.route.snapshot.paramMap.get('id');
     const { navRoutes, title } = companyRoutes[
@@ -65,6 +76,7 @@ export class AddCompanyComponent implements OnInit {
     this.entityId = this.globalService.entityId;
     this.initCompanyForm();
     this.listenChanges();
+    this.initNavRoutes();
   }
 
   initCompanyForm() {
@@ -103,6 +115,39 @@ export class AddCompanyComponent implements OnInit {
             })) ?? [];
         })
     );
+  }
+
+  initNavRoutes() {
+    this.routesConfigService.navRoutesChanges.subscribe((navRoutesRes) => {
+      this.navRoutes = [...navRoutesRes, ...this.navRoutes];
+    });
+  }
+
+  /**
+   * @function isVisible
+   * @param field as form control name
+   * @returns true if the control has a "required" validator and isSideBar is true
+   * @else return false
+   * @description to hide the field which is not required in sidebar
+   */
+  isVisible(field: string) {
+    if (!this.isSideBar) {
+      return true;
+    }
+    // Get the form control for the specified field
+    const control = this.companyForm.get(field);
+
+    if (control) {
+      // Check if the control has the "required" validator
+      const hasRequiredValidator =
+        control.validator && control.validator({} as AbstractControl)?.required;
+
+      // Return true if the control has a "required" validator
+      return hasRequiredValidator;
+    }
+
+    // Return false if the control doesn't exist or has no "required" validator
+    return false;
   }
 
   listenChanges() {
@@ -178,7 +223,11 @@ export class AddCompanyComponent implements OnInit {
             '',
             { panelClass: 'success' }
           );
-          this.location.back();
+          if (this.isSideBar) {
+            this.onClose.emit({ id: res.id, companyName: res.firstName });
+          } else {
+            this.location.back();
+          }
         },
         (error) => {
           this.loading = false;
@@ -206,6 +255,10 @@ export class AddCompanyComponent implements OnInit {
   handleFinal = () => {
     this.loading = false;
   };
+
+  closeSidebar() {
+    this.onClose.emit(true);
+  }
 
   /**
    * Unsubscribe when component is getting removed

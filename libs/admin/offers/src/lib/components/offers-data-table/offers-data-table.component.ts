@@ -13,11 +13,12 @@ import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.
 import { LazyLoadEvent } from 'primeng/api/lazyloadevent';
 import { Subscription } from 'rxjs';
 import { chips, cols, title } from '../../constant/data-table';
-import routes from '../../constant/routes';
 import { Offer, OfferList } from '../../models/offers.model';
 import { OffersServices } from '../../services/offers.service';
 import { OfferData } from '../../types/offers';
 import { OfferListResponse, OfferResponse } from '../../types/response';
+import { RoutesConfigService } from '@hospitality-bot/admin/core/theme';
+import { offersRoutes } from '../../constant/routes';
 
 @Component({
   selector: 'hospitality-bot-offers-data-table',
@@ -36,7 +37,8 @@ export class OffersDataTableComponent extends BaseDatatableComponent
     private snackbarService: SnackBarService,
     private offerService: OffersServices,
     private adminUtilityService: AdminUtilityService,
-    private router: Router
+    private router: Router,
+    private routesConfigService: RoutesConfigService
   ) {
     super(fb, tabFilterService);
   }
@@ -45,7 +47,7 @@ export class OffersDataTableComponent extends BaseDatatableComponent
   tableName = title;
   cols = cols;
   filterChips = chips;
-  readonly routes = routes;
+  readonly routes = offersRoutes;
   iQuickFilters = true;
   isAllTabFilterRequired = true;
   subscription$ = new Subscription();
@@ -138,9 +140,9 @@ export class OffersDataTableComponent extends BaseDatatableComponent
    * @params rowData
    */
   editOffer(rowData: OfferResponse) {
-    this.router.navigate([
-      `/pages/library/offers/${routes.createOffer}/${rowData.id}`,
-    ]);
+    this.routesConfigService.navigate({
+      additionalPath: `${this.routes.createOffer.route}/${rowData.id}`,
+    });
   }
 
   /**

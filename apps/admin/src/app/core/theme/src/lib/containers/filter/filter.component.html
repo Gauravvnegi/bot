@@ -2,12 +2,24 @@
   <div class="close--wrapper">
     <p class="filter">Filter</p>
   </div>
-  <div (click)="resetFilter()" class="reset-wrapper">
-    <p class="filter">Reset All</p>
-    <mat-icon class="material-icon" matSuffix>undo</mat-icon>
-    <mat-icon (click)="closePopup()" class="material-icon" matSuffix
-      >cancel</mat-icon
+  <div class="reset-wrapper">
+    <mat-icon
+      (click)="resetFilter()"
+      pTooltip="Reset"
+      tooltipPosition="bottom"
+      class="material-icon"
+      matSuffix
+      >undo</mat-icon
     >
+
+    <i
+      class="pi pi-arrow-right"
+      style="color: #fff;"
+      (click)="closePopup()"
+      aria-hidden="true"
+      pTooltip="Close"
+      tooltipPosition="bottom"
+    ></i>
   </div>
 </div>
 <div class="filter--form">

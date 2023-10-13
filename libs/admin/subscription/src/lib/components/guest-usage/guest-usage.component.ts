@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Subscriptions } from '@hospitality-bot/admin/core/theme';
-import { ModuleNames } from '@hospitality-bot/admin/shared';
+import { ModuleNames, ProductNames } from '@hospitality-bot/admin/shared';
 import { DateService } from '@hospitality-bot/shared/utils';
 import { SubscriptionPlanService } from 'apps/admin/src/app/core/theme/src/lib/services/subscription-plan.service';
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
@@ -112,10 +112,12 @@ export class GuestUsageComponent implements OnInit {
 
     const limit =
       this.productData
-        .find((product) => product.name === ModuleNames.MEMBERS)
-        ?.config.find(
-          (subProduct) => subProduct.name === ModuleNames.GUESTS
-        ).cost.usageLimit || 0;
+        .find(
+          (product) => product.name === this.subscriptionService.selectedProduct
+        )
+        .config?.find((product) => product.name === ModuleNames.MEMBERS)
+        ?.config.find((subProduct) => subProduct.name === ModuleNames.GUESTS)
+        .cost.usageLimit || 0;
 
     this.chartData.forEach((data) => {
       this.chart.chartData.datasets[1].data.push(limit);

@@ -128,10 +128,12 @@ export class Status implements IDeserializable {
 
 export class CurrentJourney implements IDeserializable {
   currentJourneyName;
+  currentJourneyStatus;
   deserialize(input) {
     Object.assign(
       this,
-      set({}, 'currentJourneyName', get(input, ['currentJourney']))
+      set({}, 'currentJourneyName', get(input, ['currentJourney'])),
+      set({}, 'currentJourneyStatus', get(input, ['currentJourneyState']))
     );
     return this;
   }
@@ -420,6 +422,8 @@ export class Room implements IDeserializable {
   chargeCode;
   status;
   roomClass;
+  adultCount?: number;
+  kidsCount?: number;
   deserialize(input: any) {
     this.roomNumber = input?.room?.roomNumber;
     this.type = input.room?.type;
@@ -427,6 +431,9 @@ export class Room implements IDeserializable {
     this.chargeCode = input?.room?.chargeCode;
     this.status = input.room?.status;
     this.roomClass = input.room?.roomClass;
+    this.adultCount = input?.adultsCount;
+    this.kidsCount = input?.kidsCount;
+
 
     return this;
   }

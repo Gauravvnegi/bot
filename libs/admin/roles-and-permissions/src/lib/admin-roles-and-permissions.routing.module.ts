@@ -26,6 +26,10 @@ const appRoutes: Route[] = [
         path: managePermissionRoutes.viewUser.route,
         component: UserProfileComponent,
       },
+      {
+        path: '',
+        redirectTo: managePermissionRoutes.userProfile.route,
+      },
       { path: '**', redirectTo: '404' },
       { path: '404', component: DashboardErrorComponent },
     ],

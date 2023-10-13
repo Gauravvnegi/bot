@@ -54,3 +54,33 @@
     transform: rotate(360deg);
   }
 }
+
+.white-icon {
+  filter: brightness(0) invert(1);
+}
+
+// Sidebar header desing
+.sidebar-slide-header {
+  display: flex;
+  justify-content: space-between;
+  padding: 15px 30px;
+  background-color: $primary;
+  color: $white;
+  .title,
+  .center-item {
+    @include flex-item-center();
+    gap: 10px;
+    font-size: 16px;
+    font-weight: 500;
+    color: $white;
+    img {
+      width: 20px;
+    }
+  }
+  .close-icon {
+    color: $white;
+    &:hover {
+      cursor: pointer;
+    }
+  }
+}

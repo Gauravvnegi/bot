@@ -14,8 +14,6 @@ import { FinanceService } from './services/finance.service';
     ReactiveFormsModule,
   ],
   declarations: [...AdminFinanceRoutingModule.components],
-  providers: [FinanceService]
-
+  providers: [FinanceService],
 })
-
 export class AdminFinanceModule {}

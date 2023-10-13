@@ -1,7 +1,11 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, FormControl } from '@angular/forms';
 import { MatDialogConfig } from '@angular/material/dialog';
-import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import {
+  GlobalFilterService,
+  RoutesConfigService,
+  SubscriptionPlanService,
+} from '@hospitality-bot/admin/core/theme';
 import {
   DetailsComponent,
   Reservation,
@@ -22,7 +26,7 @@ import {
 } from '@hospitality-bot/shared/material';
 import * as FileSaver from 'file-saver';
 import { Observable, Subscription } from 'rxjs';
-import { cols } from '../../../constants/cols';
+import { cols, tableTypes } from '../../../constants/cols';
 import { dashboard } from '../../../constants/dashboard';
 import { TableValue } from '../../../constants/tabFilterItem';
 import { ReservationService } from '../../../services/reservation.service';
@@ -45,11 +49,18 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
   isCustomSort = true;
   rowsPerPage = 100;
   triggerInitialData = false;
+  showFullView = false;
   cols = cols.reservation;
   selectedTab: TableValue;
+  isSidebarVisible = false;
+  tableTypes = [tableTypes.table, tableTypes.calendar];
 
   globalQueries = [];
   $subscription = new Subscription();
+  entityId: string;
+  options: any[] = [];
+  isPopUploading: boolean = false;
+  selectedTableType: string;
 
   constructor(
     public fb: FormBuilder,
@@ -59,7 +70,9 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
     protected snackbarService: SnackBarService,
     protected _modal: ModalService,
     public feedbackService: FeedbackService,
-    protected tabFilterService: TableService
+    protected tabFilterService: TableService,
+    protected subscriptionPlanService: SubscriptionPlanService,
+    protected routesConfigService: RoutesConfigService
   ) {
     super(fb, tabFilterService);
   }
@@ -71,11 +84,30 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
       TableNames.RESERVATION,
       this.tabFilterItems
     );
+    this.entityId = this.globalFilterService.entityId;
   }
 
   registerListeners(): void {
+    this.checkReservationSubscription();
     this.listenForGlobalFilters();
     this.listenGuestDetails();
+  }
+
+  get isCalendarViewAvailable() {
+    return this.subscriptionPlanService.checkModuleSubscriptionWithRespectiveToProduct(
+      this.routesConfigService.productName,
+      ModuleNames.ADD_RESERVATION
+    );
+  }
+
+  checkReservationSubscription() {
+    this.tableFG?.addControl('tableType', new FormControl('calendar'));
+    if (this.isCalendarViewAvailable) {
+      this.tableFG.patchValue({ tableType: 'table' });
+      this.selectedTableType = 'table';
+    } else {
+      this.tableTypes = [];
+    }
   }
 
   /**
@@ -342,6 +374,11 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
       case 'PI':
         return 'status-text-pending';
     }
+  }
+
+  setTableType(value: string) {
+    this.selectedTableType = value;
+    this.tableFG.patchValue({ tableType: value });
   }
 
   ngOnDestroy(): void {

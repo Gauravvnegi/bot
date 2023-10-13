@@ -3,6 +3,7 @@
     class="sidebar-slide"
     [(visible)]="sidebarVisible"
     position="right"
+    [showCloseIcon]="false"
   >
     <ng-container #sidebarSlide></ng-container>
   </p-sidebar>
@@ -18,6 +19,7 @@
     <div (click)="close({ status: false })" class="close">
       <i
         [ngClass]="!isSideBar ? 'fa fa-times' : 'pi pi-arrow-right'"
+        style="color: #ffff;"
         aria-hidden="true"
       ></i>
     </div>
@@ -32,7 +34,7 @@
       <hospitality-bot-select
         class="half-width"
         [options]="items"
-        label="Item Name"
+        label="Service Name"
         controlName="itemCode"
         [props]="{
           isAsync: true,

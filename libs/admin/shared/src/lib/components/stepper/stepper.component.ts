@@ -1,4 +1,11 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  SimpleChanges,
+} from '@angular/core';
 import { MenuItem } from 'primeng/api';
 export type StepperEmitType = { item: MenuItem; index: number };
 
@@ -10,8 +17,30 @@ export type StepperEmitType = { item: MenuItem; index: number };
 export class StepperComponent implements OnInit {
   @Input() stepList: MenuItem[];
   @Input() activeIndex = 0;
+  @Input() readOnly = false;
+  @Input() completedStyle: 'dark';
   @Output() onActive = new EventEmitter<StepperEmitType>();
+
   constructor() {}
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (
+      this.completedStyle &&
+      changes['activeIndex'] &&
+      !changes.activeIndex.firstChange
+    ) {
+      this.stepList = this.stepList.map((item, index) => ({
+        ...item,
+        ...{
+          styleClass:
+            index < changes.activeIndex.currentValue &&
+            this.completedStyle == 'dark'
+              ? 'completed-step-dark'
+              : 'completed',
+        },
+      }));
+    }
+  }
 
   ngOnInit(): void {
     this.initCommand();

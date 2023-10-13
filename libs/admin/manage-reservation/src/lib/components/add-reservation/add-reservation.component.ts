@@ -30,6 +30,8 @@ import { BaseReservationComponent } from '../base-reservation.component';
 import { ReservationType } from '../../constants/reservation-table';
 import { convertToTitleCase } from 'libs/admin/shared/src/lib/utils/valueFormatter';
 import { Subject } from 'rxjs';
+import { CalendarViewData } from 'libs/admin/reservation/src/lib/components/reservation-calendar-view/reservation-calendar-view.component';
+import { RoutesConfigService } from '@hospitality-bot/admin/core/theme';
 
 @Component({
   selector: 'hospitality-bot-add-reservation',
@@ -49,7 +51,7 @@ export class AddReservationComponent extends BaseReservationComponent
     childCount: 0,
     roomCount: 0,
   };
-
+  paramsData: CalendarViewData;
   checkinJourneyState: JourneyState;
   cancelOfferRequests$ = new Subject<void>();
 
@@ -59,9 +61,10 @@ export class AddReservationComponent extends BaseReservationComponent
     private manageReservationService: ManageReservationService,
     protected activatedRoute: ActivatedRoute,
     protected formService: FormService,
-    protected hotelDetailService: HotelDetailService
+    protected hotelDetailService: HotelDetailService,
+    protected routesConfigService: RoutesConfigService
   ) {
-    super(activatedRoute, hotelDetailService, formService);
+    super(activatedRoute, hotelDetailService, formService, routesConfigService);
   }
 
   ngOnInit(): void {
@@ -69,6 +72,7 @@ export class AddReservationComponent extends BaseReservationComponent
     this.initDetails();
     if (this.reservationId) this.getReservationDetails();
     this.initFormData();
+    // this.listenRouteData();
   }
 
   initDetails() {
@@ -116,7 +120,7 @@ export class AddReservationComponent extends BaseReservationComponent
     this.formValueChanges = true;
     this.inputControls.roomInformation
       .get('roomTypes')
-      .valueChanges.pipe(debounceTime(100))
+      .valueChanges.pipe(debounceTime(300))
       .subscribe((res) => {
         const data = this.inputControls.roomInformation.get(
           'roomTypes'

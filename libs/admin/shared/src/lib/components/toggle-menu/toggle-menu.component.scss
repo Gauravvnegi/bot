@@ -1,0 +1,9 @@
+:host ::ng-deep {
+  .toggle-menu {
+    .ng-trigger {
+      top: unset !important;
+      left: unset !important;
+      right: 10px;
+    }
+  }
+}

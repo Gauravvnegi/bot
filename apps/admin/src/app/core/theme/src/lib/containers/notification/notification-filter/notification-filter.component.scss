@@ -40,11 +40,11 @@
     color: $inActiveTab;
     .date {
       .fields {
-        @include flex-item-center;
-        gap: 12px;
-        margin-top: 12px;
+        @include flex-start;
+        gap: 10px;
+        margin-top: 8px;
         .date-field {
-          width: 119px;
+          width: 135px;
         }
       }
     }
@@ -56,9 +56,18 @@
   }
 }
 
+.filter-heading {
+  color: $grayAuth;
+  font-weight: 500;
+  font-size: 14px;
+}
+
 .status {
-  @include flex-item-center;
-  gap: 20px;
+  @include flex-col;
+  margin-top: 10px;
+  & .mat-checkbox {
+    margin: 2px 0;
+  }
 }
 
 :host ::ng-deep {
@@ -71,5 +80,8 @@
   }
   .mat-checkbox-background {
     background-color: $whiteDeep;
+  }
+  .mat-form-field-appearance-outline .mat-form-field-outline-thick {
+    color: $primary;
   }
 }

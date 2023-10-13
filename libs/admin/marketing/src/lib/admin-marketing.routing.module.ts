@@ -12,7 +12,7 @@ const appRoutes: CRoutes = [
   {
     path: '',
     component: MarketingComponent,
-    name: ModuleNames.EMARK_IT,
+    name: ModuleNames.EMARK_IT_HOME,
     children: [
       {
         path: 'analytics',

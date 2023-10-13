@@ -1,7 +1,7 @@
 <div class="wrapper" [id]="fa.referenceId">
   <hospitality-bot-navigation-header
-    [heading]="offerId ? 'Edit Offer' : 'Create Offer'"
-    [routes]="routes"
+    [heading]="pageTitle"
+    [routes]="navRoutes"
   ></hospitality-bot-navigation-header>
 
   <div class="form-block" [formGroup]="useForm">
@@ -33,7 +33,7 @@
 
     <hospitality-bot-custom-file-upload
       class="full-width"
-      formControlName="images"
+      formControlName="imageUrl"
       [entityId]="entityId"
       [label]="'Image'"
       [description]="

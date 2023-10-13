@@ -18,12 +18,12 @@ export const listingRoutes: Record<
   },
   createListing: {
     route: 'create-listing',
-    navRoutes: [navRoute.library, navRoute.listing, navRoute.createListing],
+    navRoutes: [navRoute.createListing],
     title: 'Create Listing',
   },
   editListing: {
     route: 'edit-listing/:id',
-    navRoutes: [navRoute.library, navRoute.listing, navRoute.editListing],
+    navRoutes: [navRoute.editListing],
     title: 'Edit Listing',
   },
 };

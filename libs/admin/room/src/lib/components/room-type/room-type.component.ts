@@ -9,6 +9,7 @@ import {
 import { ActivatedRoute, Router } from '@angular/router';
 import {
   GlobalFilterService,
+  RoutesConfigService,
   SubscriptionPlanService,
 } from '@hospitality-bot/admin/core/theme';
 import {
@@ -16,8 +17,10 @@ import {
   DiscountType,
   ModuleNames,
 } from '@hospitality-bot/admin/shared';
+import { ModalService } from '@hospitality-bot/shared/material';
 import { NavRouteOptions, Option } from 'libs/admin/shared/src';
 import CustomValidators from 'libs/admin/shared/src/lib/utils/validators';
+import { convertToTitleCase } from 'libs/admin/shared/src/lib/utils/valueFormatter';
 import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.service';
 import { Subscription } from 'rxjs';
 import {
@@ -27,17 +30,17 @@ import {
   noRecordAction,
   noRecordActionForComp,
 } from '../../constant/form';
-import routes from '../../constant/routes';
+import routes, {
+  navRoutesConfig,
+  roomRoutesConfig,
+} from '../../constant/routes';
 import { Service, Services } from '../../models/amenities.model';
 import { RoomTypeForm } from '../../models/room.model';
+import { RoomType } from '../../models/rooms-data-table.model';
+import { FormService } from '../../services/form.service';
 import { RoomService } from '../../services/room.service';
 import { RatePlanOptions } from '../../types/room';
-import { FormService } from '../../services/form.service';
-import { RoomType } from '../../models/rooms-data-table.model';
-import { MatDialogConfig } from '@angular/material/dialog';
-import { ModalService } from '@hospitality-bot/shared/material';
-import { ModalComponent } from 'libs/admin/shared/src/lib/components/modal/modal.component';
-
+import { Location } from '@angular/common';
 @Component({
   selector: 'hospitality-bot-room-type',
   templateUrl: './room-type.component.html',
@@ -74,11 +77,7 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
 
   defaultImage: string = 'assets/images/image-upload.png';
   pageTitle = 'Add Room Type';
-  navRoutes: NavRouteOptions = [
-    { label: 'efrontdesk', link: './' },
-    { label: 'Rooms', link: '/pages/efrontdesk/room' },
-    { label: 'Add Room Type', link: './' },
-  ];
+  navRoutes: NavRouteOptions = [];
 
   /* Dropdown Options */
   paidServices: Service[] = [];
@@ -95,9 +94,11 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
     private snackbarService: SnackBarService,
     private formService: FormService,
     private subscriptionPlanService: SubscriptionPlanService,
-    private modalService: ModalService
+    private modalService: ModalService,
+    private location: Location,
+    private routesConfigService: RoutesConfigService
   ) {
-    this.roomTypeId = this.route.snapshot.paramMap.get('id');
+    this.roomTypeId = this.route.snapshot.paramMap.get('roomTypeId');
   }
 
   ngOnInit(): void {
@@ -107,6 +108,14 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
     );
     this.initForm();
     this.initOptionConfig();
+    this.initNavRoutes();
+  }
+
+  initNavRoutes() {
+    this.routesConfigService.navRoutesChanges.subscribe((navRoutesRes) => {
+      this.navRoutes = [...navRoutesRes];
+      this.navRoutes.push(...roomRoutesConfig.roomType.navRoutes);
+    });
   }
 
   get inputControl() {
@@ -269,8 +278,8 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
   }
 
   initFormDetails() {
-    this.pageTitle = 'Update Room Type';
-    this.navRoutes[2].label = 'Update Room Type';
+    // this.pageTitle = 'Update Room Type';
+    // this.navRoutes[2].label = 'Update Room Type';
 
     if (!this.roomService.roomTypeFormState) {
       this.subscription$.add(
@@ -284,11 +293,13 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
               this.disableRoomType = data.isBaseRoomType;
               if (this.isPricingDynamic) {
                 this.useForm
-                  .get('dynamicRatePlans')
-                  .patchValue(dynamicRatePlans);
+                  ?.get('dynamicRatePlans')
+                  ?.patchValue(dynamicRatePlans);
                 this.defaultRatePlanStatus = dynamicRatePlans.status;
               } else {
-                this.useForm.get('staticRatePlans').patchValue(staticRatePlans);
+                this.useForm
+                  .get('staticRatePlans')
+                  ?.patchValue(staticRatePlans);
                 this.defaultRatePlanStatus = dynamicRatePlans.status;
               }
 
@@ -446,7 +457,9 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
   saveRoomTypeData(serviceType) {
     const data = this.useForm.getRawValue();
     this.roomService.initRoomTypeFormData(data, serviceType, true);
-    this.router.navigate(['/pages/efrontdesk/room/add-room-type/services']);
+    this.router.navigate([routes.services], {
+      relativeTo: this.route,
+    });
   }
 
   /**
@@ -455,7 +468,7 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
    * @param serviceType
    * @returns
    */
-  openImportService(serviceType) {
+  openService(serviceType) {
     const data = this.useForm.getRawValue();
     this.roomService.initRoomTypeFormData(
       { ...data, services: this.compServices },
@@ -463,12 +476,16 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
       true
     );
 
+    this.roomService.selectedService = serviceType;
     if (serviceType === 'PAID') {
-      this.router.navigate(['pages/library/services/create-service']);
+      this.routesConfigService.navigate({
+        subModuleName: ModuleNames.SERVICES,
+        additionalPath: routes.createService,
+      });
     } else {
-      this.router.navigate([
-        'pages/efrontdesk/room/add-room-type/import-services',
-      ]);
+      this.router.navigate([routes.importServices], {
+        relativeTo: this.route,
+      });
     }
   }
 
@@ -504,7 +521,8 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
       this.roomService.createRoomType(this.entityId, modifiedData).subscribe(
         (res) => {
           this.loading = false;
-          this.router.navigate([`/pages/efrontdesk/room/${routes.dashboard}`]);
+          this.location.back();
+
           this.snackbarService.openSnackBarAsText(
             'Room type is created successfully',
             '',
@@ -534,7 +552,7 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
       this.roomService.updateRoomType(this.entityId, roomTypeData).subscribe(
         (res) => {
           this.loading = false;
-          this.router.navigate([`/pages/efrontdesk/room/${routes.dashboard}`]);
+          this.location.back();
           this.snackbarService.openSnackBarAsText(
             'Room type is updated successfully',
             '',

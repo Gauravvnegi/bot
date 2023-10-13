@@ -3,6 +3,7 @@ import { DateService } from '@hospitality-bot/shared/utils';
 // import { Status } from '../constant/data-table';
 import {
   AverageRoomRateResponse,
+  Features,
   InventoryCostRemainingResponse,
   InventoryRemainingResponse,
   OccupancyResponse,
@@ -43,7 +44,7 @@ export class Room {
   status: string;
   foStatus: string;
   nextStates: string[];
-  features;
+  features: Features[];
 
   deserialize(input: RoomResponse) {
     this.id = input.id ?? '';

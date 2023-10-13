@@ -21,3 +21,14 @@
     font-weight: bold;
   }
 }
+
+:host ::ng-deep {
+  .completed-step-dark {
+    .p-steps-number {
+      background-color: #313131 !important;
+    }
+    .p-steps-title {
+      color: #313131 !important;
+    }
+  }
+}

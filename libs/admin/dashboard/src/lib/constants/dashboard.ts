@@ -226,3 +226,8 @@ export const dashboard = {
     },
   },
 };
+
+export const dashboardPopUpTabs = [
+  { label: 'Guest', value: 'GUEST' },
+  { label: 'Pre-Arrival Request', value: 'PRE_ARRIVAL_REQUEST' },
+];

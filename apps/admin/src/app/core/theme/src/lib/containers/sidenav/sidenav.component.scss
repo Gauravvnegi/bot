@@ -271,6 +271,7 @@
   flex-direction: column;
   .header {
     display: flex;
+    flex-direction: row-reverse;
     justify-content: space-between;
     align-items: center;
 
@@ -372,5 +373,28 @@
     color: white !important;
     opacity: 1 !important;
     font-weight: 600 !important;
+  }
+}
+
+.product-icon{
+  width: 1.5em;
+  height: 1.5em;
+  margin-right: 0.5em;
+  margin-bottom: 0.5em;
+  object-fit: contain;
+
+   img{
+    width: 100%;
+    height: 100%;
+    
+   }
+}
+
+.empty-img-view {
+  background: #80808033;
+  border-radius: 50%;
+
+  img {
+    height: unset;
   }
 }

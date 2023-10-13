@@ -9,7 +9,7 @@ import {
   SourceData,
 } from '../types/forms.types';
 import { ReservationForm } from '../constants/form';
-import { GuestInfo } from '../models/reservations.model';
+import { GuestInfo, RoomReservation } from '../models/reservations.model';
 import { ManageReservationService } from './manage-reservation.service';
 import { Option, QueryConfig } from '@hospitality-bot/admin/shared';
 import { RoomsByRoomType } from 'libs/admin/room/src/lib/types/service-response';
@@ -23,6 +23,7 @@ export class FormService {
   dateDifference = new BehaviorSubject(1);
 
   disableBtn: boolean = false;
+  calendarView: boolean = false;
 
   getSummary = new Subject<void>();
 
@@ -52,7 +53,8 @@ export class FormService {
 
   mapRoomReservationData(
     input: ReservationForm,
-    id?: string
+    id?: string,
+    type: 'full' | 'quick' = 'full'
   ): RoomReservationFormData {
     const roomReservationData = new RoomReservationFormData();
     // Map Reservation Info
@@ -60,26 +62,25 @@ export class FormService {
     roomReservationData.from = input.reservationInformation?.from;
     roomReservationData.to = input.reservationInformation?.to;
     roomReservationData.reservationType =
-      input.reservationInformation?.reservationType;
+      input.reservationInformation?.reservationType ?? 'CONFIRMED';
     roomReservationData.sourceName = input.reservationInformation?.sourceName;
     roomReservationData.source = input.reservationInformation?.source;
     roomReservationData.marketSegment =
       input.reservationInformation?.marketSegment;
 
-    roomReservationData.paymentDetails.paymentMethod =
-      input.paymentMethod?.paymentMethod ?? '';
-    roomReservationData.paymentDetails.remarks =
-      input.paymentMethod?.paymentRemark ?? '';
-    roomReservationData.paymentDetails.amount =
-      input.paymentMethod?.totalPaidAmount ?? 0;
-    roomReservationData.paymentDetails.transactionId =
-      input.paymentMethod.transactionId;
-      
+    roomReservationData.paymentDetails = {
+      paymentMethod: input?.paymentMethod?.paymentMethod ?? '',
+      remarks: input?.paymentMethod?.paymentRemark ?? '',
+      amount: input?.paymentMethod?.totalPaidAmount ?? 0,
+      transactionId: input?.paymentMethod?.transactionId ?? '',
+    };
+
     roomReservationData.guestId = input.guestInformation?.guestDetails;
     roomReservationData.specialRequest = input.instructions.specialInstructions;
     roomReservationData.offer = {
       id: input.offerId ?? null,
     };
+
     // Map Booking Items
     if (input.roomInformation?.roomTypes) {
       roomReservationData.bookingItems = input.roomInformation.roomTypes.map(
@@ -88,15 +89,19 @@ export class FormService {
             roomDetails: {
               ratePlan: { id: roomType.ratePlan },
               roomTypeId: roomType.roomTypeId,
-              roomCount: roomType.roomCount,
+              roomCount: roomType?.roomCount ? roomType.roomCount : 1,
               roomNumbers: roomType?.roomNumbers ? roomType?.roomNumbers : [],
-              roomNumber: roomType?.roomNumbers ? roomType?.roomNumbers[0] : '',
             },
             occupancyDetails: {
               maxChildren: roomType.childCount,
               maxAdult: roomType.adultCount,
             },
           };
+          if (id) {
+            bookingItem.roomDetails.roomNumber = roomType?.roomNumber
+              ? roomType?.roomNumber
+              : '';
+          }
 
           if (roomType.id.length) {
             bookingItem.id = roomType.id;
@@ -105,6 +110,20 @@ export class FormService {
           return bookingItem;
         }
       );
+    } else if (type === 'quick') {
+      roomReservationData.bookingItems[0] = {
+        roomDetails: {
+          ratePlan: { id: input.roomInformation.ratePlan },
+          roomTypeId: input.roomInformation.roomTypeId,
+          roomCount: 1,
+          roomNumbers: [input.roomInformation.roomNumber],
+          roomNumber: input.roomInformation.roomNumber ?? '',
+        },
+        occupancyDetails: {
+          maxChildren: input.roomInformation.childCount,
+          maxAdult: input.roomInformation.adultCount,
+        },
+      };
     } else {
       roomReservationData.bookingItems = [];
     }
@@ -178,47 +197,22 @@ export class FormService {
     return reservationData;
   }
 
-  getRooms(
-    entityId: string,
-    config: QueryConfig,
-    roomNumbersControl: AbstractControl,
-    roomNumbers?: AbstractControl,
-    defaultRoomNumbers?: string[]
-  ) {
-    this.manageReservationService
-      .getRoomNumber(entityId, config)
-      .subscribe((res) => {
-        const roomNumberOptions = res.rooms
-          .filter((room: RoomsByRoomType) => room.roomNumber.length)
-          .map((room: RoomsByRoomType) => ({
-            label: room.roomNumber,
-            value: room.roomNumber,
-          }));
-        // this.fields[3].loading[index] = false;
-
-        // Check if the roomNumber control has the room number in roomNumberOptions
-        if (roomNumbers && roomNumbers.value && !defaultRoomNumbers) {
-          const roomNumbersValue = roomNumbers.value;
-          // Filter the roomNumbersValue to keep only those values that exist in roomNumberOptions
-          const filteredRoomNumbers = roomNumbersValue.filter((value: string) =>
-            roomNumberOptions.some((option: Option) => option.value === value)
-          );
-
-          roomNumbers.setValue(filteredRoomNumbers);
-        }
-
-        // Patch the roomNumbers when the room number options are initialized
-        if (defaultRoomNumbers.length) {
-          roomNumbers.setValue(defaultRoomNumbers);
-        }
-
-        roomNumbersControl.patchValue(roomNumberOptions, { emitEvent: false });
-      });
-  }
-
   resetData() {
     this.reservationForm.next(null);
     this.sourceData.next(null);
     this.disableBtn = false;
+    this.dateDifference.next(1);
+    this.guestInformation.next(null);
+    this.enableAccordion = false;
+    this.reservationForm.next(null);
   }
 }
+
+export type GetRoomsConfig = {
+  entityId: string;
+  config: QueryConfig;
+  type: 'string' | 'array';
+  roomControl: AbstractControl;
+  roomNumbersControl?: AbstractControl;
+  defaultRoomNumbers?: string[];
+};

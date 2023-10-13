@@ -1,5 +1,5 @@
 <div class="wrapper">
-  <div class="heading">
+  <div *ngIf="!isSideBar; else sidebarHeader">
     <div class="header">
       Settings
     </div>
@@ -16,7 +16,8 @@
         *ngIf="setting.isActive"
         class="setting"
         [ngClass]="{ setting__disabled: setting.isDisabled }"
-        (click)="selectSetting(setting.name, setting.isDisabled); close()"
+        [routerLink]="setting.isDisabled ? null : [setting.path]"
+        (click)="setting.isDisabled ? $event.preventDefault() : close()"
       >
         <div class="setting__header">
           <div
@@ -38,3 +39,12 @@
     </ng-container>
   </div>
 </div>
+
+<ng-template #sidebarHeader>
+  <div class="sidebar-slide-header">
+    <span class="title">Settings</span>
+    <span class="close-icon" (click)="close()">
+      <i class="pi pi-arrow-right" aria-hidden="true"></i>
+    </span>
+  </div>
+</ng-template>

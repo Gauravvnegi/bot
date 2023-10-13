@@ -1,0 +1,198 @@
+<div class="main-wrapper" [id]="fa?.referenceId">
+  <hospitality-bot-navigation-header
+    heading="Setup Bar Price"
+    [routes]="[{ label: 'Revenue Manager', link: './' }]"
+    [isStickyTitle]="false"
+    [isBack]="false"
+  ></hospitality-bot-navigation-header>
+  <ng-container *ngIf="!!useForm; else loader">
+    <div class="wrapper" [formGroup]="useForm">
+      <div class="room-type-option">
+        <hospitality-bot-room-types
+          class="room-types-select"
+          [controlName]="'roomType'"
+          [props]="{
+            isAllSelected: true
+          }"
+        >
+        </hospitality-bot-room-types>
+      </div>
+      <ng-container
+        *ngIf="!isRoomsEmpty && allRoomTypes?.length; else emptyView"
+      >
+        <p-accordion
+          class="accordion"
+          [multiple]="true"
+          #accordion
+          formArrayName="barPrices"
+        >
+          <ng-container *ngFor="let barPrice of barPriceControl; let i = index">
+            <ng-container
+              *ngIf="checkForRoomTypeSelection(barPrice.get('id').value)"
+            >
+              <p-accordionTab [selected]="i == 0">
+                <p-header class="header">
+                  <div class="title-wrapper">
+                    <span class="title">
+                      {{ barPrice.get('label').value }}
+                    </span>
+                    <div *ngIf="barPrice.get('isBase').value" class="badge">
+                      <img
+                        src="assets/images/verified-badge.webp"
+                        alt="badge"
+                      />
+                    </div>
+                  </div>
+
+                  <hospitality-bot-toggle-switch-with-label
+                    class="toggle action-wrapper"
+                    [isToggleOn]="barPrice.get('isBase').value"
+                    [isDisabled]="barPrice.get('isBase').value"
+                    [config]="{
+                      preContent: 'Base Room Type',
+                      disableTurnOff: barPrice.get('isBase').value
+                    }"
+                    (onToggleSwitch)="statusUpdate($event, barPrice)"
+                    click-stop-propagation
+                  ></hospitality-bot-toggle-switch-with-label>
+                </p-header>
+                <div [formGroupName]="i">
+                  <div class="basic-detail">
+                    <div class="field">
+                      <hospitality-bot-multiple-prefix-input
+                        [controls]="{
+                          preCountControlName: 'price',
+                          postCountControlName: 'variablePrice'
+                        }"
+                        [labels]="{
+                          mainLabel: 'Price',
+                          preCountLabel: 'Base Price',
+                          postCountLabel: 'Price'
+                        }"
+                        [defaultProps]="{
+                          post: {
+                            type: 'number',
+                            float: true,
+                            errorMessages: {
+                              required: 'This is a required field.',
+                              min: 'Value must be greater than 0.'
+                            },
+                            isPriceField: true
+                          }
+                        }"
+                      ></hospitality-bot-multiple-prefix-input>
+                    </div>
+                    <div class="row-1" formArrayName="ratePlans">
+                      <div
+                        class="field"
+                        *ngFor="
+                          let ratePlan of barPrice.get('ratePlans').controls;
+                          let ratePlanFG = index
+                        "
+                        [formGroupName]="ratePlanFG"
+                      >
+                        <hospitality-bot-input
+                          [label]="ratePlan.value.label"
+                          controlName="value"
+                          [props]="{
+                            type: 'number'
+                          }"
+                        ></hospitality-bot-input>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="pax">
+                    <div class="pax__title">Pax</div>
+                    <div class="pax__body">
+                      <div class="field">
+                        <hospitality-bot-input
+                          label="Child Below 5"
+                          controlName="childBelowFive"
+                          [props]="{
+                            type: 'number'
+                          }"
+                        ></hospitality-bot-input>
+                      </div>
+                      <div class="field">
+                        <hospitality-bot-input
+                          label="Child 5-12"
+                          controlName="chileFiveToTwelve"
+                          [props]="{
+                            type: 'number'
+                          }"
+                        ></hospitality-bot-input>
+                      </div>
+                      <div class="field">
+                        <hospitality-bot-input
+                          label="Adult (12+)"
+                          controlName="adult"
+                          [props]="{
+                            type: 'number'
+                          }"
+                        ></hospitality-bot-input>
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    formArrayName="exceptions"
+                    *ngIf="barPrice.get('exceptions').controls.length"
+                  >
+                    <div
+                      *ngFor="
+                        let exception of barPrice.get('exceptions').controls;
+                        let j = index
+                      "
+                      [formGroupName]="j"
+                    >
+                      <hospitality-bot-exception
+                        [price]="barPrice.get('price')?.value"
+                        [parentFG]="barPrice.get('exceptions').controls[j]"
+                        (removeAction)="removeException(barPrice, j)"
+                      ></hospitality-bot-exception>
+                    </div>
+                  </div>
+                  <!-- May Be it will use in future -->
+                  <!-- <div class="add-exception">
+                    <div class="link" (click)="addException(barPrice)">
+                      +Add Exception
+                    </div>
+                  </div> -->
+                </div>
+              </p-accordionTab>
+            </ng-container>
+          </ng-container>
+        </p-accordion>
+      </ng-container>
+    </div>
+  </ng-container>
+  <ng-template #loader>
+    <hospitality-bot-loader-bounce></hospitality-bot-loader-bounce>
+  </ng-template>
+  <ng-template #emptyView>
+    <hospitality-bot-empty-table
+      [isLoading]="loading"
+      [content]="{
+        description:
+          !isRoomsEmpty && allRoomTypes?.length
+            ? 'Please select at least one rooms'
+            : 'There is no room available',
+        imageSrc: 'assets/images/empty-table-service.png'
+      }"
+    >
+    </hospitality-bot-empty-table>
+  </ng-template>
+
+  <hospitality-bot-form-action
+    class="full-width"
+    [loading]="loading"
+    [config]="{
+      preHide: true,
+      postLabel: 'Preview & Save',
+      postDisable:
+        (!isRoomsEmpty && loading) || loadingError || !allRoomTypes?.length
+    }"
+    (onPostAction)="handleSave()"
+    #fa
+  >
+  </hospitality-bot-form-action>
+</div>

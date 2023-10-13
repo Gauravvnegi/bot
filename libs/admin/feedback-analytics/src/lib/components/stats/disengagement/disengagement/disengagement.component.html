@@ -1,0 +1,113 @@
+<div class="card-container">
+  <div class="left">
+    <div
+      class="left__title"
+      *skeleton="disengagement == undefined; height: '25px'; width: '80%'"
+    >
+      What drivers are leading to disengagement at All Outlets ?
+    </div>
+    <div class="left__graph">
+      <div
+        class="outer"
+        *skeleton="loading; height: '25vw'; width: '25vw'; borderRadius: '50%'"
+      >
+        <canvas
+          baseChart
+          class="graph-base-chart"
+          [data]="circularTransparentGraph.Data"
+          [labels]="circularTransparentGraph.Labels"
+          [chartType]="circularTransparentGraph.Type"
+          [legend]="circularTransparentGraph.Legend"
+          [colors]="circularTransparentGraph.Colors"
+          [options]="circularTransparentGraph.Options"
+        >
+        </canvas>
+      </div>
+      <div class="inner" *ngIf="!loading">
+        <canvas
+          baseChart
+          class="graph-base-chart"
+          [data]="circularGraph.Data"
+          [labels]="circularGraph.Labels"
+          [chartType]="circularGraph.Type"
+          [legend]="circularGraph.Legend"
+          [colors]="circularGraph.Colors"
+          [options]="circularGraph.Options"
+          (chartHover)="handleCircularGraphClick($event)"
+        >
+        </canvas>
+      </div>
+      <div class="left__graph__stat" *ngIf="!loading">
+        <div class="text">
+          {{ total }}
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="right">
+    <div
+      class="right__title"
+      *skeleton="
+        disengagement == undefined;
+        height: '25px';
+        width: '80%';
+        margin: '0 0 30px 0'
+      "
+    >
+      {{ selectedDepartment.label }}
+    </div>
+    <div
+      class="right__sub-title"
+      *skeleton="disengagement == undefined; height: '20px'; width: '200px'"
+    >
+      Guest to meet Break-down
+    </div>
+    <div class="right__top">
+      <div class="progress">
+        <div
+          class="high-risk"
+          *ngIf="disengagement?.gtmBreakDown?.HIGH_RISK"
+          [style.width]="
+            getPercentage(
+              disengagement?.gtmBreakDown?.HIGH_RISK,
+              disengagement?.gtmBreakDown?.MEDIUM_RISK
+            ) + '%'
+          "
+        ></div>
+        <div
+          class="medium-risk"
+          *ngIf="disengagement?.gtmBreakDown?.MEDIUM_RISK"
+          [style.width]="
+            getPercentage(
+              disengagement?.gtmBreakDown?.MEDIUM_RISK,
+              disengagement?.gtmBreakDown?.HIGH_RISK
+            ) + '%'
+          "
+        ></div>
+      </div>
+      <div class="right__top__stat-container">
+        <div
+          *skeleton="disengagement == undefined; height: '25px'; width: '85px'"
+        >
+          High Risk
+          <span>{{ disengagement?.gtmBreakDown?.HIGH_RISK || 0 }}</span>
+        </div>
+        <div
+          *skeleton="disengagement == undefined; height: '25px'; width: '85px'"
+        >
+          Medium Risk
+          <span>{{ disengagement?.gtmBreakDown?.MEDIUM_RISK || 0 }}</span>
+        </div>
+      </div>
+    </div>
+    <div class="divider"></div>
+    <div class="right__bottom">
+      <hospitality-bot-gtm-closure
+        [department]="selectedDepartment"
+        [data]="disengagement?.gtmClosureGraph"
+        [selectedInterval]="selectedInterval"
+        [globalQueries]="globalQueries"
+      ></hospitality-bot-gtm-closure>
+    </div>
+  </div>
+</div>

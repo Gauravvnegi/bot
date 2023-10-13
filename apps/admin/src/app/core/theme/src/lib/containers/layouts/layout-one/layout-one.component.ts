@@ -1,20 +1,28 @@
 import { animate, style, transition, trigger } from '@angular/animations';
 import {
+  Compiler,
   Component,
+  ComponentFactoryResolver,
   HostListener,
   OnDestroy,
   OnInit,
-  ComponentFactoryResolver,
-  ViewContainerRef,
   ViewChild,
+  ViewContainerRef,
 } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { Router } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
 import { ConfigService, UserService } from '@hospitality-bot/admin/shared';
 import { DateService } from '@hospitality-bot/shared/utils';
+import { AddGuestComponent } from 'libs/admin/guests/src/lib/components/add-guest/add-guest.component';
+import { manageReservationRoutes } from 'libs/admin/manage-reservation/src/lib/constants/routes';
+import { RaiseRequestComponent } from 'libs/admin/request/src/lib/components/raise-request/raise-request.component';
+import { SettingsMenuComponent } from 'libs/admin/settings/src/lib/components/settings-menu/settings-menu.component';
 import { ModuleNames } from 'libs/admin/shared/src/lib/constants/subscriptionConfig';
 import { HotelDetailService } from 'libs/admin/shared/src/lib/services/hotel-detail.service';
+import { MenuItem } from 'primeng/api';
 import { Subscription } from 'rxjs';
+import { NightAuditComponent } from '../../../../../../../../../../../libs/admin/global-shared/src/lib/components/night-audit/night-audit.component';
+import { QuickReservationFormComponent } from '../../../../../../../../../../../libs/admin/reservation/src/lib/components/quick-reservation-form/quick-reservation-form.component';
 import { tokensConfig } from '../../../../../../../../../../../libs/admin/shared/src/lib/constants/common';
 import { layoutConfig } from '../../../constants/layout';
 import { DateRangeFilterService } from '../../../services/daterange-filter.service';
@@ -24,17 +32,8 @@ import { LoadingService } from '../../../services/loader.service';
 import { FirebaseMessagingService } from '../../../services/messaging.service';
 import { NotificationService } from '../../../services/notification.service';
 import { ProgressSpinnerService } from '../../../services/progress-spinner.service';
+import { RoutesConfigService } from '../../../services/routes-config.service';
 import { SubscriptionPlanService } from '../../../services/subscription-plan.service';
-import { NavigationEnd } from '@angular/router';
-import { MenuItem } from 'primeng/api';
-import { manageReservationRoutes } from 'libs/admin/manage-reservation/src/lib/constants/routes';
-import { RaiseRequestComponent } from 'libs/admin/request/src/lib/components/raise-request/raise-request.component';
-import {
-  navRoute,
-  manageGuestRoutes,
-} from 'libs/admin/guests/src/lib/constant/route';
-import { SettingsMenuComponent } from '../../../../../../../../../../../libs/admin/settings/src/lib/components/settings-menu/settings-menu.component';
-import { convertToTitleCase } from 'libs/admin/shared/src/lib/utils/valueFormatter';
 
 @Component({
   selector: 'admin-layout-one',
@@ -62,12 +61,15 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
   bgColor: string;
   outlets = [];
   lastUpdatedAt: string;
+
   isGlobalFilterVisible = false;
   showNotification = false;
-  flashNotification: any;
-  delayTime = layoutConfig.notificationDelayTime;
   isDetailPageVisible = false;
   isNotificationVisible = false;
+  fullView: boolean = false;
+
+  flashNotification: any;
+  delayTime = layoutConfig.notificationDelayTime;
   private $subscription = new Subscription();
   searchFG: FormGroup;
   timezone: string;
@@ -93,7 +95,13 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
   sidebarVisible: boolean;
   @ViewChild('sidebarSlide', { read: ViewContainerRef })
   sidebarSlide: ViewContainerRef;
-  sidebarType: 'complaint' | 'settings' = 'complaint';
+  sidebarType:
+    | 'complaint'
+    | 'settings'
+    | 'guest-sidebar'
+    | 'night-audit'
+    | 'booking' = 'complaint';
+  propertyList: any[];
 
   constructor(
     private _router: Router,
@@ -110,7 +118,9 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
     private notificationService: NotificationService,
     private configService: ConfigService,
     private hotelDetailService: HotelDetailService,
-    private resolver: ComponentFactoryResolver
+    private resolver: ComponentFactoryResolver,
+    private compiler: Compiler,
+    private routesConfigService: RoutesConfigService
   ) {
     this.initFG();
   }
@@ -118,6 +128,9 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.initLayoutConfigs();
     this.globalFilterService.listenForGlobalFilterChange();
+    this.globalFilterService.showFullView.subscribe(
+      (res: boolean) => (this.fullView = res)
+    );
     this.setInitialFilterValue();
     this.loadingService.close();
     this.getNotificationUnreadCount();
@@ -207,7 +220,9 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
   }
 
   checkForMessageRoute() {
-    return this._router.url.includes('messages');
+    return (
+      this.routesConfigService.subModuleName === ModuleNames.LIVE_MESSAGING
+    );
   }
 
   initLayoutConfigs() {
@@ -252,6 +267,7 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
     this.globalFilterService.entityId = selectedentityId;
     this.globalFilterService.entityType = selectedHotelData.category;
     this.globalFilterService.entitySubType = selectedHotelData.type;
+
     this.isSitesAvailable =
       !!selectedSiteId && !!this._hotelDetailService.sites?.length;
   }
@@ -363,11 +379,11 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
     this.dateRangeFilterService.emitDateRangeFilterValue$.next(event);
   }
 
-  checkForTransactionFeedbackSubscribed() {
-    return this.subscriptionPlanService.checkModuleSubscription(
-      ModuleNames.FEEDBACK_TRANSACTIONAL
-    );
-  }
+  // checkForTransactionFeedbackSubscribed() {
+  //   return this.subscriptionPlanService.checkModuleSubscription(
+  //     ModuleNames.FEEDBACK_TRANSACTIONAL
+  //   );
+  // }
 
   @HostListener('document:visibilitychange', ['$event'])
   visibilitychange() {
@@ -394,40 +410,40 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
   }
 
   initBookingOption() {
-    const propertyList = this.hotelDetailService.getPropertyList();
+    this.propertyList = this.hotelDetailService.getPropertyList();
     this.bookingOptions = [
-      this.checkModuleSubscription(ModuleNames.ADD_RESERVATION)
+      this.isAddReservationSubscribed
         ? {
             label: 'New Booking',
             icon: 'pi pi-calendar',
-            ...(!!propertyList.length
+            ...(!!this.propertyList.length
               ? {
-                  items: propertyList.map((item) => ({
+                  items: this.propertyList.map((item) => ({
                     label: item.label,
                     command: () => {
                       this.openNewWindow(
-                        `/pages/efrontdesk/reservation/${manageReservationRoutes.addReservation.route}?entityId=${item.value}`
+                        ModuleNames.ADD_RESERVATION,
+                        `/${manageReservationRoutes.addReservation.route}?entityId=${item.value}`
                       );
                     },
                   })),
                 }
               : {
                   command: () =>
-                    this.openNewWindow(`/pages/efrontdesk/reservation`),
+                    this.openNewWindow(ModuleNames.ADD_RESERVATION),
                 }),
           }
         : null,
-      this.checkModuleSubscription(ModuleNames.GUESTS)
+      this.isGuestSubscribed
         ? {
             label: 'New Guest',
             icon: 'pi pi-user-plus',
-            command: () =>
-              this.openNewWindow(
-                `${navRoute.guest.link}/${manageGuestRoutes.addGuest.route}`
-              ),
+            command: () => {
+              this.showAddGuest();
+            },
           }
         : null,
-      this.checkModuleSubscription(ModuleNames.REQUEST)
+      this.isComplaintTrackerSubscribed
         ? {
             label: 'New Complaint',
             icon: 'pi pi-exclamation-circle',
@@ -442,6 +458,7 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
               componentRef.instance.isSideBar = true;
               componentRef.instance.onRaiseRequestClose.subscribe((res) => {
                 this.sidebarVisible = false;
+                componentRef.destroy();
               });
             },
           }
@@ -449,8 +466,105 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
     ].filter((item) => item);
   }
 
-  openNewWindow(url: string) {
+  showAddGuest() {
+    const lazyModulePromise = import(
+      'libs/admin/guests/src/lib/admin-guests.module'
+    )
+      .then((module) => {
+        return this.compiler.compileModuleAsync(module.AdminGuestsModule);
+      })
+      .catch((error) => {
+        console.error('Error loading the lazy module:', error);
+      });
+
+    lazyModulePromise.then((moduleFactory) => {
+      this.sidebarVisible = true;
+      this.sidebarType = 'guest-sidebar';
+      const factory = this.resolver.resolveComponentFactory(AddGuestComponent);
+      this.sidebarSlide.clear();
+      const componentRef = this.sidebarSlide.createComponent(factory);
+      componentRef.instance.isSideBar = true;
+      componentRef.instance.onClose.subscribe((res) => {
+        this.sidebarVisible = false;
+        componentRef.destroy();
+      });
+    });
+  }
+
+  showQuickReservation() {
+    const lazyModulePromise = import(
+      'libs/admin/reservation/src/lib/admin-reservation.module'
+    )
+      .then((module) => {
+        return this.compiler.compileModuleAsync(module.AdminReservationModule);
+      })
+      .catch((error) => {
+        console.error('Error loading the lazy module:', error);
+      });
+
+    lazyModulePromise.then((moduleFactory) => {
+      this.sidebarVisible = true;
+      this.sidebarType = 'booking';
+      const factory = this.resolver.resolveComponentFactory(
+        QuickReservationFormComponent
+      );
+      this.sidebarSlide.clear();
+      const componentRef = this.sidebarSlide.createComponent(factory);
+      componentRef.instance.isSidebar = true;
+      componentRef.instance.onCloseSidebar.subscribe((res) => {
+        this.sidebarVisible = false;
+        componentRef.destroy();
+      });
+    });
+  }
+
+  openNightAudit() {
+    const lazyModulePromise = import(
+      'libs/admin/global-shared/src/lib/admin-global-shared.module'
+    )
+      .then((module) => {
+        return this.compiler.compileModuleAsync(module.GlobalSharedModule);
+      })
+      .catch((error) => {
+        console.error('Error loading the lazy module:', error);
+      });
+
+    lazyModulePromise.then((moduleFactory) => {
+      this.sidebarVisible = true;
+      this.sidebarType = 'night-audit';
+      const factory = this.resolver.resolveComponentFactory(
+        NightAuditComponent
+      );
+      this.sidebarSlide.clear();
+      const componentRef = this.sidebarSlide.createComponent(factory);
+      componentRef.instance.isSidebar = true;
+      componentRef.instance.onClose.subscribe((res) => {
+        this.sidebarVisible = false;
+        componentRef.destroy();
+      });
+    });
+  }
+
+  openNewWindow(moduleName: ModuleNames, additionalPath = '') {
+    const url =
+      this.routesConfigService.modulePathConfig[moduleName] + additionalPath;
     window.open(url);
+  }
+
+  openFreddie() {
+    this.openNewWindow(ModuleNames.LIVE_MESSAGING);
+  }
+
+  openViewReservation() {
+    this.openNewWindow(ModuleNames.ADD_RESERVATION);
+  }
+
+  quickDropdownLink() {
+    this.showQuickReservation();
+  }
+
+  get isSettingAvailable() {
+    return !!this.subscriptionPlanService.settings?.length;
   }
 
   openSettings() {
@@ -468,26 +582,50 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
   }
 
   checkModuleSubscription(module) {
-    return this.subscriptionPlanService.checkModuleSubscription(
-      ModuleNames.MEMBERS
-    );
+    return this.subscriptionPlanService.checkModuleSubscription(module);
   }
 
   ngOnDestroy() {
     this.firebaseMessagingService.destroySubscription();
   }
 
-  get isCreateWithSubscribed() {
+  get isComplaintTrackerSubscribed() {
+    return this.subscriptionPlanService.checkProductSubscription(
+      ModuleNames.COMPLAINT_TRACKER
+    );
+  }
+
+  get isAddReservationSubscribed() {
+    return this.subscriptionPlanService.checkProductSubscription(
+      ModuleNames.PREDICTO_PMS
+    );
+  }
+
+  get isGuestSubscribed() {
     return this.subscriptionPlanService.checkModuleSubscription(
+      ModuleNames.GUESTS
+    );
+  }
+
+  get isLiveMessagingSubscribed() {
+    return this.subscriptionPlanService.checkModuleSubscription(
+      ModuleNames.LIVE_MESSAGING
+    );
+  }
+
+  get isCreateWithSubscribed() {
+    return this.subscriptionPlanService.checkProductSubscription(
       ModuleNames.CREATE_WITH
     );
   }
 
-  get selectedProductIcon() {
-    return this.subscriptionPlanService
-      .getSubscription()
-      .products.find(
-        (item) => item.name === this.subscriptionPlanService.selectedProduct
-      ).icon;
+  get isQuickReservationAvailable() {
+    return this.subscriptionPlanService.checkModuleSubscription(
+      ModuleNames.ADD_RESERVATION
+    );
+  }
+
+  get selectedProduct() {
+    return this.subscriptionPlanService.getSelectedProductData();
   }
 }

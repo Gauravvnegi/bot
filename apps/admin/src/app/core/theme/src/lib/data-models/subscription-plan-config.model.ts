@@ -2,6 +2,7 @@ import {
   CardNames,
   ModuleConfig,
   ModuleNames,
+  ProductNames,
   TableNames,
 } from 'libs/admin/shared/src/lib/constants/subscriptionConfig';
 import { get, set } from 'lodash';
@@ -84,7 +85,7 @@ export class Subscriptions {
 }
 
 export class Products {
-  name: string;
+  name: ProductNames;
   label: string;
   description: string;
   icon: string;
@@ -113,7 +114,7 @@ export class Products {
 }
 
 export class SubProducts {
-  name: string;
+  name: ModuleNames;
   label: string;
   description: string;
   icon: string;
@@ -186,24 +187,71 @@ export class Feature {
 }
 
 export class ProductSubscription {
+  subscribedModuleProductBased: Partial<Record<ModuleNames, ModuleNames[]>>;
   subscribedProducts: ModuleNames[];
   subscribedModules: ModuleNames[];
   modules: Partial<Modules>;
   subscribedIntegrations: Set<string>;
+  moduleProductMapping: Partial<Record<ModuleNames, ModuleNames>>;
 
   deserialize(input: any) {
     this.subscribedModules = new Array<ModuleNames>();
     this.subscribedProducts = new Array<ModuleNames>();
+    this.subscribedModuleProductBased = {};
+    this.moduleProductMapping = {};
 
     this.modules = new Object();
 
     input.products?.forEach((product) => {
-      if (product.isSubscribed) this.subscribedProducts.push(product.name);
+      const productName = product.name;
+      const isProductSubscribed = product.isSubscribed;
 
-      product.config?.forEach((subProduct) => {
-        this.setConfig(subProduct);
-        subProduct.config?.forEach((subSubProduct) => {
-          this.setConfig(subSubProduct);
+      if (isProductSubscribed) {
+        this.subscribedProducts.push(productName);
+        this.subscribedModuleProductBased = {
+          ...this.subscribedModuleProductBased,
+          [productName]: [],
+        };
+      }
+
+      product.config?.forEach((module) => {
+        this.setConfig(module, isProductSubscribed);
+        const isModuleSubscribed = module.isSubscribed;
+
+        if (isProductSubscribed && isModuleSubscribed) {
+          this.subscribedModuleProductBased[productName].push(module.name);
+        }
+
+        // Only sub module with initial subscribed product
+        if (
+          isModuleSubscribed &&
+          module.isView &&
+          !this.moduleProductMapping[module.name]
+        ) {
+          this.moduleProductMapping = {
+            ...this.moduleProductMapping,
+            [module.name]: productName,
+          };
+        }
+
+        module.config?.forEach((subModule) => {
+          const isSubModuleSubscribed = subModule.isSubscribed;
+
+          if (isProductSubscribed && isSubModuleSubscribed) {
+            this.subscribedModuleProductBased[productName].push(subModule.name);
+          }
+
+          if (
+            subModule.isSubscribed &&
+            subModule.isView &&
+            !this.moduleProductMapping[subModule.name]
+          ) {
+            this.moduleProductMapping = {
+              ...this.moduleProductMapping,
+              [subModule.name]: productName,
+            };
+          }
+          this.setConfig(subModule, isProductSubscribed && isModuleSubscribed);
         });
       });
     });
@@ -218,33 +266,34 @@ export class ProductSubscription {
     return this;
   }
 
-  setConfig(product: Product) {
-    if (product.isSubscribed) this.subscribedModules.push(product.name);
+  setConfig(module: Product, isParentSubscribed: boolean) {
+    if (module.isSubscribed && isParentSubscribed)
+      this.subscribedModules.push(module.name);
 
-    const productName: ModuleNames = product.name;
+    const productName: ModuleNames = module.name;
     let moduleProduct = ModuleConfig[productName];
     if (moduleProduct) {
       const tempCards: Partial<Cards> = new Object();
       moduleProduct.cards.forEach((card: CardNames) => {
         tempCards[card] = {
-          isSubscribed: product.isSubscribed,
-          isView: product.isView,
+          isSubscribed: module.isSubscribed,
+          isView: module.isView,
         };
       });
 
       const tempTables: Partial<Tables> = new Object();
       moduleProduct.tables.forEach((table: TableNames) => {
         tempTables[table] = {
-          isSubscribed: product.isSubscribed,
-          isView: product.isView,
+          isSubscribed: module.isSubscribed,
+          isView: module.isView,
           tabFilters:
-            ModuleConfig[ModuleNames[product.name]]?.filters[table].tabFilters,
+            ModuleConfig[ModuleNames[module.name]]?.filters[table].tabFilters,
         };
       });
 
       this.modules[productName] = {
-        isView: product.isView,
-        isSubscribed: product.isSubscribed,
+        isView: module.isView,
+        isSubscribed: module.isSubscribed,
         cards: tempCards,
         tables: tempTables,
       };
@@ -259,8 +308,10 @@ export class SettingsMenuItem {
   icon: string;
   isActive: boolean;
   isDisabled: boolean;
+  path: string;
 
-  deserialize(input) {
+  deserialize(input, route: string) {
+    this.path = route;
     Object.assign(
       this,
       set({}, 'name', get(input, ['name'])),

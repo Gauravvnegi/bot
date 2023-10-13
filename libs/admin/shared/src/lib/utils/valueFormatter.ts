@@ -1,4 +1,5 @@
-import { labels } from '../constants/config';
+import { ModuleNames, ProductNames } from '../constants';
+import { labels, routesConfig } from '../constants/config';
 
 export const ValueFormatter = (num, digits) => {
   const units = [

@@ -1,17 +1,19 @@
 <div class="wrapper" [id]="fa.referenceId">
   <hospitality-bot-navigation-header
+    *ngIf="!isSideBar; else sidebarHeader"
     [heading]="pageTitle"
     [routes]="navRoutes"
   ></hospitality-bot-navigation-header>
 
-  <div class="form-block" [formGroup]="companyForm">
-    <div class="code half-width">
+  <div class="form-block body" [formGroup]="companyForm">
+    <div class="code half-width" *ngIf="isVisible('packageCode')">
       <span class="code__label"> Code: </span>
       <span class="code__hash">
         {{ companyForm.get('packageCode').value }}
       </span>
     </div>
     <hospitality-bot-toggle-switch
+      *ngIf="isVisible('status')"
       class="status half-width"
       controlName="status"
       label="Status:"
@@ -20,6 +22,7 @@
     ></hospitality-bot-toggle-switch>
 
     <hospitality-bot-input
+      *ngIf="isVisible('name')"
       class="half-width"
       controlName="name"
       maxLength="60"
@@ -30,6 +33,7 @@
     ></hospitality-bot-input>
 
     <hospitality-bot-input
+      *ngIf="isVisible('email')"
       class="half-width"
       controlName="email"
       label="Email"
@@ -44,13 +48,15 @@
     ></hospitality-bot-input>
 
     <hospitality-bot-phone-number
-      class="half-width"
+      *ngIf="isVisible('phoneNo')"
+      [ngClass]="{ 'full-width': isSideBar, 'half-width': !isSideBar }"
       preControlName="cc"
       postControlName="phoneNo"
     ></hospitality-bot-phone-number>
 
     <hospitality-bot-address-component
-      class="half-width"
+      *ngIf="isVisible('address')"
+      [ngClass]="{ 'full-width': isSideBar, 'half-width': !isSideBar }"
       controlName="address"
       [props]="{
         errorMessages: {
@@ -61,6 +67,7 @@
     </hospitality-bot-address-component>
 
     <hospitality-bot-input
+      *ngIf="isVisible('website')"
       class="half-width"
       controlName="salePersonName"
       maxLength="60"
@@ -71,6 +78,7 @@
     ></hospitality-bot-input>
 
     <hospitality-bot-phone-number
+      *ngIf="isVisible('salePersonNo')"
       class="half-width"
       label="Sales Person No."
       preControlName="salePersonCC"
@@ -78,6 +86,7 @@
     ></hospitality-bot-phone-number>
 
     <hospitality-bot-prefix-field
+      *ngIf="isVisible('discount')"
       class="half-width"
       [options]="discountType"
       label="Discount"
@@ -97,6 +106,7 @@
     ></hospitality-bot-prefix-field>
 
     <hospitality-bot-input
+      *ngIf="isVisible('taxId')"
       class="half-width"
       controlName="taxId"
       maxLength="60"
@@ -107,6 +117,7 @@
     ></hospitality-bot-input>
 
     <hospitality-bot-input
+      *ngIf="isVisible('creditLimit')"
       class="half-width"
       controlName="creditLimit"
       label="Credit Limit"
@@ -117,6 +128,7 @@
     ></hospitality-bot-input>
 
     <hospitality-bot-select
+      *ngIf="isVisible('currency')"
       class="half-width"
       label="Market Segment"
       controlName="marketSegment"
@@ -128,6 +140,7 @@
     </hospitality-bot-select>
 
     <hospitality-bot-select
+      *ngIf="isVisible('currency')"
       class="half-width"
       label="Business Source"
       controlName="businessSource"
@@ -139,6 +152,7 @@
     </hospitality-bot-select>
 
     <hospitality-bot-select
+      *ngIf="isVisible('currency')"
       class="half-width"
       label="Billing Instruction"
       controlName="billingInstruction"
@@ -149,13 +163,23 @@
     >
     </hospitality-bot-select>
   </div>
-  <hospitality-bot-form-action
-    class="full-width"
-    [loading]="loading"
-    [isId]="companyId"
-    (onPreAction)="reset()"
-    (onPostAction)="handleSubmit()"
-    #fa
-  >
-  </hospitality-bot-form-action>
 </div>
+
+<ng-template #sidebarHeader>
+  <div class="sidebar-slide-header">
+    <span class="title">{{ pageTitle }}</span>
+    <span class="close-icon" (click)="closeSidebar()">
+      <i class="pi pi-arrow-right" aria-hidden="true"></i>
+    </span>
+  </div>
+</ng-template>
+
+<hospitality-bot-form-action
+  class="full-width"
+  [loading]="loading"
+  [isId]="companyId"
+  (onPreAction)="reset()"
+  (onPostAction)="handleSubmit()"
+  #fa
+>
+</hospitality-bot-form-action>

@@ -2,7 +2,10 @@ import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { ActivatedRoute, Router } from '@angular/router';
-import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import {
+  GlobalFilterService,
+  RoutesConfigService,
+} from '@hospitality-bot/admin/core/theme';
 import {
   AdminUtilityService,
   BaseDatatableComponent,
@@ -55,7 +58,8 @@ export class ListingDatatableComponent extends BaseDatatableComponent
     protected router: Router,
     private route: ActivatedRoute,
     protected _translateService: TranslateService,
-    private listingService: ListingService
+    private listingService: ListingService,
+    private routesConfigService: RoutesConfigService
   ) {
     super(fb, tabFilterService);
   }
@@ -227,8 +231,8 @@ export class ListingDatatableComponent extends BaseDatatableComponent
    * @function openCreateListing To navigate to create listing page.
    */
   openCreateListing() {
-    this.router.navigate([listingRoutes.createListing.route], {
-      relativeTo: this.route,
+    this.routesConfigService.navigate({
+      additionalPath: listingRoutes.createListing.route,
     });
   }
 
@@ -270,8 +274,8 @@ export class ListingDatatableComponent extends BaseDatatableComponent
    */
   openList(event, id) {
     event.stopPropagation();
-    this.router.navigate([listingRoutes.editListing.route.replace(':id', id)], {
-      relativeTo: this.route,
+    this.routesConfigService.navigate({
+      additionalPath: listingRoutes.editListing.route.replace(':id', id),
     });
   }
 

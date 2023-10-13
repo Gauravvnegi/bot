@@ -24,6 +24,9 @@ import { StatisticsComponent } from './components/statistics/statistics.componen
 import { StatisticsService } from './services/statistics.service';
 import { AnalyticsService } from 'libs/admin/request-analytics/src/lib/services/analytics.service';
 import { AdminGuestDashboardModule } from '@hospitality-bot/admin/guest-dashboard';
+import { RoomService } from 'libs/admin/room/src/lib/services/room.service';
+import { ManageReservationService } from 'libs/admin/manage-reservation/src/lib/services/manage-reservation.service';
+import { FormService } from 'libs/admin/manage-reservation/src/lib/services/form.service';
 
 export const adminDashboardRoutes: Route[] = [
   {
@@ -63,6 +66,12 @@ export const adminDashboardRoutes: Route[] = [
     MessagesComponent,
   ],
   exports: [RouterModule],
-  providers: [StatisticsService, AnalyticsService],
+  providers: [
+    StatisticsService,
+    AnalyticsService,
+    RoomService,
+    ManageReservationService,
+    FormService,
+  ],
 })
 export class AdminDashboardModule {}

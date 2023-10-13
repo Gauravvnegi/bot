@@ -20,34 +20,26 @@ export class RedirectGuard implements CanActivate {
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): boolean {
-    const subscription = this.subscriptionService.getSubscription();
-    const selectedProduct = this.authService.getTokenByName('selectedProduct');
-    
-    let prioritySubscribedModuleName;
+    const selectedProduct = this.subscriptionService.getSelectedProductData();
 
-    const findSubscribedModule = (products) => {
-      return products
-        .find((item) => item.isSubscribed)
-        ?.config.find((item) => item.isSubscribed)?.name;
-    };
+    if (selectedProduct.isSubscribed && selectedProduct.isView) {
+      const currentConfig = selectedProduct.config;
 
-    if (selectedProduct) {
-      const selectedProductData = subscription.products.find(
-        (item) => item.name === selectedProduct
-      );
+      const firstSubscribedModuleName = currentConfig?.find(
+        (item) => item.isSubscribed && item.isView
+      )?.name;
 
-      if (selectedProductData && selectedProductData.isSubscribed) {
-        prioritySubscribedModuleName = findSubscribedModule([
-          selectedProductData,
-        ]);
+      const firstViewModuleName = currentConfig?.find((item) => item.isView)
+        ?.name;
+
+      let prioritySubscribedModuleName =
+        firstSubscribedModuleName ?? firstViewModuleName;
+
+      if (prioritySubscribedModuleName) {
+        const routeUrl = routes[prioritySubscribedModuleName];
+        this.router.navigate([`pages/${routeUrl}`]);
       }
-    } else {
-      prioritySubscribedModuleName = findSubscribedModule(
-        subscription.products
-      );
     }
-    const routeUrl = routes[prioritySubscribedModuleName];
-    this.router.navigate([`pages/${routeUrl}`]);
 
     return true;
   }

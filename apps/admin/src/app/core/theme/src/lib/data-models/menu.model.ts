@@ -1,32 +1,34 @@
-import { ModuleNames, routes } from 'libs/admin/shared/src/index';
+import { ModuleNames, ProductNames, routes } from 'libs/admin/shared/src/index';
 import { get, set } from 'lodash';
+import { Products, SubProducts } from './subscription-plan-config.model';
+import { RouteConfigPathService } from '../services/routes-config.service';
+import { Router } from '@angular/router';
 
 export class SubMenuItem {
   path: string;
   title: string;
   name: ModuleNames;
-  url: string;
+  iconUrl: string;
   isSubscribed: boolean;
   isView: boolean;
   children: SubMenuItem[];
 
-  deserialize(input: any) {
+  deserialize(input: SubProducts, prevRoute: string) {
+    const routeService = new RouteConfigPathService();
+
     this.children = new Array<SubMenuItem>();
 
-    Object.assign(
-      this,
-      set({}, 'title', get(input, ['label'])),
-      set({}, 'name', get(input, ['name'])),
-      set({}, 'url', get(input, ['icon']))
-    );
+    this.title = input.label;
+    this.name = input.name;
+    this.iconUrl = input.icon;
     this.isSubscribed = input.isSubscribed;
     this.isView = input.isView;
 
-    this.path = routes[input.name];
+    this.path = prevRoute + '/' + routeService.getRouteFromName(input.name);
 
     input.config?.forEach((subMenu) => {
-      if (routes[subMenu.name] && subMenu.isView) {
-        this.children.push(new SubMenuItem().deserialize(subMenu));
+      if (subMenu.name) {
+        this.children.push(new SubMenuItem().deserialize(subMenu, this.path));
       }
     });
 
@@ -34,39 +36,30 @@ export class SubMenuItem {
   }
 }
 
-export class MenuItem {
+export class ProductItem {
   path: string;
   title: string;
-  name: ModuleNames;
+  name: ProductNames;
+  iconUrl: string;
   isSubscribed: boolean;
   isView: boolean;
-
   children: SubMenuItem[];
-  url: string;
 
-  deserialize(
-    input: any,
-    configuration?: {
-      moduleList: any;
-      moduleData: any;
-    }
-  ) {
+  deserialize(input: Products) {
+    const routeService = new RouteConfigPathService();
+
     this.children = new Array<SubMenuItem>();
 
-    Object.assign(
-      this,
-      set({}, 'title', get(input, ['label'])),
-      set({}, 'name', get(input, ['name'])),
-      set({}, 'url', get(input, ['icon']))
-    );
+    this.name = input.name;
+    this.title = input.label;
+    this.iconUrl = input.icon;
     this.isSubscribed = input.isSubscribed;
     this.isView = input.isView;
-
-    this.path = routes[input.name];
+    this.path = '/' + routeService.getRouteFromName(input.name);
 
     input.config?.forEach((subMenu) => {
-      if (routes[subMenu.name] && subMenu.isView) {
-        this.children.push(new SubMenuItem().deserialize(subMenu));
+      if (subMenu.name) {
+        this.children.push(new SubMenuItem().deserialize(subMenu, this.path));
       }
     });
 
@@ -74,15 +67,15 @@ export class MenuItem {
   }
 }
 
-export class Menu {
-  menuItems: MenuItem[];
+export class Product {
+  productItems: ProductItem[];
 
   deserialize(input: any) {
-    this.menuItems = new Array<MenuItem>();
+    this.productItems = new Array<ProductItem>();
 
     input.forEach((menu) => {
-      if (routes[menu.name] && menu.isView)
-        this.menuItems.push(new MenuItem().deserialize(menu));
+      if (menu.name)
+        this.productItems.push(new ProductItem().deserialize(menu));
     });
 
     return this;

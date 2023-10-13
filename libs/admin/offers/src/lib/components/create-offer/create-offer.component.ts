@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import {
+  GlobalFilterService,
+  RoutesConfigService,
+} from '@hospitality-bot/admin/core/theme';
 import {
   LibrarySearchItem,
   ServiceTypeOptionValue,
@@ -10,7 +13,7 @@ import { SnackBarService } from '@hospitality-bot/shared/material';
 import { NavRouteOptions, Option } from 'libs/admin/shared/src';
 import { ConfigService } from 'libs/admin/shared/src/lib/services/config.service';
 import { Subscription } from 'rxjs';
-import routes from '../../constant/routes';
+import { offersRoutes } from '../../constant/routes';
 import { OffersServices } from '../../services/offers.service';
 import { OfferData, OfferFormData, OffersOnEntity } from '../../types/offers';
 import { OfferResponse, SearchResult } from '../../types/response';
@@ -24,15 +27,12 @@ import { DiscountType } from '../../constant/data-table';
 export class CreateOfferComponent implements OnInit {
   entityId: string;
   offerId: string;
+  pageTitle = 'Create Offer';
   packageCode: string = '# will be auto generated';
 
   useForm: FormGroup;
 
-  routes: NavRouteOptions = [
-    { label: 'Library', link: './' },
-    { label: 'Offers', link: '/pages/library/offers' },
-    { label: 'Create Offer', link: './' },
-  ];
+  navRoutes: NavRouteOptions = [];
 
   loading = false;
   searchItems: LibrarySearchItem[];
@@ -56,9 +56,19 @@ export class CreateOfferComponent implements OnInit {
     private offerService: OffersServices,
     private snackbarService: SnackBarService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private routesConfigService: RoutesConfigService
   ) {
-    this.offerId = this.route.snapshot.paramMap.get('id');
+    this.route.params.subscribe((params) => {
+      this.offerId = params['id'];
+    });
+    const { navRoutes, title } = offersRoutes[
+      this.offerId ? 'editOffer' : 'createOffer'
+    ];
+
+    this.navRoutes = navRoutes;
+    this.pageTitle = title;
+
     this.searchItems = [
       LibrarySearchItem.SERVICE,
       LibrarySearchItem.PACKAGE,
@@ -70,6 +80,7 @@ export class CreateOfferComponent implements OnInit {
     this.entityId = this.globalService.entityId;
     this.initUseForm();
     this.initOptionsConfig();
+    this.initNavRoutes();
   }
 
   initUseForm() {
@@ -77,7 +88,7 @@ export class CreateOfferComponent implements OnInit {
       active: [true],
       name: ['', [Validators.required]],
       libraryItems: [[], [Validators.required]],
-      images: ['', [Validators.required]],
+      imageUrl: ['', [Validators.required]],
       description: ['', [Validators.required]],
       startDate: ['', [Validators.required]],
       endDate: ['', [Validators.required]],
@@ -90,6 +101,12 @@ export class CreateOfferComponent implements OnInit {
     this.initFormSubscription();
 
     if (this.offerId) this.getOfferById();
+  }
+
+  initNavRoutes() {
+    this.routesConfigService.navRoutesChanges.subscribe((navRoutesRes) => {
+      this.navRoutes = [...navRoutesRes, ...this.navRoutes];
+    });
   }
 
   /**
@@ -180,25 +197,26 @@ export class CreateOfferComponent implements OnInit {
       }
       return prev + this.selectedServicePrice[curr.value];
     }, 0);
-    // this.useForm.get('rate').setValue(totalPrice);
-    // const rateValue = +this.useForm.get('rate').value;
+    this.useForm.get('rate').setValue(totalPrice);
+    const rateValue = +this.useForm.get('rate').value;
+
     const discountType = this.useForm.get('discountType').value;
     const discountValue = +this.useForm.get('discountValue').value;
 
-    // if (rateValue && discountType) {
-    //   const discountedPrice =
-    //     discountType === 'NUMBER'
-    //       ? `${rateValue - discountValue}`
-    //       : `${
-    //           Math.round(
-    //             (rateValue -
-    //               (rateValue * discountValue) / 100 +
-    //               Number.EPSILON) *
-    //               100
-    //           ) / 100
-    //         }`;
-    //   this.useForm.get('discountedPrice').setValue(discountedPrice);
-    // }
+    if (rateValue && discountType) {
+      const discountedPrice =
+        discountType === 'NUMBER'
+          ? `${rateValue - discountValue}`
+          : `${
+              Math.round(
+                (rateValue -
+                  (rateValue * discountValue) / 100 +
+                  Number.EPSILON) *
+                  100
+              ) / 100
+            }`;
+      this.useForm.get('discountedPrice').setValue(discountedPrice);
+    }
   }
 
   searchOptions(text: string) {
@@ -268,11 +286,11 @@ export class CreateOfferComponent implements OnInit {
 
     const {
       libraryItems,
-      images,
+      imageUrl,
       ...restFormData
     } = this.useForm.getRawValue() as OfferFormData;
     const data = {
-      images: [{ url: images, isFeatured: true }],
+      imageUrl: [{ url: imageUrl, isFeatured: true }],
       ...restFormData,
     };
 
@@ -338,18 +356,17 @@ export class CreateOfferComponent implements OnInit {
         })
         .subscribe((res) => {
           this.loading = false;
-          this.routes[2].label = 'Edit Offer';
           let {
             packageCode,
             subPackages,
             roomTypes,
-            images,
+            imageUrl,
             ...restData
           } = res;
 
           const data: OfferFormData = {
             ...restData,
-            images: images?.[0]?.url,
+            imageUrl: imageUrl?.[0]?.url,
             libraryItems: [
               ...subPackages?.map((item) => ({
                 label: `${item.name} ${
@@ -405,7 +422,7 @@ export class CreateOfferComponent implements OnInit {
       '',
       { panelClass: 'success' }
     );
-    this.router.navigate([`pages/library/${routes.offers}`]);
+    this.routesConfigService.goBack();
   };
 
   /**

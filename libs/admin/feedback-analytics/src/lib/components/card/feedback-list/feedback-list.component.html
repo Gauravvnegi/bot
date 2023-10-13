@@ -1,0 +1,121 @@
+<div
+  class="list-container"
+  [ngStyle]="
+    !showFilter ? { display: 'block' } : { display: 'none', height: '0px' }
+  "
+>
+  <div class="header">
+    <div class="header__search">
+      <hospitality-bot-search
+        [parentFG]="parentFG"
+        [globalQueries]="globalQueries"
+        [feedbackType]="getFeedbackType(feedbackType)"
+        [filterData]="filterData"
+        (clear)="clearSearch()"
+        (search)="getSearchValue($event)"
+      ></hospitality-bot-search>
+    </div>
+    <div class="header__filter">
+      <img
+        src="assets/svg/Filter-Icon.svg"
+        alt="filter"
+        (click)="showFilter = true"
+      />
+    </div>
+  </div>
+  <hospitality-bot-tab-group
+    *ngIf="!search.length"
+    [listItems]="cardTabFilterItems"
+    [selectedIndex]="tabFilterIdx"
+    (selectedTabChange)="onSelectedTabFilterChange($event)"
+  ></hospitality-bot-tab-group>
+  <div
+    class="body"
+    [style.height]="search.length ? '480px' : 'calc(100% - 129px)'"
+    infiniteScroll
+    (scrolled)="loadMore()"
+    [toggleScrollListener]="paginationDisabled"
+    [scrollSettings]="{ throttle: 6000 }"
+    *ngIf="!loading; else loader"
+  >
+    <ng-container *ngIf="feedbackList?.length; else noList">
+      <ng-container *ngFor="let feedbackItem of feedbackList">
+        <div
+          class="item"
+          (click)="setSelectedItem(feedbackItem)"
+          [ngStyle]="
+            selectedFeedback &&
+            selectedFeedback.id === feedbackItem.id && { background: '#f1f1f1' }
+          "
+        >
+          <hospitality-bot-chat-card
+            [content]="{
+              cardType: 'feedback',
+              name: feedbackItem?.feedback.guest.getFullName(),
+              roomNo: feedbackItem?.getTableOrRoomNo(
+                getFeedbackType(feedbackType)
+              ),
+
+              taskStatus: {
+                action: feedbackItem?.getStatus(cardTabFilterItems),
+                jd: feedbackItem?.getSLA(),
+                sla: feedbackItem?.jobDuration
+              },
+              rating: feedbackItem?.feedback.ratings,
+              time: feedbackItem?.getTime(globalFilterService.timezone),
+              remark: feedbackItem?.feedback.comments,
+              department: {
+                userName: feedbackItem.userName,
+                label: feedbackItem.departmentLabel
+              },
+              feedbackType: feedbackType,
+              profileNickName: feedbackItem.getProfileNickName(),
+              backgroundColor: feedbackItem.color,
+              colorMap: colorMap,
+              serviceTag:
+                getFeedbackType(feedbackType) === 'TRANSACTIONALFEEDBACK' &&
+                feedbackItem.feedback.services.services?.length
+                  ? (feedbackItem?.feedback.services.services)[0]?.serviceName
+                  : feedbackItem.feedback.services[0]?.serviceName
+            }"
+          ></hospitality-bot-chat-card>
+        </div>
+      </ng-container>
+    </ng-container>
+    <ng-template #noList>
+      <div class="no-contact">
+        <div class="no-contact__img">
+          <img src="assets/svg/no_request.svg" alt="No Request" />
+        </div>
+        <div class="no-contact__title">
+          {{ 'noList.noTitle' | translate }}
+        </div>
+        <div class="no-contact__description">
+          {{ 'noList.noDescription' | translate }}
+        </div>
+      </div>
+    </ng-template>
+  </div>
+</div>
+<ng-template #noContent>---</ng-template>
+<div
+  class="list-container"
+  [ngStyle]="
+    showFilter
+      ? {
+          visibility: 'visible',
+          marginRight: '1px solid #9eaeb8'
+        }
+      : { visibility: 'hidden', height: '0px', overflow: 'hidden' }
+  "
+>
+  <hospitality-bot-feedback-list-filter
+    [parentFG]="parentFG"
+    [entityId]="entityId"
+    (filterApplied)="handleFilter($event)"
+    (close)="showFilter = false"
+  ></hospitality-bot-feedback-list-filter>
+</div>
+<ng-template #loader>
+  <hospitality-bot-loader-bounce></hospitality-bot-loader-bounce>
+</ng-template>

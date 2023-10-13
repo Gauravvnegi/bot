@@ -21,7 +21,7 @@ import { MenuItemsData, RoomTypes, SpaItems } from '../constants/form';
 import { ItemsData, OutletFormData } from '../types/forms.types';
 import { RoomReservationResponse } from '../types/response.type';
 import { RoomTypeForm } from 'libs/admin/room/src/lib/models/room.model';
-import { JourneyState } from '../constants/reservation';
+import { JourneyState, JourneyType } from '../constants/reservation';
 /* Reservation */
 
 export class RoomReservation {
@@ -42,6 +42,8 @@ export class RoomReservation {
   totalAmount: number;
   totalDueAmount: number;
   totalPaidAmount: number;
+  guestId: string;
+  journeysStatus: Record<JourneyType, JourneyState>;
 
   deserialize(input: RoomReservationRes) {
     this.id = input.id;
@@ -56,6 +58,7 @@ export class RoomReservation {
     this.guestName = input.guest.firstName
       ? input.guest?.firstName + ' ' + (input.guest?.lastName ?? '')
       : '';
+    this.guestId = input.guest.id;
     this.companyName = input.guest?.company?.firstName ?? '';
     this.created = input.created;
     this.nextStates = [input.reservationType, ...input.nextStates];
@@ -68,6 +71,8 @@ export class RoomReservation {
         input?.bookingItems.map((item) => item?.roomDetails?.roomTypeLabel) ??
         [];
     }
+    this.journeysStatus = input.journeysStatus;
+
     return this;
   }
 
@@ -208,6 +213,8 @@ export class ReservationFormData {
   instructions: Instructions;
   nextStates: string[];
   totalPaidAmount: number;
+  totalDueAmount: number;
+  totalAmount: number;
   journeyState: JourneyState;
 
   deserialize(input: RoomReservationResponse) {
@@ -233,8 +240,11 @@ export class ReservationFormData {
       roomNumbers: item?.roomDetails.roomNumber
         ? [item?.roomDetails.roomNumber]
         : [],
+      roomNumber: item?.roomDetails.roomNumber ?? '',
     }));
-    this.totalPaidAmount = input.pricingDetails.totalPaidAmount;
+    this.totalPaidAmount = input.pricingDetails?.totalPaidAmount ?? 0;
+    this.totalDueAmount = input.pricingDetails?.totalDueAmount ?? 0;
+    this.totalAmount = input.pricingDetails.totalAmount ?? 0;
     this.journeyState = input.journeysStatus.CHECKIN;
     return this;
   }
@@ -424,6 +434,7 @@ export class SummaryData {
   totalAmount?: number;
   totalPaidAmount: number;
   totalDueAmount: number;
+  discountedAmount: number;
   taxAndFees: number;
   basePrice: number;
   offerAmount: number;
@@ -455,6 +466,7 @@ export class SummaryData {
     this.basePrice = input?.pricingDetails?.basePrice ?? 0;
     this.totalPaidAmount = input?.pricingDetails?.totalPaidAmount ?? 0;
     this.totalDueAmount = input?.pricingDetails?.totalDueAmount ?? 0;
+    this.discountedAmount = input?.pricingDetails?.discountedAmount ?? 0;
     this.min = input?.pricingDetails?.min ?? 0;
     this.max = input?.pricingDetails?.max ?? 0;
     this.paxChild = input?.pricingDetails?.paxChild ?? 0;

@@ -1,6 +1,9 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
-import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import {
+  GlobalFilterService,
+  RoutesConfigService,
+} from '@hospitality-bot/admin/core/theme';
 import {
   AdminUtilityService,
   BaseDatatableComponent,
@@ -11,7 +14,7 @@ import * as FileSaver from 'file-saver';
 import { Subscription } from 'rxjs';
 import { GuestData, GuestTable } from '../../data-models/guest-table.model';
 import { GuestTableService } from '../../services/guest-table.service';
-import { manageGuestRoutes } from '../../constant/route';
+import { manageGuestRoutes } from '../../constant/routes';
 import { guestCols } from '../../constant/guest';
 import { LazyLoadEvent } from 'primeng/api';
 import { Router } from '@angular/router';
@@ -49,7 +52,8 @@ export class GuestDatatableComponent extends BaseDatatableComponent
     protected guestTableService: GuestTableService,
     protected globalFilterService: GlobalFilterService,
     protected tabFilterService: TableService,
-    private router: Router
+    private router: Router,
+    private routesConfigService: RoutesConfigService
   ) {
     super(fb, tabFilterService);
   }
@@ -141,9 +145,9 @@ export class GuestDatatableComponent extends BaseDatatableComponent
   }
 
   editGuest(event, rowData) {
-    this.router.navigate([
-      `/pages/members/guests/${manageGuestRoutes.editGuest.route}/${rowData.id}`,
-    ]);
+    this.routesConfigService.navigate({
+      additionalPath: `${manageGuestRoutes.editGuest.route}/${rowData.id}`,
+    });
   }
 
   searchGuest(key: string) {

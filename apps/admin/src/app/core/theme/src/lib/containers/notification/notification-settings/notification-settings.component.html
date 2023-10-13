@@ -16,7 +16,7 @@
       *ngFor="let item of notificationSettings | keyvalue"
       [formGroupName]="item.key"
     >
-      <div>{{ item.key }}</div>
+      <div class="filter-heading">{{ item.key }}</div>
       <div class="field" *ngFor="let control of item.value">
         <div class="field--title">{{ control.notificationLabel }}</div>
         <mat-slide-toggle

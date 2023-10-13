@@ -4,10 +4,13 @@
   <div class="main">
     <p-accordion [multiple]="true">
       <hospitality-bot-booking-info
-        [reservationTypes]="reservationTypes"
-        [bookingType]="bookingType"
-        [expandAccordion]="expandAccordion"
-        [reservationId]="reservationId"
+        [props]="{
+          reservationTypes: reservationTypes,
+          bookingType: bookingType,
+          expandAccordion: expandAccordion,
+          reservationId: reservationId,
+          disabledForm: disabledForm
+        }"
       ></hospitality-bot-booking-info>
       <p-accordionTab
         [selected]="expandAccordion"
@@ -18,6 +21,7 @@
           (listenChanges)="listenForFormChanges()"
           [itemValues]="roomTypeValues"
           [reservationId]="reservationId"
+          [paramsData]="paramsData"
         >
         </hospitality-bot-room-iterator>
       </p-accordionTab>

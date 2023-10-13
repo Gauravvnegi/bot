@@ -24,8 +24,8 @@ export class Service {
     this.id = input.id;
     this.name = input.name;
 
-    if (input.images && input.images.length > 0)
-      this.imageUrl = input.images[0].url;
+    if (input.imageUrl && input.imageUrl.length > 0)
+      this.imageUrl = input.imageUrl[0].url;
 
     this.type = input.type;
     this.rate = `${input.currency}${input.rate}`;

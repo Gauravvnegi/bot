@@ -4,7 +4,7 @@ export type QueryConfig = {
 
 export enum commissionType {
   PERCENTAGE = 'PERCENTAGE',
-  COMMISSION = 'COMMISSION',
+  COMMISSION = 'FLAT',
 }
 
 export type MemberSortTypes = 'A-Z' | 'Z-A' | 'Latest' | 'Modified' | 'Oldest';

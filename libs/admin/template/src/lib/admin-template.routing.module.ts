@@ -7,6 +7,7 @@ import { TemplateHtmlEditorComponent } from './components/template-html-editor/t
 import { ImportAssetComponent } from './components/import-asset/import-asset.component';
 import { TemplateListContainerComponent } from './components/template-list-container/template-list-container.component';
 import { TopicTemplatesComponent } from './components/topic-templates/topic-templates.component';
+import { templateRoutes } from './constants/routes';
 
 const appRoutes: Route[] = [
   {
@@ -15,7 +16,7 @@ const appRoutes: Route[] = [
     children: [
       { path: '', component: TemplateDatatableComponent },
       {
-        path: 'create',
+        path: templateRoutes.createTemplate.route,
         component: TemplateComponent,
         children: [
           { path: '', component: EditTemplateComponent },
@@ -25,7 +26,7 @@ const appRoutes: Route[] = [
         ],
       },
       {
-        path: 'edit/:id',
+        path: templateRoutes.editTemplate.route,
         component: TemplateComponent,
         children: [
           { path: '', component: EditTemplateComponent },

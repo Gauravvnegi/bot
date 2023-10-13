@@ -1,5 +1,9 @@
 import { FlagType } from '@hospitality-bot/admin/shared';
 import { ReservationTab, ReservationType } from '../types/response.type';
+import {
+  JourneyType,
+  JourneyState,
+} from 'libs/admin/manage-reservation/src/lib/constants/reservation';
 
 export const reservationStatus: Record<
   ReservationType | ReservationTab,

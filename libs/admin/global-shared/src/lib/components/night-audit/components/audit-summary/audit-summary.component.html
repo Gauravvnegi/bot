@@ -1,0 +1,53 @@
+<div class="main__wrapper" [id]="fa?.referenceId">
+  <div class="header">
+    Night audit is completed for {{ today | date: 'dd/MM/yyy' }}
+  </div>
+  <div
+    class="content__wrapper"
+    *ngIf="!isNoAuditFound && !loading; else emptyTable"
+  >
+    <p-accordion [multiple]="true">
+      <p-accordionTab
+        *ngFor="let col of columns; let i = index"
+        [selected]="true"
+        [header]="values[col].title"
+      >
+        <hospitality-bot-table-view
+          [columns]="cols[col]"
+          [items]="values[col].values"
+          [emptyViewConfig]="{
+            content: {
+              description: 'There are no users logged in except for you.'
+            }
+          }"
+          (actionClicked)="initTable()"
+        ></hospitality-bot-table-view>
+      </p-accordionTab>
+    </p-accordion>
+  </div>
+
+  <!-- Action Button -->
+  <hospitality-bot-form-action
+    class="full-width action-button"
+    [loading]="loading"
+    [disabled]="loading"
+    [config]="actionConfig"
+    (onPostAction)="handleNext()"
+    (onPreAction)="handlePrev()"
+    #fa
+  >
+  </hospitality-bot-form-action>
+</div>
+
+<ng-template #emptyTable>
+  <div class="caption__wrapper">
+    <hospitality-bot-empty-table
+      [isLoading]="loading"
+      [content]="{
+        imageSrc: 'assets/images/empty-table-offer.png',
+        description: 'There is no night audit found for today.'
+      }"
+    >
+    </hospitality-bot-empty-table>
+  </div>
+</ng-template>

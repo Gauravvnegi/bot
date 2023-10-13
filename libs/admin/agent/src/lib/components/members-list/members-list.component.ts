@@ -24,7 +24,7 @@ export class MembersListComponent implements OnInit {
   placeholder: string;
 
   membersOffSet = 0;
-  limit = 50;
+  limit = 10;
   loadingMembers = false;
   noMoreMembers = false;
   membersList: Option[] = [];

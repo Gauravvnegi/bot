@@ -31,6 +31,7 @@ import { AnalyticsService } from 'libs/admin/request-analytics/src/lib/services/
 import { PreArrivalRequestList } from '../../data-models/ex-checkin.model';
 import { dashboardPopUpTabs } from '../../constants/dashboard';
 import { ReservationService } from '../../services';
+import { InhouseTable } from 'libs/admin/request-analytics/src/lib/models/inhouse-datatable.model';
 
 @Component({
   selector: 'hospitality-bot-dashboard',
@@ -102,12 +103,14 @@ export class DashboardComponent implements OnInit, OnDestroy {
       DetailsComponent,
       dialogConfig
     );
-    detailCompRef.componentInstance.bookingNumber =
-      rowData?.booking?.bookingNumber;
+    // detailCompRef.componentInstance.bookingId = rowData?.booking?.bookingNumber;
 
-    detailCompRef.componentInstance.guestId = rowData.guests.primaryGuest.id;
-    detailCompRef.componentInstance.bookingNumber =
-      rowData.booking.bookingNumber;
+    detailCompRef.componentInstance.guestId =
+      rowData?.guests?.primaryGuest?.id ??
+      rowData?.guestDetails?.primaryGuest?.id;
+
+    // detailCompRef.componentInstance.bookingNumber =
+    //   rowData.booking.bookingNumber;
 
     tabKey && (detailCompRef.componentInstance.tabKey = tabKey);
 
@@ -152,9 +155,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
     };
 
     this.analyticsService.getInhouseRequest(query).subscribe((res) => {
-      this.options = new PreArrivalRequestList().deserialize(
-        res
-      ).PreArrivalRequest;
+      this.options = new InhouseTable().deserialize(res).records;
+
       this.loading = false;
     });
   }

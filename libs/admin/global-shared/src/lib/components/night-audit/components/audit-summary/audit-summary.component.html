@@ -2,7 +2,10 @@
   <div class="header">
     Night audit is completed for {{ today | date: 'dd/MM/yyy' }}
   </div>
-  <div class="content__wrapper">
+  <div
+    class="content__wrapper"
+    *ngIf="!isNoAuditFound && !loading; else emptyTable"
+  >
     <p-accordion [multiple]="true">
       <p-accordionTab
         *ngFor="let col of columns; let i = index"
@@ -35,3 +38,16 @@
   >
   </hospitality-bot-form-action>
 </div>
+
+<ng-template #emptyTable>
+  <div class="caption__wrapper">
+    <hospitality-bot-empty-table
+      [isLoading]="loading"
+      [content]="{
+        imageSrc: 'assets/images/empty-table-offer.png',
+        description: 'There is no night audit found for today.'
+      }"
+    >
+    </hospitality-bot-empty-table>
+  </div>
+</ng-template>

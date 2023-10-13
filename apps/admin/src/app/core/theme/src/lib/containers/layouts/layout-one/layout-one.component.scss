@@ -419,11 +419,12 @@
   }
 }
 
+// Sidebar design
 :host ::ng-deep {
   .complaint {
     @include default-close;
     .body {
-      height: 82vh;
+      height: 84vh;
     }
     .p-sidebar-right {
       @include sidebar-design(30rem);
@@ -447,6 +448,7 @@
     .main {
       margin-top: 0;
       border-top: 2px solid rgba(112, 112, 112, 0.25);
+      box-shadow: unset;
       border-radius: 0;
       padding-top: 10px;
       .setting {

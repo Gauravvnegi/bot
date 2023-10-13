@@ -1,7 +1,7 @@
 <div class="table-view__wrapper">
   <div *ngIf="header" class="header">
-    <span class="text">{{ header || '' }}</span>
-    <span *ngIf="action" (click)="onActionClicked()" class="action"
+    <span class="header-text">{{ header || '' }}</span>
+    <span *ngIf="action" (click)="onActionClicked()" class="header-action"
       >{{ action }} <img src="assets/svg/refresh.svg" alt="refresh"
     /></span>
   </div>
@@ -84,12 +84,11 @@
                   [nextStates]="rowData[col.field]?.dropDown.nextStates"
                   [disabled]="rowData[col.field]?.dropDown.disabled"
                   [toggleMenu]="true"
+                  [recordSetting]="statusConfig"
                   [state]="rowData[col.field]?.dropDown.currentState"
-                  (onClick)="handleStatus($event, rowData[col.field]?.dropDown)"
+                  (onClick)="handleStatus($event, rowData)"
                   [menuOptions]="rowData[col.field]?.quick"
-                  (onMenuItemClick)="
-                    handleMenuClick($event, rowData[col.field]?.quick)
-                  "
+                  (onMenuItemClick)="handleMenuClick($event, rowData)"
                 >
                 </hospitality-bot-status-dropdown-toggle>
               </ng-template>

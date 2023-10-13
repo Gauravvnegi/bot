@@ -1,8 +1,20 @@
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { ActionConfigType } from '../../../../types/night-audit.type';
 import { ConfirmationService, MenuItem } from 'primeng/api';
-import { cols } from '../../constants/checked-in-reservation.table';
+import {
+  cols,
+  reservationStatus,
+} from '../../constants/checked-in-reservation.table';
 import { CheckedInReservation } from '../../models/night-audit.model';
+import { SnackBarService } from '@hospitality-bot/shared/material';
+import { Subscription } from 'rxjs';
+import { NightAuditService } from '../../../../services/night-audit.service';
+import { EntityType, ModuleNames } from '@hospitality-bot/admin/shared';
+import {
+  GlobalFilterService,
+  RoutesConfigService,
+} from '@hospitality-bot/admin/core/theme';
+import { manageReservationRoutes } from 'libs/admin/manage-reservation/src/lib/constants/routes';
 
 @Component({
   selector: 'hospitality-bot-checkin-reservations',
@@ -15,9 +27,11 @@ import { CheckedInReservation } from '../../models/night-audit.model';
   providers: [ConfirmationService],
 })
 export class CheckinReservationsComponent implements OnInit {
+  readonly reservationStatusConfig = reservationStatus;
   title = 'Pending Check-ins';
   cols = cols;
   actionConfig: ActionConfigType;
+  entityId = '';
 
   @Input() loading = false;
   @Input() items: CheckedInReservation[] = [];
@@ -25,10 +39,20 @@ export class CheckinReservationsComponent implements OnInit {
   @Input() stepList: MenuItem[];
   @Output() indexChange = new EventEmitter<number>();
   @Output() reload = new EventEmitter();
+  @Output() onClose = new EventEmitter();
 
-  constructor(private confirmationService: ConfirmationService) {}
+  $subscription = new Subscription();
+
+  constructor(
+    private nightAuditService: NightAuditService,
+    private confirmationService: ConfirmationService,
+    private snackbarService: SnackBarService,
+    private globalFilterService: GlobalFilterService,
+    private routesConfigService: RoutesConfigService
+  ) {}
 
   ngOnInit(): void {
+    this.entityId = this.globalFilterService.entityId;
     this.initActionConfig();
     this.initTable();
   }
@@ -44,12 +68,52 @@ export class CheckinReservationsComponent implements OnInit {
 
   statusChange(event) {
     this.confirmationService.confirm({
-      header: `Status Change ${event}`,
-      message: 'Do You want to continue ?',
+      header: `Mark Reservation As ${event.value}`,
+      message: 'Are you sure... ?',
       acceptButtonStyleClass: 'accept-button',
       rejectButtonStyleClass: 'reject-button-outlined',
       accept: () => {
-        // debugger;
+        this.loading = true;
+        this.$subscription.add(
+          this.nightAuditService
+            .updateBookingStatus(
+              event.details.id,
+              this.entityId,
+              EntityType.HOTEL,
+              {
+                reservationType: event.value,
+              }
+            )
+            .subscribe(
+              (res) => {
+                this.reloadTable();
+                this.snackbarService.openSnackBarAsText(
+                  'Reservation ' + event.value + ' changes successfully',
+                  '',
+                  { panelClass: 'success' }
+                );
+                this.loading = false;
+              },
+              (error) => {
+                this.loading = false;
+              }
+            )
+        );
+      },
+    });
+  }
+
+  // TODO: Dynamic Routing...
+  /**
+   * @function editReservation To navigate to the edit page
+   */
+  editReservation(id: string) {
+    this.onClose.emit(true);
+    this.routesConfigService.navigate({
+      subModuleName: ModuleNames.RESERVATION,
+      additionalPath: `${manageReservationRoutes.editReservation.route}/${id}`,
+      queryParams: {
+        entityId: this.entityId,
       },
     });
   }

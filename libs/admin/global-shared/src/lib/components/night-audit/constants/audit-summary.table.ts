@@ -30,16 +30,16 @@ export const cols: Record<string, Cols[]> = {
 
   houseKeeping: [
     {
-      field: 'checkoutRooms',
-      header: 'Checked-out Rooms marked Dirty',
+      field: 'clean',
+      header: 'CLEAN',
     },
     {
-      field: 'vacantRooms',
-      header: 'Vacant Rooms marked for Touchup',
+      field: 'dirty',
+      header: 'DIRTY',
     },
     {
-      field: 'occupiedOut',
-      header: 'Occupied-out Rooms marked for Dirty',
+      field: 'inspected',
+      header: 'INSPECTED',
     },
   ],
 

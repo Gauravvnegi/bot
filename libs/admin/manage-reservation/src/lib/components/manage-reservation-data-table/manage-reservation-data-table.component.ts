@@ -236,6 +236,7 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
    * @param status status value
    */
   handleStatus(status: ReservationStatusType, reservationData): void {
+    debugger;
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;
     const togglePopupCompRef = this.modalService.openDialog(

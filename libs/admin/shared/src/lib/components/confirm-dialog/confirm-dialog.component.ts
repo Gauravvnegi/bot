@@ -13,13 +13,14 @@ export class ConfirmDialogComponent implements OnInit {
   yesLabel = 'Yes';
   yesIcon = 'pi pi-check';
   @Input() isVisible = false;
-  @Output() onChange = new EventEmitter();
-
+  @Input() style: Record<string, string> = { width: '500px' };
   @Input() set props(values: ConfirmDialogProps) {
     Object.entries(values).forEach(([key, value]) => {
       this[key] = value;
     });
   }
+
+  @Output() onChange = new EventEmitter();
 
   constructor() {}
 

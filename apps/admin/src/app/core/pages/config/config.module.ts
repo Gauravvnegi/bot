@@ -1,11 +1,26 @@
-import { ModuleNames, SubscriptionConfig } from 'libs/admin/shared/src/index';
+import {
+  ModuleNames,
+  ProductNames,
+  SubscriptionConfig,
+} from 'libs/admin/shared/src/index';
 
 const CreateWithSubModule = () =>
   import('@hospitality-bot/admin/create-with').then(
     (m) => m.AdminCreateWithModule
   );
 
+export const productConfig: Partial<Record<ModuleNames, any>> = {
+  [ProductNames.CREATE_WITH]: CreateWithSubModule,
+};
+
 export const moduleConfig: Partial<Record<ModuleNames, any>> = {
+  // Reports
+  [ModuleNames.REPORTS]: () =>
+    import('@hospitality-bot/admin/reports').then((m) => m.AdminReportsModule),
+  [ModuleNames.CREATE_WITH_HOME]: CreateWithSubModule,
+};
+
+export const subModuleConfig: Partial<Record<ModuleNames, any>> = {
   // Settings Module
   [ModuleNames.TAX]: () =>
     import('@hospitality-bot/admin/tax').then((m) => m.AdminTaxModule),
@@ -19,14 +34,13 @@ export const moduleConfig: Partial<Record<ModuleNames, any>> = {
     ),
 
   // All submodule of create-with will have same module as the external (Iframe)
-  // Create with setting modules
-  [ModuleNames.CREATE_WITH_DASHBOARD]: CreateWithSubModule,
-  [ModuleNames.SEO_FRIENDLY]: CreateWithSubModule,
-  [ModuleNames.PAGES]: CreateWithSubModule,
-  [ModuleNames.BLOG]: CreateWithSubModule,
+  //Create With Home sub modules - Can be loaded from module config
+  // [ModuleNames.CREATE_WITH_DASHBOARD]: CreateWithSubModule,
+  // [ModuleNames.SEO_FRIENDLY]: CreateWithSubModule,
+  // [ModuleNames.PAGES]: CreateWithSubModule,
+  // [ModuleNames.BLOG]: CreateWithSubModule,
 
-  //Create With
-
+  // Create with setting sub modules
   [ModuleNames.WEBSITE_SETTINGS]: CreateWithSubModule,
   [ModuleNames.ACCEPT_PAYMENTS]: CreateWithSubModule,
   [ModuleNames.LEGAL_POLICIES]: CreateWithSubModule,

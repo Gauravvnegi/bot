@@ -91,7 +91,6 @@ export class HousekeepingComponent extends BaseDatatableComponent
       .getList(this.entityId, this.getQueryConfig())
       .subscribe(
         (res) => {
-          debugger;
           const roomList = new RoomList().deserialize(res);
           this.values = roomList.records;
           this.initFilters(

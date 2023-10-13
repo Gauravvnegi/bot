@@ -1,7 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
-import { NavRouteOptions, Option } from '@hospitality-bot/admin/shared';
+import {
+  ModuleNames,
+  NavRouteOptions,
+  Option,
+} from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { Subscription } from 'rxjs';
 import { errorMessages } from '../../constants/form';
@@ -12,6 +16,7 @@ import { TaxService } from 'libs/admin/tax/src/lib/services/tax.service';
 import { IteratorField } from 'libs/admin/shared/src/lib/types/fields.type';
 import { foodPackageFields } from '../../constants/data';
 import { PageReloadService } from '../../services/page-reload.service.service';
+import { RoutesConfigService } from '@hospitality-bot/admin/core/theme';
 
 @Component({
   selector: 'hospitality-bot-create-food-package',
@@ -44,7 +49,8 @@ export class CreateFoodPackageComponent extends OutletBaseComponent
     router: Router,
     private taxService: TaxService,
     private outletService: OutletService,
-    private pageReloadService: PageReloadService
+    private pageReloadService: PageReloadService,
+    private routesConfigService: RoutesConfigService
   ) {
     super(router, route);
   }
@@ -179,11 +185,11 @@ export class CreateFoodPackageComponent extends OutletBaseComponent
     const dataToSend = {
       entityId: this.outletId, // Replace with your actual data
     };
-
-    const navigationExtras: NavigationExtras = {
+    this.routesConfigService.navigate({
+      subModuleName: ModuleNames.TAX,
+      additionalPath: 'create-tax',
       queryParams: dataToSend,
-    };
-    this.router.navigate(['pages/settings/tax/create-tax'], navigationExtras);
+    });
   }
 
   createType(name: string) {}

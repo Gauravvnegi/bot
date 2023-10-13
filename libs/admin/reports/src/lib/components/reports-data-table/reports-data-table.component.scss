@@ -7,3 +7,7 @@
   border-radius: 4px;
   cursor: pointer;
 }
+
+:host ::ng-deep .action-header {
+  margin: 0px 0px 15px !important;
+}

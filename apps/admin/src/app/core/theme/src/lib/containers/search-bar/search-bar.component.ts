@@ -20,6 +20,9 @@ import { SnackBarService } from '../../../../../../../../../../libs/shared/mater
 import { SearchResultDetail } from '../../data-models/search-bar-config.model';
 import { GlobalFilterService } from '../../services/global-filters.service';
 import { SearchService } from '../../services/search.service';
+import { RoutesConfigService } from '../../services/routes-config.service';
+import { ModuleNames } from '../../../../../../../../../../libs/admin/shared/src/index';
+import { packagesRoutes } from '../../../../../../../../../../libs/admin/packages/src/lib/constant/routes';
 
 @Component({
   selector: 'admin-search-bar',
@@ -47,7 +50,8 @@ export class SearchBarComponent implements OnInit, OnDestroy {
     private modal: ModalService,
     private snackbarService: SnackBarService,
     private router: Router,
-    private globalFilterService: GlobalFilterService
+    private globalFilterService: GlobalFilterService,
+    private routesConfigService: RoutesConfigService
   ) {}
 
   searchValue = false;
@@ -173,7 +177,10 @@ export class SearchBarComponent implements OnInit, OnDestroy {
     this.searchDropdownVisible = false;
     this.searchResult.hide();
 
-    this.router.navigateByUrl(`/pages/library/packages/edit/${id}`);
+    this.routesConfigService.navigate({
+      subModuleName: ModuleNames.PACKAGES,
+      path: `${packagesRoutes.createPackage}/${id}`,
+    });
   }
 
   clearSearch() {

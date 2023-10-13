@@ -197,49 +197,6 @@ export class FormService {
     return reservationData;
   }
 
-  getRooms(roomsConfig: GetRoomsConfig) {
-    const {
-      entityId,
-      config,
-      roomControl,
-      roomNumbersControl,
-      defaultRoomNumbers,
-      type,
-    } = roomsConfig;
-    this.manageReservationService
-      .getRoomNumber(entityId, config)
-      .subscribe((res) => {
-        const roomNumberOptions = res.rooms
-          .filter((room: RoomsByRoomType) => room.roomNumber.length)
-          .map((room: RoomsByRoomType) => ({
-            label: room.roomNumber,
-            value: room.roomNumber,
-          }));
-        // this.fields[3].loading[index] = false;
-        // Check if the roomNumber control has the room number in roomNumberOptions
-        if (
-          roomControl &&
-          roomControl?.value?.length &&
-          !defaultRoomNumbers?.length
-        ) {
-          const roomNumbersValue = roomControl.value;
-          // Filter the roomNumbersValue to keep only those values that exist in roomNumberOptions
-          const filteredRoomNumbers = roomNumbersValue.filter((value: string) =>
-            roomNumberOptions.some((option: Option) => option.value === value)
-          );
-          roomControl.setValue(filteredRoomNumbers);
-        }
-
-        roomNumbersControl.patchValue(roomNumberOptions, { emitEvent: false });
-        // Patch the roomNumbers when the room number options are initialized
-        if (defaultRoomNumbers.length) {
-          type === 'array'
-            ? roomControl.setValue(defaultRoomNumbers)
-            : roomControl.setValue(defaultRoomNumbers[0]);
-        }
-      });
-  }
-
   resetData() {
     this.reservationForm.next(null);
     this.sourceData.next(null);

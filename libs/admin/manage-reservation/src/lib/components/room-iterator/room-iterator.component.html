@@ -94,6 +94,7 @@
                 isPagination: true
               }"
               (clickedOption)="roomTypeChange($event, i)"
+              [reinitialize]="reinitializeRooms"
             ></hospitality-bot-quick-select>
           </div>
           <ng-container *ngIf="roomTypeArray.length > 1">

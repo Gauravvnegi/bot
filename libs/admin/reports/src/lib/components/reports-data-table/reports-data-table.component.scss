@@ -6,3 +6,7 @@
   padding: 5px;
   border-radius: 4px;
 }
+
+:host ::ng-deep .action-header {
+  margin: 0px 0px 15px !important;
+}

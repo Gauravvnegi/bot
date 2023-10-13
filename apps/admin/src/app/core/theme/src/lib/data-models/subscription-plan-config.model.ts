@@ -228,7 +228,7 @@ export class ProductSubscription {
         }
 
         module.config?.forEach((subModule) => {
-          this.subscribedModuleProductBased[productName].push(module.name);
+          this.subscribedModuleProductBased[productName].push(subModule.name);
           if (
             subModule.isSubscribed &&
             subModule.isView &&

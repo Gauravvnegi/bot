@@ -8,6 +8,6 @@
   cursor: pointer;
 }
 
-:host ::ng-deep .action-header {
-  margin: 0px 0px 15px !important;
+:host ::ng-deep .table-head__search {
+  display: none;
 }

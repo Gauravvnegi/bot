@@ -68,38 +68,10 @@
     let-rowIndex="rowIndex"
   >
     <tr class="table-row" (click)="openDetailsPage(rowData.reservationId)">
-      <td class="table-row__checkbox">
-        <p-tableCheckbox
-          [value]="rowData"
-          [index]="rowIndex"
-          (click)="onCheckboxClicked($event)"
-        ></p-tableCheckbox>
-      </td>
-      <td>
-        <div class="cell-content" *ngIf="rowData.invoiceId; else emptyCell">
+      <td *ngFor="let rowItem of rowData">
+        <div class="cell-content" *ngIf="rowItem; else emptyCell">
           <div class="primary-text">
-            {{ rowData.invoiceId }}
-          </div>
-        </div>
-      </td>
-      <td>
-        <div class="cell-content" *ngIf="rowData.bookingNumber; else emptyCell">
-          <div class="primary-text">
-            {{ rowData.bookingNumber }}
-          </div>
-        </div>
-      </td>
-      <td>
-        <div class="cell-content" *ngIf="rowData.invoiceDate; else emptyCell">
-          <div class="primary-text">
-            {{ rowData.invoiceDate | date: 'dd/MM/yyyy' }}
-          </div>
-        </div>
-      </td>
-      <td>
-        <div class="cell-content" *ngIf="rowData.totalBill; else emptyCell">
-          <div class="primary-text">
-            {{ rowData.totalBill | currency: 'INR' }}
+            {{ rowItem }}
           </div>
         </div>
       </td>

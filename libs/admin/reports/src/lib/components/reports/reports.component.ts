@@ -24,6 +24,22 @@ export class ReportsComponent implements OnInit {
       value: 'noShowReport',
     },
   ];
+
+  columnData = ['Reservation No', 'Guest Name', 'Room Type'];
+  rowData = [
+    ['123', 'Ajay', 'Premium'],
+    ['123', 'Ajay', 'Premium'],
+    ['123', 'Ajay', 'Premium'],
+    ['123', 'Ajay', 'Premium'],
+    ['123', 'Ajay', 'Premium'],
+    ['123', 'Ajay', 'Premium'],
+    ['123', 'Ajay', 'Premium'],
+    ['123', 'Ajay', 'Premium'],
+    ['123', 'Ajay', 'Premium'],
+    ['123', 'Ajay', 'Premium'],
+    ['123', 'Ajay', 'Premium'],
+  ];
+
   constructor(private reportsService: ReportsService) {}
 
   ngOnInit(): void {

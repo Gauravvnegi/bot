@@ -1,8 +1,11 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { NightAuditService } from '../../services/night-audit.service';
 import { itemList } from '../../constants/night-audit.const';
-import { Subscription, timer } from 'rxjs';
-import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import { Subscription } from 'rxjs';
+import {
+  GlobalFilterService,
+  RoutesConfigService,
+} from '@hospitality-bot/admin/core/theme';
 import {
   AdminUtilityService,
   QueryConfig,
@@ -22,7 +25,8 @@ export class NightAuditComponent implements OnInit {
   constructor(
     private nightAuditService: NightAuditService,
     private globalFilterService: GlobalFilterService,
-    private adminUtilityService: AdminUtilityService
+    private adminUtilityService: AdminUtilityService,
+    private routesConfigService: RoutesConfigService
   ) {}
   @Input() isSidebar = true;
   @Output() onClose = new EventEmitter();
@@ -87,5 +91,19 @@ export class NightAuditComponent implements OnInit {
         },
       ]),
     };
+  }
+
+  /**
+   * @function onNavigate To navigate to the edit page
+   */
+  onNavigate(event) {
+    this.onClose.emit(true);
+    this.routesConfigService.navigate({
+      subModuleName: event.subModuleName,
+      additionalPath: event.additionalPath,
+      queryParams: {
+        entityId: this.entityId,
+      },
+    });
   }
 }

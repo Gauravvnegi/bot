@@ -59,6 +59,7 @@ export type RoomTypeFormData = {
   area: number;
   isBaseRoomType: boolean;
   shortDescription: string;
+  selectedServicePackageCode;
 };
 
 export type RoomTypeForm = {

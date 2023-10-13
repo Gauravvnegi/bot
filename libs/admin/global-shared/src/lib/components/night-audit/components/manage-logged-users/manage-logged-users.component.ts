@@ -44,8 +44,17 @@ export class ManageLoggedUsersComponent implements OnInit {
 
   ngOnInit(): void {
     this.entityId = this.globalFilterService.entityId;
-    this.initActionConfig();
+    this.initAction(); // TODO: Replace with @function initActionConfig();, after forcefully loggin implement
     this.initTable();
+  }
+
+  /**
+   * TODO: Remove after forcefully loggin implement
+   */
+  initAction() {
+    this.usersLoggedOut = false;
+    this.isTimerStart = true;
+    this.initActionConfig('Next');
   }
 
   initActionConfig(postLabel?: string) {
@@ -81,7 +90,7 @@ export class ManageLoggedUsersComponent implements OnInit {
   }
 
   handleNext() {
-    if (!this.isTimerStart && this.activeIndex == 0) {
+    if (this.items?.length && !this.isTimerStart && this.activeIndex == 0) {
       this.handleMangeLoggedIn();
     } else if (this.activeIndex + 1 < this.stepList.length)
       this.indexChange.emit(this.activeIndex + 1);

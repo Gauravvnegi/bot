@@ -39,9 +39,9 @@ export class TableViewComponent implements OnInit {
     });
   }
 
-  @Output() actionClicked = new EventEmitter();
-  @Output() dropDownChange = new EventEmitter();
-  @Output() quickChange = new EventEmitter();
+  @Output() actionClicked = new EventEmitter<boolean>();
+  @Output() dropDownChange = new EventEmitter<TableActionType>();
+  @Output() quickChange = new EventEmitter<TableActionType>();
 
   constructor() {}
 
@@ -99,4 +99,8 @@ export class TableViewComponent implements OnInit {
   }
 }
 
+export type TableActionType = {
+  value: string;
+  details: { id: string; [key: string]: any };
+};
 type EmptyViewType = { link: string; content: EmptyContent };

@@ -4,9 +4,10 @@
   <div class="audit-content_wrapper">
     <hospitality-bot-stepper
       [completedStyle]="'dark'"
+      [incompleteDisable]="true"
       [stepList]="itemList"
-      [readOnly]="true"
       [activeIndex]="activeStep"
+      (onActive)="activeStep = $event.index"
     ></hospitality-bot-stepper>
     <ng-container [ngSwitch]="activeStep">
       <hospitality-bot-manage-logged-users

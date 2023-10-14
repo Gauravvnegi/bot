@@ -1,11 +1,9 @@
 import { ModuleNames } from '@hospitality-bot/admin/shared';
 
 export type GetReportQuery = {
-  reportName: string;
-  toDate: string;
-  fromDate: string;
+  reportName: ReportType;
   entityId: string;
-};
+} & Partial<ReportFilters>;
 
 // Need typescript 4.0
 // export type ReportModules = Extract<keyof typeof ModuleNames, `${string}_REPORTS`>;
@@ -37,3 +35,20 @@ export type ReportsType = {
   FINANCIAL_REPORTS: 'monthlySummaryReport' | 'dailyRevenueReport';
   REVENUE_REPORTS: 'cashierReport';
 };
+
+export type ReportsConfig = {
+  [K in ReportModules]: {
+    menu: Array<{ label: string; value: ReportsType[K] }>;
+  };
+};
+
+export type ReportType = ReportsConfig[ReportModules]['menu'][number]['value'];
+export type ReportsMenu = ReportsConfig[ReportModules]['menu'];
+
+export type ReportFilters = {
+  toDate?: string;
+  fromDate?: string;
+  roomType?: string;
+};
+
+export type ReportFiltersKey = keyof ReportFilters;

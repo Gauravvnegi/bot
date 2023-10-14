@@ -1,13 +1,4 @@
-import { ReportModules, ReportsType } from '../../types/reports.type';
-
-export type ReportsConfig = {
-  [K in ReportModules]: {
-    menu: Array<{ label: string; value: ReportsType[K] }>;
-  };
-};
-
-export type ReportType = ReportsConfig[ReportModules]['menu'][number]['value'];
-export type ReportsMenu = ReportsConfig[ReportModules]['menu'];
+import { ReportsConfig } from '../../types/reports.type';
 
 export const reportsConfig: ReportsConfig = {
   RESERVATION_REPORTS: {

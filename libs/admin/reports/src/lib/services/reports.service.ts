@@ -1,19 +1,20 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from '@hospitality-bot/shared/utils';
-import { BehaviorSubject } from 'rxjs';
-import { GetReportQuery } from '../types/reports.type';
+import { BehaviorSubject, Subject } from 'rxjs';
+import { GetReportQuery, ReportType } from '../types/reports.type';
 
 @Injectable()
 export class ReportsService extends ApiService {
   showMenu = new BehaviorSubject(true);
+  $selectedReport = new Subject<ReportType>();
 
   toggleMenu() {
     this.showMenu.next(!this.showMenu.value);
   }
 
   getReport(query: GetReportQuery, isExport = false) {
-    this.get(
-      `api/v1/reports${this.getQueryParam({
+    return this.get(
+      `/api/v1/reports${this.getQueryParam({
         ...query,
         ...(isExport ? { exportType: 'csv' } : {}),
       })}`

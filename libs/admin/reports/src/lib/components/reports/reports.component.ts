@@ -1,12 +1,16 @@
 import { Component, OnInit } from '@angular/core';
-import { RoutesConfigService } from '@hospitality-bot/admin/core/theme';
-import { ReportsService } from '../../services/reports.service';
-import { ReportModules } from '../../types/reports.type';
 import {
+  GlobalFilterService,
+  RoutesConfigService,
+} from '@hospitality-bot/admin/core/theme';
+import { ReportsService } from '../../services/reports.service';
+import {
+  ReportModules,
   ReportType,
   ReportsMenu,
-  reportsConfig,
-} from '../constant/reports.const';
+} from '../../types/reports.type';
+import { reportsConfig } from '../constant/reports.const';
+import { convertToTitleCase } from 'libs/admin/shared/src/lib/utils/valueFormatter';
 
 @Component({
   selector: 'hospitality-bot-reports',
@@ -15,48 +19,37 @@ import {
 })
 export class ReportsComponent implements OnInit {
   showMenu = false;
-  reportTitle = 'Reservation';
-  selectedReport: ReportType;
+  reportTitle = '';
   reportsMenuOptions: ReportsMenu = [];
   selectedReportModule: ReportModules;
-
-  columnData = ['Reservation No', 'Guest Name', 'Room Type'];
-  rowData = [
-    ['123', 'Ajay', 'Premium'],
-    ['123', 'Ajay', 'Premium'],
-    ['123', 'Ajay', 'Premium'],
-    ['123', 'Ajay', 'Premium'],
-    ['123', 'Ajay', 'Premium'],
-    ['123', 'Ajay', 'Premium'],
-    ['123', 'Ajay', 'Premium'],
-    ['123', 'Ajay', 'Premium'],
-    ['123', 'Ajay', 'Premium'],
-    ['123', 'Ajay', 'Premium'],
-    ['123', 'Ajay', 'Premium'],
-  ];
+  selectedReport: ReportType;
 
   constructor(
     private reportsService: ReportsService,
-    private routesConfigService: RoutesConfigService
+    private routesConfigService: RoutesConfigService,
+    private globalFilterService: GlobalFilterService
   ) {}
 
   ngOnInit(): void {
-    this.initReportsMenuOptions();
+    this.initReportConfigDetails();
     this.registerListener();
-  }
-
-  initReportsMenuOptions() {
-    this.selectedReportModule = (this.routesConfigService
-      .subModuleName as unknown) as ReportModules;
-
-    this.reportsMenuOptions = reportsConfig[this.selectedReportModule]?.menu;
-    this.selectedReport = this.reportsMenuOptions[0].value;
   }
 
   registerListener() {
     this.reportsService.showMenu.subscribe((res) => {
       this.showMenu = res;
     });
+    this.reportsService.$selectedReport.subscribe((res) => {
+      this.selectedReport = res;
+    });
+  }
+
+  initReportConfigDetails() {
+    this.selectedReportModule = (this.routesConfigService
+      .subModuleName as unknown) as ReportModules;
+    this.reportTitle = convertToTitleCase(this.selectedReportModule);
+    this.reportsMenuOptions = reportsConfig[this.selectedReportModule]?.menu;
+    this.reportsService.$selectedReport.next(this.reportsMenuOptions[0].value);
   }
 
   /**
@@ -67,7 +60,7 @@ export class ReportsComponent implements OnInit {
   }
 
   selectReport(value: ReportType) {
-    this.selectedReport = value;
+    this.reportsService.$selectedReport.next(value);
     this.toggleMenu();
   }
 }

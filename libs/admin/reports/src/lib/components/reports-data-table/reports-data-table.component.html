@@ -12,6 +12,16 @@
     <span> {{ tableName }}</span>
   </div>
   <div class="action-wrapper">
+    <ng-container formGroupName="filters">
+      <hospitality-bot-date controlName="fromDate"> </hospitality-bot-date>
+      <hospitality-bot-date controlName="toDate"> </hospitality-bot-date>
+      <!-- <hospitality-bot-room-types
+        controlName="roomType"
+        [props]="{
+          isAllSelected: true
+        }"
+      ></hospitality-bot-room-types> -->
+    </ng-container>
     <hospitality-bot-export-list
       [isDisable]="values.length === 0"
       [additionalActionItems]="additionalActionItems"
@@ -68,6 +78,13 @@
     let-rowIndex="rowIndex"
   >
     <tr class="table-row" (click)="openDetailsPage(rowData.reservationId)">
+      <td class="table-row__checkbox" *ngIf="isSelectable">
+        <p-tableCheckbox
+          [value]="rowData"
+          [index]="rowIndex"
+          (click)="onCheckboxClicked($event)"
+        ></p-tableCheckbox>
+      </td>
       <td *ngFor="let rowItem of rowData">
         <div class="cell-content" *ngIf="rowItem; else emptyCell">
           <div class="primary-text">

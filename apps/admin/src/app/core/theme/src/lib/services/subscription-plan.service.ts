@@ -25,6 +25,16 @@ export class SubscriptionPlanService extends ApiService {
       map((response) => {
         // response.products = productMenuSubs;
         response.products?.forEach((element) => {
+          element.config.push({
+            name: 'REPORTS',
+            label: 'Reports',
+            isSubscribed: true,
+            icon:
+              'https://botfiles.nyc3.cdn.digitaloceanspaces.com/bot/subscription_icon/settings.png',
+
+            isView: true,
+          });
+
           element.config?.forEach((item) => {
             if (item.name === 'REPORTS') {
               item.config = [

@@ -19,7 +19,7 @@
     class="menu-option"
     [ngClass]="{ selected: reportOption.value === selectedReport }"
     *ngFor="let reportOption of reportsMenuOptions"
-    (onclick)="selectReport(reportsMenuOptions.value)"
+    (click)="selectReport(reportOption.value)"
   >
     {{ reportOption.label }}
   </div>

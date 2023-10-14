@@ -1,8 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { ReportsService } from '../../services/reports.service';
 import { RoutesConfigService } from '@hospitality-bot/admin/core/theme';
-import { ReportsConfig, reportsConfig } from '../constant/reports.const';
+import { ReportsService } from '../../services/reports.service';
 import { ReportModules } from '../../types/reports.type';
+import {
+  ReportType,
+  ReportsMenu,
+  reportsConfig,
+} from '../constant/reports.const';
 
 @Component({
   selector: 'hospitality-bot-reports',
@@ -12,8 +16,8 @@ import { ReportModules } from '../../types/reports.type';
 export class ReportsComponent implements OnInit {
   showMenu = false;
   reportTitle = 'Reservation';
-  selectedReport = 'arrivalReport';
-  reportsMenuOptions: ReportsConfig[ReportModules]['menu'] = [];
+  selectedReport: ReportType;
+  reportsMenuOptions: ReportsMenu = [];
   selectedReportModule: ReportModules;
 
   columnData = ['Reservation No', 'Guest Name', 'Room Type'];
@@ -46,6 +50,7 @@ export class ReportsComponent implements OnInit {
       .subModuleName as unknown) as ReportModules;
 
     this.reportsMenuOptions = reportsConfig[this.selectedReportModule]?.menu;
+    this.selectedReport = this.reportsMenuOptions[0].value;
   }
 
   registerListener() {
@@ -61,5 +66,8 @@ export class ReportsComponent implements OnInit {
     this.reportsService.toggleMenu();
   }
 
-  selectReport() {}
+  selectReport(value: ReportType) {
+    this.selectedReport = value;
+    this.toggleMenu();
+  }
 }

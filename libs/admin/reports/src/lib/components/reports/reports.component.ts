@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ReportsService } from '../../services/reports.service';
+import { RoutesConfigService } from '@hospitality-bot/admin/core/theme';
+import { ReportsConfig, reportsConfig } from '../constant/reports.const';
+import { ReportModules } from '../../types/reports.type';
 
 @Component({
   selector: 'hospitality-bot-reports',
@@ -7,23 +10,11 @@ import { ReportsService } from '../../services/reports.service';
   styleUrls: ['./reports.component.scss'],
 })
 export class ReportsComponent implements OnInit {
-  openMenu = false;
+  showMenu = false;
   reportTitle = 'Reservation';
   selectedReport = 'arrivalReport';
-  reportsMenuOptions = [
-    {
-      label: 'Arrival',
-      value: 'arrivalReport',
-    },
-    {
-      label: 'Departure',
-      value: 'departureReport',
-    },
-    {
-      label: 'No Show',
-      value: 'noShowReport',
-    },
-  ];
+  reportsMenuOptions: ReportsConfig[ReportModules]['menu'] = [];
+  selectedReportModule: ReportModules;
 
   columnData = ['Reservation No', 'Guest Name', 'Room Type'];
   rowData = [
@@ -40,18 +31,32 @@ export class ReportsComponent implements OnInit {
     ['123', 'Ajay', 'Premium'],
   ];
 
-  constructor(private reportsService: ReportsService) {}
+  constructor(
+    private reportsService: ReportsService,
+    private routesConfigService: RoutesConfigService
+  ) {}
 
   ngOnInit(): void {
+    this.initReportsMenuOptions();
     this.registerListener();
+  }
+
+  initReportsMenuOptions() {
+    this.selectedReportModule = (this.routesConfigService
+      .subModuleName as unknown) as ReportModules;
+
+    this.reportsMenuOptions = reportsConfig[this.selectedReportModule]?.menu;
   }
 
   registerListener() {
     this.reportsService.showMenu.subscribe((res) => {
-      this.openMenu = res;
+      this.showMenu = res;
     });
   }
 
+  /**
+   * To toggle selected report menu
+   */
   toggleMenu() {
     this.reportsService.toggleMenu();
   }

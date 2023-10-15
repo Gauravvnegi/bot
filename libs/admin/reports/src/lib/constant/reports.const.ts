@@ -1,29 +1,28 @@
 import { Cols } from '@hospitality-bot/admin/shared';
 import {
-  ClassType,
-  ColsData,
-  ColsInfo,
-  ReportsConfig,
-  ReportsTypeValues,
-} from '../../types/reports.types';
-
+  DailyRevenueReport,
+  MonthlySummaryReport,
+} from '../models/financial-reports.models';
+import { ManagerFlashReport } from '../models/manager-reports.models';
+import { HistoryAndForecastReport } from '../models/occupancy-reports.models';
 import {
   ArrivalReport,
   CancellationReport,
   DepartureReport,
   NoShowReport,
 } from '../models/reservation-reports.models';
+import { CashierReport } from '../models/revenue-reports.models';
+import {
+  ClassType,
+  ColsData,
+  ColsInfo,
+  ReportsConfig,
+  ReportsTypeValues,
+} from '../types/reports.types';
 import {
   cancellationReportCols,
   noShowReportCols,
 } from './reservation-reports.const';
-import {
-  DailyRevenueReport,
-  MonthlySummaryReport,
-} from '../models/financial-reports.models';
-import { ManagerFlashReport } from '../models/manager-reports.models';
-import { HistoryAndForecastReport } from '../models/occupancy-reports.models';
-import { CashierReport } from '../models/revenue-reports.models';
 
 export const reportsConfig: ReportsConfig = {
   RESERVATION_REPORTS: {

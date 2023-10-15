@@ -2,8 +2,8 @@ import { ReservationResponseData } from 'libs/admin/shared/src/lib/types/respons
 import {
   MonthlySummaryReportData,
   DailyRevenueReportData,
-} from '../../types/financial-reports.types';
-import { ReportClass } from '../../types/reports.types';
+} from '../types/financial-reports.types';
+import { ReportClass } from '../types/reports.types';
 
 export class MonthlySummaryReport
   implements ReportClass<MonthlySummaryReportData, ReservationResponseData> {

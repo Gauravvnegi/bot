@@ -1,11 +1,11 @@
-import { ColsData } from '../../types/reports.types';
+import { ColsData } from '../types/reports.types';
 import {
   ArrivalReportData,
   CancellationReportData,
   DefaultReservationReportData,
   DepartureReportData,
   NoShowReportData,
-} from '../../types/reservation-reports.types';
+} from '../types/reservation-reports.types';
 
 const reservationReportCols: ColsData<DefaultReservationReportData> = {
   bookingNo: {

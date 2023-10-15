@@ -1,8 +1,8 @@
 import {
   DailyRevenueReportData,
   MonthlySummaryReportData,
-} from '../../types/financial-reports.types';
-import { ColsData } from '../../types/reports.types';
+} from '../types/financial-reports.types';
+import { ColsData } from '../types/reports.types';
 
 export const monthlySummaryReportCols: ColsData<MonthlySummaryReportData> = {
   // ToDO

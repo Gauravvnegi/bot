@@ -1,12 +1,12 @@
 import { ReservationResponseData } from 'libs/admin/shared/src/lib/types/response';
-import { ReportClass } from '../../types/reports.types';
+import { ReportClass } from '../types/reports.types';
 import {
   DefaultReservationReportData,
   NoShowReportData,
   ArrivalReportData,
   CancellationReportData,
   DepartureReportData,
-} from '../../types/reservation-reports.types';
+} from '../types/reservation-reports.types';
 
 class ReservationReport {
   defaultValue: DefaultReservationReportData;

@@ -19,7 +19,7 @@ import * as FileSaver from 'file-saver';
 import {
   reportsColumnMapping,
   reportsModelMapping,
-} from '../constant/reports.const';
+} from '../../constant/reports.const';
 
 @Component({
   selector: 'hospitality-bot-reports-data-table',

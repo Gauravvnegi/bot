@@ -127,3 +127,7 @@
     }
   }
 }
+
+:host ::ng-deep .input__float .p-multiselect {
+  margin-top: 0;
+}

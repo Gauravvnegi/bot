@@ -12,16 +12,3 @@
 // :host ::ng-deep .table-head__search {
 //   display: none;
 // }
-
-:host ::ng-deep .wrapper {
-  .label.label__static {
-    position: absolute;
-    z-index: 1;
-    zoom: 0.7;
-    top: -12px;
-    left: 11px;
-  }
-  .input__static .p-multiselect {
-    margin-top: 0;
-  }
-}

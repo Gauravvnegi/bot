@@ -1,11 +1,11 @@
-import { ReservationResponseData } from 'libs/admin/shared/src/lib/types/response';
 import { ReportClass } from '../types/reports.types';
 import { CashierReportData } from '../types/revenue-reports.types';
 
-export class CashierReport
-  implements ReportClass<CashierReportData, ReservationResponseData> {
+export class CashierReport implements ReportClass<CashierReportData, any> {
   records: CashierReportData[];
   deserialize(value: any) {
+    // TODO - also remove any
+
     return this;
   }
 }

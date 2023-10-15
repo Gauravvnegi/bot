@@ -1,9 +1,9 @@
 export type DailyRevenueReportData = {
-  bookingNo: string;
-  dateOfArrival: number;
+  // TODO
+  todo: string;
 };
 
 export type MonthlySummaryReportData = {
-  bookingNo: string;
-  dateOfArrival: number;
+  // TODO
+  todo: string;
 };

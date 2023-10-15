@@ -8,6 +8,10 @@ import {
   DepartureReportData,
 } from '../types/reservation-reports.types';
 
+/**
+ * @class Default Reservation Report class
+ * Will be extended in every reservation report
+ */
 class ReservationReport {
   defaultValue: DefaultReservationReportData;
   getDefaultValues(reservationData: ReservationResponseData) {
@@ -48,14 +52,6 @@ export class NoShowReport extends ReservationReport
   }
 }
 
-export class ArrivalReport
-  implements ReportClass<ArrivalReportData, ReservationResponseData> {
-  records: ArrivalReportData[];
-  deserialize(value: ReservationResponseData[]) {
-    return this;
-  }
-}
-
 export class CancellationReport extends ReservationReport
   implements ReportClass<CancellationReportData, ReservationResponseData> {
   records: CancellationReportData[];
@@ -81,10 +77,34 @@ export class CancellationReport extends ReservationReport
   }
 }
 
-export class DepartureReport
+export class ArrivalReport extends ReservationReport
+  implements ReportClass<ArrivalReportData, ReservationResponseData> {
+  records: ArrivalReportData[];
+  deserialize(value: ReservationResponseData[]) {
+    this.records = new Array<ArrivalReportData>();
+
+    value.forEach((reservationData) => {
+      this.records.push({
+        ...this.getDefaultValues(reservationData),
+        // TODO
+      });
+    });
+    return this;
+  }
+}
+
+export class DepartureReport extends ReservationReport
   implements ReportClass<DepartureReportData, ReservationResponseData> {
   records: DepartureReportData[];
   deserialize(value: ReservationResponseData[]) {
+    this.records = new Array<DepartureReportData>();
+
+    value.forEach((reservationData) => {
+      this.records.push({
+        ...this.getDefaultValues(reservationData),
+        // TODO
+      });
+    });
     return this;
   }
 }

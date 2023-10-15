@@ -20,9 +20,15 @@ import {
   ReportsTypeValues,
 } from '../types/reports.types';
 import {
+  arrivalReportCols,
   cancellationReportCols,
+  departureReportCols,
   noShowReportCols,
 } from './reservation-reports.const';
+import {
+  dailyRevenueReportCols,
+  monthlySummaryReportCols,
+} from './financial-reports.const';
 
 export const reportsConfig: ReportsConfig = {
   RESERVATION_REPORTS: {
@@ -108,12 +114,12 @@ function getColsArray(colsData: ColsData): Cols[] {
 
 export const reportsColumnMapping: Record<ReportsTypeValues, Cols[]> = {
   noShowReport: getColsArray(noShowReportCols),
-  arrivalReport: [],
+  arrivalReport: getColsArray(arrivalReportCols),
   cancellationReport: getColsArray(cancellationReportCols),
-  departureReport: [],
+  departureReport: getColsArray(departureReportCols),
   cashierReport: [],
-  dailyRevenueReport: [],
   historyAndForecastReport: [],
   managerFlashReport: [],
-  monthlySummaryReport: [],
+  dailyRevenueReport: getColsArray(dailyRevenueReportCols),
+  monthlySummaryReport: getColsArray(monthlySummaryReportCols),
 };

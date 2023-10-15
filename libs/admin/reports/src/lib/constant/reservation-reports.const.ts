@@ -44,14 +44,6 @@ export const noShowReportCols: ColsData<NoShowReportData> = {
   },
 };
 
-export const arrivalReportCols: ColsData<ArrivalReportData> = {
-  ...reservationReportCols,
-};
-
-export const departureReportCols: ColsData<DepartureReportData> = {
-  ...reservationReportCols,
-};
-
 export const cancellationReportCols: ColsData<CancellationReportData> = {
   ...reservationReportCols,
   roomAndRoomType: {
@@ -75,4 +67,14 @@ export const cancellationReportCols: ColsData<CancellationReportData> = {
   cancellationReason: {
     header: 'Cancellation Reason',
   },
+};
+
+export const arrivalReportCols: ColsData<ArrivalReportData> = {
+  ...reservationReportCols,
+  // TODO
+};
+
+export const departureReportCols: ColsData<DepartureReportData> = {
+  ...reservationReportCols,
+  // TODO
 };

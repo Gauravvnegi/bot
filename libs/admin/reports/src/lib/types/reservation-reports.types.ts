@@ -14,9 +14,13 @@ export type NoShowReportData = DefaultReservationReportData & {
   noShowReason: string;
 };
 
-export type ArrivalReportData = DefaultReservationReportData & {};
+export type ArrivalReportData = DefaultReservationReportData & {
+  // TODO
+};
 
-export type DepartureReportData = DefaultReservationReportData & {};
+export type DepartureReportData = DefaultReservationReportData & {
+  // TODO
+};
 
 export type CancellationReportData = DefaultReservationReportData & {
   roomAndRoomType: string;

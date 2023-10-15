@@ -6,20 +6,19 @@ import {
   Cols,
   TableService,
 } from '@hospitality-bot/admin/shared';
+import * as FileSaver from 'file-saver';
 import { Subscription } from 'rxjs';
+import {
+  reportsColumnMapping,
+  reportsModelMapping,
+} from '../../constant/reports.const';
 import { ReportsService } from '../../services/reports.service';
 import {
   GetReportQuery,
   ReportFilters,
   ReportFiltersKey,
-  ReportType,
   ReportsMenu,
 } from '../../types/reports.types';
-import * as FileSaver from 'file-saver';
-import {
-  reportsColumnMapping,
-  reportsModelMapping,
-} from '../../constant/reports.const';
 
 @Component({
   selector: 'hospitality-bot-reports-data-table',
@@ -80,8 +79,8 @@ export class ReportsDataTableComponent extends BaseDatatableComponent {
         const ReportModel = reportsModelMapping[this.selectedReport.value];
         this.cols = reportsColumnMapping[this.selectedReport.value];
         this.values = new ReportModel().deserialize(res).records;
+        this.loading = false;
       },
-      () => {},
       () => {
         this.loading = false;
       }

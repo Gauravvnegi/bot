@@ -1,18 +1,11 @@
-import {
-  DailyRevenueReportData,
-  MonthlySummaryReportData,
-} from '../../types/financial-reports.types';
-import { ManagerFlashReportData } from '../../types/manager-reports.types';
-import { HistoryAndForecastReportData } from '../../types/occupany-reports.types';
 import { ColsData } from '../../types/reports.types';
 import {
-  DefaultReservationReportData,
-  NoShowReportData,
   ArrivalReportData,
-  DepartureReportData,
   CancellationReportData,
+  DefaultReservationReportData,
+  DepartureReportData,
+  NoShowReportData,
 } from '../../types/reservation-reports.types';
-import { CashierReportData } from '../../types/revenue-reports.types';
 
 const reservationReportCols: ColsData<DefaultReservationReportData> = {
   bookingNo: {
@@ -81,55 +74,5 @@ export const cancellationReportCols: ColsData<CancellationReportData> = {
   },
   cancellationReason: {
     header: 'Cancellation Reason',
-  },
-};
-
-export const cashierReportCols: ColsData<CashierReportData> = {
-  // ToDO
-  bookingNo: {
-    header: 'Res/Group',
-  },
-  dateOfArrival: {
-    header: 'Date of Arrival',
-  },
-};
-
-export const dailyRevenueReportCols: ColsData<DailyRevenueReportData> = {
-  // ToDO
-  bookingNo: {
-    header: 'Res/Group',
-  },
-  dateOfArrival: {
-    header: 'Date of Arrival',
-  },
-};
-
-export const historyAndForecastReportCols: ColsData<HistoryAndForecastReportData> = {
-  // ToDO
-  bookingNo: {
-    header: 'Res/Group',
-  },
-  dateOfArrival: {
-    header: 'Date of Arrival',
-  },
-};
-
-export const managerFlashReportCols: ColsData<ManagerFlashReportData> = {
-  // ToDO
-  bookingNo: {
-    header: 'Res/Group',
-  },
-  dateOfArrival: {
-    header: 'Date of Arrival',
-  },
-};
-
-export const monthlySummaryReportCols: ColsData<MonthlySummaryReportData> = {
-  // ToDO
-  bookingNo: {
-    header: 'Res/Group',
-  },
-  dateOfArrival: {
-    header: 'Date of Arrival',
   },
 };

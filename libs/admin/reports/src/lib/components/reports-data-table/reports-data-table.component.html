@@ -15,6 +15,8 @@
     <ng-container formGroupName="filters">
       <hospitality-bot-date
         controlName="fromDate"
+        label="From Date"
+        [props]="{ float: true }"
         [settings]="{
           enableTime: false
         }"
@@ -22,6 +24,8 @@
       </hospitality-bot-date>
       <hospitality-bot-date
         controlName="toDate"
+        label="To Date"
+        [props]="{ float: true }"
         [settings]="{
           enableTime: false
         }"

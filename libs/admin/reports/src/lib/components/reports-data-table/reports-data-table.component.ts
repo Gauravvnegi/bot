@@ -70,9 +70,7 @@ export class ReportsDataTableComponent extends BaseDatatableComponent {
     this.loading = true;
 
     this.reportsService.getReport(this.getQueryParams()).subscribe(
-      (res) => {
-        debugger;
-      },
+      (res) => {},
       () => {},
       () => {
         this.loading = false;

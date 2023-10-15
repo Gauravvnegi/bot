@@ -8,7 +8,7 @@ import {
   ReportModules,
   ReportType,
   ReportsMenu,
-} from '../../types/reports.type';
+} from '../../types/reports.types';
 import { reportsConfig } from '../constant/reports.const';
 import { convertToTitleCase } from 'libs/admin/shared/src/lib/utils/valueFormatter';
 

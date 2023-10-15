@@ -1,37 +1,22 @@
-import { ColsData } from '../../types/reports.type';
 import {
-  ArrivalReportData,
+  DailyRevenueReportData,
+  MonthlySummaryReportData,
+} from '../../types/financial-reports.types';
+import { ManagerFlashReportData } from '../../types/manager-reports.types';
+import { HistoryAndForecastReportData } from '../../types/occupany-reports.types';
+import { ColsData } from '../../types/reports.types';
+import {
+  DefaultReservationReportData,
   NoShowReportData,
+  ArrivalReportData,
   DepartureReportData,
   CancellationReportData,
-  CashierReportData,
-  DailyRevenueReportData,
-  HistoryAndForecastReportData,
-  ManagerFlashReportData,
-  MonthlySummaryReportData,
-} from '../../types/reportsData.type';
+} from '../../types/reservation-reports.types';
+import { CashierReportData } from '../../types/revenue-reports.types';
 
-export const noShowReportCols: ColsData<NoShowReportData> = {
+const reservationReportCols: ColsData<DefaultReservationReportData> = {
   bookingNo: {
     header: 'Res/Group',
-  },
-  dateOfArrival: {
-    header: 'Date of Arrival',
-  },
-  dateOfNoShow: {
-    header: 'No-Show On',
-  },
-  guestName: {
-    header: 'Guest Name',
-  },
-  bookingAmount: {
-    header: 'Booking Amount',
-  },
-  noShowCharges: {
-    header: 'No show charges',
-  },
-  noShowReason: {
-    header: 'No show Reason',
   },
   otherCharges: {
     header: 'Other Charges',
@@ -42,35 +27,60 @@ export const noShowReportCols: ColsData<NoShowReportData> = {
   balance: {
     header: 'Balance',
   },
+  guestName: {
+    header: 'Guest Name',
+  },
+  bookingAmount: {
+    header: 'Booking Amount',
+  },
+};
+
+export const noShowReportCols: ColsData<NoShowReportData> = {
+  ...reservationReportCols,
+  dateOfArrival: {
+    header: 'Date of Arrival',
+  },
+  dateOfNoShow: {
+    header: 'No-Show On',
+  },
+  noShowCharges: {
+    header: 'No show charges',
+  },
+  noShowReason: {
+    header: 'No show Reason',
+  },
 };
 
 export const arrivalReportCols: ColsData<ArrivalReportData> = {
-  // ToDO
-  bookingNo: {
-    header: 'Res/Group',
-  },
-  dateOfArrival: {
-    header: 'Date of Arrival',
-  },
+  ...reservationReportCols,
 };
 
 export const departureReportCols: ColsData<DepartureReportData> = {
-  // ToDO
-  bookingNo: {
-    header: 'Res/Group',
-  },
-  dateOfArrival: {
-    header: 'Date of Arrival',
-  },
+  ...reservationReportCols,
 };
 
 export const cancellationReportCols: ColsData<CancellationReportData> = {
-  // ToDO
-  bookingNo: {
-    header: 'Res/Group',
+  ...reservationReportCols,
+  roomAndRoomType: {
+    header: 'Room/ Type',
   },
-  dateOfArrival: {
-    header: 'Date of Arrival',
+  checkInDate: {
+    header: 'Check In',
+  },
+  checkOutDate: {
+    header: 'Check out',
+  },
+  noOfNights: {
+    header: 'Nights',
+  },
+  cancelationDate: {
+    header: 'Cancelled ON',
+  },
+  cancellationCharges: {
+    header: 'Cancellation Charge',
+  },
+  cancellationReason: {
+    header: 'Cancellation Reason',
   },
 };
 

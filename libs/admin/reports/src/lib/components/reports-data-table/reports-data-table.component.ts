@@ -14,7 +14,7 @@ import {
   ReportFiltersKey,
   ReportType,
   ReportsMenu,
-} from '../../types/reports.type';
+} from '../../types/reports.types';
 import * as FileSaver from 'file-saver';
 import {
   reportsColumnMapping,

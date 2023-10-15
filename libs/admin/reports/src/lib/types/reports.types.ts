@@ -69,3 +69,5 @@ export interface ReportClass<T, K> {
 
 export type ColsInfo = Omit<Cols, 'field'>;
 export type ColsData<T = {}> = Record<keyof T, ColsInfo>;
+
+export type CalendarType = 'DAY' | 'MONTH' | 'YEAR';

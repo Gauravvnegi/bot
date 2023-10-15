@@ -9,7 +9,7 @@ export class MonthlySummaryReport
   records: MonthlySummaryReportData[];
   deserialize(value: any) {
     // TODO - also remove any
-    this.records = [{ todo: 'To-do' }];
+    this.records = [{ day: 'To-do', month: 'To-do', year: 'To-do' }];
     return this;
   }
 }
@@ -19,7 +19,7 @@ export class DailyRevenueReport
   records: DailyRevenueReportData[];
   deserialize(value: any) {
     // TODO - also remove any
-    this.records = [{ todo: 'To-do' }];
+    this.records = [{ day: 'To-do', month: 'To-do', year: 'To-do' }];
     return this;
   }
 }

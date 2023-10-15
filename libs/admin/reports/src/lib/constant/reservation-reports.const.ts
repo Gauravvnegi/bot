@@ -2,12 +2,12 @@ import { ColsData } from '../types/reports.types';
 import {
   ArrivalReportData,
   CancellationReportData,
-  DefaultReservationReportData,
+  ReservationReportData,
   DepartureReportData,
   NoShowReportData,
 } from '../types/reservation-reports.types';
 
-const reservationReportCols: ColsData<DefaultReservationReportData> = {
+const reservationReportCols: ColsData<ReservationReportData> = {
   bookingNo: {
     header: 'Res/Group',
   },

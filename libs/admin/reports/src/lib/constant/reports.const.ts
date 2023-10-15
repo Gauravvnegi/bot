@@ -29,6 +29,9 @@ import {
   dailyRevenueReportCols,
   monthlySummaryReportCols,
 } from './financial-reports.const';
+import { cashierReportCols } from './revenue-reports.const';
+import { historyAndForecastReportCols } from './occupancy-reports.const';
+import { managerFlashReportCols } from './manager-reports.const';
 
 export const reportsConfig: ReportsConfig = {
   RESERVATION_REPORTS: {
@@ -117,9 +120,9 @@ export const reportsColumnMapping: Record<ReportsTypeValues, Cols[]> = {
   arrivalReport: getColsArray(arrivalReportCols),
   cancellationReport: getColsArray(cancellationReportCols),
   departureReport: getColsArray(departureReportCols),
-  cashierReport: [],
-  historyAndForecastReport: [],
-  managerFlashReport: [],
+  cashierReport: getColsArray(cashierReportCols),
+  historyAndForecastReport: getColsArray(historyAndForecastReportCols),
+  managerFlashReport: getColsArray(managerFlashReportCols),
   dailyRevenueReport: getColsArray(dailyRevenueReportCols),
   monthlySummaryReport: getColsArray(monthlySummaryReportCols),
 };

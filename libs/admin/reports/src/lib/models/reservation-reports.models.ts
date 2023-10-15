@@ -1,7 +1,7 @@
 import { ReservationResponseData } from 'libs/admin/shared/src/lib/types/response';
 import { ReportClass } from '../types/reports.types';
 import {
-  DefaultReservationReportData,
+  ReservationReportData,
   NoShowReportData,
   ArrivalReportData,
   CancellationReportData,
@@ -13,7 +13,7 @@ import {
  * Will be extended in every reservation report
  */
 class ReservationReport {
-  defaultValue: DefaultReservationReportData;
+  defaultValue: ReservationReportData;
   getDefaultValues(reservationData: ReservationResponseData) {
     this.defaultValue = {
       amountPaid: reservationData.totalPaidAmount,

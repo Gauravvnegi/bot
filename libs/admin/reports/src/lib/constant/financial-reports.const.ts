@@ -1,19 +1,26 @@
 import {
   DailyRevenueReportData,
+  FinancialReportData,
   MonthlySummaryReportData,
 } from '../types/financial-reports.types';
 import { ColsData } from '../types/reports.types';
 
-export const monthlySummaryReportCols: ColsData<MonthlySummaryReportData> = {
-  // TODO
-  todo: {
-    header: 'TODO',
+const financialReportCols: ColsData<FinancialReportData> = {
+  day: {
+    header: 'DAY',
+  },
+  month: {
+    header: 'MONTH',
+  },
+  year: {
+    header: 'YEAR',
   },
 };
 
+export const monthlySummaryReportCols: ColsData<MonthlySummaryReportData> = {
+  ...financialReportCols,
+};
+
 export const dailyRevenueReportCols: ColsData<DailyRevenueReportData> = {
-  // TODO
-  todo: {
-    header: 'TODO',
-  },
+  ...financialReportCols,
 };

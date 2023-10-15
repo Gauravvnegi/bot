@@ -1,4 +1,4 @@
-export type DefaultReservationReportData = {
+export type ReservationReportData = {
   bookingNo: string;
   guestName: string;
   bookingAmount: number;
@@ -7,22 +7,22 @@ export type DefaultReservationReportData = {
   balance: number;
 };
 
-export type NoShowReportData = DefaultReservationReportData & {
+export type NoShowReportData = ReservationReportData & {
   dateOfArrival: number;
   dateOfNoShow: number;
   noShowCharges: number;
   noShowReason: string;
 };
 
-export type ArrivalReportData = DefaultReservationReportData & {
+export type ArrivalReportData = ReservationReportData & {
   // TODO
 };
 
-export type DepartureReportData = DefaultReservationReportData & {
+export type DepartureReportData = ReservationReportData & {
   // TODO
 };
 
-export type CancellationReportData = DefaultReservationReportData & {
+export type CancellationReportData = ReservationReportData & {
   roomAndRoomType: string;
   checkInDate: number;
   checkOutDate: number;

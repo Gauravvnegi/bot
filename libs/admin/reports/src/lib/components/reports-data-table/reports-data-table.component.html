@@ -14,6 +14,7 @@
   <div class="action-wrapper">
     <ng-container formGroupName="filters">
       <hospitality-bot-date
+        class="filter-item"
         controlName="fromDate"
         label="From Date"
         [props]="{ float: true }"
@@ -23,6 +24,7 @@
       >
       </hospitality-bot-date>
       <hospitality-bot-date
+        class="filter-item"
         controlName="toDate"
         label="To Date"
         [props]="{ float: true }"
@@ -32,6 +34,7 @@
       >
       </hospitality-bot-date>
       <hospitality-bot-room-types
+        class="filter-item"
         controlName="roomType"
         [settings]="{
           float: true

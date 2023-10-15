@@ -15,6 +15,16 @@
 
 :host ::ng-deep {
   .p-datatable {
-    @include tableCellPadding(0.3em);
+    @include tableCellPadding(0.1em);
+    .p-datatable-tbody {
+      .table-row {
+        height: auto;
+        cursor: default;
+      }
+    }
   }
+}
+
+.filter-item {
+  max-width: 150px;
 }

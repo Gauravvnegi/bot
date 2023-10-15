@@ -22,6 +22,7 @@ class ReservationReport {
       bookingNo: reservationData.number,
       guestName:
         reservationData.guestDetails.primaryGuest.firstName +
+        ' ' +
         reservationData.guestDetails.primaryGuest.lastName,
       otherCharges: null,
     };

@@ -9,7 +9,7 @@
       (click)="toggleMenu()"
       aria-hidden="true"
     ></i>
-    <span> {{ tableName }}</span>
+    <span> {{ this.selectedReport?.label }}</span>
   </div>
   <div class="action-wrapper">
     <ng-container formGroupName="filters">

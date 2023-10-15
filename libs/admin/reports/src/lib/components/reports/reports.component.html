@@ -5,8 +5,6 @@
   [showCloseIcon]="false"
   [modal]="false"
 >
-  <!-- Sidebar content goes here -->
-
   <div class="menu-header">
     <div>{{ reportTitle }}</div>
     <i
@@ -17,9 +15,9 @@
   </div>
   <div
     class="menu-option"
-    [ngClass]="{ selected: reportOption.value === selectedReport }"
+    [ngClass]="{ selected: reportOption.value === selectedReport.value }"
     *ngFor="let reportOption of reportsMenuOptions"
-    (click)="selectReport(reportOption.value)"
+    (click)="selectReport(reportOption)"
   >
     {{ reportOption.label }}
   </div>

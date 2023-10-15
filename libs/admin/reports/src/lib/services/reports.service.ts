@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from '@hospitality-bot/shared/utils';
 import { BehaviorSubject, Subject } from 'rxjs';
-import { GetReportQuery, ReportType } from '../types/reports.type';
+import { GetReportQuery, ReportType, ReportsMenu } from '../types/reports.type';
 
 @Injectable()
 export class ReportsService extends ApiService {
   showMenu = new BehaviorSubject(true);
-  $selectedReport = new BehaviorSubject<ReportType>(null);
+  $selectedReport = new BehaviorSubject<ReportsMenu[number]>(null);
 
   toggleMenu() {
     this.showMenu.next(!this.showMenu.value);
@@ -17,7 +17,8 @@ export class ReportsService extends ApiService {
       `/api/v1/reports${this.getQueryParam({
         ...query,
         ...(isExport ? { exportType: 'csv' } : {}),
-      })}`
+      })}`,
+      isExport ? { responseType: 'blob' } : {}
     );
   }
 }

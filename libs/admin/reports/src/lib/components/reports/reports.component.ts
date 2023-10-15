@@ -22,7 +22,7 @@ export class ReportsComponent implements OnInit {
   reportTitle = '';
   reportsMenuOptions: ReportsMenu = [];
   selectedReportModule: ReportModules;
-  selectedReport: ReportType;
+  selectedReport: ReportsMenu[number];
 
   constructor(
     private reportsService: ReportsService,
@@ -49,10 +49,9 @@ export class ReportsComponent implements OnInit {
   initReportConfigDetails() {
     this.selectedReportModule = (this.routesConfigService
       .subModuleName as unknown) as ReportModules;
-    this.reportTitle = convertToTitleCase(this.selectedReportModule);
+    this.settReportMainTitle();
     this.reportsMenuOptions = reportsConfig[this.selectedReportModule]?.menu;
-
-    this.reportsService.$selectedReport.next(this.reportsMenuOptions[0].value);
+    this.reportsService.$selectedReport.next(this.reportsMenuOptions[0]);
   }
 
   /**
@@ -62,8 +61,14 @@ export class ReportsComponent implements OnInit {
     this.reportsService.toggleMenu();
   }
 
-  selectReport(value: ReportType) {
-    this.reportsService.$selectedReport.next(value);
+  selectReport(value: ReportsMenu[number]) {
+    if (value.value !== this.reportsService.$selectedReport.value.value) {
+      this.reportsService.$selectedReport.next(value);
+    }
     this.toggleMenu();
+  }
+
+  settReportMainTitle() {
+    this.reportTitle = convertToTitleCase(this.selectedReportModule);
   }
 }

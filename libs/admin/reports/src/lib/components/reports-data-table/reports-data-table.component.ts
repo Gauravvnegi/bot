@@ -13,7 +13,9 @@ import {
   ReportFilters,
   ReportFiltersKey,
   ReportType,
+  ReportsMenu,
 } from '../../types/reports.type';
+import * as FileSaver from 'file-saver';
 
 @Component({
   selector: 'hospitality-bot-reports-data-table',
@@ -32,7 +34,7 @@ export class ReportsDataTableComponent extends BaseDatatableComponent {
   isSelectable = false;
   isSearchable = false;
 
-  selectedReport: ReportType;
+  selectedReport: ReportsMenu[number];
 
   $subscription = new Subscription();
   constructor(
@@ -62,7 +64,7 @@ export class ReportsDataTableComponent extends BaseDatatableComponent {
       toDate: filters.toDate,
       fromDate: filters.fromDate,
       roomType: filters.roomType,
-      reportName: this.selectedReport,
+      reportName: this.selectedReport.value,
     };
   }
 
@@ -70,12 +72,22 @@ export class ReportsDataTableComponent extends BaseDatatableComponent {
     this.loading = true;
 
     this.reportsService.getReport(this.getQueryParams()).subscribe(
-      (res) => {},
+      (res) => {
+        this.values = [['hello']];
+      },
       () => {},
       () => {
         this.loading = false;
       }
     );
+  }
+
+  exportCSV(): void {
+    this.reportsService
+      .getReport(this.getQueryParams(), true)
+      .subscribe((res) => {
+        FileSaver.saveAs(res, 'Report_export' + new Date().getTime() + '.csv');
+      });
   }
 
   initReportFilters() {

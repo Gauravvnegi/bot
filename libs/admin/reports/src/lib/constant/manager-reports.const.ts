@@ -3,4 +3,7 @@ import { ColsData } from '../types/reports.types';
 
 export const managerFlashReportCols: ColsData<ManagerFlashReportData> = {
   // TODO
+  todo: {
+    header: 'TODO',
+  },
 };

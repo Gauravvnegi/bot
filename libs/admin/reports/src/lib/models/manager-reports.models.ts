@@ -1,4 +1,3 @@
-import { ReservationResponseData } from 'libs/admin/shared/src/lib/types/response';
 import { ManagerFlashReportData } from '../types/manager-reports.types';
 import { ReportClass } from '../types/reports.types';
 
@@ -7,7 +6,7 @@ export class ManagerFlashReport
   records: ManagerFlashReportData[];
   deserialize(value: any) {
     // TODO - also remove any
-
+    this.records = [{ todo: 'To-do' }];
     return this;
   }
 }

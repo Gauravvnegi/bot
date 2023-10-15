@@ -13,6 +13,7 @@ import {
 } from '../models/reservation-reports.models';
 import { CashierReport } from '../models/revenue-reports.models';
 import {
+  AvailableFilters,
   ClassType,
   ColsData,
   ColsInfo,
@@ -125,4 +126,19 @@ export const reportsColumnMapping: Record<ReportsTypeValues, Cols[]> = {
   managerFlashReport: getColsArray(managerFlashReportCols),
   dailyRevenueReport: getColsArray(dailyRevenueReportCols),
   monthlySummaryReport: getColsArray(monthlySummaryReportCols),
+};
+
+export const reportFiltersMapping: Record<
+  ReportsTypeValues,
+  AvailableFilters[]
+> = {
+  noShowReport: ['fromDate', 'toDate', 'roomType'],
+  arrivalReport: ['fromDate', 'toDate', 'roomType'],
+  cancellationReport: ['fromDate', 'toDate', 'roomType'],
+  departureReport: ['fromDate', 'toDate', 'roomType'],
+  cashierReport: ['fromDate', 'toDate', 'roomType'],
+  historyAndForecastReport: ['fromDate', 'toDate', 'roomType'],
+  managerFlashReport: ['fromDate', 'toDate', 'roomType'],
+  dailyRevenueReport: ['fromDate', 'toDate', 'roomType'],
+  monthlySummaryReport: ['fromDate', 'toDate', 'roomType'],
 };

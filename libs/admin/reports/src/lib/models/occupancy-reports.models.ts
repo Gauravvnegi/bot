@@ -6,7 +6,7 @@ export class HistoryAndForecastReport
   records: HistoryAndForecastReportData[];
   deserialize(value: any) {
     // TODO - also remove any
-
+    this.records = [{ todo: 'To-do' }];
     return this;
   }
 }

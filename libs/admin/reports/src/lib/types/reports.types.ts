@@ -53,6 +53,8 @@ export type ReportFilters = {
   roomType?: string;
 };
 
+export type AvailableFilters = keyof ReportFilters;
+
 export type ReportFiltersKey = keyof ReportFilters;
 
 export type RowValue = {

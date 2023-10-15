@@ -9,6 +9,7 @@ import {
 import * as FileSaver from 'file-saver';
 import { Subscription } from 'rxjs';
 import {
+  reportFiltersMapping,
   reportsColumnMapping,
   reportsModelMapping,
 } from '../../constant/reports.const';
@@ -64,10 +65,14 @@ export class ReportsDataTableComponent extends BaseDatatableComponent {
     const filters: ReportFilters = this.tableFG.get('filters').value;
     return {
       entityId: this.globalFilterService.entityId,
-      toDate: filters.toDate,
-      fromDate: filters.fromDate,
-      roomType: filters.roomType,
       reportName: this.selectedReport.value,
+      ...this.currentFilters.reduce((value, curr) => {
+        value = { ...value, curr: filters[curr] };
+        return value;
+      }, {}),
+      // toDate: filters.toDate,
+      // fromDate: filters.fromDate,
+      // roomType: filters.roomType,
     };
   }
 
@@ -97,10 +102,10 @@ export class ReportsDataTableComponent extends BaseDatatableComponent {
 
   initReportFilters() {
     const filterForm = this.fb.group({
-      // fromDate: [new Date().getTime()],
-      // toDate: [new Date().getTime()],
-      fromDate: [1696962600000],
-      toDate: [1697048999000],
+      fromDate: [new Date().getTime()],
+      toDate: [new Date().getTime()],
+      // fromDate: [1696962600000],
+      // toDate: [1697048999000],
       roomType: [''],
     } as Record<ReportFiltersKey, any>);
     this.tableFG.addControl('filters', filterForm);
@@ -108,6 +113,18 @@ export class ReportsDataTableComponent extends BaseDatatableComponent {
     filterForm.valueChanges.subscribe((_res) => {
       this.loadInitialData();
     });
+  }
+
+  get availableFilters() {
+    return {
+      isFromDate: this.currentFilters.includes('fromDate'),
+      isToDate: this.currentFilters.includes('toDate'),
+      isRoomType: this.currentFilters.includes('roomType'),
+    };
+  }
+
+  get currentFilters() {
+    return reportFiltersMapping[this.selectedReport.value];
   }
 
   toggleMenu() {

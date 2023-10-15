@@ -14,6 +14,7 @@
   <div class="action-wrapper">
     <ng-container formGroupName="filters">
       <hospitality-bot-date
+        *ngIf="availableFilters.isFromDate"
         class="filter-item"
         controlName="fromDate"
         label="From Date"
@@ -24,6 +25,7 @@
       >
       </hospitality-bot-date>
       <hospitality-bot-date
+        *ngIf="availableFilters.isToDate"
         class="filter-item"
         controlName="toDate"
         label="To Date"
@@ -34,6 +36,7 @@
       >
       </hospitality-bot-date>
       <hospitality-bot-room-types
+        *ngIf="availableFilters.isRoomType"
         class="filter-item"
         controlName="roomType"
         [settings]="{

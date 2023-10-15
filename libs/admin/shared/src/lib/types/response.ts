@@ -62,3 +62,92 @@ export type LoaderProps = {
   };
   viewHeight?: string;
 };
+
+export interface ReservationResponseData {
+  id: string;
+  updated: number;
+  arrivalTime: number;
+  departureTime: number;
+  number: string;
+  pmsStatus: string;
+  state: string;
+  stateCompletedSteps: string;
+  stayDetails: {
+    arrivalTime: number;
+    departureTime: number;
+    expectedArrivalTime: number;
+    expectedDepartureTime: number;
+    adultsCount: number;
+    kidsCount: number;
+    comments: string;
+    room: {
+      roomNumber: string;
+      type: string;
+      unit: number;
+      status: string;
+    };
+    checkInComment: string;
+    address: Record<string, any>; // You can define a more specific interface if you have one
+  };
+  guestDetails: {
+    primaryGuest: {
+      id: string;
+      firstName: string;
+      lastName: string;
+      contactDetails: {
+        cc: string;
+        contactNumber: string;
+        emailId: string;
+      };
+      regcardUrl: string;
+      age: number;
+      privacy: boolean;
+      documentRequired: boolean;
+    };
+    accompanyGuests: any[]; // You can define a more specific interface if you have one
+    sharerGuests: any[]; // You can define a more specific interface if you have one
+    secondaryGuest: any[]; // You can define a more specific interface if you have one
+    kids: any[]; // You can define a more specific interface if you have one
+    allGuest: Record<
+      string,
+      {
+        id: string;
+        firstName: string;
+        lastName: string;
+        contactDetails: {
+          cc: string;
+          contactNumber: string;
+          emailId: string;
+        };
+        regcardUrl: string;
+        age: number;
+        privacy: boolean;
+        documentRequired: boolean;
+      }
+    >;
+  };
+  paymentSummary: {
+    totalAmount: number;
+    taxAmount: number;
+    totalDiscount: number;
+    paidAmount: number;
+    dueAmount: number;
+    payableAmount: number;
+    currency: string;
+    printRate: boolean;
+    packages: any[]; // You can define a more specific interface if you have one
+    signatureUrl: string;
+  };
+  journeysStatus: Record<string, string>;
+  stepsStatus: Record<string, string>;
+  lastCompletedStep: string;
+  currentJourney: string;
+  currentJoureyStatus: string; // Fix the typo (currentJoureyStatus)
+  currentJourneyState: string;
+  source: string;
+  totalDueAmount: number;
+  totalPaidAmount: number;
+  vip: boolean;
+  invoicePrepareRequest: boolean;
+  pmsBooking: boolean;
+}

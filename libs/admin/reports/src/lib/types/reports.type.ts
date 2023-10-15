@@ -1,4 +1,4 @@
-import { ModuleNames } from '@hospitality-bot/admin/shared';
+import { Cols, ModuleNames } from '@hospitality-bot/admin/shared';
 
 export type GetReportQuery = {
   reportName: ReportType;
@@ -36,6 +36,8 @@ export type ReportsType = {
   REVENUE_REPORTS: 'cashierReport';
 };
 
+export type ReportsTypeValues = ReportsType[keyof ReportsType];
+
 export type ReportsConfig = {
   [K in ReportModules]: {
     menu: Array<{ label: string; value: ReportsType[K] }>;
@@ -52,3 +54,18 @@ export type ReportFilters = {
 };
 
 export type ReportFiltersKey = keyof ReportFilters;
+
+export type RowValue = {
+  isBold?: boolean;
+  value: string;
+};
+export type Rows = RowValue[];
+
+export type ClassType<T = ReportClass<any, any>> = new (...args: any[]) => T;
+export interface ReportClass<T, K> {
+  records: T[];
+  deserialize(value: K[]): this;
+}
+
+export type ColsInfo = Omit<Cols, 'field'>;
+export type ColsData<T = {}> = Record<keyof T, ColsInfo>;

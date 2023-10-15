@@ -16,6 +16,10 @@ import {
   ReportsMenu,
 } from '../../types/reports.type';
 import * as FileSaver from 'file-saver';
+import {
+  reportsColumnMapping,
+  reportsModelMapping,
+} from '../constant/reports.const';
 
 @Component({
   selector: 'hospitality-bot-reports-data-table',
@@ -73,7 +77,9 @@ export class ReportsDataTableComponent extends BaseDatatableComponent {
 
     this.reportsService.getReport(this.getQueryParams()).subscribe(
       (res) => {
-        this.values = [['hello']];
+        const ReportModel = reportsModelMapping[this.selectedReport.value];
+        this.cols = reportsColumnMapping[this.selectedReport.value];
+        this.values = new ReportModel().deserialize(res).records;
       },
       () => {},
       () => {

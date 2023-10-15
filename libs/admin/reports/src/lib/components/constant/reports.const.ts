@@ -1,4 +1,23 @@
-import { ReportsConfig } from '../../types/reports.type';
+import { Cols } from '@hospitality-bot/admin/shared';
+import {
+  ClassType,
+  ColsData,
+  ColsInfo,
+  ReportsConfig,
+  ReportsTypeValues,
+} from '../../types/reports.type';
+import {
+  ArrivalReport,
+  CancellationReport,
+  CashierReport,
+  DailyRevenueReport,
+  DepartureReport,
+  HistoryAndForecastReport,
+  ManagerFlashReport,
+  MonthlySummaryReport,
+  NoShowReport,
+} from '../models/report.models';
+import { noShowReportCols } from './reports.cols.const';
 
 export const reportsConfig: ReportsConfig = {
   RESERVATION_REPORTS: {
@@ -57,4 +76,39 @@ export const reportsConfig: ReportsConfig = {
       },
     ],
   },
+};
+
+export const reportsModelMapping: Record<ReportsTypeValues, ClassType> = {
+  noShowReport: NoShowReport,
+  arrivalReport: ArrivalReport,
+  cancellationReport: CancellationReport,
+  departureReport: DepartureReport,
+  cashierReport: CashierReport,
+  dailyRevenueReport: DailyRevenueReport,
+  historyAndForecastReport: HistoryAndForecastReport,
+  managerFlashReport: ManagerFlashReport,
+  monthlySummaryReport: MonthlySummaryReport,
+};
+
+function getColsArray(colsData: ColsData): Cols[] {
+  const colsArr: [string, ColsInfo][] = Object.entries(colsData);
+
+  const data = colsArr.map(([key, value]) => ({
+    ...value,
+    field: key,
+  }));
+
+  return data;
+}
+
+export const reportsColumnMapping: Record<ReportsTypeValues, Cols[]> = {
+  noShowReport: getColsArray(noShowReportCols),
+  arrivalReport: [],
+  cancellationReport: [],
+  departureReport: [],
+  cashierReport: [],
+  dailyRevenueReport: [],
+  historyAndForecastReport: [],
+  managerFlashReport: [],
+  monthlySummaryReport: [],
 };

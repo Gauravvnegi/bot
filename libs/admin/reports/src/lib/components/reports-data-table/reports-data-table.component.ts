@@ -1,5 +1,6 @@
-import { Component, Input } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { Component } from '@angular/core';
+import { FormBuilder } from '@angular/forms';
+import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
   BaseDatatableComponent,
   Cols,
@@ -13,7 +14,6 @@ import {
   ReportFiltersKey,
   ReportType,
 } from '../../types/reports.type';
-import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 
 @Component({
   selector: 'hospitality-bot-reports-data-table',
@@ -34,18 +34,6 @@ export class ReportsDataTableComponent extends BaseDatatableComponent {
 
   selectedReport: ReportType;
 
-  @Input() set columnData(value: string[]) {
-    this.cols = value.map((item) => ({
-      field: '',
-      header: item,
-      isSortDisabled: true,
-    }));
-  }
-
-  @Input() set rowData(value: string[][]) {
-    this.values = value;
-  }
-
   $subscription = new Subscription();
   constructor(
     private reportsService: ReportsService,
@@ -59,9 +47,11 @@ export class ReportsDataTableComponent extends BaseDatatableComponent {
   ngOnInit(): void {
     this.initReportFilters();
 
-    this.reportsService.$selectedReport.subscribe((res) => {
-      this.selectedReport = res;
-      this.loadInitialData();
+    this.reportsService.$selectedReport.subscribe((report) => {
+      if (report) {
+        this.selectedReport = report;
+        this.loadInitialData();
+      }
     });
   }
 
@@ -77,19 +67,32 @@ export class ReportsDataTableComponent extends BaseDatatableComponent {
   }
 
   loadInitialData() {
-    this.reportsService.getReport(this.getQueryParams()).subscribe((res) => {
-      debugger;
-    });
     this.loading = true;
+
+    this.reportsService.getReport(this.getQueryParams()).subscribe(
+      (res) => {
+        debugger;
+      },
+      () => {},
+      () => {
+        this.loading = false;
+      }
+    );
   }
 
   initReportFilters() {
     const filterForm = this.fb.group({
-      fromDate: [''],
-      toDate: [''],
+      // fromDate: [new Date().getTime()],
+      // toDate: [new Date().getTime()],
+      fromDate: [1696962600000],
+      toDate: [1697048999000],
+      roomType: [''],
     } as Record<ReportFiltersKey, any>);
-
     this.tableFG.addControl('filters', filterForm);
+
+    filterForm.valueChanges.subscribe((_res) => {
+      this.loadInitialData();
+    });
   }
 
   toggleMenu() {

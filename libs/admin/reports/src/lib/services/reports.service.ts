@@ -6,7 +6,7 @@ import { GetReportQuery, ReportType } from '../types/reports.type';
 @Injectable()
 export class ReportsService extends ApiService {
   showMenu = new BehaviorSubject(true);
-  $selectedReport = new Subject<ReportType>();
+  $selectedReport = new BehaviorSubject<ReportType>(null);
 
   toggleMenu() {
     this.showMenu.next(!this.showMenu.value);

@@ -31,16 +31,18 @@ export class ReportsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.initReportConfigDetails();
     this.registerListener();
+    this.initReportConfigDetails();
   }
 
   registerListener() {
     this.reportsService.showMenu.subscribe((res) => {
       this.showMenu = res;
     });
-    this.reportsService.$selectedReport.subscribe((res) => {
-      this.selectedReport = res;
+    this.reportsService.$selectedReport.subscribe((report) => {
+      if (report) {
+        this.selectedReport = report;
+      }
     });
   }
 
@@ -49,6 +51,7 @@ export class ReportsComponent implements OnInit {
       .subModuleName as unknown) as ReportModules;
     this.reportTitle = convertToTitleCase(this.selectedReportModule);
     this.reportsMenuOptions = reportsConfig[this.selectedReportModule]?.menu;
+
     this.reportsService.$selectedReport.next(this.reportsMenuOptions[0].value);
   }
 

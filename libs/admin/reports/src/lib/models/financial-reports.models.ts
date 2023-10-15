@@ -7,9 +7,9 @@ import { ReportClass } from '../types/reports.types';
 export class MonthlySummaryReport
   implements ReportClass<MonthlySummaryReportData, any> {
   records: MonthlySummaryReportData[];
-  deserialize(value: any) {
+  deserialize(value: any[]) {
     // TODO - also remove any
-    this.records = [{ day: 'To-do', month: 'To-do', year: 'To-do' }];
+    this.records = [{ todo: 'To-do' }];
     return this;
   }
 }
@@ -17,9 +17,9 @@ export class MonthlySummaryReport
 export class DailyRevenueReport
   implements ReportClass<DailyRevenueReportData, any> {
   records: DailyRevenueReportData[];
-  deserialize(value: any) {
+  deserialize(value: any[]) {
     // TODO - also remove any
-    this.records = [{ day: 'To-do', month: 'To-do', year: 'To-do' }];
+    this.records = [{ todo: 'To-do' }];
     return this;
   }
 }

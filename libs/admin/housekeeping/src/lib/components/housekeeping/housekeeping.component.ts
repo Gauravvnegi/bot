@@ -1,9 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import {
+  GlobalFilterService,
+  RoutesConfigService,
+} from '@hospitality-bot/admin/core/theme';
 import {
   AdminUtilityService,
   BaseDatatableComponent,
+  ModuleNames,
   Option,
   QueryConfig,
   TableService,
@@ -15,6 +19,7 @@ import { Subscription } from 'rxjs';
 import { roomStatusDetails } from '../../constant/room';
 import { houseKeepingRoutes } from '../../constant/routes';
 import { HousekeepingService } from '../../services/housekeeping.service';
+import { ChannelManagerFormService } from 'libs/admin/channel-manager/src/lib/services/channel-manager-form.service';
 
 @Component({
   selector: 'hospitality-bot-housekeeping',
@@ -23,6 +28,7 @@ import { HousekeepingService } from '../../services/housekeeping.service';
     './housekeeping.component.scss',
     '../../../../../shared/src/lib/components/datatable/datatable.component.scss',
   ],
+  providers: [ChannelManagerFormService],
 })
 export class HousekeepingComponent extends BaseDatatableComponent
   implements OnInit {
@@ -52,7 +58,9 @@ export class HousekeepingComponent extends BaseDatatableComponent
     private adminUtilityService: AdminUtilityService,
     protected tabFilterService: TableService,
     private globalFilterService: GlobalFilterService,
-    private housekeepingService: HousekeepingService
+    private housekeepingService: HousekeepingService,
+    private channelMangerForm: ChannelManagerFormService,
+    private routesConfigServices: RoutesConfigService
   ) {
     super(fb, tabFilterService);
     this.initForm();
@@ -63,13 +71,14 @@ export class HousekeepingComponent extends BaseDatatableComponent
     this.listenForRoomTypeChange();
     this.listenForRefreshData();
     this.navRoutes = houseKeepingRoutes['HouseKeeping'].navRoutes;
+    this.channelMangerForm.roomDetails.subscribe((roomType) => {
+      if (roomType.length > 0) {
+        this.useForm.get('roomType').setValue(roomType.map((item) => item.id));
+      }
+    });
   }
 
   loadData(event: LazyLoadEvent): void {
-    this.getRoomList();
-  }
-
-  ngAfterViewInit(): void {
     this.getRoomList();
   }
 
@@ -113,6 +122,13 @@ export class HousekeepingComponent extends BaseDatatableComponent
           this.loading = false;
         }
       );
+  }
+
+  navigateToAddRoom() {
+    this.routesConfigServices.navigate({
+      subModuleName: ModuleNames.ROOM,
+      additionalPath: 'add-room/multiple',
+    });
   }
 
   /**

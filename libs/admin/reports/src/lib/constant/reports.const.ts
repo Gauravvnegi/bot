@@ -19,6 +19,7 @@ import {
   ColsInfo,
   ReportsConfig,
   ReportsTypeValues,
+  RowStylesKeys,
 } from '../types/reports.types';
 import {
   arrivalReportCols,
@@ -141,4 +142,9 @@ export const reportFiltersMapping: Record<
   managerFlashReport: ['fromDate', 'toDate', 'roomType'],
   dailyRevenueReport: ['fromDate', 'toDate', 'roomType'],
   monthlySummaryReport: ['fromDate', 'toDate', 'roomType'],
+};
+
+export const rowStylesMapping: Record<RowStylesKeys, string> = {
+  isBold: 'is-bold',
+  isGreyBg: 'is-grey-bg',
 };

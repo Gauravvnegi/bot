@@ -283,7 +283,6 @@
   [loading]="isBooking"
   [isId]="reservationId"
   (onPostAction)="handleSubmit()"
-  [disabled]="!reservationId && useForm.invalid"
   [isSticky]="true"
   [config]="{
     postLabel: reservationId ? 'Update Reservation' : 'Create Reservation',

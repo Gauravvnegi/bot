@@ -45,6 +45,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   isSidebarVisible: boolean = false;
   entityId: string;
   loading: boolean = false;
+  showCalendarView = false;
   options: any[] = [];
   tabFilterItems = dashboardPopUpTabs;
   tabFilterIdx = 0;
@@ -64,7 +65,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.entityId = this.globalFilterService.entityId;
-
+    this.globalFilterService.toggleFullView.subscribe((res) => {
+      this.showCalendarView = res;
+    });
     this.listenForStateData();
   }
 

@@ -42,6 +42,7 @@ export class GuestInformationComponent implements OnInit {
   sidebarVisible: boolean;
   @ViewChild('sidebarSlide', { read: ViewContainerRef })
   sidebarSlide: ViewContainerRef;
+  editMode = false;
 
   constructor(
     private fb: FormBuilder,
@@ -121,6 +122,7 @@ export class GuestInformationComponent implements OnInit {
         this.formService.guestInformation.subscribe((res) => {
           if (res) {
             this.getGuestById(res.id);
+            this.editMode = true;
           }
         })
       );
@@ -150,7 +152,12 @@ export class GuestInformationComponent implements OnInit {
         cc: event.contactDetails.cc,
         email: event.contactDetails.emailId,
       };
-      this.formService.getSummary.next();
+      if (!this.editMode) {
+        this.formService.getSummary.next();
+      }
+      setTimeout(() => {
+        this.editMode = false;
+      }, 2000);
     }
   }
 

@@ -73,3 +73,10 @@ export type ColsInfo = Omit<Cols, 'field'>;
 export type ColsData<T = {}> = Record<keyof T, ColsInfo>;
 
 export type CalendarType = 'DAY' | 'MONTH' | 'YEAR';
+
+export class RowStyles {
+  isBold?: boolean;
+  isGreyBg?: boolean;
+}
+
+export type RowStylesKeys = keyof RowStyles;

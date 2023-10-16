@@ -28,3 +28,18 @@
 .filter-item {
   max-width: 150px;
 }
+
+:host ::ng-deep {
+  .is-bold {
+    font-weight: bold;
+  }
+
+  .is-grey-bg {
+    background-color: #dedede;
+    color: black;
+    .primary-text:hover,
+    .secondary-text:hover {
+      background: unset !important;
+    }
+  }
+}

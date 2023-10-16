@@ -79,4 +79,4 @@ export class RowStyles {
   isGreyBg?: boolean;
 }
 
-export type RowStylesKeys = 'isBold' | 'isGreyBg';
+export type RowStylesKeys = keyof RowStyles;

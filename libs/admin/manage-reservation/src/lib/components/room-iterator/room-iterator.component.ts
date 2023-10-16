@@ -188,6 +188,7 @@ export class RoomIteratorComponent extends IteratorComponent
         sellingprice: item.sellingPrice,
         isBase: item.isBase,
       }));
+
       // Patch the selected room number if available.
       this.roomControls[index].patchValue(
         {
@@ -265,7 +266,6 @@ export class RoomIteratorComponent extends IteratorComponent
         rooms: data.rooms.map((room) => ({
           label: room.roomNumber,
           value: room.roomNumber,
-
         })),
       };
       this.listenRoomTypeChanges(index);

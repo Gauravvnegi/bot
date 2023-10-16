@@ -19,7 +19,7 @@ export class ReservationComponent implements OnInit {
       link: '/admin',
     },
   ];
-  showCalendarView: boolean;
+  showCalendarView: boolean = false;
 
   constructor(
     private formService: FormService,
@@ -27,7 +27,7 @@ export class ReservationComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.globalFilterService.showFullView.subscribe((res: boolean) => {
+    this.globalFilterService.toggleFullView.subscribe((res: boolean) => {
       this.showCalendarView = res;
     });
   }

@@ -22,3 +22,7 @@
     max-height: 130px !important;
   }
 }
+
+:host ::ng-deep .p-dropdown-items-wrapper {
+  max-height: 150px !important;
+}

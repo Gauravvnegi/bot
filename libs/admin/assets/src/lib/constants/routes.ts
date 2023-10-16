@@ -7,7 +7,7 @@ export const navRoutes = {
   editAssets: { label: 'Edit Assets', link: './' },
 };
 
-export const AssetsRoutes: Record<
+export const assetsRoutes: Record<
   'assets' | 'createAssets' | 'editAssets',
   PageRoutes
 > = {

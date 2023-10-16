@@ -234,11 +234,7 @@
 <ng-template #emptyTable>
   <hospitality-bot-empty-table
     [isLoading]="loading"
-    [link]="
-      selectedTable === 'ROOM'
-        ? '/pages/efrontdesk/room/add-room/multiple'
-        : '/pages/efrontdesk/room/add-room-type'
-    "
+    [link]="selectedTable === 'ROOM' ? 'add-room/multiple' : 'add-room-type'"
     [content]="
       selectedTable === 'ROOM'
         ? {

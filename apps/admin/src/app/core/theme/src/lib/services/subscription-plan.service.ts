@@ -6,13 +6,14 @@ import {
   ProductSubscription,
   SettingsMenuItem,
   Subscriptions,
+  UserSubscriptionPermission,
 } from '../data-models/subscription-plan-config.model';
 import {
   productMenuSubs,
   reportsConfigMenu,
 } from '../data-models/product-subs';
 import { map } from 'rxjs/operators';
-import { ProductNames } from 'libs/admin/shared/src/index';
+import { ProductNames, UserResponse } from 'libs/admin/shared/src/index';
 import { RouteConfigPathService } from './routes-config.service';
 
 @Injectable({ providedIn: 'root' })
@@ -22,6 +23,7 @@ export class SubscriptionPlanService extends ApiService {
   private productSubscription: ProductSubscription;
   settings: SettingsMenuItem[];
   selectedProduct: ProductNames;
+  userSubscriptionPermission: UserSubscriptionPermission;
 
   getSubscriptionPlan(entityId: string): Observable<any> {
     return this.get(`/api/v1/entity/${entityId}/subscriptions/`).pipe(
@@ -49,6 +51,12 @@ export class SubscriptionPlanService extends ApiService {
   initSubscriptionDetails(data) {
     this.setSubscription(data);
     this.subscription$.next(new ProductSubscription().deserialize(data));
+  }
+
+  initUserBasedSubscription(userRes: UserResponse) {
+    this.userSubscriptionPermission = new UserSubscriptionPermission().deserialize(
+      userRes
+    );
   }
 
   setSubscription(data) {

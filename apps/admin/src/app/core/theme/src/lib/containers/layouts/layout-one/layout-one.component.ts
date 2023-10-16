@@ -511,6 +511,7 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
       this.sidebarSlide.clear();
       const componentRef = this.sidebarSlide.createComponent(factory);
       componentRef.instance.isSidebar = true;
+      componentRef.instance.isNewBooking = true;
       componentRef.instance.onCloseSidebar.subscribe((res) => {
         this.sidebarVisible = false;
         componentRef.destroy();

@@ -107,7 +107,7 @@
           (click)="onCheckboxClicked($event)"
         ></p-tableCheckbox>
       </td>
-      <td *ngFor="let column of columns">
+      <td *ngFor="let column of columns" [class]="getStyle(rowData)">
         <div
           class="cell-content"
           *ngIf="

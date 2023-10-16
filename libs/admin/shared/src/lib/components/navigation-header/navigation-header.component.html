@@ -1,4 +1,8 @@
-<div class="nav-header-wrapper" #header>
+<div
+  [ngClass]="{ 'only-routes': onlyNavRoutes }"
+  class="nav-header-wrapper"
+  #header
+>
   <div
     *ngIf="isStickyTitle && isScrolledUp"
     [ngStyle]="{ 'height.px': extraGap }"
@@ -6,7 +10,9 @@
   <div
     class="nav-wrapper"
     *ngIf="routes.length"
-    [ngClass]="{ 'nav-wrapper__sticky': isScrolledUp && !isStickyTitle }"
+    [ngClass]="{
+      'nav-wrapper__sticky': isScrolledUp && !isStickyTitle && !onlyNavRoutes
+    }"
   >
     <div class="link" *ngFor="let route of routes; let idx = index">
       <span
@@ -33,6 +39,7 @@
     </div>
   </div>
   <div
+    *ngIf="!onlyNavRoutes"
     class="header__wrapper"
     [ngClass]="{
       'header__wrapper__sticky-sub-title': isScrolledUp && !isStickyTitle,

@@ -1,4 +1,4 @@
-import { EntitySubType, EntityType } from "./table.type";
+import { EntitySubType, EntityType } from './table.type';
 
 export type CookiesData = {
   accessToken: string;
@@ -93,7 +93,7 @@ export type UserResponse = {
     module: string;
     label: string;
     permissions: {
-      manage: -1 | 0 | 1;
+      manage: -1 | 0 | 1; // -1 is disabled that is there is nothing related to that permission
       view: -1 | 0 | 1;
     };
     productType: string;

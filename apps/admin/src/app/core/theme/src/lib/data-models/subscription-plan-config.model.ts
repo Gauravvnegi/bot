@@ -7,6 +7,7 @@ import {
 } from 'libs/admin/shared/src/lib/constants/subscriptionConfig';
 import { get, set } from 'lodash';
 import { Cards, Modules, Product, Tables } from '../type/product';
+import { UserResponse } from 'libs/admin/shared/src/index';
 
 export class SubscriptionPlan {
   featureIncludes: Item[];
@@ -321,6 +322,35 @@ export class SettingsMenuItem {
       set({}, 'isActive', get(input, ['isView'])),
       set({}, 'isDisabled', !get(input, ['isSubscribed']))
     );
+    return this;
+  }
+}
+
+export class UserSubscriptionPermission {
+  productPermission: ProductNames[];
+  permission: Record<string, { canView: boolean; canManage: boolean }>;
+
+  deserialize(input: UserResponse) {
+    this.productPermission = [
+      ...new Map(
+        input.departments
+          .map(({ productType }) => productType)
+          .map((item) => [item, item])
+      ).values(),
+    ] as ProductNames[];
+
+    this.permission = input.permissions.reduce((value, current) => {
+      value = {
+        ...value,
+        [current.module]: {
+          canView: current.permissions.view === 1,
+          canManage: current.permissions.manage === 1,
+        },
+      };
+
+      return value;
+    }, {});
+
     return this;
   }
 }

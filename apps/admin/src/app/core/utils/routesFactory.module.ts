@@ -64,6 +64,10 @@ export const routeFactoryNew = (
     const productName = product.name;
     const isProductSubscribed = product.isSubscribed;
     const isProductInView = product.isView || makeRouteEvenIfIsViewIsFalse;
+    const productHasViewPermission = subscriptionService.hasViewUserPermission({
+      type: 'product',
+      name: productName,
+    });
 
     if (productName && isProductInView) {
       const productRoute = routesConfigService.getRouteFromName(productName);
@@ -129,6 +133,7 @@ export const routeFactoryNew = (
                * Initial redirect path
                */
               if (
+                productHasViewPermission &&
                 !initialRedirectPath &&
                 isProductSubscribed &&
                 isModuleSubscribed &&

@@ -7,20 +7,22 @@
     <div class="heading">{{ tableName }}</div>
     <ng-container
       *ngIf="
-        tableFG?.get('tableType')?.value === 'calendar' && tableTypes.length
+        tableFG?.get('tableType')?.value === 'calendar' &&
+        tableTypes.length &&
+        !showCalendarView
       "
     >
       <hospitality-bot-info-panel type="booking"></hospitality-bot-info-panel>
-      <!-- <img
-        (click)="toggleFullView = true"
+      <img
+        (click)="toggleFullView()"
         class="expand"
         [src]="'assets/svg/expand.svg'"
         alt=""
         [pTooltip]="'Full View'"
-      /> -->
+      />
     </ng-container>
   </div>
-  <div class="action-wrapper">
+  <div class="action-wrapper" *ngIf="!showCalendarView">
     <div class="pull-right" *ngIf="tableTypes.length">
       <label class="type-label" *ngFor="let option of tableTypes">
         <input
@@ -40,12 +42,13 @@
       </label>
     </div>
     <hospitality-bot-export-list
+      *ngIf="
+        tableFG?.get('tableType')?.value !== 'calendar' || !tableTypes.length
+      "
       (onDocumentActions)="onDocumentActions()"
       [documentTypes]="documentTypes"
       [documentActionTypes]="documentActionTypes"
-      [isDisable]="
-        values.length === 0 || tableFG?.get('tableType')?.value === 'calendar'
-      "
+      [isDisable]="values.length === 0"
     ></hospitality-bot-export-list>
   </div>
 </div>

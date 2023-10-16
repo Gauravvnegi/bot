@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormControl } from '@angular/forms';
 import { MatDialogConfig } from '@angular/material/dialog';
-import { Router } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
 import {
   GlobalFilterService,
   RoutesConfigService,
@@ -98,11 +98,10 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
     private formService: FormService,
     private globalFilterService: GlobalFilterService,
     protected snackbarService: SnackBarService,
-    private router: Router,
     private modalService: ModalService,
     private invoiceService: InvoiceService,
-    private subscriptionPlanService: SubscriptionPlanService,
-    private routesConfigService: RoutesConfigService
+    private routesConfigService: RoutesConfigService,
+    private router: Router
   ) {
     super(fb, tabFilterService);
   }
@@ -113,6 +112,16 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
     this.checkReservationSubscription();
     this.listenForSelectedEntityChange();
     this.formService.resetData();
+    this.toggleCalendarView();
+  }
+
+  toggleCalendarView() {
+    // Turn off full view on route change
+    this.router.events.subscribe((event) => {
+      if (event instanceof NavigationEnd && this.showCalendarView === true) {
+        this.globalFilterService.toggleFullView.next(false);
+      }
+    });
     this.globalFilterService.toggleFullView.subscribe((res) => {
       this.showCalendarView = res;
     });

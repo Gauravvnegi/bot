@@ -2,11 +2,14 @@
   class="action-header"
   [ngClass]="{ 'action-header__sticky': isScrolledUp }"
   [formGroup]="tableFG"
-  *ngIf="!showCalendarView"
 >
   <div class="heading-wrapper">
     <div class="heading">{{ tableName }}</div>
-    <ng-container *ngIf="tableFG?.get('tableType').value === 'calendar'">
+    <ng-container
+      *ngIf="
+        tableFG?.get('tableType').value === 'calendar' && !showCalendarView
+      "
+    >
       <hospitality-bot-info-panel type="booking"></hospitality-bot-info-panel>
       <img
         (click)="toggleFullView()"
@@ -18,7 +21,7 @@
     </ng-container>
   </div>
 
-  <div class="action-wrapper">
+  <div class="action-wrapper" *ngIf="!showCalendarView">
     <div class="pull-right" *ngIf="selectedEntity.subType === 'ROOM_TYPE'">
       <label class="type-label" *ngFor="let option of tableTypes">
         <input
@@ -42,13 +45,12 @@
       (onClick)="createReservation()"
     ></hospitality-bot-button>
     <hospitality-bot-export-list
+      *ngIf="tableFG?.get('tableType').value !== 'calendar'"
       [additionalActionItems]="additionalActionItems"
       (onDocumentActions)="onDocumentActions()"
       [documentTypes]="documentTypes"
       [documentActionTypes]="documentActionTypes"
-      [isDisable]="
-        values.length === 0 || tableFG?.get('tableType').value === 'calendar'
-      "
+      [isDisable]="values.length === 0"
     ></hospitality-bot-export-list>
   </div>
 </div>

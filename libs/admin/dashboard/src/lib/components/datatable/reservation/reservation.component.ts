@@ -31,6 +31,7 @@ import { dashboard } from '../../../constants/dashboard';
 import { TableValue } from '../../../constants/tabFilterItem';
 import { ReservationService } from '../../../services/reservation.service';
 import { reservationStatus } from '../../../constants/response';
+import { NavigationEnd, Router } from '@angular/router';
 @Component({
   selector: 'hospitality-bot-reservation-datatable',
   templateUrl: './reservation.component.html',
@@ -49,7 +50,6 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
   isCustomSort = true;
   rowsPerPage = 100;
   triggerInitialData = false;
-  toggleFullView = false;
   cols = cols.reservation;
   selectedTab: TableValue;
   isSidebarVisible = false;
@@ -60,6 +60,7 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
   entityId: string;
   options: any[] = [];
   isPopUploading: boolean = false;
+  showCalendarView: boolean = false;
   selectedTableType: string;
 
   constructor(
@@ -72,7 +73,8 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
     public feedbackService: FeedbackService,
     protected tabFilterService: TableService,
     protected subscriptionPlanService: SubscriptionPlanService,
-    protected routesConfigService: RoutesConfigService
+    protected routesConfigService: RoutesConfigService,
+    private router: Router
   ) {
     super(fb, tabFilterService);
   }
@@ -91,6 +93,7 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
     this.checkReservationSubscription();
     this.listenForGlobalFilters();
     this.listenGuestDetails();
+    this.toggleCalendarView();
   }
 
   get isCalendarViewAvailable() {
@@ -98,6 +101,18 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
       this.routesConfigService.productName,
       ModuleNames.ADD_RESERVATION
     );
+  }
+
+  toggleCalendarView() {
+    this.router.events.subscribe((event) => {
+      // Turn off full view on route change
+      if (event instanceof NavigationEnd && this.showCalendarView === true) {
+        this.globalFilterService.toggleFullView.next(false);
+      }
+    });
+    this.globalFilterService.toggleFullView.subscribe((res) => {
+      this.showCalendarView = res;
+    });
   }
 
   checkReservationSubscription() {
@@ -108,6 +123,10 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
     } else {
       this.tableTypes = [];
     }
+  }
+
+  toggleFullView() {
+    this.globalFilterService.toggleFullView.next(true);
   }
 
   /**

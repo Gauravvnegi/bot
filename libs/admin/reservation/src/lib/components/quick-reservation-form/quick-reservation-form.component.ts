@@ -393,9 +393,20 @@ export class QuickReservationFormComponent implements OnInit {
   handleSubmit() {
     if (this.useForm.invalid && !this.reservationId) {
       this.useForm.markAllAsTouched();
+      // const cdkOverlayContainer = this.elementRef.nativeElement.querySelector(
+      //   '.cdk-overlay-container'
+      // );
+      // debugger;
+      // // Increase the z-index before showing the snackbar
+      // this.renderer.setStyle(cdkOverlayContainer, 'z-index', '1000');
+      // setTimeout(() => {
+      //   this.renderer.removeStyle(cdkOverlayContainer, 'z-index');
+      // }, 3000);
       this.snackbarService.openSnackBarAsText(
-        'Invalid form: Please fix errors'
-      );
+        'Invalid form: Please fix errors',
+        '',
+        { horizontalPosition: 'right' }
+        );
       return;
     }
 

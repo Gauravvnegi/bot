@@ -149,10 +149,12 @@ export class BaseReservationComponent {
     this.paymentControls.totalPaidAmount.updateValueAndValidity();
 
     // Needs to be changed according to api.
-    // this.paymentRuleControls.deductedAmount.patchValue(
-    //   this.summaryData?.totalAmount
-    // );
+    this.paymentRuleControls.deductedAmount.patchValue(
+      this.summaryData?.totalAmount
+    );
   }
+
+
 
   get reservationInfoControls() {
     return (this.userForm.get('reservationInformation') as FormGroup)
@@ -176,10 +178,10 @@ export class BaseReservationComponent {
     >;
   }
 
-  // get paymentRuleControls() {
-  //   return (this.userForm.get('paymentRule') as FormGroup).controls as Record<
-  //     keyof ReservationForm['paymentRule'],
-  //     AbstractControl
-  //   >;
-  // }
+  get paymentRuleControls() {
+    return (this.userForm.get('paymentRule') as FormGroup).controls as Record<
+      keyof ReservationForm['paymentRule'],
+      AbstractControl
+    >;
+  }
 }

@@ -86,6 +86,7 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
   tableTypes = [tableTypes.calendar, tableTypes.table];
 
   selectedTableType: string;
+  showCalendarView = false;
 
   private cancelRequests$ = new Subject<void>();
 
@@ -112,10 +113,13 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
     this.checkReservationSubscription();
     this.listenForSelectedEntityChange();
     this.formService.resetData();
+    this.globalFilterService.toggleFullView.subscribe((res) => {
+      this.showCalendarView = res;
+    });
   }
 
-  showFullView() {
-    this.globalFilterService.showFullView.next(true);
+  toggleFullView() {
+    this.globalFilterService.toggleFullView.next(true);
   }
 
   checkReservationSubscription() {
@@ -159,20 +163,22 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
     this.$selectedEntitySubscription.add(
       this.formService.selectedEntity
         .pipe(
-          distinctUntilChanged((prev, curr) => prev.id === curr.id), // Compare subType property for changes
+          distinctUntilChanged((prev, curr) => prev?.id === curr?.id), // Compare subType property for changes
           tap((res) => {
-            this.selectedEntity = res;
+            if (res) this.selectedEntity = res;
           })
         )
         .subscribe((res) => {
-          this.cancelRequests$.next();
-          this.isSelectedEntityChanged = true; // Since we only get here when selectedEntity has changed
-          // this.resetTableValues();
-          this.initDetails(this.selectedEntity);
-          this.initTableValue();
-          if (this.selectedEntity.subType !== 'ROOM_TYPE') {
-            this.selectedTableType = 'table';
-            this.tableFG.patchValue({ tableType: 'table' });
+          if (res) {
+            this.cancelRequests$.next();
+            this.isSelectedEntityChanged = true; // Since we only get here when selectedEntity has changed
+            // this.resetTableValues();
+            this.initDetails(this.selectedEntity);
+            this.initTableValue();
+            if (this.selectedEntity?.subType !== 'ROOM_TYPE') {
+              this.selectedTableType = 'table';
+              this.tableFG.patchValue({ tableType: 'table' });
+            }
           }
         })
     );

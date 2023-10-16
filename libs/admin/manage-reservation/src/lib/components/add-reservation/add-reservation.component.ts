@@ -216,8 +216,10 @@ export class AddReservationComponent extends BaseReservationComponent
 
             this.userForm.patchValue({
               reservationInformation: reservationInfo,
+              instructions: formData.instructions,
               formData,
             });
+            
             this.inputControls.offerId.patchValue(data.offerId);
             if (data.offerId) {
               const roomTypeIds = roomInformation.map(

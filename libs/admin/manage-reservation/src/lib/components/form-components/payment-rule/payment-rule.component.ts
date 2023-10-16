@@ -57,6 +57,7 @@ export class PaymentRuleComponent implements OnInit {
 
     this.inputControl.amountToPay.valueChanges.subscribe((res) => {
       const newDeductedAmount = this.inputControl.deductedAmount.value - +res;
+      debugger;
       this.inputControl.deductedAmount.setValue(newDeductedAmount);
     });
   }

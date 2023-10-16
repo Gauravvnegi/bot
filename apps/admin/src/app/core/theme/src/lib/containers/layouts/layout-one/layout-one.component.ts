@@ -128,7 +128,7 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.initLayoutConfigs();
     this.globalFilterService.listenForGlobalFilterChange();
-    this.globalFilterService.showFullView.subscribe(
+    this.globalFilterService.toggleFullView.subscribe(
       (res: boolean) => (this.fullView = res)
     );
     this.setInitialFilterValue();

@@ -2,18 +2,19 @@
   class="action-header"
   [ngClass]="{ 'action-header__sticky': isScrolledUp }"
   [formGroup]="tableFG"
+  *ngIf="!showCalendarView"
 >
   <div class="heading-wrapper">
     <div class="heading">{{ tableName }}</div>
     <ng-container *ngIf="tableFG?.get('tableType').value === 'calendar'">
       <hospitality-bot-info-panel type="booking"></hospitality-bot-info-panel>
-      <!-- <img
-        (click)="showFullView()"
+      <img
+        (click)="toggleFullView()"
         class="expand"
         [src]="'assets/svg/expand.svg'"
         alt=""
         [pTooltip]="'Full View'"
-      /> -->
+      />
     </ng-container>
   </div>
 

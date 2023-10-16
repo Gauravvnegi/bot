@@ -53,7 +53,7 @@ export class PaymentMethodComponent implements OnInit {
     const { firstName, lastName } = this.userService.userDetails;
     this.paymentControls.cashierFirstName.setValue(firstName);
     this.paymentControls.cashierLastName.setValue(lastName);
-
+    this.listenForPaidAmountChanges();
   }
 
   addFormGroup() {
@@ -62,10 +62,7 @@ export class PaymentMethodComponent implements OnInit {
     const data = {
       cashierFirstName: [{ value: '', disabled: true }],
       cashierLastName: [{ value: '', disabled: true }],
-      totalPaidAmount: [
-        0,
-        [Validators.min(0)],
-      ],
+      totalPaidAmount: [0, [Validators.min(0)]],
       currency: [''],
       paymentMethod: [''],
       paymentRemark: ['', [Validators.maxLength(60)]],
@@ -86,6 +83,15 @@ export class PaymentMethodComponent implements OnInit {
         this.controlContainer.control.get('paymentMethod').patchValue({
           currency: this.currencies[0].value,
         });
+      }
+    });
+  }
+
+  listenForPaidAmountChanges() {
+    this.paymentControls.totalPaidAmount.valueChanges.subscribe((res) => {
+      if (res) {
+        this.paymentRuleControls.amountToPay.reset();
+        this.paymentRuleControls.deductedAmount.setValue(res);
       }
     });
   }
@@ -114,6 +120,14 @@ export class PaymentMethodComponent implements OnInit {
     return (this.parentFormGroup.get('paymentMethod') as FormGroup)
       .controls as Record<
       keyof ReservationForm['paymentMethod'],
+      AbstractControl
+    >;
+  }
+
+  get paymentRuleControls() {
+    return (this.parentFormGroup.get('paymentRule') as FormGroup)
+      .controls as Record<
+      keyof ReservationForm['paymentRule'],
       AbstractControl
     >;
   }

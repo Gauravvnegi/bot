@@ -49,7 +49,7 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
   isCustomSort = true;
   rowsPerPage = 100;
   triggerInitialData = false;
-  showFullView = false;
+  toggleFullView = false;
   cols = cols.reservation;
   selectedTab: TableValue;
   isSidebarVisible = false;

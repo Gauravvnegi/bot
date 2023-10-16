@@ -5,29 +5,29 @@
   margin-bottom: 20px;
 }
 
-// ::ng-deep .p-sidebar-mask,
-// .p-sidebar-mask-leave.p-component-overlay {
-//   background-color: rgba(0, 0, 0, 0) !important;
-// }
+::ng-deep .p-sidebar-mask,
+.p-sidebar-mask-leave.p-component-overlay {
+  background-color: rgba(0, 0, 0, 0) !important;
+}
 
-// ::ng-deep .p-component-overlay {
-//   display: none !important;
-// }
+::ng-deep .p-component-overlay {
+  display: none !important;
+}
 
 // :host ::ng-deep .p-sidebar {
 //   top: 65px;
 //   width: 27rem;
 // }
 
-// :host ::ng-deep .nav-header {
-//   .nav-wrapper {
-//     .nav-actions {
-//     }
-//   }
-//   .nav-wrapper__sticky {
-//     z-index: 470 !important;
-//   }
-// }
+:host ::ng-deep .nav-header {
+  .nav-wrapper {
+    .nav-actions {
+    }
+  }
+  .nav-wrapper__sticky {
+    z-index: 470 !important;
+  }
+}
 
 .content {
   display: flex;

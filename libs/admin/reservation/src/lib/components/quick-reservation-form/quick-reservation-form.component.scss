@@ -93,18 +93,14 @@
   }
 }
 
-.error-message {
-  font-size: 0.7em;
-  height: 1.5em;
-  position: absolute;
-  color: #f44336;
-  display: flex;
-  width: 100%;
-  left: 0;
-  top: 65px;
-}
-
 :host ::ng-deep .fixed {
   left: 0 !important;
   box-shadow: 1px 7px 7px #b5b5b5 !important;
+}
+
+.loader {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }

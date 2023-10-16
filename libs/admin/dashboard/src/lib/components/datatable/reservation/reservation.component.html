@@ -5,13 +5,23 @@
 >
   <div class="heading-wrapper">
     <div class="heading">{{ tableName }}</div>
-    <hospitality-bot-info-panel
-      *ngIf="tableFG?.get('tableType').value === 'calendar'"
-      type="booking"
-    ></hospitality-bot-info-panel>
+    <ng-container
+      *ngIf="
+        tableFG?.get('tableType')?.value === 'calendar' && tableTypes.length
+      "
+    >
+      <hospitality-bot-info-panel type="booking"></hospitality-bot-info-panel>
+      <!-- <img
+        (click)="showFullView = true"
+        class="expand"
+        [src]="'assets/svg/expand.svg'"
+        alt=""
+        [pTooltip]="'Full View'"
+      /> -->
+    </ng-container>
   </div>
   <div class="action-wrapper">
-    <div class="pull-right">
+    <div class="pull-right" *ngIf="tableTypes.length">
       <label class="type-label" *ngFor="let option of tableTypes">
         <input
           type="radio"
@@ -33,28 +43,24 @@
       (onDocumentActions)="onDocumentActions()"
       [documentTypes]="documentTypes"
       [documentActionTypes]="documentActionTypes"
+      [isDisable]="
+        values.length === 0 || tableFG?.get('tableType')?.value === 'calendar'
+      "
     ></hospitality-bot-export-list>
   </div>
 </div>
 <div [ngClass]="{ 'sticky-header-gap': isScrolledUp }"></div>
 
-<ng-container *ngIf="tableFG?.get('tableType').value === 'calendar'">
+<ng-container
+  *ngIf="
+    tableFG?.get('tableType')?.value === 'calendar' && tableTypes.length;
+    else tableView
+  "
+>
   <hospitality-bot-reservation-calendar-view></hospitality-bot-reservation-calendar-view>
 </ng-container>
 
-<ng-container *ngIf="tableFG?.get('tableType').value === 'calendarMaximize'">
-  <p-dialog
-    header="Header"
-    [modal]="true"
-    [(visible)]="visible"
-    [style]="{ width: '50vw' }"
-    [maximizable]="true"
-  >
-    <hospitality-bot-reservation-calendar-view></hospitality-bot-reservation-calendar-view>
-  </p-dialog>
-</ng-container>
-
-<ng-container *ngIf="tableFG?.get('tableType').value === 'table'">
+<ng-template #tableView>
   <p-table
     #dt
     [styleClass]="tableConfig.styleClass"
@@ -445,7 +451,7 @@
       ></p-paginator>
     </ng-template>
   </p-table>
-</ng-container>
+</ng-template>
 
 <ng-template #emptyCell>
   <div class="emptyCell">&mdash;</div>

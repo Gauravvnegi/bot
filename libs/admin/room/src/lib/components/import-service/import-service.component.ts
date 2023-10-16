@@ -107,33 +107,11 @@ export class ImportServiceComponent implements OnInit {
     });
   }
 
-  manageRoutes() {
-    // const { navRoutes, title } = businessRoute[
-    //   this.entityId ? 'editImportServices' : 'importServices'
-    // ];
-    // this.pageTitle = title;
-    // this.navRoutes = navRoutes;
-    // this.navRoutes[2].link.replace('brandId', this.brandId);
-    // this.navRoutes[2].isDisabled = false;
-    // if (this.entityId) {
-    //   this.navRoutes[3].link = `/pages/settings/business-info/brand/${this.brandId}/hotel/${this.entityId}`;
-    //   this.navRoutes[3].isDisabled = false;
-    // } else {
-    //   this.navRoutes[3].link = `/pages/settings/business-info/brand/${this.brandId}/hotel`;
-    //   this.navRoutes[3].isDisabled = false;
-    // }
-  }
+  manageRoutes() {}
 
-  saveForm(serviceData) {
-    serviceData.serviceIds = [
-      ...this.roomService.roomTypeFormData.services.map(
-        (service) => service.id
-      ),
-      ...serviceData.serviceIds,
-    ];
-
+  saveForm(data: { serviceIds: string[]; packageCode: string }) {
     this.roomService
-      .updateHotel(this.entityId, serviceData)
+      .updateHotel(this.entityId, { serviceIds: data.serviceIds })
       .subscribe(this.handleSuccess, this.handelError);
   }
 

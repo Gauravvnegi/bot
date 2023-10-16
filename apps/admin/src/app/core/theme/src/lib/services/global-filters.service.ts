@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { get } from 'lodash';
-import { BehaviorSubject } from 'rxjs';
+import { Subject, BehaviorSubject } from 'rxjs';
 import {
   EntitySubType,
   EntityType,
@@ -14,6 +14,7 @@ import { FilterService } from './filter.service';
 export class GlobalFilterService {
   selectedModule = new BehaviorSubject<ModuleNames | ''>('');
   globalFilter$ = new BehaviorSubject<Partial<GlobalFilterData>>({});
+  showFullView = new BehaviorSubject<boolean>(false);
   timezone: string;
   entityId: string;
   entityType: EntityType; //category

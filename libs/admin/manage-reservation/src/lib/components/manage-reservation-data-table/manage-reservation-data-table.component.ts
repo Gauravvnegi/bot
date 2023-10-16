@@ -114,6 +114,10 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
     this.formService.resetData();
   }
 
+  showFullView() {
+    this.globalFilterService.showFullView.next(true);
+  }
+
   checkReservationSubscription() {
     this.tableFG?.addControl('tableType', new FormControl('calendar'));
     this.tableFG.patchValue({ tableType: 'calendar' });

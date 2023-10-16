@@ -128,7 +128,7 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
       address: ['', [Validators.required]],
       imageUrl: [[], [Validators.required]],
       description: [''],
-      serviceIds: [[]],
+      serviceIds: [[]], //for complimentary services
       paidServiceIds: [[]],
       menuIds: [[]],
       foodPackageIds: [[]],
@@ -151,7 +151,6 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
       if (this.OutletFormService.outletFormState) {
         const { type } = this.OutletFormService.OutletFormData;
         this.initOptionConfig(type);
-
         this.useForm.patchValue(this.OutletFormService.OutletFormData);
         this.useForm.get('type').disable();
       } else {
@@ -386,7 +385,6 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
             this.paidServices = new Services().deserialize(
               res.paidPackages
             ).services;
-
             //extracting id of paid services
             const data = this.paidServices.map((item) => {
               if (item.active) return item.id;
@@ -403,7 +401,23 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
             this.compServices = new Services().deserialize(
               res.complimentaryPackages
             ).services;
-
+            if ((this, this.OutletFormService.outletFormState)) {
+              const test = this.compServices
+                .filter((item) =>
+                  this.OutletFormService.OutletFormData.packageCode.includes(
+                    item.packageCode
+                  )
+                )
+                .map((item) => item.id);
+              this.OutletFormService.OutletFormData.serviceIds = [
+                ...test,
+                ...this.OutletFormService.OutletFormData.serviceIds,
+              ];
+              const { serviceIds } = this.formControls;
+              serviceIds.patchValue(
+                this.OutletFormService.OutletFormData.serviceIds
+              );
+            }
             const data = this.compServices.map((item) => {
               if (item.active) return item.id;
             });

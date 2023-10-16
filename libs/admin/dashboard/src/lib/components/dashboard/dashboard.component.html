@@ -91,13 +91,10 @@
           }}</span>
           <span
             [ngClass]="
-              getStatusStyle(
-                data?.currentJourney?.currentJourneyStatus,
-                'image'
-              )
+              getStatusStyle(data?.status?.journeyStatus.preCheckin, 'image')
             "
             class="status"
-            >{{ data?.currentJourney?.currentJourneyStatus }}</span
+            >{{ data?.status?.journeyStatus.preCheckin }}</span
           >
         </div>
       </div>

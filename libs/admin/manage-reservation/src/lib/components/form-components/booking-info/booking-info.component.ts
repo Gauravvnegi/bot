@@ -4,10 +4,8 @@ import {
   ControlContainer,
   FormArray,
   FormGroup,
-  Validators,
 } from '@angular/forms';
 import {
-  AdminUtilityService,
   ConfigService,
   CountryCodeList,
   EntitySubType,
@@ -66,8 +64,7 @@ export class BookingInfoComponent implements OnInit {
     public controlContainer: ControlContainer,
     private configService: ConfigService,
     private globalFilterService: GlobalFilterService,
-    private formService: FormService,
-    private adminUtilityService: AdminUtilityService
+    private formService: FormService
   ) {}
 
   ngOnInit(): void {
@@ -141,7 +138,6 @@ export class BookingInfoComponent implements OnInit {
           this.minToDate.setDate(maxToLimit.getDate());
           this.formService.reservationDate.next(res);
           if (this.roomControls.valid) {
-            // this.getRoomsForAllRoomTypes();
             this.formService.getSummary.next();
           }
         }
@@ -152,7 +148,6 @@ export class BookingInfoComponent implements OnInit {
           this.toDateValue = new Date(res);
           this.updateDateDifference();
           if (this.roomControls.valid && !multipleDateChange) {
-            // this.getRoomsForAllRoomTypes();
             this.formService.getSummary.next();
           }
           multipleDateChange = false;
@@ -239,31 +234,6 @@ export class BookingInfoComponent implements OnInit {
       // Update the dateDifference BehaviorSubject with the new value
       this.formService.dateDifference.next(dateDiffInDays);
     }
-  }
-
-  getRoomsForAllRoomTypes() {
-    this.roomTypeArray.forEach((roomTypeGroup, index) => {
-      const roomTypeId = roomTypeGroup.get('roomTypeId').value;
-      const config = {
-        params: this.adminUtilityService.makeQueryParams([
-          {
-            from: this.reservationInfoControls.from.value,
-            to: this.reservationInfoControls.to.value,
-            type: 'ROOM',
-            createBooking: true,
-            roomTypeId: roomTypeId,
-          },
-        ]),
-      };
-
-      this.formService.getRooms({
-        entityId: this.entityId,
-        config: config,
-        type: 'array',
-        roomControl: this.roomControls[index].get('roomNumberOptions'),
-        roomNumbersControl: this.roomControls[index].get('roomNumbers'),
-      });
-    });
   }
 
   get reservationInfoControls() {

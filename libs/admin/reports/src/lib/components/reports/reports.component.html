@@ -1,1 +1,27 @@
-<p>reports works!</p>
+<p-sidebar
+  styleClass="reports-menu"
+  [visible]="showMenu"
+  [position]="'left'"
+  [showCloseIcon]="false"
+  [modal]="false"
+>
+  <div class="menu-header">
+    <div>{{ reportTitle }}</div>
+    <i
+      class="pi pi-angle-double-left"
+      (click)="toggleMenu()"
+      aria-hidden="true"
+    ></i>
+  </div>
+  <div
+    class="menu-option"
+    [ngClass]="{ selected: reportOption.value === selectedReport.value }"
+    *ngFor="let reportOption of reportsMenuOptions"
+    (click)="selectReport(reportOption)"
+  >
+    {{ reportOption.label }}
+  </div>
+</p-sidebar>
+
+<p class="routes">Frontdesk > Reports > Reservation > No show reports</p>
+<hospitality-bot-reports-data-table></hospitality-bot-reports-data-table>

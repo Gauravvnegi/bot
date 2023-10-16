@@ -401,7 +401,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
   }
 
   manageInvoice() {
-    this.onDetailsClose.next(false);
+    this.onDetailsClose.next(true);
     this.routesConfigService.navigate({
       subModuleName: ModuleNames.INVOICE,
       additionalPath: `${this.bookingId}`,
@@ -648,7 +648,9 @@ export class DetailsComponent implements OnInit, OnDestroy {
     this._reservationService
       .manualCheckout(this.reservationDetailsFG.get('bookingId').value)
       .subscribe((res) => {
-        this.snackbarService.openSnackBarAsText('Checkout completed.');
+        this.snackbarService.openSnackBarAsText('Checkout completed.', '', {
+          panelClass: 'success',
+        });
       });
   }
 
@@ -682,7 +684,9 @@ export class DetailsComponent implements OnInit, OnDestroy {
           phoneNumber: this.primaryGuest.phoneNumber,
         })
         .subscribe((res) => {
-          this.snackbarService.openSnackBarAsText('Checkin completed.');
+          this.snackbarService.openSnackBarAsText('Checkin completed.', '', {
+            panelClass: 'success',
+          });
         })
     );
   }
@@ -902,7 +906,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
     if (sharedIcon) {
       return channel.isSubscribed ? sharedIcon.iconUrl : sharedIcon.iconUrl;
     }
-    return '';
+    return null;
   }
 
   checkForTransactionFeedbackSubscribed() {

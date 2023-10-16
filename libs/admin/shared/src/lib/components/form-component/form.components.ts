@@ -185,6 +185,7 @@ export class FormComponent implements OnInit {
   get inputNgClasses() {
     return {
       input__static: this.label && this.alignment === 'vertical',
+      input__float: this.label && this.float,
       input__standard: this.variant === 'standard',
       input__outlined: this.variant === 'outlined',
       input__error: this.error,

@@ -16,6 +16,7 @@ export class RoomTypesComponent extends FormComponent {
   entityId = '';
   roomTypes: Option[] = [];
   @Input() isAllSelected = false;
+  @Input() floatLabel = false;
 
   $subscription = new Subscription();
   /* roomTypes options variable */
@@ -23,6 +24,19 @@ export class RoomTypesComponent extends FormComponent {
   loadingRoomTypes = false;
   noMoreRoomTypes = false;
   roomTypeLimit = 100;
+
+  propsValue = {
+    isAsync: false,
+  };
+
+  @Input() set settings(values) {
+    if (values) {
+      this.propsValue = {
+        ...this.propsValue,
+        ...values,
+      };
+    }
+  }
 
   constructor(
     public controlContainer: ControlContainer,

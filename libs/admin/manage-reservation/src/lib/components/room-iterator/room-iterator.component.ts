@@ -29,6 +29,7 @@ import { IteratorField } from 'libs/admin/shared/src/lib/types/fields.type';
 import { FormService } from '../../services/form.service';
 import { RoomTypeResponse } from 'libs/admin/room/src/lib/types/service-response';
 import { CalendarViewData } from 'libs/admin/reservation/src/lib/components/reservation-calendar-view/reservation-calendar-view.component';
+import { debounceTime } from 'rxjs/operators';
 
 @Component({
   selector: 'hospitality-bot-room-iterator',
@@ -56,6 +57,7 @@ export class RoomIteratorComponent extends IteratorComponent
 
   loadingRoomTypes = [false];
   isDefaultRoomType = false;
+  reinitializeRooms = false;
 
   itemValuesCount = 0;
   selectedRoomNumber: string = '';
@@ -134,6 +136,18 @@ export class RoomIteratorComponent extends IteratorComponent
       });
       this.parentFormGroup.addControl('roomInformation', roomInformationGroup);
     }
+    this.listenForDateChanges();
+  }
+
+  listenForDateChanges() {
+    this.reservationInfoControls.from.valueChanges.subscribe((res) => {
+      if (res) this.reinitializeRooms = !this.reinitializeRooms;
+    });
+    this.reservationInfoControls.to.valueChanges
+      .pipe(debounceTime(50))
+      .subscribe((res) => {
+        if (res) this.reinitializeRooms = !this.reinitializeRooms;
+      });
   }
 
   // Init Room Details
@@ -174,7 +188,6 @@ export class RoomIteratorComponent extends IteratorComponent
         sellingprice: item.sellingPrice,
         isBase: item.isBase,
       }));
-
       // Patch the selected room number if available.
       this.roomControls[index].patchValue(
         {
@@ -252,6 +265,7 @@ export class RoomIteratorComponent extends IteratorComponent
         rooms: data.rooms.map((room) => ({
           label: room.roomNumber,
           value: room.roomNumber,
+
         })),
       };
       this.listenRoomTypeChanges(index);

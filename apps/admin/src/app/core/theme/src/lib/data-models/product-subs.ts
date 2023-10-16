@@ -3167,3 +3167,44 @@ export const productMenuSubs: any[] = [
     isView: true,
   },
 ];
+
+export const reportsConfigMenu = {
+  name: 'REPORTS',
+  label: 'Reports',
+  isSubscribed: true,
+  icon:
+    'https://botfiles.nyc3.cdn.digitaloceanspaces.com/bot/subscription_icon/settings.png',
+  isView: true,
+  config: [
+    {
+      name: 'RESERVATION_REPORTS',
+      label: 'Reservation',
+      isSubscribed: true,
+      isView: true,
+    },
+    {
+      name: 'MANAGER_REPORTS',
+      label: 'Manager',
+      isSubscribed: true,
+      isView: true,
+    },
+    {
+      name: 'OCCUPANCY_REPORTS',
+      label: 'Occupancy',
+      isSubscribed: true,
+      isView: true,
+    },
+    {
+      name: 'REVENUE_REPORTS',
+      label: 'Revenue',
+      isSubscribed: true,
+      isView: true,
+    },
+    {
+      name: 'FINANCIAL_REPORTS',
+      label: 'Financial',
+      isSubscribed: true,
+      isView: true,
+    },
+  ],
+};

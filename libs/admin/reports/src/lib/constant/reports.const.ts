@@ -132,7 +132,7 @@ export const reportFiltersMapping: Record<
   ReportsTypeValues,
   AvailableFilters[]
 > = {
-  noShowReport: ['fromDate', 'toDate', 'roomType'],
+  noShowReport: ['fromDate', 'toDate'],
   arrivalReport: ['fromDate', 'toDate', 'roomType'],
   cancellationReport: ['fromDate', 'toDate', 'roomType'],
   departureReport: ['fromDate', 'toDate', 'roomType'],

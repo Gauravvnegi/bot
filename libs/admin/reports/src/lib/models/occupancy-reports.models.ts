@@ -1,8 +1,8 @@
 import { formatDateToCustomString } from 'libs/web-user/shared/src/lib/utils/date-utils';
 import { HistoryAndForecastReportResponse } from '../types/occupany-reports.types';
-import { ReportClass } from '../types/reports.types';
+import { ReportClass, RowStyles } from '../types/reports.types';
 
-export class HistoryAndForecastReportData {
+export class HistoryAndForecastReportData extends RowStyles {
   date: number | string;
   roomsOccupied: number;
   arrivalRooms: number;
@@ -40,6 +40,8 @@ export class HistoryAndForecastReportData {
     this.DNRRooms = input?.outOfServiceRooms;
     this.houseUseRooms = input?.houseUseRooms;
     this.pax = input?.inhouseAdults + input?.inhouseChildren;
+    this.isBold = input?.subTotalObject ? true : undefined;
+    this.isGreyBg = input?.subTotalObject ? true : undefined;
     return this;
   }
 }
@@ -50,7 +52,7 @@ export class HistoryAndForecastReport
   deserialize(values: HistoryAndForecastReportResponse[]) {
     this.records = new Array<HistoryAndForecastReportData>();
     if (!(values.length == 1 && values.find((item) => item?.subTotalObject))) {
-      values.forEach((item) => {
+      values.forEach((item, index) => {
         this.records.push(new HistoryAndForecastReportData().deserialize(item));
       });
     }

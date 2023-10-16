@@ -37,6 +37,8 @@ export class ReportsDataTableComponent extends BaseDatatableComponent {
   globalQueries = [];
   isSelectable = false;
   isSearchable = false;
+  fromDate: Date;
+  toDate: Date;
 
   selectedReport: ReportsMenu[number];
 
@@ -51,8 +53,8 @@ export class ReportsDataTableComponent extends BaseDatatableComponent {
   }
 
   ngOnInit(): void {
+    this.initTime();
     this.initReportFilters();
-
     this.reportsService.$selectedReport.subscribe((report) => {
       if (report) {
         this.selectedReport = report;
@@ -67,7 +69,10 @@ export class ReportsDataTableComponent extends BaseDatatableComponent {
       entityId: this.globalFilterService.entityId,
       reportName: this.selectedReport.value,
       ...this.currentFilters.reduce((value, curr) => {
-        value = { ...value, curr: filters[curr] };
+        value = {
+          ...value,
+          [curr]: filters[curr],
+        };
         return value;
       }, {}),
       // toDate: filters.toDate,
@@ -102,10 +107,8 @@ export class ReportsDataTableComponent extends BaseDatatableComponent {
 
   initReportFilters() {
     const filterForm = this.fb.group({
-      fromDate: [new Date().getTime()],
-      toDate: [new Date().getTime()],
-      // fromDate: [1696962600000],
-      // toDate: [1697048999000],
+      fromDate: [this.fromDate.getTime()],
+      toDate: [this.toDate.getTime()],
       roomType: [''],
     } as Record<ReportFiltersKey, any>);
     this.tableFG.addControl('filters', filterForm);
@@ -113,6 +116,13 @@ export class ReportsDataTableComponent extends BaseDatatableComponent {
     filterForm.valueChanges.subscribe((_res) => {
       this.loadInitialData();
     });
+  }
+
+  initTime() {
+    this.fromDate = new Date();
+    this.toDate = new Date();
+    this.fromDate.setHours(0, 0, 0, 0);
+    this.toDate.setHours(23, 59, 59, 999);
   }
 
   get availableFilters() {

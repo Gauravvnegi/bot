@@ -74,7 +74,7 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
     protected tabFilterService: TableService,
     protected subscriptionPlanService: SubscriptionPlanService,
     protected routesConfigService: RoutesConfigService,
-    private router: Router
+    protected router: Router
   ) {
     super(fb, tabFilterService);
   }

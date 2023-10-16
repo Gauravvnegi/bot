@@ -41,9 +41,9 @@ export class ReservationDatatableModalComponent
     protected _modal: ModalService,
     protected tabFilterService: TableService,
     public feedbackService: FeedbackService,
-    private router: Router,
     protected subscriptionPlanService: SubscriptionPlanService,
-    protected routesConfigService: RoutesConfigService
+    protected routesConfigService: RoutesConfigService,
+    protected router: Router
   ) {
     super(
       fb,
@@ -55,7 +55,8 @@ export class ReservationDatatableModalComponent
       feedbackService,
       tabFilterService,
       subscriptionPlanService,
-      routesConfigService
+      routesConfigService,
+      router
     );
   }
 

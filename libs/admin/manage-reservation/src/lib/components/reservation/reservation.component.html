@@ -1,25 +1,20 @@
-<ng-container *ngIf="showCalendarView; else reservationView">
-  <hospitality-bot-reservation-calendar-view></hospitality-bot-reservation-calendar-view>
-</ng-container>
-<ng-template #reservationView>
-  <hospitality-bot-navigation-header
-    [heading]="'Welcome To Reservation'"
-    [routes]="navRoutes"
-    [isBack]="false"
-  >
-  </hospitality-bot-navigation-header>
+<hospitality-bot-navigation-header
+  [heading]="'Welcome To Reservation'"
+  [routes]="navRoutes"
+  [isBack]="false"
+  *ngIf="!showCalendarView"
+>
+</hospitality-bot-navigation-header>
 
-  <hospitality-bot-entity-tab-filter
-    [config]="{
-      isSticky: true,
-      extraGap: 70,
-      scrollBoundary: 25,
-      isAllOutletTabFilter: false
-    }"
-    class="tab-filter"
-    (onEntityTabFilterChanges)="onEntityTabFilterChanges($event)"
-  ></hospitality-bot-entity-tab-filter>
-
-  <hospitality-bot-manage-reservation-data-table></hospitality-bot-manage-reservation-data-table>
-</ng-template>
-
+<hospitality-bot-entity-tab-filter
+  [config]="{
+    isSticky: true,
+    extraGap: 70,
+    scrollBoundary: 25,
+    isAllOutletTabFilter: false
+  }"
+  class="tab-filter"
+  (onEntityTabFilterChanges)="onEntityTabFilterChanges($event)"
+  *ngIf="!showCalendarView"
+></hospitality-bot-entity-tab-filter>
+<hospitality-bot-manage-reservation-data-table></hospitality-bot-manage-reservation-data-table>

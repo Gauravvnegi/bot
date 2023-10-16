@@ -1,5 +1,5 @@
-<div class="main-wrapper">
-  <div class="inventory-form" *ngIf="!!useForm && roomsLoaded; else loader">
+<div class="main-wrapper" *ngIf="!!useForm && roomsLoaded; else loader">
+  <div class="inventory-form">
     <div
       [ngClass]="
         !isRoomsEmpty && allRoomTypes?.length
@@ -198,10 +198,6 @@
  -->
   <div></div>
 
-  <ng-template #loader>
-    <hospitality-bot-loader-bounce></hospitality-bot-loader-bounce>
-  </ng-template>
-
   <ng-template #emptyView>
     <hospitality-bot-empty-table
       [isLoading]="loading"
@@ -215,3 +211,7 @@
     </hospitality-bot-empty-table>
   </ng-template>
 </div>
+
+<ng-template #loader>
+  <hospitality-bot-loader-bounce class="loader"></hospitality-bot-loader-bounce>
+</ng-template>

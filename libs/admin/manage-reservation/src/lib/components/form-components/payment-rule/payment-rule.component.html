@@ -24,7 +24,11 @@
         controlName="amountToPay"
         [props]="{
           placeholder: 'Enter',
-          type: 'number'
+          type: 'number',
+          errorMessages: {
+            min: 'Value cannot be less than 0.',
+            max: 'Value must be less than or equal to Total amount to be paid.'
+          }
         }"
       ></hospitality-bot-input>
       <hospitality-bot-view-input

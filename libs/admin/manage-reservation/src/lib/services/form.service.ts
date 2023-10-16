@@ -9,10 +9,9 @@ import {
   SourceData,
 } from '../types/forms.types';
 import { ReservationForm } from '../constants/form';
-import { GuestInfo, RoomReservation } from '../models/reservations.model';
+import { GuestInfo } from '../models/reservations.model';
 import { ManageReservationService } from './manage-reservation.service';
-import { Option, QueryConfig } from '@hospitality-bot/admin/shared';
-import { RoomsByRoomType } from 'libs/admin/room/src/lib/types/service-response';
+import { QueryConfig } from '@hospitality-bot/admin/shared';
 import { AbstractControl } from '@angular/forms';
 
 @Injectable({
@@ -24,9 +23,9 @@ export class FormService {
 
   disableBtn: boolean = false;
   calendarView: boolean = false;
-
   getSummary = new Subject<void>();
-
+  deductedAmount = new BehaviorSubject(0);
+  
   guestInformation: BehaviorSubject<GuestInfo> = new BehaviorSubject<GuestInfo>(
     null
   );
@@ -205,6 +204,7 @@ export class FormService {
     this.guestInformation.next(null);
     this.enableAccordion = false;
     this.reservationForm.next(null);
+    this.deductedAmount.next(0);
   }
 }
 

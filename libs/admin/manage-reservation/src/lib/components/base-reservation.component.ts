@@ -146,12 +146,17 @@ export class BaseReservationComponent {
       Validators.max(this.summaryData?.totalAmount),
       Validators.min(0),
     ]);
+    this.paymentRuleControls.amountToPay.setValidators([
+      Validators.max(this.summaryData?.totalAmount),
+      Validators.min(0),
+    ]);
     this.paymentControls.totalPaidAmount.updateValueAndValidity();
 
     // Needs to be changed according to api.
-    // this.paymentRuleControls.deductedAmount.patchValue(
-    //   this.summaryData?.totalAmount
-    // );
+    this.paymentRuleControls.deductedAmount.patchValue(
+      this.summaryData?.totalAmount
+    );
+    this.formService.deductedAmount.next(this.summaryData?.totalAmount);
   }
 
   get reservationInfoControls() {
@@ -176,10 +181,10 @@ export class BaseReservationComponent {
     >;
   }
 
-  // get paymentRuleControls() {
-  //   return (this.userForm.get('paymentRule') as FormGroup).controls as Record<
-  //     keyof ReservationForm['paymentRule'],
-  //     AbstractControl
-  //   >;
-  // }
+  get paymentRuleControls() {
+    return (this.userForm.get('paymentRule') as FormGroup).controls as Record<
+      keyof ReservationForm['paymentRule'],
+      AbstractControl
+    >;
+  }
 }

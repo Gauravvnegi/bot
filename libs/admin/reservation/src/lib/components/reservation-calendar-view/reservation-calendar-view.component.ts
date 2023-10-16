@@ -61,6 +61,7 @@ export class ReservationCalendarViewComponent implements OnInit {
   previousData: IGValue[] = [];
 
   formProps: QuickFormProps;
+  fullView: boolean;
 
   constructor(
     private fb: FormBuilder,
@@ -72,6 +73,9 @@ export class ReservationCalendarViewComponent implements OnInit {
 
   ngOnInit(): void {
     this.entityId = this.globalFilterService.entityId;
+    this.globalFilterService.toggleFullView.subscribe((res) => {
+      this.fullView = res;
+    });
     this.initForm();
     this.initDates(Date.now());
     this.initRoomTypes();
@@ -111,6 +115,10 @@ export class ReservationCalendarViewComponent implements OnInit {
           this.initReservationData();
         })
     );
+  }
+
+  close() {
+    this.globalFilterService.toggleFullView.next(false);
   }
 
   initReservationData() {

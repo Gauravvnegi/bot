@@ -17,7 +17,7 @@ import { SelectedEntityState } from 'libs/admin/dashboard/src/lib/types/dashboar
 import { LazyLoadEvent, SortEvent } from 'primeng/api';
 import { Observable, Subscription } from 'rxjs';
 import { assetConfig } from '../../../constants/asset';
-import { AssetsRoutes } from '../../../constants/routes';
+import { assetsRoutes } from '../../../constants/routes';
 import { Assets } from '../../../data-models/assetConfig.model';
 import { AssetService } from '../../../services/asset.service';
 import { RoutesConfigService } from '@hospitality-bot/admin/core/theme';
@@ -290,7 +290,7 @@ export class AssetDatatableComponent extends BaseDatatableComponent
    */
   openCreateAsset() {
     this.routesConfigService.navigate({
-      additionalPath: AssetsRoutes.createAssets.route,
+      additionalPath: assetsRoutes.createAssets.route,
     });
   }
 
@@ -302,7 +302,7 @@ export class AssetDatatableComponent extends BaseDatatableComponent
   openAssetDetails(asset, event): void {
     event.stopPropagation();
     this.routesConfigService.navigate({
-      additionalPath: AssetsRoutes.editAssets.route.replace(':id', asset.id),
+      additionalPath: assetsRoutes.editAssets.route.replace(':id', asset.id),
     });
   }
 

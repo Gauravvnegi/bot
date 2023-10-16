@@ -13,18 +13,15 @@ export const navRoute = {
   brand: {
     label: 'Brand',
     link: '/create-with/settings/business-info/brand',
-    isDisabled: true,
   },
   hotel: {
     label: 'Hotel',
     link: '/create-with/settings/business-info/brand/:brandId/hotel',
-    isDisabled: true,
   },
 
   editBrand: {
     label: 'Edit Brand',
     link: '/create-with/settings/business-info/brand/:brandId',
-    isDisabled: true,
   },
   businessInfo: {
     label: 'Business Info',
@@ -33,19 +30,16 @@ export const navRoute = {
   editHotel: {
     label: 'Edit Hotel',
     link: '/create-with/settings/business-info/brand/:brandId/hotel/:entityId',
-    isDisabled: true,
   },
   importService: {
     label: 'Import Service',
     link:
       '/create-with/settings/business-info/brand/:brandId/hotel/import-services',
-    isDisabled: true,
   },
   editImportService: {
     label: 'Import Service',
     link:
       '/create-with/settings/business-info/brand/:brandId/hotel/:entityId/import-services',
-    isDisabled: true,
   },
   services: { label: 'Services', link: './' },
 };

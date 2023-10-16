@@ -139,7 +139,7 @@
   <div class="caption__wrapper">
     <hospitality-bot-empty-table
       [isLoading]="loading"
-      link="pages/library/offers/{{ routes.createOffer }}"
+      [link]="routes.createOffer"
       [content]="{
         description:
           'No offers found. Tap the +Create Offers to create enticing offers to attract guests and boost bookings.',

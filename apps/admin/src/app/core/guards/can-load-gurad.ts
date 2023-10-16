@@ -19,7 +19,9 @@ export class CanLoadGuard implements CanLoad {
   // can load will always return true (it is just use to get the subscription data if not present)
   canLoad(route: Route, segments: UrlSegment[]) {
     const subscription = this.subscriptionService.getSubscription();
-    const userPermissions = this.userService.userPermissionDetails;
+    const userSubscriptionPermission = this.subscriptionService
+      .userSubscriptionPermission;
+
     const userId = this.userService.getLoggedInUserId();
     const entityId = this.hotelDetailsService.getentityId();
 
@@ -42,22 +44,24 @@ export class CanLoadGuard implements CanLoad {
         switchMap((response) => {
           this.subscriptionService.initSubscriptionDetails(response);
           this.loadingService.close();
-          if (!userPermissions) {
+          if (!userSubscriptionPermission) {
             return getLoggedUserDetails;
           }
-          return of(userPermissions);
+          return of(true);
         }),
         switchMap((response) => {
-          this.userService.initUserPermissionDetails(response.permissions);
+          if (typeof response !== 'boolean') {
+            this.subscriptionService.initUserBasedSubscription(response);
+          }
           return of(true);
         })
       );
     }
 
-    if (!userPermissions) {
+    if (!userSubscriptionPermission) {
       return getLoggedUserDetails.pipe(
         switchMap((response) => {
-          this.userService.initUserPermissionDetails(response.permissions);
+          this.subscriptionService.initUserBasedSubscription(response);
           return of(true);
         })
       );

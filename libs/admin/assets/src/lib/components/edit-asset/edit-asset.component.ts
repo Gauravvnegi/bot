@@ -14,7 +14,7 @@ import { AssetService } from '../../services/asset.service';
 import { TranslateService } from '@ngx-translate/core';
 import { assetConfig } from '../../constants/asset';
 import { FileUploadType } from 'libs/admin/shared/src/lib/models/file-upload-type.model';
-import { AssetsRoutes } from '../../constants/routes';
+import { assetsRoutes } from '../../constants/routes';
 
 @Component({
   selector: 'hospitality-bot-edit-asset',
@@ -57,7 +57,7 @@ export class EditAssetComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.initFg();
     this.listenForGlobalFilters();
-    const { navRoutes, title } = AssetsRoutes[
+    const { navRoutes, title } = assetsRoutes[
       this.assetId ? 'editAssets' : 'createAssets'
     ];
     this.navRoutes = navRoutes;

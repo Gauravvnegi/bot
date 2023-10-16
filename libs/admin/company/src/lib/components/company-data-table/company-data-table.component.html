@@ -198,7 +198,7 @@
 <ng-template #emptyTable>
   <hospitality-bot-empty-table
     [isLoading]="loading"
-    link="/pages/members/company/{{ companyRoutes.addCompany.route }}"
+    [link]="companyRoutes.addCompany.route"
     [content]="{
       description:
         'No Company found. Tap the +Add Company to add & manage the companies',

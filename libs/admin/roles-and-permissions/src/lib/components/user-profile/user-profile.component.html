@@ -118,7 +118,7 @@
     ></hospitality-bot-select>
 
     <hospitality-bot-multi-select
-      class="two-third-width"
+      class="full-width"
       controlName="products"
       [options]="products"
       label="Product Type"
@@ -174,8 +174,9 @@
                 >
                   <p
                     *ngIf="
-                      manageProduct ===
-                      userPermissionFG.get('productType').value
+                      permissionIncludesProduct(
+                        userPermissionFG.get('productType').value
+                      )
                     "
                     class="left-table-entity"
                     [ngClass]="{ 'color-added': 0 === index % 2 }"
@@ -216,8 +217,9 @@
                   <div
                     formGroupName="{{ userPermissionIdx }}"
                     *ngIf="
-                      manageProduct ===
-                      userPermissionFG.get('productType').value
+                      permissionIncludesProduct(
+                        userPermissionFG.get('productType').value
+                      )
                     "
                   >
                     <div formGroupName="permissions" class="checkbox-wrapper">

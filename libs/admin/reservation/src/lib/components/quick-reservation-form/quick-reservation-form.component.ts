@@ -91,6 +91,12 @@ export class QuickReservationFormComponent implements OnInit {
   @ViewChild('sidebarSlide', { read: ViewContainerRef })
   sidebarSlide: ViewContainerRef;
 
+  @Input() set isNewBooking(value: boolean) {
+    if (value === true) {
+      this.isDataLoaded = true;
+    }
+  }
+
   @Output() onCloseSidebar = new EventEmitter<boolean>(false);
   @Input() set reservationConfig(value: QuickReservationConfig) {
     for (const key in value) {

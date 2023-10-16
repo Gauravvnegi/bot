@@ -1,4 +1,5 @@
-import { EntitySubType, EntityType } from "./table.type";
+import { PermissionModuleNames } from '../constants';
+import { EntitySubType, EntityType } from './table.type';
 
 export type CookiesData = {
   accessToken: string;
@@ -90,10 +91,10 @@ export type UserResponse = {
   phoneNumber: string;
   // hotelAccess: { brands: Brand[] };
   permissions: {
-    module: string;
+    module: PermissionModuleNames;
     label: string;
     permissions: {
-      manage: -1 | 0 | 1;
+      manage: -1 | 0 | 1; // -1 is disabled that is there is nothing related to that permission
       view: -1 | 0 | 1;
     };
     productType: string;

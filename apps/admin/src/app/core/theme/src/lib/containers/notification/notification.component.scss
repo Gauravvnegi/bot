@@ -111,7 +111,7 @@
     @include flex-col-center-algn();
     gap: 7px;
     &::-webkit-scrollbar {
-      width: 16px;
+      width: 8px;
       &:hover {
         cursor: pointer;
       }

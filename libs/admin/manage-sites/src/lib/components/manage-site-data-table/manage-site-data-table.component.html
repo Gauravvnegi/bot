@@ -157,11 +157,7 @@
 <ng-template #emptyTable>
   <hospitality-bot-empty-table
     [isLoading]="loading"
-    [link]="
-      selectedTable === 'ROOM'
-        ? '/pages/inventory/room/add-room/multiple'
-        : '/pages/inventory/room/add-room-type'
-    "
+    [link]="selectedTable === 'ROOM' ? 'add-room/multiple' : 'add-room-type'"
     [content]="{
       description:
         'No site found. Tap the +Add Site to Manage and track your site',

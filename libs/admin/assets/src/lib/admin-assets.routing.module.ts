@@ -3,12 +3,12 @@ import { Route, RouterModule } from '@angular/router';
 import { AssetsComponent } from './components/assets/assets.component';
 import { AssetDatatableComponent } from './components/datatable/asset-datatable/asset-datatable.component';
 import { EditAssetComponent } from './components/edit-asset/edit-asset.component';
-import { AssetsRoutes } from './constants/routes';
+import { assetsRoutes } from './constants/routes';
 
 const appRoutes: Route[] = [
-  { path: AssetsRoutes.assets.route, component: AssetsComponent },
-  { path: AssetsRoutes.createAssets.route, component: EditAssetComponent },
-  { path: AssetsRoutes.editAssets.route, component: EditAssetComponent },
+  { path: assetsRoutes.assets.route, component: AssetsComponent },
+  { path: assetsRoutes.createAssets.route, component: EditAssetComponent },
+  { path: assetsRoutes.editAssets.route, component: EditAssetComponent },
 ];
 
 @NgModule({

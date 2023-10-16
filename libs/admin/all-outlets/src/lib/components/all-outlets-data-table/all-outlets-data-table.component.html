@@ -147,7 +147,7 @@
 <ng-template #emptyTable>
   <hospitality-bot-empty-table
     [isLoading]="loading"
-    link="/pages/outlet/all-outlets/{{ outletRoutes.addOutlet.route }}"
+    [link]="outletRoutes.addOutlet.route"
     [content]="{
       description:
         'No Outlets found. Tap the +Add Outlet to add & manage the outlets',

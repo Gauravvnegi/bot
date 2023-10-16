@@ -105,16 +105,14 @@ export class ImportServiceComponent implements OnInit {
       this.entityId ? 'editImportServices' : 'importServices'
     ];
     this.pageTitle = title;
-    this.navRoutes = navRoutes;
-    this.navRoutes[2].link.replace('brandId', this.brandId);
-    this.navRoutes[2].isDisabled = false;
-    if (this.entityId) {
-      this.navRoutes[3].link = `/pages/settings/business-info/brand/${this.brandId}/hotel/${this.entityId}`;
-      this.navRoutes[3].isDisabled = false;
-    } else {
-      this.navRoutes[3].link = `/pages/settings/business-info/brand/${this.brandId}/hotel`;
-      this.navRoutes[3].isDisabled = false;
-    }
+    this.navRoutes = navRoutes.map((routes) => {
+      return {
+        ...routes,
+        link: routes.link
+          .replace(':brandId', this.brandId)
+          .replace(':entityId', this.entityId),
+      };
+    });
   }
 
   /**

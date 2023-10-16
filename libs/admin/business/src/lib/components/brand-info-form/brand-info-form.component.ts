@@ -115,9 +115,9 @@ export class BrandInfoFormComponent implements OnInit {
       this.$subscription.add(
         this.businessService.createBrand(data).subscribe((res) => {
           this.handleSuccess();
-          this.router.navigate([
-            `pages/settings/business-info/brand/${res.id}`,
-          ]);
+          this.router.navigate([`${res.id}`], {
+            relativeTo: this.route,
+          });
         }, this.handelError)
       );
     }

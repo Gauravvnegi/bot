@@ -156,9 +156,7 @@
     </span>
   </p>
   <p class="bk-summary_priceInfo_taxFair">
-    <span class="bk-summary_priceInfo_perNight_label"
-      >Taxes & Fees <i class="fa fa-info-circle" aria-hidden="true"></i
-    ></span>
+    <span class="bk-summary_priceInfo_perNight_label">Taxes & Fees</span>
     <span
       class="bk-summary_priceInfo_perNight_amount"
       *ngIf="summaryData?.taxAndFees"
@@ -245,9 +243,7 @@
         index === undefined
       "
     >
-      <span class="bk-summary_priceInfo_perNight_label"
-        >Discount<i class="fa fa-info-circle" aria-hidden="true"></i
-      ></span>
+      <span class="bk-summary_priceInfo_perNight_label">Discount</span>
       <span class="bk-summary_priceInfo_perNight_amount">{{
         summaryData?.offerAmount
           ? summaryData?.offerAmount
@@ -258,17 +254,13 @@
       class="bk-summary_priceInfo_taxFair"
       *ngIf="bookingItem?.discountedAmount && index !== undefined"
     >
-      <span class="bk-summary_priceInfo_perNight_label"
-        >Discount<i class="fa fa-info-circle" aria-hidden="true"></i
-      ></span>
+      <span class="bk-summary_priceInfo_perNight_label">Discount</span>
       <span class="bk-summary_priceInfo_perNight_amount">{{
         bookingItem?.discountedAmount | currency: 'INR'
       }}</span>
     </p>
     <p class="bk-summary_priceInfo_taxFair">
-      <span class="bk-summary_priceInfo_perNight_label"
-        >Taxes & Fees <i class="fa fa-info-circle" aria-hidden="true"></i
-      ></span>
+      <span class="bk-summary_priceInfo_perNight_label">Taxes & Fees </span>
       <span
         class="bk-summary_priceInfo_perNight_amount"
         *ngIf="bookingItem?.taxAndFees"

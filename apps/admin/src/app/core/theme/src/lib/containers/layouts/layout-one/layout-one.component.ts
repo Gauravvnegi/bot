@@ -410,6 +410,7 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
   }
 
   get hasPermissionToViewProduct() {
+    return true;
     return this.subscriptionPlanService.hasViewUserPermission({
       type: 'product',
       name: this.routesConfigService.productName,

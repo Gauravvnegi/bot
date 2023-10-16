@@ -220,6 +220,14 @@ export class DashboardComponent implements OnInit, OnDestroy {
     }
   }
 
+  openExCheckinSidebar() {
+    this.isSidebarVisible = true;
+  }
+
+  closeSidebar() {
+    this.isSidebarVisible = false;
+  }
+
   getTemplate() {
     return this.tabFilterItems[this.tabFilterIdx].value ===
       dashboardPopUpTabs[1].value

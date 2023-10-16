@@ -58,7 +58,7 @@ $border-color: rgba(112, 112, 112, 0.35);
   display: flex;
   align-items: flex-end;
   color: $title;
-  gap: 10%;
+  gap: 5%;
 
   &__left {
     justify-content: space-between;
@@ -66,7 +66,7 @@ $border-color: rgba(112, 112, 112, 0.35);
 }
 
 :host ::ng-deep .room-types-select {
-  max-width: 180px;
+  max-width: 150px;
   & .p-multiselect-label-container {
     overflow: hidden;
   }
@@ -261,14 +261,14 @@ $border-color: rgba(112, 112, 112, 0.35);
   height: 0;
 }
 
-::ng-deep .p-sidebar-mask,
-.p-sidebar-mask-leave.p-component-overlay {
-  background-color: rgba(0, 0, 0, 0) !important;
-}
+// ::ng-deep .p-sidebar-mask,
+// .p-sidebar-mask-leave.p-component-overlay {
+//   background-color: rgba(0, 0, 0, 0) !important;
+// }
 
-::ng-deep .p-component-overlay {
-  z-index: 400 !important;
-}
+// ::ng-deep .p-component-overlay {
+//   z-index: 400 !important;
+// }
 
 :host ::ng-deep .sidebar {
   .p-sidebar {

@@ -12,7 +12,7 @@
   <div class="sidebar-wrapper">
     <p-sidebar
       [visible]="isSidebarVisible"
-      (onHide)="isSidebarVisible = false"
+      (onHide)="closeSidebar()"
       class="sidebar"
       [showCloseIcon]="false"
       position="right"
@@ -26,14 +26,14 @@
           [options]="options"
           header="E-Checkin"
           [template]="getTemplate()"
-          (onCloseSidebar)="isSidebarVisible = false"
+          (onCloseSidebar)="closeSidebar()"
         >
         </hospitality-bot-tabbed-sidebar>
       </div>
     </p-sidebar>
     <hospitality-bot-button
       label="E-Checkin"
-      (onClick)="isSidebarVisible = true"
+      (onClick)="openExCheckinSidebar()"
     ></hospitality-bot-button>
   </div>
 </hospitality-bot-navigation-header>

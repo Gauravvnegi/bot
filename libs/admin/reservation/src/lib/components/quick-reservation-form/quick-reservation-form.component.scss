@@ -68,7 +68,7 @@
 }
 
 :host ::ng-deep .p-dropdown {
-  border: 1px solid rgba(0, 0, 0, 0.38);
+  border: 1px solid rgba(0, 0, 0, 0.38) !important;
   &:hover {
     border-color: $primary-cta !important;
   }

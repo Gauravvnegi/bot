@@ -169,6 +169,10 @@ export class UserProfileComponent implements OnInit {
       });
   }
 
+  permissionIncludesProduct(productListStr: string) {
+    return productListStr.includes(this.manageProduct);
+  }
+
   initFormValues() {
     const {
       departments,

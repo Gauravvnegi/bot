@@ -7,7 +7,10 @@ import {
   SettingsMenuItem,
   Subscriptions,
 } from '../data-models/subscription-plan-config.model';
-import { productMenuSubs } from '../data-models/product-subs';
+import {
+  productMenuSubs,
+  reportsConfigMenu,
+} from '../data-models/product-subs';
 import { map } from 'rxjs/operators';
 import { ProductNames } from 'libs/admin/shared/src/index';
 import { RouteConfigPathService } from './routes-config.service';
@@ -25,52 +28,18 @@ export class SubscriptionPlanService extends ApiService {
       map((response) => {
         // response.products = productMenuSubs;
         response.products?.forEach((element) => {
-          element.config.push({
-            name: 'REPORTS',
-            label: 'Reports',
-            isSubscribed: true,
-            icon:
-              'https://botfiles.nyc3.cdn.digitaloceanspaces.com/bot/subscription_icon/settings.png',
-
-            isView: true,
-          });
+          let hasReport = false;
 
           element.config?.forEach((item) => {
             if (item.name === 'REPORTS') {
-              item.config = [
-                {
-                  name: 'RESERVATION_REPORTS',
-                  label: 'Reservation',
-                  isSubscribed: true,
-                  isView: true,
-                },
-                {
-                  name: 'MANAGER_REPORTS',
-                  label: 'Manager',
-                  isSubscribed: true,
-                  isView: true,
-                },
-                {
-                  name: 'OCCUPANCY_REPORTS',
-                  label: 'Occupancy',
-                  isSubscribed: true,
-                  isView: true,
-                },
-                {
-                  name: 'REVENUE_REPORTS',
-                  label: 'Revenue',
-                  isSubscribed: true,
-                  isView: true,
-                },
-                {
-                  name: 'FINANCIAL_REPORTS',
-                  label: 'Financial',
-                  isSubscribed: true,
-                  isView: true,
-                },
-              ];
+              hasReport = true;
+              item.config = reportsConfigMenu.config;
             }
           });
+
+          if (!hasReport) {
+            element.config?.push(reportsConfigMenu);
+          }
         });
         return response;
       })

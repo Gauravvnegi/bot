@@ -146,4 +146,13 @@ export class ApiService {
   private handleError(err: any) {
     return observableThrowError(err);
   }
+
+  getQueryParam(query?: Record<string, string | number>) {
+    if (query) {
+      return `?${Object.entries(query)
+        .map(([key, value]) => `${key}=${value}`)
+        .join('&')}`;
+    }
+    return '';
+  }
 }

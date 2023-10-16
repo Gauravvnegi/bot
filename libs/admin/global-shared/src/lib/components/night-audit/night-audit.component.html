@@ -4,9 +4,10 @@
   <div class="audit-content_wrapper">
     <hospitality-bot-stepper
       [completedStyle]="'dark'"
+      [incompleteDisable]="true"
       [stepList]="itemList"
-      [readOnly]="true"
       [activeIndex]="activeStep"
+      (onActive)="activeStep = $event.index"
     ></hospitality-bot-stepper>
     <ng-container [ngSwitch]="activeStep">
       <hospitality-bot-manage-logged-users
@@ -26,6 +27,7 @@
         (reload)="initData()"
         (onClose)="close($event)"
         (indexChange)="activeStep = $event"
+        (onNavigate)="onNavigate($event)"
       ></hospitality-bot-checkin-reservations>
       <hospitality-bot-checkout-reservations
         *ngSwitchCase="2"
@@ -36,6 +38,7 @@
         [stepList]="itemList"
         (reload)="initData()"
         (indexChange)="activeStep = $event"
+        (onNavigate)="onNavigate($event)"
       ></hospitality-bot-checkout-reservations>
       <hospitality-bot-audit-summary
         *ngSwitchCase="3"

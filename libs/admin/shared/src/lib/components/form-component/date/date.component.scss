@@ -170,3 +170,7 @@
   border-radius: 3px;
   padding: 4px 2px;
 }
+
+:host ::ng-deep .input__float .p-calendar {
+  margin-top: 0;
+}

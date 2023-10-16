@@ -4,8 +4,9 @@
   [style.fontSize]="fontSize"
 >
   <label
-    *ngIf="label && !float"
-    class="label label__static"
+    *ngIf="label"
+    class="label"
+    [ngClass]="{ float__label: float, label__static: !float }"
     [for]="controlName"
     >{{ label }}</label
   >
@@ -13,6 +14,7 @@
     class="input"
     [ngClass]="{
       input__static: label && alignment === 'vertical',
+      input__float: float,
       input__standard: variant === 'standard',
       input__outlined: variant === 'outlined',
       input__error: error,
@@ -40,8 +42,6 @@
     [timeOnly]="isTimeOnly"
   ></p-calendar>
   <small *ngIf="error" class="p-error">{{ error }} </small>
-
-  <label *ngIf="label && float" [for]="controlName">{{ label }}</label>
 
   <!-- <i class="pi" [ngClass]="modIconNgClasses"></i> -->
 </div>

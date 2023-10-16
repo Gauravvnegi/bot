@@ -4,8 +4,9 @@
   [formGroup]="controlContainer.control"
 >
   <label
-    *ngIf="label && !float"
-    class="label label__static"
+    *ngIf="label"
+    class="labelc"
+    [ngClass]="{ float__label: float, label__static: !float }"
     [for]="controlName"
     >{{ label }}</label
   >
@@ -36,5 +37,4 @@
   </p-multiSelect>
 
   <small *ngIf="error" class="p-error">{{ error }}</small>
-  <label *ngIf="label && float" [for]="controlName">{{ label }}</label>
 </div>

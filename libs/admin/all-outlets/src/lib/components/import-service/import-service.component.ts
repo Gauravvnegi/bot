@@ -29,16 +29,14 @@ export class ImportServiceComponent extends OutletBaseComponent
     this.initRoutes('importService');
   }
 
-  saveForm(serviceData) {
-    //filter are already applied using props
-    serviceData.serviceIds = [
-      ...serviceData.serviceIds,
-      ...this.outletFormService.OutletFormData.serviceIds,
-    ];
-    this.outletFormService.initOutletFormData(serviceData, true);
+  saveForm(data: { serviceIds: string[]; packageCode: string[] }) {
+    this.outletFormService.initOutletFormData(
+      { packageCode: data.packageCode },
+      true
+    );
     //pass active service ids + selected service ids in import service so that selected services can be marked as active
     this.outletService
-      .updateOutlet(this.outletId, serviceData)
+      .updateOutlet(this.outletId, { serviceIds: data.serviceIds })
       .subscribe(this.handleSuccess, this.handelError);
   }
 

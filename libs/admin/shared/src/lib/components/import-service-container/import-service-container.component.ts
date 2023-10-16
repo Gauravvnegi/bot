@@ -1,9 +1,8 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { Form, FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { Subscription, forkJoin } from 'rxjs';
-import { ImportService } from '../../services/import-service.service';
-import { QueryConfig } from '../../types/table.type';
 import { Services } from '../../models/import-service.model';
+import { ImportService } from '../../services/import-service.service';
 
 @Component({
   selector: 'hospitality-bot-import-service-container',
@@ -20,9 +19,11 @@ export class ImportServiceContainerComponent implements OnInit {
   itemId: string;
   endpoint = '';
   params: string;
+  allComplimentaryServices: any[] = [];
+  attachedServicesPackageCode: string[] = [];
 
   @Input() compServices: any[] = [];
-  @Output() OnSave = new EventEmitter<string[]>();
+  @Output() OnSave = new EventEmitter<any>();
   @Input() attachedServices: any[] = [];
 
   @Input() set apiConfig(apiConfig: apiConfig) {
@@ -87,14 +88,20 @@ export class ImportServiceContainerComponent implements OnInit {
 
     forkJoin([api1$, api2$]).subscribe(
       ([api1Data, api2Data]) => {
-        api2Data = api2Data.complimentaryPackages.map((res) => res.id);
+        api2Data = api2Data.complimentaryPackages.map((res) => res.packageCode);
+        //backup the attached services
+        this.attachedServicesPackageCode = api2Data;
 
         this.compServices = new Services().deserialize(
           api1Data.service
         ).services;
+
+        // backup the default services
+        this.allComplimentaryServices = this.compServices;
+
         // remove the attached services from the default services
         this.compServices = this.compServices.filter(
-          (res) => !api2Data.includes(res.id)
+          (res) => !api2Data.includes(res.packageCode)
         );
         // set the default services to the form
         this.filteredServices = this.compServices;
@@ -111,7 +118,22 @@ export class ImportServiceContainerComponent implements OnInit {
    * @description emit the form value to the parent component
    */
   saveForm() {
-    this.OnSave.emit(this.useForm.value);
+    // get the attached services according to the config api id
+    const attachedServiceIds = this.allComplimentaryServices.filter((res) =>
+      this.attachedServicesPackageCode.includes(res.packageCode)
+    );
+
+    const data = this.useForm.getRawValue();
+    data.serviceIds = [
+      ...data.serviceIds,
+      ...attachedServiceIds.map((res) => res.id),
+    ];
+
+    const packageCode = this.allComplimentaryServices
+      .filter((res) => data.serviceIds.includes(res.id))
+      .map((res) => res.packageCode);
+
+    this.OnSave.emit({ serviceIds: data.serviceIds, packageCode: packageCode });
   }
 
   /**
@@ -132,4 +154,8 @@ type apiConfig = {
   endpoint: string;
   itemId: string;
   params;
+};
+
+type Form = {
+  serviceIds: string[];
 };

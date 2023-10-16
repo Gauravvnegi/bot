@@ -1,4 +1,11 @@
-import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnInit,
+  Output,
+  EventEmitter,
+  SimpleChanges,
+} from '@angular/core';
 import { ActionConfigType } from '../../../../types/night-audit.type';
 import { ConfirmationService, MenuItem } from 'primeng/api';
 import {
@@ -9,12 +16,10 @@ import { CheckedInReservation } from '../../models/night-audit.model';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { Subscription } from 'rxjs';
 import { NightAuditService } from '../../../../services/night-audit.service';
-import { EntityType, ModuleNames } from '@hospitality-bot/admin/shared';
-import {
-  GlobalFilterService,
-  RoutesConfigService,
-} from '@hospitality-bot/admin/core/theme';
+import { EntitySubType, ModuleNames } from '@hospitality-bot/admin/shared';
+import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { manageReservationRoutes } from 'libs/admin/manage-reservation/src/lib/constants/routes';
+import { TableActionType } from '../../../table-view/table-view.component';
 
 @Component({
   selector: 'hospitality-bot-checkin-reservations',
@@ -40,6 +45,7 @@ export class CheckinReservationsComponent implements OnInit {
   @Output() indexChange = new EventEmitter<number>();
   @Output() reload = new EventEmitter();
   @Output() onClose = new EventEmitter();
+  @Output() onNavigate = new EventEmitter();
 
   $subscription = new Subscription();
 
@@ -47,14 +53,19 @@ export class CheckinReservationsComponent implements OnInit {
     private nightAuditService: NightAuditService,
     private confirmationService: ConfirmationService,
     private snackbarService: SnackBarService,
-    private globalFilterService: GlobalFilterService,
-    private routesConfigService: RoutesConfigService
+    private globalFilterService: GlobalFilterService
   ) {}
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['items']) {
+      this.initActionConfig();
+    }
+  }
 
   ngOnInit(): void {
     this.entityId = this.globalFilterService.entityId;
-    this.initActionConfig();
     this.initTable();
+    this.initActionConfig();
   }
 
   initActionConfig(postLabel?: string) {
@@ -63,6 +74,7 @@ export class CheckinReservationsComponent implements OnInit {
       preLabel: this.activeIndex != 0 ? 'Back' : undefined,
       postLabel: 'Next',
       preSeverity: 'primary',
+      postDisabled: this.isSomeConfirmed(),
     };
   }
 
@@ -79,7 +91,7 @@ export class CheckinReservationsComponent implements OnInit {
             .updateBookingStatus(
               event.details.id,
               this.entityId,
-              EntityType.HOTEL,
+              EntitySubType.ROOM_TYPE,
               {
                 reservationType: event.value,
               }
@@ -103,19 +115,17 @@ export class CheckinReservationsComponent implements OnInit {
     });
   }
 
-  // TODO: Dynamic Routing...
-  /**
-   * @function editReservation To navigate to the edit page
-   */
-  editReservation(id: string) {
-    this.onClose.emit(true);
-    this.routesConfigService.navigate({
-      subModuleName: ModuleNames.RESERVATION,
-      additionalPath: `${manageReservationRoutes.editReservation.route}/${id}`,
-      queryParams: {
-        entityId: this.entityId,
-      },
+  editReservation(event: TableActionType) {
+    this.onNavigate.emit({
+      additionalPath: `${manageReservationRoutes.editReservation.route}/${event.details.id}`,
+      subModuleName: ModuleNames.ADD_RESERVATION,
     });
+  }
+
+  isSomeConfirmed() {
+    return this.items.some(
+      (item) => item.action.dropDown.currentState == 'CONFIRMED'
+    );
   }
 
   initTable() {

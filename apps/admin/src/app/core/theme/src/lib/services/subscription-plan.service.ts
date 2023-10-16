@@ -24,6 +24,54 @@ export class SubscriptionPlanService extends ApiService {
     return this.get(`/api/v1/entity/${entityId}/subscriptions/`).pipe(
       map((response) => {
         // response.products = productMenuSubs;
+        response.products?.forEach((element) => {
+          element.config.push({
+            name: 'REPORTS',
+            label: 'Reports',
+            isSubscribed: true,
+            icon:
+              'https://botfiles.nyc3.cdn.digitaloceanspaces.com/bot/subscription_icon/settings.png',
+
+            isView: true,
+          });
+
+          element.config?.forEach((item) => {
+            if (item.name === 'REPORTS') {
+              item.config = [
+                {
+                  name: 'RESERVATION_REPORTS',
+                  label: 'Reservation',
+                  isSubscribed: true,
+                  isView: true,
+                },
+                {
+                  name: 'MANAGER_REPORTS',
+                  label: 'Manager',
+                  isSubscribed: true,
+                  isView: true,
+                },
+                {
+                  name: 'OCCUPANCY_REPORTS',
+                  label: 'Occupancy',
+                  isSubscribed: true,
+                  isView: true,
+                },
+                {
+                  name: 'REVENUE_REPORTS',
+                  label: 'Revenue',
+                  isSubscribed: true,
+                  isView: true,
+                },
+                {
+                  name: 'FINANCIAL_REPORTS',
+                  label: 'Financial',
+                  isSubscribed: true,
+                  isView: true,
+                },
+              ];
+            }
+          });
+        });
         return response;
       })
     );

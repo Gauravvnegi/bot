@@ -116,6 +116,8 @@ export type FormActionConfig = {
   preSeverity: ButtonSeverity;
   PreLabelWithId: string;
   postLabelWithId: string;
+  preDisabled?: boolean;
+  postDisabled?: boolean;
   isSticky: boolean;
   id: boolean;
   referenceId: string;

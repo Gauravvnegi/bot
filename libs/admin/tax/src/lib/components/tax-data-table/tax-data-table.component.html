@@ -139,7 +139,7 @@
 <ng-template #emptyTable>
   <hospitality-bot-empty-table
     [isLoading]="loading"
-    link="pages/settings/tax/{{ routes.createTax.route }}"
+    [link]="routes.createTax.route"
     [content]="{
       description:
         'No tax records found. Tap the Create Tax  to view preexisting tax ',

@@ -23,19 +23,19 @@ export class InfoPanelComponent implements OnInit {
       color: '#ef1d45',
     },
     {
-      name: 'New Booking',
+      name: 'Due-in',
       color: '#52b33f',
     },
     {
-      name: 'Checked-In',
+      name: 'Check-In',
       color: '#3166f0',
     },
     {
-      name: 'Due Out',
+      name: 'Due-Out',
       color: '#550000',
     },
     {
-      name: 'Out of Order',
+      name: 'Out of Service',
       color: '#555555',
     },
   ];

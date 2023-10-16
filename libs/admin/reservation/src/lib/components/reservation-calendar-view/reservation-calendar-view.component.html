@@ -171,9 +171,6 @@
       *ngIf="!isRoomsEmpty && roomTypes?.length; else emptyView"
     ></ng-container>
   </div>
-  <div *ngIf="fullView" (click)="close()" class="close-btn">
-    <i [ngClass]="'pi pi-arrow-right'" aria-hidden="true"></i>
-  </div>
   <p-sidebar
     *ngIf="viewReservationForm"
     [visible]="viewReservationForm"

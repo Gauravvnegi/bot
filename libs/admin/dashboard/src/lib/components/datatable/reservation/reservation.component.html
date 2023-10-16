@@ -8,8 +8,7 @@
     <ng-container
       *ngIf="
         tableFG?.get('tableType')?.value === 'calendar' &&
-        tableTypes.length &&
-        !showCalendarView
+        tableTypes.length
       "
     >
       <hospitality-bot-info-panel type="booking"></hospitality-bot-info-panel>
@@ -18,7 +17,7 @@
         class="expand"
         [src]="'assets/svg/expand.svg'"
         alt=""
-        [pTooltip]="'Full View'"
+        [pTooltip]="showCalendarView ? 'Close Full View' : 'Full View'"
       />
     </ng-container>
   </div>

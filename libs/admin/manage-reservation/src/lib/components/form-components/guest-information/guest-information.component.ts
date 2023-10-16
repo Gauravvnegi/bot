@@ -153,7 +153,6 @@ export class GuestInformationComponent implements OnInit {
         email: event.contactDetails.emailId,
       };
       if (!this.editMode) {
-        debugger;
         this.formService.getSummary.next();
       }
       setTimeout(() => {

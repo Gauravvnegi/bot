@@ -128,7 +128,7 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
   }
 
   toggleFullView() {
-    this.globalFilterService.toggleFullView.next(true);
+    this.globalFilterService.toggleFullView.next(!this.showCalendarView);
   }
 
   checkReservationSubscription() {

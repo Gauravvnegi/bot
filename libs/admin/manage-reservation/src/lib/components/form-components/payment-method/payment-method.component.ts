@@ -53,7 +53,6 @@ export class PaymentMethodComponent implements OnInit {
     const { firstName, lastName } = this.userService.userDetails;
     this.paymentControls.cashierFirstName.setValue(firstName);
     this.paymentControls.cashierLastName.setValue(lastName);
-    this.listenForPaidAmountChanges();
   }
 
   addFormGroup() {
@@ -83,15 +82,6 @@ export class PaymentMethodComponent implements OnInit {
         this.controlContainer.control.get('paymentMethod').patchValue({
           currency: this.currencies[0].value,
         });
-      }
-    });
-  }
-
-  listenForPaidAmountChanges() {
-    this.paymentControls.totalPaidAmount.valueChanges.subscribe((res) => {
-      if (res) {
-        this.paymentRuleControls.amountToPay.reset();
-        this.paymentRuleControls.deductedAmount.setValue(res);
       }
     });
   }

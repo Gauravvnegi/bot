@@ -4,6 +4,7 @@ import {
   ControlContainer,
   FormBuilder,
   FormGroup,
+  Validators,
 } from '@angular/forms';
 import * as moment from 'moment';
 import { ReservationForm } from '../../../constants/form';
@@ -20,7 +21,7 @@ export class PaymentRuleComponent implements OnInit {
   startTime: number;
   viewAmountToPay = false;
   parentFormGroup: FormGroup;
-
+  totalAmount = 0;
   $subscription = new Subscription();
 
   constructor(
@@ -49,6 +50,9 @@ export class PaymentRuleComponent implements OnInit {
       inclusionsAndTerms: [''],
     };
     this.parentFormGroup.addControl('paymentRule', this.fb.group(data));
+    this.formService.deductedAmount.subscribe((res) => {
+      this.totalAmount = res;
+    });
   }
 
   registerPaymentRuleChange() {
@@ -56,9 +60,10 @@ export class PaymentRuleComponent implements OnInit {
     this.inputControl.makePaymentBefore.setValue(this.startTime);
 
     this.inputControl.amountToPay.valueChanges.subscribe((res) => {
-      const newDeductedAmount = this.inputControl.deductedAmount.value - +res;
-      debugger;
-      this.inputControl.deductedAmount.setValue(newDeductedAmount);
+      if (res && this.inputControl.amountToPay.valid) {
+        const newDeductedAmount = this.totalAmount - +res;
+        this.inputControl.deductedAmount.setValue(newDeductedAmount);
+      }
     });
   }
 

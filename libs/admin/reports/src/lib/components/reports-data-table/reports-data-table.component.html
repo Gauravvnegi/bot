@@ -108,7 +108,13 @@
         ></p-tableCheckbox>
       </td>
       <td *ngFor="let column of columns">
-        <div class="cell-content" *ngIf="rowData[column.field]; else emptyCell">
+        <div
+          class="cell-content"
+          *ngIf="
+            rowData[column.field] != undefined || null || '';
+            else emptyCell
+          "
+        >
           <div class="primary-text">
             {{ rowData[column.field] }}
           </div>

@@ -1,5 +1,9 @@
 import { Route, Routes } from '@angular/router';
-import { ModuleNames, SubscriptionConfig } from 'libs/admin/shared/src/index';
+import {
+  ModuleNames,
+  ProductNames,
+  SubscriptionConfig,
+} from 'libs/admin/shared/src/index';
 import { ComingSoonComponent } from 'libs/admin/shared/src/lib/components/coming-soon/coming-soon.component';
 import {
   moduleConfig,
@@ -19,6 +23,11 @@ type ModulePromise<T extends any> = () => Promise<T>;
 const UnsubscribedModule = () =>
   import('@hospitality-bot/admin/unsubscribed').then(
     (m) => m.AdminUnsubscribedModule
+  );
+
+const ViewNotAllowedModule = () =>
+  import('@hospitality-bot/admin/view-not-allowed').then(
+    (m) => m.AdminViewNotAllowedModule
   );
 
 const getRedirectRouteConfig = (
@@ -192,12 +201,13 @@ export const routeFactoryNew = (
               if (subModule.isView || (!subModule.isView && LoadSubModule)) {
                 const subModuleRouteConfig: Route = {
                   path: subModulePath,
-                  loadChildren:
-                    isProductSubscribed &&
-                    isModuleSubscribed &&
-                    isSubModuleSubscribed
+                  loadChildren: productHasViewPermission
+                    ? isProductSubscribed &&
+                      isModuleSubscribed &&
+                      isSubModuleSubscribed
                       ? LoadSubModule
-                      : UnsubscribedModule,
+                      : UnsubscribedModule
+                    : ViewNotAllowedModule,
                   component: LoadSubModule ? undefined : ComingSoonComponent,
                 };
                 routes[0].children.push(subModuleRouteConfig);

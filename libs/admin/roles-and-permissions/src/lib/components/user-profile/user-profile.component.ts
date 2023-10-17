@@ -13,6 +13,7 @@ import {
   ModuleNames,
   NavRouteOptions,
   Option,
+  PermissionModuleNames,
   Regex,
   UserService,
 } from '@hospitality-bot/admin/shared';
@@ -24,7 +25,10 @@ import { ManagePermissionService } from '../../services/manage-permission.servic
 import { PageState, Permission, PermissionMod, UserForm } from '../../types';
 import { UserPermissionDatatableComponent } from '../user-permission-datatable/user-permission-datatable.component';
 import { UserPermissionTable } from '../../models/user-permission-table.model';
-import { RoutesConfigService } from '@hospitality-bot/admin/core/theme';
+import {
+  RoutesConfigService,
+  SubscriptionPlanService,
+} from '@hospitality-bot/admin/core/theme';
 
 @Component({
   selector: 'hospitality-bot-user-profile',
@@ -89,7 +93,8 @@ export class UserProfileComponent implements OnInit {
     private snackbarService: SnackBarService,
     private router: Router,
     private route: ActivatedRoute,
-    private routesConfigService: RoutesConfigService
+    private routesConfigService: RoutesConfigService,
+    private subscriptionPlanService: SubscriptionPlanService
   ) {
     this.initUserForm();
   }
@@ -276,6 +281,12 @@ export class UserProfileComponent implements OnInit {
 
   doesNotHasPageSate(...args: PageState[]) {
     return !args.includes(this.state);
+  }
+
+  get hasManagePermission() {
+    return this.subscriptionPlanService.hasManageUserPermission(
+      PermissionModuleNames.USERS
+    );
   }
 
   initAfterFormLoaded() {
@@ -484,7 +495,7 @@ export class UserProfileComponent implements OnInit {
         if (res?.userId) {
           this.routesConfigService.navigate({
             additionalPath: managePermissionRoutes[
-              res?.isView ? 'viewUser' : 'editUser'
+              res?.isView || !this.hasManagePermission ? 'viewUser' : 'editUser'
             ].route.replace(':id', res.userId),
           });
           // this.router.navigate([

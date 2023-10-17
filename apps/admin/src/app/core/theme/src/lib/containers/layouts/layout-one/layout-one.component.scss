@@ -510,10 +510,18 @@
   inset: $top-nav-height 0 0 $left-nav-height;
   z-index: $no-view-z;
 
+  img {
+    width: 100px;
+  }
+
   .no-view-container {
+    display: flex;
+    gap: 15px;
     padding: 20px;
     background: white;
     box-shadow: 0px 0px 3px 0px $primary-cta;
+    @include normal-sm-text;
+    color: $secondary;
   }
 
   .no-view-sub-text {

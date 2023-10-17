@@ -245,6 +245,9 @@
     },
     "admin-reports": {
       "tags": []
+    },
+    "admin-view-not-allowed": {
+      "tags": []
     }
   }
 }

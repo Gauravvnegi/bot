@@ -141,9 +141,12 @@ export class SubscriptionPlanService extends ApiService {
     return this.productSubscription.subscribedModules.indexOf(moduleName) > -1;
   }
 
-  checkProductSubscription(moduleName: ModuleNames) {
-    //should be productNames
-    return this.productSubscription.subscribedProducts.indexOf(moduleName) > -1;
+  checkProductSubscription(moduleName: ModuleNames | ProductNames) {
+    return (
+      this.productSubscription.subscribedProducts.indexOf(
+        moduleName as ModuleNames //should be productNames
+      ) > -1
+    );
   }
 
   checkProductOrModuleSubscription(moduleName: ModuleNames) {
@@ -196,6 +199,16 @@ export class SubscriptionPlanService extends ApiService {
     }, false);
   }
 
+  /**
+   * Only for sub modules
+   */
+  hasManageUserPermission(names: PermissionModuleNames) {
+    return this.userSubscriptionPermission.permission[names]?.canManage;
+  }
+
+  /**
+   * View user permission will also have product
+   */
   hasViewUserPermission<T extends PermissionType>(params: PermissionParams<T>) {
     const { type, name } = params;
 
@@ -210,17 +223,27 @@ export class SubscriptionPlanService extends ApiService {
     }
 
     if (type === 'module') {
+      const permissionType = this.productSubscription
+        .submodulePermissionMapping[name as ModuleNames];
+
+      /**
+       * if there is no permission type related to this module
+       * then there is no need to check permission
+       */
+      if (!permissionType) {
+        return true;
+      }
+
       isModuleViewTrue = this.userSubscriptionPermission.permission[
-        name as PermissionModuleNames
+        permissionType
       ]?.canView;
     }
-
     return isProductViewTrue || isModuleViewTrue;
   }
 }
 
 type PermissionType = 'product' | 'module';
 type PermissionParams<T extends PermissionType> = {
-  name: T extends 'product' ? ProductNames : PermissionModuleNames;
+  name: T extends 'product' ? ProductNames : ModuleNames;
   type: T;
 };

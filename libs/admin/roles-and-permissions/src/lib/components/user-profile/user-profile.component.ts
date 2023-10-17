@@ -10,8 +10,10 @@ import { MatDialogConfig } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
   CountryCode,
+  ModuleNames,
   NavRouteOptions,
   Option,
+  PermissionModuleNames,
   Regex,
   UserService,
 } from '@hospitality-bot/admin/shared';
@@ -23,6 +25,10 @@ import { ManagePermissionService } from '../../services/manage-permission.servic
 import { PageState, Permission, PermissionMod, UserForm } from '../../types';
 import { UserPermissionDatatableComponent } from '../user-permission-datatable/user-permission-datatable.component';
 import { UserPermissionTable } from '../../models/user-permission-table.model';
+import {
+  RoutesConfigService,
+  SubscriptionPlanService,
+} from '@hospitality-bot/admin/core/theme';
 
 @Component({
   selector: 'hospitality-bot-user-profile',
@@ -86,7 +92,9 @@ export class UserProfileComponent implements OnInit {
     private _managePermissionService: ManagePermissionService,
     private snackbarService: SnackBarService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private routesConfigService: RoutesConfigService,
+    private subscriptionPlanService: SubscriptionPlanService
   ) {
     this.initUserForm();
   }
@@ -164,6 +172,10 @@ export class UserProfileComponent implements OnInit {
         }));
         this.totalTeamMember = res?.entityTypeCounts['REPORTING'];
       });
+  }
+
+  permissionIncludesProduct(productListStr: string) {
+    return productListStr.includes(this.manageProduct);
   }
 
   initFormValues() {
@@ -269,6 +281,12 @@ export class UserProfileComponent implements OnInit {
 
   doesNotHasPageSate(...args: PageState[]) {
     return !args.includes(this.state);
+  }
+
+  get hasManagePermission() {
+    return this.subscriptionPlanService.hasManageUserPermission(
+      PermissionModuleNames.USERS
+    );
   }
 
   initAfterFormLoaded() {
@@ -475,12 +493,17 @@ export class UserProfileComponent implements OnInit {
       (res: { userId?: string; isView?: boolean }) => {
         tableCompRef.close();
         if (res?.userId) {
-          this.router.navigate([
-            navRoute[res?.isView ? 'viewUser' : 'editUser'].link.replace(
-              ':userId',
-              res.userId
-            ),
-          ]);
+          this.routesConfigService.navigate({
+            additionalPath: managePermissionRoutes[
+              res?.isView || !this.hasManagePermission ? 'viewUser' : 'editUser'
+            ].route.replace(':id', res.userId),
+          });
+          // this.router.navigate([
+          //   navRoute[res?.isView ? 'viewUser' : 'editUser'].link.replace(
+          //     ':userId',
+          //     res.userId
+          //   ),
+          // ]);
         }
       }
     );
@@ -536,8 +559,12 @@ export class UserProfileComponent implements OnInit {
         { panelClass: 'success' }
       );
       this.isUpdatingPermissions = false;
-      if (this.state !== 'editUser')
-        this.router.navigate([navRoute.userProfile.link]);
+
+      // if (this.state === 'editUser')
+      // this.router.navigate([navRoute.userProfile.link]);
+      this.routesConfigService.navigate({
+        subModuleName: ModuleNames.ROLES_AND_PERMISSION,
+      });
     };
 
     this.isUpdatingPermissions = true;
@@ -572,7 +599,9 @@ export class UserProfileComponent implements OnInit {
   }
 
   addUser() {
-    this.router.navigate([navRoute.addNewUser.link]);
+    this.routesConfigService.navigate({
+      additionalPath: managePermissionRoutes.addNewUser.route,
+    });
   }
 
   handleManage(event) {

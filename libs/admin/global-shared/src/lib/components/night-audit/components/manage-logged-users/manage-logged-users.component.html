@@ -22,12 +22,13 @@
     <hospitality-bot-table-view
       [header]="title"
       [columns]="cols"
-      [items]="users"
+      [loading]="loading"
+      [items]="items"
       [headerSticky]="true"
       [emptyViewConfig]="{
         content: {
           imageSrc: 'assets/svg/Success.svg',
-          description: 'There are no users logged in except for you.'
+          description: 'There is no users logged in except you.'
         }
       }"
     ></hospitality-bot-table-view>
@@ -37,7 +38,7 @@
   <hospitality-bot-form-action
     class="full-width action-button"
     [loading]="loading"
-    [disabled]="loading"
+    [disabled]="loading || usersLoggedOut || !!items.length"
     [config]="actionConfig"
     (onPostAction)="handleNext()"
     (onPreAction)="handlePrev()"

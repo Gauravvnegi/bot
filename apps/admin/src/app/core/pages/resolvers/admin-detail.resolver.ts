@@ -32,6 +32,7 @@ export class AdminDetailResolver implements Resolve<any> {
       .getUserDetailsById(this._userService.getLoggedInUserId())
       .pipe(
         switchMap((res) => {
+          this.subscriptionPlanService.initUserBasedSubscription(res);
           if (entityId) {
             const manageSiteList = this.manageSite.getSitesList();
             let subscription: Observable<any> = of(undefined);

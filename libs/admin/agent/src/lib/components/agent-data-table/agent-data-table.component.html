@@ -8,7 +8,8 @@
     <ng-container [ngTemplateOutlet]="search" #searchComponent></ng-container>
     <hospitality-bot-button
       label="+ Add agent"
-      link="/pages/members/agent/{{ routes.addAgent.route }}"
+      [routerLink]="routes.addAgent.route"
+      preserveQueryParams="true"
     ></hospitality-bot-button>
     <hospitality-bot-export-list
       [additionalActionItems]="additionalActionItems"
@@ -186,7 +187,7 @@
   <div class="caption__wrapper">
     <hospitality-bot-empty-table
       [isLoading]="loading"
-      link="/pages/members/agent/{{ routes.addAgent.route }}"
+      [link]="routes.addAgent.route"
       [content]="{
         description: 'No Agent found. Tap the +Add Agent to add more agent.',
         imageSrc: 'assets/images/empty-table-offer.png',
@@ -212,7 +213,7 @@
     [formGroup]="tableFG"
     controlName="search"
     [props]="{
-      placeholder: 'Search by Name, Phone No, Code or IATA...',
+      placeholder: 'Search by Name, Phone No, Code or Reg. No...',
       hasSuggestion: true,
       scattered: true
     }"

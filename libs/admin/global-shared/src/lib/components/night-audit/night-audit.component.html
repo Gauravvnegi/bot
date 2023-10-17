@@ -3,39 +3,49 @@
   <ng-template *ngTemplateOutlet="sidebarHeader"></ng-template>
   <div class="audit-content_wrapper">
     <hospitality-bot-stepper
+      [completedStyle]="'dark'"
+      [incompleteDisable]="true"
       [stepList]="itemList"
-      [readOnly]="true"
       [activeIndex]="activeStep"
-      (onActive)="onActive($event)"
+      (onActive)="activeStep = $event.index"
     ></hospitality-bot-stepper>
     <ng-container [ngSwitch]="activeStep">
       <hospitality-bot-manage-logged-users
+        *ngSwitchCase="0"
         class="audit-content"
         [activeIndex]="activeStep"
         [stepList]="itemList"
         (indexChange)="activeStep = $event"
-        *ngSwitchCase="0"
       ></hospitality-bot-manage-logged-users>
       <hospitality-bot-checkin-reservations
+        *ngSwitchCase="1"
         class="audit-content"
         [activeIndex]="activeStep"
+        [loading]="loading"
+        [items]="checkedInReservation"
         [stepList]="itemList"
+        (reload)="initData()"
+        (onClose)="close($event)"
         (indexChange)="activeStep = $event"
-        *ngSwitchCase="1"
+        (onNavigate)="onNavigate($event)"
       ></hospitality-bot-checkin-reservations>
       <hospitality-bot-checkout-reservations
+        *ngSwitchCase="2"
         class="audit-content"
+        [items]="checkedOutReservation"
+        [loading]="loading"
         [activeIndex]="activeStep"
         [stepList]="itemList"
+        (reload)="initData()"
         (indexChange)="activeStep = $event"
-        *ngSwitchCase="2"
+        (onNavigate)="onNavigate($event)"
       ></hospitality-bot-checkout-reservations>
       <hospitality-bot-audit-summary
+        *ngSwitchCase="3"
         class="audit-content"
         [activeIndex]="activeStep"
         [stepList]="itemList"
-        (indexChange)="activeStep = $event"
-        *ngSwitchCase="3"
+        (indexChange)="finish($event)"
       ></hospitality-bot-audit-summary>
     </ng-container>
   </div>

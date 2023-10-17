@@ -1,4 +1,11 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  SimpleChanges,
+} from '@angular/core';
 import { MenuItem } from 'primeng/api';
 export type StepperEmitType = { item: MenuItem; index: number };
 
@@ -8,11 +15,20 @@ export type StepperEmitType = { item: MenuItem; index: number };
   styleUrls: ['./stepper.component.scss'],
 })
 export class StepperComponent implements OnInit {
+  completedStep = 0;
   @Input() stepList: MenuItem[];
   @Input() activeIndex = 0;
   @Input() readOnly = false;
+  @Input() completedStyle: 'dark';
+  @Input() incompleteDisable = false;
   @Output() onActive = new EventEmitter<StepperEmitType>();
+
   constructor() {}
+
+  ngOnChanges(changes: SimpleChanges): void {
+    this.handleDisabilityStyle(changes);
+    this.handleActiveStyle(changes);
+  }
 
   ngOnInit(): void {
     this.initCommand();
@@ -26,6 +42,47 @@ export class StepperComponent implements OnInit {
         this.onActive.emit({ item: this.stepList[index], index: index });
       },
     }));
+  }
+
+  handleDisabilityStyle(changes: SimpleChanges) {
+    // Firstly all step will be disabled if incomplete is disabled is true
+    if (
+      changes['incompleteDisable'] &&
+      changes.incompleteDisable.firstChange &&
+      changes.incompleteDisable.currentValue
+    ) {
+      this.stepList = this.stepList.map((item, index) => ({
+        ...item,
+        styleClass: 'disable',
+      }));
+    }
+  }
+
+  handleActiveStyle(changes: SimpleChanges) {
+    // Active change style
+    if (
+      this.completedStyle &&
+      changes['activeIndex'] &&
+      !changes.activeIndex.firstChange
+    ) {
+      this.stepList = this.stepList.map((item, index) => ({
+        ...item,
+        ...{
+          styleClass: `'completed '${
+            this.incompleteDisable
+              ? index <= changes.activeIndex.currentValue
+                ? ' enable'
+                : ' disable'
+              : ''
+          } ${
+            index <= changes.activeIndex.currentValue &&
+            this.completedStyle == 'dark'
+              ? 'completed-step-dark'
+              : ''
+          }`,
+        },
+      }));
+    }
   }
 
   onActiveIndexChange(index) {

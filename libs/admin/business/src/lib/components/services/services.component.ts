@@ -14,6 +14,7 @@ import { businessRoute } from '../../constant/routes';
 import {
   Service,
   ServiceIdList,
+  Services,
   noRecordAction,
 } from '../../models/hotel.models';
 import { BusinessService } from '../../services/business.service';
@@ -150,15 +151,14 @@ export class ServicesComponent implements OnInit, OnDestroy {
       this.entityId ? 'editServices' : 'services'
     ];
     this.pageTitle = title;
-    this.navRoutes = navRoutes;
-    this.navRoutes[2].link.replace('brandId', this.brandId);
-    if (this.entityId) {
-      this.navRoutes[3].link = `/pages/settings/business-info/brand/${this.brandId}/hotel/${this.entityId}`;
-      this.navRoutes[3].isDisabled = false;
-    } else {
-      this.navRoutes[3].link = `/pages/settings/business-info/brand/${this.brandId}/hotel`;
-      this.navRoutes[3].isDisabled = false;
-    }
+    this.navRoutes = navRoutes.map((route) => {
+      return {
+        ...route,
+        link: route.link
+          .replace(':brandId', this.brandId)
+          .replace(':entityId', this.entityId),
+      };
+    });
   }
 
   /**
@@ -174,16 +174,12 @@ export class ServicesComponent implements OnInit, OnDestroy {
    */
   getServices() {
     this.loading = true;
-
     const config = this.getQueryConfig(this.offset);
     this.$subscription.add(
       this.businessService.getServiceList(this.entityId, config).subscribe(
         (res) => {
-          this.compServices = [
-            ...this.compServices,
-            ...res.complimentaryPackages,
-          ];
-          // this.filteredServices = this.compServices;
+          const data = new Services().deserialize(res.complimentaryPackages);
+          this.compServices = [...this.compServices, ...data.services];
 
           if (this.compServices.length === res.total) {
             this.noMoreServices = true;

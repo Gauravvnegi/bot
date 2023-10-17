@@ -53,7 +53,6 @@ export class PaymentMethodComponent implements OnInit {
     const { firstName, lastName } = this.userService.userDetails;
     this.paymentControls.cashierFirstName.setValue(firstName);
     this.paymentControls.cashierLastName.setValue(lastName);
-
   }
 
   addFormGroup() {
@@ -62,10 +61,7 @@ export class PaymentMethodComponent implements OnInit {
     const data = {
       cashierFirstName: [{ value: '', disabled: true }],
       cashierLastName: [{ value: '', disabled: true }],
-      totalPaidAmount: [
-        0,
-        [Validators.min(0)],
-      ],
+      totalPaidAmount: [0, [Validators.min(0)]],
       currency: [''],
       paymentMethod: [''],
       paymentRemark: ['', [Validators.maxLength(60)]],
@@ -114,6 +110,14 @@ export class PaymentMethodComponent implements OnInit {
     return (this.parentFormGroup.get('paymentMethod') as FormGroup)
       .controls as Record<
       keyof ReservationForm['paymentMethod'],
+      AbstractControl
+    >;
+  }
+
+  get paymentRuleControls() {
+    return (this.parentFormGroup.get('paymentRule') as FormGroup)
+      .controls as Record<
+      keyof ReservationForm['paymentRule'],
       AbstractControl
     >;
   }

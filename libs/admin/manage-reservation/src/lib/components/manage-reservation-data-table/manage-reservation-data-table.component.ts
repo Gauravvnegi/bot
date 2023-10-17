@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormControl } from '@angular/forms';
 import { MatDialogConfig } from '@angular/material/dialog';
-import { Router } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
 import {
   GlobalFilterService,
+  RoutesConfigService,
   SubscriptionPlanService,
 } from '@hospitality-bot/admin/core/theme';
 import {
@@ -85,6 +86,7 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
   tableTypes = [tableTypes.calendar, tableTypes.table];
 
   selectedTableType: string;
+  showCalendarView = false;
 
   private cancelRequests$ = new Subject<void>();
 
@@ -96,10 +98,10 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
     private formService: FormService,
     private globalFilterService: GlobalFilterService,
     protected snackbarService: SnackBarService,
-    private router: Router,
     private modalService: ModalService,
     private invoiceService: InvoiceService,
-    private subscriptionPlanService: SubscriptionPlanService
+    private routesConfigService: RoutesConfigService,
+    private router: Router
   ) {
     super(fb, tabFilterService);
   }
@@ -110,6 +112,23 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
     this.checkReservationSubscription();
     this.listenForSelectedEntityChange();
     this.formService.resetData();
+    this.toggleCalendarView();
+  }
+
+  toggleCalendarView() {
+    // Turn off full view on route change
+    this.router.events.subscribe((event) => {
+      if (event instanceof NavigationEnd && this.showCalendarView === true) {
+        this.globalFilterService.toggleFullView.next(false);
+      }
+    });
+    this.globalFilterService.toggleFullView.subscribe((res) => {
+      this.showCalendarView = res;
+    });
+  }
+
+  toggleFullView() {
+    this.globalFilterService.toggleFullView.next(!this.showCalendarView);
   }
 
   checkReservationSubscription() {
@@ -153,20 +172,22 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
     this.$selectedEntitySubscription.add(
       this.formService.selectedEntity
         .pipe(
-          distinctUntilChanged((prev, curr) => prev.id === curr.id), // Compare subType property for changes
+          distinctUntilChanged((prev, curr) => prev?.id === curr?.id), // Compare subType property for changes
           tap((res) => {
-            this.selectedEntity = res;
+            if (res) this.selectedEntity = res;
           })
         )
         .subscribe((res) => {
-          this.cancelRequests$.next();
-          this.isSelectedEntityChanged = true; // Since we only get here when selectedEntity has changed
-          // this.resetTableValues();
-          this.initDetails(this.selectedEntity);
-          this.initTableValue();
-          if (this.selectedEntity.subType !== 'ROOM_TYPE') {
-            this.selectedTableType = 'table';
-            this.tableFG.patchValue({ tableType: 'table' });
+          if (res) {
+            this.cancelRequests$.next();
+            this.isSelectedEntityChanged = true; // Since we only get here when selectedEntity has changed
+            // this.resetTableValues();
+            this.initDetails(this.selectedEntity);
+            this.initTableValue();
+            if (this.selectedEntity?.subType !== 'ROOM_TYPE') {
+              this.selectedTableType = 'table';
+              this.tableFG.patchValue({ tableType: 'table' });
+            }
           }
         })
     );
@@ -310,16 +331,12 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
    * @function editReservation To navigate to the edit page
    */
   editReservation(id: string) {
-    this.router.navigate(
-      [
-        `/pages/efrontdesk/reservation/${manageReservationRoutes.editReservation.route}/${id}`,
-      ],
-      {
-        queryParams: {
-          entityId: this.selectedEntity.id,
-        },
-      }
-    );
+    this.routesConfigService.navigate({
+      additionalPath: `${manageReservationRoutes.editReservation.route}/${id}`,
+      queryParams: {
+        entityId: this.selectedEntity.id,
+      },
+    });
   }
 
   /**
@@ -353,13 +370,14 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
   handleMenuClick(value: string, id: string) {
     switch (value) {
       case 'MANAGE_INVOICE':
-        this.router.navigate([`/pages/efrontdesk/invoice/${id}`], {
+        this.routesConfigService.navigate({
+          subModuleName: ModuleNames.INVOICE,
+          additionalPath: id,
           queryParams: {
             entityId: this.selectedEntity.id,
             type: this.selectedEntity.subType,
           },
         });
-        // this.router.navigateByUrl(`pages/efrontdesk/invoice/${id}`);
         break;
       case 'EDIT_RESERVATION':
         this.editReservation(id);
@@ -376,16 +394,12 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
   }
 
   createReservation() {
-    this.router.navigate(
-      [
-        `/pages/efrontdesk/reservation/${manageReservationRoutes.addReservation.route}`,
-      ],
-      {
-        queryParams: {
-          entityId: this.selectedEntity.id,
-        },
-      }
-    );
+    this.routesConfigService.navigate({
+      additionalPath: `${manageReservationRoutes.addReservation.route}`,
+      queryParams: {
+        entityId: this.selectedEntity.id,
+      },
+    });
   }
 
   /**

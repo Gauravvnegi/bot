@@ -9,6 +9,7 @@ import { MatDialogConfig } from '@angular/material/dialog';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
   DetailsComponent,
+  DetailsTabOptions,
   Reservation,
   ReservationTable,
 } from '@hospitality-bot/admin/reservation';
@@ -30,6 +31,7 @@ import { AnalyticsService } from 'libs/admin/request-analytics/src/lib/services/
 import { PreArrivalRequestList } from '../../data-models/ex-checkin.model';
 import { dashboardPopUpTabs } from '../../constants/dashboard';
 import { ReservationService } from '../../services';
+import { InhouseTable } from 'libs/admin/request-analytics/src/lib/models/inhouse-datatable.model';
 
 @Component({
   selector: 'hospitality-bot-dashboard',
@@ -43,6 +45,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   isSidebarVisible: boolean = false;
   entityId: string;
   loading: boolean = false;
+  showCalendarView = false;
   options: any[] = [];
   tabFilterItems = dashboardPopUpTabs;
   tabFilterIdx = 0;
@@ -62,7 +65,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.entityId = this.globalFilterService.entityId;
-
+    this.globalFilterService.toggleFullView.subscribe((res) => {
+      this.showCalendarView = res;
+    });
     this.listenForStateData();
   }
 
@@ -75,10 +80,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
   listenForStateData(): void {
     this.$subscription.add(
       this.notificationService.$reservationNotification.subscribe(
-        (response) => {
-          if (response) {
+        (reservationId) => {
+          if (reservationId) {
             this.reservationService
-              .getReservationDetails(response)
+              .getReservationDetailsById(reservationId)
               .subscribe((response) => {
                 const data = new Reservation().deserialize(
                   response,
@@ -93,7 +98,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     );
   }
 
-  openDetailPage(rowData): void {
+  openDetailPage(rowData, tabKey?: DetailsTabOptions): void {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;
     dialogConfig.width = '100%';
@@ -101,10 +106,16 @@ export class DashboardComponent implements OnInit, OnDestroy {
       DetailsComponent,
       dialogConfig
     );
+    // detailCompRef.componentInstance.bookingId = rowData?.booking?.bookingNumber;
 
-    detailCompRef.componentInstance.guestId = rowData.guests.primaryGuest.id;
-    detailCompRef.componentInstance.bookingNumber =
-      rowData.booking.bookingNumber;
+    detailCompRef.componentInstance.guestId =
+      rowData?.guests?.primaryGuest?.id ??
+      rowData?.guestDetails?.primaryGuest?.id;
+
+    // detailCompRef.componentInstance.bookingNumber =
+    //   rowData.booking.bookingNumber;
+
+    tabKey && (detailCompRef.componentInstance.tabKey = tabKey);
 
     this.$subscription.add(
       detailCompRef.componentInstance.onDetailsClose.subscribe((_) => {
@@ -147,9 +158,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
     };
 
     this.analyticsService.getInhouseRequest(query).subscribe((res) => {
-      this.options = new PreArrivalRequestList().deserialize(
-        res
-      ).PreArrivalRequest;
+      this.options = new InhouseTable().deserialize(res).records;
+
       this.loading = false;
     });
   }
@@ -197,17 +207,25 @@ export class DashboardComponent implements OnInit, OnDestroy {
     );
   }
 
-  getStatusStyle(type: string): string {
+  getStatusStyle(type: string, state: string): string {
     switch (type) {
       case 'INITIATED':
-        return 'status-text-initiated';
+        return `status-background-initiated`;
       case 'PENDING':
-        return 'status-text-pending';
+        return `status-background-pending`;
       case 'FAILED':
-        return 'status-text-reject';
+        return `status-background-reject`;
       case 'COMPLETED':
-        return 'status-text-success';
+        return `status-background-success`;
     }
+  }
+
+  openExCheckinSidebar() {
+    this.isSidebarVisible = true;
+  }
+
+  closeSidebar() {
+    this.isSidebarVisible = false;
   }
 
   getTemplate() {

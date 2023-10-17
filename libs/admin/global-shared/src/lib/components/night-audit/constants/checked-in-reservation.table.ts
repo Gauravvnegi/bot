@@ -1,4 +1,5 @@
-import { Cols } from '@hospitality-bot/admin/shared';
+import { Cols, FlagType } from '@hospitality-bot/admin/shared';
+import { TableViewDataType } from '../../../types/table-view.type';
 
 export const cols: Cols[] = [
   {
@@ -8,6 +9,7 @@ export const cols: Cols[] = [
   {
     field: 'roomInfo',
     header: 'Room No / Type',
+    width: '14%',
   },
   {
     field: 'bookingNo',
@@ -24,122 +26,38 @@ export const cols: Cols[] = [
   {
     field: 'expenses',
     header: 'Amount Due / Total (INR)',
+    width: '13%',
   },
   {
     field: 'sourceName',
     header: 'Source / Name',
   },
   {
-    field: 'amount',
-    header: 'Amount Due',
-  },
-  {
     field: 'action',
     header: 'Actions',
+    width: '16%',
   },
 ];
 
-// Dummy Data
-export const checkedInList = [
-  {
-    invoiceId: 'INV001',
-    roomInfo: {
-      roomNumber: '101',
-      type: 'Single',
-    },
-    bookingNo: 'BN001',
-    stakeHolder: {
-      guest: 'Guest',
-      company: 'Google',
-    },
-    visitStatus: '03/03/2023',
-    expenses: '5000/7000',
-    sourceName: {
-      source: 'Ameer',
-      name: 'Agent',
-    },
-    amount: '5000',
-    action: {
-      dropDown: [
-        { label: 'No Show', value: 'no-show' },
-        { label: 'Cancel', value: 'cancel' },
-      ],
-      quick: [{ label: 'Reservation', value: 'reservation' }],
-    },
+export const reservationStatus: Record<
+  'NOSHOW' | 'CONFIRMED' | 'CANCELED',
+  { label: string; type: FlagType }
+> = {
+  NOSHOW: {
+    label: 'No Show',
+    type: 'active',
   },
-  {
-    invoiceId: 'INV002',
-    roomInfo: {
-      roomNumber: '102',
-      type: 'Double',
-    },
-    bookingNo: 'BN002',
-    stakeHolder: {
-      guest: 'Gourav',
-      company: 'Google',
-    },
-    visitStatus: '03/03/2023',
-    expenses: '5000/8000',
-    sourceName: {
-      source: 'Ameer',
-      name: 'Agent',
-    },
-    amount: '8000',
-    action: {
-      dropDown: [
-        { label: 'No Show', value: 'no-show' },
-        { label: 'Cancel', value: 'cancel' },
-      ],
-      quick: [{ label: 'Reservation', value: 'reservation' }],
-    },
+  CONFIRMED: {
+    label: 'Confirmed',
+    type: 'completed',
   },
-  {
-    invoiceId: 'INV003',
-    roomInfo: {
-      roomNumber: '102',
-      type: 'Suite',
-    },
-    bookingNo: 'BN003',
-    stakeHolder: {
-      guest: 'Gourav',
-      company: 'Google',
-    },
-    visitStatus: '03/03/2023',
-    expenses: '9000/9000',
-    sourceName: {
-      source: 'Ameer',
-      name: 'Agent',
-    },
-    amount: '6000',
-    action: {
-      dropDown: [
-        { label: 'No Show', value: 'no-show' },
-        { label: 'Cancel', value: 'cancel' },
-      ],
-      quick: [{ label: 'Reservation', value: 'reservation' }],
-    },
+  CANCELED: {
+    label: 'Canceled',
+    type: 'failed',
   },
-  {
-    invoiceId: 'INV004',
-    roomInfo: {
-      roomNumber: '103',
-      type: 'Double',
-    },
-    bookingNo: 'BN004',
-    stakeHolder: {
-      guest: 'Sourav',
-      company: 'BigOh',
-    },
-    visitStatus: '03/03/2023',
-    expenses: '6000/7000',
-    sourceName: 'Walk-in',
-    amount: '7000',
-    action: {
-      dropDown: [
-        { label: 'No Show', value: 'no-show' },
-        { label: 'Cancel', value: 'cancel' },
-      ],
-      quick: [{ label: 'Reservation', value: 'reservation' }],
-    },
-  },
-];
+};
+
+export const quickActions = {
+  modify: 'modify',
+  settlement: 'settlement',
+};

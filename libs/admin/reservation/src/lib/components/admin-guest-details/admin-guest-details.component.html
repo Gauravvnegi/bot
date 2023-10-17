@@ -117,6 +117,29 @@
                     {{ guestFormGroup.lastName }}
                   </div>
                 </div>
+                <div class="field width-added">
+                  <mat-label class="label">Phone No.</mat-label>
+                  <a
+                    *ngIf="guestData.phoneNumber; else emptyCell"
+                    href="tel:{{ guestFormGroup.countryCode }}{{
+                      guestFormGroup.phoneNumber
+                    }}"
+                  >
+                    <div class="value">
+                      {{ guestFormGroup.countryCode }}
+                      {{ guestFormGroup.phoneNumber }}
+                    </div>
+                  </a>
+                </div>
+                <div class="field width-added">
+                  <mat-label class="label">Email</mat-label>
+                  <div
+                    *ngIf="guestFormGroup.email; else emptyCell"
+                    class="value"
+                  >
+                    {{ guestFormGroup.email }}
+                  </div>
+                </div>
               </div>
               <hr
                 class="data-seperator"

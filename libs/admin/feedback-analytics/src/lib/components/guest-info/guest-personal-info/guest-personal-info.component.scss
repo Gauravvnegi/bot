@@ -1,0 +1,66 @@
+@import 'main';
+
+.guest-person {
+  padding: 15px;
+  overflow-y: auto;
+  .person-title {
+    font-size: 14px;
+    letter-spacing: 0.84px;
+    font-weight: $bolder;
+    color: $secondary;
+  }
+  .person-image {
+    margin: 15px 0;
+    display: flex;
+    align-items: center;
+
+    .default {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      @include flex-all-center;
+      img {
+        width: 40px;
+        height: 40px;
+      }
+      &_nickName {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        @include flex-all-center;
+        font-size: 14px;
+        color: $white;
+        background-color: olivedrab;
+      }
+    }
+  }
+  .guest-name {
+    margin-left: 15px;
+    font-size: 12px;
+    letter-spacing: 0.72px;
+  }
+  .contact-detials {
+    margin-top: 15px;
+    font-size: 14px;
+    letter-spacing: 0.84px;
+    color: $inActiveTab;
+  }
+  .label {
+    font-size: 10px;
+    letter-spacing: 0.6px;
+    text-align: left;
+    color: $grayMedium;
+    margin-top: 15px;
+    font-weight: $bolder;
+  }
+  .label-text {
+    font-size: 12px;
+    letter-spacing: 0.72px;
+    text-align: left;
+    margin-top: 5px;
+    color: $secondary;
+  }
+  .border-line {
+    border: solid 1px $grayLight;
+  }
+}

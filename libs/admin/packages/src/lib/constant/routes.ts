@@ -19,17 +19,17 @@ export const packagesRoutes: Record<
   },
   createPackage: {
     route: 'create-package',
-    navRoutes: [navRoute.library, navRoute.packages, navRoute.createPackage],
+    navRoutes: [navRoute.createPackage],
     title: 'Create Package',
   },
   createCategory: {
     route: 'create-category',
-    navRoutes: [navRoute.library, navRoute.packages, navRoute.createCategory],
+    navRoutes: [navRoute.createCategory],
     title: 'Create Category',
   },
   editPackage: {
     route: 'create-package/:id',
-    navRoutes: [navRoute.library, navRoute.packages, navRoute.editPackage],
+    navRoutes: [navRoute.editPackage],
     title: 'Edit Package',
   },
 };

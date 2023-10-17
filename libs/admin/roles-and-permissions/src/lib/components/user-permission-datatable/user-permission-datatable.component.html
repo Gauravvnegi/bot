@@ -78,7 +78,7 @@
         <tr
           class="table-row"
           [ngClass]="{
-            disabled: isEditAccessDenied(rowData)
+            'row-disabled': isEditAccessDenied(rowData)
           }"
           (click)="openUserDetails(rowData)"
         >

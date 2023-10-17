@@ -1,52 +1,30 @@
 import { NgModule } from '@angular/core';
-import { RouterModule, ROUTES } from '@angular/router';
-import { SubscriptionPlanService } from '@hospitality-bot/admin/core/theme';
-import {
-  CRoutes,
-  ModuleNames,
-  routesFactory,
-} from '@hospitality-bot/admin/shared';
+import { RouterModule, Routes } from '@angular/router';
 import { MainComponent } from './components/main/main.component';
-import { InvoiceHistoryDataTableComponent } from './components/invoice-history-data-table/invoice-history-data-table.component';
 import { TransactionHistoryDataTableComponent } from './components/transaction-history-data-table/transaction-history-data-table.component';
 
-const appRoutes: CRoutes = [
+const appRoutes: Routes = [
   {
     path: '',
-    name: ModuleNames.FINANCE,
     component: MainComponent,
     children: [
       {
-        path: 'invoice',
-        name: ModuleNames.INVOICE,
-        component: InvoiceHistoryDataTableComponent,
-      },
-      {
-        path: 'transactions',
-        name: ModuleNames.TRANSACTIONS,
+        path: '',
         component: TransactionHistoryDataTableComponent,
       },
+      // {
+      //   // Remove Invoice from here already moved to invoice module
+      //   path: 'invoice',
+      //   component: InvoiceHistoryDataTableComponent,
+      // },
     ],
   },
 ];
 
 @NgModule({
-  imports: [RouterModule.forChild([])],
-  providers: [
-    {
-      provide: ROUTES,
-      useFactory: (subscriptionService: SubscriptionPlanService) =>
-        routesFactory(appRoutes, [subscriptionService]),
-      multi: true,
-      deps: [SubscriptionPlanService],
-    },
-  ],
+  imports: [RouterModule.forChild(appRoutes)],
   exports: [RouterModule],
 })
 export class AdminFinanceRoutingModule {
-  static components = [
-    MainComponent,
-    InvoiceHistoryDataTableComponent,
-    TransactionHistoryDataTableComponent,
-  ];
+  static components = [MainComponent, TransactionHistoryDataTableComponent];
 }

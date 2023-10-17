@@ -368,18 +368,19 @@ export class BookingInfo {
 
 export class GuestInfo {
   id: string;
-  firstName: string;
-  lastName: string;
-  phoneNumber: string;
-  cc: string;
-  email: string;
-  deserialize(input: GuestType) {
+  firstName?: string;
+  lastName?: string;
+  phoneNumber?: string;
+  cc?: string;
+  email?: string;
+
+  deserialize(input: GuestType): this {
     this.id = input?.id;
-    this.firstName = input.firstName;
-    this.lastName = input.lastName;
-    this.phoneNumber = input.contactDetails.contactNumber;
-    this.cc = input.contactDetails.cc;
-    this.email = input.contactDetails.emailId;
+    this.firstName = input?.firstName;
+    this.lastName = input?.lastName;
+    this.phoneNumber = input?.contactDetails?.contactNumber;
+    this.cc = input?.contactDetails?.cc;
+    this.email = input?.contactDetails?.emailId;
     return this;
   }
 }
@@ -434,6 +435,7 @@ export class SummaryData {
   totalAmount?: number;
   totalPaidAmount: number;
   totalDueAmount: number;
+  discountedAmount: number;
   taxAndFees: number;
   basePrice: number;
   offerAmount: number;
@@ -465,6 +467,7 @@ export class SummaryData {
     this.basePrice = input?.pricingDetails?.basePrice ?? 0;
     this.totalPaidAmount = input?.pricingDetails?.totalPaidAmount ?? 0;
     this.totalDueAmount = input?.pricingDetails?.totalDueAmount ?? 0;
+    this.discountedAmount = input?.pricingDetails?.discountedAmount ?? 0;
     this.min = input?.pricingDetails?.min ?? 0;
     this.max = input?.pricingDetails?.max ?? 0;
     this.paxChild = input?.pricingDetails?.paxChild ?? 0;

@@ -3,6 +3,7 @@
   [routes]="navRoutes"
   [isBack]="false"
   class="nav-header"
+  *ngIf="!showCalendarView"
 >
   <!-- <hospitality-bot-button
     label="View Pre-Arrival Request"
@@ -11,7 +12,7 @@
   <div class="sidebar-wrapper">
     <p-sidebar
       [visible]="isSidebarVisible"
-      (onHide)="isSidebarVisible = false"
+      (onHide)="closeSidebar()"
       class="sidebar"
       [showCloseIcon]="false"
       position="right"
@@ -25,48 +26,104 @@
           [options]="options"
           header="E-Checkin"
           [template]="getTemplate()"
-          (onCloseSidebar)="isSidebarVisible = false"
+          (onCloseSidebar)="closeSidebar()"
         >
         </hospitality-bot-tabbed-sidebar>
       </div>
     </p-sidebar>
     <hospitality-bot-button
       label="E-Checkin"
-      (onClick)="isSidebarVisible = true"
+      (onClick)="openExCheckinSidebar()"
     ></hospitality-bot-button>
   </div>
 </hospitality-bot-navigation-header>
 
-<hospitality-bot-statistics class="statistics"></hospitality-bot-statistics>
+<hospitality-bot-statistics
+  *ngIf="!showCalendarView"
+  class="statistics"
+></hospitality-bot-statistics>
 <!-- <hospitality-bot-datatable></hospitality-bot-datatable> -->
 <hospitality-bot-reservation-datatable></hospitality-bot-reservation-datatable>
 
 <ng-template #request let-data>
-  <div class="content">
-    <div class="title">
-      <span class="item-name">Request for a {{ data.itemName }}</span>
-      <span class="booking-no">{{ data?.bookingNo }}</span>
-    </div>
-    <div class="name-section">
-      <span class="name">{{ data?.customerName }}</span>
-    </div>
-    <div class="footer">
-      <span class="desc">{{ data?.description }}</span>
-      <span>{{ data?.time * 1000 | date: 'HH:mm a' }}</span>
+  <div class="container" (click)="openDetailPage(data, 'package_details')">
+    <div class="guest-container">
+      <div class="header">
+        <span class="booking-no">#{{ data?.confirmationNumber }}</span>
+
+        <div class="header-left">
+          <span class="time">{{
+            data?.stayDetails?.arrivalTime * 1000 | date: 'HH:mm a'
+          }}</span>
+        </div>
+      </div>
+      <div class="info-section">
+        <div class="title">Request for a {{ data?.itemName }}</div>
+        <div class="name-wrapper">
+          <span class="name-title">
+            by:
+          </span>
+          <span class="name"
+            >{{ data?.guestDetails?.primaryGuest?.name }}
+            {{ data?.guestDetails?.primaryGuest?.lastName }}</span
+          >
+        </div>
+        <div class="contact">
+          <div class="social">
+            <img class="icon" src="assets/svg/phone.svg" alt="" />
+            {{ data?.guestDetails?.primaryGuest?.phoneNumber }}
+          </div>
+          <div class="social">
+            <img class="icon" src="assets/svg/message.svg" alt="" />
+            {{ data?.guestDetails?.primaryGuest?.email }}
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </ng-template>
 
 <ng-template #guest let-data>
-  <div class="guest content pre-card" (click)="openDetailPage(data)">
-    <div class="name-section title">
-      <span class="name">{{ data?.guests?.primaryGuest?.fullName }}</span>
-      <div class="counts">
-        <p>
+  <div class="container" (click)="openDetailPage(data)">
+    <div class="guest-container">
+      <div class="header">
+        <span class="booking-no">#{{ data?.booking?.bookingNumber }}</span>
+
+        <div class="header-left">
+          <span class="time">{{
+            data?.booking?.expectedArrivalTimeStamp * 1000 | date: 'HH:mm a'
+          }}</span>
+          <span
+            [ngClass]="
+              getStatusStyle(data?.status?.journeyStatus.preCheckin, 'image')
+            "
+            class="status"
+            >{{ data?.status?.journeyStatus.preCheckin }}</span
+          >
+        </div>
+      </div>
+      <div class="info-section">
+        <div class="title">{{ data?.guests?.primaryGuest?.fullName }}</div>
+        <div class="contact">
+          <div class="social">
+            <img class="icon" src="assets/svg/phone.svg" alt="" />
+            {{ data?.guests?.primaryGuest?.phoneNumber }}
+          </div>
+          <div class="social">
+            <img class="icon" src="assets/svg/message.svg" alt="" />{{
+              data?.guests?.primaryGuest?.email
+            }}
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer">
+      <div class="count-wrapper">
+        <div class="item">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="12.96"
-            height="1.5em"
+            height="16px"
             viewBox="0 0 16 37.862"
             class="svg"
           >
@@ -95,13 +152,13 @@
               </g>
             </g>
           </svg>
-          <span>{{ data?.rooms?.adultCount }}</span>
-        </p>
-        <p>
+          <span class="count">{{ data?.rooms?.adultCount }}</span>
+        </div>
+        <div class="item">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="12.96"
-            height="1.5em"
+            height="16px"
             viewBox="0 0 12.96 23.764"
             class="svg"
           >
@@ -123,20 +180,9 @@
             </g>
           </svg>
 
-          <span>{{ data?.rooms?.kidsCount }}</span>
-        </p>
+          <span class="count">{{ data?.rooms?.kidsCount }}</span>
+        </div>
       </div>
-      <span class="booking-no">{{ data?.booking?.bookingNumber }}</span>
-    </div>
-    <div class="footer">
-      <div
-        [ngClass]="getStatusStyle(data?.currentJourney?.currentJourneyStatus)"
-      >
-        {{ data?.currentJourney?.currentJourneyStatus }}
-      </div>
-      <span>
-        {{ data?.booking?.expectedArrivalTimeStamp * 1000 | date: 'HH:mm a' }}
-      </span>
     </div>
   </div>
 </ng-template>

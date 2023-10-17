@@ -3,6 +3,7 @@ import { FormBuilder, FormControl } from '@angular/forms';
 import { MatDialogConfig } from '@angular/material/dialog';
 import {
   GlobalFilterService,
+  RoutesConfigService,
   SubscriptionPlanService,
 } from '@hospitality-bot/admin/core/theme';
 import {
@@ -30,7 +31,7 @@ import { dashboard } from '../../../constants/dashboard';
 import { TableValue } from '../../../constants/tabFilterItem';
 import { ReservationService } from '../../../services/reservation.service';
 import { reservationStatus } from '../../../constants/response';
-import * as moment from 'moment';
+import { NavigationEnd, Router } from '@angular/router';
 @Component({
   selector: 'hospitality-bot-reservation-datatable',
   templateUrl: './reservation.component.html',
@@ -59,6 +60,7 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
   entityId: string;
   options: any[] = [];
   isPopUploading: boolean = false;
+  showCalendarView: boolean = false;
   selectedTableType: string;
 
   constructor(
@@ -70,7 +72,9 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
     protected _modal: ModalService,
     public feedbackService: FeedbackService,
     protected tabFilterService: TableService,
-    protected subscriptionPlanService: SubscriptionPlanService
+    protected subscriptionPlanService: SubscriptionPlanService,
+    protected routesConfigService: RoutesConfigService,
+    protected router: Router
   ) {
     super(fb, tabFilterService);
   }
@@ -89,21 +93,40 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
     this.checkReservationSubscription();
     this.listenForGlobalFilters();
     this.listenGuestDetails();
+    this.toggleCalendarView();
+  }
+
+  get isCalendarViewAvailable() {
+    return this.subscriptionPlanService.checkModuleSubscriptionWithRespectiveToProduct(
+      this.routesConfigService.productName,
+      ModuleNames.ADD_RESERVATION
+    );
+  }
+
+  toggleCalendarView() {
+    this.router.events.subscribe((event) => {
+      // Turn off full view on route change
+      if (event instanceof NavigationEnd && this.showCalendarView === true) {
+        this.globalFilterService.toggleFullView.next(false);
+      }
+    });
+    this.globalFilterService.toggleFullView.subscribe((res) => {
+      this.showCalendarView = res;
+    });
   }
 
   checkReservationSubscription() {
-    if (
-      !this.subscriptionPlanService.checkModuleSubscription(
-        ModuleNames.ADD_RESERVATION
-      )
-    ) {
-      this.tableTypes = [tableTypes.table];
-      this.tableFG?.addControl('tableType', new FormControl('table'));
+    this.tableFG?.addControl('tableType', new FormControl('calendar'));
+    if (this.isCalendarViewAvailable) {
+      this.tableFG.patchValue({ tableType: 'table' });
+      this.selectedTableType = 'table';
     } else {
-      this.tableFG?.addControl('tableType', new FormControl('calendar'));
+      this.tableTypes = [];
     }
-    this.tableFG.patchValue({ tableType: 'table' });
-    this.selectedTableType = 'table';
+  }
+
+  toggleFullView() {
+    this.globalFilterService.toggleFullView.next(!this.showCalendarView);
   }
 
   /**

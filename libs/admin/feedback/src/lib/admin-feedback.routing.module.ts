@@ -1,11 +1,6 @@
 import { NgModule } from '@angular/core';
-import { RouterModule, ROUTES } from '@angular/router';
-import { SubscriptionPlanService } from '@hospitality-bot/admin/core/theme';
-import {
-  CRoutes,
-  ModuleNames,
-  routesFactory,
-} from '@hospitality-bot/admin/shared';
+import { RouterModule } from '@angular/router';
+import { CRoutes } from '@hospitality-bot/admin/shared';
 import { ActionOverlayComponent } from './components/action-overlay/action-overlay.component';
 import {
   FeedbackDetailComponent,
@@ -19,6 +14,8 @@ import { FeedbackDatatableComponent } from './components/datatable/feedback-data
 import { FeedbackContainerComponent } from './components/feedback-container/feedback-container.component';
 import { FeedbackNotesComponent } from './components/feedback-notes/feedback-notes.component';
 import { FeedbackStatusFormComponent } from './components/feedback-status-form/feedback-status-form.component';
+import { FeedbackTypesComponent } from './components/feedback-types/feedback-types.component';
+import { FeedbackWrapperComponent } from './components/feedback-wrapper/feedback-wrapper.component';
 import { FeedbackComponent } from './components/feedback/feedback.component';
 import {
   FeedbackHistoryComponent,
@@ -33,6 +30,7 @@ import { FeedbackDatatableModalComponent } from './components/modals/feedback-da
 import { FeedbackDetailModalComponent } from './components/modals/feedback-detail-modal/feedback-detail.component';
 import {
   ArtComponent,
+  BifurcationStatsComponent,
   DisengagementComponent,
   FeedbackDistributionComponent,
   GlobalNpsComponent,
@@ -44,45 +42,13 @@ import {
   ResponseRateComponent,
   TopLowNpsComponent,
   TwoWayProgressComponent,
-  BifurcationStatsComponent,
 } from './components/stats';
 import { DepartmentBarGraphComponent } from './components/stats/department-bar-graph/department-bar-graph.component';
-import { FeedbackWrapperComponent } from './components/feedback-wrapper/feedback-wrapper.component';
-import { FeedbackTypesComponent } from './components/feedback-types/feedback-types.component';
 
-const appRoutes: CRoutes = [
-  { path: '', redirectTo: 'analytics' },
-  {
-    path: 'analytics',
-    name: ModuleNames.HEDA_DASHBOARD,
-    component: FeedbackContainerComponent,
-  },
-  {
-    path: 'sentimental-analysis',
-    name: ModuleNames.SENTIMENTAL_ANALYSIS_HEDA,
-    loadChildren: () =>
-      import('@hospitality-bot/admin/sentimental-analysis').then(
-        (m) => m.AdminSentimentalAnalysisModule
-      ),
-  },
-  {
-    path: 'feedback',
-    name: ModuleNames.FEEDBACK,
-    component: FeedbackWrapperComponent,
-  },
-];
+const appRoutes: CRoutes = [{ path: '', component: FeedbackWrapperComponent }];
 
 @NgModule({
-  imports: [RouterModule.forChild([])],
-  providers: [
-    {
-      provide: ROUTES,
-      useFactory: (subscriptionService: SubscriptionPlanService) =>
-        routesFactory(appRoutes, [subscriptionService]),
-      multi: true,
-      deps: [SubscriptionPlanService],
-    },
-  ],
+  imports: [RouterModule.forChild(appRoutes)],
   exports: [RouterModule],
 })
 export class AdminFeedbackRoutingModule {

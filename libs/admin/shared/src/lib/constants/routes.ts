@@ -34,7 +34,7 @@ export const routes = {
   [ModuleNames.FEEDBACK]: 'heda/feedback',
 
   // eMarkt_IT
-  [ModuleNames.eMARK_IT_HOME]: 'marketing',
+  [ModuleNames.EMARK_IT_HOME]: 'marketing',
   [ModuleNames.EMARK_IT_DASHBOARD]: 'marketing/analytics',
   [ModuleNames.CAMPAIGN]: 'marketing/campaign',
 

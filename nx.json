@@ -233,6 +233,21 @@
     },
     "admin-booking-engine": {
       "tags": []
+    },
+    "admin-feedback-analytics": {
+      "tags": []
+    },
+    "admin-manage-rate": {
+      "tags": []
+    },
+    "admin-manage-inventory": {
+      "tags": []
+    },
+    "admin-reports": {
+      "tags": []
+    },
+    "admin-view-not-allowed": {
+      "tags": []
     }
   }
 }

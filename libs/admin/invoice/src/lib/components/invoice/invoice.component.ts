@@ -8,11 +8,15 @@ import {
 } from '@angular/forms';
 import { MatDialogConfig } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
-import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import {
+  GlobalFilterService,
+  RoutesConfigService,
+} from '@hospitality-bot/admin/core/theme';
 import { LibraryItem, QueryConfig } from '@hospitality-bot/admin/library';
 import {
   AdminUtilityService,
   EntitySubType,
+  ModuleNames,
   NavRouteOptions,
   Option,
   UserService,
@@ -36,6 +40,8 @@ import {
   defaultMenu,
   MenuActionItem,
   editDiscountMenu,
+  AdditionalChargesType,
+  additionalChargesDetails,
 } from '../../constants/invoice.constant';
 
 import { cols } from '../../constants/payment';
@@ -49,7 +55,9 @@ import {
 import { InvoiceService } from '../../services/invoice.service';
 import {
   BillItemFields,
+  ChargesType,
   DescriptionOption,
+  PaymentForm,
   UseForm,
 } from '../../types/forms.types';
 import { AddDiscountComponent } from '../add-discount/add-discount.component';
@@ -125,7 +133,8 @@ export class InvoiceComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private manageReservationService: ManageReservationService,
-    private reservationService: ReservationService
+    private reservationService: ReservationService,
+    private routesConfigService: RoutesConfigService
   ) {
     this.reservationId = this.activatedRoute.snapshot.paramMap.get('id');
     this.initPageHeaders();
@@ -143,6 +152,7 @@ export class InvoiceComponent implements OnInit {
     this.entityType = paramData.type;
     this.initForm();
     this.initOptions();
+    this.initNavRoutes();
   }
 
   initOptions() {
@@ -167,6 +177,12 @@ export class InvoiceComponent implements OnInit {
         (error) => {}
       )
     );
+  }
+
+  initNavRoutes() {
+    this.routesConfigService.navRoutesChanges.subscribe((navRoutesRes) => {
+      this.navRoutes = [...navRoutesRes, ...this.navRoutes];
+    });
   }
 
   /**
@@ -240,6 +256,9 @@ export class InvoiceComponent implements OnInit {
           this.inputControl.guestName.patchValue(
             `${guestData.firstName} ${guestData.lastName}`
           );
+          this.inputControl.companyName.patchValue(
+            guestData?.companyName || ''
+          );
 
           this.guestId = guestData.id;
           this.bookingNumber = res.number;
@@ -308,7 +327,9 @@ export class InvoiceComponent implements OnInit {
           this.getDescriptionOptions();
         },
         (error) => {
-          this.router.navigateByUrl('/pages/efrontdesk');
+          this.routesConfigService.navigate({
+            subModuleName: ModuleNames.INVOICE,
+          });
         },
         () => {
           this.loadingData = false;
@@ -460,7 +481,7 @@ export class InvoiceComponent implements OnInit {
       isNew: [isNewEntry],
       taxId: [''],
       isDiscount: [false],
-      isRefundOrPayment: [false],
+      isNonEditableBillItem: [false],
       isAddOn: [true],
     };
 
@@ -533,7 +554,7 @@ export class InvoiceComponent implements OnInit {
             selectedService.amount * (item.taxValue / 100)
           ),
           billItemId: item.id,
-          description: `${item.taxType} (${item.taxValue}%) ${selectedService.label}`,
+          description: `${selectedService.label} ${item.taxType} ${item.taxValue}% `,
         }));
 
         newServiceTax.forEach((item) => {
@@ -786,7 +807,8 @@ export class InvoiceComponent implements OnInit {
   }
 
   handleSave(): void {
-    if (!this.addGST) this.gstValidation(false);
+    // Commenting it as GST Code is commented as of now
+    // if (!this.addGST) this.gstValidation(false);
 
     this.markAsTouched(this.useForm);
     this.markAsTouched(this.tableFormArray);
@@ -832,6 +854,7 @@ export class InvoiceComponent implements OnInit {
     this.paymentValidation(false);
     this.tableFormArray.clear();
     this.tableFormArray.updateValueAndValidity();
+    this.resetPaymentForm();
     this.useForm.updateValueAndValidity();
     this.getBillingSummary();
   }
@@ -844,6 +867,16 @@ export class InvoiceComponent implements OnInit {
           console.log('Invoice Created');
         })
     );
+  }
+
+  resetPaymentForm() {
+    const paymentConfig: PaymentForm = {
+      remarks: '',
+      paymentMethod: '',
+      receivedPayment: null,
+      transactionId: '',
+    };
+    this.useForm.patchValue(paymentConfig);
   }
 
   onAddGST() {
@@ -1021,7 +1054,9 @@ export class InvoiceComponent implements OnInit {
    * Navigate to service form
    */
   createService() {
-    this.router.navigate([`/pages/library/services/create-service`], {
+    this.routesConfigService.navigate({
+      subModuleName: ModuleNames.SERVICES,
+      additionalPath: 'create-service',
       queryParams: {
         entityId: this.entityId,
       },
@@ -1132,7 +1167,7 @@ export class InvoiceComponent implements OnInit {
     itemId: string;
     value: string;
     entryIdx?: number;
-    type: 'discount' | 'refund' | 'other';
+    type: ChargesType;
   }) {
     const { type, amount, itemId, value, entryIdx, transactionType } = {
       entryIdx: this.tableFormArray.length,
@@ -1157,7 +1192,7 @@ export class InvoiceComponent implements OnInit {
       billItemId: value,
       description: value,
       isDiscount: type === 'discount',
-      isRefundOrPayment: type === 'refund',
+      isNonEditableBillItem: type === 'refund' || type === 'miscellaneous',
       itemId,
       transactionType: transactionType,
     });
@@ -1166,12 +1201,22 @@ export class InvoiceComponent implements OnInit {
   }
 
   handleRefund() {
+    this.handleAdditionalCharges(AdditionalChargesType.REFUND);
+  }
+
+  handleMiscellaneous() {
+    this.handleAdditionalCharges(AdditionalChargesType.MISCELLANEOUS);
+  }
+
+  handleAdditionalCharges(chargesType: AdditionalChargesType) {
     if (this.isTableInvalid()) return;
+    const additionalChargeDetails = additionalChargesDetails[chargesType];
 
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = false;
     dialogConfig.width = '40%';
     const discountComponentRef = this.modalService.openDialog(
+      // Rename this component to Additional Charge Component
       AddRefundComponent,
       dialogConfig
     );
@@ -1179,20 +1224,24 @@ export class InvoiceComponent implements OnInit {
     /**
      * Need to update this with excess amount and need to add also
      */
-    discountComponentRef.componentInstance.maxAmount = -this.inputControl
-      .dueAmount.value;
+    if (chargesType === AdditionalChargesType.REFUND)
+      discountComponentRef.componentInstance.maxAmount = -this.inputControl
+        .dueAmount.value;
+    discountComponentRef.componentInstance.heading = `Add ${additionalChargeDetails.label} Amount`;
 
     discountComponentRef.componentInstance.onClose.subscribe(
       (res: { refundAmount: number; remarks: string }) => {
-        console.log(res);
-
         if (res) {
           this.addNonBillItem({
             amount: res.refundAmount,
-            itemId: `refund-${moment(new Date()).unix() * 1000}`,
-            transactionType: 'DEBIT',
-            type: 'refund',
-            value: 'Paid Out' + `${res.remarks ? ` (${res.remarks})` : ''}`,
+            itemId: `${additionalChargeDetails.value}-${
+              moment(new Date()).unix() * 1000
+            }`,
+            transactionType: additionalChargeDetails.transactionType,
+            type: additionalChargeDetails.type,
+            value:
+              additionalChargesDetails[chargesType].value +
+              `${res.remarks ? ` (${res.remarks})` : ''}`,
           });
         }
 

@@ -5,7 +5,10 @@ import {
   ActivatedRouteSnapshot,
   Router,
 } from '@angular/router';
-import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import {
+  GlobalFilterService,
+  RoutesConfigService,
+} from '@hospitality-bot/admin/core/theme';
 import {
   HotelDetailService,
   NavRouteOption,
@@ -19,7 +22,7 @@ import { SegmentList, Service, Services } from '../../models/hotel.models';
 import { BusinessService } from '../../services/business.service';
 import { HotelFormDataService } from '../../services/hotel-form.service';
 import { noRecordActionForCompWithId } from 'libs/admin/all-outlets/src/lib/constants/form';
-
+import { Location } from '@angular/common';
 declare let google: any;
 
 @Component({
@@ -59,7 +62,8 @@ export class HotelInfoFormComponent implements OnInit {
     private businessService: BusinessService,
     private route: ActivatedRoute,
     private hotelFormDataService: HotelFormDataService,
-    private hotelDetailService: HotelDetailService
+    private hotelDetailService: HotelDetailService,
+    private location: Location
   ) {
     this.router.events.subscribe(
       ({ snapshot }: { snapshot: ActivatedRouteSnapshot }) => {
@@ -159,10 +163,14 @@ export class HotelInfoFormComponent implements OnInit {
       this.entityId ? 'editHotel' : 'hotel'
     ];
     this.pageTitle = title;
-    this.navRoutes = navRoutes;
-    this.navRoutes[2].link = `/pages/settings/business-info/brand/${this.brandId}`;
-    this.navRoutes[2].isDisabled = !this.brandId;
-    this.navRoutes[3].isDisabled = true;
+    this.navRoutes = navRoutes.map((routes) => {
+      return {
+        ...routes,
+        link: routes.link
+          .replace(':brandId', this.brandId)
+          .replace(':entityId', this.entityId),
+      };
+    });
   }
 
   /**
@@ -200,27 +208,15 @@ export class HotelInfoFormComponent implements OnInit {
     //if entityId is present then update hotel else create hotel
     if (this.entityId) {
       this.$subscription.add(
-        this.businessService.updateHotel(this.entityId, data.entity).subscribe(
-          (res) => {
-            this.router.navigate([
-              `/pages/settings/business-info/brand/${this.brandId}`,
-            ]);
-          },
-          this.handelError,
-          this.handleSuccess
-        )
+        this.businessService
+          .updateHotel(this.entityId, data.entity)
+          .subscribe((res) => {}, this.handelError, this.handleSuccess)
       );
     } else {
       this.$subscription.add(
-        this.businessService.createHotel(this.brandId, data).subscribe(
-          (res) => {
-            this.router.navigate([
-              `/pages/settings/business-info/brand/${this.brandId}`,
-            ]);
-          },
-          this.handelError,
-          this.handleSuccess
-        )
+        this.businessService
+          .createHotel(this.brandId, data)
+          .subscribe((res) => {}, this.handelError, this.handleSuccess)
       );
     }
   }
@@ -234,12 +230,10 @@ export class HotelInfoFormComponent implements OnInit {
     );
 
     if (this.entityId) {
-      this.router.navigate([
-        `/pages/settings/business-info/brand/${this.brandId}/hotel/${this.entityId}/services`,
-      ]);
+      this.router.navigate(['services'], { relativeTo: this.route });
     } else {
       this.router.navigate([
-        `pages/settings/business-info/brand/${this.brandId}/hotel/services`,
+        `create-with/settings/business-info/brand/${this.brandId}/hotel/services`,
       ]);
     }
   }
@@ -247,22 +241,14 @@ export class HotelInfoFormComponent implements OnInit {
   //to import the services
   openImportService() {
     const data = this.useForm.getRawValue();
-
     //save hotel form data and now got to import service page
     this.hotelFormDataService.initHotelInfoFormData(
       { ...data.entity, allServices: this.allServices },
       true
     );
-
-    if (this.entityId) {
-      this.router.navigate([
-        `/pages/settings/business-info/brand/${this.brandId}/hotel/${this.entityId}/import-services`,
-      ]);
-    } else {
-      this.router.navigate([
-        `/pages/settings/business-info/brand/${this.brandId}/hotel/import-services`,
-      ]);
-    }
+    this.router.navigate([businessRoute.importServices.route], {
+      relativeTo: this.route,
+    });
   }
 
   /**
@@ -276,6 +262,7 @@ export class HotelInfoFormComponent implements OnInit {
       '',
       { panelClass: 'success' }
     );
+    this.location.back();
   };
 
   /**

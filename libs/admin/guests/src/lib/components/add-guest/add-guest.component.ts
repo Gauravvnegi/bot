@@ -8,11 +8,19 @@ import {
   ComponentFactoryResolver,
   Compiler,
 } from '@angular/core';
-import { manageGuestRoutes } from '../../constant/route';
+import { manageGuestRoutes } from '../../constant/routes';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
-import { NavRouteOptions, Option, Regex } from '@hospitality-bot/admin/shared';
+import {
+  GlobalFilterService,
+  RoutesConfigService,
+} from '@hospitality-bot/admin/core/theme';
+import {
+  ModuleNames,
+  NavRouteOptions,
+  Option,
+  Regex,
+} from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { Subscription } from 'rxjs';
 import { Location } from '@angular/common';
@@ -21,6 +29,7 @@ import { GuestFactory } from '../../data-models/guest.model';
 import { FormService } from 'libs/admin/members/src/lib/services/form.service';
 import { GuestFormType } from 'libs/admin/agent/src/lib/types/form.types';
 import { AddCompanyComponent } from 'libs/admin/company/src/lib/components/add-company/add-company.component';
+import { GuestType } from '../../types/guest.type';
 
 @Component({
   selector: 'hospitality-bot-add-guest',
@@ -58,7 +67,7 @@ export class AddGuestComponent implements OnInit {
   //Sidebar configuration
   isSideBar = false;
   sidebarVisible = false;
-  @Output() onClose = new EventEmitter(false);
+  @Output() onClose = new EventEmitter<GuestType | boolean>(false);
   @ViewChild('sidebarSlide', { read: ViewContainerRef })
   sidebarSlide: ViewContainerRef;
   selectedMember: Option;
@@ -72,6 +81,7 @@ export class AddGuestComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private location: Location,
     private formService: FormService,
+    private routesConfigService: RoutesConfigService,
     private resolver: ComponentFactoryResolver,
     private compiler: Compiler
   ) {}
@@ -90,6 +100,7 @@ export class AddGuestComponent implements OnInit {
     });
     this.listenChanges();
     this.formService.restoreForm(this.guestForm, 'guest');
+    this.initNavRoutes();
   }
 
   initGuestForm() {
@@ -101,9 +112,9 @@ export class AddGuestComponent implements OnInit {
       phoneNo: [null, [Validators.required]],
       company: [''],
       gender: ['', [Validators.required]],
-      dateOfBirth: ['', Validators.required],
-      age: [{ value: '', disabled: true }, Validators.required],
-      address: ['', [Validators.required]],
+      dateOfBirth: [''],
+      age: [{ value: '', disabled: true }],
+      address: [''],
     });
   }
 
@@ -112,6 +123,12 @@ export class AddGuestComponent implements OnInit {
       ((this.loading = true),
       this.subscription$.add(
         this.guestService.getGuestById(this.guestId).subscribe((res) => {
+          this.selectedMember = res?.companyId && {
+            label: `${res?.company?.firstName || ''} ${
+              res?.company.lastName || ''
+            }`,
+            value: res?.companyId,
+          };
           GuestFactory.patchEditView(this.guestForm, res);
           this.loading = false;
         }, this.handleFinal)
@@ -135,12 +152,21 @@ export class AddGuestComponent implements OnInit {
     );
   }
 
+  initNavRoutes() {
+    this.routesConfigService.navRoutesChanges.subscribe((navRoutesRes) => {
+      this.navRoutes = [...navRoutesRes, ...this.navRoutes];
+    });
+  }
+
   createNewCompany() {
     if (this.isSideBar) {
       this.openCompanyFromSide();
     } else {
       this.saveForm();
-      this.router.navigateByUrl('pages/members/company/add-company');
+      this.routesConfigService.navigate({
+        subModuleName: ModuleNames.COMPANY,
+        additionalPath: 'add-company',
+      });
     }
   }
 
@@ -213,7 +239,7 @@ export class AddGuestComponent implements OnInit {
           this.loading = false;
 
           if (this.isSideBar) {
-            this.onClose.emit(true);
+            this.onClose.emit(res);
           } else {
             this.location.back();
           }

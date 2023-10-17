@@ -2,10 +2,12 @@ import { DOCUMENT, Location } from '@angular/common';
 import {
   Component,
   ElementRef,
+  EventEmitter,
   Inject,
   Input,
   OnDestroy,
   OnInit,
+  Output,
   ViewChild,
 } from '@angular/core';
 import { fullMonths } from '../../constants';
@@ -23,6 +25,7 @@ export class NavigationHeaderComponent implements OnInit, OnDestroy {
   _dateTime: number;
 
   @Input() heading: string;
+  @Input() onlyNavRoutes: boolean = false;
   @Input() routes: NavRouteOptions = [];
   @Input() isBack: boolean = true;
   @Input() dateTitle: string;
@@ -41,6 +44,7 @@ export class NavigationHeaderComponent implements OnInit, OnDestroy {
   }
 
   @ViewChild('header') header: ElementRef;
+  @Output() routeNumber = new EventEmitter<number>();
 
   constructor(
     @Inject(DOCUMENT) private document: Document,
@@ -51,6 +55,10 @@ export class NavigationHeaderComponent implements OnInit, OnDestroy {
     this.document
       .getElementById('main-layout')
       ?.addEventListener('scroll', this.onScroll);
+  }
+
+  handleRouteIdx(index: number) {
+    this.routeNumber.emit(index + 1);
   }
 
   setDraftTime(date: Date) {

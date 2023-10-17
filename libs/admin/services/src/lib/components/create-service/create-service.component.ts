@@ -6,7 +6,10 @@ import {
   Validators,
 } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import {
+  GlobalFilterService,
+  RoutesConfigService,
+} from '@hospitality-bot/admin/core/theme';
 import {
   LibraryItem,
   ServiceTypeOptionValue,
@@ -14,6 +17,7 @@ import {
 import {
   ConfigService,
   HotelDetailService,
+  ModuleNames,
 } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { NavRouteOptions, Option } from 'libs/admin/shared/src';
@@ -79,7 +83,8 @@ export class CreateServiceComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private hotelDetailService: HotelDetailService,
-    private location: Location
+    private location: Location,
+    private routesConfigService: RoutesConfigService
   ) {
     this.serviceId = this.route.snapshot.paramMap.get('id');
 
@@ -107,6 +112,7 @@ export class CreateServiceComponent implements OnInit {
     this.getPropertyList();
     this.listenForTypeChange();
     this.initOptionsConfig();
+    this.initNavRoutes();
   }
 
   getPropertyList() {
@@ -184,6 +190,12 @@ export class CreateServiceComponent implements OnInit {
     }
   }
 
+  initNavRoutes() {
+    this.routesConfigService.navRoutesChanges.subscribe((navRoutesRes) => {
+      this.navRoutes = [...navRoutesRes, ...this.navRoutes];
+    });
+  }
+
   // /**
   //  * @function updateFormControlSubscription  Add and remove FormControl Based on service type selection
   //  */
@@ -258,9 +270,9 @@ export class CreateServiceComponent implements OnInit {
    * @function createCategory
    */
   createCategory() {
-    this.router.navigate([
-      `/pages/library/services/${servicesRoutes.createCategory.route}`,
-    ]);
+    this.routesConfigService.navigate({
+      additionalPath: servicesRoutes.createCategory.route,
+    });
   }
 
   /**
@@ -304,7 +316,9 @@ export class CreateServiceComponent implements OnInit {
   }
 
   createTax() {
-    this.router.navigate(['pages/settings/tax/create-tax'], {
+    this.routesConfigService.navigate({
+      subModuleName: ModuleNames.TAX,
+      additionalPath: 'create-tax',
       queryParams: { entityId: this.entityId },
     });
   }
@@ -316,8 +330,7 @@ export class CreateServiceComponent implements OnInit {
       '',
       { panelClass: 'success' }
     );
-    this.location.back();
-    // this.router.navigate(['/pages/library/services']);
+    this.routesConfigService.goBack();
   };
 
   closeLoading = () => {

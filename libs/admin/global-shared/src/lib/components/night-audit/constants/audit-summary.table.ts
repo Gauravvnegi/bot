@@ -30,23 +30,23 @@ export const cols: Record<string, Cols[]> = {
 
   houseKeeping: [
     {
-      field: 'checkoutRooms',
-      header: 'Checked-out Rooms marked Dirty',
+      field: 'clean',
+      header: 'CLEAN',
     },
     {
-      field: 'vacantRooms',
-      header: 'Vacant Rooms marked for Touchup',
+      field: 'dirty',
+      header: 'DIRTY',
     },
     {
-      field: 'occupiedOut',
-      header: 'Occupied-out Rooms marked for Dirty',
+      field: 'inspected',
+      header: 'INSPECTED',
     },
   ],
 
   accountDetails: [
     {
       field: 'counter',
-      header: 'Counter',
+      header: 'Cashier',
     },
     {
       field: 'revenueReceived',
@@ -78,22 +78,6 @@ export const cols: Record<string, Cols[]> = {
     {
       field: 'restaurant',
       header: 'Restaurant',
-    },
-    {
-      field: 'miniBar',
-      header: 'Mini Bar',
-    },
-    {
-      field: 'confectionary',
-      header: 'Confectionary',
-    },
-    {
-      field: 'bookStore',
-      header: 'Book Store',
-    },
-    {
-      field: 'iceCreamStore',
-      header: 'Ice Cream Parlour Store',
     },
   ],
 };

@@ -13,7 +13,7 @@ export const navRoutes = {
 export const houseKeepingRoutes: Record<HouseKeepingRoutes, PageRoutes> = {
   HouseKeeping: {
     route: 'housekeeping',
-    navRoutes: [navRoutes.efrontDesk, navRoutes.houseKeeping],
+    navRoutes: [navRoutes.houseKeeping],
     title: 'HouseKeeping',
   },
 };

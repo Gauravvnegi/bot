@@ -1,0 +1,133 @@
+@import 'main';
+.stat-title {
+  font: normal normal $bolder 16px/19px Poppins;
+  letter-spacing: 0.96px;
+  color: $secondary;
+  opacity: 1;
+  @media (max-width: 1024px) {
+    font-size: 12px;
+  }
+}
+
+.graph-container {
+  height: 125px;
+  display: flex;
+  justify-content: center;
+  position: relative;
+  .graph {
+    z-index: 2;
+  }
+  .labels {
+    z-index: 1;
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    top: 6%;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    .val {
+      font: normal normal $bolder 25px/29px Poppins;
+      letter-spacing: 1.5px;
+      color: $secondary;
+      opacity: 1;
+    }
+    .label {
+      font: normal normal $bolder 12px/14px Poppins;
+      letter-spacing: 0.72px;
+      color: $subtitle;
+      text-align: center;
+      width: 80px;
+      opacity: 1;
+      color: $grayLight;
+    }
+  }
+}
+
+.stat-val-container {
+  width: 100%;
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  padding: 5px 0;
+  .stat-lable-container {
+    display: flex;
+    align-items: center;
+    .icon {
+      width: 10px;
+      height: 10px;
+      opacity: 1;
+      border-radius: 50%;
+    }
+    .initiated {
+      background: $initiated-2 0% 0% no-repeat padding-box;
+    }
+    .pending {
+      background: #38649f 0% 0% no-repeat padding-box;
+    }
+    .accepted {
+      background: $success-color 0% 0% no-repeat padding-box;
+    }
+    .rejected {
+      background: $mediumRed 0% 0% no-repeat padding-box;
+    }
+    .stat-lable {
+      padding-left: 10px;
+      text-align: left;
+      font: normal normal $medium 12px/14px Poppins;
+      letter-spacing: 0.72px;
+      color: $subtitle;
+      opacity: 1;
+      @media (max-width: 1024px) {
+        font-size: 10px;
+      }
+    }
+  }
+  .stat-val {
+    text-align: right;
+    font: normal normal $bolder 12px/14px Poppins;
+    letter-spacing: 0.72px;
+    color: $primary-cta;
+    opacity: 1;
+
+    span {
+      font-weight: $medium;
+      color: $posCompare;
+    }
+  }
+}
+.thirty__days {
+  font-size: 10px;
+  width: 100%;
+  text-align: center;
+  background-color: $white;
+  color: $grayLight;
+  position: relative;
+  z-index: 1;
+  display: block;
+
+  span {
+    background: $white;
+    padding: 5px 10px;
+  }
+
+  ::before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 0.5px;
+    top: 50%;
+    left: 0%;
+    background-color: $grayLight;
+    transform: translateY(-50%);
+    z-index: -1;
+  }
+}
+.comparison-negative {
+  color: $darkRed;
+}
+
+.comparison-positive {
+  color: $posCompare;
+}

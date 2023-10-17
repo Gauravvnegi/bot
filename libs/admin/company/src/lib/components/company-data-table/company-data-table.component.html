@@ -8,7 +8,8 @@
     <ng-container [ngTemplateOutlet]="search"></ng-container>
     <hospitality-bot-button
       label="+ Add Company"
-      link="/pages/members/company/{{ companyRoutes.addCompany.route }}"
+      [routerLink]="companyRoutes.addCompany.route"
+      preserveQueryParams="true"
     ></hospitality-bot-button>
     <hospitality-bot-export-list
       [additionalActionItems]="additionalActionItems"
@@ -197,7 +198,7 @@
 <ng-template #emptyTable>
   <hospitality-bot-empty-table
     [isLoading]="loading"
-    link="/pages/members/company/{{ companyRoutes.addCompany.route }}"
+    [link]="companyRoutes.addCompany.route"
     [content]="{
       description:
         'No Company found. Tap the +Add Company to add & manage the companies',

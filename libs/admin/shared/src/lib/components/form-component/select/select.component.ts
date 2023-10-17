@@ -33,4 +33,16 @@ export class SelectComponent extends FormComponent {
   handleItemChange(event: any): void {
     this.itemSelection.emit(event);
   }
+
+  get dropdownOption() {
+    return this.menuOptions.length
+      ? this.menuOptions
+      : [
+          {
+            label: 'No record found',
+            value: 'No record found not to be selected',
+            disabled: true,
+          },
+        ];
+  }
 }

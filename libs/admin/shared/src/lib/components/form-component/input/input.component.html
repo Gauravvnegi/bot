@@ -1,7 +1,7 @@
 <div
   class="wrapper p-field"
   [style.fontSize]="fontSize"
-  [ngClass]="wrapperNgClasses(isHideSpinners)"
+  [ngClass]="getWrapperNgClasses"
   [formGroup]="controlContainer.control"
 >
   <label

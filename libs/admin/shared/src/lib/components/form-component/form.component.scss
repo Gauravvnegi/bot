@@ -171,3 +171,20 @@ input:disabled {
   right: 0;
   top: -2em;
 }
+
+.float__label {
+  position: absolute;
+  z-index: 1;
+  zoom: 0.7;
+  top: -12px;
+  left: 11px;
+}
+
+.float-inside__label {
+  position: absolute;
+  z-index: 1;
+  zoom: 0.7;
+  top: 2px;
+  left: 13px;
+  font-size: 13px;
+}

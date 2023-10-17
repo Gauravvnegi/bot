@@ -175,7 +175,7 @@
 
   .member {
     @include flex-space-between-cen-Algn;
-    width: 80px;
+
     flex-direction: row;
     position: relative;
     margin: 10px 0;
@@ -241,4 +241,7 @@
   border-radius: 20px;
   background-color: #f5f5f5;
   flex-basis: 21% !important;
+}
+.wrapper-manage-permission {
+  width: 100%;
 }

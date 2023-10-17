@@ -31,6 +31,7 @@ import { MenuItemListResponse } from 'libs/admin/all-outlets/src/lib/types/outle
 import { BaseReservationComponent } from '../base-reservation.component';
 import { OutletService } from 'libs/admin/all-outlets/src/lib/services/outlet.service';
 import { FoodPackageList } from 'libs/admin/all-outlets/src/lib/models/outlet.model';
+import { RoutesConfigService } from '@hospitality-bot/admin/core/theme';
 
 @Component({
   selector: 'hospitality-bot-restaurant-reservation',
@@ -68,9 +69,10 @@ export class RestaurantReservationComponent extends BaseReservationComponent
     protected activatedRoute: ActivatedRoute,
     private outletService: OutletService,
     protected formService: FormService,
-    protected hotelDetailService: HotelDetailService
+    protected hotelDetailService: HotelDetailService,
+    protected routesConfigService: RoutesConfigService
   ) {
-    super(activatedRoute, hotelDetailService, formService);
+    super(activatedRoute, hotelDetailService, formService, routesConfigService);
     this.initForm();
   }
   ngOnInit(): void {
@@ -317,7 +319,7 @@ export class RestaurantReservationComponent extends BaseReservationComponent
 
             // Menu Items Array Values
             this.menuItemsValues = menuItems;
-            this.formService.guestInformation.next(guestInformation);
+            this.formService.guestInformation.next(guestInformation.id);
 
             this.userForm.patchValue({
               reservationInformation: reservationInfo,

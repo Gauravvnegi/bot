@@ -1,8 +1,16 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { cols, title, usersList } from '../../constants/manage-login.table';
+import { cols, title } from '../../constants/manage-login.table';
 import { ActionConfigType } from '../../../../types/night-audit.type';
 import { MenuItem } from 'primeng/api';
-import { timer } from 'rxjs';
+import { Subscription, timer } from 'rxjs';
+import { NightAuditService } from '../../../../services/night-audit.service';
+import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import {
+  AdminUtilityService,
+  QueryConfig,
+} from '@hospitality-bot/admin/shared';
+import { UserPermissionTable } from 'libs/admin/roles-and-permissions/src/lib/models/user-permission-table.model';
+import { LoggedInUsers } from '../../models/logged-users.model';
 
 @Component({
   selector: 'hospitality-bot-manage-logged-users',
@@ -13,25 +21,43 @@ import { timer } from 'rxjs';
   ],
 })
 export class ManageLoggedUsersComponent implements OnInit {
+  entityId: string;
   title = title;
   cols = cols;
-  users = usersList;
   loading = false;
   actionConfig: ActionConfigType;
   usersLoggedOut: boolean;
   isTimerStart = false;
 
+  @Input() items: LoggedInUsers[];
   @Input() activeIndex = 0;
   @Input() stepList: MenuItem[];
   @Output() indexChange = new EventEmitter<number>();
 
-  constructor() {}
+  $subscription = new Subscription();
+
+  constructor(
+    private nightAuditService: NightAuditService,
+    private globalFilterService: GlobalFilterService,
+    private adminUtilityService: AdminUtilityService
+  ) {}
 
   ngOnInit(): void {
-    this.initActionConfig();
+    this.entityId = this.globalFilterService.entityId;
+    this.initAction(); // TODO: Replace with @function initActionConfig();, after forcefully loggin implement
+    this.initTable();
   }
 
-  initActionConfig(postLabel?: string, postDisabled?: boolean) {
+  /**
+   * TODO: Remove after forcefully loggin implement
+   */
+  initAction() {
+    this.usersLoggedOut = false;
+    this.isTimerStart = true;
+    this.initActionConfig('Next');
+  }
+
+  initActionConfig(postLabel?: string) {
     this.actionConfig = {
       preHide: this.activeIndex == 0,
       preLabel: this.activeIndex != 0 ? 'Back' : undefined,
@@ -40,18 +66,32 @@ export class ManageLoggedUsersComponent implements OnInit {
         : this.activeIndex == 0
         ? 'Forcefully Logout Users >'
         : 'Next',
-      ...(postDisabled && { postDisabled: true }),
       preSeverity: 'primary',
     };
   }
 
+  initTable() {
+    this.loading = true;
+    this.$subscription.add(
+      this.nightAuditService
+        .getAllUsers(this.entityId, this.getQueryConfig())
+        .subscribe(
+          (loggedUsers) => {
+            const users = new UserPermissionTable().deserialize(loggedUsers)
+              .records;
+            this.items = users.map((user) => new LoggedInUsers(user));
+            this.loading = false;
+          },
+          (error) => {
+            this.loading = false;
+          }
+        )
+    );
+  }
+
   handleNext() {
-    if (!this.isTimerStart && this.activeIndex == 0) {
-      // this.handleMangeLoggedIn(); // TODO: Uncomment for timer
-      //these below line should be removed, after uncommenting above line
-      this.isTimerStart = true;
-      this.initActionConfig('Next', false);
-      this.users = [];
+    if (this.items?.length && !this.isTimerStart && this.activeIndex == 0) {
+      this.handleMangeLoggedIn();
     } else if (this.activeIndex + 1 < this.stepList.length)
       this.indexChange.emit(this.activeIndex + 1);
   }
@@ -66,25 +106,33 @@ export class ManageLoggedUsersComponent implements OnInit {
   handleMangeLoggedIn() {
     this.usersLoggedOut = true;
     this.isTimerStart = true;
-    const targetTime = Date.now() + 5 * 60 * 1000;
+    const targetTime = Date.now() + 2 * 1000; //Date.now() + 5 * 60 * 1000; //<=== 5 Minute
     // Update the display every second
     timer(0, 1000).subscribe(() => {
       const now = Date.now();
       const remainingTime = targetTime - now;
 
       if (remainingTime <= 0) {
-        // call api
+        this.initActionConfig('Next');
         this.usersLoggedOut = false;
-        this.initActionConfig('Next', false);
-        this.users = [];
+        this.items = [];
       } else {
         const minutes = Math.floor(remainingTime / 60000);
         const seconds = Math.floor((remainingTime % 60000) / 1000);
         this.initActionConfig(
-          `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`,
-          true
+          `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`
         );
       }
     });
+  }
+
+  getQueryConfig(): QueryConfig {
+    return {
+      params: this.adminUtilityService.makeQueryParams([
+        {
+          loggedInUser: true,
+        },
+      ]),
+    };
   }
 }

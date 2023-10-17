@@ -27,8 +27,6 @@ export const manageReservationRoutes: Record<
   addReservation: {
     route: 'add-reservation',
     navRoutes: [
-      navRoute.eFrontdesk,
-      navRoute.manageReservation,
       navRoute.addReservation,
     ],
     title: 'Add Reservation',
@@ -37,8 +35,6 @@ export const manageReservationRoutes: Record<
   editReservation: {
     route: 'edit-reservation',
     navRoutes: [
-      navRoute.eFrontdesk,
-      navRoute.manageReservation,
       navRoute.editReservation,
     ],
     title: 'Edit Reservation',

@@ -1,4 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import {
+  Component,
+  ComponentFactoryResolver,
+  OnInit,
+  ViewChild,
+  ViewContainerRef,
+} from '@angular/core';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
   AdminUtilityService,
@@ -38,6 +44,14 @@ export class ComplaintAnalyticsComponent implements OnInit {
   createdPerDay = 0;
   closedPerDay = 0;
 
+  @ViewChild('sidebarSlide', { read: ViewContainerRef })
+  sidebarSlide: ViewContainerRef;
+  sidebarType;
+
+  buttonConfig = [
+    { button: true, label: 'Raise Complaint', icon: 'assets/svg/requests.svg' },
+  ];
+
   $subscription = new Subscription();
 
   constructor(
@@ -47,7 +61,8 @@ export class ComplaintAnalyticsComponent implements OnInit {
     private modalService: ModalService,
     private dateService: DateService,
     private analyticsService: AnalyticsService,
-    private adminUtilityService: AdminUtilityService
+    private adminUtilityService: AdminUtilityService,
+    private resolver: ComponentFactoryResolver
   ) {}
 
   statCard: StatCard[] = [];
@@ -124,42 +139,33 @@ export class ComplaintAnalyticsComponent implements OnInit {
   }
 
   createServiceItem() {
-    //to open add new item pop up
-
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.disableClose = true;
-    dialogConfig.width = '500px';
-    dialogConfig.height = '90vh';
-
-    const addItemCompRef = this.modalService.openDialog(
-      AddItemComponent,
-      dialogConfig
-    );
-
+    this.sidebarVisible = true;
+    this.sidebarType = 'complaint';
+    const factory = this.resolver.resolveComponentFactory(AddItemComponent);
+    this.sidebarSlide.clear();
+    const componentRef = this.sidebarSlide.createComponent(factory);
+    componentRef.instance.isSidebar = true;
     this.$subscription.add(
-      addItemCompRef.componentInstance.onClose.subscribe(() => {
-        addItemCompRef.close();
+      componentRef.instance.onClose.subscribe((res) => {
+        this.sidebarVisible = false;
       })
     );
   }
 
+  sidebarVisible: boolean = false;
   raiseRequest() {
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.disableClose = true;
-    dialogConfig.width = '500px';
-    dialogConfig.height = '90vh';
+    this.sidebarVisible = true;
+    this.sidebarType = 'complaint';
 
-    const raiseRequestCompRef = this.modalService.openDialog(
-      RaiseRequestComponent,
-      dialogConfig
+    const factory = this.resolver.resolveComponentFactory(
+      RaiseRequestComponent
     );
-
-    this.$subscription.add(
-      raiseRequestCompRef.componentInstance.onRaiseRequestClose.subscribe(
-        (res) => {
-          raiseRequestCompRef.close();
-        }
-      )
-    );
+    this.sidebarSlide.clear();
+    const componentRef = this.sidebarSlide.createComponent(factory);
+    componentRef.instance.isSideBar = true;
+    componentRef.instance.onRaiseRequestClose.subscribe((res) => {
+      this.sidebarVisible = false;
+      componentRef.destroy();
+    });
   }
 }

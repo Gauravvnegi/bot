@@ -1,4 +1,11 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  SimpleChanges,
+} from '@angular/core';
 import { FormProps, Option } from '../../types/form.type';
 import { Router } from '@angular/router';
 import { ApiService } from '@hospitality-bot/shared/utils';
@@ -9,6 +16,7 @@ import { FormComponent } from '../../components/form-component/form.components';
 import { MultiSelectSettings } from '../../components/form-component/multi-select/multi-select.component';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { convertToTitleCase } from '../../utils/valueFormatter';
+
 @Component({
   selector: 'hospitality-bot-quick-select',
   templateUrl: './quick-select.component.html',
@@ -30,6 +38,7 @@ export class QuickSelectComponent extends FormComponent implements OnInit {
     | 'one-fourth-width';
   isAsync = false;
   qsLoading = false;
+  resetApiData = false;
 
   /**
    * Pagination Variables
@@ -49,10 +58,12 @@ export class QuickSelectComponent extends FormComponent implements OnInit {
       label: 'name',
       value: 'id',
     },
+    response: false,
   };
   dataModel: DataModel = { ...this.model };
   baseURL: string;
   entityId = '';
+  createType: string;
   apiEndPoint: string;
   queryParams: Record<string, string>;
 
@@ -62,7 +73,7 @@ export class QuickSelectComponent extends FormComponent implements OnInit {
 
   postAPIEndPoint?: string;
   postQueryParams?: Record<string, string>;
-  postModel?: DataModel = { ...this.model };
+  postModel?: DataModel;
 
   // Settings variables
   showHeader = true;
@@ -71,6 +82,7 @@ export class QuickSelectComponent extends FormComponent implements OnInit {
 
   @Input() settings: MultiSelectSettings;
   @Input() controlName: string;
+  @Input() reinitialize: boolean;
   @Input() label: string;
   @Input() inputType: 'select' | 'multiselect' = 'select';
   @Input() set paginationConfig(values: PaginationConfig) {
@@ -85,6 +97,7 @@ export class QuickSelectComponent extends FormComponent implements OnInit {
   }
 
   @Output() clickedOption = new EventEmitter<Option>();
+  @Output() openSidebar = new EventEmitter<boolean>();
 
   $subscription: Subscription;
 
@@ -101,6 +114,23 @@ export class QuickSelectComponent extends FormComponent implements OnInit {
   ngOnInit(): void {
     this.getItems();
     this.listenControl();
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (
+      changes['props']?.previousValue &&
+      !changes['props']?.previousValue?.selectedOption
+    ) {
+      // Get items again when selected option is patched.
+      this.getItems();
+    }
+    if (
+      changes['reinitialize']?.previousValue !==
+      changes['reinitialize']?.currentValue
+    ) {
+      this.resetApiData = true;
+      this.getItems();
+    }
   }
 
   /**
@@ -195,14 +225,15 @@ export class QuickSelectComponent extends FormComponent implements OnInit {
       .subscribe(
         (res) => {
           let data = this.getOptions(res, this.dataModel);
-          this.menuOptions = this.removeDuplicate([
-            ...this.menuOptions,
-            ...data,
-            ...(this._qsProps.selectedOption
-              ? [this._qsProps.selectedOption]
-              : []),
-          ]);
-
+          this.menuOptions = this.resetApiData
+            ? data
+            : this.removeDuplicate([
+                ...this.menuOptions,
+                ...data,
+                ...(this._qsProps.selectedOption
+                  ? [this._qsProps.selectedOption]
+                  : []),
+              ]);
           // To be improved later.
           this.controlContainer.control
             .get(this.controlName)
@@ -225,7 +256,13 @@ export class QuickSelectComponent extends FormComponent implements OnInit {
    * @returns list of option[]
    */
   getOptions(res, model) {
-    const items = res ? (model?.key ? res[model.key] : res) : [];
+    const items = res
+      ? model.response
+        ? res
+        : model?.key
+        ? res[model.key]
+        : res
+      : [];
     return (
       items.map((item) => {
         const label = Array.isArray(model.values?.label)
@@ -233,7 +270,9 @@ export class QuickSelectComponent extends FormComponent implements OnInit {
           : item[model.values?.label];
         return {
           ...item,
-          label: convertToTitleCase(label ?? ''),
+          label: Array.isArray(model.values?.label)
+            ? label
+            : convertToTitleCase(label ?? ''),
           value: item[model.values.value] ?? '',
         };
       }) ?? []
@@ -253,6 +292,10 @@ export class QuickSelectComponent extends FormComponent implements OnInit {
    * @instance inputPrompt POST API will be call & data will be reload
    */
   create(event) {
+    if (this.createType === 'sidebar') {
+      this.openSidebar.emit(true);
+      return;
+    }
     if (event?.length) {
       //Case When inputPrompt haven't to redirect...
       if (this._qsProps.inputPrompt) {
@@ -332,7 +375,7 @@ export class QuickSelectComponent extends FormComponent implements OnInit {
     this.controlContainer.control
       .get(this.controlName)
       .valueChanges.subscribe((res) => {
-        if (res?.length) {
+        if (res?.length && this.menuOptions.length) {
           this.clickedOption.emit(
             this.menuOptions.find((item) => item.value == res)
           );
@@ -370,6 +413,7 @@ export type QSProps = FormProps & {
   promptLink: string;
   selectedOption: Option;
   showChips: boolean;
+  createType?: string;
 };
 
 /**
@@ -380,4 +424,5 @@ export type DataModel = {
   key?: string;
   values: { label: string | string[]; value: string } | Record<string, string>;
   data?: Record<string, string>;
+  response?: boolean;
 };

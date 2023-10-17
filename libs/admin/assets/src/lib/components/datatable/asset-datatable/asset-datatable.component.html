@@ -142,7 +142,7 @@
 <ng-template #emptyTable>
   <hospitality-bot-empty-table
     [isLoading]="loading"
-    link="/pages/library/assets/create-asset"
+    [link]="assetsRoutes.createAssets.route"
     [content]="{
       description:
         'No assets found. Efficiently create, manage and maintain your hotel\'s assets to ensure smooth operations and prevent asset-related issues.',

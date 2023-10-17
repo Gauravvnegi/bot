@@ -33,6 +33,7 @@ import { FormService } from '../../services/form.service';
 import { ReservationType } from '../../constants/reservation-table';
 import { debounceTime } from 'rxjs/operators';
 import { convertToTitleCase } from 'libs/admin/shared/src/lib/utils/valueFormatter';
+import { RoutesConfigService } from '@hospitality-bot/admin/core/theme';
 
 @Component({
   selector: 'hospitality-bot-venue-reservation',
@@ -59,9 +60,10 @@ export class VenueReservationComponent extends BaseReservationComponent
     private manageReservationService: ManageReservationService,
     protected activatedRoute: ActivatedRoute,
     protected formService: FormService,
-    protected hotelDetailService: HotelDetailService
+    protected hotelDetailService: HotelDetailService,
+    protected routesConfigService: RoutesConfigService
   ) {
-    super(activatedRoute, hotelDetailService, formService);
+    super(activatedRoute, hotelDetailService, formService, routesConfigService);
   }
 
   ngOnInit(): void {
@@ -178,7 +180,7 @@ export class VenueReservationComponent extends BaseReservationComponent
             this.formValueChanges = true;
 
             this.venueItemValues = venueInfo;
-            this.formService.guestInformation.next(guestInformation);
+            this.formService.guestInformation.next(guestInformation.id);
 
             this.userForm.patchValue({
               bookingInformation: eventInfo,

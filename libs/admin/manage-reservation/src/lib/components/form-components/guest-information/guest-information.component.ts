@@ -1,20 +1,25 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  Compiler,
+  Component,
+  ComponentFactoryResolver,
+  Input,
+  OnInit,
+  ViewChild,
+  ViewContainerRef,
+} from '@angular/core';
 import {
   ControlContainer,
   FormBuilder,
   FormGroup,
   Validators,
 } from '@angular/forms';
-import { AdminUtilityService, Option } from '@hospitality-bot/admin/shared';
+import { Option } from '@hospitality-bot/admin/shared';
 import { GuestTableService } from 'libs/admin/guests/src/lib/services/guest-table.service';
-import { GuestList } from '../../../models/reservations.model';
-import { GuestDetails } from '../../../types/forms.types';
-import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { manageGuestRoutes } from 'libs/admin/guests/src/lib/constant/route';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { FormService } from '../../../services/form.service';
-import { debounceTime } from 'rxjs/operators';
+import { GuestType } from 'libs/admin/guests/src/lib/types/guest.type';
+import { AddGuestComponent } from 'libs/admin/guests/src/lib/components';
 
 @Component({
   selector: 'hospitality-bot-guest-information',
@@ -25,31 +30,33 @@ import { debounceTime } from 'rxjs/operators';
   ],
 })
 export class GuestInformationComponent implements OnInit {
-  guestOptions: Option[] = [];
-  loadingGuests = false;
-  noMoreGuests = false;
-  guestsOffSet = 0;
   globalQueries = [];
   $subscription = new Subscription();
+
   entityId: string;
   parentFormGroup: FormGroup;
 
+  selectedGuest: Option;
   @Input() reservationId: string;
+
+  sidebarVisible: boolean;
+  @ViewChild('sidebarSlide', { read: ViewContainerRef })
+  sidebarSlide: ViewContainerRef;
+  editMode = false;
 
   constructor(
     private fb: FormBuilder,
     public controlContainer: ControlContainer,
     private guestService: GuestTableService,
-    private router: Router,
-    private adminUtilityService: AdminUtilityService,
     private globalFilterService: GlobalFilterService,
-    private formService: FormService
+    private formService: FormService,
+    private resolver: ComponentFactoryResolver,
+    private compiler: Compiler
   ) {}
 
   ngOnInit(): void {
     this.entityId = this.globalFilterService.entityId;
     this.addFormGroup();
-    this.listenForGuestDetailsChange();
     this.listenForGlobalFilters();
     this.initGuestDetails();
   }
@@ -62,140 +69,108 @@ export class GuestInformationComponent implements OnInit {
     this.parentFormGroup.addControl('guestInformation', this.fb.group(data));
   }
 
-  listenForGuestDetailsChange() {
-    // Call summary data on guest details changes for company discount
-    this.parentFormGroup
-      .get('guestInformation.guestDetails')
-      .valueChanges.subscribe((res) => {
-        if (res) {
-          this.formService.getSummary.next();
-        }
-      });
-  }
-
   /**
    * @function listenForGlobalFilters To listen for global filters and load data when filter value is changed.
    */
   listenForGlobalFilters(): void {
     this.$subscription.add(
       this.globalFilterService.globalFilter$.subscribe((data) => {
-        this.globalQueries = [
-          ...data['filter'].queryValue,
-          ...data['dateRange'].queryValue,
-        ];
+        this.globalQueries = [...data['dateRange'].queryValue];
         this.entityId = this.globalFilterService.entityId;
-        this.globalQueries = [
-          ...this.globalQueries,
-          {
-            order: 'DESC',
-            entityType: 'DUEIN',
-          },
-        ];
-        this.getGuests();
       })
     );
   }
 
-  loadMoreGuests() {
-    this.guestsOffSet = this.guestsOffSet + 5;
-    this.getGuests();
-  }
-
-  searchGuests(text: string) {
-    if (text) {
-      this.loadingGuests = true;
-      this.guestService
-        .searchGuest({
-          params: this.adminUtilityService.makeQueryParams([
-            {
-              key: text,
-              type: 'GUEST',
-            },
-          ]),
-        })
-        .subscribe((res) => {
-          this.loadingGuests = false;
-          const data = new GuestList().deserialize(res).records;
-          this.guestOptions = data;
-        });
-    } else {
-      this.guestsOffSet = 0;
-      this.guestOptions = [];
-      this.getGuests();
-    }
-  }
-
-  createGuest() {
-    this.formService.reservationForm.next(this.parentFormGroup.getRawValue());
-    if (this.reservationId) {
-      this.router.navigateByUrl(
-        `/pages/members/guests/${manageGuestRoutes.editGuest.route}/${this.reservationId}`
-      );
-    } else {
-      this.router.navigateByUrl(
-        `/pages/members/guests/${manageGuestRoutes.addGuest.route}`
-      );
-    }
-  }
-
-  getGuests() {
-    this.loadingGuests = true;
-    this.guestService.getGuestList(this.getConfig()).subscribe(
-      (res) => {
-        const guests = res.records;
-        const guestDetails: GuestDetails[] = guests.map((guest) => ({
-          label: `${guest.firstName} ${guest.lastName}`,
-          value: guest.id,
-          phoneNumber: guest.contactDetails.contactNumber,
-          cc: guest.contactDetails.cc,
-          email: guest.contactDetails.emailId,
-        }));
-        this.guestOptions = [...this.guestOptions, ...guestDetails];
-        this.noMoreGuests = guests.length < 5;
-        this.loadingGuests = false;
-      },
-      (err) => {
-        this.loadingGuests = false;
-      }
-    );
+  showGuests() {
+    const lazyModulePromise = import(
+      'libs/admin/guests/src/lib/admin-guests.module'
+    )
+      .then((module) => {
+        return this.compiler.compileModuleAsync(module.AdminGuestsModule);
+      })
+      .catch((error) => {
+        console.error('Error loading the lazy module:', error);
+      });
+    lazyModulePromise.then((moduleFactory) => {
+      this.sidebarVisible = true;
+      const factory = this.resolver.resolveComponentFactory(AddGuestComponent);
+      this.sidebarSlide.clear();
+      const componentRef = this.sidebarSlide.createComponent(factory);
+      componentRef.instance.isSideBar = true;
+      componentRef.instance.onClose.subscribe((res: GuestType | boolean) => {
+        if (typeof res !== 'boolean') {
+          this.selectedGuest = {
+            label: `${res.firstName} ${res.lastName}`,
+            value: res.id,
+            phoneNumber: res.contactDetails.contactNumber,
+            cc: res.contactDetails.cc,
+            email: res.contactDetails.emailId,
+          };
+          this.parentFormGroup
+            .get('guestInformation.guestDetails')
+            .patchValue(res.id);
+        }
+        this.sidebarVisible = false;
+        componentRef.destroy();
+      });
+    });
   }
 
   initGuestDetails() {
-    if (this.reservationId)
-      this.$subscription.add(
-        this.formService.guestInformation.subscribe((res) => {
-          if (res) {
-            if (
-              this.guestOptions.findIndex((item) => item.value === res.id) ===
-              -1
-            ) {
-              this.guestOptions.push({
-                label: `${res.firstName} ${res.lastName}`,
-                value: res.id,
-                phoneNumber: res.phoneNumber,
-                cc: res.cc,
-                email: res.email,
-              });
-            }
-            this.parentFormGroup
-              .get('guestInformation.guestDetails')
-              .patchValue(res.id);
-          }
-        })
-      );
+    // if (this.reservationId)
+    this.$subscription.add(
+      this.formService.guestInformation.subscribe((res) => {
+        if (res) {
+          this.getGuestById(res);
+          this.editMode = true;
+        }
+      })
+    );
   }
 
-  getConfig() {
-    const config = [
-      ...this.globalQueries,
-      {
-        entityState: 'ALL',
-        offset: this.guestsOffSet,
-        limit: 5,
-        type: 'GUEST',
-      },
-    ];
-    return { params: this.adminUtilityService.makeQueryParams(config) };
+  getGuestById(id: string) {
+    this.guestService.getGuestById(id).subscribe((res) => {
+      this.selectedGuest = {
+        label: `${res.firstName} ${res.lastName}`,
+        value: res.id,
+        phoneNumber: res.contactDetails.contactNumber,
+        cc: res.contactDetails.cc,
+        email: res.contactDetails.emailId,
+      };
+      this.parentFormGroup
+        .get('guestInformation.guestDetails')
+        .patchValue(res.id);
+    });
+  }
+
+  guestChange(event: GuestType) {
+    if (event && event?.id) {
+      this.selectedGuest = {
+        label: `${event.firstName} ${event.lastName}`,
+        value: event.id,
+        phoneNumber: event.contactDetails.contactNumber,
+        cc: event.contactDetails.cc,
+        email: event.contactDetails.emailId,
+      };
+      if (!this.editMode) {
+        this.formService.getSummary.next();
+      }
+      setTimeout(() => {
+        this.editMode = false;
+      }, 2000);
+    }
+  }
+
+  getConfig(type = 'get') {
+    if (type === 'search') return { type: 'GUEST' };
+    const queries = {
+      entityId: this.entityId,
+      toDate: this.globalQueries[0].toDate,
+      fromDate: this.globalQueries[1].fromDate,
+      entityState: 'ALL',
+      type: 'GUEST',
+    };
+    return queries;
   }
 
   /**

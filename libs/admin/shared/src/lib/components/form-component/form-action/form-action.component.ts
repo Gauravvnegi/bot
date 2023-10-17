@@ -85,8 +85,8 @@ export class FormActionComponent implements OnInit {
 
   onScroll() {
     const distanceFromBottom =
-      this.formLayout.scrollHeight -
-      (this.mainLayout.scrollTop + this.mainLayout.clientHeight);
+      this.formLayout?.scrollHeight -
+      (this.mainLayout?.scrollTop + this.mainLayout?.clientHeight);
 
     // Check if the user has scrolled close to the bottom
     if (distanceFromBottom <= 0 && this.isFixed) {
@@ -116,6 +116,8 @@ export type FormActionConfig = {
   preSeverity: ButtonSeverity;
   PreLabelWithId: string;
   postLabelWithId: string;
+  preDisabled?: boolean;
+  postDisabled?: boolean;
   isSticky: boolean;
   id: boolean;
   referenceId: string;

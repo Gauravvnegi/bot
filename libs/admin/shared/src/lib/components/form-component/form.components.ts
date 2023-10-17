@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { AbstractControl, ControlContainer } from '@angular/forms';
-import { Cancelable, debounce, map } from 'lodash';
+import { Cancelable, debounce, map, stubFalse } from 'lodash';
 import {
   Alignment,
   FormProps,
@@ -18,6 +18,7 @@ export class FormComponent implements OnInit {
   /* Default Settings Props */
   fontSize = '16px';
   float = false; // for floatable label
+  floatInsideLabel = false; // for floatable label inside
   showClear = false;
   placeholder: string = '';
   variant: InputVariant = 'outlined';
@@ -168,14 +169,14 @@ export class FormComponent implements OnInit {
   /**
    * Input wrapper classes
    */
-  wrapperNgClasses(hideSpinner: boolean) {
+  get wrapperNgClasses() {
     return {
       // 'p-input-icon-right': this.isLoading,
+      wrapper: true,
       'p-float-label': this.float,
       wrapper__vertical: this.alignment === 'vertical',
       wrapper__horizontal: this.alignment === 'horizontal',
       'custom-disabled': this.isDisabled,
-      'hide-spinner': hideSpinner,
     };
   }
 
@@ -185,6 +186,7 @@ export class FormComponent implements OnInit {
   get inputNgClasses() {
     return {
       input__static: this.label && this.alignment === 'vertical',
+      input__float: this.label && (this.float || this.floatInsideLabel),
       input__standard: this.variant === 'standard',
       input__outlined: this.variant === 'outlined',
       input__error: this.error,
@@ -249,7 +251,7 @@ export class FormComponent implements OnInit {
       });
       newDiv.id = id;
       newDiv.className = 'dropdown-action-cta'; // styling class
-      const menu = document.querySelector(`.${this.menuClass}`);
+      const menu = this.menuNode;
       menu?.parentElement.appendChild(newDiv);
     }
   };
@@ -270,7 +272,7 @@ export class FormComponent implements OnInit {
       const maxLength = 30;
       newDiv.id = id;
       newDiv.className = 'dropdown-input-action-cta'; // styling class
-      const menu = document.querySelector(`.${this.menuClass}`);
+      const menu = this.menuNode;
       menu?.parentElement.appendChild(newDiv);
 
       const input = document.getElementById('myInput') as HTMLInputElement;
@@ -297,6 +299,12 @@ export class FormComponent implements OnInit {
     }
   };
 
+  get menuNode() {
+    return document
+      .querySelector(`.${this.controlName}`)
+      .querySelector(`.${this.menuClass}`);
+  }
+
   /**
    * @function onMenuOpen To Attach search and pagination api
    */
@@ -307,8 +315,7 @@ export class FormComponent implements OnInit {
     let debounceCall: (() => void) & Cancelable;
 
     const registerScroll = () => {
-      const menu = document.querySelector(`.${this.menuClass}`);
-
+      const menu = this.menuNode;
       menu?.addEventListener('scroll', () => {
         if (this.stopEmission) return;
         if (

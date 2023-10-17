@@ -9,6 +9,7 @@ export class OutletFormService {
     serviceIds: [],
     menuIds: [],
     foodPackageIds: [],
+    packageCode: [],
   };
   Outlet: any = 'RESTAURANT';
 

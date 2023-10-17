@@ -6,9 +6,10 @@ import { ThemeModule } from '../theme/src';
 import { PagesComponent } from './containers/pages/pages.component';
 import { TemporaryRedirectPageComponent } from './containers/trp/temporary-redirect-page/temporary-redirect-page.component';
 import { PagesRoutingModule } from './pages.routing.module';
+import { MainComponent } from './containers/main/main.component';
 
 @NgModule({
-  declarations: [PagesComponent, TemporaryRedirectPageComponent],
+  declarations: [PagesComponent, TemporaryRedirectPageComponent, MainComponent],
   imports: [
     CommonModule,
     ThemeModule,

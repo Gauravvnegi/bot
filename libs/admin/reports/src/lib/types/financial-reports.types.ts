@@ -1,0 +1,138 @@
+import { CalendarType } from './reports.types';
+
+export type FinancialReportData = {
+  emptyCell: string;
+};
+
+export type DailyRevenueReportData = FinancialReportData & {
+  gross: string;
+  adj: string;
+  today: string;
+  month: string;
+  year: string;
+  isBold?: boolean;
+  isGreyBg?: boolean;
+  isBlueBg?: boolean;
+};
+
+export type MonthlySummaryReportData = {
+  day: string;
+  roomCount: number;
+  occupancy: string;
+  avgDailyRateIncludeInclusion: number;
+  avgDailyRateExcludeInclusion: number;
+  roomRent: number;
+  roomInclusions: number;
+  totalTaxes: number;
+  directSales: number;
+  directSaleTax: number;
+  grossTotal: number;
+};
+
+export type MonthlySummaryReportResponse = {
+  id: string;
+  date: number;
+  entityId: string;
+  roomRevenue: number;
+  revPar: number;
+  averageRate: number;
+  totalRooms: number;
+  occupiedRooms: number;
+  outOfOrderRooms: number;
+  outOfServiceRooms: number;
+  complimentaryRooms: number;
+  houseUseRooms: number;
+  occupancyPercentage: number;
+  arrivalRooms: number;
+  departureRooms: number;
+  dayUseRooms: number;
+  individualRoomsInhouse: number;
+  frontDeskRoomsInhouse: number;
+  companyRoomsInhouse: number;
+  agentRoomsInhouse: number;
+  walkInRoomsInhouse: number;
+  noShowRooms: number;
+  inhouseAdults: number;
+  inhouseChildren: number;
+  individualPersonInhouse: number;
+  frontDeskPersonInhouse: number;
+  companyPersonInhouse: number;
+  agentPersonInhouse: number;
+  walkInPersonInhouse: number;
+  cancelledReservationForToday: number;
+  reservationsMadeToday: number;
+  nextDayArrivalRooms: number;
+  nextDayDepartureRooms: number;
+  roomChargePerDay: number;
+  roomCgstPerDay: number;
+  roomSgstPerDay: number;
+  vipPersonInhouse: number;
+  arrivalPersons: number;
+  departurePersons: number;
+  noShowPersons: number;
+  roomNightsReserved: number;
+  inclusionOrAddOn: number;
+  totalPersonInHouse: number;
+  noShowReservationForToday: number;
+  totalTax: number;
+  grossTotal: number;
+  subTotalObject: boolean;
+};
+
+export type DailyRevenueReportResponse<
+  T extends CalendarType = CalendarType
+> = {
+  date: number;
+  entityId: string;
+  roomRevenue: number;
+  revPar: number;
+  averageRate: number;
+  totalRooms: number;
+  occupiedRooms: number;
+  outOfOrderRooms: number;
+  outOfServiceRooms: number;
+  complimentaryRooms: number;
+  houseUseRooms: number;
+  occupancyPercentage: number;
+  arrivalRooms: number;
+  departureRooms: number;
+  dayUseRooms: number;
+  individualRoomsInhouse: number;
+  frontDeskRoomsInhouse: number;
+  companyRoomsInhouse: number;
+  agentRoomsInhouse: number;
+  walkInRoomsInhouse: number;
+  noShowRooms: number;
+  inhouseAdults: number;
+  inhouseChildren: number;
+  individualPersonInhouse: number;
+  frontDeskPersonInhouse: number;
+  companyPersonInhouse: number;
+  agentPersonInhouse: number;
+  walkInPersonInhouse: number;
+  cancelledReservationForToday: number;
+  reservationsMadeToday: number;
+  nextDayArrivalRooms: number;
+  nextDayDepartureRooms: number;
+  roomChargePerDay: number;
+  roomCgstPerDay: number;
+  roomSgstPerDay: number;
+  calenderType: string;
+  vipPersonInhouse: number;
+  arrivalPersons: number;
+  departurePersons: number;
+  noShowPersons: number;
+  roomNightsReserved: number;
+  inclusionOrAddOn: number;
+  totalPersonInHouse: number;
+  noShowReservationForToday: number;
+  totalTax: number;
+  grossTotal: number;
+  subTotalObject: boolean;
+  cancellation: number;
+  noShow: number;
+  totalRoom: number;
+  addOn: number;
+  totalOthers: number;
+  totalRevenue: number;
+};

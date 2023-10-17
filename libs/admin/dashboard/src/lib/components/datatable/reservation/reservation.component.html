@@ -3,11 +3,26 @@
   [ngClass]="{ 'action-header__sticky': isScrolledUp }"
   [formGroup]="tableFG"
 >
-  <div class="heading">{{ tableName }}</div>
-  <div class="action-wrapper">
-    <div class="pull-right">
-      <!-- <hospitality-bot-info-panel type="booking"></hospitality-bot-info-panel> -->
-
+  <div class="heading-wrapper">
+    <div class="heading">{{ tableName }}</div>
+    <ng-container
+      *ngIf="
+        tableFG?.get('tableType')?.value === 'calendar' &&
+        tableTypes.length
+      "
+    >
+      <hospitality-bot-info-panel type="booking"></hospitality-bot-info-panel>
+      <img
+        (click)="toggleFullView()"
+        class="expand"
+        [src]="'assets/svg/expand-grey.svg'"
+        alt=""
+        [pTooltip]="showCalendarView ? 'Collapse' : 'Expand'"
+      />
+    </ng-container>
+  </div>
+  <div class="action-wrapper" *ngIf="!showCalendarView">
+    <div class="pull-right" *ngIf="tableTypes.length">
       <label class="type-label" *ngFor="let option of tableTypes">
         <input
           type="radio"
@@ -26,16 +41,23 @@
       </label>
     </div>
     <hospitality-bot-export-list
+      *ngIf="
+        tableFG?.get('tableType')?.value !== 'calendar' || !tableTypes.length
+      "
       (onDocumentActions)="onDocumentActions()"
       [documentTypes]="documentTypes"
       [documentActionTypes]="documentActionTypes"
+      [isDisable]="values.length === 0"
     ></hospitality-bot-export-list>
   </div>
 </div>
 <div [ngClass]="{ 'sticky-header-gap': isScrolledUp }"></div>
 
 <ng-container
-  *ngIf="tableFG?.get('tableType').value === 'calendar'; else tableView"
+  *ngIf="
+    tableFG?.get('tableType')?.value === 'calendar' && tableTypes.length;
+    else tableView
+  "
 >
   <hospitality-bot-reservation-calendar-view></hospitality-bot-reservation-calendar-view>
 </ng-container>

@@ -264,7 +264,6 @@ hospitality-bot-tab-group .icon {
       color: $title;
     }
   }
-  
 
   .footer {
     display: inline-flex;
@@ -322,11 +321,23 @@ hospitality-bot-tab-group .icon {
   }
 }
 
+.heading-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1em;
+  .expand {
+    cursor: pointer;
+    height: 25px;
+    width: 25px;
+  }
+}
+
 :host ::ng-deep .p-dialog-mask {
   height: unset !important;
   width: unset !important;
-  right: 0 !important;
-  left: 44em !important;
+  left: 214px !important;
+
   top: 53px !important;
   position: absolute !important;
 }

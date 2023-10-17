@@ -1,0 +1,56 @@
+@import 'main';
+
+.pi-angle-double-right {
+  color: $primary;
+  background-color: $primary-text-bg;
+  padding: 5px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+// Uncomment to hide search
+// :host ::ng-deep .table-head__search {
+//   display: none;
+// }
+
+:host ::ng-deep {
+  .p-datatable {
+    @include tableCellPadding(0.1em);
+    .p-datatable-tbody {
+      .table-row {
+        height: auto;
+        cursor: default;
+      }
+    }
+  }
+}
+
+.filter-item {
+  max-width: 150px;
+}
+
+:host ::ng-deep {
+  .is-bold {
+    font-weight: bold;
+  }
+
+  .is-grey-bg {
+    background-color: #dedede;
+    color: black;
+    .primary-text:hover,
+    .secondary-text:hover {
+      background: unset !important;
+    }
+  }
+  .is-babyBlue-bg {
+    background-color: #e1effe;
+    color: black;
+    .primary-text:hover,
+    .secondary-text:hover {
+      background: unset !important;
+    }
+  }
+}
+:host ::ng-deep .p-datatable.p-datatable-sm .p-datatable-footer {
+  display: none !important;
+}

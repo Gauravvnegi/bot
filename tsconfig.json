@@ -166,6 +166,19 @@
       ],
       "@hospitality-bot/admin/booking-engine": [
         "libs/admin/booking-engine/src/index.ts"
+      ],
+      "@hospitality-bot/admin/feedback-analytics": [
+        "libs/admin/feedback-analytics/src/index.ts"
+      ],
+      "@hospitality-bot/admin/manage-rate": [
+        "libs/admin/manage-rate/src/index.ts"
+      ],
+      "@hospitality-bot/admin/manage-inventory": [
+        "libs/admin/manage-inventory/src/index.ts"
+      ],
+      "@hospitality-bot/admin/reports": ["libs/admin/reports/src/index.ts"],
+      "@hospitality-bot/admin/view-not-allowed": [
+        "libs/admin/view-not-allowed/src/index.ts"
       ]
     }
   },

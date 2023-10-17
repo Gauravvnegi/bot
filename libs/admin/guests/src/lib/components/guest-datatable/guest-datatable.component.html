@@ -10,7 +10,8 @@
     <ng-container [ngTemplateOutlet]="search"></ng-container>
     <hospitality-bot-button
       label="+ Add Guest"
-      [link]="'/pages/members/guests/' + guestRoutes.addGuest.route"
+      [routerLink]="guestRoutes.addGuest.route"
+      preserveQueryParams="true"
     ></hospitality-bot-button>
 
     <hospitality-bot-export-list

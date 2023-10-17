@@ -1,13 +1,17 @@
 import { Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { Router } from '@angular/router';
-import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import { ActivatedRouteSnapshot, Router } from '@angular/router';
+import {
+  GlobalFilterService,
+  RoutesConfigService,
+} from '@hospitality-bot/admin/core/theme';
 import { NavRouteOptions } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { Subscription } from 'rxjs';
 import { RoomService } from '../../services/room.service';
 import { error } from 'console';
+import { roomRoutesConfig } from '../../constant/routes';
 
 @Component({
   selector: 'hospitality-bot-import-service',
@@ -29,12 +33,9 @@ export class ImportServiceComponent implements OnInit {
   compServices: any[] = [];
   filteredServices: any[] = [];
   allServices;
-  navRoutes: NavRouteOptions = [
-    { label: 'efrontdesk', link: './' },
-    { label: 'Rooms', link: '/pages/efrontdesk/room' },
-    { label: 'Add Room Type', link: '/pages/efrontdesk/room/add-room-type' },
-    { label: 'Import Services', link: './' },
-  ];
+  navRoutes: NavRouteOptions = [];
+
+  roomTypeId: string;
 
   constructor(
     private fb: FormBuilder,
@@ -42,8 +43,18 @@ export class ImportServiceComponent implements OnInit {
     private roomService: RoomService,
     private router: Router,
     private location: Location,
-    private globalService: GlobalFilterService
-  ) {}
+    private globalService: GlobalFilterService,
+    private routesConfigService: RoutesConfigService
+  ) {
+    this.router.events.subscribe(
+      ({ snapshot }: { snapshot: ActivatedRouteSnapshot }) => {
+        const roomTypeId = snapshot?.params['roomTypeId'];
+        if (roomTypeId) {
+          this.roomTypeId = roomTypeId;
+        }
+      }
+    );
+  }
 
   ngOnInit(): void {
     if (!this.roomService.selectedService) {
@@ -67,35 +78,40 @@ export class ImportServiceComponent implements OnInit {
     // this.roomService.roomTypeFormData.active;
 
     this.manageRoutes();
+    this.initNavRoutes();
   }
 
-  manageRoutes() {
-    // const { navRoutes, title } = businessRoute[
-    //   this.entityId ? 'editImportServices' : 'importServices'
-    // ];
-    // this.pageTitle = title;
-    // this.navRoutes = navRoutes;
-    // this.navRoutes[2].link.replace('brandId', this.brandId);
-    // this.navRoutes[2].isDisabled = false;
-    // if (this.entityId) {
-    //   this.navRoutes[3].link = `/pages/settings/business-info/brand/${this.brandId}/hotel/${this.entityId}`;
-    //   this.navRoutes[3].isDisabled = false;
-    // } else {
-    //   this.navRoutes[3].link = `/pages/settings/business-info/brand/${this.brandId}/hotel`;
-    //   this.navRoutes[3].isDisabled = false;
-    // }
+  initNavRoutes() {
+    let path = '';
+    this.routesConfigService.activeRouteConfigSubscription.subscribe(
+      (activeRouteConfig) => {
+        path = activeRouteConfig.submodule.fullPath;
+      }
+    );
+    this.routesConfigService.navRoutesChanges.subscribe((navRoutesRes) => {
+      this.navRoutes = [...navRoutesRes];
+      const roomRoutes =
+        roomRoutesConfig[
+          this.roomTypeId ? 'editRoomTypeImportServices' : 'importServices'
+        ];
+      this.pageTitle = roomRoutes.title;
+      const modifiedRoomType = roomRoutes.navRoutes.map((navRoute) => {
+        if (navRoute.link.includes(':roomTypeId')) {
+          navRoute.link = navRoute.link.replace(':roomTypeId', this.roomTypeId);
+        }
+        navRoute.link = path + '/' + navRoute.link;
+
+        return navRoute;
+      });
+      this.navRoutes = [...this.navRoutes, ...modifiedRoomType];
+    });
   }
 
-  saveForm(serviceData) {
-    serviceData.serviceIds = [
-      ...this.roomService.roomTypeFormData.services.map(
-        (service) => service.id
-      ),
-      ...serviceData.serviceIds,
-    ];
+  manageRoutes() {}
 
+  saveForm(data: { serviceIds: string[]; packageCode: string }) {
     this.roomService
-      .updateHotel(this.entityId, serviceData)
+      .updateHotel(this.entityId, { serviceIds: data.serviceIds })
       .subscribe(this.handleSuccess, this.handelError);
   }
 

@@ -1,5 +1,9 @@
 import { get, set } from 'lodash';
-import { IDeserializable, UserResponse } from '@hospitality-bot/admin/shared';
+import {
+  IDeserializable,
+  ProductNames,
+  UserResponse,
+} from '@hospitality-bot/admin/shared';
 import { tokensConfig } from '../constants/common';
 
 export class UserConfig implements IDeserializable {
@@ -157,6 +161,16 @@ export class Hotel {
     this.url = input.domain;
     this.expiry = input.expiry;
     this.status = 'published';
+    return this;
+  }
+}
+
+export class UserSubscriptionPermissions {
+  userPermissions: Record<string, { canView: boolean; canManage: boolean }>;
+  userProducts: ProductNames[];
+
+  deserialize(input: UserResponse['permissions']) {
+    // need to complete (To DO)
     return this;
   }
 }

@@ -9,10 +9,12 @@
       label="+ Create Category"
       variant="text"
       severity="secondary"
-      link="/pages/library/packages/{{ routes.createCategory.route }}"
+      [routerLink]="routes.createCategory.route"
+      preserveQueryParams="true"
     ></hospitality-bot-button>
     <hospitality-bot-button
-      link="/pages/library/packages/{{ routes.createPackage.route }}"
+      [routerLink]="routes.createPackage.route"
+      preserveQueryParams="true"
       label="+ Add Package"
     ></hospitality-bot-button>
     <hospitality-bot-export-list
@@ -152,7 +154,7 @@
 <ng-template #emptyTable>
   <hospitality-bot-empty-table
     [isLoading]="loading"
-    link="/pages/library/packages/{{ routes.createPackage.route }}"
+    [link]="routes.createPackage.route"
     [content]="{
       description:
         'No packages found. Tap the +Add Packages to Create and manage special packages and promotions to attract guests and increase bookings.',

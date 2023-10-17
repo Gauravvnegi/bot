@@ -15,10 +15,14 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
-import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import {
+  GlobalFilterService,
+  RoutesConfigService,
+} from '@hospitality-bot/admin/core/theme';
 import {
   ConfigService,
   EntitySubType,
+  ModuleNames,
   Option,
 } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
@@ -33,14 +37,15 @@ import {
 } from '../../../../../dashboard/src/lib/data-models/reservation.model';
 import { FormService } from 'libs/admin/manage-reservation/src/lib/services/form.service';
 import { Router } from '@angular/router';
-import { IGRoomType } from '../../../../../dashboard/src/lib/components/reservation-calendar-view/reservation-calendar-view.component';
+import { IGRoomType } from '../reservation-calendar-view/reservation-calendar-view.component';
 import { IGCol } from 'libs/admin/shared/src/lib/components/interactive-grid/interactive-grid.component';
 import { Subscription } from 'rxjs';
-import { AddGuestComponent } from 'libs/admin/guests/src/lib/components';
+import { AddGuestComponent } from 'libs/admin/guests/src/lib/components/add-guest/add-guest.component';
 import { RoomTypeResponse } from 'libs/admin/room/src/lib/types/service-response';
 import { RoomTypeForm } from 'libs/admin/room/src/lib/models/room.model';
 import { GuestType } from 'libs/admin/guests/src/lib/types/guest.type';
-
+import { RoomFieldTypeOption } from 'libs/admin/manage-reservation/src/lib/constants/reservation';
+import * as moment from 'moment';
 @Component({
   selector: 'hospitality-bot-quick-reservation-form',
   templateUrl: './quick-reservation-form.component.html',
@@ -60,13 +65,19 @@ export class QuickReservationFormComponent implements OnInit {
 
   ratePlans: Option[] = [];
   roomOptions: Option[] = [];
+  otaOptions: Option[] = [];
+
   globalQueries = [];
 
   loading: boolean = false;
+  isDataLoaded: boolean = false;
   isBooking = false;
+  editMode = false;
+  reinitializeRooms = false;
 
-  selectedGuest: GuestType;
+  selectedGuest: Option;
   defaultRoomType: IGRoomType;
+  selectedRoomType: RoomFieldTypeOption;
 
   selectedRoom: string;
   date: IGCol;
@@ -82,7 +93,13 @@ export class QuickReservationFormComponent implements OnInit {
   @ViewChild('sidebarSlide', { read: ViewContainerRef })
   sidebarSlide: ViewContainerRef;
 
-  errorMessage: string;
+  fromDateValue = new Date();
+  toDateValue = new Date();
+  @Input() set isNewBooking(value: boolean) {
+    if (value === true) {
+      this.isDataLoaded = true;
+    }
+  }
 
   @Output() onCloseSidebar = new EventEmitter<boolean>(false);
   @Input() set reservationConfig(value: QuickReservationConfig) {
@@ -99,11 +116,11 @@ export class QuickReservationFormComponent implements OnInit {
     private snackbarService: SnackBarService,
     private globalFilterService: GlobalFilterService,
     private configService: ConfigService,
-    private router: Router,
     private manageReservationService: ManageReservationService,
     private formService: FormService,
     private compiler: Compiler,
-    private resolver: ComponentFactoryResolver
+    private resolver: ComponentFactoryResolver,
+    private routesConfigService: RoutesConfigService
   ) {
     this.initForm();
   }
@@ -112,15 +129,18 @@ export class QuickReservationFormComponent implements OnInit {
     this.listenForGlobalFilters();
     this.getCountryCode();
     this.initDefaultDate();
+    this.listenForSourceChanges();
   }
 
   initDetails() {
     if (this.reservationId) {
       this.initReservationDetails();
     } else {
+      this.isDataLoaded = true;
       this.inputControls.roomInformation.patchValue({
         roomTypeId: this.defaultRoomType.value,
         roomNumber: this.selectedRoom,
+        roomNumbers: [this.selectedRoom],
       });
       this.setRoomInfo(this.defaultRoomType);
     }
@@ -139,14 +159,47 @@ export class QuickReservationFormComponent implements OnInit {
   }
 
   initDefaultDate() {
+    const toDateControl = this.reservationInfoControls?.to;
+    const fromDateControl = this.reservationInfoControls?.from;
+
     const fromDate = this.date ? new Date(this.date) : new Date(); // Convert epoch to milliseconds
     const toDate = new Date(fromDate);
-    this.startMinDate = fromDate;
-    this.endMinDate = toDate;
+    this.startMinDate = new Date();
+    this.endMinDate.setDate(new Date().getDate() + 1);
     toDate.setDate(fromDate.getDate() + 1); // Add 1 day
     this.inputControls.reservationInformation.patchValue({
       from: fromDate.getTime(),
       to: toDate.getTime(),
+    });
+
+    let multipleDateChange = false;
+    fromDateControl.valueChanges.subscribe((res) => {
+      if (res) {
+        const maxToLimit = new Date(res);
+        this.fromDateValue = new Date(maxToLimit);
+        maxToLimit.setDate(maxToLimit.getDate() + 1);
+
+        if (maxToLimit >= this.toDateValue) {
+          // Calculate the date for one day later
+          const nextDayTime = moment(maxToLimit).unix() * 1000;
+          multipleDateChange = true;
+          toDateControl.setValue(nextDayTime); // Set toDateControl to one day later
+        }
+        if (res) {
+          this.reinitializeRooms = !this.reinitializeRooms;
+          this.roomControls.roomNumbers.reset();
+        }
+      }
+    });
+    toDateControl.valueChanges.subscribe((res) => {
+      if (res) {
+        this.toDateValue = new Date(res);
+        if (!multipleDateChange) {
+          this.reinitializeRooms = !this.reinitializeRooms;
+          this.roomControls.roomNumbers.reset();
+        }
+        multipleDateChange = false;
+      }
     });
   }
 
@@ -162,8 +215,9 @@ export class QuickReservationFormComponent implements OnInit {
 
       roomInformation: this.fb.group({
         roomTypeId: ['', [Validators.required]],
-        ratePlan: [{ value: '', disabled: true }],
-        roomNumber: [{ value: '', disabled: true }],
+        ratePlan: [''],
+        roomNumber: [''],
+        roomNumbers: [[]],
         adultCount: ['', [Validators.required, Validators.min(1)]],
         childCount: ['', [Validators.min(0)]],
         id: [''],
@@ -181,6 +235,26 @@ export class QuickReservationFormComponent implements OnInit {
     });
 
     this.entityId = this.globalFilterService.entityId;
+    this.listenForRoomChanges();
+  }
+
+  listenForRoomChanges() {
+    let roomCount = 0;
+    this.roomControls.roomNumbers.valueChanges.subscribe((res) => {
+      if (res) {
+        const currentRoomCount = res.length ? res.length : 1;
+        const previousRoomCount = roomCount;
+
+        // Update roomCount
+        roomCount = currentRoomCount;
+        // Update adultCount only if room count is increased
+        if (currentRoomCount > previousRoomCount) {
+          this.roomControls.adultCount.setValue(currentRoomCount, {
+            emitEvent: false,
+          });
+        }
+      }
+    });
   }
 
   close(): void {
@@ -188,18 +262,24 @@ export class QuickReservationFormComponent implements OnInit {
   }
 
   editForm() {
-    this.router.navigate(
-      [
-        this.reservationId
-          ? `/pages/efrontdesk/reservation/edit-reservation/${this.reservationId}`
-          : `/pages/efrontdesk/reservation/add-reservation`,
-      ],
-      {
-        queryParams: {
-          entityId: this.entityId,
-        },
-      }
-    );
+    const roomTypeData: QuickReservationForm = this.useForm.getRawValue();
+    let queryParams: any = {
+      entityId: this.entityId,
+    };
+    if (!this.reservationId) {
+      queryParams = {
+        entityId: this.entityId,
+        data: btoa(JSON.stringify(roomTypeData)),
+      };
+    }
+    this.routesConfigService.navigate({
+      subModuleName: ModuleNames.ADD_RESERVATION,
+      additionalPath: this.reservationId
+        ? `edit-reservation/${this.reservationId}`
+        : `add-reservation`,
+      queryParams,
+      openInNewWindow: true,
+    });
   }
 
   initReservationDetails() {
@@ -211,7 +291,6 @@ export class QuickReservationFormComponent implements OnInit {
           (res) => {
             const formData = new ReservationFormData().deserialize(res);
             this.reservationData = formData;
-            this.roomControls.roomNumber.enable();
             this.calculateDailyPrice();
             const { roomInformation, ...data } = formData;
             this.guestDetails = {
@@ -236,8 +315,9 @@ export class QuickReservationFormComponent implements OnInit {
             }));
 
             this.useForm.patchValue(data);
-
             this.inputControls.roomInformation.patchValue(roomInformation[0]);
+
+            this.isDataLoaded = true;
           },
           (error) => {
             this.loading = false;
@@ -252,8 +332,8 @@ export class QuickReservationFormComponent implements OnInit {
   getGuestConfig() {
     const queries = {
       entityId: this.entityId,
-      toDate: this.globalQueries[0].toDate,
-      fromDate: this.globalQueries[1].fromDate,
+      toDate: this.reservationInfoControls.to.value,
+      fromDate: this.reservationInfoControls.from.value,
       entityState: 'ALL',
       type: 'GUEST',
     };
@@ -263,8 +343,8 @@ export class QuickReservationFormComponent implements OnInit {
   getRoomTypeConfig() {
     const queries = {
       type: EntitySubType.ROOM_TYPE,
-      toDate: this.globalQueries[0].toDate,
-      fromDate: this.globalQueries[1].fromDate,
+      toDate: this.reservationInfoControls.to.value,
+      fromDate: this.reservationInfoControls.from.value,
       createBooking: true,
       raw: true,
       roomTypeStatus: true,
@@ -286,38 +366,77 @@ export class QuickReservationFormComponent implements OnInit {
 
   // Patch data for selected room type
   roomTypeChange(event: RoomTypeResponse) {
-    if (event) {
+    if (event && event.id) {
       const data = new RoomTypeForm().deserialize(event);
+      this.selectedRoomType = {
+        label: data.name,
+        value: data.id,
+        ratePlan: data.allRatePlans,
+        roomCount: 1,
+        maxChildren: data.maxChildren,
+        maxAdult: data.maxAdult,
+        rooms: data.rooms.map((room) => ({
+          label: room.roomNumber,
+          value: room.roomNumber,
+        })),
+      };
       this.setRoomInfo(data);
     }
   }
 
   setRoomInfo(selectedRoomType) {
-    this.roomControls.roomNumber.enable();
-    this.roomControls.ratePlan.enable();
-
     this.ratePlans = selectedRoomType?.allRatePlans.map((res) => ({
       label: res.label,
       value: res.value,
+      isBase: res?.isBase,
     }));
     this.roomOptions = selectedRoomType?.rooms.map((room) => ({
       label: room.roomNumber,
       value: room.roomNumber,
     }));
     this.inputControls.roomInformation.patchValue({
-      ratePlan: this.ratePlans[0].value,
+      ratePlan: this.ratePlans.filter((rateplan) => rateplan.isBase)[0].value,
       adultCount: 1,
+      childCount: 0,
     });
   }
 
   guestChange(event: GuestType) {
-    // this.selectedGuest = {
-    //   label: `${event.firstName} ${event.lastName}`,
-    //   value: event.id,
-    //   phoneNumber: event.contactDetails.contactNumber,
-    //   cc: event.contactDetails.cc,
-    //   email: event.contactDetails.emailId,
-    // };
+    if (event && event?.id) {
+      this.selectedGuest = {
+        label: `${event.firstName} ${event.lastName}`,
+        value: event.id,
+        phoneNumber: event.contactDetails.contactNumber,
+        cc: event.contactDetails.cc,
+        email: event.contactDetails.emailId,
+      };
+    }
+  }
+
+  listenForSourceChanges() {
+    const sourceControl = this.reservationInfoControls.source;
+    const sourceNameControl = this.reservationInfoControls.sourceName;
+
+    sourceControl.valueChanges.subscribe((res) => {
+      // this.agentSource = res === 'AGENT';
+      this.otaOptions =
+        res === 'OTA' && this.configData
+          ? this.configData.source.filter((item) => item.value === res)[0].type
+          : [];
+      if (!this.editMode) {
+        sourceNameControl.reset();
+      }
+    });
+
+    this.$subscription.add(
+      this.formService.sourceData.subscribe((res) => {
+        if (res && this.configData) {
+          this.editMode = true;
+          sourceControl.setValue(res.source);
+          sourceNameControl.setValue(res.sourceName);
+        }
+      })
+    );
   }
 
   calculateDailyPrice() {
@@ -373,7 +492,6 @@ export class QuickReservationFormComponent implements OnInit {
           },
           (error) => {
             this.isBooking = false;
-            this.errorMessage = error.error.message;
           },
           () => {
             this.isBooking = false;
@@ -383,26 +501,39 @@ export class QuickReservationFormComponent implements OnInit {
   }
 
   createGuest() {
-    // const lazyModulePromise = import(
-    //   'libs/admin/guests/src/lib/admin-guests.module'
-    // )
-    //   .then((module) => {
-    //     return this.compiler.compileModuleAsync(module.AdminGuestsModule);
-    //   })
-    //   .catch((error) => {
-    //     console.error('Error loading the lazy module:', error);
-    //   });
-    // lazyModulePromise.then((moduleFactory) => {
-    //   this.sidebarVisible = true;
-    //   const factory = this.resolver.resolveComponentFactory(AddGuestComponent);
-    //   this.sidebarSlide.clear();
-    //   const componentRef = this.sidebarSlide.createComponent(factory);
-    //   componentRef.instance.isSideBar = true;
-    //   componentRef.instance.onClose.subscribe((res) => {
-    //     this.sidebarVisible = false;
-    //     componentRef.destroy();
-    //   });
-    // });
+    const lazyModulePromise = import(
+      'libs/admin/guests/src/lib/admin-guests.module'
+    )
+      .then((module) => {
+        return this.compiler.compileModuleAsync(module.AdminGuestsModule);
+      })
+      .catch((error) => {
+        console.error('Error loading the lazy module:', error);
+      });
+    lazyModulePromise.then((moduleFactory) => {
+      this.sidebarVisible = true;
+      const factory = this.resolver.resolveComponentFactory(AddGuestComponent);
+      this.sidebarSlide.clear();
+      const componentRef = this.sidebarSlide.createComponent(factory);
+      componentRef.instance.isSideBar = true;
+      componentRef.instance.onClose.subscribe((res) => {
+        this.sidebarVisible = false;
+        if (typeof res !== 'boolean') {
+          this.selectedGuest = {
+            label: `${res.firstName} ${res.lastName}`,
+            value: res.id,
+            phoneNumber: res.contactDetails.contactNumber,
+            cc: res.contactDetails.cc,
+            email: res.contactDetails.emailId,
+          };
+
+          this.inputControls.guestInformation
+            .get('guestDetails')
+            .patchValue(res.id);
+        }
+        componentRef.destroy();
+      });
+    });
   }
 
   updateReservation(data: any): void {
@@ -416,13 +547,16 @@ export class QuickReservationFormComponent implements OnInit {
           },
           (error) => {
             this.isBooking = false;
-            this.errorMessage = error.error.message;
           },
           () => {
             this.isBooking = false;
           }
         )
     );
+  }
+
+  openNewWindow(url: string) {
+    window.open(url);
   }
 
   handleSuccess = () => {

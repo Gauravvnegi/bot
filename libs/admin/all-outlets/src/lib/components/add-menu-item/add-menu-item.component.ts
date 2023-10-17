@@ -1,10 +1,19 @@
 import { Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
-import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import {
+  ActivatedRoute,
+  NavigationExtras,
+  Route,
+  Router,
+} from '@angular/router';
+import {
+  GlobalFilterService,
+  RoutesConfigService,
+} from '@hospitality-bot/admin/core/theme';
 import {
   ConfigService,
+  ModuleNames,
   NavRouteOptions,
   Option,
 } from '@hospitality-bot/admin/shared';
@@ -51,7 +60,8 @@ export class AddMenuItemComponent extends OutletBaseComponent
     private taxService: TaxService,
     private globalFilterService: GlobalFilterService,
     private configService: ConfigService,
-    private location: Location
+    private location: Location,
+    private routesConfigService: RoutesConfigService
   ) {
     super(router, route);
   }
@@ -163,7 +173,11 @@ export class AddMenuItemComponent extends OutletBaseComponent
     const navigationExtras: NavigationExtras = {
       queryParams: dataToSend,
     };
-    this.router.navigate(['pages/settings/tax/create-tax'], navigationExtras);
+    this.routesConfigService.navigate({
+      subModuleName: ModuleNames.TAX,
+      additionalPath: 'create-tax',
+      queryParams: dataToSend,
+    });
   }
 
   // To be added from BE first

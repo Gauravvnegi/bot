@@ -15,6 +15,7 @@
         }"
         [minDate]="startMinDate"
         [maxDate]="maxDate"
+        [disabled]="disabledForm"
       ></hospitality-bot-date>
       <hospitality-bot-date
         class="half-width"
@@ -26,6 +27,7 @@
         }"
         [minDate]="minToDate"
         [maxDate]="maxDate"
+        [disabled]="disabledForm"
       ></hospitality-bot-date>
     </ng-container>
     <ng-container *ngIf="bookingType === 'VENUE'">
@@ -95,7 +97,7 @@
     ></hospitality-bot-select>
     <!-- *ngIf="!agentSource && !otaOptions.length" -->
     <hospitality-bot-input
-      *ngIf="!otaOptions.length"
+      *ngIf="reservationInfoControls.source.value !== 'OTA'"
       class="half-width maxlength"
       controlName="sourceName"
       label="Booking Source Name"
@@ -109,7 +111,7 @@
       }"
     ></hospitality-bot-input>
     <hospitality-bot-select
-      *ngIf="otaOptions.length"
+      *ngIf="reservationInfoControls.source.value === 'OTA'"
       class="half-width maxlength"
       controlName="sourceName"
       label="Booking Source Name"

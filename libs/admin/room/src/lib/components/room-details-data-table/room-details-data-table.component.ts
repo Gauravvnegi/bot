@@ -1,11 +1,15 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import {
+  GlobalFilterService,
+  RoutesConfigService,
+} from '@hospitality-bot/admin/core/theme';
 import {
   AdminUtilityService,
   BaseDatatableComponent,
   FlagType,
+  ModuleNames,
   TableService,
 } from '@hospitality-bot/admin/shared';
 import { LazyLoadEvent } from 'primeng/api';
@@ -40,7 +44,8 @@ export class RoomDetailsDataTableComponent extends BaseDatatableComponent
     private globalFilterService: GlobalFilterService,
     private adminUtilityService: AdminUtilityService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private routesConfigService: RoutesConfigService
   ) {
     super(fb, tabFilterService);
   }
@@ -87,9 +92,10 @@ export class RoomDetailsDataTableComponent extends BaseDatatableComponent
   }
 
   onEditRoom(id: string) {
-    this.router.navigate([routes.addSingleRoom], {
+    this.routesConfigService.navigate({
+      subModuleName: ModuleNames.ROOM,
+      additionalPath: routes.addSingleRoom,
       queryParams: { id },
-      relativeTo: this.route,
     });
   }
 }

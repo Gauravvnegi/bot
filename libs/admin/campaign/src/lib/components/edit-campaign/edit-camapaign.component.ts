@@ -10,7 +10,10 @@ import {
 import { MatDialogConfig } from '@angular/material/dialog';
 import { MatStepper } from '@angular/material/stepper';
 import { ActivatedRoute, Router } from '@angular/router';
-import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import {
+  GlobalFilterService,
+  RoutesConfigService,
+} from '@hospitality-bot/admin/core/theme';
 import {
   ModalService,
   SnackBarService,
@@ -23,6 +26,7 @@ import { Campaign } from '../../data-model/campaign.model';
 import { CampaignService } from '../../services/campaign.service';
 import { EmailService } from '../../services/email.service';
 import { ScheduleCampaignComponent } from '../schedule-campaign/schedule-campaign.component';
+import { ModuleNames } from '@hospitality-bot/admin/shared';
 
 @Component({
   selector: 'hospitality-bot-camapaign-email',
@@ -65,7 +69,8 @@ export class EditCampaignComponent implements OnInit, OnDestroy {
     private snackbarService: SnackBarService,
     private _router: Router,
     protected _translateService: TranslateService,
-    private _modalService: ModalService
+    private _modalService: ModalService,
+    private routesConfigService: RoutesConfigService
   ) {
     this.initFG();
   }
@@ -408,7 +413,7 @@ export class EditCampaignComponent implements OnInit, OnDestroy {
                 '',
                 { panelClass: 'success' }
               );
-              this._router.navigate(['pages/marketing/campaign']);
+              this.routesConfigService.goBack();
             })
         );
       } else this.scheduleFG.reset();
@@ -451,7 +456,7 @@ export class EditCampaignComponent implements OnInit, OnDestroy {
               }
             )
             .subscribe();
-          this._router.navigate(['pages/marketing/campaign']);
+          this.routesConfigService.goBack();
         },
         ({ error }) => {
           this.isSending = false;

@@ -1,5 +1,5 @@
-import { create, get, set } from 'lodash';
 import * as moment from 'moment';
+import { notificationIconMapping } from '../constants/menu.contant';
 
 export class NotificationList {
   records: Notification[];
@@ -24,6 +24,7 @@ export class Notification {
   updated: number;
   userAgent: string;
   userId: string;
+  icon: string;
   data;
 
   deserialize(input) {
@@ -37,6 +38,9 @@ export class Notification {
     this.read = input.read || false;
     this.updated = input.updated || '';
     this.data = input.data;
+    this.icon =
+      notificationIconMapping[input.notificationType?.toUpperCase()] ??
+      'assets/svg/request-add-btn.svg';
     return this;
   }
 

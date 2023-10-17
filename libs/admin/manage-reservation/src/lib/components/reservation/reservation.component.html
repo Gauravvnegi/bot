@@ -2,6 +2,7 @@
   [heading]="'Welcome To Reservation'"
   [routes]="navRoutes"
   [isBack]="false"
+  *ngIf="!showCalendarView"
 >
 </hospitality-bot-navigation-header>
 
@@ -14,6 +15,6 @@
   }"
   class="tab-filter"
   (onEntityTabFilterChanges)="onEntityTabFilterChanges($event)"
+  *ngIf="!showCalendarView"
 ></hospitality-bot-entity-tab-filter>
-
 <hospitality-bot-manage-reservation-data-table></hospitality-bot-manage-reservation-data-table>

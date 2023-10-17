@@ -1,4 +1,5 @@
 import { Option } from '@hospitality-bot/admin/shared';
+import { BillItemFields, ChargesType } from '../types/forms.types';
 
 export enum MenuActionItem {
   'ADD_DISCOUNT' = 'ADD_DISCOUNT',
@@ -39,3 +40,31 @@ export const editDiscountMenu: Option[] = [
 export const defaultMenu = [
   { label: 'Delete Item', value: MenuActionItem.DELETE_ITEM },
 ];
+
+export enum AdditionalChargesType {
+  REFUND = 'REFUND',
+  MISCELLANEOUS = 'MISCELLANEOUS',
+}
+
+export const additionalChargesDetails: Record<
+  AdditionalChargesType,
+  {
+    label: string;
+    value: string;
+    type: ChargesType;
+    transactionType: BillItemFields['transactionType'];
+  }
+> = {
+  [AdditionalChargesType.REFUND]: {
+    label: 'Refund',
+    value: 'Paid Out',
+    type: 'refund',
+    transactionType: 'DEBIT',
+  },
+  [AdditionalChargesType.MISCELLANEOUS]: {
+    label: 'Miscellaneous',
+    value: 'Miscellaneous Charges',
+    type: 'miscellaneous',
+    transactionType: 'DEBIT',
+  },
+};

@@ -17,12 +17,12 @@ export const companyRoutes: Record<
   },
   addCompany: {
     route: 'add-company',
-    navRoutes: [navRoute.company, navRoute.addCompany],
+    navRoutes: [navRoute.addCompany],
     title: 'Add Company',
   },
   editCompany: {
     route: 'edit-company',
-    navRoutes: [navRoute.company, navRoute.editCompany],
+    navRoutes: [navRoute.editCompany],
     title: 'Edit Company',
   },
 };

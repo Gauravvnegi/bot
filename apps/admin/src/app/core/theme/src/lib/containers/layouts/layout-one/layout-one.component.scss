@@ -205,7 +205,7 @@
         right: 0;
         height: 100vh;
         box-shadow: 0px 0px 3px 0px $primary-cta;
-        width: 299px;
+        width: 100%;
         background-color: $white;
         z-index: $right-side-panel-z;
       }
@@ -215,7 +215,7 @@
         right: 0;
         height: 100vh;
         box-shadow: 0px 0px 3px 0px $primary-cta;
-        width: 299px;
+        width: 100%;
         background-color: $white;
         z-index: $right-side-panel-z;
       }
@@ -419,11 +419,12 @@
   }
 }
 
+// Sidebar design
 :host ::ng-deep {
   .complaint {
     @include default-close;
     .body {
-      height: 82vh;
+      height: 84vh;
     }
     .p-sidebar-right {
       @include sidebar-design(30rem);
@@ -447,6 +448,7 @@
     .main {
       margin-top: 0;
       border-top: 2px solid rgba(112, 112, 112, 0.25);
+      box-shadow: unset;
       border-radius: 0;
       padding-top: 10px;
       .setting {
@@ -499,5 +501,48 @@
     filter: brightness(0) invert(1) !important;
     height: 100%;
     width: 100%;
+  }
+}
+
+.no-view {
+  position: fixed;
+  background: #ffffff99;
+  inset: $top-nav-height 0 0 $left-nav-height;
+  z-index: $no-view-z;
+
+  img {
+    width: 100px;
+  }
+
+  &__container {
+    display: flex;
+    gap: 15px;
+    margin: 2px;
+    padding: 20px;
+    background: white;
+    box-shadow: 0px 0px 3px 0px $primary-cta;
+    @include normal-sm-text;
+    color: $secondary;
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  &__title-text {
+    font-weight: 600;
+  }
+
+  &__main-text {
+    font-size: 18px;
+    color: $grayAuth;
+  }
+
+  &__sub-text {
+    font-size: 12px;
+    font-style: italic;
+    color: $grayAuth;
   }
 }

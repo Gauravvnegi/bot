@@ -57,24 +57,8 @@
       }"
     ></hospitality-bot-input>
 
-    <hospitality-bot-address-component
-      class="half-width"
-      controlName="address"
-      [props]="{
-        errorMessages: {
-          required: 'This is a required field.'
-        }
-      }"
-    >
+    <hospitality-bot-address-component class="half-width" controlName="address">
     </hospitality-bot-address-component>
-    <hospitality-bot-members-list
-      class="half-width"
-      controlName="company"
-      type="COMPANY"
-      label="Company Name"
-      [defaultMember]="selectedMember"
-      (createMembers)="createNewCompany()"
-    ></hospitality-bot-members-list>
     <hospitality-bot-date
       class="half-width"
       controlName="dateOfBirth"
@@ -88,14 +72,6 @@
       }"
       [maxDate]="ageRestriction"
     ></hospitality-bot-date>
-    <hospitality-bot-input
-      class="half-width"
-      controlName="age"
-      label="Age"
-      [props]="{
-        placeholder: 'Enter'
-      }"
-    ></hospitality-bot-input>
     <hospitality-bot-select
       class="half-width"
       controlName="gender"
@@ -105,6 +81,22 @@
         placeholder: 'Select'
       }"
     ></hospitality-bot-select>
+    <hospitality-bot-input
+      class="half-width"
+      controlName="age"
+      label="Age"
+      [props]="{
+        placeholder: 'Enter'
+      }"
+    ></hospitality-bot-input>
+    <hospitality-bot-members-list
+      class="half-width"
+      controlName="company"
+      type="COMPANY"
+      label="Company Name"
+      [defaultMember]="selectedMember"
+      (createMembers)="createNewCompany()"
+    ></hospitality-bot-members-list>
   </div>
 </div>
 

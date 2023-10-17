@@ -20,6 +20,7 @@ import { TopicRoutes } from '../../../constants/routes';
 import { topicConfig } from '../../../constants/topic';
 import { Topics } from '../../../data-models/topicConfig.model';
 import { TopicService } from '../../../services/topic.service';
+import { RoutesConfigService } from '@hospitality-bot/admin/core/theme';
 
 @Component({
   selector: 'hospitality-bot-topic-datatable',
@@ -53,7 +54,7 @@ export class TopicDatatableComponent extends BaseDatatableComponent
     private _router: Router,
     private route: ActivatedRoute,
     private topicService: TopicService,
-    protected _translateService: TranslateService
+    private routesConfigService: RoutesConfigService
   ) {
     super(fb, tabFilterService);
   }
@@ -175,8 +176,8 @@ export class TopicDatatableComponent extends BaseDatatableComponent
    * @function openCreateTopic navigate to create topic page.
    */
   openCreateTopic() {
-    this._router.navigate([TopicRoutes.createTopic.route], {
-      relativeTo: this.route,
+    this.routesConfigService.navigate({
+      additionalPath: TopicRoutes.createTopic.route,
     });
   }
 
@@ -187,8 +188,8 @@ export class TopicDatatableComponent extends BaseDatatableComponent
    */
   openTopic(event, topic): void {
     event.stopPropagation();
-    this._router.navigate([`${TopicRoutes.createTopic.route}/${topic.id}`], {
-      relativeTo: this.route,
+    this.routesConfigService.navigate({
+      additionalPath: `${TopicRoutes.createTopic.route}/${topic.id}`,
     });
   }
 

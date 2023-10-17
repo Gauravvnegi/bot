@@ -12,6 +12,13 @@ import { ImportServiceComponent } from './components/import-service/import-servi
 const appRoutes: Route[] = [
   {
     path: '',
+    loadChildren: () =>
+      import('@hospitality-bot/admin/create-with').then(
+        (m) => m.AdminCreateWithModule
+      ),
+  },
+  {
+    path: 'brand',
     component: MainComponent,
     children: [
       {

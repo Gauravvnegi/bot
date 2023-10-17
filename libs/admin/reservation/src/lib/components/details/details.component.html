@@ -345,64 +345,74 @@
                   ></hospitality-bot-button>
                 </ng-container>
               </ng-container>
-              <!-- <hospitality-bot-button
+              <hospitality-bot-button
+                *ngIf="isManageBookingSubscribed"
                 label="Edit Booking"
                 variant="outlined"
                 (click)="editBooking()"
-              ></hospitality-bot-button> -->
+              ></hospitality-bot-button>
             </ng-template>
             <ng-template #CHECKIN>
               <ng-container [ngSwitch]="details.currentJourneyDetails.status">
                 <ng-container *ngSwitchCase="'PENDING'">
-                  <hospitality-bot-button
+                  <!-- <hospitality-bot-button
                     (click)="activateAndgenerateJourney('CHECKIN')"
                     label="Generate CheckIn"
                     variant="outlined"
-                  ></hospitality-bot-button>
-                  <hospitality-bot-button
+                  ></hospitality-bot-button> -->
+                  <!-- <hospitality-bot-button
                     (click)="manualCheckin()"
                     label="Manual CheckIn"
                     variant="outlined"
-                  ></hospitality-bot-button>
+                  ></hospitality-bot-button> -->
+                  <p-splitButton
+                    class="download-btn"
+                    label="CheckIn"
+                    (onClick)="manualCheckin()"
+                    [model]="checkInOptions"
+                    styleClass="p-button-raised p-button-text mr-2 mb-2"
+                  ></p-splitButton>
                 </ng-container>
                 <ng-container *ngSwitchCase="'INITIATED'">
-                  <hospitality-bot-button
+                  <!-- <hospitality-bot-button
                     (click)="activateAndgenerateJourney('CHECKIN')"
                     label="Generate CheckIn"
                     variant="outlined"
-                  ></hospitality-bot-button>
+                  ></hospitality-bot-button> -->
                   <hospitality-bot-button
                     (click)="verifyAllDocuments()"
                     label="Confirm All Docs"
                     variant="outlined"
                   ></hospitality-bot-button>
-                  <hospitality-bot-button
+                  <!-- <hospitality-bot-button
                     (click)="confirmAndNotifyCheckin()"
                     label="Confirm And Notify Checkin"
                     variant="outlined"
-                  ></hospitality-bot-button>
-                  <hospitality-bot-button
-                    (click)="manualCheckin()"
-                    label="Manual CheckIn"
-                    variant="outlined"
-                  ></hospitality-bot-button>
+                  ></hospitality-bot-button> -->
+                  <p-splitButton
+                    class="download-btn"
+                    label="CheckIn"
+                    (onClick)="manualCheckin()"
+                    [model]="checkInOptions"
+                    styleClass="p-button-raised p-button-text mr-2 mb-2"
+                  ></p-splitButton>
                 </ng-container>
                 <ng-container *ngSwitchCase="'FAILED'">
-                  <hospitality-bot-button
+                  <!-- <hospitality-bot-button
                     label="Generate CheckIn"
                     (click)="activateAndgenerateJourney('CHECKIN')"
                     variant="outlined"
-                  ></hospitality-bot-button>
-
-                  <hospitality-bot-button
-                    (click)="manualCheckin()"
-                    label="Manual CheckIn"
-                    variant="outlined"
-                  ></hospitality-bot-button>
+                  ></hospitality-bot-button> -->
+                  <p-splitButton
+                    class="download-btn"
+                    label="CheckIn"
+                    (onClick)="manualCheckin()"
+                    [model]="checkInOptions"
+                  ></p-splitButton>
                 </ng-container>
                 <ng-container *ngSwitchCase="'COMPLETED'">
                   <hospitality-bot-button
-                    label="Activate & Generate Checkout"
+                    label="Send Payment Link"
                     (click)="activateAndgenerateJourney('CHECKOUT')"
                     variant="outlined"
                   ></hospitality-bot-button>
@@ -414,61 +424,86 @@
                   ></hospitality-bot-button>
                   <!-- initiate force checkout -->
                   <hospitality-bot-button
-                    label="Manual Checkout"
+                    label="Checkout"
                     (click)="manualCheckout()"
                     variant="outlined"
                   ></hospitality-bot-button>
+                  <!-- <p-splitButton
+                    class="download-btn"
+                    label="Checkout"
+                    (onClick)="manualCheckout()"
+                    [model]="checkOutOptions"
+                  ></p-splitButton> -->
                 </ng-container>
               </ng-container>
-              <!-- <hospitality-bot-button
+              <hospitality-bot-button
+                *ngIf="isManageBookingSubscribed"
                 label="Edit Booking"
                 variant="outlined"
                 (click)="editBooking()"
-              ></hospitality-bot-button> -->
+              ></hospitality-bot-button>
             </ng-template>
             <ng-template #CHECKOUT
               ><ng-container [ngSwitch]="details.currentJourneyDetails.status">
                 <ng-container *ngSwitchCase="'PENDING'">
                   <hospitality-bot-button
-                    label="Activate & Generate Checkout"
+                    label="Send Payment Link"
                     (click)="activateAndgenerateJourney('CHECKOUT')"
                     variant="outlined"
                   ></hospitality-bot-button>
                   <hospitality-bot-button
-                    label="Manual Checkout"
+                    label="Checkout"
                     (click)="manualCheckout()"
                     variant="outlined"
                   ></hospitality-bot-button>
+                  <!-- <p-splitButton
+                    class="download-btn"
+                    label="Checkout"
+                    (onClick)="manualCheckout()"
+                    [model]="checkOutOptions"
+                  ></p-splitButton> -->
                 </ng-container>
                 <ng-container *ngSwitchCase="'INITIATED'">
                   <hospitality-bot-button
-                    label="Activate & Generate Checkout"
+                    label="Send Payment Link"
                     (click)="activateAndgenerateJourney('CHECKOUT')"
                     variant="outlined"
                   ></hospitality-bot-button>
-                  <hospitality-bot-button
+                  <!-- <hospitality-bot-button
                     (click)="confirmAndNotifyCheckin()"
                     label="Confirm And Notify Checkout"
                     variant="outlined"
-                  ></hospitality-bot-button>
+                  ></hospitality-bot-button> -->
                   <hospitality-bot-button
-                    label="Manual Checkout"
+                    label="Checkout"
                     (click)="manualCheckout()"
                     variant="outlined"
                   ></hospitality-bot-button>
+                  <!-- <p-splitButton
+                    class="download-btn"
+                    label="Checkout"
+                    (onClick)="manualCheckout()"
+                    [model]="checkOutOptions"
+                  ></p-splitButton> -->
                 </ng-container>
                 <ng-container *ngSwitchCase="'COMPLETED'"> </ng-container>
                 <ng-container *ngSwitchCase="'FAILED'">
                   <hospitality-bot-button
-                    label="Activate & Generate Checkout"
+                    label="Send Payment Link"
                     (click)="activateAndgenerateJourney('CHECKOUT')"
                     variant="outlined"
                   ></hospitality-bot-button>
                   <hospitality-bot-button
-                    label="Manual Checkout"
+                    label="Checkout"
                     (click)="manualCheckout()"
                     variant="outlined"
                   ></hospitality-bot-button>
+                  <!-- <p-splitButton
+                    class="download-btn"
+                    label="Checkout"
+                    (onClick)="manualCheckout()"
+                    [model]="checkOutOptions"
+                  ></p-splitButton> -->
                 </ng-container>
               </ng-container>
             </ng-template>
@@ -478,7 +513,7 @@
             <div class="right-bottom-icons">
               <ng-container *ngFor="let channel of channels">
                 <div
-                  *ngIf="channel.isView"
+                  *ngIf="channel.isView && getIconUrl(channel)"
                   class="social-icons"
                   (click)="openSendNotification(channel.name)"
                 >

@@ -18,7 +18,10 @@ import {
   SnackBarService,
 } from '@hospitality-bot/shared/material';
 import { MatDialogConfig } from '@angular/material/dialog';
-import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import {
+  GlobalFilterService,
+  RoutesConfigService,
+} from '@hospitality-bot/admin/core/theme';
 import { ModalComponent } from 'libs/admin/shared/src/lib/components/modal/modal.component';
 import { manageReservationRoutes } from '../../../constants/routes';
 import { ManageReservationService } from '../../../services/manage-reservation.service';
@@ -27,7 +30,11 @@ import { Location } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { PaymentMethod, ReservationForm } from '../../../constants/form';
 import { FormService } from '../../../services/form.service';
-import { EntitySubType, EntityType } from '@hospitality-bot/admin/shared';
+import {
+  EntitySubType,
+  EntityType,
+  ModuleNames,
+} from '@hospitality-bot/admin/shared';
 import { RoomReservationRes } from '../../../types/response.type';
 import {
   OccupancyDetails,
@@ -79,6 +86,7 @@ export class BookingSummaryComponent implements OnInit {
     private manageReservationService: ManageReservationService,
     private location: Location,
     private router: Router,
+    private routesConfigService: RoutesConfigService,
     protected activatedRoute: ActivatedRoute,
     private modalService: ModalService,
     private _clipboard: Clipboard,
@@ -132,7 +140,7 @@ export class BookingSummaryComponent implements OnInit {
     if (this.bookingType === EntitySubType.ROOM_TYPE)
       data = this.formService.mapRoomReservationData(
         this.parentFormGroup.getRawValue(),
-        id,
+        id
       );
     else
       data = this.formService.mapOutletReservationData(
@@ -217,23 +225,35 @@ export class BookingSummaryComponent implements OnInit {
         label: 'Continue Reservation',
         onClick: () => {
           // Route but don't change location
-          this.router
-            .navigateByUrl('/pages/efrontdesk/reservation', {
+          this.routesConfigService
+            .navigate({
               skipLocationChange: true,
             })
             .then(() => {
-              // Route again to reload all form and service values.
-              this.router.navigate(
-                [
-                  `/pages/efrontdesk/reservation/${manageReservationRoutes.addReservation.route}`,
-                ],
-                {
-                  queryParams: {
-                    entityId: this.outletId ? this.outletId : this.entityId,
-                  },
-                }
-              );
+              this.routesConfigService.navigate({
+                additionalPath: manageReservationRoutes.addReservation.route,
+                queryParams: {
+                  entityId: this.outletId ? this.outletId : this.entityId,
+                },
+              });
             });
+          // this.router
+          //   .navigateByUrl('/pages/efrontdesk/reservation', {
+          //     skipLocationChange: true,
+          //   })
+          //   .then(() => {
+          //     // Route again to reload all form and service values.
+          //     this.router.navigate(
+          //       [
+          //         `/pages/efrontdesk/reservation/${manageReservationRoutes.addReservation.route}`,
+          //       ],
+          //       {
+          //         queryParams: {
+          //           entityId: this.outletId ? this.outletId : this.entityId,
+          //         },
+          //       }
+          //     );
+          //   });
           this.modalService.close();
         },
         variant: 'outlined',
@@ -243,15 +263,28 @@ export class BookingSummaryComponent implements OnInit {
         onClick: () => {
           this.copiedConfirmationNumber(number);
           this.modalService.close();
-          this.location.back();
+          this.gobackToReservation();
         },
         variant: 'contained',
       },
     ];
     togglePopupCompRef.componentInstance.onClose.subscribe(() => {
       this.modalService.close();
-      this.location.back();
+      this.gobackToReservation();
     });
+  }
+
+  gobackToReservation() {
+    this.routesConfigService.navigate({
+      subModuleName: ModuleNames.ADD_RESERVATION,
+    });
+  }
+
+  calculateAmountToBePaid(summaryData) {
+    const totalAmount = summaryData.totalDueAmount
+      ? summaryData.totalDueAmount
+      : summaryData.totalAmount;
+    return totalAmount - this.paymentControls.totalPaidAmount.value;
   }
 
   copiedConfirmationNumber(number): void {

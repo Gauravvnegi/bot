@@ -3,14 +3,17 @@
     <hospitality-bot-table-view
       [header]="title"
       [columns]="cols"
-      [items]="users"
+      [headerSticky]="true"
+      [items]="items"
+      [loading]="loading"
       [action]="'Refresh'"
       [emptyViewConfig]="{
         content: {
-          description: 'There are no users logged in except for you.'
+          description: 'There is no Pending Checked-out Reservations.'
         }
       }"
-      (actionClicked)="initTable()"
+      (actionClicked)="reloadTable()"
+      (quickChange)="quickChange($event)"
     ></hospitality-bot-table-view>
   </div>
 

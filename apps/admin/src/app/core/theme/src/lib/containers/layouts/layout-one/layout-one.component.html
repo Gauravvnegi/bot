@@ -8,6 +8,7 @@
     class="sidebar-panel upper"
     id="sidebar"
     [style.background-color]="backgroundColor"
+    *ngIf="!fullView"
   >
     <hospitality-bot-sidenav
       (submenuItems)="subMenuItem($event)"
@@ -71,6 +72,7 @@
             ? { visibility: 'visible' }
             : { visibility: 'hidden', height: '0px' }
         "
+        *ngIf="!fullView"
       >
         <div class="options1" [ngClass]="{ disabled: isGlobalFilterVisible }">
           <div class="selected-product">
@@ -115,9 +117,9 @@
         </div>
         <div class="options2">
           <div
-            *ngIf="isFreddieSubscribed"
+            *ngIf="isLiveMessagingSubscribed"
             class="header--button quick-action"
-            (click)="openNewWindow('/pages/freddie/messages')"
+            (click)="openFreddie()"
           >
             <img
               class="filter-icon"
@@ -139,7 +141,7 @@
           <div
             *ngIf="isQuickReservationAvailable"
             class="header--button quick-action"
-            (click)="openNewWindow('/pages/efrontdesk/reservation')"
+            (click)="openViewReservation()"
           >
             <img
               class="filter-icon"
@@ -191,17 +193,20 @@
                   {{ unreadCount }}
                 </div>
               </div>
-              <div
-                class="notification"
-                *ngIf="isNotificationVisible"
-                [@slideInOut]
+              <p-sidebar
+                [visible]="isNotificationVisible"
+                (onHide)="closeNotification()"
+                [showCloseIcon]="false"
+                position="right"
               >
-                <admin-notification
-                  [notificationFilterData]="notificationFilterData"
-                  (onCloseNotification)="closeNotification()"
-                  (filterData)="setNotificationFilterData($event)"
-                ></admin-notification>
-              </div>
+                <div class="notification" *ngIf="isNotificationVisible">
+                  <admin-notification
+                    [notificationFilterData]="notificationFilterData"
+                    (onCloseNotification)="isNotificationVisible = false"
+                    (filterData)="setNotificationFilterData($event)"
+                  ></admin-notification>
+                </div>
+              </p-sidebar>
             </div>
           </div>
           <div class="dropdown-wrapper">
@@ -268,6 +273,23 @@
         </div>
         <admin-footer id="main-footer"></admin-footer>
       </div>
+    </div>
+  </div>
+</div>
+
+<div id="no-view" class="no-view" *ngIf="!hasPermissionToViewModule">
+  <div class="no-view__container">
+    <img src="assets/svg/access_denied.svg" alt="no-view" />
+    <div class="no-view__content">
+      <h2 class="no-view__title-text">
+        Permission not allowed.
+      </h2>
+      <p class="no-view__main-text">
+        You lack the necessary permissions to view this resource.
+      </p>
+      <p class="no-view__sub-text">
+        Kindly request permission from your manager.
+      </p>
     </div>
   </div>
 </div>

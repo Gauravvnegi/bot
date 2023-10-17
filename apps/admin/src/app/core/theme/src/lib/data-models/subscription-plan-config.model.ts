@@ -2,10 +2,13 @@ import {
   CardNames,
   ModuleConfig,
   ModuleNames,
+  PermissionModuleNames,
+  ProductNames,
   TableNames,
 } from 'libs/admin/shared/src/lib/constants/subscriptionConfig';
 import { get, set } from 'lodash';
 import { Cards, Modules, Product, Tables } from '../type/product';
+import { UserResponse } from 'libs/admin/shared/src/index';
 
 export class SubscriptionPlan {
   featureIncludes: Item[];
@@ -84,7 +87,7 @@ export class Subscriptions {
 }
 
 export class Products {
-  name: string;
+  name: ProductNames;
   label: string;
   description: string;
   icon: string;
@@ -113,7 +116,7 @@ export class Products {
 }
 
 export class SubProducts {
-  name: string;
+  name: ModuleNames;
   label: string;
   description: string;
   icon: string;
@@ -122,6 +125,7 @@ export class SubProducts {
   isSubscribed: true;
   isView: true;
   config: SubProducts[];
+  permissionType: PermissionModuleNames;
 
   deserialize(input: any) {
     this.config = new Array<SubProducts>();
@@ -134,7 +138,8 @@ export class SubProducts {
       set({}, 'icon', get(input, ['icon'])),
       set({}, 'currentUsage', get(input, ['currentUsage'])),
       set({}, 'isSubscribed', get(input, ['isSubscribed'])),
-      set({}, 'isView', get(input, ['isView']))
+      set({}, 'isView', get(input, ['isView'])),
+      set({}, 'permissionType', get(input, ['permissionType']))
     );
     if (input.config)
       input.config?.forEach((subProduct) => {
@@ -192,53 +197,74 @@ export class ProductSubscription {
   modules: Partial<Modules>;
   subscribedIntegrations: Set<string>;
   moduleProductMapping: Partial<Record<ModuleNames, ModuleNames>>;
+  submodulePermissionMapping: Partial<
+    Record<ModuleNames, PermissionModuleNames>
+  >;
 
   deserialize(input: any) {
     this.subscribedModules = new Array<ModuleNames>();
     this.subscribedProducts = new Array<ModuleNames>();
     this.subscribedModuleProductBased = {};
     this.moduleProductMapping = {};
+    this.submodulePermissionMapping = {};
 
     this.modules = new Object();
 
     input.products?.forEach((product) => {
       const productName = product.name;
-      if (product.isSubscribed) this.subscribedProducts.push(productName);
+      const isProductSubscribed = product.isSubscribed;
 
-      this.subscribedModuleProductBased = {
-        ...this.subscribedModuleProductBased,
-        [productName]: [],
-      };
+      if (isProductSubscribed) {
+        this.subscribedProducts.push(productName);
+        this.subscribedModuleProductBased = {
+          ...this.subscribedModuleProductBased,
+          [productName]: [],
+        };
+      }
 
-      product.config?.forEach((subProduct) => {
-        this.setConfig(subProduct);
-        this.subscribedModuleProductBased[productName].push(subProduct.name);
+      product.config?.forEach((module) => {
+        this.setConfig(module, isProductSubscribed);
+        const isModuleSubscribed = module.isSubscribed;
+
+        if (isProductSubscribed && isModuleSubscribed) {
+          this.subscribedModuleProductBased[productName].push(module.name);
+        }
 
         // Only sub module with initial subscribed product
         if (
-          subProduct.isSubscribed &&
-          subProduct.isView &&
-          !this.moduleProductMapping[subProduct.name]
+          isModuleSubscribed &&
+          module.isView &&
+          !this.moduleProductMapping[module.name]
         ) {
           this.moduleProductMapping = {
             ...this.moduleProductMapping,
-            [subProduct.name]: productName,
+            [module.name]: productName,
           };
         }
 
-        subProduct.config?.forEach((subSubProduct) => {
-          this.subscribedModuleProductBased[productName].push(subProduct.name);
+        module.config?.forEach((subModule) => {
+          this.submodulePermissionMapping = {
+            ...this.submodulePermissionMapping,
+            [subModule.name]: subModule.permissionType,
+          };
+
+          const isSubModuleSubscribed = subModule.isSubscribed;
+
+          if (isProductSubscribed && isSubModuleSubscribed) {
+            this.subscribedModuleProductBased[productName].push(subModule.name);
+          }
+
           if (
-            subSubProduct.isSubscribed &&
-            subSubProduct.isView &&
-            !this.moduleProductMapping[subSubProduct.name]
+            subModule.isSubscribed &&
+            subModule.isView &&
+            !this.moduleProductMapping[subModule.name]
           ) {
             this.moduleProductMapping = {
               ...this.moduleProductMapping,
-              [subSubProduct.name]: productName,
+              [subModule.name]: productName,
             };
           }
-          this.setConfig(subSubProduct);
+          this.setConfig(subModule, isProductSubscribed && isModuleSubscribed);
         });
       });
     });
@@ -253,33 +279,34 @@ export class ProductSubscription {
     return this;
   }
 
-  setConfig(product: Product) {
-    if (product.isSubscribed) this.subscribedModules.push(product.name);
+  setConfig(module: Product, isParentSubscribed: boolean) {
+    if (module.isSubscribed && isParentSubscribed)
+      this.subscribedModules.push(module.name);
 
-    const productName: ModuleNames = product.name;
+    const productName: ModuleNames = module.name;
     let moduleProduct = ModuleConfig[productName];
     if (moduleProduct) {
       const tempCards: Partial<Cards> = new Object();
       moduleProduct.cards.forEach((card: CardNames) => {
         tempCards[card] = {
-          isSubscribed: product.isSubscribed,
-          isView: product.isView,
+          isSubscribed: module.isSubscribed,
+          isView: module.isView,
         };
       });
 
       const tempTables: Partial<Tables> = new Object();
       moduleProduct.tables.forEach((table: TableNames) => {
         tempTables[table] = {
-          isSubscribed: product.isSubscribed,
-          isView: product.isView,
+          isSubscribed: module.isSubscribed,
+          isView: module.isView,
           tabFilters:
-            ModuleConfig[ModuleNames[product.name]]?.filters[table].tabFilters,
+            ModuleConfig[ModuleNames[module.name]]?.filters[table].tabFilters,
         };
       });
 
       this.modules[productName] = {
-        isView: product.isView,
-        isSubscribed: product.isSubscribed,
+        isView: module.isView,
+        isSubscribed: module.isSubscribed,
         cards: tempCards,
         tables: tempTables,
       };
@@ -294,8 +321,10 @@ export class SettingsMenuItem {
   icon: string;
   isActive: boolean;
   isDisabled: boolean;
+  path: string;
 
-  deserialize(input) {
+  deserialize(input, route: string) {
+    this.path = route;
     Object.assign(
       this,
       set({}, 'name', get(input, ['name'])),
@@ -305,6 +334,37 @@ export class SettingsMenuItem {
       set({}, 'isActive', get(input, ['isView'])),
       set({}, 'isDisabled', !get(input, ['isSubscribed']))
     );
+    return this;
+  }
+}
+
+export class UserSubscriptionPermission {
+  productPermission: ProductNames[];
+  permission: Partial<
+    Record<PermissionModuleNames, { canView: boolean; canManage: boolean }>
+  >;
+
+  deserialize(input: UserResponse) {
+    this.productPermission = [
+      ...new Map(
+        input.departments
+          .map(({ productType }) => productType)
+          .map((item) => [item, item])
+      ).values(),
+    ] as ProductNames[];
+
+    this.permission = input.permissions.reduce((value, current) => {
+      value = {
+        ...value,
+        [current.module]: {
+          canView: current.permissions.view === 1,
+          canManage: current.permissions.manage === 1,
+        },
+      };
+
+      return value;
+    }, {});
+
     return this;
   }
 }

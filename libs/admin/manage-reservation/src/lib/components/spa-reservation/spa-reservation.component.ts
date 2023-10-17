@@ -28,6 +28,7 @@ import { ServiceList } from 'libs/admin/services/src/lib/models/services.model';
 import { ServicesTypeValue } from 'libs/admin/room/src/lib/constant/form';
 import { BaseReservationComponent } from '../base-reservation.component';
 import { convertToTitleCase } from 'libs/admin/shared/src/lib/utils/valueFormatter';
+import { RoutesConfigService } from '@hospitality-bot/admin/core/theme';
 
 @Component({
   selector: 'hospitality-bot-spa-reservation',
@@ -59,9 +60,10 @@ export class SpaReservationComponent extends BaseReservationComponent
     protected formService: FormService,
     private libraryService: LibraryService,
     private router: Router,
-    protected hotelDetailService: HotelDetailService
+    protected hotelDetailService: HotelDetailService,
+    protected routesConfigService: RoutesConfigService
   ) {
-    super(activatedRoute, hotelDetailService, formService);
+    super(activatedRoute, hotelDetailService, formService, routesConfigService);
   }
   ngOnInit(): void {
     this.initForm();
@@ -235,7 +237,7 @@ export class SpaReservationComponent extends BaseReservationComponent
 
             this.formValueChanges = true;
             this.spaItemsValues = spaItems;
-            this.formService.guestInformation.next(guestInformation);
+            this.formService.guestInformation.next(guestInformation.id);
 
             this.userForm.patchValue({
               bookingInformation: spaInfo,

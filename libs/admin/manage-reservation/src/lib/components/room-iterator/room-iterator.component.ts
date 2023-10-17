@@ -19,9 +19,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
-import {
-  EntitySubType,
-} from 'libs/admin/shared/src';
+import { EntitySubType } from 'libs/admin/shared/src';
 import { IteratorComponent } from 'libs/admin/shared/src/lib/components/iterator/iterator.component';
 import { Subscription } from 'rxjs';
 import { roomFields, RoomFieldTypeOption } from '../../constants/reservation';
@@ -29,8 +27,8 @@ import { RoomTypeForm } from 'libs/admin/room/src/lib/models/room.model';
 import { ReservationForm, RoomTypes } from '../../constants/form';
 import { IteratorField } from 'libs/admin/shared/src/lib/types/fields.type';
 import { FormService } from '../../services/form.service';
-import { CalendarViewData } from 'libs/admin/dashboard/src/lib/components/reservation-calendar-view/reservation-calendar-view.component';
 import { RoomTypeResponse } from 'libs/admin/room/src/lib/types/service-response';
+import { debounceTime } from 'rxjs/operators';
 
 @Component({
   selector: 'hospitality-bot-room-iterator',
@@ -45,7 +43,6 @@ export class RoomIteratorComponent extends IteratorComponent
   @Output() listenChanges = new EventEmitter();
 
   @Input() reservationId: string;
-  @Input() paramsData: CalendarViewData;
   fields = roomFields;
 
   entityId: string;
@@ -58,6 +55,7 @@ export class RoomIteratorComponent extends IteratorComponent
 
   loadingRoomTypes = [false];
   isDefaultRoomType = false;
+  reinitializeRooms = false;
 
   itemValuesCount = 0;
   selectedRoomNumber: string = '';
@@ -75,7 +73,6 @@ export class RoomIteratorComponent extends IteratorComponent
 
   ngOnChanges(changes: SimpleChanges): void {
     const itemValues = changes?.itemValues?.currentValue;
-
     if (itemValues?.length) {
       if (itemValues.length > 1) {
         // Create new form fields for each item in the array
@@ -114,7 +111,7 @@ export class RoomIteratorComponent extends IteratorComponent
   createNewFields(initialField = false): void {
     const data = {
       roomTypeId: ['', [Validators.required]],
-      ratePlan: [{ value: '', disabled: true }],
+      ratePlan: [''],
       roomCount: ['', [Validators.required, Validators.min(1)]],
       roomNumber: [''],
       roomNumbers: [[]],
@@ -136,6 +133,43 @@ export class RoomIteratorComponent extends IteratorComponent
       });
       this.parentFormGroup.addControl('roomInformation', roomInformationGroup);
     }
+    this.listenForDateChanges();
+    this.listenForRoomChanges(index);
+  }
+
+  listenForDateChanges() {
+    this.reservationInfoControls.from.valueChanges.subscribe((res) => {
+      if (res) this.reinitializeRooms = !this.reinitializeRooms;
+    });
+    this.reservationInfoControls.to.valueChanges
+      .pipe(debounceTime(50))
+      .subscribe((res) => {
+        if (res) this.reinitializeRooms = !this.reinitializeRooms;
+      });
+  }
+
+  listenForRoomChanges(index) {
+    this.roomControls[index]
+      .get('roomNumbers')
+      .valueChanges.subscribe((res) => {
+        if (res) {
+          const currentRoomCount = res.length ? res.length : 1;
+          const previousRoomCount = this.roomControls[index].get('roomCount')
+            .value;
+
+          // Update roomCount
+          this.roomControls[index]
+            .get('roomCount')
+            .setValue(currentRoomCount, { emitEvent: false });
+
+          // Update adultCount only if room count is increased
+          if (currentRoomCount > previousRoomCount) {
+            this.roomControls[index]
+              .get('adultCount')
+              .setValue(currentRoomCount, { emitEvent: false });
+          }
+        }
+      });
   }
 
   // Init Room Details
@@ -144,7 +178,10 @@ export class RoomIteratorComponent extends IteratorComponent
     this.itemValuesCount = itemValues.length;
     itemValues.forEach((value, index) => {
       // Rooms number is not multi-select in edit mode.
-      if (this.reservationInfoControls.reservationType.value !== 'DRAFT') {
+      if (
+        this.reservationInfoControls.reservationType.value !== 'DRAFT' &&
+        this.reservationId
+      ) {
         this.fields[3].name = 'roomNumber';
         this.fields[3].type = 'select';
       }
@@ -195,7 +232,6 @@ export class RoomIteratorComponent extends IteratorComponent
       );
 
       if (!this.isDefaultRoomType) {
-        this.roomControls[index].get('roomNumbers').reset();
         // Patch default Base rate plan when not in edit mode.
         const defaultPlan = ratePlanOptions.filter((item) => item.isBase)[0]
           ?.value;
@@ -203,21 +239,15 @@ export class RoomIteratorComponent extends IteratorComponent
           {
             ratePlan: defaultPlan ? defaultPlan : ratePlanOptions[0].value,
             adultCount: 1,
-            roomCount: 1,
+            roomCount: this.roomControls[index].get('roomNumbers')?.value.length
+              ? this.roomControls[index].get('roomNumbers')?.value.length
+              : 1,
             childCount: 0,
           },
           { emitEvent: false }
         );
-        this.roomControls[index].get('ratePlan').enable();
       }
 
-      // Enable Rate plan in Draft Booking in edit mode
-      if (
-        this.isDefaultRoomType &&
-        this.reservationInfoControls.reservationType.value === 'DRAFT'
-      ) {
-        this.roomControls[index].get('ratePlan').enable();
-      }
       setTimeout(() => {
         this.isDefaultRoomType = false;
       }, 2000);
@@ -231,8 +261,8 @@ export class RoomIteratorComponent extends IteratorComponent
   getConfig() {
     const queries = {
       type: EntitySubType.ROOM_TYPE,
-      toDate: this.globalQueries[0].toDate,
-      fromDate: this.globalQueries[1].fromDate,
+      toDate: this.reservationInfoControls.to?.value,
+      fromDate: this.reservationInfoControls.from?.value,
       createBooking: true,
       raw: true,
       roomTypeStatus: true,

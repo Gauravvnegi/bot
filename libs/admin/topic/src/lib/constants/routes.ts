@@ -18,12 +18,12 @@ export const TopicRoutes: Record<
   },
   createTopic: {
     route: 'create-topic',
-    navRoutes: [navRoutes.library, navRoutes.topic, navRoutes.createTopic],
+    navRoutes: [navRoutes.createTopic],
     title: 'Create Topic',
   },
   editTopic: {
     route: 'create-topic/:id',
-    navRoutes: [navRoutes.library, navRoutes.topic, navRoutes.editTopic],
+    navRoutes: [navRoutes.editTopic],
     title: 'Edit Topic',
   },
 };

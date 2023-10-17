@@ -16,12 +16,22 @@
   ></p-splitButton>
 
   <hospitality-bot-menu
-    *ngIf="menuOptions.length"
+    *ngIf="!toggleMenu && menuOptions.length"
     type="button"
     alignment="vertical"
     (onClickItem)="handleMenuClick($event)"
     [menuItems]="menuOptions"
   ></hospitality-bot-menu>
+
+  <hospitality-bot-toggle-menu
+    *ngIf="toggleMenu && menuOptions.length"
+    type="button"
+    class="p-toggle-menu"
+    alignment="vertical"
+    (onClickItem)="handleMenuClick($event)"
+    [menuItems]="menuOptions"
+  >
+  </hospitality-bot-toggle-menu>
 </div>
 
 <ng-template #emptyView>

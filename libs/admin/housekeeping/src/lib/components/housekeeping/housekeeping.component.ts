@@ -1,9 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import {
+  GlobalFilterService,
+  RoutesConfigService,
+} from '@hospitality-bot/admin/core/theme';
 import {
   AdminUtilityService,
   BaseDatatableComponent,
+  ModuleNames,
   Option,
   QueryConfig,
   TableService,
@@ -15,6 +19,7 @@ import { Subscription } from 'rxjs';
 import { roomStatusDetails } from '../../constant/room';
 import { houseKeepingRoutes } from '../../constant/routes';
 import { HousekeepingService } from '../../services/housekeeping.service';
+import { ChannelManagerFormService } from 'libs/admin/channel-manager/src/lib/services/channel-manager-form.service';
 
 @Component({
   selector: 'hospitality-bot-housekeeping',
@@ -23,6 +28,7 @@ import { HousekeepingService } from '../../services/housekeeping.service';
     './housekeeping.component.scss',
     '../../../../../shared/src/lib/components/datatable/datatable.component.scss',
   ],
+  providers: [ChannelManagerFormService],
 })
 export class HousekeepingComponent extends BaseDatatableComponent
   implements OnInit {
@@ -45,25 +51,31 @@ export class HousekeepingComponent extends BaseDatatableComponent
   dateValue = {};
   showContent = false;
   isQuickFilterInEmptyView: boolean = false;
+  isTabFilters: boolean = false;
 
   constructor(
     private fb: FormBuilder,
     private adminUtilityService: AdminUtilityService,
     protected tabFilterService: TableService,
     private globalFilterService: GlobalFilterService,
-    private housekeepingService: HousekeepingService
+    private housekeepingService: HousekeepingService,
+    private channelMangerForm: ChannelManagerFormService,
+    private routesConfigServices: RoutesConfigService
   ) {
     super(fb, tabFilterService);
+    this.initForm();
   }
 
   ngOnInit(): void {
     this.entityId = this.globalFilterService.entityId;
-    this.initForm();
-    this.getRoomList();
-    this.getRoomType();
     this.listenForRoomTypeChange();
     this.listenForRefreshData();
     this.navRoutes = houseKeepingRoutes['HouseKeeping'].navRoutes;
+    this.channelMangerForm.roomDetails.subscribe((roomType) => {
+      if (roomType.length > 0) {
+        this.useForm.get('roomType').setValue(roomType.map((item) => item.id));
+      }
+    });
   }
 
   loadData(event: LazyLoadEvent): void {
@@ -94,7 +106,7 @@ export class HousekeepingComponent extends BaseDatatableComponent
           const roomList = new RoomList().deserialize(res);
           this.values = roomList.records;
           this.initFilters(
-            roomList.entityTypeCounts,
+            {},
             roomList.entityStateCounts,
             roomList.totalRecord,
             this.roomStatusDetails
@@ -110,6 +122,13 @@ export class HousekeepingComponent extends BaseDatatableComponent
           this.loading = false;
         }
       );
+  }
+
+  navigateToAddRoom() {
+    this.routesConfigServices.navigate({
+      subModuleName: ModuleNames.ROOM,
+      additionalPath: 'add-room/multiple',
+    });
   }
 
   /**
@@ -135,89 +154,9 @@ export class HousekeepingComponent extends BaseDatatableComponent
     return config;
   }
 
-  /**
-   * @function searchRoomTypes To search categories
-   * @param text search text
-   */
-  searchRoomTypes(text: string): void {
-    if (text) {
-      this.housekeepingService
-        .searchLibraryItem(this.entityId, {
-          params: `?key=${text}&type=ROOM_TYPE`,
-        })
-        .subscribe(
-          (res) => {
-            if (!res) {
-              this.roomTypes = [];
-              return;
-            }
-            const data = res;
-            this.roomTypes =
-              data.ROOM_TYPE?.filter((item) => item.status)?.map((item) => {
-                return {
-                  label: item.name,
-                  value: item.id,
-                };
-              }) ?? [];
-          },
-          ({ error }) => {},
-          () => {}
-        );
-    } else {
-      this.roomTypeOffSet = 0;
-      this.roomTypes = [{ label: 'All', value: '' }];
-      this.getRoomType();
-    }
-  }
-
   listenForRoomTypeChange(): void {
     this.useForm.get('roomType').valueChanges.subscribe((value) => {
       this.getRoomList();
     });
-  }
-
-  /**
-   * @function loadMoreRoomTypes To load more categories
-   * @param index offset
-   */
-
-  loadMoreRoomTypes(index): void {
-    this.roomTypeOffSet = index;
-    this.getRoomType();
-  }
-
-  /**
-   * @function getRoomType to get room types.
-   * @param queries global Queries.
-   */
-  getRoomType(): void {
-    const queries = [
-      {
-        type: 'ROOM_TYPE',
-        offset: this.roomTypeOffSet,
-        limit: this.roomTypeLimit,
-        createBooking: true,
-      },
-    ];
-
-    const config = {
-      params: this.adminUtilityService.makeQueryParams(queries),
-    };
-
-    this.$subscription.add(
-      this.housekeepingService.getRoomTypeList(this.entityId, config).subscribe(
-        (response) => {
-          const data = new RoomTypeOptionList()
-            .deserialize(response)
-            .records.map((item) => ({
-              label: item.name,
-              value: item.id,
-            }));
-          this.roomTypes = [...this.roomTypes, ...data];
-        },
-        ({ error }) => {},
-        () => {}
-      )
-    );
   }
 }

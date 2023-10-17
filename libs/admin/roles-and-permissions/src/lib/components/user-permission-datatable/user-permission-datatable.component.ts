@@ -256,14 +256,10 @@ export class UserPermissionDatatableComponent extends BaseDatatableComponent
       );
   }
 
-  addUser() {
-    this._router.navigate(['add-user'], { relativeTo: this._route });
-  }
-
   openUserDetails(rowData) {
     this.onModalClose.emit({
       userId: rowData?.userId,
-      isView: rowData?.parentId !== this.userService.getLoggedInUserId(),
+      isView: this.isEditAccessDenied(rowData),
     });
   }
 

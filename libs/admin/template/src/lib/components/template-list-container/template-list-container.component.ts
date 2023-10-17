@@ -3,12 +3,20 @@ import { SnackBarService } from '@hospitality-bot/shared/material';
 import { templateConfig } from '../../constants/template';
 import { Topics } from '../../data-models/templateConfig.model';
 import { TemplateService } from '../../services/template.service';
-import { AdminUtilityService, NavRouteOptions } from 'libs/admin/shared/src';
+import {
+  AdminUtilityService,
+  ModuleNames,
+  NavRouteOptions,
+} from 'libs/admin/shared/src';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { EditTemplateComponent } from '../edit-template/edit-template.component';
 import { Router, ActivatedRoute } from '@angular/router';
-import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import {
+  GlobalFilterService,
+  RoutesConfigService,
+} from '@hospitality-bot/admin/core/theme';
 import { TranslateService } from '@ngx-translate/core';
+import { templateRoutes } from '../../constants/routes';
 
 @Component({
   selector: 'hospitality-bot-template-list-container',
@@ -35,7 +43,8 @@ export class TemplateListContainerComponent extends EditTemplateComponent {
     protected _router: Router,
     protected activatedRoute: ActivatedRoute,
     protected translateService: TranslateService,
-    protected adminUtilityService: AdminUtilityService
+    protected adminUtilityService: AdminUtilityService,
+    protected routesConfigService: RoutesConfigService
   ) {
     super(
       _fb,
@@ -45,7 +54,8 @@ export class TemplateListContainerComponent extends EditTemplateComponent {
       _router,
       activatedRoute,
       translateService,
-      adminUtilityService
+      adminUtilityService,
+      routesConfigService
     );
   }
 
@@ -116,7 +126,10 @@ export class TemplateListContainerComponent extends EditTemplateComponent {
         if (response.name) {
           this.templateForm?.patchValue(response);
         } else {
-          this._router.navigate(['/pages/library/template/create']);
+          this.routesConfigService.navigate({
+            subModuleName: ModuleNames.TEMPLATE,
+            additionalPath: templateRoutes.createTemplate.route,
+          });
         }
       })
     );
@@ -135,14 +148,14 @@ export class TemplateListContainerComponent extends EditTemplateComponent {
       ]),
     };
     this.$subscription.add(
-      this.templateService.getTopicList(this.entityId, config).subscribe(
-        (response) => {
+      this.templateService
+        .getTopicList(this.entityId, config)
+        .subscribe((response) => {
           this.topicList = new Topics()
             .deserialize(response)
             .records.map((item) => ({ label: item.name, value: item.id }));
           this.topicList.unshift({ label: 'All', value: 'All' });
-        }
-      )
+        })
     );
   }
 

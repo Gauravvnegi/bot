@@ -9,10 +9,9 @@ import {
   SourceData,
 } from '../types/forms.types';
 import { ReservationForm } from '../constants/form';
-import { GuestInfo, RoomReservation } from '../models/reservations.model';
+import { GuestInfo } from '../models/reservations.model';
 import { ManageReservationService } from './manage-reservation.service';
-import { Option, QueryConfig } from '@hospitality-bot/admin/shared';
-import { RoomsByRoomType } from 'libs/admin/room/src/lib/types/service-response';
+import { QueryConfig } from '@hospitality-bot/admin/shared';
 import { AbstractControl } from '@angular/forms';
 
 @Injectable({
@@ -23,12 +22,11 @@ export class FormService {
   dateDifference = new BehaviorSubject(1);
 
   disableBtn: boolean = false;
-
+  calendarView: boolean = false;
   getSummary = new Subject<void>();
+  deductedAmount = new BehaviorSubject(0);
 
-  guestInformation: BehaviorSubject<GuestInfo> = new BehaviorSubject<GuestInfo>(
-    null
-  );
+  guestInformation: BehaviorSubject<string> = new BehaviorSubject<string>(null);
 
   sourceData: BehaviorSubject<SourceData> = new BehaviorSubject<SourceData>(
     null
@@ -112,15 +110,19 @@ export class FormService {
     } else if (type === 'quick') {
       roomReservationData.bookingItems[0] = {
         roomDetails: {
-          ratePlan: { id: input.roomInformation.ratePlan },
-          roomTypeId: input.roomInformation.roomTypeId,
-          roomCount: 1,
-          roomNumbers: [input.roomInformation.roomNumber],
-          roomNumber: input.roomInformation.roomNumber ?? '',
+          ratePlan: { id: input.roomInformation?.ratePlan },
+          roomTypeId: input.roomInformation?.roomTypeId,
+          roomCount: input.roomInformation?.roomNumbers
+            ? input.roomInformation.roomNumbers.length
+            : 1,
+          roomNumbers: input.roomInformation?.roomNumbers
+            ? input.roomInformation?.roomNumbers
+            : [],
+          roomNumber: input.roomInformation?.roomNumber ?? '',
         },
         occupancyDetails: {
-          maxChildren: input.roomInformation.childCount,
-          maxAdult: input.roomInformation.adultCount,
+          maxChildren: input.roomInformation?.childCount,
+          maxAdult: input.roomInformation?.adultCount,
         },
       };
     } else {
@@ -196,53 +198,15 @@ export class FormService {
     return reservationData;
   }
 
-  getRooms(roomsConfig: GetRoomsConfig) {
-    const {
-      entityId,
-      config,
-      roomControl,
-      roomNumbersControl,
-      defaultRoomNumbers,
-      type,
-    } = roomsConfig;
-    this.manageReservationService
-      .getRoomNumber(entityId, config)
-      .subscribe((res) => {
-        const roomNumberOptions = res.rooms
-          .filter((room: RoomsByRoomType) => room.roomNumber.length)
-          .map((room: RoomsByRoomType) => ({
-            label: room.roomNumber,
-            value: room.roomNumber,
-          }));
-        // this.fields[3].loading[index] = false;
-        // Check if the roomNumber control has the room number in roomNumberOptions
-        if (
-          roomControl &&
-          roomControl?.value?.length &&
-          !defaultRoomNumbers?.length
-        ) {
-          const roomNumbersValue = roomControl.value;
-          // Filter the roomNumbersValue to keep only those values that exist in roomNumberOptions
-          const filteredRoomNumbers = roomNumbersValue.filter((value: string) =>
-            roomNumberOptions.some((option: Option) => option.value === value)
-          );
-          roomControl.setValue(filteredRoomNumbers);
-        }
-
-        roomNumbersControl.patchValue(roomNumberOptions, { emitEvent: false });
-        // Patch the roomNumbers when the room number options are initialized
-        if (defaultRoomNumbers.length) {
-          type === 'array'
-            ? roomControl.setValue(defaultRoomNumbers)
-            : roomControl.setValue(defaultRoomNumbers[0]);
-        }
-      });
-  }
-
   resetData() {
     this.reservationForm.next(null);
     this.sourceData.next(null);
     this.disableBtn = false;
+    this.dateDifference.next(1);
+    this.guestInformation.next(null);
+    this.enableAccordion = false;
+    this.reservationForm.next(null);
+    this.deductedAmount.next(0);
   }
 }
 

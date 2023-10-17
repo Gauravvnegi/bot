@@ -3,16 +3,24 @@
     <hospitality-bot-table-view
       [header]="title"
       [columns]="cols"
-      [items]="users"
+      [items]="items"
+      [loading]="loading"
+      [headerSticky]="true"
       [action]="'Refresh'"
+      [statusConfig]="reservationStatusConfig"
       [emptyViewConfig]="{
         content: {
-          description: 'There are no users logged in except for you.'
+          description: 'There is no Pending Checked-in Reservations.'
         }
       }"
-      (actionClicked)="initTable()"
+      (actionClicked)="reloadTable()"
+      (dropDownChange)="statusChange($event)"
+      (quickChange)="editReservation($event)"
     ></hospitality-bot-table-view>
   </div>
+
+  <!-- Confirm Dialog -->
+  <hospitality-bot-confirm-dialog></hospitality-bot-confirm-dialog>
 
   <!-- Action Button -->
   <hospitality-bot-form-action

@@ -1,6 +1,7 @@
 {
-  "messages": { 
+  "messages": {
     "error": {
+      "forbiddenErr": "Access denied: You do not have the necessary authorization.",
       "unknownErr": "Something went wrong",
       "exportCSV": "Failed to export CSV",
       "loadData": "Failed to load data",

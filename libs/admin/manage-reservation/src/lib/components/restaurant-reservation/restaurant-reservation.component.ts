@@ -319,7 +319,7 @@ export class RestaurantReservationComponent extends BaseReservationComponent
 
             // Menu Items Array Values
             this.menuItemsValues = menuItems;
-            this.formService.guestInformation.next(guestInformation);
+            this.formService.guestInformation.next(guestInformation.id);
 
             this.userForm.patchValue({
               reservationInformation: reservationInfo,

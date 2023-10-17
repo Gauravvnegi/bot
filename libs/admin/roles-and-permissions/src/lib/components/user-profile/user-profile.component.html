@@ -22,7 +22,13 @@
     <div *ngIf="hasPageState('userProfile')">
       <div class="member-container" *ngIf="!!totalTeamMember">
         <div class="label">Team</div>
-        <div class="member" (click)="openTableModal()">
+        <div
+          class="member"
+          (click)="openTableModal()"
+          [ngStyle]="{
+            width: totalTeamMember < 3 ? '40px' : '80px'
+          }"
+        >
           <div *ngFor="let item of teamMember; let index = index">
             <div
               class="member-name"

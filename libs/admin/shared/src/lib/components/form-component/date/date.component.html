@@ -18,7 +18,7 @@
     class="input"
     [ngClass]="{
       input__static: label && alignment === 'vertical',
-      input__float: float,
+      input__float: float || floatInsideLabel,
       input__standard: variant === 'standard',
       input__outlined: variant === 'outlined',
       input__error: error,

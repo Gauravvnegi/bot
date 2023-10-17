@@ -18,6 +18,7 @@
       <span
         [disabled]="route.isDisabled || idx === routes.length - 1"
         [routerLink]="route.link"
+        (click)="handleRouteIdx(idx)"
         [ngClass]="{
           link__disabled:
             route.link === './' ||

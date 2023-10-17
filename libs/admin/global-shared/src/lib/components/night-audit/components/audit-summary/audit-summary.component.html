@@ -1,5 +1,8 @@
 <div class="main__wrapper" [id]="fa?.referenceId">
-  <div class="header">
+  <!-- Confirm Dialog -->
+  <hospitality-bot-confirm-dialog></hospitality-bot-confirm-dialog>
+
+  <div class="header" *ngIf="!isNoAuditFound && !loading">
     Night audit is completed for {{ today | date: 'dd/MM/yyy' }}
   </div>
   <div
@@ -17,7 +20,7 @@
           [items]="values[col].values"
           [emptyViewConfig]="{
             content: {
-              description: 'There are no users logged in except for you.'
+              description: 'No Record Found !'
             }
           }"
           (actionClicked)="initTable()"
@@ -45,7 +48,7 @@
       [isLoading]="loading"
       [content]="{
         imageSrc: 'assets/images/empty-table-offer.png',
-        description: 'There is no night audit found for today.'
+        description: 'There is no night audit found.'
       }"
     >
     </hospitality-bot-empty-table>

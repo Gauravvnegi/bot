@@ -19,6 +19,12 @@ export class NightAuditService extends ApiService {
     );
   }
 
+  checkAudit(entityId: string, config?: QueryConfig): Observable<number[]> {
+    return this.get(
+      `/api/v1/entity/${entityId}/audits/pending${config?.params}`
+    );
+  }
+
   getAllUsers(
     entityId: string,
     config?: QueryConfig

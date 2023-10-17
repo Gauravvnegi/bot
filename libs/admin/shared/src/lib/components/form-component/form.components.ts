@@ -18,6 +18,7 @@ export class FormComponent implements OnInit {
   /* Default Settings Props */
   fontSize = '16px';
   float = false; // for floatable label
+  floatInsideLabel = true; // for floatable label inside
   showClear = false;
   placeholder: string = '';
   variant: InputVariant = 'outlined';

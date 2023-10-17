@@ -141,10 +141,11 @@ export const reportFiltersMapping: Record<
   historyAndForecastReport: ['fromDate', 'toDate'],
   managerFlashReport: ['fromDate', 'toDate'],
   dailyRevenueReport: ['fromDate', 'toDate', 'roomType'],
-  monthlySummaryReport: ['fromDate', 'toDate', 'roomType'],
+  monthlySummaryReport: ['fromDate', 'month'],
 };
 
 export const rowStylesMapping: Record<RowStylesKeys, string> = {
   isBold: 'is-bold',
   isGreyBg: 'is-grey-bg',
+  isBlueBg: 'is-babyBlue-bg',
 };

@@ -98,4 +98,10 @@ export class ReportsComponent implements OnInit {
   settReportMainTitle() {
     this.reportTitle = convertToTitleCase(this.selectedReportModule);
   }
+
+  handleNavClick(num: number) {
+    if (num === 3) {
+      this.toggleMenu();
+    }
+  }
 }

@@ -28,5 +28,6 @@
   [routes]="navRoutes"
   [isBack]="false"
   [onlyNavRoutes]="true"
+  (routeNumber)="handleNavClick($event)"
 ></hospitality-bot-navigation-header>
 <hospitality-bot-reports-data-table></hospitality-bot-reports-data-table>

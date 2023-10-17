@@ -159,10 +159,11 @@ export class RoutesConfigService extends RouteConfigPathService {
     let queryParamsStr = '';
     if (queryParams) {
       queryParamsStr = '?';
+      const paramArr = [];
       for (let queryKey in queryParams) {
-        queryParamsStr =
-          queryParamsStr + `${queryKey}=${queryParams[queryKey]}`;
+        paramArr.push(`${queryKey}=${queryParams[queryKey]}`);
       }
+      queryParamsStr = queryParamsStr + paramArr.join('&');
     }
     return queryParamsStr;
   }

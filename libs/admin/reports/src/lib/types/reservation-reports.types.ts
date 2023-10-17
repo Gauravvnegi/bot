@@ -1,3 +1,10 @@
+import {
+  Arrival,
+  Cancellation,
+  Departure,
+  NoShows,
+} from '../models/reservation-reports.models';
+
 export type ReservationReportData = {
   bookingNo: string;
   guestName: string;
@@ -7,27 +14,19 @@ export type ReservationReportData = {
   balance: number;
 };
 
-export type NoShowReportData = ReservationReportData & {
-  dateOfArrival: number;
-  dateOfNoShow: number;
-  noShowCharges: number;
-  noShowReason: string;
-};
+export type NoShowReportData = Omit<NoShows, 'deserialize'> & {};
 
-export type ArrivalReportData = ReservationReportData & {
-  // TODO
-};
+export type ArrivalReportData = Omit<Arrival, 'deserialize'>;
 
-export type DepartureReportData = ReservationReportData & {
-  // TODO
-};
+export type DepartureReportData = Omit<Departure, 'deserialize'>;
 
-export type CancellationReportData = ReservationReportData & {
-  roomAndRoomType: string;
-  checkInDate: number;
-  checkOutDate: number;
-  noOfNights: number;
-  cancelationDate: number;
-  cancellationCharges: number;
-  cancellationReason: string;
-};
+export type CancellationReportData = Omit<Cancellation, 'deserialize'>;
+export type CancellationReportPartialData = Omit<
+  CancellationReportData,
+  UnnecessaryCancellationObject
+>;
+export type UnnecessaryCancellationObject =
+  | 'dateOfArrival'
+  | 'noShowOn'
+  | 'noShowCharge'
+  | 'noShowReason';

@@ -112,17 +112,19 @@ export class FormService {
     } else if (type === 'quick') {
       roomReservationData.bookingItems[0] = {
         roomDetails: {
-          ratePlan: { id: input.roomInformation.ratePlan },
-          roomTypeId: input.roomInformation.roomTypeId,
-          roomCount: 1,
-          roomNumbers: input.roomInformation.roomNumber
-            ? [input.roomInformation.roomNumber]
+          ratePlan: { id: input.roomInformation?.ratePlan },
+          roomTypeId: input.roomInformation?.roomTypeId,
+          roomCount: input.roomInformation?.roomNumbers
+            ? input.roomInformation.roomNumbers.length
+            : 1,
+          roomNumbers: input.roomInformation?.roomNumbers
+            ? input.roomInformation?.roomNumbers
             : [],
-          roomNumber: input.roomInformation.roomNumber ?? '',
+          roomNumber: input.roomInformation?.roomNumber ?? '',
         },
         occupancyDetails: {
-          maxChildren: input.roomInformation.childCount,
-          maxAdult: input.roomInformation.adultCount,
+          maxChildren: input.roomInformation?.childCount,
+          maxAdult: input.roomInformation?.adultCount,
         },
       };
     } else {

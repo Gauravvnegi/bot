@@ -34,7 +34,7 @@ export const roomFields: IteratorField[] = [
     label: 'Room Number',
     name: 'roomNumbers',
     type: 'multi-select',
-    placeholder: 'Enter',
+    placeholder: 'Select',
     width: '18%',
     loading: [false],
   },

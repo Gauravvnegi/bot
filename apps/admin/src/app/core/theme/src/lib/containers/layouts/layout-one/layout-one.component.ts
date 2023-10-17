@@ -409,6 +409,14 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
       .subscribe((response) => (this.unreadCount = response?.unreadCount));
   }
 
+  get hasPermissionToViewProduct() {
+    return true;
+    return this.subscriptionPlanService.hasViewUserPermission({
+      type: 'product',
+      name: this.routesConfigService.productName,
+    });
+  }
+
   initBookingOption() {
     this.propertyList = this.hotelDetailService.getPropertyList();
     this.bookingOptions = [

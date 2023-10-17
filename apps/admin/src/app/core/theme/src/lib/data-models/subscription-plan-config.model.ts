@@ -2,6 +2,7 @@ import {
   CardNames,
   ModuleConfig,
   ModuleNames,
+  PermissionModuleNames,
   ProductNames,
   TableNames,
 } from 'libs/admin/shared/src/lib/constants/subscriptionConfig';
@@ -328,7 +329,9 @@ export class SettingsMenuItem {
 
 export class UserSubscriptionPermission {
   productPermission: ProductNames[];
-  permission: Record<string, { canView: boolean; canManage: boolean }>;
+  permission: Partial<
+    Record<PermissionModuleNames, { canView: boolean; canManage: boolean }>
+  >;
 
   deserialize(input: UserResponse) {
     this.productPermission = [

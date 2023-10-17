@@ -1,3 +1,15 @@
+export enum PermissionModuleNames {
+  INVENTORY = 'INVENTORY',
+  MEMBERS = 'MEMBERS',
+  LIBRARY = 'LIBRARY',
+  REPORTS = 'REPORTS',
+  USERS = 'USERS',
+  FINANCE = 'FINANCE',
+  CONVERSATION = 'CONVERSATION',
+  SITE = 'SITE',
+  SEGMENT = 'SEGMENT',
+}
+
 export enum ProductNames {
   CREATE_WITH = 'CREATE_WITH',
   FRONT_DESK = 'FRONT_DESK',

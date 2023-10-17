@@ -169,14 +169,14 @@ export class FormComponent implements OnInit {
   /**
    * Input wrapper classes
    */
-  wrapperNgClasses(hideSpinner: boolean) {
+  get wrapperNgClasses() {
     return {
       // 'p-input-icon-right': this.isLoading,
+      wrapper: true,
       'p-float-label': this.float,
       wrapper__vertical: this.alignment === 'vertical',
       wrapper__horizontal: this.alignment === 'horizontal',
       'custom-disabled': this.isDisabled,
-      'hide-spinner': hideSpinner,
     };
   }
 
@@ -251,7 +251,7 @@ export class FormComponent implements OnInit {
       });
       newDiv.id = id;
       newDiv.className = 'dropdown-action-cta'; // styling class
-      const menu = document.querySelector(`.${this.menuClass}`);
+      const menu = this.menuNode;
       menu?.parentElement.appendChild(newDiv);
     }
   };
@@ -272,7 +272,7 @@ export class FormComponent implements OnInit {
       const maxLength = 30;
       newDiv.id = id;
       newDiv.className = 'dropdown-input-action-cta'; // styling class
-      const menu = document.querySelector(`.${this.menuClass}`);
+      const menu = this.menuNode;
       menu?.parentElement.appendChild(newDiv);
 
       const input = document.getElementById('myInput') as HTMLInputElement;
@@ -299,6 +299,12 @@ export class FormComponent implements OnInit {
     }
   };
 
+  get menuNode() {
+    return document
+      .querySelector(`.${this.controlName}`)
+      .querySelector(`.${this.menuClass}`);
+  }
+
   /**
    * @function onMenuOpen To Attach search and pagination api
    */
@@ -309,8 +315,7 @@ export class FormComponent implements OnInit {
     let debounceCall: (() => void) & Cancelable;
 
     const registerScroll = () => {
-      const menu = document.querySelector(`.${this.menuClass}`);
-
+      const menu = this.menuNode;
       menu?.addEventListener('scroll', () => {
         if (this.stopEmission) return;
         if (

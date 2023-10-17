@@ -36,4 +36,11 @@ export class InputComponent extends FormComponent {
     }
     this.initInputControl();
   }
+
+  get getWrapperNgClasses() {
+    return {
+      ...this.wrapperNgClasses,
+      'hide-spinner': this.isHideSpinners,
+    };
+  }
 }

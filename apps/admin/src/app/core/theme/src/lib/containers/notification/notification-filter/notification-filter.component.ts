@@ -38,10 +38,7 @@ export class NotificationFilterComponent {
   }
 
   get fromMaxDate() {
-    if (this.filterFG?.get('toDate').value) {
-      return moment(this.filterFG?.get('toDate').value).endOf('day');
-    }
-    return moment().startOf('day');
+    return new Date();
   }
 
   get toMaxDate() {

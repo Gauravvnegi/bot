@@ -133,7 +133,10 @@
             {{ inputControl.guestName.value }}
           </span>
         </div>
-        <div *ngIf="inputControl.companyName.value" class="half-width code__right">
+        <div
+          *ngIf="inputControl.companyName.value"
+          class="half-width code__right"
+        >
           <span class="code__label"> Company Name: </span>
           <span class="code__hash">
             {{ inputControl.companyName.value }}
@@ -304,6 +307,7 @@
                   [menuItems]="getMenu(rowIndex)"
                   [disabled]="
                     isInvoiceDisabled ||
+                    !tableFormArray.at(rowIndex).get('isAddOn').value ||
                     (!tableFormArray.at(rowIndex).get('itemId').value &&
                       !tableFormArray.at(rowIndex).get('isNew').value) ||
                     tableFormArray.at(rowIndex).get('taxId').value ||

@@ -1,6 +1,6 @@
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { ActionConfigType } from '../../../../types/night-audit.type';
-import { MenuItem } from 'primeng/api';
+import { ConfirmationService, MenuItem } from 'primeng/api';
 import { cols, dummyData } from '../../constants/audit-summary.table';
 import { NightAuditService } from '../../../../services/night-audit.service';
 import { Subscription } from 'rxjs';
@@ -19,6 +19,7 @@ import { AuditViewType } from '../../types/audit-summary.type';
     '../../night-audit.component.scss',
     './audit-summary.component.scss',
   ],
+  providers: [ConfirmationService],
 })
 export class AuditSummaryComponent implements OnInit {
   entityId = '';
@@ -29,6 +30,7 @@ export class AuditSummaryComponent implements OnInit {
   isNoAuditFound = false;
   actionConfig: ActionConfigType;
   today = new Date();
+  auditDates: number[] = [];
 
   @Input() activeIndex = 0;
   @Input() stepList: MenuItem[];
@@ -39,20 +41,87 @@ export class AuditSummaryComponent implements OnInit {
   constructor(
     private nightAuditService: NightAuditService,
     private globalFilterService: GlobalFilterService,
-    private adminUtilityService: AdminUtilityService
+    private adminUtilityService: AdminUtilityService,
+    private confirmationService: ConfirmationService
   ) {}
 
   ngOnInit(): void {
     this.entityId = this.globalFilterService.entityId;
-    this.initTable();
+    this.initAuditTime();
+    this.checkAudit();
     this.initActionConfig();
+  }
+
+  initAuditTime() {
+    this.today.setDate(this.today.getDate() - 1);
+    this.today.setHours(23, 59, 59);
+  }
+
+  checkAudit(isNext?: boolean) {
+    this.loading = true;
+    this.$subscription.add(
+      this.nightAuditService
+        .checkAudit(
+          this.entityId,
+          this.getQueryConfig({ toDate: this.today.getTime() })
+        )
+        .subscribe(
+          (res) => {
+            const loadTable = () => {
+              this.auditDates = res;
+              const currentAuditDate = this.auditDates.shift();
+              this.today = new Date(currentAuditDate);
+              this.initTable();
+            };
+
+            const doNotLoad = () => {
+              this.values = {};
+              this.loading = false;
+              this.isNoAuditFound = true;
+            };
+
+            if (res?.length) {
+              if (isNext) {
+                this.confirmationService.confirm({
+                  header: `Audit Summary`,
+                  message: `There are ${res.length} more audit, do you want to continue ?`,
+                  acceptButtonStyleClass: 'accept-button',
+                  rejectButtonStyleClass: 'reject-button-outlined',
+                  accept: () => {
+                    loadTable();
+                  },
+                  reject: () => {
+                    doNotLoad();
+                    this.indexChange.emit(this.activeIndex + 1);
+                  },
+                });
+              } else {
+                loadTable();
+              }
+            } else {
+              doNotLoad();
+              if (isNext) this.indexChange.emit(this.activeIndex + 1);
+            }
+          },
+          (error) => {
+            this.loading = false;
+            this.auditDates = [];
+          },
+          () => {
+            this.loading = false;
+          }
+        )
+    );
   }
 
   initTable() {
     this.loading = true;
     this.$subscription.add(
       this.nightAuditService
-        .getAuditSummary(this.entityId, this.getQueryConfig())
+        .getAuditSummary(
+          this.entityId,
+          this.getQueryConfig({ auditDate: this.today.getTime() })
+        )
         .subscribe(
           (res) => {
             this.values = new AuditSummary().deserialize(res).records;
@@ -70,14 +139,13 @@ export class AuditSummaryComponent implements OnInit {
     this.actionConfig = {
       preHide: this.activeIndex == 0,
       preLabel: this.activeIndex != 0 ? 'Back' : undefined,
-      postLabel:
-        this.activeIndex == this.stepList.length - 1 ? 'Finish' : 'Next',
+      postLabel: 'Finish',
       preSeverity: 'primary',
     };
   }
 
   handleNext() {
-    this.indexChange.emit(this.activeIndex + 1);
+    this.checkAudit(true);
   }
 
   handlePrev() {
@@ -85,11 +153,11 @@ export class AuditSummaryComponent implements OnInit {
       this.indexChange.emit({ index: this.activeIndex - 1, isPrev: true });
   }
 
-  getQueryConfig(): QueryConfig {
+  getQueryConfig(data: { auditDate?: number; toDate?: number }): QueryConfig {
     return {
       params: this.adminUtilityService.makeQueryParams([
         {
-          auditDate: new Date().getTime(),
+          ...data,
         },
       ]),
     };

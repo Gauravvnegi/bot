@@ -46,7 +46,7 @@ export const cols: Record<string, Cols[]> = {
   accountDetails: [
     {
       field: 'counter',
-      header: 'Counter',
+      header: 'Cashier',
     },
     {
       field: 'revenueReceived',
@@ -78,22 +78,6 @@ export const cols: Record<string, Cols[]> = {
     {
       field: 'restaurant',
       header: 'Restaurant',
-    },
-    {
-      field: 'miniBar',
-      header: 'Mini Bar',
-    },
-    {
-      field: 'confectionary',
-      header: 'Confectionary',
-    },
-    {
-      field: 'bookStore',
-      header: 'Book Store',
-    },
-    {
-      field: 'iceCreamStore',
-      header: 'Ice Cream Parlour Store',
     },
   ],
 };

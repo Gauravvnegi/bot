@@ -56,6 +56,9 @@ export const routeFactoryNew = (
   const subscription = subscriptionService.getSubscription();
 
   const product: SubscriptionConfig[] = subscription.products;
+  /**
+   * Module Path config contains the first subscribed route of every submodule
+   */
   let modulePathConfig: ModulePathConfig = {};
   let hierarchicalPathConfig: HierarchicalPathConfig = {};
   let moduleOfSubModuleWithRespectToProduct: ModuleOfSubModuleWithRespectToProduct = {};
@@ -113,6 +116,11 @@ export const routeFactoryNew = (
             const subModuleName = subModule.name;
             const isSubModuleSubscribed = subModule.isSubscribed;
 
+            const isAllSubscribed =
+              isProductSubscribed &&
+              isModuleSubscribed &&
+              isSubModuleSubscribed;
+
             const isSubModuleInView =
               subModule.isView ||
               isSettingModule ||
@@ -144,19 +152,13 @@ export const routeFactoryNew = (
               if (
                 productHasViewPermission &&
                 !initialRedirectPath &&
-                isProductSubscribed &&
-                isModuleSubscribed &&
-                isSubModuleSubscribed &&
+                isAllSubscribed &&
                 !isSettingModule
               ) {
                 initialRedirectPath = subModulePath;
               }
 
-              if (
-                isProductSubscribed &&
-                isModuleSubscribed &&
-                isSubModuleSubscribed
-              ) {
+              if (isAllSubscribed) {
                 hierarchicalPathConfig = {
                   ...hierarchicalPathConfig,
                   [productName]: {
@@ -240,7 +242,11 @@ export const routeFactoryNew = (
               }
 
               // Pushing sub module path config
-              if (isSubModuleSubscribed && !modulePathConfig[subModuleName]) {
+              if (
+                isAllSubscribed &&
+                productHasViewPermission &&
+                !modulePathConfig[subModuleName] // do not add if already added
+              ) {
                 modulePathConfig = {
                   ...modulePathConfig,
                   [subModuleName]: `/${subModulePath}`,

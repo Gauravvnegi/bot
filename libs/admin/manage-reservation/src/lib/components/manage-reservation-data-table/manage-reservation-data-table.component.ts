@@ -332,7 +332,6 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
    */
   editReservation(id: string) {
     this.routesConfigService.navigate({
-      isRespectiveToProduct: true,
       additionalPath: `${manageReservationRoutes.editReservation.route}/${id}`,
       queryParams: {
         entityId: this.selectedEntity.id,
@@ -373,7 +372,6 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
       case 'MANAGE_INVOICE':
         this.routesConfigService.navigate({
           subModuleName: ModuleNames.INVOICE,
-          isRespectiveToProduct: true,
           additionalPath: id,
           queryParams: {
             entityId: this.selectedEntity.id,
@@ -397,7 +395,6 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
 
   createReservation() {
     this.routesConfigService.navigate({
-      isRespectiveToProduct: true,
       additionalPath: `${manageReservationRoutes.addReservation.route}`,
       queryParams: {
         entityId: this.selectedEntity.id,

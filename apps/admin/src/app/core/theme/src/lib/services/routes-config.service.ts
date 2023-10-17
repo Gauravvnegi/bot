@@ -85,6 +85,7 @@ export class RoutesConfigService extends RouteConfigPathService {
   navigate(config: Partial<NavigateConfig> = {}) {
     const {
       subModuleName,
+      productName,
       additionalPath,
       queryParams,
       isRespectiveToProduct,
@@ -94,6 +95,7 @@ export class RoutesConfigService extends RouteConfigPathService {
     }: NavigateConfig = {
       ...defaultNavigateConfig,
       subModuleName: this.subModuleName,
+      productName: this.productName,
       ...config,
     };
 
@@ -112,18 +114,18 @@ export class RoutesConfigService extends RouteConfigPathService {
     let moduleName = config.moduleName; // Directly from params
     // If is respective to product then find module
     if (isRespectiveToProduct && this.productName && !moduleName) {
-      moduleName = this.moduleOfSubModuleWithRespectToProduct[
-        this.productName
-      ]?.[subModuleName];
+      moduleName = this.moduleOfSubModuleWithRespectToProduct[productName]?.[
+        subModuleName
+      ];
     }
 
     /**
      * If module name then route will open respective to product
      */
-    if (moduleName) {
-      const newPath = this.hierarchicalPathConfig[this.productName]?.[
-        moduleName
-      ]?.[subModuleName];
+    if (moduleName && isRespectiveToProduct) {
+      const newPath = this.hierarchicalPathConfig[productName]?.[moduleName]?.[
+        subModuleName
+      ];
 
       if (newPath) {
         path = newPath;
@@ -264,6 +266,7 @@ export type HierarchicalPathConfig = Partial<
 export type NavigateConfig = {
   subModuleName?: ModuleNames;
   moduleName?: ModuleNames;
+  productName?: ProductNames;
   additionalPath: string;
   queryParams: any;
   isRespectiveToProduct: boolean;

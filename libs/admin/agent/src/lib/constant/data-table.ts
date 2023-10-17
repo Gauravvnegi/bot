@@ -17,7 +17,7 @@ export const cols: Cols[] = [
   },
   {
     field: 'iataNo',
-    header: 'IATA No',
+    header: 'Reg. No',
     sortType: 'string',
     width: '6%',
   },

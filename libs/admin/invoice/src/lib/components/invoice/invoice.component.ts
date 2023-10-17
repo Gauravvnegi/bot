@@ -554,7 +554,7 @@ export class InvoiceComponent implements OnInit {
             selectedService.amount * (item.taxValue / 100)
           ),
           billItemId: item.id,
-          description: `${item.taxType} (${item.taxValue}%) ${selectedService.label}`,
+          description: `${selectedService.label} ${item.taxType} ${item.taxValue}% `,
         }));
 
         newServiceTax.forEach((item) => {
@@ -1224,8 +1224,9 @@ export class InvoiceComponent implements OnInit {
     /**
      * Need to update this with excess amount and need to add also
      */
-    discountComponentRef.componentInstance.maxAmount = -this.inputControl
-      .dueAmount.value;
+    if (chargesType === AdditionalChargesType.REFUND)
+      discountComponentRef.componentInstance.maxAmount = -this.inputControl
+        .dueAmount.value;
     discountComponentRef.componentInstance.heading = `Add ${additionalChargeDetails.label} Amount`;
 
     discountComponentRef.componentInstance.onClose.subscribe(

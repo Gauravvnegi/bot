@@ -195,7 +195,7 @@
               </div>
               <p-sidebar
                 [visible]="isNotificationVisible"
-                (onHide)="isNotificationVisible = false"
+                (onHide)="closeNotification()"
                 [showCloseIcon]="false"
                 position="right"
               >
@@ -277,12 +277,19 @@
   </div>
 </div>
 
-<div id="no-view" *ngIf="!hasPermissionToViewProduct">
-  <div class="no-view-container">
-    <h1>
-      <img src="assets/svg/View.svg" alt="no-view" /> Permission not allowed
-    </h1>
-    <p>You do not have permission to view this product.</p>
-    <p class="no-view-sub-text">Please ask your manage to provide permission</p>
+<div id="no-view" class="no-view" *ngIf="!hasPermissionToViewModule">
+  <div class="no-view__container">
+    <img src="assets/svg/access_denied.svg" alt="no-view" />
+    <div class="no-view__content">
+      <h2 class="no-view__title-text">
+        Permission not allowed.
+      </h2>
+      <p class="no-view__main-text">
+        You lack the necessary permissions to view this resource.
+      </p>
+      <p class="no-view__sub-text">
+        Kindly request permission from your manager.
+      </p>
+    </div>
   </div>
 </div>

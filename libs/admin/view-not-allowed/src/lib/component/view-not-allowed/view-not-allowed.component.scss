@@ -1,0 +1,44 @@
+@import 'main';
+
+.unsubscribe {
+  text-align: center;
+  width: 367px;
+  margin: auto;
+  img {
+    padding-top: 48px;
+  }
+  .head {
+    padding: 37px 0 14px;
+    font-size: 22px;
+    font-weight: $bold;
+    letter-spacing: 1.32px;
+    color: $unsubscribe-Head;
+  }
+  .subhead {
+    opacity: 0.35;
+    @include normal-sm-text;
+    color: $secondary;
+  }
+  .visit {
+    padding-top: 7px;
+    text-decoration: underline;
+    @include normal-sm-text;
+    color: $unsubscribe-Visit;
+    cursor: pointer;
+  }
+}
+
+.product-wrapper {
+  display: flex;
+  gap: 20px;
+
+  .product-icon {
+    width: 50px;
+    cursor: pointer;
+  }
+
+  .product-name {
+    @include normal-sm-text;
+    cursor: pointer;
+  }
+}

@@ -504,20 +504,45 @@
   }
 }
 
-#no-view {
+.no-view {
   position: fixed;
   background: #ffffff99;
   inset: $top-nav-height 0 0 $left-nav-height;
   z-index: $no-view-z;
 
-  .no-view-container {
+  img {
+    width: 100px;
+  }
+
+  &__container {
+    display: flex;
+    gap: 15px;
+    margin: 2px;
     padding: 20px;
     background: white;
     box-shadow: 0px 0px 3px 0px $primary-cta;
+    @include normal-sm-text;
+    color: $secondary;
   }
 
-  .no-view-sub-text {
+  &__content {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  &__title-text {
+    font-weight: 600;
+  }
+
+  &__main-text {
+    font-size: 18px;
+    color: $grayAuth;
+  }
+
+  &__sub-text {
     font-size: 12px;
     font-style: italic;
+    color: $grayAuth;
   }
 }

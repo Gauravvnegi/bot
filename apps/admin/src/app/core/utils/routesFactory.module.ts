@@ -59,7 +59,7 @@ export const routeFactoryNew = (
   let modulePathConfig: ModulePathConfig = {};
   let hierarchicalPathConfig: HierarchicalPathConfig = {};
   let moduleOfSubModuleWithRespectToProduct: ModuleOfSubModuleWithRespectToProduct = {};
-
+  let comingSoonModule: ModuleNames[] = [];
   let initialRedirectPath = undefined;
 
   // View not in use to create route ,
@@ -193,6 +193,13 @@ export const routeFactoryNew = (
               }
 
               /**
+               * Adding module to coming soon
+               */
+              if (!LoadSubModule) {
+                comingSoonModule.push(subModuleName);
+              }
+
+              /**
                * Only view check is here
                * For the case of module not in view but has Load Module then only make the routes
                * Else only make route for those module in view
@@ -284,6 +291,12 @@ export const routeFactoryNew = (
     hierarchicalPathConfig,
     moduleOfSubModuleWithRespectToProduct
   );
+
+  /**
+   * These are module whose name is not mapped with any of the modules
+   * Adding coming soon modules
+   */
+  subscriptionService.initComingSoonModules(comingSoonModule);
 
   routes[0].children.unshift({
     path: '',

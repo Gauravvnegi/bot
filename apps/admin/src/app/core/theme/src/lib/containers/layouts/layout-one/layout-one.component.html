@@ -277,17 +277,17 @@
   </div>
 </div>
 
-<div id="no-view" *ngIf="!hasPermissionToViewModule">
-  <div class="no-view-container">
+<div id="no-view" class="no-view" *ngIf="!hasPermissionToViewModule">
+  <div class="no-view__container">
     <img src="assets/svg/access_denied.svg" alt="no-view" />
-    <div>
-      <h1 class="no-view-title-text">
+    <div class="no-view__content">
+      <h2 class="no-view__title-text">
         Permission not allowed.
-      </h1>
-      <p class="no-view-main-text">
-        You lack the necessary permissions to view this page.
+      </h2>
+      <p class="no-view__main-text">
+        You lack the necessary permissions to view this resource.
       </p>
-      <p class="no-view-sub-text">
+      <p class="no-view__sub-text">
         Kindly request permission from your manager.
       </p>
     </div>

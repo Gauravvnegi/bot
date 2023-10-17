@@ -410,16 +410,17 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
   }
 
   get hasPermissionToViewModule() {
-    // return true;
     const isProductSubscribed = this.subscriptionPlanService.checkProductSubscription(
       this.routesConfigService.productName
     );
+
     if (!isProductSubscribed) return true;
 
     const isModuleSubscribed = this.subscriptionPlanService.checkModuleSubscriptionWithRespectiveToProduct(
       this.routesConfigService.productName,
       this.routesConfigService.subModuleName
     );
+
     if (!isModuleSubscribed) return true;
 
     const doestProductHasPermission = this.subscriptionPlanService.hasViewUserPermission(
@@ -428,7 +429,14 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
         type: 'product',
       }
     );
+
     if (!doestProductHasPermission) return true;
+
+    const isComingSoon = this.subscriptionPlanService.isComingSoonModule(
+      this.routesConfigService.subModuleName
+    );
+
+    if (isComingSoon) return true;
 
     return this.subscriptionPlanService.hasViewUserPermission({
       type: 'module',

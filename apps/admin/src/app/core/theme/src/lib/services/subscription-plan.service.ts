@@ -28,6 +28,7 @@ export class SubscriptionPlanService extends ApiService {
   private productSubscription: ProductSubscription;
   settings: SettingsMenuItem[];
   selectedProduct: ProductNames;
+  comingSoonModules: ModuleNames[] = [];
   userSubscriptionPermission: UserSubscriptionPermission;
 
   getSubscriptionPlan(entityId: string): Observable<any> {
@@ -104,6 +105,14 @@ export class SubscriptionPlanService extends ApiService {
     }
 
     return this.getFirstSubscribedProduct();
+  }
+
+  initComingSoonModules(input: ModuleNames[]) {
+    this.comingSoonModules = input;
+  }
+
+  isComingSoonModule(input: ModuleNames) {
+    return this.comingSoonModules.indexOf(input) !== -1;
   }
 
   getModuleData(moduleName) {

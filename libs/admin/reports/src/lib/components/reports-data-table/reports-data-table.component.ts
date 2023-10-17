@@ -41,6 +41,7 @@ export class ReportsDataTableComponent extends BaseDatatableComponent {
   isSearchable = false;
   fromDate: Date;
   toDate: Date;
+  minDate = new Date();
 
   selectedReport: ReportsMenu[number];
 
@@ -134,8 +135,8 @@ export class ReportsDataTableComponent extends BaseDatatableComponent {
       month: [new Date().setDate(1) || null],
     } as Record<ReportFiltersKey, any>);
     this.tableFG.addControl('filters', filterForm);
-
     filterForm.valueChanges.subscribe((_res) => {
+      this.minDate = new Date(_res.fromDate);
       this.loadInitialData();
     });
   }

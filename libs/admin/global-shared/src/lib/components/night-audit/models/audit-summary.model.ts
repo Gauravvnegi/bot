@@ -40,7 +40,7 @@ export class AuditSummary {
   }
 
   getRevenueList(input: AuditSummaryResponse, dynamicCols: Cols[]) {
-    let total = 0;
+    let total = input?.bookingAmount;
     let revenueList: TableObjectData[] = [
       dynamicCols.reduce(
         (pre, curr, index) => {

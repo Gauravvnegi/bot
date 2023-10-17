@@ -71,34 +71,40 @@ export class ReportsDataTableComponent extends BaseDatatableComponent {
       entityId: this.globalFilterService.entityId,
       reportName: this.selectedReport.value,
       ...this.currentFilters.reduce((value, curr) => {
-        value = {
-          ...value,
-          [curr]: filters[curr],
-        };
+        if (curr === 'month') {
+          const startDate = new Date(filters.month);
+          if (startDate instanceof Date) {
+            const lastDay = new Date(
+              startDate.getFullYear(),
+              startDate.getMonth() + 1,
+              0
+            );
+
+            const rangeQuery: Partial<Record<ReportFiltersKey, number>> = {
+              fromDate: startDate.getTime(),
+              toDate: lastDay.getTime(),
+            };
+
+            value = {
+              ...value,
+              ...rangeQuery,
+            };
+          }
+        } else {
+          value = {
+            ...value,
+            [curr]: filters[curr],
+          };
+        }
+
         return value;
       }, {}),
-      // toDate: filters.toDate,
-      // fromDate: filters.fromDate,
-      // roomType: filters.roomType,
     };
   }
 
   loadInitialData() {
     this.loading = true;
     const query = this.getQueryParams();
-
-    if (this.selectedReport.value === 'monthlySummaryReport') {
-      const startDate = new Date(query.month);
-      if (startDate instanceof Date) {
-        const lastDay = new Date(
-          startDate.getFullYear(),
-          startDate.getMonth() + 1,
-          0
-        );
-        query['fromDate'] = startDate.getTime();
-        query['toDate'] = lastDay.getTime();
-      }
-    }
 
     this.reportsService.getReport(query).subscribe(
       (res) => {

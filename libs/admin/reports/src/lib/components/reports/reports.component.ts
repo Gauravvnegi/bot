@@ -47,10 +47,14 @@ export class ReportsComponent implements OnInit {
       if (report) {
         this.selectedReport = report;
         this.navRoutes.pop();
-        this.navRoutes.push({
-          label: this.selectedReport.label,
-          link: './',
-        } as NavRouteOption);
+
+        this.navRoutes = [
+          ...this.navRoutes,
+          {
+            label: this.selectedReport.label,
+            link: './',
+          } as NavRouteOption,
+        ];
       }
     });
   }
@@ -67,10 +71,14 @@ export class ReportsComponent implements OnInit {
     this.routesConfigService.navRoutesChanges.subscribe((navRoutesRes) => {
       this.navRoutes = navRoutesRes;
     });
-    this.navRoutes.push({
-      label: this.selectedReport.label,
-      link: './',
-    } as NavRouteOption);
+
+    this.navRoutes = [
+      ...this.navRoutes,
+      {
+        label: this.selectedReport.label,
+        link: './',
+      } as NavRouteOption,
+    ];
   }
 
   /**

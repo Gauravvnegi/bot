@@ -123,16 +123,17 @@ export class BaseReservationComponent {
               roomTypeArray[0].get(controlName).enable()
             );
           }
+          for (const controlName in this.paymentControls) {
+            if (
+              controlName !== 'cashierFirstName' &&
+              controlName !== 'cashierLastName'
+            ) {
+              this.paymentControls[controlName].enable();
+            }
+          }
           break;
       }
-      for (const controlName in this.paymentControls) {
-        if (
-          controlName !== 'cashierFirstName' &&
-          controlName !== 'cashierLastName'
-        ) {
-          this.paymentControls[controlName].enable();
-        }
-      }
+
       // reservationType.enable();
     }
   }

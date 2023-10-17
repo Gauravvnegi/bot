@@ -161,7 +161,10 @@ export class RoomIteratorComponent extends IteratorComponent
     this.itemValuesCount = itemValues.length;
     itemValues.forEach((value, index) => {
       // Rooms number is not multi-select in edit mode.
-      if (this.reservationInfoControls.reservationType.value !== 'DRAFT') {
+      if (
+        this.reservationInfoControls.reservationType.value !== 'DRAFT' &&
+        this.reservationId
+      ) {
         this.fields[3].name = 'roomNumber';
         this.fields[3].type = 'select';
       }

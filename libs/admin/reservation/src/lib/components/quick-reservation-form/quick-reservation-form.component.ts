@@ -116,7 +116,6 @@ export class QuickReservationFormComponent implements OnInit {
     private snackbarService: SnackBarService,
     private globalFilterService: GlobalFilterService,
     private configService: ConfigService,
-    private router: Router,
     private manageReservationService: ManageReservationService,
     private formService: FormService,
     private compiler: Compiler,
@@ -186,15 +185,19 @@ export class QuickReservationFormComponent implements OnInit {
           multipleDateChange = true;
           toDateControl.setValue(nextDayTime); // Set toDateControl to one day later
         }
-        if (res) this.reinitializeRooms = !this.reinitializeRooms;
+        if (res) {
+          this.reinitializeRooms = !this.reinitializeRooms;
+          this.roomControls.roomNumbers.reset();
+        }
       }
     });
     toDateControl.valueChanges.subscribe((res) => {
       if (res) {
         this.toDateValue = new Date(res);
-        if (!multipleDateChange)
+        if (!multipleDateChange) {
           this.reinitializeRooms = !this.reinitializeRooms;
-
+          this.roomControls.roomNumbers.reset();
+        }
         multipleDateChange = false;
       }
     });
@@ -212,9 +215,9 @@ export class QuickReservationFormComponent implements OnInit {
 
       roomInformation: this.fb.group({
         roomTypeId: ['', [Validators.required]],
-        ratePlan: [{ value: '', disabled: true }],
-        roomNumber: [{ value: '', disabled: true }],
-        roomNumbers: [{ value: [], disabled: true }],
+        ratePlan: [''],
+        roomNumber: [''],
+        roomNumbers: [[]],
         adultCount: ['', [Validators.required, Validators.min(1)]],
         childCount: ['', [Validators.min(0)]],
         id: [''],
@@ -268,8 +271,6 @@ export class QuickReservationFormComponent implements OnInit {
           (res) => {
             const formData = new ReservationFormData().deserialize(res);
             this.reservationData = formData;
-            this.roomControls.roomNumber.enable();
-            this.roomControls.roomNumbers.enable();
             this.calculateDailyPrice();
             const { roomInformation, ...data } = formData;
             this.guestDetails = {
@@ -364,9 +365,6 @@ export class QuickReservationFormComponent implements OnInit {
   }
 
   setRoomInfo(selectedRoomType) {
-    this.roomControls.roomNumber.enable();
-    this.roomControls.roomNumbers.enable();
-    this.roomControls.ratePlan.enable();
     this.ratePlans = selectedRoomType?.allRatePlans.map((res) => ({
       label: res.label,
       value: res.value,

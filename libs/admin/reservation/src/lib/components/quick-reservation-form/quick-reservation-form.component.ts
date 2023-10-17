@@ -240,15 +240,21 @@ export class QuickReservationFormComponent implements OnInit {
 
   editForm() {
     const roomTypeData: QuickReservationForm = this.useForm.getRawValue();
+    let queryParams: any = {
+      entityId: this.entityId,
+    };
+    if (!this.reservationId) {
+      queryParams = {
+        entityId: this.entityId,
+        data: btoa(JSON.stringify(roomTypeData)),
+      };
+    }
     this.routesConfigService.navigate({
       subModuleName: ModuleNames.ADD_RESERVATION,
       additionalPath: this.reservationId
         ? `edit-reservation/${this.reservationId}`
         : `add-reservation`,
-      queryParams: {
-        entityId: this.entityId,
-        data: btoa(JSON.stringify(roomTypeData)),
-      },
+      queryParams,
       openInNewWindow: true,
     });
   }
@@ -590,4 +596,3 @@ export type QuickReservationConfig = {
   defaultRoomType?: IGRoomType;
   date?: IGCol;
 };
-

@@ -134,6 +134,14 @@ export class RoomIteratorComponent extends IteratorComponent
       this.parentFormGroup.addControl('roomInformation', roomInformationGroup);
     }
     this.listenForDateChanges();
+    this.roomControls[index]
+      .get('roomNumbers')
+      .valueChanges.subscribe((res) => {
+        if (res)
+          this.roomControls[index]
+            .get('roomCount')
+            .setValue(res.length ? res.length : 1, { emitEvent: false });
+      });
   }
 
   listenForDateChanges() {
@@ -211,7 +219,9 @@ export class RoomIteratorComponent extends IteratorComponent
           {
             ratePlan: defaultPlan ? defaultPlan : ratePlanOptions[0].value,
             adultCount: 1,
-            roomCount: 1,
+            roomCount: this.roomControls[index].get('roomNumbers')?.value.length
+              ? this.roomControls[index].get('roomNumbers')?.value.length
+              : 1,
             childCount: 0,
           },
           { emitEvent: false }

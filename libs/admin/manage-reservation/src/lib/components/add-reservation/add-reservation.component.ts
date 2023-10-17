@@ -110,7 +110,12 @@ export class AddReservationComponent extends BaseReservationComponent
     this.reservationInfoControls.reservationType.patchValue(
       ReservationType.CONFIRMED
     );
-    this.roomControls[0].patchValue(roomInformation);
+    this.roomControls[0].patchValue({
+      roomCount: roomInformation?.roomNumbers
+        ? roomInformation.roomNumbers.length
+        : 1,
+      ...roomInformation,
+    });
   }
 
   listenFormServiceChanges() {
@@ -250,7 +255,7 @@ export class AddReservationComponent extends BaseReservationComponent
               instructions: formData.instructions,
               formData,
             });
-            
+
             this.inputControls.offerId.patchValue(data.offerId);
             if (data.offerId) {
               const roomTypeIds = roomInformation.map(

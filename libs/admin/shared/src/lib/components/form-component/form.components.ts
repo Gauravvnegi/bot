@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { AbstractControl, ControlContainer } from '@angular/forms';
-import { Cancelable, debounce, map } from 'lodash';
+import { Cancelable, debounce, map, stubFalse } from 'lodash';
 import {
   Alignment,
   FormProps,
@@ -18,7 +18,7 @@ export class FormComponent implements OnInit {
   /* Default Settings Props */
   fontSize = '16px';
   float = false; // for floatable label
-  floatInsideLabel = true; // for floatable label inside
+  floatInsideLabel = false; // for floatable label inside
   showClear = false;
   placeholder: string = '';
   variant: InputVariant = 'outlined';

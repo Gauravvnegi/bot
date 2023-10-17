@@ -1,4 +1,7 @@
-import { ReservationResponseData } from 'libs/admin/shared/src/lib/types/response';
+import {
+  ReservationResponse,
+  ReservationResponseData,
+} from 'libs/admin/shared/src/lib/types/response';
 import { ReportClass, RowStyles } from '../types/reports.types';
 import {
   ReservationReportData,
@@ -31,48 +34,77 @@ class ReservationReport {
   }
 }
 
+export class NoShows {
+  bookingNumber: string;
+  dateOfArrival: string;
+  noShowOn: string;
+  guestName: string;
+  bookingAmount: string;
+  noShowCharge: string;
+  noShowReason: string;
+  otherCharge: string;
+  amountPaid: string;
+  balance: string;
+  deserialize(value: ReservationResponse) {
+    this.bookingNumber = value?.reservationNumber;
+    this.dateOfArrival = getFormattedDate(value?.from);
+    this.noShowOn = getFormattedDate(value?.from);
+    this.guestName = `${value?.guest.firstName ?? ''} ${
+      value?.guest?.lastName ?? ''
+    }`.trim();
+    this.bookingAmount = `${value?.pricingDetails?.totalAmount}`;
+    this.noShowCharge = null;
+    this.noShowReason = null;
+    this.otherCharge = null;
+    this.amountPaid = `${value?.pricingDetails?.totalPaidAmount}`;
+    this.balance = `${value?.pricingDetails?.totalDueAmount}`;
+    return this;
+  }
+}
+
 export class NoShowReport extends ReservationReport
-  implements ReportClass<NoShowReportData, ReservationResponseData> {
+  implements ReportClass<NoShowReportData, ReservationResponse> {
   records: NoShowReportData[];
 
-  deserialize(value: ReservationResponseData[]) {
+  deserialize(value: ReservationResponse[]) {
     this.records = new Array<NoShowReportData>();
-
     value.forEach((reservationData) => {
-      this.records.push({
-        ...this.getDefaultValues(reservationData),
-        bookingNo: reservationData.number,
-        dateOfArrival: reservationData.arrivalTime,
-        dateOfNoShow: null,
-        noShowCharges: null,
-        noShowReason: '',
-      });
+      this.records.push(new NoShows().deserialize(reservationData));
     });
+    return this;
+  }
+}
 
+export class Cancellation extends NoShows {
+  roomType: string;
+  checkIn: string;
+  checkOut: string;
+  night: string;
+  cancelledOn: string;
+  cancellationCharge: string;
+  cancellationReason: string;
+
+  deserialize(value: ReservationResponse): this {
+    super.deserialize(value);
+    const roomDetails = value.bookingItems[0];
+    this.roomType = `${roomDetails?.roomDetails?.roomNumber}/${roomDetails?.roomDetails?.roomTypeLabel}`;
+    this.checkIn = getFormattedDate(value?.from);
+    this.checkOut = getFormattedDate(value?.to);
+    this.night = `${calculateNumberOfNights(value.from, value.to)}`;
+    this.cancelledOn = getFormattedDate(value?.from);
+    this.cancellationCharge = null;
+    this.cancellationReason = null;
     return this;
   }
 }
 
 export class CancellationReport extends ReservationReport
-  implements ReportClass<CancellationReportData, ReservationResponseData> {
+  implements ReportClass<CancellationReportData, ReservationResponse> {
   records: CancellationReportData[];
-  deserialize(value: ReservationResponseData[]) {
+  deserialize(value: ReservationResponse[]) {
     this.records = new Array<CancellationReportData>();
-
     value.forEach((reservationData) => {
-      this.records.push({
-        ...this.getDefaultValues(reservationData),
-        roomAndRoomType: `${reservationData?.stayDetails?.room.roomNumber} /
-          ${reservationData?.stayDetails?.room.type}`,
-        // is checkin and arrivalTime same??
-        checkInDate: reservationData.arrivalTime,
-        // is checkout and departureTime same??
-        checkOutDate: reservationData.departureTime,
-        noOfNights: null,
-        cancelationDate: null,
-        cancellationCharges: null,
-        cancellationReason: '',
-      });
+      this.records.push(new Cancellation().deserialize(reservationData));
     });
     return this;
   }
@@ -151,4 +183,17 @@ function getFormattedDate(time: number) {
   const date = currentDate.getDate();
   const year = currentDate.getFullYear();
   return `${monthAbbreviated} ${date}, ${year}`;
+}
+
+function calculateNumberOfNights(
+  checkinTimestamp: number,
+  checkoutTimestamp: number
+) {
+  const checkinDate = new Date(checkinTimestamp);
+  const checkoutDate = new Date(checkoutTimestamp);
+  const differenceInMilliseconds =
+    checkoutDate.getTime() - checkinDate.getTime();
+  const differenceInDays = differenceInMilliseconds / 86400000;
+  const numberOfNights = Math.ceil(differenceInDays);
+  return numberOfNights;
 }

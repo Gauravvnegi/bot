@@ -152,3 +152,59 @@ export interface ReservationResponseData {
   pmsBooking: boolean;
   specialRequest: string;
 }
+
+// No-show & Cancellation Response
+interface ContactDetails {
+  cc: string;
+  contactNumber: string;
+  emailId: string;
+}
+
+interface Guest {
+  id: string;
+  salutation: string;
+  firstName: string;
+  lastName: string;
+  contactDetails: ContactDetails;
+  nationality: string;
+  dateOfBirth: number;
+  age: number;
+  documentRequired: boolean;
+}
+
+interface PricingDetails {
+  totalAmount: number;
+  totalPaidAmount: number;
+  totalDueAmount: number;
+  taxAndFees: number;
+  taxAndFeesPerDay: number;
+  basePrice: number;
+  discountedAmount: number;
+}
+
+interface RoomDetails {
+  roomNumber: string;
+  roomTypeId: string;
+  roomTypeLabel: string;
+  roomCount: number;
+}
+
+interface BookingItem {
+  roomDetails: RoomDetails;
+  pricingDetails: PricingDetails;
+  id: string;
+}
+
+export interface ReservationResponse {
+  id: string;
+  from: number;
+  to: number;
+  reservationType: string;
+  reservationNumber: string;
+  status: string;
+  guest: Guest;
+  created: number;
+  updated: number;
+  pricingDetails: PricingDetails;
+  bookingItems: BookingItem[];
+}

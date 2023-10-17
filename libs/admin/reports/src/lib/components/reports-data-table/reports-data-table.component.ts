@@ -12,6 +12,7 @@ import {
   reportFiltersMapping,
   reportsColumnMapping,
   reportsModelMapping,
+  rowStylesMapping,
 } from '../../constant/reports.const';
 import { ReportsService } from '../../services/reports.service';
 import {
@@ -19,6 +20,7 @@ import {
   ReportFilters,
   ReportFiltersKey,
   ReportsMenu,
+  RowStyles,
 } from '../../types/reports.types';
 
 @Component({
@@ -123,6 +125,18 @@ export class ReportsDataTableComponent extends BaseDatatableComponent {
     this.toDate = new Date();
     this.fromDate.setHours(0, 0, 0, 0);
     this.toDate.setHours(23, 59, 59, 999);
+  }
+
+  getStyle(data: RowStyles | Record<string, string | number>) {
+    const styleKeys = Object.keys(rowStylesMapping);
+    let styleClass = '';
+    Object.keys(data).forEach((key) => {
+      const foundedStyleClass = styleKeys.includes(key);
+      styleClass = `${styleClass} ${
+        foundedStyleClass && data[key] == true ? rowStylesMapping[key] : ''
+      }`;
+    });
+    return styleClass.trim();
   }
 
   get availableFilters() {

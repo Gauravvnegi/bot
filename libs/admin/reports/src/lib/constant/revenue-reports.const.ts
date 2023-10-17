@@ -2,8 +2,17 @@ import { ColsData } from '../types/reports.types';
 import { CashierReportData } from '../types/revenue-reports.types';
 
 export const cashierReportCols: ColsData<CashierReportData> = {
-  todo: {
-    header: 'TODO',
+  id: {
+    header: '#',
   },
-  // ToDO
+  paymentType: {
+    header: 'Payment Type',
+    isSearchDisabled: true,
+    isSortDisabled: true,
+  },
+  amount: {
+    header: 'Amount',
+    isSearchDisabled: true,
+    isSortDisabled: true,
+  },
 };

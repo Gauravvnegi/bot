@@ -1,9 +1,4 @@
-import { TableDataType, TableObjectData } from '../../../types/table-view.type';
-
-interface RoomStatus {
-  count: number;
-  status: string;
-}
+import { TableObjectData } from '../../../types/table-view.type';
 
 export interface AuditSummaryResponse {
   id: string;
@@ -12,6 +7,7 @@ export interface AuditSummaryResponse {
   roomRevenue: number;
   revPar: number;
   averageRate: number;
+  averageRateIncl: number;
   totalRooms: number;
   occupiedRooms: number;
   outOfOrderRooms: number;
@@ -44,7 +40,10 @@ export interface AuditSummaryResponse {
   roomSgstPerDay: number;
   totalTax: number;
   grossTotal: number;
-  roomStatusMap: RoomStatus[];
+  roomStatusMap: {
+    count: number;
+    status: string;
+  }[];
   vipPersonInhouse: number;
   arrivalPersons: number;
   departurePersons: number;
@@ -52,6 +51,14 @@ export interface AuditSummaryResponse {
   roomNightsReserved: number;
   inclusionOrAddOn: number;
   totalPersonInHouse: number;
+  bookingAmount: number;
+  cashiersPayment: {
+    UserPermission: string;
+  };
+  outlets: {
+    name: string;
+    totalAmount: number;
+  }[];
   subTotalObject: boolean;
 }
 

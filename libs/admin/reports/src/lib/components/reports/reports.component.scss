@@ -58,3 +58,7 @@ $reports-menu-padding: 16px;
   padding-top: 10px;
   margin-bottom: -18px;
 }
+
+:host ::ng-deep .action-header {
+  margin-top: unset !important;
+}

@@ -14,11 +14,24 @@
   <div class="action-wrapper">
     <ng-container formGroupName="filters">
       <hospitality-bot-date
+        *ngIf="availableFilters.isMonth"
+        class="filter-item"
+        controlName="month"
+        label="Month"
+        [props]="{ floatInsideLabel: true }"
+        [settings]="{
+          enableTime: false,
+          view: 'month',
+          dateFormat: 'mm/yy'
+        }"
+      >
+      </hospitality-bot-date>
+      <hospitality-bot-date
         *ngIf="availableFilters.isFromDate"
         class="filter-item"
         controlName="fromDate"
         label="From Date"
-        [props]="{ float: true }"
+        [props]="{ floatInsideLabel: true }"
         [settings]="{
           enableTime: false
         }"
@@ -29,7 +42,7 @@
         class="filter-item"
         controlName="toDate"
         label="To Date"
-        [props]="{ float: true }"
+        [props]="{ floatInsideLabel: true }"
         [settings]="{
           enableTime: false
         }"
@@ -40,7 +53,8 @@
         class="filter-item"
         controlName="roomType"
         [settings]="{
-          float: true
+          floatInsideLabel: true,
+          placeholder: 'Select'
         }"
       ></hospitality-bot-room-types>
     </ng-container>
@@ -63,7 +77,7 @@
   [loading]="loading"
   [columns]="cols"
   [value]="values"
-  [paginator]="isPaginator"
+  [paginator]="false"
   [rows]="rowsPerPage"
   [showCurrentPageReport]="showCurrentPageReport"
   [rowsPerPageOptions]="rowsPerPageOptions"
@@ -80,7 +94,7 @@
 >
   <!-- *******************************EMPTY TABLE VIEW******************************* -->
   <ng-template pTemplate="emptymessage">
-    <tr hospitality-bot-empty-view [noOfColumns]="cols.length"></tr>
+    <tr hospitality-bot-empty-view [noOfColumns]="cols.length - 1"></tr>
   </ng-template>
 
   <!-- *******************************HEADER WITH SEARCH******************************* -->

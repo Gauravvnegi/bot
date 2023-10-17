@@ -23,5 +23,10 @@
   </div>
 </p-sidebar>
 
-<p class="routes">Frontdesk > Reports > Reservation > No show reports</p>
+<!-- <p class="routes">Frontdesk > Reports > Reservation > No show reports</p> -->
+<hospitality-bot-navigation-header
+  [routes]="navRoutes"
+  [isBack]="false"
+  [onlyNavRoutes]="true"
+></hospitality-bot-navigation-header>
 <hospitality-bot-reports-data-table></hospitality-bot-reports-data-table>

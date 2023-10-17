@@ -23,6 +23,7 @@ export class NavigationHeaderComponent implements OnInit, OnDestroy {
   _dateTime: number;
 
   @Input() heading: string;
+  @Input() onlyNavRoutes: boolean = false;
   @Input() routes: NavRouteOptions = [];
   @Input() isBack: boolean = true;
   @Input() dateTitle: string;

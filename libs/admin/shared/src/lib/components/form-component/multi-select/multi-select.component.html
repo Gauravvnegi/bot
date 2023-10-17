@@ -6,7 +6,11 @@
   <label
     *ngIf="label"
     class="labelc"
-    [ngClass]="{ float__label: float, label__static: !float }"
+    [ngClass]="{
+      float__label: float,
+      label__static: !float,
+      'float-inside__label': floatInsideLabel
+    }"
     [for]="controlName"
     >{{ label }}</label
   >

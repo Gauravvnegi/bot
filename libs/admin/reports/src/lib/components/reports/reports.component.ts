@@ -11,6 +11,7 @@ import {
 } from '../../types/reports.types';
 import { reportsConfig } from '../../constant/reports.const';
 import { convertToTitleCase } from 'libs/admin/shared/src/lib/utils/valueFormatter';
+import { NavRouteOption, NavRouteOptions } from '@hospitality-bot/admin/shared';
 
 @Component({
   selector: 'hospitality-bot-reports',
@@ -23,16 +24,19 @@ export class ReportsComponent implements OnInit {
   reportsMenuOptions: ReportsMenu = [];
   selectedReportModule: ReportModules;
   selectedReport: ReportsMenu[number];
+  navRoutes: NavRouteOptions = [];
 
   constructor(
     private reportsService: ReportsService,
     private routesConfigService: RoutesConfigService,
-    private globalFilterService: GlobalFilterService
+    private globalFilterService: GlobalFilterService,
+    private routesConfigServices: RoutesConfigService
   ) {}
 
   ngOnInit(): void {
     this.registerListener();
     this.initReportConfigDetails();
+    this.initNavRoutes();
   }
 
   registerListener() {
@@ -42,6 +46,15 @@ export class ReportsComponent implements OnInit {
     this.reportsService.$selectedReport.subscribe((report) => {
       if (report) {
         this.selectedReport = report;
+        this.navRoutes.pop();
+
+        this.navRoutes = [
+          ...this.navRoutes,
+          {
+            label: this.selectedReport.label,
+            link: './',
+          } as NavRouteOption,
+        ];
       }
     });
   }
@@ -52,6 +65,20 @@ export class ReportsComponent implements OnInit {
     this.settReportMainTitle();
     this.reportsMenuOptions = reportsConfig[this.selectedReportModule]?.menu;
     this.reportsService.$selectedReport.next(this.reportsMenuOptions[0]);
+  }
+
+  initNavRoutes() {
+    this.routesConfigService.navRoutesChanges.subscribe((navRoutesRes) => {
+      this.navRoutes = navRoutesRes;
+    });
+
+    this.navRoutes = [
+      ...this.navRoutes,
+      {
+        label: this.selectedReport.label,
+        link: './',
+      } as NavRouteOption,
+    ];
   }
 
   /**

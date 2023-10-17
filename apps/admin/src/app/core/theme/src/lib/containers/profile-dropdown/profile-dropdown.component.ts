@@ -83,7 +83,7 @@ export class ProfileDropdownComponent implements OnInit {
     } else {
       this.routesConfigService.navigate({
         isRespectiveToProduct: this.subscriptionPlanService.hasViewUserPermission(
-          this.routesConfigService.productName
+          { name: this.routesConfigService.productName, type: 'product' }
         ),
         subModuleName: ModuleNames.ROLES_AND_PERMISSION,
         moduleName: ModuleNames.SETTINGS,

@@ -1,4 +1,4 @@
-<td [attr.colspan]="noOfColumns + 1">
+<td [attr.colspan]="noOfColumns">
   <div class="wrapper">
     <div class="wrapper__default" *ngIf="variant === 'default'">
       No Data Available
@@ -15,9 +15,7 @@
           Changed a URL or want to send traffic somewhere else? Set up a 301
           redirect so your visitors don’t get lost.
         </p>
-        <div
-          class="redirectBtnWrapper"
-        >
+        <div class="redirectBtnWrapper">
           <hospitality-bot-button
             label="Redirect button"
           ></hospitality-bot-button>

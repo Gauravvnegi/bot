@@ -1,0 +1,19 @@
+<div class="unsubscribe">
+  <img src="assets/svg/access_denied.svg" alt="access denied" />
+  <div class="head">Oops Sorry</div>
+  <div class="subhead">
+    You currently lack the necessary permissions to access this product. Kindly
+    request your manager's approval for access.
+  </div>
+  <!-- <div class="visit">View product</div> -->
+  <div class="product-wrapper">
+    <div
+      class="product"
+      *ngFor="let product of products"
+      (click)="navigate(product.name)"
+    >
+      <img [src]="product.icon" alt="product-icon" class="product-icon" />
+      <div class="product-name">{{ product.label }}</div>
+    </div>
+  </div>
+</div>

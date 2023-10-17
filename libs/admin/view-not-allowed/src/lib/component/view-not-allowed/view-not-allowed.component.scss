@@ -31,14 +31,27 @@
 .product-wrapper {
   display: flex;
   gap: 20px;
+  margin-top: 30px;
+
+  .product {
+    // border: 1px solid grey;
+
+    padding: 5px;
+    width: 80px;
+    height: 80px;
+  }
 
   .product-icon {
     width: 50px;
+    padding: 0;
     cursor: pointer;
   }
 
   .product-name {
-    @include normal-sm-text;
+    font-size: 12px;
+    font-weight: $bolder;
+    letter-spacing: 0.96px;
+    color: $unsubscribe-Head;
     cursor: pointer;
   }
 }

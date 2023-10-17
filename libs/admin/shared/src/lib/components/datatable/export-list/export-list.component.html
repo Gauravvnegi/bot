@@ -38,7 +38,7 @@
         <span class="databaseActionLabel">{{ documentTypeItem.label }}</span>
       </ng-template>
     </p-dropdown>
-    <button class="go" (click)="handleSubmission()">
+    <button class="go" [disabled]="isDisable" (click)="handleSubmission()">
       <mat-icon class="material-icons" matSuffix>east</mat-icon>
     </button>
   </div>

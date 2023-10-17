@@ -137,9 +137,9 @@ export const reportFiltersMapping: Record<
   arrivalReport: ['fromDate', 'toDate', 'roomType'],
   cancellationReport: ['fromDate', 'toDate', 'roomType'],
   departureReport: ['fromDate', 'toDate', 'roomType'],
-  cashierReport: ['fromDate', 'toDate', 'roomType'],
-  historyAndForecastReport: ['fromDate', 'toDate', 'roomType'],
-  managerFlashReport: ['fromDate', 'toDate', 'roomType'],
+  cashierReport: ['fromDate', 'toDate'],
+  historyAndForecastReport: ['fromDate', 'toDate'],
+  managerFlashReport: ['fromDate', 'toDate'],
   dailyRevenueReport: ['fromDate', 'toDate', 'roomType'],
   monthlySummaryReport: ['fromDate', 'toDate', 'roomType'],
 };

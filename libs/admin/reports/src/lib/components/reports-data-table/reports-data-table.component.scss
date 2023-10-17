@@ -42,4 +42,15 @@
       background: unset !important;
     }
   }
+  .is-babyBlue-bg {
+    background-color: #e1effe;
+    color: black;
+    .primary-text:hover,
+    .secondary-text:hover {
+      background: unset !important;
+    }
+  }
+}
+:host ::ng-deep .p-datatable.p-datatable-sm .p-datatable-footer {
+  display: none !important;
 }

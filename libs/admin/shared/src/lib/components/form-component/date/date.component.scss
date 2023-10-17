@@ -174,3 +174,10 @@
 :host ::ng-deep .input__float .p-calendar {
   margin-top: 0;
 }
+
+:host ::ng-deep .month__view {
+  .p-calendar .p-datepicker {
+    flex-direction: column;
+  }
+}
+

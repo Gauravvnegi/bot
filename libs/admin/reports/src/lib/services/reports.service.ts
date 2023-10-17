@@ -16,7 +16,7 @@ export class ReportsService extends ApiService {
     this.showMenu.next(!this.showMenu.value);
   }
 
-  getReport(query: GetReportQuery, isExport = false) {
+  getReport(query: Partial<GetReportQuery>, isExport = false) {
     return this.get(
       `/api/v1/reports${this.getQueryParam({
         ...query,

@@ -130,21 +130,22 @@ export const reportsColumnMapping: Record<ReportsTypeValues, Cols[]> = {
 };
 
 export const reportFiltersMapping: Record<
-  ReportsTypeValues,
-  AvailableFilters[]
-> = {
-  noShowReport: ['fromDate', 'toDate'],
-  arrivalReport: ['fromDate', 'toDate', 'roomType'],
-  cancellationReport: ['fromDate', 'toDate', 'roomType'],
-  departureReport: ['fromDate', 'toDate', 'roomType'],
-  cashierReport: ['fromDate', 'toDate', 'roomType'],
-  historyAndForecastReport: ['fromDate', 'toDate', 'roomType'],
-  managerFlashReport: ['fromDate', 'toDate', 'roomType'],
-  dailyRevenueReport: ['fromDate', 'toDate', 'roomType'],
-  monthlySummaryReport: ['fromDate', 'toDate', 'roomType'],
-};
+         ReportsTypeValues,
+         AvailableFilters[]
+       > = {
+         noShowReport: ['fromDate', 'toDate'],
+         arrivalReport: ['fromDate', 'toDate', 'roomType'],
+         cancellationReport: ['fromDate', 'toDate', 'roomType'],
+         departureReport: ['fromDate', 'toDate', 'roomType'],
+         cashierReport: ['fromDate', 'toDate', 'roomType'],
+         historyAndForecastReport: ['fromDate', 'toDate', 'roomType'],
+         managerFlashReport: ['fromDate', 'toDate', 'roomType'],
+         dailyRevenueReport: ['fromDate', 'toDate', 'roomType'],
+         monthlySummaryReport: ['roomType', 'month'],
+       };
 
 export const rowStylesMapping: Record<RowStylesKeys, string> = {
   isBold: 'is-bold',
   isGreyBg: 'is-grey-bg',
+  isBlueBg: 'is-babyBlue-bg',
 };

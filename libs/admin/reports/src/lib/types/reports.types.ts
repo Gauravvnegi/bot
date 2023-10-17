@@ -48,9 +48,10 @@ export type ReportType = ReportsConfig[ReportModules]['menu'][number]['value'];
 export type ReportsMenu = ReportsConfig[ReportModules]['menu'];
 
 export type ReportFilters = {
-  toDate?: string;
-  fromDate?: string;
+  toDate?: number;
+  fromDate?: number;
   roomType?: string;
+  month?: number;
 };
 
 export type AvailableFilters = keyof ReportFilters;
@@ -72,11 +73,11 @@ export interface ReportClass<T, K> {
 export type ColsInfo = Omit<Cols, 'field'>;
 export type ColsData<T = {}> = Record<keyof T, ColsInfo>;
 
-export type CalendarType = 'DAY' | 'MONTH' | 'YEAR';
-
 export class RowStyles {
   isBold?: boolean;
   isGreyBg?: boolean;
+  isBlueBg?: boolean;
 }
 
 export type RowStylesKeys = keyof RowStyles;
+export type CalendarType = 'DAY' | 'MONTH' | 'YEAR' | 'GROSS' | 'ADJ';

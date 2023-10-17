@@ -85,8 +85,22 @@ export class ReportsDataTableComponent extends BaseDatatableComponent {
 
   loadInitialData() {
     this.loading = true;
+    const query = this.getQueryParams();
 
-    this.reportsService.getReport(this.getQueryParams()).subscribe(
+    if (this.selectedReport.value === 'monthlySummaryReport') {
+      const startDate = new Date(query.month);
+      if (startDate instanceof Date) {
+        const lastDay = new Date(
+          startDate.getFullYear(),
+          startDate.getMonth() + 1,
+          0
+        );
+        query['fromDate'] = startDate.getTime();
+        query['toDate'] = lastDay.getTime();
+      }
+    }
+
+    this.reportsService.getReport(query).subscribe(
       (res) => {
         const ReportModel = reportsModelMapping[this.selectedReport.value];
         this.cols = reportsColumnMapping[this.selectedReport.value];
@@ -106,12 +120,12 @@ export class ReportsDataTableComponent extends BaseDatatableComponent {
         FileSaver.saveAs(res, 'Report_export' + new Date().getTime() + '.csv');
       });
   }
-
   initReportFilters() {
     const filterForm = this.fb.group({
-      fromDate: [this.fromDate.getTime()],
-      toDate: [this.toDate.getTime()],
+      fromDate: [this.fromDate?.getTime() || null],
+      toDate: [this.toDate?.getTime() || null],
       roomType: [''],
+      month: [new Date().setDate(1) || null],
     } as Record<ReportFiltersKey, any>);
     this.tableFG.addControl('filters', filterForm);
 
@@ -144,6 +158,7 @@ export class ReportsDataTableComponent extends BaseDatatableComponent {
       isFromDate: this.currentFilters.includes('fromDate'),
       isToDate: this.currentFilters.includes('toDate'),
       isRoomType: this.currentFilters.includes('roomType'),
+      isMonth: this.currentFilters.includes('month'),
     };
   }
 

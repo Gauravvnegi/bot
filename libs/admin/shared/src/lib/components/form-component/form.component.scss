@@ -179,3 +179,13 @@ input:disabled {
   top: -12px;
   left: 11px;
 }
+
+.float-inside__label {
+  position: absolute;
+  margin-top: 0;
+  z-index: 1;
+  zoom: 0.7;
+  top: 17px;
+  left: 17px;
+  font-size: 13px;
+}

@@ -26,9 +26,7 @@ export class FormService {
   getSummary = new Subject<void>();
   deductedAmount = new BehaviorSubject(0);
 
-  guestInformation: BehaviorSubject<GuestInfo> = new BehaviorSubject<GuestInfo>(
-    null
-  );
+  guestInformation: BehaviorSubject<string> = new BehaviorSubject<string>(null);
 
   sourceData: BehaviorSubject<SourceData> = new BehaviorSubject<SourceData>(
     null

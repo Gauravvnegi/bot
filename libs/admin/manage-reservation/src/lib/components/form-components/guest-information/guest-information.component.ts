@@ -117,15 +117,15 @@ export class GuestInformationComponent implements OnInit {
   }
 
   initGuestDetails() {
-    if (this.reservationId)
-      this.$subscription.add(
-        this.formService.guestInformation.subscribe((res) => {
-          if (res) {
-            this.getGuestById(res.id);
-            this.editMode = true;
-          }
-        })
-      );
+    // if (this.reservationId)
+    this.$subscription.add(
+      this.formService.guestInformation.subscribe((res) => {
+        if (res) {
+          this.getGuestById(res);
+          this.editMode = true;
+        }
+      })
+    );
   }
 
   getGuestById(id: string) {

@@ -246,7 +246,7 @@
       <span class="bk-summary_priceInfo_perNight_label">Discount</span>
       <span class="bk-summary_priceInfo_perNight_amount">{{
         summaryData?.offerAmount
-          ? summaryData?.offerAmount
+          ? (summaryData?.offerAmount | currency: 'INR')
           : (summaryData?.discountedAmount | currency: 'INR')
       }}</span>
     </p>

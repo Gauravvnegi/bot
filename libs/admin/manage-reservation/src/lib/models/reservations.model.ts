@@ -368,18 +368,19 @@ export class BookingInfo {
 
 export class GuestInfo {
   id: string;
-  firstName: string;
-  lastName: string;
-  phoneNumber: string;
-  cc: string;
-  email: string;
-  deserialize(input: GuestType) {
+  firstName?: string;
+  lastName?: string;
+  phoneNumber?: string;
+  cc?: string;
+  email?: string;
+
+  deserialize(input: GuestType): this {
     this.id = input?.id;
-    this.firstName = input.firstName;
-    this.lastName = input.lastName;
-    this.phoneNumber = input.contactDetails.contactNumber;
-    this.cc = input.contactDetails.cc;
-    this.email = input.contactDetails.emailId;
+    this.firstName = input?.firstName;
+    this.lastName = input?.lastName;
+    this.phoneNumber = input?.contactDetails?.contactNumber;
+    this.cc = input?.contactDetails?.cc;
+    this.email = input?.contactDetails?.emailId;
     return this;
   }
 }

@@ -96,6 +96,7 @@ export class AddReservationComponent extends BaseReservationComponent
   initParamsData(paramsData: QuickReservationForm) {
     const {
       roomInformation,
+      guestInformation,
       reservationInformation: { source, sourceName, ...reservationInfo },
       ...data
     } = paramsData;
@@ -110,12 +111,8 @@ export class AddReservationComponent extends BaseReservationComponent
     this.reservationInfoControls.reservationType.patchValue(
       ReservationType.CONFIRMED
     );
-    this.roomControls[0].patchValue({
-      roomCount: roomInformation?.roomNumbers
-        ? roomInformation.roomNumbers.length
-        : 1,
-      ...roomInformation,
-    });
+    this.roomTypeValues = [roomInformation];
+    this.formService.guestInformation.next(guestInformation.guestDetails);
   }
 
   listenFormServiceChanges() {
@@ -228,7 +225,6 @@ export class AddReservationComponent extends BaseReservationComponent
               },
               ...formData
             } = data;
-
             this.checkinJourneyState = data.journeyState;
 
             this.formService.sourceData.next({
@@ -248,7 +244,7 @@ export class AddReservationComponent extends BaseReservationComponent
             // Create options for room and guest if not already available
             // in room iterator and guest info component.
             this.roomTypeValues = roomInformation;
-            this.formService.guestInformation.next(guestInformation);
+            this.formService.guestInformation.next(guestInformation.id);
 
             this.userForm.patchValue({
               reservationInformation: reservationInfo,

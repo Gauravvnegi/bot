@@ -322,17 +322,17 @@ export class QuickReservationFormComponent implements OnInit {
   setRoomInfo(selectedRoomType) {
     this.roomControls.roomNumber.enable();
     this.roomControls.ratePlan.enable();
-
     this.ratePlans = selectedRoomType?.allRatePlans.map((res) => ({
       label: res.label,
       value: res.value,
+      isBase: res?.isBase,
     }));
     this.roomOptions = selectedRoomType?.rooms.map((room) => ({
       label: room.roomNumber,
       value: room.roomNumber,
     }));
     this.inputControls.roomInformation.patchValue({
-      ratePlan: this.ratePlans[0].value,
+      ratePlan: this.ratePlans.filter((rateplan) => rateplan.isBase)[0].value,
       adultCount: 1,
       childCount: 0,
     });
@@ -463,6 +463,7 @@ export class QuickReservationFormComponent implements OnInit {
             cc: res.contactDetails.cc,
             email: res.contactDetails.emailId,
           };
+
           this.inputControls.guestInformation
             .get('guestDetails')
             .patchValue(res.id);

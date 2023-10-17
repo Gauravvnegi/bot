@@ -25,7 +25,7 @@ export class FormService {
   calendarView: boolean = false;
   getSummary = new Subject<void>();
   deductedAmount = new BehaviorSubject(0);
-  
+
   guestInformation: BehaviorSubject<GuestInfo> = new BehaviorSubject<GuestInfo>(
     null
   );
@@ -115,7 +115,9 @@ export class FormService {
           ratePlan: { id: input.roomInformation.ratePlan },
           roomTypeId: input.roomInformation.roomTypeId,
           roomCount: 1,
-          roomNumbers: [input.roomInformation.roomNumber],
+          roomNumbers: input.roomInformation.roomNumber
+            ? [input.roomInformation.roomNumber]
+            : [],
           roomNumber: input.roomInformation.roomNumber ?? '',
         },
         occupancyDetails: {

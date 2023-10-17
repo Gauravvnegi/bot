@@ -1,3 +1,5 @@
+import { Arrival, Departure } from '../models/reservation-reports.models';
+
 export type ReservationReportData = {
   bookingNo: string;
   guestName: string;
@@ -14,13 +16,9 @@ export type NoShowReportData = ReservationReportData & {
   noShowReason: string;
 };
 
-export type ArrivalReportData = ReservationReportData & {
-  // TODO
-};
+export type ArrivalReportData = Omit<Arrival, 'deserialize'>;
 
-export type DepartureReportData = ReservationReportData & {
-  // TODO
-};
+export type DepartureReportData = Omit<Departure, 'deserialize'>;
 
 export type CancellationReportData = ReservationReportData & {
   roomAndRoomType: string;

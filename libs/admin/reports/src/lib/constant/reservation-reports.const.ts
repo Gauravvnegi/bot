@@ -11,6 +11,9 @@ const reservationReportCols: ColsData<ReservationReportData> = {
   bookingNo: {
     header: 'Res/Group',
   },
+  guestName: {
+    header: 'Guest Name',
+  },
   otherCharges: {
     header: 'Other Charges',
   },
@@ -19,9 +22,6 @@ const reservationReportCols: ColsData<ReservationReportData> = {
   },
   balance: {
     header: 'Balance',
-  },
-  guestName: {
-    header: 'Guest Name',
   },
   bookingAmount: {
     header: 'Booking Amount',
@@ -70,11 +70,29 @@ export const cancellationReportCols: ColsData<CancellationReportData> = {
 };
 
 export const arrivalReportCols: ColsData<ArrivalReportData> = {
-  ...reservationReportCols,
-  // TODO
+  bookingNo: { ...reservationReportCols.bookingNo },
+  guestName: { ...reservationReportCols.guestName },
+  roomType: {
+    header: 'Room/Type',
+  },
+  checkIn: {
+    header: 'Check In',
+  },
+  checkOut: {
+    header: 'Check Out',
+  },
+  bookingAmount: { ...reservationReportCols.bookingAmount },
+  status: {
+    header: 'Status',
+  },
+  arrivalTime: {
+    header: 'Arrival Time',
+  },
+  remark: {
+    header: 'Remarks',
+  },
 };
 
 export const departureReportCols: ColsData<DepartureReportData> = {
-  ...reservationReportCols,
-  // TODO
+  ...arrivalReportCols,
 };

@@ -1,5 +1,5 @@
 import { ReservationResponseData } from 'libs/admin/shared/src/lib/types/response';
-import { ReportClass } from '../types/reports.types';
+import { ReportClass, RowStyles } from '../types/reports.types';
 import {
   ReservationReportData,
   NoShowReportData,
@@ -18,12 +18,12 @@ class ReservationReport {
     this.defaultValue = {
       amountPaid: reservationData.totalPaidAmount,
       balance: reservationData.totalDueAmount,
-      bookingAmount: reservationData.paymentSummary.totalAmount,
+      bookingAmount: reservationData.paymentSummary?.totalAmount,
       bookingNo: reservationData.number,
       guestName:
-        reservationData.guestDetails.primaryGuest.firstName +
+        reservationData?.guestDetails?.primaryGuest.firstName +
         ' ' +
-        reservationData.guestDetails.primaryGuest.lastName,
+        reservationData?.guestDetails?.primaryGuest.lastName,
       otherCharges: null,
     };
 
@@ -62,8 +62,8 @@ export class CancellationReport extends ReservationReport
     value.forEach((reservationData) => {
       this.records.push({
         ...this.getDefaultValues(reservationData),
-        roomAndRoomType: `${reservationData.stayDetails.room.roomNumber} /
-          ${reservationData.stayDetails.room.type}`,
+        roomAndRoomType: `${reservationData?.stayDetails?.room.roomNumber} /
+          ${reservationData?.stayDetails?.room.type}`,
         // is checkin and arrivalTime same??
         checkInDate: reservationData.arrivalTime,
         // is checkout and departureTime same??
@@ -78,18 +78,55 @@ export class CancellationReport extends ReservationReport
   }
 }
 
+export class Arrival {
+  bookingNo: string;
+  guestName: string;
+  bookingAmount: number;
+  roomType: string;
+  checkIn: string;
+  checkOut: string;
+  status: string;
+  arrivalTime: string;
+  remark: string;
+  deserialize(input: ReservationResponseData) {
+    (this.bookingAmount = input.paymentSummary.totalAmount),
+      (this.bookingNo = input.number),
+      (this.guestName =
+        input.guestDetails.primaryGuest.firstName +
+        ' ' +
+        input.guestDetails.primaryGuest.lastName);
+
+    this.roomType = `${input.stayDetails.room.roomNumber}/${input.stayDetails.room.type}`; // need to ask which key should be mapped
+    this.checkIn = input?.arrivalTime
+      ? getFormattedDate(input.arrivalTime)
+      : '';
+    this.checkOut = input?.departureTime
+      ? getFormattedDate(input.departureTime)
+      : '';
+    this.status = input?.pmsStatus ?? '';
+    this.arrivalTime = input?.arrivalTime
+      ? getFormattedDate(input.arrivalTime)
+      : '';
+    this.remark = input?.specialRequest ?? ''; // need to verify from backend
+    return this;
+  }
+}
+
 export class ArrivalReport extends ReservationReport
   implements ReportClass<ArrivalReportData, ReservationResponseData> {
   records: ArrivalReportData[];
   deserialize(value: ReservationResponseData[]) {
     this.records = new Array<ArrivalReportData>();
-
     value.forEach((reservationData) => {
-      this.records.push({
-        ...this.getDefaultValues(reservationData),
-        // TODO
-      });
+      this.records.push(new Arrival().deserialize(reservationData));
     });
+    return this;
+  }
+}
+
+export class Departure extends Arrival {
+  deserialize(input: ReservationResponseData) {
+    super.deserialize(input);
     return this;
   }
 }
@@ -99,13 +136,19 @@ export class DepartureReport extends ReservationReport
   records: DepartureReportData[];
   deserialize(value: ReservationResponseData[]) {
     this.records = new Array<DepartureReportData>();
-
     value.forEach((reservationData) => {
-      this.records.push({
-        ...this.getDefaultValues(reservationData),
-        // TODO
-      });
+      this.records.push(new Departure().deserialize(reservationData));
     });
     return this;
   }
+}
+
+function getFormattedDate(time: number) {
+  const currentDate = new Date(time);
+  const monthAbbreviated = new Intl.DateTimeFormat('en-US', {
+    month: 'short',
+  }).format(currentDate);
+  const date = currentDate.getDate();
+  const year = currentDate.getFullYear();
+  return `${monthAbbreviated} ${date}, ${year}`;
 }

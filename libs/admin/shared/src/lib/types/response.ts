@@ -150,4 +150,5 @@ export interface ReservationResponseData {
   vip: boolean;
   invoicePrepareRequest: boolean;
   pmsBooking: boolean;
+  specialRequest: string;
 }

@@ -96,10 +96,12 @@ export class SnackBarService {
       '.cdk-overlay-container'
     ) as HTMLElement;
 
-    // Increase the z-index before showing the snackbar
-    cdkOverlayContainer.style.zIndex = '1500';
-    setTimeout(() => {
-      cdkOverlayContainer.style.zIndex = '1000';
-    }, 3000);
+    if (cdkOverlayContainer) {
+      // Increase the z-index before showing the snackbar
+      cdkOverlayContainer.style.zIndex = '1500';
+      setTimeout(() => {
+        cdkOverlayContainer.style.zIndex = '1000';
+      }, 3000);
+    }
   }
 }

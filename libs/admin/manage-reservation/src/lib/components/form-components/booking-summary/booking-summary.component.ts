@@ -30,7 +30,11 @@ import { Location } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { PaymentMethod, ReservationForm } from '../../../constants/form';
 import { FormService } from '../../../services/form.service';
-import { EntitySubType, EntityType } from '@hospitality-bot/admin/shared';
+import {
+  EntitySubType,
+  EntityType,
+  ModuleNames,
+} from '@hospitality-bot/admin/shared';
 import { RoomReservationRes } from '../../../types/response.type';
 import {
   OccupancyDetails,
@@ -259,14 +263,20 @@ export class BookingSummaryComponent implements OnInit {
         onClick: () => {
           this.copiedConfirmationNumber(number);
           this.modalService.close();
-          this.location.back();
+          this.gobackToReservation();
         },
         variant: 'contained',
       },
     ];
     togglePopupCompRef.componentInstance.onClose.subscribe(() => {
       this.modalService.close();
-      this.location.back();
+      this.gobackToReservation();
+    });
+  }
+
+  gobackToReservation() {
+    this.routesConfigService.navigate({
+      subModuleName: ModuleNames.ADD_RESERVATION,
     });
   }
 

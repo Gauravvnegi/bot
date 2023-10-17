@@ -30,8 +30,8 @@ import { BaseReservationComponent } from '../base-reservation.component';
 import { ReservationType } from '../../constants/reservation-table';
 import { convertToTitleCase } from 'libs/admin/shared/src/lib/utils/valueFormatter';
 import { Subject } from 'rxjs';
-import { CalendarViewData } from 'libs/admin/reservation/src/lib/components/reservation-calendar-view/reservation-calendar-view.component';
 import { RoutesConfigService } from '@hospitality-bot/admin/core/theme';
+import { QuickReservationForm } from 'libs/admin/dashboard/src/lib/data-models/reservation.model';
 
 @Component({
   selector: 'hospitality-bot-add-reservation',
@@ -51,7 +51,6 @@ export class AddReservationComponent extends BaseReservationComponent
     childCount: 0,
     roomCount: 0,
   };
-  paramsData: CalendarViewData;
   checkinJourneyState: JourneyState;
   cancelOfferRequests$ = new Subject<void>();
 
@@ -72,7 +71,7 @@ export class AddReservationComponent extends BaseReservationComponent
     this.initDetails();
     if (this.reservationId) this.getReservationDetails();
     this.initFormData();
-    // this.listenRouteData();
+    this.listenRouteData();
   }
 
   initDetails() {
@@ -80,6 +79,43 @@ export class AddReservationComponent extends BaseReservationComponent
     this.reservationTypes = roomReservationTypes;
     this.fields = roomFields;
     this.bookingType = EntitySubType.ROOM_TYPE;
+  }
+
+  listenRouteData() {
+    this.activatedRoute.queryParams
+      .pipe(debounceTime(100))
+      .subscribe((queryParams) => {
+        if (queryParams.data) {
+          const data = queryParams.data;
+          const paramsData = JSON.parse(atob(data));
+          this.initParamsData(paramsData);
+        }
+      });
+  }
+
+  initParamsData(paramsData: QuickReservationForm) {
+    const {
+      roomInformation,
+      reservationInformation: { source, sourceName, ...reservationInfo },
+      ...data
+    } = paramsData;
+    this.userForm.patchValue({
+      reservationInformation: reservationInfo,
+      ...data,
+    });
+    this.formService.sourceData.next({
+      source: source,
+      sourceName: sourceName,
+    });
+    this.reservationInfoControls.reservationType.patchValue(
+      ReservationType.CONFIRMED
+    );
+    this.roomControls[0].patchValue({
+      roomCount: roomInformation?.roomNumbers
+        ? roomInformation.roomNumbers.length
+        : 1,
+      ...roomInformation,
+    });
   }
 
   listenFormServiceChanges() {
@@ -219,7 +255,7 @@ export class AddReservationComponent extends BaseReservationComponent
               instructions: formData.instructions,
               formData,
             });
-            
+
             this.inputControls.offerId.patchValue(data.offerId);
             if (data.offerId) {
               const roomTypeIds = roomInformation.map(

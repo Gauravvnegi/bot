@@ -1,5 +1,9 @@
 import { Route, Routes } from '@angular/router';
-import { ModuleNames, SubscriptionConfig } from 'libs/admin/shared/src/index';
+import {
+  ModuleNames,
+  ProductNames,
+  SubscriptionConfig,
+} from 'libs/admin/shared/src/index';
 import { ComingSoonComponent } from 'libs/admin/shared/src/lib/components/coming-soon/coming-soon.component';
 import {
   moduleConfig,
@@ -19,6 +23,11 @@ type ModulePromise<T extends any> = () => Promise<T>;
 const UnsubscribedModule = () =>
   import('@hospitality-bot/admin/unsubscribed').then(
     (m) => m.AdminUnsubscribedModule
+  );
+
+const ViewNotAllowedModule = () =>
+  import('@hospitality-bot/admin/view-not-allowed').then(
+    (m) => m.AdminViewNotAllowedModule
   );
 
 const getRedirectRouteConfig = (
@@ -47,10 +56,13 @@ export const routeFactoryNew = (
   const subscription = subscriptionService.getSubscription();
 
   const product: SubscriptionConfig[] = subscription.products;
+  /**
+   * Module Path config contains the first subscribed route of every submodule
+   */
   let modulePathConfig: ModulePathConfig = {};
   let hierarchicalPathConfig: HierarchicalPathConfig = {};
   let moduleOfSubModuleWithRespectToProduct: ModuleOfSubModuleWithRespectToProduct = {};
-
+  let comingSoonModule: ModuleNames[] = [];
   let initialRedirectPath = undefined;
 
   // View not in use to create route ,
@@ -104,6 +116,11 @@ export const routeFactoryNew = (
             const subModuleName = subModule.name;
             const isSubModuleSubscribed = subModule.isSubscribed;
 
+            const isAllSubscribed =
+              isProductSubscribed &&
+              isModuleSubscribed &&
+              isSubModuleSubscribed;
+
             const isSubModuleInView =
               subModule.isView ||
               isSettingModule ||
@@ -135,19 +152,13 @@ export const routeFactoryNew = (
               if (
                 productHasViewPermission &&
                 !initialRedirectPath &&
-                isProductSubscribed &&
-                isModuleSubscribed &&
-                isSubModuleSubscribed &&
+                isAllSubscribed &&
                 !isSettingModule
               ) {
                 initialRedirectPath = subModulePath;
               }
 
-              if (
-                isProductSubscribed &&
-                isModuleSubscribed &&
-                isSubModuleSubscribed
-              ) {
+              if (isAllSubscribed) {
                 hierarchicalPathConfig = {
                   ...hierarchicalPathConfig,
                   [productName]: {
@@ -184,6 +195,13 @@ export const routeFactoryNew = (
               }
 
               /**
+               * Adding module to coming soon
+               */
+              if (!LoadSubModule) {
+                comingSoonModule.push(subModuleName);
+              }
+
+              /**
                * Only view check is here
                * For the case of module not in view but has Load Module then only make the routes
                * Else only make route for those module in view
@@ -192,12 +210,13 @@ export const routeFactoryNew = (
               if (subModule.isView || (!subModule.isView && LoadSubModule)) {
                 const subModuleRouteConfig: Route = {
                   path: subModulePath,
-                  loadChildren:
-                    isProductSubscribed &&
-                    isModuleSubscribed &&
-                    isSubModuleSubscribed
+                  loadChildren: productHasViewPermission
+                    ? isProductSubscribed &&
+                      isModuleSubscribed &&
+                      isSubModuleSubscribed
                       ? LoadSubModule
-                      : UnsubscribedModule,
+                      : UnsubscribedModule
+                    : ViewNotAllowedModule,
                   component: LoadSubModule ? undefined : ComingSoonComponent,
                 };
                 routes[0].children.push(subModuleRouteConfig);
@@ -223,7 +242,11 @@ export const routeFactoryNew = (
               }
 
               // Pushing sub module path config
-              if (isSubModuleSubscribed && !modulePathConfig[subModuleName]) {
+              if (
+                isAllSubscribed &&
+                productHasViewPermission &&
+                !modulePathConfig[subModuleName] // do not add if already added
+              ) {
                 modulePathConfig = {
                   ...modulePathConfig,
                   [subModuleName]: `/${subModulePath}`,
@@ -274,6 +297,12 @@ export const routeFactoryNew = (
     hierarchicalPathConfig,
     moduleOfSubModuleWithRespectToProduct
   );
+
+  /**
+   * These are module whose name is not mapped with any of the modules
+   * Adding coming soon modules
+   */
+  subscriptionService.initComingSoonModules(comingSoonModule);
 
   routes[0].children.unshift({
     path: '',

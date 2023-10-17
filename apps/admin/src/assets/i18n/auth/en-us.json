@@ -20,7 +20,7 @@
     "email_required": "Email is required",
     "validate_password": "Please enter valid Password",
     "password_required": "Password is required",
-    "confirm_password": "Please confirm the password",
+    "confirm_password": "Confirm Password is required",
     "password_not_match": "Passwords did not match"
   },
   "messages": {

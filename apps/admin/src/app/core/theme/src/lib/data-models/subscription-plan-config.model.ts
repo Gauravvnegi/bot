@@ -125,6 +125,7 @@ export class SubProducts {
   isSubscribed: true;
   isView: true;
   config: SubProducts[];
+  permissionType: PermissionModuleNames;
 
   deserialize(input: any) {
     this.config = new Array<SubProducts>();
@@ -137,7 +138,8 @@ export class SubProducts {
       set({}, 'icon', get(input, ['icon'])),
       set({}, 'currentUsage', get(input, ['currentUsage'])),
       set({}, 'isSubscribed', get(input, ['isSubscribed'])),
-      set({}, 'isView', get(input, ['isView']))
+      set({}, 'isView', get(input, ['isView'])),
+      set({}, 'permissionType', get(input, ['permissionType']))
     );
     if (input.config)
       input.config?.forEach((subProduct) => {
@@ -195,12 +197,16 @@ export class ProductSubscription {
   modules: Partial<Modules>;
   subscribedIntegrations: Set<string>;
   moduleProductMapping: Partial<Record<ModuleNames, ModuleNames>>;
+  submodulePermissionMapping: Partial<
+    Record<ModuleNames, PermissionModuleNames>
+  >;
 
   deserialize(input: any) {
     this.subscribedModules = new Array<ModuleNames>();
     this.subscribedProducts = new Array<ModuleNames>();
     this.subscribedModuleProductBased = {};
     this.moduleProductMapping = {};
+    this.submodulePermissionMapping = {};
 
     this.modules = new Object();
 
@@ -237,6 +243,11 @@ export class ProductSubscription {
         }
 
         module.config?.forEach((subModule) => {
+          this.submodulePermissionMapping = {
+            ...this.submodulePermissionMapping,
+            [subModule.name]: subModule.permissionType,
+          };
+
           const isSubModuleSubscribed = subModule.isSubscribed;
 
           if (isProductSubscribed && isSubModuleSubscribed) {

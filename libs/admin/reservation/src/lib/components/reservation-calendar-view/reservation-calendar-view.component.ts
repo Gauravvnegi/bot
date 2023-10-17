@@ -110,6 +110,7 @@ export class ReservationCalendarViewComponent implements OnInit {
               allRatePlans: roomTypeData.ratePlans.map((item) => ({
                 label: item.label,
                 value: item.id,
+                isBase: item.isBase,
               })),
             }));
           this.initReservationData();
@@ -432,12 +433,6 @@ type IGRoom = {
   label?: string;
   value?: string;
   statusDetails: StatusDetails[];
-};
-
-export type CalendarViewData = {
-  date: number;
-  room: string;
-  value: string;
 };
 
 export type QuickFormProps = {

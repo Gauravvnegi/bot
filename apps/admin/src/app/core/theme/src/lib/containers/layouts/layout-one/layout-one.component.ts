@@ -409,11 +409,38 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
       .subscribe((response) => (this.unreadCount = response?.unreadCount));
   }
 
-  get hasPermissionToViewProduct() {
-    return true;
+  get hasPermissionToViewModule() {
+    const isProductSubscribed = this.subscriptionPlanService.checkProductSubscription(
+      this.routesConfigService.productName
+    );
+
+    if (!isProductSubscribed) return true;
+
+    const isModuleSubscribed = this.subscriptionPlanService.checkModuleSubscriptionWithRespectiveToProduct(
+      this.routesConfigService.productName,
+      this.routesConfigService.subModuleName
+    );
+
+    if (!isModuleSubscribed) return true;
+
+    const doestProductHasPermission = this.subscriptionPlanService.hasViewUserPermission(
+      {
+        name: this.routesConfigService.productName,
+        type: 'product',
+      }
+    );
+
+    if (!doestProductHasPermission) return true;
+
+    const isComingSoon = this.subscriptionPlanService.isComingSoonModule(
+      this.routesConfigService.subModuleName
+    );
+
+    if (isComingSoon) return true;
+
     return this.subscriptionPlanService.hasViewUserPermission({
-      type: 'product',
-      name: this.routesConfigService.productName,
+      type: 'module',
+      name: this.routesConfigService.subModuleName,
     });
   }
 

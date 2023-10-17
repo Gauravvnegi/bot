@@ -184,14 +184,17 @@ export class BookingInfoComponent implements OnInit {
     const sourceNameControl = this.reservationInfoControls.sourceName;
 
     sourceControl.valueChanges.subscribe((res) => {
-      // this.agentSource = res === 'AGENT';
-      this.otaOptions =
-        res === 'OTA' && this.configData
-          ? this.configData.source.filter((item) => item.value === res)[0].type
-          : [];
-      // sourceNameControl.clearValidators();
-      if (!this.editMode) {
-        sourceNameControl.reset();
+      if (res) {
+        // this.agentSource = res === 'AGENT';
+        this.otaOptions =
+          res === 'OTA' && this.configData
+            ? this.configData.source.filter((item) => item.value === res)[0]
+                .type
+            : [];
+        // sourceNameControl.clearValidators();
+        if (!this.editMode) {
+          sourceNameControl.reset();
+        }
       }
     });
 

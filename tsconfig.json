@@ -176,7 +176,10 @@
       "@hospitality-bot/admin/manage-inventory": [
         "libs/admin/manage-inventory/src/index.ts"
       ],
-      "@hospitality-bot/admin/reports": ["libs/admin/reports/src/index.ts"]
+      "@hospitality-bot/admin/reports": ["libs/admin/reports/src/index.ts"],
+      "@hospitality-bot/admin/view-not-allowed": [
+        "libs/admin/view-not-allowed/src/index.ts"
+      ]
     }
   },
   "exclude": ["node_modules", "tmp"]

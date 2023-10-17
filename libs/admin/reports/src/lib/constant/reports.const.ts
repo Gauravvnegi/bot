@@ -130,19 +130,19 @@ export const reportsColumnMapping: Record<ReportsTypeValues, Cols[]> = {
 };
 
 export const reportFiltersMapping: Record<
-         ReportsTypeValues,
-         AvailableFilters[]
-       > = {
-         noShowReport: ['fromDate', 'toDate'],
-         arrivalReport: ['fromDate', 'toDate', 'roomType'],
-         cancellationReport: ['fromDate', 'toDate', 'roomType'],
-         departureReport: ['fromDate', 'toDate', 'roomType'],
-         cashierReport: ['fromDate', 'toDate', 'roomType'],
-         historyAndForecastReport: ['fromDate', 'toDate', 'roomType'],
-         managerFlashReport: ['fromDate', 'toDate', 'roomType'],
-         dailyRevenueReport: ['fromDate', 'toDate', 'roomType'],
-         monthlySummaryReport: ['roomType', 'month'],
-       };
+  ReportsTypeValues,
+  AvailableFilters[]
+> = {
+  noShowReport: ['fromDate', 'toDate'],
+  arrivalReport: ['fromDate', 'toDate'],
+  cancellationReport: ['fromDate', 'toDate', 'roomType'],
+  departureReport: ['fromDate', 'toDate'],
+  cashierReport: ['fromDate', 'toDate'],
+  historyAndForecastReport: ['fromDate', 'toDate'],
+  managerFlashReport: ['fromDate', 'toDate'],
+  dailyRevenueReport: ['fromDate', 'toDate', 'roomType'],
+  monthlySummaryReport: ['fromDate', 'month'],
+};
 
 export const rowStylesMapping: Record<RowStylesKeys, string> = {
   isBold: 'is-bold',

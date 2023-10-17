@@ -7,7 +7,7 @@ export enum PermissionModuleNames {
   FINANCE = 'FINANCE',
   CONVERSATION = 'CONVERSATION',
   SITE = 'SITE',
-  SEGMENT = 'SEGMENT',
+  SEGMENTS = 'SEGMENTS',
 }
 
 export enum ProductNames {

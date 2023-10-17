@@ -23,19 +23,25 @@ export class ErrorHandlerInterceptor implements HttpInterceptor {
     return next.handle(req).pipe(
       catchError((err) => {
         try {
+          const statusCode = err.error?.status;
           const translateService = this.injector.get(TranslateService);
           const translateKey1 = `messages.error.${err.error?.type}`;
-          const translateKey2 = `messages.error.unknownErr`;
+          const translateKey2 = `messages.error.${
+            statusCode == 403 ? 'forbiddenErr' : 'unknownErr'
+          }`;
           const priorityMessage = err.error?.message;
           const cdkOverlayContainer = document.querySelector(
             '.cdk-overlay-container'
           ) as HTMLElement;
 
-          // Increase the z-index before showing the snackbar
-          cdkOverlayContainer.style.zIndex = '1500';
-          setTimeout(() => {
-            cdkOverlayContainer.style.zIndex = '1000';
-          }, 3000);
+          if (cdkOverlayContainer) {
+            // Increase the z-index before showing the snackbar
+            cdkOverlayContainer.style.zIndex = '1500';
+            setTimeout(() => {
+              cdkOverlayContainer.style.zIndex = '1000';
+            }, 3000);
+          }
+
           const handleTranslation = (translatedText) => {
             const translationToBeShown = priorityMessage || translatedText;
             this._snackBar.open(translationToBeShown, '', {

@@ -216,15 +216,12 @@
           </div>
         </td>
         <td>
-          <div
-            class="center-align"
-            *ngIf="rowData.totalDueAmount && rowData.totalAmount"
-          >
+          <div class="center-align" *ngIf="rowData.totalAmount">
             <div class="primary-text txtSize">
               <span
                 [ngClass]="{
                   'status-text-reject':
-                    rowData?.totalDueAmount > 0 &&
+                    rowData?.totalDueAmount >= 0 &&
                     rowData?.totalDueAmount <= rowData?.totalAmount
                 }"
                 >{{ rowData?.totalDueAmount | currency: 'INR' }}</span

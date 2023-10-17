@@ -1,15 +1,18 @@
 import { ColsData } from '../types/reports.types';
 import {
   ArrivalReportData,
-  CancellationReportData,
   ReservationReportData,
   DepartureReportData,
   NoShowReportData,
+  CancellationReportPartialData,
 } from '../types/reservation-reports.types';
 
 const reservationReportCols: ColsData<ReservationReportData> = {
   bookingNo: {
     header: 'Res/Group',
+  },
+  guestName: {
+    header: 'Guest Name',
   },
   otherCharges: {
     header: 'Other Charges',
@@ -20,61 +23,88 @@ const reservationReportCols: ColsData<ReservationReportData> = {
   balance: {
     header: 'Balance',
   },
-  guestName: {
-    header: 'Guest Name',
-  },
   bookingAmount: {
     header: 'Booking Amount',
   },
 };
 
 export const noShowReportCols: ColsData<NoShowReportData> = {
-  ...reservationReportCols,
+  bookingNumber: reservationReportCols.bookingNo,
   dateOfArrival: {
     header: 'Date of Arrival',
   },
-  dateOfNoShow: {
+  noShowOn: {
     header: 'No-Show On',
   },
-  noShowCharges: {
-    header: 'No show charges',
+  guestName: {
+    header: 'Guest Name',
+  },
+  bookingAmount: reservationReportCols.bookingAmount,
+  noShowCharge: {
+    header: 'No Show Charge',
   },
   noShowReason: {
-    header: 'No show Reason',
+    header: 'No Show Reason',
   },
+  otherCharge: reservationReportCols.otherCharges,
+  amountPaid: reservationReportCols.amountPaid,
+  balance: reservationReportCols.balance,
 };
 
-export const cancellationReportCols: ColsData<CancellationReportData> = {
-  ...reservationReportCols,
-  roomAndRoomType: {
-    header: 'Room/ Type',
+export const cancellationReportCols: ColsData<CancellationReportPartialData> = {
+  bookingNumber: reservationReportCols.bookingNo,
+  guestName: noShowReportCols.guestName,
+  roomType: {
+    header: 'Room/Type',
   },
-  checkInDate: {
+  checkIn: {
     header: 'Check In',
   },
-  checkOutDate: {
-    header: 'Check out',
+  checkOut: {
+    header: 'Check Out',
   },
-  noOfNights: {
+  night: {
     header: 'Nights',
   },
-  cancelationDate: {
-    header: 'Cancelled ON',
+  cancelledOn: {
+    header: 'Cancelled On',
   },
-  cancellationCharges: {
+  bookingAmount: reservationReportCols.bookingAmount,
+  cancellationCharge: {
     header: 'Cancellation Charge',
   },
   cancellationReason: {
-    header: 'Cancellation Reason',
+    header: 'Cancellation Charge',
   },
+  otherCharge: reservationReportCols.otherCharges,
+  amountPaid: reservationReportCols.amountPaid,
+  balance: reservationReportCols.balance,
 };
 
 export const arrivalReportCols: ColsData<ArrivalReportData> = {
-  ...reservationReportCols,
-  // TODO
+  bookingNo: { ...reservationReportCols.bookingNo },
+  guestName: { ...reservationReportCols.guestName },
+  roomType: {
+    header: 'Room/Type',
+  },
+  checkIn: {
+    header: 'Check In',
+  },
+  checkOut: {
+    header: 'Check Out',
+  },
+  bookingAmount: { ...reservationReportCols.bookingAmount },
+  status: {
+    header: 'Status',
+  },
+  arrivalTime: {
+    header: 'Arrival Time',
+  },
+  remark: {
+    header: 'Remarks',
+  },
 };
 
 export const departureReportCols: ColsData<DepartureReportData> = {
-  ...reservationReportCols,
-  // TODO
+  ...arrivalReportCols,
 };

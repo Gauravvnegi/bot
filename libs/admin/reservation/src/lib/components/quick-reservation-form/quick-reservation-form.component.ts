@@ -235,6 +235,26 @@ export class QuickReservationFormComponent implements OnInit {
     });
 
     this.entityId = this.globalFilterService.entityId;
+    this.listenForRoomChanges();
+  }
+
+  listenForRoomChanges() {
+    let roomCount = 0;
+    this.roomControls.roomNumbers.valueChanges.subscribe((res) => {
+      if (res) {
+        const currentRoomCount = res.length ? res.length : 1;
+        const previousRoomCount = roomCount;
+
+        // Update roomCount
+        roomCount = currentRoomCount;
+        // Update adultCount only if room count is increased
+        if (currentRoomCount > previousRoomCount) {
+          this.roomControls.adultCount.setValue(currentRoomCount, {
+            emitEvent: false,
+          });
+        }
+      }
+    });
   }
 
   close(): void {

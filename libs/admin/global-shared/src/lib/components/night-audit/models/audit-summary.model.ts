@@ -30,17 +30,18 @@ export class AuditSummary {
         balance: '',
       };
     });
-    cashierDetail.push({
-      counter: 'Total',
-      revenueReceived: ' ',
-      withdrawals: ' ',
-      balance: `Rs. ${totalAmount}`,
-    });
+    if (cashierDetail.length)
+      cashierDetail.push({
+        counter: 'Total',
+        revenueReceived: ' ',
+        withdrawals: ' ',
+        balance: `Rs. ${totalAmount}`,
+      });
     return cashierDetail;
   }
 
   getRevenueList(input: AuditSummaryResponse, dynamicCols: Cols[]) {
-    let total = 0;
+    let total = input?.bookingAmount;
     let revenueList: TableObjectData[] = [
       dynamicCols.reduce(
         (pre, curr, index) => {
@@ -56,17 +57,18 @@ export class AuditSummary {
       ),
     ];
 
-    revenueList.push({
-      textInlineBlock: true,
-      booking: 'Total Revenue',
-      cancellation: '',
-      noShows: '',
-      restaurant: '',
-      miniBar: '',
-      confectionary: '',
-      bookStore: '',
-      iceCreamStore: `Rs. ${total}`,
-    });
+    if (revenueList.length)
+      revenueList.push({
+        textInlineBlock: true,
+        booking: 'Total Revenue',
+        cancellation: '',
+        noShows: '',
+        restaurant: '',
+        miniBar: '',
+        confectionary: '',
+        bookStore: '',
+        iceCreamStore: `Rs. ${total}`,
+      });
     return revenueList;
   }
 

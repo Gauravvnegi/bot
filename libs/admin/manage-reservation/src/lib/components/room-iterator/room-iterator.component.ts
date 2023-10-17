@@ -134,14 +134,7 @@ export class RoomIteratorComponent extends IteratorComponent
       this.parentFormGroup.addControl('roomInformation', roomInformationGroup);
     }
     this.listenForDateChanges();
-    this.roomControls[index]
-      .get('roomNumbers')
-      .valueChanges.subscribe((res) => {
-        if (res)
-          this.roomControls[index]
-            .get('roomCount')
-            .setValue(res.length ? res.length : 1, { emitEvent: false });
-      });
+    this.listenForRoomChanges(index);
   }
 
   listenForDateChanges() {
@@ -152,6 +145,30 @@ export class RoomIteratorComponent extends IteratorComponent
       .pipe(debounceTime(50))
       .subscribe((res) => {
         if (res) this.reinitializeRooms = !this.reinitializeRooms;
+      });
+  }
+
+  listenForRoomChanges(index) {
+    this.roomControls[index]
+      .get('roomNumbers')
+      .valueChanges.subscribe((res) => {
+        if (res) {
+          const currentRoomCount = res.length ? res.length : 1;
+          const previousRoomCount = this.roomControls[index].get('roomCount')
+            .value;
+
+          // Update roomCount
+          this.roomControls[index]
+            .get('roomCount')
+            .setValue(currentRoomCount, { emitEvent: false });
+
+          // Update adultCount only if room count is increased
+          if (currentRoomCount > previousRoomCount) {
+            this.roomControls[index]
+              .get('adultCount')
+              .setValue(currentRoomCount, { emitEvent: false });
+          }
+        }
       });
   }
 

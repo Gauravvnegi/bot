@@ -17,7 +17,7 @@ export const monthlySummaryReportCols: Partial<ColsData<
   MonthlySummaryReportData
 >> = {
   day: {
-    header: 'DAY',
+    header: 'Day',
     isSortDisabled: true,
   },
   roomCount: {

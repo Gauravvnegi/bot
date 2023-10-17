@@ -53,7 +53,8 @@
         class="filter-item"
         controlName="roomType"
         [settings]="{
-          floatInsideLabel: true
+          floatInsideLabel: true,
+          placeholder: 'Select'
         }"
       ></hospitality-bot-room-types>
     </ng-container>
@@ -93,7 +94,7 @@
 >
   <!-- *******************************EMPTY TABLE VIEW******************************* -->
   <ng-template pTemplate="emptymessage">
-    <tr hospitality-bot-empty-view [noOfColumns]="cols.length"></tr>
+    <tr hospitality-bot-empty-view [noOfColumns]="cols.length - 1"></tr>
   </ng-template>
 
   <!-- *******************************HEADER WITH SEARCH******************************* -->

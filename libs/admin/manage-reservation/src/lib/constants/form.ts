@@ -55,6 +55,7 @@ export type RoomInformation = {
   adultCount?: number;
   childCount?: number;
   id?: string;
+  roomNumbers: string[];
 };
 
 export type RoomTypes = {

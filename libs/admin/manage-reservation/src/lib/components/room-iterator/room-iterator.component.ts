@@ -28,7 +28,6 @@ import { ReservationForm, RoomTypes } from '../../constants/form';
 import { IteratorField } from 'libs/admin/shared/src/lib/types/fields.type';
 import { FormService } from '../../services/form.service';
 import { RoomTypeResponse } from 'libs/admin/room/src/lib/types/service-response';
-import { CalendarViewData } from 'libs/admin/reservation/src/lib/components/reservation-calendar-view/reservation-calendar-view.component';
 import { debounceTime } from 'rxjs/operators';
 
 @Component({
@@ -44,7 +43,6 @@ export class RoomIteratorComponent extends IteratorComponent
   @Output() listenChanges = new EventEmitter();
 
   @Input() reservationId: string;
-  @Input() paramsData: CalendarViewData;
   fields = roomFields;
 
   entityId: string;
@@ -75,7 +73,6 @@ export class RoomIteratorComponent extends IteratorComponent
 
   ngOnChanges(changes: SimpleChanges): void {
     const itemValues = changes?.itemValues?.currentValue;
-
     if (itemValues?.length) {
       if (itemValues.length > 1) {
         // Create new form fields for each item in the array
@@ -114,7 +111,7 @@ export class RoomIteratorComponent extends IteratorComponent
   createNewFields(initialField = false): void {
     const data = {
       roomTypeId: ['', [Validators.required]],
-      ratePlan: [{ value: '', disabled: true }],
+      ratePlan: [''],
       roomCount: ['', [Validators.required, Validators.min(1)]],
       roomNumber: [''],
       roomNumbers: [[]],
@@ -207,7 +204,6 @@ export class RoomIteratorComponent extends IteratorComponent
       );
 
       if (!this.isDefaultRoomType) {
-        this.roomControls[index].get('roomNumbers').reset();
         // Patch default Base rate plan when not in edit mode.
         const defaultPlan = ratePlanOptions.filter((item) => item.isBase)[0]
           ?.value;
@@ -220,16 +216,8 @@ export class RoomIteratorComponent extends IteratorComponent
           },
           { emitEvent: false }
         );
-        this.roomControls[index].get('ratePlan').enable();
       }
 
-      // Enable Rate plan in Draft Booking in edit mode
-      if (
-        this.isDefaultRoomType &&
-        this.reservationInfoControls.reservationType.value === 'DRAFT'
-      ) {
-        this.roomControls[index].get('ratePlan').enable();
-      }
       setTimeout(() => {
         this.isDefaultRoomType = false;
       }, 2000);

@@ -435,12 +435,6 @@ type IGRoom = {
   statusDetails: StatusDetails[];
 };
 
-export type CalendarViewData = {
-  date: number;
-  room: string;
-  value: string;
-};
-
 export type QuickFormProps = {
   reservationId: string;
   room: string | number;

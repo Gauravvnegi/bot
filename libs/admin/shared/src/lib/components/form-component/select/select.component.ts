@@ -35,7 +35,7 @@ export class SelectComponent extends FormComponent {
   }
 
   get dropdownOption() {
-    return this.menuOptions.length
+    return this.menuOptions?.length
       ? this.menuOptions
       : [
           {

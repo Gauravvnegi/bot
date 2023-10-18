@@ -13,15 +13,15 @@ export class RoomTypeDirective {
     this.applyDefaultStyle(this.elementRef);
   }
 
-  @HostListener('mouseenter')
-  onMouseEnter() {
-    this.applyHoverStyle(this.elementRef);
-  }
+  // @HostListener('mouseenter')
+  // onMouseEnter() {
+  //   this.applyHoverStyle(this.elementRef);
+  // }
 
-  @HostListener('mouseleave')
-  onMouseLeave() {
-    this.applyDefaultStyle(this.elementRef);
-  }
+  // @HostListener('mouseleave')
+  // onMouseLeave() {
+  //   this.applyDefaultStyle(this.elementRef);
+  // }
 
   applyHoverStyle(elementRef: ElementRef) {
     elementRef.nativeElement.style.overflow = 'visible';
@@ -35,12 +35,18 @@ export class RoomTypeDirective {
       this.roomStatus
     );
     elementRef.nativeElement.style.padding = '7px 11.7px 7.5px 12px';
-    elementRef.nativeElement.style.textOverflow = 'ellipsis';
-    elementRef.nativeElement.style.overflow = 'hidden';
+    elementRef.nativeElement.style.textOverflow = 'unset';
+    // elementRef.nativeElement.style.overflow = 'hidden';
     elementRef.nativeElement.style.letterSpacing = '0.84px';
     elementRef.nativeElement.style.fontSize = '12px';
     elementRef.nativeElement.style.borderRadius = '8px';
     elementRef.nativeElement.style.textAlign = 'center';
+        elementRef.nativeElement.style.whiteSpace = 'normal';
+
+    elementRef.nativeElement.style.overflow = 'visible';
+        elementRef.nativeElement.style.position = 'relative';
+
+
     elementRef.nativeElement.style.color = this.getColorByStatus(
       this.roomStatus
     );

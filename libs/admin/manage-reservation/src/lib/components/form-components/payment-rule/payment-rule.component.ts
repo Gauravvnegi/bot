@@ -10,6 +10,7 @@ import * as moment from 'moment';
 import { ReservationForm } from '../../../constants/form';
 import { FormService } from '../../../services/form.service';
 import { Subscription } from 'rxjs';
+import { debounceTime } from 'rxjs/operators';
 
 @Component({
   selector: 'hospitality-bot-payment-rule',
@@ -60,6 +61,7 @@ export class PaymentRuleComponent implements OnInit {
     this.inputControl.makePaymentBefore.setValue(this.startTime);
 
     this.inputControl.amountToPay.valueChanges.subscribe((res) => {
+      if (!res) this.inputControl.deductedAmount.setValue(this.totalAmount);
       if (res && this.inputControl.amountToPay.valid) {
         const newDeductedAmount = this.totalAmount - +res;
         this.inputControl.deductedAmount.setValue(newDeductedAmount);

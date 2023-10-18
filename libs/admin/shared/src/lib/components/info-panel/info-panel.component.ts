@@ -19,7 +19,7 @@ export class InfoPanelComponent implements OnInit {
 
   bookingStatus = [
     {
-      name: 'Old Booking',
+      name: 'Check-out',
       color: '#ef1d45',
     },
     {

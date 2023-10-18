@@ -53,7 +53,8 @@ export class AddReservationComponent extends BaseReservationComponent
   };
   checkinJourneyState: JourneyState;
   cancelOfferRequests$ = new Subject<void>();
-
+  isDraftBooking = false;
+  
   constructor(
     private fb: FormBuilder,
     private adminUtilityService: AdminUtilityService,
@@ -231,7 +232,7 @@ export class AddReservationComponent extends BaseReservationComponent
               source: source,
               sourceName: sourceName,
             });
-
+            this.isDraftBooking = reservationInfo.reservationType === 'DRAFT';
             if (nextStates)
               this.reservationTypes = nextStates.map((item) => ({
                 label: convertToTitleCase(item),

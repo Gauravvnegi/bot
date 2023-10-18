@@ -5,7 +5,10 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
-import { GlobalFilterService, RoutesConfigService } from '@hospitality-bot/admin/core/theme';
+import {
+  GlobalFilterService,
+  RoutesConfigService,
+} from '@hospitality-bot/admin/core/theme';
 import {
   ConfigService,
   NavRouteOptions,
@@ -124,13 +127,13 @@ export class AddCompanyComponent implements OnInit {
   }
 
   /**
-   * @function isVisible
+   * @function isVisibleOnSideView
    * @param field as form control name
    * @returns true if the control has a "required" validator and isSideBar is true
    * @else return false
    * @description to hide the field which is not required in sidebar
    */
-  isVisible(field: string) {
+  isVisibleOnSideView(field: string) {
     if (!this.isSideBar) {
       return true;
     }
@@ -143,12 +146,19 @@ export class AddCompanyComponent implements OnInit {
         control.validator && control.validator({} as AbstractControl)?.required;
 
       // Return true if the control has a "required" validator
-      return hasRequiredValidator;
+      return hasRequiredValidator || this.extraFields.includes(field);
     }
 
     // Return false if the control doesn't exist or has no "required" validator
     return false;
   }
+
+  extraFields = [
+    'businessSource',
+    'taxId',
+    'marketSegment',
+    'billingInstruction',
+  ];
 
   listenChanges() {
     const discountControl = this.companyForm.get('discountType');

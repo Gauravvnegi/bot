@@ -43,6 +43,7 @@ export class RoomIteratorComponent extends IteratorComponent
   @Output() listenChanges = new EventEmitter();
 
   @Input() reservationId: string;
+  @Input() isDraftBooking: boolean = false;
   fields = roomFields;
 
   entityId: string;
@@ -180,7 +181,7 @@ export class RoomIteratorComponent extends IteratorComponent
       // Rooms number is not multi-select in edit mode.
       if (
         this.reservationInfoControls.reservationType.value !== 'DRAFT' &&
-        this.reservationId
+        !this.isDraftBooking
       ) {
         this.fields[3].name = 'roomNumber';
         this.fields[3].type = 'select';

@@ -19,6 +19,7 @@ import {
   ColsInfo,
   ReportsConfig,
   ReportsTypeValues,
+  ReservationReportMenu,
   RowStylesKeys,
 } from '../types/reports.types';
 import {
@@ -94,6 +95,9 @@ export const reportsConfig: ReportsConfig = {
   },
 };
 
+export const reservationReportsMenu: ReservationReportMenu[] =
+         reportsConfig.RESERVATION_REPORTS.menu.map((item) => item.value);
+
 export const reportsModelMapping: Record<ReportsTypeValues, ClassType> = {
   noShowReport: NoShowReport,
   arrivalReport: ArrivalReport,
@@ -148,4 +152,5 @@ export const rowStylesMapping: Record<RowStylesKeys, string> = {
   isBold: 'is-bold',
   isGreyBg: 'is-grey-bg',
   isBlueBg: 'is-babyBlue-bg',
+  isBlackBg: 'is-black-bg',
 };

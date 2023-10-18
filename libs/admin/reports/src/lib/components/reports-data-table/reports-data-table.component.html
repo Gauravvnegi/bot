@@ -51,7 +51,7 @@
       </hospitality-bot-date>
       <hospitality-bot-room-types
         *ngIf="availableFilters.isRoomType"
-        class="filter-item"
+        class="room-type-filter"
         controlName="roomType"
         [settings]="{
           floatInsideLabel: true,
@@ -122,7 +122,11 @@
           (click)="onCheckboxClicked($event)"
         ></p-tableCheckbox>
       </td>
-      <td *ngFor="let column of columns" [class]="getStyle(rowData)">
+      <td
+        *ngFor="let column of columns"
+        [class]="getStyle(rowData)"
+        (click)="onRowClick(rowData)"
+      >
         <div
           class="cell-content"
           *ngIf="

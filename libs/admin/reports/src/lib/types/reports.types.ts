@@ -46,6 +46,7 @@ export type ReportsConfig = {
 
 export type ReportType = ReportsConfig[ReportModules]['menu'][number]['value'];
 export type ReportsMenu = ReportsConfig[ReportModules]['menu'];
+export type ReservationReportMenu = ReportsConfig['RESERVATION_REPORTS']['menu'][number]['value'];
 
 export type ReportFilters = {
   toDate?: number;
@@ -77,6 +78,7 @@ export class RowStyles {
   isBold?: boolean;
   isGreyBg?: boolean;
   isBlueBg?: boolean;
+  isBlackBg?: boolean;
 }
 
 export type RowStylesKeys = keyof RowStyles;

@@ -104,7 +104,7 @@ export const dailyRevenueReportRows = [
   { label: 'Add Ons', name: 'addOns' }, //addons header
   { label: 'Add on', name: 'addOn' },
   { label: 'Total Revenue', name: 'totalRevenue' },
-  { label: 'payable', name: 'payable' },
+  { label: 'Payable', name: 'payable' },
   { label: 'CGST', name: 'roomCgstPerDay' },
   { label: 'SGST', name: 'roomSgstPerDay' },
   { label: 'Total Tax', name: 'totalTax' },

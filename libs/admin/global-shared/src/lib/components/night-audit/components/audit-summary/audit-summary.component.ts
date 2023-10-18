@@ -80,7 +80,6 @@ export class AuditSummaryComponent implements OnInit {
               this.loading = false;
               this.isNoAuditFound = true;
             };
-
             if (res?.length) {
               if (isNext) {
                 this.confirmationService.confirm({
@@ -127,7 +126,14 @@ export class AuditSummaryComponent implements OnInit {
         .subscribe(
           (res) => {
             const auditSummary = new AuditSummary().deserialize(res);
-            this.cols = { ...cols, ...auditSummary.columns };
+            Object.keys(auditSummary.columns).forEach((col) => {
+              if (this.cols[col]) {
+                this.cols[col] = [
+                  ...this.cols[col],
+                  ...auditSummary.columns[col],
+                ];
+              }
+            });
             this.values = auditSummary.records;
             this.loading = false;
           },

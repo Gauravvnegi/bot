@@ -6,6 +6,7 @@ import {
 } from '../types/audit-summary.type';
 import { TableObjectData } from '../../../types/table-view.type';
 export class AuditSummary {
+  columns: Record<string, Cols[]>;
   records: AuditViewType;
 
   initColumns(input: AuditSummaryResponse) {
@@ -73,9 +74,10 @@ export class AuditSummary {
   }
 
   deserialize(input: AuditSummaryResponse) {
-    const dynamicCols = this.initColumns(input);
+    this.columns = input?.outlets
+      ? { revenueList: this.initColumns(input) }
+      : {};
     const cashierDetail = this.getCashierDetails(input);
-
     const getStatusCount = (key: string) => {
       return input.roomStatusMap.find((item) => item.status == key)?.count;
     };
@@ -84,7 +86,6 @@ export class AuditSummary {
       INSPECTED: getStatusCount('INSPECTED'),
       CLEAN: getStatusCount('CLEAN'),
     };
-
     this.records = {
       rooms: {
         title: 'Room Details',
@@ -115,7 +116,7 @@ export class AuditSummary {
       },
       revenueList: {
         title: 'Revenue List',
-        values: this.getRevenueList(input, dynamicCols),
+        values: this.getRevenueList(input, this.columns['revenueList']),
       },
     };
     return this;

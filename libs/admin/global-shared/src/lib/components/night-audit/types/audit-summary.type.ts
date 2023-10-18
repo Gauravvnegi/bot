@@ -55,7 +55,7 @@ export interface AuditSummaryResponse {
   cashiersPayment: {
     UserPermission: string;
   };
-  outlets: {
+  outlets?: {
     name: string;
     totalAmount: number;
   }[];

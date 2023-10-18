@@ -19,6 +19,12 @@ export const layoutConfig = {
   notificationDelayTime: 5,
 };
 
+export const defaultNotificationFilter = {
+  status: [],
+  fromDate: null,
+  toDate: null,
+};
+
 /**
  * @constant customModule  [Menu Items]
  * These are default products, that are not subscription based

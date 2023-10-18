@@ -139,6 +139,11 @@ export class UserProfileComponent implements OnInit {
         (data) => {
           this.adminToModDetails = new UserConfig().deserialize(data);
           this.products = this.adminToModDetails.products;
+
+          /**
+           * Department flow is commented as no clarity of now - TO DO
+           */
+          // this.departments = this.adminToModDetails.departments;
           this.departments = this.adminToModDetails.departments.map((item) => ({
             ...item,
             label: item.departmentLabel,
@@ -302,7 +307,8 @@ export class UserProfileComponent implements OnInit {
       jobTitle: ['', Validators.required],
       brandName: ['', Validators.required],
       products: [[], Validators.required],
-      departments: [[], Validators.required],
+      // departments: [[], Validators.required],
+      departments: [[]],
       branchName: [[], Validators.required],
       cc: ['', [Validators.required]],
       phoneNumber: ['', [Validators.required]],
@@ -319,7 +325,7 @@ export class UserProfileComponent implements OnInit {
   }
 
   onSelectedTabFilterChange(event) {
-    this.manageProduct = this.userForm.get('products')?.value[event.index];
+    this.manageProduct = this.tabListItems?.[event.index].value;
     this.tabIdx = event.index;
   }
 
@@ -349,26 +355,30 @@ export class UserProfileComponent implements OnInit {
     const { products, departments } = this.userFormControl;
 
     products.valueChanges.subscribe((products) => {
-      const departmentValue = departments.value;
+      // const departmentValue = departments.value;
 
       this.tabListItems = this.products.filter((item) =>
         products.includes(item.value)
       );
 
-      this.departments = this.adminToModDetails.departments.filter(
-        (item: any) => products.includes(item.productType)
+      this.tabIdx = this.tabListItems.findIndex(
+        (item) => item.value === this.manageProduct
       );
 
-      this.departments = this.departments.map((item) => ({
-        ...item,
-        label: item.departmentLabel,
-        value: item.department,
-      }));
-      const currentDepartments = this.departments
-        .filter((item: any) => departmentValue?.includes(item.department))
-        .map((item) => item.department);
+      // this.departments = this.adminToModDetails.departments.filter(
+      //   (item: any) => products.includes(item.productType)
+      // );
 
-      this.userForm.patchValue({ departments: currentDepartments });
+      // this.departments = this.departments.map((item) => ({
+      //   ...item,
+      //   label: item.departmentLabel,
+      //   value: item.department,
+      // }));
+      // const currentDepartments = this.departments
+      //   .filter((item: any) => departmentValue?.includes(item.department))
+      //   .map((item) => item.department);
+
+      // this.userForm.patchValue({ departments: currentDepartments });
     });
   }
 
@@ -471,6 +481,27 @@ export class UserProfileComponent implements OnInit {
           productType: [config.productType],
         })
       );
+    });
+    this.syncManageWithView();
+  }
+
+  syncManageWithView() {
+    this.permissionConfigsFA.controls.forEach((control) => {
+      const permissionControl = control.get('permissions');
+      const managePermissionControl = permissionControl.get('manage');
+      const viewPermissionControl = permissionControl.get('view');
+
+      managePermissionControl.valueChanges.subscribe((res) => {
+        if (res) {
+          viewPermissionControl.patchValue(true);
+        }
+      });
+
+      viewPermissionControl.valueChanges.subscribe((res) => {
+        if (!res) {
+          managePermissionControl.patchValue(false);
+        }
+      });
     });
   }
 

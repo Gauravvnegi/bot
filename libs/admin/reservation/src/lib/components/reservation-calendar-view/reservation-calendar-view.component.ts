@@ -254,8 +254,8 @@ export class ReservationCalendarViewComponent implements OnInit {
         {
           type: 'ROOM_TYPE',
           entityType: 'ALL',
-          offset: 0,
-          limit: 200,
+          pagination: false,
+          calendarView: true,
         },
       ]),
     };

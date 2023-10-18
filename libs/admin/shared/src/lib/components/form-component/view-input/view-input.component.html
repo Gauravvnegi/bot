@@ -14,13 +14,14 @@
   <div class="input text__wrapper" [ngClass]="inputNgClasses">
     <ng-container *ngIf="value">
       <div class="text">
-        {{
-          suffix
-            ? suffix + ' ' + value
-            : (value | currency: 'INR')
-        }}
+        {{ suffix ? suffix + ' ' + value : (value | currency: 'INR') }}
       </div>
       <div class="text__strike">{{ strikeValue }}</div>
+    </ng-container>
+    <ng-container *ngIf="value === 0">
+      <div class="text">
+        {{ value | currency: 'INR' }}
+      </div>
     </ng-container>
   </div>
   <small *ngIf="error" class="p-error"> {{ error }}</small>

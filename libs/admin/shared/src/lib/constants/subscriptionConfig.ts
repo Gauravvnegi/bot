@@ -8,6 +8,7 @@ export enum PermissionModuleNames {
   CONVERSATION = 'CONVERSATION',
   SITE = 'SITE',
   SEGMENTS = 'SEGMENTS',
+  RESERVATION = 'RESERVATION',
 }
 
 export enum ProductNames {

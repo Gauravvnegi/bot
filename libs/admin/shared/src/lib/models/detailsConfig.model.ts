@@ -97,7 +97,10 @@ export class RoomsDetails implements IDeserializable {
   rooms;
   totalRooms: number;
   deserialize(input: any) {
-    this.totalRooms = input.rooms ? input.rooms.length : 0;
+    const room = input.stayDetails?.room;
+    // this.totalRooms = room ? room.length : 0;
+    // receiving object as of now
+    this.totalRooms = room?.unit ? room.unit : 1;
     return this;
   }
 }
@@ -316,6 +319,7 @@ export class StayDetailsConfig implements IDeserializable {
   departureTimeStamp: number;
 
   deserialize(input: any, timezone) {
+    const room = get(input, ['room'], {});
     Object.assign(
       this,
       set({}, 'code', get(input, ['code'])),
@@ -348,13 +352,13 @@ export class StayDetailsConfig implements IDeserializable {
           timezone
         )
       ),
-      set({}, 'roomType', get(input, ['roomType'])),
+      set({}, 'roomType', get(room, ['type'])),
       set({}, 'kidsCount', get(input, ['kidsCount'])),
       set({}, 'adultsCount', get(input, ['adultsCount'])),
       set(
         {},
         'roomNumber',
-        get(input, ['roomNumber']) === 0 ? '' : get(input, ['roomNumber'])
+        get(room, ['roomNumber']) === 0 ? '' : get(room, ['roomNumber'])
       ),
       set({}, 'special_comments', get(input, ['comments'])),
       set({}, 'checkin_comments', get(input, ['checkInComment']))

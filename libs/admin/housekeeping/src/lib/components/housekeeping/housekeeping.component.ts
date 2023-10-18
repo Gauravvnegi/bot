@@ -71,11 +71,15 @@ export class HousekeepingComponent extends BaseDatatableComponent
     this.listenForRoomTypeChange();
     this.listenForRefreshData();
     this.navRoutes = houseKeepingRoutes['HouseKeeping'].navRoutes;
-    this.channelMangerForm.roomDetails.subscribe((roomType) => {
-      if (roomType.length > 0) {
-        this.useForm.get('roomType').setValue(roomType.map((item) => item.id));
-      }
-    });
+    this.$subscription.add(
+      this.channelMangerForm.roomDetails.subscribe((roomType) => {
+        if (roomType.length > 0) {
+          this.useForm
+            .get('roomType')
+            .setValue(roomType.map((item) => item.id));
+        }
+      })
+    );
   }
 
   loadData(event: LazyLoadEvent): void {
@@ -90,38 +94,42 @@ export class HousekeepingComponent extends BaseDatatableComponent
   }
 
   listenForRefreshData(): void {
-    this.housekeepingService.refreshData.subscribe((value) => {
-      if (value) {
-        this.getRoomList();
-      }
-    });
+    this.$subscription.add(
+      this.housekeepingService.refreshData.subscribe((value) => {
+        if (value) {
+          this.getRoomList();
+        }
+      })
+    );
   }
 
   getRoomList(): void {
     this.loading = true;
-    this.housekeepingService
-      .getList(this.entityId, this.getQueryConfig())
-      .subscribe(
-        (res) => {
-          const roomList = new RoomList().deserialize(res);
-          this.values = roomList.records;
-          this.initFilters(
-            {},
-            roomList.entityStateCounts,
-            roomList.totalRecord,
-            this.roomStatusDetails
-          );
-          this.values.length > 0
-            ? (this.isQuickFilterInEmptyView = false)
-            : (this.isQuickFilterInEmptyView = true);
+    this.$subscription.add(
+      this.housekeepingService
+        .getList(this.entityId, this.getQueryConfig())
+        .subscribe(
+          (res) => {
+            const roomList = new RoomList().deserialize(res);
+            this.values = roomList.records;
+            this.initFilters(
+              {},
+              roomList.entityStateCounts,
+              roomList.totalRecord,
+              this.roomStatusDetails
+            );
+            this.values.length > 0
+              ? (this.isQuickFilterInEmptyView = false)
+              : (this.isQuickFilterInEmptyView = true);
 
-          this.loading = false;
-        },
-        () => {
-          this.values = [];
-          this.loading = false;
-        }
-      );
+            this.loading = false;
+          },
+          () => {
+            this.values = [];
+            this.loading = false;
+          }
+        )
+    );
   }
 
   navigateToAddRoom() {
@@ -158,5 +166,9 @@ export class HousekeepingComponent extends BaseDatatableComponent
     this.useForm.get('roomType').valueChanges.subscribe((value) => {
       this.getRoomList();
     });
+  }
+
+  ngOnDestroy(): void {
+    this.$subscription.unsubscribe();
   }
 }

@@ -24,7 +24,10 @@ import { Subscription } from 'rxjs';
 import { NightAuditComponent } from '../../../../../../../../../../../libs/admin/global-shared/src/lib/components/night-audit/night-audit.component';
 import { QuickReservationFormComponent } from '../../../../../../../../../../../libs/admin/reservation/src/lib/components/quick-reservation-form/quick-reservation-form.component';
 import { tokensConfig } from '../../../../../../../../../../../libs/admin/shared/src/lib/constants/common';
-import { layoutConfig } from '../../../constants/layout';
+import {
+  defaultNotificationFilter,
+  layoutConfig,
+} from '../../../constants/layout';
 import { DateRangeFilterService } from '../../../services/daterange-filter.service';
 import { FilterService } from '../../../services/filter.service';
 import { GlobalFilterService } from '../../../services/global-filters.service';
@@ -82,11 +85,7 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
       return this.totalFilters <= 0 ? '' : `(+${this.totalFilters}) Others`;
     },
   };
-  notificationFilterData = {
-    status: [],
-    fromDate: '',
-    toDate: '',
-  };
+  notificationFilterData = { ...defaultNotificationFilter };
   unreadCount: number;
   private $firebaseMessagingSubscription = new Subscription();
   isGlobalSearchVisible = true;
@@ -400,6 +399,9 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
 
   closeNotification(): void {
     this.isNotificationVisible = false;
+    // reset filter too
+    this.notificationFilterData = { ...defaultNotificationFilter };
+
     this.getNotificationUnreadCount();
   }
 

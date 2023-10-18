@@ -83,13 +83,17 @@ export class HotelConfig {
     | paymentType.IGuaranteePM[];
 
   deserialize(input: paymentType.IPaymentConfiguration, paymentSummary: any) {
+    // Some reservation does not have deposit rule
+    const defaultGuaranteeType = 'DEPOSIT';
     Object.assign(
       this,
       set({}, 'payAtDesk', get(paymentSummary, ['depositRules', 'payAtDesk']))
     );
     this.paymentMethods =
       input.paymentMethods &&
-      input.paymentMethods[paymentSummary.depositRules.guaranteeType];
+      input.paymentMethods[
+        paymentSummary?.depositRules?.guaranteeType ?? defaultGuaranteeType
+      ];
     this.paymentConfigurations = input;
     return this;
   }

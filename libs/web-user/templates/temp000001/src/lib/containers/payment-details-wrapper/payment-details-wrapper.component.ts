@@ -352,13 +352,15 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
       | journeyEnums.JOURNEY.preCheckin
   ): void {
     if (state === journeyEnums.JOURNEY.checkin) {
-      this._translateService
-        .get('MESSAGES.SUCCESS.PAYMENT_DETAILS_COMPLETE')
-        .subscribe((translatedMsg) => {
-          this._snackBarService.openSnackBarAsText(translatedMsg, '', {
-            panelClass: 'success',
+      if (this.selectedTab === 'Pay Now') {
+        this._translateService
+          .get('MESSAGES.SUCCESS.PAYMENT_DETAILS_COMPLETE')
+          .subscribe((translatedMsg) => {
+            this._snackBarService.openSnackBarAsText(translatedMsg, '', {
+              panelClass: 'success',
+            });
           });
-        });
+      }
       this._buttonService.buttonLoading$.next(this.buttonRefs['nextButton']);
       this._stepperService.setIndex('next');
     } else {

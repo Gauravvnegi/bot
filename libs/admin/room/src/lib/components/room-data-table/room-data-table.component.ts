@@ -130,6 +130,7 @@ export class RoomDataTableComponent extends BaseDatatableComponent
           type: this.selectedTab,
           offset: this.first,
           limit: this.rowsPerPage,
+          sort: 'updated',
         },
       ]),
     };

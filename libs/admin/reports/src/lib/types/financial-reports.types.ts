@@ -13,6 +13,7 @@ export type DailyRevenueReportData = FinancialReportData & {
   isBold?: boolean;
   isGreyBg?: boolean;
   isBlueBg?: boolean;
+  isBlackBg?: boolean;
 };
 
 export type MonthlySummaryReportData = {

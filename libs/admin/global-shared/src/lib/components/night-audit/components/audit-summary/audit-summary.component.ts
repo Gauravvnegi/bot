@@ -25,7 +25,7 @@ export class AuditSummaryComponent implements OnInit {
   entityId = '';
   title = 'Audit Summary';
   cols = cols;
-  values: AuditViewType;
+  values: AuditViewType | {};
   loading = false;
   isNoAuditFound = false;
   actionConfig: ActionConfigType;
@@ -78,7 +78,7 @@ export class AuditSummaryComponent implements OnInit {
             const doNotLoad = () => {
               this.values = {};
               this.loading = false;
-              this.isNoAuditFound = false;
+              this.isNoAuditFound = true;
             };
 
             if (res?.length) {
@@ -106,7 +106,7 @@ export class AuditSummaryComponent implements OnInit {
           },
           (error) => {
             this.loading = false;
-            this.isNoAuditFound = false;
+            this.isNoAuditFound = true;
             this.auditDates = [];
           },
           () => {
@@ -126,7 +126,9 @@ export class AuditSummaryComponent implements OnInit {
         )
         .subscribe(
           (res) => {
-            this.values = new AuditSummary().deserialize(res).records;
+            const auditSummary = new AuditSummary().deserialize(res);
+            this.cols = { ...cols, ...auditSummary.columns };
+            this.values = auditSummary.records;
             this.loading = false;
           },
           (error) => {

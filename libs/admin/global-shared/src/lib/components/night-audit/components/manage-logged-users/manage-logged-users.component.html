@@ -24,6 +24,7 @@
       [columns]="cols"
       [loading]="loading"
       [items]="items"
+      [action]="'Refresh'"
       [headerSticky]="true"
       [emptyViewConfig]="{
         content: {
@@ -31,6 +32,7 @@
           description: 'There is no users logged in except you.'
         }
       }"
+      (actionClicked)="reloadTable()"
     ></hospitality-bot-table-view>
   </div>
 

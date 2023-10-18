@@ -2,7 +2,11 @@
   <div *ngIf="header" class="header">
     <span class="header-text">{{ header || '' }}</span>
     <span *ngIf="action" (click)="onActionClicked()" class="header-action"
-      >{{ action }} <img src="assets/svg/refresh.svg" alt="refresh"
+      >{{ action }}
+      <img
+        [ngClass]="{ spin: loading }"
+        src="assets/svg/refresh.svg"
+        alt="refresh"
     /></span>
   </div>
   <div class="content">

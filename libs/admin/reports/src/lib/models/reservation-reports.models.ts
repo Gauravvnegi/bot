@@ -19,6 +19,7 @@ class ReservationReport {
   defaultValue: ReservationReportData;
   getDefaultValues(reservationData: ReservationResponseData) {
     this.defaultValue = {
+      id: reservationData.id,
       amountPaid: reservationData.totalPaidAmount,
       balance: reservationData.totalDueAmount,
       bookingAmount: reservationData.paymentSummary?.totalAmount,
@@ -35,6 +36,7 @@ class ReservationReport {
 }
 
 export class NoShows {
+  id?: string;
   bookingNumber: string;
   dateOfArrival: string;
   noShowOn: string;
@@ -46,6 +48,7 @@ export class NoShows {
   amountPaid: string;
   balance: string;
   deserialize(value: ReservationResponse) {
+    this.id = value?.id;
     this.bookingNumber = value?.reservationNumber;
     this.dateOfArrival = getFormattedDate(value?.from);
     this.noShowOn = getFormattedDate(value?.from);
@@ -111,6 +114,7 @@ export class CancellationReport extends ReservationReport
 }
 
 export class Arrival {
+  id?: string;
   bookingNo: string;
   guestName: string;
   bookingAmount: number;
@@ -121,6 +125,7 @@ export class Arrival {
   arrivalTime: string;
   remark: string;
   deserialize(input: ReservationResponseData) {
+    this.id = input.id;
     (this.bookingAmount = input.paymentSummary.totalAmount),
       (this.bookingNo = input.number),
       (this.guestName =
@@ -175,7 +180,7 @@ export class DepartureReport extends ReservationReport
   }
 }
 
-function getFormattedDate(time: number) {
+export function getFormattedDate(time: number) {
   const currentDate = new Date(time);
   const monthAbbreviated = new Intl.DateTimeFormat('en-US', {
     month: 'short',

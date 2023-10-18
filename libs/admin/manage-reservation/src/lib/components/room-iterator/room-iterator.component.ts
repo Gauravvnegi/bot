@@ -43,6 +43,7 @@ export class RoomIteratorComponent extends IteratorComponent
   @Output() listenChanges = new EventEmitter();
 
   @Input() reservationId: string;
+  @Input() isDraftBooking: boolean = false;
   fields = roomFields;
 
   entityId: string;
@@ -134,7 +135,7 @@ export class RoomIteratorComponent extends IteratorComponent
       this.parentFormGroup.addControl('roomInformation', roomInformationGroup);
     }
     this.listenForDateChanges();
-    this.listenForRoomChanges(index);
+    if (!this.reservationId) this.listenForRoomChanges(index);
   }
 
   listenForDateChanges() {
@@ -149,27 +150,36 @@ export class RoomIteratorComponent extends IteratorComponent
   }
 
   listenForRoomChanges(index) {
+    let roomCount = this.roomControls[index].get('roomCount').value ?? 0;
     this.roomControls[index]
       .get('roomNumbers')
       .valueChanges.subscribe((res) => {
         if (res) {
           const currentRoomCount = res.length ? res.length : 1;
-          const previousRoomCount = this.roomControls[index].get('roomCount')
-            .value;
-
           // Update roomCount
-          this.roomControls[index]
-            .get('roomCount')
-            .setValue(currentRoomCount, { emitEvent: false });
-
-          // Update adultCount only if room count is increased
-          if (currentRoomCount > previousRoomCount) {
-            this.roomControls[index]
-              .get('adultCount')
-              .setValue(currentRoomCount, { emitEvent: false });
-          }
+          this.roomControls[index].get('roomCount').setValue(currentRoomCount);
         }
       });
+    this.roomControls[index].get('roomCount').valueChanges.subscribe((res) => {
+      if (res) {
+        let currentRoomCount = res ? res : 1;
+        let previousRoomCount = roomCount;
+        let previousAdulCount = this.roomControls[index].get('adultCount')
+          .value;
+        roomCount = currentRoomCount;
+
+        if (
+          currentRoomCount > previousRoomCount &&
+          currentRoomCount > previousAdulCount
+        ) {
+          this.roomControls[index]
+            .get('adultCount')
+            .setValue(currentRoomCount, {
+              emitEvent: false,
+            });
+        }
+      }
+    });
   }
 
   // Init Room Details
@@ -180,7 +190,7 @@ export class RoomIteratorComponent extends IteratorComponent
       // Rooms number is not multi-select in edit mode.
       if (
         this.reservationInfoControls.reservationType.value !== 'DRAFT' &&
-        this.reservationId
+        !this.isDraftBooking
       ) {
         this.fields[3].name = 'roomNumber';
         this.fields[3].type = 'select';
@@ -232,6 +242,8 @@ export class RoomIteratorComponent extends IteratorComponent
       );
 
       if (!this.isDefaultRoomType) {
+        this.roomControls[index].get('roomNumbers').reset();
+        this.roomControls[index].get('roomNumber').reset();
         // Patch default Base rate plan when not in edit mode.
         const defaultPlan = ratePlanOptions.filter((item) => item.isBase)[0]
           ?.value;
@@ -239,7 +251,8 @@ export class RoomIteratorComponent extends IteratorComponent
           {
             ratePlan: defaultPlan ? defaultPlan : ratePlanOptions[0].value,
             adultCount: 1,
-            roomCount: this.roomControls[index].get('roomNumbers')?.value.length
+            roomCount: this.roomControls[index].get('roomNumbers')?.value
+              ?.length
               ? this.roomControls[index].get('roomNumbers')?.value.length
               : 1,
             childCount: 0,
@@ -247,10 +260,6 @@ export class RoomIteratorComponent extends IteratorComponent
           { emitEvent: false }
         );
       }
-
-      setTimeout(() => {
-        this.isDefaultRoomType = false;
-      }, 2000);
     }
   }
 
@@ -287,6 +296,10 @@ export class RoomIteratorComponent extends IteratorComponent
         })),
       };
       this.listenRoomTypeChanges(index);
+      setTimeout(() => {
+        this.isDefaultRoomType = false;
+        this.listenForRoomChanges(index);
+      }, 2000);
     }
   }
 

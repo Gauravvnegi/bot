@@ -18,20 +18,14 @@
     opacity: 0.35;
     @include normal-sm-text;
     color: $secondary;
-  }
-  .visit {
-    padding-top: 7px;
-    text-decoration: underline;
-    @include normal-sm-text;
-    color: $unsubscribe-Visit;
-    cursor: pointer;
+    padding-bottom: 25px;
   }
 }
 
 .product-wrapper {
   display: flex;
+  justify-content: center;
   gap: 20px;
-  margin-top: 30px;
 
   .product {
     // border: 1px solid grey;

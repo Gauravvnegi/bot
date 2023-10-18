@@ -191,4 +191,8 @@ export class TransactionHistoryDataTableComponent extends BaseDatatableComponent
   handleFinal = () => {
     this.loading = false;
   };
+
+  ngOnDestroy() {
+    this.$subscription.unsubscribe();
+  }
 }

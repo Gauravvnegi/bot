@@ -491,6 +491,7 @@ export class AddRoomComponent implements OnInit, OnDestroy {
     const removeFeatures = this.featureIds.filter(
       (item) => !activeFeatures.includes(item)
     );
+
     this.$subscription.add(
       this.roomService
         .updateRoom(this.entityId, {
@@ -578,6 +579,7 @@ export class AddRoomComponent implements OnInit, OnDestroy {
   }
 
   checkCurrentStatus() {
+    if (!this.statusQuoFormControls?.fromDate.value) return true;
     const todayEpoch = new Date().setHours(0, 0, 0, 0); // Get today's date in epoch format, setting time to midnight
     const fromDate = new Date(
       this.statusQuoFormControls.fromDate.value

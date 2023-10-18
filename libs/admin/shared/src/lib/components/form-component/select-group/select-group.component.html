@@ -3,8 +3,9 @@
   [style.fontSize]="fontSize"
   [ngClass]="wrapperNgClasses"
   [ngStyle]="{
-    'pointer-events': inputControl.valid ? 'auto' : 'none',
-    opacity: inputControl.valid ? 1 : 0.6
+    'pointer-events':
+      inputControl.status === 'DISABLED' || isDisabled ? 'none' : 'auto',
+    opacity: inputControl.status === 'DISABLED' || isDisabled ? 0.6 : 1
   }"
 >
   <label *ngIf="label" class="label label__static">{{ label }}</label>

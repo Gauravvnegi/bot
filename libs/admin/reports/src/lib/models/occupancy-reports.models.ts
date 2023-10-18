@@ -24,7 +24,7 @@ export class HistoryAndForecastReportData extends RowStyles {
     };
 
     this.date = input?.subTotalObject
-      ? 'SubTotal'
+      ? 'Total'
       : formatDateToCustomString(input?.date);
     this.roomsOccupied = input?.occupiedRooms;
     this.arrivalRooms = input?.arrivalRooms;

@@ -76,6 +76,7 @@ export class ManagePermissionService extends ApiService {
   modifyPermissionDetailsForEdit(value, allDepartments) {
     // to be changed when multiple hotels
     // temp function
+    const products = value.products;
 
     return {
       id: value.id,
@@ -88,12 +89,11 @@ export class ManagePermissionService extends ApiService {
       profileUrl: value.profileUrl,
       reportingTo: value.reportingTo,
       departments: allDepartments.filter((item) =>
-        value.departments?.includes(item.department)
+        // value.departments?.includes(item.department)
+        products.includes(item.productType)
       ),
       permissions: value.permissionConfigs.filter(
         ({ permissions, productType }) => {
-          const products = value.products;
-
           return (
             (permissions.manage || permissions.view) &&
             products?.reduce((value, curr) => {

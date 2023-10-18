@@ -44,3 +44,7 @@
     }
   }
 }
+
+:host ::ng-deep .cdk-overlay-container {
+  z-index: 10000 !important;
+}

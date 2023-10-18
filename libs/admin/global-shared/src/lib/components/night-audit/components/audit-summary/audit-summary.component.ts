@@ -25,7 +25,7 @@ export class AuditSummaryComponent implements OnInit {
   entityId = '';
   title = 'Audit Summary';
   cols = cols;
-  values: AuditViewType;
+  values: AuditViewType | {};
   loading = false;
   isNoAuditFound = false;
   actionConfig: ActionConfigType;
@@ -36,6 +36,7 @@ export class AuditSummaryComponent implements OnInit {
   @Input() activeIndex = 0;
   @Input() stepList: MenuItem[];
   @Output() indexChange = new EventEmitter<any>();
+  @Output() auditDateChange = new EventEmitter<Date>();
 
   $subscription = new Subscription();
 
@@ -72,15 +73,15 @@ export class AuditSummaryComponent implements OnInit {
               this.auditDates = res;
               const currentAuditDate = this.auditDates.shift();
               this.auditDate = new Date(currentAuditDate);
+              this.auditDateChange.emit(this.auditDate);
               this.initTable();
             };
 
             const doNotLoad = () => {
               this.values = {};
               this.loading = false;
-              this.isNoAuditFound = false;
+              this.isNoAuditFound = true;
             };
-
             if (res?.length) {
               if (isNext) {
                 this.confirmationService.confirm({
@@ -106,7 +107,7 @@ export class AuditSummaryComponent implements OnInit {
           },
           (error) => {
             this.loading = false;
-            this.isNoAuditFound = false;
+            this.isNoAuditFound = true;
             this.auditDates = [];
           },
           () => {
@@ -126,7 +127,16 @@ export class AuditSummaryComponent implements OnInit {
         )
         .subscribe(
           (res) => {
-            this.values = new AuditSummary().deserialize(res).records;
+            const auditSummary = new AuditSummary().deserialize(res);
+            Object.keys(auditSummary.columns).forEach((col) => {
+              if (this.cols[col]) {
+                this.cols[col] = [
+                  ...this.cols[col],
+                  ...auditSummary.columns[col],
+                ];
+              }
+            });
+            this.values = auditSummary.records;
             this.loading = false;
           },
           (error) => {

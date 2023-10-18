@@ -137,6 +137,7 @@ export class QuickReservationFormComponent implements OnInit {
       this.initReservationDetails();
     } else {
       this.isDataLoaded = true;
+      this.listenForRoomChanges();
       this.inputControls.roomInformation.patchValue({
         roomTypeId: this.defaultRoomType.value,
         roomNumber: this.selectedRoom,
@@ -235,7 +236,6 @@ export class QuickReservationFormComponent implements OnInit {
     });
 
     this.entityId = this.globalFilterService.entityId;
-    this.listenForRoomChanges();
   }
 
   listenForRoomChanges() {

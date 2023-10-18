@@ -11,8 +11,7 @@
 
 :host ::ng-deep {
   .guest-sidebar .body {
-    height: unset !important;
-    overflow: unset;
+    overflow: auto !important;
     box-shadow: unset;
   }
 

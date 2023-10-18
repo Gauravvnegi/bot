@@ -55,16 +55,22 @@ export interface AuditSummaryResponse {
   cashiersPayment: {
     UserPermission: string;
   };
-  outlets: {
+  outlets?: {
     name: string;
     totalAmount: number;
   }[];
   subTotalObject: boolean;
 }
 
+type AuditDataType = {
+  title: string;
+  values: Record<string, number | string> | TableObjectData[];
+};
 export interface AuditViewType {
-  [key: string]: {
-    title: string;
-    values: Record<string, number | string> | TableObjectData[];
-  };
+  rooms: AuditDataType;
+  houseKeeping: AuditDataType;
+  accountDetails: AuditDataType;
+  revenueList: AuditDataType;
 }
+
+export type AuditSummaryColumn = keyof AuditViewType;

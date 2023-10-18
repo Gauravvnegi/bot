@@ -7,7 +7,8 @@
       [label]="showLabel ? labels.from : ''"
       [props]="{
         placeholder: 'Select From ' + (isTimeOnly ? 'Time' : 'Date'),
-        errorMessages: preErrorMessages
+        errorMessages: preErrorMessages,
+        floatInsideLabel: floatInsideLabel
       }"
       [settings]="{
         isTimeOnly: isTimeOnly,
@@ -15,7 +16,7 @@
         showIcon: showIcon
       }"
       [minDate]="!isTimeOnly && startMinDate"
-      [maxDate]="!isTimeOnly && startMaxDate"
+      [maxDate]="startMaxDate"
     ></hospitality-bot-date>
   </div>
   <div class="field">
@@ -26,7 +27,8 @@
       [label]="showLabel ? labels.to : ''"
       [props]="{
         placeholder: 'Select To ' + (isTimeOnly ? 'Time' : 'Date'),
-        errorMessages: postErrorMessages
+        errorMessages: postErrorMessages,
+        floatInsideLabel: floatInsideLabel
       }"
       [settings]="{
         isTimeOnly: isTimeOnly,

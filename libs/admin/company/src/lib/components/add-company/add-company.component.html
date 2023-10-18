@@ -6,14 +6,14 @@
   ></hospitality-bot-navigation-header>
 
   <div class="form-block body" [formGroup]="companyForm">
-    <div class="code half-width" *ngIf="isVisible('packageCode')">
+    <div class="code half-width" *ngIf="isVisibleOnSideView('packageCode')">
       <span class="code__label"> Code: </span>
       <span class="code__hash">
         {{ companyForm.get('packageCode').value }}
       </span>
     </div>
     <hospitality-bot-toggle-switch
-      *ngIf="isVisible('status')"
+      *ngIf="isVisibleOnSideView('status')"
       class="status half-width"
       controlName="status"
       label="Status:"
@@ -22,7 +22,7 @@
     ></hospitality-bot-toggle-switch>
 
     <hospitality-bot-input
-      *ngIf="isVisible('name')"
+      *ngIf="isVisibleOnSideView('name')"
       class="half-width"
       controlName="name"
       maxLength="60"
@@ -33,7 +33,7 @@
     ></hospitality-bot-input>
 
     <hospitality-bot-input
-      *ngIf="isVisible('email')"
+      *ngIf="isVisibleOnSideView('email')"
       class="half-width"
       controlName="email"
       label="Email"
@@ -48,14 +48,14 @@
     ></hospitality-bot-input>
 
     <hospitality-bot-phone-number
-      *ngIf="isVisible('phoneNo')"
+      *ngIf="isVisibleOnSideView('phoneNo')"
       [ngClass]="{ 'full-width': isSideBar, 'half-width': !isSideBar }"
       preControlName="cc"
       postControlName="phoneNo"
     ></hospitality-bot-phone-number>
 
     <hospitality-bot-address-component
-      *ngIf="isVisible('address')"
+      *ngIf="isVisibleOnSideView('address')"
       [ngClass]="{ 'full-width': isSideBar, 'half-width': !isSideBar }"
       controlName="address"
       [props]="{
@@ -67,7 +67,7 @@
     </hospitality-bot-address-component>
 
     <hospitality-bot-input
-      *ngIf="isVisible('website')"
+      *ngIf="isVisibleOnSideView('website')"
       class="half-width"
       controlName="salePersonName"
       maxLength="60"
@@ -78,7 +78,7 @@
     ></hospitality-bot-input>
 
     <hospitality-bot-phone-number
-      *ngIf="isVisible('salePersonNo')"
+      *ngIf="isVisibleOnSideView('salePersonNo')"
       class="half-width"
       label="Sales Person No."
       preControlName="salePersonCC"
@@ -86,7 +86,7 @@
     ></hospitality-bot-phone-number>
 
     <hospitality-bot-prefix-field
-      *ngIf="isVisible('discount')"
+      *ngIf="isVisibleOnSideView('discount')"
       class="half-width"
       [options]="discountType"
       label="Discount"
@@ -106,7 +106,7 @@
     ></hospitality-bot-prefix-field>
 
     <hospitality-bot-input
-      *ngIf="isVisible('taxId')"
+      *ngIf="isVisibleOnSideView('taxId')"
       class="half-width"
       controlName="taxId"
       maxLength="60"
@@ -117,7 +117,7 @@
     ></hospitality-bot-input>
 
     <hospitality-bot-input
-      *ngIf="isVisible('creditLimit')"
+      *ngIf="isVisibleOnSideView('creditLimit')"
       class="half-width"
       controlName="creditLimit"
       label="Credit Limit"
@@ -128,7 +128,7 @@
     ></hospitality-bot-input>
 
     <hospitality-bot-select
-      *ngIf="isVisible('currency')"
+      *ngIf="isVisibleOnSideView('marketSegment')"
       class="half-width"
       label="Market Segment"
       controlName="marketSegment"
@@ -140,7 +140,7 @@
     </hospitality-bot-select>
 
     <hospitality-bot-select
-      *ngIf="isVisible('currency')"
+      *ngIf="isVisibleOnSideView('businessSource')"
       class="half-width"
       label="Business Source"
       controlName="businessSource"
@@ -152,7 +152,7 @@
     </hospitality-bot-select>
 
     <hospitality-bot-select
-      *ngIf="isVisible('currency')"
+      *ngIf="isVisibleOnSideView('billingInstruction')"
       class="half-width"
       label="Billing Instruction"
       controlName="billingInstruction"

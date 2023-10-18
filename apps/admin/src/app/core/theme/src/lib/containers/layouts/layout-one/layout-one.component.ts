@@ -17,7 +17,10 @@ import { AddGuestComponent } from 'libs/admin/guests/src/lib/components/add-gues
 import { manageReservationRoutes } from 'libs/admin/manage-reservation/src/lib/constants/routes';
 import { RaiseRequestComponent } from 'libs/admin/request/src/lib/components/raise-request/raise-request.component';
 import { SettingsMenuComponent } from 'libs/admin/settings/src/lib/components/settings-menu/settings-menu.component';
-import { ModuleNames } from 'libs/admin/shared/src/lib/constants/subscriptionConfig';
+import {
+  ModuleNames,
+  ProductNames,
+} from 'libs/admin/shared/src/lib/constants/subscriptionConfig';
 import { HotelDetailService } from 'libs/admin/shared/src/lib/services/hotel-detail.service';
 import { MenuItem } from 'primeng/api';
 import { Subscription } from 'rxjs';
@@ -625,6 +628,12 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.firebaseMessagingService.destroySubscription();
+  }
+
+  get isPredictoSubscribed() {
+    return this.subscriptionPlanService.checkProductSubscription(
+      ProductNames.PREDICTO_PMS
+    );
   }
 
   get isComplaintTrackerSubscribed() {

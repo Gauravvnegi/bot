@@ -205,6 +205,8 @@ export class InvoiceComponent implements OnInit {
 
       guestName: ['', Validators.required],
       companyName: [''],
+      arrivalDate: [0],
+      departureDate: [0],
 
       gstNumber: ['', Validators.required],
       // contactName: ['', Validators.required],
@@ -221,6 +223,8 @@ export class InvoiceComponent implements OnInit {
       totalAmount: [0],
       paidAmount: [0],
       dueAmount: [0],
+      discountedAmount: [0],
+      netAmount: [0],
 
       currency: [''],
 
@@ -253,12 +257,12 @@ export class InvoiceComponent implements OnInit {
         .getReservationDetail(this.reservationId)
         .subscribe((res) => {
           const guestData = res.guestDetails.primaryGuest;
-          this.inputControl.guestName.patchValue(
-            `${guestData.firstName} ${guestData.lastName}`
-          );
-          this.inputControl.companyName.patchValue(
-            guestData?.companyName || ''
-          );
+          this.useForm.patchValue({
+            guestName: `${guestData.firstName} ${guestData.lastName}`,
+            companyName: guestData?.companyName || '',
+            arrivalDate: res.arrivalTime,
+            departureDate: res.departureTime,
+          });
 
           this.guestId = guestData.id;
           this.bookingNumber = res.number;
@@ -282,7 +286,6 @@ export class InvoiceComponent implements OnInit {
         (res) => {
           // saving initial invoice data
           this.invoiceService.initInvoiceData(res);
-
           const { serviceIds, guestName, ...data } = new Invoice().deserialize(
             res,
             {
@@ -653,30 +656,33 @@ export class InvoiceComponent implements OnInit {
       const updatedAmounts = values.reduce(
         (prev, curr) => {
           if (curr.transactionType === 'DEBIT' && curr.debitAmount) {
-            prev.totalAmount = prev.totalAmount + curr.debitAmount;
+            prev.totalAmount += curr.debitAmount;
           }
           if (curr.transactionType === 'CREDIT' && curr.creditAmount) {
-            prev.paidAmount = prev.paidAmount + curr.creditAmount;
+            if (curr.isDiscount) prev.discountedAmount += curr.creditAmount;
+            else prev.paidAmount += curr.creditAmount;
           }
+
           return prev;
         },
         {
           totalAmount: 0,
           paidAmount: 0,
+          discountedAmount: 0,
         }
       );
 
-      const { totalAmount, paidAmount } = updatedAmounts;
+      const { totalAmount, paidAmount, discountedAmount } = updatedAmounts;
       this.useForm.patchValue(
         {
           totalAmount,
           paidAmount,
-          dueAmount: totalAmount - paidAmount,
+          discountedAmount,
+          netAmount: totalAmount - discountedAmount,
+          dueAmount: totalAmount - discountedAmount - paidAmount,
         },
         { emitEvent: false }
       );
-
-      console.log(updatedAmounts);
     });
   }
 

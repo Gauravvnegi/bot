@@ -2,22 +2,22 @@
   <!-- Confirm Dialog -->
   <hospitality-bot-confirm-dialog></hospitality-bot-confirm-dialog>
 
-  <div class="header" *ngIf="values">
+  <div class="header" *ngIf="!isNoAuditFound || !loading">
     Night audit is completed for {{ auditDate | date: 'dd/MM/yyy' }}
   </div>
   <div
     class="content__wrapper"
     *ngIf="!isNoAuditFound && !loading; else emptyTable"
   >
-    <p-accordion *ngIf="!loading" [multiple]="true">
+    <p-accordion *ngIf="values" [multiple]="true">
       <p-accordionTab
         *ngFor="let col of columns; let i = index"
         [selected]="true"
-        [header]="values[col].title"
+        [header]="values[col]?.title"
       >
         <hospitality-bot-table-view
           [columns]="cols[col]"
-          [items]="values[col].values"
+          [items]="values[col]?.values"
           [emptyViewConfig]="{
             content: {
               description: 'No Record Found !'

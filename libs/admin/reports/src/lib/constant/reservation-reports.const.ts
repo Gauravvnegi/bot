@@ -7,7 +7,7 @@ import {
   CancellationReportPartialData,
 } from '../types/reservation-reports.types';
 
-const reservationReportCols: ColsData<ReservationReportData> = {
+const reservationReportCols: ColsData<Omit<ReservationReportData, 'id'>> = {
   bookingNo: {
     header: 'Res/Group',
   },

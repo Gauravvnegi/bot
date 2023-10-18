@@ -46,6 +46,7 @@
         [activeIndex]="activeStep"
         [stepList]="itemList"
         (indexChange)="finish($event)"
+        (auditDateChange)="currentDate = $event"
       ></hospitality-bot-audit-summary>
     </ng-container>
   </div>

@@ -86,11 +86,11 @@
               ></p-tableCheckbox>
             </td>
             <td>
-              <p class="tabel-room-no" [roomStatus]="rowData.rooms.status">
+              <div class="tabel-room-no" [roomStatus]="rowData.rooms.status">
                 {{ rowData.rooms.roomNumber }}&nbsp;-&nbsp;{{
                   rowData.rooms.type
                 }}
-              </p>
+              </div>
             </td>
             <td>
               <p class="booking-number">{{ rowData.booking.bookingNumber }}</p>

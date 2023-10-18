@@ -482,6 +482,27 @@ export class UserProfileComponent implements OnInit {
         })
       );
     });
+    this.syncManageWithView();
+  }
+
+  syncManageWithView() {
+    this.permissionConfigsFA.controls.forEach((control) => {
+      const permissionControl = control.get('permissions');
+      const managePermissionControl = permissionControl.get('manage');
+      const viewPermissionControl = permissionControl.get('view');
+
+      managePermissionControl.valueChanges.subscribe((res) => {
+        if (res) {
+          viewPermissionControl.patchValue(true);
+        }
+      });
+
+      viewPermissionControl.valueChanges.subscribe((res) => {
+        if (!res) {
+          managePermissionControl.patchValue(false);
+        }
+      });
+    });
   }
 
   /**

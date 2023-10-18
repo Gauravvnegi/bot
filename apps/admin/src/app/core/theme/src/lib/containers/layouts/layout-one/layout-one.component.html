@@ -164,7 +164,11 @@
               tooltipPosition="bottom"
             />
           </div>
-          <div class="header--button quick-action" (click)="openNightAudit()">
+          <div
+            *ngIf="isAuditSubscribed"
+            class="header--button quick-action"
+            (click)="openNightAudit()"
+          >
             <img
               class="filter-icon"
               src="assets/svg/allocation.svg"

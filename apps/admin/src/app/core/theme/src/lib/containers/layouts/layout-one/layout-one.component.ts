@@ -599,6 +599,10 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
     this.showQuickReservation();
   }
 
+  get isAuditSubscribed() {
+    return this.checkModuleSubscription(ModuleNames.PREDICTO_PMS);
+  }
+
   get isSettingAvailable() {
     return !!this.subscriptionPlanService.settings?.length;
   }

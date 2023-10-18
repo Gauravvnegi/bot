@@ -164,4 +164,8 @@ export class InvoiceHistoryDataTableComponent extends BaseDatatableComponent
   handleFinal = () => {
     this.loading = false;
   };
+
+  ngOnDestroy() {
+    this.$subscription.unsubscribe();
+  }
 }

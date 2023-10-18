@@ -127,6 +127,21 @@
             {{ bookingNumber }}
           </span>
         </div>
+        <div *ngIf="inputControl.arrivalDate.value" class="half-width">
+          <span class="code__label"> Arrival Date: </span>
+          <span *ngIf="inputControl.arrivalDate.value" class="code__hash">
+            {{ inputControl.arrivalDate.value | date: 'dd/MM/yy' }}
+          </span>
+        </div>
+        <div
+          *ngIf="inputControl.departureDate.value"
+          class="half-width code__right"
+        >
+          <span class="code__label"> Departure Date: </span>
+          <span class="code__hash">
+            {{ inputControl.departureDate.value | date: 'dd/MM/yy' }}
+          </span>
+        </div>
         <div class="half-width">
           <span class="code__label"> Guest Name: </span>
           <span class="code__hash">

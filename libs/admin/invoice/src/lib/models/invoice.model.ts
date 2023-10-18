@@ -10,6 +10,8 @@ export class Invoice {
   confirmationNumber: string;
   guestName: string;
   companyName: string;
+  arrivalDate: number;
+  departureDate: number;
 
   gstNumber: string;
   contactName: string;
@@ -29,7 +31,7 @@ export class Invoice {
   dueAmount: number;
   discountedAmount: number;
   netAmount: number;
-  
+
   currency: string;
   cashierName: string;
 

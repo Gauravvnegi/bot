@@ -205,6 +205,8 @@ export class InvoiceComponent implements OnInit {
 
       guestName: ['', Validators.required],
       companyName: [''],
+      arrivalDate: [0],
+      departureDate: [0],
 
       gstNumber: ['', Validators.required],
       // contactName: ['', Validators.required],
@@ -255,12 +257,12 @@ export class InvoiceComponent implements OnInit {
         .getReservationDetail(this.reservationId)
         .subscribe((res) => {
           const guestData = res.guestDetails.primaryGuest;
-          this.inputControl.guestName.patchValue(
-            `${guestData.firstName} ${guestData.lastName}`
-          );
-          this.inputControl.companyName.patchValue(
-            guestData?.companyName || ''
-          );
+          this.useForm.patchValue({
+            guestName: `${guestData.firstName} ${guestData.lastName}`,
+            companyName: guestData?.companyName || '',
+            arrivalDate: res.arrivalTime,
+            departureDate: res.departureTime,
+          });
 
           this.guestId = guestData.id;
           this.bookingNumber = res.number;
@@ -284,7 +286,6 @@ export class InvoiceComponent implements OnInit {
         (res) => {
           // saving initial invoice data
           this.invoiceService.initInvoiceData(res);
-
           const { serviceIds, guestName, ...data } = new Invoice().deserialize(
             res,
             {

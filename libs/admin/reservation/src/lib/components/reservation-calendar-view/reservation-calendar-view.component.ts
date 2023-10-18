@@ -369,17 +369,14 @@ export class ReservationCalendarViewComponent implements OnInit {
           roomType.loading = false;
         }
       );
-    console.log(event, 'onChange event');
   }
 
   handleCreate(event: IGCreateEvent, roomType: IGRoomType) {
     this.viewQuickForm(roomType, undefined, event);
-    console.log(event, 'onCreate event');
   }
 
   handleEdit(event: IGEditEvent, roomType: IGRoomType) {
     this.viewQuickForm(roomType, event.id, undefined);
-    console.log(event, 'onEdit event');
   }
 
   viewQuickForm(roomType: IGRoomType, id: string, event: IGCreateEvent) {

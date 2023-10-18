@@ -221,6 +221,8 @@ export class InvoiceComponent implements OnInit {
       totalAmount: [0],
       paidAmount: [0],
       dueAmount: [0],
+      discountedAmount: [0],
+      netAmount: [0],
 
       currency: [''],
 
@@ -653,30 +655,33 @@ export class InvoiceComponent implements OnInit {
       const updatedAmounts = values.reduce(
         (prev, curr) => {
           if (curr.transactionType === 'DEBIT' && curr.debitAmount) {
-            prev.totalAmount = prev.totalAmount + curr.debitAmount;
+            prev.totalAmount += curr.debitAmount;
           }
           if (curr.transactionType === 'CREDIT' && curr.creditAmount) {
-            prev.paidAmount = prev.paidAmount + curr.creditAmount;
+            if (curr.isDiscount) prev.discountedAmount += curr.creditAmount;
+            else prev.paidAmount += curr.creditAmount;
           }
+
           return prev;
         },
         {
           totalAmount: 0,
           paidAmount: 0,
+          discountedAmount: 0,
         }
       );
 
-      const { totalAmount, paidAmount } = updatedAmounts;
+      const { totalAmount, paidAmount, discountedAmount } = updatedAmounts;
       this.useForm.patchValue(
         {
           totalAmount,
           paidAmount,
-          dueAmount: totalAmount - paidAmount,
+          discountedAmount,
+          netAmount: totalAmount - discountedAmount,
+          dueAmount: totalAmount - discountedAmount - paidAmount,
         },
         { emitEvent: false }
       );
-
-      console.log(updatedAmounts);
     });
   }
 

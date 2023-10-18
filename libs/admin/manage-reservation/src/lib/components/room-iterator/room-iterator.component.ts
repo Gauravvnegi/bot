@@ -242,6 +242,8 @@ export class RoomIteratorComponent extends IteratorComponent
       );
 
       if (!this.isDefaultRoomType) {
+        this.roomControls[index].get('roomNumbers').reset();
+        this.roomControls[index].get('roomNumber').reset();
         // Patch default Base rate plan when not in edit mode.
         const defaultPlan = ratePlanOptions.filter((item) => item.isBase)[0]
           ?.value;
@@ -249,7 +251,8 @@ export class RoomIteratorComponent extends IteratorComponent
           {
             ratePlan: defaultPlan ? defaultPlan : ratePlanOptions[0].value,
             adultCount: 1,
-            roomCount: this.roomControls[index].get('roomNumbers')?.value.length
+            roomCount: this.roomControls[index].get('roomNumbers')?.value
+              ?.length
               ? this.roomControls[index].get('roomNumbers')?.value.length
               : 1,
             childCount: 0,

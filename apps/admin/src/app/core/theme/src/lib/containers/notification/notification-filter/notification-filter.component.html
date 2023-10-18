@@ -22,29 +22,17 @@
     <div class="date">
       <div class="filter-heading">Date</div>
       <div class="fields">
-        <hospitality-bot-date
-          class="filter-item"
-          controlName="fromDate"
-          label="From"
-          [props]="{ floatInsideLabel: true }"
-          [settings]="{
-            enableTime: false,
-            maxDate: fromMaxDate
+        <hospitality-bot-from-to-date
+        [startMinDate]="startMinDate"
+        [startMaxDate]="startMaxDate"
+          [controlNames]="{
+            from: 'fromDate',
+            to: 'toDate'
           }"
-        >
-        </hospitality-bot-date>
-
-        <hospitality-bot-date
-          class="filter-item"
-          controlName="toDate"
-          label="To Date"
-          [props]="{ floatInsideLabel: true }"
-          [settings]="{
-            enableTime: false,
-            minDate: fromMaxDate
+          [props]="{
+            floatInsideLabel: true
           }"
-        >
-        </hospitality-bot-date>
+        ></hospitality-bot-from-to-date>
       </div>
     </div>
   </div>

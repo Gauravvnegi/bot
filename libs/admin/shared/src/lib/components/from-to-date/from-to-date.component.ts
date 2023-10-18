@@ -8,7 +8,7 @@ import { FormComponent } from '../form-component/form.components';
 })
 export class FromToDateComponent extends FormComponent implements OnInit {
   endMinDate: Date = new Date();
-  startMaxDate: Date;
+  @Input() startMaxDate: Date;
   @Input() startMinDate: Date = new Date();
   @Input() endMaxDate: Date;
   @Input() controlNames = {

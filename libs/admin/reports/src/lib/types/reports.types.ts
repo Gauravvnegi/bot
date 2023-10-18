@@ -78,6 +78,7 @@ export class RowStyles {
   isBold?: boolean;
   isGreyBg?: boolean;
   isBlueBg?: boolean;
+  isBlackBg?: boolean;
 }
 
 export type RowStylesKeys = keyof RowStyles;

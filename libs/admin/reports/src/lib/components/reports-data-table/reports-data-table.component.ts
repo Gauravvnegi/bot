@@ -12,6 +12,7 @@ import {
   reportFiltersMapping,
   reportsColumnMapping,
   reportsModelMapping,
+  reservationReportsMenu,
   rowStylesMapping,
 } from '../../constant/reports.const';
 import { ReportsService } from '../../services/reports.service';
@@ -20,8 +21,15 @@ import {
   ReportFilters,
   ReportFiltersKey,
   ReportsMenu,
+  ReportsType,
   RowStyles,
 } from '../../types/reports.types';
+import {
+  DetailsComponent,
+  DetailsTabOptions,
+} from '@hospitality-bot/admin/reservation';
+import { MatDialogConfig } from '@angular/material/dialog';
+import { ModalService } from '@hospitality-bot/shared/material';
 
 @Component({
   selector: 'hospitality-bot-reports-data-table',
@@ -48,7 +56,8 @@ export class ReportsDataTableComponent extends BaseDatatableComponent {
     private reportsService: ReportsService,
     public fb: FormBuilder,
     protected tabFilterService: TableService,
-    private globalFilterService: GlobalFilterService
+    private globalFilterService: GlobalFilterService,
+    private modalService: ModalService
   ) {
     super(fb, tabFilterService);
   }
@@ -199,6 +208,36 @@ export class ReportsDataTableComponent extends BaseDatatableComponent {
       }`;
     });
     return styleClass.trim();
+  }
+
+  onRowClick(data) {
+    if (
+      reservationReportsMenu.includes(
+        this.selectedReport.value as ReportsType['RESERVATION_REPORTS']
+      )
+    ) {
+      this.openDetailPage(data);
+    }
+  }
+
+  openDetailPage(rowData, tabKey?: DetailsTabOptions): void {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = true;
+    dialogConfig.width = '100%';
+    const detailCompRef = this.modalService.openDialog(
+      DetailsComponent,
+      dialogConfig
+    );
+
+    detailCompRef.componentInstance.bookingId = rowData?.id;
+
+    tabKey && (detailCompRef.componentInstance.tabKey = tabKey);
+
+    this.$subscription.add(
+      detailCompRef.componentInstance.onDetailsClose.subscribe((_) => {
+        detailCompRef.close();
+      })
+    );
   }
 
   get availableFilters() {

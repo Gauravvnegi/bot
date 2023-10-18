@@ -29,12 +29,26 @@
   max-width: 150px;
 }
 
+.room-type-filter {
+  width: 200px;
+}
+
 :host ::ng-deep {
   .is-bold {
     font-weight: bold;
   }
 
   .is-grey-bg {
+    .primary-text {
+      color: black !important;
+      font-weight: 700;
+    }
+    .primary-text:hover,
+    .secondary-text:hover {
+      background: unset !important;
+    }
+  }
+  .is-babyBlue-bg {
     background-color: #dedede;
     color: black;
     .primary-text:hover,
@@ -42,9 +56,12 @@
       background: unset !important;
     }
   }
-  .is-babyBlue-bg {
-    background-color: #e1effe;
-    color: black;
+  .is-black-bg {
+    background-color: #010034;
+    .primary-text {
+      color: white !important;
+      font-weight: 700;
+    }
     .primary-text:hover,
     .secondary-text:hover {
       background: unset !important;
@@ -53,4 +70,8 @@
 }
 :host ::ng-deep .p-datatable.p-datatable-sm .p-datatable-footer {
   display: none !important;
+}
+
+:host ::ng-deep .p-datatable .p-datatable-tbody tr td {
+  padding: 10px 0.4em !important;
 }

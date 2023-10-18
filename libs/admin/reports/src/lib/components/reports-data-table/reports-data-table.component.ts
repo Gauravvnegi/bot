@@ -21,7 +21,7 @@ import {
   ReportFilters,
   ReportFiltersKey,
   ReportsMenu,
-  ReservationReportMenu,
+  ReportsType,
   RowStyles,
 } from '../../types/reports.types';
 import {
@@ -172,7 +172,7 @@ export class ReportsDataTableComponent extends BaseDatatableComponent {
   onRowClick(data) {
     if (
       reservationReportsMenu.includes(
-        this.selectedReport.value as ReservationReportMenu
+        this.selectedReport.value as ReportsType['RESERVATION_REPORTS']
       )
     ) {
       this.openDetailPage(data);

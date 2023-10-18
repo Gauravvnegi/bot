@@ -46,7 +46,6 @@ export type ReportsConfig = {
 
 export type ReportType = ReportsConfig[ReportModules]['menu'][number]['value'];
 export type ReportsMenu = ReportsConfig[ReportModules]['menu'];
-export type ReservationReportMenu = ReportsConfig['RESERVATION_REPORTS']['menu'][number]['value'];
 
 export type ReportFilters = {
   toDate?: number;

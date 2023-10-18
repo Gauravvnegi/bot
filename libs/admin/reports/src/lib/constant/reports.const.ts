@@ -18,8 +18,8 @@ import {
   ColsData,
   ColsInfo,
   ReportsConfig,
+  ReportsType,
   ReportsTypeValues,
-  ReservationReportMenu,
   RowStylesKeys,
 } from '../types/reports.types';
 import {
@@ -95,8 +95,9 @@ export const reportsConfig: ReportsConfig = {
   },
 };
 
-export const reservationReportsMenu: ReservationReportMenu[] =
-         reportsConfig.RESERVATION_REPORTS.menu.map((item) => item.value);
+export const reservationReportsMenu: ReportsType['RESERVATION_REPORTS'][] = reportsConfig.RESERVATION_REPORTS.menu.map(
+  (item) => item.value
+);
 
 export const reportsModelMapping: Record<ReportsTypeValues, ClassType> = {
   noShowReport: NoShowReport,

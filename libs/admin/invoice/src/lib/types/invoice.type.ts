@@ -46,6 +46,8 @@ export type BillSummaryData = {
   totalAmount: number;
   totalPaidAmount: number;
   totalDueAmount: number;
+  totalDiscount: number;
+  totalPayableAmount: number;
   invoiceCode: string;
   invoiceGenerated: boolean;
   invoiceDate: number;

@@ -85,3 +85,7 @@
     color: $primary;
   }
 }
+
+:host ::ng-deep .dates {
+  gap: 2px !important;
+}

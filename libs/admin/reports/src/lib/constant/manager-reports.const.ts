@@ -75,5 +75,4 @@ export const managerFlashReportRows = [
   { label: 'noShowReservationForToday', name: 'noShowReservationForToday' },
   { label: 'totalTax', name: 'totalTax' },
   { label: 'grossTotal', name: 'grossTotal' },
-  { label: 'subTotalObject', name: 'subTotalObject' },
 ];

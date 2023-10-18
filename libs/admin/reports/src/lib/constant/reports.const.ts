@@ -139,7 +139,7 @@ export const reportFiltersMapping: Record<
   departureReport: ['fromDate', 'toDate'],
   cashierReport: ['fromDate', 'toDate'],
   historyAndForecastReport: ['fromDate', 'toDate'],
-  managerFlashReport: ['fromDate', 'toDate'],
+  managerFlashReport: ['date'],
   dailyRevenueReport: ['fromDate', 'toDate', 'roomType'],
   monthlySummaryReport: ['roomType', 'month'],
 };

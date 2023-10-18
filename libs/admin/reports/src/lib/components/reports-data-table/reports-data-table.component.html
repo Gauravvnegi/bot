@@ -49,6 +49,17 @@
         }"
       >
       </hospitality-bot-date>
+      <hospitality-bot-date
+        *ngIf="availableFilters.isDate"
+        class="filter-item"
+        controlName="fromDate"
+        label="Date"
+        [props]="{ floatInsideLabel: true }"
+        [settings]="{
+          enableTime: false
+        }"
+      >
+      </hospitality-bot-date>
       <hospitality-bot-room-types
         *ngIf="availableFilters.isRoomType"
         class="filter-item"

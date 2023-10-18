@@ -91,6 +91,16 @@ export class ReportsDataTableComponent extends BaseDatatableComponent {
               ...rangeQuery,
             };
           }
+        } else if (curr == 'date') {
+          this.initTime({
+            fromDate: filters['fromDate'],
+            toDate: filters['fromDate'],
+          });
+          value = {
+            ...value,
+            fromDate: this.fromDate.getTime(),
+            toDate: this.toDate.getTime(),
+          };
         } else {
           value = {
             ...value,
@@ -137,18 +147,18 @@ export class ReportsDataTableComponent extends BaseDatatableComponent {
     this.tableFG.addControl('filters', filterForm);
     filterForm.valueChanges.subscribe((_res) => {
       this.minDate = new Date(_res.fromDate);
-      this.initTime(_res, filterForm);
+      this.initTime(_res);
       this.loadInitialData();
     });
   }
 
-  initTime(res?: Object, form?: FormGroup) {
-    this.fromDate = new Date(res ? res['fromDate'] : Date.now());
-    this.toDate = new Date(res ? res['toDate'] : Date.now());
+  initTime(res?: { fromDate: number; toDate: number }) {
+    this.fromDate = new Date(res ? res.fromDate : Date.now());
+    this.toDate = new Date(res ? res.toDate : Date.now());
     this.fromDate.setHours(0, 0, 0, 0);
     this.toDate.setHours(23, 59, 59, 999);
     if (res) {
-      form.patchValue(
+      this.tableFG.controls['filters'].patchValue(
         {
           fromDate: this.fromDate.getTime(),
           toDate: this.toDate.getTime(),
@@ -176,6 +186,7 @@ export class ReportsDataTableComponent extends BaseDatatableComponent {
       isToDate: this.currentFilters.includes('toDate'),
       isRoomType: this.currentFilters.includes('roomType'),
       isMonth: this.currentFilters.includes('month'),
+      isDate: this.currentFilters.includes('date'),
     };
   }
 

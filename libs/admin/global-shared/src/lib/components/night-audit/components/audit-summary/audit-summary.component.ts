@@ -36,6 +36,7 @@ export class AuditSummaryComponent implements OnInit {
   @Input() activeIndex = 0;
   @Input() stepList: MenuItem[];
   @Output() indexChange = new EventEmitter<any>();
+  @Output() auditDateChange = new EventEmitter<Date>();
 
   $subscription = new Subscription();
 
@@ -72,6 +73,7 @@ export class AuditSummaryComponent implements OnInit {
               this.auditDates = res;
               const currentAuditDate = this.auditDates.shift();
               this.auditDate = new Date(currentAuditDate);
+              this.auditDateChange.emit(this.auditDate);
               this.initTable();
             };
 

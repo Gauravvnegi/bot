@@ -48,6 +48,7 @@ export type ReportType = ReportsConfig[ReportModules]['menu'][number]['value'];
 export type ReportsMenu = ReportsConfig[ReportModules]['menu'];
 
 export type ReportFilters = {
+  date?: number;
   toDate?: number;
   fromDate?: number;
   roomType?: string;

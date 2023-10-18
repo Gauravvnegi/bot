@@ -135,13 +135,13 @@ export const reportFiltersMapping: Record<
 > = {
   noShowReport: ['fromDate', 'toDate'],
   arrivalReport: ['fromDate', 'toDate'],
-  cancellationReport: ['fromDate', 'toDate', 'roomType'],
+  cancellationReport: ['fromDate', 'toDate'],
   departureReport: ['fromDate', 'toDate'],
   cashierReport: ['fromDate', 'toDate'],
   historyAndForecastReport: ['fromDate', 'toDate'],
-  managerFlashReport: ['fromDate', 'toDate'],
+  managerFlashReport: ['date'],
   dailyRevenueReport: ['fromDate', 'toDate', 'roomType'],
-  monthlySummaryReport: ['fromDate', 'month'],
+  monthlySummaryReport: ['roomType', 'month'],
 };
 
 export const rowStylesMapping: Record<RowStylesKeys, string> = {

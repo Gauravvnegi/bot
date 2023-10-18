@@ -89,6 +89,10 @@ export class ManageLoggedUsersComponent implements OnInit {
     );
   }
 
+  reloadTable() {
+    this.initTable();
+  }
+
   handleNext() {
     if (this.items?.length && !this.isTimerStart && this.activeIndex == 0) {
       this.handleMangeLoggedIn();

@@ -651,8 +651,8 @@ export class Package implements IDeserializable {
       set({}, 'status', get(input, ['statusMessage', 'state'])),
       set({}, 'remarks', get(input, ['statusMessage', 'remarks']))
     );
-    if (input.images && input.images.length)
-      this.imgUrl = input.images[0].url ?? '';
+    if (input.imageUrl && input.imageUrl.length)
+      this.imgUrl = input.imageUrl[0].url ?? '';
     return this;
   }
 }

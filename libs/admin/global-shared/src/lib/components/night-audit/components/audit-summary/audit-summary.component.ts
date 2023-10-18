@@ -29,7 +29,8 @@ export class AuditSummaryComponent implements OnInit {
   loading = false;
   isNoAuditFound = false;
   actionConfig: ActionConfigType;
-  today = new Date();
+  lastNightDate = new Date();
+  auditDate: Date;
   auditDates: number[] = [];
 
   @Input() activeIndex = 0;
@@ -53,8 +54,8 @@ export class AuditSummaryComponent implements OnInit {
   }
 
   initAuditTime() {
-    this.today.setDate(this.today.getDate() - 1);
-    this.today.setHours(23, 59, 59);
+    this.lastNightDate.setDate(this.lastNightDate.getDate() - 1);
+    this.lastNightDate.setHours(23, 59, 59);
   }
 
   checkAudit(isNext?: boolean) {
@@ -63,21 +64,21 @@ export class AuditSummaryComponent implements OnInit {
       this.nightAuditService
         .checkAudit(
           this.entityId,
-          this.getQueryConfig({ toDate: this.today.getTime() })
+          this.getQueryConfig({ toDate: this.lastNightDate.getTime() })
         )
         .subscribe(
           (res) => {
             const loadTable = () => {
               this.auditDates = res;
               const currentAuditDate = this.auditDates.shift();
-              this.today = new Date(currentAuditDate);
+              this.auditDate = new Date(currentAuditDate);
               this.initTable();
             };
 
             const doNotLoad = () => {
               this.values = {};
               this.loading = false;
-              this.isNoAuditFound = true;
+              this.isNoAuditFound = false;
             };
 
             if (res?.length) {
@@ -105,6 +106,7 @@ export class AuditSummaryComponent implements OnInit {
           },
           (error) => {
             this.loading = false;
+            this.isNoAuditFound = false;
             this.auditDates = [];
           },
           () => {
@@ -120,7 +122,7 @@ export class AuditSummaryComponent implements OnInit {
       this.nightAuditService
         .getAuditSummary(
           this.entityId,
-          this.getQueryConfig({ auditDate: this.today.getTime() })
+          this.getQueryConfig({ auditDate: this.auditDate.getTime() })
         )
         .subscribe(
           (res) => {

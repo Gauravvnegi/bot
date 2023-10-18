@@ -162,7 +162,7 @@ export class AdminGuestDetailsComponent implements OnInit {
             )
             .subscribe();
         },
-        (error) => { }
+        (error) => {}
       );
   }
 

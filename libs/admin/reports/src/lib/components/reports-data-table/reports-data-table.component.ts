@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
   BaseDatatableComponent,
@@ -137,15 +137,25 @@ export class ReportsDataTableComponent extends BaseDatatableComponent {
     this.tableFG.addControl('filters', filterForm);
     filterForm.valueChanges.subscribe((_res) => {
       this.minDate = new Date(_res.fromDate);
+      this.initTime(_res, filterForm);
       this.loadInitialData();
     });
   }
 
-  initTime() {
-    this.fromDate = new Date();
-    this.toDate = new Date();
+  initTime(res?: Object, form?: FormGroup) {
+    this.fromDate = new Date(res ? res['fromDate'] : Date.now());
+    this.toDate = new Date(res ? res['toDate'] : Date.now());
     this.fromDate.setHours(0, 0, 0, 0);
     this.toDate.setHours(23, 59, 59, 999);
+    if (res) {
+      form.patchValue(
+        {
+          fromDate: this.fromDate.getTime(),
+          toDate: this.toDate.getTime(),
+        },
+        { emitEvent: false }
+      );
+    }
   }
 
   getStyle(data: RowStyles | Record<string, string | number>) {

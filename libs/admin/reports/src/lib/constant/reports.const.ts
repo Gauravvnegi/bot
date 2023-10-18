@@ -141,7 +141,7 @@ export const reportFiltersMapping: Record<
   historyAndForecastReport: ['fromDate', 'toDate'],
   managerFlashReport: ['fromDate', 'toDate'],
   dailyRevenueReport: ['fromDate', 'toDate', 'roomType'],
-  monthlySummaryReport: ['fromDate', 'month'],
+  monthlySummaryReport: ['roomType', 'month'],
 };
 
 export const rowStylesMapping: Record<RowStylesKeys, string> = {

@@ -6,6 +6,7 @@ import {
   MonthlySummaryReportResponse,
 } from '../types/financial-reports.types';
 import { ReportClass, RowStyles } from '../types/reports.types';
+import { getFormattedDate } from './reservation-reports.models';
 
 export class MonthlySummary extends RowStyles {
   day: string;
@@ -20,7 +21,7 @@ export class MonthlySummary extends RowStyles {
   directSaleTax: number;
   grossTotal: number;
   deserialize(input: MonthlySummaryReportResponse, isSubTotal?: boolean) {
-    this.day = new Date(input.date * 1000).toLocaleDateString('en-US');
+    this.day = getFormattedDate(input?.date);
     this.roomCount = input.totalRooms;
     this.occupancy = input.occupancyPercentage + '%';
     this.avgDailyRateIncludeInclusion = 0;
@@ -85,11 +86,7 @@ export class DailyRevenueReport
             isBlueBg: true,
           })
         : this.records.push({
-            emptyCell:
-              dailyRevenueReportSubTotalRows.includes(item.name) &&
-              item.name !== 'totalPayable'
-                ? ' '
-                : item.label,
+            emptyCell: item.label,
             gross: grossData[item.name],
             adj: adjData[item.name],
             today: dayData[item.name],
@@ -97,6 +94,7 @@ export class DailyRevenueReport
             year: yearData[item.name],
             isBold: dailyRevenueReportSubTotalRows.includes(item.name),
             isGreyBg: dailyRevenueReportSubTotalRows.includes(item.name),
+            isBlackBg: item.name === 'totalPayable',
           });
     });
 
@@ -108,7 +106,6 @@ const dailyRevenueReportSubTotalRows = [
   'totalRoom',
   'totalOthers',
   'totalRevenue',
-  'totalPayable',
   'totalTax',
 ];
 

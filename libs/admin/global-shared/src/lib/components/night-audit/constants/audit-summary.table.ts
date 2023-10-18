@@ -1,6 +1,7 @@
 import { Cols } from '@hospitality-bot/admin/shared';
+import { AuditSummaryColumn } from '../types/audit-summary.type';
 
-export const cols: Record<string, Cols[]> = {
+export const cols: Record<AuditSummaryColumn, Cols[]> = {
   rooms: [
     {
       field: 'occupiedRooms',

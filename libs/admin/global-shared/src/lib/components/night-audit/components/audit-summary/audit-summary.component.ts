@@ -25,7 +25,7 @@ export class AuditSummaryComponent implements OnInit {
   entityId = '';
   title = 'Audit Summary';
   cols = cols;
-  values: AuditViewType;
+  values: AuditViewType | {};
   loading = false;
   isNoAuditFound = false;
   actionConfig: ActionConfigType;

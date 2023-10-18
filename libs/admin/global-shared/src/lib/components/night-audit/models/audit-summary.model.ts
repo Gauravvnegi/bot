@@ -1,13 +1,68 @@
 import { Cols } from '@hospitality-bot/admin/shared';
 import { cols } from '../constants/audit-summary.table';
 import {
+  AuditSummaryColumn,
   AuditSummaryResponse,
   AuditViewType,
 } from '../types/audit-summary.type';
 import { TableObjectData } from '../../../types/table-view.type';
 export class AuditSummary {
-  columns: Record<string, Cols[]>;
+  columns: Record<AuditSummaryColumn, Cols[]> | {};
   records: AuditViewType;
+
+  deserialize(input: AuditSummaryResponse) {
+    this.columns = input?.outlets
+      ? { revenueList: this.initColumns(input) }
+      : {};
+    const cashierDetail = this.getCashierDetails(input);
+    const revenueDetail = this.getRevenueList(
+      input,
+      this.columns['revenueList']
+    );
+    const getStatusCount = (key: string) => {
+      return input.roomStatusMap.find((item) => item.status == key)?.count;
+    };
+    let accountDetails = {
+      DIRTY: getStatusCount('DIRTY'),
+      INSPECTED: getStatusCount('INSPECTED'),
+      CLEAN: getStatusCount('CLEAN'),
+    };
+
+    this.records = {
+      rooms: {
+        title: 'Room Details',
+        values: [
+          {
+            occupiedRooms: input.occupiedRooms,
+            availableRooms: input.totalRooms - input.occupiedRooms,
+            checkIns: input.arrivalRooms,
+            checkOuts: input.departureRooms,
+            noShows: input.noShowRooms,
+            cancellations: input.cancelledReservationForToday,
+          },
+        ],
+      },
+      houseKeeping: {
+        title: 'Housekeeping Details',
+        values: [
+          {
+            clean: accountDetails?.CLEAN,
+            dirty: accountDetails?.DIRTY,
+            inspected: accountDetails?.INSPECTED,
+          },
+        ],
+      },
+      accountDetails: {
+        title: 'Account Details',
+        values: cashierDetail,
+      },
+      revenueList: {
+        title: 'Revenue List',
+        values: revenueDetail,
+      },
+    };
+    return this;
+  }
 
   initColumns(input: AuditSummaryResponse) {
     const dynamicCols: Cols[] = [
@@ -71,55 +126,6 @@ export class AuditSummary {
         iceCreamStore: `Rs. ${total}`,
       });
     return revenueList;
-  }
-
-  deserialize(input: AuditSummaryResponse) {
-    this.columns = input?.outlets
-      ? { revenueList: this.initColumns(input) }
-      : {};
-    const cashierDetail = this.getCashierDetails(input);
-    const getStatusCount = (key: string) => {
-      return input.roomStatusMap.find((item) => item.status == key)?.count;
-    };
-    let accountDetails = {
-      DIRTY: getStatusCount('DIRTY'),
-      INSPECTED: getStatusCount('INSPECTED'),
-      CLEAN: getStatusCount('CLEAN'),
-    };
-    this.records = {
-      rooms: {
-        title: 'Room Details',
-        values: [
-          {
-            occupiedRooms: input.occupiedRooms,
-            availableRooms: input.totalRooms - input.occupiedRooms,
-            checkIns: input.arrivalRooms,
-            checkOuts: input.departureRooms,
-            noShows: input.noShowRooms,
-            cancellations: input.cancelledReservationForToday,
-          },
-        ],
-      },
-      houseKeeping: {
-        title: 'Housekeeping Details',
-        values: [
-          {
-            clean: accountDetails?.CLEAN,
-            dirty: accountDetails?.DIRTY,
-            inspected: accountDetails?.INSPECTED,
-          },
-        ],
-      },
-      accountDetails: {
-        title: 'Account Details',
-        values: cashierDetail,
-      },
-      revenueList: {
-        title: 'Revenue List',
-        values: this.getRevenueList(input, this.columns['revenueList']),
-      },
-    };
-    return this;
   }
 }
 

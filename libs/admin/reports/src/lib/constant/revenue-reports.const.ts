@@ -4,6 +4,8 @@ import { CashierReportData } from '../types/revenue-reports.types';
 export const cashierReportCols: ColsData<CashierReportData> = {
   id: {
     header: '#',
+    isSearchDisabled: true,
+    isSortDisabled: true,
   },
   paymentType: {
     header: 'Payment Type',

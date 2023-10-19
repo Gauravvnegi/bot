@@ -568,12 +568,12 @@
     font-size: 15px;
     letter-spacing: 0.35px;
     border-radius: 4px;
-    z-index: 480;
+    z-index: $night-audit-info-z;
     position: absolute;
     top: 40px;
     left: -64px;
     text-align: center;
     background: #f6d6dc;
-    color: red;
+    color: $failed-state;
   }
 }

@@ -85,7 +85,7 @@ export class RoomComponent implements OnInit {
 
   welcomeMessage = 'Welcome To Room Dashboard';
   navRoutes: NavRouteOptions = [{ label: 'Room Dashboard', link: './' }];
-  hotelId: string;
+  entityId: string;
   $subscription = new Subscription();
   chart: any;
 
@@ -94,7 +94,7 @@ export class RoomComponent implements OnInit {
   }
 
   listenForGlobalFilter(): void {
-    this.hotelId = this.globalFilterService.hotelId;
+    this.entityId = this.globalFilterService.entityId;
     this.globalFilterService.globalFilter$.subscribe((data) => {
       const calenderType = {
         calenderType: this._dateService.getCalendarType(
@@ -120,7 +120,7 @@ export class RoomComponent implements OnInit {
       ]),
     };
     this.$subscription.add(
-      this.roomService.getStats(this.hotelId, config).subscribe((res) => {
+      this.roomService.getStats(this.entityId, config).subscribe((res) => {
         this.roomStat = new RoomStatGraph().deserialize(
           res.averageRoomRateStat
         );

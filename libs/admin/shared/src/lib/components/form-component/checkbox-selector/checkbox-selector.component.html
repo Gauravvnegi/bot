@@ -1,0 +1,58 @@
+<div
+  [formGroup]="checkBoxForm"
+  class="wrapper p-field"
+  [style.fontSize]="fontSize"
+  [ngClass]="wrapperNgClasses"
+>
+  <label
+    *ngIf="label && !float"
+    class="label label__static"
+    [for]="controlName"
+    >{{ label }}</label
+  >
+
+  <div class="days-selector">
+    <label>
+      <input
+        type="checkbox"
+        formControlName="all"
+        (change)="toggleSelectAll()"
+        class="d-none"
+      />
+      <div (click)="toggleSelectAll()" class="checkbox">
+        <img
+          *ngIf="checkBoxForm.get('all')?.value"
+          class="checkbox__img"
+          src="assets/svg/checkboxSelect.svg"
+          alt="select"
+        />
+      </div>
+
+      <span class="checkbox-label"> All</span>
+    </label>
+
+    <div *ngFor="let item of menuOptions">
+      <label>
+        <input
+          type="checkbox"
+          [formControlName]="item.value"
+          (change)="toggleCheckboxSelection()"
+          class="d-none"
+        />
+        <span class="panel-tree__header-checkbox">
+          <div (click)="toggleCheckboxSelection()" class="checkbox">
+            <img
+              *ngIf="checkBoxForm.get(item.value).value"
+              class="checkbox__img"
+              src="assets/svg/checkboxSelect.svg"
+              alt="select"
+            />
+          </div>
+        </span>
+
+        <span class="checkbox-label"> {{ item.label }}</span>
+      </label>
+    </div>
+    <small *ngIf="error" class="p-error"> {{ error }}</small>
+  </div>
+</div>

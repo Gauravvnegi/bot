@@ -9,7 +9,7 @@ import { ButtonVariant } from '../../types/form.type';
 })
 export class ButtonComponent {
   @Input() variant: ButtonVariant = 'contained';
-  @Input() severity: 'reset' | 'secondary' | 'primary' = 'primary';
+  @Input() severity: ButtonSeverity = 'primary';
   @Input() label: string;
   @Input() target: '_blank' | '_self' = '_blank';
   @Input() type: string = 'button';
@@ -19,6 +19,7 @@ export class ButtonComponent {
   @Output() onClick = new EventEmitter<Event>();
   @Input() isLoading: boolean = false;
   @Input() icon: string;
+  @Input() piIcon: string = '';
 
   constructor(private router: Router) {}
 
@@ -28,3 +29,5 @@ export class ButtonComponent {
     if (this.link) this.router.navigate([this.link]);
   }
 }
+
+export type ButtonSeverity = 'reset' | 'secondary' | 'primary';

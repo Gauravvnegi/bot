@@ -22,10 +22,12 @@ export class Details implements IDeserializable {
   roomsDetails: RoomsDetails;
   feedbackDetails: FeedbackDetails;
   invoicePrepareRequest: boolean;
+  pmsBooking: boolean;
 
   deserialize(input: any, timezone) {
-    const hotelNationality = input.hotel.address.countryCode;
+    const hotelNationality = input?.hotel?.address?.countryCode;
     this.invoicePrepareRequest = input.invoicePrepareRequest || false;
+    this.pmsBooking = input.pmsBooking || false;
     this.guestDetails = new GuestDetailDS().deserialize(
       input.guestDetails,
       hotelNationality
@@ -95,7 +97,10 @@ export class RoomsDetails implements IDeserializable {
   rooms;
   totalRooms: number;
   deserialize(input: any) {
-    this.totalRooms = input.rooms ? input.rooms.length : 0;
+    const room = input.stayDetails?.room;
+    // this.totalRooms = room ? room.length : 0;
+    // receiving object as of now
+    this.totalRooms = room?.unit ? room.unit : 1;
     return this;
   }
 }
@@ -236,7 +241,7 @@ export class GuestDetailsConfig implements IDeserializable {
       this,
       set({}, 'id', get(input, ['id'])),
       set({}, 'code', get(input, ['code'])),
-      set({}, 'title', get(input, ['nameTitle'], '')),
+      set({}, 'title', get(input, ['salutation'], '')),
       set({}, 'firstName', get(input, ['firstName'])),
       set({}, 'lastName', get(input, ['lastName'])),
       set({}, 'countryCode', this.getNationality(get(contactDetails, ['cc']))),
@@ -322,6 +327,7 @@ export class StayDetailsConfig implements IDeserializable {
   departureTimeStamp: number;
 
   deserialize(input: any, timezone) {
+    const room = get(input, ['room'], {});
     Object.assign(
       this,
       set({}, 'code', get(input, ['code'])),
@@ -354,13 +360,13 @@ export class StayDetailsConfig implements IDeserializable {
           timezone
         )
       ),
-      set({}, 'roomType', get(input, ['roomType'])),
+      set({}, 'roomType', get(room, ['type'])),
       set({}, 'kidsCount', get(input, ['kidsCount'])),
       set({}, 'adultsCount', get(input, ['adultsCount'])),
       set(
         {},
         'roomNumber',
-        get(input, ['roomNumber']) === 0 ? '' : get(input, ['roomNumber'])
+        get(room, ['roomNumber']) === 0 ? '' : get(room, ['roomNumber'])
       ),
       set({}, 'special_comments', get(input, ['comments'])),
       set({}, 'checkin_comments', get(input, ['checkInComment']))
@@ -442,13 +448,16 @@ export class ReservationDetailsConfig implements IDeserializable {
   bookingId: string;
   hotelId: string;
   hotelNationality: string;
+  entityId: string;
+
   deserialize(input: any) {
     Object.assign(
       this,
       set({}, 'bookingNumber', get(input, ['number'])),
       set({}, 'bookingId', get(input, ['id'])),
       set({}, 'hotelId', get(input.hotel, ['id'])),
-      set({}, 'hotelNationality', get(input.hotel.address, ['countryCode']))
+      set({}, 'hotelNationality', get(input.hotel.address, ['countryCode'])),
+      set({}, 'entityId', get(input.hotel, ['id']))
     );
     return this;
   }
@@ -644,7 +653,6 @@ export class Package implements IDeserializable {
       set({}, 'description', get(input, ['description'])),
       set({}, 'name', get(input, ['name'])),
       set({}, 'id', get(input, ['id'])),
-      set({}, 'imgUrl', get(input, ['imageUrl'])),
       set({}, 'metaData', get(input, ['metaData'])),
       set({}, 'quantity', get(input, ['quantity'])),
       set({}, 'rate', get(input, ['rate'])),
@@ -652,9 +660,11 @@ export class Package implements IDeserializable {
       set({}, 'packageCode', get(input, ['packageCode'])),
       set({}, 'unit', get(input, ['unit'])),
       set({}, 'currency', get(input, ['currency'])),
-      set({}, 'status', get(input, ['statusMessage', 'status'])),
+      set({}, 'status', get(input, ['statusMessage', 'state'])),
       set({}, 'remarks', get(input, ['statusMessage', 'remarks']))
     );
+    if (input.imageUrl && input.imageUrl.length)
+      this.imgUrl = input.imageUrl[0].url ?? '';
     return this;
   }
 }

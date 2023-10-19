@@ -5,9 +5,10 @@
     </p>
   </div>
   <div
-    class="sidebar-panel"
+    class="sidebar-panel upper"
     id="sidebar"
     [style.background-color]="backgroundColor"
+    *ngIf="!fullView"
   >
     <hospitality-bot-sidenav
       (submenuItems)="subMenuItem($event)"
@@ -16,7 +17,7 @@
     ></hospitality-bot-sidenav>
   </div>
   <div
-    class="sidebar-panel"
+    class="sidebar-panel lower"
     id="sidebar"
     [style.background-color]="backgroundColor"
   >
@@ -29,6 +30,16 @@
       (navToggle)="sideNavToggle($event)"
     ></hospitality-bot-sidenav-expand>
   </div>
+
+  <p-sidebar
+    class="sidebar-slide"
+    [ngClass]="sidebarType"
+    [(visible)]="sidebarVisible"
+    position="right"
+    [showCloseIcon]="false"
+  >
+    <ng-container #sidebarSlide></ng-container>
+  </p-sidebar>
 
   <div class="main-panel" id="main-panel">
     <div class="main-panel--header">
@@ -61,8 +72,26 @@
             ? { visibility: 'visible' }
             : { visibility: 'hidden', height: '0px' }
         "
+        *ngIf="!fullView"
       >
         <div class="options1" [ngClass]="{ disabled: isGlobalFilterVisible }">
+          <div class="selected-product">
+            <img
+              [src]="selectedProduct.icon"
+              [pTooltip]="selectedProduct.label"
+              [alt]="selectedProduct.label"
+              tooltipPosition="bottom"
+            />
+          </div>
+
+          <hospitality-bot-tiered-menu-button
+            *ngIf="!!bookingOptions?.length"
+            label="Quick booking"
+            [splitButton]="true"
+            (clicked)="showQuickReservation()"
+            [openNewWindow]="true"
+            [items]="bookingOptions"
+          ></hospitality-bot-tiered-menu-button>
           <div class="global_search">
             <admin-search-bar
               [parentForm]="searchFG"
@@ -87,6 +116,67 @@
           </div>
         </div>
         <div class="options2">
+          <div
+            *ngIf="isLiveMessagingSubscribed"
+            class="header--button quick-action"
+            (click)="openFreddie()"
+          >
+            <img
+              class="filter-icon"
+              src="assets/svg/Chats.svg"
+              alt="chats"
+              pTooltip="Chats"
+              tooltipPosition="bottom"
+            />
+          </div>
+          <!-- TODO: Route after completing arrival & departure.... -->
+          <!-- <div class="header--button quick-action">
+            <img
+              class="filter-icon"
+              src="assets/svg/Arrival.svg"
+              alt="arrival"
+              title="Arrival"
+            />
+          </div> -->
+          <div
+            *ngIf="isQuickReservationAvailable"
+            class="header--button quick-action"
+            (click)="openViewReservation()"
+          >
+            <img
+              class="filter-icon"
+              src="assets/svg/calendar-dark.svg"
+              alt="calendar"
+              pTooltip="View Reservation"
+              tooltipPosition="bottom"
+            />
+          </div>
+          <div
+            *ngIf="isSettingAvailable"
+            class="header--button quick-action"
+            (click)="openSettings()"
+          >
+            <img
+              class="filter-icon"
+              src="assets/svg/setting-dark.svg"
+              alt="setting"
+              pTooltip="Settings"
+              tooltipPosition="bottom"
+            />
+          </div>
+          <div
+            *ngIf="isPredictoSubscribed"
+            class="header--button quick-action"
+            (click)="openNightAudit()"
+          >
+            <img
+              class="filter-icon"
+              src="assets/svg/allocation.svg"
+              alt="audit"
+              pTooltip="Night Audit"
+              tooltipPosition="bottom"
+            />
+          </div>
           <div class="notification-wrapper">
             <div class="temp-width">
               <div
@@ -97,6 +187,8 @@
                   class="filter-icon"
                   src="assets/svg/notification-bell.svg"
                   alt="notification"
+                  pTooltip="Notification"
+                  tooltipPosition="bottom"
                 />
                 <div
                   class="notification-count"
@@ -105,17 +197,20 @@
                   {{ unreadCount }}
                 </div>
               </div>
-              <div
-                class="notification"
-                *ngIf="isNotificationVisible"
-                [@slideInOut]
+              <p-sidebar
+                [visible]="isNotificationVisible"
+                (onHide)="closeNotification()"
+                [showCloseIcon]="false"
+                position="right"
               >
-                <admin-notification
-                  [notificationFilterData]="notificationFilterData"
-                  (onCloseNotification)="closeNotification()"
-                  (filterData)="setNotificationFilterData($event)"
-                ></admin-notification>
-              </div>
+                <div class="notification" *ngIf="isNotificationVisible">
+                  <admin-notification
+                    [notificationFilterData]="notificationFilterData"
+                    (onCloseNotification)="isNotificationVisible = false"
+                    (filterData)="setNotificationFilterData($event)"
+                  ></admin-notification>
+                </div>
+              </p-sidebar>
             </div>
           </div>
           <div class="dropdown-wrapper">
@@ -128,23 +223,30 @@
                   class="filter-icon"
                   src="assets/svg/Filter-Icon.svg"
                   alt="filter"
+                  pTooltip="filter"
+                  tooltipPosition="bottom"
                 />
               </div>
-              <div
-                class="filter-wrapper"
-                *ngIf="
-                  isGlobalFilterVisible &&
-                  (filterService.emitFilterValue$ | async) as initialFilterValue
-                "
-                [@slideInOut]
+              <p-sidebar
+                [visible]="isGlobalFilterVisible"
+                (onHide)="isGlobalFilterVisible = false"
+                [showCloseIcon]="false"
+                position="right"
               >
-                <admin-filter
-                  [initialFilterValue]="initialFilterValue"
-                  (onCloseFilter)="isGlobalFilterVisible = false"
-                  (onApplyFilter)="applyFilter($event)"
-                  (onResetFilter)="resetFilter($event)"
-                ></admin-filter>
-              </div>
+                <div
+                  *ngIf="
+                    isGlobalFilterVisible &&
+                    (filterService.emitFilterValue$ | async) as data
+                  "
+                >
+                  <admin-filter
+                    [initialFilterValue]="data"
+                    (onCloseFilter)="isGlobalFilterVisible = false"
+                    (onApplyFilter)="applyFilter($event)"
+                    (onResetFilter)="resetFilter($event)"
+                  ></admin-filter>
+                </div>
+              </p-sidebar>
             </div>
           </div>
         </div>
@@ -175,6 +277,23 @@
         </div>
         <admin-footer id="main-footer"></admin-footer>
       </div>
+    </div>
+  </div>
+</div>
+
+<div id="no-view" class="no-view" *ngIf="!hasPermissionToViewModule">
+  <div class="no-view__container">
+    <img src="assets/svg/access_denied.svg" alt="no-view" />
+    <div class="no-view__content">
+      <h2 class="no-view__title-text">
+        Permission not allowed.
+      </h2>
+      <p class="no-view__main-text">
+        You lack the necessary permissions to view this resource.
+      </p>
+      <p class="no-view__sub-text">
+        Kindly request permission from your manager.
+      </p>
     </div>
   </div>
 </div>

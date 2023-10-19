@@ -43,7 +43,7 @@ export class PreArrivalPackagesComponent implements OnInit, OnDestroy {
   chart = analytics.preArrivalChart;
   tabFilterItems = [];
   tabFilterIdx = 0;
-  hotelId: string;
+  entityId: string;
 
   constructor(
     private _adminUtilityService: AdminUtilityService,
@@ -90,8 +90,9 @@ export class PreArrivalPackagesComponent implements OnInit, OnDestroy {
           ...data['dateRange'].queryValue,
           calenderType,
         ];
-        this.hotelId = this.globalFilterService.hotelId;
+        this.entityId = this.globalFilterService.entityId;
         if (!this.tabFilterItems.length) this.getPackageList();
+        // this.resetHiddenState;
         this.getInhouseSentimentsData();
       })
     );
@@ -100,7 +101,7 @@ export class PreArrivalPackagesComponent implements OnInit, OnDestroy {
   getPackageList() {
     this.$subscription.add(
       this.analyticsService
-        .getPackageList(this.hotelId)
+        .getPackageList(this.entityId)
         .subscribe((response) => {
           const packages = response.paidPackages || [];
 
@@ -123,7 +124,7 @@ export class PreArrivalPackagesComponent implements OnInit, OnDestroy {
       queryObj: this._adminUtilityService.makeQueryParams([
         ...this.globalFilters,
         {
-          entityType: this.entityType,
+          journeyType: this.entityType,
           packageId: this.tabFilterItems[this.tabFilterIdx]?.value,
         },
       ]),
@@ -169,6 +170,17 @@ export class PreArrivalPackagesComponent implements OnInit, OnDestroy {
     });
     ci.update();
   };
+
+  // resetHiddenState = () => {
+  //   const ci = this.baseChart.chart;
+
+  //   ci.data.datasets.forEach((e, i) => {
+  //     const meta = ci.getDatasetMeta(i);
+  //     meta.hidden = false;
+  //   });
+
+  //   ci.update();
+  // };
 
   setChartType(option, event): void {
     event.stopPropagation();
@@ -244,12 +256,6 @@ export class PreArrivalPackagesComponent implements OnInit, OnDestroy {
 
     detailCompRef.componentInstance.tableName = 'Pre-arrival Request';
     detailCompRef.componentInstance.entityType = 'pre-arrival';
-    detailCompRef.componentInstance.optionLabels = [
-      'Accept',
-      'Reject',
-      'Closed',
-      'Pending',
-    ];
     detailCompRef.componentInstance.tabFilterIdx = 0;
     detailCompRef.componentInstance.packageId = this.tabFilterItems[
       this.tabFilterIdx

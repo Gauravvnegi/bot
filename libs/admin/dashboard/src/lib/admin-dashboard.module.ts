@@ -22,6 +22,11 @@ import { ReservationDatatableComponent } from './components/datatable/reservatio
 import { ReservationDatatableModalComponent } from './components/modal/reservation-datatable-modal/reservation-datatable-modal.component';
 import { StatisticsComponent } from './components/statistics/statistics.component';
 import { StatisticsService } from './services/statistics.service';
+import { AnalyticsService } from 'libs/admin/request-analytics/src/lib/services/analytics.service';
+import { AdminGuestDashboardModule } from '@hospitality-bot/admin/guest-dashboard';
+import { RoomService } from 'libs/admin/room/src/lib/services/room.service';
+import { ManageReservationService } from 'libs/admin/manage-reservation/src/lib/services/manage-reservation.service';
+import { FormService } from 'libs/admin/manage-reservation/src/lib/services/form.service';
 
 export const adminDashboardRoutes: Route[] = [
   {
@@ -39,10 +44,11 @@ export const adminDashboardRoutes: Route[] = [
     SharedMaterialModule,
     AdminReservationModule,
     ChartsModule,
+    AdminGuestDashboardModule,
     NgCircleProgressModule.forRoot(),
     RouterModule.forChild(adminDashboardRoutes),
     TranslateModule.forChild(
-      getTranslationConfigs([HttpClient], ['dashboard'])
+      getTranslationConfigs([HttpClient], ['dashboard', 'guests'])
     ),
   ],
   declarations: [
@@ -60,6 +66,12 @@ export const adminDashboardRoutes: Route[] = [
     MessagesComponent,
   ],
   exports: [RouterModule],
-  providers: [StatisticsService],
+  providers: [
+    StatisticsService,
+    AnalyticsService,
+    RoomService,
+    ManageReservationService,
+    FormService,
+  ],
 })
 export class AdminDashboardModule {}

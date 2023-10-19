@@ -4,11 +4,15 @@
   overflow: hidden;
 }
 
+.form-view {
+  min-height: fit-content !important;
+}
+
 .wrapper {
   background-color: #ffff;
   border: 1px solid rgba(112, 112, 112, 0.35);
   border-radius: 5px;
-  height: 70vh;
+  @include flex-col-justify-center;
   &__default {
     font-size: 14px;
     font-weight: $bold;
@@ -26,7 +30,6 @@
     width: 93vw;
     padding: 10px 0;
     margin: auto;
-    min-height: 400px;
     flex-direction: column;
     gap: 2em;
 
@@ -58,5 +61,10 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 70vh;
+  height: 60vh;
 }
+
+// .nav-actions {
+//   // display: block;
+//   // height: 20vh;
+// }

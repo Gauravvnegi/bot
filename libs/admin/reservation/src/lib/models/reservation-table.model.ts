@@ -1,4 +1,7 @@
+import { EntityState } from '@hospitality-bot/admin/shared';
 import { DateService } from '@hospitality-bot/shared/utils';
+import { ReservationTab } from 'libs/admin/dashboard/src/lib/types/response.type';
+import { TableValue } from 'libs/admin/dashboard/src/lib/constants/tabFilterItem';
 import { get, set, trim } from 'lodash';
 import * as moment from 'moment';
 export interface IDeserializable {
@@ -7,10 +10,17 @@ export interface IDeserializable {
 
 export class ReservationTable implements IDeserializable {
   records: Reservation[];
+  entityStateCounts: EntityState<string>;
+  entityTypeCounts: EntityState<ReservationTab>;
+  totalRecord: number;
+
   deserialize(input: any, timezone) {
     this.records = input.records.map((record) =>
       new Reservation().deserialize(record, timezone)
     );
+    this.entityStateCounts = input?.entityStateCounts;
+    this.entityTypeCounts = input?.entityTypeCounts;
+    this.totalRecord = input?.total;
     return this;
   }
 }
@@ -30,8 +40,8 @@ export class Reservation implements IDeserializable {
     this.guests = new GuestType().deserialize(input.guestDetails);
     this.payment = new Payment().deserialize(input.paymentSummary);
     this.status = new Status().deserialize(input);
-    this.feedback = new Feedback().deserialize(input.feedback);
-    this.packages = new Package().deserialize(input.packages);
+    // this.feedback = new Feedback().deserialize(input.feedback);
+    // this.packages = new Package().deserialize(input.packages);
     this.currentJourney = new CurrentJourney().deserialize(input);
     return this;
   }
@@ -46,16 +56,16 @@ export class Package implements IDeserializable {
     return this;
   }
 
-  getPaidPackagesLabels() {
-    // return this.paidPackages.map((paidPackage) => paidPackage.label).join(', ');
-    return this.paidPackages.length
-      ? `${this.paidPackages[0].label}${
-          this.paidPackages.length > 1
-            ? ` (+${this.paidPackages.length - 1})`
-            : ''
-        }`
-      : '';
-  }
+  // getPaidPackagesLabels() {
+  //   // return this.paidPackages.map((paidPackage) => paidPackage.label).join(', ');
+  //   return this.paidPackages.length
+  //     ? `${this.paidPackages[0].label}${
+  //         this.paidPackages.length > 1
+  //           ? ` (+${this.paidPackages.length - 1})`
+  //           : ''
+  //       }`
+  //     : '';
+  // }
 }
 
 export class PackageDetail implements IDeserializable {
@@ -118,10 +128,12 @@ export class Status implements IDeserializable {
 
 export class CurrentJourney implements IDeserializable {
   currentJourneyName;
+  currentJourneyStatus;
   deserialize(input) {
     Object.assign(
       this,
-      set({}, 'currentJourneyName', get(input, ['currentJourney']))
+      set({}, 'currentJourneyName', get(input, ['currentJourney'])),
+      set({}, 'currentJourneyStatus', get(input, ['currentJourneyState']))
     );
     return this;
   }
@@ -338,7 +350,7 @@ export class GuestType implements IDeserializable {
 
 export class Guest implements IDeserializable {
   id;
-  nameTitle;
+  salutation;
   firstName: string;
   lastName: string;
   countryCode: string;
@@ -351,7 +363,7 @@ export class Guest implements IDeserializable {
     Object.assign(
       this,
       set({}, 'id', get(input, ['id'])),
-      set({}, 'nameTitle', get(input, ['nameTitle'], '')),
+      set({}, 'salutation', get(input, ['salutation'], '')),
       set({}, 'firstName', trim(get(input, ['firstName'], 'No'))),
       set({}, 'lastName', trim(get(input, ['lastName'], 'Name'))),
       set(
@@ -410,16 +422,19 @@ export class Room implements IDeserializable {
   chargeCode;
   status;
   roomClass;
+  adultCount?: number;
+  kidsCount?: number;
   deserialize(input: any) {
-    Object.assign(
-      this,
-      set({}, 'roomNumber', get(input, ['roomNumber'])),
-      set({}, 'type', get(input, ['roomType'])),
-      set({}, 'unit', get(input, ['unit'])),
-      set({}, 'chargeCode', get(input, ['chargeCode'])),
-      set({}, 'status', get(input, ['status'])),
-      set({}, 'roomClass', get(input, ['roomClass']))
-    );
+    this.roomNumber = input?.room?.roomNumber;
+    this.type = input.room?.type;
+    this.unit = input.room?.unit;
+    this.chargeCode = input?.room?.chargeCode;
+    this.status = input.room?.status;
+    this.roomClass = input.room?.roomClass;
+    this.adultCount = input?.adultsCount;
+    this.kidsCount = input?.kidsCount;
+
+
     return this;
   }
 }

@@ -1,0 +1,72 @@
+@import 'main';
+
+.custom-checkbox {
+  /* Hide the default checkbox */
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  /* Define the size and position of the custom checkbox */
+  width: 20px;
+  height: 20px;
+  border: 2px solid #ccc;
+  border-radius: 4px;
+  /* Change the color of the checkmark when checked */
+  color: #fff;
+  font-weight: bold;
+}
+
+.custom-checkbox:checked {
+  background-color: $primary-cta;
+  border-color: $primary-cta;
+}
+// .custom-checkbox::before {
+//   content: '';
+// }
+.custom-checkbox:checked:before {
+  content: '\2713';
+  padding: 4px;
+}
+
+// .custom-checkbox {
+//   /* Hide the default checkbox */
+//   appearance: none;
+//   -webkit-appearance: none;
+//   -moz-appearance: none;
+//   /* Define the size and position of the custom checkbox */
+//   width: 20px;
+//   height: 20px;
+//   border: 2px solid #ccc;
+//   border-radius: 4px;
+//   position: relative;
+// }
+
+// .checkbox-icon {
+//   position: absolute;
+//   top: 50%;
+//   left: 50%;
+//   transform: translate(-50%, -50%);
+//   width: 12px;
+//   height: 12px;
+//   border-radius: 2px;
+//   background-color: transparent;
+//   border: 2px solid #ccc;
+//   visibility: hidden;
+// }
+
+// .custom-checkbox:checked + label .checkbox-icon {
+//   visibility: visible;
+//   background-color: $primary-cta;
+//   border-color: $primary-cta;
+// }
+
+// .custom-checkbox:checked + label .checkbox-icon::before {
+//   content: '';
+//   position: absolute;
+//   top: 50%;
+//   left: 50%;
+//   transform: translate(-50%, -50%) rotate(45deg);
+//   width: 6px;
+//   height: 3px;
+//   border-bottom: 2px solid #fff;
+//   border-right: 2px solid #fff;
+// }

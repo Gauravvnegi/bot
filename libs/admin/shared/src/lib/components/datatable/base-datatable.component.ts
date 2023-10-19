@@ -1,15 +1,31 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { MatTabChangeEvent } from '@angular/material/tabs';
 import { get } from 'lodash';
 import * as moment from 'moment';
 import { MenuItem } from 'primeng/api';
 import { LazyLoadEvent, SortEvent } from 'primeng/api/public_api';
 import { Paginator } from 'primeng/paginator';
 import { Table } from 'primeng/table';
-import { Observable, of } from 'rxjs';
+import { Observable, of, Subscription } from 'rxjs';
 import { delay } from 'rxjs/operators';
+import {
+  defaultFilterChipValue,
+  defaultRecordJson,
+  quickReplyFilterDefaultConfig,
+} from '../../constants/datatable';
 import { TableService } from '../../services/table.service';
-import { Chip, Cols, FlagType, TableFieldSearch } from '../../types/table.type';
+import {
+  Chip,
+  Cols,
+  EntityState,
+  EntityStateRecord,
+  Filter,
+  QuickReplyFilterConfig,
+  TableFieldSearch,
+} from '../../types/table.type';
+import { convertToTitleCase } from '../../utils/valueFormatter';
+import { MemberSortTypes } from 'libs/admin/agent/src/lib/types/agent';
 
 interface Import {
   name: string;
@@ -20,7 +36,9 @@ interface Import {
   template: '',
 })
 export class BaseDatatableComponent implements OnInit {
+  scrollTargetPoint = 110; //scroll target point to stick the table header on top
   isScrolledUp = false;
+  isReachedEnd = false;
   currentPage = 0;
   @ViewChild('dt') table: Table; //reference to data-table
   tableName = 'Datatable'; //table name
@@ -41,13 +59,15 @@ export class BaseDatatableComponent implements OnInit {
   isCustomSort = true;
   isSelectable = true;
   isSearchable = true;
+  isEmpty = true;
 
   tableFG: FormGroup;
-
+  sortedBy: MemberSortTypes | string;
+  searchKey: string;
   isPaginator = false;
-  rowsPerPage = 5;
+  rowsPerPage = 50;
   showCurrentPageReport = true;
-  rowsPerPageOptions = [5, 10, 25, 50];
+  rowsPerPageOptions = [5, 10, 25, 50, 100, 200];
   first = 0; //index of the first page to show
 
   @Input() tableConfig = {
@@ -63,12 +83,14 @@ export class BaseDatatableComponent implements OnInit {
   @Input() loading = false;
   initialLoading = true;
 
-  tabFilterItems = [];
+  tabFilterItems: Filter<string, string>[] | any = []; //any will be removed when implemented everywhere
   tabFilterIdx = 0;
+  selectedTab: string;
+  isAllTabFilterRequired = false;
 
-  filterChips = []; //Chips setting, When there is no tabItem
-  filterChipsIndex = 0;
-
+  filterChips: Chip<string>[] | any = []; //Chips setting, When there is no tabItem
+  selectedFilterChips = new Set<string>([defaultFilterChipValue.value]);
+  isQuickFilterInEmptyView = false;
   values = [];
 
   TabItems: MenuItem[] = [];
@@ -98,7 +120,7 @@ export class BaseDatatableComponent implements OnInit {
     { vin: 11, year: 2023, brand: 'mg', color: 'yellow' },
   ]; // testing data-source
 
-  totalRecords = 20;
+  totalRecords = 0;
 
   selectionMode = 'multiple';
   selectedRows = [];
@@ -123,27 +145,27 @@ export class BaseDatatableComponent implements OnInit {
     // { label: 'PDF', value: 'pdf' },
   ];
 
-  quickReplyTypes = [
-    { label: 'All', icon: '', isSelected: true },
-    { label: 'Check-In Pending (3)', icon: '', isSelected: false },
-    { label: 'Check-In Completed (3)', icon: '', isSelected: false },
-    { label: 'Express Check-In (10)', icon: '', isSelected: false },
-  ];
+  quickReplyTypes = [];
 
   reportTemplate = 'Showing {first} to {last} of {totalRecords} entries';
   tempFirst;
   tempRowsPerPage;
   isSearchSet = false;
   @ViewChild('paginator', { static: false }) paginator: Paginator;
+  mainLayout;
+
+  /** !!!!!! IMPORTANT
+   * Use this to cancel api call when filter changes and the previous request is still in progress
+   */
+  subscriptionList$ = new Subscription();
 
   constructor(
     private _fb: FormBuilder,
     protected tabFilterService: TableService
   ) {
     this.initTableFG();
-    document
-      .getElementById('main-layout')
-      ?.addEventListener('scroll', this.onScroll);
+    this.mainLayout = document.getElementById('main-layout');
+    this.mainLayout?.addEventListener('scroll', this.onScroll);
   }
 
   initTableFG() {
@@ -153,6 +175,7 @@ export class BaseDatatableComponent implements OnInit {
         documentType: ['csv'],
       }),
       quickReplyActionFilters: [[]],
+      search: [''],
     });
   }
 
@@ -169,6 +192,17 @@ export class BaseDatatableComponent implements OnInit {
       //setting pagination
       this.totalRecords = this.dataSource.length;
     });
+  }
+
+  resetTableValues() {
+    this.rowsPerPage = 50;
+    this.first = 0;
+    this.values = [];
+    this.tabFilterItems = [];
+    this.tabFilterIdx = 0;
+    this.filterChips = [];
+    this.selectedFilterChips = new Set<string>([defaultFilterChipValue.value]);
+    this.totalRecords = 0;
   }
 
   getSubscribedFilters(module, table, tabFilters) {
@@ -215,6 +249,7 @@ export class BaseDatatableComponent implements OnInit {
     this.rowsPerPage = event.rows;
   }
 
+  // will be overridden at parent file
   loadData(event: LazyLoadEvent) {
     this.loading = true;
     this.fetchDataFrom({ first: event.first, rows: event.rows }).subscribe(
@@ -337,152 +372,127 @@ export class BaseDatatableComponent implements OnInit {
     return this.values ? this.first === 0 : true;
   }
 
-  isQuickReplyFilterSelected(quickReplyFilter) {
-    // const index = this.quickReplyTypes.indexOf(offer);
-    // return index >= 0;
-    return true;
-  }
-
   /**
    * @function toggleQuickReplyFilter To handle the chip click for a tab.
    */
-  toggleQuickReplyFilter({ chips }: { chips: Chip<string>[] }): void {
-    // If multiple tab filter chips
-    if (this.tabFilterItems[this.tabFilterIdx])
-      this.tabFilterItems[this.tabFilterIdx].chips = chips;
-
-    // If no tab to switch (singleFilter)
-    if (this.filterChips) this.filterChips = chips;
-
+  toggleQuickReplyFilter({
+    chips,
+    selectedChips,
+  }: {
+    chips: Chip<string>[];
+    selectedChips: Set<string>;
+  }): void {
+    this.selectedFilterChips = selectedChips;
     this.changePage(0);
-  }
-  /**
-   * @function calculateTotalChipsCount To calculate the total count of the chips.
-   * @param chips The chips array.
-   * @returns The total count of the chips.
-   */
-  calculateTotalChipsCount(chips) {
-    return chips
-      ?.filter((chip) => chip?.isSelected)
-      ?.reduce((total, chip) => total + (chip?.total ?? 0), 0);
+    //to handle the case when there is no tab filter and filter chips are inside the empty view
+    if (this.isQuickFilterInEmptyView) this.loadData({});
   }
 
-  // --------------- Dynamic filter and chips ----------------------
-  initTabFilters<T extends string>(
-    entityStateCounts: Record<T, number>,
-    record: Record<T, string>
-  ) {
-    this.tabFilterItems = Object.entries(entityStateCounts).map(
-      ([key, value]) => ({
-        label: key,
-        value: key,
-        total: value,
-      })
-    );
+  onSelectedTabFilterChange(event: MatTabChangeEvent) {
+    this.resetTable();
+    this.tabFilterIdx = event.index;
+    this.selectedTab = this.tabFilterItems[event.index].value;
+    this.selectedFilterChips = new Set<string>([defaultFilterChipValue.value]);
+    this.loadData({});
   }
-
-  initFilterChips<T extends string>(
-    entityTypeCounts: Record<T, number>,
-    record: Record<T, { label: string; type: FlagType }>
-  ) {
-    this.filterChips = Object.entries(entityTypeCounts).map(([key, value]) => ({
-      label: record[key].label,
-      value: key,
-      total: value,
-      type: record[key].type,
-    }));
-
-    this.filterChips = [];
-  }
-  // -------------------------------------------
 
   /**
-   * @function updateTotalRecords To update the total records count.
-   * @param chips The chips array.
+   * Handle the value of tab filters and filter chips
+   * @param entityTypeCounts Tab filters value
+   * @param entityStateCounts Filter chips value
+   * @param recordsJson Json data for label and type value against the key
+   * @param totalMainCount total count of all data
    */
-  updateTotalRecords() {
-    if (this.tabFilterItems[this.tabFilterIdx]?.chips?.length) {
-      this.totalRecords = this.calculateTotalChipsCount(
-        this.tabFilterItems[this.tabFilterIdx]?.chips
+  initFilters<T extends string>(
+    entityTypeCounts: EntityState<T>,
+    entityStateCounts: EntityState<T>,
+    totalMainCount: number,
+    recordsJson?: EntityStateRecord<T>
+  ) {
+    const record = { ...defaultRecordJson, ...recordsJson };
+    let totalCount = totalMainCount;
+
+    const resEntityTypeCounts = {
+      ...(this.isAllTabFilterRequired
+        ? { [defaultFilterChipValue.value]: totalCount }
+        : {}),
+      ...entityTypeCounts,
+    };
+
+    if (resEntityTypeCounts && Object.keys(resEntityTypeCounts).length > 0) {
+      this.tabFilterItems = Object.entries(resEntityTypeCounts).map(
+        ([key, value]) => ({
+          label: record[key]?.label ?? convertToTitleCase(key),
+          value: key,
+          total: value,
+        })
       );
-    } else if (this.filterChips?.length) {
-      this.totalRecords = this.calculateTotalChipsCount(this.filterChips);
-    } else {
-      this.totalRecords = this.tabFilterItems[this.tabFilterIdx].total;
-    }
-  }
 
-  /**
-   * @function updateTabFilterCount To update the count for the tabs.
-   * @param countObj The object with count for all the tab.
-   * @param currentTabCount The count for current selected tab.
-   */
-  updateTabFilterCount(countObj, currentTabCount: number): void {
-    countObj = countObj ?? {};
-    this.tabFilterItems?.forEach((tab) => {
-      tab.value === 'ALL'
-        ? (tab.total = currentTabCount ?? 0)
-        : (tab.total = countObj[tab.value] ?? 0);
-    });
-  }
-
-  /**
-   * @function setFilterChips To set the total count for the chips.
-   * @param chips The chips array.
-   * @param countObj The object with count for all the chip.
-   */
-  setFilterChips(chips, countObj) {
-    countObj = Object.entries(countObj).reduce((acc, [key, value]) => {
-      acc[key.toUpperCase()] = value;
-      return acc;
-    }, {});
-    chips.forEach((chip) => {
-      chip.value === 'ALL'
-        ? (chip.total =
-            Number(
-              Object.values(countObj).reduce((a: number, b: number) => a + b, 0)
-            ) ?? 0)
-        : (chip.total = countObj[chip.value] ?? 0);
-    });
-  }
-
-  /**
-   * @function updateQuickReplyFilterCount To update the count for chips.
-   * @param countObj The object with count for all the chip.
-   */
-  updateQuickReplyFilterCount(countObj): void {
-    if (countObj) {
-      if (this.tabFilterItems[this.tabFilterIdx]?.chips?.length) {
-        this.setFilterChips(
-          this.tabFilterItems[this.tabFilterIdx]?.chips,
-          countObj
-        );
-      } else if (this.filterChips?.length) {
-        this.setFilterChips(this.filterChips, countObj);
+      const selectedTabIndex = this.tabFilterItems.findIndex(
+        (item) => item.value === this.selectedTab
+      );
+      if (selectedTabIndex !== -1 && selectedTabIndex !== this.tabFilterIdx) {
+        // changing the selected tab filter index as api response can give different order
+        this.tabFilterIdx = selectedTabIndex;
       }
-    }
+
+      totalCount = this.tabFilterItems[this.tabFilterIdx].total;
+    } else this.isTabFilters = false;
+
+    // Is empty is checked for tab filters only or main
+    this.isEmpty = totalCount === 0;
+
+    if (entityStateCounts && Object.keys(entityStateCounts).length > 0) {
+      this.filterChips = Object.entries({
+        [defaultFilterChipValue.value]: totalCount,
+        ...entityStateCounts,
+      }).map(([key, value]) => {
+        const stateCount = {
+          label: record[key]?.label ?? convertToTitleCase(key),
+          value: key,
+          total: value,
+          type: record[key]?.type ?? 'active',
+        } as Chip<T>;
+        return stateCount;
+      });
+
+      if (!this.selectedFilterChips.has(defaultFilterChipValue.value)) {
+        totalCount = this.filterChips.reduce((prev, curr) => {
+          const isSelected = this.selectedFilterChips.has(curr.value);
+          const res = prev + (isSelected ? curr.total : 0);
+          return res;
+        }, 0);
+      }
+
+      this.isQuickFilters = true;
+    } else this.isQuickFilters = false;
+    this.totalRecords = totalCount;
   }
 
-  /**
-   * @function updateStatusAndCount To change the count without reloading the table
-   */
-  updateStatusAndCount = (prevStatus, currStatus) => {
-    /* for single filterChips */
+  //- different version for
+  getSelectedQuickReplyFilters(config?: Partial<QuickReplyFilterConfig>) {
+    const configSetting: QuickReplyFilterConfig = {
+      ...quickReplyFilterDefaultConfig,
+      ...(config ?? {}),
+    };
 
-    if (this.filterChips) {
-      this.filterChips.forEach((item) => {
-        if (!isNaN(item.total)) {
-          if (item.value === prevStatus) {
-            item.total = item.total - 1;
-          }
-          if (item.value === currStatus) {
-            item.total = item.total + 1;
-          }
-        }
-      });
+    const { key, isAllAType, isStatusBoolean, activeStateKey } = configSetting;
+
+    const chips = [...this.selectedFilterChips]?.filter(
+      (item) => item !== defaultFilterChipValue.value && !isAllAType
+    );
+
+    if (chips.length + 1 === this.filterChips.length && !isAllAType) {
+      return [];
     }
-    /* for multiple tab chip */
-  };
+    return !isStatusBoolean
+      ? chips.map((item) => ({ [key]: item }))
+      : [
+          chips.length !== 1
+            ? { [key]: null }
+            : { [key]: chips[0] === activeStateKey },
+        ];
+  }
 
   onRowSelect = (event) => {
     this.documentActionTypes.forEach((item) => {
@@ -621,10 +631,14 @@ export class BaseDatatableComponent implements OnInit {
   /**
    * @function onScroll Handle the scrolled to show changes is UI
    */
+
   onScroll = () => {
+    const currentScrollPosition = this.mainLayout.scrollTop;
+
     if (this.table) {
       const { top } = this.table?.el?.nativeElement.getBoundingClientRect();
-      this.isScrolledUp = top < 110;
+      this.isScrolledUp = top < this.scrollTargetPoint;
+      this.isReachedEnd = top < 300;
     }
   };
 }

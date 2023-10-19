@@ -30,10 +30,10 @@ export class ManagePermissionService extends ApiService {
       permissions: value.permissionConfigs,
       departments: value.departments,
       hotelAccess: {
-        chains: [
+        brands: [
           {
             id: value.brandName,
-            hotels: [
+            entities: [
               {
                 id: value.branchName,
               },
@@ -44,18 +44,39 @@ export class ManagePermissionService extends ApiService {
     };
   }
 
-  modifyUserDetailsForEdit(value){
-    return{
+  modifyUserDetailsForEdit(value) {
+    return {
       firstName: value.firstName,
       lastName: value.lastName,
       phoneNumber: value.phoneNumber,
-      profileUrl: value.profileUrl
-    }
+      profileUrl: value.profileUrl,
+      permissions:
+        value.permissionConfigs?.map((item) => ({
+          ...item,
+          permissions: {
+            manage: item.permissions.manage,
+            view: item.permissions.view,
+          },
+        })) ?? [],
+      hotelAccess: {
+        brands: [
+          {
+            id: value.brandName,
+            entities: [
+              {
+                id: value.branchName,
+              },
+            ],
+          },
+        ],
+      },
+    };
   }
 
   modifyPermissionDetailsForEdit(value, allDepartments) {
     // to be changed when multiple hotels
     // temp function
+    const products = value.products;
 
     return {
       id: value.id,
@@ -66,19 +87,26 @@ export class ManagePermissionService extends ApiService {
       cc: value.cc,
       phoneNumber: value.phoneNumber,
       profileUrl: value.profileUrl,
+      reportingTo: value.reportingTo,
       departments: allDepartments.filter((item) =>
-        value.departments?.includes(item.department)
+        // value.departments?.includes(item.department)
+        products.includes(item.productType)
       ),
       permissions: value.permissionConfigs.filter(
-        ({ permissions, productType }) =>
-          (permissions.manage || permissions.view) &&
-          value.products?.includes(productType)
+        ({ permissions, productType }) => {
+          return (
+            (permissions.manage || permissions.view) &&
+            products?.reduce((value, curr) => {
+              return value || productType?.includes(curr);
+            }, false)
+          );
+        }
       ),
       hotelAccess: {
-        chains: [
+        brands: [
           {
             id: value.brandName,
-            hotels: [
+            entities: [
               {
                 id: value.branchName,
               },
@@ -100,15 +128,22 @@ export class ManagePermissionService extends ApiService {
     return this.put(`/api/v1/user/${data.parentId}`, data);
   }
 
-  editUserDetails(data): Observable<any>{
-    return this.put(`/api/v1/user/${data.userId}`, data);
+  editUserDetails(data): Observable<any> {
+    return this.put(`/api/v1/user/${data.id}`, data);
   }
 
-  updateRolesStatus(userId: string, statusData) {
-    return this.patch(`/api/v1/user/${userId}`, statusData);
+  updateRolesStatus(userId: string, statusData, config: QueryConfig) {
+    return this.patch(
+      `/api/v1/user/${userId}${config?.queryObj ?? ''}`,
+      statusData
+    );
   }
 
-  getUserDetailsById(userId: string,): Observable<any> {
+  getUserJobDetails(userId: string): Observable<any> {
+    return this.get(`/api/v1/request/user/${userId}`);
+  }
+
+  getUserDetailsById(userId: string): Observable<any> {
     return this.get(`/api/v1/user/${userId}`);
   }
 
@@ -122,17 +157,19 @@ export class ManagePermissionService extends ApiService {
   // ): Observable<UserListResponse> {
   //   return this.get(
   //     `/api/v1/${
-  //       allUsers ? `hotel/${config.hotelId}` : `user/${config.loggedInUserId}`
+  //       allUsers ? `entity/${config.entityId}` : `user/${config.loggedInUserId}`
   //     }/users${config.queryObj ?? ''}`
   //   );
   // }
 
   getManagedUsers(config: QueryConfig): Observable<UserListResponse> {
-    return this.get(`/api/v1/user/${config.loggedInUserId}/users${config.queryObj ?? ''}`);
+    return this.get(
+      `/api/v1/user/${config.loggedInUserId}/users${config.queryObj ?? ''}`
+    );
   }
 
-  getAllUsers(config: QueryConfig): Observable<UserListResponse> {
-    return this.get(`/api/v1/hotel/${config.hotelId}/users${config.queryObj ?? ''}`);
+  getAllUsers(entityId: string, config): Observable<UserListResponse> {
+    return this.get(`/api/v1/entity/${entityId}/users${config.params ?? ''}`);
   }
 
   addNewUser(parentUserId: string, data: any) {
@@ -145,7 +182,7 @@ export class ManagePermissionService extends ApiService {
   exportCSV(config: QueryConfig, allUsers: boolean = false): Observable<any> {
     return this.get(
       `/api/v1/${
-        allUsers ? `hotel/${config.hotelId}` : `user/${config.loggedInUserId}`
+        allUsers ? `entity/${config.entityId}` : `user/${config.loggedInUserId}`
       }/users/export/${config.queryObj ? config.queryObj : ''}`,
       {
         responseType: 'blob',

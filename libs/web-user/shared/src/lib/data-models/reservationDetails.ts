@@ -3,7 +3,9 @@ export class ReservationDetails {
   number: string;
   status: string;
   state: string;
-  stateCompletedSteps: number;
+  // stateCompletedSteps: number; // 'DOCUMENTS'|'GUESTDETAILS'|'HEALTHDECLARATION'|'PAYMENT'|'STAYDETAILS'
+  stateCompletedSteps: any;
+
   stateMessage: object;
   stayDetails: StayDetails;
   guestDetails: GuestDetails;
@@ -11,7 +13,7 @@ export class ReservationDetails {
   redirectionParameter: any;
   healthDeclaration: Object;
   currentJourney: string;
-  hotel: Hotel;
+  entity: Entity;
 }
 
 export class StayDetails {
@@ -25,7 +27,7 @@ export class StayDetails {
 
 export class Guest {
   id: string;
-  nameTitle: string;
+  salutation: string;
   firstName: string;
   lastName: string;
   contactDetails: ContactDetails;
@@ -57,7 +59,7 @@ export class DocumentDetails {
   backUrl: string;
 }
 
-export class Hotel {
+export class Entity {
   id: string;
   name: string;
 }

@@ -34,6 +34,8 @@ export class ChatCardComponent implements OnInit {
     });
   }
 
+  @Input() isSelected = false;
+
   constructor(public globalFilterService: GlobalFilterService) {}
 
   ngOnInit(): void {}
@@ -51,6 +53,15 @@ export class ChatCardComponent implements OnInit {
       });
       return colorCode;
     }
+  }
+
+  formatTime(timeLeft: number): string {
+    const minutes = Math.floor(timeLeft / 60000);
+    const seconds = Math.floor((timeLeft % 60000) / 1000);
+
+    return `${minutes
+      .toString()
+      .padStart(2, '0')}:${seconds.toString().padStart(2, '0')}M`;
   }
 }
 

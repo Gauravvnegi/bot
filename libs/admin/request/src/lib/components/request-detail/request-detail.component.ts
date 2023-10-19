@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import {
   Component,
   EventEmitter,
@@ -7,27 +8,35 @@ import {
   Output,
 } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { Option } from '@hospitality-bot/admin/shared';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
+import { NotificationService } from 'apps/admin/src/app/core/theme/src/lib/services/notification.service';
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
+import { convertToTitleCase } from 'libs/admin/shared/src/lib/utils/valueFormatter';
 import { SnackBarService } from 'libs/shared/material/src';
 import { Subscription } from 'rxjs';
-import { request } from '../../constants/request';
 import { InhouseData } from '../../data-models/inhouse-list.model';
 import { RequestService } from '../../services/request.service';
+import { CMSUpdateJobData } from '../../types/request.type';
 
 @Component({
   selector: 'hospitality-bot-request-detail',
   templateUrl: './request-detail.component.html',
   styleUrls: ['./request-detail.component.scss'],
+  providers: [DatePipe],
 })
 export class RequestDetailComponent implements OnInit, OnDestroy {
   data: InhouseData;
   status = false;
-  statusList = request.status;
+  statusList: Option[] = [];
+  assigneeList: Option[];
   $subscription = new Subscription();
-  hotelId: string;
+  entityId: string;
   @Output() guestInfo = new EventEmitter();
   @Input() guestInfoEnable;
+  closedTimestamp: number;
+  formattedClosedTimestamp: string;
+  jobId: string;
 
   requestFG: FormGroup;
   constructor(
@@ -35,12 +44,13 @@ export class RequestDetailComponent implements OnInit, OnDestroy {
     private fb: FormBuilder,
     private adminUtilityService: AdminUtilityService,
     private snackbarService: SnackBarService,
-    private globalFilterService: GlobalFilterService
+    private globalFilterService: GlobalFilterService,
+    private notificationService: NotificationService,
+    private datePipe: DatePipe
   ) {}
 
   ngOnInit(): void {
-    this.hotelId = this.globalFilterService.hotelId;
-
+    this.entityId = this.globalFilterService.entityId;
     this.registerListeners();
     this.initFG();
   }
@@ -48,6 +58,7 @@ export class RequestDetailComponent implements OnInit, OnDestroy {
   registerListeners() {
     this.listenForGlobalFilters();
     this.listenForSelectedRequest();
+    this.listenForNotificationRequest();
   }
 
   /**
@@ -55,11 +66,43 @@ export class RequestDetailComponent implements OnInit, OnDestroy {
    */
   listenForSelectedRequest() {
     this.$subscription.add(
-      this._requestService.selectedRequest.subscribe((response) => {
+      this._requestService.selectedRequest.subscribe((res) => {
+        if (res) {
+          this.jobId = res;
+          this.getJobDetails();
+        }
+      })
+    );
+  }
+
+  listenForNotificationRequest() {
+    this.notificationService.$requestNotification.subscribe((requestId) => {
+      if (requestId) {
+        this.jobId = requestId;
+        this.getJobDetails();
+      }
+    });
+  }
+
+  /**
+   * @function getJobDetails To get the job details.
+   * @description This function is used to get the job details.
+   * @returns
+   **/
+  getJobDetails() {
+    this.$subscription.add(
+      this._requestService.getStatusList(this.jobId).subscribe((response) => {
         if (response) {
-          this.data = response;
-          this.requestFG.patchValue({ status: response.action });
+          this.data = new InhouseData().deserialize(response);
+          this.requestFG.patchValue({
+            status: response.action,
+            assignee: response.assigneeId,
+          });
+          this.closedTimestamp = response?.closedTime;
+          this.getAssigneeList(response.itemId);
+          this.getStatusList(response.nextStates);
           this.status = true;
+          this.formattedDate();
         } else {
           this.data = new InhouseData();
           this.status = false;
@@ -69,12 +112,47 @@ export class RequestDetailComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * @function getStatusList To get the status list.
+   * @param status The status list from response.
+   * @description This function is used to get the status list.
+   * @returns
+   **/
+  getStatusList(status: string[]) {
+    this.statusList = status.map((item) => {
+      return {
+        label: convertToTitleCase(item),
+        value: item,
+      };
+    });
+
+    this.statusList.push({
+      label: convertToTitleCase(this.data.action),
+      value: this.data.action,
+    } as Option);
+  }
+
+  getAssigneeList(itemId) {
+    this.$subscription.add(
+      this._requestService
+        .getItemDetails(this.entityId, itemId)
+        .subscribe((response) => {
+          this.assigneeList = response.requestItemUsers.map((item) => {
+            return {
+              label: item.firstName + ' ' + item.lastName,
+              value: item.userId,
+            };
+          });
+        })
+    );
+  }
+
+  /**
    * @function listenForGlobalFilters To listen for global filters and load data when filter value is changed.
    */
   listenForGlobalFilters(): void {
     this.$subscription.add(
       this.globalFilterService.globalFilter$.subscribe(
-        (data) => this.globalFilterService.hotelId
+        (data) => this.globalFilterService.entityId
       )
     );
   }
@@ -85,6 +163,7 @@ export class RequestDetailComponent implements OnInit, OnDestroy {
   initFG() {
     this.requestFG = this.fb.group({
       status: [''],
+      assignee: [''],
     });
   }
 
@@ -106,8 +185,8 @@ export class RequestDetailComponent implements OnInit, OnDestroy {
    */
 
   handleStatusChange(event) {
-    const requestData = {
-      jobID: this.data.jobID,
+    const requestData: CMSUpdateJobData = {
+      jobID: this.data.id,
       roomNo: this.data.rooms[0].roomNumber,
       lastName: this.data.guestDetails.primaryGuest.lastName,
     };
@@ -115,30 +194,71 @@ export class RequestDetailComponent implements OnInit, OnDestroy {
     const config = {
       queryObj: this.adminUtilityService.makeQueryParams([
         {
-          cmsUserType: 'Bot',
-          hotelId: this.hotelId,
+          cmsUserType: 'Admin',
+          entityId: this.entityId,
+          actionType: event.value,
+          entityType: 'Inhouse', // cannot be hardcoded - refactor
         },
       ]),
     };
     this.$subscription.add(
-      this._requestService.closeRequest(config, requestData).subscribe(
-        (response) =>
-          this.snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: 'messages.SUCCESS.JOB_CLOSED',
-                priorityMessage: `Job: ${this.data.jobID} closed.`,
-              },
+      this._requestService
+        .updateJobRequestStatus(config, requestData)
+        .subscribe(
+          (response) => {
+            this.snackbarService.openSnackBarAsText(
+              `Job: ${
+                this.data.jobNo
+              } status updated successfully to ${convertToTitleCase(
+                event.value
+              )}.`,
               '',
               { panelClass: 'success' }
-            )
-            .subscribe(),
-
-        ({ error }) => {
-          this.requestFG.patchValue({ status: this.data.action });
-        }
-      )
+            );
+            this.data.action = event.value;
+            this.formattedDate();
+            this.getJobDetails(); // to refresh the data
+            this._requestService.refreshData.next(true);
+          },
+          ({ error }) => {
+            this.requestFG.patchValue({ status: this.data.action });
+          }
+        )
     );
+  }
+
+  formattedDate() {
+    const dateObject: Date = this.closedTimestamp
+      ? new Date(this.closedTimestamp)
+      : new Date();
+    this.formattedClosedTimestamp = this.datePipe.transform(
+      dateObject,
+      "EEEE, MMMM d, y, 'at' h:mm a"
+    );
+  }
+
+  handleAssigneeChange(event) {
+    this._requestService
+      .assignComplaintToUser(this.data.id, {
+        assignedTo: event.value,
+      })
+      .subscribe(() => {
+        const user = this.assigneeList.find(
+          (item) => item.value === event.value
+        ).label;
+
+        this.snackbarService.openSnackBarAsText(
+          `Job ${this.data?.jobID} Assignee To ${user}  Successfully`,
+          '',
+          { panelClass: 'success' }
+        );
+        this.requestFG.patchValue({ assignee: event.value });
+
+        this._requestService.refreshData.next(true);
+      }),
+      ({ error }) => {
+        this.requestFG.patchValue({ assignee: this.data.assigneeId });
+      };
   }
 
   ngOnDestroy(): void {

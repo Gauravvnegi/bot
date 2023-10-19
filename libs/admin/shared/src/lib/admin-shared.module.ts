@@ -4,6 +4,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MenuModule } from 'primeng/menu';
 import { CKEditorModule } from 'ckeditor4-angular';
 import { SharedMaterialModule } from 'libs/shared/material/src';
 import { ButtonModule } from 'primeng/button/';
@@ -18,6 +19,7 @@ import { PaginatorModule } from 'primeng/paginator';
 import { SplitButtonModule } from 'primeng/splitbutton';
 import { InputSwitchModule } from 'primeng/inputswitch';
 import { TableModule } from 'primeng/table';
+import { InputNumberModule } from 'primeng/inputnumber';
 import { TabMenuModule } from 'primeng/tabmenu';
 import { AccordionModule } from 'primeng/accordion';
 import { ButtonComponent } from './components/button/button.component';
@@ -42,6 +44,7 @@ import { StatsCardComponent } from './components/stats-card/stats-card.component
 import { TabGroupComponent } from './components/tab-group/tab-group.component';
 import { TemplateEditorComponent } from './components/template-editor/template-editor.component';
 import { ToggleDropdownComponent } from './components/toggle-dropdown/toggle-dropdown.component';
+import { StatusDropdownToggleComponent } from './components/status-dropdown-toggle/status-dropdown-toggle.component';
 import { TopicDropdownComponent } from './components/topic-dropdown/topic-dropdown.component';
 import { UnsubscribeFeatureComponent } from './components/unsubscribe-feature/unsubscribe-feature.component';
 import { UnsubscribeViewComponent } from './components/unsubscribe-view/unsubscribe-view.component';
@@ -77,6 +80,7 @@ import { NavigationHeaderComponent } from './components/navigation-header/naviga
 import { CategoryFormComponent } from './view/category-form/category-form.component';
 import { AutoCompleteComponent } from './components/form-component/auto-complete/auto-complete.component';
 import { ViewInputComponent } from './components/form-component/view-input/view-input.component';
+import { InputSwitchComponent } from './components/form-component/input-switch/input-switch.component';
 import { MenuComponent } from './components/menu/menu.component';
 import { MatMenuModule } from '@angular/material/menu';
 import { SkeletonShapeComponent } from './components/skeleton/skeleton-shape/skeleton-shape.component';
@@ -89,14 +93,46 @@ import { CreateWithViewComponent } from './view/create-with-view/create-with-vie
 import { ToggleSwitchComponentLabel } from './components/toggle-switch-label/toggle-switch-label.component';
 import { RoomTypeDirective } from './directives/room-type.directive';
 import { CopyLinkComponentComponent } from './components/copy-link-component/copy-link-component.component';
+import { InputNumberComponent } from './components/form-component/input-number/input-number.component';
 import { AddAttachmentComponent } from './components/form-component/add-attachment/add-attachment.component';
 import { ModalHeaderComponent } from './components/datatable/modal-header/modal-header.component';
 import { ImageHandlingComponent } from './components/image-handling/image-handling.component';
 import { SharedImageCropperModule } from 'libs/shared/image-cropper/src/lib/shared-image-cropper.module';
+import { AddressComponent } from './components/address/address-component.component';
+import { SocialMediaComponent } from './components/social-media/social-media.component';
 import { DiscountFormComponent } from './components/discount-form/discount-form.component';
-
 import { TimePickerComponent } from './components/form-component/time-picker/time-picker.component';
+import { CheckboxSelectorComponent } from './components/form-component/checkbox-selector/checkbox-selector.component';
+import { MenuButtonComponent } from './components/menu-button/menu-button.component';
+// import { MenuModule } from 'primeng/menu';
+import { ToggleButtonModule } from 'primeng/togglebutton';
+import { TabHeaderComponent } from './components/tab-header/tab-header.component';
+import { ImportServiceContainerComponent } from './components/import-service-container/import-service-container.component';
+import { BackdropDirective } from './directives/backdrop.directive';
+import { CountdownDirective } from './directives/countdown.directive';
+import { GlobalSearchComponent } from './components/search/global-search.component';
+import { QrCodeModalComponent } from './components/qr-code-modal/qr-code-modal.component';
+import { QRCodeModule } from 'angularx-qrcode';
+import { MultiplePrefixInputComponent } from './components/form-component/multiple-prefix-input/multiple-prefix-input.component';
+import { FormActionComponent } from './components/form-component/form-action/form-action.component';
+import { LoaderDirective } from './directives/loader.directive';
+import { StepperComponent } from './components/stepper/stepper.component';
+import { StepsModule } from 'primeng/steps';
+import { FromToDateComponent } from './components/from-to-date/from-to-date.component';
+import { TimerComponent } from './components/timer/timer.component';
+import { SidebarModule } from 'primeng/sidebar';
+import { InteractiveGridComponent } from './components/interactive-grid/interactive-grid.component';
+import { AngularDraggableModule } from 'angular2-draggable';
+import { TooltipModule } from 'primeng/tooltip';
 
+import { TieredMenuModule } from 'primeng/tieredmenu';
+import { TieredMenuButtonComponent } from './components/tiered-menu-button/tiered-menu-button.component';
+import { TabbedSidebarComponent } from './components/tabbed-sidebar/tabbed-sidebar.component';
+import { InfoPanelComponent } from './components/info-panel/info-panel.component';
+import { QuickSelectComponent } from './view/quick-select/quick-select.component';
+import { ToggleMenuComponent } from './components/toggle-menu/toggle-menu.component';
+import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
 @NgModule({
   imports: [
     CommonModule,
@@ -123,6 +159,15 @@ import { TimePickerComponent } from './components/form-component/time-picker/tim
     DialogModule,
     MatMenuModule,
     SharedImageCropperModule,
+    MenuModule,
+    ToggleButtonModule,
+    InputNumberModule,
+    QRCodeModule,
+    StepsModule,
+    AngularDraggableModule,
+    TooltipModule,
+    TieredMenuModule,
+    ConfirmDialogModule,
   ],
   declarations: [
     DatatableComponent,
@@ -163,6 +208,7 @@ import { TimePickerComponent } from './components/form-component/time-picker/tim
     ExportListComponent,
     ButtonComponent,
     ToggleDropdownComponent,
+    StatusDropdownToggleComponent,
     IteratorComponent,
     InputComponent,
     TextAreaComponent,
@@ -183,6 +229,7 @@ import { TimePickerComponent } from './components/form-component/time-picker/tim
     CategoryFormComponent,
     AutoCompleteComponent,
     ViewInputComponent,
+    InputSwitchComponent,
     MenuComponent,
     SkeletonShapeComponent,
     SkeletonDirective,
@@ -197,9 +244,32 @@ import { TimePickerComponent } from './components/form-component/time-picker/tim
     AddAttachmentComponent,
     ModalHeaderComponent,
     ImageHandlingComponent,
-    TimePickerComponent,
+    AddressComponent,
+    SocialMediaComponent,
     DiscountFormComponent,
-    TimePickerComponent
+    TimePickerComponent,
+    CheckboxSelectorComponent,
+    MenuButtonComponent,
+    TabHeaderComponent,
+    BackdropDirective,
+    CountdownDirective,
+    ImportServiceContainerComponent,
+    InputNumberComponent,
+    GlobalSearchComponent,
+    QrCodeModalComponent,
+    MultiplePrefixInputComponent,
+    FormActionComponent,
+    LoaderDirective,
+    StepperComponent,
+    FromToDateComponent,
+    TimerComponent,
+    InteractiveGridComponent,
+    TieredMenuButtonComponent,
+    TabbedSidebarComponent,
+    InfoPanelComponent,
+    QuickSelectComponent,
+    ToggleMenuComponent,
+    ConfirmDialogComponent,
   ],
 
   exports: [
@@ -211,6 +281,7 @@ import { TimePickerComponent } from './components/form-component/time-picker/tim
     ButtonModule,
     PaginatorModule,
     TabMenuModule,
+    MenuModule,
     AccordionModule,
     SplitButtonModule,
     InputSwitchModule,
@@ -254,6 +325,7 @@ import { TimePickerComponent } from './components/form-component/time-picker/tim
     ExportListComponent,
     ButtonComponent,
     ToggleDropdownComponent,
+    StatusDropdownToggleComponent,
     IteratorComponent,
     InputComponent,
     TextAreaComponent,
@@ -275,7 +347,9 @@ import { TimePickerComponent } from './components/form-component/time-picker/tim
     CategoryFormComponent,
     AutoCompleteComponent,
     ViewInputComponent,
+    InputSwitchComponent,
     MatMenuModule,
+    MenuModule,
     MenuComponent,
     SkeletonDirective,
     SkeletonShapeComponent,
@@ -290,9 +364,35 @@ import { TimePickerComponent } from './components/form-component/time-picker/tim
     AddAttachmentComponent,
     ModalHeaderComponent,
     ImageHandlingComponent,
-    TimePickerComponent,
+    AddressComponent,
+    SocialMediaComponent,
     DiscountFormComponent,
-    TimePickerComponent
+    TimePickerComponent,
+    CheckboxSelectorComponent,
+    MenuButtonComponent,
+    ToggleButtonModule,
+    TabHeaderComponent,
+    BackdropDirective,
+    CountdownDirective,
+    ImportServiceContainerComponent,
+    InputNumberComponent,
+    GlobalSearchComponent,
+    MultiplePrefixInputComponent,
+    FormActionComponent,
+    LoaderDirective,
+    StepperComponent,
+    FromToDateComponent,
+    TimerComponent,
+    SidebarModule,
+    InteractiveGridComponent,
+    AngularDraggableModule,
+    TooltipModule,
+    TieredMenuButtonComponent,
+    TabbedSidebarComponent,
+    InfoPanelComponent,
+    QuickSelectComponent,
+    ToggleMenuComponent,
+    ConfirmDialogComponent,
   ],
 })
 export class AdminSharedModule {}

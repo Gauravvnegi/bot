@@ -13,7 +13,10 @@
     </hospitality-bot-modal-header>
   </div>
 
-  <div class="table-container" [ngStyle]="tabFilterItems[tabFilterIdx]?.total ? {} : { 'padding': '10px' }">
+  <div
+    class="table-container"
+    [ngStyle]="tabFilterItems[tabFilterIdx]?.total ? {} : { padding: '10px' }"
+  >
     <p-table
       #dt
       [styleClass]="tableConfig.styleClass"
@@ -48,6 +51,7 @@
             *ngIf="isQuickFilters"
             [chips]="filterChips"
             (onChange)="toggleQuickReplyFilter($event)"
+            [selectedChips]="selectedFilterChips"
           ></hospitality-bot-filter-chips>
         </div>
       </ng-template>
@@ -71,7 +75,13 @@
         let-columns="columns"
         let-rowIndex="rowIndex"
       >
-        <tr class="table-row" (click)="openUserDetails(rowData)">
+        <tr
+          class="table-row"
+          [ngClass]="{
+            'row-disabled': isEditAccessDenied(rowData)
+          }"
+          (click)="openUserDetails(rowData)"
+        >
           <td class="table-row__checkbox">
             <p-tableCheckbox
               [value]="rowData"
@@ -88,21 +98,29 @@
               </div>
             </div>
           </td>
-          <td class="primary-text">
-            {{ rowData.getDepartments() }}
-          </td>
-          <td class="primary-text">
-            {{ rowData.jobTitle }}
+          <td>
+            <div class="cell-content">
+              <div class="primary-text">
+                {{ rowData.getDepartments() }}
+              </div>
+            </div>
           </td>
           <td>
             <div class="cell-content">
-              <hospitality-bot-toggle-dropdown
+              <div class="primary-text">
+                {{ rowData.jobTitle }}
+              </div>
+            </div>
+          </td>
+          <td>
+            <div class="cell-content">
+              <hospitality-bot-status-dropdown-toggle
                 class="toggle-btn"
-                (onClick)="updateRolesStatus($event, rowData)"
-                [status]="rowData.status"
-                [disabled]="tabFilterItems[tabFilterIdx].value === 'ALL'"
+                (onClick)="handelStatus($event, rowData)"
+                [state]="rowData.status"
+                [disabled]="isEditAccessDenied(rowData)"
               >
-              </hospitality-bot-toggle-dropdown>
+              </hospitality-bot-status-dropdown-toggle>
             </div>
           </td>
         </tr>
@@ -110,6 +128,7 @@
       <!-- *********************************FOOTER******************************* -->
       <ng-template pTemplate="summary">
         <p-paginator
+          #paginator
           [rows]="rowsPerPage"
           [totalRecords]="totalRecords"
           [rowsPerPageOptions]="rowsPerPageOptions"

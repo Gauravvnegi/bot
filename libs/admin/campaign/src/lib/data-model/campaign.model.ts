@@ -1,13 +1,20 @@
 import { DateService } from '@hospitality-bot/shared/utils';
 import { get, set } from 'lodash';
-import { IDeserializable } from '@hospitality-bot/admin/shared';
+import { EntityState, IDeserializable } from '@hospitality-bot/admin/shared';
 
 export class Campaigns implements IDeserializable {
   records: Campaign[];
+  entityStateCounts: EntityState<string>;
+  entityTypeCounts: EntityState<string>;
+  totalRecord: number;
+
   deserialize(input: any) {
     this.records = input.records.map((record: any) =>
       new Campaign().deserialize(record)
     );
+    this.entityStateCounts = input?.entityStateCounts;
+    this.entityTypeCounts = input?.entityTypeCounts;
+    this.totalRecord = input?.total;
     return this;
   }
 }
@@ -15,7 +22,7 @@ export class Campaigns implements IDeserializable {
 export class Campaign implements IDeserializable {
   id: string;
   name: string;
-  hotelId: string;
+  entityId: string;
   active: boolean;
   statsCampaign;
   templateName: string;
@@ -24,7 +31,7 @@ export class Campaign implements IDeserializable {
   archieved: true;
   campaignType: string;
   createdAt: number;
-  entityId: string;
+
   from: string;
   message: string;
   previewText: string;

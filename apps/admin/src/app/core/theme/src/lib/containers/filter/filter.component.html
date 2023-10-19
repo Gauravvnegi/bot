@@ -2,12 +2,24 @@
   <div class="close--wrapper">
     <p class="filter">Filter</p>
   </div>
-  <div (click)="resetFilter()" class="reset-wrapper">
-    <p class="filter">Reset All</p>
-    <mat-icon class="material-icon" matSuffix>undo</mat-icon>
-    <mat-icon (click)="closePopup()" class="material-icon" matSuffix
-      >cancel</mat-icon
+  <div class="reset-wrapper">
+    <mat-icon
+      (click)="resetFilter()"
+      pTooltip="Reset"
+      tooltipPosition="bottom"
+      class="material-icon"
+      matSuffix
+      >undo</mat-icon
     >
+
+    <i
+      class="pi pi-arrow-right"
+      style="color: #fff;"
+      (click)="closePopup()"
+      aria-hidden="true"
+      pTooltip="Close"
+      tooltipPosition="bottom"
+    ></i>
   </div>
 </div>
 <div class="filter--form">
@@ -44,38 +56,28 @@
             </div>
             <div>
               <div>
-                <mat-form-field>
-                  <mat-label>Brand</mat-label>
-                  <mat-select formControlName="hotelName">
-                    <mat-option
-                      *ngFor="let hotel of hotelList"
-                      [value]="hotel.value"
-                      >{{ hotel.label }}</mat-option
-                    >
-                  </mat-select>
-                </mat-form-field>
+                <hospitality-bot-select
+                  class="half-width"
+                  controlName="brandName"
+                  label="Select Brand"
+                  [options]="entityList"
+                ></hospitality-bot-select>
               </div>
-              <div>
-                <mat-form-field>
-                  <mat-label>Hotel Name</mat-label>
-                  <mat-select
-                    formControlName="branchName"
-                    (selectionChange)="handleHotelChange($event.value)"
-                  >
-                    <mat-option
-                      *ngFor="let branch of branchList"
-                      [value]="branch.value"
-                      >{{ branch.label }}</mat-option
-                    >
-                  </mat-select>
-                </mat-form-field>
+              <div class="property">
+                <hospitality-bot-select
+                  class="half-width"
+                  controlName="entityName"
+                  label="Select Property"
+                  [options]="brandList"
+                  (itemSelection)="handleHotelChange($event.value)"
+                ></hospitality-bot-select>
               </div>
             </div>
           </div>
         </div>
       </mat-tab>
 
-      <mat-tab *ngIf="checkForTransactionFeedbackSubscribed()">
+      <mat-tab *ngIf="checkForOutlets()">
         <ng-template mat-tab-label>
           <svg
             class="svg"
@@ -114,7 +116,7 @@
               <mat-checkbox
                 *ngIf="outletFG.controls[outlet.id]"
                 [formControlName]="outlet.id"
-                (change)="onOutletSelect($event)"
+                (change)="onOutletSelect($event, outlet)"
                 >{{ outlet.name }}</mat-checkbox
               >
             </div>
@@ -166,7 +168,7 @@
           </div>
         </div>
       </mat-tab>
-      <mat-tab
+      <!-- <mat-tab
         *ngIf="
           checkForStayFeedbackSubscribed() ||
           checkForTransactionFeedbackSubscribed()
@@ -230,7 +232,7 @@
             </mat-radio-group>
           </div>
         </div>
-      </mat-tab>
+      </mat-tab> -->
     </mat-tab-group>
     <button
       [disabled]="isDisabled || isTokenLoading"

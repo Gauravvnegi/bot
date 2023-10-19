@@ -1,0 +1,50 @@
+export class Services {
+  services = new Array<Service>();
+
+  deserialize(input) {
+    input.forEach((x) => {
+      this.services.push(new Service().deserialize(x));
+    });
+
+    return this;
+  }
+}
+
+export class Service {
+  id: string;
+  name: string;
+  imageUrl: string;
+  type: string;
+  rate?: string;
+  packageCode?: string;
+  deserialize(input: Amenity) {
+    this.id = input.id;
+    this.name = input.name;
+    this.imageUrl = input.imageUrl[0]?.url;
+    this.type = input.type;
+    this.rate = `${input.currency}${input.rate}`;
+    this.packageCode = input.packageCode;
+    return this;
+  }
+}
+
+export type Amenity = {
+  id: string;
+  name: string;
+  description: string;
+  rate: number;
+  startDate: number;
+  endDate: number;
+  active: boolean;
+  currency: string;
+  packageCode: string;
+  imageUrl;
+  source: string;
+  entityId: string;
+  type: string;
+  unit: string;
+  category: string;
+  autoAccept: boolean;
+  hasChild: boolean;
+  parentId: string;
+};

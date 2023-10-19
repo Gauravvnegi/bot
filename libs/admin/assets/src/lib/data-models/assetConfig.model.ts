@@ -1,14 +1,18 @@
 import { get, set } from 'lodash';
-import { IDeserializable } from '@hospitality-bot/admin/shared';
+import { EntityState, IDeserializable } from '@hospitality-bot/admin/shared';
 
 export class Assets implements IDeserializable {
   records: Asset[];
   total: number;
+  entityStateCounts: EntityState<string>;
+  entityTypeCounts: EntityState<string>;
   deserialize(input: any) {
     this.records = input.records.map((record: any) =>
       new Asset().deserialize(record)
     );
     this.total = input.total;
+    this.entityStateCounts = input.entityStateCounts;
+    this.entityTypeCounts = input.entityTypeCounts;
     return this;
   }
 }
@@ -17,7 +21,7 @@ export class Asset implements IDeserializable {
   id: string;
   description: string;
   name: string;
-  hotelId: string;
+  entityId: string;
   url: string;
   type: string;
   active: boolean;

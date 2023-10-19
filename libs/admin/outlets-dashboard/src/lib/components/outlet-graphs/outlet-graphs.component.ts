@@ -20,7 +20,7 @@ export class OutletGraphsComponent implements OnInit {
   @ViewChild(BaseChartDirective) baseChart: BaseChartDirective;
 
   selectedInterval: string;
-  hotelId: string;
+  entityId: string;
   globalQueries = [];
   $subscription = new Subscription();
 
@@ -74,7 +74,7 @@ export class OutletGraphsComponent implements OnInit {
   }
 
   listenForGlobalFilter(): void {
-    this.hotelId = this.globalFilterService.hotelId;
+    this.entityId = this.globalFilterService.entityId;
     this.globalFilterService.globalFilter$.subscribe((data) => {
       const calenderType = {
         calenderType: this._dateService.getCalendarType(
@@ -105,7 +105,7 @@ export class OutletGraphsComponent implements OnInit {
     this.ordersStat = stats.totalOrders;
 
     // this.$subscription.add(
-    //   this.roomService.getStats(this.hotelId, config).subscribe((res)=>{
+    //   this.roomService.getStats(this.entityId, config).subscribe((res)=>{
     //     console.log(res);
     //     this.sellsStat = new SellsGraph().deserialize(res.averageRoomRateGraph);
     //     this.visitorsStat = new VisitorsGraph().deserialize(res.occupancyStat);
@@ -127,8 +127,6 @@ export class OutletGraphsComponent implements OnInit {
         value,
       })
     );
-    console.log(graphArray);
-    console.log(this.selectedInterval);
 
     const labels = graphArray.map((data)=>
       this._dateService.convertTimestampToLabels(
@@ -143,7 +141,6 @@ export class OutletGraphsComponent implements OnInit {
           : null
       )    
     );
-    console.log(labels);
     const data = graphArray.map((data)=> data.value);
     this.sellsGraph.data[0].data = data;
     this.sellsGraph.labels = labels;
@@ -158,7 +155,6 @@ export class OutletGraphsComponent implements OnInit {
     this.usersGraph.labels = [];
     this.visitorsGraph.data[0].data=[];
     this.visitorsGraph.labels=[];
-    console.log(timestamps);
     timestamps.forEach((timestamp, i) => {
       const data = this._dateService.convertTimestampToLabels(
         this.selectedInterval,

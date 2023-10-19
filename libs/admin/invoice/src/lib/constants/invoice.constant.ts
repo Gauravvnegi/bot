@@ -1,9 +1,11 @@
 import { Option } from '@hospitality-bot/admin/shared';
+import { BillItemFields, ChargesType } from '../types/forms.types';
 
-export enum DiscountActionItem {
+export enum MenuActionItem {
   'ADD_DISCOUNT' = 'ADD_DISCOUNT',
   'REMOVE_DISCOUNT' = 'REMOVE_DISCOUNT',
   'EDIT_DISCOUNT' = 'EDIT_DISCOUNT',
+  'DELETE_ITEM' = 'DELETE_ITEM',
 }
 
 export const paymentOptions: Option[] = [
@@ -27,9 +29,42 @@ export const editRefundMenu: Option[] = [
 ];
 
 export const addDiscountMenu: Option[] = [
-  { label: 'Add Discount', value: DiscountActionItem.ADD_DISCOUNT },
+  { label: 'Add Discount', value: MenuActionItem.ADD_DISCOUNT },
 ];
+
 export const editDiscountMenu: Option[] = [
-  { label: 'Edit Discount', value: DiscountActionItem.EDIT_DISCOUNT },
-  { label: 'Remove Discount', value: DiscountActionItem.REMOVE_DISCOUNT },
+  { label: 'Update Discount', value: MenuActionItem.EDIT_DISCOUNT },
+  { label: 'Remove Discount', value: MenuActionItem.REMOVE_DISCOUNT },
 ];
+
+export const defaultMenu = [
+  { label: 'Delete Item', value: MenuActionItem.DELETE_ITEM },
+];
+
+export enum AdditionalChargesType {
+  REFUND = 'REFUND',
+  MISCELLANEOUS = 'MISCELLANEOUS',
+}
+
+export const additionalChargesDetails: Record<
+  AdditionalChargesType,
+  {
+    label: string;
+    value: string;
+    type: ChargesType;
+    transactionType: BillItemFields['transactionType'];
+  }
+> = {
+  [AdditionalChargesType.REFUND]: {
+    label: 'Refund',
+    value: 'Paid Out',
+    type: 'refund',
+    transactionType: 'DEBIT',
+  },
+  [AdditionalChargesType.MISCELLANEOUS]: {
+    label: 'Miscellaneous',
+    value: 'Miscellaneous Charges',
+    type: 'miscellaneous',
+    transactionType: 'DEBIT',
+  },
+};

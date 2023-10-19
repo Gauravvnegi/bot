@@ -18,6 +18,7 @@ import {
 export class TabGroupComponent implements OnInit {
   @Input() listItems = [];
   @Input() selectedIndex = 0;
+  @Input() isLoading: boolean;
   @Output() selectedTabChange = new EventEmitter();
   @ViewChild('tabFilter') tabFilter: ElementRef;
   @Input() extraGap = 40;

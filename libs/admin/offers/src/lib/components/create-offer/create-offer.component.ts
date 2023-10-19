@@ -1,19 +1,23 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import {
+  GlobalFilterService,
+  RoutesConfigService,
+} from '@hospitality-bot/admin/core/theme';
 import {
   LibrarySearchItem,
   ServiceTypeOptionValue,
 } from '@hospitality-bot/admin/library';
 import { SnackBarService } from '@hospitality-bot/shared/material';
-import { DiscountType, NavRouteOptions, Option } from 'libs/admin/shared/src';
+import { NavRouteOptions, Option } from 'libs/admin/shared/src';
 import { ConfigService } from 'libs/admin/shared/src/lib/services/config.service';
 import { Subscription } from 'rxjs';
-import routes from '../../constant/routes';
+import { offersRoutes } from '../../constant/routes';
 import { OffersServices } from '../../services/offers.service';
 import { OfferData, OfferFormData, OffersOnEntity } from '../../types/offers';
 import { OfferResponse, SearchResult } from '../../types/response';
+import { DiscountType } from '../../constant/data-table';
 
 @Component({
   selector: 'hospitality-bot-create-offer',
@@ -21,17 +25,14 @@ import { OfferResponse, SearchResult } from '../../types/response';
   styleUrls: ['./create-offer.component.scss'],
 })
 export class CreateOfferComponent implements OnInit {
-  hotelId: string;
+  entityId: string;
   offerId: string;
+  pageTitle = 'Create Offer';
   packageCode: string = '# will be auto generated';
 
   useForm: FormGroup;
 
-  routes: NavRouteOptions = [
-    { label: 'Library', link: './' },
-    { label: 'Offers', link: '/pages/library/offers' },
-    { label: 'Create Offer', link: './' },
-  ];
+  navRoutes: NavRouteOptions = [];
 
   loading = false;
   searchItems: LibrarySearchItem[];
@@ -55,9 +56,19 @@ export class CreateOfferComponent implements OnInit {
     private offerService: OffersServices,
     private snackbarService: SnackBarService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private routesConfigService: RoutesConfigService
   ) {
-    this.offerId = this.route.snapshot.paramMap.get('id');
+    this.route.params.subscribe((params) => {
+      this.offerId = params['id'];
+    });
+    const { navRoutes, title } = offersRoutes[
+      this.offerId ? 'editOffer' : 'createOffer'
+    ];
+
+    this.navRoutes = navRoutes;
+    this.pageTitle = title;
+
     this.searchItems = [
       LibrarySearchItem.SERVICE,
       LibrarySearchItem.PACKAGE,
@@ -66,9 +77,10 @@ export class CreateOfferComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.hotelId = this.globalService.hotelId;
+    this.entityId = this.globalService.entityId;
     this.initUseForm();
     this.initOptionsConfig();
+    this.initNavRoutes();
   }
 
   initUseForm() {
@@ -89,6 +101,12 @@ export class CreateOfferComponent implements OnInit {
     this.initFormSubscription();
 
     if (this.offerId) this.getOfferById();
+  }
+
+  initNavRoutes() {
+    this.routesConfigService.navRoutesChanges.subscribe((navRoutesRes) => {
+      this.navRoutes = [...navRoutesRes, ...this.navRoutes];
+    });
   }
 
   /**
@@ -122,9 +140,9 @@ export class CreateOfferComponent implements OnInit {
                 }`,
         });
 
-      if (type === 'NUMBER' && discount > price) {
-        return 'isNumError';
-      }
+      // if (type === 'NUMBER' && discount > price) {
+      //   return 'isNumError';
+      // }
 
       if (type === 'PERCENTAGE' && discount > 100) {
         return 'isPercentError';
@@ -163,7 +181,7 @@ export class CreateOfferComponent implements OnInit {
    */
   registerServicesSelectedChange() {
     this.useForm.get('libraryItems').valueChanges.subscribe((res) => {
-      this.setDiscountPrice(res);
+      if (res.length) this.setDiscountPrice(res);
     });
   }
 
@@ -181,6 +199,7 @@ export class CreateOfferComponent implements OnInit {
     }, 0);
     this.useForm.get('rate').setValue(totalPrice);
     const rateValue = +this.useForm.get('rate').value;
+
     const discountType = this.useForm.get('discountType').value;
     const discountValue = +this.useForm.get('discountValue').value;
 
@@ -204,7 +223,7 @@ export class CreateOfferComponent implements OnInit {
     if (text) {
       this.loading = true;
       this.offerService
-        .searchLibraryItem(this.hotelId, {
+        .searchLibraryItem(this.entityId, {
           params: `?key=${text}&type=${this.searchItems.join(',')}`,
         })
         .subscribe((res) => {
@@ -267,8 +286,13 @@ export class CreateOfferComponent implements OnInit {
 
     const {
       libraryItems,
+      imageUrl,
       ...restFormData
     } = this.useForm.getRawValue() as OfferFormData;
+    const data = {
+      imageUrl: [{ url: imageUrl, isFeatured: true }],
+      ...restFormData,
+    };
 
     const libraryIds: OffersOnEntity = libraryItems.reduce(
       (prev, curr) => {
@@ -292,15 +316,15 @@ export class CreateOfferComponent implements OnInit {
         roomTypeIds: [],
       }
     );
-
+    this.loading = true;
     if (!!this.offerId) {
       this.subscription$.add(
         this.offerService
           .updateLibraryItem<OfferData, OfferResponse>(
-            this.hotelId,
+            this.entityId,
             this.offerId,
             {
-              ...restFormData,
+              ...data,
               ...libraryIds,
               type: 'OFFER',
               source: 1,
@@ -312,8 +336,8 @@ export class CreateOfferComponent implements OnInit {
     } else {
       this.subscription$.add(
         this.offerService
-          .createLibraryItem<OfferData, OfferResponse>(this.hotelId, {
-            ...restFormData,
+          .createLibraryItem<OfferData, OfferResponse>(this.entityId, {
+            ...data,
             ...libraryIds,
             type: 'OFFER',
             source: 1,
@@ -324,17 +348,25 @@ export class CreateOfferComponent implements OnInit {
   }
 
   getOfferById() {
+    this.loading = true;
     this.subscription$.add(
       this.offerService
-        .getLibraryItemById<OfferResponse>(this.hotelId, this.offerId, {
+        .getLibraryItemById<OfferResponse>(this.entityId, this.offerId, {
           params: '?type=OFFER',
         })
         .subscribe((res) => {
-          this.routes[2].label = 'Edit Offer';
-          let { packageCode, subPackages, roomTypes, ...restData } = res;
+          this.loading = false;
+          let {
+            packageCode,
+            subPackages,
+            roomTypes,
+            imageUrl,
+            ...restData
+          } = res;
 
           const data: OfferFormData = {
             ...restData,
+            imageUrl: imageUrl?.[0]?.url,
             libraryItems: [
               ...subPackages?.map((item) => ({
                 label: `${item.name} ${
@@ -358,7 +390,7 @@ export class CreateOfferComponent implements OnInit {
                 }`,
                 value: item.id,
                 price: item.rate || item.discountedPrice,
-                type: item.type,
+                type: item.type || 'ROOM_TYPE',
               })),
             ],
           };
@@ -390,7 +422,7 @@ export class CreateOfferComponent implements OnInit {
       '',
       { panelClass: 'success' }
     );
-    this.router.navigate([`pages/library/${routes.offers}`]);
+    this.routesConfigService.goBack();
   };
 
   /**
@@ -399,6 +431,12 @@ export class CreateOfferComponent implements OnInit {
   handleFinal = () => {
     this.loading = false;
   };
+
+  resetForm() {
+    this.useForm.reset();
+    this.libraryItems = [];
+    this.selectedServicePrice = {};
+  }
 
   /**
    * Unsubscribe when component is getting removed

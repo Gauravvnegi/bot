@@ -1,8 +1,15 @@
-<div>
+<div class="toggle-wrapper">
+  <span *ngIf="preContent.length" class="pre-content">{{ preContent }}</span>
   <label class="toggle">
-    <input type="checkbox" [checked]="isToggleOn" (change)="toggleSwitch()" />
+    <input
+      type="checkbox"
+      [checked]="isToggleOn"
+      (change)="toggleSwitch()"
+      [disabled]="isDisabled"
+    />
     <span
       class="slider"
+      [ngClass]="disableTurnOff ? 'disable' : ''"
       [ngStyle]="{
         'background-color': isToggleOn ? toggleOnColor : toggleOffColor
       }"

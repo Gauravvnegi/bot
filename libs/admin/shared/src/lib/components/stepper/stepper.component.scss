@@ -1,0 +1,52 @@
+@import 'main';
+::ng-deep .stepper {
+  .p-steps {
+    ul {
+      display: flex;
+      justify-content: space-between;
+    }
+    .p-steps-item {
+      justify-content: center;
+    }
+    .p-steps-item .p-menuitem-link {
+      display: flex;
+      flex-direction: column;
+      cursor: pointer;
+    }
+    .p-steps-item:before {
+      top: 33%;
+    }
+  }
+
+  .active-progress {
+    font-weight: bold;
+  }
+
+  .disable {
+    pointer-events: none;
+  }
+
+  .enable {
+    pointer-events: visible;
+  }
+}
+
+:host ::ng-deep {
+  .completed-step-dark {
+    .p-steps-number {
+      background-color: #313131 !important;
+    }
+    .p-steps-title {
+      color: #313131 !important;
+    }
+  }
+
+  .p-steps-current {
+    .p-steps-number {
+      background-color: $primary-cta !important;
+    }
+    .p-steps-title {
+      color: $primary-cta !important;
+    }
+  }
+}

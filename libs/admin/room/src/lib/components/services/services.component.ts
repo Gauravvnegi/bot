@@ -1,8 +1,15 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatTabChangeEvent } from '@angular/material/tabs';
-import { Router } from '@angular/router';
-import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import {
+  ActivatedRoute,
+  ActivatedRouteSnapshot,
+  Router,
+} from '@angular/router';
+import {
+  GlobalFilterService,
+  RoutesConfigService,
+} from '@hospitality-bot/admin/core/theme';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { NavRouteOptions } from 'libs/admin/shared/src';
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
@@ -17,6 +24,8 @@ import {
   LibrarySearchItem,
   LibraryService,
 } from '@hospitality-bot/admin/library';
+import { routesConfig } from 'libs/admin/shared/src/lib/constants/config';
+import roomRoutes, { roomRoutesConfig } from '../../constant/routes';
 @Component({
   selector: 'hospitality-bot-services',
   templateUrl: './services.component.html',
@@ -25,22 +34,17 @@ import {
 export class ServicesComponent implements OnInit, OnDestroy {
   noRecordAction = noRecordAction;
 
-  hotelId: string;
+  entityId: string;
   subscription$ = new Subscription();
   useForm: FormGroup;
   searchForm: FormGroup;
   loading: boolean;
   isCompLoading: boolean;
   isPaidLoading: boolean;
-  limit = 10;
+  limit = 15;
 
   pageTitle = 'Services';
-  navRoutes: NavRouteOptions = [
-    { label: 'Inventory', link: './' },
-    { label: 'Rooms', link: '/pages/inventory/room' },
-    { label: 'Add Room Type', link: '/pages/inventory/room/add-room-type' },
-    { label: 'Services', link: './' },
-  ];
+  navRoutes: NavRouteOptions = [];
 
   tabItemIdx = 0;
   tabItemList = [
@@ -61,7 +65,7 @@ export class ServicesComponent implements OnInit, OnDestroy {
   compOffset = 0;
 
   disablePagination = false;
-
+  roomTypeId: string;
   constructor(
     private roomService: RoomService,
     private globalService: GlobalFilterService,
@@ -70,19 +74,30 @@ export class ServicesComponent implements OnInit, OnDestroy {
     private fb: FormBuilder,
     private router: Router,
     private location: Location,
-    private libraryService: LibraryService
-  ) {}
+    private libraryService: LibraryService,
+    private routesConfigService: RoutesConfigService,
+    private route: ActivatedRoute
+  ) {
+    this.router.events.subscribe(
+      ({ snapshot }: { snapshot: ActivatedRouteSnapshot }) => {
+        const roomTypeId = snapshot?.params['roomTypeId'];
+        if (roomTypeId) {
+          this.roomTypeId = roomTypeId;
+        }
+      }
+    );
+  }
 
   ngOnInit(): void {
     if (!this.roomService.selectedService) {
       this.location.back();
       return;
     }
-    this.hotelId = this.globalService.hotelId;
-
+    this.entityId = this.globalService.entityId;
     this.initForm();
     this.initOptionConfig();
     this.initSelectedService();
+    this.initNavRoutes();
   }
 
   initSelectedService() {
@@ -90,6 +105,30 @@ export class ServicesComponent implements OnInit, OnDestroy {
     this.tabItemIdx = this.tabItemList.findIndex(
       (item) => item.value === this.selectedService
     );
+  }
+
+  initNavRoutes() {
+    let path = '';
+    this.routesConfigService.activeRouteConfigSubscription.subscribe(
+      (activeRouteConfig) => {
+        path = activeRouteConfig.submodule.fullPath;
+      }
+    );
+    this.routesConfigService.navRoutesChanges.subscribe((navRoutesRes) => {
+      this.navRoutes = [...navRoutesRes];
+      const roomRoutes =
+        roomRoutesConfig[this.roomTypeId ? 'editRoomTypeServices' : 'services'];
+      this.pageTitle = roomRoutes.title;
+      const modifiedRoomType = roomRoutes.navRoutes.map((navRoute) => {
+        if (navRoute.link.includes(':roomTypeId')) {
+          navRoute.link = navRoute.link.replace(':roomTypeId', this.roomTypeId);
+        }
+        navRoute.link = path + '/' + navRoute.link;
+
+        return navRoute;
+      });
+      this.navRoutes = [...this.navRoutes, ...modifiedRoomType];
+    });
   }
 
   /**
@@ -121,13 +160,13 @@ export class ServicesComponent implements OnInit, OnDestroy {
     let debounceCall: (() => void) & Cancelable;
 
     this.searchForm.get('searchText').valueChanges.subscribe((res) => {
+      debounceCall?.cancel();
       if (res) {
-        debounceCall?.cancel();
         debounceCall = debounce(() => {
           this.loading = true;
           this.disablePagination = true;
           this.libraryService
-            .searchLibraryItem(this.hotelId, {
+            .searchLibraryItem(this.entityId, {
               params: `?key=${res}&type=${LibrarySearchItem.SERVICE}`,
             })
             .subscribe(
@@ -215,7 +254,7 @@ export class ServicesComponent implements OnInit, OnDestroy {
     );
 
     this.subscription$.add(
-      this.roomService.getServices(this.hotelId, config).subscribe(
+      this.roomService.getServices(this.entityId, config).subscribe(
         (res) => {
           /* Setting Paid Services */
           if (serviceType == ServicesTypeValue.PAID && res.paidPackages) {

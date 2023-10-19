@@ -1,0 +1,66 @@
+@import 'main';
+
+.container {
+  height: 530px;
+  overflow-y: auto;
+  justify-content: start;
+  padding: 15px;
+  .booking-title {
+    font-size: 14px;
+    font-weight: $bolder;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: 0.84px;
+  }
+  .user-journey-title {
+    margin-top: 20px;
+    font-size: 14px;
+    font-weight: $medium;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: 0.84px;
+    text-align: left;
+    color: $inActiveTab;
+  }
+  .past {
+    .group {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 10px;
+      width: 100%;
+      height: 60px;
+      padding: 12px 6px 13px 15px;
+      border: solid 1px $borderCol;
+      .subHeading {
+        font-size: 10px;
+        font-weight: $bolder;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: normal;
+        letter-spacing: 0.6px;
+        text-align: left;
+        color: $grayMedium;
+        &--results {
+          font-size: 12px;
+          font-weight: $bolder;
+          font-stretch: normal;
+          font-style: normal;
+          line-height: normal;
+          letter-spacing: 0.72px;
+          text-align: left;
+          color: $secondary;
+          padding-top: 10px;
+        }
+      }
+    }
+    .arrow {
+      cursor: pointer;
+    }
+  }
+}
+:host ::ng-deep .mat-icon {
+  color: $mat-icon;
+}

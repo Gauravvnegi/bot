@@ -14,8 +14,15 @@ export const layoutConfig = {
   feedback: {
     transactional: 'TRANSACTIONALFEEDBACK',
     stay: 'STAYFEEDBACK',
+    both: 'ALL',
   },
   notificationDelayTime: 5,
+};
+
+export const defaultNotificationFilter = {
+  status: [],
+  fromDate: null,
+  toDate: null,
 };
 
 /**
@@ -24,47 +31,24 @@ export const layoutConfig = {
  * Add to get subscription api
  */
 export const customModule = {
-  finance: {
-    name: 'FINANCE',
-    label: 'Finance',
-    description: 'Outlet Module',
+  revenueManager: {
+    name: 'REVENUE_MANAGER',
+    label: 'Revenue Manager',
+    description: 'Revenue Manager Module',
     icon:
       'https://nyc3.digitaloceanspaces.com/botfiles/bot/subscription_icons/FrontDesk.svg',
     config: [
       {
         isSubscribed: true,
         isView: true,
-        label: 'Invoice',
-        name: 'INVOICE',
+        label: 'Setup Bar Price',
+        name: 'SETUP_BAR_PRICE',
       },
       {
         isSubscribed: true,
         isView: true,
-        label: 'Transaction',
-        name: 'TRANSACTION',
-      },
-    ],
-    isSubscribed: true,
-    isView: true,
-  },
-  outlets: {
-    name: 'OUTLET',
-    label: 'Outlet',
-    description: 'Outlet Module',
-    icon:
-      'https://nyc3.digitaloceanspaces.com/botfiles/bot/subscription_icons/FrontDesk.svg',
-    config: [
-      {
-        isSubscribed: true,
-        isView: true,
-        label: 'Dashboard',
-        name: 'OUTLETS_DASHBOARD',
-      },
-      {
-        isSubscribed: true,
-        isView: true,
-        label: 'All Outlets',
-        name: 'ALL_OUTLETS',
+        label: 'Dynamic Pricing',
+        name: 'DYNAMIC_PRICING',
       },
     ],
     isSubscribed: true,
@@ -72,6 +56,18 @@ export const customModule = {
   },
   guests: {
     config: [
+      {
+        isSubscribed: true,
+        isView: true,
+        label: 'Guest Dashboard',
+        name: 'GUEST_DASHBOARD',
+      },
+      {
+        isSubscribed: true,
+        isView: true,
+        label: 'Guests',
+        name: 'GUESTS',
+      },
       {
         isSubscribed: true,
         isView: true,

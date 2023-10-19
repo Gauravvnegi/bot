@@ -55,12 +55,12 @@ export class Temp000001Component implements OnInit, AfterViewInit, OnDestroy {
     const {
       journey,
       reservationId,
-      hotelId,
+      entityId,
     } = this.templateService.templateConfig;
 
     this.reservationService.reservationId = reservationId;
     this.hotelService.currentJourney = journey;
-    this.hotelService.hotelId = hotelId;
+    this.hotelService.entityId = entityId;
     // this.setWebUserTitle();
   }
 
@@ -70,7 +70,9 @@ export class Temp000001Component implements OnInit, AfterViewInit, OnDestroy {
         this.titleService.setTitle(response.name);
         let favicon = this.document.querySelector('#favicon');
         favicon['href'] = response['favIcon']?.trim() ?? 'favicon.ico';
-        this.hotelImageUrl = this.hotelService.hotelConfig.imageUrl;
+        this.hotelImageUrl = this.hotelService.hotelConfig.imageUrl?.find(
+          (item) => item.isFeatured
+        )?.url;
       }
     });
   }

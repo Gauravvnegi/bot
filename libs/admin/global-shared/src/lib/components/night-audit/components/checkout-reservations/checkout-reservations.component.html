@@ -1,0 +1,31 @@
+<div class="main__wrapper" [id]="fa?.referenceId">
+  <div class="content__wrapper">
+    <hospitality-bot-table-view
+      [header]="title"
+      [columns]="cols"
+      [headerSticky]="true"
+      [items]="items"
+      [loading]="loading"
+      [action]="'Refresh'"
+      [emptyViewConfig]="{
+        content: {
+          description: 'There is no Pending Checked-out Reservations.'
+        }
+      }"
+      (actionClicked)="reloadTable()"
+      (quickChange)="quickChange($event)"
+    ></hospitality-bot-table-view>
+  </div>
+
+  <!-- Action Button -->
+  <hospitality-bot-form-action
+    class="full-width action-button"
+    [loading]="loading"
+    [disabled]="loading"
+    [config]="actionConfig"
+    (onPostAction)="handleNext()"
+    (onPreAction)="handlePrev()"
+    #fa
+  >
+  </hospitality-bot-form-action>
+</div>

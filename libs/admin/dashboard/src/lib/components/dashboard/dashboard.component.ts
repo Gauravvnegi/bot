@@ -1,19 +1,37 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import {
+  Component,
+  OnDestroy,
+  OnInit,
+  TemplateRef,
+  ViewChild,
+} from '@angular/core';
 import { MatDialogConfig } from '@angular/material/dialog';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
   DetailsComponent,
+  DetailsTabOptions,
   Reservation,
+  ReservationTable,
 } from '@hospitality-bot/admin/reservation';
-import { NavRouteOptions } from '@hospitality-bot/admin/shared';
+import {
+  AdminUtilityService,
+  NavRouteOptions,
+} from '@hospitality-bot/admin/shared';
 import { ModalService } from '@hospitality-bot/shared/material';
 import { NotificationService } from 'apps/admin/src/app/core/theme/src/lib/services/notification.service';
-import { ReservationService } from 'libs/admin/reservation/src/lib/services/reservation.service';
+import { PreArrivalDatatableComponent } from 'libs/admin/request-analytics/src/lib/components/pre-arrival-datatable/pre-arrival-datatable.component';
+
 import {
   ModuleNames,
   TableNames,
 } from 'libs/admin/shared/src/lib/constants/subscriptionConfig';
 import { Subscription } from 'rxjs';
+import * as moment from 'moment';
+import { AnalyticsService } from 'libs/admin/request-analytics/src/lib/services/analytics.service';
+import { PreArrivalRequestList } from '../../data-models/ex-checkin.model';
+import { dashboardPopUpTabs } from '../../constants/dashboard';
+import { ReservationService } from '../../services';
+import { InhouseTable } from 'libs/admin/request-analytics/src/lib/models/inhouse-datatable.model';
 
 @Component({
   selector: 'hospitality-bot-dashboard',
@@ -24,15 +42,32 @@ export class DashboardComponent implements OnInit, OnDestroy {
   tables = TableNames;
   welcomeMessage = 'Welcome To Your Dashboard';
   navRoutes: NavRouteOptions = [{ label: 'eFrontdesk Dashboard', link: './' }];
+  isSidebarVisible: boolean = false;
+  entityId: string;
+  loading: boolean = false;
+  showCalendarView = false;
+  options: any[] = [];
+  tabFilterItems = dashboardPopUpTabs;
+  tabFilterIdx = 0;
+  selectedTab: string = dashboardPopUpTabs[0].value;
+  @ViewChild('request') preArrivalRequestTemplateRef: TemplateRef<any>;
+  @ViewChild('guest') preCheckinGuestTemplateRef: TemplateRef<any>;
+
   private $subscription = new Subscription();
   constructor(
     private reservationService: ReservationService,
     private globalFilterService: GlobalFilterService,
     private modalService: ModalService,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private _adminUtilityService: AdminUtilityService,
+    private analyticsService: AnalyticsService
   ) {}
 
   ngOnInit(): void {
+    this.entityId = this.globalFilterService.entityId;
+    this.globalFilterService.toggleFullView.subscribe((res) => {
+      this.showCalendarView = res;
+    });
     this.listenForStateData();
   }
 
@@ -45,10 +80,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
   listenForStateData(): void {
     this.$subscription.add(
       this.notificationService.$reservationNotification.subscribe(
-        (response) => {
-          if (response) {
+        (reservationId) => {
+          if (reservationId) {
             this.reservationService
-              .getReservationDetails(response)
+              .getReservationDetailsById(reservationId)
               .subscribe((response) => {
                 const data = new Reservation().deserialize(
                   response,
@@ -63,7 +98,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     );
   }
 
-  openDetailPage(rowData): void {
+  openDetailPage(rowData, tabKey?: DetailsTabOptions): void {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;
     dialogConfig.width = '100%';
@@ -71,10 +106,16 @@ export class DashboardComponent implements OnInit, OnDestroy {
       DetailsComponent,
       dialogConfig
     );
+    // detailCompRef.componentInstance.bookingId = rowData?.booking?.bookingNumber;
 
-    detailCompRef.componentInstance.guestId = rowData.guests.primaryGuest.id;
-    detailCompRef.componentInstance.bookingNumber =
-      rowData.booking.bookingNumber;
+    detailCompRef.componentInstance.guestId =
+      rowData?.guests?.primaryGuest?.id ??
+      rowData?.guestDetails?.primaryGuest?.id;
+
+    // detailCompRef.componentInstance.bookingNumber =
+    //   rowData.booking.bookingNumber;
+
+    tabKey && (detailCompRef.componentInstance.tabKey = tabKey);
 
     this.$subscription.add(
       detailCompRef.componentInstance.onDetailsClose.subscribe((_) => {
@@ -83,6 +124,116 @@ export class DashboardComponent implements OnInit, OnDestroy {
     );
   }
 
+  // onViewPreArrivalRequest() {
+  //   const dialogConfig = new MatDialogConfig();
+  //   dialogConfig.disableClose = true;
+  //   dialogConfig.width = '100%';
+  //   const detailCompRef = this.modalService.openDialog(
+  //     PreArrivalDatatableComponent,
+  //     dialogConfig
+  //   );
+
+  //   detailCompRef.componentInstance.tableName = 'Pre-arrival Request';
+  //   detailCompRef.componentInstance.entityType = 'ALL';
+  //   detailCompRef.componentInstance.tabFilterIdx = 0;
+
+  //   detailCompRef.componentInstance.onModalClose.subscribe((res) =>
+  //     detailCompRef.close()
+  //   );
+  // }
+
+  getPreArrivalRequest() {
+    this.loading = true;
+    const query = {
+      queryObj: this._adminUtilityService.makeQueryParams([
+        {
+          fromDate: moment.utc().startOf('day').valueOf(),
+          toDate: moment.utc().endOf('day').valueOf(),
+          order: 'DESC',
+          entityType: 'ALL',
+          journeyType: 'pre-arrival',
+          entityId: this.entityId,
+        },
+      ]),
+    };
+
+    this.analyticsService.getInhouseRequest(query).subscribe((res) => {
+      this.options = new InhouseTable().deserialize(res).records;
+
+      this.loading = false;
+    });
+  }
+
+  onSelectedTabFilterChange(index: number) {
+    this.tabFilterIdx = index;
+
+    if (this.tabFilterItems[index].value === dashboardPopUpTabs[1].value) {
+      this.options = [];
+      //GET PRE ARRIVAL REQUEST DATA
+      this.getPreArrivalRequest();
+    } else {
+      this.options = [];
+      //GET PRE CHECK-IN GUEST DATA
+      this.getPreCheckinGuest();
+    }
+  }
+
+  getPreCheckinGuest() {
+    this.loading = true;
+    const queryObj = {
+      entityId: this.entityId,
+      fromDate: moment.utc().startOf('day').valueOf(),
+      toDate: moment.utc().endOf('day').valueOf(),
+      order: 'DESC',
+      entityType: 'ARRIVAL',
+      entityState: 'EXPRESSCHECKIN',
+    };
+    const config = {
+      queryObj: this._adminUtilityService.makeQueryParams([queryObj]),
+    };
+
+    this.reservationService.getReservationDetails(config).subscribe(
+      (res) => {
+        this.options = new ReservationTable().deserialize(
+          res,
+          this.globalFilterService.timezone
+        ).records;
+
+        this.loading = false;
+      },
+      (error) => {
+        this.loading = false;
+      }
+    );
+  }
+
+  getStatusStyle(type: string, state: string): string {
+    switch (type) {
+      case 'INITIATED':
+        return `status-background-initiated`;
+      case 'PENDING':
+        return `status-background-pending`;
+      case 'FAILED':
+        return `status-background-reject`;
+      case 'COMPLETED':
+        return `status-background-success`;
+    }
+  }
+
+  openExCheckinSidebar() {
+    this.isSidebarVisible = true;
+  }
+
+  closeSidebar() {
+    this.isSidebarVisible = false;
+  }
+
+  getTemplate() {
+    return this.tabFilterItems[this.tabFilterIdx].value ===
+      dashboardPopUpTabs[1].value
+      ? this.preArrivalRequestTemplateRef
+      : this.preCheckinGuestTemplateRef;
+  }
   ngOnDestroy(): void {
     this.$subscription.unsubscribe();
   }

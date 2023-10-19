@@ -55,19 +55,21 @@
 
 .selected {
   filter: brightness(40%);
-  background-color: blueviolet;
+  background-color: #f5f5dc !important;
   border-radius: 4px;
 }
 
-.image-wrapper {
+.image-type {
+  @include flex-all-center();
   width: 210px;
   height: 157px;
-}
 
-.show-image {
-  width: 208px;
-  height: 155px;
-  border-radius: 4px;
+  .show-image {
+    height: 100%;
+    width: 100%;
+    border-radius: 4px;
+    object-fit: contain;
+  }
 }
 
 .text {
@@ -90,4 +92,21 @@
 
 :host ::ng-deep .wrapper {
   border: none !important;
+}
+
+.btn-wrapper {
+  @include flex-item-center;
+  gap: 1em;
+}
+
+.icon-type {
+  @include flex-all-center;
+  width: 210px;
+  height: 112px;
+  .show-image {
+    height: 50%;
+    width: 100%;
+    border-radius: 4px;
+    object-fit: contain;
+  }
 }

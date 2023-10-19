@@ -1,0 +1,23 @@
+@import 'main';
+.footer-buttons {
+  position: relative;
+  @include flex-all-center;
+  gap: 38.5px;
+  height: 70px;
+  background: transparent;
+}
+
+.fixed {
+  position: fixed;
+  bottom: 0;
+  z-index: $form-action-z;
+  width: 100%;
+  left: 35px;
+  background: $layout-background;
+  box-shadow: 1px 7px 7px 7px #b5b5b5;
+  transition: box-shadow 1s ease-in;
+}
+
+.footer-height {
+  height: 70px;
+}

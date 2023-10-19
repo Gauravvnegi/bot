@@ -1,3 +1,11 @@
-<div class="main_container">
+<!-- <div class="main_container">
+
   <router-outlet></router-outlet>
+</div> -->
+<div class="main_container">
+  <hospitality-bot-create-with-view
+    [isLoaded]="isLoaded && onboardingUrl"
+    [onboardingUrl]="onboardingUrl"
+  >
+  </hospitality-bot-create-with-view>
 </div>

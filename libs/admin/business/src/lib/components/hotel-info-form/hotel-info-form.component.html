@@ -1,5 +1,5 @@
-<div class="wrapper" [formGroup]="useForm">
-  <div [formGroup]="useForm.get('hotel')">
+<div class="wrapper" [formGroup]="useForm" [id]="fa.referenceId">
+  <div [formGroup]="useForm.get('entity')">
     <hospitality-bot-navigation-header
       [heading]="pageTitle"
       [routes]="navRoutes"
@@ -22,19 +22,31 @@
         controlName="name"
         label="Name"
         maxLength="60"
+        [props]="{
+          placeholder: 'Enter'
+        }"
       ></hospitality-bot-input>
       <hospitality-bot-select
         class="half-width , segment"
         controlName="propertyCategory"
         label="Segment"
         [options]="segmentList"
+        [props]="{
+          placeholder: 'Select Segment'
+        }"
       ></hospitality-bot-select>
       <hospitality-bot-input
         class="half-width"
         controlName="emailId"
         label="Email"
+        [props]="{
+          placeholder: 'Enter'
+        }"
       ></hospitality-bot-input>
-      <div class="half-width" [formGroup]="useForm.get('hotel').get('contact')">
+      <div
+        class="half-width"
+        [formGroup]="useForm.get('entity').get('contact')"
+      >
         <hospitality-bot-phone-number
           preControlName="countryCode"
           postControlName="number"
@@ -45,18 +57,15 @@
         controlName="gstNumber"
         label="GST"
         maxLength="15"
+        [props]="{
+          placeholder: 'Enter'
+        }"
       ></hospitality-bot-input>
-      <hospitality-bot-auto-complete
+      <hospitality-bot-address-component
         class="half-width"
         controlName="address"
-        label="Address"
-        [options]="addressList"
-        [loading]="loading"
-        (onSearch)="searchOptions($event)"
-        [settings]="{
-          multiple: false
-        }"
-      ></hospitality-bot-auto-complete>
+      >
+      </hospitality-bot-address-component>
 
       <div class="file-upload-wrapper">
         <hospitality-bot-custom-file-upload
@@ -69,22 +78,22 @@
             unit: 4,
             isMultiple: true
           }"
-          [hotelId]="hotelId"
-          path="static-content/room-types"
+          [entityId]="entityId"
+          path="static-content/hotel-images"
         ></hospitality-bot-custom-file-upload>
       </div>
       <div class="des-template">
         <div class="des-template__label">Description</div>
         <div class="des-template__input">
           <hospitality-bot-template-editor
-            [parentFG]="useForm.get('hotel')"
+            [parentFG]="useForm.get('entity')"
             [name]="'description'"
             [height]="250"
           ></hospitality-bot-template-editor>
         </div>
       </div>
     </div>
-    <div class="hotel-wrapper">
+    <div class="service-wrapper">
       <div class="header">Services</div>
       <hr />
       <div class="hotel-services-wrapper">
@@ -94,8 +103,17 @@
           formControlName="serviceIds"
           [itemList]="compServices"
           (viewAll)="saveHotelData()"
+          (onEmptyViewAction)="openImportService()"
+          (addAction)="openImportService()"
           [noRecordsAction]="noRecordAction"
-        ></hospitality-bot-custom-select>
+          type="icon"
+        >
+          <hospitality-bot-button
+            label="+ Import Service"
+            (onClick)="openImportService()"
+            variant="text"
+          ></hospitality-bot-button>
+        </hospitality-bot-custom-select>
       </div>
     </div>
 
@@ -104,19 +122,20 @@
       class="full-width"
     >
     </hospitality-bot-social-media>
-
-    <div class="footer-buttons">
-      <hospitality-bot-button
-        label="Reset All"
-        (onClick)="resetForm()"
-        variant="outlined"
-        severity="reset"
-      ></hospitality-bot-button>
-      <hospitality-bot-button
-        [label]="hotelId ? 'Update' : 'Create'"
-        (onClick)="submitForm()"
-        [isLoading]="loading"
-      ></hospitality-bot-button>
-    </div>
+    <hospitality-bot-form-action
+      class="full-width"
+      [isId]="entityId"
+      [loading]="loading"
+      (onPreAction)="resetForm()"
+      (onPostAction)="submitForm()"
+      #fa
+    >
+    </hospitality-bot-form-action>
   </div>
 </div>
+
+<hospitality-bot-hotel-data-table
+  class="child"
+  [parentId]="entityId"
+  *ngIf="entityId?.length"
+></hospitality-bot-hotel-data-table>

@@ -4,7 +4,7 @@ export type CategoryData = {
   imageUrl?: string;
   active?: boolean;
   source: 1;
-  type: 'SERVICE_CATEGORY' | 'PACKAGE_CATEGORY';
+  type: 'SERVICE_CATEGORY' | 'PACKAGE_CATEGORY' | 'FOOD_PACKAGE_CATEGORY';
 };
 
 /**

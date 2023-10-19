@@ -1,4 +1,4 @@
-<div class="wrapper">
+<div class="wrapper" [id]="fa.referenceId">
   <hospitality-bot-navigation-header [heading]="pageTitle" [routes]="navRoutes">
   </hospitality-bot-navigation-header>
 
@@ -29,7 +29,7 @@
     <ng-template #imageControl>
       <hospitality-bot-custom-file-upload
         formControlName="url"
-        [hotelId]="hotelId"
+        [entityId]="entityId"
         [baseType]="fileUploadType.image"
         [path]="pathToUploadFile"
       ></hospitality-bot-custom-file-upload>
@@ -37,7 +37,7 @@
     <ng-template #videoControl
       ><hospitality-bot-custom-file-upload
         [parentFG]="assetForm"
-        [hotelId]="hotelId"
+        [entityId]="entityId"
         [baseType]="fileUploadType.video"
         [path]="pathToUploadFile"
         [description]="'Mandatory to add at least 1 video'"
@@ -54,11 +54,13 @@
         ></hospitality-bot-template-editor>
       </div>
     </div>
-
-    <hospitality-bot-button
-      class="create-btn"
-      [label]="isSavingasset ? 'Saving' : 'Save'"
-      (onClick)="handleSubmit()"
-    ></hospitality-bot-button>
   </div>
+  <hospitality-bot-form-action
+    class="full-width"
+    [isId]="assetId"
+    (onPreAction)="resetForm()"
+    (onPostAction)="handleSubmit()"
+    #fa
+  >
+  </hospitality-bot-form-action>
 </div>

@@ -8,6 +8,7 @@ import { ChartsModule } from 'ng2-charts';
 import { NgCircleProgressModule } from 'ng-circle-progress';
 import { AnalyticsService } from './services/analytics.service';
 import { AdminRequestModule } from 'libs/admin/request/src/lib/admin-request.module';
+import { RequestService } from 'libs/admin/request/src/lib/services/request.service';
 
 @NgModule({
   imports: [
@@ -22,6 +23,6 @@ import { AdminRequestModule } from 'libs/admin/request/src/lib/admin-request.mod
     NgCircleProgressModule.forRoot(),
   ],
   declarations: [...AdminRequestAnalyticsRoutingModule.components],
-  providers: [AnalyticsService],
+  providers: [AnalyticsService,RequestService],
 })
 export class AdminRequestAnalyticsModule {}

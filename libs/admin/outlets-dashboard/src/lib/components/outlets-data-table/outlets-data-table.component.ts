@@ -4,7 +4,6 @@ import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
   AdminUtilityService,
   BaseDatatableComponent,
-  Cols,
   TableService,
 } from '@hospitality-bot/admin/shared';
 import { LazyLoadEvent } from 'primeng/api';
@@ -24,7 +23,7 @@ import { cols, status, tabFilterItems } from '../../constants/data-table';
 })
 export class OutletsDataTableComponent extends BaseDatatableComponent
   implements OnInit {
-  hotelId: string;
+  entityId: string;
   globalQueries = [];
   $subscription = new Subscription();
   limit = 10;
@@ -49,7 +48,7 @@ export class OutletsDataTableComponent extends BaseDatatableComponent
 
   listenForGlobalFilter() {
     this.globalFilterService.globalFilter$.subscribe((value) => {
-      this.hotelId = this.globalFilterService.hotelId;
+      this.entityId = this.globalFilterService.entityId;
 
       this.globalQueries = [
         ...value['filter'].queryValue,
@@ -67,22 +66,10 @@ export class OutletsDataTableComponent extends BaseDatatableComponent
     this.loading = true;
 
     this.$subscription.add(
-      this.outletService.getOutletList(this.hotelId).subscribe(
-        (_res) => {
-          this.values = [
-            {
-              id: 1,
-              name: 'Outlet 1',
-              booking_no: '#8544556CY',
-              guest_name: 'John Doe',
-              booking_date: '2021-07-01T00:00:00.000Z',
-              amount: '4,880',
-              scource: 'Agent',
-              payment: 'Cash',
-              actions: 'confirmed',
-            },
-          ];
-          this.totalRecords = 1;
+      this.outletService.getOutletList().subscribe(
+        (res) => {
+          this.values = res;
+          // this.totalRecords = 1;
         },
         (err) => {},
         this.handleFinal
@@ -134,7 +121,7 @@ export class OutletsDataTableComponent extends BaseDatatableComponent
     };
 
     this.$subscription.add(
-      this.outletService.exportCSV(this.hotelId, config).subscribe((res) => {
+      this.outletService.exportCSV(this.entityId, config).subscribe((res) => {
         FileSaver.saveAs(
           res,
           `${this.tableName.toLowerCase()}_export_${new Date().getTime()}.csv`
@@ -152,7 +139,7 @@ export class OutletsDataTableComponent extends BaseDatatableComponent
     this.loading = true;
     this.$subscription.add(
       this.outletService
-        .updateOutletItem(this.hotelId, rowData.id, status)
+        .updateOutletItem(this.entityId, rowData.id, status)
         .subscribe(
           () => {
             this.updateStatusAndCount(rowData.status, status);

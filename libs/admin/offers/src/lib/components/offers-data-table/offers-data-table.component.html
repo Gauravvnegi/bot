@@ -7,7 +7,8 @@
   <div class="action-wrapper">
     <hospitality-bot-button
       label="+ Create Offer"
-      link="pages/library/offers/{{ routes.createOffer }}"
+      [routerLink]="routes.createOffer.route"
+      preserveQueryParams="true"
     ></hospitality-bot-button>
     <hospitality-bot-export-list
       [additionalActionItems]="additionalActionItems"
@@ -40,7 +41,7 @@
   (onRowSelect)="onRowSelect($event)"
   (onRowUnselect)="onRowUnselect($event)"
   (onHeaderCheckboxToggle)="onToggleSelectAll($event)"
-  *ngIf="tabFilterItems[tabFilterIdx]?.total; else emptyTable"
+  *ngIf="!isEmpty; else emptyTable"
 >
   <ng-template pTemplate="caption">
     <div class="caption__wrapper" [formGroup]="tableFG">
@@ -106,12 +107,12 @@
       </td>
       <td>
         <div class="cell-content">
-          <hospitality-bot-toggle-dropdown
+          <hospitality-bot-status-dropdown-toggle
             class="toggle-btn"
             (onClick)="handleStatus($event, rowData)"
-            [status]="rowData.status"
+            [state]="rowData.status"
           >
-          </hospitality-bot-toggle-dropdown>
+          </hospitality-bot-status-dropdown-toggle>
         </div>
       </td>
     </tr>
@@ -138,7 +139,7 @@
   <div class="caption__wrapper">
     <hospitality-bot-empty-table
       [isLoading]="loading"
-      link="pages/library/offers/{{ routes.createOffer }}"
+      [link]="routes.createOffer"
       [content]="{
         description:
           'No offers found. Tap the +Create Offers to create enticing offers to attract guests and boost bookings.',

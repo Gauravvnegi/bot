@@ -1,44 +1,119 @@
-<div>
-  <div class="header">
-    <div
-      *ngFor="let field of fields"
-      [style.flexBasis]="width"
-      class="header__cell"
-    >
-      {{ field.label }}
-    </div>
-  </div>
-  <div [formGroup]="userFormGroup">
-    <div formGroupName="roomInformation" class="wrapper">
+<div class="wrapper">
+  <div #main [formGroup]="parentFormGroup">
+    <div class="header">
       <div
         *ngFor="let field of fields"
-        [style.flexBasis]="width"
-        [ngSwitch]="field.type"
+        [style.flexBasis]="field.width ? field.width : width"
+        class="header__cell"
       >
-        <hospitality-bot-input
-          *ngSwitchCase="'input'"
-          [controlName]="field.name"
-          [props]="{
-            placeholder: field.placeholder
-          }"
-          [disabled]="field.disabled"
-          (focusout)="getSummaryData()"
-          (keyup.enter)="getSummaryData()"
-        ></hospitality-bot-input>
-        <hospitality-bot-select
-          *ngSwitchCase="'select'"
-          [controlName]="field.name"
-          [props]="{
-            placeholder: field.placeholder,
-            isAsync: true
-          }"
-          (paginate)="loadMoreRoomTypes()"
-          (onSearch)="searchRoomTypes($event)"
-          [options]="field.options"
-          [disabled]="field.disabled"
-          [loading]="loadingRoomTypes"
-        ></hospitality-bot-select>
+        {{ field.label }}
       </div>
     </div>
+    <ng-container formGroupName="roomInformation">
+      <div
+        formArrayName="roomTypes"
+        *ngFor="let controls of roomTypeArray.controls; let i = index"
+      >
+        <div [formGroupName]="i" class="values-row">
+          <div
+            *ngFor="let field of fields"
+            [style.flexBasis]="field.width ? field.width : width"
+            [style.width]="'100px'"
+            [ngSwitch]="field.type"
+          >
+            <hospitality-bot-input
+              *ngSwitchCase="'input'"
+              [controlName]="field.name"
+              [props]="{
+                placeholder: field.placeholder,
+                type: 'number',
+                errorMessages: {
+                  min: errorMessage(field)
+                }
+              }"
+              [disabled]="field.disabled"
+            ></hospitality-bot-input>
+            <hospitality-bot-multi-select
+              *ngSwitchCase="'multi-select'"
+              [controlName]="field.name"
+              [props]="{
+                placeholder: field.placeholder,
+                isAsync: false
+              }"
+              [options]="
+                field.options
+                  ? field.options
+                  : controls.get('roomNumberOptions').value
+              "
+              [disabled]="field.disabled"
+              [settings]="{ showHeader: false }"
+            ></hospitality-bot-multi-select>
+            <hospitality-bot-select
+              *ngSwitchCase="'select'"
+              class="select"
+              [controlName]="field.name"
+              [props]="{
+                placeholder: field.placeholder,
+                isAsync: field.isAsync
+              }"
+              [options]="
+                field.options
+                  ? field.options
+                  : field.name === 'ratePlan'
+                  ? controls.get('ratePlanOptions').value
+                  : controls.get('roomNumberOptions').value
+              "
+              [disabled]="field.disabled"
+              [loading]="field.options ? loadingRoomTypes[i] : false"
+            ></hospitality-bot-select>
+            <hospitality-bot-quick-select
+              *ngSwitchCase="'quick-select'"
+              [controlName]="field.name"
+              class="select"
+              [inputType]="'select'"
+              [props]="{
+                showChips: false,
+                isAsync: true,
+                placeholder: field.placeholder,
+                selectedOption: roomTypes[index]
+              }"
+              [apiConfig]="{
+                entityId: entityId,
+                apiEndPoint: 'inventory',
+                dataModel: {
+                  key: 'roomTypes'
+                },
+                queryParams: getConfig(),
+                searchAPIEndPoint: 'library/search',
+                searchModel: {
+                  key: 'ROOM_TYPE'
+                },
+                searchQueryParams: { type: 'ROOM_TYPE' }
+              }"
+              [paginationConfig]="{
+                isPagination: true
+              }"
+              (clickedOption)="roomTypeChange($event, i)"
+              [reinitialize]="reinitializeRooms"
+            ></hospitality-bot-quick-select>
+          </div>
+          <ng-container *ngIf="roomTypeArray.length > 1">
+            <mat-icon
+              class="delete"
+              [ngClass]="formService.disableBtn ? 'disabled-btn' : ''"
+              (click)="removeField(i)"
+              >clear</mat-icon
+            >
+          </ng-container>
+        </div>
+      </div>
+    </ng-container>
   </div>
+  <hospitality-bot-button
+    class="action-btn"
+    label="+ Add More Rooms"
+    (onClick)="addNewField()"
+    [disabled]="formService.disableBtn"
+    variant="text"
+  ></hospitality-bot-button>
 </div>

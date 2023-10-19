@@ -2,8 +2,30 @@
 
 .wrapper {
   display: flex;
+  flex-direction: column;
+  border: solid 1px rgba(112, 112, 112, 0.35);
+  border-radius: 8px;
+}
+
+.container {
+  display: flex;
   justify-content: space-evenly;
   padding: 30px 0;
+}
+
+.values-row {
+  position: relative;
+  display: flex;
+  gap: 2%;
+  padding: 2%;
+  border-bottom: 2px solid;
+  border-color: $accordian-background;
+}
+
+.main {
+  position: relative;
+  // overflow: auto;
+  // box-shadow: inset 0px -12px 11px -12px #e8eef5;
 }
 
 .header {
@@ -23,4 +45,35 @@
     color: $accordian-label;
     margin: auto 0;
   }
+}
+
+.delete {
+  font-size: 25px;
+  font-weight: 900;
+  position: absolute;
+  right: 1%;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: $darkRed;
+}
+
+.action-btn {
+  display: flex;
+  justify-content: flex-end;
+}
+
+:host ::ng-deep .p-error {
+  bottom: -1.4em;
+}
+
+:host ::ng-deep .select {
+  .option-items {
+    overflow: hidden;
+  }
+}
+
+.disabled-btn {
+  opacity: 0.5;
+  pointer-events: none;
 }

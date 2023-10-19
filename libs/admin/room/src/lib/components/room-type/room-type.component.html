@@ -1,11 +1,24 @@
-<div class="wrapper">
+<div class="wrapper" [id]="fa.referenceId">
   <hospitality-bot-navigation-header
     [heading]="pageTitle"
     [routes]="navRoutes"
   ></hospitality-bot-navigation-header>
   <form [formGroup]="useForm">
     <div class="room-info-wrapper">
-      <div class="header">Room Information</div>
+      <div class="header-wrapper">
+        <div class="header">
+          Room Information
+        </div>
+        <hospitality-bot-toggle-switch-with-label
+          [isToggleOn]="useForm.get('isBaseRoomType').value"
+          (onToggleSwitch)="onRoomTypeToggleSwitch($event)"
+          [config]="{
+            disableTurnOff: disableRoomType,
+            preContent: 'Base Room Type'
+          }"
+          [isDisabled]="disableRoomType"
+        ></hospitality-bot-toggle-switch-with-label>
+      </div>
       <hr />
       <div class="room-info-form-wrapper">
         <div class="room-type-name">
@@ -13,21 +26,35 @@
             controlName="name"
             label="Room Type Name"
             maxLength="60"
+            [props]="{
+              placeholder: 'Enter'
+            }"
           ></hospitality-bot-input>
         </div>
         <div class="file-upload-wrapper">
           <hospitality-bot-custom-file-upload
-            formControlName="imageUrls"
+            formControlName="imageUrl"
             label="Image"
             description="Mandatory to add at least 1 image"
             [settings]="{
               limit: 1,
-              unit: 4
+              unit: 4,
+              isMultiple: true
             }"
-            [hotelId]="hotelId"
+            [isFeatureView]="true"
+            [entityId]="entityId"
             path="static-content/room-types"
           ></hospitality-bot-custom-file-upload>
         </div>
+        <hospitality-bot-input
+          label="Short Description"
+          class="room-des"
+          controlName="shortDescription"
+          maxLength="120"
+          [props]="{
+            placeholder: 'Enter Short Description'
+          }"
+        ></hospitality-bot-input>
         <div class="room-des">
           <p>Room Description</p>
           <hospitality-bot-template-editor
@@ -39,11 +66,13 @@
       </div>
     </div>
 
-    <div class="room-details-wrapper">
-      <hospitality-bot-room-details-data-table></hospitality-bot-room-details-data-table>
+    <div class="room-details-wrapper" *ngIf="roomTypeId">
+      <hospitality-bot-room-details-data-table
+        [roomTypeId]="roomTypeId"
+      ></hospitality-bot-room-details-data-table>
     </div>
 
-    <div class="room-pricing-wrapper">
+    <div class="room-wrapper">
       <div class="header">Services</div>
       <hr />
       <div class="room-services-wrapper">
@@ -53,97 +82,403 @@
           formControlName="complimentaryAmenities"
           [itemList]="compServices"
           (viewAll)="saveRoomTypeData('COMPLIMENTARY')"
-          [noRecordsAction]="noRecordAction"
-          [loading]="loading"
-        ></hospitality-bot-custom-select>
+          [noRecordsAction]="noRecordActionForComp"
+          [loading]="isCompLoading"
+          (onEmptyViewAction)="openService('COMPLIMENTARY')"
+          type="icon"
+        >
+          <hospitality-bot-button
+            label="+Import Services"
+            variant="text"
+            (onClick)="openService('COMPLIMENTARY')"
+          ></hospitality-bot-button>
+        </hospitality-bot-custom-select>
         <div class="paid-services">
           <hospitality-bot-custom-select
             label="Paid Services"
             description="Do not forget to add this cost in addition to the room cost"
             formControlName="paidAmenities"
             [itemList]="paidServices"
+            (onEmptyViewAction)="openService('PAID')"
             (viewAll)="saveRoomTypeData('PAID')"
             [noRecordsAction]="noRecordAction"
-            [loading]="loading"
+            [loading]="isPaidLoading"
           ></hospitality-bot-custom-select>
         </div>
       </div>
     </div>
-    <div class="room-pricing-wrapper">
+    <div class="room-wrapper">
       <div class="header">Room Pricing</div>
       <hr />
       <div class="room-pricing-form-wrapper">
-        <div class="input-fields">
-          <hospitality-bot-prefix-field
-            preControlName="currency"
-            postControlName="minPrice"
-            label="Min Price"
-            [options]="currencies"
-            [props]="inputValidationProps"
-            [defaultProps]="{ post: { type: 'number' } }"
-          ></hospitality-bot-prefix-field>
-        </div>
-        <div class="input-fields">
-          <hospitality-bot-prefix-field
-            preControlName="currency"
-            postControlName="maxPrice"
-            label="Max Price"
-            [options]="currencies"
-            [props]="inputValidationProps"
-            [defaultProps]="{ post: { type: 'number' } }"
-          ></hospitality-bot-prefix-field>
-        </div>
-        <div class="input-fields">
-          <hospitality-bot-prefix-field
-            preControlName="currency"
-            postControlName="paxAdditionalCost"
-            label="Pax Additional Cost"
-            [options]="currencies"
-            [props]="inputValidationProps"
-            [defaultProps]="{ post: { type: 'number' } }"
-          ></hospitality-bot-prefix-field>
-        </div>
+        <p-accordion
+          [multiple]="true"
+          [formGroupName]="
+            isPricingDynamic ? 'dynamicRatePlans' : 'staticRatePlans'
+          "
+        >
+          <p-accordionTab click [selected]="true">
+            <p-header>
+              <div class="header-wrapper">
+                <div class="header-button">
+                  <span class="label">
+                    {{
+                      useForm.get(
+                        isPricingDynamic
+                          ? 'dynamicRatePlans.label'
+                          : 'staticRatePlans.label'
+                      ).value
+                    }}</span
+                  >
+                </div>
+                <!-- <hospitality-bot-toggle-switch-with-label
+                  [isToggleOn]="defaultRatePlanStatus"
+                  (onToggleSwitch)="onToggleSwitch($event)"
+                  click-stop-propagation
+                ></hospitality-bot-toggle-switch-with-label> -->
+              </div>
+            </p-header>
 
-        <!-- <div class="input-fields">
-          <hospitality-bot-prefix-field
-            preControlName="variablePriceCurrency"
-            postControlName="variableAmount"
-            label="Variable Price"
-            [options]="currencies"
-            [props]="{ errorMessages: inputValidationProps.errorMessages }"
-            [defaultProps]="{
-              post: {
-                type: 'number',
-                additionalInfo: 'Price per additional adult'
-              }
-            }"
-          ></hospitality-bot-prefix-field>
-        </div> -->
-        <!-- <div class="input-fields">
-          <hospitality-bot-prefix-field
-            preControlName="discountType"
-            postControlName="discountValue"
-            label="Discount Type"
-            [options]="discountTypes"
-            [props]="inputValidationProps"
-            [defaultProps]="{ post: { type: 'number' } }"
-          ></hospitality-bot-prefix-field>
+            <div>
+              <div class="form-block" *ngIf="!isPricingDynamic">
+                <hospitality-bot-input
+                  label="Name"
+                  class="half-width"
+                  controlName="label"
+                  maxLength="60"
+                  [props]="{
+                    placeholder: 'Enter'
+                  }"
+                ></hospitality-bot-input>
+              </div>
+              <hospitality-bot-discount-form
+                *ngIf="!isPricingDynamic"
+                class="form-block"
+                [controls]="{
+                  originalPrice: 'basePrice',
+                  currency: 'basePriceCurrency',
+                  discountedPrice: 'bestAvailablePrice',
+                  discountedPriceCurrency: 'basePriceCurrency'
+                }"
+                [labels]="{
+                  originalPriceLabel: 'Base Price-Single Occupancy',
+                  discountedPriceLabel: 'Best Available Rate'
+                }"
+                [props]="{
+                  placeholder: 'Enter'
+                }"
+                [settings]="{
+                  className: 'half-width',
+                  isPriceControl: true
+                }"
+              >
+                <hospitality-bot-prefix-field
+                  class="half-width"
+                  [options]="currencies"
+                  label="Double Occupancy pricing"
+                  preControlName="doubleOccupancyCurrency"
+                  postControlName="doubleOccupancyPrice"
+                  [defaultProps]="{
+                    post: {
+                      type: 'number',
+                      placeholder: 'Enter Price',
+                      errorMessages: {
+                        required: 'This is a required field.',
+                        min: 'Value must be greater than 0.'
+                      }
+                    }
+                  }"
+                >
+                </hospitality-bot-prefix-field>
+                <hospitality-bot-prefix-field
+                  class="half-width"
+                  [options]="currencies"
+                  label="Triple Occupancy pricing"
+                  preControlName="tripleOccupancyCurrency"
+                  postControlName="tripleOccupancyPrice"
+                  [defaultProps]="{
+                    post: {
+                      type: 'number',
+                      placeholder: 'Enter Price',
+                      errorMessages: {
+                        required: 'This is a required field.',
+                        min: 'Value must be greater than 0.'
+                      }
+                    }
+                  }"
+                >
+                </hospitality-bot-prefix-field>
+                <hospitality-bot-multiple-prefix-input
+                  class="half-width"
+                  [controls]="{
+                    currencyControlName: 'paxPriceCurrency',
+                    preCountControlName: 'paxChildBelowFive',
+                    postCountControlName: 'paxChildPrice',
+                    additionalControlName: 'paxAdultPrice'
+                  }"
+                  [labels]="{
+                    mainLabel: 'Pax Additional Cost',
+                    preCountLabel: childBelowFive,
+                    postCountLabel: 'Child 5-12',
+                    additionalLabel: 'Adult'
+                  }"
+                  [currencyOptions]="currencies"
+                  [defaultProps]="{
+                    post: {
+                      type: 'number',
+                      float: true,
+                      errorMessages: {
+                        required: 'This is a required field.',
+                        min: 'Value must be greater than 0.'
+                      }
+                    }
+                  }"
+                ></hospitality-bot-multiple-prefix-input>
+              </hospitality-bot-discount-form>
+
+              <div class="form-block" *ngIf="isPricingDynamic">
+                <hospitality-bot-input
+                  label="Name"
+                  controlName="label"
+                  class="half-width"
+                  maxLength="60"
+                  [props]="{
+                    placeholder: 'Enter'
+                  }"
+                ></hospitality-bot-input>
+                <div class="half-width"></div>
+                <hospitality-bot-multiple-prefix-input
+                  class="half-width"
+                  [controls]="{
+                    currencyControlName: 'basePriceCurrency',
+                    preCountControlName: 'basePrice',
+                    postCountControlName: 'price'
+                  }"
+                  [labels]="{
+                    mainLabel: 'Base Price-Single Occupancy',
+                    preCountLabel: 'Base Price',
+                    postCountLabel: 'Price'
+                  }"
+                  [currencyOptions]="currencies"
+                  [defaultProps]="{
+                    post: {
+                      type: 'number',
+                      float: true,
+                      errorMessages: {
+                        required: 'This is a required field.',
+                        min: 'Value must be greater than 0.'
+                      },
+                      isPriceField: true
+                    }
+                  }"
+                ></hospitality-bot-multiple-prefix-input>
+
+                <hospitality-bot-prefix-field
+                  class="half-width"
+                  [options]="currencies"
+                  label="Double Occupancy pricing"
+                  preControlName="doubleOccupancyCurrency"
+                  postControlName="doubleOccupancyPrice"
+                  [defaultProps]="{
+                    post: {
+                      type: 'number',
+                      placeholder: 'Enter Price',
+                      errorMessages: {
+                        required: 'This is a required field.',
+                        min: 'Value must be greater than 0.'
+                      }
+                    }
+                  }"
+                >
+                </hospitality-bot-prefix-field>
+                <hospitality-bot-prefix-field
+                  class="half-width"
+                  [options]="currencies"
+                  label="Triple Occupancy pricing"
+                  preControlName="tripleOccupancyCurrency"
+                  postControlName="tripleOccupancyPrice"
+                  [defaultProps]="{
+                    post: {
+                      type: 'number',
+                      placeholder: 'Enter Price',
+                      errorMessages: {
+                        required: 'This is a required field.',
+                        min: 'Value must be greater than 0.'
+                      }
+                    }
+                  }"
+                >
+                </hospitality-bot-prefix-field>
+                <hospitality-bot-multiple-prefix-input
+                  class="half-width"
+                  [controls]="{
+                    currencyControlName: 'paxPriceCurrency',
+                    preCountControlName: 'paxChildBelowFive',
+                    postCountControlName: 'paxChildPrice',
+                    additionalControlName: 'paxAdultPrice'
+                  }"
+                  [labels]="{
+                    mainLabel: 'Pax Additional Cost',
+                    preCountLabel: childBelowFive,
+                    postCountLabel: 'Child 5-12',
+                    additionalLabel: 'Adult'
+                  }"
+                  [currencyOptions]="currencies"
+                  [defaultProps]="{
+                    post: {
+                      type: 'number',
+                      float: true,
+                      errorMessages: {
+                        required: 'This is a required field.',
+                        min: 'Value must be greater than 0.'
+                      }
+                    }
+                  }"
+                ></hospitality-bot-multiple-prefix-input>
+                <hospitality-bot-prefix-field
+                  class="half-width"
+                  preControlName="minPriceCurrency"
+                  postControlName="minPrice"
+                  label="Min Price"
+                  [options]="currencies"
+                  [defaultProps]="{
+                    post: {
+                      type: 'number',
+                      placeholder: 'Enter',
+                      errorMessages: {
+                        required: 'This is a required field.',
+                        min: 'Value must be greater than 0.'
+                      }
+                    }
+                  }"
+                ></hospitality-bot-prefix-field>
+                <hospitality-bot-prefix-field
+                  class="half-width"
+                  preControlName="maxPriceCurrency"
+                  postControlName="maxPrice"
+                  label="Max Price"
+                  [options]="currencies"
+                  [defaultProps]="{
+                    post: {
+                      type: 'number',
+                      placeholder: 'Enter',
+                      errorMessages: {
+                        required: 'This is a required field.',
+                        min: 'Value must be greater than 0.'
+                      }
+                    }
+                  }"
+                ></hospitality-bot-prefix-field>
+              </div>
+            </div>
+          </p-accordionTab>
+        </p-accordion>
+        <div class="rate-plan-btn">
+          <hospitality-bot-button
+            *ngIf="!ratePlanArray.length"
+            label="+ Add Rate Plan"
+            (onClick)="addNewRatePlan()"
+            variant="text"
+          ></hospitality-bot-button>
         </div>
-        <div class="input-fields">
-          <hospitality-bot-prefix-field
-            preControlName="discountedPriceCurrency"
-            postControlName="discountedPrice"
-            label="Discounted Price"
-            [options]="currencies"
-            [defaultProps]="{ post: { type: 'number' } }"
-          ></hospitality-bot-prefix-field>
-        </div> -->
+      </div>
+      <div
+        class="rate-plan-wrapper"
+        formArrayName="ratePlans"
+        *ngIf="ratePlanArray.length"
+      >
+        <p-accordion [multiple]="true">
+          <p-accordionTab
+            *ngFor="let ratePlanGroup of ratePlanArray.controls; let i = index"
+            click
+            [formGroupName]="i"
+            [ngStyle]="{
+              'border-bottom': ratePlanGroup.expanded
+                ? '1px solid rgba(112, 112, 112, 0.35)'
+                : 'none'
+            }"
+          >
+            <p-header>
+              <div class="header-wrapper">
+                <div class="header-button">
+                  <span class="label">
+                    {{ ratePlanGroup.get('label').value }}</span
+                  >
+                </div>
+                <hospitality-bot-toggle-switch-with-label
+                  [isToggleOn]="ratePlanGroup.get('status').value"
+                  (onToggleSwitch)="onToggleSwitch($event, i)"
+                  click-stop-propagation
+                ></hospitality-bot-toggle-switch-with-label>
+              </div>
+              <hospitality-bot-button
+                click-stop-propagation
+                label="Remove"
+                variant="text"
+                severity="reset"
+                (onClick)="removeRatePlan(i)"
+              ></hospitality-bot-button>
+            </p-header>
+
+            <div class="form-block">
+              <hospitality-bot-input
+                label="Name"
+                class="half-width"
+                controlName="label"
+                maxLength="60"
+                [props]="{
+                  placeholder: 'Enter'
+                }"
+              ></hospitality-bot-input>
+              <hospitality-bot-prefix-field
+                class="half-width"
+                preControlName="currency"
+                postControlName="extraPrice"
+                label="Extra Price"
+                [options]="currencies"
+                [defaultProps]="{
+                  post: {
+                    type: 'number',
+                    placeholder: 'Enter',
+                    errorMessages: {
+                      required: 'This is a required field.',
+                      min: 'Value must be greater than 0.'
+                    }
+                  }
+                }"
+              ></hospitality-bot-prefix-field>
+
+              <hospitality-bot-template-editor
+                [parentFG]="ratePlanGroup"
+                [name]="'description'"
+                [height]="250"
+                class="full-width"
+              ></hospitality-bot-template-editor>
+              <!-- <hospitality-bot-text-area
+                class="full-width"
+                controlName="description"
+                label="Description"
+                [props]="{
+                  placeholder: 'Enter'
+                }"
+              ></hospitality-bot-text-area> -->
+            </div>
+          </p-accordionTab>
+        </p-accordion>
+        <div class="rate-plan-btn">
+          <hospitality-bot-button
+            label="+ Add Rate Plan"
+            (onClick)="addNewRatePlan()"
+            variant="text"
+          ></hospitality-bot-button>
+        </div>
       </div>
     </div>
-    <div class="room-pricing-wrapper">
+
+    <div class="room-wrapper">
       <div class="header">Room Occupancy</div>
       <hr />
-      <div class="room-pricing-form-wrapper">
+      <div class="room-occupancy-form-wrapper">
         <div class="input-fields">
           <hospitality-bot-input
             controlName="maxOccupancy"
@@ -156,6 +491,9 @@
               },
               type: 'number'
             }"
+            [props]="{
+              placeholder: 'Enter'
+            }"
           ></hospitality-bot-input>
         </div>
         <div class="input-fields">
@@ -163,6 +501,9 @@
             controlName="maxChildren"
             label="Max Children"
             [props]="inputValidationProps"
+            [props]="{
+              placeholder: 'Enter'
+            }"
           ></hospitality-bot-input>
         </div>
         <div class="input-fields">
@@ -170,6 +511,9 @@
             controlName="maxAdult"
             label="Max Adult"
             [props]="inputValidationProps"
+            [props]="{
+              placeholder: 'Enter'
+            }"
           ></hospitality-bot-input>
         </div>
         <div class="input-fields">
@@ -181,22 +525,21 @@
               type: 'number',
               subtitle: 'Sq. Ft'
             }"
+            [props]="{
+              placeholder: 'Enter'
+            }"
           ></hospitality-bot-input>
         </div>
       </div>
     </div>
   </form>
-  <div class="footer-buttons">
-    <hospitality-bot-button
-      label="Reset All"
-      (onClick)="resetForm()"
-      variant="outlined"
-      severity="reset"
-    ></hospitality-bot-button>
-    <hospitality-bot-button
-      [label]="roomTypeId ? 'Update' : 'Create'"
-      (onClick)="submitForm()"
-      [isLoading]="loading"
-    ></hospitality-bot-button>
-  </div>
+  <hospitality-bot-form-action
+    class="full-width"
+    [loading]="loading"
+    [isId]="roomTypeId"
+    (onPreAction)="resetForm()"
+    (onPostAction)="submitForm()"
+    #fa
+  >
+  </hospitality-bot-form-action>
 </div>

@@ -8,7 +8,7 @@ export const cols = {
     },
     {
       field: 'booking.bookingNumber',
-      header: 'Booking No. / Feedback',
+      header: 'Booking No.',
       sortType: 'number',
       searchField: ['booking.bookingNumber', 'feedback.comments'],
     },
@@ -22,9 +22,9 @@ export const cols = {
       ],
     },
     {
-      field: `guests.primaryGuest.phoneNumber`,
+      field: `guests.primaryGuest.getPhoneNumber()`,
       header: 'Phone No.',
-      sortType: 'number',
+      sortType: 'string',
     },
     {
       field: 'booking.getArrivalTimeStamp()',
@@ -38,13 +38,13 @@ export const cols = {
       sortType: 'number',
       isSearchDisabled: true,
     },
-    {
-      field: 'package',
-      header: 'Add-ons',
-      isSortDisabled: true,
-      sortType: 'number',
-      isSearchDisabled: true,
-    },
+    // {
+    //   field: 'package',
+    //   header: 'Add-ons',
+    //   isSortDisabled: true,
+    //   sortType: 'number',
+    //   isSearchDisabled: true,
+    // },
     {
       field: 'stageAndourney',
       header: 'Stage/Journey',
@@ -53,4 +53,21 @@ export const cols = {
       isSearchDisabled: true,
     },
   ],
+};
+
+export const tableTypes = {
+  table: {
+    name: 'table',
+    value: 'table',
+    url: 'assets/svg/reservation-table.svg',
+    whiteUrl: 'assets/svg/reservation-table-white.svg',
+    backgroundColor: '#1AB99F',
+  },
+  calendar: {
+    name: 'calendar',
+    value: 'calendar',
+    url: 'assets/svg/calendar-dark.svg',
+    whiteUrl: 'assets/svg/calendar-white.svg',
+    backgroundColor: '#DEFFF3',
+  },
 };

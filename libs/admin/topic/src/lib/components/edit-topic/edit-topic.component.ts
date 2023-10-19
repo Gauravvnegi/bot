@@ -2,13 +2,17 @@ import { Location } from '@angular/common';
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import {
+  GlobalFilterService,
+  RoutesConfigService,
+} from '@hospitality-bot/admin/core/theme';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { TranslateService } from '@ngx-translate/core';
 import { NavRouteOptions } from 'libs/admin/shared/src/lib/types/common.type';
 import { Subscription } from 'rxjs';
 import { Topic } from '../../data-models/topicConfig.model';
 import { TopicService } from '../../services/topic.service';
+import { TopicRoutes } from '../../constants/routes';
 
 @Component({
   selector: 'hospitality-bot-edit-topic',
@@ -22,15 +26,11 @@ export class EditTopicComponent implements OnInit, OnDestroy {
   topicForm: FormGroup;
   topic: Topic;
   topicId: string;
-  hotelId: string;
+  entityId: string;
   isSavingTopic = false;
   globalQueries = [];
 
-  navRoutes: NavRouteOptions = [
-    { label: 'Library', link: './' },
-    { label: 'Topics', link: '/pages/library/topic' },
-    { label: 'Create Topic', link: './' },
-  ];
+  navRoutes: NavRouteOptions = [];
 
   pageTitle = 'Create Topic';
 
@@ -42,7 +42,8 @@ export class EditTopicComponent implements OnInit, OnDestroy {
     private globalFilterService: GlobalFilterService,
     private topicService: TopicService,
     private _router: Router,
-    protected _translateService: TranslateService
+    protected _translateService: TranslateService,
+    private routesConfigService: RoutesConfigService
   ) {
     this.initFG();
   }
@@ -57,6 +58,12 @@ export class EditTopicComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.listenForGlobalFilters();
+    const { navRoutes, title } = TopicRoutes[
+      this.topicId ? 'editTopic' : 'createTopic'
+    ];
+    this.pageTitle = title;
+    this.navRoutes = navRoutes;
+    this.initNavRoutes();
   }
 
   /**
@@ -71,10 +78,16 @@ export class EditTopicComponent implements OnInit, OnDestroy {
           ...data['dateRange'].queryValue,
         ];
 
-        this.hotelId = this.globalFilterService.hotelId;
+        this.entityId = this.globalFilterService.entityId;
         this.getTopicId();
       })
     );
+  }
+
+  initNavRoutes() {
+    this.routesConfigService.navRoutesChanges.subscribe((navRoutesRes) => {
+      this.navRoutes = [...navRoutesRes, ...this.navRoutes];
+    });
   }
 
   /**
@@ -109,10 +122,10 @@ export class EditTopicComponent implements OnInit, OnDestroy {
     this.isSavingTopic = true;
     const data = this.topicService.mapTopicData(
       this.topicForm.getRawValue(),
-      this.hotelId
+      this.entityId
     );
     this.$subscription.add(
-      this.topicService.addTopic(this.hotelId, data).subscribe(
+      this.topicService.addTopic(this.entityId, data).subscribe(
         (response) => {
           this.topic = new Topic().deserialize(response);
           this.topicForm.patchValue(this.topic);
@@ -128,10 +141,10 @@ export class EditTopicComponent implements OnInit, OnDestroy {
               }
             )
             .subscribe();
-          this._router.navigate(['/pages/library/topic']);
+          this.routesConfigService.goBack();
           this.isSavingTopic = false;
         },
-        ({ error }) => { 
+        ({ error }) => {
           this.isSavingTopic = false;
         }
       )
@@ -147,8 +160,6 @@ export class EditTopicComponent implements OnInit, OnDestroy {
         if (params['id']) {
           this.topicId = params['id'];
           this.getTopicDetails(this.topicId);
-          this.pageTitle = 'Edit Topic';
-          this.navRoutes[2].label = 'Edit Topic';
         } else if (this.id) {
           this.topicId = this.id;
           this.getTopicDetails(this.topicId);
@@ -164,7 +175,7 @@ export class EditTopicComponent implements OnInit, OnDestroy {
   getTopicDetails(topicId: string): void {
     this.$subscription.add(
       this.topicService
-        .getTopicDetails(this.hotelId, topicId)
+        .getTopicDetails(this.entityId, topicId)
         .subscribe((response) => {
           this.topic = new Topic().deserialize(response);
           this.topicForm.patchValue(this.topic);
@@ -179,12 +190,12 @@ export class EditTopicComponent implements OnInit, OnDestroy {
     this.isSavingTopic = true;
     const data = this.topicService.mapTopicData(
       this.topicForm.getRawValue(),
-      this.hotelId,
+      this.entityId,
       this.topic.id
     );
     this.$subscription.add(
       this.topicService
-        .updateTopic(this.hotelId, this.topic.id, data)
+        .updateTopic(this.entityId, this.topic.id, data)
         .subscribe(
           (response) => {
             this.snackbarService
@@ -202,18 +213,22 @@ export class EditTopicComponent implements OnInit, OnDestroy {
             this._router.navigate(['/pages/library/topic']);
             this.isSavingTopic = false;
           },
-          ({ error }) => { 
+          ({ error }) => {
             this.isSavingTopic = false;
           }
         )
     );
   }
 
+  resetForm() {
+    this.topicForm.reset();
+  }
+
   /**
    * @function redirectToTable To navigate to data table page.
    */
   redirectToTable() {
-    this.location.back();
+    this.routesConfigService.goBack();
   }
 
   /**

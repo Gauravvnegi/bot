@@ -1,5 +1,19 @@
 @import 'main';
 
-.form-block {
-  @include form-block;
+.half-width {
+  flex-basis: 47%;
+}
+
+:host ::ng-deep .base-price {
+  .post-input {
+    flex-basis: 36% !important;
+  }
+
+  .pre-input {
+    flex-basis: 18% !important;
+  }
+
+  .price {
+    flex-basis: 38% !important;
+  }
 }

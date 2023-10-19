@@ -1,15 +1,37 @@
 <div class="wrapper">
-  <div class="heading">Settings</div>
+  <div *ngIf="!isSideBar; else sidebarHeader">
+    <div class="header">
+      Settings
+    </div>
+    <div *ngIf="isSideBar" (click)="close()" class="close">
+      <i
+        [ngClass]="!isSideBar ? 'fa fa-times' : 'pi pi-arrow-right'"
+        aria-hidden="true"
+      ></i>
+    </div>
+  </div>
   <div class="main">
     <ng-container *ngFor="let setting of settings">
       <div
         *ngIf="setting.isActive"
         class="setting"
         [ngClass]="{ setting__disabled: setting.isDisabled }"
-        (click)="selectSetting(setting.name, setting.isDisabled)"
+        [routerLink]="setting.isDisabled ? null : [setting.path]"
+        (click)="setting.isDisabled ? $event.preventDefault() : close()"
       >
         <div class="setting__header">
-          <img [src]="setting.icon" [alt]="setting.title" />
+          <div
+            class="image-wrapper"
+            [ngClass]="{
+              'empty-img-view': !isImageLoaded
+            }"
+          >
+            <img
+              [src]="setting.icon"
+              [alt]="setting.title"
+              (load)="onImageLoad()"
+            />
+          </div>
           <div>{{ setting.title }}</div>
         </div>
         <div class="setting__description">{{ setting.description }}</div>
@@ -17,3 +39,12 @@
     </ng-container>
   </div>
 </div>
+
+<ng-template #sidebarHeader>
+  <div class="sidebar-slide-header">
+    <span class="title">Settings</span>
+    <span class="close-icon" (click)="close()">
+      <i class="pi pi-arrow-right" aria-hidden="true"></i>
+    </span>
+  </div>
+</ng-template>

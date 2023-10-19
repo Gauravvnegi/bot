@@ -1,4 +1,6 @@
+import { I } from '@angular/cdk/keycodes';
 import { Component, Input, OnInit } from '@angular/core';
+import { AbstractControl, ControlContainer } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
@@ -19,35 +21,47 @@ import { Subscription } from 'rxjs';
 export class CategoryComponent implements OnInit {
   @Input() controlName: string;
   @Input() type: CategoryData['type'];
+
+  @Input() set entityId(value: string) {
+    this._entityId = value;
+    this.categoryOffSet = 0;
+    this.categories = [];
+    this.getCategories();
+  }
+
+  @Input() disabled: boolean;
   categoryOffSet = 0;
   loadingCategory = false;
   noMoreCategories = false;
   categories: Option[] = [];
   $subscription = new Subscription();
-  hotelId: string;
   servicesService: any;
+  inputControl: AbstractControl;
+  _entityId: string;
 
   constructor(
     private globalFilterService: GlobalFilterService,
     private libraryService: LibraryService,
     private router: Router,
     private snackbarService: SnackBarService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private controlContainer: ControlContainer
   ) {}
 
   ngOnInit(): void {
-    this.hotelId = this.globalFilterService.hotelId;
-    this.getCategories();
+
+    this.inputControl = this.controlContainer.control.get(this.controlName);
   }
+
   /**
    * @function getCategories
    * @description get categories from server
    */
-  getCategories() {
+  getCategories(_entityId?: string) {
     this.loadingCategory = true;
     this.$subscription.add(
       this.libraryService
-        .getCategories(this.hotelId, {
+        .getCategories(this._entityId, {
           params: `?type=${this.type}&offset=${this.categoryOffSet}&limit=10&status=true`,
         })
         .subscribe(
@@ -84,7 +98,7 @@ export class CategoryComponent implements OnInit {
     if (text) {
       this.loadingCategory = true;
       this.libraryService
-        .searchLibraryItem(this.hotelId, {
+        .searchLibraryItem(this._entityId, {
           params: `?key=${text}&type=${LibrarySearchItem[this.type]}`,
         })
         .subscribe((res) => {
@@ -113,22 +127,32 @@ export class CategoryComponent implements OnInit {
   create(event) {
     this.$subscription.add(
       this.libraryService
-        .createCategory(this.hotelId, {
+        .createCategory(this._entityId, {
           name: event,
           source: 1,
           imageUrl: '',
           type: this.type,
           active: true,
         })
-        .subscribe(() => {
-          this.snackbarService.openSnackBarAsText(
-            'Category created successfully',
-            '',
-            { panelClass: 'success' }
-          );
-          this.categoryOffSet = 0;
-          this.getCategories();
-        })
+        .subscribe(
+          (res) => {
+            this.categories.push({
+              label: res?.name,
+              value: res?.id,
+            });
+            this.inputControl.setValue(res.id);
+          },
+          () => {
+            this.snackbarService.openSnackBarAsText(
+              'Category created successfully',
+              '',
+              { panelClass: 'success' }
+            );
+            this.categoryOffSet = 0;
+            this.categories = [];
+            this.getCategories();
+          }
+        )
     );
   }
 

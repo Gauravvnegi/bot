@@ -1,24 +1,33 @@
 @import 'main';
 
+.form-block {
+  @include form-block;
+  box-shadow: unset;
+  padding: unset;
+}
+
 .container {
-  max-height: 80vh;
+  position: relative;
+  padding-bottom: 86px;
 }
 .header {
-  height: 108px;
   display: flex;
+  align-items: center;
   justify-content: space-between;
-  background: $primaryGradient-bg;
+  padding: 14px 17px 12.7px 24px;
+  background-color: #5f38f9;
   position: sticky;
   top: 0;
   z-index: 999;
   .close {
-    width: 13.7px;
-    height: 13.7px;
-    margin: 15px;
-    color: $white;
-    font-size: 20px;
+    color: $primary-black;
     cursor: pointer;
   }
+}
+
+.raise-request-icon {
+  filter: brightness(0) invert(1);
+  padding-right: 8px;
 }
 
 .button:active {
@@ -68,25 +77,21 @@
   width: 100% !important;
 }
 .raise-request-btn {
-  margin: 40px 30px;
-  font-size: 20px;
-  font-weight: $bold;
-  font-stretch: normal;
-  font-style: normal;
-  line-height: normal;
-  letter-spacing: 1.2px;
-  text-align: left;
   color: $white;
 }
 .request-popup-btnwrap {
   display: flex;
-  justify-content: flex-end;
-  margin-top: 25px;
-  position: sticky;
+  align-items: center;
+  background-color: #fff;
+  box-shadow: 0 0 5px 1px hsla(0, 0%, 50.2%, 0.49019607843137253);
+  justify-content: center;
+  padding: 20px 0;
+  width: 100%;
+  gap: 30px;
+  position: absolute;
   bottom: 0;
-  padding: 15px 30px;
-  background: $white;
-  gap: 15px;
+  left: 0;
+
   &-cancel {
     width: 113px;
     height: 35px;
@@ -109,14 +114,19 @@
     cursor: pointer;
   }
 }
+
 .body {
-  margin: 30px 0px;
-  max-height: calc(100% - 108px);
-  overflow-y: scroll;
-  padding: 0 30px;
-  height: 49vh;
+  overflow: auto;
+  height: 64vh;
+  padding: 15px 30px;
 }
 
 .disabled-btn {
   pointer-events: none;
+}
+
+:host ::ng-deep .sidebar-slide {
+  .p-sidebar {
+    margin-top: 0;
+  }
 }

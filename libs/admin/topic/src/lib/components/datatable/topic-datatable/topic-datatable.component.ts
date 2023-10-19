@@ -1,6 +1,5 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
-import { MatTabChangeEvent } from '@angular/material/tabs';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
   BaseDatatableComponent,
@@ -14,14 +13,14 @@ import {
 import { TranslateService } from '@ngx-translate/core';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 import * as FileSaver from 'file-saver';
-import { SelectedEntityState } from 'libs/admin/dashboard/src/lib/types/dashboard.type';
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
-import { LazyLoadEvent, SortEvent } from 'primeng/api';
+import { SortEvent } from 'primeng/api';
 import { Observable, Subscription } from 'rxjs';
 import { TopicRoutes } from '../../../constants/routes';
 import { topicConfig } from '../../../constants/topic';
 import { Topics } from '../../../data-models/topicConfig.model';
 import { TopicService } from '../../../services/topic.service';
+import { RoutesConfigService } from '@hospitality-bot/admin/core/theme';
 
 @Component({
   selector: 'hospitality-bot-topic-datatable',
@@ -34,21 +33,16 @@ import { TopicService } from '../../../services/topic.service';
 export class TopicDatatableComponent extends BaseDatatableComponent
   implements OnInit, OnDestroy {
   tableName = topicConfig.datatable.title;
-  @Input() tabFilterItems;
-  @Input() tabFilterIdx = 0;
   actionButtons = true;
-  isQuickFilters = true;
   isTabFilters = true;
   isResizableColumns = true;
   isAutoLayout = false;
   isCustomSort = true;
-  triggerInitialData = false;
-  rowsPerPageOptions = [5, 10, 25, 50, 200];
-  rowsPerPage = topicConfig.datatable.limit;
+  isAllTabFilterRequired = true;
   cols = topicConfig.datatable.cols;
   globalQueries = [];
   $subscription = new Subscription();
-  hotelId: any;
+  entityId: any;
 
   constructor(
     public fb: FormBuilder,
@@ -60,13 +54,12 @@ export class TopicDatatableComponent extends BaseDatatableComponent
     private _router: Router,
     private route: ActivatedRoute,
     private topicService: TopicService,
-    protected _translateService: TranslateService
+    private routesConfigService: RoutesConfigService
   ) {
     super(fb, tabFilterService);
   }
 
   ngOnInit(): void {
-    this.tabFilterItems = topicConfig.datatable.tabFilterItems;
     this.listenForGlobalFilters();
   }
 
@@ -80,14 +73,14 @@ export class TopicDatatableComponent extends BaseDatatableComponent
         ...data['filter'].queryValue,
         ...data['dateRange'].queryValue,
       ];
-      this.hotelId = this.globalFilterService.hotelId;
+      this.entityId = this.globalFilterService.entityId;
       // fetch-api for records
       this.loadInitialData([
         ...this.globalQueries,
         {
           order: sharedConfig.defaultOrder,
         },
-        ...this.getSelectedQuickReplyFilters(),
+        ...this.getSelectedQuickReplyFilters({ isStatusBoolean: true }),
       ]);
     });
   }
@@ -117,10 +110,13 @@ export class TopicDatatableComponent extends BaseDatatableComponent
    * @param data The data is a response which comes from an api call.
    */
   setRecords(data): void {
-    this.values = new Topics().deserialize(data).records;
-    this.updateTabFilterCount(data.entityTypeCounts, data.total);
-    this.updateQuickReplyFilterCount(data.entityStateCounts);
-    this.updateTotalRecords();
+    const modifiedData = new Topics().deserialize(data);
+    this.values = modifiedData.records;
+    this.initFilters(
+      modifiedData.entityTypeCounts,
+      modifiedData.entityStateCounts,
+      modifiedData.total
+    );
     this.loading = false;
   }
 
@@ -138,7 +134,7 @@ export class TopicDatatableComponent extends BaseDatatableComponent
     const config = {
       queryObj: this.adminUtilityService.makeQueryParams(queries),
     };
-    return this.topicService.getHotelTopic(config, this.hotelId);
+    return this.topicService.getHotelTopic(config, this.entityId);
   }
 
   /**
@@ -147,11 +143,13 @@ export class TopicDatatableComponent extends BaseDatatableComponent
    * @param topicId The topic id for which status update action will be done.
    */
   updateTopicStatus(event, topicId): void {
+    this.loading = true;
     const data = {
       active: event.checked,
     };
-    this.topicService.updateTopicStatus(this.hotelId, data, topicId).subscribe(
+    this.topicService.updateTopicStatus(this.entityId, data, topicId).subscribe(
       (response) => {
+        this.loadData();
         this.snackbarService
           .openSnackBarWithTranslate(
             {
@@ -164,9 +162,13 @@ export class TopicDatatableComponent extends BaseDatatableComponent
             }
           )
           .subscribe();
-        this.changePage(this.currentPage);
+        this.loading = false;
       },
-      ({ error }) => {}
+      ({ error }) => {
+        this.values = [];
+        this.loading = false;
+      },
+      this.handleFinal
     );
   }
 
@@ -174,8 +176,8 @@ export class TopicDatatableComponent extends BaseDatatableComponent
    * @function openCreateTopic navigate to create topic page.
    */
   openCreateTopic() {
-    this._router.navigate([TopicRoutes.createTopic.route], {
-      relativeTo: this.route,
+    this.routesConfigService.navigate({
+      additionalPath: TopicRoutes.createTopic.route,
     });
   }
 
@@ -186,21 +188,9 @@ export class TopicDatatableComponent extends BaseDatatableComponent
    */
   openTopic(event, topic): void {
     event.stopPropagation();
-    this._router.navigate([`${TopicRoutes.createTopic.route}/${topic.id}`], {
-      relativeTo: this.route,
+    this.routesConfigService.navigate({
+      additionalPath: `${TopicRoutes.createTopic.route}/${topic.id}`,
     });
-  }
-
-  /**
-   * @function getSelectedQuickReplyFilters To return the selected chip list.
-   * @returns The selected chips.
-   */
-  getSelectedQuickReplyFilters(): SelectedEntityState[] {
-    return this.tabFilterItems[this.tabFilterIdx].chips
-      .filter((item) => item.isSelected === true)
-      .map((item) => ({
-        entityState: item.value,
-      }));
   }
 
   /**
@@ -216,7 +206,7 @@ export class TopicDatatableComponent extends BaseDatatableComponent
           {
             order: sharedConfig.defaultOrder,
           },
-          ...this.getSelectedQuickReplyFilters(),
+          ...this.getSelectedQuickReplyFilters({ isStatusBoolean: true }),
         ],
         {
           offset: this.first,
@@ -235,15 +225,6 @@ export class TopicDatatableComponent extends BaseDatatableComponent
   }
 
   /**
-   * @function updatePaginations To update the pagination variable values.
-   * @param event The lazy load event for the table.
-   */
-  updatePaginations(event): void {
-    this.first = event.first;
-    this.rowsPerPage = event.rows;
-  }
-
-  /**
    * @function customSort To sort the rows of the table.
    * @param eventThe The event for sort click action.
    */
@@ -256,40 +237,6 @@ export class TopicDatatableComponent extends BaseDatatableComponent
     event.data.sort((data1, data2) =>
       this.sortOrder(event, field, data1, data2, col)
     );
-  }
-
-  /**
-   * @function onSelectedTabFilterChange To handle the tab filter change.
-   * @param event The material tab change event.
-   */
-  onSelectedTabFilterChange(event: MatTabChangeEvent): void {
-    this.tabFilterIdx = event.index;
-    this.loadData();
-  }
-
-  /**
-   * @function onFilterTypeTextChange To handle the search for each column of the table.
-   * @param value The value of the search field.
-   * @param field The name of the field across which filter is done.
-   * @param matchMode The mode by which filter is to be done.
-   */
-  onFilterTypeTextChange(
-    value: string,
-    field: string,
-    matchMode = 'startsWith'
-  ): void {
-    if (!!value && !this.isSearchSet) {
-      this.tempFirst = this.first;
-      this.tempRowsPerPage = this.rowsPerPage;
-      this.isSearchSet = true;
-    } else if (!!!value) {
-      this.isSearchSet = false;
-      this.first = this.tempFirst;
-      this.rowsPerPage = this.tempRowsPerPage;
-    }
-
-    value = value && value.trim();
-    this.table.filter(value, field, matchMode);
   }
 
   /**
@@ -308,7 +255,7 @@ export class TopicDatatableComponent extends BaseDatatableComponent
       ]),
     };
     this.$subscription.add(
-      this.topicService.exportCSV(this.hotelId, config).subscribe(
+      this.topicService.exportCSV(this.entityId, config).subscribe(
         (response) => {
           FileSaver.saveAs(
             response,
@@ -329,6 +276,10 @@ export class TopicDatatableComponent extends BaseDatatableComponent
    */
   get topicConfiguration() {
     return topicConfig;
+  }
+
+  handleFinal() {
+    this.loading = false;
   }
 
   /**

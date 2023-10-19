@@ -9,10 +9,12 @@ import { ignoreElements } from 'rxjs/operators';
   styleUrls: ['./input.component.scss'],
 })
 export class InputComponent extends FormComponent {
+  @Input() isHideSpinners = false;
   @Input() maxLength: number;
   @Input() min: number;
   @Input() max: number;
   @Input() controlName: string;
+  strike = false;
   inputLength = 0;
 
   constructor(public controlContainer: ControlContainer) {
@@ -23,11 +25,22 @@ export class InputComponent extends FormComponent {
     if (!this.subtitle && this.maxLength) {
       this.subtitle = `${this.inputLength}/${this.maxLength}`;
       const control = this.controlContainer.control.get(this.controlName);
-      control.valueChanges.subscribe((value) => {
+      const calculateInput = (value) => {
         this.inputLength = value?.length ?? 0;
         this.subtitle = `${this.inputLength}/${this.maxLength}`;
+      };
+      calculateInput(control.value);
+      control.valueChanges.subscribe((value) => {
+        calculateInput(value);
       });
     }
     this.initInputControl();
+  }
+
+  get getWrapperNgClasses() {
+    return {
+      ...this.wrapperNgClasses,
+      'hide-spinner': this.isHideSpinners,
+    };
   }
 }

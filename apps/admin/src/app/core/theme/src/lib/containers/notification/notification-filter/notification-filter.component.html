@@ -12,7 +12,7 @@
   <div class="title">Filter by</div>
   <div class="filter--form" [formGroup]="filterFG">
     <div class="messages" formGroupName="status">
-      <div>Messages</div>
+      <div class="filter-heading">Messages</div>
       <div class="status">
         <mat-checkbox formControlName="read">Read</mat-checkbox>
         <mat-checkbox formControlName="unread">Unread</mat-checkbox>
@@ -20,34 +20,19 @@
       </div>
     </div>
     <div class="date">
-      <div>Date</div>
+      <div class="filter-heading">Date</div>
       <div class="fields">
-        <mat-form-field appearance="outline" class="date-field">
-          <input
-            matInput
-            [matDatepicker]="datepicker"
-            formControlName="fromDate"
-            [max]="fromMaxDate"
-          />
-          <mat-datepicker-toggle matSuffix [for]="datepicker"
-            ><img src="assets/svg/calendar.svg" class="calendar-image"
-          /></mat-datepicker-toggle>
-          <mat-datepicker #datepicker> </mat-datepicker>
-        </mat-form-field>
-        <div>to</div>
-        <mat-form-field appearance="outline" class="date-field">
-          <input
-            matInput
-            [matDatepicker]="datepicker1"
-            formControlName="toDate"
-            [max]="toMaxDate"
-            [min]="toMinDate"
-          />
-          <mat-datepicker-toggle matSuffix [for]="datepicker1"
-            ><img src="assets/svg/calendar.svg" class="calendar-image"
-          /></mat-datepicker-toggle>
-          <mat-datepicker #datepicker1> </mat-datepicker>
-        </mat-form-field>
+        <hospitality-bot-from-to-date
+        [startMinDate]="startMinDate"
+        [startMaxDate]="startMaxDate"
+          [controlNames]="{
+            from: 'fromDate',
+            to: 'toDate'
+          }"
+          [props]="{
+            floatInsideLabel: true
+          }"
+        ></hospitality-bot-from-to-date>
       </div>
     </div>
   </div>

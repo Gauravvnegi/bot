@@ -19,7 +19,7 @@ import { SentimentDataTable } from '../../data-models/sentiment-datatable';
 })
 export class SentimentDatatableComponent extends BaseDatatableComponent
   implements OnInit, OnDestroy {
-  hotelId: string;
+  entityId: string;
   tableName = title;
   cols = cols;
   iQuickFilters = true;
@@ -37,7 +37,6 @@ export class SentimentDatatableComponent extends BaseDatatableComponent
       MockData.sentiment.rowData
     ).records;
     this.totalRecords = this.dataSource.length;
-    this.rowsPerPage = 10;
     this.loadInitialData();
   }
 

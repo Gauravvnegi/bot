@@ -10,12 +10,13 @@ import { TableService } from 'libs/admin/shared/src/lib/services/table.service';
 import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.service';
 import { LazyLoadEvent } from 'primeng/api/public_api';
 import { Subscription } from 'rxjs';
-import { chips, cols, tabFilterItems, title } from '../../constant/data-table';
+import { chips, cols, title } from '../../constant/data-table';
 import { PackageList } from '../../models/packages.model';
 import { PackagesService } from '../../services/packages.service';
 import { PackageData } from '../../types/package';
 import { PackageListResponse, PackageResponse } from '../../types/response';
 import { packagesRoutes } from '../../constant/routes';
+import { RoutesConfigService } from '@hospitality-bot/admin/core/theme';
 
 @Component({
   selector: 'hospitality-bot-package-datatable',
@@ -29,16 +30,14 @@ export class PackageDataTableComponent extends BaseDatatableComponent
   implements OnInit, OnDestroy {
   readonly routes = packagesRoutes;
 
-  hotelId: string;
+  entityId: string;
   tableName = title;
 
   isCustomSort = true;
   triggerInitialData = false;
-  tabFilterItems = tabFilterItems;
   isTabFilters = true;
-  filterChips = chips;
+  isAllTabFilterRequired = true;
   globalQueries = [];
-  tabFilterIdx = 0;
   $subscription = new Subscription();
 
   cols = cols;
@@ -50,7 +49,8 @@ export class PackageDataTableComponent extends BaseDatatableComponent
     private globalFilterService: GlobalFilterService,
     private snackbarService: SnackBarService,
     private router: Router,
-    protected tabFilterService: TableService
+    protected tabFilterService: TableService,
+    private routesConfigService: RoutesConfigService
   ) {
     super(fb, tabFilterService);
   }
@@ -64,7 +64,7 @@ export class PackageDataTableComponent extends BaseDatatableComponent
    */
   listenForGlobalFilters(): void {
     this.globalFilterService.globalFilter$.subscribe((data) => {
-      this.hotelId = this.globalFilterService.hotelId;
+      this.entityId = this.globalFilterService.entityId;
 
       //set-global query every time global filter changes
       this.globalQueries = [
@@ -89,16 +89,18 @@ export class PackageDataTableComponent extends BaseDatatableComponent
     this.$subscription.add(
       this.packagesService
         .getLibraryItems<PackageListResponse>(
-          this.hotelId,
+          this.entityId,
           this.getQueryConfig()
         )
         .subscribe(
           (res) => {
             const packageList = new PackageList().deserialize(res);
             this.values = packageList.records;
-            this.updateTabFilterCount(res.entityTypeCounts, res.total);
-            this.updateQuickReplyFilterCount(res.entityStateCounts);
-            this.updateTotalRecords();
+            this.initFilters(
+              packageList.entityTypeCounts,
+              packageList.entityStateCounts,
+              packageList.total
+            );
           },
           ({ error }) => {
             this.values = [];
@@ -115,7 +117,7 @@ export class PackageDataTableComponent extends BaseDatatableComponent
   getQueryConfig(): QueryConfig {
     const config = {
       params: this.adminUtilityService.makeQueryParams([
-        ...this.getSelectedQuickReplyFilters(),
+        ...this.getSelectedQuickReplyFilters({ isStatusBoolean: true }),
         ...[...this.globalQueries, { order: 'DESC' }],
         {
           type: LibraryItem.package,
@@ -125,21 +127,6 @@ export class PackageDataTableComponent extends BaseDatatableComponent
       ]),
     };
     return config;
-  }
-
-  /**
-   * @function getSelectedQuickReplyFilters To return the selected chip list.
-   * @returns The selected chips.
-   */
-  getSelectedQuickReplyFilters() {
-    const chips = this.filterChips.filter(
-      (item) => item.isSelected && item.value !== 'ALL'
-    );
-    return [
-      chips.length !== 1
-        ? { status: null }
-        : { status: chips[0].value === 'ACTIVE' },
-    ];
   }
 
   exportCSV(): void {
@@ -155,7 +142,7 @@ export class PackageDataTableComponent extends BaseDatatableComponent
     };
 
     this.$subscription.add(
-      this.packagesService.exportCSV(this.hotelId, config).subscribe((res) => {
+      this.packagesService.exportCSV(this.entityId, config).subscribe((res) => {
         FileSaver.saveAs(
           res,
           `${this.tableName.toLowerCase()}_export_${new Date().getTime()}.csv`
@@ -174,26 +161,24 @@ export class PackageDataTableComponent extends BaseDatatableComponent
     this.$subscription.add(
       this.packagesService
         .updateLibraryItem<Partial<PackageData>, PackageResponse>(
-          this.hotelId,
+          this.entityId,
           rowData.id,
           { active: status },
           { params: '?type=PACKAGE' }
         )
         .subscribe(
           () => {
-            const statusValue = (val: boolean) => (val ? 'ACTIVE' : 'INACTIVE');
-            this.updateStatusAndCount(
-              statusValue(rowData.status),
-              statusValue(status)
-            );
-            this.values.find((item) => item.id === rowData.id).status = status;
+            this.initTableValue();
             this.snackbarService.openSnackBarAsText(
               'Status changes successfully',
               '',
               { panelClass: 'success' }
             );
           },
-          ({ error }) => {},
+          ({ error }) => {
+            this.values = [];
+            this.loading = false;
+          },
           this.handleFinal
         )
     );
@@ -203,9 +188,9 @@ export class PackageDataTableComponent extends BaseDatatableComponent
    * @function editPackage To Edit the service
    */
   editPackage(id: string) {
-    this.router.navigate([
-      `/pages/library/packages/${packagesRoutes.createPackage.route}/${id}`,
-    ]);
+    this.routesConfigService.navigate({
+      additionalPath: packagesRoutes.editPackage.route.replace(':id', id),
+    });
   }
 
   handleFinal = () => {

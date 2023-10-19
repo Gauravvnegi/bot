@@ -209,6 +209,45 @@
     },
     "admin-members": {
       "tags": []
+    },
+    "admin-guest-dashboard": {
+      "tags": []
+    },
+    "admin-revenue-manager": {
+      "tags": []
+    },
+    "admin-global-shared": {
+      "tags": []
+    },
+    "admin-housekeeping": {
+      "tags": []
+    },
+    "admin-complaint-tacker": {
+      "tags": []
+    },
+    "admin-setup-bar-price": {
+      "tags": []
+    },
+    "admin-dynamic-pricing": {
+      "tags": []
+    },
+    "admin-booking-engine": {
+      "tags": []
+    },
+    "admin-feedback-analytics": {
+      "tags": []
+    },
+    "admin-manage-rate": {
+      "tags": []
+    },
+    "admin-manage-inventory": {
+      "tags": []
+    },
+    "admin-reports": {
+      "tags": []
+    },
+    "admin-view-not-allowed": {
+      "tags": []
     }
   }
 }

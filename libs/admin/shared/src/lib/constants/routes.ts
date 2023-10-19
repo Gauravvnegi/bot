@@ -5,33 +5,36 @@ export const routes = {
   [ModuleNames.Home]: 'home',
 
   // Create with
-  [ModuleNames.CREATE_WITH]: 'create-with',
+  [ModuleNames.CREATE_WITH_HOME]: 'create-with',
   [ModuleNames.CREATE_WITH_DASHBOARD]: 'create-with/dashboard',
   [ModuleNames.SEO_FRIENDLY]: 'create-with/marketing-seo',
   [ModuleNames.PAGES]: 'create-with/page',
   [ModuleNames.BLOG]: 'create-with/blog',
-  [ModuleNames.BOOKING_ENGINE]: 'create-with/booking-engine',
+
+  [ModuleNames.BOOKING_ENGINE]: 'booking-engine',
 
   // Front Desk
-  [ModuleNames.FRONT_DESK]: 'efrontdesk',
+  [ModuleNames.FRONT_DESK_HOME]: 'efrontdesk',
   [ModuleNames.FRONT_DESK_DASHBOARD]: 'efrontdesk/dashboard',
-  [ModuleNames.REQUEST_DASHBOARD]: 'efrontdesk/request-analytics',
-  [ModuleNames.REQUEST]: 'efrontdesk/request',
-  [ModuleNames.ADD_RESERVATION]: 'efrontdesk/manage-reservation',
+  [ModuleNames.IN_HOUSE_GUEST]: 'efrontdesk/in-house-guest',
+  [ModuleNames.ADD_RESERVATION]: 'efrontdesk/reservation',
+  [ModuleNames.ROOM]: '{{product}}/room', // dynamic route
+  [ModuleNames.HOUSEKEEPING]: 'efrontdesk/housekeeping',
 
   // Freddie
-  [ModuleNames.FREDDIE]: 'freddie',
+  [ModuleNames.FREDDIE_HOME]: 'freddie',
   [ModuleNames.CONVERSATION_DASHBOARD]: 'freddie/conversation-analytics',
   [ModuleNames.LIVE_MESSAGING]: 'freddie/messages',
   // [ModuleNames.SENTIMENTAL_ANALYSIS_FREDDIE]: 'freddie/sentimental-analysis',
 
   // Hedda
-  [ModuleNames.HEDA]: 'heda',
+  [ModuleNames.HEDA_HOME]: 'heda',
   [ModuleNames.HEDA_DASHBOARD]: 'heda/analytics',
   [ModuleNames.SENTIMENTAL_ANALYSIS_HEDA]: 'heda/sentimental-analysis',
+  [ModuleNames.FEEDBACK]: 'heda/feedback',
 
   // eMarkt_IT
-  [ModuleNames.EMARK_IT]: 'marketing',
+  [ModuleNames.EMARK_IT_HOME]: 'marketing',
   [ModuleNames.EMARK_IT_DASHBOARD]: 'marketing/analytics',
   [ModuleNames.CAMPAIGN]: 'marketing/campaign',
 
@@ -49,27 +52,43 @@ export const routes = {
 
   // Inventory
   [ModuleNames.INVENTORY]: 'inventory',
-  [ModuleNames.ROOM]: 'inventory/room',
+  // [ModuleNames.ROOM]: 'inventory/room',
 
   // FINANCE
   [ModuleNames.FINANCE]: 'finance',
   [ModuleNames.INVOICE]: 'finance/invoice',
-  [ModuleNames.TRANSACTION]: 'finance/transaction',
+  [ModuleNames.TRANSACTIONS]: 'finance/transactions',
 
   // MEMBERS
   [ModuleNames.MEMBERS]: 'members',
-  [ModuleNames.GUESTS]: 'members/guest',
+  [ModuleNames.GUESTS]: 'members/guests',
+  [ModuleNames.GUEST_DASHBOARD]: 'members/guest-dashboard',
   [ModuleNames.AGENT]: 'members/agent',
   [ModuleNames.COMPANY]: 'members/company',
 
+  //COMPLAINT TRACKER
+  [ModuleNames.COMPLAINT_HOME]: 'complaint-tracker',
+  [ModuleNames.COMPLAINT_DASHBOARD]: 'complaint-tracker/complaint-analytics',
+  [ModuleNames.COMPLAINTS]: 'complaint-tracker/complaint',
 
   // SETTINGS
   [ModuleNames.SETTINGS]: 'settings',
 
   //OUTLET
-  [ModuleNames.OUTLET]: 'outlet',
-  [ModuleNames.OUTLETS_DASHBOARD]: 'outlet/dashboard',
-  [ModuleNames.ALL_OUTLETS]: 'outlet/all-outlets',
+  // [ModuleNames.OUTLET]: 'outlet',
+  // [ModuleNames.OUTLETS_DASHBOARD]: 'outlet/dashboard',
+  // [ModuleNames.ALL_OUTLETS]: 'outlet/all-outlets',
+
+  //CHANNEL_MANAGER
+  [ModuleNames.CHANNEL_MANAGER_HOME]: 'channel-manager',
+  [ModuleNames.MANAGE_RATE]: 'channel-manager/update-rates',
+  [ModuleNames.MANAGE_INVENTORY]: 'channel-manager/update-inventory',
+
+  //REVENUE_MANAGER
+  [ModuleNames.REV_MAXI]: 'revenue-manager',
+  [ModuleNames.REVENUE_MANAGER]: 'revenue-manager',
+  [ModuleNames.DYNAMIC_PRICING]: 'revenue-manager/dynamic-pricing',
+  [ModuleNames.SETUP_BAR_PRICE]: '{{product}}/setup-bar-price',
 
   RoleAndPermission: 'roles-permissions',
 };

@@ -74,7 +74,7 @@ export class Guest implements IDeserializable {
   firstName: string;
   id: string;
   lastName: string;
-  nameTitle: string;
+  salutation: string;
   nationality: string;
   countryCode: string;
   phoneNumber: string;
@@ -98,7 +98,7 @@ export class Guest implements IDeserializable {
       set({}, 'title', get(input, ['title'])),
       set({}, 'firstName', trim(get(input, ['firstName'], 'No'))),
       set({}, 'lastName', trim(get(input, ['lastName'], 'Name'))),
-      set({}, 'nameTitle', get(input, ['nameTitle'], '')),
+      set({}, 'salutation', get(input, ['salutation'], '')),
       set({}, 'nationality', get(input, ['nationality'])),
       set(
         {},
@@ -109,7 +109,7 @@ export class Guest implements IDeserializable {
       set({}, 'email', get(input, ['contactDetails', 'emailId']))
     );
     this.guestAttributes = new GuestAttributes().deserialize(input.attributes);
-    if (input.reservation[0]) {
+    if (input?.reservation) {
       const reservation = input.reservation[0];
       this.booking = new Booking().deserialize(reservation);
       this.feedback = new Feedback().deserialize(reservation.feedback);
@@ -133,7 +133,7 @@ export class Guest implements IDeserializable {
   }
 
   getFullName() {
-    return `${this.nameTitle} ${this.firstName} ${this.lastName}`;
+    return `${this.salutation} ${this.firstName} ${this.lastName}`;
   }
 
   getPhoneNumber() {

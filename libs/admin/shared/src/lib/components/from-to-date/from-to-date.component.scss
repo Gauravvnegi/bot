@@ -1,0 +1,13 @@
+.dates {
+  display: flex;
+  gap: 30px;
+  .field {
+    width: 50%;
+  }
+}
+
+:host ::ng-deep {
+  .p-calendar .p-datepicker {
+    min-width: unset !important;
+  }
+}

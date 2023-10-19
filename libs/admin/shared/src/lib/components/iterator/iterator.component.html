@@ -3,7 +3,7 @@
     <div class="header">
       <div
         *ngFor="let field of fields"
-        [style.flexBasis]="width"
+        [style.flexBasis]="field.width ? field.width : width"
         class="header__cell"
       >
         {{ field.label }}
@@ -17,33 +17,82 @@
       <div [formGroup]="controls" class="values-row">
         <div
           *ngFor="let field of fields"
-          [style.flexBasis]="width"
+          [style.flexBasis]="field.width ? field.width : width"
+          [style.width]="field.width ? field.width : width"
           [ngSwitch]="field.type"
         >
           <hospitality-bot-input
             *ngSwitchCase="'input'"
             [controlName]="field.name"
-            [props]="props"
             [disabled]="field.disabled"
+            [props]="{
+              placeholder: field.placeholder ? field.placeholder : '',
+              fontSize: '14px',
+              type: field?.dataType,
+              errorMessages: {
+                min: 'Value should be more than 0'
+              }
+            }"
           ></hospitality-bot-input>
-          <hospitality-bot-select
-            *ngSwitchCase="'select'"
+          <hospitality-bot-auto-complete
+            *ngSwitchCase="'auto-complete'"
             [controlName]="field.name"
-            [props]="props"
             [options]="field.options"
             [disabled]="field.disabled"
+            [loading]="field.loadingResults"
+            (onSearch)="field.searchResults($event)"
+            [props]="{
+              placeholder: field.placeholder ? field.placeholder : '',
+              fontSize: '14px'
+            }"
+          ></hospitality-bot-auto-complete>
+          <hospitality-bot-select
+            *ngSwitchCase="'select'"
+            class="select"
+            [controlName]="field.name"
+            [options]="field.options"
+            [disabled]="field.disabled"
+            [props]="{
+              placeholder: field.placeholder ? field.placeholder : '',
+              fontSize: '14px',
+              isAsync: field.isAsync,
+              createPrompt: field.createPrompt
+            }"
+            [loading]="field?.loadingResults"
+            (paginate)="field?.loadMoreResults()"
+            (onSearch)="field?.searchResults($event)"
+            [stopEmission]="field?.noMoreResults"
+            (onCreate)="field?.create()"
           ></hospitality-bot-select>
+          <hospitality-bot-multi-select
+            *ngSwitchCase="'multi-select'"
+            [controlName]="field.name"
+            [props]="{
+              placeholder: field.placeholder,
+              isAsync: false
+            }"
+            [options]="field.options"
+            [disabled]="field.disabled"
+            [settings]="{ showHeader: false }"
+          ></hospitality-bot-multi-select>
         </div>
-        <mat-icon class="delete" (click)="removeField(i)">clear</mat-icon>
+        <ng-container *ngIf="useFormArray.length > 1">
+          <mat-icon
+            *ngIf="ctaLabel && (!maxLimit || maxLimit > useFormArray.length)"
+            class="delete"
+            (click)="removeField(i)"
+            >clear</mat-icon
+          >
+        </ng-container>
       </div>
     </div>
   </div>
-
-  <hospitality-bot-button
-    *ngIf="ctaLabel && (!maxLimit || maxLimit > useFormArray.length)"
-    class="action-btn"
-    [label]="ctaLabel"
-    (onClick)="addNewField()"
-    variant="text"
-  ></hospitality-bot-button>
+  <div class="action-btn">
+    <hospitality-bot-button
+      *ngIf="ctaLabel && (!maxLimit || maxLimit > useFormArray.length)"
+      [label]="ctaLabel"
+      (onClick)="addNewField()"
+      variant="text"
+    ></hospitality-bot-button>
+  </div>
 </div>

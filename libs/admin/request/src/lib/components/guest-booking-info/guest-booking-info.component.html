@@ -1,6 +1,15 @@
 <div class="container">
   <div class="booking-title">
     Booking Info
+    <span
+      *ngIf="
+        !currentBooking?.length &&
+        !pastBooking?.length &&
+        !upcomingBooking?.length
+      "
+    >
+      Not Available</span
+    >
   </div>
   <!-- Current Booking -->
   <div>

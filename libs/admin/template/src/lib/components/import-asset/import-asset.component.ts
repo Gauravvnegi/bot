@@ -25,7 +25,7 @@ import { TemplateService } from '../../services/template.service';
 export class ImportAssetComponent implements OnInit, OnDestroy {
   @Output() closeImport = new EventEmitter();
   searchValue = false;
-  hotelId: string;
+  entityId: string;
   tabFilterItems = templateConfig.datatable.assetsTabFilterItems;
   tabFilterIdx = 0;
   limit = templateConfig.importAsset.limit;
@@ -57,7 +57,7 @@ export class ImportAssetComponent implements OnInit, OnDestroy {
   listenForGlobalFilters(): void {
     this.$subscription.add(
       this.globalFilterService.globalFilter$.subscribe((data) => {
-        this.hotelId = this.globalFilterService.hotelId;
+        this.entityId = this.globalFilterService.entityId;
         // fetch-api for records
         this.loadAssetData([
           {
@@ -99,7 +99,7 @@ export class ImportAssetComponent implements OnInit, OnDestroy {
     };
     this.$subscription.add(
       this._templateService
-        .getAssets(this.hotelId, config)
+        .getAssets(this.entityId, config)
         .subscribe((response) => {
           if (
             this.tabFilterItems[this.tabFilterIdx].page > 0 &&

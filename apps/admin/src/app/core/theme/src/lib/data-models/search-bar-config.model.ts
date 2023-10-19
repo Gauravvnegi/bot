@@ -44,7 +44,7 @@ export class GuestSearchResult implements IDeserializable {
       this,
       set({}, 'id', get(input, ['id'])),
       set({}, 'label', this.getFullName(input)),
-      set({}, 'description', ''),
+      set({}, 'description', get(input, ['phoneNumber'])),
       set({}, 'type', get(input, ['searchType'])),
       set({}, 'imageUrl', '')
     );

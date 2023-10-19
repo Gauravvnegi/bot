@@ -54,8 +54,7 @@ export const templateConfig = {
       {
         field: 'active',
         header: 'Active',
-        isSortDisabled: true,
-
+        sortType: 'number',
         isSearchDisabled: true,
       },
     ],

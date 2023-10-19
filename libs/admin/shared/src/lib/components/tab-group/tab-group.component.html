@@ -1,13 +1,5 @@
 <div #tabFilter>
-  <div
-    *ngIf="isSticky && isScrolledUp"
-    [ngStyle]="{ 'height.px': extraGap }"
-  ></div>
-
-  <div
-    class="tab-wrapper"
-    [ngClass]="{ sticky__tabs: isScrolledUp && isSticky }"
-  >
+  <div class="tab-wrapper">
     <mat-tab-group
       [selectedIndex]="selectedIndex"
       (selectedTabChange)="onSelectedTabChange($event)"
@@ -24,8 +16,6 @@
       >
       </mat-tab>
     </mat-tab-group>
-    <div class="tab-actions">
-      <ng-content></ng-content>
-    </div>
+    <ng-content></ng-content>
   </div>
 </div>

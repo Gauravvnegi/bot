@@ -2,7 +2,10 @@ import { Location } from '@angular/common';
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import {
+  GlobalFilterService,
+  RoutesConfigService,
+} from '@hospitality-bot/admin/core/theme';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { forkJoin, Subscription } from 'rxjs';
 import { NavRouteOptions, Option } from 'libs/admin/shared/src';
@@ -11,6 +14,7 @@ import { AssetService } from '../../services/asset.service';
 import { TranslateService } from '@ngx-translate/core';
 import { assetConfig } from '../../constants/asset';
 import { FileUploadType } from 'libs/admin/shared/src/lib/models/file-upload-type.model';
+import { assetsRoutes } from '../../constants/routes';
 
 @Component({
   selector: 'hospitality-bot-edit-asset',
@@ -20,7 +24,7 @@ import { FileUploadType } from 'libs/admin/shared/src/lib/models/file-upload-typ
 export class EditAssetComponent implements OnInit, OnDestroy {
   @Input() id: string;
   fileUploadData = assetConfig.fileUploadData;
-  hotelId: string;
+  entityId: string;
   assetForm: FormGroup;
   isSavingasset = false;
   private $subscription: Subscription = new Subscription();
@@ -32,12 +36,7 @@ export class EditAssetComponent implements OnInit, OnDestroy {
   pathToUploadFile = 'static-content/assets';
   pageTitle = 'Create Asset';
 
-  navRoutes: NavRouteOptions = [
-    { label: 'Library', link: './' },
-    { label: 'Assets', link: '/pages/library/assets' },
-    { label: 'Create Asset', link: './' },
-  ];
-
+  navRoutes: NavRouteOptions = [];
   fileType: Option[] = [
     { label: 'Image', value: 'Image' },
     { label: 'Video', value: 'Video' },
@@ -51,12 +50,19 @@ export class EditAssetComponent implements OnInit, OnDestroy {
     private assetService: AssetService,
     protected _translateService: TranslateService,
     private globalFilterService: GlobalFilterService,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private routesConfigService: RoutesConfigService
   ) {}
 
   ngOnInit(): void {
     this.initFg();
     this.listenForGlobalFilters();
+    const { navRoutes, title } = assetsRoutes[
+      this.assetId ? 'editAssets' : 'createAssets'
+    ];
+    this.navRoutes = navRoutes;
+    this.pageTitle = title;
+    this.initNavRoutes();
   }
 
   initFg(): void {
@@ -67,6 +73,12 @@ export class EditAssetComponent implements OnInit, OnDestroy {
       url: ['', [Validators.required]],
       status: [true, [Validators.required]],
       thumbnailUrl: [''],
+    });
+  }
+
+  initNavRoutes() {
+    this.routesConfigService.navRoutesChanges.subscribe((navRoutesRes) => {
+      this.navRoutes = [...navRoutesRes, ...this.navRoutes];
     });
   }
 
@@ -102,7 +114,7 @@ export class EditAssetComponent implements OnInit, OnDestroy {
           ...data['filter'].queryValue,
           ...data['dateRange'].queryValue,
         ];
-        this.hotelId = this.globalFilterService.hotelId;
+        this.entityId = this.globalFilterService.entityId;
 
         this.getAssetId();
       })
@@ -118,8 +130,6 @@ export class EditAssetComponent implements OnInit, OnDestroy {
         if (params['id']) {
           this.assetId = params['id'];
           this.getAssetDetails(this.assetId);
-          this.pageTitle = 'Edit Asset';
-          this.navRoutes[2].label = 'Edit Asset';
         } else if (this.id) {
           this.assetId = this.id;
           this.getAssetDetails(this.assetId);
@@ -136,7 +146,7 @@ export class EditAssetComponent implements OnInit, OnDestroy {
   getAssetDetails(assetId: string): void {
     this.$subscription.add(
       this.assetService
-        .getAssetDetails(this.hotelId, assetId)
+        .getAssetDetails(this.entityId, assetId)
         .subscribe((response) => {
           this.hotelasset = new Asset().deserialize(response);
           this.assetForm.patchValue(this.hotelasset);
@@ -152,10 +162,10 @@ export class EditAssetComponent implements OnInit, OnDestroy {
     this.isSavingasset = true;
     const data = this.assetService.mapAssetData(
       this.assetForm.getRawValue(),
-      this.hotelId
+      this.entityId
     );
     this.$subscription.add(
-      this.assetService.addasset(this.hotelId, data).subscribe(
+      this.assetService.addasset(this.entityId, data).subscribe(
         (response) => {
           this.hotelasset = new Asset().deserialize(response);
           this.assetForm.patchValue(this.hotelasset);
@@ -171,11 +181,10 @@ export class EditAssetComponent implements OnInit, OnDestroy {
               }
             )
             .subscribe();
-          this.router.navigate(['/pages/library/assets']);
-
+          this.routesConfigService.goBack();
           this.isSavingasset = false;
         },
-        ({ error }) => { 
+        ({ error }) => {
           this.isSavingasset = false;
         }
       )
@@ -196,12 +205,12 @@ export class EditAssetComponent implements OnInit, OnDestroy {
     this.isSavingasset = true;
     const data = this.assetService.mapAssetData(
       this.assetForm.getRawValue(),
-      this.hotelId,
+      this.entityId,
       this.hotelasset.id
     );
     this.$subscription.add(
       this.assetService
-        .updateAsset(this.hotelId, data, this.hotelasset.id)
+        .updateAsset(this.entityId, data, this.hotelasset.id)
         .subscribe(
           (response) => {
             this.snackbarService
@@ -220,7 +229,7 @@ export class EditAssetComponent implements OnInit, OnDestroy {
 
             this.isSavingasset = false;
           },
-          ({ error }) => { 
+          ({ error }) => {
             this.isSavingasset = false;
           }
         )
@@ -261,6 +270,10 @@ export class EditAssetComponent implements OnInit, OnDestroy {
    */
   get assetType() {
     return this.assetForm?.get('type').value || assetConfig.type.image;
+  }
+
+  resetForm() {
+    this.assetForm.reset();
   }
 
   /**

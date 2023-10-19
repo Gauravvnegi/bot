@@ -12,8 +12,11 @@
       ></hospitality-bot-export-list>
     </hospitality-bot-modal-header>
   </div>
-  
-  <div class="table-container" [ngStyle]="tabFilterItems[tabFilterIdx]?.total ? {} : { 'padding': '10px' }">
+
+  <div
+    class="table-container"
+    [ngStyle]="tabFilterItems[tabFilterIdx]?.total ? {} : { padding: '10px' }"
+  >
     <ng-container>
       <p-table
         #dt
@@ -38,15 +41,16 @@
         (sortFunction)="customSort($event)"
         [customSort]="isCustomSort"
         (onFilter)="onDataFilter()"
-        *ngIf="tabFilterItems[tabFilterIdx]?.total; else emptyTable"
+        *ngIf="!isEmpty; else emptyTable"
       >
         <ng-template pTemplate="caption">
           <div class="caption__wrapper" [formGroup]="tableFG">
             <ng-container [ngTemplateOutlet]="tabFilter"> </ng-container>
             <hospitality-bot-filter-chips
               *ngIf="isQuickFilters"
-              [chips]="tabFilterItems[tabFilterIdx].chips"
+              [chips]="filterChips"
               (onChange)="toggleQuickReplyFilter($event)"
+              [selectedChips]="selectedFilterChips"
             ></hospitality-bot-filter-chips>
           </div>
         </ng-template>
@@ -82,15 +86,15 @@
               ></p-tableCheckbox>
             </td>
             <td>
-              <p class="tabel-room-no" [roomStatus]="rowData.rooms.roomStatus">
+              <div class="tabel-room-no" [roomStatus]="rowData.rooms.status">
                 {{ rowData.rooms.roomNumber }}&nbsp;-&nbsp;{{
                   rowData.rooms.type
                 }}
-              </p>
+              </div>
             </td>
             <td>
               <p class="booking-number">{{ rowData.booking.bookingNumber }}</p>
-              <div
+              <!-- <div
                 *ngIf="['COMPLETED'].includes(rowData.feedback.status)"
                 class="booking-feedback"
                 [ngClass]="{
@@ -115,9 +119,9 @@
                 >
                   {{ rowData.feedback.comments }}
                 </div>
-              </div>
+              </div> -->
             </td>
-            <td class="guest">
+            <td class="multi-cell-content">
               <div class="primary-text">
                 {{ rowData.guests.primaryGuest.getFullName() }}
               </div>
@@ -216,7 +220,7 @@
                 >{{ rowData.payment.dueAmount | currency: 'INR' }}</span
               >/ {{ rowData.payment.totalAmount | currency: 'INR' }}
             </td>
-            <td class="package">
+            <!-- <td class="package">
               <span
                 *ngIf="
                   rowData.packages.getPaidPackagesLabels().length;
@@ -224,7 +228,7 @@
                 "
                 >{{ rowData.packages.getPaidPackagesLabels() }}
               </span>
-            </td>
+            </td> -->
 
             <!-- status-image-initiated -->
             <td class="status-image">
@@ -263,7 +267,7 @@
                 </div>
                 <div
                   (click)="openDetailPage($event, rowData, 'payment_details')"
-                  class="icon"
+                  class="icon margin-left"
                 >
                   <img
                     class="table-body-journey-icon"
@@ -288,7 +292,7 @@
                     {{ 'datatable.payment' | translate }}
                   </div>
                 </div>
-                <div class="icon">
+                <!-- <div class="icon">
                   <img
                     class="table-body-journey-icon"
                     [src]="dashboardConfig.images.feedback.url"
@@ -314,8 +318,8 @@
                   <div class="tooltip">
                     {{ 'datatable.feedback' | translate }}
                   </div>
-                </div>
-                <div class="icon extra-width">
+                </div> -->
+                <!-- <div class="icon extra-width">
                   <img
                     class="table-body-journey-icon"
                     [src]="dashboardConfig.images.newJourney.url"
@@ -336,7 +340,7 @@
                   <div class="tooltip">
                     {{ 'datatable.new' | translate }}
                   </div>
-                </div>
+                </div> -->
                 <div class="icon extra-width">
                   <img
                     class="table-body-journey-icon"

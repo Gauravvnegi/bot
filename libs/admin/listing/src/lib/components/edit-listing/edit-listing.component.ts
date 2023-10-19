@@ -1,8 +1,11 @@
 import { Location } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
-import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import { ActivatedRoute, Route, Router } from '@angular/router';
+import {
+  GlobalFilterService,
+  RoutesConfigService,
+} from '@hospitality-bot/admin/core/theme';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { Subscription } from 'rxjs';
 import { IList, List, Topics } from '../../data-models/listing.model';
@@ -14,6 +17,7 @@ import {
   Option,
 } from 'libs/admin/shared/src';
 import { listingConfig } from '../../constants/listing';
+import { listingRoutes } from '../../constants/routes';
 
 @Component({
   selector: 'hospitality-bot-edit-listing',
@@ -23,7 +27,7 @@ import { listingConfig } from '../../constants/listing';
 export class EditListingComponent implements OnInit, OnDestroy {
   listFG: FormGroup;
   listData: IList;
-  hotelId: string;
+  entityId: string;
   listId: string;
   isSaving = false;
   loading = false;
@@ -31,11 +35,7 @@ export class EditListingComponent implements OnInit, OnDestroy {
   topicList: Option[] = [];
 
   pageTitle = 'Create Listing';
-  navRoutes: NavRouteOptions = [
-    { label: 'Library', link: './' },
-    { label: 'Listing', link: '/pages/library/listing' },
-    { label: 'Create Listing', link: './' },
-  ];
+  navRoutes: NavRouteOptions = [];
   private $subscription = new Subscription();
 
   constructor(
@@ -47,7 +47,8 @@ export class EditListingComponent implements OnInit, OnDestroy {
     private _location: Location,
     protected _translateService: TranslateService,
     private _router: Router,
-    private adminUtilityService: AdminUtilityService
+    private adminUtilityService: AdminUtilityService,
+    private routesConfigService: RoutesConfigService
   ) {
     this.initFG();
   }
@@ -77,18 +78,24 @@ export class EditListingComponent implements OnInit, OnDestroy {
           ...data['filter'].queryValue,
           ...data['dateRange'].queryValue,
         ];
-        this.hotelId = this.globalFilterService.hotelId;
-        this.getTopicList(this.hotelId);
+        this.entityId = this.globalFilterService.entityId;
+        this.getTopicList(this.entityId);
         this.getListingId();
       })
     );
   }
 
+  initNavRoutes() {
+    this.routesConfigService.navRoutesChanges.subscribe((navRoutesRes) => {
+      this.navRoutes = [...navRoutesRes, ...this.navRoutes];
+    });
+  }
+
   /**
    * @function getTopicList To get topic record list.
-   * @param hotelId The hotel id for which getTopicList will be done.
+   * @param entityId The hotel id for which getTopicList will be done.
    */
-  getTopicList(hotelId) {
+  getTopicList(entityId) {
     const config = {
       queryObj: this.adminUtilityService.makeQueryParams([
         {
@@ -98,8 +105,9 @@ export class EditListingComponent implements OnInit, OnDestroy {
       ]),
     };
     this.$subscription.add(
-      this._listingService.getTopicList(hotelId, config).subscribe(
-        (response) => {
+      this._listingService
+        .getTopicList(entityId, config)
+        .subscribe((response) => {
           const data = new Topics()
             .deserialize(response)
             .records.map((item) => ({ label: item.name, value: item.id }));
@@ -117,9 +125,13 @@ export class EditListingComponent implements OnInit, OnDestroy {
         if (params['id']) {
           this.listId = params['id'];
           this.getListDetails(this.listId);
-          this.pageTitle = 'Edit Listing';
-          this.navRoutes[2].label = 'Edit Listing';
         }
+        const { navRoutes, title } = listingRoutes[
+          this.listId ? 'editListing' : 'createListing'
+        ];
+        this.pageTitle = title;
+        this.navRoutes = navRoutes;
+        this.initNavRoutes();
       })
     );
   }
@@ -131,17 +143,26 @@ export class EditListingComponent implements OnInit, OnDestroy {
   getListDetails(id) {
     this.loading = true;
     this.$subscription.add(
-      this._listingService.getListById(this.hotelId, id).subscribe(
+      this._listingService.getListById(this.entityId, id).subscribe(
         (response) => {
           this.loading = false;
           this.listData = new List().deserialize(response, 0);
           this.listFG.patchValue(this.listData);
         },
         ({ error }) => {
-          this.loading = false; 
+          this.loading = false;
         }
       )
     );
+  }
+
+  resetForm() {
+    this.listFG.reset();
+  }
+
+  handleSubmit() {
+    if (this.listId) this.updateList();
+    else this.createList();
   }
 
   /**
@@ -183,7 +204,7 @@ export class EditListingComponent implements OnInit, OnDestroy {
       };
     });
     this.isSaving = true;
-    this._listingService.createList(this.hotelId, data).subscribe(
+    this._listingService.createList(this.entityId, data).subscribe(
       (response) => {
         this.snackbarService
           .openSnackBarWithTranslate(
@@ -197,9 +218,9 @@ export class EditListingComponent implements OnInit, OnDestroy {
             }
           )
           .subscribe();
-        this._router.navigate([`pages/library/listing`]);
+        this.routesConfigService.goBack();
       },
-      ({ error }) => { },
+      ({ error }) => {},
       () => (this.isSaving = false)
     );
   }
@@ -243,7 +264,7 @@ export class EditListingComponent implements OnInit, OnDestroy {
       };
     });
     this.isSaving = true;
-    this._listingService.updateList(this.hotelId, this.listId, data).subscribe(
+    this._listingService.updateList(this.entityId, this.listId, data).subscribe(
       (response) => {
         this.snackbarService
           .openSnackBarWithTranslate(
@@ -255,9 +276,9 @@ export class EditListingComponent implements OnInit, OnDestroy {
             { panelClass: 'success' }
           )
           .subscribe();
-        this._router.navigate([`pages/library/listing`]);
+        this.routesConfigService.goBack();
       },
-      ({ error }) => {  },
+      ({ error }) => {},
       () => (this.isSaving = false)
     );
   }

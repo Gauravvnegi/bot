@@ -1,8 +1,11 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, FormControl } from '@angular/forms';
 import { MatDialogConfig } from '@angular/material/dialog';
-import { MatTabChangeEvent } from '@angular/material/tabs';
-import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import {
+  GlobalFilterService,
+  RoutesConfigService,
+  SubscriptionPlanService,
+} from '@hospitality-bot/admin/core/theme';
 import {
   DetailsComponent,
   Reservation,
@@ -23,14 +26,12 @@ import {
 } from '@hospitality-bot/shared/material';
 import * as FileSaver from 'file-saver';
 import { Observable, Subscription } from 'rxjs';
-import { cols } from '../../../constants/cols';
+import { cols, tableTypes } from '../../../constants/cols';
 import { dashboard } from '../../../constants/dashboard';
-import { tabFilterItems } from '../../../constants/tabFilterItem';
+import { TableValue } from '../../../constants/tabFilterItem';
 import { ReservationService } from '../../../services/reservation.service';
-import {
-  SelectedEntityState,
-} from '../../../types/dashboard.type';
-
+import { reservationStatus } from '../../../constants/response';
+import { NavigationEnd, Router } from '@angular/router';
 @Component({
   selector: 'hospitality-bot-reservation-datatable',
   templateUrl: './reservation.component.html',
@@ -41,23 +42,27 @@ import {
 })
 export class ReservationDatatableComponent extends BaseDatatableComponent
   implements OnInit, OnDestroy {
+  readonly reservationStatus = reservationStatus;
   @Input() tableName = 'Reservations';
   actionButtons = true;
-  isQuickFilters = true;
-  isTabFilters = true;
   isResizableColumns = true;
   isAutoLayout = false;
   isCustomSort = true;
+  rowsPerPage = 100;
   triggerInitialData = false;
-  rowsPerPageOptions = [5, 10, 25, 50, 200];
-  rowsPerPage = 200;
   cols = cols.reservation;
-
-  @Input() tabFilterItems = tabFilterItems.reservation;
-  @Input() tabFilterIdx = 0;
+  selectedTab: TableValue;
+  isSidebarVisible = false;
+  tableTypes = [tableTypes.table, tableTypes.calendar];
 
   globalQueries = [];
   $subscription = new Subscription();
+  entityId: string;
+  options: any[] = [];
+  isPopUploading: boolean = false;
+  showCalendarView: boolean = false;
+  selectedTableType: string;
+
   constructor(
     public fb: FormBuilder,
     protected _reservationService: ReservationService,
@@ -66,7 +71,10 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
     protected snackbarService: SnackBarService,
     protected _modal: ModalService,
     public feedbackService: FeedbackService,
-    protected tabFilterService: TableService
+    protected tabFilterService: TableService,
+    protected subscriptionPlanService: SubscriptionPlanService,
+    protected routesConfigService: RoutesConfigService,
+    protected router: Router
   ) {
     super(fb, tabFilterService);
   }
@@ -78,17 +86,54 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
       TableNames.RESERVATION,
       this.tabFilterItems
     );
+    this.entityId = this.globalFilterService.entityId;
   }
 
   registerListeners(): void {
+    this.checkReservationSubscription();
     this.listenForGlobalFilters();
     this.listenGuestDetails();
+    this.toggleCalendarView();
+  }
+
+  get isCalendarViewAvailable() {
+    return this.subscriptionPlanService.checkModuleSubscriptionWithRespectiveToProduct(
+      this.routesConfigService.productName,
+      ModuleNames.ADD_RESERVATION
+    );
+  }
+
+  toggleCalendarView() {
+    this.router.events.subscribe((event) => {
+      // Turn off full view on route change
+      if (event instanceof NavigationEnd && this.showCalendarView === true) {
+        this.globalFilterService.toggleFullView.next(false);
+      }
+    });
+    this.globalFilterService.toggleFullView.subscribe((res) => {
+      this.showCalendarView = res;
+    });
+  }
+
+  checkReservationSubscription() {
+    this.tableFG?.addControl('tableType', new FormControl('calendar'));
+    if (this.isCalendarViewAvailable) {
+      this.tableFG.patchValue({ tableType: 'table' });
+      this.selectedTableType = 'table';
+    } else {
+      this.tableTypes = [];
+    }
+  }
+
+  toggleFullView() {
+    this.globalFilterService.toggleFullView.next(!this.showCalendarView);
   }
 
   /**
    * @function listenForGlobalFilters To listen for global filters and load data when filter value is changed.
    */
   listenForGlobalFilters(): void {
+    this.selectedTab = this._reservationService.selectedTable;
     this.$subscription.add(
       this.globalFilterService.globalFilter$.subscribe((data) => {
         //set-global query everytime global filter changes
@@ -101,9 +146,9 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
           ...this.globalQueries,
           {
             order: sharedConfig.defaultOrder,
-            entityType: this.tabFilterItems[this.tabFilterIdx].value,
+            entityType: this.selectedTab,
           },
-          ...this.getSelectedQuickReplyFilters(),
+          ...this.getSelectedQuickReplyFilters({ key: 'entityState' }),
         ]);
       })
     );
@@ -148,18 +193,6 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
   }
 
   /**
-   * @function getSelectedQuickReplyFilters To return the selected chip list
-   * @returns The selected chips.
-   */
-  getSelectedQuickReplyFilters(): SelectedEntityState[] {
-    return this.tabFilterItems[this.tabFilterIdx].chips
-      .filter((item) => item.isSelected === true)
-      .map((item) => ({
-        entityState: item.value,
-      }));
-  }
-
-  /**
    * @function fetchDataFrom Returns an observable for the reservation list api call.
    * @param queries The filter list with date and hotel filters.
    * @param defaultProps The default table props to control data fetching.
@@ -179,13 +212,17 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
   }
 
   setRecords(data): void {
-    this.values = new ReservationTable().deserialize(
+    const modData = new ReservationTable().deserialize(
       data,
       this.globalFilterService.timezone
-    ).records;
-    this.updateTabFilterCount(data.entityTypeCounts, data.total);
-    this.updateQuickReplyFilterCount(data.entityStateCounts);
-    this.updateTotalRecords();
+    );
+    this.values = modData.records;
+    this.initFilters(
+      modData.entityTypeCounts,
+      modData.entityStateCounts,
+      modData.totalRecord,
+      this.reservationStatus
+    );
     this.loading = false;
     this.initialLoading = false;
   }
@@ -195,6 +232,10 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
    * @param event The lazy load event for the table.
    */
   loadData(): void {
+    this.getDataTableValue();
+  }
+
+  getDataTableValue() {
     this.loading = true;
     this.$subscription.add(
       this.fetchDataFrom(
@@ -202,9 +243,9 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
           ...this.globalQueries,
           {
             order: sharedConfig.defaultOrder,
-            entityType: this.tabFilterItems[this.tabFilterIdx].value,
+            entityType: this.selectedTab,
           },
-          ...this.getSelectedQuickReplyFilters(),
+          ...this.getSelectedQuickReplyFilters({ key: 'entityState' }),
         ],
         { offset: this.first, limit: this.rowsPerPage }
       ).subscribe(
@@ -217,17 +258,6 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
         }
       )
     );
-  }
-
-  /**
-   * @function updatePaginations To update the pagination variable values.
-   * @param event The lazy load event for the table.
-   */
-  updatePaginations(event): void {
-    this.first = event.first;
-    this.rowsPerPage = event.rows;
-    this.tempFirst = this.first;
-    this.tempRowsPerPage = this.rowsPerPage;
   }
 
   /**
@@ -246,40 +276,6 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
   }
 
   /**
-   * @function onSelectedTabFilterChange To handle the tab filter change.
-   * @param event The material tab change event.
-   */
-  onSelectedTabFilterChange(event: MatTabChangeEvent): void {
-    this.tabFilterIdx = event.index;
-    this.loadData();
-  }
-
-  /**
-   * @function onFilterTypeTextChange To handle the search for each column of the table.
-   * @param value The value of the search field.
-   * @param field The name of the field across which filter is done.
-   * @param matchMode The mode by which filter is to be done.
-   */
-  onFilterTypeTextChange(
-    value: string,
-    field: string,
-    matchMode = 'contains'
-  ): void {
-    if (!!value && !this.isSearchSet) {
-      this.tempFirst = this.first;
-      this.tempRowsPerPage = this.rowsPerPage;
-      this.isSearchSet = true;
-    } else if (!!!value) {
-      this.isSearchSet = false;
-      this.first = this.tempFirst;
-      this.rowsPerPage = this.tempRowsPerPage;
-    }
-
-    value = value && value.trim();
-    this.table.filter(value, field, matchMode);
-  }
-
-  /**
    * @function exportCSV To export CSV report of the table.
    */
   exportCSV(): void {
@@ -292,7 +288,7 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
           order: sharedConfig.defaultOrder,
           entityType: this.tabFilterItems[this.tabFilterIdx].value,
         },
-        ...this.getSelectedQuickReplyFilters(),
+        ...this.getSelectedQuickReplyFilters({ key: 'entityState' }),
         ...this.selectedRows.map((item) => ({ ids: item.booking.bookingId })),
       ]),
     };
@@ -355,7 +351,7 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
                 order: sharedConfig.defaultOrder,
                 entityType: this.tabFilterItems[this.tabFilterIdx].value,
               },
-              ...this.getSelectedQuickReplyFilters(),
+              ...this.getSelectedQuickReplyFilters({ key: 'entityState' }),
             ],
             false,
             {
@@ -397,6 +393,11 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
       case 'PI':
         return 'status-text-pending';
     }
+  }
+
+  setTableType(value: string) {
+    this.selectedTableType = value;
+    this.tableFG.patchValue({ tableType: value });
   }
 
   ngOnDestroy(): void {

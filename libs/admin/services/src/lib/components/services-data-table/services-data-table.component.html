@@ -1,19 +1,26 @@
-<div
-  class="action-header"
-  [ngClass]="{ 'action-header__sticky': isScrolledUp }"
-  [formGroup]="tableFG"
->
-  <div class="heading">{{ tableName }}</div>
-  <div class="action-wrapper">
+<hospitality-bot-entity-tab-filter
+  [config]="{
+    isSticky: true,
+    extraGap: 60,
+    scrollBoundary: 25,
+    isAllOutletTabFilter: false
+  }"
+  class="tab-header"
+  (onEntityTabFilterChanges)="onGlobalTabFilterChanges($event)"
+></hospitality-bot-entity-tab-filter>
+
+<div [formGroup]="tableFG" class="wrapper">
+  <hospitality-bot-navigation-header [heading]="tableName" [routes]="navRoutes">
     <hospitality-bot-button
       label="+ Create Category"
       variant="text"
       severity="secondary"
-      link="/pages/library/services/{{ servicesRoutes.createCategory.route }}"
+      (onClick)="onCreateNewCategory()"
     ></hospitality-bot-button>
     <hospitality-bot-button
+      [disabled]="isRestaurant"
       label="+ Create Service"
-      link="/pages/library/services/{{ servicesRoutes.createService.route }}"
+      (onClick)="onCreateNewService()"
     ></hospitality-bot-button>
     <hospitality-bot-export-list
       [isDisable]="values.length === 0"
@@ -22,9 +29,8 @@
       [documentTypes]="documentTypes"
       [documentActionTypes]="documentActionTypes"
     ></hospitality-bot-export-list>
-  </div>
+  </hospitality-bot-navigation-header>
 </div>
-<div [ngClass]="{ 'sticky-header-gap': isScrolledUp }"></div>
 
 <p-table
   #dt
@@ -49,16 +55,16 @@
   (sortFunction)="customSort($event)"
   [customSort]="isCustomSort"
   (onFilter)="onDataFilter()"
-  *ngIf="tabFilterItems[tabFilterIdx].total; else emptyTable"
+  *ngIf="!isEmpty; else emptyTable"
 >
   <ng-template pTemplate="caption">
     <div class="caption__wrapper" [formGroup]="tableFG">
       <ng-container [ngTemplateOutlet]="tabFilter"> </ng-container>
-
       <hospitality-bot-filter-chips
         *ngIf="isQuickFilters"
         [chips]="filterChips"
         (onChange)="toggleQuickReplyFilter($event)"
+        [selectedChips]="selectedFilterChips"
       ></hospitality-bot-filter-chips>
     </div>
   </ng-template>
@@ -97,7 +103,7 @@
           <div class="primary-text">
             {{ rowData.name }}
           </div>
-          <div class="secondary-text" *ngIf="rowData.category">
+          <div class="secondary-text" *ngIf="rowData.category; else emptyCell">
             {{ rowData.category }}
           </div>
         </div>
@@ -122,18 +128,19 @@
       <td>
         <div class="center-align" *ngIf="rowData.amount; else emptyCell">
           <div class="primary-text">
-            {{ rowData.amount | currency: rowData.currency }} / {{ rowData.unit }}
+            {{ rowData.amount | currency: rowData.currency }} /
+            {{ rowData.unit }}
           </div>
         </div>
       </td>
       <td>
         <div class="cell-content">
-          <hospitality-bot-toggle-dropdown
+          <hospitality-bot-status-dropdown-toggle
             class="toggle-btn"
             (onClick)="handleStatus($event, rowData)"
-            [status]="rowData.status"
+            [state]="rowData.status"
           >
-          </hospitality-bot-toggle-dropdown>
+          </hospitality-bot-status-dropdown-toggle>
         </div>
       </td>
     </tr>
@@ -159,7 +166,7 @@
 <ng-template #emptyTable>
   <hospitality-bot-empty-table
     [isLoading]="loading"
-    link="/pages/library/services/{{ servicesRoutes.createService.route }}"
+    [link]=" servicesRoutes.createService.route"
     [content]="{
       description:
         'No services found. Tap the +Create Services to create & manage the services offered by your hotel',

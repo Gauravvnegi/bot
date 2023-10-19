@@ -1,3 +1,8 @@
+export enum TableValue {
+  inHouse = 'INHOUSE',
+  arrival = 'ARRIVAL',
+  departure = 'DEPARTURE',
+}
 export const tabFilterItems = {
   arrivals: [
     {
@@ -308,3 +313,5 @@ export const tabFilterItems = {
     },
   ],
 };
+
+

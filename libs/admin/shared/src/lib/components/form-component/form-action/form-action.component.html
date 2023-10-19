@@ -1,0 +1,27 @@
+<div id>
+  <ng-content></ng-content>
+  <div
+    class="footer-buttons"
+    [ngClass]="{ fixed: isFixed && isSticky }"
+    #fd
+  >
+    <hospitality-bot-button
+      *ngIf="!preHide"
+      [label]="preLabel"
+      (onClick)="preAction()"
+      [variant]="preVariant"
+      [severity]="preSeverity"
+      [disabled]="preDisabled || disabled || loading"
+    ></hospitality-bot-button>
+    <hospitality-bot-button
+      *ngIf="!postHide"
+      [label]="postLabel"
+      (onClick)="postAction()"
+      [variant]="postVariant"
+      [severity]="postSeverity"
+      [isLoading]="loading"
+      [disabled]="postDisabled || disabled"
+    ></hospitality-bot-button>
+  </div>
+  <div *ngIf="isFixed" class="footer-height"></div>
+</div>

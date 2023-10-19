@@ -2,9 +2,9 @@ export type InputVariant = 'standard' | 'outlined';
 export type Alignment = 'vertical' | 'horizontal';
 export type InputType = 'number' | 'text';
 
-export type Option = {
+export type Option<T extends string = string> = {
   label: string;
-  value: string;
+  value: T;
   inactive?: boolean;
   icon?: string;
 } & Record<string, any>;
@@ -21,9 +21,12 @@ export type FormProps = {
   isAsync?: boolean;
   dropdownIcon?: string;
   additionalInfo?: string;
-  addNewPrompt?: string;
+  inputPrompt?: string;
+  createPrompt?: string;
   subtitle?: string;
   isAutoFocusFilter?: boolean;
+  tabIndex?: string;
+  isPriceField?: boolean;
 };
 
 export type ButtonVariant = 'text' | 'contained' | 'outlined';
@@ -33,4 +36,19 @@ export type CategoryFormValue = {
   active: boolean;
   description: string;
   imageUrl: string;
+};
+
+export type AddressData = {
+  placeId?: string;
+  formattedAddress?: string;
+  buildingName?: string;
+  floor?: string;
+  sector?: string;
+  street?: string;
+  city?: string;
+  state?: string;
+  country?: string;
+  postalCode?: string;
+  latitude?: number;
+  longitude?: number;
 };

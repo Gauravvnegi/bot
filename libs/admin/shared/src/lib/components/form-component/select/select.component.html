@@ -1,5 +1,5 @@
 <div
-  class="wrapper"
+  [class]="controlName"
   [ngClass]="wrapperNgClasses"
   [style.fontSize]="fontSize"
   [formGroup]="controlContainer.control"
@@ -15,7 +15,7 @@
     class="input"
     [ngClass]="inputNgClasses"
     [disabled]="isDisabled || null"
-    [options]="menuOptions"
+    [options]="dropdownOption"
     [placeholder]="placeholder"
     [showClear]="showClear"
     [formControlName]="controlName"
@@ -32,30 +32,57 @@
     [filterBy]="stopEmission ? 'label' : 'nothing'"
     [filterMatchMode]="stopEmission ? 'contains' : 'notEquals'"
     [resetFilterOnHide]="true"
+    [group]="isGroupOptions"
   >
     <ng-template let-option pTemplate="item">
-      <div class="option-item" *ngIf="!option.hidden">
+      <div
+        class="option-items"
+        *ngIf="!option.hidden"
+        [ngStyle]="{ display: option.icon ? 'flex' : 'unset' }"
+      >
         <img
           *ngIf="option.icon"
           [src]="option.icon"
           class="option-image"
           [alt]="option.label"
         />
-        <span class="option-label">{{ option.label }}</span>
+        <span
+          [ngClass]="{ 'sub-items': isGroupOptions }"
+          class="option-label"
+          >{{ option.label }}</span
+        >
+
+        <span *ngIf="option.phoneNumber && option.email" class="option-details">
+          <span [ngStyle]="{ 'padding-right': '10px' }">{{
+            option.phoneNumber
+          }}</span>
+          <span>{{ option.email }}</span>
+        </span>
       </div>
     </ng-template>
 
     <ng-template let-option pTemplate="selectedItem">
-      <div class="option-item">
-        <div>
+      <div
+        class="selected-item"
+        [ngStyle]="{ display: option?.icon ? 'flex' : 'unset' }"
+      >
+        <div *ngIf="option.icon">
           <img
-            *ngIf="option.icon"
             [src]="option.icon"
             class="selected-image"
             [alt]="option.label"
           />
         </div>
         <span class="option-label">{{ option.label }}</span>
+      </div>
+    </ng-template>
+
+    <ng-template let-group pTemplate="group">
+      <div class="option-items">
+        <div *ngIf="group.icon">
+          <img [src]="group.icon" class="selected-image" [alt]="group.label" />
+        </div>
+        <span class="option-label">{{ group.label }}</span>
       </div>
     </ng-template>
   </p-dropdown>

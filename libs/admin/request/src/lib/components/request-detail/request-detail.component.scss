@@ -1,7 +1,7 @@
 @import 'main';
 
 .form-elements {
-  min-width: 110px;
+  min-width: 130px;
   margin-right: 10px;
   padding: 10px 14px;
   font-size: 16px;
@@ -100,6 +100,7 @@ td {
     &-right {
       display: flex;
       align-items: center;
+      gap: 1em;
     }
   }
   &-body {
@@ -113,6 +114,8 @@ td {
       letter-spacing: 1.44px;
       color: $secondary;
       margin-bottom: 10px;
+      border-bottom: 1px solid #e5e9f2;
+      padding-bottom: 6px;
     }
     &-subtitle {
       font-size: 16px;
@@ -135,7 +138,8 @@ td {
         width: fit-content;
         color: $white;
         font-weight: $bold;
-        margin-top: 15px;
+        // margin-top: 15px;
+        // margin-left: 15px;
       }
       &-booking {
         margin-top: 15px;
@@ -199,4 +203,26 @@ td {
 .man-icon {
   cursor: pointer;
   padding-left: 15px;
+}
+
+.time-left {
+  position: absolute;
+  right: 25px;
+  top: 6em;
+}
+
+.jobno-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.resolved-text {
+  display: flex;
+  position: absolute;
+  right: 25px;
+  top: 6em;
+  font-size: 16px;
+  align-items: center;
+  color: #2a8853;
+  gap: 0.1em;
 }

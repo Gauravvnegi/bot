@@ -73,7 +73,7 @@ export class GuestDetailsComponent implements OnInit, OnChanges, OnDestroy {
 
   defaultFG = {
     id: ['', [Validators.required]],
-    nameTitle: ['Mr.', [Validators.required]],
+    salutation: ['Mr.', [Validators.required]],
     label: [''],
     type: [''],
     role: [''],

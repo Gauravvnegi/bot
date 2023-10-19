@@ -1,0 +1,130 @@
+<div class="wrapper" [id]="fa.referenceId">
+  <hospitality-bot-navigation-header
+    *ngIf="!isSideBar; else sidebarHeader"
+    [heading]="pageTitle"
+    [routes]="navRoutes"
+  ></hospitality-bot-navigation-header>
+
+  <div class="form-block body" [formGroup]="guestForm">
+    <hospitality-bot-input
+      class="half-width"
+      controlName="firstName"
+      label="First Name"
+      maxLength="60"
+      [props]="{
+        placeholder: 'Enter',
+        errorMessages: {
+          required: 'This is a required field.',
+          maxlength: 'Maximum character limit is upto 60.'
+        }
+      }"
+    ></hospitality-bot-input>
+    <hospitality-bot-input
+      class="half-width"
+      controlName="lastName"
+      label="Last Name"
+      maxLength="60"
+      [props]="{
+        placeholder: 'Enter',
+        errorMessages: {
+          required: 'This is a required field.',
+          maxlength: 'Maximum character limit is upto 60.'
+        }
+      }"
+    ></hospitality-bot-input>
+    <hospitality-bot-phone-number
+      [ngClass]="{ 'full-width': isSideBar, 'half-width': !isSideBar }"
+      preControlName="cc"
+      postControlName="phoneNo"
+      [props]="{
+        placeholder: 'Enter',
+        errorMessages: {
+          required: 'This is a required field.'
+        }
+      }"
+    ></hospitality-bot-phone-number>
+    <hospitality-bot-input
+      class="half-width"
+      controlName="email"
+      label="Email"
+      [props]="{
+        type: 'email',
+        errorMessages: {
+          required: 'This is a required field.',
+          pattern: 'Please enter a valid email address.'
+        },
+        placeholder: 'Enter'
+      }"
+    ></hospitality-bot-input>
+
+    <hospitality-bot-address-component class="half-width" controlName="address">
+    </hospitality-bot-address-component>
+    <hospitality-bot-date
+      class="half-width"
+      controlName="dateOfBirth"
+      label="Date of Birth"
+      [settings]="{
+        enableTime: false,
+        yearRange: '1900:' + ageRestriction.getFullYear()
+      }"
+      [props]="{
+        placeholder: 'DD/MM/YYYY'
+      }"
+      [maxDate]="ageRestriction"
+    ></hospitality-bot-date>
+    <hospitality-bot-select
+      class="half-width"
+      controlName="gender"
+      [options]="genders"
+      label="Gender"
+      [props]="{
+        placeholder: 'Select'
+      }"
+    ></hospitality-bot-select>
+    <hospitality-bot-input
+      class="half-width"
+      controlName="age"
+      label="Age"
+      [props]="{
+        placeholder: 'Enter'
+      }"
+    ></hospitality-bot-input>
+    <hospitality-bot-members-list
+      class="half-width"
+      controlName="company"
+      type="COMPANY"
+      label="Company Name"
+      [defaultMember]="selectedMember"
+      (createMembers)="createNewCompany()"
+    ></hospitality-bot-members-list>
+  </div>
+</div>
+
+<p-sidebar
+  class="sidebar-slide"
+  [ngClass]="'guest-sidebar'"
+  [(visible)]="sidebarVisible"
+  position="right"
+>
+  <ng-container #sidebarSlide></ng-container>
+</p-sidebar>
+
+<ng-template #sidebarHeader>
+  <div class="sidebar-slide-header">
+    <span class="title">{{ pageTitle }}</span>
+    <span class="close-icon" (click)="closeSidebar()">
+      <i class="pi pi-arrow-right" aria-hidden="true"></i>
+    </span>
+  </div>
+</ng-template>
+
+<hospitality-bot-form-action
+  class="full-width"
+  [loading]="loading"
+  [isId]="guestId"
+  (onPreAction)="resetForm()"
+  (onPostAction)="handleSubmit()"
+  [isSticky]="true"
+  #fa
+>
+</hospitality-bot-form-action>

@@ -19,31 +19,54 @@ export class CanLoadGuard implements CanLoad {
   // can load will always return true (it is just use to get the subscription data if not present)
   canLoad(route: Route, segments: UrlSegment[]) {
     const subscription = this.subscriptionService.getSubscription();
+    const userSubscriptionPermission = this.subscriptionService
+      .userSubscriptionPermission;
+
+    const userId = this.userService.getLoggedInUserId();
+    const entityId = this.hotelDetailsService.getentityId();
+
+    if (!userId) {
+      this.router.navigate(['/auth']);
+      return false;
+    }
+
+    if (!entityId) {
+      this.router.navigate(['/dashboard']);
+      return false;
+    }
+
+    const getLoggedUserDetails = this.userService.getUserDetailsById(userId);
 
     if (!subscription) {
-      const userId = this.userService.getLoggedInUserId();
-      const hotelId = this.hotelDetailsService.getHotelId();
-
-      if (!userId) {
-        this.router.navigate(['/auth']);
-        return false;
-      }
-
-      if (!hotelId) {
-        this.router.navigate(['/dashboard']);
-        return false;
-      }
-
       this.loadingService.open();
 
-      return this.subscriptionService.getSubscriptionPlan(hotelId).pipe(
+      return this.subscriptionService.getSubscriptionPlan(entityId).pipe(
         switchMap((response) => {
           this.subscriptionService.initSubscriptionDetails(response);
           this.loadingService.close();
+          if (!userSubscriptionPermission) {
+            return getLoggedUserDetails;
+          }
           return of(true);
         }),
+        switchMap((response) => {
+          if (typeof response !== 'boolean') {
+            this.subscriptionService.initUserBasedSubscription(response);
+          }
+          return of(true);
+        })
       );
     }
+
+    if (!userSubscriptionPermission) {
+      return getLoggedUserDetails.pipe(
+        switchMap((response) => {
+          this.subscriptionService.initUserBasedSubscription(response);
+          return of(true);
+        })
+      );
+    }
+
     return true;
   }
 }

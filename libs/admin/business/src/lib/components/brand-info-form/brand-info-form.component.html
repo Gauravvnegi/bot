@@ -1,4 +1,4 @@
-<div class="wrapper" [formGroup]="useForm">
+<div class="wrapper" [formGroup]="useForm" [id]="fa.referenceId">
   <div [formGroup]="useForm.get('brand')">
     <hospitality-bot-navigation-header
       [heading]="pageTitle"
@@ -16,23 +16,35 @@
         label="Status:"
       ></hospitality-bot-toggle-switch>
       <hospitality-bot-input
+        [loading]="loading"
         class="half-width"
         controlName="name"
         label="Name"
         maxLength="60"
+        [props]="{
+          placeholder: 'Enter'
+        }"
       ></hospitality-bot-input>
       <div class="half-width"></div>
       <hospitality-bot-input
+        [loading]="loading"
         class="half-width"
         controlName="gstNumber"
         label="GST"
         maxLength="15"
+        [props]="{
+          placeholder: 'Enter'
+        }"
       ></hospitality-bot-input>
       <hospitality-bot-input
+        [loading]="loading"
         class="half-width"
         controlName="fssaiNumber"
         label="FSSAI NO."
         maxLength="14"
+        [props]="{
+          placeholder: 'Enter'
+        }"
       ></hospitality-bot-input>
       <div class="des-template">
         <div class="des-template__label">Description</div>
@@ -45,32 +57,25 @@
         </div>
       </div>
     </div>
-    <div></div>
     <hospitality-bot-social-media
       controlName="socialPlatforms"
       class="full-width"
       [isLoading]="loading"
     >
     </hospitality-bot-social-media>
-
-    <div class="footer">
-      <hospitality-bot-button
-        severity="reset"
-        variant="outlined"
-        [label]="'Reset'"
-        (onClick)="handleReset()"
-      >
-      </hospitality-bot-button>
-
-      <hospitality-bot-button
-        [label]="brandId ? 'Update' : 'Create'"
-        (onClick)="handleSubmit()"
-      ></hospitality-bot-button>
-    </div>
   </div>
+  <hospitality-bot-form-action
+    class="full-width"
+    [isId]="brandId"
+    [loading]="loading"
+    (onPreAction)="resetForm()"
+    (onPostAction)="submitForm()"
+    #fa
+  >
+  </hospitality-bot-form-action>
 </div>
 
 <hospitality-bot-hotel-data-table
-  [brandId]="brandId"
+  [parentId]="brandId"
   *ngIf="brandId?.length"
 ></hospitality-bot-hotel-data-table>

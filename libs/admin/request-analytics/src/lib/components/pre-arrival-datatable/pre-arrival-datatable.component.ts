@@ -11,15 +11,25 @@ import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/servi
 import { BaseDatatableComponent } from 'libs/admin/shared/src/lib/components/datatable/base-datatable.component';
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
 import { TableService } from 'libs/admin/shared/src/lib/services/table.service';
-import { SnackBarService } from 'libs/shared/material/src';
+import { ModalService, SnackBarService } from 'libs/shared/material/src';
 import { DateService } from '@hospitality-bot/shared/utils';
 import { LazyLoadEvent, SortEvent } from 'primeng/api';
 import { Subscription, Observable } from 'rxjs';
 import { InhouseTable } from '../../models/inhouse-datatable.model';
 import { AnalyticsService } from '../../services/analytics.service';
 import * as FileSaver from 'file-saver';
-import { analytics } from '@hospitality-bot/admin/shared';
-import { ChipType } from '../../constant/datatable';
+import { analytics, sharedConfig } from '@hospitality-bot/admin/shared';
+import { ChipType, inhouseStatus } from '../../constant/datatable';
+import { RequestService } from 'libs/admin/request/src/lib/services/request.service';
+import { convertToTitleCase } from 'libs/admin/shared/src/lib/utils/valueFormatter';
+import { RequestStatus } from 'libs/admin/request/src/lib/constants/request';
+import {
+  DetailsComponent,
+  DetailsTabOptions,
+  Reservation,
+} from '@hospitality-bot/admin/reservation';
+import { MatDialogConfig } from '@angular/material/dialog';
+import { ReservationService } from '@hospitality-bot/admin/dashboard';
 
 @Component({
   selector: 'hospitality-bot-pre-arrival-datatable',
@@ -31,8 +41,8 @@ import { ChipType } from '../../constant/datatable';
 })
 export class PreArrivalDatatableComponent extends BaseDatatableComponent
   implements OnInit, OnDestroy {
-  @Input() entityType = 'Inhouse';
-  @Input() optionLabels = [];
+  @Input() entityType = 'pre-arrival';
+  optionLabels = [];
   @Input() packageId: string;
   @Output() onModalClose = new EventEmitter();
   globalQueries;
@@ -44,15 +54,17 @@ export class PreArrivalDatatableComponent extends BaseDatatableComponent
     private globalFilterService: GlobalFilterService,
     private snackbarService: SnackBarService,
     private analyticsService: AnalyticsService,
-    protected tabFilterService: TableService
+    protected tabFilterService: TableService,
+    private _requestService: RequestService,
+    private _modal: ModalService,
+    private _reservationService: ReservationService
   ) {
     super(fb, tabFilterService);
   }
 
   cols = analytics.preArrivalCols;
 
-  tabFilterItems = analytics.PreArrivaltabFilterItems;
-  hotelId: string;
+  entityId: string;
 
   ngOnInit(): void {
     this.registerListeners();
@@ -73,7 +85,7 @@ export class PreArrivalDatatableComponent extends BaseDatatableComponent
           ...data['filter'].queryValue,
           ...data['dateRange'].queryValue,
         ];
-        this.hotelId = this.globalFilterService.hotelId;
+        this.entityId = this.globalFilterService.entityId;
         //fetch-api for records
         this.loadInitialData([
           ...this.globalQueries,
@@ -81,10 +93,33 @@ export class PreArrivalDatatableComponent extends BaseDatatableComponent
             order: 'DESC',
             entityType: this.entityType,
             packageId: this.packageId,
+            journeyType: 'pre-arrival',
           },
-          ...this.getSelectedQuickReplyFilters(),
+          ...this.getSelectedQuickReplyFilters({
+            key: 'actionType',
+          }),
         ]);
       })
+    );
+  }
+
+  reloadData() {
+    this.loadInitialData(
+      [
+        ...this.globalQueries,
+        {
+          order: 'DESC',
+          entityType: this.entityType,
+          packageId: this.packageId,
+          journeyType: 'pre-arrival',
+        },
+        ...this.getSelectedQuickReplyFilters({ key: 'actionType' }),
+      ],
+      false,
+      {
+        offset: this.tempFirst,
+        limit: this.tempRowsPerPage ? this.tempRowsPerPage : this.rowsPerPage,
+      }
     );
   }
 
@@ -98,9 +133,6 @@ export class PreArrivalDatatableComponent extends BaseDatatableComponent
       this.fetchDataFrom(queries, props).subscribe(
         (data) => {
           this.setRecords(data);
-          if (this.tabFilterItems[this.tabFilterIdx].chips.length === 1)
-            this.addQuickReplyFilter(data.entityStateCounts, this.totalRecords);
-          else this.updateQuickReplyFilterCount(data.entityStateCounts);
         },
         ({ error }) => {
           this.values = [];
@@ -111,37 +143,24 @@ export class PreArrivalDatatableComponent extends BaseDatatableComponent
   }
 
   setRecords(data): void {
-    this.values = new InhouseTable().deserialize(data).records;
-    this.updateTabFilterCount(data?.entityTypeCounts, data.total);
-    this.updateTotalRecords();
-    this.loading = false;
-  }
-
-  addQuickReplyFilter(entityStateCounts, total) {
-    this.tabFilterItems[this.tabFilterIdx].chips[0].total = Number(
-      Object?.values(entityStateCounts)?.reduce(
-        (a: number, b: number) => a + b,
-        0
-      )
-    );
-    Object.keys(entityStateCounts).forEach((key) => {
-      this.tabFilterItems[this.tabFilterIdx].chips.push({
-        label: key,
-        icon: '',
-        value: key,
-        total: entityStateCounts[key],
-        isSelected: false,
-        type: ChipType[key],
+    const preArrivalData = new InhouseTable().deserialize(data);
+    this.values = preArrivalData.records;
+    if (!this.optionLabels.length) {
+      Object.keys(preArrivalData.entityStateCounts).forEach((item) => {
+        if (item !== RequestStatus.TIMEOUT)
+          this.optionLabels.push({
+            label: convertToTitleCase(item),
+            value: item,
+          });
       });
-    });
-  }
-
-  getSelectedQuickReplyFilters() {
-    return this.tabFilterItems[this.tabFilterIdx].chips
-      .filter((item) => item.isSelected === true)
-      .map((item) => ({
-        actionType: item.value,
-      }));
+    }
+    this.initFilters(
+      preArrivalData.entityTypeCounts,
+      preArrivalData.entityStateCounts,
+      preArrivalData.total,
+      inhouseStatus
+    );
+    this.loading = false;
   }
 
   fetchDataFrom(
@@ -168,8 +187,11 @@ export class PreArrivalDatatableComponent extends BaseDatatableComponent
             order: 'DESC',
             entityType: this.entityType,
             packageId: this.packageId,
+            journeyType: 'pre-arrival',
           },
-          ...this.getSelectedQuickReplyFilters(),
+          ...this.getSelectedQuickReplyFilters({
+            key: 'actionType',
+          }),
         ],
         { offset: this.first, limit: this.rowsPerPage }
       ).subscribe(
@@ -214,7 +236,7 @@ export class PreArrivalDatatableComponent extends BaseDatatableComponent
           entityType: this.entityType,
           packageId: this.packageId,
         },
-        ...this.getSelectedQuickReplyFilters(),
+        ...this.getSelectedQuickReplyFilters({ key: 'actionType' }),
         ...this.selectedRows.map((item) => ({ ids: item.id })),
       ]),
     };
@@ -235,40 +257,41 @@ export class PreArrivalDatatableComponent extends BaseDatatableComponent
   }
 
   handleStatusChange(data, event) {
+    // if (event.value !== 'Closed') return;
+    this.loading = true;
     const requestData = {
+      jobID: data.id,
+      roomNo: data.rooms[0]?.roomNumber,
+      lastName: data.guestDetails.primaryGuest.lastName,
       systemDateTime: DateService.currentDate('DD-MMM-YYYY HH:mm:ss'),
-      action: event.value,
     };
-    this.analyticsService
-      .updatePreArrivalRequest(data.id, requestData)
-      .subscribe((response) => {
-        this.loadInitialData(
-          [
-            ...this.globalQueries,
-            {
-              order: 'DESC',
-              entityType: this.entityType,
-              packageId: this.packageId,
-            },
-            ...this.getSelectedQuickReplyFilters(),
-          ],
-          false,
-          {
-            offset: this.tempFirst,
-            limit: this.tempRowsPerPage
-              ? this.tempRowsPerPage
-              : this.rowsPerPage,
-          }
-        );
-        this.snackbarService.openSnackBarWithTranslate(
-          {
-            translateKey: `messages.SUCCESS.REQUEST_STATUS_UPDATED`,
-            priorityMessage: 'Request status updated',
-          },
+
+    const config = {
+      queryObj: this._adminUtilityService.makeQueryParams([
+        {
+          cmsUserType: 'Admin',
+          entityId: this.entityId,
+          actionType: event.value,
+          entityType: this.entityType,
+        },
+      ]),
+    };
+    this._requestService.updateJobRequestStatus(config, requestData).subscribe(
+      (response) => {
+        this.snackbarService.openSnackBarAsText(
+          `Job: ${
+            data.jobNo
+          } status updated successfully to ${convertToTitleCase(event.value)}.`,
           '',
           { panelClass: 'success' }
         );
-      });
+
+        this.reloadData();
+      },
+      (err) => {
+        this.reloadData();
+      }
+    );
   }
 
   onFilterTypeTextChange(value, field, matchMode = 'startsWith') {
@@ -284,6 +307,61 @@ export class PreArrivalDatatableComponent extends BaseDatatableComponent
 
     value = value && value.trim();
     this.table.filter(value, field, matchMode);
+  }
+
+  /**
+   * @function openDetailPage To open the detail modal for a reservation.
+   * @param event The mouse click event.
+   * @param rowData The data of the clicked row.
+   * @param tabKey The key of the tab to be opened in detail modal.
+   */
+  openDetailPage(
+    event?: MouseEvent,
+    rowData?: any,
+    tabKey: DetailsTabOptions = 'package_details',
+    guestData?
+  ): void {
+    event?.stopPropagation();
+    // if (!rowData && !guestData) return;
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = true;
+    dialogConfig.width = '100%';
+    const detailCompRef = this._modal.openDialog(
+      DetailsComponent,
+      dialogConfig
+    );
+
+    detailCompRef.componentInstance.guestId =
+      rowData?.guestDetails?.primaryGuest?.id ?? guestData?.id;
+
+    detailCompRef.componentInstance.bookingNumber =
+      rowData?.booking?.bookingNumber ?? guestData?.number;
+    tabKey && (detailCompRef.componentInstance.tabKey = tabKey);
+    this.$subscription.add(
+      detailCompRef.componentInstance.onDetailsClose.subscribe((res) => {
+        if (res) {
+          this.loadInitialData(
+            [
+              ...this.globalQueries,
+              {
+                order: sharedConfig.defaultOrder,
+                entityType: this.tabFilterItems[this.tabFilterIdx]?.value,
+                journeyType: 'pre-arrival',
+              },
+              ...this.getSelectedQuickReplyFilters({ key: 'actionType' }),
+            ],
+            false,
+            {
+              offset: this.tempFirst,
+              limit: this.tempRowsPerPage
+                ? this.tempRowsPerPage
+                : this.rowsPerPage,
+            }
+          );
+        }
+        detailCompRef.close();
+      })
+    );
   }
 
   ngOnDestroy(): void {

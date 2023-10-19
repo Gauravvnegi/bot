@@ -3,24 +3,21 @@ import { FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { QueryConfig } from '@hospitality-bot/admin/library';
+import { MatDialogConfig } from '@angular/material/dialog';
+import { DetailsComponent as BookingDetailComponent } from 'libs/admin/reservation/src/lib/components/details/details.component';
 import {
-  BaseDatatableComponent,
   AdminUtilityService,
+  BaseDatatableComponent,
   TableService,
 } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
-import { Subscription } from 'rxjs';
-import {
-  filters,
-  TableValue,
-  cols,
-  transactionChips,
-} from '../../constants/data-table';
-import { LazyLoadEvent } from 'primeng/api';
 import * as FileSaver from 'file-saver';
+import { ModalService } from 'libs/shared/material/src/lib/services/modal.service';
+import { LazyLoadEvent } from 'primeng/api';
+import { Subscription } from 'rxjs';
+import { cols, transactionStatus } from '../../constants/data-table';
+import { TransactionHistoryList } from '../../models/history.model';
 import { FinanceService } from '../../services/finance.service';
-import { TransactionHistory } from '../../models/history.model';
-import { MatTabChangeEvent } from '@angular/material/tabs';
 
 @Component({
   selector: 'hospitality-bot-transaction-history-data-table',
@@ -32,14 +29,12 @@ import { MatTabChangeEvent } from '@angular/material/tabs';
 })
 export class TransactionHistoryDataTableComponent extends BaseDatatableComponent
   implements OnInit {
-  tabFilterItems = filters;
-  selectedTable: TableValue;
   tableName = 'Transaction History';
-  filterChips = transactionChips;
+  transactionStatus = transactionStatus;
   cols = cols.transaction;
   isQuickFilters = true;
-
-  hotelId: string;
+  globalQueries = [];
+  entityId: string;
 
   $subscription = new Subscription();
 
@@ -48,24 +43,29 @@ export class TransactionHistoryDataTableComponent extends BaseDatatableComponent
     protected tabFilterService: TableService,
     private adminUtilityService: AdminUtilityService,
     private globalFilterService: GlobalFilterService,
-    protected snackbarService: SnackBarService, // private router: Router, // private modalService: ModalService
+    protected snackbarService: SnackBarService,
     private router: Router,
-    private financeService: FinanceService
+    private financeService: FinanceService,
+    private modalService: ModalService
   ) {
     super(fb, tabFilterService);
   }
 
   ngOnInit(): void {
-    this.hotelId = this.globalFilterService.hotelId;
-    this.listenToTableChange();
+    this.entityId = this.globalFilterService.entityId;
+    this.listenForGlobalFilters();
   }
 
   /**
-   * @function listenToTableChange  To listen to table changes
+   * @function listenForGlobalFilters To listen for global filters and load data when filter value is changed.
    */
-  listenToTableChange() {
-    this.financeService.selectedTable.subscribe((value) => {
-      this.selectedTable = value;
+  listenForGlobalFilters(): void {
+    this.globalFilterService.globalFilter$.subscribe((data) => {
+      // set-global query everytime global filter changes
+      this.globalQueries = [
+        ...data['filter'].queryValue,
+        ...data['dateRange'].queryValue,
+      ];
       this.initTableValue();
     });
   }
@@ -77,19 +77,24 @@ export class TransactionHistoryDataTableComponent extends BaseDatatableComponent
   initTableValue() {
     this.loading = true;
 
-    this.financeService.getTransactionHistory(this.hotelId).subscribe(
+    this.financeService.getTransactionHistory(this.getQueryConfig()).subscribe(
       (res) => {
-        const transactionHistory = new TransactionHistory().deserialize(res);
-        this.values = res;
-        this.updateTabFilterCount(res.entityTypeCounts, res.total);
-        this.updateQuickReplyFilterCount(res.entityStateCounts);
-        this.updateTotalRecords();
+        const transactionHistory = new TransactionHistoryList().deserialize(
+          res
+        );
+        this.values = transactionHistory.records;
+        this.initFilters(
+          transactionHistory.entityTypeCounts,
+          transactionHistory.entityStateCounts,
+          transactionHistory.totalRecords,
+          this.transactionStatus
+        );
+        this.loading = false;
       },
       () => {
         this.values = [];
         this.loading = false;
-      },
-      this.handleFinal
+      }
     );
   }
 
@@ -97,8 +102,8 @@ export class TransactionHistoryDataTableComponent extends BaseDatatableComponent
     const config = {
       params: this.adminUtilityService.makeQueryParams([
         ...this.getSelectedQuickReplyFilters(),
+        ...this.globalQueries,
         {
-          tableType: this.selectedTable,
           offset: this.first,
           limit: this.rowsPerPage,
         },
@@ -107,27 +112,37 @@ export class TransactionHistoryDataTableComponent extends BaseDatatableComponent
     return config;
   }
 
-  onSelectedTabFilterChange(event: MatTabChangeEvent): void {
-    this.financeService.selectedTransactionTable.next(
-      this.tabFilterItems[event.index].value
-    );
-    this.tabFilterIdx = event.index;
-    this.initTableValue();
-  }
+  // /**
+  //  * @function getSelectedQuickReplyFilters To return the selected chip list.
+  //  * @returns The selected chips.
+  //  */
+  // getSelectedQuickReplyFilters() {
+  //   const chips = this.filterChips.filter(
+  //     (item) => item.isSelected && item.value !== 'ALL'
+  //   );
+  //   return [
+  //     chips.length !== 1
+  //       ? { status: null }
+  //       : { status: chips[0].value === 'SUCCESS' ? 'SUCCESS' : 'FAILURE' },
+  //   ];
+  // }
 
-  /**
-   * @function getSelectedQuickReplyFilters To return the selected chip list.
-   * @returns The selected chips.
-   */
-  getSelectedQuickReplyFilters() {
-    const chips = this.filterChips.filter(
-      (item) => item.isSelected && item.value !== 'ALL'
+  openDetailsPage(reservationId: string) {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = true;
+    dialogConfig.width = '100%';
+    const detailCompRef = this.modalService.openDialog(
+      BookingDetailComponent,
+      dialogConfig
     );
-    return [
-      chips.length !== 1
-        ? { status: null }
-        : { status: chips[0].value === 'PAID' },
-    ];
+
+    detailCompRef.componentInstance.bookingId = reservationId;
+    detailCompRef.componentInstance.tabKey = 'payment_details';
+    this.$subscription.add(
+      detailCompRef.componentInstance.onDetailsClose.subscribe((res) => {
+        detailCompRef.close();
+      })
+    );
   }
 
   /**
@@ -136,22 +151,31 @@ export class TransactionHistoryDataTableComponent extends BaseDatatableComponent
   exportCSV(): void {
     this.loading = true;
 
-    // const config: QueryConfig = {
-    //   params: this.adminUtilityService.makeQueryParams([
-    //     ...this.selectedRows.map((item) => ({ ids: item.id })),
-    //
-    //   ]),
-    // };
+    const config: QueryConfig = {
+      params: this.adminUtilityService.makeQueryParams([
+        ...this.selectedRows.map((item) => ({ ids: item.id })),
+        {
+          entitiyId: this.entityId,
+          pagination: true,
+          limit: this.totalRecords,
+        },
+        ...this.globalQueries,
+      ]),
+    };
     this.$subscription.add(
-      this.financeService.exportCSV(this.hotelId).subscribe(
+      this.financeService.exportCSV(config).subscribe(
         (res) => {
           FileSaver.saveAs(
             res,
             `${this.tableName.toLowerCase()}_export_${new Date().getTime()}.csv`
           );
         },
-        () => {},
-        this.handleFinal
+        (error) => {
+          this.loading = false;
+        },
+        () => {
+          this.loading = false;
+        }
       )
     );
   }
@@ -167,4 +191,8 @@ export class TransactionHistoryDataTableComponent extends BaseDatatableComponent
   handleFinal = () => {
     this.loading = false;
   };
+
+  ngOnDestroy() {
+    this.$subscription.unsubscribe();
+  }
 }

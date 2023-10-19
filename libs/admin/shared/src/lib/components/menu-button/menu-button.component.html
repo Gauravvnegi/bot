@@ -1,0 +1,4 @@
+<div class="button" (click)="toggleIcon = !toggleIcon">
+  <span> {{ label }}</span>
+  <i [ngClass]="toggleIcon ? 'pi pi-angle-up' : 'pi pi-angle-down'"></i>
+</div>

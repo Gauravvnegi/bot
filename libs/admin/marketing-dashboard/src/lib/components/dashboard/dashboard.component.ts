@@ -18,7 +18,7 @@ export class MarketingDashboardComponent implements OnInit, OnDestroy {
   welcomeMessage = 'Welcome To eMark-IT';
   navRoutes = [{ label: 'eMark-IT Stats', link: './' }];
   $subscription = new Subscription();
-  hotelId: string;
+  entityId: string;
   config: any;
   loading = false;
   rateGraph: GraphData = {
@@ -69,7 +69,7 @@ export class MarketingDashboardComponent implements OnInit, OnDestroy {
           queryObj: this._adminUtilityService.makeQueryParams(globalQueries),
         };
 
-        this.hotelId = this.globalFilterService.hotelId;
+        this.entityId = this.globalFilterService.entityId;
         this.loading = true;
         this.rateGraphStats();
         this.subscriberGraphStats();
@@ -83,7 +83,7 @@ export class MarketingDashboardComponent implements OnInit, OnDestroy {
   rateGraphStats(): void {
     this.$subscription.add(
       this.statsService
-        .rateGraphStats(this.hotelId, this.config)
+        .rateGraphStats(this.entityId, this.config)
         .subscribe((response) => {
           this.loading = false;
           const graph = new ComparisonGraphStats().deserialize(response);
@@ -104,7 +104,7 @@ export class MarketingDashboardComponent implements OnInit, OnDestroy {
   subscriberGraphStats(): void {
     this.$subscription.add(
       this.statsService
-        .subscriberGraphStats(this.hotelId, this.config)
+        .subscriberGraphStats(this.entityId, this.config)
         .subscribe((response) => {
           this.loading = false;
           const graph = new ComparisonGraphStats().deserialize(response);

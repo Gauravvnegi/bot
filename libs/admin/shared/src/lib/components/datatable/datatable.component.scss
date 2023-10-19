@@ -237,7 +237,7 @@
   font-weight: $bold;
 }
 
-:host ::ng-deep .guest {
+:host ::ng-deep .multi-cell-content {
   color: $primary-black;
   font-size: 12px;
   position: relative;
@@ -725,10 +725,17 @@ $table-hover-color: #f3f3f3;
         font-size: 14px;
         letter-spacing: 0.84px;
         color: $subtitle;
+        overflow: visible;
+        word-break: break-word;
+        text-overflow: unset;
+        white-space: normal;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
         overflow: hidden;
-        text-overflow: ellipsis;
 
         &:hover {
+          display: block;
           overflow: visible;
           text-overflow: unset;
           white-space: normal;
@@ -769,6 +776,8 @@ $table-hover-color: #f3f3f3;
       .contained {
         &__primary {
           text-align: center;
+          overflow: hidden;
+          text-overflow: ellipsis;
           font-size: 12px;
           letter-spacing: 0.72px;
           color: $primary-cta;
@@ -778,7 +787,11 @@ $table-hover-color: #f3f3f3;
         }
 
         &__primary:hover {
-          background-color: $grayLight !important;
+          overflow: visible;
+          text-overflow: unset;
+          white-space: normal;
+
+          // background-color: $grayLight !important;
         }
       }
 
@@ -818,7 +831,7 @@ $table-hover-color: #f3f3f3;
       }
 
       .status-text {
-        @include status-chip
+        @include status-chip;
       }
     }
   }
@@ -976,4 +989,16 @@ $table-hover-color: #f3f3f3;
 
 .sticky-header-gap {
   height: $sticky-header-height;
+}
+
+.dynamic-height {
+  display: block;
+  min-height: 77vh;
+}
+
+:host ::ng-deep {
+  .clear-whitespace {
+    overflow: unset;
+    white-space: wrap;
+  }
 }

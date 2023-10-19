@@ -37,6 +37,7 @@ export class NotificationComponent implements OnInit, OnDestroy {
   isFilterVisible = false;
 
   limit = 20;
+  limitDelimiter = 20;
   paginationDisabled = false;
 
   notifications: Notification[];
@@ -77,11 +78,25 @@ export class NotificationComponent implements OnInit, OnDestroy {
     });
   }
 
-  getNotifications() {
+  /**
+   * Get notification
+   * @param isRefresh is used to get the last call param state
+   * @example when openNotifications
+   *
+   */
+  getNotifications(isRefresh = false) {
     const config = {
       queryObj: this.adminUtilityService.makeQueryParams([
         this.notificationFilterData,
-        { limit: this.limit },
+        {
+          limit:
+            this.limit -
+            (!this.paginationDisabled &&
+            isRefresh &&
+            this.limit > this.limitDelimiter
+              ? this.limitDelimiter
+              : 0),
+        },
       ]),
     };
     this.$subscription.add(
@@ -89,10 +104,13 @@ export class NotificationComponent implements OnInit, OnDestroy {
         .getNotificationHistory(this.userService.getLoggedInUserId(), config)
         .subscribe((response) => {
           this.notifications = new NotificationList().deserialize(response);
-          this.paginationDisabled = response.length < this.limit;
-          this.limit = this.paginationDisabled
-            ? this.limit
-            : (this.limit = this.limit + 20);
+
+          if (!isRefresh) {
+            this.paginationDisabled = response.length < this.limit;
+            this.limit = this.paginationDisabled
+              ? this.limit
+              : (this.limit = this.limit + this.limitDelimiter);
+          }
         })
     );
   }
@@ -177,7 +195,7 @@ export class NotificationComponent implements OnInit, OnDestroy {
     this.$subscription.add(
       this.notificationService
         .updateNotificationStatus(this.userService.getLoggedInUserId(), item.id)
-        .subscribe((_) => this.getNotifications())
+        .subscribe((_) => this.getNotifications(true))
     );
     this.openNotificationDetail(item);
   }

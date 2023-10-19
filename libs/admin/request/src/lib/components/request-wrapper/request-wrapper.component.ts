@@ -1,12 +1,22 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { animate, style, transition, trigger } from '@angular/animations';
+import {
+  Component,
+  ComponentFactoryResolver,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+  ViewContainerRef,
+} from '@angular/core';
 import { MatDialogConfig } from '@angular/material/dialog';
 import { MatTabChangeEvent } from '@angular/material/tabs';
+import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import { SnackBarService } from 'libs/shared/material/src';
 import { ModalService } from 'libs/shared/material/src/lib/services/modal.service';
 import { Subscription } from 'rxjs';
 import { request } from '../../constants/request';
 import { RequestService } from '../../services/request.service';
 import { RaiseRequestComponent } from '../raise-request/raise-request.component';
-import { trigger, transition, animate, style } from '@angular/animations';
+import { SubscriptionPlanService } from 'apps/admin/src/app/core/theme/src/lib/services/subscription-plan.service';
 
 @Component({
   selector: 'hospitality-bot-request-wrapper',
@@ -25,7 +35,7 @@ import { trigger, transition, animate, style } from '@angular/animations';
   ],
 })
 export class RequestWrapperComponent implements OnInit, OnDestroy {
-  pageTitle = 'Requests';
+  pageTitle = 'Complaints';
   guestInfoEnable = false;
   private $subscription = new Subscription();
   requestConfig = request;
@@ -40,18 +50,43 @@ export class RequestWrapperComponent implements OnInit, OnDestroy {
   ];
 
   tabFilterIdx = 0;
+  requestTabFilterIdx = 0;
+
+  listByFilterItems = [
+    {
+      label: 'Focused',
+      value: 'FOCUSED',
+    },
+    {
+      label: 'All',
+      value: 'ALL',
+    },
+  ];
 
   selectedIndex = 0;
   buttonConfig = [
-    { button: true, label: 'Raise Request', icon: 'assets/svg/requests.svg' },
+    { button: true, label: 'Raise Complaint', icon: 'assets/svg/requests.svg' },
   ];
+
+  @ViewChild('sidebarSlide', { read: ViewContainerRef })
+  sidebarSlide: ViewContainerRef;
+  sidebarVisible: boolean = false;
+  sidebarType;
 
   constructor(
     private _modal: ModalService,
-    private _requestService: RequestService
+    private _requestService: RequestService,
+    private _globalFilterService: GlobalFilterService,
+    private snackbarService: SnackBarService,
+    private subscriptionService: SubscriptionPlanService,
+    private resolver: ComponentFactoryResolver
   ) {}
 
   ngOnInit(): void {}
+
+  get hasComplaintManagementSystem() {
+    return this.subscriptionService.hasComplaintManagementSystem();
+  }
 
   /**
    * @function onSelectedTabFilterChange To handle tab filter change.
@@ -59,6 +94,12 @@ export class RequestWrapperComponent implements OnInit, OnDestroy {
    */
   onSelectedTabFilterChange(event: MatTabChangeEvent): void {
     this.tabFilterIdx = event.index;
+  }
+
+  onTabFilterChange(event) {
+    this._requestService.requestListFilter.next(
+      this.listByFilterItems[event.index].value
+    );
   }
 
   openGuestInfo(event) {
@@ -73,26 +114,38 @@ export class RequestWrapperComponent implements OnInit, OnDestroy {
     }
   }
 
+  syncRequest() {
+    this.$subscription.add(
+      this._requestService
+        .syncRequest(this._globalFilterService.entityId)
+        .subscribe((res) => {
+          this.snackbarService.openSnackBarAsText(`Syncing successful`, '', {
+            panelClass: 'success',
+          });
+          this._globalFilterService.globalFilter$.next(
+            this._globalFilterService.globalFilterObj
+          );
+        })
+    );
+  }
   /**
    * @function openRaiseRequest To open raise request modal.
    */
   openRaiseRequest() {
     const dialogConfig = new MatDialogConfig();
-    dialogConfig.disableClose = true;
-    dialogConfig.width = '50%';
-    const raiseRequestCompRef = this._modal.openDialog(
-      RaiseRequestComponent,
-      dialogConfig
-    );
+    this.sidebarVisible = true;
+    this.sidebarType = 'complaint';
 
-    this.$subscription.add(
-      raiseRequestCompRef.componentInstance.onRaiseRequestClose.subscribe(
-        (res) => {
-          if (res.load) this._requestService.refreshData.next(res.load);
-          raiseRequestCompRef.close();
-        }
-      )
+    const factory = this.resolver.resolveComponentFactory(
+      RaiseRequestComponent
     );
+    this.sidebarSlide.clear();
+    const componentRef = this.sidebarSlide.createComponent(factory);
+    componentRef.instance.isSideBar = true;
+    componentRef.instance.onRaiseRequestClose.subscribe((res) => {
+      this.sidebarVisible = false;
+      componentRef.destroy();
+    });
   }
 
   ngOnDestroy(): void {

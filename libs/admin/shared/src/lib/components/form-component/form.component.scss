@@ -17,6 +17,9 @@ $input-padding: $input-padding-vertical $input-padding-horizontal;
   margin-left: 0%;
   padding: $input-padding;
   font-size: inherit;
+  &.p-disabled {
+    cursor: not-allowed !important;
+  }
 }
 
 @mixin search-input() {
@@ -26,8 +29,16 @@ $input-padding: $input-padding-vertical $input-padding-horizontal;
   color: $secondary-text-color;
 }
 
+input:disabled {
+  cursor: not-allowed;
+}
+
 .wrapper {
   position: relative;
+
+  &.custom-disabled {
+    cursor: not-allowed;
+  }
 
   &__vertical {
     // margin-top: 2em;
@@ -65,7 +76,7 @@ $input-padding: $input-padding-vertical $input-padding-horizontal;
 }
 
 // updated z index for the dropdown menu
-:host ::ng-deep .p-dropdown-panel { 
+:host ::ng-deep .p-dropdown-panel {
   z-index: $main-overlay-z !important;
 }
 
@@ -107,7 +118,7 @@ $input-padding: $input-padding-vertical $input-padding-horizontal;
   gap: 1em;
   input {
     outline: none;
-    color: $secondary-text-color;
+    color: $black;
     box-shadow: none !important;
     background: $layout-background !important;
     flex-basis: 73.5%;
@@ -115,6 +126,7 @@ $input-padding: $input-padding-vertical $input-padding-horizontal;
     border-radius: 5px;
     padding: 0 10px;
     font-size: 1rem;
+    min-width: 50px;
     &::placeholder {
       font-size: 1rem;
       line-height: 1.07;
@@ -133,7 +145,6 @@ $input-padding: $input-padding-vertical $input-padding-horizontal;
   button {
     flex-basis: 21.5%;
     height: 46px;
-    min-width: 145px;
     @include flex-all-center;
     padding: 9.5px 18.5px;
     font-size: 14px;
@@ -159,4 +170,21 @@ $input-padding: $input-padding-vertical $input-padding-horizontal;
   position: absolute;
   right: 0;
   top: -2em;
+}
+
+.float__label {
+  position: absolute;
+  z-index: 1;
+  zoom: 0.7;
+  top: -12px;
+  left: 11px;
+}
+
+.float-inside__label {
+  position: absolute;
+  z-index: 1;
+  zoom: 0.7;
+  top: 2px;
+  left: 13px;
+  font-size: 13px;
 }

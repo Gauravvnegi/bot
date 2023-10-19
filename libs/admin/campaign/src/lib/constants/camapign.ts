@@ -1,3 +1,8 @@
+export const MenuOptions = [
+  { label: 'Clone', value: 'CLONE' },
+  { label: 'Archive', value: 'ARCHIVE' },
+];
+
 export const campaign = {
   timeList: [
     { label: '12:00 AM', value: '0:00' },

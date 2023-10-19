@@ -1,4 +1,7 @@
-<div class="wrapper">
+<div
+  class="wrapper"
+  [ngStyle]="{ minHeight: height ? height : 'calc(100vh - 330px)' }"
+>
   <div class="nav-actions">
     <ng-content></ng-content>
   </div>
@@ -10,7 +13,9 @@
     <hospitality-bot-button
       *ngIf="actionName?.length"
       [label]="actionName"
-      [link]="link"
+      [routerLink]="link"
+      preserveQueryParams="true"
+      (onClick)="action.emit()"
     ></hospitality-bot-button>
   </div>
 </div>

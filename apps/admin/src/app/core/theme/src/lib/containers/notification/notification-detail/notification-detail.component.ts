@@ -2,6 +2,8 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { Notification } from '../../../data-models/notifications.model';
 import { Router } from '@angular/router';
 import { NotificationService } from '../../../services/notification.service';
+import { RoutesConfigService } from '../../../services/routes-config.service';
+import { ModuleNames } from 'libs/admin/shared/src/index';
 
 @Component({
   selector: 'admin-notification-detail',
@@ -13,7 +15,8 @@ export class NotificationDetailComponent {
   @Output() onNotificationClose = new EventEmitter();
   constructor(
     private notificationService: NotificationService,
-    private router: Router
+    private router: Router,
+    private routesConfigService: RoutesConfigService
   ) {}
 
   closeNotes() {
@@ -22,37 +25,42 @@ export class NotificationDetailComponent {
 
   redirectToPage() {
     const { data } = this.data;
-    // this.router.navigate([
-    //   data['redirectUrl'].replace('https://dev.admin.botshot.ai', ''),
-    // ]);
+
     switch (this.data.notificationType.toUpperCase()) {
       case 'WHATSAPP':
         this.notificationService.$whatsappNotification.next(
           data['phoneNumber']
         );
-        this.router.navigate(['pages/freddie/messages']);
+        this.routesConfigService.navigate({
+          subModuleName: ModuleNames.LIVE_MESSAGING,
+        });
         break;
 
       case 'IN-HOUSE REQUEST':
-        // not comming from backend
-        this.notificationService.$reservationNotification.next(
-          data['reservationId']
-        );
-        this.router.navigate(['pages/efrontdesk/request']);
+        // requestId is not coming from backend
+        this.notificationService.$requestNotification.next(data['requestId']);
+        this.routesConfigService.navigate({
+          subModuleName: ModuleNames.COMPLAINTS,
+        });
         break;
 
       case 'FEEDBACK':
         this.notificationService.$feedbackNotification.next(data['feedbackId']);
-        this.router.navigate(['pages/heda/analytics']);
+        this.routesConfigService.navigate({
+          subModuleName: ModuleNames.HEDA_DASHBOARD,
+        });
         break;
+
       case 'CHECK -IN':
         this.notificationService.$reservationNotification.next(
           data['reservationId']
         );
-        this.router.navigate(['pages/efrontdesk/dashboard']);
+        this.routesConfigService.navigate({
+          subModuleName: ModuleNames.FRONT_DESK_DASHBOARD,
+        });
         break;
+
       default:
-        this.router.navigate(['pages/efrontdesk/dashboard']);
         // Handle other notification types or add a default route
         break;
     }

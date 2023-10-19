@@ -40,18 +40,35 @@
         >
       </div>
 
-      <div [style.display]="unit == 1 ? 'flex' : ''" class="right-content">
+      <div
+        [style.display]="unit == 1 ? 'flex' : ''"
+        class="right-content"
+        [ngClass]="{ disable: isDisable }"
+      >
         <div *ngIf="unit == 1" class="content">{{ description }}</div>
         <div [style.width]="unit == 1 ? '302px' : '200px'" class="hint">
           {{ hint }}
         </div>
-        <div class="checkbox" *ngIf="isFeatureView">
+        <div
+          class="checkbox"
+          *ngIf="isFeatureView"
+          [ngClass]="{
+            disable:
+              !this.featureValueIndex?.includes(i) && this.exceedFeatureLimit
+          }"
+        >
           <input
+            #checkbox
+            [disabled]="
+              !this.featureValueIndex?.includes(i) && this.exceedFeatureLimit
+            "
             type="checkbox"
             [checked]="featureValueIndex?.includes(i)"
             (change)="processCheckboxChange($event, i)"
           />
-          <label for="checkbox"> Make Featured Image</label><br />
+          <label (click)="checkbox.click()" for="checkbox">
+            Make Featured Image</label
+          ><br />
         </div>
         <div
           class="upload-button"
@@ -72,6 +89,7 @@
           ></hospitality-bot-button>
           <hospitality-bot-button
             label="Change"
+            [disabled]="isDisable"
             (click)="uploadFiles(i)"
             *ngIf="url !== defaultImage || thumbUrl"
             variant="outlined"
@@ -79,6 +97,7 @@
 
           <div *ngIf="url !== defaultImage || thumbUrl">
             <hospitality-bot-button
+              [disabled]="isDisable"
               [label]="
                 'Remove ' +
                 this.baseType.charAt(0).toUpperCase() +
@@ -105,6 +124,12 @@
     </div>
   </div>
 </div>
+<p
+  class="validation-error"
+  *ngIf="control?.errors?.required && control?.touched"
+>
+  {{ validationErrMsg }}
+</p>
 <hospitality-bot-button
   class="create-btn"
   label="+Add More Images"
@@ -112,9 +137,3 @@
   *ngIf="isMultiple"
   variant="outlined"
 ></hospitality-bot-button>
-<p
-  class="validation-error"
-  *ngIf="control?.errors?.required && control?.touched"
->
-  {{ validationErrMsg }}
-</p>

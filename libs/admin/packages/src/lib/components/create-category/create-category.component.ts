@@ -1,10 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import {
+  GlobalFilterService,
+  RoutesConfigService,
+} from '@hospitality-bot/admin/core/theme';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { CategoryFormValue, NavRouteOptions } from 'libs/admin/shared/src';
 import { Subscription } from 'rxjs';
 import { PackagesService } from '../../services/packages.service';
+import { packagesRoutes } from '../../constant/routes';
 
 @Component({
   selector: 'hospitality-bot-create-category',
@@ -12,31 +16,29 @@ import { PackagesService } from '../../services/packages.service';
   styleUrls: ['./create-category.component.scss'],
 })
 export class CreateCategoryComponent implements OnInit {
-  hotelId: string;
+  entityId: string;
 
   $subscription = new Subscription();
 
-  routes: NavRouteOptions = [
-    { label: 'Library', link: './' },
-    { label: 'Packages', link: '/pages/library/packages' },
-    { label: 'Create Category', link: './' },
-  ];
+  navRoutes: NavRouteOptions = [];
 
   constructor(
     private globalFilterService: GlobalFilterService,
     private packagesService: PackagesService,
     private snackbarService: SnackBarService,
-    private router: Router
+    private router: Router,
+    private routesConfigService: RoutesConfigService
   ) {}
 
   ngOnInit(): void {
-    this.hotelId = this.globalFilterService.hotelId;
+    this.entityId = this.globalFilterService.entityId;
+    this.initNavRoutes();
   }
 
   handleSubmit(value: CategoryFormValue) {
     this.$subscription.add(
       this.packagesService
-        .createCategory(this.hotelId, {
+        .createCategory(this.entityId, {
           ...value,
           source: 1,
           type: 'PACKAGE_CATEGORY',
@@ -48,11 +50,20 @@ export class CreateCategoryComponent implements OnInit {
               '',
               { panelClass: 'success' }
             );
-            this.router.navigate(['/pages/library/packages']);
+            this.routesConfigService.goBack();
           },
-          ({ error }) => {  }
+          ({ error }) => {}
         )
     );
+  }
+
+  initNavRoutes() {
+    this.routesConfigService.navRoutesChanges.subscribe((navRoutesRes) => {
+      this.navRoutes = [
+        ...navRoutesRes,
+        ...packagesRoutes.createCategory.navRoutes,
+      ];
+    });
   }
 
   /**

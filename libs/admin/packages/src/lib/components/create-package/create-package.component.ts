@@ -1,9 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import {
+  GlobalFilterService,
+  RoutesConfigService,
+} from '@hospitality-bot/admin/core/theme';
 import { LibraryItem, LibrarySearchItem } from '@hospitality-bot/admin/library';
-import { ConfigService, DiscountType } from '@hospitality-bot/admin/shared';
+import {
+  ConfigService,
+  DiscountType,
+  ModuleNames,
+} from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { ServicesTypeValue } from 'libs/admin/room/src/lib/constant/form';
 import { ServiceList } from 'libs/admin/services/src/lib/models/services.model';
@@ -26,7 +33,7 @@ export class CreatePackageComponent implements OnInit {
   readonly errorMessages = errorMessages;
 
   packageId: string;
-  hotelId: string;
+  entityId: string;
   useForm: FormGroup;
   code: string = '# will be auto generated';
 
@@ -63,7 +70,8 @@ export class CreatePackageComponent implements OnInit {
     private snackbarService: SnackBarService,
     private configService: ConfigService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private routesConfigService: RoutesConfigService
   ) {
     this.packageId = this.route.snapshot.paramMap.get('id');
     const { navRoutes, title } = packagesRoutes[
@@ -74,9 +82,10 @@ export class CreatePackageComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.hotelId = this.globalFilterService.hotelId;
+    this.entityId = this.globalFilterService.entityId;
     this.initForm();
     this.initOptionsConfig();
+    this.initNavRoutes();
   }
 
   /**
@@ -94,7 +103,7 @@ export class CreatePackageComponent implements OnInit {
       ],
       imageUrl: ['', Validators.required],
       currency: ['', Validators.required],
-      rate: ['', Validators.required],
+      rate: ['0', [Validators.required, Validators.min(0)]],
       discountType: ['PERCENTAGE', Validators.required],
       discountValue: ['0', [Validators.required, Validators.min(0)]],
       discountedCurrency: ['', Validators.required],
@@ -106,12 +115,12 @@ export class CreatePackageComponent implements OnInit {
     if (this.packageId) {
       this.$subscription.add(
         this.packagesService
-          .getLibraryItemById<PackageResponse>(this.hotelId, this.packageId, {
+          .getLibraryItemById<PackageResponse>(this.entityId, this.packageId, {
             params: `?type=${LibraryItem.package}`,
           })
           .subscribe(
             (res) => {
-              const { packageCode, subPackages } = res;
+              const { packageCode, subPackages, imageUrl } = res;
               const currentServices =
                 subPackages?.map((item) => {
                   let price = item.rate;
@@ -136,8 +145,11 @@ export class CreatePackageComponent implements OnInit {
                   this.selectedServicePrice[item.value] = item.price;
                 }
               });
-
-              this.useForm.patchValue({ ...res });
+              let images;
+              if (imageUrl && imageUrl.length > 0) {
+                images = imageUrl[0].url;
+              }
+              this.useForm.patchValue({ ...res, imageUrl: images });
 
               this.useForm.get('serviceIds').setValue(
                 currentServices.map((item) => item.value),
@@ -152,6 +164,12 @@ export class CreatePackageComponent implements OnInit {
 
     /* Value changes subscription */
     this.initFormSubscription();
+  }
+
+  initNavRoutes() {
+    this.routesConfigService.navRoutesChanges.subscribe((navRoutesRes) => {
+      this.navRoutes = [...navRoutesRes, ...this.navRoutes];
+    });
   }
 
   /**
@@ -174,7 +192,9 @@ export class CreatePackageComponent implements OnInit {
           value,
         }));
         this.useForm.get('currency').setValue(this.currencies[0].value);
-        this.useForm.get('discountedCurrency').setValue(this.currencies[0].value);
+        this.useForm
+          .get('discountedCurrency')
+          .setValue(this.currencies[0].value);
       }
     });
     this.getServices();
@@ -248,7 +268,6 @@ export class CreatePackageComponent implements OnInit {
     };
 
     const clearError = () => {
-      if (rate.value) rate.setErrors(null);
       if (discountValue.value > 0) discountValue.setErrors(null);
     };
 
@@ -295,7 +314,7 @@ export class CreatePackageComponent implements OnInit {
     this.loadingServices = true;
     this.$subscription.add(
       this.packagesService
-        .getLibraryItems<ServiceListResponse>(this.hotelId, {
+        .getLibraryItems<ServiceListResponse>(this.entityId, {
           params: `?type=SERVICE&offset=${this.servicesOffSet}&limit=10&status=true&serviceType=${ServicesTypeValue.PAID}`,
         })
         .subscribe(
@@ -331,7 +350,7 @@ export class CreatePackageComponent implements OnInit {
     if (text) {
       this.loadingServices = true;
       this.packagesService
-        .searchLibraryItem(this.hotelId, {
+        .searchLibraryItem(this.entityId, {
           params: `?key=${text}&type=${LibrarySearchItem.SERVICE}`,
         })
         .subscribe(
@@ -374,11 +393,17 @@ export class CreatePackageComponent implements OnInit {
    * @function create Reroute to create service or create package category
    */
   create(path: 'service' | 'category') {
-    this.router.navigate([
+    this.routesConfigService.navigate(
       path === 'category'
-        ? `/pages/library/packages/${packagesRoutes.createCategory.route}`
-        : `/pages/library/services/create-service`,
-    ]);
+        ? {
+            subModuleName: ModuleNames.PACKAGES,
+            additionalPath: packagesRoutes.createCategory.route,
+          }
+        : {
+            subModuleName: ModuleNames.SERVICES,
+            additionalPath: 'create-service',
+          }
+    );
   }
 
   /**
@@ -395,17 +420,19 @@ export class CreatePackageComponent implements OnInit {
 
     const {
       discountedCurrency,
+      imageUrl,
       ...rest
     } = this.useForm.getRawValue() as PackageFormData;
-
+    const data = { imageUrl: [{ isFeatured: true, url: imageUrl }], ...rest };
+    this.loading = true;
     if (this.packageId) {
       this.$subscription.add(
         this.packagesService
           .updateLibraryItem<Partial<PackageData>, PackageResponse>(
-            this.hotelId,
+            this.entityId,
             this.packageId,
             {
-              ...rest,
+              ...data,
               type: 'PACKAGE',
               source: 1,
             },
@@ -416,14 +443,18 @@ export class CreatePackageComponent implements OnInit {
     } else {
       this.$subscription.add(
         this.packagesService
-          .createLibraryItem<PackageData, PackageResponse>(this.hotelId, {
-            ...rest,
+          .createLibraryItem<PackageData, PackageResponse>(this.entityId, {
+            ...data,
             type: 'PACKAGE',
             source: 1,
           })
           .subscribe(this.handleSuccess, this.handleError, this.handleFinal)
       );
     }
+  }
+
+  resetForm() {
+    this.useForm.reset();
   }
 
   /**
@@ -436,7 +467,7 @@ export class CreatePackageComponent implements OnInit {
       '',
       { panelClass: 'success' }
     );
-    this.router.navigate(['/pages/library/packages']);
+    this.routesConfigService.goBack();
   };
 
   /**

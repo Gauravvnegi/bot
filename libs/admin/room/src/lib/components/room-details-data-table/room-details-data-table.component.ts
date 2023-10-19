@@ -1,10 +1,15 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
-import { Router } from '@angular/router';
-import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import { ActivatedRoute, Router } from '@angular/router';
+import {
+  GlobalFilterService,
+  RoutesConfigService,
+} from '@hospitality-bot/admin/core/theme';
 import {
   AdminUtilityService,
   BaseDatatableComponent,
+  FlagType,
+  ModuleNames,
   TableService,
 } from '@hospitality-bot/admin/shared';
 import { LazyLoadEvent } from 'primeng/api';
@@ -14,6 +19,7 @@ import { RoomList } from '../../models/rooms-data-table.model';
 import { RoomService } from '../../services/room.service';
 import { QueryConfig } from '../../types/room';
 import { RoomListResponse } from '../../types/service-response';
+import { roomStatusDetails } from '../../constant/response';
 
 @Component({
   selector: 'hospitality-bot-room-details-data-table',
@@ -25,8 +31,10 @@ import { RoomListResponse } from '../../types/service-response';
 })
 export class RoomDetailsDataTableComponent extends BaseDatatableComponent
   implements OnInit {
-  hotelId: string;
+  readonly roomStatusDetails = roomStatusDetails;
+  entityId: string;
   cols = roomDetailsCols;
+  currentRoomState: { value: string; type: FlagType }[] = [];
   @Input() roomTypeId: string;
 
   constructor(
@@ -35,13 +43,15 @@ export class RoomDetailsDataTableComponent extends BaseDatatableComponent
     private roomService: RoomService,
     private globalFilterService: GlobalFilterService,
     private adminUtilityService: AdminUtilityService,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute,
+    private routesConfigService: RoutesConfigService
   ) {
     super(fb, tabFilterService);
   }
 
   ngOnInit(): void {
-    this.hotelId = this.globalFilterService.hotelId;
+    this.entityId = this.globalFilterService.entityId;
     this.getDataTableValue();
   }
 
@@ -52,8 +62,7 @@ export class RoomDetailsDataTableComponent extends BaseDatatableComponent
           type: TableValue.room,
           offset: this.first,
           limit: this.rowsPerPage,
-          // ---refactor---- room type query param for selected room data - BE dependent
-          roomTypeId: this.roomTypeId, 
+          roomTypeId: this.roomTypeId,
         },
       ]),
     };
@@ -67,11 +76,12 @@ export class RoomDetailsDataTableComponent extends BaseDatatableComponent
   getDataTableValue() {
     this.loading = true;
     this.roomService
-      .getList<RoomListResponse>(this.hotelId, this.getQueryConfig())
+      .getList<RoomListResponse>(this.entityId, this.getQueryConfig())
       .subscribe(
         (res) => {
           const roomList = new RoomList().deserialize(res);
           this.values = roomList.records;
+          this.initFilters({}, {}, roomList.totalRecord);
           this.loading = false;
         },
         () => {
@@ -82,7 +92,9 @@ export class RoomDetailsDataTableComponent extends BaseDatatableComponent
   }
 
   onEditRoom(id: string) {
-    this.router.navigate([`/pages/inventory/room/${routes.addRoom}/single`], {
+    this.routesConfigService.navigate({
+      subModuleName: ModuleNames.ROOM,
+      additionalPath: routes.addSingleRoom,
       queryParams: { id },
     });
   }

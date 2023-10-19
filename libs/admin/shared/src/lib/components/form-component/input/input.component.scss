@@ -19,7 +19,6 @@
     line-height: 1.07;
     letter-spacing: 0.84px;
     text-align: left;
-    color: $secondary2;
   }
   &:hover {
     border-color: $primary-form-color;
@@ -47,4 +46,16 @@
       box-shadow: none;
     }
   }
+}
+
+.hide-spinner {
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
+    -webkit-appearance: none !important;
+    margin: 0 !important;
+  }
+}
+
+.subtitle-padding {
+  padding-right: 50px !important;
 }

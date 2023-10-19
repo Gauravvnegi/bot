@@ -23,9 +23,15 @@ import {
 } from './components';
 import { InstantFeedbackComponent } from './components/instant-feedback/instant-feedback.component';
 import { StayFeedbackComponent } from './components/stay-feedback/stay-feedback.component';
+import { ReservationCalendarViewComponent } from './components/reservation-calendar-view/reservation-calendar-view.component';
+import { QuickReservationFormComponent } from './components/quick-reservation-form/quick-reservation-form.component';
+import { RoomTypesComponent } from './components/room-types/room-types.component';
 import { ButtonDependencyDirective } from './directives/button-dependency.directive';
 import { AdminDetailsService } from './services/admin-details.service';
 import { ReservationService } from './services/reservation.service';
+import { ManageReservationService } from 'libs/admin/manage-reservation/src/lib/services/manage-reservation.service';
+import { FormService } from 'libs/admin/manage-reservation/src/lib/services/form.service';
+import { RoomService } from 'libs/admin/room/src/lib/services/room.service';
 
 export const adminReservationRoutes: Route[] = [];
 
@@ -56,6 +62,9 @@ export const adminReservationRoutes: Route[] = [];
     StayDetailsComponent,
     StayFeedbackComponent,
     InstantFeedbackComponent,
+    ReservationCalendarViewComponent,
+    RoomTypesComponent,
+    QuickReservationFormComponent,
   ],
   exports: [
     AdminSharedModule,
@@ -73,7 +82,16 @@ export const adminReservationRoutes: Route[] = [];
     StayDetailsComponent,
     StayFeedbackComponent,
     InstantFeedbackComponent,
+    QuickReservationFormComponent,
+    ReservationCalendarViewComponent,
+    RoomTypesComponent,
   ],
-  providers: [ReservationService, AdminDetailsService],
+  providers: [
+    ReservationService,
+    AdminDetailsService,
+    ManageReservationService,
+    FormService,
+    RoomService,
+  ],
 })
 export class AdminReservationModule {}

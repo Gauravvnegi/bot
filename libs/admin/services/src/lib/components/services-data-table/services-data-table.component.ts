@@ -1,18 +1,23 @@
 import { Component } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { MatTabChangeEvent } from '@angular/material/tabs';
-import { Router } from '@angular/router';
-import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
+import {
+  GlobalFilterService,
+  RoutesConfigService,
+} from '@hospitality-bot/admin/core/theme';
 import { LibraryItem, QueryConfig } from '@hospitality-bot/admin/library';
 import {
   AdminUtilityService,
   BaseDatatableComponent,
+  HotelDetailService,
+  NavRouteOptions,
   TableService,
 } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import * as FileSaver from 'file-saver';
 import { LazyLoadEvent } from 'primeng/api';
-import { Subscription } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
 import {
   chips,
   cols,
@@ -25,6 +30,9 @@ import { ServiceList } from '../../models/services.model';
 import { ServicesService } from '../../services/services.service';
 import { ServiceListResponse, ServiceResponse } from '../../types/response';
 import { ServiceData } from '../../types/service';
+import { feedback } from '@hospitality-bot/admin/feedback';
+import { takeUntil } from 'rxjs/operators';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'hospitality-bot-services-data-table',
@@ -36,14 +44,21 @@ import { ServiceData } from '../../types/service';
 })
 export class ServicesDataTableComponent extends BaseDatatableComponent {
   readonly servicesRoutes = servicesRoutes;
-
-  hotelId: string;
+  isAllTabFilterRequired: boolean = true;
+  entityId: string;
   tabFilterItems = filters;
   selectedTable: TableValue;
   tableName = title;
   filterChips = chips;
   cols = cols;
   isQuickFilters = true;
+  isAllATabItem = true;
+  feedbackType: string;
+  brandId: string;
+  branchId: string;
+  private cancelRequests$ = new Subject<void>();
+  isRestaurant: boolean = false;
+  navRoutes: NavRouteOptions;
 
   $subscription = new Subscription();
 
@@ -54,24 +69,51 @@ export class ServicesDataTableComponent extends BaseDatatableComponent {
     private adminUtilityService: AdminUtilityService,
     private globalFilterService: GlobalFilterService,
     protected snackbarService: SnackBarService, // private router: Router, // private modalService: ModalService
-    private router: Router
+    private router: Router,
+    private _hotelDetailService: HotelDetailService,
+    private route: ActivatedRoute,
+    private routesConfigService: RoutesConfigService
   ) {
     super(fb, tabFilterService);
   }
 
   ngOnInit(): void {
-    this.hotelId = this.globalFilterService.hotelId;
-    this.listenToTableChange();
+    this.entityId = this.globalFilterService.entityId;
+    const { navRoutes } = servicesRoutes['services'];
+    this.navRoutes = navRoutes;
+    this.listenForGlobalFilters();
   }
 
   /**
-   * @function listenToTableChange  To listen to table changes
+   * @function onGlobalTabFilterChanges To listen to global tab filter changes
+   * @param value
    */
-  listenToTableChange() {
-    this.servicesService.selectedTable.subscribe((value) => {
-      this.selectedTable = value;
-      this.initTableValue();
-    });
+
+  onGlobalTabFilterChanges(event) {
+    //to cancel previous api call in between when tab filter changes
+    this.cancelRequests$.next();
+    this.isRestaurant = event.outletType === 'RESTAURANT' ? true : false;
+    this.entityId = event.entityId[0];
+    this.tabFilterIdx = 0;
+    this.initTableValue();
+  }
+
+  /**
+   * @function listenForGlobalFilters To listen to global filters
+   * @returns
+   * @memberof ServicesDataTableComponent
+   */
+
+  listenForGlobalFilters(): void {
+    this.$subscription.add(
+      this.globalFilterService.globalFilter$.subscribe((data) => {
+        this.feedbackType = data['filter'].value.feedback.feedbackType;
+        this.brandId = data.filter?.value?.property?.brandName;
+        this.branchId = data.filter?.value?.property?.entityName;
+        //to get outlet or hotel ids for initial of table list api call
+        this.initTableValue();
+      })
+    );
   }
 
   /**
@@ -86,11 +128,18 @@ export class ServicesDataTableComponent extends BaseDatatableComponent {
     this.loading = true;
 
     this.servicesService
-      .getLibraryItems<ServiceListResponse>(this.hotelId, this.getQueryConfig())
+      .getLibraryItems<ServiceListResponse>(
+        this.entityId,
+        this.getQueryConfig()
+      )
+      .pipe(
+        //to cancel api call between using take until
+        takeUntil(this.cancelRequests$)
+      )
       .subscribe(
         (res) => {
           const serviceList = new ServiceList().deserialize(res);
-          switch (this.selectedTable) {
+          switch (this.tabFilterItems[this.tabFilterIdx]?.value) {
             case TableValue.ALL:
               this.values = serviceList.allService;
               break;
@@ -101,9 +150,19 @@ export class ServicesDataTableComponent extends BaseDatatableComponent {
               this.values = serviceList.complimentaryService;
               break;
           }
-          this.updateTabFilterCount(res.entityTypeCounts, res.total);
-          this.updateQuickReplyFilterCount(res.entityStateCounts);
-          this.updateTotalRecords();
+
+          if (this.isRestaurant) {
+            serviceList.entityTypeCounts = _.omit(
+              serviceList.entityTypeCounts,
+              'PAID'
+            );
+          }
+
+          this.initFilters(
+            serviceList.entityTypeCounts,
+            serviceList.entityStateCounts,
+            serviceList.total
+          );
         },
         () => {
           this.values = [];
@@ -122,20 +181,14 @@ export class ServicesDataTableComponent extends BaseDatatableComponent {
     this.$subscription.add(
       this.servicesService
         .updateLibraryItem<Partial<ServiceData>, ServiceResponse>(
-          this.hotelId,
+          this.entityId,
           rowData.id,
           { active: status },
           { params: '?type=SERVICE' }
         )
         .subscribe(
           (res) => {
-            const statusValue = (val: boolean) => (val ? 'ACTIVE' : 'INACTIVE');
-            this.updateStatusAndCount(
-              statusValue(rowData.status),
-              statusValue(status)
-            );
-            this.values.find((item) => item.id === rowData.id).status = status;
-
+            this.initTableValue();
             this.snackbarService.openSnackBarAsText(
               'Status changes successfully',
               '',
@@ -150,28 +203,27 @@ export class ServicesDataTableComponent extends BaseDatatableComponent {
     );
   }
 
-  /**
-   * @function getSelectedQuickReplyFilters To return the selected chip list.
-   * @returns The selected chips.
-   */
-  getSelectedQuickReplyFilters() {
-    const chips = this.filterChips.filter(
-      (item) => item.isSelected && item.value !== 'ALL'
-    );
-    return [
-      chips.length !== 1
-        ? { status: null }
-        : { status: chips[0].value === 'ACTIVE' },
-    ];
+  onCreateNewCategory() {
+    this.routesConfigService.navigate({
+      additionalPath: servicesRoutes.createCategory.route,
+      queryParams: { entityId: this.entityId },
+    });
+  }
+  onCreateNewService() {
+    this.servicesService.entityId = this.entityId;
+    this.routesConfigService.navigate({
+      additionalPath: servicesRoutes.createService.route,
+    });
   }
 
   /**
    * @function editService To Edit the service
    */
   editService(id: string) {
-    this.router.navigate([
-      `/pages/library/services/${servicesRoutes.createService.route}/${id}`,
-    ]);
+    this.routesConfigService.navigate({
+      additionalPath: servicesRoutes.editService.route.replace(':id', id),
+      queryParams: { entityId: this.entityId },
+    });
   }
 
   /**
@@ -180,12 +232,13 @@ export class ServicesDataTableComponent extends BaseDatatableComponent {
   getQueryConfig(): QueryConfig {
     const config = {
       params: this.adminUtilityService.makeQueryParams([
-        ...this.getSelectedQuickReplyFilters(),
+        ...this.getSelectedQuickReplyFilters({ isStatusBoolean: true }),
         {
           type: LibraryItem.service,
-          serviceType: this.selectedTable,
+          serviceType: this.tabFilterItems[this.tabFilterIdx].value,
           offset: this.first,
           limit: this.rowsPerPage,
+          entityIds: this.getEntityId(),
         },
       ]),
     };
@@ -193,15 +246,17 @@ export class ServicesDataTableComponent extends BaseDatatableComponent {
   }
 
   /**
-   * @function onSelectedTabFilterChange To handle the tab filter change.
-   * @param event The material tab change event.
+   * @function setEntityId To set entity id based on current table filter.
+   * @returns The entityIds.
    */
-  onSelectedTabFilterChange(event: MatTabChangeEvent): void {
-    this.servicesService.selectedTable.next(
-      this.tabFilterItems[event.index].value
-    );
-    this.tabFilterIdx = event.index;
-    this.initTableValue();
+  getEntityId() {
+    if (this.feedbackType === feedback.types.transactional) {
+      const branch = this._hotelDetailService.brands
+        .find((brand) => brand.id === this.brandId)
+        .entities.find((branch) => branch['id'] === this.branchId);
+      return branch.entities.map((outlet) => outlet.id);
+    }
+    return this.entityId;
   }
 
   /**
@@ -217,7 +272,7 @@ export class ServicesDataTableComponent extends BaseDatatableComponent {
       ]),
     };
     this.$subscription.add(
-      this.servicesService.exportCSV(this.hotelId, config).subscribe(
+      this.servicesService.exportCSV(this.entityId, config).subscribe(
         (res) => {
           FileSaver.saveAs(
             res,

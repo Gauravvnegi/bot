@@ -12,9 +12,9 @@ export class ReservationService extends ApiService {
     return this.get(`/api/v1/countries`);
   }
 
-  getDocumentsByNationality(hotelId, nationality): Observable<any> {
+  getDocumentsByNationality(entityId, nationality): Observable<any> {
     return this.get(
-      `/api/v1/hotel/${hotelId}/support-documents?nationality=${nationality}`
+      `/api/v1/entity/${entityId}/support-documents?nationality=${nationality}`
     );
   }
 
@@ -57,6 +57,12 @@ export class ReservationService extends ApiService {
     );
   }
 
+  generateFeedback(reservationId): Observable<any> {
+    return this.get(
+      `/api/v1/reservation/${reservationId}/generate-link?surveyType=FEEDBACK`
+    );
+  }
+
   checkCurrentWindow(reservationId): Observable<any> {
     return this.get(`/api/v1/reservation/${reservationId}/journey-window`);
   }
@@ -83,12 +89,19 @@ export class ReservationService extends ApiService {
     );
   }
 
+  manualCheckout(reservationId) {
+    return this.post(
+      `/api/v1/reservation/${reservationId}/manual-checkout`,
+      {}
+    );
+  }
+
   getGuestById(guestId: string): Observable<any> {
-    return this.get(`/api/v1/guest/${guestId}`);
+    return this.get(`/api/v1/members/${guestId}`);
   }
 
   getGuestReservations(guestId: string): Observable<any> {
-    return this.get(`/api/v1/guest/${guestId}/reservations`);
+    return this.get(`/api/v1/members/${guestId}/reservations`);
   }
 
   /**

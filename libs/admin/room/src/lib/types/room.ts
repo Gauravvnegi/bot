@@ -10,3 +10,11 @@ export type RoomTypeOption = {
   price: number;
   currency: string;
 };
+
+export type RatePlanOptions = {
+  label: string;
+  value: string;
+  disabled: boolean;
+  isDefault: boolean;
+  command: () => void;
+};

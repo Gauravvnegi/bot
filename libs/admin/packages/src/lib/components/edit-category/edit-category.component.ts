@@ -12,6 +12,9 @@ import { Package } from '../../data-models/packageConfig.model';
 import { CategoriesService } from '../../services/category.service';
 import { PackageService } from '../../services/package.service';
 import { FileUploadType } from 'libs/admin/shared/src/lib/models/file-upload-type.model';
+import { packagesRoutes } from '../../constant/routes';
+import { ModuleNames } from '@hospitality-bot/admin/shared';
+import { RoutesConfigService } from '@hospitality-bot/admin/core/theme';
 
 @Component({
   selector: 'hospitality-bot-edit-category',
@@ -23,7 +26,7 @@ export class EditCategoryComponent implements OnInit, OnDestroy {
   categoryForm: FormGroup;
   hotelCategory: CategoryDetail;
   categoryId: string;
-  hotelId: string;
+  entityId: string;
   isSavingCategory = false;
   subPackages: IPackage[];
   globalQueries = [];
@@ -37,7 +40,8 @@ export class EditCategoryComponent implements OnInit, OnDestroy {
     private activatedRoute: ActivatedRoute,
     private snackbarService: SnackBarService,
     private globalFilterService: GlobalFilterService,
-    private categoriesService: CategoriesService
+    private categoriesService: CategoriesService,
+    private routesConfigService: RoutesConfigService
   ) {
     this.initAddCategoryForm();
   }
@@ -71,7 +75,7 @@ export class EditCategoryComponent implements OnInit, OnDestroy {
           ...data['dateRange'].queryValue,
         ];
 
-        this.hotelId = this.globalFilterService.hotelId;
+        this.entityId = this.globalFilterService.entityId;
         this.getCategoryId();
       })
     );
@@ -91,7 +95,7 @@ export class EditCategoryComponent implements OnInit, OnDestroy {
   getCategoryDetails(categoryId): void {
     this.$subscription.add(
       this.categoriesService
-        .getCategoryDetails(this.hotelId, categoryId)
+        .getCategoryDetails(this.entityId, categoryId)
         .subscribe((response) => {
           this.hotelCategory = new CategoryDetail().deserialize(response);
           this.categoryForm.patchValue(this.hotelCategory.category);
@@ -129,7 +133,7 @@ export class EditCategoryComponent implements OnInit, OnDestroy {
       this.categoryForm.getRawValue()
     );
     this.$subscription.add(
-      this.categoriesService.addCategory(this.hotelId, data).subscribe(
+      this.categoriesService.addCategory(this.entityId, data).subscribe(
         (response) => {
           this.hotelCategory = new CategoryDetail().deserialize(response);
           this.categoryForm.patchValue(this.hotelCategory);
@@ -143,13 +147,15 @@ export class EditCategoryComponent implements OnInit, OnDestroy {
               { panelClass: 'success' }
             )
             .subscribe();
-          this.router.navigate([
-            '/pages/library/packages/category',
-            this.hotelCategory.category.id,
-          ]);
+          this.routesConfigService.navigate({
+            additionalPath: packagesRoutes.editPackage.route.replace(
+              ':id',
+              this.hotelCategory.category.id
+            ),
+          });
           this.isSavingCategory = false;
         },
-        ({ error }) => { 
+        ({ error }) => {
           this.isSavingCategory = false;
         }
       )
@@ -173,7 +179,7 @@ export class EditCategoryComponent implements OnInit, OnDestroy {
     );
     this.$subscription.add(
       this.categoriesService
-        .updateCategory(this.hotelId, this.hotelCategory.category.id, data)
+        .updateCategory(this.entityId, this.hotelCategory.category.id, data)
         .subscribe(
           (response) => {
             this.snackbarService
@@ -186,13 +192,15 @@ export class EditCategoryComponent implements OnInit, OnDestroy {
                 { panelClass: 'success' }
               )
               .subscribe();
-            this.router.navigate([
-              '/pages/library/packages/category',
-              this.hotelCategory.category.id,
-            ]);
+            this.routesConfigService.navigate({
+              additionalPath: packagesRoutes.editPackage.route.replace(
+                ':id',
+                this.hotelCategory.category.id
+              ),
+            });
             this.isSavingCategory = false;
           },
-          ({ error }) => { 
+          ({ error }) => {
             this.isSavingCategory = false;
           }
         )
@@ -204,7 +212,10 @@ export class EditCategoryComponent implements OnInit, OnDestroy {
   }
 
   redirectToCategories() {
-    this.router.navigate(['/pages/library/packages/']);
+    this.routesConfigService.navigate({
+      subModuleName: ModuleNames.PACKAGES,
+      additionalPath: packagesRoutes.packages.route,
+    });
   }
 
   private performActionIfNotValid(status: any[]): any[] {

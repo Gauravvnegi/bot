@@ -1,17 +1,22 @@
 <div
-  class="wrapper"
+  [class]="controlName"
   [ngClass]="wrapperNgClasses"
   [formGroup]="controlContainer.control"
 >
   <label
-    *ngIf="label && !float"
-    class="label label__static"
+    *ngIf="label"
+    class="labelc"
+    [ngClass]="{
+      float__label: float,
+      label__static: !float,
+      'float-inside__label': floatInsideLabel
+    }"
     [for]="controlName"
     >{{ label }}</label
   >
 
   <p-multiSelect
-    class="input"
+    [class]="isEmpty ? 'input no-select' : 'input'"
     [ngClass]="inputNgClasses"
     [disabled]="isDisabled || null"
     [formControlName]="controlName"
@@ -21,9 +26,11 @@
     (onPanelShow)="onMenuOpen()"
     (onPanelHide)="onMenuClose()"
     [showHeader]="showHeader"
+    [defaultLabel]="placeholder"
     [resetFilterOnHide]="true"
+    [maxSelectedLabels]="maxSelectedLabels"
   >
-    <ng-template let-value pTemplate="selectedItems">
+    <ng-template *ngIf="showChips" let-value pTemplate="selectedItems">
       <div class="chips">
         <div class="chip" [click-stop-propagation] *ngFor="let val of value">
           <div>{{ dictionary[val] }}</div>
@@ -34,5 +41,4 @@
   </p-multiSelect>
 
   <small *ngIf="error" class="p-error">{{ error }}</small>
-  <label *ngIf="label && float" [for]="controlName">{{ label }}</label>
 </div>

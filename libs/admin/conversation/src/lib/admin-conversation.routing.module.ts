@@ -9,7 +9,7 @@ const appRoutes: CRoutes = [
   {
     path: '',
     component: ConversationComponent,
-    name: ModuleNames.FREDDIE,
+    name: ModuleNames.FREDDIE_HOME,
     children: [
       {
         path: 'conversation-analytics',

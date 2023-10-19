@@ -8,6 +8,7 @@ import { Howl } from 'howler';
 import { ModalService } from '../../../../../../../../../libs/shared/material/src';
 import { MatDialogConfig } from '@angular/material/dialog';
 import { NotificationPopupComponent } from '../containers/notification-popup/notification-popup.component';
+import { NotificationSnackbarComponent } from '../containers/notification-snackbar/notification-snackbar.component';
 
 @Injectable({
   providedIn: 'root',
@@ -79,12 +80,25 @@ export class FirebaseMessagingService {
   }
 
   showNotificationAsSnackBar(payload: any) {
-    if (payload.notification?.body) {
-      const title = payload.notification?.body.split(',')[0];
+    if (payload?.data?.notificationType === 'WHATSAPP') {
+      const snackBarRef = this._snackbarService.openSnackBarAsComponent(
+        NotificationSnackbarComponent,
+        {
+          panelClass: 'whatsapp-notification',
+          duration: 5000,
+          horizontalPosition: 'right',
+          verticalPosition: 'top',
+        }
+      );
+
+      snackBarRef.instance.message = payload.data?.message;
+      snackBarRef.instance.title = payload.data?.phoneNumber;
+    } else if (payload.notification?.body) {
+      const title = payload.notification?.body.split('\n')[0];
       this._snackbarService.openSnackBarAsText(
-        `${payload.notification?.title}(${title}): ${decodeURIComponent(
+        `${payload.notification?.title}: ${decodeURIComponent(
           payload.notification?.body.substring(
-            payload.notification?.body.indexOf(',') + 1
+            payload.notification?.body.split('\n').join(' | ')
           )
         )}`,
         '',

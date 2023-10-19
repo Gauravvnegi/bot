@@ -9,7 +9,7 @@ const appRoutes: CRoutes = [
   {
     path: '',
     component: EFrontDeskComponent,
-    name: ModuleNames.FRONT_DESK,
+    name: ModuleNames.FRONT_DESK_HOME,
     children: [
       {
         path: 'dashboard',
@@ -19,25 +19,8 @@ const appRoutes: CRoutes = [
             (m) => m.AdminDashboardModule
           ),
       },
-      // {
-      //   path: 'request-analytics',
-      //   name: ModuleNames.REQUEST_DASHBOARD,
-      //   loadChildren: () =>
-      //     import('@hospitality-bot/admin/request-analytics').then(
-      //       (m) => m.AdminRequestAnalyticsModule
-      //     ),
-      // },
-
       {
-        path: 'request',
-        name: ModuleNames.REQUEST,
-        loadChildren: () =>
-          import('@hospitality-bot/admin/request-analytics').then(
-            (m) => m.AdminRequestAnalyticsModule
-          ),
-      },
-      {
-        path: 'manage-reservation',
+        path: 'reservation',
         name: ModuleNames.ADD_RESERVATION,
         loadChildren: () =>
           import('@hospitality-bot/admin/manage-reservation').then(
@@ -45,8 +28,22 @@ const appRoutes: CRoutes = [
           ),
       },
       {
+        path: 'room',
+        name: ModuleNames.ROOM,
+        loadChildren: () =>
+          import('@hospitality-bot/admin/room').then((m) => m.AdminRoomModule),
+      },
+      {
+        path: 'housekeeping',
+        name: ModuleNames.HOUSEKEEPING,
+        loadChildren: () =>
+          import('@hospitality-bot/admin/housekeeping').then(
+            (m) => m.AdminHousekeepingModule
+          ),
+      },
+      {
         path: 'invoice',
-        name: ModuleNames.ADD_RESERVATION,
+        name: ModuleNames.FRONT_DESK,
         loadChildren: () =>
           import('@hospitality-bot/admin/invoice').then(
             (m) => m.AdminInvoiceModule

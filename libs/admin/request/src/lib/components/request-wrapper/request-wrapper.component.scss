@@ -8,6 +8,17 @@
   font-size: 14px;
   font-weight: $bold;
 }
+
+:host ::ng-deep .sync-now {
+  padding: 0 25px;
+  display: flex;
+  align-items: center;
+  .button {
+    padding: 0px;
+    min-width: 0;
+  }
+}
+
 .request-wrapper-header {
   padding: 10px 42px 10px 15px;
   background-color: $white;
@@ -19,6 +30,7 @@
   }
   &-btnwrap {
     display: flex;
+    align-items: center;
 
     .guestInfoEditContainer {
       width: 138px;
@@ -52,7 +64,8 @@
   }
 }
 .request-body {
-  margin-top: 6px;
+  // border: 1px solid $borderCol;
+  // margin-top: 20px;
   background-color: $white;
   height: calc(100vh - 230px);
   display: flex;
@@ -62,7 +75,7 @@
     margin-top: 15px;
   }
   &-left {
-    width: 26%;
+    width: 30%;
     @media (max-width: 1180px) {
       width: 35%;
     }
@@ -145,4 +158,9 @@
 
     color: $title;
   }
+}
+
+.request-wrapper-tab {
+  display: block;
+  margin-top: 10px;
 }

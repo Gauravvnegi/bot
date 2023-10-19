@@ -10,7 +10,7 @@ export class DocumentDetailDS implements Deserializable {
   guests: DocumentDetail[];
 
   deserialize(input: any) {
-    let hotelNationality = input.hotel.address.countryCode;
+    let hotelNationality = input.entity.address.countryCode;
 
     // input.guestDetails.primaryGuest['isPrimary'] = true;
     // input.guestDetails.sharerGuests.forEach((secondaryGuest) => {
@@ -19,41 +19,52 @@ export class DocumentDetailDS implements Deserializable {
 
     let guestData = [];
 
+    const primaryGuest = input.guestDetails.primaryGuest;
+    const primaryGuestName = `${primaryGuest.firstName} ${primaryGuest.lastName}`;
+
     guestData.push({
-      ...input.guestDetails.primaryGuest,
+      ...primaryGuest,
       ...{
         role: GuestRole.undefined,
         label: 'Primary Guest',
+        name: primaryGuestName,
         isPrimary: true,
       },
     });
 
     input.guestDetails.sharerGuests &&
       input.guestDetails.sharerGuests.forEach((guest) => {
+        console.log(guest, 'guest name');
+        const name = `${guest?.firstName} ${guest?.lastName}`;
         guestData.push({
           ...guest,
           role: GuestRole.sharer,
           label: 'Sharer',
+          name,
           isPrimary: false,
         });
       });
 
     input.guestDetails.accompanyGuests &&
       input.guestDetails.accompanyGuests.forEach((guest) => {
+        const name = `${guest?.firstName} ${guest?.lastName}`;
         guestData.push({
           ...guest,
           role: GuestRole.accompany,
           label: 'Accompany / Kids (Optional)',
+          name,
           isPrimary: false,
         });
       });
 
     input.guestDetails.kids &&
       input.guestDetails.kids.forEach((guest) => {
+        const name = `${guest?.firstName} ${guest?.lastName}`;
         guestData.push({
           ...guest,
           role: GuestRole.kids,
           label: 'Accompany / Kids (Optional)',
+          name,
           isPrimary: false,
         });
       });
@@ -76,6 +87,7 @@ export class DocumentDetail implements Deserializable {
   isInternational: boolean;
   isPrimary: boolean;
   label: string;
+  name: string;
   id: string;
   role: string;
   uploadStatus: boolean;
@@ -85,7 +97,8 @@ export class DocumentDetail implements Deserializable {
     Object.assign(
       this,
       set({}, 'label', get(input, ['label'])),
-      set({}, 'role', get(input, ['role']))
+      set({}, 'role', get(input, ['role'])),
+      set({}, 'name', get(input, ['name']))
     );
     this.uploadStatus = false;
     this.validDocs = false;

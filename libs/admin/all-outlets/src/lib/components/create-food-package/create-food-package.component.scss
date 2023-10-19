@@ -1,13 +1,43 @@
 @import 'main';
 
-
 .form-wrapper {
   display: flex;
   flex-direction: column;
   row-gap: 20px;
+  margin-bottom: 20px;
 }
 
 :host ::ng-deep .form-block {
   @include form-block;
 }
 
+.items-wrapper {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding-bottom: 10px;
+  border-radius: 8px;
+  box-shadow: $form-shadow;
+  background-color: $white;
+}
+
+.heading-wrapper {
+  border-bottom: solid 1px rgba(112, 112, 112, 0.35);
+  padding: 20px 10px;
+  .heading {
+    font-size: 20px;
+    font-weight: $bolder;
+  }
+}
+
+:host ::ng-deep .iterator {
+  .wrapper {
+    border: 0px;
+  }
+}
+
+.btn-wrapper {
+  display: flex;
+  justify-content: center;
+  padding: 10px;
+}

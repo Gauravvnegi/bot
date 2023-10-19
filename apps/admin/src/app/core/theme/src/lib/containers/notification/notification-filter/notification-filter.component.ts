@@ -11,6 +11,8 @@ export class NotificationFilterComponent {
   @Input() filterData;
   @Input() filterFG: FormGroup;
   @Output() filterApplied = new EventEmitter();
+  startMinDate;
+  startMaxDate = new Date();
 
   applyFilter() {
     const data = this.filterFG.getRawValue();
@@ -35,23 +37,9 @@ export class NotificationFilterComponent {
 
   clearFilter(): void {
     this.filterFG.reset();
-  }
-
-  get fromMaxDate() {
-    if (this.filterFG?.get('toDate').value) {
-      return moment(this.filterFG?.get('toDate').value).endOf('day');
-    }
-    return moment().startOf('day');
-  }
-
-  get toMaxDate() {
-    return moment().endOf('day');
-  }
-
-  get toMinDate() {
-    if (this.filterFG?.get('fromDate').value) {
-      return moment(this.filterFG?.get('fromDate').value).endOf('day');
-    }
-    return null;
+    this.filterFG.patchValue({
+      fromDate: '',
+      toDate: '',
+    });
   }
 }

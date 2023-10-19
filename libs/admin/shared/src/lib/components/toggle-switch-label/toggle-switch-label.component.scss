@@ -51,13 +51,15 @@
 
 .labels__on {
   position: absolute;
-  top: 7px;
-  left: 14px;
   width: 100%;
   height: 100%;
   font-size: 12px;
   font-family: sans-serif;
   transition: all 0.4s ease-in-out;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-right: 21px;
 }
 
 .toggle input:checked ~ .labels::after {
@@ -70,16 +72,32 @@
 
 .labels__off {
   position: absolute;
-  top: 7px;
-  left: 36px;
   width: 100%;
   height: 100%;
   font-size: 12px;
   font-family: sans-serif;
   transition: all 0.4s ease-in-out;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-left: 21px;
 }
 
 .labels {
   font-weight: $bold;
   color: #fff;
+}
+
+.toggle-wrapper {
+  display: flex;
+  gap: 10px;
+  .pre-content {
+    display: flex;
+    align-items: center;
+    color: rgba(112, 112, 112, 0.35);
+  }
+}
+
+.disable {
+  opacity: 0.6;
 }

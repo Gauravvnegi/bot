@@ -1,66 +1,135 @@
-<div
-  class="logo text-uppercase"
-  [style.color]="normalFontColor"
-  [style.background-color]="headerBgColor"
->
+<div class="logo text-uppercase" [style.color]="normalFontColor">
   <!-- Botshot new collapse logo-->
   <div class="sidenav-header">
-    <div [style.display]="status ? 'none' : ''" class="logo">
-      <img
-        src="assets/images/botshot_collapse.png"
-        onerror="this.src='assets/images/botshot_expand.png';"
-        alt=""
-      />
-    </div>
-    <!-- Side nav menu icon collapse-->
     <div class="menu_button">
-      <img src="assets/images/botshot_collapse.png" alt="" />
+      <img
+        (click)="isMenuBarVisible = true; navToggle.emit(false)"
+        class="product-menu"
+        src="assets/images/main-menu.png"
+      />
     </div>
   </div>
 </div>
 <div class="sidebar__container">
-  <div *ngFor="let menuItem of menuItems">
-    <div
-      class="main_heading"
-      routerLinkActive
-      #rla="routerLinkActive"
-      [routerLinkActiveOptions]="{ exact: false }"
-      [ngClass]="selectedModule == menuItem.name ? 'active' : ''"
-      (mouseenter)="handleRouteChange(menuItem)"
-      (mouseleave)="handleRouteChangeOnLeave()"
-    >
+  <ng-container *ngFor="let menuItem of menuItems">
+    <div *ngIf="menuItem.isView">
       <div
-        class="overlay-link"
-        (click)="toggleMenuButton(menuItem)"
-        *ngIf="isSameModule(menuItem.path)"
-      ></div>
-      <a
-        class="main_heading_anchor"
-        [routerLink]="[menuItem.path]"
-        [style.background-color]="
-          selectedModule == menuItem.name
-            ? 'rgba(255, 255, 255, 0.24)'
-            : 'transparent'
+        class="main_heading"
+        routerLinkActive
+        #rla="routerLinkActive"
+        [routerLinkActiveOptions]="{ exact: false }"
+        [ngClass]="
+          menuItem.path === currentRoute.module.fullPath ? 'active' : ''
         "
-        [style.color]="
-          selectedModule == menuItem.name ? activeFontColor : normalFontColor
-        "
-        [style.padding]="'10px 0px'"
-        (click)="handleRouteChange(menuItem)"
-        ><div class="sidenav_logo">
-          <ng-container *ngIf="menuItem.urlColor; else imageUrl">
-            <!-- sidebar icons coming from backend-->
-            <img
-              [src]="rla.isActive ? menuItem.urlColor : menuItem.url"
-              [alt]="menuItem.name"
-            />
-          </ng-container>
-          <ng-template #imageUrl>
-            <img [src]="menuItem.url" class="svg-icon" [alt]="menuItem.name" />
-          </ng-template>
-        </div>
-        <div class="icon-label">{{ menuItem.title }}</div>
-      </a>
-    </div>
-  </div>
+        (mouseenter)="handleRouteChange(menuItem)"
+        (mouseleave)="handleRouteChangeOnLeave()"
+      >
+        <div
+          class="overlay-link"
+          (click)="toggleMenuButton(menuItem)"
+          *ngIf="isSameModule(menuItem.path)"
+        ></div>
+        <a
+          class="main_heading_anchor"
+          [routerLink]="[menuItem.path]"
+          [style.background-color]="
+            menuItem.path === currentRoute.module.fullPath
+              ? 'rgba(255, 255, 255, 0.24)'
+              : 'transparent'
+          "
+          [style.color]="
+            menuItem.path === currentRoute.module.fullPath
+              ? activeFontColor
+              : normalFontColor
+          "
+          [style.padding]="'10px 0px'"
+          (click)="handleRouteChange(menuItem)"
+          ><div class="sidenav_logo">
+            <ng-container *ngIf="menuItem.urlColor; else imageUrl">
+              <!-- sidebar icons coming from backend-->
+              <img
+                [src]="rla.isActive ? menuItem.urlColor : menuItem.url"
+                [alt]="menuItem.name"
+              />
+            </ng-container>
+            <ng-template #imageUrl>
+              <img
+                [src]="menuItem.iconUrl"
+                class="svg-icon"
+                [alt]="menuItem.name"
+              />
+            </ng-template>
+          </div>
+          <div class="icon-label">{{ menuItem.title }}</div>
+        </a>
+      </div>
+    </div></ng-container
+  >
 </div>
+
+<ng-container>
+  <p-sidebar
+    [visible]="isMenuBarVisible"
+    (onHide)="isMenuBarVisible = false"
+    [showCloseIcon]="false"
+    [style]="{ width: '25em' }"
+    position="left"
+  >
+    <ng-template
+      *ngIf="isMenuBarVisible"
+      [ngTemplateOutlet]="sidebar"
+    ></ng-template>
+  </p-sidebar>
+</ng-container>
+
+<ng-template #sidebar>
+  <div class="wrapper">
+    <div class="header">
+      <div class="cross">
+        <div (click)="isMenuBarVisible = false" class="close">
+          <i
+            class="pi pi-arrow-left"
+            style="color: #5f38f9;"
+            aria-hidden="true"
+          ></i>
+        </div>
+      </div>
+      <div class="bot-logo">
+        <a href="https://botshot.ai/" target="_blank" rel="noopener">
+          <img src="assets/images/botshotlogo-color.png" alt="" />
+        </a>
+      </div>
+    </div>
+    <div class="menu-wrapper">
+      <div class="menu-container">
+        <ng-container *ngFor="let product of productList; let i = index">
+          <div
+            *ngIf="product.isView"
+            class="menu"
+            [ngClass]="{
+              selected: product.path === currentRoute.product.fullPath
+            }"
+            [routerLink]="[product.path]"
+          >
+            <div
+              class="product-icon"
+              [ngClass]="{
+                'empty-img-view': !isImageLoaded
+              }"
+            >
+              <img
+                (load)="onImageLoad()"
+                [src]="product.iconUrl"
+                [alt]="product.name"
+              />
+            </div>
+            <div class="menu-label">{{ product.title }}</div>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+    <!-- <div class="footer">
+      <div class="header">Free Hotel Resource</div>
+    </div> -->
+  </div>
+</ng-template>

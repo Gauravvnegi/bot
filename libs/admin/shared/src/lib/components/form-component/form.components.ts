@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { AbstractControl, ControlContainer } from '@angular/forms';
-import { Cancelable, debounce, map } from 'lodash';
+import { Cancelable, debounce, map, stubFalse } from 'lodash';
 import {
   Alignment,
   FormProps,
@@ -18,6 +18,7 @@ export class FormComponent implements OnInit {
   /* Default Settings Props */
   fontSize = '16px';
   float = false; // for floatable label
+  floatInsideLabel = false; // for floatable label inside
   showClear = false;
   placeholder: string = '';
   variant: InputVariant = 'outlined';
@@ -26,6 +27,7 @@ export class FormComponent implements OnInit {
     // error messages with appropriate error-key
     required: 'This is a required field.',
   };
+  tabIndex = ''; // Removes tab focus in input
   type: InputType = 'text';
   dropdownIcon = 'pi pi-chevron-down'; // Arrow icon for dropdown inputs
   isAsync = false; // To register load-more/search option query
@@ -44,6 +46,7 @@ export class FormComponent implements OnInit {
   menuOptions: Option[] = [];
   isDisabled = false;
   isLoading = false;
+  showLabel = true;
 
   /*** Class Input to for attach api event */
   menuClass: string;
@@ -95,9 +98,21 @@ export class FormComponent implements OnInit {
    * To update the value of default [setting] props
    */
   @Input() set props(values: FormProps) {
-    map(values, (val, key) => {
-      this[key] = val;
-    });
+    for (const key in values) {
+      if (values.hasOwnProperty(key)) {
+        const val = values[key];
+        if (key === 'errorMessages') {
+          // To update error messages
+          this.errorMessages = {
+            ...this.errorMessages,
+            ...val,
+          };
+        } else {
+          // Set other properties
+          this[key] = val;
+        }
+      }
+    }
   }
 
   constructor(public controlContainer: ControlContainer) {}
@@ -110,8 +125,10 @@ export class FormComponent implements OnInit {
   /**
    * Init Input Control
    */
-  initInputControl() {
-    this.inputControl = this.controlContainer.control.get(this.controlName);
+  initInputControl(controlName?: string) {
+    this.inputControl = this.controlContainer.control.get(
+      controlName ? controlName : this.controlName
+    );
     this.addRequiredAsterisk();
   }
 
@@ -155,9 +172,11 @@ export class FormComponent implements OnInit {
   get wrapperNgClasses() {
     return {
       // 'p-input-icon-right': this.isLoading,
+      wrapper: true,
       'p-float-label': this.float,
       wrapper__vertical: this.alignment === 'vertical',
       wrapper__horizontal: this.alignment === 'horizontal',
+      'custom-disabled': this.isDisabled,
     };
   }
 
@@ -167,6 +186,7 @@ export class FormComponent implements OnInit {
   get inputNgClasses() {
     return {
       input__static: this.label && this.alignment === 'vertical',
+      input__float: this.label && (this.float || this.floatInsideLabel),
       input__standard: this.variant === 'standard',
       input__outlined: this.variant === 'outlined',
       input__error: this.error,
@@ -231,7 +251,7 @@ export class FormComponent implements OnInit {
       });
       newDiv.id = id;
       newDiv.className = 'dropdown-action-cta'; // styling class
-      const menu = document.querySelector(`.${this.menuClass}`);
+      const menu = this.menuNode;
       menu?.parentElement.appendChild(newDiv);
     }
   };
@@ -240,14 +260,33 @@ export class FormComponent implements OnInit {
     const id = `${this.controlName}-dropdown-input-cta`;
     if (!document.getElementById(id) && this.createPrompt) {
       const newDiv = document.createElement('div');
-      newDiv.innerHTML = `<input type="text" id="myInput" placeholder="${this.inputPrompt}"><button id="myButton" onclick="myFunction()">Save</button>`;
+      newDiv.innerHTML = `
+      <div style="position: relative; flex-basis: 85%;">
+      <input style="width: 100%; height: 100%" type="text" id="myInput" pInputText maxlength="30" placeholder="${this.inputPrompt}">
+           <small id="subtitle" style="  position: absolute; bottom: 0.7em;right: 0.8em;font-size: 1em; color: lightgray;"></small>
+
+      </div>
+      <button id="myButton" onclick="myFunction()">Save</button>
+
+ `;
+      const maxLength = 30;
       newDiv.id = id;
       newDiv.className = 'dropdown-input-action-cta'; // styling class
-      const menu = document.querySelector(`.${this.menuClass}`);
+      const menu = this.menuNode;
       menu?.parentElement.appendChild(newDiv);
 
       const input = document.getElementById('myInput') as HTMLInputElement;
       const button = document.getElementById('myButton');
+
+      const subtitle = document.getElementById('subtitle');
+      subtitle.innerHTML = `0/${maxLength}`;
+
+      input.addEventListener('input', () => updateWordCount());
+
+      const updateWordCount = () => {
+        const currentTextLength = input.value.length;
+        subtitle.innerHTML = `${currentTextLength}/${maxLength}`;
+      };
 
       newDiv.focus();
 
@@ -260,6 +299,12 @@ export class FormComponent implements OnInit {
     }
   };
 
+  get menuNode() {
+    return document
+      .querySelector(`.${this.controlName}`)
+      .querySelector(`.${this.menuClass}`);
+  }
+
   /**
    * @function onMenuOpen To Attach search and pagination api
    */
@@ -270,8 +315,7 @@ export class FormComponent implements OnInit {
     let debounceCall: (() => void) & Cancelable;
 
     const registerScroll = () => {
-      const menu = document.querySelector(`.${this.menuClass}`);
-
+      const menu = this.menuNode;
       menu?.addEventListener('scroll', () => {
         if (this.stopEmission) return;
         if (

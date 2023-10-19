@@ -23,9 +23,12 @@
       ></hospitality-bot-template-editor>
     </div>
   </div>
-  <hospitality-bot-button
-    class="create-btn"
-    [label]="isSavingTopic ? 'Saving' : 'Save'"
-    (onClick)="handleSubmit()"
-  ></hospitality-bot-button>
+  <hospitality-bot-form-action
+    class="full-width"
+    [loading]="loading || isSavingTopic"
+    [isId]="topicId"
+    (onPreAction)="resetForm()"
+    (onPostAction)="handleSubmit()"
+  >
+  </hospitality-bot-form-action>
 </div>

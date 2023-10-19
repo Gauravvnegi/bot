@@ -39,8 +39,8 @@
   (sortFunction)="customSort($event)"
   [customSort]="isCustomSort"
   (onFilter)="onDataFilter()"
+  *ngIf="!isEmpty; else emptyTable"
 >
-  <!-- *ngIf="tabFilterItems[tabFilterIdx].total; else emptyTable" -->
   <ng-template pTemplate="caption">
     <div class="caption__wrapper" [formGroup]="tableFG">
       <ng-container [ngTemplateOutlet]="tabFilter"> </ng-container>
@@ -49,6 +49,7 @@
         *ngIf="isQuickFilters"
         [chips]="filterChips"
         (onChange)="toggleQuickReplyFilter($event)"
+        [selectedChips]="selectedFilterChips"
       ></hospitality-bot-filter-chips>
     </div>
   </ng-template>
@@ -74,7 +75,7 @@
     let-columns="columns"
     let-rowIndex="rowIndex"
   >
-    <tr class="table-row" (click)="editService(rowData.id)">
+    <tr class="table-row" (click)="openDetailsPage(rowData.reservationId)">
       <td class="table-row__checkbox">
         <p-tableCheckbox
           [value]="rowData"
@@ -88,18 +89,25 @@
             {{ rowData.transactionId }}
           </div>
         </div>
-      </td> 
+      </td>
       <td>
         <div class="cell-content" *ngIf="rowData.dateAndTime; else emptyCell">
           <div class="primary-text">
-            {{ rowData.dateAndTime }}
+            {{ rowData.dateAndTime | date: 'MMM d, h:mm a z' }}
           </div>
         </div>
       </td>
       <td>
         <div class="cell-content" *ngIf="rowData.status; else emptyCell">
-          <div class="status-text" [ngClass]="rowData.status === 'Paid' ? 'state-paid' : 'state-unpaid'">
-            {{ rowData.status }}
+          <div
+            class="status-text"
+            [ngClass]="
+              rowData.status === 'SUCCESS'
+                ? 'chip-contained-paid'
+                : 'chip-contained-unpaid'
+            "
+          >
+            {{ rowData.status === 'SUCCESS' ? 'Paid' : 'Failed' }}
           </div>
         </div>
       </td>
@@ -111,26 +119,26 @@
         </div>
       </td>
       <td>
-        <div class="center-align" *ngIf="rowData.remarks; else emptyCell">
+        <div class="cell-content" *ngIf="rowData.remarks; else emptyCell">
           <div class="primary-text">
             {{ rowData.remarks }}
           </div>
         </div>
       </td>
       <td>
-        <div class="center-align" *ngIf="rowData.credit; else emptyCell">
+        <div class="cell-content" *ngIf="rowData.credit; else emptyCell">
           <div class="primary-text">
-            {{ rowData.credit }}
+            {{ rowData.credit | currency: 'INR' }}
           </div>
         </div>
       </td>
-      <td>
+      <!-- <td>
         <div class="center-align" *ngIf="rowData.balanceDue; else emptyCell">
           <div class="primary-text">
             {{ rowData.balanceDue }}
           </div>
         </div>
-      </td>
+      </td> -->
     </tr>
   </ng-template>
   <!-- *********************************FOOTER******************************* -->

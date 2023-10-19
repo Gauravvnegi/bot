@@ -1,67 +1,98 @@
+import { P } from '@angular/cdk/keycodes';
 import { PageRoutes } from '@hospitality-bot/admin/shared';
 
 export const navRoute = {
+  createWith: {
+    label: 'create-with',
+    link: './',
+  },
   settings: {
     label: 'Settings',
-    link: '/pages/settings',
+    link: './',
   },
   brand: {
     label: 'Brand',
-    link: '/pages/settings/business-info/brand',
-    isDisabled: true,
+    link: '/create-with/settings/business-info/brand',
   },
   hotel: {
     label: 'Hotel',
-    link: '/pages/settings/business-info/brand/:brandId/hotel',
-    isDisabled: true,
+    link: '/create-with/settings/business-info/brand/:brandId/hotel',
   },
 
   editBrand: {
     label: 'Edit Brand',
-    link: '/pages/settings/business-info/brand/:brandId',
-    isDisabled: true,
+    link: '/create-with/settings/business-info/brand/:brandId',
   },
-  bussinessInfo: {
+  businessInfo: {
     label: 'Business Info',
-    link: '/pages/settings/business-info',
+    link: '/create-with/settings/business-info',
   },
   editHotel: {
     label: 'Edit Hotel',
-    link: '/pages/settings/business-info/brand/:brandId/hotel/:hotelId',
-    isDisabled: true,
+    link: '/create-with/settings/business-info/brand/:brandId/hotel/:entityId',
+  },
+  importService: {
+    label: 'Import Service',
+    link:
+      '/create-with/settings/business-info/brand/:brandId/hotel/import-services',
+  },
+  editImportService: {
+    label: 'Import Service',
+    link:
+      '/create-with/settings/business-info/brand/:brandId/hotel/:entityId/import-services',
   },
   services: { label: 'Services', link: './' },
 };
 
 export const businessRoute: Record<
-  'brand' | 'editBrand' | 'hotel' | 'editHotel' | 'services' | 'editServices',
+  | 'brand'
+  | 'editBrand'
+  | 'hotel'
+  | 'editHotel'
+  | 'services'
+  | 'editServices'
+  | 'importServices'
+  | 'editImportServices'
+  | 'outlet',
   PageRoutes
 > = {
   brand: {
     route: '',
-    navRoutes: [navRoute.settings, navRoute.bussinessInfo, navRoute.brand],
+    navRoutes: [
+      navRoute.createWith,
+      navRoute.settings,
+      navRoute.businessInfo,
+      navRoute.brand,
+    ],
     title: 'Brand',
   },
   editBrand: {
     route: ':brandId',
-    navRoutes: [navRoute.settings, navRoute.bussinessInfo, navRoute.editBrand],
+    navRoutes: [
+      navRoute.createWith,
+      navRoute.settings,
+      navRoute.businessInfo,
+      navRoute.editBrand,
+    ],
     title: 'Edit Brand',
   },
   hotel: {
     route: 'hotel',
     navRoutes: [
+      navRoute.createWith,
       navRoute.settings,
-      navRoute.bussinessInfo,
+      navRoute.businessInfo,
       navRoute.editBrand,
       navRoute.hotel,
     ],
     title: 'Hotel',
   },
   editHotel: {
-    route: ':hotelId',
+    route: ':entityId',
     navRoutes: [
+      navRoute.createWith,
       navRoute.settings,
-      navRoute.bussinessInfo,
+      navRoute.businessInfo,
       navRoute.editBrand,
       navRoute.editHotel,
     ],
@@ -70,8 +101,9 @@ export const businessRoute: Record<
   services: {
     route: 'services',
     navRoutes: [
+      navRoute.createWith,
       navRoute.settings,
-      navRoute.bussinessInfo,
+      navRoute.businessInfo,
       navRoute.editBrand,
       navRoute.hotel,
       navRoute.services,
@@ -81,12 +113,42 @@ export const businessRoute: Record<
   editServices: {
     route: ':serviceId',
     navRoutes: [
+      navRoute.createWith,
       navRoute.settings,
-      navRoute.bussinessInfo,
+      navRoute.businessInfo,
       navRoute.editBrand,
       navRoute.editHotel,
       navRoute.services,
     ],
     title: 'Services',
+  },
+  importServices: {
+    route: 'import-services',
+    navRoutes: [
+      navRoute.createWith,
+      navRoute.settings,
+      navRoute.businessInfo,
+      navRoute.editBrand,
+      navRoute.hotel,
+      navRoute.importService,
+    ],
+    title: 'Import Services',
+  },
+  editImportServices: {
+    route: 'import-services',
+    navRoutes: [
+      navRoute.createWith,
+      navRoute.settings,
+      navRoute.businessInfo,
+      navRoute.editBrand,
+      navRoute.editHotel,
+      navRoute.editImportService,
+    ],
+    title: 'Import Services',
+  },
+  outlet: {
+    route: 'outlet',
+    navRoutes: [],
+    title: 'Outlet',
   },
 };

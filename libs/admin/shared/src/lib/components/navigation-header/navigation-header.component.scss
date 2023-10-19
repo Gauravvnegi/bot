@@ -9,7 +9,7 @@
   @include header-fixed-position;
   height: $sticky-header-height;
   transition: box-shadow 1s ease-in;
-  padding: 20px 22px;
+  padding: 20px 32px 20px 24px;
   box-shadow: 1px 7px 8px -7px rgba(181, 181, 181, 1);
 }
 
@@ -96,6 +96,7 @@
     justify-content: flex-end;
     align-items: center;
     gap: 2%;
+    z-index: 1;
   }
 
   .pi-angle-right {
@@ -110,4 +111,14 @@
 
 .nav-header-wrapper {
   padding-top: 20px;
+}
+
+.disabled {
+  pointer-events: none;
+}
+
+.only-routes {
+  .link {
+    padding-bottom: unset !important;
+  }
 }

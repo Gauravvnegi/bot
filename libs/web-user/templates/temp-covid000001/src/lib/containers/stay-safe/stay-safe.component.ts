@@ -51,7 +51,7 @@ export class StaySafeComponent implements OnInit, OnDestroy {
 
   getSafeMeasures() {
     this.$subscription.add(
-      this._safeMeasures.getSafeMeasures(this._hotelService.hotelId).subscribe(
+      this._safeMeasures.getSafeMeasures(this._hotelService.entityId).subscribe(
         (measuresResponse) => {
           this.safeMeasures = measuresResponse;
         },

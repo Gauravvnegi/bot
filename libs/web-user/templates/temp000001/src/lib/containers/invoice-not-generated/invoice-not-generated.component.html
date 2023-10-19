@@ -11,11 +11,11 @@
       <p class="heading">Invoice Not Generated!</p>
       <p
         class="sub_heading"
-        *ngIf="reservationDetails && reservationDetails.hotel"
+        *ngIf="reservationDetails && reservationDetails.entity"
       >
         We are unable to serve you with your request at this moment, please
         contact front desk by dialing '{{
-          reservationDetails.hotel.dialNumber
+          reservationDetails.entity.dialNumber
         }}' from your phone.
       </p>
       <div class="invoice_not_generated__content__note">

@@ -1,5 +1,5 @@
 import { ComponentType } from '@angular/cdk/portal';
-import { Injectable } from '@angular/core';
+import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 import {
   MatSnackBar,
   MatSnackBarConfig,
@@ -33,6 +33,7 @@ export class SnackBarService {
     action?: string,
     config?: MatSnackBarConfig
   ): MatSnackBarRef<SimpleSnackBar> {
+    this.increaseZIndex();
     const panelClass = _.get(config, ['panelClass'], 'danger');
     const duration = _.get(
       config,
@@ -47,7 +48,6 @@ export class SnackBarService {
       panelClass: panelClass,
     });
   }
-
   /**
    * @function openSnackBarAsComponent To open snackbar.
    * @param component Component to be instantiated.
@@ -58,8 +58,10 @@ export class SnackBarService {
     component: ComponentType<any>,
     config?: MatSnackBarConfig
   ): MatSnackBarRef<any> {
+    this.increaseZIndex();
     return this._snackBar.openFromComponent(component, {
       duration: config.duration || 2000,
+      ...config,
     });
   }
 
@@ -75,6 +77,7 @@ export class SnackBarService {
     action?: string,
     config?: MatSnackBarConfig
   ) {
+    this.increaseZIndex();
     const { translateKey, priorityMessage } = data;
 
     const handleTranslation = (translatedText) => {
@@ -86,5 +89,19 @@ export class SnackBarService {
     return this._translateService
       .get(translateKey)
       .pipe(map((msg) => handleTranslation(msg)));
+  }
+
+  increaseZIndex() {
+    const cdkOverlayContainer = document.querySelector(
+      '.cdk-overlay-container'
+    ) as HTMLElement;
+
+    if (cdkOverlayContainer) {
+      // Increase the z-index before showing the snackbar
+      cdkOverlayContainer.style.zIndex = '1500';
+      setTimeout(() => {
+        cdkOverlayContainer.style.zIndex = '1000';
+      }, 3000);
+    }
   }
 }

@@ -29,7 +29,7 @@
   height: 85vh;
   // max-height: 100%;
   // @media screen and (max-width: 1100px) {
-    // height: 85vh;
+  // height: 85vh;
   // }
   padding-bottom: 10px;
 }
@@ -243,7 +243,7 @@
 
 mat-option {
   color: black !important;
-}  
+}
 
 :host ::ng-deep .mat-select-panel:not([class*='mat-elevation-z']) {
   margin: 30px 0 0 15px !important;
@@ -430,16 +430,10 @@ mat-option {
   width: 77%;
   margin: 20px 25px;
   margin-right: 0;
-  height: 48vh;
   border-right: 2px solid $whiteDeep;
   padding-right: 15px;
   overflow-y: auto;
-  @media screen and (min-resolution: 125dpi) {
-    height: calc(53vh - 105px);
-  }
-  @media screen and (max-resolution: 110dpi) {
-    height: 52vh;
-  }
+  height: calc(85vh - 279px);
 }
 
 :host ::ng-deep .mat-group {
@@ -493,11 +487,14 @@ mat-option {
   position: absolute;
   top: 62px;
   right: 10px;
-  height: 97%;
+  height: 87%;
   z-index: 1;
   background-color: $white;
   overflow-y: auto;
   overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   .contact {
     font-size: 11px;
     color: $grayMedium;
@@ -505,9 +502,13 @@ mat-option {
     margin-bottom: 7px;
   }
   .button-wrapper {
-    @include flex-col-all-Center;
+    flex-grow: 1;
+    // @include flex-col-justify-center;
+    @include flex-all-center;
+    @include flex-col;
     height: 32vh;
-    gap: 15px;
+    gap: 8px;
+    overflow-y: auto;
 
     .button {
       height: 46px;
@@ -650,15 +651,69 @@ mat-option {
 
 :host ::ng-deep .button {
   font-size: 12px !important;
-  min-width: 200px !important;
-  border-radius: 25px !important;
+  // min-width: 200px !important;
   max-width: 200px;
-  @media screen and (max-width: 1450px) {
-    min-width: 175px !important;
+  width: 175px !important;
+}
+
+.p-splitbutton :hover {
+  border-color: #4423c6;
+  color: #4423c6;
+  box-shadow: 1px 1px 1px 0px #00000070;
+}
+
+:host ::ng-deep .p-splitbutton {
+  font-size: 12px !important;
+  max-width: 200px;
+  width: 175px !important;
+  border: 1px solid #5f38f9 !important;
+  border-radius: 4px;
+
+  button {
+    background-color: #fff !important;
+    color: #5f38f9 !important;
+    height: 46px;
+    justify-content: center;
+    padding: 9.5px 18.5px;
+    font-size: 12px;
+    font-weight: 400;
+    cursor: pointer;
+    border-radius: 4px;
+    border: none;
+  }
+
+  .pi {
+    color: #5f38f9 !important;
+  }
+
+  .p-menu {
+    width: unset !important;
+  }
+
+  .p-button.p-button-icon-only {
+    border-left: 1px solid blue !important;
+    border-start-start-radius: 0px !important;
+    border-end-start-radius: 0px !important;
+  }
+
+  .p-menu .p-menuitem-link {
+    padding: unset !important;
+    border-left: none !important;
+
+    .p-menuitem-text {
+      font-size: 14px;
+      font-weight: 400;
+      padding: 9.5px 18.5px;
+      cursor: pointer;
+    }
   }
 }
-:host ::ng-deep .tab-buttons{
+
+:host ::ng-deep .tab-buttons {
   right: 0;
   width: 20%;
 }
 
+:host ::ng-deep .mat-select-value {
+  max-width: unset !important;
+}

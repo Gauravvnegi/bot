@@ -1,3 +1,6 @@
+export enum TableValue {
+  all = 'ALL',
+}
 export const listingConfig = {
   datatable: {
     title: 'Listings',
@@ -49,9 +52,8 @@ export const listingConfig = {
         isSearchDisabled: true,
       },
       {
-        field: '',
+        field: 'active',
         header: 'Active',
-        isSortDisabled: true,
         sortType: 'number',
         isSearchDisabled: true,
       },

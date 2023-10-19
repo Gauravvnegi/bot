@@ -21,7 +21,7 @@ import { TopicService } from '../../services/topic.service';
 export class TopicDropdownComponent implements OnInit, OnDestroy {
   @Input() parentForm: FormGroup;
   @Input() name: string;
-  @Input() hotelId: string;
+  @Input() entityId: string;
   @Input() title = true;
   @Input() id = false;
   @Input() state: string;
@@ -47,7 +47,7 @@ export class TopicDropdownComponent implements OnInit, OnDestroy {
       ]),
     };
     this.$subscription.add(
-      this.topicService.getHotelTopic(config, this.hotelId).subscribe(
+      this.topicService.getHotelTopic(config, this.entityId).subscribe(
         (response) => {
           this.topicList = new Topics().deserialize(response).records;
         },

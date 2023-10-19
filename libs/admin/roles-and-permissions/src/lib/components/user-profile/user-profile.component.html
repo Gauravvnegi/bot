@@ -1,17 +1,20 @@
 <hospitality-bot-navigation-header [heading]="pageTitle" [routes]="navRoutes">
   <hospitality-bot-button
-    *ngIf="hasPageState('userProfile')"
+    *ngIf="hasPageState('userProfile') && hasManagePermission"
     label="+ Add New User"
     (click)="addUser()"
   ></hospitality-bot-button>
 </hospitality-bot-navigation-header>
 
 <form class="wrapper" [formGroup]="userForm">
-  <div class="form-block">
+  <div
+    class="form-block"
+    *ngIf="!(dataLoading || userDataLoading); else loader"
+  >
     <hospitality-bot-custom-file-upload
       class="two-third-width"
-      controlName="profileUrl"
-      [hotelId]="loggedInUserId"
+      formControlName="profileUrl"
+      [entityId]="loggedInUserId"
       path="static-content/user-profile"
       description="Add your profile image"
     ></hospitality-bot-custom-file-upload>
@@ -19,7 +22,13 @@
     <div *ngIf="hasPageState('userProfile')">
       <div class="member-container" *ngIf="!!totalTeamMember">
         <div class="label">Team</div>
-        <div class="member" (click)="openTableModal()">
+        <div
+          class="member"
+          (click)="openTableModal()"
+          [ngStyle]="{
+            width: totalTeamMember < 3 ? '40px' : '80px'
+          }"
+        >
           <div *ngFor="let item of teamMember; let index = index">
             <div
               class="member-name"
@@ -47,12 +56,15 @@
 
     <div
       class="one-third-width managed-by"
-      *ngIf="hasPageState('addNewUser') && userToModDetails"
+      *ngIf="hasPageState('addNewUser', 'editUser')"
     >
-      Manage By: {{ userToModDetails.firstName }}
-      {{ userToModDetails.lastName }}, Admin
+      Manage By: {{ adminToModDetails.firstName }}
+      {{ adminToModDetails.lastName }}, Admin
     </div>
-    <div class="one-third-width" *ngIf="hasPageState('addNewUser') && !userToModDetails"></div>
+    <div
+      class="one-third-width"
+      *ngIf="hasPageState('addNewUser') && !userToModDetails"
+    ></div>
 
     <hospitality-bot-input
       class="one-third-width"
@@ -104,19 +116,26 @@
       label="Hotel"
     ></hospitality-bot-select>
 
+    <hospitality-bot-select
+      class="one-third-width"
+      controlName="reportingTo"
+      [options]="userList"
+      label="Reporting To"
+    ></hospitality-bot-select>
+
     <hospitality-bot-multi-select
-      class="two-third-width"
+      class="full-width"
       controlName="products"
       [options]="products"
       label="Product Type"
     ></hospitality-bot-multi-select>
 
-    <hospitality-bot-multi-select
+    <!-- <hospitality-bot-multi-select
       class="full-width"
       controlName="departments"
       [options]="departments"
       label="Departments"
-    ></hospitality-bot-multi-select>
+    ></hospitality-bot-multi-select> -->
 
     <!-- ****************Permission Wrapper**************** -->
 
@@ -161,8 +180,9 @@
                 >
                   <p
                     *ngIf="
-                      manageProduct ===
-                      userPermissionFG.get('productType').value
+                      permissionIncludesProduct(
+                        userPermissionFG.get('productType').value
+                      )
                     "
                     class="left-table-entity"
                     [ngClass]="{ 'color-added': 0 === index % 2 }"
@@ -203,8 +223,9 @@
                   <div
                     formGroupName="{{ userPermissionIdx }}"
                     *ngIf="
-                      manageProduct ===
-                      userPermissionFG.get('productType').value
+                      permissionIncludesProduct(
+                        userPermissionFG.get('productType').value
+                      )
                     "
                   >
                     <div formGroupName="permissions" class="checkbox-wrapper">
@@ -234,7 +255,10 @@
           </div>
         </mat-expansion-panel>
       </mat-accordion>
-      <div class="permission-button-wrapper">
+      <div
+        class="permission-button-wrapper"
+        *ngIf="doesNotHasPageSate('viewUser')"
+      >
         <hospitality-bot-button
           [label]="isUpdatingPermissions ? 'Saving...' : 'Save'"
           (click)="savePermission()"
@@ -245,3 +269,7 @@
     </div>
   </div>
 </form>
+
+<ng-template #loader>
+  <hospitality-bot-loader-bounce class="loader"></hospitality-bot-loader-bounce>
+</ng-template>

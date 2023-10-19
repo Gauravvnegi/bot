@@ -15,8 +15,8 @@ const appRoutes: CRoutes = [
     name: ModuleNames.MEMBERS, // replace by MEMBERS
     children: [
       {
-        path: 'guest',
-        name: ModuleNames.GUESTS,  // replace by GUESTS
+        path: 'guests',
+        name: ModuleNames.GUESTS, // replace by GUESTS
         loadChildren: () =>
           import('@hospitality-bot/admin/guests').then(
             (m) => m.AdminGuestsModule

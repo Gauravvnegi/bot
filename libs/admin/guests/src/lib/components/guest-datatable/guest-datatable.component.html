@@ -1,0 +1,191 @@
+<div
+  class="action-header"
+  [ngClass]="{ 'action-header__sticky': isScrolledUp }"
+  [formGroup]="tableFG"
+>
+  <div class="heading">
+    {{ tableName }}
+  </div>
+  <div class="action-wrapper">
+    <ng-container [ngTemplateOutlet]="search"></ng-container>
+    <hospitality-bot-button
+      label="+ Add Guest"
+      [routerLink]="guestRoutes.addGuest.route"
+      preserveQueryParams="true"
+    ></hospitality-bot-button>
+
+    <hospitality-bot-export-list
+      [additionalActionItems]="additionalActionItems"
+      (onDocumentActions)="onDocumentActions()"
+      [documentTypes]="documentTypes"
+      [documentActionTypes]="documentActionTypes"
+      [isDisable]="values.length === 0"
+    ></hospitality-bot-export-list>
+  </div>
+</div>
+<div [ngClass]="{ 'sticky-header-gap': isScrolledUp }"></div>
+
+<p-table
+  #dt
+  [styleClass]="tableConfig.styleClass"
+  [resizableColumns]="isResizableColumns"
+  [autoLayout]="isAutoLayout"
+  [loading]="loading"
+  [columns]="cols"
+  [value]="values"
+  [paginator]="isPaginator"
+  [rows]="rowsPerPage"
+  [showCurrentPageReport]="showCurrentPageReport"
+  [rowsPerPageOptions]="rowsPerPageOptions"
+  currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+  [(first)]="first"
+  [totalRecords]="totalRecords"
+  [filterDelay]="0"
+  [(selection)]="selectedRows"
+  (onRowSelect)="onRowSelect($event)"
+  (onRowUnselect)="onRowUnselect($event)"
+  (onHeaderCheckboxToggle)="onToggleSelectAll($event)"
+  *ngIf="!isEmpty; else emptyTable"
+>
+  <!-- <ng-template pTemplate="caption">
+    <div class="caption__wrapper" [formGroup]="tableFG">
+      <ng-container [ngTemplateOutlet]="tabFilter"> </ng-container>
+      <hospitality-bot-filter-chips
+        *ngIf="isQuickFilters"
+        [chips]="filterChips"
+        (onChange)="toggleQuickReplyFilter($event)"
+        [selectedChips]="selectedFilterChips"
+      >
+      </hospitality-bot-filter-chips>
+    </div>
+  </ng-template> -->
+
+  <ng-template pTemplate="emptymessage">
+    <tr hospitality-bot-empty-view [noOfColumns]="cols.length"></tr>
+  </ng-template>
+  <!-- *******************************HEADER WITH SEARCH******************************* -->
+  <ng-template pTemplate="header" let-columns>
+    <tr
+      hospitality-bot-table-header
+      [columns]="columns"
+      [showCheckbox]="isSelectable"
+      (search)="handleFieldSearch($event)"
+    ></tr>
+  </ng-template>
+  <!-- **************************************BODY********************************* -->
+  <ng-template
+    pTemplate="body"
+    let-rowData
+    let-columns="columns"
+    let-rowIndex="rowIndex"
+  >
+    <tr class="table-row" (click)="editGuest($event, rowData)">
+      <td class="table-row__checkbox">
+        <p-tableCheckbox
+          [value]="rowData"
+          [index]="rowIndex"
+          (click)="onCheckboxClicked($event)"
+        ></p-tableCheckbox>
+      </td>
+      <td>
+        <div class="cell-content" *ngIf="rowData.name; else emptyCell">
+          <span class="primary-text">{{ rowData.name }}</span>
+          <span class="secondary-text">{{ rowData.code }}</span>
+        </div>
+      </td>
+      <td>
+        <div class="cell-content">
+          <span class="primary-text" *ngIf="rowData.email; else emptyCell">
+            <a
+              (click)="$event.stopPropagation()"
+              href="mailto:{{ rowData.email }}"
+            >
+              {{ rowData.email }}
+            </a>
+          </span>
+        </div>
+      </td>
+      <td>
+        <div class="cell-content">
+          <span
+            class="primary-text"
+            *ngIf="rowData.mobileNumber; else emptyCell"
+          >
+            <a
+              (click)="$event.stopPropagation()"
+              href="tel:{{ rowData.mobileNumber }}"
+            >
+              {{ rowData.mobileNumber }}
+            </a>
+          </span>
+        </div>
+      </td>
+      <td>
+        <div class="cell-content">
+          <span class="primary-text" *ngIf="rowData.dob; else emptyCell">
+            {{ rowData.dob | date }}
+          </span>
+        </div>
+      </td>
+      <td>
+        <div class="cell-content">
+          <span class="primary-text" *ngIf="rowData.created; else emptyCell">
+            {{ rowData.created | date }}
+          </span>
+        </div>
+      </td>
+    </tr>
+  </ng-template>
+  <!-- *********************************FOOTER******************************* -->
+  <ng-template pTemplate="summary">
+    <p-paginator
+      #paginator
+      [rows]="rowsPerPage"
+      [totalRecords]="totalRecords"
+      [rowsPerPageOptions]="rowsPerPageOptions"
+      (onPageChange)="paginate($event)"
+      [currentPageReportTemplate]="reportTemplate"
+      showCurrentPageReport="true"
+    ></p-paginator>
+  </ng-template>
+</p-table>
+
+<ng-template #emptyCell>
+  <div class="emptyCell">&mdash;</div>
+</ng-template>
+<ng-template #emptyTable>
+  <hospitality-bot-empty-table
+    [isLoading]="loading"
+    [content]="{
+      description: 'No guest found.',
+      imageSrc: 'assets/images/empty-table-guest.png'
+    }"
+  >
+    <ng-container [ngTemplateOutlet]="tabFilter"> </ng-container>
+  </hospitality-bot-empty-table>
+</ng-template>
+
+<ng-template #tabFilter>
+  <hospitality-bot-tab-group
+    [selectedIndex]="tabFilterIdx"
+    *ngIf="isTabFilters"
+    [listItems]="tabFilterItems"
+    (selectedTabChange)="onSelectedTabFilterChange($event)"
+  ></hospitality-bot-tab-group>
+</ng-template>
+
+<ng-template #search>
+  <hospitality-bot-global-search
+    class="search"
+    [formGroup]="tableFG"
+    controlName="search"
+    [props]="{
+      placeholder: 'Search by Name, Phone No or Code...',
+      hasSuggestion: true,
+      scattered: true
+    }"
+    [suggestionList]="sortFilterList"
+    (onSuggestClick)="sortBy($event)"
+    (onSearch)="searchGuest($event)"
+  ></hospitality-bot-global-search>
+</ng-template>

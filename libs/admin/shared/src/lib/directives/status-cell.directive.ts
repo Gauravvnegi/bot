@@ -1,7 +1,7 @@
 import {
   Directive,
-  Input,
   ElementRef,
+  Input,
   OnChanges,
   SimpleChanges,
 } from '@angular/core';
@@ -13,6 +13,7 @@ import { FlagType } from '../types/table.type';
 export class StatusCellDirective implements OnChanges {
   @Input() status: string;
   @Input() type: FlagType;
+  @Input() variant: 'contained' | 'outlined' | 'standard' = 'contained';
 
   constructor(private el: ElementRef) {}
 
@@ -26,40 +27,48 @@ export class StatusCellDirective implements OnChanges {
     this.el.nativeElement.className = 'status-cell';
     switch (this.type) {
       case 'default':
-        this.el.nativeElement.classList.add('chip-contained-default');
+        this.el.nativeElement.classList.add(`chip-${this.variant}-default`);
         break;
+
       case 'active':
-        this.el.nativeElement.classList.add('chip-contained-active');
+        this.el.nativeElement.classList.add(`chip-${this.variant}-active`);
         break;
+
       case 'failed':
-        this.el.nativeElement.classList.add('chip-contained-failed');
+        this.el.nativeElement.classList.add(`chip-${this.variant}-failed`);
         break;
+
       case 'inactive':
-        this.el.nativeElement.classList.add('chip-contained-inactive');
+        this.el.nativeElement.classList.add(`chip-${this.variant}-inactive`);
         break;
 
       case 'draft':
-        this.el.nativeElement.classList.add('chip-contained-draft');
+        this.el.nativeElement.classList.add(`chip-${this.variant}-draft`);
         break;
+
       case 'completed':
-        this.el.nativeElement.classList.add('chip-contained-completed');
+        this.el.nativeElement.classList.add(`chip-${this.variant}-completed`);
         break;
 
       case 'success':
-        this.el.nativeElement.classList.add('chip-contained-success');
+        this.el.nativeElement.classList.add(`chip-${this.variant}-success`);
         break;
+
       case 'warning':
-        this.el.nativeElement.classList.add('chip-contained-warning');
+        this.el.nativeElement.classList.add(`chip-${this.variant}-warning`);
         break;
+
       case 'unavailable':
-        this.el.nativeElement.classList.add('chip-contained-unavailable');
+        this.el.nativeElement.classList.add(`chip-${this.variant}-unavailable`);
         break;
-      // case 'paid':
-      //   this.el.nativeElement.classList.add('state-paid');
-      //   break;
-      // case 'unpaid':
-      //   this.el.nativeElement.classList.add('state-unpaid');
-      //   break;
+
+      case 'paid':
+        this.el.nativeElement.classList.add(`state-${this.variant}-paid`);
+        break;
+
+      case 'unpaid':
+        this.el.nativeElement.classList.add(`state-${this.variant}-unpaid`);
+        break;
     }
 
     this.el.nativeElement.innerText = this.status;

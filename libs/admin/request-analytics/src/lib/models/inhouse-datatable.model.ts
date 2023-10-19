@@ -1,11 +1,11 @@
+import { EntityState } from '@hospitality-bot/admin/shared';
 import { DateService } from '@hospitality-bot/shared/utils';
+import { convertToTitleCase } from 'libs/admin/shared/src/lib/utils/valueFormatter';
 import { get, set, trim } from 'lodash';
 
 export class InhouseTable {
-  entityStateCounts: any;
-  entityStateLabels: any;
-  entityTypeCounts: any;
-  entityTypeLabels: any;
+  entityStateCounts: EntityState<string>;
+  entityTypeCounts: EntityState<string>;
   records: InhouseData[];
   total: number;
 
@@ -14,9 +14,7 @@ export class InhouseTable {
     Object.assign(
       this,
       set({}, 'entityStateCounts', get(input, ['entityStateCounts'])),
-      set({}, 'entityStateLabels', get(input, ['entityStateLabels'])),
       set({}, 'entityTypeCounts', get(input, ['entityTypeCounts'])),
-      set({}, 'entityTypeLabels', get(input, ['entityTypeLabels'])),
       set({}, 'total', get(input, ['total']))
     );
 
@@ -34,7 +32,7 @@ export class InhouseData {
   confirmationNumber: string;
   elaspedTime: number;
   guestDetails: GuestType;
-  hotelId: string;
+  entityId: string;
   id: string;
   itemCode: string;
   itemName: string;
@@ -54,16 +52,16 @@ export class InhouseData {
 
   deserialize(input) {
     this.rooms = new Array<Room>();
-    this.guestDetails = new GuestType().deserialize(input.guestDetails);
-    this.stayDetails = new StayDetails().deserialize(input.stayDetails);
+    this.guestDetails = new GuestType().deserialize(input?.guestDetails);
+
+    this.stayDetails = new StayDetails().deserialize(input?.stayDetails);
     input.rooms.forEach((room) => this.rooms.push(new Room().desrialize(room)));
     Object.assign(
       this,
-      set({}, 'action', get(input, ['action'])),
       set({}, 'closedTime', get(input, ['closedTime'])),
       set({}, 'confirmationNumber', get(input, ['confirmationNumber'])),
       set({}, 'elaspedTime', get(input, ['elaspedTime'])),
-      set({}, 'hotelId', get(input, ['hotelId'])),
+      set({}, 'entityId', get(input, ['entityId'])),
       set({}, 'id', get(input, ['id'])),
       set({}, 'itemCode', get(input, ['itemCode'])),
       set({}, 'itemName', get(input, ['itemName'])),
@@ -79,6 +77,7 @@ export class InhouseData {
       set({}, 'state', get(input, ['state'])),
       set({}, 'status', get(input, ['status']))
     );
+    this.action = convertToTitleCase(input?.action);
 
     return this;
   }
@@ -92,7 +91,7 @@ export class InhouseData {
       this.requestTime,
       'h:mm a',
       timezone
-    )}`;
+      )}`;
   }
 
   getClosedTime(timezone = '+05:30') {
@@ -177,7 +176,7 @@ export class Guest {
   documentRequired: boolean;
   regcardUrl: string;
   id;
-  nameTitle;
+  salutation;
   firstName: string;
   lastName: string;
   countryCode: string;
@@ -189,7 +188,7 @@ export class Guest {
     Object.assign(
       this,
       set({}, 'id', get(input, ['id'])),
-      set({}, 'nameTitle', get(input, ['nameTitle'], '')),
+      set({}, 'salutation', get(input, ['salutation'], '')),
       set({}, 'firstName', trim(get(input, ['firstName'], ''))),
       set({}, 'lastName', trim(get(input, ['lastName'], ''))),
       set(
@@ -255,7 +254,7 @@ export class StayDetails {
       set({}, 'roomType', get(input, ['roomType'])),
       set({}, 'status', get(input, ['status']))
     );
-    this.statusMessage = new Status().deserialize(input.statusMessage);
+    this.statusMessage = new Status().deserialize(input?.statusMessage);
 
     return this;
   }

@@ -1,0 +1,8 @@
+.tab-filter {
+  margin: 20px 0 0 0;
+  display: block;
+}
+
+:host ::ng-deep .p-datatable .p-datatable-thead {
+  top: 115px !important;
+}

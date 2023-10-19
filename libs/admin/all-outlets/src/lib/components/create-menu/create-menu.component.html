@@ -1,8 +1,12 @@
-<div class="wrapper">
-  <hospitality-bot-navigation-header
-    [heading]="pageTitle"
-    [routes]="navRoutes"
-  ></hospitality-bot-navigation-header>
+<div class="wrapper" [id]="fa.referenceId">
+  <hospitality-bot-navigation-header [heading]="pageTitle" [routes]="navRoutes">
+    <!-- <p-splitButton
+      class="download-btn"
+      label="Download Menu"
+      (onClick)="handleDownload()"
+      [model]="buttons"
+    ></p-splitButton> -->
+  </hospitality-bot-navigation-header>
 
   <div class="form-block" [formGroup]="useForm">
     <div class="code">
@@ -11,13 +15,14 @@
     </div>
     <hospitality-bot-toggle-switch
       class="status"
-      controlName="active"
+      controlName="status"
       label="Status"
     ></hospitality-bot-toggle-switch>
     <hospitality-bot-input
       class="half-width"
       controlName="name"
       label="Name"
+      maxLength="60"
       [props]="{
         placeholder: 'Enter'
       }"
@@ -31,7 +36,7 @@
       "
     ></hospitality-bot-custom-file-upload>
     <div class="des-template">
-      <div class="des-template__label">Offer Description</div>
+      <div class="des-template__label">Menu Description</div>
       <div class="des-template__input">
         <hospitality-bot-template-editor
           [parentFG]="useForm"
@@ -40,18 +45,19 @@
         ></hospitality-bot-template-editor>
       </div>
     </div>
-    <div class="full-width btn-wrapper">
-      <hospitality-bot-button
-        label="Create"
-        (onClick)="handleSubmit()"
-      ></hospitality-bot-button>
-      <hospitality-bot-button
-        variant="outlined"
-        severity="reset"
-        label="Reset All"
-        (onClick)="handleReset()"
-      ></hospitality-bot-button>
-    </div>
+    <hospitality-bot-form-action
+      class="full-width"
+      [loading]="loading"
+      [isId]="menuId"
+      (onPreAction)="handleReset()"
+      (onPostAction)="handleSubmit()"
+      #fa
+    >
+    </hospitality-bot-form-action>
   </div>
-  <hospitality-bot-menu-data-table></hospitality-bot-menu-data-table>
 </div>
+<hospitality-bot-menu-data-table
+  *ngIf="menuId"
+  [outletId]="outletId"
+  [menuId]="menuId"
+></hospitality-bot-menu-data-table>

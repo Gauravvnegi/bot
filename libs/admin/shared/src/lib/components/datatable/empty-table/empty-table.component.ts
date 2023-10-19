@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Event } from '@angular/router';
 
 @Component({
   selector: 'hospitality-bot-empty-table',
@@ -11,11 +12,13 @@ export class EmptyTableComponent implements OnInit {
   actionName: string;
   @Input() link: string;
   @Input() isLoading: boolean;
+  @Output() action = new EventEmitter();
+  @Input() height: string;
 
   /**
    * Set Content of the empty view.
    */
-  @Input() set content(value: Content) {
+  @Input() set content(value: EmptyContent) {
     Object.entries(value).forEach(([key, value]) => {
       this[key] = value;
     });
@@ -35,7 +38,7 @@ export class EmptyTableComponent implements OnInit {
   }
 }
 
-type Content = {
+export type EmptyContent = {
   imageSrc?: string;
   heading?: string;
   description?: string;

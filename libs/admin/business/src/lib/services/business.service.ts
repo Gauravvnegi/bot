@@ -8,6 +8,8 @@ import {
   SocialPlatForms,
 } from '../types/brand.type';
 import { HotelConfiguration, HotelFormData } from '../types/hotel.type';
+import { map } from 'rxjs/operators';
+import { EntityResponse } from '../types/entity-response.type';
 
 export class BusinessService extends ApiService {
   /**
@@ -17,18 +19,20 @@ export class BusinessService extends ApiService {
    * @memberof BusinessService
    */
 
-  getHotelList(brandId: string, config: QueryConfig): Observable<any> {
-    console.log(config, 'config');
+  getPropertyList(
+    brandId: string,
+    config: QueryConfig
+  ): Observable<EntityResponse> {
     return this.get(
-      `/api/v2/entity?type=HOTEL&parentId=${brandId}&${
+      `/api/v1/entity?type=ALL&parentId=${brandId}&${
         config.params.slice(1) ?? ''
       }`
     );
   }
 
-  resetHotelFormState() {
-    this.hotelFormState = false;
-  }
+  // resetHotelFormState() {
+  //   this.hotelFormState = false;
+  // }
 
   /**
    * @function getBrandList
@@ -38,7 +42,7 @@ export class BusinessService extends ApiService {
 
   createBrand(data: BrandFormData): Observable<BrandResponse> {
     return this.post(
-      `/api/v2/entity/onboarding?source=CREATE_WITH&onboardingType=BRAND`,
+      `/api/v1/entity/onboarding?source=CREATE_WITH&onboardingType=BRAND`,
       data
     );
   }
@@ -51,7 +55,7 @@ export class BusinessService extends ApiService {
    */
 
   getBrandById(id: string): Observable<BrandResponse> {
-    return this.get(`/api/v1/brand/${id}`);
+    return this.get(`/api/v1/entity/${id}`);
   }
 
   /**
@@ -63,13 +67,13 @@ export class BusinessService extends ApiService {
    */
 
   updateBrand(brandId: string, data: any): Observable<BrandResponse> {
-    return this.patch(`/api/v1/brand/${brandId}`, data);
+    return this.patch(`/api/v1/entity/${brandId}?type=BRAND`, data);
   }
 
   /**
    * @function getSegments
    * @description get segments
-   * @param hotelId
+   * @param entityId
    * @returns
    * @memberof HotelService
    */
@@ -85,7 +89,7 @@ export class BusinessService extends ApiService {
     data: HotelFormData | any
   ): Observable<HotelConfiguration> {
     return this.post(
-      `/api/v2/entity/onboarding?source=CREATE_WITH&onboardingType=HOTEL`,
+      `/api/v1/entity/onboarding?source=CREATE_WITH&onboardingType=HOTEL`,
       data
     );
   }
@@ -93,26 +97,26 @@ export class BusinessService extends ApiService {
   /**
    * @function updateHotel
    * @description update hotel
-   * @param hotelId
+   * @param entityId
    * @param data
    * @returns
    * @memberof HotelService
    */
 
-  updateHotel(hotelId: string, data): Observable<any> {
-    return this.patch(`/api/v2/entity/${hotelId}?type=HOTEL`, data);
+  updateHotel(entityId: string, data): Observable<any> {
+    return this.patch(`/api/v1/entity/${entityId}?type=HOTEL`, data);
   }
 
   /**
    * @function getHotelById
    * @description get hotel by id
-   * @param hotelId
+   * @param entityId
    * @returns
    * @memberof HotelService
    */
 
-  getHotelById(hotelId: string): Observable<any> {
-    return this.get(`/api/v2/entity/${hotelId}?type=HOTEL`);
+  getHotelById(entityId: string): Observable<any> {
+    return this.get(`/api/v1/entity/${entityId}?type=HOTEL`);
   }
 
   onSubmit = new EventEmitter<boolean>(false);
@@ -129,25 +133,18 @@ export class BusinessService extends ApiService {
     return this.get(`/api/v1/config?key=SERVICE_CONFIGURATION`);
   }
 
-  getServiceList(
-    hotelId,
-    config = { params: '?type=SERVICE&serviceType=ALL&limit=5' }
-  ): Observable<any> {
-    return this.get(`/api/v1/entity/${hotelId}/library${config?.params ?? ''}`);
+  getServiceList(entityId, config?: QueryConfig): Observable<any> {
+    return this.get(
+      `/api/v1/entity/${entityId}/library${config?.params ?? ''}`,
+      { headers: { 'entity-id': entityId } }
+      //hotel id to be send as header for getting service
+    );
   }
-  hotelInfoFormData = {
-    address: {
-      value: '',
-    },
-    imageUrl: [],
-    serviceIds: [],
-  };
-  hotelFormState: boolean = false;
 
-  initHotelInfoFormData(input: any, roomTypeFormState: boolean) {
-    console.log(input, 'input');
-    this.hotelInfoFormData = { ...this.hotelInfoFormData, ...input };
-    this.hotelFormState = roomTypeFormState;
+  tempServiceIds: any[] = [];
+
+  setServiceIds(serviceIds: any) {
+    this.tempServiceIds.push(...serviceIds);
   }
 
   /**
@@ -155,15 +152,27 @@ export class BusinessService extends ApiService {
    * @param config  Will have type and search query
    *
    */
-  searchLibraryItem(hotelId: string, config?: QueryConfig): Observable<any> {
+  searchLibraryItem(entityId: string, config?: QueryConfig): Observable<any> {
     return this.get(
-      `/api/v1/entity/${hotelId}/library/search${config?.params ?? ''}`
+      `/api/v1/entity/${entityId}/library/search${config?.params ?? ''}`
     );
   }
 
   exportCSV(brandId: string, config: QueryConfig): Observable<any> {
-    return this.get(`/api/v2/entity/export${config.params ?? ''}`, {
+    return this.get(`/api/v1/entity/export${config.params ?? ''}`, {
       responseType: 'blob',
     });
   }
+
+  arrayDifference(array1, array2) {
+    console.log(array1, array2, 'array1, array2');
+    return array1.filter((element) => !array2.includes(element));
+  }
 }
+
+export type importForm = {
+  imageUrl;
+  address;
+  services: any[];
+  serviceIds: any[];
+} & Record<string, any>;

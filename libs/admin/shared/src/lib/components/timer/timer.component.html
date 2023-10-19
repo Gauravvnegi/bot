@@ -1,0 +1,14 @@
+<div class="time-left">
+  <img [src]="getTimerImage()" alt="timer" />
+
+  <div class="timer">
+    <ng-container *ngIf="minutes > 0 || seconds > 0">
+      <span>{{ minutes < 10 ? '0' + minutes : minutes }}</span
+      >:<span>{{ seconds < 10 ? '0' + seconds : seconds }}</span>
+      <span class="title"> Mins Left</span>
+    </ng-container>
+    <ng-container *ngIf="minutes === 0 && seconds === 0">
+      <span>00:00 <span class="title"> Mins Left</span></span>
+    </ng-container>
+  </div>
+</div>

@@ -8,5 +8,6 @@ export const tokensConfig = t({
   userId: 'x-userId',
   siteId: 'x-siteId',
   brandId: 'x-brandId',
-  hotelId: 'x-hotelId',
+  entityId: 'x-entityId',
+  selectedProduct: 'selectedProduct',
 });

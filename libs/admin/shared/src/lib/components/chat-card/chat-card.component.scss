@@ -1,8 +1,8 @@
 @import 'main';
 .card-wrapper {
+  position: relative;
   display: flex;
   align-items: flex-start;
-  justify-content: space-between;
   width: 100%;
   &_image {
     width: 48px;
@@ -41,7 +41,7 @@
       }
       &_status {
         padding: 1px 5px 2px;
-        border-radius: 2px;
+        border-radius: 5px;
         color: $white;
         width: fit-content;
         font-size: 11px;
@@ -148,7 +148,7 @@
       letter-spacing: 0.72px;
       margin-bottom: 10px;
       white-space: nowrap;
-      overflow: hidden;
+      overflow: visible;
       text-overflow: ellipsis;
       &-divider {
         height: 15px;
@@ -170,7 +170,8 @@
     letter-spacing: 0.6px;
     text-align: right;
     color: $grayLight;
-    min-width: 50px;
+    // min-width: 50px;
+    white-space: nowrap;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -202,14 +203,26 @@
 .priority-low {
   background-color: $completed-state;
 }
+.priority-low-text {
+  color: $completed-state;
+}
 .priority-medium {
   background-color: $priority-medium;
+}
+.priority-medium-text {
+  color: $priority-medium;
 }
 .priority-high {
   background-color: $priority-high;
 }
+.priority-high-text {
+  color: $priority-high;
+}
 .priority-asap {
   background-color: $darkRed;
+}
+.priority-asap-text {
+  color: $darkRed;
 }
 .sla-new {
   color: $completed-state;
@@ -224,9 +237,26 @@
   width: 100%;
 }
 .feedback_time {
-  height: 115px;
+  position: absolute;
   display: flex;
   flex-direction: column-reverse;
   justify-content: space-between;
   align-items: flex-end;
+  right: 0;
+}
+
+.time-left {
+  &__wrapper {
+    position: absolute;
+    right: 0;
+  }
+
+  display: flex;
+  padding: 1px 5px 2px;
+  border-radius: 5px;
+  color: #ffffff;
+  width: fit-content;
+  font-size: 11px;
+  background-color: $inactive-state;
+  gap: 5px;
 }

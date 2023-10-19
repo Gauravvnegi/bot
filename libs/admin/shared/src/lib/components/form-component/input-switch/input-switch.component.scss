@@ -1,0 +1,31 @@
+@import 'main';
+
+:host ::ng-deep .p-inputswitch {
+  &:not(.p-disabled):hover {
+    .p-inputswitch-slider {
+      background-color: #b8b8b8;
+    }
+  }
+  &.p-inputswitch-checked {
+    .p-inputswitch-slider {
+      background-color: $success-state;
+    }
+    &:not(.p-disabled):hover {
+      .p-inputswitch-slider {
+        background-color: $success-state;
+      }
+    }
+  }
+  .p-inputswitch-slider {
+    height: 18px;
+    background-color: #b8b8b8;
+  }
+
+  .p-inputswitch-slider:before {
+    background: white !important;
+    height: 15px;
+    width: 15px;
+    margin-top: -7.5px;
+    left: 2.5px;
+  }
+}

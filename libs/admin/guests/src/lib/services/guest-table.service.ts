@@ -1,16 +1,25 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from 'libs/shared/utils/src/lib/services/api.service';
 import { Observable } from 'rxjs';
-import { FeedbackConfigI } from '../data-models/feedbackDetailsConfig.model';
+import {
+  GuestListResponse,
+  GuestType,
+  SearchGuestResponse,
+} from '../types/guest.type';
+import { QueryConfig } from '@hospitality-bot/admin/shared';
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class GuestTableService extends ApiService {
-  getGuestList(config): Observable<any> {
-    return this.get(`/api/v1/guests${config.queryObj}`);
+  getGuestList(config: QueryConfig): Observable<GuestListResponse> {
+    return this.get(`/api/v1/members${config.params}`);
   }
 
-  getGuestById(guestId: string): Observable<any> {
-    return this.get(`/api/v1/guest/${guestId}`);
+  getGuestById(guestId: string): Observable<GuestType> {
+    return this.get(`/api/v1/members/${guestId}`);
+  }
+
+  searchGuest(config: QueryConfig): Observable<any> {
+    return this.get(`/api/v1/search/members${config.params}`);
   }
 
   getReservationFeedback(reservationId: string): Observable<any> {
@@ -22,30 +31,38 @@ export class GuestTableService extends ApiService {
   }
 
   getGuestReservations(guestId: string): Observable<any> {
-    return this.get(`/api/v1/guest/${guestId}/reservations`);
+    return this.get(`/api/v1/members/${guestId}/reservations`);
   }
 
   getGuestReservationById(guestId: string, reservationId: string) {
-    return this.get(`/api/v1/guest/${guestId}/reservations/${reservationId}`);
+    return this.get(`/api/v1/members/${guestId}/reservations/${reservationId}`);
+  }
+
+  addGuest(data, config?: QueryConfig): Observable<any> {
+    return this.post(`/api/v1/members${config.params}`, data);
+  }
+
+  updateGuest(data, guestId: string, config?: QueryConfig): Observable<any> {
+    return this.patch(`/api/v1/members/${guestId}`, data);
   }
 
   exportCSV(config): Observable<any> {
-    return this.get(`/api/v1/guest/export/${config.queryObj}`, {
+    return this.get(`/api/v1/members/export${config.params}`, {
       responseType: 'blob',
     });
-  }
-
-  getFeedback(hotelId): Observable<FeedbackConfigI> {
-    return this.get(`/api/v1/cms/feedback-form`);
   }
 
   getAllGuestStats(config): Observable<any> {
-    return this.get(`/api/v1/guests/stats/${config.queryObj}`);
+    return this.get(`/api/v1/members/stats${config.params}`);
   }
 
   exportCSVStat(config): Observable<any> {
-    return this.get(`/api/v1/guests/stats/export/${config.queryObj}`, {
+    return this.get(`/api/v1/members/stats/export${config.params}`, {
       responseType: 'blob',
     });
+  }
+
+  sortMemberBy(config: QueryConfig): Observable<GuestListResponse> {
+    return this.get(`/api/v1/members${config.params}`);
   }
 }

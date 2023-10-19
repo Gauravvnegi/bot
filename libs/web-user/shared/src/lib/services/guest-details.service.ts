@@ -6,7 +6,7 @@ import {
   Guest,
   ReservationDetails,
 } from 'libs/web-user/shared/src/lib/data-models/reservationDetails';
-import { Observable, Subject } from 'rxjs';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { Country } from '../../../../shared/src/lib/data-models/countryCode';
 import { GuestRole, GuestTypes } from '../constants/guest';
 import { AgeList } from '../data-models/Age';
@@ -22,6 +22,7 @@ export class GuestDetailsService extends ApiService {
   private _guestDetailDS: GuestDetailDS;
   guestDetailDS$ = new Subject();
   guestDetailForm;
+  guestInfo = new BehaviorSubject({}); // Id based data (contain name for now)
 
   initGuestDetailDS({ guestDetails }) {
     this._guestDetailDS = new GuestDetailDS().deserialize(guestDetails);
@@ -144,6 +145,29 @@ export class GuestDetailsService extends ApiService {
   }
 
   updateGuestDetails(reservationId, data): Observable<ReservationDetails> {
+    let guestInfo = {};
+    if (data.primaryGuest) {
+      guestInfo = {
+        ...guestInfo,
+        [data.primaryGuest.id]: {
+          ...data.primaryGuest,
+        },
+      };
+    }
+
+    if (data.sharerGuests?.length) {
+      guestInfo = {
+        ...guestInfo,
+        ...data.sharerGuests.reduce((value, item) => {
+          value = { ...value, [item.id]: item };
+          return value;
+        }, {}),
+      };
+    }
+
+    // This data will be used as user update guest details and initial loaded data is different or not present
+    this.guestInfo.next(guestInfo);
+
     return this.put(`/api/v1/reservation/${reservationId}/guests`, data);
   }
 
@@ -151,7 +175,7 @@ export class GuestDetailsService extends ApiService {
     data.id = value.id;
     data.firstName = (value.firstName || '').trim();
     data.lastName = (value.lastName || '').trim();
-    data.nameTitle = value.nameTitle;
+    data.salutation = value.salutation;
     if (value.role === GuestRole.kids || value.role === GuestRole.accompany) {
       data.age = value.age;
     } else {

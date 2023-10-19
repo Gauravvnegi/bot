@@ -1,0 +1,36 @@
+<div class="main__wrapper" [id]="fa?.referenceId">
+  <div class="content__wrapper">
+    <hospitality-bot-table-view
+      [header]="title"
+      [columns]="cols"
+      [items]="items"
+      [loading]="loading"
+      [headerSticky]="true"
+      [action]="'Refresh'"
+      [statusConfig]="reservationStatusConfig"
+      [emptyViewConfig]="{
+        content: {
+          description: 'There is no Pending Checked-in Reservations.'
+        }
+      }"
+      (actionClicked)="reloadTable()"
+      (dropDownChange)="statusChange($event)"
+      (quickChange)="editReservation($event)"
+    ></hospitality-bot-table-view>
+  </div>
+
+  <!-- Confirm Dialog -->
+  <hospitality-bot-confirm-dialog></hospitality-bot-confirm-dialog>
+
+  <!-- Action Button -->
+  <hospitality-bot-form-action
+    class="full-width action-button"
+    [loading]="loading"
+    [disabled]="loading"
+    [config]="actionConfig"
+    (onPostAction)="handleNext()"
+    (onPreAction)="handlePrev()"
+    #fa
+  >
+  </hospitality-bot-form-action>
+</div>

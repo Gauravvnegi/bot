@@ -9,7 +9,10 @@ import {
 } from '@angular/forms';
 import { MatDialogConfig } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
-import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import {
+  GlobalFilterService,
+  RoutesConfigService,
+} from '@hospitality-bot/admin/core/theme';
 import {
   LibrarySearchItem,
   LibraryService,
@@ -18,14 +21,26 @@ import {
   ModalService,
   SnackBarService,
 } from '@hospitality-bot/shared/material';
-import { FlagType, NavRouteOptions, Option } from 'libs/admin/shared/src';
+import {
+  FlagType,
+  ModuleNames,
+  NavRouteOptions,
+  Option,
+} from 'libs/admin/shared/src';
 import { ModalComponent } from 'libs/admin/shared/src/lib/components/modal/modal.component';
 import { IteratorField } from 'libs/admin/shared/src/lib/types/fields.type';
 import { Subscription } from 'rxjs';
-import { iteratorFields } from '../../constant/form';
-import { roomStatusDetails, roomStatuses } from '../../constant/response';
-import routes from '../../constant/routes';
-import { MultipleRoomList, SingleRoomList } from '../../models/room.model';
+import {
+  iteratorFields,
+  noRecordsActionForFeatures,
+} from '../../constant/form';
+import { roomStatusDetails } from '../../constant/response';
+import routes, { roomRoutesConfig } from '../../constant/routes';
+import {
+  MultipleRoomList,
+  SingleRoom,
+  SingleRoomList,
+} from '../../models/room.model';
 import { RoomType, RoomTypeList } from '../../models/rooms-data-table.model';
 import { RoomService } from '../../services/room.service';
 import { AddRoomTypes, RoomTypeOption } from '../../types/room';
@@ -39,6 +54,9 @@ import {
   SingleRoomForm,
   StatusQuoForm,
 } from '../../types/use-form';
+import { Services } from '../../models/amenities.model';
+import { convertToTitleCase } from 'libs/admin/shared/src/lib/utils/valueFormatter';
+import { FormService } from '../../services/form.service';
 
 @Component({
   selector: 'hospitality-bot-add-room',
@@ -50,31 +68,35 @@ export class AddRoomComponent implements OnInit, OnDestroy {
   dateTitle: string;
 
   roomId: string;
-  hotelId: string;
+  entityId: string;
 
   useForm: FormGroup;
   statusQuoForm: FormGroup;
   useFormArray: FormArray;
   fields: IteratorField[];
 
+  startMinDate = new Date();
+  endMinDate = new Date();
+
   roomStatuses: Option[] = [];
   roomTypes: RoomTypeOption[] = [];
   submissionType: AddRoomTypes;
+  featureIds: string[] = [];
 
   pageTitle = 'Add rooms';
-  navRoutes: NavRouteOptions = [
-    { label: 'Inventory', link: './' },
-    { label: 'Rooms', link: '/pages/inventory/room' },
-    { label: 'Add Rooms', link: './' },
-  ];
+  navRoutes: NavRouteOptions = [];
 
   isRoomInfoLoading = false;
+  isLoadingFeatures = false;
+  isStatusUpdated = false;
 
   /* roomTypes options variable */
   roomTypeOffSet = 0;
   loadingRoomTypes = false;
   noMoreRoomTypes = false;
   roomTypeLimit = 10;
+  features = [];
+  noRecordsActionFeatures = noRecordsActionForFeatures;
 
   $subscription = new Subscription();
 
@@ -90,9 +112,10 @@ export class AddRoomComponent implements OnInit, OnDestroy {
     private router: Router,
     private location: Location,
     private modalService: ModalService,
-    private libraryService: LibraryService
+    private libraryService: LibraryService,
+    private formService: FormService,
+    private routesConfigService: RoutesConfigService
   ) {
-    this.initForm();
     this.submissionType = this.route.snapshot.paramMap.get(
       'type'
     ) as AddRoomTypes;
@@ -104,15 +127,28 @@ export class AddRoomComponent implements OnInit, OnDestroy {
         this.roomId = res.id;
         this.fields[0].disabled = true;
         this.pageTitle = 'Edit Room';
-        this.navRoutes[2].label = 'Edit Room';
       }
+      this.initNavRoutes(!!res.id);
     });
   }
 
   ngOnInit(): void {
-    this.hotelId = this.globalFilterService.hotelId;
+    this.endMinDate.setDate(this.startMinDate.getDate() + 1);
+    this.entityId = this.globalFilterService.entityId;
+    this.initForm();
     this.initOptionsConfig();
     if (this.roomId) this.initRoomDetails();
+  }
+
+  initNavRoutes(isEdit: boolean) {
+    this.routesConfigService.navRoutesChanges.subscribe((navRoutesRes) => {
+      this.navRoutes = [...navRoutesRes];
+      if (isEdit) {
+        this.navRoutes.push(...roomRoutesConfig.editRoom.navRoutes);
+        return;
+      }
+      this.navRoutes.push(...roomRoutesConfig.room.navRoutes);
+    });
   }
 
   /**
@@ -125,16 +161,17 @@ export class AddRoomComponent implements OnInit, OnDestroy {
       roomTypeId: ['', Validators.required],
       price: [''],
       currency: [''],
-      status: ['ACTIVE'],
+      status: ['DIRTY'],
       rooms: this.useFormArray,
+      featureIds: [[], Validators.required],
     });
 
     this.statusQuoForm = this.fb.group({
-      roomStatus: ['', Validators.required],
-      remarks: ['', Validators.required],
+      status: ['', Validators.required],
+      remark: [''],
       foStatus: [],
-      toDate: [''],
-      fromDate: [''],
+      fromDate: ['', Validators.required],
+      toDate: ['', Validators.required],
     });
 
     this.registerFormListener();
@@ -166,15 +203,22 @@ export class AddRoomComponent implements OnInit, OnDestroy {
   registerFormListener() {
     this.registerRoomTypeChangesListener();
     this.registerRoomStateChangeListener();
+    this.listenForRoomStatusChange();
+  }
+
+  listenForRoomStatusChange() {
+    this.formService.roomStatus.subscribe((res) => {
+      if (res) {
+        this.statusQuoFormControls.status.patchValue(res);
+        this.isStatusUpdated = true;
+        const mainLayout = document.getElementById('main-layout');
+        mainLayout.scrollTo(0, mainLayout.scrollHeight);
+      }
+    });
   }
 
   registerRoomStateChangeListener() {
-    const {
-      fromDate,
-      toDate,
-      roomStatus,
-      foStatus,
-    } = this.statusQuoFormControls;
+    const { fromDate, toDate, status, foStatus } = this.statusQuoFormControls;
 
     foStatus.valueChanges.subscribe((res: RoomFoStatus) => {
       this.currentRoomState[1] = {
@@ -183,14 +227,13 @@ export class AddRoomComponent implements OnInit, OnDestroy {
       };
     });
 
-    roomStatus.valueChanges.subscribe((res: RoomStatus) => {
+    status.valueChanges.subscribe((res: RoomStatus) => {
       this.currentRoomState[0] = {
-        value: roomStatusDetails[res].label,
-        type: roomStatusDetails[res].type,
+        value: roomStatusDetails[res]?.label,
+        type: roomStatusDetails[res]?.type,
       };
 
       this.isDateRequired = res === 'OUT_OF_ORDER' || res === 'OUT_OF_SERVICE';
-
       if (this.isDateRequired) {
         fromDate.setValidators([Validators.required]);
         toDate.setValidators([Validators.required]);
@@ -209,11 +252,7 @@ export class AddRoomComponent implements OnInit, OnDestroy {
    */
   initOptionsConfig(): void {
     this.getRoomTypes();
-    this.roomStatuses = roomStatuses.map((item) => ({
-      label: roomStatusDetails[item].label,
-      value: item,
-      type: roomStatusDetails[item].type,
-    }));
+    this.getDefaultFeatures();
   }
 
   /**
@@ -223,7 +262,7 @@ export class AddRoomComponent implements OnInit, OnDestroy {
     this.loadingRoomTypes = true;
     this.$subscription.add(
       this.roomService
-        .getList<RoomTypeListResponse>(this.hotelId, {
+        .getList<RoomTypeListResponse>(this.entityId, {
           params: `?type=ROOM_TYPE&offset=${this.roomTypeOffSet}&limit=${this.roomTypeLimit}`,
         })
         .subscribe(
@@ -247,6 +286,21 @@ export class AddRoomComponent implements OnInit, OnDestroy {
     );
   }
 
+  getDefaultFeatures() {
+    this.isLoadingFeatures = true;
+    this.$subscription.add(
+      this.roomService.getFeatures().subscribe(
+        (res) => {
+          this.features = new Services().deserialize(res.features).services;
+        },
+        (err) => {},
+        () => {
+          this.isLoadingFeatures = false;
+        }
+      )
+    );
+  }
+
   /**
    * @function searchRoomTypes To search categories
    * @param text search text
@@ -255,7 +309,7 @@ export class AddRoomComponent implements OnInit, OnDestroy {
     if (text) {
       this.loadingRoomTypes = true;
       this.libraryService
-        .searchLibraryItem(this.hotelId, {
+        .searchLibraryItem(this.entityId, {
           params: `?key=${text}&type=${LibrarySearchItem.ROOM_TYPE}`,
         })
         .subscribe(
@@ -302,22 +356,25 @@ export class AddRoomComponent implements OnInit, OnDestroy {
     this.isRoomInfoLoading = true;
     this.$subscription.add(
       this.roomService
-        .getRoomById(this.hotelId, this.roomId)
+        .getRoomById(this.entityId, this.roomId)
         .subscribe((res) => {
+          this.featureIds = res.rooms[0].features.map((item) => item.id);
           const roomDetails = res.rooms[0];
+          const statusDetails = res.rooms[0].statusDetailsList[0];
           this.draftDate = roomDetails.updated ?? roomDetails.created;
           this.dateTitle = roomDetails.updated ? 'Updated on' : 'Activated on';
           const data: SingleRoomForm = {
             roomTypeId: roomDetails.roomTypeDetails.id,
             price: roomDetails.price,
             currency: roomDetails.currency,
-            status: roomDetails.roomStatus,
+            status: statusDetails.status,
             rooms: [
               {
                 roomNo: roomDetails.roomNumber,
                 floorNo: roomDetails.floorNumber,
               },
             ],
+            featureIds: roomDetails.features.map((item) => item.id),
           };
 
           if (
@@ -335,10 +392,32 @@ export class AddRoomComponent implements OnInit, OnDestroy {
 
           this.useForm.patchValue(data);
 
+          if (roomDetails?.nextStates) {
+            this.roomStatuses = roomDetails?.nextStates?.map((item) => ({
+              label: convertToTitleCase(item),
+              value: item,
+            }));
+          }
+          this.roomStatuses.push({
+            label: convertToTitleCase(statusDetails.status),
+            value: statusDetails.status,
+          });
+
+          // If status is updated to OUT_OF_ORDER or OUT_OF_SERVICE from table.
+          if (!this.isStatusUpdated)
+            this.statusQuoFormControls.status.patchValue(statusDetails.status);
+
+          // Only set the dates if available.
+          if (statusDetails.fromDate) {
+            this.statusQuoForm.patchValue({
+              fromDate: statusDetails?.fromDate,
+              toDate: statusDetails?.toDate,
+            });
+          }
+
           this.statusQuoForm.patchValue({
-            roomStatus:roomDetails.roomStatus,
-            remarks: roomDetails.remarks,
-            foStatus: roomDetails.foStatus,
+            remark: statusDetails.remarks,
+            foStatus: roomDetails.frontOfficeState,
           });
 
           this.isRoomInfoLoading = false;
@@ -350,7 +429,9 @@ export class AddRoomComponent implements OnInit, OnDestroy {
    * Get loading state
    */
   get loading() {
-    return this.isRoomInfoLoading || this.loadingRoomTypes;
+    return (
+      this.isRoomInfoLoading || this.loadingRoomTypes || this.isLoadingFeatures
+    );
   }
 
   /**
@@ -373,7 +454,10 @@ export class AddRoomComponent implements OnInit, OnDestroy {
    * @function addRoomType Add room type
    */
   createRoomType() {
-    this.router.navigate([`/pages/inventory/room/${routes.addRoomType}`]);
+    this.routesConfigService.navigate({
+      subModuleName: ModuleNames.ROOM,
+      additionalPath: routes.addRoomType,
+    });
   }
 
   /**
@@ -382,7 +466,7 @@ export class AddRoomComponent implements OnInit, OnDestroy {
   handleSubmit(): void {
     if (this.useForm.invalid) {
       this.useForm.markAllAsTouched();
-      this.snackbarService.openSnackBarAsText('Invalid Login form');
+      this.snackbarService.openSnackBarAsText('Please fill all the fields');
       return;
     }
 
@@ -393,19 +477,33 @@ export class AddRoomComponent implements OnInit, OnDestroy {
     }
   }
 
+  resetForm() {
+    this.useForm.reset();
+  }
+
   /**
    * @function updateRoom To update the room data
    */
   updateRoom(): void {
-    const data = this.useForm.getRawValue();
+    let data = this.useForm.getRawValue();
+    let statusData = this.statusQuoForm.getRawValue();
+    const activeFeatures = data.featureIds;
+    const removeFeatures = this.featureIds.filter(
+      (item) => !activeFeatures.includes(item)
+    );
 
     this.$subscription.add(
       this.roomService
-        .updateRoom(this.hotelId, {
-          rooms: [
-            new SingleRoomList().deserialize({ id: this.roomId, ...data })
-              .list[0],
-          ],
+        .updateRoom(this.entityId, {
+          room: new SingleRoom().deserialize({
+            id: this.roomId,
+            removeFeatures: removeFeatures,
+            ...data,
+            roomNo: null,
+            statusDetailsList: [
+              { ...statusData, isCurrentStatus: this.checkCurrentStatus() },
+            ],
+          }),
         })
         .subscribe(
           (res) => {
@@ -434,7 +532,7 @@ export class AddRoomComponent implements OnInit, OnDestroy {
 
     this.$subscription.add(
       this.roomService
-        .addRooms(this.hotelId, {
+        .addRooms(this.entityId, {
           rooms:
             this.submissionType === 'single'
               ? new SingleRoomList().deserialize(data).list
@@ -478,6 +576,16 @@ export class AddRoomComponent implements OnInit, OnDestroy {
           (error) => {}
         )
     );
+  }
+
+  checkCurrentStatus() {
+    if (!this.statusQuoFormControls?.fromDate.value) return true;
+    const todayEpoch = new Date().setHours(0, 0, 0, 0); // Get today's date in epoch format, setting time to midnight
+    const fromDate = new Date(
+      this.statusQuoFormControls.fromDate.value
+    ).setHours(0, 0, 0, 0);
+    // Compare the epoch values
+    return fromDate === todayEpoch ? true : false;
   }
 
   ngOnDestroy(): void {

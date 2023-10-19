@@ -6,6 +6,7 @@ import {
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
+import { tokensConfig } from 'libs/admin/shared/src/lib/constants/common';
 import { Observable } from 'rxjs';
 import { AuthService } from '../auth/services/auth.service';
 
@@ -22,10 +23,25 @@ export class TokenInterceptor implements HttpInterceptor {
       req.url.includes(this._authService.getBaseUrl())
     ) {
       console.log('authenticated user so adding token');
+      const entityId =
+        req.headers.get('entity-id') ??
+        this._authService.getTokenByName(tokensConfig.entityId);
+        
       const modifiedRequest = req.clone({
         setHeaders: {
-          'x-access-token': this._authService.getTokenByName('x-access-token'),
-          'x-userId': this._authService.getTokenByName('x-userId'),
+          [tokensConfig.accessToken]: this._authService.getTokenByName(
+            tokensConfig.accessToken
+          ),
+          [tokensConfig.userId]: this._authService.getTokenByName(
+            tokensConfig.userId
+          ),
+          ...(entityId
+            ? {
+                ['entity-id']:
+                  req.headers.get('entity-id') ??
+                  this._authService.getTokenByName(tokensConfig.entityId),
+              }
+            : {}),
         },
       });
       return next.handle(modifiedRequest);

@@ -1,5 +1,6 @@
 import { DateService } from '@hospitality-bot/shared/utils';
 import { get, set, trim } from 'lodash';
+import { JobRequestResponse } from '../types/response.types';
 
 export class InhouseTable {
   entityStateCounts: any;
@@ -34,11 +35,13 @@ export class InhouseData {
   confirmationNumber: string;
   elapsedTime: number;
   guestDetails: GuestType;
-  hotelId: string;
+  entityId: string;
   id: string;
   itemCode: string;
   itemName: string;
+  itemId: string;
   jobDuration: number;
+  sla: number;
   jobID: string;
   jobNo: string;
   journey: string;
@@ -51,10 +54,14 @@ export class InhouseData {
   state: string;
   status: string;
   stayDetails: StayDetails;
+  timeLeft: number;
+  source: string;
+  assigneeId: string;
 
-  deserialize(input) {
+  deserialize(input: JobRequestResponse) {
     this.rooms = new Array<Room>();
     this.guestDetails = new GuestType().deserialize(input?.guestDetails);
+
     this.stayDetails = new StayDetails().deserialize(input?.stayDetails);
     input?.rooms?.forEach((room) =>
       this.rooms.push(new Room().desrialize(room))
@@ -65,7 +72,8 @@ export class InhouseData {
       set({}, 'closedTime', get(input, ['closedTime'])),
       set({}, 'confirmationNumber', get(input, ['confirmationNumber'])),
       set({}, 'elapsedTime', get(input, ['elapsedTime'])),
-      set({}, 'hotelId', get(input, ['hotelId'])),
+      set({}, 'sla', get(input, ['sla'])),
+      set({}, 'entityId', get(input, ['entityId'])),
       set({}, 'id', get(input, ['id'])),
       set({}, 'itemCode', get(input, ['itemCode'])),
       set({}, 'itemName', get(input, ['itemName'])),
@@ -81,6 +89,11 @@ export class InhouseData {
       set({}, 'state', get(input, ['state'])),
       set({}, 'status', get(input, ['status']))
     );
+
+    this.timeLeft = input.timeLeft * 60 * 1000;
+    this.source = input.source;
+    this.itemId = input.itemId;
+    this.assigneeId = input.assigneeId;
 
     return this;
   }
@@ -112,11 +125,13 @@ export class InhouseData {
   }
 
   getSLA() {
-    if (this.elapsedTime)
-      return `${Math.round(
-        ((this.elapsedTime % 86400000) % 3600000) / 60000
-      )}m`;
-    else '------';
+    // if (this.elapsedTime)
+    //   return `${Math.round(
+    //     ((this.elapsedTime % 86400000) % 3600000) / 60000
+    //   )}m`;
+    if (this.sla) {
+      return `${this.sla}m`;
+    } else '------';
   }
 
   getSLAvalue() {
@@ -158,7 +173,7 @@ export class Room {
   }
 
   getRoomNumberAndType() {
-    return this.roomNumber + ' - ' + this.type;
+    return this.roomNumber + (this.type ? ' - ' + this.type : '');
   }
 }
 
@@ -206,7 +221,7 @@ export class Guest {
   documentRequired: boolean;
   regcardUrl: string;
   id;
-  nameTitle;
+  salutation;
   firstName: string;
   lastName: string;
   countryCode: string;
@@ -218,7 +233,7 @@ export class Guest {
     Object.assign(
       this,
       set({}, 'id', get(input, ['id'])),
-      set({}, 'nameTitle', get(input, ['nameTitle'], '')),
+      set({}, 'salutation', get(input, ['salutation'], '')),
       set({}, 'firstName', trim(get(input, ['firstName']))),
       set({}, 'lastName', trim(get(input, ['lastName']))),
       set(
@@ -295,6 +310,7 @@ export class StayDetails {
       set({}, 'roomType', get(input, ['roomType'])),
       set({}, 'status', get(input, ['status']))
     );
+
     this.statusMessage = new Status().deserialize(input?.statusMessage);
 
     return this;

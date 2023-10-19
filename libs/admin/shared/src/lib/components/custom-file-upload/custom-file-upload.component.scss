@@ -51,7 +51,7 @@
 
 .box {
   width: 245px;
-  height: 187px;
+  height: 186px;
   border-radius: 6px;
   background-color: #e5e5e5;
   position: relative;
@@ -110,7 +110,12 @@
 }
 
 .checkbox {
+  cursor: pointer;
+  input {
+    cursor: pointer;
+  }
   label {
+    cursor: pointer;
     color: $secondary2;
     font-size: 14px;
   }
@@ -123,4 +128,13 @@
 .create-btn {
   margin-top: 3em;
   @include flex-justify-center();
+}
+
+.disable {
+  color: lightgray;
+  pointer-events: none;
+
+  label {
+    color: lightgray;
+  }
 }

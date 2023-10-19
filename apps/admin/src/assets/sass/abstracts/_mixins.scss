@@ -307,6 +307,16 @@
   }
 }
 
+@mixin contained-primary-button {
+  text-align: center;
+  font-size: 12px;
+  letter-spacing: 0.72px;
+  color: $primary-cta;
+  padding: 7px 11.7px 7.5px 12px;
+  background-color: $primary-text-bg;
+  border-radius: 8px;
+}
+
 @mixin chat-list {
   height: auto;
   padding: 10.5px 15px;
@@ -330,6 +340,16 @@
   }
 }
 
+@mixin contained-primary-button {
+  text-align: center;
+  font-size: 12px;
+  letter-spacing: 0.72px;
+  color: $primary-cta;
+  padding: 7px 11.7px 7.5px 12px;
+  background-color: $primary-text-bg;
+  border-radius: 8px;
+}
+
 @mixin form-header {
   padding: 25px $form-padding-x 25px;
   font-family: Poppins;
@@ -340,7 +360,7 @@
 @mixin form-block {
   --row-gap: 40px;
   --column-gap: 6%;
-  
+
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -465,6 +485,11 @@
   }
 }
 
+@mixin tableHeadingStickyPosition($topPosition) {
+  .p-datatable-thead {
+    top: $topPosition !important;
+  }
+}
 @mixin create-with-container {
   height: calc(100vh - 65px);
   overflow: hidden;
@@ -507,4 +532,10 @@
   border-radius: 20px;
   max-width: fit-content;
   text-transform: capitalize;
+}
+
+@mixin no-break-hidden-text {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
 }

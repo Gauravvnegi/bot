@@ -155,9 +155,9 @@ export class DocumentDetailsService extends ApiService {
     return this.get(`/api/v1/countries`);
   }
 
-  getDocumentsByNationality(hotelId, nationality) {
+  getDocumentsByNationality(entityId, nationality) {
     return this.get(
-      `/api/v1/hotel/${hotelId}/support-documents?nationality=${nationality}`
+      `/api/v1/entity/${entityId}/support-documents?nationality=${nationality}`
     ).pipe(
       map((res) => {
         // modified the result for no content (for the wrong nationality)
@@ -184,7 +184,7 @@ export class DocumentDetailsService extends ApiService {
     data.firstName = 'Test';
     data.lastName = 'Test';
     data.email = 'test2gmail.com';
-    data.nameTitle = 'Mr.';
+    data.salutation = 'Mr.';
     data.type = value.selectedDocument;
     data.nationality = this.getCountryByKey(value.country);
     data.contactDetails = new ContactDetails();

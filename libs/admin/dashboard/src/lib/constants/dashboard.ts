@@ -1,3 +1,5 @@
+import { getNoDataLabel } from '@hospitality-bot/admin/shared';
+
 export const dashboard = {
   images: {
     arrivals: {
@@ -49,6 +51,16 @@ export const dashboard = {
   },
   legend: {
     bookingStatus: [
+      {
+        label: 'New',
+        borderColor: '#4bc0c0',
+        backgroundColor: '#4bc0c0',
+      },
+      {
+        label: 'Pre Check-in',
+        borderColor: '#82a3fd',
+        backgroundColor: '#82a3fd',
+      },
       {
         label: 'Check-In',
         borderColor: '#0ea47a',
@@ -106,6 +118,9 @@ export const dashboard = {
           titleMarginBottom: 5,
           xPadding: 10,
           yPadding: 10,
+          callbacks: {
+            label: getNoDataLabel,
+          },
         },
         responsive: true,
         elements: {
@@ -154,6 +169,9 @@ export const dashboard = {
           titleMarginBottom: 5,
           xPadding: 10,
           yPadding: 10,
+          callbacks: {
+            label: getNoDataLabel,
+          },
         },
         responsive: true,
         cutoutPercentage: 75,
@@ -161,6 +179,12 @@ export const dashboard = {
     },
     color: {
       bookingStatus: [
+        {
+          borderColor: '#4bc0c0',
+        },
+        {
+          borderColor: '#82a3fd',
+        },
         {
           borderColor: '#0ea47a',
         },
@@ -202,3 +226,8 @@ export const dashboard = {
     },
   },
 };
+
+export const dashboardPopUpTabs = [
+  { label: 'Guest', value: 'GUEST' },
+  { label: 'Pre-Arrival Request', value: 'PRE_ARRIVAL_REQUEST' },
+];

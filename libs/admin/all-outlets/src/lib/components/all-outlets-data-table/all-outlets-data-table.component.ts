@@ -9,12 +9,18 @@ import {
 } from '@hospitality-bot/admin/shared';
 import * as FileSaver from 'file-saver';
 import { SnackBarService } from '@hospitality-bot/shared/material';
-import { TabValue, chips, cols, filters, title } from '../../constants/data-table';
+import {
+  TabValue,
+  chips,
+  cols,
+  filters,
+  title,
+} from '../../constants/data-table';
 import { Subscription } from 'rxjs';
 import { OutletService } from '../../services/outlet.service';
 import { LazyLoadEvent } from 'primeng/api';
 import { MatTabChangeEvent } from '@angular/material/tabs';
-import { outletRoutes } from '../../constants/route';
+import { outletBusinessRoutes } from '../../constants/routes';
 import { QueryConfig } from '@hospitality-bot/admin/library';
 import { OutletList } from '../../models/outlet.model';
 
@@ -26,10 +32,9 @@ import { OutletList } from '../../models/outlet.model';
     './all-outlets-data-table.component.scss',
   ],
 })
-
 export class AllOutletsDataTableComponent extends BaseDatatableComponent
   implements OnInit, OnDestroy {
-  readonly outletRoutes = outletRoutes;
+  readonly outletBusinessRoutes = outletBusinessRoutes;
 
   outletId: string;
   tabFilterItems = filters;
@@ -54,7 +59,7 @@ export class AllOutletsDataTableComponent extends BaseDatatableComponent
   }
 
   ngOnInit(): void {
-    this.outletId = this.globalFilterService.hotelId;
+    this.outletId = this.globalFilterService.entityId;
     this.listenToTableChange();
   }
 
@@ -95,39 +100,39 @@ export class AllOutletsDataTableComponent extends BaseDatatableComponent
     this.loading = true;
     // this.values = allOutletsResponse;
 
-    this.outletService
-      .getAllOutlets(this.outletId)
-      .subscribe(
-        (res) => {
-          const outletList = new OutletList().deserialize(res);
-          this.values = res;
-          // switch (this.selectedTable) {
-          //   case TabValue.ALL:
-          //     this.values = outletList.allOutlets;
-          //     break;
-          //   case TabValue.BANQUET:
-          //     this.values = outletList.banquets;
-          //     break;
-          //   case TabValue.BAR:
-          //     this.values = outletList.bar;
-          //     break;
-          //   case TabValue.CONFERENCE_ROOM:
-          //     this.values = outletList.conferenceRoom;
-          //     break;
-          //   case TabValue.RESTAURANT:
-          //     this.values = outletList.restaurant;
-          //     break;
-          // }
-          this.updateTabFilterCount(res.entityTypeCounts, res.total);
-          this.updateQuickReplyFilterCount(res.entityStateCounts);
-          this.updateTotalRecords();
-        },
-        () => {
-          this.values = [];
-          this.loading = false;
-        },
-        this.handleFinal
-      );
+    this.outletService.getAllOutlets(this.outletId).subscribe(
+      (res) => {
+        const outletList = new OutletList().deserialize(res);
+        this.values = res;
+        // switch (this.selectedTable) {
+        //   case TabValue.ALL:
+        //     this.values = outletList.allOutlets;
+        //     break;
+        //   case TabValue.BANQUET:
+        //     this.values = outletList.banquets;
+        //     break;
+        //   case TabValue.BAR:
+        //     this.values = outletList.bar;
+        //     break;
+        //   case TabValue.CONFERENCE_ROOM:
+        //     this.values = outletList.conferenceRoom;
+        //     break;
+        //   case TabValue.RESTAURANT:
+        //     this.values = outletList.restaurant;
+        //     break;
+        // }
+        this.initFilters(
+          res.entityTypeCounts,
+          res.entityStateCounts,
+          res.total
+        );
+      },
+      () => {
+        this.values = [];
+        this.loading = false;
+      },
+      this.handleFinal
+    );
   }
 
   getSelectedQuickReplyFilters() {
@@ -149,23 +154,20 @@ export class AllOutletsDataTableComponent extends BaseDatatableComponent
     // Not working
     this.loading = true;
     this.$subscription.add(
-      this.outletService
-        .updateOutletItem(rowData.id, status)
-        .subscribe(
-          () => {
-            this.updateStatusAndCount(rowData.status, status);
-
-            this.snackbarService.openSnackBarAsText(
-              'Status changes successfully',
-              '',
-              { panelClass: 'success' }
-            );
-          },
-          ({ error }) => {
-            this.handleError(error);
-          },
-          this.handleFinal
-        )
+      this.outletService.updateOutletItem(rowData.id, status).subscribe(
+        () => {
+          this.loadInitialData();
+          this.snackbarService.openSnackBarAsText(
+            'Status changes successfully',
+            '',
+            { panelClass: 'success' }
+          );
+        },
+        ({ error }) => {
+          this.handleError(error);
+        },
+        this.handleFinal
+      )
     );
   }
 
@@ -178,7 +180,55 @@ export class AllOutletsDataTableComponent extends BaseDatatableComponent
   }
 
   /**
-   * @function exportCSV To export CSV report of the table.
+   * @function e  //get restaurant form controls
+  get restaurantFormControl() {
+    return this.useForm.controls as Record<
+      keyof Rest  //get restaurant form controls
+  get restaurantFormControl() {
+    return this.useForm.controls as Record<
+      keyof Rest  //get restaurant form controls
+  get restaurantFormControl() {
+    return this.useForm.controls as Record<
+      keyof RestaurantForm,
+      AbstractControl
+    >;
+  }
+
+  //get venue form controls
+  get venueFormControl() {
+    return this.useForm.controls as Record<keyof VenueForm, AbstractControl>;
+  }
+
+  //get spa form controls
+  get spaFormControl() {
+    return this.useForm.controls as Record<keyof SpaForm, AbstractControl>;
+  }aurantForm,
+      AbstractControl
+    >;
+  }
+
+  //get venue form controls
+  get venueFormControl() {
+    return this.useForm.controls as Record<keyof VenueForm, AbstractControl>;
+  }
+
+  //get spa form controls
+  get spaFormControl() {
+    return this.useForm.controls as Record<keyof SpaForm, AbstractControl>;
+  }aurantForm,
+      AbstractControl
+    >;
+  }
+
+  //get venue form controls
+  get venueFormControl() {
+    return this.useForm.controls as Record<keyof VenueForm, AbstractControl>;
+  }
+
+  //get spa form controls
+  get spaFormControl() {
+    return this.useForm.controls as Record<keyof SpaForm, AbstractControl>;
+  }xportCSV To export CSV report of the table.
    */
   exportCSV(): void {
     this.loading = true;

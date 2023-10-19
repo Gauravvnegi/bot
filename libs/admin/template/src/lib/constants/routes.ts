@@ -8,7 +8,7 @@ export const navRoutes = {
 };
 
 export const templateRoutes: Record<
-  'template' | 'CreateTemplate' | 'EditTemplate',
+  'template' | 'createTemplate' | 'editTemplate',
   PageRoutes
 > = {
   template: {
@@ -16,14 +16,14 @@ export const templateRoutes: Record<
     navRoutes: [],
     title: 'template',
   },
-  CreateTemplate: {
+  createTemplate: {
     route: 'create-template',
-    navRoutes: [],
+    navRoutes: [navRoutes.createTemplate],
     title: 'Create Template',
   },
-  EditTemplate: {
-    route: 'edit-template',
-    navRoutes: [],
+  editTemplate: {
+    route: 'edit-template/:id',
+    navRoutes: [navRoutes.editTemplate],
     title: '',
   },
 };

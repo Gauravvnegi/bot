@@ -1,23 +1,18 @@
 import { get, set } from 'lodash';
 import { DateService } from '@hospitality-bot/shared/utils';
-import { IDeserializable } from '@hospitality-bot/admin/shared';
+import { EntityState, IDeserializable } from '@hospitality-bot/admin/shared';
 
 export class Templates implements IDeserializable {
   records: ITemplate[];
-  entitySateCounts: IEntityStateCounts;
-  entityTypeCounts: IEntityTypeCounts;
+  entityStateCounts: EntityState<string>;
+  entityTypeCounts: EntityState<string>;
   total: number;
   deserialize(input) {
     this.records =
       input?.records?.map((item) => new Template().deserialize(item)) ?? [];
-    // this.entityTypeCounts = new EntityTypeCounts().deserialize(
-    //   input?.entityTypeCounts ?? [],
-    //   input?.total
-    // );
-    // this.entitySateCounts = new EntityStateCounts().deserialize(
-    //   input?.entityStateCounts
-    // );
-    // this.total = input.total;
+    this.entityStateCounts = input?.entityStateCounts;
+    this.entityTypeCounts = input?.entityTypeCounts;
+    this.total = input?.total;
     return this;
   }
 }
@@ -38,7 +33,6 @@ class EntityStateCounts {
 }
 class EntityTypeCounts {
   ALL: number;
-
   deserialize(input, total) {
     this.ALL = total;
     console.log(EntityTypeCounts);
@@ -73,7 +67,7 @@ export class Template implements IDeserializable {
       set({}, 'name', get(input, ['name'])),
       set({}, 'status', get(input, ['active'])),
       set({}, 'description', get(input, ['description'])),
-      set({}, 'entityId', get(input, ['hotelId'])),
+      set({}, 'entityId', get(input, ['entityId'])),
       set({}, 'active', get(input, ['active'])),
       set({}, 'topicId', get(input, ['topicId'])),
       set({}, 'topicName', get(input, ['topicName'])),
@@ -108,7 +102,7 @@ export class Topic {
   status: boolean;
   description: string;
   name: string;
-  hotelId: string;
+  entityId: string;
   active: boolean;
 
   deserialize(input: any) {
@@ -118,7 +112,7 @@ export class Topic {
       set({}, 'name', get(input, ['name'])),
       set({}, 'status', get(input, ['active'])),
       set({}, 'description', get(input, ['description'])),
-      set({}, 'hotelId', get(input, ['hotelId'])),
+      set({}, 'entityId', get(input, ['entityId'])),
       set({}, 'active', get(input, ['active']))
     );
     return this;

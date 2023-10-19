@@ -20,7 +20,7 @@ export enum TableValue {
   allOutlets = 'ALL_OUTLETS',
   menu = 'MENU',
   menuList = 'MENU_LIST',
-  foodItems = 'FOOD_ITEMS'
+  foodItems = 'FOOD_ITEMS',
 }
 
 export const filters: Filter<TabValue, string>[] = [
@@ -113,35 +113,38 @@ export const cols: Record<TableValue, Cols[]> = {
       sortType: 'string',
     },
     {
+      field: 'category',
+      header: 'Category',
+      sortType: 'string',
+    },
+    {
       field: 'hsnCode',
       header: 'HSN Code',
       sortType: 'number',
     },
     {
-      field: 'category',
-      header: 'Category',
-      sortType: 'string',
-      isSearchDisabled: true,
-    },
-    {
-      field: 'kitchenDept',
-      header: 'Kitchen Dep',
-      sortType: 'string',
-    },
-    {
-      field: 'dineIn',
+      field: 'dineInPrice',
       header: 'Dine in / Delivery',
-      sortType: 'string',
+      sortType: 'number',
+      searchField: ['dineInPrice', 'deliveryPrice'],
+      width: '13%',
     },
     {
       field: 'preparationTime',
       header: 'Preparation Time',
-      sortType: 'number',
+      sortType: 'date',
     },
     {
-      field: 'unit',
+      field: 'quantity',
       header: 'Qty/Unit',
       sortType: 'number',
+      searchField: ['quantity', 'unit'],
+    },
+    {
+      field: 'status',
+      header: 'Status',
+      sortType: 'number',
+      width: '14%',
     },
   ],
 
@@ -162,11 +165,6 @@ export const cols: Record<TableValue, Cols[]> = {
       sortType: 'string',
     },
     {
-      field: 'hsnCode',
-      header: 'HSN Code',
-      sortType: 'number',
-    },
-    {
       field: 'category',
       header: 'Category',
       sortType: 'string',
@@ -174,12 +172,13 @@ export const cols: Record<TableValue, Cols[]> = {
     {
       field: 'preparationTime',
       header: 'PreparationTime',
-      sortType: 'number',
+      sortType: 'date',
     },
     {
-      field: 'unit',
+      field: 'quantity',
       header: 'Qty/Unit',
       sortType: 'number',
+      searchField: ['unit, quantity'],
     },
     {
       field: 'status',
@@ -202,10 +201,10 @@ export const cols: Record<TableValue, Cols[]> = {
     },
     {
       field: 'action',
-      header:'Action',
+      header: 'Action',
       width: '10%',
       isHidden: true,
-    }
+    },
   ],
 };
 

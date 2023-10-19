@@ -4,6 +4,7 @@ variables:
 stages:
   - deploy_admin
   - deploy_web
+
 Deploy_Admin:
   stage: deploy_admin
   environment:
@@ -15,7 +16,7 @@ Deploy_Admin:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY_URL
   script:
     - docker build -t $CI_IMAGE_NAME .
-    - docker tag $CI_IMAGE_NAME $CI_REGISTRY_IMAGE_URL:$IMAGE_TAG 
+    - docker tag $CI_IMAGE_NAME $CI_REGISTRY_IMAGE_URL:$IMAGE_TAG
     - docker push $CI_REGISTRY_IMAGE_URL:$IMAGE_TAG
     - cat "$DEPLOYMENT_FILE" > deployment.yaml
     - cat "$KUBE_CONFIG_FILE" > k8s-config.yaml
@@ -24,6 +25,7 @@ Deploy_Admin:
     - kubectl apply -f deployment.yaml --validate=false
   tags:
     - k8s-dev
+  timeout: 1h
 
 Deploy_Web:
   stage: deploy_web
@@ -38,7 +40,7 @@ Deploy_Web:
     - sed -i "s/admin/web/g" deploy/nginx.conf
   script:
     - docker build -t $CI_IMAGE_NAME .
-    - docker tag $CI_IMAGE_NAME $CI_REGISTRY_IMAGE_URL:$IMAGE_TAG 
+    - docker tag $CI_IMAGE_NAME $CI_REGISTRY_IMAGE_URL:$IMAGE_TAG
     - docker push $CI_REGISTRY_IMAGE_URL:$IMAGE_TAG
     - cat "$DEPLOYMENT_FILE" > deployment.yaml
     - cat "$KUBE_CONFIG_FILE" > k8s-config.yaml
@@ -47,9 +49,10 @@ Deploy_Web:
     - cat deployment.yaml
     - sed -i "s/latest/${IMAGE_TAG}/g" deployment.yaml
     - kubectl apply -f deployment.yaml --validate=false
+  
   tags:
     - k8s-dev
-
+  timeout: 1h
 #test_project:
 #    stage: test
 #    script:
@@ -115,9 +118,4 @@ Deploy_Web:
 #    - ssh -p "$ssh_port" "$ssh_user"@"$server_ip" "sleep 40; rm -rf $admin_work_dir/*.sh; rm -rf $admin_work_dir/*.tar; ls $admin_work_dir && netstat -tnlp"
 #  only:
 #    - dev-deploy
-
-
-
-
-
 

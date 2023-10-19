@@ -1,0 +1,45 @@
+<i
+  class="pi pi-info-circle icon"
+  (mouseenter)="showContent = true"
+  (mouseleave)="showContent = false"
+  style="font-size: 1.8rem; color: blue; padding: 8px 0;"
+></i>
+<p-dialog
+  header="Header"
+  [showHeader]="false"
+  [visible]="showContent"
+  [style]="{ width: '23vw' }"
+>
+  <div class="info-container">
+    <div class="sub-continer">
+      <div class="title">{{ title }}</div>
+      <div class="room-status">
+        <div class="status" *ngFor="let status of roomStatus">
+          <span
+            class="circle"
+            [ngStyle]="{ backgroundColor: status.color }"
+          ></span>
+          <span class="label">{{ status.name }}</span>
+        </div>
+      </div>
+    </div>
+    <div class="sub-continer">
+      <div class="title title-1">Booking Indicators</div>
+      <div class="room-status">
+        <div class="status" *ngFor="let status of bookingIndicator">
+          <img class="icon" [src]="status.icon" alt="icon" />
+          <span class="label">{{ status.name }}</span>
+        </div>
+      </div>
+    </div>
+    <div class="sub-continer">
+      <div class="title title-1">Room Features</div>
+      <div class="room-status">
+        <div class="status" *ngFor="let feature of features">
+          <img class="icon" [src]="feature.icon" alt="icon" />
+          <span class="label">{{ feature.name }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</p-dialog>

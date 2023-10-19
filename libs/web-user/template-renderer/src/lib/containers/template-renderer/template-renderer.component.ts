@@ -43,7 +43,7 @@ export class TemplateRendererComponent implements OnInit, OnDestroy {
           expiry,
           journey,
           reservationId,
-          hotelId,
+          entityId,
         } = this.cryptoService.extractTokenInfo(token);
         //can set a general loader here
         //call to fetch template data for the given templateId
@@ -51,7 +51,7 @@ export class TemplateRendererComponent implements OnInit, OnDestroy {
         this.templateService.templateConfig = {
           reservationId,
           journey,
-          hotelId,
+          entityId,
           templateId,
           expiry,
         };

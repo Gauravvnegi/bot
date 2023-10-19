@@ -35,6 +35,7 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
   selectedPaymentOption: SelectedPaymentOption = new SelectedPaymentOption();
   paymentUrl: string;
   selectedIndex: number = 0;
+  selectedTab: 'Pay At Desk' | 'Pay Now' = 'Pay At Desk';
 
   constructor(
     private _paymentDetailsService: PaymentDetailsService,
@@ -66,15 +67,18 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
   /**
    * Handle getting the button Config with disabled state
    * @param isNextDisabled to disable the next button
-   * @returns 
+   * @returns
    */
   getUpdatedBtnConfig(isNextDisabled = false) {
-    this.buttonConfig[1].settings.disable = isNextDisabled && this.reservationData.paymentSummary.payableAmount !== 0;
+    this.buttonConfig[1].settings.disable =
+      isNextDisabled && this.reservationData.paymentSummary.payableAmount !== 0;
     return this.buttonConfig;
   }
 
-  onTabChanged({ index }) {
+  onTabChanged(event) {
+    const { index, tab } = event;
     this.selectedIndex = index;
+    this.selectedTab = tab.textLabel;
   }
 
   initPaymentDetailsDS(hotelPaymentConfig) {
@@ -86,14 +90,17 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
 
   // need to merge v1 into v2
   initPaymentDetailsDSV2() {
+    const journey = this._hotelService.getCurrentJourneyConfig();
+
     this._paymentDetailsService
-      .getPaymentConfigurationV2(this._hotelService.hotelId)
+      .getPaymentConfigurationV2(this._hotelService.entityId, journey.name)
       .subscribe((data) => {
-        const gatewayDetails = data?.paymentConfigurations?.map((gateway) => ({
-          gatewayType: gateway?.gatewayType,
+        const gatewayDetails = data?.paymentConfiguration?.map((gateway) => ({
+          gatewayType: gateway?.type,
           imgSrc:
-            gateway?.imgSrc || gateway?.gatewayType === 'CCAVENUE'
-              ? 'https://nyc3.digitaloceanspaces.com/botfiles/bot/hotel/roseate/banner/ccavenue.webp'
+            // gateway?.imgSrc ||
+            gateway?.type === 'CCAVENUE'
+              ? 'https://nyc3.digitaloceanspaces.com/botfiles/bot/payment_method/ccavenue.png'
               : 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/PayU.svg/1200px-PayU.svg.png',
           payload: {
             redirectUrl: `${environment.host_url}${this.router.url}&entity=payment`,
@@ -103,15 +110,16 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
         this.paymentUrl = initPaymentModule({
           userInfo: {
             appName: 'web',
-            entityId: this._hotelService.hotelId,
+            entityId: this._hotelService.entityId,
             reservationId: this._reservationService.reservationId,
           },
           uiConfig: {
-            heading: 'Select a payment method',
+            heading: 'Select a payment method to proceed...',
             variant: 'standard',
           },
           gatewayDetails,
           paymentApiKey: `${environment.paymentApiKey}`,
+          env: environment.production ? 'production' : 'development',
         });
       });
   }
@@ -121,7 +129,7 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
     const journey = this._hotelService.getCurrentJourneyConfig();
     this.$subscription.add(
       this._paymentDetailsService
-        .getPaymentConfiguration(res_data.hotel.id, journey.name)
+        .getPaymentConfiguration(res_data.entity.id, journey.name)
         .subscribe((response) => {
           this.hotelPaymentConfig = response;
           this.isConfigLoaded = true;
@@ -143,6 +151,16 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
         this.updatePaymentStatus(journeyEnums.JOURNEY.preCheckin);
       }
     }
+  }
+
+  get isSubmitDisabled() {
+    if (!this.matTab) return;
+    const TAB_INDEX = this.matTab['_selectedIndex'];
+    return (
+      this.hotelPaymentConfig.paymentHeaders[TAB_INDEX].type ===
+        paymentEnum.PaymentHeaders.payNow &&
+      this.reservationData.paymentSummary.payableAmount !== 0
+    );
   }
 
   onCheckinSubmit() {
@@ -281,7 +299,7 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
   }
 
   handlePayNowPayment(data, buttonRef: string) {
-    switch (this.selectedPaymentOption.config.gatewayType) {
+    switch (this.selectedPaymentOption?.config.gatewayType) {
       case paymentEnum.GatewayTypes.ccavenue:
         this.initiateCCAvenuePayment(data, buttonRef);
         break;
@@ -334,13 +352,15 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
       | journeyEnums.JOURNEY.preCheckin
   ): void {
     if (state === journeyEnums.JOURNEY.checkin) {
-      this._translateService
-        .get('MESSAGES.SUCCESS.PAYMENT_DETAILS_COMPLETE')
-        .subscribe((translatedMsg) => {
-          this._snackBarService.openSnackBarAsText(translatedMsg, '', {
-            panelClass: 'success',
+      if (this.selectedTab === 'Pay Now') {
+        this._translateService
+          .get('MESSAGES.SUCCESS.PAYMENT_DETAILS_COMPLETE')
+          .subscribe((translatedMsg) => {
+            this._snackBarService.openSnackBarAsText(translatedMsg, '', {
+              panelClass: 'success',
+            });
           });
-        });
+      }
       this._buttonService.buttonLoading$.next(this.buttonRefs['nextButton']);
       this._stepperService.setIndex('next');
     } else {

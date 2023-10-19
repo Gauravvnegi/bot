@@ -9,14 +9,13 @@
 
 .main {
   position: relative;
-  overflow: auto;
-  box-shadow: inset 0px -12px 11px -12px #e8eef5;
+  // overflow: auto;
+  // box-shadow: inset 0px -12px 11px -12px #e8eef5;
 }
 
 .header {
   position: sticky;
   display: flex;
-
   top: 0;
   padding: 0 2%;
   height: 48px;
@@ -32,7 +31,7 @@
   }
 }
 
-.values-row {
+:host ::ng-deep .values-row {
   position: relative;
   display: flex;
   gap: 2%;
@@ -53,5 +52,12 @@
 }
 
 .action-btn {
-  margin: 2px 0;
+  display: flex;
+  justify-content: flex-end;
+}
+
+:host ::ng-deep .select {
+  .option-items {
+    overflow: hidden;
+  }
 }

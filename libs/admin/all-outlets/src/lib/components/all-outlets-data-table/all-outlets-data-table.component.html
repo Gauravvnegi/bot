@@ -7,7 +7,8 @@
   <div class="action-wrapper">
     <hospitality-bot-button
       label="+ Add Outlet"
-      link="pages/outlets/{{ outletRoutes.addOutlet.route }}"
+      [routerLink]="['add-outlet']"
+      queryParamsHandling="preserve"
     ></hospitality-bot-button>
     <hospitality-bot-export-list
       [additionalActionItems]="additionalActionItems"
@@ -115,12 +116,12 @@
       </td>
       <td>
         <div class="cell-content">
-          <hospitality-bot-toggle-dropdown
+          <hospitality-bot-status-dropdown-toggle
             class="toggle-btn"
             (onClick)="handleStatus($event, rowData)"
-            [status]="rowData.status"
+            [state]="rowData.status"
           >
-          </hospitality-bot-toggle-dropdown>
+          </hospitality-bot-status-dropdown-toggle>
         </div>
       </td>
     </tr>
@@ -146,7 +147,7 @@
 <ng-template #emptyTable>
   <hospitality-bot-empty-table
     [isLoading]="loading"
-    link="/pages/outlet/all-outlets/{{ outletRoutes.addOutlet.route }}"
+    [link]="outletRoutes.addOutlet.route"
     [content]="{
       description:
         'No Outlets found. Tap the +Add Outlet to add & manage the outlets',

@@ -1,6 +1,6 @@
-import { EntityStateCounts } from '@hospitality-bot/admin/library';
 import { DateService } from '@hospitality-bot/shared/utils';
 import { OfferListResponse, OfferResponse } from '../types/response';
+import { EntityState } from '@hospitality-bot/admin/shared';
 
 export class Offer {
   id: string;
@@ -21,13 +21,13 @@ export class Offer {
     this.name = input.name;
     this.description = input.description;
     this.packageCode = input.packageCode;
-    this.imageUrl = input.imageUrl;
     this.source = input.source;
     this.startDate = input.startDate;
     this.endDate = input.endDate;
     this.status = input.active;
     this.discountType = input.discountType;
     this.discountValue = input.discountValue;
+    if (input.imageUrl?.length > 0) this.imageUrl = input.imageUrl[0].url;
 
     const appliedOnNames = [];
     input.subPackages?.forEach((item) => appliedOnNames.push(item.name));
@@ -47,15 +47,15 @@ export class Offer {
 
 export class OfferList {
   records: Offer[];
-  total: number;
-  entityStateCounts: EntityStateCounts;
+  totalRecord: number;
+  entityStateCounts: EntityState<string>;
+  entityTypeCounts: EntityState<string>;
+
   deserialize(input: OfferListResponse) {
     this.records = input.offers?.map((item) => new Offer().deserialize(item));
-    this.total = input.total;
-    this.entityStateCounts = new EntityStateCounts().deserialize(
-      input?.entityStateCounts,
-      input?.total
-    );
+    this.totalRecord = input.total;
+    this.entityStateCounts = input.entityStateCounts;
+    this.entityTypeCounts = input.entityTypeCounts;
     return this;
   }
 }

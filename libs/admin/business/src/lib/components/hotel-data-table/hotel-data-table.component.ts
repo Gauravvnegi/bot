@@ -1,6 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import {
+  ActivatedRoute,
+  ActivatedRouteSnapshot,
+  Router,
+} from '@angular/router';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
   AdminUtilityService,
@@ -12,13 +16,20 @@ import {
   SnackBarService,
 } from '@hospitality-bot/shared/material';
 import { Subscription } from 'rxjs';
-import { cols } from '../../constant/hotel-data-table';
+import {
+  BrandTableName,
+  HotelTableName,
+  cols,
+} from '../../constant/hotel-data-table';
 import { BusinessService } from '../../services/business.service';
 import { MatDialogConfig } from '@angular/material/dialog';
 import { ModalComponent } from 'libs/admin/shared/src/lib/components/modal/modal.component';
 import { QueryConfig } from '@hospitality-bot/admin/library';
 import * as FileSaver from 'file-saver';
 import { LazyLoadEvent } from 'primeng/api';
+import { businessRoute } from '../../constant/routes';
+import { HotelFormDataService } from '../../services/hotel-form.service';
+import { EntityList } from '../../models/property.model';
 
 @Component({
   selector: 'hospitality-bot-hotel-data-table',
@@ -31,13 +42,14 @@ import { LazyLoadEvent } from 'primeng/api';
 export class HotelDataTableComponent extends BaseDatatableComponent
   implements OnInit {
   cols = cols;
-  tableName = 'Hotel';
+  tableName = BrandTableName;
   $subscription = new Subscription();
-  hotelId: string;
+  entityId: string;
   loading: boolean = false;
   globalQueries = [];
   tableFG;
-  @Input() brandId: string = '';
+  routerLink = businessRoute;
+  @Input() parentId: string = '';
 
   constructor(
     private fb: FormBuilder,
@@ -48,15 +60,16 @@ export class HotelDataTableComponent extends BaseDatatableComponent
     private router: Router,
     private route: ActivatedRoute,
     private businessService: BusinessService,
-    private modalService: ModalService
+    private modalService: ModalService,
+    private hotelFormDataService: HotelFormDataService
   ) {
     super(fb, tabFilterService);
   }
 
   ngOnInit(): void {
-    this.businessService.resetHotelFormState();
-
     this.initTableValue();
+    this.entityId = this.route.snapshot.params['entityId'];
+    this.tableName = this.entityId ? HotelTableName : BrandTableName;
   }
 
   /**
@@ -71,11 +84,12 @@ export class HotelDataTableComponent extends BaseDatatableComponent
     this.loading = true;
     this.$subscription.add(
       this.businessService
-        .getHotelList(this.brandId, this.getQueryConfig())
+        .getPropertyList(this.parentId, this.getQueryConfig())
         .subscribe(
           (res) => {
-            this.values = res.records;
-            this.totalRecords = res.total;
+            const data = new EntityList().deserialize(res);
+            this.values = data.records;
+            this.totalRecords = data.total;
           },
           ({ error }) => {
             this.values = [];
@@ -84,6 +98,19 @@ export class HotelDataTableComponent extends BaseDatatableComponent
           this.handelFinal
         )
     );
+  }
+
+  secondsToAMPMTime(seconds) {
+    const hours = Math.floor(seconds / 3600);
+    const minutes = Math.floor((seconds % 3600) / 60);
+    const period = hours < 12 ? 'AM' : 'PM';
+
+    const formattedHours = hours === 0 ? 12 : hours > 12 ? hours - 12 : hours;
+
+    const timeString = `${formattedHours
+      .toString()
+      .padStart(2, '0')}:${minutes.toString().padStart(2, '0')} ${period}`;
+    return timeString;
   }
 
   /**
@@ -105,21 +132,6 @@ export class HotelDataTableComponent extends BaseDatatableComponent
   }
 
   /**
-   * @function getSelectedQuickReplyFilters To return the selected chip list.
-   * @returns The selected chips.
-   */
-  getSelectedQuickReplyFilters() {
-    const chips = this.filterChips.filter(
-      (item) => item.isSelected && item.value !== 'ALL'
-    );
-    return [
-      chips.length !== 1
-        ? { entityState: null }
-        : { entityState: chips[0].value === 'ACTIVE' },
-    ];
-  }
-
-  /**
    * @function handleStatus
    * @description To handle status Active/Inactive
    */
@@ -134,14 +146,15 @@ export class HotelDataTableComponent extends BaseDatatableComponent
 
     // let heading: string;
     let description: string[] = [
-      `Are you sure you want to Deactive ${rowData?.name}`,
-      ' Once Deactivated, you wont be to manage reservations and the hotel website will not be visible to visitors.',
+      `Are you sure you want to Deactivate ${rowData?.name}?`,
+      ' Once deactivated, you will no longer be able to manage reservations, and the property or outlet',
+      'website will become inaccessible to visitors.',
     ];
     let label: string = 'Deactivate';
     if (status) {
       description = [
-        `Are you sure you want to Activate ${rowData?.name}`,
-        ' Once Activated, you will be able to manage reservations and the hotel website will be visible to visitors.',
+        `Are you sure you want to Activate ${rowData?.name}?`,
+        ' Once Activated, you will be able to manage reservations, and the property or outlet website will be visible to visitors.',
       ];
       label = 'Activate';
     }
@@ -176,15 +189,10 @@ export class HotelDataTableComponent extends BaseDatatableComponent
     this.loading = true;
     this.$subscription.add(
       this.businessService
-        .updateHotel(rowData.id, { status: status })
+        .updateHotel(rowData.id, { status: status ? 'ACTIVE' : 'INACTIVE' })
         .subscribe(
           (res) => {
-            const statusValue = (val: boolean) => (val ? 'ACTIVE' : 'INACTIVE');
-            this.updateStatusAndCount(
-              statusValue(rowData.status),
-              statusValue(status)
-            );
-            this.values.find((item) => item.id === rowData.id).status = status;
+            this.initTableValue();
             this.snackbarService.openSnackBarAsText(
               'Status changes successfully',
               '',
@@ -208,13 +216,13 @@ export class HotelDataTableComponent extends BaseDatatableComponent
       params: this.adminUtilityService.makeQueryParams([
         ...this.globalQueries,
         { type: 'HOTEL' },
-        { parentId: this.brandId },
+        { parentId: this.parentId },
         ...this.selectedRows.map((item) => ({ ids: item.id })),
       ]),
     };
 
     this.$subscription.add(
-      this.businessService.exportCSV(this.brandId, config).subscribe((res) => {
+      this.businessService.exportCSV(this.parentId, config).subscribe((res) => {
         this.loading = false;
         FileSaver.saveAs(
           res,
@@ -224,11 +232,31 @@ export class HotelDataTableComponent extends BaseDatatableComponent
     );
   }
 
-  editHotel(Id) {
-    console.log(Id);
-    this.router.navigate([
-      `pages/settings/business-info/brand/${this.brandId}/hotel/${Id}`,
-    ]);
+  getSrc(value) {
+    switch (value) {
+      case '2':
+        return 'assets/images/2.svg';
+      case '3':
+        return 'assets/images/3 star.svg';
+      case '4':
+        return 'assets/images/4 star.svg';
+      case '5':
+        return 'assets/images/5star.svg';
+    }
+  }
+
+  editHotel(data) {
+    if (data?.category === 'HOTEL') {
+      this.router.navigate([`hotel/${data.id}`], {
+        relativeTo: this.route,
+      });
+      this.hotelFormDataService.resetHotelInfoFormData();
+    } else {
+      this.router.navigate([`outlet/${data.id}`], {
+        relativeTo: this.route,
+      });
+      this.hotelFormDataService.resetHotelInfoFormData();
+    }
   }
 
   handelFinal = () => {

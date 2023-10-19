@@ -23,6 +23,7 @@
       padding: 7px 0 27px 0;
       @include normal-sm-text;
       color: $tooltip;
+      white-space: pre-line;
     }
     .footer {
       @include flex-justify-center;
@@ -42,4 +43,8 @@
       }
     }
   }
+}
+
+:host ::ng-deep .cdk-overlay-container {
+  z-index: 10000 !important;
 }

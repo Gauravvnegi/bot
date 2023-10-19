@@ -1,6 +1,5 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
-import { MatTabChangeEvent } from '@angular/material/tabs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
@@ -12,17 +11,14 @@ import {
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { TranslateService } from '@ngx-translate/core';
 import * as FileSaver from 'file-saver';
-import {
-  EntityState,
-  EntityType,
-  SelectedEntityState,
-} from 'libs/admin/dashboard/src/lib/types/dashboard.type';
 import { LazyLoadEvent, SortEvent } from 'primeng/api';
 import { Observable, Subscription } from 'rxjs';
 import { campaignConfig } from '../../../constant/campaign';
 import { Campaigns, Campaign } from '../../../data-model/campaign.model';
 import { CampaignService } from '../../../services/campaign.service';
 import { MessageObj } from '../../../types/campaign.type';
+import { campaignStatus } from '../../../constants/response';
+import { MenuOptions } from '../../../constants/camapign';
 
 @Component({
   selector: 'hospitality-bot-campaign-datatable',
@@ -35,21 +31,18 @@ import { MessageObj } from '../../../types/campaign.type';
 export class CampaignDatatableComponent extends BaseDatatableComponent
   implements OnInit, OnDestroy {
   tableName = campaignConfig.datatable.title;
-  @Input() tabFilterItems = campaignConfig.datatable.tabFilterItems;
-  @Input() tabFilterIdx = 0;
+  campaignStatus = campaignStatus;
   actionButtons = true;
-  isQuickFilters = true;
-  isTabFilters = true;
   isResizableColumns = true;
   isAutoLayout = false;
   isCustomSort = true;
+  isAllTabFilterRequired = true;
   triggerInitialData = false;
-  rowsPerPageOptions = [5, 10, 25, 50, 200];
-  rowsPerPage = campaignConfig.rowsPerPage.rows;
   cols = campaignConfig.datatable.cols;
   globalQueries = [];
   $subscription = new Subscription();
-  hotelId: string;
+  entityId: string;
+  menuOptions = MenuOptions;
   constructor(
     public fb: FormBuilder,
     private adminUtilityService: AdminUtilityService,
@@ -65,7 +58,6 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
   }
 
   ngOnInit(): void {
-    this.tabFilterItems = campaignConfig.datatable.tabFilterItems;
     this.listenForGlobalFilters();
   }
 
@@ -78,11 +70,12 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
         ...data['filter'].queryValue,
         ...data['dateRange'].queryValue,
       ];
-      this.hotelId = this.globalFilterService.hotelId;
+      this.entityId = this.globalFilterService.entityId;
       this.loadInitialData([
         ...this.globalQueries,
         {
           order: sharedConfig.defaultOrder,
+          entityType: this.selectedTab,
         },
         ...this.getSelectedQuickReplyFilters(),
       ]);
@@ -114,12 +107,14 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
    * @param data Campaign list response data.
    */
   setRecords(data: Record<string, any>): void {
-    this.values = new Campaigns().deserialize(data).records;
-    data.entityTypeCounts &&
-      this.updateTabFilterCount(data.entityTypeCounts, data.total);
-    data.entityStateCounts &&
-      this.updateQuickReplyFilterCount(data.entityStateCounts);
-    this.updateTotalRecords();
+    const modData = new Campaigns().deserialize(data);
+    this.values = modData.records;
+    this.initFilters(
+      modData.entityTypeCounts,
+      modData.entityStateCounts,
+      modData.totalRecord,
+      this.campaignStatus
+    );
     this.loading = false;
   }
 
@@ -137,7 +132,7 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
     const config = {
       queryObj: this.adminUtilityService.makeQueryParams(queries),
     };
-    return this.campaignService.getHotelCampaign(config, this.hotelId);
+    return this.campaignService.getHotelCampaign(config, this.entityId);
   }
 
   /**
@@ -152,16 +147,10 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
     this.loading = true;
     this.$subscription.add(
       this.campaignService
-        .updateCampaignStatus(this.hotelId, data, userData.id)
+        .updateCampaignStatus(this.entityId, data, userData.id)
         .subscribe(
           (_response) => {
-            const statusValue = (val: boolean) => (val ? 'ACTIVE' : 'INACTIVE');
-            this.updateStatusAndCount(
-              statusValue(userData.status),
-              statusValue(status)
-            );
-            this.values.find((item) => item.id === userData.id).status = status;
-
+            this.loadData();
             this.showMessage(
               {
                 key: 'messages.success.status_updated',
@@ -185,7 +174,7 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
     this.loading = true;
     this.$subscription.add(
       this.campaignService
-        .cloneCampaign(this.hotelId, data, campaignId)
+        .cloneCampaign(this.entityId, data, campaignId)
         .subscribe(
           (_response) => {
             this.showMessage(
@@ -212,7 +201,7 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
     this.loading = true;
     this.$subscription.add(
       this.campaignService
-        .archiveCampaign(this.hotelId, data, campaignId)
+        .archiveCampaign(this.entityId, data, campaignId)
         .subscribe(
           (_response) => {
             this.showMessage(
@@ -228,6 +217,14 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
           () => (this.loading = false)
         )
     );
+  }
+
+  handleMenuClick(value: string, rowData): void {
+    if (value === 'CLONE') {
+      this.cloneCampaign(rowData.id, rowData);
+    } else {
+      this.archiveCampaign(rowData.id, rowData);
+    }
   }
 
   /**
@@ -259,18 +256,6 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
   }
 
   /**
-   * @function getSelectedQuickReplyFilters To return the selected chip list.
-   * @returns The selected chips.
-   */
-  getSelectedQuickReplyFilters(): SelectedEntityState[] {
-    return this.tabFilterItems[this.tabFilterIdx].chips
-      .filter((item) => item.isSelected)
-      .map((item) => ({
-        entityState: item.value,
-      }));
-  }
-
-  /**
    * @function loadData To load data for the table after any event.
    * @param event The lazy load event for the table.
    */
@@ -283,6 +268,7 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
           ...this.globalQueries,
           {
             order: sharedConfig.defaultOrder,
+            entityType: this.selectedTab,
           },
           ...this.getSelectedQuickReplyFilters(),
         ],
@@ -330,40 +316,6 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
   }
 
   /**
-   * @function onSelectedTabFilterChange To handle the tab filter change.
-   * @param event The material tab change event.
-   */
-  onSelectedTabFilterChange(event: MatTabChangeEvent): void {
-    this.tabFilterIdx = event.index;
-    this.loadData();
-  }
-
-  /**
-   * @function onFilterTypeTextChange To handle the search for each column of the table.
-   * @param value The value of the search field.
-   * @param field The name of the field across which filter is done.
-   * @param matchMode The mode by which filter is to be done.
-   */
-  onFilterTypeTextChange(
-    value: string,
-    field: string,
-    matchMode = 'startsWith'
-  ): void {
-    if (!!value && !this.isSearchSet) {
-      this.tempFirst = this.first;
-      this.tempRowsPerPage = this.rowsPerPage;
-      this.isSearchSet = true;
-    } else if (!value) {
-      this.isSearchSet = false;
-      this.first = this.tempFirst;
-      this.rowsPerPage = this.tempRowsPerPage;
-    }
-
-    value = value && value.trim();
-    this.table.filter(value, field, matchMode);
-  }
-
-  /**
    * @function exportCSV To export CSV report of the table.
    */
   exportCSV(): void {
@@ -373,13 +325,14 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
         ...this.globalQueries,
         {
           order: sharedConfig.defaultOrder,
+          entityType: this.selectedTab,
         },
         ...this.getSelectedQuickReplyFilters(),
         ...this.selectedRows.map((item) => ({ ids: item.id })),
       ]),
     };
     this.$subscription.add(
-      this.campaignService.exportCSV(this.hotelId, config).subscribe(
+      this.campaignService.exportCSV(this.entityId, config).subscribe(
         (response) =>
           FileSaver.saveAs(
             response,

@@ -33,7 +33,6 @@ export class FoodItemsComponent extends BaseDatatableComponent
 
   ngOnInit(): void {
     this.initTableForm();
-    console.log(this.cols);
   }
 
   initTableForm() {
@@ -57,16 +56,12 @@ export class FoodItemsComponent extends BaseDatatableComponent
     { item: { value } }: { item: { value: DeleteAction } },
     index: number
   ) {
-    if(value === DeleteAction.DELETE_ITEM) {
+    if (value === DeleteAction.DELETE_ITEM) {
       this.removeItem(index);
     }
   }
 
-  removeItem(index: number){
+  removeItem(index: number) {}
 
-  }
-
-  onImportItems() {
-
-  }
+  onImportItems() {}
 }

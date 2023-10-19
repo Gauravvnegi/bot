@@ -1,4 +1,34 @@
-import { Chip, Cols, Filter } from '../types/table.type';
+import {
+  Cols,
+  EntityStateRecord,
+  Filter,
+  QuickReplyFilterConfig,
+} from '../types/table.type';
+
+export const quickReplyFilterDefaultConfig: QuickReplyFilterConfig = {
+  key: 'status',
+  isAllAType: false,
+  isStatusBoolean: false,
+  activeStateKey: 'ACTIVE',
+};
+
+export const defaultFilterChipValue = { label: 'All', value: 'ALL' } as const;
+export const defaultRecordJson: EntityStateRecord<
+  'ACTIVE' | 'INACTIVE' | typeof defaultFilterChipValue['value']
+> = {
+  ACTIVE: {
+    label: 'Active',
+    type: 'active',
+  },
+  INACTIVE: {
+    label: 'Inactive',
+    type: 'inactive',
+  },
+  ALL: {
+    label: defaultFilterChipValue.label,
+    type: 'default',
+  },
+};
 
 export type TableValue = 'users' | 'hotels';
 export const columns: Record<TableValue, Cols[]> = {

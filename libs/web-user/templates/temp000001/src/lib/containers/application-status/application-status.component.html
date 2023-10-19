@@ -26,7 +26,7 @@
             {{ guest.type === 'primary' ? 'Full Name (Primary)' : 'Full Name' }}
           </div>
           <div class="section--content--container--value">
-            {{ guest.nameTitle }}
+            {{ guest.salutation }}
             {{ guest.firstName }}
             {{ guest.lastName }}
           </div>
@@ -147,7 +147,7 @@
         {{ summaryDetails.guestDetails.guests[0].statusMessage.remarks }}
       </div>
     </div>
-    <div>
+    <!-- <div>
       <div
         class="section--heading"
         [ngClass]="{
@@ -212,7 +212,7 @@
           the right to take appropriate action as per the outcome.
         </div>
       </div>
-    </div>
+    </div> -->
     <div>
       <div
         class="section--heading"

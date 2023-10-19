@@ -1,54 +1,58 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from '@hospitality-bot/shared/utils';
 import { SearchResultResponse } from 'libs/admin/library/src/lib/types/response';
-import {
-  RoomListResponse,
-  RoomTypeListResponse
-} from 'libs/admin/room/src/lib/types/service-response';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { ReservationTableValue } from '../constants/reservation-table';
-import { ReservationFormData } from '../types/forms.types';
-import { QueryConfig } from '../types/reservation.type';
+import { RoomTypeListResponse } from 'libs/admin/room/src/lib/types/service-response';
+import { Observable } from 'rxjs';
+import { ReservationSummary } from '../types/forms.types';
+import { MenuItemListResponse } from 'libs/admin/all-outlets/src/lib/types/outlet';
+import { EntitySubType, QueryConfig } from '@hospitality-bot/admin/shared';
+import { AgentTableResponse } from 'libs/admin/agent/src/lib/types/response';
 
 @Injectable()
 export class ManageReservationService extends ApiService {
-  selectedTable = new BehaviorSubject<ReservationTableValue>(
-    ReservationTableValue.ALL
-  );
-
   getRoomTypeList(
-    hotelId: string,
+    entityId: string,
     config?: QueryConfig
   ): Observable<RoomTypeListResponse> {
-    return this.get(`/api/v1/entity/${hotelId}/inventory${config?.params}`);
-  }
-  
-  getPaymentMethod(hotelId: string): Observable<any> {
-    return this.get(`/api/v1/entity/${hotelId}/configuration?configType=PAYMENT&status=ACTIVE`);
+    return this.get(`/api/v1/entity/${entityId}/inventory${config?.params}`);
   }
 
-  createReservation(hotelId: string, data): Observable<any> {
-    return this.post(
-      `/api/v1/booking?bookingType=ROOM_TYPE&entityId=${hotelId}`,
+  getPaymentMethod(entityId: string): Observable<any> {
+    return this.get(
+      // `/api/v1/entity/${entityId}/configuration?configType=PAYMENT&status=ACTIVE`
+      `/api/v1/payment/configurations/admin?entity_id=${entityId}&status=ACTIVE`
+    );
+  }
+
+  createReservation(entityId: string, data, bookingType): Observable<any> {
+    return this.post(`/api/v1/booking?type=${bookingType}`, data, {
+      headers: { 'entity-id': entityId },
+    });
+  }
+
+  getOfferByRoomType(entityId: string, config: QueryConfig): Observable<any> {
+    return this.get(`/api/v1/entity/${entityId}/library/${config.params}`);
+  }
+
+  getReservationDataById(bookingId: string, entityId: string): Observable<any> {
+    return this.get(`/api/v1/booking/${bookingId}?entityId=${entityId}`);
+  }
+
+  updateReservation<T, K>(
+    entityId: string,
+    reservationId: string,
+    data: any,
+    bookingType: string
+  ): Observable<K> {
+    return this.put(
+      `/api/v1/booking/${reservationId}?type=${bookingType}&entityId=${entityId}`,
       data
     );
   }
 
-  getOfferByRoomType(hotelId: string, roomTypeId: string): Observable<any> {
-    return this.get(`/api/v1/entity/${hotelId}/inventory/room/${roomTypeId}`);
-  }
-
-  getReservationDataById(bookingId: string, hotelId: string): Observable<any> {
-    return this.get(`/api/v1/booking/${bookingId}?entityId=${hotelId}`);
-  }
-
-  updateReservation<T, K>(
-    hotelId: string,
-    reservationId: string,
-    data: any
-  ): Observable<K> {
-    return this.put(
-      `/api/v1/booking/${reservationId}?bookingType=ROOM_TYPE&entityId=${hotelId}`,
+  updateCalendarView(reservationId: string, data: any, bookingType: string) {
+    return this.patch(
+      `/api/v1/booking/${reservationId}?type=${bookingType}`,
       data
     );
   }
@@ -59,31 +63,53 @@ export class ManageReservationService extends ApiService {
    *
    */
   searchLibraryItem(
-    hotelId: string,
+    entityId: string,
     config?: QueryConfig
   ): Observable<SearchResultResponse> {
     return this.get(
-      `/api/v1/entity/${hotelId}/library/search${config?.params ?? ''}`
+      `/api/v1/entity/${entityId}/library/search${config?.params ?? ''}`
     );
   }
 
   updateBookingStatus(
     bookingId: string,
-    hotelId: string,
-    data
+    entityId: string,
+    bookingType: string,
+    data: { reservationType: string }
   ): Observable<any> {
     return this.patch(
-      `/api/v1/booking/${bookingId}?bookingType=ROOM_TYPE&entityId=${hotelId}`,
+      `/api/v1/booking/${bookingId}/status?type=${bookingType}&entityId=${entityId}`,
       data
     );
   }
 
-  getSummaryData(config: QueryConfig): Observable<any> {
-    return this.get(`/api/v1/booking/summary${config?.params}`);
+  getRoomNumber(entityId: string, config: QueryConfig) {
+    return this.get(`/api/v1/entity/${entityId}/inventory${config.params}`);
   }
 
-  getReservationItems<T>(config?: QueryConfig): Observable<T> {
-    return this.get(`/api/v1/booking${config?.params}`);
+  getSummaryData(
+    entityId: string,
+    data: ReservationSummary,
+    config: QueryConfig
+  ): Observable<any> {
+    return this.post(`/api/v1/booking/summary${config?.params}`, data, {
+      headers: { 'entity-id': entityId },
+    });
+  }
+
+  getReservationItems<T>(config?: QueryConfig, id?: string): Observable<T> {
+    return this.get(`/api/v1/booking${config?.params}`, {
+      headers: { 'entity-id': id },
+    });
+  }
+
+  getMenuList(outletId: string): Observable<MenuItemListResponse> {
+    return this.get(
+      `/api/v1/menus/items?entityId=${outletId}&pagination=false`,
+      {
+        headers: { 'entity-id': outletId },
+      }
+    );
   }
 
   getReservationItemsByCategory<T>(config?: QueryConfig): Observable<T> {
@@ -94,41 +120,5 @@ export class ManageReservationService extends ApiService {
     return this.get(`/api/v1/booking/export${config?.params ?? ''}`, {
       responseType: 'blob',
     });
-  }
-
-  mapReservationData(formValue) {
-    const reservationData = new ReservationFormData();
-    reservationData.firstName = formValue.guestInformation.firstName ?? '';
-    reservationData.lastName = formValue.guestInformation.lastName ?? '';
-    reservationData.email = formValue.guestInformation.email ?? '';
-    reservationData.contact = {
-      countryCode: formValue?.guestInformation?.countryCode ?? '',
-      phoneNumber: formValue?.guestInformation?.phoneNumber ?? '',
-    };
-    reservationData.roomTypeId = formValue.roomInformation?.roomTypeId ?? '';
-    reservationData.adultCount = formValue.roomInformation?.adultCount ?? 0;
-    reservationData.childCount = formValue.roomInformation?.childCount ?? 0;
-    reservationData.roomCount = formValue.roomInformation?.roomCount ?? 0;
-    reservationData.from = formValue.bookingInformation.from ?? 0;
-    reservationData.to = formValue.bookingInformation.to ?? 0;
-    reservationData.reservationType =
-      formValue.bookingInformation.reservationType ?? '';
-    reservationData.source = formValue.bookingInformation.source ?? '';
-    reservationData.sourceName = formValue.bookingInformation.sourceName ?? '';
-    reservationData.marketSegment =
-      formValue.bookingInformation.marketSegment ?? '';
-    reservationData.address = {
-      addressLine1: formValue.address.addressLine1 ?? '',
-      city: formValue.address.city ?? '',
-      state: formValue.address.state ?? '',
-      countryCode: formValue.address.countryCode ?? '',
-      postalCode: formValue.address.postalCode ?? '',
-    };
-    reservationData.paymentMethod = formValue.paymentMethod.paymentMethod ?? '';
-    reservationData.totalPaidAmount =
-      formValue.paymentMethod.totalPaidAmount ?? 0;
-    reservationData.offerId = formValue.offerId ?? '';
-    reservationData.paymentRemark = formValue.paymentMethod.paymentRemark ?? '';
-    return reservationData;
   }
 }

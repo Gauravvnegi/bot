@@ -1,4 +1,4 @@
-<div class="wrapper">
+<div class="wrapper" [id]="fa.referenceId">
   <hospitality-bot-navigation-header [heading]="pageTitle" [routes]="navRoutes">
   </hospitality-bot-navigation-header>
   <div class="form-block" [formGroup]="useForm">
@@ -19,6 +19,7 @@
     ></hospitality-bot-input>
 
     <hospitality-bot-category
+     [entityId]="entityId"
       controlName="parentId"
       class="half-width"
       type="PACKAGE_CATEGORY"
@@ -47,7 +48,7 @@
     <hospitality-bot-custom-file-upload
       class="upload"
       formControlName="imageUrl"
-      [hotelId]="hotelId"
+      [entityId]="entityId"
     ></hospitality-bot-custom-file-upload>
 
     <hospitality-bot-prefix-field
@@ -87,10 +88,14 @@
       [options]="visibilities"
       fieldType="checkbox"
     ></hospitality-bot-select-group>
-    <hospitality-bot-button
-      class="create-btn"
-      [label]="packageId ? 'Update' : 'Create'"
-      (onClick)="handleSubmit()"
-    ></hospitality-bot-button>
+    <hospitality-bot-form-action
+      class="full-width"
+      [loading]="loading"
+      [isId]="packageId"
+      (onPreAction)="resetForm()"
+      (onPostAction)="handleSubmit()"
+      #fa
+    >
+    </hospitality-bot-form-action>
   </div>
 </div>

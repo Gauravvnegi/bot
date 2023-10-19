@@ -7,15 +7,16 @@ export class TokenInterceptor extends SharedTokenInterceptor {
   constructor(private _accessTokenService: AccessTokenService) {
     super();
     this.setHeaderName('x-access-token');
-    // this.setTokenValue('test-token');
     this.registerListener();
   }
 
   registerListener() {
-    this._accessTokenService._accessToken$.subscribe((accessToken: string) => {
-      if (accessToken) {
-        this.setTokenValue(accessToken);
+    this._accessTokenService._accessToken$.subscribe(
+      ({ accessToken, entityId }) => {
+        if (accessToken && entityId) {
+          this.setTokenValue({ accessToken, entityId });
+        }
       }
-    });
+    );
   }
 }

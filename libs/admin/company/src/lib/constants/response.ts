@@ -1,0 +1,28 @@
+export const companyResponse = [
+  {
+    id: '1',
+    companyName: 'Company A',
+    companyCode: 'A001',
+    contactName: 'John Doe',
+    email: 'john.doe@example.com',
+    phoneNumber: '1234567890',
+    salesPersonName: 'Jane Smith',
+    salesPersonNumber: '9876543210',
+    discount: '10',
+    discountType: 'Percentage',
+    status: false,
+  },
+  {
+    id: '2',
+    companyName: 'Company B',
+    companyCode: 'B002',
+    contactName: 'Alice Johnson',
+    email: 'alice.johnson@example.com',
+    phoneNumber: '9876543210',
+    salesPersonName: 'Bob Anderson',
+    salesPersonNumber: '1234567890',
+    discount: '5',
+    discountType: 'Fixed',
+    status: true,
+  },
+];

@@ -19,6 +19,7 @@ import { LayoutOneComponent } from './containers/layouts/layout-one/layout-one.c
 import { LayoutTwoComponent } from './containers/layouts/layout-two/layout-two.component';
 import { MessageTabMenuComponent } from './containers/message-tab-menu/message-tab-menu.component';
 import { NotificationPopupComponent } from './containers/notification-popup/notification-popup.component';
+import { NotificationSnackbarComponent } from './containers/notification-snackbar/notification-snackbar.component';
 import { NotificationDetailComponent } from './containers/notification/notification-detail/notification-detail.component';
 import { NotificationFilterComponent } from './containers/notification/notification-filter/notification-filter.component';
 import { NotificationSettingsComponent } from './containers/notification/notification-settings/notification-settings.component';
@@ -31,6 +32,7 @@ import { SidenavExpandComponent } from './containers/sidenav/sidenav-expand/side
 import { SidenavComponent } from './containers/sidenav/sidenav.component';
 import { SiteActionComponent } from './containers/site-action/site-action.component';
 import { ScrollPagination } from './directives/scroll-pagination.directive';
+import { TooltipModule } from 'primeng/tooltip';
 
 @NgModule({
   imports: [
@@ -47,6 +49,7 @@ import { ScrollPagination } from './directives/scroll-pagination.directive';
     OverlayPanelModule,
     MenuModule,
     AngularFireMessagingModule,
+    TooltipModule,
   ],
   declarations: [
     SidenavComponent,
@@ -63,6 +66,7 @@ import { ScrollPagination } from './directives/scroll-pagination.directive';
     OrientationPopupComponent,
     MessageTabMenuComponent,
     NotificationPopupComponent,
+    NotificationSnackbarComponent,
     NotificationComponent,
     NotificationSettingsComponent,
     NotificationFilterComponent,
@@ -84,9 +88,11 @@ import { ScrollPagination } from './directives/scroll-pagination.directive';
     FilterComponent,
     MessageTabMenuComponent,
     NotificationPopupComponent,
+    NotificationSnackbarComponent,
     NotificationComponent,
     ScrollPagination,
     MessageTabMenuComponent,
+    TooltipModule,
   ],
 })
 export class ThemeModule {}

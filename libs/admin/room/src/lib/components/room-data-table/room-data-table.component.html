@@ -6,20 +6,23 @@
   <div class="heading">{{ tableName }}</div>
   <div class="action-wrapper">
     <hospitality-bot-button
-      *ngIf="selectedTable === 'ROOM'"
+      *ngIf="selectedTab === 'ROOM'"
       label="{{ 'room.addSingle' | translate }}"
       variant="text"
-      link="/pages/inventory/room/{{ routes.addRoom }}/single"
+      [routerLink]="routes.addSingleRoom"
+      preserveQueryParams="true"
     ></hospitality-bot-button>
     <hospitality-bot-button
-      *ngIf="selectedTable === 'ROOM_TYPE'"
+      *ngIf="selectedTab === 'ROOM_TYPE'"
       label="{{ 'room.createType' | translate }}"
-      link="/pages/inventory/room/{{ routes.addRoomType }}"
+      [routerLink]="routes.addRoomType"
+      preserveQueryParams="true"
     ></hospitality-bot-button>
     <hospitality-bot-button
-      *ngIf="selectedTable === 'ROOM'"
+      *ngIf="selectedTab === 'ROOM'"
       label="{{ 'room.addMultiple' | translate }}"
-      link="/pages/inventory/room/{{ routes.addRoom }}/multiple"
+      [routerLink]="routes.addMultipleRoom"
+      preserveQueryParams="true"
     ></hospitality-bot-button>
     <hospitality-bot-export-list
       [additionalActionItems]="additionalActionItems"
@@ -55,7 +58,7 @@
   (sortFunction)="customSort($event)"
   [customSort]="isCustomSort"
   (onFilter)="onDataFilter()"
-  *ngIf="tabFilterItems[tabFilterIdx]?.total; else emptyTable"
+  *ngIf="!isEmpty; else emptyTable"
 >
   <ng-template pTemplate="caption">
     <div class="caption__wrapper" [formGroup]="tableFG">
@@ -65,6 +68,7 @@
         *ngIf="isQuickFilters"
         [chips]="filterChips"
         (onChange)="toggleQuickReplyFilter($event)"
+        [selectedChips]="selectedFilterChips"
       ></hospitality-bot-filter-chips>
     </div>
   </ng-template>
@@ -98,7 +102,7 @@
       </td>
 
       <ng-container
-        *ngIf="values.length && values[0].roomNo"
+        *ngIf="values.length && values[0].foStatus"
         [ngTemplateOutlet]="roomCell"
         [ngTemplateOutletContext]="{ $implicit: rowData }"
       >
@@ -111,14 +115,13 @@
       </ng-container>
 
       <td>
-        <div class="" *ngIf="rowData.status; else emptyCell">
-          <hospitality-bot-toggle-dropdown
-            [listItem]="rowData.nextStates"
-            (onClick)="handleStatus($event, rowData)"
-            [status]="rowData.status"
-          >
-          </hospitality-bot-toggle-dropdown>
-        </div>
+        <hospitality-bot-status-dropdown-toggle
+          [nextStates]="rowData.nextStates"
+          (onClick)="handleStatus($event, rowData)"
+          [state]="rowData.status"
+          [recordSetting]="roomStatusDetails"
+        >
+        </hospitality-bot-status-dropdown-toggle>
       </td>
     </tr>
   </ng-template>
@@ -143,9 +146,7 @@
 <ng-template #roomCell let-rowData>
   <td>
     <div [roomStatus]="rowData.status" *ngIf="rowData.type; else emptyCell">
-      <div>
-        {{ rowData.roomNo || '--' }}&nbsp;-&nbsp;{{ rowData.type || '--' }}
-      </div>
+      {{ rowData.roomNo || '--' }}&nbsp;-&nbsp;{{ rowData.type || '--' }}
     </div>
   </td>
   <td>
@@ -164,13 +165,13 @@
       ></div>
     </div>
   </td>
-  <td>
+  <!-- <td>
     <div *ngIf="rowData.price; else emptyCell">
       <div class="primary-text">
         {{ rowData.price | currency: rowData.currency }}
       </div>
     </div>
-  </td>
+  </td> -->
 </ng-template>
 
 <ng-template #roomTypeCell let-rowData>
@@ -214,8 +215,9 @@
     <div
       class="primary-text amenities"
       *ngIf="rowData.amenities; else emptyCell"
+      [innerHTML]="rowData.amenities.join(', ')"
     >
-      {{ rowData.amenities.join(', ') }}
+      <!-- {{ rowData.amenities.join(', ') }} -->
       <!-- {{
         rowData.amenities?.length - 2 > 0
           ? '+'.concat(rowData.amenities?.length - 2)
@@ -232,11 +234,7 @@
 <ng-template #emptyTable>
   <hospitality-bot-empty-table
     [isLoading]="loading"
-    [link]="
-      selectedTable === 'ROOM'
-        ? '/pages/inventory/room/add-room/multiple'
-        : '/pages/inventory/room/add-room-type'
-    "
+    [link]="selectedTable === 'ROOM' ? 'add-room/multiple' : 'add-room-type'"
     [content]="
       selectedTable === 'ROOM'
         ? {

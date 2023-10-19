@@ -13,6 +13,7 @@ import {
   NgControl,
 } from '@angular/forms';
 import { EmptyViewType } from '../../types/table.type';
+import { C } from '@angular/cdk/keycodes';
 
 @Component({
   selector: 'hospitality-bot-custom-select',
@@ -37,6 +38,11 @@ export class CustomSelectComponent implements OnInit, ControlValueAccessor {
 
   @Output() loadMoreData = new EventEmitter();
   @Output() viewAll = new EventEmitter();
+  @Output() onEmptyViewAction = new EventEmitter();
+
+  @Input() addActLabel: string;
+
+  @Input() type: CustomSelectType = 'image';
 
   @Input() set itemList(options: Record<string, any>[]) {
     this.options =
@@ -84,7 +90,7 @@ export class CustomSelectComponent implements OnInit, ControlValueAccessor {
   selectItems(i: number) {
     const valueItem = this.options[i];
     if (!valueItem.checked) {
-      this.value.push(valueItem[this.optionValue]);
+      this.value?.push(valueItem[this.optionValue]);
     } else {
       let index = this.value.findIndex(
         (item) => item === valueItem[this.optionValue]
@@ -108,3 +114,5 @@ export class CustomSelectComponent implements OnInit, ControlValueAccessor {
     this.loadMoreData.emit();
   }
 }
+
+type CustomSelectType = 'image' | 'icon';

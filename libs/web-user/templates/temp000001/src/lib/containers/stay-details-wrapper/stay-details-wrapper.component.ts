@@ -78,7 +78,7 @@ export class StayDetailsWrapperComponent extends BaseWrapperComponent
   getHotelAmenities(): void {
     this.$subscription.add(
       this._amenitiesService
-        .getHotelAmenities(this._hotelService.hotelId)
+        .getHotelAmenities(this._hotelService.entityId)
         .subscribe((response) => {
           this._amenitiesService.initAmenitiesDetailDS(
             response,
@@ -126,17 +126,18 @@ export class StayDetailsWrapperComponent extends BaseWrapperComponent
     } = this.parentForm.controls;
     if (
       accept.invalid ||
-      address.invalid ||
+      address?.invalid ||
       special_comments.invalid ||
       stayDetail.invalid
     ) {
       this.parentForm.markAllAsTouched();
       if (
-        this._hotelService.hotelConfig?.showAddress &&
+        // this._hotelService.hotelConfig?.showAddress &&
         this.parentForm.get('address').invalid
-      )
+      ) {
         this.openPanels(this.addressFields.panelList.toArray());
-
+        this._snackBarService.openSnackBarAsText('Please fill the address');
+      }
       if (!this.parentForm.get('accept').get('disclaimer').value) {
         this._snackBarService.openSnackBarAsText('Please accept disclaimer');
       }
@@ -149,7 +150,8 @@ export class StayDetailsWrapperComponent extends BaseWrapperComponent
       formValue,
       this._hotelService.hotelConfig.timezone,
       this.countries,
-      this._hotelService.hotelConfig?.showAddress
+      // this._hotelService.hotelConfig?.showAddress
+      true
     );
     this.$subscription.add(
       this._stayDetailService

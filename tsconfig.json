@@ -142,7 +142,44 @@
       "@hospitality-bot/admin/channel-manager": [
         "libs/admin/channel-manager/src/index.ts"
       ],
-      "@hospitality-bot/admin/members": ["libs/admin/members/src/index.ts"]
+      "@hospitality-bot/admin/members": ["libs/admin/members/src/index.ts"],
+      "@hospitality-bot/admin/guest-dashboard": [
+        "libs/admin/guest-dashboard/src/index.ts"
+      ],
+      "@hospitality-bot/admin/revenue-manager": [
+        "libs/admin/revenue-manager/src/index.ts"
+      ],
+      "@hospitality-bot/admin/global-shared": [
+        "libs/admin/global-shared/src/index.ts"
+      ],
+      "@hospitality-bot/admin/housekeeping": [
+        "libs/admin/housekeeping/src/index.ts"
+      ],
+      "@hospitality-bot/admin/complaint-tacker": [
+        "libs/admin/complaint-tacker/src/index.ts"
+      ],
+      "@hospitality-bot/admin/setup-bar-price": [
+        "libs/admin/setup-bar-price/src/index.ts"
+      ],
+      "@hospitality-bot/admin/dynamic-pricing": [
+        "libs/admin/dynamic-pricing/src/index.ts"
+      ],
+      "@hospitality-bot/admin/booking-engine": [
+        "libs/admin/booking-engine/src/index.ts"
+      ],
+      "@hospitality-bot/admin/feedback-analytics": [
+        "libs/admin/feedback-analytics/src/index.ts"
+      ],
+      "@hospitality-bot/admin/manage-rate": [
+        "libs/admin/manage-rate/src/index.ts"
+      ],
+      "@hospitality-bot/admin/manage-inventory": [
+        "libs/admin/manage-inventory/src/index.ts"
+      ],
+      "@hospitality-bot/admin/reports": ["libs/admin/reports/src/index.ts"],
+      "@hospitality-bot/admin/view-not-allowed": [
+        "libs/admin/view-not-allowed/src/index.ts"
+      ]
     }
   },
   "exclude": ["node_modules", "tmp"]

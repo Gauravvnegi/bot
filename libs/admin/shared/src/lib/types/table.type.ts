@@ -7,7 +7,9 @@ export type FlagType =
   | 'warning'
   | 'inactive'
   | 'success'
-  | 'unavailable';
+  | 'unavailable'
+  | 'paid'
+  | 'unpaid';
 
 // more modes can be added (take reference form primeNg filter)
 export type MatchModes = 'startsWith' | 'contains' | 'endsWith' | 'equals';
@@ -76,11 +78,51 @@ export type Status = {
   disabled?: boolean;
 };
 
-export type NextStates = Status[]
+export type NextStates = Status[];
 
-export type EmptyViewType ={
+export type EmptyViewType = {
   description: string;
   actionName?: string;
   imageSrc: string;
   link?: string;
+};
+
+export type EntityStateRecord<T extends string> = Record<
+  T,
+  {
+    label: string;
+    type: FlagType;
+  }
+>;
+
+export type EntityState<T extends string> = Record<T, number>;
+
+export type QueryConfig = {
+  params: string;
+};
+
+export type QuickReplyFilterConfig = {
+  key: string;
+  isAllAType: boolean;
+  isStatusBoolean: boolean;
+  activeStateKey: string;
+};
+
+export enum EntityType {
+  HOTEL = 'HOTEL',
+  OUTLET = 'OUTLET',
 }
+
+export enum EntitySubType {
+  ROOM_TYPE = 'ROOM_TYPE',
+  RESTAURANT = 'RESTAURANT',
+  VENUE = 'VENUE',
+  SPA = 'SPA',
+}
+
+export type EntityTabFilterResponse = {
+  entityId: string[];
+  feedbackType: string;
+  label: string;
+  outletType: EntitySubType;
+};

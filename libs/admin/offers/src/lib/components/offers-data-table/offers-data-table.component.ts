@@ -12,12 +12,13 @@ import * as FileSaver from 'file-saver';
 import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.service';
 import { LazyLoadEvent } from 'primeng/api/lazyloadevent';
 import { Subscription } from 'rxjs';
-import { chips, cols, tabFilterItems, title } from '../../constant/data-table';
-import routes from '../../constant/routes';
+import { chips, cols, title } from '../../constant/data-table';
 import { Offer, OfferList } from '../../models/offers.model';
 import { OffersServices } from '../../services/offers.service';
 import { OfferData } from '../../types/offers';
 import { OfferListResponse, OfferResponse } from '../../types/response';
+import { RoutesConfigService } from '@hospitality-bot/admin/core/theme';
+import { offersRoutes } from '../../constant/routes';
 
 @Component({
   selector: 'hospitality-bot-offers-data-table',
@@ -36,22 +37,23 @@ export class OffersDataTableComponent extends BaseDatatableComponent
     private snackbarService: SnackBarService,
     private offerService: OffersServices,
     private adminUtilityService: AdminUtilityService,
-    private router: Router
+    private router: Router,
+    private routesConfigService: RoutesConfigService
   ) {
     super(fb, tabFilterService);
   }
 
-  hotelId: string;
+  entityId: string;
   tableName = title;
   cols = cols;
   filterChips = chips;
-  readonly routes = routes;
+  readonly routes = offersRoutes;
   iQuickFilters = true;
+  isAllTabFilterRequired = true;
   subscription$ = new Subscription();
-  tabFilterItems = tabFilterItems;
 
   ngOnInit(): void {
-    this.hotelId = this.globalFilterService.hotelId;
+    this.entityId = this.globalFilterService.entityId;
     this.initTableValue();
   }
 
@@ -67,13 +69,19 @@ export class OffersDataTableComponent extends BaseDatatableComponent
     this.loading = true;
     this.subscription$.add(
       this.offerService
-        .getLibraryItems<OfferListResponse>(this.hotelId, this.getQueryConfig())
+        .getLibraryItems<OfferListResponse>(
+          this.entityId,
+          this.getQueryConfig()
+        )
         .subscribe(
           (res) => {
-            this.values = new OfferList().deserialize(res).records;
-            this.updateTabFilterCount(res.entityTypeCounts, res.total);
-            this.updateQuickReplyFilterCount(res.entityStateCounts);
-            this.updateTotalRecords();
+            const data = new OfferList().deserialize(res);
+            this.values = data.records;
+            this.initFilters(
+              data.entityTypeCounts,
+              data.entityStateCounts,
+              data.totalRecord
+            );
           },
           ({ error }) => {
             this.values = [];
@@ -92,19 +100,13 @@ export class OffersDataTableComponent extends BaseDatatableComponent
     this.subscription$.add(
       this.offerService
         .updateLibraryItem<Partial<OfferData>, OfferResponse>(
-          this.hotelId,
+          this.entityId,
           rowData.id,
           { active: status },
           { params: '?type=OFFER' }
         )
         .subscribe(() => {
-          const statusValue = (val: boolean) => (val ? 'ACTIVE' : 'INACTIVE');
-          this.updateStatusAndCount(
-            statusValue(rowData.status),
-            statusValue(status)
-          );
-          this.values.find((item) => item.id === rowData.id).status = status;
-
+          this.initTableValue();
           this.snackbarService.openSnackBarAsText(
             'Status changes successfully',
             '',
@@ -121,7 +123,7 @@ export class OffersDataTableComponent extends BaseDatatableComponent
   getQueryConfig(): QueryConfig {
     const config = {
       params: this.adminUtilityService.makeQueryParams([
-        ...this.getSelectedQuickReplyFilters(),
+        ...this.getSelectedQuickReplyFilters({ isStatusBoolean: true }),
         {
           type: LibraryItem.offer,
           offset: this.first,
@@ -138,24 +140,9 @@ export class OffersDataTableComponent extends BaseDatatableComponent
    * @params rowData
    */
   editOffer(rowData: OfferResponse) {
-    this.router.navigate([
-      `/pages/library/offers/${routes.createOffer}/${rowData.id}`,
-    ]);
-  }
-
-  /**
-   * @function getSelectedQuickReplyFilters To return the selected chip list.
-   * @returns The selected chips.
-   */
-  getSelectedQuickReplyFilters() {
-    const chips = this.filterChips.filter(
-      (item) => item.isSelected && item.value !== 'ALL'
-    );
-    return [
-      chips.length !== 1
-        ? { status: null }
-        : { status: chips[0].value === 'ACTIVE' },
-    ];
+    this.routesConfigService.navigate({
+      additionalPath: `${this.routes.createOffer.route}/${rowData.id}`,
+    });
   }
 
   /**
@@ -170,7 +157,7 @@ export class OffersDataTableComponent extends BaseDatatableComponent
       ]),
     };
     this.subscription$.add(
-      this.offerService.exportCSV(this.hotelId, config).subscribe((res) => {
+      this.offerService.exportCSV(this.entityId, config).subscribe((res) => {
         FileSaver.saveAs(
           res,
           `${this.tableName.toLowerCase()}_export_${new Date().getTime()}.csv`

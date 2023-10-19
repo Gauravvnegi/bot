@@ -3,11 +3,24 @@ import { FormGroup } from '@angular/forms';
 import { ApiService } from 'libs/shared/utils/src/lib/services/api.service';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { RequestData } from '../../../../notification/src/lib/data-models/request.model';
+import { RequestStatus } from '../constants/request';
+import { CMSUpdateJobData } from '../types/request.type';
+import { AllJobRequestResponse } from '../types/response.types';
 
 @Injectable({ providedIn: 'root' })
 export class RequestService extends ApiService {
   selectedRequest = new BehaviorSubject(null);
   refreshData = new BehaviorSubject<boolean>(false);
+  requestStatus = new BehaviorSubject<RequestStatus[]>([]); // ['TODO', 'RESOLVED', 'CANCELED', 'IN_PROGRESS', 'TIMEOUT']
+  assigneeList = new BehaviorSubject<any[]>([]);
+  refreshItemList = new BehaviorSubject<boolean>(false);
+  requestListFilter = new BehaviorSubject<string>('');
+
+  syncRequest(entityId: string): Observable<any> {
+    return this.get(
+      `/api/v1/request/entity/${entityId}/sync-cms?cmsUserType=admin`
+    );
+  }
 
   getReservationDetails(reservationId): Observable<any> {
     return this.get(`/api/v1/reservation/${reservationId}?raw=true`);
@@ -17,7 +30,7 @@ export class RequestService extends ApiService {
     return this.get(`/api/v1/request/${config.queryObj}`);
   }
 
-  getAllLiveRequest(config) {
+  getAllLiveRequest(config): Observable<AllJobRequestResponse> {
     return this.get(`/api/v1/request/${config.queryObj}`);
   }
 
@@ -34,28 +47,28 @@ export class RequestService extends ApiService {
     );
   }
 
-  createRequestData(hotelId: string, data: RequestData): Observable<any> {
-    return this.post(`/api/v1/hotel/${hotelId}/notifications`, data);
+  createRequestData(entityId: string, data: RequestData): Observable<any> {
+    return this.post(`/api/v1/entity/${entityId}/notifications`, data);
   }
 
-  searchRequest(hotelId: string, config) {
-    return this.get(`/api/v1/request/${hotelId}/search${config.queryObj}`);
+  searchRequest(entityId: string, config) {
+    return this.get(`/api/v1/request/${entityId}/search${config.queryObj}`);
   }
 
-  uploadAttachments(hotelId, formData): Observable<any> {
+  uploadAttachments(entityId, formData): Observable<any> {
     return this.uploadDocumentPost(
-      `/api/v1/uploads?folder_name=hotel/${hotelId}/notification`,
+      `/api/v1/uploads?folder_name=hotel/${entityId}/notification`,
       formData
     );
   }
 
   getTemplate(
-    hotelId: string,
+    entityId: string,
     templateId: string,
     journey: string
   ): Observable<any> {
     return this.get(
-      `/api/v1/hotel/${hotelId}/templates/${templateId}?journey=${journey}`
+      `/api/v1/entity/${entityId}/templates/${templateId}?journey=${journey}`
     );
   }
 
@@ -63,12 +76,14 @@ export class RequestService extends ApiService {
     return this.patch(`/api/v1/request/pre-arrival/${id}`, data);
   }
 
-  getNotificationConfig(hotelId: string): Observable<any> {
-    return this.get(`/api/v1/cms/hotel/${hotelId}/notification-config`);
+  getNotificationConfig(entityId: string): Observable<any> {
+    return this.get(`/api/v1/cms/entity/${entityId}/notification-config`);
   }
 
-  getCMSServices(hotelId: string, config) {
-    return this.get(`/api/v1/hotel/${hotelId}/cms-services${config.queryObj}`);
+  getCMSServices(entityId: string, config) {
+    return this.get(
+      `/api/v1/entity/${entityId}/cms-services${config.queryObj}`
+    );
   }
 
   validateRequestData(fg: FormGroup, channelSelection) {
@@ -94,16 +109,19 @@ export class RequestService extends ApiService {
     return status;
   }
 
-  createRequest(hotelId, data) {
+  createRequest(entityId, data) {
     return this.post(
-      `/api/v1/request?cmsUserType=Bot&hotelId=${hotelId}`,
+      `/api/v1/request?cmsUserType=admin&source=ADMIN&entityId=${entityId}`,
       data
     );
   }
 
-  closeRequest(config, data) {
-    return this.post(
-      `/api/v1/reservation/cms-close-job${config.queryObj}`,
+  /**
+   * Updates status of job to to-do or close
+   */
+  updateJobRequestStatus(config, data: CMSUpdateJobData) {
+    return this.put(
+      `/api/v1/reservation/cms-update-job-status${config.queryObj}`,
       data
     );
   }
@@ -113,14 +131,30 @@ export class RequestService extends ApiService {
   }
 
   getGuestReservations(guestId: string): Observable<any> {
-    return this.get(`/api/v1/guest/${guestId}/reservations`);
+    return this.get(`/api/v1/members/${guestId}/reservations`);
   }
 
   getGuestById(guestId: string): Observable<any> {
-    return this.get(`/api/v1/guest/${guestId}`);
+    return this.get(`/api/v1/members/${guestId}`);
   }
 
   getGuestRequestData(guestId) {
     return this.get(`/api/v1/request/${guestId}/guest`);
+  }
+
+  getItemDetails(entityId: string, itemId: string): Observable<any> {
+    return this.get(`/api/v1/entity/${entityId}/cms-service/${itemId}`);
+  }
+
+  assignComplaintToUser(jobId: string, data): Observable<any> {
+    return this.patch(`/api/v1/request/${jobId}/assignee`, data);
+  }
+
+  addServiceItem(entityId: string, data): Observable<any> {
+    return this.post(`/api/v1/entity/${entityId}/cms-service`, data);
+  }
+
+  getStatusList(jobId: string): Observable<any> {
+    return this.get(`/api/v1/request/job/${jobId}`);
   }
 }

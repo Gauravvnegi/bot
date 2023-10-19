@@ -1,0 +1,106 @@
+@import 'main';
+
+.form-block {
+  @include form-block;
+  zoom: 0.9;
+}
+
+.header {
+  @include flex-space-between-cen-Algn;
+  background-color: $primary-cta;
+  padding: 15px 10px;
+  color: white;
+  border-bottom: 1px solid $primary-cta;
+  .heading {
+    @include light-sm-text;
+  }
+  .buttons {
+    @include flex-space-between-cen-Algn;
+    gap: 20px;
+    .expand {
+      cursor: pointer;
+      height: 20px;
+      width: 20px;
+    }
+  }
+}
+
+.guest-data {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  padding: 10px;
+  box-shadow: 0px 7px 5px -7px #b5b5b5;
+  position: sticky;
+  z-index: 1;
+  position: sticky;
+
+  .guest-name {
+    @include normal-lg-text;
+  }
+  .due-amount {
+    text-align: right;
+    color: $subtitle;
+    @include normal-sm-text;
+    .amount {
+      color: black;
+      @include normal-md-text;
+    }
+  }
+  .contact-details {
+    width: 50px;
+    gap: 10px;
+    display: flex;
+    padding: 10px 0;
+    flex-direction: column;
+    .phone-number {
+      @include flex-item-center;
+      gap: 5px;
+    }
+    .email-id {
+      @include flex-item-center;
+      gap: 5px;
+    }
+  }
+}
+
+.body {
+  overflow: auto;
+}
+
+:host ::ng-deep .p-dropdown {
+  border: 1px solid rgba(0, 0, 0, 0.38) !important;
+  &:hover {
+    border-color: $primary-cta !important;
+  }
+  &:focus {
+    border-color: $primary-cta !important;
+  }
+}
+
+:host ::ng-deep .select {
+  .option-items {
+    overflow: hidden !important;
+  }
+}
+
+.close {
+  cursor: pointer;
+}
+
+:host ::ng-deep .select {
+  .p-dropdown-panel {
+    left: 0px !important;
+  }
+}
+
+:host ::ng-deep .fixed {
+  left: 0 !important;
+  box-shadow: 1px 7px 7px #b5b5b5 !important;
+}
+
+.loader {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

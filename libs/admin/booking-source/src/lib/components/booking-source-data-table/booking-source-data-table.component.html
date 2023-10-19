@@ -47,7 +47,7 @@
   (sortFunction)="customSort($event)"
   [customSort]="isCustomSort"
   (onFilter)="onDataFilter()"
-  >
+>
   <!-- *ngIf="tabFilterItems[tabFilterIdx].total; else emptyTable" -->
   <ng-template pTemplate="caption">
     <div class="caption__wrapper" [formGroup]="tableFG">
@@ -83,37 +83,37 @@
     let-columns="columns"
     let-rowIndex="rowIndex"
   >
-  <tr class="table-row" (click)="editBookingSource(rowData.id)">
-    <td class="table-row__checkbox">
-      <p-tableCheckbox
-        [value]="rowData"
-        [index]="rowIndex"
-        (click)="onCheckboxClicked($event)"
-      ></p-tableCheckbox>
-    </td>
+    <tr class="table-row" (click)="editBookingSource(rowData.id)">
+      <td class="table-row__checkbox">
+        <p-tableCheckbox
+          [value]="rowData"
+          [index]="rowIndex"
+          (click)="onCheckboxClicked($event)"
+        ></p-tableCheckbox>
+      </td>
 
-    <ng-container
-      *ngIf="values.length && values[0].companyCode"
-      [ngTemplateOutlet]="company"
-      [ngTemplateOutletContext]="{ $implicit: rowData}"
-    ></ng-container>
+      <ng-container
+        *ngIf="values.length && values[0].companyCode"
+        [ngTemplateOutlet]="company"
+        [ngTemplateOutletContext]="{ $implicit: rowData }"
+      ></ng-container>
 
-    <ng-container
-      *ngIf="values.length && values[0].agentCode"
-      [ngTemplateOutlet]="agent"
-      [ngTemplateOutletContext]="{ $implicit: rowData}"
-    ></ng-container>
+      <ng-container
+        *ngIf="values.length && values[0].agentCode"
+        [ngTemplateOutlet]="agent"
+        [ngTemplateOutletContext]="{ $implicit: rowData }"
+      ></ng-container>
 
-    <td>
-      <div class="cell-content">
-        <hospitality-bot-toggle-dropdown
-          class="toggle-btn"
-          (onClick)="handleStatus($event, rowData)"
-          [status]="rowData.status"
-        ></hospitality-bot-toggle-dropdown>
-      </div>
-    </td>
-  </ng-template>
+      <td>
+        <div class="cell-content">
+          <hospitality-bot-status-dropdown-toggle
+            class="toggle-btn"
+            (onClick)="handleStatus($event, rowData)"
+            [state]="rowData.status"
+          ></hospitality-bot-status-dropdown-toggle>
+        </div>
+      </td></tr
+  ></ng-template>
 
   <ng-template pTemplate="summary">
     <p-paginator
@@ -198,36 +198,30 @@
   </td>
 </ng-template>
 
-  <!-- *********************************FOOTER******************************* -->
-  <ng-template #emptyTable>
-    <hospitality-bot-empty-table
-      [isLoading]="loading"
-      [link]="
-        selectedTable==='AGENT'
-        ? ''
-        : ''
-      "
-      [content]="
-      selectedTable==='AGENT'
-      ? {
-        description:
-          'No Agent found'
-      }
-      : {
-        description:
-          'No Company found'
-      }
-      "
-    >
-      <ng-container [ngTemplateOutlet]="tabFilter"> </ng-container>
-    </hospitality-bot-empty-table>
-  </ng-template>
-  
-  <ng-template #tabFilter>
-    <hospitality-bot-tab-group
-      [selectedIndex]="tabFilterIdx"
-      *ngIf="isTabFilters"
-      [listItems]="tabFilterItems"
-      (selectedTabChange)="onSelectedTabFilterChange($event)"
-    ></hospitality-bot-tab-group>
-  </ng-template>  
+<!-- *********************************FOOTER******************************* -->
+<ng-template #emptyTable>
+  <hospitality-bot-empty-table
+    [isLoading]="loading"
+    [link]="selectedTable === 'AGENT' ? '' : ''"
+    [content]="
+      selectedTable === 'AGENT'
+        ? {
+            description: 'No Agent found'
+          }
+        : {
+            description: 'No Company found'
+          }
+    "
+  >
+    <ng-container [ngTemplateOutlet]="tabFilter"> </ng-container>
+  </hospitality-bot-empty-table>
+</ng-template>
+
+<ng-template #tabFilter>
+  <hospitality-bot-tab-group
+    [selectedIndex]="tabFilterIdx"
+    *ngIf="isTabFilters"
+    [listItems]="tabFilterItems"
+    (selectedTabChange)="onSelectedTabFilterChange($event)"
+  ></hospitality-bot-tab-group>
+</ng-template>

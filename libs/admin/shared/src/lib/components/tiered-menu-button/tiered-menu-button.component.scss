@@ -1,0 +1,75 @@
+@import 'main';
+@mixin default-button-design() {
+  cursor: pointer;
+  display: flex;
+  color: white;
+  .label,
+  i {
+    white-space: nowrap;
+    font-size: 12px;
+  }
+  .icon {
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+@mixin split-button-design($button-hight, $bg-color) {
+  background-color: $bg-color;
+  display: flex;
+  height: $button-hight;
+  align-items: center;
+  padding: 0 10px 0 10px;
+  &:hover {
+    background-color: $primary-hover;
+  }
+}
+
+:host ::ng-deep .tiered__wrapper {
+  padding: 0 5px;
+
+  .p-tieredmenu {
+    left: unset !important;
+  }
+
+  .tiered-button {
+    @include default-button-design;
+    background-color: $primary-cta;
+    padding: 11px;
+    border-radius: 4px;
+    gap: 4px;
+    .icon {
+      margin-top: 4px;
+    }
+    &:hover {
+      background-color: $primary-hover;
+    }
+  }
+
+  .split-button {
+    @include default-button-design();
+    .label {
+      @include split-button-design(39px, $primary-cta);
+      border-radius: 4px 0 0 4px;
+    }
+    .icon {
+      @include split-button-design(39px, $primary-cta);
+      background-color: $primary-hover;
+      border-radius: 0 4px 4px 0;
+    }
+    .label:hover {
+      cursor: pointer;
+    }
+    .icon:hover {
+      cursor: pointer;
+      background-color: $primary-cta;
+    }
+  }
+
+  .p-tieredmenu .p-menuitem-active > p-tieredmenusub > .p-submenu-list {
+    overflow-y: auto;
+    max-height: 300px;
+  }
+}

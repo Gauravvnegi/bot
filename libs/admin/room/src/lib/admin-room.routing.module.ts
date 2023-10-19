@@ -7,6 +7,7 @@ import { RoomTypeComponent } from './components/room-type/room-type.component';
 import { RoomComponent } from './components/room/room.component';
 import { ServicesComponent } from './components/services/services.component';
 import routes from './constant/routes';
+import { ImportServiceComponent } from './components/import-service/import-service.component';
 
 export const adminRoomRoutes: Route[] = [
   {
@@ -32,8 +33,29 @@ export const adminRoomRoutes: Route[] = [
             pathMatch: 'full',
           },
           {
-            path: ':id',
-            component: RoomTypeComponent,
+            path: routes.importServices,
+            component: ImportServiceComponent,
+            pathMatch: 'full',
+          },
+          {
+            path: ':roomTypeId',
+            component: MainComponent,
+            children: [
+              {
+                path: '',
+                component: RoomTypeComponent,
+              },
+              {
+                path: routes.importServices,
+                component: ImportServiceComponent,
+                pathMatch: 'full',
+              },
+              {
+                path: routes.services,
+                component: ServicesComponent,
+                pathMatch: 'full',
+              },
+            ],
           },
           {
             path: '',
@@ -57,5 +79,6 @@ export class AdminRoomRoutingModule {
     AddRoomComponent,
     RoomTypeComponent,
     ServicesComponent,
+    ImportServiceComponent,
   ];
 }

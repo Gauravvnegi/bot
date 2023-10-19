@@ -21,22 +21,22 @@ import { RequestConfig } from '../../data-models/request.model';
 export class MarketingNotificationComponent extends NotificationComponent
   implements OnInit, OnDestroy {
   emailFG: FormGroup;
-  @Input() hotelId: string;
+  @Input() entityId: string;
   @Input() email: string;
   fromEmailList: Option[] = [];
   topicList: Option[] = [];
   templateList: Option[] = [];
   to: Option[] = [];
   attachmentsList: Option[] = [];
-  selectedTemplate;
-  separatorKeysCodes = [ENTER, COMMA];
   visible = true;
   selectable = true;
   removable = true;
   addOnBlur = true;
   isSending = false;
   template = '';
-  isTemplateDisabled = false;
+  isTemplateDisabled = true;
+  reservationId: string = '';
+  packageId: string = '';
 
   @ViewChild('attachmentComponent') updateAttachment: any;
 
@@ -61,15 +61,19 @@ export class MarketingNotificationComponent extends NotificationComponent
   }
 
   ngOnInit(): void {
-    this.getConfigData(this.hotelId);
+    this.getConfigData(this.entityId);
+    this.getAllTemplates();
+    this.initFG();
+    this.listenForTemplateChange();
   }
 
-  getConfigData(hotelId): void {
-    this.requestService.getNotificationConfig(hotelId).subscribe((response) => {
-      this.config = new RequestConfig().deserialize(response);
-      this.initFG();
-      this.initOptions();
-    });
+  getConfigData(entityId): void {
+    this.requestService
+      .getNotificationConfig(entityId)
+      .subscribe((response) => {
+        this.config = new RequestConfig().deserialize(response);
+        this.initOptions();
+      });
   }
 
   initOptions() {
@@ -92,7 +96,7 @@ export class MarketingNotificationComponent extends NotificationComponent
   }
 
   getFromEmails() {
-    this._emailService.getFromEmail(this.hotelId).subscribe((response) => {
+    this._emailService.getFromEmail(this.entityId).subscribe((response) => {
       this.fromEmailList = new EmailList().deserialize(response);
       this.emailFG.get('fromId').setValue(this.fromEmailList[0].value);
     });
@@ -103,24 +107,21 @@ export class MarketingNotificationComponent extends NotificationComponent
     this.emailFG.get('emailIds').patchValue(this.to.map((item) => item.value));
   }
 
-  fetchTemplate(event) {
-    const topic = this.templateList.filter(
-      (item) => item.value === event.value
-    );
-    const config = {
-      queryObj: this._adminUtilityService.makeQueryParams([
-        { templateType: topic[0].label },
-      ]),
-    };
+  getAllTemplates() {
     this.$subscription.add(
-      this.requestService
-        .getTemplate(this.hotelId, event.value, config)
+      this._emailService
+        .getAllTemplates(this.entityId, {
+          params: this._adminUtilityService.makeQueryParams([
+            { channelType: 'EMAIL' },
+            { allTemplates: 'true' },
+          ]),
+        })
         .subscribe(
           (response) => {
-            console.log(response);
-            this.emailFG
-              .get('message')
-              .patchValue(this.modifyTemplate(response.template));
+            this.templateList = response.templates.map((template) => ({
+              label: template.label,
+              value: template.name,
+            }));
           },
           (error) => {
             this.emailFG.get('message').patchValue('');
@@ -129,26 +130,51 @@ export class MarketingNotificationComponent extends NotificationComponent
     );
   }
 
-  onTopicChange(selectedMessageType: string) {
-    const topic = this.topicList.find(
-      (type) => type.value === selectedMessageType
-    );
-    if (topic) {
-      this.isTemplateDisabled = false;
-      this.templateList = topic.templateIds.map((template) => ({
-        label: template.name,
-        value: template.id,
-      }));
-    } else {
-      this.isTemplateDisabled = true;
-      this.templateList = [];
-    }
+  listenForTemplateChange() {
+    this.emailFG.get('templateId').valueChanges.subscribe((res) => {
+      this.getTemplateDetails(res);
+    });
   }
+
+  getTemplateDetails(template) {
+    console.log(this.reservationId, 'reservationId');
+    this.$subscription.add(
+      this._emailService
+        .getTemplateDetails(this.entityId, {
+          params: this._adminUtilityService.makeQueryParams([
+            { templateType: template },
+            { reservationId: this.reservationId },
+            { packageId: '' },
+          ]),
+        })
+        .subscribe((response) => {
+          this.emailFG.get('message').patchValue(response.template);
+        })
+    );
+  }
+
+  // onTopicChange(selectedMessageType: string) {
+  //   const topic = this.topicList.find(
+  //     (type) => type.value === selectedMessageType
+  //   );
+  //   this.emailFG.get('templateId').patchValue('');
+  //   this.templateList = [];
+  //   if (topic && topic.templateIds) {
+  //     this.isTemplateDisabled = false;
+  //     this.templateList = topic.templateIds.map((template) => ({
+  //       label: template.name,
+  //       value: template.id,
+  //     }));
+  //   } else {
+  //     this.isTemplateDisabled = true;
+  //     this.templateList = [];
+  //   }
+  // }
 
   // getTopicList() {
   //   this.$subscription.add(
   //     this._emailService
-  //       .getTopicList(this.hotelId)
+  //       .getTopicList(this.entityId)
   //       .subscribe(
   //         (response) =>
   //           (this.topicList = new Topics().deserialize(response).records)
@@ -189,25 +215,26 @@ export class MarketingNotificationComponent extends NotificationComponent
   //   }
   // }
 
-  getTemplateList(event) {
-    console.log(event);
-    this.$subscription.add(
-      this._emailService
-        .getTemplateByTopic(this.hotelId, event.value)
-        .subscribe((response) => {
-          console.log(response);
-          this.templateList = response.records;
-          this.emailFG.get('templateId').setValue('');
-        })
-    );
-    if (this.templateList.length === 0) {
-      this.templateList.push({
-        label: 'No Data',
-        value: 'noData',
-      });
-      this.emailFG.get('templateId').setValue(this.templateList[0].value);
-    }
-  }
+  // getTemplateList(event) {
+  //   console.log(event);
+  //   this.$subscription.add(
+  //     this._emailService
+  //       .getTemplateByTopic(this.hotelId, event.value)
+  //       .subscribe((response) => {
+  //         console.log(response);
+  //         this.templateList = response.records;
+  //         this.emailFG.get('templateId').setValue('');
+  //       })
+  //   );
+  //   if (this.templateList.length === 0) {
+  //     this.templateList.push({
+  //       label: 'No Data',
+  //       value: 'noData',
+  //     });
+  //
+  //     this.emailFG.get('templateId').setValue(this.templateList[0].value);
+  //   }
+  // }
 
   // handleTemplateChange(event) {
   //   this.emailFG.get('message').patchValue(event.value.htmlTemplate);
@@ -216,7 +243,7 @@ export class MarketingNotificationComponent extends NotificationComponent
   uploadAttachments(event): void {
     const formData = new FormData();
     formData.append('files', event.currentTarget.files[0]);
-    this.requestService.uploadAttachments(this.hotelId, formData).subscribe(
+    this.requestService.uploadAttachments(this.entityId, formData).subscribe(
       (response) => {
         this.attachment = response.fileName;
         this.attachmentsList.push({
@@ -267,7 +294,7 @@ export class MarketingNotificationComponent extends NotificationComponent
     const {
       fromId,
       emailIds,
-      message,
+      message: htmlTemplate,
       subject,
       previewText,
       topicId,
@@ -275,7 +302,7 @@ export class MarketingNotificationComponent extends NotificationComponent
     const reqData = {
       fromId,
       emailIds,
-      message,
+      htmlTemplate,
       subject,
       previewText,
       topicId,
@@ -283,7 +310,7 @@ export class MarketingNotificationComponent extends NotificationComponent
     delete reqData['tempalteId'];
     this.isSending = true;
     this.$subscription.add(
-      this._emailService.sendEmail(this.hotelId, reqData).subscribe(
+      this._emailService.sendEmail(this.entityId, reqData).subscribe(
         (response) => {
           this.snackbarService
             .openSnackBarWithTranslate(

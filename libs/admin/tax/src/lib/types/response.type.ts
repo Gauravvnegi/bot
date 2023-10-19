@@ -5,6 +5,7 @@ export type TaxResponse = {
   category: string;
   taxValue: string;
   status: boolean;
+  entityId: string;
 };
 
 export type TaxListResponse = {

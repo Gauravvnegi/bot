@@ -13,11 +13,15 @@ export class DateComponent extends FormComponent implements OnInit {
 
   /* Default Date Settings */
   enableTime = true;
+  isTimeOnly = false;
+  showIcon = true;
   enableSeconds = false;
   hourFormat: 12 | 24 = 12;
   dateFormat = 'd/m/yy';
-  readonlyInput = false;
+  readonlyInput = true;
   enableButtonBar = false;
+  yearRange = '2000:2030';
+  view = 'date';
 
   /**
    * @Input to change default date setting
@@ -38,6 +42,10 @@ export class DateComponent extends FormComponent implements OnInit {
 
   ngOnInit(): void {
     this.initInputControl();
+
+    const value = this.inputControl.value;
+    if (value) this.dateValue = new Date(value);
+
     this.inputControl.valueChanges.subscribe((res) => {
       /* Epoch Date conversion to Date */
       this.dateValue = new Date(res);
@@ -59,6 +67,7 @@ export class DateComponent extends FormComponent implements OnInit {
     // time zone to be handled
     const epochDate = DateService.convertDateToTimestamp(date) * 1000;
     this.inputControl.setValue(epochDate);
+    this.inputControl.markAsDirty();
   }
 
   /**
@@ -72,11 +81,13 @@ export class DateComponent extends FormComponent implements OnInit {
 /**
  * @type DateSetting
  * @property translateKey Translation key whose value will be fetched from translation files.
- * @property readonlyInput To set date as non editable
+ * @property readonlyInput To disable setting date using user input.
  * @property enableButtonBar To add cta to calendar
  *
  */
 export type DateSetting = {
+  isTimeOnly: boolean;
+  showIcon: boolean;
   enableTime: boolean;
   enableSeconds: boolean;
   hourFormat: 12 | 24;

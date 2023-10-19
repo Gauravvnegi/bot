@@ -304,17 +304,13 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
       if (features === 'save') {
         return;
       } else if (features === 'service') {
-        const dataToSend = {
-          entityId: this.outletId,
-        };
-        const navigationExtras: NavigationExtras = {
-          queryParams: dataToSend,
-        };
         //navigate to create service
         this.routesConfigService.navigate({
           subModuleName: ModuleNames.SERVICES,
           additionalPath: 'create-service',
-          queryParams: dataToSend,
+          queryParams: {
+            entityId: this.outletId,
+          },
         });
       } else {
         //navigate to respective feature

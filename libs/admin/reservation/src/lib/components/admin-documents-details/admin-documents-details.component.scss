@@ -70,7 +70,29 @@
     color: $grayMedium;
     opacity: 1;
     cursor: pointer;
+
+    &__disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
   }
+
+  .update {
+    border: 1px solid $primary-cta;
+    padding: 8px 20px 10px;
+    border-radius: 4px;
+    text-transform: uppercase;
+
+    img {
+      padding-right: 10px;
+    }
+  }
+}
+
+:host ::ng-deep .show-tooltip .ui-tooltip-text {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
 }
 
 :host ::ng-deep .mat-form-field-infix {
@@ -81,11 +103,40 @@
   font-size: 14px;
 }
 
-.nationality-wrapper {
+.docs-wrapper {
+  position: relative;
+}
+
+.save-message {
+  letter-spacing: 0.84px;
+  color: $unpaid-state;
+  font-size: 14px;
+  font-weight: 600;
+
+  position: absolute;
+  top: -25px;
+  left: 10px;
+}
+
+.select-field {
   @include flex-base-algn;
-  .text {
+  .label {
     color: $grayMedium;
     margin-right: 7px;
+  }
+
+  margin-top: 7px;
+
+  // &__wrapper {
+  //   display: flex;
+  //   flex-direction: row;
+  //   gap: 20px;
+  // }
+}
+
+:host ::ng-deep .select-field {
+  .mat-form-field-infix {
+    width: 150px;
   }
 }
 
@@ -187,4 +238,12 @@
   p {
     padding-top: 4px;
   }
+}
+
+::ng-deep .mat-dialog-container {
+  position: relative;
+}
+
+.required {
+  color: $failed-state;
 }

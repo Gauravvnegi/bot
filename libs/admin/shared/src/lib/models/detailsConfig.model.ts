@@ -25,7 +25,7 @@ export class Details implements IDeserializable {
   pmsBooking: boolean;
 
   deserialize(input: any, timezone) {
-    const hotelNationality = input?.hotel?.address?.countryCode;
+    const hotelNationality = input?.entity?.address?.countryCode;
     this.invoicePrepareRequest = input.invoicePrepareRequest || false;
     this.pmsBooking = input.pmsBooking || false;
     this.guestDetails = new GuestDetailDS().deserialize(
@@ -455,9 +455,9 @@ export class ReservationDetailsConfig implements IDeserializable {
       this,
       set({}, 'bookingNumber', get(input, ['number'])),
       set({}, 'bookingId', get(input, ['id'])),
-      set({}, 'hotelId', get(input.hotel, ['id'])),
-      set({}, 'hotelNationality', get(input.hotel.address, ['countryCode'])),
-      set({}, 'entityId', get(input.hotel, ['id']))
+      set({}, 'hotelId', get(input.entity, ['id'])),
+      set({}, 'hotelNationality', get(input.entity?.address, ['countryCode'])),
+      set({}, 'entityId', get(input.entity, ['id']))
     );
     return this;
   }

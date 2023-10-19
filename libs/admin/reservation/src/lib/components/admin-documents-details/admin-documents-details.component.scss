@@ -76,6 +76,16 @@
       cursor: not-allowed;
     }
   }
+
+  .update {
+    border: 1px solid $primary-cta;
+    padding: 10px 20px;
+    border-radius: 4px;
+
+    img {
+      padding-right: 10px;
+    }
+  }
 }
 
 :host ::ng-deep .mat-form-field-infix {
@@ -93,9 +103,18 @@
     margin-right: 7px;
   }
 
-  &__wrapper {
-    display: flex;
-    flex-direction: column;
+  margin-top: 7px;
+
+  // &__wrapper {
+  //   display: flex;
+  //   flex-direction: row;
+  //   gap: 20px;
+  // }
+}
+
+:host ::ng-deep .select-field {
+  .mat-form-field-infix {
+    width: 150px;
   }
 }
 
@@ -201,4 +220,8 @@
 
 ::ng-deep .mat-dialog-container {
   position: relative;
+}
+
+.required {
+  color: $failed-state;
 }

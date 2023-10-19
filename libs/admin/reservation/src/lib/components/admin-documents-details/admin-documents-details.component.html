@@ -33,21 +33,26 @@
       <div
         class="download"
         *ngIf="selectedGuestGroup"
-        (click)="saveDocument()"
-        [ngClass]="{
-          download__disabled: !updatedDocGuest.includes(this.selectedGuestId)
-        }"
-      >
-        <img src="assets/svg/uparrow.svg" alt="document" /> &nbsp;
-        <p>Update Docs</p>
-      </div>
-      <div
-        class="download"
-        *ngIf="selectedGuestGroup"
         (click)="downloadDocs(selectedGuestGroup.get('documents').value)"
       >
         <img src="assets/svg/d_document.svg" alt="document" /> &nbsp;
         <p>Download All Docs</p>
+      </div>
+      <div
+        class="download update"
+        *ngIf="selectedGuestGroup"
+        (click)="saveDocument()"
+        [ngClass]="{
+          download__disabled: !updatedDocGuest.includes(this.selectedGuestId)
+        }"
+        [pTooltip]="
+          !updatedDocGuest.includes(this.selectedGuestId)
+            ? 'Upload docs to update them'
+            : 'Please Save the uploaded docs'
+        "
+      >
+        <img src="assets/svg/uparrow.svg" alt="document" /> &nbsp;
+        <p>Update Docs</p>
       </div>
     </div>
     <ng-container *ngIf="selectedGuestGroup">
@@ -67,40 +72,39 @@
                 </mat-option>
               </mat-select>
             </mat-form-field>
-            <div class="select-field__wrapper">
-              <div class="select-field">
-                <span class="label">Nationality :</span>
-                <mat-form-field *ngIf="selectedGuestGroup">
-                  <mat-select
-                    [(value)]="selectedGuestGroup.get('nationality').value"
-                    formControlName="nationality"
-                    [disabled]="false"
+
+            <div class="select-field">
+              <span class="label">Nationality :</span>
+              <mat-form-field *ngIf="selectedGuestGroup">
+                <mat-select
+                  [(value)]="selectedGuestGroup.get('nationality').value"
+                  formControlName="nationality"
+                  [disabled]="false"
+                >
+                  <mat-option
+                    *ngFor="let country of countriesLOV"
+                    [value]="country.value"
                   >
-                    <mat-option
-                      *ngFor="let country of countriesLOV"
-                      [value]="country.value"
-                    >
-                      {{ country.label }}
-                    </mat-option>
-                  </mat-select>
-                </mat-form-field>
-              </div>
-              <div class="select-field">
-                <span class="label">Document Type :</span>
-                <mat-form-field *ngIf="selectedGuestGroup">
-                  <mat-select
-                    [(value)]="
-                      selectedGuestGroup.get('selectedDocumentType').value
-                    "
-                    formControlName="selectedDocumentType"
-                    [disabled]="false"
-                  >
-                    <mat-option *ngFor="let doc of documentsList" [value]="doc">
-                      {{ doc }}
-                    </mat-option>
-                  </mat-select>
-                </mat-form-field>
-              </div>
+                    {{ country.label }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div class="select-field">
+              <span class="label">Document Type :</span>
+              <mat-form-field *ngIf="selectedGuestGroup">
+                <mat-select
+                  [(value)]="
+                    selectedGuestGroup.get('selectedDocumentType').value
+                  "
+                  formControlName="selectedDocumentType"
+                  [disabled]="false"
+                >
+                  <mat-option *ngFor="let doc of documentsList" [value]="doc">
+                    {{ doc }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
             </div>
           </div>
           <div class="nationality-wrapper"></div>
@@ -132,6 +136,14 @@
                   </hospitality-bot-upload-file>
                   <p class="text">
                     {{ document.get('settings').value['frontImageName'] }}
+                    <span class="required">
+                      {{
+                        document.get('settings').value['frontImage'] ===
+                        'required'
+                          ? '*'
+                          : ''
+                      }}
+                    </span>
                   </p>
                 </div>
                 <div
@@ -152,6 +164,14 @@
                   </hospitality-bot-upload-file>
                   <p class="text">
                     {{ document.get('settings').value['backImageName'] }}
+                    <span class="required">
+                      {{
+                        document.get('settings').value['backImage'] ===
+                        'required'
+                          ? '*'
+                          : ''
+                      }}
+                    </span>
                   </p>
                 </div>
               </div>

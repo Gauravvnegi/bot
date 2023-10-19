@@ -46,7 +46,9 @@ export class AdminDocumentsDetailsComponent implements OnInit {
     private snackbarService: SnackBarService,
     private modalService: ModalService,
     private globalFilterService: GlobalFilterService
-  ) {}
+  ) {
+    this.entityId = this.globalFilterService.entityId;
+  }
 
   ngOnInit(): void {
     this.entityId = this.globalFilterService.entityId;
@@ -476,19 +478,23 @@ export class AdminDocumentsDetailsComponent implements OnInit {
     } else {
       const docTypes = res.split('/') as ForeignNationalDocType[]; // ["PASSPORT","VISA"] or ["PASSPORT","OCI"]
 
-      this.documentFormGroup.controls.push(
-        this.getDocumentFG(
-          { documentType: docTypes[0], ...getDocs(0) },
-          this.getDocumentsConfigurationSettings(!isNational, docTypes[0])
-        )
-      );
+      if (docTypes[0]) {
+        this.documentFormGroup.controls.push(
+          this.getDocumentFG(
+            { documentType: docTypes[0], ...getDocs(0) },
+            this.getDocumentsConfigurationSettings(!isNational, docTypes[0])
+          )
+        );
+      }
 
-      this.documentFormGroup.controls.push(
-        this.getDocumentFG(
-          { documentType: docTypes[1], ...getDocs(1) },
-          this.getDocumentsConfigurationSettings(!isNational, docTypes[1])
-        )
-      );
+      if (docTypes[1]) {
+        this.documentFormGroup.controls.push(
+          this.getDocumentFG(
+            { documentType: docTypes[1], ...getDocs(1) },
+            this.getDocumentsConfigurationSettings(!isNational, docTypes[1])
+          )
+        );
+      }
     }
   };
 

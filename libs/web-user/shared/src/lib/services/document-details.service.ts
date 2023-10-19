@@ -161,13 +161,13 @@ export class DocumentDetailsService extends ApiService {
     ).pipe(
       map((res) => {
         // modified the result for no content (for the wrong nationality)
-        return res
-          ? res
-          : {
-              documentList: [],
-              verifyAllDocuments: false,
-              invalidNationality: true,
-            };
+        return (
+          res ?? {
+            documentList: [],
+            verifyAllDocuments: false,
+            invalidNationality: true,
+          }
+        );
       })
     );
   }

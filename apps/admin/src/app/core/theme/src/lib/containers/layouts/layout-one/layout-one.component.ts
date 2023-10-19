@@ -667,8 +667,14 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
   }
 
   get isPredictoSubscribed() {
-    return this.subscriptionPlanService.checkProductSubscription(
-      ProductNames.PREDICTO_PMS
+    return (
+      this.subscriptionPlanService.hasViewUserPermission({
+        name: ProductNames.PREDICTO_PMS,
+        type: 'product',
+      }) &&
+      this.subscriptionPlanService.checkProductSubscription(
+        ProductNames.PREDICTO_PMS
+      )
     );
   }
 

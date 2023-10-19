@@ -10,6 +10,8 @@ export class Invoice {
   confirmationNumber: string;
   guestName: string;
   companyName: string;
+  arrivalDate: number;
+  departureDate: number;
 
   gstNumber: string;
   contactName: string;
@@ -27,6 +29,8 @@ export class Invoice {
   totalAmount: number;
   paidAmount: number;
   dueAmount: number;
+  discountedAmount: number;
+  netAmount: number;
 
   currency: string;
   cashierName: string;
@@ -65,8 +69,9 @@ export class Invoice {
 
     this.totalAmount = input.totalAmount;
     this.paidAmount = input.totalPaidAmount;
+    this.discountedAmount = input.totalDiscount;
     this.dueAmount = input.totalDueAmount;
-
+    this.netAmount = input.totalPayableAmount;
     this.currency = data.currency;
     this.cashierName = data.cashierName;
 

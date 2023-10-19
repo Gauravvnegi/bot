@@ -36,6 +36,7 @@ export class AuditSummaryComponent implements OnInit {
   @Input() activeIndex = 0;
   @Input() stepList: MenuItem[];
   @Output() indexChange = new EventEmitter<any>();
+  @Output() auditDateChange = new EventEmitter<Date>();
 
   $subscription = new Subscription();
 
@@ -58,6 +59,7 @@ export class AuditSummaryComponent implements OnInit {
     this.lastNightDate.setHours(23, 59, 59);
   }
 
+  // TODO: Need to do common with night audit
   checkAudit(isNext?: boolean) {
     this.loading = true;
     this.$subscription.add(
@@ -72,6 +74,7 @@ export class AuditSummaryComponent implements OnInit {
               this.auditDates = res;
               const currentAuditDate = this.auditDates.shift();
               this.auditDate = new Date(currentAuditDate);
+              this.auditDateChange.emit(this.auditDate);
               this.initTable();
             };
 
@@ -80,7 +83,6 @@ export class AuditSummaryComponent implements OnInit {
               this.loading = false;
               this.isNoAuditFound = true;
             };
-
             if (res?.length) {
               if (isNext) {
                 this.confirmationService.confirm({
@@ -89,7 +91,7 @@ export class AuditSummaryComponent implements OnInit {
                   acceptButtonStyleClass: 'accept-button',
                   rejectButtonStyleClass: 'reject-button-outlined',
                   accept: () => {
-                    loadTable();
+                    this.indexChange.emit({ index: 0 });
                   },
                   reject: () => {
                     doNotLoad();
@@ -127,7 +129,14 @@ export class AuditSummaryComponent implements OnInit {
         .subscribe(
           (res) => {
             const auditSummary = new AuditSummary().deserialize(res);
-            this.cols = { ...cols, ...auditSummary.columns };
+            Object.keys(auditSummary.columns).forEach((col) => {
+              if (this.cols[col]) {
+                this.cols[col] = [
+                  ...this.cols[col],
+                  ...auditSummary.columns[col],
+                ];
+              }
+            });
             this.values = auditSummary.records;
             this.loading = false;
           },

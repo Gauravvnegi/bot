@@ -96,6 +96,8 @@ import { CopyLinkComponentComponent } from './components/copy-link-component/cop
 import { InputNumberComponent } from './components/form-component/input-number/input-number.component';
 import { AddAttachmentComponent } from './components/form-component/add-attachment/add-attachment.component';
 import { ModalHeaderComponent } from './components/datatable/modal-header/modal-header.component';
+import { ImageHandlingComponent } from './components/image-handling/image-handling.component';
+import { SharedImageCropperModule } from 'libs/shared/image-cropper/src/lib/shared-image-cropper.module';
 import { AddressComponent } from './components/address/address-component.component';
 import { SocialMediaComponent } from './components/social-media/social-media.component';
 import { DiscountFormComponent } from './components/discount-form/discount-form.component';
@@ -156,6 +158,7 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
     MatTooltipModule,
     DialogModule,
     MatMenuModule,
+    SharedImageCropperModule,
     MenuModule,
     ToggleButtonModule,
     InputNumberModule,
@@ -240,6 +243,7 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
     CopyLinkComponentComponent,
     AddAttachmentComponent,
     ModalHeaderComponent,
+    ImageHandlingComponent,
     AddressComponent,
     SocialMediaComponent,
     DiscountFormComponent,
@@ -359,6 +363,7 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
     CopyLinkComponentComponent,
     AddAttachmentComponent,
     ModalHeaderComponent,
+    ImageHandlingComponent,
     AddressComponent,
     SocialMediaComponent,
     DiscountFormComponent,

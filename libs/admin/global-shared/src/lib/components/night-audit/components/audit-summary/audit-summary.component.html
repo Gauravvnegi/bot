@@ -2,14 +2,14 @@
   <!-- Confirm Dialog -->
   <hospitality-bot-confirm-dialog></hospitality-bot-confirm-dialog>
 
-  <div class="header" *ngIf="!isNoAuditFound">
+  <div class="header" *ngIf="!(!isNoAuditFound && !loading)">
     Night audit is completed for {{ auditDate | date: 'dd/MM/yyy' }}
   </div>
   <div
     class="content__wrapper"
     *ngIf="!isNoAuditFound && !loading; else emptyTable"
   >
-    <p-accordion [multiple]="true">
+    <p-accordion *ngIf="values" [multiple]="true">
       <p-accordionTab
         *ngFor="let col of columns; let i = index"
         [selected]="true"

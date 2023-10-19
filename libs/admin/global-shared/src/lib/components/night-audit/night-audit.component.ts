@@ -32,6 +32,8 @@ export class NightAuditComponent implements OnInit {
   @Output() onClose = new EventEmitter();
   pageTitle = 'Night Audit';
   currentDate = new Date();
+  auditDate: Date;
+  lastNightDate = new Date();
   itemList = itemList;
   activeStep = 0;
   loading = false;
@@ -47,13 +49,60 @@ export class NightAuditComponent implements OnInit {
 
   ngOnInit(): void {
     this.entityId = this.globalFilterService.entityId;
+    this.initAuditTime();
+  }
+
+  initAuditTime() {
+    this.lastNightDate.setDate(this.lastNightDate.getDate() - 1);
+    this.lastNightDate.setHours(23, 59, 59);
+  }
+
+  // TODO: Need to do common with night audit summary
+  checkAudit(event) {
+    // For Status Change
+    if (typeof event == 'object') {
+      this.initData();
+      return;
+    }
+
+    this.loading = true;
+    this.$subscription.add(
+      this.nightAuditService
+        .checkAudit(
+          this.entityId,
+          this.getQueryConfig({ toDate: this.lastNightDate.getTime() })
+        )
+        .subscribe(
+          (res) => {
+            if (res?.length) {
+              const currentAuditDate = res.shift();
+              this.auditDate = new Date(currentAuditDate);
+              this.initData();
+            } else {
+              this.checkedOutReservation = [];
+              this.checkedInReservation = [];
+            }
+            this.loading = false;
+          },
+          (error) => {
+            this.loading = false;
+            this.auditDate = undefined;
+          },
+          () => {
+            this.loading = false;
+          }
+        )
+    );
   }
 
   initData() {
     this.loading = true;
     this.$subscription.add(
       this.nightAuditService
-        .getNightAudit(this.entityId, this.getQueryConfig())
+        .getNightAudit(
+          this.entityId,
+          this.getQueryConfig({ auditDate: this.auditDate.getTime() })
+        )
         .subscribe(
           (res) => {
             const {
@@ -83,13 +132,12 @@ export class NightAuditComponent implements OnInit {
     }
   }
 
-  getQueryConfig(): QueryConfig {
+  getQueryConfig(auditDate: {
+    toDate?: number;
+    auditDate?: number;
+  }): QueryConfig {
     return {
-      params: this.adminUtilityService.makeQueryParams([
-        {
-          auditDate: new Date().getTime(),
-        },
-      ]),
+      params: this.adminUtilityService.makeQueryParams([auditDate]),
     };
   }
 

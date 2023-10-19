@@ -9,7 +9,6 @@ import {
   SourceData,
 } from '../types/forms.types';
 import { ReservationForm } from '../constants/form';
-import { GuestInfo } from '../models/reservations.model';
 import { ManageReservationService } from './manage-reservation.service';
 import { QueryConfig } from '@hospitality-bot/admin/shared';
 import { AbstractControl } from '@angular/forms';

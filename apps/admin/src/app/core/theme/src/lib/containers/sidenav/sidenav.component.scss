@@ -258,7 +258,7 @@
 //   z-index: 1003 !important;
 // }
 ::ng-deep .p-sidebar-mask.p-component-overlay {
-  z-index: 130 !important;
+  z-index: $sidebar-z !important; //side bar z-index
 }
 
 :host ::ng-deep .p-sidebar-content {
@@ -376,18 +376,17 @@
   }
 }
 
-.product-icon{
+.product-icon {
   width: 1.5em;
   height: 1.5em;
   margin-right: 0.5em;
   margin-bottom: 0.5em;
   object-fit: contain;
 
-   img{
+  img {
     width: 100%;
     height: 100%;
-    
-   }
+  }
 }
 
 .empty-img-view {

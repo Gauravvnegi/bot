@@ -10,6 +10,7 @@ export const navRoute: Record<UserPermissionRoutes, NavRouteOption> = {
   userProfile: {
     label: 'User Profile',
     link: '/pages/roles-permissions/manage-profile',
+    isDisabled: true,
   },
   editUser: {
     label: 'Edit User',

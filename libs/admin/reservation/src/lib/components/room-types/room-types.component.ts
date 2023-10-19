@@ -49,17 +49,12 @@ export class RoomTypesComponent extends FormComponent {
     this.$subscription.add(
       this.roomService
         .getList<RoomTypeListResponse>(this.entityId, {
-          params: '?type=ROOM_TYPE&offset=0&limit=200',
+          params:
+            '?type=ROOM_TYPE&offset=0&limit=200&roomTypeStatus=true&createBooking=true',
         })
         .subscribe((res) => {
           const roomTypesList = new RoomTypeList().deserialize(res).records;
-          const activeRoomTypes = roomTypesList.filter((roomType) => {
-            const roomCount = roomType.roomCount;
-            const isActive = roomType.status; // Replace with the actual property name for room type status
-
-            return roomCount > 0 && isActive;
-          });
-          this.roomTypes = activeRoomTypes.map((roomType: RoomType) => ({
+          this.roomTypes = roomTypesList.map((roomType: RoomType) => ({
             label: roomType.name,
             value: roomType.id,
             roomCount: roomType.roomCount,

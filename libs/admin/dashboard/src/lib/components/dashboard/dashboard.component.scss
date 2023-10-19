@@ -5,14 +5,6 @@
   margin-bottom: 20px;
 }
 
-::ng-deep .p-sidebar-mask,
-.p-sidebar-mask-leave.p-component-overlay {
-  background-color: rgba(0, 0, 0, 0) !important;
-}
-
-::ng-deep .p-component-overlay {
-  display: none !important;
-}
 
 // :host ::ng-deep .p-sidebar {
 //   top: 65px;
@@ -24,9 +16,9 @@
     .nav-actions {
     }
   }
-  .nav-wrapper__sticky {
-    z-index: 470 !important;
-  }
+  // .nav-wrapper__sticky {
+  //   z-index: 470 !important;
+  // }
 }
 
 .content {
@@ -246,4 +238,3 @@
 // :host ::ng-deep .action-header__sticky {
 //   z-index: 490 !important;
 // }
-

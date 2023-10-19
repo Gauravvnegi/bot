@@ -32,11 +32,12 @@ import { PreArrivalRequestList } from '../../data-models/ex-checkin.model';
 import { dashboardPopUpTabs } from '../../constants/dashboard';
 import { ReservationService } from '../../services';
 import { InhouseTable } from 'libs/admin/request-analytics/src/lib/models/inhouse-datatable.model';
-
+import { SideBarService } from 'libs/admin/shared/src/lib/services/sidebar.service';
 @Component({
   selector: 'hospitality-bot-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss'],
+  providers: [SideBarService],
 })
 export class DashboardComponent implements OnInit, OnDestroy {
   tables = TableNames;
@@ -60,7 +61,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
     private modalService: ModalService,
     private notificationService: NotificationService,
     private _adminUtilityService: AdminUtilityService,
-    private analyticsService: AnalyticsService
+    private analyticsService: AnalyticsService,
+    private sideBarService: SideBarService
   ) {}
 
   ngOnInit(): void {
@@ -221,10 +223,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   openExCheckinSidebar() {
+    this.sideBarService.setSideBarZIndex(130, true);
     this.isSidebarVisible = true;
   }
 
   closeSidebar() {
+    this.sideBarService.setSideBarZIndex(0, false);
     this.isSidebarVisible = false;
   }
 

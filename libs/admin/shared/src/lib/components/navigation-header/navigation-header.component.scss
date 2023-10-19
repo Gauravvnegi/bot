@@ -111,6 +111,8 @@
 
 .nav-header-wrapper {
   padding-top: 20px;
+  z-index: $nav-header-z;
+  position: relative;
 }
 
 .disabled {

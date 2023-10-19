@@ -55,6 +55,7 @@
     width: 100%;
     border-bottom: 1px solid $grayMedium;
     padding: 15px;
+    overflow: auto;
     .sortBy {
       font: normal normal $bolder 10px/13px Poppins;
       letter-spacing: 0.6px;

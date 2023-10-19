@@ -102,7 +102,7 @@ export class LoginComponent implements OnInit {
         if (hasSites) {
           this._router.navigate([`/`]);
         } else {
-          this._router.navigate([`/dashboard`]);
+          this.isSigningIn = false;
         }
       },
       ({ error }) => {

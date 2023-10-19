@@ -86,9 +86,9 @@
 
           <hospitality-bot-tiered-menu-button
             *ngIf="!!bookingOptions?.length"
-            label="Quick booking"
+            [label]="getQuickLabel"
             [splitButton]="true"
-            (clicked)="showQuickReservation()"
+            (clicked)="onQuickButtonClick()"
             [openNewWindow]="true"
             [items]="bookingOptions"
           ></hospitality-bot-tiered-menu-button>
@@ -166,16 +166,20 @@
           </div>
           <div
             *ngIf="isPredictoSubscribed"
-            class="header--button quick-action"
+            class="header--button quick-action night-audit"
             (click)="openNightAudit()"
           >
             <img
               class="filter-icon"
+              [ngClass]="{ 'red-filter': isNightAuditPending }"
               src="assets/svg/allocation.svg"
               alt="audit"
-              pTooltip="Night Audit"
+              [pTooltip]="isNightAuditPending ? '' : 'Night Audit'"
               tooltipPosition="bottom"
             />
+            <div class="night-audit__hover" *ngIf="isNightAuditPending">
+              Night Audit Pending
+            </div>
           </div>
           <div class="notification-wrapper">
             <div class="temp-width">

@@ -134,6 +134,10 @@ export class InteractiveGridComponent {
   @Output() onCreate = new EventEmitter<IGCreateEvent>();
 
   /**
+   * When disabled grid cell is clicked
+   */
+  @Output() onDisabledClick = new EventEmitter<IGEditEvent>();
+  /**
    * Data to map the interactive grid cell
    * @example
    * const data = {
@@ -338,6 +342,15 @@ export class InteractiveGridComponent {
    */
   handleCreate(event: IGCreateEvent) {
     this.onCreate.emit(event);
+  }
+
+  handleClick(query: IGQueryEvent) {
+    const { data, id } = this.getCurrentDataInfo(query);
+
+    // handling disable only right now
+    if (data.nonInteractive && data.id) {
+      this.onDisabledClick.emit({ id });
+    }
   }
 
   getPosition({ rowIdx, colIdx, rowValue, colValue }: IGQueryEvent): IPosition {

@@ -127,6 +127,21 @@
             {{ bookingNumber }}
           </span>
         </div>
+        <div *ngIf="inputControl.arrivalDate.value" class="half-width">
+          <span class="code__label"> Arrival Date: </span>
+          <span *ngIf="inputControl.arrivalDate.value" class="code__hash">
+            {{ inputControl.arrivalDate.value | date: 'dd/MM/yy' }}
+          </span>
+        </div>
+        <div
+          *ngIf="inputControl.departureDate.value"
+          class="half-width code__right"
+        >
+          <span class="code__label"> Departure Date: </span>
+          <span class="code__hash">
+            {{ inputControl.departureDate.value | date: 'dd/MM/yy' }}
+          </span>
+        </div>
         <div class="half-width">
           <span class="code__label"> Guest Name: </span>
           <span class="code__hash">
@@ -348,12 +363,25 @@
 
       <div class="payment-form__amount">
         <div class="py-row">
-          <span>Net Amount</span>
+          <span>Total Amount</span>
           <span>
             INR {{ inputControl.totalAmount.value | number: '1.1-1' }}</span
           >
         </div>
+        <div class="py-row">
+          <span>Discounted Amount</span>
+          <span>
+            <span
+              >INR
+              {{ inputControl.discountedAmount.value | number: '1.1-1' }}
+            </span>
+          </span>
+        </div>
         <div class="py-row invert">
+          <span>Net Amount</span>
+          <span> INR {{ inputControl.netAmount.value | number: '1.1-1' }}</span>
+        </div>
+        <div class="py-row">
           <span>Paid Amount</span>
           <span>
             <span
@@ -362,7 +390,6 @@
             </span>
           </span>
         </div>
-
         <div class="py-row">
           <span>Due Amount</span>
           <span

@@ -230,7 +230,13 @@
                   >
                     <div formGroupName="permissions" class="checkbox-wrapper">
                       <mat-checkbox
+                        [disable]
                         formControlName="view"
+                        [disabled]="
+                          userPermissionFG
+                            .get('permissions')
+                            .get('disabledPermissions').value.view
+                        "
                         [checked]="
                           userPermissionFG.get('permissions').get('view')
                             .value === 1
@@ -240,6 +246,11 @@
                       ></mat-checkbox>
                       <mat-checkbox
                         formControlName="manage"
+                        [disabled]="
+                          userPermissionFG
+                            .get('permissions')
+                            .get('disabledPermissions').value.manage
+                        "
                         [checked]="
                           userPermissionFG.get('permissions').get('manage')
                             .value == 1
@@ -247,6 +258,7 @@
                             : false
                         "
                       ></mat-checkbox>
+                      <!-- {{ userPermissionFG.get('permissions').value | json }} -->
                     </div>
                   </div>
                 </div>

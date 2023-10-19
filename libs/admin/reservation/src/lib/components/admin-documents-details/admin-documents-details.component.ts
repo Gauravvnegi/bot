@@ -325,7 +325,6 @@ export class AdminDocumentsDetailsComponent implements OnInit {
           'doc_issue_place',
           this.selectedGuestGroup.get('nationality').value
         );
-        formData.append('ocr', 'false');
 
         const guestID = this.selectedGuestGroup.get('id').value;
 

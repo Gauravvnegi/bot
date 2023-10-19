@@ -311,11 +311,11 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
           queryParams: dataToSend,
         };
         //navigate to create service
-          this.routesConfigService.navigate({
-            subModuleName: ModuleNames.SERVICES,
-            additionalPath: 'create-service',
-            queryParams: dataToSend,
-          });
+        this.routesConfigService.navigate({
+          subModuleName: ModuleNames.SERVICES,
+          additionalPath: 'create-service',
+          queryParams: dataToSend,
+        });
       } else {
         //navigate to respective feature
         this.router.navigate([features], {

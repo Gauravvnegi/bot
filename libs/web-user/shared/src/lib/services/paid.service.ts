@@ -54,28 +54,24 @@ export class PaidService extends ApiService {
   }
 
   updateAmenity(reservationId, data) {
-    if (data.packagesToBeAdd) {
-      // Unix timestamps
-      const timeTimestamp = data.packagesToBeAdd[0].metaData.pickupTime;
-      const dateTimestamp = data.packagesToBeAdd[0].metaData.pickupDate;
-
-      // Convert Unix timestamps to JavaScript Date objects
-      const timeDate = new Date(timeTimestamp * 1000); // Convert seconds to milliseconds
-      const dateDate = new Date(dateTimestamp * 1000); // Convert seconds to milliseconds
-
-      // Combine the Date objects
-      const combinedDate = new Date(
-        dateDate.getFullYear(),
-        dateDate.getMonth(),
-        dateDate.getDate(),
-        timeDate.getHours(),
-        timeDate.getMinutes(),
-        timeDate.getSeconds()
-      );
-
-      data.packagesToBeAdd[0].metaData.pickupTime = combinedDate.getTime();
-      data.packagesToBeAdd[0].metaData.pickupDate = undefined;
-    }
+    // if (data.packagesToBeAdd) {
+    // Unix timestamps
+    // const timeTimestamp = data.packagesToBeAdd[0].metaData.pickupTime;
+    // const dateTimestamp = data.packagesToBeAdd[0].metaData.pickupDate;
+    // const dateTimeStampUnix = moment(dateTimestamp).unix();
+    // // Convert Unix timestamps to JavaScript Date objects
+    // const timeDate = new Date(timeTimestamp * 1000); // Convert seconds to milliseconds
+    // const dateDate = new Date(dateTimeStampUnix); // Convert seconds to milliseconds
+    // debugger;
+    // Merge the Date and Time
+    // dateDate.setHours(
+    //   timeDate.getHours(),
+    //   timeDate.getMinutes(),
+    //   timeDate.getSeconds()
+    // );
+    // data.packagesToBeAdd[0].metaData.pickupTime = dateDate;
+    // data.packagesToBeAdd[0].metaData.pickupDate = undefined;
+    // }
     return this.put(`/api/v1/reservation/${reservationId}/packages`, data);
   }
 

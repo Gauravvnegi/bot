@@ -8,7 +8,6 @@ import {
   daysOfWeek,
 } from '@hospitality-bot/admin/shared';
 import { getWeekendBG } from 'libs/admin/channel-manager/src/lib/models/bulk-update.models';
-import { ReservationType } from 'libs/admin/manage-reservation/src/lib/constants/reservation-table';
 import {
   ReservationList,
   RoomReservation,
@@ -32,7 +31,7 @@ import {
   IGRow,
   IGValue,
 } from 'libs/admin/shared/src/lib/components/interactive-grid/interactive-grid.component';
-import { Subscription } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import { getColorCode } from '../../constants/reservation';
 
@@ -128,28 +127,30 @@ export class ReservationCalendarViewComponent implements OnInit {
 
   initReservationData() {
     this.roomTypes.map((roomType) => (roomType.loading = true));
-    this.manageReservationService
-      .getReservationItems<ReservationListResponse>(
-        this.getQueryConfig(),
-        this.entityId
-      )
-      .subscribe(
-        (res) => {
-          this.reservationListData = new ReservationList().deserialize(
-            res
-          ).reservationData;
-          this.roomTypes.forEach((roomType) => {
-            this.mapGridData(roomType);
-          });
-          this.roomsLoaded = true;
-        },
-        (error) => {
-          this.roomTypes.map((roomType) => (roomType.loading = false));
-        },
-        () => {
-          this.roomTypes.map((roomType) => (roomType.loading = false));
-        }
-      );
+    this.$subscription.add(
+      this.manageReservationService
+        .getReservationItems<ReservationListResponse>(
+          this.getQueryConfig(),
+          this.entityId
+        )
+        .subscribe(
+          (res) => {
+            this.reservationListData = new ReservationList().deserialize(
+              res
+            ).reservationData;
+            this.roomTypes.forEach((roomType) => {
+              this.mapGridData(roomType);
+            });
+            this.roomsLoaded = true;
+          },
+          (error) => {
+            this.roomTypes.map((roomType) => (roomType.loading = false));
+          },
+          () => {
+            this.roomTypes.map((roomType) => (roomType.loading = false));
+          }
+        )
+    );
   }
 
   mapGridData(roomType: IGRoomType) {
@@ -407,6 +408,10 @@ export class ReservationCalendarViewComponent implements OnInit {
   getFeatureImage(features: Features[]) {
     if (features) return features.map((feature) => feature.imageUrl);
     else return;
+  }
+
+  ngOnDestroy(): void {
+    this.$subscription.unsubscribe();
   }
 }
 

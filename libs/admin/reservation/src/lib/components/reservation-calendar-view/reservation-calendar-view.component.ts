@@ -31,9 +31,12 @@ import {
   IGRow,
   IGValue,
 } from 'libs/admin/shared/src/lib/components/interactive-grid/interactive-grid.component';
-import { Subject, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import { getColorCode } from '../../constants/reservation';
+import { MatDialogConfig } from '@angular/material/dialog';
+import { ModalService } from '@hospitality-bot/shared/material';
+import { DetailsComponent } from '../details/details.component';
 
 @Component({
   selector: 'hospitality-bot-reservation-calendar-view',
@@ -67,7 +70,8 @@ export class ReservationCalendarViewComponent implements OnInit {
     private manageReservationService: ManageReservationService,
     private globalFilterService: GlobalFilterService,
     private roomService: RoomService,
-    private adminUtilityService: AdminUtilityService
+    private adminUtilityService: AdminUtilityService,
+    private modalService: ModalService
   ) {}
 
   ngOnInit(): void {
@@ -141,12 +145,13 @@ export class ReservationCalendarViewComponent implements OnInit {
             this.roomTypes.forEach((roomType) => {
               this.mapGridData(roomType);
             });
-            this.roomsLoaded = true;
           },
           (error) => {
+            this.roomsLoaded = true;
             this.roomTypes.map((roomType) => (roomType.loading = false));
           },
           () => {
+            this.roomsLoaded = true;
             this.roomTypes.map((roomType) => (roomType.loading = false));
           }
         )
@@ -382,6 +387,10 @@ export class ReservationCalendarViewComponent implements OnInit {
     this.viewQuickForm(roomType, event.id, undefined);
   }
 
+  handleDisabledClick(event: IGEditEvent) {
+    this.openDetailsPage(event.id);
+  }
+
   viewQuickForm(roomType: IGRoomType, id: string, event: IGCreateEvent) {
     this.formProps = {
       reservationId: id,
@@ -392,6 +401,24 @@ export class ReservationCalendarViewComponent implements OnInit {
       date: event?.colValue,
     };
     this.viewReservationForm = true;
+  }
+
+  openDetailsPage(reservationId: string) {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = true;
+    dialogConfig.width = '100%';
+    const detailCompRef = this.modalService.openDialog(
+      DetailsComponent,
+      dialogConfig
+    );
+
+    detailCompRef.componentInstance.bookingId = reservationId;
+    detailCompRef.componentInstance.tabKey = 'payment_details';
+    this.$subscription.add(
+      detailCompRef.componentInstance.onDetailsClose.subscribe((res) => {
+        detailCompRef.close();
+      })
+    );
   }
 
   handleCloseSidebar(resetData: boolean) {

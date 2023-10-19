@@ -66,6 +66,14 @@
               rowIdx: rowIdx
             })
           "
+          (click)="
+            handleClick({
+              rowValue: row,
+              colValue: col,
+              colIdx: colIdx,
+              rowIdx: rowIdx
+            })
+          "
         >
           <div
             class="cell-data"

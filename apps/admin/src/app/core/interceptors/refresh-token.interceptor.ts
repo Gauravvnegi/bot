@@ -52,6 +52,7 @@ export class RefreshTokenInterceptor implements HttpInterceptor {
 
         // If error status is different than 401 we want to skip refresh token
         // So we check that and throw the error if it's the case
+
         if (err.status !== 401) {
           this.loadingService.close();
           return throwError(err);
@@ -71,6 +72,7 @@ export class RefreshTokenInterceptor implements HttpInterceptor {
         } else {
           if (!this._authService.isAuthenticated()) {
             this._router.navigate(['/auth']);
+            this.loadingService.close();
             return throwError(err);
           }
           this.refreshTokenInProgress = true;

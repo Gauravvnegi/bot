@@ -47,6 +47,10 @@ export class ReservationService extends ApiService {
     );
   }
 
+  saveDocument(reservationId, data): Observable<any> {
+    return this.patch(`/api/v1/reservation/${reservationId}/documents`, data);
+  }
+
   generateJourneyLink(reservationId, journeyName): Observable<any> {
     return this.get(
       `/api/v1/reservation/${reservationId}/generate-link?journey=${journeyName}`

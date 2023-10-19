@@ -1,11 +1,5 @@
 <div class="material-body">
-  <div
-    *ngIf="
-      detailsData.stepStatusDetails.documents !== 'PENDING';
-      else documentsPending
-    "
-  >
-    <!-- Check if documents pending in any case ; then show pending template. If documents are initiated, completed or failed i can view docs-->
+  <div>
     <div class="document-header">
       <div class="heading">
         <p class="label">Guest Documents</p>
@@ -13,15 +7,25 @@
           <img
             *ngSwitchCase="'COMPLETED'"
             src="assets/svg/status/success.svg"
+            alt="completed"
           />
 
-          <img *ngSwitchCase="'FAILED'" src="assets/svg/status/fail.svg" />
+          <img
+            *ngSwitchCase="'FAILED'"
+            src="assets/svg/status/fail.svg"
+            alt="fail"
+          />
 
-          <img *ngSwitchCase="'PENDING'" src="assets/svg/status/pending.svg" />
+          <img
+            *ngSwitchCase="'PENDING'"
+            src="assets/svg/status/pending.svg"
+            alt="pending"
+          />
 
           <img
             *ngSwitchCase="'INITIATED'"
             src="assets/svg/status/initiated.svg"
+            alt="initiated"
           />
         </ng-container>
       </div>
@@ -33,6 +37,23 @@
       >
         <img src="assets/svg/d_document.svg" alt="document" /> &nbsp;
         <p>Download All Docs</p>
+      </div>
+      <div
+        class="download update"
+        *ngIf="selectedGuestGroup"
+        (click)="saveDocument()"
+        [ngClass]="{
+          download__disabled: !updatedDocGuest.includes(this.selectedGuestId),
+          'show-tooltip': true
+        }"
+        [pTooltip]="
+          !updatedDocGuest.includes(this.selectedGuestId)
+            ? 'Upload docs to update them'
+            : ''
+        "
+      >
+        <img src="assets/svg/uparrow.svg" alt="document" /> &nbsp;
+        <p>Save Changes</p>
       </div>
     </div>
     <ng-container *ngIf="selectedGuestGroup">
@@ -52,14 +73,14 @@
                 </mat-option>
               </mat-select>
             </mat-form-field>
-            <div class="nationality-wrapper">
-              <span class="text">Nationality :</span>
+
+            <div class="select-field">
+              <span class="label">Nationality :</span>
               <mat-form-field *ngIf="selectedGuestGroup">
                 <mat-select
                   [(value)]="selectedGuestGroup.get('nationality').value"
                   formControlName="nationality"
-                  [disabled]="true"
-                  (selectionChange)="onNationalityChange($event.value)"
+                  [disabled]="false"
                 >
                   <mat-option
                     *ngFor="let country of countriesLOV"
@@ -70,9 +91,35 @@
                 </mat-select>
               </mat-form-field>
             </div>
+            <div class="select-field">
+              <span class="label">Document Type :</span>
+              <mat-form-field *ngIf="selectedGuestGroup">
+                <mat-select
+                  [(value)]="
+                    selectedGuestGroup.get('selectedDocumentType').value
+                  "
+                  formControlName="selectedDocumentType"
+                  [disabled]="false"
+                >
+                  <mat-option *ngFor="let doc of documentsList" [value]="doc">
+                    {{ doc }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
           </div>
           <div class="nationality-wrapper"></div>
-          <div *ngIf="selectedGuestGroup.get('nationality').value">
+
+          <div
+            *ngIf="!!this.documentFormGroup.controls?.length; else emptyDoc"
+            class="docs-wrapper"
+          >
+            <div
+              *ngIf="updatedDocGuest.includes(this.selectedGuestId)"
+              class="save-message"
+            >
+              Please Save changes to upload docs.
+            </div>
             <ng-container
               formArrayName="documents"
               *ngFor="
@@ -81,40 +128,60 @@
               "
             >
               <div class="upload-image-wrapper" [formGroupName]="i">
-                <div class="upload-image">
+                <div
+                  class="upload-image"
+                  *ngIf="
+                    document.get('settings').value['frontImage'] !==
+                    'not-required'
+                  "
+                >
                   <hospitality-bot-upload-file
                     [fileUploadData]="fileUploadData"
                     [url]="document.get('frontUrl').value"
                     [pageType]="'front'"
+                    (fileData)="uploadDocuments($event, 'front', i)"
                     [documentType]="document.get('documentType').value"
+                    [uploadStatus]="uploadingDoc === 'front-' + i"
                   >
                   </hospitality-bot-upload-file>
                   <p class="text">
-                    {{ document.get('documentType').value
-                    }}{{
-                      document.get('documentType').value !== 'VISA'
-                        ? ' FRONT'
-                        : ''
-                    }}
-                    PAGE
+                    {{ document.get('settings').value['frontImageName'] }}
+                    <span class="required">
+                      {{
+                        document.get('settings').value['frontImage'] ===
+                        'required'
+                          ? '*'
+                          : ''
+                      }}
+                    </span>
                   </p>
                 </div>
-                <div class="upload-image" *ngIf="document.get('backUrl').value">
+                <div
+                  class="upload-image"
+                  *ngIf="
+                    document.get('settings').value['backImage'] !==
+                    'not-required'
+                  "
+                >
                   <hospitality-bot-upload-file
                     [fileUploadData]="fileUploadData"
                     [url]="document.get('backUrl').value"
                     [pageType]="'back'"
+                    (fileData)="uploadDocuments($event, 'back', i)"
                     [documentType]="document.get('documentType').value"
+                    [uploadStatus]="uploadingDoc === 'back-' + i"
                   >
                   </hospitality-bot-upload-file>
                   <p class="text">
-                    {{ document.get('documentType').value }}
-                    {{
-                      document.get('documentType').value !== 'VISA'
-                        ? ' BACK'
-                        : ' ARRIVAL STAMP'
-                    }}
-                    PAGE
+                    {{ document.get('settings').value['backImageName'] }}
+                    <span class="required">
+                      {{
+                        document.get('settings').value['backImage'] ===
+                        'required'
+                          ? '*'
+                          : ''
+                      }}
+                    </span>
                   </p>
                 </div>
               </div>
@@ -184,13 +251,29 @@
       </form>
     </ng-container>
   </div>
-  <ng-template #documentsPending>
-    <div class="empty-view">
-      <div class="wrapper">
-        <img src="assets/images/Documents.png" />
-        <p class="label">Documents Pending!</p>
-        <p class="note">Seems like guest has not initiated Precheckin.</p>
-      </div>
-    </div>
-  </ng-template>
 </div>
+
+<ng-template #emptyDoc>
+  <div class="empty-view">
+    <div class="wrapper">
+      <img src="assets/images/Documents.png" alt="documents" />
+      <p class="label">Documents Pending!</p>
+      <p
+        class="note"
+        *ngIf="
+          documentStatus.get('status').value === 'PENDING';
+          else nationalityChangedText
+        "
+      >
+        Seems like guest has not initiated Precheckin.
+      </p>
+      <ng-template #nationalityChangedText>
+        <p class="note">
+          Seem like you have documents is still not submitted.
+        </p></ng-template
+      >
+
+      <p class="note">Select document type to upload documents.</p>
+    </div>
+  </div>
+</ng-template>

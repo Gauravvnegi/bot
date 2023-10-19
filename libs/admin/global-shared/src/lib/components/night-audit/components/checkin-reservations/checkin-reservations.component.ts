@@ -98,7 +98,7 @@ export class CheckinReservationsComponent implements OnInit {
             )
             .subscribe(
               (res) => {
-                this.reloadTable();
+                this.reload.emit({ status: event.value });
                 this.snackbarService.openSnackBarAsText(
                   'Reservation ' + event.value + ' changes successfully',
                   '',

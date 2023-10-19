@@ -8,7 +8,6 @@ import {
   daysOfWeek,
 } from '@hospitality-bot/admin/shared';
 import { getWeekendBG } from 'libs/admin/channel-manager/src/lib/models/bulk-update.models';
-import { ReservationType } from 'libs/admin/manage-reservation/src/lib/constants/reservation-table';
 import {
   ReservationList,
   RoomReservation,
@@ -35,6 +34,9 @@ import {
 import { Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import { getColorCode } from '../../constants/reservation';
+import { MatDialogConfig } from '@angular/material/dialog';
+import { ModalService } from '@hospitality-bot/shared/material';
+import { DetailsComponent } from '../details/details.component';
 
 @Component({
   selector: 'hospitality-bot-reservation-calendar-view',
@@ -68,7 +70,8 @@ export class ReservationCalendarViewComponent implements OnInit {
     private manageReservationService: ManageReservationService,
     private globalFilterService: GlobalFilterService,
     private roomService: RoomService,
-    private adminUtilityService: AdminUtilityService
+    private adminUtilityService: AdminUtilityService,
+    private modalService: ModalService
   ) {}
 
   ngOnInit(): void {
@@ -128,28 +131,31 @@ export class ReservationCalendarViewComponent implements OnInit {
 
   initReservationData() {
     this.roomTypes.map((roomType) => (roomType.loading = true));
-    this.manageReservationService
-      .getReservationItems<ReservationListResponse>(
-        this.getQueryConfig(),
-        this.entityId
-      )
-      .subscribe(
-        (res) => {
-          this.reservationListData = new ReservationList().deserialize(
-            res
-          ).reservationData;
-          this.roomTypes.forEach((roomType) => {
-            this.mapGridData(roomType);
-          });
-          this.roomsLoaded = true;
-        },
-        (error) => {
-          this.roomTypes.map((roomType) => (roomType.loading = false));
-        },
-        () => {
-          this.roomTypes.map((roomType) => (roomType.loading = false));
-        }
-      );
+    this.$subscription.add(
+      this.manageReservationService
+        .getReservationItems<ReservationListResponse>(
+          this.getQueryConfig(),
+          this.entityId
+        )
+        .subscribe(
+          (res) => {
+            this.reservationListData = new ReservationList().deserialize(
+              res
+            ).reservationData;
+            this.roomTypes.forEach((roomType) => {
+              this.mapGridData(roomType);
+            });
+          },
+          (error) => {
+            this.roomsLoaded = true;
+            this.roomTypes.map((roomType) => (roomType.loading = false));
+          },
+          () => {
+            this.roomsLoaded = true;
+            this.roomTypes.map((roomType) => (roomType.loading = false));
+          }
+        )
+    );
   }
 
   mapGridData(roomType: IGRoomType) {
@@ -237,7 +243,7 @@ export class ReservationCalendarViewComponent implements OnInit {
 
     // Compare the dates
     if (statusDate >= today) {
-      return date; // Return the date if it's on or after today
+      return statusDate.setHours(0, 0, 0, 0); // Return the date if it's on or after today
     }
 
     // Return null to skip the status if toDate is before today
@@ -381,6 +387,10 @@ export class ReservationCalendarViewComponent implements OnInit {
     this.viewQuickForm(roomType, event.id, undefined);
   }
 
+  handleDisabledClick(event: IGEditEvent) {
+    this.openDetailsPage(event.id);
+  }
+
   viewQuickForm(roomType: IGRoomType, id: string, event: IGCreateEvent) {
     this.formProps = {
       reservationId: id,
@@ -391,6 +401,24 @@ export class ReservationCalendarViewComponent implements OnInit {
       date: event?.colValue,
     };
     this.viewReservationForm = true;
+  }
+
+  openDetailsPage(reservationId: string) {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = true;
+    dialogConfig.width = '100%';
+    const detailCompRef = this.modalService.openDialog(
+      DetailsComponent,
+      dialogConfig
+    );
+
+    detailCompRef.componentInstance.bookingId = reservationId;
+    detailCompRef.componentInstance.tabKey = 'payment_details';
+    this.$subscription.add(
+      detailCompRef.componentInstance.onDetailsClose.subscribe((res) => {
+        detailCompRef.close();
+      })
+    );
   }
 
   handleCloseSidebar(resetData: boolean) {
@@ -407,6 +435,10 @@ export class ReservationCalendarViewComponent implements OnInit {
   getFeatureImage(features: Features[]) {
     if (features) return features.map((feature) => feature.imageUrl);
     else return;
+  }
+
+  ngOnDestroy(): void {
+    this.$subscription.unsubscribe();
   }
 }
 

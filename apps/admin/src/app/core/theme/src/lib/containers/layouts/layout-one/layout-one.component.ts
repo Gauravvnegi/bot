@@ -19,6 +19,7 @@ import { RaiseRequestComponent } from 'libs/admin/request/src/lib/components/rai
 import { SettingsMenuComponent } from 'libs/admin/settings/src/lib/components/settings-menu/settings-menu.component';
 import {
   ModuleNames,
+  PermissionModuleNames,
   ProductNames,
 } from 'libs/admin/shared/src/lib/constants/subscriptionConfig';
 import { HotelDetailService } from 'libs/admin/shared/src/lib/services/hotel-detail.service';
@@ -40,6 +41,7 @@ import { NotificationService } from '../../../services/notification.service';
 import { ProgressSpinnerService } from '../../../services/progress-spinner.service';
 import { RoutesConfigService } from '../../../services/routes-config.service';
 import { SubscriptionPlanService } from '../../../services/subscription-plan.service';
+import { NightAuditService } from '../../../../../../../../../../../libs/admin/global-shared/src/lib/services/night-audit.service';
 
 @Component({
   selector: 'admin-layout-one',
@@ -124,7 +126,8 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
     private hotelDetailService: HotelDetailService,
     private resolver: ComponentFactoryResolver,
     private compiler: Compiler,
-    private routesConfigService: RoutesConfigService
+    private routesConfigService: RoutesConfigService,
+    private nightAuditService: NightAuditService
   ) {
     this.initFG();
   }
@@ -271,9 +274,13 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
     this.globalFilterService.entityId = selectedentityId;
     this.globalFilterService.entityType = selectedHotelData.category;
     this.globalFilterService.entitySubType = selectedHotelData.type;
-
     this.isSitesAvailable =
       !!selectedSiteId && !!this._hotelDetailService.sites?.length;
+
+    this.nightAuditCheck();
+    setInterval(() => {
+      this.nightAuditCheck();
+    }, 15 * 60 * 1000);
   }
 
   refreshDashboard() {
@@ -489,23 +496,25 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
         ? {
             label: 'New Complaint',
             icon: 'pi pi-exclamation-circle',
-            command: () => {
-              this.sidebarVisible = true;
-              this.sidebarType = 'complaint';
-              const factory = this.resolver.resolveComponentFactory(
-                RaiseRequestComponent
-              );
-              this.sidebarSlide.clear();
-              const componentRef = this.sidebarSlide.createComponent(factory);
-              componentRef.instance.isSideBar = true;
-              componentRef.instance.onRaiseRequestClose.subscribe((res) => {
-                this.sidebarVisible = false;
-                componentRef.destroy();
-              });
-            },
+            command: () => this.showComplaint(),
           }
         : null,
     ].filter((item) => item);
+  }
+
+  showComplaint() {
+    this.sidebarVisible = true;
+    this.sidebarType = 'complaint';
+    const factory = this.resolver.resolveComponentFactory(
+      RaiseRequestComponent
+    );
+    this.sidebarSlide.clear();
+    const componentRef = this.sidebarSlide.createComponent(factory);
+    componentRef.instance.isSideBar = true;
+    componentRef.instance.onRaiseRequestClose.subscribe((res) => {
+      this.sidebarVisible = false;
+      componentRef.destroy();
+    });
   }
 
   showAddGuest() {
@@ -632,6 +641,31 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
     this.firebaseMessagingService.destroySubscription();
   }
 
+  nightAuditCheck() {
+    this.$subscription.add(
+      this.nightAuditService
+        .checkAudit(this.globalFilterService.entityId)
+        .subscribe((res) => {
+          this.isNightAuditPending = !!res?.length;
+        })
+    );
+  }
+  onQuickButtonClick() {
+    this.isAddReservationSubscribed
+      ? this.showQuickReservation()
+      : this.isGuestSubscribed
+      ? this.showAddGuest()
+      : this.showComplaint();
+  }
+
+  get getQuickLabel() {
+    return this.isAddReservationSubscribed
+      ? 'Quick Booking'
+      : this.isGuestSubscribed
+      ? 'New Guest'
+      : 'New Complaint';
+  }
+
   get isPredictoSubscribed() {
     return this.subscriptionPlanService.checkProductSubscription(
       ProductNames.PREDICTO_PMS
@@ -645,20 +679,35 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
   }
 
   get isAddReservationSubscribed() {
-    return this.subscriptionPlanService.checkProductSubscription(
-      ModuleNames.PREDICTO_PMS
+    return (
+      this.subscriptionPlanService.checkProductSubscription(
+        ModuleNames.PREDICTO_PMS
+      ) &&
+      this.subscriptionPlanService.hasManageUserPermission(
+        PermissionModuleNames.RESERVATION
+      )
     );
   }
 
   get isGuestSubscribed() {
-    return this.subscriptionPlanService.checkModuleSubscription(
-      ModuleNames.GUESTS
+    return (
+      this.subscriptionPlanService.checkModuleSubscription(
+        ModuleNames.GUESTS
+      ) &&
+      this.subscriptionPlanService.hasManageUserPermission(
+        PermissionModuleNames.MEMBERS
+      )
     );
   }
 
   get isLiveMessagingSubscribed() {
-    return this.subscriptionPlanService.checkModuleSubscription(
-      ModuleNames.LIVE_MESSAGING
+    return (
+      this.subscriptionPlanService.checkModuleSubscription(
+        ModuleNames.LIVE_MESSAGING
+      ) &&
+      this.subscriptionPlanService.hasManageUserPermission(
+        PermissionModuleNames.CONVERSATION
+      )
     );
   }
 
@@ -669,8 +718,13 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
   }
 
   get isQuickReservationAvailable() {
-    return this.subscriptionPlanService.checkModuleSubscription(
-      ModuleNames.ADD_RESERVATION
+    return (
+      this.subscriptionPlanService.checkModuleSubscription(
+        ModuleNames.ADD_RESERVATION
+      ) &&
+      this.subscriptionPlanService.hasManageUserPermission(
+        PermissionModuleNames.RESERVATION
+      )
     );
   }
 

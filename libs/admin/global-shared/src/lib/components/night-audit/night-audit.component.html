@@ -24,7 +24,7 @@
         [loading]="loading"
         [items]="checkedInReservation"
         [stepList]="itemList"
-        (reload)="initData()"
+        (reload)="checkAudit($event)"
         (onClose)="close($event)"
         (indexChange)="activeStep = $event"
         (onNavigate)="onNavigate($event)"
@@ -36,7 +36,7 @@
         [loading]="loading"
         [activeIndex]="activeStep"
         [stepList]="itemList"
-        (reload)="initData()"
+        (reload)="checkAudit()"
         (indexChange)="activeStep = $event"
         (onNavigate)="onNavigate($event)"
       ></hospitality-bot-checkout-reservations>
@@ -46,7 +46,7 @@
         [activeIndex]="activeStep"
         [stepList]="itemList"
         (indexChange)="finish($event)"
-        (auditDateChange)="currentDate = $event"
+        (auditDateChange)="auditDate = $event"
       ></hospitality-bot-audit-summary>
     </ng-container>
   </div>
@@ -55,9 +55,9 @@
 <ng-template #sidebarHeader>
   <div class="sidebar-slide-header">
     <span class="title">{{ pageTitle }}</span>
-    <span class="center-item">
+    <span class="center-item" *ngIf="auditDate">
       <img src="assets/svg/calendar-dark.svg" alt="date" class="white-icon" />
-      {{ currentDate | date: 'dd/MM/yyyy' }}</span
+      {{ auditDate | date: 'dd/MM/yyyy' }}</span
     >
     <span class="close-icon" (click)="close()">
       <i class="pi pi-arrow-right" aria-hidden="true"></i>

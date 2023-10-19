@@ -25,7 +25,7 @@ export class Details implements IDeserializable {
   pmsBooking: boolean;
 
   deserialize(input: any, timezone) {
-    const hotelNationality = input?.hotel?.address?.countryCode;
+    const hotelNationality = input?.entity?.address?.countryCode;
     this.invoicePrepareRequest = input.invoicePrepareRequest || false;
     this.pmsBooking = input.pmsBooking || false;
     this.guestDetails = new GuestDetailDS().deserialize(
@@ -223,6 +223,20 @@ export class GuestDetailsConfig implements IDeserializable {
     input.documents?.forEach((document) => {
       documents.push(new DocumentDetailsConfig().deserialize(document));
     });
+
+    this.nationality = get(input, ['nationality']) || hotelNationality;
+
+    // Generating Document type value
+    const docType1 = input?.documents[0]?.documentType;
+    const docType2 = input?.documents[1]?.documentType;
+    const selectedDocumentType = docType1
+      ? input.nationality !== hotelNationality && docType2
+        ? docType1 === 'PASSPORT'
+          ? docType1 + '/' + docType2
+          : docType2 + '/' + docType1
+        : docType1
+      : null;
+
     Object.assign(
       this,
       set({}, 'id', get(input, ['id'])),
@@ -234,7 +248,7 @@ export class GuestDetailsConfig implements IDeserializable {
       set({}, 'phoneNumber', get(contactDetails, ['contactNumber'])),
       set({}, 'email', get(contactDetails, ['email'])),
       set({}, 'isPrimary', get(input, ['isPrimary'])),
-      set({}, 'nationality', get(input, ['nationality']) || hotelNationality),
+      // set({}, 'nationality', get(input, ['nationality']) || hotelNationality),
       set({}, 'status', get(input.statusMessage, ['status'])),
       set({}, 'remarks', get(input.statusMessage, ['remarks'])),
       set({}, 'role', get(input, ['role'])),
@@ -243,17 +257,10 @@ export class GuestDetailsConfig implements IDeserializable {
       set(
         {},
         'isInternational',
-        get(input, ['nationality']) === hotelNationality ? false : true
+        this.nationality === hotelNationality ? false : true
       ),
-      set(
-        {},
-        'selectedDocumentType',
-        input.nationality === hotelNationality
-          ? input.documents && input.documents[0]
-            ? input.documents[0].documentType
-            : null
-          : null
-      ),
+      set({}, 'selectedDocumentType', selectedDocumentType),
+
       set({}, 'documents', documents),
       set(
         {},
@@ -262,6 +269,7 @@ export class GuestDetailsConfig implements IDeserializable {
       ),
       set({}, 'regcardUrl', get(input, ['regcardUrl']))
     );
+
     return this;
   }
 
@@ -438,6 +446,8 @@ export class HealthDeclarationConfig implements IDeserializable {
 export class ReservationDetailsConfig implements IDeserializable {
   bookingNumber: string;
   bookingId: string;
+  hotelId: string;
+  hotelNationality: string;
   entityId: string;
 
   deserialize(input: any) {
@@ -445,7 +455,9 @@ export class ReservationDetailsConfig implements IDeserializable {
       this,
       set({}, 'bookingNumber', get(input, ['number'])),
       set({}, 'bookingId', get(input, ['id'])),
-      set({}, 'entityId', get(input.hotel, ['id']))
+      set({}, 'hotelId', get(input.entity, ['id'])),
+      set({}, 'hotelNationality', get(input.entity?.address, ['countryCode'])),
+      set({}, 'entityId', get(input.entity, ['id']))
     );
     return this;
   }

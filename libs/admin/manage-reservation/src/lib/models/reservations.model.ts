@@ -43,6 +43,8 @@ export class RoomReservation {
   totalDueAmount: number;
   totalPaidAmount: number;
   guestId: string;
+  roomNumber?: string;
+  roomType?: string;
   journeysStatus: Record<JourneyType, JourneyState>;
 
   deserialize(input: RoomReservationRes) {
@@ -71,6 +73,8 @@ export class RoomReservation {
         input?.bookingItems.map((item) => item?.roomDetails?.roomTypeLabel) ??
         [];
     }
+    (this.roomNumber = input.bookingItems[0]?.roomDetails?.roomNumber ?? ''),
+      (this.roomType = input.bookingItems[0]?.roomDetails?.roomTypeLabel ?? '');
     this.journeysStatus = input.journeysStatus;
 
     return this;

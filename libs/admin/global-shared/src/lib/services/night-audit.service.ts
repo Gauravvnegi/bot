@@ -20,6 +20,14 @@ export class NightAuditService extends ApiService {
   }
 
   checkAudit(entityId: string, config?: QueryConfig): Observable<number[]> {
+    if (!config) {
+      const auditDate = new Date();
+      auditDate.setDate(auditDate.getDate() - 1);
+      auditDate.setHours(23, 59, 59);
+      config = {
+        params: `?toDate=${auditDate.getTime()}`,
+      };
+    }
     return this.get(
       `/api/v1/entity/${entityId}/audits/pending${config?.params}`
     );

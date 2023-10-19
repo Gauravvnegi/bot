@@ -40,6 +40,7 @@ import { NotificationService } from '../../../services/notification.service';
 import { ProgressSpinnerService } from '../../../services/progress-spinner.service';
 import { RoutesConfigService } from '../../../services/routes-config.service';
 import { SubscriptionPlanService } from '../../../services/subscription-plan.service';
+import { NightAuditService } from '../../../../../../../../../../../libs/admin/global-shared/src/lib/services/night-audit.service';
 
 @Component({
   selector: 'admin-layout-one',
@@ -124,7 +125,8 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
     private hotelDetailService: HotelDetailService,
     private resolver: ComponentFactoryResolver,
     private compiler: Compiler,
-    private routesConfigService: RoutesConfigService
+    private routesConfigService: RoutesConfigService,
+    private nightAuditService: NightAuditService
   ) {
     this.initFG();
   }
@@ -271,9 +273,13 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
     this.globalFilterService.entityId = selectedentityId;
     this.globalFilterService.entityType = selectedHotelData.category;
     this.globalFilterService.entitySubType = selectedHotelData.type;
-
     this.isSitesAvailable =
       !!selectedSiteId && !!this._hotelDetailService.sites?.length;
+
+    this.nightAuditCheck();
+    setInterval(() => {
+      this.nightAuditCheck();
+    }, 15 * 60 * 1000);
   }
 
   refreshDashboard() {
@@ -630,6 +636,16 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.firebaseMessagingService.destroySubscription();
+  }
+
+  nightAuditCheck() {
+    this.$subscription.add(
+      this.nightAuditService
+        .checkAudit(this.globalFilterService.entityId)
+        .subscribe((res) => {
+          this.isNightAuditPending = !!res?.length;
+        })
+    );
   }
 
   get isPredictoSubscribed() {

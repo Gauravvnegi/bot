@@ -272,6 +272,7 @@ export class AdminDocumentsDetailsComponent implements OnInit {
     this._reservationService
       .saveDocument(this.detailsData.reservationDetails.bookingId, data)
       .subscribe((_res) => {
+        this.updateDocumentVerificationStatus('ACCEPT');
         this.snackbarService.openSnackBarAsText(
           'Document updated successfully',
           '',

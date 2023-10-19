@@ -42,6 +42,8 @@ export class AssetDatatableComponent extends BaseDatatableComponent
   $subscription = new Subscription();
   entityId: any;
 
+  readonly assetsRoutes = assetsRoutes;
+
   cols = assetConfig.datatable.cols;
 
   constructor(

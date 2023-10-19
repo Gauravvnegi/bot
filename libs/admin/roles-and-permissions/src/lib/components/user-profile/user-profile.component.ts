@@ -492,7 +492,8 @@ export class UserProfileComponent implements OnInit {
       const viewPermissionControl = permissionControl.get('view');
 
       managePermissionControl.valueChanges.subscribe((res) => {
-        if (res) {
+        const viewPermissionValue = viewPermissionControl.value;
+        if (res && (!viewPermissionValue || viewPermissionValue !== 1)) {
           viewPermissionControl.patchValue(true);
         }
       });

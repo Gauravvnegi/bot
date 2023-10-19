@@ -16,7 +16,6 @@ export class MultiSelectComponent extends FormComponent {
   showHeader = true;
   showChips = true;
   maxSelectedLabels = 20;
-
   /**
    * @Input to change default date setting
    */

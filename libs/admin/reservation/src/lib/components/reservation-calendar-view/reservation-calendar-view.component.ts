@@ -90,31 +90,35 @@ export class ReservationCalendarViewComponent implements OnInit {
           params:
             '?type=ROOM_TYPE&offset=0&limit=200&raw=true&roomTypeStatus=true',
         })
-        .subscribe((res) => {
-          this.roomTypes = res.roomTypes
-            .filter((roomType) => roomType.rooms.length)
-            .map((roomTypeData) => ({
-              label: roomTypeData.name,
-              value: roomTypeData.id,
-              rooms: roomTypeData.rooms.map((room) => ({
-                roomNumber: room.roomNumber,
-                features: room.features,
-                statusDetails: room?.statusDetailsList ?? [],
-              })),
-              loading: false,
-              data: {
-                rows: [],
-                columns: [],
-                values: [],
-              },
-              allRatePlans: roomTypeData.ratePlans.map((item) => ({
-                label: item.label,
-                value: item.id,
-                isBase: item.isBase,
-              })),
-            }));
-          this.initReservationData();
-        })
+        .subscribe(
+          (res) => {
+            this.roomTypes = res.roomTypes
+              .filter((roomType) => roomType.rooms.length)
+              .map((roomTypeData) => ({
+                label: roomTypeData.name,
+                value: roomTypeData.id,
+                rooms: roomTypeData.rooms.map((room) => ({
+                  roomNumber: room.roomNumber,
+                  features: room.features,
+                  statusDetails: room?.statusDetailsList ?? [],
+                })),
+                loading: false,
+                data: {
+                  rows: [],
+                  columns: [],
+                  values: [],
+                },
+                allRatePlans: roomTypeData.ratePlans.map((item) => ({
+                  label: item.label,
+                  value: item.id,
+                  isBase: item.isBase,
+                })),
+              }));
+            this.initReservationData();
+          },
+          (error) => {},
+          () => {}
+        )
     );
   }
 
@@ -131,13 +135,9 @@ export class ReservationCalendarViewComponent implements OnInit {
       )
       .subscribe(
         (res) => {
-          this.reservationListData = new ReservationList()
-            .deserialize(res)
-            .reservationData.filter(
-              (reservation) =>
-                reservation.reservationType === ReservationType.CONFIRMED
-            );
-
+          this.reservationListData = new ReservationList().deserialize(
+            res
+          ).reservationData;
           this.roomTypes.forEach((roomType) => {
             this.mapGridData(roomType);
           });
@@ -175,9 +175,9 @@ export class ReservationCalendarViewComponent implements OnInit {
       // Map data for matching reservations
       const matchingData = matchingReservations.map((reservation) => ({
         id: reservation.id,
-        content: `${reservation.guestName} (${this.getOccupancy(
+        content: `${reservation.guestName} ${this.getOccupancy(
           reservation.bookingItems
-        )})`,
+        )}`,
         startPos: this.getDate(reservation.from),
         endPos: this.getDate(reservation.to),
         rowValue: reservation.bookingItems[0].roomDetails.roomNumber,
@@ -256,6 +256,7 @@ export class ReservationCalendarViewComponent implements OnInit {
           entityType: 'ALL',
           pagination: false,
           calendarView: true,
+          entityState: 'CONFIRMED',
         },
       ]),
     };
@@ -322,8 +323,9 @@ export class ReservationCalendarViewComponent implements OnInit {
     const totalGuests = bookingItems.map(
       (item) =>
         +item.occupancyDetails.maxAdult + +item.occupancyDetails.maxChildren
-    );
-    return totalGuests;
+    )[0];
+    if (totalGuests > 1) return `(+${totalGuests - 1})`;
+    else return '';
   }
 
   handleChange(event: IGChangeEvent, roomType: IGRoomType) {

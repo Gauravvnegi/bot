@@ -430,7 +430,6 @@
       @include sidebar-design(30rem);
     }
     .header {
-      @include sidebarTopBorder;
       @include close-design;
     }
   }

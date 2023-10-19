@@ -511,6 +511,7 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
         this.routesConfigService.navigate({
           subModuleName: ModuleNames.SERVICES,
           additionalPath: 'create-service',
+          queryParams: { entityId: this.outletId },
         });
         break;
       //to navigate  to create import service page

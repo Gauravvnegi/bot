@@ -92,7 +92,16 @@ export class ManagePermissionService extends ApiService {
         // value.departments?.includes(item.department)
         products.includes(item.productType)
       ),
-      permissions: value.permissionConfigs,
+      permissions: value.permissionConfigs.map((item) => {
+        return {
+          ...item,
+          permissions: {
+            ...item.permissions,
+            manage: item.permissions.manage !== 1 ? -1 : 1,
+            view: item.permissions.view !== 1 ? -1 : 1,
+          },
+        };
+      }),
       // permissions: value.permissionConfigs.filter(
       //   ({ permissions, productType }) => {
       //     return (

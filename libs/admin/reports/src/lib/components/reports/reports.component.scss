@@ -21,10 +21,16 @@ $reports-menu-padding: 16px;
 .menu-header {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   padding: $reports-menu-padding;
   font-size: 16px;
   font-weight: 600;
   color: $title;
+
+  img {
+    cursor: pointer;
+    width: 3em;
+  }
 }
 
 .menu-option {
@@ -47,16 +53,6 @@ $reports-menu-padding: 16px;
   padding: 5px;
   border-radius: 4px;
   cursor: pointer;
-}
-
-.routes {
-  opacity: 0.6;
-  font-size: 14px;
-  font-weight: 500;
-  color: #00162b;
-  letter-spacing: 0.84px;
-  padding-top: 10px;
-  margin-bottom: -18px;
 }
 
 :host ::ng-deep .action-header {

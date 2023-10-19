@@ -69,22 +69,27 @@ export const dailyRevenueReportCols: Partial<ColsData<
   gross: {
     header: 'GROSS',
     isSortDisabled: true,
+    isSearchDisabled: true,
   },
   adj: {
     header: 'ADJ',
     isSortDisabled: true,
+    isSearchDisabled: true,
   },
   today: {
     header: 'TODAY',
     isSortDisabled: true,
+    isSearchDisabled : true,
   },
   month: {
     header: 'MONTH',
     isSortDisabled: true,
+    isSearchDisabled: true,
   },
   year: {
     header: 'YEAR',
     isSortDisabled: true,
+    isSearchDisabled: true,
   },
 };
 

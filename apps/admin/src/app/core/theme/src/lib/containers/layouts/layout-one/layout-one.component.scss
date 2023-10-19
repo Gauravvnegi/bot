@@ -546,3 +546,35 @@
     color: $grayAuth;
   }
 }
+
+.red-filter {
+  filter: invert(67%) sepia(89%) saturate(7492%) hue-rotate(346deg)
+    brightness(84%) contrast(146%) !important;
+}
+.night-audit-pending {
+  background: #ff0000 !important;
+  color: white !important;
+}
+
+// ::ng-deep .p-tooltip .p-tooltip-text {
+//   background-color: rgb(246, 214, 220) !important;
+//   color: black !important;
+// }
+
+.night-audit {
+  position: relative;
+  &__hover {
+    width: 173px;
+    padding: 3px 0px;
+    font-size: 15px;
+    letter-spacing: 0.35px;
+    border-radius: 4px;
+    z-index: 480;
+    position: absolute;
+    top: 40px;
+    left: -64px;
+    text-align: center;
+    background: #f6d6dc;
+    color: red;
+  }
+}

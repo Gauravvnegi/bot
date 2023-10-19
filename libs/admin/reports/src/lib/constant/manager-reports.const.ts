@@ -13,14 +13,17 @@ const managerReportCols: ColsData<ManagerReportData> = {
   day: {
     header: 'DAY',
     isSortDisabled: true,
+    isSearchDisabled: true,
   },
   month: {
     header: 'MONTH',
     isSortDisabled: true,
+    isSearchDisabled: true,
   },
   year: {
     header: 'YEAR',
     isSortDisabled: true,
+    isSearchDisabled: true,
   },
 };
 

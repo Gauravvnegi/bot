@@ -47,7 +47,6 @@ export class ReportsComponent implements OnInit {
       if (report) {
         this.selectedReport = report;
         this.navRoutes.pop();
-
         this.navRoutes = [
           ...this.navRoutes,
           {
@@ -70,15 +69,14 @@ export class ReportsComponent implements OnInit {
   initNavRoutes() {
     this.routesConfigService.navRoutesChanges.subscribe((navRoutesRes) => {
       this.navRoutes = navRoutesRes;
+      this.navRoutes = [
+        ...this.navRoutes,
+        {
+          label: this.selectedReport.label,
+          link: './',
+        } as NavRouteOption,
+      ];
     });
-
-    this.navRoutes = [
-      ...this.navRoutes,
-      {
-        label: this.selectedReport.label,
-        link: './',
-      } as NavRouteOption,
-    ];
   }
 
   /**

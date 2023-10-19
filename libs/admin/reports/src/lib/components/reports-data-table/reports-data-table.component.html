@@ -4,11 +4,15 @@
   [formGroup]="tableFG"
 >
   <div class="heading">
-    <i
+    <!-- <i
       class="pi pi-angle-double-right"
       (click)="toggleMenu()"
       aria-hidden="true"
-    ></i>
+    ></i> -->
+    <div class="right-arrow">
+      <img src="assets/svg/arrow-right-menu.svg" (click)="toggleMenu()" />
+    </div>
+
     <span> {{ this.selectedReport?.label }}</span>
   </div>
   <div class="action-wrapper">

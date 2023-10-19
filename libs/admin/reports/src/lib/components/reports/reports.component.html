@@ -3,15 +3,16 @@
   [visible]="showMenu"
   [position]="'left'"
   [showCloseIcon]="false"
-  [modal]="false"
+  (onHide)="showMenu = false"
 >
   <div class="menu-header">
     <div>{{ reportTitle }}</div>
-    <i
+    <!-- <i
       class="pi pi-angle-double-left"
       (click)="toggleMenu()"
       aria-hidden="true"
-    ></i>
+    ></i> -->
+    <img src="assets/svg/arrow-left-menu.svg" (click)="toggleMenu()" />
   </div>
   <div
     class="menu-option"
@@ -23,7 +24,6 @@
   </div>
 </p-sidebar>
 
-<!-- <p class="routes">Frontdesk > Reports > Reservation > No show reports</p> -->
 <hospitality-bot-navigation-header
   [routes]="navRoutes"
   [isBack]="false"

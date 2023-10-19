@@ -35,20 +35,20 @@ export class SubscriptionPlanService extends ApiService {
     return this.get(`/api/v1/entity/${entityId}/subscriptions/`).pipe(
       map((response) => {
         // response.products = productMenuSubs;
-        response.products?.forEach((element) => {
-          let hasReport = false;
+        // response.products?.forEach((element) => {
+        //   let hasReport = false;
 
-          element.config?.forEach((item) => {
-            if (item.name === 'REPORTS') {
-              hasReport = true;
-              item.config = reportsConfigMenu.config;
-            }
-          });
+        //   element.config?.forEach((item) => {
+        //     if (item.name === 'REPORTS') {
+        //       hasReport = true;
+        //       item.config = reportsConfigMenu.config;
+        //     }
+        //   });
 
-          if (!hasReport) {
-            element.config?.push(reportsConfigMenu);
-          }
-        });
+        //   if (!hasReport) {
+        //     element.config?.push(reportsConfigMenu);
+        //   }
+        // });
         return response;
       })
     );

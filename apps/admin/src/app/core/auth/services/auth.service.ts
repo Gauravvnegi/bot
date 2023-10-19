@@ -26,7 +26,7 @@ export class AuthService extends ApiService {
     'x-siteId',
     'x-brandId',
     'x-entityId',
-    'selectedProduct'
+    'selectedProduct',
   ];
 
   /**
@@ -82,8 +82,9 @@ export class AuthService extends ApiService {
   isAuthenticated(): boolean {
     const xAccessToken = this.getTokenByName('x-access-token');
     const xUserIdToken = this.getTokenByName('x-userId');
+    const entityId = this.getTokenByName('x-entityId');
 
-    return !!xAccessToken && !!xUserIdToken;
+    return !!xAccessToken && !!xUserIdToken && !!entityId;
   }
 
   /**

@@ -166,8 +166,10 @@ export class RoomIteratorComponent extends IteratorComponent
         let previousRoomCount = roomCount;
         let previousAdulCount = this.roomControls[index].get('adultCount')
           .value;
-        roomCount = currentRoomCount;
 
+        // Update roomCount
+        roomCount = currentRoomCount;
+        // Update adultCount only if room count is increased
         if (
           currentRoomCount > previousRoomCount &&
           currentRoomCount > previousAdulCount

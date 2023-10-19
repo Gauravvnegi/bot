@@ -1,5 +1,4 @@
 import { Cols } from '@hospitality-bot/admin/shared';
-import { cols } from '../constants/audit-summary.table';
 import {
   AuditSummaryColumn,
   AuditSummaryResponse,
@@ -54,11 +53,11 @@ export class AuditSummary {
       },
       accountDetails: {
         title: 'Account Details',
-        values: cashierDetail,
+        values: [...cashierDetail],
       },
       revenueList: {
         title: 'Revenue List',
-        values: revenueDetail,
+        values: [...revenueDetail],
       },
     };
     return this;
@@ -71,7 +70,6 @@ export class AuditSummary {
         header: getTitleCaseString(Object.keys(item).shift()),
       })),
     ];
-    cols['revenueList'] = [...cols['revenueList'], ...dynamicCols];
     return dynamicCols;
   }
 
@@ -113,18 +111,18 @@ export class AuditSummary {
       ),
     ];
 
-    if (revenueList.length)
-      revenueList.push({
-        textInlineBlock: true,
-        booking: 'Total Revenue',
-        cancellation: '',
-        noShows: '',
-        restaurant: '',
-        miniBar: '',
-        confectionary: '',
-        bookStore: '',
-        iceCreamStore: `Rs. ${total}`,
+    if (revenueList.length) {
+      const revenueListKeys = Object.keys(revenueList[0]);
+      let totalInfo = { textInlineBlock: true };
+      revenueListKeys.forEach((key, index) => {
+        if (index == 0) {
+          totalInfo = { ...totalInfo, [key]: 'Total Revenue' };
+        } else if (index == revenueListKeys.length - 1) {
+          totalInfo = { ...totalInfo, [key]: `Rs. ${total}` };
+        }
       });
+      revenueList.push(totalInfo);
+    }
     return revenueList;
   }
 }

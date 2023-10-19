@@ -243,7 +243,7 @@ export class ReservationCalendarViewComponent implements OnInit {
 
     // Compare the dates
     if (statusDate >= today) {
-      return date; // Return the date if it's on or after today
+      return statusDate.setHours(0, 0, 0, 0); // Return the date if it's on or after today
     }
 
     // Return null to skip the status if toDate is before today

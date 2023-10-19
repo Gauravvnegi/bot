@@ -19,6 +19,7 @@ import { RaiseRequestComponent } from 'libs/admin/request/src/lib/components/rai
 import { SettingsMenuComponent } from 'libs/admin/settings/src/lib/components/settings-menu/settings-menu.component';
 import {
   ModuleNames,
+  PermissionModuleNames,
   ProductNames,
 } from 'libs/admin/shared/src/lib/constants/subscriptionConfig';
 import { HotelDetailService } from 'libs/admin/shared/src/lib/services/hotel-detail.service';
@@ -489,23 +490,25 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
         ? {
             label: 'New Complaint',
             icon: 'pi pi-exclamation-circle',
-            command: () => {
-              this.sidebarVisible = true;
-              this.sidebarType = 'complaint';
-              const factory = this.resolver.resolveComponentFactory(
-                RaiseRequestComponent
-              );
-              this.sidebarSlide.clear();
-              const componentRef = this.sidebarSlide.createComponent(factory);
-              componentRef.instance.isSideBar = true;
-              componentRef.instance.onRaiseRequestClose.subscribe((res) => {
-                this.sidebarVisible = false;
-                componentRef.destroy();
-              });
-            },
+            command: () => this.showComplaint(),
           }
         : null,
     ].filter((item) => item);
+  }
+
+  showComplaint() {
+    this.sidebarVisible = true;
+    this.sidebarType = 'complaint';
+    const factory = this.resolver.resolveComponentFactory(
+      RaiseRequestComponent
+    );
+    this.sidebarSlide.clear();
+    const componentRef = this.sidebarSlide.createComponent(factory);
+    componentRef.instance.isSideBar = true;
+    componentRef.instance.onRaiseRequestClose.subscribe((res) => {
+      this.sidebarVisible = false;
+      componentRef.destroy();
+    });
   }
 
   showAddGuest() {
@@ -632,6 +635,22 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
     this.firebaseMessagingService.destroySubscription();
   }
 
+  onQuickButtonClick() {
+    this.isAddReservationSubscribed
+      ? this.showQuickReservation()
+      : this.isGuestSubscribed
+      ? this.showAddGuest()
+      : this.showComplaint();
+  }
+
+  get getQuickLabel() {
+    return this.isAddReservationSubscribed
+      ? 'Quick Booking'
+      : this.isGuestSubscribed
+      ? 'New Guest'
+      : 'New Complaint';
+  }
+
   get isPredictoSubscribed() {
     return this.subscriptionPlanService.checkProductSubscription(
       ProductNames.PREDICTO_PMS
@@ -645,20 +664,35 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
   }
 
   get isAddReservationSubscribed() {
-    return this.subscriptionPlanService.checkProductSubscription(
-      ModuleNames.PREDICTO_PMS
+    return (
+      this.subscriptionPlanService.checkProductSubscription(
+        ModuleNames.PREDICTO_PMS
+      ) &&
+      this.subscriptionPlanService.hasManageUserPermission(
+        PermissionModuleNames.RESERVATION
+      )
     );
   }
 
   get isGuestSubscribed() {
-    return this.subscriptionPlanService.checkModuleSubscription(
-      ModuleNames.GUESTS
+    return (
+      this.subscriptionPlanService.checkModuleSubscription(
+        ModuleNames.GUESTS
+      ) &&
+      this.subscriptionPlanService.hasManageUserPermission(
+        PermissionModuleNames.MEMBERS
+      )
     );
   }
 
   get isLiveMessagingSubscribed() {
-    return this.subscriptionPlanService.checkModuleSubscription(
-      ModuleNames.LIVE_MESSAGING
+    return (
+      this.subscriptionPlanService.checkModuleSubscription(
+        ModuleNames.LIVE_MESSAGING
+      ) &&
+      this.subscriptionPlanService.hasManageUserPermission(
+        PermissionModuleNames.CONVERSATION
+      )
     );
   }
 
@@ -669,8 +703,13 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
   }
 
   get isQuickReservationAvailable() {
-    return this.subscriptionPlanService.checkModuleSubscription(
-      ModuleNames.ADD_RESERVATION
+    return (
+      this.subscriptionPlanService.checkModuleSubscription(
+        ModuleNames.ADD_RESERVATION
+      ) &&
+      this.subscriptionPlanService.hasManageUserPermission(
+        PermissionModuleNames.RESERVATION
+      )
     );
   }
 

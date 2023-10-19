@@ -146,13 +146,13 @@
         <td *ngIf="selectedEntity.subType === 'ROOM_TYPE'">
           <div
             class="multi-cell-content"
-            *ngIf="rowData?.roomTypes; else emptyCell"
+            *ngIf="rowData?.roomType; else emptyCell"
             [roomStatus]="rowData?.roomStatus"
           >
             <div>
-              {{
-                (rowData?.bookingItems)[0]?.roomDetails.roomNumber || '--'
-              }}&nbsp;-&nbsp;{{ (rowData?.roomTypes)[0] || '--' }}
+              {{ rowData?.roomNumber || '--' }}&nbsp;-&nbsp;{{
+                rowData.roomType || '--'
+              }}
             </div>
             <b class="rowData">
               {{ rowData.getRoomTypeDisplay().countString }}

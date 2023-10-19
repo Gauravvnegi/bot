@@ -67,12 +67,14 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
   bgColor: string;
   outlets = [];
   lastUpdatedAt: string;
+  isNightAuditPending: boolean = true;
 
   isGlobalFilterVisible = false;
   showNotification = false;
   isDetailPageVisible = false;
   isNotificationVisible = false;
   fullView: boolean = false;
+  showTooltip: boolean = false;
 
   flashNotification: any;
   delayTime = layoutConfig.notificationDelayTime;

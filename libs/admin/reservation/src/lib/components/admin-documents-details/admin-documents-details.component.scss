@@ -79,13 +79,20 @@
 
   .update {
     border: 1px solid $primary-cta;
-    padding: 10px 20px;
+    padding: 8px 20px 10px;
     border-radius: 4px;
+    text-transform: uppercase;
 
     img {
       padding-right: 10px;
     }
   }
+}
+
+:host ::ng-deep .show-tooltip .ui-tooltip-text {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
 }
 
 :host ::ng-deep .mat-form-field-infix {
@@ -94,6 +101,21 @@
 
 :host ::ng-deep .mat-select-value-text {
   font-size: 14px;
+}
+
+.docs-wrapper {
+  position: relative;
+}
+
+.save-message {
+  letter-spacing: 0.84px;
+  color: $unpaid-state;
+  font-size: 14px;
+  font-weight: 600;
+
+  position: absolute;
+  top: -25px;
+  left: 10px;
 }
 
 .select-field {

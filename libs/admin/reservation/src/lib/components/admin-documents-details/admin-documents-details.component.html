@@ -43,16 +43,17 @@
         *ngIf="selectedGuestGroup"
         (click)="saveDocument()"
         [ngClass]="{
-          download__disabled: !updatedDocGuest.includes(this.selectedGuestId)
+          download__disabled: !updatedDocGuest.includes(this.selectedGuestId),
+          'show-tooltip': true
         }"
         [pTooltip]="
           !updatedDocGuest.includes(this.selectedGuestId)
             ? 'Upload docs to update them'
-            : 'Please Save the uploaded docs'
+            : ''
         "
       >
         <img src="assets/svg/uparrow.svg" alt="document" /> &nbsp;
-        <p>Update Docs</p>
+        <p>Save Changes</p>
       </div>
     </div>
     <ng-container *ngIf="selectedGuestGroup">
@@ -109,7 +110,16 @@
           </div>
           <div class="nationality-wrapper"></div>
 
-          <div *ngIf="!!this.documentFormGroup.controls?.length; else emptyDoc">
+          <div
+            *ngIf="!!this.documentFormGroup.controls?.length; else emptyDoc"
+            class="docs-wrapper"
+          >
+            <div
+              *ngIf="updatedDocGuest.includes(this.selectedGuestId)"
+              class="save-message"
+            >
+              Please Save changes to upload docs.
+            </div>
             <ng-container
               formArrayName="documents"
               *ngFor="

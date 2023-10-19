@@ -7,6 +7,7 @@ import {
   TableService,
   Option,
   UserService,
+  ModuleNames,
 } from '@hospitality-bot/admin/shared';
 import { ModalComponent } from 'libs/admin/shared/src/lib/components/modal/modal.component';
 
@@ -31,6 +32,7 @@ import { ManageSitesService } from '../../services/manage-sites.service';
 import { NextState, QueryConfig } from '../../types/manage-site.type';
 import { environment } from '@hospitality-bot/admin/environment';
 import { siteStatusDetails } from '../../constants/response';
+import { RouteConfigPathService } from '@hospitality-bot/admin/core/theme';
 
 @Component({
   selector: 'hospitality-bot-manage-site-data-table',
@@ -120,7 +122,7 @@ export class ManageSiteDataTableComponent extends BaseDatatableComponent {
 
   selectSite(rowData) {
     if (rowData.id && rowData.status !== ManageSiteStatus.DELETE) {
-      this.cookiesSettingService.initPlatformChange(rowData.id, '/pages');
+      this.cookiesSettingService.initPlatformChange(rowData.id, '/');
     }
   }
 
@@ -248,9 +250,14 @@ export class ManageSiteDataTableComponent extends BaseDatatableComponent {
         label: 'Go to Website Settings',
         onClick: () => {
           this.modalService.close();
+          const routeConfig = new RouteConfigPathService();
           this.cookiesSettingService.initPlatformChange(
             entityId, // siteId
-            `/pages/settings/${SettingOptions.WEBSITE_SETTINGS}`
+            `/${routeConfig.getRouteFromName(
+              ModuleNames.CREATE_WITH
+            )}/${routeConfig.getRouteFromName(
+              ModuleNames.SETTINGS
+            )}/${routeConfig.getRouteFromName(ModuleNames.WEBSITE_SETTINGS)}`
           );
         },
         variant: 'contained',

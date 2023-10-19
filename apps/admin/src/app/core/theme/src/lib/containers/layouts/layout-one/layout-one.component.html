@@ -174,7 +174,7 @@
               [ngClass]="{ 'red-filter': isNightAuditPending }"
               src="assets/svg/allocation.svg"
               alt="audit"
-              pTooltip="Night Audit"
+              [pTooltip]="isNightAuditPending ? '' : 'Night Audit'"
               tooltipPosition="bottom"
             />
             <div class="night-audit__hover" *ngIf="isNightAuditPending">

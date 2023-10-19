@@ -59,6 +59,7 @@ export class AuditSummaryComponent implements OnInit {
     this.lastNightDate.setHours(23, 59, 59);
   }
 
+  // TODO: Need to do common with night audit
   checkAudit(isNext?: boolean) {
     this.loading = true;
     this.$subscription.add(
@@ -90,7 +91,7 @@ export class AuditSummaryComponent implements OnInit {
                   acceptButtonStyleClass: 'accept-button',
                   rejectButtonStyleClass: 'reject-button-outlined',
                   accept: () => {
-                    loadTable();
+                    this.indexChange.emit({ index: 0 });
                   },
                   reject: () => {
                     doNotLoad();

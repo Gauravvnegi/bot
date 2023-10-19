@@ -2,7 +2,7 @@
   <!-- Confirm Dialog -->
   <hospitality-bot-confirm-dialog></hospitality-bot-confirm-dialog>
 
-  <div class="header" *ngIf="!isNoAuditFound || !loading">
+  <div class="header" *ngIf="!(!isNoAuditFound && !loading)">
     Night audit is completed for {{ auditDate | date: 'dd/MM/yyy' }}
   </div>
   <div

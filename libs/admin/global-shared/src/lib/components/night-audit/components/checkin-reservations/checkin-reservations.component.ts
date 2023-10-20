@@ -132,8 +132,8 @@ export class CheckinReservationsComponent implements OnInit {
     if (!this.items.length) this.reloadTable();
   }
 
-  reloadTable() {
-    this.reload.emit(true);
+  reloadTable(refresh?: boolean) {
+    this.reload.emit(refresh ? { refresh: true } : true);
   }
 
   handleNext() {

@@ -36,7 +36,7 @@
         [loading]="loading"
         [activeIndex]="activeStep"
         [stepList]="itemList"
-        (reload)="checkAudit()"
+        (reload)="checkAudit($event)"
         (indexChange)="activeStep = $event"
         (onNavigate)="onNavigate($event)"
       ></hospitality-bot-checkout-reservations>

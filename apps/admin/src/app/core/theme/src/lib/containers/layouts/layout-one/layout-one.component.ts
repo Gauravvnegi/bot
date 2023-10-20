@@ -69,7 +69,7 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
   bgColor: string;
   outlets = [];
   lastUpdatedAt: string;
-  isNightAuditPending: boolean = true;
+  isNightAuditPending = false;
 
   isGlobalFilterVisible = false;
   showNotification = false;
@@ -277,7 +277,11 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
     this.isSitesAvailable =
       !!selectedSiteId && !!this._hotelDetailService.sites?.length;
 
+    // first time adding subscription
+    this.nightAuditCheckListener();
     this.nightAuditCheck();
+
+    //every 15 minute, we will check
     setInterval(() => {
       this.nightAuditCheck();
     }, 15 * 60 * 1000);
@@ -641,15 +645,24 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
     this.firebaseMessagingService.destroySubscription();
   }
 
+  nightAuditCheckListener() {
+    this.$subscription.add(
+      this.nightAuditService.remainingAudit.subscribe((res) => {
+        this.isNightAuditPending = !!res?.length;
+      })
+    );
+  }
+
   nightAuditCheck() {
     this.$subscription.add(
       this.nightAuditService
         .checkAudit(this.globalFilterService.entityId)
         .subscribe((res) => {
-          this.isNightAuditPending = !!res?.length;
+          this.nightAuditService.remainingAudit.next(res?.length ? res : []);
         })
     );
   }
+
   onQuickButtonClick() {
     this.isAddReservationSubscribed
       ? this.showQuickReservation()

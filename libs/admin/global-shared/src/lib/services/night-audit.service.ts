@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { QueryConfig } from '@hospitality-bot/admin/shared';
 import { ApiService } from '@hospitality-bot/shared/utils';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { NightAuditResponse } from '../types/night-audit.type';
 import { UserListResponse } from 'libs/admin/roles-and-permissions/src/lib/types/response';
 import { AuditSummaryResponse } from '../components/night-audit/types/audit-summary.type';
@@ -10,6 +10,8 @@ import { AuditSummaryResponse } from '../components/night-audit/types/audit-summ
   providedIn: 'root',
 })
 export class NightAuditService extends ApiService {
+  remainingAudit = new Subject<number[]>();
+
   getNightAudit(
     entityId: string,
     config?: QueryConfig

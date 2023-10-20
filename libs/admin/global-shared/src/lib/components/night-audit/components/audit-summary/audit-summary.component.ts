@@ -24,7 +24,7 @@ import { AuditViewType } from '../../types/audit-summary.type';
 export class AuditSummaryComponent implements OnInit {
   entityId = '';
   title = 'Audit Summary';
-  cols = cols;
+  cols = { ...cols };
   values: AuditViewType | {};
   loading = false;
   isNoAuditFound = false;
@@ -70,6 +70,9 @@ export class AuditSummaryComponent implements OnInit {
         )
         .subscribe(
           (res) => {
+            // inform to everywhere is any audit exist or not
+            this.nightAuditService.remainingAudit.next(res?.length ? res : []);
+
             const loadTable = () => {
               this.auditDates = res;
               const currentAuditDate = this.auditDates.shift();
@@ -129,6 +132,7 @@ export class AuditSummaryComponent implements OnInit {
         .subscribe(
           (res) => {
             const auditSummary = new AuditSummary().deserialize(res);
+            this.cols = { ...cols };
             Object.keys(auditSummary.columns).forEach((col) => {
               if (this.cols[col]) {
                 this.cols[col] = [

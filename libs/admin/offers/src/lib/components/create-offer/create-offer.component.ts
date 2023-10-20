@@ -378,7 +378,7 @@ export class CreateOfferComponent implements OnInit {
                 }`,
                 value: item.id,
                 price: item.rate || item.discountedPrice,
-                type: item.type,
+                type: item?.itemType,
               })),
               ...roomTypes?.map((item) => ({
                 label: `${item.name} ${

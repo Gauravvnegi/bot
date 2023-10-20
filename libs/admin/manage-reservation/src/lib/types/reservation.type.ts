@@ -12,11 +12,10 @@ export type CategoryData = {
   type: 'SERVICE_CATEGORY' | 'PACKAGE_CATEGORY';
 };
 
-export type ReservationStatus = 'DRAFT' | 'CONFIRMED' | 'CANCELED';
+export type ReservationStatus = 'DRAFT' | 'CONFIRMED' | 'CANCELED' | 'NOSHOW';
 
 export type OutletReservationStatus =
   | ReservationStatus
-  | 'NOSHOW'
   | 'WAITLISTED'
   | 'COMPLETED'
   | 'IN';

@@ -256,3 +256,85 @@ export type MetaData = {
   label: string;
   value: string | Date | number;
 };
+
+type PostGuestDetails = {
+  id: string;
+  firstName: string;
+  lastName: string;
+  salutation: string;
+  age?: string;
+  contactDetails: {
+    cc: string;
+    emailId: string;
+    contactNumber: string;
+  };
+};
+
+export class GuestDetailsUpdateModel {
+  primaryGuest: PostGuestDetails;
+
+  sharerGuests: PostGuestDetails[];
+  kids: PostGuestDetails[];
+
+  deserialize(input: GuestSuModel[]): GuestPostData {
+    this.sharerGuests = new Array<PostGuestDetails>();
+    this.kids = new Array<PostGuestDetails>();
+
+    input.forEach((guest) => {
+      const guestDetails = this.modGuestDetails(guest);
+      if (guest.isPrimary) {
+        this.primaryGuest = guestDetails;
+      }
+
+      if (guest.role === 'sharer') {
+        this.sharerGuests.push(guestDetails);
+      }
+
+      if (guest.role === 'kids') {
+        this.kids.push(guestDetails);
+      }
+    });
+
+    return {
+      primaryGuest: this.primaryGuest ?? ({} as PostGuestDetails),
+      sharerGuests: this.sharerGuests,
+      kids: this.kids,
+      accompanyGuests: [],
+    };
+  }
+
+  modGuestDetails(value: GuestSuModel): PostGuestDetails {
+    return {
+      id: value.id,
+      firstName: value.firstName,
+      lastName: value.lastName,
+      salutation: value.title,
+
+      contactDetails: {
+        cc: value.countryCode,
+        contactNumber: value.phoneNumber,
+        emailId: value.email,
+      },
+
+      ...(value.role === 'kids' ? { age: value.age } : {}),
+    };
+  }
+}
+
+export type GuestPostData = Omit<
+  GuestDetailsUpdateModel,
+  'deserialize' | 'modGuestDetails'
+> & { accompanyGuests: [] };
+
+export type GuestSuModel = {
+  id: string;
+  title: string;
+  firstName: string;
+  lastName: string;
+  countryCode: string;
+  phoneNumber: string;
+  email: string;
+  isPrimary: boolean;
+  age: string;
+  role: 'kids' | 'sharer' | '';
+};

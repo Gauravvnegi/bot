@@ -75,6 +75,10 @@ export const reservationStatusDetails: Record<
     label: 'Canceled',
     type: 'failed',
   },
+  NOSHOW: {
+    label: 'No Show',
+    type: 'draft'
+  }
 };
 
 export const outletReservationStatusDetails: Record<

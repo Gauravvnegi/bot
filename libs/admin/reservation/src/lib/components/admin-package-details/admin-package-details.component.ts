@@ -82,6 +82,14 @@ export class AdminPackageDetailsComponent implements OnChanges, AfterViewInit {
     componentRef.instance.index = index;
   }
 
+  isVisible() {
+    return (
+      this.paidAmenityFA?.controls?.length ||
+      this.stayDetailsFG?.get('special_comments')?.value ||
+      this.stayDetailsFG.get('checkin_comments').value
+    );
+  }
+
   getPaidAmenitiesFG() {
     return this._fb.group({
       id: [''],

@@ -1,21 +1,31 @@
 <div class="material-body">
-  <div *ngIf="paidAmenityFA.controls.length" class="paid-wrapper">
-    <mat-label class="package-label">Paid</mat-label>
-    <ng-container #paidPackage></ng-container>
-  </div>
-  <div *ngIf="stayDetailsFG.get('special_comments').value">
-    <hr class="data-seperator" />
-    <mat-label class="package-label">Special Request</mat-label>
-    <div class="special-request-wrapper">
-      <p class="text">{{ stayDetailsFG.get('special_comments').value }}</p>
+  <ng-container *ngIf="isVisible(); else emptyView">
+    <div *ngIf="paidAmenityFA.controls.length" class="paid-wrapper">
+      <mat-label class="package-label">Paid</mat-label>
+      <ng-container #paidPackage></ng-container>
     </div>
-  </div>
+    <div *ngIf="stayDetailsFG.get('special_comments').value">
+      <hr class="data-seperator" />
+      <mat-label class="package-label">Special Request</mat-label>
+      <div class="special-request-wrapper">
+        <p class="text">{{ stayDetailsFG.get('special_comments').value }}</p>
+      </div>
+    </div>
 
-  <div *ngIf="stayDetailsFG.get('checkin_comments').value">
-    <hr class="data-seperator" />
-    <mat-label class="package-label">Checkin Request</mat-label>
-    <div class="special-request-wrapper">
-      <p class="text">{{ stayDetailsFG.get('checkin_comments').value }}</p>
+    <div *ngIf="stayDetailsFG.get('checkin_comments').value">
+      <hr class="data-seperator" />
+      <mat-label class="package-label">Checkin Request</mat-label>
+      <div class="special-request-wrapper">
+        <p class="text">{{ stayDetailsFG.get('checkin_comments').value }}</p>
+      </div>
+    </div>
+  </ng-container>
+</div>
+<ng-template #emptyView>
+  <div class="empty-view-wrapper">
+    <div class="empty-view">
+      <img src="assets/svg/no request.svg" alt="empty-view" />
+      <p class="text">No Request Found</p>
     </div>
   </div>
-</div>
+</ng-template>

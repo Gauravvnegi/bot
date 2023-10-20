@@ -2,7 +2,7 @@
 :host ::ng-deep {
   .accept-button {
     color: white;
-    background-color: $primary-cta;
+    background-color: $primary-cta !important;
     padding: 6px 20px;
   }
   .reject-button {

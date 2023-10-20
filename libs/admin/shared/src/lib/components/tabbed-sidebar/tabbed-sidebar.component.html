@@ -13,22 +13,37 @@
       <hospitality-bot-tab-header
         [listItems]="tabFilterItems"
         [selectedIndex]="tabFilterIdx"
-        (selectedTabChange)="selectedTabFilterChange.emit($event.index)"
+        (selectedTabChange)="
+          selectedTabFilterChange.emit($event.index);
+          setEmptyMessage($event.index)
+        "
       ></hospitality-bot-tab-header>
     </div>
   </div>
-
   <div class="container" *ngIf="!loading; else loader">
-    <div *ngFor="let item of options">
-      <ng-container
-        [ngTemplateOutlet]="template"
-        [ngTemplateOutletContext]="{ $implicit: item }"
-      >
-      </ng-container>
-    </div>
+    <ng-container *ngIf="options.length; else empty">
+      <div *ngFor="let item of options">
+        <ng-container
+          [ngTemplateOutlet]="template"
+          [ngTemplateOutletContext]="{ $implicit: item }"
+        >
+        </ng-container>
+      </div>
+    </ng-container>
   </div>
 </div>
 
 <ng-template #loader>
   <hospitality-bot-loader-bounce class="loader"></hospitality-bot-loader-bounce>
 </ng-template>
+
+<ng-template #empty>
+  <div class="empty-container">
+    <div class="content">
+      <img [src]="emptyMessage.img" alt="" />
+      <span class="title">{{ emptyMessage.title }}</span>
+    </div>
+  </div>
+
+  <ng-template> </ng-template
+></ng-template>

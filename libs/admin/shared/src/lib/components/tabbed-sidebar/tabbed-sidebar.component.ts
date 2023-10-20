@@ -18,7 +18,7 @@ export class TabbedSidebarComponent implements OnInit {
   @Output() selectedTabFilterChange: any = new EventEmitter<string>();
   @Input() loading: boolean = false;
   @Input() header: string = '';
-  @Input() tabFilterItems: any[] = [];
+  @Input() tabFilterItems: TabbedSidebarTabFilterItem[] = [];
   @Input() tabFilterIdx: number = 0;
   @Input() options: any[] = [];
   @Input() template: TemplateRef<any>;
@@ -27,7 +27,28 @@ export class TabbedSidebarComponent implements OnInit {
 
   ngOnInit(): void {
     this.selectedTabFilterChange.emit(0);
+    this.emptyMessage = this.tabFilterItems[this.tabFilterIdx]?.emptyMessage;
   }
 
   ngOnChanges(): void {}
+
+  emptyMessage: {
+    title: string;
+    description: string;
+    img: string;
+  };
+
+  setEmptyMessage(index) {
+    this.emptyMessage = this.tabFilterItems[index].emptyMessage;
+  }
 }
+
+export type TabbedSidebarTabFilterItem = {
+  label: string;
+  value: string;
+  emptyMessage: {
+    title: string;
+    description: string;
+    img: string;
+  };
+};

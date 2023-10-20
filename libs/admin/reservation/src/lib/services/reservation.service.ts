@@ -1,9 +1,12 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from '@hospitality-bot/shared/utils';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { GuestPostData } from '../models/guest-table.model';
 
 @Injectable()
 export class ReservationService extends ApiService {
+  $reinitializeGuestDetails = new BehaviorSubject(false);
+
   getReservationDetails(reservationId): Observable<any> {
     return this.get(`/api/v1/reservation/${reservationId}?raw=true`);
   }
@@ -102,6 +105,13 @@ export class ReservationService extends ApiService {
 
   getGuestReservations(guestId: string): Observable<any> {
     return this.get(`/api/v1/members/${guestId}/reservations`);
+  }
+
+  updateGuestDetails(
+    reservationId: string,
+    data: GuestPostData
+  ): Observable<any> {
+    return this.put(`/api/v1/reservation/${reservationId}/guests`, data);
   }
 
   /**

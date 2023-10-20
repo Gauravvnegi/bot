@@ -26,6 +26,7 @@ export type TransactionHistoryResponse = {
   created: number;
   paymentMethod: string;
   remarks: string;
+  reservationNumber: string;
 };
 
 export type TransactionHistoryListResponse = {

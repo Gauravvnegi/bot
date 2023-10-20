@@ -54,24 +54,27 @@ export class PaidService extends ApiService {
   }
 
   updateAmenity(reservationId, data) {
-    // if (data.packagesToBeAdd) {
-    // Unix timestamps
-    // const timeTimestamp = data.packagesToBeAdd[0].metaData.pickupTime;
-    // const dateTimestamp = data.packagesToBeAdd[0].metaData.pickupDate;
-    // const dateTimeStampUnix = moment(dateTimestamp).unix();
-    // // Convert Unix timestamps to JavaScript Date objects
-    // const timeDate = new Date(timeTimestamp * 1000); // Convert seconds to milliseconds
-    // const dateDate = new Date(dateTimeStampUnix); // Convert seconds to milliseconds
-    // debugger;
-    // Merge the Date and Time
-    // dateDate.setHours(
-    //   timeDate.getHours(),
-    //   timeDate.getMinutes(),
-    //   timeDate.getSeconds()
-    // );
-    // data.packagesToBeAdd[0].metaData.pickupTime = dateDate;
-    // data.packagesToBeAdd[0].metaData.pickupDate = undefined;
-    // }
+    if (data.packagesToBeAdd && data.packagesToBeAdd[0]?.metaData?.pickupTime) {
+      // Unix timestamps
+      const timeTimestamp = data.packagesToBeAdd[0].metaData.pickupTime;
+      const dateTimestamp = data.packagesToBeAdd[0].metaData.pickupDate;
+
+      // Convert timeTimestamp (epoch) to a Moment.js object
+      const timeMoment = moment.unix(timeTimestamp);
+
+      // Extract the time in 'HH:mm' format
+      const time = timeMoment.format('HH:mm');
+
+      // Extract the date part from dateTimestamp (Moment.js object)
+      const date = dateTimestamp.format('D MMM');
+
+      // Combine the date and time
+      const mergedDateTime = date + ' ' + time;
+      const mergedTimestamp = moment(mergedDateTime, 'D MMM HH:mm').unix();
+      
+      data.packagesToBeAdd[0].metaData.pickupTime = mergedTimestamp * 1000;
+      data.packagesToBeAdd[0].metaData.pickupDate = undefined;
+    }
     return this.put(`/api/v1/reservation/${reservationId}/packages`, data);
   }
 

@@ -76,7 +76,7 @@ export const cols = {
   transaction: [
     {
       field: 'transactionId',
-      header: 'Transaction Id',
+      header: 'Transaction Id / Reservation No.',
       sortType: 'string',
     },
     {

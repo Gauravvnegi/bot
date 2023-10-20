@@ -228,6 +228,22 @@ export const dashboard = {
 };
 
 export const dashboardPopUpTabs = [
-  { label: 'Guest', value: 'GUEST' },
-  { label: 'Pre-Arrival Request', value: 'PRE_ARRIVAL_REQUEST' },
+  {
+    label: 'Guest',
+    value: 'GUEST',
+    emptyMessage: {
+      title: 'No Guest Found',
+      description: 'No guest found for this booking',
+      img: 'assets/svg/no guest found.svg',
+    },
+  },
+  {
+    label: 'Pre-Arrival Request',
+    value: 'PRE_ARRIVAL_REQUEST',
+    emptyMessage: {
+      title: 'No Pre-Arrival Request Found',
+      description: 'No pre-arrival request found for this booking',
+      img: 'assets/svg/no request.svg',
+    },
+  },
 ];

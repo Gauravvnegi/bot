@@ -108,7 +108,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       DetailsComponent,
       dialogConfig
     );
-    if (this.selectedTab === dashboardPopUpTabs[1].value as string) {
+    if (this.selectedTab === (dashboardPopUpTabs[1].value as string)) {
       //PRE ARRIVAL REQUEST
       detailCompRef.componentInstance.guestId =
         rowData?.guestDetails?.primaryGuest?.id;

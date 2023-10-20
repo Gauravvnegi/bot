@@ -298,8 +298,8 @@
           class="tab-buttons"
         >
           <div class="button-wrapper">
-            <!-- *ngIf="checkForReservationSubs()" -->
             <hospitality-bot-button
+              *ngIf="isFinanceSubscribed"
               [label]="'Manage Invoice'"
               (click)="manageInvoice()"
               variant="outlined"

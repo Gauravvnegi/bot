@@ -69,7 +69,7 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
   bgColor: string;
   outlets = [];
   lastUpdatedAt: string;
-  isNightAuditPending: boolean = true;
+  isNightAuditPending = false;
 
   isGlobalFilterVisible = false;
   showNotification = false;

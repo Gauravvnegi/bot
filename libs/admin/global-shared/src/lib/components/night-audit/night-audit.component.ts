@@ -58,7 +58,7 @@ export class NightAuditComponent implements OnInit {
   }
 
   // TODO: Need to do common with night audit summary
-  checkAudit(event) {
+  checkAudit(event?) {
     // For Status Change
     if (typeof event == 'object') {
       this.initData();
@@ -74,6 +74,9 @@ export class NightAuditComponent implements OnInit {
         )
         .subscribe(
           (res) => {
+            // inform to everywhere is any audit exist or not
+            this.nightAuditService.remainingAudit.next(res?.length ? res : []);
+
             if (res?.length) {
               const currentAuditDate = res.shift();
               this.auditDate = new Date(currentAuditDate);
@@ -96,6 +99,10 @@ export class NightAuditComponent implements OnInit {
   }
 
   initData() {
+    if (!this.auditDate) {
+      this.checkAudit();
+    }
+
     this.loading = true;
     this.$subscription.add(
       this.nightAuditService
@@ -114,6 +121,9 @@ export class NightAuditComponent implements OnInit {
             this.loading = false;
           },
           (error) => {
+            this.loading = false;
+          },
+          () => {
             this.loading = false;
           }
         )

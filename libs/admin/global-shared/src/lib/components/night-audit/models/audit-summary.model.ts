@@ -66,8 +66,8 @@ export class AuditSummary {
   initColumns(input: AuditSummaryResponse) {
     const dynamicCols: Cols[] = [
       ...input.outlets.map((item) => ({
-        field: Object.keys(item).shift(),
-        header: getTitleCaseString(Object.keys(item).shift()),
+        field: item.id,
+        header: getTitleCaseString(item.name),
       })),
     ];
     return dynamicCols;
@@ -100,7 +100,10 @@ export class AuditSummary {
       dynamicCols.reduce(
         (pre, curr, index) => {
           total = total + +input.outlets[index].totalAmount;
-          return { ...pre, [curr.field]: input.outlets[index].totalAmount };
+          return {
+            ...pre,
+            [curr.field]: `Rs. ${input.outlets[index].totalAmount}`,
+          };
         },
         {
           booking: `Rs. ${input?.bookingAmount}`,
@@ -119,6 +122,8 @@ export class AuditSummary {
           totalInfo = { ...totalInfo, [key]: 'Total Revenue' };
         } else if (index == revenueListKeys.length - 1) {
           totalInfo = { ...totalInfo, [key]: `Rs. ${total}` };
+        } else {
+          totalInfo = { ...totalInfo, [key]: ' ' };
         }
       });
       revenueList.push(totalInfo);

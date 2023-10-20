@@ -78,6 +78,25 @@
   }
 }
 
+.empty-view-wrapper {
+  @include flex-all-center;
+  height: 100%;
+  .empty-view {
+    @include flex-col-center-algn;
+    img {
+      width: 5em;
+    }
+
+    .text {
+      color: #8995a3;
+      font-weight: 500;
+      letter-spacing: 0.84px;
+      margin-top: 10px;
+      font-size: 12px;
+    }
+  }
+}
+
 :host ::ng-deep .mat-expansion-panel {
   margin-top: 20px !important;
   box-shadow: none;

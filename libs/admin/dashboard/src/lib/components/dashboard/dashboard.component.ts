@@ -231,6 +231,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   openExCheckinSidebar() {
+    this.scrollToTop();
     this.sideBarService.setSideBarZIndex(130, true);
     this.isSidebarVisible = true;
   }
@@ -238,6 +239,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
   closeSidebar() {
     this.sideBarService.setSideBarZIndex(0, false);
     this.isSidebarVisible = false;
+  }
+
+  scrollToTop() {
+    const mainLayout = document.getElementById('main-layout');
+    mainLayout?.scrollTo(0, 0);
   }
 
   getTemplate() {

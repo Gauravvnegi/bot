@@ -508,10 +508,12 @@ export class AdminDocumentsDetailsComponent implements OnInit {
     const name = `${guest.firstName}_${guest.lastName}`;
 
     documents.forEach((doc) => {
-      urls.push(doc.frontUrl);
+      urls.push(doc.frontUrl.trim());
+
       fileNames.push(`${name}_${doc.documentType}_frontURL`);
       if (doc.documentType !== 'VISA') {
-        urls.push(doc.backUrl);
+        urls.push(doc.backUrl?.trim());
+
         fileNames.push(`${name}_${doc.documentType}_backURL`);
       }
     });
@@ -520,14 +522,15 @@ export class AdminDocumentsDetailsComponent implements OnInit {
     let count = 0;
 
     // Function to fetch and add files to the zip
-    async function fetchAndAddFile(url, fileName) {
+    const fetchAndAddFile = async (url, fileName) => {
       try {
-        const response = await fetch(url);
+        const response = await fetch(url, {});
         if (!response.ok) {
           throw new Error(
             `Failed to fetch ${url}: ${response.status} ${response.statusText}`
           );
         }
+
         const data = await response.arrayBuffer();
         zipFile.file(fileName, data);
         count++;
@@ -540,7 +543,7 @@ export class AdminDocumentsDetailsComponent implements OnInit {
         this.snackbarService.openSnackBarAsText(err);
         console.error(err);
       }
-    }
+    };
 
     // Fetch and add files
     urls.forEach((url, i) => {

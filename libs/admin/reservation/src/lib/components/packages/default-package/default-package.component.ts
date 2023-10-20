@@ -48,9 +48,7 @@ export class DefaultPackageComponent implements OnInit {
         (response) => {
           this.isToggleOn = status === 'ACCEPT';
 
-          this.paidAmenityFG
-            .get('status')
-            .patchValue(status);
+          this.paidAmenityFG.get('status').patchValue(status);
           this.snackbarService.openSnackBarWithTranslate(
             {
               translateKey: `messages.SUCCESS.REQUEST_STATUS_UPDATED`,
@@ -79,9 +77,8 @@ export class DefaultPackageComponent implements OnInit {
   }
 
   convertEpochToDate(epochTime: any, format: string) {
-    return DateService.getDateFromTimeStamp(epochTime * 1000, format).replace(
-      ',',
-      'at'
-    );
+    return epochTime
+      ? DateService.getDateFromTimeStamp(epochTime, format).replace(',', 'at')
+      : '--';
   }
 }

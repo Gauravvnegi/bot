@@ -122,6 +122,8 @@ export class AuditSummary {
           totalInfo = { ...totalInfo, [key]: 'Total Revenue' };
         } else if (index == revenueListKeys.length - 1) {
           totalInfo = { ...totalInfo, [key]: `Rs. ${total}` };
+        } else {
+          totalInfo = { ...totalInfo, [key]: ' ' };
         }
       });
       revenueList.push(totalInfo);

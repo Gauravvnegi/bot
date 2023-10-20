@@ -46,6 +46,7 @@ export class TransactionHistory {
   remarks: string;
   credit: number;
   reservationId: string;
+  reservationNumber: string;
   id: string;
   // balanceDue: string;
   deserialize(input: TransactionHistoryResponse) {
@@ -56,6 +57,7 @@ export class TransactionHistory {
     this.remarks = input.remarks ?? '';
     this.credit = input.amount ?? 0;
     this.reservationId = input.reservationId;
+    this.reservationNumber = input.reservationNumber;
     this.id = input.id ?? '';
     // this.balanceDue = input.balanceDue;
     return this;

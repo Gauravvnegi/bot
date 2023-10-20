@@ -261,10 +261,10 @@ $border-color: rgba(112, 112, 112, 0.35);
   height: 0;
 }
 
-::ng-deep .p-sidebar-mask,
-.p-sidebar-mask-leave.p-component-overlay {
-  background-color: rgba(0, 0, 0, 0) !important;
-}
+// ::ng-deep .p-sidebar-mask,
+// .p-sidebar-mask-leave.p-component-overlay {
+//   background-color: rgba(0, 0, 0, 0) !important;
+// }
 
 ::ng-deep .p-component-overlay {
   z-index: 400 !important;

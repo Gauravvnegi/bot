@@ -108,7 +108,7 @@
                   class="edit-field sm"
                   controlName="age"
                   label="Age"
-                  [options]="code"
+                  [options]="kidAgesList"
                   [props]="{
                     variant: 'standard'
                   }"
@@ -162,7 +162,7 @@
                     *ngIf="guestFA.at(i).value.age; else emptyCell"
                     class="value"
                   >
-                    {{ guestFA.at(i).value.age }}
+                    {{ guestFA.at(i).value.age }} years
                   </div>
                 </div>
               </ng-template>

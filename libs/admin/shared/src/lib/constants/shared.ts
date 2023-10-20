@@ -45,6 +45,34 @@ export enum DiscountType {
   FLAT = 'Flat',
 }
 
+export const kidAgesList = [
+  { label: '1 years', value: 1 },
+  { label: '2 years', value: 2 },
+  { label: '3 years', value: 3 },
+  { label: '4 years', value: 4 },
+  { label: '5 years', value: 5 },
+  { label: '6 years', value: 6 },
+  { label: '7 years', value: 7 },
+  { label: '8 years', value: 8 },
+  { label: '9 years', value: 9 },
+  { label: '10 years', value: 10 },
+  { label: '11 years', value: 11 },
+  { label: '12 years', value: 12 },
+  { label: '13 years', value: 13 },
+  { label: '14 years', value: 14 },
+  { label: '15 years', value: 15 },
+  { label: '16 years', value: 16 },
+  { label: '17 years', value: 17 },
+  { label: '18 years', value: 18 },
+  { label: '19 years', value: 19 },
+  { label: '20 years', value: 20 },
+  { label: '21 years', value: 21 },
+  { label: '22 years', value: 22 },
+  { label: '23 years', value: 23 },
+  { label: '24 years', value: 24 },
+  { label: '25 years', value: 25 },
+];
+
 export const guestSalutation = [
   { label: 'Mr.', value: 'Mr.' },
   { label: 'Ms.', value: 'Ms.' },

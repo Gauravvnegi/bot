@@ -52,7 +52,7 @@
             : ''
         "
       >
-        <img src="assets/svg/uparrow.svg" alt="document" /> &nbsp;
+        <mat-icon class="save-icon"> save</mat-icon>
         <p>Save Changes</p>
       </div>
     </div>
@@ -68,8 +68,14 @@
                 <mat-option
                   *ngFor="let guest of detailsData.guestDetails.guests"
                   [value]="guest.id"
+                  [disabled]="!guest.firstName"
                 >
-                  {{ guest.title }} {{ guest.firstName }} {{ guest.lastName }}
+                  <ng-container *ngIf="guest.firstName; else addGuest">
+                    {{ guest.title }} {{ guest.firstName }} {{ guest.lastName }}
+                  </ng-container>
+                  <ng-template #addGuest>
+                    Add {{ guest.label }} details
+                  </ng-template>
                 </mat-option>
               </mat-select>
             </mat-form-field>

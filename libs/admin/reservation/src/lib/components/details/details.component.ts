@@ -144,6 +144,12 @@ export class DetailsComponent implements OnInit, OnDestroy {
 
   registerListeners(): void {
     this.listenForGlobalFilters();
+    this._reservationService.$reinitializeGuestDetails.subscribe((res) => {
+      if (res) {
+        this.isReservationDetailFetched = false;
+        this.getReservationDetails();
+      }
+    });
     this.channels = this.subscriptionService.getChannelSubscription();
   }
 

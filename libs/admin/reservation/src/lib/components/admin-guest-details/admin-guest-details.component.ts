@@ -15,6 +15,7 @@ import {
   CountryCodeList,
   Option,
   guestSalutation,
+  kidAgesList,
 } from '@hospitality-bot/admin/shared';
 import { GuestDetailsUpdateModel } from '../../models/guest-table.model';
 @Component({
@@ -39,6 +40,7 @@ export class AdminGuestDetailsComponent implements OnInit, AfterViewInit {
   editGuestIndex = -1;
   code: Option[] = [];
   readonly titleOptions = guestSalutation;
+  readonly kidAgesList = kidAgesList;
 
   constructor(
     private _fb: FormBuilder,

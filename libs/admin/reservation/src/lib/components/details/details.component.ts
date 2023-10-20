@@ -144,12 +144,14 @@ export class DetailsComponent implements OnInit, OnDestroy {
 
   registerListeners(): void {
     this.listenForGlobalFilters();
-    this._reservationService.$reinitializeGuestDetails.subscribe((res) => {
-      if (res) {
-        this.isReservationDetailFetched = false;
-        this.getReservationDetails();
-      }
-    });
+    this.$subscription.add(
+      this._reservationService.$reinitializeGuestDetails.subscribe((res) => {
+        if (res) {
+          this.isReservationDetailFetched = false;
+          this.getReservationDetails();
+        }
+      })
+    );
     this.channels = this.subscriptionService.getChannelSubscription();
   }
 
@@ -984,6 +986,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    this._reservationService.$reinitializeGuestDetails.next(false);
     this.$subscription.unsubscribe();
     this.isFirstTimeFetch = true;
   }

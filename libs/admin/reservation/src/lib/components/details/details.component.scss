@@ -713,7 +713,11 @@ mat-option {
   right: 0;
   width: 20%;
 }
-
-:host ::ng-deep .mat-select-value {
-  max-width: unset !important;
+:host ::ng-deep .full-text {
+  .mat-select-value {
+    max-width: unset !important;
+  }
 }
+// :host ::ng-deep .mat-select-value {
+//   // max-width: unset !important;
+// }

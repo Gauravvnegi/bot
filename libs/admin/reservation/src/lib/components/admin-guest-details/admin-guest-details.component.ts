@@ -1,4 +1,11 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Input,
+  Output,
+  EventEmitter,
+  AfterViewInit,
+} from '@angular/core';
 import { FormGroup, FormBuilder, FormArray, Validators } from '@angular/forms';
 import { ReservationService } from '../../services/reservation.service';
 import { SnackBarService } from 'libs/shared/material/src';
@@ -15,7 +22,7 @@ import { GuestDetailsUpdateModel } from '../../models/guest-table.model';
   templateUrl: './admin-guest-details.component.html',
   styleUrls: ['./admin-guest-details.component.scss'],
 })
-export class AdminGuestDetailsComponent implements OnInit {
+export class AdminGuestDetailsComponent implements OnInit, AfterViewInit {
   @Input('data') detailsData;
   @Input() parentForm: FormGroup;
   @Input() guestData;
@@ -28,6 +35,7 @@ export class AdminGuestDetailsComponent implements OnInit {
   healthCardDetailsForm: FormGroup;
   guestDetailsForm: FormGroup;
 
+  activeState: boolean[] = [true, true, true, true, true, true, true];
   editGuestIndex = -1;
   code: Option[] = [];
   readonly titleOptions = guestSalutation;
@@ -52,7 +60,10 @@ export class AdminGuestDetailsComponent implements OnInit {
       guestFA.push(this.getGuestFG());
       guestFA.controls[0].patchValue(this.guestData);
     }
+    this.activeState = this.guestFA.controls.map((item) => true);
   }
+
+  ngAfterViewInit(): void {}
 
   get guestFA() {
     return this.guestDetailsForm.get('guests') as FormArray;
@@ -82,6 +93,7 @@ export class AdminGuestDetailsComponent implements OnInit {
           this.editGuestIndex = -1;
         });
     } else {
+      this.activeState[idx] = true;
       this.editGuestIndex = idx;
     }
   }

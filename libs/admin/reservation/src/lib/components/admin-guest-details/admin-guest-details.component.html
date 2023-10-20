@@ -2,35 +2,18 @@
   <div class="material-body">
     <div class="label-wrapper">
       <mat-label class="mat-head">Guest Info</mat-label>
-      <ng-container
-        *ngIf="healthCardDetailsForm"
-        [ngSwitch]="healthCardDetailsForm.get('status').value"
-      >
-        <img
-          *ngSwitchCase="'COMPLETED'"
-          src="assets/svg/status/success.svg"
-          alt="completed"
-        />
 
-        <img
-          *ngSwitchCase="'FAILED'"
-          src="assets/svg/status/fail.svg"
-          alt="failed"
-        />
+      <img
+        *ngIf="hasSharedGuestDetails"
+        src="assets/svg/status/success.svg"
+        alt="completed"
+      />
 
-        <img
-          *ngSwitchCase="'PENDING'"
-          src="assets/svg/status/pending.svg"
-          alt="pending"
-        />
-
-        <img
-          *ngSwitchCase="'INITIATED'"
-          src="assets/svg/status/initiated.svg"
-          alt="initiated"
-        />
-        <!-- add default case icon -->
-      </ng-container>
+      <img
+        *ngIf="!hasSharedGuestDetails"
+        src="assets/svg/status/pending.svg"
+        alt="pending"
+      />
     </div>
     <form
       [formGroup]="guestDetailsForm"

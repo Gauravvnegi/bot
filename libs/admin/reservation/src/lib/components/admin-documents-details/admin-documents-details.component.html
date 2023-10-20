@@ -255,25 +255,30 @@
 
 <ng-template #emptyDoc>
   <div class="empty-view">
-    <div class="wrapper">
-      <img src="assets/images/Documents.png" alt="documents" />
-      <p class="label">Documents Pending!</p>
-      <p
-        class="note"
-        *ngIf="
-          documentStatus.get('status').value === 'PENDING';
-          else nationalityChangedText
-        "
-      >
-        Seems like guest has not initiated Precheckin.
-      </p>
-      <ng-template #nationalityChangedText>
-        <p class="note">
-          Seem like you have documents is still not submitted.
-        </p></ng-template
-      >
+    <div class="wrapper empty-doc">
+      <div class="empty-doc-image">
+        <img src="assets/images/Documents.png" alt="documents" />
+        <p class="label">Documents Pending!</p>
+      </div>
 
-      <p class="note">Select document type to upload documents.</p>
+      <div>
+        <p
+          class="note"
+          *ngIf="
+            documentStatus.get('status').value === 'PENDING';
+            else nationalityChangedText
+          "
+        >
+          Seems like guest has not initiated Precheckin.
+        </p>
+        <ng-template #nationalityChangedText>
+          <p class="note">
+            Seem like you have documents is still not submitted.
+          </p></ng-template
+        >
+
+        <p class="note">Select document type to upload documents.</p>
+      </div>
     </div>
   </div>
 </ng-template>

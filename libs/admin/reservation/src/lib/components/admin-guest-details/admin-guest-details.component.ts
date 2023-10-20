@@ -69,6 +69,20 @@ export class AdminGuestDetailsComponent implements OnInit, AfterViewInit {
     return this.guestDetailsForm.get('guests') as FormArray;
   }
 
+  /**
+   * To check whether the guest details are submitted or not
+   */
+  get hasSharedGuestDetails() {
+    console.log(
+      this.guestFA?.controls?.filter(
+        (control) => control.value.role === 'sharer'
+      )
+    );
+    return this.guestFA?.controls
+      ?.filter((control) => control.value.role === 'sharer')
+      ?.reduce((prev, control, idx) => prev && control.value.firstName, true);
+  }
+
   handleEdit(idx: number) {
     const isSave = this.editGuestIndex === idx;
 
@@ -93,8 +107,14 @@ export class AdminGuestDetailsComponent implements OnInit, AfterViewInit {
           this.editGuestIndex = -1;
         });
     } else {
-      this.activeState[idx] = true;
-      this.editGuestIndex = idx;
+      if (this.editGuestIndex !== -1) {
+        this.snackbarService.openSnackBarAsText(
+          'Please save the changes first.'
+        );
+      } else {
+        this.activeState[idx] = true;
+        this.editGuestIndex = idx;
+      }
     }
   }
 

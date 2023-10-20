@@ -1,4 +1,4 @@
-<div>
+<div [ngClass]="{ 'back-drop': this.url }">
   <div class="upload__box">
     <div class="before-upload">
       <img src="assets/svg/upload.svg" />
@@ -27,4 +27,13 @@
   <ng-container *ngIf="uploadStatus">
     <mat-progress-bar mode="indeterminate"></mat-progress-bar>
   </ng-container>
+
+  <div class="edit-pannel">
+    <img
+      pTooltip="Edit"
+      (click)="fileInput.click()"
+      src="assets/svg/edit8278.svg"
+      alt=""
+    />
+  </div>
 </div>

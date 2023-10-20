@@ -84,9 +84,15 @@
         ></p-tableCheckbox>
       </td>
       <td>
-        <div class="cell-content" *ngIf="rowData.transactionId; else emptyCell">
+        <div
+          class="cell-content"
+          *ngIf="rowData.transactionId || rowData.reservationNumber else emptyCell"
+        >
           <div class="primary-text">
-            {{ rowData.transactionId }}
+            {{ rowData.transactionId || '-' }}
+          </div>
+          <div class="secondary-text">
+            {{ rowData.reservationNumber || '-' }}
           </div>
         </div>
       </td>

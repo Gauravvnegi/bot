@@ -98,7 +98,11 @@ export class AdminGuestDetailsComponent implements OnInit, AfterViewInit {
       this._reservationService
         .updateGuestDetails(reservationId, data)
         .subscribe((res) => {
-          const label = this.guestFA.at(idx).value.label;
+          const currentGuestDetails = this.guestFA.at(idx).value;
+
+          this._reservationService.$reinitializeGuestDetails.next(true);
+
+          const label = currentGuestDetails.label;
           this.snackbarService.openSnackBarAsText(
             `${label} details updated`,
             '',

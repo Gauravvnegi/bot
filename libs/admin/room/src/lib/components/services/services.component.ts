@@ -11,7 +11,7 @@ import {
   RoutesConfigService,
 } from '@hospitality-bot/admin/core/theme';
 import { SnackBarService } from '@hospitality-bot/shared/material';
-import { NavRouteOptions } from 'libs/admin/shared/src';
+import { ModuleNames, NavRouteOptions } from 'libs/admin/shared/src';
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
 import { Subscription } from 'rxjs';
 import { Location } from '@angular/common';
@@ -26,6 +26,7 @@ import {
 } from '@hospitality-bot/admin/library';
 import { routesConfig } from 'libs/admin/shared/src/lib/constants/config';
 import roomRoutes, { roomRoutesConfig } from '../../constant/routes';
+import { servicesRoutes } from 'libs/admin/services/src/lib/constant/routes';
 @Component({
   selector: 'hospitality-bot-services',
   templateUrl: './services.component.html',
@@ -320,6 +321,13 @@ export class ServicesComponent implements OnInit, OnDestroy {
     if (this.selectedService === ServicesTypeValue.PAID) {
       this.useForm.get('paidAmenities').setValue([]);
     }
+  }
+
+  navigateToAddService() {
+    this.routesConfigService.navigate({
+      subModuleName: ModuleNames.SERVICES,
+      additionalPath: servicesRoutes.createService.route,
+    });
   }
 
   /**

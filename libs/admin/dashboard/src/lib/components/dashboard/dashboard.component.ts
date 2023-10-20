@@ -108,14 +108,21 @@ export class DashboardComponent implements OnInit, OnDestroy {
       DetailsComponent,
       dialogConfig
     );
-    // detailCompRef.componentInstance.bookingId = rowData?.booking?.bookingNumber;
+    if (this.selectedTab === dashboardPopUpTabs[1].value as string) {
+      //PRE ARRIVAL REQUEST
+      detailCompRef.componentInstance.guestId =
+        rowData?.guestDetails?.primaryGuest?.id;
 
-    detailCompRef.componentInstance.guestId =
-      rowData?.guests?.primaryGuest?.id ??
-      rowData?.guestDetails?.primaryGuest?.id;
+      detailCompRef.componentInstance.bookingNumber =
+        rowData?.confirmationNumber;
+    } else {
+      //PRE CHECKIN GUEST
+      detailCompRef.componentInstance.guestId =
+        rowData?.guests?.primaryGuest?.id;
 
-    // detailCompRef.componentInstance.bookingNumber =
-    //   rowData.booking.bookingNumber;
+      detailCompRef.componentInstance.bookingNumber =
+        rowData.booking.bookingNumber;
+    }
 
     tabKey && (detailCompRef.componentInstance.tabKey = tabKey);
 
@@ -168,6 +175,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   onSelectedTabFilterChange(index: number) {
     this.tabFilterIdx = index;
+    this.selectedTab = this.tabFilterItems[index].value;
 
     if (this.tabFilterItems[index].value === dashboardPopUpTabs[1].value) {
       this.options = [];

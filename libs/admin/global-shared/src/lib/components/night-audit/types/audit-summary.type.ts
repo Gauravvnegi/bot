@@ -56,6 +56,7 @@ export interface AuditSummaryResponse {
     UserPermission: string;
   };
   outlets?: {
+    id: string;
     name: string;
     totalAmount: number;
   }[];

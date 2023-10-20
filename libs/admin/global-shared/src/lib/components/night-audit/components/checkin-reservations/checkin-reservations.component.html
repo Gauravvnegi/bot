@@ -13,7 +13,7 @@
           description: 'There is no Pending Checked-in Reservations.'
         }
       }"
-      (actionClicked)="reloadTable()"
+      (actionClicked)="reloadTable(true)"
       (dropDownChange)="statusChange($event)"
       (quickChange)="editReservation($event)"
     ></hospitality-bot-table-view>

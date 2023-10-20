@@ -73,7 +73,7 @@
     >
       <div *ngIf="isGuestReservationFetched" [formGroup]="bookingFG">
         <mat-select
-          class="past-booking"
+          class="past-booking full-text"
           formControlName="booking"
           (selectionChange)="handleBookingChange($event)"
         >

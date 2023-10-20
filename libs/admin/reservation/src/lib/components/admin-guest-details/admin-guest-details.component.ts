@@ -3,6 +3,13 @@ import { FormGroup, FormBuilder, FormArray, Validators } from '@angular/forms';
 import { ReservationService } from '../../services/reservation.service';
 import { SnackBarService } from 'libs/shared/material/src';
 import { isEmpty } from 'lodash';
+import {
+  ConfigService,
+  CountryCodeList,
+  Option,
+  guestSalutation,
+} from '@hospitality-bot/admin/shared';
+import { GuestDetailsUpdateModel } from '../../models/guest-table.model';
 @Component({
   selector: 'hospitality-bot-admin-guest-details',
   templateUrl: './admin-guest-details.component.html',
@@ -21,13 +28,20 @@ export class AdminGuestDetailsComponent implements OnInit {
   healthCardDetailsForm: FormGroup;
   guestDetailsForm: FormGroup;
 
+  editGuestIndex = -1;
+  code: Option[] = [];
+  readonly titleOptions = guestSalutation;
+
   constructor(
     private _fb: FormBuilder,
     private _reservationService: ReservationService,
-    private snackbarService: SnackBarService
+    private snackbarService: SnackBarService,
+    private configService: ConfigService
   ) {}
 
   ngOnInit(): void {
+    this.getCountryCode();
+
     if (this.detailsData) {
       this.addFormsControls();
       this.pushDataToForm();
@@ -38,6 +52,52 @@ export class AdminGuestDetailsComponent implements OnInit {
       guestFA.push(this.getGuestFG());
       guestFA.controls[0].patchValue(this.guestData);
     }
+  }
+
+  get guestFA() {
+    return this.guestDetailsForm.get('guests') as FormArray;
+  }
+
+  handleEdit(idx: number) {
+    const isSave = this.editGuestIndex === idx;
+
+    if (isSave) {
+      const reservationId = this.parentForm
+        .get('reservationDetails')
+        .get('bookingId').value;
+
+      const data = new GuestDetailsUpdateModel().deserialize(
+        this.guestFA.value
+      );
+
+      this._reservationService
+        .updateGuestDetails(reservationId, data)
+        .subscribe((res) => {
+          const label = this.guestFA.at(idx).value.label;
+          this.snackbarService.openSnackBarAsText(
+            `${label} details updated`,
+            '',
+            { panelClass: 'success' }
+          );
+          this.editGuestIndex = -1;
+        });
+    } else {
+      this.editGuestIndex = idx;
+    }
+  }
+
+  getCountryCode() {
+    this.configService.getCountryCode().subscribe(
+      (res) => {
+        let data = new CountryCodeList().deserialize(res);
+
+        this.code = data.records.map((element) => ({
+          label: element.label + ' (' + element.value + ')',
+          value: element.value,
+        }));
+      },
+      () => {}
+    );
   }
 
   addFormsControls() {

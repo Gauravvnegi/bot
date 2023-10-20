@@ -6,22 +6,179 @@
         *ngIf="healthCardDetailsForm"
         [ngSwitch]="healthCardDetailsForm.get('status').value"
       >
-        <img *ngSwitchCase="'COMPLETED'" src="assets/svg/status/success.svg" />
+        <img
+          *ngSwitchCase="'COMPLETED'"
+          src="assets/svg/status/success.svg"
+          alt="completed"
+        />
 
-        <img *ngSwitchCase="'FAILED'" src="assets/svg/status/fail.svg" />
+        <img
+          *ngSwitchCase="'FAILED'"
+          src="assets/svg/status/fail.svg"
+          alt="failed"
+        />
 
-        <img *ngSwitchCase="'PENDING'" src="assets/svg/status/pending.svg" />
+        <img
+          *ngSwitchCase="'PENDING'"
+          src="assets/svg/status/pending.svg"
+          alt="pending"
+        />
 
         <img
           *ngSwitchCase="'INITIATED'"
           src="assets/svg/status/initiated.svg"
+          alt="initiated"
         />
-
         <!-- add default case icon -->
       </ng-container>
     </div>
     <form [formGroup]="guestDetailsForm">
-      <mat-accordion
+      <p-accordion class="w-full">
+        <p-accordionTab
+          [multi]="true"
+          formArrayName="guests"
+          *ngFor="let guestControl of guestFA.controls; let i = index"
+        >
+          <ng-template pTemplate="header">
+            <span class="container__title">{{
+              guestFA.at(i).value.label
+            }}</span>
+
+            <mat-icon
+              class="expand-icon"
+              click-stop-propagation
+              (click)="handleEdit(i)"
+              >{{ editGuestIndex == i ? 'save' : 'edit' }}</mat-icon
+            >
+          </ng-template>
+          <ng-template pTemplate="content">
+            <div class="container__body" [formGroupName]="i">
+              <div class="edit-field-wrapper" *ngIf="editGuestIndex == i">
+                <hospitality-bot-select
+                  class="edit-field sm"
+                  controlName="title"
+                  label="Title"
+                  [options]="titleOptions"
+                  [props]="{
+                    variant: 'standard'
+                  }"
+                ></hospitality-bot-select>
+                <hospitality-bot-input
+                  class="edit-field md"
+                  controlName="firstName"
+                  label="First Name"
+                  [props]="{
+                    variant: 'standard'
+                  }"
+                ></hospitality-bot-input>
+                <hospitality-bot-input
+                  class="edit-field md"
+                  controlName="lastName"
+                  label="Last Name"
+                  [props]="{
+                    variant: 'standard'
+                  }"
+                ></hospitality-bot-input>
+
+                <ng-container
+                  *ngIf="guestFA.at(i).value.role !== 'kids'; else viewAge"
+                >
+                  <hospitality-bot-select
+                    class="edit-field sm"
+                    controlName="countryCode"
+                    label="cc"
+                    [options]="code"
+                    [props]="{
+                      variant: 'standard'
+                    }"
+                  ></hospitality-bot-select>
+                  <hospitality-bot-input
+                    class="edit-field md"
+                    controlName="phoneNumber"
+                    label="Phone No."
+                    [props]="{
+                      variant: 'standard'
+                    }"
+                  ></hospitality-bot-input>
+                  <hospitality-bot-input
+                    class="edit-field lg"
+                    controlName="email"
+                    label="Email"
+                    [props]="{
+                      variant: 'standard'
+                    }"
+                  ></hospitality-bot-input>
+                </ng-container>
+                <ng-template #viewAge>
+                  <hospitality-bot-select
+                    class="edit-field sm"
+                    controlName="age"
+                    label="Age"
+                    [options]="code"
+                    [props]="{
+                      variant: 'standard'
+                    }"
+                  ></hospitality-bot-select>
+                </ng-template>
+              </div>
+
+              <div class="fields-wrapper" *ngIf="editGuestIndex !== i">
+                <div class="field width-added">
+                  <mat-label class="label">Full Name</mat-label>
+                  <div
+                    class="value"
+                    *ngIf="guestFA.at(i).value.firstName; else emptyCell"
+                  >
+                    {{ guestFA.at(i).value.title }}
+                    {{ guestFA.at(i).value.firstName }}
+                    {{ guestFA.at(i).value.lastName }}
+                  </div>
+                </div>
+                <ng-container
+                  *ngIf="guestFA.at(i).value.role !== 'kids'; else viewAge"
+                >
+                  <div class="field width-added">
+                    <mat-label class="label">Phone No.</mat-label>
+                    <a
+                      *ngIf="guestFA.at(i).value.phoneNumber; else emptyCell"
+                      href="tel:{{ guestFA.at(i).value.countryCode }}{{
+                        guestFA.at(i).value.phoneNumber
+                      }}"
+                    >
+                      <div class="value">
+                        {{ guestFA.at(i).value.countryCode }}
+                        {{ guestFA.at(i).value.phoneNumber }}
+                      </div>
+                    </a>
+                  </div>
+                  <div class="field width-added">
+                    <mat-label class="label">Email</mat-label>
+                    <div
+                      *ngIf="guestFA.at(i).value.email; else emptyCell"
+                      class="value"
+                    >
+                      {{ guestFA.at(i).value.email }}
+                    </div>
+                  </div>
+                </ng-container>
+                <ng-template #viewAge>
+                  <div class="field width-added">
+                    <mat-label class="label">Age</mat-label>
+                    <div
+                      *ngIf="guestFA.at(i).value.age; else emptyCell"
+                      class="value"
+                    >
+                      {{ guestFA.at(i).value.age }}
+                    </div>
+                  </div>
+                </ng-template>
+              </div>
+            </div>
+          </ng-template>
+        </p-accordionTab>
+      </p-accordion>
+
+      <!-- <mat-accordion
         #guestAccordian="matAccordion"
         [multi]="true"
         *ngIf="filteredGuestForm('').length"
@@ -207,7 +364,7 @@
             </ng-container>
           </div>
         </mat-expansion-panel>
-      </mat-accordion>
+      </mat-accordion> -->
     </form>
     <!-- <hr class="data-seperator" />
     <mat-label class="mat-head">Stay Details</mat-label>

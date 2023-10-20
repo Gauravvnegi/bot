@@ -8,6 +8,67 @@
   width: 33%;
 }
 
+:host ::ng-deep .p-accordion {
+  .p-accordion-tab {
+    margin-bottom: 10px;
+  }
+  .p-accordion-header {
+    .p-accordion-header-link {
+      background-color: #e8eef5 !important;
+    }
+    &.p-highlight {
+      .p-accordion-header-link {
+        background-color: #e8eef5 !important;
+
+        &:focus {
+          background-color: #e8eef5;
+        }
+      }
+    }
+  }
+
+  .p-accordion-content {
+    padding: 10px 15px;
+  }
+}
+
+:host ::ng-deep .edit-field {
+  zoom: 0.8;
+
+  .input__static {
+    margin-top: 8px !important;
+    .p-dropdown {
+      margin-top: 8px !important;
+    }
+  }
+
+  .label {
+    color: $grayMedium;
+  }
+
+  .p-inputtext {
+    color: $secondary2;
+  }
+
+  &-wrapper {
+    padding: 10px;
+    display: flex;
+    gap: 2%;
+  }
+
+  &.sm {
+    flex-basis: 10%;
+  }
+
+  &.md {
+    flex-basis: 20%;
+  }
+
+  &.lg {
+    flex-basis: 30%;
+  }
+}
+
 .svg-wrapper {
   padding-left: 5px;
   .svg {
@@ -39,12 +100,18 @@
 }
 
 .container__body {
-  margin: 0 20px;
+  // margin: 0 20px;
+  height: 85px;
+  display: flex;
+  width: 100%;
+  align-items: center;
 }
 
 .fields-wrapper {
   display: flex;
-  margin: 30px 0px;
+  gap: 1%;
+  width: 100%;
+  // margin: 30px 0px;
   .field {
     .label {
       letter-spacing: 0.72px;

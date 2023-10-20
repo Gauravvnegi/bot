@@ -46,7 +46,7 @@ export class FeedbackDetailComponent implements OnInit, OnDestroy {
   userPermissions: Departmentpermission[];
   assigneeList;
   $subscription = new Subscription();
-  globalQueries;
+  @Input() globalQueries;
   constructor(
     protected cardService: CardService,
     public globalFilterService: GlobalFilterService,

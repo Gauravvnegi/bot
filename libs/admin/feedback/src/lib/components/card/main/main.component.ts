@@ -35,6 +35,7 @@ export class MainComponent implements OnInit, OnDestroy {
   feedbackType: string;
   $subscription = new Subscription();
   feedback;
+  globalQueries = [];
   constructor(
     private globalFilterService: GlobalFilterService,
     private _hotelDetailService: HotelDetailService,
@@ -65,6 +66,10 @@ export class MainComponent implements OnInit, OnDestroy {
   listenForGlobalFilters(): void {
     this.$subscription.add(
       this.globalFilterService.globalFilter$.subscribe((data) => {
+        this.globalQueries = [
+          ...data['filter'].queryValue,
+          ...data['dateRange'].queryValue,
+        ];
         this.getOutlets(data['filter'].value.property.entityName);
         this.feedbackType = data['filter'].value.feedback.feedbackType;
       })

@@ -111,6 +111,7 @@ export class ReservationList {
       CONFIRMED: input.entityStateCounts.CONFIRMED,
       CANCELED: input.entityStateCounts.CANCELED,
       DRAFT: input.entityStateCounts.DRAFT,
+      NOSHOW: input.entityStateCounts.NOSHOW
     };
     this.entityTypeCounts = input.entityTypeCounts;
     return this;
@@ -154,6 +155,7 @@ export type EntityStateCountsResponse = {
   DRAFT: number;
   CONFIRMED: number;
   CANCELED: number;
+  NOSHOW: number;
 };
 
 export class EntityStateCounts {

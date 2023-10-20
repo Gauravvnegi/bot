@@ -409,7 +409,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
   }
 
   editBooking() {
-    this.onDetailsClose.next(false);
+    this.onDetailsClose.next(true);
     this.routesConfigService.navigate({
       subModuleName: ModuleNames.ADD_RESERVATION,
       additionalPath: `edit-reservation/${this.bookingId}`,
@@ -651,6 +651,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
         this.snackbarService.openSnackBarAsText('Checkout completed.', '', {
           panelClass: 'success',
         });
+        this.details.currentJourneyDetails.status = 'COMPLETED';
       });
   }
 
@@ -687,6 +688,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
           this.snackbarService.openSnackBarAsText('Checkin completed.', '', {
             panelClass: 'success',
           });
+          this.details.currentJourneyDetails.status = 'COMPLETED';
         })
     );
   }

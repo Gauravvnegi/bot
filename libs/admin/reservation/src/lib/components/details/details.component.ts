@@ -933,9 +933,10 @@ export class DetailsComponent implements OnInit, OnDestroy {
     return this.subscriptionService.checkModuleSubscription(ModuleNames.HEDA);
   }
 
-  checkForReservationSubs() {
-    return this.subscriptionService.checkModuleSubscription(
-      ModuleNames.ADD_RESERVATION
+  get isFinanceSubscribed() {
+    return (
+      this.subscriptionService.checkModuleSubscription(ModuleNames.FINANCE) &&
+      this.subscriptionService.checkModuleSubscription(ModuleNames.INVOICE)
     );
   }
 

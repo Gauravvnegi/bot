@@ -75,7 +75,7 @@
         *ngIf="!fullView"
       >
         <div class="options1" [ngClass]="{ disabled: isGlobalFilterVisible }">
-          <div class="selected-product">
+          <div class="selected-product padding-right">
             <img
               [src]="selectedProduct.icon"
               [pTooltip]="selectedProduct.label"
@@ -85,6 +85,7 @@
           </div>
 
           <hospitality-bot-tiered-menu-button
+            class="padding-right"
             *ngIf="!!bookingOptions?.length"
             [label]="getQuickLabel"
             [splitButton]="true"

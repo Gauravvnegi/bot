@@ -23,7 +23,7 @@ import { GuestDetailsUpdateModel } from '../../models/guest-table.model';
   templateUrl: './admin-guest-details.component.html',
   styleUrls: ['./admin-guest-details.component.scss'],
 })
-export class AdminGuestDetailsComponent implements OnInit, AfterViewInit {
+export class AdminGuestDetailsComponent implements OnInit {
   @Input('data') detailsData;
   @Input() parentForm: FormGroup;
   @Input() guestData;
@@ -38,7 +38,10 @@ export class AdminGuestDetailsComponent implements OnInit, AfterViewInit {
 
   activeState: boolean[] = [true, true, true, true, true, true, true];
   editGuestIndex = -1;
+  editGuestInitialData = {};
+  isUpdatingGuest = false;
   code: Option[] = [];
+
   readonly titleOptions = guestSalutation;
   readonly kidAgesList = kidAgesList;
 
@@ -65,8 +68,6 @@ export class AdminGuestDetailsComponent implements OnInit, AfterViewInit {
     this.activeState = this.guestFA.controls.map((item) => true);
   }
 
-  ngAfterViewInit(): void {}
-
   get guestFA() {
     return this.guestDetailsForm.get('guests') as FormArray;
   }
@@ -85,10 +86,15 @@ export class AdminGuestDetailsComponent implements OnInit, AfterViewInit {
       ?.reduce((prev, control, idx) => prev && control.value.firstName, true);
   }
 
-  handleEdit(idx: number) {
+  handleEdit(idx: number, isCancel = false) {
     const isSave = this.editGuestIndex === idx;
 
-    if (isSave) {
+    if (isCancel) {
+      this.guestFA.at(idx).patchValue(this.editGuestInitialData);
+      this.editGuestInitialData = {};
+      this.editGuestIndex = -1;
+    } else if (isSave) {
+      this.isUpdatingGuest = true;
       const reservationId = this.parentForm
         .get('reservationDetails')
         .get('bookingId').value;
@@ -99,19 +105,27 @@ export class AdminGuestDetailsComponent implements OnInit, AfterViewInit {
 
       this._reservationService
         .updateGuestDetails(reservationId, data)
-        .subscribe((res) => {
-          const currentGuestDetails = this.guestFA.at(idx).value;
+        .subscribe(
+          (res) => {
+            const currentGuestDetails = this.guestFA.at(idx).value;
 
-          this._reservationService.$reinitializeGuestDetails.next(true);
+            this._reservationService.$reinitializeGuestDetails.next(true);
 
-          const label = currentGuestDetails.label;
-          this.snackbarService.openSnackBarAsText(
-            `${label} details updated`,
-            '',
-            { panelClass: 'success' }
-          );
-          this.editGuestIndex = -1;
-        });
+            const label = currentGuestDetails.label;
+            this.snackbarService.openSnackBarAsText(
+              `${label} details updated`,
+              '',
+              { panelClass: 'success' }
+            );
+
+            this.editGuestInitialData = {};
+            this.editGuestIndex = -1;
+            this.isUpdatingGuest;
+          },
+          () => {
+            this.isUpdatingGuest = false;
+          }
+        );
     } else {
       if (this.editGuestIndex !== -1) {
         this.snackbarService.openSnackBarAsText(
@@ -120,6 +134,7 @@ export class AdminGuestDetailsComponent implements OnInit, AfterViewInit {
       } else {
         this.activeState[idx] = true;
         this.editGuestIndex = idx;
+        this.editGuestInitialData = { ...this.guestFA.at(idx).value };
       }
     }
   }

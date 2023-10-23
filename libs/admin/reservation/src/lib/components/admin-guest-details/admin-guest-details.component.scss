@@ -262,8 +262,13 @@
 }
 
 .action-btn {
+  margin-right: 10px;
   & * {
     cursor: pointer !important;
+  }
+
+  &.update-btn {
+    pointer-events: none;
   }
 
   opacity: 1 !important;

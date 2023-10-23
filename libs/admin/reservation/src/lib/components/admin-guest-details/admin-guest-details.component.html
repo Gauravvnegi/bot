@@ -32,18 +32,44 @@
               guestFA.at(i).value.label
             }}</span>
 
-            <div
-              click-stop-propagation
-              class="action-btn"
-              (click)="handleEdit(i)"
-            >
-              <mat-icon class="expand-icon">{{
-                editGuestIndex == i ? 'save' : 'edit'
-              }}</mat-icon>
-              <span class="action-text">
-                {{ editGuestIndex == i ? 'save' : 'edit' }}</span
+            <ng-container *ngIf="editGuestIndex == i; else editGuestAction">
+              <div
+                *ngIf="isUpdatingGuest"
+                click-stop-propagation
+                class="action-btn update-btn"
               >
-            </div>
+                <i class="fa fa-spinner fa-spin"></i>
+                <span class="action-text"> Updating...</span>
+              </div>
+              <ng-container *ngIf="!isUpdatingGuest">
+                <div
+                  click-stop-propagation
+                  class="action-btn"
+                  (click)="handleEdit(i)"
+                >
+                  <mat-icon class="expand-icon"> save</mat-icon>
+                  <span class="action-text"> save</span>
+                </div>
+                <div
+                  click-stop-propagation
+                  class="action-btn"
+                  (click)="handleEdit(i, true)"
+                >
+                  <mat-icon class="expand-icon">cancel</mat-icon>
+                  <span class="action-text"> Cancel</span>
+                </div>
+              </ng-container>
+            </ng-container>
+            <ng-template #editGuestAction>
+              <div
+                click-stop-propagation
+                class="action-btn"
+                (click)="handleEdit(i)"
+              >
+                <mat-icon class="expand-icon">edit</mat-icon>
+                <span class="action-text"> edit</span>
+              </div>
+            </ng-template>
           </ng-template>
 
           <div class="container__body" [formGroupName]="i">

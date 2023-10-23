@@ -26,6 +26,7 @@ export class FormComponent implements OnInit {
   errorMessages: Record<string, string> = {
     // error messages with appropriate error-key
     required: 'This is a required field.',
+    min: 'Value should be more than 0',
   };
   tabIndex = ''; // Removes tab focus in input
   type: InputType = 'text';

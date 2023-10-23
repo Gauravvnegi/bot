@@ -1,3 +1,4 @@
+import { Validator, ValidatorFn } from '@angular/forms';
 import { ButtonVariant, InputType, Option } from './form.type';
 
 export type IteratorField = {
@@ -18,6 +19,8 @@ export type IteratorField = {
   dataType?: InputType;
   minValue?: number;
   createPrompt?: string;
+  validators?: ValidatorFn[];
+  errorMessages?:{}
 };
 
 export type ModalAction = {

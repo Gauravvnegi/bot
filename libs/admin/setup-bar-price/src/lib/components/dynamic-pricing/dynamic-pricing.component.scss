@@ -19,6 +19,7 @@ $border-color: rgba(112, 112, 112, 0.35);
     @include flex-item-center();
   }
   .p-accordion .p-accordion-header .p-accordion-header-link {
+    background-color: #f1f2f7 !important;
     padding: 0.6rem 1.5rem;
   }
   .no-margin {
@@ -36,3 +37,4 @@ $border-color: rgba(112, 112, 112, 0.35);
     cursor: pointer;
   }
 }
+

@@ -1,5 +1,6 @@
 import { IteratorField } from 'libs/admin/shared/src/lib/types/fields.type';
 import { AddRoomTypes } from '../types/room';
+import { Validators } from '@angular/forms';
 
 export enum ServicesTypeValue {
   PAID = 'PAID',
@@ -13,6 +14,10 @@ export const iteratorFields: Record<AddRoomTypes, IteratorField[]> = {
       name: 'roomNo',
       type: 'input',
       required: true,
+      validators: [Validators.pattern(/^[a-zA-Z0-9]*$/)],
+      errorMessages: {
+        pattern: 'Invalid Room Number',
+      },
     },
     {
       label: 'Floor',

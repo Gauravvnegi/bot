@@ -53,7 +53,7 @@
 
         <div class="header-left">
           <span class="time">{{
-            data?.stayDetails?.arrivalTime * 1000 | date: 'HH:mm a'
+            data?.stayDetails?.arrivalTime  | date: 'dd MMM hh:mm a'
           }}</span>
         </div>
       </div>
@@ -91,7 +91,7 @@
 
           <div class="header-left">
             <span class="time">{{
-              data?.booking?.expectedArrivalTimeStamp * 1000 | date: 'HH:mm a'
+              data?.booking?.expectedArrivalTimeStamp  | date: 'dd MMM hh:mm a'
             }}</span>
             <span
               [ngClass]="

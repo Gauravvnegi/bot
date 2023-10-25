@@ -31,9 +31,9 @@ import { Guest } from '../../models/guest-table.model';
 import { ReservationService } from '../../services/reservation.service';
 import { AdminDocumentsDetailsComponent } from '../admin-documents-details/admin-documents-details.component';
 import { JourneyDialogComponent } from '../journey-dialog/journey-dialog.component';
-import { ManualCheckinComponent } from '../manual-checkin/manual-checkin.component';
 import { SendMessageComponent } from 'libs/admin/notification/src/lib/components/send-message/send-message.component';
 import { MenuItem } from 'primeng/api';
+import { FileData } from '../../models/reservation-table.model';
 
 @Component({
   selector: 'hospitality-bot-details',
@@ -54,6 +54,8 @@ export class DetailsComponent implements OnInit, OnDestroy {
   isReservationDetailFetched = false;
   isFirstTimeFetch = true;
   isGuestReservationFetched = false;
+  regCardLoading = false;
+
   shareIconList;
   channels;
   colorMap;
@@ -460,8 +462,49 @@ export class DetailsComponent implements OnInit, OnDestroy {
           new Date().getTime() +
           '.pdf'
       );
+    } else {
+      this.regCardLoading = true;
+      this.$subscription.add(
+        this._reservationService
+          .getRegCard(this.reservationDetailsFG.get('bookingId').value)
+          .subscribe(
+            (res: FileData) => {
+              this.regCardLoading = false;
+              FileSaver.saveAs(
+                res.file_download_url,
+                'regcard' +
+                  this.reservationDetailsFG.get('bookingNumber').value +
+                  new Date().getTime() +
+                  '.pdf'
+              );
+            },
+            ({ error }) => {
+              this.regCardLoading = false;
+            }
+          )
+      );
     }
   }
+
+  // openRegComp(regUrl: string) {
+  //   const dialogConfig = new MatDialogConfig();
+  //   dialogConfig.disableClose = true;
+  //   dialogConfig.id = 'modal-component';
+
+  //   dialogConfig.data = {
+  //     regcardUrl: regUrl,
+  //     signatureImageUrl:
+  //       this.summaryDetails.guestDetails.guests[0].signatureUrl || '',
+  //   };
+  //   this._dialogRef = this._modal.openDialog(
+  //     this.regCardComponent,
+  //     dialogConfig
+  //   );
+
+  //   this._dialogRef.componentInstance.onSave.subscribe((res) => {
+  //     this._dialogRef.close();
+  //   });
+  // }
 
   downloadHealthcard(healthCardUrl) {
     if (healthCardUrl) {

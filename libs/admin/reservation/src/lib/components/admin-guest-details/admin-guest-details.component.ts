@@ -76,11 +76,6 @@ export class AdminGuestDetailsComponent implements OnInit {
    * To check whether the guest details are submitted or not
    */
   get hasSharedGuestDetails() {
-    console.log(
-      this.guestFA?.controls?.filter(
-        (control) => control.value.role === 'sharer'
-      )
-    );
     return this.guestFA?.controls
       ?.filter((control) => control.value.role === 'sharer')
       ?.reduce((prev, control, idx) => prev && control.value.firstName, true);

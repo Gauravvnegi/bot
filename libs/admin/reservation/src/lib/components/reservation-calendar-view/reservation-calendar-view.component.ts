@@ -399,7 +399,6 @@ export class ReservationCalendarViewComponent implements OnInit {
     type: 'quantity' | 'occupancy',
     roomTypeId: string
   ) {
-    debugger;
     if (
       Object.keys(this.ratesRoomDetails).length === 0 ||
       !this.ratesRoomDetails[roomTypeId]?.availability

@@ -260,7 +260,7 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
           basePrice: ['', [Validators.required, Validators.min(0)]],
           price: ['', [Validators.required, Validators.min(0)]],
           discountType: ['PERCENTAGE'],
-          discountValue: ['', [Validators.required, Validators.min(0)]],
+          discountValue: ['0', [Validators.required, Validators.min(0)]],
           doubleOccupancyPrice: ['', [Validators.required, Validators.min(0)]],
           doubleOccupancyCurrency: ['INR', [Validators.required]],
           tripleOccupancyCurrency: ['INR', [Validators.required]],

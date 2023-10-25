@@ -45,6 +45,7 @@ export class CustomFileUploadComponent
   @Input() limit: number = 1;
   @Input() formControlName: string;
   unit: number = 1;
+  @Input() maxFileCount: number = undefined; // max number of files to be uploaded
   isMultiple: boolean = false;
   @Input() parentFG: FormGroup;
   @Input() isDisable = false;
@@ -55,6 +56,7 @@ export class CustomFileUploadComponent
     limit: number;
     unit: number;
     isMultiple: boolean;
+    maxFileCount: number;
   }) {
     for (const key in value) {
       if (Object.prototype.hasOwnProperty.call(value, key)) {
@@ -157,7 +159,9 @@ export class CustomFileUploadComponent
       this.fileUrls = [controlValue];
     } else if (typeof controlValue === 'object' && controlValue?.length) {
       if (this.isFeatureView) this.featureValueIndex = [];
-      this.fileUrls = Array(this.getImageCount(controlValue.length, this.unit))
+      this.fileUrls = Array(
+        this.getImageCount(controlValue.length, this.unit, this.maxFileCount)
+      )
         .fill(this.defaultImage)
         .map((item, idx) => {
           const value = controlValue[idx];
@@ -176,12 +180,14 @@ export class CustomFileUploadComponent
     }
   }
 
-  getImageCount(currentLength: number, interval: number) {
+  getImageCount(currentLength: number, interval: number, maxFileCount: number) {
     if (currentLength >= 1 && currentLength <= interval) {
       return interval;
     } else {
       const nextMultiple = Math.ceil(currentLength / interval) * interval;
-      return nextMultiple;
+      return maxFileCount && nextMultiple >= maxFileCount
+        ? maxFileCount
+        : nextMultiple;
     }
   }
 
@@ -401,7 +407,23 @@ export class CustomFileUploadComponent
   }
 
   addMoreImages() {
-    this.fileUrls.push(...Array(this.unit).fill(this.defaultImage));
+    if (this.fileUrls.length >= this.maxFileCount) {
+      this.showSnackbarMessages(
+        'error',
+        null,
+        'message.error.upload',
+        `You can upload maximum ${this.maxFileCount} files`
+      );
+      return;
+    } else if (this.fileUrls.length + this.unit > this.maxFileCount) {
+      this.fileUrls.push(
+        ...Array(this.maxFileCount - this.fileUrls.length).fill(
+          this.defaultImage
+        )
+      );
+    } else {
+      this.fileUrls.push(...Array(this.unit).fill(this.defaultImage));
+    }
   }
 
   ngOnDestroy(): void {
@@ -410,3 +432,23 @@ export class CustomFileUploadComponent
 }
 type FeatureValue = { url: string; isFeatured: boolean }[];
 type ValueType = string | string[] | FeatureValue;
+
+/**
+ *   getImageCount(currentLength: number, interval: number, maxFileCount: number) {
+    
+    if (maxFileCount) {
+      if (currentLength >= 1 && currentLength <= interval) {
+        return interval;
+      } else {
+        const nextMultiple = Math.ceil(currentLength / interval) * interval;
+        return nextMultiple > maxFileCount ? maxFileCount : nextMultiple;
+      }
+    }
+    if (currentLength >= 1 && currentLength <= interval) {
+      return interval;
+    } else {
+      const nextMultiple = Math.ceil(currentLength / interval) * interval;
+      return nextMultiple;
+    }
+  }
+ */

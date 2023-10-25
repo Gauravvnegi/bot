@@ -29,9 +29,7 @@
               placeholder: field.placeholder ? field.placeholder : '',
               fontSize: '14px',
               type: field?.dataType,
-              errorMessages: {
-                min: 'Value should be more than 0'
-              }
+              errorMessages: field?.errorMessages
             }"
           ></hospitality-bot-input>
           <hospitality-bot-auto-complete

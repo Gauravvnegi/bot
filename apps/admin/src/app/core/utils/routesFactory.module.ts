@@ -39,7 +39,10 @@ const getRedirectRouteConfig = (
     path: path,
     redirectTo: isSubscribed ? firstSubscribedChildrenPath : undefined,
     loadChildren: isSubscribed ? undefined : UnsubscribedModule,
-    component: firstSubscribedChildrenPath ? undefined : ComingSoonComponent,
+    component:
+      firstSubscribedChildrenPath || !isSubscribed
+        ? undefined
+        : ComingSoonComponent,
     pathMatch: 'full',
   };
 

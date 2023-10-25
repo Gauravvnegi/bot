@@ -29,6 +29,7 @@ $border-color: rgba(112, 112, 112, 0.35);
 :host ::ng-deep {
   .p-accordion .p-accordion-header .p-accordion-header-link {
     padding: 1.3rem 1.5rem 1rem;
+    background-color: #f1f2f7 !important;
   }
 }
 

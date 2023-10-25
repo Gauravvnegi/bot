@@ -79,10 +79,7 @@ export class InvoiceHistoryDataTableComponent extends BaseDatatableComponent
   listenForGlobalFilters(): void {
     this.globalFilterService.globalFilter$.subscribe((data) => {
       // set-global query everytime global filter changes
-      this.globalQueries = [
-        ...data['filter'].queryValue,
-        ...data['dateRange'].queryValue,
-      ];
+      this.globalQueries = [...data['dateRange'].queryValue];
       this.initTableValue();
     });
   }
@@ -92,6 +89,7 @@ export class InvoiceHistoryDataTableComponent extends BaseDatatableComponent
       params: this.adminUtilityService.makeQueryParams([
         ...this.globalQueries,
         {
+          entityId: this.entityId,
           offset: this.first,
           limit: this.rowsPerPage,
         },
@@ -116,6 +114,11 @@ export class InvoiceHistoryDataTableComponent extends BaseDatatableComponent
         detailCompRef.close();
       })
     );
+  }
+
+  onEntityTabFilterChanges(event): void {
+    this.entityId = event.entityId[0];
+    this.initTableValue();
   }
 
   /**

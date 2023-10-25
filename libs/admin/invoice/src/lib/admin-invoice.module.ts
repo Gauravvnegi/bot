@@ -9,6 +9,7 @@ import { AutoCompleteModule } from 'primeng/autocomplete';
 import { ServicesService } from '../../../services/src/lib/services/services.service';
 import { ManageReservationService } from 'libs/admin/manage-reservation/src/lib/services/manage-reservation.service';
 import { ReservationService } from 'libs/admin/reservation/src/lib/services/reservation.service';
+import { GlobalSharedModule } from '@hospitality-bot/admin/global-shared';
 
 @NgModule({
   imports: [
@@ -19,6 +20,7 @@ import { ReservationService } from 'libs/admin/reservation/src/lib/services/rese
     ReactiveFormsModule,
     AutoCompleteModule,
     AdminInvoiceRoutingModule,
+    GlobalSharedModule,
   ],
   declarations: [...AdminInvoiceRoutingModule.components],
   providers: [

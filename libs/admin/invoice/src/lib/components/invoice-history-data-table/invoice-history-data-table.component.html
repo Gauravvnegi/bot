@@ -1,3 +1,14 @@
+<hospitality-bot-entity-tab-filter
+  [config]="{
+    isSticky: true,
+    extraGap: 60,
+    scrollBoundary: 25,
+    isAllOutletTabFilter: false
+  }"
+  class="tab-filter"
+  (onEntityTabFilterChanges)="onEntityTabFilterChanges($event)"
+></hospitality-bot-entity-tab-filter>
+
 <div
   class="action-header"
   [ngClass]="{ 'action-header__sticky': isScrolledUp }"
@@ -39,8 +50,7 @@
   [customSort]="isCustomSort"
   (onFilter)="onDataFilter()"
   *ngIf="totalRecords; else emptyTable"
-  >
-
+>
   <!-- *******************************EMPTY TABLE VIEW******************************* -->
   <ng-template pTemplate="emptymessage">
     <tr hospitality-bot-empty-view [noOfColumns]="cols.length"></tr>
@@ -87,7 +97,7 @@
       <td>
         <div class="cell-content" *ngIf="rowData.invoiceDate; else emptyCell">
           <div class="primary-text">
-            {{ rowData.invoiceDate | date:'dd/MM/yyyy' }}
+            {{ rowData.invoiceDate | date: 'dd/MM/yyyy' }}
           </div>
         </div>
       </td>

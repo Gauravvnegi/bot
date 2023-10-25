@@ -37,6 +37,11 @@ import { getColorCode } from '../../constants/reservation';
 import { MatDialogConfig } from '@angular/material/dialog';
 import { ModalService } from '@hospitality-bot/shared/material';
 import { DetailsComponent } from '../details/details.component';
+import { RoomMapType } from 'libs/admin/channel-manager/src/lib/types/channel-manager.types';
+import { UpdateRatesResponse } from 'libs/admin/channel-manager/src/lib/types/response.type';
+import { UpdateRates } from 'libs/admin/channel-manager/src/lib/models/channel-manager.model';
+import { ChannelManagerService } from 'libs/admin/channel-manager/src/lib/services/channel-manager.service';
+import * as moment from 'moment';
 
 @Component({
   selector: 'hospitality-bot-reservation-calendar-view',
@@ -61,6 +66,7 @@ export class ReservationCalendarViewComponent implements OnInit {
   reservationListData: RoomReservation[];
   $subscription = new Subscription();
   previousData: IGValue[] = [];
+  ratesRoomDetails = new Map<string, RoomMapType>();
 
   formProps: QuickFormProps;
   fullView: boolean;
@@ -71,7 +77,8 @@ export class ReservationCalendarViewComponent implements OnInit {
     private globalFilterService: GlobalFilterService,
     private roomService: RoomService,
     private adminUtilityService: AdminUtilityService,
-    private modalService: ModalService
+    private modalService: ModalService,
+    private channelManagerService: ChannelManagerService
   ) {}
 
   ngOnInit(): void {
@@ -145,6 +152,7 @@ export class ReservationCalendarViewComponent implements OnInit {
             this.roomTypes.forEach((roomType) => {
               this.mapGridData(roomType);
             });
+            this.getRates();
           },
           (error) => {
             this.roomsLoaded = true;
@@ -334,6 +342,79 @@ export class ReservationCalendarViewComponent implements OnInit {
     else return '';
   }
 
+  getRates(selectedDate = this.useForm.value.date) {
+    this.$subscription.add(
+      this.channelManagerService
+        .getChannelManagerDetails<UpdateRatesResponse>(
+          this.entityId,
+          this.getRatesConfig(selectedDate)
+        )
+        .subscribe(
+          (res) => {
+            const data = new UpdateRates().deserialize(res.roomTypes);
+            this.ratesRoomDetails = data.ratesRoomDetails;
+          },
+          (error) => {}
+        )
+    );
+  }
+
+  getFromAndToDateEpoch(currentTime) {
+    const fromDate = currentTime;
+    const toDate = new Date(currentTime);
+    toDate.setDate(toDate.getDate() + this.dates.length - 1);
+    return {
+      fromDate: moment(fromDate).unix() * 1000,
+      toDate: moment(toDate).unix() * 1000,
+    };
+  }
+
+  getRatesConfig(
+    selectedDate?: number,
+    inventoryType = 'RATES',
+    roomTypeId?: string
+  ): QueryConfig {
+    const { fromDate, toDate } = this.getFromAndToDateEpoch(
+      selectedDate ? selectedDate : this.useForm.controls['date'].value
+    );
+    const config = {
+      params: this.adminUtilityService.makeQueryParams([
+        {
+          type: 'ROOM_TYPE',
+          limit: 5,
+          inventoryUpdateType: inventoryType,
+          roomTypeIds: roomTypeId,
+        },
+        selectedDate && {
+          fromDate: fromDate,
+          toDate: roomTypeId ? fromDate : toDate,
+        },
+      ]),
+    };
+    return config;
+  }
+
+  getAvailability(
+    nextDate: number,
+    type: 'quantity' | 'occupancy',
+    roomTypeId: string
+  ) {
+    debugger;
+    if (
+      Object.keys(this.ratesRoomDetails).length === 0 ||
+      !this.ratesRoomDetails[roomTypeId]?.availability
+    )
+      return 0;
+
+    const date = new Date(this.useForm.controls['date'].value);
+    date.setDate(date.getDate() + nextDate);
+    let room = this.ratesRoomDetails[roomTypeId]['availability'][
+      date.getTime()
+    ];
+    if (room) return room[type] === 'NaN' || !room[type] ? 0 : room[type];
+    return 0;
+  }
+
   handleChange(event: IGChangeEvent, roomType: IGRoomType) {
     const updateData = {
       from: event.startPos,
@@ -348,35 +429,37 @@ export class ReservationCalendarViewComponent implements OnInit {
     };
 
     roomType.loading = true;
-    this.manageReservationService
-      .updateCalendarView(event.id, updateData, 'ROOM_TYPE')
-      .subscribe(
-        (res) => {
-          const updatedValues = roomType.data.values.map((item) => {
-            if (item.id === event.id) {
-              return {
-                ...item,
-                rowValue: event.rowValue,
-                startPos: event.startPos,
-                endPos: event.endPos,
-              };
-            }
-            return item; // Keep other items unchanged
-          });
+    this.$subscription.add(
+      this.manageReservationService
+        .updateCalendarView(event.id, updateData, 'ROOM_TYPE')
+        .subscribe(
+          (res) => {
+            const updatedValues = roomType.data.values.map((item) => {
+              if (item.id === event.id) {
+                return {
+                  ...item,
+                  rowValue: event.rowValue,
+                  startPos: event.startPos,
+                  endPos: event.endPos,
+                };
+              }
+              return item; // Keep other items unchanged
+            });
 
-          roomType.data = {
-            ...roomType.data,
-            values: updatedValues,
-          };
-        },
-        (error) => {
-          roomType.loading = false;
-          roomType.data = { ...roomType.data };
-        },
-        () => {
-          roomType.loading = false;
-        }
-      );
+            roomType.data = {
+              ...roomType.data,
+              values: updatedValues,
+            };
+          },
+          (error) => {
+            roomType.loading = false;
+            roomType.data = { ...roomType.data };
+          },
+          () => {
+            roomType.loading = false;
+          }
+        )
+    );
   }
 
   handleCreate(event: IGCreateEvent, roomType: IGRoomType) {

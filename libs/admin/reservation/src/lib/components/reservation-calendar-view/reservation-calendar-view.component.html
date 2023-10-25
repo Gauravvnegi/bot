@@ -126,24 +126,22 @@
                       *ngFor="let date of dates; let dateIndex = index"
                     >
                       <div class="main-text">
-                        <!-- {{
-                            getAvailability(
-                              dateIndex,
-                              'quantity',
-                              roomType.value.value
-                            )
-                          }} -->
-                        0
+                        {{
+                          getAvailability(
+                            dateIndex,
+                            'quantity',
+                            roomType.value
+                          )
+                        }}
                       </div>
                       <div class="seconday-text">
-                        <!-- {{
-                            getAvailability(
-                              dateIndex,
-                              'occupancy',
-                              roomType.value.value
-                            )
-                          }}% -->
-                        0%
+                        {{
+                          getAvailability(
+                            dateIndex,
+                            'occupancy',
+                            roomType.value
+                          )
+                        }}%
                       </div>
                     </div>
                   </div>

@@ -66,7 +66,7 @@ export class CompanyModel {
       },
       salePersonName: data.salesPersonName,
       salePersonNo: data.salesPersonPhone,
-      discountType: data.priceModifierType,
+      discountType: data?.priceModifierType ?? data?.priceModifier,
       discount: data.priceModifierValue,
       status: data.status,
       taxId: data?.taxId,
@@ -91,7 +91,7 @@ export class CompanyModel {
         input.salesPersonPhone
       }`,
       discount: input.priceModifierValue,
-      discountType: input.priceModifier,
+      discountType: input?.priceModifierType ?? input.priceModifier,
       status: input.status,
       created: input.created,
       createdString: DateService.getDateMDY(input.created),

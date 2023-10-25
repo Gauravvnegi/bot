@@ -154,7 +154,7 @@
         <div class="cell-content" *ngIf="rowData.discount; else emptyCell">
           <div class="primary-text">
             {{ rowData.discount
-            }}{{ rowData.discountType === 'DISCOUNT' ? '/-' : '%' }}
+            }}{{ rowData.discountType === 'FLAT' ? '/-' : '%' }}
           </div>
         </div>
       </td>

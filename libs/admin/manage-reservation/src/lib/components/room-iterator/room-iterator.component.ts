@@ -29,6 +29,7 @@ import { IteratorField } from 'libs/admin/shared/src/lib/types/fields.type';
 import { FormService } from '../../services/form.service';
 import { RoomTypeResponse } from 'libs/admin/room/src/lib/types/service-response';
 import { debounceTime } from 'rxjs/operators';
+import { RoomService } from 'libs/admin/room/src/lib/services/room.service';
 
 @Component({
   selector: 'hospitality-bot-room-iterator',
@@ -67,7 +68,8 @@ export class RoomIteratorComponent extends IteratorComponent
     protected fb: FormBuilder,
     private globalFilterService: GlobalFilterService,
     private controlContainer: ControlContainer,
-    public formService: FormService
+    public formService: FormService,
+    private roomService: RoomService
   ) {
     super(fb);
   }
@@ -134,8 +136,11 @@ export class RoomIteratorComponent extends IteratorComponent
       });
       this.parentFormGroup.addControl('roomInformation', roomInformationGroup);
     }
-    this.listenForDateChanges();
-    if (!this.reservationId) this.listenForRoomChanges(index);
+
+    if (!this.reservationId) {
+      this.listenForRoomChanges(index);
+      this.listenForDateChanges();
+    }
   }
 
   listenForDateChanges() {
@@ -209,6 +214,7 @@ export class RoomIteratorComponent extends IteratorComponent
         roomNumber: value?.roomNumber,
         id: value?.id,
       });
+      this.getRoomTypeById(value.roomTypeId, index);
     });
   }
 
@@ -242,7 +248,6 @@ export class RoomIteratorComponent extends IteratorComponent
         },
         { emitEvent: false }
       );
-
       if (!this.isDefaultRoomType) {
         this.roomControls[index].get('roomNumbers').reset();
         this.roomControls[index].get('roomNumber').reset();
@@ -284,25 +289,37 @@ export class RoomIteratorComponent extends IteratorComponent
   // Patch data for selected room type
   roomTypeChange(event: RoomTypeResponse, index: number) {
     if (event) {
-      const data = new RoomTypeForm().deserialize(event);
-      this.roomTypes[index] = {
-        label: data.name,
-        value: data.id,
-        ratePlan: data.allRatePlans,
-        roomCount: 1,
-        maxChildren: data.maxChildren,
-        maxAdult: data.maxAdult,
-        rooms: data.rooms.map((room) => ({
-          label: room.roomNumber,
-          value: room.roomNumber,
-        })),
-      };
+      this.mapRoomTypeData(event, index);
       this.listenRoomTypeChanges(index);
       setTimeout(() => {
         this.isDefaultRoomType = false;
         this.listenForRoomChanges(index);
-      }, 2000);
+      }, 3000);
     }
+  }
+
+  getRoomTypeById(roomTypeId: string, index: number) {
+    this.roomService
+      .getRoomTypeById(this.entityId, roomTypeId)
+      .subscribe((res) => {
+        this.mapRoomTypeData(res, index);
+      });
+  }
+
+  mapRoomTypeData(res, index) {
+    const data = new RoomTypeForm().deserialize(res);
+    this.roomTypes[index] = {
+      label: data.name,
+      value: data.id,
+      ratePlan: data.allRatePlans,
+      roomCount: 1,
+      maxChildren: data.maxChildren,
+      maxAdult: data.maxAdult,
+      rooms: data.rooms.map((room) => ({
+        label: room.roomNumber,
+        value: room.roomNumber,
+      })),
+    };
   }
 
   /**
@@ -328,8 +345,6 @@ export class RoomIteratorComponent extends IteratorComponent
     }
     this.roomTypeArray.removeAt(index);
   }
-
-  // getRoomTypeById
 
   /**
    * @function ngOnDestroy to unsubscribe subscription.

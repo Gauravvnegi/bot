@@ -125,8 +125,9 @@ export class QuickSelectComponent extends FormComponent implements OnInit {
       this.getItems();
     }
     if (
+      changes['reinitialize']?.previousValue !== undefined &&
       changes['reinitialize']?.previousValue !==
-      changes['reinitialize']?.currentValue
+        changes['reinitialize']?.currentValue
     ) {
       this.resetApiData = true;
       this.getItems();
@@ -376,9 +377,10 @@ export class QuickSelectComponent extends FormComponent implements OnInit {
       .get(this.controlName)
       .valueChanges.subscribe((res) => {
         if (res?.length && this.menuOptions.length) {
-          this.clickedOption.emit(
-            this.menuOptions.find((item) => item.value == res)
+          const selectedOption = this.menuOptions.find(
+            (item) => item.value === res
           );
+          if (selectedOption) this.clickedOption.emit(selectedOption);
         }
       });
   }

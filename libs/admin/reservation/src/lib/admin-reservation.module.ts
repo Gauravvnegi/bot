@@ -32,6 +32,7 @@ import { ReservationService } from './services/reservation.service';
 import { ManageReservationService } from 'libs/admin/manage-reservation/src/lib/services/manage-reservation.service';
 import { FormService } from 'libs/admin/manage-reservation/src/lib/services/form.service';
 import { RoomService } from 'libs/admin/room/src/lib/services/room.service';
+import { ChannelManagerService } from 'libs/admin/channel-manager/src/lib/services/channel-manager.service';
 
 export const adminReservationRoutes: Route[] = [];
 
@@ -92,6 +93,7 @@ export const adminReservationRoutes: Route[] = [];
     ManageReservationService,
     FormService,
     RoomService,
+    ChannelManagerService,
   ],
 })
 export class AdminReservationModule {}

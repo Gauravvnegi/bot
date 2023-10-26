@@ -62,10 +62,7 @@ export class TransactionHistoryDataTableComponent extends BaseDatatableComponent
   listenForGlobalFilters(): void {
     this.globalFilterService.globalFilter$.subscribe((data) => {
       // set-global query everytime global filter changes
-      this.globalQueries = [
-        ...data['filter'].queryValue,
-        ...data['dateRange'].queryValue,
-      ];
+      this.globalQueries = [...data['dateRange'].queryValue];
       this.initTableValue();
     });
   }
@@ -104,6 +101,7 @@ export class TransactionHistoryDataTableComponent extends BaseDatatableComponent
         ...this.getSelectedQuickReplyFilters(),
         ...this.globalQueries,
         {
+          entityId: this.entityId,
           offset: this.first,
           limit: this.rowsPerPage,
         },
@@ -143,6 +141,11 @@ export class TransactionHistoryDataTableComponent extends BaseDatatableComponent
         detailCompRef.close();
       })
     );
+  }
+
+  onEntityTabFilterChanges(event): void {
+    this.entityId = event.entityId[0];
+    this.initTableValue();
   }
 
   /**

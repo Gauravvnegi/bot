@@ -434,7 +434,13 @@ export class Room implements IDeserializable {
     this.adultCount = input?.adultsCount;
     this.kidsCount = input?.kidsCount;
 
-
     return this;
   }
+}
+
+export class FileData {
+  size: number;
+  file_name: string;
+  file_download_url: string;
+  file_type: string;
 }

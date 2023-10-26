@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { ApiService } from '@hospitality-bot/shared/utils';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { GuestPostData } from '../models/guest-table.model';
+import { FileData } from '../models/reservation-table.model';
 
 @Injectable()
 export class ReservationService extends ApiService {
@@ -34,6 +35,10 @@ export class ReservationService extends ApiService {
 
   downloadInvoice(reservationId): Observable<any> {
     return this.get(`/api/v1/reservation/${reservationId}/invoice`);
+  }
+
+  getRegCard(reservationId): Observable<FileData> {
+    return this.get(`/api/v1/reservation/${reservationId}/regcard`);
   }
 
   prepareInvoice(reservationId, data = {}): Observable<any> {

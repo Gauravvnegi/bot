@@ -233,11 +233,21 @@ export class DashboardComponent implements OnInit, OnDestroy {
   openExCheckinSidebar() {
     this.scrollToTop();
     this.sideBarService.setSideBarZIndex(130, true);
+    this.setNavHeaderZIndex(true);
     this.isSidebarVisible = true;
+  }
+
+  setNavHeaderZIndex(condition: boolean) {
+    //To set z-index of nav-header-wrapper to 140 when sidebar is open to avoid background overlay on top of sidebar
+    const element = document.querySelector('.nav-header-wrapper');
+    condition
+      ? element.setAttribute('style', 'z-index: 140 !important')
+      : element.removeAttribute('style');
   }
 
   closeSidebar() {
     this.sideBarService.setSideBarZIndex(0, false);
+    this.setNavHeaderZIndex(false);
     this.isSidebarVisible = false;
   }
 

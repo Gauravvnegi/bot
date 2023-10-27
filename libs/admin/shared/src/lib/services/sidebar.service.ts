@@ -21,11 +21,7 @@ export class SideBarService {
       elements.forEach((element) => {
         condition
           ? element.setAttribute('style', `z-index: ${zIndex} !important;`)
-          : // ? this.renderer.setStyle(
-            //     element,
-            //     'z-index',
-            //     `${zIndex}`            )
-            this.renderer.removeStyle(element, 'z-index');
+          : this.renderer.removeStyle(element, 'z-index');
       });
     }, 100);
   }

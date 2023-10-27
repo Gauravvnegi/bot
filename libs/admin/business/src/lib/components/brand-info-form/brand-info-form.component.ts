@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import {
+  GlobalFilterService,
+  RoutesConfigService,
+} from '@hospitality-bot/admin/core/theme';
 import {
   HotelDetailService,
   NavRouteOptions,
@@ -30,6 +33,8 @@ export class BrandInfoFormComponent implements OnInit {
   isBrandCreated: boolean = false;
   navRoutes: NavRouteOptions;
   siteId: string;
+  socialPLatform: any;
+
   // navRoutes: string = '/pages/settings/brand';
 
   constructor(
@@ -41,7 +46,8 @@ export class BrandInfoFormComponent implements OnInit {
     private hotelDetailService: HotelDetailService,
     private businessService: BusinessService,
     private hotelFormDataService: HotelFormDataService,
-    private outletFormService: OutletFormService
+    private outletFormService: OutletFormService,
+    private routesConfigService: RoutesConfigService
   ) {
     this.brandId = this.route.snapshot.paramMap.get('brandId');
     const { navRoutes, title } = businessRoute[
@@ -57,9 +63,14 @@ export class BrandInfoFormComponent implements OnInit {
     this.entityId = this.globalFilterService.entityId;
     this.siteId = this.hotelDetailService.siteId;
     this.initForm();
+    this.initNavRoutes();
   }
 
-  socialPLatform: any;
+  initNavRoutes() {
+    this.routesConfigService?.navRoutesChanges.subscribe((navRoutesRes) => {
+      this.navRoutes = [...navRoutesRes, ...this.navRoutes];
+    });
+  }
 
   initForm(): void {
     this.useForm = this.fb.group({

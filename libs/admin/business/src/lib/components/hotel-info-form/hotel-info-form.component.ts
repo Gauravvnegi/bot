@@ -11,6 +11,7 @@ import {
 } from '@hospitality-bot/admin/core/theme';
 import {
   HotelDetailService,
+  ModuleNames,
   NavRouteOption,
   Option,
   Regex,
@@ -63,7 +64,8 @@ export class HotelInfoFormComponent implements OnInit {
     private route: ActivatedRoute,
     private hotelFormDataService: HotelFormDataService,
     private hotelDetailService: HotelDetailService,
-    private location: Location
+    private location: Location,
+    private routesConfigService: RoutesConfigService
   ) {
     this.router.events.subscribe(
       ({ snapshot }: { snapshot: ActivatedRouteSnapshot }) => {
@@ -79,6 +81,7 @@ export class HotelInfoFormComponent implements OnInit {
   ngOnInit(): void {
     this.siteId = this.hotelDetailService.siteId;
     this.initForm();
+    this.initNavRoutes();
   }
 
   initForm() {
@@ -159,6 +162,9 @@ export class HotelInfoFormComponent implements OnInit {
   }
 
   manageRoutes() {
+    let prefixPath = this.routesConfigService.activeRouteConfigSubscription
+      .value.submodule.fullPath;
+
     const { navRoutes, title } = businessRoute[
       this.entityId ? 'editHotel' : 'hotel'
     ];
@@ -166,10 +172,19 @@ export class HotelInfoFormComponent implements OnInit {
     this.navRoutes = navRoutes.map((routes) => {
       return {
         ...routes,
-        link: routes.link
-          .replace(':brandId', this.brandId)
-          .replace(':entityId', this.entityId),
+        link:
+          prefixPath +
+          '/' +
+          routes.link
+            .replace(':brandId', this.brandId)
+            .replace(':entityId', this.entityId),
       };
+    });
+  }
+
+  initNavRoutes() {
+    this.routesConfigService?.navRoutesChanges.subscribe((navRoutesRes) => {
+      this.navRoutes = [...navRoutesRes, ...this.navRoutes];
     });
   }
 
@@ -232,9 +247,10 @@ export class HotelInfoFormComponent implements OnInit {
     if (this.entityId) {
       this.router.navigate(['services'], { relativeTo: this.route });
     } else {
-      this.router.navigate([
-        `create-with/settings/business-info/brand/${this.brandId}/hotel/services`,
-      ]);
+      this.routesConfigService.navigate({
+        subModuleName: ModuleNames.BUSINESS_INFO,
+        additionalPath: `brand/${this.brandId}/hotel/services`,
+      });
     }
   }
 

@@ -8,6 +8,7 @@ import { MenuFormData, MenuResponse } from '../../types/menu';
 import { Subscription } from 'rxjs';
 import { OutletService } from '../../services/outlet.service';
 import { PageReloadService } from '../../services/page-reload.service.service';
+import { RoutesConfigService } from '@hospitality-bot/admin/core/theme';
 
 @Component({
   selector: 'hospitality-bot-create-menu',
@@ -40,9 +41,10 @@ export class CreateMenuComponent extends OutletBaseComponent implements OnInit {
     public router: Router,
     public route: ActivatedRoute,
     private outletService: OutletService,
-    private pageReloadService: PageReloadService
+    private pageReloadService: PageReloadService,
+    protected routesConfigService: RoutesConfigService
   ) {
-    super(router, route);
+    super(router, route , routesConfigService);
   }
 
   ngOnInit(): void {

@@ -74,12 +74,12 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
     private location: Location,
     private modalService: ModalService,
     private dialogService: DialogService,
-    private routesConfigService: RoutesConfigService,
+    protected routesConfigService: RoutesConfigService,
 
     router: Router,
     route: ActivatedRoute
   ) {
-    super(router, route);
+    super(router, route, routesConfigService);
   }
 
   ngOnInit(): void {
@@ -534,21 +534,17 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
         break;
       //to navigate back to edit brand page
       case 'brand':
-        this.router.navigate(
-          [`/create-with/settings/business-info/brand/${this.brandId}`],
-          { relativeTo: this.route }
-        );
+        this.routesConfigService.navigate({
+          subModuleName: ModuleNames.BUSINESS_INFO,
+          additionalPath: `/brand/${this.brandId}`,
+        });
         break;
       //to navigate back to edit hotel page
       case 'hotel':
-        this.router.navigate(
-          [
-            `/create-with/settings/business-info/brand/${this.brandId}/hotel/${this.entityId}`,
-          ],
-          {
-            relativeTo: this.route,
-          }
-        );
+        this.routesConfigService.navigate({
+          subModuleName: ModuleNames.BUSINESS_INFO,
+          additionalPath: `/brand/${this.brandId}/hotel/${this.entityId}`,
+        });
         break;
       default:
         this.router.navigate([`${outletId}`], {

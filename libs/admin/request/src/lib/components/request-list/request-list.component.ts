@@ -407,7 +407,7 @@ export class RequestListComponent implements OnInit, OnDestroy {
             offset,
             limit,
             key: this.parentFG.get('search').value.trim(),
-            journeyType: this.entityType,
+            entityType: this.entityType, 
           },
         ]),
       })

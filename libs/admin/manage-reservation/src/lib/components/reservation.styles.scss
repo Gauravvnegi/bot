@@ -71,6 +71,10 @@
     }
   }
 
+  &_header {
+    @include flex-space-between;
+  }
+
   &_subheading {
     @include normal-sm-text;
     color: #3b3b3b;

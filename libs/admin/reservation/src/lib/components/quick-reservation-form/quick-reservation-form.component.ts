@@ -46,6 +46,7 @@ import { RoomTypeForm } from 'libs/admin/room/src/lib/models/room.model';
 import { GuestType } from 'libs/admin/guests/src/lib/types/guest.type';
 import { RoomFieldTypeOption } from 'libs/admin/manage-reservation/src/lib/constants/reservation';
 import * as moment from 'moment';
+import { manageGuestRoutes } from 'libs/admin/guests/src/lib/constant/routes';
 @Component({
   selector: 'hospitality-bot-quick-reservation-form',
   templateUrl: './quick-reservation-form.component.html',
@@ -557,6 +558,15 @@ export class QuickReservationFormComponent implements OnInit {
           }
         )
     );
+  }
+
+  viewGuestDetails() {
+    this.routesConfigService.navigate({
+      subModuleName: ModuleNames.GUESTS,
+      additionalPath: `${manageGuestRoutes.editGuest.route}/${
+        this.inputControls.guestInformation.get('guestDetails').value
+      }`,
+    });
   }
 
   openNewWindow(url: string) {

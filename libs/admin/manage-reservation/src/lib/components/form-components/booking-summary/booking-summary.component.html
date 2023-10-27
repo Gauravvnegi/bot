@@ -3,20 +3,37 @@
     <div class="bk-summary_heading page-heading">Reservation Summary</div>
     <!-- <p class="divider"></p> -->
     <div class="container">
-      <div
-        class="bk-summary_subheading"
-        *ngIf="bookingType === 'ROOM_TYPE' && summaryData?.bookingItems"
-      >
-        {{ (summaryData?.bookingItems)[0]?.roomTypeLabel }}
-        <span class="room-count" *ngIf="summaryData?.bookingItems.length > 1"
-          >+{{ summaryData?.bookingItems.length - 1 }}</span
+      <div class="bk-summary_header">
+        <div>
+          <div
+            class="bk-summary_subheading"
+            *ngIf="bookingType === 'ROOM_TYPE' && summaryData?.bookingItems"
+          >
+            {{ (summaryData?.bookingItems)[0]?.roomTypeLabel }}
+            <span
+              class="room-count"
+              *ngIf="summaryData?.bookingItems.length > 1"
+              >+{{ summaryData?.bookingItems.length - 1 }}</span
+            >
+          </div>
+          <div class="bk-summary_subheading" *ngIf="heading">
+            {{ heading }}
+          </div>
+          <div class="bk-summary_subheading_label">
+            {{ summaryData?.location }}
+          </div>
+        </div>
+        <div
+          class="guest-btn"
+          *ngIf="inputControls.guestInformation.get('guestDetails').value"
         >
-      </div>
-      <div class="bk-summary_subheading" *ngIf="heading">
-        {{ heading }}
-      </div>
-      <div class="bk-summary_subheading_label">
-        {{ summaryData?.location }}
+          <hospitality-bot-button
+            class="btn"
+            label="View Guest Details"
+            variant="text"
+            (onClick)="viewGuestDetails()"
+          ></hospitality-bot-button>
+        </div>
       </div>
 
       <div class="bk-summary_roomInfo">

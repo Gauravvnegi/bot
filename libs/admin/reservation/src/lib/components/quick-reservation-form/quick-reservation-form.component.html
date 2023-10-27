@@ -23,21 +23,33 @@
     </div>
   </div>
   <div class="guest-data" *ngIf="reservationId">
-    <div class="guest-name">{{ guestDetails?.guestName }}</div>
-    <div class="due-amount">
-      Due Amount -
-      <span class="amount">{{
-        reservationData?.totalDueAmount | currency: 'INR'
-      }}</span>
-    </div>
-    <div class="contact-details">
-      <div class="phone-number">
-        <img [src]="'assets/svg/whatsapp.svg'" alt="" />
-        <p>{{ guestDetails?.phoneNumber }}</p>
+    <div class="left-col">
+      <div class="guest-name">{{ guestDetails?.guestName }}</div>
+      <div class="contact-details">
+        <div class="phone-number">
+          <img [src]="'assets/svg/whatsapp.svg'" alt="" />
+          <p>{{ guestDetails?.phoneNumber }}</p>
+        </div>
+        <div class="email-id">
+          <img [src]="'assets/svg/email-circle.svg'" alt="" />
+          <p>{{ guestDetails?.email }}</p>
+        </div>
       </div>
-      <div class="email-id">
-        <img [src]="'assets/svg/email-circle.svg'" alt="" />
-        <p>{{ guestDetails?.email }}</p>
+    </div>
+    <div class="right-col">
+      <div class="due-amount">
+        Due Amount -
+        <span class="amount">{{
+          reservationData?.totalDueAmount | currency: 'INR'
+        }}</span>
+      </div>
+      <div class="guest-btn">
+        <hospitality-bot-button
+          class="btn"
+          label="View Guest Details"
+          variant="text"
+          (onClick)="viewGuestDetails()"
+        ></hospitality-bot-button>
       </div>
     </div>
   </div>

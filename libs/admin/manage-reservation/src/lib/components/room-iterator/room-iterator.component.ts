@@ -236,7 +236,7 @@ export class RoomIteratorComponent extends IteratorComponent
       this.roomControls[index].patchValue(
         {
           ratePlanOptions: ratePlanOptions,
-          roomNumberOptions: this.selectedRoomNumber.length
+          roomNumberOptions: this.selectedRoomNumber?.length
             ? [
                 {
                   label: this.selectedRoomNumber,

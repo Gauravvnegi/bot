@@ -54,7 +54,7 @@ export class AddReservationComponent extends BaseReservationComponent
   checkinJourneyState: JourneyState;
   cancelOfferRequests$ = new Subject<void>();
   isDraftBooking = false;
-  
+
   constructor(
     private fb: FormBuilder,
     private adminUtilityService: AdminUtilityService,
@@ -198,6 +198,12 @@ export class AddReservationComponent extends BaseReservationComponent
         .subscribe((res) => {
           if (res) {
             const { roomInformation, ...formData } = res;
+            // Will always be true as the data is not saved yet.
+            this.isDraftBooking = true;
+            this.formService.sourceData.next({
+              source: formData.reservationInformation.source,
+              sourceName: formData.reservationInformation.sourceName,
+            });
             // check if room type was patched
             if (roomInformation.roomTypes[0].roomTypeId.length)
               this.roomTypeValues = roomInformation.roomTypes;

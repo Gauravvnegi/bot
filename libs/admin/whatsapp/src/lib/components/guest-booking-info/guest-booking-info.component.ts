@@ -41,7 +41,7 @@ export class GuestBookingInfoComponent implements OnInit, OnChanges, OnDestroy {
       );
 
       this.currentBooking = this.reservation.records.filter(
-        (item) => item.reservation.type === 'CURRENT'
+        (item) => item.reservation.type === 'PRESENT'
       );
 
       this.upcomingBooking = this.reservation.records.filter(

@@ -43,14 +43,6 @@
           reservationData?.totalDueAmount | currency: 'INR'
         }}</span>
       </div>
-      <div class="guest-btn">
-        <hospitality-bot-button
-          class="btn"
-          label="View Guest Details"
-          variant="text"
-          (onClick)="viewGuestDetails()"
-        ></hospitality-bot-button>
-      </div>
     </div>
   </div>
   <div
@@ -281,11 +273,17 @@
   [loading]="isBooking"
   [isId]="reservationId"
   (onPostAction)="handleSubmit()"
-  [disabled]="!reservationId && useForm.invalid"
+  (onPreAction)="viewGuestDetails()"
   [isSticky]="true"
   [config]="{
     postLabel: reservationId ? 'Update Reservation' : 'Create Reservation',
-    preHide: true
+    preHide: inputControls.guestInformation.get('guestDetails').value
+      ? false
+      : true,
+    postDisabled: !reservationId && useForm.invalid,
+    preLabel: 'Guest Profile',
+    preVariant: 'text',
+    preSeverity: 'primary'
   }"
   #fa
 >
@@ -302,7 +300,7 @@
   </p-sidebar>
 </ng-container>
 
-<hospitality-bot-form-action
+<!-- <hospitality-bot-form-action
   class="full-width"
   [loading]="isBooking"
   [isId]="reservationId"
@@ -314,7 +312,7 @@
   }"
   #fa
 >
-</hospitality-bot-form-action>
+</hospitality-bot-form-action> -->
 
 <ng-template #loader>
   <hospitality-bot-loader-bounce class="loader"></hospitality-bot-loader-bounce>

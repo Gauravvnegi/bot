@@ -71,10 +71,6 @@
     }
   }
 
-  &_header {
-    @include flex-space-between;
-  }
-
   &_subheading {
     @include normal-sm-text;
     color: #3b3b3b;
@@ -183,7 +179,7 @@
   }
   &_btn-wrapper {
     @include flex-justify-center;
-    padding-bottom: 21px;
+    padding: 10px 0;
   }
 }
 

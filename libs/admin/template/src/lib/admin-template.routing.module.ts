@@ -20,9 +20,18 @@ const appRoutes: Route[] = [
         component: TemplateComponent,
         children: [
           { path: '', component: EditTemplateComponent },
-          { path: 'saved', component: TemplateListContainerComponent },
-          { path: 'pre-designed', component: TemplateListContainerComponent },
-          { path: 'html-editor', component: TemplateHtmlEditorComponent },
+          {
+            path: templateRoutes.savedTemplate.route,
+            component: TemplateListContainerComponent,
+          },
+          {
+            path: templateRoutes.preDesignedTemplate.route,
+            component: TemplateListContainerComponent,
+          },
+          {
+            path: templateRoutes.htmlEditorTemplate.route,
+            component: TemplateHtmlEditorComponent,
+          },
         ],
       },
       {
@@ -30,9 +39,18 @@ const appRoutes: Route[] = [
         component: TemplateComponent,
         children: [
           { path: '', component: EditTemplateComponent },
-          { path: 'saved', component: TemplateListContainerComponent },
-          { path: 'pre-designed', component: TemplateListContainerComponent },
-          { path: 'html-editor', component: TemplateHtmlEditorComponent },
+          {
+            path: templateRoutes.savedTemplate.route,
+            component: TemplateListContainerComponent,
+          },
+          {
+            path: templateRoutes.preDesignedTemplate.route,
+            component: TemplateListContainerComponent,
+          },
+          {
+            path: templateRoutes.htmlEditorTemplate.route,
+            component: TemplateHtmlEditorComponent,
+          },
           { path: 'edit/html-editor', component: TemplateHtmlEditorComponent },
           { path: 'view/html-editor', component: TemplateHtmlEditorComponent },
         ],

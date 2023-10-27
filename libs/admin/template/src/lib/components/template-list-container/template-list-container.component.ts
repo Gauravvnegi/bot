@@ -16,6 +16,7 @@ import {
   RoutesConfigService,
 } from '@hospitality-bot/admin/core/theme';
 import { TranslateService } from '@ngx-translate/core';
+import { Location } from '@angular/common';
 import { templateRoutes } from '../../constants/routes';
 
 @Component({
@@ -28,12 +29,10 @@ export class TemplateListContainerComponent extends EditTemplateComponent {
   templateLabel: string;
   topicFG: FormGroup;
   templateTopicList = [];
+  isSavedTemplateType: boolean = false;
+  isEditTemplate: boolean = false;
 
-  navRoutes: NavRouteOptions = [
-    { label: 'Library', link: './' },
-    { label: 'Template', link: '/pages/library/template' },
-    { label: 'Create Template', link: '/pages/library/template/create' },
-  ];
+  navRoutes: NavRouteOptions = [];
 
   constructor(
     protected _fb: FormBuilder,
@@ -44,7 +43,8 @@ export class TemplateListContainerComponent extends EditTemplateComponent {
     protected activatedRoute: ActivatedRoute,
     protected translateService: TranslateService,
     protected adminUtilityService: AdminUtilityService,
-    protected routesConfigService: RoutesConfigService
+    protected routesConfigService: RoutesConfigService,
+    protected location: Location
   ) {
     super(
       _fb,
@@ -55,7 +55,8 @@ export class TemplateListContainerComponent extends EditTemplateComponent {
       activatedRoute,
       translateService,
       adminUtilityService,
-      routesConfigService
+      routesConfigService,
+      location
     );
   }
 
@@ -94,24 +95,35 @@ export class TemplateListContainerComponent extends EditTemplateComponent {
     );
   }
 
+  initNavRoutes() {
+    this.routesConfigService.navRoutesChanges.subscribe((navRoutesRes) => {
+      const routeName = this.isSavedTemplateType
+        ? this.isEditTemplate
+          ? 'editTemplateWithSaved'
+          : 'savedTemplate'
+        : this.isEditTemplate
+        ? 'editTemplateWithPreDesigned'
+        : 'preDesignedTemplate';
+
+      const templateCloneRoute = JSON.parse(JSON.stringify(templateRoutes));
+
+      const { navRoutes, title } = templateCloneRoute[routeName];
+
+      this.pageTitle = title;
+      this.navRoutes = this.modifyNavRoutes(navRoutes, this.templateId);
+      this.navRoutes = [...navRoutesRes, ...this.navRoutes];
+    });
+  }
   /**
    * @function getAssetId to get template Id from routes query param.
    */
   getTemplateId(): void {
-    this.templateLabel = this._router.url.includes('saved')
-      ? 'Saved Templates'
-      : 'Pre-Designed Templates';
-    this.navRoutes[2].link = '/pages/library/template/create';
-    this.navRoutes.push({ label: this.templateLabel, link: './' });
-
-    this.pageTitle = this.templateLabel;
-
+    this.isSavedTemplateType = this._router.url.includes('saved');
     this.$subscription.add(
       this.activatedRoute.parent.params.subscribe((params) => {
-        if (params['id']) {
-          this.templateId = params['id'];
-          this.navRoutes[2].label = 'Edit Template';
-          this.navRoutes[2].link = '/pages/library/template/edit';
+        if (params['templateId']) {
+          this.isEditTemplate = true;
+          this.templateId = params['templateId'];
         } else if (this.id) {
           this.templateId = this.id;
         }
@@ -238,11 +250,15 @@ export class TemplateListContainerComponent extends EditTemplateComponent {
     );
     if (event.status) {
       if (this.templateId)
-        this._router.navigate([
-          `/pages/library/template/edit/${this.templateId}/html-editor`,
-        ]);
+        this.routesConfigService.navigate({
+          subModuleName: ModuleNames.TEMPLATE,
+          additionalPath: `edit-template/${this.templateId}/html-editor`,
+        });
       else
-        this._router.navigate([`/pages/library/template/create/html-editor`]);
+        this.routesConfigService.navigate({
+          subModuleName: ModuleNames.TEMPLATE,
+          additionalPath: `create-template/html-editor`,
+        });
     }
   }
 

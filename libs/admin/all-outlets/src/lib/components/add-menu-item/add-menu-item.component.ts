@@ -61,9 +61,9 @@ export class AddMenuItemComponent extends OutletBaseComponent
     private globalFilterService: GlobalFilterService,
     private configService: ConfigService,
     private location: Location,
-    private routesConfigService: RoutesConfigService
+    protected routesConfigService: RoutesConfigService,
   ) {
-    super(router, route);
+    super(router, route, routesConfigService);
   }
 
   ngOnInit(): void {

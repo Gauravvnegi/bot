@@ -1021,6 +1021,10 @@ export class DetailsComponent implements OnInit, OnDestroy {
     return this.detailsForm.get('documentStatus') as FormGroup;
   }
 
+  get checkForCancelBooking() {
+    return this.details.pmsStatus === 'CANCELED';
+  }
+
   get tabIndex() {
     const { index } = this.detailsConfig.find(
       (tabConfig) => tabConfig.key === this.tabKey

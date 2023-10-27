@@ -3,20 +3,22 @@
     <div class="bk-summary_heading page-heading">Reservation Summary</div>
     <!-- <p class="divider"></p> -->
     <div class="container">
-      <div
-        class="bk-summary_subheading"
-        *ngIf="bookingType === 'ROOM_TYPE' && summaryData?.bookingItems"
-      >
-        {{ (summaryData?.bookingItems)[0]?.roomTypeLabel }}
-        <span class="room-count" *ngIf="summaryData?.bookingItems.length > 1"
-          >+{{ summaryData?.bookingItems.length - 1 }}</span
+      <div class="bk-summary_header">
+        <div
+          class="bk-summary_subheading"
+          *ngIf="bookingType === 'ROOM_TYPE' && summaryData?.bookingItems"
         >
-      </div>
-      <div class="bk-summary_subheading" *ngIf="heading">
-        {{ heading }}
-      </div>
-      <div class="bk-summary_subheading_label">
-        {{ summaryData?.location }}
+          {{ (summaryData?.bookingItems)[0]?.roomTypeLabel }}
+          <span class="room-count" *ngIf="summaryData?.bookingItems.length > 1"
+            >+{{ summaryData?.bookingItems.length - 1 }}</span
+          >
+        </div>
+        <div class="bk-summary_subheading" *ngIf="heading">
+          {{ heading }}
+        </div>
+        <div class="bk-summary_subheading_label">
+          {{ summaryData?.location }}
+        </div>
       </div>
 
       <div class="bk-summary_roomInfo">
@@ -102,6 +104,13 @@
         </p>
       </div>
       <div class="bk-summary_btn-wrapper">
+        <hospitality-bot-button
+          *ngIf="inputControls.guestInformation.get('guestDetails').value"
+          class="btn"
+          label="Guest Profile"
+          variant="text"
+          (onClick)="viewGuestDetails()"
+        ></hospitality-bot-button>
         <hospitality-bot-button
           (click)="handleBooking()"
           label="{{ this.reservationId ? 'Update' : 'Confirm' }} Reservation"

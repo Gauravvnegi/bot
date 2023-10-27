@@ -13,7 +13,9 @@ export class GuestBookingInfoComponent implements OnInit, OnChanges, OnDestroy {
   @Input() data;
   @Input() entityId;
   @Input() reservationData;
+  @Input() loading: boolean = false;
   currentBooking = [];
+  loadingData: boolean = false;
   pastBooking = [];
   upcomingBooking = [];
   $subscription = new Subscription();
@@ -27,7 +29,7 @@ export class GuestBookingInfoComponent implements OnInit, OnChanges, OnDestroy {
     );
 
     this.currentBooking = this.reservationData?.records.filter(
-      (item) => item.reservation.type === 'CURRENT'
+      (item) => item.reservation.type === 'PRESENT'
     );
 
     this.upcomingBooking = this.reservationData?.records.filter(

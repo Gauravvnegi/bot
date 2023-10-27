@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container" *ngIf="!loading; else loader">
   <div class="booking-title">
     Booking Info
     <span
@@ -89,3 +89,9 @@
     </div>
   </div>
 </div>
+
+<ng-template #loader>
+  <hospitality-bot-loader-bounce class="loader"></hospitality-bot-loader-bounce>
+</ng-template>
+
+

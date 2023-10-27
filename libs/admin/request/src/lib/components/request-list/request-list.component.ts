@@ -334,7 +334,7 @@ export class RequestListComponent implements OnInit, OnDestroy {
     // this logic will be removed api should be call to get the new data
 
     this.selectedRequest = request;
-    this._requestService.selectedRequest.next(request.id);
+    this._requestService.selectedRequest.next(request);
   }
 
   /**

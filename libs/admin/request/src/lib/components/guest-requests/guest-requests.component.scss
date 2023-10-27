@@ -132,3 +132,8 @@
   border-radius: 5px;
   border: solid 1px $grayLight;
 }
+
+.loader {
+  height: 60vh;
+  @include flex-justify-align-center;
+}

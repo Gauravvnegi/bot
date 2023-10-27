@@ -9,7 +9,6 @@ import {
   ViewChild,
 } from '@angular/core';
 import { MatTabGroup } from '@angular/material/tabs';
-import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 import { Subscription } from 'rxjs';
 import { SnackBarService } from 'libs/shared/material/src';
 import { FormBuilder, FormGroup } from '@angular/forms';
@@ -46,7 +45,6 @@ export class GuestInfoComponent implements OnInit, OnChanges, OnDestroy {
   buttonConfig = card.buttonConfig;
   guestData: Guest;
   constructor(
-    private snackbarService: SnackBarService,
     private feedbackService: CardService,
     private _fb: FormBuilder
   ) {}
@@ -59,12 +57,8 @@ export class GuestInfoComponent implements OnInit, OnChanges, OnDestroy {
       this.guestId = this.guestModalData.guest?.id;
       this.loadGuestInfo();
     } else {
-      this.registerListeners();
+      this.listenForSelectedRequest();
     }
-  }
-
-  registerListeners(): void {
-    this.listenForSelectedRequest();
   }
 
   listenForSelectedRequest() {
@@ -103,7 +97,7 @@ export class GuestInfoComponent implements OnInit, OnChanges, OnDestroy {
           this.guestData = new Guest().deserialize(response);
           this.loadGuestReservations();
         },
-        ({ error }) => { 
+        ({ error }) => {
           this.closeDetails();
         }
       )

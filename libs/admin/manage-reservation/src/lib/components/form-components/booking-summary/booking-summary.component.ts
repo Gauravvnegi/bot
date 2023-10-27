@@ -40,6 +40,7 @@ import {
   OccupancyDetails,
   RoomReservationFormData,
 } from '../../../types/forms.types';
+import { manageGuestRoutes } from 'libs/admin/guests/src/lib/constant/routes';
 
 @Component({
   selector: 'hospitality-bot-booking-summary',
@@ -84,8 +85,6 @@ export class BookingSummaryComponent implements OnInit {
     private globalFilterService: GlobalFilterService,
     private snackbarService: SnackBarService,
     private manageReservationService: ManageReservationService,
-    private location: Location,
-    private router: Router,
     private routesConfigService: RoutesConfigService,
     protected activatedRoute: ActivatedRoute,
     private modalService: ModalService,
@@ -271,6 +270,16 @@ export class BookingSummaryComponent implements OnInit {
     togglePopupCompRef.componentInstance.onClose.subscribe(() => {
       this.modalService.close();
       this.gobackToReservation();
+    });
+  }
+
+  viewGuestDetails() {
+    this.formService.reservationForm.next(this.parentFormGroup.getRawValue());
+    this.routesConfigService.navigate({
+      subModuleName: ModuleNames.GUESTS,
+      additionalPath: `${manageGuestRoutes.editGuest.route}/${
+        this.inputControls.guestInformation.get('guestDetails').value
+      }`,
     });
   }
 

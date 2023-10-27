@@ -1,4 +1,4 @@
-<div class="guest-request">
+<div class="guest-request" *ngIf="!loading; else loader">
   <div class="guest-request-title">
     Requests
   </div>
@@ -91,3 +91,7 @@
     </div>
   </ng-template>
 </div>
+
+<ng-template #loader>
+  <hospitality-bot-loader-bounce class="loader"></hospitality-bot-loader-bounce>
+</ng-template>

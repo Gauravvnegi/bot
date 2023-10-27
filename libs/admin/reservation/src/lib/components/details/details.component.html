@@ -487,7 +487,14 @@
                     [model]="checkOutOptions"
                   ></p-splitButton> -->
                 </ng-container>
-                <ng-container *ngSwitchCase="'COMPLETED'"> </ng-container>
+                <ng-container *ngSwitchCase="'COMPLETED'">
+                  <hospitality-bot-button
+                    *ngIf="isManageBookingSubscribed"
+                    label="View Booking"
+                    variant="outlined"
+                    (click)="editBooking()"
+                  ></hospitality-bot-button>
+                </ng-container>
                 <ng-container *ngSwitchCase="'FAILED'">
                   <hospitality-bot-button
                     label="Send Payment Link"
@@ -498,6 +505,12 @@
                     label="Checkout"
                     (click)="manualCheckout()"
                     variant="outlined"
+                  ></hospitality-bot-button>
+                  <hospitality-bot-button
+                    *ngIf="isManageBookingSubscribed"
+                    label="View Booking"
+                    variant="outlined"
+                    (click)="editBooking()"
                   ></hospitality-bot-button>
                   <!-- <p-splitButton
                     class="download-btn"

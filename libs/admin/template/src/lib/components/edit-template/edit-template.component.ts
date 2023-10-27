@@ -13,10 +13,13 @@ import { templateConfig } from '../../constants/template';
 import { TranslateService } from '@ngx-translate/core';
 import {
   AdminUtilityService,
+  ModuleNames,
   NavRouteOptions,
   Option,
 } from 'libs/admin/shared/src';
 import { templateRoutes } from '../../constants/routes';
+import { Location } from '@angular/common';
+import { Data } from 'libs/admin/feedback/src/lib/data-models/statistics.model';
 
 @Component({
   selector: 'hospitality-bot-edit-template',
@@ -33,17 +36,12 @@ export class EditTemplateComponent implements OnInit, OnDestroy {
   globalQueries = [];
   topicList: Option[] = [];
   isSaving = false;
-
   imgTemplate;
   typeOfTemplate;
-  draftDate: number | string;
+  draftDate: number | string = new Date().toDateString();
 
   pageTitle = 'Create Template';
-  navRoutes: NavRouteOptions = [
-    { label: 'Library', link: './' },
-    { label: 'Template', link: '/pages/library/template' },
-    { label: 'Create Template', link: './' },
-  ];
+  navRoutes: NavRouteOptions = [];
 
   protected $subscription = new Subscription();
   constructor(
@@ -52,17 +50,17 @@ export class EditTemplateComponent implements OnInit, OnDestroy {
     protected snackbarService: SnackBarService,
     protected templateService: TemplateService,
     protected _router: Router,
-    protected activatedRoute: ActivatedRoute,
+    protected route: ActivatedRoute,
     protected translateService: TranslateService,
     protected adminUtilityService: AdminUtilityService,
-    protected routesConfigService: RoutesConfigService
+    protected routesConfigService: RoutesConfigService,
+    protected location: Location
   ) {
     this.initFG();
   }
 
   ngOnInit(): void {
     this.listenForGlobalFilters();
-
     const { navRoutes, title } = templateRoutes[
       this.templateId ? 'editTemplate' : 'createTemplate'
     ];
@@ -131,14 +129,32 @@ export class EditTemplateComponent implements OnInit, OnDestroy {
     });
   }
 
+  modifyNavRoutes(navRoutes: NavRouteOptions, templateId?: string) {
+    let path = '';
+    this.routesConfigService.activeRouteConfigSubscription.subscribe(
+      (activeRouteConfig) => {
+        path = activeRouteConfig.submodule.fullPath;
+      }
+    );
+    return navRoutes.map((navRoute) => {
+      if (navRoute.link.includes(':templateId'))
+        navRoute.link = navRoute.link.replace(':templateId', templateId);
+
+      if (!navRoute.link.includes(path))
+        navRoute.link = path + '/' + navRoute.link;
+
+      return navRoute;
+    });
+  }
+
   /**
    * @function getTemplateId to get template Id from routes query param.
    */
   getTemplateId(): void {
     this.$subscription.add(
-      this.activatedRoute.params.subscribe((params) => {
-        if (params['id']) {
-          this.templateId = params['id'];
+      this.route.params.subscribe((params) => {
+        if (params['templateId']) {
+          this.templateId = params['templateId'];
           this.getTemplateDetails(this.templateId);
         } else if (this.id) {
           this.templateId = this.id;
@@ -215,7 +231,22 @@ export class EditTemplateComponent implements OnInit, OnDestroy {
               )
               .subscribe();
             this.templateForm.patchValue(response);
-            if (!event.data) this.routesConfigService.goBack();
+
+            if (!event) {
+              this.routesConfigService.navigate({
+                subModuleName: ModuleNames.TEMPLATE,
+              });
+            }
+
+            if (event.data.redirectToForm) {
+              this.routesConfigService.navigate({
+                subModuleName: ModuleNames.TEMPLATE,
+                additionalPath: templateRoutes.editTemplate.route.replace(
+                  ':templateId',
+                  response?.id
+                ),
+              });
+            }
             if (event.data.preview) this.isDisabled = true;
           },
           ({ error }) => {},
@@ -239,7 +270,13 @@ export class EditTemplateComponent implements OnInit, OnDestroy {
                 }
               )
               .subscribe();
-            this.routesConfigService.goBack();
+            this.routesConfigService.navigate({
+              subModuleName: ModuleNames.TEMPLATE,
+              additionalPath: templateRoutes.editTemplate.route.replace(
+                ':templateId',
+                response?.id
+              ),
+            });
           },
           ({ error }) => {},
           () => (this.isSaving = false)
@@ -255,11 +292,11 @@ export class EditTemplateComponent implements OnInit, OnDestroy {
     const data = this.templateService.mapTemplateData(
       templateFormData,
       this.entityId,
-      this.template.id
+      this.template?.id
     );
     return this.templateService.updateTemplate(
       this.entityId,
-      this.template.id,
+      this.templateId,
       data
     );
   }
@@ -286,9 +323,13 @@ export class EditTemplateComponent implements OnInit, OnDestroy {
       this.templateForm?.getRawValue()
     );
     if (disabled) {
-      this.routesConfigService.navigate({ additionalPath: 'view/html-editor' });
+      this._router.navigate(['view/html-editor'], {
+        relativeTo: this.route,
+      });
     } else {
-      this.routesConfigService.navigate({ additionalPath: 'edit/html-editor' });
+      this._router.navigate(['edit/html-editor'], {
+        relativeTo: this.route,
+      });
     }
   }
 
@@ -336,29 +377,29 @@ export class EditTemplateComponent implements OnInit, OnDestroy {
    */
   openCreateContent(newContent: boolean, type?: string) {
     this.typeOfTemplate = type;
-    this.templateService?.templateFormData.next(
-      this.templateForm?.getRawValue()
-    );
+
+    const data = this.templateForm.getRawValue();
+
+    if (!data.name) {
+      this.snackbarService.openSnackBarAsText('Please enter template name', '');
+      return;
+    }
+    this.templateService?.templateFormData.next(data);
+
     if (newContent) {
-      this.routesConfigService.navigate({ additionalPath: 'html-editor' });
+      this._router.navigate([templateRoutes.htmlEditorTemplate.route], {
+        relativeTo: this.route,
+      });
     }
     if (!newContent && type === 'SAVEDTEMPLATE') {
-      this.routesConfigService.navigate({ additionalPath: 'saved' });
+      this._router.navigate([templateRoutes.savedTemplate.route], {
+        relativeTo: this.route,
+      });
     } else if (!newContent)
-      this.routesConfigService.navigate({ additionalPath: 'pre-designed' });
+      this._router.navigate([templateRoutes.preDesignedTemplate.route], {
+        relativeTo: this.route,
+      });
   }
-
-  // /**
-  //  * @function handleTemplateListChange function to handle template list change.
-  //  */
-  // handleTemplateListChange(event) {
-  //   if (event.status) {
-  //     this.templateForm.patchValue({ htmlTemplate: event.data });
-  //     this.move(2);
-  //     return;
-  //   }
-  //   this.move(0);
-  // }
 
   resetForm() {
     this.templateForm.reset();

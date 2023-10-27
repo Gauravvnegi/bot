@@ -20,6 +20,7 @@
       <ng-template matTabContent>
         <hospitality-bot-guest-personal-info
           [data]="guestData"
+          [loading]="loadingGuests"
         ></hospitality-bot-guest-personal-info>
       </ng-template>
     </mat-tab>
@@ -34,6 +35,7 @@
           [data]="guestData"
           [entityId]="entityId"
           [reservationData]="guestReservations"
+          [loading]="loadingReservations"
         ></hospitality-bot-guest-booking-info>
       </ng-template>
     </mat-tab>
@@ -48,6 +50,7 @@
           [id]="guestId"
           [entityId]="entityId"
           [requestList]="requestList"
+          [loading]="loadingRequests"
         ></hospitality-bot-guest-requests>
       </ng-template>
     </mat-tab>

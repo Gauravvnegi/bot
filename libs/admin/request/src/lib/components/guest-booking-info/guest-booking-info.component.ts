@@ -13,7 +13,9 @@ export class GuestBookingInfoComponent implements OnInit, OnChanges, OnDestroy {
   @Input() data;
   @Input() entityId;
   @Input() reservationData;
+  @Input() loading: boolean = false;
   currentBooking = [];
+  loadingData: boolean = false;
   pastBooking = [];
   upcomingBooking = [];
   $subscription = new Subscription();

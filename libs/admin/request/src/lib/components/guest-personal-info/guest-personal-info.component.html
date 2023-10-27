@@ -1,65 +1,71 @@
-<div class="guest-person" *ngIf="data; else emptyView">
-  <div class="person-title">
-    Personal Info
-  </div>
-  <div class="person-image">
-    <div class="default" [style.background]="data?.color">
-      <img [src]="data.profileUrl" *ngIf="data.profileUrl" />
-      <div
-        class="default_nickName"
-        *ngIf="data?.getProfileNickName(); else defaultAvatar"
-      >
-        {{ data.getProfileNickName() }}
+<ng-container *ngIf="loading; else loadedContent">
+  <hospitality-bot-loader-bounce class="loader"></hospitality-bot-loader-bounce>
+</ng-container>
+
+<ng-template #loadedContent>
+  <div class="guest-person" *ngIf="data; else emptyView">
+    <div class="person-title">
+      Personal Info
+    </div>
+    <div class="person-image">
+      <div class="default" [style.background]="data?.color">
+        <img [src]="data.profileUrl" *ngIf="data.profileUrl" />
+        <div
+          class="default_nickName"
+          *ngIf="data?.getProfileNickName(); else defaultAvatar"
+        >
+          {{ data.getProfileNickName() }}
+        </div>
+        <ng-template #defaultAvatar
+          ><img src="assets/svg/defaultUser.svg" alt="defaultUser"
+        /></ng-template>
       </div>
-      <ng-template #defaultAvatar
-        ><img src="assets/svg/defaultUser.svg" alt="defaultUser"
-      /></ng-template>
+      <div class="guest-name">
+        {{ data.firstName || 'Unknown Person' }}
+        {{ data.lastName }}
+      </div>
     </div>
-    <div class="guest-name">
-      {{ data.firstName || 'Unknown Person' }}
-      {{ data.lastName }}
+    <div class="border-line"></div>
+    <div class="contact-detials">
+      Contact Details
     </div>
-  </div>
-  <div class="border-line"></div>
-  <div class="contact-detials">
-    Contact Details
-  </div>
-  <div class="label">
-    Phone No.
-  </div>
-  <a href="tel:{{ data.phoneNumber }}">
+    <div class="label">
+      Phone No.
+    </div>
+    <a href="tel:{{ data.phoneNumber }}">
+      <div class="label-text">
+        {{ data.phoneNumber }}
+      </div>
+    </a>
+    <div class="label">
+      Email
+    </div>
     <div class="label-text">
-      {{ data.phoneNumber }}
+      {{ data.email || 'Unknown' }}
     </div>
-  </a>
-  <div class="label">
-    Email
+    <div class="contact-detials">
+      Other Details
+    </div>
+    <div class="label">
+      No. of stays
+    </div>
+    <div class="label-text">
+      {{ data.numberOfBookings }}
+    </div>
+    <div class="label">
+      NPS
+    </div>
+    <div class="label-text">
+      {{ data.nps }}
+    </div>
+    <div class="label">
+      Curn probabilty prediction
+    </div>
+    <div class="label-text">
+      {{ data.churn }}
+    </div>
   </div>
-  <div class="label-text">
-    {{ data.email || 'Unknown' }}
-  </div>
-  <div class="contact-detials">
-    Other Details
-  </div>
-  <div class="label">
-    No. of stays
-  </div>
-  <div class="label-text">
-    {{ data.numberOfBookings }}
-  </div>
-  <div class="label">
-    NPS
-  </div>
-  <div class="label-text">
-    {{ data.nps }}
-  </div>
-  <div class="label">
-    Curn probabilty prediction
-  </div>
-  <div class="label-text">
-    {{ data.churn }}
-  </div>
-</div>
+</ng-template>
 
 <ng-template #emptyView>
   <div class="guest-person">

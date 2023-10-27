@@ -65,6 +65,12 @@
   display: flex;
   justify-content: center;
 }
+
+@mixin flex-justify-align-center {
+  @include flex-justify-center;
+  align-items: center;
+}
+
 @mixin flex-justify-center-end-algn {
   @include flex-justify-center;
   align-items: flex-end;

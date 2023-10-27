@@ -9,6 +9,7 @@ import { SnackBarService } from '@hospitality-bot/shared/material';
 import { ActivatedRouteSnapshot, Router } from '@angular/router';
 import { businessRoute } from '../../constant/routes';
 import { HotelFormDataService } from '../../services/hotel-form.service';
+import { RoutesConfigService } from '@hospitality-bot/admin/core/theme';
 
 @Component({
   selector: 'hospitality-bot-import-service',
@@ -37,7 +38,8 @@ export class ImportServiceComponent implements OnInit {
     private businessService: BusinessService,
     private router: Router,
     private location: Location,
-    private hotelFormDataService: HotelFormDataService
+    private hotelFormDataService: HotelFormDataService,
+    private routesConfigService: RoutesConfigService
   ) {
     this.router.events.subscribe(
       ({ snapshot }: { snapshot: ActivatedRouteSnapshot }) => {
@@ -57,6 +59,7 @@ export class ImportServiceComponent implements OnInit {
     this.initForm();
     this.getServices();
     this.registerSearch();
+    this.initNavRoutes();
   }
 
   initForm() {
@@ -101,6 +104,9 @@ export class ImportServiceComponent implements OnInit {
   }
 
   manageRoutes() {
+    let prefixPath = this.routesConfigService.activeRouteConfigSubscription
+      .value.submodule.fullPath;
+
     const { navRoutes, title } = businessRoute[
       this.entityId ? 'editImportServices' : 'importServices'
     ];
@@ -108,13 +114,21 @@ export class ImportServiceComponent implements OnInit {
     this.navRoutes = navRoutes.map((routes) => {
       return {
         ...routes,
-        link: routes.link
-          .replace(':brandId', this.brandId)
-          .replace(':entityId', this.entityId),
+        link:
+          prefixPath +
+          '/' +
+          routes.link
+            .replace(':brandId', this.brandId)
+            .replace(':entityId', this.entityId),
       };
     });
   }
 
+  initNavRoutes() {
+    this.routesConfigService?.navRoutesChanges.subscribe((navRoutesRes) => {
+      this.navRoutes = [...navRoutesRes, ...this.navRoutes];
+    });
+  }
   /**
    * @function searchServices
    */

@@ -27,6 +27,7 @@ import { OutletFormService } from '../../services/outlet-form.service';
 import { OutletService } from '../../services/outlet.service';
 import { Menu, OutletType } from '../../types/outlet';
 import { OutletBaseComponent } from '../outlet-base.components';
+import { RoutesConfigService } from '@hospitality-bot/admin/core/theme';
 
 @Component({
   selector: 'hospitality-bot-view-all',
@@ -71,9 +72,10 @@ export class ViewAllComponent extends OutletBaseComponent implements OnInit {
     private outletService: OutletService,
     private adminUtilityService: AdminUtilityService,
     private outletFormService: OutletFormService,
-    private location: Location
+    private location: Location,
+    private routesConfigServce: RoutesConfigService
   ) {
-    super(router, route);
+    super(router, route, routesConfigServce);
   }
 
   ngOnInit(): void {

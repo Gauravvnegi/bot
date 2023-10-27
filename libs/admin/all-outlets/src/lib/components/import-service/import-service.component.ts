@@ -5,6 +5,8 @@ import { OutletService } from '../../services/outlet.service';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { Location } from '@angular/common';
 import { OutletFormService } from '../../services/outlet-form.service';
+import { RoutesConfigService } from '@hospitality-bot/admin/core/theme';
+import { ModuleNames } from '@hospitality-bot/admin/shared';
 
 @Component({
   selector: 'hospitality-bot-import-service',
@@ -20,12 +22,14 @@ export class ImportServiceComponent extends OutletBaseComponent
     private outletService: OutletService,
     private outletFormService: OutletFormService,
     private location: Location,
-    private snackbarService: SnackBarService
+    private snackbarService: SnackBarService,
+    protected routesConfigService: RoutesConfigService
   ) {
-    super(router, route);
+    super(router, route, routesConfigService);
   }
 
   ngOnInit(): void {
+    if (!this.outletFormService.outletFormState) this.location.back();
     this.initRoutes('importService');
   }
 
@@ -53,24 +57,16 @@ export class ImportServiceComponent extends OutletBaseComponent
     );
     //to handle redirection in case of hotel and outlet
     if (this.entityId) {
-      this.router.navigate(
-        [
-          `/pages/settings/business-info/brand/${this.brandId}/hotel/${this.entityId}/outlet/${this.outletId}`,
-        ],
-        {
-          relativeTo: this.route,
-        }
-      );
+      this.routesConfigService.navigate({
+        subModuleName: ModuleNames.BUSINESS_INFO,
+        additionalPath: `/brand/${this.brandId}/hotel/${this.entityId}/outlet/${this.outletId}`,
+      });
       return;
     }
-    this.router.navigate(
-      [
-        `/pages/settings/business-info/brand/${this.brandId}/outlet/${this.outletId}`,
-      ],
-      {
-        relativeTo: this.route,
-      }
-    );
+    this.routesConfigService.navigate({
+      subModuleName: ModuleNames.BUSINESS_INFO,
+      additionalPath: `/brand/${this.brandId}/outlet/${this.outletId}`,
+    });
   };
 
   /**

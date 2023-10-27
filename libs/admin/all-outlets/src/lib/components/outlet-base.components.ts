@@ -11,6 +11,7 @@ import {
   navRoutes,
   outletBusinessRoutes,
 } from '../constants/routes';
+import { RoutesConfigService } from '@hospitality-bot/admin/core/theme';
 
 @Component({
   selector: 'hospitality-bot-outlet-base',
@@ -26,7 +27,11 @@ export class OutletBaseComponent {
   navRoutes: any[] = [];
   pageTitle: string = 'Outlet';
 
-  constructor(protected router: Router, protected route: ActivatedRoute) {
+  constructor(
+    protected router: Router,
+    protected route: ActivatedRoute,
+    protected routesConfigService: RoutesConfigService
+  ) {
     this.router.events.subscribe(
       ({ snapshot }: { snapshot: ActivatedRouteSnapshot }) => {
         const outletId = snapshot?.params['outletId'];
@@ -52,6 +57,12 @@ export class OutletBaseComponent {
         if (foodPackageId) this.foodPackageId = foodPackageId;
       }
     );
+  }
+
+  initNavRoutes() {
+    this.routesConfigService?.navRoutesChanges.subscribe((navRoutesRes) => {
+      this.navRoutes = [...navRoutesRes, ...this.navRoutes];
+    });
   }
 
   getRoutes(routeName, isHotel, isEdit) {
@@ -101,6 +112,9 @@ export class OutletBaseComponent {
   }
 
   initRoutes(routeName: OutletAddRoutes | 'importService' | 'services') {
+    let prefixPath = this.routesConfigService.activeRouteConfigSubscription
+      .value.submodule.fullPath;
+
     const outletBusinessRoutesClone = JSON.parse(
       JSON.stringify(outletBusinessRoutes)
     );
@@ -127,7 +141,16 @@ export class OutletBaseComponent {
         .replace(':menuItemId', this.menuItemId)
         .replace(':foodPackageId', this.foodPackageId);
     });
-    this.navRoutes = navRoutes;
+    this.navRoutes = [...this.navRoutes, ...navRoutes];
+
+    this.navRoutes.map((navRoute) => {
+      if (!navRoute.link.includes(prefixPath)) {
+        navRoute.link = prefixPath + navRoute.link;
+      }
+      return navRoute;
+    });
+
+    this.initNavRoutes();
 
     this.pageTitle = title;
   }

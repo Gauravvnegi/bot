@@ -41,6 +41,7 @@ import {
   RoomReservationFormData,
 } from '../../../types/forms.types';
 import { manageGuestRoutes } from 'libs/admin/guests/src/lib/constant/routes';
+import { DetailsComponent } from '@hospitality-bot/admin/reservation';
 
 @Component({
   selector: 'hospitality-bot-booking-summary',
@@ -273,14 +274,22 @@ export class BookingSummaryComponent implements OnInit {
     });
   }
 
-  viewGuestDetails() {
-    this.formService.reservationForm.next(this.parentFormGroup.getRawValue());
-    this.routesConfigService.navigate({
-      subModuleName: ModuleNames.GUESTS,
-      additionalPath: `${manageGuestRoutes.editGuest.route}/${
-        this.inputControls.guestInformation.get('guestDetails').value
-      }`,
-    });
+  openDetailsPage() {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = true;
+    dialogConfig.width = '100%';
+    const detailCompRef = this.modalService.openDialog(
+      DetailsComponent,
+      dialogConfig
+    );
+
+    detailCompRef.componentInstance.bookingId = this.reservationId;
+    detailCompRef.componentInstance.tabKey = 'payment_details';
+    this.$subscription.add(
+      detailCompRef.componentInstance.onDetailsClose.subscribe((res) => {
+        detailCompRef.close();
+      })
+    );
   }
 
   gobackToReservation() {

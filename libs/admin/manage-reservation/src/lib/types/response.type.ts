@@ -32,6 +32,7 @@ export type RoomReservationRes = {
   specialRequest: string;
   marketSegment?: string;
   journeysStatus: Record<JourneyType, JourneyState>;
+  invoiceId?: string;
 };
 
 export type PaymentConfigResponse = {

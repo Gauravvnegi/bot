@@ -17,6 +17,7 @@ import { PackageData } from '../../types/package';
 import { PackageListResponse, PackageResponse } from '../../types/response';
 import { packagesRoutes } from '../../constant/routes';
 import { RoutesConfigService } from '@hospitality-bot/admin/core/theme';
+import { NavRouteOption } from '@hospitality-bot/admin/shared';
 
 @Component({
   selector: 'hospitality-bot-package-datatable',
@@ -39,6 +40,12 @@ export class PackageDataTableComponent extends BaseDatatableComponent
   isAllTabFilterRequired = true;
   globalQueries = [];
   $subscription = new Subscription();
+  navRoutes: NavRouteOption[] = [
+    {
+      label: 'Library',
+      link: './',
+    },
+  ];
 
   cols = cols;
 

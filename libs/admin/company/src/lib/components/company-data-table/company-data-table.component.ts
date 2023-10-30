@@ -6,6 +6,7 @@ import { FormBuilder } from '@angular/forms';
 import {
   AdminUtilityService,
   BaseDatatableComponent,
+  NavRouteOption,
   QueryConfig,
   TableService,
 } from '@hospitality-bot/admin/shared';
@@ -46,6 +47,12 @@ export class CompanyDataTableComponent extends BaseDatatableComponent
   sortFilterList = SortFilterList;
 
   $subscription = new Subscription();
+   navRoutes: NavRouteOption[] = [
+    {
+      label: 'Members',
+      link: './'
+    },
+  ];
 
   constructor(
     public fb: FormBuilder,

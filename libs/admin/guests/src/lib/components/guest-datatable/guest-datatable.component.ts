@@ -7,6 +7,7 @@ import {
 import {
   AdminUtilityService,
   BaseDatatableComponent,
+  NavRouteOption,
   QueryConfig,
   TableService,
 } from '@hospitality-bot/admin/shared';
@@ -45,6 +46,12 @@ export class GuestDatatableComponent extends BaseDatatableComponent
   cols = guestCols;
   globalQueries = [];
   $subscription = new Subscription();
+  navRoutes: NavRouteOption[] = [
+    {
+      label: 'Members',
+      link: './'
+    },
+  ];
 
   constructor(
     public fb: FormBuilder,

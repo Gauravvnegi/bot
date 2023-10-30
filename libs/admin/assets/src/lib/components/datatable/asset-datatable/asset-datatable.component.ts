@@ -8,6 +8,8 @@ import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-ut
 
 import {
   BaseDatatableComponent,
+  NavRouteOption,
+  NavRouteOptions,
   sharedConfig,
   TableService,
 } from '@hospitality-bot/admin/shared';
@@ -41,6 +43,12 @@ export class AssetDatatableComponent extends BaseDatatableComponent
   globalQueries = [];
   $subscription = new Subscription();
   entityId: any;
+  navRoutes: NavRouteOption[] = [
+    {
+      label: 'Library',
+      link: './',
+    },
+  ];
 
   readonly assetsRoutes = assetsRoutes;
 

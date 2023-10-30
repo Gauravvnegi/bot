@@ -293,7 +293,14 @@ export class BookingSummaryComponent implements OnInit {
     const totalAmount = summaryData.totalDueAmount
       ? summaryData.totalDueAmount
       : summaryData.totalAmount;
-    return totalAmount - this.paymentControls.totalPaidAmount.value;
+
+    // When total due amount is 0.
+    const totalPaidAmount =
+      summaryData.totalPaidAmount && !summaryData.totalDueAmount
+        ? summaryData.totalPaidAmount
+        : this.paymentControls.totalPaidAmount.value;
+
+    return totalAmount - totalPaidAmount;
   }
 
   copiedConfirmationNumber(number): void {

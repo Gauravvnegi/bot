@@ -8,6 +8,7 @@ import { DetailsComponent as BookingDetailComponent } from 'libs/admin/reservati
 import {
   AdminUtilityService,
   BaseDatatableComponent,
+  NavRouteOption,
   TableService,
 } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
@@ -37,6 +38,12 @@ export class TransactionHistoryDataTableComponent extends BaseDatatableComponent
   entityId: string;
 
   $subscription = new Subscription();
+  navRoutes: NavRouteOption[] = [
+    {
+      label: 'Finance',
+      link: './',
+    },
+  ];
 
   constructor(
     public fb: FormBuilder,

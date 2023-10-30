@@ -1,11 +1,8 @@
 <div
-  class="action-header"
-  [ngClass]="{ 'action-header__sticky': isScrolledUp }"
   [formGroup]="tableFG"
 >
-  <div class="heading">{{ tableName }}</div>
-  <div class="action-wrapper">
-    <hospitality-bot-button
+  <hospitality-bot-navigation-header [heading]="tableName" [routes]="navRoutes" [isBack]="false">
+     <hospitality-bot-button
       (click)="openCreateTemplate()"
       label=" {{ 'createTemplate' | translate }}"
     ></hospitality-bot-button>
@@ -16,10 +13,8 @@
       [documentActionTypes]="documentActionTypes"
       [isDisable]="values.length === 0"
     ></hospitality-bot-export-list>
-  </div>
+  </hospitality-bot-navigation-header>
 </div>
-<div [ngClass]="{ 'sticky-header-gap': isScrolledUp }"></div>
-
 <p-table
   #dt
   [styleClass]="tableConfig.styleClass"

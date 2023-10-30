@@ -58,7 +58,12 @@ export class ServicesDataTableComponent extends BaseDatatableComponent {
   branchId: string;
   private cancelRequests$ = new Subject<void>();
   isRestaurant: boolean = false;
-  navRoutes: NavRouteOptions;
+  navRoutes: NavRouteOptions = [
+    {
+      label: 'Library',
+      link: servicesRoutes.services.route,
+    },
+  ];
 
   $subscription = new Subscription();
 
@@ -79,8 +84,6 @@ export class ServicesDataTableComponent extends BaseDatatableComponent {
 
   ngOnInit(): void {
     this.entityId = this.globalFilterService.entityId;
-    const { navRoutes } = servicesRoutes['services'];
-    this.navRoutes = navRoutes;
     this.listenForGlobalFilters();
   }
 

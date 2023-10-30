@@ -9,6 +9,7 @@ import {
 import {
   AdminUtilityService,
   BaseDatatableComponent,
+  NavRouteOption,
   TableService,
   sharedConfig,
 } from '@hospitality-bot/admin/shared';
@@ -47,6 +48,12 @@ export class ListingDatatableComponent extends BaseDatatableComponent
   cols = listingConfig.datatable.cols;
   entityId: string;
   $subscription = new Subscription();
+  navRoutes: NavRouteOption[] = [
+    {
+      label: 'Library',
+      link: './',
+    },
+  ];
 
   constructor(
     public fb: FormBuilder,

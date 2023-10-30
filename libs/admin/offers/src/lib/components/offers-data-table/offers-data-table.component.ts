@@ -5,6 +5,7 @@ import { LibraryItem, QueryConfig } from '@hospitality-bot/admin/library';
 import {
   AdminUtilityService,
   BaseDatatableComponent,
+  NavRouteOption,
   TableService,
 } from '@hospitality-bot/admin/shared';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
@@ -51,6 +52,12 @@ export class OffersDataTableComponent extends BaseDatatableComponent
   iQuickFilters = true;
   isAllTabFilterRequired = true;
   subscription$ = new Subscription();
+  navRoutes: NavRouteOption[] = [
+    {
+      label: 'Library',
+      link: './',
+    },
+  ];
 
   ngOnInit(): void {
     this.entityId = this.globalFilterService.entityId;

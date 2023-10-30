@@ -1,11 +1,8 @@
 <div
-  class="action-header"
-  [ngClass]="{ 'action-header__sticky': isScrolledUp }"
   [formGroup]="tableFG"
 >
-  <div class="heading">{{ tableName }}</div>
-  <div class="action-wrapper">
-    <ng-container [ngTemplateOutlet]="search" #searchComponent></ng-container>
+  <hospitality-bot-navigation-header [heading]="tableName" [routes]="navRoutes" [isBack]="false">
+   <ng-container [ngTemplateOutlet]="search" #searchComponent></ng-container>
     <hospitality-bot-button
       label="+ Add agent"
       [routerLink]="routes.addAgent.route"
@@ -18,9 +15,9 @@
       [documentActionTypes]="documentActionTypes"
       [isDisable]="values.length === 0"
     ></hospitality-bot-export-list>
-  </div>
+  </hospitality-bot-navigation-header>
+
 </div>
-<div [ngClass]="{ 'sticky-header-gap': isScrolledUp }"></div>
 
 <p-table
   #dt

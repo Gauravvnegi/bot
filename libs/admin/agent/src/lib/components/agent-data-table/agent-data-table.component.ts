@@ -4,6 +4,8 @@ import {
   AdminUtilityService,
   BaseDatatableComponent,
   ModuleNames,
+  NavRouteOption,
+  NavRouteOptions,
   TableService,
 } from '@hospitality-bot/admin/shared';
 import { Subscription } from 'rxjs';
@@ -40,6 +42,12 @@ export class AgentDataTableComponent extends BaseDatatableComponent
   searchForm: FormGroup;
   sortFilterList = SortFilterList;
   subscription$ = new Subscription();
+  navRoutes: NavRouteOption[] = [
+    {
+      label: 'Members',
+      link: './'
+    },
+  ];
 
   constructor(
     public fb: FormBuilder,

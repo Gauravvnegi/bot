@@ -6,6 +6,7 @@ import { QueryConfig } from '@hospitality-bot/admin/library';
 import {
   AdminUtilityService,
   BaseDatatableComponent,
+  NavRouteOption,
   TableService,
 } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
@@ -33,6 +34,12 @@ export class InvoiceHistoryDataTableComponent extends BaseDatatableComponent
   isQuickFilters = true;
   entityId: string;
   globalQueries = [];
+  navRoutes: NavRouteOption[] = [
+    {
+      label: 'Finance',
+      link: './',
+    },
+  ];
 
   $subscription = new Subscription();
 

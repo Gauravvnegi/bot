@@ -2,12 +2,12 @@ import { Option } from '@hospitality-bot/admin/shared';
 
 export enum companyDiscount {
   PERCENTAGE = 'PERCENTAGE',
-  DISCOUNT = 'FLAT',
+  FLAT = 'FLAT',
 }
 
 export const discountTypes: Option[] = [
   { label: '%OFF', value: companyDiscount.PERCENTAGE },
-  { label: 'Flat', value: companyDiscount.DISCOUNT },
+  { label: 'Flat', value: companyDiscount.FLAT },
 ];
 
 export const businessSource: Option[] = [

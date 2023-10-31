@@ -53,7 +53,13 @@
           (change)="onLiveChatChange()"
           [disabled]="liveChatStatus.value"
           >Hand Over to Bot</mat-slide-toggle
-        >
+          >
+          <!-- <img
+            class="expand"
+            [src]="'assets/svg/end-chat.svg'"
+            alt=""
+            [pTooltip]="'End Chat'"
+          /> -->
         <img
           *ngIf="!guestInfoEnable"
           class="icon"

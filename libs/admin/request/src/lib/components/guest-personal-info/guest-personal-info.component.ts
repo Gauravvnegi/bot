@@ -7,6 +7,7 @@ import { Component, Input, OnInit } from '@angular/core';
 })
 export class GuestPersonalInfoComponent implements OnInit {
   @Input() data;
+  @Input() loading: boolean = false;
   constructor() {}
 
   ngOnInit(): void {}

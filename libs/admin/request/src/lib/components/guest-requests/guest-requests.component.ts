@@ -7,6 +7,7 @@ import { Component, Input, OnChanges } from '@angular/core';
 })
 export class GuestRequestsComponent implements OnChanges {
   @Input() requestList;
+  @Input() loading: boolean = false;
   constructor() {}
   optionLabels = ['Pending', 'Closed', 'Timeout'];
 

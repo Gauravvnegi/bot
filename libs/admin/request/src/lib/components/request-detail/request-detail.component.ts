@@ -68,7 +68,7 @@ export class RequestDetailComponent implements OnInit, OnDestroy {
     this.$subscription.add(
       this._requestService.selectedRequest.subscribe((res) => {
         if (res) {
-          this.jobId = res;
+          this.jobId = res.id;
           this.getJobDetails();
         }
       })

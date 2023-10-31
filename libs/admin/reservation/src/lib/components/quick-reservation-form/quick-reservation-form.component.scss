@@ -26,14 +26,14 @@
 }
 
 .guest-data {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
+  @include flex-space-between;
   padding: 10px;
   box-shadow: 0px 7px 5px -7px #b5b5b5;
   position: sticky;
   z-index: 1;
-  position: sticky;
-
+  .right-col {
+    @include flex-col-end-algn;
+  }
   .guest-name {
     @include normal-lg-text;
   }
@@ -45,6 +45,9 @@
       color: black;
       @include normal-md-text;
     }
+  }
+  .guest-btn {
+    text-align: right;
   }
   .contact-details {
     width: 50px;
@@ -100,7 +103,5 @@
 
 .loader {
   height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  @include flex-justify-align-center;
 }

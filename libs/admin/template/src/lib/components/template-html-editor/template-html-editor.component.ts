@@ -10,10 +10,14 @@ import {
 } from 'libs/admin/shared/src';
 import { EditTemplateComponent } from '../edit-template/edit-template.component';
 import { Router, ActivatedRoute } from '@angular/router';
-import { GlobalFilterService, RoutesConfigService } from '@hospitality-bot/admin/core/theme';
+import {
+  GlobalFilterService,
+  RoutesConfigService,
+} from '@hospitality-bot/admin/core/theme';
 import { TemplateService } from '../../services/template.service';
 import { trim } from 'lodash';
 import { templateRoutes } from '../../constants/routes';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'hospitality-bot-template-html-editor',
@@ -23,15 +27,9 @@ import { templateRoutes } from '../../constants/routes';
 export class TemplateHtmlEditorComponent extends EditTemplateComponent {
   goBack = new EventEmitter();
   saveTemplate = new EventEmitter();
-
   enableAssetImport = false;
 
-  navRoutes: NavRouteOptions = [
-    { label: 'Library', link: './' },
-    { label: 'Template', link: '/pages/library/template' },
-    { label: 'Create Template', link: '/pages/library/template/create' },
-    { label: 'HTML Template', link: './' },
-  ];
+  navRoutes: NavRouteOptions = [];
 
   constructor(
     protected _fb: FormBuilder,
@@ -42,7 +40,8 @@ export class TemplateHtmlEditorComponent extends EditTemplateComponent {
     protected activatedRoute: ActivatedRoute,
     protected translateService: TranslateService,
     protected adminUtilityService: AdminUtilityService,
-    protected routesConfigService: RoutesConfigService
+    protected routesConfigService: RoutesConfigService,
+    protected location: Location
   ) {
     super(
       _fb,
@@ -53,7 +52,8 @@ export class TemplateHtmlEditorComponent extends EditTemplateComponent {
       activatedRoute,
       translateService,
       adminUtilityService,
-      routesConfigService
+      routesConfigService,
+      location
     );
   }
 
@@ -64,15 +64,33 @@ export class TemplateHtmlEditorComponent extends EditTemplateComponent {
     if (this._router.url.includes('view')) this.isDisabled = true;
     this.$subscription.add(
       this.activatedRoute.parent.params.subscribe((params) => {
-        if (params['id']) {
-          this.templateId = params['id'];
-          this.navRoutes[2].label = 'Edit Template';
+        if (params['templateId']) {
+          this.templateId = params['templateId'];
         } else if (this.id) {
           this.templateId = this.id;
         }
       })
     );
     this.listenForFormData();
+  }
+
+  initNavRoutes() {
+    this.routesConfigService.navRoutesChanges.subscribe((navRoutesRes) => {
+      const routeName = this.isDisabled
+        ? 'viewHtmlEditorTemplate'
+        : this.templateId
+        ? 'editTemplateWithHtmlEditor'
+        : 'htmlEditorTemplate';
+
+      const templateCLoneRoutes = JSON.parse(JSON.stringify(templateRoutes));
+      const data = templateCLoneRoutes[routeName];
+
+      let { navRoutes, title } = data;
+      this.pageTitle = title;
+
+      navRoutes = this.modifyNavRoutes(navRoutes, this.templateId);
+      this.navRoutes = [...navRoutesRes, ...navRoutes];
+    });
   }
 
   listenForFormData(): void {

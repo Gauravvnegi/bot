@@ -4,6 +4,7 @@ import { MatTabChangeEvent } from '@angular/material/tabs';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
   BaseDatatableComponent,
+  NavRouteOption,
   TableService,
   sharedConfig,
 } from '@hospitality-bot/admin/shared';
@@ -46,6 +47,12 @@ export class TemplateDatatableComponent extends BaseDatatableComponent
   entityId: any;
   cols = templateConfig.datatable.cols;
   isAllATabItem = true;
+  navRoutes: NavRouteOption[] = [
+    {
+      label: 'Library',
+      link: './',
+    },
+  ];
 
   constructor(
     public fb: FormBuilder,
@@ -65,6 +72,7 @@ export class TemplateDatatableComponent extends BaseDatatableComponent
   }
 
   ngOnInit(): void {
+    this.templateService.templateFormData.next(null);
     this.listenForGlobalFilters();
   }
 
@@ -209,12 +217,12 @@ export class TemplateDatatableComponent extends BaseDatatableComponent
    */
   openEditTemplate(event, template): void {
     event.stopPropagation();
-    this.routesConfigServices.navigate({
-      additionalPath: templateRoutes.createTemplate.route.replace(
-        ':id',
-        template.id
-      ),
-    });
+    this._router.navigate(
+      [templateRoutes.editTemplate.route.replace(':templateId', template.id)],
+      {
+        relativeTo: this.route,
+      }
+    );
   }
 
   /**

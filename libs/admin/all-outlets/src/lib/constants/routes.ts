@@ -13,109 +13,90 @@ export const navRoutes = {
   },
   brand: {
     label: 'Brand',
-    link: '/create-with/settings/business-info/brand',
+    link: '/brand',
   },
   hotel: {
     label: 'Hotel',
-    link: '/create-with/settings/business-info/brand/:brandId/hotel',
+    link: '/brand/:brandId/hotel',
   },
   editHotel: {
     label: 'Edit Hotel',
-    link: '/create-with/settings/business-info/brand/:brandId/hotel/:entityId',
+    link: '/brand/:brandId/hotel/:entityId',
   },
 
   editBrand: {
     label: 'Edit Brand',
-    link: '/create-with/settings/business-info/brand/:brandId',
+    link: '/brand/:brandId',
   },
   businessInfo: {
     label: 'Business Info',
-    link: '/create-with/settings/business-info',
+    link: '',
   },
   addOutlet: {
     label: 'Add Outlet',
-    link: '/create-with/settings/business-info/brand/:brandId/outlet',
+    link: '/brand/:brandId/outlet',
   },
   addHotelOutlet: {
     label: 'Add Outlet',
-    link:
-      '/create-with/settings/business-info/brand/:brandId/hotel/:entityId/outlet',
+    link: '/brand/:brandId/hotel/:entityId/outlet',
   },
   editOutlet: {
     id: 'editOutlet',
     label: 'Edit Outlet',
-    link: '/create-with/settings/business-info/brand/:brandId/outlet/:outletId',
+    link: '/brand/:brandId/outlet/:outletId',
   },
   editHotelOutlet: {
     label: 'Edit Outlet',
-    link:
-      '/create-with/settings/business-info/brand/:brandId/hotel/:entityId/outlet/:outletId',
+    link: '/brand/:brandId/hotel/:entityId/outlet/:outletId',
   },
   importService: {
     label: 'Import Service',
-    link:
-      '/create-with/settings/business-info/brand/:brandId/outlet/:outletId/import-services',
+    link: '/brand/:brandId/outlet/:outletId/import-services',
   },
   addMenu: {
     label: 'Add Menu',
-    link:
-      '/create-with/settings/business-info/brand/:brandId/outlet/:outletId/add-menu',
+    link: '/brand/:brandId/outlet/:outletId/add-menu',
   },
   editMenu: {
     label: 'Edit Menu',
-    link: `/create-with/settings/business-info/brand/:brandId/outlet/:outletId/menu/:menuId`,
+    link: `/brand/:brandId/outlet/:outletId/menu/:menuId`,
   },
   menuItem: {
     label: 'Add Menu Item',
-    link: `/create-with/settings/business-info/brand/:brandId/outlet/:outletId/menu/:menuId/menu-item`,
+    link: `/brand/:brandId/outlet/:outletId/menu/:menuId/menu-item`,
   },
   editMenuItem: {
     label: 'Edit Menu Item',
-    link: `/create-with/settings/business-info/brand/:brandId/outlet/:outletId/menu/:menuId/menu-item/:menuItemId`,
+    link: `/brand/:brandId/outlet/:outletId/menu/:menuId/menu-item/:menuItemId`,
   },
   foodPackage: {
     label: 'Food Package',
-    link: `/create-with/settings/business-info/brand/:brandId/outlet/:outletId/menu/:menuId/food-package`,
+    link: `/brand/:brandId/outlet/:outletId/menu/:menuId/food-package`,
   },
   editFoodPackage: {
     label: 'Edit Food Package',
-    link: `/create-with/settings/business-info/brand/:brandId/outlet/:outletId/menu/:menuId/food-package/:foodPackageId`,
+    link: `/brand/:brandId/outlet/:outletId/menu/:menuId/food-package/:foodPackageId`,
   },
   services: {
     label: 'Services',
-    link: `/create-with/settings/business-info/brand/:brandId/outlet/:outletId/view-all`,
+    link: `/brand/:brandId/outlet/:outletId/view-all`,
   },
 };
 
 export const outletBusinessRoutes: Record<OutletBusinessRoutes, PageRoutes> = {
   outlet: {
     route: 'outlet',
-    navRoutes: [
-      navRoutes.createWith,
-      navRoutes.settings,
-      navRoutes.businessInfo,
-      navRoutes.editBrand,
-      navRoutes.addOutlet,
-    ],
+    navRoutes: [navRoutes.editBrand, navRoutes.addOutlet],
     title: 'Add Outlet',
   },
   editOutlet: {
     route: ':outletId',
-    navRoutes: [
-      navRoutes.createWith,
-      navRoutes.settings,
-      navRoutes.businessInfo,
-      navRoutes.editBrand,
-      navRoutes.editOutlet,
-    ],
+    navRoutes: [navRoutes.editBrand, navRoutes.editOutlet],
     title: 'Edit Outlet',
   },
   importService: {
     route: 'import-services',
     navRoutes: [
-      navRoutes.createWith,
-      navRoutes.settings,
-      navRoutes.businessInfo,
       navRoutes.editBrand,
       navRoutes.editOutlet,
       navRoutes.importService,
@@ -124,34 +105,17 @@ export const outletBusinessRoutes: Record<OutletBusinessRoutes, PageRoutes> = {
   },
   menu: {
     route: 'menu',
-    navRoutes: [
-      navRoutes.createWith,
-      navRoutes.settings,
-      navRoutes.businessInfo,
-      navRoutes.editBrand,
-      navRoutes.editOutlet,
-      navRoutes.addMenu,
-    ],
+    navRoutes: [navRoutes.editBrand, navRoutes.editOutlet, navRoutes.addMenu],
     title: 'Add Menu',
   },
   editMenu: {
     route: ':menuId',
-    navRoutes: [
-      navRoutes.createWith,
-      navRoutes.settings,
-      navRoutes.businessInfo,
-      navRoutes.editBrand,
-      navRoutes.editOutlet,
-      navRoutes.editMenu,
-    ],
+    navRoutes: [navRoutes.editBrand, navRoutes.editOutlet, navRoutes.editMenu],
     title: 'Edit Menu',
   },
   menuItem: {
     route: 'menu-item',
     navRoutes: [
-      navRoutes.createWith,
-      navRoutes.settings,
-      navRoutes.businessInfo,
       navRoutes.editBrand,
       navRoutes.editOutlet,
       navRoutes.editMenu,
@@ -162,9 +126,6 @@ export const outletBusinessRoutes: Record<OutletBusinessRoutes, PageRoutes> = {
   editMenuItem: {
     route: ':menuItemId',
     navRoutes: [
-      navRoutes.createWith,
-      navRoutes.settings,
-      navRoutes.businessInfo,
       navRoutes.editBrand,
       navRoutes.editOutlet,
       navRoutes.editMenu,
@@ -175,9 +136,6 @@ export const outletBusinessRoutes: Record<OutletBusinessRoutes, PageRoutes> = {
   foodPackage: {
     route: 'food-package',
     navRoutes: [
-      navRoutes.createWith,
-      navRoutes.settings,
-      navRoutes.businessInfo,
       navRoutes.editBrand,
       navRoutes.editOutlet,
       navRoutes.foodPackage,
@@ -187,9 +145,6 @@ export const outletBusinessRoutes: Record<OutletBusinessRoutes, PageRoutes> = {
   editFoodPackage: {
     route: ':foodPackageId',
     navRoutes: [
-      navRoutes.createWith,
-      navRoutes.settings,
-      navRoutes.businessInfo,
       navRoutes.editBrand,
       navRoutes.editOutlet,
       navRoutes.editFoodPackage,
@@ -198,14 +153,7 @@ export const outletBusinessRoutes: Record<OutletBusinessRoutes, PageRoutes> = {
   },
   services: {
     route: 'services',
-    navRoutes: [
-      navRoutes.createWith,
-      navRoutes.settings,
-      navRoutes.businessInfo,
-      navRoutes.editBrand,
-      navRoutes.editOutlet,
-      navRoutes.services,
-    ],
+    navRoutes: [navRoutes.editBrand, navRoutes.editOutlet, navRoutes.services],
     title: 'Services',
   },
 };

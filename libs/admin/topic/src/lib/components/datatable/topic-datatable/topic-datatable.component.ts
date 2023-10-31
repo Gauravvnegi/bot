@@ -3,6 +3,7 @@ import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
   BaseDatatableComponent,
+  NavRouteOption,
   TableService,
   sharedConfig,
 } from '@hospitality-bot/admin/shared';
@@ -43,6 +44,12 @@ export class TopicDatatableComponent extends BaseDatatableComponent
   globalQueries = [];
   $subscription = new Subscription();
   entityId: any;
+  navRoutes: NavRouteOption[] = [
+    {
+      label: 'Library',
+      link: './',
+    },
+  ];
 
   constructor(
     public fb: FormBuilder,

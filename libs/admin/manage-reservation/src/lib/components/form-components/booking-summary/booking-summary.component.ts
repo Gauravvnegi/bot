@@ -40,6 +40,8 @@ import {
   OccupancyDetails,
   RoomReservationFormData,
 } from '../../../types/forms.types';
+import { manageGuestRoutes } from 'libs/admin/guests/src/lib/constant/routes';
+import { DetailsComponent } from '@hospitality-bot/admin/reservation';
 
 @Component({
   selector: 'hospitality-bot-booking-summary',
@@ -84,8 +86,6 @@ export class BookingSummaryComponent implements OnInit {
     private globalFilterService: GlobalFilterService,
     private snackbarService: SnackBarService,
     private manageReservationService: ManageReservationService,
-    private location: Location,
-    private router: Router,
     private routesConfigService: RoutesConfigService,
     protected activatedRoute: ActivatedRoute,
     private modalService: ModalService,
@@ -274,6 +274,24 @@ export class BookingSummaryComponent implements OnInit {
     });
   }
 
+  openDetailsPage() {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = true;
+    dialogConfig.width = '100%';
+    const detailCompRef = this.modalService.openDialog(
+      DetailsComponent,
+      dialogConfig
+    );
+
+    detailCompRef.componentInstance.bookingId = this.reservationId;
+    detailCompRef.componentInstance.tabKey = 'payment_details';
+    this.$subscription.add(
+      detailCompRef.componentInstance.onDetailsClose.subscribe((res) => {
+        detailCompRef.close();
+      })
+    );
+  }
+
   gobackToReservation() {
     this.routesConfigService.navigate({
       subModuleName: ModuleNames.ADD_RESERVATION,
@@ -284,7 +302,14 @@ export class BookingSummaryComponent implements OnInit {
     const totalAmount = summaryData.totalDueAmount
       ? summaryData.totalDueAmount
       : summaryData.totalAmount;
-    return totalAmount - this.paymentControls.totalPaidAmount.value;
+
+    // When total due amount is 0.
+    const totalPaidAmount =
+      summaryData.totalPaidAmount && !summaryData.totalDueAmount
+        ? summaryData.totalPaidAmount
+        : this.paymentControls.totalPaidAmount.value;
+
+    return totalAmount - totalPaidAmount;
   }
 
   copiedConfirmationNumber(number): void {

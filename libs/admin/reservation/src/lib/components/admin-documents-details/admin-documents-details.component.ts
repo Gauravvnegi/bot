@@ -502,18 +502,17 @@ export class AdminDocumentsDetailsComponent implements OnInit {
   downloadDocs(documents) {
     const urls = [];
     const fileNames = [];
-    const guest = this.detailsData.guestDetails.guests.filter(
+    const guest = this.detailsData.guestDetails.guests.find(
       (data) => data.id === this.selectedGuestId
-    )[0];
+    );
     const name = `${guest.firstName}_${guest.lastName}`;
 
     documents.forEach((doc) => {
       urls.push(doc.frontUrl.trim());
 
       fileNames.push(`${name}_${doc.documentType}_frontURL`);
-      if (doc.documentType !== 'VISA') {
-        urls.push(doc.backUrl?.trim());
-
+      if (doc.documentType !== 'VISA' && doc.backUrl) {
+        urls.push(doc.backUrl.trim());
         fileNames.push(`${name}_${doc.documentType}_backURL`);
       }
     });
@@ -545,15 +544,19 @@ export class AdminDocumentsDetailsComponent implements OnInit {
       }
     };
 
-    // Fetch and add files
-    urls.forEach((url, i) => {
-      let fileName = urls[i];
-      const index = fileName.lastIndexOf('/');
-      fileName = fileName.slice(index + 1);
-      fileName = decodeURIComponent(fileName);
-      fileName = `${fileNames[i]}_${fileName}`;
-      fetchAndAddFile(url, fileName);
-    });
+    if (urls.length === 0) {
+      // No files to download, create an empty zip file.
+      const content = zipFile.generateAsync({ type: 'blob' });
+      saveAs(content, `${guest.firstName}_${guest.lastName}.zip`);
+    } else {
+      // Fetch and add files
+      urls.forEach((url, i) => {
+        let fileName = urls[i].split('/').pop();
+        fileName = decodeURIComponent(fileName);
+        fileName = `${fileNames[i]}_${fileName}`;
+        fetchAndAddFile(url, fileName);
+      });
+    }
   }
 
   get documentFormGroup(): FormArray {

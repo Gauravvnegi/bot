@@ -21,7 +21,6 @@ import { Guest, GuestDetails, Requests } from '../../data-models/request.model';
   styleUrls: ['./guest-info.component.scss'],
 })
 export class GuestInfoComponent implements OnInit, OnChanges, OnDestroy {
-  isGuestReservationFetched = false;
   guestReservations: GuestDetails;
   guestId: string;
   data;
@@ -32,8 +31,9 @@ export class GuestInfoComponent implements OnInit, OnChanges, OnDestroy {
   @ViewChild('matTab') matTab: MatTabGroup;
   $subscription = new Subscription();
   guestData;
-  entityId: string;
-  isLoading = false;
+  loadingGuests = false;
+  loadingReservations = false;
+  loadingRequests = false;
   selectedIndex = 0;
   requestList;
   buttonConfig = [
@@ -60,23 +60,7 @@ export class GuestInfoComponent implements OnInit, OnChanges, OnDestroy {
   ngOnChanges() {}
 
   ngOnInit(): void {
-    this.registerListeners();
-  }
-
-  registerListeners(): void {
-    this.listenForGlobalFilters();
     this.listenForSelectedRequest();
-  }
-
-  /**
-   * @function listenForGlobalFilters To listen for global filters and load data when filter value is changed.
-   */
-  listenForGlobalFilters(): void {
-    this.$subscription.add(
-      this.globalFilterService.globalFilter$.subscribe((data) => {
-        this.entityId = this.globalFilterService.entityId;
-      })
-    );
   }
 
   listenForSelectedRequest() {
@@ -84,7 +68,9 @@ export class GuestInfoComponent implements OnInit, OnChanges, OnDestroy {
       this.requestService.selectedRequest.subscribe((response) => {
         if (response) {
           this.data = response;
-          this.guestId = response['guestDetails']?.primaryGuest?.id;
+          this.guestId = response['guestDetails']?.primaryGuest?.id
+            ? response['guestDetails']?.primaryGuest?.id
+            : response.guest.id;
           this.loadGuestInfo();
           this.loadGuestRequests();
         }
@@ -111,14 +97,18 @@ export class GuestInfoComponent implements OnInit, OnChanges, OnDestroy {
       return;
     }
 
+    this.loadingGuests = true;
+    this.loadingReservations = true;
     this.$subscription.add(
       this.requestService.getGuestById(this.guestId).subscribe(
         (response) => {
           this.guestData = new Guest().deserialize(response);
           this.loadGuestReservations();
+          this.loadingGuests = false;
         },
         ({ error }) => {
           this.closeDetails();
+          this.loadingGuests = false;
         }
       )
     );
@@ -132,10 +122,11 @@ export class GuestInfoComponent implements OnInit, OnChanges, OnDestroy {
             response,
             this.colorMap
           );
-
-          this.isGuestReservationFetched = true;
+          this.loadingReservations = false;
         },
-        ({ error }) => {}
+        ({ error }) => {
+          this.loadingReservations = false;
+        }
       )
     );
   }
@@ -151,13 +142,17 @@ export class GuestInfoComponent implements OnInit, OnChanges, OnDestroy {
       this.requestList = [];
       return;
     }
+    this.loadingRequests = true;
     this.$subscription.add(
-      this.requestService
-        .getGuestRequestData(this.guestId)
-        .subscribe(
-          (response) =>
-            (this.requestList = new Requests().deserialize(response))
-        )
+      this.requestService.getGuestRequestData(this.guestId).subscribe(
+        (response) => {
+          this.requestList = new Requests().deserialize(response);
+          this.loadingRequests = false;
+        },
+        ({ error }) => {
+          this.loadingRequests = false;
+        }
+      )
     );
   }
 

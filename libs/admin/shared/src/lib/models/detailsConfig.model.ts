@@ -23,11 +23,13 @@ export class Details implements IDeserializable {
   feedbackDetails: FeedbackDetails;
   invoicePrepareRequest: boolean;
   pmsBooking: boolean;
+  pmsStatus: string;
 
   deserialize(input: any, timezone) {
     const hotelNationality = input?.entity?.address?.countryCode;
     this.invoicePrepareRequest = input.invoicePrepareRequest || false;
     this.pmsBooking = input.pmsBooking || false;
+    this.pmsStatus = input.pmsStatus || '';
     this.guestDetails = new GuestDetailDS().deserialize(
       input.guestDetails,
       hotelNationality

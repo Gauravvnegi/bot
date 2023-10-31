@@ -21,6 +21,7 @@ import { BusinessService } from '../../services/business.service';
 import { HotelFormDataService } from '../../services/hotel-form.service';
 import { ServcieStatusList } from '../../models/hotel-form.model';
 import { Cancelable, debounce } from 'lodash';
+import { RoutesConfigService } from '@hospitality-bot/admin/core/theme';
 @Component({
   selector: 'hospitality-bot-services',
   templateUrl: './services.component.html',
@@ -50,7 +51,8 @@ export class ServicesComponent implements OnInit, OnDestroy {
     private businessService: BusinessService,
     private route: ActivatedRoute,
     private adminUtilityService: AdminUtilityService,
-    private hotelDataService: HotelFormDataService
+    private hotelDataService: HotelFormDataService,
+    private routesConfigService: RoutesConfigService
   ) {
     this.router.events.subscribe(
       ({ snapshot }: { snapshot: ActivatedRouteSnapshot }) => {
@@ -68,6 +70,7 @@ export class ServicesComponent implements OnInit, OnDestroy {
       return;
     }
     this.initForm();
+    this.initNavRoutes();
   }
 
   /**
@@ -147,6 +150,9 @@ export class ServicesComponent implements OnInit, OnDestroy {
   }
 
   manageRoutes() {
+    let prefixPath = this.routesConfigService.activeRouteConfigSubscription
+      .value.submodule.fullPath;
+
     const { navRoutes, title } = businessRoute[
       this.entityId ? 'editServices' : 'services'
     ];
@@ -154,10 +160,19 @@ export class ServicesComponent implements OnInit, OnDestroy {
     this.navRoutes = navRoutes.map((route) => {
       return {
         ...route,
-        link: route.link
-          .replace(':brandId', this.brandId)
-          .replace(':entityId', this.entityId),
+        link:
+          prefixPath +
+          '/' +
+          route.link
+            .replace(':brandId', this.brandId)
+            .replace(':entityId', this.entityId),
       };
+    });
+  }
+
+  initNavRoutes() {
+    this.routesConfigService?.navRoutesChanges.subscribe((navRoutesRes) => {
+      this.navRoutes = [...navRoutesRes, ...this.navRoutes];
     });
   }
 

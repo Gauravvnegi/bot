@@ -64,3 +64,8 @@
 :host ::ng-deep .mat-icon {
   color: $mat-icon;
 }
+
+.loader {
+  height: 60vh;
+  @include flex-justify-align-center;
+}

@@ -54,7 +54,7 @@ export class ChatComponent
   requestList;
   selectedIndex = 0;
   buttonConfig = [
-    { button: true, label: 'Raise Request', icon: 'assets/svg/requests.svg' },
+    { button: true, label: 'Raise Complaint', icon: 'assets/svg/requests.svg' },
   ];
   @ViewChild('sidebarSlide', { read: ViewContainerRef })
   sidebarSlide: ViewContainerRef;
@@ -363,7 +363,6 @@ export class ChatComponent
         this.requestList = new RequestList().deserialize(response).data;
       })
     );
-  
   }
   openRaiseRequest() {
     this.sidebarVisible = true;

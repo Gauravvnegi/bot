@@ -133,37 +133,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
     );
   }
 
-  // onViewPreArrivalRequest() {
-  //   const dialogConfig = new MatDialogConfig();
-  //   dialogConfig.disableClose = true;
-  //   dialogConfig.width = '100%';
-  //   const detailCompRef = this.modalService.openDialog(
-  //     PreArrivalDatatableComponent,
-  //     dialogConfig
-  //   );
-
-  //   detailCompRef.componentInstance.tableName = 'Pre-arrival Request';
-  //   detailCompRef.componentInstance.entityType = 'ALL';
-  //   detailCompRef.componentInstance.tabFilterIdx = 0;
-
-  //   detailCompRef.componentInstance.onModalClose.subscribe((res) =>
-  //     detailCompRef.close()
-  //   );
-  // }
-
-  getPreArrivalRequest() {
+  getPreArrivalRequest(queryObj?: any) {
     this.loading = true;
     const query = {
-      queryObj: this._adminUtilityService.makeQueryParams([
-        {
-          fromDate: moment.utc().startOf('day').valueOf(),
-          toDate: moment.utc().endOf('day').valueOf(),
-          order: 'DESC',
-          entityType: 'ALL',
-          journeyType: 'pre-arrival',
-          entityId: this.entityId,
-        },
-      ]),
+      queryObj: this._adminUtilityService.makeQueryParams([queryObj]),
     };
 
     this.analyticsService.getInhouseRequest(query).subscribe((res) => {
@@ -173,31 +146,48 @@ export class DashboardComponent implements OnInit, OnDestroy {
     });
   }
 
-  onSelectedTabFilterChange(index: number) {
-    this.tabFilterIdx = index;
-    this.selectedTab = this.tabFilterItems[index].value;
+  onSelectedTabFilterChange(data) {
+    this.tabFilterIdx =data.index;
+    this.selectedTab = this.tabFilterItems[data.index].value;
+    this.getRespectiveTabData(data);
+  }
 
-    if (this.tabFilterItems[index].value === dashboardPopUpTabs[1].value) {
+  onDateFilterChange(date) {
+    this.getRespectiveTabData(date);
+  }
+
+  getRespectiveTabData(data) {
+    if (
+      this.tabFilterItems[this.tabFilterIdx].value ===
+      dashboardPopUpTabs[1].value
+    ) {
       this.options = [];
       //GET PRE ARRIVAL REQUEST DATA
-      this.getPreArrivalRequest();
+      this.getPreArrivalRequest({
+        fromDate: data.from,
+        toDate: data.to,
+        order: 'DESC',
+        entityType: 'ALL',
+        journeyType: 'pre-arrival',
+        entityId: this.entityId,
+        onArrivalDate: true,
+      });
     } else {
       this.options = [];
       //GET PRE CHECK-IN GUEST DATA
-      this.getPreCheckinGuest();
+      this.getPreCheckinGuest({
+        entityId: this.entityId,
+        fromDate: data.from,
+        toDate: data.to,
+        order: 'DESC',
+        entityType: 'ARRIVAL',
+        entityState: 'EXPRESSCHECKIN',
+      });
     }
   }
 
-  getPreCheckinGuest() {
+  getPreCheckinGuest(queryObj?: any) {
     this.loading = true;
-    const queryObj = {
-      entityId: this.entityId,
-      fromDate: moment.utc().startOf('day').valueOf(),
-      toDate: moment.utc().endOf('day').valueOf(),
-      order: 'DESC',
-      entityType: 'ARRIVAL',
-      entityState: 'EXPRESSCHECKIN',
-    };
     const config = {
       queryObj: this._adminUtilityService.makeQueryParams([queryObj]),
     };

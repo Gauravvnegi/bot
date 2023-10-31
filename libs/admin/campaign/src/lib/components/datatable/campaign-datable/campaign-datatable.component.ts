@@ -5,6 +5,7 @@ import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
   AdminUtilityService,
   BaseDatatableComponent,
+  NavRouteOption,
   sharedConfig,
   TableService,
 } from '@hospitality-bot/admin/shared';
@@ -43,6 +44,12 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
   $subscription = new Subscription();
   entityId: string;
   menuOptions = MenuOptions;
+  navRoutes: NavRouteOption[] = [
+    {
+      label: 'Library',
+      link: './',
+    },
+  ];
   constructor(
     public fb: FormBuilder,
     private adminUtilityService: AdminUtilityService,

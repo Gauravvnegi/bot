@@ -46,6 +46,7 @@ export class RoomReservation {
   roomNumber?: string;
   roomType?: string;
   journeysStatus: Record<JourneyType, JourneyState>;
+  invoiceId: string;
 
   deserialize(input: RoomReservationRes) {
     this.id = input.id;
@@ -76,7 +77,7 @@ export class RoomReservation {
     (this.roomNumber = input.bookingItems[0]?.roomDetails?.roomNumber ?? ''),
       (this.roomType = input.bookingItems[0]?.roomDetails?.roomTypeLabel ?? '');
     this.journeysStatus = input.journeysStatus;
-
+    this.invoiceId = input?.invoiceId ?? '';
     return this;
   }
 
@@ -111,7 +112,7 @@ export class ReservationList {
       CONFIRMED: input.entityStateCounts.CONFIRMED,
       CANCELED: input.entityStateCounts.CANCELED,
       DRAFT: input.entityStateCounts.DRAFT,
-      NOSHOW: input.entityStateCounts.NOSHOW
+      NOSHOW: input.entityStateCounts.NOSHOW,
     };
     this.entityTypeCounts = input.entityTypeCounts;
     return this;

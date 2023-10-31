@@ -27,7 +27,7 @@ export class AddDiscountComponent implements OnInit {
   totalDiscount: number;
   discountForm: FormGroup;
   discountOptions: Option[] = [
-    { label: 'Flat', value: 'NUMBER' },
+    { label: 'Flat', value: 'FLAT' },
     { label: '%Off', value: 'PERCENTAGE' },
   ];
 
@@ -60,7 +60,7 @@ export class AddDiscountComponent implements OnInit {
       const type = discountType.value;
 
       if (this.originalAmount)
-        if (type === 'NUMBER') {
+        if (type === 'FLAT') {
           this.totalDiscount = discount;
         } else {
           this.totalDiscount = this.adminUtilityService.getEpsilonValue(
@@ -68,7 +68,7 @@ export class AddDiscountComponent implements OnInit {
           );
         }
 
-      if (type === 'NUMBER' && discount >= this.originalAmount) {
+      if (type === 'FLAT' && discount >= this.originalAmount) {
         return 'isNumError';
       }
 

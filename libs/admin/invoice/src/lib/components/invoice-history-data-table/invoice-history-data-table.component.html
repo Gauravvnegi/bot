@@ -8,25 +8,19 @@
   class="tab-filter"
   (onEntityTabFilterChanges)="onEntityTabFilterChanges($event)"
 ></hospitality-bot-entity-tab-filter>
-
 <div
-  class="action-header"
-  [ngClass]="{ 'action-header__sticky': isScrolledUp }"
   [formGroup]="tableFG"
 >
-  <div class="heading">{{ tableName }}</div>
-  <div class="action-wrapper">
-    <hospitality-bot-export-list
+  <hospitality-bot-navigation-header [heading]="tableName" [routes]="navRoutes" [isBack]="false">
+  <hospitality-bot-export-list
       [isDisable]="values.length === 0"
       [additionalActionItems]="additionalActionItems"
       (onDocumentActions)="onDocumentActions()"
       [documentTypes]="documentTypes"
       [documentActionTypes]="documentActionTypes"
     ></hospitality-bot-export-list>
-  </div>
+  </hospitality-bot-navigation-header>
 </div>
-<div [ngClass]="{ 'sticky-header-gap': isScrolledUp }"></div>
-
 <p-table
   #dt
   [styleClass]="tableConfig.styleClass"

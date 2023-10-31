@@ -17,6 +17,40 @@ export class ManagerFlashReport extends MangerReport
   deserialize(mangerReportData: ManagerReportResponse[]) {
     this.records = new Array<ManagerFlashReportData>();
 
+    mangerReportData = mangerReportData.map((item) => {
+      const totalRoomMinusOSS =
+        item?.totalRooms ?? 0 - item?.outOfServiceRooms ?? 0;
+      const availableRooms = totalRoomMinusOSS - item?.occupiedRooms ?? 0;
+      const availableRoomsMinusOOSS =
+        availableRooms - item?.outOfServiceRooms ?? 0;
+      const noOfLettableRooms =
+        item?.totalRooms ?? 0 - item?.outOfServiceRooms ?? 0;
+      const roomsOccupiedMinusCompAndHouse =
+        item?.occupiedRooms ??
+        0 - item?.complimentaryRooms ??
+        0 - item?.houseUseRooms ??
+        0;
+      const roomOccupiedMinusHouseUse =
+        item?.occupiedRooms ?? 0 - item?.houseUseRooms ?? 0;
+      const roomOccupiedMinusComp =
+        item?.occupiedRooms ?? 0 - item?.complimentaryRooms ?? 0;
+      const revParInclDNR = item?.roomRevenue / item?.totalRooms;
+      const totalRevenue = item?.roomRevenue + item?.inclusionOrAddOn;
+
+      return {
+        ...item,
+        totalRoomMinusOSS,
+        availableRooms,
+        availableRoomsMinusOOSS,
+        noOfLettableRooms,
+        roomsOccupiedMinusCompAndHouse,
+        roomOccupiedMinusHouseUse,
+        roomOccupiedMinusComp,
+        revParInclDNR,
+        totalRevenue,
+      };
+    });
+
     const dayData =
       mangerReportData.find((item) => item.calenderType === 'DAY') ?? {};
     const monthData =

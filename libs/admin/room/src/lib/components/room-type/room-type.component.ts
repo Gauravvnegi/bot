@@ -20,7 +20,6 @@ import {
 import { ModalService } from '@hospitality-bot/shared/material';
 import { NavRouteOptions, Option } from 'libs/admin/shared/src';
 import CustomValidators from 'libs/admin/shared/src/lib/utils/validators';
-import { convertToTitleCase } from 'libs/admin/shared/src/lib/utils/valueFormatter';
 import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.service';
 import { Subscription } from 'rxjs';
 import {

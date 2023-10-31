@@ -251,14 +251,14 @@ export class CreatePackageComponent implements OnInit {
       if (price && type)
         this.useForm.patchValue({
           discountedPrice:
-            type === 'NUMBER'
+            type === 'FLAT'
               ? price - discount
               : Math.round(
                   (price - (price * discount) / 100 + Number.EPSILON) * 100
                 ) / 100,
         });
 
-      if (type === 'NUMBER' && discount > price) {
+      if (type === 'FLAT' && discount > price) {
         return 'isNumError';
       }
 

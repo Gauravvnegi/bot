@@ -50,9 +50,9 @@ export class CreateFoodPackageComponent extends OutletBaseComponent
     private taxService: TaxService,
     private outletService: OutletService,
     private pageReloadService: PageReloadService,
-    private routesConfigService: RoutesConfigService
+    protected routesConfigService: RoutesConfigService
   ) {
-    super(router, route);
+    super(router, route , routesConfigService);
   }
 
   ngOnInit(): void {

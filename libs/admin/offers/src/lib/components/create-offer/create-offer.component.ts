@@ -131,7 +131,7 @@ export class CreateOfferComponent implements OnInit {
       if (price && type)
         this.useForm.patchValue({
           discountedPrice:
-            type === 'NUMBER'
+            type === 'FLAT'
               ? `${price - discount}`
               : `${
                   Math.round(
@@ -205,7 +205,7 @@ export class CreateOfferComponent implements OnInit {
 
     if (rateValue && discountType) {
       const discountedPrice =
-        discountType === 'NUMBER'
+        discountType === 'FLAT'
           ? `${rateValue - discountValue}`
           : `${
               Math.round(

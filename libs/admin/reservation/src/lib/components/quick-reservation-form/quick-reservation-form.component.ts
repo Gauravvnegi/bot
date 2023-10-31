@@ -25,7 +25,10 @@ import {
   ModuleNames,
   Option,
 } from '@hospitality-bot/admin/shared';
-import { SnackBarService } from '@hospitality-bot/shared/material';
+import {
+  ModalService,
+  SnackBarService,
+} from '@hospitality-bot/shared/material';
 import {
   BookingConfig,
   ReservationFormData,
@@ -36,7 +39,6 @@ import {
   QuickReservationForm,
 } from '../../../../../dashboard/src/lib/data-models/reservation.model';
 import { FormService } from 'libs/admin/manage-reservation/src/lib/services/form.service';
-import { Router } from '@angular/router';
 import { IGRoomType } from '../reservation-calendar-view/reservation-calendar-view.component';
 import { IGCol } from 'libs/admin/shared/src/lib/components/interactive-grid/interactive-grid.component';
 import { Subscription } from 'rxjs';
@@ -46,7 +48,9 @@ import { RoomTypeForm } from 'libs/admin/room/src/lib/models/room.model';
 import { GuestType } from 'libs/admin/guests/src/lib/types/guest.type';
 import { RoomFieldTypeOption } from 'libs/admin/manage-reservation/src/lib/constants/reservation';
 import * as moment from 'moment';
-import { manageGuestRoutes } from 'libs/admin/guests/src/lib/constant/routes';
+import { MatDialogConfig } from '@angular/material/dialog';
+import { DetailsComponent } from '../details/details.component';
+
 @Component({
   selector: 'hospitality-bot-quick-reservation-form',
   templateUrl: './quick-reservation-form.component.html',
@@ -121,7 +125,8 @@ export class QuickReservationFormComponent implements OnInit {
     private formService: FormService,
     private compiler: Compiler,
     private resolver: ComponentFactoryResolver,
-    private routesConfigService: RoutesConfigService
+    private routesConfigService: RoutesConfigService,
+    private modalService: ModalService
   ) {
     this.initForm();
   }
@@ -560,13 +565,32 @@ export class QuickReservationFormComponent implements OnInit {
     );
   }
 
-  viewGuestDetails() {
-    this.routesConfigService.navigate({
-      subModuleName: ModuleNames.GUESTS,
-      additionalPath: `${manageGuestRoutes.editGuest.route}/${
-        this.inputControls.guestInformation.get('guestDetails').value
-      }`,
-    });
+  openDetailsPage() {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = true;
+    dialogConfig.width = '100%';
+    const detailCompRef = this.modalService.openDialog(
+      DetailsComponent,
+      dialogConfig
+    );
+
+    detailCompRef.componentInstance.bookingId = this.reservationId;
+    detailCompRef.componentInstance.tabKey = 'payment_details';
+    this.increaseZIndex(true);
+    this.$subscription.add(
+      detailCompRef.componentInstance.onDetailsClose.subscribe((res) => {
+        this.increaseZIndex(false);
+        detailCompRef.close();
+      })
+    );
+  }
+
+  increaseZIndex(toggleZIndex: boolean) {
+    const cdkOverlayContainer = document.querySelector(
+      '.cdk-overlay-container'
+    ) as HTMLElement;
+    if (cdkOverlayContainer)
+      cdkOverlayContainer.style.zIndex = toggleZIndex ? '1500' : '1000';
   }
 
   openNewWindow(url: string) {

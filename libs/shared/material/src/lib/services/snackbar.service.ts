@@ -96,7 +96,8 @@ export class SnackBarService {
       '.cdk-overlay-container'
     ) as HTMLElement;
 
-    if (cdkOverlayContainer) {
+    // Check if the cdk container has zIndex 1500 already
+    if (cdkOverlayContainer && cdkOverlayContainer.style.zIndex !== '1500') {
       // Increase the z-index before showing the snackbar
       cdkOverlayContainer.style.zIndex = '1500';
       setTimeout(() => {

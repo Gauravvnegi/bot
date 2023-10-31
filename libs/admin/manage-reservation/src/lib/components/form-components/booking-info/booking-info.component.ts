@@ -183,6 +183,16 @@ export class BookingInfoComponent implements OnInit {
     const sourceControl = this.reservationInfoControls.source;
     const sourceNameControl = this.reservationInfoControls.sourceName;
 
+    this.$subscription.add(
+      this.formService.sourceData.subscribe((res) => {
+        if (res && this.configData) {
+          this.editMode = true;
+          sourceNameControl.setValue(res.sourceName);
+          sourceControl.setValue(res.source);
+        }
+      })
+    );
+
     sourceControl.valueChanges.subscribe((res) => {
       if (res) {
         // this.agentSource = res === 'AGENT';
@@ -192,21 +202,22 @@ export class BookingInfoComponent implements OnInit {
                 .type
             : [];
         // sourceNameControl.clearValidators();
+        if (
+          !this.otaOptions.some(
+            (item) => item.value === sourceNameControl.value
+          ) &&
+          sourceNameControl.value.length
+        ) {
+          this.otaOptions.push({
+            label: sourceNameControl.value,
+            value: sourceNameControl.value,
+          });
+        }
         if (!this.editMode) {
           sourceNameControl.reset();
         }
       }
     });
-
-    this.$subscription.add(
-      this.formService.sourceData.subscribe((res) => {
-        if (res && this.configData) {
-          this.editMode = true;
-          sourceControl.setValue(res.source);
-          sourceNameControl.setValue(res.sourceName);
-        }
-      })
-    );
   }
 
   getCountryCode(): void {

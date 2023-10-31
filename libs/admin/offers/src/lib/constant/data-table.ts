@@ -38,5 +38,5 @@ export const title = 'Offers';
 
 export enum DiscountType {
   PERCENTAGE = '%OFF',
-  NUMBER = 'FLAT',
+  FLAT = 'FLAT',
 }

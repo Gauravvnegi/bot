@@ -727,7 +727,7 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
         ModuleNames.LIVE_MESSAGING
       ) &&
       this.subscriptionPlanService.hasManageUserPermission(
-        PermissionModuleNames.CONVERSATION
+        PermissionModuleNames.CONVERSATIONS
       )
     );
   }

@@ -130,7 +130,6 @@ export class CategoryComponent implements OnInit {
         .createCategory(this._entityId, {
           name: event,
           source: 1,
-          imageUrl: '',
           type: this.type,
           active: true,
         })

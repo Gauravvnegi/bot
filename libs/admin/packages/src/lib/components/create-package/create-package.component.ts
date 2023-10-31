@@ -69,7 +69,6 @@ export class CreatePackageComponent implements OnInit {
     private packagesService: PackagesService,
     private snackbarService: SnackBarService,
     private configService: ConfigService,
-    private router: Router,
     private route: ActivatedRoute,
     private routesConfigService: RoutesConfigService
   ) {

@@ -173,7 +173,14 @@
             class="center-align"
             *ngIf="rowData?.confirmationNumber; emptyCell"
           >
-            <div class="primary-text">{{ rowData?.confirmationNumber }}</div>
+            <div class="primary-text">
+                {{ rowData?.confirmationNumber }}
+                <i
+                  class="pi pi-copy"
+                  (click)="copyConfirmationNumber(rowData?.confirmationNumber)"
+                  click-stop-propagation
+                ></i>
+            </div>
           </div>
         </td>
 

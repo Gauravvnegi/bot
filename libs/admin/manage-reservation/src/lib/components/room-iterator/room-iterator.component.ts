@@ -300,9 +300,6 @@ export class RoomIteratorComponent extends IteratorComponent
     if (event) {
       this.mapRoomTypeData(event, index);
       this.listenRoomTypeChanges(index);
-      setTimeout(() => {
-        this.formService.isDataInitialized.next(true);
-      }, 500);
       if (this.isDraftBooking) this.listenForRoomChanges(index);
     }
   }
@@ -324,9 +321,9 @@ export class RoomIteratorComponent extends IteratorComponent
       roomCount: 1,
       maxChildren: data.maxChildren,
       maxAdult: data.maxAdult,
-      rooms: data.rooms.map((room) => ({
-        label: room.roomNumber,
-        value: room.roomNumber,
+      rooms: data?.rooms.map((room) => ({
+        label: room?.roomNumber,
+        value: room?.roomNumber,
       })),
     };
   }

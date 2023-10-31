@@ -184,7 +184,9 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
       this.firebaseMessagingService.receiveMessage().subscribe((payload) => {
         console.log(payload, 'payload message when notification trigger');
         const notificationPayload = payload;
-        this.firebaseMessagingService.playNotificationSound();
+        this.firebaseMessagingService.playNotificationSound(
+          notificationPayload['data']?.notificationType
+        );
         this.getNotificationUnreadCount();
         if (notificationPayload) {
           switch (notificationPayload['data']?.notificationType) {
@@ -725,7 +727,7 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
         ModuleNames.LIVE_MESSAGING
       ) &&
       this.subscriptionPlanService.hasManageUserPermission(
-        PermissionModuleNames.CONVERSATION
+        PermissionModuleNames.CONVERSATIONS
       )
     );
   }

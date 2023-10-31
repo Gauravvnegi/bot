@@ -24,6 +24,7 @@ export class FormService {
   calendarView: boolean = false;
   getSummary = new Subject<void>();
   deductedAmount = new BehaviorSubject(0);
+  isDataInitialized = new BehaviorSubject(false);
 
   guestInformation: BehaviorSubject<string> = new BehaviorSubject<string>(null);
 

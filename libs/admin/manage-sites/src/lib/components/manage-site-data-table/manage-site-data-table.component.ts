@@ -76,6 +76,7 @@ export class ManageSiteDataTableComponent extends BaseDatatableComponent {
     this.userId = this.userService.getLoggedInUserId();
     this.initTableValue();
     this.createSiteUrl = `${environment.createWithUrl}/theme/select?userId=${this.userId}&creatingNewSite=true`;
+    this.cookiesSettingService.initCookiesForPlatform();
   }
 
   /**

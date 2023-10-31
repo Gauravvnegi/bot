@@ -184,6 +184,7 @@ export class RequestListComponent implements OnInit, OnDestroy {
     this.$subscription.add(
       this.fetchDataFrom(queries).subscribe((response) => {
         this.listData = new InhouseTable().deserialize(response).records;
+        clearInterval(this.timeInterval);
         this.timeLeft = this.listData.map((item) => item.timeLeft);
         this.startTimeLeftTimer();
 
@@ -407,7 +408,7 @@ export class RequestListComponent implements OnInit, OnDestroy {
             offset,
             limit,
             key: this.parentFG.get('search').value.trim(),
-            entityType: this.entityType, 
+            entityType: this.entityType,
           },
         ]),
       })

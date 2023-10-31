@@ -50,6 +50,7 @@ import { SelectedEntity } from '../../types/reservation.type';
 import { InvoiceService } from 'libs/admin/invoice/src/lib/services/invoice.service';
 import { distinctUntilChanged, takeUntil, tap } from 'rxjs/operators';
 import { tableTypes } from 'libs/admin/dashboard/src/lib/constants/cols';
+import { Clipboard } from '@angular/cdk/clipboard';
 
 @Component({
   selector: 'hospitality-bot-manage-reservation-data-table',
@@ -101,7 +102,8 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
     private modalService: ModalService,
     private invoiceService: InvoiceService,
     private routesConfigService: RoutesConfigService,
-    private router: Router
+    private router: Router,
+    private _clipboard: Clipboard
   ) {
     super(fb, tabFilterService);
   }
@@ -429,6 +431,13 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
         this.handleFinal
       )
     );
+  }
+
+  copyConfirmationNumber(number: string) {
+    this._clipboard.copy(number);
+    this.snackbarService.openSnackBarAsText('Confirmation number copied', '', {
+      panelClass: 'success',
+    });
   }
 
   /**

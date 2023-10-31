@@ -13,11 +13,22 @@
       <hospitality-bot-tab-header
         [listItems]="tabFilterItems"
         [selectedIndex]="tabFilterIdx"
-        (selectedTabChange)="
-          selectedTabFilterChange.emit($event.index);
-          setEmptyMessage($event.index)
-        "
+        (selectedTabChange)="onTabFilterChange($event.index)"
       ></hospitality-bot-tab-header>
+      <div class="header__filter">
+        <ng-container *ngFor="let date of dates; let i = index">
+          <div
+            (click)="
+              onDateFilterChange.emit(dates[i]); selectedDateFilter = date.date
+            "
+            class="card"
+            [ngClass]="{ card__selected: selectedDateFilter === date.date }"
+          >
+            <span> {{ date.day }}</span>
+            <span>{{ date.date }}</span>
+          </div>
+        </ng-container>
+      </div>
     </div>
   </div>
   <div class="container" *ngIf="!loading; else loader">

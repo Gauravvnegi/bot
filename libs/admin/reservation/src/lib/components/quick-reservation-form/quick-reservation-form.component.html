@@ -273,7 +273,7 @@
   [loading]="isBooking"
   [isId]="reservationId"
   (onPostAction)="handleSubmit()"
-  (onPreAction)="viewGuestDetails()"
+  (onPreAction)="openDetailsPage()"
   [isSticky]="true"
   [config]="{
     postLabel: reservationId ? 'Update Reservation' : 'Create Reservation',

@@ -23,6 +23,7 @@
           [loading]="loading"
           [tabFilterItems]="tabFilterItems"
           (selectedTabFilterChange)="onSelectedTabFilterChange($event)"
+          (onDateFilterChange)="onDateFilterChange($event)"
           [options]="options"
           header="E-Checkin"
           [template]="getTemplate()"

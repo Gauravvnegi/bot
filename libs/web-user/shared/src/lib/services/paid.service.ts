@@ -72,7 +72,7 @@ export class PaidService extends ApiService {
       const mergedDateTime = date + ' ' + time;
       const mergedTimestamp = moment(mergedDateTime, 'D MMM HH:mm').unix();
       
-      data.packagesToBeAdd[0].metaData.pickupTime = mergedTimestamp * 1000;
+      data.packagesToBeAdd[0].metaData.pickupTime = mergedTimestamp;
       data.packagesToBeAdd[0].metaData.pickupDate = undefined;
     }
     return this.put(`/api/v1/reservation/${reservationId}/packages`, data);

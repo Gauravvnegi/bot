@@ -99,7 +99,7 @@ export class QuickSelectComponent extends FormComponent implements OnInit {
   @Output() clickedOption = new EventEmitter<Option>();
   @Output() openSidebar = new EventEmitter<boolean>();
 
-  $subscription: Subscription;
+  $subscription = new Subscription();
 
   constructor(
     private route: Router,
@@ -177,26 +177,30 @@ export class QuickSelectComponent extends FormComponent implements OnInit {
         ? this.searchAPIEndPoint
         : this.apiEndPoint;
       this.qsLoading = true;
-      this.apiService
-        .get(
-          `${apiEndPoint}${this.getQueryConfig({
-            key: key,
-            ...this.queryParams,
-          })}`,
-          {
-            'entity-id': this.entityId,
-          }
-        )
-        .subscribe(
-          (res) => {
-            const model = this.searchModel ? this.searchModel : this.dataModel;
-            this.menuOptions = this.getOptions(res, model);
-          },
-          (error) => {},
-          () => {
-            this.qsLoading = false;
-          }
-        );
+      this.$subscription.add(
+        this.apiService
+          .get(
+            `${apiEndPoint}${this.getQueryConfig({
+              key: key,
+              ...this.queryParams,
+            })}`,
+            {
+              'entity-id': this.entityId,
+            }
+          )
+          .subscribe(
+            (res) => {
+              const model = this.searchModel
+                ? this.searchModel
+                : this.dataModel;
+              this.menuOptions = this.getOptions(res, model);
+            },
+            (error) => {},
+            () => {
+              this.qsLoading = false;
+            }
+          )
+      );
     } else {
       this.offSet = 0;
       this.menuOptions = [];
@@ -212,42 +216,44 @@ export class QuickSelectComponent extends FormComponent implements OnInit {
    */
   getItems() {
     this.qsLoading = true;
-    this.apiService
-      .get(
-        `${this.apiEndPoint}${this.getQueryConfig({
-          ...this.queryParams,
-          offset: this.offSet,
-          limit: this.limit,
-        })}`,
-        {
-          'entity-id': this.entityId,
-        }
-      )
-      .subscribe(
-        (res) => {
-          let data = this.getOptions(res, this.dataModel);
-          this.menuOptions = this.resetApiData
-            ? data
-            : this.removeDuplicate([
-                ...this.menuOptions,
-                ...data,
-                ...(this._qsProps.selectedOption
-                  ? [this._qsProps.selectedOption]
-                  : []),
-              ]);
-          // To be improved later.
-          this.controlContainer.control
-            .get(this.controlName)
-            .setValue(
-              this.controlContainer.control.get(this.controlName).value
-            );
-          this.noMoreData = data.length < this.limit;
-        },
-        (error) => {},
-        () => {
-          this.qsLoading = false;
-        }
-      );
+    this.$subscription.add(
+      this.apiService
+        .get(
+          `${this.apiEndPoint}${this.getQueryConfig({
+            ...this.queryParams,
+            offset: this.offSet,
+            limit: this.limit,
+          })}`,
+          {
+            'entity-id': this.entityId,
+          }
+        )
+        .subscribe(
+          (res) => {
+            let data = this.getOptions(res, this.dataModel);
+            this.menuOptions = this.resetApiData
+              ? data
+              : this.removeDuplicate([
+                  ...this.menuOptions,
+                  ...data,
+                  ...(this._qsProps.selectedOption
+                    ? [this._qsProps.selectedOption]
+                    : []),
+                ]);
+            // To be improved later.
+            this.controlContainer.control
+              .get(this.controlName)
+              .setValue(
+                this.controlContainer.control.get(this.controlName).value
+              );
+            this.noMoreData = data.length < this.limit;
+          },
+          (error) => {},
+          () => {
+            this.qsLoading = false;
+          }
+        )
+    );
   }
 
   /**
@@ -313,32 +319,34 @@ export class QuickSelectComponent extends FormComponent implements OnInit {
           ...model?.data,
           [model.key]: event,
         };
-        this.apiService.post(endPoint, data).subscribe(
-          (res) => {
-            // push created option
-            this.menuOptions.push({
-              ...res,
-              label: Array.isArray(model.values?.label)
-                ? `${res[model.values?.label[0]]} ${
-                    res[model.values?.label[1]]
-                  }` // Concatenate labels in case of an array
-                : res[model.values?.label],
-              value: res[model.values.value],
-            });
-            this.controlContainer.control
-              .get(this.controlName)
-              .setValue(res[model.values.value]);
-            this.snackbarService.openSnackBarAsText(
-              this.label + ' created successfully',
-              '',
-              { panelClass: 'success' }
-            );
-          },
-          () => {
-            this.offSet = 0;
-            this.menuOptions = [];
-            this.getItems();
-          }
+        this.$subscription.add(
+          this.apiService.post(endPoint, data).subscribe(
+            (res) => {
+              // push created option
+              this.menuOptions.push({
+                ...res,
+                label: Array.isArray(model.values?.label)
+                  ? `${res[model.values?.label[0]]} ${
+                      res[model.values?.label[1]]
+                    }` // Concatenate labels in case of an array
+                  : res[model.values?.label],
+                value: res[model.values.value],
+              });
+              this.controlContainer.control
+                .get(this.controlName)
+                .setValue(res[model.values.value]);
+              this.snackbarService.openSnackBarAsText(
+                this.label + ' created successfully',
+                '',
+                { panelClass: 'success' }
+              );
+            },
+            () => {
+              this.offSet = 0;
+              this.menuOptions = [];
+              this.getItems();
+            }
+          )
         );
       }
     } else {
@@ -383,6 +391,10 @@ export class QuickSelectComponent extends FormComponent implements OnInit {
           if (selectedOption) this.clickedOption.emit(selectedOption);
         }
       });
+  }
+
+  ngOnDestroy() {
+    this.$subscription.unsubscribe();
   }
 }
 

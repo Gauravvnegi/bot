@@ -31,7 +31,7 @@ export class CheckedInReservation {
     };
     this.bookingNo = `#${input?.reservationNumber ?? ''}`;
     this.stakeHolder = {
-      guest: guest?.firstName + ' ' + guest?.firstName,
+      guest: guest?.firstName + ' ' + guest?.lastName,
       company: guest?.company
         ? guest?.company?.firstName ?? '' + ' ' + guest?.company?.lastName ?? ''
         : '',

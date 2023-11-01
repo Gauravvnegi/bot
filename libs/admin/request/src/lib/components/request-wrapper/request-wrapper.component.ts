@@ -59,7 +59,7 @@ export class RequestWrapperComponent implements OnInit, OnDestroy {
     },
     {
       label: 'Other',
-      value: 'OTHER',
+      value: 'ALL',
     },
   ];
 

@@ -130,3 +130,9 @@
     margin-top: 0;
   }
 }
+
+:host ::ng-deep .service-item {
+  .p-dropdown-label {
+    max-width: 137px !important;
+  }
+}

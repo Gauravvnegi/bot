@@ -58,7 +58,7 @@ export class RequestWrapperComponent implements OnInit, OnDestroy {
       value: 'FOCUSED',
     },
     {
-      label: 'Others',
+      label: 'All',
       value: 'ALL',
     },
   ];

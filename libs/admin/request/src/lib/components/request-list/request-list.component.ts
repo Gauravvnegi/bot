@@ -15,6 +15,7 @@ import {
 } from '../../data-models/inhouse-list.model';
 import { RequestService } from '../../services/request.service';
 import { AllJobRequestResponse } from '../../types/response.types';
+import { SubscriptionPlanService } from '@hospitality-bot/admin/core/theme';
 
 @Component({
   selector: 'hospitality-bot-request-list',
@@ -47,6 +48,7 @@ export class RequestListComponent implements OnInit, OnDestroy {
   tabFilterItems = request.defaultTabFilter;
   tabFilterIdx = 0;
   entityId: string;
+  requestTabFilter: string;
 
   timeInterval;
   timeLeft = [];
@@ -57,13 +59,15 @@ export class RequestListComponent implements OnInit, OnDestroy {
     private _requestService: RequestService,
     private _adminUtilityService: AdminUtilityService,
     private fb: FormBuilder,
-    private firebaseMessagingService: FirebaseMessagingService
+    private firebaseMessagingService: FirebaseMessagingService,
+    private subscriptionService: SubscriptionPlanService
   ) {}
 
   ngOnInit(): void {
     this.initFG();
     this.registerListeners();
     this._requestService.selectedRequest.next(null);
+    this.requestTabFilter = this.subscriptionService.hasComplaintManagementSystem() ?  'ALL' : 'FOCUSED';
   }
 
   /**
@@ -80,6 +84,20 @@ export class RequestListComponent implements OnInit, OnDestroy {
     this.listenForNotification();
     this.listenForRefreshData();
     this.listenRequestFilter();
+    this.listenForSelectedRequestStatus();
+  }
+
+  listenForSelectedRequestStatus() {
+    this._requestService.selectedRequestStatus.subscribe((res) => {
+      if (res) {
+        this.listData = this.listData.map((item) => {
+          if (item.id === res?.jobId) {
+            item.action = res?.status;
+          }
+          return item;
+        });
+      }
+    });
   }
 
   /**
@@ -104,7 +122,7 @@ export class RequestListComponent implements OnInit, OnDestroy {
             actionType: this.tabFilterItems[this.tabFilterIdx]?.value,
             offset: 0,
             sort: 'updated',
-            entityType: 'FOCUSED',
+            entityType: this.requestTabFilter,
             limit:
               this.listData && this.listData.length > 10
                 ? this.listData.length
@@ -118,6 +136,7 @@ export class RequestListComponent implements OnInit, OnDestroy {
   listenRequestFilter() {
     this._requestService.requestListFilter.subscribe((res) => {
       if (res) {
+        this.requestTabFilter = res;
         this._requestService.selectedRequest.next(null);
         this.loadInitialRequestList([
           ...this.globalQueries,
@@ -148,6 +167,7 @@ export class RequestListComponent implements OnInit, OnDestroy {
             journeyType: this.entityType,
             actionType: this.tabFilterItems[this.tabFilterIdx].value,
             offset: 0,
+            entityType: this.requestTabFilter,
             limit:
               this.listData && this.listData.length > 10
                 ? this.listData.length
@@ -251,7 +271,7 @@ export class RequestListComponent implements OnInit, OnDestroy {
           limit,
           journeyType: this.entityType,
           sort: 'updated',
-
+          entityType: this.requestTabFilter,
           actionType: this.tabFilterItems[this.tabFilterIdx].value,
         },
       ]).subscribe((response) => {
@@ -409,6 +429,7 @@ export class RequestListComponent implements OnInit, OnDestroy {
             limit,
             key: this.parentFG.get('search').value.trim(),
             entityType: this.entityType,
+            
           },
         ]),
       })

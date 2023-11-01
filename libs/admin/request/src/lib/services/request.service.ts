@@ -15,6 +15,7 @@ export class RequestService extends ApiService {
   assigneeList = new BehaviorSubject<any[]>([]);
   refreshItemList = new BehaviorSubject<boolean>(false);
   requestListFilter = new BehaviorSubject<string>('');
+  selectedRequestStatus = new BehaviorSubject<any>({});
 
   syncRequest(entityId: string): Observable<any> {
     return this.get(

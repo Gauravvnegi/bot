@@ -82,7 +82,11 @@ export class RequestWrapperComponent implements OnInit, OnDestroy {
     private resolver: ComponentFactoryResolver
   ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    if (this.hasComplaintManagementSystem) {
+      this.listByFilterItems.reverse();
+    }
+  }
 
   get hasComplaintManagementSystem() {
     return this.subscriptionService.hasComplaintManagementSystem();

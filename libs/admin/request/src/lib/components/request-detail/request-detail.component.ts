@@ -98,6 +98,7 @@ export class RequestDetailComponent implements OnInit, OnDestroy {
             status: response.action,
             assignee: response.assigneeId,
           });
+          this._requestService.selectedRequestStatus.next({ jobId: this.jobId, status: response.action})
           this.closedTimestamp = response?.closedTime;
           this.getAssigneeList(response.itemId);
           this.getStatusList(response.nextStates);

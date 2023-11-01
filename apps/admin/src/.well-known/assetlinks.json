@@ -3,7 +3,7 @@
     "relation": ["delegate_permission/common.handle_all_urls"],
     "target": {
       "namespace": "android_app",
-      "package_name": "com.botshot.app.dev",
+      "package_name": "com.botshot.app.stage",
       "sha256_cert_fingerprints": [
         "60:05:B7:5C:6B:C2:B8:1E:87:C9:50:B8:E3:7A:EE:E3:09:31:05:5B:CA:4B:6A:AC:52:3B:5B:50:9F:CD:B5:B1",
         "3C:9C:90:A0:E2:6E:B1:DF:A6:D6:45:C8:41:E6:41:54:F8:F3:43:45:93:F8:0B:64:CA:59:AA:F3:EB:98:9F:79",

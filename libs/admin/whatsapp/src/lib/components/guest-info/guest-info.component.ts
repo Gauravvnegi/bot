@@ -141,10 +141,12 @@ export class GuestInfoComponent implements OnInit, OnChanges, OnDestroy {
       ]),
     };
     this.$subscription.add(
-      this.messageService.getRequestByConfNo(config).subscribe(
-        (response) =>
-          (this.requestList = new RequestList().deserialize(response).data)
-      )
+      this.messageService
+        .getRequestByConfNo(config)
+        .subscribe(
+          (response) =>
+            (this.requestList = new RequestList().deserialize(response).data)
+        )
     );
   }
 
@@ -196,11 +198,9 @@ export class GuestInfoComponent implements OnInit, OnChanges, OnDestroy {
             this.$subscription.add(
               this.messageService
                 .updateGuestDetail(this.entityId, this.data.receiverId, values)
-                .subscribe(
-                  (response) => {
-                    this.messageService.refreshData$.next(true);
-                  }                  
-                )
+                .subscribe((response) => {
+                  this.messageService.refreshData$.next(true);
+                })
             );
           }
           raiseRequestCompRef.close();

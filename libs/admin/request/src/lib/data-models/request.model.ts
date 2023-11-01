@@ -157,6 +157,7 @@ export class Request implements IDeserializable {
   status: string;
   priority: string;
   id: number;
+  jobId: string;
   deserialize(input: any) {
     Object.assign(
       this,
@@ -168,7 +169,8 @@ export class Request implements IDeserializable {
       set({}, 'requestTime', get(input, ['requestTime'])),
       set({}, 'status', get(input, ['status'])),
       set({}, 'priority', get(input, ['priority'])),
-      set({}, 'id', get(input, ['id']))
+      set({}, 'id', get(input, ['id'])),
+      set({}, 'jobId', get(input, ['jobID']))
     );
 
     return this;

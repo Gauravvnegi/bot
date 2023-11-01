@@ -61,6 +61,7 @@ export class ChatComponent
   @ViewChild('sidebarSlide', { read: ViewContainerRef })
   sidebarSlide: ViewContainerRef;
   sidebarType;
+  loadingChat: boolean = false;
 
   constructor(
     private modalService: ModalService,
@@ -235,6 +236,7 @@ export class ChatComponent
       'timestamp'
     );
     this.liveChatStatus.patchValue(response?.receiver?.status);
+    this.loadingChat = true;
     this.chatList.messages[
       response.receiver.receiverId
     ] = this.messageService.filterMessagesByDate(this.chat.messages);

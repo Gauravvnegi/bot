@@ -67,7 +67,9 @@ export class RequestListComponent implements OnInit, OnDestroy {
     this.initFG();
     this.registerListeners();
     this._requestService.selectedRequest.next(null);
-    this.requestTabFilter = this.subscriptionService.hasComplaintManagementSystem() ?  'ALL' : 'FOCUSED';
+    this.requestTabFilter = this.subscriptionService.hasComplaintManagementSystem()
+      ? 'ALL'
+      : 'FOCUSED';
   }
 
   /**
@@ -90,7 +92,7 @@ export class RequestListComponent implements OnInit, OnDestroy {
   listenForSelectedRequestStatus() {
     this._requestService.selectedRequestStatus.subscribe((res) => {
       if (res) {
-        this.listData = this.listData.map((item) => {
+        this.listData = this.listData?.map((item) => {
           if (item.id === res?.jobId) {
             item.action = res?.status;
           }
@@ -429,7 +431,6 @@ export class RequestListComponent implements OnInit, OnDestroy {
             limit,
             key: this.parentFG.get('search').value.trim(),
             entityType: this.entityType,
-            
           },
         ]),
       })

@@ -70,7 +70,6 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      padding-right: 33px;
       .guestInfoEditContainer {
         width: 138px;
         height: 36px;
@@ -94,6 +93,9 @@
           opacity: 1;
         }
       }
+    }
+    .end-chat {
+      height: 45px;
     }
   }
 }

@@ -345,6 +345,19 @@ export class ChatComponent
     );
   }
 
+  endLiveChat() {
+    this.liveChatStatus.patchValue(true);
+    this.$subscription.add(
+      this.messageService
+        .updateLiveChat(
+          this.entityId,
+          this.selectedChat.receiverId,
+          this.liveChatFG.getRawValue()
+        )
+        .subscribe((res) => this.liveChatFG.patchValue(res))
+    );
+  }
+
   handleButtonClick(): void {
     this.openRaiseRequest();
   }

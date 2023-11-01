@@ -46,20 +46,22 @@
             </div>
           </div>
         </div>
-        <mat-slide-toggle
+        <!-- <mat-slide-toggle
           featureSubscribed
           [feature]="productName.whatsappBot"
           formControlName="status"
           (change)="onLiveChatChange()"
           [disabled]="liveChatStatus.value"
           >Hand Over to Bot</mat-slide-toggle
-          >
-          <!-- <img
-            class="expand"
-            [src]="'assets/svg/end-chat.svg'"
-            alt=""
-            [pTooltip]="'End Chat'"
-          /> -->
+          > -->
+        <img
+          class="end-chat"
+          [src]="'assets/svg/end-chat.svg'"
+          alt="'End Chat'"
+          [pTooltip]="'End Chat'"
+          tooltipPosition="bottom"
+          (click)="endLiveChat()"
+        />
         <img
           *ngIf="!guestInfoEnable"
           class="icon"

@@ -55,13 +55,13 @@
           >Hand Over to Bot</mat-slide-toggle
           > -->
         <img
-          *ngIf="checkWhatsappBotSubscription()"
+          *ngIf="checkWhatsappBotSubscription() && !liveChatStatus.value"
           class="end-chat"
           [src]="'assets/svg/end-chat.svg'"
-          alt="'End Chat'"
-          [pTooltip]="'End Chat'"
+          alt="'End Live Chat'"
+          [pTooltip]="'End Live Chat'"
           tooltipPosition="bottom"
-          (click)="endLiveChat()"
+          (click)="openEndLiveChatPopup()"
         />
         <img
           *ngIf="!guestInfoEnable"

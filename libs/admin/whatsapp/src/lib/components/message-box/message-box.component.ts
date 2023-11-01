@@ -47,6 +47,11 @@ export class MessageBoxComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.listenForGlobalFilters();
+    this.messageService.sendLiveChatEndMessage.subscribe((res) => {
+      if (res) {
+        this.sendMessage();
+      }
+    });
   }
 
   listenForGlobalFilters() {
@@ -125,8 +130,9 @@ export class MessageBoxComponent implements OnInit, OnDestroy {
     ]);
 
     this.$subscription.add(
-      this.messageService.sendMessage(this.entityId, values, queryObj).subscribe(
-        (_) => {
+      this.messageService
+        .sendMessage(this.entityId, values, queryObj)
+        .subscribe((_) => {
           this.messageSent.emit({
             message: encodeURIComponent(this.chatFG.get('message').value),
             timestamp,
@@ -134,8 +140,7 @@ export class MessageBoxComponent implements OnInit, OnDestroy {
             update: true,
           });
           this.mentions = [];
-        }        
-      )
+        })
     );
   }
 

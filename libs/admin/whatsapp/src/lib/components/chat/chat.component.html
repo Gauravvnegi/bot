@@ -55,6 +55,7 @@
           >Hand Over to Bot</mat-slide-toggle
           > -->
         <img
+          *ngIf="checkWhatsappBotSubscription()"
           class="end-chat"
           [src]="'assets/svg/end-chat.svg'"
           alt="'End Chat'"

@@ -26,6 +26,7 @@ import { IChats, Chats, Chat, RequestList } from '../../models/message.model';
 import { MatDialogConfig } from '@angular/material/dialog';
 import { RaiseRequestComponent } from 'libs/admin/request/src/lib/components/raise-request/raise-request.component';
 import * as FileSaver from 'file-saver';
+import { SubscriptionPlanService } from '@hospitality-bot/admin/core/theme';
 
 @Component({
   selector: 'hospitality-bot-chat',
@@ -68,7 +69,8 @@ export class ChatComponent
     private adminUtilityService: AdminUtilityService,
     private globalFilterService: GlobalFilterService,
     private _firebaseMessagingService: FirebaseMessagingService,
-    private resolver: ComponentFactoryResolver
+    private resolver: ComponentFactoryResolver,
+    private subscriptionPlanService: SubscriptionPlanService
   ) {}
 
   ngOnInit(): void {
@@ -318,6 +320,12 @@ export class ChatComponent
       event.timestamp,
       event.status,
       event.update
+    );
+  }
+
+  checkWhatsappBotSubscription() {
+    return this.subscriptionPlanService.checkModuleSubscription(
+      ModuleNames.WHATSAPP_BOT
     );
   }
 

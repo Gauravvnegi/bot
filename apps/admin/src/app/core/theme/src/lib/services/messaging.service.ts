@@ -110,7 +110,7 @@ export class FirebaseMessagingService {
     }
   }
 
-  playNotificationSound(notificationType) {
+  playNotificationSound(notificationType, isBuzz: string) {
     const sound =
       notificationType === 'BOT'
         ? new Howl({
@@ -119,7 +119,7 @@ export class FirebaseMessagingService {
         : new Howl({
             src: ['assets/audio/notification.mp3'],
           });
-    sound.play();
+    if (isBuzz === 'true') sound.play();
   }
   //#endregion Public Methods
 

@@ -26,6 +26,8 @@ import { IChats, Chats, Chat, RequestList } from '../../models/message.model';
 import { MatDialogConfig } from '@angular/material/dialog';
 import { RaiseRequestComponent } from 'libs/admin/request/src/lib/components/raise-request/raise-request.component';
 import * as FileSaver from 'file-saver';
+import { SubscriptionPlanService } from '@hospitality-bot/admin/core/theme';
+import { ModalComponent } from 'libs/admin/shared/src/lib/components/modal/modal.component';
 
 @Component({
   selector: 'hospitality-bot-chat',
@@ -68,7 +70,8 @@ export class ChatComponent
     private adminUtilityService: AdminUtilityService,
     private globalFilterService: GlobalFilterService,
     private _firebaseMessagingService: FirebaseMessagingService,
-    private resolver: ComponentFactoryResolver
+    private resolver: ComponentFactoryResolver,
+    private subscriptionPlanService: SubscriptionPlanService
   ) {}
 
   ngOnInit(): void {
@@ -231,6 +234,7 @@ export class ChatComponent
       this.chat.messages,
       'timestamp'
     );
+    this.liveChatStatus.patchValue(response?.receiver?.status);
     this.chatList.messages[
       response.receiver.receiverId
     ] = this.messageService.filterMessagesByDate(this.chat.messages);
@@ -321,6 +325,12 @@ export class ChatComponent
     );
   }
 
+  checkWhatsappBotSubscription() {
+    return this.subscriptionPlanService.checkModuleSubscription(
+      ModuleNames.WHATSAPP_BOT
+    );
+  }
+
   getLiveChat() {
     this.$subscription.add(
       this.messageService
@@ -343,6 +353,62 @@ export class ChatComponent
         )
         .subscribe((response) => this.liveChatFG.patchValue(response))
     );
+  }
+
+  openEndLiveChatPopup() {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = true;
+    const togglePopupCompRef = this.modalService.openDialog(
+      ModalComponent,
+      dialogConfig
+    );
+
+    togglePopupCompRef.componentInstance.content = {
+      heading: 'End Live Chat',
+      description: [
+        'Do you want to end the live chat.',
+        'This will hand over the conversation to bot',
+      ],
+    };
+
+    togglePopupCompRef.componentInstance.actions = [
+      {
+        label: 'Cancel',
+        onClick: () => this.modalService.close(),
+        variant: 'outlined',
+      },
+      {
+        label: 'Confirm',
+        onClick: () => this.endLiveChat(),
+        variant: 'contained',
+      },
+    ];
+
+    togglePopupCompRef.componentInstance.onClose.subscribe(() => {
+      this.modalService.close();
+    });
+  }
+
+  endLiveChat() {
+    this.liveChatStatus.patchValue(true);
+    this.chatFG.patchValue({
+      receiverId: this.selectedChat.receiverId,
+      message:
+        'Your agent has ended the conversation. You can continue interacting with the bot',
+    });
+    this.messageService.sendLiveChatEndMessage.next(true);
+    this.$subscription.add(
+      this.messageService
+        .updateLiveChat(
+          this.entityId,
+          this.selectedChat.receiverId,
+          this.liveChatFG.getRawValue()
+        )
+        .subscribe((res) => {
+          this.liveChatFG.patchValue(res);
+        })
+    );
+    this.modalService.close();
   }
 
   handleButtonClick(): void {

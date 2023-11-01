@@ -185,7 +185,8 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
         console.log(payload, 'payload message when notification trigger');
         const notificationPayload = payload;
         this.firebaseMessagingService.playNotificationSound(
-          notificationPayload['data']?.notificationType
+          notificationPayload['data']?.notificationType,
+          notificationPayload['data']?.isBuzz
         );
         this.getNotificationUnreadCount();
         if (notificationPayload) {

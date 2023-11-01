@@ -9,6 +9,8 @@ import { IChat } from '../models/message.model';
 export class MessageService extends ApiService {
   refreshData$ = new BehaviorSubject(false);
   refreshRequestList$ = new BehaviorSubject(false);
+  sendLiveChatEndMessage = new BehaviorSubject(false);
+
   private whatsappUnreadContacts$ = new BehaviorSubject(0);
   chatList = {
     messages: {},
@@ -19,7 +21,9 @@ export class MessageService extends ApiService {
   }
 
   searchChatList(entityId: string, queryObj) {
-    return this.get(`/api/v1/entity/${entityId}/conversations/search${queryObj}`);
+    return this.get(
+      `/api/v1/entity/${entityId}/conversations/search${queryObj}`
+    );
   }
 
   getChat(entityId, receiverId, queryObj) {

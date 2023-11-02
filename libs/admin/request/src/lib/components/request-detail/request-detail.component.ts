@@ -58,7 +58,9 @@ export class RequestDetailComponent implements OnInit, OnDestroy {
   }
 
   get allAssigneeList() {
-    return [...this.alreadyAssignedName, ...this.assigneeList];
+    return this.data.assigneeName
+      ? this.alreadyAssignedName
+      : this.assigneeList;
   }
 
   registerListeners() {
@@ -107,7 +109,7 @@ export class RequestDetailComponent implements OnInit, OnDestroy {
                 value: this.data.assigneeName,
               },
             ];
-            this.requestFG.get('assignee').disable();
+            // this.requestFG.get('assignee').disable();
           }
 
           this.requestFG.patchValue({

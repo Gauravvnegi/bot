@@ -151,7 +151,7 @@ export class ComplaintBifurcationComponent implements OnInit {
     if (defaultGraph) {
       this._translateService
         .get('no_data_chart')
-        .subscribe((message) => this.chart.labels.push("No Data"));
+        .subscribe((message) => this.chart.labels.push('No Data'));
       this.chart.data[0].push(100);
       this.chart.colors[0].backgroundColor.push(chartConfig.defaultColor);
       this.chart.colors[0].borderColor.push(chartConfig.defaultColor);

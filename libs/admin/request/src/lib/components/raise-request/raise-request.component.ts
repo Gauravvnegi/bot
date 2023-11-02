@@ -11,7 +11,6 @@ import {
 } from '@angular/core';
 import {
   FormBuilder,
-  FormControl,
   FormGroup,
   Validators,
 } from '@angular/forms';
@@ -53,6 +52,7 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
   requestData: any;
   departmentList: Option[] = [];
   sidebarVisible = false;
+  isItemUuid: boolean = false;
   @Input() isSideBar = false;
   @ViewChild('sidebarSlide', { read: ViewContainerRef })
   sidebarSlide: ViewContainerRef;
@@ -166,6 +166,7 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
       this._requestService
         .getItemDetails(this.entityId, itemId)
         .subscribe((response) => {
+          this.isItemUuid = response?.itemUuid ? true : false;
           const data = new DepartmentList().deserialize(
             response?.requestItemUsers
           );
@@ -179,16 +180,8 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
    */
   raiseRequest(): void {
     if (this.requestFG.invalid) {
-      this._translateService.get('error.fillAllDetails').subscribe((message) =>
-        this.snackbarService
-          .openSnackBarWithTranslate(
-            {
-              translateKey: 'messages.error.some_thing_wrong',
-              priorityMessage: message,
-            },
-            ''
-          )
-          .subscribe()
+      this.snackbarService.openSnackBarAsText(
+        'Invalid Form: Please fix the errors'
       );
       this.requestFG.markAllAsTouched();
       return;
@@ -208,22 +201,13 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
     this.$subscription.add(
       this._requestService.createRequest(this.entityId, data).subscribe(
         (response) => {
-          this._translateService
-            .get('success.requestCreated')
-            .subscribe((message) =>
-              this.snackbarService
-                .openSnackBarWithTranslate(
-                  {
-                    translateKey: 'success.requestCreated',
-                    priorityMessage: message,
-                  },
-                  '',
-                  {
-                    panelClass: 'success',
-                  }
-                )
-                .subscribe()
-            );
+          this.snackbarService.openSnackBarAsText(
+            'Request Created Successfully',
+            '',
+            {
+              panelClass: 'success',
+            }
+          );
           this.isRaisingRequest = false;
           this.close({ status: false, data: this.reservation, load: true });
         },

@@ -29,7 +29,7 @@ export class RequestDetailComponent implements OnInit, OnDestroy {
   data: InhouseData;
   status = false;
   statusList: Option[] = [];
-  assigneeList: Option[];
+  assigneeList: Option[] = [];
   $subscription = new Subscription();
   entityId: string;
   @Output() guestInfo = new EventEmitter();
@@ -37,6 +37,8 @@ export class RequestDetailComponent implements OnInit, OnDestroy {
   closedTimestamp: number;
   formattedClosedTimestamp: string;
   jobId: string;
+
+  alreadAssignedName: Option[] = [];
 
   requestFG: FormGroup;
   constructor(
@@ -53,6 +55,10 @@ export class RequestDetailComponent implements OnInit, OnDestroy {
     this.entityId = this.globalFilterService.entityId;
     this.registerListeners();
     this.initFG();
+  }
+
+  get allAssigneeList() {
+    return [...this.alreadAssignedName, ...this.assigneeList];
   }
 
   registerListeners() {
@@ -94,11 +100,26 @@ export class RequestDetailComponent implements OnInit, OnDestroy {
       this._requestService.getStatusList(this.jobId).subscribe((response) => {
         if (response) {
           this.data = new InhouseData().deserialize(response);
+          if (this.data?.assigneeName) {
+            this.alreadAssignedName = [
+              {
+                label: this.data.assigneeName,
+                value: this.data.assigneeName,
+              },
+            ];
+          }
+
           this.requestFG.patchValue({
             status: response.action,
-            assignee: response.assigneeId,
+            assignee: response.assigneeId
+              ? response.assigneeId
+              : response.assigneeName,
           });
-          this._requestService.selectedRequestStatus.next({ jobId: this.jobId, status: response.action})
+
+          this._requestService.selectedRequestStatus.next({
+            jobId: this.jobId,
+            status: response.action,
+          });
           this.closedTimestamp = response?.closedTime;
           this.getAssigneeList(response.itemId);
           this.getStatusList(response.nextStates);
@@ -137,12 +158,13 @@ export class RequestDetailComponent implements OnInit, OnDestroy {
       this._requestService
         .getItemDetails(this.entityId, itemId)
         .subscribe((response) => {
-          this.assigneeList = response.requestItemUsers.map((item) => {
-            return {
-              label: item.firstName + ' ' + item.lastName,
-              value: item.userId,
-            };
-          });
+          this.assigneeList =
+            response?.requestItemUsers?.map((item) => {
+              return {
+                label: item.firstName + ' ' + item.lastName,
+                value: item.userId,
+              };
+            }) ?? [];
         })
     );
   }
@@ -244,9 +266,9 @@ export class RequestDetailComponent implements OnInit, OnDestroy {
         assignedTo: event.value,
       })
       .subscribe(() => {
-        const user = this.assigneeList.find(
-          (item) => item.value === event.value
-        ).label;
+        const user =
+          this.assigneeList.find((item) => item.value === event.value)?.label ??
+          '';
 
         this.snackbarService.openSnackBarAsText(
           `Job ${this.data?.jobID} Assignee To ${user}  Successfully`,

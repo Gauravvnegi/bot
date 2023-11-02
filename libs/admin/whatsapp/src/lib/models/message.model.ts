@@ -160,7 +160,7 @@ export class Contact {
     return moment(this.lastMessageAt).utcOffset(timezone).format('h:mm a');
   }
 
-  checkEnableSend(timezone = '+05:30') { 
+  checkEnableSend(timezone = '+05:30') {
     return (
       +moment()
         .utcOffset(timezone)
@@ -188,8 +188,8 @@ export class RequestList {
 
   deserialize(input) {
     this.data = new Array<InhouseData>();
-    input.forEach((request) => {
-      this.data.push(new InhouseData().deserialize(request));
+    input?.forEach((request) => {
+      this.data?.push(new InhouseData().deserialize(request));
     });
 
     return this;
@@ -260,7 +260,7 @@ export class GuestDetails {
 
   deserialize(input, colorMap) {
     this.records = new Array();
-    input.forEach((item) => {
+    input?.forEach((item) => {
       this.records.push(new GuestDetail().deserialize(item, colorMap));
     });
     return this;
@@ -274,8 +274,8 @@ export class GuestDetail {
   deserialize(input, colorMap) {
     if (input.guestReservation) {
       this.reservation = new Reservation().deserialize(
-        input.guestReservation,
-        input.subType,
+        input?.guestReservation,
+        input?.subType,
         colorMap
       );
     }
@@ -297,7 +297,7 @@ export class Reservation {
   deserialize(input: any, type: string, colorMap) {
     this.rooms = new Room().deserialize(input.stayDetails);
     this.booking = new Booking().deserialize(input);
-    this.type = type;
+    this.type = type ?? '';
     return this;
   }
 
@@ -309,6 +309,8 @@ export class Reservation {
         return 'Past Booking';
       case 'PRESENT':
         return 'Current Booking';
+      default:
+        return '';
     }
   }
 }

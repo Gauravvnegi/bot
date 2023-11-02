@@ -65,11 +65,11 @@ export class RequestListComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.initFG();
-    this.registerListeners();
     this._requestService.selectedRequest.next(null);
     this.requestTabFilter = this.subscriptionService.hasComplaintManagementSystem()
       ? 'ALL'
       : 'FOCUSED';
+    this.registerListeners();
   }
 
   /**

@@ -38,7 +38,7 @@ export class RequestDetailComponent implements OnInit, OnDestroy {
   formattedClosedTimestamp: string;
   jobId: string;
 
-  alreadAssignedName: Option[] = [];
+  alreadyAssignedName: Option[] = [];
 
   requestFG: FormGroup;
   constructor(
@@ -58,7 +58,7 @@ export class RequestDetailComponent implements OnInit, OnDestroy {
   }
 
   get allAssigneeList() {
-    return [...this.alreadAssignedName, ...this.assigneeList];
+    return [...this.alreadyAssignedName, ...this.assigneeList];
   }
 
   registerListeners() {
@@ -101,12 +101,13 @@ export class RequestDetailComponent implements OnInit, OnDestroy {
         if (response) {
           this.data = new InhouseData().deserialize(response);
           if (this.data?.assigneeName) {
-            this.alreadAssignedName = [
+            this.alreadyAssignedName = [
               {
                 label: this.data.assigneeName,
                 value: this.data.assigneeName,
               },
             ];
+            this.requestFG.get('assignee').disable();
           }
 
           this.requestFG.patchValue({

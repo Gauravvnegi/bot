@@ -110,6 +110,8 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
       remarks: ['', [Validators.maxLength(200)]],
       quantity: [1, [Validators.required, Validators.min(1)]],
       assigneeId: [''],
+      cc: ['+91'],
+      phoneNumber: ['' , [Validators.required, Validators.pattern('^[0-9]*$')]],
     });
 
     this.requestFG.get('itemCode').valueChanges.subscribe((value) => {
@@ -192,8 +194,11 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
       return;
     }
 
+    const { phoneNumber, cc, ...rest } = this.requestFG.getRawValue();
+   let countryCode = cc.replace('+', '');
     const data = {
-      ...this.requestFG.getRawValue(),
+      phone: `${countryCode}${phoneNumber}`,
+      ...rest,
       systemDateTime: DateService.currentDate('DD-MMM-YYYY HH:mm:ss'),
       sender: request.kiosk,
       propertyID: '1',

@@ -366,10 +366,10 @@ export class ChatComponent
     );
 
     togglePopupCompRef.componentInstance.content = {
-      heading: 'End Live Chat',
+      heading: 'Exit Live Chat',
       description: [
-        'Do you want to end the live chat.',
-        'This will hand over the conversation to bot',
+        'Do you want to exit the live chat.',
+        'This will hand over the conversation back to the bot',
       ],
     };
 

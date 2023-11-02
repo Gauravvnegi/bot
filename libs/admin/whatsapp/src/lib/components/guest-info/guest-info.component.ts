@@ -62,7 +62,11 @@ export class GuestInfoComponent implements OnInit, OnChanges, OnDestroy {
     }
   }
 
-  ngOnChanges(changes: SimpleChanges): void {}
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.data.currentValue && !changes.data.firstChange) {
+      this.getGuestInfo();
+    }
+  }
 
   getGuestInfo() {
     this.isLoading = true;

@@ -10,9 +10,7 @@
 <div
   class="guestInfoWrapper"
   [ngStyle]="{
-    'border-bottom': selectedTab !== 2
-      ? '1px solid #e0e0e0'
-      : ''
+    'border-bottom': selectedTab !== 2 ? '1px solid #e0e0e0' : ''
   }"
 >
   <mat-tab-group #matTab (selectedTabChange)="onTabChanged($event)">
@@ -23,6 +21,7 @@
       <ng-template matTabContent>
         <hospitality-bot-guest-personal-info
           [data]="guestData"
+          [loading]="isLoading"
         ></hospitality-bot-guest-personal-info>
       </ng-template>
     </mat-tab>

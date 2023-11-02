@@ -61,6 +61,7 @@ export class ChatComponent
   @ViewChild('sidebarSlide', { read: ViewContainerRef })
   sidebarSlide: ViewContainerRef;
   sidebarType;
+  loadingChat: boolean = false;
 
   constructor(
     private modalService: ModalService,
@@ -235,6 +236,7 @@ export class ChatComponent
       'timestamp'
     );
     this.liveChatStatus.patchValue(response?.receiver?.status);
+    this.loadingChat = true;
     this.chatList.messages[
       response.receiver.receiverId
     ] = this.messageService.filterMessagesByDate(this.chat.messages);
@@ -364,10 +366,10 @@ export class ChatComponent
     );
 
     togglePopupCompRef.componentInstance.content = {
-      heading: 'End Live Chat',
+      heading: 'Exit Live Chat',
       description: [
-        'Do you want to end the live chat.',
-        'This will hand over the conversation to bot',
+        'Do you want to exit the live chat.',
+        'This will hand over the conversation back to the bot',
       ],
     };
 

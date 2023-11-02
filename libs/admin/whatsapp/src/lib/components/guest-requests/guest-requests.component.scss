@@ -20,23 +20,26 @@
       padding: 0 15px;
       font-size: 12px;
       &-row {
-        margin: 15px 0;
+        margin: 4px 0;
         .item-code {
-          font-size: 14px;
-          font-weight: $bold;
-          letter-spacing: 0.84px;
-          color: $inActiveTab;
+          font-size: 10px;
+          font-weight: 500;
+          letter-spacing: 0.6px;
+          text-align: left;
+          color: $grayMedium;
+          margin-right: 12px;
         }
       }
       .intiated-row {
         font-weight: $medium;
         letter-spacing: 0.72px;
+        margin-bottom: 4px;
       }
       .nail-utter-row {
-        margin-top: 10px;
-        font-weight: $medium;
-        letter-spacing: 0.72px;
-        color: $secondary;
+        color: $grayMedium;
+        font-weight: $bold;
+        font-size: 12px;
+        margin-bottom: 4px;
       }
       .gsb-row {
         margin-top: 5px;
@@ -50,6 +53,7 @@
         line-height: normal;
         letter-spacing: 0.72px;
         color: $secondary;
+        gap: 5px;
         &-img {
           width: 13px;
           height: 13px;
@@ -118,4 +122,10 @@
   padding: 5px;
   border-radius: 5px;
   border: solid 1px $grayLight;
+}
+
+.job-id {
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.72;
 }

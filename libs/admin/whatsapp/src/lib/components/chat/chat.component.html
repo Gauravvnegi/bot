@@ -54,15 +54,22 @@
           [disabled]="liveChatStatus.value"
           >Hand Over to Bot</mat-slide-toggle
           > -->
-        <img
-          *ngIf="checkWhatsappBotSubscription() && !liveChatStatus.value"
-          class="end-chat"
-          [src]="'assets/svg/end-chat.svg'"
-          alt="'End Live Chat'"
-          [pTooltip]="'End Live Chat'"
-          tooltipPosition="bottom"
-          (click)="openEndLiveChatPopup()"
-        />
+        <ng-container
+          *ngIf="
+            checkWhatsappBotSubscription() &&
+            !liveChatStatus.value &&
+            loadingChat
+          "
+        >
+          <img
+            class="end-chat"
+            [src]="'assets/svg/end-chat.svg'"
+            alt="Exit Chat"
+            [pTooltip]="'Exit Live Chat'"
+            tooltipPosition="bottom"
+            (click)="openEndLiveChatPopup()"
+          />
+        </ng-container>
         <img
           *ngIf="!guestInfoEnable"
           class="icon"

@@ -1,46 +1,60 @@
-<div class="guest-person" *ngIf="data">
-  <div class="person-title">
-    Personal Info
-  </div>
-  <div class="person-image">
-    <div class="default" [style.background]="data?.color">
-      <img [src]="data.profileUrl" *ngIf="data.profileUrl" />
-      <div
-        class="default_nickName"
-        *ngIf="data?.getProfileNickName(); else defaultAvatar"
-      >
-        {{ data?.getProfileNickName() }}
+<ng-container *ngIf="!loading; else loader">
+  <div class="guest-person" *ngIf="data; else emptyView">
+    <div class="person-title">
+      Personal Info
+    </div>
+    <div class="person-image">
+      <div class="default" [style.background]="data?.color">
+        <img [src]="data.profileUrl" *ngIf="data.profileUrl" />
+        <div
+          class="default_nickName"
+          *ngIf="data?.getProfileNickName(); else defaultAvatar"
+        >
+          {{ data?.getProfileNickName() }}
+        </div>
+        <ng-template #defaultAvatar
+          ><img src="assets/svg/defaultUser.svg" alt="defaultAvatar"
+        /></ng-template>
       </div>
-      <ng-template #defaultAvatar
-        ><img src="assets/svg/defaultUser.svg" alt="defaultAvatar"
-      /></ng-template>
+      <div class="guest-name">
+        {{ data.name || 'Unknown Person' }}
+      </div>
     </div>
-    <div class="guest-name">
-      {{ data.name || 'Unknown Person' }}
+    <div class="border-line"></div>
+    <div class="contact-detials">
+      Contact Details
+    </div>
+    <div class="label">
+      Phone No.
+    </div>
+    <div>
+      <a href="tel:+{{ data.phone }}" class="label-text" target="blank"
+        >+{{ data.phone }}</a
+      >
+    </div>
+    <div class="label">
+      Email
+    </div>
+    <div>
+      <a
+        href="mailto: {{ data.email || 'Unknown' }}"
+        class="label-text"
+        target="blank"
+      >
+        {{ data.email || 'Unknown' }}</a
+      >
     </div>
   </div>
-  <div class="border-line"></div>
-  <div class="contact-detials">
-    Contact Details
+</ng-container>
+
+<ng-template #emptyView>
+  <div class="guest-person">
+    <div class="person-title">
+      Personal Info Not Available
+    </div>
   </div>
-  <div class="label">
-    Phone No.
-  </div>
-  <div>
-    <a href="tel:+{{ data.phone }}" class="label-text" target="blank"
-      >+{{ data.phone }}</a
-    >
-  </div>
-  <div class="label">
-    Email
-  </div>
-  <div>
-    <a
-      href="mailto: {{ data.email || 'Unknown' }}"
-      class="label-text"
-      target="blank"
-    >
-      {{ data.email || 'Unknown' }}</a
-    >
-  </div>
-</div>
+</ng-template>
+
+<ng-template #loader>
+  <hospitality-bot-loader-bounce class="loader"></hospitality-bot-loader-bounce>
+</ng-template>

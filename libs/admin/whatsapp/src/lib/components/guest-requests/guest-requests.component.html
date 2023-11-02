@@ -1,6 +1,6 @@
 <div class="guest-request" [formGroup]="requestFG">
   <div class="guest-request-title">
-    Requests
+    Complaints
   </div>
   <div
     *ngIf="requestList && requestList.length && requestFG; else noRequest"
@@ -25,7 +25,7 @@
         </div>
       </div>
       <div class="row intiated-row">
-        <div>{{ request.status }}</div>
+        <div>{{ request.action }}</div>
         <div>JD:-{{ request.jobDuration }}m</div>
       </div>
       <div class="row nail-utter-row">
@@ -51,7 +51,10 @@
           </div>
         </div>
       </div>
-      <mat-select
+      <div>
+        <div class="job-id">Job Id:- {{ request?.jobID }}</div>
+      </div>
+      <!-- <mat-select
         class="status"
         placeholder=""
         [formControlName]="request.id"
@@ -79,7 +82,7 @@
             >{{ item }}</mat-option
           ></ng-template
         >
-      </mat-select>
+      </mat-select> -->
       <div class="guest-request-items-wrap-item-under-line"></div>
     </div>
   </div>
@@ -89,7 +92,7 @@
         <img src="assets/svg/conversation-no-request.svg" alt="No Request" />
       </div>
       <div class="no-request-msg">
-        No request found
+        No complaints found
       </div>
       <div class="no-request-underline"></div>
     </div>

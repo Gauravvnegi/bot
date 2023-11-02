@@ -31,7 +31,7 @@
           (selectionChange)="handleAssigneeChange($event)"
         >
           <mat-option
-            *ngFor="let status of assigneeList"
+            *ngFor="let status of allAssigneeList"
             [value]="status.value"
             >{{ status.label }}</mat-option
           >

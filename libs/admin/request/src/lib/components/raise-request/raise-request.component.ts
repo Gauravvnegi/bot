@@ -11,7 +11,6 @@ import {
 } from '@angular/core';
 import {
   FormBuilder,
-  FormControl,
   FormGroup,
   Validators,
 } from '@angular/forms';
@@ -53,6 +52,7 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
   requestData: any;
   departmentList: Option[] = [];
   sidebarVisible = false;
+  isItemUuid: boolean = false;
   @Input() isSideBar = false;
   @ViewChild('sidebarSlide', { read: ViewContainerRef })
   sidebarSlide: ViewContainerRef;
@@ -110,6 +110,8 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
       remarks: ['', [Validators.maxLength(200)]],
       quantity: [1, [Validators.required, Validators.min(1)]],
       assigneeId: [''],
+      cc: ['+91'],
+      phoneNumber: ['' , [Validators.required, Validators.pattern('^[0-9]*$')]],
     });
 
     this.requestFG.get('itemCode').valueChanges.subscribe((value) => {
@@ -164,6 +166,7 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
       this._requestService
         .getItemDetails(this.entityId, itemId)
         .subscribe((response) => {
+          this.isItemUuid = response?.itemUuid ? true : false;
           const data = new DepartmentList().deserialize(
             response?.requestItemUsers
           );
@@ -177,23 +180,18 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
    */
   raiseRequest(): void {
     if (this.requestFG.invalid) {
-      this._translateService.get('error.fillAllDetails').subscribe((message) =>
-        this.snackbarService
-          .openSnackBarWithTranslate(
-            {
-              translateKey: 'messages.error.some_thing_wrong',
-              priorityMessage: message,
-            },
-            ''
-          )
-          .subscribe()
+      this.snackbarService.openSnackBarAsText(
+        'Invalid Form: Please fix the errors'
       );
       this.requestFG.markAllAsTouched();
       return;
     }
 
+    const { phoneNumber, cc, ...rest } = this.requestFG.getRawValue();
+   let countryCode = cc.replace('+', '');
     const data = {
-      ...this.requestFG.getRawValue(),
+      phone: `${countryCode}${phoneNumber}`,
+      ...rest,
       systemDateTime: DateService.currentDate('DD-MMM-YYYY HH:mm:ss'),
       sender: request.kiosk,
       propertyID: '1',
@@ -203,22 +201,13 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
     this.$subscription.add(
       this._requestService.createRequest(this.entityId, data).subscribe(
         (response) => {
-          this._translateService
-            .get('success.requestCreated')
-            .subscribe((message) =>
-              this.snackbarService
-                .openSnackBarWithTranslate(
-                  {
-                    translateKey: 'success.requestCreated',
-                    priorityMessage: message,
-                  },
-                  '',
-                  {
-                    panelClass: 'success',
-                  }
-                )
-                .subscribe()
-            );
+          this.snackbarService.openSnackBarAsText(
+            'Request Created Successfully',
+            '',
+            {
+              panelClass: 'success',
+            }
+          );
           this.isRaisingRequest = false;
           this.close({ status: false, data: this.reservation, load: true });
         },

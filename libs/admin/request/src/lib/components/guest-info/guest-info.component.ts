@@ -8,9 +8,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import { MatTabGroup } from '@angular/material/tabs';
-import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 import { Subscription } from 'rxjs';
-import { SnackBarService } from 'libs/shared/material/src';
 import { RequestService } from '../../services/request.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Guest, GuestDetails, Requests } from '../../data-models/request.model';
@@ -51,8 +49,6 @@ export class GuestInfoComponent implements OnInit, OnChanges, OnDestroy {
   ];
   colorMap: any;
   constructor(
-    private globalFilterService: GlobalFilterService,
-    private snackbarService: SnackBarService,
     private requestService: RequestService,
     private _fb: FormBuilder
   ) {}
@@ -70,7 +66,7 @@ export class GuestInfoComponent implements OnInit, OnChanges, OnDestroy {
           this.data = response;
           this.guestId = response['guestDetails']?.primaryGuest?.id
             ? response['guestDetails']?.primaryGuest?.id
-            : response.guest.id;
+            : response?.guest?.id;
           this.loadGuestInfo();
           this.loadGuestRequests();
         }

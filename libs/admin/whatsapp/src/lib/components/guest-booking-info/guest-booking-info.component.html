@@ -8,20 +8,42 @@
     </div>
     <div class="past">
       <div class="group" *ngFor="let item of currentBooking">
-        <div>
-          <div class="subHeading">Reservation ID</div>
-          <div class="subHeading--results">
-            {{ item.reservation.booking.bookingNumber }}
+        <div class="column">
+          <div>
+            <div class="subHeading">Reservation ID</div>
+            <div class="subHeading--results">
+              {{ item.reservation.booking.bookingNumber }}
+            </div>
+          </div>
+          <div>
+            <div class="subHeading">Room No.</div>
+            <div class="subHeading--results">
+              {{ item.reservation.booking.bookingNumber }}
+            </div>
+          </div>
+          <div class="arrow" (click)="openDetailPage(item)">
+            <mat-icon>east</mat-icon>
           </div>
         </div>
-        <div>
-          <div class="subHeading">Room No.</div>
-          <div class="subHeading--results">
-            {{ item.reservation.booking.bookingNumber }}
+        <div class="column">
+          <div>
+            <div class="subHeading">Checkin Date</div>
+            <div class="subHeading--results">
+              {{
+                item?.reservation?.booking?.arrivalTimeStamp | date: 'dd/MM/yy'
+              }}
+            </div>
           </div>
-        </div>
-        <div class="arrow" (click)="openDetailPage(item)">
-          <mat-icon>east</mat-icon>
+          <div>
+            <div class="subHeading">Checkout Date</div>
+            <div class="subHeading--results">
+              {{
+                item?.reservation?.booking?.departureTimeStamp
+                  | date: 'dd/MM/yy'
+              }}
+            </div>
+          </div>
+          <div></div>
         </div>
       </div>
     </div>
@@ -32,20 +54,42 @@
     </div>
     <div class="past">
       <div class="group" *ngFor="let item of pastBooking">
-        <div>
-          <div class="subHeading">Reservation ID</div>
-          <div class="subHeading--results">
-            {{ item.reservation.booking.bookingNumber }}
+        <div class="column">
+          <div>
+            <div class="subHeading">Reservation ID</div>
+            <div class="subHeading--results">
+              {{ item.reservation.booking.bookingNumber }}
+            </div>
+          </div>
+          <div>
+            <div class="subHeading">Room No.</div>
+            <div class="subHeading--results">
+              {{ item.reservation.rooms.roomNumber }}
+            </div>
+          </div>
+          <div class="arrow" (click)="openDetailPage(item)">
+            <mat-icon>east</mat-icon>
           </div>
         </div>
-        <div>
-          <div class="subHeading">Room No.</div>
-          <div class="subHeading--results">
-            {{ item.reservation.rooms.roomNumber }}
+        <div class="column">
+          <div>
+            <div class="subHeading">Checkin Date</div>
+            <div class="subHeading--results">
+              {{
+                item?.reservation?.booking?.arrivalTimeStamp | date: 'dd/MM/yy'
+              }}
+            </div>
           </div>
-        </div>
-        <div class="arrow" (click)="openDetailPage(item)">
-          <mat-icon>east</mat-icon>
+          <div>
+            <div class="subHeading">Checkout Date</div>
+            <div class="subHeading--results">
+              {{
+                item?.reservation?.booking?.departureTimeStamp
+                  | date: 'dd/MM/yy'
+              }}
+            </div>
+          </div>
+          <div></div>
         </div>
       </div>
     </div>
@@ -56,20 +100,42 @@
     </div>
     <div class="past">
       <div class="group" *ngFor="let item of upcomingBooking">
-        <div>
-          <div class="subHeading">Reservation ID</div>
-          <div class="subHeading--results">
-            {{ item.reservation.booking.bookingNumber }}
+        <div class="column">
+          <div>
+            <div class="subHeading">Reservation ID</div>
+            <div class="subHeading--results">
+              {{ item.reservation.booking.bookingNumber }}
+            </div>
+          </div>
+          <div>
+            <div class="subHeading">Room No.</div>
+            <div class="subHeading--results">
+              {{ item.reservation.rooms.roomNumber }}
+            </div>
+          </div>
+          <div class="arrow" (click)="openDetailPage(item)">
+            <mat-icon>east</mat-icon>
           </div>
         </div>
-        <div>
-          <div class="subHeading">Room No.</div>
-          <div class="subHeading--results">
-            {{ item.reservation.rooms.roomNumber }}
+        <div class="column">
+          <div>
+            <div class="subHeading">Checkin Date</div>
+            <div class="subHeading--results">
+              {{
+                item?.reservation?.booking?.arrivalTimeStamp | date: 'dd/MM/yy'
+              }}
+            </div>
           </div>
-        </div>
-        <div class="arrow" (click)="openDetailPage(item)">
-          <mat-icon>east</mat-icon>
+          <div>
+            <div class="subHeading">Checkout Date</div>
+            <div class="subHeading--results">
+              {{
+                item?.reservation?.booking?.departureTimeStamp
+                  | date: 'dd/MM/yy'
+              }}
+            </div>
+          </div>
+          <div></div>
         </div>
       </div>
     </div>

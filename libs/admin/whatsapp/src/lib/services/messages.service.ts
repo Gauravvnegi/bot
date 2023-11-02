@@ -84,6 +84,10 @@ export class MessageService extends ApiService {
     return this.get(`/api/v1/request/created-jobs${config.queryObj}`);
   }
 
+  getRequestByPhoneNumber(no: string): Observable<any> {
+    return this.get(`/api/v1/request/phone-number?phoneNumber=${no}`);
+  }
+
   getGuestReservations(guestId: string): Observable<any> {
     return this.get(`/api/v1/members/${guestId}/reservations`);
   }

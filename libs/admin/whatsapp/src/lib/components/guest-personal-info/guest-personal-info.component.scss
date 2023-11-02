@@ -70,3 +70,8 @@
     border: 1px solid $grayLight;
   }
 }
+
+.loader {
+  height: 60vh;
+  @include flex-justify-align-center;
+}

@@ -6,6 +6,7 @@ import {
   OnDestroy,
   OnInit,
   Output,
+  SimpleChanges,
   ViewChild,
 } from '@angular/core';
 import { MatDialogConfig } from '@angular/material/dialog';
@@ -53,15 +54,15 @@ export class GuestInfoComponent implements OnInit, OnChanges, OnDestroy {
   ) {}
 
   ngOnInit(): void {
+    this.entityId = this.globalFilterService.entityId;
     this.listenForRefreshData();
     this.listenForGlobalFilters();
-  }
-
-  ngOnChanges() {
     if (this.entityId) {
       this.getGuestInfo();
     }
   }
+
+  ngOnChanges(changes: SimpleChanges): void {}
 
   getGuestInfo() {
     this.isLoading = true;
@@ -76,7 +77,9 @@ export class GuestInfoComponent implements OnInit, OnChanges, OnDestroy {
           if (this.guestData.reservationId) {
             this.guestId = this.guestData.guestId;
             this.getRequestAndReservation();
-          } else this.requestList = [];
+          } else {
+            this.getRequestList();
+          }
           this.isLoading = false;
         })
     );
@@ -113,7 +116,9 @@ export class GuestInfoComponent implements OnInit, OnChanges, OnDestroy {
       ]),
     };
     forkJoin({
-      requests: this.messageService.getRequestByConfNo(config),
+      requests: this.messageService.getRequestByPhoneNumber(
+        this.guestData?.phone
+      ),
       reservations: this.messageService.getGuestReservations(this.guestId),
     }).subscribe(
       (response) => {
@@ -132,19 +137,26 @@ export class GuestInfoComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   getRequestList() {
-    const config = {
-      queryObj: this.adminUtilityService.makeQueryParams([
-        {
-          entityId: this.entityId,
-          confirmationNumber: this.data.reservationId,
-        },
-      ]),
-    };
+    // const config = {
+    //   queryObj: this.adminUtilityService.makeQueryParams([
+    //     {
+    //       entityId: this.entityId,
+    //       confirmationNumber: this.data.reservationId,
+    //     },
+    //   ]),
+    // };
     this.$subscription.add(
-      this.messageService.getRequestByConfNo(config).subscribe(
-        (response) =>
-          (this.requestList = new RequestList().deserialize(response).data)
-      )
+      this.messageService
+        // .getRequestByConfNo(config)
+        // .subscribe(
+        //   (response) =>
+        //     (this.requestList = new RequestList().deserialize(response).data)
+        // )
+        .getRequestByPhoneNumber(this.guestData?.phone)
+        .subscribe((response) => {
+          // debugger;
+          this.requestList = new RequestList().deserialize(response).data;
+        })
     );
   }
 
@@ -176,38 +188,36 @@ export class GuestInfoComponent implements OnInit, OnChanges, OnDestroy {
     });
   }
 
-  openRaiseRequest() {
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.disableClose = true;
-    dialogConfig.width = '50%';
-    const raiseRequestCompRef = this.modalService.openDialog(
-      RaiseRequestComponent,
-      dialogConfig
-    );
+  // openRaiseRequest() {
+  //   const dialogConfig = new MatDialogConfig();
+  //   dialogConfig.disableClose = true;
+  //   dialogConfig.width = '50%';
+  //   const raiseRequestCompRef = this.modalService.openDialog(
+  //     RaiseRequestComponent,
+  //     dialogConfig
+  //   );
 
-    this.$subscription.add(
-      raiseRequestCompRef.componentInstance.onRaiseRequestClose.subscribe(
-        (res) => {
-          if (res.status) {
-            this.getRequestList();
-            const values = {
-              reservationId: res.data.number,
-            };
-            this.$subscription.add(
-              this.messageService
-                .updateGuestDetail(this.entityId, this.data.receiverId, values)
-                .subscribe(
-                  (response) => {
-                    this.messageService.refreshData$.next(true);
-                  }                  
-                )
-            );
-          }
-          raiseRequestCompRef.close();
-        }
-      )
-    );
-  }
+  //   this.$subscription.add(
+  //     raiseRequestCompRef.componentInstance.onRaiseRequestClose.subscribe(
+  //       (res) => {
+  //         if (res.status) {
+  //           this.getRequestList();
+  //           const values = {
+  //             reservationId: res.data.number,
+  //           };
+  //           this.$subscription.add(
+  //             this.messageService
+  //               .updateGuestDetail(this.entityId, this.data.receiverId, values)
+  //               .subscribe((response) => {
+  //                 this.messageService.refreshData$.next(true);
+  //               })
+  //           );
+  //         }
+  //         raiseRequestCompRef.close();
+  //       }
+  //     )
+  //   );
+  // }
 
   ngOnDestroy(): void {
     this.$subscription.unsubscribe();

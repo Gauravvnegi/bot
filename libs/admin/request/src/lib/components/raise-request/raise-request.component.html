@@ -14,7 +14,7 @@
         alt="raise-request-icon"
         class="raise-request-icon"
       /> -->
-      {{ 'Raise Complaint' | translate }}
+      Raise Complaint
     </div>
     <div (click)="close({ status: false })" class="close">
       <i
@@ -83,9 +83,24 @@
         label="Quantity"
         controlName="quantity"
       ></hospitality-bot-input>
+      <!-- <hospitality-bot-phone-number
+        class="full-width"
+
+      ></hospitality-bot-phone-number> -->
+
+      <hospitality-bot-input
+        class="half-width"
+        label="Phone Number"
+        controlName="phoneNumber"
+        [props]="{
+          type: 'number'
+        }"
+      >
+      </hospitality-bot-input>
 
       <hospitality-bot-select
-        class="full-width department"
+        *ngIf="!isItemUuid"
+        class="half-width department service-item"
         [disabled]="!requestFG.get('itemCode').value"
         [options]="departmentList"
         label="Assign To"

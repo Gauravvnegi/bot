@@ -4,6 +4,7 @@ import {
   ControlContainer,
   FormArray,
   FormGroup,
+  Validators,
 } from '@angular/forms';
 import {
   ConfigService,
@@ -17,6 +18,7 @@ import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { FormService } from '../../../services/form.service';
 import { ReservationForm } from '../../../constants/form';
 import { Subscription } from 'rxjs';
+import { AgentTableResponse } from 'libs/admin/agent/src/lib/types/response';
 
 @Component({
   selector: 'hospitality-bot-booking-info',
@@ -58,6 +60,7 @@ export class BookingInfoComponent implements OnInit {
 
   fromDateValue = new Date();
   toDateValue = new Date();
+  selectedAgent: AgentTableResponse;
 
   $subscription = new Subscription();
   constructor(
@@ -182,42 +185,82 @@ export class BookingInfoComponent implements OnInit {
   listenForSourceChanges() {
     const sourceControl = this.reservationInfoControls.source;
     const sourceNameControl = this.reservationInfoControls.sourceName;
-
+    const marketSegmentControl = this.reservationInfoControls.marketSegment;
     this.$subscription.add(
       this.formService.sourceData.subscribe((res) => {
         if (res && this.configData) {
           this.editMode = true;
+          this.selectedAgent = res.agent;
           sourceNameControl.setValue(res.sourceName);
           sourceControl.setValue(res.source);
         }
       })
     );
 
-    sourceControl.valueChanges.subscribe((res) => {
-      if (res) {
-        // this.agentSource = res === 'AGENT';
-        this.otaOptions =
-          res === 'OTA' && this.configData
-            ? this.configData.source.filter((item) => item.value === res)[0]
-                .type
-            : [];
-        // sourceNameControl.clearValidators();
-        if (
-          !this.otaOptions.some(
-            (item) => item.value === sourceNameControl.value
-          ) &&
-          sourceNameControl?.value?.length
-        ) {
-          this.otaOptions.push({
-            label: sourceNameControl.value,
-            value: sourceNameControl.value,
-          });
-        }
-        if (!this.editMode) {
-          sourceNameControl.reset();
-        }
+    marketSegmentControl.valueChanges.subscribe((res) => {
+      if (
+        res &&
+        this.configData?.marketSegment.some((item) => item.value === res)
+      ) {
+        this.configData.marketSegment.push({ label: res, value: res });
       }
     });
+
+    sourceControl.valueChanges.subscribe((res) => {
+      if (res) {
+        if (
+          this.configData.source.some(
+            (item) => item.value === sourceNameControl.value
+          )
+        ) {
+          this.configData.source.push({ label: res, value: res });
+        }
+        this.initSourceDetails(res);
+        !this.editMode && sourceNameControl.reset();
+      }
+    });
+  }
+
+  initSourceDetails(source: string) {
+    const sourceNameControl = this.reservationInfoControls.sourceName;
+    const agentSourceNameControl = this.reservationInfoControls.agentSourceName;
+    const otaSourceNameControl = this.reservationInfoControls.otaSourceName;
+    if (source === 'OTA') {
+      otaSourceNameControl.setValidators(Validators.required);
+      sourceNameControl.setValidators(null);
+      sourceNameControl.updateValueAndValidity();
+      agentSourceNameControl.setValidators(null);
+      agentSourceNameControl.updateValueAndValidity();
+      this.otaOptions = this.configData
+        ? this.configData.source.filter((item) => item.value === source)[0].type
+        : [];
+      if (
+        !this.otaOptions.some(
+          (item) => item.value === sourceNameControl?.value
+        ) &&
+        sourceNameControl?.value?.length
+      ) {
+        this.otaOptions.push({
+          label: sourceNameControl.value,
+          value: sourceNameControl.value,
+        });
+      }
+    } else if (source === 'AGENT') {
+      agentSourceNameControl.setValidators(Validators.required);
+      sourceNameControl.setValidators(null);
+      sourceNameControl.updateValueAndValidity();
+      otaSourceNameControl.setValidators(null);
+      otaSourceNameControl.updateValueAndValidity();
+    } else {
+      sourceNameControl.setValidators([
+        Validators.required,
+        Validators.maxLength(60),
+      ]);
+      agentSourceNameControl.setValidators(null);
+      agentSourceNameControl.updateValueAndValidity();
+      otaSourceNameControl.setValidators(null);
+      otaSourceNameControl.updateValueAndValidity();
+    }
   }
 
   getCountryCode(): void {

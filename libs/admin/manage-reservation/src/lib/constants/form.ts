@@ -24,6 +24,8 @@ export type ReservationInformation = {
   marketSegment: string;
   status?: string;
   eventType?: string;
+  agentSourceName?: string;
+  otaSourceName?: string;
 };
 
 export type GuestInformation = {

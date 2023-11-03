@@ -134,7 +134,6 @@ export class BookingSummaryComponent implements OnInit {
       this.bookingType === EntitySubType.ROOM_TYPE
         ? EntitySubType.ROOM_TYPE
         : EntityType.OUTLET;
-
     if (this.bookingType === EntitySubType.ROOM_TYPE)
       data = this.formService.mapRoomReservationData(
         this.parentFormGroup.getRawValue(),

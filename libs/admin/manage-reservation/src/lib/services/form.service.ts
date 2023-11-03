@@ -62,7 +62,16 @@ export class FormService {
     roomReservationData.to = input.reservationInformation?.to;
     roomReservationData.reservationType =
       input.reservationInformation?.reservationType ?? 'CONFIRMED';
-    roomReservationData.sourceName = input.reservationInformation?.sourceName;
+    roomReservationData.sourceName =
+      input.reservationInformation.source === 'OTA'
+        ? input.reservationInformation.otaSourceName
+        : input.reservationInformation.source === 'AGENT'
+        ? input.reservationInformation.agentSourceName
+        : input.reservationInformation.sourceName;
+
+    input.reservationInformation?.sourceName ??
+      input.reservationInformation?.agentSourceName ??
+      input.reservationInformation?.otaSourceName;
     roomReservationData.source = input.reservationInformation?.source;
     roomReservationData.marketSegment =
       input.reservationInformation?.marketSegment;

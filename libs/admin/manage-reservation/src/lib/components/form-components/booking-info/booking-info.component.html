@@ -97,7 +97,10 @@
     ></hospitality-bot-select>
     <!-- *ngIf="!agentSource && !otaOptions.length" -->
     <hospitality-bot-input
-      *ngIf="reservationInfoControls.source.value !== 'OTA'"
+      *ngIf="
+        reservationInfoControls.source.value !== 'OTA' &&
+        reservationInfoControls.source.value !== 'AGENT'
+      "
       class="half-width maxlength"
       controlName="sourceName"
       label="Booking Source Name"
@@ -113,7 +116,7 @@
     <hospitality-bot-select
       *ngIf="reservationInfoControls.source.value === 'OTA'"
       class="half-width maxlength"
-      controlName="sourceName"
+      controlName="otaSourceName"
       label="Booking Source Name"
       [options]="otaOptions"
       [props]="{
@@ -123,13 +126,45 @@
         }
       }"
     ></hospitality-bot-select>
-    <!-- <hospitality-bot-members-list
-      *ngIf="agentSource"
-      class="half-width"
-      controlName="sourceName"
-      type="AGENT"
+
+    <hospitality-bot-quick-select
+      *ngIf="reservationInfoControls.source.value === 'AGENT'"
+      class="half-width select"
+      controlName="agentSourceName"
       label="Booking Source Name"
-    ></hospitality-bot-members-list> -->
+      [inputType]="'select'"
+      [props]="{
+        showChips: false,
+        isAsync: true,
+        placeholder: 'Select',
+        createPrompt: '+ Add New Agent',
+        selectedOption: selectedAgent
+      }"
+      [apiConfig]="{
+        apiEndPoint: '/api/v1/members',
+        dataModel: {
+          key: 'records',
+          values: {
+            label: ['firstName', 'lastName'],
+            value: 'id'
+          }
+        },
+        queryParams: { type: 'AGENT' },
+        searchAPIEndPoint: '/api/v1/search/members',
+        searchModel: {
+          response: true,
+          values: {
+            label: ['firstName', 'lastName'],
+            value: 'id'
+          }
+        },
+        searchQueryParams: { type: 'AGENT' }
+      }"
+      [paginationConfig]="{
+        isPagination: true
+      }"
+    ></hospitality-bot-quick-select>
+
     <!-- (createMembers)="createNewAgent()" -->
     <hospitality-bot-select
       class="half-width"

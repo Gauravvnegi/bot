@@ -138,6 +138,8 @@ export class AddReservationComponent extends BaseReservationComponent
         reservationType: ['', Validators.required],
         source: ['', Validators.required],
         sourceName: ['', [Validators.required, Validators.maxLength(60)]],
+        otaSourceName: [''],
+        agentSourceName: [''],
         marketSegment: ['', Validators.required],
       }),
       offerId: [''],
@@ -237,6 +239,7 @@ export class AddReservationComponent extends BaseReservationComponent
             this.formService.sourceData.next({
               source: source,
               sourceName: sourceName,
+              agent: response?.agent ?? null,
             });
             this.isDraftBooking = reservationInfo.reservationType === 'DRAFT';
             if (nextStates)

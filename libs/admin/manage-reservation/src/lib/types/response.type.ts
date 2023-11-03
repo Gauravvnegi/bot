@@ -6,6 +6,7 @@ import { GuestType } from 'libs/admin/guests/src/lib/types/guest.type';
 import { RatePlanRes } from 'libs/admin/room/src/lib/types/service-response';
 import { ItemsData } from './forms.types';
 import { JourneyState, JourneyType } from '../constants/reservation';
+import { AgentTableResponse } from 'libs/admin/agent/src/lib/types/response';
 
 /* Reservation List Response Types deceleration */
 export type ReservationListResponse = {
@@ -163,6 +164,7 @@ export type RoomReservationResponse = {
   journeysStatus: {
     CHECKIN: JourneyState;
   };
+  agent: AgentTableResponse;
 };
 
 export type SourceResponse = {

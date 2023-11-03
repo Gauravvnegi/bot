@@ -14,6 +14,9 @@ export type ReportModules = Extract<
   | 'OCCUPANCY_REPORTS'
   | 'FINANCIAL_REPORTS'
   | 'REVENUE_REPORTS'
+  | 'NIGHT_AUDIT_REPORTS'
+  | 'TAX_REPORTS'
+  | 'GUEST_REPORTS'
 >;
 
 // export enum ReportModules {
@@ -34,6 +37,12 @@ export type ReportsType = {
   OCCUPANCY_REPORTS: 'historyAndForecastReport';
   FINANCIAL_REPORTS: 'monthlySummaryReport' | 'dailyRevenueReport';
   REVENUE_REPORTS: 'cashierReport';
+  NIGHT_AUDIT_REPORTS:
+    | 'auditRoomDetailsReport'
+    | 'auditTaxReport'
+    | 'revenueReport';
+  TAX_REPORTS: 'monthlyTaxReport' | 'lodgingTaxReport' | 'taxReport';
+  GUEST_REPORTS: 'guestHistory' | 'salesByGuest' | 'guestTypeReport';
 };
 
 export type ReportsTypeValues = ReportsType[keyof ReportsType];
@@ -68,7 +77,7 @@ export type Rows = RowValue[];
 export type ClassType<T = ReportClass<any, any>> = new (...args: any[]) => T;
 export interface ReportClass<T, K> {
   records: T[];
-  deserialize(value: K[]): this;
+  deserialize(value: K[] | {} ): this;
 }
 
 export type ColsInfo = Omit<Cols, 'field'>;

@@ -47,6 +47,7 @@ export class RoomReservation {
   roomType?: string;
   journeysStatus: Record<JourneyType, JourneyState>;
   invoiceId: string;
+  agentName?: string;
 
   deserialize(input: RoomReservationRes) {
     this.id = input.id;
@@ -78,6 +79,7 @@ export class RoomReservation {
       (this.roomType = input.bookingItems[0]?.roomDetails?.roomTypeLabel ?? '');
     this.journeysStatus = input.journeysStatus;
     this.invoiceId = input?.invoiceId ?? '';
+    this.agentName = `${input?.agent?.firstName} ${input?.agent?.lastName}`;
     return this;
   }
 

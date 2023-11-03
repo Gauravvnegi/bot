@@ -235,7 +235,7 @@ export class AddReservationComponent extends BaseReservationComponent
               ...formData
             } = data;
             this.checkinJourneyState = data.journeyState;
-
+            this.isExternalBooking = response.externalBooking;
             this.formService.sourceData.next({
               source: source,
               sourceName: sourceName,

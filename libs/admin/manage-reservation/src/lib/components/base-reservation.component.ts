@@ -55,6 +55,7 @@ export class BaseReservationComponent {
 
   $subscription = new Subscription();
   cancelRequests$ = new Subject<void>();
+  isExternalBooking = false;
 
   constructor(
     protected activatedRoute: ActivatedRoute,
@@ -96,6 +97,17 @@ export class BaseReservationComponent {
           ? this.reservationInfoControls.reservationType
           : this.reservationInfoControls.status;
       switch (true) {
+        case this.isExternalBooking && journeyState !== JourneyState.COMPLETED:
+          this.userForm.disable();
+          this.disabledForm = true;
+          this.formService.disableBtn = true;
+          const roomTypeArray = ((this.inputControls
+            .roomInformation as FormGroup).get('roomTypes') as FormArray)
+            .controls;
+          ['roomNumber'].forEach((controlName) =>
+            roomTypeArray[0].get(controlName).enable()
+          );
+          break;
         case this.bookingType !== EntitySubType.ROOM_TYPE ||
           reservationType.value === ReservationType.CANCELED ||
           journeyState === JourneyState.COMPLETED:

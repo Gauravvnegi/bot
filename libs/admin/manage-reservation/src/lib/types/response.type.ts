@@ -34,6 +34,7 @@ export type RoomReservationRes = {
   marketSegment?: string;
   journeysStatus: Record<JourneyType, JourneyState>;
   invoiceId?: string;
+  agent?: AgentTableResponse;
 };
 
 export type PaymentConfigResponse = {
@@ -165,6 +166,7 @@ export type RoomReservationResponse = {
     CHECKIN: JourneyState;
   };
   agent: AgentTableResponse;
+  externalBooking: boolean;
 };
 
 export type SourceResponse = {

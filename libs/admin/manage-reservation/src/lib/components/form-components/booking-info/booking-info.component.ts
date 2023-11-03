@@ -188,21 +188,6 @@ export class BookingInfoComponent implements OnInit {
     const marketSegmentControl = this.reservationInfoControls.marketSegment;
     const otaSourceNameControl = this.reservationInfoControls.otaSourceName;
 
-    this.$subscription.add(
-      this.formService.sourceData.subscribe((res) => {
-        if (res && this.configData) {
-          this.editMode = true;
-          this.selectedAgent = res.agent;
-          if (res.source === 'OTA') {
-            otaSourceNameControl.setValue(res.sourceName);
-          } else if (res.source !== 'AGENT') {
-            sourceNameControl.setValue(res.sourceName);
-          }
-          sourceControl.setValue(res.source);
-        }
-      })
-    );
-
     marketSegmentControl.valueChanges.subscribe((res) => {
       if (
         res &&
@@ -225,6 +210,21 @@ export class BookingInfoComponent implements OnInit {
         !this.editMode && sourceNameControl.reset();
       }
     });
+
+    this.$subscription.add(
+      this.formService.sourceData.subscribe((res) => {
+        if (res && this.configData) {
+          this.editMode = true;
+          this.selectedAgent = res.agent;
+          if (res.source === 'OTA') {
+            otaSourceNameControl.setValue(res.sourceName);
+          } else if (res.source !== 'AGENT') {
+            sourceNameControl.setValue(res.sourceName);
+          }
+          sourceControl.setValue(res.source);
+        }
+      })
+    );
   }
 
   initSourceDetails(source: string) {

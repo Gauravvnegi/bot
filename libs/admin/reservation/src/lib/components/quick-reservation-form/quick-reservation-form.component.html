@@ -317,7 +317,7 @@
   [isSticky]="true"
   [config]="{
     postLabel: reservationId ? 'Update Reservation' : 'Create Reservation',
-    preHide: inputControls.guestInformation.get('guestDetails').value
+    preHide: reservationId
       ? false
       : true,
     postDisabled: !reservationId && useForm.invalid,

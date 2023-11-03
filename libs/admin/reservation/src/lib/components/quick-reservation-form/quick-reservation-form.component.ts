@@ -137,7 +137,6 @@ export class QuickReservationFormComponent implements OnInit {
     this.listenForGlobalFilters();
     this.getCountryCode();
     this.initDefaultDate();
-    this.listenForSourceChanges();
   }
 
   initDetails() {
@@ -322,7 +321,10 @@ export class QuickReservationFormComponent implements OnInit {
             this.inputControls.guestInformation
               .get('guestDetails')
               .patchValue(res.guest.id);
-
+            this.formService.sourceData.next({
+              source: data.reservationInformation.source,
+              sourceName: data.reservationInformation.sourceName,
+            });
             this.roomOptions = this.defaultRoomType.rooms.map((room) => ({
               label: room.roomNumber.toString(),
               value: room.roomNumber.toString(),
@@ -374,6 +376,7 @@ export class QuickReservationFormComponent implements OnInit {
           this.configData = new BookingConfig().deserialize(
             response.bookingConfig
           );
+          this.listenForSourceChanges();
         })
     );
   }
@@ -423,6 +426,29 @@ export class QuickReservationFormComponent implements OnInit {
     const marketSegmentControl = this.reservationInfoControls.marketSegment;
     const otaSourceNameControl = this.reservationInfoControls.otaSourceName;
 
+    marketSegmentControl.valueChanges.subscribe((res) => {
+      if (
+        res &&
+        this.configData?.marketSegment.some((item) => item.value === res)
+      ) {
+        this.configData.marketSegment.push({ label: res, value: res });
+      }
+    });
+
+    sourceControl.valueChanges.subscribe((res) => {
+      if (res) {
+        if (
+          this.configData?.source.some(
+            (item) => item.value === sourceNameControl.value
+          )
+        ) {
+          this.configData.source.push({ label: res, value: res });
+        }
+        this.initSourceDetails(res);
+        !this.editMode && sourceNameControl.reset();
+      }
+    });
+
     this.$subscription.add(
       this.formService.sourceData.subscribe((res) => {
         if (res && this.configData) {
@@ -438,29 +464,6 @@ export class QuickReservationFormComponent implements OnInit {
         }
       })
     );
-
-    marketSegmentControl.valueChanges.subscribe((res) => {
-      if (
-        res &&
-        this.configData?.marketSegment.some((item) => item.value === res)
-      ) {
-        this.configData.marketSegment.push({ label: res, value: res });
-      }
-    });
-
-    sourceControl.valueChanges.subscribe((res) => {
-      if (res) {
-        if (
-          this.configData.source.some(
-            (item) => item.value === sourceNameControl.value
-          )
-        ) {
-          this.configData.source.push({ label: res, value: res });
-        }
-        this.initSourceDetails(res);
-        !this.editMode && sourceNameControl.reset();
-      }
-    });
   }
 
   initSourceDetails(source: string) {
@@ -482,6 +485,7 @@ export class QuickReservationFormComponent implements OnInit {
         ) &&
         otaSourceNameControl?.value?.length
       ) {
+
         this.otaOptions.push({
           label: otaSourceNameControl.value,
           value: otaSourceNameControl.value,

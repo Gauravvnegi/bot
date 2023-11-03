@@ -2,7 +2,7 @@ import { ComponentType } from '@angular/cdk/portal';
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 import {
   MatSnackBar,
-  MatSnackBarConfig,
+  formMatSnackBarConfig,
   MatSnackBarRef,
   SimpleSnackBar,
 } from '@angular/material/snack-bar';
@@ -31,7 +31,7 @@ export class SnackBarService {
   openSnackBarAsText(
     message: string,
     action?: string,
-    config?: MatSnackBarConfig
+    config?: formMatSnackBarConfig
   ): MatSnackBarRef<SimpleSnackBar> {
     this.increaseZIndex();
     const panelClass = _.get(config, ['panelClass'], 'danger');
@@ -56,7 +56,7 @@ export class SnackBarService {
    */
   openSnackBarAsComponent(
     component: ComponentType<any>,
-    config?: MatSnackBarConfig
+    config?: formMatSnackBarConfig
   ): MatSnackBarRef<any> {
     this.increaseZIndex();
     return this._snackBar.openFromComponent(component, {
@@ -75,7 +75,7 @@ export class SnackBarService {
   openSnackBarWithTranslate(
     data: SnackBarWithTranslateData,
     action?: string,
-    config?: MatSnackBarConfig
+    config?: formMatSnackBarConfig
   ) {
     this.increaseZIndex();
     const { translateKey, priorityMessage } = data;

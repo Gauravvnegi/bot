@@ -421,11 +421,18 @@ export class QuickReservationFormComponent implements OnInit {
     const sourceControl = this.reservationInfoControls.source;
     const sourceNameControl = this.reservationInfoControls.sourceName;
     const marketSegmentControl = this.reservationInfoControls.marketSegment;
+    const otaSourceNameControl = this.reservationInfoControls.otaSourceName;
+
     this.$subscription.add(
       this.formService.sourceData.subscribe((res) => {
         if (res && this.configData) {
           this.editMode = true;
           this.selectedAgent = res.agent;
+          if (res.source === 'OTA') {
+            otaSourceNameControl.setValue(res.sourceName);
+          } else if (res.source !== 'AGENT') {
+            sourceNameControl.setValue(res.sourceName);
+          }
           sourceNameControl.setValue(res.sourceName);
           sourceControl.setValue(res.source);
         }
@@ -471,13 +478,13 @@ export class QuickReservationFormComponent implements OnInit {
         : [];
       if (
         !this.otaOptions.some(
-          (item) => item.value === sourceNameControl?.value
+          (item) => item.value === otaSourceNameControl?.value
         ) &&
-        sourceNameControl?.value?.length
+        otaSourceNameControl?.value?.length
       ) {
         this.otaOptions.push({
-          label: sourceNameControl.value,
-          value: sourceNameControl.value,
+          label: otaSourceNameControl.value,
+          value: otaSourceNameControl.value,
         });
       }
     } else if (source === 'AGENT') {

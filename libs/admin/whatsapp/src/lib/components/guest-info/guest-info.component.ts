@@ -154,7 +154,6 @@ export class GuestInfoComponent implements OnInit, OnChanges, OnDestroy {
         // )
         .getRequestByPhoneNumber(this.guestData?.phone)
         .subscribe((response) => {
-          // debugger;
           this.requestList = new RequestList().deserialize(response).data;
         })
     );

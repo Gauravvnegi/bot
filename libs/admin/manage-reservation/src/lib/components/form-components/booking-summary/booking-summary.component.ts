@@ -26,7 +26,6 @@ import { ModalComponent } from 'libs/admin/shared/src/lib/components/modal/modal
 import { manageReservationRoutes } from '../../../constants/routes';
 import { ManageReservationService } from '../../../services/manage-reservation.service';
 import { Clipboard } from '@angular/cdk/clipboard';
-import { Location } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { PaymentMethod, ReservationForm } from '../../../constants/form';
 import { FormService } from '../../../services/form.service';
@@ -40,7 +39,6 @@ import {
   OccupancyDetails,
   RoomReservationFormData,
 } from '../../../types/forms.types';
-import { manageGuestRoutes } from 'libs/admin/guests/src/lib/constant/routes';
 import { DetailsComponent } from '@hospitality-bot/admin/reservation';
 
 @Component({

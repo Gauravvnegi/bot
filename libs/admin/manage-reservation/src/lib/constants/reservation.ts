@@ -60,7 +60,7 @@ export type RoomFieldTypeOption = {
   label: string;
   value: string;
   roomCount: number;
-  ratePlan?: ReservationRatePlan[];
+  ratePlans?: ReservationRatePlan[];
   maxChildren: number;
   maxAdult: number;
   id?: string;

@@ -118,7 +118,7 @@ export class ReservationCalendarViewComponent implements OnInit {
                   columns: [],
                   values: [],
                 },
-                allRatePlans: roomTypeData.ratePlans.map((item) => ({
+                ratePlans: roomTypeData.ratePlans.map((item) => ({
                   label: item.label,
                   value: item.id,
                   isBase: item.isBase,
@@ -531,7 +531,7 @@ export type IGRoomType = {
   loading?: boolean;
   reinitialize?: boolean;
   data?: GridData;
-  allRatePlans?: Option[];
+  ratePlans?: Option[];
 };
 
 type GridData = {

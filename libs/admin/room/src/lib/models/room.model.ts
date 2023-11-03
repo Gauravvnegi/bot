@@ -1,8 +1,7 @@
+import { RoomFieldTypeOption } from 'libs/admin/manage-reservation/src/lib/constants/reservation';
 import {
   AddedRatePlans,
   DynamicPricingRatePlan,
-  RatePlan,
-  ReservationRatePlan,
   StaticPricingRatePlan,
 } from '../constant/form';
 import {
@@ -139,7 +138,6 @@ export class RoomTypeForm {
   maxAdult: number;
   area: number;
   id?: string;
-  allRatePlans?: ReservationRatePlan[];
   isBaseRoomType?: boolean;
   shortDescription?: string;
   rooms?: RoomResponse[];
@@ -160,7 +158,6 @@ export class RoomTypeForm {
     this.isBaseRoomType = input?.isBaseRoomType ?? false;
     this.shortDescription = input?.shortDescription ?? '';
     this.rooms = input?.rooms ?? [];
-
     const defaultRatePlan = input?.ratePlans?.filter((item) => item.isBase);
     if (defaultRatePlan?.length) {
       this.staticRatePlans = {
@@ -204,7 +201,6 @@ export class RoomTypeForm {
         tripleOccupancyPrice: input.pricingDetails.paxTripleOccupancy,
       };
     }
-
     this.ratePlans = input?.ratePlans
       .filter((item) => !item.isBase)
       .map((item) => ({
@@ -218,15 +214,6 @@ export class RoomTypeForm {
         sellingPrice: item?.sellingPrice,
         total: item?.total ?? 0,
       }));
-
-    // For Reservation
-    this.allRatePlans = input?.ratePlans.map((item) => ({
-      label: item.label,
-      value: item.id,
-      isBase: item.isBase,
-      sellingPrice: item?.sellingPrice,
-    }));
-
     return this;
   }
 }

@@ -121,8 +121,13 @@ export class QuickSelectComponent extends FormComponent implements OnInit {
       changes['props']?.previousValue &&
       !changes['props']?.previousValue?.selectedOption
     ) {
+      const selectedOption = changes['props']?.currentValue?.selectedOption;
       // Get items again when selected option is patched.
-      this.getItems();
+      this.menuOptions = [...this.menuOptions, selectedOption];
+      this.removeDuplicate([...this.menuOptions]);
+      this.controlContainer.control.patchValue(selectedOption.value, {
+        emitEvent: false,
+      });
     }
     if (
       changes['reinitialize']?.previousValue !== undefined &&
@@ -355,17 +360,16 @@ export class QuickSelectComponent extends FormComponent implements OnInit {
     }
   }
 
-  /**
-   * @param param0 items which may be exists duplicate object value
-   * @returns removed duplicate object item
-   */
   removeDuplicate([...items]) {
-    return items.filter(
-      (item, index, arr) =>
-        arr.findIndex(
-          (obj) => obj.label === item.label && obj.value === item.value
-        ) === index
-    );
+    const seen = new Set();
+    return items.filter((item) => {
+      const key = item.value; // Customize this key based on your needs
+      if (!seen.has(key)) {
+        seen.add(key);
+        return true;
+      }
+      return false;
+    });
   }
 
   /**

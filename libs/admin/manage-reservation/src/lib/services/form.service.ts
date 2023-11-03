@@ -12,6 +12,8 @@ import { ReservationForm } from '../constants/form';
 import { ManageReservationService } from './manage-reservation.service';
 import { QueryConfig } from '@hospitality-bot/admin/shared';
 import { AbstractControl } from '@angular/forms';
+import { RoomTypeResponse } from 'libs/admin/room/src/lib/types/service-response';
+import { RoomFieldTypeOption } from '../constants/reservation';
 
 @Injectable({
   providedIn: 'root',
@@ -196,6 +198,29 @@ export class FormService {
         : input.instructions?.specialInstructions;
 
     return reservationData;
+  }
+
+  setReservationRoomType(data: RoomTypeResponse | RoomFieldTypeOption) {
+    return 'name' in data
+      ? {
+          label: data.name,
+          value: data.id,
+          ratePlans: data?.ratePlans?.map((item) => ({
+            label: item.label,
+            value: item.id,
+            isBase: item.isBase,
+            sellingPrice: item?.sellingPrice,
+          })),
+          roomCount: 1,
+          maxChildren: data.occupancyDetails?.maxChildren,
+          maxAdult: data.occupancyDetails?.maxAdult,
+          rooms:
+            data?.rooms?.map((room) => ({
+              label: room?.roomNumber,
+              value: room?.roomNumber,
+            })) ?? [],
+        }
+      : data;
   }
 
   resetData() {

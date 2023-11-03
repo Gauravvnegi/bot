@@ -21,7 +21,7 @@ import {
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { EntitySubType } from 'libs/admin/shared/src';
 import { IteratorComponent } from 'libs/admin/shared/src/lib/components/iterator/iterator.component';
-import { Subscription } from 'rxjs';
+import { Subscription, forkJoin } from 'rxjs';
 import { roomFields, RoomFieldTypeOption } from '../../constants/reservation';
 import { RoomTypeForm } from 'libs/admin/room/src/lib/models/room.model';
 import { ReservationForm, RoomTypes } from '../../constants/form';
@@ -218,13 +218,29 @@ export class RoomIteratorComponent extends IteratorComponent
         roomCount: value.roomCount,
         childCount: value.childCount,
         adultCount: value.adultCount,
-        ratePlan: value.allRatePlans?.value ?? value.ratePlan,
+        ratePlan: value.ratePlans?.value ?? value.ratePlan,
         roomNumbers: value?.roomNumbers,
         roomNumber: value?.roomNumber,
         id: value?.id,
       });
-      this.getRoomTypeById(value.roomTypeId, index);
     });
+
+    // const observables = itemValues.map((value, index) =>
+    //   this.roomService.getRoomTypeById(this.entityId, value.roomTypeId)
+    // );
+
+    // // Use forkJoin to wait for all observables to complete
+    // forkJoin(observables).subscribe(
+    //   (responses) => {
+    //     // Process the responses if needed
+    //     responses.forEach((res, index) => {
+    //       this.roomTypes[index] = this.formService.setReservationRoomType(res);
+    //       this.listenRoomTypeChanges(index);
+    //     });
+    //   },
+    //   (error) => {},
+    //   () => this.formService.isDataInitialized.next(true)
+    // );
   }
 
   /**
@@ -234,7 +250,7 @@ export class RoomIteratorComponent extends IteratorComponent
   listenRoomTypeChanges(index: number) {
     if (this.roomTypes.length) {
       // Sets rate plan options according to the selected room type
-      const ratePlanOptions = this.roomTypes[index].ratePlan.map((item) => ({
+      const ratePlanOptions = this.roomTypes[index].ratePlans.map((item) => ({
         label: item.label,
         value: item.value,
         sellingprice: item.sellingPrice,
@@ -257,7 +273,7 @@ export class RoomIteratorComponent extends IteratorComponent
         },
         { emitEvent: false }
       );
-      if (this.isDataInitialized) {
+      if (this.isDataInitialized || !this.reservationId) {
         this.roomControls[index].get('roomNumbers').reset();
         this.roomControls[index].get('roomNumber').reset();
         // Patch default Base rate plan when not in edit mode.
@@ -298,34 +314,11 @@ export class RoomIteratorComponent extends IteratorComponent
   // Patch data for selected room type
   roomTypeChange(event: RoomTypeResponse, index: number) {
     if (event) {
-      this.mapRoomTypeData(event, index);
+      this.roomTypes[index] = this.formService.setReservationRoomType(event);
       this.listenRoomTypeChanges(index);
       if (this.isDraftBooking) this.listenForRoomChanges(index);
+      this.formService.isDataInitialized.next(true);
     }
-  }
-
-  getRoomTypeById(roomTypeId: string, index: number) {
-    this.roomService
-      .getRoomTypeById(this.entityId, roomTypeId)
-      .subscribe((res) => {
-        this.mapRoomTypeData(res, index);
-      });
-  }
-
-  mapRoomTypeData(res, index) {
-    const data = new RoomTypeForm().deserialize(res);
-    this.roomTypes[index] = {
-      label: data.name,
-      value: data.id,
-      ratePlan: data.allRatePlans,
-      roomCount: 1,
-      maxChildren: data.maxChildren,
-      maxAdult: data.maxAdult,
-      rooms: data?.rooms.map((room) => ({
-        label: room?.roomNumber,
-        value: room?.roomNumber,
-      })),
-    };
   }
 
   /**

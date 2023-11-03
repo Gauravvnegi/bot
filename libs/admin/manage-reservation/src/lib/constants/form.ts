@@ -67,7 +67,7 @@ export type RoomTypes = {
   adultCount: number;
   childCount: number;
   roomTypeLabel?: string;
-  allRatePlans?: ReservationRatePlan;
+  ratePlans?: ReservationRatePlan;
   id?: string;
 };
 

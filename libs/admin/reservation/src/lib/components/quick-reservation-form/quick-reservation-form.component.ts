@@ -377,35 +377,27 @@ export class QuickReservationFormComponent implements OnInit {
   // Patch data for selected room type
   roomTypeChange(event: RoomTypeResponse) {
     if (event && event.id) {
-      const data = new RoomTypeForm().deserialize(event);
-      this.selectedRoomType = {
-        label: data.name,
-        value: data.id,
-        ratePlan: data.allRatePlans,
-        roomCount: 1,
-        maxChildren: data.maxChildren,
-        maxAdult: data.maxAdult,
-        rooms: data.rooms.map((room) => ({
-          label: room.roomNumber,
-          value: room.roomNumber,
-        })),
-      };
-      this.setRoomInfo(data);
+      this.selectedRoomType = this.formService.setReservationRoomType(
+        event
+      );
+      this.setRoomInfo();
     }
   }
 
-  setRoomInfo(selectedRoomType) {
-    this.ratePlans = selectedRoomType?.allRatePlans.map((res) => ({
+  setRoomInfo(defaultRoomType?: IGRoomType) {
+    const roomType = defaultRoomType ? defaultRoomType : this.selectedRoomType;
+    this.ratePlans = ((roomType?.ratePlans as Option[]) ?? []).map((res) => ({
       label: res.label,
       value: res.value,
-      isBase: res?.isBase,
+      isBase: res.isBase,
     }));
-    this.roomOptions = selectedRoomType?.rooms.map((room) => ({
+
+    this.roomOptions = ((roomType?.rooms as Option[]) ?? []).map((room) => ({
       label: room.roomNumber,
       value: room.roomNumber,
     }));
     this.inputControls.roomInformation.patchValue({
-      ratePlan: this.ratePlans.filter((rateplan) => rateplan.isBase)[0].value,
+      ratePlan: this.ratePlans?.filter((rateplan) => rateplan.isBase)[0].value,
       adultCount: 1,
       childCount: 0,
     });

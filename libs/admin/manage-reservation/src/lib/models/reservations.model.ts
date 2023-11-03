@@ -237,7 +237,7 @@ export class ReservationFormData {
       ratePlan: item.roomDetails.ratePlan.id,
       roomCount: item.roomDetails.roomCount,
       roomTypeLabel: item.roomDetails.roomTypeLabel,
-      allRatePlans: {
+      ratePlans: {
         value: item.roomDetails.ratePlan.id,
         label: item.roomDetails.ratePlan.label,
         isBase: item.roomDetails.ratePlan.isBase,

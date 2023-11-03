@@ -206,7 +206,7 @@ export class BookingInfoComponent implements OnInit {
           !this.otaOptions.some(
             (item) => item.value === sourceNameControl.value
           ) &&
-          sourceNameControl.value.length
+          sourceNameControl?.value?.length
         ) {
           this.otaOptions.push({
             label: sourceNameControl.value,

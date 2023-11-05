@@ -12,12 +12,13 @@ export type ReservationForm = {
   paymentRule: PaymentRule;
   paymentMethod: PaymentMethod;
   offerId: string;
+  dailyPrice?: string;
 };
 
 export type ReservationInformation = {
   from?: number;
   to?: number;
-  dateAndTime: number;
+  dateAndTime?: number;
   reservationType?: string;
   source: string;
   sourceName: string;
@@ -48,7 +49,7 @@ export type Instructions = {
 };
 
 export type RoomInformation = {
-  roomTypes: RoomTypes[];
+  roomTypes?: RoomTypes[];
 
   // For quick form
   roomTypeId?: string;
@@ -57,7 +58,7 @@ export type RoomInformation = {
   adultCount?: number;
   childCount?: number;
   id?: string;
-  roomNumbers: string[];
+  roomNumbers?: string[];
 };
 
 export type RoomTypes = {

@@ -1,8 +1,15 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  Compiler,
+  Component,
+  ComponentFactoryResolver,
+  Input,
+  OnInit,
+  ViewChild,
+  ViewContainerRef,
+} from '@angular/core';
 import {
   AbstractControl,
   ControlContainer,
-  FormArray,
   FormGroup,
   Validators,
 } from '@angular/forms';
@@ -12,18 +19,22 @@ import {
   EntitySubType,
   Option,
 } from '@hospitality-bot/admin/shared';
-import { BookingConfig } from '../../../models/reservations.model';
+import { BookingConfig } from '../../../../../manage-reservation/src/lib/models/reservations.model';
 import * as moment from 'moment';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
-import { FormService } from '../../../services/form.service';
-import { ReservationForm } from '../../../constants/form';
+import { FormService } from '../../../../../manage-reservation/src/lib/services/form.service';
+import { ReservationForm } from '../../../../../manage-reservation/src/lib/constants/form';
 import { Subscription } from 'rxjs';
 import { AgentTableResponse } from 'libs/admin/agent/src/lib/types/response';
+import { AddAgentComponent } from 'libs/admin/agent/src/lib/components/add-agent/add-agent.component';
 
 @Component({
   selector: 'hospitality-bot-booking-info',
   templateUrl: './booking-info.component.html',
-  styleUrls: ['./booking-info.component.scss', '../../reservation.styles.scss'],
+  styleUrls: [
+    './booking-info.component.scss',
+    '../../../../../manage-reservation/src/lib/components/reservation.styles.scss',
+  ],
 })
 export class BookingInfoComponent implements OnInit {
   countries: Option[];
@@ -33,8 +44,8 @@ export class BookingInfoComponent implements OnInit {
   eventTypes: Option[] = [];
   bookingType: string;
   reservationId: string;
-  disabledForm: string;
-
+  isQuickReservation: boolean = false;
+  isFormInitilaized: boolean = false
   /**
    * Props to show extra information
    * @todo Need to handle label for col and row to show information
@@ -45,6 +56,8 @@ export class BookingInfoComponent implements OnInit {
       this[key] = val;
     }
   }
+
+  parentFormGroup: FormGroup;
 
   otaOptions: Option[] = [];
 
@@ -63,18 +76,27 @@ export class BookingInfoComponent implements OnInit {
   selectedAgent: AgentTableResponse;
 
   $subscription = new Subscription();
+
+  sidebarVisible: boolean;
+  @ViewChild('sidebarSlide', { read: ViewContainerRef })
+  sidebarSlide: ViewContainerRef;
+
   constructor(
     public controlContainer: ControlContainer,
     private configService: ConfigService,
     private globalFilterService: GlobalFilterService,
+    private resolver: ComponentFactoryResolver,
+    private compiler: Compiler,
     private formService: FormService
   ) {}
 
   ngOnInit(): void {
+    this.parentFormGroup = this.controlContainer.control as FormGroup;
     this.entityId = this.globalFilterService.entityId;
     this.getCountryCode();
     this.initDates();
     this.listenForSourceChanges();
+    this.isFormInitilaized = true;
   }
 
   initDates() {
@@ -299,6 +321,34 @@ export class BookingInfoComponent implements OnInit {
     }
   }
 
+  agentChange() {}
+
+  showAgent() {
+    const lazyModulePromise = import(
+      'libs/admin/agent/src/lib/admin-agent.module'
+    )
+      .then((module) => {
+        return this.compiler.compileModuleAsync(module.AdminAgentModule);
+      })
+      .catch((error) => {
+        console.error('Error loading the lazy module:', error);
+      });
+    lazyModulePromise.then((moduleFactory) => {
+      this.sidebarVisible = true;
+      const factory = this.resolver.resolveComponentFactory(AddAgentComponent);
+      this.sidebarSlide.clear();
+      const componentRef = this.sidebarSlide.createComponent(factory);
+      componentRef.instance.isSideBar = true;
+      componentRef.instance.onClose.subscribe((res) => {
+        if (typeof res !== 'boolean') {
+          this.selectedAgent = res;
+        }
+        this.sidebarVisible = false;
+        componentRef.destroy();
+      });
+    });
+  }
+
   get reservationInfoControls() {
     return (this.controlContainer.control.get(
       'reservationInformation'
@@ -310,12 +360,6 @@ export class BookingInfoComponent implements OnInit {
 
   get roomControls() {
     return this.controlContainer.control.get('roomInformation') as FormGroup;
-  }
-
-  get roomTypeArray() {
-    return ((this.controlContainer.control.get(
-      'roomInformation'
-    ) as FormGroup).get('roomTypes') as FormArray).controls;
   }
 
   ngOnDestroy() {
@@ -330,5 +374,5 @@ type BookingInfoProps = {
   eventTypes?: Option[];
   bookingType?: string;
   reservationId?: string;
-  disabledForm?: string;
+  isQuickReservation?: boolean;
 };

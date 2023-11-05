@@ -31,7 +31,7 @@ import { ReservationType } from '../../constants/reservation-table';
 import { convertToTitleCase } from 'libs/admin/shared/src/lib/utils/valueFormatter';
 import { Subject } from 'rxjs';
 import { RoutesConfigService } from '@hospitality-bot/admin/core/theme';
-import { QuickReservationForm } from 'libs/admin/dashboard/src/lib/data-models/reservation.model';
+import { ReservationForm } from '../../constants/form';
 
 @Component({
   selector: 'hospitality-bot-add-reservation',
@@ -65,10 +65,10 @@ export class AddReservationComponent extends BaseReservationComponent
     protected routesConfigService: RoutesConfigService
   ) {
     super(activatedRoute, hotelDetailService, formService, routesConfigService);
+    this.initForm();
   }
 
   ngOnInit(): void {
-    this.initForm();
     this.initDetails();
     if (this.reservationId) this.getReservationDetails();
     this.initFormData();
@@ -94,7 +94,7 @@ export class AddReservationComponent extends BaseReservationComponent
       });
   }
 
-  initParamsData(paramsData: QuickReservationForm) {
+  initParamsData(paramsData: ReservationForm) {
     const {
       roomInformation,
       guestInformation,

@@ -79,7 +79,9 @@ export class RoomReservation {
       (this.roomType = input.bookingItems[0]?.roomDetails?.roomTypeLabel ?? '');
     this.journeysStatus = input.journeysStatus;
     this.invoiceId = input?.invoiceId ?? '';
-    this.agentName = `${input?.agent?.firstName} ${input?.agent?.lastName}`;
+    this.agentName = input?.agent
+      ? `${input?.agent?.firstName} ${input?.agent?.lastName}`
+      : '';
     return this;
   }
 

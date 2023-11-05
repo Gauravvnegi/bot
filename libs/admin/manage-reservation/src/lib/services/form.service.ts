@@ -241,6 +241,7 @@ export class FormService {
     this.enableAccordion = false;
     this.reservationForm.next(null);
     this.deductedAmount.next(0);
+    this.isDataInitialized.next(false);
   }
 }
 

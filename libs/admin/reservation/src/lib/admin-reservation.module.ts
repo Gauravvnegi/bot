@@ -33,6 +33,7 @@ import { ManageReservationService } from 'libs/admin/manage-reservation/src/lib/
 import { FormService } from 'libs/admin/manage-reservation/src/lib/services/form.service';
 import { RoomService } from 'libs/admin/room/src/lib/services/room.service';
 import { ChannelManagerService } from 'libs/admin/channel-manager/src/lib/services/channel-manager.service';
+import { BookingInfoComponent } from './components/booking-info/booking-info.component';
 
 export const adminReservationRoutes: Route[] = [];
 
@@ -66,6 +67,7 @@ export const adminReservationRoutes: Route[] = [];
     ReservationCalendarViewComponent,
     RoomTypesComponent,
     QuickReservationFormComponent,
+    BookingInfoComponent,
   ],
   exports: [
     AdminSharedModule,
@@ -86,6 +88,7 @@ export const adminReservationRoutes: Route[] = [];
     QuickReservationFormComponent,
     ReservationCalendarViewComponent,
     RoomTypesComponent,
+    BookingInfoComponent,
   ],
   providers: [
     ReservationService,

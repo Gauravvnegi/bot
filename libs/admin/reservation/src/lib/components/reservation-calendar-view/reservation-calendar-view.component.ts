@@ -42,6 +42,7 @@ import { UpdateRatesResponse } from 'libs/admin/channel-manager/src/lib/types/re
 import { UpdateRates } from 'libs/admin/channel-manager/src/lib/models/channel-manager.model';
 import { ChannelManagerService } from 'libs/admin/channel-manager/src/lib/services/channel-manager.service';
 import * as moment from 'moment';
+import { FormService } from 'libs/admin/manage-reservation/src/lib/services/form.service';
 
 @Component({
   selector: 'hospitality-bot-reservation-calendar-view',
@@ -78,7 +79,8 @@ export class ReservationCalendarViewComponent implements OnInit {
     private roomService: RoomService,
     private adminUtilityService: AdminUtilityService,
     private modalService: ModalService,
-    private channelManagerService: ChannelManagerService
+    private channelManagerService: ChannelManagerService,
+    private formService: FormService
   ) {}
 
   ngOnInit(): void {
@@ -86,6 +88,7 @@ export class ReservationCalendarViewComponent implements OnInit {
     this.globalFilterService.toggleFullView.subscribe((res) => {
       this.fullView = res;
     });
+    this.formService.resetData();
     this.initForm();
     this.initDates(Date.now());
     this.initRoomTypes();

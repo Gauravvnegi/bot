@@ -37,14 +37,6 @@ export type GuestDetails = {
   email: string;
 };
 
-export type QuickReservationForm = {
-  reservationInformation: ReservationInformation;
-  guestInformation: GuestInformation;
-  roomInformation?: RoomInformation;
-  instructions?: Instructions;
-  dailyPrice: string;
-};
-
 type RoomInformation = {
   // For quick form
   roomTypeId?: string;

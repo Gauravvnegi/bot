@@ -1,15 +1,17 @@
 <div class="wrapper" [id]="fd.referenceId">
   <hospitality-bot-navigation-header
+    *ngIf="!isSideBar; else sidebarHeader"
     [heading]="pageTitle"
     [routes]="navRoutes"
   ></hospitality-bot-navigation-header>
 
-  <div class="form-block" [formGroup]="agentForm">
-    <div class="code half-width">
+  <div class="form-block body" [formGroup]="agentForm">
+    <div class="code half-width" *ngIf="!isSideBar">
       <span class="code__label"> Code: </span>
       <span class="code__hash"> {{ agentForm.get('packageCode').value }} </span>
     </div>
     <hospitality-bot-toggle-switch
+      *ngIf="!isSideBar"
       class="status half-width"
       controlName="status"
       label="Status:"
@@ -42,7 +44,7 @@
     ></hospitality-bot-input>
 
     <hospitality-bot-phone-number
-      class="half-width"
+      [ngClass]="{ 'full-width': isSideBar, 'half-width': !isSideBar }"
       preControlName="cc"
       postControlName="phoneNo"
     ></hospitality-bot-phone-number>
@@ -65,8 +67,31 @@
       controlName="company"
       type="COMPANY"
       label="Agency Name"
+      [defaultMember]="selectedMember"
       (createMembers)="createNewCompany()"
     ></hospitality-bot-members-list>
+
+    <hospitality-bot-select
+      class="half-width"
+      label="Market Segment"
+      controlName="marketSegment"
+      [options]="marketSegment"
+      [props]="{
+        placeholder: 'Select'
+      }"
+    >
+    </hospitality-bot-select>
+
+    <hospitality-bot-select
+      class="half-width"
+      label="Business Source"
+      controlName="businessSource"
+      [options]="businessSource"
+      [props]="{
+        placeholder: 'Select'
+      }"
+    >
+    </hospitality-bot-select>
 
     <hospitality-bot-address-component
       class="half-width"
@@ -97,29 +122,9 @@
         placeholder: 'Enter'
       }"
     ></hospitality-bot-prefix-field>
-    <hospitality-bot-select
-      class="half-width"
-      label="Market Segment"
-      controlName="marketSegment"
-      [options]="marketSegment"
-      [props]="{
-        placeholder: 'Select'
-      }"
-    >
-    </hospitality-bot-select>
 
     <hospitality-bot-select
-      class="half-width"
-      label="Business Source"
-      controlName="businessSource"
-      [options]="businessSource"
-      [props]="{
-        placeholder: 'Select'
-      }"
-    >
-    </hospitality-bot-select>
-
-    <hospitality-bot-select
+      *ngIf="!isSideBar"
       class="half-width"
       label="Billing Instruction"
       controlName="billingInstruction"
@@ -130,14 +135,32 @@
     >
     </hospitality-bot-select>
   </div>
-
-  <hospitality-bot-form-action
-    class="full-width"
-    [loading]="loading"
-    [isId]="agentId"
-    (onPreAction)="reset()"
-    (onPostAction)="handleSubmit()"
-    #fd
-  >
-  </hospitality-bot-form-action>
 </div>
+
+<p-sidebar
+  class="sidebar-slide"
+  [ngClass]="'agent-sidebar'"
+  [(visible)]="sidebarVisible"
+  position="right"
+>
+  <ng-container #sidebarSlide></ng-container>
+</p-sidebar>
+
+<ng-template #sidebarHeader>
+  <div class="sidebar-slide-header">
+    <span class="title">{{ pageTitle }}</span>
+    <span class="close-icon" (click)="closeSidebar()">
+      <i class="pi pi-arrow-right" aria-hidden="true"></i>
+    </span>
+  </div>
+</ng-template>
+
+<hospitality-bot-form-action
+  class="full-width"
+  [loading]="loading"
+  [isId]="agentId"
+  (onPreAction)="reset()"
+  (onPostAction)="handleSubmit()"
+  #fd
+>
+</hospitality-bot-form-action>

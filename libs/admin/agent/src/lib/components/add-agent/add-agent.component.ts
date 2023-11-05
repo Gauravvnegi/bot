@@ -1,4 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import {
+  Compiler,
+  Component,
+  ComponentFactoryResolver,
+  EventEmitter,
+  OnInit,
+  Output,
+  ViewChild,
+  ViewContainerRef,
+} from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import {
   GlobalFilterService,
@@ -29,9 +38,9 @@ import { commissionType } from '../../types/agent';
 import {
   billingInstruction,
   businessSource,
-  discountTypes,
 } from 'libs/admin/company/src/lib/constants/company';
 import { Location } from '@angular/common';
+import { AddCompanyComponent } from 'libs/admin/company/src/lib/components/add-company/add-company.component';
 @Component({
   selector: 'hospitality-bot-add-agent',
   templateUrl: './add-agent.component.html',
@@ -64,6 +73,14 @@ export class AddAgentComponent implements OnInit {
   billingInstruction = billingInstruction;
   marketSegment: Option[] = [];
 
+  //Sidebar configuration
+  isSideBar = false;
+  sidebarVisible = false;
+  @ViewChild('sidebarSlide', { read: ViewContainerRef })
+  sidebarSlide: ViewContainerRef;
+  @Output() onClose = new EventEmitter<AgentTableResponse | boolean>(false);
+  selectedMember: Option;
+
   constructor(
     public fb: FormBuilder,
     public tabFilter: TableService,
@@ -76,7 +93,9 @@ export class AddAgentComponent implements OnInit {
     private formService: FormService,
     private configService: ConfigService,
     private routesConfigService: RoutesConfigService,
-    private location: Location
+    private location: Location,
+    private resolver: ComponentFactoryResolver,
+    private compiler: Compiler
   ) {
     this.agentId = this.route.snapshot.paramMap.get('id');
     const { navRoutes, title } = agentRoutes[
@@ -206,6 +225,11 @@ export class AddAgentComponent implements OnInit {
         (res) => {
           this.loading = false;
           this.handleSuccess();
+          if (this.isSideBar) {
+            this.onClose.emit(res);
+          } else {
+            this.location.back();
+          }
         },
         (error) => {
           this.loading = false;
@@ -219,15 +243,51 @@ export class AddAgentComponent implements OnInit {
     AgentModel.resetForm(this.agentForm);
   }
 
+  openCompanyFromSide() {
+    const lazyModulePromise = import(
+      'libs/admin/company/src/lib/admin-company.module'
+    )
+      .then((module) => {
+        return this.compiler.compileModuleAsync(module.AdminCompanyModule);
+      })
+      .catch((error) => {
+        console.error('Error loading the lazy module:', error);
+      });
+
+    lazyModulePromise.then((moduleFactory) => {
+      this.sidebarVisible = true;
+      const factory = this.resolver.resolveComponentFactory(
+        AddCompanyComponent
+      );
+      this.sidebarSlide.clear();
+      const componentRef = this.sidebarSlide.createComponent(factory);
+      componentRef.instance.isSideBar = true;
+      componentRef.instance.onClose.subscribe((res) => {
+        if (typeof res !== 'boolean') {
+          this.selectedMember = {
+            label: res.companyName,
+            value: res.id,
+          };
+        }
+        this.sidebarVisible = false;
+        componentRef.destroy();
+      });
+    });
+  }
+
   /**
    * @function createNewCompany Add new company
    */
   createNewCompany() {
-    this.saveForm();
-    this.routesConfigService.navigate({
-      subModuleName: ModuleNames.COMPANY,
-      additionalPath: companyRoutes.addCompany.route,
-    });
+    if (this.isSideBar) {
+      this.openCompanyFromSide();
+    } else {
+      this.saveForm();
+      this.routesConfigService.navigate({
+        subModuleName: ModuleNames.COMPANY,
+        additionalPath: companyRoutes.addCompany.route,
+      });
+    }
   }
 
   saveForm() {
@@ -274,6 +334,10 @@ export class AddAgentComponent implements OnInit {
   handleFinal = () => {
     this.loading = false;
   };
+
+  closeSidebar() {
+    this.onClose.emit(true);
+  }
 
   /**
    * Unsubscribe when component is getting removed

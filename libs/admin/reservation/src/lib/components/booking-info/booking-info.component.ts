@@ -220,7 +220,8 @@ export class BookingInfoComponent implements OnInit {
     marketSegmentControl.valueChanges.subscribe((res) => {
       if (
         res &&
-        this.configData?.marketSegment.some((item) => item.value === res)
+        this.configData?.marketSegment &&
+        !this.configData?.marketSegment.some((item) => item.value === res)
       ) {
         this.configData.marketSegment.push({ label: res, value: res });
       }
@@ -229,7 +230,8 @@ export class BookingInfoComponent implements OnInit {
     sourceControl.valueChanges.subscribe((res) => {
       if (res) {
         if (
-          this.configData.source.some(
+          this.configData?.source &&
+          !this.configData?.source.some(
             (item) => item.value === sourceNameControl.value
           )
         ) {

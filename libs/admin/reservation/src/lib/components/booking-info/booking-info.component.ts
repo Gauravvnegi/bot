@@ -158,6 +158,7 @@ export class BookingInfoComponent implements OnInit {
             multipleDateChange = true;
             toDateControl.setValue(nextDayTime); // Set toDateControl to one day later
           }
+          this.formService.reinitializeRooms.next(true);
           this.updateDateDifference();
           this.minToDate = new Date(maxToLimit); // Create a new date object
           this.minToDate.setDate(maxToLimit.getDate());
@@ -172,6 +173,7 @@ export class BookingInfoComponent implements OnInit {
         if (res) {
           this.toDateValue = new Date(res);
           this.updateDateDifference();
+          !multipleDateChange && this.formService.reinitializeRooms.next(true);
           if (
             this.roomControls.valid &&
             !multipleDateChange &&

@@ -136,7 +136,8 @@
               queryParams: getRoomTypeConfig()
             }"
             [paginationConfig]="{
-              isPagination: true
+              isPagination: true,
+              limit: 200
             }"
             (clickedOption)="roomTypeChange($event)"
             [reinitialize]="reinitializeRooms"

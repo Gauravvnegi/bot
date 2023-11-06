@@ -131,6 +131,7 @@ export class QuickReservationFormComponent implements OnInit {
 
   ngOnInit(): void {
     this.listenForGlobalFilters();
+    this.initDefaultDate();
   }
 
   initDetails() {
@@ -146,6 +147,25 @@ export class QuickReservationFormComponent implements OnInit {
       });
       this.setRoomInfo(this.defaultRoomType);
     }
+  }
+
+  initDefaultDate() {
+    const fromDate = this.date ? new Date(this.date) : new Date(); // Convert epoch to milliseconds
+    const toDate = new Date(fromDate);
+    toDate.setDate(fromDate.getDate() + 1); // Add 1 day
+
+    this.inputControls.reservationInformation.patchValue({
+      from: fromDate.getTime(),
+      to: toDate.getTime(),
+    });
+  }
+
+  listenForDateChanges() {
+    this.formService.reinitializeRooms.subscribe((res) => {
+      if (res) {
+        this.reinitializeRooms = !this.reinitializeRooms;
+      }
+    });
   }
 
   /**
@@ -194,6 +214,7 @@ export class QuickReservationFormComponent implements OnInit {
     });
 
     this.entityId = this.globalFilterService.entityId;
+    this.listenForDateChanges();
   }
 
   listenForRoomChanges() {
@@ -321,12 +342,18 @@ export class QuickReservationFormComponent implements OnInit {
   roomTypeChange(event: RoomTypeResponse) {
     if (event && event.id) {
       this.selectedRoomType = this.formService.setReservationRoomType(event);
+      if (
+        !this.selectedRoomType?.rooms.some(
+          (item) => item?.value === this.selectedRoom
+        )
+      )
+        this.roomControls.roomNumbers.reset();
       this.setRoomInfo();
     }
   }
 
   setRoomInfo(defaultRoomType?: IGRoomType) {
-    if (defaultRoomType) {
+    if (defaultRoomType || this.selectedRoomType) {
       const roomType = defaultRoomType
         ? defaultRoomType
         : this.selectedRoomType;
@@ -336,8 +363,8 @@ export class QuickReservationFormComponent implements OnInit {
         isBase: res.isBase,
       }));
       this.roomOptions = ((roomType?.rooms as Option[]) ?? []).map((room) => ({
-        label: room.roomNumber,
-        value: room.roomNumber,
+        label: room?.roomNumber,
+        value: room?.roomNumber,
       }));
       this.inputControls.roomInformation.patchValue({
         ratePlan: this.ratePlans?.filter((rateplan) => rateplan.isBase)[0]

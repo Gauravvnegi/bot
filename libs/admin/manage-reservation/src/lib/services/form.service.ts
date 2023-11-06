@@ -27,6 +27,7 @@ export class FormService {
   getSummary = new Subject<void>();
   deductedAmount = new BehaviorSubject(0);
   isDataInitialized = new BehaviorSubject(false);
+  reinitializeRooms = new BehaviorSubject(false);
 
   guestInformation: BehaviorSubject<string> = new BehaviorSubject<string>(null);
 
@@ -227,6 +228,7 @@ export class FormService {
             data?.rooms?.map((room) => ({
               label: room?.roomNumber,
               value: room?.roomNumber,
+              roomNumber: room?.roomNumber,
             })) ?? [],
         }
       : data;
@@ -242,6 +244,7 @@ export class FormService {
     this.reservationForm.next(null);
     this.deductedAmount.next(0);
     this.isDataInitialized.next(false);
+    this.reinitializeRooms.next(false);
   }
 }
 

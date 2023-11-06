@@ -91,7 +91,8 @@
                 searchQueryParams: { type: 'ROOM_TYPE' }
               }"
               [paginationConfig]="{
-                isPagination: true
+                isPagination: true,
+                limit: 200
               }"
               (clickedOption)="roomTypeChange($event, i)"
               [reinitialize]="reinitializeRooms"

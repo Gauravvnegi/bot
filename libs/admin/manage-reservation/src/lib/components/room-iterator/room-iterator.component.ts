@@ -153,14 +153,11 @@ export class RoomIteratorComponent extends IteratorComponent
   }
 
   listenForDateChanges() {
-    this.reservationInfoControls.from.valueChanges.subscribe((res) => {
-      if (res) this.reinitializeRooms = !this.reinitializeRooms;
+    this.formService.reinitializeRooms.subscribe((res) => {
+      if (res) {
+        this.reinitializeRooms = !this.reinitializeRooms;
+      }
     });
-    this.reservationInfoControls.to.valueChanges
-      .pipe(debounceTime(50))
-      .subscribe((res) => {
-        if (res) this.reinitializeRooms = !this.reinitializeRooms;
-      });
   }
 
   listenForRoomChanges(index) {

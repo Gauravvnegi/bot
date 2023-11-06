@@ -125,6 +125,7 @@ export class QuickReservationFormComponent implements OnInit {
     private routesConfigService: RoutesConfigService,
     private modalService: ModalService
   ) {
+    this.formService.resetData();
     this.initForm();
   }
 

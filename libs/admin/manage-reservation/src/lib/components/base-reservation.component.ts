@@ -63,6 +63,7 @@ export class BaseReservationComponent {
     protected formService: FormService,
     protected routesConfigService: RoutesConfigService
   ) {
+    this.formService.resetData();
     this.reservationId = this.activatedRoute.snapshot.paramMap.get('id');
     const { navRoutes, title } = manageReservationRoutes[
       this.reservationId ? 'editReservation' : 'addReservation'

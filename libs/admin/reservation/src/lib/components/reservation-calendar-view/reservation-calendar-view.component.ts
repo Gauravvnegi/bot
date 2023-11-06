@@ -79,8 +79,7 @@ export class ReservationCalendarViewComponent implements OnInit {
     private roomService: RoomService,
     private adminUtilityService: AdminUtilityService,
     private modalService: ModalService,
-    private channelManagerService: ChannelManagerService,
-    private formService: FormService
+    private channelManagerService: ChannelManagerService
   ) {}
 
   ngOnInit(): void {
@@ -88,7 +87,6 @@ export class ReservationCalendarViewComponent implements OnInit {
     this.globalFilterService.toggleFullView.subscribe((res) => {
       this.fullView = res;
     });
-    this.formService.resetData();
     this.initForm();
     this.initDates(Date.now());
     this.initRoomTypes();

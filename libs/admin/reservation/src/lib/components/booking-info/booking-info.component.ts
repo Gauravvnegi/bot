@@ -45,7 +45,7 @@ export class BookingInfoComponent implements OnInit {
   bookingType: string;
   reservationId: string;
   isQuickReservation: boolean = false;
-  isFormInitilaized: boolean = false
+  isFormInitilaized: boolean = false;
   /**
    * Props to show extra information
    * @todo Need to handle label for col and row to show information
@@ -162,7 +162,7 @@ export class BookingInfoComponent implements OnInit {
           this.minToDate = new Date(maxToLimit); // Create a new date object
           this.minToDate.setDate(maxToLimit.getDate());
           this.formService.reservationDate.next(res);
-          if (this.roomControls.valid) {
+          if (this.roomControls.valid && !this.isQuickReservation) {
             this.formService.getSummary.next();
           }
         }
@@ -172,7 +172,11 @@ export class BookingInfoComponent implements OnInit {
         if (res) {
           this.toDateValue = new Date(res);
           this.updateDateDifference();
-          if (this.roomControls.valid && !multipleDateChange) {
+          if (
+            this.roomControls.valid &&
+            !multipleDateChange &&
+            !this.isQuickReservation
+          ) {
             this.formService.getSummary.next();
           }
           multipleDateChange = false;
@@ -209,6 +213,7 @@ export class BookingInfoComponent implements OnInit {
     const sourceNameControl = this.reservationInfoControls.sourceName;
     const marketSegmentControl = this.reservationInfoControls.marketSegment;
     const otaSourceNameControl = this.reservationInfoControls.otaSourceName;
+    const agentSourceNameControl = this.reservationInfoControls.agentSourceName;
 
     marketSegmentControl.valueChanges.subscribe((res) => {
       if (
@@ -237,10 +242,16 @@ export class BookingInfoComponent implements OnInit {
       this.formService.sourceData.subscribe((res) => {
         if (res && this.configData) {
           this.editMode = true;
-          this.selectedAgent = res.agent;
+          this.selectedAgent = {
+            label: `${res?.agent?.firstName} ${res?.agent?.lastName}`,
+            value: res?.agent?.id,
+            ...res?.agent,
+          };
           if (res.source === 'OTA') {
             otaSourceNameControl.setValue(res.sourceName);
-          } else if (res.source !== 'AGENT') {
+          } else if (res.source === 'AGENT') {
+            agentSourceNameControl.setValue(res.sourceName);
+          } else {
             sourceNameControl.setValue(res.sourceName);
           }
           sourceControl.setValue(res.source);
@@ -255,10 +266,9 @@ export class BookingInfoComponent implements OnInit {
     const otaSourceNameControl = this.reservationInfoControls.otaSourceName;
     if (source === 'OTA') {
       otaSourceNameControl.setValidators(Validators.required);
-      sourceNameControl.setValidators(null);
-      sourceNameControl.updateValueAndValidity();
-      agentSourceNameControl.setValidators(null);
-      agentSourceNameControl.updateValueAndValidity();
+      otaSourceNameControl.markAsUntouched();
+      this.updateValueAndValidity(agentSourceNameControl);
+      this.updateValueAndValidity(sourceNameControl);
       this.otaOptions = this.configData
         ? this.configData.source.filter((item) => item.value === source)[0].type
         : [];
@@ -275,20 +285,24 @@ export class BookingInfoComponent implements OnInit {
       }
     } else if (source === 'AGENT') {
       agentSourceNameControl.setValidators(Validators.required);
-      sourceNameControl.setValidators(null);
-      sourceNameControl.updateValueAndValidity();
-      otaSourceNameControl.setValidators(null);
-      otaSourceNameControl.updateValueAndValidity();
+      agentSourceNameControl.markAsUntouched();
+      this.updateValueAndValidity(sourceNameControl);
+      this.updateValueAndValidity(otaSourceNameControl);
     } else {
       sourceNameControl.setValidators([
         Validators.required,
         Validators.maxLength(60),
       ]);
-      agentSourceNameControl.setValidators(null);
-      agentSourceNameControl.updateValueAndValidity();
-      otaSourceNameControl.setValidators(null);
-      otaSourceNameControl.updateValueAndValidity();
+      agentSourceNameControl.markAsUntouched();
+      this.updateValueAndValidity(agentSourceNameControl);
+      this.updateValueAndValidity(otaSourceNameControl);
     }
+  }
+
+  updateValueAndValidity(control: AbstractControl) {
+    control.reset();
+    control.clearValidators();
+    control.updateValueAndValidity();
   }
 
   getCountryCode(): void {
@@ -321,7 +335,7 @@ export class BookingInfoComponent implements OnInit {
     }
   }
 
-  agentChange() {}
+  agentChange(event) {}
 
   showAgent() {
     const lazyModulePromise = import(
@@ -341,7 +355,11 @@ export class BookingInfoComponent implements OnInit {
       componentRef.instance.isSideBar = true;
       componentRef.instance.onClose.subscribe((res) => {
         if (typeof res !== 'boolean') {
-          this.selectedAgent = res;
+          this.selectedAgent = {
+            label: `${res?.agent?.firstName} ${res?.agent?.lastName}`,
+            value: res?.agent?.id,
+            ...res?.agent,
+          };
         }
         this.sidebarVisible = false;
         componentRef.destroy();

@@ -108,6 +108,8 @@ export class AddReservationComponent extends BaseReservationComponent
     this.formService.sourceData.next({
       source: source,
       sourceName: sourceName,
+      agent: data?.agent ?? null,
+      marketSegment: reservationInfo?.marketSegment,
     });
     this.reservationInfoControls.reservationType.patchValue(
       ReservationType.CONFIRMED
@@ -205,6 +207,8 @@ export class AddReservationComponent extends BaseReservationComponent
             this.formService.sourceData.next({
               source: formData.reservationInformation.source,
               sourceName: formData.reservationInformation.sourceName,
+              agent: formData?.agent ?? null,
+              marketSegment: formData?.reservationInformation?.marketSegment,
             });
             // check if room type was patched
             if (roomInformation.roomTypes[0].roomTypeId.length)
@@ -240,6 +244,7 @@ export class AddReservationComponent extends BaseReservationComponent
               source: source,
               sourceName: sourceName,
               agent: response?.agent ?? null,
+              marketSegment: reservationInfo?.marketSegment,
             });
             this.isDraftBooking = reservationInfo.reservationType === 'DRAFT';
             if (nextStates)

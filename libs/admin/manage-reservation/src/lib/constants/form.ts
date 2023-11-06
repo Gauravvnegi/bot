@@ -1,3 +1,4 @@
+import { AgentTableResponse } from 'libs/admin/agent/src/lib/types/response';
 import { ReservationRatePlan } from 'libs/admin/room/src/lib/constant/form';
 
 export type ReservationForm = {
@@ -13,6 +14,7 @@ export type ReservationForm = {
   paymentMethod: PaymentMethod;
   offerId: string;
   dailyPrice?: string;
+  agent?: AgentTableResponse;
 };
 
 export type ReservationInformation = {

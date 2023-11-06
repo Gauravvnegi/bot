@@ -111,4 +111,5 @@ export type SourceData = {
   source: string;
   sourceName: string;
   agent?: AgentTableResponse;
+  marketSegment?: string;
 };

@@ -108,6 +108,7 @@ export class BaseReservationComponent {
           ['roomNumber'].forEach((controlName) =>
             roomTypeArray[0].get(controlName).enable()
           );
+          this.reservationInfoControls.reservationType.enable();
           break;
         case this.bookingType !== EntitySubType.ROOM_TYPE ||
           reservationType.value === ReservationType.CANCELED ||

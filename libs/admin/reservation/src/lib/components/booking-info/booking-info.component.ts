@@ -45,7 +45,8 @@ export class BookingInfoComponent implements OnInit {
   bookingType: string;
   reservationId: string;
   isQuickReservation: boolean = false;
-  isFormInitilaized: boolean = false;
+  disabledForm: boolean = false;
+
   /**
    * Props to show extra information
    * @todo Need to handle label for col and row to show information
@@ -96,7 +97,6 @@ export class BookingInfoComponent implements OnInit {
     this.getCountryCode();
     this.initDates();
     this.listenForSourceChanges();
-    this.isFormInitilaized = true;
   }
 
   initDates() {
@@ -224,6 +224,7 @@ export class BookingInfoComponent implements OnInit {
         !this.configData?.marketSegment.some((item) => item.value === res)
       ) {
         this.configData.marketSegment.push({ label: res, value: res });
+        marketSegmentControl.patchValue(res, { emitEvent: false });
       }
     });
 
@@ -251,6 +252,7 @@ export class BookingInfoComponent implements OnInit {
             value: res?.agent?.id,
             ...res?.agent,
           };
+          marketSegmentControl.patchValue(res.marketSegment);
           if (res.source === 'OTA') {
             otaSourceNameControl.setValue(res.sourceName);
           } else if (res.source === 'AGENT') {
@@ -397,4 +399,5 @@ type BookingInfoProps = {
   bookingType?: string;
   reservationId?: string;
   isQuickReservation?: boolean;
+  disabledForm: boolean;
 };

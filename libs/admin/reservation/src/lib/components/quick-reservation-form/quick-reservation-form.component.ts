@@ -74,8 +74,8 @@ export class QuickReservationFormComponent implements OnInit {
   loading: boolean = false;
   isDataLoaded: boolean = false;
   isBooking = false;
-  editMode = false;
   reinitializeRooms = false;
+  isExternalBooking = false;
 
   selectedGuest: Option;
   defaultRoomType: IGRoomType;
@@ -274,6 +274,11 @@ export class QuickReservationFormComponent implements OnInit {
           (res) => {
             const formData = new ReservationFormData().deserialize(res);
             this.reservationData = formData;
+            this.isExternalBooking = res?.externalBooking;
+            if (this.isExternalBooking) {
+              this.userForm.disable();
+              this.roomControls.roomNumber.enable();
+            }
             this.calculateDailyPrice();
             const { roomInformation, ...data } = formData;
             this.guestDetails = {
@@ -294,6 +299,8 @@ export class QuickReservationFormComponent implements OnInit {
             this.formService.sourceData.next({
               source: data.reservationInformation.source,
               sourceName: data.reservationInformation.sourceName,
+              agent: res?.agent ?? null,
+              marketSegment: data.reservationInformation?.marketSegment,
             });
             this.roomOptions = this.defaultRoomType.rooms.map((room) => ({
               label: room.roomNumber.toString(),

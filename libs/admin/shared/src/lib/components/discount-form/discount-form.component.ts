@@ -1,11 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormComponent } from '../form-component/form.components';
-import {
-  AbstractControl,
-  ControlContainer,
-  FormControl,
-  FormGroup,
-} from '@angular/forms';
+import { AbstractControl, ControlContainer } from '@angular/forms';
 import { Option } from '../../types/form.type';
 
 @Component({
@@ -83,7 +78,6 @@ export class DiscountFormComponent extends FormComponent implements OnInit {
     const discountValue = this.controlContainer.control.get(this.discountValue);
     const discountType = this.controlContainer.control.get(this.discountType);
     const currency = this.controlContainer.control.get(this.currency);
-
     let priceControl: AbstractControl;
 
     const discountedPriceCurrency = this.controlContainer.control.get(
@@ -129,6 +123,7 @@ export class DiscountFormComponent extends FormComponent implements OnInit {
     };
 
     const clearError = () => {
+
       originalPrice.setErrors(null);
       discountValue.setErrors(null);
     };
@@ -136,6 +131,7 @@ export class DiscountFormComponent extends FormComponent implements OnInit {
     /* Original price Subscription */
     originalPrice.valueChanges.subscribe(() => {
       clearError();
+
       const error = setDiscountValueAndErrors();
       if (error === 'isNumError') {
         originalPrice.setErrors({ isPriceLess: true });
@@ -150,8 +146,10 @@ export class DiscountFormComponent extends FormComponent implements OnInit {
 
     if (this.isPriceControl) {
       /* Price Subscription */
+
       priceControl.valueChanges.subscribe(() => {
         clearError();
+
         const error = setDiscountValueAndErrors();
         if (error === 'isNumError') {
           priceControl.setErrors({ isPriceLess: true });
@@ -171,6 +169,7 @@ export class DiscountFormComponent extends FormComponent implements OnInit {
     const discountSubscription = () => {
       discountValue.enable({ emitEvent: false });
       clearError();
+
       const error = setDiscountValueAndErrors();
       if (error === 'isNumError') {
         discountValue.setErrors({ isDiscountMore: true });

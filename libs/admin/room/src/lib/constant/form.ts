@@ -94,8 +94,8 @@ export type StaticPricingMod = Omit<
 export type StaticPricingRatePlan = RatePlan & {
   discountType: string;
   discountValue: number;
-  bestPriceCurrency: string;
-  bestAvailablePrice: number;
+  bestPriceCurrency?: string;
+  bestAvailablePrice?: number;
 };
 
 export type DynamicPricingRatePlan = RatePlan & {

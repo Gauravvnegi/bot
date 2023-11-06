@@ -312,7 +312,10 @@ export class RoomIteratorComponent extends IteratorComponent
 
   // Patch data for selected room type
   roomTypeChange(event: RoomTypeResponse, index: number) {
-    if (event) {
+    const exists =
+      this.roomTypes.length &&
+      this.roomTypes.some((item) => item?.value === event?.id);
+    if (event && !exists) {
       this.roomTypes[index] = this.formService.setReservationRoomType(event);
       this.listenRoomTypeChanges(index);
       if (this.isDraftBooking) this.listenForRoomChanges(index);

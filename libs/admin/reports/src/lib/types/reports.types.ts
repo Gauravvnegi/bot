@@ -17,6 +17,10 @@ export type ReportModules = Extract<
   | 'NIGHT_AUDIT_REPORTS'
   | 'TAX_REPORTS'
   | 'GUEST_REPORTS'
+  | 'ACTIVITY_REPORTS'
+  | 'ANALYTICS_REPORTS'
+  | 'DISCOUNT_REPORTS'
+  | 'DIRECT_BILLING_REPORTS'
 >;
 
 // export enum ReportModules {
@@ -32,7 +36,14 @@ export type ReportsType = {
     | 'noShowReport'
     | 'cancellationReport'
     | 'arrivalReport'
-    | 'departureReport';
+    | 'departureReport'
+    | 'draftReservationReport'
+    | 'employeeWiseReservation'
+    | 'reservationAdrReport'
+    | 'incomeSummaryReport'
+    | 'reservationSummaryReport'
+    | 'marketSegmentReport'
+    | 'housekeepingReport';
   MANAGER_REPORTS: 'managerFlashReport';
   OCCUPANCY_REPORTS: 'historyAndForecastReport';
   FINANCIAL_REPORTS: 'monthlySummaryReport' | 'dailyRevenueReport';
@@ -40,9 +51,20 @@ export type ReportsType = {
   NIGHT_AUDIT_REPORTS:
     | 'auditRoomDetailsReport'
     | 'auditTaxReport'
-    | 'revenueReport';
+    | 'revenueReport'
+    | 'mtdAndYtdReport';
   TAX_REPORTS: 'monthlyTaxReport' | 'lodgingTaxReport' | 'taxReport';
-  GUEST_REPORTS: 'guestHistory' | 'salesByGuest' | 'guestTypeReport';
+  GUEST_REPORTS:
+    | 'guestHistory'
+    | 'salesByGuest'
+    | 'guestTypeReport'
+    | 'guestLedger';
+  ACTIVITY_REPORTS: 'reservationCreatedReport' | 'reservationActivityReport';
+  ANALYTICS_REPORTS: 'companyContributionsReport' | 'noShowSummaryReport';
+  DISCOUNT_REPORTS: 'discountAllowance';
+  DIRECT_BILLING_REPORTS:
+    | 'directAgentBillingReport'
+    | 'directCompanyBillingReport';
 };
 
 export type ReportsTypeValues = ReportsType[keyof ReportsType];
@@ -77,7 +99,7 @@ export type Rows = RowValue[];
 export type ClassType<T = ReportClass<any, any>> = new (...args: any[]) => T;
 export interface ReportClass<T, K> {
   records: T[];
-  deserialize(value: K[] | {} ): this;
+  deserialize(value: K[] | {}): this;
 }
 
 export type ColsInfo = Omit<Cols, 'field'>;

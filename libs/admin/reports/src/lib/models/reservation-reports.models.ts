@@ -1,15 +1,30 @@
 import {
+  DraftReservationReportResponse,
   ReservationResponse,
   ReservationResponseData,
 } from 'libs/admin/shared/src/lib/types/response';
-import { ReportClass, RowStyles } from '../types/reports.types';
+import { ReportClass } from '../types/reports.types';
 import {
-  ReservationReportData,
-  NoShowReportData,
   ArrivalReportData,
   CancellationReportData,
   DepartureReportData,
+  DraftReservationReportData,
+  EmployeeWiseReservationReportData,
+  HousekeepingReportData,
+  HousekeepingReportResponse,
+  IncomeSummaryReportData,
+  MarketSegmentReportData,
+  MarketSegmentReportResponse,
+  NoShowReportData,
+  ReservationAdrReportData,
+  ReservationReportData,
+  ReservationSummaryReportData,
 } from '../types/reservation-reports.types';
+import {
+  marketSegmentReportCols,
+  marketSegmentReportRows,
+} from '../constant/reservation-reports.const';
+import { label } from 'libs/admin/guest-dashboard/src/lib/constants/guest';
 
 /**
  * @class Default Reservation Report class
@@ -175,6 +190,202 @@ export class DepartureReport extends ReservationReport
     this.records = new Array<DepartureReportData>();
     value.forEach((reservationData) => {
       this.records.push(new Departure().deserialize(reservationData));
+    });
+    return this;
+  }
+}
+
+export class DraftReservationReport extends ReservationReport
+  implements
+    ReportClass<DraftReservationReportData, DraftReservationReportResponse> {
+  records: DraftReservationReportData[];
+  deserialize(value: DraftReservationReportResponse[]) {
+    this.records = new Array<DraftReservationReportData>();
+    if (!value) return this;
+    value.forEach((reservationData) => {
+      this.records.push({
+        id: reservationData.id,
+        bookingNo: reservationData.reservationNumber,
+        guestName: `${reservationData.guest.firstName} ${reservationData.guest.lastName}`,
+        roomType: `${
+          reservationData.bookingItems[0].roomDetails.roomNumber ?? '-'
+        }-${reservationData.bookingItems[0].roomDetails.roomTypeLabel}`,
+        checkIn: getFormattedDate(reservationData.from),
+        checkOut: getFormattedDate(reservationData.to),
+        nights: reservationData.guest.totalNights,
+        tempReservedNumber: reservationData.reservationNumber,
+        bookingAmount: reservationData.pricingDetails.totalAmount,
+        paidAmount: reservationData.pricingDetails.totalPaidAmount,
+        balance: reservationData.pricingDetails.totalDueAmount,
+        status: reservationData.status,
+      });
+    });
+    return this;
+  }
+}
+//todo
+export class EmployeeWiseReservationReport
+  implements
+    ReportClass<EmployeeWiseReservationReportData, ReservationResponseData> {
+  records: EmployeeWiseReservationReportData[];
+  deserialize(value: ReservationResponseData[]) {
+    this.records = new Array<EmployeeWiseReservationReportData>();
+    if (!value) return this;
+    value.forEach((reservationData) => {
+      const totalCharge =
+        reservationData.reservationItemsPayment.totalRoomCharge +
+        reservationData.reservationItemsPayment.totalAddOnsAmount;
+      this.records.push({
+        id: reservationData.id,
+        userName: undefined, //to be added in response
+        bookingNo: reservationData.number,
+        guestName: `${reservationData.guestDetails.primaryGuest.firstName} ${reservationData.guestDetails.primaryGuest.lastName}`,
+        checkIn: getFormattedDate(reservationData.stayDetails.arrivalTime),
+        checkOut: getFormattedDate(reservationData.stayDetails.departureTime),
+        nights: reservationData.guestDetails.primaryGuest.totalNights,
+        roomCharge: reservationData.reservationItemsPayment.totalRoomCharge,
+        tax:
+          reservationData.reservationItemsPayment.totalCgstTax +
+          reservationData.reservationItemsPayment.totalSgstTax,
+        otherCharges: reservationData.reservationItemsPayment.totalAddOnsAmount,
+        totalCharge: totalCharge,
+        amountPaid: reservationData.reservationItemsPayment.paidAmount,
+      });
+    });
+    return this;
+  }
+}
+
+export class ReservationAdrReport
+  implements ReportClass<ReservationAdrReportData, ReservationResponseData> {
+  records: ReservationAdrReportData[];
+  deserialize(value: ReservationResponseData[]) {
+    this.records = new Array<ReservationAdrReportData>();
+    if (!value) return this;
+
+    value.forEach((data) => {
+      this.records.push({
+        id: data.id,
+        bookingNo: data.number,
+        guestName: `${data.guestDetails.primaryGuest.firstName} ${data.guestDetails.primaryGuest.lastName}`,
+        roomType: data.stayDetails.room.type,
+        roomNo: data.stayDetails.room.roomNumber,
+        checkIn: getFormattedDate(data.stayDetails.arrivalTime),
+        checkOut: getFormattedDate(data.stayDetails.departureTime),
+        nights: data.guestDetails.primaryGuest.totalNights,
+        roomRent: data.paymentSummary.totalAmount,
+
+        adr: data.guestDetails.primaryGuest.totalNights
+          ? data.reservationItemsPayment.totalRoomCharge /
+            data.guestDetails.primaryGuest.totalNights
+          : data.reservationItemsPayment.totalRoomCharge,
+      });
+    });
+
+    return this;
+  }
+}
+
+export class IncomeSummaryReport
+  implements ReportClass<IncomeSummaryReportData, ReservationResponseData> {
+  records: IncomeSummaryReportData[];
+  deserialize(value: ReservationResponseData[]) {
+    this.records = new Array<IncomeSummaryReportData>();
+    if (!value) return this;
+
+    value.forEach((data) => {
+      this.records.push({
+        id: data.id,
+        bookingNo: data.number,
+        guestName: `${data.guestDetails.primaryGuest.firstName} ${data.guestDetails.primaryGuest.lastName}`,
+        checkIn: getFormattedDate(data.stayDetails.arrivalTime),
+        checkOut: getFormattedDate(data.stayDetails.departureTime),
+        nights: data.nightCount,
+        lodgingAndOtherCharges:
+          data.reservationItemsPayment.totalAddOnsAmount +
+          data.reservationItemsPayment.totalRoomCharge,
+        taxTotal:
+          data.reservationItemsPayment.totalCgstTax +
+          data.reservationItemsPayment.totalSgstTax,
+        paidAmount: data.paymentSummary.paidAmount,
+      });
+    });
+    return this;
+  }
+}
+
+//reservationSummaryReport
+export class ReservationSummaryReport
+  implements
+    ReportClass<ReservationSummaryReportData, ReservationResponseData> {
+  records: ReservationSummaryReportData[];
+  deserialize(value: ReservationResponseData[]) {
+    this.records = new Array<ReservationSummaryReportData>();
+    if (!value) return this;
+
+    value.forEach((data) => {});
+    return this;
+  }
+}
+
+//marketSegmentReport
+export class MarketSegmentReport
+  implements ReportClass<MarketSegmentReportData, MarketSegmentReportResponse> {
+  records: MarketSegmentReportData[];
+  deserialize(value: MarketSegmentReportResponse) {
+    this.records = new Array<MarketSegmentReportData>();
+    if (!value) return this;
+
+    marketSegmentReportRows.forEach((row) => {
+      if (value.hasOwnProperty(row.label)) {
+        this.records.push({
+          marketSegment: row.name,
+          nights: value[row.label].nights,
+          occupancy: value[row.label].occupancyPercent,
+          pax: value[row.label].pax,
+          roomRevenue: value[row.label].roomRevenue,
+          revenue: value[row.label].revenue,
+          arrOrAgr: value[row.label].arr,
+          arp: value[row.label].arp,
+        });
+      } else {
+        this.records.push({
+          marketSegment: row.name,
+          nights: undefined,
+          occupancy: undefined,
+          pax: undefined,
+          roomRevenue: undefined,
+          revenue: undefined,
+          arrOrAgr: undefined,
+          arp: undefined,
+        });
+      }
+    });
+
+    return this;
+  }
+}
+
+//housekeepingReport
+export class HousekeepingReport
+  implements ReportClass<HousekeepingReportData, HousekeepingReportResponse> {
+  records: HousekeepingReportData[];
+  deserialize(value: HousekeepingReportResponse[]) {
+    this.records = new Array<HousekeepingReportData>();
+    if (!value) return this;
+
+    value.forEach((data) => {
+      this.records.push({
+        roomNo: data.roomNumber,
+        roomType: data.roomTypeName,
+        bookingNo: data.reservationNumber,
+        guestName: undefined, //to be added in response
+        checkIn: undefined, //to be added in response
+        checkOut: undefined, //to be added in response
+        nights: data.nights,
+        roomNotes: data.remarks, //to be added in response
+        status: data.status,
+      });
     });
     return this;
   }

@@ -230,7 +230,6 @@ export class ReportsDataTableComponent extends BaseDatatableComponent {
     );
 
     detailCompRef.componentInstance.bookingId = rowData?.id;
-
     tabKey && (detailCompRef.componentInstance.tabKey = tabKey);
 
     this.$subscription.add(

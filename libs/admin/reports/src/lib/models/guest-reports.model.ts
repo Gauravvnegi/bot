@@ -1,6 +1,8 @@
 import {
   GuestHistoryData,
   GuestHistoryResponse,
+  GuestLedgerData,
+  GuestLedgerResponse,
   SalesByGuestData,
   SalesByGuestResponse,
 } from '../types/guest-reports.types';
@@ -79,6 +81,27 @@ export class SalesByGuestModel {
     this.noOfRes = input.reservation.length;
     this.nights = input.totalNights;
     this.totalSales = input.totalSales;
+    return this;
+  }
+}
+
+export class GuestLedger implements ReportClass<GuestLedgerData, any> {
+  records: GuestLedgerData[];
+
+  deserialize(value: GuestLedgerResponse[]) {
+    this.records = new Array<GuestLedgerData>();
+    if (!value) return this;
+
+    value.forEach((reservationData) => {
+      this.records.push({
+        roomNo: reservationData?.stayDetails?.room?.roomNumber,
+        name: `${reservationData?.guestDetails.primaryGuest.firstName ?? ''} ${
+          reservationData?.guestDetails?.primaryGuest.lastName ?? ''
+        }`.trim(),
+        confirmationNo: reservationData?.number,
+        balance: reservationData?.paymentSummary?.totalAmount,
+      });
+    });
     return this;
   }
 }

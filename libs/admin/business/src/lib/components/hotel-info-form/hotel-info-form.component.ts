@@ -99,7 +99,7 @@ export class HotelInfoFormComponent implements OnInit {
           number: [''],
         }),
         gstNumber: [''],
-        address: [{}],
+        address: [{} , Validators.required],
         imageUrl: [[], [Validators.required]],
         description: [''],
         serviceIds: [[]],
@@ -131,11 +131,12 @@ export class HotelInfoFormComponent implements OnInit {
     if (this.entityId && !this.hotelFormDataService.hotelFormState) {
       this.businessService.getHotelById(this.entityId).subscribe((res) => {
         // const data = new HotelResponse().deserialize(res);
-        const { propertyCategory, ...rest } = res;
+        const { propertyCategory, status, ...rest } = res;
         this.useForm
           .get('entity.propertyCategory')
           .patchValue(propertyCategory?.value);
         this.useForm.get('entity').patchValue(rest);
+        this.useForm.get('entity').patchValue({ status: status === 'ACTIVE' });
       });
 
       //get the servcie list after getting hotel by id
@@ -218,7 +219,8 @@ export class HotelInfoFormComponent implements OnInit {
     data.entity.propertyCategory = this.segmentList.find(
       (item) => item?.value === data?.entity?.propertyCategory
     );
-    data.status = data.entity.status === true ? 'ACTIVE' : 'INACTIVE';
+    data.entity.status = data.entity.status === true ? 'ACTIVE' : 'INACTIVE';
+    console.log(data);
 
     //if entityId is present then update hotel else create hotel
     if (this.entityId) {

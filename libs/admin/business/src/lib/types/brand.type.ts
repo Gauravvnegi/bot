@@ -9,7 +9,7 @@ export type BrandFormData = {
     name: string;
     description: string;
     socialPlatforms: SocialPlatForms[];
-    status: boolean;
+    status: boolean| string;
   };
   siteId: string;
 };
@@ -35,5 +35,5 @@ export type BrandResponse = {
     imageUrl: string;
     redirectUrl: string;
   }[];
-  status: boolean;
+  status: string;
 };

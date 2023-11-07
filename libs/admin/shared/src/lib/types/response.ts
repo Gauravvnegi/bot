@@ -66,6 +66,7 @@ export type LoaderProps = {
 export interface ReservationResponseData {
   id: string;
   updated: number;
+  created: number;
   arrivalTime: number;
   departureTime: number;
   number: string;
@@ -103,7 +104,9 @@ export interface ReservationResponseData {
       age: number;
       privacy: boolean;
       documentRequired: boolean;
+      totalNights?: number;
     };
+
     accompanyGuests: any[]; // You can define a more specific interface if you have one
     sharerGuests: any[]; // You can define a more specific interface if you have one
     secondaryGuest: any[]; // You can define a more specific interface if you have one
@@ -126,6 +129,19 @@ export interface ReservationResponseData {
       }
     >;
   };
+  reservationItemsPayment: {
+    dueAmount: number;
+    paidAmount: number;
+    payableAmount: number;
+    taxAmount: number;
+    totalAddOnsAmount: number;
+    totalAmount: number;
+    totalCgstTax: number;
+    totalDiscount: number;
+    totalRoomCharge: number;
+    totalRoomDiscount: number;
+    totalSgstTax: number;
+  };
   paymentSummary: {
     totalAmount: number;
     taxAmount: number;
@@ -137,6 +153,10 @@ export interface ReservationResponseData {
     printRate: boolean;
     packages: any[]; // You can define a more specific interface if you have one
     signatureUrl: string;
+    totalCgstTax: number;
+    totalSgstTax: number;
+    totalRoomCharge: number;
+    totalAddOnsAmount: number;
   };
   journeysStatus: Record<string, string>;
   stepsStatus: Record<string, string>;
@@ -151,6 +171,7 @@ export interface ReservationResponseData {
   invoicePrepareRequest: boolean;
   pmsBooking: boolean;
   specialRequest: string;
+  nightCount: number;
 }
 
 // No-show & Cancellation Response
@@ -170,6 +191,7 @@ interface Guest {
   dateOfBirth: number;
   age: number;
   documentRequired: boolean;
+  totalNights: number;
 }
 
 interface PricingDetails {
@@ -208,3 +230,17 @@ export interface ReservationResponse {
   pricingDetails: PricingDetails;
   bookingItems: BookingItem[];
 }
+
+export type DraftReservationReportResponse = {
+  id: string;
+  from: number;
+  to: number;
+  reservationType: string;
+  reservationNumber: string;
+  status: string;
+  guest: Guest;
+  created: number;
+  updated: number;
+  pricingDetails: PricingDetails;
+  bookingItems: BookingItem[];
+};

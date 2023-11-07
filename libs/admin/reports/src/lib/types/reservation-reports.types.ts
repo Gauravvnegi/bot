@@ -26,6 +26,124 @@ export type CancellationReportPartialData = Omit<
   CancellationReportData,
   UnnecessaryCancellationObject
 >;
+
+export type DraftReservationReportData = {
+  id: string;
+  bookingNo: string;
+  guestName: string;
+  roomType: string;
+  checkIn: string;
+  checkOut: string;
+  nights: number;
+  tempReservedNumber: string;
+  bookingAmount: number;
+  paidAmount: number;
+  balance: number;
+  status: string;
+};
+
+export type EmployeeWiseReservationReportData = {
+  id?: string;
+  userName: string;
+  bookingNo: string;
+  guestName: string;
+  checkIn: string;
+  checkOut: string;
+  nights: number;
+  roomCharge: number;
+  tax: number;
+  otherCharges: number;
+  totalCharge: number;
+  amountPaid: number;
+};
+
+export type ReservationAdrReportData = {
+  id?: string;
+  bookingNo: string;
+  guestName: string;
+  roomType: string;
+  roomNo: string;
+  checkIn: string;
+  checkOut: string;
+  nights: number;
+  roomRent: number;
+  adr: number;
+};
+
+export type IncomeSummaryReportData = {
+  id: string;
+  bookingNo: string;
+  guestName: string;
+  checkIn: string;
+  checkOut: string;
+  nights: number;
+  lodgingAndOtherCharges: number;
+  taxTotal: number;
+  paidAmount: number;
+};
+
+export type ReservationSummaryReportData = {};
+
+export type MarketSegmentReportData = {
+  marketSegment: string;
+  nights: number;
+  occupancy: number;
+  pax: number;
+  roomRevenue: number;
+  revenue: number;
+  arrOrAgr: number;
+  arp: number;
+};
+
+export type MarketSegmentReportResponse = OccupancyReport;
+
+type OccupancyData = {
+  nights: number;
+  occupancyPercent: number;
+  pax: number;
+  roomRevenue: number;
+  revenuePercent: number;
+  arr: number;
+  arp: number;
+};
+
+type OccupancyDataMap = {
+  [key: string]: OccupancyData;
+};
+
+type OccupancyReport = {
+  FIT: OccupancyData;
+  'Corporate FIT': OccupancyData;
+  MICE: OccupancyData;
+  Budget: OccupancyData;
+  'Aiosell BE': OccupancyData;
+  subTotal: OccupancyData;
+};
+
+export type HousekeepingReportData = {
+  roomNo: string;
+  roomType: string;
+  bookingNo: string;
+  guestName: string;
+  checkIn: string;
+  checkOut: string;
+  nights: string;
+  roomNotes: string;
+  status: string;
+};
+
+export type HousekeepingReportResponse = {
+  roomNumber: string;
+  status: 'Clean' | 'Dirty' | 'Out of Order' | 'Occupied' | 'Out of Service';
+  remarks: string;
+  roomTypeName: string;
+  reservationNumber: string;
+  guestName: string;
+  arrivalDate: string;
+  departureDate: string;
+  nights: string;
+};
+
 export type UnnecessaryCancellationObject =
   | 'dateOfArrival'
   | 'noShowOn'

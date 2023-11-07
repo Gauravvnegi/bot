@@ -1,10 +1,17 @@
 import { ColsData } from '../types/reports.types';
 import {
   ArrivalReportData,
-  ReservationReportData,
-  DepartureReportData,
-  NoShowReportData,
   CancellationReportPartialData,
+  DepartureReportData,
+  DraftReservationReportData,
+  EmployeeWiseReservationReportData,
+  HousekeepingReportData,
+  IncomeSummaryReportData,
+  MarketSegmentReportData,
+  NoShowReportData,
+  ReservationAdrReportData,
+  ReservationReportData,
+  ReservationSummaryReportData,
 } from '../types/reservation-reports.types';
 
 const reservationReportCols: ColsData<Omit<ReservationReportData, 'id'>> = {
@@ -131,4 +138,231 @@ export const arrivalReportCols: ColsData<ArrivalReportData> = {
 
 export const departureReportCols: ColsData<DepartureReportData> = {
   ...arrivalReportCols,
+};
+
+export const draftReservationReportCols: ColsData<Omit<
+  DraftReservationReportData,
+  'id'
+>> = {
+  bookingNo: reservationReportCols.bookingNo,
+  guestName: reservationReportCols.guestName,
+  roomType: {
+    header: 'Room/Type',
+    isSortDisabled: true,
+  },
+  checkIn: {
+    header: 'Check In',
+    isSortDisabled: true,
+  },
+  checkOut: {
+    header: 'Check Out',
+    isSortDisabled: true,
+  },
+  nights: {
+    header: 'Nights',
+    isSortDisabled: true,
+  },
+  tempReservedNumber: {
+    header: 'Temp Reserved No.',
+    isSortDisabled: true,
+  },
+  bookingAmount: reservationReportCols.bookingAmount,
+  paidAmount: reservationReportCols.amountPaid,
+  balance: reservationReportCols.balance,
+  status: {
+    header: 'Status',
+    isSortDisabled: true,
+  },
+};
+
+export const employeeWiseReservationReportCols: ColsData<Omit<
+  EmployeeWiseReservationReportData,
+  'id'
+>> = {
+  userName: {
+    header: 'User Name',
+    isSortDisabled: true,
+  },
+  bookingNo: reservationReportCols.bookingNo,
+  guestName: reservationReportCols.guestName,
+  checkIn: arrivalReportCols.checkIn,
+  checkOut: arrivalReportCols.checkOut,
+  nights: {
+    header: 'Nights',
+    isSortDisabled: true,
+  },
+  roomCharge: {
+    header: 'Room Charge',
+    isSortDisabled: true,
+  },
+  tax: {
+    header: 'Tax',
+    isSortDisabled: true,
+  },
+  otherCharges: {
+    header: 'Other Charges',
+    isSortDisabled: true,
+  },
+  totalCharge: {
+    header: 'Total Charge',
+    isSortDisabled: true,
+  },
+  amountPaid: reservationReportCols.amountPaid,
+};
+
+export const reservationAdrReportCols: ColsData<Omit<
+  ReservationAdrReportData,
+  'id'
+>> = {
+  bookingNo: reservationReportCols.bookingNo,
+  guestName: reservationReportCols.guestName,
+  roomType: {
+    header: 'Room Type',
+    isSortDisabled: true,
+  },
+  roomNo: {
+    header: 'Room No.',
+    isSortDisabled: true,
+  },
+  checkIn: {
+    header: 'Check In',
+    isSortDisabled: true,
+  },
+  checkOut: {
+    header: 'Check Out',
+    isSortDisabled: true,
+  },
+  nights: {
+    header: 'Nights',
+    isSortDisabled: true,
+  },
+  roomRent: {
+    header: 'Room Rent',
+    isSortDisabled: true,
+  },
+  adr: {
+    header: 'ADR',
+    isSortDisabled: true,
+  },
+};
+
+export const incomeSummaryReportCols: ColsData<Omit<
+  IncomeSummaryReportData,
+  'id'
+>> = {
+  bookingNo: reservationReportCols.bookingNo,
+  guestName: reservationReportCols.guestName,
+  checkIn: arrivalReportCols.checkIn,
+  checkOut: arrivalReportCols.checkOut,
+  nights: {
+    header: 'Nights',
+    isSortDisabled: true,
+  },
+  lodgingAndOtherCharges: {
+    header: 'Lodging & Other Charges',
+    isSortDisabled: true,
+  },
+  taxTotal: {
+    header: 'Post Tax Total',
+    isSortDisabled: true,
+  },
+  paidAmount: {
+    header: 'Total Paid',
+    isSortDisabled: true,
+  },
+};
+
+export const reservationSummaryReportCols: ColsData<Omit<
+  ReservationSummaryReportData,
+  'id'
+>> = {};
+
+export const marketSegmentReportCols: ColsData<Omit<
+  MarketSegmentReportData,
+  'id'
+>> = {
+  marketSegment: {
+    header: 'Market Segment',
+    isSortDisabled: true,
+  },
+  nights: {
+    header: 'Nights',
+    isSortDisabled: true,
+  },
+  occupancy: {
+    header: 'Occupancy',
+    isSortDisabled: true,
+  },
+
+  pax: {
+    header: 'Pax',
+    isSortDisabled: true,
+  },
+  roomRevenue: {
+    header: 'Room Revenue',
+    isSortDisabled: true,
+  },
+  revenue: {
+    header: 'Revenue',
+    isSortDisabled: true,
+  },
+  arrOrAgr: {
+    header: 'ARR/AGR',
+    isSortDisabled: true,
+  },
+  arp: {
+    header: 'ARP',
+    isSortDisabled: true,
+  },
+};
+
+export const marketSegmentReportRows = [
+         { name: 'FIT', label: 'FIT' },
+         { name: 'Corporate FIT', label: 'Corporate FIT' },
+         { name: 'MICE', label: 'MICE' },
+         { name: 'Budget', label: 'Budget' },
+         { name: 'Aiosell BE', label: 'Aiosell BE' },
+         { name: 'subTotal', label: 'subTotal' },
+       ];
+
+export const housekeepingReportCols: ColsData<Omit<
+  HousekeepingReportData,
+  'id'
+>> = {
+  roomNo: {
+    header: 'Room No.',
+    isSortDisabled: true,
+  },
+  roomType: {
+    header: 'Room Type',
+    isSortDisabled: true,
+  },
+  bookingNo: {
+    header: 'Booking No.',
+    isSortDisabled: true,
+  },
+  guestName: {
+    header: 'Guest Name',
+    isSortDisabled: true,
+  },
+  checkIn: {
+    header: 'Check In',
+    isSortDisabled: true,
+  },
+  checkOut: {
+    header: 'Check Out',
+    isSortDisabled: true,
+  },
+  nights: {
+    header: 'Nights',
+    isSortDisabled: true,
+  },
+  roomNotes: {
+    header: 'Room Notes',
+    isSortDisabled: true,
+  },
+  status: {
+    header: 'Status',
+    isSortDisabled: true,
+  },
 };

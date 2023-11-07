@@ -1,20 +1,41 @@
 import { Cols } from '@hospitality-bot/admin/shared';
 import {
+  ReservationActivityReport,
+  ReservationCreatedReport,
+} from '../models/activity-reports.models';
+import {
+  CompanyContributionsReport,
+  NoShowSummaryReport,
+} from '../models/analytics-reports.models';
+import { DiscountAllowanceReport } from '../models/discount-reports.models';
+import {
   DailyRevenueReport,
   MonthlySummaryReport,
 } from '../models/financial-reports.models';
-import { GuestHistory, SalesByGuest } from '../models/guest-reports.model';
+import {
+  GuestHistory,
+  GuestLedger,
+  SalesByGuest,
+} from '../models/guest-reports.model';
 import { ManagerFlashReport } from '../models/manager-reports.models';
 import {
   AuditRoomDetailsReport,
   AuditTaxReport,
+  MtdAndYtdReport,
 } from '../models/night-audit-reports.model';
 import { HistoryAndForecastReport } from '../models/occupancy-reports.models';
 import {
   ArrivalReport,
   CancellationReport,
   DepartureReport,
+  DraftReservationReport,
+  EmployeeWiseReservationReport,
+  HousekeepingReport,
+  IncomeSummaryReport,
+  MarketSegmentReport,
   NoShowReport,
+  ReservationAdrReport,
+  ReservationSummaryReport,
 } from '../models/reservation-reports.models';
 import { CashierReport } from '../models/revenue-reports.models';
 import {
@@ -33,21 +54,42 @@ import {
   RowStylesKeys,
 } from '../types/reports.types';
 import {
+  reservationActivityReportCols,
+  reservationCreatedReportCols,
+} from './activity-reports.const';
+import {
+  companyContributionsReportCols,
+  noShowSummaryReportCols,
+} from './analytics-reports.const';
+import { discountAllowanceReportCols } from './discount-reports.const';
+import {
   dailyRevenueReportCols,
   monthlySummaryReportCols,
 } from './financial-reports.const';
-import { SalesByGuestCols, guestHistoryCols } from './guest-reports.const';
+import {
+  SalesByGuestCols,
+  guestHistoryCols,
+  guestLedgerCols,
+} from './guest-reports.const';
 import { managerFlashReportCols } from './manager-reports.const';
 import {
   auditRoomDetailsReportCols,
   auditTaxReportCols,
+  mtdAndYtdReportCols,
 } from './night-audit-reports.const';
 import { historyAndForecastReportCols } from './occupancy-reports.const';
 import {
   arrivalReportCols,
   cancellationReportCols,
   departureReportCols,
+  draftReservationReportCols,
+  employeeWiseReservationReportCols,
+  housekeepingReportCols,
+  incomeSummaryReportCols,
+  marketSegmentReportCols,
   noShowReportCols,
+  reservationAdrReportCols,
+  reservationSummaryReportCols,
 } from './reservation-reports.const';
 import { cashierReportCols } from './revenue-reports.const';
 import {
@@ -55,6 +97,11 @@ import {
   monthlyTaxReportCols,
   taxReportCols,
 } from './tax-reports.const';
+import {
+  directAgentBillingReportsCols,
+  directCompanyBillingReportCols,
+} from './direct-billing-reports.const';
+import { DirectAgentBillingReport, DirectCompanyBillingReport } from '../models/direct-billing-reports.models';
 
 export const reportsConfig: ReportsConfig = {
   RESERVATION_REPORTS: {
@@ -74,6 +121,34 @@ export const reportsConfig: ReportsConfig = {
       {
         label: 'Departure',
         value: 'departureReport',
+      },
+      {
+        label: 'Draft Reservation',
+        value: 'draftReservationReport',
+      },
+      {
+        label: 'Employee Wise Reservation',
+        value: 'employeeWiseReservation',
+      },
+      {
+        label: 'Reservation ADR',
+        value: 'reservationAdrReport',
+      },
+      {
+        label: 'Income Summary',
+        value: 'incomeSummaryReport',
+      },
+      {
+        label: 'Reservation Summary',
+        value: 'reservationSummaryReport',
+      },
+      {
+        label: 'Market Segment',
+        value: 'marketSegmentReport',
+      },
+      {
+        label: 'Housekeeping',
+        value: 'housekeepingReport',
       },
     ],
   },
@@ -127,6 +202,10 @@ export const reportsConfig: ReportsConfig = {
         label: 'Revenue Report',
         value: 'revenueReport',
       },
+      {
+        label: 'MTD & YTD Report',
+        value: 'mtdAndYtdReport',
+      },
     ],
   },
   TAX_REPORTS: {
@@ -136,7 +215,7 @@ export const reportsConfig: ReportsConfig = {
         value: 'monthlyTaxReport',
       },
       {
-        label: 'Lodging Tax Report',
+        label: 'Lodging Tax',
         value: 'lodgingTaxReport',
       },
       {
@@ -159,6 +238,54 @@ export const reportsConfig: ReportsConfig = {
       //   label: 'Guest Type Report',
       //   value: 'guestTypeReport',
       // },
+      {
+        label: 'Guest Ledger',
+        value: 'guestLedger',
+      },
+    ],
+  },
+  ACTIVITY_REPORTS: {
+    menu: [
+      {
+        label: 'Reservation Created',
+        value: 'reservationCreatedReport',
+      },
+      {
+        label: 'Reservation Activity',
+        value: 'reservationActivityReport',
+      },
+    ],
+  },
+  ANALYTICS_REPORTS: {
+    menu: [
+      {
+        label: 'Company Contributions',
+        value: 'companyContributionsReport',
+      },
+      {
+        label: 'No Show Summary',
+        value: 'noShowSummaryReport',
+      },
+    ],
+  },
+  DISCOUNT_REPORTS: {
+    menu: [
+      {
+        label: 'Discount Allowance',
+        value: 'discountAllowance',
+      },
+    ],
+  },
+  DIRECT_BILLING_REPORTS: {
+    menu: [
+      {
+        label: 'Direct Agent Billing',
+        value: 'directAgentBillingReport',
+      },
+      {
+        label: 'Direct Company Billing',
+        value: 'directCompanyBillingReport',
+      },
     ],
   },
 };
@@ -172,6 +299,15 @@ export const reportsModelMapping: Record<ReportsTypeValues, ClassType> = {
   arrivalReport: ArrivalReport,
   cancellationReport: CancellationReport,
   departureReport: DepartureReport,
+  draftReservationReport: DraftReservationReport,
+  employeeWiseReservation: EmployeeWiseReservationReport,
+  reservationAdrReport: ReservationAdrReport,
+  reservationCreatedReport: ReservationCreatedReport,
+  reservationActivityReport: ReservationActivityReport,
+  incomeSummaryReport: IncomeSummaryReport,
+  reservationSummaryReport: ReservationSummaryReport,
+  marketSegmentReport: MarketSegmentReport,
+  housekeepingReport: HousekeepingReport,
   cashierReport: CashierReport,
   dailyRevenueReport: DailyRevenueReport,
   historyAndForecastReport: HistoryAndForecastReport,
@@ -186,6 +322,13 @@ export const reportsModelMapping: Record<ReportsTypeValues, ClassType> = {
   guestHistory: GuestHistory,
   salesByGuest: SalesByGuest,
   guestTypeReport: AuditRoomDetailsReport, //to be decided
+  guestLedger: GuestLedger,
+  discountAllowance: DiscountAllowanceReport,
+  companyContributionsReport: CompanyContributionsReport, //to be decided
+  noShowSummaryReport: NoShowSummaryReport,
+  mtdAndYtdReport: MtdAndYtdReport,
+  directAgentBillingReport: DirectAgentBillingReport, //to be decided
+  directCompanyBillingReport: DirectCompanyBillingReport, //to be decided
 };
 
 function getColsArray(colsData: ColsData): Cols[] {
@@ -204,6 +347,15 @@ export const reportsColumnMapping: Record<ReportsTypeValues, Cols[]> = {
   arrivalReport: getColsArray(arrivalReportCols),
   cancellationReport: getColsArray(cancellationReportCols),
   departureReport: getColsArray(departureReportCols),
+  draftReservationReport: getColsArray(draftReservationReportCols),
+  employeeWiseReservation: getColsArray(employeeWiseReservationReportCols),
+  reservationAdrReport: getColsArray(reservationAdrReportCols),
+  reservationCreatedReport: getColsArray(reservationCreatedReportCols),
+  reservationActivityReport: getColsArray(reservationActivityReportCols),
+  incomeSummaryReport: getColsArray(incomeSummaryReportCols),
+  reservationSummaryReport: getColsArray(reservationSummaryReportCols),
+  marketSegmentReport: getColsArray(marketSegmentReportCols),
+  housekeepingReport: getColsArray(housekeepingReportCols),
   cashierReport: getColsArray(cashierReportCols),
   historyAndForecastReport: getColsArray(historyAndForecastReportCols),
   managerFlashReport: getColsArray(managerFlashReportCols),
@@ -218,6 +370,13 @@ export const reportsColumnMapping: Record<ReportsTypeValues, Cols[]> = {
   guestHistory: getColsArray(guestHistoryCols),
   salesByGuest: getColsArray(SalesByGuestCols),
   guestTypeReport: getColsArray({}), //to be decided
+  guestLedger: getColsArray(guestLedgerCols),
+  discountAllowance: getColsArray(discountAllowanceReportCols),
+  companyContributionsReport: getColsArray(companyContributionsReportCols),
+  noShowSummaryReport: getColsArray(noShowSummaryReportCols), //to be decided
+  mtdAndYtdReport: getColsArray(mtdAndYtdReportCols), //to be decided
+  directAgentBillingReport: getColsArray(directAgentBillingReportsCols), //to be decided
+  directCompanyBillingReport: getColsArray(directCompanyBillingReportCols), //to be decided
 };
 
 export const reportFiltersMapping: Record<
@@ -228,6 +387,15 @@ export const reportFiltersMapping: Record<
   arrivalReport: ['fromDate', 'toDate'],
   cancellationReport: ['fromDate', 'toDate'],
   departureReport: ['fromDate', 'toDate'],
+  draftReservationReport: ['fromDate', 'toDate'],
+  employeeWiseReservation: ['fromDate', 'toDate'],
+  reservationAdrReport: ['fromDate', 'toDate'],
+  reservationCreatedReport: ['fromDate', 'toDate'],
+  reservationActivityReport: ['fromDate', 'toDate'],
+  incomeSummaryReport: ['fromDate', 'toDate'],
+  reservationSummaryReport: ['fromDate', 'toDate'],
+  marketSegmentReport: ['fromDate', 'toDate'],
+  housekeepingReport: ['fromDate', 'toDate'],
   cashierReport: ['fromDate', 'toDate'],
   historyAndForecastReport: ['fromDate', 'toDate'],
   managerFlashReport: ['date'],
@@ -242,6 +410,13 @@ export const reportFiltersMapping: Record<
   guestHistory: ['fromDate', 'toDate'],
   salesByGuest: ['fromDate', 'toDate'],
   guestTypeReport: ['fromDate', 'toDate'],
+  guestLedger: ['fromDate', 'toDate'],
+  discountAllowance: ['fromDate', 'toDate'],
+  companyContributionsReport: ['fromDate', 'toDate'],
+  noShowSummaryReport: ['fromDate', 'toDate'],
+  mtdAndYtdReport: ['fromDate', 'toDate'],
+  directAgentBillingReport: ['fromDate', 'toDate'], //extra filter to be integrated
+  directCompanyBillingReport: ['fromDate', 'toDate'],
 };
 
 export const rowStylesMapping: Record<RowStylesKeys, string> = {

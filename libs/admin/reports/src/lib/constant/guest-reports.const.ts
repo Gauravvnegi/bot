@@ -1,5 +1,6 @@
 import {
   GuestHistoryData,
+  GuestLedgerData,
   SalesByGuestData,
 } from '../types/guest-reports.types';
 import { ColsData } from '../types/reports.types';
@@ -110,6 +111,29 @@ export const SalesByGuestCols: ColsData<SalesByGuestData> = {
   },
   totalSales: {
     header: 'Total Sales',
+    isSortDisabled: true,
+    isSearchDisabled: true,
+  },
+};
+
+export const guestLedgerCols: ColsData<GuestLedgerData> = {
+  roomNo: {
+    header: 'Room No',
+    isSortDisabled: true,
+    isSearchDisabled: true,
+  },
+  name: {
+    header: 'Name',
+    isSortDisabled: true,
+    isSearchDisabled: true,
+  },
+  confirmationNo: {
+    header: 'Conf. No.',
+    isSortDisabled: true,
+    isSearchDisabled: true,
+  },
+  balance: {
+    header: 'Balance',
     isSortDisabled: true,
     isSearchDisabled: true,
   },

@@ -91,7 +91,11 @@ export class BrandInfoFormComponent implements OnInit {
       this.$subscription.add(
         this.businessService.getBrandById(this.brandId).subscribe(
           (res) => {
-            this.useForm.get('brand').patchValue(res);
+            const { status, ...rest } = res;
+            this.useForm.get('brand').patchValue(rest);
+            this.useForm
+              .get('brand')
+              .patchValue({ status: status === 'ACTIVE' });
             this.code = res.brandCode;
           },
           this.handelError,
@@ -111,12 +115,17 @@ export class BrandInfoFormComponent implements OnInit {
     }
     this.businessService.onSubmit.emit(true);
     const data = this.useForm.getRawValue() as BrandFormData;
+    data.brand.status = data.brand.status === true ? 'ACTIVE' : 'INACTIVE';
 
     if (this.brandId) {
       this.$subscription.add(
         this.businessService.updateBrand(this.brandId, data.brand).subscribe(
           (res) => {
-            this.useForm.get('brand').patchValue(res);
+            const { status, ...rest } = res;
+            this.useForm.get('brand').patchValue(rest);
+            this.useForm
+              .get('brand')
+              .patchValue({ status: status === 'ACTIVE' });
           },
           this.handelError,
           this.handleSuccess

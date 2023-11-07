@@ -108,7 +108,10 @@ export class TaxDataTableComponent extends BaseDatatableComponent
   getQueryConfig(): QueryConfig {
     const config = {
       params: this.adminUtilityService.makeQueryParams([
-        ...this.getSelectedQuickReplyFilters({ isStatusBoolean: true }),
+        ...this.getSelectedQuickReplyFilters({
+          isStatusBoolean: true,
+          key: 'entityState',
+        }),
         ...[...this.globalQueries, { order: 'DESC' }],
         {
           offset: this.first,

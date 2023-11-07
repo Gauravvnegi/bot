@@ -5,10 +5,10 @@
 export const environment = {
   production: false,
   name: 'default',
-  base_url: 'https://dev.api.botshot.ai:8443',
+  // base_url: 'https://dev.api.botshot.ai:8443',
   // base_url: 'https://api.botshot.in:8443',
   // base_url: 'https://dev.api.botshot.ai:8443',
-  // base_url: 'https://stg.api.botshot.ai:31956',
+  base_url: 'https://stg.api.botshot.ai:31956',
   firebase: {
     apiKey: 'AIzaSyBVotX7FRNCpG7WakjyDnxnUmgYDerLyHI',
     authDomain: 'push-notification-6455a.firebaseapp.com',

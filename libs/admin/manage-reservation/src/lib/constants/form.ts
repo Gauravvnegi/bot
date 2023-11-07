@@ -1,3 +1,4 @@
+import { AgentTableResponse } from 'libs/admin/agent/src/lib/types/response';
 import { ReservationRatePlan } from 'libs/admin/room/src/lib/constant/form';
 
 export type ReservationForm = {
@@ -12,18 +13,22 @@ export type ReservationForm = {
   paymentRule: PaymentRule;
   paymentMethod: PaymentMethod;
   offerId: string;
+  dailyPrice?: string;
+  agent?: AgentTableResponse;
 };
 
 export type ReservationInformation = {
   from?: number;
   to?: number;
-  dateAndTime: number;
+  dateAndTime?: number;
   reservationType?: string;
   source: string;
   sourceName: string;
   marketSegment: string;
   status?: string;
   eventType?: string;
+  agentSourceName?: string;
+  otaSourceName?: string;
 };
 
 export type GuestInformation = {
@@ -46,7 +51,7 @@ export type Instructions = {
 };
 
 export type RoomInformation = {
-  roomTypes: RoomTypes[];
+  roomTypes?: RoomTypes[];
 
   // For quick form
   roomTypeId?: string;
@@ -55,7 +60,7 @@ export type RoomInformation = {
   adultCount?: number;
   childCount?: number;
   id?: string;
-  roomNumbers: string[];
+  roomNumbers?: string[];
 };
 
 export type RoomTypes = {

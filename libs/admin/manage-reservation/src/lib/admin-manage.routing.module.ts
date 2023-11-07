@@ -5,7 +5,6 @@ import { MainComponent } from './components/main/main.component';
 import { ManageReservationDataTableComponent } from './components/manage-reservation-data-table/manage-reservation-data-table.component';
 import { manageReservationRoutes } from './constants/routes';
 import { RoomIteratorComponent } from './components/room-iterator/room-iterator.component';
-import { BookingInfoComponent } from './components/form-components/booking-info/booking-info.component';
 import { SpaReservationComponent } from './components/spa-reservation/spa-reservation.component';
 import { RestaurantReservationComponent } from './components/restaurant-reservation/restaurant-reservation.component';
 import { VenueReservationComponent } from './components/venue-reservation/venue-reservation.component';
@@ -59,7 +58,6 @@ export class AdminManageReservationRoutingModule {
     MainComponent,
     ManageReservationDataTableComponent,
     RoomIteratorComponent,
-    BookingInfoComponent,
     PaymentRuleComponent,
     PaymentMethodComponent,
     SpaReservationComponent,

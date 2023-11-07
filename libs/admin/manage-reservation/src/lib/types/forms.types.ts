@@ -1,4 +1,5 @@
 import { EntitySubType } from '@hospitality-bot/admin/shared';
+import { AgentTableResponse } from 'libs/admin/agent/src/lib/types/response';
 import { GuestType } from 'libs/admin/guests/src/lib/types/guest.type';
 
 export class RoomReservationFormData {
@@ -7,6 +8,8 @@ export class RoomReservationFormData {
   reservationType: string;
   source: string;
   sourceName: string;
+  agentSourceName: string;
+  otaSourceName: string;
   marketSegment: string;
   guestId: string;
   bookingItems: BookingItemFormData[] = [];
@@ -107,4 +110,6 @@ export type OccupancyDetails = {
 export type SourceData = {
   source: string;
   sourceName: string;
+  agent?: AgentTableResponse;
+  marketSegment?: string;
 };

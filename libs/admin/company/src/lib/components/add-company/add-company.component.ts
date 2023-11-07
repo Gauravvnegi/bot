@@ -157,7 +157,6 @@ export class AddCompanyComponent implements OnInit {
     'businessSource',
     'taxId',
     'marketSegment',
-    'billingInstruction',
   ];
 
   listenChanges() {

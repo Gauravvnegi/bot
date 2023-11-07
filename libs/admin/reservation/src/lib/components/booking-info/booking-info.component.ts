@@ -1,9 +1,17 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  Compiler,
+  Component,
+  ComponentFactoryResolver,
+  Input,
+  OnInit,
+  ViewChild,
+  ViewContainerRef,
+} from '@angular/core';
 import {
   AbstractControl,
   ControlContainer,
-  FormArray,
   FormGroup,
+  Validators,
 } from '@angular/forms';
 import {
   ConfigService,
@@ -11,17 +19,22 @@ import {
   EntitySubType,
   Option,
 } from '@hospitality-bot/admin/shared';
-import { BookingConfig } from '../../../models/reservations.model';
+import { BookingConfig } from '../../../../../manage-reservation/src/lib/models/reservations.model';
 import * as moment from 'moment';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
-import { FormService } from '../../../services/form.service';
-import { ReservationForm } from '../../../constants/form';
+import { FormService } from '../../../../../manage-reservation/src/lib/services/form.service';
+import { ReservationForm } from '../../../../../manage-reservation/src/lib/constants/form';
 import { Subscription } from 'rxjs';
+import { AgentTableResponse } from 'libs/admin/agent/src/lib/types/response';
+import { AddAgentComponent } from 'libs/admin/agent/src/lib/components/add-agent/add-agent.component';
 
 @Component({
   selector: 'hospitality-bot-booking-info',
   templateUrl: './booking-info.component.html',
-  styleUrls: ['./booking-info.component.scss', '../../reservation.styles.scss'],
+  styleUrls: [
+    './booking-info.component.scss',
+    '../../../../../manage-reservation/src/lib/components/reservation.styles.scss',
+  ],
 })
 export class BookingInfoComponent implements OnInit {
   countries: Option[];
@@ -31,7 +44,8 @@ export class BookingInfoComponent implements OnInit {
   eventTypes: Option[] = [];
   bookingType: string;
   reservationId: string;
-  disabledForm: string;
+  isQuickReservation: boolean = false;
+  disabledForm: boolean = false;
 
   /**
    * Props to show extra information
@@ -43,6 +57,8 @@ export class BookingInfoComponent implements OnInit {
       this[key] = val;
     }
   }
+
+  parentFormGroup: FormGroup;
 
   otaOptions: Option[] = [];
 
@@ -58,16 +74,25 @@ export class BookingInfoComponent implements OnInit {
 
   fromDateValue = new Date();
   toDateValue = new Date();
+  selectedAgent: AgentTableResponse;
 
   $subscription = new Subscription();
+
+  sidebarVisible: boolean;
+  @ViewChild('sidebarSlide', { read: ViewContainerRef })
+  sidebarSlide: ViewContainerRef;
+
   constructor(
     public controlContainer: ControlContainer,
     private configService: ConfigService,
     private globalFilterService: GlobalFilterService,
+    private resolver: ComponentFactoryResolver,
+    private compiler: Compiler,
     private formService: FormService
   ) {}
 
   ngOnInit(): void {
+    this.parentFormGroup = this.controlContainer.control as FormGroup;
     this.entityId = this.globalFilterService.entityId;
     this.getCountryCode();
     this.initDates();
@@ -133,11 +158,12 @@ export class BookingInfoComponent implements OnInit {
             multipleDateChange = true;
             toDateControl.setValue(nextDayTime); // Set toDateControl to one day later
           }
+          this.formService.reinitializeRooms.next(true);
           this.updateDateDifference();
           this.minToDate = new Date(maxToLimit); // Create a new date object
           this.minToDate.setDate(maxToLimit.getDate());
           this.formService.reservationDate.next(res);
-          if (this.roomControls.valid) {
+          if (this.roomControls.valid && !this.isQuickReservation) {
             this.formService.getSummary.next();
           }
         }
@@ -147,7 +173,12 @@ export class BookingInfoComponent implements OnInit {
         if (res) {
           this.toDateValue = new Date(res);
           this.updateDateDifference();
-          if (this.roomControls.valid && !multipleDateChange) {
+          !multipleDateChange && this.formService.reinitializeRooms.next(true);
+          if (
+            this.roomControls.valid &&
+            !multipleDateChange &&
+            !this.isQuickReservation
+          ) {
             this.formService.getSummary.next();
           }
           multipleDateChange = false;
@@ -182,42 +213,102 @@ export class BookingInfoComponent implements OnInit {
   listenForSourceChanges() {
     const sourceControl = this.reservationInfoControls.source;
     const sourceNameControl = this.reservationInfoControls.sourceName;
+    const marketSegmentControl = this.reservationInfoControls.marketSegment;
+    const otaSourceNameControl = this.reservationInfoControls.otaSourceName;
+    const agentSourceNameControl = this.reservationInfoControls.agentSourceName;
+
+    marketSegmentControl.valueChanges.subscribe((res) => {
+      if (
+        res &&
+        this.configData?.marketSegment &&
+        !this.configData?.marketSegment.some((item) => item.value === res)
+      ) {
+        this.configData.marketSegment.push({ label: res, value: res });
+        marketSegmentControl.patchValue(res, { emitEvent: false });
+      }
+    });
+
+    sourceControl.valueChanges.subscribe((res) => {
+      if (res) {
+        if (
+          this.configData?.source &&
+          !this.configData?.source.some(
+            (item) => item.value === sourceNameControl.value
+          )
+        ) {
+          this.configData.source.push({ label: res, value: res });
+        }
+        this.initSourceDetails(res);
+        !this.editMode && sourceNameControl.reset();
+      }
+    });
 
     this.$subscription.add(
       this.formService.sourceData.subscribe((res) => {
         if (res && this.configData) {
           this.editMode = true;
-          sourceNameControl.setValue(res.sourceName);
+          this.selectedAgent = {
+            label: `${res?.agent?.firstName} ${res?.agent?.lastName}`,
+            value: res?.agent?.id,
+            ...res?.agent,
+          };
+          marketSegmentControl.patchValue(res.marketSegment);
+          if (res.source === 'OTA') {
+            otaSourceNameControl.setValue(res.sourceName);
+          } else if (res.source === 'AGENT') {
+            agentSourceNameControl.setValue(res.sourceName);
+          } else {
+            sourceNameControl.setValue(res.sourceName);
+          }
           sourceControl.setValue(res.source);
         }
       })
     );
+  }
 
-    sourceControl.valueChanges.subscribe((res) => {
-      if (res) {
-        // this.agentSource = res === 'AGENT';
-        this.otaOptions =
-          res === 'OTA' && this.configData
-            ? this.configData.source.filter((item) => item.value === res)[0]
-                .type
-            : [];
-        // sourceNameControl.clearValidators();
-        if (
-          !this.otaOptions.some(
-            (item) => item.value === sourceNameControl.value
-          ) &&
-          sourceNameControl?.value?.length
-        ) {
-          this.otaOptions.push({
-            label: sourceNameControl.value,
-            value: sourceNameControl.value,
-          });
-        }
-        if (!this.editMode) {
-          sourceNameControl.reset();
-        }
+  initSourceDetails(source: string) {
+    const sourceNameControl = this.reservationInfoControls.sourceName;
+    const agentSourceNameControl = this.reservationInfoControls.agentSourceName;
+    const otaSourceNameControl = this.reservationInfoControls.otaSourceName;
+    if (source === 'OTA') {
+      otaSourceNameControl.setValidators(Validators.required);
+      otaSourceNameControl.markAsUntouched();
+      this.updateValueAndValidity(agentSourceNameControl);
+      this.updateValueAndValidity(sourceNameControl);
+      this.otaOptions = this.configData
+        ? this.configData.source.filter((item) => item.value === source)[0].type
+        : [];
+      if (
+        !this.otaOptions.some(
+          (item) => item.value === otaSourceNameControl?.value
+        ) &&
+        otaSourceNameControl?.value?.length
+      ) {
+        this.otaOptions.push({
+          label: otaSourceNameControl.value,
+          value: otaSourceNameControl.value,
+        });
       }
-    });
+    } else if (source === 'AGENT') {
+      agentSourceNameControl.setValidators(Validators.required);
+      agentSourceNameControl.markAsUntouched();
+      this.updateValueAndValidity(sourceNameControl);
+      this.updateValueAndValidity(otaSourceNameControl);
+    } else {
+      sourceNameControl.setValidators([
+        Validators.required,
+        Validators.maxLength(60),
+      ]);
+      agentSourceNameControl.markAsUntouched();
+      this.updateValueAndValidity(agentSourceNameControl);
+      this.updateValueAndValidity(otaSourceNameControl);
+    }
+  }
+
+  updateValueAndValidity(control: AbstractControl) {
+    control.reset();
+    control.clearValidators();
+    control.updateValueAndValidity();
   }
 
   getCountryCode(): void {
@@ -250,6 +341,38 @@ export class BookingInfoComponent implements OnInit {
     }
   }
 
+  agentChange(event) {}
+
+  showAgent() {
+    const lazyModulePromise = import(
+      'libs/admin/agent/src/lib/admin-agent.module'
+    )
+      .then((module) => {
+        return this.compiler.compileModuleAsync(module.AdminAgentModule);
+      })
+      .catch((error) => {
+        console.error('Error loading the lazy module:', error);
+      });
+    lazyModulePromise.then((moduleFactory) => {
+      this.sidebarVisible = true;
+      const factory = this.resolver.resolveComponentFactory(AddAgentComponent);
+      this.sidebarSlide.clear();
+      const componentRef = this.sidebarSlide.createComponent(factory);
+      componentRef.instance.isSideBar = true;
+      componentRef.instance.onClose.subscribe((res) => {
+        if (typeof res !== 'boolean') {
+          this.selectedAgent = {
+            label: `${res?.agent?.firstName} ${res?.agent?.lastName}`,
+            value: res?.agent?.id,
+            ...res?.agent,
+          };
+        }
+        this.sidebarVisible = false;
+        componentRef.destroy();
+      });
+    });
+  }
+
   get reservationInfoControls() {
     return (this.controlContainer.control.get(
       'reservationInformation'
@@ -261,12 +384,6 @@ export class BookingInfoComponent implements OnInit {
 
   get roomControls() {
     return this.controlContainer.control.get('roomInformation') as FormGroup;
-  }
-
-  get roomTypeArray() {
-    return ((this.controlContainer.control.get(
-      'roomInformation'
-    ) as FormGroup).get('roomTypes') as FormArray).controls;
   }
 
   ngOnDestroy() {
@@ -281,5 +398,6 @@ type BookingInfoProps = {
   eventTypes?: Option[];
   bookingType?: string;
   reservationId?: string;
-  disabledForm?: string;
+  isQuickReservation?: boolean;
+  disabledForm: boolean;
 };

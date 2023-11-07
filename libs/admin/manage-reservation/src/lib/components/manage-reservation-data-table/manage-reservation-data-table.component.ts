@@ -113,7 +113,6 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
     this.listenForGlobalFilters();
     this.checkReservationSubscription();
     this.listenForSelectedEntityChange();
-    this.formService.resetData();
     this.toggleCalendarView();
   }
 

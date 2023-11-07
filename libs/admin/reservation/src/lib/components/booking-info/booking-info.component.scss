@@ -1,0 +1,50 @@
+@import 'main';
+
+.form-block {
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: 6%;
+  row-gap: 30px;
+  .half-width {
+    flex-basis: 47%;
+  }
+  .full-width {
+    flex-basis: 100%;
+  }
+}
+
+.custom-width {
+  flex-basis: 47%;
+}
+
+:host ::ng-deep .to-date {
+  .label {
+    visibility: hidden;
+  }
+  .text__wrapper {
+    min-width: max-content;
+  }
+}
+
+:host ::ng-deep .sidebar {
+  .p-sidebar-close {
+    display: none;
+  }
+  .body {
+    height: 83vh;
+    overflow: auto;
+  }
+  .p-sidebar-right {
+    border-top-left-radius: 10px;
+    width: 40rem;
+  }
+  .p-dropdown-items-wrapper {
+    max-height: 130px !important;
+  }
+}
+
+:host ::ng-deep .select {
+  .p-dropdown-panel {
+    left: 0px !important;
+  }
+}

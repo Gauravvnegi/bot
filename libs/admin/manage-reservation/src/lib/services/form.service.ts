@@ -27,6 +27,7 @@ export class FormService {
   getSummary = new Subject<void>();
   deductedAmount = new BehaviorSubject(0);
   isDataInitialized = new BehaviorSubject(false);
+  reinitializeRooms = new BehaviorSubject(false);
 
   guestInformation: BehaviorSubject<string> = new BehaviorSubject<string>(null);
 
@@ -62,7 +63,16 @@ export class FormService {
     roomReservationData.to = input.reservationInformation?.to;
     roomReservationData.reservationType =
       input.reservationInformation?.reservationType ?? 'CONFIRMED';
-    roomReservationData.sourceName = input.reservationInformation?.sourceName;
+    roomReservationData.sourceName =
+      input.reservationInformation.source === 'OTA'
+        ? input.reservationInformation.otaSourceName
+        : input.reservationInformation.source === 'AGENT'
+        ? input.reservationInformation.agentSourceName
+        : input.reservationInformation.sourceName;
+
+    input.reservationInformation?.sourceName ??
+      input.reservationInformation?.agentSourceName ??
+      input.reservationInformation?.otaSourceName;
     roomReservationData.source = input.reservationInformation?.source;
     roomReservationData.marketSegment =
       input.reservationInformation?.marketSegment;
@@ -218,6 +228,7 @@ export class FormService {
             data?.rooms?.map((room) => ({
               label: room?.roomNumber,
               value: room?.roomNumber,
+              roomNumber: room?.roomNumber,
             })) ?? [],
         }
       : data;
@@ -232,6 +243,8 @@ export class FormService {
     this.enableAccordion = false;
     this.reservationForm.next(null);
     this.deductedAmount.next(0);
+    this.isDataInitialized.next(false);
+    this.reinitializeRooms.next(false);
   }
 }
 

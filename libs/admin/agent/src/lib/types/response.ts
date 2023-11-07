@@ -33,6 +33,8 @@ export type AgentTableResponse = AdditionalFeature & {
   gender?: string;
   dateOfBirth?: number;
   created?: number;
+  value?: string;
+  label?: string;
 };
 
 export type AgentListResponse = {

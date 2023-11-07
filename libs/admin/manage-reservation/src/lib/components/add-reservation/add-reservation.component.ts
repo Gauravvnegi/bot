@@ -31,7 +31,7 @@ import { ReservationType } from '../../constants/reservation-table';
 import { convertToTitleCase } from 'libs/admin/shared/src/lib/utils/valueFormatter';
 import { Subject } from 'rxjs';
 import { RoutesConfigService } from '@hospitality-bot/admin/core/theme';
-import { QuickReservationForm } from 'libs/admin/dashboard/src/lib/data-models/reservation.model';
+import { ReservationForm } from '../../constants/form';
 
 @Component({
   selector: 'hospitality-bot-add-reservation',
@@ -65,10 +65,10 @@ export class AddReservationComponent extends BaseReservationComponent
     protected routesConfigService: RoutesConfigService
   ) {
     super(activatedRoute, hotelDetailService, formService, routesConfigService);
+    this.initForm();
   }
 
   ngOnInit(): void {
-    this.initForm();
     this.initDetails();
     if (this.reservationId) this.getReservationDetails();
     this.initFormData();
@@ -94,7 +94,7 @@ export class AddReservationComponent extends BaseReservationComponent
       });
   }
 
-  initParamsData(paramsData: QuickReservationForm) {
+  initParamsData(paramsData: ReservationForm) {
     const {
       roomInformation,
       guestInformation,
@@ -108,6 +108,8 @@ export class AddReservationComponent extends BaseReservationComponent
     this.formService.sourceData.next({
       source: source,
       sourceName: sourceName,
+      agent: data?.agent ?? null,
+      marketSegment: reservationInfo?.marketSegment,
     });
     this.reservationInfoControls.reservationType.patchValue(
       ReservationType.CONFIRMED
@@ -138,6 +140,8 @@ export class AddReservationComponent extends BaseReservationComponent
         reservationType: ['', Validators.required],
         source: ['', Validators.required],
         sourceName: ['', [Validators.required, Validators.maxLength(60)]],
+        otaSourceName: [''],
+        agentSourceName: [''],
         marketSegment: ['', Validators.required],
       }),
       offerId: [''],
@@ -203,6 +207,8 @@ export class AddReservationComponent extends BaseReservationComponent
             this.formService.sourceData.next({
               source: formData.reservationInformation.source,
               sourceName: formData.reservationInformation.sourceName,
+              agent: formData?.agent ?? null,
+              marketSegment: formData?.reservationInformation?.marketSegment,
             });
             // check if room type was patched
             if (roomInformation.roomTypes[0].roomTypeId.length)
@@ -233,10 +239,12 @@ export class AddReservationComponent extends BaseReservationComponent
               ...formData
             } = data;
             this.checkinJourneyState = data.journeyState;
-
+            this.isExternalBooking = response.externalBooking;
             this.formService.sourceData.next({
               source: source,
               sourceName: sourceName,
+              agent: response?.agent ?? null,
+              marketSegment: reservationInfo?.marketSegment,
             });
             this.isDraftBooking = reservationInfo.reservationType === 'DRAFT';
             if (nextStates)

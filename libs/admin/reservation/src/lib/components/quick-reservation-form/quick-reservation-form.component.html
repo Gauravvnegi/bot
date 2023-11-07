@@ -49,114 +49,71 @@
     class="body"
     [ngStyle]="{ 'max-height': reservationId ? '70vh' : '85vh' }"
   >
-    <div class="form-block" [formGroup]="useForm">
+    <div class="form-block" [formGroup]="userForm">
       <!-- Reservation Information -->
-      <ng-container formGroupName="reservationInformation">
-        <hospitality-bot-date
-          class="half-width"
-          controlName="from"
-          label="Check-In Date"
-          [settings]="{
-            enableTime: false
-          }"
-          [minDate]="startMinDate"
-        ></hospitality-bot-date>
-        <hospitality-bot-date
-          class="half-width"
-          controlName="to"
-          label="Check-Out Date"
-          [settings]="{
-            enableTime: false
-          }"
-          [minDate]="endMinDate"
-        ></hospitality-bot-date>
-        <hospitality-bot-select
-          class="half-width"
-          controlName="source"
-          label="Booking Source"
-          [options]="configData?.source"
-          [props]="{ placeholder: 'Select' }"
-        ></hospitality-bot-select>
-        <hospitality-bot-input
-          *ngIf="!otaOptions.length"
-          class="half-width maxlength"
-          controlName="sourceName"
-          label="Booking Source Name"
-          maxLength="60"
-          [props]="{
-            placeholder: 'Enter',
-            errorMessages: {
-              required: 'This is a required field.',
-              maxlength: 'Maximum character limit is upto 60.'
-            }
-          }"
-        ></hospitality-bot-input>
-        <hospitality-bot-select
-          *ngIf="otaOptions.length"
-          class="half-width maxlength"
-          controlName="sourceName"
-          label="Booking Source Name"
-          [options]="otaOptions"
-          [props]="{
-            placeholder: 'Select',
-            errorMessages: {
-              required: 'This is a required field.'
-            }
-          }"
-        ></hospitality-bot-select>
-        <hospitality-bot-select
-          class="half-width"
-          controlName="marketSegment"
-          label="Market Segment"
-          [options]="configData?.marketSegment"
-          [props]="{
-            placeholder: 'Enter'
-          }"
-        ></hospitality-bot-select>
-      </ng-container>
-
-      <!-- Guest Information -->
-      <ng-container *ngIf="!reservationId" formGroupName="guestInformation">
-        <hospitality-bot-quick-select
-          class="half-width select"
-          controlName="guestDetails"
-          label="Guest"
-          [inputType]="'select'"
-          [props]="{
-            showChips: false,
-            isAsync: true,
-            placeholder: 'Select',
-            createPrompt: '+ Add New Guest',
-            selectedOption: selectedGuest,
-            createType: 'sidebar'
-          }"
-          [apiConfig]="{
-            apiEndPoint: '/api/v1/members',
-            dataModel: {
-              key: 'records',
-              values: {
-                label: ['firstName', 'lastName'],
-                value: 'id'
-              }
-            },
-            queryParams: getGuestConfig(),
-            searchAPIEndPoint: '/api/v1/search/members',
-            searchModel: {
-              response: true,
-              values: {
-                label: ['firstName', 'lastName'],
-                value: 'id'
-              }
-            },
-            searchQueryParams: { type: 'GUEST' }
-          }"
-          [paginationConfig]="{
-            isPagination: true
-          }"
-          (clickedOption)="guestChange($event)"
-          (openSidebar)="createGuest()"
-        ></hospitality-bot-quick-select>
-      </ng-container>
+      <hospitality-bot-booking-info
+        [props]="{
+          bookingType: 'ROOM_TYPE',
+          reservationId: reservationId,
+          isQuickReservation: true,
+          disabledForm: isExternalBooking
+        }"
+        class="booking-info"
+      >
+        <!-- Guest Information -->
+        <ng-container *ngIf="!reservationId" formGroupName="guestInformation">
+          <hospitality-bot-quick-select
+            class="half-width"
+            controlName="guestDetails"
+            label="Guest"
+            [inputType]="'select'"
+            [props]="{
+              showChips: false,
+              isAsync: true,
+              placeholder: 'Select',
+              createPrompt: '+ Add New Guest',
+              selectedOption: selectedGuest,
+              createType: 'sidebar'
+            }"
+            [apiConfig]="{
+              apiEndPoint: '/api/v1/members',
+              dataModel: {
+                key: 'records',
+                values: {
+                  label: ['firstName', 'lastName'],
+                  value: 'id'
+                }
+              },
+              queryParams: getGuestConfig(),
+              searchAPIEndPoint: '/api/v1/search/members',
+              searchModel: {
+                response: true,
+                values: {
+                  label: ['firstName', 'lastName'],
+                  value: 'id'
+                }
+              },
+              searchQueryParams: { type: 'GUEST' }
+            }"
+            [paginationConfig]="{
+              isPagination: true
+            }"
+            (clickedOption)="guestChange($event)"
+            (openSidebar)="createGuest()"
+          ></hospitality-bot-quick-select>
+        </ng-container>
+        <ng-container formGroupName="roomInformation" *ngIf="reservationId">
+          <hospitality-bot-select
+            class="half-width"
+            controlName="roomNumber"
+            label="Room Number"
+            [options]="roomOptions"
+            [props]="{
+              placeholder: 'Select'
+            }"
+          ></hospitality-bot-select>
+        </ng-container>
+      </hospitality-bot-booking-info>
 
       <!-- Room Information -->
       <ng-container formGroupName="roomInformation">
@@ -180,7 +137,8 @@
               queryParams: getRoomTypeConfig()
             }"
             [paginationConfig]="{
-              isPagination: true
+              isPagination: true,
+              limit: 200
             }"
             (clickedOption)="roomTypeChange($event)"
             [reinitialize]="reinitializeRooms"
@@ -194,16 +152,6 @@
           ></hospitality-bot-select>
         </ng-container>
 
-        <hospitality-bot-select
-          *ngIf="reservationId"
-          class="half-width"
-          controlName="roomNumber"
-          label="Room Number"
-          [options]="roomOptions"
-          [props]="{
-            placeholder: 'Select'
-          }"
-        ></hospitality-bot-select>
         <hospitality-bot-multi-select
           *ngIf="!reservationId"
           class="half-width"
@@ -277,10 +225,7 @@
   [isSticky]="true"
   [config]="{
     postLabel: reservationId ? 'Update Reservation' : 'Create Reservation',
-    preHide: inputControls.guestInformation.get('guestDetails').value
-      ? false
-      : true,
-    postDisabled: !reservationId && useForm.invalid,
+    preHide: reservationId ? false : true,
     preLabel: 'Guest Profile',
     preVariant: 'text',
     preSeverity: 'primary'

@@ -42,6 +42,7 @@ import { UpdateRatesResponse } from 'libs/admin/channel-manager/src/lib/types/re
 import { UpdateRates } from 'libs/admin/channel-manager/src/lib/models/channel-manager.model';
 import { ChannelManagerService } from 'libs/admin/channel-manager/src/lib/services/channel-manager.service';
 import * as moment from 'moment';
+import { FormService } from 'libs/admin/manage-reservation/src/lib/services/form.service';
 
 @Component({
   selector: 'hospitality-bot-reservation-calendar-view',

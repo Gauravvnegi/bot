@@ -23,7 +23,6 @@ import { EntitySubType } from 'libs/admin/shared/src';
 import { IteratorComponent } from 'libs/admin/shared/src/lib/components/iterator/iterator.component';
 import { Subscription, forkJoin } from 'rxjs';
 import { roomFields, RoomFieldTypeOption } from '../../constants/reservation';
-import { RoomTypeForm } from 'libs/admin/room/src/lib/models/room.model';
 import { ReservationForm, RoomTypes } from '../../constants/form';
 import { IteratorField } from 'libs/admin/shared/src/lib/types/fields.type';
 import { FormService } from '../../services/form.service';
@@ -154,14 +153,11 @@ export class RoomIteratorComponent extends IteratorComponent
   }
 
   listenForDateChanges() {
-    this.reservationInfoControls.from.valueChanges.subscribe((res) => {
-      if (res) this.reinitializeRooms = !this.reinitializeRooms;
+    this.formService.reinitializeRooms.subscribe((res) => {
+      if (res) {
+        this.reinitializeRooms = !this.reinitializeRooms;
+      }
     });
-    this.reservationInfoControls.to.valueChanges
-      .pipe(debounceTime(50))
-      .subscribe((res) => {
-        if (res) this.reinitializeRooms = !this.reinitializeRooms;
-      });
   }
 
   listenForRoomChanges(index) {
@@ -313,7 +309,10 @@ export class RoomIteratorComponent extends IteratorComponent
 
   // Patch data for selected room type
   roomTypeChange(event: RoomTypeResponse, index: number) {
-    if (event) {
+    const exists =
+      this.roomTypes.length &&
+      this.roomTypes.some((item) => item?.value === event?.id);
+    if (event && !exists) {
       this.roomTypes[index] = this.formService.setReservationRoomType(event);
       this.listenRoomTypeChanges(index);
       if (this.isDraftBooking) this.listenForRoomChanges(index);

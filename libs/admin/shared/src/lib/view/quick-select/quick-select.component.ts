@@ -125,7 +125,7 @@ export class QuickSelectComponent extends FormComponent implements OnInit {
       // Get items again when selected option is patched.
       this.menuOptions = [...this.menuOptions, selectedOption];
       this.removeDuplicate([...this.menuOptions]);
-      this.controlContainer.control.patchValue(selectedOption.value, {
+      this.controlContainer.control.patchValue(selectedOption?.value, {
         emitEvent: false,
       });
     }
@@ -135,6 +135,7 @@ export class QuickSelectComponent extends FormComponent implements OnInit {
         changes['reinitialize']?.currentValue
     ) {
       this.resetApiData = true;
+      this.offSet = 0;
       this.getItems();
     }
   }
@@ -221,13 +222,15 @@ export class QuickSelectComponent extends FormComponent implements OnInit {
    */
   getItems() {
     this.qsLoading = true;
+    let paginationConfig = !this.isPagination
+      ? { pagination: false }
+      : { offset: this.offSet, limit: this.limit };
     this.$subscription.add(
       this.apiService
         .get(
           `${this.apiEndPoint}${this.getQueryConfig({
             ...this.queryParams,
-            offset: this.offSet,
-            limit: this.limit,
+            ...paginationConfig,
           })}`,
           {
             'entity-id': this.entityId,
@@ -246,6 +249,7 @@ export class QuickSelectComponent extends FormComponent implements OnInit {
                     : []),
                 ]);
             // To be improved later.
+
             this.controlContainer.control
               .get(this.controlName)
               .setValue(
@@ -296,6 +300,7 @@ export class QuickSelectComponent extends FormComponent implements OnInit {
    */
   loadMoreData() {
     this.offSet = this.offSet + 10;
+    this.resetApiData = false;
     this.getItems();
   }
 
@@ -362,7 +367,7 @@ export class QuickSelectComponent extends FormComponent implements OnInit {
 
   removeDuplicate([...items]) {
     const seen = new Set();
-    return items.filter((item) => {
+    const filteredItems = items.filter((item) => {
       const key = item.value; // Customize this key based on your needs
       if (!seen.has(key)) {
         seen.add(key);
@@ -370,6 +375,7 @@ export class QuickSelectComponent extends FormComponent implements OnInit {
       }
       return false;
     });
+    return filteredItems;
   }
 
   /**
@@ -377,7 +383,7 @@ export class QuickSelectComponent extends FormComponent implements OnInit {
    * @param config configuration of the api calling
    * @returns
    */
-  getQueryConfig(config?: Record<string, string | number>) {
+  getQueryConfig(config?: Record<string, string | number | boolean>) {
     return this.adminUtilityService.makeQueryParams([config]);
   }
 

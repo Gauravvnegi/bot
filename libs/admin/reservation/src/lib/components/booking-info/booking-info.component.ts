@@ -362,9 +362,9 @@ export class BookingInfoComponent implements OnInit {
       componentRef.instance.onClose.subscribe((res) => {
         if (typeof res !== 'boolean') {
           this.selectedAgent = {
-            label: `${res?.agent?.firstName} ${res?.agent?.lastName}`,
-            value: res?.agent?.id,
-            ...res?.agent,
+            label: `${res?.firstName} ${res?.lastName}`,
+            value: res?.id,
+            ...res,
           };
         }
         this.sidebarVisible = false;

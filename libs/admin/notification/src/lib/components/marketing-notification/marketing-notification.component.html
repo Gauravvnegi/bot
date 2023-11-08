@@ -31,6 +31,15 @@
       [props]="{ placeholder: 'Select Template' }"
       (itemSelection)="fetchTemplate($event)"
     ></hospitality-bot-select>
+      <hospitality-bot-select
+      *ngIf="isPackageVisible"
+      label="Packages"
+      controlName="packageId"
+      [options]="packageList"
+      class="half-width"
+      [props]="{ placeholder: 'Select Package' }"
+      (itemSelection)="fetchTemplate($event)"
+    ></hospitality-bot-select>
     <hospitality-bot-multi-select
       class="full-width"
       controlName="emailIds"

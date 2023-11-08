@@ -97,14 +97,8 @@ export class SubscriptionPlanService extends ApiService {
     return this.productSubscription?.moduleProductMapping;
   }
 
-  getSelectedProductData() {
-    if (this.selectedProduct) {
-      return this.subscriptions.products.find(
-        (item) => item.name === this.selectedProduct
-      );
-    }
-
-    return this.getFirstSubscribedProduct();
+  getSelectedProductData(name?: ProductNames) {
+    return this.subscriptions.products.find((item) => item.name === name);
   }
 
   initComingSoonModules(input: ModuleNames[]) {

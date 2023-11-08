@@ -77,9 +77,9 @@
         <div class="options1" [ngClass]="{ disabled: isGlobalFilterVisible }">
           <div class="selected-product padding-right">
             <img
-              [src]="selectedProduct.icon"
-              [pTooltip]="selectedProduct.label"
-              [alt]="selectedProduct.label"
+              [src]="selectedProduct?.icon"
+              [pTooltip]="selectedProduct?.label"
+              [alt]="selectedProduct?.label"
               tooltipPosition="bottom"
             />
           </div>

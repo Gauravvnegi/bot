@@ -656,6 +656,14 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
     );
   }
 
+  selectedProductName: string;
+  get selectedProduct() {
+    this.selectedProductName = this.routesConfigService.productName;
+    return this.subscriptionPlanService.getSelectedProductData(
+      this.selectedProductName as ProductNames
+    );
+  }
+
   nightAuditCheck() {
     this.$subscription.add(
       this.nightAuditService
@@ -750,7 +758,7 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
     );
   }
 
-  get selectedProduct() {
-    return this.subscriptionPlanService.getSelectedProductData();
-  }
+  // get selectedProduct() {
+  //   return this.subscriptionPlanService.getSelectedProductData();
+  // }
 }

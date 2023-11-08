@@ -37,6 +37,8 @@ export class MarketingNotificationComponent extends NotificationComponent
   isTemplateDisabled = true;
   reservationId: string = '';
   packageId: string = '';
+  details: any;
+  packageList: Option[] = [];
 
   @ViewChild('attachmentComponent') updateAttachment: any;
 
@@ -63,8 +65,19 @@ export class MarketingNotificationComponent extends NotificationComponent
   ngOnInit(): void {
     this.getConfigData(this.entityId);
     this.getAllTemplates();
+    this.getPackageList();
     this.initFG();
     this.listenForTemplateChange();
+    this.listenForPackageChange();
+  }
+
+  getPackageList() {
+    this.details.amenitiesDetails.paidPackages.forEach((packageData) => {
+      this.packageList.push({
+        label: packageData.name,
+        value: packageData.id,
+      } as Option);
+    });
   }
 
   getConfigData(entityId): void {
@@ -92,6 +105,7 @@ export class MarketingNotificationComponent extends NotificationComponent
       topicId: [''],
       templateId: [''],
       attachments: [[]],
+      packageId: [''],
     });
   }
 
@@ -132,24 +146,41 @@ export class MarketingNotificationComponent extends NotificationComponent
 
   listenForTemplateChange() {
     this.emailFG.get('templateId').valueChanges.subscribe((res) => {
-      this.getTemplateDetails(res);
+      this.emailFG.get('message').patchValue('', { emitEvent: false });
+      this.emailFG.get('packageId').patchValue('', { emitEvent: false });
+      if (res != 'PACKAGE_ACCEPT' && res != 'PACKAGE_REJECT') {
+        this.getTemplateDetails(res);
+      }
+    });
+  }
+
+  listenForPackageChange() {
+    this.emailFG.get('packageId').valueChanges.subscribe((res) => {
+      this.packageId = res;
+      this.getTemplateDetails(this.emailFG.get('templateId').value);
     });
   }
 
   getTemplateDetails(template) {
-    console.log(this.reservationId, 'reservationId');
     this.$subscription.add(
       this._emailService
         .getTemplateDetails(this.entityId, {
           params: this._adminUtilityService.makeQueryParams([
             { templateType: template },
             { reservationId: this.reservationId },
-            { packageId: '' },
+            { packageId: this.packageId },
           ]),
         })
         .subscribe((response) => {
           this.emailFG.get('message').patchValue(response.template);
         })
+    );
+  }
+
+  get isPackageVisible() {
+    return (
+      this.emailFG.get('templateId').value === 'PACKAGE_ACCEPT' ||
+      this.emailFG.get('templateId').value === 'PACKAGE_REJECT'
     );
   }
 

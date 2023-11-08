@@ -193,7 +193,7 @@ export class ManagePermissionService extends ApiService {
     return this.get(
       `/api/v1/${
         allUsers ? `entity/${config.entityId}` : `user/${config.loggedInUserId}`
-      }/users/export/${config.queryObj ? config.queryObj : ''}`,
+      }/users/export${config.queryObj ? config.queryObj : ''}`,
       {
         responseType: 'blob',
       }

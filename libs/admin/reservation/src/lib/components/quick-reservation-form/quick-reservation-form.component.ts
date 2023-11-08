@@ -47,6 +47,7 @@ import { MatDialogConfig } from '@angular/material/dialog';
 import { DetailsComponent } from '../details/details.component';
 import { AgentTableResponse } from 'libs/admin/agent/src/lib/types/response';
 import { ReservationForm } from 'libs/admin/manage-reservation/src/lib/constants/form';
+import { debounceTime } from 'rxjs/operators';
 
 @Component({
   selector: 'hospitality-bot-quick-reservation-form',
@@ -270,9 +271,11 @@ export class QuickReservationFormComponent implements OnInit {
     this.$subscription.add(
       this.manageReservationService
         .getReservationDataById(this.reservationId, this.entityId)
+        .pipe(debounceTime(100))
         .subscribe(
           (res) => {
             const formData = new ReservationFormData().deserialize(res);
+
             this.reservationData = formData;
             this.isExternalBooking = res?.externalBooking;
             if (this.isExternalBooking) {

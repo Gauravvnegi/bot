@@ -25,7 +25,7 @@
             enableTime: false,
             dateValue: startMinDate
           }"
-          [minDate]="startMinDate"
+          [minDate]="reservationId ? date : startMinDate"
           [maxDate]="maxDate"
           [disabled]="disabledForm"
         ></hospitality-bot-date>

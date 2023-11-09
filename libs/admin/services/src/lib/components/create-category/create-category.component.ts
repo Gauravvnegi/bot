@@ -9,6 +9,7 @@ import { CategoryFormValue, NavRouteOptions } from 'libs/admin/shared/src';
 import { Subscription } from 'rxjs';
 import { servicesRoutes } from '../../constant/routes';
 import { ServicesService } from '../../services/services.service';
+import { ImageUrl } from 'libs/admin/room/src/lib/types/service-response';
 
 @Component({
   selector: 'hospitality-bot-create-category',
@@ -38,14 +39,14 @@ export class CreateCategoryComponent implements OnInit {
   }
 
   handleSubmit(value: CategoryFormValue) {
-    const { imageUrl } = value;
+    const imageUrls = [{ isFeatured: true, url: value.imageUrl }];
     this.$subscription.add(
       this.servicesService
         .createCategory(this.entityId, {
-          imageUrl: [{ url: imageUrl, isFeatured: true }],
           ...value,
           type: 'SERVICE_CATEGORY',
           source: 1,
+          imageUrl: imageUrls,
         })
         .subscribe(
           () => {

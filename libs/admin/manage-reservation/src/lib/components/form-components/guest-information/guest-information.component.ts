@@ -106,9 +106,6 @@ export class GuestInformationComponent implements OnInit {
             cc: res.contactDetails.cc,
             email: res.contactDetails.emailId,
           };
-          this.parentFormGroup
-            .get('guestInformation.guestDetails')
-            .patchValue(res.id);
         }
         this.sidebarVisible = false;
         componentRef.destroy();

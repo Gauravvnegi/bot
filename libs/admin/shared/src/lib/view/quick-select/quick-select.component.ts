@@ -125,9 +125,11 @@ export class QuickSelectComponent extends FormComponent implements OnInit {
       // Get items again when selected option is patched.
       this.menuOptions = [...this.menuOptions, selectedOption];
       this.removeDuplicate([...this.menuOptions]);
-      this.controlContainer.control.patchValue(selectedOption?.value, {
-        emitEvent: false,
-      });
+      this.controlContainer.control
+        .get(this.controlName)
+        .patchValue(selectedOption?.value, {
+          emitEvent: false,
+        });
     }
     if (
       changes['reinitialize']?.previousValue !== undefined &&

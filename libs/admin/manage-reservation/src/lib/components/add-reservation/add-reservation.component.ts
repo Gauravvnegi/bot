@@ -166,10 +166,8 @@ export class AddReservationComponent extends BaseReservationComponent
         res = data.getRawValue();
         // Get raw value to get disabled control values as well
 
-        const roomTypeIds = res.map((item) => item.roomTypeId);
         // check if the last added room type is selected
         if (res && res[res.length - 1].roomTypeId?.length) {
-          this.getOfferByRoomType(roomTypeIds);
           this.getSummaryData();
         }
 
@@ -330,32 +328,44 @@ export class AddReservationComponent extends BaseReservationComponent
 
   getSummaryData(): void {
     this.cancelRequests$.next();
-    this.$subscription.add(
-      this.manageReservationService
-        .getSummaryData(this.selectedEntity.id, this.getFormData(), {
-          params: `?type=${EntitySubType.ROOM_TYPE}`,
-        })
-        .pipe(
-          //to cancel api call between using take until
-          takeUntil(this.cancelRequests$)
-        )
-        .subscribe(
-          (res) => {
-            this.summaryData = new SummaryData()?.deserialize(res);
-            // Modify data to show summary for occupancy details.
-            this.updateBookingItemsCounts(this.summaryData.bookingItems);
-            this.updatePaymentData();
+    const configData = this.getFormData();
+    let isAdultAndRoomCount = configData.bookingItems.every((item) => {
+      return item.occupancyDetails.maxAdult && item.roomDetails.roomCount;
+    });
 
-            if (this.formValueChanges) {
-              this.reservationId
-                ? this.setFormDisability(this.checkinJourneyState)
-                : this.setFormDisability;
-              this.formValueChanges = false;
-            }
-          },
-          (error) => {}
-        )
-    );
+    if (isAdultAndRoomCount) {
+      this.$subscription.add(
+        this.manageReservationService
+          .getSummaryData(this.selectedEntity.id, this.getFormData(), {
+            params: `?type=${EntitySubType.ROOM_TYPE}`,
+          })
+          .pipe(
+            //to cancel api call between using take until
+            takeUntil(this.cancelRequests$)
+          )
+          .subscribe(
+            (res) => {
+              this.summaryData = new SummaryData()?.deserialize(res);
+              // Modify data to show summary for occupancy details.
+              this.updateBookingItemsCounts(this.summaryData.bookingItems);
+              this.updatePaymentData();
+
+              if (this.formValueChanges) {
+                this.reservationId
+                  ? this.setFormDisability(this.checkinJourneyState)
+                  : this.setFormDisability;
+                this.formValueChanges = false;
+              }
+            },
+            (error) => {}
+          )
+      );
+      const roomTypeIds = configData.bookingItems.map(
+        (item) => item.roomDetails.roomTypeId
+      );
+      // check if the last added room type is selected
+      this.getOfferByRoomType(roomTypeIds);
+    }
   }
 
   getFormData() {

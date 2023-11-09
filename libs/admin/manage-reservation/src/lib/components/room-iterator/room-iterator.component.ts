@@ -252,7 +252,6 @@ export class RoomIteratorComponent extends IteratorComponent
         sellingprice: item.sellingPrice,
         isBase: item.isBase,
       }));
-
       // Patch the selected room number if available.
       this.roomControls[index].patchValue(
         {

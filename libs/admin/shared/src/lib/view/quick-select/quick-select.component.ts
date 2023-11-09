@@ -125,8 +125,9 @@ export class QuickSelectComponent extends FormComponent implements OnInit {
       // Get items again when selected option is patched.
       this.menuOptions = [...this.menuOptions, selectedOption];
       this.removeDuplicate([...this.menuOptions]);
-      if (this.inputControl)
-        this.inputControl.patchValue(selectedOption?.value, {
+      this.controlContainer.control
+        .get(this.controlName)
+        .patchValue(selectedOption?.value, {
           emitEvent: false,
         });
     }
@@ -250,8 +251,11 @@ export class QuickSelectComponent extends FormComponent implements OnInit {
                     : []),
                 ]);
             // To be improved later.
-            if (this.inputControl)
-              this.inputControl.setValue(this.inputControl?.value);
+            this.controlContainer.control
+              .get(this.controlName)
+              .setValue(
+                this.controlContainer.control.get(this.controlName)?.value
+              );
             this.noMoreData = data.length < this.limit;
           },
           (error) => {},
@@ -339,8 +343,9 @@ export class QuickSelectComponent extends FormComponent implements OnInit {
                   : res[model.values?.label],
                 value: res[model.values.value],
               });
-              if (this.inputControl)
-                this.inputControl.setValue(res[model.values.value]);
+              this.controlContainer.control
+                .get(this.controlName)
+                .setValue(res[model.values.value]);
               this.snackbarService.openSnackBarAsText(
                 this.label + ' created successfully',
                 '',
@@ -387,8 +392,9 @@ export class QuickSelectComponent extends FormComponent implements OnInit {
    * @function listenControl will emit the selected option to parent
    */
   listenControl() {
-    if (this.inputControl)
-      this.inputControl.valueChanges.subscribe((res) => {
+    this.controlContainer.control
+      .get(this.controlName)
+      .valueChanges.subscribe((res) => {
         if (res?.length && this.menuOptions.length) {
           const selectedOption = this.menuOptions.find(
             (item) => item.value === res

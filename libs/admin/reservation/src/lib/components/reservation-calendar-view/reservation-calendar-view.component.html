@@ -114,7 +114,13 @@
               </div>
             </div>
           </div>
-          <div class="main-section" *ngIf="!isRoomsEmpty && roomTypes?.length">
+          <div
+            class="main-section"
+            *ngIf="
+              !isRoomsEmpty && roomTypes?.length && reservationsLoaded;
+              else content
+            "
+          >
             <ng-container>
               <ng-container
                 *ngFor="let roomType of roomTypes; let roomTypeIdx = index"
@@ -127,11 +133,7 @@
                     >
                       <div class="main-text">
                         {{
-                          getAvailability(
-                            dateIndex,
-                            'quantity',
-                            roomType.value
-                          )
+                          getAvailability(dateIndex, 'quantity', roomType.value)
                         }}
                       </div>
                       <div class="seconday-text">

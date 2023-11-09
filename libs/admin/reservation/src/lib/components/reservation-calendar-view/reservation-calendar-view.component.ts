@@ -63,6 +63,7 @@ export class ReservationCalendarViewComponent implements OnInit {
   isRoomsEmpty = false;
   roomsLoaded = false;
   viewReservationForm = false;
+  reservationsLoaded = false;
 
   reservationListData: RoomReservation[];
   $subscription = new Subscription();
@@ -125,6 +126,7 @@ export class ReservationCalendarViewComponent implements OnInit {
                   isBase: item.isBase,
                 })),
               }));
+            this.roomsLoaded = true;
             this.initReservationData();
           },
           (error) => {},
@@ -154,13 +156,12 @@ export class ReservationCalendarViewComponent implements OnInit {
               this.mapGridData(roomType);
             });
             this.getRates();
+            this.reservationsLoaded = true;
           },
           (error) => {
-            this.roomsLoaded = true;
             this.roomTypes.map((roomType) => (roomType.loading = false));
           },
           () => {
-            this.roomsLoaded = true;
             this.roomTypes.map((roomType) => (roomType.loading = false));
           }
         )

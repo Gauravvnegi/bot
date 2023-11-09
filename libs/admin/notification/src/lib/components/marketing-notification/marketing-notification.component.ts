@@ -74,8 +74,8 @@ export class MarketingNotificationComponent extends NotificationComponent
   getPackageList() {
     this.details.amenitiesDetails.paidPackages.forEach((packageData) => {
       this.packageList.push({
-        label: packageData.name,
-        value: packageData.id,
+        label: packageData?.name,
+        value: packageData?.packageId,
       } as Option);
     });
   }

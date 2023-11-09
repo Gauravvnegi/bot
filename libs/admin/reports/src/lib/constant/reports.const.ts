@@ -4,9 +4,15 @@ import {
   ReservationCreatedReport,
 } from '../models/activity-reports.models';
 import {
+  BusinessAnalysisReport,
   CompanyContributionsReport,
+  MarketSegmentReport,
   NoShowSummaryReport,
 } from '../models/analytics-reports.models';
+import {
+  DirectAgentBillingReport,
+  DirectCompanyBillingReport,
+} from '../models/direct-billing-reports.models';
 import { DiscountAllowanceReport } from '../models/discount-reports.models';
 import {
   DailyRevenueReport,
@@ -32,7 +38,6 @@ import {
   EmployeeWiseReservationReport,
   HousekeepingReport,
   IncomeSummaryReport,
-  MarketSegmentReport,
   NoShowReport,
   ReservationAdrReport,
   ReservationSummaryReport,
@@ -58,9 +63,15 @@ import {
   reservationCreatedReportCols,
 } from './activity-reports.const';
 import {
+  businessAnalysisReportCols,
   companyContributionsReportCols,
+  marketSegmentReportCols,
   noShowSummaryReportCols,
 } from './analytics-reports.const';
+import {
+  directAgentBillingReportsCols,
+  directCompanyBillingReportCols,
+} from './direct-billing-reports.const';
 import { discountAllowanceReportCols } from './discount-reports.const';
 import {
   dailyRevenueReportCols,
@@ -86,7 +97,6 @@ import {
   employeeWiseReservationReportCols,
   housekeepingReportCols,
   incomeSummaryReportCols,
-  marketSegmentReportCols,
   noShowReportCols,
   reservationAdrReportCols,
   reservationSummaryReportCols,
@@ -97,11 +107,8 @@ import {
   monthlyTaxReportCols,
   taxReportCols,
 } from './tax-reports.const';
-import {
-  directAgentBillingReportsCols,
-  directCompanyBillingReportCols,
-} from './direct-billing-reports.const';
-import { DirectAgentBillingReport, DirectCompanyBillingReport } from '../models/direct-billing-reports.models';
+import { MarketSourceReport } from '../models/scource-reports.models';
+import { marketSourceReportCols } from './source-reports.const';
 
 export const reportsConfig: ReportsConfig = {
   RESERVATION_REPORTS: {
@@ -141,10 +148,6 @@ export const reportsConfig: ReportsConfig = {
       {
         label: 'Reservation Summary',
         value: 'reservationSummaryReport',
-      },
-      {
-        label: 'Market Segment',
-        value: 'marketSegmentReport',
       },
       {
         label: 'Housekeeping',
@@ -266,6 +269,14 @@ export const reportsConfig: ReportsConfig = {
         label: 'No Show Summary',
         value: 'noShowSummaryReport',
       },
+      {
+        label: 'Business Analysis',
+        value: 'businessAnalysisReport',
+      },
+      {
+        label: 'Market Segment',
+        value: 'marketSegmentReport',
+      },
     ],
   },
   DISCOUNT_REPORTS: {
@@ -285,6 +296,14 @@ export const reportsConfig: ReportsConfig = {
       {
         label: 'Direct Company Billing',
         value: 'directCompanyBillingReport',
+      },
+    ],
+  },
+  SOURCE_REPORTS: {
+    menu: [
+      {
+        label: 'Market Source',
+        value: 'marketSource',
       },
     ],
   },
@@ -327,8 +346,10 @@ export const reportsModelMapping: Record<ReportsTypeValues, ClassType> = {
   companyContributionsReport: CompanyContributionsReport, //to be decided
   noShowSummaryReport: NoShowSummaryReport,
   mtdAndYtdReport: MtdAndYtdReport,
-  directAgentBillingReport: DirectAgentBillingReport, //to be decided
-  directCompanyBillingReport: DirectCompanyBillingReport, //to be decided
+  directAgentBillingReport: DirectAgentBillingReport,
+  directCompanyBillingReport: DirectCompanyBillingReport,
+  marketSource: MarketSourceReport, //to be decided
+  businessAnalysisReport: BusinessAnalysisReport, //to be decided
 };
 
 function getColsArray(colsData: ColsData): Cols[] {
@@ -375,8 +396,10 @@ export const reportsColumnMapping: Record<ReportsTypeValues, Cols[]> = {
   companyContributionsReport: getColsArray(companyContributionsReportCols),
   noShowSummaryReport: getColsArray(noShowSummaryReportCols), //to be decided
   mtdAndYtdReport: getColsArray(mtdAndYtdReportCols), //to be decided
-  directAgentBillingReport: getColsArray(directAgentBillingReportsCols), //to be decided
-  directCompanyBillingReport: getColsArray(directCompanyBillingReportCols), //to be decided
+  directAgentBillingReport: getColsArray(directAgentBillingReportsCols),
+  directCompanyBillingReport: getColsArray(directCompanyBillingReportCols), 
+  marketSource: getColsArray(marketSourceReportCols), 
+  businessAnalysisReport: getColsArray(businessAnalysisReportCols), 
 };
 
 export const reportFiltersMapping: Record<
@@ -417,6 +440,9 @@ export const reportFiltersMapping: Record<
   mtdAndYtdReport: ['fromDate', 'toDate'],
   directAgentBillingReport: ['fromDate', 'toDate'], //extra filter to be integrated
   directCompanyBillingReport: ['fromDate', 'toDate'],
+  marketSource: ['fromDate', 'toDate'],
+  businessAnalysisReport: ['fromDate', 'toDate'],
+
 };
 
 export const rowStylesMapping: Record<RowStylesKeys, string> = {

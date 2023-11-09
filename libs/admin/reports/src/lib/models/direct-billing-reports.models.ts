@@ -52,24 +52,23 @@ export class DirectCompanyBillingReport
     if (value instanceof Array) {
       this.records = value.map((item) => {
         return {
-          companyCode: undefined, // to be added in response
-          companyName: undefined, // to be added in response
-          bookingNo: undefined, // to be added in response
-          guestName: undefined, // to be added in response
-          roomType: undefined, // to be added in response
-          roomNo: undefined, // to be added in response
-          checkInDate: undefined, // to be added in response
-          checkOutDate: undefined, // to be added in response
-          totalNights: undefined, // to be added in response
-          pax: undefined, // to be added in response
-          totalPaidAmount: undefined, // to be added in response
-          postTaxAmount: undefined, // to be added in response
-          totalAmount: undefined, // to be added in response
-          totalDueAmount: undefined, // to be added in response
+          companyCode: item.guest.company.code,
+          companyName: item.guest.company.firstName,
+          bookingNo: item.reservationNumber,
+          guestName: `${item.guest.firstName} ${item.guest.lastName}`,
+          roomType: item.bookingItems[0].roomDetails.roomTypeLabel,
+          roomNo: item.bookingItems[0].roomDetails.roomNumber,
+          checkInDate: getFormattedDate(item.from),
+          checkOutDate: getFormattedDate(item.to),
+          totalNights: item.guest.totalNights,
+          pax: item.bookingItems[0].occupancyDetails.maxAdult,
+          totalPaidAmount: item.pricingDetails.totalPaidAmount,
+          postTaxAmount: item.pricingDetails.taxAndFees,
+          totalAmount: item.pricingDetails.totalAmount,
+          totalDueAmount: item.pricingDetails.totalDueAmount,
         };
       });
     }
     return this;
   }
 }
-

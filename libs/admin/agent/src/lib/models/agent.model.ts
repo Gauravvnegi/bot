@@ -48,7 +48,7 @@ export class AgentModel {
       status: form.status,
       marketSegment: form.marketSegment,
       businessSource: form.businessSource,
-      billingInstruction: form.billingInstruction,
+      billingInstructions: form.billingInstructions,
     };
 
     return data;
@@ -76,7 +76,7 @@ export class AgentModel {
       status: data.status,
       marketSegment: data.marketSegment,
       businessSource: data.businessSource,
-      billingInstruction: data.billingInstruction,
+      billingInstructions: data.billingInstructions,
     });
   }
 

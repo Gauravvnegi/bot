@@ -5,7 +5,7 @@ export type AdditionalFeature = {
   creditLimit?: number;
   marketSegment?: string;
   businessSource?: string;
-  billingInstruction?: string;
+  billingInstructions?: string;
 };
 
 export type CompanyResponseType = AdditionalFeature & {

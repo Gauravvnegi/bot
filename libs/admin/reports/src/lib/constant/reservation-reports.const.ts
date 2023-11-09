@@ -7,7 +7,6 @@ import {
   EmployeeWiseReservationReportData,
   HousekeepingReportData,
   IncomeSummaryReportData,
-  MarketSegmentReportData,
   NoShowReportData,
   ReservationAdrReportData,
   ReservationReportData,
@@ -276,54 +275,6 @@ export const reservationSummaryReportCols: ColsData<Omit<
   ReservationSummaryReportData,
   'id'
 >> = {};
-
-export const marketSegmentReportCols: ColsData<Omit<
-  MarketSegmentReportData,
-  'id'
->> = {
-  marketSegment: {
-    header: 'Market Segment',
-    isSortDisabled: true,
-  },
-  nights: {
-    header: 'Nights',
-    isSortDisabled: true,
-  },
-  occupancy: {
-    header: 'Occupancy',
-    isSortDisabled: true,
-  },
-
-  pax: {
-    header: 'Pax',
-    isSortDisabled: true,
-  },
-  roomRevenue: {
-    header: 'Room Revenue',
-    isSortDisabled: true,
-  },
-  revenue: {
-    header: 'Revenue',
-    isSortDisabled: true,
-  },
-  arrOrAgr: {
-    header: 'ARR/AGR',
-    isSortDisabled: true,
-  },
-  arp: {
-    header: 'ARP',
-    isSortDisabled: true,
-  },
-};
-
-export const marketSegmentReportRows = [
-         { name: 'FIT', label: 'FIT' },
-         { name: 'Corporate FIT', label: 'Corporate FIT' },
-         { name: 'MICE', label: 'MICE' },
-         { name: 'Budget', label: 'Budget' },
-         { name: 'Aiosell BE', label: 'Aiosell BE' },
-         { name: 'subTotal', label: 'subTotal' },
-       ];
 
 export const housekeepingReportCols: ColsData<Omit<
   HousekeepingReportData,

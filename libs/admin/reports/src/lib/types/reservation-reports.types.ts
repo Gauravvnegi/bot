@@ -84,41 +84,8 @@ export type IncomeSummaryReportData = {
 
 export type ReservationSummaryReportData = {};
 
-export type MarketSegmentReportData = {
-  marketSegment: string;
-  nights: number;
-  occupancy: number;
-  pax: number;
-  roomRevenue: number;
-  revenue: number;
-  arrOrAgr: number;
-  arp: number;
-};
 
-export type MarketSegmentReportResponse = OccupancyReport;
 
-type OccupancyData = {
-  nights: number;
-  occupancyPercent: number;
-  pax: number;
-  roomRevenue: number;
-  revenuePercent: number;
-  arr: number;
-  arp: number;
-};
-
-type OccupancyDataMap = {
-  [key: string]: OccupancyData;
-};
-
-type OccupancyReport = {
-  FIT: OccupancyData;
-  'Corporate FIT': OccupancyData;
-  MICE: OccupancyData;
-  Budget: OccupancyData;
-  'Aiosell BE': OccupancyData;
-  subTotal: OccupancyData;
-};
 
 export type HousekeepingReportData = {
   roomNo: string;

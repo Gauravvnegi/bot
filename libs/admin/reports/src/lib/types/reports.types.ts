@@ -21,6 +21,7 @@ export type ReportModules = Extract<
   | 'ANALYTICS_REPORTS'
   | 'DISCOUNT_REPORTS'
   | 'DIRECT_BILLING_REPORTS'
+  | 'SOURCE_REPORTS'
 >;
 
 // export enum ReportModules {
@@ -42,7 +43,6 @@ export type ReportsType = {
     | 'reservationAdrReport'
     | 'incomeSummaryReport'
     | 'reservationSummaryReport'
-    | 'marketSegmentReport'
     | 'housekeepingReport';
   MANAGER_REPORTS: 'managerFlashReport';
   OCCUPANCY_REPORTS: 'historyAndForecastReport';
@@ -60,11 +60,16 @@ export type ReportsType = {
     | 'guestTypeReport'
     | 'guestLedger';
   ACTIVITY_REPORTS: 'reservationCreatedReport' | 'reservationActivityReport';
-  ANALYTICS_REPORTS: 'companyContributionsReport' | 'noShowSummaryReport';
+  ANALYTICS_REPORTS:
+    | 'companyContributionsReport'
+    | 'noShowSummaryReport'
+    | 'businessAnalysisReport'
+    | 'marketSegmentReport';
   DISCOUNT_REPORTS: 'discountAllowance';
   DIRECT_BILLING_REPORTS:
     | 'directAgentBillingReport'
     | 'directCompanyBillingReport';
+  SOURCE_REPORTS: 'marketSource';
 };
 
 export type ReportsTypeValues = ReportsType[keyof ReportsType];

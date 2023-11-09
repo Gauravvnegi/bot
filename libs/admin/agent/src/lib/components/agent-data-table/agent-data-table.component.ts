@@ -45,7 +45,7 @@ export class AgentDataTableComponent extends BaseDatatableComponent
   navRoutes: NavRouteOption[] = [
     {
       label: 'Members',
-      link: './'
+      link: './',
     },
   ];
 
@@ -213,6 +213,8 @@ export class AgentDataTableComponent extends BaseDatatableComponent
           type: 'AGENT',
           entityId: this.entityId,
           entityState: this.selectedTab,
+          pagination: true,
+          limit: this.totalRecords,
         },
       ]),
     };

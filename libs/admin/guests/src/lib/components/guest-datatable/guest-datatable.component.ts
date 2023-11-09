@@ -49,7 +49,7 @@ export class GuestDatatableComponent extends BaseDatatableComponent
   navRoutes: NavRouteOption[] = [
     {
       label: 'Members',
-      link: './'
+      link: './',
     },
   ];
 
@@ -191,6 +191,8 @@ export class GuestDatatableComponent extends BaseDatatableComponent
           order: 'DESC',
           type: 'GUEST',
           entityType: this.selectedTab,
+          pagination: true,
+          limit: this.totalRecords,
         },
         ...this.getSelectedQuickReplyFilters(),
         ...this.selectedRows.map((item) => ({ ids: item.booking.bookingId })),

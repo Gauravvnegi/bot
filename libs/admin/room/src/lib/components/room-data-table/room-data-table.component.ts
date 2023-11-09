@@ -371,7 +371,11 @@ export class RoomDataTableComponent extends BaseDatatableComponent
     const config: QueryConfig = {
       params: this.adminUtilityService.makeQueryParams([
         ...this.selectedRows.map((item) => ({ ids: item.id })),
-        { type: this.selectedTab === TableValue.room ? 'ROOM' : 'ROOM_TYPE' },
+        {
+          type: this.selectedTab === TableValue.room ? 'ROOM' : 'ROOM_TYPE',
+          pagination: true,
+          limit: this.totalRecords,
+        },
       ]),
     };
     this.$subscription.add(

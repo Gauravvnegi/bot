@@ -47,10 +47,10 @@ export class CompanyDataTableComponent extends BaseDatatableComponent
   sortFilterList = SortFilterList;
 
   $subscription = new Subscription();
-   navRoutes: NavRouteOption[] = [
+  navRoutes: NavRouteOption[] = [
     {
       label: 'Members',
-      link: './'
+      link: './',
     },
   ];
 
@@ -226,6 +226,8 @@ export class CompanyDataTableComponent extends BaseDatatableComponent
           type: 'COMPANY',
           entityId: this.entityId,
           entityState: this.selectedTab,
+          pagination: true,
+          limit: this.totalRecords,
         },
       ]),
     };

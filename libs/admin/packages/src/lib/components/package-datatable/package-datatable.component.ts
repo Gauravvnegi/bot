@@ -144,7 +144,11 @@ export class PackageDataTableComponent extends BaseDatatableComponent
         ...this.globalQueries,
         { order: 'DESC' },
         ...this.selectedRows.map((item) => ({ ids: item.id })),
-        { type: LibraryItem.package },
+        {
+          type: LibraryItem.package,
+          pagination: true,
+          limit: this.totalRecords,
+        },
       ]),
     };
 

@@ -160,7 +160,7 @@ export class OffersDataTableComponent extends BaseDatatableComponent
     const config: QueryConfig = {
       params: this.adminUtilityService.makeQueryParams([
         ...this.selectedRows.map((item) => ({ ids: item.id })),
-        { type: LibraryItem.offer },
+        { type: LibraryItem.offer, pagination: true, limit: this.totalRecords },
       ]),
     };
     this.subscription$.add(

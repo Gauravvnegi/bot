@@ -38,6 +38,17 @@ export class CategoryComponent implements OnInit {
   servicesService: any;
   inputControl: AbstractControl;
   _entityId: string;
+  _selectedCategory: Option;
+
+  @Input() set selectedCategory(value: Option) {
+    if (value) {
+      this._selectedCategory = value;
+      this.categories = [...this.categories, this._selectedCategory];
+      this.inputControl.patchValue(this._selectedCategory.value, {
+        emitEvent: false,
+      });
+    }
+  }
 
   constructor(
     private globalFilterService: GlobalFilterService,
@@ -49,7 +60,6 @@ export class CategoryComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-
     this.inputControl = this.controlContainer.control.get(this.controlName);
   }
 

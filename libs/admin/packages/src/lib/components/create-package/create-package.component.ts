@@ -62,6 +62,7 @@ export class CreatePackageComponent implements OnInit {
   visibilities: Option[] = [];
 
   selectedServicePrice: Record<string, number> = {};
+  selectedPackage: Option;
 
   constructor(
     private fb: FormBuilder,
@@ -133,7 +134,10 @@ export class CreatePackageComponent implements OnInit {
                 }) ?? [];
 
               this.code = packageCode;
-
+              this.selectedPackage = {
+                label: res?.categoryName,
+                value: res?.parentId,
+              };
               currentServices.forEach((item) => {
                 if (
                   this.services.findIndex(

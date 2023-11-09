@@ -20,6 +20,8 @@ export type PackageResponse = {
   hasChild: boolean;
   parentId: string;
   category: string;
+  categoryName: string;
+
   // category: string;
   discountType: string;
   discountValue: number;

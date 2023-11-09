@@ -74,6 +74,8 @@ export class CreateServiceComponent implements OnInit {
   hotelId: string;
   paramData: any;
 
+  selectedService: Option;
+
   constructor(
     private fb: FormBuilder,
     private globalFilterService: GlobalFilterService,
@@ -183,7 +185,10 @@ export class CreateServiceComponent implements OnInit {
               taxIds: taxes.map((item) => item.id),
             });
             this.useForm.get('enableVisibility').setValue(enableVisibility);
-
+            this.selectedService = {
+              label: res?.categoryName,
+              value: res?.parentId,
+            };
             this.code = res.packageCode;
           }, this.handleError)
       );

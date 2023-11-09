@@ -118,7 +118,7 @@
             class="main-section"
             *ngIf="
               !isRoomsEmpty && roomTypes?.length && reservationsLoaded;
-              else content
+              else loader
             "
           >
             <ng-container>

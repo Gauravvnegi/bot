@@ -647,6 +647,7 @@ export class Package implements IDeserializable {
   remarks: string;
   unit: number;
   currency: number;
+  packageId: string;
 
   deserialize(input: any) {
     Object.assign(
@@ -663,7 +664,8 @@ export class Package implements IDeserializable {
       set({}, 'unit', get(input, ['unit'])),
       set({}, 'currency', get(input, ['currency'])),
       set({}, 'status', get(input, ['statusMessage', 'state'])),
-      set({}, 'remarks', get(input, ['statusMessage', 'remarks']))
+      set({}, 'remarks', get(input, ['statusMessage', 'remarks'])),
+      set({}, 'packageId', get(input, ['packageId']))
     );
     if (input.imageUrl && input.imageUrl.length)
       this.imgUrl = input.imageUrl[0].url ?? '';

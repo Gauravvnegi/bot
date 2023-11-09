@@ -125,9 +125,10 @@ export class QuickSelectComponent extends FormComponent implements OnInit {
       // Get items again when selected option is patched.
       this.menuOptions = [...this.menuOptions, selectedOption];
       this.removeDuplicate([...this.menuOptions]);
-      this.inputControl.patchValue(selectedOption?.value, {
-        emitEvent: false,
-      });
+      if (this.inputControl)
+        this.inputControl.patchValue(selectedOption?.value, {
+          emitEvent: false,
+        });
     }
     if (
       changes['reinitialize']?.previousValue !== undefined &&
@@ -249,8 +250,8 @@ export class QuickSelectComponent extends FormComponent implements OnInit {
                     : []),
                 ]);
             // To be improved later.
-
-            this.inputControl.setValue(this.inputControl.value);
+            if (this.inputControl)
+              this.inputControl.setValue(this.inputControl?.value);
             this.noMoreData = data.length < this.limit;
           },
           (error) => {},
@@ -338,7 +339,8 @@ export class QuickSelectComponent extends FormComponent implements OnInit {
                   : res[model.values?.label],
                 value: res[model.values.value],
               });
-              this.inputControl.setValue(res[model.values.value]);
+              if (this.inputControl)
+                this.inputControl.setValue(res[model.values.value]);
               this.snackbarService.openSnackBarAsText(
                 this.label + ' created successfully',
                 '',
@@ -385,14 +387,15 @@ export class QuickSelectComponent extends FormComponent implements OnInit {
    * @function listenControl will emit the selected option to parent
    */
   listenControl() {
-    this.inputControl.valueChanges.subscribe((res) => {
-      if (res?.length && this.menuOptions.length) {
-        const selectedOption = this.menuOptions.find(
-          (item) => item.value === res
-        );
-        if (selectedOption) this.clickedOption.emit(selectedOption);
-      }
-    });
+    if (this.inputControl)
+      this.inputControl.valueChanges.subscribe((res) => {
+        if (res?.length && this.menuOptions.length) {
+          const selectedOption = this.menuOptions.find(
+            (item) => item.value === res
+          );
+          if (selectedOption) this.clickedOption.emit(selectedOption);
+        }
+      });
   }
 
   ngOnDestroy() {

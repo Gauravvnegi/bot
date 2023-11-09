@@ -16,6 +16,7 @@
     margin-bottom: 2rem;
     .card {
       cursor: pointer;
+      position: relative;
       overflow-y: hidden;
       overflow-x: hidden;
       box-shadow: rgb(82 82 82 / 10%) 1px -3px 0px -3px,
@@ -27,6 +28,7 @@
       margin: 0 4rem 2rem 4rem;
       &__content {
         pointer-events: none;
+        zoom: 0.3;
       }
     }
     .template-name {
@@ -35,6 +37,18 @@
     }
   }
 }
+
 .footer {
   @include flex-justify-center;
+}
+
+.loader {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  top: 0;
+  height: 100%;
+  width: 100%;
+  background: rgb(221 224 227 / 87%);
 }

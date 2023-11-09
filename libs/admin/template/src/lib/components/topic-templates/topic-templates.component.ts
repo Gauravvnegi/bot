@@ -26,6 +26,7 @@ export class TopicTemplatesComponent implements OnInit, OnDestroy {
   loading: boolean;
   offset = 0;
   private $subscription = new Subscription();
+  isTemplateLoaded: boolean = false;
 
   constructor(
     private adminUtilityService: AdminUtilityService,
@@ -34,12 +35,15 @@ export class TopicTemplatesComponent implements OnInit, OnDestroy {
     protected translateService: TranslateService
   ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.onTemplateLoad();
+  }
 
   /**
    * @function loadData To load data for the table after any event.
    */
   loadData() {
+    this.isTemplateLoaded = false;
     const config = {
       queryObj: this.adminUtilityService.makeQueryParams([
         {
@@ -53,15 +57,20 @@ export class TopicTemplatesComponent implements OnInit, OnDestroy {
     this.$subscription.add(
       this.templateService
         .getTemplateListByTopicId(this.entityId, this.template.topicId, config)
-        .subscribe(
-          (response) => {
-            this.template.templates = [
-              ...this.template.templates,
-              ...response.records,
-            ];
-          }
-        )
+        .subscribe((response) => {
+          this.template.templates = [
+            ...this.template.templates,
+            ...response.records,
+          ];
+          this.onTemplateLoad();
+        })
     );
+  }
+
+  onTemplateLoad() {
+    setTimeout(() => {
+      this.isTemplateLoaded = true;
+    }, 1000);
   }
 
   /**

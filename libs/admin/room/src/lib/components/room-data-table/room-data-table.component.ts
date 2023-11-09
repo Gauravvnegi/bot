@@ -222,7 +222,7 @@ export class RoomDataTableComponent extends BaseDatatableComponent
       this.formService.roomStatus.next(status);
       this.routesConfigService.navigate({
         additionalPath: routes.addSingleRoom,
-        queryParams: { id: id },
+        queryParams: { id: id, data: btoa(JSON.stringify({ status: status })) },
       });
       return;
     }

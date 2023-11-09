@@ -7,6 +7,7 @@ import { AdminHousekeepingRoutingModule } from './admin-housekeeping.routing.mod
 import { DialogModule } from 'primeng/dialog';
 import { RoomService } from 'libs/admin/room/src/lib/services/room.service';
 import { AdminChannelManagerModule } from '@hospitality-bot/admin/channel-manager';
+import { FormService } from 'libs/admin/room/src/lib/services/form.service';
 
 @NgModule({
   imports: [
@@ -20,6 +21,6 @@ import { AdminChannelManagerModule } from '@hospitality-bot/admin/channel-manage
     AdminChannelManagerModule,
   ],
   declarations: [...AdminHousekeepingRoutingModule.components],
-  providers: [RoomService],
+  providers: [RoomService, FormService],
 })
 export class AdminHousekeepingModule {}

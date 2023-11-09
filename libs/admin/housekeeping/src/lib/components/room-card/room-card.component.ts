@@ -24,7 +24,7 @@ export class RoomCardComponent implements OnInit {
     private roomService: RoomService,
     private snackbarService: SnackBarService,
     private housekeepingService: HousekeepingService,
-    private routesConfigService: RoutesConfigService
+    private routesConfigService: RoutesConfigService,
   ) {}
 
   ngOnInit(): void {}
@@ -41,7 +41,7 @@ export class RoomCardComponent implements OnInit {
       this.routesConfigService.navigate({
         subModuleName: ModuleNames.ROOM,
         additionalPath: `${routes.addRoom}/single`,
-        queryParams: { id: id },
+        queryParams: { id: id, data: btoa(JSON.stringify({ status: status })) },
       });
       return;
     }

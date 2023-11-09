@@ -126,7 +126,6 @@ export class ReservationCalendarViewComponent implements OnInit {
                   isBase: item.isBase,
                 })),
               }));
-            this.roomsLoaded = true;
             this.initReservationData();
           },
           (error) => {},
@@ -159,9 +158,11 @@ export class ReservationCalendarViewComponent implements OnInit {
             this.reservationsLoaded = true;
           },
           (error) => {
+            this.roomsLoaded = true;
             this.roomTypes.map((roomType) => (roomType.loading = false));
           },
           () => {
+            this.roomsLoaded = true;
             this.roomTypes.map((roomType) => (roomType.loading = false));
           }
         )

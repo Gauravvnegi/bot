@@ -114,13 +114,7 @@
               </div>
             </div>
           </div>
-          <div
-            class="main-section"
-            *ngIf="
-              !isRoomsEmpty && roomTypes?.length && reservationsLoaded;
-              else loader
-            "
-          >
+          <div class="main-section" *ngIf="!isRoomsEmpty && roomTypes?.length">
             <ng-container>
               <ng-container
                 *ngFor="let roomType of roomTypes; let roomTypeIdx = index"
@@ -204,7 +198,7 @@
       [isLoading]="loading"
       [content]="{
         description: allRoomTypes?.length
-          ? 'Please select at least one rooms'
+          ? 'Please select at least one room'
           : 'There is no room available',
         imageSrc: 'assets/images/empty-table-service.png'
       }"

@@ -57,6 +57,7 @@ import {
 import { Services } from '../../models/amenities.model';
 import { convertToTitleCase } from 'libs/admin/shared/src/lib/utils/valueFormatter';
 import { FormService } from '../../services/form.service';
+import { debounceTime } from 'rxjs/operators';
 
 @Component({
   selector: 'hospitality-bot-add-room',
@@ -114,7 +115,8 @@ export class AddRoomComponent implements OnInit, OnDestroy {
     private modalService: ModalService,
     private libraryService: LibraryService,
     private formService: FormService,
-    private routesConfigService: RoutesConfigService
+    private routesConfigService: RoutesConfigService,
+    private activatedRoute: ActivatedRoute
   ) {
     this.submissionType = this.route.snapshot.paramMap.get(
       'type'
@@ -203,18 +205,21 @@ export class AddRoomComponent implements OnInit, OnDestroy {
   registerFormListener() {
     this.registerRoomTypeChangesListener();
     this.registerRoomStateChangeListener();
-    this.listenForRoomStatusChange();
+    this.listenForRouteData();
   }
 
-  listenForRoomStatusChange() {
-    this.formService.roomStatus.subscribe((res) => {
-      if (res) {
-        this.statusQuoFormControls.status.patchValue(res);
-        this.isStatusUpdated = true;
-        const mainLayout = document.getElementById('main-layout');
-        mainLayout.scrollTo(0, mainLayout.scrollHeight);
-      }
-    });
+  listenForRouteData() {
+    this.activatedRoute.queryParams
+      .pipe(debounceTime(100))
+      .subscribe((params) => {
+        if (params?.data) {
+          const routeData = JSON.parse(atob(params?.data));
+          this.statusQuoFormControls.status.patchValue(routeData?.status);
+          this.isStatusUpdated = true;
+          const mainLayout = document.getElementById('main-layout');
+          mainLayout.scrollTo(0, mainLayout.scrollHeight);
+        }
+      });
   }
 
   registerRoomStateChangeListener() {

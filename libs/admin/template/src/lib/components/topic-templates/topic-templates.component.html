@@ -5,6 +5,9 @@
   <div class="topic-cards" *ngFor="let t of template.templates">
     <div class="card" (click)="selectTemplate(t.htmlTemplate)">
       <div [innerHTML]="t.htmlTemplate" class="card__content"></div>
+      <div class="loader" *ngIf="!isTemplateLoaded">
+        <hospitality-bot-loader-bounce></hospitality-bot-loader-bounce>
+      </div>
     </div>
     <div class="template-name">
       {{ t.name }}

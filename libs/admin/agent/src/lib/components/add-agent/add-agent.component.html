@@ -123,17 +123,17 @@
       }"
     ></hospitality-bot-prefix-field>
 
-    <hospitality-bot-select
+    <hospitality-bot-input
       *ngIf="!isSideBar"
       class="half-width"
       label="Billing Instruction"
-      controlName="billingInstruction"
-      [options]="billingInstruction"
+      controlName="billingInstructions"
       [props]="{
         placeholder: 'Select'
       }"
+      maxLength="60"
     >
-    </hospitality-bot-select>
+    </hospitality-bot-input>
   </div>
 </div>
 

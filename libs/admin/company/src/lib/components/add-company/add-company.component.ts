@@ -23,7 +23,6 @@ import { companyRoutes } from '../../constants/route';
 import { CompanyModel } from '../../models/company.model';
 import { CompanyResponseType } from '../../types/response';
 import {
-  billingInstruction,
   businessSource,
   companyDiscount,
   discountTypes,
@@ -38,7 +37,6 @@ import { FormService } from 'libs/admin/members/src/lib/services/form.service';
 export class AddCompanyComponent implements OnInit {
   readonly discountType = discountTypes;
   businessSource = businessSource;
-  billingInstruction = billingInstruction;
   marketSegment: Option[] = [];
 
   entityId: string;
@@ -100,7 +98,7 @@ export class AddCompanyComponent implements OnInit {
       creditLimit: [''],
       marketSegment: [''],
       businessSource: [''],
-      billingInstruction: [''],
+      billingInstructions: ['', [Validators.maxLength(60)]],
     });
     this.loadMarketSegment();
     if (this.companyId) this.getCompanyById();
@@ -153,11 +151,7 @@ export class AddCompanyComponent implements OnInit {
     return false;
   }
 
-  extraFields = [
-    'businessSource',
-    'taxId',
-    'marketSegment',
-  ];
+  extraFields = ['businessSource', 'taxId', 'marketSegment'];
 
   listenChanges() {
     const discountControl = this.companyForm.get('discountType');

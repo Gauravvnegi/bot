@@ -20,14 +20,3 @@ export const businessSource: Option[] = [
     value: 'bs2',
   },
 ];
-
-export const billingInstruction: Option[] = [
-  {
-    label: 'Billing Instruction 1',
-    value: 'bi1',
-  },
-  {
-    label: 'Billing Instruction 2',
-    value: 'bi2',
-  },
-];

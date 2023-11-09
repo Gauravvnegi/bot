@@ -44,7 +44,7 @@ export class CompanyModel {
       creditLimit: form.creditLimit,
       marketSegment: form.marketSegment,
       businessSource: form.businessSource,
-      billingInstruction: form.billingInstruction,
+      billingInstructions: form.billingInstructions,
     };
     return data;
   }
@@ -73,7 +73,7 @@ export class CompanyModel {
       creditLimit: data?.creditLimit,
       marketSegment: data?.marketSegment,
       businessSource: data?.businessSource,
-      billingInstruction: data?.billingInstruction,
+      billingInstructions: data?.billingInstructions,
     });
   }
 

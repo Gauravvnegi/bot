@@ -36,7 +36,6 @@ import { AgentModel } from '../../models/agent.model';
 import { AgentTableResponse } from '../../types/response';
 import { commissionType } from '../../types/agent';
 import {
-  billingInstruction,
   businessSource,
 } from 'libs/admin/company/src/lib/constants/company';
 import { Location } from '@angular/common';
@@ -70,7 +69,6 @@ export class AddAgentComponent implements OnInit {
     { label: 'Flat', value: commissionType.COMMISSION },
   ];
   businessSource = businessSource;
-  billingInstruction = billingInstruction;
   marketSegment: Option[] = [];
 
   //Sidebar configuration
@@ -127,7 +125,7 @@ export class AddAgentComponent implements OnInit {
       commission: ['', [Validators.required, Validators.min(0)]],
       marketSegment: [''],
       businessSource: [''],
-      billingInstruction: [''],
+      billingInstructions: [''],
     });
     this.loadMarketSegment();
     this.listenChanges();

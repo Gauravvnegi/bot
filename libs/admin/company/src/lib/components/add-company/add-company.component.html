@@ -151,17 +151,17 @@
     >
     </hospitality-bot-select>
 
-    <hospitality-bot-select
-      *ngIf="isVisibleOnSideView('billingInstruction')"
+    <hospitality-bot-input
+      *ngIf="isVisibleOnSideView('billingInstructions')"
       class="half-width"
       label="Billing Instruction"
-      controlName="billingInstruction"
-      [options]="billingInstruction"
+      controlName="billingInstructions"
+      maxLength="60"
       [props]="{
-        placeholder: 'Select'
+        placeholder: 'Enter'
       }"
     >
-    </hospitality-bot-select>
+    </hospitality-bot-input>
   </div>
 </div>
 

@@ -36,12 +36,14 @@ export class CreateCategoryComponent implements OnInit {
   }
 
   handleSubmit(value: CategoryFormValue) {
+    const imageUrls = [{ isFeatured: true, url: value.imageUrl }];
     this.$subscription.add(
       this.packagesService
         .createCategory(this.entityId, {
           ...value,
           source: 1,
           type: 'PACKAGE_CATEGORY',
+          imageUrl: imageUrls,
         })
         .subscribe(
           () => {

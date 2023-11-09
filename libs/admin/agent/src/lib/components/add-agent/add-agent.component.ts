@@ -325,7 +325,6 @@ export class AddAgentComponent implements OnInit {
       '',
       { panelClass: 'success' }
     );
-    this.location.back();
   };
 
   /**

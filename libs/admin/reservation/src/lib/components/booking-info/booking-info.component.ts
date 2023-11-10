@@ -67,6 +67,7 @@ export class BookingInfoComponent implements OnInit {
   editMode: boolean = false;
   // agentSource = false;
 
+  today = new Date();
   date = new Date();
   entityId: string;
   startMinDate = new Date();
@@ -115,6 +116,21 @@ export class BookingInfoComponent implements OnInit {
    * Set default to and from dates.
    */
   initDefaultDates() {
+    if (!this.reservationId) {
+      this.startMinDate = this.defaultDate
+        ? new Date(this.defaultDate)
+        : new Date();
+      this.endMinDate.setDate(this.startMinDate.getDate() + 1);
+    } else {
+      this.startMinDate = new Date(this.reservationInfoControls.from.value);
+      this.endMinDate = new Date(this.reservationInfoControls.to.value);
+    }
+
+    this.minToDate.setDate(this.endMinDate.getDate());
+
+    this.fromDateValue = this.startMinDate;
+    this.toDateValue = this.endMinDate;
+
     if (this.bookingType === EntitySubType.ROOM_TYPE)
       this.maxDate.setDate(this.startMinDate.getDate() + 365);
 
@@ -122,21 +138,28 @@ export class BookingInfoComponent implements OnInit {
     if (this.bookingType === EntitySubType.VENUE)
       this.maxDate = moment().add(24, 'hours').toDate();
 
-    if (!this.reservationId) {
-      this.startMinDate = this.defaultDate
-        ? new Date(this.defaultDate)
-        : new Date();
-      this.endMinDate.setDate(this.startMinDate.getDate() + 1);
-      this.maxDate.setDate(this.endMinDate.getDate() - 1);
-    } else {
-      this.startMinDate = new Date(this.reservationInfoControls.from.value);
-      this.endMinDate = new Date(this.reservationInfoControls.to.value);
-    }
-    this.fromDateValue = this.startMinDate;
-    this.toDateValue = this.endMinDate;
     // Reservation dates should be within 1 year time.
     this.endMinDate.setTime(this.endMinDate.getTime() - 5 * 60 * 1000);
   }
+
+  //   /**
+  //  * Set default to and from dates.
+  //  */
+  //   initDefaultDates() {
+  //     this.endMinDate.setDate(this.startMinDate.getDate() + 1);
+  //     this.maxDate.setDate(this.endMinDate.getDate() - 1);
+
+  //     this.fromDateValue = this.startMinDate;
+  //     this.toDateValue = this.endMinDate;
+  //     // Reservation dates should be within 1 year time.
+  //     if (this.bookingType === EntitySubType.ROOM_TYPE)
+  //       this.maxDate.setDate(this.startMinDate.getDate() + 365);
+
+  //     // Venue only valid till 24 hours later.
+  //     if (this.bookingType === EntitySubType.VENUE)
+  //       this.maxDate = moment().add(24, 'hours').toDate();
+  //     this.endMinDate.setTime(this.endMinDate.getTime() - 5 * 60 * 1000);
+  //   }
 
   /**
    * Listen for date changes in ROOM_TYPE and outlets.

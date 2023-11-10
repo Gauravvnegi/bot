@@ -118,7 +118,7 @@
         <hospitality-bot-button
           (click)="handleBooking()"
           label="{{ this.reservationId ? 'Update' : 'Confirm' }} Reservation"
-          [disabled]="controlContainer.control.invalid || disabledForm"
+          [disabled]="disabledForm"
           [isLoading]="isBooking"
         ></hospitality-bot-button>
       </div>

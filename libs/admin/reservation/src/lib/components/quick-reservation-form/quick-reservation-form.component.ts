@@ -97,8 +97,6 @@ export class QuickReservationFormComponent implements OnInit {
   @ViewChild('sidebarSlide', { read: ViewContainerRef })
   sidebarSlide: ViewContainerRef;
 
-  fromDateValue = new Date();
-  toDateValue = new Date();
   @Input() set isNewBooking(value: boolean) {
     if (value === true) {
       this.isDataLoaded = true;
@@ -132,7 +130,6 @@ export class QuickReservationFormComponent implements OnInit {
 
   ngOnInit(): void {
     this.listenForGlobalFilters();
-    this.initDefaultDate();
   }
 
   initDetails() {
@@ -148,17 +145,6 @@ export class QuickReservationFormComponent implements OnInit {
       });
       this.setRoomInfo(this.defaultRoomType);
     }
-  }
-
-  initDefaultDate() {
-    const fromDate = this.date ? new Date(this.date) : new Date(); // Convert epoch to milliseconds
-    const toDate = new Date(fromDate);
-    toDate.setDate(fromDate.getDate() + 1); // Add 1 day
-
-    this.inputControls.reservationInformation.patchValue({
-      from: fromDate.getTime(),
-      to: toDate.getTime(),
-    });
   }
 
   listenForDateChanges() {

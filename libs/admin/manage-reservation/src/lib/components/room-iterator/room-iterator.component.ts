@@ -161,7 +161,8 @@ export class RoomIteratorComponent extends IteratorComponent
   }
 
   listenForRoomChanges(index) {
-    let roomCount = this.roomControls[index].get('roomCount').value ?? 0;
+    let roomCount =
+      parseInt(this.roomControls[index].get('roomCount').value) ?? 0;
     this.roomControls[index]
       .get('roomNumbers')
       .valueChanges.subscribe((res) => {
@@ -173,10 +174,11 @@ export class RoomIteratorComponent extends IteratorComponent
       });
     this.roomControls[index].get('roomCount').valueChanges.subscribe((res) => {
       if (res) {
-        let currentRoomCount = res ? res : 1;
+        let currentRoomCount = res ? parseInt(res) : 1;
         let previousRoomCount = roomCount;
-        let previousAdultCount = this.roomControls[index].get('adultCount')
-          .value;
+        let previousAdultCount = parseInt(
+          this.roomControls[index].get('adultCount').value
+        );
 
         // Update roomCount
         roomCount = currentRoomCount;

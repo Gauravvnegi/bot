@@ -124,8 +124,16 @@ export class BookingSummaryComponent implements OnInit {
   }
 
   handleBooking(): void {
+    if (this.controlContainer.control.invalid && !this.reservationId) {
+      this.controlContainer.control.markAllAsTouched();
+      this.snackbarService.openSnackBarAsText(
+        'Invalid form: Please fix errors'
+      );
+      return;
+    }
     this.isBooking = true;
     let data: any;
+
     const id =
       this.bookingType === EntitySubType.ROOM_TYPE
         ? this.entityId

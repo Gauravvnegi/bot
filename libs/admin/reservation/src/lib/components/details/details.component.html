@@ -531,9 +531,8 @@
           <div *ngIf="channels.length > 0">
             <p class="contact">Contact Guest</p>
             <div class="right-bottom-icons">
-              <ng-container *ngFor="let channel of channels">
+              <ng-container *ngFor="let channel of getSortedChannels()">
                 <div
-                  *ngIf="channel.isView && getIconUrl(channel)"
                   class="social-icons"
                   (click)="openSendNotification(channel.name)"
                 >

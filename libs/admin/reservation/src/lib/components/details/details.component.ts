@@ -963,6 +963,16 @@ export class DetailsComponent implements OnInit, OnDestroy {
     return null;
   }
 
+  getSortedChannels() {
+    return this.channels
+      .filter((channel) => channel.isView && this.getIconUrl(channel))
+      .sort((a, b) => {
+        const labelA = a.name.split('_')[0].toLowerCase();
+        const labelB = b.name.split('_')[0].toLowerCase();
+        return labelA.localeCompare(labelB);
+      });
+  }
+
   checkForTransactionFeedbackSubscribed() {
     return this.subscriptionService.checkModuleSubscription(
       ModuleNames.FEEDBACK_TRANSACTIONAL

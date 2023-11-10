@@ -246,9 +246,7 @@ export class BookingInfoComponent implements OnInit {
       if (res) {
         if (
           this.configData?.source &&
-          !this.configData?.source.some(
-            (item) => item.value === sourceNameControl.value
-          )
+          !this.configData?.source.some((item) => item.value === res)
         ) {
           this.configData.source.push({ label: res, value: res });
         }
@@ -261,11 +259,12 @@ export class BookingInfoComponent implements OnInit {
       this.formService.sourceData.subscribe((res) => {
         if (res && this.configData) {
           this.editMode = true;
-          this.selectedAgent = {
-            label: `${res?.agent?.firstName} ${res?.agent?.lastName}`,
-            value: res?.agent?.id,
-            ...res?.agent,
-          };
+          if (res.agent)
+            this.selectedAgent = {
+              label: `${res?.agent?.firstName} ${res?.agent?.lastName}`,
+              value: res?.agent?.id,
+              ...res?.agent,
+            };
           marketSegmentControl.patchValue(res.marketSegment);
           if (res.source === 'OTA') {
             otaSourceNameControl.setValue(res.sourceName);
@@ -313,7 +312,7 @@ export class BookingInfoComponent implements OnInit {
         Validators.required,
         Validators.maxLength(60),
       ]);
-      agentSourceNameControl.markAsUntouched();
+      sourceNameControl.markAsUntouched();
       this.updateValueAndValidity(agentSourceNameControl);
       this.updateValueAndValidity(otaSourceNameControl);
     }

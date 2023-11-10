@@ -253,21 +253,27 @@ export class RoomIteratorComponent extends IteratorComponent
         isBase: item.isBase,
       }));
       // Patch the selected room number if available.
+
       this.roomControls[index].patchValue(
         {
           ratePlanOptions: ratePlanOptions,
-          roomNumberOptions: this.selectedRoomNumber?.length
-            ? [
-                {
-                  label: this.selectedRoomNumber,
-                  value: this.selectedRoomNumber,
-                },
-                ...this.roomTypes[index].rooms,
-              ]
-            : this.roomTypes[index].rooms,
+          roomNumberOptions:
+            this.selectedRoomNumber?.length &&
+            !this.roomTypes[index].rooms.some(
+              (room) => room?.value === this.selectedRoomNumber
+            )
+              ? [
+                  {
+                    label: this.selectedRoomNumber,
+                    value: this.selectedRoomNumber,
+                  },
+                  ...this.roomTypes[index].rooms,
+                ]
+              : this.roomTypes[index].rooms,
         },
         { emitEvent: false }
       );
+
       if (this.isDataInitialized || !this.reservationId) {
         this.roomControls[index].get('roomNumbers').reset();
         this.roomControls[index].get('roomNumber').reset();

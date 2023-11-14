@@ -573,6 +573,7 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
       componentRef.instance.onCloseSidebar.subscribe((res) => {
         this.sidebarVisible = false;
         componentRef.destroy();
+        this.refreshDashboard();
       });
     });
   }

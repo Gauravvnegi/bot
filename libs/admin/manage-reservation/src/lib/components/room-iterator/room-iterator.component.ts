@@ -67,8 +67,7 @@ export class RoomIteratorComponent extends IteratorComponent
     protected fb: FormBuilder,
     private globalFilterService: GlobalFilterService,
     private controlContainer: ControlContainer,
-    public formService: FormService,
-    private roomService: RoomService
+    public formService: FormService
   ) {
     super(fb);
   }
@@ -245,23 +244,22 @@ export class RoomIteratorComponent extends IteratorComponent
    * @function listenRoomTypeChanges Listen changes in room type
    * @param index to keep track of the form array.
    */
-  listenRoomTypeChanges(index: number) {
-    if (this.roomTypes.length) {
+  listenRoomTypeChanges(roomType: RoomFieldTypeOption, index: number) {
+    if (roomType) {
       // Sets rate plan options according to the selected room type
-      const ratePlanOptions = this.roomTypes[index].ratePlans.map((item) => ({
+      const ratePlanOptions = roomType.ratePlans.map((item) => ({
         label: item.label,
         value: item.value,
         sellingprice: item.sellingPrice,
         isBase: item.isBase,
       }));
       // Patch the selected room number if available.
-
       this.roomControls[index].patchValue(
         {
           ratePlanOptions: ratePlanOptions,
           roomNumberOptions:
             this.selectedRoomNumber?.length &&
-            !this.roomTypes[index].rooms.some(
+            !roomType.rooms.some(
               (room) => room?.value === this.selectedRoomNumber
             )
               ? [
@@ -269,9 +267,9 @@ export class RoomIteratorComponent extends IteratorComponent
                     label: this.selectedRoomNumber,
                     value: this.selectedRoomNumber,
                   },
-                  ...this.roomTypes[index].rooms,
+                  ...roomType.rooms,
                 ]
-              : this.roomTypes[index].rooms,
+              : roomType.rooms,
         },
         { emitEvent: false }
       );
@@ -316,14 +314,13 @@ export class RoomIteratorComponent extends IteratorComponent
 
   // Patch data for selected room type
   roomTypeChange(event: RoomTypeResponse, index: number) {
-    const exists =
-      this.roomTypes.length &&
-      this.roomTypes.some((item) => item?.value === event?.id);
-    if (event && !exists) {
-      this.roomTypes[index] = this.formService.setReservationRoomType(event);
-      this.listenRoomTypeChanges(index);
-      if (this.isDraftBooking) this.listenForRoomChanges(index);
-      this.formService.isDataInitialized.next(true);
+    if (event) {
+      this.listenRoomTypeChanges(
+        this.formService.setReservationRoomType(event),
+        index
+      );
+      this.isDraftBooking && this.listenForRoomChanges(index);
+      this.reservationId && this.formService.isDataInitialized.next(true);
     }
   }
 

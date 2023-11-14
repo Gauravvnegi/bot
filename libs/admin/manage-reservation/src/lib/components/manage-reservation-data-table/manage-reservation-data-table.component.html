@@ -268,7 +268,8 @@
               [state]="rowData.reservationType"
               [recordSetting]="reservationStatusDetails"
               [menuOptions]="
-                rowData.reservationType === 'DRAFT'
+                rowData.reservationType === 'DRAFT' &&
+                rowData.reservationType === 'CANCELED'
                   ? [{ label: 'Edit Reservation', value: 'EDIT_RESERVATION' }]
                   : menuOptions
               "

@@ -5,7 +5,6 @@ import { NavigationEnd, Router } from '@angular/router';
 import {
   GlobalFilterService,
   RoutesConfigService,
-  SubscriptionPlanService,
 } from '@hospitality-bot/admin/core/theme';
 import {
   AdminUtilityService,
@@ -439,7 +438,7 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
 
   copyConfirmationNumber(number: string) {
     this._clipboard.copy(number);
-    this.snackbarService.openSnackBarAsText('Confirmation number copied', '', {
+    this.snackbarService.openSnackBarAsText('Booking number copied', '', {
       panelClass: 'success',
     });
   }

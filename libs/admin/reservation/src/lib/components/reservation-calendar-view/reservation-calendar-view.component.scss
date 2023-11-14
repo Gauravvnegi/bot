@@ -286,3 +286,11 @@ $border-color: rgba(112, 112, 112, 0.35);
     opacity: 0.8;
   }
 }
+
+.content-loader {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  width: 70%;
+}

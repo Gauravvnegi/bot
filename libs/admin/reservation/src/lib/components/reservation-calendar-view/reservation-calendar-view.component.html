@@ -114,7 +114,13 @@
               </div>
             </div>
           </div>
-          <div class="main-section" *ngIf="!isRoomsEmpty && roomTypes?.length">
+          <div
+            class="main-section"
+            *ngIf="
+              !isRoomsEmpty && roomTypes?.length && reservationsLoaded;
+              else contentLoader
+            "
+          >
             <ng-container>
               <ng-container
                 *ngFor="let roomType of roomTypes; let roomTypeIdx = index"
@@ -209,4 +215,10 @@
 
 <ng-template #loader>
   <hospitality-bot-loader-bounce class="loader"></hospitality-bot-loader-bounce>
+</ng-template>
+
+<ng-template #contentLoader>
+  <hospitality-bot-loader-bounce
+    class="content-loader"
+  ></hospitality-bot-loader-bounce>
 </ng-template>

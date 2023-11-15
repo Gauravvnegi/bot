@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, Renderer2 } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
@@ -80,7 +80,9 @@ export class ReservationCalendarViewComponent implements OnInit {
     private roomService: RoomService,
     private adminUtilityService: AdminUtilityService,
     private modalService: ModalService,
-    private channelManagerService: ChannelManagerService
+    private channelManagerService: ChannelManagerService,
+    private renderer: Renderer2,
+    private el: ElementRef
   ) {}
 
   ngOnInit(): void {
@@ -96,6 +98,7 @@ export class ReservationCalendarViewComponent implements OnInit {
 
   initRoomTypes() {
     this.roomsLoaded = false;
+    this.hideFooter(true);
     this.$subscription.add(
       this.roomService
         .getList<RoomTypeListResponse>(this.entityId, {
@@ -128,8 +131,13 @@ export class ReservationCalendarViewComponent implements OnInit {
               }));
             this.initReservationData();
           },
-          (error) => {},
-          () => {}
+          (error) => {
+            this.roomsLoaded = true;
+            this.hideFooter(false);
+          },
+          () => {
+            this.roomsLoaded = true;
+          }
         )
     );
   }
@@ -155,14 +163,19 @@ export class ReservationCalendarViewComponent implements OnInit {
               this.mapGridData(roomType);
             });
             this.getRates();
-            this.reservationsLoaded = true;
           },
           (error) => {
-            this.roomsLoaded = true;
+            setTimeout(() => {
+              this.reservationsLoaded = true;
+            }, 200);
             this.roomTypes.map((roomType) => (roomType.loading = false));
+            this.hideFooter(false);
           },
           () => {
-            this.roomsLoaded = true;
+            this.hideFooter(false);
+            setTimeout(() => {
+              this.reservationsLoaded = true;
+            }, 200);
             this.roomTypes.map((roomType) => (roomType.loading = false));
           }
         )
@@ -462,6 +475,17 @@ export class ReservationCalendarViewComponent implements OnInit {
           }
         )
     );
+  }
+
+  hideFooter(hide: boolean) {
+    const footer = document.querySelector('.main-footer') as HTMLElement;
+    // Check if the cdk container has zIndex 1500 already
+    if (footer && hide) {
+      // Increase the z-index before showing the snackbar
+      footer.style.display = 'none';
+    } else {
+      footer.style.display = 'flex';
+    }
   }
 
   handleCreate(event: IGCreateEvent, roomType: IGRoomType) {

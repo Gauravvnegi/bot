@@ -147,7 +147,11 @@
                 <mat-label class="label">Full Name</mat-label>
                 <div
                   class="value"
-                  *ngIf="guestFA.at(i).value.firstName; else emptyCell"
+                  *ngIf="
+                    guestFA.at(i).value.firstName ||
+                      guestFA.at(i).value.lastName;
+                    else emptyCell
+                  "
                 >
                   {{ guestFA.at(i).value.title }}
                   {{ guestFA.at(i).value.firstName }}

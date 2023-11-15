@@ -28,7 +28,6 @@ import { IteratorField } from 'libs/admin/shared/src/lib/types/fields.type';
 import { FormService } from '../../services/form.service';
 import { RoomTypeResponse } from 'libs/admin/room/src/lib/types/service-response';
 import { debounceTime } from 'rxjs/operators';
-import { RoomService } from 'libs/admin/room/src/lib/services/room.service';
 
 @Component({
   selector: 'hospitality-bot-room-iterator',
@@ -210,16 +209,19 @@ export class RoomIteratorComponent extends IteratorComponent
       }
       // Patch room details in the form array
       this.selectedRoomNumber = value?.roomNumber;
-      this.roomControls[index].patchValue({
-        roomTypeId: value.roomTypeId,
-        roomCount: value.roomCount,
-        childCount: value.childCount,
-        adultCount: value.adultCount,
-        ratePlan: value.ratePlans?.value ?? value.ratePlan,
-        roomNumbers: value?.roomNumbers,
-        roomNumber: value?.roomNumber,
-        id: value?.id,
-      });
+      this.roomControls[index].patchValue(
+        {
+          roomTypeId: value.roomTypeId,
+          roomCount: value.roomCount,
+          childCount: value.childCount,
+          adultCount: value.adultCount,
+          ratePlan: value.ratePlans?.value ?? value.ratePlan,
+          roomNumbers: value?.roomNumbers,
+          roomNumber: value?.roomNumber,
+          id: value?.id,
+        },
+        { emitEvent: false }
+      );
     });
 
     // const observables = itemValues.map((value, index) =>

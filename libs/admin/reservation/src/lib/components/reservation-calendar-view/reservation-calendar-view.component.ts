@@ -132,6 +132,7 @@ export class ReservationCalendarViewComponent implements OnInit {
             this.initReservationData();
           },
           (error) => {
+            this.reservationsLoaded = true;
             this.roomsLoaded = true;
             this.hideFooter(false);
           },

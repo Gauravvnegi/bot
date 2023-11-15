@@ -114,14 +114,8 @@
               </div>
             </div>
           </div>
-          <div
-            class="main-section"
-            *ngIf="
-              !isRoomsEmpty && roomTypes?.length && reservationsLoaded;
-              else contentLoader
-            "
-          >
-            <ng-container>
+          <div class="main-section" *ngIf="!isRoomsEmpty && roomTypes?.length">
+            <ng-container *ngIf="reservationsLoaded; else contentLoader">
               <ng-container
                 *ngFor="let roomType of roomTypes; let roomTypeIdx = index"
               >

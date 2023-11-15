@@ -7,7 +7,10 @@ import {
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TableService } from 'libs/admin/shared/src/lib/services/table.service';
-import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import {
+  GlobalFilterService,
+  RoutesConfigService,
+} from '@hospitality-bot/admin/core/theme';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { taxRoutes } from '../../constants/routes';
 import { cols, title } from '../../constants/data-table';
@@ -47,16 +50,23 @@ export class TaxDataTableComponent extends BaseDatatableComponent
     private taxService: TaxService,
     private router: Router,
     private route: ActivatedRoute,
-    protected tabFilterService: TableService
+    protected tabFilterService: TableService,
+    private routesConfigService: RoutesConfigService
   ) {
     super(fb, tabFilterService);
     const { navRoutes } = taxRoutes['tax'];
-    this.navRoutes = navRoutes;
   }
 
   ngOnInit(): void {
     // this.entityId = this.globalFilterService.entityId;
     // this.initTableValue();
+    this.initNavRoutes();
+  }
+
+  initNavRoutes() {
+    this.routesConfigService.navRoutesChanges.subscribe((navRoutesRes) => {
+      this.navRoutes = navRoutesRes;
+    });
   }
 
   /**

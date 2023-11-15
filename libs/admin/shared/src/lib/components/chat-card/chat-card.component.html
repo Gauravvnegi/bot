@@ -104,10 +104,11 @@
   <div class="time-left__wrapper" *ngIf="taskStatus">
     <div
       *ngIf="
-        taskStatus?.timeLeft !== undefined &&
-        !isSelected &&
-        taskStatus?.action !== 'RESOLVED' &&
-        taskStatus?.action !== 'CANCELLED'
+        taskStatus?.timeLeft &&
+          !isSelected &&
+          taskStatus?.action !== 'RESOLVED' &&
+          taskStatus?.action !== 'CANCELLED';
+        else timeOut
       "
       class="time-left"
     >
@@ -117,6 +118,7 @@
         {{ formatTime(taskStatus.timeLeft) }}
       </div>
     </div>
+
     <div
       *ngIf="!cardType === 'feedback'"
       class="card-wrapper_time"
@@ -126,3 +128,11 @@
     </div>
   </div>
 </div>
+
+<ng-template #timeOut>
+  <div class="time-left" *ngIf="!isSelected">
+    <div>
+      Timed Out
+    </div>
+  </div>
+</ng-template>

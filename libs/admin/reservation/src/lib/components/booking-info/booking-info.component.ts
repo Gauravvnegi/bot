@@ -274,7 +274,7 @@ export class BookingInfoComponent implements OnInit {
           this.configData.source.push({ label: res, value: res });
         }
         this.initSourceDetails(res);
-        !this.editMode && sourceNameControl.reset();
+        !this.editMode && sourceNameControl.reset({ emitEvent: false });
       }
     });
 
@@ -342,7 +342,7 @@ export class BookingInfoComponent implements OnInit {
   }
 
   updateValueAndValidity(control: AbstractControl) {
-    control.reset();
+    control.reset({ emitEvent: false });
     control.clearValidators();
     control.updateValueAndValidity();
   }

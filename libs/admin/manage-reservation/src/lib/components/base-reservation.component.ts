@@ -99,21 +99,21 @@ export class BaseReservationComponent {
           : this.reservationInfoControls.status;
       switch (true) {
         case this.isExternalBooking && journeyState !== JourneyState.COMPLETED:
-          this.userForm.disable();
+          this.userForm.disable({ emitEvent: false });
           this.disabledForm = true;
           this.formService.disableBtn = true;
           const roomTypeArray = ((this.inputControls
             .roomInformation as FormGroup).get('roomTypes') as FormArray)
             .controls;
           ['roomNumber'].forEach((controlName) =>
-            roomTypeArray[0].get(controlName).enable()
+            roomTypeArray[0].get(controlName).enable({ emitEvent: false })
           );
           this.reservationInfoControls.reservationType.enable();
           break;
         case this.bookingType !== EntitySubType.ROOM_TYPE ||
           reservationType.value === ReservationType.CANCELED ||
           journeyState === JourneyState.COMPLETED:
-          this.userForm.disable();
+          this.userForm.disable({ emitEvent: false });
           this.disabledForm = true;
           this.formService.disableBtn = true;
           break;
@@ -121,11 +121,13 @@ export class BaseReservationComponent {
         case journeyState !== JourneyState.COMPLETED:
           if (reservationType.value === ReservationType.CONFIRMED) {
             this.formService.disableBtn = true;
-            this.inputControls.guestInformation.get('guestDetails').disable();
+            this.inputControls.guestInformation
+              .get('guestDetails')
+              .disable({ emitEvent: false });
             const roomTypeArray = ((this.inputControls
               .roomInformation as FormGroup).get('roomTypes') as FormArray)
               .controls;
-            roomTypeArray[0].disable();
+            roomTypeArray[0].disable({ emitEvent: false });
 
             // Enable the controls you don't want to disable
             [
@@ -134,7 +136,7 @@ export class BaseReservationComponent {
               'adultCount',
               'childCount',
             ].forEach((controlName) =>
-              roomTypeArray[0].get(controlName).enable()
+              roomTypeArray[0].get(controlName).enable({ emitEvent: false })
             );
           }
           for (const controlName in this.paymentControls) {
@@ -142,7 +144,7 @@ export class BaseReservationComponent {
               controlName !== 'cashierFirstName' &&
               controlName !== 'cashierLastName'
             ) {
-              this.paymentControls[controlName].enable();
+              this.paymentControls[controlName].enable({ emitEvent: false });
             }
           }
           break;

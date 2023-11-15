@@ -21,13 +21,14 @@ import {
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { EntitySubType } from 'libs/admin/shared/src';
 import { IteratorComponent } from 'libs/admin/shared/src/lib/components/iterator/iterator.component';
-import { Subscription, forkJoin } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { roomFields, RoomFieldTypeOption } from '../../constants/reservation';
 import { ReservationForm, RoomTypes } from '../../constants/form';
 import { IteratorField } from 'libs/admin/shared/src/lib/types/fields.type';
 import { FormService } from '../../services/form.service';
 import { RoomTypeResponse } from 'libs/admin/room/src/lib/types/service-response';
 import { debounceTime } from 'rxjs/operators';
+import { ReservationType } from '../../constants/reservation-table';
 
 @Component({
   selector: 'hospitality-bot-room-iterator',
@@ -42,7 +43,14 @@ export class RoomIteratorComponent extends IteratorComponent
   @Output() listenChanges = new EventEmitter();
 
   @Input() reservationId: string;
-  @Input() isDraftBooking: boolean = false;
+  isDraftBooking: boolean = false;
+
+  @Input() set bookingConfig(value: BookingConfig) {
+    for (const key in value) {
+      const val = value[key];
+      this[key] = val;
+    }
+  }
   fields = roomFields;
 
   entityId: string;
@@ -86,6 +94,8 @@ export class RoomIteratorComponent extends IteratorComponent
   }
 
   ngOnInit(): void {
+    this.fields[3].name = 'roomNumbers';
+    this.fields[3].type = 'multi-select';
     this.entityId = this.globalFilterService.entityId;
     this.initDetails();
     this.listenForGlobalFilters();
@@ -101,10 +111,9 @@ export class RoomIteratorComponent extends IteratorComponent
       .subscribe((res) => {
         if (res) {
           this.isDataInitialized = res;
-
-          this.listenForDateChanges();
         }
       });
+    this.listenForDateChanges();
   }
 
   listenForGlobalFilters(): void {
@@ -147,13 +156,12 @@ export class RoomIteratorComponent extends IteratorComponent
       this.fields[3].name = 'roomNumbers';
       this.fields[3].type = 'multi-select';
       this.listenForRoomChanges(index);
-      this.listenForDateChanges();
     }
   }
 
   listenForDateChanges() {
     this.formService.reinitializeRooms.subscribe((res) => {
-      if (res && !this.reservationId) {
+      if (res) {
         this.reinitializeRooms = !this.reinitializeRooms;
       }
     });
@@ -200,7 +208,7 @@ export class RoomIteratorComponent extends IteratorComponent
   initRoomDetails(itemValues: RoomTypes[]) {
     this.itemValuesCount = itemValues.length;
     itemValues.forEach((value, index) => {
-      // Rooms number is not multi-select in edit mode.
+      // Rooms number is not multi-select in edit mode for confirmed reservation.
       if (
         this.reservationInfoControls.reservationType.value !== 'DRAFT' &&
         !this.isDraftBooking
@@ -301,6 +309,21 @@ export class RoomIteratorComponent extends IteratorComponent
 
   listenForFormChanges(): void {
     this.listenChanges.emit();
+
+    // Listen changes in reservation Type.
+    this.reservationInfoControls.reservationType.valueChanges.subscribe(
+      (res) => {
+        // Disable roomNumber field if the reservation type is draft.
+        if (res === ReservationType.DRAFT) {
+          this.roomControls.forEach((item) => {
+            item.get('roomNumbers').patchValue([], { emitEvent: false });
+          });
+          this.fields[3].disabled = true;
+        } else {
+          this.fields[3].disabled = false;
+        }
+      }
+    );
   }
 
   getConfig() {
@@ -383,3 +406,8 @@ export class RoomIteratorComponent extends IteratorComponent
     return `Value should be more than ${field.minValue}`;
   }
 }
+
+type BookingConfig = {
+  reservationId: string;
+  isDraftBooking: boolean;
+};

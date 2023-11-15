@@ -20,8 +20,10 @@
         <hospitality-bot-room-iterator
           (listenChanges)="listenForFormChanges()"
           [itemValues]="roomTypeValues"
-          [reservationId]="reservationId"
-          [isDraftBooking]="isDraftBooking"
+          [bookingConfig]="{
+            isDraftBooking: isDraftBooking,
+            reservationId: reservationId
+          }"
         >
         </hospitality-bot-room-iterator>
       </p-accordionTab>

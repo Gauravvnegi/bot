@@ -10,17 +10,17 @@ export const navRoute = {
 export const taxRoutes: Record<'tax' | 'createTax' | 'editTax', PageRoutes> = {
   tax: {
     route: '',
-    navRoutes: [navRoute.settings, navRoute.tax],
+    navRoutes: [navRoute.tax],
     title: 'Tax',
   },
   createTax: {
     route: 'create-tax',
-    navRoutes: [navRoute.settings, navRoute.tax, navRoute.createTax],
+    navRoutes: [navRoute.createTax],
     title: 'Create Tax',
   },
   editTax: {
     route: 'create-tax',
-    navRoutes: [navRoute.settings, navRoute.tax, navRoute.editTax],
+    navRoutes: [navRoute.editTax],
     title: 'Edit Tax',
   },
 };

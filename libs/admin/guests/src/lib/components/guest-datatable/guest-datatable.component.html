@@ -1,5 +1,9 @@
 <div [formGroup]="tableFG">
-  <hospitality-bot-navigation-header [heading]="tableName" [routes]="navRoutes" [isBack]="false">
+  <hospitality-bot-navigation-header
+    [heading]="tableName"
+    [routes]="navRoutes"
+    [isBack]="false"
+  >
     <ng-container [ngTemplateOutlet]="search"></ng-container>
     <hospitality-bot-button
       label="+ Add Guest"
@@ -148,8 +152,10 @@
 <ng-template #emptyTable>
   <hospitality-bot-empty-table
     [isLoading]="loading"
+    [link]="guestRoutes.addGuest.route"
     [content]="{
-      description: 'No guest found.',
+      description: 'No guest found. Tab the +Add Guest to add & manage guests',
+      actionName: '+Add Guest',
       imageSrc: 'assets/images/empty-table-guest.png'
     }"
   >

@@ -60,6 +60,12 @@ export class CreateTaxComponent implements OnInit {
     this.pageTitle = title;
   }
 
+  initNavRoutes() {
+    this.routesConfigService.navRoutesChanges.subscribe((navRoutesRes) => {
+      this.navRoutes = [...navRoutesRes, ...this.navRoutes];
+    });
+  }
+
   ngOnInit(): void {
     //to handel case when entity id is coming from query params
     this.paramData = this.route.snapshot.queryParams;
@@ -76,6 +82,7 @@ export class CreateTaxComponent implements OnInit {
     this.getTaxCountry();
     this.getPropertyList();
     this.initForm();
+    this.initNavRoutes();
   }
 
   /**

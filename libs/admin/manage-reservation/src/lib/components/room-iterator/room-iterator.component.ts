@@ -101,6 +101,7 @@ export class RoomIteratorComponent extends IteratorComponent
       .subscribe((res) => {
         if (res) {
           this.isDataInitialized = res;
+
           this.listenForDateChanges();
         }
       });
@@ -152,7 +153,7 @@ export class RoomIteratorComponent extends IteratorComponent
 
   listenForDateChanges() {
     this.formService.reinitializeRooms.subscribe((res) => {
-      if (res) {
+      if (res && !this.reservationId) {
         this.reinitializeRooms = !this.reinitializeRooms;
       }
     });

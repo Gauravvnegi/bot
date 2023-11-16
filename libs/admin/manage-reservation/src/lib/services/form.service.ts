@@ -84,6 +84,13 @@ export class FormService {
       transactionId: input?.paymentMethod?.transactionId ?? '',
     };
 
+    roomReservationData.paymentRule = {
+      amount: input?.paymentRule.amountToPay,
+      type: 'FLAT',
+      dueDate: input?.paymentRule.makePaymentBefore,
+      remarks: input?.paymentRule.inclusionsAndTerms,
+    };
+
     roomReservationData.guestId = input.guestInformation?.guestDetails;
     roomReservationData.specialRequest = input.instructions.specialInstructions;
     roomReservationData.offer = {

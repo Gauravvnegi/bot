@@ -10,7 +10,7 @@ export type ReservationForm = {
   eventInformation?: EventInformation;
   instructions?: Instructions;
   address: Address;
-  paymentRule: PaymentRule;
+  paymentRule: PaymentRuleForm;
   paymentMethod: PaymentMethod;
   offerId: string;
   dailyPrice?: string;
@@ -115,11 +115,12 @@ type Address = {
   postalCode: string;
 };
 
-type PaymentRule = {
+export type PaymentRuleForm = {
   amountToPay: number;
   deductedAmount: number;
   makePaymentBefore: number;
   inclusionsAndTerms: string;
+  type?: string;
 };
 
 export type PaymentMethod = {

@@ -4,13 +4,11 @@ import {
   ControlContainer,
   FormBuilder,
   FormGroup,
-  Validators,
 } from '@angular/forms';
 import * as moment from 'moment';
 import { ReservationForm } from '../../../constants/form';
 import { FormService } from '../../../services/form.service';
 import { Subscription } from 'rxjs';
-import { debounceTime } from 'rxjs/operators';
 
 @Component({
   selector: 'hospitality-bot-payment-rule',
@@ -18,12 +16,14 @@ import { debounceTime } from 'rxjs/operators';
   styleUrls: ['./payment-rule.component.scss', '../../reservation.styles.scss'],
 })
 export class PaymentRuleComponent implements OnInit {
-  startMinDate = new Date();
+  currentDate = new Date();
   startTime: number;
   viewAmountToPay = false;
   parentFormGroup: FormGroup;
   totalAmount = 0;
   $subscription = new Subscription();
+  minDate = new Date();
+  maxDate = new Date();
 
   constructor(
     private fb: FormBuilder,
@@ -32,9 +32,12 @@ export class PaymentRuleComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.maxDate.setDate(this.currentDate.getDate());
     this.$subscription.add(
       this.formService.reservationDate.subscribe((res) => {
-        if (res) this.startMinDate = new Date(res);
+        if (res) {
+          this.maxDate = new Date(res);
+        }
       })
     );
     this.addFormGroup();
@@ -49,6 +52,7 @@ export class PaymentRuleComponent implements OnInit {
       deductedAmount: [''],
       makePaymentBefore: [''],
       inclusionsAndTerms: [''],
+      type: ['FLAT'],
     };
     this.parentFormGroup.addControl('paymentRule', this.fb.group(data));
     this.formService.deductedAmount.subscribe((res) => {
@@ -57,7 +61,7 @@ export class PaymentRuleComponent implements OnInit {
   }
 
   registerPaymentRuleChange() {
-    this.startTime = moment(this.startMinDate).unix() * 1000;
+    this.startTime = moment(this.currentDate).unix() * 1000;
     this.inputControl.makePaymentBefore.setValue(this.startTime);
 
     this.inputControl.amountToPay.valueChanges.subscribe((res) => {

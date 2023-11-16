@@ -8,16 +8,18 @@ import {
 } from '@angular/forms';
 import {
   ConfigService,
+  ModuleNames,
   Option,
-  Regex,
   UserService,
 } from '@hospitality-bot/admin/shared';
 import { Subscription } from 'rxjs';
 import { ManageReservationService } from '../../../services/manage-reservation.service';
 import { PaymentMethodList } from '../../../models/reservations.model';
-import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import {
+  GlobalFilterService,
+  RoutesConfigService,
+} from '@hospitality-bot/admin/core/theme';
 import { ReservationForm } from '../../../constants/form';
-import { FormService } from '../../../services/form.service';
 
 @Component({
   selector: 'hospitality-bot-payment-method',
@@ -31,7 +33,7 @@ export class PaymentMethodComponent implements OnInit {
   currencies: Option[] = [];
   paymentOptions: Option[] = [];
   entityId: string;
-
+  @Input() reservationId: string;
   $subscription = new Subscription();
   parentFormGroup: FormGroup;
   constructor(
@@ -41,7 +43,7 @@ export class PaymentMethodComponent implements OnInit {
     private manageReservationService: ManageReservationService,
     private globalFilterService: GlobalFilterService,
     private userService: UserService,
-    private formService: FormService
+    private routesConfigService: RoutesConfigService
   ) {}
 
   ngOnInit(): void {
@@ -104,6 +106,12 @@ export class PaymentMethodComponent implements OnInit {
         (error) => {}
       )
     );
+  }
+
+  viewPaymentHistory() {
+    this.routesConfigService.navigate({
+      subModuleName: ModuleNames.TRANSACTIONS,
+    });
   }
 
   get paymentControls() {

@@ -24,6 +24,7 @@ export class RoomReservationFormData {
     remarks: string;
     transactionId: string;
   };
+  paymentRule: PaymentRule;
 }
 
 export type BookingItemFormData = {
@@ -83,6 +84,13 @@ export type ItemsData = {
   itemId: string;
   unit: number;
   amount: number;
+};
+
+export type PaymentRule = {
+  amount: number;
+  type: string;
+  dueDate: number;
+  remarks: string;
 };
 
 export type ReservationSummary = {

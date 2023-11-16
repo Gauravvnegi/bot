@@ -165,11 +165,6 @@ export class BaseReservationComponent {
       Validators.min(0),
     ]);
     this.paymentControls.totalPaidAmount.updateValueAndValidity();
-
-    // Needs to be changed according to api.
-    this.paymentRuleControls.deductedAmount.patchValue(
-      this.summaryData?.totalAmount
-    );
     this.formService.deductedAmount.next(this.summaryData?.totalAmount);
   }
 

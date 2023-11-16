@@ -224,7 +224,7 @@ export class AddReservationComponent extends BaseReservationComponent
               },
               ...formData
             } = data;
-            
+
             this.isDraftBooking = reservationInfo.reservationType === 'DRAFT';
             this.checkinJourneyState = data.journeyState;
             this.isExternalBooking = response.externalBooking;
@@ -251,6 +251,7 @@ export class AddReservationComponent extends BaseReservationComponent
             this.userForm.patchValue({
               reservationInformation: reservationInfo,
               instructions: formData.instructions,
+              paymentRule: formData.paymentRule,
               formData,
             });
 

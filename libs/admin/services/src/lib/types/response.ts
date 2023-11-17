@@ -29,6 +29,8 @@ export type ServiceResponse = {
   categoryName: string;
   enableVisibility: string[];
   taxes: any[];
+  priority?: string;
+  enableOnMicrosite?: boolean;
 };
 
 export type TaxResponse = {

@@ -51,7 +51,18 @@
       formControlName="imageUrl"
       [entityId]="entityId"
     ></hospitality-bot-custom-file-upload>
-
+    <div class="full-width checkbox">
+      <input
+        #checkbox
+        type="checkbox"
+        [checked]="useForm.get('priority').value === 'HIGH'"
+        (change)="onCheckboxClick($event.target)"
+      />
+      <label (click)="checkbox.click()" for="checkbox">
+        Give this package priority status, featuring it prominently on the
+        landing page as a highlighted package.</label
+      >
+    </div>
     <hospitality-bot-prefix-field
       class="one-third-width"
       [options]="currencies"

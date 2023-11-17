@@ -11,6 +11,8 @@ export type PackageFormData = {
   discountValue: number;
   active: boolean;
   enableVisibility: string[];
+  priority: string;
+  enableOnMicrosite: boolean;
 };
 
 export type PackageData = Omit<PackageFormData, 'discountedCurrency'> & {

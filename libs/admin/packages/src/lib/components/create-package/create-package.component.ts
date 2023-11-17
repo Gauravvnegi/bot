@@ -109,6 +109,8 @@ export class CreatePackageComponent implements OnInit {
       discountedCurrency: ['', Validators.required],
       discountedPrice: ['', Validators.required],
       enableVisibility: [[], Validators.required],
+      enableOnMicrosite: [true],
+      priority: ['LOW'],
     });
 
     /* Patch the form value if serv id present */
@@ -390,6 +392,11 @@ export class CreatePackageComponent implements OnInit {
   loadMoreServices() {
     this.servicesOffSet = this.servicesOffSet + 10;
     this.getServices();
+  }
+
+  onCheckboxClick(event: HTMLInputElement) {
+    if (event.checked) this.useForm.get('priority').setValue('HIGH');
+    else this.useForm.get('priority').setValue('LOW');
   }
 
   /**

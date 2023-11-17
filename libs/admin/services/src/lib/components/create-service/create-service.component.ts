@@ -172,6 +172,8 @@ export class CreateServiceComponent implements OnInit {
       enableVisibility: [[], Validators.required],
       taxIds: [[]],
       hsnCode: [''],
+      enableOnMicrosite: [true],
+      priority: ['LOW'],
     });
     this.useForm.get('entityId').setValue(this.entityId);
 
@@ -326,6 +328,11 @@ export class CreateServiceComponent implements OnInit {
           .subscribe(this.handleSuccess, this.handleError)
       );
     }
+  }
+
+  onCheckboxClick(event: HTMLInputElement) {
+    if (event.checked) this.useForm.get('priority').setValue('HIGH');
+    else this.useForm.get('priority').setValue('LOW');
   }
 
   createTax() {

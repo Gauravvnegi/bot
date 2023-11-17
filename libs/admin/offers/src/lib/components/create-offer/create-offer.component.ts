@@ -18,6 +18,7 @@ import { OffersServices } from '../../services/offers.service';
 import { OfferData, OfferFormData, OffersOnEntity } from '../../types/offers';
 import { OfferResponse, SearchResult } from '../../types/response';
 import { DiscountType } from '../../constant/data-table';
+import { convertToTitleCase } from 'libs/admin/shared/src/lib/utils/valueFormatter';
 
 @Component({
   selector: 'hospitality-bot-create-offer',
@@ -88,7 +89,7 @@ export class CreateOfferComponent implements OnInit {
       active: [true],
       name: ['', [Validators.required]],
       libraryItems: [[], [Validators.required]],
-      imageUrl: ['', [Validators.required]],
+      imageUrl: ['', []],
       description: ['', [Validators.required]],
       startDate: ['', [Validators.required]],
       endDate: ['', [Validators.required]],
@@ -252,7 +253,7 @@ export class CreateOfferComponent implements OnInit {
                         price ? `[${item.currency} ${price}]` : ''
                       }`,
                       value: item.id,
-                      type: descriptiveType,
+                      type: convertToTitleCase(descriptiveType),
                       price: price,
                     };
                   }) ?? [];

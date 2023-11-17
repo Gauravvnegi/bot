@@ -115,6 +115,14 @@ export class CreateServiceComponent implements OnInit {
     this.listenForTypeChange();
     this.initOptionsConfig();
     this.initNavRoutes();
+    this.listenForFormData();
+  }
+
+  listenForFormData() {
+    if (this.servicesService.serviceFormData.value) {
+      this.useForm.patchValue(this.servicesService.serviceFormData.value);
+      this.servicesService.serviceFormData.next(null);
+    }
   }
 
   getPropertyList() {
@@ -326,6 +334,7 @@ export class CreateServiceComponent implements OnInit {
       additionalPath: 'create-tax',
       queryParams: { entityId: this.entityId },
     });
+    this.servicesService.serviceFormData.next(this.useForm.getRawValue());
   }
 
   handleSuccess = () => {

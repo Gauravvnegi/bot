@@ -13,10 +13,10 @@ export const cols: Cols[] = [
   },
   {
     field: 'code',
-    header: 'Code / Source',
+    header: 'Code',
     sortType: 'string',
     width: '20%',
-    searchField: ['code', 'source'],
+    searchField: ['code'],
   },
   {
     field: 'discountedPrice',

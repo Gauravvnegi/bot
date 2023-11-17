@@ -13,3 +13,9 @@
 .input-wrapper {
   position: relative;
 }
+
+:host ::ng-deep .auto-complete {
+  .p-autocomplete-panel {
+    left: 0 !important;
+  }
+}

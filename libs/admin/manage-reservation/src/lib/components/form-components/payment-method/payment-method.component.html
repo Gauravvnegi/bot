@@ -12,6 +12,13 @@
         controlName="cashierLastName"
       ></hospitality-bot-input>
     </div>
+    <div class="half-width view-history-cta" *ngIf="reservationId">
+      <hospitality-bot-button
+        variant="text"
+        label="View Payment History"
+        (onClick)="viewPaymentHistory()"
+      ></hospitality-bot-button>
+    </div>
     <hospitality-bot-select-group
       *ngIf="!!paymentOptions.length"
       class="full-width"

@@ -20,8 +20,10 @@
         <hospitality-bot-room-iterator
           (listenChanges)="listenForFormChanges()"
           [itemValues]="roomTypeValues"
-          [reservationId]="reservationId"
-          [isDraftBooking]="isDraftBooking"
+          [bookingConfig]="{
+            isDraftBooking: isDraftBooking,
+            reservationId: reservationId
+          }"
         >
         </hospitality-bot-room-iterator>
       </p-accordionTab>
@@ -41,7 +43,9 @@
         </div>
       </p-accordionTab>
       <hospitality-bot-payment-rule></hospitality-bot-payment-rule>
-      <hospitality-bot-payment-method></hospitality-bot-payment-method>
+      <hospitality-bot-payment-method
+        [reservationId]="reservationId"
+      ></hospitality-bot-payment-method>
     </p-accordion>
     <div class="bk-summary">
       <hospitality-bot-booking-summary

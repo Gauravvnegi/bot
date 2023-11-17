@@ -17,7 +17,12 @@ import {
   GuestType,
   SearchGuestResponse,
 } from 'libs/admin/guests/src/lib/types/guest.type';
-import { MenuItemsData, RoomTypes, SpaItems } from '../constants/form';
+import {
+  MenuItemsData,
+  PaymentRuleForm,
+  RoomTypes,
+  SpaItems,
+} from '../constants/form';
 import { ItemsData, OutletFormData } from '../types/forms.types';
 import { RoomReservationResponse } from '../types/response.type';
 import { RoomTypeForm } from 'libs/admin/room/src/lib/models/room.model';
@@ -227,6 +232,7 @@ export class ReservationFormData {
   totalDueAmount: number;
   totalAmount: number;
   journeyState: JourneyState;
+  paymentRule: PaymentRuleForm;
 
   deserialize(input: RoomReservationResponse) {
     this.reservationInformation = new BookingInfo().deserialize(input);
@@ -234,6 +240,7 @@ export class ReservationFormData {
     this.offerId = input.offer ? input.offer?.id : null;
     this.nextStates = [input.reservationType, ...input.nextStates];
     this.instructions = new Instructions().deserialize(input);
+    this.paymentRule = new PaymentRule().deserialize(input);
     this.roomInformation = input?.bookingItems.map((item: BookingItems) => ({
       adultCount: item.occupancyDetails.maxAdult,
       childCount: item.occupancyDetails.maxChildren,
@@ -373,6 +380,24 @@ export class BookingInfo {
     this.marketSegment = input?.marketSegment;
     this.status = input?.reservationType ?? '';
     this.dateAndTime = input?.from;
+    return this;
+  }
+}
+
+export class PaymentRule {
+  amountToPay: number;
+  deductedAmount: number;
+  makePaymentBefore: number;
+  inclusionsAndTerms: string;
+  type?: string;
+
+  deserialize(input: RoomReservationResponse): this {
+    this.amountToPay = input?.paymentRule?.amount ?? 0;
+    this.deductedAmount =
+      input?.pricingDetails?.totalAmount - input?.paymentRule?.amount;
+    this.makePaymentBefore = input?.paymentRule?.dueDate ?? 0;
+    this.inclusionsAndTerms = input?.paymentRule?.remarks ?? '';
+    this.type = input.paymentRule.type ?? 'FLAT';
     return this;
   }
 }

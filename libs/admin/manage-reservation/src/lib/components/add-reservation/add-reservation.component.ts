@@ -16,7 +16,6 @@ import {
 } from '@hospitality-bot/admin/shared';
 import {
   JourneyState,
-  roomFields,
   roomReservationTypes,
 } from '../../constants/reservation';
 import { FormService } from '../../services/form.service';
@@ -78,7 +77,6 @@ export class AddReservationComponent extends BaseReservationComponent
   initDetails() {
     this.listenFormServiceChanges();
     this.reservationTypes = roomReservationTypes;
-    this.fields = roomFields;
     this.bookingType = EntitySubType.ROOM_TYPE;
   }
 
@@ -101,10 +99,13 @@ export class AddReservationComponent extends BaseReservationComponent
       reservationInformation: { source, sourceName, ...reservationInfo },
       ...data
     } = paramsData;
-    this.userForm.patchValue({
-      reservationInformation: reservationInfo,
-      ...data,
-    });
+    this.userForm.patchValue(
+      {
+        reservationInformation: reservationInfo,
+        ...data,
+      },
+      { emitEvent: false }
+    );
     this.formService.sourceData.next({
       source: source,
       sourceName: sourceName,
@@ -178,21 +179,6 @@ export class AddReservationComponent extends BaseReservationComponent
           this.resetFormData();
         }
       });
-
-    // Listen changes in reservation Type.
-    this.reservationInfoControls.reservationType.valueChanges.subscribe(
-      (res) => {
-        // Disable roomNumber field if the reservation type is draft.
-        if (res === ReservationType.DRAFT) {
-          this.roomControls.forEach((item) => {
-            item.get('roomNumbers').patchValue([], { emitEvent: false });
-          });
-          this.fields[3].disabled = true;
-        } else {
-          this.fields[3].disabled = false;
-        }
-      }
-    );
   }
 
   initFormData() {
@@ -213,7 +199,7 @@ export class AddReservationComponent extends BaseReservationComponent
             // check if room type was patched
             if (roomInformation.roomTypes[0].roomTypeId.length)
               this.roomTypeValues = roomInformation.roomTypes;
-            this.userForm.patchValue(formData);
+            this.userForm.patchValue(formData, { emitEvent: false });
           }
         })
     );
@@ -238,6 +224,8 @@ export class AddReservationComponent extends BaseReservationComponent
               },
               ...formData
             } = data;
+
+            this.isDraftBooking = reservationInfo.reservationType === 'DRAFT';
             this.checkinJourneyState = data.journeyState;
             this.isExternalBooking = response.externalBooking;
             this.formService.sourceData.next({
@@ -246,7 +234,6 @@ export class AddReservationComponent extends BaseReservationComponent
               agent: response?.agent ?? null,
               marketSegment: reservationInfo?.marketSegment,
             });
-            this.isDraftBooking = reservationInfo.reservationType === 'DRAFT';
             if (nextStates)
               this.reservationTypes = nextStates.map((item) => ({
                 label: convertToTitleCase(item),
@@ -264,6 +251,7 @@ export class AddReservationComponent extends BaseReservationComponent
             this.userForm.patchValue({
               reservationInformation: reservationInfo,
               instructions: formData.instructions,
+              paymentRule: formData.paymentRule,
               formData,
             });
 

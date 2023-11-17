@@ -167,6 +167,18 @@ export type RoomReservationResponse = {
   };
   agent: AgentTableResponse;
   externalBooking: boolean;
+  paymentRule: PaymentRuleResponse;
+};
+
+export type PaymentRuleResponse = {
+  id: string;
+  amount: number;
+  dueDate: number;
+  remarks: string;
+  type: string;
+  depositNight: number;
+  payAtDesk: boolean;
+  label: string;
 };
 
 export type SourceResponse = {

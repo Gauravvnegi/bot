@@ -138,7 +138,7 @@ export class InvoiceHistoryDataTableComponent extends BaseDatatableComponent
       params: this.adminUtilityService.makeQueryParams([
         ...this.selectedRows.map((item) => ({ ids: item.reservationId })),
         {
-          entitiyId: this.entityId,
+          entityId: this.entityId,
           pagination: true,
           limit: this.totalRecords,
         },

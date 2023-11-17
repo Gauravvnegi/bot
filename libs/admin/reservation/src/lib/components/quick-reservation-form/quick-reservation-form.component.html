@@ -26,7 +26,7 @@
     <div class="left-col">
       <div class="guest-name">{{ guestDetails?.guestName }}</div>
       <div class="contact-details">
-        <div class="phone-number">
+        <div class="phone-number" *ngIf="guestDetails.phoneNumber">
           <img [src]="'assets/svg/whatsapp.svg'" alt="" />
           <p>{{ guestDetails?.phoneNumber }}</p>
         </div>

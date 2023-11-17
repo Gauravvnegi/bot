@@ -35,19 +35,20 @@
         label="amount"
         controlName="deductedAmount"
         class="one-fourth-width deducted-amount"
-        [strikeValue]="summaryData?.totalAmount"
       ></hospitality-bot-view-input>
     </div>
     <hospitality-bot-date
       class="half-width"
       controlName="makePaymentBefore"
-      label="Make Payment on/Before"
-      [maxDate]="startMinDate"
+      label="Make Payment on/before"
+      [maxDate]="maxDate"
+      [minDate]="minDate"
       [props]="{
-        placeholder: 'DD-HH-MM'
+        enableTime: false,
+        placeholder: 'Select Date'
       }"
       [settings]="{
-        dateValue: startMinDate
+        dateValue: currentDate
       }"
     ></hospitality-bot-date>
     <hospitality-bot-text-area

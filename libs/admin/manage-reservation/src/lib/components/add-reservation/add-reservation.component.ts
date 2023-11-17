@@ -323,7 +323,7 @@ export class AddReservationComponent extends BaseReservationComponent
       return item.occupancyDetails.maxAdult && item.roomDetails.roomCount;
     });
 
-    if (isAdultAndRoomCount) {
+    if (isAdultAndRoomCount && (!this.reservationId || configData.guestId)) {
       this.$subscription.add(
         this.manageReservationService
           .getSummaryData(this.selectedEntity.id, this.getFormData(), {
@@ -336,6 +336,8 @@ export class AddReservationComponent extends BaseReservationComponent
           .subscribe(
             (res) => {
               this.summaryData = new SummaryData()?.deserialize(res);
+              if (res?.offer?.offerType)
+                this.formService.offerType.next(res?.offer?.offerType);
               // Modify data to show summary for occupancy details.
               this.updateBookingItemsCounts(this.summaryData.bookingItems);
               this.updatePaymentData();
@@ -380,7 +382,9 @@ export class AddReservationComponent extends BaseReservationComponent
       offerId: this.inputControls.offerId.value
         ? this.inputControls.offerId.value
         : null,
-      guestId: this.inputControls.guestInformation.get('guestDetails')?.value,
+      guestId: this.inputControls.guestInformation.get('guestDetails')?.value
+        ? this.inputControls.guestInformation.get('guestDetails')?.value
+        : null,
     };
 
     return data;

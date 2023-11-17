@@ -138,6 +138,9 @@ export class BaseReservationComponent {
             ].forEach((controlName) =>
               roomTypeArray[0].get(controlName).enable({ emitEvent: false })
             );
+            this.inputControls.guestInformation
+              .get('guestDetails')
+              .enable({ emitEvent: false });
           }
           for (const controlName in this.paymentControls) {
             if (

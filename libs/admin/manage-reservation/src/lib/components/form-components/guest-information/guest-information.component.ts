@@ -8,6 +8,7 @@ import {
   ViewContainerRef,
 } from '@angular/core';
 import {
+  AbstractControl,
   ControlContainer,
   FormBuilder,
   FormGroup,
@@ -20,6 +21,7 @@ import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { FormService } from '../../../services/form.service';
 import { GuestType } from 'libs/admin/guests/src/lib/types/guest.type';
 import { AddGuestComponent } from 'libs/admin/guests/src/lib/components';
+import { ReservationForm } from '../../../constants/form';
 
 @Component({
   selector: 'hospitality-bot-guest-information',
@@ -134,9 +136,9 @@ export class GuestInformationComponent implements OnInit {
         cc: res.contactDetails.cc,
         email: res.contactDetails.emailId,
       };
-      this.parentFormGroup
-        .get('guestInformation.guestDetails')
-        .patchValue(res.id);
+      setTimeout(() => {
+        this.formService.getSummary.next();
+      }, 100);
     });
   }
 
@@ -149,12 +151,12 @@ export class GuestInformationComponent implements OnInit {
         cc: event.contactDetails.cc,
         email: event.contactDetails.emailId,
       };
-      if (!this.editMode) {
-        this.formService.getSummary.next();
-      }
-      setTimeout(() => {
-        this.editMode = false;
-      }, 2000);
+      this.formService.offerType.subscribe((res) => {
+        if (res && res === 'COMPANY' && this.reservationId) {
+          this.inputControls.offerId.reset();
+        }
+      });
+      this.formService.getSummary.next();
     }
   }
 
@@ -168,6 +170,13 @@ export class GuestInformationComponent implements OnInit {
       type: 'GUEST',
     };
     return queries;
+  }
+
+  get inputControls() {
+    return this.parentFormGroup.controls as Record<
+      keyof ReservationForm,
+      AbstractControl
+    >;
   }
 
   /**

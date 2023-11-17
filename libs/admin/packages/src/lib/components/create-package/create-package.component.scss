@@ -3,3 +3,15 @@
 .form-block {
   @include form-block;
 }
+
+.checkbox {
+  cursor: pointer;
+  input {
+    cursor: pointer;
+  }
+  label {
+    cursor: pointer;
+    color: $secondary2;
+    font-size: 14px;
+  }
+}

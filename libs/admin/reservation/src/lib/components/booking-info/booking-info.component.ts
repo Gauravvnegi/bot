@@ -261,7 +261,7 @@ export class BookingInfoComponent implements OnInit {
         !this.configData?.marketSegment.some((item) => item.value === res)
       ) {
         this.configData.marketSegment.push({ label: res, value: res });
-        marketSegmentControl.patchValue(res, { emitEvent: false });
+        marketSegmentControl.patchValue(res);
       }
     });
 
@@ -274,7 +274,7 @@ export class BookingInfoComponent implements OnInit {
           this.configData.source.push({ label: res, value: res });
         }
         this.initSourceDetails(res);
-        !this.editMode && sourceNameControl.reset({ emitEvent: false });
+        !this.editMode && sourceNameControl.reset();
       }
     });
 
@@ -342,7 +342,7 @@ export class BookingInfoComponent implements OnInit {
   }
 
   updateValueAndValidity(control: AbstractControl) {
-    control.reset({ emitEvent: false });
+    control.reset();
     control.clearValidators();
     control.updateValueAndValidity();
   }

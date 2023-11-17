@@ -11,6 +11,8 @@ export type ServiceFormData = {
   categoryName: string;
   enableVisibility: string[];
   taxIds: string[];
+  enableOnMicrosite: boolean;
+  priority: string;
 };
 
 export type ServiceData = ServiceFormData & {

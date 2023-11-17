@@ -29,6 +29,8 @@ export type PackageResponse = {
   subPackages: ServiceResponse[];
   // enableVisibility: string[];
   // serviceIds: string[];
+  enableOnMicrosite: boolean;
+  priority: string;
 };
 
 export type PackageListResponse = {

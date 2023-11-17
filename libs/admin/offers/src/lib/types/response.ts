@@ -26,6 +26,8 @@ export type OfferResponse = {
   discountedPrice: number;
   subPackages: any[];
   roomTypes: any[];
+  enableOnMicrosite: boolean;
+  priority: string;
 };
 
 export type SearchResult = {

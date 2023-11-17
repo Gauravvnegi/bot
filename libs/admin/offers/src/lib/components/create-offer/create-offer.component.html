@@ -41,6 +41,19 @@
       "
     ></hospitality-bot-custom-file-upload>
 
+    <div class="full-width checkbox">
+      <input
+        #checkbox
+        type="checkbox"
+        [checked]="useForm.get('priority').value === 'HIGH'"
+        (change)="onCheckboxClick($event.target)"
+      />
+      <label (click)="checkbox.click()" for="checkbox">
+        Give this service priority status, featuring it prominently on the
+        landing page as a highlighted service.</label
+      >
+    </div>
+
     <div class="des-template">
       <div class="des-template__label">Offer Description</div>
       <div class="des-template__input">

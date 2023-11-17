@@ -15,6 +15,8 @@ export type OfferFormData = {
   endDate: number;
   discountType: string;
   discountValue: number;
+  enableOnMicrosite: boolean;
+  priority: string;
 };
 
 export type OfferData = Omit<OfferFormData, 'libraryItems'> & {

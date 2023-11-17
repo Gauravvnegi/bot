@@ -97,6 +97,8 @@ export class CreateOfferComponent implements OnInit {
       discountType: ['PERCENTAGE', [Validators.required]],
       discountValue: ['0', [Validators.required, Validators.min(0)]],
       discountedPrice: [''],
+      enableOnMicrosite: [false],
+      priority: ['LOW'],
     });
 
     this.initFormSubscription();
@@ -274,6 +276,20 @@ export class CreateOfferComponent implements OnInit {
         }));
       })
     );
+  }
+
+  onCheckboxClick(event: HTMLInputElement) {
+    if (event.checked) {
+      this.useForm.patchValue({
+        priority: 'HIGH',
+        enableOnMicrosite: true,
+      });
+    } else {
+      this.useForm.patchValue({
+        priority: 'LOW',
+        enableOnMicrosite: false,
+      });
+    }
   }
 
   handleSubmit() {

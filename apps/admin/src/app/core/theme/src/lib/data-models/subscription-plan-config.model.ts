@@ -216,6 +216,7 @@ export class ProductSubscription {
 
       if (isProductSubscribed) {
         this.subscribedProducts.push(productName);
+        this.subscribedModules.push(productName);
         this.subscribedModuleProductBased = {
           ...this.subscribedModuleProductBased,
           [productName]: [],

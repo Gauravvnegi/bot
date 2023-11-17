@@ -289,7 +289,7 @@ export class BookingSummaryComponent implements OnInit {
     );
 
     detailCompRef.componentInstance.bookingId = this.reservationId;
-    detailCompRef.componentInstance.tabKey = 'payment_details';
+    detailCompRef.componentInstance.tabKey = 'guest_details';
     this.$subscription.add(
       detailCompRef.componentInstance.onDetailsClose.subscribe((res) => {
         detailCompRef.close();

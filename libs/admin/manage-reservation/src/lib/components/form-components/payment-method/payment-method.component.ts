@@ -20,6 +20,9 @@ import {
   RoutesConfigService,
 } from '@hospitality-bot/admin/core/theme';
 import { ReservationForm } from '../../../constants/form';
+import { DetailsComponent } from '@hospitality-bot/admin/reservation';
+import { ModalService } from '@hospitality-bot/shared/material';
+import { MatDialogConfig } from '@angular/material/dialog';
 
 @Component({
   selector: 'hospitality-bot-payment-method',
@@ -43,7 +46,8 @@ export class PaymentMethodComponent implements OnInit {
     private manageReservationService: ManageReservationService,
     private globalFilterService: GlobalFilterService,
     private userService: UserService,
-    private routesConfigService: RoutesConfigService
+    private routesConfigService: RoutesConfigService,
+    private modalService: ModalService
   ) {}
 
   ngOnInit(): void {
@@ -108,10 +112,22 @@ export class PaymentMethodComponent implements OnInit {
     );
   }
 
-  viewPaymentHistory() {
-    this.routesConfigService.navigate({
-      subModuleName: ModuleNames.TRANSACTIONS,
-    });
+  openDetailsPage() {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = true;
+    dialogConfig.width = '100%';
+    const detailCompRef = this.modalService.openDialog(
+      DetailsComponent,
+      dialogConfig
+    );
+
+    detailCompRef.componentInstance.bookingId = this.reservationId;
+    detailCompRef.componentInstance.tabKey = 'payment_details';
+    this.$subscription.add(
+      detailCompRef.componentInstance.onDetailsClose.subscribe((res) => {
+        detailCompRef.close();
+      })
+    );
   }
 
   get paymentControls() {

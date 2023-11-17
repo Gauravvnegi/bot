@@ -203,9 +203,9 @@ export class TaxDataTableComponent extends BaseDatatableComponent
 
   editTax(data): void {
     this.taxService.entityId = data.entityId;
-    this.router.navigate([
-      `/pages/settings/tax/${this.routes.createTax.route}/${data?.id}`,
-    ]);
+    this.router.navigate([`${this.routes.editTax.route}/${data?.id}`], {
+      relativeTo: this.route,
+    });
   }
 
   /**

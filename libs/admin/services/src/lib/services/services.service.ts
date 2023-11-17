@@ -4,11 +4,14 @@ import { BehaviorSubject } from 'rxjs';
 import { Observable } from 'rxjs/internal/Observable';
 import { TableValue } from '../constant/data-table';
 import { TaxListResponse } from '../types/response';
+import { EventEmitter } from 'events';
+import { ServiceFormData } from '../types/service';
 
 @Injectable()
 export class ServicesService extends LibraryService {
-
   entityId: string;
+
+  serviceFormData = new BehaviorSubject<ServiceFormData>(null);
 
   /**
    * Currently Selected Services table

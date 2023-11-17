@@ -397,7 +397,7 @@ export class PaymentRule {
       input?.pricingDetails?.totalAmount - input?.paymentRule?.amount;
     this.makePaymentBefore = input?.paymentRule?.dueDate ?? 0;
     this.inclusionsAndTerms = input?.paymentRule?.remarks ?? '';
-    this.type = input.paymentRule.type ?? 'FLAT';
+    this.type = input?.paymentRule?.type ?? 'FLAT';
     return this;
   }
 }

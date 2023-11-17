@@ -19,16 +19,23 @@ import {
   Validators,
 } from '@angular/forms';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
-import { EntitySubType } from 'libs/admin/shared/src';
+import {
+  AdminUtilityService,
+  EntitySubType,
+  QueryConfig,
+} from 'libs/admin/shared/src';
 import { IteratorComponent } from 'libs/admin/shared/src/lib/components/iterator/iterator.component';
-import { Subscription } from 'rxjs';
+import { Subscription, forkJoin } from 'rxjs';
 import { roomFields, RoomFieldTypeOption } from '../../constants/reservation';
 import { ReservationForm, RoomTypes } from '../../constants/form';
 import { IteratorField } from 'libs/admin/shared/src/lib/types/fields.type';
 import { FormService } from '../../services/form.service';
-import { RoomTypeResponse } from 'libs/admin/room/src/lib/types/service-response';
+import {
+  RoomTypeResponse,
+} from 'libs/admin/room/src/lib/types/service-response';
 import { debounceTime } from 'rxjs/operators';
 import { ReservationType } from '../../constants/reservation-table';
+import { RoomService } from 'libs/admin/room/src/lib/services/room.service';
 
 @Component({
   selector: 'hospitality-bot-room-iterator',
@@ -57,7 +64,7 @@ export class RoomIteratorComponent extends IteratorComponent
   globalQueries = [];
   errorMessages = {};
 
-  roomTypes: RoomFieldTypeOption[] = [];
+  selectedRoomTypes: RoomFieldTypeOption[] = [];
 
   $subscription = new Subscription();
 
@@ -74,7 +81,9 @@ export class RoomIteratorComponent extends IteratorComponent
     protected fb: FormBuilder,
     private globalFilterService: GlobalFilterService,
     private controlContainer: ControlContainer,
-    public formService: FormService
+    public formService: FormService,
+    private roomService: RoomService,
+    private adminUtilityService: AdminUtilityService
   ) {
     super(fb);
   }
@@ -167,7 +176,7 @@ export class RoomIteratorComponent extends IteratorComponent
     });
   }
 
-  listenForRoomChanges(index) {
+  listenForRoomChanges(index: number) {
     let roomCount =
       parseInt(this.roomControls[index].get('roomCount').value) ?? 0;
     this.roomControls[index]
@@ -232,32 +241,35 @@ export class RoomIteratorComponent extends IteratorComponent
         { emitEvent: false }
       );
     });
+  }
 
-    // const observables = itemValues.map((value, index) =>
-    //   this.roomService.getRoomTypeById(this.entityId, value.roomTypeId)
-    // );
-
-    // // Use forkJoin to wait for all observables to complete
-    // forkJoin(observables).subscribe(
-    //   (responses) => {
-    //     // Process the responses if needed
-    //     responses.forEach((res, index) => {
-    //       this.roomTypes[index] = this.formService.setReservationRoomType(res);
-    //       this.listenRoomTypeChanges(index);
-    //     });
-    //   },
-    //   (error) => {},
-    //   () => this.formService.isDataInitialized.next(true)
-    // );
+  getQueryConfig(): QueryConfig {
+    const config = {
+      params: this.adminUtilityService.makeQueryParams([
+        {
+          type: 'ROOM_TYPE',
+          offset: 0,
+          limit: 200,
+          raw: true,
+          roomTypeStatus: true,
+          createBooking: true,
+        },
+      ]),
+    };
+    return config;
   }
 
   /**
    * @function listenRoomTypeChanges Listen changes in room type
    * @param index to keep track of the form array.
    */
-  listenRoomTypeChanges(roomType: RoomFieldTypeOption, index: number) {
+  listenRoomTypeChanges(
+    roomType: RoomFieldTypeOption,
+    index: number,
+    defaultOption: boolean
+  ) {
     if (roomType) {
-      // Sets rate plan options according to the selected room type
+      this.selectedRoomTypes[index] = defaultOption ? null : roomType;
       const ratePlanOptions = roomType.ratePlans.map((item) => ({
         label: item.label,
         value: item.value,
@@ -339,15 +351,28 @@ export class RoomIteratorComponent extends IteratorComponent
   }
 
   // Patch data for selected room type
-  roomTypeChange(event: RoomTypeResponse, index: number) {
+  roomTypeChange(event: RoomTypeResponse, index: number, defaultOption = true) {
     if (event) {
       this.listenRoomTypeChanges(
         this.formService.setReservationRoomType(event),
-        index
+        index,
+        defaultOption
       );
       this.isDraftBooking && this.listenForRoomChanges(index);
-      this.reservationId && this.formService.isDataInitialized.next(true);
+
+      // Data initialized only when all the roomTypes in itemValues are patched.
+      this.itemValuesCount - 1 === index &&
+        this.reservationId &&
+        this.formService.isDataInitialized.next(true);
     }
+  }
+
+  loadMoreRoomTypes(id: string, index: number) {
+    this.roomService.getRoomTypeById(this.entityId, id).subscribe((res) => {
+      if (res) {
+        this.roomTypeChange(res, index, false);
+      }
+    });
   }
 
   /**

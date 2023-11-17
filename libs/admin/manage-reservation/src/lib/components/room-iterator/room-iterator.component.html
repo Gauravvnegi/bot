@@ -75,7 +75,8 @@
               [props]="{
                 showChips: false,
                 isAsync: true,
-                placeholder: field.placeholder
+                placeholder: field.placeholder,
+                selectedOption: selectedRoomTypes[i]
               }"
               [apiConfig]="{
                 entityId: entityId,
@@ -95,6 +96,7 @@
                 limit: 200
               }"
               (clickedOption)="roomTypeChange($event, i)"
+              (missingOption)="loadMoreRoomTypes($event, i)"
               [reinitialize]="reinitializeRooms"
             ></hospitality-bot-quick-select>
           </div>

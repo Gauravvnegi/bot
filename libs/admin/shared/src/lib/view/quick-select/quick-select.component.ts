@@ -97,6 +97,7 @@ export class QuickSelectComponent extends FormComponent implements OnInit {
   }
 
   @Output() clickedOption = new EventEmitter<Option>();
+  @Output() missingOption = new EventEmitter<Option>();
   @Output() openSidebar = new EventEmitter<boolean>();
 
   $subscription = new Subscription();
@@ -122,14 +123,17 @@ export class QuickSelectComponent extends FormComponent implements OnInit {
       !changes['props']?.previousValue?.selectedOption
     ) {
       const selectedOption = changes['props']?.currentValue?.selectedOption;
+
       // Get items again when selected option is patched.
-      this.menuOptions = [...this.menuOptions, selectedOption];
-      this.removeDuplicate([...this.menuOptions]);
-      this.controlContainer.control
-        .get(this.controlName)
-        .patchValue(selectedOption?.value, {
-          emitEvent: false,
-        });
+      if (selectedOption) {
+        this.menuOptions = [...this.menuOptions, selectedOption];
+        this.removeDuplicate([...this.menuOptions]);
+        this.controlContainer.control
+          .get(this.controlName)
+          .patchValue(selectedOption?.value, {
+            emitEvent: false,
+          });
+      }
     }
     if (
       changes['reinitialize']?.previousValue !== undefined &&
@@ -395,11 +399,12 @@ export class QuickSelectComponent extends FormComponent implements OnInit {
     this.controlContainer.control
       .get(this.controlName)
       .valueChanges.subscribe((res) => {
-        if (res?.length && this.menuOptions.length) {
-          const selectedOption = this.menuOptions.find(
+        if (res?.length) {
+          const selectedOption = this.menuOptions?.find(
             (item) => item.value === res
           );
           if (selectedOption) this.clickedOption.emit(selectedOption);
+          else this.missingOption.emit(res);
         }
       });
   }

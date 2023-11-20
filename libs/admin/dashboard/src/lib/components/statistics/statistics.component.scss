@@ -78,7 +78,11 @@
 .guest-stats--wrapper {
   @include flex-justify-center-wrap();
   .stats-row {
-    @include flex-space-btw-wrap();
+    //after hiding the guest source code else use space-between
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    gap: 25px;
     width: 100%;
     @media (max-width: $tablet) {
       gap: 1.3%;

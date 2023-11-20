@@ -39,6 +39,7 @@ export class SubMenuItem {
 export class ProductItem {
   path: string;
   title: string;
+  description: string;
   name: ProductNames;
   iconUrl: string;
   isSubscribed: boolean;
@@ -52,11 +53,11 @@ export class ProductItem {
 
     this.name = input.name;
     this.title = input.label;
+    this.description = input?.description;
     this.iconUrl = input.icon;
     this.isSubscribed = input.isSubscribed;
     this.isView = input.isView;
     this.path = '/' + routeService.getRouteFromName(input.name);
-
     input.config?.forEach((subMenu) => {
       if (subMenu.name) {
         this.children.push(new SubMenuItem().deserialize(subMenu, this.path));

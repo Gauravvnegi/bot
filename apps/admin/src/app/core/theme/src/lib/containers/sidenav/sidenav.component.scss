@@ -315,6 +315,8 @@
       row-gap: 2em;
 
       .menu {
+        @include flex-col;
+        gap: 0.4em;
         flex-basis: 49%;
         cursor: pointer !important;
         padding: 9px 12px;
@@ -342,6 +344,15 @@
           font-size: 14px;
           line-height: 1.07;
           letter-spacing: 0.84px;
+          text-align: left;
+          color: #001037;
+          font-weight: 700;
+        }
+        .menu-description {
+          opacity: 0.6;
+          font-size: 12px;
+          line-height: 1.17;
+          letter-spacing: 0.72px;
           text-align: left;
           color: #001037;
         }
@@ -372,7 +383,10 @@
   .menu-label {
     color: white !important;
     opacity: 1 !important;
-    font-weight: 600 !important;
+  }
+  .menu-description {
+    color: white !important;
+    opacity: 1 !important;
   }
 }
 

@@ -275,7 +275,7 @@ export class QuickReservationFormComponent implements OnInit {
                 res.guest.firstName +
                 ' ' +
                 (res.guest?.lastName ? res.guest.lastName : ''),
-              phoneNumber: res.guestDetails?.contactDetails?.contactNumber
+              phoneNumber: res.guest?.contactDetails?.contactNumber
                 ? res.guest?.contactDetails?.cc ??
                   +'' + res.guest?.contactDetails?.contactNumber
                 : null,

@@ -8,7 +8,6 @@ import {
 } from '@angular/forms';
 import {
   ConfigService,
-  ModuleNames,
   Option,
   UserService,
 } from '@hospitality-bot/admin/shared';
@@ -23,6 +22,7 @@ import { ReservationForm } from '../../../constants/form';
 import { DetailsComponent } from '@hospitality-bot/admin/reservation';
 import { ModalService } from '@hospitality-bot/shared/material';
 import { MatDialogConfig } from '@angular/material/dialog';
+import { ReservationType } from '../../../constants/reservation-table';
 
 @Component({
   selector: 'hospitality-bot-payment-method',
@@ -39,6 +39,8 @@ export class PaymentMethodComponent implements OnInit {
   @Input() reservationId: string;
   $subscription = new Subscription();
   parentFormGroup: FormGroup;
+  isConfirmedReservation: boolean = false;
+
   constructor(
     public fb: FormBuilder,
     public controlContainer: ControlContainer,
@@ -75,6 +77,11 @@ export class PaymentMethodComponent implements OnInit {
     };
 
     this.parentFormGroup.addControl('paymentMethod', this.fb.group(data));
+    this.reservationInfoControls.reservationType.valueChanges.subscribe(
+      (res) => {
+        this.isConfirmedReservation = res === ReservationType.CONFIRMED;
+      }
+    );
   }
 
   initConfig() {
@@ -142,6 +149,14 @@ export class PaymentMethodComponent implements OnInit {
     return (this.parentFormGroup.get('paymentRule') as FormGroup)
       .controls as Record<
       keyof ReservationForm['paymentRule'],
+      AbstractControl
+    >;
+  }
+
+  get reservationInfoControls() {
+    return (this.parentFormGroup.get('reservationInformation') as FormGroup)
+      .controls as Record<
+      keyof ReservationForm['reservationInformation'],
       AbstractControl
     >;
   }

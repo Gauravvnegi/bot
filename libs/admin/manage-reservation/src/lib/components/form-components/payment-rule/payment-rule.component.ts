@@ -9,6 +9,7 @@ import * as moment from 'moment';
 import { ReservationForm } from '../../../constants/form';
 import { FormService } from '../../../services/form.service';
 import { Subscription } from 'rxjs';
+import { ReservationType } from '../../../constants/reservation-table';
 
 @Component({
   selector: 'hospitality-bot-payment-rule',
@@ -24,6 +25,7 @@ export class PaymentRuleComponent implements OnInit {
   $subscription = new Subscription();
   minDate = new Date();
   maxDate = new Date();
+  isConfirmedReservation: boolean = false;
 
   constructor(
     private fb: FormBuilder,
@@ -58,6 +60,11 @@ export class PaymentRuleComponent implements OnInit {
     this.formService.deductedAmount.subscribe((res) => {
       this.totalAmount = res;
     });
+    this.reservationInfoControls.reservationType.valueChanges.subscribe(
+      (res) => {
+        this.isConfirmedReservation = res === ReservationType.CONFIRMED;
+      }
+    );
   }
 
   registerPaymentRuleChange() {
@@ -84,6 +91,14 @@ export class PaymentRuleComponent implements OnInit {
     return (this.parentFormGroup.get('paymentRule') as FormGroup)
       .controls as Record<
       keyof ReservationForm['paymentRule'],
+      AbstractControl
+    >;
+  }
+
+  get reservationInfoControls() {
+    return (this.parentFormGroup.get('reservationInformation') as FormGroup)
+      .controls as Record<
+      keyof ReservationForm['reservationInformation'],
       AbstractControl
     >;
   }

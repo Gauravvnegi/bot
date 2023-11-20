@@ -53,6 +53,7 @@ export class AddReservationComponent extends BaseReservationComponent
   checkinJourneyState: JourneyState;
   cancelOfferRequests$ = new Subject<void>();
   isDraftBooking = false;
+  isConfirmedBooking = false;
 
   constructor(
     private fb: FormBuilder,

@@ -129,16 +129,19 @@ export class CreateServiceComponent implements OnInit {
     const selectedHotel = this.hotelDetailService.hotels.find(
       (item) => item.id === this.hotelId
     );
-
     if (!selectedHotel) {
       this.entityList = [];
       return;
     }
 
-    this.entityList = selectedHotel.entities.map((entity) => ({
-      label: entity.name,
-      value: entity.id,
-    }));
+    this.entityList = selectedHotel.entities.map((entity) => {
+      if (entity.type !== ('RESTAURANT' as any)) {
+        return {
+          label: entity.name,
+          value: entity.id,
+        };
+      }
+    });
 
     this.entityList.unshift({
       label: selectedHotel.name,

@@ -11,6 +11,7 @@
       {{ description }}
     </p>
     <hospitality-bot-button
+      [disabled]="disabledAction"
       *ngIf="actionName?.length"
       [label]="actionName"
       [routerLink]="link"

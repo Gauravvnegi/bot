@@ -166,8 +166,9 @@
 <ng-template #emptyTable>
   <hospitality-bot-empty-table
     [isLoading]="loading"
-    [link]=" servicesRoutes.createService.route"
+    [link]="servicesRoutes.createService.route"
     [content]="{
+      disabledAction: isRestaurant,
       description:
         'No services found. Tap the +Create Services to create & manage the services offered by your hotel',
       actionName: '+Create Service',

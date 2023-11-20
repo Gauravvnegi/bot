@@ -10,6 +10,7 @@ export class EmptyTableComponent implements OnInit {
   imageSrc: string;
   description: string;
   actionName: string;
+  disabledAction: boolean;
   @Input() link: string;
   @Input() isLoading: boolean;
   @Output() action = new EventEmitter();

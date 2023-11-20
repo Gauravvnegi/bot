@@ -276,13 +276,15 @@ export class QuickReservationFormComponent implements OnInit {
                 ' ' +
                 (res.guest?.lastName ? res.guest.lastName : ''),
               phoneNumber: res.guest?.contactDetails?.contactNumber
-                ? res.guest?.contactDetails?.cc ??
-                  +'' + res.guest?.contactDetails?.contactNumber
+                ? res.guest?.contactDetails?.cc +
+                  '' +
+                  res.guest?.contactDetails?.contactNumber
                 : null,
 
               id: res.guest?.id ?? '',
               email: res.guest?.contactDetails?.emailId,
             };
+
             this.inputControls.guestInformation
               .get('guestDetails')
               .patchValue(res.guest.id);

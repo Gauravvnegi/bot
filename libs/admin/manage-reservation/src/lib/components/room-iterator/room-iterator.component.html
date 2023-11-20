@@ -35,7 +35,7 @@
             ></hospitality-bot-input>
             <hospitality-bot-multi-select
               *ngSwitchCase="'multi-select'"
-              class="multi-select"
+              class="multi-select dropdown-panel"
               [controlName]="field.name"
               [props]="{
                 placeholder: field.placeholder,
@@ -51,7 +51,7 @@
             ></hospitality-bot-multi-select>
             <hospitality-bot-select
               *ngSwitchCase="'select'"
-              class="select"
+              class="select dropdown-panel"
               [controlName]="field.name"
               [props]="{
                 placeholder: field.placeholder,
@@ -70,7 +70,7 @@
             <hospitality-bot-quick-select
               *ngSwitchCase="'quick-select'"
               [controlName]="field.name"
-              class="select"
+              class="select dropdown-panel"
               [inputType]="'select'"
               [props]="{
                 showChips: false,

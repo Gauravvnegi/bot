@@ -238,8 +238,10 @@
   color: #3b3b3b;
 }
 
-:host ::ng-deep .p-dropdown-panel {
-  // width: 300px !important;
+:host ::ng-deep .dropdown-panel {
+  .p-dropdown-panel {
+    width: 300px !important;
+  }
 }
 
 .form-block {

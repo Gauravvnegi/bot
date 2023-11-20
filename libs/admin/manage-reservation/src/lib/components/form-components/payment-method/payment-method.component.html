@@ -1,4 +1,8 @@
-<p-accordionTab header="Payment Method" [formGroup]="parentFormGroup">
+<p-accordionTab
+  header="Payment Method"
+  *ngIf="isConfirmedReservation"
+  [formGroup]="parentFormGroup"
+>
   <div class="form-block" formGroupName="paymentMethod">
     <div class="type-wrapper half-width">
       <hospitality-bot-input

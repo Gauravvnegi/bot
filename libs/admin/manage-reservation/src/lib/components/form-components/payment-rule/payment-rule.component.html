@@ -2,6 +2,7 @@
   class="payment-rule-accordion"
   header="Payment Rule"
   #accordionTab
+  *ngIf="isConfirmedReservation"
   [formGroup]="parentFormGroup"
 >
   <div class="btn-wrapper" *ngIf="accordionTab?.selected">

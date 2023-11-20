@@ -1,11 +1,10 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import {
   AbstractControl,
   ControlContainer,
   FormBuilder,
   FormGroup,
-} from '@angular/forms';
-import * as moment from 'moment';
+} from '@angular/forms'
 import { ReservationForm } from '../../../constants/form';
 import { FormService } from '../../../services/form.service';
 import { Subscription } from 'rxjs';
@@ -68,9 +67,6 @@ export class PaymentRuleComponent implements OnInit {
   }
 
   registerPaymentRuleChange() {
-    this.startTime = moment(this.currentDate).unix() * 1000;
-    this.inputControl.makePaymentBefore.setValue(this.startTime);
-
     this.inputControl.amountToPay.valueChanges.subscribe((res) => {
       if (!res) this.inputControl.deductedAmount.setValue(this.totalAmount);
       if (res && this.inputControl.amountToPay.valid) {

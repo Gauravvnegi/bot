@@ -397,8 +397,8 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
             this.compServices = new Services().deserialize(
               res.complimentaryPackages
             ).services;
-            if ((this, this.OutletFormService.outletFormState)) {
-              const test = this.compServices
+            if (this.OutletFormService.outletFormState) {
+              const filteredService = this.compServices
                 .filter((item) =>
                   this.OutletFormService.OutletFormData.packageCode.includes(
                     item.packageCode
@@ -406,7 +406,7 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
                 )
                 .map((item) => item.id);
               this.OutletFormService.OutletFormData.serviceIds = [
-                ...test,
+                ...filteredService,
                 ...this.OutletFormService.OutletFormData.serviceIds,
               ];
               const { serviceIds } = this.formControls;

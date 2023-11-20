@@ -130,7 +130,7 @@
 </div>
 
 <ng-template #timeOut>
-  <div class="time-left" *ngIf="!isSelected">
+  <div class="time-left" *ngIf="!isSelected && taskStatus?.timeLeft === 0">
     <div>
       Timed Out
     </div>

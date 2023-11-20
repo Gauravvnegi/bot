@@ -212,7 +212,10 @@ export class ReservationCalendarViewComponent implements OnInit {
         startPos: this.getDate(reservation.from),
         endPos: this.getDate(reservation.to),
         rowValue: reservation.bookingItems[0].roomDetails.roomNumber,
-        colorCode: getColorCode(reservation.journeysStatus),
+        colorCode: getColorCode(
+          reservation.journeysStatus,
+          reservation?.status
+        ),
         nonInteractive: reservation.journeysStatus.CHECKOUT === 'COMPLETED',
         additionContent: reservation?.companyName ?? '',
       }));

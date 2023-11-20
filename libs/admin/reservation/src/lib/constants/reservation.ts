@@ -1,4 +1,7 @@
-import { JourneyState, JourneyType } from "libs/admin/manage-reservation/src/lib/constants/reservation";
+import {
+  JourneyState,
+  JourneyType,
+} from 'libs/admin/manage-reservation/src/lib/constants/reservation';
 
 const actionBtnConfig = [
   {
@@ -20,7 +23,8 @@ export const actionConfig = {
 };
 
 export function getColorCode(
-  jouryneyStatus: Record<JourneyType, JourneyState>
+  jouryneyStatus: Record<JourneyType, JourneyState>,
+  status: string
 ) {
   if (jouryneyStatus) {
     if (jouryneyStatus.CHECKOUT === JourneyState.COMPLETED) return 'inactive';
@@ -28,6 +32,7 @@ export function getColorCode(
     else if (jouryneyStatus.PRECHECKIN === JourneyState.COMPLETED)
       return 'success';
     else if (jouryneyStatus.NEW === JourneyState.COMPLETED) return 'success';
+    else if (status === 'DUEOUT') return 'warning';
     else return 'success';
   }
 }

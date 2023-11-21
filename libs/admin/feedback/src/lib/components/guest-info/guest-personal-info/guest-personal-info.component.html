@@ -21,45 +21,38 @@
     </div>
   </div>
   <div class="border-line"></div>
-  <div class="contact-detials">
-    {{ 'guestData.contact' | translate }}
-  </div>
-  <a href="tel:{{'guestData.phone'}}">
-  <div class="label">
-    {{ 'guestData.phone' | translate }}
-  </div>
-  </a>
- 
-  <a href="tel:{{data?.phoneNumber}}">
-  <div class="label-text">
-    {{ data.phoneNumber }}
-  </div>
-   </a>
-  <div class="label">
-    {{ 'guestData.email' | translate }}
-  </div>
-  <div class="label-text">
-    {{ data.email || 'Unknown' }}
-  </div>
-  <div class="contact-detials">
-    {{ 'guestData.other' | translate }}
-  </div>
+  <ng-container
+    *ngIf="data?.phoneNumber || (data?.email && data?.email.length)"
+  >
+    <div class="contact-detials">
+      {{ 'guestData.contact' | translate }}
+    </div>
+    <ng-container *ngIf="data?.phoneNumber">
+      <a href="tel:{{ 'guestData.phone' }}">
+        <div class="label">
+          {{ 'guestData.phone' | translate }}
+        </div>
+      </a>
+      <a href="tel:{{ data?.phoneNumber }}">
+        <div class="label-text">
+          {{ data.phoneNumber }}
+        </div>
+      </a>
+    </ng-container>
+    <div class="label">
+      {{ 'guestData.email' | translate }}
+    </div>
+    <div class="label-text">
+      {{ data.email || 'Unknown' }}
+    </div>
+    <div class="contact-detials">
+      {{ 'guestData.other' | translate }}
+    </div>
+  </ng-container>
   <div class="label">
     {{ 'guestData.noOfStays' | translate }}
   </div>
   <div class="label-text">
     {{ data.numberOfBookings }}
-  </div>
-  <div class="label">
-    {{ 'top_low_nps.label' | translate }}
-  </div>
-  <div class="label-text">
-    {{ data.nps }}
-  </div>
-  <div class="label">
-    {{ 'churnPrediction' | translate }}
-  </div>
-  <div class="label-text">
-    {{ data.churn }}
   </div>
 </div>

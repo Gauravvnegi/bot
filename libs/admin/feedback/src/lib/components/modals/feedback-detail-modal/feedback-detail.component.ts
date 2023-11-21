@@ -59,6 +59,7 @@ export class FeedbackDetailModalComponent implements OnInit, OnDestroy {
   userPermissions: Departmentpermission[];
   $subscription = new Subscription();
   assigneeList;
+  stateList: { label: string; id: string }[] = [];
   guestInfoEnable = false;
   feedbackFG: FormGroup;
   num = card.num;
@@ -73,6 +74,7 @@ export class FeedbackDetailModalComponent implements OnInit, OnDestroy {
   ) {
     this.feedbackFG = new FormGroup({
       assignee: new FormControl(''),
+      state: new FormControl(''),
     });
   }
 

@@ -87,13 +87,13 @@
     </div>
     <mat-select
       class="assignee-dropdown state-dropdown"
-      [value]="feedbackFG?.get('state')?.value"
+      [value]="feedbackFG?.get('status')?.value"
       (selectionChange)="updateFeedbackState($event)"
       placeholder="Status"
-      [disabled]="stateList?.length === 0"
+      [disabled]="statusList?.length === 0"
     >
-      <mat-option *ngFor="let state of stateList" [value]="state?.id">
-        {{ assignee?.label }}
+      <mat-option *ngFor="let status of statusList" [value]="status?.id">
+        {{ status?.label }}
       </mat-option>
     </mat-select>
 

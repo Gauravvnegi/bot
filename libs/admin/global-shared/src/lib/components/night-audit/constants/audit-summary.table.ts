@@ -76,10 +76,10 @@ export const cols: Record<AuditSummaryColumn, Cols[]> = {
       field: 'noShows',
       header: 'No Show',
     },
-    {
-      field: 'restaurant',
-      header: 'Restaurant',
-    },
+    // {
+    //   field: 'restaurant',
+    //   header: 'Restaurant',
+    // },
   ],
 };
 

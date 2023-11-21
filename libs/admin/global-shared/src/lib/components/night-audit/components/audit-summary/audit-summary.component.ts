@@ -154,7 +154,7 @@ export class AuditSummaryComponent implements OnInit {
 
   initActionConfig(postLabel?: string) {
     this.actionConfig = {
-      preHide: this.activeIndex == 0,
+      preHide: this.activeIndex == 0 || this.activeIndex === 3,
       preLabel: this.activeIndex != 0 ? 'Back' : undefined,
       postLabel: 'Finish',
       preSeverity: 'primary',

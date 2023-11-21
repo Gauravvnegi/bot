@@ -35,7 +35,7 @@ export const cols: Cols[] = [
   {
     field: 'action',
     header: 'Actions',
-    width: '16%',
+    width: '20%',
   },
 ];
 

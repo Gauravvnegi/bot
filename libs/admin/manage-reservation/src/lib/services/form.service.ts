@@ -85,7 +85,7 @@ export class FormService {
       transactionId: input?.paymentMethod?.transactionId ?? '',
     };
 
-    if (type === 'full')
+    if (type === 'full' || input?.paymentRule?.amountToPay)
       roomReservationData.paymentRule = {
         amount: input?.paymentRule?.amountToPay,
         type: 'FLAT',

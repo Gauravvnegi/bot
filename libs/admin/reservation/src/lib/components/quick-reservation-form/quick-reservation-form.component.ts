@@ -193,6 +193,14 @@ export class QuickReservationFormComponent implements OnInit {
         specialInstructions: [''],
       }),
 
+      paymentRule: this.fb.group({
+        amountToPay: [0],
+        deductedAmount: [''],
+        makePaymentBefore: [''],
+        inclusionsAndTerms: [''],
+        type: ['FLAT'],
+      }),
+
       guestInformation: this.fb.group({
         guestDetails: ['', [Validators.required]],
       }),

@@ -121,12 +121,12 @@ export class BookingInfoComponent implements OnInit {
         ? new Date(this.defaultDate)
         : new Date();
       this.endMinDate.setDate(this.startMinDate.getDate() + 1);
+      this.minToDate.setDate(this.endMinDate.getDate());
     } else {
       this.startMinDate = new Date(this.reservationInfoControls.from.value);
+      this.minToDate.setDate(this.startMinDate.getDate() + 1);
       this.endMinDate = new Date(this.reservationInfoControls.to.value);
     }
-
-    this.minToDate.setDate(this.endMinDate.getDate());
 
     this.fromDateValue = this.startMinDate;
     this.toDateValue = this.endMinDate;

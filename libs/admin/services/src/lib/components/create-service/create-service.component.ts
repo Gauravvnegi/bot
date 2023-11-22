@@ -147,6 +147,8 @@ export class CreateServiceComponent implements OnInit {
       label: selectedHotel.name,
       value: selectedHotel.id,
     });
+
+    this.entityList = this.entityList.filter((item) => item);
   }
 
   listenForTypeChange() {

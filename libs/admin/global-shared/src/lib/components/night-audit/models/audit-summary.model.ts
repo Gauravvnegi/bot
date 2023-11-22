@@ -79,7 +79,7 @@ export class AuditSummary {
       totalAmount = totalAmount + +input.cashiersPayment[key];
       return {
         counter: getTitleCaseString(key),
-        revenueReceived: `Rs. ${input.cashiersPayment[key]}`,
+        revenueReceived: `\u20B9 ${input.cashiersPayment[key]}`,
         withdrawals: '',
         balance: '',
       };
@@ -89,7 +89,7 @@ export class AuditSummary {
         counter: 'Total',
         revenueReceived: ' ',
         withdrawals: ' ',
-        balance: `Rs. ${totalAmount}`,
+        balance: `\u20B9 ${totalAmount}`,
       });
     return cashierDetail;
   }
@@ -102,11 +102,11 @@ export class AuditSummary {
           total = total + +input.outlets[index].totalAmount;
           return {
             ...pre,
-            [curr.field]: `Rs. ${input.outlets[index].totalAmount}`,
+            [curr.field]: `\u20B9 ${input.outlets[index].totalAmount}`,
           };
         },
         {
-          booking: `Rs. ${input?.bookingAmount}`,
+          booking: `\u20B9 ${input?.bookingAmount}`,
           cancellation: '',
           noShows: '',
           restaurant: '',
@@ -121,7 +121,7 @@ export class AuditSummary {
         if (index == 0) {
           totalInfo = { ...totalInfo, [key]: 'Total Revenue' };
         } else if (index == revenueListKeys.length - 1) {
-          totalInfo = { ...totalInfo, [key]: `Rs. ${total}` };
+          totalInfo = { ...totalInfo, [key]: `\u20B9 ${total}` };
         } else {
           totalInfo = { ...totalInfo, [key]: ' ' };
         }

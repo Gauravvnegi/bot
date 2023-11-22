@@ -29,7 +29,7 @@ export class CheckedInReservation {
       styleClass: 'active-text',
       room: `${roomDetails.roomNumber + ' - ' + roomDetails.roomTypeLabel}`,
     };
-    this.bookingNo = `#${input?.reservationNumber ?? ''}`;
+    this.bookingNo = `${input?.reservationNumber ?? ''}`;
     this.stakeHolder = {
       guest: guest?.firstName + ' ' + guest?.lastName,
       company: guest?.company
@@ -43,8 +43,8 @@ export class CheckedInReservation {
       postText: 'tiny-text',
     };
     this.expenses = {
-      dueAmount: input?.pricingDetails?.totalDueAmount ?? 0,
-      total: input?.pricingDetails?.totalAmount ?? 0,
+      dueAmount: `\u20B9 ${input?.pricingDetails?.totalDueAmount}` ?? 0,
+      total: `\u20B9 ${input?.pricingDetails?.totalAmount}` ?? 0,
       preText: 'danger-text',
       textSeparator: '/',
       textInlineBlock: true,

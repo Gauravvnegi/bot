@@ -112,6 +112,7 @@ export class TableData {
   isNonEditableBillItem: boolean;
   isDisabled: boolean;
   isAddOn: boolean;
+  isMiscellaneous: boolean;
 
   deserialize(input: BillItem) {
     this.key = input.id;
@@ -128,6 +129,7 @@ export class TableData {
     this.isDisabled = !input.isAddOn || !!input.taxId;
     this.isDiscount = !!input.isCoupon;
     this.isNonEditableBillItem = !input.itemId;
+    this.isMiscellaneous = !input.itemId && !input.isCoupon;
     this.isAddOn = input.isAddOn;
 
     return this;

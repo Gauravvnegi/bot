@@ -262,7 +262,8 @@
                     tableFormArray.at(rowIndex).get('isDiscount').value ||
                     !tableFormArray.at(rowIndex).get('isNew').value ||
                     tableFormArray.at(rowIndex).get('isNonEditableBillItem')
-                      .value
+                      .value ||
+                    !tableFormArray.at(rowIndex).get('isMiscellaneous').value
                   "
                   (onFocus)="handleFocus(rowIndex)"
                   (onBlur)="handleBlur()"
@@ -469,13 +470,18 @@
         ></hospitality-bot-input>
       </ng-container>
     </div>
-
-    <div class="button">
-      <hospitality-bot-button
-        label="Save Details"
-        (onClick)="handleSave()"
-        [disabled]="isInvoiceDisabled"
-      ></hospitality-bot-button>
-    </div>
   </div>
 </div>
+
+<hospitality-bot-form-action
+  class="full-width"
+  (onPostAction)="handleSave()"
+  [isSticky]="true"
+  [config]="{
+    postLabel: 'Save Details',
+    postDisabled: isInvoiceDisabled,
+    preHide: true
+  }"
+  #fa
+>
+</hospitality-bot-form-action>

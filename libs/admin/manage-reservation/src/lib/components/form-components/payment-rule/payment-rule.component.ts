@@ -4,7 +4,7 @@ import {
   ControlContainer,
   FormBuilder,
   FormGroup,
-} from '@angular/forms'
+} from '@angular/forms';
 import { ReservationForm } from '../../../constants/form';
 import { FormService } from '../../../services/form.service';
 import { Subscription } from 'rxjs';

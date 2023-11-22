@@ -83,6 +83,7 @@ export class InvoiceService extends ApiService {
       isDisabled: false,
       isDiscount: false,
       isNonEditableBillItem: false,
+      isMiscellaneous: false,
       isNew: true,
       itemId: '',
       taxId: null,

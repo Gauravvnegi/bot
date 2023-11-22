@@ -308,7 +308,7 @@ export class AddReservationComponent extends BaseReservationComponent
 
   offerSelect(offerData?: OfferData): void {
     if (offerData) {
-      this.userForm.patchValue({ offerId: offerData.id });
+      this.userForm.patchValue({ offerId: offerData.id }, { emitEvent: false });
       this.getSummaryData();
     } else {
       this.userForm.get('offerId').reset();

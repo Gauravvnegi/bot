@@ -27,7 +27,11 @@ export class AddRefundComponent implements OnInit {
     this.userForm = this.fb.group({
       refundAmount: [
         null,
-        [Validators.required, Validators.max(this.maxAmount + 1)],
+        [
+          Validators.required,
+          Validators.max(this.maxAmount + 1),
+          Validators.min(0),
+        ],
       ],
       remarks: [''],
     });

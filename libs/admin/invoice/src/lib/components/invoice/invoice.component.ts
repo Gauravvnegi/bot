@@ -363,6 +363,9 @@ export class InvoiceComponent implements OnInit {
     const rowFG: BillItemFields = this.tableFormArray.at(rowIndex).value;
     const dMenu = rowFG.isDiscount || !rowFG.isAddOn ? [] : defaultMenu;
 
+    if (rowFG.isMiscellaneous) {
+      return dMenu;
+    }
     if (this.hasDiscount(rowFG.itemId)) {
       return [...editDiscountMenu, ...dMenu];
     }
@@ -486,6 +489,7 @@ export class InvoiceComponent implements OnInit {
       isDiscount: [false],
       isNonEditableBillItem: [false],
       isAddOn: [true],
+      isMiscellaneous: [false],
     };
 
     const formGroup = this.fb.group(data);
@@ -1018,7 +1022,6 @@ export class InvoiceComponent implements OnInit {
    */
   loadMoreDescription() {
     this.descriptionOffSet = this.descriptionOffSet + 10;
-
     this.getDescriptionOptions();
   }
 
@@ -1199,6 +1202,7 @@ export class InvoiceComponent implements OnInit {
       description: value,
       isDiscount: type === 'discount',
       isNonEditableBillItem: type === 'refund' || type === 'miscellaneous',
+      isMiscellaneous: type === 'miscellaneous',
       itemId,
       transactionType: transactionType,
     });

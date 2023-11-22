@@ -62,6 +62,7 @@ export class FormComponent implements OnInit {
   @Output() onSearch = new EventEmitter<string>();
   @Input() label: string;
   @Input() controlName: string;
+  @Input() controlIndex: number;
 
   /**
    * To set menu options options
@@ -300,9 +301,15 @@ export class FormComponent implements OnInit {
     }
   };
 
+  get fieldClass() {
+    return `${this.controlName}${
+      this.controlIndex ? `_${this.controlIndex}` : ''
+    }`;
+  }
+
   get menuNode() {
     return document
-      .querySelector(`.${this.controlName}`)
+      .querySelector(`.${this.fieldClass}`)
       .querySelector(`.${this.menuClass}`);
   }
 

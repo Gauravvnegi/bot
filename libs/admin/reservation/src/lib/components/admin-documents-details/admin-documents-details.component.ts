@@ -363,7 +363,7 @@ export class AdminDocumentsDetailsComponent implements OnInit {
         this.parentForm.get('reservationDetails').get('bookingId').value,
         data
       )
-      .subscribe(
+    .subscribe(
         (response) => {
           this.selectedGuestGroup
             .get('status')
@@ -509,7 +509,7 @@ export class AdminDocumentsDetailsComponent implements OnInit {
 
     documents.forEach((doc) => {
       urls.push(doc.frontUrl.trim());
-
+      debugger;
       fileNames.push(`${name}_${doc.documentType}_frontURL`);
       if (doc.documentType !== 'VISA' && doc.backUrl) {
         urls.push(doc.backUrl.trim());

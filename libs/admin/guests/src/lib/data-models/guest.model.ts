@@ -16,11 +16,11 @@ export class GuestFactory {
       gender: formData.gender ?? '',
       dateOfBirth: formData.dateOfBirth ?? '',
       address: {
-        addressLine1: formData.address.formattedAddress ?? '',
-        city: formData.address.city ?? '',
-        state: formData.address.state ?? '',
-        countryCode: formData.address.countryCode ?? '',
-        postalCode: formData.address.postalCode ?? '',
+        addressLine1: formData?.address?.formattedAddress ?? '',
+        city: formData?.address?.city ?? '',
+        state: formData?.address?.state ?? '',
+        countryCode: formData?.address?.countryCode ?? '',
+        postalCode: formData?.address?.postalCode ?? '',
       },
     };
   }

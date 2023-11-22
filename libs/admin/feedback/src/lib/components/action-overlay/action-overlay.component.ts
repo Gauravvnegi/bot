@@ -22,6 +22,7 @@ import {
 } from '@angular/cdk/overlay';
 import { ComponentPortal } from '@angular/cdk/portal';
 import { FeedbackStatusFormComponent } from '../feedback-status-form/feedback-status-form.component';
+import { convertToTitleCase } from 'libs/admin/shared/src/lib/utils/valueFormatter';
 
 @Component({
   selector: 'hospitality-bot-action-overlay',
@@ -150,5 +151,9 @@ export class ActionOverlayComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.$subscription.unsubscribe();
+  }
+
+  get modifiedRowStatus() { 
+    return convertToTitleCase(this.rowDataStatus);
   }
 }

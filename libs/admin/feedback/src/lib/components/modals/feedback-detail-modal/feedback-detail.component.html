@@ -99,6 +99,17 @@
         </div>
         <div class="dropdown-wrapper">
           <mat-select
+            class="assignee-dropdown status-dropdown"
+            [value]="feedbackFG?.get('status')?.value"
+            (selectionChange)="updateFeedbackState($event)"
+            placeholder="Status"
+            [disabled]="statusList?.length === 0"
+          >
+            <mat-option *ngFor="let status of statusList" [value]="status?.id">
+              {{ status?.label }}
+            </mat-option>
+          </mat-select>
+          <mat-select
             class="assignee-dropdown"
             [value]="feedbackFG?.get('assignee')?.value"
             (selectionChange)="setAssignee($event)"

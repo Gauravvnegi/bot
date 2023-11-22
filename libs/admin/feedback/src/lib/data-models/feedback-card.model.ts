@@ -44,6 +44,7 @@ export class FeedbackRecord {
   userName: string;
   comments: string;
   color: string;
+  nextState: string[];
 
   deserialize(input, outlets, feedbackType, colorMap) {
     this.remarks = new Array<Remark>();
@@ -61,7 +62,8 @@ export class FeedbackRecord {
       set({}, 'updated', get(input, ['updated'])),
       set({}, 'userId', get(input, ['userId'])),
       set({}, 'userName', get(input, ['userName'])),
-      set({}, 'comments', get(input, [' feedback', 'comments']))
+      set({}, 'comments', get(input, [' feedback', 'comments'])),
+      set ({}, 'nextState', get(input, ['nextState']))
     );
 
     this.color = colors[Math.floor(Math.random() * colors.length)];

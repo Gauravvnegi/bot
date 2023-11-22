@@ -27,6 +27,7 @@ import {
 } from '../../../data-models/feedback-card.model';
 import { CardService } from '../../../services/card.service';
 import { FeedbackTableService } from '../../../services/table.service';
+import { convertToTitleCase } from 'libs/admin/shared/src/lib/utils/valueFormatter';
 
 @Component({
   selector: 'hospitality-bot-feedback-detail',
@@ -45,6 +46,7 @@ export class FeedbackDetailComponent implements OnInit, OnDestroy {
   globalFeedbackConfig = feedback;
   userPermissions: Departmentpermission[];
   assigneeList;
+  statusList: { label: string; id: string }[] = [];
   $subscription = new Subscription();
   @Input() globalQueries;
   constructor(
@@ -58,6 +60,7 @@ export class FeedbackDetailComponent implements OnInit, OnDestroy {
     this.assigneeList = new UserList().deserialize([]);
     this.feedbackFG = new FormGroup({
       assignee: new FormControl(''),
+      status: new FormControl(''),
     });
   }
 
@@ -82,7 +85,20 @@ export class FeedbackDetailComponent implements OnInit, OnDestroy {
     this.$subscription.add(
       this.cardService.$selectedFeedback.subscribe((response) => {
         this.feedback = response;
-        this.feedbackFG?.patchValue({ assignee: response?.userId });
+        this.statusList = response.nextState.map((item) => {
+          return { label: convertToTitleCase(item), id: item };
+        });
+
+        this.statusList.unshift({
+          label: convertToTitleCase(response.status),
+          id: response.status,
+        } as any);
+
+        this.feedbackFG?.patchValue({
+          assignee: response?.userId,
+          status: response?.status,
+        });
+
         if (response) {
           this.refreshFeedbackData(false);
 

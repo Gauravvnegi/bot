@@ -9,6 +9,8 @@ import { CheckedOutReservation } from '../../models/night-audit.model';
 import { TableActionType } from '../../../table-view/table-view.component';
 import { manageReservationRoutes } from 'libs/admin/manage-reservation/src/lib/constants/routes';
 import { ModuleNames } from '@hospitality-bot/admin/shared';
+import { SnackBarService } from '@hospitality-bot/shared/material';
+import { Clipboard } from '@angular/cdk/clipboard';
 
 @Component({
   selector: 'hospitality-bot-checkout-reservations',
@@ -31,7 +33,10 @@ export class CheckoutReservationsComponent implements OnInit {
   @Output() reload = new EventEmitter();
   @Output() onNavigate = new EventEmitter();
 
-  constructor() {}
+  constructor(
+    private snackbarService: SnackBarService,
+    private _clipboard: Clipboard
+  ) {}
 
   ngOnInit(): void {
     this.initActionConfig();
@@ -72,5 +77,12 @@ export class CheckoutReservationsComponent implements OnInit {
 
   handlePrev() {
     if (this.activeIndex > 0) this.indexChange.emit(this.activeIndex - 1);
+  }
+
+  copyConfirmationNumber(number: string) {
+    this._clipboard.copy(number);
+    this.snackbarService.openSnackBarAsText('Booking number copied', '', {
+      panelClass: 'success',
+    });
   }
 }

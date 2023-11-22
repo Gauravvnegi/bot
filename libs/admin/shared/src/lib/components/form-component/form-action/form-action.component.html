@@ -20,7 +20,7 @@
       [variant]="postVariant"
       [severity]="postSeverity"
       [isLoading]="loading"
-      [disabled]="postDisabled || disabled"
+      [disabled]="postDisabled || disabled || loading"
     ></hospitality-bot-button>
   </div>
   <div *ngIf="isFixed" class="footer-height"></div>

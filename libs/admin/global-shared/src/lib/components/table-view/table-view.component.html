@@ -79,6 +79,12 @@
                       >{{ objectData.value }}</span
                     >
                   </div>
+                  <i
+                    *ngIf="objectData?.postIcon && keyIndex == 0"
+                    [ngClass]="objectData.postIcon"
+                    (click)="OnPostIconClick.emit(objectData.value)"
+                    click-stop-propagation
+                  ></i>
                 </ng-container>
               </ng-container>
 

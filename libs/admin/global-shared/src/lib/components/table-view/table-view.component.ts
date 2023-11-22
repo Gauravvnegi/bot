@@ -42,7 +42,7 @@ export class TableViewComponent implements OnInit {
   @Output() actionClicked = new EventEmitter<boolean>();
   @Output() dropDownChange = new EventEmitter<TableActionType>();
   @Output() quickChange = new EventEmitter<TableActionType>();
-
+  @Output() OnPostIconClick = new EventEmitter<any>();
   constructor() {}
 
   ngOnInit(): void {}

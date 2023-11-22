@@ -11,7 +11,7 @@ import { quickActions } from '../constants/checked-in-reservation.table';
 export class CheckedInReservation {
   id: string;
   invoiceId: TableDataType;
-  bookingNo: string;
+  bookingNo: TableDataType;
   roomInfo: TableDataType;
   stakeHolder: TableDataType;
   visitStatus: TableDataType;
@@ -29,7 +29,10 @@ export class CheckedInReservation {
       styleClass: 'active-text',
       room: `${roomDetails.roomNumber + ' - ' + roomDetails.roomTypeLabel}`,
     };
-    this.bookingNo = `${input?.reservationNumber ?? ''}`;
+    this.bookingNo = input?.reservationNumber && {
+      postIcon: 'pi pi-copy',
+      bookingNo: `${input?.reservationNumber ?? ''}`,
+    };
     this.stakeHolder = {
       guest: guest?.firstName + ' ' + guest?.lastName,
       company: guest?.company

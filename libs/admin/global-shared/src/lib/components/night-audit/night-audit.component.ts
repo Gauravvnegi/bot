@@ -102,7 +102,7 @@ export class NightAuditComponent implements OnInit {
     if (!this.auditDate) {
       this.checkAudit();
     }
-
+    
     this.loading = true;
     this.$subscription.add(
       this.nightAuditService

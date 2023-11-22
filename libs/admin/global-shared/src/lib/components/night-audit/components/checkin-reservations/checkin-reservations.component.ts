@@ -20,6 +20,7 @@ import { EntitySubType, ModuleNames } from '@hospitality-bot/admin/shared';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { manageReservationRoutes } from 'libs/admin/manage-reservation/src/lib/constants/routes';
 import { TableActionType } from '../../../table-view/table-view.component';
+import { Clipboard } from '@angular/cdk/clipboard';
 
 @Component({
   selector: 'hospitality-bot-checkin-reservations',
@@ -38,7 +39,7 @@ export class CheckinReservationsComponent implements OnInit {
   actionConfig: ActionConfigType;
   entityId = '';
 
-  @Input() loading = false;
+  @Input() loading: boolean = false;
   @Input() items: CheckedInReservation[] = [];
   @Input() activeIndex = 0;
   @Input() stepList: MenuItem[];
@@ -53,7 +54,8 @@ export class CheckinReservationsComponent implements OnInit {
     private nightAuditService: NightAuditService,
     private confirmationService: ConfirmationService,
     private snackbarService: SnackBarService,
-    private globalFilterService: GlobalFilterService
+    private globalFilterService: GlobalFilterService,
+    private _clipboard: Clipboard
   ) {}
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -74,7 +76,7 @@ export class CheckinReservationsComponent implements OnInit {
       preLabel: this.activeIndex != 0 ? 'Back' : undefined,
       postLabel: 'Next',
       preSeverity: 'primary',
-      postDisabled: this.isSomeConfirmed(),
+      postDisabled: this.isSomeConfirmed() ,
     };
   }
 
@@ -112,6 +114,13 @@ export class CheckinReservationsComponent implements OnInit {
             )
         );
       },
+    });
+  }
+
+  copyConfirmationNumber(number: string) {
+    this._clipboard.copy(number);
+    this.snackbarService.openSnackBarAsText('Booking number copied', '', {
+      panelClass: 'success',
     });
   }
 

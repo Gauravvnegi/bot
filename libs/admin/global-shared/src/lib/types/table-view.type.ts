@@ -23,6 +23,7 @@ export interface TableObjectData {
   [TableObjectStyleKeys.textSeparator]?: string;
   [TableObjectStyleKeys.preText]?: TextType;
   [TableObjectStyleKeys.postText]?: TextType;
+  [TableObjectStyleKeys.postIcon]?: string;
 }
 
 export interface ActionDataType {

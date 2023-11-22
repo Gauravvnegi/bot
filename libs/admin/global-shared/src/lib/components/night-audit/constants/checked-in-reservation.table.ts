@@ -14,6 +14,7 @@ export const cols: Cols[] = [
   {
     field: 'bookingNo',
     header: 'Booking No',
+    width: '12%',
   },
   {
     field: 'stakeHolder',

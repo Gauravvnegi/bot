@@ -1,5 +1,6 @@
 export enum TableObjectStyleKeys {
   icon = 'icon',
+  postIcon = 'postIcon',
   styleClass = 'styleClass',
   textInlineBlock = 'textInlineBlock',
   textSeparator = 'textSeparator',

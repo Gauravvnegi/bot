@@ -32,6 +32,7 @@ import {
 } from '../../../data-models/feedback-datatable.model';
 import { CardService } from '../../../services/card.service';
 import { FeedbackTableService } from '../../../services/table.service';
+import { convertToTitleCase } from 'libs/admin/shared/src/lib/utils/valueFormatter';
 
 @Component({
   selector: 'hospitality-bot-feedback-detail-modal',
@@ -59,6 +60,7 @@ export class FeedbackDetailModalComponent implements OnInit, OnDestroy {
   userPermissions: Departmentpermission[];
   $subscription = new Subscription();
   assigneeList;
+  statusList: { label: string; id: string }[] = [];
   guestInfoEnable = false;
   feedbackFG: FormGroup;
   num = card.num;
@@ -73,15 +75,31 @@ export class FeedbackDetailModalComponent implements OnInit, OnDestroy {
   ) {
     this.feedbackFG = new FormGroup({
       assignee: new FormControl(''),
+      status: new FormControl(''),
     });
   }
 
   ngOnInit(): void {
     this.getUserPermission();
+    this.getStatusList();
   }
 
   close() {
     this.onDetailsClose.emit();
+  }
+
+  getStatusList() {
+    //note:  nextState need to be Integrate form BE
+    this.statusList = this.data?.nextStates?.map((item) => {
+      return { label: convertToTitleCase(item), id: item };
+    });
+
+    this.statusList.unshift({
+      label: convertToTitleCase(this.data?.status),
+      id: this.data?.status,
+    });
+
+    this.feedbackFG.patchValue({ status: this.data?.status });
   }
 
   getUserPermission() {

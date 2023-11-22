@@ -8,9 +8,8 @@ import {
 } from '@angular/core';
 import { FormBuilder, FormControl } from '@angular/forms';
 import { MatDialogConfig } from '@angular/material/dialog';
-import { MatTabChangeEvent } from '@angular/material/tabs';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
-import { feedback } from '../../../constants/feedback';
+import { feedback, feedbackStatus } from '../../../constants/feedback';
 import { FeedbackNotificationComponent } from '@hospitality-bot/admin/notification';
 import {
   AdminUtilityService,
@@ -44,6 +43,7 @@ import {
 } from '../../../data-models/feedback-card.model';
 import { StatisticsService } from '../../../services/feedback-statistics.service';
 import { MainComponent } from '../../card';
+import { convertToTitleCase } from 'libs/admin/shared/src/lib/utils/valueFormatter';
 @Component({
   selector: 'hospitality-bot-feedback-datatable',
   templateUrl: './feedback-datatable.component.html',
@@ -59,6 +59,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
   @Input() tableName = feedback.table.name;
   // tabFilterIdx = 0;
   // @Input() tabFilterItems = [];
+  readonly feedbackStatus = feedbackStatus;
   feedbackTypeFilterItem = [];
   feedbackTypeFilterIdx = 0;
   defaultFeedbackType;
@@ -390,7 +391,8 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
     this.initFilters(
       modifiedData.entityTypeCounts,
       modifiedData.entityStateCounts,
-      modifiedData.totalRecord
+      modifiedData.totalRecord,
+      this.feedbackStatus
     );
     this.loading = false;
   }

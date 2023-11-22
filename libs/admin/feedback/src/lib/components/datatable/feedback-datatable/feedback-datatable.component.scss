@@ -565,14 +565,16 @@ img {
 
 .detailPage {
   display: flex;
+  justify-content: center;
   outline: none;
   width: fit-content;
   border-radius: 24px;
-  font-size: 14px;
+  font-size: 11px;
   border: solid 1px $button-blue;
   background-color: $white;
-  padding: 4px 10px;
+  padding: 8px;
   color: $button-blue;
+  min-width: 124px;
   cursor: pointer;
 
   @media screen and (max-width: $L) {

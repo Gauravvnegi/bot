@@ -560,10 +560,14 @@
 }
 
 .assignee-dropdown {
-  width: 140px;
+  width: 260px;
   padding: 8px 10px;
   border-radius: 5px;
   border: solid 1px $grayLight;
+}
+
+.state-dropdown {
+  margin-right: 12px;
 }
 .userChat {
   @include flex-row-justify-end;

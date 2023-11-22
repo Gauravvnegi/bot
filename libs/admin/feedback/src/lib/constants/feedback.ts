@@ -14,14 +14,14 @@ export const feedbackStatus: Record<
   },
   HIGHRISK: {
     label: 'High Risk ',
-    type: 'completed',
+    type: 'failed',
   },
   TODO: {
-    label: 'To Do ',
+    label: 'To-Do ',
     type: 'default',
   },
   INPROGRESS: {
-    label: 'In-Progress ',
+    label: 'In Progress ',
     type: 'completed',
   },
   RESOLVED: {

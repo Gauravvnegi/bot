@@ -54,7 +54,7 @@ export class ReservationCalendarViewComponent implements OnInit {
   gridCols: IGCol[] = [];
   allRoomTypes: IGRoomType[] = [];
   roomTypes: IGRoomType[] = [];
-  dates: { day: string; date: number }[];
+  dates: IGDate[];
   globalQueries = [];
   entityId: string;
   useForm: FormGroup;
@@ -225,7 +225,6 @@ export class ReservationCalendarViewComponent implements OnInit {
         const unavailableStatusDetails = room.statusDetails.filter(
           (status) => status.status === 'OUT_OF_SERVICE'
         );
-
         const roomValues = unavailableStatusDetails
           .filter((status) => {
             const endDate = this.getStatusDate(status.toDate);
@@ -262,16 +261,16 @@ export class ReservationCalendarViewComponent implements OnInit {
   }
 
   getStatusDate(date: number) {
-    const today = new Date();
+    const currentDate = new Date(this.dates[0].currentDate);
     const statusDate = new Date(date);
 
     // Set both dates to midnight to compare only the dates
-    today.setHours(0, 0, 0, 0);
+    currentDate.setHours(0, 0, 0, 0);
     statusDate.setHours(0, 0, 0, 0);
 
     // Compare the dates
-    if (statusDate >= today) {
-      return statusDate.setHours(0, 0, 0, 0); // Return the date if it's on or after today
+    if (statusDate >= currentDate) {
+      return statusDate.setHours(0, 0, 0, 0); // Return the date if it's today or later
     }
 
     // Return null to skip the status if toDate is before today
@@ -309,6 +308,7 @@ export class ReservationCalendarViewComponent implements OnInit {
       const data = {
         day: daysOfWeek[day].substring(0, 3),
         date: nextDate.getDate(),
+        currentDate: nextDate,
       };
       dates.push(data);
 
@@ -584,4 +584,10 @@ export type QuickFormProps = {
   room: string | number;
   date?: number | string;
   roomType: IGRoomType;
+};
+
+export type IGDate = {
+  day: string;
+  date: number;
+  currentDate: Date;
 };

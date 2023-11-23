@@ -106,8 +106,8 @@ export type HousekeepingReportResponse = {
   roomTypeName: string;
   reservationNumber: string;
   guestName: string;
-  arrivalDate: string;
-  departureDate: string;
+  arrivalDate: number;
+  departureDate: number;
   nights: string;
 };
 

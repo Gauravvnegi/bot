@@ -289,7 +289,7 @@ export const housekeepingReportCols: ColsData<Omit<
     isSortDisabled: true,
   },
   bookingNo: {
-    header: 'Booking No.',
+    header: 'Res#',
     isSortDisabled: true,
   },
   guestName: {

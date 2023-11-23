@@ -16,7 +16,7 @@ import {
   NoShowReportData,
   ReservationAdrReportData,
   ReservationReportData,
-  ReservationSummaryReportData
+  ReservationSummaryReportData,
 } from '../types/reservation-reports.types';
 
 /**
@@ -265,7 +265,7 @@ export class ReservationAdrReport
         roomNo: data.stayDetails.room.roomNumber,
         checkIn: getFormattedDate(data.stayDetails.arrivalTime),
         checkOut: getFormattedDate(data.stayDetails.departureTime),
-        nights: data.guestDetails.primaryGuest.totalNights,
+        nights: data.nightCount,
         roomRent: data.reservationItemsPayment.totalRoomCharge,
 
         adr: data.guestDetails.primaryGuest.totalNights
@@ -321,7 +321,6 @@ export class ReservationSummaryReport
   }
 }
 
-
 //housekeepingReport
 export class HousekeepingReport
   implements ReportClass<HousekeepingReportData, HousekeepingReportResponse> {
@@ -332,15 +331,21 @@ export class HousekeepingReport
 
     value.forEach((data) => {
       this.records.push({
-        roomNo: data.roomNumber,
-        roomType: data.roomTypeName,
-        bookingNo: data.reservationNumber,
-        guestName: undefined, //to be added in response
-        checkIn: undefined, //to be added in response
-        checkOut: undefined, //to be added in response
-        nights: data.nights,
-        roomNotes: data.remarks, //to be added in response
-        status: data.status,
+        roomNo: data?.roomNumber,
+        roomType: data?.roomTypeName,
+        bookingNo: data?.reservationNumber,
+        guestName: data?.guestName,
+        checkIn:
+          typeof data?.arrivalDate === 'number'
+            ? getFormattedDate(data?.arrivalDate)
+            : '-',
+        checkOut:
+          typeof data?.departureDate === 'number'
+            ? getFormattedDate(data?.departureDate)
+            : '-',
+        nights: data?.nights,
+        roomNotes: data?.remarks,
+        status: data?.status,
       });
     });
     return this;
@@ -348,6 +353,7 @@ export class HousekeepingReport
 }
 
 export function getFormattedDate(time: number) {
+  debugger;
   const currentDate = new Date(time);
   const monthAbbreviated = new Intl.DateTimeFormat('en-US', {
     month: 'short',

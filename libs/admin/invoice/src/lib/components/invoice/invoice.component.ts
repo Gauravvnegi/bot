@@ -699,6 +699,12 @@ export class InvoiceComponent implements OnInit {
     return formControl;
   }
 
+  getCheckboxValue(index: number) {
+    return this.tableFormArray.at(index)?.get('taxId').value
+      ? this.tableFormArray.at(index)?.get('itemId').value
+      : this.tableFormArray.at(index)?.get('key').value;
+  }
+
   getTableRowValue(index: number) {
     return this.tableFormArray.at(index).value as BillItemFields;
   }

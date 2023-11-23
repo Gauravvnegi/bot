@@ -402,6 +402,11 @@ export class BookingInfoComponent implements OnInit {
             value: res?.id,
             ...res,
           };
+          res.marketSegment &&
+            this.reservationInfoControls.marketSegment.patchValue(
+              res.marketSegment,
+              { emitEvent: false }
+            );
         }
         this.sidebarVisible = false;
         componentRef.destroy();

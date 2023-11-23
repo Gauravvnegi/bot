@@ -29,38 +29,38 @@ export const auditRoomDetailsReportRows = [
   {
     label: 'Today`s Occupied Rooms',
     noOfRooms: 'occupiedRooms',
-    noOfGuests: 'occupiedGuests',
+    noOfGuests: 'occupiedRoomGuests',
   },
-  { label: 'Today`s Available Rooms', noOfRooms: 'arrivalRooms' }, //total rooms - occupied rooms
+  { label: 'Today`s Available Rooms', noOfRooms: 'todayAvailableRooms' }, //total rooms - occupied rooms
   {
     label: 'Today`s CheckIn',
     noOfRooms: 'arrivalRooms',
-    noOfGuests: 'arrivalGuests',
+    noOfGuests: 'arrivalPersons',
   },
   {
     label: 'Today`s CheckOut',
     noOfRooms: 'departureRooms',
-    noOfGuests: 'departureGuests',
+    noOfGuests: 'departurePersons',
   },
   {
     label: 'Today`s No Show',
     noOfRooms: 'noShowRooms',
-    noOfGuests: 'noShowGuests',
+    noOfGuests: 'noShowPersons',
   },
   {
     label: 'Today`s Cancellation',
     noOfRooms: 'cancelledReservationForToday',
-    noOfGuests: 'cancelledReservationForToday',
+    noOfGuests: undefined,
   },
   {
     label: 'Today`s Complimentary Rooms',
     noOfRooms: 'complimentaryRooms',
-    noOfGuests: 'complimentaryGuests',
+    noOfGuests: undefined,
   },
   {
     label: 'Today`s Use Rooms',
     noOfRooms: 'dayUseRooms',
-    noOfGuests: 'dayUseGuests',
+    noOfGuests: 'dayUseRoomGuests',
   },
 ];
 

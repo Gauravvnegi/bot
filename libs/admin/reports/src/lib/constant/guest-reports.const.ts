@@ -1,4 +1,6 @@
+import { GuestContactReport } from '../models/guest-reports.model';
 import {
+  GuestContactReportData,
   GuestHistoryData,
   GuestLedgerData,
   SalesByGuestData,
@@ -60,6 +62,73 @@ export const guestHistoryCols: ColsData<GuestHistoryData> = {
     header: 'Balance',
     isSortDisabled: true,
     isSearchDisabled: true,
+  },
+};
+
+export const guestContactReportCols: ColsData<GuestContactReportData> = {
+  guestId: {
+    header: 'Guest Id',
+    isSortDisabled: true,
+  },
+  salutation: {
+    header: 'Salutation',
+    isSortDisabled: true,
+  },
+  name: {
+    header: 'Name',
+    isSortDisabled: true,
+  },
+  address: {
+    header: 'Address',
+    isSortDisabled: true,
+  },
+  city: {
+    header: 'City',
+    isSortDisabled: true,
+  },
+  state: {
+    header: 'State',
+    isSortDisabled: true,
+  },
+  country: {
+    header: 'Country',
+    isSortDisabled: true,
+  },
+  nationality: {
+    header: 'Nationality',
+    isSortDisabled: true,
+  },
+  phone: {
+    header: 'Phone',
+    isSortDisabled: true,
+  },
+  mobileNo: {
+    header: 'Mobile No',
+    isSortDisabled: true,
+  },
+  fax: {
+    header: 'Fax',
+    isSortDisabled: true,
+  },
+  zipCode: {
+    header: 'Zip',
+    isSortDisabled: true,
+  },
+  email: {
+    header: 'Email',
+    isSortDisabled: true,
+  },
+  gender: {
+    header: 'Gender',
+    isSortDisabled: true,
+  },
+  dateOfBirth: {
+    header: 'DOB',
+    isSortDisabled: true,
+  },
+  idType: {
+    header: 'ID Type',
+    isSortDisabled: true,
   },
 };
 

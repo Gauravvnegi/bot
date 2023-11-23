@@ -22,6 +22,7 @@ export type ReportModules = Extract<
   | 'DISCOUNT_REPORTS'
   | 'DIRECT_BILLING_REPORTS'
   | 'SOURCE_REPORTS'
+  | 'FOLIO_REPORTS'
 >;
 
 // export enum ReportModules {
@@ -43,11 +44,18 @@ export type ReportsType = {
     | 'reservationAdrReport'
     | 'incomeSummaryReport'
     | 'reservationSummaryReport'
-    | 'housekeepingReport';
+    | 'housekeepingReport'
   MANAGER_REPORTS: 'managerFlashReport';
   OCCUPANCY_REPORTS: 'historyAndForecastReport';
-  FINANCIAL_REPORTS: 'monthlySummaryReport' | 'dailyRevenueReport';
-  REVENUE_REPORTS: 'cashierReport';
+  FINANCIAL_REPORTS:
+    | 'monthlySummaryReport'
+    | 'dailyRevenueReport'
+    | 'financialReport'
+    | 'closeOutBalance'
+    | 'depositReport'
+    | 'postingAuditReport';
+
+  REVENUE_REPORTS: 'cashierReport' | 'payTypeReport';
   NIGHT_AUDIT_REPORTS:
     | 'auditRoomDetailsReport'
     | 'auditTaxReport'
@@ -58,7 +66,8 @@ export type ReportsType = {
     | 'guestHistory'
     | 'salesByGuest'
     | 'guestTypeReport'
-    | 'guestLedger';
+    | 'guestLedger'
+    | 'guestContactReport';
   ACTIVITY_REPORTS: 'reservationCreatedReport' | 'reservationActivityReport';
   ANALYTICS_REPORTS:
     | 'companyContributionsReport'
@@ -70,6 +79,7 @@ export type ReportsType = {
     | 'directAgentBillingReport'
     | 'directCompanyBillingReport';
   SOURCE_REPORTS: 'marketSource';
+  FOLIO_REPORTS: 'folioListReport';
 };
 
 export type ReportsTypeValues = ReportsType[keyof ReportsType];

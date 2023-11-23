@@ -2,6 +2,8 @@ import { ReportClass, RowStyles } from '../types/reports.types';
 import {
   CashierReportData,
   CashierReportResponse,
+  PayTypeReportData,
+  PayTypeReportResponse,
 } from '../types/revenue-reports.types';
 
 export class Cashier extends RowStyles {
@@ -27,6 +29,14 @@ export class CashierReport implements ReportClass<CashierReportData, any> {
       return new Cashier().deserialize(item, index);
     });
     this.records.push(new Cashier().deserialize(null, null, total));
+    return this;
+  }
+}
+
+export class PayTypeReport
+  implements ReportClass<PayTypeReportData, PayTypeReportResponse> {
+  records: PayTypeReportData[];
+  deserialize(values: PayTypeReportResponse[]) {
     return this;
   }
 }

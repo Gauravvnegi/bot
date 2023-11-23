@@ -32,6 +32,42 @@ export type SalesByGuestData = {
   totalSales: number;
 };
 
+export type GuestContactReportData = {
+  guestId: string;
+  salutation: string;
+  name: string;
+  address: string;
+  city: string;
+  state: string;
+  country: string;
+  nationality: string;
+  phone: string;
+  mobileNo: string;
+  fax: string;
+  zipCode: string;
+  email: string;
+  gender: string;
+  dateOfBirth: string;
+  idType: string;
+};
+
+export type GuestContactReportResponse = {
+  id: string;
+  firstName: string;
+  lastName: string;
+  contactDetails: ContactDetails;
+  dateOfBirth: number;
+  nationality: string;
+  address: Record<string, never>;
+  reservation: Reservation[];
+  age: number;
+  firstStay: number;
+  lastStay: number;
+  totalNights: number;
+  documentRequired: boolean;
+  gender: string;
+};
+
 export type SalesByGuestResponse = GuestHistoryResponse & {
   totalSales: number;
 };
@@ -185,3 +221,37 @@ type GuestDetails = {
   kids: Guest[];
   allGuest: Record<string, Guest>;
 };
+
+interface Reservation {
+  id: string;
+  updated: number;
+  created: number;
+  arrivalTime: number;
+  departureTime: number;
+  number: string;
+  pmsStatus: string;
+  state: string;
+  stateCompletedSteps: string;
+  stayDetails: StayDetails;
+  guestDetails: GuestDetails;
+  paymentSummary: PaymentSummary;
+  journeysStatus: JourneyStatus;
+  stepsStatus: StepsStatus;
+  lastCompletedStep: string;
+  currentJourney: string;
+  currentJoureyStatus: string;
+  currentJourneyState: string;
+  totalDueAmount: number;
+  totalPaidAmount: number;
+  totalAmount: number;
+  nightCount: number;
+  vip: boolean;
+  pmsBooking: boolean;
+  invoicePrepareRequest: boolean;
+}
+
+interface ContactDetails {
+  cc: string;
+  contactNumber: string;
+  emailId: string;
+}

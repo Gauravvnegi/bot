@@ -56,6 +56,7 @@ export type AuditRoomDetailsReportResponse = {
   occupiedRoomGuests: number;
   dayUseRoomGuests: number;
   subTotalObject: boolean;
+  todayAvailableRooms: number | string;
 };
 
 export type AuditTaxReportData = {

@@ -15,10 +15,16 @@ import {
 } from '../models/direct-billing-reports.models';
 import { DiscountAllowanceReport } from '../models/discount-reports.models';
 import {
+  CloseOutBalanceReport,
   DailyRevenueReport,
+  DepositReport,
+  FinancialReport,
   MonthlySummaryReport,
+  PostingAuditReport,
 } from '../models/financial-reports.models';
+import { FolioListReport } from '../models/folio-list-reports.models';
 import {
+  GuestContactReport,
   GuestHistory,
   GuestLedger,
   SalesByGuest,
@@ -42,7 +48,8 @@ import {
   ReservationAdrReport,
   ReservationSummaryReport,
 } from '../models/reservation-reports.models';
-import { CashierReport } from '../models/revenue-reports.models';
+import { CashierReport, PayTypeReport } from '../models/revenue-reports.models';
+import { MarketSourceReport } from '../models/scource-reports.models';
 import {
   LodgingTaxReport,
   MonthlyTaxReport,
@@ -74,11 +81,17 @@ import {
 } from './direct-billing-reports.const';
 import { discountAllowanceReportCols } from './discount-reports.const';
 import {
+  closeOutBalanceCols,
   dailyRevenueReportCols,
+  depositReportCols,
+  financialReportCols,
   monthlySummaryReportCols,
+  postingAuditReportCols,
 } from './financial-reports.const';
+import { folioListReportHeaderCols } from './folio-list-reports.const';
 import {
   SalesByGuestCols,
+  guestContactReportCols,
   guestHistoryCols,
   guestLedgerCols,
 } from './guest-reports.const';
@@ -101,14 +114,13 @@ import {
   reservationAdrReportCols,
   reservationSummaryReportCols,
 } from './reservation-reports.const';
-import { cashierReportCols } from './revenue-reports.const';
+import { cashierReportCols, payTypeReportCols } from './revenue-reports.const';
+import { marketSourceReportCols } from './source-reports.const';
 import {
   lodgingTaxReportCols,
   monthlyTaxReportCols,
   taxReportCols,
 } from './tax-reports.const';
-import { MarketSourceReport } from '../models/scource-reports.models';
-import { marketSourceReportCols } from './source-reports.const';
 
 export const reportsConfig: ReportsConfig = {
   RESERVATION_REPORTS: {
@@ -177,6 +189,10 @@ export const reportsConfig: ReportsConfig = {
         label: 'Cashier',
         value: 'cashierReport',
       },
+      {
+        label: 'Pay Type',
+        value: 'payTypeReport',
+      },
     ],
   },
   FINANCIAL_REPORTS: {
@@ -188,6 +204,19 @@ export const reportsConfig: ReportsConfig = {
       {
         label: 'Monthly Summary',
         value: 'monthlySummaryReport',
+      },
+      {
+        label: 'Financial Report',
+        value: 'financialReport',
+      },
+      {
+        label: 'Close Out Balance Report',
+        value: 'closeOutBalance',
+      },
+      { label: 'Deposit Report', value: 'depositReport' },
+      {
+        label: 'Posting Audit Report',
+        value: 'postingAuditReport',
       },
     ],
   },
@@ -229,10 +258,10 @@ export const reportsConfig: ReportsConfig = {
   },
   GUEST_REPORTS: {
     menu: [
-      // {
-      //   label: 'Guest History',
-      //   value: 'guestHistory',
-      // },
+      {
+        label: 'Guest History',
+        value: 'guestHistory',
+      },
       {
         label: 'Sales By Guest',
         value: 'salesByGuest',
@@ -244,6 +273,10 @@ export const reportsConfig: ReportsConfig = {
       {
         label: 'Guest Ledger',
         value: 'guestLedger',
+      },
+      {
+        label: 'Guest Contact Report',
+        value: 'guestContactReport',
       },
     ],
   },
@@ -307,6 +340,14 @@ export const reportsConfig: ReportsConfig = {
       },
     ],
   },
+  FOLIO_REPORTS: {
+    menu: [
+      {
+        label: 'Folio List',
+        value: 'folioListReport',
+      },
+    ],
+  },
 };
 
 export const reservationReportsMenu: ReportsType['RESERVATION_REPORTS'][] = reportsConfig.RESERVATION_REPORTS.menu.map(
@@ -348,8 +389,15 @@ export const reportsModelMapping: Record<ReportsTypeValues, ClassType> = {
   mtdAndYtdReport: MtdAndYtdReport,
   directAgentBillingReport: DirectAgentBillingReport,
   directCompanyBillingReport: DirectCompanyBillingReport,
-  marketSource: MarketSourceReport, //to be decided
-  businessAnalysisReport: BusinessAnalysisReport, //to be decided
+  marketSource: MarketSourceReport,
+  businessAnalysisReport: BusinessAnalysisReport,
+  financialReport: FinancialReport, //to be decided
+  closeOutBalance: CloseOutBalanceReport,
+  depositReport: DepositReport,
+  postingAuditReport: PostingAuditReport,
+  folioListReport: FolioListReport, //to be decided
+  guestContactReport: GuestContactReport, //to be decided
+  payTypeReport: PayTypeReport, //to be decided
 };
 
 function getColsArray(colsData: ColsData): Cols[] {
@@ -397,9 +445,16 @@ export const reportsColumnMapping: Record<ReportsTypeValues, Cols[]> = {
   noShowSummaryReport: getColsArray(noShowSummaryReportCols), //to be decided
   mtdAndYtdReport: getColsArray(mtdAndYtdReportCols), //to be decided
   directAgentBillingReport: getColsArray(directAgentBillingReportsCols),
-  directCompanyBillingReport: getColsArray(directCompanyBillingReportCols), 
-  marketSource: getColsArray(marketSourceReportCols), 
-  businessAnalysisReport: getColsArray(businessAnalysisReportCols), 
+  directCompanyBillingReport: getColsArray(directCompanyBillingReportCols),
+  marketSource: getColsArray(marketSourceReportCols),
+  businessAnalysisReport: getColsArray(businessAnalysisReportCols),
+  financialReport: getColsArray(financialReportCols),
+  closeOutBalance: getColsArray(closeOutBalanceCols),
+  depositReport: getColsArray(depositReportCols),
+  postingAuditReport: getColsArray(postingAuditReportCols),
+  folioListReport: getColsArray(folioListReportHeaderCols), //to be decided
+  guestContactReport: getColsArray(guestContactReportCols), //to be decided
+  payTypeReport: getColsArray(payTypeReportCols), //to be decided
 };
 
 export const reportFiltersMapping: Record<
@@ -442,7 +497,13 @@ export const reportFiltersMapping: Record<
   directCompanyBillingReport: ['fromDate', 'toDate'],
   marketSource: ['fromDate', 'toDate'],
   businessAnalysisReport: ['fromDate', 'toDate'],
-
+  financialReport: ['fromDate', 'toDate'],
+  closeOutBalance: ['fromDate', 'toDate'],
+  depositReport: ['fromDate', 'toDate'],
+  postingAuditReport: ['fromDate', 'toDate'],
+  folioListReport: ['fromDate', 'toDate'],
+  guestContactReport: ['fromDate', 'toDate'],
+  payTypeReport: ['fromDate', 'toDate'],
 };
 
 export const rowStylesMapping: Record<RowStylesKeys, string> = {

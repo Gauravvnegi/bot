@@ -353,7 +353,6 @@ export class HousekeepingReport
 }
 
 export function getFormattedDate(time: number) {
-  debugger;
   const currentDate = new Date(time);
   const monthAbbreviated = new Intl.DateTimeFormat('en-US', {
     month: 'short',

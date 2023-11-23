@@ -1,12 +1,128 @@
 import { dailyRevenueReportRows } from '../constant/financial-reports.const';
 import {
+  CloseOutBalanceData,
+  CloseOutBalanceResponse,
   DailyRevenueReportData,
   DailyRevenueReportResponse,
+  DepositReportData,
+  DepositReportResponse,
+  FinancialReportData,
+  FinancialReportResponse,
   MonthlySummaryReportData,
   MonthlySummaryReportResponse,
+  PostingAuditReportData,
+  PostingAuditReportResponse,
 } from '../types/financial-reports.types';
 import { ReportClass, RowStyles } from '../types/reports.types';
 import { getFormattedDate } from './reservation-reports.models';
+
+export class FinancialReport
+  implements ReportClass<FinancialReportData, FinancialReportResponse> {
+  records: FinancialReportData[];
+  deserialize(value: FinancialReportResponse[]) {
+    this.records = new Array<FinancialReportData>();
+    if (!value) return this;
+
+    this.records = value.map((element) => {
+      return {
+        bookingNo: element?.number,
+        folioNo: element?.invoiceCode,
+        nights: element?.nightCount,
+        lodging: element?.reservationItemsPayment?.totalRoomCharge,
+        lodgingTax:
+          element?.reservationItemsPayment.totalCgstTax +
+          element?.reservationItemsPayment?.totalSgstTax, //need to confirm
+        discount: element?.paymentSummary?.totalDiscount,
+        otherCharges: element?.reservationItemsPayment?.totalAddOnsAmount,
+        otherChargesTax: element?.paymentSummary?.totalSgstTax,
+        otherChargesDiscount: undefined, //need to confirm
+        postTaxTotal:
+          element?.reservationItemsPayment.totalCgstTax +
+          element?.reservationItemsPayment?.totalSgstTax, //need to confirm
+        paid: element?.reservationItemsPayment?.paidAmount,
+        balance: element?.reservationItemsPayment?.dueAmount,
+      };
+    });
+    return this;
+  }
+}
+
+export class CloseOutBalanceReport
+  implements ReportClass<CloseOutBalanceData, CloseOutBalanceResponse> {
+  records: CloseOutBalanceData[];
+  deserialize(value: CloseOutBalanceResponse[]): this {
+    this.records = new Array<CloseOutBalanceData>();
+    if (!value) return this;
+    this.records = value.map((item) => {
+      return {
+        bookingNo: item?.number,
+        folioNo: item?.invoiceCode,
+        checkOut: getFormattedDate(item?.departureTime),
+        guestName: `${item?.guestDetails.primaryGuest.firstName} ${item?.guestDetails.primaryGuest.lastName}`,
+        lodgingAndTax: item?.reservationItemsPayment?.totalCgstTax + item?.reservationItemsPayment?.totalSgstTax, //need to confirm
+        otherChargesAndTax: item?.reservationItemsPayment.totalAddOnsAmount, //need to confirm
+        amount: item?.reservationItemsPayment?.paidAmount,
+        collected: item?.paymentSummary?.paidAmount,
+        openBalance: item?.paymentSummary?.dueAmount,
+      };
+    });
+    return this;
+  }
+}
+
+export class DepositReport
+  implements ReportClass<DepositReportData, DepositReportResponse> {
+  records: DepositReportData[];
+
+  deserialize(value: DepositReportResponse[]) {
+    this.records = new Array<DepositReportData>();
+    if (!value) return this;
+
+    this.records = value.map((item) => {
+      return {
+        bookingNo: item?.number,
+        guestName: `${item?.guestDetails.primaryGuest.firstName} ${item?.guestDetails.primaryGuest.lastName}`,
+        checkIn: getFormattedDate(item?.arrivalTime),
+        checkOut: getFormattedDate(item?.departureTime),
+        nights: item?.nightCount,
+        lodging: item?.reservationItemsPayment?.totalRoomCharge,
+        otherCharges: item?.reservationItemsPayment?.totalAddOnsAmount,
+        taxes: item?.reservationItemsPayment?.totalCgstTax + item?.reservationItemsPayment?.totalSgstTax,
+        btc: undefined,
+        cash: undefined,
+        bankTransfer: undefined,
+        payAtDesk: undefined,
+        onlinePaymentGateway: undefined,
+        totalPaid: item?.reservationItemsPayment?.paidAmount,
+        lastDepositDate: undefined
+      };
+    });
+
+    return this;
+  }
+}
+
+export class PostingAuditReport
+  implements ReportClass<PostingAuditReportData, PostingAuditReportResponse> {
+  records: PostingAuditReportData[];
+  deserialize(value: PostingAuditReportResponse[]): this {
+    this.records = new Array<PostingAuditReportData>();
+    if (!value) return this;
+
+    this.records = value.map((item) => {
+      return {
+        room: `${item?.stayDetails?.room.roomNumber} ${item?.stayDetails?.room.type}`,
+        name: `${item?.guestDetails?.primaryGuest?.firstName} ${item?.guestDetails?.primaryGuest?.lastName}`,
+        user: undefined,
+        trxAmount: undefined,
+        baseAmount: undefined,
+        cgst: undefined,
+        sgst: undefined,
+      };
+    });
+    return this;
+  }
+}
 
 export class MonthlySummary extends RowStyles {
   day: string;

@@ -35,9 +35,7 @@ import { AgentFormType } from '../../types/form.types';
 import { AgentModel } from '../../models/agent.model';
 import { AgentTableResponse } from '../../types/response';
 import { commissionType } from '../../types/agent';
-import {
-  businessSource,
-} from 'libs/admin/company/src/lib/constants/company';
+import { businessSource } from 'libs/admin/company/src/lib/constants/company';
 import { Location } from '@angular/common';
 import { AddCompanyComponent } from 'libs/admin/company/src/lib/components/add-company/add-company.component';
 @Component({
@@ -114,12 +112,12 @@ export class AddAgentComponent implements OnInit {
     this.agentForm = this.fb.group({
       packageCode: ['# will be auto generated'],
       status: [true],
-      name: ['', [Validators.required]],
-      email: ['', [Validators.required, Validators.pattern(Regex.EMAIL_REGEX)]],
-      cc: ['+91', [Validators.required]],
-      phoneNo: ['', [Validators.required]],
+      name: ['', []],
+      email: ['', [Validators.pattern(Regex.EMAIL_REGEX)]],
+      cc: ['+91', []],
+      phoneNo: ['', []],
       iataNo: ['', [CustomValidators.requiredLength(14)]],
-      company: [''],
+      company: ['', [Validators.required]],
       address: [''],
       commissionType: [commissionType.PERCENTAGE, [Validators.required]],
       commission: ['', [Validators.required, Validators.min(0)]],

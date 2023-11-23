@@ -266,7 +266,7 @@ export class ReservationAdrReport
         checkIn: getFormattedDate(data.stayDetails.arrivalTime),
         checkOut: getFormattedDate(data.stayDetails.departureTime),
         nights: data.guestDetails.primaryGuest.totalNights,
-        roomRent: data.paymentSummary.totalAmount,
+        roomRent: data.reservationItemsPayment.totalRoomCharge,
 
         adr: data.guestDetails.primaryGuest.totalNights
           ? data.reservationItemsPayment.totalRoomCharge /

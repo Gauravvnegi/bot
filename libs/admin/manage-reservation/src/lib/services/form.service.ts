@@ -133,7 +133,7 @@ export class FormService {
         roomDetails: {
           ratePlan: { id: input.roomInformation?.ratePlan },
           roomTypeId: input.roomInformation?.roomTypeId,
-          roomCount: input.roomInformation?.roomNumbers
+          roomCount: input.roomInformation?.roomNumbers.length
             ? input.roomInformation.roomNumbers.length
             : 1,
           roomNumbers: input.roomInformation?.roomNumbers

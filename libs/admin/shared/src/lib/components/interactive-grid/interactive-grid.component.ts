@@ -1,4 +1,10 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  HostListener,
+  Input,
+  Output,
+} from '@angular/core';
 import { IPosition } from 'angular2-draggable';
 import { IResizeEvent } from 'angular2-draggable/lib/models/resize-event';
 import { FlagType } from '../../types/table.type';
@@ -33,6 +39,7 @@ export class InteractiveGridComponent {
   minWidth: IGProps['minWidth'] = 'half';
   resizeWidth: IGProps['resizeWidth'] = 'half';
   gridHeight: IGProps['resizeWidth'] = 'half';
+  halfwayCell: IGProps['halfwayCell'] = true;
 
   /**
    * Props to show extra information
@@ -137,6 +144,7 @@ export class InteractiveGridComponent {
    * When disabled grid cell is clicked
    */
   @Output() onDisabledClick = new EventEmitter<IGEditEvent>();
+
   /**
    * Data to map the interactive grid cell
    * @example
@@ -204,6 +212,63 @@ export class InteractiveGridComponent {
    */
   outOfBoundRecord: OutOfBoundRecord = {};
 
+  toggleMenuId = '';
+  toggleMenuPos: 'SE' | 'SW' | 'NE' | 'NW' = 'SE';
+
+  @Output() onMenuClick = new EventEmitter<
+    Omit<IGCellInfo['options'][number], 'label'> & { id: string }
+  >();
+
+  @HostListener('document:click', ['$event'])
+  listenToClick(event: Event): void {
+    this.toggleMenuId = '';
+  }
+
+  onRightClick(event: MouseEvent, query: IGQueryEvent): void {
+    const { data, id } = this.getCurrentDataInfo(query);
+
+    event.preventDefault();
+
+    const viewportWidth = window.innerWidth;
+    const viewportHeight = window.innerHeight;
+
+    // Calculate distance from the right
+    const distanceFromRight = viewportWidth - event.clientX;
+    // Calculate distance from the bottom
+    const distanceFromBottom = viewportHeight - event.clientY;
+
+    // No of option to calculate the minimum menu distance and whether menu is to be opened
+    const noOfOptions = data.options?.length;
+    if (noOfOptions) {
+      const menuHeight = 50 + noOfOptions * 41;
+      if (distanceFromBottom < menuHeight) {
+        if (distanceFromRight < 200) {
+          this.toggleMenuPos = 'NW';
+        } else {
+          this.toggleMenuPos = 'NE';
+        }
+      } else {
+        if (distanceFromRight < menuHeight) {
+          this.toggleMenuPos = 'SW';
+        } else {
+          this.toggleMenuPos = 'SE';
+        }
+      }
+
+      this.toggleMenuId = id;
+    }
+  }
+
+  /**Emit selected menu option */
+  handleMenuClick(event: MouseEvent, value: IGCellInfo['options'][number]) {
+    event.stopPropagation();
+    this.onMenuClick.emit({
+      id: this.toggleMenuId,
+      ...value,
+    });
+    this.toggleMenuId = '';
+  }
+
   getCurrentDataInfo(
     query: IGQueryEvent
   ): {
@@ -217,6 +282,11 @@ export class InteractiveGridComponent {
       data,
       id: data.id,
     };
+  }
+
+  isInteractive(query: IGQueryEvent) {
+    const { data, id } = this.getCurrentDataInfo(query);
+    return !data.nonInteractive && this.toggleMenuId !== id;
   }
 
   /**
@@ -283,6 +353,7 @@ export class InteractiveGridComponent {
    */
   handleDrag(event: IPosition, query: IGQueryEvent) {
     const { data, id } = this.getCurrentDataInfo(query);
+
     const { x: currentPosX, y: currentPosY } = this.getPosition(query);
     const { x: newPosX, y: newPosY } = event;
     const { rowValue } = query;
@@ -472,14 +543,16 @@ export class InteractiveGridComponent {
       rowValues.forEach((item) => {
         const hasStart = this.gridColumns.includes(item.startPos); // if start is within the bound
         const hasEnd = this.gridColumns.includes(item.endPos); // if end is within the bound
-
         const boundStartPos = hasStart ? item.startPos : this.gridColumns[0];
+
         const boundEndPos = hasEnd
           ? item.endPos
           : this.gridColumns[this.gridColumns.length - 1];
 
-        const hasPrev = endPos.has(item.startPos);
-        const hasNext = startPos.has(item.endPos);
+        const hasPrev =
+          (hasStart && this.halfwayCell) || endPos.has(item.startPos);
+        const hasNext =
+          (hasEnd && this.halfwayCell) || startPos.has(item.endPos);
 
         this.outOfBoundRecord = {
           ...this.outOfBoundRecord,
@@ -495,21 +568,25 @@ export class InteractiveGridComponent {
         const cellOccupied =
           1 + this.colIndices[boundEndPos] - this.colIndices[boundStartPos];
 
+        const key = boundStartPos;
+        const data: IGCellInfo = {
+          ...item,
+          id: item.id,
+          cellOccupied,
+          startPosIdx: this.colIndices[boundStartPos],
+          endPosIdx: this.colIndices[boundEndPos],
+          oStartPos: item.startPos,
+          oEndPos: item.endPos,
+          hasNext, // if end position has new item with same point as start
+          hasPrev, // if start position has new item with same point as end
+          hasStart, // if start point is out of bound (left)
+          hasEnd, // if end point is out of bound (right)
+          options: [{ label: 'asdasd', value: 'asd' }],
+        };
+
         rowResult = {
           ...(rowResult ?? {}),
-          [boundStartPos]: {
-            ...item,
-            id: item.id,
-            cellOccupied,
-            startPosIdx: this.colIndices[boundStartPos],
-            endPosIdx: this.colIndices[boundEndPos],
-            oStartPos: item.startPos,
-            oEndPos: item.endPos,
-            hasNext, // if end position has new item with same point as start
-            hasPrev, // if start position has new item with same point as end
-            hasStart, // if start point is out of bound (left)
-            hasEnd, // if end point is out of bound (right)
-          },
+          [key]: data,
         };
       });
 
@@ -591,6 +668,7 @@ export type IGProps = {
   cellSize?: number;
   cellGap?: number;
   gridHeight?: GridBreakPoints;
+  halfwayCell: boolean;
 };
 
 /**
@@ -624,6 +702,7 @@ type ExtraGridInformation = {
   colorCode?: FlagType;
   icons?: string[];
   nonInteractive?: boolean;
+  options?: { label: string; value: string; extras?: any }[];
 };
 
 type ExtraGridInformationKeys = keyof ExtraGridInformation;

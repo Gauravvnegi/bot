@@ -17,8 +17,22 @@
           [rzContainment]="myBounds"
           [inBounds]="true"
           *ngIf="data[row] && data[row][col]"
-          [ngDraggable]="!data[row][col].nonInteractive"
-          [ngResizable]="!data[row][col].nonInteractive"
+          [ngDraggable]="
+            isInteractive({
+              rowValue: row,
+              colValue: col,
+              colIdx: colIdx,
+              rowIdx: rowIdx
+            })
+          "
+          [ngResizable]="
+            isInteractive({
+              rowValue: row,
+              colValue: col,
+              colIdx: colIdx,
+              rowIdx: rowIdx
+            })
+          "
           [rzMinWidth]="cellSize / resizeDelimiter"
           [rzGrid]="cellSize / resizeDelimiter"
           [position]="{
@@ -38,7 +52,7 @@
             padding: cellGap + 'px',
             marginLeft: '-' + outOfBoundRecord[data[row][col].id].lSpace + 'px'
           }"
-          zIndex="10"
+          [zIndex]="data[row][col]?.id === toggleMenuId ? 20 : 10"
           zIndexMoving="100"
           [preventDefaultEvent]="true"
           rzHandles="e,w"
@@ -74,11 +88,43 @@
               rowIdx: rowIdx
             })
           "
+          (contextmenu)="
+            onRightClick($event, {
+              rowValue: row,
+              colValue: col,
+              colIdx: colIdx,
+              rowIdx: rowIdx
+            })
+          "
         >
+          <div
+            *ngIf="
+              data[row][col]?.options?.length &&
+              toggleMenuId === data[row][col].id
+            "
+            class="menu"
+            [ngClass]="{
+              menu__se: toggleMenuPos === 'SE',
+              menu__sw: toggleMenuPos === 'SW',
+              menu__ne: toggleMenuPos === 'NE',
+              menu__nw: toggleMenuPos === 'NW'
+            }"
+          >
+            <ng-container *ngFor="let option of data[row][col]?.options">
+              <div class="menu__item" (click)="handleMenuClick($event, option)">
+                {{ option.label }}
+              </div>
+            </ng-container>
+          </div>
           <div
             class="cell-data"
             [ngClass]="{
-              'non-interactive-cell': data[row][col]?.nonInteractive,
+              'non-interactive-cell': !isInteractive({
+                rowValue: row,
+                colValue: col,
+                colIdx: colIdx,
+                rowIdx: rowIdx
+              }),
               'success-cell': data[row][col]?.colorCode === 'success',
               'active-cell': data[row][col]?.colorCode === 'active',
               'inactive-cell': data[row][col]?.colorCode === 'inactive',

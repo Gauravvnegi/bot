@@ -581,7 +581,6 @@ export class InteractiveGridComponent {
           hasPrev, // if start position has new item with same point as end
           hasStart, // if start point is out of bound (left)
           hasEnd, // if end point is out of bound (right)
-          options: [{ label: 'asdasd', value: 'asd' }],
         };
 
         rowResult = {

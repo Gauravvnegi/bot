@@ -11,6 +11,9 @@ import { AuditSummaryResponse } from '../components/night-audit/types/audit-summ
 })
 export class NightAuditService extends ApiService {
   remainingAudit = new Subject<number[]>();
+  $checkedInLoading = new BehaviorSubject<boolean>(true);
+  $checkedOutLoading = new BehaviorSubject<boolean>(true);
+  $moveBackStateDisable = new Subject();
 
   getNightAudit(
     entityId: string,

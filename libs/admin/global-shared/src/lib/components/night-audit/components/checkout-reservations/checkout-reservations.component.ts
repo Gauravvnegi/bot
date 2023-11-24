@@ -11,6 +11,7 @@ import { manageReservationRoutes } from 'libs/admin/manage-reservation/src/lib/c
 import { ModuleNames } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { Clipboard } from '@angular/cdk/clipboard';
+import { NightAuditService } from '../../../../services/night-audit.service';
 
 @Component({
   selector: 'hospitality-bot-checkout-reservations',
@@ -23,7 +24,7 @@ import { Clipboard } from '@angular/cdk/clipboard';
 export class CheckoutReservationsComponent implements OnInit {
   title = 'Pending Check-out';
   cols = cols;
-  @Input() loading = false;
+  loading = true;
   actionConfig: ActionConfigType;
 
   @Input() items: CheckedOutReservation[] = [];
@@ -35,10 +36,12 @@ export class CheckoutReservationsComponent implements OnInit {
 
   constructor(
     private snackbarService: SnackBarService,
+    private nightAuditService: NightAuditService,
     private _clipboard: Clipboard
   ) {}
 
   ngOnInit(): void {
+    this.listenLoaders();
     this.initActionConfig();
   }
 
@@ -83,6 +86,12 @@ export class CheckoutReservationsComponent implements OnInit {
     this._clipboard.copy(number);
     this.snackbarService.openSnackBarAsText('Booking number copied', '', {
       panelClass: 'success',
+    });
+  }
+
+  listenLoaders() {
+    this.nightAuditService.$checkedInLoading.subscribe((res) => {
+      this.loading = res;
     });
   }
 }

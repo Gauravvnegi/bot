@@ -122,10 +122,10 @@ export class BarPriceComponent implements OnInit {
     return this.fb.array(
       this.roomTypes.map((item) => {
         const baseDetail = item?.ratePlans.find((ratePlan) => ratePlan.isBase);
-        return this.fb.group({
+        const dataForm = this.fb.group({
           isBase: [item.isBase],
           price: [
-            { value: item?.price, disabled: true },
+            { value: item?.price, disabled: !item.isBase },
             [Validators.min(0), Validators.required],
           ],
           baseId: [baseDetail?.id],
@@ -150,8 +150,25 @@ export class BarPriceComponent implements OnInit {
           id: [item.value],
           label: [item.label],
         });
+        this.listenBasePriceChanges(dataForm, item);
+        return dataForm;
       })
     );
+  }
+
+  listenBasePriceChanges(formGroup: FormGroup, roomType: RoomTypes) {
+    if (roomType.isBase) {
+      formGroup.get('price').valueChanges.subscribe((res) => {
+        (this.useFormControl.barPrices as FormArray).controls.forEach(
+          (control: FormGroup) => {
+            const { isBase, price } = control.controls;
+            if (!isBase.value) {
+              price.patchValue(res);
+            }
+          }
+        );
+      });
+    }
   }
 
   addRatePlans(ratePlans: RatePlanRes[], priceDetails: PricingDetails) {

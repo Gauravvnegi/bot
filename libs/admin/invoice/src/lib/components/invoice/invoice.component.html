@@ -216,7 +216,7 @@
             <tr [formGroupName]="rowIndex" [disabled]="true">
               <td>
                 <p-tableCheckbox
-                  [value]="tableFormArray.at(rowIndex)?.get('itemId').value"
+                  [value]="getCheckboxValue(rowIndex)"
                   [index]="rowIndex"
                   [disabled]="
                     tableFormArray.at(rowIndex).get('isDisabled').value ||

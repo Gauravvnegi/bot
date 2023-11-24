@@ -470,7 +470,7 @@ export class OccupancyComponent implements OnInit {
             '',
             { panelClass: 'success' }
           );
-          DynamicPricingHandler.resetFormState(form, this.fb);
+          DynamicPricingHandler.resetFormState(form, this.fb, res);
         },
         (error) => {
           this.loading = false;

@@ -121,3 +121,50 @@
   inset: 10px auto 10px 5px;
   height: 60px;
 }
+
+$menu-width: 150px;
+// based on the menu-width
+$menu-distance: -145px;
+
+.menu {
+  position: absolute;
+  width: $menu-width;
+  background: white;
+  padding: 0 5px;
+  border-radius: 5px;
+  box-shadow: 0px 1px 4px 0px #8c908ca8;
+
+  &__item {
+    border-top: 1px solid #80808069;
+    padding: 8px;
+    cursor: pointer;
+
+    &:hover {
+      background: #f5f5f5;
+    }
+  }
+
+  &__se {
+    top: 40px;
+    right: $menu-distance;
+  }
+
+  &__sw {
+    top: 50px;
+    left: $menu-distance;
+  }
+
+  &__ne {
+    transform: translateY(-100%);
+    right: $menu-distance;
+  }
+
+  &__nw {
+    transform: translateY(-100%);
+    left: $menu-distance;
+  }
+}
+
+.higherZIndex {
+  z-index: 20;
+}

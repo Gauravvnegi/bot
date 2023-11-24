@@ -284,7 +284,6 @@ export class DynamicPricingHandler {
       status: item.status,
       basePrice: item.basePrice,
     });
-    season.get('configCategory').disable();
     if (item.configCategory == 'HOTEL') {
       season.patchValue({
         configCategory: 'HOTEL',
@@ -351,6 +350,7 @@ export class DynamicPricingHandler {
         );
       });
     }
+    season.get('configCategory').disable();
   }
 
   mapHotelConfig(
@@ -366,7 +366,12 @@ export class DynamicPricingHandler {
               fromTime: rule?.fromTime - 1000,
               toTime: rule?.toTime,
             }
-          : {};
+          : {
+              rate: (
+                (rule.discount * item.basePrice) / 100 +
+                item.basePrice
+              ).toFixed(2),
+            };
       rule &&
         hotelOccupancy.patchValue(
           {
@@ -435,6 +440,7 @@ export class DynamicPricingHandler {
         },
         { emitEvent: false }
       );
+      form.get('configCategory').disable();
     }
 
     (hotelConfig as FormArray).controls.forEach((item) => {

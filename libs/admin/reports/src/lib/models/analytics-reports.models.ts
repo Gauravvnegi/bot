@@ -11,6 +11,8 @@ import {
   MarketSegmentReportResponse,
   NoShowSummaryReportData,
   NoShowSummaryReportResponse,
+  OccupancyAnalysisReportData,
+  OccupancyAnalysisReportResponse,
 } from '../types/analytics-reports.types';
 import { ReportClass } from '../types/reports.types';
 import { getFormattedDate } from './reservation-reports.models';
@@ -30,6 +32,15 @@ export class CompanyContributionsReport
       this.records.push({});
     });
     return this;
+  }
+}
+
+
+export class OccupancyAnalysisReport implements ReportClass<OccupancyAnalysisReportData, OccupancyAnalysisReportResponse> { 
+  records: OccupancyAnalysisReportData[];
+
+  deserialize(value: {} | OccupancyAnalysisReportResponse[]): this {
+      return this;
   }
 }
 

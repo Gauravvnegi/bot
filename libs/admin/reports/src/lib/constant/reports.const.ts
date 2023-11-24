@@ -8,6 +8,7 @@ import {
   CompanyContributionsReport,
   MarketSegmentReport,
   NoShowSummaryReport,
+  OccupancyAnalysisReport,
 } from '../models/analytics-reports.models';
 import {
   DirectAgentBillingReport,
@@ -74,6 +75,7 @@ import {
   companyContributionsReportCols,
   marketSegmentReportCols,
   noShowSummaryReportCols,
+  occupancyAnalysisReportCols,
 } from './analytics-reports.const';
 import {
   directAgentBillingReportsCols,
@@ -294,10 +296,10 @@ export const reportsConfig: ReportsConfig = {
   },
   ANALYTICS_REPORTS: {
     menu: [
-      {
-        label: 'Company Contributions',
-        value: 'companyContributionsReport',
-      },
+      // {
+      //   label: 'Company Contributions',
+      //   value: 'marketSource',
+      // },
       {
         label: 'No Show Summary',
         value: 'noShowSummaryReport',
@@ -309,6 +311,10 @@ export const reportsConfig: ReportsConfig = {
       {
         label: 'Market Segment',
         value: 'marketSegmentReport',
+      },
+      {
+        label: 'Occupancy Analysis',
+        value: 'occupancyAnalysisReport',
       },
     ],
   },
@@ -398,6 +404,7 @@ export const reportsModelMapping: Record<ReportsTypeValues, ClassType> = {
   folioListReport: FolioListReport, //to be decided
   guestContactReport: GuestContactReport, //to be decided
   payTypeReport: PayTypeReport, //to be decided
+  occupancyAnalysisReport: OccupancyAnalysisReport,
 };
 
 function getColsArray(colsData: ColsData): Cols[] {
@@ -455,6 +462,7 @@ export const reportsColumnMapping: Record<ReportsTypeValues, Cols[]> = {
   folioListReport: getColsArray(folioListReportHeaderCols), //to be decided
   guestContactReport: getColsArray(guestContactReportCols), //to be decided
   payTypeReport: getColsArray(payTypeReportCols), //to be decided
+  occupancyAnalysisReport: getColsArray(occupancyAnalysisReportCols),
 };
 
 export const reportFiltersMapping: Record<
@@ -504,6 +512,7 @@ export const reportFiltersMapping: Record<
   folioListReport: ['fromDate', 'toDate'],
   guestContactReport: ['fromDate', 'toDate'],
   payTypeReport: ['fromDate', 'toDate'],
+  occupancyAnalysisReport: ['fromDate', 'toDate'],
 };
 
 export const rowStylesMapping: Record<RowStylesKeys, string> = {

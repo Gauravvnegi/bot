@@ -44,7 +44,7 @@ export type ReportsType = {
     | 'reservationAdrReport'
     | 'incomeSummaryReport'
     | 'reservationSummaryReport'
-    | 'housekeepingReport'
+    | 'housekeepingReport';
   MANAGER_REPORTS: 'managerFlashReport';
   OCCUPANCY_REPORTS: 'historyAndForecastReport';
   FINANCIAL_REPORTS:
@@ -73,7 +73,8 @@ export type ReportsType = {
     | 'companyContributionsReport'
     | 'noShowSummaryReport'
     | 'businessAnalysisReport'
-    | 'marketSegmentReport';
+    | 'marketSegmentReport'
+    | 'occupancyAnalysisReport';
   DISCOUNT_REPORTS: 'discountAllowance';
   DIRECT_BILLING_REPORTS:
     | 'directAgentBillingReport'

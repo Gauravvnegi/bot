@@ -6,6 +6,28 @@ export type CompanyContributionsReportResponse = {
   //todo
 };
 
+//occupancyAnalysisReport
+export type OccupancyAnalysisReportData = {
+  roomType: string;
+  roomAvailable: number;
+  roomRevenue: number;
+  soldRooms: number;
+  soldRoomsPercent: number;
+  singleSoldRooms: number;
+  doubleSoldRooms: number;
+  tripleSoldRooms: number;
+  quadSoldRooms: number;
+  moreQuardplSoldRooms: number;
+  pax: number;
+  arrOrAgr: number;
+  arp: number;
+  revPar: number;
+};
+
+export type OccupancyAnalysisReportResponse = {
+  //todo
+};
+
 export type BusinessAnalysisReportData = MarketSegmentReportData & {};
 
 export type BusinessAnalysisReportResponse = {

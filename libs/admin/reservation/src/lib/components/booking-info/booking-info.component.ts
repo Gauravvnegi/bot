@@ -377,7 +377,15 @@ export class BookingInfoComponent implements OnInit {
     }
   }
 
-  agentChange(event) {}
+  agentChange(event) {
+    if (event) {
+      this.selectedAgent = event;
+      this.reservationInfoControls.marketSegment.patchValue(
+        this.selectedAgent?.marketSegment,
+        { emitEvent: false }
+      );
+    }
+  }
 
   showAgent() {
     const lazyModulePromise = import(

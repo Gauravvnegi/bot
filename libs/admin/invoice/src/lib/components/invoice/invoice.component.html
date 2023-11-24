@@ -182,96 +182,96 @@
           <img src="assets/svg/delete.svg" alt="delete" />
         </div>
       </div>
-      <div class="payment-form__details" formArrayName="tableData">
-        <p-table
-          #dt
-          [columns]="cols"
-          [value]="tableValue"
-          [(selection)]="selectedRows"
-          [loading]="loadingData"
-          (onRowSelect)="onRowSelect($event)"
-          (onRowUnselect)="onRowUnselect($event)"
-          (onHeaderCheckboxToggle)="onToggleSelectAll($event)"
-        >
-          <ng-template pTemplate="header" let-columns #header>
-            <tr class="header">
-              <th id="select-all" class="select-box">
-                <!-- <p-tableHeaderCheckbox></p-tableHeaderCheckbox> -->
-              </th>
-              <th
-                *ngFor="let col of columns"
-                [id]="col.header"
-                [ngStyle]="{ width: col.width }"
-              >
-                <div class="col-heading">{{ col.header }}</div>
-              </th>
-            </tr>
-          </ng-template>
-          <ng-template
-            pTemplate="body"
-            let-rowData
-            let-columns="columns"
-            let-rowIndex="rowIndex"
+      <div *ngIf="!loadingData; else loader">
+        <div class="payment-form__details" formArrayName="tableData">
+          <p-table
+            #dt
+            [columns]="cols"
+            [value]="tableValue"
+            [(selection)]="selectedRows"
+            (onRowSelect)="onRowSelect($event)"
+            (onRowUnselect)="onRowUnselect($event)"
+            (onHeaderCheckboxToggle)="onToggleSelectAll($event)"
           >
-            <tr [formGroupName]="rowIndex" [disabled]="true">
-              <td>
-                <p-tableCheckbox
-                  [value]="getCheckboxValue(rowIndex)"
-                  [index]="rowIndex"
-                  [disabled]="
-                    tableFormArray.at(rowIndex).get('isDisabled').value ||
-                    tableFormArray.at(rowIndex).get('isDiscount').value ||
-                    tableFormArray.at(rowIndex).get('taxId').value
-                  "
-                ></p-tableCheckbox>
-              </td>
+            <ng-template pTemplate="header" let-columns #header>
+              <tr class="header">
+                <th id="select-all" class="select-box">
+                  <!-- <p-tableHeaderCheckbox></p-tableHeaderCheckbox> -->
+                </th>
+                <th
+                  *ngFor="let col of columns"
+                  [id]="col.header"
+                  [ngStyle]="{ width: col.width }"
+                >
+                  <div class="col-heading">{{ col.header }}</div>
+                </th>
+              </tr>
+            </ng-template>
+            <ng-template
+              pTemplate="body"
+              let-rowData
+              let-columns="columns"
+              let-rowIndex="rowIndex"
+            >
+              <tr [formGroupName]="rowIndex" [disabled]="true">
+                <td>
+                  <p-tableCheckbox
+                    [value]="getCheckboxValue(rowIndex)"
+                    [index]="rowIndex"
+                    [disabled]="
+                      tableFormArray.at(rowIndex).get('isDisabled').value ||
+                      tableFormArray.at(rowIndex).get('isDiscount').value ||
+                      tableFormArray.at(rowIndex).get('taxId').value
+                    "
+                  ></p-tableCheckbox>
+                </td>
 
-              <td>
-                <hospitality-bot-date
-                  [settings]="{
-                    enableTime: false
-                  }"
-                  controlName="date"
-                  [minDate]="currentData"
-                  [disabled]="true"
-                ></hospitality-bot-date>
-              </td>
-              <td>
-                <hospitality-bot-select
-                  class="bill-description"
-                  controlName="billItemId"
-                  [controlIndex]="rowIndex"
-                  [options]="
-                    rowIndex !== selectedSearchIndex
-                      ? defaultDescriptionOptions
-                      : filteredDescriptionOptions
-                  "
-                  [props]="{
-                    isAsync: true,
-                    createPrompt: '+ Add New Service',
-                    placeholder: 'Select'
-                  }"
-                  [loading]="
-                    rowIndex === selectedSearchIndex && loadingDescription
-                  "
-                  (paginate)="loadMoreDescription()"
-                  (onSearch)="searchDescription($event)"
-                  [stopEmission]="noMoreDescription"
-                  (onCreate)="createService($event)"
-                  [disabled]="
-                    tableFormArray.at(rowIndex).get('isDisabled').value ||
-                    tableFormArray.at(rowIndex).get('isDiscount').value ||
-                    !tableFormArray.at(rowIndex).get('isNew').value ||
-                    tableFormArray.at(rowIndex).get('isNonEditableBillItem')
-                      .value
-                  "
-                  (onFocus)="handleFocus(rowIndex)"
-                  (onBlur)="handleBlur()"
-                ></hospitality-bot-select>
-              </td>
+                <td>
+                  <hospitality-bot-date
+                    [settings]="{
+                      enableTime: false
+                    }"
+                    controlName="date"
+                    [minDate]="currentData"
+                    [disabled]="true"
+                  ></hospitality-bot-date>
+                </td>
+                <td>
+                  <hospitality-bot-select
+                    class="bill-description"
+                    controlName="billItemId"
+                    [controlIndex]="rowIndex"
+                    [options]="
+                      rowIndex !== selectedSearchIndex
+                        ? defaultDescriptionOptions
+                        : filteredDescriptionOptions
+                    "
+                    [props]="{
+                      isAsync: true,
+                      createPrompt: '+ Add New Service',
+                      placeholder: 'Select'
+                    }"
+                    [loading]="
+                      rowIndex === selectedSearchIndex && loadingDescription
+                    "
+                    (paginate)="loadMoreDescription()"
+                    (onSearch)="searchDescription($event)"
+                    [stopEmission]="noMoreDescription"
+                    (onCreate)="createService($event)"
+                    [disabled]="
+                      tableFormArray.at(rowIndex).get('isDisabled').value ||
+                      tableFormArray.at(rowIndex).get('isDiscount').value ||
+                      !tableFormArray.at(rowIndex).get('isNew').value ||
+                      tableFormArray.at(rowIndex).get('isNonEditableBillItem')
+                        .value
+                    "
+                    (onFocus)="handleFocus(rowIndex)"
+                    (onBlur)="handleBlur()"
+                  ></hospitality-bot-select>
+                </td>
 
-              <td>
-                <!-- <hospitality-bot-input
+                <td>
+                  <!-- <hospitality-bot-input
                   controlName="unit"
                   [props]="{
                     errorMessages: errorMessages,
@@ -283,134 +283,137 @@
                     tableFormArray.at(rowIndex).get('isNonEditableBillItem').value
                   "
                 ></hospitality-bot-input> -->
-                <hospitality-bot-input-number
-                  controlName="unit"
-                  [settings]="{
-                    min: 1
-                  }"
-                  [disabled]="
-                    tableFormArray.at(rowIndex).get('isDisabled').value ||
-                    tableFormArray.at(rowIndex).get('isDiscount').value ||
-                    tableFormArray.at(rowIndex).get('isNonEditableBillItem')
-                      .value ||
-                    !tableFormArray.at(rowIndex).get('billItemId').value ||
-                    isInvoiceDisabled
-                  "
-                ></hospitality-bot-input-number>
-              </td>
+                  <hospitality-bot-input-number
+                    controlName="unit"
+                    [settings]="{
+                      min: 1
+                    }"
+                    [disabled]="
+                      tableFormArray.at(rowIndex).get('isDisabled').value ||
+                      tableFormArray.at(rowIndex).get('isDiscount').value ||
+                      tableFormArray.at(rowIndex).get('isNonEditableBillItem')
+                        .value ||
+                      !tableFormArray.at(rowIndex).get('billItemId').value ||
+                      isInvoiceDisabled
+                    "
+                  ></hospitality-bot-input-number>
+                </td>
 
-              <td>
-                <hospitality-bot-input
-                  controlName="debitAmount"
-                  [props]="{ type: 'number' }"
-                  [disabled]="true"
-                ></hospitality-bot-input>
-              </td>
+                <td>
+                  <hospitality-bot-input
+                    controlName="debitAmount"
+                    [props]="{ type: 'number' }"
+                    [disabled]="true"
+                  ></hospitality-bot-input>
+                </td>
 
-              <td>
-                <hospitality-bot-input
-                  controlName="creditAmount"
-                  [props]="{ type: 'number' }"
-                  [disabled]="true"
-                ></hospitality-bot-input>
-              </td>
+                <td>
+                  <hospitality-bot-input
+                    controlName="creditAmount"
+                    [props]="{ type: 'number' }"
+                    [disabled]="true"
+                  ></hospitality-bot-input>
+                </td>
 
-              <td>
-                <hospitality-bot-menu
-                  type="button"
-                  alignment="horizontal"
-                  (onClickItem)="handleMenuAction($event, rowIndex)"
-                  [menuItems]="getMenu(rowIndex)"
-                  [disabled]="
-                    isInvoiceDisabled ||
-                    !tableFormArray.at(rowIndex).get('isAddOn').value ||
-                    (!tableFormArray.at(rowIndex).get('itemId').value &&
-                      !tableFormArray.at(rowIndex).get('isNew').value) ||
-                    tableFormArray.at(rowIndex).get('taxId').value ||
-                    (tableFormArray.at(rowIndex).get('isNonEditableBillItem')
-                      .value &&
-                      !tableFormArray.at(rowIndex).get('isMiscellaneous').value)
-                  "
-                ></hospitality-bot-menu>
-              </td>
-            </tr>
-          </ng-template>
+                <td>
+                  <hospitality-bot-menu
+                    type="button"
+                    alignment="horizontal"
+                    (onClickItem)="handleMenuAction($event, rowIndex)"
+                    [menuItems]="getMenu(rowIndex)"
+                    [disabled]="
+                      isInvoiceDisabled ||
+                      !tableFormArray.at(rowIndex).get('isAddOn').value ||
+                      (!tableFormArray.at(rowIndex).get('itemId').value &&
+                        !tableFormArray.at(rowIndex).get('isNew').value) ||
+                      tableFormArray.at(rowIndex).get('taxId').value ||
+                      (tableFormArray.at(rowIndex).get('isNonEditableBillItem')
+                        .value &&
+                        !tableFormArray.at(rowIndex).get('isMiscellaneous')
+                          .value)
+                    "
+                  ></hospitality-bot-menu>
+                </td>
+              </tr>
+            </ng-template>
 
-          <ng-template pTemplate="summary">
-            <div class="summary-btn">
-              <hospitality-bot-button
-                label="+ Add New Item"
-                variant="text"
-                (onClick)="addNewCharges()"
-                [disabled]="isInvoiceDisabled"
-              ></hospitality-bot-button>
-              <hospitality-bot-button
-                label="+ Add Miscellaneous Charges"
-                variant="text"
-                (onClick)="handleMiscellaneous()"
-                [disabled]="isInvoiceDisabled"
-              ></hospitality-bot-button>
-              <hospitality-bot-button
-                *ngIf="inputControl.dueAmount.value < 0"
-                label="+ Add Refund"
-                variant="text"
-                [severity]="'reset'"
-                (onClick)="handleRefund()"
-                [disabled]="isInvoiceDisabled"
-              ></hospitality-bot-button>
-            </div>
-          </ng-template>
-        </p-table>
-      </div>
-
-      <div class="payment-form__amount">
-        <div class="py-row">
-          <span>Total Amount</span>
-          <span>
-            INR {{ inputControl.totalAmount.value | number: '1.2-2' }}</span
-          >
+            <ng-template pTemplate="summary">
+              <div class="summary-btn">
+                <hospitality-bot-button
+                  label="+ Add New Item"
+                  variant="text"
+                  (onClick)="addNewCharges()"
+                  [disabled]="isInvoiceDisabled"
+                ></hospitality-bot-button>
+                <hospitality-bot-button
+                  label="+ Add Miscellaneous Charges"
+                  variant="text"
+                  (onClick)="handleMiscellaneous()"
+                  [disabled]="isInvoiceDisabled"
+                ></hospitality-bot-button>
+                <hospitality-bot-button
+                  *ngIf="inputControl.dueAmount.value < 0"
+                  label="+ Add Refund"
+                  variant="text"
+                  [severity]="'reset'"
+                  (onClick)="handleRefund()"
+                  [disabled]="isInvoiceDisabled"
+                ></hospitality-bot-button>
+              </div>
+            </ng-template>
+          </p-table>
         </div>
-        <div class="py-row">
-          <span>Discounted Amount</span>
-          <span>
-            <span
-              >INR
-              {{ inputControl.discountedAmount.value | number: '1.2-2' }}
+
+        <div class="payment-form__amount">
+          <div class="py-row">
+            <span>Total Amount</span>
+            <span>
+              INR {{ inputControl.totalAmount.value | number: '1.2-2' }}</span
+            >
+          </div>
+          <div class="py-row">
+            <span>Discounted Amount</span>
+            <span>
+              <span
+                >INR
+                {{ inputControl.discountedAmount.value | number: '1.2-2' }}
+              </span>
             </span>
-          </span>
-        </div>
-        <div class="py-row invert">
-          <span>Net Amount</span>
-          <span> INR {{ inputControl.netAmount.value | number: '1.2-2' }}</span>
-        </div>
-        <div class="py-row">
-          <span>Paid Amount</span>
-          <span>
-            <span
-              >INR
-              {{ inputControl.paidAmount.value | number: '1.2-2' }}
+          </div>
+          <div class="py-row invert">
+            <span>Net Amount</span>
+            <span>
+              INR {{ inputControl.netAmount.value | number: '1.2-2' }}</span
+            >
+          </div>
+          <div class="py-row">
+            <span>Paid Amount</span>
+            <span>
+              <span
+                >INR
+                {{ inputControl.paidAmount.value | number: '1.2-2' }}
+              </span>
             </span>
-          </span>
+          </div>
+          <div class="py-row">
+            <span>Due Amount</span>
+            <span
+              [ngStyle]="{
+                color: inputControl.dueAmount.value < 0 ? 'red' : 'inherit'
+              }"
+              >INR
+              <span>{{ inputControl.dueAmount.value | number: '1.2-2' }} </span>
+            </span>
+          </div>
         </div>
-        <div class="py-row">
-          <span>Due Amount</span>
-          <span
-            [ngStyle]="{
-              color: inputControl.dueAmount.value < 0 ? 'red' : 'inherit'
-            }"
-            >INR
-            <span>{{ inputControl.dueAmount.value | number: '1.2-2' }} </span>
-          </span>
+        <div class="payment-form__note">
+          <hospitality-bot-text-area
+            controlName="additionalNote"
+            label="Additional Note"
+          ></hospitality-bot-text-area>
         </div>
-      </div>
-      <div class="payment-form__note">
-        <hospitality-bot-text-area
-          controlName="additionalNote"
-          label="Additional Note"
-        ></hospitality-bot-text-area>
       </div>
     </div>
-
     <div class="form-block">
       <div class="full-width header">
         <div class="header">
@@ -473,6 +476,10 @@
     </div>
   </div>
 </div>
+
+<ng-template #loader>
+  <hospitality-bot-loader-bounce class="loader"></hospitality-bot-loader-bounce>
+</ng-template>
 
 <hospitality-bot-form-action
   class="full-width"

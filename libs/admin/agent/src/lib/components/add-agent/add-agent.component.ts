@@ -66,7 +66,6 @@ export class AddAgentComponent implements OnInit {
     { label: '%OFF', value: commissionType.PERCENTAGE },
     { label: 'Flat', value: commissionType.COMMISSION },
   ];
-  businessSource = businessSource;
   marketSegment: Option[] = [];
 
   //Sidebar configuration
@@ -264,6 +263,13 @@ export class AddAgentComponent implements OnInit {
             label: res.companyName,
             value: res.id,
           };
+          this.agentForm.patchValue(
+            {
+              marketSegment: res?.marketSegment,
+              businessSource: res?.businessSource,
+            },
+            { emitEvent: false }
+          );
         }
         this.sidebarVisible = false;
         componentRef.destroy();

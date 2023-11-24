@@ -257,3 +257,8 @@ input[disabled] {
   cursor: not-allowed;
   /* Add more styles as needed */
 }
+
+.loader {
+  height: 40vh;
+  @include flex-justify-align-center;
+}

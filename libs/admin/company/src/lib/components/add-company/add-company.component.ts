@@ -22,11 +22,7 @@ import { Subscription } from 'rxjs';
 import { companyRoutes } from '../../constants/route';
 import { CompanyModel } from '../../models/company.model';
 import { CompanyResponseType } from '../../types/response';
-import {
-  businessSource,
-  companyDiscount,
-  discountTypes,
-} from '../../constants/company';
+import { companyDiscount, discountTypes } from '../../constants/company';
 import { Location } from '@angular/common';
 import { FormService } from 'libs/admin/members/src/lib/services/form.service';
 @Component({
@@ -36,7 +32,6 @@ import { FormService } from 'libs/admin/members/src/lib/services/form.service';
 })
 export class AddCompanyComponent implements OnInit {
   readonly discountType = discountTypes;
-  businessSource = businessSource;
   marketSegment: Option[] = [];
 
   entityId: string;
@@ -49,7 +44,11 @@ export class AddCompanyComponent implements OnInit {
 
   isSideBar = false;
   @Output() onClose = new EventEmitter<
-    Pick<CompanyResponseType, 'id' | 'companyName'> | boolean
+    | Pick<
+        CompanyResponseType,
+        'id' | 'companyName' | 'marketSegment' | 'businessSource'
+      >
+    | boolean
   >();
 
   subscription$ = new Subscription();
@@ -227,7 +226,12 @@ export class AddCompanyComponent implements OnInit {
             { panelClass: 'success' }
           );
           if (this.isSideBar) {
-            this.onClose.emit({ id: res.id, companyName: res.firstName });
+            this.onClose.emit({
+              id: res.id,
+              companyName: res.firstName,
+              marketSegment: res.marketSegment,
+              businessSource: res.businessSource,
+            });
           } else {
             this.location.back();
           }

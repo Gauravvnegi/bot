@@ -11,8 +11,8 @@
   [style]="{ width: '23vw' }"
 >
   <div class="info-container">
-    <div class="sub-continer">
-      <div class="title">{{ title }}</div>
+    <div class="sub-container">
+      <div class="title-container">{{ title }}</div>
       <div class="room-status">
         <div class="status" *ngFor="let status of roomStatus">
           <span
@@ -23,8 +23,11 @@
         </div>
       </div>
     </div>
-    <div class="sub-continer">
-      <div class="title title-1">Booking Indicators</div>
+    <div class="sub-container">
+      <div class="title-container title-1">
+        <span class="title">Booking Indicators</span>
+        <span class="coming-soon">Coming Soon</span>
+      </div>
       <div class="room-status">
         <div class="status" *ngFor="let status of bookingIndicator">
           <img class="icon" [src]="status.icon" alt="icon" />
@@ -32,8 +35,8 @@
         </div>
       </div>
     </div>
-    <div class="sub-continer">
-      <div class="title title-1">Room Features</div>
+    <div class="sub-container">
+      <div class="title-container title-1">Room Features</div>
       <div class="room-status">
         <div class="status" *ngFor="let feature of features">
           <img class="icon" [src]="feature.icon" alt="icon" />

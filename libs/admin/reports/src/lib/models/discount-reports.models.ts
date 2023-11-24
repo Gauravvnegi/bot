@@ -12,20 +12,20 @@ export class DiscountAllowanceReport
 
   deserialize(value: DiscountAllowanceReportResponse[]) {
     this.records = new Array<DiscountAllowanceReportData>();
-
-    value.forEach((reservationData: DiscountAllowanceReportResponse) => {
-      this.records.push({
-        date: getFormattedDate(reservationData.created),
-        group: undefined, //to be added in response
-        res: reservationData.number,
-        createdBy: undefined, //to be added in response
-        guestName: `${reservationData.guestDetails.primaryGuest.firstName} ${reservationData.guestDetails.primaryGuest.lastName}`,
-        reasonForDiscount: undefined, //to be added in response
-        directDiscount: reservationData.paymentSummary.totalDiscount,
-        allowance: undefined, //to be added in response
-        total: reservationData.paymentSummary.totalDiscount,
+    value &&
+      value.forEach((reservationData: DiscountAllowanceReportResponse) => {
+        this.records.push({
+          date: getFormattedDate(reservationData.created),
+          group: undefined, //to be added in response
+          res: reservationData.number,
+          createdBy: undefined, //to be added in response
+          guestName: `${reservationData.guestDetails.primaryGuest.firstName} ${reservationData.guestDetails.primaryGuest.lastName}`,
+          reasonForDiscount: undefined, //to be added in response
+          directDiscount: reservationData.paymentSummary.totalDiscount,
+          allowance: undefined, //to be added in response
+          total: reservationData.paymentSummary.totalDiscount,
+        });
       });
-    });
     return this;
   }
 }

@@ -178,7 +178,7 @@ export const reportsConfig: ReportsConfig = {
   OCCUPANCY_REPORTS: {
     menu: [
       {
-        label: 'History And Forecast',
+        label: 'History', //In future it will be History & Forecast
         value: 'historyAndForecastReport',
       },
     ],

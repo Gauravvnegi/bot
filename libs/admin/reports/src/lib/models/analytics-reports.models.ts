@@ -71,10 +71,7 @@ export class BusinessAnalysisReport
 
   deserialize(value: BusinessAnalysisReportResponse[]) {
     this.records = new Array<BusinessAnalysisReportData>();
-
-    if (!value) return this;
-
-    businessAnalysisReportRows.forEach((row) => {
+   value && businessAnalysisReportRows.forEach((row) => {
       if (value.hasOwnProperty(row.label)) {
         this.records.push({
           marketSegment: row.name,
@@ -111,9 +108,8 @@ export class MarketSegmentReport
   records: MarketSegmentReportData[];
   deserialize(value: MarketSegmentReportResponse) {
     this.records = new Array<MarketSegmentReportData>();
-    if (!value) return this;
 
-    marketSegmentReportRows.forEach((row) => {
+    value && marketSegmentReportRows.forEach((row) => {
       if (value.hasOwnProperty(row.label)) {
         this.records.push({
           marketSegment: row.name,

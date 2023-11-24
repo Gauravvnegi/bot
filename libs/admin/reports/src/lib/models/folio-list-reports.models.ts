@@ -10,8 +10,7 @@ export class FolioListReport
   records: FolioListReportData[];
   deserialize(value: FolioListReportResponse[]): this {
     this.records = new Array<FolioListReportData>();
-    if (!value) return this;
-    this.records = value.map((item) => {
+    this.records = value && value.map((item) => {
       return {
         bookingNo: item?.number,
         folioNo: item?.invoiceCode,

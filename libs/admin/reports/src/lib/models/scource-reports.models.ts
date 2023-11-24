@@ -11,20 +11,19 @@ export class MarketSourceReport
   deserialize(value: MarketSourceReportResponse): this {
     this.records = new Array<MarketSourceReportData>();
 
-    if (!value) return this;
-
-    Object.keys(value).forEach((key) => {
-      this.records.push({
-        company: key,
-        nights: value[key].nights,
-        occupancy: value[key].occupancyPercent,
-        pax: value[key].pax,
-        roomRevenue: value[key].roomRevenue,
-        revenue: value[key].revenuePercent,
-        arrOrAgr: value[key].arr,
-        arp: value[key].arp,
+    value &&
+      Object.keys(value).forEach((key) => {
+        this.records.push({
+          company: key,
+          nights: value[key].nights,
+          occupancy: value[key].occupancyPercent,
+          pax: value[key].pax,
+          roomRevenue: value[key].roomRevenue,
+          revenue: value[key].revenuePercent,
+          arrOrAgr: value[key].arr,
+          arp: value[key].arp,
+        });
       });
-    });
 
     return this;
   }

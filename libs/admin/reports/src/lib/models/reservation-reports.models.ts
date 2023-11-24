@@ -194,25 +194,25 @@ export class DraftReservationReport extends ReservationReport
   records: DraftReservationReportData[];
   deserialize(value: DraftReservationReportResponse[]) {
     this.records = new Array<DraftReservationReportData>();
-    if (!value) return this;
-    value.forEach((reservationData) => {
-      this.records.push({
-        id: reservationData.id,
-        bookingNo: reservationData.reservationNumber,
-        guestName: `${reservationData.guest.firstName} ${reservationData.guest.lastName}`,
-        roomType: `${
-          reservationData.bookingItems[0].roomDetails.roomNumber ?? '-'
-        }-${reservationData.bookingItems[0].roomDetails.roomTypeLabel}`,
-        checkIn: getFormattedDate(reservationData.from),
-        checkOut: getFormattedDate(reservationData.to),
-        nights: reservationData.guest.totalNights,
-        tempReservedNumber: reservationData.reservationNumber,
-        bookingAmount: reservationData.pricingDetails.totalAmount,
-        paidAmount: reservationData.pricingDetails.totalPaidAmount,
-        balance: reservationData.pricingDetails.totalDueAmount,
-        status: reservationData.status,
+    value &&
+      value.forEach((reservationData) => {
+        this.records.push({
+          id: reservationData.id,
+          bookingNo: reservationData.reservationNumber,
+          guestName: `${reservationData.guest.firstName} ${reservationData.guest.lastName}`,
+          roomType: `${
+            reservationData.bookingItems[0].roomDetails.roomNumber ?? '-'
+          }-${reservationData.bookingItems[0].roomDetails.roomTypeLabel}`,
+          checkIn: getFormattedDate(reservationData.from),
+          checkOut: getFormattedDate(reservationData.to),
+          nights: reservationData.guest.totalNights,
+          tempReservedNumber: reservationData.reservationNumber,
+          bookingAmount: reservationData.pricingDetails.totalAmount,
+          paidAmount: reservationData.pricingDetails.totalPaidAmount,
+          balance: reservationData.pricingDetails.totalDueAmount,
+          status: reservationData.status,
+        });
       });
-    });
     return this;
   }
 }
@@ -223,28 +223,29 @@ export class EmployeeWiseReservationReport
   records: EmployeeWiseReservationReportData[];
   deserialize(value: ReservationResponseData[]) {
     this.records = new Array<EmployeeWiseReservationReportData>();
-    if (!value) return this;
-    value.forEach((reservationData) => {
-      const totalCharge =
-        reservationData.reservationItemsPayment.totalRoomCharge +
-        reservationData.reservationItemsPayment.totalAddOnsAmount;
-      this.records.push({
-        id: reservationData.id,
-        userName: undefined, //to be added in response
-        bookingNo: reservationData.number,
-        guestName: `${reservationData.guestDetails.primaryGuest.firstName} ${reservationData.guestDetails.primaryGuest.lastName}`,
-        checkIn: getFormattedDate(reservationData.stayDetails.arrivalTime),
-        checkOut: getFormattedDate(reservationData.stayDetails.departureTime),
-        nights: reservationData.guestDetails.primaryGuest.totalNights,
-        roomCharge: reservationData.reservationItemsPayment.totalRoomCharge,
-        tax:
-          reservationData.reservationItemsPayment.totalCgstTax +
-          reservationData.reservationItemsPayment.totalSgstTax,
-        otherCharges: reservationData.reservationItemsPayment.totalAddOnsAmount,
-        totalCharge: totalCharge,
-        amountPaid: reservationData.reservationItemsPayment.paidAmount,
+    value &&
+      value.forEach((reservationData) => {
+        const totalCharge =
+          reservationData.reservationItemsPayment.totalRoomCharge +
+          reservationData.reservationItemsPayment.totalAddOnsAmount;
+        this.records.push({
+          id: reservationData.id,
+          userName: undefined, //to be added in response
+          bookingNo: reservationData.number,
+          guestName: `${reservationData.guestDetails.primaryGuest.firstName} ${reservationData.guestDetails.primaryGuest.lastName}`,
+          checkIn: getFormattedDate(reservationData.stayDetails.arrivalTime),
+          checkOut: getFormattedDate(reservationData.stayDetails.departureTime),
+          nights: reservationData.guestDetails.primaryGuest.totalNights,
+          roomCharge: reservationData.reservationItemsPayment.totalRoomCharge,
+          tax:
+            reservationData.reservationItemsPayment.totalCgstTax +
+            reservationData.reservationItemsPayment.totalSgstTax,
+          otherCharges:
+            reservationData.reservationItemsPayment.totalAddOnsAmount,
+          totalCharge: totalCharge,
+          amountPaid: reservationData.reservationItemsPayment.paidAmount,
+        });
       });
-    });
     return this;
   }
 }
@@ -254,26 +255,25 @@ export class ReservationAdrReport
   records: ReservationAdrReportData[];
   deserialize(value: ReservationResponseData[]) {
     this.records = new Array<ReservationAdrReportData>();
-    if (!value) return this;
+    value &&
+      value.forEach((data) => {
+        this.records.push({
+          id: data.id,
+          bookingNo: data.number,
+          guestName: `${data.guestDetails.primaryGuest.firstName} ${data.guestDetails.primaryGuest.lastName}`,
+          roomType: data.stayDetails.room.type,
+          roomNo: data.stayDetails.room.roomNumber,
+          checkIn: getFormattedDate(data.stayDetails.arrivalTime),
+          checkOut: getFormattedDate(data.stayDetails.departureTime),
+          nights: data.nightCount,
+          roomRent: data.reservationItemsPayment.totalRoomCharge,
 
-    value.forEach((data) => {
-      this.records.push({
-        id: data.id,
-        bookingNo: data.number,
-        guestName: `${data.guestDetails.primaryGuest.firstName} ${data.guestDetails.primaryGuest.lastName}`,
-        roomType: data.stayDetails.room.type,
-        roomNo: data.stayDetails.room.roomNumber,
-        checkIn: getFormattedDate(data.stayDetails.arrivalTime),
-        checkOut: getFormattedDate(data.stayDetails.departureTime),
-        nights: data.nightCount,
-        roomRent: data.reservationItemsPayment.totalRoomCharge,
-
-        adr: data.guestDetails.primaryGuest.totalNights
-          ? data.reservationItemsPayment.totalRoomCharge /
-            data.guestDetails.primaryGuest.totalNights
-          : data.reservationItemsPayment.totalRoomCharge,
+          adr: data.guestDetails.primaryGuest.totalNights
+            ? data.reservationItemsPayment.totalRoomCharge /
+              data.guestDetails.primaryGuest.totalNights
+            : data.reservationItemsPayment.totalRoomCharge,
+        });
       });
-    });
 
     return this;
   }
@@ -284,25 +284,25 @@ export class IncomeSummaryReport
   records: IncomeSummaryReportData[];
   deserialize(value: ReservationResponseData[]) {
     this.records = new Array<IncomeSummaryReportData>();
-    if (!value) return this;
 
-    value.forEach((data) => {
-      this.records.push({
-        id: data.id,
-        bookingNo: data.number,
-        guestName: `${data.guestDetails.primaryGuest.firstName} ${data.guestDetails.primaryGuest.lastName}`,
-        checkIn: getFormattedDate(data.stayDetails.arrivalTime),
-        checkOut: getFormattedDate(data.stayDetails.departureTime),
-        nights: data.nightCount,
-        lodgingAndOtherCharges:
-          data.reservationItemsPayment.totalAddOnsAmount +
-          data.reservationItemsPayment.totalRoomCharge,
-        taxTotal:
-          data.reservationItemsPayment.totalCgstTax +
-          data.reservationItemsPayment.totalSgstTax,
-        paidAmount: data.paymentSummary.paidAmount,
+    value &&
+      value.forEach((data) => {
+        this.records.push({
+          id: data.id,
+          bookingNo: data.number,
+          guestName: `${data.guestDetails.primaryGuest.firstName} ${data.guestDetails.primaryGuest.lastName}`,
+          checkIn: getFormattedDate(data.stayDetails.arrivalTime),
+          checkOut: getFormattedDate(data.stayDetails.departureTime),
+          nights: data.nightCount,
+          lodgingAndOtherCharges:
+            data.reservationItemsPayment.totalAddOnsAmount +
+            data.reservationItemsPayment.totalRoomCharge,
+          taxTotal:
+            data.reservationItemsPayment.totalCgstTax +
+            data.reservationItemsPayment.totalSgstTax,
+          paidAmount: data.paymentSummary.paidAmount,
+        });
       });
-    });
     return this;
   }
 }
@@ -314,9 +314,44 @@ export class ReservationSummaryReport
   records: ReservationSummaryReportData[];
   deserialize(value: ReservationResponseData[]) {
     this.records = new Array<ReservationSummaryReportData>();
-    if (!value) return this;
+    this.records =
+      value &&
+      value.map((data) => {
+        return {
+          id: data.id,
+          businessSource: data.source,
+          marketSegment: undefined, //to be added in response
+          phoneNumber:
+            data.guestDetails.primaryGuest.contactDetails.contactNumber,
+          email: data.guestDetails.primaryGuest.contactDetails.emailId,
+          roomType: data.stayDetails.room.type,
+          room: data.stayDetails.room.roomNumber,
+          createdOn: getFormattedDate(data.created),
+          rateOrPackage: undefined, //to be added in response
+          checkIn: getFormattedDate(data.stayDetails.arrivalTime),
+          checkOut: getFormattedDate(data.stayDetails.departureTime),
 
-    value.forEach((data) => {});
+          lodging: data.reservationItemsPayment.totalRoomCharge,
+
+          lodgingTax:
+            data.reservationItemsPayment.totalCgstTax +
+            data.reservationItemsPayment.totalSgstTax,
+
+          otherCharges: data.reservationItemsPayment.totalAddOnsAmount,
+          otherChargesTax:
+            data.reservationItemsPayment.totalCgstTax +
+            data.reservationItemsPayment.totalSgstTax,
+          avgRoomRate:
+            data.reservationItemsPayment.totalRoomCharge /
+            data.guestDetails.primaryGuest.totalNights,
+          paidAndRevenueLoss: undefined, //to be added in response
+          balance: undefined, //to be added in response
+          // paidAndRevenueLoss:
+          //   data.reservationItemsPayment.paidAmount +
+          //   data.reservationItemsPayment.revenueLoss,
+          // balance: data.reservationItemsPayment.totalDueAmount,
+        };
+      });
     return this;
   }
 }
@@ -327,27 +362,20 @@ export class HousekeepingReport
   records: HousekeepingReportData[];
   deserialize(value: HousekeepingReportResponse[]) {
     this.records = new Array<HousekeepingReportData>();
-    if (!value) return this;
-
-    value.forEach((data) => {
-      this.records.push({
-        roomNo: data?.roomNumber,
-        roomType: data?.roomTypeName,
-        bookingNo: data?.reservationNumber,
-        guestName: data?.guestName,
-        checkIn:
-          typeof data?.arrivalDate === 'number'
-            ? getFormattedDate(data?.arrivalDate)
-            : '-',
-        checkOut:
-          typeof data?.departureDate === 'number'
-            ? getFormattedDate(data?.departureDate)
-            : '-',
-        nights: data?.nights,
-        roomNotes: data?.remarks,
-        status: data?.status,
+    value &&
+      value.forEach((data) => {
+        this.records.push({
+          roomNo: data?.roomNumber,
+          roomType: data?.roomTypeName,
+          bookingNo: data?.reservationNumber,
+          guestName: data?.guestName,
+          checkIn: data.arrivalDate,
+          checkOut: data?.departureDate,
+          nights: data?.nights,
+          roomNotes: data?.remarks,
+          status: data?.status,
+        });
       });
-    });
     return this;
   }
 }

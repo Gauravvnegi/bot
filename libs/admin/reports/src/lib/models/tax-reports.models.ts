@@ -33,12 +33,12 @@ export class LodgingTaxReport
 
   deserialize(value: LodgingTaxReportResponse[]) {
     this.records = new Array<LodgingTaxReportData>();
-    if (!value) return this;
-    value.forEach((reservationData) => {
-      this.records.push(
-        new LodgingTaxReportDataModel().deserialize(reservationData)
-      );
-    });
+    value &&
+      value.forEach((reservationData) => {
+        this.records.push(
+          new LodgingTaxReportDataModel().deserialize(reservationData)
+        );
+      });
     return this;
   }
 }
@@ -83,10 +83,12 @@ export class TaxReport implements ReportClass<TaxReportData, any> {
 
   deserialize(value: TaxReportResponse[]) {
     this.records = new Array<TaxReportData>();
-    if (!value) return this;
-    value.forEach((reservationData) => {
-      this.records.push(new TaxReportDataModel().deserialize(reservationData));
-    });
+    value &&
+      value.forEach((reservationData) => {
+        this.records.push(
+          new TaxReportDataModel().deserialize(reservationData)
+        );
+      });
 
     return this;
   }

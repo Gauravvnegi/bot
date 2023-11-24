@@ -82,10 +82,26 @@ export type IncomeSummaryReportData = {
   paidAmount: number;
 };
 
-export type ReservationSummaryReportData = {};
-
-
-
+export type ReservationSummaryReportData = {
+  id: string;
+  businessSource: string;
+  marketSegment: string;
+  phoneNumber: string;
+  email: string;
+  roomType: string;
+  room: string;
+  createdOn: string;
+  rateOrPackage: string;
+  checkIn: string;
+  checkOut: string;
+  lodging: number;
+  lodgingTax: number;
+  otherCharges: number;
+  otherChargesTax: number;
+  avgRoomRate: number;
+  paidAndRevenueLoss: number;
+  balance: number;
+};
 
 export type HousekeepingReportData = {
   roomNo: string;
@@ -106,8 +122,8 @@ export type HousekeepingReportResponse = {
   roomTypeName: string;
   reservationNumber: string;
   guestName: string;
-  arrivalDate: number;
-  departureDate: number;
+  arrivalDate: string;
+  departureDate: string;
   nights: string;
 };
 

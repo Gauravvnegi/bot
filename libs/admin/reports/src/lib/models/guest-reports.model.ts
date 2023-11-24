@@ -29,28 +29,28 @@ export class GuestContactReport
   records: GuestContactReportData[];
   deserialize(value: GuestContactReportResponse[]): this {
     this.records = new Array<GuestContactReportData>();
-    if (!value) return this;
-
-    this.records = value.map((item) => {
-      return {
-        guestId: item?.id,
-        salutation: undefined, //need to confirm
-        name: `${item?.firstName} ${item?.lastName}`,
-        address: item?.address?.addressLine1, //need to confirm
-        city: item?.address?.city,
-        state: item?.address?.state,
-        country: item?.address?.country,
-        email: item?.contactDetails?.emailId,
-        dateOfBirth: item?.dateOfBirth && getFormattedDate(item?.dateOfBirth), //need to confirm
-        mobileNo: `${item?.contactDetails?.cc} ${item?.contactDetails?.contactNumber}`,
-        phone: undefined, //need to confirm
-        fax: undefined, //need to confirm
-        gender: item?.gender, //need to confirm
-        idType: undefined, //need to confirm
-        nationality: item.nationality, //need to confirm
-        zipCode: item?.address?.postalCode, //need to confirm
-      };
-    });
+    this.records =
+      value &&
+      value.map((item) => {
+        return {
+          guestId: item?.id,
+          salutation: undefined, //need to confirm
+          name: `${item?.firstName} ${item?.lastName}`,
+          address: item?.address?.addressLine1, //need to confirm
+          city: item?.address?.city,
+          state: item?.address?.state,
+          country: item?.address?.country,
+          email: item?.contactDetails?.emailId,
+          dateOfBirth: item?.dateOfBirth && getFormattedDate(item?.dateOfBirth), //need to confirm
+          mobileNo: `${item?.contactDetails?.cc} ${item?.contactDetails?.contactNumber}`,
+          phone: undefined, //need to confirm
+          fax: undefined, //need to confirm
+          gender: item?.gender, //need to confirm
+          idType: undefined, //need to confirm
+          nationality: item.nationality, //need to confirm
+          zipCode: item?.address?.postalCode, //need to confirm
+        };
+      });
     return this;
   }
 }
@@ -123,18 +123,19 @@ export class GuestLedger implements ReportClass<GuestLedgerData, any> {
 
   deserialize(value: GuestLedgerResponse[]) {
     this.records = new Array<GuestLedgerData>();
-    if (!value) return this;
-
-    value.forEach((reservationData) => {
-      this.records.push({
-        roomNo: reservationData?.stayDetails?.room?.roomNumber,
-        name: `${reservationData?.guestDetails.primaryGuest.firstName ?? ''} ${
-          reservationData?.guestDetails?.primaryGuest.lastName ?? ''
-        }`.trim(),
-        confirmationNo: reservationData?.number,
-        balance: reservationData?.paymentSummary?.totalAmount,
+    value &&
+      value.forEach((reservationData) => {
+        this.records.push({
+          roomNo: reservationData?.stayDetails?.room?.roomNumber,
+          name: `${
+            reservationData?.guestDetails.primaryGuest.firstName ?? ''
+          } ${
+            reservationData?.guestDetails?.primaryGuest.lastName ?? ''
+          }`.trim(),
+          confirmationNo: reservationData?.number,
+          balance: reservationData?.paymentSummary?.totalAmount,
+        });
       });
-    });
     return this;
   }
 }

@@ -569,7 +569,7 @@ export class InteractiveGridComponent {
           1 + this.colIndices[boundEndPos] - this.colIndices[boundStartPos];
 
         const key = boundStartPos;
-        const data: IGCellInfo = {
+        const data = {
           ...item,
           id: item.id,
           cellOccupied,
@@ -583,10 +583,19 @@ export class InteractiveGridComponent {
           hasEnd, // if end point is out of bound (right)
         };
 
-        rowResult = {
-          ...(rowResult ?? {}),
-          [key]: data,
-        };
+        if (rowResult.hasOwnProperty(key)) {
+          const currentData = rowResult[key];
+
+          rowResult = {
+            ...(rowResult ?? {}),
+            [key]: currentData.hasStart ? currentData : data,
+          };
+        } else {
+          rowResult = {
+            ...(rowResult ?? {}),
+            [key]: data,
+          };
+        }
       });
 
       resultData = { ...resultData, [item]: rowResult };

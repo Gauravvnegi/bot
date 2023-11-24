@@ -1,10 +1,10 @@
 import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
+import { RoutesConfigService } from '@hospitality-bot/admin/core/theme';
+import { environment } from '@hospitality-bot/admin/environment';
 import {
   CookiesSettingsService,
   ModuleNames,
 } from '@hospitality-bot/admin/shared';
-import { environment } from '@hospitality-bot/admin/environment';
-import { RoutesConfigService } from '@hospitality-bot/admin/core/theme';
 
 @Component({
   selector: 'hospitality-bot-create-with-main',
@@ -50,12 +50,14 @@ export class MainComponent implements OnInit, AfterViewInit, OnDestroy {
       .submodule;
     const additionalPath = this.routesConfigService.getQueryValue('redirect');
 
+    const productRoute = this.routesConfigService.activeRouteConfigSubscription.value.product.shortPath;
+
     this.urlMapping.forEach((item) => {
       if (
         this.routesConfigService.getRouteFromName(item.name) ===
         currentModuleRoute.shortPath
       ) {
-        this.onboardingUrl = `${environment.createWithUrl}${item.path}/${additionalPath}`;
+        this.onboardingUrl = `${environment.createWithUrl}${item.path}/${additionalPath}?productPath=${productRoute}`;
       }
     });
 

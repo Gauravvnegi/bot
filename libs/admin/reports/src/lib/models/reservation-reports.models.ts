@@ -131,6 +131,7 @@ export class Arrival {
   checkOut: string;
   status: string;
   arrivalTime: string;
+  departureTime: string;
   remark: string;
   deserialize(input: ReservationResponseData) {
     this.id = input.id;
@@ -150,7 +151,10 @@ export class Arrival {
       : '';
     this.status = input?.pmsStatus ?? '';
     this.arrivalTime = input?.arrivalTime
-      ? getFormattedDate(input.arrivalTime)
+      ? getFormattedDateWithTime(input.arrivalTime)
+      : '';
+    this.departureTime = input?.departureTime
+      ? getFormattedDateWithTime(input.departureTime)
       : '';
     this.remark = input?.specialRequest ?? ''; // need to verify from backend
     return this;
@@ -162,16 +166,17 @@ export class ArrivalReport extends ReservationReport
   records: ArrivalReportData[];
   deserialize(value: ReservationResponseData[]) {
     this.records = new Array<ArrivalReportData>();
-    value.forEach((reservationData) => {
-      this.records.push(new Arrival().deserialize(reservationData));
-    });
+    value &&
+      value.forEach((reservationData) => {
+        this.records.push(new Arrival().deserialize(reservationData));
+      });
     return this;
   }
 }
 
 export class Departure extends Arrival {
   deserialize(input: ReservationResponseData) {
-    super.deserialize(input);
+    input && super.deserialize(input);
     return this;
   }
 }
@@ -181,9 +186,10 @@ export class DepartureReport extends ReservationReport
   records: DepartureReportData[];
   deserialize(value: ReservationResponseData[]) {
     this.records = new Array<DepartureReportData>();
-    value.forEach((reservationData) => {
-      this.records.push(new Departure().deserialize(reservationData));
-    });
+    value &&
+      value.forEach((reservationData) => {
+        this.records.push(new Departure().deserialize(reservationData));
+      });
     return this;
   }
 }
@@ -205,7 +211,7 @@ export class DraftReservationReport extends ReservationReport
           }-${reservationData.bookingItems[0].roomDetails.roomTypeLabel}`,
           checkIn: getFormattedDate(reservationData.from),
           checkOut: getFormattedDate(reservationData.to),
-          nights: reservationData.guest.totalNights,
+          nights: reservationData.nightsCount,
           tempReservedNumber: reservationData.reservationNumber,
           bookingAmount: reservationData.pricingDetails.totalAmount,
           paidAmount: reservationData.pricingDetails.totalPaidAmount,
@@ -235,7 +241,7 @@ export class EmployeeWiseReservationReport
           guestName: `${reservationData.guestDetails.primaryGuest.firstName} ${reservationData.guestDetails.primaryGuest.lastName}`,
           checkIn: getFormattedDate(reservationData.stayDetails.arrivalTime),
           checkOut: getFormattedDate(reservationData.stayDetails.departureTime),
-          nights: reservationData.guestDetails.primaryGuest.totalNights,
+          nights: reservationData.nightCount,
           roomCharge: reservationData.reservationItemsPayment.totalRoomCharge,
           tax:
             reservationData.reservationItemsPayment.totalCgstTax +
@@ -243,7 +249,7 @@ export class EmployeeWiseReservationReport
           otherCharges:
             reservationData.reservationItemsPayment.totalAddOnsAmount,
           totalCharge: totalCharge,
-          amountPaid: reservationData.reservationItemsPayment.paidAmount,
+          amountPaid: reservationData.paymentSummary.paidAmount,
         });
       });
     return this;
@@ -344,12 +350,8 @@ export class ReservationSummaryReport
           avgRoomRate:
             data.reservationItemsPayment.totalRoomCharge /
             data.guestDetails.primaryGuest.totalNights,
-          paidAndRevenueLoss: undefined, //to be added in response
-          balance: undefined, //to be added in response
-          // paidAndRevenueLoss:
-          //   data.reservationItemsPayment.paidAmount +
-          //   data.reservationItemsPayment.revenueLoss,
-          // balance: data.reservationItemsPayment.totalDueAmount,
+          paidAndRevenueLoss: data?.paymentSummary?.paidAmount, 
+          balance: data?.paymentSummary?.dueAmount, 
         };
       });
     return this;
@@ -388,6 +390,18 @@ export function getFormattedDate(time: number) {
   const date = currentDate.getDate();
   const year = currentDate.getFullYear();
   return `${monthAbbreviated} ${date}, ${year}`;
+}
+
+export function getFormattedDateWithTime(time: number) {
+  const currentDate = new Date(time);
+  const monthAbbreviated = new Intl.DateTimeFormat('en-US', {
+    month: 'short',
+  }).format(currentDate);
+  const date = currentDate.getDate();
+  const year = currentDate.getFullYear();
+  const hours = currentDate.getHours();
+  const minutes = currentDate.getMinutes();
+  return `${monthAbbreviated} ${date}, ${year} ${hours}:${minutes}`;
 }
 
 function calculateNumberOfNights(

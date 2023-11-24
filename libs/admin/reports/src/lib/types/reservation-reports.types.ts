@@ -17,9 +17,9 @@ export type ReservationReportData = {
 
 export type NoShowReportData = Omit<NoShows, 'deserialize' | 'id'> & {};
 
-export type ArrivalReportData = Omit<Arrival, 'deserialize' | 'id'>;
+export type ArrivalReportData = Omit<Arrival, 'deserialize' | 'id'| 'departureTime'>;
 
-export type DepartureReportData = Omit<Departure, 'deserialize' | 'id'>;
+export type DepartureReportData = Omit<Departure, 'deserialize' | 'id' | 'arrivalTime'>;
 
 export type CancellationReportData = Omit<Cancellation, 'deserialize' | 'id'>;
 export type CancellationReportPartialData = Omit<

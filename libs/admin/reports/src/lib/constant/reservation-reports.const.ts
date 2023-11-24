@@ -125,18 +125,23 @@ export const arrivalReportCols: ColsData<ArrivalReportData> = {
     header: 'Status',
     isSortDisabled: true,
   },
-  arrivalTime: {
-    header: 'Arrival Time',
-    isSortDisabled: true,
-  },
   remark: {
     header: 'Remarks',
     isSortDisabled: true,
   },
+  arrivalTime: {
+    header: 'Arrival Time',
+    isSortDisabled: true,
+  },
 };
+const { arrivalTime, ...rest } = arrivalReportCols;
 
 export const departureReportCols: ColsData<DepartureReportData> = {
-  ...arrivalReportCols,
+  ...rest,
+  departureTime: {
+    header: 'Departure Time',
+    isSortDisabled: true,
+  },
 };
 
 export const draftReservationReportCols: ColsData<Omit<

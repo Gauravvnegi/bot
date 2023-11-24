@@ -38,6 +38,7 @@ export class NightAuditComponent implements OnInit {
   activeStep = 0;
   loading = false;
   entityId: string;
+  isReadOnlyStepper = false;
 
   // Manage logged config
   usersLoggedOut = false;
@@ -50,6 +51,7 @@ export class NightAuditComponent implements OnInit {
   ngOnInit(): void {
     this.entityId = this.globalFilterService.entityId;
     this.initAuditTime();
+    this.listenStepperMoveBackState();
   }
 
   initAuditTime() {
@@ -65,7 +67,7 @@ export class NightAuditComponent implements OnInit {
       return;
     }
 
-    this.loading = true;
+    this.setLoaders(true);
     this.$subscription.add(
       this.nightAuditService
         .checkAudit(
@@ -85,14 +87,14 @@ export class NightAuditComponent implements OnInit {
               this.checkedOutReservation = [];
               this.checkedInReservation = [];
             }
-            this.loading = false;
+            this.setLoaders(false);
           },
           (error) => {
-            this.loading = false;
+            this.setLoaders(false);
             this.auditDate = undefined;
           },
           () => {
-            this.loading = false;
+            this.setLoaders(false);
           }
         )
     );
@@ -102,8 +104,8 @@ export class NightAuditComponent implements OnInit {
     if (!this.auditDate) {
       this.checkAudit();
     }
-    
-    this.loading = true;
+
+    this.setLoaders(true);
     this.$subscription.add(
       this.nightAuditService
         .getNightAudit(
@@ -118,13 +120,13 @@ export class NightAuditComponent implements OnInit {
             } = new NightAudit().deserialize(res);
             this.checkedOutReservation = checkedOutReservation;
             this.checkedInReservation = checkedInReservation;
-            this.loading = false;
+            this.setLoaders(false);
           },
           (error) => {
-            this.loading = false;
+            this.setLoaders(false);
           },
           () => {
-            this.loading = false;
+            this.setLoaders(false);
           }
         )
     );
@@ -156,12 +158,30 @@ export class NightAuditComponent implements OnInit {
    */
   onNavigate(event) {
     this.onClose.emit(true);
-    this.routesConfigService.navigate({
-      subModuleName: event.subModuleName,
-      additionalPath: event.additionalPath,
-      queryParams: {
-        entityId: this.entityId,
-      },
+    this.routesConfigService
+      .navigate({
+        skipLocationChange: true,
+      })
+      .then(() => {
+        this.routesConfigService.navigate({
+          subModuleName: event.subModuleName,
+          additionalPath: event.additionalPath,
+          queryParams: {
+            entityId: this.entityId,
+          },
+        });
+      });
+  }
+
+  listenStepperMoveBackState() {
+    this.nightAuditService.$moveBackStateDisable.subscribe((res: boolean) => {
+      this.isReadOnlyStepper = res;
     });
+  }
+
+  setLoaders(state: boolean) {
+    this.loading = state;
+    this.nightAuditService.$checkedInLoading.next(state);
+    this.nightAuditService.$checkedOutLoading.next(state);
   }
 }

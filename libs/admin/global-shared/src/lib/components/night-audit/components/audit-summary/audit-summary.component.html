@@ -5,10 +5,7 @@
   <div class="header" *ngIf="auditDate">
     Night audit is completed for {{ auditDate | date: 'dd/MM/yyy' }}
   </div>
-  <div
-    class="content__wrapper"
-    *ngIf="!isNoAuditFound && !loading; else emptyTable"
-  >
+  <div class="content__wrapper" *ngIf="!isNoAuditFound; else emptyTable">
     <p-accordion *ngIf="values" [multiple]="true">
       <p-accordionTab
         *ngFor="let col of columns; let i = index"

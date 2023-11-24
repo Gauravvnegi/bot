@@ -5,6 +5,7 @@
     <hospitality-bot-stepper
       [completedStyle]="'dark'"
       [incompleteDisable]="true"
+      [readOnly]="isReadOnlyStepper"
       [stepList]="itemList"
       [activeIndex]="activeStep"
       (onActive)="activeStep = $event.index"
@@ -21,7 +22,6 @@
         *ngSwitchCase="1"
         class="audit-content"
         [activeIndex]="activeStep"
-        [loading]="loading"
         [items]="checkedInReservation"
         [stepList]="itemList"
         (reload)="checkAudit($event)"
@@ -33,7 +33,6 @@
         *ngSwitchCase="2"
         class="audit-content"
         [items]="checkedOutReservation"
-        [loading]="loading"
         [activeIndex]="activeStep"
         [stepList]="itemList"
         (reload)="checkAudit($event)"

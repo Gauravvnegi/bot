@@ -2,7 +2,6 @@ import { PricingDetails } from 'libs/admin/room/src/lib/models/rooms-data-table.
 import {
   BarPriceFormType,
   BarPriceTypes,
-  BarRatePlans,
   UpdateBarPriceRequest,
 } from '../types/bar-price.types';
 import { BarPriceRatePlan } from '../constants/barprice.const';
@@ -18,8 +17,8 @@ export class BarPriceFactory {
       const currentBarPrice = inputForm.barPrices.find(
         (item) => item.id === roomTypeId
       );
-
       const priceDetails = {
+        base: +currentBarPrice.price,
         paxAdult: +currentBarPrice.adult,
         paxChildAboveFive: +currentBarPrice.chileFiveToTwelve,
         paxChildBelowFive: +currentBarPrice.childBelowFive,
@@ -54,9 +53,8 @@ export class BarPriceFactory {
             isBase: true,
           },
         ],
-      });
+      } as BarPriceTypes);
     });
-
     return { inventoryList: data };
   }
 }

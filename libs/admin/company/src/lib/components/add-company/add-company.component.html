@@ -139,17 +139,16 @@
     >
     </hospitality-bot-select>
 
-    <hospitality-bot-select
+    <hospitality-bot-input
       *ngIf="isVisibleOnSideView('businessSource')"
       class="half-width"
       label="Business Source"
       controlName="businessSource"
-      [options]="businessSource"
       [props]="{
-        placeholder: 'Select'
+        placeholder: 'Enter'
       }"
     >
-    </hospitality-bot-select>
+    </hospitality-bot-input>
 
     <hospitality-bot-input
       *ngIf="isVisibleOnSideView('billingInstructions')"

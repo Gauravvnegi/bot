@@ -627,13 +627,18 @@ export class InvoiceComponent implements OnInit {
    * Find and remove item from the table of same item id
    * @param idToRemove ID of the items you want to remove
    */
-  findAndRemoveItems(idToRemove: string) {
+  findAndRemoveItems(idToRemove: BillItemFields, id?: string) {
     // removing the selected serviceID
-    this.selectedServiceIds.delete(idToRemove);
+    this.selectedServiceIds.delete(idToRemove?.billItemId ?? id);
 
     // Step 1: Filter out items with the same ID
     const itemsToRemove = this.tableFormArray.controls.filter(
-      (control: Controls) => control.value.itemId === idToRemove
+      (control: Controls) => {
+        return (
+          control.value.itemId === (idToRemove?.itemId ?? id) ||
+          control.value.itemId === (idToRemove?.key ?? id)
+        );
+      }
     );
 
     // Step 2: Remove each matching item
@@ -702,7 +707,7 @@ export class InvoiceComponent implements OnInit {
   getCheckboxValue(index: number) {
     return this.tableFormArray.at(index)?.get('taxId').value
       ? this.tableFormArray.at(index)?.get('itemId').value
-      : this.tableFormArray.at(index)?.get('key').value;
+      : this.tableFormArray.at(index)?.get('billItemId').value;
   }
 
   getTableRowValue(index: number) {
@@ -722,7 +727,7 @@ export class InvoiceComponent implements OnInit {
      * If delete item action is performed
      */
     if (value === MenuActionItem.DELETE_ITEM) {
-      this.findAndRemoveItems(priceControls.itemId);
+      this.findAndRemoveItems(priceControls);
       return;
     }
 
@@ -744,7 +749,9 @@ export class InvoiceComponent implements OnInit {
   }
 
   removeSelectedCharges() {
-    this.selectedRows.forEach((item) => this.findAndRemoveItems(item));
+    this.selectedRows.forEach((item) => {
+      this.findAndRemoveItems(undefined, item);
+    });
     this.selectedRows = [];
 
     return;

@@ -35,12 +35,35 @@ export class CompanyContributionsReport
   }
 }
 
-
-export class OccupancyAnalysisReport implements ReportClass<OccupancyAnalysisReportData, OccupancyAnalysisReportResponse> { 
+export class OccupancyAnalysisReport
+  implements
+    ReportClass<OccupancyAnalysisReportData, OccupancyAnalysisReportResponse> {
   records: OccupancyAnalysisReportData[];
 
-  deserialize(value: {} | OccupancyAnalysisReportResponse[]): this {
-      return this;
+  deserialize(value: OccupancyAnalysisReportResponse[]): this {
+    this.records = new Array<OccupancyAnalysisReportData>();
+
+    this.records =
+      value &&
+      value.map((item) => {
+        return {
+          roomType: item.roomTypeName,
+          roomAvailable: item.availableRooms,
+          roomRevenue: item.roomRevenue,
+          soldRooms: item.soldRooms,
+          soldRoomsPercent: item.soldRoomPercentage,
+          singleSoldRooms: item.singleSold,
+          doubleSoldRooms: item.doubleSold,
+          tripleSoldRooms: item.tripleSold,
+          quadSoldRooms: item.quardplSold,
+          moreQuardplSoldRooms: item.moreQuardplSold,
+          pax: item.pax,
+          arp: item.arp,
+          revPar: item.revPar,
+          arrOrAgr: item.arr,
+        };
+      });
+    return this;
   }
 }
 
@@ -82,32 +105,32 @@ export class BusinessAnalysisReport
 
   deserialize(value: BusinessAnalysisReportResponse[]) {
     this.records = new Array<BusinessAnalysisReportData>();
-   value && businessAnalysisReportRows.forEach((row) => {
-      if (value.hasOwnProperty(row.label)) {
-        this.records.push({
-          marketSegment: row.name,
-          nights: value[row.label].nights,
-          occupancy: value[row.label].occupancyPercent,
-          pax: value[row.label].pax,
-          roomRevenue: value[row.label].roomRevenue,
-          revenue: value[row.label].revenue,
-          arrOrAgr: value[row.label].arr,
-          arp: value[row.label].arp,
-        });
-      } else {
-        this.records.push({
-          marketSegment: row.name,
-          nights: undefined,
-          occupancy: undefined,
-          pax: undefined,
-          roomRevenue: undefined,
-          revenue: undefined,
-          arrOrAgr: undefined,
-          arp: undefined,
-  
-        });
-      }
-    });
+    value &&
+      businessAnalysisReportRows.forEach((row) => {
+        if (value.hasOwnProperty(row.label)) {
+          this.records.push({
+            marketSegment: row.name,
+            nights: value[row.label].nights,
+            occupancy: value[row.label].occupancyPercent,
+            pax: value[row.label].pax,
+            roomRevenue: value[row.label].roomRevenue,
+            revenue: value[row.label].revenue,
+            arrOrAgr: value[row.label].arr,
+            arp: value[row.label].arp,
+          });
+        } else {
+          this.records.push({
+            marketSegment: row.name,
+            nights: undefined,
+            occupancy: undefined,
+            pax: undefined,
+            roomRevenue: undefined,
+            revenue: undefined,
+            arrOrAgr: undefined,
+            arp: undefined,
+          });
+        }
+      });
 
     return this;
   }
@@ -120,31 +143,32 @@ export class MarketSegmentReport
   deserialize(value: MarketSegmentReportResponse) {
     this.records = new Array<MarketSegmentReportData>();
 
-    value && marketSegmentReportRows.forEach((row) => {
-      if (value.hasOwnProperty(row.label)) {
-        this.records.push({
-          marketSegment: row.name,
-          nights: value[row.label].nights,
-          occupancy: value[row.label].occupancyPercent,
-          pax: value[row.label].pax,
-          roomRevenue: value[row.label].roomRevenue,
-          revenue: value[row.label].revenue,
-          arrOrAgr: value[row.label].arr,
-          arp: value[row.label].arp,
-        });
-      } else {
-        this.records.push({
-          marketSegment: row.name,
-          nights: undefined,
-          occupancy: undefined,
-          pax: undefined,
-          roomRevenue: undefined,
-          revenue: undefined,
-          arrOrAgr: undefined,
-          arp: undefined,
-        });
-      }
-    });
+    value &&
+      marketSegmentReportRows.forEach((row) => {
+        if (value.hasOwnProperty(row.label)) {
+          this.records.push({
+            marketSegment: row.name,
+            nights: value[row.label].nights,
+            occupancy: value[row.label].occupancyPercent,
+            pax: value[row.label].pax,
+            roomRevenue: value[row.label].roomRevenue,
+            revenue: value[row.label].revenue,
+            arrOrAgr: value[row.label].arr,
+            arp: value[row.label].arp,
+          });
+        } else {
+          this.records.push({
+            marketSegment: row.name,
+            nights: undefined,
+            occupancy: undefined,
+            pax: undefined,
+            roomRevenue: undefined,
+            revenue: undefined,
+            arrOrAgr: undefined,
+            arp: undefined,
+          });
+        }
+      });
 
     return this;
   }

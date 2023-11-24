@@ -25,7 +25,32 @@ export type OccupancyAnalysisReportData = {
 };
 
 export type OccupancyAnalysisReportResponse = {
-  //todo
+  id: string;
+  date: number;
+  entityId: string;
+  roomTypeId: string;
+  roomTypeName: string;
+  status: string;
+  totalRooms: number;
+  outOfServiceRooms: number;
+  outOfOrderRooms: number;
+  roomRevenue: number;
+  roomTax: number;
+  roomDiscount: number;
+  soldRooms: number;
+  singleSold: number;
+  doubleSold: number;
+  tripleSold: number;
+  quardplSold: number;
+  moreQuardplSold: number;
+  pax: number;
+  cancelledReservation: number;
+  availableRooms: number;
+  soldRoomPercentage: number;
+  arr: number;
+  arp: number;
+  revPar: number;
+  subTotalObject: boolean;
 };
 
 export type BusinessAnalysisReportData = MarketSegmentReportData & {};

@@ -512,7 +512,7 @@ export const reportFiltersMapping: Record<
   folioListReport: ['fromDate', 'toDate'],
   guestContactReport: ['fromDate', 'toDate'],
   payTypeReport: ['fromDate', 'toDate'],
-  occupancyAnalysisReport: ['fromDate', 'toDate'],
+  occupancyAnalysisReport: ['date'],
 };
 
 export const rowStylesMapping: Record<RowStylesKeys, string> = {

@@ -9,9 +9,9 @@ export class ConfirmDialogComponent implements OnInit {
   header: string;
   message: string;
   noLabel = 'No';
-  noIcon = 'pi pi-times';
+  noIcon = null
   yesLabel = 'Yes';
-  yesIcon = 'pi pi-check';
+  yesIcon = null;
   @Input() isVisible = false;
   @Input() style: Record<string, string> = { width: '500px' };
   @Input() set props(values: ConfirmDialogProps) {

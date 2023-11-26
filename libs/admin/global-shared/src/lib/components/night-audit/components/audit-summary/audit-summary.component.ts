@@ -26,8 +26,8 @@ export class AuditSummaryComponent implements OnInit {
   title = 'Audit Summary';
   cols = { ...cols };
   values: AuditViewType | {};
-  loading = false;
-  isNoAuditFound = false;
+  loading = true;
+  isNoAuditFound = true;
   actionConfig: ActionConfigType;
   lastNightDate = new Date();
   auditDate: Date;
@@ -48,6 +48,7 @@ export class AuditSummaryComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.nightAuditService.$moveBackStateDisable.next(true);
     this.entityId = this.globalFilterService.entityId;
     this.initAuditTime();
     this.checkAudit();

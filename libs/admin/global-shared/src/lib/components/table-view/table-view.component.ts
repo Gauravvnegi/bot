@@ -1,4 +1,11 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  SimpleChanges,
+} from '@angular/core';
 import { Cols, FlagType } from '@hospitality-bot/admin/shared';
 import { EmptyContent } from 'libs/admin/shared/src/lib/components/datatable/empty-table/empty-table.component';
 import { ActionDataType, TableObjectData } from '../../types/table-view.type';
@@ -44,6 +51,12 @@ export class TableViewComponent implements OnInit {
   @Output() quickChange = new EventEmitter<TableActionType>();
   @Output() OnPostIconClick = new EventEmitter<any>();
   constructor() {}
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['loading']) {
+      this.loading = changes['loading'].currentValue;
+    }
+  }
 
   ngOnInit(): void {}
 

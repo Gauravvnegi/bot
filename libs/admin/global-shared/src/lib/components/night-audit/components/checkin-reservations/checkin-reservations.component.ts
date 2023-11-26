@@ -39,7 +39,7 @@ export class CheckinReservationsComponent implements OnInit {
   actionConfig: ActionConfigType;
   entityId = '';
 
-  @Input() loading: boolean = false;
+  loading = true;
   @Input() items: CheckedInReservation[] = [];
   @Input() activeIndex = 0;
   @Input() stepList: MenuItem[];
@@ -66,6 +66,7 @@ export class CheckinReservationsComponent implements OnInit {
 
   ngOnInit(): void {
     this.entityId = this.globalFilterService.entityId;
+    this.listenLoaders();
     this.initTable();
     this.initActionConfig();
   }
@@ -76,7 +77,7 @@ export class CheckinReservationsComponent implements OnInit {
       preLabel: this.activeIndex != 0 ? 'Back' : undefined,
       postLabel: 'Next',
       preSeverity: 'primary',
-      postDisabled: this.isSomeConfirmed() ,
+      postDisabled: this.loading || this.isSomeConfirmed(),
     };
   }
 
@@ -139,6 +140,12 @@ export class CheckinReservationsComponent implements OnInit {
 
   initTable() {
     if (!this.items.length) this.reloadTable();
+  }
+
+  listenLoaders() {
+    this.nightAuditService.$checkedInLoading.subscribe((res) => {
+      this.loading = res;
+    });
   }
 
   reloadTable(refresh?: boolean) {

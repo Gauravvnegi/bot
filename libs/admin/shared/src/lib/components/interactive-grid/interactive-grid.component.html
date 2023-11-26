@@ -11,159 +11,35 @@
   >
     <ng-container *ngFor="let row of gridRows; let rowIdx = index">
       <ng-container *ngFor="let col of gridColumns; let colIdx = index">
-        <div
-          class="drag-grid"
-          [bounds]="myBounds"
-          [rzContainment]="myBounds"
-          [inBounds]="true"
-          *ngIf="data[row] && data[row][col]"
-          [ngDraggable]="
-            isInteractive({
-              rowValue: row,
-              colValue: col,
-              colIdx: colIdx,
-              rowIdx: rowIdx
-            })
+        <ng-container
+          *ngTemplateOutlet="
+            cellTemplate;
+            context: {
+              myBounds: myBounds,
+              row: row,
+              col: col,
+              rowIdx: rowIdx,
+              colIdx: colIdx
+            }
           "
-          [ngResizable]="
-            isInteractive({
-              rowValue: row,
-              colValue: col,
-              colIdx: colIdx,
-              rowIdx: rowIdx
-            })
-          "
-          [rzMinWidth]="cellSize / resizeDelimiter"
-          [rzGrid]="cellSize / resizeDelimiter"
-          [position]="{
-            x: colIdx * cellSize + (data[row][col]?.hasPrev ? cellSize / 2 : 0),
-            y: rowIdx * height
-          }"
-          [gridSize]="cellSize / 2"
-          [ngStyle]="{
-            width:
-              getWidth({
-                rowValue: row,
-                colValue: col,
-                colIdx: colIdx,
-                rowIdx: rowIdx
-              }) + 'px',
-            height: height + 'px',
-            padding: cellGap + 'px',
-            marginLeft: '-' + outOfBoundRecord[data[row][col].id].lSpace + 'px'
-          }"
-          [zIndex]="data[row][col]?.id === toggleMenuId ? 20 : 10"
-          zIndexMoving="100"
-          [preventDefaultEvent]="true"
-          rzHandles="e,w"
-          (rzStop)="
-            handleResizing($event, {
-              rowValue: row,
-              colValue: col,
-              colIdx: colIdx,
-              rowIdx: rowIdx
-            })
-          "
-          (endOffset)="
-            handleDrag($event, {
-              rowValue: row,
-              colValue: col,
-              colIdx: colIdx,
-              rowIdx: rowIdx
-            })
-          "
-          (movingOffset)="
-            onMoving($event, {
-              rowValue: row,
-              colValue: col,
-              colIdx: colIdx,
-              rowIdx: rowIdx
-            })
-          "
-          (click)="
-            handleClick({
-              rowValue: row,
-              colValue: col,
-              colIdx: colIdx,
-              rowIdx: rowIdx
-            })
-          "
-          (contextmenu)="
-            onRightClick($event, {
-              rowValue: row,
-              colValue: col,
-              colIdx: colIdx,
-              rowIdx: rowIdx
-            })
-          "
-        >
-          <div
-            *ngIf="
-              data[row][col]?.options?.length &&
-              toggleMenuId === data[row][col].id
-            "
-            class="menu"
-            [ngClass]="{
-              menu__se: toggleMenuPos === 'SE',
-              menu__sw: toggleMenuPos === 'SW',
-              menu__ne: toggleMenuPos === 'NE',
-              menu__nw: toggleMenuPos === 'NW'
-            }"
-          >
-            <ng-container *ngFor="let option of data[row][col]?.options">
-              <div class="menu__item" (click)="handleMenuClick($event, option)">
-                {{ option.label }}
-              </div>
-            </ng-container>
-          </div>
-          <div
-            class="cell-data"
-            [ngClass]="{
-              'non-interactive-cell': !isInteractive({
-                rowValue: row,
-                colValue: col,
-                colIdx: colIdx,
-                rowIdx: rowIdx
-              }),
-              'success-cell': data[row][col]?.colorCode === 'success',
-              'active-cell': data[row][col]?.colorCode === 'active',
-              'inactive-cell': data[row][col]?.colorCode === 'inactive',
-              'failed-cell': data[row][col]?.colorCode === 'failed',
-              'warning-cell': data[row][col]?.colorCode === 'warning',
-              'draft-cell': data[row][col]?.colorCode === 'draft'
-            }"
-            [ngStyle]="{
-              height: height - 2 * cellGap + 'px',
-              borderLeft: outOfBoundRecord[data[row][col].id].hasLeftBorder
-                ? null
-                : 0,
-              borderRight: outOfBoundRecord[data[row][col].id].hasRightBorder
-                ? null
-                : 0
-            }"
-          >
-            <div
-              class="cell-data__content"
-              [ngStyle]="{
-                whiteSpace: data[row][col]?.nonInteractive ? 'wrap' : 'nowrap'
-              }"
-            >
-              <ng-container *ngIf="data[row][col]?.icons">
-                <img
-                  *ngFor="let icon of data[row][col]?.icons"
-                  [src]="icon"
-                  alt="cell-icon"
-                  class="cell-data__icon"
-                />
-              </ng-container>
-              {{ data[row][col]?.content }}
-            </div>
-            <div class="cell-data__additional-content">
-              {{ data[row][col]?.additionContent }}
-            </div>
-          </div>
-        </div>
+        ></ng-container>
       </ng-container>
+    </ng-container>
+
+    <!-- _S are the grid data at the start, needed to map is separately -->
+    <ng-container *ngFor="let row of gridRows; let rowIdx = index">
+      <ng-container
+        *ngTemplateOutlet="
+          cellTemplate;
+          context: {
+            myBounds: myBounds,
+            row: row,
+            col: gridColumns[0] + '_S',
+            rowIdx: rowIdx,
+            colIdx: 0
+          }
+        "
+      ></ng-container>
     </ng-container>
   </div>
 
@@ -230,3 +106,165 @@
     <i class="pi pi-spin pi-spinner" [ngClass]="iconNgClass"></i>
   </div>
 </div>
+
+<!-- Interactive grid cell -->
+<ng-template
+  #cellTemplate
+  let-row="row"
+  let-col="col"
+  let-rowIdx="rowIdx"
+  let-colIdx="colIdx"
+  let-myBounds="myBounds"
+>
+  <div
+    class="drag-grid"
+    [bounds]="myBounds"
+    [rzContainment]="myBounds"
+    [inBounds]="true"
+    *ngIf="data[row] && data[row][col]"
+    [ngDraggable]="
+      isInteractive({
+        rowValue: row,
+        colValue: col,
+        colIdx: colIdx,
+        rowIdx: rowIdx
+      })
+    "
+    [ngResizable]="
+      isInteractive({
+        rowValue: row,
+        colValue: col,
+        colIdx: colIdx,
+        rowIdx: rowIdx
+      })
+    "
+    [rzMinWidth]="cellSize / resizeDelimiter"
+    [rzGrid]="cellSize / resizeDelimiter"
+    [position]="{
+      x: colIdx * cellSize + (data[row][col]?.hasPrev ? cellSize / 2 : 0),
+      y: rowIdx * height
+    }"
+    [gridSize]="cellSize / 2"
+    [ngStyle]="{
+      width:
+        getWidth({
+          rowValue: row,
+          colValue: col,
+          colIdx: colIdx,
+          rowIdx: rowIdx
+        }) + 'px',
+      height: height + 'px',
+      padding: cellGap + 'px',
+      marginLeft: '-' + outOfBoundRecord[data[row][col].id].lSpace + 'px'
+    }"
+    [zIndex]="data[row][col]?.id === toggleMenuId ? 20 : 10"
+    zIndexMoving="100"
+    [preventDefaultEvent]="true"
+    rzHandles="e,w"
+    (rzStop)="
+      handleResizing($event, {
+        rowValue: row,
+        colValue: col,
+        colIdx: colIdx,
+        rowIdx: rowIdx
+      })
+    "
+    (endOffset)="
+      handleDrag($event, {
+        rowValue: row,
+        colValue: col,
+        colIdx: colIdx,
+        rowIdx: rowIdx
+      })
+    "
+    (movingOffset)="
+      onMoving($event, {
+        rowValue: row,
+        colValue: col,
+        colIdx: colIdx,
+        rowIdx: rowIdx
+      })
+    "
+    (click)="
+      handleClick({
+        rowValue: row,
+        colValue: col,
+        colIdx: colIdx,
+        rowIdx: rowIdx
+      })
+    "
+    (contextmenu)="
+      onRightClick($event, {
+        rowValue: row,
+        colValue: col,
+        colIdx: colIdx,
+        rowIdx: rowIdx
+      })
+    "
+  >
+    <div
+      *ngIf="
+        data[row][col]?.options?.length && toggleMenuId === data[row][col].id
+      "
+      class="menu"
+      [ngClass]="{
+        menu__se: toggleMenuPos === 'SE',
+        menu__sw: toggleMenuPos === 'SW',
+        menu__ne: toggleMenuPos === 'NE',
+        menu__nw: toggleMenuPos === 'NW'
+      }"
+    >
+      <ng-container *ngFor="let option of data[row][col]?.options">
+        <div class="menu__item" (click)="handleMenuClick($event, option)">
+          {{ option.label }}
+        </div>
+      </ng-container>
+    </div>
+    <div
+      class="cell-data"
+      [ngClass]="{
+        'non-interactive-cell': !isInteractive({
+          rowValue: row,
+          colValue: col,
+          colIdx: colIdx,
+          rowIdx: rowIdx
+        }),
+        'success-cell': data[row][col]?.colorCode === 'success',
+        'active-cell': data[row][col]?.colorCode === 'active',
+        'inactive-cell': data[row][col]?.colorCode === 'inactive',
+        'failed-cell': data[row][col]?.colorCode === 'failed',
+        'warning-cell': data[row][col]?.colorCode === 'warning',
+        'draft-cell': data[row][col]?.colorCode === 'draft'
+      }"
+      [ngStyle]="{
+        height: height - 2 * cellGap + 'px',
+        borderLeft: outOfBoundRecord[data[row][col].id].hasLeftBorder
+          ? null
+          : 0,
+        borderRight: outOfBoundRecord[data[row][col].id].hasRightBorder
+          ? null
+          : 0
+      }"
+    >
+      <div
+        class="cell-data__content"
+        [ngStyle]="{
+          whiteSpace: data[row][col]?.nonInteractive ? 'wrap' : 'nowrap'
+        }"
+      >
+        <ng-container *ngIf="data[row][col]?.icons">
+          <img
+            *ngFor="let icon of data[row][col]?.icons"
+            [src]="icon"
+            alt="cell-icon"
+            class="cell-data__icon"
+          />
+        </ng-container>
+        {{ data[row][col]?.content }}
+      </div>
+      <div class="cell-data__additional-content">
+        {{ data[row][col]?.additionContent }}
+      </div>
+    </div>
+  </div>
+</ng-template>

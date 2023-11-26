@@ -404,7 +404,69 @@ export class InteractiveGridComponent {
       };
       this.onChange.emit(currentData);
     } else {
-      this.onEdit.emit({ id: currentData.id });
+      if (!this.isMoved) {
+        this.onEdit.emit({ id: currentData.id });
+      }
+      this.isMoved = false;
+    }
+  }
+
+  /**
+   * Flag indicating whether the gridCell has been moved.
+   * Since the drag handle triggers the click, this flag helps determine if movement occurred.
+   * It considers cases where the cell can be moved and returned to the same position.
+   */
+  isMoved = false;
+
+  /**
+   * Handle size and boundary visibility of the grid that is out of bound
+   */
+  onMoving(event: IPosition, query: IGQueryEvent) {
+    const { data } = this.getCurrentDataInfo(query);
+    const position = this.getPosition(query);
+
+    if (!this.isMoved && (event.x !== position.x || event.y !== position.y)) {
+      this.isMoved = true;
+    }
+
+    const startOOB = !data.hasStart;
+    const endOOB = !data.hasEnd;
+
+    const cPos = position.x;
+    const qPos = event.x;
+
+    /**
+     * If IGCell is out of bound to the left
+     */
+    if (startOOB) {
+      const diff = qPos - cPos;
+
+      const noOfCell =
+        (this.gridColumns[data.startPosIdx] - data.oStartPos) / this.colDiff;
+
+      this.outOfBoundRecord[data.id].hasLeftBorder =
+        diff >= noOfCell * this.cellSize;
+
+      if (diff <= noOfCell * this.cellSize) {
+        this.outOfBoundRecord[data.id].lSpace = diff;
+      }
+    }
+
+    /**
+     * If IGCell is out of bound to the right
+     */
+    if (endOOB) {
+      const diff = cPos - qPos;
+
+      const noOfCell =
+        (data.oEndPos - this.gridColumns[data.endPosIdx]) / this.colDiff;
+
+      this.outOfBoundRecord[data.id].hasRightBorder =
+        diff >= noOfCell * this.cellSize;
+
+      if (diff <= noOfCell * this.cellSize) {
+        this.outOfBoundRecord[data.id].rSpace = diff;
+      }
     }
   }
 
@@ -450,50 +512,6 @@ export class InteractiveGridComponent {
     return (
       width + currentOutOfBoundRecord.lSpace + currentOutOfBoundRecord.rSpace
     );
-  }
-
-  onMoving(event: IPosition, query: IGQueryEvent) {
-    const { data } = this.getCurrentDataInfo(query);
-
-    const startOOB = !data.hasStart;
-    const endOOB = !data.hasEnd;
-
-    const cPos = this.getPosition(query).x;
-    const qPos = event.x;
-
-    /**
-     * If IGCell is out of bound to the left
-     */
-    if (startOOB) {
-      const diff = qPos - cPos;
-
-      const noOfCell =
-        (this.gridColumns[data.startPosIdx] - data.oStartPos) / this.colDiff;
-
-      this.outOfBoundRecord[data.id].hasLeftBorder =
-        diff >= noOfCell * this.cellSize;
-
-      if (diff <= noOfCell * this.cellSize) {
-        this.outOfBoundRecord[data.id].lSpace = diff;
-      }
-    }
-
-    /**
-     * If IGCell is out of bound to the right
-     */
-    if (endOOB) {
-      const diff = cPos - qPos;
-
-      const noOfCell =
-        (data.oEndPos - this.gridColumns[data.endPosIdx]) / this.colDiff;
-
-      this.outOfBoundRecord[data.id].hasRightBorder =
-        diff >= noOfCell * this.cellSize;
-
-      if (diff <= noOfCell * this.cellSize) {
-        this.outOfBoundRecord[data.id].rSpace = diff;
-      }
-    }
   }
 
   /**
@@ -589,6 +607,7 @@ export class InteractiveGridComponent {
           rowResult = {
             ...(rowResult ?? {}),
             [key]: currentData.hasStart ? currentData : data,
+            [`${key}_S`]: currentData.hasStart ? data : currentData,
           };
         } else {
           rowResult = {
@@ -600,6 +619,8 @@ export class InteractiveGridComponent {
 
       resultData = { ...resultData, [item]: rowResult };
     }
+
+    console.log(resultData, 'resultData');
 
     return resultData;
   }

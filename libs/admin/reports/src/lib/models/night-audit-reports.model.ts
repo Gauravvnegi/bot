@@ -19,13 +19,20 @@ export class AuditRoomDetailsReport
   records: AuditRoomDetailsReportData[];
 
   deserialize(value: AuditRoomDetailsReportResponse[]) {
-    const data = value.find((item) => item?.calenderType === 'DAY') ?? {};
-
     this.records = new Array<AuditRoomDetailsReportData>();
+
+    let data = value.find((item) => item?.calenderType === 'DAY');
+    if (!data) return this;
+
+    if (data?.totalRooms && data?.occupiedRooms) {
+      const todayAvailableRooms = data?.totalRooms - data?.occupiedRooms;
+      data = { ...data, todayAvailableRooms };
+    }
+
     auditRoomDetailsReportRows.forEach((item) => {
       this.records.push({
         roomDetails: item.label,
-        noOfRooms: data[item?.noOfRooms],
+        noOfRooms: data[item?.noOfRooms] ,
         noOfGuests: data[item?.noOfGuests],
       });
     });

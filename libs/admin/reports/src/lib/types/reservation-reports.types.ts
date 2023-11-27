@@ -17,9 +17,9 @@ export type ReservationReportData = {
 
 export type NoShowReportData = Omit<NoShows, 'deserialize' | 'id'> & {};
 
-export type ArrivalReportData = Omit<Arrival, 'deserialize' | 'id'>;
+export type ArrivalReportData = Omit<Arrival, 'deserialize' | 'id'| 'departureTime'>;
 
-export type DepartureReportData = Omit<Departure, 'deserialize' | 'id'>;
+export type DepartureReportData = Omit<Departure, 'deserialize' | 'id' | 'arrivalTime'>;
 
 export type CancellationReportData = Omit<Cancellation, 'deserialize' | 'id'>;
 export type CancellationReportPartialData = Omit<
@@ -82,10 +82,26 @@ export type IncomeSummaryReportData = {
   paidAmount: number;
 };
 
-export type ReservationSummaryReportData = {};
-
-
-
+export type ReservationSummaryReportData = {
+  id: string;
+  businessSource: string;
+  marketSegment: string;
+  phoneNumber: string;
+  email: string;
+  roomType: string;
+  room: string;
+  createdOn: string;
+  rateOrPackage: string;
+  checkIn: string;
+  checkOut: string;
+  lodging: number;
+  lodgingTax: number;
+  otherCharges: number;
+  otherChargesTax: number;
+  avgRoomRate: number;
+  paidAndRevenueLoss: number;
+  balance: number;
+};
 
 export type HousekeepingReportData = {
   roomNo: string;

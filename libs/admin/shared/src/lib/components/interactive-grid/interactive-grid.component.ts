@@ -374,6 +374,9 @@ export class InteractiveGridComponent {
     const { x: newPosX, y: newPosY } = event;
     const { rowValue } = query;
 
+    const isPositionDifferent =
+      currentPosX !== newPosX || currentPosY !== newPosY;
+
     const startPosIdx = data.startPosIdx;
     const endPosIdx = data.endPosIdx;
 
@@ -432,14 +435,18 @@ export class InteractiveGridComponent {
       newEndPosIdx = newEndPosIdx + 1;
     }
 
+    console.log('newStartPosIdx', newStartPosIdx, 'startPosIdx', startPosIdx);
+    console.log('newEndPosIdx', newEndPosIdx, 'endPosIdx', endPosIdx);
+
     /**
      * Drag event is emitted even if it is not moved (on click)
      * So emit onChange if something is changed else trigger onClick event
      */
     if (
-      endPosIdx !== newEndPosIdx ||
-      startPosIdx !== newStartPosIdx ||
-      rowValue !== this.gridRows[newYIdx]
+      // endPosIdx !== newEndPosIdx ||
+      // startPosIdx !== newStartPosIdx ||
+      // rowValue !== this.gridRows[newYIdx]
+      isPositionDifferent
     ) {
       currentData = {
         ...currentData,

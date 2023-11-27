@@ -14,15 +14,16 @@ export class MonthlyTaxReport
   implements ReportClass<MonthlyTaxReportData, MonthlyTaxReportResponse> {
   records: MonthlyTaxReportData[];
 
-  deserialize(value: MonthlyTaxReportResponse) {
+  deserialize(value: MonthlyTaxReportResponse[]) {
     this.records = new Array<MonthlyTaxReportData>();
-    monthlyTaxReportRows.forEach((item) => {
-      this.records.push({
-        taxName: item.label,
-        taxCategory: item.taxCategory,
-        amount: value[item?.amount],
+    value &&
+      value.forEach((reservationData) => {
+        this.records.push({
+          taxName: reservationData.type,
+          taxCategory: reservationData.category,
+          amount: reservationData.amount,
+        });
       });
-    });
     return this;
   }
 }

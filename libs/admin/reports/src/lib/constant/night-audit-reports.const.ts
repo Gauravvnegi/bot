@@ -1,5 +1,6 @@
 import {
   AuditRoomDetailsReportData,
+  AuditTaxReportCols,
   AuditTaxReportData,
   MtdAndYtdReportData,
 } from '../types/night-audit-reports.types';
@@ -64,7 +65,7 @@ export const auditRoomDetailsReportRows = [
   },
 ];
 
-export const auditTaxReportCols: ColsData<AuditTaxReportData> = {
+export const auditTaxReportCols: ColsData<AuditTaxReportCols> = {
   taxName: {
     header: 'Tax Name',
     isSortDisabled: true,

@@ -39,6 +39,7 @@ export class InteractiveGridComponent {
   minWidth: IGProps['minWidth'] = 'half';
   resizeWidth: IGProps['resizeWidth'] = 'half';
   gridHeight: IGProps['resizeWidth'] = 'half';
+  /** * Grid will always cover half cell from the end and start, irrespective of whether their is another cell or not  */
   halfwayCell: IGProps['halfwayCell'] = true;
 
   /**
@@ -286,7 +287,10 @@ export class InteractiveGridComponent {
 
   isInteractive(query: IGQueryEvent) {
     const { data, id } = this.getCurrentDataInfo(query);
-    return !data.nonInteractive && this.toggleMenuId !== id;
+    return (
+      (!data.nonInteractive && this.toggleMenuId !== id) ||
+      (!data.hasEnd && !data.hasStart)
+    );
   }
 
   /**
@@ -347,6 +351,16 @@ export class InteractiveGridComponent {
     this.onChange.emit(currentData);
   }
 
+  columnValueCalculator(index: number, isAtNegativeIndex = false) {
+    if (isAtNegativeIndex) {
+      return this.gridColumns[0] - this.colDiff * (1 - index);
+    }
+
+    const value = this.gridColumns[0] + this.colDiff * (index - 1);
+    // a + (n - 1)d,
+    return value;
+  }
+
   /**
    * @function handleDrag To handle drag and drop event
    * @summary If cell is dropped half-way (in-between row) then next bottom row value will be considered
@@ -382,10 +396,34 @@ export class InteractiveGridComponent {
     const interimEndPos = endPosIdx - (data.hasNext ? 0.5 : 0);
 
     const newStartPosInDecimal = interimStartPos + xDiffIdx; // can be in decimal (0.5)
-    const newStartPosIdx = Math.trunc(newStartPosInDecimal); // removed 0.5 as 2 or 2.5 will always be 2
+    let newStartPosIdx = Math.trunc(newStartPosInDecimal); // removed 0.5 as 2 or 2.5 will always be 2
 
     const newEndPosInDecimal = interimEndPos + xDiffIdx; // can be in decimal (0.5)
-    const newEndPosIdx = Math.round(newEndPosInDecimal); // round of as 2.5 or 3 is same for the end that will be 3
+    let newEndPosIdx = Math.round(newEndPosInDecimal); // round of as 2.5 or 3 is same for the end that will be 3
+
+    const cellSize = (data.oEndPos - data.oStartPos) / this.colDiff;
+
+    //  if(this.halfwayCell){} not handle here (may need to)
+
+    if (!data.hasEnd) {
+      const newEndPosInDecimal_EO = newStartPosInDecimal + cellSize;
+      const newEndPosIdx_EO = Math.round(newEndPosInDecimal_EO) - 1;
+      newEndPosIdx = newEndPosIdx_EO;
+    }
+
+    if (!data.hasStart) {
+      const newStartPosInDecimal_EO = newEndPosInDecimal - cellSize;
+      const newStartPosIdx_EO = Math.trunc(newStartPosInDecimal_EO) + 1;
+      newStartPosIdx = newStartPosIdx_EO;
+      if (newStartPosInDecimal_EO < 0) {
+        // if negative the negation of 1 is needed
+        const hasDecimal = Math.abs(newStartPosInDecimal_EO % 1) === 0.5;
+
+        if (hasDecimal) {
+          newStartPosIdx = newStartPosIdx - 1;
+        }
+      }
+    }
 
     /**
      * Drag event is emitted even if it is not moved (on click)
@@ -399,9 +437,16 @@ export class InteractiveGridComponent {
       currentData = {
         ...currentData,
         rowValue: this.gridRows[newYIdx],
-        startPos: this.gridColumns[newStartPosIdx],
-        endPos: this.gridColumns[newEndPosIdx],
+        startPos:
+          newStartPosIdx >= 0
+            ? this.gridColumns[newStartPosIdx]
+            : this.columnValueCalculator(newStartPosIdx + 1),
+
+        endPos:
+          this.gridColumns[newEndPosIdx] ??
+          this.columnValueCalculator(newEndPosIdx + 1),
       };
+
       this.onChange.emit(currentData);
     } else {
       if (!this.isMoved) {
@@ -425,6 +470,8 @@ export class InteractiveGridComponent {
     const { data } = this.getCurrentDataInfo(query);
     const position = this.getPosition(query);
 
+    const extraDiff = this.halfwayCell ? 0.5 : 0;
+
     if (!this.isMoved && (event.x !== position.x || event.y !== position.y)) {
       this.isMoved = true;
     }
@@ -442,7 +489,8 @@ export class InteractiveGridComponent {
       const diff = qPos - cPos;
 
       const noOfCell =
-        (this.gridColumns[data.startPosIdx] - data.oStartPos) / this.colDiff;
+        (this.gridColumns[data.startPosIdx] - data.oStartPos) / this.colDiff -
+        extraDiff;
 
       this.outOfBoundRecord[data.id].hasLeftBorder =
         diff >= noOfCell * this.cellSize;
@@ -459,7 +507,8 @@ export class InteractiveGridComponent {
       const diff = cPos - qPos;
 
       const noOfCell =
-        (data.oEndPos - this.gridColumns[data.endPosIdx]) / this.colDiff;
+        (data.oEndPos - this.gridColumns[data.endPosIdx]) / this.colDiff -
+        extraDiff;
 
       this.outOfBoundRecord[data.id].hasRightBorder =
         diff >= noOfCell * this.cellSize;

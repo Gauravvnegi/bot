@@ -350,8 +350,8 @@ export class ReservationSummaryReport
           avgRoomRate:
             data.reservationItemsPayment.totalRoomCharge /
             data.guestDetails.primaryGuest.totalNights,
-          paidAndRevenueLoss: data?.paymentSummary?.paidAmount, 
-          balance: data?.paymentSummary?.dueAmount, 
+          paidAndRevenueLoss: data?.paymentSummary?.paidAmount,
+          balance: data?.paymentSummary?.dueAmount,
         };
       });
     return this;
@@ -394,14 +394,14 @@ export function getFormattedDate(time: number) {
 
 export function getFormattedDateWithTime(time: number) {
   const currentDate = new Date(time);
-  const monthAbbreviated = new Intl.DateTimeFormat('en-US', {
-    month: 'short',
-  }).format(currentDate);
-  const date = currentDate.getDate();
+  const month = (currentDate.getMonth() + 1).toString().padStart(2, '0'); // Adding 1 because months are zero-based
+  const date = currentDate.getDate().toString().padStart(2, '0');
   const year = currentDate.getFullYear();
-  const hours = currentDate.getHours();
-  const minutes = currentDate.getMinutes();
-  return `${monthAbbreviated} ${date}, ${year} ${hours}:${minutes}`;
+  const hours = currentDate.getHours().toString().padStart(2, '0');
+  const minutes = currentDate.getMinutes().toString().padStart(2, '0');
+  const seconds = currentDate.getSeconds().toString().padStart(2, '0');
+
+  return `${year}-${month}-${date} ${hours}:${minutes}:${seconds}`;
 }
 
 function calculateNumberOfNights(

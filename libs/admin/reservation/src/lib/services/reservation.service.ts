@@ -90,16 +90,27 @@ export class ReservationService extends ApiService {
     );
   }
 
-  manualCheckin(reservationId, data) {
-    return this.post(
-      `/api/v1/reservation/${reservationId}/manual-checkin`,
-      data
-    );
+  manualCheckin(reservationId) {
+    return this.post(`/api/v1/reservation/${reservationId}/manual-checkin`, {});
   }
 
   manualCheckout(reservationId) {
     return this.post(
       `/api/v1/reservation/${reservationId}/manual-checkout`,
+      {}
+    );
+  }
+
+  cancelCheckin(reservationId: string) {
+    return this.post(
+      `/api/v1/reservation/${reservationId}/checkin/cancel`,
+      {}
+    );
+  }
+
+  cancelCheckout(reservationId: string) {
+    return this.post(
+      `/api/v1/reservation/${reservationId}/checkout/cancel`,
       {}
     );
   }

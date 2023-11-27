@@ -731,10 +731,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
   checkInfn() {
     this.$subscription.add(
       this._reservationService
-        .manualCheckin(this.reservationDetailsFG.get('bookingId').value, {
-          cc: this.primaryGuest.countryCode,
-          phoneNumber: this.primaryGuest.phoneNumber,
-        })
+        .manualCheckin(this.reservationDetailsFG.get('bookingId').value)
         .subscribe((res) => {
           this.snackbarService.openSnackBarAsText('Checkin completed.', '', {
             panelClass: 'success',

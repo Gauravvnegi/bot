@@ -122,11 +122,14 @@ $border-color: rgba(112, 112, 112, 0.35);
 
   .room-type {
     font-size: 14px;
-    gap: 50px;
+    gap: 25px;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
     width: 100%;
+    .room-state {
+      width: 33%;
+    }
     &__subtitle {
       font-size: 14px;
       font-weight: 500;

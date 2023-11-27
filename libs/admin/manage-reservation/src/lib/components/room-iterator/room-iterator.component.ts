@@ -30,9 +30,7 @@ import { roomFields, RoomFieldTypeOption } from '../../constants/reservation';
 import { ReservationForm, RoomTypes } from '../../constants/form';
 import { IteratorField } from 'libs/admin/shared/src/lib/types/fields.type';
 import { FormService } from '../../services/form.service';
-import {
-  RoomTypeResponse,
-} from 'libs/admin/room/src/lib/types/service-response';
+import { RoomTypeResponse } from 'libs/admin/room/src/lib/types/service-response';
 import { debounceTime } from 'rxjs/operators';
 import { ReservationType } from '../../constants/reservation-table';
 import { RoomService } from 'libs/admin/room/src/lib/services/room.service';
@@ -177,8 +175,7 @@ export class RoomIteratorComponent extends IteratorComponent
   }
 
   listenForRoomChanges(index: number) {
-    let roomCount =
-      parseInt(this.roomControls[index].get('roomCount').value) ?? 0;
+    let roomCount = +this.roomControls[index].get('roomCount')?.value ?? 0;
     this.roomControls[index]
       .get('roomNumbers')
       .valueChanges.subscribe((res) => {
@@ -190,11 +187,10 @@ export class RoomIteratorComponent extends IteratorComponent
       });
     this.roomControls[index].get('roomCount').valueChanges.subscribe((res) => {
       if (res) {
-        let currentRoomCount = res ? parseInt(res) : 1;
+        let currentRoomCount = +res ? +res : 1;
         let previousRoomCount = roomCount;
-        let previousAdultCount = parseInt(
-          this.roomControls[index].get('adultCount').value
-        );
+        let previousAdultCount = +this.roomControls[index].get('adultCount')
+          .value;
 
         // Update roomCount
         roomCount = currentRoomCount;

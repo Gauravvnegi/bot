@@ -74,6 +74,15 @@
                           <div class="room-type__subtitle">
                             {{ room.roomNumber }}
                           </div>
+                          <div class="room-state">
+                            <hospitality-bot-status-dropdown-toggle
+                              [nextStates]="room.nextStates"
+                              (onClick)="handleRoomStatus($event, data.id)"
+                              [state]="room.currentStatus"
+                              [recordSetting]="roomStatusDetails"
+                            >
+                            </hospitality-bot-status-dropdown-toggle>
+                          </div>
                           <div class="features">
                             <ng-container
                               *ngFor="
@@ -151,6 +160,7 @@
                     [isProcessing]="roomType.loading"
                     (onChange)="handleChange($event, roomType)"
                     (onCreate)="handleCreate($event, roomType)"
+                    (onMenuClick)="handleMenuClick($event, roomType)"
                     (onEdit)="handleEdit($event, roomType)"
                     (onDisabledClick)="handleDisabledClick($event)"
                   ></hospitality-bot-interactive-grid>

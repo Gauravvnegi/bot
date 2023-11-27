@@ -17,6 +17,21 @@
   </div>
   <div class="action-wrapper">
     <ng-container formGroupName="filters">
+      <hospitality-bot-select
+        *ngIf="availableFilters.isCashier"
+        [loading]="loading"
+        class="filter-item__cashier"
+        controlName="cashierId"
+        label="Cashier"
+        [options]="userList"
+        [props]="{
+          placeholder: 'Select Type',
+          isAsync: true,
+          floatInsideLabel: true
+        }"
+        (paginate)="loadMoreUsers()"
+        [stopEmission]="noMoreUsers"
+      ></hospitality-bot-select>
       <hospitality-bot-date
         *ngIf="availableFilters.isMonth"
         class="filter-item"

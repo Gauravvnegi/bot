@@ -145,10 +145,12 @@ export class CheckinReservationsComponent implements OnInit {
   listenLoaders() {
     this.nightAuditService.$checkedInLoading.subscribe((res) => {
       this.loading = res;
+      this.initActionConfig();
     });
   }
 
   reloadTable(refresh?: boolean) {
+    this.initActionConfig();
     this.reload.emit(refresh ? { refresh: true } : true);
   }
 

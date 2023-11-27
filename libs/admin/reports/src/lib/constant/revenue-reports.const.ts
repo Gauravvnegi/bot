@@ -1,5 +1,8 @@
 import { ColsData } from '../types/reports.types';
-import { CashierReportData } from '../types/revenue-reports.types';
+import {
+  CashierReportData,
+  PayTypeReportData,
+} from '../types/revenue-reports.types';
 
 export const cashierReportCols: ColsData<CashierReportData> = {
   id: {
@@ -18,3 +21,5 @@ export const cashierReportCols: ColsData<CashierReportData> = {
     isSortDisabled: true,
   },
 };
+
+export const payTypeReportCols: ColsData<PayTypeReportData> = {};

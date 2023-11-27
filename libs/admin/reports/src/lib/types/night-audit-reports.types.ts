@@ -56,25 +56,25 @@ export type AuditRoomDetailsReportResponse = {
   occupiedRoomGuests: number;
   dayUseRoomGuests: number;
   subTotalObject: boolean;
+  todayAvailableRooms: number | string;
 };
 
 export type AuditTaxReportData = {
   taxName: string;
   taxAmount: number;
+  isBlackBg?: boolean;
+  isBold?: boolean;
 };
 
+export type AuditTaxReportCols = Omit<
+  AuditTaxReportData,
+  'isBlackBg' | 'isBold'
+>;
+
 export type AuditTaxReportResponse = {
-  totalAmount: number;
-  taxAmount: number;
-  totalDiscount: number;
-  paidAmount: number;
-  dueAmount: number;
-  payableAmount: number;
-  totalCgstTax: number;
-  totalSgstTax: number;
-  totalAddOnsAmount: number;
-  totalRoomCharge: number;
-  totalTax?: number;
+  amount: number;
+  category: string;
+  type: 'CGST' | 'SGST';
 };
 
 //mtdAndYtdReport

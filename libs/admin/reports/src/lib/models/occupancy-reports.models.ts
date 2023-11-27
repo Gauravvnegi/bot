@@ -39,7 +39,7 @@ export class HistoryAndForecastReportData extends RowStyles {
     this.cancelRooms = input?.cancelledReservationForToday;
     this.DNRRooms = input?.outOfServiceRooms;
     this.houseUseRooms = input?.houseUseRooms;
-    this.pax = input?.inhouseAdults + input?.inhouseChildren;
+    this.pax = input?.totalPersonInHouse;
     this.isBold = input?.subTotalObject ? true : undefined;
     this.isGreyBg = input?.subTotalObject ? true : undefined;
     return this;

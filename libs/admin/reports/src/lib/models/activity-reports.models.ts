@@ -12,9 +12,7 @@ export class ReservationCreatedReport
   records: ReservationCreatedReportData[];
   deserialize(value: ReservationResponseData[]) {
     this.records = new Array<ReservationCreatedReportData>();
-    if (!value) return this;
-
-    value.forEach((data) => {
+   value && value.forEach((data) => {
       this.records.push({
         id: data.id,
         bookingNo: data.number,

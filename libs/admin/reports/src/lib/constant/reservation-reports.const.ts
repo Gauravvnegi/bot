@@ -125,18 +125,23 @@ export const arrivalReportCols: ColsData<ArrivalReportData> = {
     header: 'Status',
     isSortDisabled: true,
   },
-  arrivalTime: {
-    header: 'Arrival Time',
-    isSortDisabled: true,
-  },
   remark: {
     header: 'Remarks',
     isSortDisabled: true,
   },
+  arrivalTime: {
+    header: 'Arrival Time',
+    isSortDisabled: true,
+  },
 };
+const { arrivalTime, ...rest } = arrivalReportCols;
 
 export const departureReportCols: ColsData<DepartureReportData> = {
-  ...arrivalReportCols,
+  ...rest,
+  departureTime: {
+    header: 'Departure Time',
+    isSortDisabled: true,
+  },
 };
 
 export const draftReservationReportCols: ColsData<Omit<
@@ -274,7 +279,76 @@ export const incomeSummaryReportCols: ColsData<Omit<
 export const reservationSummaryReportCols: ColsData<Omit<
   ReservationSummaryReportData,
   'id'
->> = {};
+>> = {
+  businessSource: {
+    header: 'Business Source',
+    isSortDisabled: true,
+  },
+  marketSegment: {
+    header: 'Market Segment',
+    isSortDisabled: true,
+  },
+  phoneNumber: {
+    header: 'Phone',
+    isSortDisabled: true,
+  },
+  email: {
+    header: 'Email',
+    isSortDisabled: true,
+  },
+  roomType: {
+    header: 'Room Type',
+    isSortDisabled: true,
+  },
+  room: {
+    header: 'Room',
+    isSortDisabled: true,
+  },
+  createdOn: {
+    header: 'Created On',
+    isSortDisabled: true,
+  },
+  rateOrPackage: {
+    header: 'Rate/Package',
+    isSortDisabled: true,
+  },
+  checkIn: {
+    header: 'Check In',
+    isSortDisabled: true,
+  },
+  checkOut: {
+    header: 'Check Out',
+    isSortDisabled: true,
+  },
+  lodging: {
+    header: 'Lodging',
+    isSortDisabled: true,
+  },
+  lodgingTax: {
+    header: 'Lodging Tax',
+    isSortDisabled: true,
+  },
+  otherCharges: {
+    header: 'Other Charges',
+    isSortDisabled: true,
+  },
+  otherChargesTax: {
+    header: 'Other Charges Tax',
+    isSortDisabled: true,
+  },
+  avgRoomRate: {
+    header: 'Avg Room Rate',
+    isSortDisabled: true,
+  },
+  paidAndRevenueLoss: {
+    header: 'Paid & Revenue Loss',
+    isSortDisabled: true,
+  },
+  balance: {
+    header: 'Balance',
+    isSortDisabled: true,
+  },
+};
 
 export const housekeepingReportCols: ColsData<Omit<
   HousekeepingReportData,
@@ -289,7 +363,7 @@ export const housekeepingReportCols: ColsData<Omit<
     isSortDisabled: true,
   },
   bookingNo: {
-    header: 'Booking No.',
+    header: 'Res#',
     isSortDisabled: true,
   },
   guestName: {

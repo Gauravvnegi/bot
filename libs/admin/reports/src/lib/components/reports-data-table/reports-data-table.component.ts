@@ -2,8 +2,10 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
+  AdminUtilityService,
   BaseDatatableComponent,
   Cols,
+  Option,
   TableService,
 } from '@hospitality-bot/admin/shared';
 import * as FileSaver from 'file-saver';
@@ -30,6 +32,7 @@ import {
 } from '@hospitality-bot/admin/reservation';
 import { MatDialogConfig } from '@angular/material/dialog';
 import { ModalService } from '@hospitality-bot/shared/material';
+import { ManagePermissionService } from 'libs/admin/roles-and-permissions/src/lib/services/manage-permission.service';
 
 @Component({
   selector: 'hospitality-bot-reports-data-table',
@@ -48,6 +51,7 @@ export class ReportsDataTableComponent extends BaseDatatableComponent {
   isSelectable = false;
   isSearchable = false;
   minDate = new Date();
+  userList: Option[] = [];
 
   selectedReport: ReportsMenu[number];
 
@@ -57,20 +61,54 @@ export class ReportsDataTableComponent extends BaseDatatableComponent {
     public fb: FormBuilder,
     protected tabFilterService: TableService,
     private globalFilterService: GlobalFilterService,
-    private modalService: ModalService
+    private modalService: ModalService,
+    private managePermissionService: ManagePermissionService,
+    private adminUtilityService: AdminUtilityService
   ) {
     super(fb, tabFilterService);
   }
 
   ngOnInit(): void {
+    this.entityId = this.globalFilterService.entityId;
     this.initTime();
     this.initReportFilters();
+    this.getUserList();
     this.reportsService.$selectedReport.subscribe((report) => {
       if (report) {
         this.selectedReport = report;
         this.loadInitialData();
       }
     });
+  }
+  userOffset: number = 0;
+  noMoreUsers: boolean = false;
+  loadMoreUsers() {
+    this.userOffset = this.userOffset + 10;
+    this.getUserList();
+  }
+
+  getUserList() {
+    this.$subscription.add(
+      this.managePermissionService
+        .getAllUsers(this.entityId, {
+          params: this.adminUtilityService.makeQueryParams([
+            {
+              offset: this.userOffset,
+              limit: 10,
+            },
+          ]),
+        })
+        .subscribe((res) => {
+          const data = res.records.map((item) => ({
+            label: item.firstName + ' ' + item.lastName,
+            value: item.id,
+          }));
+
+          this.userList = [...this.userList, ...data];
+
+          this.noMoreUsers = data.length < 10;
+        })
+    );
   }
 
   getQueryParams(): GetReportQuery {
@@ -157,6 +195,7 @@ export class ReportsDataTableComponent extends BaseDatatableComponent {
       date: [fromDate || null],
       roomType: [''],
       month: [new Date().setDate(1) || null],
+      cashierId: [''],
     } as Record<ReportFiltersKey, any>);
     this.tableFG.addControl('filters', filterForm);
 
@@ -246,6 +285,7 @@ export class ReportsDataTableComponent extends BaseDatatableComponent {
       isRoomType: this.currentFilters.includes('roomType'),
       isMonth: this.currentFilters.includes('month'),
       isDate: this.currentFilters.includes('date'),
+      isCashier: this.currentFilters.includes('cashierId'),
     };
   }
 

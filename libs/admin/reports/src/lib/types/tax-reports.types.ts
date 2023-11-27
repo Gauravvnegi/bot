@@ -5,16 +5,9 @@ export type MonthlyTaxReportData = {
 };
 
 export type MonthlyTaxReportResponse = {
-  totalAmount: number;
-  taxAmount: number;
-  totalDiscount: number;
-  paidAmount: number;
-  dueAmount: number;
-  payableAmount: number;
-  totalCgstTax: number;
-  totalSgstTax: number;
-  totalAddOnsAmount: number;
-  totalRoomCharge: number;
+  amount: number;
+  category: string;
+  type: 'CGST' | 'SGST';
 };
 
 export type TaxReportData = {

@@ -148,3 +148,9 @@
 .sub-items {
   text-indent: 17px;
 }
+
+::ng-deep .input-margin-top {
+  .p-dropdown {
+    margin-top: unset !important;
+  }
+}

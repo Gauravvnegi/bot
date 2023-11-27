@@ -19,9 +19,16 @@ export class AuditRoomDetailsReport
   records: AuditRoomDetailsReportData[];
 
   deserialize(value: AuditRoomDetailsReportResponse[]) {
-    const data = value.find((item) => item?.calenderType === 'DAY') ?? {};
-
     this.records = new Array<AuditRoomDetailsReportData>();
+
+    let data = value.find((item) => item?.calenderType === 'DAY');
+    if (!data) return this;
+
+    if (data?.totalRooms && data?.occupiedRooms) {
+      const todayAvailableRooms = data?.totalRooms - data?.occupiedRooms;
+      data = { ...data, todayAvailableRooms };
+    }
+
     auditRoomDetailsReportRows.forEach((item) => {
       this.records.push({
         roomDetails: item.label,
@@ -33,20 +40,41 @@ export class AuditRoomDetailsReport
   }
 }
 
-export class AuditTaxReport implements ReportClass<AuditTaxReportData, any> {
-  records: AuditTaxReportData[];
+export class AuditTaxReport
+  implements ReportClass<AuditTaxReportData, AuditTaxReportResponse[]> {
+  records: AuditTaxReportData[] = [];
 
-  deserialize(value: AuditTaxReportResponse) {
-    this.records = new Array<AuditTaxReportData>();
-    const totalTax = value?.totalCgstTax + value?.totalSgstTax;
-    value = { ...value, totalTax };
+  deserialize(value: AuditTaxReportResponse[]): this {
+    const groupedData =
+      value &&
+      value.reduce((acc, item) => {
+        const { type, amount } = item || {};
 
-    auditTaxReportRows.forEach((item) => {
-      this.records.push({
-        taxName: item.label,
-        taxAmount: value[item?.name],
+        if (type) {
+          if (acc.has(type)) {
+            acc.get(type).taxAmount += amount;
+          } else {
+            acc.set(type, { taxName: item?.type, taxAmount: item.amount });
+          }
+        }
+        return acc;
+      }, new Map<string, AuditTaxReportData>());
+
+    let totalTaxAmount = 0;
+    groupedData &&
+      groupedData.forEach((item) => {
+        totalTaxAmount += item.taxAmount;
       });
-    });
+
+    this.records = [
+      ...groupedData.values(),
+      {
+        taxName: 'Total Tax',
+        taxAmount: totalTaxAmount,
+        isBlackBg: true,
+        isBold: true,
+      },
+    ];
 
     return this;
   }

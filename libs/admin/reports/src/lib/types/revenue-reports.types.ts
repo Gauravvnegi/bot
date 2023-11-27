@@ -7,3 +7,12 @@ export type CashierReportResponse = {
   paymentMode: string;
   totalAmount: number;
 };
+
+
+export type PayTypeReportData = {
+
+}
+
+export type PayTypeReportResponse = {
+  
+}

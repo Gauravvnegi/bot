@@ -83,13 +83,13 @@ export const monthlyTaxReportRows = [
     label: 'CGST',
     taxName: 'cgst',
     taxCategory: 'Room',
-    amount: 'totalCgstTax',
+    amount: 'amount',
   },
   {
     label: 'SGST',
     taxName: 'sgst',
     taxCategory: 'Room',
-    amount: 'totalSgstTax',
+    amount: 'amount',
   },
 ];
 

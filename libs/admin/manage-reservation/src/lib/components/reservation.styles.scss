@@ -216,9 +216,10 @@
     cursor: pointer;
     background-color: #f8f9fb;
     .offerDescription {
-      @include normal-sm-text;
-      color: #3b3b3b;
-      opacity: 0.6;
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.72px;
+      color: #8995a3;
     }
   }
 }
@@ -234,7 +235,9 @@
 }
 
 .offerName {
-  @include bold-sm-text;
+  font-size: 16px;
+  font-weight: 500;
+  letter-spacing: 0.96px;
   color: #3b3b3b;
 }
 

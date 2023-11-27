@@ -323,7 +323,6 @@
                     [menuItems]="getMenu(rowIndex)"
                     [disabled]="
                       isInvoiceDisabled ||
-                      !tableFormArray.at(rowIndex).get('isAddOn').value ||
                       (!tableFormArray.at(rowIndex).get('itemId').value &&
                         !tableFormArray.at(rowIndex).get('isNew').value) ||
                       tableFormArray.at(rowIndex).get('taxId').value ||

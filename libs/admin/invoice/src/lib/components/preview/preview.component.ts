@@ -19,6 +19,7 @@ export class PreviewComponent implements OnInit {
   isInvoiceGenerated = false;
   failedToLoad = false;
   pageTitle = 'Preview Invoice';
+  isPrintRate = true;
   // items = [
   //   {
   //     label: 'Generate Proforma',
@@ -52,6 +53,9 @@ export class PreviewComponent implements OnInit {
       () => {},
       () => (this.isLoading = false)
     );
+    this.invoiceService.isPrintRate.subscribe((res) => {
+      if (typeof res === 'boolean') this.isPrintRate = res;
+    });
   }
 
   getPreviewUrl() {

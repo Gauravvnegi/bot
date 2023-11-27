@@ -48,4 +48,5 @@ export type StatusQuoForm = {
   foStatus: RoomFoStatus;
   toDate: string;
   fromDate: string;
+  id?: string;
 };

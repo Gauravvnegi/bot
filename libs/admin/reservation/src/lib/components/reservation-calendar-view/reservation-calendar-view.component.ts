@@ -141,6 +141,7 @@ export class ReservationCalendarViewComponent implements OnInit {
                     statusDetails: room?.statusDetailsList ?? [],
                     currentStatus: currentStatus,
                     nextStates: [...room.nextStates, currentStatus],
+                    id: room?.id,
                   };
                 }),
                 loading: false,
@@ -679,7 +680,7 @@ export class ReservationCalendarViewComponent implements OnInit {
    * @param status room status
    * @param id room id
    */
-  handleRoomStatus(status: RoomStatus, id: string): void {
+  handleRoomStatus(status: RoomStatus, id: string, roomType: IGRoomType): void {
     if (status === 'OUT_OF_ORDER' || status === 'OUT_OF_SERVICE') {
       this.routesConfigService.navigate({
         subModuleName: ModuleNames.ROOM,
@@ -697,6 +698,7 @@ export class ReservationCalendarViewComponent implements OnInit {
       })
       .subscribe(
         () => {
+          this.initRoomTypes();
           this.snackbarService.openSnackBarAsText(
             'Status changes successfully',
             '',
@@ -751,6 +753,7 @@ type IGRoom = {
   value?: string;
   statusDetails: StatusDetails[];
   nextStates: string[];
+  id?: string;
 };
 
 export type QuickFormProps = {

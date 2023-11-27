@@ -263,7 +263,7 @@ export class InvoiceComponent implements OnInit {
             arrivalDate: res.arrivalTime,
             departureDate: res.departureTime,
           });
-
+          this.invoiceService.isPrintRate.next(res?.printRate);
           this.guestId = guestData.id;
           this.bookingNumber = res.number;
           this.invoicePrepareRequest = res.invoicePrepareRequest;
@@ -580,7 +580,7 @@ export class InvoiceComponent implements OnInit {
           });
         });
 
-        if (prevId) this.findAndRemoveItems(prevId);
+        if (prevId) this.findAndRemoveItems(undefined, prevId);
       });
 
     let doNotUpdateUnit = false;
@@ -636,7 +636,7 @@ export class InvoiceComponent implements OnInit {
       (control: Controls) => {
         return (
           control.value.itemId === (idToRemove?.itemId ?? id) ||
-          control.value.itemId === (idToRemove?.key ?? id)
+          control.value.itemId === (idToRemove?.billItemId ?? id)
         );
       }
     );
@@ -1014,7 +1014,7 @@ export class InvoiceComponent implements OnInit {
     } else {
       this.servicesService
         .getLibraryItems<ServiceListResponse>(this.entityId, {
-          params: `?&type=${LibraryItem.service}&serviceType=PAID&limit=10&offset=${this.descriptionOffSet}&status=true`,
+          params: `?&type=${LibraryItem.service}&serviceType=PAID&limit=10&offset=${this.descriptionOffSet}&status=true&raw=true`,
         })
         .subscribe(
           (res) => {
@@ -1161,7 +1161,6 @@ export class InvoiceComponent implements OnInit {
             entryIdx: index + 1,
           });
         } else alreadyHasDiscount.patchValue({ creditAmount: totalDiscount });
-
         this.updateTax(taxedAmount, itemId, newTaxedAmount);
       }
     );

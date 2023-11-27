@@ -72,7 +72,7 @@ export class CreateOfferComponent implements OnInit {
 
     this.searchItems = [
       LibrarySearchItem.SERVICE,
-      LibrarySearchItem.PACKAGE,
+      // LibrarySearchItem.PACKAGE,
       LibrarySearchItem.ROOM_TYPE,
     ];
   }
@@ -319,9 +319,9 @@ export class CreateOfferComponent implements OnInit {
           case LibrarySearchItem.SERVICE:
             prev.serviceIds.push(value);
             break;
-          case LibrarySearchItem.PACKAGE:
-            prev.packageIds.push(value);
-            break;
+          // case LibrarySearchItem.PACKAGE:
+          //   prev.packageIds.push(value);
+          //   break;
           case LibrarySearchItem.ROOM_TYPE:
             prev.roomTypeIds.push(value);
             break;
@@ -330,7 +330,7 @@ export class CreateOfferComponent implements OnInit {
       },
       {
         serviceIds: [],
-        packageIds: [],
+        // packageIds: [],
         roomTypeIds: [],
       }
     );

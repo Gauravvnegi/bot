@@ -24,11 +24,11 @@ export class CashierReport implements ReportClass<CashierReportData, any> {
   records: CashierReportData[];
   deserialize(values: CashierReportResponse[]) {
     let total = 0;
-    this.records = values.map((item, index) => {
+    this.records = values && values.map((item, index) => {
       total = total + item.totalAmount;
       return new Cashier().deserialize(item, index);
     });
-    this.records.push(new Cashier().deserialize(null, null, total));
+    values && this.records.push(new Cashier().deserialize(null, null, total));
     return this;
   }
 }

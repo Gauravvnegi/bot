@@ -257,6 +257,7 @@ export class CreateOfferComponent implements OnInit {
                       value: item.id,
                       type: convertToTitleCase(descriptiveType),
                       price: price,
+                       category: descriptiveType,
                     };
                   }) ?? [];
 
@@ -313,8 +314,8 @@ export class CreateOfferComponent implements OnInit {
 
     const libraryIds: OffersOnEntity = libraryItems.reduce(
       (prev, curr) => {
-        const { value, type } = curr;
-        switch (type) {
+        const { value, category } = curr;
+        switch (category) {
           case LibrarySearchItem.SERVICE:
             prev.serviceIds.push(value);
             break;
@@ -333,6 +334,7 @@ export class CreateOfferComponent implements OnInit {
         roomTypeIds: [],
       }
     );
+
     this.loading = true;
     if (!!this.offerId) {
       this.subscription$.add(
@@ -396,6 +398,7 @@ export class CreateOfferComponent implements OnInit {
                 value: item.id,
                 price: item.rate || item.discountedPrice,
                 type: item?.itemType,
+                category: item?.itemType,
               })),
               ...roomTypes?.map((item) => ({
                 label: `${item.name} ${
@@ -408,6 +411,7 @@ export class CreateOfferComponent implements OnInit {
                 value: item.id,
                 price: item.rate || item.discountedPrice,
                 type: item.type || 'ROOM_TYPE',
+                category: item.type || 'ROOM_TYPE',
               })),
             ],
           };

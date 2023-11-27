@@ -41,6 +41,8 @@ export class InteractiveGridComponent {
   gridHeight: IGProps['resizeWidth'] = 'half';
   /** * Grid will always cover half cell from the end and start, irrespective of whether their is another cell or not  */
   halfwayCell: IGProps['halfwayCell'] = true;
+  /** To decide whether i-grid can exist in single cell */
+  oneCellGrid: IGProps['oneCellGrid'] = false;
 
   /**
    * Props to show extra information
@@ -425,6 +427,11 @@ export class InteractiveGridComponent {
       }
     }
 
+    /** isSingleIGridDroppedInSingleCell */
+    if (!this.oneCellGrid && newStartPosIdx === newEndPosIdx) {
+      newEndPosIdx = newEndPosIdx + 1;
+    }
+
     /**
      * Drag event is emitted even if it is not moved (on click)
      * So emit onChange if something is changed else trigger onClick event
@@ -747,6 +754,7 @@ export type IGProps = {
   cellGap?: number;
   gridHeight?: GridBreakPoints;
   halfwayCell: boolean;
+  oneCellGrid?: boolean;
 };
 
 /**

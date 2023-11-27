@@ -8,12 +8,13 @@
     *ngIf="label && !float"
     class="label label__static"
     [for]="controlName"
+    [ngClass]="{ 'float-inside__label': floatInsideLabel }"
     >{{ label }}</label
   >
 
   <p-dropdown
     class="input"
-    [ngClass]="inputNgClasses"
+    [ngClass]="selectDropDownClass"
     [disabled]="isDisabled || null"
     [options]="dropdownOption"
     [placeholder]="placeholder"

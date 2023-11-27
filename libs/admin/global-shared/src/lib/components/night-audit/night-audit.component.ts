@@ -86,15 +86,12 @@ export class NightAuditComponent implements OnInit {
             } else {
               this.checkedOutReservation = [];
               this.checkedInReservation = [];
+              this.setLoaders(false);
             }
-            this.setLoaders(false);
           },
           (error) => {
             this.setLoaders(false);
             this.auditDate = undefined;
-          },
-          () => {
-            this.setLoaders(false);
           }
         )
     );
@@ -123,9 +120,6 @@ export class NightAuditComponent implements OnInit {
             this.setLoaders(false);
           },
           (error) => {
-            this.setLoaders(false);
-          },
-          () => {
             this.setLoaders(false);
           }
         )

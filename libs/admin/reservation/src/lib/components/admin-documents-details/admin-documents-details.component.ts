@@ -507,13 +507,14 @@ export class AdminDocumentsDetailsComponent implements OnInit {
     );
     const name = `${guest.firstName}_${guest.lastName}`;
 
+    const bookingNumber = this.detailsData.reservationDetails.bookingNumber;
+
     documents.forEach((doc) => {
       urls.push(doc.frontUrl.trim());
-      debugger;
-      fileNames.push(`${name}_${doc.documentType}_frontURL`);
+      fileNames.push(`${doc.documentType}_${bookingNumber}_${name}_frontURL`);
       if (doc.documentType !== 'VISA' && doc.backUrl) {
         urls.push(doc.backUrl.trim());
-        fileNames.push(`${name}_${doc.documentType}_backURL`);
+        fileNames.push(`${doc.documentType}_${bookingNumber}_${name}_backURL`);
       }
     });
 
@@ -533,6 +534,8 @@ export class AdminDocumentsDetailsComponent implements OnInit {
         const data = await response.arrayBuffer();
         zipFile.file(fileName, data);
         count++;
+
+        debugger;
 
         if (count === urls.length) {
           const content = await zipFile.generateAsync({ type: 'blob' });

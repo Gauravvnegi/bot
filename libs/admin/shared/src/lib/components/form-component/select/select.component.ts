@@ -34,6 +34,13 @@ export class SelectComponent extends FormComponent {
     this.itemSelection.emit(event);
   }
 
+  get selectDropDownClass() {
+    return {
+      ...this.inputNgClasses,
+      'input-margin-top': this.floatInsideLabel,
+    };
+  }
+
   get dropdownOption() {
     return this.menuOptions?.length
       ? this.menuOptions

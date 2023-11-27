@@ -14,15 +14,16 @@ export class MonthlyTaxReport
   implements ReportClass<MonthlyTaxReportData, MonthlyTaxReportResponse> {
   records: MonthlyTaxReportData[];
 
-  deserialize(value: MonthlyTaxReportResponse) {
+  deserialize(value: MonthlyTaxReportResponse[]) {
     this.records = new Array<MonthlyTaxReportData>();
-    monthlyTaxReportRows.forEach((item) => {
-      this.records.push({
-        taxName: item.label,
-        taxCategory: item.taxCategory,
-        amount: value[item?.amount],
+    value &&
+      value.forEach((reservationData) => {
+        this.records.push({
+          taxName: reservationData.type,
+          taxCategory: reservationData.category,
+          amount: reservationData.amount,
+        });
       });
-    });
     return this;
   }
 }
@@ -33,12 +34,12 @@ export class LodgingTaxReport
 
   deserialize(value: LodgingTaxReportResponse[]) {
     this.records = new Array<LodgingTaxReportData>();
-    if (!value) return this;
-    value.forEach((reservationData) => {
-      this.records.push(
-        new LodgingTaxReportDataModel().deserialize(reservationData)
-      );
-    });
+    value &&
+      value.forEach((reservationData) => {
+        this.records.push(
+          new LodgingTaxReportDataModel().deserialize(reservationData)
+        );
+      });
     return this;
   }
 }
@@ -83,10 +84,12 @@ export class TaxReport implements ReportClass<TaxReportData, any> {
 
   deserialize(value: TaxReportResponse[]) {
     this.records = new Array<TaxReportData>();
-    if (!value) return this;
-    value.forEach((reservationData) => {
-      this.records.push(new TaxReportDataModel().deserialize(reservationData));
-    });
+    value &&
+      value.forEach((reservationData) => {
+        this.records.push(
+          new TaxReportDataModel().deserialize(reservationData)
+        );
+      });
 
     return this;
   }

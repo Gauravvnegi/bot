@@ -27,6 +27,11 @@
 
 .filter-item {
   max-width: 150px;
+
+  &__cashier {
+    flex-basis: 49%;
+    // max-width: 200px;
+  }
 }
 
 .room-type-filter {

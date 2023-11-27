@@ -3,6 +3,7 @@ import {
   CompanyContributionsReportData,
   MarketSegmentReportData,
   NoShowSummaryReportData,
+  OccupancyAnalysisReportData,
 } from '../types/analytics-reports.types';
 import { ColsData } from '../types/reports.types';
 
@@ -51,6 +52,65 @@ export const noShowSummaryReportCols: ColsData<NoShowSummaryReportData> = {
   },
   createdBy: {
     header: 'Created By',
+    isSortDisabled: true,
+  },
+};
+
+export const occupancyAnalysisReportCols: ColsData<OccupancyAnalysisReportData> = {
+  roomType: {
+    header: 'Room Type',
+    isSortDisabled: true,
+  },
+  roomAvailable: {
+    header: 'Room Available',
+    isSortDisabled: true,
+  },
+  roomRevenue: {
+    header: 'Room Revenue',
+    isSortDisabled: true,
+  },
+  soldRooms: {
+    header: 'Sold Rooms',
+    isSortDisabled: true,
+  },
+  soldRoomsPercent: {
+    header: 'Sold Rooms %',
+    isSortDisabled: true,
+  },
+  singleSoldRooms: {
+    header: 'Single Sold',
+    isSortDisabled: true,
+  },
+  doubleSoldRooms: {
+    header: 'Double Sold',
+    isSortDisabled: true,
+  },
+  tripleSoldRooms: {
+    header: 'Triple Sold',
+    isSortDisabled: true,
+  },
+  quadSoldRooms: {
+    header: 'Quadpl. Sold',
+    isSortDisabled: true,
+  },
+  moreQuardplSoldRooms: {
+    header: 'More Quadpl. Sold',
+    isSortDisabled: true,
+  },
+  pax: {
+    header: 'Pax',
+    isSortDisabled: true,
+  },
+  arrOrAgr: {
+    header: 'ARR/AGR',
+    isSortDisabled: true,
+  },
+  arp: {
+    header: 'ARP',
+    isSortDisabled: true,
+  },
+  revPar: {
+    header: 'RevPAR',
     isSortDisabled: true,
   },
 };

@@ -243,4 +243,5 @@ export type DraftReservationReportResponse = {
   updated: number;
   pricingDetails: PricingDetails;
   bookingItems: BookingItem[];
+  nightsCount: number;
 };

@@ -114,9 +114,6 @@ export class AuditSummaryComponent implements OnInit {
             this.loading = false;
             this.isNoAuditFound = true;
             this.auditDates = [];
-          },
-          () => {
-            this.loading = false;
           }
         )
     );

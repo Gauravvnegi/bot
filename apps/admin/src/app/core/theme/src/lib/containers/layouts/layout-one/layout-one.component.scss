@@ -580,4 +580,9 @@
     background: #f6d6dc;
     color: $failed-state;
   }
+
+  .audit-disabled {
+    cursor: not-allowed;
+    opacity: 0.9;
+  }
 }

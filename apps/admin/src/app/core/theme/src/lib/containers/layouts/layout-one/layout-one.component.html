@@ -168,15 +168,20 @@
           <div
             *ngIf="isPredictoSubscribed"
             class="header--button quick-action night-audit"
-            (click)="openNightAudit()"
+            (click)="isNightAuditPending && openNightAudit()"
           >
             <img
               class="filter-icon"
-              [ngClass]="{ 'red-filter': isNightAuditPending }"
+              [ngClass]="{
+                'red-filter': isNightAuditPending
+              }"
               src="assets/svg/allocation.svg"
               alt="audit"
               [pTooltip]="isNightAuditPending ? '' : 'Night Audit'"
               tooltipPosition="bottom"
+              [ngClass]="{
+                'audit-disabled': !isNightAuditPending
+              }"
             />
             <div class="night-audit__hover" *ngIf="isNightAuditPending">
               Night Audit Pending

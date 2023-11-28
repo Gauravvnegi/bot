@@ -42,7 +42,7 @@ import { UpdateRatesResponse } from 'libs/admin/channel-manager/src/lib/types/re
 import { UpdateRates } from 'libs/admin/channel-manager/src/lib/models/channel-manager.model';
 import { ChannelManagerService } from 'libs/admin/channel-manager/src/lib/services/channel-manager.service';
 import * as moment from 'moment';
-import { FormService } from 'libs/admin/manage-reservation/src/lib/services/form.service';
+import { NightAuditService } from 'libs/admin/global-shared/src/lib/services/night-audit.service';
 
 @Component({
   selector: 'hospitality-bot-reservation-calendar-view',
@@ -82,7 +82,8 @@ export class ReservationCalendarViewComponent implements OnInit {
     private modalService: ModalService,
     private channelManagerService: ChannelManagerService,
     private renderer: Renderer2,
-    private el: ElementRef
+    private el: ElementRef,
+    private auditService: NightAuditService
   ) {}
 
   ngOnInit(): void {
@@ -90,10 +91,7 @@ export class ReservationCalendarViewComponent implements OnInit {
     this.globalFilterService.toggleFullView.subscribe((res) => {
       this.fullView = res;
     });
-    this.initForm();
-    this.initDates(Date.now());
-    this.initRoomTypes();
-    this.listenChanges();
+    this.checkAudit();
   }
 
   initRoomTypes() {
@@ -296,10 +294,32 @@ export class ReservationCalendarViewComponent implements OnInit {
     return config;
   }
 
+  checkAudit() {
+    this.$subscription.add(
+      this.auditService.checkAudit(this.entityId).subscribe(
+        (res) => {
+          const date = res?.shift() ?? Date.now();
+          this.initConfig(date);
+        },
+        (error) => {
+          this.initConfig(Date.now());
+        }
+      )
+    );
+  }
+
+  initConfig(date: number) {
+    this.initDates(date);
+    this.initForm();
+    this.initRoomTypes();
+    this.listenChanges();
+  }
+
   initDates(startDate: number, limit = 14) {
     const dates = [];
     const cols = [];
     const currentDate = new Date(startDate);
+    this.currentDate = currentDate;
 
     for (let i = 0; i < limit; i++) {
       const nextDate = new Date(currentDate);

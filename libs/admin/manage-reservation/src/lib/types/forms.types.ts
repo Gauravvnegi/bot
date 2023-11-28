@@ -23,6 +23,7 @@ export class RoomReservationFormData {
     paymentMethod: string;
     remarks: string;
     transactionId: string;
+    cashierId: string;
   };
   paymentRule: PaymentRule;
 }

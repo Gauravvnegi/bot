@@ -34,10 +34,12 @@ export class Invoice {
 
   currency: string;
   cashierName: string;
+  cashierId: string;
 
   deserialize(
     input: BillSummaryData,
     data: {
+      cashierId: string;
       cashierName: string;
       guestName: string;
       currency: string;
@@ -74,7 +76,7 @@ export class Invoice {
     this.netAmount = input.totalPayableAmount;
     this.currency = data.currency;
     this.cashierName = data.cashierName;
-
+    this.cashierId = data?.cashierId;
     return this;
   }
 }
@@ -132,8 +134,7 @@ export class TableData {
     this.isNonEditableBillItem = !input.itemId;
     this.isMiscellaneous = !input.itemId && !input.isCoupon;
     this.isAddOn = input.isAddOn;
-    this.reservationItemId =
-      input?.taxId ? input.itemId : input.id;
+    this.reservationItemId = input?.taxId ? input.itemId : input.id;
     return this;
   }
 }

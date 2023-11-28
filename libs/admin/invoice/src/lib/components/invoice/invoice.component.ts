@@ -198,7 +198,7 @@ export class InvoiceComponent implements OnInit {
    * @function initForm Initialize form
    */
   initForm(): void {
-    const { firstName, lastName } = this.userService.userDetails;
+    const { firstName, lastName, id } = this.userService.userDetails;
 
     this.useForm = this.fb.group({
       invoiceNumber: [],
@@ -232,6 +232,7 @@ export class InvoiceComponent implements OnInit {
         { value: `${firstName} ${lastName}`, disabled: true },
         Validators.required,
       ],
+      cashierId: [id],
 
       // Payment Details
       remarks: [''],
@@ -279,7 +280,7 @@ export class InvoiceComponent implements OnInit {
   getBillingSummary() {
     this.loadingData = true;
 
-    const { firstName, lastName } = this.userService.userDetails;
+    const { firstName, lastName, id } = this.userService.userDetails;
 
     this.$subscription.add(
       this.invoiceService.getInvoiceData(this.reservationId).subscribe(
@@ -292,6 +293,7 @@ export class InvoiceComponent implements OnInit {
               cashierName: `${firstName} ${lastName}`,
               guestName: this.inputControl.guestName.value,
               currency: 'INR',
+              cashierId: id,
             }
           );
 
@@ -469,6 +471,10 @@ export class InvoiceComponent implements OnInit {
       ...settings,
     };
 
+    const epochDate = settings?.date
+      ? settings.date
+      : moment(new Date()).unix() * 1000;
+
     if (this.tableFormArray.length > 0 && !rowIndex) {
       if (this.isTableInvalid()) return;
     }
@@ -480,7 +486,7 @@ export class InvoiceComponent implements OnInit {
       unit: [unit, [Validators.min(1)]],
       creditAmount: [0],
       debitAmount: [0],
-      date: [moment(new Date()).unix() * 1000],
+      date: [epochDate],
       transactionType: [isDebit ? 'DEBIT' : 'CREDIT'],
       isDisabled: [isDisabled],
       itemId: [null],
@@ -731,12 +737,12 @@ export class InvoiceComponent implements OnInit {
     const reservationItemId = priceControls.reservationItemId;
 
     const priceItem = this.getAllItemWithSameItemId(itemId).find(
-      (control) => !control.value.taxId && !control.value.isDiscount
+      (item) => !item.control.value.taxId && !item.control.value.isDiscount
     );
 
     this.addDiscountModal({
-      amount: priceItem.value.debitAmount,
-      serviceName: priceItem.value.description,
+      amount: priceItem.control.value.debitAmount,
+      serviceName: priceItem.control.value.description,
       index,
       itemId,
       reservationItemId,
@@ -754,11 +760,11 @@ export class InvoiceComponent implements OnInit {
   }
 
   getAllItemWithSameItemId(itemId: string) {
-    const res = this.tableFormArray.controls.filter(
-      (control: Controls) => control.value.itemId === itemId
-    );
+    const res = this.tableFormArray.controls
+      .map((control: Controls, index) => ({ index, control }))
+      .filter((item) => item.control.value.itemId === itemId);
 
-    return res as Controls[];
+    return res;
   }
 
   registerOnDeleteChanges(index) {
@@ -1145,64 +1151,81 @@ export class InvoiceComponent implements OnInit {
           amount - (alreadyHasDiscount?.value.creditAmount ?? 0); // Amount to be used for the reversed tax calculation
         const newTaxedAmount = amount - totalDiscount;
 
-        const discountItem = this.getAllItemWithSameItemId(itemId).find(
-          (control) => !control.value.taxId && !control.value.isDiscount
+        const reservationItem = this.getAllItemWithSameItemId(itemId).filter(
+          (item) => !item.control.value.taxId && !item.control.value.isDiscount
         );
+
+        const discountItem = this.getAllItemWithSameItemId(itemId).filter(
+          (item) => item.control.value.isDiscount
+        );
+
+        // Update each discountItem with the total discount
+        discountItem.forEach((item) => {
+          item.control.patchValue({ creditAmount: totalDiscount });
+        });
 
         if (!totalDiscount) {
           if (alreadyHasDiscount) {
-            this.removeSingleItem(alreadyHasDiscount.value.billItemId);
-            this.updateTax(
-              taxedAmount,
-              discountItem.value.billItemId,
-              newTaxedAmount
-            );
+            discountItem.forEach((item) => {
+              this.removeSingleItem(item.control.value.billItemId);
+            });
+            reservationItem.forEach((item) => {
+              this.updateTax(
+                taxedAmount,
+                item.control.value.billItemId,
+                newTaxedAmount
+              );
+            });
           }
           return;
         }
 
         if (!alreadyHasDiscount) {
           const value = `DISCOUNT (${serviceName})`;
-          this.addNonBillItem({
-            amount: totalDiscount,
-            itemId: itemId,
-            reservationItemId: reservationItemId,
-            transactionType: 'CREDIT',
-            type: 'discount',
-            value: value,
-            entryIdx: index + 1,
+          reservationItem.forEach((item, index) => {
+            this.addNonBillItem({
+              amount: totalDiscount,
+              itemId: itemId,
+              reservationItemId: reservationItemId,
+              transactionType: 'CREDIT',
+              type: 'discount',
+              value: value,
+              entryIdx: item.index + 1 + index,
+              date: item.control.value.date,
+            });
           });
         } else alreadyHasDiscount.patchValue({ creditAmount: totalDiscount });
-        this.updateTax(
-          taxedAmount,
-          discountItem.value.billItemId,
-          newTaxedAmount
-        );
+        reservationItem.forEach((item) => {
+          this.updateTax(
+            taxedAmount,
+            item.control.value.billItemId,
+            newTaxedAmount
+          );
+        });
       }
     );
   }
 
-  updateTax(
-    taxedAmount: number,
-    reservationItemId: string,
-    newTaxedAmount: number
-  ) {
-    this.tableFormArray.controls.forEach((control: Controls) => {
-      if (
-        control.value.reservationItemId === reservationItemId &&
-        control.value.taxId
-      ) {
-        const currentTax = control.value.debitAmount;
-        const taxFraction = currentTax / taxedAmount;
-
-        const newTax = this.adminUtilityService.getEpsilonValue(
-          newTaxedAmount * taxFraction
+  updateTax(taxedAmount: number, itemId: string, newTaxedAmount: number) {
+    const itemsToUpdate = this.tableFormArray.controls.filter(
+      (control: Controls) => {
+        return (
+          (control.value.reservationItemId === itemId ||
+            control.value.itemId === itemId) &&
+          control.value.taxId
         );
-
-        control.patchValue({ debitAmount: newTax });
       }
-    });
+    );
 
+    itemsToUpdate.forEach((itemToUpdate: Controls) => {
+      const currentTax = itemToUpdate.value.debitAmount;
+      const taxFraction = currentTax / taxedAmount;
+      const newTax = this.adminUtilityService.getEpsilonValue(
+        newTaxedAmount * taxFraction
+      );
+
+      itemToUpdate.patchValue({ debitAmount: newTax });
+    });
     this.tableFormArray.updateValueAndValidity();
   }
 
@@ -1213,6 +1236,7 @@ export class InvoiceComponent implements OnInit {
     reservationItemId: string;
     value: string;
     entryIdx?: number;
+    date?: number;
     type: ChargesType;
   }) {
     const {
@@ -1221,18 +1245,22 @@ export class InvoiceComponent implements OnInit {
       itemId,
       reservationItemId,
       value,
-      entryIdx,
       transactionType,
     } = {
-      entryIdx: this.tableFormArray.length,
       ...settings,
     };
+
+    const entryIdx =
+      settings.entryIdx || settings.entryIdx === 0
+        ? settings.entryIdx
+        : this.tableFormArray.length;
 
     this.addNewCharges({
       rowIndex: entryIdx,
       isNewEntry: true,
       isDebit: true,
       isDisabled: true,
+      date: settings?.date,
     });
 
     this.addNewDefaultDescription({
@@ -1251,6 +1279,7 @@ export class InvoiceComponent implements OnInit {
       itemId,
       reservationItemId,
       transactionType: transactionType,
+      date: settings.date ? settings.date : moment(new Date()).unix() * 1000,
     });
 
     this.tableFormArray.at(entryIdx).patchValue(data);
@@ -1321,6 +1350,7 @@ type AddNewChargesSettings = {
   isDebit?: boolean;
   unit?: number;
   isDisabled?: boolean;
+  date?: number;
 };
 
 type Controls = Omit<AbstractControl, 'value'> & { value: BillItemFields };

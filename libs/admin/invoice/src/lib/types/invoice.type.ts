@@ -42,6 +42,7 @@ export type BillSummaryData = {
   billItems: BillItem[];
   companyDetails: CompanyDetails;
   cashier: string;
+  cashierId: string;
   remarks: string;
   deleteInvoiceItems: string[];
   totalAmount: number;

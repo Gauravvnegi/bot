@@ -184,6 +184,7 @@ export class InvoiceService extends ApiService {
       deleteInvoiceItems: deletedItemsId.length ? deletedItemsId : null,
       invoiceGenerated: false,
       cashier: invoiceFormData.cashierName,
+      cashierId: invoiceFormData.cashierId,
       remarks: invoiceFormData.additionalNote,
 
       // Payment info (BE related - to maintain history)

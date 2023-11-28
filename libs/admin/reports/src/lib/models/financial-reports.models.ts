@@ -181,7 +181,6 @@ export class DailyRevenueReport
     value = value.map((item) => {
       const totalRoom = item?.roomRevenue ?? 0;
       const totalOthers = (item?.cancellation ?? 0) + (item?.noShow ?? 0) ?? 0;
-      debugger;
       const totalRevenue = totalRoom + totalOthers + item?.inclusionOrAddOn;
       const totalPayable = (totalRevenue ?? 0) + (item?.totalTax ?? 0) ?? 0;
       return {

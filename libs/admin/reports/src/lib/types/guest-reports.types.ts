@@ -53,6 +53,7 @@ export type GuestContactReportData = {
 
 export type GuestContactReportResponse = {
   id: string;
+  salutation: string;
   firstName: string;
   lastName: string;
   contactDetails: ContactDetails;

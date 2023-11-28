@@ -196,6 +196,7 @@ export class ReportsDataTableComponent extends BaseDatatableComponent {
       roomType: [''],
       month: [new Date().setDate(1) || null],
       cashierId: [''],
+      employeeId: [''],
     } as Record<ReportFiltersKey, any>);
     this.tableFG.addControl('filters', filterForm);
 
@@ -286,6 +287,7 @@ export class ReportsDataTableComponent extends BaseDatatableComponent {
       isMonth: this.currentFilters.includes('month'),
       isDate: this.currentFilters.includes('date'),
       isCashier: this.currentFilters.includes('cashierId'),
+      isEmployee: this.currentFilters.includes('employeeId'),
     };
   }
 

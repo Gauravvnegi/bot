@@ -101,6 +101,7 @@ export type ReportFilters = {
   roomType?: string;
   month?: number;
   cashierId?: string;
+  employeeId?: string;
 };
 
 export type AvailableFilters = keyof ReportFilters;

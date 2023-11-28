@@ -1,14 +1,14 @@
-import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
-import { ActionConfigType } from '../../../../types/night-audit.type';
-import { ConfirmationService, MenuItem } from 'primeng/api';
-import { cols, dummyData } from '../../constants/audit-summary.table';
-import { NightAuditService } from '../../../../services/night-audit.service';
-import { Subscription } from 'rxjs';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
   AdminUtilityService,
   QueryConfig,
 } from '@hospitality-bot/admin/shared';
-import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import { ConfirmationService, MenuItem } from 'primeng/api';
+import { Subscription } from 'rxjs';
+import { NightAuditService } from '../../../../services/night-audit.service';
+import { ActionConfigType } from '../../../../types/night-audit.type';
+import { cols } from '../../constants/audit-summary.table';
 import { AuditSummary } from '../../models/audit-summary.model';
 import { AuditViewType } from '../../types/audit-summary.type';
 

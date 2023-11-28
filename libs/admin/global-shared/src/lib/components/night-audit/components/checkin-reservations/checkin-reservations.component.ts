@@ -1,26 +1,26 @@
+import { Clipboard } from '@angular/cdk/clipboard';
 import {
   Component,
+  EventEmitter,
   Input,
   OnInit,
   Output,
-  EventEmitter,
   SimpleChanges,
 } from '@angular/core';
-import { ActionConfigType } from '../../../../types/night-audit.type';
+import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import { EntitySubType, ModuleNames } from '@hospitality-bot/admin/shared';
+import { SnackBarService } from '@hospitality-bot/shared/material';
+import { manageReservationRoutes } from 'libs/admin/manage-reservation/src/lib/constants/routes';
 import { ConfirmationService, MenuItem } from 'primeng/api';
+import { Subscription } from 'rxjs';
+import { NightAuditService } from '../../../../services/night-audit.service';
+import { ActionConfigType } from '../../../../types/night-audit.type';
+import { TableActionType } from '../../../table-view/table-view.component';
 import {
   cols,
   reservationStatus,
 } from '../../constants/checked-in-reservation.table';
 import { CheckedInReservation } from '../../models/night-audit.model';
-import { SnackBarService } from '@hospitality-bot/shared/material';
-import { Subscription } from 'rxjs';
-import { NightAuditService } from '../../../../services/night-audit.service';
-import { EntitySubType, ModuleNames } from '@hospitality-bot/admin/shared';
-import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
-import { manageReservationRoutes } from 'libs/admin/manage-reservation/src/lib/constants/routes';
-import { TableActionType } from '../../../table-view/table-view.component';
-import { Clipboard } from '@angular/cdk/clipboard';
 
 @Component({
   selector: 'hospitality-bot-checkin-reservations',
@@ -40,6 +40,7 @@ export class CheckinReservationsComponent implements OnInit {
   entityId = '';
 
   loading = true;
+  hasError = false;
   @Input() items: CheckedInReservation[] = [];
   @Input() activeIndex = 0;
   @Input() stepList: MenuItem[];
@@ -77,7 +78,7 @@ export class CheckinReservationsComponent implements OnInit {
       preLabel: this.activeIndex != 0 ? 'Back' : undefined,
       postLabel: 'Next',
       preSeverity: 'primary',
-      postDisabled: this.loading || this.isSomeConfirmed(),
+      postDisabled: this.loading || this.isSomeConfirmed() || this.hasError,
     };
   }
 
@@ -144,7 +145,8 @@ export class CheckinReservationsComponent implements OnInit {
 
   listenLoaders() {
     this.nightAuditService.$checkedInLoading.subscribe((res) => {
-      this.loading = res;
+      this.loading = res.loading;
+      this.hasError = res.error;
       this.initActionConfig();
     });
   }

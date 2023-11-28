@@ -10,6 +10,7 @@ import { TranslateService } from '@ngx-translate/core';
 import * as _ from 'lodash';
 import { map } from 'rxjs/operators';
 import { SnackBarWithTranslateData } from '../types/snackbar.type';
+import { SnackbarHandlerService } from '../../../../../admin/global-shared/src/lib/services/snackbar-handler.service';
 
 /**
  * @class To manage all the operations related to snackbar.
@@ -18,7 +19,8 @@ import { SnackBarWithTranslateData } from '../types/snackbar.type';
 export class SnackBarService {
   constructor(
     private _snackBar: MatSnackBar,
-    private _translateService: TranslateService
+    private _translateService: TranslateService,
+    public snackbarHandler: SnackbarHandlerService
   ) {}
 
   /**
@@ -100,9 +102,11 @@ export class SnackBarService {
     if (cdkOverlayContainer && cdkOverlayContainer.style.zIndex !== '1500') {
       // Increase the z-index before showing the snackbar
       cdkOverlayContainer.style.zIndex = '1500';
-      setTimeout(() => {
-        cdkOverlayContainer.style.zIndex = '1000';
-      }, 3000);
+      if (this.snackbarHandler.isDecreaseSnackbarZIndex) {
+        setTimeout(() => {
+          cdkOverlayContainer.style.zIndex = '1000';
+        }, 3000);
+      }
     }
   }
 }

@@ -8,7 +8,7 @@ import {
 } from '@angular/core';
 import { Cols, FlagType } from '@hospitality-bot/admin/shared';
 import { EmptyContent } from 'libs/admin/shared/src/lib/components/datatable/empty-table/empty-table.component';
-import { ActionDataType, TableObjectData } from '../../types/table-view.type';
+import { TableObjectData } from '../../types/table-view.type';
 import { TableObjectStyleKeys } from '../../constants/table-view.const';
 @Component({
   selector: 'hospitality-bot-table-view',
@@ -33,6 +33,7 @@ export class TableViewComponent implements OnInit {
     description: 'No Data Found',
     imageSrc: 'assets/images/empty-table-offer.png',
     actionName: '',
+    isError: false,
   };
   @Input() set emptyViewConfig(values: EmptyViewType) {
     Object.entries(values).forEach(([key, value]) => {

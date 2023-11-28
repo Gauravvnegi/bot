@@ -1,15 +1,15 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { cols, title } from '../../constants/manage-login.table';
-import { ActionConfigType } from '../../../../types/night-audit.type';
-import { MenuItem } from 'primeng/api';
-import { Subscription, timer } from 'rxjs';
-import { NightAuditService } from '../../../../services/night-audit.service';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
   AdminUtilityService,
   QueryConfig,
 } from '@hospitality-bot/admin/shared';
 import { UserPermissionTable } from 'libs/admin/roles-and-permissions/src/lib/models/user-permission-table.model';
+import { MenuItem } from 'primeng/api';
+import { Subscription, timer } from 'rxjs';
+import { NightAuditService } from '../../../../services/night-audit.service';
+import { ActionConfigType } from '../../../../types/night-audit.type';
+import { cols, title } from '../../constants/manage-login.table';
 import { LoggedInUsers } from '../../models/logged-users.model';
 
 @Component({

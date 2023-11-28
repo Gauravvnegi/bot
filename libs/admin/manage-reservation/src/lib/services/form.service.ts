@@ -83,7 +83,7 @@ export class FormService {
       remarks: input?.paymentMethod?.paymentRemark ?? '',
       amount: input?.paymentMethod?.totalPaidAmount ?? 0,
       transactionId: input?.paymentMethod?.transactionId ?? '',
-      cashierId: input?.paymentMethod.cashierId ?? '',
+      cashierId: input?.paymentMethod?.cashierId ?? '',
     };
 
     if (input?.paymentRule?.amountToPay)

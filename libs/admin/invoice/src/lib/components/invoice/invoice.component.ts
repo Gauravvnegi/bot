@@ -490,6 +490,7 @@ export class InvoiceComponent implements OnInit {
       isNonEditableBillItem: [false],
       isAddOn: [true],
       isMiscellaneous: [false],
+      reservationItemId: [null],
     };
 
     const formGroup = this.fb.group(data);
@@ -525,6 +526,7 @@ export class InvoiceComponent implements OnInit {
       unit,
       debitAmount,
       itemId,
+      reservationItemId,
     } = currentFormGroup.controls as TableFormItemControl;
 
     billItemId.valueChanges
@@ -546,6 +548,7 @@ export class InvoiceComponent implements OnInit {
 
         currentFormGroup.patchValue({
           itemId: selectedService.value,
+          reservationItemId: selectedService.value,
           description: selectedService.label,
           debitAmount: selectedService.amount,
         });
@@ -557,6 +560,7 @@ export class InvoiceComponent implements OnInit {
         >[] = selectedService.taxes.map((item) => ({
           taxId: item.id,
           itemId: selectedService.value,
+          reservationItemId: selectedService.value,
           debitAmount: this.adminUtilityService.getEpsilonValue(
             selectedService.amount * (item.taxValue / 100)
           ),
@@ -580,7 +584,7 @@ export class InvoiceComponent implements OnInit {
           });
         });
 
-        if (prevId) this.findAndRemoveItems(undefined, prevId);
+        if (prevId) this.findAndRemoveItems(prevId);
       });
 
     let doNotUpdateUnit = false;
@@ -617,7 +621,7 @@ export class InvoiceComponent implements OnInit {
 
         this.updateTax(
           currentDebitAmount - discountValue,
-          itemId.value,
+          reservationItemId.value,
           newDebitAmount - discountValue
         );
       });
@@ -627,18 +631,13 @@ export class InvoiceComponent implements OnInit {
    * Find and remove item from the table of same item id
    * @param idToRemove ID of the items you want to remove
    */
-  findAndRemoveItems(idToRemove: BillItemFields, id?: string) {
+  findAndRemoveItems(idToRemove?: string) {
     // removing the selected serviceID
-    this.selectedServiceIds.delete(idToRemove?.billItemId ?? id);
+    this.selectedServiceIds.delete(idToRemove);
 
     // Step 1: Filter out items with the same ID
     const itemsToRemove = this.tableFormArray.controls.filter(
-      (control: Controls) => {
-        return (
-          control.value.itemId === (idToRemove?.itemId ?? id) ||
-          control.value.itemId === (idToRemove?.billItemId ?? id)
-        );
-      }
+      (control: Controls) => control.value.reservationItemId === idToRemove
     );
 
     // Step 2: Remove each matching item
@@ -704,12 +703,6 @@ export class InvoiceComponent implements OnInit {
     return formControl;
   }
 
-  getCheckboxValue(index: number) {
-    return this.tableFormArray.at(index)?.get('taxId').value
-      ? this.tableFormArray.at(index)?.get('itemId').value
-      : this.tableFormArray.at(index)?.get('billItemId').value;
-  }
-
   getTableRowValue(index: number) {
     return this.tableFormArray.at(index).value as BillItemFields;
   }
@@ -727,7 +720,7 @@ export class InvoiceComponent implements OnInit {
      * If delete item action is performed
      */
     if (value === MenuActionItem.DELETE_ITEM) {
-      this.findAndRemoveItems(priceControls);
+      this.findAndRemoveItems(priceControls.reservationItemId);
       return;
     }
 
@@ -735,6 +728,8 @@ export class InvoiceComponent implements OnInit {
      * To update or add discount
      */
     const itemId = priceControls.itemId;
+    const reservationItemId = priceControls.reservationItemId;
+
     const priceItem = this.getAllItemWithSameItemId(itemId).find(
       (control) => !control.value.taxId && !control.value.isDiscount
     );
@@ -742,15 +737,16 @@ export class InvoiceComponent implements OnInit {
     this.addDiscountModal({
       amount: priceItem.value.debitAmount,
       serviceName: priceItem.value.description,
-      itemId,
-      discountAction: value,
       index,
+      itemId,
+      reservationItemId,
+      discountAction: value,
     });
   }
 
   removeSelectedCharges() {
     this.selectedRows.forEach((item) => {
-      this.findAndRemoveItems(undefined, item);
+      this.findAndRemoveItems(item);
     });
     this.selectedRows = [];
 
@@ -1116,9 +1112,17 @@ export class InvoiceComponent implements OnInit {
     serviceName: string;
     index: number;
     itemId: string;
+    reservationItemId: string;
     discountAction: MenuActionItem;
   }) {
-    const { amount, serviceName, index, itemId, discountAction } = data;
+    const {
+      amount,
+      serviceName,
+      index,
+      itemId,
+      reservationItemId,
+      discountAction,
+    } = data;
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = false;
     dialogConfig.width = '40%';
@@ -1135,17 +1139,24 @@ export class InvoiceComponent implements OnInit {
       (res: { totalDiscount: number }) => {
         this.modalService.close();
         if (!res) return;
-
         const totalDiscount = res.totalDiscount;
         const alreadyHasDiscount = this.hasDiscount(itemId);
         const taxedAmount =
           amount - (alreadyHasDiscount?.value.creditAmount ?? 0); // Amount to be used for the reversed tax calculation
         const newTaxedAmount = amount - totalDiscount;
 
+        const discountItem = this.getAllItemWithSameItemId(itemId).find(
+          (control) => !control.value.taxId && !control.value.isDiscount
+        );
+
         if (!totalDiscount) {
           if (alreadyHasDiscount) {
             this.removeSingleItem(alreadyHasDiscount.value.billItemId);
-            this.updateTax(taxedAmount, itemId, newTaxedAmount);
+            this.updateTax(
+              taxedAmount,
+              discountItem.value.billItemId,
+              newTaxedAmount
+            );
           }
           return;
         }
@@ -1155,26 +1166,39 @@ export class InvoiceComponent implements OnInit {
           this.addNonBillItem({
             amount: totalDiscount,
             itemId: itemId,
+            reservationItemId: reservationItemId,
             transactionType: 'CREDIT',
             type: 'discount',
             value: value,
             entryIdx: index + 1,
           });
         } else alreadyHasDiscount.patchValue({ creditAmount: totalDiscount });
-        this.updateTax(taxedAmount, itemId, newTaxedAmount);
+        this.updateTax(
+          taxedAmount,
+          discountItem.value.billItemId,
+          newTaxedAmount
+        );
       }
     );
   }
 
-  updateTax(taxedAmount: number, itemId: string, newTaxedAmount: number) {
+  updateTax(
+    taxedAmount: number,
+    reservationItemId: string,
+    newTaxedAmount: number
+  ) {
     this.tableFormArray.controls.forEach((control: Controls) => {
-      if (control.value.itemId === itemId && control.value.taxId) {
+      if (
+        control.value.reservationItemId === reservationItemId &&
+        control.value.taxId
+      ) {
         const currentTax = control.value.debitAmount;
         const taxFraction = currentTax / taxedAmount;
 
         const newTax = this.adminUtilityService.getEpsilonValue(
           newTaxedAmount * taxFraction
         );
+
         control.patchValue({ debitAmount: newTax });
       }
     });
@@ -1186,11 +1210,20 @@ export class InvoiceComponent implements OnInit {
     transactionType: BillItemFields['transactionType'];
     amount: number;
     itemId: string;
+    reservationItemId: string;
     value: string;
     entryIdx?: number;
     type: ChargesType;
   }) {
-    const { type, amount, itemId, value, entryIdx, transactionType } = {
+    const {
+      type,
+      amount,
+      itemId,
+      reservationItemId,
+      value,
+      entryIdx,
+      transactionType,
+    } = {
       entryIdx: this.tableFormArray.length,
       ...settings,
     };
@@ -1216,6 +1249,7 @@ export class InvoiceComponent implements OnInit {
       isNonEditableBillItem: type === 'refund' || type === 'miscellaneous',
       isMiscellaneous: type === 'miscellaneous',
       itemId,
+      reservationItemId,
       transactionType: transactionType,
     });
 
@@ -1257,6 +1291,9 @@ export class InvoiceComponent implements OnInit {
           this.addNonBillItem({
             amount: res.refundAmount,
             itemId: `${additionalChargeDetails.value}-${
+              moment(new Date()).unix() * 1000
+            }`,
+            reservationItemId: `${additionalChargeDetails.value}-${
               moment(new Date()).unix() * 1000
             }`,
             transactionType: additionalChargeDetails.transactionType,

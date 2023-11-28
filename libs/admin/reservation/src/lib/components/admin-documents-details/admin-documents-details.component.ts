@@ -535,8 +535,6 @@ export class AdminDocumentsDetailsComponent implements OnInit {
         zipFile.file(fileName, data);
         count++;
 
-        debugger;
-
         if (count === urls.length) {
           const content = await zipFile.generateAsync({ type: 'blob' });
           saveAs(content, `${guest.firstName}_${guest.lastName}.zip`);

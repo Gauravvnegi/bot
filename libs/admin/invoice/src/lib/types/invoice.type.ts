@@ -13,6 +13,7 @@ export type BillItem = {
   itemCode?: string;
   isAddOn?: boolean;
   itemId?: string;
+  reservationItemId?: string;
   taxId?: string;
   isCoupon?: boolean;
 };

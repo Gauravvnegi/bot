@@ -92,6 +92,7 @@ export class InvoiceService extends ApiService {
       transactionType: 'DEBIT',
       unit: 1,
       isAddOn: true,
+      reservationItemId: '',
       ...settings,
     };
   }

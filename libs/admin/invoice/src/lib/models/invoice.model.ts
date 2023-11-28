@@ -89,7 +89,7 @@ export class TableList {
     input.forEach((item) => {
       const billItem = new TableData().deserialize({ ...item });
       this.records.push(billItem);
-      this.serviceIds.add(billItem.itemId);
+      this.serviceIds.add(billItem.reservationItemId);
     });
 
     return this;
@@ -113,6 +113,7 @@ export class TableData {
   isDisabled: boolean;
   isAddOn: boolean;
   isMiscellaneous: boolean;
+  reservationItemId: string;
 
   deserialize(input: BillItem) {
     this.key = input.id;
@@ -131,7 +132,8 @@ export class TableData {
     this.isNonEditableBillItem = !input.itemId;
     this.isMiscellaneous = !input.itemId && !input.isCoupon;
     this.isAddOn = input.isAddOn;
-
+    this.reservationItemId =
+      input?.taxId ? input.itemId : input.id;
     return this;
   }
 }

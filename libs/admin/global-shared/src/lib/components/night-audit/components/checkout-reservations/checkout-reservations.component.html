@@ -9,7 +9,10 @@
       [action]="'Refresh'"
       [emptyViewConfig]="{
         content: {
-          description: 'There is no Pending Checked-out Reservations.'
+          description: hasError
+            ? 'Data Loading Failed !'
+            : 'There is no Pending Checked-out Reservations.',
+          isError: hasError
         }
       }"
       (actionClicked)="reloadTable(true)"

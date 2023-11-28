@@ -34,6 +34,7 @@ import { JourneyDialogComponent } from '../journey-dialog/journey-dialog.compone
 import { SendMessageComponent } from 'libs/admin/notification/src/lib/components/send-message/send-message.component';
 import { MenuItem } from 'primeng/api';
 import { FileData } from '../../models/reservation-table.model';
+import { SnackbarHandlerService } from 'libs/admin/global-shared/src/lib/services/snackbar-handler.service';
 
 @Component({
   selector: 'hospitality-bot-details',
@@ -64,6 +65,9 @@ export class DetailsComponent implements OnInit, OnDestroy {
     { label: 'Current Booking', icon: '' },
   ];
   @Input('bookingId') bookingId: string; //reservationId
+  @Input() isDecreaseSnackbarZIndex = false;
+  @Output() onRoute = new EventEmitter();
+
   branchConfig;
   $subscription = new Subscription();
 
@@ -133,9 +137,11 @@ export class DetailsComponent implements OnInit, OnDestroy {
     private globalFilterService: GlobalFilterService,
     private subscriptionService: SubscriptionPlanService,
     private configService: ConfigService,
-    private routesConfigService: RoutesConfigService
+    private routesConfigService: RoutesConfigService,
+    public snackbarHandler: SnackbarHandlerService
   ) {
     this.self = this;
+    this.snackbarHandler.isDecreaseSnackbarZIndex = false; // Protect MUI Element hiding on snackbar open
     this.initDetailsForm();
   }
 
@@ -366,19 +372,17 @@ export class DetailsComponent implements OnInit, OnDestroy {
           this.reservationDetailsFG.get('bookingId').value,
           data
         )
-        .subscribe(
-          (res) =>
-            this.snackbarService
-              .openSnackBarWithTranslate(
-                {
-                  translateKey: 'messages.SUCCESS.PAYMENT_ACCEPTED',
-                  priorityMessage: 'Payment accepted.',
-                },
-                '',
-                { panelClass: 'success' }
-              )
-              .subscribe(),
-          ({ error }) => {}
+        .subscribe((res) =>
+          this.snackbarService
+            .openSnackBarWithTranslate(
+              {
+                translateKey: 'messages.SUCCESS.PAYMENT_ACCEPTED',
+                priorityMessage: 'Payment accepted.',
+              },
+              '',
+              { panelClass: 'success' }
+            )
+            .subscribe()
         )
     );
   }
@@ -387,20 +391,17 @@ export class DetailsComponent implements OnInit, OnDestroy {
     this.$subscription.add(
       this._reservationService
         .downloadInvoice(this.reservationDetailsFG.get('bookingId').value)
-        .subscribe(
-          (res) => {
-            if (res && res.file_download_url) {
-              FileSaver.saveAs(
-                res.file_download_url,
-                'invoice_' +
-                  this.reservationDetailsFG.get('bookingNumber').value +
-                  new Date().getTime() +
-                  '.pdf'
-              );
-            }
-          },
-          ({ error }) => {}
-        )
+        .subscribe((res) => {
+          if (res && res.file_download_url) {
+            FileSaver.saveAs(
+              res.file_download_url,
+              'invoice_' +
+                this.reservationDetailsFG.get('bookingNumber').value +
+                new Date().getTime() +
+                '.pdf'
+            );
+          }
+        })
     );
   }
 
@@ -412,6 +413,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
 
   manageInvoice() {
     this.onDetailsClose.next(true);
+    this.onRoute.next(true);
     this.routesConfigService.navigate({
       subModuleName: ModuleNames.INVOICE,
       additionalPath: `${this.bookingId}`,
@@ -420,6 +422,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
 
   editBooking() {
     this.onDetailsClose.next(true);
+    this.onRoute.next(true);
     this.routesConfigService.navigate({
       subModuleName: ModuleNames.ADD_RESERVATION,
       additionalPath: `edit-reservation/${this.bookingId}`,
@@ -434,22 +437,19 @@ export class DetailsComponent implements OnInit, OnDestroy {
       this.$subscription.add(
         this._reservationService
           .prepareInvoice(this.reservationDetailsFG.get('bookingId').value)
-          .subscribe(
-            (_) => {
-              this.details.invoicePrepareRequest = true;
-              this.snackbarService
-                .openSnackBarWithTranslate(
-                  {
-                    translateKey: 'messages.SUCCESS.INVOICE_TICKET_RAISED',
-                    priorityMessage: 'Payment accepted.',
-                  },
-                  '',
-                  { panelClass: 'success' }
-                )
-                .subscribe();
-            },
-            ({ error }) => {}
-          )
+          .subscribe((_) => {
+            this.details.invoicePrepareRequest = true;
+            this.snackbarService
+              .openSnackBarWithTranslate(
+                {
+                  translateKey: 'messages.SUCCESS.INVOICE_TICKET_RAISED',
+                  priorityMessage: 'Payment accepted.',
+                },
+                '',
+                { panelClass: 'success' }
+              )
+              .subscribe();
+          })
       );
   }
 
@@ -538,139 +538,136 @@ export class DetailsComponent implements OnInit, OnDestroy {
   confirmAndNotifyCheckin() {
     this._reservationService
       .checkCurrentWindow(this.reservationDetailsFG.get('bookingId').value)
-      .subscribe(
-        (res) => {
-          const journeyName = res.journey;
-          switch (journeyName) {
-            case 'EARLYCHECKIN':
-              this.openJourneyDialog({
-                title: 'Early Check-In Request',
-                description:
-                  'Guest checkin request is before scheduled arrival time.',
-                buttons: {
-                  cancel: {
-                    label: 'Cancel',
-                    context: '',
-                  },
-                  accept: {
-                    label: 'Accept',
-                    context: this,
-                    handler: {
-                      fn_name: 'verifyJourney',
-                      args: ['CHECKIN', 'ACCEPT'],
-                    },
+      .subscribe((res) => {
+        const journeyName = res.journey;
+        switch (journeyName) {
+          case 'EARLYCHECKIN':
+            this.openJourneyDialog({
+              title: 'Early Check-In Request',
+              description:
+                'Guest checkin request is before scheduled arrival time.',
+              buttons: {
+                cancel: {
+                  label: 'Cancel',
+                  context: '',
+                },
+                accept: {
+                  label: 'Accept',
+                  context: this,
+                  handler: {
+                    fn_name: 'verifyJourney',
+                    args: ['CHECKIN', 'ACCEPT'],
                   },
                 },
-              });
-              break;
-            case 'CHECKIN':
-              this.openJourneyDialog({
-                title: 'Check-In Request',
-                description: 'Guest is about to checkin.',
-                buttons: {
-                  cancel: {
-                    label: 'Cancel',
-                    context: '',
-                  },
-                  accept: {
-                    label: 'Accept',
-                    context: this,
-                    handler: {
-                      fn_name: 'verifyJourney',
-                      args: ['CHECKIN', 'ACCEPT'],
-                    },
+              },
+            });
+            break;
+          case 'CHECKIN':
+            this.openJourneyDialog({
+              title: 'Check-In Request',
+              description: 'Guest is about to checkin.',
+              buttons: {
+                cancel: {
+                  label: 'Cancel',
+                  context: '',
+                },
+                accept: {
+                  label: 'Accept',
+                  context: this,
+                  handler: {
+                    fn_name: 'verifyJourney',
+                    args: ['CHECKIN', 'ACCEPT'],
                   },
                 },
-              });
-              break;
-            case 'LATECHECKIN ':
-              this.openJourneyDialog({
-                title: 'Late Check-In Request',
-                description:
-                  'Guest checkin request is before scheduled arrival time.',
-                buttons: {
-                  cancel: {
-                    label: 'Cancel',
-                    context: '',
-                  },
-                  accept: {
-                    label: 'Accept',
-                    context: this,
-                    handler: {
-                      fn_name: 'verifyJourney',
-                      args: ['CHECKIN', 'ACCEPT'],
-                    },
+              },
+            });
+            break;
+          case 'LATECHECKIN ':
+            this.openJourneyDialog({
+              title: 'Late Check-In Request',
+              description:
+                'Guest checkin request is before scheduled arrival time.',
+              buttons: {
+                cancel: {
+                  label: 'Cancel',
+                  context: '',
+                },
+                accept: {
+                  label: 'Accept',
+                  context: this,
+                  handler: {
+                    fn_name: 'verifyJourney',
+                    args: ['CHECKIN', 'ACCEPT'],
                   },
                 },
-              });
-              break;
-            case 'EARLYCHECKOUT':
-              this.openJourneyDialog({
-                title: 'Early Check-Out Request',
-                description:
-                  'Guest checkout request is before scheduled departure time.',
+              },
+            });
+            break;
+          case 'EARLYCHECKOUT':
+            this.openJourneyDialog({
+              title: 'Early Check-Out Request',
+              description:
+                'Guest checkout request is before scheduled departure time.',
 
-                buttons: {
-                  cancel: {
-                    label: 'Cancel',
-                    context: '',
-                  },
-                  accept: {
-                    label: 'Accept',
-                    context: this,
-                    handler: {
-                      fn_name: 'verifyJourney',
-                      args: ['CHECKOUT', 'ACCEPT'],
-                    },
+              buttons: {
+                cancel: {
+                  label: 'Cancel',
+                  context: '',
+                },
+                accept: {
+                  label: 'Accept',
+                  context: this,
+                  handler: {
+                    fn_name: 'verifyJourney',
+                    args: ['CHECKOUT', 'ACCEPT'],
                   },
                 },
-              });
-              break;
-            case 'CHECKOUT':
-              this.openJourneyDialog({
-                title: 'Check-Out Request',
-                description: 'Guest is about to checkout.',
-                buttons: {
-                  cancel: {
-                    label: 'Cancel',
-                    context: '',
-                  },
-                  accept: {
-                    label: 'Accept',
-                    context: this,
-                    handler: {
-                      fn_name: 'verifyJourney',
-                      args: ['CHECKOUT', 'ACCEPT'],
-                    },
+              },
+            });
+            break;
+          case 'CHECKOUT':
+            this.openJourneyDialog({
+              title: 'Check-Out Request',
+              description: 'Guest is about to checkout.',
+              buttons: {
+                cancel: {
+                  label: 'Cancel',
+                  context: '',
+                },
+                accept: {
+                  label: 'Accept',
+                  context: this,
+                  handler: {
+                    fn_name: 'verifyJourney',
+                    args: ['CHECKOUT', 'ACCEPT'],
                   },
                 },
-              });
-              break;
-            case 'LATECHECKOUT':
-              this.openJourneyDialog({
-                title: 'Late Check-Out Request',
-                description:
-                  'Guest checkout request is after checkout request window.',
-                buttons: {
-                  cancel: {
-                    label: 'Cancel',
-                    context: '',
-                  },
-                  accept: {
-                    label: 'Accept',
-                    context: this,
-                    handler: {
-                      fn_name: 'verifyJourney',
-                      args: ['CHECKOUT', 'ACCEPT'],
-                    },
+              },
+            });
+            break;
+          case 'LATECHECKOUT':
+            this.openJourneyDialog({
+              title: 'Late Check-Out Request',
+              description:
+                'Guest checkout request is after checkout request window.',
+              buttons: {
+                cancel: {
+                  label: 'Cancel',
+                  context: '',
+                },
+                accept: {
+                  label: 'Accept',
+                  context: this,
+                  handler: {
+                    fn_name: 'verifyJourney',
+                    args: ['CHECKOUT', 'ACCEPT'],
                   },
                 },
-              });
-              break;
-          }
-        },
-        ({ error }) => {}
-      );
+              },
+            });
+            break;
+        }
+      });
   }
 
   manualCheckout() {
@@ -824,25 +821,22 @@ export class DetailsComponent implements OnInit, OnDestroy {
         this.reservationDetailsFG.get('bookingId').value,
         data
       )
-      .subscribe(
-        (res) => {
-          this.snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: 'messages.SUCCESS.JOURNEY_COMPLETED',
-                priorityMessage: `${journeyName[0]
-                  .toUpperCase()
-                  .concat(
-                    journeyName.slice(1, journeyName.length).toLowerCase()
-                  )} completed`,
-              },
-              '',
-              { panelClass: 'success' }
-            )
-            .subscribe();
-        },
-        ({ error }) => {}
-      );
+      .subscribe((res) => {
+        this.snackbarService
+          .openSnackBarWithTranslate(
+            {
+              translateKey: 'messages.SUCCESS.JOURNEY_COMPLETED',
+              priorityMessage: `${journeyName[0]
+                .toUpperCase()
+                .concat(
+                  journeyName.slice(1, journeyName.length).toLowerCase()
+                )} completed`,
+            },
+            '',
+            { panelClass: 'success' }
+          )
+          .subscribe();
+      });
   }
 
   // getPrimaryGuestDetails() {
@@ -868,7 +862,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
       );
       if (channel === 'WHATSAPP_LITE') {
         this._modal.close();
-
+        this.onRoute.emit(true);
         this.routesConfigService.navigate({
           subModuleName: ModuleNames.LIVE_MESSAGING,
         });
@@ -1057,3 +1051,8 @@ export type DetailsTabOptions =
   | 'package_details'
   | 'payment_details'
   | 'request_details';
+
+export interface DetailsDialogData {
+  bookingId: string;
+  tabKey: DetailsTabOptions;
+}

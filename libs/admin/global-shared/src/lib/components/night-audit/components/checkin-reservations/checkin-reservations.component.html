@@ -10,7 +10,10 @@
       [statusConfig]="reservationStatusConfig"
       [emptyViewConfig]="{
         content: {
-          description: 'There is no Pending Checked-in Reservations.'
+          description: hasError
+            ? 'Data Loading Failed !'
+            : 'There is no Pending Checked-in Reservations.',
+          isError: hasError
         }
       }"
       (actionClicked)="reloadTable(true)"

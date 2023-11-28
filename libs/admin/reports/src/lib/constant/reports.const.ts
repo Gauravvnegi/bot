@@ -191,10 +191,10 @@ export const reportsConfig: ReportsConfig = {
         label: 'Cashier',
         value: 'cashierReport',
       },
-      {
-        label: 'Pay Type',
-        value: 'payTypeReport',
-      },
+      // {
+      //   label: 'Pay Type',
+      //   value: 'payTypeReport',
+      // },
     ],
   },
   FINANCIAL_REPORTS: {
@@ -232,10 +232,10 @@ export const reportsConfig: ReportsConfig = {
         label: 'TAX',
         value: 'auditTaxReport',
       },
-      {
-        label: 'Revenue Report',
-        value: 'revenueReport',
-      },
+      // {
+      //   label: 'Revenue Report',   
+      //   value: 'revenueReport',
+      // },
       {
         label: 'MTD & YTD Report',
         value: 'mtdAndYtdReport',
@@ -439,7 +439,7 @@ export const reportsColumnMapping: Record<ReportsTypeValues, Cols[]> = {
   monthlySummaryReport: getColsArray(monthlySummaryReportCols),
   auditRoomDetailsReport: getColsArray(auditRoomDetailsReportCols),
   auditTaxReport: getColsArray(auditTaxReportCols),
-  revenueReport: getColsArray(auditTaxReportCols), //to be decided
+  revenueReport: getColsArray({}), //to be decided
   monthlyTaxReport: getColsArray(monthlyTaxReportCols),
   lodgingTaxReport: getColsArray(lodgingTaxReportCols),
   taxReport: getColsArray(taxReportCols),
@@ -487,10 +487,10 @@ export const reportFiltersMapping: Record<
   managerFlashReport: ['date'],
   dailyRevenueReport: ['fromDate', 'toDate', 'roomType'],
   monthlySummaryReport: ['roomType', 'month'],
-  auditRoomDetailsReport: ['fromDate', 'toDate'],
+  auditRoomDetailsReport: ['date'],
   revenueReport: ['fromDate', 'toDate'],
   auditTaxReport: ['fromDate', 'toDate'],
-  monthlyTaxReport: ['fromDate', 'toDate'],
+  monthlyTaxReport: ['month'],
   lodgingTaxReport: ['fromDate', 'toDate'],
   taxReport: ['fromDate', 'toDate'],
   guestHistory: ['fromDate', 'toDate'],

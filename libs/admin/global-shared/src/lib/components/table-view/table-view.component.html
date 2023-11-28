@@ -35,7 +35,7 @@
           <td *ngFor="let col of columns">
             <div
               class="cell-content"
-              *ngIf="rowData[col.field]; else emptyCell"
+              *ngIf="rowData[col.field] !== undefined; else emptyCell"
               [ngStyle]="
                 getKeysValues(rowData[col.field])[0]?.textInlineBlock && {
                   display: 'flex'

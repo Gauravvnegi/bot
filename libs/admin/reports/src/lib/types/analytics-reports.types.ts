@@ -115,7 +115,7 @@ export type NoShowSummaryReportData = {
   bookingNo: string;
   guestName: string;
   pax: number;
-  rooms: string;
+  rooms: number;
   roomType: string;
   company: string;
   status: string;

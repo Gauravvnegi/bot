@@ -82,7 +82,7 @@ export class NoShowSummaryReport
           ' ' +
           reservationData?.guest?.lastName,
         pax: reservationData?.bookingItems[0]?.occupancyDetails.maxAdult,
-        rooms: reservationData?.bookingItems[0]?.roomDetails.roomNumber,
+        rooms: reservationData?.bookingItems[0]?.roomDetails.roomCount,
         roomType: reservationData?.bookingItems[0]?.roomDetails.roomTypeLabel,
         company: reservationData?.guest?.company?.firstName,
         status: reservationData?.status,
@@ -114,7 +114,7 @@ export class BusinessAnalysisReport
             occupancy: value[row.label].occupancyPercent,
             pax: value[row.label].pax,
             roomRevenue: value[row.label].roomRevenue,
-            revenue: value[row.label].revenue,
+            revenue: value[row.label].revenuePercent,
             arrOrAgr: value[row.label].arr,
             arp: value[row.label].arp,
           });
@@ -152,7 +152,7 @@ export class MarketSegmentReport
             occupancy: value[row.label].occupancyPercent,
             pax: value[row.label].pax,
             roomRevenue: value[row.label].roomRevenue,
-            revenue: value[row.label].revenue,
+            revenue: value[row.label].revenuePercent,
             arrOrAgr: value[row.label].arr,
             arp: value[row.label].arp,
           });

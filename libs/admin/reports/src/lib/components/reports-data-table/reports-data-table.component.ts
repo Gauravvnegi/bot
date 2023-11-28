@@ -267,9 +267,13 @@ export class ReportsDataTableComponent extends BaseDatatableComponent {
     const detailCompRef = this.modalService.openDialog(
       DetailsComponent,
       dialogConfig
-    );
+      );
+    if(!rowData?.id)
+      detailCompRef.componentInstance.bookingId = rowData?.id;
+    if (rowData?.bookingNo) {
+      detailCompRef.componentInstance.bookingNumber = rowData?.bookingNo;
+    }
 
-    detailCompRef.componentInstance.bookingId = rowData?.id;
     tabKey && (detailCompRef.componentInstance.tabKey = tabKey);
 
     this.$subscription.add(

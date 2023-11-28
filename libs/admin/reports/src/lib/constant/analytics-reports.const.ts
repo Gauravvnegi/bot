@@ -141,7 +141,7 @@ export const marketSegmentReportCols: ColsData<Omit<
     isSortDisabled: true,
   },
   revenue: {
-    header: 'Revenue',
+    header: 'Revenue %',
     isSortDisabled: true,
   },
   arrOrAgr: {

@@ -22,4 +22,49 @@ export const cashierReportCols: ColsData<CashierReportData> = {
   },
 };
 
-export const payTypeReportCols: ColsData<PayTypeReportData> = {};
+export const payTypeReportCols: ColsData<PayTypeReportData> = {
+  paymentMode: {
+    header: 'Payment Mode',
+    isSortDisabled: true,
+  },
+  paymentType: {
+    header: 'Payment Type',
+    isSortDisabled: true,
+  },
+  employee: {
+    header: 'Employee',
+    isSortDisabled: true,
+  },
+  bookingNo: {
+    header: 'Res',
+    isSortDisabled: true,
+  },
+  folioNo: {
+    header: 'Folio No',
+    isSortDisabled: true,
+  },
+  guestName: {
+    header: 'Guest Name',
+    isSortDisabled: true,
+  },
+  room: {
+    header: 'Room',
+    isSortDisabled: true,
+  },
+  counter: {
+    header: 'Counter',
+    isSortDisabled: true,
+  },
+  dateAndTime: {
+    header: 'Date & Time',
+    isSortDisabled: true,
+  },
+  amount: {
+    header: 'Amount',
+    isSortDisabled: true,
+  },
+  description: {
+    header: 'Description',
+    isSortDisabled: true,
+  },
+};

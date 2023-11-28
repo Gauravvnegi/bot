@@ -140,6 +140,7 @@ export class AuditSummaryComponent implements OnInit {
               }
             });
             this.values = auditSummary.records;
+            this.isNoAuditFound = false;
             this.loading = false;
           },
           (error) => {

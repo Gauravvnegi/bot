@@ -114,7 +114,7 @@ export class TaxReportDataModel {
     this.checkOutDate = value.stayDetails.departureTime
       ? getFormattedDate(value.stayDetails.departureTime)
       : '';
-    this.roomCharge = value.paymentSummary.totalAmount;
+    this.roomCharge = value.reservationItemsPayment?.totalRoomCharge;
     this.otherCharge = value?.reservationItemsPayment?.totalAddOnsAmount;
     this.cgst = value.reservationItemsPayment?.totalCgstTax;
     this.sgst = value.reservationItemsPayment.totalSgstTax;

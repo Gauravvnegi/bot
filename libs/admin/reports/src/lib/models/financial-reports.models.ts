@@ -145,7 +145,7 @@ export class MonthlySummary extends RowStyles {
   directSaleTax: number;
   grossTotal: number;
   deserialize(input: MonthlySummaryReportResponse, isSubTotal?: boolean) {
-    this.day = getFormattedDate(input?.date);
+    this.day = isSubTotal ? ' ' : getFormattedDate(input?.date);
     this.roomCount = input.totalRooms;
     this.occupancy = input.occupancyPercentage + '%';
     this.avgDailyRateIncludeInclusion = 0;

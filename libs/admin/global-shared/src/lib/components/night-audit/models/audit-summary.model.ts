@@ -32,12 +32,12 @@ export class AuditSummary {
         title: 'Room Details',
         values: [
           {
-            occupiedRooms: input.occupiedRooms,
-            availableRooms: input.totalRooms - input.occupiedRooms,
-            checkIns: input.arrivalRooms,
-            checkOuts: input.departureRooms,
-            noShows: input.noShowRooms,
-            cancellations: input.cancelledReservationForToday,
+            occupiedRooms: input?.occupiedRooms ?? 0,
+            availableRooms: input?.totalRooms - input?.occupiedRooms ?? 0,
+            checkIns: input?.arrivalRooms ?? 0,
+            checkOuts: input?.departureRooms ?? 0,
+            noShows: input?.noShowRooms ?? 0,
+            cancellations: input?.cancelledReservationForToday ?? 0,
           },
         ],
       },
@@ -95,7 +95,12 @@ export class AuditSummary {
   }
 
   getRevenueList(input: AuditSummaryResponse, dynamicCols: Cols[]) {
-    let total = input?.bookingAmount;
+    //to calculate total revenue amount
+    let total =
+      input?.bookingAmount +
+      input?.canceledReservationAmount +
+      input?.noShowReservationAmount;
+
     let revenueList: TableObjectData[] = [
       dynamicCols.reduce(
         (pre, curr, index) => {
@@ -107,13 +112,13 @@ export class AuditSummary {
         },
         {
           booking: `\u20B9 ${input?.bookingAmount}`,
-          cancellation: '',
-          noShows: '',
-          restaurant: '',
+          cancellation: `\u20B9 ${input?.canceledReservationAmount}`,
+          noShows: `\u20B9 ${input?.noShowReservationAmount}`,
         }
       ),
     ];
 
+    //for total revenue rows
     if (revenueList.length) {
       const revenueListKeys = Object.keys(revenueList[0]);
       let totalInfo = { textInlineBlock: true };

@@ -61,6 +61,8 @@ export interface AuditSummaryResponse {
     totalAmount: number;
   }[];
   subTotalObject: boolean;
+  canceledReservationAmount: number;
+  noShowReservationAmount: number;
 }
 
 type AuditDataType = {

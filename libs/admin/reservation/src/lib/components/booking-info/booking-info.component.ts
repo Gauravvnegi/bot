@@ -120,8 +120,11 @@ export class BookingInfoComponent implements OnInit {
       this.startMinDate = this.defaultDate
         ? new Date(this.defaultDate)
         : new Date();
-      this.endMinDate.setDate(this.startMinDate.getDate() + 1);
-      this.minToDate.setDate(this.endMinDate.getDate());
+      this.endMinDate = new Date(this.startMinDate);
+      this.endMinDate.setDate(this.endMinDate.getDate() + 1);
+
+      this.minToDate = new Date(this.endMinDate);
+      this.minToDate.setDate(this.minToDate.getDate());
     } else {
       this.startMinDate = new Date(this.reservationInfoControls.from.value);
       this.minToDate.setDate(this.startMinDate.getDate() + 1);
@@ -137,9 +140,6 @@ export class BookingInfoComponent implements OnInit {
     // Venue only valid till 24 hours later.
     if (this.bookingType === EntitySubType.VENUE)
       this.maxDate = moment().add(24, 'hours').toDate();
-
-    // Reservation dates should be within 1 year time.
-    this.endMinDate.setTime(this.endMinDate.getTime() - 5 * 60 * 1000);
   }
 
   //   /**

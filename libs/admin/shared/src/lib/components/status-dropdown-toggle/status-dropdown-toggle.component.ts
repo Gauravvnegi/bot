@@ -61,12 +61,10 @@ export class StatusDropdownToggleComponent implements OnInit {
 
   @Input() set nextStates(input: string[]) {
     if (!input) return;
-
     this.items = input?.map((key) => {
       const value = this.isBoolean ? this.booleanKeys.forTrue === key : key;
-
       const data = {
-        label: this.records[key]?.label ?? convertToTitleCase(key),
+        label: this.records[key]?.label ?? (key && convertToTitleCase(key)),
         command: () => {
           if (this.value !== value) this.onClick.emit(value);
         },

@@ -2,7 +2,7 @@ import { ComponentType } from '@angular/cdk/portal';
 import { ElementRef, Injectable, Renderer2 } from '@angular/core';
 import {
   MatSnackBar,
-  MatSnackBarConfig,
+  formMatSnackBarConfig,
   MatSnackBarRef,
   SimpleSnackBar,
 } from '@angular/material/snack-bar';
@@ -10,6 +10,7 @@ import { TranslateService } from '@ngx-translate/core';
 import * as _ from 'lodash';
 import { map } from 'rxjs/operators';
 import { SnackBarWithTranslateData } from '../types/snackbar.type';
+import { SnackbarHandlerService } from '../../../../../admin/global-shared/src/lib/services/snackbar-handler.service';
 
 /**
  * @class To manage all the operations related to snackbar.
@@ -18,7 +19,8 @@ import { SnackBarWithTranslateData } from '../types/snackbar.type';
 export class SnackBarService {
   constructor(
     private _snackBar: MatSnackBar,
-    private _translateService: TranslateService
+    private _translateService: TranslateService,
+    public snackbarHandler: SnackbarHandlerService
   ) {}
 
   /**
@@ -31,7 +33,7 @@ export class SnackBarService {
   openSnackBarAsText(
     message: string,
     action?: string,
-    config?: MatSnackBarConfig
+    config?: formMatSnackBarConfig
   ): MatSnackBarRef<SimpleSnackBar> {
     this.increaseZIndex();
     const panelClass = _.get(config, ['panelClass'], 'danger');
@@ -56,7 +58,7 @@ export class SnackBarService {
    */
   openSnackBarAsComponent(
     component: ComponentType<any>,
-    config?: MatSnackBarConfig
+    config?: formMatSnackBarConfig
   ): MatSnackBarRef<any> {
     this.increaseZIndex();
     return this._snackBar.openFromComponent(component, {
@@ -75,7 +77,7 @@ export class SnackBarService {
   openSnackBarWithTranslate(
     data: SnackBarWithTranslateData,
     action?: string,
-    config?: MatSnackBarConfig
+    config?: formMatSnackBarConfig
   ) {
     this.increaseZIndex();
     const { translateKey, priorityMessage } = data;
@@ -100,9 +102,11 @@ export class SnackBarService {
     if (cdkOverlayContainer && cdkOverlayContainer.style.zIndex !== '1500') {
       // Increase the z-index before showing the snackbar
       cdkOverlayContainer.style.zIndex = '1500';
-      setTimeout(() => {
-        cdkOverlayContainer.style.zIndex = '1000';
-      }, 3000);
+      if (this.snackbarHandler.isDecreaseSnackbarZIndex) {
+        setTimeout(() => {
+          cdkOverlayContainer.style.zIndex = '1000';
+        }, 3000);
+      }
     }
   }
 }

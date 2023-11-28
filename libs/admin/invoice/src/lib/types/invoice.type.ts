@@ -13,6 +13,7 @@ export type BillItem = {
   itemCode?: string;
   isAddOn?: boolean;
   itemId?: string;
+  reservationItemId?: string;
   taxId?: string;
   isCoupon?: boolean;
 };
@@ -41,6 +42,7 @@ export type BillSummaryData = {
   billItems: BillItem[];
   companyDetails: CompanyDetails;
   cashier: string;
+  cashierId: string;
   remarks: string;
   deleteInvoiceItems: string[];
   totalAmount: number;

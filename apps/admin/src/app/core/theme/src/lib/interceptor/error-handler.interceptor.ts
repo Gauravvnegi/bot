@@ -10,11 +10,13 @@ import { catchError, map } from 'rxjs/operators';
 import * as _ from 'lodash';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { TranslateService } from '@ngx-translate/core';
+import { SnackbarHandlerService } from '../../../../../../../../../libs/admin/global-shared/src/lib/services/snackbar-handler.service';
 @Injectable()
 export class ErrorHandlerInterceptor implements HttpInterceptor {
   constructor(
     private _snackBar: MatSnackBar,
-    private readonly injector: Injector
+    private readonly injector: Injector,
+    public snackbarHandler: SnackbarHandlerService
   ) {}
   intercept(
     req: HttpRequest<any>,
@@ -37,9 +39,11 @@ export class ErrorHandlerInterceptor implements HttpInterceptor {
           if (cdkOverlayContainer) {
             // Increase the z-index before showing the snackbar
             cdkOverlayContainer.style.zIndex = '1500';
-            setTimeout(() => {
-              cdkOverlayContainer.style.zIndex = '1000';
-            }, 3000);
+            if (this.snackbarHandler.isDecreaseSnackbarZIndex) {
+              setTimeout(() => {
+                cdkOverlayContainer.style.zIndex = '1000';
+              }, 3000);
+            }
           }
 
           const handleTranslation = (translatedText) => {

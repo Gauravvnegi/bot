@@ -37,7 +37,7 @@ export class RoomReservation {
   reservationType: string;
   sourceName: string;
   confirmationNumber: string;
-  status: string;
+  status: ReservationCurrentStatus;
   guestName: string;
   companyName: string;
   created: number;
@@ -63,7 +63,7 @@ export class RoomReservation {
     this.confirmationNumber = input.reservationNumber;
     this.sourceName = input.sourceName;
     this.source = input.source;
-    this.status = input.status;
+    this.status = ReservationCurrentStatus[input.status];
     this.guestName = input.guest.firstName
       ? input.guest?.firstName + ' ' + (input.guest?.lastName ?? '')
       : '';
@@ -105,6 +105,15 @@ export type Status = {
   type: FlagType;
   disabled?: boolean;
 };
+
+export enum ReservationCurrentStatus {
+  NEW = 'NEW',
+  RESERVED = 'RESERVED',
+  INHOUSE = 'INHOUSE',
+  DUEIN = 'DUEIN',
+  DUEOUT = 'DUEOUT',
+  CHECKEDOUT = 'CHECKEDOUT',
+}
 
 /* Lists of all type Reservations*/
 export class ReservationList {

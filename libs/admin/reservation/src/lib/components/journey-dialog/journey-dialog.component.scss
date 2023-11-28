@@ -42,27 +42,7 @@
     .button-wrapper {
       display: flex;
       margin-top: 2rem;
-      button {
-        margin: 0 7px;
-        color: $white;
-        font-size: 12px;
-        font-weight: $medium;
-        width: $popup-button-width;
-        border-radius: 25px;
-        &:hover {
-          cursor: pointer;
-          box-shadow: 0px 4px 4px $btn-shadow;
-        }
-      }
-      .cancel {
-        background-color: $white;
-        margin-right: 20px;
-        color: $primary-cta;
-        border: 1px solid $primary-cta;
-      }
-      .accept {
-        background-color: $primary-cta;
-      }
+      gap: 20px;
     }
   }
 }

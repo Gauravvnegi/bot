@@ -2,13 +2,15 @@ import { Injectable } from '@angular/core';
 import { Option } from '@hospitality-bot/admin/shared';
 import { ApiService } from '@hospitality-bot/shared/utils';
 import * as moment from 'moment';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { BillItemFields, UseForm } from '../types/forms.types';
 import { BillItem, BillSummaryData, QueryConfig } from '../types/invoice.type';
 
 @Injectable()
 export class InvoiceService extends ApiService {
   invoiceData: BillSummaryData;
+
+  isPrintRate = new BehaviorSubject(true);
 
   createInvoice(reservationId: string, data): Observable<any> {
     return this.put(
@@ -90,6 +92,7 @@ export class InvoiceService extends ApiService {
       transactionType: 'DEBIT',
       unit: 1,
       isAddOn: true,
+      reservationItemId: '',
       ...settings,
     };
   }
@@ -181,6 +184,7 @@ export class InvoiceService extends ApiService {
       deleteInvoiceItems: deletedItemsId.length ? deletedItemsId : null,
       invoiceGenerated: false,
       cashier: invoiceFormData.cashierName,
+      cashierId: invoiceFormData.cashierId,
       remarks: invoiceFormData.additionalNote,
 
       // Payment info (BE related - to maintain history)

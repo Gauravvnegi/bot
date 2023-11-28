@@ -74,10 +74,24 @@
                           <div class="room-type__subtitle">
                             {{ room.roomNumber }}
                           </div>
+                          <div class="room-state">
+                            <hospitality-bot-status-dropdown-toggle
+                              class="status-toggle"
+                              [nextStates]="room.nextStates"
+                              (onClick)="
+                                handleRoomStatus($event, room.id, roomType)
+                              "
+                              [state]="room.currentStatus"
+                              [recordSetting]="roomStatusDetails"
+                            >
+                            </hospitality-bot-status-dropdown-toggle>
+                          </div>
                           <div class="features">
                             <ng-container
                               *ngFor="
-                                let imageUrl of getFeatureImage(room.features)
+                                let imageUrl of getFeatureImage(
+                                  room.features
+                                ).slice(0, 2)
                               "
                             >
                               <img
@@ -87,6 +101,13 @@
                                 alt="'room-feature"
                               />
                             </ng-container>
+                            <span
+                              *ngIf="getFeatureImage(room.features).length > 2"
+                              >+(
+                              {{
+                                getFeatureImage(room.features).length - 2
+                              }})</span
+                            >
                           </div>
                         </div>
                       </div>
@@ -151,6 +172,7 @@
                     [isProcessing]="roomType.loading"
                     (onChange)="handleChange($event, roomType)"
                     (onCreate)="handleCreate($event, roomType)"
+                    (onMenuClick)="handleMenuClick($event, roomType)"
                     (onEdit)="handleEdit($event, roomType)"
                     (onDisabledClick)="handleDisabledClick($event)"
                   ></hospitality-bot-interactive-grid>

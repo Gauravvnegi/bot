@@ -12,6 +12,7 @@ import {
   RoomResponse,
   RoomTypeListResponse,
   RoomTypeResponse,
+  StatusDetails,
 } from '../types/service-response';
 
 // ************ Room Models ******************
@@ -45,6 +46,7 @@ export class Room {
   foStatus: string;
   nextStates: string[];
   features: Features[];
+  statusDetailsList?: StatusDetails[];
 
   deserialize(input: RoomResponse) {
     this.id = input.id ?? '';
@@ -63,6 +65,7 @@ export class Room {
     this.foStatus = input.frontOfficeState ?? '';
     this.nextStates = [...input.nextStates, currentStatus];
     this.features = input.features ?? [];
+    this.statusDetailsList = input.statusDetailsList;
     return this;
   }
 

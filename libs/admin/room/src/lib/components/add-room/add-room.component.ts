@@ -174,6 +174,7 @@ export class AddRoomComponent implements OnInit, OnDestroy {
       foStatus: [],
       fromDate: ['', Validators.required],
       toDate: ['', Validators.required],
+      id: [null],
     });
 
     this.registerFormListener();
@@ -423,6 +424,7 @@ export class AddRoomComponent implements OnInit, OnDestroy {
           this.statusQuoForm.patchValue({
             remark: statusDetails.remarks,
             foStatus: roomDetails.frontOfficeState,
+            id: statusDetails.id,
           });
 
           this.isRoomInfoLoading = false;
@@ -492,6 +494,7 @@ export class AddRoomComponent implements OnInit, OnDestroy {
   updateRoom(): void {
     let data = this.useForm.getRawValue();
     let statusData = this.statusQuoForm.getRawValue();
+
     const activeFeatures = data.featureIds;
     const removeFeatures = this.featureIds.filter(
       (item) => !activeFeatures.includes(item)

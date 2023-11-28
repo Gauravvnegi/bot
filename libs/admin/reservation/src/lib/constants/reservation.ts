@@ -2,6 +2,8 @@ import {
   JourneyState,
   JourneyType,
 } from 'libs/admin/manage-reservation/src/lib/constants/reservation';
+import { ReservationCurrentStatus } from 'libs/admin/manage-reservation/src/lib/models/reservations.model';
+import { IGCellInfo } from 'libs/admin/shared/src/lib/components/interactive-grid/interactive-grid.component';
 
 const actionBtnConfig = [
   {
@@ -36,3 +38,37 @@ export function getColorCode(
     else return 'success';
   }
 }
+
+export const viewDetails = [{ label: 'View Details', value: 'VEIW_DETAILS' }];
+
+export const checkinOptions = [
+  { label: 'Checkin', value: 'CHECKIN' },
+  ...viewDetails,
+];
+
+export const checkoutOptions = [
+  { label: 'Checkout', value: 'CHECKOUT' },
+  ...viewDetails,
+];
+
+export const reservationMenuOptions: Record<
+  ReservationCurrentStatus & 'PRECHEKIN',
+  IGCellInfo['options']
+> = {
+  NEW: checkinOptions,
+  RESERVED: checkinOptions,
+  DUEIN: checkinOptions,
+  INHOUSE: [
+    { label: 'Cancel Checkin', value: 'CANCEL_CHECKIN' },
+    ...checkoutOptions,
+  ],
+  DUEOUT: checkoutOptions,
+  CHECKEDOUT: [
+    { label: 'Cancel Checkout', value: 'CANCEL_CHECKOUT' },
+    ...viewDetails,
+  ],
+  PRECHEKIN: [
+    { label: 'Activate Precheckin', value: 'PRECHECKIN' },
+    ...viewDetails,
+  ],
+};

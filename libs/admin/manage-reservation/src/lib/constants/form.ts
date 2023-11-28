@@ -126,6 +126,7 @@ export type PaymentRuleForm = {
 export type PaymentMethod = {
   cashierFirstName: string;
   cashierLastName: string;
+  cashierId?: string;
   totalPaidAmount: number;
   currency: string;
   paymentMethod: string;

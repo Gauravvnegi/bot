@@ -11,6 +11,7 @@ export class EmptyTableComponent implements OnInit {
   description: string;
   actionName: string;
   disabledAction: boolean;
+  isError = false;
   @Input() link: string;
   @Input() isLoading: boolean;
   @Output() action = new EventEmitter();
@@ -44,4 +45,5 @@ export type EmptyContent = {
   heading?: string;
   description?: string;
   actionName?: string;
+  isError?: boolean;
 };

@@ -64,6 +64,9 @@ export class CreatePackageComponent implements OnInit {
   selectedServicePrice: Record<string, number> = {};
   selectedPackage: Option;
 
+  startMinDate = new Date();
+  endMinDate = new Date();
+
   constructor(
     private fb: FormBuilder,
     private globalFilterService: GlobalFilterService,
@@ -97,6 +100,9 @@ export class CreatePackageComponent implements OnInit {
       name: ['', Validators.required],
       parentId: ['', Validators.required],
       categoryName: [''],
+      description: ['', Validators.required],
+      startDate: ['', Validators.required],
+      endDate: ['', Validators.required],
       serviceIds: [
         [],
         [Validators.required, CustomValidators.minArrayValueLength(2)],
@@ -111,6 +117,15 @@ export class CreatePackageComponent implements OnInit {
       enableVisibility: [[], Validators.required],
       enableOnMicrosite: [true],
       priority: ['LOW'],
+    });
+
+    const { startDate, endDate } = this.useForm.controls;
+
+    startDate.valueChanges.subscribe((res) => {
+      this.endMinDate = new Date(res);
+      if (endDate.value && startDate.value > endDate.value) {
+        endDate.setValue(startDate.value);
+      }
     });
 
     /* Patch the form value if serv id present */

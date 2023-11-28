@@ -53,21 +53,23 @@ export class CloseOutBalanceReport
   records: CloseOutBalanceData[];
   deserialize(value: CloseOutBalanceResponse[]): this {
     this.records = new Array<CloseOutBalanceData>();
-    this.records = value && value.map((item) => {
-      return {
-        bookingNo: item?.number,
-        folioNo: item?.invoiceCode,
-        checkOut: getFormattedDate(item?.departureTime),
-        guestName: `${item?.guestDetails.primaryGuest.firstName} ${item?.guestDetails.primaryGuest.lastName}`,
-        lodgingAndTax:
-          item?.reservationItemsPayment?.totalCgstTax +
-          item?.reservationItemsPayment?.totalSgstTax, //need to confirm
-        otherChargesAndTax: item?.reservationItemsPayment.totalAddOnsAmount, //need to confirm
-        amount: item?.reservationItemsPayment?.paidAmount,
-        collected: item?.paymentSummary?.paidAmount,
-        openBalance: item?.paymentSummary?.dueAmount,
-      };
-    });
+    this.records =
+      value &&
+      value.map((item) => {
+        return {
+          bookingNo: item?.number,
+          folioNo: item?.invoiceCode,
+          checkOut: getFormattedDate(item?.departureTime),
+          guestName: `${item?.guestDetails.primaryGuest.firstName} ${item?.guestDetails.primaryGuest.lastName}`,
+          lodgingAndTax:
+            item?.reservationItemsPayment?.totalCgstTax +
+            item?.reservationItemsPayment?.totalSgstTax, //need to confirm
+          otherChargesAndTax: item?.reservationItemsPayment.totalAddOnsAmount, //need to confirm
+          amount: item?.reservationItemsPayment?.paidAmount,
+          collected: item?.paymentSummary?.paidAmount,
+          openBalance: item?.paymentSummary?.dueAmount,
+        };
+      });
     return this;
   }
 }
@@ -79,27 +81,29 @@ export class DepositReport
   deserialize(value: DepositReportResponse[]) {
     this.records = new Array<DepositReportData>();
 
-    this.records = value && value.map((item) => {
-      return {
-        bookingNo: item?.number,
-        guestName: `${item?.guestDetails.primaryGuest.firstName} ${item?.guestDetails.primaryGuest.lastName}`,
-        checkIn: getFormattedDate(item?.arrivalTime),
-        checkOut: getFormattedDate(item?.departureTime),
-        nights: item?.nightCount,
-        lodging: item?.reservationItemsPayment?.totalRoomCharge,
-        otherCharges: item?.reservationItemsPayment?.totalAddOnsAmount,
-        taxes:
-          item?.reservationItemsPayment?.totalCgstTax +
-          item?.reservationItemsPayment?.totalSgstTax,
-        btc: undefined,
-        cash: undefined,
-        bankTransfer: undefined,
-        payAtDesk: undefined,
-        onlinePaymentGateway: undefined,
-        totalPaid: item?.reservationItemsPayment?.paidAmount,
-        lastDepositDate: undefined,
-      };
-    });
+    this.records =
+      value &&
+      value.map((item) => {
+        return {
+          bookingNo: item?.number,
+          guestName: `${item?.guestDetails.primaryGuest.firstName} ${item?.guestDetails.primaryGuest.lastName}`,
+          checkIn: getFormattedDate(item?.arrivalTime),
+          checkOut: getFormattedDate(item?.departureTime),
+          nights: item?.nightCount,
+          lodging: item?.reservationItemsPayment?.totalRoomCharge,
+          otherCharges: item?.reservationItemsPayment?.totalAddOnsAmount,
+          taxes:
+            item?.reservationItemsPayment?.totalCgstTax +
+            item?.reservationItemsPayment?.totalSgstTax,
+          btc: undefined,
+          cash: undefined,
+          bankTransfer: undefined,
+          payAtDesk: undefined,
+          onlinePaymentGateway: undefined,
+          totalPaid: item?.reservationItemsPayment?.paidAmount,
+          lastDepositDate: undefined,
+        };
+      });
 
     return this;
   }
@@ -111,17 +115,19 @@ export class PostingAuditReport
   deserialize(value: PostingAuditReportResponse[]): this {
     this.records = new Array<PostingAuditReportData>();
 
-    this.records = value && value.map((item) => {
-      return {
-        room: `${item?.stayDetails?.room.roomNumber} ${item?.stayDetails?.room.type}`,
-        name: `${item?.guestDetails?.primaryGuest?.firstName} ${item?.guestDetails?.primaryGuest?.lastName}`,
-        user: undefined,
-        trxAmount: undefined,
-        baseAmount: undefined,
-        cgst: undefined,
-        sgst: undefined,
-      };
-    });
+    this.records =
+      value &&
+      value.map((item) => {
+        return {
+          room: `${item?.stayDetails?.room.roomNumber} ${item?.stayDetails?.room.type}`,
+          name: `${item?.guestDetails?.primaryGuest?.firstName} ${item?.guestDetails?.primaryGuest?.lastName}`,
+          user: undefined,
+          trxAmount: undefined,
+          baseAmount: undefined,
+          cgst: undefined,
+          sgst: undefined,
+        };
+      });
     return this;
   }
 }
@@ -175,7 +181,8 @@ export class DailyRevenueReport
     value = value.map((item) => {
       const totalRoom = item?.roomRevenue ?? 0;
       const totalOthers = (item?.cancellation ?? 0) + (item?.noShow ?? 0) ?? 0;
-      const totalRevenue = (totalRoom ?? 0) + (totalOthers ?? 0) ?? 0;
+      debugger;
+      const totalRevenue = totalRoom + totalOthers + item?.inclusionOrAddOn;
       const totalPayable = (totalRevenue ?? 0) + (item?.totalTax ?? 0) ?? 0;
       return {
         ...item,

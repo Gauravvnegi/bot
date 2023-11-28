@@ -63,6 +63,31 @@
         landing page as a highlighted package.</label
       >
     </div>
+     <div class="des-template">
+      <div class="des-template__label">Offer Description</div>
+      <div class="des-template__input">
+        <hospitality-bot-template-editor
+          [parentFG]="useForm"
+          [name]="'description'"
+          [height]="250"
+        ></hospitality-bot-template-editor>
+      </div>
+    </div>
+     <hospitality-bot-date
+      class="half-width"
+      controlName="startDate"
+      label="Valid From"
+      [settings]="{ enableTime: false }"
+      [minDate]="startMinDate"
+    ></hospitality-bot-date>
+
+    <hospitality-bot-date
+      class="half-width"
+      controlName="endDate"
+      label="Valid Till"
+      [settings]="{ enableTime: false }"
+      [minDate]="endMinDate"
+    ></hospitality-bot-date>
     <hospitality-bot-prefix-field
       class="one-third-width"
       [options]="currencies"

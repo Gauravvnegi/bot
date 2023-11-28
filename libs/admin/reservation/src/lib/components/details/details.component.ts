@@ -56,6 +56,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
   isFirstTimeFetch = true;
   isGuestReservationFetched = false;
   regCardLoading = false;
+  isPrintRate = true;
 
   shareIconList;
   channels;
@@ -243,6 +244,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
               response,
               this.globalFilterService.timezone
             );
+            this.isPrintRate = response.printRate !== undefined ? response.printRate : true;
             if (initGuestDetails) {
               this.bookingNumber = response.number;
               this.guestId = response.guestDetails.primaryGuest.id;
@@ -728,10 +730,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
   checkInfn() {
     this.$subscription.add(
       this._reservationService
-        .manualCheckin(this.reservationDetailsFG.get('bookingId').value, {
-          cc: this.primaryGuest.countryCode,
-          phoneNumber: this.primaryGuest.phoneNumber,
-        })
+        .manualCheckin(this.reservationDetailsFG.get('bookingId').value)
         .subscribe((res) => {
           this.snackbarService.openSnackBarAsText('Checkin completed.', '', {
             panelClass: 'success',

@@ -25,7 +25,7 @@
     <hospitality-bot-auto-complete
       class="full-width"
       controlName="libraryItems"
-      label="Choose Package/Services/rooms"
+      label="Choose Services/rooms"
       [options]="libraryItems"
       [loading]="loading"
       (onSearch)="searchOptions($event)"
@@ -55,7 +55,7 @@
     </div>
 
     <div class="des-template">
-      <div class="des-template__label">Offer Description</div>
+      <div class="des-template__label">Description</div>
       <div class="des-template__input">
         <hospitality-bot-template-editor
           [parentFG]="useForm"
@@ -71,6 +71,9 @@
       label="Valid From"
       [settings]="{ enableTime: false }"
       [minDate]="startMinDate"
+      [props]="{
+        placeholder: 'DD/MM/YY'
+      }"
     ></hospitality-bot-date>
 
     <hospitality-bot-date
@@ -79,6 +82,9 @@
       label="Valid Till"
       [settings]="{ enableTime: false }"
       [minDate]="endMinDate"
+      [props]="{
+        placeholder: 'DD/MM/YY'
+      }"
     ></hospitality-bot-date>
 
     <hospitality-bot-prefix-field

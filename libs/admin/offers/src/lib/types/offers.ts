@@ -27,6 +27,6 @@ export type OfferData = Omit<OfferFormData, 'libraryItems'> & {
 
 export type OffersOnEntity = {
   serviceIds: string[];
-  packageIds: string[];
+  packageIds?: string[];
   roomTypeIds: string[];
 };

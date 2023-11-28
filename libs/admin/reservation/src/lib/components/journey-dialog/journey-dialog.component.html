@@ -15,12 +15,15 @@
     <input matInput [(ngModel)]="data.animal">
   </mat-form-field> -->
     <div class="button-wrapper">
-      <button class="cancel" mat-button (click)="onCancel()">
-        {{ config.buttons.cancel.label }}
-      </button>
-      <button class="accept" mat-button cdkFocusInitial (click)="onAccept()">
-        {{ config.buttons.accept.label }}
-      </button>
+      <hospitality-bot-button
+        [label]="config.buttons.cancel.label"
+        (onClick)="onCancel()"
+        variant="outlined"
+      ></hospitality-bot-button>
+      <hospitality-bot-button
+        [label]="config.buttons.accept.label"
+        (onClick)="onAccept()"
+      ></hospitality-bot-button>
     </div>
   </div>
 </div>

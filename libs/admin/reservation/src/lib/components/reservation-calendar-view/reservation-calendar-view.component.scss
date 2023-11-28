@@ -122,19 +122,41 @@ $border-color: rgba(112, 112, 112, 0.35);
 
   .room-type {
     font-size: 14px;
-    gap: 50px;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
     width: 100%;
+    .room-state {
+      width: 33%;
+    }
     &__subtitle {
       font-size: 14px;
       font-weight: 500;
+      width: 50px;
     }
   }
 
   .cell {
     padding: 0 2px;
+  }
+}
+
+:host ::ng-deep .status-toggle {
+  .p-splitbutton {
+    height: 30px;
+    width: 85%;
+    .p-button {
+      width: 4rem;
+    }
+    .p-splitbutton-defaultbutton {
+      padding: 5px;
+      width: 4rem;
+      .p-button-label {
+        font-size: 14px;
+        font-weight: 500;
+        white-space: nowrap;
+      }
+    }
   }
 }
 
@@ -278,8 +300,10 @@ $border-color: rgba(112, 112, 112, 0.35);
 
 .features {
   display: flex;
-  gap: 5px;
-  padding: 0px 10px;
+  gap: 4px;
+  padding: 0px 4px;
+  width: 100px;
+  justify-content: flex-end;
   .feature-image {
     height: 22px;
     width: 22px;

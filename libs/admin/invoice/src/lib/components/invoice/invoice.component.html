@@ -216,7 +216,10 @@
               <tr [formGroupName]="rowIndex" [disabled]="true">
                 <td>
                   <p-tableCheckbox
-                    [value]="getCheckboxValue(rowIndex)"
+                    [value]="
+                      tableFormArray.at(rowIndex)?.get('reservationItemId')
+                        .value
+                    "
                     [index]="rowIndex"
                     [disabled]="
                       tableFormArray.at(rowIndex).get('isDisabled').value ||
@@ -322,8 +325,10 @@
                     (onClickItem)="handleMenuAction($event, rowIndex)"
                     [menuItems]="getMenu(rowIndex)"
                     [disabled]="
+                      (tableFormArray.at(rowIndex).get('transactionType')
+                        .value === 'CREDIT' &&
+                        !tableFormArray.at(rowIndex).get('isDiscount').value) ||
                       isInvoiceDisabled ||
-                      !tableFormArray.at(rowIndex).get('isAddOn').value ||
                       (!tableFormArray.at(rowIndex).get('itemId').value &&
                         !tableFormArray.at(rowIndex).get('isNew').value) ||
                       tableFormArray.at(rowIndex).get('taxId').value ||

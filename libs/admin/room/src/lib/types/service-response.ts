@@ -255,6 +255,7 @@ export type StatusDetails = {
   toDate?: number;
   fromDate?: number;
   isCurrentStatus?: boolean;
+  id?: string;
 };
 
 export type ImageUrl = {

@@ -72,13 +72,19 @@ export class SingleRoom {
     // this.currentStatusTo = input?.currentStatusTo;
     // this.currentStatusFrom = input?.currentStatusFrom;
     if (input.statusDetailsList)
-      this.statusDetailsList = input.statusDetailsList.map((item) => ({
-        toDate: item.toDate,
-        fromDate: item.fromDate,
-        isCurrentStatus: item.isCurrentStatus,
-        status: item.status,
-        remarks: item.remarks,
-      }));
+      this.statusDetailsList = input.statusDetailsList.map((item) => {
+        const statusDetailsItem: any = {
+          toDate: item?.toDate,
+          fromDate: item?.fromDate,
+          isCurrentStatus: item?.isCurrentStatus,
+          status: item?.status,
+          remarks: item?.remarks ?? '',
+        };
+        if (this.id) {
+          statusDetailsItem.id = item?.id;
+        }
+        return statusDetailsItem;
+      });
     return this;
   }
 }

@@ -58,9 +58,17 @@ export class PaymentMethodComponent implements OnInit {
     this.getPaymentMethod();
     this.initConfig();
 
-    const { firstName, lastName } = this.userService.userDetails;
-    this.paymentControls.cashierFirstName.setValue(firstName);
-    this.paymentControls.cashierLastName.setValue(lastName);
+    const { firstName, lastName, id } = this.userService.userDetails;
+    this.parentFormGroup
+      .get('paymentMethod')
+      .patchValue(
+        {
+          cashierFirstName: firstName,
+          cashierLastName: lastName,
+          cashierId: id,
+        },
+        { emitEvent: false }
+      );
   }
 
   addFormGroup() {
@@ -69,6 +77,7 @@ export class PaymentMethodComponent implements OnInit {
     const data = {
       cashierFirstName: [{ value: '', disabled: true }],
       cashierLastName: [{ value: '', disabled: true }],
+      cashierId: [''],
       totalPaidAmount: [0, [Validators.min(0)]],
       currency: [''],
       paymentMethod: [''],

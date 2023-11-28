@@ -1,8 +1,13 @@
-import { Component, ElementRef, OnInit, Renderer2 } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import { Clipboard } from '@angular/cdk/clipboard';
+import {
+  GlobalFilterService,
+  RoutesConfigService,
+} from '@hospitality-bot/admin/core/theme';
 import {
   AdminUtilityService,
+  ModuleNames,
   Option,
   QueryConfig,
   daysOfWeek,
@@ -20,6 +25,7 @@ import {
 import { RoomService } from 'libs/admin/room/src/lib/services/room.service';
 import {
   Features,
+  RoomStatus,
   RoomTypeListResponse,
   StatusDetails,
 } from 'libs/admin/room/src/lib/types/service-response';
@@ -33,15 +39,25 @@ import {
 } from 'libs/admin/shared/src/lib/components/interactive-grid/interactive-grid.component';
 import { Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
-import { getColorCode } from '../../constants/reservation';
+import {
+  getColorCode,
+  reservationMenuOptions,
+} from '../../constants/reservation';
 import { MatDialogConfig } from '@angular/material/dialog';
-import { ModalService } from '@hospitality-bot/shared/material';
+import {
+  ModalService,
+  SnackBarService,
+} from '@hospitality-bot/shared/material';
 import { DetailsComponent } from '../details/details.component';
 import { RoomMapType } from 'libs/admin/channel-manager/src/lib/types/channel-manager.types';
 import { UpdateRatesResponse } from 'libs/admin/channel-manager/src/lib/types/response.type';
 import { UpdateRates } from 'libs/admin/channel-manager/src/lib/models/channel-manager.model';
 import { ChannelManagerService } from 'libs/admin/channel-manager/src/lib/services/channel-manager.service';
 import * as moment from 'moment';
+import { AdminDetailsService } from '../../services/admin-details.service';
+import { ReservationService } from '../../services/reservation.service';
+import { JourneyState } from 'libs/admin/manage-reservation/src/lib/constants/reservation';
+import { roomStatusDetails } from 'libs/admin/housekeeping/src/lib/constant/room';
 import { NightAuditService } from 'libs/admin/global-shared/src/lib/services/night-audit.service';
 
 @Component({
@@ -65,6 +81,7 @@ export class ReservationCalendarViewComponent implements OnInit {
   viewReservationForm = false;
   reservationsLoaded = false;
 
+  roomStatusDetails = roomStatusDetails;
   reservationListData: RoomReservation[];
   $subscription = new Subscription();
   previousData: IGValue[] = [];
@@ -81,8 +98,11 @@ export class ReservationCalendarViewComponent implements OnInit {
     private adminUtilityService: AdminUtilityService,
     private modalService: ModalService,
     private channelManagerService: ChannelManagerService,
-    private renderer: Renderer2,
-    private el: ElementRef,
+    private adminDetailsService: AdminDetailsService,
+    private _reservationService: ReservationService,
+    private snackbarService: SnackBarService,
+    private _clipboard: Clipboard,
+    private routesConfigService: RoutesConfigService,
     private auditService: NightAuditService
   ) {}
 
@@ -110,11 +130,19 @@ export class ReservationCalendarViewComponent implements OnInit {
               .map((roomTypeData) => ({
                 label: roomTypeData.name,
                 value: roomTypeData.id,
-                rooms: roomTypeData.rooms.map((room) => ({
-                  roomNumber: room.roomNumber,
-                  features: room.features,
-                  statusDetails: room?.statusDetailsList ?? [],
-                })),
+                rooms: roomTypeData.rooms.map((room) => {
+                  let currentStatus = room?.statusDetailsList.filter(
+                    (item) => item.isCurrentStatus
+                  )[0]?.status;
+                  return {
+                    roomNumber: room.roomNumber,
+                    features: room.features,
+                    statusDetails: room?.statusDetailsList ?? [],
+                    currentStatus: currentStatus,
+                    nextStates: [...room.nextStates, currentStatus],
+                    id: room?.id,
+                  };
+                }),
                 loading: false,
                 data: {
                   rows: [],
@@ -216,6 +244,7 @@ export class ReservationCalendarViewComponent implements OnInit {
         ),
         nonInteractive: reservation.journeysStatus.CHECKOUT === 'COMPLETED',
         additionContent: reservation?.companyName ?? '',
+        options: this.getMenuOptions(reservation),
       }));
 
       // Map data for unavailable rooms
@@ -501,6 +530,12 @@ export class ReservationCalendarViewComponent implements OnInit {
     );
   }
 
+  getMenuOptions(reservation: RoomReservation) {
+    return reservation.journeysStatus.PRECHECKIN === JourneyState.PENDING
+      ? reservationMenuOptions['PRECHEKIN']
+      : reservationMenuOptions[reservation.status];
+  }
+
   hideFooter(hide: boolean) {
     const footer = document.querySelector('.main-footer') as HTMLElement;
     // Check if the cdk container has zIndex 1500 already
@@ -536,6 +571,114 @@ export class ReservationCalendarViewComponent implements OnInit {
     this.viewReservationForm = true;
   }
 
+  handleMenuClick(event: { label: string; value: string; id: string }) {
+    switch (event.value) {
+      case 'CHECKIN':
+        this.manualCheckin(event.id);
+        break;
+      case 'CHECKOUT':
+        this.manualCheckout(event.id);
+        break;
+      case 'CANCEL_CHECKIN':
+        this._reservationService.cancelCheckin(event.id).subscribe((res) => {
+          this.snackbarService.openSnackBarAsText('Checkin canceled.', '', {
+            panelClass: 'success',
+          });
+        });
+        break;
+      case 'CANCEL_CHECKOUT':
+        this._reservationService.cancelCheckout(event.id).subscribe((res) => {
+          this.snackbarService.openSnackBarAsText('Checkin canceled.', '', {
+            panelClass: 'success',
+          });
+        });
+        break;
+      case 'PRECHECKIN':
+        this.activateAndGeneratePrecheckin(event.id);
+        break;
+      case 'VEIW_DETAILS':
+        this.openDetailsPage(event.id);
+        break;
+    }
+  }
+
+  activateAndGeneratePrecheckin(reservationId: string) {
+    this._reservationService
+      .generateJourneyLink(reservationId, 'PRECHECKIN')
+      .subscribe((res) => {
+        this._clipboard.copy(`${res.domain}?token=${res.journey.token}`);
+        this.snackbarService.openSnackBarAsText(
+          'Link copied successfully',
+          '',
+          {
+            panelClass: 'success',
+          }
+        );
+      });
+  }
+
+  manualCheckin(reservationId: string) {
+    this.adminDetailsService.openJourneyDialog({
+      title: 'Check-In',
+      description: 'Guest is about to checkin',
+      question: 'Are you sure you want to continue?',
+      buttons: {
+        cancel: {
+          label: 'Cancel',
+          context: '',
+        },
+        accept: {
+          label: 'Accept',
+          context: this,
+          handler: {
+            fn_name: 'checkInfn',
+            args: [reservationId],
+          },
+        },
+      },
+    });
+  }
+
+  manualCheckout(reservationId: string) {
+    this.adminDetailsService.openJourneyDialog({
+      title: 'Manual Checkout',
+      description: 'Guest is about to checkout',
+      question: 'Are you sure you want to continue?',
+      buttons: {
+        cancel: {
+          label: 'Cancel',
+          context: '',
+        },
+        accept: {
+          label: 'Accept',
+          context: this,
+          handler: {
+            fn_name: 'manualCheckoutfn',
+            args: [reservationId],
+          },
+        },
+      },
+    });
+  }
+
+  checkInfn(reservationId: string) {
+    this.$subscription.add(
+      this._reservationService.manualCheckin(reservationId).subscribe((res) => {
+        this.snackbarService.openSnackBarAsText('Checkin completed.', '', {
+          panelClass: 'success',
+        });
+      })
+    );
+  }
+
+  manualCheckoutfn(reservationId: string) {
+    this._reservationService.manualCheckout(reservationId).subscribe((res) => {
+      this.snackbarService.openSnackBarAsText('Checkout completed.', '', {
+        panelClass: 'success',
+      });
+    });
+  }
+
   openDetailsPage(reservationId: string) {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;
@@ -544,7 +687,6 @@ export class ReservationCalendarViewComponent implements OnInit {
       DetailsComponent,
       dialogConfig
     );
-
     detailCompRef.componentInstance.bookingId = reservationId;
     detailCompRef.componentInstance.tabKey = 'payment_details';
     this.$subscription.add(
@@ -552,6 +694,40 @@ export class ReservationCalendarViewComponent implements OnInit {
         detailCompRef.close();
       })
     );
+  }
+
+  /**
+   * @function handleRoomStatus handle the room status toggle
+   * @param status room status
+   * @param id room id
+   */
+  handleRoomStatus(status: RoomStatus, id: string, roomType: IGRoomType): void {
+    if (status === 'OUT_OF_ORDER' || status === 'OUT_OF_SERVICE') {
+      this.routesConfigService.navigate({
+        subModuleName: ModuleNames.ROOM,
+        additionalPath: `add-room/single`,
+        queryParams: { id: id, data: btoa(JSON.stringify({ status: status })) },
+      });
+      return;
+    }
+    this.roomService
+      .updateRoomStatus(this.entityId, {
+        room: {
+          id: id,
+          statusDetailsList: [{ isCurrentStatus: true, status: status }],
+        },
+      })
+      .subscribe(
+        () => {
+          this.initRoomTypes();
+          this.snackbarService.openSnackBarAsText(
+            'Status changes successfully',
+            '',
+            { panelClass: 'success' }
+          );
+        },
+        () => {}
+      );
   }
 
   handleCloseSidebar(resetData: boolean) {
@@ -597,6 +773,8 @@ type IGRoom = {
   label?: string;
   value?: string;
   statusDetails: StatusDetails[];
+  nextStates: string[];
+  id?: string;
 };
 
 export type QuickFormProps = {

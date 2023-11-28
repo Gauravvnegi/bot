@@ -419,6 +419,7 @@
                 </ng-container>
                 <ng-container *ngSwitchCase="'COMPLETED'">
                   <hospitality-bot-button
+                    *ngIf="isPrintRate"
                     label="Send Payment Link"
                     (click)="activateAndgenerateJourney('CHECKOUT')"
                     variant="outlined"
@@ -454,6 +455,7 @@
               ><ng-container [ngSwitch]="details.currentJourneyDetails.status">
                 <ng-container *ngSwitchCase="'PENDING'">
                   <hospitality-bot-button
+                    *ngIf="isPrintRate"
                     label="Send Payment Link"
                     (click)="activateAndgenerateJourney('CHECKOUT')"
                     variant="outlined"
@@ -472,6 +474,7 @@
                 </ng-container>
                 <ng-container *ngSwitchCase="'INITIATED'">
                   <hospitality-bot-button
+                    *ngIf="isPrintRate"
                     label="Send Payment Link"
                     (click)="activateAndgenerateJourney('CHECKOUT')"
                     variant="outlined"
@@ -503,6 +506,7 @@
                 </ng-container>
                 <ng-container *ngSwitchCase="'FAILED'">
                   <hospitality-bot-button
+                    *ngIf="isPrintRate"
                     label="Send Payment Link"
                     (click)="activateAndgenerateJourney('CHECKOUT')"
                     variant="outlined"

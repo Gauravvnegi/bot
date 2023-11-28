@@ -1,5 +1,4 @@
 import { Cols } from '@hospitality-bot/admin/shared';
-import { IGCellInfo } from 'libs/admin/shared/src/lib/components/interactive-grid/interactive-grid.component';
 
 export const cols: Cols[] = [
   {
@@ -27,8 +26,3 @@ export const cols: Cols[] = [
     isSearchDisabled: true,
   },
 ];
-
-const options: Record<'CHECKIN' | 'CHECKOUT', IGCellInfo['options']> = {
-  CHECKIN: [{ label: 'Checking', value: 'checking' }],
-  CHECKOUT: [{ label: 'Checking', value: 'checking' }],
-};

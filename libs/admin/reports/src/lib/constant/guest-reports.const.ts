@@ -1,4 +1,3 @@
-import { GuestContactReport } from '../models/guest-reports.model';
 import {
   GuestContactReportData,
   GuestHistoryData,

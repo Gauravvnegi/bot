@@ -348,8 +348,9 @@ export class ReservationSummaryReport
             data.reservationItemsPayment.totalCgstTax +
             data.reservationItemsPayment.totalSgstTax,
           avgRoomRate:
-            data.reservationItemsPayment.totalRoomCharge /
-            data.guestDetails.primaryGuest.totalNights,
+            data.reservationItemsPayment.totalRoomCharge / data.nightCount ??
+            data?.reservationItemsPayment?.totalRoomCharge,
+
           paidAndRevenueLoss: data?.paymentSummary?.paidAmount,
           balance: data?.paymentSummary?.dueAmount,
         };

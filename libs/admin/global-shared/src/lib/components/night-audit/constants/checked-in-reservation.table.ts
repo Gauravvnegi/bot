@@ -61,4 +61,5 @@ export const reservationStatus: Record<
 export const quickActions = {
   modify: 'modify',
   settlement: 'settlement',
+  'View Details': 'viewDetails',
 };

@@ -34,7 +34,7 @@ export class GuestContactReport
       value.map((item) => {
         return {
           guestId: item?.id,
-          salutation: undefined, //need to confirm
+          salutation: item?.salutation,
           name: `${item?.firstName} ${item?.lastName}`,
           address: item?.address?.addressLine1, //need to confirm
           city: item?.address?.city,

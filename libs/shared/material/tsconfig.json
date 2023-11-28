@@ -3,5 +3,5 @@
   "compilerOptions": {
     "types": ["node", "jest"]
   },
-  "include": ["**/*.ts"]
+  "include": ["**/*.ts", "../../admin/global-shared/src/lib/services/snackbar-handler.service.ts"]
 }

@@ -11,8 +11,14 @@ import { AuditSummaryResponse } from '../components/night-audit/types/audit-summ
 })
 export class NightAuditService extends ApiService {
   remainingAudit = new Subject<number[]>();
-  $checkedInLoading = new BehaviorSubject<boolean>(true);
-  $checkedOutLoading = new BehaviorSubject<boolean>(true);
+  $checkedInLoading = new BehaviorSubject<LoadingType>({
+    loading: true,
+    error: false,
+  });
+  $checkedOutLoading = new BehaviorSubject<LoadingType>({
+    loading: true,
+    error: false,
+  });
   $moveBackStateDisable = new Subject();
 
   getNightAudit(
@@ -66,3 +72,8 @@ export class NightAuditService extends ApiService {
     );
   }
 }
+
+export type LoadingType = {
+  loading: boolean;
+  error: boolean;
+};

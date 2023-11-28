@@ -34,7 +34,9 @@ export class ManagerFlashReport extends MangerReport
         item?.occupiedRooms ?? 0 - item?.houseUseRooms ?? 0;
       const roomOccupiedMinusComp =
         item?.occupiedRooms ?? 0 - item?.complimentaryRooms ?? 0;
-      const revParInclDNR = item?.roomRevenue / item?.totalRooms ?? 0;
+      const revParInclDNR = +(
+        item?.roomRevenue / item?.totalRooms ?? 0
+      ).toFixed(2);
       const totalRevenue = item?.roomRevenue + item?.inclusionOrAddOn;
 
       return {

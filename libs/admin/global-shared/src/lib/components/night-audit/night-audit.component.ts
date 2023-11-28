@@ -1,5 +1,8 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { NightAuditService } from '../../services/night-audit.service';
+import {
+  LoadingType,
+  NightAuditService,
+} from '../../services/night-audit.service';
 import { itemList } from '../../constants/night-audit.const';
 import { Subscription } from 'rxjs';
 import {
@@ -90,7 +93,7 @@ export class NightAuditComponent implements OnInit {
             }
           },
           (error) => {
-            this.setLoaders(false);
+            this.setLoaders(false, true);
             this.auditDate = undefined;
           }
         )
@@ -103,29 +106,34 @@ export class NightAuditComponent implements OnInit {
     }
 
     this.setLoaders(true);
-    this.$subscription.add(
-      this.nightAuditService
-        .getNightAudit(
-          this.entityId,
-          this.getQueryConfig({ auditDate: this.auditDate.getTime() })
-        )
-        .subscribe(
-          (res) => {
-            const {
-              checkedInReservation,
-              checkedOutReservation,
-            } = new NightAudit().deserialize(res);
-            this.checkedOutReservation = checkedOutReservation;
-            this.checkedInReservation = checkedInReservation;
-            this.setLoaders(false);
-          },
-          (error) => {
-            this.setLoaders(false);
-          }
-        )
-    );
+    this.auditDate &&
+      this.$subscription.add(
+        this.nightAuditService
+          .getNightAudit(
+            this.entityId,
+            this.getQueryConfig({ auditDate: this.auditDate?.getTime() })
+          )
+          .subscribe(
+            (res) => {
+              const {
+                checkedInReservation,
+                checkedOutReservation,
+              } = new NightAudit().deserialize(res);
+              this.checkedOutReservation = checkedOutReservation;
+              this.checkedInReservation = checkedInReservation;
+              this.setLoaders(false);
+            },
+            (error) => {
+              this.setLoaders(false, true);
+            }
+          )
+      );
   }
 
+  /**
+   *
+   * @param event calling from template
+   */
   close(event?: boolean) {
     this.onClose.emit(false);
   }
@@ -173,9 +181,14 @@ export class NightAuditComponent implements OnInit {
     });
   }
 
-  setLoaders(state: boolean) {
+  setLoaders(state: boolean, isError?: boolean) {
+    const loadingState: LoadingType = {
+      loading: state,
+      error: !!isError,
+    };
+
     this.loading = state;
-    this.nightAuditService.$checkedInLoading.next(state);
-    this.nightAuditService.$checkedOutLoading.next(state);
+    this.nightAuditService.$checkedInLoading.next(loadingState);
+    this.nightAuditService.$checkedOutLoading.next(loadingState);
   }
 }

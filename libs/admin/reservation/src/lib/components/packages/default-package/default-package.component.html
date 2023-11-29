@@ -9,13 +9,13 @@
             <ng-container [ngSwitch]="paidAmenityFG.get('status').value">
               <img
                 class="progress"
-                *ngSwitchCase="'COMPLETED'"
+                *ngSwitchCase="'ACCEPT'"
                 src="assets/svg/status/success.svg"
               />
 
               <img
                 class="progress"
-                *ngSwitchCase="'FAILED'"
+                *ngSwitchCase="'REJECT'"
                 src="assets/svg/status/fail.svg"
               />
 

@@ -173,15 +173,13 @@
             <img
               class="filter-icon"
               [ngClass]="{
-                'red-filter': isNightAuditPending
+                'red-filter': isNightAuditPending,
+                'audit-disabled': !isNightAuditPending
               }"
               src="assets/svg/allocation.svg"
               alt="audit"
               [pTooltip]="isNightAuditPending ? '' : 'Night Audit'"
               tooltipPosition="bottom"
-              [ngClass]="{
-                'audit-disabled': !isNightAuditPending
-              }"
             />
             <div class="night-audit__hover" *ngIf="isNightAuditPending">
               Night Audit Pending

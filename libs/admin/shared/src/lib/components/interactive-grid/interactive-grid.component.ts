@@ -350,7 +350,14 @@ export class InteractiveGridComponent {
       };
     }
 
-    this.onChange.emit(currentData);
+    if (width !== currentWidth) {
+      this.onChange.emit(currentData);
+    } else {
+      if (!this.isResized) {
+        this.onEdit.emit({ id: currentData.id });
+      }
+      this.isResized = false;
+    }
   }
 
   columnValueCalculator(index: number, isAtNegativeIndex = false) {
@@ -435,9 +442,6 @@ export class InteractiveGridComponent {
       newEndPosIdx = newEndPosIdx + 1;
     }
 
-    console.log('newStartPosIdx', newStartPosIdx, 'startPosIdx', startPosIdx);
-    console.log('newEndPosIdx', newEndPosIdx, 'endPosIdx', endPosIdx);
-
     /**
      * Drag event is emitted even if it is not moved (on click)
      * So emit onChange if something is changed else trigger onClick event
@@ -468,6 +472,14 @@ export class InteractiveGridComponent {
       }
       this.isMoved = false;
     }
+  }
+
+  isResized = false;
+
+  onResizing(event: IResizeEvent, query: IGQueryEvent) {
+    const width = event.size.width;
+    const currentWidth = this.getWidth(query);
+    if (!this.isResized && width !== currentWidth) this.isResized = true;
   }
 
   /**
@@ -682,8 +694,6 @@ export class InteractiveGridComponent {
 
       resultData = { ...resultData, [item]: rowResult };
     }
-
-    console.log(resultData, 'resultData');
 
     return resultData;
   }

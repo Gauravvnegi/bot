@@ -181,8 +181,8 @@ export type FinancialReportResponse = {
 
 export type DailyRevenueReportData = {
   emptyCell: string;
-  gross: string;
-  adj: string;
+  // gross: string;
+  // adj: string;
   today: string;
   month: string;
   year: string;

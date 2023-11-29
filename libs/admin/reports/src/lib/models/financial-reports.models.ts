@@ -191,8 +191,8 @@ export class DailyRevenueReport
         totalPayable: totalPayable,
       };
     });
-    const grossData = value.find((item) => item.calenderType === 'GROSS') ?? {};
-    const adjData = value.find((item) => item.calenderType === 'ADJ') ?? {};
+    // const grossData = value.find((item) => item.calenderType === 'GROSS') ?? {};
+    // const adjData = value.find((item) => item.calenderType === 'ADJ') ?? {};
     const dayData = value.find((item) => item.calenderType === 'DAY') ?? {};
     const monthData = value.find((item) => item.calenderType === 'MONTH') ?? {};
     const yearData = value.find((item) => item.calenderType === 'YEAR') ?? {};
@@ -201,8 +201,8 @@ export class DailyRevenueReport
       dailyRevenueReportHeaderRows.includes(item.name)
         ? this.records.push({
             emptyCell: item.label,
-            gross: ' ',
-            adj: ' ',
+            // gross: ' ',
+            // adj: ' ',
             today: ' ',
             month: ' ',
             year: ' ',
@@ -211,8 +211,8 @@ export class DailyRevenueReport
           })
         : this.records.push({
             emptyCell: item.label,
-            gross: grossData[item.name],
-            adj: adjData[item.name],
+            // gross: grossData[item.name],
+            // adj: adjData[item.name],
             today: dayData[item.name],
             month: monthData[item.name],
             year: yearData[item.name],

@@ -191,16 +191,16 @@ export const reportsConfig: ReportsConfig = {
         label: 'Cashier',
         value: 'cashierReport',
       },
-      // {
-      //   label: 'Pay Type',
-      //   value: 'payTypeReport',
-      // },
+      {
+        label: 'Pay Type',
+        value: 'payTypeReport',
+      },
     ],
   },
   FINANCIAL_REPORTS: {
     menu: [
       {
-        label: 'Daily Summary',
+        label: 'Daily Revenue',
         value: 'dailyRevenueReport',
       },
       {
@@ -485,7 +485,7 @@ export const reportFiltersMapping: Record<
   cashierReport: ['fromDate', 'toDate', 'cashierId'],
   historyAndForecastReport: ['fromDate', 'toDate'],
   managerFlashReport: ['date'],
-  dailyRevenueReport: ['fromDate', 'toDate', 'roomType'],
+  dailyRevenueReport: ['date'],
   monthlySummaryReport: ['roomType', 'month'],
   auditRoomDetailsReport: ['date'],
   revenueReport: ['fromDate', 'toDate'],

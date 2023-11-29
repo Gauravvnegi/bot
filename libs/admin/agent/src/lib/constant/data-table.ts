@@ -32,13 +32,13 @@ export const cols: Cols[] = [
     field: 'commission',
     header: 'Commission',
     sortType: 'string',
-    width: '5%',
+    width: '6%',
   },
   {
     field: `created`,
     header: 'Created',
     sortType: 'string',
-    width: '8%',
+    width: '5%',
     searchField: ['createdString'],
   },
   {

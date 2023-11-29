@@ -249,16 +249,16 @@ export const dailyRevenueReportCols: Partial<ColsData<
     isSearchDisabled: true,
     isSortDisabled: true,
   },
-  gross: {
-    header: 'GROSS',
-    isSortDisabled: true,
-    isSearchDisabled: true,
-  },
-  adj: {
-    header: 'ADJ',
-    isSortDisabled: true,
-    isSearchDisabled: true,
-  },
+  // gross: {
+  //   header: 'GROSS',
+  //   isSortDisabled: true,
+  //   isSearchDisabled: true,
+  // },
+  // adj: {
+  //   header: 'ADJ',
+  //   isSortDisabled: true,
+  //   isSearchDisabled: true,
+  // },
   today: {
     header: 'TODAY',
     isSortDisabled: true,

@@ -262,3 +262,7 @@ input[disabled] {
   height: 40vh;
   @include flex-justify-align-center;
 }
+
+.btn-wrapper{
+  display: flex;
+}

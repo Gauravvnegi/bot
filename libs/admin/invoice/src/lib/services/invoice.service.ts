@@ -105,7 +105,8 @@ export class InvoiceService extends ApiService {
       entityId: string;
       currency: string;
     },
-    descriptionData: Option[]
+    descriptionData: Option[],
+    isPayment: boolean
   ): Partial<BillSummaryData> {
     const descriptionIds = [];
     const previousSavedIds = this.invoiceData.billItems.map((item) => item.id);
@@ -147,15 +148,27 @@ export class InvoiceService extends ApiService {
         ? `: ${invoiceFormData.paymentMethod}`
         : '';
 
-      const paymentItem: BillItem = {
-        date: moment(new Date()).unix() * 1000,
-        description: `${transactionText} Payment Received ${methodText} ${remarksText}`,
-        unit: 1,
-        creditAmount: invoiceFormData.receivedPayment,
-        transactionType: 'CREDIT',
-        debitAmount: 0,
-        id: null,
-      };
+      const paymentItem: BillItem = isPayment
+        ? {
+            date: moment(new Date()).unix() * 1000,
+            description: `${transactionText} Payment Received ${methodText} ${remarksText}`,
+            unit: 1,
+            creditAmount: invoiceFormData.receivedPayment,
+            transactionType: 'CREDIT',
+            debitAmount: 0,
+            id: null,
+          }
+        : {
+            date: moment(new Date()).unix() * 1000,
+            description: `${transactionText} Refund ${methodText} ${remarksText}`,
+            unit: 1,
+            creditAmount: 0,
+            transactionType: 'DEBIT',
+            debitAmount: invoiceFormData.receivedPayment,
+            id: null,
+            isRefund: true,
+          };
+
       billItems.push(paymentItem);
     }
 

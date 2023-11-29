@@ -274,9 +274,9 @@ export class ReservationAdrReport
           nights: data.nightCount,
           roomRent: data.reservationItemsPayment.totalRoomCharge,
 
-          adr: data.guestDetails.primaryGuest.totalNights
-            ? data.reservationItemsPayment.totalRoomCharge /
-              data.guestDetails.primaryGuest.totalNights
+          adr: data.nightCount ? data.reservationItemsPayment.totalRoomCharge /
+            data.nightCount
+            
             : data.reservationItemsPayment.totalRoomCharge,
         });
       });
@@ -333,7 +333,6 @@ export class ReservationSummaryReport
           roomType: data.stayDetails.room.type,
           room: data.stayDetails.room.roomNumber,
           createdOn: getFormattedDate(data.created),
-          rateOrPackage: undefined, //to be added in response
           checkIn: getFormattedDate(data.stayDetails.arrivalTime),
           checkOut: getFormattedDate(data.stayDetails.departureTime),
 
@@ -344,14 +343,15 @@ export class ReservationSummaryReport
             data.reservationItemsPayment.totalSgstTax,
 
           otherCharges: data.reservationItemsPayment.totalAddOnsAmount,
-          otherChargesTax:
-            data.reservationItemsPayment.totalCgstTax +
-            data.reservationItemsPayment.totalSgstTax,
+
+          otherChargesTax: data.reservationItemsPayment.totalAddOnsTax,
+          
           avgRoomRate:
             data.reservationItemsPayment.totalRoomCharge / data.nightCount ??
             data?.reservationItemsPayment?.totalRoomCharge,
 
           paidAndRevenueLoss: data?.paymentSummary?.paidAmount,
+
           balance: data?.paymentSummary?.dueAmount,
         };
       });

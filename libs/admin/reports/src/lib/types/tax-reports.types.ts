@@ -175,31 +175,3 @@ interface GuestInfo {
   documentRequired: boolean;
 }
 
-interface Journey {
-  id: string;
-  updated: number;
-  arrivalTime: number;
-  departureTime: number;
-  number: string;
-  pmsStatus: string;
-  state: string;
-  stateCompletedSteps: string;
-  stayDetails: StayDetails;
-  guestDetails: Guest;
-  paymentSummary: PaymentSummary;
-  journeysStatus: JourneyStatus;
-  stepsStatus: StepsStatus;
-  lastCompletedStep: string;
-  currentJourney: string;
-  currentJoureyStatus: string;
-  currentJourneyState: string;
-  source: string;
-  totalDueAmount: number;
-  totalPaidAmount: number;
-  totalAmount: number;
-  invoiceCode?: string;
-  nights: number;
-  pmsBooking: boolean;
-  invoicePrepareRequest: boolean;
-  vip: boolean;
-}

@@ -15,12 +15,14 @@ export type DirectAgentBillingReportData = {
 };
 
 export type DirectAgentBillingReportResponse = {
+  agent: Agent;
   id: string;
   from: number;
   to: number;
   reservationType: string;
   reservationNumber: string;
   status: string;
+  nightCount: number;
   guest: {
     id: string;
     firstName: string;
@@ -86,6 +88,48 @@ export type DirectAgentBillingReportResponse = {
     };
   }>;
 };
+
+export type Agent = {
+  id: string;
+  firstName: string;
+  lastName: string;
+  contactDetails: {
+    cc: string;
+    contactNumber: string;
+    emailId: string;
+  };
+  nationality: string;
+  address: {
+    city: string;
+    state: string;
+    countryCode: string | undefined;
+    postalCode: string;
+    addressLine1: string;
+  };
+  age: number;
+  firstStay: number;
+  lastStay: number;
+  totalNights: number;
+  company: Company;
+  code: string;
+  documentRequired: boolean;
+};
+
+interface Company {
+  id: string;
+  firstName: string;
+  contactDetails: {
+    cc: string;
+    contactNumber: string;
+    emailId: string;
+  };
+  age: number;
+  firstStay: number;
+  lastStay: number;
+  totalNights: number;
+  code: string;
+  documentRequired: boolean;
+}
 
 //directCompanyBillingReport
 export type DirectCompanyBillingReportData = {

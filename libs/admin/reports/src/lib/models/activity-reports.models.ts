@@ -21,7 +21,7 @@ export class ReservationCreatedReport
         primaryGuest: `${data.guestDetails.primaryGuest.firstName} ${data.guestDetails.primaryGuest.lastName}`,
         arrival: getFormattedDate(data.stayDetails.arrivalTime),
         departure: getFormattedDate(data.stayDetails.departureTime),
-        nights: data.guestDetails.primaryGuest.totalNights,
+        nights: data.nightCount,
         amount: data.paymentSummary.totalAmount,
       });
     });

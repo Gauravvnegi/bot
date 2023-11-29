@@ -308,10 +308,6 @@ export const reservationSummaryReportCols: ColsData<Omit<
     header: 'Created On',
     isSortDisabled: true,
   },
-  rateOrPackage: {
-    header: 'Rate/Package',
-    isSortDisabled: true,
-  },
   checkIn: {
     header: 'Check In',
     isSortDisabled: true,

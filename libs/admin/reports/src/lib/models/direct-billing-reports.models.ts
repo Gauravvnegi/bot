@@ -20,10 +20,10 @@ export class DirectAgentBillingReport
     if (value instanceof Array) {
       this.records = value.map((item) => {
         return {
-          agentCode: undefined, // to be added in response
-          agentName: undefined, // to be added in response
+          agentCode: item?.agent?.code,
+          agentName: item?.agent && `${item?.agent?.firstName} ${item?.agent?.lastName}`,
           bookingNo: item.reservationNumber,
-          guestName: `${item.guest.firstName} ${item.guest.lastName}`,
+          guestName: `${item.guest.firstName ?? ''} ${item.guest.lastName ?? ''}`,
           roomType: item.bookingItems[0].roomDetails.roomTypeLabel,
           roomNo: item.bookingItems[0].roomDetails.roomNumber,
           checkInDate: getFormattedDate(item.from),
@@ -60,7 +60,7 @@ export class DirectCompanyBillingReport
           roomNo: item.bookingItems[0].roomDetails.roomNumber,
           checkInDate: getFormattedDate(item.from),
           checkOutDate: getFormattedDate(item.to),
-          totalNights: item.guest.totalNights,
+          totalNights: item.nightCount,
           pax: item.bookingItems[0].occupancyDetails.maxAdult,
           totalPaidAmount: item.pricingDetails.totalPaidAmount,
           postTaxAmount: item.pricingDetails.taxAndFees,

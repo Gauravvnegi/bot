@@ -105,7 +105,26 @@ export type DepositReportResponse = {
   vip: boolean;
   pmsBooking: boolean;
   invoicePrepareRequest: InvoicePrepareRequest;
+  paymentModesAndTotalAmount: PaymentModesAndTotalAmount;
 };
+type PaymentModesAndTotalAmount = {
+  paymentMode: PaymentMode;
+  totalAmount: number;
+  lastPaymentDate: number;
+}[];
+
+export type PaymentMode =
+  | 'Cash Payment'
+  | 'Bank Transfer'
+  | 'Pay at Desk'
+  | 'Online Payment Gateway'
+  | 'Bill to Company'
+  | 'CCAVENUE'
+  | 'Paytm'
+  | 'Paypal'
+  | 'Razorpay'
+  | 'PayU'
+  | 'Stripe';
 
 export type PostingAuditReportData = {
   room: string;
@@ -395,7 +414,7 @@ interface StepsStatus {
   HEALTHDECLARATION: string;
 }
 
-interface ReservationItemsPayment {
+export type ReservationItemsPayment = {
   totalAmount: number;
   taxAmount: number;
   totalDiscount: number;
@@ -407,6 +426,8 @@ interface ReservationItemsPayment {
   totalAddOnsAmount: number;
   totalRoomCharge: number;
   totalRoomDiscount: number;
+  totalAddOnsTax: number;
+  totalAddOnsDiscount: number;
 }
 
 interface InvoicePrepareRequest {

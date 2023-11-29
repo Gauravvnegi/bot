@@ -1,3 +1,5 @@
+import { ReservationItemsPayment } from "./financial-reports.types";
+
 export type GuestHistoryData = {
   guestName: string;
   firstStayed: string;
@@ -121,7 +123,7 @@ export type GuestHistoryResponse = {
     postalCode: string;
     addressLine1: string;
   };
-  reservation: any[];
+  reservation: Reservation[];
   age: number;
   gender: string;
   firstStay: number;
@@ -249,6 +251,8 @@ interface Reservation {
   vip: boolean;
   pmsBooking: boolean;
   invoicePrepareRequest: boolean;
+  reservationItemsPayment: ReservationItemsPayment
+
 }
 
 interface ContactDetails {

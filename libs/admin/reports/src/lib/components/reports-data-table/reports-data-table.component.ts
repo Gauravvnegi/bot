@@ -51,7 +51,12 @@ export class ReportsDataTableComponent extends BaseDatatableComponent {
   isSelectable = false;
   isSearchable = false;
   minDate = new Date();
-  userList: Option[] = [];
+  userList: Option[] = [
+    {
+      label: 'All',
+      value: '',
+    },
+  ];
 
   selectedReport: ReportsMenu[number];
 

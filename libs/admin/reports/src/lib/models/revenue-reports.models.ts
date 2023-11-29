@@ -2,7 +2,6 @@ import { ReportClass, RowStyles } from '../types/reports.types';
 import {
   CashierReportData,
   CashierReportResponse,
-  PayTypeReportData,
   PayTypeReportResponse,
 } from '../types/revenue-reports.types';
 import { getFormattedDate } from './reservation-reports.models';
@@ -41,23 +40,131 @@ export class PayTypeReport
   records: PayTypeReportData[];
   deserialize(values: PayTypeReportResponse[]) {
     this.records = new Array<PayTypeReportData>();
-    this.records =
+
+    if (!values.length) return this;
+
+    const groupedData =
       values &&
-      values.map((item) => {
-        return {
-          paymentMode: item.paymentMethod,
-          paymentType: undefined,
-          employee: undefined,
-          bookingNo: item.reservationNumber,
-          folioNo: undefined,
-          guestName: `${item.reservation.guestDetails.primaryGuest.firstName} ${item.reservation.guestDetails.primaryGuest.lastName}`,
-          room: `${item.reservation.stayDetails.room.roomNumber} - ${item.reservation.stayDetails.room.type}`,
-          counter: undefined,
-          dateAndTime: getFormattedDate(item.created),
-          amount: item.amount,
-          description: undefined,
-        };
-      });
+      values.reduce((acc, curr) => {
+        const paymentMethod = curr.paymentMethod;
+
+        const payType =
+          paymentMethod === 'Cash Payment' || paymentMethod === 'Bank Transfer'
+            ? paymentMethod
+            : 'Other';
+
+        if (acc.has(payType)) {
+          acc.get(payType).push(new PayTypeReportData().deserialize(curr));
+        } else {
+          acc.set(payType, [new PayTypeReportData().deserialize(curr)]);
+        }
+
+        return acc;
+      }, new Map<string, PayTypeReportData[]>());
+ 
+    
+    // Sum of grouped data
+    groupedData.forEach((value, key) => {
+      sumGroupedData.set(
+        key,
+        value.reduce((acc, curr) => {
+          return acc + Number(curr.amount);
+        }, 0)
+      );
+    });
+
+    this.records = [
+      new PayTypeReportData().deserialize({}, 'Cash Payment'),
+      ...(groupedData.get('Cash Payment') || []),
+      new PayTypeReportData().deserialize({}, '', 'Cash Payment'),
+      new PayTypeReportData().deserialize({}, 'Bank Transfer'),
+      ...(groupedData.get('Bank Transfer') || []),
+      new PayTypeReportData().deserialize({}, '', 'Bank Transfer'),
+      new PayTypeReportData().deserialize({}, 'Other'),
+      ...(groupedData.get('Other') || []),
+      new PayTypeReportData().deserialize({}, '', 'Other'),
+    ];
     return this;
+  }
+}
+
+const sumGroupedData = new Map<string, number>();
+
+class PayTypeReportData {
+  paymentMode?: string;
+  paymentType?: string;
+  employee?: string;
+  bookingNo?: string;
+  folioNo?: string;
+  guestName?: string;
+  room?: string;
+  counter?: string;
+  dateAndTime?: string;
+  amount?: number | string;
+  description?: string;
+  isBold?: boolean;
+  isBlueBg?: boolean;
+  isBlackBg?: boolean;
+
+  deserialize(
+    input: Partial<PayTypeReportResponse>,
+    paymentMode?: string,
+    totalLabel?: string
+  ) {
+    if (totalLabel) {
+      this.setTotalLabel(totalLabel);
+    } else if (paymentMode) {
+      this.setPaymentMode(paymentMode);
+    } else {
+      this.setDetails(input);
+    }
+
+    return this;
+  }
+
+  private setTotalLabel(totalLabel: string) {
+    this.paymentMode = `Total ${totalLabel}`;
+    this.paymentType = ' ';
+    this.employee = ' ';
+    this.bookingNo = ' ';
+    this.folioNo = ' ';
+    this.guestName = ' ';
+    this.room = ' ';
+    this.counter = ' ';
+    this.dateAndTime = ' ';
+    this.amount = sumGroupedData.get(totalLabel);
+    this.description = ' ';
+    this.isBold = true;
+    this.isBlackBg = true;
+  }
+
+  private setPaymentMode(paymentMode: string) {
+    this.paymentMode = paymentMode;
+    this.paymentType = ' ';
+    this.employee = ' ';
+    this.bookingNo = ' ';
+    this.folioNo = ' ';
+    this.guestName = ' ';
+    this.room = ' ';
+    this.counter = ' ';
+    this.dateAndTime = ' ';
+    this.amount = ' ';
+    this.description = ' ';
+    this.isBold = true;
+    this.isBlueBg = true;
+  }
+
+  private setDetails(input: Partial<PayTypeReportResponse>) {
+    this.paymentMode = undefined;
+    this.paymentType = input?.paymentMethod;
+    this.employee = undefined;
+    this.bookingNo = input?.reservationNumber;
+    this.folioNo = input?.reservation?.invoiceCode;
+    this.guestName = `${input?.reservation?.guestDetails?.primaryGuest?.firstName} ${input?.reservation?.guestDetails?.primaryGuest?.lastName}`;
+    this.room = `${input?.reservation?.stayDetails?.room?.roomNumber} - ${input?.reservation?.stayDetails?.room?.type}`;
+    this.counter = undefined;
+    this.dateAndTime = input.created && getFormattedDate(input?.created);
+    this.amount = input?.amount;
+    this.description = undefined;
   }
 }

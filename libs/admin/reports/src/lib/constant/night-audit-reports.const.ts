@@ -30,7 +30,7 @@ export const auditRoomDetailsReportRows = [
   {
     label: 'Today`s Occupied Rooms',
     noOfRooms: 'occupiedRooms',
-    noOfGuests: 'occupiedRoomGuests',
+    noOfGuests: 'totalPersonInHouse',
   },
   { label: 'Today`s Available Rooms', noOfRooms: 'todayAvailableRooms' }, //total rooms - occupied rooms
   {

@@ -1,3 +1,4 @@
+import { Location } from '@angular/common';
 import {
   Compiler,
   Component,
@@ -9,6 +10,7 @@ import {
   ViewContainerRef,
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 import {
   GlobalFilterService,
   RoutesConfigService,
@@ -23,21 +25,18 @@ import {
   Regex,
   TableService,
 } from '@hospitality-bot/admin/shared';
-import { AgentService } from '../../services/agent.service';
 import { SnackBarService } from '@hospitality-bot/shared/material';
-import { ActivatedRoute, Router } from '@angular/router';
+import { AddCompanyComponent } from 'libs/admin/company/src/lib/components/add-company/add-company.component';
+import { companyRoutes } from 'libs/admin/company/src/lib/constants/route';
+import { FormService } from 'libs/admin/members/src/lib/services/form.service';
+import CustomValidators from 'libs/admin/shared/src/lib/utils/validators';
 import { Subscription } from 'rxjs';
 import { agentRoutes } from '../../constant/routes';
-import CustomValidators from 'libs/admin/shared/src/lib/utils/validators';
-import { FormService } from 'libs/admin/members/src/lib/services/form.service';
-import { companyRoutes } from 'libs/admin/company/src/lib/constants/route';
-import { AgentFormType } from '../../types/form.types';
 import { AgentModel } from '../../models/agent.model';
-import { AgentTableResponse } from '../../types/response';
+import { AgentService } from '../../services/agent.service';
 import { commissionType } from '../../types/agent';
-import { businessSource } from 'libs/admin/company/src/lib/constants/company';
-import { Location } from '@angular/common';
-import { AddCompanyComponent } from 'libs/admin/company/src/lib/components/add-company/add-company.component';
+import { AgentFormType } from '../../types/form.types';
+import { AgentTableResponse } from '../../types/response';
 @Component({
   selector: 'hospitality-bot-add-agent',
   templateUrl: './add-agent.component.html',

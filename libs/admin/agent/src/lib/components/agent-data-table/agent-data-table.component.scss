@@ -1,6 +1,6 @@
 @import 'main';
 .badge-container {
-  display: flex;
+  display: flex !important;
   gap: 10px;
 }
 // *** over ride the table style ***

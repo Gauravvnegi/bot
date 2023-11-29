@@ -1,8 +1,10 @@
-<div
-  [formGroup]="tableFG"
->
-  <hospitality-bot-navigation-header [heading]="tableName" [routes]="navRoutes" [isBack]="false">
-   <ng-container [ngTemplateOutlet]="search" #searchComponent></ng-container>
+<div [formGroup]="tableFG">
+  <hospitality-bot-navigation-header
+    [heading]="tableName"
+    [routes]="navRoutes"
+    [isBack]="false"
+  >
+    <ng-container [ngTemplateOutlet]="search" #searchComponent></ng-container>
     <hospitality-bot-button
       label="+ Add agent"
       [routerLink]="routes.addAgent.route"
@@ -16,7 +18,6 @@
       [isDisable]="values.length === 0"
     ></hospitality-bot-export-list>
   </hospitality-bot-navigation-header>
-
 </div>
 
 <p-table
@@ -138,8 +139,16 @@
       <td>
         <div class="cell-content" *ngIf="rowData.commission; else emptyCell">
           <div class="primary-text">
-            {{ rowData.commission
-            }}{{ rowData.commissionType === 'COMMISSION' ? '/-' : '%' }}
+            <span
+              *ngIf="
+                rowData.commissionType === commissionType.COMMISSION;
+                else currencyText
+              "
+              >{{ rowData.commission }}%</span
+            >
+            <ng-template #currencyText>{{
+              rowData.commission | currency: 'INR'
+            }}</ng-template>
           </div>
         </div>
       </td>

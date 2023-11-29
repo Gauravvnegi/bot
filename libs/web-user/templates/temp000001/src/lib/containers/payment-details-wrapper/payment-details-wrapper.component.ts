@@ -97,13 +97,18 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
       .subscribe((data) => {
         const gatewayDetails = data?.paymentConfiguration?.map((gateway) => ({
           gatewayType: gateway?.type,
-          imgSrc:
-            // gateway?.imgSrc ||
-            gateway?.type === 'CCAVENUE'
-              ? 'https://nyc3.digitaloceanspaces.com/botfiles/bot/payment_method/ccavenue.png'
-              : 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/PayU.svg/1200px-PayU.svg.png',
+          imgSrc: gateway?.imageUrl,
+          //  gateway?.type === 'CCAVENUE'
+          //   ? 'https://nyc3.digitaloceanspaces.com/botfiles/bot/payment_method/ccavenue.png'
+          //   : 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/PayU.svg/1200px-PayU.svg.png',
           payload: {
             redirectUrl: `${environment.host_url}${this.router.url}&entity=payment`,
+            ...(gateway?.type === 'AIRPAY'
+              ? {
+                  currency: '356',
+                  isocurrency: 'INR',
+                }
+              : {}),
           },
         }));
 
@@ -155,7 +160,9 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
 
   get isSubmitDisabled() {
     if (!this.matTab) return;
-    const TAB_INDEX = this.matTab['_selectedIndex'];
+    let TAB_INDEX = this.matTab['_selectedIndex'];
+    console.log(this.hotelPaymentConfig.paymentHeaders, TAB_INDEX, 'TAB_INDEX');
+    if (TAB_INDEX === -1) TAB_INDEX = 0;
     return (
       this.hotelPaymentConfig.paymentHeaders[TAB_INDEX].type ===
         paymentEnum.PaymentHeaders.payNow &&

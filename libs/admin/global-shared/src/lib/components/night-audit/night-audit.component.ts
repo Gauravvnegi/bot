@@ -63,7 +63,7 @@ export class NightAuditComponent implements OnInit {
   }
 
   // TODO: Need to do common with night audit summary
-  checkAudit(event?) {
+  checkAudit(event?, onlyDayAuditCheck?) {
     // For Status Change
     if (typeof event == 'object') {
       this.initData();
@@ -85,8 +85,9 @@ export class NightAuditComponent implements OnInit {
             if (res?.length) {
               const currentAuditDate = res.shift();
               this.auditDate = new Date(currentAuditDate);
-              this.initData();
-            } else {
+              if (!onlyDayAuditCheck) this.initData();
+              else this.setLoaders(false);
+            } else if (!onlyDayAuditCheck) {
               this.checkedOutReservation = [];
               this.checkedInReservation = [];
               this.setLoaders(false);
@@ -188,6 +189,7 @@ export class NightAuditComponent implements OnInit {
     };
 
     this.loading = state;
+    this.nightAuditService.$manageLoggedInLoading.next(loadingState);
     this.nightAuditService.$checkedInLoading.next(loadingState);
     this.nightAuditService.$checkedOutLoading.next(loadingState);
   }

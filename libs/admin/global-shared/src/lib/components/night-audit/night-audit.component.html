@@ -16,6 +16,7 @@
         class="audit-content"
         [activeIndex]="activeStep"
         [stepList]="itemList"
+        (onCheckAudit)="checkAudit(true, true)"
         (indexChange)="activeStep = $event"
       ></hospitality-bot-manage-logged-users>
       <hospitality-bot-checkin-reservations
@@ -55,7 +56,7 @@
 <ng-template #sidebarHeader>
   <div class="sidebar-slide-header">
     <span class="title">{{ pageTitle }}</span>
-    <span class="center-item" *ngIf="auditDate && activeStep !== 0">
+    <span class="center-item" *ngIf="auditDate">
       <img src="assets/svg/calendar-dark.svg" alt="date" class="white-icon" />
       {{ auditDate | date: 'dd/MM/yyyy' }}</span
     >

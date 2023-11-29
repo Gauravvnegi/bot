@@ -169,6 +169,14 @@
         rowIdx: rowIdx
       })
     "
+    (rzResizing)="
+      onResizing($event, {
+        rowValue: row,
+        colValue: col,
+        colIdx: colIdx,
+        rowIdx: rowIdx
+      })
+    "
     (endOffset)="
       handleDrag($event, {
         rowValue: row,

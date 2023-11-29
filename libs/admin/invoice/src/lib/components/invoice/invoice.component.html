@@ -356,14 +356,6 @@
                   (onClick)="handleMiscellaneous()"
                   [disabled]="isInvoiceDisabled"
                 ></hospitality-bot-button>
-                <hospitality-bot-button
-                  *ngIf="inputControl.dueAmount.value < 0"
-                  label="+ Add Refund"
-                  variant="text"
-                  [severity]="'reset'"
-                  (onClick)="handleRefund()"
-                  [disabled]="isInvoiceDisabled"
-                ></hospitality-bot-button>
               </div>
             </ng-template>
           </p-table>
@@ -424,16 +416,26 @@
         <div class="header">
           Payment Details
         </div>
-        <hospitality-bot-button
-          variant="text"
-          [severity]="addPayment ? 'reset' : 'primary'"
-          [label]="addPayment ? 'Remove Payment' : '+Add Payment'"
-          [disabled]="isInvoiceDisabled"
-          (onClick)="onAddPaymentDetails()"
-        ></hospitality-bot-button>
+        <div class="btn-wrapper">
+          <hospitality-bot-button
+            variant="text"
+            [severity]="addPayment ? 'reset' : 'primary'"
+            [label]="addPayment ? 'Remove Payment' : '+ Add Payment'"
+            [disabled]="isInvoiceDisabled"
+            (onClick)="onAddPaymentDetails()"
+          ></hospitality-bot-button>
+          <hospitality-bot-button
+            *ngIf="inputControl.dueAmount.value < 0"
+            [label]="addRefund ? 'Remove Refund' : '+ Add Refund'"
+            variant="text"
+            [severity]="addRefund ? 'reset' : 'primary'"
+            (onClick)="onAddRefund()"
+            [disabled]="isInvoiceDisabled"
+          ></hospitality-bot-button>
+        </div>
       </div>
 
-      <ng-container *ngIf="addPayment">
+      <ng-container *ngIf="addPayment || addRefund">
         <hospitality-bot-input
           class="half-width"
           controlName="cashierName"

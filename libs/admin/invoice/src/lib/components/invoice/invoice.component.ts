@@ -92,6 +92,7 @@ export class InvoiceComponent implements OnInit {
 
   addGST = false;
   addPayment = false;
+  addRefund = false;
 
   isInvoiceGenerated = false;
   pmsBooking = false;
@@ -854,7 +855,8 @@ export class InvoiceComponent implements OnInit {
         guestId: this.guestId,
         currency: 'INR',
       },
-      this.defaultDescriptionOptions
+      this.defaultDescriptionOptions,
+      this.addPayment
     );
 
     this.$subscription.add(
@@ -876,6 +878,7 @@ export class InvoiceComponent implements OnInit {
    */
   refreshData() {
     this.addPayment = false;
+    this.addRefund = false;
     this.paymentValidation(false);
     this.tableFormArray.clear();
     this.tableFormArray.updateValueAndValidity();
@@ -921,6 +924,7 @@ export class InvoiceComponent implements OnInit {
   }
 
   onAddPaymentDetails() {
+    this.addRefund = false;
     if (this.addPayment) {
       this.removeDetails(
         'Remove Payment Details',
@@ -932,6 +936,23 @@ export class InvoiceComponent implements OnInit {
       );
     } else {
       this.addPayment = true;
+      this.paymentValidation(true);
+    }
+  }
+
+  onAddRefund() {
+    this.addPayment = false;
+    if (this.addRefund) {
+      this.removeDetails(
+        'Remove Payment Details',
+        'Are you sure you want to remove payment details?',
+        () => {
+          this.addRefund = false;
+          this.paymentValidation(false);
+        }
+      );
+    } else {
+      this.addRefund = true;
       this.paymentValidation(true);
     }
   }

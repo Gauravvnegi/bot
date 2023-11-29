@@ -25,6 +25,7 @@ export class ManageLoggedUsersComponent implements OnInit {
   title = title;
   cols = cols;
   loading = false;
+  hasError = false;
   actionConfig: ActionConfigType;
   usersLoggedOut: boolean;
   isTimerStart = false;
@@ -33,6 +34,7 @@ export class ManageLoggedUsersComponent implements OnInit {
   @Input() activeIndex = 0;
   @Input() stepList: MenuItem[];
   @Output() indexChange = new EventEmitter<number>();
+  @Output() onCheckAudit = new EventEmitter<boolean>();
 
   $subscription = new Subscription();
 
@@ -44,8 +46,10 @@ export class ManageLoggedUsersComponent implements OnInit {
 
   ngOnInit(): void {
     this.entityId = this.globalFilterService.entityId;
+    this.listenLoading();
     this.initAction(); // TODO: Replace with @function initActionConfig();, after forcefully loggin implement
     this.initTable();
+    this.checkAudit();
   }
 
   /**
@@ -67,6 +71,7 @@ export class ManageLoggedUsersComponent implements OnInit {
         ? 'Forcefully Logout Users >'
         : 'Next',
       preSeverity: 'primary',
+      postDisabled: this.hasError,
     };
   }
 
@@ -89,8 +94,23 @@ export class ManageLoggedUsersComponent implements OnInit {
     );
   }
 
+  checkAudit() {
+    this.onCheckAudit.emit(true);
+  }
+
+  listenLoading() {
+    this.$subscription.add(
+      this.nightAuditService.$manageLoggedInLoading.subscribe((res) => {
+        this.loading = res.loading;
+        this.hasError = res.error;
+        this.initActionConfig('Next');
+      })
+    );
+  }
+
   reloadTable() {
     this.initTable();
+    this.checkAudit();
   }
 
   handleNext() {

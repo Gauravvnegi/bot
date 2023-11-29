@@ -15,7 +15,12 @@ import { AgentService } from '../../services/agent.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { agentRoutes } from '../../constant/routes';
 import * as FileSaver from 'file-saver';
-import { MemberSortTypes, QueryConfig, SortingOrder } from '../../types/agent';
+import {
+  MemberSortTypes,
+  QueryConfig,
+  SortingOrder,
+  commissionType,
+} from '../../types/agent';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { AgentModel, AgentResponseModel } from '../../models/agent.model';
 import { LazyLoadEvent } from 'primeng/api';
@@ -34,6 +39,7 @@ import { RoutesConfigService } from '@hospitality-bot/admin/core/theme';
 })
 export class AgentDataTableComponent extends BaseDatatableComponent
   implements OnInit, OnDestroy {
+  readonly commissionType = commissionType;
   readonly routes = { ...agentRoutes, ...companyRoutes };
 
   entityId: string;

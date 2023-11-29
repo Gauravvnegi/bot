@@ -102,7 +102,7 @@ export class AgentModel {
       iataNo: input.iataNumber,
       email: contact.emailId,
       phoneNo: `${contact.cc}-${contact.contactNumber}`,
-      commissionType: input.priceModifier,
+      commissionType: input.priceModifierType,
       company: input.company?.firstName,
       commission: input.priceModifierValue,
       status: input.status,

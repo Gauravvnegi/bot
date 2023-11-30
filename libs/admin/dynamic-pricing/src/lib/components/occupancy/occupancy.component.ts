@@ -114,7 +114,7 @@ export class OccupancyComponent implements OnInit {
   seasonStatusChange(status, seasonIndex: number) {
     const control = this.dynamicPricingControl.occupancyFA.at(
       seasonIndex
-    ) as FormGroup;
+    ) as FormGroup; 
     if (control.get('id').value) {
       this.loading = true;
       this.$subscription.add(
@@ -128,7 +128,7 @@ export class OccupancyComponent implements OnInit {
           .subscribe(
             (res) => {
               this.snackbarService.openSnackBarAsText(
-                `Status Updated Successfully.`,
+                `Season '${control.controls['name'].value}' Status Updated Successfully.`,
                 '',
                 { panelClass: 'success' }
               );

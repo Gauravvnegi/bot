@@ -46,14 +46,13 @@ export class DynamicPricingFactory {
       status,
       hotelConfig,
       hotelId,
-    } = form.controls;
-
+    } = form.controls; 
     const isHotelType = configCategory.value === 'HOTEL';
     return {
       status: status.value ? 'ACTIVE' : 'INACTIVE',
       name: name.value,
-      fromDate: getDateTimeInEpoch(fromDate.value).time,
-      toDate: getDateTimeInEpoch(toDate.value).time,
+      fromDate: getDateTimeInEpoch({time:fromDate.value,isHourseReset:true}).time,
+      toDate: getDateTimeInEpoch({time:toDate.value,isHourseReset:true}).time,
       daysIncluded: selectedDays.value.map((day: string) => day.toUpperCase()),
       configItems: isHotelType
         ? [

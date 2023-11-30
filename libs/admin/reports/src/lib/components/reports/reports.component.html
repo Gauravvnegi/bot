@@ -16,7 +16,7 @@
   </div>
   <div
     class="menu-option"
-    [ngClass]="{ selected: reportOption.value === selectedReport.value }"
+    [ngClass]="{ selected: reportOption.value === selectedReport?.value }"
     *ngFor="let reportOption of reportsMenuOptions"
     (click)="selectReport(reportOption)"
   >

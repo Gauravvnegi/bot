@@ -1,3 +1,5 @@
+import { ReservationItemsPayment } from './financial-reports.types';
+
 export type MonthlyTaxReportData = {
   taxName: string;
   taxCategory: string;
@@ -76,6 +78,7 @@ export type LodgingTaxReportResponse = {
   pmsBooking: boolean;
   invoicePrepareRequest: boolean;
   vip: boolean;
+  reservationItemsPayment: ReservationItemsPayment;
 };
 interface GuestDetails {
   id: string;
@@ -174,4 +177,3 @@ interface GuestInfo {
   totalNights: number;
   documentRequired: boolean;
 }
-

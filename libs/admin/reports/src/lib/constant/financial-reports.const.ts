@@ -227,14 +227,14 @@ export const monthlySummaryReportCols: Partial<ColsData<
     header: 'Total Taxes',
     isSortDisabled: true,
   },
-  directSales: {
-    header: 'Direct Sales',
-    isSortDisabled: true,
-  },
-  directSaleTax: {
-    header: 'Direct Sale Tax',
-    isSortDisabled: true,
-  },
+  // directSales: {
+  //   header: 'Direct Sales',         //to be added in future
+  //   isSortDisabled: true,
+  // },
+  // directSaleTax: {
+  //   header: 'Direct Sale Tax',
+  //   isSortDisabled: true,
+  // },
   grossTotal: {
     header: 'Gross Total',
     isSortDisabled: true,
@@ -282,13 +282,13 @@ export const dailyRevenueReportRows = [
   { label: 'Late Check Out', name: 'lateCheckOut' },
   { label: 'Early Check In', name: 'earlyCheckIn' },
   { label: 'Early Check Out', name: 'earlyCheckOut' },
-  { label: 'Room Charge(Tax Exempt)', name: 'roomCharge' },
-  { label: 'Extra Bed', name: 'extraBed' },
+  // { label: 'Room Charge(Tax Exempt)', name: 'roomCharge' },
+  // { label: 'Extra Bed', name: 'extraBed' },
   { label: 'Total', name: 'totalRoom' }, //map total of room
-  { label: 'Room others', name: 'roomOthers' },
-  { label: 'Cancellation', name: 'cancellation' },
-  { label: 'No Show', name: 'noShow' },
-  { label: 'Total Others', name: 'totalOthers' },
+  // { label: 'Room others', name: 'roomOthers' },
+  // { label: 'Cancellation', name: 'cancellation' },
+  // { label: 'No Show', name: 'noShow' },
+  // { label: 'Total Others', name: 'totalOthers' },
   { label: 'Add Ons', name: 'addOns' }, //addons header
   { label: 'Add on', name: 'inclusionOrAddOn' },
   { label: 'Total Revenue', name: 'totalRevenue' },

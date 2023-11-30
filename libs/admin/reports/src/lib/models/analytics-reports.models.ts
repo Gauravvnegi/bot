@@ -113,7 +113,7 @@ export class BusinessAnalysisReport
             nights: value[row.label].nights,
             occupancy: value[row.label].occupancyPercent,
             pax: value[row.label].pax,
-            roomRevenue: value[row.label].roomRevenue,
+            roomRevenue: value[row.label].roomRevenue,//to be confirmed form backend
             revenue: value[row.label].revenuePercent,
             arrOrAgr: value[row.label].arr,
             arp: value[row.label].arp,

@@ -1,3 +1,5 @@
+import { PaymentModesAndTotalAmount } from "./financial-reports.types";
+
 export type FolioListReportData = {
   bookingNo: string;
   folioNo: string;
@@ -45,6 +47,7 @@ export type FolioListReportResponse = {
   vip: boolean;
   pmsBooking: boolean;
   invoicePrepareRequest: boolean;
+  paymentModesAndTotalAmount: PaymentModesAndTotalAmount;
 };
 
 interface ContactDetails {

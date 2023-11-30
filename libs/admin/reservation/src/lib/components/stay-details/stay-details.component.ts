@@ -13,7 +13,23 @@ export class StayDetailsComponent implements OnInit {
   @Input() parentForm: FormGroup;
   @Output() addFGEvent = new EventEmitter();
   @Output() isGuestInfoPatched = new EventEmitter();
-  @Input() guestReservations;
+
+  _guestReservation: any[];
+  @Input() set guestReservations(value: any[]) {
+    //sort data according to booking sub type
+    this._guestReservation = value.sort((a, b) => {
+      const bookingTypeWeights = {
+        PRESENT: 1,
+        UPCOMING: 2,
+        PAST: 3,
+      };
+      const weightA = bookingTypeWeights[a.subType];
+      const weightB = bookingTypeWeights[b.subType];
+
+      return weightA - weightB;
+    });
+  }
+
   @Input() bookingNumber: string;
   @Input() feedbackId: string;
   @Input() colorMap;

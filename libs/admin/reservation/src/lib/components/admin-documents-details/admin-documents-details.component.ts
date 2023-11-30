@@ -339,6 +339,7 @@ export class AdminDocumentsDetailsComponent implements OnInit {
               docPageControl.setValue(res.fileDownloadUrl);
               this.uploadingDoc = '';
               this.updatedDocGuest.push(guestID);
+              this.saveDocument();
             },
             ({ error }) => {
               this.snackbarService.openSnackBarAsText(error?.message);
@@ -363,7 +364,7 @@ export class AdminDocumentsDetailsComponent implements OnInit {
         this.parentForm.get('reservationDetails').get('bookingId').value,
         data
       )
-    .subscribe(
+      .subscribe(
         (response) => {
           this.selectedGuestGroup
             .get('status')

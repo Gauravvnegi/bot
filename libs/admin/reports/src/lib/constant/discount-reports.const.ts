@@ -1,17 +1,19 @@
 import { DiscountAllowanceReportData } from '../types/discount-reports.types';
 import { ColsData } from '../types/reports.types';
 
-export const discountAllowanceReportCols: ColsData<DiscountAllowanceReportData> = {
+export const discountAllowanceReportCols: Partial<ColsData<
+  DiscountAllowanceReportData
+>> = {
   date: {
     header: 'Date',
     isSortDisabled: true,
     isSearchDisabled: true,
   },
-  group: {
-    header: 'Group',
-    isSortDisabled: true,
-    isSearchDisabled: true,
-  },
+  // group: {
+  //   header: 'Group',
+  //   isSortDisabled: true,
+  //   isSearchDisabled: true,
+  // },
   res: {
     header: 'Res#',
     isSortDisabled: true,
@@ -27,11 +29,11 @@ export const discountAllowanceReportCols: ColsData<DiscountAllowanceReportData> 
     isSortDisabled: true,
     isSearchDisabled: true,
   },
-  reasonForDiscount: {
-    header: 'Reason For Discount',
-    isSortDisabled: true,
-    isSearchDisabled: true,
-  },
+  // reasonForDiscount: {
+  //   header: 'Reason For Discount',
+  //   isSortDisabled: true,
+  //   isSearchDisabled: true,
+  // },
   directDiscount: {
     header: 'Direct Discount',
     isSortDisabled: true,

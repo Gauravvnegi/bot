@@ -48,13 +48,13 @@ export class DynamicPricingFactory {
     } = form.controls;
 
     const isHotelType = configCategory.value === 'HOTEL';
+
     return {
       status: status.value ? 'ACTIVE' : 'INACTIVE',
       name: name.value,
       fromDate: new Date(fromDate.value).getTime(),
       toDate: new Date(toDate.value).getTime(),
       daysIncluded: selectedDays.value.map((day: string) => day.toUpperCase()),
-
       configItems: isHotelType
         ? [
             {
@@ -86,6 +86,7 @@ export class DynamicPricingFactory {
   static getChangedProperties(formGroup: FormGroup, type: ConfigType) {
     let requestData: DynamicPricingUpdateRequestType = {};
     let removedRulesIds = [];
+   
     const otherDirtyMapper = (
       currentControl,
       name: OccupancyFormControlsType

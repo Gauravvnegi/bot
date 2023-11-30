@@ -12,7 +12,7 @@
     [stepList]="itemList"
     (onActive)="onActive($event)"
   ></hospitality-bot-stepper>
-  <div class="content">
+  <div class="content"> 
     <ng-container [ngSwitch]="activeStep">
       <hospitality-bot-occupancy
         *ngSwitchCase="0"

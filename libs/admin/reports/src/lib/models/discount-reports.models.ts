@@ -18,7 +18,9 @@ export class DiscountAllowanceReport
           date: getFormattedDate(reservationData.created),
           group: undefined, //to be added in response
           res: reservationData.number,
-          createdBy: undefined, //to be added in response
+          createdBy:
+            reservationData?.user?.firstName &&
+            `${reservationData?.user?.firstName} ${reservationData?.user?.lastName}`, //to be added in response
           guestName: `${reservationData.guestDetails.primaryGuest.firstName} ${reservationData.guestDetails.primaryGuest.lastName}`,
           reasonForDiscount: undefined, //to be added in response
           directDiscount: reservationData.paymentSummary.totalDiscount,

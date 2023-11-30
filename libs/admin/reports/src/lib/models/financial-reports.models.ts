@@ -129,10 +129,7 @@ export class DepositReport
   }
 }
 
-export function getPaymentMethodAmount(
-  item: any,
-  paymentMode: PaymentMode
-) {
+export function getPaymentMethodAmount(item: any, paymentMode: PaymentMode) {
   return (
     item?.paymentModesAndTotalAmount?.find(
       (payment) => payment.paymentMode === paymentMode
@@ -152,7 +149,9 @@ export class PostingAuditReport
         return {
           room: `${item?.stayDetails?.room.roomNumber} ${item?.stayDetails?.room.type}`,
           name: `${item?.guestDetails?.primaryGuest?.firstName} ${item?.guestDetails?.primaryGuest?.lastName}`,
-          user: undefined,
+          user:
+            item?.user?.firstName &&
+            `${item?.user.firstName} ${item?.user?.lastName}`,
           trxAmount: item?.paymentSummary?.totalAmount,
           baseAmount: item?.reservationItemsPayment?.totalRoomCharge,
           cgst: item?.reservationItemsPayment?.totalCgstTax,

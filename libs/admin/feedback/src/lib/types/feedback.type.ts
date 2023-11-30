@@ -49,7 +49,6 @@ export type FeedbackStatusType =
   | 'HIGHPOTENTIAL'
   | 'HIGHRISK'
   | 'TODO'
-  | 'INPROGRESS'
+  | 'IN_PROGRESS'
   | 'RESOLVED'
   | 'NOACTION';
-  

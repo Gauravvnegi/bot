@@ -21,8 +21,8 @@ export class FeedbackStatusFormComponent implements OnInit {
   }
 
   statusType() {
-    if (this.rowDataStatus === 'TODO') this.type = 'INPROGRESS';
-    else if (this.rowDataStatus === 'INPROGRESS') this.type = 'RESOLVED';
+    if (this.rowDataStatus === 'TODO') this.type = 'IN_PROGRESS';
+    else if (this.rowDataStatus === 'IN_PROGRESS') this.type = 'RESOLVED';
     else this.type = this.rowDataStatus;
   }
 

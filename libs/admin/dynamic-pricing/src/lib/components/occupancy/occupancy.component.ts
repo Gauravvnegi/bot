@@ -145,7 +145,7 @@ export class OccupancyComponent implements OnInit {
     }
   }
 
-  add(type: ControlTypes, form?: FormGroup | FormArray) {
+  add(type: ControlTypes, form?: FormGroup | FormArray,onClickAddition?:boolean) {
     switch (type) {
       case 'season':
         this.dynamicPricingControl.occupancyFA.push(this.seasonFG);
@@ -158,6 +158,7 @@ export class OccupancyComponent implements OnInit {
         this.listenOccupancy(rulesFA, roomStrikeAmount.value);
         break;
       case 'hotel-occupancy':
+        onClickAddition && form.markAsDirty();
         (form as FormArray).controls.push(this.seasonOccupancyFG);
         this.listenOccupancy(form as FormArray);
         break;
@@ -355,12 +356,12 @@ export class OccupancyComponent implements OnInit {
     ruleFG: FormGroup,
     pointer?: { previous: FormGroup; next: FormGroup },
     baseAmount?: number
-  ) => {
+  ) => { 
     const { discount, rate, start, end, basePrice } = ruleFG.controls;
     if (!baseAmount) {
       baseAmount = +basePrice.value;
     }
-
+    
     discount.valueChanges.subscribe((percentage) => {
       const totalRate = (parseInt(percentage) * baseAmount) / 100 + baseAmount;
       rate.patchValue(totalRate.toFixed(2), { emitEvent: false });
@@ -439,14 +440,14 @@ export class OccupancyComponent implements OnInit {
       form,
       'OCCUPANCY',
       form.get('type').value
-    );
-
+    ); 
     if (!Object.keys(requestedData).length) {
       this.snackbarService.openSnackBarAsText(
         'Please make changes for the new updates.'
       );
       return;
     }
+
 
     const requestFunction =
       Revenue[type.value] === Revenue['add']

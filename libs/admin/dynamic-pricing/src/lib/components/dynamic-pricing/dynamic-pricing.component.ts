@@ -52,7 +52,7 @@ export class DynamicPricingComponent implements OnInit {
     private fb: FormBuilder,
     private globalFilter: GlobalFilterService,
     private snackbarService: SnackBarService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.entityId = this.globalFilter.entityId;

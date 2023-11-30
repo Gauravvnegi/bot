@@ -17,7 +17,7 @@ import { feedback } from '../../constants/feedback';
 export class FeedbackNotesComponent implements OnInit {
   @Output() onNotesClosed = new EventEmitter();
   statusOptions = [
-    { label: 'In-Progress', value: 'INPROGRESS' },
+    { label: 'In-Progress', value: 'IN_PROGRESS' },
     { label: 'Closed', value: 'CLOSED' },
   ];
   notesFG: FormGroup;

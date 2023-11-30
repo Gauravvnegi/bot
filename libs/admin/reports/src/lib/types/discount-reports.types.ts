@@ -1,5 +1,5 @@
-import { ReservationResponseData } from "libs/admin/shared/src/lib/types/response";
-import { ReservationReportData } from "./reservation-reports.types";
+import { ReservationResponseData } from 'libs/admin/shared/src/lib/types/response';
+import { ReservationReportData, User } from './reservation-reports.types';
 
 export type DiscountAllowanceReportData = {
   date: string;
@@ -13,4 +13,6 @@ export type DiscountAllowanceReportData = {
   total: number;
 };
 
-export type DiscountAllowanceReportResponse = ReservationResponseData;
+export type DiscountAllowanceReportResponse = ReservationResponseData & {
+  user: User;
+};

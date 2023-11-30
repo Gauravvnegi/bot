@@ -63,6 +63,7 @@ import {
 import { AddDiscountComponent } from '../add-discount/add-discount.component';
 import { AddRefundComponent } from '../add-refund/add-refund.component';
 import { MenuItemListResponse } from 'libs/admin/all-outlets/src/lib/types/outlet';
+import { DetailsComponent } from '@hospitality-bot/admin/reservation';
 
 @Component({
   selector: 'hospitality-bot-invoice',
@@ -1304,6 +1305,31 @@ export class InvoiceComponent implements OnInit {
     });
 
     this.tableFormArray.at(entryIdx).patchValue(data);
+  }
+
+  viewDetails() {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = true;
+    dialogConfig.width = '100%';
+    const detailCompRef = this.modalService.openDialog(
+      DetailsComponent,
+      dialogConfig
+    );
+
+    detailCompRef.componentInstance.bookingId = this.reservationId;
+    detailCompRef.componentInstance.tabKey = 'guest_details';
+    this.$subscription.add(
+      detailCompRef.componentInstance.onDetailsClose.subscribe((res) => {
+        detailCompRef.close();
+      })
+    );
+  }
+  editReservation() {
+    this.routesConfigService.navigate({
+      subModuleName: ModuleNames.ADD_RESERVATION,
+      additionalPath: `edit-reservation/${this.reservationId}`,
+      queryParams: { entityId: this.entityId },
+    });
   }
 
   handleRefund() {

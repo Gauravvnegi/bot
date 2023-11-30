@@ -291,6 +291,23 @@ export class AddAgentComponent implements OnInit {
     }
   }
 
+  companyChange(event) {
+    if (event) {
+      this.selectedMember = {
+        label: event.label ? event.label : event.firstName,
+        value: event.value ? event.value : event.id,
+      };
+      event.marketSegment &&
+        this.agentForm
+          .get('marketSegment')
+          .patchValue(event.marketSegment, { emitEvent: false });
+      event.businessSource &&
+        this.agentForm
+          .get('marketSegment')
+          .patchValue(event.businessSource, { emitEvent: false });
+    }
+  }
+
   saveForm() {
     this.formService.companyRedirectRoute = '/pages/members/agent';
     this.route.snapshot.url.forEach((segment) => {

@@ -159,8 +159,9 @@
           dataModel: {
             key: 'records',
             values: {
-              label: ['firstName', 'lastName'],
-              value: 'id'
+              label: 'company.firstName',
+              value: 'id',
+              extras: ['firstName', 'lastName']
             }
           },
           queryParams: { type: 'AGENT' },
@@ -168,8 +169,9 @@
           searchModel: {
             response: true,
             values: {
-              label: ['firstName', 'lastName'],
-              value: 'id'
+              label: 'company.firstName',
+              value: 'id',
+              extras: ['firstName', 'lastName']
             }
           },
           searchQueryParams: { type: 'AGENT' }

@@ -265,7 +265,7 @@ export class InvoiceComponent implements OnInit {
             arrivalDate: res.arrivalTime,
             departureDate: res.departureTime,
           });
-          this.invoiceService.isPrintRate.next(res?.printRate);
+          this.invoiceService.isPrintRate.next(res?.paymentSummary?.printRate);
           this.guestId = guestData.id;
           this.bookingNumber = res.number;
           this.invoicePrepareRequest = res.invoicePrepareRequest;

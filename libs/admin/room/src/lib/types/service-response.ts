@@ -97,6 +97,7 @@ export type RatePlanRes = {
   currency?: string;
   isBase: boolean;
   description?: string;
+  basePrice?: number;
   discount?: {
     type: string;
     value: number;

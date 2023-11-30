@@ -96,6 +96,16 @@ export class RoomTypeList {
     this.entityTypeCounts = input.entityTypeCounts;
     this.totalRecord = input.total;
 
+    this.records.sort((a, b) => {
+      // Sort by isBaseRoomType in descending order (true comes first)
+      if (a.isBaseRoomType && !b.isBaseRoomType) {
+        return -1;
+      } else if (!a.isBaseRoomType && b.isBaseRoomType) {
+        return 1;
+      } else {
+        return 0;
+      }
+    });
     return this;
   }
 }
@@ -132,8 +142,11 @@ export class RoomType {
       input.originalPrice ??
       input.pricingDetails?.base;
     this.currency = input.currency ?? '';
-    this.ratePlans = input.ratePlans;
-    this.isBaseRoomType = input.isBaseRoomType ?? null; // TODO: need to add from BE
+    this.ratePlans = input.ratePlans.map((item) => ({
+      ...item,
+      basePrice: input?.pricingDetails?.base ?? 0,
+    }));
+    this.isBaseRoomType = input.isBaseRoomType ?? false;
     this.pricingDetails = new PricingDetails().deserialize(input);
     return this;
   }

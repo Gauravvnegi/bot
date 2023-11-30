@@ -244,7 +244,10 @@ export class DetailsComponent implements OnInit, OnDestroy {
               response,
               this.globalFilterService.timezone
             );
-            this.isPrintRate = response.printRate !== undefined ? response.printRate : true;
+            this.isPrintRate =
+              response.paymnetSummary.printRate !== undefined
+                ? response.printRate
+                : true;
             if (initGuestDetails) {
               this.bookingNumber = response.number;
               this.guestId = response.guestDetails.primaryGuest.id;

@@ -269,6 +269,7 @@ export enum ReservationStatusType {
   CONFIRMED = 'CONFIRMED',
   DRAFT = 'DRAFT',
   CANCELED = 'CANCELED',
+  REINSTATE = 'REINSTATE'
 }
 
 /* All Chips */

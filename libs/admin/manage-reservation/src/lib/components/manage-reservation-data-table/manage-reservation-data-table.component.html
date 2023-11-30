@@ -270,12 +270,13 @@
               [state]="rowData.reservationType"
               [recordSetting]="reservationStatusDetails"
               [menuOptions]="
-                rowData.reservationType === 'DRAFT' ||
                 rowData.reservationType === 'CANCELED'
+                  ? [{ label: 'Reinstate', value: 'REINSTATE' }]
+                  : rowData.reservationType === 'DRAFT'
                   ? [{ label: 'Edit Reservation', value: 'EDIT_RESERVATION' }]
                   : menuOptions
               "
-              (onMenuItemClick)="handleMenuClick($event, rowData.id)"
+              (onMenuItemClick)="handleMenuClick($event, rowData)"
             >
             </hospitality-bot-status-dropdown-toggle>
           </div>

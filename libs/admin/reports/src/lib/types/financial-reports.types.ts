@@ -107,7 +107,7 @@ export type DepositReportResponse = {
   invoicePrepareRequest: InvoicePrepareRequest;
   paymentModesAndTotalAmount: PaymentModesAndTotalAmount;
 };
-type PaymentModesAndTotalAmount = {
+export type PaymentModesAndTotalAmount = {
   paymentMode: PaymentMode;
   totalAmount: number;
   lastPaymentDate: number;
@@ -273,6 +273,7 @@ export type MonthlySummaryReportResponse = {
   totalTax: number;
   grossTotal: number;
   subTotalObject: boolean;
+  averageRateIncl: number;
 };
 
 export type DailyRevenueReportResponse<

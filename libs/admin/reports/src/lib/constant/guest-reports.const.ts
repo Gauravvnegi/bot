@@ -64,7 +64,9 @@ export const guestHistoryCols: ColsData<GuestHistoryData> = {
   },
 };
 
-export const guestContactReportCols: ColsData<GuestContactReportData> = {
+export const guestContactReportCols: Partial<ColsData<
+  GuestContactReportData
+>> = {
   guestId: {
     header: 'Guest Id',
     isSortDisabled: true,
@@ -97,18 +99,18 @@ export const guestContactReportCols: ColsData<GuestContactReportData> = {
     header: 'Nationality',
     isSortDisabled: true,
   },
-  phone: {
-    header: 'Phone',
-    isSortDisabled: true,
-  },
+  // phone: {
+  //   header: 'Phone',
+  //   isSortDisabled: true,
+  // },
   mobileNo: {
     header: 'Mobile No',
     isSortDisabled: true,
   },
-  fax: {
-    header: 'Fax',
-    isSortDisabled: true,
-  },
+  // fax: {
+  //   header: 'Fax',
+  //   isSortDisabled: true,
+  // },
   zipCode: {
     header: 'Zip',
     isSortDisabled: true,
@@ -125,10 +127,10 @@ export const guestContactReportCols: ColsData<GuestContactReportData> = {
     header: 'DOB',
     isSortDisabled: true,
   },
-  idType: {
-    header: 'ID Type',
-    isSortDisabled: true,
-  },
+  // idType: {
+  //   header: 'ID Type',
+  //   isSortDisabled: true,
+  // },
 };
 
 export const SalesByGuestCols: ColsData<SalesByGuestData> = {

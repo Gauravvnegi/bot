@@ -125,19 +125,19 @@ export class DepositReport
         };
       });
 
-    function getPaymentMethodAmount(
-      item: DepositReportResponse,
-      paymentMode: PaymentMode
-    ) {
-      return (
-        item?.paymentModesAndTotalAmount?.find(
-          (payment) => payment.paymentMode === paymentMode
-        )?.totalAmount || 0
-      );
-    }
-
     return this;
   }
+}
+
+export function getPaymentMethodAmount(
+  item: any,
+  paymentMode: PaymentMode
+) {
+  return (
+    item?.paymentModesAndTotalAmount?.find(
+      (payment) => payment.paymentMode === paymentMode
+    )?.totalAmount || 0
+  );
 }
 
 export class PostingAuditReport
@@ -179,7 +179,7 @@ export class MonthlySummary extends RowStyles {
     this.day = isSubTotal ? ' ' : getFormattedDate(input?.date);
     this.roomCount = input.totalRooms;
     this.occupancy = input.occupancyPercentage + '%';
-    this.avgDailyRateIncludeInclusion = 0;
+    this.avgDailyRateIncludeInclusion = input?.averageRateIncl;
     this.avgDailyRateExcludeInclusion = input.averageRate;
     this.roomRent = input.roomRevenue;
     this.roomInclusions = input.inclusionOrAddOn;

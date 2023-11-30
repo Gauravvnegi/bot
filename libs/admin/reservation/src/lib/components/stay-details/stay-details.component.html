@@ -4,7 +4,7 @@
   </div>
   <div
     class="booking__container"
-    *ngFor="let rowData of guestReservations; let index = index"
+    *ngFor="let rowData of _guestReservation; let index = index"
   >
     <ng-container *ngIf="rowData.type === 'FEEDBACK'; else reservation">
       <hospitality-bot-instant-feedback

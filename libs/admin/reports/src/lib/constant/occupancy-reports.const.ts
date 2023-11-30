@@ -1,7 +1,10 @@
 import { HistoryAndForecastColumns } from '../types/occupany-reports.types';
 import { ColsData } from '../types/reports.types';
 
-export const historyAndForecastReportCols: ColsData<HistoryAndForecastColumns> = {
+export const historyAndForecastReportCols: ColsData<Omit<
+  HistoryAndForecastColumns,
+  'complimentaryRooms' | 'dayUseRooms' //in future it will be used
+>> = {
   date: {
     header: 'Date',
     isSearchDisabled: true,
@@ -17,11 +20,11 @@ export const historyAndForecastReportCols: ColsData<HistoryAndForecastColumns> =
     isSearchDisabled: true,
     isSortDisabled: true,
   },
-  complimentaryRooms: {
-    header: `Comp. Rooms`,
-    isSearchDisabled: true,
-    isSortDisabled: true,
-  },
+  // complimentaryRooms: {
+  //   header: `Comp. Rooms`,
+  //   isSearchDisabled: true,
+  //   isSortDisabled: true,
+  // },
   occupancy: {
     header: 'Occ %',
     isSearchDisabled: true,
@@ -47,11 +50,11 @@ export const historyAndForecastReportCols: ColsData<HistoryAndForecastColumns> =
     isSearchDisabled: true,
     isSortDisabled: true,
   },
-  dayUseRooms: {
-    header: 'Day Use Rooms',
-    isSearchDisabled: true,
-    isSortDisabled: true,
-  },
+  // dayUseRooms: {
+  //   header: 'Day Use Rooms',
+  //   isSearchDisabled: true,
+  //   isSortDisabled: true,
+  // },
   noShow: {
     header: 'No Show',
     isSearchDisabled: true,

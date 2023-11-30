@@ -227,14 +227,14 @@ export const monthlySummaryReportCols: Partial<ColsData<
     header: 'Total Taxes',
     isSortDisabled: true,
   },
-  directSales: {
-    header: 'Direct Sales',
-    isSortDisabled: true,
-  },
-  directSaleTax: {
-    header: 'Direct Sale Tax',
-    isSortDisabled: true,
-  },
+  // directSales: {
+  //   header: 'Direct Sales',         //to be added in future
+  //   isSortDisabled: true,
+  // },
+  // directSaleTax: {
+  //   header: 'Direct Sale Tax',
+  //   isSortDisabled: true,
+  // },
   grossTotal: {
     header: 'Gross Total',
     isSortDisabled: true,

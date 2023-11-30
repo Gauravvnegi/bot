@@ -22,6 +22,7 @@ import { OccupancyComponent } from '../components/occupancy/occupancy.component'
 import { RoomTypes } from 'libs/admin/channel-manager/src/lib/models/bulk-update.models';
 import { DayTimeTriggerComponent } from '../components/day-time-trigger/day-time-trigger.component';
 import { Revenue } from '../constants/revenue-manager.const';
+import { getDateTimeInEpoch } from 'libs/web-user/shared/src/lib/utils/date-utils';
 export class DynamicPricingFactory {
   static buildRequest(form: FormGroup, type: ConfigType, mode: ModeType) {
     let data:
@@ -48,12 +49,11 @@ export class DynamicPricingFactory {
     } = form.controls;
 
     const isHotelType = configCategory.value === 'HOTEL';
-
     return {
       status: status.value ? 'ACTIVE' : 'INACTIVE',
       name: name.value,
-      fromDate: new Date(fromDate.value).getTime(),
-      toDate: new Date(toDate.value).getTime(),
+      fromDate: getDateTimeInEpoch(fromDate.value).time,
+      toDate: getDateTimeInEpoch(toDate.value).time,
       daysIncluded: selectedDays.value.map((day: string) => day.toUpperCase()),
       configItems: isHotelType
         ? [
@@ -109,7 +109,8 @@ export class DynamicPricingFactory {
             if (item === 'selectedDays') {
               requestData['daysIncluded'] = days;
             } else {
-              requestData[item] = days;
+              const {time} = getDateTimeInEpoch({time:days,isHourseReset:true})
+              requestData[item] = time; 
             }
           });
         }
@@ -643,3 +644,4 @@ function validateOccupancy(
 
   return !collideError && !timeGapError && !sameTimeError;
 }
+

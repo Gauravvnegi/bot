@@ -1,20 +1,32 @@
 <div class="wrapper">
   <hospitality-bot-navigation-header [heading]="pageTitle" [routes]="navRoutes">
     <ng-container *ngIf="isInitialized">
-      <hospitality-bot-button
-        *ngIf="(invoicePrepareRequest && pmsBooking) || !pmsBooking"
-        variant="outlined"
-        [label]="
-          isInvoiceGenerated ? 'Preview and Send' : 'Preview and Generate'
-        "
-        (onClick)="previewAndGenerate()"
-      ></hospitality-bot-button>
-      <hospitality-bot-button
-        *ngIf="!invoicePrepareRequest && pmsBooking"
-        variant="outlined"
-        [label]="'Prepare Invoice'"
-        (onClick)="prepareInvoice()"
-      ></hospitality-bot-button>
+      <div class="btn-wrapper">
+        <hospitality-bot-button
+          variant="text"
+          label="View Details"
+          (onClick)="viewDetails()"
+        ></hospitality-bot-button>
+        <hospitality-bot-button
+          variant="text"
+          label="Edit Reservation"
+          (onClick)="editReservation()"
+        ></hospitality-bot-button>
+        <hospitality-bot-button
+          *ngIf="(invoicePrepareRequest && pmsBooking) || !pmsBooking"
+          variant="outlined"
+          [label]="
+            isInvoiceGenerated ? 'Preview and Send' : 'Preview and Generate'
+          "
+          (onClick)="previewAndGenerate()"
+        ></hospitality-bot-button>
+        <hospitality-bot-button
+          *ngIf="!invoicePrepareRequest && pmsBooking"
+          variant="outlined"
+          [label]="'Prepare Invoice'"
+          (onClick)="prepareInvoice()"
+        ></hospitality-bot-button>
+      </div>
     </ng-container>
   </hospitality-bot-navigation-header>
   <div class="form-wrapper" [formGroup]="useForm">

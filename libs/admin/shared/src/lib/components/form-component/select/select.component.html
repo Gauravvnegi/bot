@@ -53,6 +53,13 @@
           >{{ option.label }}</span
         >
 
+        <span
+          *ngIf="option?.extras && option?.extras.length"
+          class="option-name"
+        >
+          {{ option.extras }}
+        </span>
+
         <span *ngIf="option.phoneNumber && option.email" class="option-details">
           <span [ngStyle]="{ 'padding-right': '10px' }">{{
             option.phoneNumber

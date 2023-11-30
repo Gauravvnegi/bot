@@ -41,6 +41,7 @@ export class BarPriceComponent implements OnInit {
   active = [0];
   $subscription = new Subscription();
   isPreview = false;
+  hasPreviewRendered = false;
   @ViewChild('accordion') accordion: Accordion;
   private valueChangesSubject = new Subject<string[]>(); 
 
@@ -221,6 +222,7 @@ export class BarPriceComponent implements OnInit {
       );
       return;
     }
+    this.hasPreviewRendered = true;
     this.isPreview = true; 
   }
 

@@ -13,9 +13,11 @@
           <hospitality-bot-room-types
             class="room-types-select"
             [controlName]="'roomType'"
-            [props]="{
-              isAllSelected: true
-            }"
+            [props]="
+              !hasPreviewRendered && {
+                isAllSelected: true
+              }
+            "
           >
           </hospitality-bot-room-types>
         </div>

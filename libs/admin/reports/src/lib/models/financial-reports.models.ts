@@ -1,3 +1,4 @@
+import { I } from '@angular/cdk/keycodes';
 import { dailyRevenueReportRows } from '../constant/financial-reports.const';
 import {
   CloseOutBalanceData,
@@ -10,6 +11,7 @@ import {
   FinancialReportResponse,
   MonthlySummaryReportData,
   MonthlySummaryReportResponse,
+  PaymentMode,
   PostingAuditReportData,
   PostingAuditReportResponse,
 } from '../types/financial-reports.types';
@@ -30,18 +32,28 @@ export class FinancialReport
           folioNo: element?.invoiceCode,
           nights: element?.nightCount,
           lodging: element?.reservationItemsPayment?.totalRoomCharge,
+
           lodgingTax:
             element?.reservationItemsPayment.totalCgstTax +
-            element?.reservationItemsPayment?.totalSgstTax, //need to confirm
-          discount: element?.paymentSummary?.totalDiscount,
+            element?.reservationItemsPayment?.totalSgstTax,
+
+          discount: element?.reservationItemsPayment?.totalRoomDiscount,
+
           otherCharges: element?.reservationItemsPayment?.totalAddOnsAmount,
-          otherChargesTax: element?.paymentSummary?.totalSgstTax,
-          otherChargesDiscount: undefined, //need to confirm
+
+          otherChargesTax: element?.reservationItemsPayment.totalAddOnsTax,
+
+          otherChargesDiscount:
+            element.reservationItemsPayment.totalAddOnsDiscount,
+
           postTaxTotal:
             element?.reservationItemsPayment.totalCgstTax +
-            element?.reservationItemsPayment?.totalSgstTax, //need to confirm
-          paid: element?.reservationItemsPayment?.paidAmount,
-          balance: element?.reservationItemsPayment?.dueAmount,
+            element?.reservationItemsPayment?.totalSgstTax +
+            element?.reservationItemsPayment.totalAddOnsTax,
+
+          paid: element?.paymentSummary?.paidAmount,
+
+          balance: element?.paymentSummary?.dueAmount,
         };
       });
     return this;
@@ -84,26 +96,45 @@ export class DepositReport
     this.records =
       value &&
       value.map((item) => {
+        const formattedCheckIn = getFormattedDate(item?.arrivalTime);
+        const formattedCheckOut = getFormattedDate(item?.departureTime);
+
         return {
           bookingNo: item?.number,
-          guestName: `${item?.guestDetails.primaryGuest.firstName} ${item?.guestDetails.primaryGuest.lastName}`,
-          checkIn: getFormattedDate(item?.arrivalTime),
-          checkOut: getFormattedDate(item?.departureTime),
+          guestName: item?.guestDetails?.primaryGuest
+            ? `${item?.guestDetails.primaryGuest.firstName} ${item?.guestDetails.primaryGuest.lastName}`
+            : '',
+          checkIn: formattedCheckIn,
+          checkOut: formattedCheckOut,
           nights: item?.nightCount,
           lodging: item?.reservationItemsPayment?.totalRoomCharge,
           otherCharges: item?.reservationItemsPayment?.totalAddOnsAmount,
           taxes:
-            item?.reservationItemsPayment?.totalCgstTax +
-            item?.reservationItemsPayment?.totalSgstTax,
-          btc: undefined,
-          cash: undefined,
-          bankTransfer: undefined,
-          payAtDesk: undefined,
-          onlinePaymentGateway: undefined,
+            (item?.reservationItemsPayment?.totalCgstTax || 0) +
+            (item?.reservationItemsPayment?.totalSgstTax || 0),
+          btc: getPaymentMethodAmount(item, 'Bill to Company'),
+          cash: getPaymentMethodAmount(item, 'Cash Payment'),
+          bankTransfer: getPaymentMethodAmount(item, 'Bank Transfer'),
+          payAtDesk: getPaymentMethodAmount(item, 'Pay at Desk'),
+          onlinePaymentGateway:
+            getPaymentMethodAmount(item, 'CCAVENUE') +
+            getPaymentMethodAmount(item, 'Stripe'),
+
           totalPaid: item?.reservationItemsPayment?.paidAmount,
           lastDepositDate: undefined,
         };
       });
+
+    function getPaymentMethodAmount(
+      item: DepositReportResponse,
+      paymentMode: PaymentMode
+    ) {
+      return (
+        item?.paymentModesAndTotalAmount?.find(
+          (payment) => payment.paymentMode === paymentMode
+        )?.totalAmount || 0
+      );
+    }
 
     return this;
   }
@@ -122,10 +153,10 @@ export class PostingAuditReport
           room: `${item?.stayDetails?.room.roomNumber} ${item?.stayDetails?.room.type}`,
           name: `${item?.guestDetails?.primaryGuest?.firstName} ${item?.guestDetails?.primaryGuest?.lastName}`,
           user: undefined,
-          trxAmount: undefined,
-          baseAmount: undefined,
-          cgst: undefined,
-          sgst: undefined,
+          trxAmount: item?.paymentSummary?.totalAmount,
+          baseAmount: item?.reservationItemsPayment?.totalRoomCharge,
+          cgst: item?.reservationItemsPayment?.totalCgstTax,
+          sgst: item?.reservationItemsPayment?.totalSgstTax,
         };
       });
     return this;

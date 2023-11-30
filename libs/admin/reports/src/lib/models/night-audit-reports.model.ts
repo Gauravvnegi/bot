@@ -87,20 +87,21 @@ export class MtdAndYtdReport
 
   deserialize(value: MtdAndYtdReportResponse[]) {
     value = value.map((item) => {
-      const roomsOccupiedMinusOOSAndHouseUsePercentage =
+      const roomsOccupiedMinusOOSAndHouseUsePercentage = (
         (item?.occupiedRooms /
           (item?.totalRooms - item?.houseUseRooms - item?.outOfServiceRooms)) *
-        100;
+        100
+      ).toFixed(2);
 
-      const roomsOccupiedMinusOOSPercentage =
+      const roomsOccupiedMinusOOSPercentage = (
         (item?.occupiedRooms / (item.totalRooms - item?.outOfServiceRooms)) *
-        100;
+        100
+      ).toFixed(2);
 
-      const roomsOccupiedMinusCompPercentage =
-        item?.occupiedRooms -
-        (item?.complimentaryRooms /
-          (item?.totalRooms - item?.outOfServiceRooms)) *
-          100;
+      const roomsOccupiedMinusCompPercentage = (
+        (item?.occupiedRooms / (item?.totalRooms - item?.complimentaryRooms)) *
+        100
+      ).toFixed(2);
       const totalRevenue = item?.roomRevenue + item?.inclusionOrAddOn;
 
       const occupiedRoomsExclHouseUse =
@@ -108,14 +109,17 @@ export class MtdAndYtdReport
       const roomsOccupiedMinusComp =
         item?.occupiedRooms - item?.complimentaryRooms;
 
-      const adrMinusComp =
-        item?.roomRevenue / (item.occupiedRooms - item?.complimentaryRooms);
+      const adrMinusComp = (
+        item?.roomRevenue /
+        (item.occupiedRooms - item?.complimentaryRooms)
+      ).toFixed(2);
+
       const noOfLettableRooms = item.totalRooms - item.outOfServiceRooms;
 
       const availableRoom =
         item?.totalRooms - item?.outOfServiceRooms - item?.occupiedRooms;
 
-      const revPAR = item.roomRevenue / item.totalRooms;
+      const revPAR = (item.roomRevenue / item.totalRooms).toFixed(2);
 
       return {
         ...item,

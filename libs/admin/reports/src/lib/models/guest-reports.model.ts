@@ -74,6 +74,21 @@ export class GuestHistoryModel {
     if (input.firstStay) this.firstStayed = getFormattedDate(input.firstStay);
     if (input.lastStay) this.lastStayed = getFormattedDate(input.lastStay);
     this.noOfResv = input.reservation.length;
+    const reservationData = input.reservation[input.reservation.length - 1];
+
+    this.roomCharges = reservationData.reservationItemsPayment.totalRoomCharge;
+    this.roomTax =
+      reservationData.reservationItemsPayment.totalCgstTax +
+      reservationData.reservationItemsPayment.totalSgstTax;
+    
+    this.otherCharges = reservationData.reservationItemsPayment.totalAddOnsAmount;
+
+    this.totalCharges =
+      reservationData.reservationItemsPayment.totalAddOnsAmount +
+      reservationData.reservationItemsPayment.totalRoomCharge;
+    
+    this.totalAmount = reservationData.paymentSummary.totalAmount;
+    this.balance = reservationData.paymentSummary.dueAmount;
 
     return this;
   }

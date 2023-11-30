@@ -141,6 +141,8 @@ export interface ReservationResponseData {
     totalRoomCharge: number;
     totalRoomDiscount: number;
     totalSgstTax: number;
+    totalAddOnsTax: number;
+    totalAddOnsDiscount: number;
   };
   paymentSummary: {
     totalAmount: number;

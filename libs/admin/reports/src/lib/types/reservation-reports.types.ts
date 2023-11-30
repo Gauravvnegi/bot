@@ -91,7 +91,6 @@ export type ReservationSummaryReportData = {
   roomType: string;
   room: string;
   createdOn: string;
-  rateOrPackage: string;
   checkIn: string;
   checkOut: string;
   lodging: number;

@@ -24,6 +24,18 @@ export class MonthlyTaxReport
           amount: reservationData.amount,
         });
       });
+
+    this.records.push({
+      taxName: 'Total Tax',
+      taxCategory: ' ',
+      amount: this.records.reduce((acc, item) => {
+        acc += item.amount;
+        return acc;
+      }, 0),
+      isBlackBg: true,
+      isBold: true,
+    } as any);
+
     return this;
   }
 }

@@ -162,6 +162,8 @@ export class UpdateRatesComponent implements OnInit {
         this.fb.group({
           label: roomType.label,
           value: roomType.value,
+          isBaseRoomType: roomType.isBaseRoomType,
+          basePrice: roomType.price,
         })
       );
       this.addRoomDynamicPriceControl(roomTypeIdx);
@@ -274,6 +276,8 @@ export class UpdateRatesComponent implements OnInit {
       roomTypeIdx
     ) as FormGroup;
 
+    const isBaseRoomType = roomTypeFG.get('isBaseRoomType').value;
+
     roomTypeFG.addControl('ratePlans', this.fb.array([]));
 
     const ratePlansControl = roomTypeFG.get('ratePlans') as FormArray;
@@ -281,9 +285,10 @@ export class UpdateRatesComponent implements OnInit {
       ratePlansControl.push(
         this.fb.group({
           type: [ratePlan.type],
+          basePrice: [ratePlan.basePrice],
           label: [ratePlan.label],
           value: [ratePlan.value],
-          linked: [false],
+          linked: [true],
           showChannels: [false],
           isBase: [ratePlan.isBase],
           variablePrice: [ratePlan.variablePrice],
@@ -296,7 +301,8 @@ export class UpdateRatesComponent implements OnInit {
       this.addRatesAndRestrictionControl(
         ratePlansControl,
         ratePlanIdx,
-        roomTypeIdx
+        roomTypeIdx,
+        isBaseRoomType
       );
       this.addChannelsControl(ratePlan.channels, roomTypeIdx, ratePlanIdx);
     });
@@ -304,13 +310,14 @@ export class UpdateRatesComponent implements OnInit {
 
   /**
    * Handle Rates and Restrictions Control
-   * @param control
-   * @param idx
+   * @param control rate plans
+   * @param idx index of roomType
    */
   addRatesAndRestrictionControl(
     control: FormArray,
     idx: number,
-    roomTypeIdx: number
+    roomTypeIdx: number,
+    isBaseRoomType: boolean
   ) {
     const controlG = control.at(idx) as FormGroup;
     this.restrictions &&
@@ -326,48 +333,133 @@ export class UpdateRatesComponent implements OnInit {
               });
             }
 
+            const mapPrices = (isMapAllRoom: boolean) => {
+              this.mapRoomPrices(
+                control,
+                dayIndex,
+                roomTypeIdx,
+                res,
+                linkedValue,
+                isMapAllRoom
+              );
+            };
+
             // RatePlan Pricing Control with Base RatePlan
             const isBaseRatePlanRow = controlG.get('isBase').value;
-            isBaseRatePlanRow &&
-              control.controls?.forEach((ratePlanControl) => {
-                const isBase = ratePlanControl.get('isBase').value;
-                const dynamicControl = this.useFormControl.roomTypes.controls[
-                  roomTypeIdx
-                ].get('dynamicPrice') as FormArray;
-
-                if (
-                  !isBase &&
-                  !dynamicControl.at(dayIndex).get('value').value
-                ) {
-                  const variablePrice = ratePlanControl.get('variablePrice')
-                    .value;
-                  const price = res.value.length
-                    ? +res.value + variablePrice
-                    : null;
-
-                  const rates = ratePlanControl.get('rates') as FormArray;
-                  const newPriceList = rates.controls.map(
-                    (rate, rateIndex) => ({
-                      value: dynamicControl.at(rateIndex).get('value').value
-                        ? rate.get('value').value
-                        : price,
-                    })
-                  );
-
-                  if (linkedValue) {
-                    rates.patchValue(newPriceList, {
-                      emitEvent: false,
-                    });
-                  } else {
-                    rates
-                      .at(dayIndex)
-                      .patchValue({ value: price }, { emitEvent: false });
-                  }
-                }
-              });
+            if (isBaseRatePlanRow && isBaseRoomType) {
+              // change entire price
+              mapPrices(true);
+            } else if (isBaseRatePlanRow) {
+              mapPrices(false);
+            }
           });
         });
       });
+  }
+
+  /**
+   *
+   * @param control rate plans control
+   * @param dayIndex in which column user input (0,1,2,3,4)
+   * @param roomTypeIdx room type index
+   * @param res value changes
+   * @param linkedValue link or unlink state of changes
+   * @param isMapInAllRoom do you want map all room of perticular room
+   * @param source from where its called
+   */
+  mapRoomPrices(
+    control: FormArray,
+    dayIndex: number,
+    roomTypeIdx: number,
+    res: { value: string },
+    linkedValue: boolean,
+    isMapInAllRoom: boolean,
+    source: 'basePrice' | 'noneBasePrice' = 'noneBasePrice'
+  ) {
+    let previousPrice = 0;
+    control.controls?.forEach((ratePlanControl) => {
+      const isBase = ratePlanControl.get('isBase').value;
+      const dynamicControl = this.useFormControl.roomTypes.controls[
+        roomTypeIdx
+      ].get('dynamicPrice') as FormArray;
+
+      if (
+        (!isBase || source == 'basePrice') &&
+        !dynamicControl.at(dayIndex).get('value').value
+      ) {
+        const variablePrice = ratePlanControl.get('variablePrice').value;
+        const price = res?.value?.length
+          ? previousPrice + +res.value + variablePrice
+          : null;
+
+        const rates = ratePlanControl.get('rates') as FormArray;
+
+        // mapping data in which dynamic pricing off
+        const newPriceList = rates.controls.map((rate, rateIndex) => ({
+          value: dynamicControl.at(rateIndex).get('value').value
+            ? rate.get('value').value
+            : price,
+        }));
+        // console.log(newPriceList);
+
+        if (linkedValue) {
+          rates.patchValue(newPriceList, {
+            emitEvent: false,
+          });
+          isMapInAllRoom &&
+            this.mapAllRoomPrice({
+              isLinked: true,
+              dayWise: dayIndex,
+              res: res,
+            });
+        } else {
+          rates.at(dayIndex).patchValue({ value: price }, { emitEvent: false });
+          isMapInAllRoom &&
+            this.mapAllRoomPrice({
+              isLinked: false,
+              dayWise: dayIndex,
+              res: res,
+            });
+        }
+
+        //previous base price will be added to the next
+        previousPrice = variablePrice;
+      }
+    });
+  }
+
+  /**
+   *
+   * @param mappingInfo for mapping all rooms if room is base room
+   */
+  mapAllRoomPrice(mappingInfo: {
+    isLinked: boolean;
+    dayWise: number;
+    res: { value: string };
+  }) {
+    this.useFormControl.roomTypes.controls.forEach(
+      (roomType: FormGroup, index: number) => {
+        const { isBaseRoomType, basePrice } = roomType.controls;
+        if (!isBaseRoomType.value) {
+          const { ratePlans } = roomType.controls;
+
+          console.log(index, basePrice.value);
+          this.mapRoomPrices(
+            ratePlans as FormArray,
+            mappingInfo.dayWise,
+            index,
+            {
+              value: mappingInfo.res.value.length
+                ? basePrice.value.toString()
+                : '',
+            },
+            mappingInfo.isLinked,
+            false,
+            'basePrice'
+          );
+        }
+      }
+    );
   }
 
   /**
@@ -381,10 +473,11 @@ export class UpdateRatesComponent implements OnInit {
     roomTypeIdx: number,
     ratePlanIdx: number
   ) {
-    const ratePlanFG = (this.useFormControl.roomTypes
-      .at(roomTypeIdx)
-      .get('ratePlans') as FormArray).at(ratePlanIdx) as FormGroup;
-
+    const roomType = this.useFormControl.roomTypes.at(roomTypeIdx) as FormGroup;
+    const ratePlanFG = (roomType.get('ratePlans') as FormArray).at(
+      ratePlanIdx
+    ) as FormGroup;
+    const isBaseRoomType = roomType.get('isBaseRoomType').value;
     ratePlanFG.addControl('channels', this.fb.array([]));
     const channelControl = ratePlanFG.get('channels') as FormArray;
     channels.forEach((channel, channelIdx) => {
@@ -402,7 +495,8 @@ export class UpdateRatesComponent implements OnInit {
       this.addRatesAndRestrictionControl(
         channelControl,
         channelIdx,
-        roomTypeIdx
+        roomTypeIdx,
+        isBaseRoomType
       );
     });
   }

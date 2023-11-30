@@ -271,6 +271,7 @@
                         },
                         post: {
                           placeholder: 'End',
+                          min: form.get('start')?.value,
                           type: 'number',
                           errorMessages: {
                             required: 'This is required field',

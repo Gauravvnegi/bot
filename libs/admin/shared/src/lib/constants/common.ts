@@ -10,4 +10,5 @@ export const tokensConfig = t({
   brandId: 'x-brandId',
   entityId: 'x-entityId',
   selectedProduct: 'selectedProduct',
+  userAgent: 'custom-user-agent',
 });

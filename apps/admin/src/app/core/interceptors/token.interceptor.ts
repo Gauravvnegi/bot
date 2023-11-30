@@ -26,7 +26,7 @@ export class TokenInterceptor implements HttpInterceptor {
       const entityId =
         req.headers.get('entity-id') ??
         this._authService.getTokenByName(tokensConfig.entityId);
-        
+
       const modifiedRequest = req.clone({
         setHeaders: {
           [tokensConfig.accessToken]: this._authService.getTokenByName(
@@ -35,11 +35,19 @@ export class TokenInterceptor implements HttpInterceptor {
           [tokensConfig.userId]: this._authService.getTokenByName(
             tokensConfig.userId
           ),
+
           ...(entityId
             ? {
                 ['entity-id']:
                   req.headers.get('entity-id') ??
                   this._authService.getTokenByName(tokensConfig.entityId),
+              }
+            : {}),
+
+          // Custom user agent in case device and logout api
+          ...(req.url.includes('device') || req.url.includes('logout')
+            ? {
+                [tokensConfig.userAgent]: this._authService.getUniqueUserAgent(),
               }
             : {}),
         },

@@ -10,6 +10,7 @@ import {
   DepartureReportData,
   DraftReservationReportData,
   EmployeeWiseReservationReportData,
+  EmployeeWiseReservationReportResponse,
   HousekeepingReportData,
   HousekeepingReportResponse,
   IncomeSummaryReportData,
@@ -225,9 +226,12 @@ export class DraftReservationReport extends ReservationReport
 //todo
 export class EmployeeWiseReservationReport
   implements
-    ReportClass<EmployeeWiseReservationReportData, ReservationResponseData> {
+    ReportClass<
+      EmployeeWiseReservationReportData,
+      EmployeeWiseReservationReportResponse
+    > {
   records: EmployeeWiseReservationReportData[];
-  deserialize(value: ReservationResponseData[]) {
+  deserialize(value: EmployeeWiseReservationReportResponse[]) {
     this.records = new Array<EmployeeWiseReservationReportData>();
     value &&
       value.forEach((reservationData) => {
@@ -236,7 +240,10 @@ export class EmployeeWiseReservationReport
           reservationData.reservationItemsPayment.totalAddOnsAmount;
         this.records.push({
           id: reservationData.id,
-          userName: undefined, //to be added in response
+          userName:
+            reservationData?.user?.firstName &&
+            `${reservationData?.user?.firstName} ${reservationData?.user?.lastName}`,
+          
           bookingNo: reservationData.number,
           guestName: `${reservationData.guestDetails.primaryGuest.firstName} ${reservationData.guestDetails.primaryGuest.lastName}`,
           checkIn: getFormattedDate(reservationData.stayDetails.arrivalTime),
@@ -274,9 +281,8 @@ export class ReservationAdrReport
           nights: data.nightCount,
           roomRent: data.reservationItemsPayment.totalRoomCharge,
 
-          adr: data.nightCount ? data.reservationItemsPayment.totalRoomCharge /
-            data.nightCount
-            
+          adr: data.nightCount
+            ? data.reservationItemsPayment.totalRoomCharge / data.nightCount
             : data.reservationItemsPayment.totalRoomCharge,
         });
       });
@@ -345,7 +351,7 @@ export class ReservationSummaryReport
           otherCharges: data.reservationItemsPayment.totalAddOnsAmount,
 
           otherChargesTax: data.reservationItemsPayment.totalAddOnsTax,
-          
+
           avgRoomRate:
             data.reservationItemsPayment.totalRoomCharge / data.nightCount ??
             data?.reservationItemsPayment?.totalRoomCharge,

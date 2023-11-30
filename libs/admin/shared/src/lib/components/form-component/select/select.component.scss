@@ -17,6 +17,9 @@
   text-overflow: unset;
   white-space: normal;
   -webkit-box-orient: vertical;
+  display: flex !important;
+  flex-direction: column;
+  align-items: flex-start;
 }
 
 .selected-item {
@@ -153,4 +156,11 @@
   .p-dropdown {
     margin-top: unset !important;
   }
+}
+
+.option-name {
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.72px;
+  color: #8995a3;
 }

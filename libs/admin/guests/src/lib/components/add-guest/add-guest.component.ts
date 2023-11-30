@@ -251,6 +251,16 @@ export class AddGuestComponent implements OnInit {
       )
     );
   }
+
+  companyChange(event) {
+    if (event.id) {
+      this.selectedMember = {
+        label: event?.firstName,
+        value: event?.id,
+      };
+    }
+  }
+
   resetForm() {
     this.guestForm.reset();
   }

@@ -97,6 +97,46 @@
       [defaultMember]="selectedMember"
       (createMembers)="createNewCompany()"
     ></hospitality-bot-members-list>
+
+    <hospitality-bot-quick-select
+      class="half-width select"
+      controlName="company"
+      label="AgencyName"
+      [inputType]="'select'"
+      [props]="{
+        showChips: false,
+        isAsync: true,
+        placeholder: 'Select',
+        createPrompt: '+ Add New Agency',
+        selectedOption: selectedMember,
+        createType: 'sidebar'
+      }"
+      [apiConfig]="{
+        apiEndPoint: '/api/v1/members',
+        dataModel: {
+          key: 'records',
+          values: {
+            label: 'firstName',
+            value: 'id'
+          }
+        },
+        queryParams: { type: 'COMPANY' },
+        searchAPIEndPoint: '/api/v1/search/members',
+        searchModel: {
+          response: true,
+          values: {
+            label: 'firstName',
+            value: 'id'
+          }
+        },
+        searchQueryParams: { type: 'AGENT' }
+      }"
+      [paginationConfig]="{
+        isPagination: true
+      }"
+      (clickedOption)="companyChange($event)"
+      (openSidebar)="createNewCompany()"
+    ></hospitality-bot-quick-select>
   </div>
 </div>
 

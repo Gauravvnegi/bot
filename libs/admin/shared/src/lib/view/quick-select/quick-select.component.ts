@@ -254,6 +254,7 @@ export class QuickSelectComponent extends FormComponent implements OnInit {
                     ? [this._qsProps.selectedOption]
                     : []),
                 ]);
+
             // To be improved later.
             this.controlContainer.control
               .get(this.controlName)
@@ -288,16 +289,42 @@ export class QuickSelectComponent extends FormComponent implements OnInit {
       items.map((item) => {
         const label = Array.isArray(model.values?.label)
           ? `${item[model.values?.label[0]]} ${item[model.values?.label[1]]}` // Concatenate labels in case of an array
-          : item[model.values?.label];
+          : this.getNestedPropertyValue(item, model?.values?.label);
+
+        let extras =
+          model.values?.extras &&
+          (Array.isArray(model.values?.extras)
+            ? `${
+                item[model.values?.extras[0]]
+                  ? item[model.values?.extras[0]] + ' '
+                  : ''
+              }${
+                item[model.values?.extras[1]]
+                  ? item[model.values?.extras[1]]
+                  : ''
+              }`
+            : this.getNestedPropertyValue(item, model?.values?.extras));
+
         return {
           ...item,
           label: Array.isArray(model.values?.label)
             ? label
             : convertToTitleCase(label ?? ''),
           value: item[model.values.value] ?? '',
+          extras: extras ?? '',
         };
       }) ?? []
     );
+  }
+
+  getNestedPropertyValue(obj, path) {
+    const returnval = path
+      .split('.')
+      .reduce(
+        (acc, key) => (acc && acc[key] !== undefined ? acc[key] : undefined),
+        obj
+      );
+    return returnval;
   }
 
   /**
@@ -455,4 +482,5 @@ export type DataModel = {
   values: { label: string | string[]; value: string } | Record<string, string>;
   data?: Record<string, string>;
   response?: boolean;
+  extras?: string;
 };

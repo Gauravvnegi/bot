@@ -284,8 +284,9 @@ export class BookingInfoComponent implements OnInit {
           this.editMode = true;
           if (res.agent)
             this.selectedAgent = {
-              label: `${res?.agent?.firstName} ${res?.agent?.lastName}`,
+              label: res?.agent?.company?.firstName,
               value: res?.agent?.id,
+              extras: `${res?.agent?.firstName} ${res?.agent?.lastName}`,
               ...res?.agent,
             };
           marketSegmentControl.patchValue(res.marketSegment);
@@ -379,11 +380,17 @@ export class BookingInfoComponent implements OnInit {
 
   agentChange(event) {
     if (event) {
-      this.selectedAgent = event;
-      this.reservationInfoControls.marketSegment.patchValue(
-        this.selectedAgent?.marketSegment,
-        { emitEvent: false }
-      );
+      this.selectedAgent = {
+        label: event?.company?.firstName,
+        value: event?.id,
+        extras: `${event?.firstName} ${event?.lastName}`,
+        ...event,
+      };
+      !this.reservationId &&
+        this.reservationInfoControls.marketSegment.patchValue(
+          this.selectedAgent?.marketSegment,
+          { emitEvent: false }
+        );
     }
   }
 
@@ -406,8 +413,9 @@ export class BookingInfoComponent implements OnInit {
       componentRef.instance.onClose.subscribe((res) => {
         if (typeof res !== 'boolean') {
           this.selectedAgent = {
-            label: `${res?.firstName} ${res?.lastName}`,
+            label: `${res?.company?.firstName}`,
             value: res?.id,
+            extras: `${res?.firstName} ${res?.lastName}`,
             ...res,
           };
           res.marketSegment &&

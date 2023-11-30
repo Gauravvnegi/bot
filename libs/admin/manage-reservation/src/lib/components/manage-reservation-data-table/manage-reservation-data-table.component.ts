@@ -367,12 +367,12 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
   /**
    * @function handleMenuClick To handle click on menu button.
    */
-  handleMenuClick(value: string, id: string) {
+  handleMenuClick(value: string, rowData) {
     switch (value) {
       case 'MANAGE_INVOICE':
         this.routesConfigService.navigate({
           subModuleName: ModuleNames.INVOICE,
-          additionalPath: id,
+          additionalPath: rowData.id,
           queryParams: {
             entityId: this.selectedEntity.id,
             type: this.selectedEntity.subType,
@@ -380,10 +380,13 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
         });
         break;
       case 'EDIT_RESERVATION':
-        this.editReservation(id);
+        this.editReservation(rowData.id);
         break;
       case 'PRINT_INVOICE':
-        this.invoiceService.handleInvoiceDownload(id);
+        this.invoiceService.handleInvoiceDownload(rowData.id);
+        break;
+      case 'REINSTATE':
+        this.handleStatus(ReservationStatusType.REINSTATE, rowData);
         break;
       // case 'ASSIGN_ROOM':
       // case 'ASSIGN_TABLE':

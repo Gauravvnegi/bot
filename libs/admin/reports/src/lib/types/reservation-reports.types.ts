@@ -1,3 +1,4 @@
+import { ReservationResponse, ReservationResponseData } from 'libs/admin/shared/src/lib/types/response';
 import {
   Arrival,
   Cancellation,
@@ -17,9 +18,15 @@ export type ReservationReportData = {
 
 export type NoShowReportData = Omit<NoShows, 'deserialize' | 'id'> & {};
 
-export type ArrivalReportData = Omit<Arrival, 'deserialize' | 'id'| 'departureTime'>;
+export type ArrivalReportData = Omit<
+  Arrival,
+  'deserialize' | 'id' | 'departureTime'
+>;
 
-export type DepartureReportData = Omit<Departure, 'deserialize' | 'id' | 'arrivalTime'>;
+export type DepartureReportData = Omit<
+  Departure,
+  'deserialize' | 'id' | 'arrivalTime'
+>;
 
 export type CancellationReportData = Omit<Cancellation, 'deserialize' | 'id'>;
 export type CancellationReportPartialData = Omit<
@@ -55,6 +62,10 @@ export type EmployeeWiseReservationReportData = {
   otherCharges: number;
   totalCharge: number;
   amountPaid: number;
+};
+
+export type EmployeeWiseReservationReportResponse = ReservationResponseData & {
+  user: User;
 };
 
 export type ReservationAdrReportData = {
@@ -132,3 +143,37 @@ export type UnnecessaryCancellationObject =
   | 'noShowCharge'
   | 'noShowReason'
   | 'id';
+
+export type User = {
+  id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  type: number;
+  title: string;
+  cc: string;
+  phoneNumber: string;
+  profileUrl: string;
+  parentId: string | null;
+  status: boolean;
+}
+
+interface Room {
+  roomNumber: string;
+  type: string;
+  unit: number;
+  status: string;
+}
+
+interface StayDetails {
+  arrivalTime: number;
+  departureTime: number;
+  expectedArrivalTime: number;
+  expectedDepartureTime: number;
+  adultsCount: number;
+  kidsCount: number;
+  comments: string;
+  room: Room;
+  checkInComment: string;
+  address: Record<string, any>; // Assuming address is an object with dynamic keys
+}

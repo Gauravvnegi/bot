@@ -1,4 +1,5 @@
 import { CalendarType } from './reports.types';
+import { User } from './reservation-reports.types';
 
 export type FinancialReportData = {
   bookingNo: string;
@@ -165,6 +166,7 @@ export type PostingAuditReportResponse = {
   vip: boolean;
   pmsBooking: boolean;
   invoicePrepareRequest: InvoicePrepareRequest;
+  user: User
 };
 
 export type FinancialReportResponse = {

@@ -20,7 +20,7 @@ export const card = {
       },
       {
         label: 'In-Progress',
-        value: 'INPROGRESS',
+        value: 'IN_PROGRESS',
         total: 0,
       },
       {

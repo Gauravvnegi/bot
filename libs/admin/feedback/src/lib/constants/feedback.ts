@@ -20,7 +20,7 @@ export const feedbackStatus: Record<
     label: 'To-Do ',
     type: 'default',
   },
-  INPROGRESS: {
+  IN_PROGRESS: {
     label: 'In Progress ',
     type: 'completed',
   },
@@ -298,7 +298,7 @@ export const feedback = {
       {
         label: 'In-Progress ',
         icon: '',
-        value: 'INPROGRESS',
+        value: 'IN_PROGRESS',
         total: 0,
         isSelected: false,
         type: 'completed',

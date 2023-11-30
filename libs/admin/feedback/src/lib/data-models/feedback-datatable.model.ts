@@ -31,6 +31,7 @@ export class FeedbackTable {
                 remarks: item.remarks,
                 timeOut: item.timeOut,
                 feedbackId: item.id,
+                nextState: item?.nextState,
               }
             : item,
           outlets
@@ -69,6 +70,7 @@ export class Feedback {
   timeOut: boolean;
   feedbackId: string;
   tableOrRoomNumber;
+  nextState: string[];
   deserialize(input, outlets) {
     this.remarks = new Array<Remark>();
     const bookingDetails = get(input, ['bookingDetails']);
@@ -112,7 +114,8 @@ export class Feedback {
       set({}, 'userName', get(input, ['userName'])),
       set({}, 'timeOut', get(input, ['timeOut'])),
       set({}, 'feedbackId', get(input, ['feedbackId'], '')),
-      set({}, 'tableOrRoomNumber', get(input, ['tableOrRoomNumber'], ''))
+      set({}, 'tableOrRoomNumber', get(input, ['tableOrRoomNumber'], '')),
+      set({}, 'nextState', get(input, ['nextState'], []))
     );
     this.outlet = outlets?.filter(
       (outlet) => outlet.id === input.entityId
@@ -377,6 +380,7 @@ export class StayFeedbackTable {
                 remarks: item.remarks,
                 timeOut: item.timeOut,
                 feedbackId: item.id,
+                nextState: item?.nextState,
               }
             : item,
           outlets,
@@ -418,6 +422,7 @@ export class StayFeedback {
   userName: string;
   remarks: Remark[];
   timeOut: boolean;
+  nextState: string[];
   deserialize(input, outlets, colorMap) {
     this.services = new Array<Service>();
     this.remarks = new Array<Remark>();
@@ -452,7 +457,8 @@ export class StayFeedback {
       set({}, 'userId', get(input, ['userId'])),
       set({}, 'userName', get(input, ['userName'])),
       set({}, 'timeOut', get(input, ['timeOut'])),
-      set({}, 'feedbackId', get(input, ['feedbackId'], ''))
+      set({}, 'feedbackId', get(input, ['feedbackId'], '')),
+      set({}, 'nextState', get(input, ['nextState'], []))
     );
     const serviceList = (get(input, ['serviceMap', 'services']) ||
       get(input, ['serviceMap'])) as any[];

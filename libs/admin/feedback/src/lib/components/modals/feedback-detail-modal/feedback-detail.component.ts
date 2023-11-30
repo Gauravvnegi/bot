@@ -89,18 +89,23 @@ export class FeedbackDetailModalComponent implements OnInit, OnDestroy {
   }
 
   getStatusList() {
-    //note:  nextState need to be Integrate form BE
-    this.statusList = this.data?.nextStates?.map((item) => {
+    this.statusList = this.data?.feedback?.nextState?.map((item) => {
       return { label: convertToTitleCase(item), id: item };
     });
 
     this.statusList.unshift({
-      label: convertToTitleCase(this.data?.status),
-      id: this.data?.status,
+      label: convertToTitleCase(this.data?.feedback?.status),
+      id: this.data?.feedback?.status,
     });
 
-    this.feedbackFG.patchValue({ status: this.data?.status });
+    this.feedbackFG.patchValue({ status: this.data?.feedback?.status });
   }
+
+  // listenForFeedbackStateChange() {
+  //   this.feedbackFG.get('status').valueChanges.subscribe((response) => {
+  //     this.updateFeedbackState(response);
+  //   });
+  // }
 
   getUserPermission() {
     this.$subscription.add(
@@ -160,8 +165,8 @@ export class FeedbackDetailModalComponent implements OnInit, OnDestroy {
 
   updateFeedbackState(event) {
     const data = {
-      status: 'RESOLVED',
-      notes: event.data.comment,
+      status: event?.value,
+      notes: event?.data?.comment,
     };
     this.tableService
       .updateFeedbackState(this.data.feedback.departmentId, data)
@@ -176,7 +181,9 @@ export class FeedbackDetailModalComponent implements OnInit, OnDestroy {
               '',
               { panelClass: 'success' }
             )
-            .subscribe();
+            .subscribe(
+              
+            );
           this.feedbackFG.patchValue({ comment: '' });
           this.cardService.$assigneeChange.next({ status: true });
           this.refreshFeedbackData();

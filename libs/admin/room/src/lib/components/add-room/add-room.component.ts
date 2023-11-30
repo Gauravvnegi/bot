@@ -248,8 +248,8 @@ export class AddRoomComponent implements OnInit, OnDestroy {
         toDate.clearValidators();
       }
 
-      fromDate.updateValueAndValidity();
-      toDate.updateValueAndValidity();
+      // fromDate.updateValueAndValidity();
+      // toDate.updateValueAndValidity();
     });
   }
 

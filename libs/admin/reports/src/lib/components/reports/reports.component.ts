@@ -12,6 +12,7 @@ import {
 import { reportsConfig } from '../../constant/reports.const';
 import { convertToTitleCase } from 'libs/admin/shared/src/lib/utils/valueFormatter';
 import { NavRouteOption, NavRouteOptions } from '@hospitality-bot/admin/shared';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'hospitality-bot-reports',
@@ -29,13 +30,30 @@ export class ReportsComponent implements OnInit {
   constructor(
     private reportsService: ReportsService,
     private routesConfigService: RoutesConfigService,
-    private globalFilterService: GlobalFilterService,
-    private routesConfigServices: RoutesConfigService
+    private router: Router,
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
+    const reportName = this.route.snapshot.params['report'] as ReportType;
+
+    this.initReportConfigDetails(); //we are getting the report menu options from the config file
+
+    //if there is no report selected, then select the first report from the list and navigate to that report
+    !reportName &&
+      this.router.navigate([`${this.reportsMenuOptions[0].value}`], {
+        relativeTo: this.route,
+        replaceUrl: true,
+      });
+
+    this.selectedReport = (this.reportsMenuOptions as any[]).find(
+      (report) => (report.value as ReportType) === reportName
+    );
+
+    //after emitting the selected report to get the corresponding data
+    this.reportsService.$selectedReport.next(this.selectedReport);
+
     this.registerListener();
-    this.initReportConfigDetails();
     this.initNavRoutes();
   }
 
@@ -43,27 +61,28 @@ export class ReportsComponent implements OnInit {
     this.reportsService.showMenu.subscribe((res) => {
       this.showMenu = res;
     });
-    this.reportsService.$selectedReport.subscribe((report) => {
-      if (report) {
-        this.selectedReport = report;
-        this.navRoutes.pop();
-        this.navRoutes = [
-          ...this.navRoutes,
-          {
-            label: this.selectedReport.label,
-            link: './',
-          } as NavRouteOption,
-        ];
-      }
-    });
+    if (this.selectedReport) {
+      this.selectedReport = this.selectedReport;
+      this.navRoutes.pop();
+      this.navRoutes = [
+        ...this.navRoutes,
+        {
+          label: this.selectedReport?.label,
+          link: './',
+        } as NavRouteOption,
+      ];
+    }
   }
 
   initReportConfigDetails() {
     this.selectedReportModule = (this.routesConfigService
       .subModuleName as unknown) as ReportModules;
+
     this.settReportMainTitle();
-    this.reportsMenuOptions = reportsConfig[this.selectedReportModule]?.menu;
-    this.reportsService.$selectedReport.next(this.reportsMenuOptions[0]);
+    this.reportsMenuOptions =
+      reportsConfig[this.selectedReportModule]?.menu ?? [];
+
+    // this.reportsService.$selectedReport.next(this.reportsMenuOptions[0]);
   }
 
   initNavRoutes() {
@@ -88,6 +107,11 @@ export class ReportsComponent implements OnInit {
 
   selectReport(value: ReportsMenu[number]) {
     if (value.value !== this.reportsService.$selectedReport.value.value) {
+      //navigate to the selected report
+      this.router.navigate([`../${value.value}`], {
+        relativeTo: this.route,
+      });
+      this.selectedReport = value;
       this.reportsService.$selectedReport.next(value);
     }
     this.toggleMenu();

@@ -13,6 +13,10 @@ const appRoutes: Routes = [
         path: '',
         component: ReportsComponent,
       },
+      {
+        path: ':report',
+        component: ReportsComponent,
+      },
     ],
   },
 ];

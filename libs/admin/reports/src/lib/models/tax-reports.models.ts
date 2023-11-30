@@ -81,12 +81,14 @@ export class LodgingTaxReportDataModel {
       ? getFormattedDate(input.stayDetails.departureTime)
       : '';
     this.roomType = input.stayDetails.room.type;
-    this.rate = input.paymentSummary.totalAmount;
-    this.discounts = input.paymentSummary.totalDiscount;
-    this.netRate = input.paymentSummary.totalAmount;
+    this.rate = input.reservationItemsPayment.totalRoomCharge + input.reservationItemsPayment.totalRoomDiscount ;
+    this.discounts = input.reservationItemsPayment.totalRoomDiscount;
+
+    this.netRate = input.reservationItemsPayment.totalRoomCharge;
     this.occupancyTax =
-      input.paymentSummary.totalCgstTax + input.paymentSummary.totalSgstTax;
-    this.otherTax = input.paymentSummary.totalAddOnsAmount;
+      input.reservationItemsPayment.totalCgstTax + input.reservationItemsPayment.totalSgstTax;
+  
+    this.otherTax = input.reservationItemsPayment.totalAddOnsAmount;
     return this;
   }
 }

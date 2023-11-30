@@ -145,7 +145,9 @@ export class BookingSummaryComponent implements OnInit {
     if (this.bookingType === EntitySubType.ROOM_TYPE)
       data = this.formService.mapRoomReservationData(
         this.parentFormGroup.getRawValue(),
-        id
+        id,
+        'full',
+        this.summaryData.totalAmount
       );
     else
       data = this.formService.mapOutletReservationData(
@@ -304,10 +306,9 @@ export class BookingSummaryComponent implements OnInit {
   }
 
   calculateAmountToBePaid(summaryData: SummaryData) {
-    const totalAmount =
-      summaryData?.totalDueAmount
-        ? summaryData.totalDueAmount
-        : summaryData.totalAmount;
+    const totalAmount = summaryData?.totalDueAmount
+      ? summaryData.totalDueAmount
+      : summaryData.totalAmount;
 
     // When total due amount is 0.
     const totalPaidAmount =

@@ -121,6 +121,7 @@ export type PaymentRuleForm = {
   makePaymentBefore: number;
   inclusionsAndTerms: string;
   type?: string;
+  partialPayment?: boolean;
 };
 
 export type PaymentMethod = {

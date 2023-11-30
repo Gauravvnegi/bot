@@ -100,9 +100,9 @@
       </p>
       <p class="bk-summary_priceInfo_perNight" *ngIf="summaryData?.refund">
         <span class="bk-summary_priceInfo_perNight_label">Total Refund</span>
-        <span class="bk-summary_priceInfo_perNight_amount">{{
-          summaryData.refund | currency: 'INR'
-        }}</span>
+        <span class="bk-summary_priceInfo_perNight_amount"
+          >-{{ summaryData.refund | currency: 'INR' }}</span
+        >
       </p>
     </div>
     <p class="divider"></p>
@@ -189,9 +189,9 @@
     <span class="bk-summary_priceInfo_perNight_label"
       >Total Miscellaneous Charges</span
     >
-    <span class="bk-summary_priceInfo_perNight_amount">{{
-      summaryData.miscellaneousCharges | currency: 'INR'
-    }}</span>
+    <span class="bk-summary_priceInfo_perNight_amount"
+      >+{{ summaryData.miscellaneousCharges | currency: 'INR' }}</span
+    >
   </p>
 </ng-template>
 
@@ -266,29 +266,6 @@
         {{ bookingItem?.roomCharges | currency: 'INR' }}
       </span>
     </p>
-    <p
-      class="bk-summary_priceInfo_taxFair"
-      *ngIf="
-        (summaryData?.offerAmount || summaryData.discountedAmount) &&
-        index === undefined
-      "
-    >
-      <span class="bk-summary_priceInfo_perNight_label">Discount</span>
-      <span class="bk-summary_priceInfo_perNight_amount">{{
-        summaryData?.offerAmount
-          ? (summaryData?.offerAmount | currency: 'INR')
-          : (summaryData?.discountedAmount | currency: 'INR')
-      }}</span>
-    </p>
-    <p
-      class="bk-summary_priceInfo_taxFair"
-      *ngIf="bookingItem?.discountedAmount && index !== undefined"
-    >
-      <span class="bk-summary_priceInfo_perNight_label">Discount</span>
-      <span class="bk-summary_priceInfo_perNight_amount">{{
-        bookingItem?.discountedAmount | currency: 'INR'
-      }}</span>
-    </p>
     <p class="bk-summary_priceInfo_taxFair">
       <span class="bk-summary_priceInfo_perNight_label">Taxes & Fees </span>
       <span
@@ -304,9 +281,34 @@
       <span class="bk-summary_priceInfo_perNight_label"
         >Total Miscellaneous Charges</span
       >
-      <span class="bk-summary_priceInfo_perNight_amount">{{
-        summaryData.miscellaneousCharges | currency: 'INR'
-      }}</span>
+      <span class="bk-summary_priceInfo_perNight_amount"
+        >+{{ summaryData.miscellaneousCharges | currency: 'INR' }}</span
+      >
+    </p>
+    <p
+      class="bk-summary_priceInfo_taxFair"
+      *ngIf="
+        (summaryData?.offerAmount || summaryData.discountedAmount) &&
+        index === undefined
+      "
+    >
+      <span class="bk-summary_priceInfo_perNight_label">Discount</span>
+      <span class="bk-summary_priceInfo_perNight_amount"
+        >-{{
+          summaryData?.offerAmount
+            ? (summaryData?.offerAmount | currency: 'INR')
+            : (summaryData?.discountedAmount | currency: 'INR')
+        }}</span
+      >
+    </p>
+    <p
+      class="bk-summary_priceInfo_taxFair"
+      *ngIf="bookingItem?.discountedAmount && index !== undefined"
+    >
+      <span class="bk-summary_priceInfo_perNight_label">Discount</span>
+      <span class="bk-summary_priceInfo_perNight_amount"
+        >-{{ bookingItem?.discountedAmount | currency: 'INR' }}</span
+      >
     </p>
   </div>
 </ng-template>

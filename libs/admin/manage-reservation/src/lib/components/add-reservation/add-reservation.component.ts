@@ -55,6 +55,7 @@ export class AddReservationComponent extends BaseReservationComponent
   isDraftBooking = false;
   isConfirmedBooking = false;
   isCheckedout = false;
+  isFullPayment = false;
 
   constructor(
     private fb: FormBuilder,
@@ -345,6 +346,9 @@ export class AddReservationComponent extends BaseReservationComponent
               this.updateBookingItemsCounts(this.summaryData.bookingItems);
               this.updatePaymentData();
 
+              this.isFullPayment =
+                this.paymentRuleControls.amountToPay.value ===
+                this.summaryData.totalAmount;
               if (this.formValueChanges) {
                 this.reservationId
                   ? this.setFormDisability(this.checkinJourneyState)

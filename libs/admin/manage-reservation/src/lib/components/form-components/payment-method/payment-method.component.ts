@@ -38,6 +38,15 @@ export class PaymentMethodComponent implements OnInit {
   entityId: string;
   @Input() reservationId: string;
   @Input() isCheckedout: boolean;
+
+  @Input() set isFullPayment(value: boolean) {
+    value &&
+      this.reservationId &&
+      this.paymentRuleControls.partialPayment.patchValue(false, {
+        emitEvent: false,
+      });
+  }
+
   $subscription = new Subscription();
   parentFormGroup: FormGroup;
   isConfirmedReservation: boolean = false;
@@ -49,7 +58,6 @@ export class PaymentMethodComponent implements OnInit {
     private manageReservationService: ManageReservationService,
     private globalFilterService: GlobalFilterService,
     private userService: UserService,
-    private routesConfigService: RoutesConfigService,
     private modalService: ModalService
   ) {}
 

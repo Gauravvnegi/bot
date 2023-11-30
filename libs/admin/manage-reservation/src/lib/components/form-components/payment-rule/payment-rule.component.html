@@ -7,18 +7,21 @@
 >
   <div class="btn-wrapper" *ngIf="accordionTab?.selected">
     <hospitality-bot-button
-      label="Full Payment"
-      [variant]="viewAmountToPay ? 'outlined' : 'contained'"
-      (onClick)="viewAmountToPay = false"
+      label="Partial"
+      [variant]="inputControl.partialPayment.value ? 'contained' : 'outlined'"
+      (onClick)="inputControl.partialPayment.patchValue(true)"
     ></hospitality-bot-button>
     <hospitality-bot-button
-      label="Partial"
-      [variant]="viewAmountToPay ? 'contained' : 'outlined'"
-      (onClick)="viewAmountToPay = true"
+      label="Full Payment"
+      [variant]="inputControl.partialPayment.value ? 'outlined' : 'contained'"
+      (onClick)="inputControl.partialPayment.patchValue(false)"
     ></hospitality-bot-button>
   </div>
   <div class="form-block" formGroupName="paymentRule">
-    <div class="half-width type-wrapper" *ngIf="viewAmountToPay">
+    <div
+      class="half-width type-wrapper"
+      *ngIf="inputControl.partialPayment.value"
+    >
       <hospitality-bot-input
         label="Amount to pay"
         class="three-fourth-width amount-to-pay"

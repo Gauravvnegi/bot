@@ -499,6 +499,7 @@ export class InvoiceComponent implements OnInit {
       isAddOn: [true],
       isMiscellaneous: [false],
       reservationItemId: [null],
+      isRefund: [false],
     };
 
     const formGroup = this.fb.group(data);

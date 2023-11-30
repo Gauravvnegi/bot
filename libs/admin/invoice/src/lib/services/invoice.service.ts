@@ -93,6 +93,7 @@ export class InvoiceService extends ApiService {
       unit: 1,
       isAddOn: true,
       reservationItemId: '',
+      isRefund: false,
       ...settings,
     };
   }

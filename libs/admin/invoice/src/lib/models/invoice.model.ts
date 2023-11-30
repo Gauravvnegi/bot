@@ -116,6 +116,7 @@ export class TableData {
   isAddOn: boolean;
   isMiscellaneous: boolean;
   reservationItemId: string;
+  isRefund: boolean;
 
   deserialize(input: BillItem) {
     this.key = input.id;
@@ -135,6 +136,7 @@ export class TableData {
     this.isMiscellaneous = !input.itemId && !input.isCoupon;
     this.isAddOn = input.isAddOn;
     this.reservationItemId = input?.taxId ? input.itemId : input.id;
+    this.isRefund = input?.isRefund;
     return this;
   }
 }

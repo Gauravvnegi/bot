@@ -305,7 +305,7 @@ export class BookingSummaryComponent implements OnInit {
 
   calculateAmountToBePaid(summaryData: SummaryData) {
     const totalAmount =
-      summaryData?.totalDueAmount || summaryData?.totalDueAmount === 0
+      summaryData?.totalDueAmount
         ? summaryData.totalDueAmount
         : summaryData.totalAmount;
 

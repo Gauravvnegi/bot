@@ -164,6 +164,7 @@ export class UpdateRatesComponent implements OnInit {
           value: roomType.value,
           isBaseRoomType: roomType.isBaseRoomType,
           basePrice: roomType.price,
+          masterBasePrice: roomType.price,
         })
       );
       this.addRoomDynamicPriceControl(roomTypeIdx);
@@ -439,11 +440,11 @@ export class UpdateRatesComponent implements OnInit {
   }) {
     this.useFormControl.roomTypes.controls.forEach(
       (roomType: FormGroup, index: number) => {
-        const { isBaseRoomType, basePrice } = roomType.controls;
+        const { isBaseRoomType, basePrice, masterBasePrice } = roomType.controls;  
+        basePrice.patchValue(mappingInfo.res.value.length ? +mappingInfo.res.value : +masterBasePrice.value,{emitEvent: false});
         if (!isBaseRoomType.value) {
           const { ratePlans } = roomType.controls;
-
-          console.log(index, basePrice.value);
+          
           this.mapRoomPrices(
             ratePlans as FormArray,
             mappingInfo.dayWise,

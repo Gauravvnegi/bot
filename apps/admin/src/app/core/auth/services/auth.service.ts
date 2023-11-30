@@ -13,6 +13,7 @@ import {
   LoginParam,
   RefreshTokenParam,
 } from '../types/auth.type';
+import { tokensConfig } from 'libs/admin/shared/src/lib/constants/common';
 
 /**
  * @class To manage all the api call for authentication.
@@ -27,6 +28,7 @@ export class AuthService extends ApiService {
     'x-brandId',
     'x-entityId',
     'selectedProduct',
+    'custom-user-agent',
   ];
 
   /**
@@ -94,6 +96,22 @@ export class AuthService extends ApiService {
    */
   setTokenByName(tokenName: string, value: string) {
     localStorage.setItem(tokenName, value);
+  }
+
+  getUniqueUserAgent() {
+    const currentUserAgentToken = this.getTokenByName(tokensConfig.userAgent);
+    if (currentUserAgentToken) {
+      return currentUserAgentToken;
+    } else {
+      const systemId = navigator.userAgent + navigator.platform;
+      const currentDate = Math.floor(new Date().getTime() / 1000); // Extract YYYY-MM-DD from ISO date
+      const randomVersion = Math.floor(Math.random() * 10) + 1; // Random version between 1 and 10
+      const UniqueUserAgent = `${systemId}/${randomVersion}/${currentDate}`;
+
+      localStorage.setItem(tokensConfig.userAgent, UniqueUserAgent);
+
+      return UniqueUserAgent;
+    }
   }
 
   /**

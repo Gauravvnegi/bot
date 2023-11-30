@@ -1,6 +1,6 @@
 <p-accordionTab
   header="Payment Method"
-  *ngIf="isConfirmedReservation"
+  *ngIf="isConfirmedReservation && !isCheckedout"
   [formGroup]="parentFormGroup"
 >
   <div class="form-block" formGroupName="paymentMethod">

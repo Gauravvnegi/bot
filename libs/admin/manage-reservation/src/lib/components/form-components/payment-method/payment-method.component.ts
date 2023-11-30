@@ -37,6 +37,7 @@ export class PaymentMethodComponent implements OnInit {
   paymentOptions: Option[] = [];
   entityId: string;
   @Input() reservationId: string;
+  @Input() isCheckedout: boolean;
   $subscription = new Subscription();
   parentFormGroup: FormGroup;
   isConfirmedReservation: boolean = false;
@@ -59,16 +60,14 @@ export class PaymentMethodComponent implements OnInit {
     this.initConfig();
 
     const { firstName, lastName, id } = this.userService.userDetails;
-    this.parentFormGroup
-      .get('paymentMethod')
-      .patchValue(
-        {
-          cashierFirstName: firstName,
-          cashierLastName: lastName,
-          cashierId: id,
-        },
-        { emitEvent: false }
-      );
+    this.parentFormGroup.get('paymentMethod').patchValue(
+      {
+        cashierFirstName: firstName,
+        cashierLastName: lastName,
+        cashierId: id,
+      },
+      { emitEvent: false }
+    );
   }
 
   addFormGroup() {

@@ -142,15 +142,15 @@ export class BaseReservationComponent {
               .get('guestDetails')
               .enable({ emitEvent: false });
           }
-          for (const controlName in this.paymentControls) {
-            if (
-              controlName !== 'cashierFirstName' &&
-              controlName !== 'cashierLastName'
-            ) {
-              this.paymentControls[controlName].enable({ emitEvent: false });
-            }
-          }
           break;
+      }
+      for (const controlName in this.paymentControls) {
+        if (
+          controlName !== 'cashierFirstName' &&
+          controlName !== 'cashierLastName'
+        ) {
+          this.paymentControls[controlName].enable({ emitEvent: false });
+        }
       }
 
       // reservationType.enable();

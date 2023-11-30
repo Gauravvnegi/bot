@@ -54,6 +54,7 @@ export class AddReservationComponent extends BaseReservationComponent
   cancelOfferRequests$ = new Subject<void>();
   isDraftBooking = false;
   isConfirmedBooking = false;
+  isCheckedout = false;
 
   constructor(
     private fb: FormBuilder,
@@ -227,6 +228,7 @@ export class AddReservationComponent extends BaseReservationComponent
             } = data;
 
             this.isDraftBooking = reservationInfo.reservationType === 'DRAFT';
+            this.isCheckedout = response.status === 'CHECKEDOUT';
             this.checkinJourneyState = data.journeyState;
             this.isExternalBooking = response.externalBooking;
             this.formService.sourceData.next({

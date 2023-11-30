@@ -98,6 +98,12 @@
             | currency: 'INR'
         }}</span>
       </p>
+      <p class="bk-summary_priceInfo_perNight" *ngIf="summaryData?.refund">
+        <span class="bk-summary_priceInfo_perNight_label">Total Refund</span>
+        <span class="bk-summary_priceInfo_perNight_amount">{{
+          summaryData.refund | currency: 'INR'
+        }}</span>
+      </p>
     </div>
     <p class="divider"></p>
     <div class="footer">
@@ -165,7 +171,7 @@
       Adults
     </span>
     <span class="bk-summary_priceInfo_perNight_amount">
-      {{ summaryData?.basePrice | currency: 'INR' }}
+      {{ summaryData?.roomCharges | currency: 'INR' }}
     </span>
   </p>
   <p class="bk-summary_priceInfo_taxFair">
@@ -175,6 +181,17 @@
       *ngIf="summaryData?.taxAndFees"
       >+{{ summaryData?.taxAndFees | currency: 'INR' }}</span
     >
+  </p>
+  <p
+    class="bk-summary_priceInfo_perNight"
+    *ngIf="summaryData?.miscellaneousCharges"
+  >
+    <span class="bk-summary_priceInfo_perNight_label"
+      >Total Miscellaneous Charges</span
+    >
+    <span class="bk-summary_priceInfo_perNight_amount">{{
+      summaryData.miscellaneousCharges | currency: 'INR'
+    }}</span>
   </p>
 </ng-template>
 
@@ -246,7 +263,7 @@
         Kids
       </span>
       <span class="bk-summary_priceInfo_perNight_amount">
-        {{ bookingItem?.basePrice | currency: 'INR' }}
+        {{ bookingItem?.roomCharges | currency: 'INR' }}
       </span>
     </p>
     <p
@@ -279,6 +296,17 @@
         *ngIf="bookingItem?.taxAndFees"
         >+{{ bookingItem?.taxAndFees | currency: 'INR' }}</span
       >
+    </p>
+    <p
+      class="bk-summary_priceInfo_perNight"
+      *ngIf="summaryData?.miscellaneousCharges"
+    >
+      <span class="bk-summary_priceInfo_perNight_label"
+        >Total Miscellaneous Charges</span
+      >
+      <span class="bk-summary_priceInfo_perNight_amount">{{
+        summaryData.miscellaneousCharges | currency: 'INR'
+      }}</span>
     </p>
   </div>
 </ng-template>

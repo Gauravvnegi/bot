@@ -484,6 +484,9 @@ export class SummaryData {
   taxAndFees: number;
   basePrice: number;
   offerAmount: number;
+  refund: number;
+  miscellaneousCharges: number;
+  roomCharges?: number;
   location: string;
 
   deserialize(input?: SummaryResponse) {
@@ -517,6 +520,10 @@ export class SummaryData {
     this.max = input?.pricingDetails?.max ?? 0;
     this.paxChild = input?.pricingDetails?.paxChild ?? 0;
     this.paxAdult = input?.pricingDetails?.paxAdult ?? 0;
+    this.refund = input?.pricingDetails?.refund ?? 0;
+    this.miscellaneousCharges =
+      input?.pricingDetails?.miscellaneousCharges ?? 0;
+    this.roomCharges = input?.pricingDetails?.roomCharges ?? 0;
     return this;
   }
 }

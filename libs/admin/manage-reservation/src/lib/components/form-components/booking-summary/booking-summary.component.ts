@@ -12,7 +12,7 @@ import {
   SummaryData,
 } from '../../../models/reservations.model';
 import { AbstractControl, ControlContainer, FormGroup } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import {
   ModalService,
   SnackBarService,
@@ -303,10 +303,11 @@ export class BookingSummaryComponent implements OnInit {
     });
   }
 
-  calculateAmountToBePaid(summaryData) {
-    const totalAmount = summaryData.totalDueAmount
-      ? summaryData.totalDueAmount
-      : summaryData.totalAmount;
+  calculateAmountToBePaid(summaryData: SummaryData) {
+    const totalAmount =
+      summaryData?.totalDueAmount || summaryData?.totalDueAmount === 0
+        ? summaryData.totalDueAmount
+        : summaryData.totalAmount;
 
     // When total due amount is 0.
     const totalPaidAmount =

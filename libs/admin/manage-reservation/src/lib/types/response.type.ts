@@ -127,6 +127,9 @@ export type PricingDetails = {
   taxAndFees: number;
   basePrice: number;
   discountedAmount?: number;
+  refund?: number;
+  miscellaneousCharges?: number;
+  roomCharges?: number;
 };
 
 export type SummaryPricing = {

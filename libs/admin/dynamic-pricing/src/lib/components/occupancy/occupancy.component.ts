@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnInit, Renderer2 } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, Renderer2, ViewChild } from '@angular/core';
 import {
   AbstractControl,
   FormArray,
@@ -32,6 +32,8 @@ import { RoomTypes } from 'libs/admin/channel-manager/src/lib/models/bulk-update
 import { ModalComponent } from 'libs/admin/shared/src/lib/components/modal/modal.component';
 import { MatDialogConfig } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
+import { Accordion } from 'primeng/accordion';
+import { openAccordion } from '../../models/bar-price.model';
 
 export type ControlTypes = 'season' | 'occupancy' | 'hotel-occupancy';
 
@@ -63,6 +65,7 @@ export class OccupancyComponent implements OnInit {
     }
   }
   @Input() rooms: RoomTypes[];
+  @ViewChild('accordion') accordion: Accordion;
   $subscription = new Subscription();
 
   get dynamicPricingFG(): FormGroup {
@@ -169,6 +172,15 @@ export class OccupancyComponent implements OnInit {
       case 'season':
         this.dynamicPricingControl.occupancyFA.push(this.seasonFG);
         this.listenChanges();
+        if(onClickAddition){
+          setTimeout(()=>{
+            openAccordion({
+              accordion: this.accordion,
+              index: this.dynamicPricingControl.occupancyFA.controls.length-1,
+              isScrollToTop: true
+            });
+          });
+        }
         break;
       case 'occupancy':
         const { roomStrikeAmount, occupancy } = (form as FormGroup).controls;

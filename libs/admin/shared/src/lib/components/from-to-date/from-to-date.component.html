@@ -6,7 +6,7 @@
       [controlName]="controlNames.from"
       [label]="showLabel ? labels.from : ''"
       [props]="{
-        placeholder: 'Select From ' + (isTimeOnly ? 'Time' : 'Date'),
+        placeholder: (isTimeOnly ? 'HH:MM A' : 'DD/MM/YYYY'),
         errorMessages: preErrorMessages,
         floatInsideLabel: floatInsideLabel
       }"
@@ -26,7 +26,7 @@
       [controlName]="controlNames.to"
       [label]="showLabel ? labels.to : ''"
       [props]="{
-        placeholder: 'Select To ' + (isTimeOnly ? 'Time' : 'Date'),
+        placeholder:  (isTimeOnly ? 'HH:MM A' : 'DD/MM/YYYY'),
         errorMessages: postErrorMessages,
         floatInsideLabel: floatInsideLabel
       }"

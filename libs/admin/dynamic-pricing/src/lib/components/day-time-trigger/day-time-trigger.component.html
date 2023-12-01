@@ -1,5 +1,5 @@
 <div [formGroup]="dynamicPricingFG" *ngIf="!!dynamicPricingFG">
-  <p-accordion class="accordion" [multiple]="true">
+  <p-accordion class="accordion" [multiple]="true" #accordion>
     <div formArrayName="timeFA">
       <div
         *ngFor="
@@ -234,7 +234,7 @@
         </div>
       </div>
       <div class="add-trigger">
-        <div class="link" (click)="modifyTriggerFG()">+Add New</div>
+        <div class="link" (click)="modifyTriggerFG('add',null,true)">+Add New</div>
       </div>
     </div>
   </p-accordion>

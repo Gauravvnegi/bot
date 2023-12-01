@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import {
   AbstractControl,
   FormArray,
@@ -25,6 +25,8 @@ import {
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { ModalComponent } from 'libs/admin/shared/src/lib/components/modal/modal.component';
 import { MatDialogConfig } from '@angular/material/dialog';
+import { openAccordion } from '../../models/bar-price.model';
+import { Accordion } from 'primeng/accordion';
 
 @Component({
   selector: 'hospitality-bot-day-time-trigger',
@@ -37,6 +39,7 @@ export class DayTimeTriggerComponent implements OnInit {
   parentFG: FormGroup;
   loading = false;
   $subscription = new Subscription();
+  @ViewChild('accordion') accordion: Accordion;
 
   @Input() set dynamicPricingFG(form: FormGroup) {
     this.parentFG = form;
@@ -66,7 +69,7 @@ export class DayTimeTriggerComponent implements OnInit {
     this.entityId = this.globalFilter.entityId;
   }
 
-  modifyTriggerFG(mode = Revenue.add, index?: number): void {
+  modifyTriggerFG(mode = Revenue.add, index?: number, createOnClick?:boolean): void {
     const dayTimeFormArray = this.dynamicPricingControl.timeFA;
     if (mode != Revenue.add) {
       const triggerFG = dayTimeFormArray.at(index) as FormGroup;
@@ -125,7 +128,19 @@ export class DayTimeTriggerComponent implements OnInit {
       this.modifyTriggerFGEvent.emit({ mode, index });
       this.listenChanges(
         dayTimeFormArray.at(dayTimeFormArray.controls.length - 1) as FormGroup
-      );
+      ); 
+       
+      // TODO: Need to scroll on create new trigger
+      // if(createOnClick){ 
+      //     setTimeout(()=>{
+      //       openAccordion({
+      //         accordion: this.accordion,
+      //         index: dayTimeFormArray.length-2,
+      //         isScrollToTop: true,
+      //         wait: 500
+      //       });
+      //    });
+      // }
     }
   }
 

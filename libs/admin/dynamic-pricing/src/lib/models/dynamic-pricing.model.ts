@@ -346,7 +346,7 @@ export class DynamicPricingHandler {
                 start: rule.start,
                 end: rule.end,
                 discount: rule.discount,
-              });
+              }); 
           }
         );
       });
@@ -368,10 +368,10 @@ export class DynamicPricingHandler {
               toTime: rule?.toTime,
             }
           : {
-              rate: (
+              rate: Math.floor(
                 (rule.discount * item.basePrice) / 100 +
                 item.basePrice
-              ).toFixed(2),
+              ),
             };
       rule &&
         hotelOccupancy.patchValue(

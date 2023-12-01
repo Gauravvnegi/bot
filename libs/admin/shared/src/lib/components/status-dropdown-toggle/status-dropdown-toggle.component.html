@@ -9,7 +9,7 @@
       menuOptions.length ? { 'flex-basis': '90%' } : { 'flex-basis': '100%' }
     "
     [label]="label"
-    (onClick)="toggleState()"
+    (onClick)="!isDisabledMenuCta && toggleState()"
     [model]="items"
     [styleClass]="styleClass"
     [disabled]="disabled"

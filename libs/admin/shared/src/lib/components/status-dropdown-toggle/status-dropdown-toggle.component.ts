@@ -13,6 +13,7 @@ export class StatusDropdownToggleComponent implements OnInit {
   label = 'Active';
   value: string | boolean;
   styleClass = 'activeButton';
+  @Input() isDisabledMenuCta = false;
   items: (Status & { command: () => void })[] = [];
   @Input() toggleMenu: boolean;
 

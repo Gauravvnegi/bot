@@ -54,3 +54,7 @@
   margin: 0;
   max-width: 115px;
 }
+
+:host ::ng-deep .p-datatable.p-datatable-sm .p-datatable-footer {
+  display: none !important;
+}

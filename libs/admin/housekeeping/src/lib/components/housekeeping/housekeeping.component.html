@@ -23,6 +23,14 @@
     }"
   >
   </hospitality-bot-room-types>
+  <hospitality-bot-input
+    class="btn-width"
+    controlName="search"
+    label="Search Room"
+    [props]="{
+      placeholder: 'Search by Room Number...'
+    }"
+  ></hospitality-bot-input>
 </div>
 
 <p-table
@@ -80,6 +88,7 @@
   <!-- *********************************FOOTER******************************* -->
   <ng-template pTemplate="summary">
     <p-paginator
+      [hidden]="true"
       #paginator
       [rows]="rowsPerPage"
       [totalRecords]="totalRecords"

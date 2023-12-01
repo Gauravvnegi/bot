@@ -6,6 +6,7 @@ import {
   UpdateBarPriceRequest,
 } from '../types/bar-price.types';
 import { BarPriceRatePlan } from '../constants/barprice.const';
+import { Accordion } from 'primeng/accordion';
 
 export class BarPriceFactory {
   static buildRequest(inputForm: BarPriceFormType): UpdateBarPriceRequest {
@@ -58,5 +59,23 @@ export class BarPriceFactory {
     });
 
     return { inventoryList: data };
+  }
+}
+
+export function openAccordion(data: {
+  accordion: Accordion;
+  index: number;
+  isScrollToTop?: boolean;
+  wait?: number;
+}) {
+  data.wait = data.wait ? data.wait : 210;
+  const tab = data.accordion.tabs[data.index];
+  console.log(data.accordion.tabs)
+  tab.selected = true;
+  if (data.isScrollToTop) {
+    setTimeout(() => {
+      const mainLayout = document.getElementById('main-layout');
+      mainLayout.scrollBy({ top: mainLayout.scrollHeight, behavior: 'smooth' });
+    }, data.wait);
   }
 }

@@ -7,12 +7,16 @@ import {
 } from '@angular/forms';
 import {
   AdminUtilityService,
+  ModuleNames,
   NavRouteOptions,
   QueryConfig,
 } from '@hospitality-bot/admin/shared';
 import { CheckBoxTreeFactory } from '../../models/bulk-update.models';
 import { ChannelManagerFormService } from '../../services/channel-manager-form.service';
-import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import {
+  GlobalFilterService,
+  RoutesConfigService,
+} from '@hospitality-bot/admin/core/theme';
 import { Subscription } from 'rxjs';
 import { UpdateRates } from '../../models/channel-manager.model';
 import { ChannelManagerService } from '../../services/channel-manager.service';
@@ -30,13 +34,7 @@ export class RatesBulkUpdateComponent implements OnInit {
   roomsData: any;
   useForm: FormGroup;
   pageTitle = 'Bulk Update';
-  navRoutes: NavRouteOptions = [
-    {
-      label: 'Update Rates',
-      link: '/pages/channel-manager/update-rates/',
-    },
-    { label: 'Bulk Update', link: './' },
-  ];
+  navRoutes: NavRouteOptions = [{ label: 'Bulk Update', link: './' }];
   today = new Date();
   seventhDate = new Date();
   loading = false;
@@ -51,7 +49,8 @@ export class RatesBulkUpdateComponent implements OnInit {
     private adminUtilityService: AdminUtilityService,
     private channelManagerService: ChannelManagerService,
     private snackbarService: SnackBarService,
-    private router: Router
+    private router: Router,
+    private routeConfigService: RoutesConfigService
   ) {}
 
   ngOnInit(): void {
@@ -72,6 +71,13 @@ export class RatesBulkUpdateComponent implements OnInit {
     });
     this.listenChanges();
     this.loadRooms();
+    this.initNavRoutes();
+  }
+
+  initNavRoutes() {
+    this.routeConfigService.navRoutesChanges.subscribe((navRoutes) => {
+      this.navRoutes = [...navRoutes, ...this.navRoutes];
+    });
   }
 
   loadRooms() {
@@ -131,8 +137,11 @@ export class RatesBulkUpdateComponent implements OnInit {
               '',
               { panelClass: 'success' }
             );
-            this.router.navigate([this.navRoutes[0].link]);
             this.loading = false;
+            this.routeConfigService.navigate({
+              subModuleName: ModuleNames.CHANNEL_MANAGER_HOME,
+              additionalPath: 'manage-rate',
+            });
           },
           (error) => {
             this.loading = false;

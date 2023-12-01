@@ -29,7 +29,6 @@
       [options]="templateList"
       class="half-width"
       [props]="{ placeholder: 'Select Template' }"
-      (itemSelection)="fetchTemplate($event)"
     ></hospitality-bot-select>
       <hospitality-bot-select
       *ngIf="isPackageVisible"
@@ -38,7 +37,6 @@
       [options]="packageList"
       class="half-width"
       [props]="{ placeholder: 'Select Package' }"
-      (itemSelection)="fetchTemplate($event)"
     ></hospitality-bot-select>
     <hospitality-bot-multi-select
       class="full-width"

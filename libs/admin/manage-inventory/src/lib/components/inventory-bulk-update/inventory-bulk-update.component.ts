@@ -8,6 +8,7 @@ import {
 } from '@angular/forms';
 import {
   AdminUtilityService,
+  ModuleNames,
   NavRouteOptions,
   QueryConfig,
 } from '@hospitality-bot/admin/shared';
@@ -16,7 +17,10 @@ import {
   CheckBoxTreeFactory,
   RoomTypes,
 } from '../../models/bulk-update.models';
-import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import {
+  GlobalFilterService,
+  RoutesConfigService,
+} from '@hospitality-bot/admin/core/theme';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { Subscription } from 'rxjs';
 import { UpdateInventory } from '../../models/channel-manager.model';
@@ -38,13 +42,7 @@ export class InventoryBulkUpdateComponent implements OnInit {
   loading = false;
   $subscription = new Subscription();
   isRoomsEmpty = false;
-  navRoutes: NavRouteOptions = [
-    {
-      label: 'Update Inventory',
-      link: '/pages/channel-manager/update-inventory/',
-    },
-    { label: 'Bulk Update', link: './' },
-  ];
+  navRoutes: NavRouteOptions = [{ label: 'Bulk Update', link: './' }];
   roomTypes: RoomTypes[] = [];
   today = new Date();
   seventhDate = new Date();
@@ -55,7 +53,8 @@ export class InventoryBulkUpdateComponent implements OnInit {
     public snackbarService: SnackBarService,
     private adminUtilityService: AdminUtilityService,
     private channelManagerService: ChannelManagerService,
-    public router: Router
+    public router: Router,
+    private routeConfigService: RoutesConfigService
   ) {}
 
   ngOnInit(): void {
@@ -80,6 +79,13 @@ export class InventoryBulkUpdateComponent implements OnInit {
     });
     this.listenChanges();
     this.loadRooms();
+    this.initNavRoutes();
+  }
+
+  initNavRoutes() {
+    this.routeConfigService.navRoutesChanges.subscribe((navRoutes) => {
+      this.navRoutes = [...navRoutes, ...this.navRoutes];
+    });
   }
 
   get isFormValid() {
@@ -144,7 +150,10 @@ export class InventoryBulkUpdateComponent implements OnInit {
               '',
               { panelClass: 'success' }
             );
-            this.router.navigate([this.navRoutes[0].link]);
+            this.routeConfigService.navigate({
+              subModuleName: ModuleNames.CHANNEL_MANAGER_HOME,
+              additionalPath: 'manage-inventory',
+            });
             this.loading = false;
           },
           (error) => {

@@ -1,5 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import {
+  GlobalFilterService,
+  RouteConfigPathService,
+  RoutesConfigService,
+} from '@hospitality-bot/admin/core/theme';
 import { StepperEmitType } from 'libs/admin/shared/src/lib/components/stepper/stepper.component';
 import { MenuItem } from 'primeng/api';
 import { BarPriceService } from '../../services/bar-price.service';
@@ -20,6 +24,8 @@ import { DynamicPricingService } from '../../services/dynamic-pricing.service';
 import { Subscription } from 'rxjs';
 import {
   AdminUtilityService,
+  NavRouteOption,
+  NavRouteOptions,
   QueryConfig,
 } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
@@ -44,6 +50,7 @@ export class DynamicPricingComponent implements OnInit {
   ];
   loading = false;
   $subscription = new Subscription();
+  navRoutes: NavRouteOptions = [{ label: 'Create Season', link: './' }];
 
   constructor(
     private barPriceService: BarPriceService,
@@ -51,12 +58,14 @@ export class DynamicPricingComponent implements OnInit {
     private adminUtilityService: AdminUtilityService,
     private fb: FormBuilder,
     private globalFilter: GlobalFilterService,
-    private snackbarService: SnackBarService
-  ) { }
+    private snackbarService: SnackBarService,
+    private routeConfigService: RoutesConfigService
+  ) {}
 
   ngOnInit(): void {
     this.entityId = this.globalFilter.entityId;
     this.initRoom();
+    this.initNavRoutes();
   }
 
   initRoom() {
@@ -67,6 +76,12 @@ export class DynamicPricingComponent implements OnInit {
       } else {
         this.barPriceService.loadRoomTypes(this.entityId);
       }
+    });
+  }
+
+  initNavRoutes() {
+    this.routeConfigService.navRoutesChanges.subscribe((navRoutes) => {
+      this.navRoutes = [...navRoutes, ...this.navRoutes];
     });
   }
 

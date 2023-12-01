@@ -12,14 +12,17 @@ import {
   QueryConfig,
   TableService,
 } from '@hospitality-bot/admin/shared';
-import { RoomTypeOptionList } from 'libs/admin/manage-reservation/src/lib/models/reservations.model';
-import { RoomList } from 'libs/admin/room/src/lib/models/rooms-data-table.model';
+import { ChannelManagerFormService } from 'libs/admin/channel-manager/src/lib/services/channel-manager-form.service';
+import {
+  Room,
+  RoomList,
+} from 'libs/admin/room/src/lib/models/rooms-data-table.model';
 import { LazyLoadEvent } from 'primeng/api';
-import { Subscription } from 'rxjs';
+import { Subscription, of } from 'rxjs';
+import { debounceTime, switchMap } from 'rxjs/operators';
 import { roomStatusDetails } from '../../constant/room';
 import { houseKeepingRoutes } from '../../constant/routes';
 import { HousekeepingService } from '../../services/housekeeping.service';
-import { ChannelManagerFormService } from 'libs/admin/channel-manager/src/lib/services/channel-manager-form.service';
 
 @Component({
   selector: 'hospitality-bot-housekeeping',
@@ -52,6 +55,7 @@ export class HousekeepingComponent extends BaseDatatableComponent
   showContent = false;
   isQuickFilterInEmptyView: boolean = false;
   isTabFilters: boolean = false;
+  backUpRoomList: Room[];
 
   constructor(
     private fb: FormBuilder,
@@ -90,7 +94,28 @@ export class HousekeepingComponent extends BaseDatatableComponent
     this.useForm = this.fb.group({
       date: [new Date(), []],
       roomType: [''],
+      search: [''],
     });
+    this.listenForSearch();
+  }
+
+  listenForSearch() {
+    const { search } = this.useForm.controls;
+    search.valueChanges
+      .pipe(
+        debounceTime(1000),
+        switchMap((searchTerm) => {
+          const filteredValues = this.backUpRoomList.filter((item) =>
+            item.roomNo
+              .toLocaleLowerCase()
+              .includes(searchTerm.toLocaleLowerCase())
+          );
+          return of(filteredValues);
+        })
+      )
+      .subscribe((updatedValues) => {
+        this.values = updatedValues;
+      });
   }
 
   listenForRefreshData(): void {
@@ -111,6 +136,7 @@ export class HousekeepingComponent extends BaseDatatableComponent
         .subscribe(
           (res) => {
             const roomList = new RoomList().deserialize(res);
+            this.backUpRoomList = roomList.records;
             this.values = roomList.records;
             this.initFilters(
               {},
@@ -152,8 +178,8 @@ export class HousekeepingComponent extends BaseDatatableComponent
         }),
         {
           type: 'ROOM',
-          offset: this.first,
-          limit: this.rowsPerPage,
+          offset: 0,
+          limit: 0,
           roomTypeIds: this.useForm.get('roomType').value ?? [],
           raw: true,
         },

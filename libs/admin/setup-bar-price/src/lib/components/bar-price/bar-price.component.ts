@@ -40,8 +40,10 @@ export class BarPriceComponent implements OnInit {
   loadingError = false;
   active = [0];
   $subscription = new Subscription();
+  isPreview = false;
+  hasPreviewRendered = false;
   @ViewChild('accordion') accordion: Accordion;
-  private valueChangesSubject = new Subject<string[]>();
+  private valueChangesSubject = new Subject<string[]>(); 
 
   constructor(
     private fb: FormBuilder,
@@ -53,7 +55,8 @@ export class BarPriceComponent implements OnInit {
 
   ngOnInit(): void {
     this.entityId = this.globalFilter.entityId;
-    this.initRoomTypes();
+    this.barPriceService.resetRoomDetails();
+    this.initRoomTypes(); 
   }
 
   listenChanges() {
@@ -219,6 +222,12 @@ export class BarPriceComponent implements OnInit {
       );
       return;
     }
+    this.hasPreviewRendered = true;
+    this.isPreview = true; 
+  }
+
+  saveData(){
+    this.loading = true;
     const data: UpdateBarPriceRequest = BarPriceFactory.buildRequest(
       this.useForm.getRawValue()
     );
@@ -243,6 +252,7 @@ export class BarPriceComponent implements OnInit {
                   : 1
             );
             this.loading = false;
+            this.isPreview = false;
           },
           (error) => {
             this.loading = false;
@@ -329,5 +339,9 @@ export class BarPriceComponent implements OnInit {
 
   get barPriceControl() {
     return this.useFormControl.barPrices?.controls;
+  }
+
+  ngOnDestroy(){
+    this.barPriceService.resetRoomDetails();
   }
 }

@@ -206,7 +206,11 @@
                         <div
                           class="link"
                           (click)="
-                            add('hotel-occupancy', season.get('hotelConfig'),true)
+                            add(
+                              'hotel-occupancy',
+                              season.get('hotelConfig'),
+                              true
+                            )
                           "
                         >
                           +Add More
@@ -267,6 +271,7 @@
                         },
                         post: {
                           placeholder: 'End',
+                          min: form.get('start')?.value,
                           type: 'number',
                           errorMessages: {
                             required: 'This is required field',
@@ -281,7 +286,6 @@
                     </hospitality-bot-prefix-field>
                     <hospitality-bot-input
                       controlName="discount"
-                      [min]="0"
                       [props]="{
                         placeholder: 'Enter',
                         type: 'number',
@@ -313,9 +317,11 @@
                           : 'pi pi-times remove disable'
                       "
                       (click)="
-                        occupancyLength > 1 && roomConfig
-                          ? remove('occupancy', index, roomConfig.room, season)
-                          : remove('hotel-occupancy', index, season)
+                        roomConfig
+                          ? occupancyLength > 1 &&
+                            remove('occupancy', index, roomConfig.room, season)
+                          : occupancyLength > 1 &&
+                            remove('hotel-occupancy', index, season)
                       "
                     ></i>
                   </div>

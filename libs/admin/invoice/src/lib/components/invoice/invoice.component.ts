@@ -657,13 +657,14 @@ export class InvoiceComponent implements OnInit {
     this.tableFormArray.updateValueAndValidity();
   }
 
-  removeSingleItem(billItemId: string) {
-    const itemToRemove = this.tableFormArray.controls.find(
-      (control: Controls) => control.value.billItemId === billItemId
+  removeDiscountItems(itemId: string) {
+    const itemsToRemove = this.tableFormArray.controls.filter(
+      (control: Controls) =>
+        control.value.itemId === itemId && control.value.isDiscount
     );
-
-    this.tableFormArray.removeAt(
-      this.tableFormArray.controls.indexOf(itemToRemove)
+    // Step 2: Remove each matching item
+    itemsToRemove.forEach((item) =>
+      this.tableFormArray.removeAt(this.tableFormArray.controls.indexOf(item))
     );
     this.tableFormArray.updateValueAndValidity();
   }
@@ -1189,9 +1190,7 @@ export class InvoiceComponent implements OnInit {
 
         if (!totalDiscount) {
           if (alreadyHasDiscount) {
-            discountItem.forEach((item) => {
-              this.removeSingleItem(item.control.value.billItemId);
-            });
+            this.removeDiscountItems(discountItem[0].control.value.itemId);
             reservationItem.forEach((item) => {
               this.updateTax(
                 taxedAmount,
@@ -1325,6 +1324,7 @@ export class InvoiceComponent implements OnInit {
       })
     );
   }
+
   editReservation() {
     this.routesConfigService.navigate({
       subModuleName: ModuleNames.ADD_RESERVATION,

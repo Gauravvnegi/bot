@@ -55,6 +55,7 @@ export type BillSummaryData = {
   invoiceGenerated: boolean;
   invoiceDate: number;
   pdfUrl: string;
+  isRefund?: boolean;
 } & PaymentData;
 
 export type PaymentData = {

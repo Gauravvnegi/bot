@@ -200,7 +200,7 @@ export class InvoiceService extends ApiService {
       cashier: invoiceFormData.cashierName,
       cashierId: invoiceFormData.cashierId,
       remarks: invoiceFormData.additionalNote,
-
+      isRefund: !isPayment,
       // Payment info (BE related - to maintain history)
       ...(invoiceFormData.receivedPayment
         ? {

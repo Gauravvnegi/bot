@@ -265,7 +265,7 @@
         class="cell-data__content"
         [ngStyle]="{
           whiteSpace: data[row][col]?.nonInteractive ? 'wrap' : 'nowrap',
-          fontSize: height / 4 + 'px'
+          fontSize: height / 3.5 + 'px'
         }"
       >
         <ng-container *ngIf="data[row][col]?.icons">
@@ -285,7 +285,7 @@
         class="cell-data__additional-content"
         [ngStyle]="{
           whiteSpace: data[row][col]?.nonInteractive ? 'wrap' : 'nowrap',
-          fontSize: height / 5 + 'px'
+          fontSize: height / 4.5 + 'px'
         }"
       >
         {{ data[row][col]?.additionContent }}

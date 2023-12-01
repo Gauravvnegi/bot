@@ -106,6 +106,7 @@ export class MarketingNotificationComponent extends NotificationComponent
       templateId: [''],
       attachments: [[]],
       packageId: [''],
+      attachedFiles: [[]],
     });
   }
 
@@ -174,15 +175,7 @@ export class MarketingNotificationComponent extends NotificationComponent
         .subscribe((response) => {
           this.emailFG.get('message').patchValue(response.template);
           this.emailFG.get('subject').patchValue(response.subject);
-
-          // response?.attachments &&
-          //   this._emailService
-          //     .getAttachment({
-          //       params: `?url=${response.attachments.attachmentDownloadUrl}`,
-          //     })
-          //     .subscribe((response) => {
-          //       const data = new Blob([response], { type: response.type });
-          //     });
+          this.emailFG.get('attachedFiles').patchValue([response.attachments]);
         })
     );
   }
@@ -339,6 +332,8 @@ export class MarketingNotificationComponent extends NotificationComponent
       subject,
       previewText,
       topicId,
+      attachments,
+      attachedFiles,
     } = this.emailFG.getRawValue();
     const reqData = {
       fromId,
@@ -347,11 +342,17 @@ export class MarketingNotificationComponent extends NotificationComponent
       subject,
       previewText,
       topicId,
+      attachments,
     };
-    delete reqData['tempalteId'];
+    // delete reqData['tempalteId'];
+
+    const formData = new FormData();
+    formData.append('files', attachedFiles);
+    formData.append('data', JSON.stringify(reqData));
+
     this.isSending = true;
     this.$subscription.add(
-      this._emailService.sendEmail(this.entityId, reqData).subscribe(
+      this._emailService.sendEmail(this.entityId, formData).subscribe(
         (response) => {
           this.snackbarService
             .openSnackBarWithTranslate(

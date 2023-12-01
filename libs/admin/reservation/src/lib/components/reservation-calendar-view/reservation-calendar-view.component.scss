@@ -54,13 +54,13 @@ $border-color: rgba(112, 112, 112, 0.35);
 }
 
 :host ::ng-deep .ng-resizable-handle.ng-resizable-e {
-  inset: 2px 2px 2px auto;
-  height: 28px;
+  inset: 2px 2px 2px auto !important;
+  height: 28px !important;
 }
 
 :host ::ng-deep .ng-resizable-handle.ng-resizable-w {
-  inset: 2px auto 2px 2px;
-  height: 28px;
+  inset: 2px auto 2px 2px !important;
+  height: 28px !important;
 }
 
 .main-header {

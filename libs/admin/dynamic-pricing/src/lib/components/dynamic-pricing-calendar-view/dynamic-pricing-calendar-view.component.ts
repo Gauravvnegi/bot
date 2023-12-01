@@ -17,6 +17,7 @@ import {
   IGValue,
 } from 'libs/admin/shared/src/lib/components/interactive-grid/interactive-grid.component';
 import { DynamicPricingResponse } from '../../types/dynamic-pricing.types';
+import { ActivatedRoute, Router } from '@angular/router';
 
 type YearData = {
   year: number;
@@ -47,7 +48,9 @@ export class DynamicPricingCalendarViewComponent implements OnInit, OnDestroy {
     private adminUtilityService: AdminUtilityService,
     private fb: FormBuilder,
     private globalFilter: GlobalFilterService,
-    private snackbarService: SnackBarService
+    private snackbarService: SnackBarService,
+    private router:Router,
+    private route: ActivatedRoute
   ) {}
 
   heading = 'Update inventory';
@@ -313,6 +316,15 @@ export class DynamicPricingCalendarViewComponent implements OnInit, OnDestroy {
 
   handleEdit(event: IGEditEvent) {
     console.log(event, 'onEdit event');
+
+    if(event.id){
+      this.router.navigate(['create-season'] ,{
+        queryParams:{
+          seasonId: event.id
+        } ,
+        relativeTo : this.route
+      })
+    }
   }
 
   calculateSpace(value) {

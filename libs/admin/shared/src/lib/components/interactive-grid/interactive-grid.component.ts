@@ -555,10 +555,13 @@ export class InteractiveGridComponent {
 
   handleClick(query: IGQueryEvent) {
     const { data, id } = this.getCurrentDataInfo(query);
-
     // handling disable only right now
     if (data.nonInteractive && data.id) {
       this.onDisabledClick.emit({ id });
+    }
+
+    if(this.disableChanges){
+      this.onEdit.emit({id})
     }
   }
 

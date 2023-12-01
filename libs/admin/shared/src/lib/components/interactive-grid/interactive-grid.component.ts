@@ -43,6 +43,7 @@ export class InteractiveGridComponent {
   halfwayCell: IGProps['halfwayCell'] = true;
   /** To decide whether i-grid can exist in single cell */
   oneCellGrid: IGProps['oneCellGrid'] = false;
+  disableChanges: IGProps['disableChanges'] = false;
 
   /**
    * Props to show extra information
@@ -785,6 +786,7 @@ export type IGProps = {
   gridHeight?: GridBreakPoints;
   halfwayCell: boolean;
   oneCellGrid?: boolean;
+  disableChanges?: boolean;
 };
 
 /**

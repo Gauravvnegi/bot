@@ -14,7 +14,19 @@
     </hospitality-bot-navigation-header>
   </div>
 
-  <div>
+  <hospitality-bot-empty-table
+    *ngIf="!yearsData?.length && !loading"
+    [isLoading]="loading"
+    [link]="'create-season'"
+    [content]="{
+      description: 'No season created. Tap the Create Season to add season.',
+      imageSrc: 'assets/images/empty-table-offer.png',
+      actionName: '+ Create Season'
+    }"
+  >
+  </hospitality-bot-empty-table>
+
+  <div *ngFor="let yearData of yearsData">
     <div class="wrapper">
       <!-- LEFT SECTION -->
       <div class="left">
@@ -28,9 +40,11 @@
               }"
             >
             </hospitality-bot-room-types> -->
-            <div class="date-wrapper"></div>
+            <div class="date-wrapper">
+              {{ yearData.year }}
+            </div>
           </div>
-          <div class="main-section border-right border-top">
+          <div class="main-section border">
             <!-- <div
               loader
               [isVisible]="true"
@@ -58,16 +72,16 @@
           <div class="main-section border-x">
             <hospitality-bot-interactive-grid
               [props]="{
-                createNewToolTipInfo: 'Create New Reservation',
                 halfwayCell: false,
                 gridHeight: 'full',
                 cellSize: 36,
-                cellGap: 2.5
+                cellGap: 2.5,
+                disableChanges: true
               }"
               [gridData]="{
                 rows: gridRows,
                 columns: gridCols,
-                values: data
+                values: yearData.data
               }"
               (onChange)="handleChange($event)"
               (onCreate)="handleCreate($event)"

@@ -69,7 +69,8 @@
           [ngStyle]="{
             width: cellSize - 2 * cellGap + 'px',
             height: height - 2 * cellGap + 'px',
-            margin: cellGap + 'px'
+            margin: cellGap + 'px',
+            cursor: disableChanges ? 'default' : 'pointer'
           }"
           (click)="
             handleCreate({
@@ -77,7 +78,7 @@
               colValue: col
             })
           "
-          [pTooltip]="createNewToolTipInfo"
+          [pTooltip]="disableChanges ? undefined : createNewToolTipInfo"
           showDelay="500"
           tooltipPosition="top"
         >
@@ -128,7 +129,7 @@
         colValue: col,
         colIdx: colIdx,
         rowIdx: rowIdx
-      })
+      }) && !disableChanges
     "
     [ngResizable]="
       isInteractive({
@@ -136,7 +137,7 @@
         colValue: col,
         colIdx: colIdx,
         rowIdx: rowIdx
-      })
+      }) && !disableChanges
     "
     [rzMinWidth]="cellSize / resizeDelimiter"
     [rzGrid]="cellSize / resizeDelimiter"
@@ -242,6 +243,7 @@
           colIdx: colIdx,
           rowIdx: rowIdx
         }),
+        'click-only': disableChanges,
         'success-cell': data[row][col]?.colorCode === 'success',
         'active-cell': data[row][col]?.colorCode === 'active',
         'inactive-cell': data[row][col]?.colorCode === 'inactive',

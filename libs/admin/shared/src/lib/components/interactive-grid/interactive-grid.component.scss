@@ -60,6 +60,10 @@
     cursor: not-allowed;
   }
 
+  &.click-only {
+    cursor: pointer;
+  }
+
   &__content {
     font-size: small;
     @include no-break-hidden-text;

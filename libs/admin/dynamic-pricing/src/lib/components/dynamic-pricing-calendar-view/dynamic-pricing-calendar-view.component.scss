@@ -31,7 +31,7 @@ $header-height: 35px;
 
 .wrapper {
   display: flex;
-  min-height: 65vh;
+  min-height: 500px;
   width: 100%;
 }
 
@@ -63,6 +63,13 @@ $header-height: 35px;
 
   &__left {
     justify-content: space-between;
+
+    & .date-wrapper {
+      width: 100%;
+      border: 1px solid rgba(112, 112, 112, 0.35);
+      line-height: 35px;
+      text-align: center;
+    }
   }
 }
 
@@ -76,7 +83,7 @@ $header-height: 35px;
 // ------- Section Styling -------
 
 .main-section {
-  margin-top: 20px;
+  // margin-top: 20px;
   display: flex;
   flex-direction: column;
 
@@ -227,6 +234,10 @@ $header-height: 35px;
 
 .border-right {
   border-right: 1px solid #8080802e;
+}
+
+.border {
+  border: 1px solid #8080802e;
 }
 
 .data-cell-wrapper {

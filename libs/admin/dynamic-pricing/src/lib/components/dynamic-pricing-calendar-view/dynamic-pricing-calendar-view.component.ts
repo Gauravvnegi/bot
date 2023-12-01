@@ -16,104 +16,12 @@ import {
   IGCol,
   IGValue,
 } from 'libs/admin/shared/src/lib/components/interactive-grid/interactive-grid.component';
+import { DynamicPricingResponse } from '../../types/dynamic-pricing.types';
 
-const data: IGValue[] = [
-  {
-    id: 'RES000',
-    content: 'Out left 105',
-    startPos: 8,
-    endPos: 10,
-    rowValue: 105,
-    colorCode: 'warning',
-    icons: ['assets/svg/View.svg', 'assets/svg/copy.svg'],
-    additionContent: 'BigOh private ltd.',
-  },
-  {
-    id: 'RES01000',
-    content: 'Out right 105',
-    startPos: 19,
-    endPos: 22,
-    rowValue: 105,
-    colorCode: 'active',
-    icons: ['assets/svg/copy.svg'],
-  },
-  {
-    id: 'RES001',
-    content: 'Room not available',
-    startPos: 14,
-    endPos: 16,
-    rowValue: 101,
-    colorCode: 'draft',
-    nonInteractive: true,
-  },
-  {
-    id: 'RES002',
-    content: 'Akash 101',
-    startPos: 17,
-    endPos: 19,
-    rowValue: 101,
-    colorCode: 'warning',
-    icons: ['assets/svg/View.svg', 'assets/svg/copy.svg'],
-    additionContent: 'BigOh private ltd.',
-  },
-  {
-    id: 'RES003',
-    content: 'Jag 101',
-    startPos: 20,
-    endPos: 21,
-    rowValue: 101,
-    colorCode: 'success',
-    additionContent: 'BigOh private ltd.',
-  },
-  {
-    id: 'RES004',
-    content: 'Tony Stark 102',
-    startPos: 10,
-    endPos: 15,
-
-    rowValue: 102,
-    colorCode: 'success',
-    icons: ['assets/svg/copy.svg'],
-    additionContent: 'BigOh private ltd.',
-  },
-  {
-    id: 'RES006',
-    content: 'Steve Rogers 103',
-    startPos: 11,
-    endPos: 15,
-    rowValue: 103,
-    colorCode: 'active',
-  },
-
-  {
-    id: 'RES0071',
-    content: 'Pradeep 104',
-    startPos: 11,
-    endPos: 19,
-    rowValue: 104,
-    colorCode: 'inactive',
-    icons: ['assets/svg/copy.svg', 'assets/svg/View.svg'],
-
-    additionContent: 'BigOh private ltd.',
-  },
-  {
-    id: 'RES008',
-    content: 'Ayush 104',
-    startPos: 19,
-    endPos: 20,
-    rowValue: 104,
-    colorCode: 'active',
-    additionContent: 'BigOh private ltd.',
-  },
-  {
-    id: 'RES007',
-    content: 'Ayush 104',
-    startPos: 21,
-    endPos: 30,
-    rowValue: 104,
-    colorCode: 'inactive',
-  },
-];
+type YearData = {
+  year: number;
+  data: IGValue[];
+};
 
 @Component({
   selector: 'hospitality-bot-dynamic-pricing-calendar-view',
@@ -148,6 +56,8 @@ export class DynamicPricingCalendarViewComponent implements OnInit, OnDestroy {
   gridRows: IGRow[] = fullMonths;
 
   data: IGValue[] = [];
+  years = [2023, 2024];
+  yearsData: YearData[] = [];
 
   reset = true;
 
@@ -173,58 +83,143 @@ export class DynamicPricingCalendarViewComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.entityId = this.globalFilter.entityId;
-
+    this.loading = true;
     this.$subscription.add(
       this.dynamicPricingService
         .getDynamicPricingList({
           params: '?type=OCCUPANCY',
         })
-        .subscribe((res) => {
-          console.log(res);
-          const finalData = new Array<IGValue>();
+        .subscribe(
+          (res) => {
+            let dataObj = {};
 
-          res.configDetails.forEach((item) => {
-            const startDate = this.getFormattedDate(item.fromDate);
-            const endDate = this.getFormattedDate(item.toDate);
+            res.configDetails.forEach((item) => {
+              const startDate = this.getFormattedDate(item.fromDate);
+              const endDate = this.getFormattedDate(item.toDate);
 
-            const lastDates = this.getLastDaysOfMonthBetweenDates(
-              item.fromDate,
-              item.toDate
-            );
+              const isSameYear = startDate.year === endDate.year;
+              console.log(item.name, 'sss', isSameYear);
 
-            console.log(lastDates, 'getLastDaysOfMonthBetweenDates');
+              if (isSameYear) {
+                dataObj = {
+                  ...dataObj,
+                  [startDate.year]: [...(dataObj[startDate.year] ?? []), item],
+                };
 
-            const startMonthIndex = this.gridRows.indexOf(
-              startDate.monthFullName
-            );
-            const endMonthIndex = this.gridRows.indexOf(endDate.monthFullName);
+                console.log(item, '.isSameYear', startDate.year);
+              } else {
+                const { lastDate, newDate } = this.getLastDateOfTheYear(
+                  item.fromDate
+                );
 
-            const itemArray = Array.from(
-              { length: endMonthIndex - startMonthIndex + 1 },
-              (_, index) => startMonthIndex + index
-            );
+                console.log(lastDate, newDate, 'newDate');
 
-            itemArray.forEach((monthIndex, index) => {
-              const isLastItem = index === itemArray.length - 1;
-              const isFirstItem = index === 0;
-              const gridData = {
-                id: item.id,
-                startPos: isFirstItem ? startDate.day : 1,
-                endPos: isLastItem ? endDate.day : lastDates[index],
-                rowValue: this.gridRows[monthIndex],
+                const startItem = {
+                  ...item,
+                  toDate: lastDate,
+                };
 
-                content: item.name,
-                additionContent: item.daysIncluded
-                  .map((item) => item.substring(0, 3))
-                  .join(', '),
-              };
+                const endItem = {
+                  ...item,
+                  fromDate: newDate,
+                };
 
-              finalData.push(gridData);
+                console.log(startItem, endItem, 'endItem');
+
+                const startItemStartDate = this.getFormattedDate(
+                  startItem.fromDate
+                );
+                const endItemStartDate = this.getFormattedDate(newDate);
+
+                dataObj = {
+                  ...dataObj,
+                  [startItemStartDate.year]: [
+                    ...(dataObj[startItemStartDate.year] ?? []),
+                    startItem,
+                  ],
+                  [endItemStartDate.year]: [
+                    ...(dataObj[startItemStartDate.year] ?? []),
+                    endItem,
+                  ],
+                };
+              }
+
+              console.log(dataObj, 'dataObj');
             });
-          });
 
-          this.data = [...finalData, ...this.getNonInteractiveGrid(2024)];
-        })
+            console.log(dataObj, 'dfinal');
+
+            const finalYearData = new Array<YearData>();
+
+            Object.entries(dataObj).forEach(
+              ([key, value]: [
+                string,
+                DynamicPricingResponse['configDetails']
+              ]) => {
+                const resultYearData: YearData = {
+                  year: +key,
+                  data: [],
+                };
+
+                const finalData = new Array<IGValue>();
+
+                value.forEach((item) => {
+                  const startDate = this.getFormattedDate(item.fromDate);
+                  const endDate = this.getFormattedDate(item.toDate);
+
+                  const lastDates = this.getLastDaysOfMonthBetweenDates(
+                    item.fromDate,
+                    item.toDate
+                  );
+
+                  const startMonthIndex = this.gridRows.indexOf(
+                    startDate.monthFullName
+                  );
+                  const endMonthIndex = this.gridRows.indexOf(
+                    endDate.monthFullName
+                  );
+
+                  const itemArray = Array.from(
+                    { length: endMonthIndex - startMonthIndex + 1 },
+                    (_, index) => startMonthIndex + index
+                  );
+
+                  itemArray.forEach((monthIndex, index) => {
+                    const isLastItem = index === itemArray.length - 1;
+                    const isFirstItem = index === 0;
+                    const gridData: IGValue = {
+                      id: item.id,
+                      startPos: isFirstItem ? startDate.day : 1,
+                      endPos: isLastItem ? endDate.day : lastDates[index],
+                      rowValue: this.gridRows[monthIndex],
+
+                      content: item.name,
+                      additionContent: item.daysIncluded
+                        .map((item) => item.substring(0, 3))
+                        .join(', '),
+                    };
+
+                    finalData.push(gridData);
+                  });
+                });
+
+                resultYearData.data = [
+                  ...finalData,
+                  ...this.getNonInteractiveGrid(+key),
+                ];
+
+                finalYearData.push(resultYearData);
+              }
+            );
+
+            this.yearsData = finalYearData;
+
+            this.loading = false;
+          },
+          () => {
+            this.loading = false;
+          }
+        )
     );
   }
 
@@ -268,6 +263,24 @@ export class DynamicPricingCalendarViewComponent implements OnInit, OnDestroy {
     return result;
   }
 
+  getLastDateOfTheYear(fromDate: number) {
+    const fromYear = new Date(fromDate).getFullYear();
+
+    const lastDayOfYearEpoch = new Date(
+      fromYear,
+      11,
+      31,
+      23,
+      59,
+      59,
+      999
+    ).getTime();
+
+    const firstDayOfNextYearEpoch = new Date(fromYear + 1, 0, 1).getTime();
+
+    return { lastDate: lastDayOfYearEpoch, newDate: firstDayOfNextYearEpoch };
+  }
+
   getFormattedDate(epochDate: number) {
     const date = new Date(epochDate);
 
@@ -309,7 +322,7 @@ export class DynamicPricingCalendarViewComponent implements OnInit, OnDestroy {
   handleReset() {
     this.loading = false;
     setTimeout(() => {
-      this.data = [...data];
+      // this.data = [...data];
       this.loading = false;
     }, 1500);
   }

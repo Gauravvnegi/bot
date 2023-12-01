@@ -14,7 +14,11 @@ $border-color: rgba(112, 112, 112, 0.35);
   align-items: center;
 }
 
-.main-wrapper {
+:host ::ng-deep .main-wrapper {
+  .input.p-inputtext {
+    font-size: 14px;
+    padding: 0.9em 5px;
+  }
 }
 
 .wrapper {

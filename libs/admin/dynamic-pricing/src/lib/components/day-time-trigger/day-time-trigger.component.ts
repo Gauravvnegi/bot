@@ -98,7 +98,7 @@ export class DayTimeTriggerComponent implements OnInit {
                   .subscribe(
                     (res) => {
                       this.snackbarService.openSnackBarAsText(
-                        ` Day/Time Trigger deleted Successfully.`,
+                        `Trigger '${triggerFG.get('name').value}' deleted Successfully.`,
                         '',
                         { panelClass: 'success' }
                       );
@@ -167,7 +167,7 @@ export class DayTimeTriggerComponent implements OnInit {
   }
 
   triggerStatusChange(event: boolean, triggerFG: FormGroup) {
-    const { id } = triggerFG.controls;
+    const { id,name } = triggerFG.controls;
     if (id.value) {
       this.loading = true;
       this.$subscription.add(
@@ -181,7 +181,7 @@ export class DayTimeTriggerComponent implements OnInit {
           .subscribe(
             (res) => {
               this.snackbarService.openSnackBarAsText(
-                'Status Updated Successfully',
+                `Trigger '${name.value}' Status Updated Successfully`,
                 '',
                 { panelClass: 'success' }
               );
@@ -303,9 +303,9 @@ export class DayTimeTriggerComponent implements OnInit {
       request(...requestParams).subscribe(
         (res) => {
           this.snackbarService.openSnackBarAsText(
-            `Day/Time Trigger ${
+            `Trigger '${
               form.get('type').value === 'add' ? 'Created ' : 'Updated '
-            } Successfully.`,
+            }' Successfully.`,
             '',
             { panelClass: 'success' }
           );

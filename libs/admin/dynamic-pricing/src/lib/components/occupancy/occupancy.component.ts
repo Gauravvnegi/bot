@@ -114,7 +114,7 @@ export class OccupancyComponent implements OnInit {
   seasonStatusChange(status, seasonIndex: number) {
     const control = this.dynamicPricingControl.occupancyFA.at(
       seasonIndex
-    ) as FormGroup;
+    ) as FormGroup; 
     if (control.get('id').value) {
       this.loading = true;
       this.$subscription.add(
@@ -128,7 +128,7 @@ export class OccupancyComponent implements OnInit {
           .subscribe(
             (res) => {
               this.snackbarService.openSnackBarAsText(
-                `Status Updated Successfully.`,
+                `Season '${control.controls['name'].value}' Status Updated Successfully.`,
                 '',
                 { panelClass: 'success' }
               );
@@ -364,12 +364,12 @@ export class OccupancyComponent implements OnInit {
     
     discount.valueChanges.subscribe((percentage) => {
       const totalRate = (parseInt(percentage) * baseAmount) / 100 + baseAmount;
-      rate.patchValue(totalRate.toFixed(2), { emitEvent: false });
+      rate.patchValue(Math.floor(totalRate), { emitEvent: false });
     });
 
     rate.valueChanges.subscribe((rate) => {
-      const totalDiscount = ((parseInt(rate) - baseAmount) / baseAmount) * 100;
-      discount.patchValue(totalDiscount.toFixed(2), { emitEvent: false });
+      const totalDiscount = (((parseInt(rate) - baseAmount) / baseAmount) * 100);
+      discount.patchValue(Math.floor(totalDiscount), { emitEvent: false });
     });
 
     end.valueChanges.subscribe((endValue) => {

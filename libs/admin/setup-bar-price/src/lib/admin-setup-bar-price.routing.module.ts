@@ -14,6 +14,7 @@ import { DayTimeTriggerComponent } from './components/day-time-trigger/day-time-
 import { BarPriceComponent } from './components/bar-price/bar-price.component';
 import { RoomTypesComponent } from './components/room-types/room-types.component';
 import { ExceptionComponent } from './components/exception/exception.component';
+import { BarPricePreviewComponent } from './components/bar-price-preview/bar-price-preview.component';
 
 const appRoutes: Route[] = [
   {
@@ -48,6 +49,7 @@ export class AdminSetupBarPriceRoutingModule {
     OccupancyComponent,
     InventoryReallocationComponent,
     DayTimeTriggerComponent,
+    BarPricePreviewComponent,
     RoomTypesComponent,
   ];
 }

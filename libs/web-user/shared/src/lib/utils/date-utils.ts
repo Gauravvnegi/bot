@@ -16,3 +16,14 @@ export function formatDateToCustomString(dateMS: number) {
 
   return `${months} ${day}, ${year} ${dayOfWeek}`;
 }
+
+export function getDateTimeInEpoch(data:{time:number,isHourseReset?:boolean}){
+  const time = new Date(data.time);
+  if(data.isHourseReset){
+    time.setHours(0,0,0,0); 
+  }
+
+  return {
+    time: time.getTime(), 
+  }
+}

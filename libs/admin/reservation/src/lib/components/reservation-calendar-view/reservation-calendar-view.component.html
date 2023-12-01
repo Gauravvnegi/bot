@@ -91,9 +91,7 @@
                           <div class="features">
                             <ng-container
                               *ngFor="
-                                let imageUrl of getFeatureImage(
-                                  room.features
-                                ).slice(0, 2)
+                                let imageUrl of getFeatureImage(room.features)
                               "
                             >
                               <img
@@ -103,13 +101,6 @@
                                 alt="'room-feature"
                               />
                             </ng-container>
-                            <span
-                              *ngIf="getFeatureImage(room.features).length > 2"
-                              >+(
-                              {{
-                                getFeatureImage(room.features).length - 2
-                              }})</span
-                            >
                           </div>
                         </div>
                       </div>

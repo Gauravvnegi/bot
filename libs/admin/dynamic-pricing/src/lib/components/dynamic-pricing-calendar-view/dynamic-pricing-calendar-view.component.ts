@@ -138,7 +138,7 @@ export class DynamicPricingCalendarViewComponent implements OnInit, OnDestroy {
                     startItem,
                   ],
                   [endItemStartDate.year]: [
-                    ...(dataObj[startItemStartDate.year] ?? []),
+                    ...(dataObj[endItemStartDate.year] ?? []),
                     endItem,
                   ],
                 };

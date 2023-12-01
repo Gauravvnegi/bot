@@ -16,6 +16,9 @@
       controlName="name"
       label="Package Name"
       maxLength="60"
+      [props]="{
+        placeholder: 'Enter'
+      }"
     ></hospitality-bot-input>
 
     <hospitality-bot-category
@@ -63,7 +66,7 @@
         landing page as a highlighted package.</label
       >
     </div>
-     <div class="des-template">
+    <div class="des-template">
       <div class="des-template__label">Description</div>
       <div class="des-template__input">
         <hospitality-bot-template-editor
@@ -73,12 +76,15 @@
         ></hospitality-bot-template-editor>
       </div>
     </div>
-     <hospitality-bot-date
+    <hospitality-bot-date
       class="half-width"
       controlName="startDate"
       label="Valid From"
       [settings]="{ enableTime: false }"
       [minDate]="startMinDate"
+      [props]="{
+        placeholder: 'DD/MM/YY'
+      }"
     ></hospitality-bot-date>
 
     <hospitality-bot-date
@@ -87,6 +93,9 @@
       label="Valid Till"
       [settings]="{ enableTime: false }"
       [minDate]="endMinDate"
+      [props]="{
+        placeholder: 'DD/MM/YY'
+      }"
     ></hospitality-bot-date>
     <hospitality-bot-prefix-field
       class="one-third-width"

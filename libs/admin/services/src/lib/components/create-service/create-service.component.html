@@ -89,7 +89,8 @@
         errorMessages: {
           required: 'This is a required field.',
           min: 'Value must be greater than 0.'
-        }
+        },
+        placeholder: 'Enter'
       }"
     >
     </hospitality-bot-prefix-field>
@@ -98,6 +99,9 @@
       controlName="unit"
       label="Unit"
       [options]="units"
+      [props]="{
+        placeholder: 'Enter'
+      }"
     ></hospitality-bot-select>
     <hospitality-bot-multi-select
       *ngIf="!isComplimentaryService"
@@ -107,7 +111,8 @@
       [options]="tax"
       [props]="{
         isAsync: true,
-        createPrompt: '+ Create New Tax'
+        createPrompt: '+ Create New Tax',
+        placeholder: 'Select'
       }"
       (onCreate)="createTax()"
     ></hospitality-bot-multi-select>
@@ -117,6 +122,9 @@
       controlName="hsnCode"
       label="HSN Code"
       maxLength="60"
+      [props]="{
+        placeholder: 'Enter'
+      }"
     ></hospitality-bot-input>
     <div class="container">
       <hospitality-bot-select-group

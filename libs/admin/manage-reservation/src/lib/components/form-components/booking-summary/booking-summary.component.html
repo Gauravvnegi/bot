@@ -92,7 +92,7 @@
           paymentControls?.totalPaidAmount.value || summaryData?.totalPaidAmount
         "
       >
-        <span class="bk-summary_priceInfo_perNight_label">Total Payment</span>
+        <span class="bk-summary_priceInfo_perNight_label">Paid Amount</span>
         <span class="bk-summary_priceInfo_perNight_amount">{{
           +paymentControls.totalPaidAmount.value + +summaryData.totalPaidAmount
             | currency: 'INR'
@@ -108,7 +108,7 @@
     <p class="divider"></p>
     <div class="footer">
       <div class="bk-summary_total">
-        <p class="bk-summary_total_label">Remaining Balance</p>
+        <p class="bk-summary_total_label">Due Amount</p>
         <p class="bk-summary_total_amount">
           {{ calculateAmountToBePaid(summaryData) | currency: 'INR' }}
         </p>
@@ -186,9 +186,7 @@
     class="bk-summary_priceInfo_perNight"
     *ngIf="summaryData?.miscellaneousCharges"
   >
-    <span class="bk-summary_priceInfo_perNight_label"
-      >Total Miscellaneous Charges</span
-    >
+    <span class="bk-summary_priceInfo_perNight_label">Total Misc. Charges</span>
     <span class="bk-summary_priceInfo_perNight_amount"
       >+{{ summaryData.miscellaneousCharges | currency: 'INR' }}</span
     >
@@ -292,7 +290,7 @@
         index === undefined
       "
     >
-      <span class="bk-summary_priceInfo_perNight_label">Discount</span>
+      <span class="bk-summary_priceInfo_perNight_label">Discounted Amount</span>
       <span class="bk-summary_priceInfo_perNight_amount"
         >-{{
           summaryData?.offerAmount
@@ -305,7 +303,7 @@
       class="bk-summary_priceInfo_taxFair"
       *ngIf="bookingItem?.discountedAmount && index !== undefined"
     >
-      <span class="bk-summary_priceInfo_perNight_label">Discount</span>
+      <span class="bk-summary_priceInfo_perNight_label">Discounted Amount</span>
       <span class="bk-summary_priceInfo_perNight_amount"
         >-{{ bookingItem?.discountedAmount | currency: 'INR' }}</span
       >

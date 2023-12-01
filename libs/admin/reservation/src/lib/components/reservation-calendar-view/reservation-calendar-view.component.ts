@@ -718,8 +718,26 @@ export class ReservationCalendarViewComponent implements OnInit {
         },
       })
       .subscribe(
-        () => {
-          this.initRoomTypes();
+        (res) => {
+          // this.initRoomTypes();
+          let currentStatus = res.rooms[0]?.statusDetailsList.filter(
+            (item) => item.isCurrentStatus
+          )[0]?.status;
+          const updatedValues = roomType.rooms.map((item) => {
+            if (item.id === id) {
+              return {
+                ...item,
+                currentStatus: currentStatus,
+                nextStates: [currentStatus, ...res.rooms[0].nextStates],
+                statusDetails: res.rooms[0].statusDetailsList,
+              };
+            }
+            return item; // Keep other items unchanged
+          });
+          this.roomTypes.find(
+            (item) => item.value === roomType.value
+          ).rooms = updatedValues;
+
           this.snackbarService.openSnackBarAsText(
             'Status changes successfully',
             '',

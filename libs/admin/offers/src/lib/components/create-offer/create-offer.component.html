@@ -20,6 +20,9 @@
         controlName="name"
         label="Offer Name"
         maxLength="60"
+        [props]="{
+          placeholder: 'Enter'
+        }"
       ></hospitality-bot-input>
     </div>
     <hospitality-bot-auto-complete
@@ -29,6 +32,9 @@
       [options]="libraryItems"
       [loading]="loading"
       (onSearch)="searchOptions($event)"
+      [props]="{
+        placeholder: 'Enter'
+      }"
     ></hospitality-bot-auto-complete>
 
     <hospitality-bot-custom-file-upload

@@ -102,7 +102,7 @@ export class RoomService extends ApiService {
         statusDetailsList: [{ isCurrentStatus: boolean; status: RoomStatus }];
       };
     }
-  ): Observable<RoomResponse> {
+  ) {
     return this.patch(`/api/v1/entity/${entityId}/inventory?type=ROOM`, data);
   }
 

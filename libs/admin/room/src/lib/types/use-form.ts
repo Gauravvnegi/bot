@@ -11,7 +11,7 @@ export type BaseRoomForm = {
   status?: RoomStatus;
   featureIds: string[];
   removeFeatures?: string[];
-  remark?: string;
+  remarks?: string;
   statusDetailsList?: StatusDetails[];
   currentStatusTo?: number;
   currentStatusFrom?: number;
@@ -44,7 +44,7 @@ export type MultipleRoomData = MultipleRoomBase & BaseRoomForm;
 
 export type StatusQuoForm = {
   status: RoomStatus;
-  remark: string;
+  remarks: string;
   foStatus: RoomFoStatus;
   toDate: string;
   fromDate: string;

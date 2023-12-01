@@ -24,6 +24,7 @@
             </hospitality-bot-room-types>
             <div class="date-wrapper">
               <hospitality-bot-date
+                class="date"
                 controlName="date"
                 [settings]="{ enableTime: false, dateFormat: 'M dd, yy' }"
                 [disabled]="isRoomsEmpty || !roomTypes?.length"
@@ -90,9 +91,7 @@
                           <div class="features">
                             <ng-container
                               *ngFor="
-                                let imageUrl of getFeatureImage(
-                                  room.features
-                                ).slice(0, 2)
+                                let imageUrl of getFeatureImage(room.features)
                               "
                             >
                               <img
@@ -102,13 +101,6 @@
                                 alt="'room-feature"
                               />
                             </ng-container>
-                            <span
-                              *ngIf="getFeatureImage(room.features).length > 2"
-                              >+(
-                              {{
-                                getFeatureImage(room.features).length - 2
-                              }})</span
-                            >
                           </div>
                         </div>
                       </div>
@@ -167,7 +159,9 @@
                 <ng-container>
                   <hospitality-bot-interactive-grid
                     [props]="{
-                      createNewToolTipInfo: 'Create Reservation'
+                      createNewToolTipInfo: 'Reservation',
+                      cellGap: 2,
+                      cellSize: 65
                     }"
                     [gridData]="roomType.data"
                     [isProcessing]="roomType.loading"

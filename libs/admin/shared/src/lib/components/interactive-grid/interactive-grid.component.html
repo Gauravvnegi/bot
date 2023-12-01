@@ -78,7 +78,9 @@
               colValue: col
             })
           "
-          [pTooltip]="disableChanges ? undefined : createNewToolTipInfo"
+          [pTooltip]="
+            disableChanges ? undefined : 'Create ' + createNewToolTipInfo
+          "
           showDelay="500"
           tooltipPosition="top"
         >
@@ -229,7 +231,13 @@
       }"
     >
       <ng-container *ngFor="let option of data[row][col]?.options">
-        <div class="menu__item" (click)="handleMenuClick($event, option)">
+        <div
+          class="menu__item"
+          [ngStyle]="{
+            fontSize: height / 2.3 + 'px'
+          }"
+          (click)="handleMenuClick($event, option)"
+        >
           {{ option.label }}
         </div>
       </ng-container>
@@ -260,11 +268,22 @@
           ? null
           : 0
       }"
+      [pTooltip]="
+        isInteractive({
+          rowValue: row,
+          colValue: col,
+          colIdx: colIdx,
+          rowIdx: rowIdx
+        })
+          ? 'Edit ' + data[row][col]?.content + ' ' + createNewToolTipInfo
+          : undefined
+      "
+      showDelay="500"
+      tooltipPosition="top"
     >
       <div
         class="cell-data__content"
         [ngStyle]="{
-          whiteSpace: data[row][col]?.nonInteractive ? 'wrap' : 'nowrap',
           fontSize: height / 3.5 + 'px'
         }"
       >

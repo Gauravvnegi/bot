@@ -377,7 +377,7 @@ export class UpdateRatesComponent implements OnInit {
     isMapInAllRoom: boolean,
     source: 'basePrice' | 'noneBasePrice' = 'noneBasePrice'
   ) {
-    let previousPrice = 0;
+    let basePrice = 0;
     control.controls?.forEach((ratePlanControl) => {
       const isBase = ratePlanControl.get('isBase').value;
       const dynamicControl = this.useFormControl.roomTypes.controls[
@@ -389,9 +389,17 @@ export class UpdateRatesComponent implements OnInit {
         !dynamicControl.at(dayIndex).get('value').value
       ) {
         const variablePrice = ratePlanControl.get('variablePrice').value;
-        const price = res?.value?.length
-          ? previousPrice + +res.value + variablePrice
-          : null;
+        const currentPrice = +res.value + variablePrice;
+        let price = res?.value?.length ? currentPrice : null;
+
+        // if mapping data came from the baseRoomType then all price will be calculated as per the baseRatePlan, except to baseRoom
+        if (source === 'basePrice') {
+          if (isBase) basePrice = +res.value + variablePrice;
+          const baseRatePlanPrice = +res.value + variablePrice;
+          const nonBaseRatePlanPrice = basePrice + variablePrice;
+          const newPrice = isBase ? baseRatePlanPrice : nonBaseRatePlanPrice;
+          price = res?.value?.length ? newPrice : null;
+        }
 
         const rates = ratePlanControl.get('rates') as FormArray;
 
@@ -400,8 +408,7 @@ export class UpdateRatesComponent implements OnInit {
           value: dynamicControl.at(rateIndex).get('value').value
             ? rate.get('value').value
             : price,
-        }));
-        // console.log(newPriceList);
+        })); 
 
         if (linkedValue) {
           rates.patchValue(newPriceList, {
@@ -422,9 +429,6 @@ export class UpdateRatesComponent implements OnInit {
               res: res,
             });
         }
-
-        //previous base price will be added to the next
-        previousPrice = variablePrice;
       }
     });
   }
@@ -440,11 +444,20 @@ export class UpdateRatesComponent implements OnInit {
   }) {
     this.useFormControl.roomTypes.controls.forEach(
       (roomType: FormGroup, index: number) => {
-        const { isBaseRoomType, basePrice, masterBasePrice } = roomType.controls;  
-        basePrice.patchValue(mappingInfo.res.value.length ? +mappingInfo.res.value : +masterBasePrice.value,{emitEvent: false});
+        const {
+          isBaseRoomType,
+          basePrice,
+          masterBasePrice,
+        } = roomType.controls;
+        basePrice.patchValue(
+          mappingInfo.res.value.length
+            ? +mappingInfo.res.value
+            : +masterBasePrice.value,
+          { emitEvent: false }
+        );
         if (!isBaseRoomType.value) {
           const { ratePlans } = roomType.controls;
-          
+
           this.mapRoomPrices(
             ratePlans as FormArray,
             mappingInfo.dayWise,

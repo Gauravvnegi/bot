@@ -241,7 +241,7 @@ export type RoomsByRoomType = {
   frontOfficeState: string;
   id: string;
   nextStates: string[];
-  remark: string;
+  remarks: string;
   roomNumber: string;
   roomTypeDetails: {
     id: string;

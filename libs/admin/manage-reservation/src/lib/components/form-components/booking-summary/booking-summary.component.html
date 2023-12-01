@@ -101,7 +101,7 @@
       <p class="bk-summary_priceInfo_perNight" *ngIf="summaryData?.refund">
         <span class="bk-summary_priceInfo_perNight_label">Total Refund</span>
         <span class="bk-summary_priceInfo_perNight_amount"
-          >-{{ summaryData.refund | currency: 'INR' }}</span
+          >+{{ summaryData.refund | currency: 'INR' }}</span
         >
       </p>
     </div>

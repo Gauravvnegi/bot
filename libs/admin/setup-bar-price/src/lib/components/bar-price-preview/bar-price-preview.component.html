@@ -6,7 +6,7 @@
           <span>{{ room.label }}</span>
         </p-header>
         <div class="content">
-          <div class="info">
+          <div class="info" [ngStyle]="getRates(room.ratePlans,false).length ? {flex:1} : {'min-width':'50%'}">
             <div class="item">
               <span class="left">EP Single</span>
               <span class="right"
@@ -19,7 +19,7 @@
               class="item"
               *ngFor="let otherRoom of getRates(room.ratePlans, true)"
             >
-              <span class="left">EP {{ otherRoom.label }}</span>
+              <span class="left">{{ otherRoom.label }}</span>
               <span class="right"
                 ><span>-</span
                 ><span>{{
@@ -35,7 +35,7 @@
                   childBelowFive: room.childBelowFive,
                   chileFiveToTwelve: room.chileFiveToTwelve,
                   adult: room.adult,
-                  type: 'EP'
+                  type: ''
                 }
               }"
             >
@@ -46,6 +46,7 @@
           <div
             class="info"
             *ngFor="let ratePlans of getRates(room.ratePlans, false)"
+            [ngStyle]="getRates(room.ratePlans,false).length && {flex:1}"
           >
             <div class="item">
               <span class="left">{{ ratePlans.label }}</span>
@@ -64,7 +65,7 @@
               "
             >
               <span class="left"
-                >{{ otherRoom.label }} {{ otherRoom.label }}</span
+                >{{ otherRoom.label }}</span
               >
               <span class="right"
                 ><span>-</span
@@ -83,7 +84,7 @@
                   childBelowFive: room.childBelowFive,
                   chileFiveToTwelve: room.chileFiveToTwelve,
                   adult: room.adult,
-                  type: 'CP'
+                  type: ''
                 }
               }"
             >

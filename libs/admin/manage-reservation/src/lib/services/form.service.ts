@@ -55,7 +55,8 @@ export class FormService {
   mapRoomReservationData(
     input: ReservationForm,
     id?: string,
-    type: 'full' | 'quick' = 'full'
+    type: 'full' | 'quick' = 'full',
+    totalAmount?: number
   ): RoomReservationFormData {
     const roomReservationData = new RoomReservationFormData();
     // Map Reservation Info
@@ -86,9 +87,16 @@ export class FormService {
       cashierId: input?.paymentMethod?.cashierId ?? '',
     };
 
-    if (input?.paymentRule?.amountToPay)
+    if (input?.paymentRule?.amountToPay && input.paymentRule.partialPayment)
       roomReservationData.paymentRule = {
         amount: input?.paymentRule?.amountToPay,
+        type: 'FLAT',
+        dueDate: input?.paymentRule?.makePaymentBefore,
+        remarks: input?.paymentRule?.inclusionsAndTerms,
+      };
+    if (input.paymentRule.partialPayment === false)
+      roomReservationData.paymentRule = {
+        amount: totalAmount,
         type: 'FLAT',
         dueDate: input?.paymentRule?.makePaymentBefore,
         remarks: input?.paymentRule?.inclusionsAndTerms,

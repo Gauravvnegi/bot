@@ -18,7 +18,6 @@ import { ReservationType } from '../../../constants/reservation-table';
 export class PaymentRuleComponent implements OnInit {
   currentDate = new Date();
   startTime: number;
-  viewAmountToPay = false;
   parentFormGroup: FormGroup;
   totalAmount = 0;
   $subscription = new Subscription();
@@ -54,6 +53,7 @@ export class PaymentRuleComponent implements OnInit {
       makePaymentBefore: [''],
       inclusionsAndTerms: [''],
       type: ['FLAT'],
+      partialPayment: [true],
     };
     this.parentFormGroup.addControl('paymentRule', this.fb.group(data));
     this.formService.deductedAmount.subscribe((res) => {

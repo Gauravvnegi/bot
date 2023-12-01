@@ -337,6 +337,7 @@
                     (onClickItem)="handleMenuAction($event, rowIndex)"
                     [menuItems]="getMenu(rowIndex)"
                     [disabled]="
+                      tableFormArray.at(rowIndex).get('isRefund').value ||
                       (tableFormArray.at(rowIndex).get('transactionType')
                         .value === 'CREDIT' &&
                         !tableFormArray.at(rowIndex).get('isDiscount').value) ||

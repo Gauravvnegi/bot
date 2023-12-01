@@ -1,6 +1,9 @@
 @import 'main';
 $border-color: rgba(112, 112, 112, 0.35);
 :host ::ng-deep {
+  .header {
+    justify-content: unset;
+  }
   .p-steps .p-steps-item.p-highlight .p-steps-number {
     background-color: #5f38f9;
   }

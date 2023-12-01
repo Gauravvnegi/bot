@@ -246,7 +246,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
             );
             this.isPrintRate =
               response?.paymentSummary?.printRate !== undefined
-                ? response.printRate
+                ? response?.paymentSummary?.printRate
                 : true;
             if (initGuestDetails) {
               this.bookingNumber = response.number;

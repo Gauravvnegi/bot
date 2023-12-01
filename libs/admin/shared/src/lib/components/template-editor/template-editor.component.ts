@@ -18,7 +18,7 @@ export class TemplateEditorComponent implements OnInit {
   richText = true;
   ckeConfig = {
     allowedContent: true,
-    extraAllowedContent: '*(*);*{*}',
+    extraAllowedContent: '*(*);*{*};div(*);a(*)',
     readOnly: false,
     height: this.height,
     disallowedContent: 'img[src]',

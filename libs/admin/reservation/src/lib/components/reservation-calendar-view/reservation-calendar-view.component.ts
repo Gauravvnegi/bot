@@ -254,20 +254,19 @@ export class ReservationCalendarViewComponent implements OnInit {
         );
         const roomValues = unavailableStatusDetails
           .filter((status) => {
-            const endDate = this.getStatusDate(status.toDate);
+            const endDate = this.getStatusDate(status.toDate, status.fromDate);
             return endDate !== null;
           })
           .map((status) => ({
             id: null, // Set id as needed for unavailable rooms
             content: 'Out Of Service',
             startPos: this.getDate(status.fromDate),
-            endPos: this.getStatusDate(status.toDate),
+            endPos: this.getStatusDate(status.toDate, status.fromDate),
             rowValue: room.roomNumber,
             colorCode: 'draft',
             nonInteractive: true,
             additionContent: status?.remarks,
           }));
-
         return [...result, ...roomValues];
       }, []);
 
@@ -287,17 +286,21 @@ export class ReservationCalendarViewComponent implements OnInit {
     return data.setHours(0, 0, 0, 0);
   }
 
-  getStatusDate(date: number) {
+  getStatusDate(toDateEpochdate: number, fromDateEpoch: number) {
     const currentDate = new Date(this.dates[0].currentDate);
-    const statusDate = new Date(date);
+    const toDate = new Date(toDateEpochdate);
+    const fromDate = new Date(fromDateEpoch);
+    const endDate = new Date(this.dates[this.dates.length - 1].currentDate);
 
     // Set both dates to midnight to compare only the dates
     currentDate.setHours(0, 0, 0, 0);
-    statusDate.setHours(0, 0, 0, 0);
+    toDate.setHours(0, 0, 0, 0);
+    endDate.setHours(0, 0, 0, 0);
+    fromDate.setHours(0, 0, 0, 0);
 
     // Compare the dates
-    if (statusDate >= currentDate) {
-      return statusDate.setHours(0, 0, 0, 0); // Return the date if it's today or later
+    if (toDate >= currentDate && fromDate <= endDate) {
+      return toDate.setHours(0, 0, 0, 0); // Return the date if it's today or later
     }
 
     // Return null to skip the status if toDate is before today

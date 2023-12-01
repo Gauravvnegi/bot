@@ -4,7 +4,7 @@
       <div class="btn-wrapper">
         <hospitality-bot-button
           variant="text"
-          label="View Details"
+          label="Guest Profile"
           (onClick)="viewDetails()"
         ></hospitality-bot-button>
         <hospitality-bot-button
@@ -449,12 +449,12 @@
       </div>
 
       <ng-container *ngIf="addPayment || addRefund">
-        <hospitality-bot-input
+        <!-- <hospitality-bot-input
           class="half-width"
           controlName="cashierName"
           label="Cashier Name"
           maxLength="60"
-        ></hospitality-bot-input>
+        ></hospitality-bot-input> -->
         <hospitality-bot-input
           class="half-width"
           controlName="remarks"

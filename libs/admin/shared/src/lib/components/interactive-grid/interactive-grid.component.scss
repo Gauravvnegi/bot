@@ -66,6 +66,7 @@
 
   &__content {
     font-size: small;
+    white-space: 'nowrap';
     @include no-break-hidden-text;
   }
 
@@ -134,13 +135,13 @@ $menu-distance: -145px;
   position: absolute;
   width: $menu-width;
   background: white;
-  padding: 0 5px;
+  padding: 0 0.3em;
   border-radius: 5px;
   box-shadow: 0px 1px 4px 0px #8c908ca8;
 
   &__item {
     border-top: 1px solid #80808069;
-    padding: 8px;
+    padding: 0.3em;
     cursor: pointer;
     font-size: 14px;
 
@@ -150,12 +151,12 @@ $menu-distance: -145px;
   }
 
   &__se {
-    top: 40px;
+    top: 30px;
     right: $menu-distance;
   }
 
   &__sw {
-    top: 50px;
+    top: 30px;
     left: $menu-distance;
   }
 

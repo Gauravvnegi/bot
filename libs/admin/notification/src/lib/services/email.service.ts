@@ -40,6 +40,10 @@ export class EmailService extends ApiService {
   sendEmail(entityId: string, data) {
     return this.post(`/api/v1/entity/${entityId}/notifications/send`, data);
   }
+
+  getAttachment(queryConfig: QueryConfig): Observable<any> {
+    return this.get(`/api/v1/download${queryConfig.params ?? ''}`);
+  }
 }
 
 type TemplateListResponse = {
@@ -53,4 +57,10 @@ type TransactionType = {
 
 type TemplateDetailsResponse = {
   template: string;
+  subject: string;
+  attachments: {
+    attachmentName: string;
+    attachmentDownloadUrl: string;
+    contentType: string;
+  };
 };

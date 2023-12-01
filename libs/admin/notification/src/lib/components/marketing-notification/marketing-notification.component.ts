@@ -173,6 +173,16 @@ export class MarketingNotificationComponent extends NotificationComponent
         })
         .subscribe((response) => {
           this.emailFG.get('message').patchValue(response.template);
+          this.emailFG.get('subject').patchValue(response.subject);
+
+          // response?.attachments &&
+          //   this._emailService
+          //     .getAttachment({
+          //       params: `?url=${response.attachments.attachmentDownloadUrl}`,
+          //     })
+          //     .subscribe((response) => {
+          //       const data = new Blob([response], { type: response.type });
+          //     });
         })
     );
   }

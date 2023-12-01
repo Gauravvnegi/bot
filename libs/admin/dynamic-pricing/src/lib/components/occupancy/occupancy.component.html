@@ -4,7 +4,7 @@
   [formGroup]="dynamicPricingFG"
 >
   <div class="wrapper__occupancy-content" formArrayName="occupancyFA">
-    <p-accordion class="accordion" [multiple]="true">
+    <p-accordion class="accordion" [multiple]="true" #accordion>
       <ng-container
         *ngFor="
           let season of dynamicPricingControl.occupancyFA.controls;
@@ -12,7 +12,11 @@
         "
         [formGroupName]="seasonIndex"
       >
-        <p-accordionTab [selected]="seasonIndex == 0">
+        <p-accordionTab
+          [selected]="
+            seasonId ? seasonId === season.get('id')?.value : seasonIndex == 0
+          "
+        >
           <p-header class="season-header">
             <div class="header-wrapper">
               <div class="header-button">

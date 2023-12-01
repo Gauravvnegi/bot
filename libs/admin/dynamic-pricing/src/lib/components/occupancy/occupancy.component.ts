@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, Renderer2 } from '@angular/core';
 import {
   AbstractControl,
   FormArray,
@@ -31,6 +31,7 @@ import {
 import { RoomTypes } from 'libs/admin/channel-manager/src/lib/models/bulk-update.models';
 import { ModalComponent } from 'libs/admin/shared/src/lib/components/modal/modal.component';
 import { MatDialogConfig } from '@angular/material/dialog';
+import { ActivatedRoute } from '@angular/router';
 
 export type ControlTypes = 'season' | 'occupancy' | 'hotel-occupancy';
 
@@ -46,6 +47,7 @@ export class OccupancyComponent implements OnInit {
     { label: 'Hotel Type', value: 'HOTEL' },
   ];
   entityId = '';
+  seasonId!:string;
 
   loading = false;
   footerNote = `Instruction Goes here...`;
@@ -82,13 +84,17 @@ export class OccupancyComponent implements OnInit {
     private adminUtilityService: AdminUtilityService,
     private snackbarService: SnackBarService,
     public fb: FormBuilder,
-    private modalService: ModalService
-  ) {}
+    private modalService: ModalService,
+    private route: ActivatedRoute,
+    private el: ElementRef, private renderer: Renderer2
+  ) {
+    this.seasonId = this.route.snapshot.queryParamMap?.get('seasonId');
+  }
 
   ngOnInit(): void {
     this.entityId = this.globalFilterService.entityId;
-  }
-
+  } 
+ 
   initSeason() {
     this.loading = true;
     this.$subscription.add(
@@ -102,11 +108,11 @@ export class OccupancyComponent implements OnInit {
             const handler = new DynamicPricingHandler().deserialize(
               res,
               this.rooms
-            );
-            handler.dataList.forEach((item, index) => {
-              handler.mapOccupancy(index, item, this);
-            });
-          }
+              );
+              handler.dataList.forEach((item, index) => {
+                handler.mapOccupancy(index, item, this);
+              }); 
+          } 
         })
     );
   }

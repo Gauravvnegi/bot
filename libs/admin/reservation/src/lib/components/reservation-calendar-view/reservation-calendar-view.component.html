@@ -24,6 +24,7 @@
             </hospitality-bot-room-types>
             <div class="date-wrapper">
               <hospitality-bot-date
+                class="date"
                 controlName="date"
                 [settings]="{ enableTime: false, dateFormat: 'M dd, yy' }"
                 [disabled]="isRoomsEmpty || !roomTypes?.length"
@@ -167,7 +168,9 @@
                 <ng-container>
                   <hospitality-bot-interactive-grid
                     [props]="{
-                      createNewToolTipInfo: 'Create Reservation'
+                      createNewToolTipInfo: 'Create Reservation',
+                      cellGap: 2,
+                      cellSize: 65
                     }"
                     [gridData]="roomType.data"
                     [isProcessing]="roomType.loading"

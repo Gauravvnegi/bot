@@ -170,7 +170,7 @@ export class AddRoomComponent implements OnInit, OnDestroy {
 
     this.statusQuoForm = this.fb.group({
       status: ['', Validators.required],
-      remark: [''],
+      remarks: [''],
       foStatus: [],
       fromDate: ['', Validators.required],
       toDate: ['', Validators.required],
@@ -422,7 +422,7 @@ export class AddRoomComponent implements OnInit, OnDestroy {
           }
 
           this.statusQuoForm.patchValue({
-            remark: statusDetails.remarks,
+            remarks: statusDetails.remarks,
             foStatus: roomDetails.frontOfficeState,
             id: statusDetails.id,
           });

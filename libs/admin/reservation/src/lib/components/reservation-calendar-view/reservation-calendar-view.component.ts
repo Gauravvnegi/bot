@@ -133,13 +133,13 @@ export class ReservationCalendarViewComponent implements OnInit {
                 rooms: roomTypeData.rooms.map((room) => {
                   let currentStatus = room?.statusDetailsList.filter(
                     (item) => item.isCurrentStatus
-                  )[0]?.status;
+                  )[0];
                   return {
                     roomNumber: room.roomNumber,
                     features: room.features,
                     statusDetails: room?.statusDetailsList ?? [],
-                    currentStatus: currentStatus,
-                    nextStates: [...room.nextStates, currentStatus],
+                    currentStatus: currentStatus.status,
+                    nextStates: [...room.nextStates, currentStatus.status],
                     id: room?.id,
                   };
                 }),
@@ -265,7 +265,7 @@ export class ReservationCalendarViewComponent implements OnInit {
             rowValue: room.roomNumber,
             colorCode: 'draft',
             nonInteractive: true,
-            additionContent: status?.remarks,
+            additionContent: status.remarks,
           }));
         return [...result, ...roomValues];
       }, []);
@@ -347,7 +347,7 @@ export class ReservationCalendarViewComponent implements OnInit {
     this.listenChanges();
   }
 
-  initDates(startDate: number, limit = 14) {
+  initDates(startDate: number, limit = 21) {
     const dates = [];
     const cols = [];
     const currentDate = new Date(startDate);

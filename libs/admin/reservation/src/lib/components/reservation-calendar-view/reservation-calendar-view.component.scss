@@ -35,8 +35,8 @@ $border-color: rgba(112, 112, 112, 0.35);
 }
 
 .left {
-  min-width: 310px;
   flex-grow: 1;
+  min-width: 200px;
   &__main {
     width: 100%;
   }
@@ -58,7 +58,6 @@ $border-color: rgba(112, 112, 112, 0.35);
   display: flex;
   align-items: flex-end;
   color: $title;
-  gap: 5%;
 
   &__left {
     justify-content: space-between;
@@ -66,9 +65,23 @@ $border-color: rgba(112, 112, 112, 0.35);
 }
 
 :host ::ng-deep .room-types-select {
-  max-width: 130px;
+  max-width: 118px;
   & .p-multiselect-label-container {
     overflow: hidden;
+  }
+}
+
+:host ::ng-deep .date {
+  .input {
+    .p-calendar {
+      .p-button.p-button-icon-only {
+        padding: 0.3rem 0;
+      }
+
+      .p-inputtext {
+        padding: 0.9em 0.2em;
+      }
+    }
   }
 }
 
@@ -104,16 +117,16 @@ $border-color: rgba(112, 112, 112, 0.35);
   height: 80px;
   color: $title;
 
-  .main-text {
-    @include normal-sm-text;
-  }
-  .secondary-text {
-    @include light-sm-text;
-  }
+  // .main-text {
+  //   @include normal-vsm-text;
+  // }
+  // .secondary-text {
+  //   @include light-vsm-text;
+  // }
 }
 
 .input-content-section {
-  height: 45px;
+  height: 32.5px;
   background-color: white;
 
   .left-main-cell__left {
@@ -179,7 +192,7 @@ $border-color: rgba(112, 112, 112, 0.35);
 
 .dates-header {
   display: flex;
-  flex-grow: 1;
+  flex-basis: 1;
 }
 
 .dates-cell {
@@ -245,11 +258,10 @@ $border-color: rgba(112, 112, 112, 0.35);
 }
 
 .cell {
-  width: 90px;
-  min-width: 90px;
-  max-width: 90px;
+  width: 65px;
+  min-width: 65px;
+  max-width: 65px;
   height: 100%;
-  // max-width: 65px;
   flex-grow: 1;
 
   // cell to be centered align
@@ -317,6 +329,7 @@ $border-color: rgba(112, 112, 112, 0.35);
   justify-content: center;
   position: absolute;
   width: 70%;
+  padding: 100px 0;
 }
 
 :host ::ng-deep .p-splitbutton-menubutton {

@@ -109,6 +109,19 @@ export class OccupancyComponent implements OnInit {
               res,
               this.rooms
               );
+
+              if(this.seasonId){
+                handler.dataList.sort((a, b) => {
+                  if (a.id === this.seasonId) {
+                    return -1; // Move 'elementToMove' to the top
+                  } else if (b.id === this.seasonId) {
+                    return 1; // Move 'elementToMove' to the top
+                  } else {
+                    return 0; // Maintain the order for other elements
+                  }
+                });
+              }
+
               handler.dataList.forEach((item, index) => {
                 handler.mapOccupancy(index, item, this);
               }); 

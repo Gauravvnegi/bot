@@ -143,7 +143,7 @@ export class Arrival {
         ' ' +
         input.guestDetails.primaryGuest.lastName);
 
-    this.roomType = `${input.stayDetails.room.roomNumber}/${input.stayDetails.room.type}`; // need to ask which key should be mapped
+    this.roomType = `${input?.stayDetails?.room?.roomNumber ?? '-'} - ${input.stayDetails.room.type ?? '-'}`; // need to ask which key should be mapped
     this.checkIn = input?.arrivalTime
       ? getFormattedDate(input.arrivalTime)
       : '';
@@ -206,10 +206,10 @@ export class DraftReservationReport extends ReservationReport
         this.records.push({
           id: reservationData.id,
           bookingNo: reservationData.reservationNumber,
-          guestName: `${reservationData.guest.firstName} ${reservationData.guest.lastName}`,
+          guestName: `${reservationData?.guest?.firstName ?? '-'} ${reservationData.guest.lastName ?? '-'}`,
           roomType: `${
             reservationData.bookingItems[0].roomDetails.roomNumber ?? '-'
-          }-${reservationData.bookingItems[0].roomDetails.roomTypeLabel}`,
+          }-${reservationData.bookingItems[0].roomDetails.roomTypeLabel ?? '-'}`,
           checkIn: getFormattedDate(reservationData.from),
           checkOut: getFormattedDate(reservationData.to),
           nights: reservationData.nightsCount,

@@ -32,6 +32,7 @@
     [placeholder]="placeholder"
     (keydown)="handleKeyDown($event)"
     [tabindex]="tabIndex"
+    (wheel)="$event.preventDefault(); $event.stopPropagation()"
   />
 
   <ng-container *ngIf="!isLoading">

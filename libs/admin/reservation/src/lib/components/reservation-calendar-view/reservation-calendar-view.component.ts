@@ -132,14 +132,14 @@ export class ReservationCalendarViewComponent implements OnInit {
                 value: roomTypeData.id,
                 rooms: roomTypeData.rooms.map((room) => {
                   let currentStatus = room?.statusDetailsList.filter(
-                    (item) => item.isCurrentStatus
+                    (item) => item?.isCurrentStatus
                   )[0];
                   return {
-                    roomNumber: room.roomNumber,
-                    features: room.features,
+                    roomNumber: room?.roomNumber,
+                    features: room?.features,
                     statusDetails: room?.statusDetailsList ?? [],
-                    currentStatus: currentStatus.status,
-                    nextStates: [...room.nextStates, currentStatus.status],
+                    currentStatus: currentStatus?.status,
+                    nextStates: [...room.nextStates, currentStatus?.status],
                     id: room?.id,
                   };
                 }),

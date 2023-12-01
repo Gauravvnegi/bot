@@ -141,7 +141,12 @@
     [rzMinWidth]="cellSize / resizeDelimiter"
     [rzGrid]="cellSize / resizeDelimiter"
     [position]="{
-      x: colIdx * cellSize + (data[row][col]?.hasPrev ? cellSize / 2 : 0),
+      x:
+        colIdx * cellSize +
+        (data[row][col]?.hasPrev &&
+        data[row][col].endPosIdx !== data[row][col].startPosIdx
+          ? cellSize / 2
+          : 0),
       y: rowIdx * height
     }"
     [gridSize]="cellSize / 2"
@@ -257,7 +262,8 @@
       <div
         class="cell-data__content"
         [ngStyle]="{
-          whiteSpace: data[row][col]?.nonInteractive ? 'wrap' : 'nowrap'
+          whiteSpace: data[row][col]?.nonInteractive ? 'wrap' : 'nowrap',
+          fontSize: height / 4 + 'px'
         }"
       >
         <ng-container *ngIf="data[row][col]?.icons">
@@ -266,11 +272,20 @@
             [src]="icon"
             alt="cell-icon"
             class="cell-data__icon"
+            [ngStyle]="{
+              height: height / 4 + 'px'
+            }"
           />
         </ng-container>
         {{ data[row][col]?.content }}
       </div>
-      <div class="cell-data__additional-content">
+      <div
+        class="cell-data__additional-content"
+        [ngStyle]="{
+          whiteSpace: data[row][col]?.nonInteractive ? 'wrap' : 'nowrap',
+          fontSize: height / 5 + 'px'
+        }"
+      >
         {{ data[row][col]?.additionContent }}
       </div>
     </div>

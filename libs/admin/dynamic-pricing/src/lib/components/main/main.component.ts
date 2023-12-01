@@ -1,15 +1,10 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { BarPriceService } from '../../services/bar-price.service';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'hospitality-bot-main',
   templateUrl: './main.component.html',
   styleUrls: ['./main.component.scss'],
 })
-export class MainComponent implements OnDestroy {
-  constructor(private barPriceService: BarPriceService) {}
-
-  ngOnDestroy(): void {
-    this.barPriceService.resetRoomDetails();
-  }
+export class MainComponent {
+  constructor() {}
 }

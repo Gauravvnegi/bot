@@ -14,24 +14,22 @@ import { DayTimeTriggerComponent } from './components/day-time-trigger/day-time-
 import { BarPriceComponent } from './components/bar-price/bar-price.component';
 import { RoomTypesComponent } from './components/room-types/room-types.component';
 import { ExceptionComponent } from './components/exception/exception.component';
+import { DynamicPricingCalendarViewComponent } from './components/dynamic-pricing-calendar-view/dynamic-pricing-calendar-view.component';
 
 const appRoutes: Route[] = [
   {
     path: '',
-    component: DynamicPricingComponent,
-    // name: ModuleNames.REVENUE_MANAGER,
-    // children: [
-    //   {
-    //     path: 'setup-bar-price',
-    //     component: BarPriceComponent,
-    //     name: ModuleNames.SETUP_BAR_PRICE,
-    //   },
-    //   {
-    //     path: 'dynamic-pricing',
-    //     name: ModuleNames.DYNAMIC_PRICING,
-    //     component: DynamicPricingComponent,
-    //   },
-    // ],
+    component: MainComponent,
+    children: [
+      {
+        path: '',
+        component: DynamicPricingCalendarViewComponent,
+      },
+      {
+        path: 'create-season',
+        component: DynamicPricingComponent,
+      },
+    ],
   },
 ];
 
@@ -48,6 +46,7 @@ export class AdminDynamicPricingRoutingModule {
     OccupancyComponent,
     InventoryReallocationComponent,
     DayTimeTriggerComponent,
+    DynamicPricingCalendarViewComponent,
     RoomTypesComponent,
   ];
 }

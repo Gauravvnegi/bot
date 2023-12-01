@@ -38,7 +38,7 @@ export class InteractiveGridComponent {
   colName: IGProps['colName'];
   minWidth: IGProps['minWidth'] = 'half';
   resizeWidth: IGProps['resizeWidth'] = 'half';
-  gridHeight: IGProps['resizeWidth'] = 'half';
+  gridHeight: IGProps['gridHeight'] = 'half';
   /** * Grid will always cover half cell from the end and start, irrespective of whether their is another cell or not  */
   halfwayCell: IGProps['halfwayCell'] = true;
   /** To decide whether i-grid can exist in single cell */
@@ -563,10 +563,20 @@ export class InteractiveGridComponent {
 
   getPosition({ rowIdx, colIdx, rowValue, colValue }: IGQueryEvent): IPosition {
     // cannot use this in template as it reset the position
+    const { data } = this.getCurrentDataInfo({
+      rowIdx,
+      colIdx,
+      rowValue,
+      colValue,
+    });
+
+    // Using This will break at last cell
+    const isStartEndSameCell = data.endPosIdx === data.startPosIdx;
+
     return {
       x:
         colIdx * this.cellSize +
-        (this.data[rowValue][colValue]?.hasPrev ? this.cellSize / 2 : 0),
+        (data?.hasPrev && !isStartEndSameCell ? this.cellSize / 2 : 0),
       y: rowIdx * this.height,
     };
   }
@@ -578,10 +588,13 @@ export class InteractiveGridComponent {
     const { data } = this.getCurrentDataInfo(query);
 
     const currentOutOfBoundRecord = this.outOfBoundRecord[data.id];
-    const width =
-      this.cellSize * data.cellOccupied -
-      (data?.hasNext ? this.cellSize / 2 : 0) -
-      (data.hasPrev ? this.cellSize / 2 : 0);
+    const isStartEndSameCell = data.oEndPos === data.oStartPos;
+    const minDiff = isStartEndSameCell
+      ? 0
+      : (data?.hasNext ? this.cellSize / 2 : 0) +
+        (data.hasPrev ? this.cellSize / 2 : 0);
+
+    const width = this.cellSize * data.cellOccupied - minDiff;
 
     // Left margin is used in the html for start of bound
     return (

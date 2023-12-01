@@ -1,8 +1,12 @@
 <div class="main-wrapper">
   <div class="header">
     <hospitality-bot-navigation-header
-      heading="Dynamic Pricing"
-      [routes]="[{ label: 'Revenue Manager', link: './' }]"
+      heading="Create Season"
+      [routes]="[
+        { label: 'Revenue Manager', link: './' },
+        { label: 'Dynamic Pricing', link: '../' },
+        { label: 'Create Season', link: './' }
+      ]"
       [isStickyTitle]="false"
       [isBack]="false"
     >
@@ -12,7 +16,7 @@
     [stepList]="itemList"
     (onActive)="onActive($event)"
   ></hospitality-bot-stepper>
-  <div class="content"> 
+  <div class="content">
     <ng-container [ngSwitch]="activeStep">
       <hospitality-bot-occupancy
         *ngSwitchCase="0"

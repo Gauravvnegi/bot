@@ -127,7 +127,7 @@ $border-color: rgba(112, 112, 112, 0.35);
     align-items: center;
     width: 100%;
     .room-state {
-      width: 33%;
+      width: 40%;
     }
     &__subtitle {
       font-size: 14px;
@@ -317,4 +317,8 @@ $border-color: rgba(112, 112, 112, 0.35);
   justify-content: center;
   position: absolute;
   width: 70%;
+}
+
+:host ::ng-deep .p-splitbutton-menubutton {
+  width: 3rem !important;
 }

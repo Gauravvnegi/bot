@@ -1,4 +1,4 @@
-import { ENTER, COMMA } from '@angular/cdk/keycodes';
+import { ENTER, COMMA, J } from '@angular/cdk/keycodes';
 import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Location } from '@angular/common';
@@ -27,7 +27,11 @@ export class MarketingNotificationComponent extends NotificationComponent
   topicList: Option[] = [];
   templateList: Option[] = [];
   to: Option[] = [];
-  attachmentsList: Option[] = [];
+  attachmentsList: {
+    label: string;
+    value: string;
+    data: string | Blob;
+  }[] = [];
   visible = true;
   selectable = true;
   removable = true;
@@ -69,6 +73,7 @@ export class MarketingNotificationComponent extends NotificationComponent
     this.initFG();
     this.listenForTemplateChange();
     this.listenForPackageChange();
+    this.listenForAttachmentChange();
   }
 
   getPackageList() {
@@ -175,7 +180,10 @@ export class MarketingNotificationComponent extends NotificationComponent
         .subscribe((response) => {
           this.emailFG.get('message').patchValue(response.template);
           this.emailFG.get('subject').patchValue(response.subject);
-          this.emailFG.get('attachedFiles').patchValue([response.attachments]);
+          response?.attachments &&
+            this.emailFG
+              .get('attachedFiles')
+              .patchValue([response.attachments]);
         })
     );
   }
@@ -273,45 +281,24 @@ export class MarketingNotificationComponent extends NotificationComponent
   // handleTemplateChange(event) {
   //   this.emailFG.get('message').patchValue(event.value.htmlTemplate);
   // }
-
   uploadAttachments(event): void {
-    const formData = new FormData();
-    formData.append('files', event.currentTarget.files[0]);
-    this.requestService.uploadAttachments(this.entityId, formData).subscribe(
-      (response) => {
-        this.attachment = response.fileName;
-        this.attachmentsList.push({
-          label: response.fileName,
-          value: response.fileDownloadUri,
-        });
-        this.setUpdatedOptions(this.attachmentsList);
-        this.emailFG
-          .get('attachments')
-          .patchValue(this.attachmentsList.map((item) => item.value));
-        this.snackbarService
-          .openSnackBarWithTranslate(
-            {
-              translateKey: 'messages.SUCCESS.ATTACHMENT_UPLOADED',
-              priorityMessage: 'Attachment uploaded.',
-            },
-            '',
-            { panelClass: 'success' }
-          )
-          .subscribe();
-      },
-      ({ error }) => {}
-    );
+    this.attachmentsList.push({
+      label: event.currentTarget.files[0].name,
+      value: event.currentTarget.files[0].name,
+      data: event.currentTarget.files[0],
+    });
+
+    this.emailFG
+      .get('attachments')
+      .patchValue(this.attachmentsList.map((item) => item.value));
   }
 
-  setUpdatedOptions(input: Option[]) {
-    this.updateAttachment.menuOptions = input;
-    this.updateAttachment.dictionary = input.reduce(
-      (prev, { label, value }) => {
-        prev[value] = label;
-        return prev;
-      },
-      {}
-    );
+  listenForAttachmentChange() {
+    this.emailFG.get('attachments').valueChanges.subscribe((res) => {
+      this.attachmentsList = this.attachmentsList.filter((item) =>
+        res.includes(item.value)
+      );
+    });
   }
 
   sendMail() {
@@ -332,7 +319,6 @@ export class MarketingNotificationComponent extends NotificationComponent
       subject,
       previewText,
       topicId,
-      attachments,
       attachedFiles,
     } = this.emailFG.getRawValue();
     const reqData = {
@@ -342,12 +328,18 @@ export class MarketingNotificationComponent extends NotificationComponent
       subject,
       previewText,
       topicId,
-      attachments,
     };
+    reqData['attachments'] = attachedFiles;
     // delete reqData['tempalteId'];
 
     const formData = new FormData();
-    formData.append('files', attachedFiles);
+    this.attachmentsList.forEach((attachment, index) => {
+      const blobData = new Blob([attachment.data], {
+        type: 'application/octet-stream',
+      });
+      formData.append('files', blobData, attachment.label);
+    });
+
     formData.append('data', JSON.stringify(reqData));
 
     this.isSending = true;
@@ -366,7 +358,9 @@ export class MarketingNotificationComponent extends NotificationComponent
             .subscribe();
           this.onModalClose.emit();
         },
-        ({ error }) => {},
+        ({ error }) => {
+          this.isSending = false;
+        },
         () => (this.isSending = false)
       )
     );

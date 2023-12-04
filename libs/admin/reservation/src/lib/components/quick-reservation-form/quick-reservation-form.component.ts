@@ -312,7 +312,7 @@ export class QuickReservationFormComponent implements OnInit {
             this.inputControls.roomInformation.patchValue(roomInformation[0]);
 
             this.isCheckinCompleted =
-              formData.journeyState === JourneyState.COMPLETED;
+              res?.status === ReservationCurrentStatus.INHOUSE;
             this.isCheckedout =
               res.status === ReservationCurrentStatus.CHECKEDOUT;
             this.setFormDisability();

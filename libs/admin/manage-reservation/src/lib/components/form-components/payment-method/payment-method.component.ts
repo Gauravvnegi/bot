@@ -13,16 +13,17 @@ import {
 } from '@hospitality-bot/admin/shared';
 import { Subscription } from 'rxjs';
 import { ManageReservationService } from '../../../services/manage-reservation.service';
-import { PaymentMethodList } from '../../../models/reservations.model';
 import {
-  GlobalFilterService,
-  RoutesConfigService,
-} from '@hospitality-bot/admin/core/theme';
+  PaymentMethodList,
+  ReservationCurrentStatus,
+} from '../../../models/reservations.model';
+import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { ReservationForm } from '../../../constants/form';
 import { DetailsComponent } from '@hospitality-bot/admin/reservation';
 import { ModalService } from '@hospitality-bot/shared/material';
 import { MatDialogConfig } from '@angular/material/dialog';
 import { ReservationType } from '../../../constants/reservation-table';
+import { FormService } from '../../../services/form.service';
 
 @Component({
   selector: 'hospitality-bot-payment-method',
@@ -37,15 +38,7 @@ export class PaymentMethodComponent implements OnInit {
   paymentOptions: Option[] = [];
   entityId: string;
   @Input() reservationId: string;
-  @Input() isCheckedout: boolean;
-
-  @Input() set isFullPayment(value: boolean) {
-    value &&
-      this.reservationId &&
-      this.paymentRuleControls.partialPayment.patchValue(false, {
-        emitEvent: false,
-      });
-  }
+  isCheckedout: boolean = false;
 
   $subscription = new Subscription();
   parentFormGroup: FormGroup;
@@ -58,7 +51,8 @@ export class PaymentMethodComponent implements OnInit {
     private manageReservationService: ManageReservationService,
     private globalFilterService: GlobalFilterService,
     private userService: UserService,
-    private modalService: ModalService
+    private modalService: ModalService,
+    private formService: FormService
   ) {}
 
   ngOnInit(): void {
@@ -76,6 +70,9 @@ export class PaymentMethodComponent implements OnInit {
       },
       { emitEvent: false }
     );
+    this.formService.currentJourneyStatus.subscribe((res) => {
+      this.isCheckedout = res && res === ReservationCurrentStatus.CHECKEDOUT;
+    });
   }
 
   addFormGroup() {
@@ -157,14 +154,6 @@ export class PaymentMethodComponent implements OnInit {
     return (this.parentFormGroup.get('paymentMethod') as FormGroup)
       .controls as Record<
       keyof ReservationForm['paymentMethod'],
-      AbstractControl
-    >;
-  }
-
-  get paymentRuleControls() {
-    return (this.parentFormGroup.get('paymentRule') as FormGroup)
-      .controls as Record<
-      keyof ReservationForm['paymentRule'],
       AbstractControl
     >;
   }

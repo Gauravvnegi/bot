@@ -1,6 +1,7 @@
 import {
   EntityStateCountsResponse,
   EntityTypeCountsResponse,
+  ReservationCurrentStatus,
 } from '../models/reservations.model';
 import { GuestType } from 'libs/admin/guests/src/lib/types/guest.type';
 import { RatePlanRes } from 'libs/admin/room/src/lib/types/service-response';
@@ -151,7 +152,7 @@ export type RoomReservationResponse = {
   totalPaidAmount: number;
   totalDueAmount: number;
   reservationNumber: string;
-  status: string;
+  status: ReservationCurrentStatus;
   guest: GuestType;
   created: number;
   offerAmount: number;

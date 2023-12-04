@@ -14,6 +14,7 @@ import { QueryConfig } from '@hospitality-bot/admin/shared';
 import { AbstractControl } from '@angular/forms';
 import { RoomTypeResponse } from 'libs/admin/room/src/lib/types/service-response';
 import { RoomFieldTypeOption } from '../constants/reservation';
+import { ReservationCurrentStatus } from '../models/reservations.model';
 
 @Injectable({
   providedIn: 'root',
@@ -31,6 +32,10 @@ export class FormService {
 
   guestInformation: BehaviorSubject<string> = new BehaviorSubject<string>(null);
   offerType: BehaviorSubject<string> = new BehaviorSubject<string>(null);
+
+  currentJourneyStatus: BehaviorSubject<
+    ReservationCurrentStatus
+  > = new BehaviorSubject<ReservationCurrentStatus>(null);
 
   sourceData: BehaviorSubject<SourceData> = new BehaviorSubject<SourceData>(
     null
@@ -155,6 +160,8 @@ export class FormService {
           maxAdult: input.roomInformation?.adultCount,
         },
       };
+      if (input.roomInformation?.id?.length)
+        roomReservationData.bookingItems[0].id = input.roomInformation.id;
     } else {
       roomReservationData.bookingItems = [];
     }
@@ -253,13 +260,13 @@ export class FormService {
   }
 
   resetData() {
+    this.currentJourneyStatus.next(null);
     this.reservationForm.next(null);
     this.sourceData.next(null);
     this.disableBtn = false;
     this.dateDifference.next(1);
     this.guestInformation.next(null);
     this.enableAccordion = false;
-    this.reservationForm.next(null);
     this.deductedAmount.next(0);
     this.isDataInitialized.next(false);
     this.reinitializeRooms.next(false);

@@ -9,9 +9,10 @@ import { IteratorField } from 'libs/admin/shared/src/lib/types/fields.type';
 import {
   OfferData,
   OfferList,
+  ReservationCurrentStatus,
   SummaryData,
-} from '../models/reservations.model';
-import { SelectedEntity } from '../types/reservation.type';
+} from '../../../../manage-reservation/src/lib/models/reservations.model';
+import { SelectedEntity } from '../../../../manage-reservation/src/lib/types/reservation.type';
 import {
   EntitySubType,
   HotelDetailService,
@@ -19,11 +20,11 @@ import {
 } from '@hospitality-bot/admin/shared';
 import { Subject, Subscription } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
-import { manageReservationRoutes } from '../constants/routes';
-import { ReservationForm } from '../constants/form';
-import { JourneyState } from '../constants/reservation';
-import { ReservationType } from '../constants/reservation-table';
-import { FormService } from '../services/form.service';
+import { manageReservationRoutes } from '../../../../manage-reservation/src/lib/constants/routes';
+import { ReservationForm } from '../../../../manage-reservation/src/lib/constants/form';
+import { JourneyState } from '../../../../manage-reservation/src/lib/constants/reservation';
+import { ReservationType } from '../../../../manage-reservation/src/lib/constants/reservation-table';
+import { FormService } from '../../../../manage-reservation/src/lib/services/form.service';
 import { RoutesConfigService } from '@hospitality-bot/admin/core/theme';
 
 @Component({
@@ -90,14 +91,23 @@ export class BaseReservationComponent {
     });
   }
 
-  setFormDisability(journeyState?: JourneyState): void {
+  setFormDisability(
+    journeyState?: JourneyState,
+    status?: ReservationCurrentStatus
+  ): void {
     // this.userForm.get('reservationInformation.source').disable();
     if (this.reservationId) {
       const reservationType =
         this.bookingType === EntitySubType.ROOM_TYPE
           ? this.reservationInfoControls.reservationType
           : this.reservationInfoControls.status;
+
       switch (true) {
+        case status === ReservationCurrentStatus.CHECKEDOUT:
+          this.userForm.disable();
+          this.formService.disableBtn = true;
+          this.disabledForm = true;
+          break;
         case this.isExternalBooking && journeyState !== JourneyState.COMPLETED:
           this.userForm.disable({ emitEvent: false });
           this.disabledForm = true;
@@ -114,10 +124,8 @@ export class BaseReservationComponent {
           reservationType.value === ReservationType.CANCELED ||
           journeyState === JourneyState.COMPLETED:
           this.userForm.disable({ emitEvent: false });
-          this.disabledForm = true;
           this.formService.disableBtn = true;
           break;
-
         case journeyState !== JourneyState.COMPLETED:
           if (reservationType.value === ReservationType.CONFIRMED) {
             this.formService.disableBtn = true;
@@ -138,6 +146,7 @@ export class BaseReservationComponent {
             ].forEach((controlName) =>
               roomTypeArray[0].get(controlName).enable({ emitEvent: false })
             );
+            this.reservationInfoControls.to.enable({ emitEvent: false });
             this.inputControls.guestInformation
               .get('guestDetails')
               .enable({ emitEvent: false });
@@ -187,14 +196,15 @@ export class BaseReservationComponent {
   }
 
   get paymentControls() {
-    return (this.userForm.get('paymentMethod') as FormGroup).controls as Record<
+    return (this.userForm.get('paymentMethod') as FormGroup)
+      ?.controls as Record<
       keyof ReservationForm['paymentMethod'],
       AbstractControl
     >;
   }
 
   get paymentRuleControls() {
-    return (this.userForm.get('paymentRule') as FormGroup).controls as Record<
+    return (this.userForm.get('paymentRule') as FormGroup)?.controls as Record<
       keyof ReservationForm['paymentRule'],
       AbstractControl
     >;

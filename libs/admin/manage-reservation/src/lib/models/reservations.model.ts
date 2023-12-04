@@ -241,6 +241,7 @@ export class ReservationFormData {
   totalDueAmount: number;
   totalAmount: number;
   journeyState: JourneyState;
+  currentState: ReservationCurrentStatus;
   paymentRule: PaymentRuleForm;
 
   deserialize(input: RoomReservationResponse) {
@@ -273,6 +274,7 @@ export class ReservationFormData {
     this.totalDueAmount = input.pricingDetails?.totalDueAmount ?? 0;
     this.totalAmount = input.pricingDetails.totalAmount ?? 0;
     this.journeyState = input.journeysStatus.CHECKIN;
+    this.currentState = input.status;
     return this;
   }
 }

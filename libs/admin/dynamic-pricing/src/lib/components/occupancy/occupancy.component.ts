@@ -1,4 +1,11 @@
-import { Component, ElementRef, Input, OnInit, Renderer2, ViewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  Input,
+  OnInit,
+  Renderer2,
+  ViewChild,
+} from '@angular/core';
 import {
   AbstractControl,
   FormArray,
@@ -34,6 +41,7 @@ import { MatDialogConfig } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 import { Accordion } from 'primeng/accordion';
 import { openAccordion } from '../../models/bar-price.model';
+import { isDirty } from '../../services/bar-price.service';
 
 export type ControlTypes = 'season' | 'occupancy' | 'hotel-occupancy';
 
@@ -49,7 +57,8 @@ export class OccupancyComponent implements OnInit {
     { label: 'Hotel Type', value: 'HOTEL' },
   ];
   entityId = '';
-  seasonId!:string;
+  seasonId!: string;
+  readonly isDirty = isDirty;
 
   loading = false;
   footerNote = `Instruction Goes here...`;
@@ -89,15 +98,16 @@ export class OccupancyComponent implements OnInit {
     public fb: FormBuilder,
     private modalService: ModalService,
     private route: ActivatedRoute,
-    private el: ElementRef, private renderer: Renderer2
+    private el: ElementRef,
+    private renderer: Renderer2
   ) {
     this.seasonId = this.route.snapshot.queryParamMap?.get('seasonId');
   }
 
   ngOnInit(): void {
     this.entityId = this.globalFilterService.entityId;
-  } 
- 
+  }
+
   initSeason() {
     this.loading = true;
     this.$subscription.add(
@@ -111,24 +121,24 @@ export class OccupancyComponent implements OnInit {
             const handler = new DynamicPricingHandler().deserialize(
               res,
               this.rooms
-              );
+            );
 
-              if(this.seasonId){
-                handler.dataList.sort((a, b) => {
-                  if (a.id === this.seasonId) {
-                    return -1; // Move 'elementToMove' to the top
-                  } else if (b.id === this.seasonId) {
-                    return 1; // Move 'elementToMove' to the top
-                  } else {
-                    return 0; // Maintain the order for other elements
-                  }
-                });
-              }
+            if (this.seasonId) {
+              handler.dataList.sort((a, b) => {
+                if (a.id === this.seasonId) {
+                  return -1; // Move 'elementToMove' to the top
+                } else if (b.id === this.seasonId) {
+                  return 1; // Move 'elementToMove' to the top
+                } else {
+                  return 0; // Maintain the order for other elements
+                }
+              });
+            }
 
-              handler.dataList.forEach((item, index) => {
-                handler.mapOccupancy(index, item, this);
-              }); 
-          } 
+            handler.dataList.forEach((item, index) => {
+              handler.mapOccupancy(index, item, this);
+            });
+          }
         })
     );
   }
@@ -136,7 +146,7 @@ export class OccupancyComponent implements OnInit {
   seasonStatusChange(status, seasonIndex: number) {
     const control = this.dynamicPricingControl.occupancyFA.at(
       seasonIndex
-    ) as FormGroup; 
+    ) as FormGroup;
     if (control.get('id').value) {
       this.loading = true;
       this.$subscription.add(
@@ -167,17 +177,21 @@ export class OccupancyComponent implements OnInit {
     }
   }
 
-  add(type: ControlTypes, form?: FormGroup | FormArray,onClickAddition?:boolean) {
+  add(
+    type: ControlTypes,
+    form?: FormGroup | FormArray,
+    onClickAddition?: boolean
+  ) {
     switch (type) {
       case 'season':
         this.dynamicPricingControl.occupancyFA.push(this.seasonFG);
         this.listenChanges();
-        if(onClickAddition){
-          setTimeout(()=>{
+        if (onClickAddition) {
+          setTimeout(() => {
             openAccordion({
               accordion: this.accordion,
-              index: this.dynamicPricingControl.occupancyFA.controls.length-1,
-              isScrollToTop: true
+              index: this.dynamicPricingControl.occupancyFA.controls.length - 1,
+              isScrollToTop: true,
             });
           });
         }
@@ -387,19 +401,19 @@ export class OccupancyComponent implements OnInit {
     ruleFG: FormGroup,
     pointer?: { previous: FormGroup; next: FormGroup },
     baseAmount?: number
-  ) => { 
+  ) => {
     const { discount, rate, start, end, basePrice } = ruleFG.controls;
     if (!baseAmount) {
       baseAmount = +basePrice.value;
     }
-    
+
     discount.valueChanges.subscribe((percentage) => {
       const totalRate = (parseInt(percentage) * baseAmount) / 100 + baseAmount;
       rate.patchValue(Math.floor(totalRate), { emitEvent: false });
     });
 
     rate.valueChanges.subscribe((rate) => {
-      const totalDiscount = (((parseInt(rate) - baseAmount) / baseAmount) * 100);
+      const totalDiscount = ((parseInt(rate) - baseAmount) / baseAmount) * 100;
       discount.patchValue(Math.floor(totalDiscount), { emitEvent: false });
     });
 
@@ -471,14 +485,13 @@ export class OccupancyComponent implements OnInit {
       form,
       'OCCUPANCY',
       form.get('type').value
-    ); 
+    );
     if (!Object.keys(requestedData).length) {
       this.snackbarService.openSnackBarAsText(
         'Please make changes for the new updates.'
       );
       return;
     }
-
 
     const requestFunction =
       Revenue[type.value] === Revenue['add']

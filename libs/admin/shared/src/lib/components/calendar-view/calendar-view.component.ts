@@ -104,7 +104,7 @@ export class CalendarViewComponent implements OnInit, OnDestroy {
       height: this.height,
       minWidth: this.height,
       maxWidth: this.height,
-      fontSize: this.fontSize,
+      fontSize: this.size / 2.3 + 'px',
     };
   }
 

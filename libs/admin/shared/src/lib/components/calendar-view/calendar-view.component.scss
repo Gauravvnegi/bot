@@ -3,11 +3,19 @@
 $border: 1px solid #8080802e;
 
 .wrapper {
+  &__container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  line-height: 1.5em;
   border-radius: 5%;
+
   &__main {
     display: flex;
     width: 100%;
-    margin-bottom: 10px;
+
     border-radius: 4px;
     overflow: hidden;
   }
@@ -36,8 +44,9 @@ $border: 1px solid #8080802e;
 .main-header {
   display: flex;
   align-items: flex-end;
-  color: $title;
+  color: white;
   gap: 5%;
+  background-color: #4b4d54;
 
   &__left {
     justify-content: space-between;
@@ -93,8 +102,14 @@ $border: 1px solid #8080802e;
   border: $border;
 }
 
-.bg-white {
+.bg-data {
   background-color: white;
+}
+
+.bg-header {
+  background-color: $table-header;
+  color: $accordian-label;
+  font-weight: 500;
 }
 
 // ----- new

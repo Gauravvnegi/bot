@@ -2,7 +2,7 @@
   class="payment-rule-accordion"
   header="Payment Rule"
   #accordionTab
-  *ngIf="isConfirmedReservation"
+  *ngIf="isConfirmedReservation && !isCheckedout"
   [formGroup]="parentFormGroup"
 >
   <div class="btn-wrapper" *ngIf="accordionTab?.selected">
@@ -10,11 +10,13 @@
       label="Partial"
       [variant]="inputControl.partialPayment.value ? 'contained' : 'outlined'"
       (onClick)="inputControl.partialPayment.patchValue(true)"
+      [disabled]="isCheckedIn"
     ></hospitality-bot-button>
     <hospitality-bot-button
       label="Full Payment"
       [variant]="inputControl.partialPayment.value ? 'outlined' : 'contained'"
       (onClick)="inputControl.partialPayment.patchValue(false)"
+      [disabled]="isCheckedIn"
     ></hospitality-bot-button>
   </div>
   <div class="form-block" formGroupName="paymentRule">
@@ -54,6 +56,7 @@
       [settings]="{
         dateValue: currentDate
       }"
+      [disabled]="isCheckedIn"
     ></hospitality-bot-date>
     <hospitality-bot-text-area
       class="full-width"

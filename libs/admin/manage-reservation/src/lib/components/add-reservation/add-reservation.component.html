@@ -42,11 +42,12 @@
           ></hospitality-bot-text-area>
         </div>
       </p-accordionTab>
-      <hospitality-bot-payment-rule></hospitality-bot-payment-rule>
+      <hospitality-bot-payment-rule
+        [reservationId]="reservationId"
+        [isFullPayment]="isFullPayment"
+      ></hospitality-bot-payment-rule>
       <hospitality-bot-payment-method
         [reservationId]="reservationId"
-        [isCheckedout]="isCheckedout"
-        [isFullPayment]="isFullPayment"
       ></hospitality-bot-payment-method>
     </p-accordion>
     <div class="bk-summary">

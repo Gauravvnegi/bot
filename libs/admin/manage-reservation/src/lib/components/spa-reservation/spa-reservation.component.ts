@@ -26,7 +26,7 @@ import { ReservationSummary } from '../../types/forms.types';
 import { ServiceListResponse } from 'libs/admin/services/src/lib/types/response';
 import { ServiceList } from 'libs/admin/services/src/lib/models/services.model';
 import { ServicesTypeValue } from 'libs/admin/room/src/lib/constant/form';
-import { BaseReservationComponent } from '../base-reservation.component';
+import { BaseReservationComponent } from '../../../../../reservation/src/lib/components/base-reservation.component';
 import { convertToTitleCase } from 'libs/admin/shared/src/lib/utils/valueFormatter';
 import { RoutesConfigService } from '@hospitality-bot/admin/core/theme';
 

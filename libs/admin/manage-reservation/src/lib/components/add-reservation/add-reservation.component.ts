@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import {
   OfferData,
   OfferList,
+  ReservationCurrentStatus,
   ReservationFormData,
   SummaryData,
 } from '../../models/reservations.model';
@@ -25,7 +26,7 @@ import {
   BookingItemsSummary,
   RoomReservationResponse,
 } from '../../types/response.type';
-import { BaseReservationComponent } from '../base-reservation.component';
+import { BaseReservationComponent } from '../../../../../reservation/src/lib/components/base-reservation.component';
 import { ReservationType } from '../../constants/reservation-table';
 import { convertToTitleCase } from 'libs/admin/shared/src/lib/utils/valueFormatter';
 import { Subject } from 'rxjs';
@@ -56,6 +57,8 @@ export class AddReservationComponent extends BaseReservationComponent
   isConfirmedBooking = false;
   isCheckedout = false;
   isFullPayment = false;
+  currentStatus: ReservationCurrentStatus;
+  reservationFormData: ReservationFormData;
 
   constructor(
     private fb: FormBuilder,
@@ -214,7 +217,9 @@ export class AddReservationComponent extends BaseReservationComponent
         .getReservationDataById(this.reservationId, this.selectedEntity.id)
         .subscribe(
           (response: RoomReservationResponse) => {
-            const data = new ReservationFormData().deserialize(response);
+            this.reservationFormData = new ReservationFormData().deserialize(
+              response
+            );
             const {
               guestInformation,
               roomInformation,
@@ -226,11 +231,15 @@ export class AddReservationComponent extends BaseReservationComponent
                 ...reservationInfo
               },
               ...formData
-            } = data;
+            } = this.reservationFormData;
 
-            this.isDraftBooking = reservationInfo.reservationType === 'DRAFT';
-            this.isCheckedout = response.status === 'CHECKEDOUT';
-            this.checkinJourneyState = data.journeyState;
+            this.isDraftBooking =
+              reservationInfo.reservationType === ReservationType.DRAFT;
+            this.formService.currentJourneyStatus.next(response.status);
+            this.currentStatus = response?.status;
+            this.isCheckedout =
+              response.status === ReservationCurrentStatus.CHECKEDOUT;
+            this.checkinJourneyState = this.reservationFormData.journeyState;
             this.isExternalBooking = response.externalBooking;
             this.formService.sourceData.next({
               source: source,
@@ -259,8 +268,10 @@ export class AddReservationComponent extends BaseReservationComponent
               formData,
             });
 
-            this.inputControls.offerId.patchValue(data.offerId);
-            if (data.offerId) {
+            this.inputControls.offerId.patchValue(
+              this.reservationFormData.offerId
+            );
+            if (this.reservationFormData.offerId) {
               const roomTypeIds = roomInformation.map(
                 (item) => item.roomTypeId
               );
@@ -351,7 +362,10 @@ export class AddReservationComponent extends BaseReservationComponent
                 this.summaryData.totalAmount;
               if (this.formValueChanges) {
                 this.reservationId
-                  ? this.setFormDisability(this.checkinJourneyState)
+                  ? this.setFormDisability(
+                      this.checkinJourneyState,
+                      this.currentStatus
+                    )
                   : this.setFormDisability;
                 this.formValueChanges = false;
               }

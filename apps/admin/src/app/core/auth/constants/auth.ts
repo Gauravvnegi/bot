@@ -17,15 +17,48 @@ export const authConstants = {
     botshotLogo: 'assets/images/botshotlogo.png',
   },
   managingOptions: [
-    { id: 1, label: 'Live Dashboard', url: 'assets/svg/dashboard-white.svg' },
-    { id: 2, label: 'Filters as per Journeys', url: 'assets/svg/Filter.svg' },
+    {
+      id: 1,
+      label: 'createWith',
+      url: 'assets/svg/dashboard-white.svg',
+    },
+    {
+      id: 2,
+      label: 'eFront Desk',
+      url: 'assets/svg/Filter.svg',
+    },
     { id: 3, label: 'Analytics', url: 'assets/svg/Analytics.svg' },
     {
       id: 4,
-      label: 'Live Request Handling',
+      label: 'Freddie',
       url: 'assets/svg/live-help.svg',
     },
-    { id: 5, label: 'Universal Search', url: 'assets/svg/search.svg' },
+    { id: 5, label: 'Heda', url: 'assets/svg/search.svg' },
+    {
+      id: 6,
+      label: 'eMarket-IT',
+      url: 'assets/svg/Analytics.svg',
+    },
+    {
+      id: 7,
+      label: 'channelSynchro',
+      url: 'assets/svg/Analytics.svg',
+    },
+    {
+      id: 7,
+      label: 'RevMaxi',
+      url: 'assets/svg/Analytics.svg',
+    },
+    {
+      id: 7,
+      label: 'PredictoPMS',
+      url: 'assets/svg/Analytics.svg',
+    },
+    {
+      id: 7,
+      label: 'ComplaintTrackr',
+      url: 'assets/svg/Analytics.svg',
+    },
   ],
   alt: {
     bell: 'bell',
@@ -41,4 +74,28 @@ export const authConstants = {
   },
   passwordMinLength: 6,
   passwordMaxLength: 10,
+
+  //product certification
+  productCertification: [
+    {
+      id: 1,
+      label: 'google Certified',
+      url: 'assets/svg/google-certification2.svg',
+    },
+    {
+      id: 2,
+      label: 'iso Certified',
+      url: 'assets/svg/iso-certification.svg',
+    },
+    {
+      id: 3,
+      label: 'gdr Certified',
+      url: 'assets/svg/gdr-certification.svg',
+    },
+    {
+      id: 4,
+      label: 'opera Certified',
+      url: 'assets/svg/opera-certification2.png',
+    },
+  ],
 };

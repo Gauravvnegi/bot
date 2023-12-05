@@ -80,11 +80,12 @@
     position: relative;
     width: 65%;
     height: 100vh;
-    background-image: url('/assets/images/auth-banner.webp');
-    background-repeat: no-repeat;
-    background-size: 100% 100%;
+    display: flex;
+    flex-direction: column;
+    // justify-content: space-between;
     &--carousel {
       position: absolute;
+      display: none;
       height: 100%;
       width: 100%;
       .fredabg {
@@ -110,17 +111,26 @@
         right: 57.5%;
       }
     }
+
+    &__top {
+      height: 75%;
+      background-image: url(/assets/images/auth-banner.webp);
+      background-repeat: no-repeat;
+      background-size: 101% 101%;
+      padding-top: 30px;
+    }
     &-header {
-      position: absolute;
+      // position: absolute;
       z-index: 1;
       right: 0;
       padding: 15px 1%;
+      gap: 1em;
       @include flex-center-algn-justify-end();
 
       a {
         text-decoration: none;
-        font-size: 12px;
-        font-weight: $bolder;
+        font-size: 14px;
+        font-weight: 500;
         margin: 0px 10px;
         color: $white;
       }
@@ -136,11 +146,11 @@
       }
     }
     &-managing-hotel {
-      position: absolute;
+      // position: absolute;
       z-index: 1;
       padding: 1%;
       margin: 0px 8%;
-      margin-top: 15%;
+      margin-top: 3%;
       color: $white;
 
       .heading {
@@ -151,15 +161,21 @@
         }
       }
       &-option-box {
-        @include flex-space-btw-wrap;
+        display: flex;
+        /* justify-content: space-between; */
+        flex-wrap: wrap;
+        flex-direction: column;
+        height: 33vh;
+        // @include flex-space-btw-wrap;
         .option {
-          width: 50%;
+          width: 33.33%;
           margin-bottom: 20px;
           @include flex-item-center;
           padding: 10px;
-
           .material-icons {
             margin-right: 10px;
+            width: 1.5em;
+            filter: brightness(0) invert(1);
           }
           .option-label {
             margin: 0;
@@ -184,13 +200,30 @@
       }
     }
     &-footer {
-      padding: 1%;
-      position: absolute;
-      @include flex-space-between-cen-Algn;
-      width: 96%;
+      // padding: 1%;
+      // position: absolute;
+      // @include flex-space-between-cen-Algn;
+
+      // width: 96%;
       bottom: 10px;
       font-size: 14px;
       color: $white;
+      background-color: #090a16;
+      padding: 14px 21px;
+
+      .image {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        .copyright {
+          font-size: 14px;
+          font-weight: 500;
+          letter-spacing: 0.84px;
+          color: #fff;
+        }
+      }
+
       @media (max-width: $tablet) {
         margin-bottom: 20px;
         padding-left: 6px;
@@ -205,7 +238,36 @@
           }
         }
       }
+
+      &__certification {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        margin: 0 8%;
+        .title {
+          font-weight: $bolder;
+          font-size: 18px;
+          font-weight: 600;
+          letter-spacing: 0.54px;
+          text-align: left;
+          color: #fff;
+        }
+
+        .icons-container {
+          display: flex;
+          flex-direction: row;
+          justify-content: space-between;
+          align-items: center;
+          .icons {
+            width: 10em;
+            img {
+              @include full-img-contain;
+            }
+          }
+        }
+      }
     }
+
     @media screen and (max-width: $tablet) {
       width-percentage: 59.1%;
       @include flex-col-justify-center;

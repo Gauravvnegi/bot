@@ -1,0 +1,32 @@
+@import '../form.component.scss';
+.days-selector {
+  @include flex-item-center();
+  justify-content: space-between;
+  margin-top: 12px;
+
+  label {
+    @include flex-item-center();
+    font-size: 14px;
+    gap: 8px;
+    input {
+      height: 16px;
+      width: 16px;
+      border-radius: 5px;
+    }
+  }
+}
+
+.checkbox {
+  height: 1.4em;
+  background: $border-color;
+  width: 1.4em;
+  border-radius: 2px;
+  opacity: 0.8;
+  &__img {
+    height: 100%;
+    width: 100%;
+  }
+}
+.d-none {
+  display: none;
+}

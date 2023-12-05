@@ -2,7 +2,7 @@ export type InputVariant = 'standard' | 'outlined';
 export type Alignment = 'vertical' | 'horizontal';
 export type InputType = 'number' | 'text';
 
-export type Option<T extends string = string> = {
+export type Option<T extends string | Date = string> = {
   label: string;
   value: T;
   inactive?: boolean;

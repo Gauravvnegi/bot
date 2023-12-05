@@ -122,6 +122,7 @@ import { FromToDateComponent } from './components/from-to-date/from-to-date.comp
 import { TimerComponent } from './components/timer/timer.component';
 import { SidebarModule } from 'primeng/sidebar';
 import { InteractiveGridComponent } from './components/interactive-grid/interactive-grid.component';
+import { CalendarViewComponent } from './components/calendar-view/calendar-view.component';
 import { AngularDraggableModule } from 'angular2-draggable';
 import { TooltipModule } from 'primeng/tooltip';
 
@@ -264,6 +265,7 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
     FromToDateComponent,
     TimerComponent,
     InteractiveGridComponent,
+    CalendarViewComponent,
     TieredMenuButtonComponent,
     TabbedSidebarComponent,
     InfoPanelComponent,
@@ -385,6 +387,7 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
     TimerComponent,
     SidebarModule,
     InteractiveGridComponent,
+    CalendarViewComponent,
     AngularDraggableModule,
     TooltipModule,
     TieredMenuButtonComponent,

@@ -1,0 +1,72 @@
+<div class="main-wrapper">
+  <div class="wrapper bdr">
+    <!-- LEFT SECTION -->
+    <div class="left">
+      <div class="left__main">
+        <div
+          class="main-header main-header__left"
+          [ngStyle]="{
+            height: size + 5 + 'px'
+          }"
+        >
+          <div class="date__wrapper bdr-btm">
+            {{ year }}
+          </div>
+        </div>
+        <div class="main-section">
+          <div
+            class="row_info"
+            [ngStyle]="{
+              height: size + 'px',
+              fontSize: size / 2 + 'px'
+            }"
+            *ngFor="let item of rowsInfo"
+          >
+            {{ item.label }}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT SECTION -->
+    <div class="right">
+      <div class="right__main">
+        <div
+          class="main-header main-header__right"
+          [ngStyle]="{
+            height: size + 5 + 'px'
+          }"
+        >
+          <div class="date__wrapper bdr-btm date__header">
+            <div
+              class="col_info"
+              [ngStyle]="{
+                minWidth: size + 'px',
+                fontSize: size / 1.5 + 'px'
+              }"
+              *ngFor="let item of colsInfo"
+            >
+              {{ item.label }}
+            </div>
+          </div>
+        </div>
+        <div class="main-section">
+          <div *ngFor="let gridRow of gridInfo" class="grid__row">
+            <div
+              *ngFor="let gridData of gridRow"
+              class="grid__data"
+              [ngStyle]="{
+                height: size + 'px',
+                minWidth: size + 'px',
+                maxWidth: size + 'px',
+                fontSize: size / 2 + 'px'
+              }"
+            >
+              {{ gridData.inactive ? '' : gridData.label }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,7 +1,11 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
-import { AdminUtilityService, fullMonths } from '@hospitality-bot/admin/shared';
+import {
+  AdminUtilityService,
+  Option,
+  fullMonths,
+} from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { RoomTypes } from 'libs/admin/channel-manager/src/lib/models/bulk-update.models';
 import { MenuItem } from 'primeng/api';
@@ -18,6 +22,7 @@ import {
 } from 'libs/admin/shared/src/lib/components/interactive-grid/interactive-grid.component';
 import { DynamicPricingResponse } from '../../types/dynamic-pricing.types';
 import { ActivatedRoute, Router } from '@angular/router';
+import { weeks } from '../../constants/revenue-manager.const';
 
 type YearData = {
   year: number;
@@ -49,7 +54,7 @@ export class DynamicPricingCalendarViewComponent implements OnInit, OnDestroy {
     private fb: FormBuilder,
     private globalFilter: GlobalFilterService,
     private snackbarService: SnackBarService,
-    private router:Router,
+    private router: Router,
     private route: ActivatedRoute
   ) {}
 
@@ -69,11 +74,14 @@ export class DynamicPricingCalendarViewComponent implements OnInit, OnDestroy {
     value: item,
   }));
 
-  colsInfo = Array.from({ length: 31 }, (_, index) => index + 1).map(
-    (item) => ({
-      label: item,
-      value: item,
-    })
+  colsInfo: Option[] = Array.from({ length: 37 }, (_, index) => index + 1).map(
+    (item) => {
+      const currentWeek = weeks[item % 7].label;
+      return {
+        label: currentWeek.charAt(0),
+        value: currentWeek,
+      };
+    }
   );
 
   // get gridRows(): IGRow[] {
@@ -317,13 +325,13 @@ export class DynamicPricingCalendarViewComponent implements OnInit, OnDestroy {
   handleEdit(event: IGEditEvent) {
     console.log(event, 'onEdit event');
 
-    if(event.id){
-      this.router.navigate(['create-season'] ,{
-        queryParams:{
-          seasonId: event.id
-        } ,
-        relativeTo : this.route
-      })
+    if (event.id) {
+      this.router.navigate(['create-season'], {
+        queryParams: {
+          seasonId: event.id,
+        },
+        relativeTo: this.route,
+      });
     }
   }
 

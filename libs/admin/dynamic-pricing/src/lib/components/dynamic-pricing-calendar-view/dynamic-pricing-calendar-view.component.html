@@ -35,29 +35,57 @@
         ></hospitality-bot-calendar-view>
       </div>
 
-      <div class="filters">
+      <div class="filters" [formGroup]="useForm">
         <div class="filters__head">Seasons</div>
-        <div class="filters__main">
-          <div class="season" *ngFor="let season of seasons">
+        <div
+          class="filters__main"
+          *ngIf="useForm.get('seasons')?.length"
+          formArrayName="seasons"
+        >
+          <div
+            class="season"
+            [formGroupName]="i"
+            *ngFor="
+              let season of useForm.get('seasons')?.controls;
+              let i = index
+            "
+          >
             <div class="season__checkbox">
-              <input type="checkbox" class="d-none" />
+              <hospitality-bot-checkbox
+                controlName="selected"
+              ></hospitality-bot-checkbox>
             </div>
             <div
               class="season__color"
               [ngStyle]="{
-                backgroundColor: season.colorCode
+                backgroundColor: season.get('colorCode').value
               }"
             ></div>
             <div class="season__name" [ngStyle]="{}">
-              {{ season.name }}
+              {{ season.get('name').value }}
             </div>
 
             <div class="season__toggle">
-              <p-inputSwitch></p-inputSwitch>
+              <hospitality-bot-input-switch
+                controlName="toggle"
+              ></hospitality-bot-input-switch>
+            </div>
+
+            <div class="season__dates">
+              <div class="season__date">
+                {{ season.get('fromDate').value | date: 'dd/MM/yyyy' }}
+              </div>
+              {{ ' - ' }}
+              <div class="season__date">
+                {{ season.get('toDate').value | date: 'dd/MM/yyyy' }}
+              </div>
             </div>
 
             <div class="season__days">
-              <div class="season__day" *ngFor="let day of season.days">
+              <div
+                class="season__day"
+                *ngFor="let day of season.get('days').value"
+              >
                 {{ day.label }}
               </div>
             </div>

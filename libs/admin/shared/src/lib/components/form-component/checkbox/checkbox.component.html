@@ -1,10 +1,5 @@
-<label>
-  <input
-    type="checkbox"
-    (change)="toggleSelectAll()"
-    [formControlName]="controlName"
-    class="d-none"
-  />
+<div>
+  <input type="checkbox" (change)="toggleSelectAll()" class="d-none" />
   <div class="checkbox" (change)="toggleSelectAll()">
     <img
       *ngIf="value"
@@ -15,4 +10,4 @@
   </div>
 
   <span class="checkbox-label">{{ label }}</span>
-</label>
+</div>

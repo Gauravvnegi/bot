@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
@@ -16,6 +16,17 @@ import {
   DynamicPricingRequest,
 } from '../../types/dynamic-pricing.types';
 
+type Season = {
+  name: string;
+  colorCode: string;
+  fromDate: Date;
+  toDate: Date;
+  days: {
+    label: string;
+    value: DaysType;
+  }[];
+};
+
 @Component({
   selector: 'hospitality-bot-dynamic-pricing-calendar-view',
   templateUrl: './dynamic-pricing-calendar-view.component.html',
@@ -25,16 +36,9 @@ export class DynamicPricingCalendarViewComponent implements OnInit, OnDestroy {
   loading = false;
   $subscription = new Subscription();
 
-  seasons: {
-    name: string;
-    colorCode: string;
-    fromDate: Date;
-    toDate: Date;
-    days: {
-      label: string;
-      value: DaysType;
-    }[];
-  }[] = [];
+  seasons: Season[] = [];
+
+  useForm: FormGroup;
 
   colors = getListOfRandomLightColor(20);
 
@@ -48,7 +52,25 @@ export class DynamicPricingCalendarViewComponent implements OnInit, OnDestroy {
     private snackbarService: SnackBarService,
     private router: Router,
     private route: ActivatedRoute
-  ) {}
+  ) {
+    this.useForm = this.fb.group({
+      seasons: new FormArray([]),
+    });
+  }
+
+  createSeasonForm(data: Season) {
+    const sFrom = this.fb.group({
+      selected: [true],
+      toggle: [true],
+      name: [data.name],
+      colorCode: [data.colorCode],
+      fromDate: [data.fromDate],
+      toDate: [data.toDate],
+      days: [data.days],
+    });
+
+    return sFrom;
+  }
 
   ngOnInit(): void {
     this.loading = true;
@@ -78,6 +100,19 @@ export class DynamicPricingCalendarViewComponent implements OnInit, OnDestroy {
                 fromDate: new Date(fromDate),
                 toDate: new Date(toDate),
               });
+
+              (this.useForm.get('seasons') as FormArray).push(
+                this.createSeasonForm({
+                  name,
+                  colorCode,
+                  days: daysIncluded.map((item) => ({
+                    label: item.substring(0, 3),
+                    value: item,
+                  })),
+                  fromDate: new Date(fromDate),
+                  toDate: new Date(toDate),
+                })
+              );
 
               const startDate = this.getFormattedDate(fromDate);
               const endDate = this.getFormattedDate(toDate);
@@ -134,6 +169,7 @@ export class DynamicPricingCalendarViewComponent implements OnInit, OnDestroy {
             });
 
             console.log(this.seasons, 'seasons');
+            console.log(this.useForm.get('seasons'), 'seasonsForm');
           },
           () => {
             this.loading = false;

@@ -18,13 +18,18 @@
 
   position: sticky;
   top: 82px;
-  height: calc(100vh - 232px);
+  height: calc(100vh - 200px);
+  overflow-y: auto;
   width: 300px;
 
   &__head {
+    position: sticky;
+    top: 0;
+    color: #01152b;
+    border-bottom: 1px solid gray;
     padding: 10px;
     font-size: 20px;
-    font-weight: 600;
+    font-weight: 500;
   }
 
   &__main {
@@ -41,6 +46,10 @@
 
   &__checkbox {
     flex-basis: 10%;
+    & input {
+      height: 80%;
+      width: 80%;
+    }
   }
 
   &__name {
@@ -67,6 +76,20 @@
     font-size: 12px;
     /* text-decoration: underline; */
     color: #6038f9;
+    font-weight: 500;
+  }
+
+  &__dates {
+    flex-basis: 100%;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  &__date {
+    font-size: 12px;
+    /* text-decoration: underline; */
+    color: #564d78;
     font-weight: 500;
   }
 }

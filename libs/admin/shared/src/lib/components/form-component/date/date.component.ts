@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { ControlContainer } from '@angular/forms';
 import { DateService } from '@hospitality-bot/shared/utils';
 import { FormComponent } from '../form.components';
+import { debounceTime } from 'rxjs/operators';
 
 @Component({
   selector: 'hospitality-bot-date',
@@ -46,9 +47,9 @@ export class DateComponent extends FormComponent implements OnInit {
     const value = this.inputControl.value;
     if (value) this.dateValue = new Date(value);
 
-    this.inputControl.valueChanges.subscribe((res) => {
+    this.inputControl.valueChanges.pipe(debounceTime(1000)).subscribe((res) => {
       /* Epoch Date conversion to Date */
-      this.dateValue = new Date(res);
+      if (res) this.dateValue = new Date(res);
     });
   }
 

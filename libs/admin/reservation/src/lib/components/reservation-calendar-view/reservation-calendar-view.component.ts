@@ -534,7 +534,7 @@ export class ReservationCalendarViewComponent implements OnInit {
 
   getMenuOptions(reservation: RoomReservation) {
     return reservation.journeysStatus.PRECHECKIN === JourneyState.PENDING
-      ? reservationMenuOptions['PRECHEKIN']
+      ? reservationMenuOptions['PRECHECKIN']
       : reservationMenuOptions[reservation.status];
   }
 

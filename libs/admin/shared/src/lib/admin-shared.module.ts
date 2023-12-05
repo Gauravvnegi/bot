@@ -133,6 +133,7 @@ import { QuickSelectComponent } from './view/quick-select/quick-select.component
 import { ToggleMenuComponent } from './components/toggle-menu/toggle-menu.component';
 import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { CheckboxComponent } from './components/form-component/checkbox/checkbox.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -270,6 +271,7 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
     QuickSelectComponent,
     ToggleMenuComponent,
     ConfirmDialogComponent,
+    CheckboxComponent,
   ],
 
   exports: [
@@ -393,6 +395,7 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
     QuickSelectComponent,
     ToggleMenuComponent,
     ConfirmDialogComponent,
+    CheckboxComponent,
   ],
 })
 export class AdminSharedModule {}

@@ -120,11 +120,20 @@
             *ngIf="!!this.documentFormGroup.controls?.length; else emptyDoc"
             class="docs-wrapper"
           >
-            <div
+            <!-- <div
               *ngIf="updatedDocGuest.includes(this.selectedGuestId)"
               class="save-message"
             >
               Please Save changes to upload docs.
+            </div> -->
+            <div
+              *ngIf="
+                !isAllDocsAttached &&
+                updatedDocGuest.includes(this.selectedGuestId)
+              "
+              class="save-message"
+            >
+              Please attach all documents.
             </div>
             <ng-container
               formArrayName="documents"

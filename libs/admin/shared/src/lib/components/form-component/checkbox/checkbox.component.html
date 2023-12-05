@@ -1,0 +1,18 @@
+<label>
+  <input
+    type="checkbox"
+    (change)="toggleSelectAll()"
+    [formControlName]="controlName"
+    class="d-none"
+  />
+  <div class="checkbox" (change)="toggleSelectAll()">
+    <img
+      *ngIf="value"
+      class="checkbox__img"
+      src="assets/svg/checkboxSelect.svg"
+      alt="select"
+    />
+  </div>
+
+  <span class="checkbox-label">{{ label }}</span>
+</label>

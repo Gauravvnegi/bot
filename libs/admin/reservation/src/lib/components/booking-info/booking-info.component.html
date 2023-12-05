@@ -27,7 +27,7 @@
           }"
           [minDate]="today"
           [maxDate]="maxDate"
-          [disabled]="disabledForm"
+          [disabled]="disabledForm || isCheckedIn"
         ></hospitality-bot-date>
         <hospitality-bot-date
           [ngClass]="isQuickReservation ? 'custom-width' : 'half-width'"
@@ -39,7 +39,7 @@
           }"
           [minDate]="minToDate"
           [maxDate]="maxDate"
-          [disabled]="disabledForm"
+          [disabled]="disabledForm || isCheckedOut"
         ></hospitality-bot-date>
       </ng-container>
       <ng-container *ngIf="bookingType === 'VENUE'">

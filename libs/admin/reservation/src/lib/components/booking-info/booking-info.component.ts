@@ -19,7 +19,10 @@ import {
   EntitySubType,
   Option,
 } from '@hospitality-bot/admin/shared';
-import { BookingConfig } from '../../../../../manage-reservation/src/lib/models/reservations.model';
+import {
+  BookingConfig,
+  ReservationCurrentStatus,
+} from '../../../../../manage-reservation/src/lib/models/reservations.model';
 import * as moment from 'moment';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { FormService } from '../../../../../manage-reservation/src/lib/services/form.service';
@@ -47,7 +50,8 @@ export class BookingInfoComponent implements OnInit {
   isQuickReservation: boolean = false;
   disabledForm: boolean = false;
   defaultDate: number;
-
+  isCheckedIn: boolean = false;
+  isCheckedOut: boolean = false;
   /**
    * Props to show extra information
    * @todo Need to handle label for col and row to show information
@@ -68,7 +72,6 @@ export class BookingInfoComponent implements OnInit {
   // agentSource = false;
 
   today = new Date();
-  date = new Date();
   entityId: string;
   startMinDate = new Date();
   endMinDate = new Date();
@@ -110,6 +113,15 @@ export class BookingInfoComponent implements OnInit {
     this.minToDate = new Date();
     this.initDefaultDates();
     this.listenForDateChange();
+    this.formService.currentJourneyStatus.subscribe((res) => {
+      if (res) {
+        this.isCheckedIn =
+          res &&
+          (res === ReservationCurrentStatus.INHOUSE ||
+            res === ReservationCurrentStatus.DUEOUT);
+        this.isCheckedOut = res === ReservationCurrentStatus.CHECKEDOUT;
+      }
+    });
   }
 
   /**

@@ -322,7 +322,10 @@
               </ng-container>
             </ng-container>
             <ng-template #PRECHECKIN>
-              <ng-container [ngSwitch]="details.currentJourneyDetails.status">
+              <ng-container
+                [ngSwitch]="details.currentJourneyDetails.status"
+                *ngIf="!(checkForExpiredBooking || checkForCancelBooking)"
+              >
                 <ng-container *ngSwitchCase="'PENDING'">
                   <hospitality-bot-button
                     label="Activate & Generate PreCheckIn"
@@ -373,6 +376,7 @@
                     variant="outlined"
                   ></hospitality-bot-button> -->
                   <p-splitButton
+                  *ngIf="!(checkForExpiredBooking || checkForCancelBooking)"
                     class="download-btn"
                     label="CheckIn"
                     (onClick)="manualCheckin()"

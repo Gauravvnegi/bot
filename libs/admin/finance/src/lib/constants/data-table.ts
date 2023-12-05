@@ -170,10 +170,14 @@ export const transactionStatus: Record<
 > = {
   SUCCESS: {
     label: 'Paid',
-    type: 'active',
+    type: 'success',
   },
   FAILURE: {
     label: 'Failed',
     type: 'failed',
   },
+  REFUND: {
+    label: 'Refund',
+    type: 'active'
+  }
 };

@@ -166,4 +166,8 @@ export class AuthService extends ApiService {
       })
     );
   }
+
+  getProductList(): Observable<any> {
+    return this.get(`/api/v1/subscriptions/master/product`);
+  }
 }

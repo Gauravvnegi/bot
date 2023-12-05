@@ -33,6 +33,7 @@ export class AdminDocumentsDetailsComponent implements OnInit {
   };
   uploadingDoc: string; //'front-1'|'front-2'|'back-1'|'back-2'
   updatedDocGuest = [];
+  isAllDocsAttached: boolean = false;
 
   entityId: string;
 
@@ -255,6 +256,8 @@ export class AdminDocumentsDetailsComponent implements OnInit {
       this.snackbarService.openSnackBarAsText('Please attach all documents');
       return;
     }
+
+    this.isAllDocsAttached = true;
 
     if (docsData.isPrimary) {
       data.primaryGuest = {

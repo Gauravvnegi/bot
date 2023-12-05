@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import {
   AbstractControl,
   ControlContainer,
@@ -9,6 +9,7 @@ import { ReservationForm } from '../../../constants/form';
 import { FormService } from '../../../services/form.service';
 import { Subscription } from 'rxjs';
 import { ReservationType } from '../../../constants/reservation-table';
+import { ReservationCurrentStatus } from '../../../models/reservations.model';
 
 @Component({
   selector: 'hospitality-bot-payment-rule',
@@ -24,6 +25,16 @@ export class PaymentRuleComponent implements OnInit {
   minDate = new Date();
   maxDate = new Date();
   isConfirmedReservation: boolean = false;
+  @Input() reservationId: string;
+  isCheckedout: boolean;
+  isCheckedIn: boolean;
+  @Input() set isFullPayment(value: boolean) {
+    value &&
+      this.reservationId &&
+      this.paymentRuleControls.partialPayment.patchValue(false, {
+        emitEvent: false,
+      });
+  }
 
   constructor(
     private fb: FormBuilder,
@@ -41,6 +52,15 @@ export class PaymentRuleComponent implements OnInit {
       })
     );
     this.addFormGroup();
+    this.formService.currentJourneyStatus.subscribe((res) => {
+      if (res) {
+        this.isCheckedout = res === ReservationCurrentStatus.CHECKEDOUT;
+        this.isCheckedIn =
+          res &&
+          (res === ReservationCurrentStatus.INHOUSE ||
+            res === ReservationCurrentStatus.DUEOUT);
+      }
+    });
     this.registerPaymentRuleChange();
   }
 
@@ -95,6 +115,14 @@ export class PaymentRuleComponent implements OnInit {
     return (this.parentFormGroup.get('reservationInformation') as FormGroup)
       .controls as Record<
       keyof ReservationForm['reservationInformation'],
+      AbstractControl
+    >;
+  }
+
+  get paymentRuleControls() {
+    return (this.parentFormGroup.get('paymentRule') as FormGroup)
+      .controls as Record<
+      keyof ReservationForm['paymentRule'],
       AbstractControl
     >;
   }

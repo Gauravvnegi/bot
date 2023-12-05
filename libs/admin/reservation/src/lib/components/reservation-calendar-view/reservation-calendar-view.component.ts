@@ -7,6 +7,7 @@ import {
 } from '@hospitality-bot/admin/core/theme';
 import {
   AdminUtilityService,
+  FlagType,
   ModuleNames,
   Option,
   QueryConfig,
@@ -14,6 +15,7 @@ import {
 } from '@hospitality-bot/admin/shared';
 import { getWeekendBG } from 'libs/admin/channel-manager/src/lib/models/bulk-update.models';
 import {
+  ReservationCurrentStatus,
   ReservationList,
   RoomReservation,
 } from 'libs/admin/manage-reservation/src/lib/models/reservations.model';
@@ -40,8 +42,8 @@ import {
 import { Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import {
-  getColorCode,
   reservationMenuOptions,
+  reservationStatusColorCode,
 } from '../../constants/reservation';
 import { MatDialogConfig } from '@angular/material/dialog';
 import {
@@ -238,10 +240,7 @@ export class ReservationCalendarViewComponent implements OnInit {
         startPos: this.getDate(reservation.from),
         endPos: this.getDate(reservation.to),
         rowValue: reservation.bookingItems[0].roomDetails.roomNumber,
-        colorCode: getColorCode(
-          reservation.journeysStatus,
-          reservation?.status
-        ),
+        colorCode: reservationStatusColorCode[reservation?.status],
         nonInteractive: reservation.journeysStatus.CHECKOUT === 'COMPLETED',
         additionContent: reservation?.companyName ?? '',
         options: this.getMenuOptions(reservation),
@@ -358,8 +357,8 @@ export class ReservationCalendarViewComponent implements OnInit {
       nextDate.setDate(currentDate.getDate() + i);
       const day = nextDate.getDay();
       const data = {
-        day: daysOfWeek[day].substring(0, 3),
-        date: nextDate.getDate(),
+        day: daysOfWeek[day]?.substring(0, 3),
+        date: nextDate?.getDate(),
         currentDate: nextDate,
       };
       dates.push(data);
@@ -386,8 +385,10 @@ export class ReservationCalendarViewComponent implements OnInit {
 
   listenChanges() {
     this.useForm.get('date').valueChanges.subscribe((res) => {
-      this.initDates(res);
-      this.initReservationData();
+      if (res) {
+        this.initDates(res);
+        this.initReservationData();
+      }
     });
 
     this.useForm
@@ -535,7 +536,7 @@ export class ReservationCalendarViewComponent implements OnInit {
 
   getMenuOptions(reservation: RoomReservation) {
     return reservation.journeysStatus.PRECHECKIN === JourneyState.PENDING
-      ? reservationMenuOptions['PRECHEKIN']
+      ? reservationMenuOptions['PRECHECKIN']
       : reservationMenuOptions[reservation.status];
   }
 
@@ -574,16 +575,24 @@ export class ReservationCalendarViewComponent implements OnInit {
     this.viewReservationForm = true;
   }
 
-  handleMenuClick(event: { label: string; value: string; id: string }) {
+  handleMenuClick(
+    event: { label: string; value: string; id: string },
+    roomType: IGRoomType
+  ) {
     switch (event.value) {
       case 'CHECKIN':
-        this.manualCheckin(event.id);
+        this.manualCheckin(event.id, roomType);
         break;
       case 'CHECKOUT':
-        this.manualCheckout(event.id);
+        this.manualCheckout(event.id, roomType);
         break;
       case 'CANCEL_CHECKIN':
         this._reservationService.cancelCheckin(event.id).subscribe((res) => {
+          this.updateRoomType(
+            event.id,
+            roomType,
+            ReservationCurrentStatus.DUEIN
+          );
           this.snackbarService.openSnackBarAsText('Checkin canceled.', '', {
             panelClass: 'success',
           });
@@ -591,6 +600,11 @@ export class ReservationCalendarViewComponent implements OnInit {
         break;
       case 'CANCEL_CHECKOUT':
         this._reservationService.cancelCheckout(event.id).subscribe((res) => {
+          this.updateRoomType(
+            event.id,
+            roomType,
+            ReservationCurrentStatus.DUEOUT
+          );
           this.snackbarService.openSnackBarAsText('Checkin canceled.', '', {
             panelClass: 'success',
           });
@@ -620,7 +634,7 @@ export class ReservationCalendarViewComponent implements OnInit {
       });
   }
 
-  manualCheckin(reservationId: string) {
+  manualCheckin(reservationId: string, roomType: IGRoomType) {
     this.adminDetailsService.openJourneyDialog({
       title: 'Check-In',
       description: 'Guest is about to checkin',
@@ -635,14 +649,14 @@ export class ReservationCalendarViewComponent implements OnInit {
           context: this,
           handler: {
             fn_name: 'checkInfn',
-            args: [reservationId],
+            args: [reservationId, roomType],
           },
         },
       },
     });
   }
 
-  manualCheckout(reservationId: string) {
+  manualCheckout(reservationId: string, roomType: IGRoomType) {
     this.adminDetailsService.openJourneyDialog({
       title: 'Manual Checkout',
       description: 'Guest is about to checkout',
@@ -657,16 +671,21 @@ export class ReservationCalendarViewComponent implements OnInit {
           context: this,
           handler: {
             fn_name: 'manualCheckoutfn',
-            args: [reservationId],
+            args: [reservationId, roomType],
           },
         },
       },
     });
   }
 
-  checkInfn(reservationId: string) {
+  checkInfn(reservationId: string, roomType: IGRoomType) {
     this.$subscription.add(
       this._reservationService.manualCheckin(reservationId).subscribe((res) => {
+        this.updateRoomType(
+          reservationId,
+          roomType,
+          ReservationCurrentStatus.INHOUSE
+        );
         this.snackbarService.openSnackBarAsText('Checkin completed.', '', {
           panelClass: 'success',
         });
@@ -674,12 +693,39 @@ export class ReservationCalendarViewComponent implements OnInit {
     );
   }
 
-  manualCheckoutfn(reservationId: string) {
+  manualCheckoutfn(reservationId: string, roomType: IGRoomType) {
     this._reservationService.manualCheckout(reservationId).subscribe((res) => {
+      this.updateRoomType(
+        reservationId,
+        roomType,
+        ReservationCurrentStatus.CHECKEDOUT
+      );
       this.snackbarService.openSnackBarAsText('Checkout completed.', '', {
         panelClass: 'success',
       });
     });
+  }
+
+  updateRoomType(
+    reservationId: string,
+    roomType: IGRoomType,
+    status: ReservationCurrentStatus
+  ) {
+    const updatedValues = roomType.data.values.map((item) => {
+      if (item.id === reservationId) {
+        return {
+          ...item,
+          colorCode: reservationStatusColorCode[status] as FlagType,
+          options: reservationMenuOptions[status],
+        };
+      }
+      return item; // Keep other items unchanged
+    });
+
+    roomType.data = {
+      ...roomType.data,
+      values: updatedValues,
+    };
   }
 
   openDetailsPage(reservationId: string) {

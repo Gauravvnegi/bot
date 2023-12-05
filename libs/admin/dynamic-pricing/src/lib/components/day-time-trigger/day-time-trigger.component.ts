@@ -1,4 +1,11 @@
-import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  ViewChild,
+} from '@angular/core';
 import {
   AbstractControl,
   FormArray,
@@ -27,6 +34,7 @@ import { ModalComponent } from 'libs/admin/shared/src/lib/components/modal/modal
 import { MatDialogConfig } from '@angular/material/dialog';
 import { openAccordion } from '../../models/bar-price.model';
 import { Accordion } from 'primeng/accordion';
+import { isDirty } from '../../services/bar-price.service';
 
 @Component({
   selector: 'hospitality-bot-day-time-trigger',
@@ -34,6 +42,7 @@ import { Accordion } from 'primeng/accordion';
   styleUrls: ['./day-time-trigger.component.scss'],
 })
 export class DayTimeTriggerComponent implements OnInit {
+  readonly isDirty = isDirty;
   entityId: string;
 
   parentFG: FormGroup;
@@ -69,7 +78,11 @@ export class DayTimeTriggerComponent implements OnInit {
     this.entityId = this.globalFilter.entityId;
   }
 
-  modifyTriggerFG(mode = Revenue.add, index?: number, createOnClick?:boolean): void {
+  modifyTriggerFG(
+    mode = Revenue.add,
+    index?: number,
+    createOnClick?: boolean
+  ): void {
     const dayTimeFormArray = this.dynamicPricingControl.timeFA;
     if (mode != Revenue.add) {
       const triggerFG = dayTimeFormArray.at(index) as FormGroup;
@@ -101,7 +114,9 @@ export class DayTimeTriggerComponent implements OnInit {
                   .subscribe(
                     (res) => {
                       this.snackbarService.openSnackBarAsText(
-                        `Trigger '${triggerFG.get('name').value}' deleted Successfully.`,
+                        `Trigger '${
+                          triggerFG.get('name').value
+                        }' deleted Successfully.`,
                         '',
                         { panelClass: 'success' }
                       );
@@ -128,10 +143,10 @@ export class DayTimeTriggerComponent implements OnInit {
       this.modifyTriggerFGEvent.emit({ mode, index });
       this.listenChanges(
         dayTimeFormArray.at(dayTimeFormArray.controls.length - 1) as FormGroup
-      ); 
-       
+      );
+
       // TODO: Need to scroll on create new trigger
-      // if(createOnClick){ 
+      // if(createOnClick){
       //     setTimeout(()=>{
       //       openAccordion({
       //         accordion: this.accordion,
@@ -182,7 +197,7 @@ export class DayTimeTriggerComponent implements OnInit {
   }
 
   triggerStatusChange(event: boolean, triggerFG: FormGroup) {
-    const { id,name } = triggerFG.controls;
+    const { id, name } = triggerFG.controls;
     if (id.value) {
       this.loading = true;
       this.$subscription.add(

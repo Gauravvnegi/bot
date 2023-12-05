@@ -53,38 +53,52 @@
         </div>
       </ng-container>
     </div>
-    <header class="wrapper--right-header">
-      <a
-        [href]="authConstants.linkUrl.aboutUs"
-        target="_blank"
-        rel="noopener"
-        >{{ 'menu.about_us' | translate }}</a
-      >
-      <a
-        [href]="authConstants.linkUrl.privacyPolicy"
-        target="_blank"
-        rel="noopener"
-        >{{ 'menu.privacy_policy' | translate }}</a
-      >
-    </header>
-    <div class="wrapper--right-managing-hotel">
-      <p class="heading">{{ 'banner_heading_text' | translate }}</p>
-      <div class="wrapper--right-managing-hotel-option-box">
-        <div
-          *ngFor="
-            let option of authConstants.managingOptions;
-            trackBy: trackById
-          "
-          class="option"
+    <div class="wrapper--right__top">
+      <header class="wrapper--right-header">
+        <a
+          [href]="authConstants.linkUrl.aboutUs"
+          target="_blank"
+          rel="noopener"
+          >{{ 'menu.about_us' | translate }}</a
         >
-          <img class="material-icons" [src]="option.url" [alt]="option.label" />
-          <p class="option-label">{{ option.label }}</p>
+        <a
+          [href]="authConstants.linkUrl.privacyPolicy"
+          target="_blank"
+          rel="noopener"
+          >{{ 'menu.privacy_policy' | translate }}</a
+        >
+      </header>
+      <div class="wrapper--right-managing-hotel">
+        <p class="heading">
+          Maximize revenue & streamline your hotel's operations.
+        </p>
+        <div class="wrapper--right-managing-hotel-option-box">
+          <div *ngFor="let option of productList" class="option">
+            <img
+              class="material-icons"
+              [src]="option?.icon"
+              [alt]="option?.label"
+            />
+            <p class="option-label">{{ option.label }}</p>
+          </div>
         </div>
       </div>
     </div>
     <div class="wrapper--right-footer">
+      <div class="wrapper--right-footer__certification">
+        <div class="title">Trusted by industries leaders</div>
+        <div class="icons-container">
+          <div
+            *ngFor="let icons of authConstants?.productCertification"
+            class="icons"
+          >
+            <img [src]="icons.url" [alt]="icons.label" />
+          </div>
+        </div>
+      </div>
       <div class="image">
         <img [src]="authConstants.imgUrl.botshotLogo" alt="Botshot" />
+        <span class="copyright">© 2020, Botshot. All Right Reserved</span>
       </div>
     </div>
   </div>

@@ -24,20 +24,17 @@ export const actionConfig = {
   },
 };
 
-export function getColorCode(
-  jouryneyStatus: Record<JourneyType, JourneyState>,
-  status: string
-) {
-  if (jouryneyStatus) {
-    if (jouryneyStatus.CHECKOUT === JourneyState.COMPLETED) return 'inactive';
-    else if (jouryneyStatus.CHECKIN === JourneyState.COMPLETED) return 'active';
-    else if (jouryneyStatus.PRECHECKIN === JourneyState.COMPLETED)
-      return 'success';
-    else if (jouryneyStatus.NEW === JourneyState.COMPLETED) return 'success';
-    else if (status === 'DUEOUT') return 'warning';
-    else return 'success';
-  }
-}
+export const reservationStatusColorCode: Record<
+  ReservationCurrentStatus,
+  string
+> = {
+  NEW: 'success',
+  RESERVED: 'success',
+  DUEIN: 'success',
+  INHOUSE: 'active',
+  CHECKEDOUT: 'inactive',
+  DUEOUT: 'warning',
+};
 
 export const viewDetails = [{ label: 'View Details', value: 'VEIW_DETAILS' }];
 
@@ -52,7 +49,7 @@ export const checkoutOptions = [
 ];
 
 export const reservationMenuOptions: Record<
-  ReservationCurrentStatus & 'PRECHEKIN',
+  ReservationCurrentStatus & 'PRECHECKIN',
   IGCellInfo['options']
 > = {
   NEW: checkinOptions,
@@ -67,7 +64,7 @@ export const reservationMenuOptions: Record<
     { label: 'Cancel Checkout', value: 'CANCEL_CHECKOUT' },
     ...viewDetails,
   ],
-  PRECHEKIN: [
+  PRECHECKIN: [
     { label: 'Activate Precheckin', value: 'PRECHECKIN' },
     ...viewDetails,
   ],

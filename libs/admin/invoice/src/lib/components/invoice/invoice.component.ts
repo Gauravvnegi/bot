@@ -500,6 +500,8 @@ export class InvoiceComponent implements OnInit {
       isMiscellaneous: [false],
       reservationItemId: [null],
       isRefund: [false],
+      discountType: [''],
+      discountValue: [0],
     };
 
     const formGroup = this.fb.group(data);
@@ -1166,7 +1168,7 @@ export class InvoiceComponent implements OnInit {
     // discountComponentRef.componentInstance.tax = taxPercentage;
 
     discountComponentRef.componentInstance.onClose.subscribe(
-      (res: { totalDiscount: number }) => {
+      (res: { discountType: string; totalDiscount: number }) => {
         this.modalService.close();
         if (!res) return;
         const totalDiscount = res.totalDiscount;
@@ -1214,6 +1216,8 @@ export class InvoiceComponent implements OnInit {
               value: value,
               entryIdx: item.index + 1 + index,
               date: item.control.value.date,
+              discountType: res.discountType,
+              discountValue: totalDiscount,
             });
           });
         } else alreadyHasDiscount.patchValue({ creditAmount: totalDiscount });
@@ -1260,6 +1264,8 @@ export class InvoiceComponent implements OnInit {
     entryIdx?: number;
     date?: number;
     type: ChargesType;
+    discountType?: string;
+    discountValue?: number;
   }) {
     const {
       type,
@@ -1268,6 +1274,8 @@ export class InvoiceComponent implements OnInit {
       reservationItemId,
       value,
       transactionType,
+      discountType,
+      discountValue,
     } = {
       ...settings,
     };
@@ -1290,7 +1298,7 @@ export class InvoiceComponent implements OnInit {
       value: value,
     });
 
-    const data = this.invoiceService.generateBillItem({
+    const baseData = this.invoiceService.generateBillItem({
       creditAmount: transactionType === 'CREDIT' ? amount : 0,
       debitAmount: transactionType === 'DEBIT' ? amount : 0,
       billItemId: value,
@@ -1303,6 +1311,18 @@ export class InvoiceComponent implements OnInit {
       transactionType: transactionType,
       date: settings.date ? settings.date : moment(new Date()).unix() * 1000,
     });
+    
+    // Add discountType and discountValue only when type is 'discount'
+    const data: BillItemFields = {
+      ...baseData,
+      ...settings,
+      ...(settings.type === 'discount'
+        ? {
+            discountType: discountType, // Replace with your actual value
+            discountValue: discountValue, // Replace with your actual value
+          }
+        : {}),
+    };
 
     this.tableFormArray.at(entryIdx).patchValue(data);
   }

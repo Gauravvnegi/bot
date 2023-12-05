@@ -21,6 +21,7 @@
   >
   <div (click)="onAddAttachment()">
     <p-multiSelect
+      #multiSelect
       class="input"
       [ngClass]="inputNgClasses"
       [disabled]="isDisabled || null"
@@ -33,7 +34,10 @@
         <div class="chips">
           <div class="chip" [click-stop-propagation] *ngFor="let val of value">
             <div>{{ dictionary[val] }}</div>
-            <i class="pi pi-times" (click)="handleClear(val)"></i>
+            <i
+              class="pi pi-times"
+              (click)="handleClear(val); $event.stopPropagation()"
+            ></i>
           </div>
         </div>
       </ng-template>

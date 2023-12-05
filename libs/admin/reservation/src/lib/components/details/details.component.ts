@@ -362,6 +362,35 @@ export class DetailsComponent implements OnInit, OnDestroy {
       });
   }
 
+  checkForDocumentsStatus() {
+    return (
+      this.detailsForm.get('documentStatus').get('status').value === 'INITIATED'
+    );
+  }
+
+  get checkForExpiredBooking() {
+    //expired booking are those which are not checked in and departure date is passed
+    //in-house , due out , checked out
+
+    const departureDateStr = this.details?.stayDetails?.departureDate;
+
+    if (departureDateStr) {
+      // Parse the date string to get day, month, and year
+      const [day, month, year] = departureDateStr.split('/').map(Number);
+
+      // Note: months are 0-indexed in JavaScript Date, so subtract 1 from the month
+      const departureDate = new Date(year, month - 1, day);
+
+      // Set time components of both dates to midnight (00:00:00)
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      departureDate.setHours(0, 0, 0, 0);
+      // Compare the day, month, and year components
+      return departureDate < today;
+    }
+
+    return false;
+  }
   generateCheckinLink() {}
 
   acceptPayment(status = 'Accept') {

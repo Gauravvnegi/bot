@@ -227,6 +227,7 @@
 
               <div class="action">
                 <hospitality-bot-button
+                  [disabled]="!isDirty(season)"
                   [label]="
                     season.get('type').value == 'update' ? 'Update' : 'Save'
                   "
@@ -339,7 +340,7 @@
       </ng-container>
     </p-accordion>
     <div class="add-level">
-      <div class="link" (click)="add('season',null,true)">
+      <div class="link" (click)="add('season', null, true)">
         +Add New Season
       </div>
     </div>

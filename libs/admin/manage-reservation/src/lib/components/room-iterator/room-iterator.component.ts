@@ -34,6 +34,7 @@ import { RoomTypeResponse } from 'libs/admin/room/src/lib/types/service-response
 import { debounceTime } from 'rxjs/operators';
 import { ReservationType } from '../../constants/reservation-table';
 import { RoomService } from 'libs/admin/room/src/lib/services/room.service';
+import { ReservationCurrentStatus } from '../../models/reservations.model';
 
 @Component({
   selector: 'hospitality-bot-room-iterator',
@@ -69,9 +70,12 @@ export class RoomIteratorComponent extends IteratorComponent
   loadingRoomTypes = [false];
   isDataInitialized = false;
   reinitializeRooms = false;
+  updatedRoomsLoaded = false;
 
   itemValuesCount = 0;
   selectedRoomNumber: string = '';
+  isCheckedIn = false;
+  isCheckedout = false;
 
   @ViewChild('main') main: ElementRef;
 
@@ -128,6 +132,13 @@ export class RoomIteratorComponent extends IteratorComponent
       // set-global query everytime global filter changes
       this.globalQueries = [...data['dateRange'].queryValue];
     });
+    this.formService.currentJourneyStatus.subscribe((res) => {
+      this.isCheckedIn =
+        res &&
+        (res === ReservationCurrentStatus.INHOUSE ||
+          res === ReservationCurrentStatus.DUEOUT);
+      this.isCheckedout = res && res === ReservationCurrentStatus.CHECKEDOUT;
+    });
   }
 
   /**
@@ -170,6 +181,7 @@ export class RoomIteratorComponent extends IteratorComponent
     this.formService.reinitializeRooms.subscribe((res) => {
       if (res) {
         this.reinitializeRooms = !this.reinitializeRooms;
+        this.updatedRoomsLoaded = true;
       }
     });
   }
@@ -293,7 +305,11 @@ export class RoomIteratorComponent extends IteratorComponent
         { emitEvent: false }
       );
 
-      if (this.isDataInitialized || !this.reservationId) {
+      if (
+        !this.isCheckedIn &&
+        !this.isCheckedout &&
+        (this.isDataInitialized || !this.reservationId)
+      ) {
         this.roomControls[index].get('roomNumbers').reset();
         this.roomControls[index].get('roomNumber').reset();
         // Patch default Base rate plan when not in edit mode.
@@ -328,6 +344,11 @@ export class RoomIteratorComponent extends IteratorComponent
           });
           this.fields[3].disabled = true;
         } else {
+          // Load updated rooms for draft reservations according to current date
+          res === ReservationType.CONFIRMED &&
+            this.isDraftBooking &&
+            !this.updatedRoomsLoaded &&
+            this.formService.reinitializeRooms.next(true);
           this.fields[3].disabled = false;
         }
       }

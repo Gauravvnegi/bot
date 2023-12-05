@@ -223,6 +223,7 @@
 
             <div class="action">
               <hospitality-bot-button
+                [disabled]="!isDirty(triggerFG)"
                 [label]="
                   triggerFG.get('type').value === 'update' ? 'Update' : 'Save'
                 "
@@ -234,7 +235,9 @@
         </div>
       </div>
       <div class="add-trigger">
-        <div class="link" (click)="modifyTriggerFG('add',null,true)">+Add New</div>
+        <div class="link" (click)="modifyTriggerFG('add', null, true)">
+          +Add New
+        </div>
       </div>
     </div>
   </p-accordion>

@@ -28,7 +28,7 @@ import {
 } from '../../models/reservations.model';
 import { ManageReservationService } from '../../services/manage-reservation.service';
 import { ReservationForm } from '../../constants/form';
-import { BaseReservationComponent } from '../base-reservation.component';
+import { BaseReservationComponent } from '../../../../../reservation/src/lib/components/base-reservation.component';
 import { FormService } from '../../services/form.service';
 import { ReservationType } from '../../constants/reservation-table';
 import { debounceTime } from 'rxjs/operators';

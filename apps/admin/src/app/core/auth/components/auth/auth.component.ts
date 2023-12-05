@@ -4,6 +4,7 @@ import { authConstants } from '../../constants/auth';
 import { ManagingOption } from '../../types/auth.type';
 import { Slick } from 'ngx-slickjs';
 import { LoadingService } from '../../../theme/src/lib/services/loader.service';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'admin-auth',
@@ -23,10 +24,14 @@ export class AuthComponent implements OnInit {
     autoplaySpeed: 1000,
   };
 
-  constructor(private loadingService: LoadingService) {}
+  constructor(
+    private loadingService: LoadingService,
+    private authService: AuthService
+  ) {}
 
   ngOnInit(): void {
     if (this.loadingService.overlayCompRef) this.loadingService?.close();
+    this.getProductList();
   }
 
   /**
@@ -37,6 +42,20 @@ export class AuthComponent implements OnInit {
    */
   trackById(index: number, managingOptions: ManagingOption): number {
     return managingOptions.id;
+  }
+
+  productList: any[] = [];
+
+  getProductList() {
+    this.authService.getProductList().subscribe((res) => {
+      this.productList = res.map((data) => {
+        return {
+          name: data.name,
+          label: data.label,
+          icon: data.icon,
+        };
+      });
+    });
   }
 
   /**

@@ -548,7 +548,7 @@ export class UpdateRatesComponent implements OnInit {
       nextDate.setDate(currentDate.getDate() + i);
       const day = nextDate.getDay();
       const data: DateOption = {
-        day: daysOfWeek[day].substring(0, 3),
+        day: daysOfWeek[day]?.substring(0, 3),
         date: nextDate.getDate(),
       };
       dates.push(data);

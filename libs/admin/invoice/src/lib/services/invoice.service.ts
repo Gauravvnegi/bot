@@ -120,18 +120,33 @@ export class InvoiceService extends ApiService {
       //     (des) => des.value === item.billItemId
       //   ).label;
       // }
-      return {
-        date: item.date,
-        description: item.description,
-        unit: item.unit,
-        creditAmount: +item.creditAmount,
-        debitAmount: +item.debitAmount,
-        transactionType: item.transactionType,
-        id: item.isNew ? null : item.billItemId,
-        itemId: item.isNonEditableBillItem ? null : item.itemId,
-        taxId: item.taxId,
-        isCoupon: item.isDiscount,
-      };
+      return item.isDiscount
+        ? {
+            date: item.date,
+            description: item.description,
+            unit: item.unit,
+            creditAmount: +item.creditAmount,
+            debitAmount: +item.debitAmount,
+            transactionType: item.transactionType,
+            id: item.isNew ? null : item.billItemId,
+            itemId: item.isNonEditableBillItem ? null : item.itemId,
+            taxId: item.taxId,
+            isCoupon: item.isDiscount,
+            discountType: item.discountType,
+            discountValue: item.discountValue,
+          }
+        : {
+            date: item.date,
+            description: item.description,
+            unit: item.unit,
+            creditAmount: +item.creditAmount,
+            debitAmount: +item.debitAmount,
+            transactionType: item.transactionType,
+            id: item.isNew ? null : item.billItemId,
+            itemId: item.isNonEditableBillItem ? null : item.itemId,
+            taxId: item.taxId,
+            isCoupon: item.isDiscount,
+          };
     });
 
     const deletedItemsId = previousSavedIds.filter(

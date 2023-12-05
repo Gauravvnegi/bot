@@ -25,6 +25,8 @@ export class AddDiscountComponent implements OnInit {
   }
 
   totalDiscount: number;
+  discountType: string;
+
   discountForm: FormGroup;
   discountOptions: Option[] = [
     { label: 'Flat', value: 'FLAT' },
@@ -110,6 +112,7 @@ export class AddDiscountComponent implements OnInit {
 
   handleApply() {
     this.onClose.next({
+      discountType: this.discountForm.get('discountType').value,
       totalDiscount: this.totalDiscount,
     });
   }

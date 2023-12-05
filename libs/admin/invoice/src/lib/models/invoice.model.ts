@@ -117,6 +117,8 @@ export class TableData {
   isMiscellaneous: boolean;
   reservationItemId: string;
   isRefund: boolean;
+  discountType?: string;
+  discountValue?: number;
 
   deserialize(input: BillItem) {
     this.key = input.id;

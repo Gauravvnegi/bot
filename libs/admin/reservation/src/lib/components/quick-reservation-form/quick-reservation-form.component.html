@@ -62,7 +62,7 @@
         class="booking-info"
       >
         <!-- Guest Information -->
-        <ng-container *ngIf="!reservationId" formGroupName="guestInformation">
+        <ng-container formGroupName="guestInformation">
           <hospitality-bot-quick-select
             class="half-width"
             controlName="guestDetails"
@@ -103,17 +103,6 @@
             (openSidebar)="createGuest()"
           ></hospitality-bot-quick-select>
         </ng-container>
-        <ng-container formGroupName="roomInformation" *ngIf="reservationId">
-          <hospitality-bot-select
-            class="half-width"
-            controlName="roomNumber"
-            label="Room Number"
-            [options]="roomOptions"
-            [props]="{
-              placeholder: 'Select'
-            }"
-          ></hospitality-bot-select>
-        </ng-container>
       </hospitality-bot-booking-info>
 
       <!-- Room Information -->
@@ -151,18 +140,26 @@
             [props]="{ placeholder: 'Select' }"
             [options]="ratePlans"
           ></hospitality-bot-select>
+          <hospitality-bot-multi-select
+            class="half-width"
+            controlName="roomNumbers"
+            label="Room Number"
+            [options]="roomOptions"
+            [props]="{
+              placeholder: 'Select'
+            }"
+          ></hospitality-bot-multi-select>
         </ng-container>
-
-        <hospitality-bot-multi-select
-          *ngIf="!reservationId"
+        <hospitality-bot-select
+          *ngIf="reservationId"
           class="half-width"
-          controlName="roomNumbers"
+          controlName="roomNumber"
           label="Room Number"
           [options]="roomOptions"
           [props]="{
             placeholder: 'Select'
           }"
-        ></hospitality-bot-multi-select>
+        ></hospitality-bot-select>
         <hospitality-bot-input
           class="half-width"
           controlName="adultCount"

@@ -20,7 +20,6 @@ import {
   RoutesConfigService,
 } from '@hospitality-bot/admin/core/theme';
 import {
-  ConfigService,
   EntitySubType,
   ModuleNames,
   Option,
@@ -31,6 +30,7 @@ import {
 } from '@hospitality-bot/shared/material';
 import {
   BookingConfig,
+  ReservationCurrentStatus,
   ReservationFormData,
 } from 'libs/admin/manage-reservation/src/lib/models/reservations.model';
 import { ManageReservationService } from 'libs/admin/manage-reservation/src/lib/services/manage-reservation.service';
@@ -42,7 +42,10 @@ import { Subscription } from 'rxjs';
 import { AddGuestComponent } from 'libs/admin/guests/src/lib/components/add-guest/add-guest.component';
 import { RoomTypeResponse } from 'libs/admin/room/src/lib/types/service-response';
 import { GuestType } from 'libs/admin/guests/src/lib/types/guest.type';
-import { RoomFieldTypeOption } from 'libs/admin/manage-reservation/src/lib/constants/reservation';
+import {
+  JourneyState,
+  RoomFieldTypeOption,
+} from 'libs/admin/manage-reservation/src/lib/constants/reservation';
 import { MatDialogConfig } from '@angular/material/dialog';
 import { DetailsComponent } from '../details/details.component';
 import { AgentTableResponse } from 'libs/admin/agent/src/lib/types/response';
@@ -77,6 +80,8 @@ export class QuickReservationFormComponent implements OnInit {
   isBooking = false;
   reinitializeRooms = false;
   isExternalBooking = false;
+  isCheckinCompleted = false;
+  isCheckedout = false;
 
   selectedGuest: Option;
   defaultRoomType: IGRoomType;
@@ -118,11 +123,11 @@ export class QuickReservationFormComponent implements OnInit {
     private snackbarService: SnackBarService,
     private globalFilterService: GlobalFilterService,
     private manageReservationService: ManageReservationService,
-    private formService: FormService,
+    protected formService: FormService,
     private compiler: Compiler,
     private resolver: ComponentFactoryResolver,
-    private routesConfigService: RoutesConfigService,
-    private modalService: ModalService
+    private modalService: ModalService,
+    protected routesConfigService: RoutesConfigService
   ) {
     this.formService.resetData();
     this.initForm();
@@ -269,13 +274,9 @@ export class QuickReservationFormComponent implements OnInit {
         .subscribe(
           (res) => {
             const formData = new ReservationFormData().deserialize(res);
-
             this.reservationData = formData;
             this.isExternalBooking = res?.externalBooking;
-            if (this.isExternalBooking) {
-              this.userForm.disable();
-              this.roomControls.roomNumber.enable();
-            }
+            this.formService.currentJourneyStatus.next(res.status);
             this.calculateDailyPrice();
             const { roomInformation, ...data } = formData;
             this.guestDetails = {
@@ -310,6 +311,11 @@ export class QuickReservationFormComponent implements OnInit {
             this.userForm.patchValue(data);
             this.inputControls.roomInformation.patchValue(roomInformation[0]);
 
+            this.isCheckinCompleted =
+              res?.status === ReservationCurrentStatus.INHOUSE;
+            this.isCheckedout =
+              res.status === ReservationCurrentStatus.CHECKEDOUT;
+            this.setFormDisability();
             this.isDataLoaded = true;
           },
           (error) => {
@@ -320,6 +326,18 @@ export class QuickReservationFormComponent implements OnInit {
           }
         )
     );
+  }
+
+  setFormDisability() {
+    if (this.isExternalBooking) {
+      this.userForm.disable({ emitEvent: false });
+      this.roomControls.roomNumber.enable({ emitEvent: false });
+    }
+    if (this.isCheckinCompleted) {
+      this.userForm.disable({ emitEvent: false });
+      this.reservationInfoControls.to.enable({ emitEvent: false });
+    }
+    this.isCheckedout && this.userForm.disable();
   }
 
   getGuestConfig() {
@@ -410,7 +428,7 @@ export class QuickReservationFormComponent implements OnInit {
       this.userForm.patchValue({
         dailyPrice: dailyPrice.toFixed(2), // Optionally format to two decimal places
       });
-      this.inputControls.dailyPrice.disable();
+      this.inputControls.dailyPrice.disable({ emitEvent: false });
     }
   }
 

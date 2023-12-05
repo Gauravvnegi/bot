@@ -28,7 +28,7 @@ import { debounceTime } from 'rxjs/operators';
 import { OutletForm } from '../../models/reservations.model';
 import { ReservationSummary } from '../../types/forms.types';
 import { MenuItemListResponse } from 'libs/admin/all-outlets/src/lib/types/outlet';
-import { BaseReservationComponent } from '../base-reservation.component';
+import { BaseReservationComponent } from '../../../../../reservation/src/lib/components/base-reservation.component';
 import { OutletService } from 'libs/admin/all-outlets/src/lib/services/outlet.service';
 import { FoodPackageList } from 'libs/admin/all-outlets/src/lib/models/outlet.model';
 import { RoutesConfigService } from '@hospitality-bot/admin/core/theme';

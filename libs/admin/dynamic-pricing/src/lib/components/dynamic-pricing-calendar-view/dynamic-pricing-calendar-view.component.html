@@ -26,7 +26,18 @@
   >
   </hospitality-bot-empty-table>
 
-  <div *ngFor="let yearData of yearsData">
-    <hospitality-bot-calendar-view></hospitality-bot-calendar-view>
+  <div class="main">
+    <div class="calendar">
+      <hospitality-bot-calendar-view
+        [years]="[2023, 2024]"
+        calendarWidth="calc(90vw - 300px)"
+      ></hospitality-bot-calendar-view>
+    </div>
+
+    <div class="filters">
+      <div>Filters</div>
+
+      <div class="filters__main"></div>
+    </div>
   </div>
 </div>

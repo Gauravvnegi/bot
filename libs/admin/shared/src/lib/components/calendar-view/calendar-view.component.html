@@ -1,24 +1,35 @@
-<div class="main-wrapper">
-  <div class="wrapper bdr">
+<div
+  *ngFor="let year of years"
+  class="wrapper"
+  [ngStyle]="{
+    width: calendarWidth
+  }"
+>
+  <div class="wrapper__main bdr">
     <!-- LEFT SECTION -->
     <div class="left">
-      <div class="left__main">
+      <div class="left__main bg-white bdr-rgt">
         <div
           class="main-header main-header__left"
           [ngStyle]="{
-            height: size + 5 + 'px'
+            height: height
           }"
         >
-          <div class="date__wrapper bdr-btm">
+          <div
+            class="date__wrapper bdr-btm"
+            [ngStyle]="{
+              fontSize: fontSize
+            }"
+          >
             {{ year }}
           </div>
         </div>
         <div class="main-section">
           <div
-            class="row_info"
+            class="row_info bdr-btm"
             [ngStyle]="{
-              height: size + 'px',
-              fontSize: size / 2 + 'px'
+              height: height,
+              fontSize: fontSize
             }"
             *ngFor="let item of rowsInfo"
           >
@@ -34,15 +45,15 @@
         <div
           class="main-header main-header__right"
           [ngStyle]="{
-            height: size + 5 + 'px'
+            height: height
           }"
         >
-          <div class="date__wrapper bdr-btm date__header">
+          <div class="date__wrapper date__header">
             <div
-              class="col_info"
+              class="col_info bg-white bdr-btm-rgt"
               [ngStyle]="{
-                minWidth: size + 'px',
-                fontSize: size / 1.5 + 'px'
+                minWidth: height,
+                fontSize: fontSize
               }"
               *ngFor="let item of colsInfo"
             >
@@ -51,15 +62,15 @@
           </div>
         </div>
         <div class="main-section">
-          <div *ngFor="let gridRow of gridInfo" class="grid__row">
+          <div *ngFor="let gridRow of gridInfo[year]" class="grid__row">
             <div
               *ngFor="let gridData of gridRow"
-              class="grid__data"
+              class="grid__data bdr-btm-rgt"
               [ngStyle]="{
-                height: size + 'px',
-                minWidth: size + 'px',
-                maxWidth: size + 'px',
-                fontSize: size / 2 + 'px'
+                height: height,
+                minWidth: height,
+                maxWidth: height,
+                fontSize: fontSize
               }"
             >
               {{ gridData.inactive ? '' : gridData.label }}

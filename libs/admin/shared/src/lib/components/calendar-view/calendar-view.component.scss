@@ -2,28 +2,23 @@
 
 $border: 1px solid #8080802e;
 
-@mixin item-center {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-@mixin item-center-with-space {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
 .wrapper {
-  display: flex;
-  width: 100%;
+  border-radius: 5%;
+  &__main {
+    display: flex;
+    width: 100%;
+    margin-bottom: 10px;
+    border-radius: 4px;
+    overflow: hidden;
+  }
 }
 
 .left {
   min-width: 70px;
-  flex-grow: 1;
+
   &__main {
     width: 100%;
+    text-align: center;
   }
 }
 

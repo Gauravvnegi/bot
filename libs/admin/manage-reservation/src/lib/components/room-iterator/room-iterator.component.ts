@@ -69,6 +69,7 @@ export class RoomIteratorComponent extends IteratorComponent
   loadingRoomTypes = [false];
   isDataInitialized = false;
   reinitializeRooms = false;
+  updatedRoomsLoaded = false;
 
   itemValuesCount = 0;
   selectedRoomNumber: string = '';
@@ -170,6 +171,7 @@ export class RoomIteratorComponent extends IteratorComponent
     this.formService.reinitializeRooms.subscribe((res) => {
       if (res) {
         this.reinitializeRooms = !this.reinitializeRooms;
+        this.updatedRoomsLoaded = true;
       }
     });
   }
@@ -328,6 +330,11 @@ export class RoomIteratorComponent extends IteratorComponent
           });
           this.fields[3].disabled = true;
         } else {
+          // Load updated rooms for draft reservations according to current date
+          res === ReservationType.CONFIRMED &&
+            this.isDraftBooking &&
+            !this.updatedRoomsLoaded &&
+            this.formService.reinitializeRooms.next(true);
           this.fields[3].disabled = false;
         }
       }

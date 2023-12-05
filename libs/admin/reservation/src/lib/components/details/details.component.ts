@@ -385,7 +385,6 @@ export class DetailsComponent implements OnInit, OnDestroy {
       const today = new Date();
       today.setHours(0, 0, 0, 0);
       departureDate.setHours(0, 0, 0, 0);
-      debugger;
       // Compare the day, month, and year components
       return departureDate < today;
     }

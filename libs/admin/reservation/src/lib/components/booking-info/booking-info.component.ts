@@ -115,7 +115,10 @@ export class BookingInfoComponent implements OnInit {
     this.listenForDateChange();
     this.formService.currentJourneyStatus.subscribe((res) => {
       if (res) {
-        this.isCheckedIn = res === ReservationCurrentStatus.INHOUSE;
+        this.isCheckedIn =
+          res &&
+          (res === ReservationCurrentStatus.INHOUSE ||
+            res === ReservationCurrentStatus.DUEOUT);
         this.isCheckedOut = res === ReservationCurrentStatus.CHECKEDOUT;
       }
     });

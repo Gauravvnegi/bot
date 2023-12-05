@@ -53,9 +53,12 @@ export class PaymentRuleComponent implements OnInit {
     );
     this.addFormGroup();
     this.formService.currentJourneyStatus.subscribe((res) => {
-      if(res){
+      if (res) {
         this.isCheckedout = res === ReservationCurrentStatus.CHECKEDOUT;
-        this.isCheckedIn = res === ReservationCurrentStatus.INHOUSE;
+        this.isCheckedIn =
+          res &&
+          (res === ReservationCurrentStatus.INHOUSE ||
+            res === ReservationCurrentStatus.DUEOUT);
       }
     });
     this.registerPaymentRuleChange();

@@ -8,11 +8,13 @@
   class="tab-filter"
   (onEntityTabFilterChanges)="onEntityTabFilterChanges($event)"
 ></hospitality-bot-entity-tab-filter>
-<div
-  [formGroup]="tableFG"
->
-  <hospitality-bot-navigation-header [heading]="tableName" [routes]="navRoutes" [isBack]="false">
-     <hospitality-bot-export-list
+<div [formGroup]="tableFG">
+  <hospitality-bot-navigation-header
+    [heading]="tableName"
+    [routes]="navRoutes"
+    [isBack]="false"
+  >
+    <hospitality-bot-export-list
       [isDisable]="values.length === 0"
       [additionalActionItems]="additionalActionItems"
       (onDocumentActions)="onDocumentActions()"
@@ -117,11 +119,19 @@
             class="status-text"
             [ngClass]="
               rowData.status === 'SUCCESS'
-                ? 'chip-contained-paid'
-                : 'chip-contained-unpaid'
+                ? 'chip-contained-success'
+                : rowData.status === 'FAILURE'
+                ? 'chip-contained-unpaid'
+                : 'chip-contained-paid'
             "
           >
-            {{ rowData.status === 'SUCCESS' ? 'Paid' : 'Failed' }}
+            {{
+              rowData.status === 'SUCCESS'
+                ? 'Paid'
+                : rowData.status === 'FAILURE'
+                ? 'Failed'
+                : 'Refund'
+            }}
           </div>
         </div>
       </td>

@@ -58,6 +58,7 @@ import { Services } from '../../models/amenities.model';
 import { convertToTitleCase } from 'libs/admin/shared/src/lib/utils/valueFormatter';
 import { FormService } from '../../services/form.service';
 import { debounceTime } from 'rxjs/operators';
+import { NightAuditService } from 'libs/admin/global-shared/src/lib/services/night-audit.service';
 
 @Component({
   selector: 'hospitality-bot-add-room',
@@ -116,7 +117,8 @@ export class AddRoomComponent implements OnInit, OnDestroy {
     private libraryService: LibraryService,
     private formService: FormService,
     private routesConfigService: RoutesConfigService,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private auditService: NightAuditService
   ) {
     this.submissionType = this.route.snapshot.paramMap.get(
       'type'
@@ -140,6 +142,7 @@ export class AddRoomComponent implements OnInit, OnDestroy {
     this.initForm();
     this.initOptionsConfig();
     if (this.roomId) this.initRoomDetails();
+    this.checkAudit();
   }
 
   initNavRoutes(isEdit: boolean) {
@@ -465,6 +468,18 @@ export class AddRoomComponent implements OnInit, OnDestroy {
       subModuleName: ModuleNames.ROOM,
       additionalPath: routes.addRoomType,
     });
+  }
+
+  checkAudit() {
+    this.$subscription.add(
+      this.auditService.checkAudit(this.entityId).subscribe(
+        (res) => {
+          const date = res?.shift() ?? Date.now();
+          this.startMinDate = new Date(date);
+        },
+        (error) => {}
+      )
+    );
   }
 
   /**

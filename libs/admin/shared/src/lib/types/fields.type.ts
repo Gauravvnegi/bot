@@ -20,7 +20,7 @@ export type IteratorField = {
   minValue?: number;
   createPrompt?: string;
   validators?: ValidatorFn[];
-  errorMessages?:{}
+  errorMessages?: {};
 };
 
 export type ModalAction = {
@@ -29,7 +29,11 @@ export type ModalAction = {
   variant: ButtonVariant;
 };
 
-export type ModalContent = { heading: string; description: string[] };
+export type ModalContent = {
+  heading: string;
+  description: string[];
+  isRemarks?: boolean;
+};
 
 export type UploadFileData = {
   maxFileSize: number;

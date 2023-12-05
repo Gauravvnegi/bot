@@ -261,27 +261,42 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
       ModalComponent,
       dialogConfig
     );
-
     togglePopupCompRef.componentInstance.content = {
       heading: `Mark Reservation As ${
         status.charAt(0).toUpperCase() + status.slice(1).toLowerCase()
       }`,
       description: [
         `You are about to mark this reservation as ${status}`,
-        'Are you Sure?',
+        `Are you Sure?`,
+        status === 'CANCELED' && reservationData?.totalPaidAmount
+          ? ` A total of \u20B9 ${reservationData?.totalPaidAmount} is received for the reservation`
+          : '',
       ],
+      isRemarks: status === 'CANCELED',
     };
 
     togglePopupCompRef.componentInstance.actions = [
       {
-        label: 'No',
-        onClick: () => this.modalService.close(),
+        label: status === 'CANCELED' ? 'Cancel & Settlement' : 'Cancel',
+        onClick: () => {
+          status === 'CANCELED' &&
+            this.routesConfigService.navigate({
+              subModuleName: ModuleNames.INVOICE,
+              additionalPath: reservationData.id,
+              queryParams: {
+                entityId: this.selectedEntity.id,
+                type: this.selectedEntity.subType,
+              },
+            });
+
+          this.modalService.close();
+        },
         variant: 'outlined',
       },
       {
         label: 'Yes',
-        onClick: () => {
-          this.changeStatus(status, reservationData);
+        onClick: (modelData) => {
+          this.changeStatus(status, reservationData, modelData);
           this.modalService.close();
         },
         variant: 'contained',
@@ -293,7 +308,11 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
     });
   }
 
-  changeStatus(status: ReservationStatusType, reservationData) {
+  changeStatus(
+    status: ReservationStatusType,
+    reservationData,
+    additionalData?: any
+  ) {
     let bookingType =
       this.selectedEntity.type === EntityType.HOTEL
         ? EntitySubType.ROOM_TYPE
@@ -307,6 +326,7 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
           bookingType,
           {
             reservationType: status,
+            remarks: additionalData?.remarks,
           }
         )
         .subscribe(

@@ -26,6 +26,9 @@
   .body {
     padding: 20px 30px;
     min-width: 550px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
     .descriptions {
       display: flex;
       flex-direction: column;

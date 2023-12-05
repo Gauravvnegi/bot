@@ -1,4 +1,4 @@
-<div class="detail--container">
+<div class="detail--container" [formGroup]="modelForm">
   <div class="header">
     <div class="header__title">
       <mat-icon class="alert">warning</mat-icon>
@@ -14,13 +14,17 @@
         {{ text }}
       </div>
     </div>
-
+    <hospitality-bot-text-area
+      *ngIf="isRemarks"
+      controlName="remarks"
+      label="Remarks"
+    ></hospitality-bot-text-area>
     <div class="actions">
       <ng-container *ngIf="!!actions?.length; else defaultCTA">
         <hospitality-bot-button
           *ngFor="let action of actions"
           [label]="action.label"
-          (onClick)="action.onClick()"
+          (onClick)="action.onClick(modelForm.value)"
           [variant]="action.variant"
         ></hospitality-bot-button>
       </ng-container>

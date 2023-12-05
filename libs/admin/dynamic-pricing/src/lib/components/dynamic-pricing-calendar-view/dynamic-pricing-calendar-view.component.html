@@ -14,30 +14,60 @@
     </hospitality-bot-navigation-header>
   </div>
 
-  <hospitality-bot-empty-table
-    *ngIf="!yearsData?.length && !loading"
-    [isLoading]="loading"
-    [link]="'create-season'"
-    [content]="{
-      description: 'No season created. Tap the Create Season to add season.',
-      imageSrc: 'assets/images/empty-table-offer.png',
-      actionName: '+ Create Season'
-    }"
-  >
-  </hospitality-bot-empty-table>
+  <ng-container *ngIf="!loading; else loader">
+    <hospitality-bot-empty-table
+      *ngIf="!seasons?.length"
+      [isLoading]="loading"
+      [link]="'create-season'"
+      [content]="{
+        description: 'No season created. Tap the Create Season to add season.',
+        imageSrc: 'assets/images/empty-table-offer.png',
+        actionName: '+ Create Season'
+      }"
+    >
+    </hospitality-bot-empty-table>
+    <div class="main" *ngIf="seasons.length">
+      <div class="calendar">
+        <hospitality-bot-calendar-view
+          [years]="[2023, 2024]"
+          calendarWidth="calc(90vw - 300px)"
+          [gridData]="gridData"
+        ></hospitality-bot-calendar-view>
+      </div>
 
-  <div class="main">
-    <div class="calendar">
-      <hospitality-bot-calendar-view
-        [years]="[2023, 2024]"
-        calendarWidth="calc(90vw - 300px)"
-      ></hospitality-bot-calendar-view>
+      <div class="filters">
+        <div class="filters__head">Seasons</div>
+        <div class="filters__main">
+          <div class="season" *ngFor="let season of seasons">
+            <div class="season__checkbox">
+              <input type="checkbox" class="d-none" />
+            </div>
+            <div
+              class="season__color"
+              [ngStyle]="{
+                backgroundColor: season.colorCode
+              }"
+            ></div>
+            <div class="season__name" [ngStyle]="{}">
+              {{ season.name }}
+            </div>
+
+            <div class="season__toggle">
+              <p-inputSwitch></p-inputSwitch>
+            </div>
+
+            <div class="season__days">
+              <div class="season__day" *ngFor="let day of season.days">
+                {{ day.label }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-
-    <div class="filters">
-      <div>Filters</div>
-
-      <div class="filters__main"></div>
-    </div>
-  </div>
+  </ng-container>
 </div>
+
+<ng-template #loader>
+  <hospitality-bot-loader-bounce></hospitality-bot-loader-bounce>
+</ng-template>

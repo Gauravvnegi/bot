@@ -64,16 +64,11 @@
         <div class="main-section">
           <div *ngFor="let gridRow of gridInfo[year]" class="grid__row">
             <div
-              *ngFor="let gridData of gridRow"
+              *ngFor="let gridRowData of gridRow; let gridRowDataIdx = index"
               class="grid__data bdr-btm-rgt"
-              [ngStyle]="{
-                height: height,
-                minWidth: height,
-                maxWidth: height,
-                fontSize: fontSize
-              }"
+              [ngStyle]="getStyles(gridRowData.value, gridRowDataIdx)"
             >
-              {{ gridData.inactive ? '' : gridData.label }}
+              {{ gridRowData.inactive ? '' : gridRowData.label }}
             </div>
           </div>
         </div>

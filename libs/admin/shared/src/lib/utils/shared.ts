@@ -39,3 +39,44 @@ export const discountCalculation = (
 
   return null;
 };
+
+export function getRandomLightHexColor() {
+  // Generate random values for RGB components
+  var r = Math.floor(Math.random() * 128) + 128; // Red component biased towards higher values
+  var g = Math.floor(Math.random() * 128) + 128; // Green component biased towards higher values
+  var b = Math.floor(Math.random() * 128) + 128; // Blue component biased towards higher values
+
+  // Convert RGB components to hex and concatenate
+  var hexColor =
+    '#' + ((1 << 24) | (r << 16) | (g << 8) | b).toString(16).slice(1);
+
+  return hexColor;
+}
+
+export function getListOfRandomLightColor(numberOfColors: number) {
+  return Array.from({ length: numberOfColors }, getRandomLightHexColor);
+}
+
+export function epochWithoutTime(epoch: number) {
+  // Create a new Date object using the epoch timestamp
+  const date = new Date(epoch); // multiply by 1000 for milliseconds
+
+  // Extract the date components
+  const year = date.getFullYear();
+  const month = date.getMonth() + 1; // months are zero-indexed, so add 1
+  const day = date.getDate();
+
+  // Construct the date string in the format YYYY-MM-DD
+  const formattedDate =
+    year +
+    '-' +
+    (month < 10 ? '0' : '') +
+    month +
+    '-' +
+    (day < 10 ? '0' : '') +
+    day;
+
+  const newDate = new Date(formattedDate);
+
+  return newDate.getTime();
+}

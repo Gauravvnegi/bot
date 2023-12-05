@@ -21,6 +21,52 @@
   height: calc(100vh - 232px);
   width: 300px;
 
+  &__head {
+    padding: 10px;
+    font-size: 20px;
+    font-weight: 600;
+  }
+
   &__main {
+    padding: 10px;
+  }
+}
+
+.season {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 10px 5px;
+  border-bottom: 1px solid rgba(128, 128, 128, 0.531);
+
+  &__checkbox {
+    flex-basis: 10%;
+  }
+
+  &__name {
+    flex-basis: 46%;
+  }
+
+  &__toggle {
+    flex-basis: 20%;
+  }
+
+  &__color {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+  }
+
+  &__days {
+    flex-basis: 100%;
+    display: flex;
+    gap: 5px;
+  }
+
+  &__day {
+    font-size: 12px;
+    /* text-decoration: underline; */
+    color: #6038f9;
+    font-weight: 500;
   }
 }

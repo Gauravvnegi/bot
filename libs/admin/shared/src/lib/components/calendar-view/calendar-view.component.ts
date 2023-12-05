@@ -1,5 +1,9 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { Option, fullMonths } from '@hospitality-bot/admin/shared';
+import {
+  Option,
+  epochWithoutTime,
+  fullMonths,
+} from '@hospitality-bot/admin/shared';
 import { Subscription } from 'rxjs';
 
 export type DaysType =
@@ -21,6 +25,13 @@ export const weeks: Option<DaysType>[] = [
   { label: 'Sat', value: 'SATURDAY' },
 ];
 
+export type CGridOption = Option<string, { date?: number }>;
+export type CGridInfo = Record<number, CGridOption[][]>;
+export type CGridData = Record<
+  string,
+  Partial<{ bg: string; days: DaysType[] }>
+>;
+
 @Component({
   selector: 'hospitality-bot-calendar-view',
   templateUrl: './calendar-view.component.html',
@@ -40,23 +51,25 @@ export class CalendarViewComponent implements OnInit, OnDestroy {
     value: item,
   }));
 
+  @Input() gridData: CGridData = {};
+
   /**
    * @example M,T,W,T,F,S
    */
-  colsInfo: Option[] = Array.from({ length: 37 }, (_, index) => index + 1).map(
-    (item) => {
-      console.log('week item: ', item);
-      const currentWeek = weeks[item % 7].label;
-      return {
-        label: currentWeek.charAt(0),
-        value: currentWeek,
-      };
-    }
-  );
+  colsInfo: Option<DaysType>[] = Array.from(
+    { length: 37 },
+    (_, index) => index + 1
+  ).map((item) => {
+    const currentWeek = weeks[item % 7].value;
+    return {
+      label: currentWeek.charAt(0),
+      value: currentWeek,
+    };
+  });
 
   monthIndices = Array.from({ length: 12 }, (_, index) => index);
 
-  gridInfo: Record<number, Option<Date>[][]> = {};
+  gridInfo: CGridInfo = {};
 
   get fontSize() {
     return this.size / 2 + 'px';
@@ -77,8 +90,22 @@ export class CalendarViewComponent implements OnInit, OnDestroy {
       return { ...value, [curr]: this.getCalendarInfo(curr) };
     }, {});
 
-    console.log(this.gridInfo, 'gridInfo');
-    console.log(this.years, 'years');
+    console.log(this.gridInfo);
+  }
+
+  getStyles(value: string, gridDataIdx: number) {
+    const data = this.gridData[value];
+
+    const showBg =
+      data?.days.includes(this.colsInfo[gridDataIdx].value) && data?.bg;
+
+    return {
+      backgroundColor: showBg ? data.bg : 'none',
+      height: this.height,
+      minWidth: this.height,
+      maxWidth: this.height,
+      fontSize: this.fontSize,
+    };
   }
 
   getCalendarInfo(year: number) {
@@ -92,9 +119,12 @@ export class CalendarViewComponent implements OnInit, OnDestroy {
 
       return this.colsInfo.map((_, idx) => {
         const isValid = idx >= startDayIdx && idx - startDayIdx < count;
-        const res: Option<Date> = {
+        const value = epochWithoutTime(
+          new Date(year, monthIdx, idx - startDayIdx + 1).getTime()
+        );
+        const res: CGridOption = {
           label: (isValid ? idx + 1 - startDayIdx : 0).toString(),
-          value: isValid ? new Date(year, monthIdx, idx - startDayIdx) : null,
+          value: isValid ? `${value}` : null,
           inactive: !isValid,
         };
 

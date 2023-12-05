@@ -2,12 +2,12 @@ export type InputVariant = 'standard' | 'outlined';
 export type Alignment = 'vertical' | 'horizontal';
 export type InputType = 'number' | 'text';
 
-export type Option<T extends string | Date = string> = {
+export type Option<T = string, TOption = Record<string, any>> = {
   label: string;
   value: T;
   inactive?: boolean;
   icon?: string;
-} & Record<string, any>;
+} & TOption;
 
 export type FormProps = {
   fontSize?: string;

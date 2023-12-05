@@ -357,8 +357,8 @@ export class ReservationCalendarViewComponent implements OnInit {
       nextDate.setDate(currentDate.getDate() + i);
       const day = nextDate.getDay();
       const data = {
-        day: daysOfWeek[day].substring(0, 3),
-        date: nextDate.getDate(),
+        day: daysOfWeek[day]?.substring(0, 3),
+        date: nextDate?.getDate(),
         currentDate: nextDate,
       };
       dates.push(data);
@@ -385,8 +385,10 @@ export class ReservationCalendarViewComponent implements OnInit {
 
   listenChanges() {
     this.useForm.get('date').valueChanges.subscribe((res) => {
-      this.initDates(res);
-      this.initReservationData();
+      if (res) {
+        this.initDates(res);
+        this.initReservationData();
+      }
     });
 
     this.useForm

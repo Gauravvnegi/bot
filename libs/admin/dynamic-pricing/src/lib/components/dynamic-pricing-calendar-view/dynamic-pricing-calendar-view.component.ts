@@ -132,11 +132,13 @@ export class DynamicPricingCalendarViewComponent implements OnInit, OnDestroy {
     } else {
       // Close the overlay panel if there's no valid data
       // this.overlayPanel.hide();
+      this.tooltip = '';
     }
   }
 
   closeOverlayPanel() {
     // this.overlayPanel.hide();
+    this.tooltip = '';
   }
 
   handleHover(event: CGridHoverData) {

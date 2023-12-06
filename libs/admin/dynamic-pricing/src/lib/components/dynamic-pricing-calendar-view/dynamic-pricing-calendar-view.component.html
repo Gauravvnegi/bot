@@ -38,7 +38,7 @@
         ></hospitality-bot-calendar-view>
       </div>
 
-      <div class="filters" [formGroup]="useForm">
+      <div class="filters" id="season-filter" [formGroup]="useForm">
         <div class="filters__head">Seasons</div>
         <div
           class="filters__main"
@@ -46,6 +46,7 @@
           formArrayName="seasons"
         >
           <div
+            [id]="season.get('id').value"
             class="season"
             [formGroupName]="i"
             *ngFor="

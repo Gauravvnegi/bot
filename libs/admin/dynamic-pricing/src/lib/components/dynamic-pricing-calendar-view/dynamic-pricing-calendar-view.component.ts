@@ -66,6 +66,22 @@ export class DynamicPricingCalendarViewComponent implements OnInit, OnDestroy {
     });
   }
 
+  scrollIntoView(id: string) {
+    // const targetElement = document.getElementById(id);
+    // targetElement.scrollIntoView({ behavior: 'smooth' });
+
+    var container = document.getElementById('season-filter');
+    var content = document.getElementById(id);
+
+    // Calculate the offset of the content within the container
+    var offset = content.offsetTop - container.offsetTop;
+
+    container.scrollTo({
+      top: offset,
+      behavior: 'smooth',
+    });
+  }
+
   createSeasonForm(data: Season) {
     const sFrom = this.fb.group({
       isActive: [data.isActive],
@@ -268,6 +284,7 @@ export class DynamicPricingCalendarViewComponent implements OnInit, OnDestroy {
       this.highlightedSeason = '';
     } else if (event.id) {
       this.highlightedSeason = event.id;
+      this.scrollIntoView(this.highlightedSeason);
     } else {
       this.highlightedSeason = '';
     }

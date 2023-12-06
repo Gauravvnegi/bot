@@ -23,6 +23,7 @@ import { debounceTime, switchMap } from 'rxjs/operators';
 import { roomStatusDetails } from '../../constant/room';
 import { houseKeepingRoutes } from '../../constant/routes';
 import { HousekeepingService } from '../../services/housekeeping.service';
+import { NightAuditService } from 'libs/admin/global-shared/src/lib/services/night-audit.service';
 
 @Component({
   selector: 'hospitality-bot-housekeeping',
@@ -64,7 +65,8 @@ export class HousekeepingComponent extends BaseDatatableComponent
     private globalFilterService: GlobalFilterService,
     private housekeepingService: HousekeepingService,
     private channelMangerForm: ChannelManagerFormService,
-    private routesConfigServices: RoutesConfigService
+    private routesConfigServices: RoutesConfigService,
+    private auditService: NightAuditService
   ) {
     super(fb, tabFilterService);
     this.initForm();
@@ -72,6 +74,7 @@ export class HousekeepingComponent extends BaseDatatableComponent
 
   ngOnInit(): void {
     this.entityId = this.globalFilterService.entityId;
+    this.checkAudit();
     this.listenForRoomTypeChange();
     this.listenForRefreshData();
     this.navRoutes = houseKeepingRoutes['HouseKeeping'].navRoutes;
@@ -186,6 +189,18 @@ export class HousekeepingComponent extends BaseDatatableComponent
       ]),
     };
     return config;
+  }
+
+  checkAudit() {
+    this.$subscription.add(
+      this.auditService.checkAudit(this.entityId).subscribe(
+        (res) => {
+          const date = res?.shift() ?? Date.now();
+          this.useForm.get('date').setValue(new Date(date));
+        },
+        (error) => {}
+      )
+    );
   }
 
   listenForRoomTypeChange(): void {

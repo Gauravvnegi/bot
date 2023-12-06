@@ -10,7 +10,11 @@ import {
   ReportsMenu,
 } from '../../types/reports.types';
 import { reportsConfig } from '../../constant/reports.const';
-import { convertToTitleCase } from 'libs/admin/shared/src/lib/utils/valueFormatter';
+import {
+  camelToKebab,
+  kebabToCamel,
+  convertToTitleCase,
+} from 'libs/admin/shared/src/lib/utils/valueFormatter';
 import { NavRouteOption, NavRouteOptions } from '@hospitality-bot/admin/shared';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -35,16 +39,19 @@ export class ReportsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    const reportName = this.route.snapshot.params['report'] as ReportType;
-
+    let reportName = this.route.snapshot.params['report'] as ReportType;
+    reportName = reportName && kebabToCamel(reportName);
     this.initReportConfigDetails(); //we are getting the report menu options from the config file
 
     //if there is no report selected, then select the first report from the list and navigate to that report
     !reportName &&
-      this.router.navigate([`${this.reportsMenuOptions[0].value}`], {
-        relativeTo: this.route,
-        replaceUrl: true,
-      });
+      this.router.navigate(
+        [`${camelToKebab(this.reportsMenuOptions[0].value)}`],
+        {
+          relativeTo: this.route,
+          replaceUrl: true,
+        }
+      );
 
     this.selectedReport = (this.reportsMenuOptions as any[]).find(
       (report) => (report.value as ReportType) === reportName
@@ -108,7 +115,7 @@ export class ReportsComponent implements OnInit {
   selectReport(value: ReportsMenu[number]) {
     if (value.value !== this.reportsService.$selectedReport.value.value) {
       //navigate to the selected report
-      this.router.navigate([`../${value.value}`], {
+      this.router.navigate([`../${camelToKebab(value.value)}`], {
         relativeTo: this.route,
       });
       this.selectedReport = value;

@@ -1,3 +1,4 @@
+import { toCurrency } from 'libs/admin/shared/src/lib/utils/valueFormatter';
 import {
   businessAnalysisReportRows,
   marketSegmentReportRows,
@@ -113,7 +114,7 @@ export class BusinessAnalysisReport
             nights: value[row.label].nights,
             occupancy: value[row.label].occupancyPercent,
             pax: value[row.label].pax,
-            roomRevenue: value[row.label].roomRevenue,//to be confirmed form backend
+            roomRevenue: value[row.label].roomRevenue, //to be confirmed form backend
             revenue: value[row.label].revenuePercent,
             arrOrAgr: value[row.label].arr,
             arp: value[row.label].arp,
@@ -151,10 +152,10 @@ export class MarketSegmentReport
             nights: value[row.label].nights,
             occupancy: value[row.label].occupancyPercent,
             pax: value[row.label].pax,
-            roomRevenue: value[row.label].roomRevenue,
+            roomRevenue: toCurrency(value[row.label].roomRevenue),
             revenue: value[row.label].revenuePercent,
-            arrOrAgr: value[row.label].arr,
-            arp: value[row.label].arp,
+            arrOrAgr: toCurrency(value[row.label].arr),
+            arp: toCurrency(value[row.label].arp),
           });
         } else {
           this.records.push({

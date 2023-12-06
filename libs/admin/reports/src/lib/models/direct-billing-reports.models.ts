@@ -1,3 +1,4 @@
+import { toCurrency } from 'libs/admin/shared/src/lib/utils/valueFormatter';
 import {
   DirectAgentBillingReportData,
   DirectAgentBillingReportResponse,
@@ -21,17 +22,20 @@ export class DirectAgentBillingReport
       this.records = value.map((item) => {
         return {
           agentCode: item?.agent?.code,
-          agentName: item?.agent && `${item?.agent?.firstName} ${item?.agent?.lastName}`,
+          agentName:
+            item?.agent && `${item?.agent?.firstName} ${item?.agent?.lastName}`,
           bookingNo: item.reservationNumber,
-          guestName: `${item.guest.firstName ?? ''} ${item.guest.lastName ?? ''}`,
+          guestName: `${item.guest.firstName ?? ''} ${
+            item.guest.lastName ?? ''
+          }`,
           roomType: item.bookingItems[0].roomDetails.roomTypeLabel,
           roomNo: item.bookingItems[0].roomDetails.roomNumber,
           checkInDate: getFormattedDate(item.from),
           checkOutDate: getFormattedDate(item.to),
           totalNights: item.guest.totalNights,
           pax: item.bookingItems[0].occupancyDetails.maxAdult,
-          totalPaidAmount: item.pricingDetails.totalPaidAmount,
-          totalDueAmount: item.pricingDetails.totalDueAmount,
+          totalPaidAmount: toCurrency(item.pricingDetails.totalPaidAmount),
+          totalDueAmount: toCurrency(item.pricingDetails.totalDueAmount),
         };
       });
     }
@@ -52,20 +56,20 @@ export class DirectCompanyBillingReport
     if (value instanceof Array) {
       this.records = value.map((item) => {
         return {
-          companyCode: item.guest.company.code,
-          companyName: item.guest.company.firstName,
-          bookingNo: item.reservationNumber,
+          companyCode: item?.guest?.company?.code,
+          companyName: item?.guest?.company?.firstName,
+          bookingNo: item?.reservationNumber,
           guestName: `${item.guest.firstName} ${item.guest.lastName}`,
-          roomType: item.bookingItems[0].roomDetails.roomTypeLabel,
-          roomNo: item.bookingItems[0].roomDetails.roomNumber,
-          checkInDate: getFormattedDate(item.from),
-          checkOutDate: getFormattedDate(item.to),
-          totalNights: item.nightCount,
-          pax: item.bookingItems[0].occupancyDetails.maxAdult,
-          totalPaidAmount: item.pricingDetails.totalPaidAmount,
-          postTaxAmount: item.pricingDetails.taxAndFees,
-          totalAmount: item.pricingDetails.totalAmount,
-          totalDueAmount: item.pricingDetails.totalDueAmount,
+          roomType: item.bookingItems[0]?.roomDetails?.roomTypeLabel,
+          roomNo: item.bookingItems[0]?.roomDetails?.roomNumber,
+          checkInDate: getFormattedDate(item?.from),
+          checkOutDate: getFormattedDate(item?.to),
+          totalNights: item?.nightCount,
+          pax: item.bookingItems[0]?.occupancyDetails?.maxAdult,
+          totalPaidAmount: toCurrency(item?.pricingDetails?.totalPaidAmount),
+          postTaxAmount: toCurrency(item?.pricingDetails?.taxAndFees),
+          totalAmount: toCurrency(item?.pricingDetails?.totalAmount),
+          totalDueAmount: toCurrency(item?.pricingDetails?.totalDueAmount),
         };
       });
     }

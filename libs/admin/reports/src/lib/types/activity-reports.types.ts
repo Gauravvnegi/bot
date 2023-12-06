@@ -7,7 +7,7 @@ export type ReservationCreatedReportData = {
   arrival: string;
   departure: string;
   nights: number;
-  amount: number;
+  amount: string;
 };
 
 export type ReservationActivityReportData = {
@@ -20,5 +20,5 @@ export type ReservationActivityReportData = {
   departure: string;
   pax: string;
   rateOrPackage: string;
-  amount: number;
+  amount: string;
 };

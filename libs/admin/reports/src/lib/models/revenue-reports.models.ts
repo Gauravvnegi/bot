@@ -1,3 +1,7 @@
+import {
+  currencyToNumber,
+  toCurrency,
+} from 'libs/admin/shared/src/lib/utils/valueFormatter';
 import { ReportClass, RowStyles } from '../types/reports.types';
 import {
   CashierReportData,
@@ -9,11 +13,11 @@ import { getFormattedDate } from './reservation-reports.models';
 export class Cashier extends RowStyles {
   id: string;
   paymentType: string;
-  amount: number;
+  amount: string;
   deserialize(input: CashierReportResponse, id: number, total?: number) {
     this.id = total ? ' ' : (id + 1).toString();
     this.paymentType = total ? ' ' : input?.paymentMode;
-    this.amount = total ? total : input?.totalAmount;
+    this.amount = total ? toCurrency(total) : toCurrency(input?.totalAmount);
     this.isBold = total ? true : undefined;
     this.isGreyBg = total ? true : undefined;
     return this;
@@ -61,14 +65,13 @@ export class PayTypeReport
 
         return acc;
       }, new Map<string, PayTypeReportData[]>());
- 
-    
+
     // Sum of grouped data
     groupedData.forEach((value, key) => {
       sumGroupedData.set(
         key,
         value.reduce((acc, curr) => {
-          return acc + Number(curr.amount);
+          return acc + currencyToNumber(curr.amount);
         }, 0)
       );
     });
@@ -100,7 +103,7 @@ class PayTypeReportData {
   room?: string;
   counter?: string;
   dateAndTime?: string;
-  amount?: number | string;
+  amount?: string;
   description?: string;
   isBold?: boolean;
   isBlueBg?: boolean;
@@ -132,7 +135,7 @@ class PayTypeReportData {
     this.room = ' ';
     this.counter = ' ';
     this.dateAndTime = ' ';
-    this.amount = sumGroupedData.get(totalLabel);
+    this.amount = toCurrency(sumGroupedData.get(totalLabel));
     this.description = ' ';
     this.isBold = true;
     this.isBlackBg = true;
@@ -164,7 +167,7 @@ class PayTypeReportData {
     this.room = `${input?.reservation?.stayDetails?.room?.roomNumber} - ${input?.reservation?.stayDetails?.room?.type}`;
     this.counter = undefined;
     this.dateAndTime = input.created && getFormattedDate(input?.created);
-    this.amount = input?.amount;
+    this.amount = toCurrency(input?.amount);
     this.description = undefined;
   }
 }

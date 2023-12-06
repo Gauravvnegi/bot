@@ -5,6 +5,7 @@ import {
 } from '../types/activity-reports.types';
 import { ReportClass } from '../types/reports.types';
 import { getFormattedDate } from './reservation-reports.models';
+import { toCurrency } from 'libs/admin/shared/src/lib/utils/valueFormatter';
 
 export class ReservationCreatedReport
   implements
@@ -12,19 +13,20 @@ export class ReservationCreatedReport
   records: ReservationCreatedReportData[];
   deserialize(value: ReservationResponseData[]) {
     this.records = new Array<ReservationCreatedReportData>();
-   value && value.forEach((data) => {
-      this.records.push({
-        id: data.id,
-        bookingNo: data.number,
-        createdOn: getFormattedDate(data.created),
-        roomType: data.stayDetails.room.type,
-        primaryGuest: `${data.guestDetails.primaryGuest.firstName} ${data.guestDetails.primaryGuest.lastName}`,
-        arrival: getFormattedDate(data.stayDetails.arrivalTime),
-        departure: getFormattedDate(data.stayDetails.departureTime),
-        nights: data.nightCount,
-        amount: data.paymentSummary.totalAmount,
+    value &&
+      value.forEach((data) => {
+        this.records.push({
+          id: data.id,
+          bookingNo: data.number,
+          createdOn: getFormattedDate(data.created),
+          roomType: data.stayDetails.room.type,
+          primaryGuest: `${data.guestDetails.primaryGuest.firstName} ${data.guestDetails.primaryGuest.lastName}`,
+          arrival: getFormattedDate(data.stayDetails.arrivalTime),
+          departure: getFormattedDate(data.stayDetails.departureTime),
+          nights: data.nightCount,
+          amount: toCurrency(data.paymentSummary.totalAmount),
+        });
       });
-    });
 
     return this;
   }
@@ -48,7 +50,7 @@ export class ReservationActivityReport
         departure: getFormattedDate(data.stayDetails.departureTime),
         pax: `${data.stayDetails.adultsCount} Adults, ${data.stayDetails.kidsCount} Kids`,
         rateOrPackage: undefined, //to be added in response
-        amount: data.paymentSummary.totalAmount,
+        amount: toCurrency(data.paymentSummary.totalAmount),
       });
     });
 

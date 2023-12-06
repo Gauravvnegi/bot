@@ -6,8 +6,9 @@ export const navRoute = {
   editReservation: { label: 'Edit Reservation', link: './' },
   invoice: { label: 'Invoice', link: './' },
   createInvoice: { label: 'Create Invoice', link: './' },
-  previewInvoice: { label: 'Preview Invoice', link: '././'},
-  paymentHistory: { label: 'Payment History', link: './'},
+  previewInvoice: { label: 'Preview Invoice', link: '././' },
+  paymentHistory: { label: 'Payment History', link: './' },
+  manageInvoice: { label: 'Manage Invoice', link: './' },
 };
 
 export const invoiceRoutes: Record<
@@ -16,7 +17,7 @@ export const invoiceRoutes: Record<
 > = {
   invoice: {
     route: '',
-    navRoutes: [],
+    navRoutes: [navRoute.manageInvoice],
     title: 'Manage Invoice',
   },
 
@@ -35,6 +36,6 @@ export const invoiceRoutes: Record<
   paymentHistory: {
     route: 'payment-history',
     navRoutes: [navRoute.paymentHistory],
-    title: 'Payment History',    
-  }
+    title: 'Payment History',
+  },
 };

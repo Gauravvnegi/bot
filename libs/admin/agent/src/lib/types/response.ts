@@ -28,14 +28,17 @@ export type AgentTableResponse = AdditionalFeature & {
     countryCode: string;
     postalCode: string;
   };
-  companyId: string;
-  company?: AgentTableResponse;
+  companyId?: string;
+  agencyName?: string;
+  creditLimit: number;
+  creditLimitUsed?: number;
   gender?: string;
   dateOfBirth?: number;
   created?: number;
   value?: string;
   label?: string;
   extras?: string;
+  salesPersonName?: string;
 };
 
 export type AgentListResponse = {

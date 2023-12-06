@@ -80,7 +80,10 @@
               class="notification--item__icon"
             />
 
-            <div class="title">
+            <div
+              class="title"
+              [ngStyle]="{ color: item?.read ? 'grey' : 'black' }"
+            >
               {{ item.notificationType | titlecase }}
             </div>
             <div class="time">
@@ -94,10 +97,7 @@
               />
             </div>
           </div>
-          <div
-            class="message"
-            [ngStyle]="{ color: item.read ? '#002046' : '#4b56c0' }"
-          >
+          <div class="message" >
             {{ item.message }}
           </div>
         </div>

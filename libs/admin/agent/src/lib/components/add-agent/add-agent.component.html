@@ -18,11 +18,10 @@
       onLabel="Active"
       offLabel="Inactive"
     ></hospitality-bot-toggle-switch>
-
     <hospitality-bot-input
       class="half-width"
-      controlName="name"
-      label="Sales Person Name"
+      controlName="agencyName"
+      label="Agency Name"
       maxLength="60"
       [props]="{
         placeholder: 'Enter'
@@ -49,6 +48,17 @@
       postControlName="phoneNo"
     ></hospitality-bot-phone-number>
 
+    <hospitality-bot-address-component
+      class="half-width"
+      controlName="address"
+      [props]="{
+        errorMessages: {
+          required: 'This is a required field.'
+        }
+      }"
+    >
+    </hospitality-bot-address-component>
+
     <hospitality-bot-input
       class="half-width"
       controlName="iataNo"
@@ -70,46 +80,25 @@
       [defaultMember]="selectedMember"
       (createMembers)="createNewCompany()"
     ></hospitality-bot-members-list> -->
-
-    <hospitality-bot-quick-select
-      class="half-width select"
-      controlName="company"
-      label="Agency Name"
-      [inputType]="'select'"
+    <hospitality-bot-input
+      class="half-width"
+      controlName="name"
+      label="Sales Person Name"
+      maxLength="60"
       [props]="{
-        showChips: false,
-        isAsync: true,
-        placeholder: 'Select',
-        createPrompt: '+ Add New Agency',
-        selectedOption: selectedMember,
-        createType: 'sidebar'
+        placeholder: 'Enter'
       }"
-      [apiConfig]="{
-        apiEndPoint: '/api/v1/members',
-        dataModel: {
-          key: 'records',
-          values: {
-            label: 'firstName',
-            value: 'id'
-          }
-        },
-        queryParams: { type: 'COMPANY' },
-        searchAPIEndPoint: '/api/v1/search/members',
-        searchModel: {
-          response: true,
-          values: {
-            label: 'firstName',
-            value: 'id'
-          }
-        },
-        searchQueryParams: { type: 'AGENT' }
+    ></hospitality-bot-input>
+
+    <hospitality-bot-input
+      class="half-width"
+      controlName="creditLimit"
+      label="Credit Limit"
+      [props]="{
+        type: 'number',
+        placeholder: 'Enter'
       }"
-      [paginationConfig]="{
-        isPagination: true
-      }"
-      (clickedOption)="companyChange($event)"
-      (openSidebar)="createNewCompany()"
-    ></hospitality-bot-quick-select>
+    ></hospitality-bot-input>
 
     <hospitality-bot-select
       class="half-width"
@@ -131,17 +120,6 @@
       }"
     >
     </hospitality-bot-input>
-
-    <hospitality-bot-address-component
-      class="half-width"
-      controlName="address"
-      [props]="{
-        errorMessages: {
-          required: 'This is a required field.'
-        }
-      }"
-    >
-    </hospitality-bot-address-component>
 
     <hospitality-bot-prefix-field
       class="half-width"

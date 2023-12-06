@@ -76,6 +76,8 @@ export class PreviewComponent implements OnInit {
     this.routesConfigService.navRoutesChanges.subscribe((navRoutesRes) => {
       this.navRoutes = [...navRoutesRes, ...this.navRoutes];
     });
+    this.navRoutes[2].link = this.navRoutes[2].link+ '/'+ this.reservationId;
+
   }
 
   handleGenerateInvoice() {

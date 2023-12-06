@@ -10,8 +10,8 @@ export type DirectAgentBillingReportData = {
   checkOutDate: string;
   totalNights: number;
   pax: number;
-  totalPaidAmount: number;
-  totalDueAmount: number;
+  totalPaidAmount: string;
+  totalDueAmount: string;
 };
 
 export type DirectAgentBillingReportResponse = {
@@ -143,10 +143,10 @@ export type DirectCompanyBillingReportData = {
   checkOutDate: string;
   totalNights: number;
   pax: number;
-  totalAmount: number;
-  postTaxAmount: number;
-  totalPaidAmount: number;
-  totalDueAmount: number;
+  totalAmount: string;
+  postTaxAmount: string;
+  totalPaidAmount: string;
+  totalDueAmount: string;
 };
 
 export type DirectCompanyBillingReportResponse = DirectAgentBillingReportResponse & {};

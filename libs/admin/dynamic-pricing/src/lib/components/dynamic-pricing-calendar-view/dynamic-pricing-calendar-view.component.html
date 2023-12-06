@@ -29,7 +29,7 @@
     <div class="main" *ngIf="seasonFA.controls.length">
       <div class="calendar">
         <hospitality-bot-calendar-view
-          [years]="[2023, 2024]"
+          [years]="years"
           calendarWidth="calc(90vw - 300px)"
           [gridData]="gridData"
           [highlightId]="highlightedSeason"
@@ -53,7 +53,7 @@
               let i = index
             "
             [ngClass]="{
-              season__selected: season.get('id').value === highlightId
+              season__selected: season.get('id').value === highlightedSeason
             }"
             (click)="handleEdit(season.get('id').value)"
           >

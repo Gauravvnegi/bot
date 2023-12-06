@@ -50,6 +50,7 @@ export class DynamicPricingCalendarViewComponent implements OnInit, OnDestroy {
 
   gridData: CGridDataRecord = {};
   inactiveSeasons: CGridData['id'][] = [];
+  years: number[] = [];
 
   constructor(
     private dynamicPricingService: DynamicPricingService,
@@ -156,41 +157,59 @@ export class DynamicPricingCalendarViewComponent implements OnInit, OnDestroy {
               }
 
               const isSameYear = startDate.year === endDate.year;
+              const hasStartYear = this.years.includes(startDate.year);
+              const hasEndYear = this.years.includes(endDate.year);
 
               if (isSameYear) {
-                dataObj = {
-                  ...dataObj,
-                  [startDate.year]: [...(dataObj[startDate.year] ?? []), item],
-                };
+                if (!hasStartYear) {
+                  this.years.push(startDate.year);
+                }
               } else {
-                const { lastDate, newDate } = this.getLastDateOfTheYear(
-                  fromDate
-                );
-
-                const startItem = { ...item, toDate: lastDate };
-
-                const endItem = { ...item, fromDate: newDate };
-
-                const startItemStartDate = this.getFormattedDate(
-                  startItem.fromDate
-                );
-
-                const endItemStartDate = this.getFormattedDate(
-                  endItem.fromDate
-                );
-
-                dataObj = {
-                  ...dataObj,
-                  [startItemStartDate.year]: [
-                    ...(dataObj[startItemStartDate.year] ?? []),
-                    startItem,
-                  ],
-                  [endItemStartDate.year]: [
-                    ...(dataObj[endItemStartDate.year] ?? []),
-                    endItem,
-                  ],
-                };
+                if (!hasStartYear) {
+                  this.years.push(startDate.year);
+                }
+                if (!hasEndYear) {
+                  this.years.push(endDate.year);
+                }
               }
+
+              this.years.sort();
+
+              // const isSameYear = startDate.year === endDate.year
+              // if (isSameYear) {
+              //   dataObj = {
+              //     ...dataObj,
+              //     [startDate.year]: [...(dataObj[startDate.year] ?? []), item],
+              //   };
+              // } else {
+              //   const { lastDate, newDate } = this.getLastDateOfTheYear(
+              //     fromDate
+              //   );
+
+              //   const startItem = { ...item, toDate: lastDate };
+
+              //   const endItem = { ...item, fromDate: newDate };
+
+              //   const startItemStartDate = this.getFormattedDate(
+              //     startItem.fromDate
+              //   );
+
+              //   const endItemStartDate = this.getFormattedDate(
+              //     endItem.fromDate
+              //   );
+
+              //   dataObj = {
+              //     ...dataObj,
+              //     [startItemStartDate.year]: [
+              //       ...(dataObj[startItemStartDate.year] ?? []),
+              //       startItem,
+              //     ],
+              //     [endItemStartDate.year]: [
+              //       ...(dataObj[endItemStartDate.year] ?? []),
+              //       endItem,
+              //     ],
+              //   };
+              // }
             });
           },
           () => {

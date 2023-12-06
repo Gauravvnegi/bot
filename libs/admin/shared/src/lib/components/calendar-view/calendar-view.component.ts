@@ -112,7 +112,6 @@ export class CalendarViewComponent implements OnInit, OnDestroy {
       maxWidth: this.height,
       fontSize: this.size / 2.3 + 'px',
       cursor: show ? (isInactive ? 'not-allowed' : 'pointer') : 'default',
-      pointerEvents: isInactive ? 'none' : 'auto',
     };
   }
 
@@ -120,7 +119,10 @@ export class CalendarViewComponent implements OnInit, OnDestroy {
     const id = this.gridData[value]?.id;
     const selectedDate = +value;
 
-    this.onDateSelect.emit({ id, selectedDate });
+    this.onDateSelect.emit({
+      id: this.inactiveIds.includes(id) ? '' : id,
+      selectedDate,
+    });
   }
 
   getCalendarInfo(year: number) {

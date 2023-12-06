@@ -7,10 +7,12 @@ export type AgentFormType = AdditionalFeature & {
   cc: string;
   phoneNo: string;
   iataNo?: string;
-  company: string;
+  agencyName: string;
+  creditLimit: number;
   address: string;
   commissionType: string;
   commission: number;
+
 };
 
 export type GuestFormType = Omit<

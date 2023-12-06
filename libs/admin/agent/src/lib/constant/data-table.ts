@@ -4,14 +4,14 @@ import { Cols } from '@hospitality-bot/admin/shared';
 export const cols: Cols[] = [
   {
     field: 'name',
-    header: 'Name / Code',
+    header: 'Agency Name / Code',
     sortType: 'string',
     width: '10%',
     searchField: ['name', 'code'],
   },
   {
-    field: 'company',
-    header: 'Company',
+    field: 'salesPerson',
+    header: 'Sales Person',
     sortType: 'string',
     width: '7%',
   },
@@ -31,6 +31,12 @@ export const cols: Cols[] = [
   {
     field: 'commission',
     header: 'Commission',
+    sortType: 'string',
+    width: '6%',
+  },
+  {
+    field: 'creditLimit',
+    header: 'Credit Limit',
     sortType: 'string',
     width: '6%',
   },

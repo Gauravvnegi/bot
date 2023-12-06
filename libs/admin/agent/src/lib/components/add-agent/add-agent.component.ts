@@ -115,13 +115,14 @@ export class AddAgentComponent implements OnInit {
       cc: ['+91', []],
       phoneNo: ['', []],
       iataNo: ['', [CustomValidators.requiredLength(14)]],
-      company: ['', [Validators.required]],
+      agencyName: ['', [Validators.required]],
       address: [''],
       commissionType: [commissionType.PERCENTAGE, [Validators.required]],
       commission: ['', [Validators.required, Validators.min(0)]],
       marketSegment: [''],
       businessSource: [''],
       billingInstructions: [''],
+      creditLimit: [''],
     });
     this.loadMarketSegment();
     this.listenChanges();

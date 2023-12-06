@@ -9,8 +9,9 @@ export class AgentModel {
   name: string;
   code: number;
   verified: boolean;
-  company: string;
-  companyId: string;
+  agencyName: string;
+  creditLimit: number;
+  creditLimitUsed: number;
   iataNo: number;
   email: string;
   phoneNo: string;
@@ -44,11 +45,13 @@ export class AgentModel {
         countryCode: form?.address['country'] ?? '',
         postalCode: form?.address['postalCode'] ?? '',
       },
-      companyId: form.company,
+      salesPersonName: form?.agencyName,
+      creditLimit: form?.creditLimit,
       status: form.status,
       marketSegment: form.marketSegment,
       businessSource: form.businessSource,
       billingInstructions: form.billingInstructions,
+
     };
 
     return data;
@@ -63,7 +66,8 @@ export class AgentModel {
       cc: data.contactDetails.cc,
       phoneNo: data.contactDetails.contactNumber,
       iataNo: data.iataNumber,
-      company: data.companyId,
+      agencyName: data?.salesPersonName,
+      creditLimit: data?.creditLimit,
       address: {
         formattedAddress: `${address.addressLine1}, ${address.city}, ${address.countryCode}, ${address.postalCode}, ${address.state}`,
         city: address.city,
@@ -103,11 +107,12 @@ export class AgentModel {
       email: contact.emailId,
       phoneNo: `${contact.cc}-${contact.contactNumber}`,
       commissionType: input.priceModifierType,
-      company: input.company?.firstName,
+      agencyName: input?.salesPersonName,
+      creditLimit: input.creditLimit,
       commission: input.priceModifierValue,
       status: input.status,
-      companyId: input.company?.id,
       created: input?.created,
+      creditLimitUsed: input?.creditLimitUsed,
       createdString: DateService.getDateMDY(input?.created),
     });
     return this;

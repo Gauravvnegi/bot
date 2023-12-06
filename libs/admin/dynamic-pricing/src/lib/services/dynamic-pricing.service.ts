@@ -45,6 +45,17 @@ export class DynamicPricingService extends ApiService {
     );
   }
 
+  changeSeasonStatus(
+    seasonId: string,
+    isActive: boolean,
+    config: QueryConfig
+  ): Observable<DynamicPricingRequest> {
+    return this.patch(
+      `/api/v1/revenue/dynamic-pricing-configuration/${seasonId}${config.params}`,
+      { status: isActive ? 'ACTIVE' : 'INACTIVE' }
+    );
+  }
+
   deleteDynamicPricing(deleteId: string) {
     return this.delete(
       `/api/v1/revenue/dynamic-pricing-configuration/${deleteId}`

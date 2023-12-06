@@ -1,27 +1,36 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
-import { AdminUtilityService, fullMonths } from '@hospitality-bot/admin/shared';
+import {
+  epochWithoutTime,
+  getDayOfWeekFromEpoch,
+  getListOfRandomLightColor,
+} from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
-import { RoomTypes } from 'libs/admin/channel-manager/src/lib/models/bulk-update.models';
-import { MenuItem } from 'primeng/api';
+import {
+  CGridData,
+  CGridDataRecord,
+  CGridSelectedData,
+} from 'libs/admin/shared/src/lib/components/calendar-view/calendar-view.component';
 import { Subscription } from 'rxjs';
-import { BarPriceService } from '../../services/bar-price.service';
 import { DynamicPricingService } from '../../services/dynamic-pricing.service';
 import {
-  IGCreateEvent,
-  IGChangeEvent,
-  IGEditEvent,
-  IGRow,
-  IGCol,
-  IGValue,
-} from 'libs/admin/shared/src/lib/components/interactive-grid/interactive-grid.component';
-import { DynamicPricingResponse } from '../../types/dynamic-pricing.types';
-import { ActivatedRoute, Router } from '@angular/router';
+  DaysType,
+  DynamicPricingRequest,
+} from '../../types/dynamic-pricing.types';
 
-type YearData = {
-  year: number;
-  data: IGValue[];
+type Season = {
+  id: string;
+  isActive: boolean;
+  name: string;
+  colorCode: string;
+  fromDate: Date;
+  toDate: Date;
+  days: {
+    label: string;
+    value: DaysType;
+  }[];
 };
 
 @Component({
@@ -30,63 +39,71 @@ type YearData = {
   styleUrls: ['./dynamic-pricing-calendar-view.component.scss'],
 })
 export class DynamicPricingCalendarViewComponent implements OnInit, OnDestroy {
-  activeStep = 0;
-  allRooms: RoomTypes[];
-  entityId: string;
-  dynamicPricingFG: FormGroup;
-  itemList: MenuItem[] = [
-    { label: 'Occupancy' },
-    { label: 'Day/Time Trigger' },
-    // { label: 'Inventory Reallocation' },
-  ];
   loading = false;
   $subscription = new Subscription();
 
+  highlightedSeason: CGridData['id'] = '';
+
+  useForm: FormGroup;
+
+  colors = getListOfRandomLightColor(20);
+
+  gridData: CGridDataRecord = {};
+  inactiveSeasons: CGridData['id'][] = [];
+  years: number[] = [];
+
   constructor(
-    private barPriceService: BarPriceService,
     private dynamicPricingService: DynamicPricingService,
-    private adminUtilityService: AdminUtilityService,
+
     private fb: FormBuilder,
     private globalFilter: GlobalFilterService,
     private snackbarService: SnackBarService,
-    private router:Router,
+    private router: Router,
     private route: ActivatedRoute
-  ) {}
+  ) {
+    this.useForm = this.fb.group({
+      seasons: new FormArray([]),
+    });
+  }
 
-  heading = 'Update inventory';
+  createSeasonForm(data: Season) {
+    const sFrom = this.fb.group({
+      isActive: [data.isActive],
+      name: [data.name],
+      id: [data.id],
+      colorCode: [data.colorCode],
+      fromDate: [data.fromDate],
+      toDate: [data.toDate],
+      days: [data.days],
+    });
 
-  gridCols: IGCol[] = Array.from({ length: 31 }, (_, index) => index + 1);
-  gridRows: IGRow[] = fullMonths;
+    sFrom.valueChanges.subscribe((value) => {
+      this.$subscription.add(
+        this.dynamicPricingService
+          .changeSeasonStatus(value.id, value.isActive, {
+            params: '?type=OCCUPANCY',
+          })
+          .subscribe((res) => {
+            const isActive = res.status === 'ACTIVE';
 
-  data: IGValue[] = [];
-  years = [2023, 2024];
-  yearsData: YearData[] = [];
+            if (isActive) {
+              const newInactiveSeason = this.inactiveSeasons.filter(
+                (item) => item !== res.id
+              );
+              this.inactiveSeasons = newInactiveSeason;
+            } else {
+              this.inactiveSeasons.push(res.id);
+            }
+          })
+      );
+    });
 
-  reset = true;
-
-  rowsInfo = fullMonths.map((item) => ({
-    label: item,
-    value: item,
-  }));
-
-  colsInfo = Array.from({ length: 31 }, (_, index) => index + 1).map(
-    (item) => ({
-      label: item,
-      value: item,
-    })
-  );
-
-  // get gridRows(): IGRow[] {
-  //   return this.rowsInfo.map((item) => item.value);
-  // }
-
-  // get gridCols(): IGCol[] {
-  //   return this.colsInfo.map((item) => item.value);
-  // }
+    return sFrom;
+  }
 
   ngOnInit(): void {
-    this.entityId = this.globalFilter.entityId;
     this.loading = true;
+
     this.$subscription.add(
       this.dynamicPricingService
         .getDynamicPricingList({
@@ -94,130 +111,106 @@ export class DynamicPricingCalendarViewComponent implements OnInit, OnDestroy {
         })
         .subscribe(
           (res) => {
-            let dataObj = {};
+            this.loading = false;
 
-            res.configDetails.forEach((item) => {
-              const startDate = this.getFormattedDate(item.fromDate);
-              const endDate = this.getFormattedDate(item.toDate);
+            let dataObj: Record<number, DynamicPricingRequest[]> = {};
+
+            res.configDetails.forEach((item, seasonIdx) => {
+              const { fromDate, toDate, daysIncluded, name, id, status } = item;
+              const colorCode = this.colors[seasonIdx];
+
+              const isActive = status === 'ACTIVE';
+
+              this.seasonFA.push(
+                this.createSeasonForm({
+                  id,
+                  name,
+                  isActive,
+                  colorCode,
+                  days: daysIncluded.map((item) => ({
+                    label: item.substring(0, 3),
+                    value: item,
+                  })),
+                  fromDate: new Date(fromDate),
+                  toDate: new Date(toDate),
+                })
+              );
+
+              if (!isActive) this.inactiveSeasons.push(id);
+
+              const startDate = this.getFormattedDate(fromDate);
+              const endDate = this.getFormattedDate(toDate);
+
+              for (
+                let currentEpoch = epochWithoutTime(fromDate);
+                currentEpoch <= epochWithoutTime(toDate);
+                currentEpoch += 86400000
+              ) {
+                const { day } = getDayOfWeekFromEpoch(currentEpoch);
+
+                if (daysIncluded.includes(day))
+                  this.gridData[currentEpoch] = {
+                    bg: colorCode,
+                    days: daysIncluded,
+                    id,
+                  };
+              }
 
               const isSameYear = startDate.year === endDate.year;
-              console.log(item.name, 'sss', isSameYear);
+              const hasStartYear = this.years.includes(startDate.year);
+              const hasEndYear = this.years.includes(endDate.year);
 
               if (isSameYear) {
-                dataObj = {
-                  ...dataObj,
-                  [startDate.year]: [...(dataObj[startDate.year] ?? []), item],
-                };
-
-                console.log(item, '.isSameYear', startDate.year);
+                if (!hasStartYear) {
+                  this.years.push(startDate.year);
+                }
               } else {
-                const { lastDate, newDate } = this.getLastDateOfTheYear(
-                  item.fromDate
-                );
-
-                console.log(lastDate, newDate, 'newDate');
-
-                const startItem = {
-                  ...item,
-                  toDate: lastDate,
-                };
-
-                const endItem = {
-                  ...item,
-                  fromDate: newDate,
-                };
-
-                console.log(startItem, endItem, 'endItem');
-
-                const startItemStartDate = this.getFormattedDate(
-                  startItem.fromDate
-                );
-                const endItemStartDate = this.getFormattedDate(newDate);
-
-                dataObj = {
-                  ...dataObj,
-                  [startItemStartDate.year]: [
-                    ...(dataObj[startItemStartDate.year] ?? []),
-                    startItem,
-                  ],
-                  [endItemStartDate.year]: [
-                    ...(dataObj[endItemStartDate.year] ?? []),
-                    endItem,
-                  ],
-                };
+                if (!hasStartYear) {
+                  this.years.push(startDate.year);
+                }
+                if (!hasEndYear) {
+                  this.years.push(endDate.year);
+                }
               }
 
-              console.log(dataObj, 'dataObj');
+              this.years.sort();
+
+              // const isSameYear = startDate.year === endDate.year
+              // if (isSameYear) {
+              //   dataObj = {
+              //     ...dataObj,
+              //     [startDate.year]: [...(dataObj[startDate.year] ?? []), item],
+              //   };
+              // } else {
+              //   const { lastDate, newDate } = this.getLastDateOfTheYear(
+              //     fromDate
+              //   );
+
+              //   const startItem = { ...item, toDate: lastDate };
+
+              //   const endItem = { ...item, fromDate: newDate };
+
+              //   const startItemStartDate = this.getFormattedDate(
+              //     startItem.fromDate
+              //   );
+
+              //   const endItemStartDate = this.getFormattedDate(
+              //     endItem.fromDate
+              //   );
+
+              //   dataObj = {
+              //     ...dataObj,
+              //     [startItemStartDate.year]: [
+              //       ...(dataObj[startItemStartDate.year] ?? []),
+              //       startItem,
+              //     ],
+              //     [endItemStartDate.year]: [
+              //       ...(dataObj[endItemStartDate.year] ?? []),
+              //       endItem,
+              //     ],
+              //   };
+              // }
             });
-
-            console.log(dataObj, 'dfinal');
-
-            const finalYearData = new Array<YearData>();
-
-            Object.entries(dataObj).forEach(
-              ([key, value]: [
-                string,
-                DynamicPricingResponse['configDetails']
-              ]) => {
-                const resultYearData: YearData = {
-                  year: +key,
-                  data: [],
-                };
-
-                const finalData = new Array<IGValue>();
-
-                value.forEach((item) => {
-                  const startDate = this.getFormattedDate(item.fromDate);
-                  const endDate = this.getFormattedDate(item.toDate);
-
-                  const lastDates = this.getLastDaysOfMonthBetweenDates(
-                    item.fromDate,
-                    item.toDate
-                  );
-
-                  const startMonthIndex = this.gridRows.indexOf(
-                    startDate.monthFullName
-                  );
-                  const endMonthIndex = this.gridRows.indexOf(
-                    endDate.monthFullName
-                  );
-
-                  const itemArray = Array.from(
-                    { length: endMonthIndex - startMonthIndex + 1 },
-                    (_, index) => startMonthIndex + index
-                  );
-
-                  itemArray.forEach((monthIndex, index) => {
-                    const isLastItem = index === itemArray.length - 1;
-                    const isFirstItem = index === 0;
-                    const gridData: IGValue = {
-                      id: item.id,
-                      startPos: isFirstItem ? startDate.day : 1,
-                      endPos: isLastItem ? endDate.day : lastDates[index],
-                      rowValue: this.gridRows[monthIndex],
-
-                      content: item.name,
-                      additionContent: item.daysIncluded
-                        .map((item) => item.substring(0, 3))
-                        .join(', '),
-                    };
-
-                    finalData.push(gridData);
-                  });
-                });
-
-                resultYearData.data = [
-                  ...finalData,
-                  ...this.getNonInteractiveGrid(+key),
-                ];
-
-                finalYearData.push(resultYearData);
-              }
-            );
-
-            this.yearsData = finalYearData;
-
-            this.loading = false;
           },
           () => {
             this.loading = false;
@@ -226,24 +219,8 @@ export class DynamicPricingCalendarViewComponent implements OnInit, OnDestroy {
     );
   }
 
-  getNonInteractiveGrid(year: number) {
-    const interactiveData = new Array<IGValue>();
-
-    for (let month = 0; month < 12; month++) {
-      const lastDayOfMonth = new Date(year, month + 1, 0);
-      const lastDateOfMonth = lastDayOfMonth.getDate();
-      if (lastDateOfMonth < 31)
-        interactiveData.push({
-          id: null,
-          endPos: 31,
-          startPos: lastDateOfMonth + 1,
-          nonInteractive: true,
-          rowValue: this.gridRows[month],
-          colorCode: 'draft',
-        });
-    }
-
-    return interactiveData;
+  get seasonFA() {
+    return this.useForm.get('seasons') as FormArray;
   }
 
   getLastDaysOfMonthBetweenDates(fromDate: number, toDate: number) {
@@ -284,6 +261,18 @@ export class DynamicPricingCalendarViewComponent implements OnInit, OnDestroy {
     return { lastDate: lastDayOfYearEpoch, newDate: firstDayOfNextYearEpoch };
   }
 
+  handleHighlightOfSeason() {}
+
+  onDateSelect(event: CGridSelectedData) {
+    if (event.id === this.highlightedSeason && event.id !== '') {
+      this.highlightedSeason = '';
+    } else if (event.id) {
+      this.highlightedSeason = event.id;
+    } else {
+      this.highlightedSeason = '';
+    }
+  }
+
   getFormattedDate(epochDate: number) {
     const date = new Date(epochDate);
 
@@ -306,41 +295,11 @@ export class DynamicPricingCalendarViewComponent implements OnInit, OnDestroy {
     };
   }
 
-  handleChange(event: IGChangeEvent) {
-    console.log(event, 'onChange event');
-  }
-
-  handleCreate(event: IGCreateEvent) {
-    console.log(event, 'onCreate event');
-  }
-
-  handleEdit(event: IGEditEvent) {
-    console.log(event, 'onEdit event');
-
-    if(event.id){
-      this.router.navigate(['create-season'] ,{
-        queryParams:{
-          seasonId: event.id
-        } ,
-        relativeTo : this.route
-      })
-    }
-  }
-
-  calculateSpace(value) {
-    console.log('hello', value);
-  }
-
-  handleReset() {
-    this.loading = false;
-    setTimeout(() => {
-      // this.data = [...data];
-      this.loading = false;
-    }, 1500);
-  }
-
-  handleReinitialize() {
-    this.reset = !this.reset;
+  handleEdit(seasonId: string) {
+    this.router.navigate(['create-season'], {
+      queryParams: { seasonId },
+      relativeTo: this.route,
+    });
   }
 
   ngOnDestroy(): void {

@@ -38,6 +38,7 @@ export type CompanyResponseType = AdditionalFeature & {
   companyCode?: number;
   status?: boolean;
   created?: number;
+  creditLimitUsed?: number;
 };
 
 export type CompanyListResponse = {

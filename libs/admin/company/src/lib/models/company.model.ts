@@ -17,6 +17,8 @@ export class CompanyModel {
   discountType: string;
   created: number;
   createdString: string;
+  creditLimit: number;
+  creditLimitUsed: number;
   status: boolean;
 
   static mapFormData(form: CompanyFormType) {
@@ -94,6 +96,8 @@ export class CompanyModel {
       discountType: input?.priceModifierType ?? input.priceModifier,
       status: input.status,
       created: input.created,
+      creditLimit: input?.creditLimit,
+      creditLimitUsed: input?.creditLimitUsed,
       createdString: DateService.getDateMDY(input.created),
     });
     return this;

@@ -1,8 +1,10 @@
-<div
-  [formGroup]="tableFG"
->
-  <hospitality-bot-navigation-header [heading]="tableName" [routes]="navRoutes" [isBack]="false">
-  <ng-container [ngTemplateOutlet]="search"></ng-container>
+<div [formGroup]="tableFG">
+  <hospitality-bot-navigation-header
+    [heading]="tableName"
+    [routes]="navRoutes"
+    [isBack]="false"
+  >
+    <ng-container [ngTemplateOutlet]="search"></ng-container>
     <hospitality-bot-button
       label="+ Add Company"
       [routerLink]="companyRoutes.addCompany.route"
@@ -16,7 +18,6 @@
       [isDisable]="values.length === 0"
     ></hospitality-bot-export-list>
   </hospitality-bot-navigation-header>
-
 </div>
 
 <p-table
@@ -152,6 +153,16 @@
           <div class="primary-text">
             {{ rowData.discount
             }}{{ rowData.discountType === 'FLAT' ? '/-' : '%' }}
+          </div>
+        </div>
+      </td>
+      <td>
+        <div class="cell-content" *ngIf="rowData.creditLimit; else emptyCell">
+          <div class="primary-text">
+            <div class="primary-text txtSize">
+              <span>{{ rowData?.creditLimitUsed }}</span>
+              /{{ rowData?.creditLimit }}
+            </div>
           </div>
         </div>
       </td>

@@ -31,6 +31,11 @@ export const cols: Cols[] = [
     sortType: 'number',
   },
   {
+    field: 'creditLimit',
+    header: 'Credit Limit',
+    sortType: 'number',
+  },
+  {
     field: 'created',
     header: 'Created',
     sortType: 'number',

@@ -122,6 +122,7 @@ import { FromToDateComponent } from './components/from-to-date/from-to-date.comp
 import { TimerComponent } from './components/timer/timer.component';
 import { SidebarModule } from 'primeng/sidebar';
 import { InteractiveGridComponent } from './components/interactive-grid/interactive-grid.component';
+import { CalendarViewComponent } from './components/calendar-view/calendar-view.component';
 import { AngularDraggableModule } from 'angular2-draggable';
 import { TooltipModule } from 'primeng/tooltip';
 
@@ -265,6 +266,7 @@ import { CheckboxComponent } from './components/form-component/checkbox/checkbox
     FromToDateComponent,
     TimerComponent,
     InteractiveGridComponent,
+    CalendarViewComponent,
     TieredMenuButtonComponent,
     TabbedSidebarComponent,
     InfoPanelComponent,
@@ -387,6 +389,7 @@ import { CheckboxComponent } from './components/form-component/checkbox/checkbox
     TimerComponent,
     SidebarModule,
     InteractiveGridComponent,
+    CalendarViewComponent,
     AngularDraggableModule,
     TooltipModule,
     TieredMenuButtonComponent,

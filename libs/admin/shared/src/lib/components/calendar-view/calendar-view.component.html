@@ -67,8 +67,13 @@
               <div
                 *ngFor="let gridRowData of gridRow; let gridRowDataIdx = index"
                 class="grid__data bdr-btm-rgt bg-data"
-                [ngStyle]="getStyles(gridRowData.value, gridRowDataIdx)"
+                [ngStyle]="getStyles(gridRowData.value)"
                 (click)="onGridClick(gridRowData.value, gridRowDataIdx)"
+                (mouseenter)="openOverlayPanel($event, gridRowData.value)"
+                (mouseleave)="closeOverlayPanel($event, gridRowData.value)"
+                [pTooltip]="tooltip ? tooltip : undefined"
+                showDelay="500"
+                tooltipPosition="top"
               >
                 {{ gridRowData.inactive ? '' : gridRowData.label }}
               </div>

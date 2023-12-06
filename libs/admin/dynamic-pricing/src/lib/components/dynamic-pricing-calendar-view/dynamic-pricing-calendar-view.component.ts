@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
@@ -11,6 +11,7 @@ import { SnackBarService } from '@hospitality-bot/shared/material';
 import {
   CGridData,
   CGridDataRecord,
+  CGridHoverData,
   CGridSelectedData,
 } from 'libs/admin/shared/src/lib/components/calendar-view/calendar-view.component';
 import { Subscription } from 'rxjs';
@@ -19,6 +20,8 @@ import {
   DaysType,
   DynamicPricingRequest,
 } from '../../types/dynamic-pricing.types';
+// import { OverlayPanel } from 'primeng/overlaypanel';
+// import { Menu } from 'primeng/menu';
 
 type Season = {
   id: string;
@@ -32,6 +35,20 @@ type Season = {
     value: DaysType;
   }[];
 };
+
+type ContentData = {
+  id: string;
+  name: string;
+  isActive: boolean;
+};
+
+type Content = Record<'season' | 'dayTrigger', ContentData>;
+
+// const defaultContent: ContentData = {
+//   id: '',
+//   name: '',
+//   isActive: true,
+// };
 
 @Component({
   selector: 'hospitality-bot-dynamic-pricing-calendar-view',
@@ -49,8 +66,19 @@ export class DynamicPricingCalendarViewComponent implements OnInit, OnDestroy {
   colors = getListOfRandomLightColor(20);
 
   gridData: CGridDataRecord = {};
+
+  occupancyData: CGridDataRecord<ContentData> = {};
+  dayTriggerData: CGridDataRecord<ContentData> = {};
   inactiveSeasons: CGridData['id'][] = [];
   years: number[] = [];
+
+  // content: Content = {
+  //   season: { ...defaultContent },
+  //   dayTrigger: { ...defaultContent },
+  // };
+
+  // showMenu: { clientX: number; clientY: number };
+  tooltip: string;
 
   constructor(
     private dynamicPricingService: DynamicPricingService,
@@ -64,6 +92,62 @@ export class DynamicPricingCalendarViewComponent implements OnInit, OnDestroy {
     this.useForm = this.fb.group({
       seasons: new FormArray([]),
     });
+  }
+
+  openOverlayPanel(event, value: string) {
+    const occupancySeasonData = this.occupancyData[value];
+    const dayTriggerSeasonData = this.dayTriggerData[value];
+
+    const currentSeasonId = occupancySeasonData?.id;
+    const dayTriggerSeasonId = dayTriggerSeasonData?.id;
+
+    if (currentSeasonId || dayTriggerSeasonId) {
+      // if (dayTriggerSeasonId) {
+      //   this.content.dayTrigger = dayTriggerSeasonData;
+      // } else {
+      //   this.content.dayTrigger = { ...defaultContent };
+      // }
+
+      // if (currentSeasonId) {
+      //   this.content.season = occupancySeasonData;
+      // } else {
+      //   this.content.season = { ...defaultContent };
+      // }
+
+      this.tooltip =
+        (currentSeasonId ? `Season: ${occupancySeasonData.name}` : ' ') +
+        (dayTriggerSeasonId ? `Day Trigger: ${dayTriggerSeasonData.name}` : '');
+
+      // if (this.overlayPanel.overlayVisible) {
+      //   // Close the existing overlay panel
+      //   this.overlayPanel.hide();
+      // }
+
+      // Change the content or update content based on your needs
+
+      // Open the overlay panel again
+      // setTimeout(() => {
+      //   this.overlayPanel.show(event);
+      // }, 200);
+    } else {
+      // Close the overlay panel if there's no valid data
+      // this.overlayPanel.hide();
+    }
+  }
+
+  closeOverlayPanel() {
+    // this.overlayPanel.hide();
+  }
+
+  handleHover(event: CGridHoverData) {
+    event.type === 'enter'
+      ? this.openOverlayPanel(event.event, event.value)
+      : this.closeOverlayPanel();
+
+    // this.showMenu = event.event;
+    // console.log(event, 'event', this.showMenu);
+
+    // event.type === 'enter' ? this.menu.show(event.event) : this.menu.hide();
   }
 
   scrollIntoView(id: string) {
@@ -120,119 +204,98 @@ export class DynamicPricingCalendarViewComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.loading = true;
 
-    this.$subscription.add(
-      this.dynamicPricingService
-        .getDynamicPricingList({
-          params: '?type=OCCUPANCY',
-        })
-        .subscribe(
-          (res) => {
-            this.loading = false;
+    this.dynamicPricingService.getAllDynamicPricingList().subscribe((res) => {
+      const [occupancy, dayTrigger] = res;
+      this.loading = false;
 
-            let dataObj: Record<number, DynamicPricingRequest[]> = {};
+      occupancy.configDetails.forEach((item, seasonIdx) => {
+        const { fromDate, toDate, daysIncluded, name, id, status } = item;
+        const colorCode = this.colors[seasonIdx];
 
-            res.configDetails.forEach((item, seasonIdx) => {
-              const { fromDate, toDate, daysIncluded, name, id, status } = item;
-              const colorCode = this.colors[seasonIdx];
+        const isActive = status === 'ACTIVE';
 
-              const isActive = status === 'ACTIVE';
+        this.seasonFA.push(
+          this.createSeasonForm({
+            id,
+            name,
+            isActive,
+            colorCode,
+            days: daysIncluded.map((item) => ({
+              label: item.substring(0, 3),
+              value: item,
+            })),
+            fromDate: new Date(fromDate),
+            toDate: new Date(toDate),
+          })
+        );
 
-              this.seasonFA.push(
-                this.createSeasonForm({
-                  id,
-                  name,
-                  isActive,
-                  colorCode,
-                  days: daysIncluded.map((item) => ({
-                    label: item.substring(0, 3),
-                    value: item,
-                  })),
-                  fromDate: new Date(fromDate),
-                  toDate: new Date(toDate),
-                })
-              );
+        if (!isActive) this.inactiveSeasons.push(id);
 
-              if (!isActive) this.inactiveSeasons.push(id);
+        const startDate = this.getFormattedDate(fromDate);
+        const endDate = this.getFormattedDate(toDate);
 
-              const startDate = this.getFormattedDate(fromDate);
-              const endDate = this.getFormattedDate(toDate);
+        for (
+          let currentEpoch = epochWithoutTime(fromDate);
+          currentEpoch <= epochWithoutTime(toDate);
+          currentEpoch += 86400000
+        ) {
+          const { day } = getDayOfWeekFromEpoch(currentEpoch);
 
-              for (
-                let currentEpoch = epochWithoutTime(fromDate);
-                currentEpoch <= epochWithoutTime(toDate);
-                currentEpoch += 86400000
-              ) {
-                const { day } = getDayOfWeekFromEpoch(currentEpoch);
+          if (daysIncluded.includes(day)) {
+            this.gridData[currentEpoch] = {
+              bg: colorCode,
+              days: daysIncluded,
+              id,
+            };
 
-                if (daysIncluded.includes(day))
-                  this.gridData[currentEpoch] = {
-                    bg: colorCode,
-                    days: daysIncluded,
-                    id,
-                  };
-              }
-
-              const isSameYear = startDate.year === endDate.year;
-              const hasStartYear = this.years.includes(startDate.year);
-              const hasEndYear = this.years.includes(endDate.year);
-
-              if (isSameYear) {
-                if (!hasStartYear) {
-                  this.years.push(startDate.year);
-                }
-              } else {
-                if (!hasStartYear) {
-                  this.years.push(startDate.year);
-                }
-                if (!hasEndYear) {
-                  this.years.push(endDate.year);
-                }
-              }
-
-              this.years.sort();
-
-              // const isSameYear = startDate.year === endDate.year
-              // if (isSameYear) {
-              //   dataObj = {
-              //     ...dataObj,
-              //     [startDate.year]: [...(dataObj[startDate.year] ?? []), item],
-              //   };
-              // } else {
-              //   const { lastDate, newDate } = this.getLastDateOfTheYear(
-              //     fromDate
-              //   );
-
-              //   const startItem = { ...item, toDate: lastDate };
-
-              //   const endItem = { ...item, fromDate: newDate };
-
-              //   const startItemStartDate = this.getFormattedDate(
-              //     startItem.fromDate
-              //   );
-
-              //   const endItemStartDate = this.getFormattedDate(
-              //     endItem.fromDate
-              //   );
-
-              //   dataObj = {
-              //     ...dataObj,
-              //     [startItemStartDate.year]: [
-              //       ...(dataObj[startItemStartDate.year] ?? []),
-              //       startItem,
-              //     ],
-              //     [endItemStartDate.year]: [
-              //       ...(dataObj[endItemStartDate.year] ?? []),
-              //       endItem,
-              //     ],
-              //   };
-              // }
-            });
-          },
-          () => {
-            this.loading = false;
+            this.occupancyData[currentEpoch] = {
+              id,
+              name,
+              isActive,
+            };
           }
-        )
-    );
+        }
+
+        const isSameYear = startDate.year === endDate.year;
+        const hasStartYear = this.years.includes(startDate.year);
+        const hasEndYear = this.years.includes(endDate.year);
+
+        if (isSameYear) {
+          if (!hasStartYear) {
+            this.years.push(startDate.year);
+          }
+        } else {
+          if (!hasStartYear) {
+            this.years.push(startDate.year);
+          }
+          if (!hasEndYear) {
+            this.years.push(endDate.year);
+          }
+        }
+
+        this.years.sort();
+      });
+
+      dayTrigger.configDetails.forEach((item, seasonIdx) => {
+        const { fromDate, toDate, daysIncluded, name, id, status } = item;
+
+        for (
+          let currentEpoch = epochWithoutTime(fromDate);
+          currentEpoch <= epochWithoutTime(toDate);
+          currentEpoch += 86400000
+        ) {
+          const { day } = getDayOfWeekFromEpoch(currentEpoch);
+
+          if (daysIncluded.includes(day)) {
+            this.dayTriggerData[currentEpoch] = {
+              id,
+              name,
+              isActive: status === 'ACTIVE',
+            };
+          }
+        }
+      });
+    });
   }
 
   get seasonFA() {

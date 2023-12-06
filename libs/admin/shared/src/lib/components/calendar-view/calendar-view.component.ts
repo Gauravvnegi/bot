@@ -5,6 +5,7 @@ import {
   OnDestroy,
   OnInit,
   Output,
+  ViewChild,
 } from '@angular/core';
 import {
   DaysType,
@@ -13,15 +14,21 @@ import {
   fullMonths,
   weeks,
 } from '@hospitality-bot/admin/shared';
+import { OverlayPanel } from 'primeng/overlaypanel';
 import { Subscription } from 'rxjs';
 
 export type CGridOption = Option<string, { date?: number }>;
 export type CGridInfo = Record<number, CGridOption[][]>;
-export type CGridDataRecord = Record<string, CGridData>;
+export type CGridDataRecord<TOptions = CGridData> = Record<string, TOptions>;
 export type CGridData = { bg: string; id: string } & Partial<{
   days: DaysType[];
 }>;
 export type CGridSelectedData = { id?: string; selectedDate: number };
+export type CGridHoverData = {
+  type?: 'enter' | 'leave';
+  value: string; // date epoch
+  event: MouseEvent;
+};
 
 @Component({
   selector: 'hospitality-bot-calendar-view',
@@ -42,6 +49,8 @@ export class CalendarViewComponent implements OnInit, OnDestroy {
   @Input() gridData: CGridDataRecord = {};
 
   @Input() inactiveIds: CGridData['id'][] = [];
+
+  @Input() tooltip: string = '';
 
   /**
    * @example M,T,W,T,F,S
@@ -66,6 +75,13 @@ export class CalendarViewComponent implements OnInit, OnDestroy {
 
   gridInfo: CGridInfo = {};
 
+  content: Partial<{
+    season: {
+      id: string;
+      name: string;
+    };
+  }> = {};
+
   get fontSize() {
     return this.size / 2 + 'px';
   }
@@ -75,11 +91,28 @@ export class CalendarViewComponent implements OnInit, OnDestroy {
   }
 
   @Output() onDateSelect = new EventEmitter<CGridSelectedData>();
+  @Output() onDateHover = new EventEmitter<CGridHoverData>();
 
   constructor() {}
 
   ngOnInit(): void {
     this.setGridInfo();
+  }
+
+  openOverlayPanel(event, value: string) {
+    this.onDateHover.emit({
+      type: 'enter',
+      value,
+      event,
+    });
+  }
+
+  closeOverlayPanel(event, value: string) {
+    this.onDateHover.emit({
+      type: 'leave',
+      value,
+      event,
+    });
   }
 
   setGridInfo() {
@@ -90,7 +123,7 @@ export class CalendarViewComponent implements OnInit, OnDestroy {
     console.log(this.gridInfo);
   }
 
-  getStyles(value: string, gridDataIdx: number) {
+  getStyles(value: string) {
     const data = this.gridData[value];
     const show = !!data;
     const currentId = data?.id;

@@ -1,0 +1,176 @@
+@import 'main';
+
+.wrapper {
+  position: relative;
+}
+
+.interactive-grid-wrapper {
+  position: relative;
+}
+
+.grid-container {
+  display: grid;
+  position: absolute;
+  top: 0;
+}
+
+.spinner-wrapper {
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(128, 128, 128, 0.417);
+  & .pi-spinner {
+    height: 50px;
+    width: 50px;
+    font-size: 50px;
+    color: #636f7c;
+  }
+}
+
+.grid-row {
+  position: relative;
+  display: grid;
+  grid-auto-flow: column;
+  background-color: white;
+}
+
+.grid-cell {
+  position: relative;
+}
+
+.drag-grid {
+  position: absolute;
+}
+
+.no-break-text {
+}
+
+.cell-data {
+  cursor: move;
+
+  padding: 0 5px;
+  border-width: 0 0 0 5px;
+  border-style: solid;
+
+  background-color: $primary-text-bg;
+  border-color: $primary;
+
+  &.non-interactive-cell {
+    cursor: not-allowed;
+  }
+
+  &.click-only {
+    cursor: pointer;
+  }
+
+  &__content {
+    font-size: small;
+    white-space: 'nowrap';
+    @include no-break-hidden-text;
+  }
+
+  &__icon {
+    height: 10px;
+    margin-right: 5px;
+  }
+
+  &__additional-content {
+    font-size: x-small;
+    color: $grayMedium;
+    @include no-break-hidden-text;
+  }
+
+  &.success-cell {
+    background-color: #dcf6d3;
+    border-color: #72cf4d;
+  }
+
+  &.active-cell {
+    background-color: #e2eafd;
+    border-color: #3166f0;
+  }
+
+  &.inactive-cell {
+    border-color: #d13b30;
+    background-color: #fce3e3;
+  }
+
+  &.warning-cell {
+    border-color: #550000;
+    background-color: #f9bda4;
+  }
+
+  &.draft-cell {
+    background-color: #d1d1d1;
+    border-color: #555555;
+  }
+}
+
+.non-drag-grid {
+  border: 1px solid rgba(128, 128, 128, 0.369);
+  position: absolute;
+  top: 0;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+// Need to handle height and inset based on the gap and height
+// Drag handles style update - to make them not overlap each other
+:host ::ng-deep .ng-resizable-handle.ng-resizable-e {
+  inset: 10px 5px 10px auto;
+  height: 60px;
+}
+
+:host ::ng-deep .ng-resizable-handle.ng-resizable-w {
+  inset: 10px auto 10px 5px;
+  height: 60px;
+}
+
+$menu-width: 150px;
+// based on the menu-width
+$menu-distance: -145px;
+
+.menu {
+  position: absolute;
+  width: $menu-width;
+  background: white;
+  padding: 0 0.3em;
+  border-radius: 5px;
+  box-shadow: 0px 1px 4px 0px #8c908ca8;
+
+  &__item {
+    border-top: 1px solid #80808069;
+    padding: 0.3em;
+    cursor: pointer;
+    font-size: 14px;
+
+    &:hover {
+      background: #f5f5f5;
+    }
+  }
+
+  &__se {
+    top: 30px;
+    right: $menu-distance;
+  }
+
+  &__sw {
+    top: 30px;
+    left: $menu-distance;
+  }
+
+  &__ne {
+    transform: translateY(-100%);
+    right: $menu-distance;
+  }
+
+  &__nw {
+    transform: translateY(-100%);
+    left: $menu-distance;
+  }
+}
+
+.higherZIndex {
+  z-index: 20;
+}

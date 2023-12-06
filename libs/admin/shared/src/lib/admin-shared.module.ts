@@ -22,6 +22,8 @@ import { TableModule } from 'primeng/table';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { TabMenuModule } from 'primeng/tabmenu';
 import { AccordionModule } from 'primeng/accordion';
+import { OverlayPanelModule } from 'primeng/overlaypanel';
+
 import { ButtonComponent } from './components/button/button.component';
 import { ComingSoonComponent } from './components/coming-soon/coming-soon.component';
 import { CustomFileUploadComponent } from './components/custom-file-upload/custom-file-upload.component';
@@ -123,6 +125,7 @@ import { TimerComponent } from './components/timer/timer.component';
 import { SidebarModule } from 'primeng/sidebar';
 import { InteractiveGridComponent } from './components/interactive-grid/interactive-grid.component';
 import { CalendarViewComponent } from './components/calendar-view/calendar-view.component';
+import { PositionedMenuComponent } from './components/positioned-menu/positioned-menu.component';
 import { AngularDraggableModule } from 'angular2-draggable';
 import { TooltipModule } from 'primeng/tooltip';
 
@@ -146,6 +149,7 @@ import { CheckboxComponent } from './components/form-component/checkbox/checkbox
     PaginatorModule,
     TabMenuModule,
     AccordionModule,
+    OverlayPanelModule,
     SplitButtonModule,
     InputSwitchModule,
     InputTextModule,
@@ -267,6 +271,7 @@ import { CheckboxComponent } from './components/form-component/checkbox/checkbox
     TimerComponent,
     InteractiveGridComponent,
     CalendarViewComponent,
+    PositionedMenuComponent,
     TieredMenuButtonComponent,
     TabbedSidebarComponent,
     InfoPanelComponent,
@@ -287,6 +292,7 @@ import { CheckboxComponent } from './components/form-component/checkbox/checkbox
     TabMenuModule,
     MenuModule,
     AccordionModule,
+    OverlayPanelModule,
     SplitButtonModule,
     InputSwitchModule,
     InputTextModule,
@@ -390,6 +396,7 @@ import { CheckboxComponent } from './components/form-component/checkbox/checkbox
     SidebarModule,
     InteractiveGridComponent,
     CalendarViewComponent,
+    PositionedMenuComponent,
     AngularDraggableModule,
     TooltipModule,
     TieredMenuButtonComponent,

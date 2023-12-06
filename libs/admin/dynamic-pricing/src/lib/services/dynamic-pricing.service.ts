@@ -5,7 +5,7 @@ import {
   DynamicPricingResponse,
 } from '../types/dynamic-pricing.types';
 import { QueryConfig } from '@hospitality-bot/admin/shared';
-import { Observable } from 'rxjs';
+import { Observable, forkJoin } from 'rxjs';
 import {
   AbstractControl,
   FormArray,
@@ -68,6 +68,19 @@ export class DynamicPricingService extends ApiService {
     return this.get(
       `/api/v1/revenue/dynamic-pricing-configuration${config.params}`
     );
+  }
+
+  getAllDynamicPricingList(): Observable<
+    [DynamicPricingResponse, DynamicPricingResponse]
+  > {
+    const request1$ = this.getDynamicPricingList({
+      params: '?type=OCCUPANCY',
+    });
+    const request2$ = this.getDynamicPricingList({
+      params: '?type=DAY_TIME_TRIGGER',
+    });
+
+    return forkJoin([request1$, request2$]);
   }
 
   occupancyValidate(form: FormGroup): boolean {

@@ -115,7 +115,7 @@ export class DynamicPricingCalendarViewComponent implements OnInit, OnDestroy {
       // }
 
       this.tooltip =
-        (currentSeasonId ? `Season: ${occupancySeasonData.name}` : ' ') +
+        (currentSeasonId ? `Season: ${occupancySeasonData.name}\n` : '') +
         (dayTriggerSeasonId ? `Day Trigger: ${dayTriggerSeasonData.name}` : '');
 
       // if (this.overlayPanel.overlayVisible) {

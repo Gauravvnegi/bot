@@ -68,6 +68,7 @@
                 *ngFor="let gridRowData of gridRow; let gridRowDataIdx = index"
                 class="grid__data bdr-btm-rgt bg-data"
                 [ngStyle]="getStyles(gridRowData.value, gridRowDataIdx)"
+                (click)="onGridClick(gridRowData.value, gridRowDataIdx)"
               >
                 {{ gridRowData.inactive ? '' : gridRowData.label }}
               </div>

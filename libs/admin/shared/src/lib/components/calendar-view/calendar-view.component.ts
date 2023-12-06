@@ -1,4 +1,11 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+} from '@angular/core';
 import {
   Option,
   epochWithoutTime,
@@ -29,8 +36,9 @@ export type CGridOption = Option<string, { date?: number }>;
 export type CGridInfo = Record<number, CGridOption[][]>;
 export type CGridData = Record<
   string,
-  Partial<{ bg: string; days: DaysType[] }>
+  Partial<{ bg: string; days: DaysType[]; id: string }>
 >;
+export type CGridSelectedData = { id?: string; selectedDate: number };
 
 @Component({
   selector: 'hospitality-bot-calendar-view',
@@ -46,10 +54,7 @@ export class CalendarViewComponent implements OnInit, OnDestroy {
 
   @Input() calendarWidth: 'max-content';
 
-  rowsInfo = fullMonths.map((item) => ({
-    label: item.substring(0, 3),
-    value: item,
-  }));
+  @Input() highlightId: CGridData[string]['id'] = '';
 
   @Input() gridData: CGridData = {};
 
@@ -67,6 +72,11 @@ export class CalendarViewComponent implements OnInit, OnDestroy {
     };
   });
 
+  rowsInfo = fullMonths.map((item) => ({
+    label: item.substring(0, 3),
+    value: item,
+  }));
+
   monthIndices = Array.from({ length: 12 }, (_, index) => index);
 
   gridInfo: CGridInfo = {};
@@ -78,6 +88,8 @@ export class CalendarViewComponent implements OnInit, OnDestroy {
   get height() {
     return this.size + 'px';
   }
+
+  @Output() onDateSelect = new EventEmitter<CGridSelectedData>();
 
   constructor() {}
 
@@ -95,17 +107,31 @@ export class CalendarViewComponent implements OnInit, OnDestroy {
 
   getStyles(value: string, gridDataIdx: number) {
     const data = this.gridData[value];
+    const isHighlighted = !!this.highlightId;
 
-    const showBg =
+    const show =
       data?.days.includes(this.colsInfo[gridDataIdx].value) && data?.bg;
 
     return {
-      backgroundColor: showBg ? data.bg : 'none',
+      backgroundColor: show ? data.bg : 'none',
+      opacity: isHighlighted
+        ? data?.id === this.highlightId && show
+          ? 1
+          : 0.5
+        : 1,
       height: this.height,
       minWidth: this.height,
       maxWidth: this.height,
       fontSize: this.size / 2.3 + 'px',
+      cursor: show ? 'pointer' : 'default',
     };
+  }
+
+  onGridClick(value: string, gridDataIdx: number) {
+    const id = this.gridData[value]?.id;
+    const selectedDate = +value;
+
+    this.onDateSelect.emit({ id, selectedDate });
   }
 
   getCalendarInfo(year: number) {

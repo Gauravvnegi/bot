@@ -16,7 +16,7 @@
 
   <ng-container *ngIf="!loading; else loader">
     <hospitality-bot-empty-table
-      *ngIf="!seasons?.length"
+      *ngIf="!seasonFA.controls?.length"
       [isLoading]="loading"
       [link]="'create-season'"
       [content]="{
@@ -26,12 +26,14 @@
       }"
     >
     </hospitality-bot-empty-table>
-    <div class="main" *ngIf="seasons.length">
+    <div class="main" *ngIf="seasonFA.controls.length">
       <div class="calendar">
         <hospitality-bot-calendar-view
           [years]="[2023, 2024]"
           calendarWidth="calc(90vw - 300px)"
           [gridData]="gridData"
+          [highlightId]="highlightId"
+          (onDateSelect)="onDateSelect($event)"
         ></hospitality-bot-calendar-view>
       </div>
 
@@ -49,6 +51,9 @@
               let season of useForm.get('seasons')?.controls;
               let i = index
             "
+            [ngClass]="{
+              season__selected: season.get('id').value === highlightId
+            }"
           >
             <!-- <div class="season__checkbox">
               <hospitality-bot-checkbox

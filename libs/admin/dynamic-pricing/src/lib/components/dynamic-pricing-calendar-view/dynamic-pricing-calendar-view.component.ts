@@ -1,5 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import {
+  AbstractControl,
+  FormArray,
+  FormBuilder,
+  FormGroup,
+} from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
@@ -7,7 +12,10 @@ import {
   getListOfRandomLightColor,
 } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
-import { CGridData } from 'libs/admin/shared/src/lib/components/calendar-view/calendar-view.component';
+import {
+  CGridData,
+  CGridSelectedData,
+} from 'libs/admin/shared/src/lib/components/calendar-view/calendar-view.component';
 import { IGEditEvent } from 'libs/admin/shared/src/lib/components/interactive-grid/interactive-grid.component';
 import { Subscription } from 'rxjs';
 import { DynamicPricingService } from '../../services/dynamic-pricing.service';
@@ -17,6 +25,7 @@ import {
 } from '../../types/dynamic-pricing.types';
 
 type Season = {
+  id: string;
   name: string;
   colorCode: string;
   fromDate: Date;
@@ -36,7 +45,7 @@ export class DynamicPricingCalendarViewComponent implements OnInit, OnDestroy {
   loading = false;
   $subscription = new Subscription();
 
-  seasons: Season[] = [];
+  highlightId: string = '';
 
   useForm: FormGroup;
 
@@ -60,9 +69,10 @@ export class DynamicPricingCalendarViewComponent implements OnInit, OnDestroy {
 
   createSeasonForm(data: Season) {
     const sFrom = this.fb.group({
-      selected: [true],
+      selected: [false],
       toggle: [true],
       name: [data.name],
+      id: [data.id],
       colorCode: [data.colorCode],
       fromDate: [data.fromDate],
       toDate: [data.toDate],
@@ -87,22 +97,12 @@ export class DynamicPricingCalendarViewComponent implements OnInit, OnDestroy {
             let dataObj: Record<number, DynamicPricingRequest[]> = {};
 
             res.configDetails.forEach((item, seasonIdx) => {
-              const { fromDate, toDate, daysIncluded, name } = item;
+              const { fromDate, toDate, daysIncluded, name, id } = item;
               const colorCode = this.colors[seasonIdx];
 
-              this.seasons.push({
-                name,
-                colorCode,
-                days: daysIncluded.map((item) => ({
-                  label: item.substring(0, 3),
-                  value: item,
-                })),
-                fromDate: new Date(fromDate),
-                toDate: new Date(toDate),
-              });
-
-              (this.useForm.get('seasons') as FormArray).push(
+              this.seasonFA.push(
                 this.createSeasonForm({
+                  id,
                   name,
                   colorCode,
                   days: daysIncluded.map((item) => ({
@@ -127,6 +127,7 @@ export class DynamicPricingCalendarViewComponent implements OnInit, OnDestroy {
                 this.gridData[currentEpoch] = {
                   bg: colorCode,
                   days: daysIncluded,
+                  id,
                 };
               }
 
@@ -168,14 +169,17 @@ export class DynamicPricingCalendarViewComponent implements OnInit, OnDestroy {
               }
             });
 
-            console.log(this.seasons, 'seasons');
-            console.log(this.useForm.get('seasons'), 'seasonsForm');
+            console.log(this.seasonFA, 'seasonsForm');
           },
           () => {
             this.loading = false;
           }
         )
     );
+  }
+
+  get seasonFA() {
+    return this.useForm.get('seasons') as FormArray;
   }
 
   getLastDaysOfMonthBetweenDates(fromDate: number, toDate: number) {
@@ -214,6 +218,20 @@ export class DynamicPricingCalendarViewComponent implements OnInit, OnDestroy {
     const firstDayOfNextYearEpoch = new Date(fromYear + 1, 0, 1).getTime();
 
     return { lastDate: lastDayOfYearEpoch, newDate: firstDayOfNextYearEpoch };
+  }
+
+  handleHighlightOfSeason() {}
+
+  onDateSelect(event: CGridSelectedData) {
+    console.log(event);
+
+    if (event.id === this.highlightId && event.id !== '') {
+      this.highlightId = '';
+    } else if (event.id) {
+      this.highlightId = event.id;
+    } else {
+      this.highlightId = '';
+    }
   }
 
   getFormattedDate(epochDate: number) {

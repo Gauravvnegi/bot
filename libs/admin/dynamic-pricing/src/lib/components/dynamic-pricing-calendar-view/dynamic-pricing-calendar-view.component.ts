@@ -9,6 +9,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
   epochWithoutTime,
+  getDayOfWeekFromEpoch,
   getListOfRandomLightColor,
 } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
@@ -117,18 +118,20 @@ export class DynamicPricingCalendarViewComponent implements OnInit, OnDestroy {
               const startDate = this.getFormattedDate(fromDate);
               const endDate = this.getFormattedDate(toDate);
 
-              console.log(epochWithoutTime(fromDate), epochWithoutTime(toDate));
-
               for (
                 let currentEpoch = epochWithoutTime(fromDate);
                 currentEpoch <= epochWithoutTime(toDate);
                 currentEpoch += 86400000
               ) {
-                this.gridData[currentEpoch] = {
-                  bg: colorCode,
-                  days: daysIncluded,
-                  id,
-                };
+                const { day } = getDayOfWeekFromEpoch(currentEpoch);
+                if (name === 'Fallen' || name === 'Summer')
+                  console.log(day, daysIncluded);
+                if (daysIncluded.includes(day))
+                  this.gridData[currentEpoch] = {
+                    bg: colorCode,
+                    days: daysIncluded,
+                    id,
+                  };
               }
 
               const isSameYear = startDate.year === endDate.year;
@@ -168,8 +171,6 @@ export class DynamicPricingCalendarViewComponent implements OnInit, OnDestroy {
                 };
               }
             });
-
-            console.log(this.seasonFA, 'seasonsForm');
           },
           () => {
             this.loading = false;
@@ -223,8 +224,6 @@ export class DynamicPricingCalendarViewComponent implements OnInit, OnDestroy {
   handleHighlightOfSeason() {}
 
   onDateSelect(event: CGridSelectedData) {
-    console.log(event);
-
     if (event.id === this.highlightId && event.id !== '') {
       this.highlightId = '';
     } else if (event.id) {
@@ -256,21 +255,11 @@ export class DynamicPricingCalendarViewComponent implements OnInit, OnDestroy {
     };
   }
 
-  handleEdit(event: IGEditEvent) {
-    console.log(event, 'onEdit event');
-
-    if (event.id) {
-      this.router.navigate(['create-season'], {
-        queryParams: {
-          seasonId: event.id,
-        },
-        relativeTo: this.route,
-      });
-    }
-  }
-
-  calculateSpace(value) {
-    console.log('hello', value);
+  handleEdit(seasonId: string) {
+    this.router.navigate(['create-season'], {
+      queryParams: { seasonId },
+      relativeTo: this.route,
+    });
   }
 
   ngOnDestroy(): void {

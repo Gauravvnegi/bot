@@ -57,6 +57,28 @@ export function getListOfRandomLightColor(numberOfColors: number) {
   return Array.from({ length: numberOfColors }, getRandomLightHexColor);
 }
 
+export type DaysType =
+  | 'MONDAY'
+  | 'TUESDAY'
+  | 'WEDNESDAY'
+  | 'THURSDAY'
+  | 'FRIDAY'
+  | 'SATURDAY'
+  | 'SUNDAY';
+
+export const weeks: {
+  label: string;
+  value: DaysType;
+}[] = [
+  { label: 'Sun', value: 'SUNDAY' },
+  { label: 'Mon', value: 'MONDAY' },
+  { label: 'Tue', value: 'TUESDAY' },
+  { label: 'Wed', value: 'WEDNESDAY' },
+  { label: 'Thu', value: 'THURSDAY' },
+  { label: 'Fri', value: 'FRIDAY' },
+  { label: 'Sat', value: 'SATURDAY' },
+];
+
 export function epochWithoutTime(epoch: number) {
   // Create a new Date object using the epoch timestamp
   const date = new Date(epoch); // multiply by 1000 for milliseconds
@@ -79,4 +101,11 @@ export function epochWithoutTime(epoch: number) {
   const newDate = new Date(formattedDate);
 
   return newDate.getTime();
+}
+
+export function getDayOfWeekFromEpoch(epoch: number) {
+  const date = new Date(epoch);
+  const dayIndex = date.getUTCDay();
+
+  return { day: weeks[dayIndex].value, dayIndex };
 }

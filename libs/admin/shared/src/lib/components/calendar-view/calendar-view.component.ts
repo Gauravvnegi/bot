@@ -7,30 +7,13 @@ import {
   Output,
 } from '@angular/core';
 import {
+  DaysType,
   Option,
   epochWithoutTime,
   fullMonths,
+  weeks,
 } from '@hospitality-bot/admin/shared';
 import { Subscription } from 'rxjs';
-
-export type DaysType =
-  | 'MONDAY'
-  | 'TUESDAY'
-  | 'WEDNESDAY'
-  | 'THURSDAY'
-  | 'FRIDAY'
-  | 'SATURDAY'
-  | 'SUNDAY';
-
-export const weeks: Option<DaysType>[] = [
-  { label: 'Sun', value: 'SUNDAY' },
-  { label: 'Mon', value: 'MONDAY' },
-  { label: 'Tue', value: 'TUESDAY' },
-  { label: 'Wed', value: 'WEDNESDAY' },
-  { label: 'Thu', value: 'THURSDAY' },
-  { label: 'Fri', value: 'FRIDAY' },
-  { label: 'Sat', value: 'SATURDAY' },
-];
 
 export type CGridOption = Option<string, { date?: number }>;
 export type CGridInfo = Record<number, CGridOption[][]>;
@@ -109,13 +92,13 @@ export class CalendarViewComponent implements OnInit, OnDestroy {
     const data = this.gridData[value];
     const isHighlighted = !!this.highlightId;
 
-    const show =
-      data?.days.includes(this.colsInfo[gridDataIdx].value) && data?.bg;
+    const show = !!data;
+    // data?.days.includes(this.colsInfo[gridDataIdx].value) && data?.bg;
 
     return {
       backgroundColor: show ? data.bg : 'none',
       opacity: isHighlighted
-        ? data?.id === this.highlightId && show
+        ? show && data?.id === this.highlightId
           ? 1
           : 0.5
         : 1,

@@ -54,6 +54,7 @@
             [ngClass]="{
               season__selected: season.get('id').value === highlightId
             }"
+            (click)="handleEdit(season.get('id').value)"
           >
             <!-- <div class="season__checkbox">
               <hospitality-bot-checkbox

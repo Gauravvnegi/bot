@@ -17,10 +17,10 @@ import { Subscription } from 'rxjs';
 
 export type CGridOption = Option<string, { date?: number }>;
 export type CGridInfo = Record<number, CGridOption[][]>;
-export type CGridData = Record<
-  string,
-  Partial<{ bg: string; days: DaysType[]; id: string }>
->;
+export type CGridDataRecord = Record<string, CGridData>;
+export type CGridData = { bg: string; id: string } & Partial<{
+  days: DaysType[];
+}>;
 export type CGridSelectedData = { id?: string; selectedDate: number };
 
 @Component({
@@ -37,9 +37,11 @@ export class CalendarViewComponent implements OnInit, OnDestroy {
 
   @Input() calendarWidth: 'max-content';
 
-  @Input() highlightId: CGridData[string]['id'] = '';
+  @Input() highlightId: CGridData['id'] = '';
 
-  @Input() gridData: CGridData = {};
+  @Input() gridData: CGridDataRecord = {};
+
+  @Input() inactiveIds: CGridData['id'][] = [];
 
   /**
    * @example M,T,W,T,F,S
@@ -90,23 +92,27 @@ export class CalendarViewComponent implements OnInit, OnDestroy {
 
   getStyles(value: string, gridDataIdx: number) {
     const data = this.gridData[value];
-    const isHighlighted = !!this.highlightId;
-
     const show = !!data;
+    const currentId = data?.id;
+    const isHighlighted = !!this.highlightId;
+    const isInactive = currentId && this.inactiveIds.includes(currentId);
+
     // data?.days.includes(this.colsInfo[gridDataIdx].value) && data?.bg;
+    const opacity = isInactive ? 0.5 : 1;
 
     return {
       backgroundColor: show ? data.bg : 'none',
       opacity: isHighlighted
-        ? show && data?.id === this.highlightId
-          ? 1
+        ? show && currentId === this.highlightId
+          ? opacity
           : 0.5
-        : 1,
+        : opacity,
       height: this.height,
       minWidth: this.height,
       maxWidth: this.height,
       fontSize: this.size / 2.3 + 'px',
-      cursor: show ? 'pointer' : 'default',
+      cursor: show ? (isInactive ? 'not-allowed' : 'pointer') : 'default',
+      pointerEvents: isInactive ? 'none' : 'auto',
     };
   }
 

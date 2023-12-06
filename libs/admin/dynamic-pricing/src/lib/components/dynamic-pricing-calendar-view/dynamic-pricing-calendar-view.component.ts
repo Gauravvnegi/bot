@@ -1,10 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import {
-  AbstractControl,
-  FormArray,
-  FormBuilder,
-  FormGroup,
-} from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
@@ -15,9 +10,9 @@ import {
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import {
   CGridData,
+  CGridDataRecord,
   CGridSelectedData,
 } from 'libs/admin/shared/src/lib/components/calendar-view/calendar-view.component';
-import { IGEditEvent } from 'libs/admin/shared/src/lib/components/interactive-grid/interactive-grid.component';
 import { Subscription } from 'rxjs';
 import { DynamicPricingService } from '../../services/dynamic-pricing.service';
 import {
@@ -27,6 +22,7 @@ import {
 
 type Season = {
   id: string;
+  isActive: boolean;
   name: string;
   colorCode: string;
   fromDate: Date;
@@ -46,13 +42,14 @@ export class DynamicPricingCalendarViewComponent implements OnInit, OnDestroy {
   loading = false;
   $subscription = new Subscription();
 
-  highlightId: string = '';
+  highlightedSeason: CGridData['id'] = '';
 
   useForm: FormGroup;
 
   colors = getListOfRandomLightColor(20);
 
-  gridData: CGridData = {};
+  gridData: CGridDataRecord = {};
+  inactiveSeasons: CGridData['id'][] = [];
 
   constructor(
     private dynamicPricingService: DynamicPricingService,
@@ -70,8 +67,7 @@ export class DynamicPricingCalendarViewComponent implements OnInit, OnDestroy {
 
   createSeasonForm(data: Season) {
     const sFrom = this.fb.group({
-      selected: [false],
-      toggle: [true],
+      isActive: [data.isActive],
       name: [data.name],
       id: [data.id],
       colorCode: [data.colorCode],
@@ -80,11 +76,33 @@ export class DynamicPricingCalendarViewComponent implements OnInit, OnDestroy {
       days: [data.days],
     });
 
+    sFrom.valueChanges.subscribe((value) => {
+      this.$subscription.add(
+        this.dynamicPricingService
+          .changeSeasonStatus(value.id, value.isActive, {
+            params: '?type=OCCUPANCY',
+          })
+          .subscribe((res) => {
+            const isActive = res.status === 'ACTIVE';
+
+            if (isActive) {
+              const newInactiveSeason = this.inactiveSeasons.filter(
+                (item) => item !== res.id
+              );
+              this.inactiveSeasons = newInactiveSeason;
+            } else {
+              this.inactiveSeasons.push(res.id);
+            }
+          })
+      );
+    });
+
     return sFrom;
   }
 
   ngOnInit(): void {
     this.loading = true;
+
     this.$subscription.add(
       this.dynamicPricingService
         .getDynamicPricingList({
@@ -92,19 +110,21 @@ export class DynamicPricingCalendarViewComponent implements OnInit, OnDestroy {
         })
         .subscribe(
           (res) => {
-            console.log(res);
             this.loading = false;
 
             let dataObj: Record<number, DynamicPricingRequest[]> = {};
 
             res.configDetails.forEach((item, seasonIdx) => {
-              const { fromDate, toDate, daysIncluded, name, id } = item;
+              const { fromDate, toDate, daysIncluded, name, id, status } = item;
               const colorCode = this.colors[seasonIdx];
+
+              const isActive = status === 'ACTIVE';
 
               this.seasonFA.push(
                 this.createSeasonForm({
                   id,
                   name,
+                  isActive,
                   colorCode,
                   days: daysIncluded.map((item) => ({
                     label: item.substring(0, 3),
@@ -115,6 +135,8 @@ export class DynamicPricingCalendarViewComponent implements OnInit, OnDestroy {
                 })
               );
 
+              if (!isActive) this.inactiveSeasons.push(id);
+
               const startDate = this.getFormattedDate(fromDate);
               const endDate = this.getFormattedDate(toDate);
 
@@ -124,8 +146,7 @@ export class DynamicPricingCalendarViewComponent implements OnInit, OnDestroy {
                 currentEpoch += 86400000
               ) {
                 const { day } = getDayOfWeekFromEpoch(currentEpoch);
-                if (name === 'Fallen' || name === 'Summer')
-                  console.log(day, daysIncluded);
+
                 if (daysIncluded.includes(day))
                   this.gridData[currentEpoch] = {
                     bg: colorCode,
@@ -224,12 +245,12 @@ export class DynamicPricingCalendarViewComponent implements OnInit, OnDestroy {
   handleHighlightOfSeason() {}
 
   onDateSelect(event: CGridSelectedData) {
-    if (event.id === this.highlightId && event.id !== '') {
-      this.highlightId = '';
+    if (event.id === this.highlightedSeason && event.id !== '') {
+      this.highlightedSeason = '';
     } else if (event.id) {
-      this.highlightId = event.id;
+      this.highlightedSeason = event.id;
     } else {
-      this.highlightId = '';
+      this.highlightedSeason = '';
     }
   }
 

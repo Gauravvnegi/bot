@@ -32,8 +32,9 @@
           [years]="[2023, 2024]"
           calendarWidth="calc(90vw - 300px)"
           [gridData]="gridData"
-          [highlightId]="highlightId"
+          [highlightId]="highlightedSeason"
           (onDateSelect)="onDateSelect($event)"
+          [inactiveIds]="inactiveSeasons"
         ></hospitality-bot-calendar-view>
       </div>
 
@@ -71,9 +72,9 @@
               {{ season.get('name').value }}
             </div>
 
-            <div class="season__toggle">
+            <div class="season__toggle" click-stop-propagation>
               <hospitality-bot-input-switch
-                controlName="toggle"
+                controlName="isActive"
               ></hospitality-bot-input-switch>
             </div>
 

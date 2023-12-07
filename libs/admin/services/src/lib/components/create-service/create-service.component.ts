@@ -174,7 +174,7 @@ export class CreateServiceComponent implements OnInit {
       description: [''],
 
       unit: ['', Validators.required],
-      enableVisibility: [[], Validators.required],
+      enableVisibility: [[]],
       taxIds: [[]],
       hsnCode: [''],
       enableOnMicrosite: [true],

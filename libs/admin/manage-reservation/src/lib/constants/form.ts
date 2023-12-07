@@ -23,12 +23,13 @@ export type ReservationInformation = {
   dateAndTime?: number;
   reservationType?: string;
   source: string;
-  sourceName: string;
+  sourceName?: string;
   marketSegment: string;
   status?: string;
   eventType?: string;
   agentSourceName?: string;
   otaSourceName?: string;
+  companySourceName?: string;
 };
 
 export type GuestInformation = {

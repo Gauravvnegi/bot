@@ -11,6 +11,7 @@ import {
   AbstractControl,
   ControlContainer,
   FormGroup,
+  ValidatorFn,
   Validators,
 } from '@angular/forms';
 import {
@@ -30,6 +31,7 @@ import { ReservationForm } from '../../../../../manage-reservation/src/lib/const
 import { Subscription } from 'rxjs';
 import { AgentTableResponse } from 'libs/admin/agent/src/lib/types/response';
 import { AddAgentComponent } from 'libs/admin/agent/src/lib/components/add-agent/add-agent.component';
+import { AddCompanyComponent } from 'libs/admin/company/src/lib/components/add-company/add-company.component';
 
 @Component({
   selector: 'hospitality-bot-booking-info',
@@ -81,6 +83,7 @@ export class BookingInfoComponent implements OnInit {
   fromDateValue = new Date();
   toDateValue = new Date();
   selectedAgent: AgentTableResponse;
+  selectedGuest: Option;
 
   $subscription = new Subscription();
 
@@ -102,7 +105,7 @@ export class BookingInfoComponent implements OnInit {
     this.entityId = this.globalFilterService.entityId;
     this.getCountryCode();
     this.initDates();
-    this.listenForSourceChanges();
+    this.reservationId && this.listenForSourceChanges();
   }
 
   initDates() {
@@ -261,103 +264,121 @@ export class BookingInfoComponent implements OnInit {
 
   listenForSourceChanges() {
     const sourceControl = this.reservationInfoControls.source;
-    const sourceNameControl = this.reservationInfoControls.sourceName;
     const marketSegmentControl = this.reservationInfoControls.marketSegment;
-    const otaSourceNameControl = this.reservationInfoControls.otaSourceName;
-    const agentSourceNameControl = this.reservationInfoControls.agentSourceName;
 
+    // Add options Market Segment and Source for external reservations
     marketSegmentControl.valueChanges.subscribe((res) => {
-      if (
-        res &&
+      if (res) {
         this.configData?.marketSegment &&
-        !this.configData?.marketSegment.some((item) => item.value === res)
-      ) {
-        this.configData.marketSegment.push({ label: res, value: res });
-        marketSegmentControl.patchValue(res);
+          !this.configData?.marketSegment.some((item) => item.value === res) &&
+          this.configData.marketSegment.push({ label: res, value: res });
+        marketSegmentControl.patchValue(res, { emitEvent: false });
       }
     });
 
     sourceControl.valueChanges.subscribe((res) => {
       if (res) {
-        if (
-          this.configData?.source &&
-          !this.configData?.source.some((item) => item.value === res)
-        ) {
+        this.configData?.source &&
+          !this.configData?.source?.some((item) => item.value === res) &&
           this.configData.source.push({ label: res, value: res });
-        }
         this.initSourceDetails(res);
-        !this.editMode && sourceNameControl.reset();
+        !this.editMode && this.sourceNameControl.reset();
       }
     });
 
+    // Map source data for edit reservation
     this.$subscription.add(
       this.formService.sourceData.subscribe((res) => {
         if (res && this.configData) {
           this.editMode = true;
-          if (res.agent)
-            this.selectedAgent = {
-              label: res?.agent?.company?.firstName,
-              value: res?.agent?.id,
-              extras: `${res?.agent?.firstName} ${res?.agent?.lastName}`,
-              ...res?.agent,
-            };
-          marketSegmentControl.patchValue(res.marketSegment);
-          if (res.source === 'OTA') {
-            otaSourceNameControl.setValue(res.sourceName);
-          } else if (res.source === 'AGENT') {
-            agentSourceNameControl.setValue(res.sourceName);
-          } else {
-            sourceNameControl.setValue(res.sourceName);
-          }
-          sourceControl.setValue(res.source);
+          this.selectedAgent = res.agent && {
+            label: res?.agent?.agencyName,
+            value: res?.agent?.id,
+            extras: `${res?.agent?.salesPersonName}`,
+            ...res?.agent,
+          };
+
+          this.inputControls.reservationInformation.patchValue(
+            {
+              marketSegment: res.marketSegment,
+              source: res.source,
+            },
+            { emitEvent: false }
+          );
+
+          // Map source name data according to the source
+          const sourceControlMap = {
+            OTA: this.otaSourceControl,
+            AGENT: this.agentSourceControl,
+            COMPANY: this.companySourceControl,
+            default: this.sourceNameControl,
+          };
+          const selectedControl =
+            sourceControlMap[res.source] || sourceControlMap['default'];
+          selectedControl.patchValue(res.sourceName, { emitEvent: false });
         }
       })
     );
   }
 
+  // Update sourceName controls values and validity
   initSourceDetails(source: string) {
-    const sourceNameControl = this.reservationInfoControls.sourceName;
-    const agentSourceNameControl = this.reservationInfoControls.agentSourceName;
-    const otaSourceNameControl = this.reservationInfoControls.otaSourceName;
-    if (source === 'OTA') {
-      otaSourceNameControl.setValidators(Validators.required);
-      otaSourceNameControl.markAsUntouched();
-      this.updateValueAndValidity(agentSourceNameControl);
-      this.updateValueAndValidity(sourceNameControl);
-      this.otaOptions = this.configData
-        ? this.configData.source.filter((item) => item.value === source)[0].type
-        : [];
-      if (
+    switch (source) {
+      case 'OTA':
+        this.setupControl(this.otaSourceControl, [Validators.required]);
+        this.otaOptions = this.configData
+          ? this.configData.source.filter((item) => item.value === source)[0]
+              .type
+          : [];
         !this.otaOptions.some(
-          (item) => item.value === otaSourceNameControl?.value
+          (item) => item.value === this.otaSourceControl?.value
         ) &&
-        otaSourceNameControl?.value?.length
-      ) {
-        this.otaOptions.push({
-          label: otaSourceNameControl.value,
-          value: otaSourceNameControl.value,
-        });
-      }
-    } else if (source === 'AGENT') {
-      agentSourceNameControl.setValidators(Validators.required);
-      agentSourceNameControl.markAsUntouched();
-      this.updateValueAndValidity(sourceNameControl);
-      this.updateValueAndValidity(otaSourceNameControl);
-    } else {
-      sourceNameControl.setValidators([
-        Validators.required,
-        Validators.maxLength(60),
-      ]);
-      sourceNameControl.markAsUntouched();
-      this.updateValueAndValidity(agentSourceNameControl);
-      this.updateValueAndValidity(otaSourceNameControl);
+          this.otaSourceControl?.value?.length &&
+          this.otaOptions.push({
+            label: this.otaSourceControl.value,
+            value: this.otaSourceControl.value,
+          });
+        this.updateValueAndValidity(this.agentSourceControl);
+        this.updateValueAndValidity(this.sourceNameControl);
+        this.updateValueAndValidity(this.companySourceControl);
+        break;
+      case 'AGENT':
+        this.setupControl(this.agentSourceControl, [Validators.required]);
+        this.updateValueAndValidity(this.sourceNameControl);
+        this.updateValueAndValidity(this.companySourceControl);
+        this.updateValueAndValidity(this.otaSourceControl);
+        break;
+      case 'COMPANY':
+        this.setupControl(this.companySourceControl, [Validators.required]);
+        this.updateValueAndValidity(this.otaSourceControl);
+        this.updateValueAndValidity(this.agentSourceControl);
+        this.updateValueAndValidity(this.sourceNameControl);
+        break;
+      default:
+        this.setupControl(this.sourceNameControl, [
+          Validators.required,
+          Validators.maxLength(60),
+        ]);
+        this.updateValueAndValidity(this.otaSourceControl);
+        this.updateValueAndValidity(this.agentSourceControl);
+        this.updateValueAndValidity(this.companySourceControl);
+        break;
     }
   }
 
   updateValueAndValidity(control: AbstractControl) {
-    control.reset();
+    control.reset({ emitEvent: false });
     control.clearValidators();
-    control.updateValueAndValidity();
+    control.updateValueAndValidity({ emitEvent: false });
+  }
+
+  setupControl(control: AbstractControl, validator: ValidatorFn[]) {
+    control.setValidators(validator);
+    control.markAsUntouched();
+  }
+
+  patchControlValue(control: AbstractControl, value: any) {
+    control.patchValue(value, { emitEvent: false });
   }
 
   getCountryCode(): void {
@@ -367,7 +388,7 @@ export class BookingInfoComponent implements OnInit {
         this.configData = new BookingConfig().deserialize(
           response.bookingConfig
         );
-        this.listenForSourceChanges();
+        !this.reservationId && this.listenForSourceChanges();
       });
     this.configService.getCountryCode().subscribe((res) => {
       const data = new CountryCodeList().deserialize(res);
@@ -397,6 +418,20 @@ export class BookingInfoComponent implements OnInit {
         value: event?.id,
         extras: `${event?.firstName} ${event?.lastName}`,
         ...event,
+      };
+      !this.reservationId &&
+        this.reservationInfoControls.marketSegment.patchValue(
+          this.selectedAgent?.marketSegment,
+          { emitEvent: false }
+        );
+    }
+  }
+
+  companyChange(event) {
+    if (event.id) {
+      this.selectedGuest = {
+        label: event?.firstName,
+        value: event?.id,
       };
       !this.reservationId &&
         this.reservationInfoControls.marketSegment.patchValue(
@@ -442,6 +477,42 @@ export class BookingInfoComponent implements OnInit {
     });
   }
 
+  showCompany() {
+    const lazyModulePromise = import(
+      'libs/admin/company/src/lib/admin-company.module'
+    )
+      .then((module) => {
+        return this.compiler.compileModuleAsync(module.AdminCompanyModule);
+      })
+      .catch((error) => {
+        console.error('Error loading the lazy module:', error);
+      });
+    lazyModulePromise.then((moduleFactory) => {
+      this.sidebarVisible = true;
+      const factory = this.resolver.resolveComponentFactory(
+        AddCompanyComponent
+      );
+      this.sidebarSlide.clear();
+      const componentRef = this.sidebarSlide.createComponent(factory);
+      componentRef.instance.isSideBar = true;
+      componentRef.instance.onClose.subscribe((res) => {
+        if (typeof res !== 'boolean') {
+          this.selectedGuest = {
+            label: `${res?.companyName}`,
+            value: res?.id,
+          };
+          res.marketSegment &&
+            this.reservationInfoControls.marketSegment.patchValue(
+              res.marketSegment,
+              { emitEvent: false }
+            );
+        }
+        this.sidebarVisible = false;
+        componentRef.destroy();
+      });
+    });
+  }
+
   get reservationInfoControls() {
     return (this.controlContainer.control.get(
       'reservationInformation'
@@ -449,6 +520,29 @@ export class BookingInfoComponent implements OnInit {
       keyof ReservationForm['reservationInformation'],
       AbstractControl
     >;
+  }
+
+  get inputControls() {
+    return this.parentFormGroup.controls as Record<
+      keyof ReservationForm,
+      AbstractControl
+    >;
+  }
+
+  get sourceNameControl() {
+    return this.reservationInfoControls.sourceName;
+  }
+
+  get agentSourceControl() {
+    return this.reservationInfoControls.agentSourceName;
+  }
+
+  get companySourceControl() {
+    return this.reservationInfoControls.companySourceName;
+  }
+
+  get otaSourceControl() {
+    return this.reservationInfoControls.otaSourceName;
   }
 
   get roomControls() {

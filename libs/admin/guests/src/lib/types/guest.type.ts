@@ -1,5 +1,6 @@
 import { EntityState } from '@hospitality-bot/admin/shared';
 import { AgentTableResponse } from 'libs/admin/agent/src/lib/types/response';
+import { CompanyResponseType } from 'libs/admin/company/src/lib/types/response';
 export type AddressFieldType = {
   formattedAddress: string;
   city: string;
@@ -50,7 +51,9 @@ type discard =
   | 'priceModifier'
   | 'priceModifierValue'
   | 'iataNumber';
-export type GuestType = Omit<AgentTableResponse, discard>;
+export type GuestType = Omit<AgentTableResponse, discard> & {
+  company: CompanyResponseType;
+};
 
 export type GuestListResponse = {
   records: GuestType[];

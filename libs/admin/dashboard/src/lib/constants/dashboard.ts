@@ -238,8 +238,8 @@ export const dashboardPopUpTabs = [
     },
   },
   {
-    label: 'Pre-Arrival Request',
-    value: 'PRE_ARRIVAL_REQUEST',
+    label: 'Add-Ons Request',
+    value: 'ADDONS_REQUEST',
     emptyMessage: {
       title: 'No Pre-Arrival Request Found',
       description: 'No pre-arrival request found for this booking',

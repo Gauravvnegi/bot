@@ -4,7 +4,6 @@ import { AgentDataTableComponent } from './components/agent-data-table/agent-dat
 import { MainComponent } from './components/main/main.component';
 import { AddAgentComponent } from './components/add-agent/add-agent.component';
 import { agentRoutes } from './constant/routes';
-import { MembersListComponent } from './components/members-list/members-list.component';
 import { CompanyService } from 'libs/admin/company/src/lib/services/company.service';
 const appRoutes: Route[] = [
   {
@@ -37,6 +36,5 @@ export class AdminAgentRoutingModule {
     MainComponent,
     AgentDataTableComponent,
     AddAgentComponent,
-    MembersListComponent,
   ];
 }

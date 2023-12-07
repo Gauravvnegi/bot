@@ -538,7 +538,7 @@ export class QuickReservationFormComponent implements OnInit {
     );
 
     detailCompRef.componentInstance.bookingId = this.reservationId;
-    detailCompRef.componentInstance.tabKey = 'payment_details';
+    detailCompRef.componentInstance.tabKey = 'guest_details';
     this.increaseZIndex(true);
     this.$subscription.add(
       detailCompRef.componentInstance.onDetailsClose.subscribe((res) => {

@@ -110,10 +110,10 @@ export class AddAgentComponent implements OnInit {
     this.agentForm = this.fb.group({
       packageCode: ['# will be auto generated'],
       status: [true],
-      name: ['', []],
+      salesPersonName: [''],
       email: ['', [Validators.pattern(Regex.EMAIL_REGEX)]],
-      cc: ['+91', []],
-      phoneNo: ['', []],
+      cc: ['+91'],
+      phoneNo: [''],
       iataNo: ['', [CustomValidators.requiredLength(14)]],
       agencyName: ['', [Validators.required]],
       address: [''],

@@ -2,21 +2,35 @@
   <hospitality-bot-navigation-header [heading]="pageTitle" [routes]="navRoutes">
     <ng-container *ngIf="!isLoading">
       <hospitality-bot-button
-        label="Email Invoice"
+        *ngIf="isCheckin"
+        label="Checkout"
         variant="outlined"
-        (onClick)="handleEmailInvoice()"
+        (onClick)="handleCheckout()"
         [isLoading]="loadingPdf"
-        [disabled]="failedToLoad || !isPrintRate"
+        [disabled]="failedToLoad"
       ></hospitality-bot-button>
 
-      <hospitality-bot-button
+      <!-- <hospitality-bot-button
         *ngIf="isInvoiceGenerated"
         variant="text"
         label="Download PDF"
         (onClick)="handleDownload()"
         [isLoading]="loadingPdf"
         [disabled]="failedToLoad"
-      ></hospitality-bot-button>
+      ></hospitality-bot-button> -->
+
+      <hospitality-bot-tiered-menu-button
+        *ngIf="!!invoiceButtons?.length"
+        [label]="!isInvoiceGenerated ? 'Generate Invoice' : 'Download PDF'"
+        [splitButton]="true"
+        (clicked)="
+          !isInvoiceGenerated ? handleGenerateInvoice() : handleDownload()
+        "
+        [openNewWindow]="true"
+        [items]="invoiceButtons"
+        [isLoading]="loadingPdf"
+        [disabled]="failedToLoad"
+      ></hospitality-bot-tiered-menu-button>
 
       <!-- <p-splitButton
       *ngIf="!isInvoiceGenerated"
@@ -24,13 +38,14 @@
       (onClick)="handleGenerateInvoice()"
       [model]="items"
     ></p-splitButton> -->
-      <hospitality-bot-button
+
+      <!-- <hospitality-bot-button
         *ngIf="!isInvoiceGenerated"
         label="Generate Invoice"
         (onClick)="handleGenerateInvoice()"
         [isLoading]="loadingPdf"
         [disabled]="failedToLoad"
-      ></hospitality-bot-button>
+      ></hospitality-bot-button> -->
     </ng-container>
   </hospitality-bot-navigation-header>
 

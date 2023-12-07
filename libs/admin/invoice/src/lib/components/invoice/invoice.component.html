@@ -376,13 +376,13 @@
 
         <div class="payment-form__amount">
           <div class="py-row">
-            <span>Total Amount</span>
+            <span>Total Charges</span>
             <span>
               INR {{ inputControl.totalAmount.value | number: '1.2-2' }}</span
             >
           </div>
           <div class="py-row">
-            <span>Discounted Amount</span>
+            <span>Total Discount</span>
             <span>
               <span
                 >INR
@@ -391,13 +391,13 @@
             </span>
           </div>
           <div class="py-row invert">
-            <span>Net Amount</span>
+            <span>Total Payable</span>
             <span>
               INR {{ inputControl.netAmount.value | number: '1.2-2' }}</span
             >
           </div>
           <div class="py-row">
-            <span>Paid Amount</span>
+            <span>Total Payment</span>
             <span>
               <span
                 >INR
@@ -406,7 +406,7 @@
             </span>
           </div>
           <div class="py-row">
-            <span>Due Amount</span>
+            <span>Remaining Balance</span>
             <span
               [ngStyle]="{
                 color: inputControl.dueAmount.value < 0 ? 'red' : 'inherit'
@@ -425,7 +425,7 @@
       </div>
     </div>
     <div class="form-block">
-      <div class="full-width header">
+      <div class="full-width header payment-header">
         <div class="header">
           Payment Details
         </div>
@@ -455,14 +455,6 @@
           label="Cashier Name"
           maxLength="60"
         ></hospitality-bot-input> -->
-        <hospitality-bot-input
-          class="half-width"
-          controlName="remarks"
-          [props]="{
-            placeholder: 'Enter'
-          }"
-          label="Your Inclusions/remarks:"
-        ></hospitality-bot-input>
         <hospitality-bot-select-group
           class="full-width"
           controlName="paymentMethod"
@@ -491,6 +483,14 @@
             placeholder: 'Enter'
           }"
           label="Transaction ID"
+        ></hospitality-bot-input>
+        <hospitality-bot-input
+          class="half-width"
+          controlName="remarks"
+          [props]="{
+            placeholder: 'Enter'
+          }"
+          label="Your Inclusions/remarks:"
         ></hospitality-bot-input>
       </ng-container>
     </div>

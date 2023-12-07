@@ -93,7 +93,6 @@ export class FeedbackDetailComponent implements OnInit, OnDestroy {
           label: convertToTitleCase(response.status),
           id: response.status,
         } as any);
-
         this.feedbackFG?.patchValue({
           assignee: response?.userId,
           status: response?.status,
@@ -206,12 +205,11 @@ export class FeedbackDetailComponent implements OnInit, OnDestroy {
 
   updateFeedbackState(event) {
     const data = {
-      status: card.feedbackState.resolved,
-      notes: event.data.comment,
+      status: event.value,
+      notes: event?.data?.comment,
     };
-    this.tableService
-      .updateFeedbackState(this.feedback.id, data)
-      .subscribe((response) => {
+    this.tableService.updateFeedbackState(this.feedback.id, data).subscribe(
+      (response) => {
         this.snackbarService.openSnackBarWithTranslate(
           {
             translateKey: `messages.SUCCESS.STATUS_UPDATED`,
@@ -222,7 +220,11 @@ export class FeedbackDetailComponent implements OnInit, OnDestroy {
         );
         this.refreshFeedbackData(true);
         this.cardService.$refreshList.next(true);
-      });
+      },
+      (error) => {
+        this.feedbackFG.patchValue({ status: this.feedback.status });
+      }
+    );
   }
 
   addComment(event) {

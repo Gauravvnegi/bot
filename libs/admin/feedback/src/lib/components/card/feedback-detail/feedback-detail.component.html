@@ -87,9 +87,9 @@
     </div>
     <mat-select
       class="assignee-dropdown state-dropdown"
-      [value]="feedbackFG?.get('status')?.value"
       (selectionChange)="updateFeedbackState($event)"
       placeholder="Status"
+      formControlName="status"
       [disabled]="statusList?.length === 0"
     >
       <mat-option *ngFor="let status of statusList" [value]="status?.id">
@@ -99,9 +99,9 @@
 
     <mat-select
       class="assignee-dropdown"
-      [value]="feedbackFG?.get('assignee')?.value"
       (selectionChange)="setAssignee($event)"
       placeholder="Assignee"
+      formControlName="assignee"
       [disabled]="assigneeList?.length === 0"
     >
       <mat-option *ngFor="let assignee of assigneeList" [value]="assignee.id">

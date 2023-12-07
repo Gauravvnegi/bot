@@ -133,8 +133,8 @@ export class InvoiceService extends ApiService {
             itemId: item.isNonEditableBillItem ? null : item.itemId,
             taxId: item.taxId,
             isCoupon: item.isDiscount,
-            discountType: item.discountType,
-            discountValue: item.discountValue,
+            discountType: item?.discountType,
+            discountValue: item?.discountValue,
           }
         : {
             date: item.date,

@@ -1222,7 +1222,11 @@ export class InvoiceComponent implements OnInit {
     // discountComponentRef.componentInstance.tax = taxPercentage;
 
     discountComponentRef.componentInstance.onClose.subscribe(
-      (res: { discountType: string; totalDiscount: number }) => {
+      (res: {
+        discountType: string;
+        discountValue: number;
+        totalDiscount: number;
+      }) => {
         this.modalService.close();
         if (!res) return;
         const totalDiscount = res.totalDiscount;
@@ -1241,7 +1245,11 @@ export class InvoiceComponent implements OnInit {
 
         // Update each discountItem with the total discount
         discountItem.forEach((item) => {
-          item.control.patchValue({ creditAmount: totalDiscount });
+          item.control.patchValue({
+            creditAmount: totalDiscount,
+            discountType: res.discountType,
+            discountValue: res.discountValue,
+          });
         });
 
         if (!totalDiscount) {
@@ -1271,10 +1279,15 @@ export class InvoiceComponent implements OnInit {
               entryIdx: item.index + 1 + index,
               date: item.control.value.date,
               discountType: res.discountType,
-              discountValue: totalDiscount,
+              discountValue: res.discountValue,
             });
           });
-        } else alreadyHasDiscount.patchValue({ creditAmount: totalDiscount });
+        } else
+          alreadyHasDiscount.patchValue({
+            creditAmount: totalDiscount,
+            discountType: res.discountType,
+            discountValue: res.discountValue,
+          });
         reservationItem.forEach((item) => {
           this.updateTax(
             taxedAmount,

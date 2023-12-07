@@ -113,6 +113,7 @@ export class AddDiscountComponent implements OnInit {
   handleApply() {
     this.onClose.next({
       discountType: this.discountForm.get('discountType').value,
+      discountValue: this.discountForm.get('discountValue').value,
       totalDiscount: this.totalDiscount,
     });
   }
@@ -123,6 +124,8 @@ export class AddDiscountComponent implements OnInit {
 
   handleRemove() {
     this.onClose.emit({
+      discountType: this.discountForm.get('discountType').value,
+      discountValue: this.discountForm.get('discountValue').value,
       totalDiscount: 0,
     });
   }

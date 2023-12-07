@@ -160,8 +160,10 @@
         <div class="cell-content" *ngIf="rowData.creditLimit; else emptyCell">
           <div class="primary-text">
             <div class="primary-text txtSize">
-              <span>{{ rowData?.creditLimitUsed }}</span>
-              /{{ rowData?.creditLimit }}
+              <span class="status-text-reject">{{
+                rowData?.creditLimitUsed | currency: 'INR'
+              }}</span>
+              /{{ rowData?.creditLimit | currency: 'INR' }}
             </div>
           </div>
         </div>

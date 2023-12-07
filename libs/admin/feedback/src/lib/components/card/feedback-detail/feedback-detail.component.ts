@@ -300,6 +300,7 @@ export class FeedbackDetailComponent implements OnInit, OnDestroy {
       this.cardService
         .getFeedbackByID(this.feedback.id)
         .subscribe((response) => {
+          debugger;
           this.feedback = new FeedbackRecord().deserialize(
             response,
             this.outlets,

@@ -116,8 +116,10 @@ export class MtdAndYtdReport
 
       const noOfLettableRooms = item.totalRooms - item.outOfServiceRooms;
 
-      const availableRoom =
-        item?.totalRooms - item?.outOfServiceRooms - item?.occupiedRooms;
+      const availableRooms =
+        (item?.totalRooms ?? 0) -
+        (item?.outOfServiceRooms ?? 0) -
+        (item?.occupiedRooms ?? 0);
 
       const revPAR = (item.roomRevenue / item.totalRooms).toFixed(2);
 
@@ -131,7 +133,7 @@ export class MtdAndYtdReport
         totalRevenue,
         occupiedRoomsExclHouseUse,
         noOfLettableRooms,
-        availableRoom,
+        availableRooms,
         revPAR,
       };
     });

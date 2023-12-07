@@ -32,8 +32,9 @@ export const cols: Cols[] = [
   },
   {
     field: 'creditLimit',
-    header: 'Credit Limit',
+    header: 'Used/Total Credit Limit',
     sortType: 'number',
+    isSearchDisabled: true,
   },
   {
     field: 'created',

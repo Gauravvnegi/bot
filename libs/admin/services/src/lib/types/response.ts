@@ -4,8 +4,8 @@ export type ServiceListResponse = {
   paidPackages?: ServiceResponse[];
   complimentaryPackages?: ServiceResponse[];
   total: number;
-  entityStateCounts: EntityState<string>;
-  entityTypeCounts: EntityState<string>;
+  entityStateCounts?: EntityState<string>;
+  entityTypeCounts?: EntityState<string>;
 };
 
 export type ServiceResponse = {

@@ -111,6 +111,7 @@ export class InvoiceComponent implements OnInit {
   paymentOptions: Option[];
 
   descriptionOffSet = 0;
+  limit = 10;
   loadingDescription = false;
   noMoreDescription = false;
 
@@ -118,6 +119,14 @@ export class InvoiceComponent implements OnInit {
   descriptionOptions: DescriptionOption[] = [];
   defaultDescriptionOptions: DescriptionOption[] = [];
   focusedDescriptionId: string;
+
+  /**
+   * To store the actual service response for the re-initialization
+   */
+  serviceListResponse: ServiceListResponse = {
+    paidPackages: [],
+    total: 0,
+  };
 
   loadingData = false;
   isInitialized = false;
@@ -144,6 +153,14 @@ export class InvoiceComponent implements OnInit {
   ) {
     this.reservationId = this.activatedRoute.snapshot.paramMap.get('id');
     this.initPageHeaders();
+  }
+
+  showDate = true;
+  dateReflectionTrigger() {
+    this.showDate = false;
+    setTimeout(() => {
+      this.showDate = true;
+    }, 0);
   }
 
   get inputControl() {
@@ -361,10 +378,13 @@ export class InvoiceComponent implements OnInit {
 
   handleFocus(index: number) {
     this.selectedSearchIndex = index;
-    const currId = this.tableFormArray.at(index).get('billItemId').value;
+
+    const currId = this.tableFormArray.at(index).get('itemId').value;
     if (currId) {
       this.focusedDescriptionId = currId;
     }
+
+    this.setServiceDescriptionOptions();
   }
 
   handleBlur() {
@@ -521,6 +541,8 @@ export class InvoiceComponent implements OnInit {
 
     this.registerServiceSelection();
     this.listenTableChanges();
+
+    this.dateReflectionTrigger();
   }
 
   get tableValue() {
@@ -584,7 +606,7 @@ export class InvoiceComponent implements OnInit {
           debitAmount: this.adminUtilityService.getEpsilonValue(
             selectedService.amount * (item.taxValue / 100)
           ),
-          billItemId: item.id,
+          billItemId: item.id + selectedService.value,
           description: `${selectedService.label} ${item.taxType} ${item.taxValue}% `,
         }));
 
@@ -653,7 +675,6 @@ export class InvoiceComponent implements OnInit {
    */
   findAndRemoveItems(idToRemove?: string) {
     // removing the selected serviceID
-    this.selectedServiceIds.delete(idToRemove);
 
     // Step 1: Filter out items with the same ID
     const itemsToRemove = this.tableFormArray.controls.filter(
@@ -661,11 +682,15 @@ export class InvoiceComponent implements OnInit {
     );
 
     // Step 2: Remove each matching item
-    itemsToRemove.forEach((item) =>
-      this.tableFormArray.removeAt(this.tableFormArray.controls.indexOf(item))
-    );
+    itemsToRemove.forEach((item) => {
+      this.tableFormArray.removeAt(this.tableFormArray.controls.indexOf(item));
+      this.selectedServiceIds.delete(item.get('itemId').value);
+    });
+
     // Step 3: Adjust the FormArray's length or resize it if necessary
     this.tableFormArray.updateValueAndValidity();
+
+    this.dateReflectionTrigger();
   }
 
   removeDiscountItems(itemId: string) {
@@ -678,6 +703,7 @@ export class InvoiceComponent implements OnInit {
       this.tableFormArray.removeAt(this.tableFormArray.controls.indexOf(item))
     );
     this.tableFormArray.updateValueAndValidity();
+    this.dateReflectionTrigger();
   }
 
   listenTableChanges() {
@@ -1012,7 +1038,7 @@ export class InvoiceComponent implements OnInit {
         {
           type: LibraryItem.service,
           serviceType: 'ALL',
-          limit: 10,
+          limit: this.limit,
           offset: this.descriptionOffSet,
           status: true,
         },
@@ -1021,14 +1047,14 @@ export class InvoiceComponent implements OnInit {
     return config;
   }
 
-  get filteredDescriptionOptions() {
-    if (!this.selectedServiceIds?.size) return this.descriptionOptions;
-    return this.descriptionOptions.filter(
-      (item) =>
-        !this.selectedServiceIds.has(item.value) ||
-        item.value === this.focusedDescriptionId
-    );
-  }
+  // get filteredDescriptionOptions() {
+  //   if (!this.selectedServiceIds?.size) return this.descriptionOptions;
+  //   return this.descriptionOptions.filter(
+  //     (item) =>
+  //       !this.selectedServiceIds.has(item.value) ||
+  //       item.value === this.focusedDescriptionId
+  //   );
+  // }
 
   /**
    * Getting All Services (Description)
@@ -1041,7 +1067,7 @@ export class InvoiceComponent implements OnInit {
         (items: MenuItemListResponse) => {
           const data = new MenuItemsList().deserialize(items).menuItems;
           this.descriptionOptions = [...this.descriptionOptions, ...data];
-          this.noMoreDescription = items.records.length < 10;
+          this.noMoreDescription = items.records.length < this.limit;
           this.loadingDescription = false;
         },
         (err) => {
@@ -1051,13 +1077,17 @@ export class InvoiceComponent implements OnInit {
     } else {
       this.servicesService
         .getLibraryItems<ServiceListResponse>(this.entityId, {
-          params: `?&type=${LibraryItem.service}&serviceType=PAID&limit=10&offset=${this.descriptionOffSet}&status=true&raw=true`,
+          params: `?&type=${LibraryItem.service}&serviceType=PAID&limit=${this.limit}&offset=${this.descriptionOffSet}&status=true&raw=true`,
         })
         .subscribe(
           (res) => {
-            const data = new ServiceList().deserialize(res).allService;
-            this.descriptionOptions = [...this.descriptionOptions, ...data];
-            this.noMoreDescription = res.paidPackages.length < 10;
+            this.serviceListResponse.paidPackages = [
+              ...this.serviceListResponse.paidPackages,
+              ...(res.paidPackages ?? []),
+            ];
+
+            this.serviceListResponse.total = res.total;
+            this.noMoreDescription = res.paidPackages.length < this.limit;
             this.loadingDescription = false;
           },
           (err) => {
@@ -1068,10 +1098,25 @@ export class InvoiceComponent implements OnInit {
   }
 
   /**
+   * re-initialization description option to filter selected id
+   */
+  setServiceDescriptionOptions() {
+    const selectedServiceExceptTheCurrentOne = new Set([
+      ...this.selectedServiceIds,
+    ]);
+    selectedServiceExceptTheCurrentOne.delete(this.focusedDescriptionId);
+
+    this.descriptionOptions = new ServiceList().deserialize(
+      this.serviceListResponse,
+      selectedServiceExceptTheCurrentOne
+    ).allService;
+  }
+
+  /**
    * Load more service (pagination)
    */
   loadMoreDescription() {
-    this.descriptionOffSet = this.descriptionOffSet + 10;
+    this.descriptionOffSet = this.descriptionOffSet + this.limit;
     this.getDescriptionOptions();
   }
 
@@ -1293,6 +1338,15 @@ export class InvoiceComponent implements OnInit {
       settings.entryIdx || settings.entryIdx === 0
         ? settings.entryIdx
         : this.tableFormArray.length;
+
+    console.log('entryIdx', entryIdx);
+    console.log('addNewCharges', {
+      rowIndex: entryIdx,
+      isNewEntry: true,
+      isDebit: true,
+      isDisabled: true,
+      date: settings?.date,
+    });
 
     this.addNewCharges({
       rowIndex: entryIdx,

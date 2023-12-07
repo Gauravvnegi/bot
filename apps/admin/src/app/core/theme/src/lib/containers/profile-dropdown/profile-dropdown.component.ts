@@ -22,6 +22,10 @@ export class ProfileDropdownComponent implements OnInit {
   items = [];
   onManageSite = false;
 
+  initials = '';
+  profilePic = '';
+  showImage = true;
+
   constructor(
     private _router: Router,
     private _authService: AuthService,
@@ -33,11 +37,22 @@ export class ProfileDropdownComponent implements OnInit {
     private routesConfigService: RoutesConfigService
   ) {
     this.onManageSite = this._router.url.includes('manage-sites');
+    this.getUserDetails();
+  }
+
+  getUserDetails() {
+    this.initials = this.userService.userDetails.getProfileNickName();
+    this.profilePic = this.userService.userDetails.profileUrl;
+    console.log(this.initials, this.profilePic);
+  }
+
+  handleImageError() {
+    // Handle the image error
+    this.showImage = false;
   }
 
   ngOnInit(): void {
     const isSiteAvailable = !!this.hotelDetailsService.sites?.length;
-
     const isCreateWithSubscribed =
       !this.onManageSite &&
       this.subscriptionPlanService.checkProductSubscription(

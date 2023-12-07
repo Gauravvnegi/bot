@@ -1,0 +1,16 @@
+<div
+  *ngIf="showMenu"
+  class="menu"
+  [ngClass]="{
+    menu__se: toggleMenuPos === 'SE',
+    menu__sw: toggleMenuPos === 'SW',
+    menu__ne: toggleMenuPos === 'NE',
+    menu__nw: toggleMenuPos === 'NW'
+  }"
+>
+  <ng-container *ngFor="let option of options">
+    <div class="menu__item" (click)="handleMenuClick($event, option)">
+      {{ option.label }}
+    </div>
+  </ng-container>
+</div>

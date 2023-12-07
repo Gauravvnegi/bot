@@ -35,6 +35,8 @@
           [highlightId]="highlightedSeason"
           (onDateSelect)="onDateSelect($event)"
           [inactiveIds]="inactiveSeasons"
+          (onDateHover)="handleHover($event)"
+          [tooltip]="tooltip"
         ></hospitality-bot-calendar-view>
       </div>
 
@@ -107,3 +109,20 @@
 <ng-template #loader>
   <hospitality-bot-loader-bounce></hospitality-bot-loader-bounce>
 </ng-template>
+
+<!-- <p-overlayPanel #op>
+  <ng-template pTemplate>
+    <div class="season-overlay">
+      <div *ngIf="content.season.id" class="season-overlay__occupancy">
+        Season: {{ content.season.name }}
+      </div>
+      <div class="season-overlay__day-trigger" *ngIf="content.dayTrigger.id">
+        DayTrigger: {{ content.dayTrigger.name }}
+      </div>
+    </div>
+  </ng-template>
+</p-overlayPanel>
+
+<hospitality-bot-positioned-menu
+  [showMenu]="showMenu"
+></hospitality-bot-positioned-menu> -->

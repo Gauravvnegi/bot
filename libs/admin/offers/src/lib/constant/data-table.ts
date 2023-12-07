@@ -11,7 +11,7 @@ export const cols: Cols[] = [
   },
   {
     field: 'packageCode',
-    header: 'Code / Source',
+    header: 'Code',
     sortType: 'string',
     width: '20%',
     searchField: ['packageCode', 'source'],

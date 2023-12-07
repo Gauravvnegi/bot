@@ -242,6 +242,7 @@ export class AddReservationComponent extends BaseReservationComponent
               response.status === ReservationCurrentStatus.CHECKEDOUT;
             this.checkinJourneyState = this.reservationFormData.journeyState;
             this.isExternalBooking = response.externalBooking;
+
             this.formService.sourceData.next({
               source: source,
               sourceName: sourceName,
@@ -400,6 +401,15 @@ export class AddReservationComponent extends BaseReservationComponent
           maxAdult: item.get('adultCount').value,
         },
         id: item.get('id').value,
+        source: item.get('source')?.value,
+        sourceName:
+          (item.get('source')?.value === 'OTA' &&
+            item.get('otaSourceName')?.value) ||
+          (item.get('source')?.value === 'AGENT' &&
+            item.get('agentSourceName')?.value) ||
+          (item.get('source')?.value === 'COMPANY' &&
+            item.get('companySourceName')?.value) ||
+          item.get('sourceName')?.value,
       })),
       offerId: this.inputControls.offerId.value
         ? this.inputControls.offerId.value

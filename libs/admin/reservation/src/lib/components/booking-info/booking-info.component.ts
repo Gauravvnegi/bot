@@ -105,7 +105,7 @@ export class BookingInfoComponent implements OnInit {
     this.entityId = this.globalFilterService.entityId;
     this.getCountryCode();
     this.initDates();
-    this.listenForSourceChanges();
+    this.reservationId && this.listenForSourceChanges();
   }
 
   initDates() {
@@ -269,15 +269,17 @@ export class BookingInfoComponent implements OnInit {
     // Add options Market Segment and Source for external reservations
     marketSegmentControl.valueChanges.subscribe((res) => {
       if (res) {
-        !this.configData?.marketSegment?.some((item) => item.value === res) &&
+        this.configData?.marketSegment &&
+          !this.configData?.marketSegment.some((item) => item.value === res) &&
           this.configData.marketSegment.push({ label: res, value: res });
-        marketSegmentControl.patchValue(res);
+        marketSegmentControl.patchValue(res, { emitEvent: false });
       }
     });
 
     sourceControl.valueChanges.subscribe((res) => {
       if (res) {
-        !this.configData?.source?.some((item) => item.value === res) &&
+        this.configData?.source &&
+          !this.configData?.source?.some((item) => item.value === res) &&
           this.configData.source.push({ label: res, value: res });
         this.initSourceDetails(res);
         !this.editMode && this.sourceNameControl.reset();
@@ -299,7 +301,7 @@ export class BookingInfoComponent implements OnInit {
           this.inputControls.reservationInformation.patchValue(
             {
               marketSegment: res.marketSegment,
-              sourceControl: res.source,
+              source: res.source,
             },
             { emitEvent: false }
           );
@@ -365,9 +367,9 @@ export class BookingInfoComponent implements OnInit {
   }
 
   updateValueAndValidity(control: AbstractControl) {
-    control.reset();
+    control.reset({ emitEvent: false });
     control.clearValidators();
-    control.updateValueAndValidity();
+    control.updateValueAndValidity({ emitEvent: false });
   }
 
   setupControl(control: AbstractControl, validator: ValidatorFn[]) {
@@ -386,7 +388,7 @@ export class BookingInfoComponent implements OnInit {
         this.configData = new BookingConfig().deserialize(
           response.bookingConfig
         );
-        this.listenForSourceChanges();
+        !this.reservationId && this.listenForSourceChanges();
       });
     this.configService.getCountryCode().subscribe((res) => {
       const data = new CountryCodeList().deserialize(res);

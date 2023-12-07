@@ -5,6 +5,8 @@ import { SnackBarService } from '@hospitality-bot/shared/material';
 import { RoutesConfigService } from '@hospitality-bot/admin/core/theme';
 import { invoiceRoutes } from '../../constants/routes';
 import { MenuItem } from 'primeng/api';
+import { AdminDetailsService } from 'libs/admin/reservation/src/lib/services/admin-details.service';
+import { ReservationService } from 'libs/admin/reservation/src/lib/services/reservation.service';
 
 @Component({
   selector: 'hospitality-bot-preview',
@@ -21,6 +23,7 @@ export class PreviewComponent implements OnInit {
   failedToLoad = false;
   pageTitle = 'Preview Invoice';
   isPrintRate = true;
+  isCheckIn = false;
   // items = [
   //   {
   //     label: 'Generate Proforma',
@@ -36,7 +39,9 @@ export class PreviewComponent implements OnInit {
     private invoiceService: InvoiceService,
     private activatedRoute: ActivatedRoute,
     private snackbarService: SnackBarService,
-    private routesConfigService: RoutesConfigService
+    private routesConfigService: RoutesConfigService,
+    private adminDetailsService: AdminDetailsService,
+    private reservationService: ReservationService
   ) {}
 
   ngOnInit(): void {
@@ -57,6 +62,9 @@ export class PreviewComponent implements OnInit {
       () => {},
       () => (this.isLoading = false)
     );
+    this.invoiceService.isCheckIn.subscribe((res) => {
+      if (typeof res === 'boolean') this.isCheckIn = res;
+    });
     this.invoiceService.isPrintRate.subscribe((res) => {
       if (typeof res === 'boolean') {
         this.isPrintRate = res;
@@ -100,8 +108,7 @@ export class PreviewComponent implements OnInit {
     this.routesConfigService.navRoutesChanges.subscribe((navRoutesRes) => {
       this.navRoutes = [...navRoutesRes, ...this.navRoutes];
     });
-    this.navRoutes[2].link = this.navRoutes[2].link+ '/'+ this.reservationId;
-
+    this.navRoutes[2].link = this.navRoutes[2].link + '/' + this.reservationId;
   }
 
   handleGenerateInvoice() {
@@ -131,5 +138,37 @@ export class PreviewComponent implements OnInit {
         panelClass: 'success',
       });
     });
+  }
+
+  handleCheckout() {
+    this.adminDetailsService.openJourneyDialog({
+      title: 'Manual Checkout',
+      description: 'Guest is about to checkout',
+      question: 'Are you sure you want to continue?',
+      buttons: {
+        cancel: {
+          label: 'Cancel',
+          context: '',
+        },
+        accept: {
+          label: 'Accept',
+          context: this,
+          handler: {
+            fn_name: 'manualCheckoutfn',
+            args: [],
+          },
+        },
+      },
+    });
+  }
+
+  manualCheckoutfn() {
+    this.reservationService
+      .manualCheckout(this.reservationId)
+      .subscribe((res) => {
+        this.snackbarService.openSnackBarAsText('Checkout completed.', '', {
+          panelClass: 'success',
+        });
+      });
   }
 }

@@ -1,13 +1,14 @@
 <div class="wrapper">
   <hospitality-bot-navigation-header [heading]="pageTitle" [routes]="navRoutes">
     <ng-container *ngIf="!isLoading">
-      <!-- <hospitality-bot-button
-        label="Email Invoice"
+      <hospitality-bot-button
+        *ngIf="isCheckin"
+        label="Checkout"
         variant="outlined"
-        (onClick)="handleEmailInvoice()"
+        (onClick)="handleCheckout()"
         [isLoading]="loadingPdf"
-        [disabled]="failedToLoad || !isPrintRate"
-      ></hospitality-bot-button> -->
+        [disabled]="failedToLoad"
+      ></hospitality-bot-button>
 
       <!-- <hospitality-bot-button
         *ngIf="isInvoiceGenerated"

@@ -2,7 +2,9 @@
   header="Payment Method"
   *ngIf="isConfirmedReservation && !isCheckedout"
   [formGroup]="parentFormGroup"
-  [selected]="expandAccordion"
+  #accordionTab
+  [selected]="isAccordionTabOpened"
+  (onTabToggle)="onAccordionTabToggle($event)"
 >
   <div class="form-block" formGroupName="paymentMethod">
     <hospitality-bot-select-group
@@ -40,7 +42,7 @@
       label="Transaction ID"
       [props]="{ placeholder: 'Enter' }"
     ></hospitality-bot-input>
-    <div *ngIf="reservationId && selected" class="half-width">
+    <div *ngIf="reservationId && accordionTab?.selected" class="half-width">
       <hospitality-bot-button
         class="view-history-cta"
         variant="text"

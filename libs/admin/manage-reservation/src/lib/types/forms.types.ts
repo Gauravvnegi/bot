@@ -108,6 +108,8 @@ export type ReservationSummary = {
   };
   offerId?: string;
   guestId?: string;
+  source?: string;
+  sourceName?: string;
 };
 
 export type OccupancyDetails = {

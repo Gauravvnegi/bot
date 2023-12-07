@@ -25,7 +25,10 @@ import {
   ModalService,
   SnackBarService,
 } from '@hospitality-bot/shared/material';
-import { PaymentMethodList } from 'libs/admin/manage-reservation/src/lib/models/reservations.model';
+import {
+  PaymentMethodList,
+  ReservationCurrentStatus,
+} from 'libs/admin/manage-reservation/src/lib/models/reservations.model';
 import { ManageReservationService } from 'libs/admin/manage-reservation/src/lib/services/manage-reservation.service';
 import { ReservationService } from 'libs/admin/reservation/src/lib/services/reservation.service';
 import { errorMessages } from 'libs/admin/room/src/lib/constant/form';
@@ -99,6 +102,7 @@ export class InvoiceComponent implements OnInit {
   pmsBooking = false;
   isInvoiceDisabled = false;
   invoicePrepareRequest = false;
+  isCheckin = false;
 
   $subscription = new Subscription();
   typeSubscription: Subscription;
@@ -272,6 +276,11 @@ export class InvoiceComponent implements OnInit {
           this.invoicePrepareRequest = res.invoicePrepareRequest;
           this.pmsBooking = res.pmsBooking;
           if (this.pmsBooking) this.disableInvoice();
+          this.invoiceService.isCheckIn.next(
+            res?.status === ReservationCurrentStatus.DUEOUT ||
+              res?.status === ReservationCurrentStatus.INHOUSE
+          );
+
           this.isInitialized = true;
         })
     );
@@ -1311,7 +1320,7 @@ export class InvoiceComponent implements OnInit {
       transactionType: transactionType,
       date: settings.date ? settings.date : moment(new Date()).unix() * 1000,
     });
-    
+
     // Add discountType and discountValue only when type is 'discount'
     const data: BillItemFields = {
       ...baseData,

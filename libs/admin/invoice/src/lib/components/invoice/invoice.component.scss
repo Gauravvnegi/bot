@@ -228,6 +228,10 @@
   }
 }
 
+.payment-header {
+  margin-bottom: 10px;
+}
+
 .discount-row td {
   align-items: center;
   border-top: hidden;
@@ -263,6 +267,6 @@ input[disabled] {
   @include flex-justify-align-center;
 }
 
-.btn-wrapper{
+.btn-wrapper {
   display: flex;
 }

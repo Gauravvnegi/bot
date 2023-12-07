@@ -28,3 +28,9 @@
   align-items: center;
   height: 70vh;
 }
+
+:host ::ng-deep .tiered__wrapper {
+  .p-tieredmenu {
+    top: unset !important;
+  }
+}

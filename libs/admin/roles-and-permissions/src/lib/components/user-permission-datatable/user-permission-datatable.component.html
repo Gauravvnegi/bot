@@ -37,6 +37,7 @@
       (onRowSelect)="onRowSelect($event)"
       (onRowUnselect)="onRowUnselect($event)"
       (sortFunction)="customSort($event)"
+      (onHeaderCheckboxToggle)="onToggleSelectAll($event)"
       [customSort]="isCustomSort"
     >
       <ng-template pTemplate="caption">

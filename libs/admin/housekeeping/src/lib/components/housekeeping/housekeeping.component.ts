@@ -18,12 +18,13 @@ import {
   RoomList,
 } from 'libs/admin/room/src/lib/models/rooms-data-table.model';
 import { LazyLoadEvent } from 'primeng/api';
-import { Subscription, of } from 'rxjs';
+import { Subject, Subscription, of } from 'rxjs';
 import { debounceTime, switchMap } from 'rxjs/operators';
 import { roomStatusDetails } from '../../constant/room';
 import { houseKeepingRoutes } from '../../constant/routes';
 import { HousekeepingService } from '../../services/housekeeping.service';
 import { NightAuditService } from 'libs/admin/global-shared/src/lib/services/night-audit.service';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'hospitality-bot-housekeeping',
@@ -40,7 +41,7 @@ export class HousekeepingComponent extends BaseDatatableComponent
   navRoutes = [];
   useForm: FormGroup;
   first = 0;
-  loading: boolean = false;
+  loading: boolean = true;
   entityId: string;
   roomStatusDetails = roomStatusDetails;
   $subscription = new Subscription();
@@ -104,6 +105,7 @@ export class HousekeepingComponent extends BaseDatatableComponent
 
   listenForRoomTypeChange(): void {
     this.useForm.get('roomType').valueChanges.subscribe((value) => {
+      this.cancelRequests$.next();
       value.length > 0 ? this.getRoomList() : (this.values = []);
     });
   }
@@ -136,12 +138,14 @@ export class HousekeepingComponent extends BaseDatatableComponent
         this.values = updatedValues;
       });
   }
+  private cancelRequests$ = new Subject<void>();
 
   getRoomList(): void {
     this.loading = true;
     this.$subscription.add(
       this.housekeepingService
         .getList(this.entityId, this.getQueryConfig())
+        .pipe(takeUntil(this.cancelRequests$))
         .subscribe(
           (res) => {
             const roomList = new RoomList().deserialize(res);
@@ -159,8 +163,11 @@ export class HousekeepingComponent extends BaseDatatableComponent
 
             this.loading = false;
           },
-          () => {
+          (error) => {
+            this.loading = false;
             this.values = [];
+          },
+          () => {
             this.loading = false;
           }
         )

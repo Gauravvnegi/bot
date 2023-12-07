@@ -192,8 +192,8 @@ export class AddGuestComponent implements OnInit {
       componentRef.instance.onClose.subscribe((res) => {
         if (typeof res !== 'boolean') {
           this.selectedMember = {
-            label: res.companyName,
-            value: res.id,
+            label: res?.companyName,
+            value: res?.id,
           };
         }
         this.sidebarVisible = false;

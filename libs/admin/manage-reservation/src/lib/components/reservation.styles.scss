@@ -324,6 +324,7 @@
 }
 
 .view-history-cta {
-  display: flex;
-  justify-content: flex-end;
+  position: absolute;
+  bottom: 50px;
+  right: 0;
 }

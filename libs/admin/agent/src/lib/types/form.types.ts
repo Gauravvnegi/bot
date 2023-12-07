@@ -2,23 +2,22 @@ import { AdditionalFeature } from 'libs/admin/company/src/lib/types/response';
 
 export type AgentFormType = AdditionalFeature & {
   status: boolean;
-  name: string;
+  agencyName: string;
   email: string;
   cc: string;
   phoneNo: string;
   iataNo?: string;
-  agencyName: string;
+  salesPersonName: string;
   creditLimit: number;
   address: string;
   commissionType: string;
   commission: number;
-
 };
 
 export type GuestFormType = Omit<
   AgentFormType,
   | 'status'
-  | 'name'
+  | 'agencyName'
   | 'address'
   | 'commissionType'
   | 'commission'

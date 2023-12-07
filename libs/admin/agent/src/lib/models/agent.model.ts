@@ -6,10 +6,10 @@ import { DateService } from '@hospitality-bot/shared/utils';
 import { FormGroup } from '@angular/forms';
 export class AgentModel {
   id: string;
-  name: string;
+  agencyName: string;
   code: number;
   verified: boolean;
-  agencyName: string;
+  salesPersonName: string;
   creditLimit: number;
   creditLimitUsed: number;
   iataNo: number;
@@ -22,10 +22,9 @@ export class AgentModel {
   createdString: string;
 
   static mapFormData(form: AgentFormType) {
-    const name = form.name.split(' ');
     let data: AgentTableResponse = {
-      firstName: name[0] ?? '',
-      lastName: name[1] ?? '',
+      firstName: form.agencyName ?? '',
+      lastName: '',
       contactDetails: {
         cc: form.cc,
         contactNumber: form.phoneNo,
@@ -45,13 +44,12 @@ export class AgentModel {
         countryCode: form?.address['country'] ?? '',
         postalCode: form?.address['postalCode'] ?? '',
       },
-      salesPersonName: form?.agencyName,
+      salesPersonName: form?.salesPersonName,
       creditLimit: form?.creditLimit,
       status: form.status,
       marketSegment: form.marketSegment,
       businessSource: form.businessSource,
       billingInstructions: form.billingInstructions,
-
     };
 
     return data;
@@ -61,12 +59,12 @@ export class AgentModel {
     const address = data.address;
     form.patchValue({
       packageCode: '#' + data.code,
-      name: data.firstName,
+      agencyName: data.firstName,
       email: data.contactDetails.emailId,
       cc: data.contactDetails.cc,
       phoneNo: data.contactDetails.contactNumber,
       iataNo: data.iataNumber,
-      agencyName: data?.salesPersonName,
+      salesPersonName: data?.salesPersonName,
       creditLimit: data?.creditLimit,
       address: {
         formattedAddress: `${address.addressLine1}, ${address.city}, ${address.countryCode}, ${address.postalCode}, ${address.state}`,
@@ -86,10 +84,11 @@ export class AgentModel {
 
   static resetForm(form: FormGroup) {
     form.patchValue({
-      name: '',
+      agencyName: '',
       email: '',
       phoneNo: '',
       iataNo: '',
+      salesPersonName: '',
       company: '',
       address: {},
       commission: '',
@@ -100,14 +99,14 @@ export class AgentModel {
     const contact = input.contactDetails;
     Object.assign(this, {
       id: input.id,
-      name: input.firstName,
+      agencyName: input?.firstName,
       code: input.code,
       verified: input.isVerified,
       iataNo: input.iataNumber,
       email: contact.emailId,
       phoneNo: `${contact.cc}-${contact.contactNumber}`,
       commissionType: input.priceModifierType,
-      agencyName: input?.salesPersonName,
+      salesPersonName: input?.salesPersonName,
       creditLimit: input.creditLimit,
       commission: input.priceModifierValue,
       status: input.status,

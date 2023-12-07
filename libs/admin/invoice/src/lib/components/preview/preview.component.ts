@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { RoutesConfigService } from '@hospitality-bot/admin/core/theme';
 import { invoiceRoutes } from '../../constants/routes';
+import { MenuItem } from 'primeng/api';
 
 @Component({
   selector: 'hospitality-bot-preview',
@@ -28,6 +29,9 @@ export class PreviewComponent implements OnInit {
   //     },
   //   },
   // ];
+
+  invoiceButtons: MenuItem[];
+
   constructor(
     private invoiceService: InvoiceService,
     private activatedRoute: ActivatedRoute,
@@ -54,7 +58,27 @@ export class PreviewComponent implements OnInit {
       () => (this.isLoading = false)
     );
     this.invoiceService.isPrintRate.subscribe((res) => {
-      if (typeof res === 'boolean') this.isPrintRate = res;
+      if (typeof res === 'boolean') {
+        this.isPrintRate = res;
+        this.invoiceButtons = this.isPrintRate
+          ? [
+              {
+                label: 'Email Invoice',
+                command: () => {
+                  this.handleEmailInvoice();
+                },
+              },
+            ]
+          : [
+              {
+                label: 'Email Invoice',
+                command: () => {
+                  this.handleEmailInvoice();
+                },
+                disabled: true,
+              },
+            ];
+      }
     });
   }
 

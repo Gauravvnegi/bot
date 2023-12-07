@@ -455,14 +455,6 @@
           label="Cashier Name"
           maxLength="60"
         ></hospitality-bot-input> -->
-        <hospitality-bot-input
-          class="half-width"
-          controlName="remarks"
-          [props]="{
-            placeholder: 'Enter'
-          }"
-          label="Your Inclusions/remarks:"
-        ></hospitality-bot-input>
         <hospitality-bot-select-group
           class="full-width"
           controlName="paymentMethod"
@@ -491,6 +483,14 @@
             placeholder: 'Enter'
           }"
           label="Transaction ID"
+        ></hospitality-bot-input>
+        <hospitality-bot-input
+          class="half-width"
+          controlName="remarks"
+          [props]="{
+            placeholder: 'Enter'
+          }"
+          label="Your Inclusions/remarks:"
         ></hospitality-bot-input>
       </ng-container>
     </div>

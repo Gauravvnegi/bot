@@ -151,6 +151,7 @@ export class AddReservationComponent extends BaseReservationComponent
         sourceName: ['', [Validators.required, Validators.maxLength(60)]],
         otaSourceName: [''],
         agentSourceName: [''],
+        companySourceName: [''],
         marketSegment: ['', Validators.required],
       }),
       offerId: [''],

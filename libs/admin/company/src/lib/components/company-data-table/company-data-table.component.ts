@@ -226,7 +226,7 @@ export class CompanyDataTableComponent extends BaseDatatableComponent
           type: 'COMPANY',
           entityId: this.entityId,
           entityState: this.selectedTab,
-          pagination: true,
+          pagination: false,
           limit: this.totalRecords,
         },
       ]),

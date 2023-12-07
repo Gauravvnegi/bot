@@ -325,6 +325,7 @@ export class FormComponent implements OnInit {
     const registerScroll = () => {
       const menu = this.menuNode;
       menu?.addEventListener('scroll', () => {
+        console.log('s');
         if (this.stopEmission) return;
         if (
           !this.isLoading &&

@@ -91,7 +91,7 @@ export class TableList {
     input.forEach((item) => {
       const billItem = new TableData().deserialize({ ...item });
       this.records.push(billItem);
-      this.serviceIds.add(billItem.reservationItemId);
+      this.serviceIds.add(billItem.itemId);
     });
 
     return this;
@@ -209,11 +209,12 @@ export class Service {
 export class ServiceList {
   allService: Service[];
 
-  deserialize(input: ServiceListResponse) {
+  deserialize(input: ServiceListResponse, removeIds: Set<string>) {
     this.allService = new Array<Service>();
 
-    input.paidPackages?.forEach((item) => {
-      this.allService.push(new Service().deserialize(item));
+    input?.paidPackages?.forEach((item) => {
+      if (!removeIds.has(item.id))
+        this.allService.push(new Service().deserialize(item));
     });
 
     return this;

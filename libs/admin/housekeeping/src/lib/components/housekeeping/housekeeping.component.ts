@@ -102,6 +102,22 @@ export class HousekeepingComponent extends BaseDatatableComponent
     this.listenForSearch();
   }
 
+  listenForRoomTypeChange(): void {
+    this.useForm.get('roomType').valueChanges.subscribe((value) => {
+      value.length > 0 ? this.getRoomList() : (this.values = []);
+    });
+  }
+
+  listenForRefreshData(): void {
+    this.$subscription.add(
+      this.housekeepingService.refreshData.subscribe((value) => {
+        if (value) {
+          this.getRoomList();
+        }
+      })
+    );
+  }
+
   listenForSearch() {
     const { search } = this.useForm.controls;
     search.valueChanges
@@ -119,16 +135,6 @@ export class HousekeepingComponent extends BaseDatatableComponent
       .subscribe((updatedValues) => {
         this.values = updatedValues;
       });
-  }
-
-  listenForRefreshData(): void {
-    this.$subscription.add(
-      this.housekeepingService.refreshData.subscribe((value) => {
-        if (value) {
-          this.getRoomList();
-        }
-      })
-    );
   }
 
   getRoomList(): void {
@@ -201,12 +207,6 @@ export class HousekeepingComponent extends BaseDatatableComponent
         (error) => {}
       )
     );
-  }
-
-  listenForRoomTypeChange(): void {
-    this.useForm.get('roomType').valueChanges.subscribe((value) => {
-      this.getRoomList();
-    });
   }
 
   ngOnDestroy(): void {

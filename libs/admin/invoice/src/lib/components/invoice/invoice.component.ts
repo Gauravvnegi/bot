@@ -155,6 +155,14 @@ export class InvoiceComponent implements OnInit {
     this.initPageHeaders();
   }
 
+  showDate = true;
+  dateReflectionTrigger() {
+    this.showDate = false;
+    setTimeout(() => {
+      this.showDate = true;
+    }, 0);
+  }
+
   get inputControl() {
     return this.useForm.controls as Record<keyof UseForm, AbstractControl>;
   }
@@ -533,6 +541,8 @@ export class InvoiceComponent implements OnInit {
 
     this.registerServiceSelection();
     this.listenTableChanges();
+
+    this.dateReflectionTrigger();
   }
 
   get tableValue() {
@@ -679,6 +689,8 @@ export class InvoiceComponent implements OnInit {
 
     // Step 3: Adjust the FormArray's length or resize it if necessary
     this.tableFormArray.updateValueAndValidity();
+
+    this.dateReflectionTrigger();
   }
 
   removeDiscountItems(itemId: string) {
@@ -691,6 +703,7 @@ export class InvoiceComponent implements OnInit {
       this.tableFormArray.removeAt(this.tableFormArray.controls.indexOf(item))
     );
     this.tableFormArray.updateValueAndValidity();
+    this.dateReflectionTrigger();
   }
 
   listenTableChanges() {
@@ -1325,6 +1338,15 @@ export class InvoiceComponent implements OnInit {
       settings.entryIdx || settings.entryIdx === 0
         ? settings.entryIdx
         : this.tableFormArray.length;
+
+    console.log('entryIdx', entryIdx);
+    console.log('addNewCharges', {
+      rowIndex: entryIdx,
+      isNewEntry: true,
+      isDebit: true,
+      isDisabled: true,
+      date: settings?.date,
+    });
 
     this.addNewCharges({
       rowIndex: entryIdx,

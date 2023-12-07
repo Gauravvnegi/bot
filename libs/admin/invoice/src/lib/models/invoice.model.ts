@@ -88,8 +88,26 @@ export class TableList {
     this.records = new Array<TableData>();
     this.serviceIds = new Set<string>();
 
+    /**
+     * Logic Here
+     * Tax has id of main-item as itemId
+     * Discount has itemId of main-item as itemId
+     */
+    const idOfItemIdRecord = input.reduce((value, item) => {
+      if (item.isCoupon || item.isRefund || item.taxId) {
+        return value;
+      }
+      return {
+        ...value,
+        [item.itemId]: item.id,
+      };
+    }, {});
+
     input.forEach((item) => {
-      const billItem = new TableData().deserialize({ ...item });
+      const billItem = new TableData().deserialize(
+        { ...item },
+        idOfItemIdRecord
+      );
       this.records.push(billItem);
       this.serviceIds.add(billItem.itemId);
     });
@@ -120,7 +138,15 @@ export class TableData {
   discountType?: string;
   discountValue?: number;
 
-  deserialize(input: BillItem) {
+  deserialize(input: BillItem, idOfItemIdRecord: Record<string, string>) {
+    let reservationId = input.id;
+    if (input?.taxId) {
+      reservationId = input.itemId;
+    }
+    if (input?.isCoupon) {
+      reservationId = idOfItemIdRecord[input.itemId];
+    }
+
     this.key = input.id;
     this.billItemId = input.id;
     this.description = input.description;
@@ -137,7 +163,7 @@ export class TableData {
     this.isNonEditableBillItem = !input.itemId;
     this.isMiscellaneous = !input.itemId && !input.isCoupon;
     this.isAddOn = input.isAddOn;
-    this.reservationItemId = input?.taxId ? input.itemId : input.id;
+    this.reservationItemId = reservationId;
     this.isRefund = input?.isRefund;
     return this;
   }

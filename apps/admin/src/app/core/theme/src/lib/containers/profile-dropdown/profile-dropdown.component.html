@@ -1,9 +1,13 @@
 <div class="profile__dropdown">
-  <div class="profile__dropdown__image">
+  <div class="profile__dropdown__image" *ngIf="!showImage">
     <p class="profile-initial">
       {{ userService.userDetails.getProfileNickName() }}
     </p>
   </div>
+  <div class="profile-image" *ngIf="showImage">
+    <img [src]="profilePic" (error)="handleImageError()" />
+  </div>
+
   <span class="dropdown-text">{{ userService.userDetails.getFullName() }}</span>
   <mat-icon class="material-icons" matPrefix>keyboard_arrow_down</mat-icon>
   <div class="dropdown-list">

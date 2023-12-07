@@ -219,7 +219,7 @@ export class AgentDataTableComponent extends BaseDatatableComponent
           type: 'AGENT',
           entityId: this.entityId,
           entityState: this.selectedTab,
-          pagination: true,
+          pagination: false,
           limit: this.totalRecords,
         },
       ]),

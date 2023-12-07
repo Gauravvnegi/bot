@@ -191,11 +191,11 @@ export class GuestDatatableComponent extends BaseDatatableComponent
           order: 'DESC',
           type: 'GUEST',
           entityType: this.selectedTab,
-          pagination: true,
+          pagination: false,
           limit: this.totalRecords,
         },
         ...this.getSelectedQuickReplyFilters(),
-        ...this.selectedRows.map((item) => ({ ids: item.booking.bookingId })),
+        ...this.selectedRows.map((item) => ({ ids: item?.id })),
       ]),
     };
     this.$subscription.add(

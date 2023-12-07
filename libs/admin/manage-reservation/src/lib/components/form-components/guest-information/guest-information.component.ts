@@ -136,9 +136,6 @@ export class GuestInformationComponent implements OnInit {
         cc: res.contactDetails.cc,
         email: res.contactDetails.emailId,
       };
-      setTimeout(() => {
-        this.formService.getSummary.next();
-      }, 100);
     });
   }
 
@@ -156,7 +153,6 @@ export class GuestInformationComponent implements OnInit {
           this.inputControls.offerId.reset();
         }
       });
-      this.formService.getSummary.next();
     }
   }
 

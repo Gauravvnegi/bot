@@ -71,6 +71,7 @@ export class RoomIteratorComponent extends IteratorComponent
   isDataInitialized = false;
   reinitializeRooms = false;
   updatedRoomsLoaded = false;
+  initItems = false;
 
   itemValuesCount = 0;
   selectedRoomNumber: string = '';
@@ -112,6 +113,7 @@ export class RoomIteratorComponent extends IteratorComponent
     this.listenForGlobalFilters();
     this.createNewFields(true);
     this.listenForFormChanges();
+    if (!this.reservationId) this.initItems = true;
   }
 
   initDetails() {
@@ -248,6 +250,7 @@ export class RoomIteratorComponent extends IteratorComponent
         },
         { emitEvent: false }
       );
+      this.initItems = true;
     });
   }
 

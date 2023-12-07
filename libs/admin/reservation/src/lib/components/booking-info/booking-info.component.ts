@@ -289,15 +289,13 @@ export class BookingInfoComponent implements OnInit {
     // Map source data for edit reservation
     this.$subscription.add(
       this.formService.sourceData.subscribe((res) => {
-        if (res && this.configData) {
+        if (res) {
           this.editMode = true;
           this.selectedAgent = res.agent && {
-            label: res?.agent?.agencyName,
+            label: res?.agent?.firstName,
             value: res?.agent?.id,
-            extras: `${res?.agent?.salesPersonName}`,
             ...res?.agent,
           };
-
           this.inputControls.reservationInformation.patchValue(
             {
               marketSegment: res.marketSegment,
@@ -414,9 +412,8 @@ export class BookingInfoComponent implements OnInit {
   agentChange(event) {
     if (event) {
       this.selectedAgent = {
-        label: event?.company?.firstName,
+        label: event?.firstName,
         value: event?.id,
-        extras: `${event?.firstName} ${event?.lastName}`,
         ...event,
       };
       !this.reservationId &&
@@ -424,6 +421,7 @@ export class BookingInfoComponent implements OnInit {
           this.selectedAgent?.marketSegment,
           { emitEvent: false }
         );
+      this.formService.getSummary.next();
     }
   }
 
@@ -438,6 +436,7 @@ export class BookingInfoComponent implements OnInit {
           this.selectedAgent?.marketSegment,
           { emitEvent: false }
         );
+      this.formService.getSummary.next();
     }
   }
 
@@ -460,9 +459,8 @@ export class BookingInfoComponent implements OnInit {
       componentRef.instance.onClose.subscribe((res) => {
         if (typeof res !== 'boolean') {
           this.selectedAgent = {
-            label: `${res?.company?.firstName}`,
+            label: `${res?.firstName}`,
             value: res?.id,
-            extras: `${res?.firstName} ${res?.lastName}`,
             ...res,
           };
           res.marketSegment &&

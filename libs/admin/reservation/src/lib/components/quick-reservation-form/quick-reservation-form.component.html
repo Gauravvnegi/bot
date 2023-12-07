@@ -101,6 +101,7 @@
             }"
             (clickedOption)="guestChange($event)"
             (openSidebar)="createGuest()"
+            [initItems]="true"
           ></hospitality-bot-quick-select>
         </ng-container>
       </hospitality-bot-booking-info>
@@ -132,6 +133,7 @@
             }"
             (clickedOption)="roomTypeChange($event)"
             [reinitialize]="reinitializeRooms"
+            [initItems]="true"
           ></hospitality-bot-quick-select>
           <hospitality-bot-select
             class="half-width select"

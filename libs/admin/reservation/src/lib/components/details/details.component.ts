@@ -1058,7 +1058,11 @@ export class DetailsComponent implements OnInit, OnDestroy {
   }
 
   get checkForCancelBooking() {
-    return this.details.pmsStatus === 'CANCELED';
+    return this.details.pmsStatus && this.details.pmsStatus === 'CHECKEDOUT';
+  }
+
+  get checkForValidBooking() {
+    return this.details.pmsStatus && this.details.pmsStatus !== 'CHECKEDOUT';
   }
 
   get tabIndex() {

@@ -738,7 +738,7 @@ export class ReservationCalendarViewComponent implements OnInit {
       dialogConfig
     );
     detailCompRef.componentInstance.bookingId = reservationId;
-    detailCompRef.componentInstance.tabKey = 'payment_details';
+    detailCompRef.componentInstance.tabKey = 'guest_details';
     this.$subscription.add(
       detailCompRef.componentInstance.onDetailsClose.subscribe((res) => {
         detailCompRef.close();

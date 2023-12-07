@@ -215,6 +215,10 @@
     margin: 10px 0;
     cursor: pointer;
     background-color: #f8f9fb;
+    .offerHeader {
+      display: flex;
+      justify-content: space-between;
+    }
     .offerDescription {
       font-size: 12px;
       font-weight: 500;
@@ -239,12 +243,30 @@
   font-weight: 500;
   letter-spacing: 0.96px;
   color: #3b3b3b;
+  overflow: hidden;
+  max-width: 60%;
+  text-overflow: ellipsis;
 }
+
+.offerSummary {
+  display: flex;
+}
+
+// .offerData {
+//   font-size: 16px;
+//   font-weight: 400;
+//   letter-spacing: 0.96px;
+//   cursor: default;
+//   color: $grayMedium;
+// }
 
 :host ::ng-deep .dropdown-panel {
   .p-dropdown-panel {
     width: 300px !important;
   }
+}
+.offerValidity {
+  min-width: 130px;
 }
 
 .form-block {

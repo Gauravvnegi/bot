@@ -385,6 +385,7 @@ export class AddReservationComponent extends BaseReservationComponent
 
   getFormData() {
     // Summary data for booking summary
+    const source = this.reservationInfoControls.source?.value;
     const data: ReservationSummary = {
       from: this.reservationInfoControls.from.value,
       to: this.reservationInfoControls.to.value,
@@ -401,15 +402,6 @@ export class AddReservationComponent extends BaseReservationComponent
           maxAdult: item.get('adultCount').value,
         },
         id: item.get('id').value,
-        source: item.get('source')?.value,
-        sourceName:
-          (item.get('source')?.value === 'OTA' &&
-            item.get('otaSourceName')?.value) ||
-          (item.get('source')?.value === 'AGENT' &&
-            item.get('agentSourceName')?.value) ||
-          (item.get('source')?.value === 'COMPANY' &&
-            item.get('companySourceName')?.value) ||
-          item.get('sourceName')?.value,
       })),
       offerId: this.inputControls.offerId.value
         ? this.inputControls.offerId.value
@@ -417,6 +409,19 @@ export class AddReservationComponent extends BaseReservationComponent
       guestId: this.inputControls.guestInformation.get('guestDetails')?.value
         ? this.inputControls.guestInformation.get('guestDetails')?.value
         : null,
+      source: source || null,
+      sourceName:
+        (source &&
+          source === 'OTA' &&
+          this.reservationInfoControls.otaSourceName?.value) ||
+        (source &&
+          source === 'AGENT' &&
+          this.reservationInfoControls.agentSourceName?.value) ||
+        (source &&
+          source === 'COMPANY' &&
+          this.reservationInfoControls.companySourceName?.value) ||
+        this.reservationInfoControls?.sourceName?.value ||
+        null,
     };
 
     return data;

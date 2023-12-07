@@ -161,8 +161,7 @@
             key: 'records',
             values: {
               label: 'firstName',
-              value: 'id',
-              extras: 'salesPersonName'
+              value: 'id'
             }
           },
           queryParams: { type: 'AGENT' },
@@ -171,8 +170,7 @@
             response: true,
             values: {
               label: 'firstName',
-              value: 'id',
-              extras: 'salesPersonName'
+              value: 'id'
             }
           },
           searchQueryParams: { type: 'AGENT' }
@@ -182,6 +180,7 @@
         }"
         (clickedOption)="agentChange($event)"
         (openSidebar)="showAgent()"
+        [initItems]="true"
       ></hospitality-bot-quick-select>
 
       <hospitality-bot-quick-select
@@ -223,6 +222,7 @@
         }"
         (clickedOption)="companyChange($event)"
         (openSidebar)="showCompany()"
+        [initItems]="true"
       ></hospitality-bot-quick-select>
 
       <!-- (createMembers)="createNewAgent()" -->

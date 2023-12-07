@@ -103,7 +103,8 @@ export class BaseReservationComponent {
           : this.reservationInfoControls.status;
 
       switch (true) {
-        case status === ReservationCurrentStatus.CHECKEDOUT:
+        case status === ReservationCurrentStatus.CHECKEDOUT ||
+          reservationType.value === ReservationType.CANCELED:
           this.userForm.disable();
           this.formService.disableBtn = true;
           this.disabledForm = true;
@@ -121,7 +122,6 @@ export class BaseReservationComponent {
           this.reservationInfoControls.reservationType.enable();
           break;
         case this.bookingType !== EntitySubType.ROOM_TYPE ||
-          reservationType.value === ReservationType.CANCELED ||
           journeyState === JourneyState.COMPLETED:
           this.userForm.disable({ emitEvent: false });
           this.formService.disableBtn = true;

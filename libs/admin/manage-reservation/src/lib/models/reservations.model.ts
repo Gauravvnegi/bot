@@ -27,6 +27,10 @@ import { ItemsData, OutletFormData } from '../types/forms.types';
 import { RoomReservationResponse } from '../types/response.type';
 import { RoomTypeForm } from 'libs/admin/room/src/lib/models/room.model';
 import { JourneyState, JourneyType } from '../constants/reservation';
+import {
+  OfferListResponse,
+  OfferResponse,
+} from 'libs/admin/offers/src/lib/types/response';
 /* Reservation */
 
 export class RoomReservation {
@@ -203,7 +207,7 @@ export class RoomTypeOptionList {
 
 export class OfferList {
   records: OfferData[];
-  deserialize(input) {
+  deserialize(input: OfferListResponse) {
     this.records =
       input?.offers.map((item) => new OfferData().deserialize(item)) ?? [];
     return this;
@@ -221,11 +225,17 @@ export class OfferData {
   id: string;
   name: string;
   description: string;
+  validDate: number;
+  discountType: string;
+  discountValue: number;
 
-  deserialize(input) {
+  deserialize(input: OfferResponse) {
     this.id = input.id ?? '';
     this.name = input.name ?? '';
     this.description = input.description ?? '';
+    this.validDate = input?.endDate ?? 0;
+    this.discountType = input?.discountType ?? null;
+    this.discountValue = input?.discountValue ?? 0;
     return this;
   }
 }

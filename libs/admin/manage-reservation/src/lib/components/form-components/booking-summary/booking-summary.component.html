@@ -145,7 +145,12 @@
         class="offer"
         (click)="offerSelect(item)"
       >
-        <div class="offerName">{{ item.name }}</div>
+        <div class="offerHeader">
+          <div class="offerName">{{ item.name }}</div>
+          <span class="offerValidity"
+            >Valid Till - {{ item?.validDate | date: 'dd/MM/yy' }}</span
+          >
+        </div>
         <div [innerHTML]="item.description" class="offerDescription"></div>
       </div>
     </ng-container>
@@ -220,8 +225,16 @@
             >Remove</span
           >
         </div>
-        <div class="offer">
+        <div class="offer offerSummary">
           <div class="offerName">{{ selectedOffer?.name }}</div>
+          <!-- <span
+            class="offerData"
+            *ngIf="selectedOffer?.discountType === 'PERCENTAGE'"
+            >({{ selectedOffer?.discountValue }} %)</span
+          >
+          <span class="offerData" *ngIf="selectedOffer?.discountType === 'FLAT'"
+            >({{ selectedOffer?.discountValue | currency: 'INR' }})</span
+          > -->
         </div>
       </ng-container>
       <ng-template #selectOffer>

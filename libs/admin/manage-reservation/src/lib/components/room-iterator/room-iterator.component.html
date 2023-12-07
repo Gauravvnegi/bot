@@ -98,6 +98,7 @@
               (clickedOption)="roomTypeChange($event, i)"
               (missingOption)="loadMoreRoomTypes($event, i)"
               [reinitialize]="reinitializeRooms"
+              [initItems]="initItems"
             ></hospitality-bot-quick-select>
           </div>
           <ng-container *ngIf="roomTypeArray.length > 1">

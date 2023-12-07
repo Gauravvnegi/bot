@@ -96,6 +96,10 @@ export class QuickSelectComponent extends FormComponent implements OnInit {
     this._qsProps = values;
   }
 
+  @Input() set initItems(value: boolean) {
+    value && this.getItems();
+  }
+
   @Output() clickedOption = new EventEmitter<Option>();
   @Output() missingOption = new EventEmitter<Option>();
   @Output() openSidebar = new EventEmitter<boolean>();
@@ -114,7 +118,6 @@ export class QuickSelectComponent extends FormComponent implements OnInit {
 
   ngOnInit(): void {
     this.listenControl();
-    this.getItems();
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -258,7 +261,7 @@ export class QuickSelectComponent extends FormComponent implements OnInit {
             // To be improved later.
             this.controlContainer.control
               .get(this.controlName)
-              .patchValue(
+              .setValue(
                 this.controlContainer.control.get(this.controlName)?.value,
                 { emitEvent: true }
               );

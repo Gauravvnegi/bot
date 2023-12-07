@@ -299,14 +299,20 @@
         >
           <div class="button-wrapper">
             <hospitality-bot-button
-              *ngIf="isFinanceSubscribed && !checkForCancelBooking"
+              *ngIf="isFinanceSubscribed"
               [label]="'Manage Invoice'"
               (click)="manageInvoice()"
               variant="outlined"
             ></hospitality-bot-button>
             <hospitality-bot-button
-              *ngIf="checkForCancelBooking"
+              *ngIf="details?.pmsStatus && details?.pmsStatus === 'CHECKEDOUT'"
               label="View Booking"
+              variant="outlined"
+              (click)="editBooking()"
+            ></hospitality-bot-button>
+            <hospitality-bot-button
+              *ngIf="details?.pmsStatus && details?.pmsStatus !== 'CHECKEDOUT'"
+              label="Edit Booking"
               variant="outlined"
               (click)="editBooking()"
             ></hospitality-bot-button>
@@ -355,12 +361,6 @@
                   ></hospitality-bot-button>
                 </ng-container>
               </ng-container>
-              <hospitality-bot-button
-                *ngIf="isManageBookingSubscribed"
-                label="Edit Booking"
-                variant="outlined"
-                (click)="editBooking()"
-              ></hospitality-bot-button>
             </ng-template>
             <ng-template #CHECKIN>
               <ng-container [ngSwitch]="details.currentJourneyDetails.status">
@@ -376,7 +376,7 @@
                     variant="outlined"
                   ></hospitality-bot-button> -->
                   <p-splitButton
-                  *ngIf="!(checkForExpiredBooking || checkForCancelBooking)"
+                    *ngIf="!(checkForExpiredBooking || checkForCancelBooking)"
                     class="download-btn"
                     label="CheckIn"
                     (onClick)="manualCheckin()"
@@ -448,12 +448,6 @@
                   ></p-splitButton> -->
                 </ng-container>
               </ng-container>
-              <hospitality-bot-button
-                *ngIf="isManageBookingSubscribed"
-                label="Edit Booking"
-                variant="outlined"
-                (click)="editBooking()"
-              ></hospitality-bot-button>
             </ng-template>
             <ng-template #CHECKOUT
               ><ng-container [ngSwitch]="details.currentJourneyDetails.status">
@@ -500,14 +494,7 @@
                     [model]="checkOutOptions"
                   ></p-splitButton> -->
                 </ng-container>
-                <ng-container *ngSwitchCase="'COMPLETED'">
-                  <hospitality-bot-button
-                    *ngIf="isManageBookingSubscribed"
-                    label="View Booking"
-                    variant="outlined"
-                    (click)="editBooking()"
-                  ></hospitality-bot-button>
-                </ng-container>
+                <ng-container *ngSwitchCase="'COMPLETED'"> </ng-container>
                 <ng-container *ngSwitchCase="'FAILED'">
                   <hospitality-bot-button
                     *ngIf="isPrintRate"
@@ -519,12 +506,6 @@
                     label="Checkout"
                     (click)="manualCheckout()"
                     variant="outlined"
-                  ></hospitality-bot-button>
-                  <hospitality-bot-button
-                    *ngIf="isManageBookingSubscribed"
-                    label="View Booking"
-                    variant="outlined"
-                    (click)="editBooking()"
                   ></hospitality-bot-button>
                   <!-- <p-splitButton
                     class="download-btn"

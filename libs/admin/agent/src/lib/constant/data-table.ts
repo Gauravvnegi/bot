@@ -36,7 +36,7 @@ export const cols: Cols[] = [
   },
   {
     field: 'creditLimit',
-    header: 'Credit Limit',
+    header: 'Used/Total Credit Limit',
     sortType: 'string',
     width: '6%',
   },

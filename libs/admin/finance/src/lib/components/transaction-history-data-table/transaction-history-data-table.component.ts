@@ -88,7 +88,7 @@ export class TransactionHistoryDataTableComponent extends BaseDatatableComponent
         );
         this.values = transactionHistory.records;
         this.initFilters(
-          transactionHistory.entityTypeCounts,
+          {},
           transactionHistory.entityStateCounts,
           transactionHistory.totalRecords,
           this.transactionStatus
@@ -105,7 +105,7 @@ export class TransactionHistoryDataTableComponent extends BaseDatatableComponent
   getQueryConfig(): QueryConfig {
     const config = {
       params: this.adminUtilityService.makeQueryParams([
-        ...this.getSelectedQuickReplyFilters(),
+        ...this.getSelectedQuickReplyFilters({ key: 'entityState' }),
         ...this.globalQueries,
         {
           entityId: this.entityId,

@@ -1,4 +1,4 @@
-export type TransactionStatus = 'SUCCESS' | 'REFUND' | 'FAILURE';
+export type TransactionStatus = 'PAID' | 'REFUND' | 'FAILED';
 
 export type InvoiceHistoryResponse = {
   totalAmount: number;

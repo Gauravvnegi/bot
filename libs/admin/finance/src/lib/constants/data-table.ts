@@ -168,11 +168,11 @@ export const transactionStatus: Record<
   TransactionStatus,
   { label: string; type: FlagType }
 > = {
-  SUCCESS: {
+  PAID: {
     label: 'Paid',
     type: 'success',
   },
-  FAILURE: {
+  FAILED: {
     label: 'Failed',
     type: 'failed',
   },

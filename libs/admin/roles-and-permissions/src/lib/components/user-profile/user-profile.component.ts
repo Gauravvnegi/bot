@@ -361,9 +361,16 @@ export class UserProfileComponent implements OnInit {
         products.includes(item.value)
       );
 
-      this.tabIdx = this.tabListItems.findIndex(
+      const selectedProductIdx = this.tabListItems.findIndex(
         (item) => item.value === this.manageProduct
       );
+
+      if (selectedProductIdx === -1) {
+        this.manageProduct = this.tabListItems[0].value;
+        this.tabIdx = 0;
+      } else {
+        this.tabIdx = selectedProductIdx;
+      }
 
       // this.departments = this.adminToModDetails.departments.filter(
       //   (item: any) => products.includes(item.productType)

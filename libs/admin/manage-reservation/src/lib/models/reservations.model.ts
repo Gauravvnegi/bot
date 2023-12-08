@@ -91,6 +91,7 @@ export class RoomReservation {
     this.agentName = input?.agent
       ? `${input?.agent?.firstName} ${input?.agent?.lastName}`
       : '';
+    this.companyName = input?.company?.firstName ?? '';
     return this;
   }
 
@@ -286,6 +287,7 @@ export class ReservationFormData {
     this.totalAmount = input.pricingDetails.totalAmount ?? 0;
     this.journeyState = input.journeysStatus.CHECKIN;
     this.currentState = input.status;
+    this.printRate = input?.printRate;
     return this;
   }
 }

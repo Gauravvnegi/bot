@@ -83,7 +83,7 @@ export class BookingInfoComponent implements OnInit {
   fromDateValue = new Date();
   toDateValue = new Date();
   selectedAgent: AgentTableResponse;
-  selectedGuest: Option;
+  selectedCompany: Option;
 
   $subscription = new Subscription();
 
@@ -298,7 +298,10 @@ export class BookingInfoComponent implements OnInit {
             value: res?.agent?.id,
             ...res?.agent,
           };
-
+          this.selectedCompany = res.company && {
+            label: res?.company?.firstName,
+            value: res?.company?.id,
+          };
           this.inputControls.reservationInformation.patchValue({
             marketSegment: res.marketSegment,
             source: res.source,
@@ -431,7 +434,7 @@ export class BookingInfoComponent implements OnInit {
 
   companyChange(event) {
     if (event.id) {
-      this.selectedGuest = {
+      this.selectedCompany = {
         label: event?.firstName,
         value: event?.id,
       };
@@ -499,7 +502,7 @@ export class BookingInfoComponent implements OnInit {
       componentRef.instance.isSideBar = true;
       componentRef.instance.onClose.subscribe((res) => {
         if (typeof res !== 'boolean') {
-          this.selectedGuest = {
+          this.selectedCompany = {
             label: `${res?.companyName}`,
             value: res?.id,
           };

@@ -310,6 +310,7 @@ export class QuickReservationFormComponent implements OnInit {
               sourceName: data.reservationInformation.sourceName,
               agent: res?.agent ?? null,
               marketSegment: data.reservationInformation?.marketSegment,
+              company: res?.company ?? null,
             });
             this.roomOptions = this.defaultRoomType.rooms.map((room) => ({
               label: room.roomNumber.toString(),

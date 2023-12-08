@@ -250,6 +250,7 @@ export class AddReservationComponent extends BaseReservationComponent
               sourceName: sourceName,
               agent: response?.agent ?? null,
               marketSegment: reservationInfo?.marketSegment,
+              company: response?.company ?? null,
             });
             if (nextStates)
               this.reservationTypes = nextStates.map((item) => ({

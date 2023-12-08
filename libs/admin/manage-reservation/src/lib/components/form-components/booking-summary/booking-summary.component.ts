@@ -40,6 +40,7 @@ import {
   RoomReservationFormData,
 } from '../../../types/forms.types';
 import { DetailsComponent } from '@hospitality-bot/admin/reservation';
+import { ReservationType } from '../../../constants/reservation-table';
 
 @Component({
   selector: 'hospitality-bot-booking-summary',
@@ -155,7 +156,11 @@ export class BookingSummaryComponent implements OnInit {
         this.bookingType
       );
     if (this.reservationId) {
-      this.updateReservation(data, id, type);
+      if (data.reservationType === ReservationType.CANCELED) {
+        this.openCancelPopup(data, id, type);
+      } else {
+        this.updateReservation(data, id, type);
+      }
     } else this.createReservation(data, id, type);
   }
 
@@ -283,6 +288,77 @@ export class BookingSummaryComponent implements OnInit {
     });
   }
 
+  openCancelPopup(
+    data: RoomReservationFormData,
+    entityId: string,
+    type: string,
+    reservationType = ReservationType.CANCELED
+  ) {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = true;
+    const togglePopupCompRef = this.modalService.openDialog(
+      ModalComponent,
+      dialogConfig
+    );
+
+    togglePopupCompRef.componentInstance.content = {
+      heading: `Mark Reservation As ${
+        reservationType.charAt(0).toUpperCase() +
+        reservationType.slice(1).toLowerCase()
+      }`,
+      description: [
+        `You are about to mark this reservation as ${ReservationType.CANCELED}`,
+        `Are you Sure?`,
+        this.summaryData?.totalPaidAmount
+          ? ` A total of \u20B9 ${this.summaryData?.totalPaidAmount} is received for the reservation`
+          : '',
+      ],
+      isRemarks: true,
+    };
+
+    this.isBooking = false;
+    togglePopupCompRef.componentInstance.actions = [
+      {
+        label: 'Cancel & Settlement',
+        onClick: () => {
+          this.routesConfigService.navigate({
+            subModuleName: ModuleNames.INVOICE,
+            additionalPath: data.id,
+            queryParams: {
+              entityId: entityId,
+              type: EntitySubType.ROOM_TYPE,
+            },
+          });
+
+          this.modalService.close();
+        },
+        variant: 'outlined',
+      },
+      {
+        label: 'Yes',
+        onClick: (modelData: { remarks: string }) => {
+          let updatedData = { ...data, ...modelData };
+          this.updateReservation(updatedData, entityId, type);
+          this.modalService.close();
+        },
+        variant: 'contained',
+      },
+    ];
+
+    togglePopupCompRef.componentInstance.onClose.subscribe(() => {
+      this.modalService.close();
+    });
+  }
+
+  listenForReservationTypeChanges(): void {
+    this.reservationInfoControls.reservationType.valueChanges.subscribe(
+      (res) => {
+        if (res === ReservationType.CANCELED && this.reservationId) {
+        }
+      }
+    );
+  }
+
   openDetailsPage() {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;
@@ -331,6 +407,15 @@ export class BookingSummaryComponent implements OnInit {
   get inputControls() {
     return this.parentFormGroup.controls as Record<
       keyof ReservationForm,
+      AbstractControl
+    >;
+  }
+
+  get reservationInfoControls() {
+    return (this.controlContainer.control.get(
+      'reservationInformation'
+    ) as FormGroup).controls as Record<
+      keyof ReservationForm['reservationInformation'],
       AbstractControl
     >;
   }

@@ -105,7 +105,8 @@ export class BookingInfoComponent implements OnInit {
     this.entityId = this.globalFilterService.entityId;
     this.getCountryCode();
     this.initDates();
-    this.reservationId && this.listenForSourceChanges();
+    this.listenForConfigDataChanges();
+    this.listenForSourceData();
   }
 
   initDates() {
@@ -262,7 +263,7 @@ export class BookingInfoComponent implements OnInit {
     }
   }
 
-  listenForSourceChanges() {
+  listenForConfigDataChanges() {
     const sourceControl = this.reservationInfoControls.source;
     const marketSegmentControl = this.reservationInfoControls.marketSegment;
 
@@ -282,27 +283,26 @@ export class BookingInfoComponent implements OnInit {
           !this.configData?.source?.some((item) => item.value === res) &&
           this.configData.source.push({ label: res, value: res });
         this.initSourceDetails(res);
-        !this.editMode && this.sourceNameControl.reset();
+        // !this.editMode && this.sourceNameControl.reset();
       }
     });
+  }
 
-    // Map source data for edit reservation
+  // Map source data for edit reservation
+  listenForSourceData() {
     this.$subscription.add(
       this.formService.sourceData.subscribe((res) => {
         if (res) {
-          this.editMode = true;
           this.selectedAgent = res.agent && {
             label: res?.agent?.firstName,
             value: res?.agent?.id,
             ...res?.agent,
           };
-          this.inputControls.reservationInformation.patchValue(
-            {
-              marketSegment: res.marketSegment,
-              source: res.source,
-            },
-            { emitEvent: false }
-          );
+
+          this.inputControls.reservationInformation.patchValue({
+            marketSegment: res.marketSegment,
+            source: res.source,
+          });
 
           // Map source name data according to the source
           const sourceControlMap = {
@@ -324,18 +324,7 @@ export class BookingInfoComponent implements OnInit {
     switch (source) {
       case 'OTA':
         this.setupControl(this.otaSourceControl, [Validators.required]);
-        this.otaOptions = this.configData
-          ? this.configData.source.filter((item) => item.value === source)[0]
-              .type
-          : [];
-        !this.otaOptions.some(
-          (item) => item.value === this.otaSourceControl?.value
-        ) &&
-          this.otaSourceControl?.value?.length &&
-          this.otaOptions.push({
-            label: this.otaSourceControl.value,
-            value: this.otaSourceControl.value,
-          });
+        this.mapOtaOptions(source);
         this.updateValueAndValidity(this.agentSourceControl);
         this.updateValueAndValidity(this.sourceNameControl);
         this.updateValueAndValidity(this.companySourceControl);
@@ -364,6 +353,20 @@ export class BookingInfoComponent implements OnInit {
     }
   }
 
+  mapOtaOptions(source: string) {
+    this.otaOptions = this.configData
+      ? this.configData.source.filter((item) => item.value === source)[0].type
+      : [];
+    !this.otaOptions.some(
+      (item) => item.value === this.otaSourceControl?.value
+    ) &&
+      this.otaSourceControl?.value?.length &&
+      this.otaOptions.push({
+        label: this.otaSourceControl.value,
+        value: this.otaSourceControl.value,
+      });
+  }
+
   updateValueAndValidity(control: AbstractControl) {
     control.reset({ emitEvent: false });
     control.clearValidators();
@@ -386,7 +389,8 @@ export class BookingInfoComponent implements OnInit {
         this.configData = new BookingConfig().deserialize(
           response.bookingConfig
         );
-        !this.reservationId && this.listenForSourceChanges();
+        this.reservationInfoControls.source.value === 'OTA' &&
+          this.mapOtaOptions(this.reservationInfoControls.source.value);
       });
     this.configService.getCountryCode().subscribe((res) => {
       const data = new CountryCodeList().deserialize(res);

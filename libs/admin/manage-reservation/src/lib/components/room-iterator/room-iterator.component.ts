@@ -119,13 +119,11 @@ export class RoomIteratorComponent extends IteratorComponent
   initDetails() {
     this.parentFormGroup = this.controlContainer.control as FormGroup;
     this.roomTypeArray = this.fb.array([]);
-    this.formService.isDataInitialized
-      .pipe(debounceTime(500))
-      .subscribe((res) => {
-        if (res) {
-          this.isDataInitialized = res;
-        }
-      });
+    this.formService.isDataInitialized.subscribe((res) => {
+      if (res) {
+        this.isDataInitialized = res;
+      }
+    });
     this.listenForDateChanges();
   }
 

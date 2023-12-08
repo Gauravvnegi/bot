@@ -182,6 +182,7 @@ export class QuickReservationFormComponent implements OnInit {
         marketSegment: ['', Validators.required],
         agentSourceName: [''],
         otaSourceName: [''],
+        companySourceName: [''],
       }),
 
       roomInformation: this.fb.group({
@@ -297,6 +298,13 @@ export class QuickReservationFormComponent implements OnInit {
             this.inputControls.guestInformation
               .get('guestDetails')
               .patchValue(res.guest.id);
+            this.selectedGuest = {
+              label: `${res?.guest?.firstName} ${res?.guest?.lastName}`,
+              value: res?.guest?.id,
+              phoneNumber: res?.guest?.contactDetails.contactNumber,
+              cc: res?.guest?.contactDetails?.cc,
+              email: res?.guest?.contactDetails?.emailId,
+            };
             this.formService.sourceData.next({
               source: data.reservationInformation.source,
               sourceName: data.reservationInformation.sourceName,

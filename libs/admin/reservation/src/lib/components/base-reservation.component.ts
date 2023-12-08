@@ -122,7 +122,9 @@ export class BaseReservationComponent {
           this.reservationInfoControls.reservationType.enable();
           break;
         case this.bookingType !== EntitySubType.ROOM_TYPE ||
-          journeyState === JourneyState.COMPLETED:
+          journeyState === JourneyState.COMPLETED ||
+          status === ReservationCurrentStatus.INHOUSE ||
+          status === ReservationCurrentStatus.DUEOUT:
           this.userForm.disable({ emitEvent: false });
           this.formService.disableBtn = true;
           break;

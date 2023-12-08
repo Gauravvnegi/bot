@@ -79,7 +79,12 @@
               [src]="option?.icon"
               [alt]="option?.label"
             />
-            <p class="option-label">{{ option.label }}</p>
+            <div class="option-container">
+              <div class="option-label">{{ option.label }}</div>
+              <div class="option-description">
+                {{ option?.description }}
+              </div>
+            </div>
           </div>
         </div>
       </div>

@@ -123,7 +123,7 @@
       // position: absolute;
       z-index: 1;
       right: 0;
-      padding: 15px 1%;
+      padding: 10px 1%;
       gap: 1em;
       @include flex-center-algn-justify-end();
 
@@ -150,23 +150,23 @@
       z-index: 1;
       padding: 1%;
       margin: 0px 8%;
-      margin-top: 3%;
+      // margin-top: 3%;
       color: $white;
 
       .heading {
         font-size: 40px;
-        margin: 20px 0px;
+        padding-bottom: 10px;
+        // margin: 20px 0px;
         @media only screen and (max-width: 1300px) {
           font-size: 30px;
         }
       }
       &-option-box {
         display: flex;
-        /* justify-content: space-between; */
         flex-wrap: wrap;
         flex-direction: column;
-        height: 36vh;
-        // @include flex-space-btw-wrap;
+        max-height: 40vh;
+        gap: 1%;
         .option {
           width: 33.33%;
           margin-bottom: 20px;
@@ -177,10 +177,16 @@
             width: 1.5em;
             filter: brightness(0) invert(1);
           }
-          .option-label {
-            margin: 0;
-            @media only screen and (max-width: 800px) {
+          .option-container {
+            .option-label {
               font-size: 14px;
+              font-weight: 600;
+              letter-spacing: 0.84px;
+            }
+            .option-description {
+              font-size: 13px;
+              letter-spacing: 0.84px;
+              word-wrap: normal;
             }
           }
         }

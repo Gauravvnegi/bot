@@ -232,18 +232,19 @@ export class BookingSummaryComponent implements OnInit {
         label: 'Continue Reservation',
         onClick: () => {
           // Route but don't change location
-          this.routesConfigService
-            .navigate({
-              skipLocationChange: true,
-            })
-            .then(() => {
-              this.routesConfigService.navigate({
-                additionalPath: manageReservationRoutes.addReservation.route,
-                queryParams: {
-                  entityId: this.outletId ? this.outletId : this.entityId,
-                },
-              });
-            });
+          // this.routesConfigService
+          //   .navigate({
+          //     skipLocationChange: true,
+          //   })
+          //   .then(() => {
+          //     this.routesConfigService.navigate({
+          //       additionalPath: manageReservationRoutes.addReservation.route,
+          //       queryParams: {
+          //         entityId: this.outletId ? this.outletId : this.entityId,
+          //       },
+          //     });
+          //   });
+
           // this.router
           //   .navigateByUrl('/pages/efrontdesk/reservation', {
           //     skipLocationChange: true,
@@ -262,6 +263,7 @@ export class BookingSummaryComponent implements OnInit {
           //     );
           //   });
           this.modalService.close();
+          this.gobackToReservation();
         },
         variant: 'outlined',
       },

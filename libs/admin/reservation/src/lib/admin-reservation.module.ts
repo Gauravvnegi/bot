@@ -35,6 +35,7 @@ import { RoomService } from 'libs/admin/room/src/lib/services/room.service';
 import { ChannelManagerService } from 'libs/admin/channel-manager/src/lib/services/channel-manager.service';
 import { BookingInfoComponent } from './components/booking-info/booking-info.component';
 import { BaseReservationComponent } from './components/base-reservation.component';
+import { GuestTableService } from 'libs/admin/guests/src/lib/services/guest-table.service';
 
 export const adminReservationRoutes: Route[] = [];
 
@@ -100,6 +101,7 @@ export const adminReservationRoutes: Route[] = [];
     FormService,
     RoomService,
     ChannelManagerService,
+    GuestTableService,
   ],
 })
 export class AdminReservationModule {}

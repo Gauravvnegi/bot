@@ -32,6 +32,7 @@ import { convertToTitleCase } from 'libs/admin/shared/src/lib/utils/valueFormatt
 import { Subject } from 'rxjs';
 import { RoutesConfigService } from '@hospitality-bot/admin/core/theme';
 import { ReservationForm } from '../../constants/form';
+import { SnackBarService } from '@hospitality-bot/shared/material';
 
 @Component({
   selector: 'hospitality-bot-add-reservation',
@@ -67,7 +68,8 @@ export class AddReservationComponent extends BaseReservationComponent
     protected activatedRoute: ActivatedRoute,
     protected formService: FormService,
     protected hotelDetailService: HotelDetailService,
-    protected routesConfigService: RoutesConfigService
+    protected routesConfigService: RoutesConfigService,
+    private snackbarService: SnackBarService
   ) {
     super(activatedRoute, hotelDetailService, formService, routesConfigService);
     this.initForm();
@@ -451,6 +453,16 @@ export class AddReservationComponent extends BaseReservationComponent
     };
     this.inputControls.offerId.reset();
     this.offersList.records = [];
+  }
+
+  handleEmailInvoice() {
+    this.manageReservationService
+      .emailInvoice(this.reservationId, {})
+      .subscribe((_) => {
+        this.snackbarService.openSnackBarAsText('Email Sent Successfully', '', {
+          panelClass: 'success',
+        });
+      });
   }
 
   /**

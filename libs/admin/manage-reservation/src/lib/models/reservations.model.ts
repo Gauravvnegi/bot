@@ -250,6 +250,7 @@ export class ReservationFormData {
   totalPaidAmount: number;
   totalDueAmount: number;
   totalAmount: number;
+  printRate: boolean;
   journeyState: JourneyState;
   currentState: ReservationCurrentStatus;
   paymentRule: PaymentRuleForm;

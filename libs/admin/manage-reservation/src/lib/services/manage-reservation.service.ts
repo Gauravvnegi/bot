@@ -75,7 +75,7 @@ export class ManageReservationService extends ApiService {
     bookingId: string,
     entityId: string,
     bookingType: string,
-    data: { reservationType: string , remarks: string }
+    data: { reservationType: string; remarks: string }
   ): Observable<any> {
     return this.patch(
       `/api/v1/booking/${bookingId}/status?type=${bookingType}&entityId=${entityId}`,
@@ -120,5 +120,12 @@ export class ManageReservationService extends ApiService {
     return this.get(`/api/v1/booking/export${config?.params ?? ''}`, {
       responseType: 'blob',
     });
+  }
+
+  emailInvoice(reservationId: string, data) {
+    return this.post(
+      `/api/v1/reservation/${reservationId}/send-invoice?source=BOTSHOT_ADMIN`,
+      data
+    );
   }
 }

@@ -1,5 +1,13 @@
 <div [formGroup]="userForm" class="wrapper">
   <hospitality-bot-navigation-header [heading]="pageTitle" [routes]="routes">
+    <ng-container>
+      <hospitality-bot-button
+        *ngIf="reservationFormData?.printRate"
+        label="Send Invoice"
+        variant="outlined"
+        (onClick)="handleEmailInvoice()"
+      ></hospitality-bot-button>
+    </ng-container>
   </hospitality-bot-navigation-header>
   <div class="main">
     <p-accordion [multiple]="true">

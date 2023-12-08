@@ -1,4 +1,8 @@
 import {
+  currencyToNumber,
+  toCurrency,
+} from 'libs/admin/shared/src/lib/utils/valueFormatter';
+import {
   FolioListReportData,
   FolioListReportResponse,
 } from '../types/folio-reports.types';
@@ -18,36 +22,40 @@ export class FolioListReport
           bookingNo: item?.number,
           folioNo: item?.invoiceCode,
           guestName: `${item?.guestDetails.primaryGuest.firstName} ${item?.guestDetails.primaryGuest.lastName}`,
-          discount: item?.paymentSummary?.totalDiscount,
-          amount: item?.paymentSummary?.totalRoomCharge,
-          tax:
+          discount: toCurrency(item?.reservationItemsPayment?.totalDiscount),
+          amount: toCurrency(item?.reservationItemsPayment?.totalRoomCharge),
+          tax: toCurrency(
             item?.reservationItemsPayment?.totalCgstTax +
-            item?.reservationItemsPayment?.totalSgstTax,
+              item?.reservationItemsPayment?.totalSgstTax
+          ),
           btc: getPaymentMethodAmount(item, 'Bill to Company'),
           cash: getPaymentMethodAmount(item, 'Cash Payment'),
           bankTransfer: getPaymentMethodAmount(item, 'Bank Transfer'),
           payAtDesk: getPaymentMethodAmount(item, 'Pay at Desk'),
-          onlinePaymentGateway:
-            getPaymentMethodAmount(item, 'CCAVENUE') +
-            getPaymentMethodAmount(item, 'Stripe'),
-          other: item?.paymentModesAndTotalAmount.reduce((acc, curr) => {
-            if (
-              ![
-                'Bill to Company',
-                'Cash Payment',
-                'Bank Transfer',
-                'Pay at Desk',
-                'CCAVENUE',
-                'Stripe',
-              ].includes(curr.paymentMode)
-            ) {
-              acc += curr.totalAmount;
-            }
-            return acc;
-          }, 0),
+          onlinePaymentGateway: toCurrency(
+            currencyToNumber(getPaymentMethodAmount(item, 'CCAVENUE')) +
+              currencyToNumber(getPaymentMethodAmount(item, 'Stripe'))
+          ),
+          other: toCurrency(
+            item?.paymentModesAndTotalAmount.reduce((acc, curr) => {
+              if (
+                ![
+                  'Bill to Company',
+                  'Cash Payment',
+                  'Bank Transfer',
+                  'Pay at Desk',
+                  'CCAVENUE',
+                  'Stripe',
+                ].includes(curr.paymentMode)
+              ) {
+                acc += curr.totalAmount;
+              }
+              return acc;
+            }, 0)
+          ),
 
-          paid: item?.reservationItemsPayment?.paidAmount,
-          balance: item?.reservationItemsPayment?.dueAmount,
+          paid: toCurrency(item?.reservationItemsPayment?.paidAmount),
+          balance: toCurrency(item?.reservationItemsPayment?.dueAmount),
           date: getFormattedDate(item?.created),
         };
       });

@@ -17,6 +17,11 @@ import {
 } from '../types/financial-reports.types';
 import { ReportClass, RowStyles } from '../types/reports.types';
 import { getFormattedDate } from './reservation-reports.models';
+import {
+  currencyToNumber,
+  toCurrency,
+} from 'libs/admin/shared/src/lib/utils/valueFormatter';
+import { get } from 'lodash';
 
 export class FinancialReport
   implements ReportClass<FinancialReportData, FinancialReportResponse> {
@@ -31,29 +36,40 @@ export class FinancialReport
           bookingNo: element?.number,
           folioNo: element?.invoiceCode,
           nights: element?.nightCount,
-          lodging: element?.reservationItemsPayment?.totalRoomCharge,
+          lodging: toCurrency(
+            element?.reservationItemsPayment?.totalRoomCharge
+          ),
 
-          lodgingTax:
+          lodgingTax: toCurrency(
             element?.reservationItemsPayment.totalCgstTax +
-            element?.reservationItemsPayment?.totalSgstTax,
+              element?.reservationItemsPayment?.totalSgstTax
+          ),
 
-          discount: element?.reservationItemsPayment?.totalRoomDiscount,
+          discount: toCurrency(
+            element?.reservationItemsPayment?.totalRoomDiscount
+          ),
 
-          otherCharges: element?.reservationItemsPayment?.totalAddOnsAmount,
+          otherCharges: toCurrency(
+            element?.reservationItemsPayment?.totalAddOnsAmount
+          ),
 
-          otherChargesTax: element?.reservationItemsPayment.totalAddOnsTax,
+          otherChargesTax: toCurrency(
+            element?.reservationItemsPayment.totalAddOnsTax
+          ),
 
-          otherChargesDiscount:
-            element.reservationItemsPayment.totalAddOnsDiscount,
+          otherChargesDiscount: toCurrency(
+            element.reservationItemsPayment.totalAddOnsDiscount
+          ),
 
-          postTaxTotal:
+          postTaxTotal: toCurrency(
             element?.reservationItemsPayment.totalCgstTax +
-            element?.reservationItemsPayment?.totalSgstTax +
-            element?.reservationItemsPayment.totalAddOnsTax,
+              element?.reservationItemsPayment?.totalSgstTax +
+              element?.reservationItemsPayment.totalAddOnsTax
+          ),
 
-          paid: element?.paymentSummary?.paidAmount,
+          paid: toCurrency(element?.paymentSummary?.paidAmount),
 
-          balance: element?.paymentSummary?.dueAmount,
+          balance: toCurrency(element?.paymentSummary?.dueAmount),
         };
       });
     return this;
@@ -73,13 +89,24 @@ export class CloseOutBalanceReport
           folioNo: item?.invoiceCode,
           checkOut: getFormattedDate(item?.departureTime),
           guestName: `${item?.guestDetails.primaryGuest.firstName} ${item?.guestDetails.primaryGuest.lastName}`,
-          lodgingAndTax:
-            item?.reservationItemsPayment?.totalCgstTax +
-            item?.reservationItemsPayment?.totalSgstTax, //need to confirm
-          otherChargesAndTax: item?.reservationItemsPayment.totalAddOnsAmount, //need to confirm
-          amount: item?.reservationItemsPayment?.paidAmount,
-          collected: item?.paymentSummary?.paidAmount,
-          openBalance: item?.paymentSummary?.dueAmount,
+          lodgingAndTax: toCurrency(
+            +(
+              item?.reservationItemsPayment?.totalCgstTax +
+              item?.reservationItemsPayment?.totalSgstTax +
+              item?.reservationItemsPayment.totalRoomCharge
+            ).toFixed(2)
+          ),
+
+          otherChargesAndTax: toCurrency(
+            +(
+              item?.reservationItemsPayment.totalAddOnsAmount +
+              item?.reservationItemsPayment?.totalAddOnsTax
+            ).toFixed(2)
+          ),
+
+          amount: toCurrency(item?.paymentSummary?.totalAmount),
+          collected: toCurrency(item?.paymentSummary?.paidAmount),
+          openBalance: toCurrency(item?.paymentSummary?.dueAmount),
         };
       });
     return this;
@@ -98,6 +125,17 @@ export class DepositReport
       value.map((item) => {
         const formattedCheckIn = getFormattedDate(item?.arrivalTime);
         const formattedCheckOut = getFormattedDate(item?.departureTime);
+        const lastDepositDate =
+          item?.paymentModesAndTotalAmount[0]?.lastPaymentDate &&
+          getFormattedDate(
+            item?.paymentModesAndTotalAmount[0]?.lastPaymentDate
+          );
+
+        const onlinePaymentGateway = toCurrency(
+          currencyToNumber(getPaymentMethodAmount(item, 'CCAVENUE')) +
+            currencyToNumber(getPaymentMethodAmount(item, 'Stripe')) +
+            currencyToNumber(getPaymentMethodAmount(item, 'PAYU'))
+        );
 
         return {
           bookingNo: item?.number,
@@ -107,21 +145,27 @@ export class DepositReport
           checkIn: formattedCheckIn,
           checkOut: formattedCheckOut,
           nights: item?.nightCount,
-          lodging: item?.reservationItemsPayment?.totalRoomCharge,
-          otherCharges: item?.reservationItemsPayment?.totalAddOnsAmount,
-          taxes:
+          lodging: toCurrency(item?.reservationItemsPayment?.totalRoomCharge),
+          otherCharges: toCurrency(
+            item?.reservationItemsPayment?.totalAddOnsAmount
+          ),
+          taxes: toCurrency(
             (item?.reservationItemsPayment?.totalCgstTax || 0) +
-            (item?.reservationItemsPayment?.totalSgstTax || 0),
+              (item?.reservationItemsPayment?.totalSgstTax || 0)
+          ),
           btc: getPaymentMethodAmount(item, 'Bill to Company'),
           cash: getPaymentMethodAmount(item, 'Cash Payment'),
-          bankTransfer: getPaymentMethodAmount(item, 'Bank Transfer'),
-          payAtDesk: getPaymentMethodAmount(item, 'Pay at Desk'),
-          onlinePaymentGateway:
-            getPaymentMethodAmount(item, 'CCAVENUE') +
-            getPaymentMethodAmount(item, 'Stripe'),
+          bankTransfer: toCurrency(
+            currencyToNumber(getPaymentMethodAmount(item, 'Bank Transfer')) +
+              currencyToNumber(getPaymentMethodAmount(item, 'Bank Deposit'))
+          ),
 
-          totalPaid: item?.reservationItemsPayment?.paidAmount,
-          lastDepositDate: undefined,
+          payAtDesk: getPaymentMethodAmount(item, 'Pay at Desk'),
+          onlinePaymentGateway: onlinePaymentGateway,
+
+          totalPaid: toCurrency(item?.reservationItemsPayment?.paidAmount),
+
+          lastDepositDate: lastDepositDate,
         };
       });
 
@@ -129,8 +173,11 @@ export class DepositReport
   }
 }
 
-export function getPaymentMethodAmount(item: any, paymentMode: PaymentMode) {
-  return (
+export function getPaymentMethodAmount(
+  item: any,
+  paymentMode: PaymentMode
+): string {
+  return toCurrency(
     item?.paymentModesAndTotalAmount?.find(
       (payment) => payment.paymentMode === paymentMode
     )?.totalAmount || 0
@@ -152,10 +199,12 @@ export class PostingAuditReport
           user:
             item?.user?.firstName &&
             `${item?.user.firstName} ${item?.user?.lastName}`,
-          trxAmount: item?.paymentSummary?.totalAmount,
-          baseAmount: item?.reservationItemsPayment?.totalRoomCharge,
-          cgst: item?.reservationItemsPayment?.totalCgstTax,
-          sgst: item?.reservationItemsPayment?.totalSgstTax,
+          trxAmount: toCurrency(item?.paymentSummary?.totalAmount),
+          baseAmount: toCurrency(
+            item?.reservationItemsPayment?.totalRoomCharge
+          ),
+          cgst: toCurrency(item?.reservationItemsPayment?.totalCgstTax),
+          sgst: toCurrency(item?.reservationItemsPayment?.totalSgstTax),
         };
       });
     return this;
@@ -166,26 +215,26 @@ export class MonthlySummary extends RowStyles {
   day: string;
   roomCount: number;
   occupancy: string;
-  avgDailyRateIncludeInclusion: number;
-  avgDailyRateExcludeInclusion: number;
-  roomRent: number;
-  roomInclusions: number;
-  totalTaxes: number;
-  directSales: number;
-  directSaleTax: number;
-  grossTotal: number;
+  avgDailyRateIncludeInclusion: string;
+  avgDailyRateExcludeInclusion: string;
+  roomRent: string;
+  roomInclusions: string;
+  totalTaxes: string;
+  directSales: string;
+  directSaleTax: string;
+  grossTotal: string;
   deserialize(input: MonthlySummaryReportResponse, isSubTotal?: boolean) {
     this.day = isSubTotal ? ' ' : getFormattedDate(input?.date);
     this.roomCount = input.totalRooms;
     this.occupancy = input.occupancyPercentage + '%';
-    this.avgDailyRateIncludeInclusion = input?.averageRateIncl;
-    this.avgDailyRateExcludeInclusion = input.averageRate;
-    this.roomRent = input.roomRevenue;
-    this.roomInclusions = input.inclusionOrAddOn;
-    this.totalTaxes = input.totalTax;
-    this.directSales = 0;
-    this.directSaleTax = 0;
-    this.grossTotal = input.grossTotal;
+    this.avgDailyRateIncludeInclusion = toCurrency(input?.averageRateIncl);
+    this.avgDailyRateExcludeInclusion = toCurrency(input.averageRate);
+    this.roomRent = toCurrency(input.roomRevenue);
+    this.roomInclusions = toCurrency(input.inclusionOrAddOn);
+    this.totalTaxes = toCurrency(input.totalTax);
+    this.directSales = toCurrency(0);
+    this.directSaleTax = toCurrency(0);
+    this.grossTotal = toCurrency(input.grossTotal);
     this.isBold = isSubTotal ? true : undefined;
     this.isGreyBg = isSubTotal ? true : undefined;
     return this;
@@ -243,9 +292,9 @@ export class DailyRevenueReport
             emptyCell: item.label,
             // gross: grossData[item.name],
             // adj: adjData[item.name],
-            today: dayData[item.name],
-            month: monthData[item.name],
-            year: yearData[item.name],
+            today: toCurrency(dayData[item.name]),
+            month: toCurrency(monthData[item.name]),
+            year: toCurrency(yearData[item.name]),
             isBold: dailyRevenueReportSubTotalRows.includes(item.name),
             isGreyBg: dailyRevenueReportSubTotalRows.includes(item.name),
             isBlackBg: item.name === 'totalPayable',

@@ -5,15 +5,15 @@ export type FinancialReportData = {
   bookingNo: string;
   folioNo: string;
   nights: number;
-  lodging: number;
-  lodgingTax: number;
-  discount: number;
-  otherCharges: number;
-  otherChargesTax: number;
-  otherChargesDiscount: number;
-  postTaxTotal: number;
-  paid: number;
-  balance: number;
+  lodging: string;
+  lodgingTax: string;
+  discount: string;
+  otherCharges: string;
+  otherChargesTax: string;
+  otherChargesDiscount: string;
+  postTaxTotal: string;
+  paid: string;
+  balance: string;
 };
 
 export type CloseOutBalanceData = {
@@ -21,11 +21,11 @@ export type CloseOutBalanceData = {
   folioNo: string;
   checkOut: string;
   guestName: string;
-  lodgingAndTax: number;
-  otherChargesAndTax: number;
-  amount: number;
-  collected: number;
-  openBalance: number;
+  lodgingAndTax: string;
+  otherChargesAndTax: string;
+  amount: string;
+  collected: string;
+  openBalance: string;
 };
 
 export type CloseOutBalanceResponse = {
@@ -65,15 +65,15 @@ export type DepositReportData = {
   checkIn: string;
   checkOut: string;
   nights: number;
-  lodging: number;
-  otherCharges: number;
-  taxes: number;
-  btc: number;
-  cash: number;
-  bankTransfer: number;
-  payAtDesk: number;
-  onlinePaymentGateway: number;
-  totalPaid: number;
+  lodging: string;
+  otherCharges: string;
+  taxes: string;
+  btc: string;
+  cash: string;
+  bankTransfer: string;
+  payAtDesk: string;
+  onlinePaymentGateway: string;
+  totalPaid: string;
   lastDepositDate: string;
 };
 
@@ -125,16 +125,18 @@ export type PaymentMode =
   | 'Paypal'
   | 'Razorpay'
   | 'PayU'
-  | 'Stripe';
+  | 'Stripe'
+  | 'PAYU'
+  | 'Bank Deposit';
 
 export type PostingAuditReportData = {
   room: string;
   name: string;
   user: string;
-  trxAmount: number;
-  baseAmount: number;
-  cgst: number;
-  sgst: number;
+  trxAmount: string;
+  baseAmount: string;
+  cgst: string;
+  sgst: string;
 };
 
 export type PostingAuditReportResponse = {
@@ -166,7 +168,7 @@ export type PostingAuditReportResponse = {
   vip: boolean;
   pmsBooking: boolean;
   invoicePrepareRequest: InvoicePrepareRequest;
-  user: User
+  user: User;
 };
 
 export type FinancialReportResponse = {
@@ -217,14 +219,14 @@ export type MonthlySummaryReportData = {
   day: string;
   roomCount: number;
   occupancy: string;
-  avgDailyRateIncludeInclusion: number;
-  avgDailyRateExcludeInclusion: number;
-  roomRent: number;
-  roomInclusions: number;
-  totalTaxes: number;
-  directSales: number;
-  directSaleTax: number;
-  grossTotal: number;
+  avgDailyRateIncludeInclusion: string;
+  avgDailyRateExcludeInclusion: string;
+  roomRent: string;
+  roomInclusions: string;
+  totalTaxes: string;
+  directSales: string;
+  directSaleTax: string;
+  grossTotal: string;
 };
 
 export type MonthlySummaryReportResponse = {
@@ -431,7 +433,7 @@ export type ReservationItemsPayment = {
   totalRoomDiscount: number;
   totalAddOnsTax: number;
   totalAddOnsDiscount: number;
-}
+};
 
 interface InvoicePrepareRequest {
   totalDueAmount: number;

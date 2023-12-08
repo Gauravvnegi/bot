@@ -67,10 +67,10 @@ export const guestHistoryCols: ColsData<GuestHistoryData> = {
 export const guestContactReportCols: Partial<ColsData<
   GuestContactReportData
 >> = {
-  guestId: {
-    header: 'Guest Id',
-    isSortDisabled: true,
-  },
+  // guestId: {
+  //   header: 'Guest Id',
+  //   isSortDisabled: true,
+  // },
   salutation: {
     header: 'Salutation',
     isSortDisabled: true,

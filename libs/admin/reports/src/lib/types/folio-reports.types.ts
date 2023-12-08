@@ -4,17 +4,17 @@ export type FolioListReportData = {
   bookingNo: string;
   folioNo: string;
   guestName: string;
-  discount: number;
-  amount: number;
-  tax: number;
-  btc: number;
-  cash: number;
-  bankTransfer: number;
-  payAtDesk: number;
-  onlinePaymentGateway: number;
-  other: number;
-  paid: number;
-  balance: number;
+  discount: string;
+  amount: string;
+  tax: string;
+  btc: string;
+  cash: string;
+  bankTransfer: string;
+  payAtDesk: string;
+  onlinePaymentGateway: string;
+  other: string;
+  paid: string;
+  balance: string;
   date: string;
 };
 

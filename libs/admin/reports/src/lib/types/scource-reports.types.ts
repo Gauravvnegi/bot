@@ -3,10 +3,10 @@ export type MarketSourceReportData = {
   nights: number;
   occupancy: number;
   pax: number;
-  roomRevenue: number;
-  revenue: number;
-  arrOrAgr: number;
-  arp: number;
+  roomRevenue: string;
+  revenue: string;
+  arrOrAgr: string;
+  arp: string;
 };
 
 export type MarketSourceReportResponse = {

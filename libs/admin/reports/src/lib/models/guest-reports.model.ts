@@ -1,3 +1,4 @@
+import { toCurrency } from 'libs/admin/shared/src/lib/utils/valueFormatter';
 import {
   GuestContactReportData,
   GuestContactReportResponse,
@@ -36,19 +37,19 @@ export class GuestContactReport
           guestId: item?.id,
           salutation: item?.salutation,
           name: `${item?.firstName} ${item?.lastName}`,
-          address: item?.address?.addressLine1, //need to confirm
+          address: item?.address?.addressLine1,
           city: item?.address?.city,
           state: item?.address?.state,
           country: item?.address?.country,
           email: item?.contactDetails?.emailId,
-          dateOfBirth: item?.dateOfBirth && getFormattedDate(item?.dateOfBirth), //need to confirm
+          dateOfBirth: item?.dateOfBirth && getFormattedDate(item?.dateOfBirth),
           mobileNo: `${item?.contactDetails?.cc} ${item?.contactDetails?.contactNumber}`,
           phone: undefined, //need to confirm
           fax: undefined, //need to confirm
           gender: item?.gender, //need to confirm
           idType: undefined, //need to confirm
-          nationality: item.nationality, //need to confirm
-          zipCode: item?.address?.postalCode, //need to confirm
+          nationality: item.nationality,
+          zipCode: item?.address?.postalCode,
         };
       });
     return this;
@@ -60,13 +61,13 @@ export class GuestHistoryModel {
   firstStayed: string;
   lastStayed: string;
   noOfResv: number;
-  roomCharges: number;
-  roomTax: number;
-  otherCharges: number;
-  totalCharges: number;
-  totalAmount: number;
-  amountPaid: number;
-  balance: number;
+  roomCharges: string;
+  roomTax: string;
+  otherCharges: string;
+  totalCharges: string;
+  totalAmount: string;
+  amountPaid: string;
+  balance: string;
   deserialize(input: GuestHistoryResponse) {
     this.guestName = `${input?.firstName ?? ''} ${
       input?.lastName ?? ''
@@ -76,19 +77,25 @@ export class GuestHistoryModel {
     this.noOfResv = input.reservation.length;
     const reservationData = input.reservation[input.reservation.length - 1];
 
-    this.roomCharges = reservationData.reservationItemsPayment.totalRoomCharge;
-    this.roomTax =
+    this.roomCharges = toCurrency(
+      reservationData.reservationItemsPayment.totalRoomCharge
+    );
+    this.roomTax = toCurrency(
       reservationData.reservationItemsPayment.totalCgstTax +
-      reservationData.reservationItemsPayment.totalSgstTax;
-    
-    this.otherCharges = reservationData.reservationItemsPayment.totalAddOnsAmount;
+        reservationData.reservationItemsPayment.totalSgstTax
+    );
 
-    this.totalCharges =
+    this.otherCharges = toCurrency(
+      reservationData.reservationItemsPayment.totalAddOnsAmount
+    );
+
+    this.totalCharges = toCurrency(
       reservationData.reservationItemsPayment.totalAddOnsAmount +
-      reservationData.reservationItemsPayment.totalRoomCharge;
-    
-    this.totalAmount = reservationData.paymentSummary.totalAmount;
-    this.balance = reservationData.paymentSummary.dueAmount;
+        reservationData.reservationItemsPayment.totalRoomCharge
+    );
+
+    this.totalAmount = toCurrency(reservationData.paymentSummary.totalAmount);
+    this.balance = toCurrency(reservationData.paymentSummary.dueAmount);
 
     return this;
   }
@@ -148,7 +155,7 @@ export class GuestLedger implements ReportClass<GuestLedgerData, any> {
             reservationData?.guestDetails?.primaryGuest.lastName ?? ''
           }`.trim(),
           confirmationNo: reservationData?.number,
-          balance: reservationData?.paymentSummary?.totalAmount,
+          balance: toCurrency(reservationData?.paymentSummary?.dueAmount),
         });
       });
     return this;

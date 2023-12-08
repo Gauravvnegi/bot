@@ -64,7 +64,7 @@ export class DirectCompanyBillingReport
           roomNo: item.bookingItems[0]?.roomDetails?.roomNumber,
           checkInDate: getFormattedDate(item?.from),
           checkOutDate: getFormattedDate(item?.to),
-          totalNights: item?.nightCount,
+          totalNights: item?.nightsCount,
           pax: item.bookingItems[0]?.occupancyDetails?.maxAdult,
           totalPaidAmount: toCurrency(item?.pricingDetails?.totalPaidAmount),
           postTaxAmount: toCurrency(item?.pricingDetails?.taxAndFees),

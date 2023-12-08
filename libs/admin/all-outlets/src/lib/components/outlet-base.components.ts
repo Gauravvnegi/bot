@@ -79,8 +79,8 @@ export class OutletBaseComponent {
       const updatedRoutes = this.deepCloneRoutes(
         outletBusinessRoutes[routeName]
       );
-
-      updatedRoutes.navRoutes.splice(3, 0, navRoutes.editHotel);
+      //insert edit hotel route in between edit brand and add outlet or edit outlet
+      updatedRoutes.navRoutes.splice(1, 0, navRoutes.editHotel);
 
       if (isHotel) {
         updatedRoutes.navRoutes.forEach((element) => {

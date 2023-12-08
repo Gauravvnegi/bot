@@ -58,6 +58,7 @@ export class HousekeepingComponent extends BaseDatatableComponent
   isQuickFilterInEmptyView: boolean = false;
   isTabFilters: boolean = false;
   backUpRoomList: Room[];
+  private cancelRequests$ = new Subject<void>();
 
   constructor(
     private fb: FormBuilder,
@@ -138,7 +139,6 @@ export class HousekeepingComponent extends BaseDatatableComponent
         this.values = updatedValues;
       });
   }
-  private cancelRequests$ = new Subject<void>();
 
   getRoomList(): void {
     this.loading = true;

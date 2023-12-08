@@ -181,9 +181,7 @@ export class FeedbackDetailModalComponent implements OnInit, OnDestroy {
               '',
               { panelClass: 'success' }
             )
-            .subscribe(
-              
-            );
+            .subscribe();
           this.feedbackFG.patchValue({ comment: '' });
           this.cardService.$assigneeChange.next({ status: true });
           this.refreshFeedbackData();
@@ -286,6 +284,7 @@ export class FeedbackDetailModalComponent implements OnInit, OnDestroy {
                   },
                   this.data.outlets
                 );
+          this.getStatusList();
           setTimeout(() => {
             this.feedbackChatRef.nativeElement.scrollTop = this.feedbackChatRef.nativeElement.scrollHeight;
           }, 1000);

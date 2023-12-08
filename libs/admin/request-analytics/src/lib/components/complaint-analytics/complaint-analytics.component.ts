@@ -43,6 +43,7 @@ export class ComplaintAnalyticsComponent implements OnInit {
 
   createdPerDay = 0;
   closedPerDay = 0;
+  sidebarVisible: boolean = false;
 
   @ViewChild('sidebarSlide', { read: ViewContainerRef })
   sidebarSlide: ViewContainerRef;
@@ -138,6 +139,15 @@ export class ComplaintAnalyticsComponent implements OnInit {
       });
   }
 
+  /**
+   * Refreshes the stats on the page
+   */
+  refreshStats() {
+    this.statCard = [];
+    this.getPerDayStats();
+    this.getAgentStats();
+  }
+
   createServiceItem() {
     this.sidebarVisible = true;
     this.sidebarType = 'complaint';
@@ -147,12 +157,12 @@ export class ComplaintAnalyticsComponent implements OnInit {
     componentRef.instance.isSidebar = true;
     this.$subscription.add(
       componentRef.instance.onClose.subscribe((res) => {
+        this.refreshStats();
+
         this.sidebarVisible = false;
       })
     );
   }
-
-  sidebarVisible: boolean = false;
   raiseRequest() {
     this.sidebarVisible = true;
     this.sidebarType = 'complaint';
@@ -163,7 +173,9 @@ export class ComplaintAnalyticsComponent implements OnInit {
     this.sidebarSlide.clear();
     const componentRef = this.sidebarSlide.createComponent(factory);
     componentRef.instance.isSideBar = true;
+
     componentRef.instance.onRaiseRequestClose.subscribe((res) => {
+      this.refreshStats();
       this.sidebarVisible = false;
       componentRef.destroy();
     });

@@ -558,12 +558,12 @@ export class AdminDocumentsDetailsComponent implements OnInit {
       urls.forEach((url, i) => {
         let fileName = urls[i].split('/').pop();
         fileName = decodeURIComponent(fileName);
-        fileName = `${fileNames[i]}_${fileName}`;
+        fileName = fileName.toLocaleLowerCase();
         fetchAndAddFile(url, fileName);
       });
     }
   }
-
+  
   get documentFormGroup(): FormArray {
     // return this.selectedGuestGroup.get('documents') as FormArray;
     return this.guestsFA.controls

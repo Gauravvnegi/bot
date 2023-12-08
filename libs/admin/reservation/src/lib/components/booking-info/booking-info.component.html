@@ -180,7 +180,11 @@
         }"
         (clickedOption)="agentChange($event)"
         (openSidebar)="showAgent()"
-        [initItems]="true"
+        [initItems]="
+          !reservationId ||
+          (reservationInfoControls?.reservationType?.value &&
+            reservationInfoControls?.reservationType?.value !== 'CONFIRMED')
+        "
       ></hospitality-bot-quick-select>
 
       <hospitality-bot-quick-select
@@ -222,7 +226,11 @@
         }"
         (clickedOption)="companyChange($event)"
         (openSidebar)="showCompany()"
-        [initItems]="true"
+        [initItems]="
+          !reservationId ||
+          (reservationInfoControls?.reservationType?.value &&
+            reservationInfoControls?.reservationType?.value !== 'CONFIRMED')
+        "
       ></hospitality-bot-quick-select>
 
       <!-- (createMembers)="createNewAgent()" -->

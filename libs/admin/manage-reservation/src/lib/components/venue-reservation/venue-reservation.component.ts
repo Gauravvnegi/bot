@@ -180,7 +180,7 @@ export class VenueReservationComponent extends BaseReservationComponent
             this.formValueChanges = true;
 
             this.venueItemValues = venueInfo;
-            this.formService.guestInformation.next(guestInformation.id);
+            // this.formService.guestInformation.next(guestInformation.id);
 
             this.userForm.patchValue({
               bookingInformation: eventInfo,

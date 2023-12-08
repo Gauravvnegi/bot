@@ -25,13 +25,12 @@ import {
   QueryConfig,
 } from 'libs/admin/shared/src';
 import { IteratorComponent } from 'libs/admin/shared/src/lib/components/iterator/iterator.component';
-import { Subscription, forkJoin } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { roomFields, RoomFieldTypeOption } from '../../constants/reservation';
 import { ReservationForm, RoomTypes } from '../../constants/form';
 import { IteratorField } from 'libs/admin/shared/src/lib/types/fields.type';
 import { FormService } from '../../services/form.service';
 import { RoomTypeResponse } from 'libs/admin/room/src/lib/types/service-response';
-import { debounceTime } from 'rxjs/operators';
 import { ReservationType } from '../../constants/reservation-table';
 import { RoomService } from 'libs/admin/room/src/lib/services/room.service';
 import { ReservationCurrentStatus } from '../../models/reservations.model';
@@ -248,6 +247,8 @@ export class RoomIteratorComponent extends IteratorComponent
         },
         { emitEvent: false }
       );
+
+      // Init rooms data
       this.initItems = true;
     });
   }

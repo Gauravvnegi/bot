@@ -10,15 +10,13 @@ import {
 } from '../types/forms.types';
 import { ReservationForm, ReservationInformation } from '../constants/form';
 import { ManageReservationService } from './manage-reservation.service';
-import { QueryConfig } from '@hospitality-bot/admin/shared';
+import { Option, QueryConfig } from '@hospitality-bot/admin/shared';
 import { AbstractControl } from '@angular/forms';
 import { RoomTypeResponse } from 'libs/admin/room/src/lib/types/service-response';
 import { RoomFieldTypeOption } from '../constants/reservation';
 import {
   ReservationCurrentStatus,
-  ReservationFormData,
 } from '../models/reservations.model';
-import { RoomReservationResponse } from '../types/response.type';
 import { AgentTableResponse } from 'libs/admin/agent/src/lib/types/response';
 import { CompanyResponseType } from 'libs/admin/company/src/lib/types/response';
 
@@ -36,7 +34,7 @@ export class FormService {
   isDataInitialized = new BehaviorSubject(false);
   reinitializeRooms = new BehaviorSubject(false);
 
-  guestInformation: BehaviorSubject<string> = new BehaviorSubject<string>(null);
+  guestInformation: BehaviorSubject<Option> = new BehaviorSubject<Option>(null);
   offerType: BehaviorSubject<string> = new BehaviorSubject<string>(null);
 
   currentJourneyStatus: BehaviorSubject<

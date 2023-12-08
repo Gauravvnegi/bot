@@ -302,6 +302,7 @@ export class BookingInfoComponent implements OnInit {
             label: res?.company?.firstName,
             value: res?.company?.id,
           };
+
           this.inputControls.reservationInformation.patchValue({
             marketSegment: res.marketSegment,
             source: res.source,
@@ -381,10 +382,6 @@ export class BookingInfoComponent implements OnInit {
     control.markAsUntouched();
   }
 
-  patchControlValue(control: AbstractControl, value: any) {
-    control.patchValue(value, { emitEvent: false });
-  }
-
   getCountryCode(): void {
     this.configService
       .getColorAndIconConfig(this.entityId)
@@ -417,7 +414,7 @@ export class BookingInfoComponent implements OnInit {
   }
 
   agentChange(event) {
-    if (event) {
+    if (event && event.id) {
       this.selectedAgent = {
         label: event?.firstName,
         value: event?.id,

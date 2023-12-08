@@ -1,4 +1,5 @@
 import { AgentTableResponse } from 'libs/admin/agent/src/lib/types/response';
+import { CompanyResponseType } from 'libs/admin/company/src/lib/types/response';
 import { ReservationRatePlan } from 'libs/admin/room/src/lib/constant/form';
 
 export type ReservationForm = {
@@ -15,6 +16,7 @@ export type ReservationForm = {
   offerId: string;
   dailyPrice?: string;
   agent?: AgentTableResponse;
+  company?: CompanyResponseType;
 };
 
 export type ReservationInformation = {

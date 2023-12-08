@@ -279,7 +279,7 @@ export class QuickReservationFormComponent implements OnInit {
             this.isExternalBooking = res?.externalBooking;
             this.formService.currentJourneyStatus.next(res.status);
             this.calculateDailyPrice();
-            const { roomInformation, ...data } = formData;
+            const { roomInformation, guestInformation, ...data } = formData;
             this.guestDetails = {
               guestName:
                 res.guest.firstName +
@@ -304,14 +304,11 @@ export class QuickReservationFormComponent implements OnInit {
               phoneNumber: res?.guest?.contactDetails.contactNumber,
               cc: res?.guest?.contactDetails?.cc,
               email: res?.guest?.contactDetails?.emailId,
-            };
-            this.formService.sourceData.next({
-              source: data.reservationInformation.source,
-              sourceName: data.reservationInformation.sourceName,
-              agent: res?.agent ?? null,
-              marketSegment: data.reservationInformation?.marketSegment,
-              company: res?.company ?? null,
-            });
+            };   
+            this.formService.initSourceData(
+              formData.reservationInformation,
+              { agent: formData.agent, company: formData?.company }
+            );
             this.roomOptions = this.defaultRoomType.rooms.map((room) => ({
               label: room.roomNumber.toString(),
               value: room.roomNumber.toString(),

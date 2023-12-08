@@ -391,6 +391,9 @@
                     variant="outlined"
                   ></hospitality-bot-button> -->
                   <hospitality-bot-button
+                    *ngIf="
+                      details?.stepStatusDetails?.documents !== 'COMPLETED'
+                    "
                     (click)="verifyAllDocuments()"
                     label="Confirm All Docs"
                     variant="outlined"

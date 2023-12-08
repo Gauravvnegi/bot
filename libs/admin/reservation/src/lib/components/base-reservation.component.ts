@@ -101,7 +101,6 @@ export class BaseReservationComponent {
         this.bookingType === EntitySubType.ROOM_TYPE
           ? this.reservationInfoControls.reservationType
           : this.reservationInfoControls.status;
-
       switch (true) {
         case status === ReservationCurrentStatus.CHECKEDOUT ||
           reservationType.value === ReservationType.CANCELED:
@@ -122,7 +121,9 @@ export class BaseReservationComponent {
           this.reservationInfoControls.reservationType.enable();
           break;
         case this.bookingType !== EntitySubType.ROOM_TYPE ||
-          journeyState === JourneyState.COMPLETED:
+          journeyState === JourneyState.COMPLETED ||
+          status === ReservationCurrentStatus.INHOUSE ||
+          status === ReservationCurrentStatus.DUEOUT:
           this.userForm.disable({ emitEvent: false });
           this.formService.disableBtn = true;
           break;
@@ -146,7 +147,18 @@ export class BaseReservationComponent {
             ].forEach((controlName) =>
               roomTypeArray[0].get(controlName).enable({ emitEvent: false })
             );
-            this.reservationInfoControls.to.enable({ emitEvent: false });
+            [
+              'source',
+              'sourceName',
+              'otaSourceName',
+              'agentSourceName',
+              'companySourceName',
+            ].forEach((controlName) => {
+              this.inputControls.reservationInformation
+                .get(controlName)
+                .disable({ emitEvent: false });
+            });
+
             this.inputControls.guestInformation
               .get('guestDetails')
               .enable({ emitEvent: false });

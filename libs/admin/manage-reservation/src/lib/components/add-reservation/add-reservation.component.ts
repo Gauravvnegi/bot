@@ -105,6 +105,7 @@ export class AddReservationComponent extends BaseReservationComponent
       roomInformation,
       guestInformation,
       reservationInformation: { source, sourceName, ...reservationInfo },
+      reservationInformation,
       ...data
     } = paramsData;
     this.userForm.patchValue(
@@ -114,11 +115,9 @@ export class AddReservationComponent extends BaseReservationComponent
       },
       { emitEvent: false }
     );
-    this.formService.sourceData.next({
-      source: source,
-      sourceName: sourceName,
-      agent: data?.agent ?? null,
-      marketSegment: reservationInfo?.marketSegment,
+    this.formService.initSourceData(reservationInformation, {
+      company: data.company,
+      agent: data.agent,
     });
     this.reservationInfoControls.reservationType.patchValue(
       ReservationType.CONFIRMED
@@ -199,11 +198,9 @@ export class AddReservationComponent extends BaseReservationComponent
             const { roomInformation, ...formData } = res;
             // Will always be true as the data is not saved yet.
             this.isDraftBooking = true;
-            this.formService.sourceData.next({
-              source: formData.reservationInformation.source,
-              sourceName: formData.reservationInformation.sourceName,
-              agent: formData?.agent ?? null,
-              marketSegment: formData?.reservationInformation?.marketSegment,
+            this.formService.initSourceData(formData.reservationInformation, {
+              agent: formData.agent,
+              company: formData?.company,
             });
             // check if room type was patched
             if (roomInformation.roomTypes[0].roomTypeId.length)
@@ -245,12 +242,10 @@ export class AddReservationComponent extends BaseReservationComponent
             this.checkinJourneyState = this.reservationFormData.journeyState;
             this.isExternalBooking = response.externalBooking;
 
-            this.formService.sourceData.next({
-              source: source,
-              sourceName: sourceName,
-              agent: response?.agent ?? null,
-              marketSegment: reservationInfo?.marketSegment,
-            });
+            this.formService.initSourceData(
+              this.reservationFormData.reservationInformation,
+              { agent: formData.agent, company: formData?.company }
+            );
             if (nextStates)
               this.reservationTypes = nextStates.map((item) => ({
                 label: convertToTitleCase(item),

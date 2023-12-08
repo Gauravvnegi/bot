@@ -241,11 +241,13 @@
         </td>
         <td>
           <div class="center-align" *ngIf="rowData.source; else emptyCell">
-            <div class="primary-text" *ngIf="rowData?.agentName?.length">
-              {{ rowData?.agentName || '--' }}
-            </div>
-            <div class="primary-text" *ngIf="!rowData?.agentName?.length">
-              {{ rowData?.sourceName || '--' }}
+            <div class="primary-text">
+              {{
+                rowData?.agentName ||
+                  rowData?.companyName ||
+                  rowData?.sourceName ||
+                  '--'
+              }}
             </div>
             <div class="secondary-text">
               {{ rowData?.source }}

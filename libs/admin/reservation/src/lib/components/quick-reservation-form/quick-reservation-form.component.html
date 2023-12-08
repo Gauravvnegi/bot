@@ -181,7 +181,16 @@
           }"
         ></hospitality-bot-input>
       </ng-container>
-
+      <!-- Daily Price -->
+      <hospitality-bot-input
+        *ngIf="reservationId"
+        class="half-width"
+        controlName="dailyPrice"
+        label="Daily Price"
+        [props]="{
+          placeholder: 'Enter'
+        }"
+      ></hospitality-bot-input>
       <!-- Instructions -->
       <ng-container formGroupName="instructions">
         <hospitality-bot-text-area
@@ -193,17 +202,6 @@
           }"
         ></hospitality-bot-text-area>
       </ng-container>
-
-      <!-- Daily Price -->
-      <hospitality-bot-input
-        *ngIf="reservationId"
-        class="half-width"
-        controlName="dailyPrice"
-        label="Daily Price"
-        [props]="{
-          placeholder: 'Enter'
-        }"
-      ></hospitality-bot-input>
     </div>
   </div>
   <!-- <div class="btn-wrapper">

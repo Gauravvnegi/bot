@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { FormBuilder, FormGroup, FormArray, FormControl } from '@angular/forms';
 import { UserService } from '@hospitality-bot/admin/shared';
+import { of } from 'rxjs';
 
 @Component({
   selector: 'hospitality-bot-admin-payment-details',
@@ -72,6 +73,13 @@ export class AdminPaymentDetailsComponent implements OnInit {
   }
 
   getModifiedTransactionHistory() {
+    const getCashierName = async (cashierId: string) => {
+      const res = await this.userService
+        .getUserDetailsById(cashierId)
+        .toPromise();
+      return res.firstName + ' ' + res.lastName;
+    };
+
     this.transactionHistory = []; // Clear the array before populating it
     this.transactionHistory = this.detailsData.paymentDetails.transactionHistory.map(
       (transaction) => {
@@ -83,9 +91,8 @@ export class AdminPaymentDetailsComponent implements OnInit {
           remarks,
           amount,
           currency,
+          cashierId,
         } = transaction;
-        const { firstName, lastName } = this.userService.userDetails;
-        const cashierName = firstName;
 
         return {
           transactionId,
@@ -93,9 +100,11 @@ export class AdminPaymentDetailsComponent implements OnInit {
           status,
           paymentMode,
           remarks,
-          cashierName,
           amount,
-          currency
+          currency,
+          cashierName: cashierId
+            ? getCashierName(cashierId)
+            : of('-').toPromise(),
         };
       }
     );

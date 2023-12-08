@@ -31,6 +31,8 @@ import {
   OfferListResponse,
   OfferResponse,
 } from 'libs/admin/offers/src/lib/types/response';
+import { AgentTableResponse } from 'libs/admin/agent/src/lib/types/response';
+import { CompanyResponseType } from 'libs/admin/company/src/lib/types/response';
 /* Reservation */
 
 export class RoomReservation {
@@ -91,6 +93,7 @@ export class RoomReservation {
     this.agentName = input?.agent
       ? `${input?.agent?.firstName} ${input?.agent?.lastName}`
       : '';
+    this.companyName = input?.company?.firstName ?? '';
     return this;
   }
 
@@ -254,6 +257,8 @@ export class ReservationFormData {
   journeyState: JourneyState;
   currentState: ReservationCurrentStatus;
   paymentRule: PaymentRuleForm;
+  agent: AgentTableResponse;
+  company: CompanyResponseType;
 
   deserialize(input: RoomReservationResponse) {
     this.reservationInformation = new BookingInfo().deserialize(input);
@@ -286,6 +291,9 @@ export class ReservationFormData {
     this.totalAmount = input.pricingDetails.totalAmount ?? 0;
     this.journeyState = input.journeysStatus.CHECKIN;
     this.currentState = input.status;
+    this.printRate = input?.printRate;
+    this.company = input?.company ?? null;
+    this.agent = input?.agent ?? null;
     return this;
   }
 }

@@ -53,18 +53,34 @@ export class InvoiceService extends ApiService {
     );
   }
 
-  generateInvoice(reservationId: string): Observable<any> {
-    return this.patch(`/api/v1/reservation/${reservationId}/bill-summary`, {
-      invoiceGenerated: true,
-    });
+  generateInvoice(
+    reservationId: string,
+    paymentState?: string
+  ): Observable<any> {
+    return this.patch(
+      `/api/v1/reservation/${reservationId}/bill-summary` +
+        (paymentState ? `?paymentState=${paymentState}` : ''),
+      {
+        invoiceGenerated: true,
+      }
+    );
   }
 
-  getInvoiceData(reservationId: string): Observable<BillSummaryData> {
-    return this.get(`/api/v1/reservation/${reservationId}/bill-summary`);
+  getInvoiceData(
+    reservationId: string,
+    paymentState?: string
+  ): Observable<BillSummaryData> {
+    return this.get(
+      `/api/v1/reservation/${reservationId}/bill-summary` +
+        (paymentState ? `?paymentState=${paymentState}` : '')
+    );
   }
 
-  downloadPDF(reservationId: string): Observable<any> {
-    return this.get(`/api/v1/reservation/${reservationId}/invoice`);
+  downloadPDF(reservationId: string, paymentState?: string): Observable<any> {
+    return this.get(
+      `/api/v1/reservation/${reservationId}/invoice` +
+        (paymentState ? `?paymentState=${paymentState}` : '')
+    );
   }
 
   emailInvoice(reservationId: string, data) {
@@ -232,7 +248,7 @@ export class InvoiceService extends ApiService {
   }
 
   handleInvoiceDownload(reservationId: string) {
-    this.downloadPDF(reservationId).subscribe((res) => {
+    this.downloadPDF(reservationId, 'REALISED').subscribe((res) => {
       const fileUrl = res.file_download_url;
       const xhr = new XMLHttpRequest();
       xhr.open('GET', fileUrl, true);

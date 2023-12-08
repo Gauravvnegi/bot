@@ -107,7 +107,7 @@
           </ng-container>
 
           <ng-container matColumnDef="amount">
-            <th mat-header-cell *matHeaderCellDef>Amount</th>
+            <th mat-header-cell *matHeaderCellDef>Total Charges</th>
             <td mat-cell *matCellDef="let element">
               {{ element.amount | currency: element.currency }}
             </td>
@@ -117,7 +117,7 @@
             <th mat-header-cell *matHeaderCellDef>CGST</th>
             <td mat-cell *matCellDef="let element">
               <ng-container *ngIf="element.cgstAmount >= 0; else emptyCell">
-                {{ element.cgstAmount }}
+                {{ element.cgstAmount | currency: element.currency }}
               </ng-container>
             </td>
           </ng-container>
@@ -126,7 +126,7 @@
             <th mat-header-cell *matHeaderCellDef>SGST</th>
             <td mat-cell *matCellDef="let element">
               <ng-container *ngIf="element.sgstAmount >= 0; else emptyCell">
-                {{ element.sgstAmount }}
+                {{ element.sgstAmount | currency: element.currency }}
               </ng-container>
             </td>
           </ng-container>
@@ -139,7 +139,7 @@
           </ng-container>
 
           <ng-container matColumnDef="totalAmount">
-            <th mat-header-cell *matHeaderCellDef>Total Amount</th>
+            <th mat-header-cell *matHeaderCellDef>Total Payable</th>
             <td mat-cell *matCellDef="let element">
               {{ element.totalAmount | currency: element.currency }}
             </td>
@@ -150,7 +150,7 @@
         </table>
         <div class="total-detail-wrapper">
           <div class="total">
-            <mat-label class="label">Total Charges:</mat-label>
+            <mat-label class="label">Total Payable:</mat-label>
             <span class="value">
               {{
                 +detailsData.paymentDetails.totalAmount
@@ -169,7 +169,7 @@
             >
           </div>
           <div class="green total">
-            <mat-label class="label">Total Payment:</mat-label>
+            <mat-label class="label">Total Paid Amount:</mat-label>
             <span class="value"
               >-
               {{
@@ -291,6 +291,11 @@
     </div>
 
     <hr class="data-seperator" /> -->
+    <hr class="data-seperator" />
+    <div class="payment-header">
+      <mat-label class="heading">Payment History</mat-label>
+    </div>
+
     <ng-container *ngFor="let transaction of transactionHistory">
       <ng-container
         *ngIf="
@@ -298,10 +303,6 @@
           transaction.amount
         "
       >
-        <hr class="data-seperator" />
-        <div class="payment-header">
-          <mat-label class="heading">Payment History</mat-label>
-        </div>
         <mat-accordion>
           <mat-expansion-panel #paymentHistoryPanel *ngIf="transaction.amount">
             <mat-expansion-panel-header>
@@ -309,7 +310,11 @@
                 <p>
                   Transcation ID -
                   {{ transaction.transactionId || '--' }}
-                  <span class="seperator"> | </span> {{ transaction.amount }}
+                  <span class="seperator"> | </span>
+                  {{
+                    transaction.amount
+                      | currency: detailsData.paymentDetails.currency
+                  }}
                   <span class="seperator"> | </span>
                   <span
                     [class.status-button]="transaction?.status"
@@ -382,12 +387,12 @@
               <ng-container matColumnDef="cashierName">
                 <th mat-header-cell *matHeaderCellDef>Cashier Name</th>
                 <td mat-cell *matCellDef="let element">
-                  {{ element?.cashierName }}
+                  {{ element?.cashierName | async }}
                 </td>
               </ng-container>
 
               <ng-container matColumnDef="totalAmount">
-                <th mat-header-cell *matHeaderCellDef>Total Charges</th>
+                <th mat-header-cell *matHeaderCellDef>Total Payable</th>
                 <td mat-cell *matCellDef="let element">
                   {{ +element?.amount | currency: element.currency }}
                 </td>

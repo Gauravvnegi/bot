@@ -8,13 +8,19 @@ import {
   RoomReservationFormData,
   SourceData,
 } from '../types/forms.types';
-import { ReservationForm } from '../constants/form';
+import { ReservationForm, ReservationInformation } from '../constants/form';
 import { ManageReservationService } from './manage-reservation.service';
 import { QueryConfig } from '@hospitality-bot/admin/shared';
 import { AbstractControl } from '@angular/forms';
 import { RoomTypeResponse } from 'libs/admin/room/src/lib/types/service-response';
 import { RoomFieldTypeOption } from '../constants/reservation';
-import { ReservationCurrentStatus } from '../models/reservations.model';
+import {
+  ReservationCurrentStatus,
+  ReservationFormData,
+} from '../models/reservations.model';
+import { RoomReservationResponse } from '../types/response.type';
+import { AgentTableResponse } from 'libs/admin/agent/src/lib/types/response';
+import { CompanyResponseType } from 'libs/admin/company/src/lib/types/response';
 
 @Injectable({
   providedIn: 'root',
@@ -56,6 +62,19 @@ export class FormService {
   enableAccordion: boolean = false;
 
   reservationForm = new BehaviorSubject<ReservationForm>(null);
+
+  initSourceData(
+    reservationInfo: ReservationInformation,
+    sourceData: { agent: AgentTableResponse; company: CompanyResponseType }
+  ) {
+    this.sourceData.next({
+      source: reservationInfo.source,
+      sourceName: reservationInfo.sourceName,
+      agent: sourceData?.agent ?? null,
+      marketSegment: reservationInfo?.marketSegment,
+      company: sourceData?.company ?? null,
+    });
+  }
 
   mapRoomReservationData(
     input: ReservationForm,
@@ -284,55 +303,3 @@ export type GetRoomsConfig = {
   roomNumbersControl?: AbstractControl;
   defaultRoomNumbers?: string[];
 };
-
-
-//for ayush
-
-// listenForReservationTypeChanges(): void {
-//   this.reservationInfoControls.reservationType.valueChanges.subscribe(
-//     (res) => {
-//       if (res === ReservationType.CANCELED && this.reservationId) {
-//         const dialogConfig = new MatDialogConfig();
-//         dialogConfig.disableClose = true;
-//         const togglePopupCompRef = this.modalService.openDialog(
-//           ModalComponent,
-//           dialogConfig
-//         );
-
-//         togglePopupCompRef.componentInstance.content = {
-//           heading: `Mark Reservation As ${
-//             res.charAt(0).toUpperCase() + res.slice(1).toLowerCase()
-//           }`,
-//           description: [
-//             `You are about to mark this reservation as ${res}`,
-//             `Are you Sure?`,
-//           ],
-//         };
-
-//         togglePopupCompRef.componentInstance.actions = [
-//           {
-//             label: 'No',
-//             onClick: () => {
-//               this.reservationInfoControls.reservationType.patchValue(
-//                 this.reservationType,
-//                 {
-//                   emitEvent: false,
-//                 }
-//               );
-
-//               this.modalService.close();
-//             },
-//             variant: 'outlined',
-//           },
-//           {
-//             label: 'Yes',
-//             onClick: () => {
-//               this.modalService.close();
-//             },
-//             variant: 'contained',
-//           },
-//         ];
-//       }
-//     }
-//   );
-// }

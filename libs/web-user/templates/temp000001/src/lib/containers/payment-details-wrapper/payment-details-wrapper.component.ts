@@ -95,22 +95,24 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
     this._paymentDetailsService
       .getPaymentConfigurationV2(this._hotelService.entityId, journey.name)
       .subscribe((data) => {
-        const gatewayDetails = data?.paymentConfiguration?.map((gateway) => ({
-          gatewayType: gateway?.type,
-          imgSrc: gateway?.imageUrl,
-          //  gateway?.type === 'CCAVENUE'
-          //   ? 'https://nyc3.digitaloceanspaces.com/botfiles/bot/payment_method/ccavenue.png'
-          //   : 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/PayU.svg/1200px-PayU.svg.png',
-          payload: {
-            redirectUrl: `${environment.host_url}${this.router.url}&entity=payment`,
-            ...(gateway?.type === 'AIRPAY'
-              ? {
-                  currency: '356',
-                  isocurrency: 'INR',
-                }
-              : {}),
-          },
-        }));
+        const gatewayDetails = data?.paymentConfiguration
+          ?.filter((item) => item.status)
+          ?.map((gateway) => ({
+            gatewayType: gateway?.type,
+            imgSrc: gateway?.imageUrl,
+            //  gateway?.type === 'CCAVENUE'
+            //   ? 'https://nyc3.digitaloceanspaces.com/botfiles/bot/payment_method/ccavenue.png'
+            //   : 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/PayU.svg/1200px-PayU.svg.png',
+            payload: {
+              redirectUrl: `${environment.host_url}${this.router.url}&entity=payment`,
+              ...(gateway?.type === 'AIRPAY'
+                ? {
+                    currency: '356',
+                    isocurrency: 'INR',
+                  }
+                : {}),
+            },
+          }));
 
         this.paymentUrl = initPaymentModule({
           userInfo: {

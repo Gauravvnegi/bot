@@ -132,6 +132,10 @@ export class CheckoutReservationsComponent implements OnInit {
     });
   }
 
+  handleRowClick(event) {
+    this.openDetailsPage(event.id);
+  }
+
   openDetailsPage(reservationId: string) {
     const openTab: DetailsTabOptions = 'guest_details';
     const dialogConfig = new MatDialogConfig();

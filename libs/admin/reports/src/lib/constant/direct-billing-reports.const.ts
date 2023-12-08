@@ -45,6 +45,14 @@ export const directAgentBillingReportsCols: ColsData<DirectAgentBillingReportDat
     header: 'Pax',
     isSortDisabled: true,
   },
+  totalAmount: {
+    header: 'Total Amount',
+    isSortDisabled: true,
+  },
+  postTaxAmount: {
+    header: 'Post Tax Total',
+    isSortDisabled: true,
+  },
   totalPaidAmount: {
     header: 'Paid Amount',
     isSortDisabled: true,

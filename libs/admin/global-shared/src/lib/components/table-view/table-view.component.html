@@ -31,7 +31,7 @@
       </ng-template>
       <!-- ************ BODY *************** -->
       <ng-template pTemplate="body" let-rowData>
-        <tr>
+        <tr (click)="onRowClick.emit(rowData)" class="row">
           <td *ngFor="let col of columns">
             <div
               class="cell-content"

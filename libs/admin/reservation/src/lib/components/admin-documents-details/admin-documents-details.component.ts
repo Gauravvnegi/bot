@@ -509,6 +509,8 @@ export class AdminDocumentsDetailsComponent implements OnInit {
     const guest = this.detailsData.guestDetails.guests.find(
       (data) => data.id === this.selectedGuestId
     );
+
+    debugger;
     const name = `${guest.firstName}_${guest.lastName}`;
 
     const bookingNumber = this.detailsData.reservationDetails.bookingNumber;
@@ -521,6 +523,8 @@ export class AdminDocumentsDetailsComponent implements OnInit {
         fileNames.push(`${doc.documentType}_${bookingNumber}_${name}_backURL`);
       }
     });
+
+    console.log(fileNames);
 
     const zipFile = new JSZip();
     let count = 0;
@@ -558,7 +562,7 @@ export class AdminDocumentsDetailsComponent implements OnInit {
       urls.forEach((url, i) => {
         let fileName = urls[i].split('/').pop();
         fileName = decodeURIComponent(fileName);
-        fileName = `${fileNames[i]}_${fileName}`;
+        fileName = `${fileNames[i]}`.toLocaleLowerCase();
         fetchAndAddFile(url, fileName);
       });
     }

@@ -291,6 +291,11 @@
     </div>
 
     <hr class="data-seperator" /> -->
+    <hr class="data-seperator" />
+    <div class="payment-header">
+      <mat-label class="heading">Payment History</mat-label>
+    </div>
+
     <ng-container *ngFor="let transaction of transactionHistory">
       <ng-container
         *ngIf="
@@ -298,10 +303,6 @@
           transaction.amount
         "
       >
-        <hr class="data-seperator" />
-        <div class="payment-header">
-          <mat-label class="heading">Payment History</mat-label>
-        </div>
         <mat-accordion>
           <mat-expansion-panel #paymentHistoryPanel *ngIf="transaction.amount">
             <mat-expansion-panel-header>
@@ -386,7 +387,7 @@
               <ng-container matColumnDef="cashierName">
                 <th mat-header-cell *matHeaderCellDef>Cashier Name</th>
                 <td mat-cell *matCellDef="let element">
-                  {{ element?.cashierName }}
+                  {{ element?.cashierName | async }}
                 </td>
               </ng-container>
 

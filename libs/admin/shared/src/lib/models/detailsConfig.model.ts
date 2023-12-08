@@ -556,6 +556,7 @@ export class TransactionHistory {
   signatureUrl: string | null;
   status: string;
   transactionId: string | null;
+  cashierId: string;
   updated: number;
 
   deserialize(input: TransactionHistoryResponse) {
@@ -577,6 +578,7 @@ export class TransactionHistory {
     this.signatureUrl = input.signatureUrl;
     this.status = input.status;
     this.transactionId = input.transactionId;
+    this.cashierId = input.cashierId;
     this.updated = input.updated;
 
     return this;

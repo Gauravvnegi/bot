@@ -50,9 +50,10 @@ export class AuthComponent implements OnInit {
     this.authService.getProductList().subscribe((res) => {
       this.productList = res.map((data) => {
         return {
-          name: data.name,
-          label: data.label,
-          icon: data.icon,
+          name: data?.name,
+          label: data?.label,
+          icon: data?.icon,
+          description: data?.description,
         };
       });
     });

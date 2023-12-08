@@ -16,6 +16,7 @@ import { AuthService } from '../../services/auth.service';
 export class RequestPasswordComponent implements OnInit {
   requestPasswordForm: FormGroup;
   isEmailSent: boolean;
+  isRequesting: boolean;
 
   constructor(
     private _fb: FormBuilder,
@@ -44,6 +45,7 @@ export class RequestPasswordComponent implements OnInit {
    * @function requestPassword To request for a new password.
    */
   requestPassword(): void {
+    this.isRequesting = true;
     if (!this.requestPasswordForm.valid) {
       return;
     }
@@ -57,7 +59,11 @@ export class RequestPasswordComponent implements OnInit {
           panelClass: 'success',
         });
         this._router.navigate(['/auth/resend-password']);
-      } 
+        this.isRequesting = false;
+      },
+      (error) => {
+        this.isRequesting = false;
+      }
     );
   }
 

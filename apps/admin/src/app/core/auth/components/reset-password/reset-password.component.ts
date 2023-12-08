@@ -18,6 +18,7 @@ export class ResetPasswordComponent implements OnInit {
   resetPasswordForm: FormGroup;
   isPasswordVisible = false;
   changePasswordToken: string;
+  isResetingIn: boolean = false;
 
   constructor(
     private _fb: FormBuilder,
@@ -77,6 +78,8 @@ export class ResetPasswordComponent implements OnInit {
       return;
     }
 
+    this.isResetingIn = true;
+
     const data = {
       token: this.changePasswordToken,
       password: this.resetPasswordForm?.get('password')?.value,
@@ -94,10 +97,16 @@ export class ResetPasswordComponent implements OnInit {
             { panelClass: 'success' }
           )
           .subscribe();
+        
+        debugger;
+
+        this.isResetingIn = false;
 
         this.navigateToLogin();
       },
       ({ error }) => {
+        this.isResetingIn = false;
+
         this._snackbarService
           .openSnackBarWithTranslate(
             {

@@ -1,3 +1,4 @@
+import { toCurrency } from 'libs/admin/shared/src/lib/utils/valueFormatter';
 import {
   DiscountAllowanceReportData,
   DiscountAllowanceReportResponse,
@@ -23,9 +24,9 @@ export class DiscountAllowanceReport
             `${reservationData?.user?.firstName} ${reservationData?.user?.lastName}`, //to be added in response
           guestName: `${reservationData.guestDetails.primaryGuest.firstName} ${reservationData.guestDetails.primaryGuest.lastName}`,
           reasonForDiscount: undefined, //to be added in response
-          directDiscount: reservationData.paymentSummary.totalDiscount,
+          directDiscount:toCurrency(reservationData.paymentSummary.totalDiscount),
           allowance: undefined, //to be added in response
-          total: reservationData.paymentSummary.totalDiscount,
+          total: toCurrency(reservationData.paymentSummary.totalDiscount),
         });
       });
     return this;

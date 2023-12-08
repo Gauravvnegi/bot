@@ -149,4 +149,6 @@ export type DirectCompanyBillingReportData = {
   totalDueAmount: string;
 };
 
-export type DirectCompanyBillingReportResponse = DirectAgentBillingReportResponse & {};
+export type DirectCompanyBillingReportResponse = DirectAgentBillingReportResponse & {
+  nightsCount: number;
+};

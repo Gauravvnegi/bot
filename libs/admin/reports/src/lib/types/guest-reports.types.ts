@@ -5,20 +5,20 @@ export type GuestHistoryData = {
   firstStayed: string;
   lastStayed: string;
   noOfResv: number;
-  roomCharges: number;
-  roomTax: number;
-  otherCharges: number;
-  totalCharges: number;
-  totalAmount: number;
-  amountPaid: number;
-  balance: number;
+  roomCharges: string;
+  roomTax: string;
+  otherCharges: string;
+  totalCharges: string;
+  totalAmount: string;
+  amountPaid: string;
+  balance: string;
 };
 
 export type GuestLedgerData = {
   roomNo: string;
   name: string;
   confirmationNo: string;
-  balance: number;
+  balance: string;
 };
 
 export type SalesByGuestData = {

@@ -85,14 +85,9 @@ export class FeedbackDetailComponent implements OnInit, OnDestroy {
     this.$subscription.add(
       this.cardService.$selectedFeedback.subscribe((response) => {
         this.feedback = response;
-        this.statusList = response.nextState.map((item) => {
-          return { label: convertToTitleCase(item), id: item };
-        });
+        
+        this.setStatusList(this.feedback);
 
-        this.statusList.unshift({
-          label: convertToTitleCase(response.status),
-          id: response.status,
-        } as any);
         this.feedbackFG?.patchValue({
           assignee: response?.userId,
           status: response?.status,
@@ -306,12 +301,26 @@ export class FeedbackDetailComponent implements OnInit, OnDestroy {
             this.feedbackType,
             this.colorMap
           );
+
+          this.setStatusList(this.feedback);
+
           if (scrollTop)
             setTimeout(() => {
               this.feedbackChat.nativeElement.scrollTop = this.feedbackChat.nativeElement.scrollHeight;
             }, 1000);
         })
     );
+  }
+
+  setStatusList(data) {
+    this.statusList = this.feedback.nextState.map((item) => {
+      return { label: convertToTitleCase(item), id: item };
+    });
+
+    this.statusList.unshift({
+      label: convertToTitleCase(data.status),
+      id: data.status,
+    } as any);
   }
 
   get feedbackServices() {

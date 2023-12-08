@@ -488,14 +488,10 @@ export class DetailsComponent implements OnInit, OnDestroy {
   }
 
   downloadRegcard(regcardUrl) {
+    const [name] = regcardUrl.split('/').reverse();
+
     if (regcardUrl) {
-      FileSaver.saveAs(
-        regcardUrl,
-        'regcard' +
-          this.reservationDetailsFG.get('bookingNumber').value +
-          new Date().getTime() +
-          '.pdf'
-      );
+      FileSaver.saveAs(regcardUrl, name);
     } else {
       this.regCardLoading = true;
       this.$subscription.add(
@@ -504,13 +500,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
           .subscribe(
             (res: FileData) => {
               this.regCardLoading = false;
-              FileSaver.saveAs(
-                res.file_download_url,
-                'regcard' +
-                  this.reservationDetailsFG.get('bookingNumber').value +
-                  new Date().getTime() +
-                  '.pdf'
-              );
+              FileSaver.saveAs(res.file_download_url, name);
             },
             ({ error }) => {
               this.regCardLoading = false;

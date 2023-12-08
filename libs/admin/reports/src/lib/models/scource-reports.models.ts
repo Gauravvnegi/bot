@@ -1,3 +1,4 @@
+import { toCurrency } from 'libs/admin/shared/src/lib/utils/valueFormatter';
 import { ReportClass } from '../types/reports.types';
 import {
   MarketSourceReportData,
@@ -18,10 +19,10 @@ export class MarketSourceReport
           nights: value[key].nights,
           occupancy: value[key].occupancyPercent,
           pax: value[key].pax,
-          roomRevenue: value[key].roomRevenue,
-          revenue: value[key].revenuePercent,
-          arrOrAgr: value[key].arr,
-          arp: value[key].arp,
+          roomRevenue: toCurrency(value[key].roomRevenue),
+          revenue: toCurrency(value[key].revenuePercent),
+          arrOrAgr: toCurrency(value[key].arr),
+          arp: toCurrency(value[key].arp),
         });
       });
 

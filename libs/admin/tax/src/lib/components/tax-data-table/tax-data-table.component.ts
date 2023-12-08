@@ -14,12 +14,13 @@ import {
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { taxRoutes } from '../../constants/routes';
 import { cols, title } from '../../constants/data-table';
-import { Subscription } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
 import { TaxService } from '../../services/tax.service';
 import { LazyLoadEvent } from 'primeng/api/public_api';
 import { TaxList } from '../../models/tax.model';
 import { QueryConfig } from '../../types/tax';
 import * as FileSaver from 'file-saver';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'hospitality-bot-tax-data-table',
@@ -41,6 +42,7 @@ export class TaxDataTableComponent extends BaseDatatableComponent
   globalQueries = [];
   $subscription = new Subscription();
   navRoutes: NavRouteOptions;
+  private destroyed$ = new Subject<void>();
 
   constructor(
     public fb: FormBuilder,
@@ -78,7 +80,9 @@ export class TaxDataTableComponent extends BaseDatatableComponent
   }
 
   onEntityTabFilterChanges(event): void {
+    this.destroyed$.next();
     this.entityId = event.entityId[0];
+    this.taxService.entityId = this.entityId;
     this.initTableValue();
   }
 
@@ -92,6 +96,7 @@ export class TaxDataTableComponent extends BaseDatatableComponent
     this.$subscription.add(
       this.taxService
         .getTaxList(this.entityId, this.getQueryConfig())
+        .pipe(takeUntil(this.destroyed$))
         .subscribe(
           (res) => {
             const taxList = new TaxList().deserialize(res);
@@ -190,7 +195,6 @@ export class TaxDataTableComponent extends BaseDatatableComponent
   }
 
   onCreateNewTax(): void {
-    this.taxService.entityId = this.entityId;
     this.router.navigate([this.routes.createTax.route], {
       relativeTo: this.route,
     });

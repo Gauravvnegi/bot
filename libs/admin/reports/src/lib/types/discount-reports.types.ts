@@ -8,9 +8,9 @@ export type DiscountAllowanceReportData = {
   createdBy: string;
   guestName: string;
   reasonForDiscount: string;
-  directDiscount: number;
+  directDiscount: string;
   allowance: string;
-  total: number;
+  total: string;
 };
 
 export type DiscountAllowanceReportResponse = ReservationResponseData & {

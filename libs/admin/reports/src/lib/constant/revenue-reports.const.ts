@@ -22,7 +22,7 @@ export const cashierReportCols: ColsData<CashierReportData> = {
   },
 };
 
-export const payTypeReportCols: ColsData<PayTypeReportData> = {
+export const payTypeReportCols: Partial<ColsData<PayTypeReportData>> = {
   paymentMode: {
     header: 'Payment Mode',
     isSortDisabled: true,
@@ -51,10 +51,10 @@ export const payTypeReportCols: ColsData<PayTypeReportData> = {
     header: 'Room',
     isSortDisabled: true,
   },
-  counter: {
-    header: 'Counter',
-    isSortDisabled: true,
-  },
+  // counter: {
+  //   header: 'Counter',
+  //   isSortDisabled: true,
+  // },
   dateAndTime: {
     header: 'Date & Time',
     isSortDisabled: true,

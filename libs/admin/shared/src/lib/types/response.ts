@@ -49,6 +49,7 @@ export type TransactionHistoryResponse = {
   status: string;
   transactionId: string | null;
   updated: number;
+  cashierId: string;
 };
 
 export type LoaderProps = {

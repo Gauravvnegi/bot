@@ -8,7 +8,10 @@ import {
   CashierReportResponse,
   PayTypeReportResponse,
 } from '../types/revenue-reports.types';
-import { getFormattedDate } from './reservation-reports.models';
+import {
+  getFormattedDate,
+  getFormattedDateWithTime,
+} from './reservation-reports.models';
 
 export class Cashier extends RowStyles {
   id: string;
@@ -166,8 +169,9 @@ class PayTypeReportData {
     this.guestName = `${input?.reservation?.guestDetails?.primaryGuest?.firstName} ${input?.reservation?.guestDetails?.primaryGuest?.lastName}`;
     this.room = `${input?.reservation?.stayDetails?.room?.roomNumber} - ${input?.reservation?.stayDetails?.room?.type}`;
     this.counter = undefined;
-    this.dateAndTime = input.created && getFormattedDate(input?.created);
+    this.dateAndTime =
+      input.created && getFormattedDateWithTime(input?.created);
     this.amount = toCurrency(input?.amount);
-    this.description = undefined;
+    this.description = input?.remarks;
   }
 }

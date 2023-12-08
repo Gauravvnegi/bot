@@ -31,6 +31,7 @@ export type PayTypeReportResponse = {
   paymentMethod: string;
   reservationNumber: string;
   reservation: Reservation;
+  remarks: string;
 };
 
 interface ContactDetails {

@@ -115,7 +115,7 @@ export class CreatePackageComponent implements OnInit {
       discountedCurrency: ['', Validators.required],
       discountedPrice: ['', Validators.required],
       enableVisibility: [[], Validators.required],
-      enableOnMicrosite: [true],
+      enableOnMicrosite: [false],
       priority: ['LOW'],
     });
 
@@ -180,6 +180,10 @@ export class CreatePackageComponent implements OnInit {
             this.handleFinal
           )
       );
+
+      this.useForm.get('enableVisibility').valueChanges.subscribe((res) => {
+        if (res === 'ALL') this.useForm.get('enableOnMicrosite').setValue(true);
+      });
     }
 
     /* Value changes subscription */

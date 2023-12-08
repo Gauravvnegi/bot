@@ -8,8 +8,15 @@ import {
   SimpleChanges,
 } from '@angular/core';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import {
+  DetailsComponent,
+  DetailsTabOptions,
+} from '@hospitality-bot/admin/reservation';
 import { EntitySubType, ModuleNames } from '@hospitality-bot/admin/shared';
-import { SnackBarService } from '@hospitality-bot/shared/material';
+import {
+  ModalService,
+  SnackBarService,
+} from '@hospitality-bot/shared/material';
 import { manageReservationRoutes } from 'libs/admin/manage-reservation/src/lib/constants/routes';
 import { ConfirmationService, MenuItem } from 'primeng/api';
 import { Subscription } from 'rxjs';
@@ -21,6 +28,7 @@ import {
   reservationStatus,
 } from '../../constants/checked-in-reservation.table';
 import { CheckedInReservation } from '../../models/night-audit.model';
+import { MatDialogConfig } from '@angular/material/dialog';
 
 @Component({
   selector: 'hospitality-bot-checkin-reservations',
@@ -56,6 +64,7 @@ export class CheckinReservationsComponent implements OnInit {
     private confirmationService: ConfirmationService,
     private snackbarService: SnackBarService,
     private globalFilterService: GlobalFilterService,
+    private modalService: ModalService,
     private _clipboard: Clipboard
   ) {}
 
@@ -154,6 +163,45 @@ export class CheckinReservationsComponent implements OnInit {
   reloadTable(refresh?: boolean) {
     this.initActionConfig();
     this.reload.emit(refresh ? { refresh: true } : true);
+  }
+
+  handleRowClick(event) {
+    this.openDetailsPage(event.id);
+  }
+
+  openDetailsPage(reservationId: string) {
+    const openTab: DetailsTabOptions = 'guest_details';
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = true;
+    dialogConfig.width = '100%';
+    const detailCompRef = this.modalService.openDialog(
+      DetailsComponent,
+      dialogConfig
+    );
+
+    detailCompRef.componentInstance.bookingId = reservationId;
+    detailCompRef.componentInstance.tabKey = openTab;
+    this.increaseZIndex(true);
+    this.$subscription.add(
+      detailCompRef.componentInstance.onDetailsClose.subscribe((res) => {
+        this.increaseZIndex(false);
+        detailCompRef.close();
+      })
+    );
+
+    this.$subscription.add(
+      detailCompRef.componentInstance.onRoute.subscribe((res) => {
+        this.onClose.emit(true);
+      })
+    );
+  }
+
+  increaseZIndex(toggleZIndex: boolean) {
+    const cdkOverlayContainer = document.querySelector(
+      '.cdk-overlay-container'
+    ) as HTMLElement;
+    if (cdkOverlayContainer)
+      cdkOverlayContainer.style.zIndex = toggleZIndex ? '1500 ' : '1000';
   }
 
   handleNext() {

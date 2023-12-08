@@ -10,6 +10,8 @@ export type DirectAgentBillingReportData = {
   checkOutDate: string;
   totalNights: number;
   pax: number;
+  totalAmount: string;
+  postTaxAmount: string;
   totalPaidAmount: string;
   totalDueAmount: string;
 };
@@ -22,7 +24,7 @@ export type DirectAgentBillingReportResponse = {
   reservationType: string;
   reservationNumber: string;
   status: string;
-  nightCount: number;
+  nightsCount: number;
   guest: {
     id: string;
     firstName: string;

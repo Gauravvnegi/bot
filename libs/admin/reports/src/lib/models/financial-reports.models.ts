@@ -134,7 +134,7 @@ export class DepositReport
         const onlinePaymentGateway = toCurrency(
           currencyToNumber(getPaymentMethodAmount(item, 'CCAVENUE')) +
             currencyToNumber(getPaymentMethodAmount(item, 'Stripe')) +
-            currencyToNumber(getPaymentMethodAmount(item, 'PAYU'))
+            currencyToNumber(getPaymentMethodAmount(item, 'PayU'))
         );
 
         return {

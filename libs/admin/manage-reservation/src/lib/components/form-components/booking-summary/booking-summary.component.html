@@ -92,7 +92,9 @@
           paymentControls?.totalPaidAmount.value || summaryData?.totalPaidAmount
         "
       >
-        <span class="bk-summary_priceInfo_perNight_label">Total Payment</span>
+        <span class="bk-summary_priceInfo_perNight_label"
+          >Total Paid Amount</span
+        >
         <span class="bk-summary_priceInfo_perNight_amount">{{
           +paymentControls.totalPaidAmount.value + +summaryData.totalPaidAmount
             | currency: 'INR'
@@ -226,15 +228,21 @@
           >
         </div>
         <div class="offer offerSummary">
-          <div class="offerName">{{ selectedOffer?.name }}</div>
-          <!-- <span
-            class="offerData"
+          <!-- <div> -->
+          <span class="offerName">{{ selectedOffer?.name }}</span>
+          <span
+            class="offerAmount"
             *ngIf="selectedOffer?.discountType === 'PERCENTAGE'"
-            >({{ selectedOffer?.discountValue }} %)</span
           >
-          <span class="offerData" *ngIf="selectedOffer?.discountType === 'FLAT'"
-            >({{ selectedOffer?.discountValue | currency: 'INR' }})</span
-          > -->
+            ({{ selectedOffer?.discountValue }}% OFF)</span
+          >
+          <span
+            class="offerAmount"
+            *ngIf="selectedOffer?.discountType === 'FLAT'"
+          >
+            ({{ selectedOffer?.discountValue | currency: 'INR' }} FLAT)</span
+          >
+          <!-- </div> -->
         </div>
       </ng-container>
       <ng-template #selectOffer>
@@ -242,6 +250,7 @@
           Have an Offer?
           <span
             (click)="applyOffer()"
+            class="apply-btn"
             [ngClass]="formService.disableBtn ? 'disabled-btn' : ''"
             >Apply Offer</span
           >

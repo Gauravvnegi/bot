@@ -112,7 +112,7 @@
   &_offerInfo {
     font-weight: $bold;
     margin: 8px 0;
-    span {
+    .apply-btn {
       cursor: pointer;
       color: $authColor;
     }
@@ -239,26 +239,22 @@
 }
 
 .offerName {
-  font-size: 16px;
-  font-weight: 500;
-  letter-spacing: 0.96px;
+  @include normal-sm-text();
   color: #3b3b3b;
   overflow: hidden;
   max-width: 60%;
   text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.offerAmount {
+  @include normal-sm-text();
+  color: $grayMedium;
 }
 
 .offerSummary {
   display: flex;
 }
-
-// .offerData {
-//   font-size: 16px;
-//   font-weight: 400;
-//   letter-spacing: 0.96px;
-//   cursor: default;
-//   color: $grayMedium;
-// }
 
 :host ::ng-deep .dropdown-panel {
   .p-dropdown-panel {

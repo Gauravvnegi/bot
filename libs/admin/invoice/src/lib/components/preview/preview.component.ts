@@ -57,11 +57,13 @@ export class PreviewComponent implements OnInit {
 
   getInvoiceData() {
     this.isLoading = true;
-    this.invoiceService.getInvoiceData(this.reservationId).subscribe(
-      (res) => (this.isInvoiceGenerated = res.invoiceGenerated),
-      () => {},
-      () => (this.isLoading = false)
-    );
+    this.invoiceService
+      .getInvoiceData(this.reservationId, 'REALISED')
+      .subscribe(
+        (res) => (this.isInvoiceGenerated = res.invoiceGenerated),
+        () => {},
+        () => (this.isLoading = false)
+      );
     this.invoiceService.isCheckIn.subscribe((res) => {
       if (typeof res === 'boolean') this.isCheckIn = res;
     });
@@ -92,7 +94,7 @@ export class PreviewComponent implements OnInit {
 
   getPreviewUrl() {
     this.loadingPdf = true;
-    this.invoiceService.downloadPDF(this.reservationId).subscribe(
+    this.invoiceService.downloadPDF(this.reservationId, 'REALISED').subscribe(
       (res) => {
         this.previewUrl = res.file_download_url;
         this.loadingPdf = false;
@@ -112,20 +114,22 @@ export class PreviewComponent implements OnInit {
   }
 
   handleGenerateInvoice() {
-    this.invoiceService.generateInvoice(this.reservationId).subscribe(
-      (res) => {
-        this.snackbarService.openSnackBarAsText(
-          'Invoice Generated Successfully',
-          '',
-          {
-            panelClass: 'success',
-          }
-        );
-        this.isInvoiceGenerated = true;
-        this.getPreviewUrl();
-      },
-      () => {}
-    );
+    this.invoiceService
+      .generateInvoice(this.reservationId, 'REALISED')
+      .subscribe(
+        (res) => {
+          this.snackbarService.openSnackBarAsText(
+            'Invoice Generated Successfully',
+            '',
+            {
+              panelClass: 'success',
+            }
+          );
+          this.isInvoiceGenerated = true;
+          this.getPreviewUrl();
+        },
+        () => {}
+      );
   }
 
   handleDownload() {

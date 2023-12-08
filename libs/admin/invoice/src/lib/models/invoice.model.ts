@@ -31,6 +31,7 @@ export class Invoice {
   dueAmount: number;
   discountedAmount: number;
   netAmount: number;
+  refund: number;
 
   currency: string;
   cashierName: string;
@@ -74,6 +75,7 @@ export class Invoice {
     this.discountedAmount = input.totalDiscount;
     this.dueAmount = input.totalDueAmount;
     this.netAmount = input.totalPayableAmount;
+    this.refund = input?.refund ?? 0;
     this.currency = data.currency;
     this.cashierName = data.cashierName;
     this.cashierId = data?.cashierId;

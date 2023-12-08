@@ -236,7 +236,10 @@
                     [disabled]="
                       tableFormArray.at(rowIndex).get('isDisabled').value ||
                       tableFormArray.at(rowIndex).get('isDiscount').value ||
-                      tableFormArray.at(rowIndex).get('taxId').value
+                      tableFormArray.at(rowIndex).get('taxId').value ||
+                      tableFormArray.at(rowIndex).get('isRefund').value ||
+                      (tableFormArray.at(rowIndex).get('creditAmount').value &&
+                        !tableFormArray.at(rowIndex).get('isDiscount').value)
                     "
                   ></p-tableCheckbox>
                 </td>
@@ -376,13 +379,13 @@
         </div>
 
         <div class="payment-form__amount">
-          <div class="py-row">
+          <div class="py-row" *ngIf="inputControl.totalAmount.value">
             <span>Total Charges</span>
             <span>
               INR {{ inputControl.totalAmount.value | number: '1.2-2' }}</span
             >
           </div>
-          <div class="py-row">
+          <div class="py-row" *ngIf="inputControl.discountedAmount.value">
             <span>Total Discount</span>
             <span>
               <span
@@ -391,13 +394,13 @@
               </span>
             </span>
           </div>
-          <div class="py-row invert">
+          <div class="py-row invert" *ngIf="inputControl.netAmount.value">
             <span>Total Payable</span>
             <span>
               INR {{ inputControl.netAmount.value | number: '1.2-2' }}</span
             >
           </div>
-          <div class="py-row">
+          <div class="py-row" *ngIf="inputControl.paidAmount.value">
             <span>Total Paid Amount</span>
             <span>
               <span
@@ -406,7 +409,16 @@
               </span>
             </span>
           </div>
-          <div class="py-row">
+          <div class="py-row" *ngIf="inputControl.refund.value">
+            <span>Total Refund</span>
+            <span>
+              <span
+                >INR
+                {{ inputControl.refund.value | number: '1.2-2' }}
+              </span>
+            </span>
+          </div>
+          <div class="py-row" *ngIf="inputControl.dueAmount.value">
             <span>Remaining Balance</span>
             <span
               [ngStyle]="{

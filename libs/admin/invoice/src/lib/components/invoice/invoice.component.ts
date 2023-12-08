@@ -248,6 +248,7 @@ export class InvoiceComponent implements OnInit {
       dueAmount: [0],
       discountedAmount: [0],
       netAmount: [0],
+      refund: [0],
 
       currency: [''],
 

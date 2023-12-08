@@ -98,8 +98,6 @@ export class ResetPasswordComponent implements OnInit {
           )
           .subscribe();
         
-        debugger;
-
         this.isResetingIn = false;
 
         this.navigateToLogin();

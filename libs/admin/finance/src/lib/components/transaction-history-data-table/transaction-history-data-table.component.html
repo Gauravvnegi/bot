@@ -118,19 +118,11 @@
           <div
             class="status-text"
             [ngClass]="
-              rowData.status === 'PAID'
-                ? 'chip-contained-success'
-                : rowData.status === 'FAILED'
-                ? 'chip-contained-unpaid'
-                : 'chip-contained-paid'
+              getStatusTextAndClass(rowData.paymentType, rowData.status).class
             "
           >
             {{
-              rowData.status === 'PAID'
-                ? 'Paid'
-                : rowData.status === 'FAILED'
-                ? 'Failed'
-                : 'Refund'
+              getStatusTextAndClass(rowData.paymentType, rowData.status).text
             }}
           </div>
         </div>

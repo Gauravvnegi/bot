@@ -19,6 +19,7 @@ import { Subscription } from 'rxjs';
 import { cols, transactionStatus } from '../../constants/data-table';
 import { TransactionHistoryList } from '../../models/history.model';
 import { FinanceService } from '../../services/finance.service';
+import { PaymentType } from '../../types/history';
 
 @Component({
   selector: 'hospitality-bot-transaction-history-data-table',
@@ -190,6 +191,29 @@ export class TransactionHistoryDataTableComponent extends BaseDatatableComponent
     );
   }
 
+  getStatusTextAndClass(
+    paymentType: PaymentType,
+    status: 'SUCCESS' | 'FAILURE'
+  ): { text: string; class: string } {
+    switch (true) {
+      case paymentType === PaymentType.PAYMENT &&
+        status === PaymentStatus.SUCCESS:
+        return { text: 'Paid', class: 'chip-contained-success' };
+
+      case paymentType === PaymentType.REFUND &&
+        status === PaymentStatus.SUCCESS:
+        return { text: 'Refund', class: 'chip-contained-paid' };
+
+      case (paymentType === PaymentType.PAYMENT ||
+        paymentType === PaymentType.REFUND) &&
+        status === PaymentStatus.FAILURE:
+        return { text: 'Failed', class: 'chip-contained-unpaid' };
+
+      default:
+        return { text: '--', class: 'default-chip-class' };
+    }
+  }
+
   /**
    * @function handleError to show the error
    * @param param0 network error
@@ -205,4 +229,9 @@ export class TransactionHistoryDataTableComponent extends BaseDatatableComponent
   ngOnDestroy() {
     this.$subscription.unsubscribe();
   }
+}
+
+export enum PaymentStatus {
+  SUCCESS = 'SUCCESS',
+  FAILURE = 'FAILURE',
 }

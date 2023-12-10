@@ -3,6 +3,7 @@ import * as moment from 'moment';
 import { DateService } from '@hospitality-bot/shared/utils';
 import { GuestRole } from '../constants/guest';
 import { TransactionHistoryResponse } from '../types/response';
+import { PaymentType } from 'libs/admin/finance/src/lib/types/history';
 
 export interface IDeserializable {
   deserialize(input: any, hotelNationality: string): this;
@@ -558,6 +559,7 @@ export class TransactionHistory {
   transactionId: string | null;
   cashierId: string;
   updated: number;
+  paymentType?: PaymentType;
 
   deserialize(input: TransactionHistoryResponse) {
     this.amount = input.amount;
@@ -580,7 +582,7 @@ export class TransactionHistory {
     this.transactionId = input.transactionId;
     this.cashierId = input.cashierId;
     this.updated = input.updated;
-
+    this.paymentType = input?.paymentType;
     return this;
   }
 }

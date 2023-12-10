@@ -1,3 +1,5 @@
+import { PaymentType } from "libs/admin/finance/src/lib/types/history";
+
 export type CountryCodeResponse = {
   countryName: string;
   srcImg: string;
@@ -50,6 +52,7 @@ export type TransactionHistoryResponse = {
   transactionId: string | null;
   updated: number;
   cashierId: string;
+  paymentType: PaymentType;
 };
 
 export type LoaderProps = {

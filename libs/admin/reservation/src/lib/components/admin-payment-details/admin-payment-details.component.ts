@@ -1,6 +1,8 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { FormBuilder, FormGroup, FormArray, FormControl } from '@angular/forms';
 import { UserService } from '@hospitality-bot/admin/shared';
+import { PaymentStatus } from 'libs/admin/finance/src/lib/components/transaction-history-data-table/transaction-history-data-table.component';
+import { PaymentType } from 'libs/admin/finance/src/lib/types/history';
 import { of } from 'rxjs';
 
 @Component({
@@ -45,7 +47,7 @@ export class AdminPaymentDetailsComponent implements OnInit {
   transactionHistoryCols: string[] = [
     'transactionId',
     'dateTime',
-    'status',
+    'paymentType',
     'paymentMethod',
     'remarks',
     'cashierName',
@@ -92,8 +94,8 @@ export class AdminPaymentDetailsComponent implements OnInit {
           amount,
           currency,
           cashierId,
+          paymentType,
         } = transaction;
-
         return {
           transactionId,
           created,
@@ -102,6 +104,7 @@ export class AdminPaymentDetailsComponent implements OnInit {
           remarks,
           amount,
           currency,
+          paymentType,
           cashierName: cashierId
             ? getCashierName(cashierId)
             : of('-').toPromise(),
@@ -169,6 +172,29 @@ export class AdminPaymentDetailsComponent implements OnInit {
       return 'PENDING';
     } else {
       return 'INITIATED';
+    }
+  }
+
+  getStatusTextAndClass(
+    paymentType: PaymentType,
+    status: 'SUCCESS' | 'FAILURE'
+  ): { text: string; class: string } {
+    switch (true) {
+      case paymentType === PaymentType.PAYMENT &&
+        status === PaymentStatus.SUCCESS:
+        return { text: 'Paid', class: 'chip-contained-success' };
+
+      case paymentType === PaymentType.REFUND &&
+        status === PaymentStatus.SUCCESS:
+        return { text: 'Refund', class: 'chip-contained-paid' };
+
+      case (paymentType === PaymentType.PAYMENT ||
+        paymentType === PaymentType.REFUND) &&
+        status === PaymentStatus.FAILURE:
+        return { text: 'Failed', class: 'chip-contained-unpaid' };
+
+      default:
+        return { text: '--', class: 'default-chip-class' };
     }
   }
 

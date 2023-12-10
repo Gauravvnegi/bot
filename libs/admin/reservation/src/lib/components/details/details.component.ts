@@ -488,9 +488,8 @@ export class DetailsComponent implements OnInit, OnDestroy {
   }
 
   downloadRegcard(regcardUrl) {
-    const [name] = regcardUrl.split('/').reverse();
-
     if (regcardUrl) {
+      const [name] = regcardUrl.split('/').reverse();
       FileSaver.saveAs(regcardUrl, name);
     } else {
       this.regCardLoading = true;
@@ -499,6 +498,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
           .getRegCard(this.reservationDetailsFG.get('bookingId').value)
           .subscribe(
             (res: FileData) => {
+              const [name] = res.file_download_url.split('/').reverse();
               this.regCardLoading = false;
               FileSaver.saveAs(res.file_download_url, name);
             },

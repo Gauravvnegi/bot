@@ -63,6 +63,11 @@ export class ComplaintBifurcationComponent implements OnInit {
   ngOnInit(): void {
     this.initFG();
     // this.listenForGlobalFilters();
+    this.$subscription.add(
+      this.analyticsService.refreshStats.subscribe((res) => {
+        if (res) this.getStats();
+      })
+    );
   }
 
   initFG(): void {

@@ -11,6 +11,8 @@ import {
   AuditTaxReportResponse,
   MtdAndYtdReportData,
   MtdAndYtdReportResponse,
+  NightAuditRevenueData,
+  NightAuditRevenueResponse,
 } from '../types/night-audit-reports.types';
 import { ReportClass } from '../types/reports.types';
 
@@ -151,6 +153,22 @@ export class MtdAndYtdReport
         year: yearData[item?.label],
       });
     });
+
+    return this;
+  }
+}
+
+//nightAuditRevenue
+export class NightAuditRevenueReport
+  implements ReportClass<NightAuditRevenueData, NightAuditRevenueResponse[]> {
+  records: NightAuditRevenueData[];
+
+  deserialize(value: NightAuditRevenueResponse[]) {
+
+    this.records = new Array<NightAuditRevenueData>();
+
+    
+
 
     return this;
   }

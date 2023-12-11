@@ -1,5 +1,6 @@
 import { Cashier } from '../models/revenue-reports.models';
 import { RowStylesKeys } from './reports.types';
+import { User } from './reservation-reports.types';
 
 export type CashierReportData = Omit<Cashier, 'deserialize' | RowStylesKeys>;
 
@@ -31,6 +32,7 @@ export type PayTypeReportResponse = {
   paymentMethod: string;
   reservationNumber: string;
   reservation: Reservation;
+  remarks: string;
 };
 
 interface ContactDetails {
@@ -141,6 +143,7 @@ interface Reservation {
   vip: boolean;
   invoicePrepareRequest: boolean;
   pmsBooking: boolean;
+  user: User
 }
 
 interface ReservationResponse {}

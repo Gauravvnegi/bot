@@ -92,6 +92,7 @@ export class HousekeepingComponent extends BaseDatatableComponent
   }
 
   loadData(event: LazyLoadEvent): void {
+    this.cancelRequests$.next();
     this.getRoomList();
   }
 
@@ -115,6 +116,7 @@ export class HousekeepingComponent extends BaseDatatableComponent
     this.$subscription.add(
       this.housekeepingService.refreshData.subscribe((value) => {
         if (value) {
+          this.cancelRequests$.next();
           this.getRoomList();
         }
       })
@@ -214,6 +216,20 @@ export class HousekeepingComponent extends BaseDatatableComponent
         (error) => {}
       )
     );
+  }
+
+  get isNoRoomSelected(): boolean {
+    return this.useForm.get('roomType').value.length === 0;
+  }
+
+  get emptyViewDescription() {
+    return {
+      description: this.isNoRoomSelected
+        ? "Please select room type to view rooms or tap the +Add Multiple Rooms to Manage and track your hotel's room inventory, rates, and availability"
+        : "No rooms found. Tap the +Add Multiple Rooms to Manage and track your hotel's room inventory, rates, and availability",
+      actionName: '+ Add Multiple Rooms',
+      imageSrc: 'assets/images/empty-table-room-types.png',
+    };
   }
 
   ngOnDestroy(): void {

@@ -85,6 +85,14 @@ export type MtdAndYtdReportData = {
   year: string;
 };
 
+//nightAuditRevenue
+export type NightAuditRevenueData = {
+  revenueList: string;
+  amount: number;
+};
+
+export type NightAuditRevenueResponse = {};
+
 export type MtdAndYtdReportResponse = {
   date: number;
   entityId: string;

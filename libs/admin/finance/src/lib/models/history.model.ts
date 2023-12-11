@@ -1,8 +1,7 @@
-import { DateService } from '@hospitality-bot/shared/utils';
 import {
-  EntityStateCountsResponse,
   InvoiceHistoryListResponse,
   InvoiceHistoryResponse,
+  PaymentType,
   TransactionHistoryListResponse,
   TransactionHistoryResponse,
 } from '../types/history';
@@ -48,6 +47,8 @@ export class TransactionHistory {
   reservationId: string;
   reservationNumber: string;
   id: string;
+  paymentType: PaymentType;
+
   // balanceDue: string;
   deserialize(input: TransactionHistoryResponse) {
     this.transactionId = input.transactionId ?? '';
@@ -59,6 +60,7 @@ export class TransactionHistory {
     this.reservationId = input.reservationId;
     this.reservationNumber = input.reservationNumber;
     this.id = input.id ?? '';
+    this.paymentType = input.paymentType;
     // this.balanceDue = input.balanceDue;
     return this;
   }

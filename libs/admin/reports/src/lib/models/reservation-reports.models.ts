@@ -5,12 +5,16 @@ import {
 } from 'libs/admin/shared/src/lib/types/response';
 import { ReportClass } from '../types/reports.types';
 import {
+  AddOnRequestReportData,
+  AddOnRequestReportResponse,
   ArrivalReportData,
   CancellationReportData,
   DepartureReportData,
   DraftReservationReportData,
   EmployeeWiseReservationReportData,
   EmployeeWiseReservationReportResponse,
+  ExpressCheckInData,
+  ExpressCheckInResponse,
   HousekeepingReportData,
   HousekeepingReportResponse,
   IncomeSummaryReportData,
@@ -19,6 +23,7 @@ import {
   ReservationReportData,
   ReservationSummaryReportData,
 } from '../types/reservation-reports.types';
+import { toCurrency } from 'libs/admin/shared/src/lib/utils/valueFormatter';
 
 /**
  * @class Default Reservation Report class
@@ -143,7 +148,9 @@ export class Arrival {
         ' ' +
         input.guestDetails.primaryGuest.lastName);
 
-    this.roomType = `${input?.stayDetails?.room?.roomNumber ?? '-'} - ${input.stayDetails.room.type ?? '-'}`; // need to ask which key should be mapped
+    this.roomType = `${input?.stayDetails?.room?.roomNumber ?? '-'} - ${
+      input.stayDetails.room.type ?? '-'
+    }`; // need to ask which key should be mapped
     this.checkIn = input?.arrivalTime
       ? getFormattedDate(input.arrivalTime)
       : '';
@@ -206,10 +213,14 @@ export class DraftReservationReport extends ReservationReport
         this.records.push({
           id: reservationData.id,
           bookingNo: reservationData.reservationNumber,
-          guestName: `${reservationData?.guest?.firstName ?? '-'} ${reservationData.guest.lastName ?? '-'}`,
+          guestName: `${reservationData?.guest?.firstName ?? '-'} ${
+            reservationData.guest.lastName ?? '-'
+          }`,
           roomType: `${
             reservationData.bookingItems[0].roomDetails.roomNumber ?? '-'
-          }-${reservationData.bookingItems[0].roomDetails.roomTypeLabel ?? '-'}`,
+          }-${
+            reservationData.bookingItems[0].roomDetails.roomTypeLabel ?? '-'
+          }`,
           checkIn: getFormattedDate(reservationData.from),
           checkOut: getFormattedDate(reservationData.to),
           nights: reservationData.nightsCount,
@@ -243,7 +254,7 @@ export class EmployeeWiseReservationReport
           userName:
             reservationData?.user?.firstName &&
             `${reservationData?.user?.firstName} ${reservationData?.user?.lastName}`,
-          
+
           bookingNo: reservationData.number,
           guestName: `${reservationData.guestDetails.primaryGuest.firstName} ${reservationData.guestDetails.primaryGuest.lastName}`,
           checkIn: getFormattedDate(reservationData.stayDetails.arrivalTime),
@@ -331,10 +342,10 @@ export class ReservationSummaryReport
       value.map((data) => {
         return {
           id: data.id,
-          businessSource: data.source,
-          marketSegment: undefined, //to be added in response
+          businessSource: data?.source,
+          marketSegment: data?.marketSegment, //to be added in response
           phoneNumber:
-            data.guestDetails.primaryGuest.contactDetails.contactNumber,
+            data?.guestDetails?.primaryGuest?.contactDetails?.contactNumber,
           email: data.guestDetails.primaryGuest.contactDetails.emailId,
           roomType: data.stayDetails.room.type,
           room: data.stayDetails.room.roomNumber,
@@ -384,6 +395,50 @@ export class HousekeepingReport
           roomNotes: data?.remarks,
           status: data?.status,
         });
+      });
+    return this;
+  }
+}
+
+//expressCheckIn
+export class ExpressCheckIn
+  implements ReportClass<ExpressCheckInData, ExpressCheckInResponse[]> {
+  records: ExpressCheckInData[];
+  deserialize(value: ExpressCheckInResponse[]): this {
+    this.records = new Array<ExpressCheckInData>();
+    value &&
+      value.forEach((data) => {
+        this.records.push({
+          bookingNo: data?.number,
+          guestName: `${data.guestDetails.primaryGuest.firstName} ${data.guestDetails.primaryGuest.lastName}`,
+          roomType: `${data?.stayDetails?.room?.roomNumber} - ${data?.stayDetails?.room?.type}`,
+          checkIn: getFormattedDate(data?.stayDetails?.arrivalTime),
+          checkOut: getFormattedDate(data?.stayDetails?.departureTime),
+          bookingAmount: toCurrency(data?.paymentSummary?.totalAmount),
+          status: data?.pmsStatus,
+        });
+      });
+    return this;
+  }
+}
+
+//addOnRequestReport
+export class AddOnRequestReport
+  implements ReportClass<AddOnRequestReportData, AddOnRequestReportResponse[]> {
+  records: AddOnRequestReportData[];
+  deserialize(value: AddOnRequestReportResponse[]): this {
+    this.records =
+      value &&
+      value.map((data) => {
+        return {
+          packageName: data?.packageName,
+          packageCode: data?.packageCode,
+          source: data?.source,
+          amount: toCurrency(data?.rate),
+          category: data?.category,
+          active: data?.active,
+          bookingNo: data?.reservationNumber,
+        };
       });
     return this;
   }

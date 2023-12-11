@@ -27,6 +27,7 @@ export type TransactionHistoryResponse = {
   paymentMethod: string;
   remarks: string;
   reservationNumber: string;
+  paymentType: PaymentType;
 };
 
 export type TransactionHistoryListResponse = {
@@ -41,6 +42,11 @@ export type EntityStateCountsResponse = {
   Paid: number;
   Unpaid: number;
 };
+
+export enum PaymentType {
+  PAYMENT = 'PAYMENT',
+  REFUND = 'REFUND',
+}
 
 // {
 //     "total": 299,

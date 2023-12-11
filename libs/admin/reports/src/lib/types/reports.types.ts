@@ -44,7 +44,9 @@ export type ReportsType = {
     | 'reservationAdrReport'
     | 'incomeSummaryReport'
     | 'reservationSummaryReport'
-    | 'housekeepingReport';
+    | 'housekeepingReport'
+    | 'expressCheckIn'
+    | 'addOnRequestReport';
   MANAGER_REPORTS: 'managerFlashReport';
   OCCUPANCY_REPORTS: 'historyAndForecastReport';
   FINANCIAL_REPORTS:
@@ -53,14 +55,17 @@ export type ReportsType = {
     | 'financialReport'
     | 'closeOutBalance'
     | 'depositReport'
-    | 'postingAuditReport';
+    | 'postingAuditReport'
+    | 'advanceDepositPayment'
+    | 'revParRoomReport';
 
   REVENUE_REPORTS: 'cashierReport' | 'payTypeReport';
   NIGHT_AUDIT_REPORTS:
     | 'auditRoomDetailsReport'
     | 'auditTaxReport'
     | 'revenueReport'
-    | 'mtdAndYtdReport';
+    | 'mtdAndYtdReport'
+    | 'nightAuditRevenue';
   TAX_REPORTS: 'monthlyTaxReport' | 'lodgingTaxReport' | 'taxReport';
   GUEST_REPORTS:
     | 'guestHistory'

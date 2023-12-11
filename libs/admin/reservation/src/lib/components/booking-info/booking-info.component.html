@@ -25,6 +25,9 @@
             enableTime: false,
             dateValue: startMinDate
           }"
+          [props]="{
+            placeholder: 'DD/MM/YY'
+          }"
           [minDate]="today"
           [maxDate]="maxDate"
           [disabled]="disabledForm || isCheckedIn"
@@ -36,6 +39,9 @@
           [settings]="{
             enableTime: false,
             dateValue: endMinDate
+          }"
+          [props]="{
+            placeholder: 'DD/MM/YY'
           }"
           [minDate]="minToDate"
           [maxDate]="maxDate"

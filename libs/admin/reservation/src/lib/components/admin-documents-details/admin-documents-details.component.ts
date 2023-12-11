@@ -275,7 +275,9 @@ export class AdminDocumentsDetailsComponent implements OnInit {
     this._reservationService
       .saveDocument(this.detailsData.reservationDetails.bookingId, data)
       .subscribe((_res) => {
-        this.updateDocumentVerificationStatus('ACCEPT');
+        if (this.documentStatus.get('status').value !== 'COMPLETED')
+          this.updateDocumentVerificationStatus('ACCEPT');
+
         this.snackbarService.openSnackBarAsText(
           'Document updated successfully',
           '',
@@ -563,7 +565,7 @@ export class AdminDocumentsDetailsComponent implements OnInit {
       });
     }
   }
-  
+
   get documentFormGroup(): FormArray {
     // return this.selectedGuestGroup.get('documents') as FormArray;
     return this.guestsFA.controls

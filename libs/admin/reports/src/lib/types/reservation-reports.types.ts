@@ -1,10 +1,14 @@
-import { ReservationResponse, ReservationResponseData } from 'libs/admin/shared/src/lib/types/response';
+import {
+  ReservationResponse,
+  ReservationResponseData,
+} from 'libs/admin/shared/src/lib/types/response';
 import {
   Arrival,
   Cancellation,
   Departure,
   NoShows,
 } from '../models/reservation-reports.models';
+import { PaymentSummary } from './guest-reports.types';
 
 export type ReservationReportData = {
   id?: string;
@@ -156,7 +160,7 @@ export type User = {
   profileUrl: string;
   parentId: string | null;
   status: boolean;
-}
+};
 
 interface Room {
   roomNumber: string;
@@ -165,15 +169,41 @@ interface Room {
   status: string;
 }
 
-interface StayDetails {
-  arrivalTime: number;
-  departureTime: number;
-  expectedArrivalTime: number;
-  expectedDepartureTime: number;
-  adultsCount: number;
-  kidsCount: number;
-  comments: string;
-  room: Room;
-  checkInComment: string;
-  address: Record<string, any>; // Assuming address is an object with dynamic keys
-}
+//expressCheckIn
+export type ExpressCheckInData = {
+  bookingNo: string;
+  guestName: string;
+  roomType: string;
+  checkIn: string;
+  checkOut: string;
+  bookingAmount: string;
+  status: string;
+};
+
+export type ExpressCheckInResponse = ReservationResponseData & {
+  paymentSummary: PaymentSummary;
+};
+
+//addOnRequestReport
+export type AddOnRequestReportData = {
+  packageName: string;
+  packageCode: string;
+  source: string;
+  amount: string;
+  category: string;
+  active: boolean;
+  bookingNo: string;
+};
+
+export type AddOnRequestReportResponse = {
+  id: string;
+  discountedPrice: number;
+  reservationNumber: string;
+  packageCode: string;
+  offerDiscount: number;
+  active: boolean;
+  packageName: string;
+  rate: number;
+  source: string;
+  category: string;
+};

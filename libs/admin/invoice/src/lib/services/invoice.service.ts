@@ -258,10 +258,12 @@ export class InvoiceService extends ApiService {
         if (xhr.readyState === 4 && xhr.status === 200) {
           const blob = new Blob([xhr.response], { type: 'application/pdf' });
           const url = window.URL.createObjectURL(blob);
+
+          // Specify the desired filename here
+          const fileName = fileUrl.split('/').pop();
           const link = document.createElement('a');
           link.href = url;
-          link.download =
-            'invoice_' + reservationId + new Date().getTime() + '.pdf';
+          link.download = fileName;
           document.body.appendChild(link);
           link.click();
           document.body.removeChild(link);

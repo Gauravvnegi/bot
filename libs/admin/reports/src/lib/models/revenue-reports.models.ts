@@ -8,7 +8,10 @@ import {
   CashierReportResponse,
   PayTypeReportResponse,
 } from '../types/revenue-reports.types';
-import { getFormattedDate } from './reservation-reports.models';
+import {
+  getFormattedDate,
+  getFormattedDateWithTime,
+} from './reservation-reports.models';
 
 export class Cashier extends RowStyles {
   id: string;
@@ -160,14 +163,20 @@ class PayTypeReportData {
   private setDetails(input: Partial<PayTypeReportResponse>) {
     this.paymentMode = undefined;
     this.paymentType = input?.paymentMethod;
-    this.employee = undefined;
+
+    this.employee =
+      (input?.reservation?.user?.firstName ?? '') +
+      ' ' +
+      (input?.reservation?.user?.lastName ?? '');
+
     this.bookingNo = input?.reservationNumber;
     this.folioNo = input?.reservation?.invoiceCode;
     this.guestName = `${input?.reservation?.guestDetails?.primaryGuest?.firstName} ${input?.reservation?.guestDetails?.primaryGuest?.lastName}`;
     this.room = `${input?.reservation?.stayDetails?.room?.roomNumber} - ${input?.reservation?.stayDetails?.room?.type}`;
     this.counter = undefined;
-    this.dateAndTime = input.created && getFormattedDate(input?.created);
+    this.dateAndTime =
+      input.created && getFormattedDateWithTime(input?.created);
     this.amount = toCurrency(input?.amount);
-    this.description = undefined;
+    this.description = input?.remarks;
   }
 }

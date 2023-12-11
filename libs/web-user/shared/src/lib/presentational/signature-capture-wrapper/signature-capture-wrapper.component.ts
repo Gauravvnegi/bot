@@ -85,7 +85,7 @@ export class SignatureCaptureWrapperComponent
         label: 'Upload',
         settings: {
           fileConfig: {
-            fileIcon: '',
+            fileIcon: '/assets/contract.png',
             accept: '.pdf,.img,.png,.jpg,.jpeg',
             maxFileSize: 3145728,
           },
@@ -226,6 +226,17 @@ export class SignatureCaptureWrapperComponent
       this.signature.signatureImg = this.uploadType;
       this.signature.signatureText = '';
       image = this.signature['signatureFile'];
+
+      if (!image) {
+        this._translateService
+          .get(`VALIDATION.SIGNATURE_FILE_PENDING`)
+          .subscribe((translatedMsg) => {
+            this._snackBarService.openSnackBarAsText(translatedMsg);
+          });
+        this._buttonService.buttonLoading$.next(this.saveButton);
+
+        return;
+      }
       this.uploadType = '';
       this.setSignatureData(image);
     }

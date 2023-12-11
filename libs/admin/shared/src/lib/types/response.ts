@@ -1,3 +1,5 @@
+import { PaymentType } from "libs/admin/finance/src/lib/types/history";
+
 export type CountryCodeResponse = {
   countryName: string;
   srcImg: string;
@@ -49,6 +51,8 @@ export type TransactionHistoryResponse = {
   status: string;
   transactionId: string | null;
   updated: number;
+  cashierId: string;
+  paymentType: PaymentType;
 };
 
 export type LoaderProps = {
@@ -89,7 +93,8 @@ export interface ReservationResponseData {
     };
     checkInComment: string;
     address: Record<string, any>; // You can define a more specific interface if you have one
-  };
+  }
+  marketSegment: string
   guestDetails: {
     primaryGuest: {
       id: string;

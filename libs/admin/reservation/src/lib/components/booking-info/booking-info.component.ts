@@ -85,6 +85,9 @@ export class BookingInfoComponent implements OnInit {
   selectedAgent: AgentTableResponse;
   selectedCompany: Option;
 
+  sourceValue: string;
+  marketSegmentValue: string;
+
   $subscription = new Subscription();
 
   sidebarVisible: boolean;
@@ -103,9 +106,9 @@ export class BookingInfoComponent implements OnInit {
   ngOnInit(): void {
     this.parentFormGroup = this.controlContainer.control as FormGroup;
     this.entityId = this.globalFilterService.entityId;
+    this.listenForConfigDataChanges();
     this.getCountryCode();
     this.initDates();
-    this.listenForConfigDataChanges();
     this.listenForSourceData();
   }
 
@@ -138,13 +141,12 @@ export class BookingInfoComponent implements OnInit {
         : new Date();
       this.endMinDate = new Date(this.startMinDate);
       this.endMinDate.setDate(this.endMinDate.getDate() + 1);
-
       this.minToDate = new Date(this.endMinDate);
       this.minToDate.setDate(this.minToDate.getDate());
     } else {
-      this.startMinDate = new Date(this.reservationInfoControls.from.value);
+      this.startMinDate = new Date(new Date());
       this.minToDate.setDate(this.startMinDate.getDate() + 1);
-      this.endMinDate = new Date(this.reservationInfoControls.to.value);
+      this.endMinDate = new Date(this.minToDate);
     }
 
     this.fromDateValue = this.startMinDate;
@@ -264,24 +266,18 @@ export class BookingInfoComponent implements OnInit {
   }
 
   listenForConfigDataChanges() {
-    const sourceControl = this.reservationInfoControls.source;
-    const marketSegmentControl = this.reservationInfoControls.marketSegment;
-
     // Add options Market Segment and Source for external reservations
-    marketSegmentControl.valueChanges.subscribe((res) => {
+    this.marketSegmentControl.valueChanges.subscribe((res) => {
       if (res) {
-        this.configData?.marketSegment &&
-          !this.configData?.marketSegment.some((item) => item.value === res) &&
-          this.configData.marketSegment.push({ label: res, value: res });
-        marketSegmentControl.patchValue(res, { emitEvent: false });
+        this.marketSegmentValue = res;
+        this.mapMarketSegments();
       }
     });
 
-    sourceControl.valueChanges.subscribe((res) => {
+    this.sourceControl.valueChanges.subscribe((res) => {
       if (res) {
-        this.configData?.source &&
-          !this.configData?.source?.some((item) => item.value === res) &&
-          this.configData.source.push({ label: res, value: res });
+        this.sourceValue = res;
+        this.mapSourceOptions();
         this.initSourceDetails(res);
         (!this.editMode || !this.reservationId) &&
           this.sourceNameControl.reset();
@@ -385,7 +381,7 @@ export class BookingInfoComponent implements OnInit {
     control.markAsUntouched();
   }
 
-  patchControlValue(control: AbstractControl, value: any) {
+  patchValue(control: AbstractControl, value: any) {
     control.patchValue(value, { emitEvent: false });
   }
 
@@ -396,6 +392,8 @@ export class BookingInfoComponent implements OnInit {
         this.configData = new BookingConfig().deserialize(
           response.bookingConfig
         );
+        this.mapMarketSegments();
+        this.mapSourceOptions();
         this.reservationInfoControls.source.value === 'OTA' &&
           this.mapOtaOptions(this.reservationInfoControls.source.value);
       });
@@ -403,6 +401,30 @@ export class BookingInfoComponent implements OnInit {
       const data = new CountryCodeList().deserialize(res);
       this.countries = data.records;
     });
+  }
+
+  mapMarketSegments() {
+    if (this.marketSegmentValue && this.configData?.marketSegment.length) {
+      !this.configData?.marketSegment.some(
+        (item) => item.value === this.marketSegmentValue
+      ) &&
+        this.configData.marketSegment.push({
+          label: this.marketSegmentValue,
+          value: this.marketSegmentValue,
+        });
+      this.patchValue(this.marketSegmentControl, this.marketSegmentValue);
+    }
+  }
+
+  mapSourceOptions() {
+    if (this.sourceValue && this.configData?.source.length) {
+      !this.configData.source.some((item) => item.value === this.sourceValue) &&
+        this.configData.source.push({
+          label: this.sourceValue,
+          value: this.sourceValue,
+        });
+      this.patchValue(this.sourceControl, this.sourceValue);
+    }
   }
 
   updateDateDifference() {
@@ -428,11 +450,8 @@ export class BookingInfoComponent implements OnInit {
         ...event,
       };
       !this.reservationId &&
-        this.selectedAgent?.marketSegment &&
-        this.reservationInfoControls.marketSegment.patchValue(
-          this.selectedAgent?.marketSegment,
-          { emitEvent: false }
-        );
+        event?.marketSegment &&
+        this.patchValue(this.marketSegmentControl, event.marketSegment);
       this.formService.getSummary.next();
     }
   }
@@ -445,11 +464,8 @@ export class BookingInfoComponent implements OnInit {
         marketSegment: event?.marketSegment,
       };
       !this.reservationId &&
-        this.selectedAgent.marketSegment &&
-        this.reservationInfoControls.marketSegment.patchValue(
-          this.selectedAgent?.marketSegment,
-          { emitEvent: false }
-        );
+        event?.marketSegment &&
+        this.patchValue(this.marketSegmentControl, event?.marketSegment);
       this.formService.getSummary.next();
     }
   }
@@ -478,10 +494,7 @@ export class BookingInfoComponent implements OnInit {
             ...res,
           };
           res.marketSegment &&
-            this.reservationInfoControls.marketSegment.patchValue(
-              res.marketSegment,
-              { emitEvent: false }
-            );
+            this.patchValue(this.marketSegmentControl, res.marketSegment);
         }
         this.sidebarVisible = false;
         componentRef.destroy();
@@ -514,10 +527,7 @@ export class BookingInfoComponent implements OnInit {
             value: res?.id,
           };
           res.marketSegment &&
-            this.reservationInfoControls.marketSegment.patchValue(
-              res.marketSegment,
-              { emitEvent: false }
-            );
+            this.patchValue(this.marketSegmentControl, res.marketSegment);
         }
         this.sidebarVisible = false;
         componentRef.destroy();
@@ -543,6 +553,14 @@ export class BookingInfoComponent implements OnInit {
 
   get sourceNameControl() {
     return this.reservationInfoControls.sourceName;
+  }
+
+  get marketSegmentControl() {
+    return this.reservationInfoControls.marketSegment;
+  }
+
+  get sourceControl() {
+    return this.reservationInfoControls.source;
   }
 
   get agentSourceControl() {

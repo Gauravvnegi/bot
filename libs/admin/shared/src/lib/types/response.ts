@@ -93,7 +93,8 @@ export interface ReservationResponseData {
     };
     checkInComment: string;
     address: Record<string, any>; // You can define a more specific interface if you have one
-  };
+  }
+  marketSegment: string
   guestDetails: {
     primaryGuest: {
       id: string;

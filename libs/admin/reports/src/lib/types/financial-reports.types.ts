@@ -171,35 +171,96 @@ export type PostingAuditReportResponse = {
   user: User;
 };
 
-export type FinancialReportResponse = {
+export type FinancialReportResponse = Reservation & {};
+
+//advanceDepositPayment
+export type AdvanceDepositPaymentReportData = {
+  bookingNo: string;
+  // groupId: string;
+  checkIn: string;
+  checkOut: string;
+  advancedDepositDate: string;
+  paymentMode: string;
+  // paymentType: string;
+  advancedDepositAmount: string;
+};
+
+export type AdvanceDepositPaymentReportResponse = {
   id: string;
-  updated: number;
+  amount: number;
+  transactionId: string;
+  status: string;
+  reservationId: string;
   created: number;
-  arrivalTime: number;
-  departureTime: number;
-  number: string;
-  pmsStatus: string;
-  state: string;
-  stateCompletedSteps: string;
-  stayDetails: StayDetails;
-  guestDetails: GuestDetails;
-  paymentSummary: PaymentSummary;
-  journeysStatus: JourneysStatus;
-  stepsStatus: StepsStatus;
-  lastCompletedStep: string;
-  currentJourney: string;
-  currentJoureyStatus: string;
-  currentJourneyState: string;
-  source: string;
-  totalDueAmount: number;
-  totalPaidAmount: number;
-  totalAmount: number;
-  invoiceCode: string;
-  reservationItemsPayment: ReservationItemsPayment;
-  nightCount: number;
-  vip: boolean;
-  invoicePrepareRequest: boolean;
-  pmsBooking: boolean;
+  paymentMethod: string;
+  reservationNumber: string;
+  reservation: Reservation;
+};
+
+//revParRoomReport
+export type RevParRoomReportData = {
+  totalRoomInventory: number;
+  revParIncludeInclusion: number;
+  revParExcludeInclusion: number;
+  totalRoomRent: string;
+  totalRoomInclusions: string;
+  totalTaxes: string;
+  // totalOtherCharges: string;
+  // totalOtherTaxes: string;
+  grossTotal: string;
+};
+
+export type RevParRoomReportResponse = {
+  date: number;
+  entityId: string;
+  roomRevenue: number;
+  revPar: number;
+  averageRate: number;
+  averageRateIncl: number;
+  totalRooms: number;
+  occupiedRooms: number;
+  outOfOrderRooms: number;
+  outOfServiceRooms: number;
+  complimentaryRooms: number;
+  houseUseRooms: number;
+  occupancyPercentage: number;
+  arrivalRooms: number;
+  departureRooms: number;
+  dayUseRooms: number;
+  individualRoomsInhouse: number;
+  frontDeskRoomsInhouse: number;
+  companyRoomsInhouse: number;
+  agentRoomsInhouse: number;
+  walkInRoomsInhouse: number;
+  noShowRooms: number;
+  inhouseAdults: number;
+  inhouseChildren: number;
+  individualPersonInhouse: number;
+  frontDeskPersonInhouse: number;
+  companyPersonInhouse: number;
+  agentPersonInhouse: number;
+  walkInPersonInhouse: number;
+  cancelledReservationForToday: number;
+  reservationsMadeToday: number;
+  nextDayArrivalRooms: number;
+  nextDayDepartureRooms: number;
+  roomChargePerDay: number;
+  roomCgstPerDay: number;
+  roomSgstPerDay: number;
+  calenderType: string;
+  vipPersonInhouse: number;
+  arrivalPersons: number;
+  departurePersons: number;
+  noShowPersons: number;
+  roomNightsReserved: number;
+  inclusionOrAddOn: number;
+  totalPersonInHouse: number;
+  noShowReservationForToday: number;
+  totalTax: number;
+  grossTotal: number;
+  occupiedRoomGuests: number;
+  dayUseRoomGuests: number;
+  subTotalObject: boolean;
 };
 
 export type DailyRevenueReportData = {
@@ -336,6 +397,42 @@ export type DailyRevenueReportResponse<
   addOn: number;
   totalOthers: number;
   totalRevenue: number;
+};
+
+type Reservation = {
+  id: string;
+  updated: number;
+  created: number;
+  arrivalTime: number;
+  departureTime: number;
+  number: string;
+  pmsStatus: string;
+  state: string;
+  stateCompletedSteps: string;
+  stayDetails: StayDetails;
+  guestDetails: {
+    primaryGuest: GuestDetails;
+    accompanyGuests: GuestDetails[];
+    sharerGuests: GuestDetails[];
+    secondaryGuest: GuestDetails[];
+    kids: GuestDetails[];
+    allGuest: Record<string, GuestDetails>;
+  };
+  paymentSummary: PaymentSummary;
+  reservationItemsPayment: ReservationItemsPayment;
+  journeysStatus: Record<string, string>;
+  stepsStatus: Record<string, string>;
+  lastCompletedStep: string;
+  currentJourney: string;
+  currentJoureyStatus: string;
+  currentJourneyState: string;
+  source: string;
+  invoiceCode: string;
+  nightCount: number;
+  vip: boolean;
+  pmsBooking: boolean;
+  invoicePrepareRequest: boolean;
+  user: User;
 };
 
 interface ContactDetails {

@@ -150,7 +150,7 @@ export class MarketSegmentReport
           this.records.push({
             marketSegment: row.name,
             nights: value[row.label].nights,
-            occupancy: value[row.label].occupancyPercent,
+            occupancy: (value[row.label].occupancyPercent ?? 0) + '%',
             pax: value[row.label].pax,
             roomRevenue: toCurrency(value[row.label].roomRevenue),
             revenue: value[row.label].revenuePercent,

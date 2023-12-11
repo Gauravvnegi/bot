@@ -1,10 +1,12 @@
 import {
+  AdvanceDepositPaymentReportData,
   CloseOutBalanceData,
   DailyRevenueReportData,
   DepositReportData,
   FinancialReportData,
   MonthlySummaryReportData,
   PostingAuditReportData,
+  RevParRoomReportData,
 } from '../types/financial-reports.types';
 import { ColsData } from '../types/reports.types';
 
@@ -55,6 +57,80 @@ export const financialReportCols: ColsData<FinancialReportData> = {
   },
   balance: {
     header: 'Balance',
+    isSortDisabled: true,
+  },
+};
+
+export const advanceDepositPaymentCols: ColsData<AdvanceDepositPaymentReportData> = {
+  bookingNo: {
+    header: 'Res#',
+    isSortDisabled: true,
+  },
+  // groupId: {
+  //   header: 'Group Id',
+  //   isSortDisabled: true,
+  // },
+  checkIn: {
+    header: 'Check In',
+    isSortDisabled: true,
+  },
+  checkOut: {
+    header: 'Check Out',
+    isSortDisabled: true,
+  },
+  advancedDepositDate: {
+    header: 'Advanced Deposit Date',
+    isSortDisabled: true,
+  },
+  paymentMode: {
+    header: 'Payment Mode',
+    isSortDisabled: true,
+  },
+  // paymentType: {
+  //   header: 'Payment Type',
+  //   isSortDisabled: true,
+  // },
+  advancedDepositAmount: {
+    header: 'Advanced Deposit Amount',
+    isSortDisabled: true,
+  },
+};
+
+export const revParReportCols: ColsData<RevParRoomReportData> = {
+  totalRoomInventory: {
+    header: 'Total Room Inventory',
+    isSortDisabled: true,
+  },
+  revParIncludeInclusion: {
+    header: 'RevPAR (Incl. Inclusions)',
+    isSortDisabled: true,
+  },
+  revParExcludeInclusion: {
+    header: 'RevPAR (Excl. Inclusions)',
+    isSortDisabled: true,
+  },
+  totalRoomRent: {
+    header: 'Total Room Rent',
+    isSortDisabled: true,
+  },
+  totalRoomInclusions: {
+    header: 'Total Room Inclusions',
+    isSortDisabled: true,
+  },
+  totalTaxes: {
+    header: 'Total Taxes',
+    isSortDisabled: true,
+  },
+  // totalOtherCharges: {
+  //   header: 'Total Other Charges',
+  //   isSortDisabled: true,
+  // },
+  // totalOtherTaxes: {
+  //   header: 'Total Other Taxes',
+  //   isSortDisabled: true,
+  // },
+  grossTotal: {
+    header: 'Gross Total',
     isSortDisabled: true,
   },
 };

@@ -1,6 +1,11 @@
 import { I } from '@angular/cdk/keycodes';
-import { dailyRevenueReportRows } from '../constant/financial-reports.const';
 import {
+  advanceDepositPaymentCols,
+  dailyRevenueReportRows,
+} from '../constant/financial-reports.const';
+import {
+  AdvanceDepositPaymentReportData,
+  AdvanceDepositPaymentReportResponse,
   CloseOutBalanceData,
   CloseOutBalanceResponse,
   DailyRevenueReportData,
@@ -14,6 +19,8 @@ import {
   PaymentMode,
   PostingAuditReportData,
   PostingAuditReportResponse,
+  RevParRoomReportData,
+  RevParRoomReportResponse,
 } from '../types/financial-reports.types';
 import { ReportClass, RowStyles } from '../types/reports.types';
 import { getFormattedDate } from './reservation-reports.models';
@@ -300,6 +307,67 @@ export class DailyRevenueReport
             isBlackBg: item.name === 'totalPayable',
           });
     });
+
+    return this;
+  }
+}
+
+//advanceDepositPayment
+export class AdvanceDepositPaymentReport
+  implements
+    ReportClass<
+      AdvanceDepositPaymentReportData,
+      AdvanceDepositPaymentReportResponse
+    > {
+  records: AdvanceDepositPaymentReportData[];
+
+  deserialize(value: AdvanceDepositPaymentReportResponse[]): this {
+    this.records = new Array<AdvanceDepositPaymentReportData>();
+
+    this.records =
+      value &&
+      value.map((item) => {
+        return {
+          bookingNo: item?.reservationNumber,
+          // groupId: undefined,
+          checkIn: getFormattedDate(item?.reservation?.arrivalTime),
+          checkOut: getFormattedDate(item?.reservation?.departureTime),
+          advancedDepositDate: getFormattedDate(item?.created),
+          paymentMode: item?.paymentMethod,
+          advancedDepositAmount: toCurrency(item?.amount),
+        };
+      });
+    return this;
+  }
+}
+
+//revParRoomReport
+export class RevParRoomReport
+  implements ReportClass<RevParRoomReportData, RevParRoomReportResponse> {
+  records: RevParRoomReportData[];
+
+  deserialize(value: RevParRoomReportResponse[]): this {
+    this.records = new Array<RevParRoomReportData>();
+
+    this.records =
+      value &&
+      value?.map((item) => {
+        return {
+          totalRoomInventory: item?.totalRooms,
+          revParIncludeInclusion: item?.revPar + item?.inclusionOrAddOn,
+
+          revParExcludeInclusion: item?.revPar,
+
+          totalRoomRent: toCurrency(item?.roomRevenue),
+
+          totalRoomInclusions: toCurrency(item?.inclusionOrAddOn),
+          
+          totalTaxes: toCurrency(item?.totalTax),
+          // totalOtherCharges: toCurrency(item?.inclusionOrAddOn),
+          // totalOtherTaxes: undefined,
+          grossTotal: toCurrency(item?.grossTotal),
+        };
+      });
 
     return this;
   }

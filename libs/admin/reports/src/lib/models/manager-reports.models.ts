@@ -20,24 +20,36 @@ export class ManagerFlashReport extends MangerReport
     mangerReportData = mangerReportData.map((item) => {
       const totalRoomMinusOSS =
         item?.totalRooms ?? 0 - item?.outOfServiceRooms ?? 0;
-      const availableRooms = totalRoomMinusOSS - item?.occupiedRooms ?? 0;
+      const availableRooms = totalRoomMinusOSS - (item?.occupiedRooms ?? 0);
       const availableRoomsMinusOOSS =
-        availableRooms - item?.outOfServiceRooms ?? 0;
+        availableRooms - (item?.outOfServiceRooms ?? 0);
       const noOfLettableRooms =
-        item?.totalRooms ?? 0 - item?.outOfServiceRooms ?? 0;
+        (item?.totalRooms ?? 0) - (item?.outOfServiceRooms ?? 0);
+
+      console.log(
+        'noOfLettableRooms',
+        noOfLettableRooms,
+        item?.totalRooms - item?.outOfServiceRooms,
+        item?.totalRooms,
+        item?.outOfServiceRooms
+      );
+
       const roomsOccupiedMinusCompAndHouse =
         item?.occupiedRooms ??
         0 - item?.complimentaryRooms ??
         0 - item?.houseUseRooms ??
         0;
       const roomOccupiedMinusHouseUse =
-        item?.occupiedRooms ?? 0 - item?.houseUseRooms ?? 0;
+        (item?.occupiedRooms ?? 0) - (item?.houseUseRooms ?? 0);
       const roomOccupiedMinusComp =
-        item?.occupiedRooms ?? 0 - item?.complimentaryRooms ?? 0;
-      const revParInclDNR = +(
-        item?.roomRevenue / item?.totalRooms ?? 0
-      ).toFixed(2);
-      const totalRevenue = item?.roomRevenue + item?.inclusionOrAddOn;
+        (item?.occupiedRooms ?? 0) - (item?.complimentaryRooms ?? 0);
+
+      const revParInclDNR =
+        item?.roomRevenue &&
+        +(item?.roomRevenue / item?.totalRooms ?? 0).toFixed(2);
+
+      const totalRevenue =
+        (item?.roomRevenue ?? 0) + (item?.inclusionOrAddOn ?? 0);
 
       return {
         ...item,

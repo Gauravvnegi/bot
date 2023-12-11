@@ -128,7 +128,7 @@ export const marketSegmentReportCols: ColsData<Omit<
     isSortDisabled: true,
   },
   occupancy: {
-    header: 'Occupancy',
+    header: 'Occupancy %',
     isSortDisabled: true,
   },
 

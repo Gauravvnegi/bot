@@ -24,9 +24,14 @@ export class DiscountAllowanceReport
             `${reservationData?.user?.firstName} ${reservationData?.user?.lastName}`, //to be added in response
           guestName: `${reservationData.guestDetails.primaryGuest.firstName} ${reservationData.guestDetails.primaryGuest.lastName}`,
           reasonForDiscount: undefined, //to be added in response
-          directDiscount:toCurrency(reservationData.paymentSummary.totalDiscount),
+          directDiscount: toCurrency(
+            reservationData?.reservationItemsPayment?.totalRoomDiscount
+          ),
           allowance: undefined, //to be added in response
-          total: toCurrency(reservationData.paymentSummary.totalDiscount),
+          total: toCurrency(
+            reservationData.reservationItemsPayment.totalRoomDiscount +
+              reservationData.reservationItemsPayment.totalAddOnsDiscount
+          ),
         });
       });
     return this;

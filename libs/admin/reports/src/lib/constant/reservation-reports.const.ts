@@ -1,10 +1,12 @@
 import { ColsData } from '../types/reports.types';
 import {
+  AddOnRequestReportData,
   ArrivalReportData,
   CancellationReportPartialData,
   DepartureReportData,
   DraftReservationReportData,
   EmployeeWiseReservationReportData,
+  ExpressCheckInData,
   HousekeepingReportData,
   IncomeSummaryReportData,
   NoShowReportData,
@@ -384,6 +386,69 @@ export const housekeepingReportCols: ColsData<Omit<
   },
   status: {
     header: 'Status',
+    isSortDisabled: true,
+  },
+};
+
+//expressCheckIn
+export const expressCheckInReportCols: ColsData<ExpressCheckInData> = {
+  bookingNo: {
+    header: 'Res#',
+    isSortDisabled: true,
+  },
+  guestName: {
+    header: 'Guest Name',
+    isSortDisabled: true,
+  },
+  roomType: {
+    header: 'Room/Type',
+    isSearchDisabled: true,
+  },
+  checkIn: {
+    header: 'Check In',
+    isSortDisabled: true,
+  },
+  checkOut: {
+    header: 'Check Out',
+    isSortDisabled: true,
+  },
+  bookingAmount: {
+    header: 'Booking Amount',
+    isSortDisabled: true,
+  },
+  status: {
+    header: 'Status',
+    isSortDisabled: true,
+  },
+};
+
+export const addOnRequestReportCols: ColsData<AddOnRequestReportData> = {
+  packageName: {
+    header: 'Package Name',
+    isSortDisabled: true,
+  },
+  packageCode: {
+    header: 'Package Code',
+    isSortDisabled: true,
+  },
+  source: {
+    header: 'Source',
+    isSortDisabled: true,
+  },
+  amount: {
+    header: 'Amount',
+    isSortDisabled: true,
+  },
+  category: {
+    header: 'Category',
+    isSortDisabled: true,
+  },
+  active: {
+    header: 'Active',
+    isSortDisabled: true,
+  },
+  bookingNo: {
+    header: 'Res#',
     isSortDisabled: true,
   },
 };

@@ -79,7 +79,7 @@ export class AdminPaymentDetailsComponent implements OnInit {
       const res = await this.userService
         .getUserDetailsById(cashierId)
         .toPromise();
-      return res.firstName + ' ' + res.lastName;
+      return (res?.firstName ?? '') + ' ' + (res?.lastName ?? '');
     };
 
     this.transactionHistory = []; // Clear the array before populating it

@@ -150,7 +150,6 @@ export class QuickSelectComponent extends FormComponent implements OnInit {
     //   if (selectedOption) {
     //     this.menuOptions = [...this.menuOptions, selectedOption];
     //     this.removeDuplicate([...this.menuOptions]);
-    //     if (this.controlName === 'companySourceName') debugger;
     //     this.controlContainer.control
     //       .get(this.controlName)
     //       .patchValue(selectedOption?.value, {

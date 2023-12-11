@@ -21,6 +21,7 @@ import { FormService } from '../../../services/form.service';
 import { GuestType } from 'libs/admin/guests/src/lib/types/guest.type';
 import { AddGuestComponent } from 'libs/admin/guests/src/lib/components';
 import { ReservationForm } from '../../../constants/form';
+import { ReservationCurrentStatus } from '../../../models/reservations.model';
 
 @Component({
   selector: 'hospitality-bot-guest-information',
@@ -44,6 +45,7 @@ export class GuestInformationComponent implements OnInit {
   @ViewChild('sidebarSlide', { read: ViewContainerRef })
   sidebarSlide: ViewContainerRef;
   editMode = false;
+  isCheckinOrCheckout = true;
 
   constructor(
     private fb: FormBuilder,
@@ -67,6 +69,13 @@ export class GuestInformationComponent implements OnInit {
       guestDetails: ['', [Validators.required]],
     };
     this.parentFormGroup.addControl('guestInformation', this.fb.group(data));
+    this.formService.currentJourneyStatus.subscribe((res) => {
+      if (res)
+        this.isCheckinOrCheckout =
+          res === ReservationCurrentStatus.INHOUSE ||
+          res === ReservationCurrentStatus.DUEOUT ||
+          res === ReservationCurrentStatus.CHECKEDOUT;
+    });
   }
 
   /**
@@ -101,7 +110,7 @@ export class GuestInformationComponent implements OnInit {
         if (typeof res !== 'boolean') {
           this.selectedGuest = {
             label: `${res.firstName} ${res.lastName}`,
-            value: res.id
+            value: res.id,
           };
         }
         this.sidebarVisible = false;
@@ -117,12 +126,11 @@ export class GuestInformationComponent implements OnInit {
         if (res) {
           this.selectedGuest = {
             label: res.label,
-            value: res.value
+            value: res.value,
           };
           this.formService.offerType.subscribe((res) => {
-            if (res && res === 'COMPANY' && this.reservationId) {
+            if (res && res === 'COMPANY' && this.reservationId)
               this.inputControls.offerId.reset();
-            }
           });
         }
       })
@@ -136,9 +144,8 @@ export class GuestInformationComponent implements OnInit {
         value: event.id,
       };
       this.formService.offerType.subscribe((res) => {
-        if (res && res === 'COMPANY' && this.reservationId) {
+        if (res && res === 'COMPANY' && this.reservationId)
           this.inputControls.offerId.reset();
-        }
       });
     }
   }

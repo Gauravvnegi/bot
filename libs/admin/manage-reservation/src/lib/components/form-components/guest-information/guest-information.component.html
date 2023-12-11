@@ -38,7 +38,7 @@
       }"
       (clickedOption)="guestChange($event)"
       (openSidebar)="showGuests()"
-      [initItems]="true"
+      [initItems]="!reservationId || !isCheckinOrCheckout"
     ></hospitality-bot-quick-select>
   </div>
 </p-accordionTab>

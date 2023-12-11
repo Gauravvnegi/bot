@@ -133,7 +133,9 @@ export class AddReservationComponent extends BaseReservationComponent
       this.formService.enableAccordion = false;
     }
     this.formService.getSummary.subscribe((res) => {
-      if (this.roomInfoControls.valid) this.getSummaryData();
+      if (this.roomInfoControls.valid) {
+        this.getSummaryData();
+      }
     });
   }
 
@@ -141,11 +143,12 @@ export class AddReservationComponent extends BaseReservationComponent
    * @function initForm Initialize form
    */
   initForm(): void {
-    let toDate = new Date();
-    toDate.setDate(toDate.getDate() + 1);
+    let startDate = this.reservationId ? '' : new Date();
+    let toDate = this.reservationId ? '' : new Date();
+    typeof toDate !== 'string' && toDate.setDate(toDate.getDate() + 1);
     this.userForm = this.fb.group({
       reservationInformation: this.fb.group({
-        from: [new Date(), Validators.required],
+        from: [startDate, Validators.required],
         to: [toDate, Validators.required],
         reservationType: ['', Validators.required],
         source: ['', Validators.required],

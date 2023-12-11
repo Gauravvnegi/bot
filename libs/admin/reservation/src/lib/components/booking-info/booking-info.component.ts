@@ -283,13 +283,15 @@ export class BookingInfoComponent implements OnInit {
           !this.configData?.source?.some((item) => item.value === res) &&
           this.configData.source.push({ label: res, value: res });
         this.initSourceDetails(res);
-        !this.editMode && this.sourceNameControl.reset();
+        (!this.editMode || !this.reservationId) &&
+          this.sourceNameControl.reset();
       }
     });
   }
 
   // Map source data for edit reservation
   listenForSourceData() {
+    this.editMode = true;
     this.$subscription.add(
       this.formService.sourceData.subscribe((res) => {
         if (res) {
@@ -318,6 +320,7 @@ export class BookingInfoComponent implements OnInit {
           const selectedControl =
             sourceControlMap[res.source] || sourceControlMap['default'];
           selectedControl.patchValue(res.sourceName, { emitEvent: false });
+          this.editMode = false;
         }
       })
     );
@@ -355,7 +358,6 @@ export class BookingInfoComponent implements OnInit {
         this.updateValueAndValidity(this.companySourceControl);
         break;
     }
-    this.editMode = true;
   }
 
   mapOtaOptions(source: string) {
@@ -373,7 +375,7 @@ export class BookingInfoComponent implements OnInit {
   }
 
   updateValueAndValidity(control: AbstractControl) {
-    control.reset({ emitEvent: false });
+    control.reset();
     control.clearValidators();
     control.updateValueAndValidity({ emitEvent: false });
   }

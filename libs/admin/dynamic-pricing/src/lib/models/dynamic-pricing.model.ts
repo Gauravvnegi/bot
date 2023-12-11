@@ -46,13 +46,17 @@ export class DynamicPricingFactory {
       status,
       hotelConfig,
       hotelId,
-    } = form.controls; 
+    } = form.controls;
     const isHotelType = configCategory.value === 'HOTEL';
     return {
       status: status.value ? 'ACTIVE' : 'INACTIVE',
       name: name.value,
-      fromDate: getDateTimeInEpoch({time:fromDate.value,isHourseReset:true}).time,
-      toDate: getDateTimeInEpoch({time:toDate.value,isHourseReset:true}).time,
+      fromDate: getDateTimeInEpoch({
+        time: fromDate.value,
+        isHourseReset: true,
+      }).time,
+      toDate: getDateTimeInEpoch({ time: toDate.value, isHourseReset: true })
+        .time,
       daysIncluded: selectedDays.value.map((day: string) => day.toUpperCase()),
       configItems: isHotelType
         ? [
@@ -85,7 +89,7 @@ export class DynamicPricingFactory {
   static getChangedProperties(formGroup: FormGroup, type: ConfigType) {
     let requestData: DynamicPricingUpdateRequestType = {};
     let removedRulesIds = [];
-   
+
     const otherDirtyMapper = (
       currentControl,
       name: OccupancyFormControlsType
@@ -108,8 +112,11 @@ export class DynamicPricingFactory {
             if (item === 'selectedDays') {
               requestData['daysIncluded'] = days;
             } else {
-              const {time} = getDateTimeInEpoch({time:days,isHourseReset:true})
-              requestData[item] = time; 
+              const { time } = getDateTimeInEpoch({
+                time: days,
+                isHourseReset: true,
+              });
+              requestData[item] = time;
             }
           });
         }
@@ -236,6 +243,8 @@ export class DynamicPricingFactory {
   static getOccupancyRules(rule: FormGroup): ConfigRuleType {
     const { id, discount, end, rate, start, fromTime, toTime } = rule.controls;
     const status = true; //TODO, Future dependent
+    const localTime = (5 * 60 + 30) * 60 * 1000;
+    
     return {
       ...(id?.value && { id: id.value }),
       occupancyStart: +start?.value,
@@ -246,10 +255,12 @@ export class DynamicPricingFactory {
         value: +discount?.value,
       },
       ...(fromTime?.value && {
-        fromTimeInMillis: (+fromTime.value + 1000) % (24 * 60 * 60 * 1000),
+        fromTimeInMillis:
+          ((+fromTime.value + 1000 + localTime) % (24 * 60 * 60 * 1000)) / 1000,
       }),
       ...(toTime?.value && {
-        toTimeInMillis: +toTime.value % (24 * 60 * 60 * 1000),
+        toTimeInMillis:
+          ((+toTime.value + localTime) % (24 * 60 * 60 * 1000)) / 1000,
       }),
     };
   }
@@ -346,7 +357,7 @@ export class DynamicPricingHandler {
                 start: rule.start,
                 end: rule.end,
                 discount: rule.discount,
-              }); 
+              });
           }
         );
       });
@@ -369,8 +380,7 @@ export class DynamicPricingHandler {
             }
           : {
               rate: Math.floor(
-                (rule.discount * item.basePrice) / 100 +
-                item.basePrice
+                (rule.discount * item.basePrice) / 100 + item.basePrice
               ),
             };
       rule &&
@@ -643,4 +653,3 @@ function validateOccupancy(
 
   return !collideError && !timeGapError && !sameTimeError;
 }
-

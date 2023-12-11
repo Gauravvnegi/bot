@@ -145,8 +145,8 @@ export class AddReservationComponent extends BaseReservationComponent
     toDate.setDate(toDate.getDate() + 1);
     this.userForm = this.fb.group({
       reservationInformation: this.fb.group({
-        from: [new Date(), Validators.required],
-        to: [toDate, Validators.required],
+        from: [this.reservationId ? '' : new Date(), Validators.required],
+        to: [this.reservationId ? '' : toDate, Validators.required],
         reservationType: ['', Validators.required],
         source: ['', Validators.required],
         sourceName: ['', [Validators.required, Validators.maxLength(60)]],

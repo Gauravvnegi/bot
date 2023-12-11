@@ -42,6 +42,10 @@ import { ProgressSpinnerService } from '../../../services/progress-spinner.servi
 import { RoutesConfigService } from '../../../services/routes-config.service';
 import { SubscriptionPlanService } from '../../../services/subscription-plan.service';
 import { NightAuditService } from '../../../../../../../../../../../libs/admin/global-shared/src/lib/services/night-audit.service';
+import {
+  SideBarConfig,
+  SideBarService,
+} from '../../../../../../../../../../../libs/admin/shared/src/lib/services/sidebar.service';
 
 @Component({
   selector: 'admin-layout-one',
@@ -127,7 +131,8 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
     private resolver: ComponentFactoryResolver,
     private compiler: Compiler,
     private routesConfigService: RoutesConfigService,
-    private nightAuditService: NightAuditService
+    private nightAuditService: NightAuditService,
+    private sideBarService: SideBarService
   ) {
     this.initFG();
   }
@@ -156,6 +161,19 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
       }
     });
     this.initBookingOption();
+    this.initSidebarSubscription();
+  }
+
+  initSidebarSubscription() {
+    this.sideBarService
+      .sideBarSubscription()
+      .subscribe((res: SideBarConfig) => {
+        if (res.open) {
+          if (res.type === 'RAISE_REQUEST') {
+            this.showComplaint();
+          }
+        }
+      });
   }
 
   scrollToTop() {
@@ -510,17 +528,29 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
   }
 
   showComplaint() {
-    this.sidebarVisible = true;
-    this.sidebarType = 'complaint';
-    const factory = this.resolver.resolveComponentFactory(
-      RaiseRequestComponent
-    );
-    this.sidebarSlide.clear();
-    const componentRef = this.sidebarSlide.createComponent(factory);
-    componentRef.instance.isSideBar = true;
-    componentRef.instance.onRaiseRequestClose.subscribe((res) => {
-      this.sidebarVisible = false;
-      componentRef.destroy();
+    const lazyModulePromise = import(
+      'libs/admin/request/src/lib/admin-request.module'
+    )
+      .then((module) => {
+        return this.compiler.compileModuleAsync(module.AdminRequestModule);
+      })
+      .catch((error) => {
+        console.error('Error loading the lazy module:', error);
+      });
+
+    lazyModulePromise.then((moduleFactory) => {
+      this.sidebarVisible = true;
+      this.sidebarType = 'complaint';
+      const factory = this.resolver.resolveComponentFactory(
+        RaiseRequestComponent
+      );
+      this.sidebarSlide.clear();
+      const componentRef = this.sidebarSlide.createComponent(factory);
+      componentRef.instance.isSideBar = true;
+      componentRef.instance.onRaiseRequestClose.subscribe((res) => {
+        this.sidebarVisible = false;
+        componentRef.destroy();
+      });
     });
   }
 

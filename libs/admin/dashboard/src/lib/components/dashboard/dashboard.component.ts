@@ -37,7 +37,7 @@ import { SideBarService } from 'libs/admin/shared/src/lib/services/sidebar.servi
   selector: 'hospitality-bot-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss'],
-  providers: [SideBarService],
+  // providers: [SideBarService],
 })
 export class DashboardComponent implements OnInit, OnDestroy {
   tables = TableNames;
@@ -147,7 +147,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   onSelectedTabFilterChange(data) {
-    this.tabFilterIdx =data.index;
+    this.tabFilterIdx = data.index;
     this.selectedTab = this.tabFilterItems[data.index].value;
     this.getRespectiveTabData(data);
   }

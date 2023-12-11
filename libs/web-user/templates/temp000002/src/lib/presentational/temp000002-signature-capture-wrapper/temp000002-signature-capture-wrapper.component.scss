@@ -22,6 +22,15 @@
   }
 }
 
+::ng-deep .upload_file_wrapper {
+  & .upload__box {
+    & .upload__box__child {
+      height: 100%;
+      max-height: 99% !important;
+    }
+  }
+}
+
 .upload_file_wrapper {
   position: relative;
   .button_image_wrap {

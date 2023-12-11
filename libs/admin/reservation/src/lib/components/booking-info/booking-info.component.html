@@ -23,7 +23,12 @@
           label="Check-In Date"
           [settings]="{
             enableTime: false,
-            dateValue: startMinDate
+            dateValue: reservationId
+              ? reservationInfoControls.from.value
+              : startMinDate
+          }"
+          [props]="{
+            placeholder: 'DD/MM/YY'
           }"
           [minDate]="today"
           [maxDate]="maxDate"
@@ -35,7 +40,12 @@
           label="Check-Out Date"
           [settings]="{
             enableTime: false,
-            dateValue: endMinDate
+            dateValue: reservationId
+              ? reservationInfoControls.from.value
+              : endMinDate
+          }"
+          [props]="{
+            placeholder: 'DD/MM/YY'
           }"
           [minDate]="minToDate"
           [maxDate]="maxDate"

@@ -32,7 +32,6 @@ import {
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { ModalComponent } from 'libs/admin/shared/src/lib/components/modal/modal.component';
 import { MatDialogConfig } from '@angular/material/dialog';
-import { openAccordion } from '../../models/bar-price.model';
 import { Accordion } from 'primeng/accordion';
 import { isDirty } from '../../services/bar-price.service';
 

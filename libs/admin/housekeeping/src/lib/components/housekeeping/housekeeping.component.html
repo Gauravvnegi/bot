@@ -24,6 +24,7 @@
   >
   </hospitality-bot-room-types>
   <hospitality-bot-input
+  [disabled]="isNoRoomSelected"
     class="btn-width"
     controlName="search"
     label="Search Room"
@@ -104,20 +105,16 @@
   <hospitality-bot-empty-table
     [isLoading]="loading"
     (action)="navigateToAddRoom()"
-    [content]="{
-      description:
-        'No rooms found. Tap the +Add Multiple Rooms to Manage and track your hotel\'s room inventory, rates, and availability',
-      actionName: '+ Add Multiple Rooms',
-      imageSrc: 'assets/images/empty-table-room-types.png'
-    }"
+    [content]="emptyViewDescription"
   >
-    <ng-container [ngTemplateOutlet]="filter"> </ng-container>
+    <ng-container [ngTemplateOutlet]="filter" *ngIf="!loading"> </ng-container>
   </hospitality-bot-empty-table>
 </ng-template>
 
 <ng-template #filter>
   <ng-container [formGroup]="tableFG">
     <hospitality-bot-filter-chips
+      *ngIf="!isNoRoomSelected"
       class="filter"
       [chips]="filterChips"
       (onChange)="toggleQuickReplyFilter($event)"

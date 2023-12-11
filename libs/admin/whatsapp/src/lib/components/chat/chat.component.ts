@@ -28,6 +28,7 @@ import { RaiseRequestComponent } from 'libs/admin/request/src/lib/components/rai
 import * as FileSaver from 'file-saver';
 import { SubscriptionPlanService } from '@hospitality-bot/admin/core/theme';
 import { ModalComponent } from 'libs/admin/shared/src/lib/components/modal/modal.component';
+import { SideBarService } from 'libs/admin/shared/src/lib/services/sidebar.service';
 
 @Component({
   selector: 'hospitality-bot-chat',
@@ -48,7 +49,7 @@ export class ChatComponent
   isLoading = false;
   limit = 20;
   paginationDisabled = false;
-  sidebarVisible: boolean = false;
+  // sidebarVisible: boolean = false;
 
   $subscription = new Subscription();
   scrollBottom = true;
@@ -60,7 +61,7 @@ export class ChatComponent
   ];
   @ViewChild('sidebarSlide', { read: ViewContainerRef })
   sidebarSlide: ViewContainerRef;
-  sidebarType;
+  // sidebarType;
   loadingChat: boolean = false;
 
   constructor(
@@ -72,7 +73,8 @@ export class ChatComponent
     private globalFilterService: GlobalFilterService,
     private _firebaseMessagingService: FirebaseMessagingService,
     private resolver: ComponentFactoryResolver,
-    private subscriptionPlanService: SubscriptionPlanService
+    private subscriptionPlanService: SubscriptionPlanService,
+    private sideBarService: SideBarService
   ) {}
 
   ngOnInit(): void {
@@ -433,32 +435,40 @@ export class ChatComponent
     );
   }
   openRaiseRequest() {
-    this.sidebarVisible = true;
-    this.sidebarType = 'complaint';
-
-    const factory = this.resolver.resolveComponentFactory(
-      RaiseRequestComponent
-    );
-    this.sidebarSlide.clear();
-    const componentRef = this.sidebarSlide.createComponent(factory);
-    componentRef.instance.isSideBar = true;
-    componentRef.instance.onRaiseRequestClose.subscribe((res) => {
-      if (res.status) {
-        this.getRequestList();
-        const values = {
-          reservationId: res.data.number,
-        };
-        this.$subscription.add(
-          this.messageService
-            .updateGuestDetail(this.entityId, this.data.receiverId, values)
-            .subscribe((response) => {
-              this.messageService.refreshData$.next(true);
-            })
-        );
-      }
-      this.sidebarVisible = false;
-      componentRef.destroy();
+    this.sideBarService.openSideBar({
+      type: 'RAISE_REQUEST',
+      open: true,
     });
+
+    return;
+
+    // this.sidebarVisible = true;
+    // this.sidebarType = 'complaint';
+
+    // const factory = this.resolver.resolveComponentFactory(
+    //   RaiseRequestComponent
+    // );
+    // this.sidebarSlide.clear();
+    // const componentRef = this.sidebarSlide.createComponent(factory);
+    // componentRef.instance.isSideBar = true;
+    // componentRef.instance.onRaiseRequestClose.subscribe((res) => {
+    //   // Not getting used.. status is hardcode to false in the RaiseRequestComponent
+    //   if (res.status) {
+    //     this.getRequestList();
+    //     const values = {
+    //       reservationId: res.data.number,
+    //     };
+    //     this.$subscription.add(
+    //       this.messageService
+    //         .updateGuestDetail(this.entityId, this.data.receiverId, values)
+    //         .subscribe((response) => {
+    //           this.messageService.refreshData$.next(true);
+    //         })
+    //     );
+    //   }
+    //   this.sidebarVisible = false;
+    //   componentRef.destroy();
+    // });
   }
 
   exportChat() {

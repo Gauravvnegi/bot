@@ -143,6 +143,7 @@ export class ComplaintAnalyticsComponent implements OnInit {
    * Refreshes the stats on the page
    */
   refreshStats() {
+    this.analyticsService.refreshStats.emit(true);
     this.statCard = [];
     this.getPerDayStats();
     this.getAgentStats();

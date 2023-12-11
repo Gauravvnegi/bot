@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { EventEmitter, Injectable } from '@angular/core';
 import { ApiService } from 'libs/shared/utils/src/lib/services/api.service';
 import { Observable } from 'rxjs';
 import { SentimentStatsResponse } from '../types/response.types';
@@ -6,6 +6,9 @@ import { QueryConfig } from '@hospitality-bot/admin/shared';
 
 @Injectable()
 export class AnalyticsService extends ApiService {
+
+  refreshStats: EventEmitter<any> = new EventEmitter();
+  
   getConversationStats(config): Observable<any> {
     return this.get(`/api/v1/conversations-stats/counts${config.queryObj}`);
   }

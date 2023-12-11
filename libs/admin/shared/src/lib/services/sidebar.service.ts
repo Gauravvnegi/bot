@@ -1,17 +1,41 @@
 import { Injectable, RendererStyleFlags2 } from '@angular/core';
 import { Renderer2 } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
+
+// export type SideBarConfig<TData extends Record<string,any>> = {
+//   type?: 'RAISE_REQUEST' | 'ADD_GUEST';
+//   open: boolean;
+//   data?: TData;
+// }
+
+export type SideBarConfig<TData extends Record<string, any> = {}> = {
+  type?: 'RAISE_REQUEST' | 'ADD_GUEST';
+  open: boolean;
+  data?: TData extends { type: 'RAISE_REQUEST' }
+    ? { firstName?: string; lastName?: string; roomNo?: string }
+    : TData extends { type: 'ADD_GUEST' }
+    ? { guestName: string }
+    : TData;
+};
 
 @Injectable({ providedIn: 'root' })
 export class SideBarService {
-  constructor(private renderer: Renderer2) {}
+  private _sideBarConfiguration = new BehaviorSubject<SideBarConfig>({
+    open: false,
+  });
+
+  constructor() {}
+
+  openSideBar(data: SideBarConfig) {
+    return this._sideBarConfiguration.next(data);
+  }
+
+  sideBarSubscription(): BehaviorSubject<SideBarConfig<{}>> {
+    return this._sideBarConfiguration;
+  }
+
   /**
-   * @function setSideBarZIndex
-   * @description set z-index of sidebar
-   * @param zIndex
-   * @param condition
-   * @returns void
-   * @memberof SideBarService
-   * @example setSideBarZIndex(100, true);
+   * Set z-index of sidebar
    */
   setSideBarZIndex(zIndex: number, condition: boolean) {
     setTimeout(() => {
@@ -21,7 +45,7 @@ export class SideBarService {
       elements.forEach((element) => {
         condition
           ? element.setAttribute('style', `z-index: ${zIndex} !important;`)
-          : this.renderer.removeStyle(element, 'z-index');
+          : element.setAttribute('style', `z-index: unset !important ;`);
       });
     }, 100);
   }

@@ -345,6 +345,14 @@
                     (click)="activateAndgenerateJourney('PRECHECKIN')"
                     variant="outlined"
                   ></hospitality-bot-button>
+                  <hospitality-bot-button
+                    *ngIf="
+                      details?.stepStatusDetails?.documents !== 'COMPLETED'
+                    "
+                    (click)="verifyAllDocuments()"
+                    label="Confirm All Docs"
+                    variant="outlined"
+                  ></hospitality-bot-button>
                 </ng-container>
                 <ng-container *ngSwitchCase="'COMPLETED'">
                   <hospitality-bot-button
@@ -454,6 +462,12 @@
             </ng-template>
             <ng-template #CHECKOUT
               ><ng-container [ngSwitch]="details.currentJourneyDetails.status">
+                <hospitality-bot-button
+                  *ngIf="checkForGenerateFeedbackSubscribed()"
+                  label="Generate Feedback"
+                  (click)="generateFeedback()"
+                  variant="outlined"
+                ></hospitality-bot-button>
                 <ng-container *ngSwitchCase="'PENDING'">
                   <hospitality-bot-button
                     *ngIf="isPrintRate"

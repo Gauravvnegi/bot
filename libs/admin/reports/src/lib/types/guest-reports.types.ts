@@ -186,7 +186,7 @@ type StayDetails = {
   address: Record<string, any>;
 };
 
-type PaymentSummary = {
+export type PaymentSummary = {
   totalAmount: number;
   taxAmount: number;
   totalDiscount: number;

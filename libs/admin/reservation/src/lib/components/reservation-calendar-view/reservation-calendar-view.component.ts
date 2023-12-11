@@ -372,7 +372,7 @@ export class ReservationCalendarViewComponent implements OnInit {
     this.gridCols = cols;
     this.globalQueries = [
       { fromDate: this.gridCols[0] },
-      { toDate: this.gridCols[13] },
+      { toDate: this.gridCols[limit - 1] },
     ];
   }
 

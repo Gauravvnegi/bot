@@ -1,8 +1,10 @@
+import { NightAuditRevenueReport } from '../models/night-audit-reports.model';
 import {
   AuditRoomDetailsReportData,
   AuditTaxReportCols,
   AuditTaxReportData,
   MtdAndYtdReportData,
+  NightAuditRevenueData,
 } from '../types/night-audit-reports.types';
 import { ColsData } from '../types/reports.types';
 
@@ -235,3 +237,16 @@ export const mtdAndYtdReportRows = [
     label: 'revPar',
   },
 ];
+
+export const nightAuditRevenueReportCols: ColsData<NightAuditRevenueData> = {
+  revenueList: {
+    header: 'Revenue List',
+    isSortDisabled: true,
+    isSearchDisabled: true,
+  },
+  amount: {
+    header: 'Amount',
+    isSortDisabled: true,
+    isSearchDisabled: true,
+  },
+};

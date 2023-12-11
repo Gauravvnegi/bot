@@ -163,7 +163,12 @@ class PayTypeReportData {
   private setDetails(input: Partial<PayTypeReportResponse>) {
     this.paymentMode = undefined;
     this.paymentType = input?.paymentMethod;
-    this.employee = undefined;
+
+    this.employee =
+      (input?.reservation?.user?.firstName ?? '') +
+      ' ' +
+      (input?.reservation?.user?.lastName ?? '');
+
     this.bookingNo = input?.reservationNumber;
     this.folioNo = input?.reservation?.invoiceCode;
     this.guestName = `${input?.reservation?.guestDetails?.primaryGuest?.firstName} ${input?.reservation?.guestDetails?.primaryGuest?.lastName}`;

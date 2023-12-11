@@ -77,7 +77,7 @@ type Accommodation = {
 export type MarketSegmentReportData = {
   marketSegment: string;
   nights: number;
-  occupancy: number;
+  occupancy: string;
   pax: number;
   roomRevenue: string;
   revenue: string;

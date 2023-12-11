@@ -136,6 +136,7 @@ export class OffersDataTableComponent extends BaseDatatableComponent
           offset: this.first,
           limit: this.rowsPerPage,
           source: 1,
+          raw: true,
         },
       ]),
     };

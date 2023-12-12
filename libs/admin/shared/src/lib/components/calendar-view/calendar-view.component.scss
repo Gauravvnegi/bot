@@ -23,7 +23,7 @@ $border: 1px solid #8080802e;
 
 .left {
   min-width: 70px;
-
+  flex-grow: 0.3;
   &__main {
     width: 100%;
     text-align: center;
@@ -91,6 +91,10 @@ $border: 1px solid #8080802e;
 
 .bdr-rgt {
   border-right: $border;
+}
+
+.bdr-left {
+  border-left: $border;
 }
 
 .bdr-btm-rgt {

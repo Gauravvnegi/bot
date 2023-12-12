@@ -57,7 +57,7 @@ export class CalendarViewComponent implements OnInit, OnDestroy {
    */
   colsInfo: Option<DaysType>[] = Array.from(
     { length: 37 },
-    (_, index) => index + 1
+    (_, index) => index
   ).map((item) => {
     const currentWeek = weeks[item % 7].value;
     return {

@@ -171,38 +171,35 @@ export class DynamicPricingFactory {
                   ...removedRulesIds,
                   ...currentControl['controls'],
                 ];
-              } else {
-                let occupancyRuleData: {
-                  type: ConfigCategory;
-                  id: string;
-                  configRules: ConfigRuleType[];
-                }[] = [];
-                const selectedRoomType = [
-                  ...formGroup.controls['roomType'].value,
-                ];
-                occupancyRuleData = (currentControl as FormArray).controls
-                  .filter((item: FormGroup) =>
-                    selectedRoomType.includes(item.get('roomId').value)
-                  )
-                  .reduce((accumulator, roomType: FormGroup) => {
-                    const { occupancy } = roomType.controls;
-                    if (roomType.dirty) {
-                      const rules = (occupancy as FormArray).controls.map(
-                        (occupancyRule: FormGroup) =>
-                          DynamicPricingFactory.getOccupancyRules(occupancyRule)
-                      );
-                      accumulator.push({
-                        type: 'ROOM_TYPE',
-                        id: roomType.get('roomId').value,
-                        configRules: rules,
-                      });
-                    }
-                    return accumulator;
-                  }, occupancyRuleData);
-
-                if (occupancyRuleData.length) {
-                  requestData['configItems'] = occupancyRuleData;
-                }
+              }
+              let occupancyRuleData: {
+                type: ConfigCategory;
+                id: string;
+                configRules: ConfigRuleType[];
+              }[] = [];
+              const selectedRoomType = [
+                ...formGroup.controls['roomType'].value,
+              ];
+              const roomControl = formGroup.controls['roomTypes'];
+              occupancyRuleData = (roomControl as FormArray).controls
+                .filter((item: FormGroup) =>
+                  selectedRoomType.includes(item.get('roomId').value)
+                )
+                .reduce((accumulator, roomType: FormGroup) => {
+                  const { occupancy } = roomType.controls;
+                  const rules = (occupancy as FormArray).controls.map(
+                    (occupancyRule: FormGroup) =>
+                      DynamicPricingFactory.getOccupancyRules(occupancyRule)
+                  );
+                  accumulator.push({
+                    type: 'ROOM_TYPE',
+                    id: roomType.get('roomId').value,
+                    configRules: rules,
+                  });
+                  return accumulator;
+                }, occupancyRuleData);
+              if (occupancyRuleData.length) {
+                requestData['configItems'] = occupancyRuleData;
               }
             } else {
               otherDirtyMapper(currentControl, name);
@@ -244,7 +241,7 @@ export class DynamicPricingFactory {
     const { id, discount, end, rate, start, fromTime, toTime } = rule.controls;
     const status = true; //TODO, Future dependent
     const localTime = (5 * 60 + 30) * 60 * 1000;
-    
+
     return {
       ...(id?.value && { id: id.value }),
       occupancyStart: +start?.value,
@@ -484,7 +481,7 @@ export class DynamicPricingForm {
     this.toDate = input.toDate;
     this.selectedDays = input.daysIncluded;
     this.basePrice = rooms && rooms.find((item) => item.isBase)?.price;
-
+    const localTimeInMilis = (5 * 60 * 60 + 30 * 60) * 1000;
     const getRules = (configRules) => {
       return (
         configRules.map((rule) => ({
@@ -492,8 +489,12 @@ export class DynamicPricingForm {
           start: rule.occupancyStart,
           end: rule.occupancyEnd,
           discount: rule.discountOrMarkup.value,
-          ...(rule?.fromTimeInMillis && { fromTime: rule.fromTimeInMillis }),
-          ...(rule?.toTimeInMillis && { toTime: rule.toTimeInMillis }),
+          ...(rule?.fromTimeInMillis && {
+            fromTime: rule.fromTimeInMillis * 1000 - localTimeInMilis,
+          }),
+          ...(rule?.toTimeInMillis && {
+            toTime: rule.toTimeInMillis * 1000 - localTimeInMilis,
+          }),
         })) ?? []
       );
     };

@@ -89,13 +89,6 @@
   font-weight: $medium;
 }
 
-:host ::ng-deep .activeClass {
-  background: rgba(103, 58, 183, 0.12);
-  span {
-    color: $primary !important;
-  }
-}
-
 :host ::ng-deep .mat-icon-button {
   min-width: 20px !important;
   width: unset;

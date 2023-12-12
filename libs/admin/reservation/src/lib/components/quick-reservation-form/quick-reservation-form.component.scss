@@ -13,9 +13,11 @@
   max-height: 20rem;
   .half-width {
     flex-basis: 47%;
+    width: 47%;
   }
   .full-width {
     flex-basis: 100%;
+    width: 100%;
   }
 }
 

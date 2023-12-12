@@ -15,13 +15,13 @@ import {
   Validators,
 } from '@angular/forms';
 import { Option } from '@hospitality-bot/admin/shared';
-import { GuestTableService } from 'libs/admin/guests/src/lib/services/guest-table.service';
 import { Subscription } from 'rxjs';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { FormService } from '../../../services/form.service';
 import { GuestType } from 'libs/admin/guests/src/lib/types/guest.type';
 import { AddGuestComponent } from 'libs/admin/guests/src/lib/components';
 import { ReservationForm } from '../../../constants/form';
+import { ReservationCurrentStatus } from '../../../models/reservations.model';
 
 @Component({
   selector: 'hospitality-bot-guest-information',
@@ -45,11 +45,11 @@ export class GuestInformationComponent implements OnInit {
   @ViewChild('sidebarSlide', { read: ViewContainerRef })
   sidebarSlide: ViewContainerRef;
   editMode = false;
+  isCheckinOrCheckout = true;
 
   constructor(
     private fb: FormBuilder,
     public controlContainer: ControlContainer,
-    private guestService: GuestTableService,
     private globalFilterService: GlobalFilterService,
     private formService: FormService,
     private resolver: ComponentFactoryResolver,
@@ -69,6 +69,13 @@ export class GuestInformationComponent implements OnInit {
       guestDetails: ['', [Validators.required]],
     };
     this.parentFormGroup.addControl('guestInformation', this.fb.group(data));
+    this.formService.currentJourneyStatus.subscribe((res) => {
+      if (res)
+        this.isCheckinOrCheckout =
+          res === ReservationCurrentStatus.INHOUSE ||
+          res === ReservationCurrentStatus.DUEOUT ||
+          res === ReservationCurrentStatus.CHECKEDOUT;
+    });
   }
 
   /**
@@ -104,9 +111,6 @@ export class GuestInformationComponent implements OnInit {
           this.selectedGuest = {
             label: `${res.firstName} ${res.lastName}`,
             value: res.id,
-            phoneNumber: res.contactDetails.contactNumber,
-            cc: res.contactDetails.cc,
-            email: res.contactDetails.emailId,
           };
         }
         this.sidebarVisible = false;
@@ -120,23 +124,17 @@ export class GuestInformationComponent implements OnInit {
     this.$subscription.add(
       this.formService.guestInformation.subscribe((res) => {
         if (res) {
-          this.getGuestById(res);
-          this.editMode = true;
+          this.selectedGuest = {
+            label: res.label,
+            value: res.value,
+          };
+          this.formService.offerType.subscribe((res) => {
+            if (res && res === 'COMPANY' && this.reservationId)
+              this.inputControls.offerId.reset();
+          });
         }
       })
     );
-  }
-
-  getGuestById(id: string) {
-    this.guestService.getGuestById(id).subscribe((res) => {
-      this.selectedGuest = {
-        label: `${res.firstName} ${res.lastName}`,
-        value: res.id,
-        phoneNumber: res.contactDetails.contactNumber,
-        cc: res.contactDetails.cc,
-        email: res.contactDetails.emailId,
-      };
-    });
   }
 
   guestChange(event: GuestType) {
@@ -144,14 +142,10 @@ export class GuestInformationComponent implements OnInit {
       this.selectedGuest = {
         label: `${event.firstName} ${event.lastName}`,
         value: event.id,
-        phoneNumber: event.contactDetails.contactNumber,
-        cc: event.contactDetails.cc,
-        email: event.contactDetails.emailId,
       };
       this.formService.offerType.subscribe((res) => {
-        if (res && res === 'COMPANY' && this.reservationId) {
+        if (res && res === 'COMPANY' && this.reservationId)
           this.inputControls.offerId.reset();
-        }
       });
     }
   }

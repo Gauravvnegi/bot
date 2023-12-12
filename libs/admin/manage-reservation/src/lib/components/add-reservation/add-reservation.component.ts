@@ -100,7 +100,7 @@ export class AddReservationComponent extends BaseReservationComponent
       });
   }
 
-  initParamsData(paramsData: ReservationForm) {
+  initParamsData(paramsData: ReservationForm & { guestData: Option }) {
     const {
       roomInformation,
       guestInformation,
@@ -123,7 +123,7 @@ export class AddReservationComponent extends BaseReservationComponent
       ReservationType.CONFIRMED
     );
     this.roomTypeValues = [roomInformation];
-    this.formService.guestInformation.next(guestInformation.guestDetails);
+    this.formService.guestInformation.next(paramsData.guestData);
   }
 
   listenFormServiceChanges() {
@@ -133,7 +133,9 @@ export class AddReservationComponent extends BaseReservationComponent
       this.formService.enableAccordion = false;
     }
     this.formService.getSummary.subscribe((res) => {
-      if (this.roomInfoControls.valid) this.getSummaryData();
+      if (this.roomInfoControls.valid) {
+        this.getSummaryData();
+      }
     });
   }
 
@@ -141,11 +143,12 @@ export class AddReservationComponent extends BaseReservationComponent
    * @function initForm Initialize form
    */
   initForm(): void {
-    let toDate = new Date();
-    toDate.setDate(toDate.getDate() + 1);
+    let startDate = this.reservationId ? '' : new Date();
+    let toDate = this.reservationId ? '' : new Date();
+    typeof toDate !== 'string' && toDate.setDate(toDate.getDate() + 1);
     this.userForm = this.fb.group({
       reservationInformation: this.fb.group({
-        from: [new Date(), Validators.required],
+        from: [startDate, Validators.required],
         to: [toDate, Validators.required],
         reservationType: ['', Validators.required],
         source: ['', Validators.required],
@@ -169,7 +172,7 @@ export class AddReservationComponent extends BaseReservationComponent
     this.formValueChanges = true;
     this.inputControls.roomInformation
       .get('roomTypes')
-      .valueChanges.pipe(debounceTime(300))
+      .valueChanges.pipe(debounceTime(200))
       .subscribe((res) => {
         const data = this.inputControls.roomInformation.get(
           'roomTypes'
@@ -233,6 +236,7 @@ export class AddReservationComponent extends BaseReservationComponent
               ...formData
             } = this.reservationFormData;
 
+            // Checks to disable form based on reservation type and journeys
             this.isDraftBooking =
               reservationInfo.reservationType === ReservationType.DRAFT;
             this.formService.currentJourneyStatus.next(response.status);
@@ -242,10 +246,12 @@ export class AddReservationComponent extends BaseReservationComponent
             this.checkinJourneyState = this.reservationFormData.journeyState;
             this.isExternalBooking = response.externalBooking;
 
+            // Init Source Data for booking info
             this.formService.initSourceData(
               this.reservationFormData.reservationInformation,
               { agent: formData.agent, company: formData?.company }
             );
+
             if (nextStates)
               this.reservationTypes = nextStates.map((item) => ({
                 label: convertToTitleCase(item),
@@ -258,7 +264,10 @@ export class AddReservationComponent extends BaseReservationComponent
             // Create options for room and guest if not already available
             // in room iterator and guest info component.
             this.roomTypeValues = roomInformation;
-            this.formService.guestInformation.next(guestInformation.id);
+            this.formService.guestInformation.next({
+              label: `${guestInformation?.firstName} ${guestInformation?.lastName}`,
+              value: guestInformation.id,
+            });
 
             this.userForm.patchValue({
               reservationInformation: reservationInfo,

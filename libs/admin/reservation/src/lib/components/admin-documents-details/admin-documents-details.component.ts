@@ -16,6 +16,7 @@ import * as JSZipUtils from 'jszip-utils';
 import { ImageHandlingComponent } from 'libs/admin/shared/src/lib/components/image-handling/image-handling.component';
 import { ReservationService } from '../../services/reservation.service';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import { GuestDetailsConfig } from 'libs/admin/shared/src/lib/models/detailsConfig.model';
 
 @Component({
   selector: 'hospitality-bot-admin-documents-details',
@@ -197,6 +198,37 @@ export class AdminDocumentsDetailsComponent implements OnInit {
       .getDocumentsByNationality(this.entityId, nationality)
       .subscribe((response) => {
         this.documentsList = response.documentList;
+
+        /**
+         * Patching the document type - Logic
+         */
+        const guestData: GuestDetailsConfig = this.getGuestDataById(
+          this.selectedGuestId
+        );
+
+        const selectedNationality = this.selectedGuestGroup.get('nationality')
+          .value;
+        const currentGuestNationality = guestData?.nationality;
+        const currentGuestDocument = guestData?.selectedDocumentType;
+
+        const currentDocIdx =
+          this.documentsList?.findIndex(
+            (item) =>
+              this.selectedGuestGroup.get('selectedDocumentType').value === item
+          ) ?? -1;
+
+        const selectedDoc =
+          currentGuestDocument &&
+          selectedNationality === currentGuestNationality
+            ? currentGuestDocument
+            : this.documentsList[currentDocIdx === -1 ? 0 : currentDocIdx];
+
+        this.selectedGuestGroup
+          .get('selectedDocumentType')
+          .patchValue(selectedDoc);
+
+        //--------- Patching logic completed
+
         // this._adminDetailsService.guestNationality = response.verifyAllDocuments;
       });
   }
@@ -275,17 +307,46 @@ export class AdminDocumentsDetailsComponent implements OnInit {
     this._reservationService
       .saveDocument(this.detailsData.reservationDetails.bookingId, data)
       .subscribe((_res) => {
-        if (this.documentStatus.get('status').value !== 'COMPLETED')
-          this.updateDocumentVerificationStatus('ACCEPT');
+        // if (this.selectedGuestGroup.get('status').value !== 'COMPLETED')
+        this.selectedGuestGroup.get('status').patchValue('INITIATED');
+        this.updateDocumentVerificationStatus('ACCEPT');
 
         this.snackbarService.openSnackBarAsText(
           'Document updated successfully',
           '',
           { panelClass: 'success' }
         );
+
         this.updatedDocGuest = this.updatedDocGuest.filter(
           (item) => item !== this.selectedGuestId
         );
+
+        /**
+         * Resetting the variable
+         */
+        this.detailsData.guestDetails.guests.forEach(
+          (data: GuestDetailsConfig) => {
+            if (data.id === this.selectedGuestId) {
+              data.documents[0].backUrl = docsData.data[0].backUrl;
+              data.documents[0].frontUrl = docsData.data[0].frontUrl;
+              data.documents[0].documentType = docsData.data[0].documentType;
+              data.selectedDocumentType = docsData.data[0].documentType;
+              data.nationality = this.selectedGuestGroup.get(
+                'nationality'
+              ).value;
+            }
+          }
+        );
+        const docForm = this.selectedGuestGroup.get('documents') as FormArray;
+        docForm.at(0).get('backUrl').patchValue(docsData.data[0].backUrl);
+        docForm.at(0).get('frontUrl').patchValue(docsData.data[0].frontUrl);
+        docForm
+          .at(0)
+          .get('documentType')
+          .patchValue(docsData.data[0].documentType);
+
+        // Can be used to reset the guest data
+        // this._reservationService.$reinitializeGuestDetails.next(true);
       });
   }
 
@@ -356,7 +417,49 @@ export class AdminDocumentsDetailsComponent implements OnInit {
     });
   }
 
+  isAllGuestDocsSubmitted() {
+    const isSubmitted = this.guestsFA
+      .getRawValue()
+      .reduce(
+        (
+          value: boolean,
+          item: { documents: DocumentForm[]; role: GuestRole } & Record<
+            string,
+            any
+          >
+        ) => {
+          if (item.documents.length === 0) {
+            return false;
+          }
+
+          if (item.role === 'kids') {
+            return value;
+          }
+
+          let isSubmitted = true;
+          const doc = item.documents[0];
+
+          if (doc.settings.frontImage === 'required' && !doc.frontUrl) {
+            isSubmitted = false;
+          }
+
+          if (doc.settings.backImage === 'required' && !doc.backUrl) {
+            isSubmitted = false;
+          }
+
+          return isSubmitted && value;
+        },
+        true
+      );
+
+    return isSubmitted;
+  }
+
   updateDocumentVerificationStatus(status, isConfirmALL = false) {
+    if (isConfirmALL && !this.isAllGuestDocsSubmitted()) {
+      return;
+    }
+
     if (status === 'REJECT' && !this.selectedGuestGroup.get('remarks').value) {
       this.snackbarService.openSnackBarAsText('Please enter remarks');
       return;
@@ -429,8 +532,19 @@ export class AdminDocumentsDetailsComponent implements OnInit {
   onGuestChange(value: string) {
     this.guestsFA.controls.forEach((guest: FormGroup) => {
       if (guest.get('id').value === value) {
+        // Resetting the value on guest change id docs not updated
+        const previousGuestId = this.selectedGuestId;
+        const prevGuest = this.guestsFA.controls.find(
+          (item) => item.get('id').value === previousGuestId
+        );
+        const guestData: GuestDetailsConfig = this.getGuestDataById(
+          this.selectedGuestId
+        );
+        prevGuest.get('nationality').patchValue(guestData.nationality);
+
         this.selectedGuestId = value;
         // this.selectedGuestGroup = guest;
+
         this.getDocumentsByCountry(
           this.selectedGuestGroup.get('nationality').value
         );
@@ -450,15 +564,19 @@ export class AdminDocumentsDetailsComponent implements OnInit {
     this.documentFormGroup.clear();
   };
 
+  getGuestDataById(guestId: string) {
+    return this.detailsData.guestDetails.guests.find(
+      (data) => data.id === guestId
+    );
+  }
+
   onDocumentTypeChange = (res: string) => {
     if (!res) return;
 
     this.documentFormGroup.clear();
     const guestId = this.selectedGuestGroup.get('id').value;
 
-    const guestData = this.detailsData.guestDetails.guests.find(
-      (data) => data.id === guestId
-    );
+    const guestData = this.getGuestDataById(guestId);
 
     const guestUploadedDocs = guestData.documents;
     const isDocTypeAlreadyPresent = guestData.selectedDocumentType === res;
@@ -617,3 +735,5 @@ type DocumentDS = {
   isInvalid?: boolean;
   isPrimary?: boolean;
 };
+
+type GuestRole = 'Primary Guest' | 'Sharer' | 'kids';

@@ -22,7 +22,7 @@ $border: 1px solid hsla(0, 0%, 43.9%, 0.4);
 
   position: sticky;
   top: 82px;
-  height: calc(100vh - 200px);
+  max-height: calc(100vh - 200px);
   overflow-y: auto;
   width: 300px;
 

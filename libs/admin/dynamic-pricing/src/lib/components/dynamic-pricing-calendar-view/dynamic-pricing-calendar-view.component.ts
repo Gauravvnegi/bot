@@ -179,7 +179,7 @@ export class DynamicPricingCalendarViewComponent implements OnInit, OnDestroy {
       days: [data.days],
     });
 
-    sFrom.valueChanges.subscribe((value) => {
+    sFrom.valueChanges.subscribe((value: Season) => {
       this.$subscription.add(
         this.dynamicPricingService
           .changeSeasonStatus(value.id, value.isActive, {
@@ -196,6 +196,14 @@ export class DynamicPricingCalendarViewComponent implements OnInit, OnDestroy {
             } else {
               this.inactiveSeasons.push(res.id);
             }
+
+            this.snackbarService.openSnackBarAsText(
+              `Season ${value.name} status updated successfully.`,
+              '',
+              {
+                panelClass: 'success',
+              }
+            );
           })
       );
     });

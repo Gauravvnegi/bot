@@ -307,8 +307,9 @@ export class AdminDocumentsDetailsComponent implements OnInit {
     this._reservationService
       .saveDocument(this.detailsData.reservationDetails.bookingId, data)
       .subscribe((_res) => {
-        if (this.selectedGuestGroup.get('status').value !== 'COMPLETED')
-          this.updateDocumentVerificationStatus('ACCEPT');
+        // if (this.selectedGuestGroup.get('status').value !== 'COMPLETED')
+        this.selectedGuestGroup.get('status').patchValue('INITIATED');
+        this.updateDocumentVerificationStatus('ACCEPT');
 
         this.snackbarService.openSnackBarAsText(
           'Document updated successfully',

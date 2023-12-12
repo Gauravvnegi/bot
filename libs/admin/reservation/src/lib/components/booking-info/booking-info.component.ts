@@ -16,7 +16,6 @@ import {
 } from '@angular/forms';
 import {
   ConfigService,
-  CountryCodeList,
   EntitySubType,
   Option,
 } from '@hospitality-bot/admin/shared';
@@ -42,7 +41,6 @@ import { AddCompanyComponent } from 'libs/admin/company/src/lib/components/add-c
   ],
 })
 export class BookingInfoComponent implements OnInit {
-  countries: Option[];
   expandAccordion: boolean = false;
   reservationTypes: Option[] = [];
   statusOptions: Option[] = [];
@@ -160,25 +158,6 @@ export class BookingInfoComponent implements OnInit {
       this.maxDate = moment().add(24, 'hours').toDate();
   }
 
-  //   /**
-  //  * Set default to and from dates.
-  //  */
-  //   initDefaultDates() {
-  //     this.endMinDate.setDate(this.startMinDate.getDate() + 1);
-  //     this.maxDate.setDate(this.endMinDate.getDate() - 1);
-
-  //     this.fromDateValue = this.startMinDate;
-  //     this.toDateValue = this.endMinDate;
-  //     // Reservation dates should be within 1 year time.
-  //     if (this.bookingType === EntitySubType.ROOM_TYPE)
-  //       this.maxDate.setDate(this.startMinDate.getDate() + 365);
-
-  //     // Venue only valid till 24 hours later.
-  //     if (this.bookingType === EntitySubType.VENUE)
-  //       this.maxDate = moment().add(24, 'hours').toDate();
-  //     this.endMinDate.setTime(this.endMinDate.getTime() - 5 * 60 * 1000);
-  //   }
-
   /**
    * Listen for date changes in ROOM_TYPE and outlets.
    */
@@ -193,8 +172,10 @@ export class BookingInfoComponent implements OnInit {
     // Listen to from and to date changes in ROOM_TYPE and set
     // min and max dates accordingly
     if (this.bookingType === EntitySubType.ROOM_TYPE) {
-      fromDateControl.setValue(startTime);
-      toDateControl.setValue(endTime);
+      if (!this.reservationId) {
+        fromDateControl.setValue(startTime);
+        toDateControl.setValue(endTime);
+      }
 
       let multipleDateChange = false;
 
@@ -216,9 +197,6 @@ export class BookingInfoComponent implements OnInit {
           this.minToDate = new Date(maxToLimit); // Create a new date object
           this.minToDate.setDate(maxToLimit.getDate());
           this.formService.reservationDate.next(res);
-          if (this.roomControls.valid && !this.isQuickReservation) {
-            this.formService.getSummary.next();
-          }
         }
       });
 
@@ -229,13 +207,6 @@ export class BookingInfoComponent implements OnInit {
           (this.formService.isDataInitialized.value || !this.reservationId) &&
             !multipleDateChange &&
             this.formService.reinitializeRooms.next(true);
-          if (
-            this.roomControls.valid &&
-            !multipleDateChange &&
-            !this.isQuickReservation
-          ) {
-            this.formService.getSummary.next();
-          }
           multipleDateChange = false;
         }
       });
@@ -283,6 +254,9 @@ export class BookingInfoComponent implements OnInit {
           this.sourceNameControl.reset();
       }
     });
+    this.otaSourceControl.valueChanges.subscribe((res) => {
+      res && this.formService.getSummary.next();
+    });
   }
 
   // Map source data for edit reservation
@@ -300,6 +274,7 @@ export class BookingInfoComponent implements OnInit {
             label: res?.company?.firstName,
             value: res?.company?.id,
           };
+
           this.inputControls.reservationInformation.patchValue({
             marketSegment: res.marketSegment,
             source: res.source,
@@ -397,10 +372,6 @@ export class BookingInfoComponent implements OnInit {
         this.reservationInfoControls.source.value === 'OTA' &&
           this.mapOtaOptions(this.reservationInfoControls.source.value);
       });
-    this.configService.getCountryCode().subscribe((res) => {
-      const data = new CountryCodeList().deserialize(res);
-      this.countries = data.records;
-    });
   }
 
   mapMarketSegments() {
@@ -443,7 +414,7 @@ export class BookingInfoComponent implements OnInit {
   }
 
   agentChange(event) {
-    if (event) {
+    if (event && event.id) {
       this.selectedAgent = {
         label: event?.firstName,
         value: event?.id,
@@ -495,6 +466,7 @@ export class BookingInfoComponent implements OnInit {
           };
           res.marketSegment &&
             this.patchValue(this.marketSegmentControl, res.marketSegment);
+          this.formService.getSummary.next();
         }
         this.sidebarVisible = false;
         componentRef.destroy();
@@ -528,6 +500,7 @@ export class BookingInfoComponent implements OnInit {
           };
           res.marketSegment &&
             this.patchValue(this.marketSegmentControl, res.marketSegment);
+          this.formService.getSummary.next();
         }
         this.sidebarVisible = false;
         componentRef.destroy();

@@ -10,15 +10,11 @@ import {
 } from '../types/forms.types';
 import { ReservationForm, ReservationInformation } from '../constants/form';
 import { ManageReservationService } from './manage-reservation.service';
-import { QueryConfig } from '@hospitality-bot/admin/shared';
+import { Option, QueryConfig } from '@hospitality-bot/admin/shared';
 import { AbstractControl } from '@angular/forms';
 import { RoomTypeResponse } from 'libs/admin/room/src/lib/types/service-response';
 import { RoomFieldTypeOption } from '../constants/reservation';
-import {
-  ReservationCurrentStatus,
-  ReservationFormData,
-} from '../models/reservations.model';
-import { RoomReservationResponse } from '../types/response.type';
+import { ReservationCurrentStatus } from '../models/reservations.model';
 import { AgentTableResponse } from 'libs/admin/agent/src/lib/types/response';
 import { CompanyResponseType } from 'libs/admin/company/src/lib/types/response';
 
@@ -36,7 +32,7 @@ export class FormService {
   isDataInitialized = new BehaviorSubject(false);
   reinitializeRooms = new BehaviorSubject(false);
 
-  guestInformation: BehaviorSubject<string> = new BehaviorSubject<string>(null);
+  guestInformation: BehaviorSubject<Option> = new BehaviorSubject<Option>(null);
   offerType: BehaviorSubject<string> = new BehaviorSubject<string>(null);
 
   currentJourneyStatus: BehaviorSubject<
@@ -55,9 +51,7 @@ export class FormService {
 
   reservationDate = new BehaviorSubject<Date>(null);
   reservationDateAndTime = new BehaviorSubject<number>(0);
-  getReservationDateAndTime(): Observable<Date> {
-    return this.reservationDate.asObservable();
-  }
+
   selectedTab = ReservationTableValue.ALL;
   enableAccordion: boolean = false;
 
@@ -292,6 +286,7 @@ export class FormService {
     this.isDataInitialized.next(false);
     this.reinitializeRooms.next(false);
     this.offerType.next(null);
+    this.getSummary.next(null);
   }
 }
 

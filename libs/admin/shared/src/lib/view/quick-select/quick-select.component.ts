@@ -79,10 +79,20 @@ export class QuickSelectComponent extends FormComponent implements OnInit {
   showHeader = true;
   showChips = false;
   maxSelectedLabels = 1;
+  _reinitialize = false;
 
   @Input() settings: MultiSelectSettings;
   @Input() controlName: string;
-  @Input() reinitialize: boolean;
+
+  @Input() set reinitialize(value: boolean) {
+    if (value !== undefined && value !== this._reinitialize) {
+      this.resetApiData = true;
+      this.offSet = 0;
+      this.getItems();
+    }
+    this._reinitialize = value;
+  }
+
   @Input() label: string;
   @Input() inputType: 'select' | 'multiselect' = 'select';
   @Input() set paginationConfig(values: PaginationConfig) {
@@ -94,6 +104,16 @@ export class QuickSelectComponent extends FormComponent implements OnInit {
   @Input() set props(values: QSProps) {
     this.setValues<QSProps>(values);
     this._qsProps = values;
+    const selectedOption = values?.selectedOption;
+    if (selectedOption) {
+      this.menuOptions = [...this.menuOptions, selectedOption];
+      this.removeDuplicate([...this.menuOptions]);
+      this.controlContainer.control
+        .get(this.controlName)
+        .patchValue(selectedOption.value, {
+          emitEvent: false,
+        });
+    }
   }
 
   @Input() set initItems(value: boolean) {
@@ -121,32 +141,31 @@ export class QuickSelectComponent extends FormComponent implements OnInit {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (
-      changes['props']?.previousValue &&
-      !changes['props']?.previousValue?.selectedOption
-    ) {
-      const selectedOption = changes['props']?.currentValue?.selectedOption;
-
-      // Get items again when selected option is patched.
-      if (selectedOption) {
-        this.menuOptions = [...this.menuOptions, selectedOption];
-        this.removeDuplicate([...this.menuOptions]);
-        this.controlContainer.control
-          .get(this.controlName)
-          .patchValue(selectedOption?.value, {
-            emitEvent: false,
-          });
-      }
-    }
-    if (
-      changes['reinitialize']?.previousValue !== undefined &&
-      changes['reinitialize']?.previousValue !==
-        changes['reinitialize']?.currentValue
-    ) {
-      this.resetApiData = true;
-      this.offSet = 0;
-      this.getItems();
-    }
+    // if (
+    //   changes['props']?.previousValue &&
+    //   !changes['props']?.previousValue?.selectedOption
+    // ) {
+    //   const selectedOption = changes['props']?.currentValue?.selectedOption;
+    //   // Get items again when selected option is patched.
+    //   if (selectedOption) {
+    //     this.menuOptions = [...this.menuOptions, selectedOption];
+    //     this.removeDuplicate([...this.menuOptions]);
+    //     this.controlContainer.control
+    //       .get(this.controlName)
+    //       .patchValue(selectedOption?.value, {
+    //         emitEvent: false,
+    //       });
+    //   }
+    // }
+    // if (
+    //   changes['reinitialize']?.previousValue !== undefined &&
+    //   changes['reinitialize']?.previousValue !==
+    //     changes['reinitialize']?.currentValue
+    // ) {
+    //   this.resetApiData = true;
+    //   this.offSet = 0;
+    //   this.getItems();
+    // }
   }
 
   /**

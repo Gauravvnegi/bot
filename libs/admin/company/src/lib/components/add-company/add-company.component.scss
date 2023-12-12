@@ -10,3 +10,8 @@
   gap: 10px;
   margin-top: 20px;
 }
+
+:host ::ng-deep .fixed {
+  left: 0 !important;
+  box-shadow: 1px 7px 7px#b5b5b5 !important;
+}

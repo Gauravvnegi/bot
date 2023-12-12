@@ -22,8 +22,7 @@
           controlName="from"
           label="Check-In Date"
           [settings]="{
-            enableTime: false,
-            dateValue: startMinDate
+            enableTime: false
           }"
           [props]="{
             placeholder: 'DD/MM/YY'
@@ -37,8 +36,7 @@
           controlName="to"
           label="Check-Out Date"
           [settings]="{
-            enableTime: false,
-            dateValue: endMinDate
+            enableTime: false
           }"
           [props]="{
             placeholder: 'DD/MM/YY'
@@ -132,6 +130,8 @@
             maxlength: 'Maximum character limit is upto 60.'
           }
         }"
+        (focusout)="formService.getSummary.next()"
+        (keyup.enter)="formService.getSummary.next()"
       ></hospitality-bot-input>
       <hospitality-bot-select
         *ngIf="reservationInfoControls.source.value === 'OTA'"
@@ -186,7 +186,11 @@
         }"
         (clickedOption)="agentChange($event)"
         (openSidebar)="showAgent()"
-        [initItems]="true"
+        [initItems]="
+          !reservationId ||
+          (reservationInfoControls?.reservationType?.value &&
+            reservationInfoControls?.reservationType?.value !== 'CONFIRMED')
+        "
       ></hospitality-bot-quick-select>
 
       <hospitality-bot-quick-select
@@ -228,7 +232,11 @@
         }"
         (clickedOption)="companyChange($event)"
         (openSidebar)="showCompany()"
-        [initItems]="true"
+        [initItems]="
+          !reservationId ||
+          (reservationInfoControls?.reservationType?.value &&
+            reservationInfoControls?.reservationType?.value !== 'CONFIRMED')
+        "
       ></hospitality-bot-quick-select>
 
       <!-- (createMembers)="createNewAgent()" -->

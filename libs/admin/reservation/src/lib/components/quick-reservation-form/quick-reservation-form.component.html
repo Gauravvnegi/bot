@@ -4,10 +4,6 @@
       Booking Information
     </div>
     <div class="buttons">
-      <!-- <hospitality-bot-button
-        label="Edit Full Reservation"
-        (onClick)="editForm()"
-      ></hospitality-bot-button> -->
       <img
         (click)="editForm()"
         class="expand"
@@ -42,6 +38,10 @@
         <span class="amount">{{
           reservationData?.totalDueAmount | currency: 'INR'
         }}</span>
+      </div>
+      <div class="due-amount" *ngIf="reservationNumber">
+        Booking Number -
+        <span class="amount">{{ reservationNumber }}</span>
       </div>
     </div>
   </div>
@@ -242,20 +242,6 @@
     <ng-container #sidebarSlide></ng-container>
   </p-sidebar>
 </ng-container>
-
-<!-- <hospitality-bot-form-action
-  class="full-width"
-  [loading]="isBooking"
-  [isId]="reservationId"
-  (onPostAction)="handleSubmit()"
-  [isSticky]="true"
-  [config]="{
-    postLabel: reservationId ? 'Update Reservation' : 'Create Reservation',
-    preHide: true
-  }"
-  #fa
->
-</hospitality-bot-form-action> -->
 
 <ng-template #loader>
   <hospitality-bot-loader-bounce class="loader"></hospitality-bot-loader-bounce>

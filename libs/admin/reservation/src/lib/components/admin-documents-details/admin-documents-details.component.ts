@@ -457,6 +457,9 @@ export class AdminDocumentsDetailsComponent implements OnInit {
 
   updateDocumentVerificationStatus(status, isConfirmALL = false) {
     if (isConfirmALL && !this.isAllGuestDocsSubmitted()) {
+      this.snackbarService.openSnackBarAsText(
+        'Please upload all guest documents prior to confirming.'
+      );
       return;
     }
 
@@ -533,6 +536,7 @@ export class AdminDocumentsDetailsComponent implements OnInit {
     this.guestsFA.controls.forEach((guest: FormGroup) => {
       if (guest.get('id').value === value) {
         // Resetting the value on guest change id docs not updated
+        this.isAllDocsAttached = false;
         const previousGuestId = this.selectedGuestId;
         const prevGuest = this.guestsFA.controls.find(
           (item) => item.get('id').value === previousGuestId

@@ -71,6 +71,7 @@ export class StatusDropdownToggleComponent implements OnInit {
         },
         type: this.records[key]?.type ?? 'active',
         value: value,
+        styleClass: this.records[key]?.styleClass ?? '',
       };
 
       return data;
@@ -162,5 +163,6 @@ type Status = {
   label: string;
   value: string | boolean;
   type: FlagType;
+  styleClass?: string;
   disabled?: boolean;
 };

@@ -2,7 +2,6 @@
 
 .form-block {
   @include form-block;
-  zoom: 0.9;
 }
 
 .booking-info {
@@ -11,14 +10,16 @@
   column-gap: 6%;
   row-gap: 40px;
   max-height: 20rem;
-  .half-width {
-    flex-basis: 47%;
-    width: 47%;
-  }
-  .full-width {
-    flex-basis: 100%;
-    width: 100%;
-  }
+}
+
+.half-width {
+  flex-basis: 47%;
+  width: 47%;
+}
+
+.full-width {
+  flex-basis: 100%;
+  width: 100%;
 }
 
 .header {

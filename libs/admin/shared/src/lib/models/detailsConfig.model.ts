@@ -211,7 +211,7 @@ export class GuestDetailsConfig implements IDeserializable {
   selectedDocumentType: string;
   status: string;
   remarks: string;
-  documents: DocumentDetailsConfig;
+  documents: DocumentDetailsConfig[];
   regcardUrl: string;
   regcardStatus: string;
   role: string;

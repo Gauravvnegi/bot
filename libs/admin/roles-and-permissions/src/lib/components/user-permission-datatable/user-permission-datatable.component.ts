@@ -141,6 +141,12 @@ export class UserPermissionDatatableComponent extends BaseDatatableComponent
     const config: QueryConfig = {
       queryObj: this._adminUtilityService.makeQueryParams([
         ...this.selectedRows.map((item) => ({ ids: item.userId })),
+        {
+          type:
+            this.tabFilterItems[this.tabFilterIdx]?.value === 'ALL'
+              ? ''
+              : this.tabFilterItems[this.tabFilterIdx]?.value ?? '',
+        },
       ]),
       loggedInUserId: this.userService.getLoggedInUserId(),
       entityId: this.entityId,

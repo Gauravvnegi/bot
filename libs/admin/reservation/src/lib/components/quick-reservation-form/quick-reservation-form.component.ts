@@ -42,9 +42,7 @@ import { Subscription } from 'rxjs';
 import { AddGuestComponent } from 'libs/admin/guests/src/lib/components/add-guest/add-guest.component';
 import { RoomTypeResponse } from 'libs/admin/room/src/lib/types/service-response';
 import { GuestType } from 'libs/admin/guests/src/lib/types/guest.type';
-import {
-  RoomFieldTypeOption,
-} from 'libs/admin/manage-reservation/src/lib/constants/reservation';
+import { RoomFieldTypeOption } from 'libs/admin/manage-reservation/src/lib/constants/reservation';
 import { MatDialogConfig } from '@angular/material/dialog';
 import { DetailsComponent } from '../details/details.component';
 import { AgentTableResponse } from 'libs/admin/agent/src/lib/types/response';
@@ -67,6 +65,7 @@ export class QuickReservationFormComponent implements OnInit {
 
   entityId: string;
   reservationId: string;
+  reservationNumber: string;
 
   ratePlans: Option[] = [];
   roomOptions: Option[] = [];
@@ -281,6 +280,7 @@ export class QuickReservationFormComponent implements OnInit {
           (res) => {
             const formData = new ReservationFormData().deserialize(res);
             this.reservationData = formData;
+            this.reservationNumber = res?.reservationNumber;
             this.isExternalBooking = res?.externalBooking;
             this.formService.currentJourneyStatus.next(res.status);
             this.calculateDailyPrice();
@@ -412,7 +412,7 @@ export class QuickReservationFormComponent implements OnInit {
     if (event && event?.id) {
       this.selectedGuest = {
         label: `${event.firstName} ${event.lastName}`,
-        value: event.id
+        value: event.id,
       };
     }
   }
@@ -499,7 +499,7 @@ export class QuickReservationFormComponent implements OnInit {
         if (typeof res !== 'boolean') {
           this.selectedGuest = {
             label: `${res.firstName} ${res.lastName}`,
-            value: res.id
+            value: res.id,
           };
 
           this.inputControls.guestInformation

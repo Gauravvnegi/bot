@@ -39,6 +39,10 @@
           reservationData?.totalDueAmount | currency: 'INR'
         }}</span>
       </div>
+      <div class="due-amount" *ngIf="reservationNumber">
+        Booking Number -
+        <span class="amount">{{ reservationNumber }}</span>
+      </div>
     </div>
   </div>
   <div

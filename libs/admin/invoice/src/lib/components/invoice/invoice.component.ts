@@ -711,7 +711,11 @@ export class InvoiceComponent implements OnInit {
     this.tableFormArray.valueChanges.subscribe((values: BillItemFields[]) => {
       const updatedAmounts = values.reduce(
         (prev, curr) => {
-          if (curr.transactionType === 'DEBIT' && curr.debitAmount) {
+          if (
+            curr.transactionType === 'DEBIT' &&
+            curr.debitAmount &&
+            !curr.isRefund
+          ) {
             prev.totalAmount += curr.debitAmount;
           }
           if (curr.transactionType === 'CREDIT' && curr.creditAmount) {

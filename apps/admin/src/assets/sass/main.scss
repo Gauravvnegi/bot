@@ -84,3 +84,10 @@
     }
   }
 }
+
+.p-menuitem.activeClass {
+  background: rgba(103, 58, 183, 0.12);
+  span {
+    color: $primary !important;
+  }
+}

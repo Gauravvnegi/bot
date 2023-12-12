@@ -30,11 +30,15 @@ export class FolioListReport
           ),
           btc: getPaymentMethodAmount(item, 'Bill to Company'),
           cash: getPaymentMethodAmount(item, 'Cash Payment'),
-          bankTransfer: getPaymentMethodAmount(item, 'Bank Transfer'),
+          bankTransfer: toCurrency(
+            currencyToNumber(getPaymentMethodAmount(item, 'Bank Transfer')) +
+              currencyToNumber(getPaymentMethodAmount(item, 'Bank Deposit'))
+          ),
           payAtDesk: getPaymentMethodAmount(item, 'Pay at Desk'),
           onlinePaymentGateway: toCurrency(
             currencyToNumber(getPaymentMethodAmount(item, 'CCAVENUE')) +
-              currencyToNumber(getPaymentMethodAmount(item, 'Stripe'))
+              currencyToNumber(getPaymentMethodAmount(item, 'Stripe')) +
+              currencyToNumber(getPaymentMethodAmount(item, 'PAYU'))
           ),
           other: toCurrency(
             item?.paymentModesAndTotalAmount.reduce((acc, curr) => {
@@ -46,6 +50,7 @@ export class FolioListReport
                   'Pay at Desk',
                   'CCAVENUE',
                   'Stripe',
+                  'PAYU',
                 ].includes(curr.paymentMode)
               ) {
                 acc += curr.totalAmount;

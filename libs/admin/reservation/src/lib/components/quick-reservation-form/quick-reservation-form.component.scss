@@ -47,9 +47,13 @@
   z-index: 1;
   .right-col {
     @include flex-col-end-algn;
+    flex-basis: 50%;
+  }
+  .left-col {
+    flex-basis: 50%;
   }
   .guest-name {
-    @include normal-lg-text;
+    @include normal-md-text;
   }
   .due-amount {
     text-align: right;
@@ -57,7 +61,7 @@
     @include normal-sm-text;
     .amount {
       color: black;
-      @include normal-md-text;
+      @include normal-sm-text;
     }
   }
   .guest-btn {

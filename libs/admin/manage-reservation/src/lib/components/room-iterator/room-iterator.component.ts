@@ -247,6 +247,8 @@ export class RoomIteratorComponent extends IteratorComponent
         },
         { emitEvent: false }
       );
+
+      // Init rooms data
       this.initItems = true;
     });
   }

@@ -180,10 +180,6 @@ export class CreatePackageComponent implements OnInit {
             this.handleFinal
           )
       );
-
-      this.useForm.get('enableVisibility').valueChanges.subscribe((res) => {
-        if (res === 'ALL') this.useForm.get('enableOnMicrosite').setValue(true);
-      });
     }
 
     /* Value changes subscription */
@@ -452,6 +448,10 @@ export class CreatePackageComponent implements OnInit {
       imageUrl,
       ...rest
     } = this.useForm.getRawValue() as PackageFormData;
+
+    const { enableVisibility } = rest;
+    rest.enableOnMicrosite = enableVisibility.includes('ALL');
+
     const data = { imageUrl: [{ isFeatured: true, url: imageUrl }], ...rest };
     this.loading = true;
     if (this.packageId) {

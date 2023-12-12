@@ -42,10 +42,7 @@ import { Subscription } from 'rxjs';
 import { AddGuestComponent } from 'libs/admin/guests/src/lib/components/add-guest/add-guest.component';
 import { RoomTypeResponse } from 'libs/admin/room/src/lib/types/service-response';
 import { GuestType } from 'libs/admin/guests/src/lib/types/guest.type';
-import {
-  JourneyState,
-  RoomFieldTypeOption,
-} from 'libs/admin/manage-reservation/src/lib/constants/reservation';
+import { RoomFieldTypeOption } from 'libs/admin/manage-reservation/src/lib/constants/reservation';
 import { MatDialogConfig } from '@angular/material/dialog';
 import { DetailsComponent } from '../details/details.component';
 import { AgentTableResponse } from 'libs/admin/agent/src/lib/types/response';
@@ -68,6 +65,7 @@ export class QuickReservationFormComponent implements OnInit {
 
   entityId: string;
   reservationId: string;
+  reservationNumber: string;
 
   ratePlans: Option[] = [];
   roomOptions: Option[] = [];
@@ -246,7 +244,13 @@ export class QuickReservationFormComponent implements OnInit {
   }
 
   editForm() {
-    const roomTypeData: ReservationForm = this.userForm.getRawValue();
+    const roomTypeData: ReservationForm & {
+      guestData: Option;
+    } = this.userForm.getRawValue();
+    roomTypeData.guestData = {
+      label: this.selectedGuest.label,
+      value: this.selectedGuest.value,
+    };
     let queryParams: any = {
       entityId: this.entityId,
     };
@@ -276,6 +280,7 @@ export class QuickReservationFormComponent implements OnInit {
           (res) => {
             const formData = new ReservationFormData().deserialize(res);
             this.reservationData = formData;
+            this.reservationNumber = res?.reservationNumber;
             this.isExternalBooking = res?.externalBooking;
             this.formService.currentJourneyStatus.next(res.status);
             this.calculateDailyPrice();
@@ -301,14 +306,11 @@ export class QuickReservationFormComponent implements OnInit {
             this.selectedGuest = {
               label: `${res?.guest?.firstName} ${res?.guest?.lastName}`,
               value: res?.guest?.id,
-              phoneNumber: res?.guest?.contactDetails.contactNumber,
-              cc: res?.guest?.contactDetails?.cc,
-              email: res?.guest?.contactDetails?.emailId,
-            };   
-            this.formService.initSourceData(
-              formData.reservationInformation,
-              { agent: formData.agent, company: formData?.company }
-            );
+            };
+            this.formService.initSourceData(formData.reservationInformation, {
+              agent: formData.agent,
+              company: formData?.company,
+            });
             this.roomOptions = this.defaultRoomType.rooms.map((room) => ({
               label: room.roomNumber.toString(),
               value: room.roomNumber.toString(),
@@ -411,9 +413,6 @@ export class QuickReservationFormComponent implements OnInit {
       this.selectedGuest = {
         label: `${event.firstName} ${event.lastName}`,
         value: event.id,
-        phoneNumber: event.contactDetails.contactNumber,
-        cc: event.contactDetails.cc,
-        email: event.contactDetails.emailId,
       };
     }
   }
@@ -501,9 +500,6 @@ export class QuickReservationFormComponent implements OnInit {
           this.selectedGuest = {
             label: `${res.firstName} ${res.lastName}`,
             value: res.id,
-            phoneNumber: res.contactDetails.contactNumber,
-            cc: res.contactDetails.cc,
-            email: res.contactDetails.emailId,
           };
 
           this.inputControls.guestInformation

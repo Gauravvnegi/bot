@@ -244,7 +244,7 @@ export class DynamicPricingFactory {
     const { id, discount, end, rate, start, fromTime, toTime } = rule.controls;
     const status = true; //TODO, Future dependent
     const localTime = (5 * 60 + 30) * 60 * 1000;
-    
+
     return {
       ...(id?.value && { id: id.value }),
       occupancyStart: +start?.value,
@@ -484,7 +484,7 @@ export class DynamicPricingForm {
     this.toDate = input.toDate;
     this.selectedDays = input.daysIncluded;
     this.basePrice = rooms && rooms.find((item) => item.isBase)?.price;
-
+    const localTimeInMilis = (5 * 60 * 60 + 30 * 60) * 1000;
     const getRules = (configRules) => {
       return (
         configRules.map((rule) => ({
@@ -492,8 +492,12 @@ export class DynamicPricingForm {
           start: rule.occupancyStart,
           end: rule.occupancyEnd,
           discount: rule.discountOrMarkup.value,
-          ...(rule?.fromTimeInMillis && { fromTime: rule.fromTimeInMillis }),
-          ...(rule?.toTimeInMillis && { toTime: rule.toTimeInMillis }),
+          ...(rule?.fromTimeInMillis && {
+            fromTime: rule.fromTimeInMillis * 1000 - localTimeInMilis,
+          }),
+          ...(rule?.toTimeInMillis && {
+            toTime: rule.toTimeInMillis * 1000 - localTimeInMilis,
+          }),
         })) ?? []
       );
     };

@@ -131,10 +131,13 @@ export class ReportsDataTableComponent extends BaseDatatableComponent {
               0
             );
 
-            const rangeQuery: Partial<Record<ReportFiltersKey, number>> = {
+            const rangeQuery: Partial<Record<
+              ReportFiltersKey,
+              number
+            >> = this.getModifiedDate({
               fromDate: startDate.getTime(),
               toDate: lastDay.getTime(),
-            };
+            });
 
             value = {
               ...value,

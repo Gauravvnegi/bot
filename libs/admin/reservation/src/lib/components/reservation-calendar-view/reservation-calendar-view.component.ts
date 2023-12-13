@@ -700,17 +700,19 @@ export class ReservationCalendarViewComponent implements OnInit {
   }
 
   manualCheckoutfn(reservationId: string, roomType: IGRoomType) {
-    this._reservationService.manualCheckout(reservationId).subscribe((res) => {
-      this.updateRoomType(
-        reservationId,
-        roomType,
-        ReservationCurrentStatus.CHECKEDOUT,
-        true
-      );
-      this.snackbarService.openSnackBarAsText('Checkout completed.', '', {
-        panelClass: 'success',
-      });
-    });
+    this._reservationService.manualCheckout(reservationId).subscribe(
+      (res) => {
+        this.updateRoomType(
+          reservationId,
+          roomType,
+          ReservationCurrentStatus.CHECKEDOUT,
+          true
+        );
+        this.snackbarService.openSnackBarAsText('Checkout completed.', '', {
+          panelClass: 'success',
+        });
+      }
+    );
   }
 
   updateRoomType(
@@ -721,13 +723,16 @@ export class ReservationCalendarViewComponent implements OnInit {
   ) {
     let currentDateEpoch = new Date();
     const updatedValues = roomType.data.values.map((item) => {
+      const selectedRoom = roomType.rooms.find(
+        (room) => room.roomNumber === item.rowValue
+      );
       if (item.id === reservationId) {
         const updatedItem: any = {
           ...item,
           colorCode: reservationStatusColorCode[status] as FlagType,
           options: reservationMenuOptions[status],
         };
-
+        isCheckout && this.handleRoomStatus('DIRTY', selectedRoom.id, roomType);
         if (isCheckout) {
           updatedItem.endPos = this.getDate(currentDateEpoch.getTime());
         }
@@ -736,7 +741,6 @@ export class ReservationCalendarViewComponent implements OnInit {
       }
       return item; // Keep other items unchanged
     });
-
     roomType.data = {
       ...roomType.data,
       values: updatedValues,

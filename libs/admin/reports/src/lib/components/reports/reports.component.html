@@ -14,13 +14,15 @@
     ></i> -->
     <img src="assets/svg/arrow-left-menu.svg" (click)="toggleMenu()" />
   </div>
-  <div
-    class="menu-option"
-    [ngClass]="{ selected: reportOption.value === selectedReport?.value }"
-    *ngFor="let reportOption of reportsMenuOptions"
-    (click)="selectReport(reportOption)"
-  >
-    {{ reportOption.label }}
+  <div class="menu-container">
+    <div
+      class="menu-option"
+      [ngClass]="{ selected: reportOption.value === selectedReport?.value }"
+      *ngFor="let reportOption of reportsMenuOptions"
+      (click)="selectReport(reportOption)"
+    >
+      {{ reportOption.label }}
+    </div>
   </div>
 </p-sidebar>
 

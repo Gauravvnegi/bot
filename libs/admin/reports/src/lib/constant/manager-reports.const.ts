@@ -32,7 +32,7 @@ export const managerFlashReportCols: ColsData<ManagerFlashReportData> = {
 };
 export const managerFlashReportRows = [
   { label: 'Total Rooms in Hotel(Incl. DNR)', name: 'totalRooms' },
-  { label: 'Rooms Occupied (Incl House Use)', name: 'occupiedRooms' },
+  { label: 'Rooms Occupied', name: 'occupiedRooms' },
   {
     label: 'Total Rooms in Hotel minus OOS Rooms',
     name: 'totalRoomMinusOSS',
@@ -42,16 +42,19 @@ export const managerFlashReportRows = [
     label: 'Available Rooms minus OOS Rooms',
     name: 'availableRoomsMinusOOSS',
   }, // totalroom - occupied - outof service
-  { label: 'Complimentary Rooms', name: 'complimentaryRooms' },
+
+  // { label: 'Complimentary Rooms', name: 'complimentaryRooms' },
+
   { label: 'No. of Lettable Rooms', name: 'noOfLettableRooms' }, //total rooms - out of service
-  {
-    label: 'Rooms Occupied minus Comp And House Use',
-    name: 'roomsOccupiedMinusCompAndHouse',
-  }, //occupied rooms - complimentary rooms - house use rooms
-  {
-    label: 'Rooms Occupied minus House Use',
-    name: 'roomOccupiedMinusHouseUse',
-  }, //`occupied rooms - house use rooms
+  // {
+  //   label: 'Rooms Occupied minus Comp And House Use',
+  //   name: 'roomsOccupiedMinusCompAndHouse',
+  // }, //occupied rooms - complimentary rooms - house use rooms
+  // {
+  //   label: 'Rooms Occupied minus House Use',
+  //   name: 'roomOccupiedMinusHouseUse',
+  
+  // }, //`occupied rooms - house use rooms
   { label: 'Rooms Occupied minus Comp', name: 'roomOccupiedMinusComp' }, //occupied rooms - complimentary rooms
   { label: 'Day Use Rooms', name: 'dayUseRooms' },
   { label: 'Out of Service Rooms (DNR)', name: 'outOfServiceRooms' },
@@ -80,6 +83,10 @@ export const managerFlashReportRows = [
   {
     label: 'Reservation Cancellations made Today',
     name: 'cancelledReservationForToday',
+  },
+  {
+    label: '% Room occupied minus OOS',
+    name: 'percentageRoomOccupiedMinusOOS'
   },
   { label: 'Reservations Made Today', name: 'reservationsMadeToday' },
   { label: 'Room Nights Reserved Today', name: 'roomNightsReserved' },

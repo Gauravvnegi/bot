@@ -19,12 +19,22 @@ export class ManagerFlashReport extends MangerReport
 
     mangerReportData = mangerReportData.map((item) => {
       const totalRoomMinusOSS =
-        item?.totalRooms ?? 0 - item?.outOfServiceRooms ?? 0;
-      const availableRooms = totalRoomMinusOSS - (item?.occupiedRooms ?? 0);
+        (item?.totalRooms ?? 0) - (item?.outOfServiceRooms ?? 0);
+
+      const availableRooms =
+        (item?.totalRooms ?? 0) - (item?.occupiedRooms ?? 0);
+
       const availableRoomsMinusOOSS =
         availableRooms - (item?.outOfServiceRooms ?? 0);
+
       const noOfLettableRooms =
         (item?.totalRooms ?? 0) - (item?.outOfServiceRooms ?? 0);
+
+      const percentageRoomOccupiedMinusOOS =
+        (
+          (item?.occupiedRooms * 100.0) /
+          (item?.totalRooms - item?.outOfServiceRooms)
+        ).toFixed(2) + '%';
 
       console.log(
         'noOfLettableRooms',
@@ -34,13 +44,13 @@ export class ManagerFlashReport extends MangerReport
         item?.outOfServiceRooms
       );
 
-      const roomsOccupiedMinusCompAndHouse =
-        item?.occupiedRooms ??
-        0 - item?.complimentaryRooms ??
-        0 - item?.houseUseRooms ??
-        0;
-      const roomOccupiedMinusHouseUse =
-        (item?.occupiedRooms ?? 0) - (item?.houseUseRooms ?? 0);
+      // const roomsOccupiedMinusCompAndHouse =
+      //   item?.occupiedRooms ??
+      //   0 - item?.complimentaryRooms ??
+      //   0 - item?.houseUseRooms ??
+      //   0;
+      // const roomOccupiedMinusHouseUse =
+      //   (item?.occupiedRooms ?? 0) - (item?.houseUseRooms ?? 0);
       const roomOccupiedMinusComp =
         (item?.occupiedRooms ?? 0) - (item?.complimentaryRooms ?? 0);
 
@@ -57,11 +67,12 @@ export class ManagerFlashReport extends MangerReport
         availableRooms,
         availableRoomsMinusOOSS,
         noOfLettableRooms,
-        roomsOccupiedMinusCompAndHouse,
-        roomOccupiedMinusHouseUse,
+        // roomsOccupiedMinusCompAndHouse,
+        // roomOccupiedMinusHouseUse,
         roomOccupiedMinusComp,
         revParInclDNR,
         totalRevenue,
+        percentageRoomOccupiedMinusOOS,
       };
     });
 

@@ -202,36 +202,6 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
     }
   }
 
-  /**
-   * @Function filterValues
-   * @description filters the values
-   * @param control
-   * @param values
-   * @returns
-   */
-  filterValues(control, values) {
-    const value = control?.value;
-    return value !== undefined
-      ? values.filter((item) => item.value !== value)
-      : values;
-  }
-
-  get startDays() {
-    return this.filterValues(this.formControls.endDay, this.days);
-  }
-
-  get endDays() {
-    return this.filterValues(this.formControls.startDay, this.days);
-  }
-
-  get fromTime() {
-    return this.filterValues(this.formControls.to, this.hours);
-  }
-
-  get toTime() {
-    return this.filterValues(this.formControls.from, this.hours);
-  }
-
   onTypeChange() {
     const { type } = this.formControls;
     type.valueChanges.subscribe((type: OutletType) => {

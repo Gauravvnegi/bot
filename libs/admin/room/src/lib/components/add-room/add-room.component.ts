@@ -142,7 +142,6 @@ export class AddRoomComponent implements OnInit, OnDestroy {
     this.initForm();
     this.initOptionsConfig();
     if (this.roomId) this.initRoomDetails();
-    this.checkAudit();
   }
 
   initNavRoutes(isEdit: boolean) {
@@ -468,18 +467,6 @@ export class AddRoomComponent implements OnInit, OnDestroy {
       subModuleName: ModuleNames.ROOM,
       additionalPath: routes.addRoomType,
     });
-  }
-
-  checkAudit() {
-    this.$subscription.add(
-      this.auditService.checkAudit(this.entityId).subscribe(
-        (res) => {
-          const date = res?.shift() ?? Date.now();
-          this.startMinDate = new Date(date);
-        },
-        (error) => {}
-      )
-    );
   }
 
   /**

@@ -1,4 +1,8 @@
-import { DiscountAllowanceReportData } from '../types/discount-reports.types';
+import { PromoCodeReport } from '../models/discount-reports.models';
+import {
+  DiscountAllowanceReportData,
+  PromoCodeReportData,
+} from '../types/discount-reports.types';
 import { ColsData } from '../types/reports.types';
 
 export const discountAllowanceReportCols: Partial<ColsData<
@@ -48,5 +52,28 @@ export const discountAllowanceReportCols: Partial<ColsData<
     header: 'Net Total',
     isSortDisabled: true,
     isSearchDisabled: true,
+  },
+};
+
+export const promoCodeReportCols: ColsData<PromoCodeReportData> = {
+  promoCode: {
+    header: 'Promo Code',
+    isSortDisabled: true,
+  },
+  discount: {
+    header: 'Discount',
+    isSortDisabled: true,
+  },
+  redemptions: {
+    header: 'Redemptions',
+    isSortDisabled: true,
+  },
+  totalNights: {
+    header: 'Total Nights',
+    isSortDisabled: true,
+  },
+  totalRevenueEarned: {
+    header: 'Total Revenue Earned',
+    isSortDisabled: true,
   },
 };

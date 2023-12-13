@@ -14,7 +14,10 @@ import {
   DirectAgentBillingReport,
   DirectCompanyBillingReport,
 } from '../models/direct-billing-reports.models';
-import { DiscountAllowanceReport } from '../models/discount-reports.models';
+import {
+  DiscountAllowanceReport,
+  PromoCodeReport,
+} from '../models/discount-reports.models';
 import {
   AdvanceDepositPaymentReport,
   CloseOutBalanceReport,
@@ -26,6 +29,7 @@ import {
   RevParRoomReport,
 } from '../models/financial-reports.models';
 import { FolioListReport } from '../models/folio-list-reports.models';
+import { AddWithdrawReport } from '../models/fund-reports.models';
 import {
   GuestContactReport,
   GuestHistory,
@@ -40,6 +44,7 @@ import {
   NightAuditRevenueReport,
 } from '../models/night-audit-reports.model';
 import { HistoryAndForecastReport } from '../models/occupancy-reports.models';
+import { RateVariationReport } from '../models/rate-package-reports-models';
 import {
   AddOnRequestReport,
   ArrivalReport,
@@ -86,7 +91,10 @@ import {
   directAgentBillingReportsCols,
   directCompanyBillingReportCols,
 } from './direct-billing-reports.const';
-import { discountAllowanceReportCols } from './discount-reports.const';
+import {
+  discountAllowanceReportCols,
+  promoCodeReportCols,
+} from './discount-reports.const';
 import {
   advanceDepositPaymentCols,
   closeOutBalanceCols,
@@ -98,6 +106,7 @@ import {
   revParReportCols,
 } from './financial-reports.const';
 import { folioListReportHeaderCols } from './folio-list-reports.const';
+import { addWithdrawReportCols } from './fund-reports.const';
 import {
   SalesByGuestCols,
   guestContactReportCols,
@@ -112,6 +121,7 @@ import {
   nightAuditRevenueReportCols,
 } from './night-audit-reports.const';
 import { historyAndForecastReportCols } from './occupancy-reports.const';
+import { rateVariationReportCols } from './rate-package-reports.const';
 import {
   addOnRequestReportCols,
   arrivalReportCols,
@@ -354,6 +364,11 @@ export const reportsConfig: ReportsConfig = {
         label: 'Discount Allowance',
         value: 'discountAllowance',
       },
+
+      {
+        label: 'Promo Code Report',
+        value: 'promoCodeReport',
+      },
     ],
   },
   DIRECT_BILLING_REPORTS: {
@@ -381,6 +396,22 @@ export const reportsConfig: ReportsConfig = {
       {
         label: 'Folio List',
         value: 'folioListReport',
+      },
+    ],
+  },
+  FUND_REPORTS: {
+    menu: [
+      {
+        label: 'ADD Withdrawal Report',
+        value: 'addWithdrawalFundReport',
+      },
+    ],
+  },
+  RATE_PACKAGE_REPORTS: {
+    menu: [
+      {
+        label: 'Rate Variation Report',
+        value: 'rateVariation',
       },
     ],
   },
@@ -433,13 +464,16 @@ export const reportsModelMapping: Record<ReportsTypeValues, ClassType> = {
   postingAuditReport: PostingAuditReport,
   folioListReport: FolioListReport, //to be decided
   guestContactReport: GuestContactReport, //to be decided
-  payTypeReport: PayTypeReport, //to be decided
+  payTypeReport: PayTypeReport,
   occupancyAnalysisReport: OccupancyAnalysisReport,
   expressCheckIn: ExpressCheckIn,
   addOnRequestReport: AddOnRequestReport,
   advanceDepositPayment: AdvanceDepositPaymentReport,
   revParRoomReport: RevParRoomReport,
   nightAuditRevenue: NightAuditRevenueReport,
+  promoCodeReport: PromoCodeReport,
+  addWithdrawalFundReport: AddWithdrawReport,
+  rateVariation: RateVariationReport,
 };
 
 function getColsArray(colsData: ColsData): Cols[] {
@@ -503,6 +537,9 @@ export const reportsColumnMapping: Record<ReportsTypeValues, Cols[]> = {
   revParRoomReport: getColsArray(revParReportCols),
   nightAuditRevenue: getColsArray(nightAuditRevenueReportCols),
   addOnRequestReport: getColsArray(addOnRequestReportCols),
+  promoCodeReport: getColsArray(promoCodeReportCols),
+  addWithdrawalFundReport: getColsArray(addWithdrawReportCols),
+  rateVariation: getColsArray(rateVariationReportCols),
 };
 
 export const reportFiltersMapping: Record<
@@ -553,13 +590,14 @@ export const reportFiltersMapping: Record<
   guestContactReport: ['fromDate', 'toDate'],
   payTypeReport: ['fromDate', 'toDate'],
   occupancyAnalysisReport: ['date'],
-
-  // extra filters
   addOnRequestReport: ['fromDate', 'toDate'],
   advanceDepositPayment: ['fromDate', 'toDate'],
   expressCheckIn: ['fromDate', 'toDate'],
   revParRoomReport: ['month'],
   nightAuditRevenue: ['fromDate', 'toDate'],
+  promoCodeReport: ['fromDate', 'toDate'],
+  addWithdrawalFundReport: ['fromDate', 'toDate'],
+  rateVariation: ['fromDate', 'toDate'],
 };
 
 export const rowStylesMapping: Record<RowStylesKeys, string> = {

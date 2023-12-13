@@ -617,6 +617,11 @@ export class ReservationCalendarViewComponent implements OnInit {
       case 'VEIW_DETAILS':
         this.openDetailsPage(event.id);
         break;
+      case 'MANAGE_INVOICE':
+        this.routesConfigService.navigate({
+          subModuleName: ModuleNames.INVOICE,
+          additionalPath: `${event.id}`,
+        });
     }
   }
 
@@ -699,7 +704,8 @@ export class ReservationCalendarViewComponent implements OnInit {
       this.updateRoomType(
         reservationId,
         roomType,
-        ReservationCurrentStatus.CHECKEDOUT
+        ReservationCurrentStatus.CHECKEDOUT,
+        true
       );
       this.snackbarService.openSnackBarAsText('Checkout completed.', '', {
         panelClass: 'success',
@@ -710,15 +716,23 @@ export class ReservationCalendarViewComponent implements OnInit {
   updateRoomType(
     reservationId: string,
     roomType: IGRoomType,
-    status: ReservationCurrentStatus
+    status: ReservationCurrentStatus,
+    isCheckout: boolean = false
   ) {
+    let currentDateEpoch = new Date();
     const updatedValues = roomType.data.values.map((item) => {
       if (item.id === reservationId) {
-        return {
+        const updatedItem: any = {
           ...item,
           colorCode: reservationStatusColorCode[status] as FlagType,
           options: reservationMenuOptions[status],
         };
+
+        if (isCheckout) {
+          updatedItem.endPos = this.getDate(currentDateEpoch.getTime());
+        }
+
+        return updatedItem;
       }
       return item; // Keep other items unchanged
     });

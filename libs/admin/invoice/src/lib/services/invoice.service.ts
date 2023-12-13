@@ -11,7 +11,6 @@ export class InvoiceService extends ApiService {
   invoiceData: BillSummaryData;
 
   isPrintRate = new BehaviorSubject(true);
-  isCheckIn = new BehaviorSubject(false);
 
   createInvoice(reservationId: string, data): Observable<any> {
     return this.put(

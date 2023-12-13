@@ -2,7 +2,7 @@
   <hospitality-bot-navigation-header [heading]="pageTitle" [routes]="navRoutes">
     <ng-container *ngIf="!isLoading">
       <hospitality-bot-button
-        *ngIf="isCheckin"
+        *ngIf="(isCheckin || isInvoiceGenerated) && !isCheckedOut"
         label="Checkout"
         variant="outlined"
         (onClick)="handleCheckout()"

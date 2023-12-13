@@ -463,7 +463,7 @@ export function getFormattedDateWithTime(time: number) {
   const minutes = currentDate.getMinutes().toString().padStart(2, '0');
   const seconds = currentDate.getSeconds().toString().padStart(2, '0');
 
-  return `${year}-${month}-${date} ${hours}:${minutes}:${seconds}`;
+  return `${year}-${month}-${date}, ${hours}:${minutes}:${seconds}`;
 }
 
 function calculateNumberOfNights(

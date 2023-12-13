@@ -7,8 +7,9 @@ export type BillItemFields = Omit<TableData, 'deserialize'>;
 
 export type PaymentForm = {
   remarks: string;
-  paymentMethod: string;
+  paymentMethod?: string;
   receivedPayment: number;
+  refundMethod?: string;
   transactionId: string;
 };
 

@@ -121,6 +121,11 @@ export class InvoiceComponent implements OnInit {
   defaultDescriptionOptions: DescriptionOption[] = [];
   focusedDescriptionId: string;
 
+  refundOptions = [
+    { label: 'Cash Payment', value: 'Cash Payment' },
+    { label: 'Bank Transfer', value: 'Bank Trasfer' },
+  ];
+
   /**
    * To store the actual service response for the re-initialization
    */
@@ -262,6 +267,7 @@ export class InvoiceComponent implements OnInit {
       // Payment Details
       remarks: [''],
       paymentMethod: [''],
+      refundMethod: [''],
       receivedPayment: [''],
       transactionId: [''],
     });
@@ -409,12 +415,19 @@ export class InvoiceComponent implements OnInit {
 
   paymentValidation(addValidation: boolean = true) {
     const paymentMethodControl = this.useForm.get('paymentMethod');
+    const refundMethodControl = this.useForm.get('refundMethod');
+    const paymentControl = this.addRefund
+      ? refundMethodControl
+      : paymentMethodControl;
     const receivedPaymentControl = this.useForm.get('receivedPayment');
     // const transactionIdControl = this.useForm.get('transactionId');
     // const remarksControl = this.useForm.get('remarks');
 
+    if (this.addRefund) this.resetValidators(paymentMethodControl);
+    else this.resetValidators(refundMethodControl);
+
     [
-      paymentMethodControl,
+      paymentControl,
       receivedPaymentControl,
       // transactionIdControl,
       // remarksControl,
@@ -425,11 +438,15 @@ export class InvoiceComponent implements OnInit {
           item.setValidators([Validators.required, Validators.min(1)]);
         }
       } else {
-        item.clearValidators();
-        item.updateValueAndValidity();
-        item.reset();
+        this.resetValidators(item);
       }
     });
+  }
+
+  resetValidators(item: AbstractControl) {
+    item.clearValidators();
+    item.updateValueAndValidity();
+    item.reset();
   }
 
   gstValidation(addValidation: boolean = true) {
@@ -959,6 +976,7 @@ export class InvoiceComponent implements OnInit {
     const paymentConfig: PaymentForm = {
       remarks: '',
       paymentMethod: '',
+      refundMethod: '',
       receivedPayment: null,
       transactionId: '',
     };

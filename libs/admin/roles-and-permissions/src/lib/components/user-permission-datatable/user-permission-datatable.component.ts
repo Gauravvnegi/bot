@@ -146,6 +146,7 @@ export class UserPermissionDatatableComponent extends BaseDatatableComponent
             this.tabFilterItems[this.tabFilterIdx]?.value === 'ALL'
               ? ''
               : this.tabFilterItems[this.tabFilterIdx]?.value ?? '',
+          limit: this.totalRecords,
         },
       ]),
       loggedInUserId: this.userService.getLoggedInUserId(),

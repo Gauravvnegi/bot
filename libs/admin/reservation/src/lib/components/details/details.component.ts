@@ -149,6 +149,8 @@ export class DetailsComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.registerListeners();
     this.getConfig();
+
+    // this.subscribeToConfirmDoc();
   }
 
   registerListeners(): void {
@@ -163,6 +165,17 @@ export class DetailsComponent implements OnInit, OnDestroy {
     );
     this.channels = this.subscriptionService.getChannelSubscription();
   }
+
+  // subscribeToConfirmDoc() {
+  //   debugger;
+  //   this.documentDetailComponent.$isAllDocsConfirmed.subscribe((res) => {
+  //     debugger;
+
+  //     if (res) {
+  //       this.details.stepStatusDetails.documents = 'COMPLETED';
+  //     }
+  //   });
+  // }
 
   /**
    * @function listenForGlobalFilters To listen for global filters and load data when filter value is changed.

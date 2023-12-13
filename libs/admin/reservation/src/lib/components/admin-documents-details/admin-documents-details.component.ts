@@ -16,7 +16,11 @@ import * as JSZipUtils from 'jszip-utils';
 import { ImageHandlingComponent } from 'libs/admin/shared/src/lib/components/image-handling/image-handling.component';
 import { ReservationService } from '../../services/reservation.service';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
-import { GuestDetailsConfig } from 'libs/admin/shared/src/lib/models/detailsConfig.model';
+import {
+  DocumentDetailsConfig,
+  GuestDetailsConfig,
+} from 'libs/admin/shared/src/lib/models/detailsConfig.model';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'hospitality-bot-admin-documents-details',
@@ -41,6 +45,8 @@ export class AdminDocumentsDetailsComponent implements OnInit {
   @Input() parentForm;
   @Input('data') detailsData;
   @Output() addFGEvent = new EventEmitter();
+
+  $isAllDocsConfirmed = new Subject<boolean>();
 
   constructor(
     private _fb: FormBuilder,
@@ -327,6 +333,15 @@ export class AdminDocumentsDetailsComponent implements OnInit {
         this.detailsData.guestDetails.guests.forEach(
           (data: GuestDetailsConfig) => {
             if (data.id === this.selectedGuestId) {
+              if (data.documents.length === 0) {
+                const dataConfig = new DocumentDetailsConfig().deserialize({
+                  backUrl: '',
+                  frontUrl: '',
+                  documentType: '',
+                  id: '',
+                });
+                data.documents.push(dataConfig);
+              }
               data.documents[0].backUrl = docsData.data[0].backUrl;
               data.documents[0].frontUrl = docsData.data[0].frontUrl;
               data.documents[0].documentType = docsData.data[0].documentType;
@@ -428,12 +443,12 @@ export class AdminDocumentsDetailsComponent implements OnInit {
             any
           >
         ) => {
-          if (item.documents.length === 0) {
-            return false;
-          }
-
           if (item.role === 'kids') {
             return value;
+          }
+
+          if (item.documents.length === 0) {
+            return false;
           }
 
           let isSubmitted = true;
@@ -494,6 +509,7 @@ export class AdminDocumentsDetailsComponent implements OnInit {
   }
 
   checkIfAllDocumentsVerified() {
+    let isAllConfirmed = true;
     this.guestsFA.controls.forEach((guest) => {
       if (guest.get('status').value !== 'COMPLETED') {
         if (guest.get('status').value === 'FAILED') {
@@ -501,10 +517,15 @@ export class AdminDocumentsDetailsComponent implements OnInit {
         } else {
           this.documentStatus.get('status').patchValue('INITIATED');
         }
+        isAllConfirmed = false;
       } else {
         this.documentStatus.get('status').setValue('COMPLETED');
       }
     });
+
+    if (isAllConfirmed) {
+      this.$isAllDocsConfirmed.next(true);
+    }
   }
 
   mapDocumentVerificationData(status, isConfirmALL) {
@@ -530,6 +551,8 @@ export class AdminDocumentsDetailsComponent implements OnInit {
     });
 
     this.documentStatus.get('status').patchValue('COMPLETED');
+
+    this.$isAllDocsConfirmed.next(true);
   }
 
   onGuestChange(value: string) {

@@ -261,11 +261,11 @@
             </ng-container>
           </ng-container>
         </div>
-        <div class="section--content--label amount__pay">
-          Total Payable :&nbsp;<span
-            >{{ currencyCode }}
-            {{ paymentDetails ? paymentDetails.payableAmount : 0 }}</span
-          >
+        <div
+          class="section--content--label amount__pay"
+          *ngIf="_reservationService.reservationData.paymentSummary.printRate"
+        >
+          Total Payable :&nbsp;<span>{{ currencyCode }} </span>
         </div>
       </div>
       <div

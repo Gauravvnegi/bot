@@ -23,7 +23,10 @@ import {
   RevParRoomReportResponse,
 } from '../types/financial-reports.types';
 import { ReportClass, RowStyles } from '../types/reports.types';
-import { getFormattedDate } from './reservation-reports.models';
+import {
+  getFormattedDate,
+  getFormattedDateWithTime,
+} from './reservation-reports.models';
 import {
   currencyToNumber,
   toCurrency,
@@ -332,7 +335,7 @@ export class AdvanceDepositPaymentReport
           // groupId: undefined,
           checkIn: getFormattedDate(item?.reservation?.arrivalTime),
           checkOut: getFormattedDate(item?.reservation?.departureTime),
-          advancedDepositDate: getFormattedDate(item?.created),
+          advancedDepositDate: getFormattedDateWithTime(item?.created),
           paymentMode: item?.paymentMethod,
           advancedDepositAmount: toCurrency(item?.amount),
         };
@@ -361,11 +364,11 @@ export class RevParRoomReport
           totalRoomRent: toCurrency(item?.roomRevenue),
 
           totalRoomInclusions: toCurrency(item?.inclusionOrAddOn),
-          
+
           totalTaxes: toCurrency(item?.totalTax),
           // totalOtherCharges: toCurrency(item?.inclusionOrAddOn),
           // totalOtherTaxes: undefined,
-          grossTotal: toCurrency(item?.grossTotal),
+          grossTotal: toCurrency(item?.grossTotal + item?.inclusionOrAddOn),
         };
       });
 

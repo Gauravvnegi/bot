@@ -68,7 +68,7 @@ export class NightAuditService extends ApiService {
     bookingId: string,
     entityId: string,
     bookingType: string,
-    data: { reservationType: string }
+    data: { reservationType: string , remarks: string }
   ): Observable<any> {
     return this.patch(
       `/api/v1/booking/${bookingId}/status?type=${bookingType}&entityId=${entityId}`,

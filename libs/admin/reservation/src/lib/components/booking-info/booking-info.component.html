@@ -130,8 +130,8 @@
             maxlength: 'Maximum character limit is upto 60.'
           }
         }"
-        (focusout)="formService.getSummary.next()"
-        (keyup.enter)="formService.getSummary.next()"
+        (focusout)="formService.getSummary.next(true)"
+        (keyup.enter)="formService.getSummary.next(true)"
       ></hospitality-bot-input>
       <hospitality-bot-select
         *ngIf="reservationInfoControls.source.value === 'OTA'"

@@ -255,7 +255,7 @@ export class BookingInfoComponent implements OnInit {
       }
     });
     this.otaSourceControl.valueChanges.subscribe((res) => {
-      res && this.formService.getSummary.next();
+      res && this.formService.getSummary.next(true);
     });
   }
 
@@ -423,7 +423,7 @@ export class BookingInfoComponent implements OnInit {
       !this.reservationId &&
         event?.marketSegment &&
         this.patchValue(this.marketSegmentControl, event.marketSegment);
-      this.formService.getSummary.next();
+      this.formService.getSummary.next(true);
     }
   }
 
@@ -437,7 +437,7 @@ export class BookingInfoComponent implements OnInit {
       !this.reservationId &&
         event?.marketSegment &&
         this.patchValue(this.marketSegmentControl, event?.marketSegment);
-      this.formService.getSummary.next();
+      this.formService.getSummary.next(true);
     }
   }
 
@@ -466,7 +466,7 @@ export class BookingInfoComponent implements OnInit {
           };
           res.marketSegment &&
             this.patchValue(this.marketSegmentControl, res.marketSegment);
-          this.formService.getSummary.next();
+          this.formService.getSummary.next(true);
         }
         this.sidebarVisible = false;
         componentRef.destroy();
@@ -500,7 +500,7 @@ export class BookingInfoComponent implements OnInit {
           };
           res.marketSegment &&
             this.patchValue(this.marketSegmentControl, res.marketSegment);
-          this.formService.getSummary.next();
+          this.formService.getSummary.next(true);
         }
         this.sidebarVisible = false;
         componentRef.destroy();

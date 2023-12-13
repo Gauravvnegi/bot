@@ -117,7 +117,10 @@
       </div>
       <div class="bk-summary_btn-wrapper">
         <hospitality-bot-button
-          *ngIf="reservationId"
+          *ngIf="
+            reservationId &&
+            reservationInfoControls?.reservationType?.value === 'CONFIRMED'
+          "
           class="btn"
           label="Guest Profile"
           variant="text"

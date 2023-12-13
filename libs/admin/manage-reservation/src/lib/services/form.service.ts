@@ -27,7 +27,7 @@ export class FormService {
 
   disableBtn: boolean = false;
   calendarView: boolean = false;
-  getSummary = new Subject<void>();
+  getSummary = new BehaviorSubject(false);
   deductedAmount = new BehaviorSubject(0);
   isDataInitialized = new BehaviorSubject(false);
   reinitializeRooms = new BehaviorSubject(false);
@@ -277,6 +277,7 @@ export class FormService {
   resetData() {
     this.currentJourneyStatus.next(null);
     this.reservationForm.next(null);
+    this.getSummary.next(false);
     this.sourceData.next(null);
     this.disableBtn = false;
     this.dateDifference.next(1);
@@ -286,7 +287,6 @@ export class FormService {
     this.isDataInitialized.next(false);
     this.reinitializeRooms.next(false);
     this.offerType.next(null);
-    this.getSummary.next(null);
   }
 }
 

@@ -58,6 +58,7 @@ export class AddReservationComponent extends BaseReservationComponent
   isConfirmedBooking = false;
   isCheckedout = false;
   isFullPayment = false;
+  isDataInitialized = false;
   currentStatus: ReservationCurrentStatus;
   reservationFormData: ReservationFormData;
 
@@ -133,8 +134,10 @@ export class AddReservationComponent extends BaseReservationComponent
       this.formService.enableAccordion = false;
     }
     this.formService.getSummary.subscribe((res) => {
-      if (this.roomInfoControls.valid) {
-        this.getSummaryData();
+      if (res) {
+        if (this.roomInfoControls.valid && this.isDataInitialized) {
+          this.getSummaryData();
+        }
       }
     });
   }
@@ -183,6 +186,7 @@ export class AddReservationComponent extends BaseReservationComponent
         // check if the last added room type is selected
         if (res && res[res.length - 1].roomTypeId?.length) {
           this.getSummaryData();
+          this.isDataInitialized = true;
         }
 
         // Reset form data when all items are removed from roomArray.
@@ -239,6 +243,8 @@ export class AddReservationComponent extends BaseReservationComponent
             // Checks to disable form based on reservation type and journeys
             this.isDraftBooking =
               reservationInfo.reservationType === ReservationType.DRAFT;
+            this.isConfirmedBooking =
+              reservationInfo.reservationType === ReservationType.CONFIRMED;
             this.formService.currentJourneyStatus.next(response.status);
             this.currentStatus = response?.status;
             this.isCheckedout =
@@ -385,7 +391,7 @@ export class AddReservationComponent extends BaseReservationComponent
         (item) => item.roomDetails.roomTypeId
       );
       // check if the last added room type is selected
-      this.getOfferByRoomType(roomTypeIds);
+      !this.isConfirmedBooking && this.getOfferByRoomType(roomTypeIds);
     }
   }
 
@@ -473,6 +479,7 @@ export class AddReservationComponent extends BaseReservationComponent
    * @function ngOnDestroy to unsubscribe subscription.
    */
   ngOnDestroy(): void {
+    this.isDataInitialized = false;
     this.$subscription.unsubscribe();
   }
 

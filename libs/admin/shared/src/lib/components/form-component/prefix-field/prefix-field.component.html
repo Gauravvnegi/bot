@@ -28,7 +28,7 @@
         [controlName]="preControlName"
         [props]="getProps('pre')"
         [disabled]="inputDisabled.pre || isDisabled"
-        [options]="preOptions"
+        [options]="showFilteredOptions ? filterPreOptions : preOptions"
         [stopEmission]="stopEmission"
       ></hospitality-bot-select>
       <hospitality-bot-auto-complete
@@ -83,7 +83,7 @@
         }"
         [controlName]="postControlName"
         [props]="getProps('post')"
-        [options]="postOptions"
+        [options]="showFilteredOptions ? filterPostOptions : postOptions"
         [disabled]="inputDisabled.post || isDisabled"
       ></hospitality-bot-select>
       <hospitality-bot-auto-complete

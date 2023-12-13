@@ -468,12 +468,22 @@
           label="Cashier Name"
           maxLength="60"
         ></hospitality-bot-input> -->
-        <hospitality-bot-select-group
-          class="full-width"
-          controlName="paymentMethod"
-          label="Payment method"
-          [options]="paymentOptions"
-        ></hospitality-bot-select-group>
+        <ng-container *ngIf="addPayment">
+          <hospitality-bot-select-group
+            class="full-width"
+            controlName="paymentMethod"
+            label="Payment method"
+            [options]="paymentOptions"
+          ></hospitality-bot-select-group>
+        </ng-container>
+        <ng-container *ngIf="addRefund">
+          <hospitality-bot-select-group
+            class="full-width"
+            controlName="refundMethod"
+            label="Payment method"
+            [options]="refundOptions"
+          ></hospitality-bot-select-group>
+        </ng-container>
         <!-- <div class="one-third-width"></div> -->
         <hospitality-bot-input
           class="half-width"

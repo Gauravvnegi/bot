@@ -236,7 +236,9 @@ export class InvoiceService extends ApiService {
       ...(invoiceFormData.receivedPayment
         ? {
             paymentRemarks: invoiceFormData.remarks,
-            paymentMethod: invoiceFormData.paymentMethod,
+            paymentMethod: isPayment
+              ? invoiceFormData.paymentMethod
+              : invoiceFormData.refundMethod,
             transactionId: invoiceFormData.transactionId,
             paymentAmount: invoiceFormData.receivedPayment,
           }

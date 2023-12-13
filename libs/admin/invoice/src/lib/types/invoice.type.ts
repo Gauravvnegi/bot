@@ -61,7 +61,8 @@ export type BillSummaryData = {
 
 export type PaymentData = {
   paymentRemarks: string;
-  paymentMethod: string;
+  paymentMethod?: string;
+  refundMethod?: string;
   transactionId: string;
   paymentAmount: string | number;
 };

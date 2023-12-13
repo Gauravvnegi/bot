@@ -11,6 +11,9 @@ import { ActionConfigType } from '../../../../types/night-audit.type';
 import { cols } from '../../constants/audit-summary.table';
 import { AuditSummary } from '../../models/audit-summary.model';
 import { AuditViewType } from '../../types/audit-summary.type';
+import { MatDialogConfig } from '@angular/material/dialog';
+import { ModalService } from '@hospitality-bot/shared/material';
+import { ModalComponent } from 'libs/admin/shared/src/lib/components/modal/modal.component';
 
 @Component({
   selector: 'hospitality-bot-audit-summary',
@@ -44,7 +47,8 @@ export class AuditSummaryComponent implements OnInit {
     private nightAuditService: NightAuditService,
     private globalFilterService: GlobalFilterService,
     private adminUtilityService: AdminUtilityService,
-    private confirmationService: ConfirmationService
+    private confirmationService: ConfirmationService,
+    private modalService: ModalService
   ) {}
 
   ngOnInit(): void {
@@ -89,19 +93,53 @@ export class AuditSummaryComponent implements OnInit {
             };
             if (res?.length) {
               if (isNext) {
-                this.confirmationService.confirm({
-                  header: `Audit Summary`,
-                  message: `There are ${res.length} more audit, do you want to continue ?`,
-                  acceptButtonStyleClass: 'accept-button',
-                  rejectButtonStyleClass: 'reject-button-outlined',
-                  accept: () => {
-                    this.indexChange.emit({ index: 0 });
+                // this.confirmationService.confirm({
+                //   header: `Audit Summary`,
+                //   message: `There are ${res.length} more audit, do you want to continue ?`,
+                //   acceptButtonStyleClass: 'accept-button',
+                //   rejectButtonStyleClass: 'reject-button-outlined',
+                //   accept: () => {
+                //     this.indexChange.emit({ index: 0 });
+                //   },
+                //   reject: () => {
+                //     doNotLoad();
+                //     this.indexChange.emit(this.activeIndex + 1);
+                //   },
+                // });
+
+                const dialogConfig = new MatDialogConfig();
+                dialogConfig.disableClose = true;
+                const togglePopupCompRef = this.modalService.openDialog(
+                  ModalComponent,
+                  dialogConfig
+                );
+                this.increaseZIndex(true);
+                togglePopupCompRef.componentInstance.content = {
+                  heading: 'Audit Summary',
+                  description: [
+                    `There are ${res.length} more audit, do you want to continue ?`,
+                  ],
+                };
+
+                togglePopupCompRef.componentInstance.actions = [
+                  {
+                    label: 'No',
+                    onClick: () => {
+                      doNotLoad();
+                      this.indexChange.emit(this.activeIndex + 1);
+                      this.modalService.close();
+                    },
+                    variant: 'outlined',
                   },
-                  reject: () => {
-                    doNotLoad();
-                    this.indexChange.emit(this.activeIndex + 1);
+                  {
+                    label: 'Yes',
+                    onClick: () => {
+                      this.indexChange.emit({ index: 0 });
+                      this.modalService.close();
+                    },
+                    variant: 'contained',
                   },
-                });
+                ];
               } else {
                 loadTable();
               }
@@ -117,6 +155,14 @@ export class AuditSummaryComponent implements OnInit {
           }
         )
     );
+  }
+
+  increaseZIndex(toggleZIndex: boolean) {
+    const cdkOverlayContainer = document.querySelector(
+      '.cdk-overlay-container'
+    ) as HTMLElement;
+    if (cdkOverlayContainer)
+      cdkOverlayContainer.style.zIndex = toggleZIndex ? '1500 ' : '1000';
   }
 
   initTable() {

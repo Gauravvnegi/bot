@@ -7,7 +7,10 @@ import {
   Output,
   SimpleChanges,
 } from '@angular/core';
-import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import {
+  GlobalFilterService,
+  RoutesConfigService,
+} from '@hospitality-bot/admin/core/theme';
 import {
   DetailsComponent,
   DetailsTabOptions,
@@ -29,6 +32,7 @@ import {
 } from '../../constants/checked-in-reservation.table';
 import { CheckedInReservation } from '../../models/night-audit.model';
 import { MatDialogConfig } from '@angular/material/dialog';
+import { ModalComponent } from 'libs/admin/shared/src/lib/components/modal/modal.component';
 
 @Component({
   selector: 'hospitality-bot-checkin-reservations',
@@ -65,7 +69,8 @@ export class CheckinReservationsComponent implements OnInit {
     private snackbarService: SnackBarService,
     private globalFilterService: GlobalFilterService,
     private modalService: ModalService,
-    private _clipboard: Clipboard
+    private _clipboard: Clipboard,
+    private routesConfigService: RoutesConfigService
   ) {}
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -91,42 +96,131 @@ export class CheckinReservationsComponent implements OnInit {
     };
   }
 
-  statusChange(event) {
-    this.confirmationService.confirm({
-      header: `Mark Reservation As ${event.value}`,
-      message: 'Are you sure... ?',
-      acceptButtonStyleClass: 'accept-button',
-      rejectButtonStyleClass: 'reject-button-outlined',
-      accept: () => {
-        this.loading = true;
-        this.$subscription.add(
-          this.nightAuditService
-            .updateBookingStatus(
-              event.details.id,
-              this.entityId,
-              EntitySubType.ROOM_TYPE,
-              {
-                reservationType: event.value,
-              }
-            )
-            .subscribe(
-              (res) => {
-                this.reload.emit({ status: event.value });
-                this.snackbarService.openSnackBarAsText(
-                  'Reservation ' + event.value + ' changes successfully',
-                  '',
-                  { panelClass: 'success' }
-                );
-                this.loading = false;
+  handelStatus(event, reservationData) {
+    const status = event?.value;
+    debugger;
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = true;
+    const togglePopupCompRef = this.modalService.openDialog(
+      ModalComponent,
+      dialogConfig
+    );
+    this.increaseZIndex(true);
+
+    togglePopupCompRef.componentInstance.content = {
+      heading: `Mark Reservation As ${
+        status.charAt(0).toUpperCase() + status.slice(1).toLowerCase()
+      }`,
+      description: [
+        `You are about to mark this reservation as ${status}`,
+        `Are you Sure?`,
+        status === 'CANCELED' && reservationData?.totalPaidAmount
+          ? ` A total of \u20B9 ${reservationData?.totalPaidAmount} is received for the reservation`
+          : '',
+      ],
+      isRemarks: status === 'CANCELED' || 'NOSHOW',
+    };
+    togglePopupCompRef.componentInstance.actions = [
+      {
+        label: status === 'CANCELED' ? 'Cancel & Settlement' : 'Cancel',
+        onClick: () => {
+          if (status === 'CANCELED') {
+            this.routesConfigService.navigate({
+              subModuleName: ModuleNames.INVOICE,
+              additionalPath: reservationData.id,
+              queryParams: {
+                entityId: this.entityId,
+                type: EntitySubType.ROOM_TYPE,
               },
-              (error) => {
-                this.loading = false;
-              }
-            )
-        );
+            });
+            this.onClose.emit(true);
+          }
+
+          this.modalService.close();
+        },
+        variant: 'outlined',
       },
+      {
+        label: 'Yes',
+        onClick: (modelData) => {
+          this.modalService.close();
+          this.updateStatus(event, modelData);
+        },
+        variant: 'contained',
+      },
+    ];
+
+    togglePopupCompRef.componentInstance.onClose.subscribe(() => {
+      this.increaseZIndex(false);
+      this.modalService.close();
     });
   }
+
+  updateStatus(event, additionalData) {
+    this.$subscription.add(
+      this.nightAuditService
+        .updateBookingStatus(
+          event.details.id,
+          this.entityId,
+          EntitySubType.ROOM_TYPE,
+          {
+            reservationType: event.value,
+            remarks: additionalData.remarks,
+          }
+        )
+        .subscribe(
+          (res) => {
+            this.reload.emit({ status: event.value });
+            this.snackbarService.openSnackBarAsText(
+              'Reservation ' + event.value + ' changes successfully',
+              '',
+              { panelClass: 'success' }
+            );
+            this.loading = false;
+          },
+          (error) => {
+            this.loading = false;
+          }
+        )
+    );
+  }
+
+  // statusChange(event) {
+  //   this.confirmationService.confirm({
+  //     header: `Mark Reservation As ${event.value}`,
+  //     message: 'Are you sure... ?',
+  //     acceptButtonStyleClass: 'accept-button',
+  //     rejectButtonStyleClass: 'reject-button-outlined',
+  //     accept: () => {
+  //       this.loading = true;
+  //       this.$subscription.add(
+  //         this.nightAuditService
+  //           .updateBookingStatus(
+  //             event.details.id,
+  //             this.entityId,
+  //             EntitySubType.ROOM_TYPE,
+  //             {
+  //               reservationType: event.value,
+  //             }
+  //           )
+  //           .subscribe(
+  //             (res) => {
+  //               this.reload.emit({ status: event.value });
+  //               this.snackbarService.openSnackBarAsText(
+  //                 'Reservation ' + event.value + ' changes successfully',
+  //                 '',
+  //                 { panelClass: 'success' }
+  //               );
+  //               this.loading = false;
+  //             },
+  //             (error) => {
+  //               this.loading = false;
+  //             }
+  //           )
+  //       );
+  //     },
+  //   });
+  // }
 
   copyConfirmationNumber(number: string) {
     this._clipboard.copy(number);

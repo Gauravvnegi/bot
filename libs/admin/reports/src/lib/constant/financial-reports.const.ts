@@ -11,55 +11,63 @@ import {
 import { ColsData } from '../types/reports.types';
 
 export const financialReportCols: ColsData<FinancialReportData> = {
-  bookingNo: {
-    header: 'Res#',
-    isSortDisabled: true,
-  },
-  folioNo: {
-    header: 'Folio#',
-    isSortDisabled: true,
-  },
-  nights: {
-    header: 'Nights',
-    isSortDisabled: true,
-  },
-  lodging: {
-    header: 'Lodging',
-    isSortDisabled: true,
-  },
-  lodgingTax: {
-    header: 'Lodging Tax',
-    isSortDisabled: true,
-  },
-  discount: {
-    header: 'Discount',
-    isSortDisabled: true,
-  },
-  otherCharges: {
-    header: 'Other Charges',
-    isSortDisabled: true,
-  },
-  otherChargesTax: {
-    header: 'Other Charges Tax',
-    isSortDisabled: true,
-  },
-  otherChargesDiscount: {
-    header: 'Other Charges Discount',
-    isSortDisabled: true,
-  },
-  postTaxTotal: {
-    header: 'Post Tax Total',
-    isSortDisabled: true,
-  },
-  paid: {
-    header: 'Paid',
-    isSortDisabled: true,
-  },
-  balance: {
-    header: 'Balance',
-    isSortDisabled: true,
-  },
-};
+         bookingNo: {
+           header: 'Res#',
+           isSortDisabled: true,
+         },
+         folioNo: {
+           header: 'Folio#',
+           isSortDisabled: true,
+         },
+         nights: {
+           header: 'Nights',
+           isSortDisabled: true,
+         },
+         lodging: {
+           header: 'Lodging',
+           isSortDisabled: true,
+         },
+         lodgingTax: {
+           header: 'Lodging Tax',
+           isSortDisabled: true,
+           isSearchDisabled: true,
+         },
+         discount: {
+           header: 'Discount',
+           isSortDisabled: true,
+           isSearchDisabled: true,
+         },
+         otherCharges: {
+           header: 'Other Charges',
+           isSortDisabled: true,
+           isSearchDisabled: true,
+         },
+         otherChargesTax: {
+           header: 'Other Charges Tax',
+           isSortDisabled: true,
+           isSearchDisabled: true,
+         },
+         otherChargesDiscount: {
+           header: 'Other Charges Discount',
+           isSortDisabled: true,
+           isSearchDisabled: true,
+         },
+         postTaxTotal: {
+           header: 'Post Tax Total',
+           isSortDisabled: true,
+           isSearchDisabled: true,
+         },
+         paid: {
+           header: 'Paid',
+           isSortDisabled: true,
+           isSearchDisabled: true,
+         },
+         balance: {
+           header: 'Balance',
+           isSortDisabled: true,
+           isSearchDisabled: true,
+         },
+       };
 
 export const advanceDepositPaymentCols: ColsData<AdvanceDepositPaymentReportData> = {
   bookingNo: {

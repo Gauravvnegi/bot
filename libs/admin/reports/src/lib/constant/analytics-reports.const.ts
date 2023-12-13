@@ -104,14 +104,17 @@ export const occupancyAnalysisReportCols: ColsData<OccupancyAnalysisReportData> 
   arrOrAgr: {
     header: 'ARR/AGR',
     isSortDisabled: true,
+    isSearchDisabled: true,
   },
   arp: {
     header: 'ARP',
     isSortDisabled: true,
+    isSearchDisabled: true,
   },
   revPar: {
     header: 'RevPAR',
     isSortDisabled: true,
+    isSearchDisabled: true,
   },
 };
 
@@ -139,6 +142,7 @@ export const marketSegmentReportCols: ColsData<Omit<
   roomRevenue: {
     header: 'Room Revenue',
     isSortDisabled: true,
+    isSearchDisabled: true,
   },
   revenue: {
     header: 'Revenue %',
@@ -147,10 +151,12 @@ export const marketSegmentReportCols: ColsData<Omit<
   arrOrAgr: {
     header: 'ARR/AGR',
     isSortDisabled: true,
+    isSearchDisabled: true,
   },
   arp: {
     header: 'ARP',
     isSortDisabled: true,
+    isSearchDisabled: true,
   },
 };
 

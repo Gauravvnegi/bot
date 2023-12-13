@@ -56,24 +56,25 @@ export const discountAllowanceReportCols: Partial<ColsData<
 };
 
 export const promoCodeReportCols: ColsData<PromoCodeReportData> = {
-  promoCode: {
-    header: 'Promo Code',
-    isSortDisabled: true,
-  },
-  discount: {
-    header: 'Discount',
-    isSortDisabled: true,
-  },
-  redemptions: {
-    header: 'Redemptions',
-    isSortDisabled: true,
-  },
-  totalNights: {
-    header: 'Total Nights',
-    isSortDisabled: true,
-  },
-  totalRevenueEarned: {
-    header: 'Total Revenue Earned',
-    isSortDisabled: true,
-  },
-};
+         promoCode: {
+           header: 'Promo Code',
+           isSortDisabled: true,
+         },
+         discount: {
+           header: 'Discount',
+           isSortDisabled: true,
+         },
+         redemptions: {
+           header: 'Redemptions',
+           isSortDisabled: true,
+         },
+         totalNights: {
+           header: 'Total Nights',
+           isSortDisabled: true,
+         },
+         totalRevenueEarned: {
+           header: 'Total Revenue Earned',
+           isSortDisabled: true,
+           isSearchDisabled: true,
+         },
+       };

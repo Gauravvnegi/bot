@@ -34,6 +34,11 @@ $reports-menu-padding: 16px;
   }
 }
 
+.menu-container {
+  height: 83vh;
+  overflow-y: auto;
+}
+
 .menu-option {
   padding: $reports-menu-padding;
   border-width: 1px 0 0 0;

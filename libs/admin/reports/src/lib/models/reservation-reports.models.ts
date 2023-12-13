@@ -248,7 +248,10 @@ export class EmployeeWiseReservationReport
       value.forEach((reservationData) => {
         const totalCharge =
           reservationData.reservationItemsPayment.totalRoomCharge +
-          reservationData.reservationItemsPayment.totalAddOnsAmount;
+          reservationData.reservationItemsPayment.totalAddOnsAmount +
+          reservationData.reservationItemsPayment.totalCgstTax +
+          reservationData.reservationItemsPayment.totalSgstTax;
+
         this.records.push({
           id: reservationData.id,
           userName:
@@ -310,6 +313,9 @@ export class IncomeSummaryReport
 
     value &&
       value.forEach((data) => {
+        const totalCharge =
+          data.reservationItemsPayment.totalAddOnsAmount +
+          data.reservationItemsPayment.totalRoomCharge;
         this.records.push({
           id: data.id,
           bookingNo: data.number,
@@ -317,12 +323,13 @@ export class IncomeSummaryReport
           checkIn: getFormattedDate(data.stayDetails.arrivalTime),
           checkOut: getFormattedDate(data.stayDetails.departureTime),
           nights: data.nightCount,
-          lodgingAndOtherCharges:
-            data.reservationItemsPayment.totalAddOnsAmount +
-            data.reservationItemsPayment.totalRoomCharge,
+          lodgingAndOtherCharges: totalCharge,
+
           taxTotal:
             data.reservationItemsPayment.totalCgstTax +
-            data.reservationItemsPayment.totalSgstTax,
+            data.reservationItemsPayment.totalSgstTax +
+            totalCharge,
+
           paidAmount: data.paymentSummary.paidAmount,
         });
       });

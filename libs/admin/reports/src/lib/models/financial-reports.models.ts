@@ -72,7 +72,9 @@ export class FinancialReport
           ),
 
           postTaxTotal: toCurrency(
-            element?.reservationItemsPayment.totalCgstTax +
+            element?.reservationItemsPayment?.totalRoomCharge +
+              element?.reservationItemsPayment?.totalAddOnsAmount +
+              element?.reservationItemsPayment.totalCgstTax +
               element?.reservationItemsPayment?.totalSgstTax +
               element?.reservationItemsPayment.totalAddOnsTax
           ),

@@ -67,7 +67,7 @@ export class AgentModel {
       salesPersonName: data?.salesPersonName,
       creditLimit: data?.creditLimit,
       address: {
-        formattedAddress: `${address.addressLine1}, ${address.city}, ${address.countryCode}, ${address.postalCode}, ${address.state}`,
+        formattedAddress: `${address.addressLine1 ?? ''}`,
         city: address.city,
         state: address.state,
         countryCode: address.countryCode,

@@ -85,7 +85,7 @@ export class SignatureCaptureWrapperComponent
         label: 'Upload',
         settings: {
           fileConfig: {
-            fileIcon: '/assets/contract.png',
+            fileIcon: 'assets/contract.png',
             accept: '.pdf,.img,.png,.jpg,.jpeg',
             maxFileSize: 3145728,
           },

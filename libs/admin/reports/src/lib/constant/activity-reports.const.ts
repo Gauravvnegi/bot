@@ -39,10 +39,12 @@ export const reservationActivityReportCols: ColsData<Omit<
   rateOrPackage: {
     header: 'Rate/Package',
     isSortDisabled: true,
+    isSearchDisabled: true,
   },
   amount: {
     header: 'Amount',
     isSortDisabled: true,
+    isSearchDisabled: true,
   },
 };
 
@@ -81,5 +83,6 @@ export const reservationCreatedReportCols: ColsData<Omit<
   amount: {
     header: 'Amount',
     isSortDisabled: true,
+    isSearchDisabled: true,
   },
 };

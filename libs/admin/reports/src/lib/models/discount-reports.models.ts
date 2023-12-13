@@ -2,6 +2,8 @@ import { toCurrency } from 'libs/admin/shared/src/lib/utils/valueFormatter';
 import {
   DiscountAllowanceReportData,
   DiscountAllowanceReportResponse,
+  PromoCodeReportData,
+  PromoCodeReportResponse,
 } from '../types/discount-reports.types';
 import { ReportClass } from '../types/reports.types';
 import { getFormattedDate } from './reservation-reports.models';
@@ -33,6 +35,26 @@ export class DiscountAllowanceReport
               reservationData.reservationItemsPayment.totalAddOnsDiscount
           ),
         });
+      });
+    return this;
+  }
+}
+
+export class PromoCodeReport
+  implements ReportClass<PromoCodeReportData, PromoCodeReportResponse> {
+  records: PromoCodeReportData[];
+
+  deserialize(value: PromoCodeReportResponse[]): this {
+    this.records =
+      value &&
+      value.map((res) => {
+        return {
+          promoCode: res?.offer?.packageCode,
+          discount: toCurrency(res?.offer?.discountedPrice),
+          redemptions: getFormattedDate(res?.arrivalTime),
+          totalNights: res?.nightCount,
+          totalRevenueEarned: toCurrency(res?.paymentSummary?.totalAmount),
+        };
       });
     return this;
   }

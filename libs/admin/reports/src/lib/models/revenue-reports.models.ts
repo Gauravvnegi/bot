@@ -55,10 +55,14 @@ export class PayTypeReport
       values.reduce((acc, curr) => {
         const paymentMethod = curr.paymentMethod;
 
-        const payType =
-          paymentMethod === 'Cash Payment' || paymentMethod === 'Bank Transfer'
+        let payType =
+          paymentMethod === 'Cash Payment' ||
+          paymentMethod === 'Bank Transfer' ||
+          paymentMethod === 'Bank Deposit'
             ? paymentMethod
             : 'Other';
+
+        if (payType === 'Bank Deposit') payType = 'Bank Transfer';
 
         if (acc.has(payType)) {
           acc.get(payType).push(new PayTypeReportData().deserialize(curr));

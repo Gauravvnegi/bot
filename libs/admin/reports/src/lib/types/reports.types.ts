@@ -23,6 +23,8 @@ export type ReportModules = Extract<
   | 'DIRECT_BILLING_REPORTS'
   | 'SOURCE_REPORTS'
   | 'FOLIO_REPORTS'
+  | 'FUND_REPORTS'
+  | 'RATE_PACKAGE_REPORTS'
 >;
 
 // export enum ReportModules {
@@ -80,12 +82,14 @@ export type ReportsType = {
     | 'businessAnalysisReport'
     | 'marketSegmentReport'
     | 'occupancyAnalysisReport';
-  DISCOUNT_REPORTS: 'discountAllowance';
+  DISCOUNT_REPORTS: 'discountAllowance' | 'promoCodeReport';
   DIRECT_BILLING_REPORTS:
     | 'directAgentBillingReport'
     | 'directCompanyBillingReport';
   SOURCE_REPORTS: 'marketSource';
   FOLIO_REPORTS: 'folioListReport';
+  RATE_PACKAGE_REPORTS: 'rateVariation';
+  FUND_REPORTS: 'addWithdrawalFundReport';
 };
 
 export type ReportsTypeValues = ReportsType[keyof ReportsType];

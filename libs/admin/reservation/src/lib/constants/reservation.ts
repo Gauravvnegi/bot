@@ -36,7 +36,10 @@ export const reservationStatusColorCode: Record<
   DUEOUT: 'warning',
 };
 
-export const viewDetails = [{ label: 'View Details', value: 'VEIW_DETAILS' }];
+export const viewDetails = [
+  { label: 'View Details', value: 'VEIW_DETAILS' },
+  { label: 'Manage Invoice', value: 'MANAGE_INVOICE' },
+];
 
 export const checkinOptions = [
   { label: 'Checkin', value: 'CHECKIN' },

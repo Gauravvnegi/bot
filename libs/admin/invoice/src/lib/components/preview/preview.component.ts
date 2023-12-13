@@ -24,6 +24,7 @@ export class PreviewComponent implements OnInit {
   pageTitle = 'Preview Invoice';
   isPrintRate = true;
   isCheckIn = false;
+  isCheckedOut = false;
   // items = [
   //   {
   //     label: 'Generate Proforma',
@@ -53,6 +54,7 @@ export class PreviewComponent implements OnInit {
     this.getPreviewUrl();
     this.getInvoiceData();
     this.initNavRoutes();
+    this.listenRouteData();
   }
 
   getInvoiceData() {
@@ -64,9 +66,6 @@ export class PreviewComponent implements OnInit {
         () => {},
         () => (this.isLoading = false)
       );
-    this.invoiceService.isCheckIn.subscribe((res) => {
-      if (typeof res === 'boolean') this.isCheckIn = res;
-    });
     this.invoiceService.isPrintRate.subscribe((res) => {
       if (typeof res === 'boolean') {
         this.isPrintRate = res;
@@ -132,6 +131,17 @@ export class PreviewComponent implements OnInit {
       );
   }
 
+  listenRouteData() {
+    this.activatedRoute.queryParams.subscribe((queryParams) => {
+      if (queryParams.data) {
+        const data = queryParams.data;
+        const paramsData = JSON.parse(atob(data));
+        this.isCheckIn = paramsData.isCheckin;
+        this.isCheckedOut = paramsData.isCheckout;
+      }
+    });
+  }
+
   handleDownload() {
     this.invoiceService.handleInvoiceDownload(this.reservationId);
   }
@@ -170,6 +180,7 @@ export class PreviewComponent implements OnInit {
     this.reservationService
       .manualCheckout(this.reservationId)
       .subscribe((res) => {
+        this.isCheckedOut = true;
         this.snackbarService.openSnackBarAsText('Checkout completed.', '', {
           panelClass: 'success',
         });

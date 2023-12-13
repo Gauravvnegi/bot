@@ -103,6 +103,7 @@ export class InvoiceComponent implements OnInit {
   isInvoiceDisabled = false;
   invoicePrepareRequest = false;
   isCheckin = false;
+  isCheckout = false;
 
   $subscription = new Subscription();
   typeSubscription: Subscription;
@@ -294,11 +295,11 @@ export class InvoiceComponent implements OnInit {
           this.invoicePrepareRequest = res.invoicePrepareRequest;
           this.pmsBooking = res.pmsBooking;
           if (this.pmsBooking) this.disableInvoice();
-          this.invoiceService.isCheckIn.next(
-            res?.status === ReservationCurrentStatus.DUEOUT ||
-              res?.status === ReservationCurrentStatus.INHOUSE
-          );
-
+          this.isCheckin =
+            res?.pmsStatus === ReservationCurrentStatus.DUEOUT ||
+            res?.pmsStatus === ReservationCurrentStatus.INHOUSE;
+          this.isCheckout =
+            res?.pmsStatus === ReservationCurrentStatus.CHECKEDOUT;
           this.isInitialized = true;
         })
     );
@@ -856,9 +857,21 @@ export class InvoiceComponent implements OnInit {
   };
 
   previewAndGenerate(): void {
-    this.router.navigate(['../preview-invoice', this.reservationId], {
-      relativeTo: this.route,
+    let queryParams = {
+      data: btoa(
+        JSON.stringify({
+          isCheckin: this.isCheckin,
+          isCheckout: this.isCheckout,
+        })
+      ),
+    };
+    this.routesConfigService.navigate({
+      additionalPath: `../preview-invoice/${this.reservationId}`,
+      queryParams: queryParams,
     });
+    // this.router.navigate(['../preview-invoice', this.reservationId], {
+    //   relativeTo: this.route,
+    // });
   }
 
   prepareInvoice() {

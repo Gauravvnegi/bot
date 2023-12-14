@@ -1,12 +1,14 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from '@hospitality-bot/shared/utils';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { GuestPostData } from '../models/guest-table.model';
 import { FileData } from '../models/reservation-table.model';
 
 @Injectable()
 export class ReservationService extends ApiService {
   $reinitializeGuestDetails = new BehaviorSubject(false);
+
+  $allDocsAreConfirmed = new Subject<boolean>();
 
   getReservationDetails(reservationId): Observable<any> {
     return this.get(`/api/v1/reservation/${reservationId}?raw=true`);
@@ -102,10 +104,7 @@ export class ReservationService extends ApiService {
   }
 
   cancelCheckin(reservationId: string) {
-    return this.post(
-      `/api/v1/reservation/${reservationId}/checkin/cancel`,
-      {}
-    );
+    return this.post(`/api/v1/reservation/${reservationId}/checkin/cancel`, {});
   }
 
   cancelCheckout(reservationId: string) {

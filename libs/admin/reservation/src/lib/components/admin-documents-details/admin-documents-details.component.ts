@@ -46,8 +46,6 @@ export class AdminDocumentsDetailsComponent implements OnInit {
   @Input('data') detailsData;
   @Output() addFGEvent = new EventEmitter();
 
-  $isAllDocsConfirmed = new Subject<boolean>();
-
   constructor(
     private _fb: FormBuilder,
     private _reservationService: ReservationService,
@@ -524,7 +522,7 @@ export class AdminDocumentsDetailsComponent implements OnInit {
     });
 
     if (isAllConfirmed) {
-      this.$isAllDocsConfirmed.next(true);
+      this._reservationService.$allDocsAreConfirmed.next(true);
     }
   }
 
@@ -552,7 +550,7 @@ export class AdminDocumentsDetailsComponent implements OnInit {
 
     this.documentStatus.get('status').patchValue('COMPLETED');
 
-    this.$isAllDocsConfirmed.next(true);
+    this._reservationService.$allDocsAreConfirmed.next(true);
   }
 
   onGuestChange(value: string) {

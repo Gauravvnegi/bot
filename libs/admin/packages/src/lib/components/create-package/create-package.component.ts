@@ -115,7 +115,7 @@ export class CreatePackageComponent implements OnInit {
       discountValue: ['0', [Validators.required, Validators.min(0)]],
       discountedCurrency: ['', Validators.required],
       discountedPrice: ['', Validators.required],
-      enableVisibility: [[], Validators.required],
+      enableVisibility: [[]],
       enableOnMicrosite: [false],
       priority: ['LOW'],
     });

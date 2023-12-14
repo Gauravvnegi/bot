@@ -89,6 +89,7 @@ export class CreatePackageComponent implements OnInit {
     this.initForm();
     this.initOptionsConfig();
     this.initNavRoutes();
+    this.listenForFormData();
   }
 
   /**
@@ -129,7 +130,7 @@ export class CreatePackageComponent implements OnInit {
     });
 
     /* Patch the form value if serv id present */
-    if (this.packageId) {
+    if (this.packageId && !this.packagesService?.packageFormData?.value) {
       this.$subscription.add(
         this.packagesService
           .getLibraryItemById<PackageResponse>(this.entityId, this.packageId, {
@@ -184,6 +185,18 @@ export class CreatePackageComponent implements OnInit {
 
     /* Value changes subscription */
     this.initFormSubscription();
+  }
+
+  /**
+   * to patch value from service which are saved during route change
+   */
+  listenForFormData() {
+    const formData = this.packagesService?.packageFormData?.value;
+    if (formData) {
+      this.useForm.patchValue(formData);
+      this.useForm.markAsDirty();
+      this.packagesService.packageFormData.next(null);
+    }
   }
 
   initNavRoutes() {
@@ -429,6 +442,9 @@ export class CreatePackageComponent implements OnInit {
             additionalPath: 'create-service',
           }
     );
+    //while redirecting to create service page save data to form service
+    path === 'service' &&
+      this.packagesService.packageFormData.next(this.useForm.getRawValue());
   }
 
   /**

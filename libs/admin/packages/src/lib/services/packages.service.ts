@@ -3,9 +3,12 @@ import { LibraryService } from '@hospitality-bot/admin/library';
 import { Observable } from 'rxjs/internal/Observable';
 import { PackageFormData } from '../types/package';
 import { PackageResponse } from '../types/response';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable()
 export class PackagesService extends LibraryService {
+  packageFormData = new BehaviorSubject<PackageFormData>(null);
+
   /*refactor*/
   updatePackage(
     entityId: string,

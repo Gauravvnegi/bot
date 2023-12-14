@@ -221,6 +221,34 @@ export class DetailsComponent implements OnInit, OnDestroy {
     );
   }
 
+  currentFeedbackId: string;
+
+  getCurrentBookingGuestDetails() {
+    if (this.guestReservations?.records?.length && this.bookingId) {
+      const guestDetail = this.guestReservations.records.find(
+        (item) => item.reservation.booking.bookingId === this.bookingId
+      );
+
+      this.currentFeedbackId =
+        guestDetail?.reservation?.visitDetail?.feedbackId;
+    }
+  }
+
+  downloadFeedback() {
+    this.$subscription.add(
+      this._reservationService
+        .getFeedbackPdf(this.currentFeedbackId)
+        .subscribe((response) => {
+          const link = document.createElement('a');
+          link.href = response.fileDownloadUri;
+          link.target = '_blank';
+          link.download = response.fileName;
+          link.click();
+          link.remove();
+        })
+    );
+  }
+
   loadGuestReservations(): void {
     this.$subscription.add(
       this._reservationService.getGuestReservations(this.guestId).subscribe(
@@ -229,6 +257,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
             response,
             this.colorMap
           );
+          this.getCurrentBookingGuestDetails();
           this.initBookingsFG();
           this.initGuestReservationDropdownList();
           this.isGuestReservationFetched = true;
@@ -950,6 +979,8 @@ export class DetailsComponent implements OnInit, OnDestroy {
           this.bookingNumber = this.guestReservationDropdownList[0]?.bookingNumber;
           this.bookingId = this.guestReservationDropdownList[0]?.bookingId;
         }
+
+        this.getCurrentBookingGuestDetails();
         this.getReservationDetails();
       } else {
         this.isReservationDetailFetched = true;
@@ -1009,8 +1040,11 @@ export class DetailsComponent implements OnInit, OnDestroy {
     );
   }
 
-  checkForGenerateFeedbackSubscribed() {
-    return this.subscriptionService.checkModuleSubscription(ModuleNames.HEDA);
+  checkForGenerateFeedbackSubscribed(isSubmitted: boolean) {
+    return this.subscriptionService.checkModuleSubscription(ModuleNames.HEDA) &&
+      isSubmitted
+      ? this.currentFeedbackId
+      : !this.currentFeedbackId;
   }
 
   get isFinanceSubscribed() {

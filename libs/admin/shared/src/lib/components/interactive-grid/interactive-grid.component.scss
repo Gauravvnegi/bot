@@ -78,6 +78,7 @@
   &__additional-content {
     font-size: x-small;
     color: $grayMedium;
+    white-space: nowrap;
     @include no-break-hidden-text;
   }
 

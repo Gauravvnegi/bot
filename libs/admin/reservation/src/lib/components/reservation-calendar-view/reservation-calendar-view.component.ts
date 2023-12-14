@@ -514,6 +514,7 @@ export class ReservationCalendarViewComponent implements OnInit {
                   rowValue: event.rowValue,
                   startPos: event.startPos,
                   endPos: event.endPos,
+                  options: this.getMenuOptions(res),
                 };
               }
               return item; // Keep other items unchanged
@@ -700,19 +701,17 @@ export class ReservationCalendarViewComponent implements OnInit {
   }
 
   manualCheckoutfn(reservationId: string, roomType: IGRoomType) {
-    this._reservationService.manualCheckout(reservationId).subscribe(
-      (res) => {
-        this.updateRoomType(
-          reservationId,
-          roomType,
-          ReservationCurrentStatus.CHECKEDOUT,
-          true
-        );
-        this.snackbarService.openSnackBarAsText('Checkout completed.', '', {
-          panelClass: 'success',
-        });
-      }
-    );
+    this._reservationService.manualCheckout(reservationId).subscribe((res) => {
+      this.updateRoomType(
+        reservationId,
+        roomType,
+        ReservationCurrentStatus.CHECKEDOUT,
+        true
+      );
+      this.snackbarService.openSnackBarAsText('Checkout completed.', '', {
+        panelClass: 'success',
+      });
+    });
   }
 
   updateRoomType(

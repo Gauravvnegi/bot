@@ -17,6 +17,7 @@ export class RequestPasswordComponent implements OnInit {
   requestPasswordForm: FormGroup;
   isEmailSent: boolean;
   isRequesting: boolean;
+  email: string;
 
   constructor(
     private _fb: FormBuilder,
@@ -24,6 +25,7 @@ export class RequestPasswordComponent implements OnInit {
     private _authService: AuthService,
     private _snackbarService: SnackBarService
   ) {
+    this.email = this._router?.getCurrentNavigation()?.extras?.state?.email;
     this.initRequestForm();
   }
 
@@ -35,7 +37,7 @@ export class RequestPasswordComponent implements OnInit {
   initRequestForm(): void {
     this.requestPasswordForm = this._fb.group({
       email: [
-        this._router.getCurrentNavigation().extras.state.email,
+        this.email,
         [Validators.required, Validators.pattern(Regex.EMAIL_REGEX)],
       ],
     });
@@ -58,7 +60,11 @@ export class RequestPasswordComponent implements OnInit {
         this._snackbarService.openSnackBarAsText(response?.message, '', {
           panelClass: 'success',
         });
-        this._router.navigate(['/auth/resend-password']);
+        this._router.navigate(['/auth/resend-password'], {
+          state: {
+            email: this.email,
+          },
+        });
         this.isRequesting = false;
       },
       (error) => {

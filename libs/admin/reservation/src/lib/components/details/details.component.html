@@ -445,6 +445,12 @@
                     (click)="generateFeedback()"
                     variant="outlined"
                   ></hospitality-bot-button>
+                  <hospitality-bot-button
+                    *ngIf="checkForGenerateFeedbackSubscribed(true)"
+                    label="View Feedback"
+                    (click)="downloadFeedback()"
+                    variant="outlined"
+                  ></hospitality-bot-button>
                   <!-- initiate force checkout -->
                   <hospitality-bot-button
                     label="Checkout"
@@ -466,6 +472,12 @@
                   *ngIf="checkForGenerateFeedbackSubscribed()"
                   label="Generate Feedback"
                   (click)="generateFeedback()"
+                  variant="outlined"
+                ></hospitality-bot-button>
+                <hospitality-bot-button
+                  *ngIf="checkForGenerateFeedbackSubscribed(true)"
+                  label="View Feedback"
+                  (click)="downloadFeedback()"
                   variant="outlined"
                 ></hospitality-bot-button>
                 <ng-container *ngSwitchCase="'PENDING'">

@@ -98,7 +98,7 @@ export class CheckinReservationsComponent implements OnInit {
 
   handelStatus(event, reservationData) {
     const status = event?.value;
-    debugger;
+
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;
     const togglePopupCompRef = this.modalService.openDialog(

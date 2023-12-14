@@ -293,7 +293,7 @@ export const reportsConfig: ReportsConfig = {
         value: 'lodgingTaxReport',
       },
       {
-        label: 'Report',
+        label: 'Tax Report',
         value: 'taxReport',
       },
     ],

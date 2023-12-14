@@ -160,24 +160,6 @@ export const marketSegmentReportCols: ColsData<Omit<
   },
 };
 
-export const marketSegmentReportRows = [
-  { name: 'FIT', label: 'FIT' },
-  { name: 'Corporate FIT', label: 'Corporate FIT' },
-  { name: 'MICE', label: 'MICE' },
-  { name: 'Budget', label: 'Budget' },
-  { name: 'Aiosell BE', label: 'Aiosell BE' },
-  { name: 'Sub Total', label: 'subTotal' },
-];
-
 export const businessAnalysisReportCols: ColsData<BusinessAnalysisReportData> = {
   ...marketSegmentReportCols,
 };
-
-export const businessAnalysisReportRows = [
-  { name: 'AGENT', label: 'AGENT' },
-  { name: 'OTA', label: 'OTA' },
-  { name: 'OTHERS', label: 'OTHERS' },
-  { name: 'WALK-IN', label: 'WALK_IN' },
-  { name: 'Aiosell BE', label: 'Aiosell BE' },
-  { name: 'Sub Total', label: 'subTotal' },
-];

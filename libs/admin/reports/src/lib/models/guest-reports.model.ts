@@ -75,7 +75,8 @@ export class GuestHistoryModel {
     if (input.firstStay) this.firstStayed = getFormattedDate(input.firstStay);
     if (input.lastStay) this.lastStayed = getFormattedDate(input.lastStay);
     this.noOfResv = input.reservation.length;
-    const reservationData = input.reservation[input.reservation.length - 1];
+
+    const reservationData = input.reservation[0];
 
     this.roomCharges = toCurrency(
       reservationData.reservationItemsPayment.totalRoomCharge

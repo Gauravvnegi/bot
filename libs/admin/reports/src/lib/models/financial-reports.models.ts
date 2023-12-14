@@ -165,7 +165,7 @@ export class DepositReport
             (item?.reservationItemsPayment?.totalCgstTax || 0) +
               (item?.reservationItemsPayment?.totalSgstTax || 0)
           ),
-          btc: getPaymentMethodAmount(item, 'Bill to Company'),
+          btc: getPaymentMethodAmount(item, 'Bill To Company'),
           cash: getPaymentMethodAmount(item, 'Cash Payment'),
           bankTransfer: toCurrency(
             currencyToNumber(getPaymentMethodAmount(item, 'Bank Transfer')) +

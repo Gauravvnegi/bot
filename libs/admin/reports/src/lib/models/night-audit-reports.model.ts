@@ -34,8 +34,8 @@ export class AuditRoomDetailsReport
     auditRoomDetailsReportRows.forEach((item) => {
       this.records.push({
         roomDetails: item.label,
-        noOfRooms: data[item?.noOfRooms],
-        noOfGuests: data[item?.noOfGuests],
+        noOfRooms: data[item?.noOfRooms] ?? 0,
+        noOfGuests: data[item?.noOfGuests] ?? 0,
       });
     });
     return this;
@@ -164,11 +164,7 @@ export class NightAuditRevenueReport
   records: NightAuditRevenueData[];
 
   deserialize(value: NightAuditRevenueResponse[]) {
-
     this.records = new Array<NightAuditRevenueData>();
-
-    
-
 
     return this;
   }

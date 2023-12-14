@@ -1,3 +1,4 @@
+import { toCurrency } from 'libs/admin/shared/src/lib/utils/valueFormatter';
 import { monthlyTaxReportRows } from '../constant/tax-reports.const';
 import { ReportClass } from '../types/reports.types';
 import {
@@ -62,11 +63,11 @@ export class LodgingTaxReportDataModel {
   checkInDate: string;
   checkOutDate: string;
   roomType: string;
-  rate: number;
-  discounts: number;
-  netRate: number;
-  occupancyTax: number;
-  otherTax: number;
+  rate: string;
+  discounts: string;
+  netRate: string;
+  occupancyTax: string;
+  otherTax: string;
 
   deserialize(input: LodgingTaxReportResponse) {
     this.res = input?.number;
@@ -81,14 +82,22 @@ export class LodgingTaxReportDataModel {
       ? getFormattedDate(input.stayDetails.departureTime)
       : '';
     this.roomType = input.stayDetails.room.type;
-    this.rate = input.reservationItemsPayment.totalRoomCharge + input.reservationItemsPayment.totalRoomDiscount ;
-    this.discounts = input.reservationItemsPayment.totalRoomDiscount;
+    this.rate = toCurrency(
+      input.reservationItemsPayment.totalRoomCharge +
+        input.reservationItemsPayment.totalRoomDiscount
+    );
 
-    this.netRate = input.reservationItemsPayment.totalRoomCharge;
-    this.occupancyTax =
-      input.reservationItemsPayment.totalCgstTax + input.reservationItemsPayment.totalSgstTax;
-  
-    this.otherTax = input.reservationItemsPayment.totalAddOnsAmount;
+    this.discounts = toCurrency(
+      input.reservationItemsPayment.totalRoomDiscount
+    );
+
+    this.netRate = toCurrency(input.reservationItemsPayment.totalRoomCharge);
+    this.occupancyTax = toCurrency(
+      input.reservationItemsPayment.totalCgstTax +
+        input.reservationItemsPayment.totalSgstTax
+    );
+
+    this.otherTax = toCurrency(input.reservationItemsPayment.totalAddOnsTax);
     return this;
   }
 }
@@ -113,11 +122,11 @@ export class TaxReportDataModel {
   res: string;
   checkInDate: string;
   checkOutDate: string;
-  roomCharge: number;
-  otherCharge: number;
-  cgst: number;
-  sgst: number;
-  postTaxTotal: number;
+  roomCharge: string;
+  otherCharge: string;
+  cgst: string;
+  sgst: string;
+  postTaxTotal: string;
 
   deserialize(value: TaxReportResponse) {
     this.res = value.number;
@@ -128,13 +137,21 @@ export class TaxReportDataModel {
     this.checkOutDate = value.stayDetails.departureTime
       ? getFormattedDate(value.stayDetails.departureTime)
       : '';
-    this.roomCharge = value.reservationItemsPayment?.totalRoomCharge;
-    this.otherCharge = value?.reservationItemsPayment?.totalAddOnsAmount;
-    this.cgst = value.reservationItemsPayment?.totalCgstTax;
-    this.sgst = value.reservationItemsPayment.totalSgstTax;
-    this.postTaxTotal =
+    this.roomCharge = toCurrency(
+      value.reservationItemsPayment?.totalRoomCharge
+    );
+    this.otherCharge = toCurrency(
+      value?.reservationItemsPayment?.totalAddOnsAmount
+    );
+    this.cgst = toCurrency(value.reservationItemsPayment?.totalCgstTax);
+    this.sgst = toCurrency(value.reservationItemsPayment.totalSgstTax);
+
+    this.postTaxTotal = toCurrency(
       value.reservationItemsPayment?.totalCgstTax +
-      value.reservationItemsPayment?.totalSgstTax;
+        value.reservationItemsPayment?.totalSgstTax +
+        value?.reservationItemsPayment?.totalRoomCharge +
+        value?.reservationItemsPayment?.totalAddOnsAmount
+    );
 
     return this;
   }

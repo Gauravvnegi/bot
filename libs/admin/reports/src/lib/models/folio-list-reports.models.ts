@@ -28,7 +28,7 @@ export class FolioListReport
             item?.reservationItemsPayment?.totalCgstTax +
               item?.reservationItemsPayment?.totalSgstTax
           ),
-          btc: getPaymentMethodAmount(item, 'Bill to Company'),
+          btc: getPaymentMethodAmount(item, 'Bill To Company'),
           cash: getPaymentMethodAmount(item, 'Cash Payment'),
           bankTransfer: toCurrency(
             currencyToNumber(getPaymentMethodAmount(item, 'Bank Transfer')) +
@@ -44,7 +44,7 @@ export class FolioListReport
             item?.paymentModesAndTotalAmount.reduce((acc, curr) => {
               if (
                 ![
-                  'Bill to Company',
+                  'Bill To Company',
                   'Cash Payment',
                   'Bank Transfer',
                   'Pay at Desk',

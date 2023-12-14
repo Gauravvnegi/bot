@@ -25,18 +25,16 @@ export class RateVariationReport
           guestName: `${data?.guestDetails?.primaryGuest?.firstName ?? ''} ${
             data?.guestDetails?.primaryGuest?.lastName ?? ''
           }`,
-          discountedRate: toCurrency(
-            data?.paymentSummary?.totalAmount -
-              data?.reservationItemsPayment?.totalRoomDiscount
-          ),
+          discountedRate: toCurrency(data?.paymentSummary?.totalAmount),
 
           rateVariance: toCurrency(
             data?.reservationItemsPayment?.totalRoomDiscount
           ),
 
           actualRate: toCurrency(
-            data?.paymentSummary?.totalAmount)
-          
+            data?.paymentSummary?.totalAmount +
+              data?.reservationItemsPayment?.totalRoomDiscount
+          ),
         };
       });
     return this;

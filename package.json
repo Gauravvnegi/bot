@@ -114,6 +114,7 @@
     "jest-preset-angular": "8.1.2",
     "jsonc-parser": "^3.0.0",
     "open": "^7.0.3",
+    "postcss": "^8.4.32",
     "prettier": "2.0.4",
     "ts-jest": "25.2.1",
     "ts-node": "~7.0.0",

@@ -1,8 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Option } from '../../types/form.type';
-import { ConfigService, CountryCodeList } from '@hospitality-bot/admin/shared';
+// import { ConfigService, CountryCodeList } from '@hospitality-bot/admin/shared';
 import { FormComponent } from '../../components/form-component/form.components';
 import { ControlContainer } from '@angular/forms';
+import { ConfigService } from '../../services/config.service';
+import { CountryCodeList } from '../../models/country-code.model';
 
 @Component({
   selector: 'hospitality-bot-phone-number',

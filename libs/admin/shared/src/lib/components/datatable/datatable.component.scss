@@ -848,7 +848,7 @@ $table-hover-color: #f3f3f3;
 /* Container Element, dropdown to select page number and show current details and styling text for disable/enabled prev/next button styling */
 
 :host ::ng-deep .p-paginator {
-  justify-content: start;
+  justify-content: flex-start;
   align-items: baseline;
 
   .p-inputwrapper-filled {

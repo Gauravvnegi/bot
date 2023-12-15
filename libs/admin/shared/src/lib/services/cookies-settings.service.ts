@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
-import { SnackBarService } from '@hospitality-bot/shared/material';
+// import { SnackBarService } from '@hospitality-bot/shared/material';
 import { AuthService } from 'apps/admin/src/app/core/auth/services/auth.service';
 import { TokenUpdateService } from 'apps/admin/src/app/core/theme/src/lib/services/token-update.service';
 import {
@@ -14,6 +13,8 @@ import { tokensConfig } from '../constants/common';
 import { CookiesData } from '../types/user.type';
 import { HotelDetailService } from './hotel-detail.service';
 import { UserService } from './user-detail.service';
+import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.service';
+import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 
 @Injectable({ providedIn: 'root' })
 export class CookiesSettingsService {
@@ -26,7 +27,6 @@ export class CookiesSettingsService {
     private cookieService: CookieService,
     private tokenUpdateService: TokenUpdateService,
     private snackbarService: SnackBarService,
-    private router: Router,
     private hotelDetailsService: HotelDetailService,
     private globalFilterService: GlobalFilterService
   ) {}

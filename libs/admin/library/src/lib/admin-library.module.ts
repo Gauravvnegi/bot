@@ -5,6 +5,9 @@ import { AdminLibraryRoutingModule } from './admin-library.routing.module';
 import { CategoryComponent } from './components/category/category.component';
 import { LibraryService } from './services/library.service';
 
+/**
+ * Need to refactor this module
+ */
 @NgModule({
   imports: [CommonModule, AdminLibraryRoutingModule, AdminSharedModule],
   declarations: [...AdminLibraryRoutingModule.components, CategoryComponent],

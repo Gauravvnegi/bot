@@ -24,7 +24,7 @@ import { CompanyModel } from '../../models/company.model';
 import { CompanyResponseType } from '../../types/response';
 import { companyDiscount, discountTypes } from '../../constants/company';
 import { Location } from '@angular/common';
-import { FormService } from 'libs/admin/members/src/lib/services/form.service';
+import { FormService } from 'libs/admin/shared/src/lib/services/form.service';
 @Component({
   selector: 'hospitality-bot-add-company',
   templateUrl: './add-company.component.html',

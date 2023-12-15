@@ -26,7 +26,7 @@ import { Subscription } from 'rxjs';
 import { Location } from '@angular/common';
 import { GuestTableService } from '../../services/guest-table.service';
 import { GuestFactory } from '../../data-models/guest.model';
-import { FormService } from 'libs/admin/members/src/lib/services/form.service';
+import { FormService } from 'libs/admin/shared/src/lib/services/form.service';
 import { GuestFormType } from 'libs/admin/agent/src/lib/types/form.types';
 import { AddCompanyComponent } from 'libs/admin/company/src/lib/components/add-company/add-company.component';
 import { GuestType } from '../../types/guest.type';

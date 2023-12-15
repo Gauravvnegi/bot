@@ -28,7 +28,7 @@ import {
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { AddCompanyComponent } from 'libs/admin/company/src/lib/components/add-company/add-company.component';
 import { companyRoutes } from 'libs/admin/company/src/lib/constants/route';
-import { FormService } from 'libs/admin/members/src/lib/services/form.service';
+import { FormService } from 'libs/admin/shared/src/lib/services/form.service';
 import CustomValidators from 'libs/admin/shared/src/lib/utils/validators';
 import { Subscription } from 'rxjs';
 import { agentRoutes } from '../../constant/routes';

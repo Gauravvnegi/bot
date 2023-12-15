@@ -15,6 +15,9 @@ import { AdminGuestDashboardRoutingModule } from './admin-guest-dashboard.routin
 import { GuestTableService } from './services/guest-table.service';
 import { StatisticsService } from './services/statistics.service';
 
+/**
+ * Not getting used was moved to reservation dashboard
+ */
 @NgModule({
   imports: [
     CommonModule,

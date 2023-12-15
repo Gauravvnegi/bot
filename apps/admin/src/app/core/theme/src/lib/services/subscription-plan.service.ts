@@ -7,10 +7,6 @@ import {
   Subscriptions,
   UserSubscriptionPermission,
 } from '../data-models/subscription-plan-config.model';
-import {
-  productMenuSubs,
-  reportsConfigMenu,
-} from '../data-models/product-subs';
 import { map } from 'rxjs/operators';
 import {
   PermissionModuleNames,
@@ -19,7 +15,6 @@ import {
   ModuleNames,
 } from 'libs/admin/shared/src/index';
 import { RouteConfigPathService } from './routes-config.service';
-import { type } from 'os';
 
 @Injectable({ providedIn: 'root' })
 export class SubscriptionPlanService extends ApiService {

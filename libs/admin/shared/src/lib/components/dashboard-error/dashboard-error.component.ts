@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { routes } from '@hospitality-bot/admin/shared';
+import { routes } from '../../constants';
 
 @Component({
   selector: 'hospitality-bot-dashboard-error',

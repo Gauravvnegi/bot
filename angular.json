@@ -40,7 +40,20 @@
             "scripts": ["node_modules/jquery/dist/jquery.min.js"],
             "stylePreprocessorOptions": {
               "includePaths": ["apps/admin/src/assets/sass"]
-            }
+            },
+            "allowedCommonJsDependencies": [
+              "lodash",
+              "file-saver",
+              "howler",
+              "daterangepicker",
+              "jquery",
+              "chart.js",
+              "qrcode",
+              "canvg",
+              "core-js",
+              "@babel/runtime",
+              "raf"
+            ]
           },
           "configurations": {
             "production": {

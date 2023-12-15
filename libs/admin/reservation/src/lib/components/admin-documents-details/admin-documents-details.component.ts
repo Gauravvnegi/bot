@@ -10,16 +10,15 @@ import {
   ModalService,
   SnackBarService,
 } from '@hospitality-bot/shared/material';
-import { saveAs } from 'file-saver';
 
-import { ImageHandlingComponent } from 'libs/admin/shared/src/lib/components/image-handling/image-handling.component';
-import { ReservationService } from '../../services/reservation.service';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import { DownloadService } from '@hospitality-bot/admin/shared';
+import { ImageHandlingComponent } from 'libs/admin/shared/src/lib/components/image-handling/image-handling.component';
 import {
   DocumentDetailsConfig,
   GuestDetailsConfig,
 } from 'libs/admin/shared/src/lib/models/detailsConfig.model';
-import { DownloadService } from '@hospitality-bot/admin/shared';
+import { ReservationService } from '../../services/reservation.service';
 
 @Component({
   selector: 'hospitality-bot-admin-documents-details',

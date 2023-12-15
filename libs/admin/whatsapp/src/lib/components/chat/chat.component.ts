@@ -101,13 +101,6 @@ export class ChatComponent
     }
   }
 
-  get productName() {
-    return {
-      whatsappBot: ModuleNames.WHATSAPP_BOT,
-      request: ModuleNames.COMPLAINTS,
-    };
-  }
-
   loadChat() {
     if (
       !this.chatList.messages[this.selectedChat.receiverId] ||

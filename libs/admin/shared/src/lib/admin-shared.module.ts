@@ -55,7 +55,6 @@ import { UploadFileComponent } from './components/upload-file/upload-file.compon
 import { UploadVideoComponent } from './components/upload-video/upload-video.component';
 import { ClickableDirective } from './directives/clickable.directive';
 import { ImageDirective } from './directives/image.directive';
-import { InternalSubscriptionDirective } from './directives/internal-subscription.directive';
 import { NumberDirective } from './directives/number.directive';
 import { StatusCellDirective } from './directives/status-cell.directive';
 import { ClickStopPropagation } from './directives/stoppropagation.directive';
@@ -180,7 +179,6 @@ import { CheckboxComponent } from './components/form-component/checkbox/checkbox
     NumberDirective,
     StatusCellDirective,
     MultipleDropdownComponent,
-    InternalSubscriptionDirective,
     ClickableDirective,
     ImageDirective,
     InfiniteScroll,
@@ -300,7 +298,6 @@ import { CheckboxComponent } from './components/form-component/checkbox/checkbox
     StatusCellDirective,
     MultipleDropdownComponent,
     UploadCsvComponent,
-    InternalSubscriptionDirective,
     ClickableDirective,
     ImageDirective,
     InfiniteScroll,

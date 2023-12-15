@@ -222,14 +222,18 @@ export class Service {
   amount: number;
   currency: string;
   taxes: Tax[];
+  extras?: string;
+  itemAmount?: number;
 
   deserialize(input) {
     this.value = input.id;
     this.label = input.name;
-
+    this.extras = `Code - ${input?.packageCode}`;
     this.amount = input.discountedPrice ? input.discountedPrice : input.rate;
     this.taxes = input.taxes?.map((item) => new Tax().deserialize(item)) || [];
-
+    this.itemAmount = input.discountedPrice
+      ? input.discountedPrice
+      : input.rate;
     return this;
   }
 }

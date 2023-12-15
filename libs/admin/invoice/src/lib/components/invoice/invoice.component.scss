@@ -29,9 +29,17 @@
 }
 
 :host ::ng-deep .bill-description {
-  .option-items {
-    gap: 0px;
-    overflow: hidden;
+  .p-dropdown-item {
+    display: flex;
+    justify-content: space-between;
+    .option-items {
+      gap: 0px;
+      overflow: hidden;
+      flex-direction: column;
+    }
+    .option-amount {
+      @include flex-item-center;
+    }
   }
 }
 

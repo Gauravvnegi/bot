@@ -67,6 +67,9 @@
           <span>{{ option.email }}</span>
         </span>
       </div>
+      <span *ngIf="option?.itemAmount" class="option-amount">
+        {{ option.itemAmount | currency: 'INR' }}
+      </span>
     </ng-template>
 
     <ng-template let-option pTemplate="selectedItem">

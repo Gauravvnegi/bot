@@ -1,9 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {
-  BaseDatatableComponent,
-  Option,
-  TableService,
-} from '@hospitality-bot/admin/shared';
+import { BaseDatatableComponent, Option } from '@hospitality-bot/admin/shared';
 import { cols } from '../../constants/data-table';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DeleteAction } from '../../constants/form';
@@ -24,11 +20,8 @@ export class FoodItemsComponent extends BaseDatatableComponent
   foodItemsArray: FormArray;
   menuItems: Option[] = [{ label: 'Delete', value: 'DELETE_ITEM' }];
 
-  constructor(
-    public fb: FormBuilder,
-    protected tabFilterService: TableService
-  ) {
-    super(fb, tabFilterService);
+  constructor(public fb: FormBuilder) {
+    super(fb);
   }
 
   ngOnInit(): void {

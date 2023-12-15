@@ -5,8 +5,6 @@ import {
   BaseDatatableComponent,
   ModuleNames,
   NavRouteOption,
-  NavRouteOptions,
-  TableService,
 } from '@hospitality-bot/admin/shared';
 import { Subscription } from 'rxjs';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
@@ -57,7 +55,6 @@ export class AgentDataTableComponent extends BaseDatatableComponent
 
   constructor(
     public fb: FormBuilder,
-    protected tabFilterService: TableService,
     private globalFilterService: GlobalFilterService,
     private agentService: AgentService,
     private adminUtilityService: AdminUtilityService,
@@ -66,7 +63,7 @@ export class AgentDataTableComponent extends BaseDatatableComponent
     private route: ActivatedRoute,
     private routesConfigService: RoutesConfigService
   ) {
-    super(fb, tabFilterService);
+    super(fb);
   }
 
   /**

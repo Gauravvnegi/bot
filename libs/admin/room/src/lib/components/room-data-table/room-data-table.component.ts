@@ -9,7 +9,6 @@ import {
 import {
   AdminUtilityService,
   BaseDatatableComponent,
-  TableService,
 } from '@hospitality-bot/admin/shared';
 import {
   ModalService,
@@ -51,7 +50,6 @@ export class RoomDataTableComponent extends BaseDatatableComponent
   tabFilterIdx: number = 0;
   constructor(
     public fb: FormBuilder,
-    protected tabFilterService: TableService,
     private roomService: RoomService,
     private adminUtilityService: AdminUtilityService,
     private globalFilterService: GlobalFilterService,
@@ -62,7 +60,7 @@ export class RoomDataTableComponent extends BaseDatatableComponent
     private route: ActivatedRoute,
     private routesConfigService: RoutesConfigService
   ) {
-    super(fb, tabFilterService);
+    super(fb);
   }
 
   ngOnInit(): void {

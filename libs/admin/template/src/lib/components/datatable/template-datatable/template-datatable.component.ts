@@ -5,7 +5,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import {
   BaseDatatableComponent,
   NavRouteOption,
-  TableService,
   sharedConfig,
 } from '@hospitality-bot/admin/shared';
 import {
@@ -59,7 +58,6 @@ export class TemplateDatatableComponent extends BaseDatatableComponent
     private adminUtilityService: AdminUtilityService,
     private globalFilterService: GlobalFilterService,
     protected snackbarService: SnackBarService,
-    protected tabFilterService: TableService,
     protected _modal: ModalService,
     private _router: Router,
     private route: ActivatedRoute,
@@ -68,7 +66,7 @@ export class TemplateDatatableComponent extends BaseDatatableComponent
     protected _translateService: TranslateService,
     private routesConfigServices: RoutesConfigService
   ) {
-    super(fb, tabFilterService);
+    super(fb);
   }
 
   ngOnInit(): void {

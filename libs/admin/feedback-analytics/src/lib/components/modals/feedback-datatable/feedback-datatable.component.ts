@@ -17,7 +17,6 @@ import {
   FeedbackService,
   HotelDetailService,
   sharedConfig,
-  TableService,
   UserService,
 } from '@hospitality-bot/admin/shared';
 import {
@@ -62,7 +61,6 @@ export class FeedbackDatatableModalComponent extends FeedbackDatatableComponent
     snackbarService: SnackBarService,
     _modal: ModalService,
     public feedbackService: FeedbackService,
-    tabFilterService: TableService,
     tableService: FeedbackTableService,
     statisticService: StatisticsService,
     _hotelDetailService: HotelDetailService,
@@ -78,7 +76,6 @@ export class FeedbackDatatableModalComponent extends FeedbackDatatableComponent
       snackbarService,
       _modal,
       feedbackService,
-      tabFilterService,
       tableService,
       statisticService,
       _hotelDetailService,

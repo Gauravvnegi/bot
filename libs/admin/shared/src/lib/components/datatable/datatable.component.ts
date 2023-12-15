@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
-import { TableService } from '../../services/table.service';
 import { Chip, Cols } from '../../types/table.type';
 import { BaseDatatableComponent } from './base-datatable.component';
 import {
@@ -65,9 +64,8 @@ export class DatatableComponent extends BaseDatatableComponent
 
   constructor(
     public fb: FormBuilder,
-    protected tabFilterService: TableService
   ) {
-    super(fb, tabFilterService);
+    super(fb);
   }
 
   addEntry() {}

@@ -1,11 +1,9 @@
 import { Component, Input } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ModuleNames, TableNames } from '@hospitality-bot/admin/shared';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 import { BaseDatatableComponent } from 'libs/admin/shared/src/lib/components/datatable/base-datatable.component';
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
-import { TableService } from 'libs/admin/shared/src/lib/services/table.service';
 import { SnackBarService } from 'libs/shared/material/src';
 import { Observable } from 'rxjs';
 import { RequestTable } from '../../models/request-table.model';
@@ -45,19 +43,13 @@ export class RequestsTableComponent extends BaseDatatableComponent {
     private snackbarService: SnackBarService,
     private globalFilterService: GlobalFilterService,
     private _router: Router,
-    private _route: ActivatedRoute,
-    protected tabFilterService: TableService
+    private _route: ActivatedRoute
   ) {
-    super(fb, tabFilterService);
+    super(fb);
   }
 
   ngOnInit() {
     this.loadInitialData();
-    this.getSubscribedFilters(
-      ModuleNames.COMPLAINTS,
-      TableNames.REQUEST,
-      this.tabFilterItems
-    );
   }
 
   loadInitialData(queries = []) {

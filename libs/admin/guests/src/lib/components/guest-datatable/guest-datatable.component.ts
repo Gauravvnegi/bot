@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import {
   GlobalFilterService,
@@ -9,7 +9,6 @@ import {
   BaseDatatableComponent,
   NavRouteOption,
   QueryConfig,
-  TableService,
 } from '@hospitality-bot/admin/shared';
 import * as FileSaver from 'file-saver';
 import { Subscription } from 'rxjs';
@@ -18,7 +17,6 @@ import { GuestTableService } from '../../services/guest-table.service';
 import { manageGuestRoutes } from '../../constant/routes';
 import { guestCols } from '../../constant/guest';
 import { LazyLoadEvent } from 'primeng/api';
-import { Router } from '@angular/router';
 import {
   MemberSortTypes,
   SortingOrder,
@@ -58,11 +56,9 @@ export class GuestDatatableComponent extends BaseDatatableComponent
     protected adminUtilityService: AdminUtilityService,
     protected guestTableService: GuestTableService,
     protected globalFilterService: GlobalFilterService,
-    protected tabFilterService: TableService,
-    private router: Router,
     private routesConfigService: RoutesConfigService
   ) {
-    super(fb, tabFilterService);
+    super(fb);
   }
 
   ngOnInit(): void {

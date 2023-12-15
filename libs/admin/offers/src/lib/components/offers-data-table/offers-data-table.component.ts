@@ -6,7 +6,6 @@ import {
   AdminUtilityService,
   BaseDatatableComponent,
   NavRouteOption,
-  TableService,
 } from '@hospitality-bot/admin/shared';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 import * as FileSaver from 'file-saver';
@@ -33,7 +32,6 @@ export class OffersDataTableComponent extends BaseDatatableComponent
   implements OnInit, OnDestroy {
   constructor(
     public fb: FormBuilder,
-    protected tabFilterService: TableService,
     private globalFilterService: GlobalFilterService,
     private snackbarService: SnackBarService,
     private offerService: OffersServices,
@@ -41,7 +39,7 @@ export class OffersDataTableComponent extends BaseDatatableComponent
     private router: Router,
     private routesConfigService: RoutesConfigService
   ) {
-    super(fb, tabFilterService);
+    super(fb);
   }
 
   entityId: string;

@@ -7,7 +7,6 @@ import {
   AdminUtilityService,
   BaseDatatableComponent,
   NavRouteOption,
-  TableService,
 } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { DetailsComponent as BookingDetailComponent } from 'libs/admin/reservation/src/lib/components/details/details.component';
@@ -45,7 +44,6 @@ export class InvoiceHistoryDataTableComponent extends BaseDatatableComponent
 
   constructor(
     public fb: FormBuilder,
-    protected tabFilterService: TableService,
     private adminUtilityService: AdminUtilityService,
     private globalFilterService: GlobalFilterService,
     protected snackbarService: SnackBarService, // private router: Router, // private modalService: ModalService
@@ -53,7 +51,7 @@ export class InvoiceHistoryDataTableComponent extends BaseDatatableComponent
     private invoiceService: InvoiceService,
     private modalService: ModalService
   ) {
-    super(fb, tabFilterService);
+    super(fb);
   }
 
   ngOnInit(): void {

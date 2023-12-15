@@ -5,7 +5,6 @@ import {
   AdminUtilityService,
   BaseDatatableComponent,
   QueryConfig,
-  TableService,
 } from '@hospitality-bot/admin/shared';
 import { Subscription } from 'rxjs';
 import { OutletService } from '../../services/outlet.service';
@@ -38,14 +37,13 @@ export class MenuDataTableComponent extends BaseDatatableComponent
   constructor(
     public fb: FormBuilder,
     protected globalFilterService: GlobalFilterService,
-    protected tabFilterService: TableService,
     protected outletService: OutletService,
     protected adminUtilityService: AdminUtilityService,
     protected snackbarService: SnackBarService,
     private router: Router,
     private route: ActivatedRoute
   ) {
-    super(fb, tabFilterService);
+    super(fb);
   }
 
   ngOnInit(): void {

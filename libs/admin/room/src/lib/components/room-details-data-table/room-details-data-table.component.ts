@@ -10,7 +10,6 @@ import {
   BaseDatatableComponent,
   FlagType,
   ModuleNames,
-  TableService,
 } from '@hospitality-bot/admin/shared';
 import { LazyLoadEvent } from 'primeng/api';
 import { roomDetailsCols, TableValue } from '../../constant/data-table';
@@ -39,7 +38,6 @@ export class RoomDetailsDataTableComponent extends BaseDatatableComponent
 
   constructor(
     public fb: FormBuilder,
-    protected tabFilterService: TableService,
     private roomService: RoomService,
     private globalFilterService: GlobalFilterService,
     private adminUtilityService: AdminUtilityService,
@@ -47,7 +45,7 @@ export class RoomDetailsDataTableComponent extends BaseDatatableComponent
     private route: ActivatedRoute,
     private routesConfigService: RoutesConfigService
   ) {
-    super(fb, tabFilterService);
+    super(fb);
   }
 
   ngOnInit(): void {

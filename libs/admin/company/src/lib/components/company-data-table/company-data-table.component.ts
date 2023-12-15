@@ -8,7 +8,6 @@ import {
   BaseDatatableComponent,
   NavRouteOption,
   QueryConfig,
-  TableService,
 } from '@hospitality-bot/admin/shared';
 import * as FileSaver from 'file-saver';
 import { CompanyService } from '../../services/company.service';
@@ -56,7 +55,6 @@ export class CompanyDataTableComponent extends BaseDatatableComponent
 
   constructor(
     public fb: FormBuilder,
-    protected tabFilterService: TableService,
     private adminUtilityService: AdminUtilityService,
     protected snackbarService: SnackBarService,
     private router: Router,
@@ -64,7 +62,7 @@ export class CompanyDataTableComponent extends BaseDatatableComponent
     private globalFilterService: GlobalFilterService,
     private routesConfigService: RoutesConfigService
   ) {
-    super(fb, tabFilterService);
+    super(fb);
   }
   /**
    * @function loadData Fetch data as paginates

@@ -17,8 +17,6 @@ import {
   FeedbackService,
   ModuleNames,
   sharedConfig,
-  TableNames,
-  TableService,
 } from '@hospitality-bot/admin/shared';
 import {
   ModalService,
@@ -71,21 +69,15 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
     protected snackbarService: SnackBarService,
     protected _modal: ModalService,
     public feedbackService: FeedbackService,
-    protected tabFilterService: TableService,
     protected subscriptionPlanService: SubscriptionPlanService,
     protected routesConfigService: RoutesConfigService,
     protected router: Router
   ) {
-    super(fb, tabFilterService);
+    super(fb);
   }
 
   ngOnInit(): void {
     this.registerListeners();
-    this.getSubscribedFilters(
-      ModuleNames.FRONT_DESK_DASHBOARD,
-      TableNames.RESERVATION,
-      this.tabFilterItems
-    );
     this.entityId = this.globalFilterService.entityId;
   }
 

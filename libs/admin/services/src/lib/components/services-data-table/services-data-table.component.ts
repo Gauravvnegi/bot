@@ -12,7 +12,6 @@ import {
   BaseDatatableComponent,
   HotelDetailService,
   NavRouteOptions,
-  TableService,
 } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import * as FileSaver from 'file-saver';
@@ -69,7 +68,6 @@ export class ServicesDataTableComponent extends BaseDatatableComponent {
 
   constructor(
     public fb: FormBuilder,
-    protected tabFilterService: TableService,
     private servicesService: ServicesService,
     private adminUtilityService: AdminUtilityService,
     private globalFilterService: GlobalFilterService,
@@ -79,7 +77,7 @@ export class ServicesDataTableComponent extends BaseDatatableComponent {
     private route: ActivatedRoute,
     private routesConfigService: RoutesConfigService
   ) {
-    super(fb, tabFilterService);
+    super(fb);
   }
 
   ngOnInit(): void {

@@ -6,7 +6,6 @@ import {
 } from '@hospitality-bot/admin/shared';
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { TableService } from 'libs/admin/shared/src/lib/services/table.service';
 import {
   GlobalFilterService,
   RoutesConfigService,
@@ -52,10 +51,9 @@ export class TaxDataTableComponent extends BaseDatatableComponent
     private taxService: TaxService,
     private router: Router,
     private route: ActivatedRoute,
-    protected tabFilterService: TableService,
     private routesConfigService: RoutesConfigService
   ) {
-    super(fb, tabFilterService);
+    super(fb);
     const { navRoutes } = taxRoutes['tax'];
   }
 

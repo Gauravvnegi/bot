@@ -10,7 +10,6 @@ import {
   ModuleNames,
   Option,
   QueryConfig,
-  TableService,
 } from '@hospitality-bot/admin/shared';
 import { ChannelManagerFormService } from 'libs/admin/channel-manager/src/lib/services/channel-manager-form.service';
 import {
@@ -63,14 +62,13 @@ export class HousekeepingComponent extends BaseDatatableComponent
   constructor(
     private fb: FormBuilder,
     private adminUtilityService: AdminUtilityService,
-    protected tabFilterService: TableService,
     private globalFilterService: GlobalFilterService,
     private housekeepingService: HousekeepingService,
     private channelMangerForm: ChannelManagerFormService,
     private routesConfigServices: RoutesConfigService,
     private auditService: NightAuditService
   ) {
-    super(fb, tabFilterService);
+    super(fb);
     this.initForm();
   }
 

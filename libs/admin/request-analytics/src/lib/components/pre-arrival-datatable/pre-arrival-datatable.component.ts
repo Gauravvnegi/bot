@@ -10,7 +10,6 @@ import { FormBuilder } from '@angular/forms';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 import { BaseDatatableComponent } from 'libs/admin/shared/src/lib/components/datatable/base-datatable.component';
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
-import { TableService } from 'libs/admin/shared/src/lib/services/table.service';
 import { ModalService, SnackBarService } from 'libs/shared/material/src';
 import { DateService } from '@hospitality-bot/shared/utils';
 import { LazyLoadEvent, SortEvent } from 'primeng/api';
@@ -54,12 +53,11 @@ export class PreArrivalDatatableComponent extends BaseDatatableComponent
     private globalFilterService: GlobalFilterService,
     private snackbarService: SnackBarService,
     private analyticsService: AnalyticsService,
-    protected tabFilterService: TableService,
     private _requestService: RequestService,
     private _modal: ModalService,
     private _reservationService: ReservationService
   ) {
-    super(fb, tabFilterService);
+    super(fb);
   }
 
   cols = analytics.preArrivalCols;

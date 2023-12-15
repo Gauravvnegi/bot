@@ -11,7 +11,6 @@ import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
   AdminUtilityService,
   FeedbackService,
-  TableService,
 } from '@hospitality-bot/admin/shared';
 import {
   ModalService,
@@ -50,7 +49,6 @@ export class GuestDatatableModalComponent extends GuestDatatableComponent
     protected globalFilterService: GlobalFilterService,
     protected snackbarService: SnackBarService,
     protected _modal: ModalService,
-    protected tabFilterService: TableService,
     public feedbackService: FeedbackService,
     private router: Router
   ) {
@@ -61,7 +59,6 @@ export class GuestDatatableModalComponent extends GuestDatatableComponent
       globalFilterService,
       snackbarService,
       _modal,
-      tabFilterService,
       feedbackService
     );
   }

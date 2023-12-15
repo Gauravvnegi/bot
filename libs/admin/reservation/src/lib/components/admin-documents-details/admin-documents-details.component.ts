@@ -11,10 +11,7 @@ import {
   SnackBarService,
 } from '@hospitality-bot/shared/material';
 import { saveAs } from 'file-saver';
-/**
- * @todo - Remove zip- download single
- */
-import * as JSZip from 'jszip';
+
 import { ImageHandlingComponent } from 'libs/admin/shared/src/lib/components/image-handling/image-handling.component';
 import { ReservationService } from '../../services/reservation.service';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
@@ -22,7 +19,7 @@ import {
   DocumentDetailsConfig,
   GuestDetailsConfig,
 } from 'libs/admin/shared/src/lib/models/detailsConfig.model';
-import { Subject } from 'rxjs';
+import { DownloadService } from '@hospitality-bot/admin/shared';
 
 @Component({
   selector: 'hospitality-bot-admin-documents-details',
@@ -53,7 +50,8 @@ export class AdminDocumentsDetailsComponent implements OnInit {
     private _reservationService: ReservationService,
     private snackbarService: SnackBarService,
     private modalService: ModalService,
-    private globalFilterService: GlobalFilterService
+    private globalFilterService: GlobalFilterService,
+    private downloadService: DownloadService
   ) {
     this.entityId = this.globalFilterService.entityId;
   }
@@ -651,8 +649,8 @@ export class AdminDocumentsDetailsComponent implements OnInit {
   };
 
   downloadDocs(documents) {
-    const urls = [];
-    const fileNames = [];
+    const images = new Array<{ url: string; fileName: string }>();
+
     const guest = this.detailsData.guestDetails.guests.find(
       (data) => data.id === this.selectedGuestId
     );
@@ -661,53 +659,28 @@ export class AdminDocumentsDetailsComponent implements OnInit {
     const bookingNumber = this.detailsData.reservationDetails.bookingNumber;
 
     documents.forEach((doc) => {
-      urls.push(doc.frontUrl.trim());
-      fileNames.push(`${doc.documentType}_${bookingNumber}_${name}_frontURL`);
-      if (doc.documentType !== 'VISA' && doc.backUrl) {
-        urls.push(doc.backUrl.trim());
-        fileNames.push(`${doc.documentType}_${bookingNumber}_${name}_backURL`);
+      const frontUrl = doc.frontUrl?.trim();
+      const backUrl = doc.backUrl?.trim();
+
+      if (frontUrl) {
+        images.push({
+          url: frontUrl,
+          fileName: `${doc.documentType}_${bookingNumber}_${name}_frontURL`,
+        });
+      }
+
+      if (doc.documentType !== 'VISA' && backUrl) {
+        images.push({
+          url: doc.backUrl.trim(),
+          fileName: `${doc.documentType}_${bookingNumber}_${name}_backURL`,
+        });
       }
     });
 
-    const zipFile = new JSZip();
-    let count = 0;
-
-    // Function to fetch and add files to the zip
-    const fetchAndAddFile = async (url, fileName) => {
-      try {
-        const response = await fetch(url, {});
-        if (!response.ok) {
-          throw new Error(
-            `Failed to fetch ${url}: ${response.status} ${response.statusText}`
-          );
-        }
-
-        const data = await response.arrayBuffer();
-        zipFile.file(fileName, data);
-        count++;
-
-        if (count === urls.length) {
-          const content = await zipFile.generateAsync({ type: 'blob' });
-          saveAs(content, `${guest.firstName}_${guest.lastName}.zip`);
-        }
-      } catch (err) {
-        this.snackbarService.openSnackBarAsText(err);
-        console.error(err);
-      }
-    };
-
-    if (urls.length === 0) {
-      // No files to download, create an empty zip file.
-      const content = zipFile.generateAsync({ type: 'blob' });
-      saveAs(content, `${guest.firstName}_${guest.lastName}.zip`);
+    if (images.length) {
+      this.downloadService.downloadFiles(images, 'image');
     } else {
-      // Fetch and add files
-      urls.forEach((url, i) => {
-        let fileName = urls[i].split('/').pop();
-        fileName = decodeURIComponent(fileName);
-        fileName = fileName.toLocaleLowerCase();
-        fetchAndAddFile(url, fileName);
-      });
+      this.snackbarService.openSnackBarAsText('No files to download');
     }
   }
 

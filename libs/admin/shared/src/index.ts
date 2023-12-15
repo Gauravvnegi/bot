@@ -5,6 +5,7 @@ export * from './lib/services/admin-utility.service';
 export * from './lib/services/feedback.service';
 export * from './lib/services/hotel-detail.service';
 export * from './lib/services/table.service';
+export * from './lib/services/download-file.service';
 export * from './lib/constants/subscriptionConfig';
 export * from './lib/components/datatable/base-datatable.component';
 export * from './lib/constants';

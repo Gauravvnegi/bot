@@ -55,12 +55,9 @@ import { UploadFileComponent } from './components/upload-file/upload-file.compon
 import { UploadVideoComponent } from './components/upload-video/upload-video.component';
 import { ClickableDirective } from './directives/clickable.directive';
 import { ImageDirective } from './directives/image.directive';
-import { FeatureDirective } from './directives/feature.directive';
-import { InternalSubscriptionDirective } from './directives/internal-subscription.directive';
 import { NumberDirective } from './directives/number.directive';
 import { StatusCellDirective } from './directives/status-cell.directive';
 import { ClickStopPropagation } from './directives/stoppropagation.directive';
-import { SubscriptionDirective } from './directives/subscription.directive';
 import { LinkDetector } from './pipes/linkDetector.pipe';
 import { NumberFormatterPipe } from './pipes/number-formatter.pipe';
 import { SafeHtmlPipe } from './pipes/safe-html.pipe';
@@ -110,7 +107,6 @@ import { MenuButtonComponent } from './components/menu-button/menu-button.compon
 import { ToggleButtonModule } from 'primeng/togglebutton';
 import { TabHeaderComponent } from './components/tab-header/tab-header.component';
 import { ImportServiceContainerComponent } from './components/import-service-container/import-service-container.component';
-import { BackdropDirective } from './directives/backdrop.directive';
 import { CountdownDirective } from './directives/countdown.directive';
 import { GlobalSearchComponent } from './components/search/global-search.component';
 import { QrCodeModalComponent } from './components/qr-code-modal/qr-code-modal.component';
@@ -183,9 +179,6 @@ import { CheckboxComponent } from './components/form-component/checkbox/checkbox
     NumberDirective,
     StatusCellDirective,
     MultipleDropdownComponent,
-    SubscriptionDirective,
-    InternalSubscriptionDirective,
-    FeatureDirective,
     ClickableDirective,
     ImageDirective,
     InfiniteScroll,
@@ -257,7 +250,6 @@ import { CheckboxComponent } from './components/form-component/checkbox/checkbox
     CheckboxSelectorComponent,
     MenuButtonComponent,
     TabHeaderComponent,
-    BackdropDirective,
     CountdownDirective,
     ImportServiceContainerComponent,
     InputNumberComponent,
@@ -306,9 +298,6 @@ import { CheckboxComponent } from './components/form-component/checkbox/checkbox
     StatusCellDirective,
     MultipleDropdownComponent,
     UploadCsvComponent,
-    SubscriptionDirective,
-    InternalSubscriptionDirective,
-    FeatureDirective,
     ClickableDirective,
     ImageDirective,
     InfiniteScroll,
@@ -382,7 +371,6 @@ import { CheckboxComponent } from './components/form-component/checkbox/checkbox
     MenuButtonComponent,
     ToggleButtonModule,
     TabHeaderComponent,
-    BackdropDirective,
     CountdownDirective,
     ImportServiceContainerComponent,
     InputNumberComponent,

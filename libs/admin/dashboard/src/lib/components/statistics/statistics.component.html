@@ -1,48 +1,26 @@
 <div class="stats--wrapper">
-  <div
-    class="stats"
-    isFeatureSubscribed
-    [paths]="[productName + '.cards.' + cardNames.ARRIVAL]"
-    click-allow
-  >
+  <div class="stats" click-allow>
     <hospitality-bot-arrivals-statistics
       [arrivals]="statistics?.arrivals || undefined"
     ></hospitality-bot-arrivals-statistics>
   </div>
-  <div
-    class="stats"
-    isFeatureSubscribed
-    [paths]="[productName + '.cards.' + cardNames.INHOUSE]"
-  >
+  <div class="stats">
     <hospitality-bot-inhouse-statistics
       [inhouse]="statistics?.inhouse || undefined"
       [inhouseRequest]="statistics?.inhouseRequest || undefined"
     ></hospitality-bot-inhouse-statistics>
   </div>
   <!-- <ng-container *ngIf="statistics"> -->
-  <div
-    class="stats full-width"
-    isFeatureSubscribed
-    [paths]="[productName + '.cards.' + cardNames.DEPARTURE]"
-    click-allow
-  >
+  <div class="stats full-width" click-allow>
     <hospitality-bot-departure-statistics
       [departures]="statistics?.departures || undefined"
     ></hospitality-bot-departure-statistics>
   </div>
 
-  <div
-    class="stats inc-width-xl change-height"
-    isFeatureSubscribed
-    [paths]="[productName + '.cards.' + cardNames.BOOKINGSTATUS]"
-  >
+  <div class="stats inc-width-xl change-height">
     <hospitality-bot-booking-status></hospitality-bot-booking-status>
   </div>
-  <div
-    class="stats inc-width-l change-height"
-    isFeatureSubscribed
-    [paths]="[productName + '.cards.' + cardNames.RESERVATION]"
-  >
+  <div class="stats inc-width-l change-height">
     <hospitality-bot-customer-statistics></hospitality-bot-customer-statistics>
   </div>
   <!-- </ng-container> -->

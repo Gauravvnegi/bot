@@ -5,17 +5,11 @@ import {
   OnDestroy,
   OnInit,
   Output,
-  ViewChild,
 } from '@angular/core';
-import {
-  DaysType,
-  Option,
-  epochWithoutTime,
-  fullMonths,
-  weeks,
-} from '@hospitality-bot/admin/shared';
-import { OverlayPanel } from 'primeng/overlaypanel';
 import { Subscription } from 'rxjs';
+import { DaysType, epochWithoutTime, weeks } from '../../utils/shared';
+import { fullMonths } from '../../constants';
+import { Option } from '../../types/form.type';
 
 export type CGridOption = Option<string, { date?: number }>;
 export type CGridInfo = Record<number, CGridOption[][]>;

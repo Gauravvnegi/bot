@@ -113,8 +113,6 @@ export class CalendarViewComponent implements OnInit, OnDestroy {
     this.gridInfo = this.years.reduce((value, curr) => {
       return { ...value, [curr]: this.getCalendarInfo(curr) };
     }, {});
-
-    console.log(this.gridInfo);
   }
 
   getStyles(value: string) {

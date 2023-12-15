@@ -1,8 +1,5 @@
-import { I } from '@angular/cdk/keycodes';
 import { Component, Input, OnInit } from '@angular/core';
 import { AbstractControl, ControlContainer } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
-import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
   Categories,
   CategoryData,
@@ -51,11 +48,10 @@ export class CategoryComponent implements OnInit {
   }
 
   constructor(
-    private globalFilterService: GlobalFilterService,
     private libraryService: LibraryService,
-    private router: Router,
+
     private snackbarService: SnackBarService,
-    private route: ActivatedRoute,
+
     private controlContainer: ControlContainer
   ) {}
 

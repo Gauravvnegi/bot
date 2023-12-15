@@ -436,7 +436,7 @@ export class FeedbackDatatableModalComponent extends FeedbackDatatableComponent
 
   ngOnDestroy(): void {
     this.$subscription.unsubscribe();
-    this.tabFilterItems[this.tabFilterIdx].chips.forEach((chip) => {
+    this.tabFilterItems[this.tabFilterIdx]?.chips?.forEach((chip) => {
       if (chip.value !== 'ALL') {
         chip.isSelected = false;
       } else chip.isSelected = true;

@@ -1,9 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
-import {
-  BaseDatatableComponent,
-  TableService,
-} from '@hospitality-bot/admin/shared';
+import { BaseDatatableComponent } from '@hospitality-bot/admin/shared';
 import { Subscription } from 'rxjs';
 import { cols, title } from '../../constants/data-table';
 import { colorConfig, MockData } from '../../constants/sentimental-mock-data';
@@ -25,11 +22,8 @@ export class SentimentDatatableComponent extends BaseDatatableComponent
   iQuickFilters = true;
   subscription$ = new Subscription();
   colorsConfig = colorConfig;
-  constructor(
-    public fb: FormBuilder,
-    protected tabFilterService: TableService
-  ) {
-    super(fb, tabFilterService);
+  constructor(public fb: FormBuilder) {
+    super(fb);
   }
 
   ngOnInit(): void {

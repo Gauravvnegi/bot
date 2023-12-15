@@ -12,7 +12,6 @@ import {
   AdminUtilityService,
   BaseDatatableComponent,
   sharedConfig,
-  TableService,
 } from '@hospitality-bot/admin/shared';
 import {
   ModalService,
@@ -53,14 +52,13 @@ export class ContactDatatableComponent extends BaseDatatableComponent
   globalQueries = [];
   constructor(
     public fb: FormBuilder,
-    protected tabFilterService: TableService,
     protected _adminUtilityService: AdminUtilityService,
     private _listingService: ListingService,
     private snackbarService: SnackBarService,
     protected _translateService: TranslateService,
     private _modal: ModalService
   ) {
-    super(fb, tabFilterService);
+    super(fb);
   }
 
   ngOnInit(): void {

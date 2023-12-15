@@ -3,7 +3,6 @@ import { FormBuilder } from '@angular/forms';
 import {
   AdminUtilityService,
   FeedbackService,
-  TableService,
 } from '@hospitality-bot/admin/shared';
 import {
   GlobalFilterService,
@@ -39,7 +38,6 @@ export class ReservationDatatableModalComponent
     protected globalFilterService: GlobalFilterService,
     protected snackbarService: SnackBarService,
     protected _modal: ModalService,
-    protected tabFilterService: TableService,
     public feedbackService: FeedbackService,
     protected subscriptionPlanService: SubscriptionPlanService,
     protected routesConfigService: RoutesConfigService,
@@ -53,7 +51,6 @@ export class ReservationDatatableModalComponent
       snackbarService,
       _modal,
       feedbackService,
-      tabFilterService,
       subscriptionPlanService,
       routesConfigService,
       router

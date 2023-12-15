@@ -4,7 +4,6 @@ import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
   AdminUtilityService,
   BaseDatatableComponent,
-  TableService,
 } from '@hospitality-bot/admin/shared';
 import { LazyLoadEvent } from 'primeng/api';
 import { Subscription } from 'rxjs';
@@ -35,12 +34,11 @@ export class OutletsDataTableComponent extends BaseDatatableComponent
   constructor(
     public fb: FormBuilder,
     protected globalFilterService: GlobalFilterService,
-    protected tabFilterService: TableService,
     protected outletService: OutletTableService,
     protected adminUtilityService: AdminUtilityService,
     protected snackbarService: SnackBarService
   ) {
-    super(fb, tabFilterService);
+    super(fb);
   }
   ngOnInit(): void {
     this.listenForGlobalFilter();
@@ -142,7 +140,7 @@ export class OutletsDataTableComponent extends BaseDatatableComponent
         .updateOutletItem(this.entityId, rowData.id, status)
         .subscribe(
           () => {
-            this.updateStatusAndCount(rowData.status, status);
+            // this.updateStatusAndCount(rowData.status, status);
 
             this.snackbarService.openSnackBarAsText(
               'Status changes successfully',

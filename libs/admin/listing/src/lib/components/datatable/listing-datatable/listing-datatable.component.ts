@@ -10,7 +10,6 @@ import {
   AdminUtilityService,
   BaseDatatableComponent,
   NavRouteOption,
-  TableService,
   sharedConfig,
 } from '@hospitality-bot/admin/shared';
 import {
@@ -61,14 +60,13 @@ export class ListingDatatableComponent extends BaseDatatableComponent
     protected globalFilterService: GlobalFilterService,
     protected snackbarService: SnackBarService,
     protected _modal: ModalService,
-    protected tabFilterService: TableService,
     protected router: Router,
     private route: ActivatedRoute,
     protected _translateService: TranslateService,
     private listingService: ListingService,
     private routesConfigService: RoutesConfigService
   ) {
-    super(fb, tabFilterService);
+    super(fb);
   }
 
   ngOnInit(): void {

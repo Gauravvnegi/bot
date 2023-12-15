@@ -15,11 +15,9 @@ import { NotificationService } from 'apps/admin/src/app/core/theme/src/lib/servi
 import { SubscriptionPlanService } from 'apps/admin/src/app/core/theme/src/lib/services/subscription-plan.service';
 import { Subscription } from 'rxjs';
 import { feedback } from '../../constants/feedback';
-import { FeedbackRecord } from '../../data-models/feedback-card.model';
 import { CardService } from '../../services/card.service';
 import { StatisticsService } from '../../services/feedback-statistics.service';
 import { FeedbackTableService } from '../../services/table.service';
-import { FeedbackDetailModalComponent } from '../modals/feedback-detail-modal/feedback-detail.component';
 
 @Component({
   selector: 'hospitality-bot-feedback',
@@ -56,10 +54,7 @@ export class FeedbackComponent implements OnInit, OnDestroy {
     protected statisticsService: StatisticsService,
     protected subscriptionPlanService: SubscriptionPlanService,
     protected tableService: FeedbackTableService,
-    private cardService: CardService,
-    private location: Location,
     private configService: ConfigService,
-    private notificationService: NotificationService
   ) {}
 
   ngOnInit(): void {

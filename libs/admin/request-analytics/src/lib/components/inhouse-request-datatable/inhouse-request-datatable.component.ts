@@ -14,7 +14,6 @@ import { RequestStatus } from 'libs/admin/request/src/lib/constants/request';
 import { RequestService } from 'libs/admin/request/src/lib/services/request.service';
 import { BaseDatatableComponent } from 'libs/admin/shared/src/lib/components/datatable/base-datatable.component';
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
-import { TableService } from 'libs/admin/shared/src/lib/services/table.service';
 import { convertToTitleCase } from 'libs/admin/shared/src/lib/utils/valueFormatter';
 import { SnackBarService } from 'libs/shared/material/src';
 import { LazyLoadEvent, SortEvent } from 'primeng/api';
@@ -48,10 +47,9 @@ export class InhouseRequestDatatableComponent extends BaseDatatableComponent
     private globalFilterService: GlobalFilterService,
     private snackbarService: SnackBarService,
     private analyticsService: AnalyticsService,
-    protected tabFilterService: TableService,
     private _requestService: RequestService
   ) {
-    super(fb, tabFilterService);
+    super(fb);
   }
   cols = analytics.cols;
   tabFilterItems = analytics.tabFilterItems;

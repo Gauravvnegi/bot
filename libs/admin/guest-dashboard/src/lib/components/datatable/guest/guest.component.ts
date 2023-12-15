@@ -7,19 +7,15 @@ import {
   AdminUtilityService,
   BaseDatatableComponent,
   FeedbackService,
-  ModuleNames,
-  TableNames,
-  TableService,
 } from '@hospitality-bot/admin/shared';
 import { ModalService } from '@hospitality-bot/shared/material';
 import * as FileSaver from 'file-saver';
 import { SnackBarService } from 'libs/shared/material/src';
 import { SortEvent } from 'primeng/api/sortevent';
 import { Observable, Subscription } from 'rxjs';
-import { chips, guest, guestStatusDetails } from '../../../constants/guest';
+import { guest, guestStatusDetails } from '../../../constants/guest';
 import { GuestTable } from '../../../data-models/guest-table.model';
 import { GuestTableService } from '../../../services/guest-table.service';
-import { SelectedEntityState } from '../../../types/guest.type';
 
 @Component({
   selector: 'hospitality-bot-guest-datatable',
@@ -55,19 +51,13 @@ export class GuestDatatableComponent extends BaseDatatableComponent
     protected globalFilterService: GlobalFilterService,
     protected snackbarService: SnackBarService,
     protected _modal: ModalService,
-    protected tabFilterService: TableService,
     public feedbackService: FeedbackService
   ) {
-    super(fb, tabFilterService);
+    super(fb);
   }
 
   ngOnInit(): void {
     this.registerListeners();
-    this.getSubscribedFilters(
-      ModuleNames.GUESTS,
-      TableNames.GUEST,
-      this.tabFilterItems
-    );
   }
 
   registerListeners(): void {

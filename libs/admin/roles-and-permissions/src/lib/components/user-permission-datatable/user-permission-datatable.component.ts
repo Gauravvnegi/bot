@@ -13,7 +13,6 @@ import { UserService } from '@hospitality-bot/admin/shared';
 import * as FileSaver from 'file-saver';
 import { BaseDatatableComponent } from 'libs/admin/shared/src/lib/components/datatable/base-datatable.component';
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
-import { TableService } from 'libs/admin/shared/src/lib/services/table.service';
 import { ModalService, SnackBarService } from 'libs/shared/material/src';
 import { Observable, Subscription, forkJoin } from 'rxjs';
 import { UserPermissionTable } from '../../models/user-permission-table.model';
@@ -66,10 +65,9 @@ export class UserPermissionDatatableComponent extends BaseDatatableComponent
     private _managePermissionService: ManagePermissionService,
     public userService: UserService,
     private snackbarService: SnackBarService,
-    protected tabFilterService: TableService,
     private modalService: ModalService
   ) {
-    super(fb, tabFilterService);
+    super(fb);
   }
 
   ngOnInit(): void {

@@ -11,7 +11,6 @@ import {
   NavRouteOption,
   NavRouteOptions,
   sharedConfig,
-  TableService,
 } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { TranslateService } from '@ngx-translate/core';
@@ -61,12 +60,11 @@ export class AssetDatatableComponent extends BaseDatatableComponent
     private adminUtilityService: AdminUtilityService,
     private globalFilterService: GlobalFilterService,
     protected snackbarService: SnackBarService,
-    protected tabFilterService: TableService,
     private assetService: AssetService,
     protected _translateService: TranslateService,
     private routesConfigService: RoutesConfigService
   ) {
-    super(fb, tabFilterService);
+    super(fb);
   }
 
   ngOnInit(): void {

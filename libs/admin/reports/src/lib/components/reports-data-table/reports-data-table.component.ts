@@ -1,12 +1,11 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder } from '@angular/forms';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
   AdminUtilityService,
   BaseDatatableComponent,
   Cols,
   Option,
-  TableService,
 } from '@hospitality-bot/admin/shared';
 import * as FileSaver from 'file-saver';
 import { Subscription } from 'rxjs';
@@ -64,13 +63,12 @@ export class ReportsDataTableComponent extends BaseDatatableComponent {
   constructor(
     private reportsService: ReportsService,
     public fb: FormBuilder,
-    protected tabFilterService: TableService,
     private globalFilterService: GlobalFilterService,
     private modalService: ModalService,
     private managePermissionService: ManagePermissionService,
     private adminUtilityService: AdminUtilityService
   ) {
-    super(fb, tabFilterService);
+    super(fb);
   }
 
   ngOnInit(): void {

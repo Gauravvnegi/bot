@@ -7,7 +7,6 @@ import {
   BaseDatatableComponent,
   NavRouteOption,
   sharedConfig,
-  TableService,
 } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { TranslateService } from '@ngx-translate/core';
@@ -55,13 +54,12 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
     private adminUtilityService: AdminUtilityService,
     private globalFilterService: GlobalFilterService,
     protected snackbarService: SnackBarService,
-    protected tabFilterService: TableService,
     private router: Router,
     private route: ActivatedRoute,
     private campaignService: CampaignService,
     protected _translateService: TranslateService
   ) {
-    super(fb, tabFilterService);
+    super(fb);
   }
 
   ngOnInit(): void {

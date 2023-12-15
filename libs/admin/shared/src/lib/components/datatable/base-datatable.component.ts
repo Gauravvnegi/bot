@@ -14,7 +14,6 @@ import {
   defaultRecordJson,
   quickReplyFilterDefaultConfig,
 } from '../../constants/datatable';
-import { TableService } from '../../services/table.service';
 import {
   Chip,
   Cols,
@@ -161,7 +160,6 @@ export class BaseDatatableComponent implements OnInit {
 
   constructor(
     private _fb: FormBuilder,
-    protected tabFilterService: TableService
   ) {
     this.initTableFG();
     this.mainLayout = document.getElementById('main-layout');
@@ -203,14 +201,6 @@ export class BaseDatatableComponent implements OnInit {
     this.filterChips = [];
     this.selectedFilterChips = new Set<string>([defaultFilterChipValue.value]);
     this.totalRecords = 0;
-  }
-
-  getSubscribedFilters(module, table, tabFilters) {
-    this.tabFilterItems = this.tabFilterService.getSubscribedFilters(
-      module,
-      table,
-      tabFilters
-    );
   }
 
   private paginate(event) {

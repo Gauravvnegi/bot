@@ -19,7 +19,6 @@ import {
   FeedbackService,
   HotelDetailService,
   sharedConfig,
-  TableService,
   UserService,
 } from '@hospitality-bot/admin/shared';
 import {
@@ -28,14 +27,13 @@ import {
 } from '@hospitality-bot/shared/material';
 import { TranslateService } from '@ngx-translate/core';
 import * as FileSaver from 'file-saver';
-import { LazyLoadEvent, SortEvent } from 'primeng/api';
+import { SortEvent } from 'primeng/api';
 import { Observable, Subscription } from 'rxjs';
 import {
   FeedbackTable,
   StayFeedbackTable,
 } from '../../../data-models/feedback-datatable.model';
 import { FeedbackTableService } from '../../../services/table.service';
-import { EntityState, SelectedChip } from '../../../types/feedback.type';
 import { FeedbackDetailModalComponent } from '../../modals/feedback-detail-modal/feedback-detail.component';
 import {
   Departmentpermission,
@@ -43,7 +41,6 @@ import {
 } from '../../../data-models/feedback-card.model';
 import { StatisticsService } from '../../../services/feedback-statistics.service';
 import { MainComponent } from '../../card';
-import { convertToTitleCase } from 'libs/admin/shared/src/lib/utils/valueFormatter';
 @Component({
   selector: 'hospitality-bot-feedback-datatable',
   templateUrl: './feedback-datatable.component.html',
@@ -91,7 +88,6 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
     protected snackbarService: SnackBarService,
     protected _modal: ModalService,
     public feedbackService: FeedbackService,
-    protected tabFilterService: TableService,
     protected tableService: FeedbackTableService,
     protected statisticService: StatisticsService,
     protected _hotelDetailService: HotelDetailService,
@@ -99,7 +95,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
     protected configService: ConfigService,
     protected userService: UserService
   ) {
-    super(fb, tabFilterService);
+    super(fb);
   }
 
   ngOnInit(): void {

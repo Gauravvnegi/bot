@@ -2,14 +2,11 @@ import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import {
   ActivatedRoute,
-  ActivatedRouteSnapshot,
   Router,
 } from '@angular/router';
-import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
   AdminUtilityService,
   BaseDatatableComponent,
-  TableService,
 } from '@hospitality-bot/admin/shared';
 import {
   ModalService,
@@ -53,8 +50,6 @@ export class HotelDataTableComponent extends BaseDatatableComponent
 
   constructor(
     private fb: FormBuilder,
-    private globalFilterService: GlobalFilterService,
-    protected tabFilterService: TableService,
     private adminUtilityService: AdminUtilityService,
     private snackbarService: SnackBarService,
     private router: Router,
@@ -63,7 +58,7 @@ export class HotelDataTableComponent extends BaseDatatableComponent
     private modalService: ModalService,
     private hotelFormDataService: HotelFormDataService
   ) {
-    super(fb, tabFilterService);
+    super(fb);
   }
 
   ngOnInit(): void {

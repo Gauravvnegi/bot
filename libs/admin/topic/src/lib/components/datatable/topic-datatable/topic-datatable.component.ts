@@ -1,17 +1,14 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
 import {
   BaseDatatableComponent,
   NavRouteOption,
-  TableService,
   sharedConfig,
 } from '@hospitality-bot/admin/shared';
 import {
   ModalService,
   SnackBarService,
 } from '@hospitality-bot/shared/material';
-import { TranslateService } from '@ngx-translate/core';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 import * as FileSaver from 'file-saver';
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
@@ -56,14 +53,11 @@ export class TopicDatatableComponent extends BaseDatatableComponent
     private adminUtilityService: AdminUtilityService,
     private globalFilterService: GlobalFilterService,
     protected snackbarService: SnackBarService,
-    protected tabFilterService: TableService,
     protected _modal: ModalService,
-    private _router: Router,
-    private route: ActivatedRoute,
     private topicService: TopicService,
     private routesConfigService: RoutesConfigService
   ) {
-    super(fb, tabFilterService);
+    super(fb);
   }
 
   ngOnInit(): void {

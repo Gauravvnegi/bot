@@ -5,7 +5,6 @@ import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
   AdminUtilityService,
   BaseDatatableComponent,
-  TableService,
 } from '@hospitality-bot/admin/shared';
 import * as FileSaver from 'file-saver';
 import { SnackBarService } from '@hospitality-bot/shared/material';
@@ -48,14 +47,13 @@ export class AllOutletsDataTableComponent extends BaseDatatableComponent
 
   constructor(
     public fb: FormBuilder,
-    protected tabFilterService: TableService,
     private adminUtilityService: AdminUtilityService,
     private globalFilterService: GlobalFilterService,
     protected snackbarService: SnackBarService,
     private router: Router,
     private outletService: OutletService
   ) {
-    super(fb, tabFilterService);
+    super(fb);
   }
 
   ngOnInit(): void {

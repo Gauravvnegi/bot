@@ -4,7 +4,6 @@ import {
   AdminUtilityService,
   BaseDatatableComponent,
   CookiesSettingsService,
-  TableService,
   Option,
   UserService,
   ModuleNames,
@@ -60,7 +59,6 @@ export class ManageSiteDataTableComponent extends BaseDatatableComponent {
 
   constructor(
     public fb: FormBuilder,
-    protected tabFilterService: TableService,
     private userService: UserService,
     private manageSiteService: ManageSitesService,
     private snackbarService: SnackBarService,
@@ -69,7 +67,7 @@ export class ManageSiteDataTableComponent extends BaseDatatableComponent {
     private modalService: ModalService,
     private router: Router
   ) {
-    super(fb, tabFilterService);
+    super(fb);
   }
 
   ngOnInit(): void {

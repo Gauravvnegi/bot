@@ -1,5 +1,6 @@
 import { Directive, ElementRef, Input, OnInit } from '@angular/core';
-import { SubscriptionPlanService } from 'apps/admin/src/app/core/theme/src/lib/services/subscription-plan.service';
+import { SubscriptionPlanService } from '@hospitality-bot/admin/core/theme';
+// import { SubscriptionPlanService } from 'apps/admin/src/app/core/theme/src/lib/services/subscription-plan.service';
 import { get } from 'lodash';
 
 @Directive({ selector: '[isFeatureSubscribed]' })

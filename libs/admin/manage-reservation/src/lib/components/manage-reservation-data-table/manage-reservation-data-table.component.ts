@@ -14,7 +14,6 @@ import {
   ModuleNames,
   Option,
   QueryConfig,
-  TableService,
   sharedConfig,
 } from '@hospitality-bot/admin/shared';
 import {
@@ -92,7 +91,6 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
 
   constructor(
     public fb: FormBuilder,
-    protected tabFilterService: TableService,
     private manageReservationService: ManageReservationService,
     private adminUtilityService: AdminUtilityService,
     private formService: FormService,
@@ -104,7 +102,7 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
     private router: Router,
     private _clipboard: Clipboard
   ) {
-    super(fb, tabFilterService);
+    super(fb);
   }
 
   ngOnInit(): void {

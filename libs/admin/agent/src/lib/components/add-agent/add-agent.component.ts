@@ -22,8 +22,7 @@ import {
   NavRouteOptions,
   Option,
   QueryConfig,
-  Regex,
-  TableService,
+  Regex
 } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { AddCompanyComponent } from 'libs/admin/company/src/lib/components/add-company/add-company.component';
@@ -77,7 +76,6 @@ export class AddAgentComponent implements OnInit {
 
   constructor(
     public fb: FormBuilder,
-    public tabFilter: TableService,
     private agentService: AgentService,
     private globalService: GlobalFilterService,
     private adminUtilityService: AdminUtilityService,

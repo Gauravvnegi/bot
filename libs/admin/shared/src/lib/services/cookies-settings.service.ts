@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
 // import { SnackBarService } from '@hospitality-bot/shared/material';
 import { AuthService } from 'apps/admin/src/app/core/auth/services/auth.service';
 import { TokenUpdateService } from 'apps/admin/src/app/core/theme/src/lib/services/token-update.service';
@@ -14,7 +13,7 @@ import { CookiesData } from '../types/user.type';
 import { HotelDetailService } from './hotel-detail.service';
 import { UserService } from './user-detail.service';
 import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.service';
-import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 
 @Injectable({ providedIn: 'root' })
 export class CookiesSettingsService {

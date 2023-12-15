@@ -21,8 +21,8 @@ import { SearchResultDetail } from '../../data-models/search-bar-config.model';
 import { GlobalFilterService } from '../../services/global-filters.service';
 import { SearchService } from '../../services/search.service';
 import { RoutesConfigService } from '../../services/routes-config.service';
-import { ModuleNames } from '../../../../../../../../../../libs/admin/shared/src/index';
-import { packagesRoutes } from '../../../../../../../../../../libs/admin/packages/src/lib/constant/routes';
+import { ModuleNames } from 'libs/admin/shared/src/lib/constants/subscriptionConfig';
+import { packagesRoutes } from 'libs/admin/packages/src/lib/constant/routes';
 
 @Component({
   selector: 'admin-search-bar',

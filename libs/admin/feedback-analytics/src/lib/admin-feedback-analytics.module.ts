@@ -12,7 +12,6 @@ import { GaugeChartModule } from 'angular-gauge-chart';
 import { SharedMaterialModule } from 'libs/shared/material/src/lib/shared-material.module';
 import { NgCircleProgressModule } from 'ng-circle-progress';
 import { ChartsModule } from 'ng2-charts';
-import { SlickCarouselModule } from 'ngx-slick-carousel';
 import { AdminFeedbackAnalyticsRoutingModule } from './admin-feedback-analytics.routing.module';
 import { FeedbackTypesComponent } from './components/feedback-types/feedback-types.component';
 import { CardService } from './services/card.service';
@@ -29,7 +28,6 @@ import { FeedbackTableService } from './services/table.service';
     AdminSharedModule,
     AdminFeedbackAnalyticsRoutingModule,
     FlexLayoutModule,
-    SlickCarouselModule,
     GaugeChartModule,
     NgCircleProgressModule.forRoot(),
     TranslateModule.forChild(getTranslationConfigs([HttpClient], ['feedback'])),

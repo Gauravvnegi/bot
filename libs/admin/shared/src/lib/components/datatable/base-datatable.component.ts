@@ -314,25 +314,25 @@ export class BaseDatatableComponent implements OnInit {
   exportCSV() {}
 
   exportPdf() {
-    import('jspdf').then((jsPDF) => {
-      import('jspdf-autotable').then((x) => {
-        // const doc = new jsPDF.default(0, 0);
-        //   doc.autoTable(this.exportColumns, this.values);
-        // doc.save(`${this.tableName}.pdf`);
-      });
-    });
+    // import('jspdf').then((jsPDF) => {
+    //   import('jspdf-autotable').then((x) => {
+    //     // const doc = new jsPDF.default(0, 0);
+    //     //   doc.autoTable(this.exportColumns, this.values);
+    //     // doc.save(`${this.tableName}.pdf`);
+    //   });
+    // });
   }
 
   exportExcel() {
-    import('xlsx').then((xlsx) => {
-      const worksheet = xlsx.utils.json_to_sheet(this.values);
-      const workbook = { Sheets: { data: worksheet }, SheetNames: ['data'] };
-      const excelBuffer: any = xlsx.write(workbook, {
-        bookType: 'xlsx',
-        type: 'array',
-      });
-      this.saveAsExcelFile(excelBuffer, `${this.tableName}`);
-    });
+    // import('xlsx').then((xlsx) => {
+    //   const worksheet = xlsx.utils.json_to_sheet(this.values);
+    //   const workbook = { Sheets: { data: worksheet }, SheetNames: ['data'] };
+    //   const excelBuffer: any = xlsx.write(workbook, {
+    //     bookType: 'xlsx',
+    //     type: 'array',
+    //   });
+    //   this.saveAsExcelFile(excelBuffer, `${this.tableName}`);
+    // });
   }
 
   saveAsExcelFile(buffer: any, fileName: string): void {

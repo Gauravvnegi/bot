@@ -3,8 +3,10 @@ import { LayoutModule } from '@angular/cdk/layout';
 import { OverlayModule } from '@angular/cdk/overlay';
 import { CdkStepperModule } from '@angular/cdk/stepper';
 import { NgModule } from '@angular/core';
+/**
+ * @todo Check this out - what is the use of it
+ */
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { MatMomentDateModule } from '@angular/material-moment-adapter';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -54,7 +56,6 @@ import { SnackBarService } from './services/snackbar.service';
     MatDatepickerModule,
     MatRadioModule,
     MatNativeDateModule,
-    MatMomentDateModule,
     LayoutModule,
     MatSnackBarModule,
     CdkStepperModule,
@@ -87,7 +88,6 @@ import { SnackBarService } from './services/snackbar.service';
     MatDatepickerModule,
     MatRadioModule,
     MatNativeDateModule,
-    MatMomentDateModule,
     LayoutModule,
     MatSnackBarModule,
     CdkStepperModule,

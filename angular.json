@@ -29,8 +29,6 @@
             ],
             "styles": [
               "node_modules/@fortawesome/fontawesome-free/css/all.min.css",
-              "node_modules/slick-carousel/slick/slick.scss",
-              "node_modules/slick-carousel/slick/slick-theme.scss",
               "node_modules/primeng/resources/themes/md-light-deeppurple/theme.css",
               "node_modules/primeng/resources/primeng.min.css",
               "node_modules/primeicons/primeicons.css",
@@ -39,10 +37,7 @@
               "apps/admin/src/styles.scss",
               "node_modules/angular2-draggable/css/resizable.min.css"
             ],
-            "scripts": [
-              "node_modules/jquery/dist/jquery.min.js",
-              "node_modules/slick-carousel/slick/slick.min.js"
-            ],
+            "scripts": ["node_modules/jquery/dist/jquery.min.js"],
             "stylePreprocessorOptions": {
               "includePaths": ["apps/admin/src/assets/sass"]
             }

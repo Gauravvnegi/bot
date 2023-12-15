@@ -11,8 +11,10 @@ import {
   SnackBarService,
 } from '@hospitality-bot/shared/material';
 import { saveAs } from 'file-saver';
+/**
+ * @todo - Remove zip- download single
+ */
 import * as JSZip from 'jszip';
-import * as JSZipUtils from 'jszip-utils';
 import { ImageHandlingComponent } from 'libs/admin/shared/src/lib/components/image-handling/image-handling.component';
 import { ReservationService } from '../../services/reservation.service';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';

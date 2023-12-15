@@ -659,12 +659,17 @@ export class AdminDocumentsDetailsComponent implements OnInit {
     const bookingNumber = this.detailsData.reservationDetails.bookingNumber;
 
     documents.forEach((doc) => {
-      images.push({
-        url: doc.frontUrl.trim(),
-        fileName: `${doc.documentType}_${bookingNumber}_${name}_frontURL`,
-      });
+      const frontUrl = doc.frontUrl?.trim();
+      const backUrl = doc.backUrl?.trim();
 
-      if (doc.documentType !== 'VISA' && doc.backUrl) {
+      if (frontUrl) {
+        images.push({
+          url: frontUrl,
+          fileName: `${doc.documentType}_${bookingNumber}_${name}_frontURL`,
+        });
+      }
+
+      if (doc.documentType !== 'VISA' && backUrl) {
         images.push({
           url: doc.backUrl.trim(),
           fileName: `${doc.documentType}_${bookingNumber}_${name}_backURL`,

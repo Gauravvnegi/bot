@@ -34,26 +34,26 @@ export type DirectAgentBillingReportResponse = {
       contactNumber: string;
       emailId: string;
     };
-    company: {
-      id: string;
-      firstName: string;
-      contactDetails: {
-        cc: string;
-        contactNumber: string;
-        emailId: string;
-      };
-      age: number;
-      firstStay: number;
-      lastStay: number;
-      totalNights: number;
-      code: string;
-      documentRequired: boolean;
-    };
     nationality: string;
     age: number;
     firstStay: number;
     lastStay: number;
     totalNights: number;
+    documentRequired: boolean;
+  };
+  company: {
+    id: string;
+    firstName: string;
+    contactDetails: {
+      cc: string;
+      contactNumber: string;
+      emailId: string;
+    };
+    age: number;
+    firstStay: number;
+    lastStay: number;
+    totalNights: number;
+    code: string;
     documentRequired: boolean;
   };
   created: number;

@@ -10,7 +10,6 @@ import { NavRouteOptions } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { Subscription } from 'rxjs';
 import { RoomService } from '../../services/room.service';
-import { error } from 'console';
 import { roomRoutesConfig } from '../../constant/routes';
 
 @Component({

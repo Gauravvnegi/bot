@@ -14,7 +14,7 @@ export class ScrollPagination implements OnDestroy {
   emitted = false;
   emittedHeight: number;
   minimumBaseDistance = 10;
-  timeoutId: NodeJS.Timer;
+  timeoutId: number;
 
   distance = 0;
   throttle = 3000;
@@ -73,7 +73,7 @@ export class ScrollPagination implements OnDestroy {
     this.emitted = true;
     clearTimeout(this.timeoutId);
     // Enables the emission to go again
-    this.timeoutId = setTimeout(() => {
+    this.timeoutId = window.setTimeout(() => {
       this.emitted = false;
     }, this.throttle);
   }

@@ -1,25 +1,20 @@
 import { Injectable } from '@angular/core';
+import {
+  ModuleNames,
+  PermissionModuleNames,
+  ProductNames,
+  UserResponse,
+} from 'libs/admin/shared/src/index';
 import { ApiService } from 'libs/shared/utils/src/lib/services/api.service';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import {
   ProductSubscription,
   SettingsMenuItem,
   Subscriptions,
   UserSubscriptionPermission,
 } from '../data-models/subscription-plan-config.model';
-import {
-  productMenuSubs,
-  reportsConfigMenu,
-} from '../data-models/product-subs';
-import { map } from 'rxjs/operators';
-import {
-  PermissionModuleNames,
-  ProductNames,
-  UserResponse,
-  ModuleNames,
-} from 'libs/admin/shared/src/index';
 import { RouteConfigPathService } from './routes-config.service';
-import { type } from 'os';
 
 @Injectable({ providedIn: 'root' })
 export class SubscriptionPlanService extends ApiService {

@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { QueryConfig } from '@hospitality-bot/admin/shared';
 import { ApiService } from 'libs/shared/utils/src/lib/services/api.service';
-import { type } from 'os';
 import { Observable } from 'rxjs';
 
 @Injectable()

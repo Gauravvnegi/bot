@@ -7,7 +7,8 @@ import {
 import { Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { isEmpty } from 'lodash';
-import { TokensConfig } from 'apps/web-user/src/app/core/types/common.types';
+
+type TokensConfig = { accessToken: string; entityId: string };
 
 @Injectable()
 export class SharedTokenInterceptor implements HttpInterceptor {

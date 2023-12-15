@@ -1,4 +1,4 @@
-import { formatDateToCustomString } from 'libs/web-user/shared/src/lib/utils/date-utils';
+import { formatDateToCustomString } from '@hospitality-bot/admin/shared';
 import { HistoryAndForecastReportResponse } from '../types/occupany-reports.types';
 import { ReportClass, RowStyles } from '../types/reports.types';
 

@@ -1,9 +1,9 @@
 import { NightAuditResponse } from '../../../types/night-audit.type';
 import { ActionDataType, TableDataType } from '../../../types/table-view.type';
 import { CheckoutPendingResponse } from '../types/checkout-pending.type';
-import { dateTimeWithFormat } from '../../../../../../../web-user/shared/src/lib/utils/date-utils';
 import { CheckInResponseType } from '../types/checkin-pending.type';
 import { quickActions } from '../constants/checked-in-reservation.table';
+import { dateTimeWithFormat } from '@hospitality-bot/admin/shared';
 /**
  * Table ViewData implement for the styling recommendation
  */

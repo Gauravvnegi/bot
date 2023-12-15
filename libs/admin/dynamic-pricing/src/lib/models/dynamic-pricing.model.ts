@@ -22,7 +22,8 @@ import { OccupancyComponent } from '../components/occupancy/occupancy.component'
 import { RoomTypes } from 'libs/admin/channel-manager/src/lib/models/bulk-update.models';
 import { DayTimeTriggerComponent } from '../components/day-time-trigger/day-time-trigger.component';
 import { Revenue } from '../constants/revenue-manager.const';
-import { getDateTimeInEpoch } from 'libs/web-user/shared/src/lib/utils/date-utils';
+import { getDateTimeInEpoch } from '@hospitality-bot/admin/shared';
+
 export class DynamicPricingFactory {
   static buildRequest(form: FormGroup, type: ConfigType, mode: ModeType) {
     let data:

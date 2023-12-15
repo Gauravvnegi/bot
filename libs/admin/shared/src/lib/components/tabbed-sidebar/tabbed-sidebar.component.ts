@@ -6,8 +6,6 @@ import {
   Output,
   TemplateRef,
 } from '@angular/core';
-import { Template } from 'libs/web-user/shared/src/lib/types/template';
-import { Chip } from '../../types/table.type';
 import { FormBuilder, FormGroup } from '@angular/forms';
 
 @Component({
@@ -58,12 +56,12 @@ export class TabbedSidebarComponent implements OnInit {
     this.initDate(new Date().getTime(), 5);
     this.selectedDateFilter = this.dates[0].date;
   }
- 
+
   /**
    * @function initDate
    * @description initialize date
-   * @param startDate 
-   * @param limit 
+   * @param startDate
+   * @param limit
    */
   initDate(startDate: number, limit: number) {
     const dates = [];
@@ -89,11 +87,11 @@ export class TabbedSidebarComponent implements OnInit {
     }
     this.dates = dates;
   }
- 
+
   /**
    * @function onDateFilterChange
    * @description on date filter change
-   * @param date 
+   * @param date
    */
   onTabFilterChange(index: number) {
     this.selectedTabFilterChange.emit({
@@ -105,7 +103,7 @@ export class TabbedSidebarComponent implements OnInit {
     this.setEmptyMessage(index);
     this.selectedDateFilter = this.dates[0].date;
   }
-  
+
   /**
    * @function setEmptyMessage
    * @description set empty message
@@ -131,7 +129,6 @@ type TabChangeData = {
   index: number;
   value: string;
 } & DateOption;
-
 
 type DateOption = {
   day: string;

@@ -19,13 +19,6 @@
     }
   },
   "projects": {
-    "web-user": {
-      "tags": []
-    },
-    "web-user-e2e": {
-      "tags": [],
-      "implicitDependencies": ["web-user"]
-    },
     "admin": {
       "tags": []
     },
@@ -36,24 +29,11 @@
     "admin-shared": {
       "tags": []
     },
-    "web-user-shared": {
-      "tags": []
-    },
+
     "shared-auth": {
       "tags": []
     },
-    "web-user-template-renderer": {
-      "tags": []
-    },
-    "web-user-templates-temp000001": {
-      "tags": []
-    },
-    "web-user-templates-temp000002": {
-      "tags": []
-    },
-    "web-user-templates-temp-covid000001": {
-      "tags": []
-    },
+
     "shared-theme": {
       "tags": []
     },

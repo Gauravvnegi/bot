@@ -16,9 +16,6 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@hospitality-bot/web-user/environment": [
-        "apps/web-user/src/environments/environment.ts"
-      ],
       "@hospitality-bot/admin/environment": [
         "apps/admin/src/environments/environment.ts"
       ],
@@ -27,23 +24,7 @@
       "@hospitality-bot/shared/interceptors": [
         "libs/shared/iterceptors/src/index.ts"
       ],
-      "@hospitality-bot/web-user/shared": ["libs/web-user/shared/src/index.ts"],
       "@hospitality-bot/shared/auth": ["libs/shared/auth/src/index.ts"],
-      "@hospitality-bot/web-user/template-renderer": [
-        "libs/web-user/template-renderer/src/index.ts"
-      ],
-      "@hospitality-bot/web-user/templates": [
-        "libs/web-user/templates/src/index.ts"
-      ],
-      "@hospitality-bot/web-user/templates/temp000002": [
-        "libs/web-user/templates/temp000002/src/index.ts"
-      ],
-      "@hospitality-bot/web-user/templates/temp000001": [
-        "libs/web-user/templates/temp000001/src/index.ts"
-      ],
-      "@hospitality-bot/web-user/templates/temp-covid000001": [
-        "libs/web-user/templates/temp-covid000001/src/index.ts"
-      ],
       "@hospitality-bot/shared/theme": ["libs/shared/theme/src/index.ts"],
       "@hospitality-bot/admin/dashboard": ["libs/admin/dashboard/src/index.ts"],
       "@hospitality-bot/admin/reservation": [

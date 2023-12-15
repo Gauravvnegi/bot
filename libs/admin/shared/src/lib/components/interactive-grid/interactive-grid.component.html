@@ -276,7 +276,7 @@
           rowIdx: rowIdx
         })
           ? 'Edit ' + data[row][col]?.content + ' ' + createNewToolTipInfo
-          : undefined
+          : data[row][col]?.additionContent
       "
       showDelay="500"
       tooltipPosition="top"
@@ -303,7 +303,6 @@
       <div
         class="cell-data__additional-content"
         [ngStyle]="{
-          whiteSpace: data[row][col]?.nonInteractive ? 'wrap' : 'nowrap',
           fontSize: height / 4.5 + 'px'
         }"
       >

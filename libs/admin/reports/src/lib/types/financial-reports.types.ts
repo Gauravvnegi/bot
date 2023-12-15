@@ -119,7 +119,7 @@ export type PaymentMode =
   | 'Bank Transfer'
   | 'Pay at Desk'
   | 'Online Payment Gateway'
-  | 'Bill to Company'
+  | 'Bill To Company'
   | 'CCAVENUE'
   | 'Paytm'
   | 'Paypal'

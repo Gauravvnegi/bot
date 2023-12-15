@@ -1,8 +1,7 @@
-import { toCurrency } from 'libs/admin/shared/src/lib/utils/valueFormatter';
 import {
-  businessAnalysisReportRows,
-  marketSegmentReportRows,
-} from '../constant/analytics-reports.const';
+  convertToNormalCase,
+  toCurrency,
+} from 'libs/admin/shared/src/lib/utils/valueFormatter';
 import {
   BusinessAnalysisReportData,
   BusinessAnalysisReportResponse,
@@ -17,6 +16,7 @@ import {
 } from '../types/analytics-reports.types';
 import { ReportClass } from '../types/reports.types';
 import { getFormattedDate } from './reservation-reports.models';
+import { unescape } from 'lodash';
 
 export class CompanyContributionsReport
   implements
@@ -48,7 +48,7 @@ export class OccupancyAnalysisReport
       value &&
       value.map((item) => {
         return {
-          roomType: item.roomTypeName,
+          roomType: item.subTotalObject ? 'Sub Total' : item.roomTypeName,
           roomAvailable: item.availableRooms,
           roomRevenue: item.roomRevenue,
           soldRooms: item.soldRooms,
@@ -104,33 +104,27 @@ export class BusinessAnalysisReport
     ReportClass<BusinessAnalysisReportData, BusinessAnalysisReportResponse> {
   records: BusinessAnalysisReportData[];
 
-  deserialize(value: BusinessAnalysisReportResponse[]) {
+  deserialize(value: BusinessAnalysisReportResponse) {
     this.records = new Array<BusinessAnalysisReportData>();
+
     value &&
-      businessAnalysisReportRows.forEach((row) => {
-        if (value.hasOwnProperty(row.label)) {
-          this.records.push({
-            marketSegment: row.name,
-            nights: value[row.label].nights,
-            occupancy: value[row.label].occupancyPercent,
-            pax: value[row.label].pax,
-            roomRevenue: value[row.label].roomRevenue, //to be confirmed form backend
-            revenue: value[row.label].revenuePercent,
-            arrOrAgr: value[row.label].arr,
-            arp: value[row.label].arp,
-          });
-        } else {
-          this.records.push({
-            marketSegment: row.name,
-            nights: undefined,
-            occupancy: undefined,
-            pax: undefined,
-            roomRevenue: undefined,
-            revenue: undefined,
-            arrOrAgr: undefined,
-            arp: undefined,
-          });
-        }
+      Object.keys(value).forEach((key) => {
+        const data = value[key];
+        this.records.push({
+          marketSegment: convertToNormalCase(key),
+          nights: data.nights,
+          occupancy:
+            key === 'subTotal' ? undefined : (data.occupancyPercent ?? 0) + '%',
+
+          pax: data?.pax,
+          roomRevenue: toCurrency(data?.roomRevenue),
+
+          revenue:
+            key === 'subTotal' ? undefined : (data?.revenuePercent ?? 0) + '%',
+
+          arrOrAgr: toCurrency(data?.arr),
+          arp: toCurrency(data?.arp),
+        });
       });
 
     return this;
@@ -145,30 +139,25 @@ export class MarketSegmentReport
     this.records = new Array<MarketSegmentReportData>();
 
     value &&
-      marketSegmentReportRows.forEach((row) => {
-        if (value.hasOwnProperty(row.label)) {
-          this.records.push({
-            marketSegment: row.name,
-            nights: value[row.label].nights,
-            occupancy: (value[row.label].occupancyPercent ?? 0) + '%',
-            pax: value[row.label].pax,
-            roomRevenue: toCurrency(value[row.label].roomRevenue),
-            revenue: value[row.label].revenuePercent,
-            arrOrAgr: toCurrency(value[row.label].arr),
-            arp: toCurrency(value[row.label].arp),
-          });
-        } else {
-          this.records.push({
-            marketSegment: row.name,
-            nights: undefined,
-            occupancy: undefined,
-            pax: undefined,
-            roomRevenue: undefined,
-            revenue: undefined,
-            arrOrAgr: undefined,
-            arp: undefined,
-          });
-        }
+      Object.keys(value).forEach((key) => {
+        const data = value[key];
+        this.records.push({
+          marketSegment: convertToNormalCase(key),
+          nights: data?.nights,
+          occupancy:
+            key === 'subTotal'
+              ? undefined
+              : (data?.occupancyPercent ?? 0) + '%',
+
+          pax: data?.pax,
+          roomRevenue: toCurrency(data?.roomRevenue),
+
+          revenue:
+            key === 'subTotal' ? undefined : (data?.revenuePercent ?? 0) + '%',
+
+          arrOrAgr: toCurrency(data?.arr),
+          arp: toCurrency(data?.arp),
+        });
       });
 
     return this;

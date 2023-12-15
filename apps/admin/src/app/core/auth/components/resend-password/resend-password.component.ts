@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 /**
  * @class Resend password component.
@@ -10,7 +10,11 @@ import { Router } from '@angular/router';
   styleUrls: ['./resend-password.component.scss'],
 })
 export class ResendPasswordComponent implements OnInit {
-  constructor(private _router: Router) {}
+  email: string;
+
+  constructor(private _router: Router, private route: ActivatedRoute) {
+    this.email = this._router?.getCurrentNavigation()?.extras?.state?.email;
+  }
 
   ngOnInit(): void {}
 
@@ -18,7 +22,11 @@ export class ResendPasswordComponent implements OnInit {
    * @function navigateToRequestPassword To navigate to request password page.
    */
   navigateToRequestPassword(): void {
-    this._router.navigate(['/auth/request-password']);
+    this._router.navigate(['/auth/request-password'], {
+      state: {
+        email: this.email,
+      },
+    });
   }
 
   /**

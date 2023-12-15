@@ -121,6 +121,7 @@ export class CreateServiceComponent implements OnInit {
   listenForFormData() {
     if (this.servicesService.serviceFormData.value) {
       this.useForm.patchValue(this.servicesService.serviceFormData.value);
+      this.useForm.markAsDirty();
       this.servicesService.serviceFormData.next(null);
     }
   }
@@ -185,7 +186,7 @@ export class CreateServiceComponent implements OnInit {
     // this.updateFormControlSubscription();
 
     /* Patch the form value if service id present */
-    if (this.serviceId) {
+    if (this.serviceId && !this.servicesService.serviceFormData.value) {
       this.$subscription.add(
         this.servicesService
           .getLibraryItemById<ServiceResponse>(this.entityId, this.serviceId, {

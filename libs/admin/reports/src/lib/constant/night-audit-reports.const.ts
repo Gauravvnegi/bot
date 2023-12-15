@@ -61,7 +61,7 @@ export const auditRoomDetailsReportRows = [
     noOfGuests: undefined,
   },
   {
-    label: 'Today`s Use Rooms',
+    label: 'Today`s Day Use Rooms',
     noOfRooms: 'dayUseRooms',
     noOfGuests: 'dayUseRoomGuests',
   },

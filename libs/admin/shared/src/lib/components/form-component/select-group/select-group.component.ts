@@ -27,6 +27,14 @@ export class SelectGroupComponent extends FormComponent implements OnInit {
 
   ngOnInit(): void {
     this.initInputControl();
+    //if input control has initial value
+    if (this?.inputControl?.value) {
+      this.defaultOptions = this.menuOptions.map((item) => ({
+        ...item,
+        isSelected: this?.inputControl?.value?.includes(item.value),
+      }));
+    }
+    
     this.inputControl.valueChanges.subscribe((res) => {
       this.defaultOptions = this.menuOptions.map((item) => ({
         ...item,

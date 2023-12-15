@@ -16,11 +16,11 @@ export type TaxReportData = {
   res: string;
   checkInDate: string;
   checkOutDate: string;
-  roomCharge: number;
-  otherCharge: number;
-  cgst: number;
-  sgst: number;
-  postTaxTotal: number;
+  roomCharge: string;
+  otherCharge: string;
+  cgst: string;
+  sgst: string;
+  postTaxTotal: string;
 };
 
 export type TaxReportResponse = LodgingTaxReportResponse & {
@@ -44,11 +44,11 @@ export type LodgingTaxReportData = {
   checkInDate: string;
   checkOutDate: string;
   roomType: string;
-  rate: number;
-  discounts: number;
-  netRate: number;
-  occupancyTax: number;
-  otherTax: number;
+  rate: string;
+  discounts: string;
+  netRate: string;
+  occupancyTax: string;
+  otherTax: string;
 };
 
 export type LodgingTaxReportResponse = {

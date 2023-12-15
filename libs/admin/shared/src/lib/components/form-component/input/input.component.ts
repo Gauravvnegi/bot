@@ -37,6 +37,18 @@ export class InputComponent extends FormComponent {
     this.initInputControl();
   }
 
+  /**
+   *
+   * to disable value changes on scroll
+   */
+  disableValueChangesOnScroll(e) {
+    // Prevent the input value change
+    e.target.blur();
+
+    // Prevent the page/container scrolling
+    e.stopPropagation();
+  }
+
   get getWrapperNgClasses() {
     return {
       ...this.wrapperNgClasses,

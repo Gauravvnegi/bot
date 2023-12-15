@@ -75,3 +75,25 @@ export function toCurrency(
 export function currencyToNumber(currency: string) {
   return Number(currency.replace(/[^0-9.-]+/g, ''));
 }
+
+/**
+ * @function convertToNormalCase
+ * @param inputString string which need to be converted
+ * @returns normal formatted string
+ */
+export function convertToNormalCase(inputString) {
+  // Handle camelCase, PascalCase, snake_case, and kebab-case
+  const words = inputString
+    .replace(/([a-z])([A-Z])/g, '$1 $2') // Add space between camelCase and PascalCase
+    .replace(/_/g, ' ') // Replace underscores with spaces for snake_case
+    .replace(/-/g, ' ') // Replace hyphens with spaces for kebab-case
+    .toLowerCase() // Convert to lowercase
+    .split(/\s+/); // Split into words
+
+  // Capitalize the first letter of each word
+  const normalCaseString = words
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
+
+  return normalCaseString;
+}

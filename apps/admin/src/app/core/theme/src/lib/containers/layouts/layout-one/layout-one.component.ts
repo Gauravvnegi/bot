@@ -25,9 +25,7 @@ import {
 import { HotelDetailService } from 'libs/admin/shared/src/lib/services/hotel-detail.service';
 import { MenuItem } from 'primeng/api';
 import { Subscription } from 'rxjs';
-import { NightAuditComponent } from '../../../../../../../../../../../libs/admin/global-shared/src/lib/components/night-audit/night-audit.component';
-import { QuickReservationFormComponent } from '../../../../../../../../../../../libs/admin/reservation/src/lib/components/quick-reservation-form/quick-reservation-form.component';
-import { tokensConfig } from '../../../../../../../../../../../libs/admin/shared/src/lib/constants/common';
+import { QuickReservationFormComponent } from 'libs/admin/reservation/src/lib/components/quick-reservation-form/quick-reservation-form.component';
 import {
   defaultNotificationFilter,
   layoutConfig,
@@ -41,11 +39,13 @@ import { NotificationService } from '../../../services/notification.service';
 import { ProgressSpinnerService } from '../../../services/progress-spinner.service';
 import { RoutesConfigService } from '../../../services/routes-config.service';
 import { SubscriptionPlanService } from '../../../services/subscription-plan.service';
-import { NightAuditService } from '../../../../../../../../../../../libs/admin/global-shared/src/lib/services/night-audit.service';
+import { NightAuditService } from 'libs/admin/global-shared/src/lib/services/night-audit.service';
 import {
   SideBarConfig,
   SideBarService,
-} from '../../../../../../../../../../../libs/admin/shared/src/lib/services/sidebar.service';
+} from 'libs/admin/shared/src/lib/services/sidebar.service';
+import { tokensConfig } from 'libs/admin/shared/src/lib/constants/common';
+import { NightAuditComponent } from 'libs/admin/global-shared/src/lib/components/night-audit/night-audit.component';
 
 @Component({
   selector: 'admin-layout-one',
@@ -63,6 +63,7 @@ import {
     ]),
   ],
 })
+
 export class LayoutOneComponent implements OnInit, OnDestroy {
   readonly moduleNames = ModuleNames;
   backgroundColor: string;

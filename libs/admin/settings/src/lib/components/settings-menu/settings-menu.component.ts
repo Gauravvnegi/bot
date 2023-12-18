@@ -1,5 +1,4 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { Router } from '@angular/router';
 import {
   SettingsMenuItem,
   SubscriptionPlanService,
@@ -17,7 +16,6 @@ export class SettingsMenuComponent implements OnInit {
   @Output() closeEvent = new EventEmitter(false);
 
   constructor(
-    private router: Router,
     private subscriptionService: SubscriptionPlanService
   ) {}
 

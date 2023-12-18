@@ -1,36 +1,30 @@
 import { Component, OnInit } from '@angular/core';
 import {
-  GlobalFilterService,
-  RouteConfigPathService,
-  RoutesConfigService,
-} from '@hospitality-bot/admin/core/theme';
-import { StepperEmitType } from 'libs/admin/shared/src/lib/components/stepper/stepper.component';
-import { MenuItem } from 'primeng/api';
-import { BarPriceService } from '../../services/bar-price.service';
-import {
   AbstractControl,
   FormArray,
   FormBuilder,
   FormGroup,
   Validators,
 } from '@angular/forms';
-import { Revenue } from '../../constants/revenue-manager.const';
+import { ActivatedRoute } from '@angular/router';
 import {
-  ConfigType,
-  DynamicPricingForm,
-  RuleType,
-} from '../../types/dynamic-pricing.types';
-import { RoomTypes } from 'libs/admin/channel-manager/src/lib/models/bulk-update.models';
-import { DynamicPricingService } from '../../services/dynamic-pricing.service';
-import { Subscription } from 'rxjs';
+  GlobalFilterService,
+  RoutesConfigService,
+} from '@hospitality-bot/admin/core/theme';
 import {
   AdminUtilityService,
-  NavRouteOption,
   NavRouteOptions,
   QueryConfig,
 } from '@hospitality-bot/admin/shared';
-import { SnackBarService } from '@hospitality-bot/shared/material';
-import { ActivatedRoute } from '@angular/router';
+import { RoomTypes } from 'libs/admin/channel-manager/src/lib/models/bulk-update.models';
+import { Subscription } from 'rxjs';
+import { RuleType, ruleLabel } from '../../constants/dynamic-pricing.const';
+import { Revenue } from '../../constants/revenue-manager.const';
+import { DynamicPricingService } from '../../services/dynamic-pricing.service';
+import {
+  ConfigType,
+  DynamicPricingForm,
+} from '../../types/dynamic-pricing.types';
 
 @Component({
   selector: 'hospitality-bot-dynamic-pricing',
@@ -50,10 +44,10 @@ export class DynamicPricingComponent implements OnInit {
 
   loading = false;
   $subscription = new Subscription();
-  navRoutes: NavRouteOptions = [{ label: 'Create Season', link: './' }];
+  navRoutes: NavRouteOptions = [];
+  heading: string = '';
 
   constructor(
-    private barPriceService: BarPriceService,
     private dynamicPricingService: DynamicPricingService,
     private adminUtilityService: AdminUtilityService,
     private fb: FormBuilder,
@@ -61,9 +55,20 @@ export class DynamicPricingComponent implements OnInit {
     private routeConfigService: RoutesConfigService,
     private activatedRoute: ActivatedRoute
   ) {
+    this.initRouteConfiguration();
+  }
+
+  initRouteConfiguration() {
     this.activeRule = (this.activatedRoute.snapshot.data
       .ruleType as unknown) as RuleType;
+
     this.ruleId = this.activatedRoute.snapshot.paramMap.get('id');
+
+    this.heading = `${this.ruleId ? 'Edit' : 'Create'} ${
+      ruleLabel[this.activeRule]
+    }`;
+
+    this.navRoutes = [{ label: this.heading, link: './' }];
   }
 
   ngOnInit(): void {

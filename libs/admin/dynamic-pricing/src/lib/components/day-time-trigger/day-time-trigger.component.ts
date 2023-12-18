@@ -11,11 +11,15 @@ import {
   FormArray,
   FormBuilder,
   FormGroup,
+  Validators,
 } from '@angular/forms';
 import { Revenue, weeks } from '../../constants/revenue-manager.const';
 import { Subscription } from 'rxjs';
 import { DynamicPricingService } from '../../services/dynamic-pricing.service';
-import { ConfigType } from '../../types/dynamic-pricing.types';
+import {
+  ConfigType,
+  DynamicDayTriggerPricingForm,
+} from '../../types/dynamic-pricing.types';
 import {
   AdminUtilityService,
   QueryConfig,
@@ -44,25 +48,15 @@ export class DayTimeTriggerComponent implements OnInit {
   readonly isDirty = isDirty;
   entityId: string;
 
-  parentFG: FormGroup;
   loading = false;
   $subscription = new Subscription();
   @ViewChild('accordion') accordion: Accordion;
 
-  @Input() set dynamicPricingFG(form: FormGroup) {
-    this.parentFG = form;
-    if (this.dynamicPricingControl?.timeFA) {
-      this.loadTriggers();
-    }
-  }
+  dynamicPricingFG: FormGroup;
 
-  @Output() modifyTriggerFGEvent = new EventEmitter();
-  @Output() modifyLevelFGEvent = new EventEmitter();
+  // @Output() modifyTriggerFGEvent = new EventEmitter();
+  // @Output() modifyLevelFGEvent = new EventEmitter();
   weeks = weeks;
-
-  get dynamicPricingFG() {
-    return this.parentFG;
-  }
 
   constructor(
     private dynamicPricingService: DynamicPricingService,
@@ -73,8 +67,18 @@ export class DayTimeTriggerComponent implements OnInit {
     private modalService: ModalService
   ) {}
 
+  initForm() {
+    const data: DynamicDayTriggerPricingForm = {
+      timeFA: this.fb.array([]),
+    };
+
+    this.dynamicPricingFG = this.fb.group(data);
+  }
+
   ngOnInit(): void {
     this.entityId = this.globalFilter.entityId;
+    this.initForm();
+    this.loadTriggers();
   }
 
   modifyTriggerFG(
@@ -139,23 +143,46 @@ export class DayTimeTriggerComponent implements OnInit {
         dayTimeFormArray.removeAt(index);
       }
     } else {
-      this.modifyTriggerFGEvent.emit({ mode, index });
+      // this.modifyTriggerFGEvent.emit({ mode, index });
+      if (mode == Revenue.add) {
+        this.dynamicPricingControl.timeFA.controls.push(this.getTriggerFG());
+      }
       this.listenChanges(
         dayTimeFormArray.at(dayTimeFormArray.controls.length - 1) as FormGroup
       );
-
-      // TODO: Need to scroll on create new trigger
-      // if(createOnClick){
-      //     setTimeout(()=>{
-      //       openAccordion({
-      //         accordion: this.accordion,
-      //         index: dayTimeFormArray.length-2,
-      //         isScrollToTop: true,
-      //         wait: 500
-      //       });
-      //    });
-      // }
     }
+  }
+
+  getTriggerFG(data?: any): FormGroup {
+    const triggerFG = this.fb.group({
+      id: [],
+      hotelId: [this.entityId],
+      name: ['', [Validators.required]],
+      fromDate: ['', [Validators.required]],
+      toDate: ['', [Validators.required]],
+      type: ['add'],
+      removedRules: this.fb.array([]),
+      selectedDays: [, [Validators.required]],
+      configCategory: ['HOTEL'],
+      hotelConfig: this.fb.array([this.getLevelFG()]),
+      status: [true, [Validators.required]],
+    });
+    if (data) triggerFG.patchValue(data);
+    return triggerFG;
+  }
+
+  getLevelFG(): FormGroup {
+    return this.fb.group(
+      {
+        id: [],
+        fromTime: ['', [Validators.required]],
+        toTime: ['', [Validators.required]],
+        start: ['', [Validators.min(1), Validators.required]],
+        end: ['', [Validators.min(1), Validators.required]],
+        discount: ['', [Validators.required]],
+      },
+      { validators: this.dynamicPricingService.triggerLevelValidator }
+    );
   }
 
   modifyLevelFG(
@@ -163,7 +190,20 @@ export class DayTimeTriggerComponent implements OnInit {
     mode = Revenue.add,
     index?: number
   ): void {
-    this.modifyLevelFGEvent.emit({ triggerFG, mode, index });
+    // this.modifyLevelFGEvent.emit({ triggerFG, mode, index });
+    const levelFA = triggerFG?.get('hotelConfig') as FormArray;
+    if (mode == Revenue.add) {
+      levelFA.controls.push(this.getLevelFG());
+    } else {
+      const levelRemoveId = levelFA.at(index).value.id;
+      if (levelRemoveId) {
+        const removedRule = triggerFG.get('removedRules') as FormArray;
+        removedRule.controls.push(levelRemoveId);
+        removedRule.markAsDirty();
+      }
+      levelFA.removeAt(index);
+    }
+    levelFA.markAsDirty();
     this.listenChanges(triggerFG);
   }
 

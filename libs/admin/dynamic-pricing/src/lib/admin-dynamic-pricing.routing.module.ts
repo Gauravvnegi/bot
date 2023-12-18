@@ -9,7 +9,7 @@ import { InventoryReallocationComponent } from './components/inventory-reallocat
 import { MainComponent } from './components/main/main.component';
 import { OccupancyComponent } from './components/occupancy/occupancy.component';
 import { RoomTypesComponent } from './components/room-types/room-types.component';
-import { RuleType } from './types/dynamic-pricing.types';
+import { RuleType } from './constants/dynamic-pricing.const';
 
 const appRoutes: Route[] = [
   {

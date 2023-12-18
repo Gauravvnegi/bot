@@ -54,11 +54,6 @@ export type ConfigType =
   | 'DAY_TIME_TRIGGER'
   | 'INVENTORY_REALLOCATION';
 
-export enum RuleType {
-  'OCCUPANCY' = 'OCCUPANCY',
-  'DAY_TIME_TRIGGER' = 'DAY_TIME_TRIGGER',
-}
-
 export type ModeType = 'add' | 'update';
 
 export type DynamicPricingUpdateRequestType = Record<
@@ -111,6 +106,7 @@ export type DynamicPricingForm = {
 };
 
 export type DynamicSeasonPricingForm = Pick<DynamicPricingForm, 'occupancyFA'>;
+export type DynamicDayTriggerPricingForm = Pick<DynamicPricingForm, 'timeFA'>;
 
 export type TriggerErrorTypes =
   | 'collide'

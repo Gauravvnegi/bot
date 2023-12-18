@@ -1,7 +1,7 @@
 <div class="main-wrapper">
   <div class="header">
     <hospitality-bot-navigation-header
-      heading="Create Season"
+      [heading]="heading"
       [routes]="navRoutes"
       [isStickyTitle]="false"
       [isBack]="true"
@@ -17,9 +17,6 @@
 
       <hospitality-bot-day-time-trigger
         *ngSwitchCase="'DAY_TIME_TRIGGER'"
-        [dynamicPricingFG]="dynamicPricingFG"
-        (modifyTriggerFGEvent)="modifyTriggerFG($event)"
-        (modifyLevelFGEvent)="modifyLevelFG($event)"
         [ruleId]="ruleId"
       ></hospitality-bot-day-time-trigger>
 

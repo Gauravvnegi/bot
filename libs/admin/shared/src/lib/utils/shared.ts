@@ -53,6 +53,22 @@ export function getRandomLightHexColor() {
   return hexColor;
 }
 
+export function generateArrayItemColor(
+  index: number,
+  count: number,
+  type: 'dark' | 'light' = 'light'
+) {
+  const saturation = type === 'light' ? 50 : 80; // Saturation value (0-100)
+
+  // Determine lightness based on the type parameter
+  const lightness = type === 'light' ? 80 : 30; // Adjust as needed
+
+  const hue = (360 / count) * index; // Vary the hue based on the index
+  const color = `hsl(${hue}, ${saturation}%, ${lightness}%)`;
+
+  return color;
+}
+
 export function getListOfRandomLightColor(numberOfColors: number) {
   return Array.from({ length: numberOfColors }, getRandomLightHexColor);
 }

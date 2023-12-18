@@ -1,25 +1,24 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
+  Option,
   epochWithoutTime,
+  generateArrayItemColor,
   getDayOfWeekFromEpoch,
-  getListOfRandomLightColor,
 } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import {
   CGridData,
   CGridDataRecord,
   CGridHoverData,
+  CGridMarkedRecord,
   CGridSelectedData,
 } from 'libs/admin/shared/src/lib/components/calendar-view/calendar-view.component';
 import { Subscription } from 'rxjs';
 import { DynamicPricingService } from '../../services/dynamic-pricing.service';
-import {
-  DaysType,
-  DynamicPricingRequest,
-} from '../../types/dynamic-pricing.types';
+import { ConfigType, DaysType } from '../../types/dynamic-pricing.types';
 // import { OverlayPanel } from 'primeng/overlaypanel';
 // import { Menu } from 'primeng/menu';
 
@@ -34,21 +33,14 @@ type Season = {
     label: string;
     value: DaysType;
   }[];
+  type: ConfigType;
 };
 
-type ContentData = {
-  id: string;
+type ContentData = Partial<{
   name: string;
   isActive: boolean;
-};
-
-type Content = Record<'season' | 'dayTrigger', ContentData>;
-
-// const defaultContent: ContentData = {
-//   id: '',
-//   name: '',
-//   isActive: true,
-// };
+  id: string;
+}>;
 
 @Component({
   selector: 'hospitality-bot-dynamic-pricing-calendar-view',
@@ -63,21 +55,31 @@ export class DynamicPricingCalendarViewComponent implements OnInit, OnDestroy {
 
   useForm: FormGroup;
 
-  colors = getListOfRandomLightColor(20);
-
   gridData: CGridDataRecord = {};
+  markDates: CGridMarkedRecord = {};
 
-  occupancyData: CGridDataRecord<ContentData> = {};
-  dayTriggerData: CGridDataRecord<ContentData> = {};
-  inactiveSeasons: CGridData['id'][] = [];
+  occupancyData: Record<string, ContentData> = {};
+  dayTriggerData: Record<string, ContentData> = {};
+  inactiveRules: CGridData['id'][] = [];
   years: number[] = [];
 
-  // content: Content = {
-  //   season: { ...defaultContent },
-  //   dayTrigger: { ...defaultContent },
-  // };
+  ruleOptions: Option<ConfigType>[] = [
+    {
+      label: 'Season',
+      value: 'OCCUPANCY',
+    },
+    {
+      label: 'Day triggers',
+      value: 'DAY_TIME_TRIGGER',
+    },
+  ];
 
-  // showMenu: { clientX: number; clientY: number };
+  selectedRuleIdx: number = 0;
+
+  get selectedRuleType() {
+    return this.ruleOptions[this.selectedRuleIdx].value;
+  }
+
   tooltip: string;
 
   constructor(
@@ -92,6 +94,10 @@ export class DynamicPricingCalendarViewComponent implements OnInit, OnDestroy {
     this.useForm = this.fb.group({
       seasons: new FormArray([]),
     });
+  }
+
+  onRuleFilterChange(event) {
+    this.selectedRuleIdx = event.index;
   }
 
   openOverlayPanel(event, value: string) {
@@ -168,8 +174,9 @@ export class DynamicPricingCalendarViewComponent implements OnInit, OnDestroy {
     });
   }
 
-  createSeasonForm(data: Season) {
-    const sFrom = this.fb.group({
+  crateRulesForm(data: Season) {
+    // Rules Value
+    const fgData: Record<keyof Season, any> = {
       isActive: [data.isActive],
       name: [data.name],
       id: [data.id],
@@ -177,24 +184,25 @@ export class DynamicPricingCalendarViewComponent implements OnInit, OnDestroy {
       fromDate: [data.fromDate],
       toDate: [data.toDate],
       days: [data.days],
-    });
+      type: [data.type],
+    };
+
+    const sFrom = this.fb.group(fgData);
 
     sFrom.valueChanges.subscribe((value: Season) => {
       this.$subscription.add(
         this.dynamicPricingService
-          .changeSeasonStatus(value.id, value.isActive, {
-            params: '?type=OCCUPANCY',
-          })
+          .changeRuleStatus(value.id, value.isActive, value.type)
           .subscribe((res) => {
             const isActive = res.status === 'ACTIVE';
 
             if (isActive) {
-              const newInactiveSeason = this.inactiveSeasons.filter(
+              const newInactiveSeason = this.inactiveRules.filter(
                 (item) => item !== res.id
               );
-              this.inactiveSeasons = newInactiveSeason;
+              this.inactiveRules = newInactiveSeason;
             } else {
-              this.inactiveSeasons.push(res.id);
+              this.inactiveRules.push(res.id);
             }
 
             this.snackbarService.openSnackBarAsText(
@@ -214,20 +222,26 @@ export class DynamicPricingCalendarViewComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.loading = true;
 
-    this.dynamicPricingService.getAllDynamicPricingList().subscribe((res) => {
-      const [occupancy, dayTrigger] = res;
+    this.dynamicPricingService.getDynamicPricingListing().subscribe((rules) => {
       this.loading = false;
 
-      occupancy.configDetails.forEach((item, seasonIdx) => {
-        const { fromDate, toDate, daysIncluded, name, id, status } = item;
-        const colorCode = this.colors[seasonIdx];
+      const totalRules = rules.configDetails.length;
+
+      rules.configDetails.forEach((item, seasonIdx) => {
+        const { fromDate, toDate, daysIncluded, name, id, status, type } = item;
+        const colorCode = generateArrayItemColor(
+          seasonIdx,
+          totalRules,
+          type === 'DAY_TIME_TRIGGER' ? 'dark' : 'light'
+        );
 
         const isActive = status === 'ACTIVE';
 
-        this.seasonFA.push(
-          this.createSeasonForm({
+        this.rulesFA.push(
+          this.crateRulesForm({
             id,
             name,
+            type,
             isActive,
             colorCode,
             days: daysIncluded.map((item) => ({
@@ -239,7 +253,7 @@ export class DynamicPricingCalendarViewComponent implements OnInit, OnDestroy {
           })
         );
 
-        if (!isActive) this.inactiveSeasons.push(id);
+        if (!isActive) this.inactiveRules.push(id);
 
         const startDate = this.getFormattedDate(fromDate);
         const endDate = this.getFormattedDate(toDate);
@@ -251,18 +265,32 @@ export class DynamicPricingCalendarViewComponent implements OnInit, OnDestroy {
         ) {
           const { day } = getDayOfWeekFromEpoch(currentEpoch);
 
-          if (daysIncluded.includes(day)) {
-            this.gridData[currentEpoch] = {
-              bg: colorCode,
-              days: daysIncluded,
-              id,
-            };
+          const gridData: CGridData = {
+            bg: colorCode,
+            days: daysIncluded,
+            id,
+          };
 
-            this.occupancyData[currentEpoch] = {
-              id,
-              name,
-              isActive,
-            };
+          if (daysIncluded.includes(day)) {
+            if (type === 'OCCUPANCY') {
+              this.gridData[currentEpoch] = gridData;
+
+              this.occupancyData[currentEpoch] = {
+                id,
+                name,
+                isActive,
+              };
+            }
+
+            if (type === 'DAY_TIME_TRIGGER') {
+              this.dayTriggerData[currentEpoch] = {
+                id,
+                name,
+                isActive: status === 'ACTIVE',
+              };
+
+              this.markDates[currentEpoch] = gridData;
+            }
           }
         }
 
@@ -285,30 +313,10 @@ export class DynamicPricingCalendarViewComponent implements OnInit, OnDestroy {
 
         this.years.sort();
       });
-
-      dayTrigger.configDetails.forEach((item, seasonIdx) => {
-        const { fromDate, toDate, daysIncluded, name, id, status } = item;
-
-        for (
-          let currentEpoch = epochWithoutTime(fromDate);
-          currentEpoch <= epochWithoutTime(toDate);
-          currentEpoch += 86400000
-        ) {
-          const { day } = getDayOfWeekFromEpoch(currentEpoch);
-
-          if (daysIncluded.includes(day)) {
-            this.dayTriggerData[currentEpoch] = {
-              id,
-              name,
-              isActive: status === 'ACTIVE',
-            };
-          }
-        }
-      });
     });
   }
 
-  get seasonFA() {
+  get rulesFA() {
     return this.useForm.get('seasons') as FormArray;
   }
 

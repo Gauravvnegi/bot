@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from '@hospitality-bot/shared/utils';
 import {
+  ConfigType,
   DynamicPricingRequest,
   DynamicPricingResponse,
 } from '../types/dynamic-pricing.types';
@@ -45,13 +46,13 @@ export class DynamicPricingService extends ApiService {
     );
   }
 
-  changeSeasonStatus(
+  changeRuleStatus(
     seasonId: string,
     isActive: boolean,
-    config: QueryConfig
+    type: ConfigType
   ): Observable<DynamicPricingRequest> {
     return this.patch(
-      `/api/v1/revenue/dynamic-pricing-configuration/${seasonId}${config.params}`,
+      `/api/v1/revenue/dynamic-pricing-configuration/${seasonId}?type=${type}`,
       { status: isActive ? 'ACTIVE' : 'INACTIVE' }
     );
   }
@@ -70,17 +71,22 @@ export class DynamicPricingService extends ApiService {
     );
   }
 
-  getAllDynamicPricingList(): Observable<
-    [DynamicPricingResponse, DynamicPricingResponse]
-  > {
-    const request1$ = this.getDynamicPricingList({
-      params: '?type=OCCUPANCY',
-    });
-    const request2$ = this.getDynamicPricingList({
-      params: '?type=DAY_TIME_TRIGGER',
-    });
+  getDynamicPricingListing(config?: {
+    type?: ConfigType;
+    pagination?: boolean;
+    fromDate?: number;
+    toDate?: number;
+  }): Observable<DynamicPricingResponse> {
+    const { type, pagination } = {
+      pagination: false,
+      ...(config ?? {}),
+    };
 
-    return forkJoin([request1$, request2$]);
+    return this.get(
+      `/api/v1/revenue/dynamic-pricing-configuration?${
+        type ? `type=${type}` : ''
+      }&pagination=${pagination}`
+    );
   }
 
   occupancyValidate(form: FormGroup): boolean {

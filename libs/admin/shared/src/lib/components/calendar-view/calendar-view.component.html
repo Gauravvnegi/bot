@@ -75,7 +75,12 @@
                 showDelay="500"
                 tooltipPosition="top"
               >
-                {{ gridRowData.inactive ? '' : gridRowData.label }}
+                <div
+                  [ngStyle]="getMarkedDatesStyle(gridRowData.value)"
+                  class="grid__marked"
+                >
+                  {{ gridRowData.inactive ? '' : gridRowData.label }}
+                </div>
               </div>
             </div>
           </div>

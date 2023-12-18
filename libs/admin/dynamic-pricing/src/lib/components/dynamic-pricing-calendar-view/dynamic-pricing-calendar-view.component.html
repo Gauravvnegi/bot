@@ -16,7 +16,7 @@
 
   <ng-container *ngIf="!loading; else loader">
     <hospitality-bot-empty-table
-      *ngIf="!seasonFA.controls?.length"
+      *ngIf="!rulesFA.controls?.length"
       [isLoading]="loading"
       [link]="'create-season'"
       [content]="{
@@ -26,80 +26,85 @@
       }"
     >
     </hospitality-bot-empty-table>
-    <div class="main" *ngIf="seasonFA.controls.length">
+    <div class="main" *ngIf="rulesFA.controls.length">
       <div class="calendar">
         <hospitality-bot-calendar-view
           [years]="years"
           calendarWidth="calc(90vw - 300px)"
           [gridData]="gridData"
-          [highlightId]="highlightedSeason"
+          [highlightId]="highlightedRule"
           (onDateSelect)="onDateSelect($event)"
-          [inactiveIds]="inactiveSeasons"
+          [inactiveIds]="inactiveRules"
           (onDateHover)="handleHover($event)"
           [tooltip]="tooltip"
+          [markDates]="markDates"
         ></hospitality-bot-calendar-view>
       </div>
 
       <div class="filters" id="season-filter" [formGroup]="useForm">
-        <div class="filters__head">Seasons</div>
+        <!-- <div class="filters__head">Seasons</div> -->
+        <hospitality-bot-tab-group
+          [listItems]="ruleOptions"
+          [selectedIndex]="selectedRuleIdx"
+          (selectedTabChange)="onRuleFilterChange($event)"
+        ></hospitality-bot-tab-group>
         <div
           class="filters__main"
           *ngIf="useForm.get('seasons')?.length"
           formArrayName="seasons"
         >
-          <div
-            [id]="season.get('id').value"
-            class="season"
-            [formGroupName]="i"
+          <ng-container
             *ngFor="
               let season of useForm.get('seasons')?.controls;
               let i = index
             "
-            [ngClass]="{
-              season__selected: season.get('id').value === highlightedSeason
-            }"
-            (click)="handleEdit(season.get('id').value)"
           >
-            <!-- <div class="season__checkbox">
-              <hospitality-bot-checkbox
-                controlName="selected"
-              ></hospitality-bot-checkbox>
-            </div> -->
             <div
-              class="season__color"
-              [ngStyle]="{
-                backgroundColor: season.get('colorCode').value
+              *ngIf="season.get('type').value === selectedRuleType"
+              [id]="season.get('id').value"
+              class="season"
+              [formGroupName]="i"
+              [ngClass]="{
+                season__selected: season.get('id').value === highlightedRule
               }"
-            ></div>
-            <div class="season__name" [ngStyle]="{}">
-              {{ season.get('name').value }}
-            </div>
-
-            <div class="season__toggle" click-stop-propagation>
-              <hospitality-bot-input-switch
-                controlName="isActive"
-              ></hospitality-bot-input-switch>
-            </div>
-
-            <div class="season__dates">
-              <div class="season__date">
-                {{ season.get('fromDate').value | date: 'dd/MM/yyyy' }}
-              </div>
-              {{ ' - ' }}
-              <div class="season__date">
-                {{ season.get('toDate').value | date: 'dd/MM/yyyy' }}
-              </div>
-            </div>
-
-            <div class="season__days">
+              (click)="handleEdit(season.get('id').value)"
+            >
               <div
-                class="season__day"
-                *ngFor="let day of season.get('days').value"
-              >
-                {{ day.label }}
+                class="season__color"
+                [ngStyle]="{
+                  backgroundColor: season.get('colorCode').value
+                }"
+              ></div>
+              <div class="season__name" [ngStyle]="{}">
+                {{ season.get('name').value }}
+              </div>
+
+              <div class="season__toggle" click-stop-propagation>
+                <hospitality-bot-input-switch
+                  controlName="isActive"
+                ></hospitality-bot-input-switch>
+              </div>
+
+              <div class="season__dates">
+                <div class="season__date">
+                  {{ season.get('fromDate').value | date: 'dd/MM/yyyy' }}
+                </div>
+                {{ ' - ' }}
+                <div class="season__date">
+                  {{ season.get('toDate').value | date: 'dd/MM/yyyy' }}
+                </div>
+              </div>
+
+              <div class="season__days">
+                <div
+                  class="season__day"
+                  *ngFor="let day of season.get('days').value"
+                >
+                  {{ day.label }}
+                </div>
               </div>
             </div>
-          </div>
+          </ng-container>
         </div>
       </div>
     </div>
@@ -109,20 +114,3 @@
 <ng-template #loader>
   <hospitality-bot-loader-bounce></hospitality-bot-loader-bounce>
 </ng-template>
-
-<!-- <p-overlayPanel #op>
-  <ng-template pTemplate>
-    <div class="season-overlay">
-      <div *ngIf="content.season.id" class="season-overlay__occupancy">
-        Season: {{ content.season.name }}
-      </div>
-      <div class="season-overlay__day-trigger" *ngIf="content.dayTrigger.id">
-        DayTrigger: {{ content.dayTrigger.name }}
-      </div>
-    </div>
-  </ng-template>
-</p-overlayPanel>
-
-<hospitality-bot-positioned-menu
-  [showMenu]="showMenu"
-></hospitality-bot-positioned-menu> -->

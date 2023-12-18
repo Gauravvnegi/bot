@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormGroup } from '@angular/forms';
+import { convertToTitleCase } from 'libs/admin/shared/src/lib/utils/valueFormatter';
 
 @Component({
   selector: 'hospitality-bot-feedback-status-form',
@@ -14,6 +15,8 @@ export class FeedbackStatusFormComponent implements OnInit {
   @Output() statusUpdate = new EventEmitter();
   @Output() openDetail = new EventEmitter();
   type: string;
+  readonly convertToTitleCas = convertToTitleCase;
+
   constructor() {}
 
   ngOnInit(): void {

@@ -18,8 +18,6 @@ import {
 import { Subscription } from 'rxjs';
 import { DynamicPricingService } from '../../services/dynamic-pricing.service';
 import { ConfigType, DaysType } from '../../types/dynamic-pricing.types';
-// import { OverlayPanel } from 'primeng/overlaypanel';
-// import { Menu } from 'primeng/menu';
 
 type Season = {
   id: string;
@@ -197,12 +195,17 @@ export class DynamicPricingCalendarViewComponent implements OnInit, OnDestroy {
             const isActive = res.status === 'ACTIVE';
 
             if (isActive) {
-              const newInactiveSeason = this.inactiveRules.filter(
+              const newInactiveRules = this.inactiveRules.filter(
                 (item) => item !== res.id
               );
-              this.inactiveRules = newInactiveSeason;
+              this.inactiveRules = newInactiveRules;
             } else {
-              this.inactiveRules.push(res.id);
+              /**
+               * @todo - Inactive is now disappearing
+               */
+              const newInactiveRules = [...this.inactiveRules];
+              newInactiveRules.push(res.id);
+              this.inactiveRules = newInactiveRules;
             }
 
             this.snackbarService.openSnackBarAsText(

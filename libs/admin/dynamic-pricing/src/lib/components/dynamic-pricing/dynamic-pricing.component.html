@@ -8,23 +8,19 @@
     >
     </hospitality-bot-navigation-header>
   </div>
-  <hospitality-bot-stepper
-    [stepList]="itemList"
-    (onActive)="onActive($event)"
-  ></hospitality-bot-stepper>
-  <div class="content">
-    <ng-container [ngSwitch]="activeStep">
+  <div class="content" *ngIf="activeRule">
+    <ng-container [ngSwitch]="activeRule">
       <hospitality-bot-occupancy
-        *ngSwitchCase="0"
-        [dynamicPricingFG]="dynamicPricingFG"
-        [rooms]="allRooms"
+        *ngSwitchCase="'OCCUPANCY'"
+        [seasonId]="ruleId"
       ></hospitality-bot-occupancy>
 
       <hospitality-bot-day-time-trigger
-        *ngSwitchCase="1"
+        *ngSwitchCase="'DAY_TIME_TRIGGER'"
         [dynamicPricingFG]="dynamicPricingFG"
         (modifyTriggerFGEvent)="modifyTriggerFG($event)"
         (modifyLevelFGEvent)="modifyLevelFG($event)"
+        [ruleId]="ruleId"
       ></hospitality-bot-day-time-trigger>
 
       <!-- <hospitality-bot-inventory-reallocation

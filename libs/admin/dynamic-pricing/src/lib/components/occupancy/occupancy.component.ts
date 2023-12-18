@@ -34,6 +34,7 @@ import {
   ConfigCategory,
   ConfigType,
   DynamicPricingForm,
+  DynamicSeasonPricingForm,
 } from '../../types/dynamic-pricing.types';
 import { RoomTypes } from 'libs/admin/channel-manager/src/lib/models/bulk-update.models';
 import { ModalComponent } from 'libs/admin/shared/src/lib/components/modal/modal.component';
@@ -41,7 +42,7 @@ import { MatDialogConfig } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 import { Accordion } from 'primeng/accordion';
 import { openAccordion } from '../../models/bar-price.model';
-import { isDirty } from '../../services/bar-price.service';
+import { BarPriceService, isDirty } from '../../services/bar-price.service';
 
 export type ControlTypes = 'season' | 'occupancy' | 'hotel-occupancy';
 
@@ -51,43 +52,39 @@ export type ControlTypes = 'season' | 'occupancy' | 'hotel-occupancy';
   styleUrls: ['./occupancy.component.scss'],
 })
 export class OccupancyComponent implements OnInit {
+  @Input() seasonId: string;
+
   readonly weeks = weeks;
   configCategory: Option[] = [
     { label: 'Room Type', value: 'ROOM_TYPE' },
     { label: 'Hotel Type', value: 'HOTEL' },
   ];
   entityId = '';
-  seasonId!: string;
   readonly isDirty = isDirty;
 
   loading = false;
   footerNote = `Instruction Goes here...`;
-  private parentForm: FormGroup;
+  dynamicPricingFG: FormGroup;
 
-  @Input() set dynamicPricingFG(form: FormGroup) {
-    if (form) {
-      this.parentForm = form;
-      if (!this.dynamicPricingControl.occupancyFA.length) {
-        this.initSeason();
-        this.listenChanges();
-      }
-    }
-  }
-  @Input() rooms: RoomTypes[];
+  // @Input() set dynamicPricingFG(form: FormGroup) {
+  //   if (form) {
+  //     this.parentForm = form;
+  //     if (!this.dynamicPricingControl.occupancyFA.length) {
+  //       this.initSeason();
+  //       this.listenChanges();
+  //     }
+  //   }
+  // }
+
+  rooms: RoomTypes[];
   @ViewChild('accordion') accordion: Accordion;
   $subscription = new Subscription();
 
-  get dynamicPricingFG(): FormGroup {
-    return this.parentForm;
-  }
-
   get dynamicPricingControl() {
     return this.dynamicPricingFG?.controls as Record<
-      keyof DynamicPricingForm,
-      AbstractControl
-    > & {
-      occupancyFA: FormArray;
-    };
+      keyof DynamicSeasonPricingForm,
+      FormArray
+    >;
   }
 
   constructor(
@@ -97,48 +94,72 @@ export class OccupancyComponent implements OnInit {
     private snackbarService: SnackBarService,
     public fb: FormBuilder,
     private modalService: ModalService,
-    private route: ActivatedRoute,
-    private el: ElementRef,
-    private renderer: Renderer2
-  ) {
-    this.seasonId = this.route.snapshot.queryParamMap?.get('seasonId');
-  }
+    private barPriceService: BarPriceService
+  ) {}
 
   ngOnInit(): void {
     this.entityId = this.globalFilterService.entityId;
+    this.initForm();
+    this.initRoom();
+  }
+
+  initForm() {
+    const data: DynamicSeasonPricingForm = {
+      occupancyFA: this.fb.array([]),
+    };
+
+    this.dynamicPricingFG = this.fb.group(data);
+  }
+
+  initRoom() {
+    this.loading = true;
+    this.barPriceService.roomDetails.subscribe((res) => {
+      if (this.barPriceService.isRoomDetailsLoaded) {
+        this.rooms = res;
+
+        if (this.seasonId) {
+          this.initSeason();
+          this.listenChanges();
+        } else {
+          this.add('season', null, true);
+        }
+      } else {
+        this.barPriceService.loadRoomTypes(this.entityId);
+      }
+
+      this.loading = false;
+    });
   }
 
   initSeason() {
     this.loading = true;
+
     this.$subscription.add(
       this.dynamicPricingService
         .getDynamicPricingList(this.getQueryConfig('OCCUPANCY'))
         .subscribe((res) => {
+          /**
+           * @todo Support from api using ruleId
+           */
+
+          res.configDetails = res.configDetails.filter(
+            (res) => res.id === this.seasonId
+          );
+
           this.dynamicPricingControl.occupancyFA = this.fb.array([]);
-          if (!res.configDetails.length) {
-            this.add('season');
-          } else {
-            const handler = new DynamicPricingHandler().deserialize(
-              res,
-              this.rooms
-            );
 
-            if (this.seasonId) {
-              handler.dataList.sort((a, b) => {
-                if (a.id === this.seasonId) {
-                  return -1; // Move 'elementToMove' to the top
-                } else if (b.id === this.seasonId) {
-                  return 1; // Move 'elementToMove' to the top
-                } else {
-                  return 0; // Maintain the order for other elements
-                }
-              });
-            }
+          const handler = new DynamicPricingHandler().deserialize(
+            res,
+            this.rooms
+          );
 
-            handler.dataList.forEach((item, index) => {
-              handler.mapOccupancy(index, item, this);
-            });
-          }
+          handler.dataList = handler.dataList.filter(
+            (res) => res.id === this.seasonId
+          );
+
+          handler.dataList.forEach((item, index) => {
+            handler.mapOccupancy(index, item, this);
+          });
         })
     );
   }

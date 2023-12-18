@@ -24,7 +24,7 @@
                   {{
                     !!season.get('name').value?.length
                       ? season.get('name').value
-                      : 'Season ' + (seasonIndex + 1)
+                      : 'Season'
                   }}
                 </div>
               </div>
@@ -339,11 +339,11 @@
         <br />
       </ng-container>
     </p-accordion>
-    <div class="add-level">
+    <!-- <div class="add-level">
       <div class="link" (click)="add('season', null, true)">
         +Add New Season
       </div>
-    </div>
+    </div> -->
   </div>
   <div class="wrapper__occupancy-footer">
     <!-- <span><strong>Note:</strong> {{ footerNote }}</span> -->

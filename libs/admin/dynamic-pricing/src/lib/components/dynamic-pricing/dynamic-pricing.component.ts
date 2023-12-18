@@ -18,6 +18,7 @@ import { Revenue } from '../../constants/revenue-manager.const';
 import {
   ConfigType,
   DynamicPricingForm,
+  RuleType,
 } from '../../types/dynamic-pricing.types';
 import { RoomTypes } from 'libs/admin/channel-manager/src/lib/models/bulk-update.models';
 import { DynamicPricingService } from '../../services/dynamic-pricing.service';
@@ -29,6 +30,7 @@ import {
   QueryConfig,
 } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'hospitality-bot-dynamic-pricing',
@@ -39,15 +41,13 @@ import { SnackBarService } from '@hospitality-bot/shared/material';
   ],
 })
 export class DynamicPricingComponent implements OnInit {
-  activeStep = 0;
   allRooms: RoomTypes[];
   entityId: string;
   dynamicPricingFG: FormGroup;
-  itemList: MenuItem[] = [
-    { label: 'Occupancy' },
-    { label: 'Day/Time Trigger' },
-    // { label: 'Inventory Reallocation' },
-  ];
+
+  ruleId: string;
+  activeRule: RuleType;
+
   loading = false;
   $subscription = new Subscription();
   navRoutes: NavRouteOptions = [{ label: 'Create Season', link: './' }];
@@ -58,25 +58,17 @@ export class DynamicPricingComponent implements OnInit {
     private adminUtilityService: AdminUtilityService,
     private fb: FormBuilder,
     private globalFilter: GlobalFilterService,
-    private snackbarService: SnackBarService,
-    private routeConfigService: RoutesConfigService
-  ) {}
+    private routeConfigService: RoutesConfigService,
+    private activatedRoute: ActivatedRoute
+  ) {
+    this.activeRule = (this.activatedRoute.snapshot.data
+      .ruleType as unknown) as RuleType;
+    this.ruleId = this.activatedRoute.snapshot.paramMap.get('id');
+  }
 
   ngOnInit(): void {
     this.entityId = this.globalFilter.entityId;
-    this.initRoom();
     this.initNavRoutes();
-  }
-
-  initRoom() {
-    this.barPriceService.roomDetails.subscribe((res) => {
-      if (this.barPriceService.isRoomDetailsLoaded) {
-        this.allRooms = res;
-        this.initFG();
-      } else {
-        this.barPriceService.loadRoomTypes(this.entityId);
-      }
-    });
   }
 
   initNavRoutes() {
@@ -168,10 +160,6 @@ export class DynamicPricingComponent implements OnInit {
       this.dynamicPricingControl.inventoryAllocationFA.removeAt(event.index);
   }
 
-  onActive(event: StepperEmitType) {
-    this.activeStep = event.index;
-  }
-
   modifyTriggerFG(event: { mode: string; index?: number }): void {
     if (event.mode == Revenue.add)
       this.dynamicPricingControl.timeFA.controls.push(this.getTriggerFG());
@@ -220,9 +208,5 @@ export class DynamicPricingComponent implements OnInit {
         },
       ]),
     };
-  }
-
-  handleFinal() {
-    this.loading = false;
   }
 }

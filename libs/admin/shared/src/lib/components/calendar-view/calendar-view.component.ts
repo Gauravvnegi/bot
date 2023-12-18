@@ -10,6 +10,7 @@ import { Subscription } from 'rxjs';
 import { DaysType, epochWithoutTime, weeks } from '../../utils/shared';
 import { fullMonths } from '../../constants';
 import { Option } from '../../types/form.type';
+import { FieldValues } from '../../types/fields.type';
 
 const disabledOpacity = 0.3;
 const unselectedOpacity = 0.5;
@@ -33,7 +34,7 @@ export class CalendarViewComponent implements OnInit, OnDestroy {
 
   @Input() inactiveIds: CGridData['id'][] = [];
 
-  @Input() markDates: CGridMarkedRecord = {};
+  @Input() markDates: CGridDataRecord = {};
 
   @Input() tooltip: string = '';
 
@@ -118,8 +119,10 @@ export class CalendarViewComponent implements OnInit, OnDestroy {
 
   getStyles(value: CGridOption['value']) {
     const data = this.gridData[value];
+
     const show = !!data;
-    const currentId = data?.id;
+
+    const currentId = data?.id ?? this.markDates[value]?.id; // Current Id could be of markDates also
     const isHighlighted = !!this.highlightId;
     const isInactive = currentId && this.inactiveIds.includes(currentId);
 
@@ -131,7 +134,7 @@ export class CalendarViewComponent implements OnInit, OnDestroy {
     return {
       backgroundColor: show ? data.bg : 'none',
       opacity: isHighlighted
-        ? show && currentId === this.highlightId
+        ? currentId === this.highlightId
           ? opacity
           : unOpacity
         : opacity,
@@ -144,12 +147,14 @@ export class CalendarViewComponent implements OnInit, OnDestroy {
   }
 
   onGridClick(value: CGridOption['value'], gridDataIdx: number) {
-    const id = this.gridData[value]?.id;
+    const gridData = this.gridData[value];
+    const markedData = this.markDates[value];
     const selectedDate = +value;
 
     this.onDateSelect.emit({
-      id: this.inactiveIds.includes(id) ? '' : id,
       selectedDate,
+      gridData,
+      markedData,
     });
   }
 
@@ -185,18 +190,25 @@ export class CalendarViewComponent implements OnInit, OnDestroy {
 
 export type CGridOption = Option<string, { date?: number }>;
 export type CGridInfo = Record<number, CGridOption[][]>;
-export type CGridDataRecord<TOptions = Record<string, any>> = Record<
+export type CGridDataRecord<TOptions = FieldValues> = Record<
   string,
-  CGridData & TOptions
+  CGridData<TOptions>
 >;
-export type CGridData = { bg: string; id: string } & Partial<{
+export type CGridData<TOptions = FieldValues> = {
+  bg: string;
+  id: string;
+} & Partial<{
   days: DaysType[];
-}>;
-export type CGridSelectedData = { id?: string; selectedDate: number };
+}> &
+  TOptions;
+
+export type CGridSelectedData<TOptions = FieldValues> = {
+  gridData?: CGridData<TOptions>;
+  markedData?: CGridData<TOptions>;
+  selectedDate: number;
+};
 export type CGridHoverData = {
   type?: 'enter' | 'leave';
   value: string; // date epoch
   event: MouseEvent;
 };
-
-export type CGridMarkedRecord = Record<string, CGridData>;

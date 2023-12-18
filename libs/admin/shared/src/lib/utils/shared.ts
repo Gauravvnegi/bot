@@ -58,7 +58,7 @@ export function generateArrayItemColor(
   count: number,
   type: 'dark' | 'light' = 'light'
 ) {
-  const saturation = type === 'light' ? 50 : 80; // Saturation value (0-100)
+  const saturation = type === 'light' ? 50 : 70; // Saturation value (0-100)
 
   // Determine lightness based on the type parameter
   const lightness = type === 'light' ? 80 : 30; // Adjust as needed

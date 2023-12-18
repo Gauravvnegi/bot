@@ -13,7 +13,6 @@ import {
   CGridData,
   CGridDataRecord,
   CGridHoverData,
-  CGridMarkedRecord,
   CGridSelectedData,
 } from 'libs/admin/shared/src/lib/components/calendar-view/calendar-view.component';
 import { Subscription } from 'rxjs';
@@ -42,6 +41,7 @@ type ContentData = Partial<{
   id: string;
 }>;
 
+type AdditionalData = { type: ConfigType };
 @Component({
   selector: 'hospitality-bot-dynamic-pricing-calendar-view',
   templateUrl: './dynamic-pricing-calendar-view.component.html',
@@ -51,16 +51,16 @@ export class DynamicPricingCalendarViewComponent implements OnInit, OnDestroy {
   loading = false;
   $subscription = new Subscription();
 
-  highlightedSeason: CGridData['id'] = '';
+  highlightedRule: CGridData<AdditionalData>['id'] = '';
 
   useForm: FormGroup;
 
-  gridData: CGridDataRecord = {};
-  markDates: CGridMarkedRecord = {};
+  gridData: CGridDataRecord<AdditionalData> = {};
+  markDates: CGridDataRecord<AdditionalData> = {};
 
   occupancyData: Record<string, ContentData> = {};
   dayTriggerData: Record<string, ContentData> = {};
-  inactiveRules: CGridData['id'][] = [];
+  inactiveRules: CGridData<AdditionalData>['id'][] = [];
   years: number[] = [];
 
   ruleOptions: Option<ConfigType>[] = [
@@ -265,10 +265,11 @@ export class DynamicPricingCalendarViewComponent implements OnInit, OnDestroy {
         ) {
           const { day } = getDayOfWeekFromEpoch(currentEpoch);
 
-          const gridData: CGridData = {
+          const gridData: CGridData<AdditionalData> = {
             bg: colorCode,
             days: daysIncluded,
             id,
+            type,
           };
 
           if (daysIncluded.includes(day)) {
@@ -360,14 +361,35 @@ export class DynamicPricingCalendarViewComponent implements OnInit, OnDestroy {
 
   handleHighlightOfSeason() {}
 
-  onDateSelect(event: CGridSelectedData) {
-    if (event.id === this.highlightedSeason && event.id !== '') {
-      this.highlightedSeason = '';
-    } else if (event.id) {
-      this.highlightedSeason = event.id;
-      this.scrollIntoView(this.highlightedSeason);
+  highlightRule(data: CGridData<AdditionalData>) {
+    // resetting highlighted rule if clicked on same rule
+    if (data && data.id === this.highlightedRule) {
+      this.highlightedRule = '';
+    } else if (data) {
+      // Setting highlighted rule
+      this.selectedRuleIdx = this.ruleOptions.findIndex(
+        (item) => item.value === data.type
+      );
+      this.highlightedRule = data.id;
+      setTimeout(() => {
+        this.scrollIntoView(this.highlightedRule);
+      }, 200);
     } else {
-      this.highlightedSeason = '';
+      this.highlightedRule = '';
+    }
+  }
+
+  onDateSelect(event: CGridSelectedData<AdditionalData>) {
+    const seasonData = event.gridData;
+    const markedData = event.markedData; //
+    if (seasonData && markedData) {
+      this.highlightRule(
+        this.ruleOptions[this.selectedRuleIdx].value === 'DAY_TIME_TRIGGER'
+          ? markedData
+          : seasonData
+      );
+    } else if (seasonData || markedData) {
+      this.highlightRule(seasonData ?? markedData);
     }
   }
 

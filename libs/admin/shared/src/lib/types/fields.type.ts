@@ -39,3 +39,5 @@ export type UploadFileData = {
   maxFileSize: number;
   fileType: string[];
 };
+
+export type FieldValues = Record<string, any>;

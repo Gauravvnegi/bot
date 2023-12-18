@@ -32,7 +32,7 @@
           [years]="years"
           calendarWidth="calc(90vw - 300px)"
           [gridData]="gridData"
-          [highlightId]="highlightedSeason"
+          [highlightId]="highlightedRule"
           (onDateSelect)="onDateSelect($event)"
           [inactiveIds]="inactiveRules"
           (onDateHover)="handleHover($event)"
@@ -65,7 +65,7 @@
               class="season"
               [formGroupName]="i"
               [ngClass]="{
-                season__selected: season.get('id').value === highlightedSeason
+                season__selected: season.get('id').value === highlightedRule
               }"
               (click)="handleEdit(season.get('id').value)"
             >

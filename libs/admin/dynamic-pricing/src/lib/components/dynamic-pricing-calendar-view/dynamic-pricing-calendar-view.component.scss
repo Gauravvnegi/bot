@@ -11,6 +11,12 @@ $border: 1px solid hsla(0, 0%, 43.9%, 0.4);
   flex-direction: column;
 }
 
+.select-rule-tab-group {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
 .filters {
   display: flex;
   flex-direction: column;

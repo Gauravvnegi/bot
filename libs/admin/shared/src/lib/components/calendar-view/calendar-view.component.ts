@@ -103,11 +103,12 @@ export class CalendarViewComponent implements OnInit, OnDestroy {
 
   getMarkedDatesStyle(value: CGridOption['value']) {
     const data = this.markDates[value];
-    const show = !!data;
+    const show = !!data && !this.inactiveIds.includes(data.id);
     return {
       color: show ? data.bg : 'none',
       borderColor: show ? data.bg : 'none',
       borderWidth: show ? '1px' : '0px',
+      cursor: show ? 'pointer' : 'default',
     };
   }
 
@@ -120,29 +121,27 @@ export class CalendarViewComponent implements OnInit, OnDestroy {
   getStyles(value: CGridOption['value']) {
     const data = this.gridData[value];
 
-    const show = !!data;
+    const show = !!data && !this.inactiveIds.includes(data.id);
 
-    const currentId = data?.id ?? this.markDates[value]?.id; // Current Id could be of markDates also
+    const currentId = data?.id; // Current Id could be of markDates also
+    const markedId = this.markDates[value]?.id;
     const isHighlighted = !!this.highlightId;
-    const isInactive = currentId && this.inactiveIds.includes(currentId);
 
     // data?.days.includes(this.colsInfo[gridDataIdx].value) && data?.bg;
-
-    const opacity = isInactive ? disabledOpacity : 1;
-    const unOpacity = isInactive ? disabledOpacity : unselectedOpacity;
 
     return {
       backgroundColor: show ? data.bg : 'none',
       opacity: isHighlighted
-        ? currentId === this.highlightId
-          ? opacity
-          : unOpacity
-        : opacity,
+        ? currentId === this.highlightId || markedId === this.highlightId
+          ? 1
+          : 0.5
+        : 1,
       height: this.height,
       minWidth: this.height,
       maxWidth: this.height,
       fontSize: this.size / 2.3 + 'px',
-      cursor: show ? (isInactive ? 'not-allowed' : 'pointer') : 'default',
+      // cursor: show ? (isInactive ? 'not-allowed' : 'pointer') : 'default',
+      cursor: show ? 'pointer' : 'default',
     };
   }
 

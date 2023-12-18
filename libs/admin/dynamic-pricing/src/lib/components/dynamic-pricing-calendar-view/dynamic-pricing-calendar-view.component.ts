@@ -381,7 +381,7 @@ export class DynamicPricingCalendarViewComponent implements OnInit, OnDestroy {
 
   onDateSelect(event: CGridSelectedData<AdditionalData>) {
     const seasonData = event.gridData;
-    const markedData = event.markedData; //
+    const markedData = event.markedData;
     if (seasonData && markedData) {
       this.highlightRule(
         this.ruleOptions[this.selectedRuleIdx].value === 'DAY_TIME_TRIGGER'

@@ -44,6 +44,7 @@
       <div class="filters" id="season-filter" [formGroup]="useForm">
         <!-- <div class="filters__head">Seasons</div> -->
         <hospitality-bot-tab-group
+          class="select-rule-tab-group"
           [listItems]="ruleOptions"
           [selectedIndex]="selectedRuleIdx"
           (selectedTabChange)="onRuleFilterChange($event)"

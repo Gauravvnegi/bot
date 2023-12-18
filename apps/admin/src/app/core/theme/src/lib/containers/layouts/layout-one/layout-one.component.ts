@@ -3,9 +3,11 @@ import {
   Compiler,
   Component,
   ComponentFactoryResolver,
+  ElementRef,
   HostListener,
   OnDestroy,
   OnInit,
+  TemplateRef,
   ViewChild,
   ViewContainerRef,
 } from '@angular/core';
@@ -63,7 +65,6 @@ import { NightAuditComponent } from 'libs/admin/global-shared/src/lib/components
     ]),
   ],
 })
-
 export class LayoutOneComponent implements OnInit, OnDestroy {
   readonly moduleNames = ModuleNames;
   backgroundColor: string;
@@ -111,8 +112,12 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
     | 'settings'
     | 'guest-sidebar'
     | 'night-audit'
+    | 'url'
     | 'booking' = 'complaint';
   propertyList: any[];
+
+  @ViewChild('url') urlTemplate: TemplateRef<any>;
+  iframeTempUrl: string;
 
   constructor(
     private _router: Router,
@@ -173,8 +178,23 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
           if (res.type === 'RAISE_REQUEST') {
             this.showComplaint();
           }
+          if (res.type === 'URL') {
+            this.openSideBarWithUrl(res.url);
+          }
         }
       });
+  }
+  /**
+   * open sidebar with iframe popup
+   * @param url link to be open in iframe
+   */
+  openSideBarWithUrl(url: string) {
+    this.sidebarType = 'url';
+    this.iframeTempUrl = url;
+    this.sidebarSlide.clear();
+    this.sidebarSlide.createEmbeddedView(this.urlTemplate);
+    this.sidebarVisible = true;
+    this.sideBarService.setSideBarZIndex(1000, true);
   }
 
   scrollToTop() {

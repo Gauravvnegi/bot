@@ -1,5 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
+import {
+  convertToNormalCase,
+  convertToTitleCase,
+} from '../../utils/valueFormatter';
 
 @Component({
   selector: 'hospitality-bot-chat-card',
@@ -24,6 +28,8 @@ export class ChatCardComponent implements OnInit {
   feedbackType?: string;
   profileNickName?: string;
   backgroundColor?: any;
+
+  readonly convertToTitleCase = convertToTitleCase;
 
   /**
    * Set Content of the empty view.

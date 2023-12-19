@@ -137,9 +137,7 @@ export class DayTimeTriggerComponent implements OnInit {
                         { panelClass: 'success' }
                       );
                       // dayTimeFormArray.removeAt(index);
-                      this.routesConfigService.navigate({
-                        subModuleName: ModuleNames.DYNAMIC_PRICING,
-                      });
+                      this.navigateToMain();
                     },
                     (error) => {
                       this.loading = false;
@@ -349,6 +347,12 @@ export class DayTimeTriggerComponent implements OnInit {
     });
   }
 
+  navigateToMain() {
+    this.routesConfigService.navigate({
+      subModuleName: ModuleNames.DYNAMIC_PRICING,
+    });
+  }
+
   handleSave(form: FormGroup) {
     if (!this.dynamicPricingService.triggerValidate(form)) {
       form.markAllAsTouched();
@@ -394,7 +398,8 @@ export class DayTimeTriggerComponent implements OnInit {
             '',
             { panelClass: 'success' }
           );
-          DynamicPricingHandler.resetFormState(form, this.fb, res);
+          // DynamicPricingHandler.resetFormState(form, this.fb, res);
+          this.navigateToMain();
         },
         (error) => {
           this.loading = false;

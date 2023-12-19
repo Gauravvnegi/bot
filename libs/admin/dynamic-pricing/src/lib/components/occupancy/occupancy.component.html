@@ -41,6 +41,7 @@
               ></hospitality-bot-toggle-switch-with-label>
             </div>
             <hospitality-bot-button
+              *ngIf="seasonId"
               click-stop-propagation
               class="remove"
               label="Remove"

@@ -121,8 +121,8 @@ export class CalendarViewComponent implements OnInit, OnDestroy {
             borderStyle: show ? 'solid' : 'none',
           }
         : {
-            backgroundColor: show ? data.bg : 'none',
-            color: show ? 'white' : 'none',
+            backgroundColor: show ? data.bg : 'transparent',
+            color: show ? 'white' : 'black',
           }),
       cursor: show ? 'pointer' : 'default',
     };

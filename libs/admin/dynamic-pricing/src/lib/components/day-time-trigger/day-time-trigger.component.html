@@ -32,7 +32,7 @@
                     ></hospitality-bot-toggle-switch-with-label>
                   </div>
                 </div>
-                <div class="status">
+                <div class="status" *ngIf="triggerId">
                   <hospitality-bot-button
                     click-stop-propagation
                     label="Remove"

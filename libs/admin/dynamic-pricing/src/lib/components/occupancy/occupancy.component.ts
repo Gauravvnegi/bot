@@ -330,9 +330,7 @@ export class OccupancyComponent implements OnInit {
                         );
 
                         // season.removeAt(index);
-                        this.routesConfigService.navigate({
-                          subModuleName: ModuleNames.DYNAMIC_PRICING,
-                        });
+                        this.navigateToMain();
                       },
                       (error) => {
                         this.loading = false;
@@ -491,6 +489,12 @@ export class OccupancyComponent implements OnInit {
     });
   }
 
+  navigateToMain() {
+    this.routesConfigService.navigate({
+      subModuleName: ModuleNames.DYNAMIC_PRICING,
+    });
+  }
+
   handleSave(form: FormGroup) {
     if (!this.dynamicPricingService.occupancyValidate(form)) {
       form.markAllAsTouched();
@@ -536,7 +540,8 @@ export class OccupancyComponent implements OnInit {
             '',
             { panelClass: 'success' }
           );
-          DynamicPricingHandler.resetFormState(form, this.fb, res);
+          // DynamicPricingHandler.resetFormState(form, this.fb, res);
+          this.navigateToMain();
         },
         (error) => {
           this.loading = false;

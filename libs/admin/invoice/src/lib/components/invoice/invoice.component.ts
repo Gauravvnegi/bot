@@ -736,6 +736,7 @@ export class InvoiceComponent implements OnInit {
           ) {
             prev.totalAmount += curr.debitAmount;
           }
+          if (curr.isRefund) prev.refundAmount += curr.debitAmount;
           if (curr.transactionType === 'CREDIT' && curr.creditAmount) {
             if (curr.isDiscount) prev.discountedAmount += curr.creditAmount;
             else prev.paidAmount += curr.creditAmount;
@@ -747,17 +748,22 @@ export class InvoiceComponent implements OnInit {
           totalAmount: 0,
           paidAmount: 0,
           discountedAmount: 0,
+          refundAmount: 0,
         }
       );
-
-      const { totalAmount, paidAmount, discountedAmount } = updatedAmounts;
+      const {
+        totalAmount,
+        paidAmount,
+        discountedAmount,
+        refundAmount,
+      } = updatedAmounts;
       this.useForm.patchValue(
         {
           totalAmount,
           paidAmount,
           discountedAmount,
           netAmount: totalAmount - discountedAmount,
-          dueAmount: totalAmount - discountedAmount - paidAmount,
+          dueAmount: totalAmount - discountedAmount - paidAmount + refundAmount,
         },
         { emitEvent: false }
       );

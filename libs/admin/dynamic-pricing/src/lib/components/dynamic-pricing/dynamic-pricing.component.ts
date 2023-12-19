@@ -30,7 +30,7 @@ import {
   selector: 'hospitality-bot-dynamic-pricing',
   templateUrl: './dynamic-pricing.component.html',
   styleUrls: [
-    '../bar-price/bar-price.component.scss',
+    '../../../../../setup-bar-price/src/lib/components/bar-price/bar-price.component.scss',
     './dynamic-pricing.component.scss',
   ],
 })

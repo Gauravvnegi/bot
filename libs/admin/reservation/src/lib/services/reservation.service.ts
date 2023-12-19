@@ -137,4 +137,8 @@ export class ReservationService extends ApiService {
   getFeedbackPdf(id: string): Observable<any> {
     return this.get(`/api/v1/feedback/${id}/download-feedback-form`);
   }
+
+  getConfirmationVoucher(reservationId: string): Observable<any> {
+    return this.get(`/api/v1/reservation/${reservationId}/booking-voucher`);
+  }
 }

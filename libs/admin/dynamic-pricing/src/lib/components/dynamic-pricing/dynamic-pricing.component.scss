@@ -7,20 +7,28 @@ $border-color: rgba(112, 112, 112, 0.35);
   .p-steps .p-steps-item.p-highlight .p-steps-number {
     background-color: #5f38f9;
   }
+
   .action {
     display: flex;
     justify-content: center;
     padding-bottom: 20px;
   }
+
   .add-level {
-    padding: 20px 30px;
+    padding: 10px 20px 0px;
     border-top: 1px solid $border-color;
     display: flex;
     justify-content: flex-end;
   }
+
+  .link {
+    font-size: 12px !important;
+  }
+
   .item-center {
     @include flex-item-center();
   }
+
   .p-accordion .p-accordion-header .p-accordion-header-link {
     padding: 0.6rem 1.5rem;
     background-color: #f1f2f7 !important;
@@ -40,13 +48,17 @@ $border-color: rgba(112, 112, 112, 0.35);
       margin: 0;
     }
   }
+
   .disable {
     opacity: 0.5;
     cursor: not-allowed !important;
   }
+
   .remove {
     color: red;
     cursor: pointer !important;
+    display: flex;
+    align-items: center;
     & * {
       cursor: pointer !important;
     }

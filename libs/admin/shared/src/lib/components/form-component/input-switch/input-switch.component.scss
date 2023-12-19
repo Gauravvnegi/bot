@@ -1,10 +1,40 @@
 @import 'main';
 
+.wrapper {
+  display: flex;
+  align-items: center;
+}
+
 .label {
-  padding-left: 10px;
+  &__off {
+    padding-right: 5px;
+  }
+
+  &__on {
+    padding-left: 5px;
+  }
+}
+
+:host ::ng-deep .wrapper__red {
+  .p-inputswitch {
+    .p-inputswitch-slider {
+      background-color: $inactive-state;
+    }
+  }
+
+  .p-inputswitch:not(.p-disabled):hover {
+    .p-inputswitch-slider {
+      background-color: $inactive-state;
+    }
+  }
+}
+
+.disabled {
+  opacity: 0.5;
 }
 
 :host ::ng-deep .p-inputswitch {
+  height: 0.9rem;
   &:not(.p-disabled):hover {
     .p-inputswitch-slider {
       background-color: #b8b8b8;

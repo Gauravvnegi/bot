@@ -290,7 +290,10 @@ export class OccupancyComponent implements OnInit {
         ]);
       }
       discount.updateValueAndValidity();
-      discount.markAllAsTouched();
+
+      if (discount.value || discount.value === 0) {
+        discount.markAllAsTouched();
+      }
     });
     return seasonForm;
   }

@@ -38,8 +38,9 @@ export class PaymentMethodComponent implements OnInit {
   paymentOptions: Option[] = [];
   entityId: string;
   @Input() reservationId: string;
+  marketSegment: string;
   isCheckedout: boolean = false;
-
+  isBTCAvailable = false;
   $subscription = new Subscription();
   parentFormGroup: FormGroup;
   isConfirmedReservation: boolean = false;
@@ -95,6 +96,22 @@ export class PaymentMethodComponent implements OnInit {
         this.isConfirmedReservation = res === ReservationType.CONFIRMED;
       }
     );
+    this.reservationInfoControls.marketSegment.valueChanges.subscribe((res) => {
+      if (res === 'FIT')
+        this.paymentOptions = this.paymentOptions.filter(
+          (option) => option?.value !== 'Bill To Company'
+        );
+      else {
+        !this.paymentOptions.some(
+          (option) => option?.value === 'Bill To Company'
+        ) &&
+          this.isBTCAvailable &&
+          this.paymentOptions.push({
+            label: 'Bill To Company',
+            value: 'Bill To Company',
+          });
+      }
+    });
   }
 
   initConfig() {
@@ -122,10 +139,13 @@ export class PaymentMethodComponent implements OnInit {
           const labels = [].concat(
             ...types.map((array) => array.map((item) => item.label))
           );
-          this.paymentOptions = labels.map((label) => ({
-            label: label,
-            value: label,
-          }));
+          this.paymentOptions = labels.map((label) => {
+            this.isBTCAvailable = label === 'BillToCompany';
+            return {
+              label: label,
+              value: label,
+            };
+          });
         },
         (error) => {}
       )

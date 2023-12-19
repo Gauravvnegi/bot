@@ -2,9 +2,11 @@ import {
   Component,
   EventEmitter,
   Input,
+  OnChanges,
   OnDestroy,
   OnInit,
   Output,
+  SimpleChanges,
 } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { DaysType, epochWithoutTime, weeks } from '../../utils/shared';
@@ -37,6 +39,16 @@ export class CalendarViewComponent implements OnInit, OnDestroy {
   @Input() markDates: CGridDataRecord = {};
 
   @Input() tooltip: string = '';
+
+  markedView: CSettings['markedView'] = 'solid';
+
+  @Input() settings(input: CSettings) {
+    for (const key in input) {
+      if (input.hasOwnProperty(key)) {
+        this[key] = input[key];
+      }
+    }
+  }
 
   /**
    * @example M,T,W,T,F,S
@@ -105,9 +117,17 @@ export class CalendarViewComponent implements OnInit, OnDestroy {
     const data = this.markDates[value];
     const show = !!data && !this.inactiveIds.includes(data.id);
     return {
-      color: show ? data.bg : 'none',
-      borderColor: show ? data.bg : 'none',
-      borderWidth: show ? '1px' : '0px',
+      ...(this.markedView === 'outline'
+        ? {
+            color: show ? data.bg : 'none',
+            borderColor: show ? data.bg : 'none',
+            borderWidth: show ? '1px' : '0px',
+            borderStyle: show ? 'solid' : 'none',
+          }
+        : {
+            backgroundColor: show ? data.bg : 'none',
+            color: show ? 'white' : 'none',
+          }),
       cursor: show ? 'pointer' : 'default',
     };
   }
@@ -130,18 +150,20 @@ export class CalendarViewComponent implements OnInit, OnDestroy {
     // data?.days.includes(this.colsInfo[gridDataIdx].value) && data?.bg;
 
     return {
-      backgroundColor: show ? data.bg : 'none',
+      backgroundColor: show ? data.bg : 'transparent',
       opacity: isHighlighted
         ? currentId === this.highlightId || markedId === this.highlightId
           ? 1
           : 0.5
         : 1,
+
+      // cursor: show ? (isInactive ? 'not-allowed' : 'pointer') : 'default',
+      cursor: show ? 'pointer' : 'default',
+      position: show,
       height: this.height,
       minWidth: this.height,
       maxWidth: this.height,
       fontSize: this.size / 2.3 + 'px',
-      // cursor: show ? (isInactive ? 'not-allowed' : 'pointer') : 'default',
-      cursor: show ? 'pointer' : 'default',
     };
   }
 
@@ -210,4 +232,7 @@ export type CGridHoverData = {
   type?: 'enter' | 'leave';
   value: string; // date epoch
   event: MouseEvent;
+};
+export type CSettings = {
+  markedView: 'outline' | 'solid';
 };

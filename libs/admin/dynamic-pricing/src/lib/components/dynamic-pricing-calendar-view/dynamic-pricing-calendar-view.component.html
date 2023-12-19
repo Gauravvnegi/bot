@@ -68,7 +68,9 @@
               [ngClass]="{
                 season__selected: season.get('id').value === highlightedRule
               }"
-              (click)="handleEdit(season.get('id').value)"
+              (click)="
+                handleEdit(season.get('id').value, season.get('type').value)
+              "
             >
               <div
                 class="season__color"

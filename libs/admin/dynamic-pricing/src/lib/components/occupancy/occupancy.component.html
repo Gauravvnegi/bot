@@ -12,11 +12,7 @@
         "
         [formGroupName]="seasonIndex"
       >
-        <p-accordionTab
-          [selected]="
-            seasonId ? seasonId === season.get('id')?.value : seasonIndex == 0
-          "
-        >
+        <p-accordionTab [selected]="true" [disabled]="true">
           <p-header class="season-header">
             <div class="header-wrapper">
               <div class="header-button">
@@ -49,12 +45,8 @@
               class="remove"
               label="Remove"
               variant="text"
-              [disabled]="dynamicPricingControl.occupancyFA.length < 2"
               severity="reset"
-              (onClick)="
-                dynamicPricingControl.occupancyFA.length > 1 &&
-                  remove('season', seasonIndex)
-              "
+              (onClick)="remove('season', seasonIndex)"
             ></hospitality-bot-button>
           </p-header>
           <div class="content">

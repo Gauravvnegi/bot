@@ -38,11 +38,7 @@
                     label="Remove"
                     variant="text"
                     severity="reset"
-                    [disabled]="dynamicPricingControl.timeFA.length < 2"
-                    (onClick)="
-                      dynamicPricingControl.timeFA.length > 1 &&
-                        modifyTriggerFG('', i)
-                    "
+                    (onClick)="modifyTriggerFG('', i)"
                   ></hospitality-bot-button>
                 </div>
               </div>

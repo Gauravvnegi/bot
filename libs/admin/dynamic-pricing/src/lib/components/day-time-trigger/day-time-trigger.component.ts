@@ -22,6 +22,7 @@ import {
 } from '../../types/dynamic-pricing.types';
 import {
   AdminUtilityService,
+  ModuleNames,
   QueryConfig,
 } from '@hospitality-bot/admin/shared';
 import {
@@ -33,7 +34,10 @@ import {
   ModalService,
   SnackBarService,
 } from '@hospitality-bot/shared/material';
-import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import {
+  GlobalFilterService,
+  RoutesConfigService,
+} from '@hospitality-bot/admin/core/theme';
 import { ModalComponent } from 'libs/admin/shared/src/lib/components/modal/modal.component';
 import { MatDialogConfig } from '@angular/material/dialog';
 import { Accordion } from 'primeng/accordion';
@@ -66,7 +70,8 @@ export class DayTimeTriggerComponent implements OnInit {
     private snackbarService: SnackBarService,
     private globalFilter: GlobalFilterService,
     public fb: FormBuilder,
-    private modalService: ModalService
+    private modalService: ModalService,
+    private routesConfigService: RoutesConfigService
   ) {}
 
   initForm() {
@@ -131,7 +136,10 @@ export class DayTimeTriggerComponent implements OnInit {
                         '',
                         { panelClass: 'success' }
                       );
-                      dayTimeFormArray.removeAt(index);
+                      // dayTimeFormArray.removeAt(index);
+                      this.routesConfigService.navigate({
+                        subModuleName: ModuleNames.DYNAMIC_PRICING,
+                      });
                     },
                     (error) => {
                       this.loading = false;

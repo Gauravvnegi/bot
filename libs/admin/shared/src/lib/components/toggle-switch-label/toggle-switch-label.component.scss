@@ -89,6 +89,10 @@
 }
 
 .toggle-wrapper {
+  cursor: pointer !important;
+  & * {
+    cursor: pointer !important;
+  }
   display: flex;
   gap: 10px;
   .pre-content {

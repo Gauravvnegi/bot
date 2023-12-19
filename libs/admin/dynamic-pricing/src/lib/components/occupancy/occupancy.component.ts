@@ -1,11 +1,4 @@
-import {
-  Component,
-  ElementRef,
-  Input,
-  OnInit,
-  Renderer2,
-  ViewChild,
-} from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import {
   AbstractControl,
   FormArray,
@@ -13,9 +6,14 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
-import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import { MatDialogConfig } from '@angular/material/dialog';
+import {
+  GlobalFilterService,
+  RoutesConfigService,
+} from '@hospitality-bot/admin/core/theme';
 import {
   AdminUtilityService,
+  ModuleNames,
   Option,
   QueryConfig,
 } from '@hospitality-bot/admin/shared';
@@ -23,26 +21,23 @@ import {
   ModalService,
   SnackBarService,
 } from '@hospitality-bot/shared/material';
+import { RoomTypes } from 'libs/admin/channel-manager/src/lib/models/bulk-update.models';
+import { ModalComponent } from 'libs/admin/shared/src/lib/components/modal/modal.component';
+import { Accordion } from 'primeng/accordion';
 import { Subscription } from 'rxjs';
 import { Revenue, weeks } from '../../constants/revenue-manager.const';
+import { openAccordion } from '../../models/bar-price.model';
 import {
   DynamicPricingFactory,
   DynamicPricingHandler,
 } from '../../models/dynamic-pricing.model';
+import { BarPriceService, isDirty } from '../../services/bar-price.service';
 import { DynamicPricingService } from '../../services/dynamic-pricing.service';
 import {
   ConfigCategory,
   ConfigType,
-  DynamicPricingForm,
   DynamicSeasonPricingForm,
 } from '../../types/dynamic-pricing.types';
-import { RoomTypes } from 'libs/admin/channel-manager/src/lib/models/bulk-update.models';
-import { ModalComponent } from 'libs/admin/shared/src/lib/components/modal/modal.component';
-import { MatDialogConfig } from '@angular/material/dialog';
-import { ActivatedRoute } from '@angular/router';
-import { Accordion } from 'primeng/accordion';
-import { openAccordion } from '../../models/bar-price.model';
-import { BarPriceService, isDirty } from '../../services/bar-price.service';
 
 export type ControlTypes = 'season' | 'occupancy' | 'hotel-occupancy';
 
@@ -94,7 +89,8 @@ export class OccupancyComponent implements OnInit {
     private snackbarService: SnackBarService,
     public fb: FormBuilder,
     private modalService: ModalService,
-    private barPriceService: BarPriceService
+    private barPriceService: BarPriceService,
+    private routesConfigService: RoutesConfigService
   ) {}
 
   ngOnInit(): void {
@@ -332,7 +328,11 @@ export class OccupancyComponent implements OnInit {
                           '',
                           { panelClass: 'success' }
                         );
-                        season.removeAt(index);
+
+                        // season.removeAt(index);
+                        this.routesConfigService.navigate({
+                          subModuleName: ModuleNames.DYNAMIC_PRICING,
+                        });
                       },
                       (error) => {
                         this.loading = false;

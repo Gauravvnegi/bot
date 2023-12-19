@@ -18,6 +18,7 @@ import {
 import { Subscription } from 'rxjs';
 import { DynamicPricingService } from '../../services/dynamic-pricing.service';
 import { ConfigType, DaysType } from '../../types/dynamic-pricing.types';
+import { MenuItem } from 'libs/admin/all-outlets/src/lib/models/outlet.model';
 import { rulesRoutes } from '../../constants/dynamic-pricing.const';
 
 type Season = {
@@ -39,6 +40,7 @@ type ContentData = Partial<{
   isActive: boolean;
   id: string;
 }>;
+
 
 type AdditionalData = { type: ConfigType };
 @Component({
@@ -70,6 +72,13 @@ export class DynamicPricingCalendarViewComponent implements OnInit, OnDestroy {
     {
       label: 'Day triggers',
       value: 'DAY_TIME_TRIGGER',
+    },
+  ];
+
+  splitOptions = [
+    {
+      label: 'Generate Link',
+      command: () => {},
     },
   ];
 

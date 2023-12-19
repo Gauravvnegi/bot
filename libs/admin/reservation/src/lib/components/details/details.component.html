@@ -383,14 +383,21 @@
                     label="Manual CheckIn"
                     variant="outlined"
                   ></hospitality-bot-button> -->
-                  <p-splitButton
+                  <!-- <p-splitButton
                     *ngIf="!(checkForExpiredBooking || checkForCancelBooking)"
                     class="download-btn"
                     label="CheckIn"
                     (onClick)="manualCheckin()"
                     [model]="checkInOptions"
                     styleClass="p-button-raised p-button-text mr-2 mb-2"
-                  ></p-splitButton>
+                  ></p-splitButton> -->
+                  <hospitality-bot-split-button
+                    *ngIf="!(checkForExpiredBooking || checkForCancelBooking)"
+                    label="CheckIn"
+                    (onClick)="manualCheckin()"
+                    [splitOptions]="checkInOptions"
+                  >
+                  </hospitality-bot-split-button>
                 </ng-container>
                 <ng-container *ngSwitchCase="'INITIATED'">
                   <!-- <hospitality-bot-button
@@ -411,13 +418,20 @@
                     label="Confirm And Notify Checkin"
                     variant="outlined"
                   ></hospitality-bot-button> -->
-                  <p-splitButton
+                  <!-- <p-splitButton
                     class="download-btn"
                     label="CheckIn"
                     (onClick)="manualCheckin()"
                     [model]="checkInOptions"
                     styleClass="p-button-raised p-button-text mr-2 mb-2"
-                  ></p-splitButton>
+                  ></p-splitButton> -->
+
+                  <hospitality-bot-split-button
+                    label="CheckIn"
+                    [splitOptions]="checkInOptions"
+                    (onClick)="manualCheckin()"
+                  >
+                  </hospitality-bot-split-button>
                 </ng-container>
                 <ng-container *ngSwitchCase="'FAILED'">
                   <!-- <hospitality-bot-button
@@ -425,12 +439,18 @@
                     (click)="activateAndgenerateJourney('CHECKIN')"
                     variant="outlined"
                   ></hospitality-bot-button> -->
-                  <p-splitButton
+                  <!-- <p-splitButton
                     class="download-btn"
                     label="CheckIn"
                     (onClick)="manualCheckin()"
                     [model]="checkInOptions"
-                  ></p-splitButton>
+                  ></p-splitButton> -->
+                  <hospitality-bot-split-button
+                    label="CheckIn"
+                    [splitOptions]="checkInOptions"
+                    (onClick)="manualCheckin()"
+                  >
+                  </hospitality-bot-split-button>
                 </ng-container>
                 <ng-container *ngSwitchCase="'COMPLETED'">
                   <hospitality-bot-button

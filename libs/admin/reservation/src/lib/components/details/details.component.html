@@ -85,9 +85,25 @@
         </mat-select>
       </div>
       <div class="btn-wrapper">
+
+        <!-- conformation voucher -->
+        <!-- hide cta in case of opera booking -->
+            <button
+            *ngIf="!this?.details?.pmsBooking"
+          class="check-button"
+          (click)="openConfirmationVoucher()"
+        >
+          <img src="assets/svg/Layer_d.svg" alt="Download" srcset="" /> &nbsp;
+          &nbsp;
+          <p class="text">Confirmation Voucher</p>
+        </button>
+        
+       
+
+        <!-- reg-card -->
         <button
           class="check-button"
-          (click)="downloadRegcard(details.guestDetails.guests[0].regcardUrl)"
+          (click)="openRegCardSideBar(details.guestDetails.guests[0].regcardUrl)"
         >
           <img src="assets/svg/Layer_d.svg" alt="Download" srcset="" /> &nbsp;
           &nbsp;
@@ -109,6 +125,7 @@
             >
           </ng-container>
         </button>
+
         <!-- <button
           (click)="downloadHealthcard(details.healDeclarationDetails.url)"
           class="check-button"

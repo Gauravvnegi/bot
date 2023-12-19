@@ -137,9 +137,7 @@ export class DayTimeTriggerComponent implements OnInit {
                         { panelClass: 'success' }
                       );
                       // dayTimeFormArray.removeAt(index);
-                      this.routesConfigService.navigate({
-                        subModuleName: ModuleNames.DYNAMIC_PRICING,
-                      });
+                      this.navigateToMain();
                     },
                     (error) => {
                       this.loading = false;
@@ -195,7 +193,8 @@ export class DayTimeTriggerComponent implements OnInit {
         toTime: ['', [Validators.required]],
         start: ['', [Validators.min(1), Validators.required]],
         end: ['', [Validators.min(1), Validators.required]],
-        discount: ['', [Validators.required]],
+        discount: [, [Validators.min(0), Validators.required]],
+        isMarkup: [true],
       },
       { validators: this.dynamicPricingService.triggerLevelValidator }
     );
@@ -327,7 +326,28 @@ export class DayTimeTriggerComponent implements OnInit {
       control.markAsDirty();
     };
     levelsFA.controls.forEach((levelFG: FormGroup) => {
-      const { start, end, fromTime, toTime } = levelFG.controls;
+      const {
+        start,
+        end,
+        fromTime,
+        toTime,
+        isMarkup,
+        discount,
+      } = levelFG.controls;
+
+      isMarkup.valueChanges.subscribe((res) => {
+        if (res) {
+          discount.setValidators([Validators.min(0), Validators.required]);
+        } else {
+          discount.setValidators([
+            Validators.max(100),
+            Validators.min(0),
+            Validators.required,
+          ]);
+        }
+        discount.updateValueAndValidity();
+      });
+
       start.valueChanges.subscribe((res) => {
         validateConfig(levelsFA);
       });
@@ -346,6 +366,12 @@ export class DayTimeTriggerComponent implements OnInit {
         resetSeconds(+res, toTime);
         validateConfig(levelsFA);
       });
+    });
+  }
+
+  navigateToMain() {
+    this.routesConfigService.navigate({
+      subModuleName: ModuleNames.DYNAMIC_PRICING,
     });
   }
 
@@ -394,7 +420,8 @@ export class DayTimeTriggerComponent implements OnInit {
             '',
             { panelClass: 'success' }
           );
-          DynamicPricingHandler.resetFormState(form, this.fb, res);
+          // DynamicPricingHandler.resetFormState(form, this.fb, res);
+          this.navigateToMain();
         },
         (error) => {
           this.loading = false;

@@ -45,6 +45,7 @@
               ></hospitality-bot-toggle-switch-with-label>
             </div>
             <hospitality-bot-button
+              *ngIf="seasonId"
               click-stop-propagation
               class="remove"
               label="Remove"
@@ -297,18 +298,27 @@
                       }"
                     >
                     </hospitality-bot-prefix-field>
+                    <!-- <hospitality-bot-markup-discount
+                      controlName="discount"
+                    ></hospitality-bot-markup-discount> -->
                     <hospitality-bot-input
                       controlName="discount"
+                      [min]="0"
                       [props]="{
                         placeholder: 'Enter',
                         type: 'number',
                         subtitle: '%',
                         errorMessages: {
                           required: 'This is required field',
-                          min: 'Value should be >= -100'
+                          min: 'Value should be positive',
+                          max:'Value cannot be more than 100 for discount'
                         }
                       }"
                     ></hospitality-bot-input>
+                    <hospitality-bot-input-switch
+                      controlName="isMarkup"
+                      label="Markup"
+                    ></hospitality-bot-input-switch>
                     <hospitality-bot-input
                       controlName="rate"
                       [min]="0"

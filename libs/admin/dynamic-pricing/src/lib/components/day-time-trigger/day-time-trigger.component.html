@@ -10,7 +10,7 @@
         class="accordion-list"
       >
         <div [formGroupName]="i">
-          <p-accordionTab [selected]="i == 0">
+          <p-accordionTab [selected]="true" [disabled]="true">
             <p-header>
               <div class="accordion-header">
                 <div class="title item-center">
@@ -33,7 +33,7 @@
                     ></hospitality-bot-toggle-switch-with-label>
                   </div>
                 </div>
-                <div class="status">
+                <div class="status" *ngIf="triggerId">
                   <hospitality-bot-button
                     click-stop-propagation
                     label="Remove"
@@ -187,13 +187,23 @@
                   >
                     <div style="width: calc(100% - 35px);">
                       <hospitality-bot-input
-                        class="full-width"
+                        [min]="0"
                         controlName="discount"
                         [props]="{
                           placeholder: 'Enter',
-                          type: 'number'
+                          type: 'number',
+                          subtitle: '%',
+                          errorMessages: {
+                            required: 'This is required field',
+                            min: 'Value should be positive',
+                            max: 'Value cannot be more than 100 for discount'
+                          }
                         }"
                       ></hospitality-bot-input>
+                      <hospitality-bot-input-switch
+                        controlName="isMarkup"
+                        label="Markup"
+                      ></hospitality-bot-input-switch>
                     </div>
                     <div
                       class="remove"

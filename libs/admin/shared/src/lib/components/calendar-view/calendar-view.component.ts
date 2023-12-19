@@ -121,8 +121,8 @@ export class CalendarViewComponent implements OnInit, OnDestroy {
             borderStyle: show ? 'solid' : 'none',
           }
         : {
-            backgroundColor: show ? data.bg : 'none',
-            color: show ? 'white' : 'none',
+            backgroundColor: show ? data.bg : 'transparent',
+            color: show ? 'white' : 'black',
           }),
       cursor: show ? 'pointer' : 'default',
     };
@@ -146,7 +146,7 @@ export class CalendarViewComponent implements OnInit, OnDestroy {
     // data?.days.includes(this.colsInfo[gridDataIdx].value) && data?.bg;
 
     return {
-      backgroundColor: show ? data.bg : 'transparent',
+      backgroundColor: show ? data.bg : 'white',
       opacity: isHighlighted
         ? currentId === this.highlightId || markedId === this.highlightId
           ? 1

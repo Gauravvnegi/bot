@@ -19,7 +19,11 @@ import { Subscription } from 'rxjs';
 import { DynamicPricingService } from '../../services/dynamic-pricing.service';
 import { ConfigType, DaysType } from '../../types/dynamic-pricing.types';
 import { MenuItem } from 'libs/admin/all-outlets/src/lib/models/outlet.model';
-import { rulesRoutes } from '../../constants/dynamic-pricing.const';
+import {
+  RuleType,
+  ruleLabel,
+  rulesRoutes,
+} from '../../constants/dynamic-pricing.const';
 
 type Season = {
   id: string;
@@ -40,7 +44,6 @@ type ContentData = Partial<{
   isActive: boolean;
   id: string;
 }>;
-
 
 type AdditionalData = { type: ConfigType };
 @Component({
@@ -77,8 +80,10 @@ export class DynamicPricingCalendarViewComponent implements OnInit, OnDestroy {
 
   splitOptions = [
     {
-      label: 'Generate Link',
-      command: () => {},
+      label: `Create ${ruleLabel[RuleType.DAY_TIME_TRIGGER]}`,
+      command: () => {
+        this.handleCreate(RuleType.DAY_TIME_TRIGGER);
+      },
     },
   ];
 
@@ -112,46 +117,23 @@ export class DynamicPricingCalendarViewComponent implements OnInit, OnDestroy {
     const occupancySeasonData = this.occupancyData[value];
     const dayTriggerSeasonData = this.dayTriggerData[value];
 
-    const currentSeasonId = occupancySeasonData?.id;
-    const dayTriggerSeasonId = dayTriggerSeasonData?.id;
+    const currentSeasonId =
+      occupancySeasonData?.id &&
+      !this.inactiveRules.includes(occupancySeasonData.id);
+    const dayTriggerSeasonId =
+      dayTriggerSeasonData?.id &&
+      !this.inactiveRules.includes(dayTriggerSeasonData.id);
 
     if (currentSeasonId || dayTriggerSeasonId) {
-      // if (dayTriggerSeasonId) {
-      //   this.content.dayTrigger = dayTriggerSeasonData;
-      // } else {
-      //   this.content.dayTrigger = { ...defaultContent };
-      // }
-
-      // if (currentSeasonId) {
-      //   this.content.season = occupancySeasonData;
-      // } else {
-      //   this.content.season = { ...defaultContent };
-      // }
-
       this.tooltip =
         (currentSeasonId ? `Season: ${occupancySeasonData.name}\n` : '') +
         (dayTriggerSeasonId ? `Day Trigger: ${dayTriggerSeasonData.name}` : '');
-
-      // if (this.overlayPanel.overlayVisible) {
-      //   // Close the existing overlay panel
-      //   this.overlayPanel.hide();
-      // }
-
-      // Change the content or update content based on your needs
-
-      // Open the overlay panel again
-      // setTimeout(() => {
-      //   this.overlayPanel.show(event);
-      // }, 200);
     } else {
-      // Close the overlay panel if there's no valid data
-      // this.overlayPanel.hide();
-      this.tooltip = '';
+      this.closeOverlayPanel();
     }
   }
 
   closeOverlayPanel() {
-    // this.overlayPanel.hide();
     this.tooltip = '';
   }
 
@@ -159,11 +141,6 @@ export class DynamicPricingCalendarViewComponent implements OnInit, OnDestroy {
     event.type === 'enter'
       ? this.openOverlayPanel(event.event, event.value)
       : this.closeOverlayPanel();
-
-    // this.showMenu = event.event;
-    // console.log(event, 'event', this.showMenu);
-
-    // event.type === 'enter' ? this.menu.show(event.event) : this.menu.hide();
   }
 
   scrollIntoView(id: string) {
@@ -394,15 +371,23 @@ export class DynamicPricingCalendarViewComponent implements OnInit, OnDestroy {
 
   onDateSelect(event: CGridSelectedData<AdditionalData>) {
     const seasonData = event.gridData;
-    const markedData = event.markedData;
-    if (seasonData && markedData) {
+    const triggerData = event.markedData;
+
+    const hasSeasonData =
+      seasonData?.id && !this.inactiveRules.includes(seasonData.id);
+    const hasTriggerData =
+      triggerData?.id && !this.inactiveRules.includes(triggerData.id);
+
+    if (hasSeasonData && hasTriggerData) {
       this.highlightRule(
         this.ruleOptions[this.selectedRuleIdx].value === 'DAY_TIME_TRIGGER'
-          ? markedData
+          ? triggerData
           : seasonData
       );
-    } else if (seasonData || markedData) {
-      this.highlightRule(seasonData ?? markedData);
+    } else if (hasSeasonData) {
+      this.highlightRule(seasonData);
+    } else if (hasTriggerData) {
+      this.highlightRule(triggerData);
     }
   }
 
@@ -430,6 +415,12 @@ export class DynamicPricingCalendarViewComponent implements OnInit, OnDestroy {
 
   handleEdit(ruleId: string, type: ConfigType) {
     this.router.navigate([rulesRoutes[type], ruleId], {
+      relativeTo: this.route,
+    });
+  }
+
+  handleCreate(type: RuleType = RuleType.OCCUPANCY) {
+    this.router.navigate([rulesRoutes[type]], {
       relativeTo: this.route,
     });
   }

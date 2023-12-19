@@ -1,5 +1,9 @@
 @import 'main';
 
+.label {
+  padding-left: 10px;
+}
+
 :host ::ng-deep .p-inputswitch {
   &:not(.p-disabled):hover {
     .p-inputswitch-slider {

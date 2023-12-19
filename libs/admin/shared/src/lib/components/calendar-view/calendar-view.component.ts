@@ -2,20 +2,16 @@ import {
   Component,
   EventEmitter,
   Input,
-  OnChanges,
   OnDestroy,
   OnInit,
   Output,
-  SimpleChanges,
 } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { DaysType, epochWithoutTime, weeks } from '../../utils/shared';
 import { fullMonths } from '../../constants';
-import { Option } from '../../types/form.type';
 import { FieldValues } from '../../types/fields.type';
+import { Option } from '../../types/form.type';
+import { DaysType, epochWithoutTime, weeks } from '../../utils/shared';
 
-const disabledOpacity = 0.3;
-const unselectedOpacity = 0.5;
 @Component({
   selector: 'hospitality-bot-calendar-view',
   templateUrl: './calendar-view.component.html',

@@ -58,6 +58,8 @@ export class DayTimeTriggerComponent implements OnInit {
   // @Output() modifyLevelFGEvent = new EventEmitter();
   weeks = weeks;
 
+  @Input() triggerId: string;
+
   constructor(
     private dynamicPricingService: DynamicPricingService,
     private adminUtilityService: AdminUtilityService,
@@ -78,7 +80,13 @@ export class DayTimeTriggerComponent implements OnInit {
   ngOnInit(): void {
     this.entityId = this.globalFilter.entityId;
     this.initForm();
-    this.loadTriggers();
+    if (this.triggerId) {
+      this.loadTriggers();
+    } else {
+      // this.modifyTriggerFG(Revenue.add);
+      this.modifyTriggerFG(Revenue.add, null, true);
+      this.listenChanges(this.dynamicPricingControl.timeFA.at(0) as FormGroup);
+    }
   }
 
   modifyTriggerFG(
@@ -215,17 +223,17 @@ export class DayTimeTriggerComponent implements OnInit {
         .subscribe(
           (res) => {
             this.dynamicPricingControl.timeFA = this.fb.array([]);
-            if (!res.configDetails.length) {
-              this.modifyTriggerFG(Revenue.add);
-              this.listenChanges(
-                this.dynamicPricingControl.timeFA.at(0) as FormGroup
-              );
-            } else {
-              const triggerModel = new DynamicPricingHandler().deserialize(res);
-              triggerModel.dataList.forEach((item, index) => {
-                triggerModel.mapDayTimeTrigger(index, item, this);
-              });
-            }
+
+            /**
+             * @todo handle by id api call
+             */
+            res.configDetails = res.configDetails.filter(
+              (res) => res.id === this.triggerId
+            );
+            const triggerModel = new DynamicPricingHandler().deserialize(res);
+            triggerModel.dataList.forEach((item, index) => {
+              triggerModel.mapDayTimeTrigger(index, item, this);
+            });
           },
           (error) => {
             this.loading = false;

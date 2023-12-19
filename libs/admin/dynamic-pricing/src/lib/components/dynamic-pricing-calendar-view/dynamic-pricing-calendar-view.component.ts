@@ -19,6 +19,7 @@ import { Subscription } from 'rxjs';
 import { DynamicPricingService } from '../../services/dynamic-pricing.service';
 import { ConfigType, DaysType } from '../../types/dynamic-pricing.types';
 import { MenuItem } from 'libs/admin/all-outlets/src/lib/models/outlet.model';
+import { rulesRoutes } from '../../constants/dynamic-pricing.const';
 
 type Season = {
   id: string;
@@ -427,9 +428,8 @@ export class DynamicPricingCalendarViewComponent implements OnInit, OnDestroy {
     };
   }
 
-  handleEdit(seasonId: string) {
-    this.router.navigate(['create-season'], {
-      queryParams: { seasonId },
+  handleEdit(ruleId: string, type: ConfigType) {
+    this.router.navigate([rulesRoutes[type], ruleId], {
       relativeTo: this.route,
     });
   }

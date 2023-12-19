@@ -9,7 +9,7 @@ import { InventoryReallocationComponent } from './components/inventory-reallocat
 import { MainComponent } from './components/main/main.component';
 import { OccupancyComponent } from './components/occupancy/occupancy.component';
 import { RoomTypesComponent } from './components/room-types/room-types.component';
-import { RuleType } from './constants/dynamic-pricing.const';
+import { RuleType, rulesRoutes } from './constants/dynamic-pricing.const';
 
 const appRoutes: Route[] = [
   {
@@ -21,7 +21,7 @@ const appRoutes: Route[] = [
         component: DynamicPricingCalendarViewComponent,
       },
       {
-        path: 'create-season',
+        path: rulesRoutes.OCCUPANCY,
         data: { ruleType: RuleType.OCCUPANCY },
         children: [
           {
@@ -35,7 +35,7 @@ const appRoutes: Route[] = [
         ],
       },
       {
-        path: 'create-day-time-trigger',
+        path: rulesRoutes.DAY_TIME_TRIGGER,
         data: { ruleType: RuleType.DAY_TIME_TRIGGER },
         children: [
           {

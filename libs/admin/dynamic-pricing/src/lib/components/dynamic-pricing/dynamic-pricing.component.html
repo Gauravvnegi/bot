@@ -8,7 +8,7 @@
     >
     </hospitality-bot-navigation-header>
   </div>
-  <div class="content" *ngIf="activeRule">
+  <div class="content">
     <ng-container [ngSwitch]="activeRule">
       <hospitality-bot-occupancy
         *ngSwitchCase="'OCCUPANCY'"
@@ -17,7 +17,7 @@
 
       <hospitality-bot-day-time-trigger
         *ngSwitchCase="'DAY_TIME_TRIGGER'"
-        [ruleId]="ruleId"
+        [triggerId]="ruleId"
       ></hospitality-bot-day-time-trigger>
 
       <!-- <hospitality-bot-inventory-reallocation

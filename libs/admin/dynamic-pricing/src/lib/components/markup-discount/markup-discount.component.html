@@ -1,0 +1,21 @@
+<div [formGroup]="useForm">
+  <hospitality-bot-input
+    controlName="discount"
+    [min]="0"
+    [props]="{
+      placeholder: 'Enter',
+      type: 'number',
+      subtitle: '%',
+      errorMessages: {
+        required: 'This is required field',
+        min: 'Value cannot be negative',
+        max: 'Value cannot be more than 100'
+      }
+    }"
+  ></hospitality-bot-input>
+
+  <hospitality-bot-input-switch
+    controlName="isMarkup"
+    label="Markup"
+  ></hospitality-bot-input-switch>
+</div>

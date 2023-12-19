@@ -125,42 +125,15 @@ export class DynamicPricingCalendarViewComponent implements OnInit, OnDestroy {
       !this.inactiveRules.includes(dayTriggerSeasonData.id);
 
     if (currentSeasonId || dayTriggerSeasonId) {
-      // if (dayTriggerSeasonId) {
-      //   this.content.dayTrigger = dayTriggerSeasonData;
-      // } else {
-      //   this.content.dayTrigger = { ...defaultContent };
-      // }
-
-      // if (currentSeasonId) {
-      //   this.content.season = occupancySeasonData;
-      // } else {
-      //   this.content.season = { ...defaultContent };
-      // }
-
       this.tooltip =
         (currentSeasonId ? `Season: ${occupancySeasonData.name}\n` : '') +
         (dayTriggerSeasonId ? `Day Trigger: ${dayTriggerSeasonData.name}` : '');
-
-      // if (this.overlayPanel.overlayVisible) {
-      //   // Close the existing overlay panel
-      //   this.overlayPanel.hide();
-      // }
-
-      // Change the content or update content based on your needs
-
-      // Open the overlay panel again
-      // setTimeout(() => {
-      //   this.overlayPanel.show(event);
-      // }, 200);
     } else {
-      // Close the overlay panel if there's no valid data
-      // this.overlayPanel.hide();
-      this.tooltip = '';
+      this.closeOverlayPanel();
     }
   }
 
   closeOverlayPanel() {
-    // this.overlayPanel.hide();
     this.tooltip = '';
   }
 
@@ -168,11 +141,6 @@ export class DynamicPricingCalendarViewComponent implements OnInit, OnDestroy {
     event.type === 'enter'
       ? this.openOverlayPanel(event.event, event.value)
       : this.closeOverlayPanel();
-
-    // this.showMenu = event.event;
-    // console.log(event, 'event', this.showMenu);
-
-    // event.type === 'enter' ? this.menu.show(event.event) : this.menu.hide();
   }
 
   scrollIntoView(id: string) {

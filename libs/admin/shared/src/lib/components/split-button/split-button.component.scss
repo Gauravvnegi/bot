@@ -1,48 +1,84 @@
+@import 'main';
+
 :host ::ng-deep {
+  .button {
+    &__contained {
+      .p-splitbutton {
+        button {
+          color: $white;
+          background-color: $primary-cta;
+          border-radius: unset;
+
+          &:hover {
+            background-color: $primary-hover;
+          }
+          &:active {
+            background-color: $primary-active;
+          }
+        }
+      }
+      .p-splitbutton-defaultbutton {
+        opacity: 0.9;
+      }
+
+      .pi {
+        color: $white !important;
+      }
+    }
+
+    &__outlined {
+      .p-splitbutton {
+        border: 1px solid #5f38f9 !important;
+
+        button {
+          background-color: #fff !important;
+          color: #5f38f9 !important;
+        }
+      }
+      .pi {
+        color: #5f38f9 !important;
+      }
+
+      .p-menu {
+        width: unset !important;
+      }
+
+      .p-button.p-button-icon-only {
+        border-left: 1px solid blue !important;
+        border-start-start-radius: 0px !important;
+        border-end-start-radius: 0px !important;
+      }
+
+      .p-menu .p-menuitem-link {
+        padding: unset !important;
+        border-left: none !important;
+
+        .p-menuitem-text {
+          font-size: 14px;
+          font-weight: 400;
+          padding: 9.5px 18.5px;
+          cursor: pointer;
+        }
+      }
+    }
+  }
+
   .p-splitbutton {
-    font-size: 12px !important;
+    font-size: 14px !important;
     max-width: 200px;
-    width: 175px !important;
+    min-width: 145px;
     border: 1px solid #5f38f9 !important;
     border-radius: 4px;
 
     button {
-      background-color: #fff !important;
-      color: #5f38f9 !important;
       height: 46px;
       justify-content: center;
       padding: 9.5px 18.5px;
       font-size: 12px;
-      font-weight: 400;
+      font-weight: $medium;
       cursor: pointer;
       border-radius: 4px;
       border: none;
-    }
-
-    .pi {
-      color: #5f38f9 !important;
-    }
-
-    .p-menu {
-      width: unset !important;
-    }
-
-    .p-button.p-button-icon-only {
-      border-left: 1px solid blue !important;
-      border-start-start-radius: 0px !important;
-      border-end-start-radius: 0px !important;
-    }
-
-    .p-menu .p-menuitem-link {
-      padding: unset !important;
-      border-left: none !important;
-
-      .p-menuitem-text {
-        font-size: 14px;
-        font-weight: 400;
-        padding: 9.5px 18.5px;
-        cursor: pointer;
-      }
     }
   }
 }

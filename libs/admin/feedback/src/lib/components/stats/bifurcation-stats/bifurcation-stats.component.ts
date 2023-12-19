@@ -245,7 +245,7 @@ export class BifurcationStatsComponent implements OnInit {
 
   getOtherStats(response) {
     this.feedback.push({
-      label: 'Others',
+      label: 'Other Depts',
       score: response.totalCount,
       additionalData: response.totalCount,
       color: 'rgb(197, 197, 197)',

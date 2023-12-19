@@ -124,6 +124,15 @@
     <ng-container *ngSwitchCase="'sentiment'"
       ><div class="progress_container">
         <div class="progress_container__carousel_box" *ngIf="npsChartData">
+          <div class="progress-indicator">
+            <div class="indiactor" *ngFor="let indicator of progressIndicator">
+              <span
+                class="square"
+                [ngStyle]="{ backgroundColor: indicator?.color }"
+              ></span>
+              <div class="label">{{ indicator?.label }}</div>
+            </div>
+          </div>
           <div class="slide" *ngFor="let progress of npsChartData.departments">
             <hospitality-bot-two-way-progress
               [settings]="progress"

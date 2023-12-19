@@ -35,7 +35,7 @@ export const card = {
       },
 
       {
-        label: 'No-Action',
+        label: 'Positive Feedback',
         value: 'NOACTION',
         total: 0,
       },
@@ -72,6 +72,10 @@ export const card = {
       label: 'Map Details',
       icon: 'assets/svg/user.svg',
     },
-    { button: true, label: 'Raise Request', icon: 'assets/svg/requests.svg' },
+    {
+      button: true,
+      label: 'Raise Request',
+      icon: 'assets/svg/requests.svg',
+    },
   ],
 };

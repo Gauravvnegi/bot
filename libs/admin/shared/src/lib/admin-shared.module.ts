@@ -134,6 +134,7 @@ import { ToggleMenuComponent } from './components/toggle-menu/toggle-menu.compon
 import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { CheckboxComponent } from './components/form-component/checkbox/checkbox.component';
+import { SplitButtonComponent } from './components/split-button/split-button.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -271,6 +272,7 @@ import { CheckboxComponent } from './components/form-component/checkbox/checkbox
     ToggleMenuComponent,
     ConfirmDialogComponent,
     CheckboxComponent,
+    SplitButtonComponent,
   ],
 
   exports: [
@@ -394,6 +396,7 @@ import { CheckboxComponent } from './components/form-component/checkbox/checkbox
     ToggleMenuComponent,
     ConfirmDialogComponent,
     CheckboxComponent,
+    SplitButtonComponent,
   ],
 })
 export class AdminSharedModule {}

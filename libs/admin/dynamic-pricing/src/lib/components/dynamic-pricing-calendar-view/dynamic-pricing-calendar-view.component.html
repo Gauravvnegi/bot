@@ -6,11 +6,17 @@
       [isStickyTitle]="false"
       [isBack]="false"
     >
-      <hospitality-bot-button
+      <!-- <hospitality-bot-button
         label="+ Create Season"
         [routerLink]="'create-season'"
         preserveQueryParams="true"
-      ></hospitality-bot-button>
+      ></hospitality-bot-button> -->
+
+      <hospitality-bot-split-button
+        label="+ Create Season"
+        [splitOptions]="splitOptions"
+      >
+      </hospitality-bot-split-button>
     </hospitality-bot-navigation-header>
   </div>
 

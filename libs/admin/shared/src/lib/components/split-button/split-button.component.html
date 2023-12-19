@@ -1,0 +1,11 @@
+<p-splitButton
+  [ngClass]="{
+    button__contained: variant === 'contained',
+    button__outlined: variant === 'outlined'
+  }"
+  [label]="label"
+  (onClick)="onClick.emit($event)"
+  [model]="splitOptions"
+  [icon]="icon"
+  [disabled]="disabled || isLoading"
+></p-splitButton>

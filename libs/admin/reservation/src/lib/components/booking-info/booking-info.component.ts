@@ -31,6 +31,7 @@ import { Subscription } from 'rxjs';
 import { AgentTableResponse } from 'libs/admin/agent/src/lib/types/response';
 import { AddAgentComponent } from 'libs/admin/agent/src/lib/components/add-agent/add-agent.component';
 import { AddCompanyComponent } from 'libs/admin/company/src/lib/components/add-company/add-company.component';
+import { CompanyResponseType } from 'libs/admin/company/src/lib/types/response';
 
 @Component({
   selector: 'hospitality-bot-booking-info',
@@ -81,7 +82,7 @@ export class BookingInfoComponent implements OnInit {
   fromDateValue = new Date();
   toDateValue = new Date();
   selectedAgent: AgentTableResponse;
-  selectedCompany: Option;
+  selectedCompany: CompanyResponseType;
 
   sourceValue: string;
   marketSegmentValue: string;
@@ -273,6 +274,7 @@ export class BookingInfoComponent implements OnInit {
           this.selectedCompany = res.company && {
             label: res?.company?.firstName,
             value: res?.company?.id,
+            ...res?.company,
           };
 
           this.inputControls.reservationInformation.patchValue({
@@ -433,6 +435,7 @@ export class BookingInfoComponent implements OnInit {
         label: event?.firstName,
         value: event?.id,
         marketSegment: event?.marketSegment,
+        ...event,
       };
       !this.reservationId &&
         event?.marketSegment &&
@@ -497,6 +500,7 @@ export class BookingInfoComponent implements OnInit {
           this.selectedCompany = {
             label: `${res?.companyName}`,
             value: res?.id,
+            ...res,
           };
           res.marketSegment &&
             this.patchValue(this.marketSegmentControl, res.marketSegment);

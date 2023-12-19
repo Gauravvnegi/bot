@@ -2,8 +2,9 @@ import {
   BookingItems,
   BookingItemsSummary,
   PaymentMethodConfig,
+  PaymentRuleResponse,
   ReservationListResponse,
-  RoomReservationRes,
+  RoomReservationFormResponse,
   SourceResponse,
   SummaryResponse,
 } from '../types/response.type';
@@ -24,7 +25,6 @@ import {
   SpaItems,
 } from '../constants/form';
 import { ItemsData, OutletFormData } from '../types/forms.types';
-import { RoomReservationResponse } from '../types/response.type';
 import { RoomTypeForm } from 'libs/admin/room/src/lib/models/room.model';
 import { JourneyState, JourneyType } from '../constants/reservation';
 import {
@@ -60,7 +60,7 @@ export class RoomReservation {
   invoiceId: string;
   agentName?: string;
 
-  deserialize(input: RoomReservationRes) {
+  deserialize(input: RoomReservationFormResponse) {
     this.id = input.id;
     this.from = input.from;
     this.to = input.to;
@@ -260,13 +260,16 @@ export class ReservationFormData {
   agent: AgentTableResponse;
   company: CompanyResponseType;
 
-  deserialize(input: RoomReservationResponse) {
+  deserialize(input: RoomReservationFormResponse) {
     this.reservationInformation = new BookingInfo().deserialize(input);
     this.guestInformation = new GuestInfo().deserialize(input.guest);
     this.offerId = input.offer ? input.offer?.id : null;
     this.nextStates = [input.reservationType, ...input.nextStates];
     this.instructions = new Instructions().deserialize(input);
-    this.paymentRule = new PaymentRule().deserialize(input);
+    this.paymentRule = new PaymentRule().deserialize(
+      input?.paymentRule,
+      input.pricingDetails.totalAmount
+    );
     this.roomInformation = input?.bookingItems.map((item: BookingItems) => ({
       adultCount: item.occupancyDetails.maxAdult,
       childCount: item.occupancyDetails.maxChildren,
@@ -421,13 +424,12 @@ export class PaymentRule {
   inclusionsAndTerms: string;
   type?: string;
 
-  deserialize(input: RoomReservationResponse): this {
-    this.amountToPay = input?.paymentRule?.amount ?? 0;
-    this.deductedAmount =
-      input?.pricingDetails?.totalAmount - input?.paymentRule?.amount;
-    this.makePaymentBefore = input?.paymentRule?.dueDate ?? 0;
-    this.inclusionsAndTerms = input?.paymentRule?.remarks ?? '';
-    this.type = input?.paymentRule?.type ?? 'FLAT';
+  deserialize(paymentRule: PaymentRuleResponse, totalAmount: number): this {
+    this.amountToPay = paymentRule?.amount ?? 0;
+    this.deductedAmount = totalAmount - paymentRule?.amount;
+    this.makePaymentBefore = paymentRule?.dueDate ?? 0;
+    this.inclusionsAndTerms = paymentRule?.remarks ?? '';
+    this.type = paymentRule?.type ?? 'FLAT';
     return this;
   }
 }

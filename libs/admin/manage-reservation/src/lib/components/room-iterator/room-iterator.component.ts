@@ -76,6 +76,7 @@ export class RoomIteratorComponent extends IteratorComponent
   selectedRoomNumber: string = '';
   isCheckedIn = false;
   isCheckedout = false;
+  isRouteData = false;
 
   @ViewChild('main') main: ElementRef;
 
@@ -227,7 +228,8 @@ export class RoomIteratorComponent extends IteratorComponent
       // Rooms number is not multi-select in edit mode for confirmed reservation.
       if (
         this.reservationInfoControls.reservationType.value !== 'DRAFT' &&
-        !this.isDraftBooking
+        !this.isDraftBooking &&
+        !this.isRouteData
       ) {
         this.fields[3].name = 'roomNumber';
         this.fields[3].type = 'select';
@@ -306,11 +308,10 @@ export class RoomIteratorComponent extends IteratorComponent
         },
         { emitEvent: false }
       );
-
       if (
         !this.isCheckedIn &&
         !this.isCheckedout &&
-        (this.isDataInitialized || !this.reservationId)
+        (this.isDataInitialized || (!this.reservationId && !this.isRouteData))
       ) {
         this.roomControls[index].get('roomNumbers').reset();
         this.roomControls[index].get('roomNumber').reset();
@@ -453,5 +454,6 @@ export class RoomIteratorComponent extends IteratorComponent
 
 type BookingConfig = {
   reservationId: string;
-  isDraftBooking: boolean;
+  isDraftBooking?: boolean;
+  isRouteData?: boolean;
 };

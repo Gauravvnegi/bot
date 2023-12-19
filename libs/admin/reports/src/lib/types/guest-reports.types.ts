@@ -1,4 +1,4 @@
-import { ReservationItemsPayment } from "./financial-reports.types";
+import { ReservationItemsPayment } from './financial-reports.types';
 
 export type GuestHistoryData = {
   guestName: string;
@@ -92,7 +92,7 @@ export type GuestLedgerResponse = {
   stepsStatus: StepsStatus;
   lastCompletedStep: string;
   currentJourney: string;
-  currentJoureyStatus: string;
+  currentJourneyStatus: string;
   currentJourneyState: string;
   source: string;
   totalDueAmount: number;
@@ -242,7 +242,7 @@ interface Reservation {
   stepsStatus: StepsStatus;
   lastCompletedStep: string;
   currentJourney: string;
-  currentJoureyStatus: string;
+  currentJourneyStatus: string;
   currentJourneyState: string;
   totalDueAmount: number;
   totalPaidAmount: number;
@@ -251,8 +251,7 @@ interface Reservation {
   vip: boolean;
   pmsBooking: boolean;
   invoicePrepareRequest: boolean;
-  reservationItemsPayment: ReservationItemsPayment
-
+  reservationItemsPayment: ReservationItemsPayment;
 }
 
 interface ContactDetails {

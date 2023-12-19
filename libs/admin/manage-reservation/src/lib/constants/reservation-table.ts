@@ -77,8 +77,8 @@ export const reservationStatusDetails: Record<
   },
   NOSHOW: {
     label: 'No Show',
-    type: 'draft'
-  }
+    type: 'draft',
+  },
 };
 
 export const outletReservationStatusDetails: Record<
@@ -269,7 +269,7 @@ export enum ReservationStatusType {
   CONFIRMED = 'CONFIRMED',
   DRAFT = 'DRAFT',
   CANCELED = 'CANCELED',
-  REINSTATE = 'REINSTATE'
+  REINSTATE = 'REINSTATE',
 }
 
 /* All Chips */
@@ -313,6 +313,7 @@ export const MenuOptions: Option[] = [
   { label: 'Manage Invoice', value: 'MANAGE_INVOICE' },
   { label: 'Edit Reservation', value: 'EDIT_RESERVATION' },
   { label: 'Print Invoice', value: 'PRINT_INVOICE' },
+  { label: 'Clone Reservation', value: 'CLONE_RESERVATION' },
 ];
 
 export const HotelMenuOptions: Option[] = [

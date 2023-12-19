@@ -67,7 +67,7 @@ export type LodgingTaxReportResponse = {
   stepsStatus: StepsStatus;
   lastCompletedStep: string;
   currentJourney: string;
-  currentJoureyStatus: string;
+  currentJourneyStatus: string;
   currentJourneyState: string;
   source: string;
   totalDueAmount: number;

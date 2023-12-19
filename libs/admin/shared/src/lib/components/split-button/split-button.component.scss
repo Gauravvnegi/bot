@@ -64,7 +64,6 @@
   }
 
   .p-splitbutton {
-    font-size: 14px !important;
     max-width: 200px;
     min-width: 145px;
     border: 1px solid #5f38f9 !important;
@@ -73,12 +72,11 @@
     button {
       height: 46px;
       justify-content: center;
-      padding: 9.5px 18.5px;
-      font-size: 12px;
+      font-size: 14px;
       font-weight: $medium;
       cursor: pointer;
-      border-radius: 4px;
       border: none;
+      border-radius: 4px;
     }
   }
 }

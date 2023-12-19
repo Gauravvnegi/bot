@@ -265,7 +265,7 @@ export class OccupancyComponent implements OnInit {
   }
 
   get seasonOccupancyFG(): FormGroup {
-    return this.fb.group({
+    const seasonForm = this.fb.group({
       id: [],
       basePrice: [this.rooms.find((item) => item.isBase).price],
       start: [
@@ -273,9 +273,26 @@ export class OccupancyComponent implements OnInit {
         [Validators.min(0), Validators.required],
       ],
       end: [1, [Validators.min(0), Validators.required]],
-      discount: [, [Validators.min(-100), Validators.required]],
+      discount: [, [Validators.min(0), Validators.required]],
+      isMarkup: [true],
       rate: [, [Validators.min(0), Validators.required]],
     });
+
+    seasonForm.get('isMarkup').valueChanges.subscribe((res) => {
+      const discount = seasonForm.get('discount');
+      if (res) {
+        discount.setValidators([Validators.min(0), Validators.required]);
+      } else {
+        discount.setValidators([
+          Validators.max(100),
+          Validators.min(0),
+          Validators.required,
+        ]);
+      }
+      discount.updateValueAndValidity();
+      discount.markAllAsTouched();
+    });
+    return seasonForm;
   }
 
   remove(
@@ -421,19 +438,29 @@ export class OccupancyComponent implements OnInit {
     pointer?: { previous: FormGroup; next: FormGroup },
     baseAmount?: number
   ) => {
-    const { discount, rate, start, end, basePrice } = ruleFG.controls;
+    const { discount, rate, start, end, basePrice, isMarkup } = ruleFG.controls;
     if (!baseAmount) {
       baseAmount = +basePrice.value;
     }
 
-    discount.valueChanges.subscribe((percentage) => {
-      const totalRate = (parseInt(percentage) * baseAmount) / 100 + baseAmount;
+    const updateRate = () => {
+      const percentageValue = parseInt(discount.value);
+      const totalRate =
+        ((isMarkup.value ? percentageValue : -percentageValue) * baseAmount) /
+          100 +
+        baseAmount;
       rate.patchValue(Math.floor(totalRate), { emitEvent: false });
-    });
+    };
+
+    isMarkup.valueChanges.subscribe(updateRate);
+    discount.valueChanges.subscribe(updateRate);
 
     rate.valueChanges.subscribe((rate) => {
       const totalDiscount = ((parseInt(rate) - baseAmount) / baseAmount) * 100;
-      discount.patchValue(Math.floor(totalDiscount), { emitEvent: false });
+      isMarkup.patchValue(totalDiscount > 0, { emitEvent: false });
+      discount.patchValue(Math.floor(Math.abs(totalDiscount)), {
+        emitEvent: false,
+      });
     });
 
     end.valueChanges.subscribe((endValue) => {

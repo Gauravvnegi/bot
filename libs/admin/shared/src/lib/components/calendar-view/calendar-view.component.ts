@@ -146,7 +146,7 @@ export class CalendarViewComponent implements OnInit, OnDestroy {
     // data?.days.includes(this.colsInfo[gridDataIdx].value) && data?.bg;
 
     return {
-      backgroundColor: show ? data.bg : 'transparent',
+      backgroundColor: show ? data.bg : 'white',
       opacity: isHighlighted
         ? currentId === this.highlightId || markedId === this.highlightId
           ? 1

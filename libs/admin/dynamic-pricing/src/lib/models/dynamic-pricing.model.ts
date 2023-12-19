@@ -239,7 +239,16 @@ export class DynamicPricingFactory {
   }
 
   static getOccupancyRules(rule: FormGroup): ConfigRuleType {
-    const { id, discount, end, rate, start, fromTime, toTime } = rule.controls;
+    const {
+      id,
+      discount,
+      end,
+      rate,
+      start,
+      fromTime,
+      toTime,
+      isMarkup,
+    } = rule.controls;
     const status = true; //TODO, Future dependent
     const localTime = (5 * 60 + 30) * 60 * 1000;
 
@@ -250,7 +259,7 @@ export class DynamicPricingFactory {
       status: status ? 'ACTIVE' : 'INACTIVE',
       discountOrMarkup: {
         type: 'PERCENTAGE',
-        value: +discount?.value,
+        value: isMarkup?.value ? +discount?.value : -discount?.value,
       },
       ...(fromTime?.value && {
         fromTimeInMillis:
@@ -354,7 +363,8 @@ export class DynamicPricingHandler {
                 id: rule.id,
                 start: rule.start,
                 end: rule.end,
-                discount: rule.discount,
+                discount: Math.abs(rule.discount),
+                isMarkup: rule.discount >= 0,
               });
           }
         );
@@ -387,11 +397,14 @@ export class DynamicPricingHandler {
             id: rule.id,
             start: rule.start,
             end: rule.end,
-            discount: rule.discount,
+            discount: Math.abs(rule.discount),
+
             ...triggerConfig,
           },
           type === 'DAY_TIME_TRIGGER' ? { emitEvent: false } : {}
         );
+
+      hotelOccupancy.get('isMarkup').patchValue(rule.discount >= 0);
     });
   }
 

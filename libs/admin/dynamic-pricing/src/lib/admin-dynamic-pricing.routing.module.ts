@@ -8,6 +8,7 @@ import { MainComponent } from './components/main/main.component';
 import { OccupancyComponent } from './components/occupancy/occupancy.component';
 import { RoomTypesComponent } from './components/room-types/room-types.component';
 import { RuleType, rulesRoutes } from './constants/dynamic-pricing.const';
+import { MarkupDiscountComponent } from './components/markup-discount/markup-discount.component';
 
 const appRoutes: Route[] = [
   {
@@ -63,5 +64,6 @@ export class AdminDynamicPricingRoutingModule {
     DayTimeTriggerComponent,
     DynamicPricingCalendarViewComponent,
     RoomTypesComponent,
+    MarkupDiscountComponent,
   ];
 }

@@ -15,6 +15,7 @@ export class RateVariationReport
       value &&
       value.map((data) => {
         return {
+          id: data?.id,
           bookingNo: data?.number,
           folio: data?.invoiceCode,
           roomNo: data?.stayDetails?.room?.roomNumber,

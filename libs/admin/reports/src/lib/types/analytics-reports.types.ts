@@ -122,6 +122,8 @@ export type NoShowSummaryReportData = {
   checkIn: string;
   checkOut: string;
   createdBy: string;
+  reservationNumber: string;
+  guestId: string;
 };
 
 export type NoShowSummaryReportResponse = {

@@ -134,7 +134,7 @@ export class CurrentJourneyDetails implements IDeserializable {
   deserialize(input: any) {
     Object.assign(
       this,
-      set({}, 'status', get(input, ['currentJoureyStatus'])),
+      set({}, 'status', get(input, ['currentJourneyStatus'])),
       set({}, 'journey', get(input, ['currentJourney']))
     );
     return this;

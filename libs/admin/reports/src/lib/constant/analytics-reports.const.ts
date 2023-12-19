@@ -9,7 +9,10 @@ import { ColsData } from '../types/reports.types';
 
 export const companyContributionsReportCols: ColsData<CompanyContributionsReportData> = {};
 
-export const noShowSummaryReportCols: ColsData<NoShowSummaryReportData> = {
+export const noShowSummaryReportCols: ColsData<Omit<
+  NoShowSummaryReportData,
+  'reservationNumber' | 'guestId'
+>> = {
   createdOn: {
     header: 'Created On',
     isSortDisabled: true,

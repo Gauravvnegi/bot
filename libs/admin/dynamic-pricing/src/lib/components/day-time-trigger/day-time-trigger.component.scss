@@ -1,3 +1,5 @@
+@import 'main';
+
 $border-color: rgba(112, 112, 112, 0.35);
 .accordion-list {
   margin-bottom: 30px;
@@ -115,6 +117,11 @@ $border-color: rgba(112, 112, 112, 0.35);
   p-header {
     width: calc(100% - 30px);
   }
+
+  .p-accordion p-accordiontab .p-accordion-header {
+    @include sticky-header(60px);
+  }
+
   .p-accordion-content {
     border-top: 1px solid $border-color !important;
   }
@@ -141,4 +148,7 @@ $border-color: rgba(112, 112, 112, 0.35);
   .main {
     gap: 2em;
   }
+}
+::ng-deep .p-accordion p-accordiontab .p-accordion-header {
+  @include sticky-header(60px);
 }

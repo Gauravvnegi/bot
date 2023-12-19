@@ -39,20 +39,21 @@ export class ReservationActivityReport
   deserialize(value: ReservationResponseData[]) {
     this.records = new Array<ReservationActivityReportData>();
 
-    value.forEach((data) => {
-      this.records.push({
-        id: data.id,
-        bookingNo: data.number,
-        roomType: data.stayDetails.room.type,
-        primaryGuest: `${data.guestDetails.primaryGuest.firstName} ${data.guestDetails.primaryGuest.lastName}`,
-        sharers: `${data.guestDetails.sharerGuests.length}`,
-        arrival: getFormattedDate(data.stayDetails.arrivalTime),
-        departure: getFormattedDate(data.stayDetails.departureTime),
-        pax: `${data.stayDetails.adultsCount} Adults, ${data.stayDetails.kidsCount} Kids`,
-        rateOrPackage: undefined, //to be added in response
-        amount: toCurrency(data.paymentSummary.totalAmount),
+    value &&
+      value.forEach((data) => {
+        this.records.push({
+          id: data.id,
+          bookingNo: data.number,
+          roomType: data.stayDetails.room.type,
+          primaryGuest: `${data.guestDetails.primaryGuest.firstName} ${data.guestDetails.primaryGuest.lastName}`,
+          sharers: `${data.guestDetails.sharerGuests.length}`,
+          arrival: getFormattedDate(data.stayDetails.arrivalTime),
+          departure: getFormattedDate(data.stayDetails.departureTime),
+          pax: `${data.stayDetails.adultsCount} Adults, ${data.stayDetails.kidsCount} Kids`,
+          rateOrPackage: undefined, //to be added in response
+          amount: toCurrency(data.paymentSummary.totalAmount),
+        });
       });
-    });
 
     return this;
   }

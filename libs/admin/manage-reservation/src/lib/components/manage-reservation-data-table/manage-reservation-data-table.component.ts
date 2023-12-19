@@ -39,16 +39,22 @@ import {
 import { manageReservationRoutes } from '../../constants/routes';
 import {
   BookingConfig,
+  ReservationFormData,
   ReservationList,
+  RoomReservation,
 } from '../../models/reservations.model';
 import { ManageReservationService } from '../../services/manage-reservation.service';
-import { ReservationListResponse } from '../../types/response.type';
+import {
+  ReservationListResponse,
+  RoomReservationFormResponse,
+} from '../../types/response.type';
 import { FormService } from '../../services/form.service';
 import { SelectedEntity } from '../../types/reservation.type';
 import { InvoiceService } from 'libs/admin/invoice/src/lib/services/invoice.service';
 import { distinctUntilChanged, takeUntil, tap } from 'rxjs/operators';
 import { tableTypes } from 'libs/admin/dashboard/src/lib/constants/cols';
 import { Clipboard } from '@angular/cdk/clipboard';
+import { RoomReservationFormData } from '../../types/forms.types';
 
 @Component({
   selector: 'hospitality-bot-manage-reservation-data-table',
@@ -86,6 +92,8 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
 
   selectedTableType: string;
   showCalendarView = false;
+
+  roomReservationList: RoomReservationFormResponse[] = [];
 
   private cancelRequests$ = new Subject<void>();
 
@@ -209,6 +217,7 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
         (res) => {
           // Process the response and update the data
           this.reservationLists = new ReservationList().deserialize(res);
+          this.roomReservationList = res?.records;
           this.values = this.reservationLists.reservationData;
           // const statusDetails =
           //   this.selectedEntity.type === EntityType.HOTEL
@@ -385,7 +394,7 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
   /**
    * @function handleMenuClick To handle click on menu button.
    */
-  handleMenuClick(value: string, rowData) {
+  handleMenuClick(value: string, rowData: RoomReservation) {
     switch (value) {
       case 'MANAGE_INVOICE':
         this.routesConfigService.navigate({
@@ -406,12 +415,51 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
       case 'REINSTATE':
         this.handleStatus(ReservationStatusType.REINSTATE, rowData);
         break;
+      case 'CLONE_RESERVATION':
+        this.cloneReservation(rowData.id);
+        break;
       // case 'ASSIGN_ROOM':
       // case 'ASSIGN_TABLE':
       //   this.formService.enableAccordion = true;
       //   this.editReservation(id);
       //   break;
     }
+  }
+
+  cloneReservation(reservationId: string) {
+    const selectedReservation = this.roomReservationList.find(
+      (item) => item.id === reservationId
+    );
+    const reservation = new ReservationFormData().deserialize(
+      selectedReservation
+    );
+    const guestName =
+      reservation.guestInformation?.firstName ||
+      reservation.guestInformation?.lastName
+        ? reservation.guestInformation?.firstName +
+          ' ' +
+          (reservation.guestInformation?.lastName ?? '')
+        : '';
+    reservation.reservationInformation.reservationType = ReservationType.DRAFT;
+    let queryParams = {
+      entityId: this.entityId,
+      data: btoa(
+        JSON.stringify({
+          ...reservation,
+          guestData: {
+            label: guestName,
+            value: selectedReservation.guest?.id,
+          },
+        })
+      ),
+    };
+
+    this.routesConfigService.navigate({
+      subModuleName: ModuleNames.ADD_RESERVATION,
+      additionalPath: 'add-reservation',
+      queryParams,
+      openInNewWindow: true,
+    });
   }
 
   createReservation() {

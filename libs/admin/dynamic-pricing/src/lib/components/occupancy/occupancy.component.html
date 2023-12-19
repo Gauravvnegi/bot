@@ -12,7 +12,11 @@
         "
         [formGroupName]="seasonIndex"
       >
-        <p-accordionTab [selected]="true" [disabled]="true">
+        <p-accordionTab
+          [selected]="true"
+          [disabled]="true"
+          [id]="fa.referenceId"
+        >
           <p-header class="season-header">
             <div class="header-wrapper">
               <div class="header-button">
@@ -218,7 +222,7 @@
                 </p-accordion>
               </ng-template>
 
-              <div class="action">
+              <!-- <div class="action">
                 <hospitality-bot-button
                   [disabled]="!isDirty(season)"
                   [label]="
@@ -227,7 +231,19 @@
                   (click)="handleSave(season)"
                 >
                 </hospitality-bot-button>
-              </div>
+              </div> -->
+              <hospitality-bot-form-action
+                [disabled]="!isDirty(season)"
+                class="full-width"
+                [config]="{
+                  preHide: true,
+                  postLabel:
+                    season?.get('type')?.value === 'update' ? 'Update' : 'Save'
+                }"
+                (onPostAction)="handleSave(season)"
+                #fa
+              >
+              </hospitality-bot-form-action>
 
               <ng-template #ruleHeading>
                 <div class="form-table form-table__header">

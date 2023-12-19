@@ -21,6 +21,7 @@ export class DirectAgentBillingReport
     if (value instanceof Array) {
       this.records = value.map((item) => {
         return {
+          guestId: item?.guest?.id,
           agentCode: item?.agent?.code,
           agentName:
             item?.agent && `${item?.agent?.firstName} ${item?.agent?.lastName}`,
@@ -67,6 +68,7 @@ export class DirectCompanyBillingReport
     if (value instanceof Array) {
       this.records = value.map((item) => {
         return {
+          guestId: item?.guest?.id,
           companyCode: item?.company?.code,
           companyName: item?.company?.firstName,
           bookingNo: item?.reservationNumber,

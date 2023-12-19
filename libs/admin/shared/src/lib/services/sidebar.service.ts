@@ -9,13 +9,14 @@ import { BehaviorSubject } from 'rxjs';
 // }
 
 export type SideBarConfig<TData extends Record<string, any> = {}> = {
-  type?: 'RAISE_REQUEST' | 'ADD_GUEST';
+  type?: 'RAISE_REQUEST' | 'ADD_GUEST' | 'URL';
   open: boolean;
   data?: TData extends { type: 'RAISE_REQUEST' }
     ? { firstName?: string; lastName?: string; roomNo?: string }
     : TData extends { type: 'ADD_GUEST' }
     ? { guestName: string }
-    : TData;
+  : TData;
+  url?: string;
 };
 
 @Injectable({ providedIn: 'root' })

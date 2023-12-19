@@ -557,3 +557,9 @@
   overflow: hidden;
   white-space: nowrap;
 }
+
+@mixin sticky-header($topPosition) {
+  position: sticky;
+  top: $topPosition;
+  z-index: 1;
+}

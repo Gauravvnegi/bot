@@ -177,3 +177,7 @@ $border-color: rgba(112, 112, 112, 0.35);
   row-gap: var(--row-gap);
   column-gap: var(--column-gap);
 }
+
+::ng-deep .p-accordion p-accordiontab .p-accordion-header {
+  @include sticky-header(60px);
+}

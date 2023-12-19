@@ -2,6 +2,7 @@
   <p-accordion class="accordion" [multiple]="true" #accordion>
     <div formArrayName="timeFA">
       <div
+        [id]="fa.referenceId"
         *ngFor="
           let triggerFG of dynamicPricingControl.timeFA?.controls;
           let i = index
@@ -216,7 +217,7 @@
               </div>
             </div>
 
-            <div class="action">
+            <!-- <div class="action">
               <hospitality-bot-button
                 [disabled]="!isDirty(triggerFG)"
                 [label]="
@@ -225,7 +226,20 @@
                 (click)="handleSave(triggerFG)"
               >
               </hospitality-bot-button>
-            </div>
+            </div> -->
+
+            <hospitality-bot-form-action
+              [disabled]="!isDirty(triggerFG)"
+              class="full-width"
+              [config]="{
+                preHide: true,
+                postLabel:
+                  triggerFG?.get('type')?.value === 'update' ? 'Update' : 'Save'
+              }"
+              (onPostAction)="handleSave(triggerFG)"
+              #fa
+            >
+            </hospitality-bot-form-action>
           </p-accordionTab>
         </div>
       </div>

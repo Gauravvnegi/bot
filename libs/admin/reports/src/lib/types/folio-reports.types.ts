@@ -1,4 +1,4 @@
-import { PaymentModesAndTotalAmount } from "./financial-reports.types";
+import { PaymentModesAndTotalAmount } from './financial-reports.types';
 
 export type FolioListReportData = {
   bookingNo: string;
@@ -35,7 +35,7 @@ export type FolioListReportResponse = {
   stepsStatus: StepsStatus;
   lastCompletedStep: string;
   currentJourney: string;
-  currentJoureyStatus: string;
+  currentJourneyStatus: string;
   currentJourneyState: string;
   source: string;
   totalDueAmount: number;
@@ -178,7 +178,7 @@ interface Reservation {
   stepsStatus: StepsStatus;
   lastCompletedStep: string;
   currentJourney: string;
-  currentJoureyStatus: string;
+  currentJourneyStatus: string;
   currentJourneyState: string;
   source: string;
   totalDueAmount: number;

@@ -64,17 +64,17 @@ export class NoShows {
   deserialize(value: ReservationResponse) {
     this.id = value?.id;
     this.bookingNumber = value?.reservationNumber;
-    this.dateOfArrival = getFormattedDate(value?.from);
+    this.dateOfArrival = getFormattedDate(value?.arrivalTime);
     this.noShowOn = getFormattedDate(value?.from);
-    this.guestName = `${value?.guest.firstName ?? ''} ${
+    this.guestName = `${value?.guest?.firstName ?? ''} ${
       value?.guest?.lastName ?? ''
     }`.trim();
-    this.bookingAmount = `${value?.pricingDetails?.totalAmount}`;
+    this.bookingAmount = toCurrency(value?.pricingDetails?.totalAmount);
     this.noShowCharge = null;
     this.noShowReason = null;
     this.otherCharge = null;
-    this.amountPaid = `${value?.pricingDetails?.totalPaidAmount}`;
-    this.balance = `${value?.pricingDetails?.totalDueAmount}`;
+    this.amountPaid = toCurrency(value?.pricingDetails?.totalPaidAmount);
+    this.balance = toCurrency(value?.pricingDetails?.totalDueAmount);
     return this;
   }
 }
@@ -96,18 +96,20 @@ export class Cancellation extends NoShows {
   roomType: string;
   checkIn: string;
   checkOut: string;
-  night: string;
+  night: number;
   cancelledOn: string;
   cancellationCharge: string;
   cancellationReason: string;
 
   deserialize(value: ReservationResponse): this {
     super.deserialize(value);
-    const roomDetails = value.bookingItems[0];
-    this.roomType = `${roomDetails?.roomDetails?.roomNumber}/${roomDetails?.roomDetails?.roomTypeLabel}`;
+    const roomDetails = value?.bookingItems?.[0];
+    this.roomType = `${roomDetails?.roomDetails?.roomNumber ?? ' '} - ${
+      roomDetails?.roomDetails?.roomTypeLabel ?? ''
+    }`;
     this.checkIn = getFormattedDate(value?.from);
     this.checkOut = getFormattedDate(value?.to);
-    this.night = `${calculateNumberOfNights(value.from, value.to)}`;
+    this.night = value?.nightCount;
     this.cancelledOn = getFormattedDate(value?.from);
     this.cancellationCharge = null;
     this.cancellationReason = null;
@@ -452,6 +454,7 @@ export class AddOnRequestReport
 }
 
 export function getFormattedDate(time: number) {
+  if (!time) return;
   const currentDate = new Date(time);
   const monthAbbreviated = new Intl.DateTimeFormat('en-US', {
     month: 'short',
@@ -462,6 +465,7 @@ export function getFormattedDate(time: number) {
 }
 
 export function getFormattedDateWithTime(time: number) {
+  if (!time) return;
   const currentDate = new Date(time);
   const month = (currentDate.getMonth() + 1).toString().padStart(2, '0'); // Adding 1 because months are zero-based
   const date = currentDate.getDate().toString().padStart(2, '0');

@@ -98,7 +98,7 @@ export class ReportsComponent implements OnInit {
       this.navRoutes = [
         ...this.navRoutes,
         {
-          label: this.selectedReport.label,
+          label: this.selectedReport?.label,
           link: './',
         } as NavRouteOption,
       ];

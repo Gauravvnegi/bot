@@ -236,6 +236,8 @@ export interface ReservationResponse {
   updated: number;
   pricingDetails: PricingDetails;
   bookingItems: BookingItem[];
+  arrivalTime: number;
+  nightCount: number
 }
 
 export type DraftReservationReportResponse = {

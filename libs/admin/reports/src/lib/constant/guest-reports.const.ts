@@ -186,7 +186,7 @@ export const SalesByGuestCols: ColsData<SalesByGuestData> = {
   },
 };
 
-export const guestLedgerCols: ColsData<GuestLedgerData> = {
+export const guestLedgerCols: ColsData<Omit<GuestLedgerData, 'id'>> = {
   roomNo: {
     header: 'Room No',
     isSortDisabled: true,

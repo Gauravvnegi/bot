@@ -101,6 +101,7 @@ export class PayTypeReport
 const sumGroupedData = new Map<string, number>();
 
 class PayTypeReportData {
+  id: string;
   paymentMode?: string;
   paymentType?: string;
   employee?: string;
@@ -165,6 +166,7 @@ class PayTypeReportData {
   }
 
   private setDetails(input: Partial<PayTypeReportResponse>) {
+    this.id = input?.reservationId,
     this.paymentMode = undefined;
     this.paymentType = input?.paymentMethod;
 

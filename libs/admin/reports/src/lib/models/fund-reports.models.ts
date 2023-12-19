@@ -16,8 +16,10 @@ export class AddWithdrawReport
       value.map((data) => {
         return {
           createdDate: getFormattedDate(data?.created),
-          fundTransferredBy: undefined,
-          action: data?.status,
+          fundTransferredBy: `${data?.cashier?.firstName ?? ''} ${
+            data?.cashier?.lastName
+          }`,
+          action: data?.paymentType,
           amount: toCurrency(data?.amount),
           paymentMode: data?.paymentMethod,
           comments: data?.remarks,

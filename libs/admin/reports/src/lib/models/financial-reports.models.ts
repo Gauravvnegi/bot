@@ -333,6 +333,7 @@ export class AdvanceDepositPaymentReport
       value &&
       value.map((item) => {
         return {
+          id: item?.reservationId,
           bookingNo: item?.reservationNumber,
           // groupId: undefined,
           checkIn: getFormattedDate(item?.reservation?.arrivalTime),

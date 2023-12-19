@@ -175,6 +175,7 @@ export type FinancialReportResponse = Reservation & {};
 
 //advanceDepositPayment
 export type AdvanceDepositPaymentReportData = {
+  id: string;
   bookingNo: string;
   // groupId: string;
   checkIn: string;

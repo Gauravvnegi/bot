@@ -2,6 +2,7 @@ import { ReservationResponseData } from 'libs/admin/shared/src/lib/types/respons
 import { ReservationReportData, User } from './reservation-reports.types';
 
 export type DiscountAllowanceReportData = {
+  id: string;
   date: string;
   group: string;
   res: string;

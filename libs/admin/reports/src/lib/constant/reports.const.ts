@@ -276,10 +276,10 @@ export const reportsConfig: ReportsConfig = {
         label: 'MTD & YTD Report',
         value: 'mtdAndYtdReport',
       },
-      // {
-      //   label: 'Night Audit Revenue',
-      //   value: 'nightAuditRevenue',
-      // },
+      {
+        label: 'Night Audit Revenue',
+        value: 'nightAuditRevenue',
+      },
     ],
   },
   TAX_REPORTS: {
@@ -417,9 +417,27 @@ export const reportsConfig: ReportsConfig = {
   },
 };
 
-export const reservationReportsMenu: ReportsType['RESERVATION_REPORTS'][] = reportsConfig.RESERVATION_REPORTS.menu.map(
-  (item) => item.value
-);
+/**
+ * Guest Details Popup mapping
+ */
+export const reportsPopUpMapping: ReportsTypeValues[] = [
+  ...reportsConfig.RESERVATION_REPORTS.menu.map((item) => item.value),
+  'payTypeReport',
+  'advanceDepositPayment',
+  'taxReport',
+  'noShowSummaryReport',
+  'discountAllowance',
+  'promoCodeReport',
+  'lodgingTaxReport',
+  'guestLedger',
+  'guestContactReport',
+  'reservationCreatedReport',
+  'reservationActivityReport',
+  'directAgentBillingReport',
+  'directCompanyBillingReport',
+  'folioListReport',
+  'rateVariation',
+];
 
 export const reportsModelMapping: Record<ReportsTypeValues, ClassType> = {
   noShowReport: NoShowReport,

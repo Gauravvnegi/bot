@@ -149,6 +149,7 @@ export class GuestLedger implements ReportClass<GuestLedgerData, any> {
     value &&
       value.forEach((reservationData) => {
         this.records.push({
+          id: reservationData?.id,
           roomNo: reservationData?.stayDetails?.room?.roomNumber,
           name: `${
             reservationData?.guestDetails.primaryGuest.firstName ?? ''

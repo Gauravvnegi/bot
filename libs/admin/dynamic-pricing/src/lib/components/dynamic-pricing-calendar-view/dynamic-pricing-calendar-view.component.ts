@@ -364,8 +364,6 @@ export class DynamicPricingCalendarViewComponent implements OnInit, OnDestroy {
       setTimeout(() => {
         this.scrollIntoView(this.highlightedRule);
       }, 200);
-    } else {
-      this.highlightedRule = '';
     }
   }
 
@@ -388,6 +386,8 @@ export class DynamicPricingCalendarViewComponent implements OnInit, OnDestroy {
       this.highlightRule(seasonData);
     } else if (hasTriggerData) {
       this.highlightRule(triggerData);
+    } else {
+      this.highlightedRule = '';
     }
   }
 

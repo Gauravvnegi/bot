@@ -31,6 +31,7 @@
     flex-wrap: wrap;
     margin: 10px 0;
     height: fit-content;
+    position: relative;
     .slide {
       margin: 3rem;
       display: inline-block;
@@ -52,6 +53,33 @@
       &::-webkit-scrollbar-thumb {
         background: $subtitle;
         border-radius: 10px;
+      }
+    }
+
+    .progress-indicator {
+      position: absolute;
+      left: 0;
+      display: flex;
+      flex-direction: column;
+
+      .indiactor {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.3em;
+
+        .square {
+          width: 1em;
+          display: block;
+          height: 1em;
+          background: blue;
+        }
+
+        .label {
+          font-size: 14px;
+          letter-spacing: 0.96px;
+          color: #002046;
+          font-weight: 600;
+        }
       }
     }
   }

@@ -34,7 +34,7 @@ export class NpsAcrossDepartmentsComponent implements OnInit, OnDestroy {
   tabFilterItems = [];
   tabFilterIdx = 0;
   tabFeedbackType;
-  chartTypes = [feedback.chartType.bar, feedback.chartType.sentiment];
+  chartTypes = [feedback.chartType.sentiment, feedback.chartType.bar];
 
   documentActionTypes = [
     {
@@ -42,6 +42,21 @@ export class NpsAcrossDepartmentsComponent implements OnInit, OnDestroy {
       value: 'export',
       type: 'countType',
       defaultLabel: 'Export',
+    },
+  ];
+
+  progressIndicator = [
+    {
+      label: 'Bad',
+      color: '#e75e82',
+    },
+    {
+      label: 'Avg',
+      color: '#f29e3d',
+    },
+    {
+      label: 'Good',
+      color: '#5ec0c0',
     },
   ];
 
@@ -152,7 +167,7 @@ export class NpsAcrossDepartmentsComponent implements OnInit, OnDestroy {
       documentType: ['csv'],
       documentActionType: ['Export All'],
       quickReplyActionFilters: [[]],
-      npsChartType: ['bar'],
+      npsChartType: ['sentiment'],
     });
   }
 

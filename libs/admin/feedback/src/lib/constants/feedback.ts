@@ -29,7 +29,7 @@ export const feedbackStatus: Record<
     type: 'failed',
   },
   NOACTION: {
-    label: 'No Action ',
+    label: 'Positive Feedback',
     type: 'draft',
   },
   ENCOURAGEIMPROVEMENT: {
@@ -312,7 +312,7 @@ export const feedback = {
         type: 'failed',
       },
       {
-        label: 'No Action ',
+        label: 'Positive Feedback',
         icon: '',
         value: 'NOACTION',
         total: 0,

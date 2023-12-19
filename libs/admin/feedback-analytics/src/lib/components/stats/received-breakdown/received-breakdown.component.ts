@@ -29,13 +29,13 @@ export class ReceivedBreakdownComponent implements OnInit, OnDestroy {
   $subscription = new Subscription();
   selectedInterval;
   globalQueries;
-  progress=0;
+  progress = 0;
   stats: Bifurcation;
   bifurcationFG: FormGroup;
   keyLabels = [
     { label: 'GTM', key: 'GTM' },
     { label: 'ALL', key: 'ALL' },
-    { label: 'Others', key: 'OTHERS' }
+    { label: 'Other Depts', key: 'OTHERS' },
   ];
   timeout: number;
   timeoutColor: string;
@@ -205,26 +205,23 @@ export class ReceivedBreakdownComponent implements OnInit, OnDestroy {
           this.total = this.stats.totalCount;
           this.initFeedbackChart(
             this.stats.feedbacks
-            .filter((feedback) => feedback.label !== 'Timeout')
-            .reduce(
-              (accumulator, current) => accumulator + current.score, 0
-            ) === 0
-            );
+              .filter((feedback) => feedback.label !== 'Timeout')
+              .reduce(
+                (accumulator, current) => accumulator + current.score,
+                0
+              ) === 0
+          );
           this.setProgress();
         })
     );
   }
 
-  setProgress(){
-    if(this.timeout){
-      this.progress = Math.abs(
-        (this.timeout/
-        this.total) *100
-      )
-    }else if(this.timeout === 0 && this.total){
+  setProgress() {
+    if (this.timeout) {
+      this.progress = Math.abs((this.timeout / this.total) * 100);
+    } else if (this.timeout === 0 && this.total) {
       this.progress = 100;
-    }
-    else{
+    } else {
       this.progress = 0;
     }
   }
@@ -246,7 +243,9 @@ export class ReceivedBreakdownComponent implements OnInit, OnDestroy {
       this.feedbackChart.Data = [[100]];
       return;
     }
-    const data = this.stats.feedbacks.filter((feedback) => feedback.label !== 'Timeout');
+    const data = this.stats.feedbacks.filter(
+      (feedback) => feedback.label !== 'Timeout'
+    );
     data.map((feedback) => {
       if (feedback.score) {
         this.feedbackChart.Data[0].push(feedback.score);

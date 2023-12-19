@@ -48,6 +48,7 @@ import { DetailsComponent } from '../details/details.component';
 import { AgentTableResponse } from 'libs/admin/agent/src/lib/types/response';
 import { ReservationForm } from 'libs/admin/manage-reservation/src/lib/constants/form';
 import { debounceTime } from 'rxjs/operators';
+import { BookingInfoComponent } from '../booking-info/booking-info.component';
 
 @Component({
   selector: 'hospitality-bot-quick-reservation-form',
@@ -99,6 +100,9 @@ export class QuickReservationFormComponent implements OnInit {
   sidebarVisible: boolean = false;
   @ViewChild('sidebarSlide', { read: ViewContainerRef })
   sidebarSlide: ViewContainerRef;
+
+  @ViewChild('bookingInfo')
+  bookingInfo: BookingInfoComponent;
 
   @Input() set isNewBooking(value: boolean) {
     if (value === true) {
@@ -251,6 +255,11 @@ export class QuickReservationFormComponent implements OnInit {
       label: this.selectedGuest.label,
       value: this.selectedGuest.value,
     };
+    roomTypeData.roomInformation.roomCount =
+      roomTypeData?.roomInformation?.roomNumbers.length ?? 1;
+    roomTypeData.agent = this.bookingInfo?.selectedAgent;
+    roomTypeData.company = this.bookingInfo?.selectedCompany;
+
     let queryParams: any = {
       entityId: this.entityId,
     };

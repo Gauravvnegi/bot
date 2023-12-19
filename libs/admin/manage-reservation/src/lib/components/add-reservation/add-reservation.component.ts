@@ -24,7 +24,7 @@ import { debounceTime, takeUntil } from 'rxjs/operators';
 import { OccupancyDetails, ReservationSummary } from '../../types/forms.types';
 import {
   BookingItemsSummary,
-  RoomReservationResponse,
+  RoomReservationFormResponse,
 } from '../../types/response.type';
 import { BaseReservationComponent } from '../../../../../reservation/src/lib/components/base-reservation.component';
 import { ReservationType } from '../../constants/reservation-table';
@@ -59,6 +59,7 @@ export class AddReservationComponent extends BaseReservationComponent
   isCheckedout = false;
   isFullPayment = false;
   isDataInitialized = false;
+  isRouteData = false;
   currentStatus: ReservationCurrentStatus;
   reservationFormData: ReservationFormData;
 
@@ -120,10 +121,14 @@ export class AddReservationComponent extends BaseReservationComponent
       company: data.company,
       agent: data.agent,
     });
-    this.reservationInfoControls.reservationType.patchValue(
-      ReservationType.CONFIRMED
-    );
-    this.roomTypeValues = [roomInformation];
+    reservationInfo.reservationType !== ReservationType.DRAFT &&
+      this.reservationInfoControls.reservationType.patchValue(
+        ReservationType.CONFIRMED
+      );
+    this.isRouteData = true;
+    this.roomTypeValues = Array.isArray(roomInformation)
+      ? roomInformation
+      : [roomInformation];
     this.formService.guestInformation.next(paramsData.guestData);
   }
 
@@ -223,7 +228,7 @@ export class AddReservationComponent extends BaseReservationComponent
       this.manageReservationService
         .getReservationDataById(this.reservationId, this.selectedEntity.id)
         .subscribe(
-          (response: RoomReservationResponse) => {
+          (response: RoomReservationFormResponse) => {
             this.reservationFormData = new ReservationFormData().deserialize(
               response
             );

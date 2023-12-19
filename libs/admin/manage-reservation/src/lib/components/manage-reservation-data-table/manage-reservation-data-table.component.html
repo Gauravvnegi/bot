@@ -273,9 +273,15 @@
               [recordSetting]="reservationStatusDetails"
               [menuOptions]="
                 rowData.reservationType === 'CANCELED'
-                  ? [{ label: 'Reinstate', value: 'REINSTATE' }]
+                  ? [
+                      { label: 'Reinstate', value: 'REINSTATE' },
+                      { label: 'Clone Reservation', value: 'CLONE_RESERVATION' }
+                    ]
                   : rowData.reservationType === 'DRAFT'
-                  ? [{ label: 'Edit Reservation', value: 'EDIT_RESERVATION' }]
+                  ? [
+                      { label: 'Edit Reservation', value: 'EDIT_RESERVATION' },
+                      { label: 'Clone Reservation', value: 'CLONE_RESERVATION' }
+                    ]
                   : menuOptions
               "
               (onMenuItemClick)="handleMenuClick($event, rowData)"

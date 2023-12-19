@@ -26,7 +26,7 @@ export type RoomReservationRes = {
   reservationType: string;
   sourceName: string;
   reservationNumber: string;
-  status: string;
+  status: ReservationCurrentStatus;
   guest: GuestType;
   created: number;
   nextStates: string[];
@@ -38,6 +38,13 @@ export type RoomReservationRes = {
   invoiceId?: string;
   agent?: AgentTableResponse;
   company?: CompanyResponseType;
+  externalBooking?: boolean;
+  offer?: OfferResponse;
+};
+
+export type RoomReservationFormResponse = RoomReservationRes & {
+  paymentRule?: PaymentRuleResponse;
+  printRate?: boolean;
 };
 
 export type PaymentConfigResponse = {
@@ -192,4 +199,11 @@ export type PaymentRuleResponse = {
 export type SourceResponse = {
   name: string;
   type?: { code: string; label: string }[];
+};
+
+export type OfferResponse = {
+  id: string;
+  created: number;
+  updated: number;
+  offerType: string;
 };

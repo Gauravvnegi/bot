@@ -45,7 +45,7 @@ export type CloseOutBalanceResponse = {
   stepsStatus: StepsStatus;
   lastCompletedStep: string;
   currentJourney: string;
-  currentJoureyStatus: string;
+  currentJourneyStatus: string;
   currentJourneyState: string;
   source: string;
   totalDueAmount: number;
@@ -94,7 +94,7 @@ export type DepositReportResponse = {
   stepsStatus: StepsStatus;
   lastCompletedStep: string;
   currentJourney: string;
-  currentJoureyStatus: string;
+  currentJourneyStatus: string;
   currentJourneyState: string;
   source: string;
   totalDueAmount: number;
@@ -156,7 +156,7 @@ export type PostingAuditReportResponse = {
   stepsStatus: StepsStatus;
   lastCompletedStep: string;
   currentJourney: string;
-  currentJoureyStatus: string;
+  currentJourneyStatus: string;
   currentJourneyState: string;
   source: string;
   totalDueAmount: number;
@@ -425,7 +425,7 @@ type Reservation = {
   stepsStatus: Record<string, string>;
   lastCompletedStep: string;
   currentJourney: string;
-  currentJoureyStatus: string;
+  currentJourneyStatus: string;
   currentJourneyState: string;
   source: string;
   invoiceCode: string;

@@ -63,6 +63,7 @@ export type RoomInformation = {
   adultCount?: number;
   childCount?: number;
   id?: string;
+  roomCount?: number;
   roomNumbers?: string[];
 };
 

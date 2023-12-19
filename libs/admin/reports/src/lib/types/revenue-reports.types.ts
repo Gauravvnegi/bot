@@ -132,7 +132,7 @@ interface Reservation {
   stepsStatus: StepsStatus;
   lastCompletedStep: string;
   currentJourney: string;
-  currentJoureyStatus: string;
+  currentJourneyStatus: string;
   currentJourneyState: string;
   source: string;
   totalDueAmount: number;
@@ -143,7 +143,7 @@ interface Reservation {
   vip: boolean;
   invoicePrepareRequest: boolean;
   pmsBooking: boolean;
-  user: User
+  user: User;
 }
 
 interface ReservationResponse {}

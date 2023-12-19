@@ -1,4 +1,4 @@
-import { PaymentType } from "libs/admin/finance/src/lib/types/history";
+import { PaymentType } from 'libs/admin/finance/src/lib/types/history';
 
 export type CountryCodeResponse = {
   countryName: string;
@@ -93,8 +93,8 @@ export interface ReservationResponseData {
     };
     checkInComment: string;
     address: Record<string, any>; // You can define a more specific interface if you have one
-  }
-  marketSegment: string
+  };
+  marketSegment: string;
   guestDetails: {
     primaryGuest: {
       id: string;
@@ -169,7 +169,7 @@ export interface ReservationResponseData {
   stepsStatus: Record<string, string>;
   lastCompletedStep: string;
   currentJourney: string;
-  currentJoureyStatus: string; // Fix the typo (currentJoureyStatus)
+  currentJourneyStatus: string; // Fix the typo (currentJourneyStatus)
   currentJourneyState: string;
   source: string;
   totalDueAmount: number;

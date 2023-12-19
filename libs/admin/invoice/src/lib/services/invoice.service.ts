@@ -179,6 +179,9 @@ export class InvoiceService extends ApiService {
       const methodText = invoiceFormData.paymentMethod
         ? `: ${invoiceFormData.paymentMethod}`
         : '';
+      const refundMethod = invoiceFormData.refundMethod
+        ? `: ${invoiceFormData.refundMethod}`
+        : '';
 
       const paymentItem: BillItem = isPayment
         ? {
@@ -192,7 +195,7 @@ export class InvoiceService extends ApiService {
           }
         : {
             date: moment(new Date()).unix() * 1000,
-            description: `${transactionText} Refund ${methodText} ${remarksText}`,
+            description: `${transactionText} Refund ${refundMethod} ${remarksText}`,
             unit: 1,
             creditAmount: 0,
             transactionType: 'DEBIT',

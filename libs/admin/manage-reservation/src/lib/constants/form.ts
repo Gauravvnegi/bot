@@ -14,6 +14,7 @@ export type ReservationForm = {
   paymentRule: PaymentRuleForm;
   paymentMethod: PaymentMethod;
   offerId: string;
+  printRate?: boolean;
   dailyPrice?: string;
   agent?: AgentTableResponse;
   company?: CompanyResponseType;

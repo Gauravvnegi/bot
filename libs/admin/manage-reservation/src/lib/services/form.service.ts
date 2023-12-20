@@ -99,6 +99,8 @@ export class FormService {
     roomReservationData.marketSegment =
       input.reservationInformation?.marketSegment;
 
+    roomReservationData.printRate = input?.printRate;
+
     roomReservationData.paymentDetails = {
       paymentMethod: input?.paymentMethod?.paymentMethod ?? '',
       remarks: input?.paymentMethod?.paymentRemark ?? '',

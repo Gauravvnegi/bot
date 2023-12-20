@@ -1,6 +1,15 @@
 <div [formGroup]="userForm" class="wrapper">
   <hospitality-bot-navigation-header [heading]="pageTitle" [routes]="routes">
     <ng-container>
+      <hospitality-bot-toggle-switch-with-label
+        class="toggle-switch"
+        [isToggleOn]="inputControls.printRate.value"
+        (onToggleSwitch)="triggerPrintRate($event)"
+        [config]="{
+          preContent: 'Print Rate'
+        }"
+        click-stop-propagation
+      ></hospitality-bot-toggle-switch-with-label>
       <hospitality-bot-button
         *ngIf="reservationFormData?.printRate && reservationId"
         label="Send Invoice"

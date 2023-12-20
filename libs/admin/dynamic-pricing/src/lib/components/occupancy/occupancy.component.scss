@@ -54,7 +54,8 @@ $border-color: rgba(112, 112, 112, 0.35);
 .form-table {
   display: flex;
   align-items: center;
-  padding: 20px;
+  padding: 20px 4%;
+
   gap: 4%;
 
   &__header {
@@ -75,7 +76,7 @@ $border-color: rgba(112, 112, 112, 0.35);
   }
 
   &__discount {
-    flex-basis: 25%;
+    flex-basis: 30%;
   }
 
   &__rates {
@@ -128,7 +129,7 @@ $border-color: rgba(112, 112, 112, 0.35);
     }
 
     .p-accordion .p-accordion-header .p-accordion-header-link {
-      padding: 0.5rem 1.5rem;
+      padding: 0.5rem 4%;
     }
     .p-accordion p-accordiontab .p-accordion-header .p-accordion-header-link,
     .p-accordion p-accordiontab .p-accordion-content {

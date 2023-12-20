@@ -301,9 +301,7 @@
                       >
                       </hospitality-bot-prefix-field>
                     </div>
-                    <!-- <hospitality-bot-markup-discount
-                      controlName="discount"
-                    ></hospitality-bot-markup-discount> -->
+
                     <div class="form-table__discount field__markup">
                       <hospitality-bot-input
                         controlName="discount"
@@ -327,10 +325,11 @@
                         }"
                       ></hospitality-bot-input-switch>
                     </div>
-                    <!-- <div class="form-table__rates">
-                      <hospitality-bot-input
-                        controlName="rate"
+
+                    <div class="form-table__rates">
+                      <!-- <hospitality-bot-input
                         class="field__rates"
+                        controlName="rate"
                         [min]="0"
                         [props]="{
                           placeholder: 'Enter',
@@ -341,62 +340,30 @@
                             required: 'This is required field',
                             min: 'Minimum value should be 0'
                           }
-                        }
-                      }"
-                      [settings]="{
-                        layout: 'dashed'
-                      }"
-                    >
-                    </hospitality-bot-prefix-field>
-                    <!-- <hospitality-bot-markup-discount
-                      controlName="discount"
-                    ></hospitality-bot-markup-discount> -->
-                    <hospitality-bot-input
-                      controlName="discount"
-                      [min]="0"
-                      [props]="{
-                        placeholder: 'Enter',
-                        type: 'number',
-                        subtitle: '%',
-                        errorMessages: {
-                          required: 'This is required field',
-                          min: 'Value should be positive',
-                          max: 'Value cannot be more than 100 for discount'
-                        }
-                      }"
-                    ></hospitality-bot-input>
-                    <hospitality-bot-input-switch
-                      controlName="isMarkup"
-                      label="Markup"
-                    ></hospitality-bot-input-switch>
-                    <hospitality-bot-input
-                      controlName="rate"
-                      [min]="0"
-                      [props]="{
-                        placeholder: 'Enter',
-                        type: 'number',
-                        subtitle: 'Rs. ' + basePrice,
-                        strike: true,
-                        errorMessages: {
-                          required: 'This is required field',
-                          min: 'Minimum value should be 0'
-                        }
-                      }"
-                    ></hospitality-bot-input>
-                    <i
-                      [class]="
-                        occupancyLength > 1
-                          ? 'pi pi-times remove'
-                          : 'pi pi-times remove disable'
-                      "
-                      (click)="
-                        roomConfig
-                          ? occupancyLength > 1 &&
-                            remove('occupancy', index, roomConfig.room, season)
-                          : occupancyLength > 1 &&
-                            remove('hotel-occupancy', index, season)
-                      "
-                    ></i>
+                        }"
+                      ></hospitality-bot-input> -->
+                    </div>
+                    <div class="form-table__remove">
+                      <i
+                        [class]="
+                          occupancyLength > 1
+                            ? 'pi pi-times remove'
+                            : 'pi pi-times remove disable'
+                        "
+                        (click)="
+                          roomConfig
+                            ? occupancyLength > 1 &&
+                              remove(
+                                'occupancy',
+                                index,
+                                roomConfig.room,
+                                season
+                              )
+                            : occupancyLength > 1 &&
+                              remove('hotel-occupancy', index, season)
+                        "
+                      ></i>
+                    </div>
                   </div>
                 </ng-container>
               </ng-template>

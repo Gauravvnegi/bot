@@ -1,0 +1,52 @@
+<div class="wrapper">
+  <div class="form-block" [formGroup]="useForm">
+    <hospitality-bot-select
+      class="one-third-width"
+      label="Room Type"
+      controlName="roomType"
+      [props]="{
+        placeholder: 'Select Room Type'
+      }"
+    ></hospitality-bot-select>
+    <hospitality-bot-select
+      class="one-third-width"
+      label="Room Number"
+      controlName="roomNumber"
+      [props]="{
+        placeholder: 'Select Room Number'
+      }"
+    ></hospitality-bot-select>
+    <hospitality-bot-select
+      class="one-third-width"
+      label="Rate Plan"
+      controlName="ratePlan"
+      [props]="{
+        placeholder: 'Select Rate Plan'
+      }"
+    ></hospitality-bot-select>
+
+    <hospitality-bot-input
+      class="one-third-width"
+      label="Amount"
+      controlName="amount"
+      [props]="{
+        placeholder: 'Enter'
+      }"
+    ></hospitality-bot-input>
+
+    <hospitality-bot-toggle-switch
+      class="status"
+      controlName="chargeable"
+      onLabel="Chargable"
+      offLabel="Non-chargable"
+    ></hospitality-bot-toggle-switch>
+
+    <hospitality-bot-text-area
+      class="full-width"
+      controlName="remarks"
+      [props]="{
+        placeholder: 'Enter Remarks'
+      }"
+    ></hospitality-bot-text-area>
+  </div>
+</div>

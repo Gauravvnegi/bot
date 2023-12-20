@@ -1,8 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { MatChipsModule } from '@angular/material/chips';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MenuModule } from 'primeng/menu';
 import { CKEditorModule } from 'ckeditor4-angular';
@@ -135,6 +133,9 @@ import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dial
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { CheckboxComponent } from './components/form-component/checkbox/checkbox.component';
 import { SplitButtonComponent } from './components/split-button/split-button.component';
+import { Dialog } from 'primeng/dialog';
+
+
 @NgModule({
   imports: [
     CommonModule,
@@ -155,8 +156,6 @@ import { SplitButtonComponent } from './components/split-button/split-button.com
     CalendarModule,
     MultiSelectModule,
     AutoCompleteModule,
-    MatChipsModule,
-    MatAutocompleteModule,
     CKEditorModule,
     MatTooltipModule,
     DialogModule,
@@ -397,6 +396,7 @@ import { SplitButtonComponent } from './components/split-button/split-button.com
     ConfirmDialogComponent,
     CheckboxComponent,
     SplitButtonComponent,
+    Dialog,
   ],
 })
 export class AdminSharedModule {}

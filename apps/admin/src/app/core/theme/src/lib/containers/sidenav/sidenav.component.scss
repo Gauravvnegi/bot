@@ -263,6 +263,8 @@
 
 :host ::ng-deep .p-sidebar-content {
   padding: 20px;
+  height: 100vh;
+  overflow-y: auto;
 }
 
 .wrapper {

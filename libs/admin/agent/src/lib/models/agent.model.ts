@@ -20,6 +20,7 @@ export class AgentModel {
   status: boolean;
   created: number;
   createdString: string;
+  taxId: string;
 
   static mapFormData(form: AgentFormType) {
     let data: AgentTableResponse = {
@@ -50,6 +51,7 @@ export class AgentModel {
       marketSegment: form.marketSegment,
       businessSource: form.businessSource,
       billingInstructions: form.billingInstructions,
+      taxId: form?.taxId,
     };
 
     return data;
@@ -79,6 +81,7 @@ export class AgentModel {
       marketSegment: data.marketSegment,
       businessSource: data.businessSource,
       billingInstructions: data.billingInstructions,
+      taxId: data?.taxId,
     });
   }
 
@@ -113,6 +116,7 @@ export class AgentModel {
       created: input?.created,
       creditLimitUsed: input?.creditLimitUsed,
       createdString: DateService.getDateMDY(input?.created),
+      taxId: input?.taxId,
     });
     return this;
   }

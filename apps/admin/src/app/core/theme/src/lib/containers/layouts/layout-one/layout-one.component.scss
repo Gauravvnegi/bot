@@ -471,8 +471,14 @@
       height: 83vh;
       overflow: auto;
     }
+
+    // hospitality-bot-form-action {
+    //   display: block;
+    //   margin-top: 14em;
+    // }
+
     .p-sidebar-right {
-      @include sidebar-design(40rem);
+      @include sidebar-design(35rem);
     }
     .p-dropdown-items-wrapper {
       max-height: 130px !important;

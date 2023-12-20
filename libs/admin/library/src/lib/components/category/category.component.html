@@ -10,7 +10,6 @@
     placeholder: 'Select Category'
   }"
   [loading]="loadingCategory"
-  (paginate)="loadMoreCategories()"
   (onSearch)="searchCategories($event)"
   [stopEmission]="noMoreCategories"
   (onCreate)="create($event)"

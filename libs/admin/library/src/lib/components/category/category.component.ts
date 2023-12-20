@@ -68,7 +68,7 @@ export class CategoryComponent implements OnInit {
     this.$subscription.add(
       this.libraryService
         .getCategories(this._entityId, {
-          params: `?type=${this.type}&offset=${this.categoryOffSet}&limit=10&status=true`,
+          params: `?type=${this.type}&offset=${this.categoryOffSet}&limit=50&status=true&pagination=false`,
         })
         .subscribe(
           (res) => {
@@ -84,16 +84,16 @@ export class CategoryComponent implements OnInit {
     );
   }
 
-  /**
-   * @function loadMoreCategories
-   * @description load more categories from server
-   * @returns void
-   * @memberof CategoryComponent
-   */
-  loadMoreCategories() {
-    this.categoryOffSet = this.categoryOffSet + 10;
-    this.getCategories();
-  }
+  // /**
+  //  * @function loadMoreCategories
+  //  * @description load more categories from server
+  //  * @returns void
+  //  * @memberof CategoryComponent
+  //  */
+  // loadMoreCategories() {
+  //   this.categoryOffSet = this.categoryOffSet + 10;
+  //   this.getCategories();
+  // }
 
   /**
    * @function searchCategories

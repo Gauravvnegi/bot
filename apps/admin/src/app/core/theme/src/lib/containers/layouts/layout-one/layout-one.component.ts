@@ -305,10 +305,9 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
       },
       isAllOutletSelected: this.outlets.length !== 0,
 
-      outlets: this.outlets.reduce(
-        (acc, curr) => ((acc[curr.id] = true), acc),
-        {}
-      ),
+      outlets: this.outlets
+        .filter((outlet) => outlet?.status === 'ACTIVE')
+        .reduce((acc, curr) => ((acc[curr.id] = true), acc), {}),
     });
     this.initFirebaseMessaging(selectedHotelData?.['id']);
     this.timezone = selectedHotelData?.['timezone'];
@@ -319,14 +318,16 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
     this.isSitesAvailable =
       !!selectedSiteId && !!this._hotelDetailService.sites?.length;
 
-    // first time adding subscription
-    this.nightAuditCheckListener();
-    this.nightAuditCheck();
-
-    //every 15 minute, we will check
-    setInterval(() => {
+    if (this.isPredictoSubscribed) {
+      // first time adding subscription
+      this.nightAuditCheckListener();
       this.nightAuditCheck();
-    }, 15 * 60 * 1000);
+
+      //every 15 minute, we will check
+      setInterval(() => {
+        this.nightAuditCheck();
+      }, 15 * 60 * 1000);
+    }
   }
 
   refreshDashboard() {

@@ -41,6 +41,9 @@ import {
 
 export type ControlTypes = 'season' | 'occupancy' | 'hotel-occupancy';
 
+/**
+ * @remarks - Rates input in table in not shown in UI
+ */
 @Component({
   selector: 'hospitality-bot-occupancy',
   templateUrl: './occupancy.component.html',

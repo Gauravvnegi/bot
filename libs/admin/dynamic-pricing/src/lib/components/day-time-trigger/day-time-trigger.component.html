@@ -82,11 +82,12 @@
             >
               <div class="form-table form-table__header">
                 <div class="form-table__time">
-                  Time <span class="form-table__subs">(From - To)</span>
+                  Time Range
+                  <!-- <span class="form-table__subs">(From - To)</span> -->
                 </div>
                 <div class="form-table__occupancy">
                   Occupancy
-                  <span class="form-table__subs">(Start - End)</span>
+                  <!-- <span class="form-table__subs">(Start - End)</span> -->
                 </div>
                 <div class="form-table__discount">Discount/Markup</div>
                 <div class="form-table__remove"></div>
@@ -108,6 +109,7 @@
                       [isTimeEnable]="true"
                       [isTimeOnly]="true"
                       [showIcon]="false"
+                      [showDash]="true"
                       [props]="{
                         showLabel: false,
                         preErrorMessages: {
@@ -164,8 +166,7 @@
                         }
                       }"
                       [settings]="{
-                        layout: 'dashed',
-                        dashHidden: true
+                        layout: 'dashed'
                       }"
                     >
                     </hospitality-bot-prefix-field>

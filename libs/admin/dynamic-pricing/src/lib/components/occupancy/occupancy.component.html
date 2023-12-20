@@ -249,10 +249,10 @@
                 <div class="form-table form-table__header">
                   <div class="form-table__occupancy">
                     Occupancy
-                    <span class="form-table__subs">(Start - End)</span>
+                    <!-- <span class="form-table__subs">(Start - End)</span> -->
                   </div>
                   <div class="form-table__discount">Discount/Markup</div>
-                  <div class="form-table__rates">Rates</div>
+                  <!-- <div class="form-table__rates">Rates</div> -->
                   <div class="form-table__remove"></div>
                 </div>
               </ng-template>
@@ -294,8 +294,7 @@
                           }
                         }"
                         [settings]="{
-                          layout: 'dashed',
-                          dashHidden: true
+                          layout: 'dashed'
                         }"
                       >
                       </hospitality-bot-prefix-field>
@@ -326,7 +325,7 @@
                         }"
                       ></hospitality-bot-input-switch>
                     </div>
-                    <div class="form-table__rates">
+                    <!-- <div class="form-table__rates">
                       <hospitality-bot-input
                         controlName="rate"
                         class="field__rates"
@@ -342,7 +341,7 @@
                           }
                         }"
                       ></hospitality-bot-input>
-                    </div>
+                    </div> -->
                     <div class="form-table__remove">
                       <i
                         *ngIf="occupancyLength > 1"

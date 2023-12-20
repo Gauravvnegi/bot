@@ -1,4 +1,8 @@
-<div class="dates" [formGroup]="parentFG">
+<div
+  class="dates"
+  [formGroup]="parentFG"
+  [ngClass]="{ dates__dashed: showDash }"
+>
   <div class="field">
     <hospitality-bot-date
       class="bulk-update__date"
@@ -6,7 +10,7 @@
       [controlName]="controlNames.from"
       [label]="showLabel ? labels.from : ''"
       [props]="{
-        placeholder: (isTimeOnly ? 'HH:MM A' : 'DD/MM/YYYY'),
+        placeholder: isTimeOnly ? 'HH:MM A' : 'DD/MM/YYYY',
         errorMessages: preErrorMessages,
         floatInsideLabel: floatInsideLabel
       }"
@@ -19,6 +23,7 @@
       [maxDate]="startMaxDate"
     ></hospitality-bot-date>
   </div>
+  <div *ngIf="showDash" class="hypen"></div>
   <div class="field">
     <hospitality-bot-date
       class="bulk-update__date"
@@ -26,7 +31,7 @@
       [controlName]="controlNames.to"
       [label]="showLabel ? labels.to : ''"
       [props]="{
-        placeholder:  (isTimeOnly ? 'HH:MM A' : 'DD/MM/YYYY'),
+        placeholder: isTimeOnly ? 'HH:MM A' : 'DD/MM/YYYY',
         errorMessages: postErrorMessages,
         floatInsideLabel: floatInsideLabel
       }"

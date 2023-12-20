@@ -6,6 +6,7 @@ import {
   Option,
   epochWithoutTime,
   generateArrayItemColor,
+  getCurrentYearStartDate,
   getDayOfWeekFromEpoch,
 } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
@@ -16,14 +17,13 @@ import {
   CGridSelectedData,
 } from 'libs/admin/shared/src/lib/components/calendar-view/calendar-view.component';
 import { Subscription } from 'rxjs';
-import { DynamicPricingService } from '../../services/dynamic-pricing.service';
-import { ConfigType, DaysType } from '../../types/dynamic-pricing.types';
-import { MenuItem } from 'libs/admin/all-outlets/src/lib/models/outlet.model';
 import {
   RuleType,
   ruleLabel,
   rulesRoutes,
 } from '../../constants/dynamic-pricing.const';
+import { DynamicPricingService } from '../../services/dynamic-pricing.service';
+import { ConfigType, DaysType } from '../../types/dynamic-pricing.types';
 
 type Season = {
   id: string;
@@ -211,100 +211,112 @@ export class DynamicPricingCalendarViewComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.loading = true;
+    const fromDate = getCurrentYearStartDate();
+    this.dynamicPricingService
+      .getDynamicPricingListing({
+        fromDate,
+      })
+      .subscribe((rules) => {
+        this.loading = false;
 
-    this.dynamicPricingService.getDynamicPricingListing().subscribe((rules) => {
-      this.loading = false;
+        const totalRules = rules.configDetails.length;
 
-      const totalRules = rules.configDetails.length;
-
-      rules.configDetails.forEach((item, seasonIdx) => {
-        const { fromDate, toDate, daysIncluded, name, id, status, type } = item;
-        const colorCode = generateArrayItemColor(
-          seasonIdx,
-          totalRules,
-          type === 'DAY_TIME_TRIGGER' ? 'dark' : 'light'
-        );
-
-        const isActive = status === 'ACTIVE';
-
-        this.rulesFA.push(
-          this.crateRulesForm({
-            id,
+        rules.configDetails.forEach((item, seasonIdx) => {
+          const {
+            fromDate,
+            toDate,
+            daysIncluded,
             name,
-            type,
-            isActive,
-            colorCode,
-            days: daysIncluded.map((item) => ({
-              label: item.substring(0, 3),
-              value: item,
-            })),
-            fromDate: new Date(fromDate),
-            toDate: new Date(toDate),
-          })
-        );
-
-        if (!isActive) this.inactiveRules.push(id);
-
-        const startDate = this.getFormattedDate(fromDate);
-        const endDate = this.getFormattedDate(toDate);
-
-        for (
-          let currentEpoch = epochWithoutTime(fromDate);
-          currentEpoch <= epochWithoutTime(toDate);
-          currentEpoch += 86400000
-        ) {
-          const { day } = getDayOfWeekFromEpoch(currentEpoch);
-
-          const gridData: CGridData<AdditionalData> = {
-            bg: colorCode,
-            days: daysIncluded,
             id,
+            status,
             type,
-          };
+          } = item;
+          const colorCode = generateArrayItemColor(
+            seasonIdx,
+            totalRules,
+            type === 'DAY_TIME_TRIGGER' ? 'dark' : 'light'
+          );
 
-          if (daysIncluded.includes(day)) {
-            if (type === 'OCCUPANCY') {
-              this.gridData[currentEpoch] = gridData;
+          const isActive = status === 'ACTIVE';
 
-              this.occupancyData[currentEpoch] = {
-                id,
-                name,
-                isActive,
-              };
+          this.rulesFA.push(
+            this.crateRulesForm({
+              id,
+              name,
+              type,
+              isActive,
+              colorCode,
+              days: daysIncluded.map((item) => ({
+                label: item.substring(0, 3),
+                value: item,
+              })),
+              fromDate: new Date(fromDate),
+              toDate: new Date(toDate),
+            })
+          );
+
+          if (!isActive) this.inactiveRules.push(id);
+
+          const startDate = this.getFormattedDate(fromDate);
+          const endDate = this.getFormattedDate(toDate);
+
+          for (
+            let currentEpoch = epochWithoutTime(fromDate);
+            currentEpoch <= epochWithoutTime(toDate);
+            currentEpoch += 86400000
+          ) {
+            const { day } = getDayOfWeekFromEpoch(currentEpoch);
+
+            const gridData: CGridData<AdditionalData> = {
+              bg: colorCode,
+              days: daysIncluded,
+              id,
+              type,
+            };
+
+            if (daysIncluded.includes(day)) {
+              if (type === 'OCCUPANCY') {
+                this.gridData[currentEpoch] = gridData;
+
+                this.occupancyData[currentEpoch] = {
+                  id,
+                  name,
+                  isActive,
+                };
+              }
+
+              if (type === 'DAY_TIME_TRIGGER') {
+                this.dayTriggerData[currentEpoch] = {
+                  id,
+                  name,
+                  isActive: status === 'ACTIVE',
+                };
+
+                this.markDates[currentEpoch] = gridData;
+              }
             }
+          }
 
-            if (type === 'DAY_TIME_TRIGGER') {
-              this.dayTriggerData[currentEpoch] = {
-                id,
-                name,
-                isActive: status === 'ACTIVE',
-              };
+          const isSameYear = startDate.year === endDate.year;
+          const hasStartYear = this.years.includes(startDate.year);
+          const hasEndYear = this.years.includes(endDate.year);
 
-              this.markDates[currentEpoch] = gridData;
+          if (isSameYear) {
+            if (!hasStartYear) {
+              this.years.push(startDate.year);
+            }
+          } else {
+            if (!hasStartYear) {
+              this.years.push(startDate.year);
+            }
+            if (!hasEndYear) {
+              this.years.push(endDate.year);
             }
           }
-        }
 
-        const isSameYear = startDate.year === endDate.year;
-        const hasStartYear = this.years.includes(startDate.year);
-        const hasEndYear = this.years.includes(endDate.year);
-
-        if (isSameYear) {
-          if (!hasStartYear) {
-            this.years.push(startDate.year);
-          }
-        } else {
-          if (!hasStartYear) {
-            this.years.push(startDate.year);
-          }
-          if (!hasEndYear) {
-            this.years.push(endDate.year);
-          }
-        }
-
-        this.years.sort();
+          this.years.sort();
+        });
       });
-    });
   }
 
   get rulesFA() {

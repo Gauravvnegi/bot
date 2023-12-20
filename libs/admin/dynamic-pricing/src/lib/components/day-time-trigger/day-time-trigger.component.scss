@@ -144,11 +144,6 @@ $border-color: rgba(112, 112, 112, 0.35);
   }
 }
 
-:host ::ng-deep .p-field {
-  .main {
-    gap: 2em;
-  }
-}
 ::ng-deep .p-accordion p-accordiontab .p-accordion-header {
   @include sticky-header(60px);
 }

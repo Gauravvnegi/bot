@@ -24,6 +24,7 @@ export class FromToDateComponent extends FormComponent implements OnInit {
   @Input() isTimeEnable = false;
   @Input() isTimeOnly = false;
   @Input() showIcon = true;
+  @Input() showDash = false;
 
   preErrorMessages: Record<string, string> = {
     required: 'This is required field',

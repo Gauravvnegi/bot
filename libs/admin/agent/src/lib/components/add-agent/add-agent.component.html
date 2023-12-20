@@ -143,6 +143,17 @@
     <hospitality-bot-input
       *ngIf="!isSideBar"
       class="half-width"
+      controlName="taxId"
+      maxLength="15"
+      label="Tax Id"
+      [props]="{
+        placeholder: 'Enter'
+      }"
+    ></hospitality-bot-input>
+
+    <hospitality-bot-input
+      *ngIf="!isSideBar"
+      class="half-width"
       label="Billing Instruction"
       controlName="billingInstructions"
       [props]="{

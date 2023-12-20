@@ -140,7 +140,8 @@ export class FilterComponent implements OnChanges, OnInit {
         const outlets =
           this._hotelDetailService.brands
             .find((item) => item.id == brandName)
-            ?.entities.find((item) => item.id === id).entities ?? [];
+            ?.entities.find((item) => item.id === id)
+            .entities.filter((outlet) => outlet.status === 'ACTIVE') ?? [];
 
         this.outlets = [...this.outlets, ...outlets];
         this.updateOutletsFormControls(this.outlets);

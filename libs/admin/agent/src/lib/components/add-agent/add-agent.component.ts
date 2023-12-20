@@ -22,7 +22,7 @@ import {
   NavRouteOptions,
   Option,
   QueryConfig,
-  Regex
+  Regex,
 } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { AddCompanyComponent } from 'libs/admin/company/src/lib/components/add-company/add-company.component';
@@ -109,16 +109,17 @@ export class AddAgentComponent implements OnInit {
       packageCode: ['# will be auto generated'],
       status: [true],
       salesPersonName: [''],
-      email: ['', [Validators.pattern(Regex.EMAIL_REGEX)]],
-      cc: ['+91'],
-      phoneNo: [''],
+      email: ['', [Validators.required , Validators.pattern(Regex.EMAIL_REGEX)]],
+      cc: ['+91', [Validators.required]],
+      phoneNo: ['', [Validators.required]],
       iataNo: ['', [CustomValidators.requiredLength(14)]],
       agencyName: ['', [Validators.required]],
       address: [''],
       commissionType: [commissionType.PERCENTAGE, [Validators.required]],
-      commission: ['', [Validators.required, Validators.min(0)]],
+      commission: ['', [Validators.min(0)]],
       marketSegment: [''],
       businessSource: [''],
+      taxId: [''],
       billingInstructions: [''],
       creditLimit: [''],
     });

@@ -68,7 +68,7 @@ export class CategoryComponent implements OnInit {
     this.$subscription.add(
       this.libraryService
         .getCategories(this._entityId, {
-          params: `?type=${this.type}&offset=${this.categoryOffSet}&limit=10&status=true`,
+          params: `?type=${this.type}&offset=${this.categoryOffSet}&limit=50&status=true&pagination=false`,
         })
         .subscribe(
           (res) => {

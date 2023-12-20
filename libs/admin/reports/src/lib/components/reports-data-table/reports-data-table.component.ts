@@ -1,19 +1,26 @@
 import { Component } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
+import { MatDialogConfig } from '@angular/material/dialog';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import {
+  DetailsComponent,
+  DetailsTabOptions,
+} from '@hospitality-bot/admin/reservation';
 import {
   AdminUtilityService,
   BaseDatatableComponent,
   Cols,
   Option,
 } from '@hospitality-bot/admin/shared';
+import { ModalService } from '@hospitality-bot/shared/material';
 import * as FileSaver from 'file-saver';
+import { ManagePermissionService } from 'libs/admin/roles-and-permissions/src/lib/services/manage-permission.service';
 import { Subscription } from 'rxjs';
 import {
   reportFiltersMapping,
   reportsColumnMapping,
   reportsModelMapping,
-  reservationReportsMenu,
+  reportsPopUpMapping,
   rowStylesMapping,
 } from '../../constant/reports.const';
 import { ReportsService } from '../../services/reports.service';
@@ -23,15 +30,9 @@ import {
   ReportFiltersKey,
   ReportsMenu,
   ReportsType,
+  ReportsTypeValues,
   RowStyles,
 } from '../../types/reports.types';
-import {
-  DetailsComponent,
-  DetailsTabOptions,
-} from '@hospitality-bot/admin/reservation';
-import { MatDialogConfig } from '@angular/material/dialog';
-import { ModalService } from '@hospitality-bot/shared/material';
-import { ManagePermissionService } from 'libs/admin/roles-and-permissions/src/lib/services/manage-permission.service';
 
 @Component({
   selector: 'hospitality-bot-reports-data-table',
@@ -256,12 +257,8 @@ export class ReportsDataTableComponent extends BaseDatatableComponent {
     return styleClass.trim();
   }
 
-  onRowClick(data) {
-    if (
-      reservationReportsMenu.includes(
-        this.selectedReport.value as ReportsType['RESERVATION_REPORTS']
-      )
-    ) {
+  onRowClick(data:{}) {
+    if (data.hasOwnProperty('id') || data.hasOwnProperty('guestId')) {
       this.openDetailPage(data);
     }
   }
@@ -274,7 +271,11 @@ export class ReportsDataTableComponent extends BaseDatatableComponent {
       DetailsComponent,
       dialogConfig
     );
-    detailCompRef.componentInstance.bookingId = rowData?.id;
+    const instance = detailCompRef.componentInstance as DetailsComponent;
+    instance.bookingId = rowData?.id;
+
+    //to open guestDetails popup with guestId
+    instance.guestId = rowData?.guestId;
 
     tabKey && (detailCompRef.componentInstance.tabKey = tabKey);
 

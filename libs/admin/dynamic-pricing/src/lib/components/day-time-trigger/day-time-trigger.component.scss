@@ -1,6 +1,53 @@
+@import 'main';
+
 $border-color: rgba(112, 112, 112, 0.35);
 .accordion-list {
   margin-bottom: 30px;
+}
+
+.form-table {
+  display: flex;
+  align-items: center;
+  padding: 20px 4%;
+  gap: 3%;
+
+  &__header {
+    background-color: #f1f2f7 !important;
+    font-size: 16px;
+    color: #787c9e !important;
+    letter-spacing: 0.96px !important;
+    font-weight: 600 !important;
+  }
+
+  &__subs {
+    font-size: 14px;
+    font-style: italic;
+  }
+
+  &__time {
+    flex-basis: 20%;
+  }
+
+  &__occupancy {
+    flex-basis: 20%;
+  }
+
+  &__discount {
+    flex-basis: 50%;
+  }
+
+  &__remove {
+    flex-basis: 1%;
+  }
+}
+
+.markup {
+  display: flex;
+  align-items: center;
+  &__field {
+    width: 150px;
+    margin-right: 10px;
+  }
 }
 
 .accordion-header {
@@ -70,6 +117,11 @@ $border-color: rgba(112, 112, 112, 0.35);
   p-header {
     width: calc(100% - 30px);
   }
+
+  .p-accordion p-accordiontab .p-accordion-header {
+    @include sticky-header(60px);
+  }
+
   .p-accordion-content {
     border-top: 1px solid $border-color !important;
   }
@@ -92,16 +144,6 @@ $border-color: rgba(112, 112, 112, 0.35);
   }
 }
 
-th {
-  background-color: #f1f2f7 !important;
-  font-size: 16px;
-  color: #787c9e !important;
-  letter-spacing: 0.96px !important;
-  font-weight: 600 !important;
-}
-
-:host ::ng-deep .p-field {
-  .main {
-    gap: 2em;
-  }
+::ng-deep .p-accordion p-accordiontab .p-accordion-header {
+  @include sticky-header(60px);
 }

@@ -305,3 +305,21 @@
     </div>
   </div>
 </div>
+
+<ng-template #url>
+  <ng-container *ngIf="iframeTempUrl; else loader" class="sidebar-container">
+    <iframe
+      class="iframe"
+      [src]="iframeTempUrl | safeUrl"
+      height="100%"
+      width="100%"
+      allowFullScreen
+      title="Dashboard"
+    ></iframe>
+  </ng-container>
+  <ng-template #loader>
+    <hospitality-bot-loader-bounce
+      class="loader"
+    ></hospitality-bot-loader-bounce>
+  </ng-template>
+</ng-template>

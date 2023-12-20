@@ -76,6 +76,8 @@ export class NoShowSummaryReport
     this.records = new Array<NoShowSummaryReportData>();
     value.forEach((reservationData: NoShowSummaryReportResponse) => {
       this.records.push({
+        guestId: reservationData?.guest?.id,
+        reservationNumber : reservationData?.reservationNumber,
         createdOn: getFormattedDate(reservationData?.created),
         bookingNo: reservationData?.reservationNumber,
         guestName:

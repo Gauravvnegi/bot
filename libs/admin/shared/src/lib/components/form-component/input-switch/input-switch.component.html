@@ -1,7 +1,29 @@
-<ng-container [formGroup]="controlContainer.control">
-  <p-inputSwitch
-    [disabled]="isDisabled"
-    [formControlName]="controlName"
-  ></p-inputSwitch>
-</ng-container>
-<span *ngIf="label" class="label">{{ label }}</span>
+<div
+  class="wrapper"
+  [ngClass]="{
+    wrapper__red: offLabel
+  }"
+>
+  <span
+    *ngIf="offLabel"
+    class="label label__off"
+    [ngClass]="{
+      disabled: inputControl.value
+    }"
+    >{{ offLabel }}</span
+  >
+  <div [formGroup]="controlContainer.control">
+    <p-inputSwitch
+      [disabled]="isDisabled"
+      [formControlName]="controlName"
+    ></p-inputSwitch>
+  </div>
+  <span
+    [ngClass]="{
+      disabled: !inputControl.value
+    }"
+    *ngIf="onLabel"
+    class="label label__on"
+    >{{ onLabel }}</span
+  >
+</div>

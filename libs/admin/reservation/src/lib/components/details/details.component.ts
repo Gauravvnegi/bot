@@ -35,6 +35,7 @@ import { SendMessageComponent } from 'libs/admin/notification/src/lib/components
 import { MenuItem } from 'primeng/api';
 import { FileData } from '../../models/reservation-table.model';
 import { SnackbarHandlerService } from 'libs/admin/global-shared/src/lib/services/snackbar-handler.service';
+import { SideBarService } from 'libs/admin/shared/src/lib/services/sidebar.service';
 
 @Component({
   selector: 'hospitality-bot-details',
@@ -139,7 +140,8 @@ export class DetailsComponent implements OnInit, OnDestroy {
     private subscriptionService: SubscriptionPlanService,
     private configService: ConfigService,
     private routesConfigService: RoutesConfigService,
-    public snackbarHandler: SnackbarHandlerService
+    public snackbarHandler: SnackbarHandlerService,
+    protected sidebarService: SideBarService
   ) {
     this.self = this;
     this.snackbarHandler.isDecreaseSnackbarZIndex = false; // Protect MUI Element hiding on snackbar open
@@ -459,6 +461,55 @@ export class DetailsComponent implements OnInit, OnDestroy {
     );
   }
 
+  /**
+   * to open reg-card sidebar
+   * @param url
+   */
+  openRegCardSideBar(url: string) {
+    if (url) {
+      this.sidebarService.openSideBar({
+        type: 'URL',
+        open: true,
+        url: url,
+      });
+    } else {
+      this.regCardLoading = true;
+      this.$subscription.add(
+        this._reservationService
+          .getRegCard(this.reservationDetailsFG.get('bookingId').value)
+          .subscribe(
+            (res: FileData) => {
+              this.sidebarService.openSideBar({
+                type: 'URL',
+                open: true,
+                url: res?.file_download_url,
+              });
+            },
+            ({ error }) => {
+              this.regCardLoading = false;
+            }
+          )
+      );
+    }
+  }
+
+  /**
+   * open confirmation voucher sidebar
+   */
+  openConfirmationVoucher() {
+    this.$subscription.add(
+      this._reservationService
+        .getConfirmationVoucher(this.bookingId)
+        .subscribe((res: FileData) => {
+          this.sidebarService.openSideBar({
+            type: 'URL',
+            open: true,
+            url: res?.file_download_url,
+          });
+        })
+    );
+  }
+
   downloadInvoice() {
     this.$subscription.add(
       this._reservationService
@@ -525,28 +576,28 @@ export class DetailsComponent implements OnInit, OnDestroy {
       );
   }
 
-  downloadRegcard(regcardUrl) {
-    if (regcardUrl) {
-      const [name] = regcardUrl.split('/').reverse();
-      FileSaver.saveAs(regcardUrl, name);
-    } else {
-      this.regCardLoading = true;
-      this.$subscription.add(
-        this._reservationService
-          .getRegCard(this.reservationDetailsFG.get('bookingId').value)
-          .subscribe(
-            (res: FileData) => {
-              const [name] = res.file_download_url.split('/').reverse();
-              this.regCardLoading = false;
-              FileSaver.saveAs(res.file_download_url, name);
-            },
-            ({ error }) => {
-              this.regCardLoading = false;
-            }
-          )
-      );
-    }
-  }
+  // downloadRegcard(regcardUrl) {
+  //   if (regcardUrl) {
+  //     const [name] = regcardUrl.split('/').reverse();
+  //     FileSaver.saveAs(regcardUrl, name);
+  //   } else {
+  //     this.regCardLoading = true;
+  //     this.$subscription.add(
+  //       this._reservationService
+  //         .getRegCard(this.reservationDetailsFG.get('bookingId').value)
+  //         .subscribe(
+  //           (res: FileData) => {
+  //             const [name] = res.file_download_url.split('/').reverse();
+  //             this.regCardLoading = false;
+  //             FileSaver.saveAs(res.file_download_url, name);
+  //           },
+  //           ({ error }) => {
+  //             this.regCardLoading = false;
+  //           }
+  //         )
+  //     );
+  //   }
+  // }
 
   // openRegComp(regUrl: string) {
   //   const dialogConfig = new MatDialogConfig();

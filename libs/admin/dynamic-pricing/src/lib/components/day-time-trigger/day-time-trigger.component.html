@@ -2,6 +2,7 @@
   <p-accordion class="accordion" [multiple]="true" #accordion>
     <div formArrayName="timeFA">
       <div
+        [id]="fa.referenceId"
         *ngFor="
           let triggerFG of dynamicPricingControl.timeFA?.controls;
           let i = index
@@ -79,32 +80,27 @@
               formArrayName="hotelConfig"
               style="margin-top: 30px;"
             >
-              <p-table>
-                <ng-template pTemplate="header">
-                  <tr>
-                    <th style="width: 19%; padding-left: 30px;">From Time</th>
-                    <th style="width: 17.5%; padding-left: 30px;">To Time</th>
-                    <th style="width: 15%;">Start</th>
-                    <th style="width: 5%;"></th>
-                    <th style="width: 17.5%;">End</th>
-                    <th style="width: 30%;">Discount/Markup</th>
-                  </tr>
-                </ng-template>
-              </p-table>
+              <div class="form-table form-table__header">
+                <div class="form-table__time">
+                  Time Range
+                  <!-- <span class="form-table__subs">(From - To)</span> -->
+                </div>
+                <div class="form-table__occupancy">
+                  Occupancy
+                  <!-- <span class="form-table__subs">(Start - End)</span> -->
+                </div>
+                <div class="form-table__discount">Discount/Markup</div>
+                <div class="form-table__remove"></div>
+              </div>
+
               <ng-container
                 *ngFor="
                   let levelFG of triggerFG?.get('hotelConfig')?.controls;
                   let j = index
                 "
               >
-                <div
-                  [formGroupName]="j"
-                  style="display: flex; padding: 23px 0;"
-                >
-                  <div
-                    class="time-range-field"
-                    style="width: 35%; padding: 0 18px 0 30px;"
-                  >
+                <div [formGroupName]="j" class="form-table">
+                  <div class="form-table__time time-range-field">
                     <hospitality-bot-from-to-date
                       [controlNames]="{
                         from: 'fromTime',
@@ -113,6 +109,7 @@
                       [isTimeEnable]="true"
                       [isTimeOnly]="true"
                       [showIcon]="false"
+                      [showDash]="true"
                       [props]="{
                         showLabel: false,
                         preErrorMessages: {
@@ -135,7 +132,7 @@
                       }"
                     ></hospitality-bot-from-to-date>
                   </div>
-                  <div style="width: 35%; padding: 0 1rem;" class="no-margin">
+                  <div class="no-margin form-table__occupancy">
                     <hospitality-bot-prefix-field
                       class="one-fourth-width"
                       preControlName="start"
@@ -169,54 +166,48 @@
                         }
                       }"
                       [settings]="{
-                        layout: 'dashed',
-                        dashHidden: true
+                        layout: 'dashed'
                       }"
                     >
                     </hospitality-bot-prefix-field>
                   </div>
+                  <div class="form-table__discount markup">
+                    <hospitality-bot-input
+                      class="markup__field"
+                      [min]="0"
+                      controlName="discount"
+                      [props]="{
+                        placeholder: 'Enter',
+                        type: 'number',
+                        subtitle: '%',
+                        errorMessages: {
+                          required: 'This is required field',
+                          min: 'Value should be positive',
+                          max: 'Value cannot be more than 100 for discount'
+                        }
+                      }"
+                    ></hospitality-bot-input>
+                    <hospitality-bot-input-switch
+                      controlName="isMarkup"
+                      [settings]="{
+                        onLabel: 'Markup',
+                        offLabel: 'Discount'
+                      }"
+                    ></hospitality-bot-input-switch>
+                  </div>
                   <div
-                    style="
-                      width: 30%;
-                      padding: 0 30px 0 1rem;
-                      display: flex;
-                      align-items: center;
-                      gap: 15px;
+                    *ngIf="triggerFG.get('hotelConfig').controls.length > 1"
+                    class="form-table__remove remove"
+                    [ngClass]="
+                      triggerFG.get('hotelConfig').controls.length < 2 &&
+                      'disable'
+                    "
+                    (click)="
+                      triggerFG.get('hotelConfig').controls.length > 1 &&
+                        modifyLevelFG(triggerFG, '', j)
                     "
                   >
-                    <div style="width: calc(100% - 35px);">
-                      <hospitality-bot-input
-                        [min]="0"
-                        controlName="discount"
-                        [props]="{
-                          placeholder: 'Enter',
-                          type: 'number',
-                          subtitle: '%',
-                          errorMessages: {
-                            required: 'This is required field',
-                            min: 'Value should be positive',
-                            max: 'Value cannot be more than 100 for discount'
-                          }
-                        }"
-                      ></hospitality-bot-input>
-                      <hospitality-bot-input-switch
-                        controlName="isMarkup"
-                        label="Markup"
-                      ></hospitality-bot-input-switch>
-                    </div>
-                    <div
-                      class="remove"
-                      [ngClass]="
-                        triggerFG.get('hotelConfig').controls.length < 2 &&
-                        'disable'
-                      "
-                      (click)="
-                        triggerFG.get('hotelConfig').controls.length > 1 &&
-                          modifyLevelFG(triggerFG, '', j)
-                      "
-                    >
-                      &#10006;
-                    </div>
+                    <i [class]="'pi pi-times remove'"></i>
                   </div>
                 </div>
               </ng-container>
@@ -227,7 +218,7 @@
               </div>
             </div>
 
-            <div class="action">
+            <!-- <div class="action">
               <hospitality-bot-button
                 [disabled]="!isDirty(triggerFG)"
                 [label]="
@@ -236,7 +227,20 @@
                 (click)="handleSave(triggerFG)"
               >
               </hospitality-bot-button>
-            </div>
+            </div> -->
+
+            <hospitality-bot-form-action
+              [disabled]="!isDirty(triggerFG)"
+              class="full-width"
+              [config]="{
+                preHide: true,
+                postLabel:
+                  triggerFG?.get('type')?.value === 'update' ? 'Update' : 'Save'
+              }"
+              (onPostAction)="handleSave(triggerFG)"
+              #fa
+            >
+            </hospitality-bot-form-action>
           </p-accordionTab>
         </div>
       </div>

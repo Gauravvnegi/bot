@@ -4,6 +4,10 @@
   .field {
     width: 50%;
   }
+
+  &__dashed {
+    gap: 1em;
+  }
 }
 
 :host ::ng-deep {

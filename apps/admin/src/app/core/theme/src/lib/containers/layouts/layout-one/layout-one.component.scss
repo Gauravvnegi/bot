@@ -492,6 +492,17 @@
       width: 35rem;
     }
   }
+
+  .url {
+    @include default-close;
+    .p-sidebar-right {
+      @include sidebar-design(60rem);
+    }
+
+    iframe {
+      height: 100vh !important;
+    }
+  }
 }
 
 .selected-product {

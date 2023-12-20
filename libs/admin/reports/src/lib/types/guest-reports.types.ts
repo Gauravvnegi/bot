@@ -15,6 +15,7 @@ export type GuestHistoryData = {
 };
 
 export type GuestLedgerData = {
+  id: string;
   roomNo: string;
   name: string;
   confirmationNo: string;

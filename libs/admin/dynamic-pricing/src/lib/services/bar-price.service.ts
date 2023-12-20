@@ -52,12 +52,12 @@ export class BarPriceService extends ApiService {
  * @description check if control is dirty or not
  */
 export function isDirty(control: AbstractControl): boolean {
-  if (control.dirty) {
+  if (control?.dirty) {
     return true;
   }
 
   if (control instanceof FormGroup) {
-    return Object.values(control.controls).some(this.isDirty);
+    return Object.values(control?.controls).some(this.isDirty);
   }
 
   return false;

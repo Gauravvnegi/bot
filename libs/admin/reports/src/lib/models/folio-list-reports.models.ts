@@ -19,6 +19,7 @@ export class FolioListReport
       value &&
       value.map((item) => {
         return {
+          id: item?.id,
           bookingNo: item?.number,
           folioNo: item?.invoiceCode,
           guestName: `${item?.guestDetails.primaryGuest.firstName} ${item?.guestDetails.primaryGuest.lastName}`,

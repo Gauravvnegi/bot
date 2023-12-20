@@ -63,7 +63,7 @@ export class FormActionComponent implements OnInit {
 
   mainLayout: HTMLElement;
   formLayout: HTMLElement;
-  isFixed = true;
+  isFixed = false;
 
   ngOnInit(): void {}
 
@@ -71,6 +71,12 @@ export class FormActionComponent implements OnInit {
     this.mainLayout = document.getElementById('main-layout');
     this.formLayout = document.getElementById(this.referenceId);
     this.mainLayout?.addEventListener('scroll', this.onScroll.bind(this));
+
+    const distanceFromBottom =
+      this.formLayout?.scrollHeight -
+      (this.mainLayout?.scrollTop + this.mainLayout?.offsetHeight);
+
+    this.isFixed = distanceFromBottom > 0 ? true : false;
   }
 
   preAction() {
@@ -84,12 +90,20 @@ export class FormActionComponent implements OnInit {
   }
 
   onScroll() {
+    /**
+     * scrollHeight -- actual form height
+     * scrollTop - initial it will be 0,later scrolled position in px
+     * clientHeight - main layout height excluding padding
+     *
+     * distanceFromBottom = scrollHeight(form height) - sum of scrollTop and client height(actual layout or screen height)
+     */
+
     const distanceFromBottom =
       this.formLayout?.scrollHeight -
       (this.mainLayout?.scrollTop + this.mainLayout?.clientHeight);
 
     // Check if the user has scrolled close to the bottom
-    if (distanceFromBottom <= 0 && this.isFixed) {
+    if (distanceFromBottom < 0 && this.isFixed) {
       // If we're at the bottom, set the position to relative
       this.isFixed = false;
     } else if (distanceFromBottom > 0 && !this.isFixed) {

@@ -305,10 +305,9 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
       },
       isAllOutletSelected: this.outlets.length !== 0,
 
-      outlets: this.outlets.reduce(
-        (acc, curr) => ((acc[curr.id] = true), acc),
-        {}
-      ),
+      outlets: this.outlets
+        .filter((outlet) => outlet?.status === 'ACTIVE')
+        .reduce((acc, curr) => ((acc[curr.id] = true), acc), {}),
     });
     this.initFirebaseMessaging(selectedHotelData?.['id']);
     this.timezone = selectedHotelData?.['timezone'];

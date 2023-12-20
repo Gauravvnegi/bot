@@ -179,6 +179,11 @@ $border-color: rgba(112, 112, 112, 0.35);
   column-gap: var(--column-gap);
 }
 
-::ng-deep .p-accordion p-accordiontab .p-accordion-header {
-  @include sticky-header(60px);
+:host ::ng-deep .wrapper__occupancy-content > .main-accordion p-accordiontab {
+  .p-accordion-header {
+    @include sticky-header(58px);
+  }
+  .room-accordion p-accordiontab .p-accordion-header {
+    position: unset !important;
+  }
 }

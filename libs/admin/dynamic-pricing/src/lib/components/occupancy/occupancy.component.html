@@ -4,7 +4,7 @@
   [formGroup]="dynamicPricingFG"
 >
   <div class="wrapper__occupancy-content" formArrayName="occupancyFA">
-    <p-accordion class="accordion" [multiple]="true" #accordion>
+    <p-accordion class="accordion main-accordion" [multiple]="true" #accordion>
       <ng-container
         *ngFor="
           let season of dynamicPricingControl.occupancyFA.controls;
@@ -13,6 +13,8 @@
         [formGroupName]="seasonIndex"
       >
         <p-accordionTab
+          class="main-tab"
+          id="main"
           [selected]="true"
           [disabled]="true"
           [id]="fa.referenceId"
@@ -339,31 +341,62 @@
                             required: 'This is required field',
                             min: 'Minimum value should be 0'
                           }
-                        }"
-                      ></hospitality-bot-input>
-                    </div> -->
-                    <div class="form-table__remove">
-                      <i
-                        *ngIf="occupancyLength > 1"
-                        [class]="
-                          occupancyLength > 1
-                            ? 'pi pi-times remove'
-                            : 'pi pi-times remove disable'
-                        "
-                        (click)="
-                          roomConfig
-                            ? occupancyLength > 1 &&
-                              remove(
-                                'occupancy',
-                                index,
-                                roomConfig.room,
-                                season
-                              )
-                            : occupancyLength > 1 &&
-                              remove('hotel-occupancy', index, season)
-                        "
-                      ></i>
-                    </div>
+                        }
+                      }"
+                      [settings]="{
+                        layout: 'dashed'
+                      }"
+                    >
+                    </hospitality-bot-prefix-field>
+                    <!-- <hospitality-bot-markup-discount
+                      controlName="discount"
+                    ></hospitality-bot-markup-discount> -->
+                    <hospitality-bot-input
+                      controlName="discount"
+                      [min]="0"
+                      [props]="{
+                        placeholder: 'Enter',
+                        type: 'number',
+                        subtitle: '%',
+                        errorMessages: {
+                          required: 'This is required field',
+                          min: 'Value should be positive',
+                          max: 'Value cannot be more than 100 for discount'
+                        }
+                      }"
+                    ></hospitality-bot-input>
+                    <hospitality-bot-input-switch
+                      controlName="isMarkup"
+                      label="Markup"
+                    ></hospitality-bot-input-switch>
+                    <hospitality-bot-input
+                      controlName="rate"
+                      [min]="0"
+                      [props]="{
+                        placeholder: 'Enter',
+                        type: 'number',
+                        subtitle: 'Rs. ' + basePrice,
+                        strike: true,
+                        errorMessages: {
+                          required: 'This is required field',
+                          min: 'Minimum value should be 0'
+                        }
+                      }"
+                    ></hospitality-bot-input>
+                    <i
+                      [class]="
+                        occupancyLength > 1
+                          ? 'pi pi-times remove'
+                          : 'pi pi-times remove disable'
+                      "
+                      (click)="
+                        roomConfig
+                          ? occupancyLength > 1 &&
+                            remove('occupancy', index, roomConfig.room, season)
+                          : occupancyLength > 1 &&
+                            remove('hotel-occupancy', index, season)
+                      "
+                    ></i>
                   </div>
                 </ng-container>
               </ng-template>

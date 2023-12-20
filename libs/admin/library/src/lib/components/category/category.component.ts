@@ -84,16 +84,16 @@ export class CategoryComponent implements OnInit {
     );
   }
 
-  /**
-   * @function loadMoreCategories
-   * @description load more categories from server
-   * @returns void
-   * @memberof CategoryComponent
-   */
-  loadMoreCategories() {
-    this.categoryOffSet = this.categoryOffSet + 10;
-    this.getCategories();
-  }
+  // /**
+  //  * @function loadMoreCategories
+  //  * @description load more categories from server
+  //  * @returns void
+  //  * @memberof CategoryComponent
+  //  */
+  // loadMoreCategories() {
+  //   this.categoryOffSet = this.categoryOffSet + 10;
+  //   this.getCategories();
+  // }
 
   /**
    * @function searchCategories

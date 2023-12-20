@@ -1,27 +1,51 @@
-<div class="wrapper">
+<div class="dialog-wrapper">
   <div class="form-block" [formGroup]="useForm">
-    <hospitality-bot-select
-      class="one-third-width"
+    <hospitality-bot-quick-select
       label="Room Type"
       controlName="roomType"
+      class="one-third-width select"
+      [inputType]="'select'"
       [props]="{
-        placeholder: 'Select Room Type'
+        showChips: false,
+        isAsync: true,
+        placeholder: 'Select'
       }"
-    ></hospitality-bot-select>
+      [apiConfig]="{
+        entityId: entityId,
+        apiEndPoint: 'inventory',
+        dataModel: {
+          key: 'roomTypes'
+        },
+        queryParams: queryConfig,
+        searchAPIEndPoint: 'library/search',
+        searchModel: {
+          key: 'ROOM_TYPE'
+        },
+        searchQueryParams: { type: 'ROOM_TYPE' }
+      }"
+      [paginationConfig]="{
+        isPagination: true,
+        limit: 200
+      }"
+      (clickedOption)="roomTypeChange($event)"
+      [initItems]="true"
+    ></hospitality-bot-quick-select>
     <hospitality-bot-select
-      class="one-third-width"
+      class="one-third-width select"
       label="Room Number"
       controlName="roomNumber"
+      [options]="roomNumbers"
       [props]="{
-        placeholder: 'Select Room Number'
+        placeholder: 'Select'
       }"
     ></hospitality-bot-select>
     <hospitality-bot-select
-      class="one-third-width"
+      class="one-third-width select"
       label="Rate Plan"
       controlName="ratePlan"
+      [options]="ratePlans"
       [props]="{
-        placeholder: 'Select Rate Plan'
+        placeholder: 'Select'
       }"
     ></hospitality-bot-select>
 
@@ -37,16 +61,30 @@
     <hospitality-bot-toggle-switch
       class="status"
       controlName="chargeable"
-      onLabel="Chargable"
-      offLabel="Non-chargable"
+      onLabel="Chargeable"
+      offLabel="Non-chargeable"
     ></hospitality-bot-toggle-switch>
 
     <hospitality-bot-text-area
       class="full-width"
       controlName="remarks"
+      label="Remarks"
       [props]="{
         placeholder: 'Enter Remarks'
       }"
     ></hospitality-bot-text-area>
   </div>
 </div>
+
+<hospitality-bot-form-action
+  class="full-width"
+  (onPostAction)="handleSubmit()"
+  (onPreAction)="handleCancel()"
+  [isSticky]="true"
+  [config]="{
+    postLabel: 'Confirm',
+    preLabel: 'Cancel'
+  }"
+  #fa
+>
+</hospitality-bot-form-action>

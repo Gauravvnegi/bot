@@ -23,7 +23,6 @@ import {
   RoutesConfigService,
 } from '@hospitality-bot/admin/core/theme';
 import { ModalComponent } from 'libs/admin/shared/src/lib/components/modal/modal.component';
-import { manageReservationRoutes } from '../../../constants/routes';
 import { ManageReservationService } from '../../../services/manage-reservation.service';
 import { Clipboard } from '@angular/cdk/clipboard';
 import { Subscription } from 'rxjs';
@@ -393,8 +392,8 @@ export class BookingSummaryComponent implements OnInit {
       summaryData.totalPaidAmount && !summaryData.totalDueAmount
         ? summaryData.totalPaidAmount
         : this.paymentControls.totalPaidAmount.value;
-
-    return totalAmount - totalPaidAmount;
+    const refundAmount = summaryData?.refund ? summaryData.refund : 0;
+    return (totalAmount + refundAmount) - totalPaidAmount;
   }
 
   copiedConfirmationNumber(number): void {

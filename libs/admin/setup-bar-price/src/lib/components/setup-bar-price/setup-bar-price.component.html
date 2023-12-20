@@ -1,0 +1,45 @@
+<div class="main-wrapper" [id]="fa?.referenceId">
+  <hospitality-bot-navigation-header
+    heading="Setup Bar Price"
+    [routes]="navRoutes"
+    [isStickyTitle]="false"
+  ></hospitality-bot-navigation-header>
+
+  <hospitality-bot-stepper
+    [stepList]="stepList"
+    (onActive)="activeStep = $event.index"
+    [activeIndex]="activeStep"
+  ></hospitality-bot-stepper>
+
+  <ng-container [formGroup]="useForm" [ngSwitch]="steps[activeStep].value">
+    <hospitality-bot-room-type-bar
+      *ngSwitchCase="'ROOM_TYPE'"
+    ></hospitality-bot-room-type-bar>
+
+    <ng-container *ngSwitchCase="'RATE_PLAN'"> RATE_PLAN</ng-container>
+
+    <ng-container *ngSwitchCase="'ROOM_OCCUPANCY'">
+      ROOM_OCCUPANCY</ng-container
+    >
+
+    <ng-container *ngSwitchCase="'EXTRAS'"> EXTRAS</ng-container>
+
+    <ng-container *ngSwitchCase="'PREVIEW'">PREVIEW </ng-container>
+
+    <ng-container *ngSwitchCase="'SUMMARY'"> SUMMARY</ng-container>
+  </ng-container>
+
+  <hospitality-bot-form-action
+    #fa
+    [loading]="loading"
+    [config]="{
+      preHide: false,
+      preLabel: 'Cancel',
+      postLabel: 'Next',
+      postDisable: false
+    }"
+    (onPostAction)="handleNext()"
+    (onPreAction)="handleBack()"
+  >
+  </hospitality-bot-form-action>
+</div>

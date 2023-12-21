@@ -61,6 +61,8 @@ export class BookingSummaryComponent implements OnInit {
   heading = '';
   bookingType: EntitySubType;
   outletId = '';
+  externalBooking = false;
+
   occupancyDetails: OccupancyDetails;
   $subscription = new Subscription();
 
@@ -434,4 +436,5 @@ type BookingSummaryInfo = {
   outletId?: string;
   heading: string;
   occupancyDetails?: OccupancyDetails;
+  externalBooking: boolean;
 };

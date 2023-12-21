@@ -44,6 +44,7 @@ export class BaseReservationComponent {
   summaryData: SummaryData;
   formValueChanges: boolean = false;
   disabledForm = false;
+  disableBtn = false;
 
   pageTitle: string;
   routes: NavRouteOptions = [];
@@ -106,12 +107,14 @@ export class BaseReservationComponent {
           reservationType.value === ReservationType.CANCELED:
           this.userForm.disable({ emitEvent: false });
           this.formService.disableBtn = true;
+          this.disableBtn = true;
           this.disabledForm = true;
           break;
         case this.isExternalBooking && journeyState !== JourneyState.COMPLETED:
           this.userForm.disable({ emitEvent: false });
           this.disabledForm = true;
           this.formService.disableBtn = true;
+          this.disableBtn = true;
           const roomTypeArray = ((this.inputControls
             .roomInformation as FormGroup).get('roomTypes') as FormArray)
             .controls;
@@ -126,10 +129,12 @@ export class BaseReservationComponent {
           status === ReservationCurrentStatus.DUEOUT:
           this.userForm.disable({ emitEvent: false });
           this.formService.disableBtn = true;
+          this.disableBtn = true;
           break;
         case journeyState !== JourneyState.COMPLETED:
           if (reservationType.value === ReservationType.CONFIRMED) {
             this.formService.disableBtn = true;
+            this.disableBtn = true;
             this.inputControls.guestInformation
               .get('guestDetails')
               .disable({ emitEvent: false });

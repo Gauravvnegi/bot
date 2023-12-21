@@ -133,10 +133,9 @@ export type ColsInfo = Omit<Cols, 'field'>;
 export type ColsData<T = {}> = Record<keyof T, ColsInfo>;
 
 export class RowStyles {
-  isBold?: boolean;
-  isGreyBg?: boolean;
-  isBlueBg?: boolean;
-  isBlackBg?: boolean;
+  isHeader?: boolean;
+  isSubTotal?: boolean;
+  isTotal?: boolean;
 }
 
 export type RowStylesKeys = keyof RowStyles;

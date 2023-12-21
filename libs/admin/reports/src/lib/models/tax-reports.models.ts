@@ -22,19 +22,20 @@ export class MonthlyTaxReport
         this.records.push({
           taxName: reservationData.type,
           taxCategory: reservationData.category,
-          amount: reservationData.amount,
+          amount: toCurrency(reservationData.amount) as any,
         });
       });
 
     this.records.push({
       taxName: 'Total Tax',
       taxCategory: ' ',
-      amount: this.records.reduce((acc, item) => {
-        acc += item.amount;
-        return acc;
-      }, 0),
-      isBlackBg: true,
-      isBold: true,
+      amount: toCurrency(
+        this.records.reduce((acc, item) => {
+          acc += item.amount;
+          return acc;
+        }, 0)
+      ),
+      isSubTotal: true,
     } as any);
 
     return this;

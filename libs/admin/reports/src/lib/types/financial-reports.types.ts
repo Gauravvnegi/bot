@@ -272,8 +272,8 @@ export type DailyRevenueReportData = {
   month: string;
   year: string;
   isBold?: boolean;
-  isGreyBg?: boolean;
-  isBlueBg?: boolean;
+  isSubTotal?: boolean;
+  isTotal?: boolean;
   isBlackBg?: boolean;
 };
 

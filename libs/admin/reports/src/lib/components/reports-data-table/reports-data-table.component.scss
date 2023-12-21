@@ -37,13 +37,22 @@
 }
 
 :host ::ng-deep {
-  .is-bold {
-    font-weight: bold;
+  .is-header {
+    background: #dedede;
+    font-weight: 700;
+
+    .primary-text {
+      color: #000000 !important;
+    }
+    .primary-text:hover,
+    .secondary-text:hover {
+      background: unset !important;
+    }
   }
 
-  .is-grey-bg {
+  .is-total {
     .primary-text {
-      color: black !important;
+      color: #000000 !important;
       font-weight: 700;
     }
     .primary-text:hover,
@@ -51,15 +60,8 @@
       background: unset !important;
     }
   }
-  .is-babyBlue-bg {
-    background-color: #dedede;
-    color: black;
-    .primary-text:hover,
-    .secondary-text:hover {
-      background: unset !important;
-    }
-  }
-  .is-black-bg {
+
+  .is-sub-total {
     background-color: #010034;
     .primary-text {
       color: white !important;

@@ -62,6 +62,7 @@ export class OccupancyAnalysisReport
           arp: item.arp,
           revPar: item.revPar,
           arrOrAgr: item.arr,
+          isSubTotal: item.subTotalObject ? true : false,
         };
       });
     return this;
@@ -77,7 +78,7 @@ export class NoShowSummaryReport
     value.forEach((reservationData: NoShowSummaryReportResponse) => {
       this.records.push({
         guestId: reservationData?.guest?.id,
-        reservationNumber : reservationData?.reservationNumber,
+        reservationNumber: reservationData?.reservationNumber,
         createdOn: getFormattedDate(reservationData?.created),
         bookingNo: reservationData?.reservationNumber,
         guestName:
@@ -159,6 +160,8 @@ export class MarketSegmentReport
 
           arrOrAgr: toCurrency(data?.arr),
           arp: toCurrency(data?.arp),
+          // @ts-ignore
+          isSubTotal: key === 'subTotal',
         });
       });
 

@@ -142,6 +142,7 @@ export class QuickReservationFormComponent implements OnInit {
   initDetails() {
     if (this.reservationId) {
       this.initReservationDetails();
+      this.roomControls.roomTypeId.disable({ emitEvent: false });
     } else {
       this.isDataLoaded = true;
       this.listenForRoomChanges();
@@ -382,7 +383,7 @@ export class QuickReservationFormComponent implements OnInit {
 
   // Patch data for selected room type
   roomTypeChange(event: RoomTypeResponse) {
-    if (event && event.id) {
+    if (event && event.id && !this.reservationId) {
       this.selectedRoomType = this.formService.setReservationRoomType(event);
       if (
         !this.selectedRoomType?.rooms.some(

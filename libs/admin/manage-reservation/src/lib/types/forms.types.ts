@@ -28,6 +28,7 @@ export class RoomReservationFormData {
   };
   paymentRule: PaymentRule;
   remarks?: string;
+  printRate?: boolean;
 }
 
 export type BookingItemFormData = {

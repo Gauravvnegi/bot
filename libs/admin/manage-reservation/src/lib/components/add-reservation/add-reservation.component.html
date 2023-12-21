@@ -1,6 +1,16 @@
 <div [formGroup]="userForm" class="wrapper">
   <hospitality-bot-navigation-header [heading]="pageTitle" [routes]="routes">
     <ng-container>
+      <hospitality-bot-toggle-switch-with-label
+        class="toggle-switch"
+        [isToggleOn]="inputControls.printRate.value"
+        (onToggleSwitch)="triggerPrintRate($event)"
+        [config]="{
+          preContent: 'Print Rate'
+        }"
+        [isDisabled]="disableBtn"
+        click-stop-propagation
+      ></hospitality-bot-toggle-switch-with-label>
       <hospitality-bot-button
         *ngIf="reservationFormData?.printRate && reservationId"
         label="Send Invoice"
@@ -30,7 +40,8 @@
           [bookingConfig]="{
             isDraftBooking: isDraftBooking,
             reservationId: reservationId,
-            isRouteData: isRouteData
+            isRouteData: isRouteData,
+            isConfirmedBooking: isConfirmedBooking
           }"
         >
         </hospitality-bot-room-iterator>
@@ -69,7 +80,8 @@
         [disabledForm]="disabledForm"
         [bookingInfo]="{
           bookingType: bookingType,
-          occupancyDetails: occupancyDetails
+          occupancyDetails: occupancyDetails,
+          externalBooking: isExternalBooking
         }"
       >
         <div class="bk-summary_roomInfo_checkoutInfo summary-item">

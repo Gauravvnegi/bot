@@ -49,6 +49,7 @@ export class RoomIteratorComponent extends IteratorComponent
 
   @Input() reservationId: string;
   isDraftBooking: boolean = false;
+  isConfirmedBooking: boolean = false;
 
   @Input() set bookingConfig(value: BookingConfig) {
     for (const key in value) {
@@ -77,6 +78,7 @@ export class RoomIteratorComponent extends IteratorComponent
   isCheckedIn = false;
   isCheckedout = false;
   isRouteData = false;
+  openDialog = false;
 
   @ViewChild('main') main: ElementRef;
 
@@ -456,4 +458,5 @@ type BookingConfig = {
   reservationId: string;
   isDraftBooking?: boolean;
   isRouteData?: boolean;
+  isConfirmedBooking?: boolean;
 };

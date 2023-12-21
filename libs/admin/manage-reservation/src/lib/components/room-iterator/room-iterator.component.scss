@@ -84,3 +84,20 @@
   opacity: 0.5;
   pointer-events: none;
 }
+
+.btn-wrapper {
+  display: flex;
+  justify-content: flex-end;
+}
+
+:host ::ng-deep .dialog {
+  .p-dialog {
+    .p-dialog-content {
+      padding: unset;
+    }
+    .p-dialog-header {
+      background-color: #f4f5f7;
+      padding: 10px 15px;
+    }
+  }
+}

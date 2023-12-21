@@ -129,7 +129,7 @@
         <hospitality-bot-button
           (click)="handleBooking()"
           label="{{ this.reservationId ? 'Update' : 'Confirm' }} Reservation"
-          [disabled]="disabledForm"
+          [disabled]="disabledForm && !externalBooking"
           [isLoading]="isBooking"
         ></hospitality-bot-button>
       </div>

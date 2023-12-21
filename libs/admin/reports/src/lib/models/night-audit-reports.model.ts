@@ -14,7 +14,7 @@ import {
   NightAuditRevenueData,
   NightAuditRevenueResponse,
 } from '../types/night-audit-reports.types';
-import { ReportClass } from '../types/reports.types';
+import { ReportClass, RowStyles } from '../types/reports.types';
 import {
   convertToNormalCase,
   toCurrency,
@@ -189,17 +189,28 @@ export class NightAuditRevenueReport
     } as any);
 
     const revenueListData = value?.auditData;
+    let totalRevenueAmount = 0;
     revenueListData
       ? revenueListRows.forEach((row) => {
+          totalRevenueAmount += revenueListData[row?.name] ?? 0;
           this.records.push({
             firstCol: row?.label,
-            secondCol: revenueListData[row?.name],
+            secondCol: toCurrency(revenueListData[row?.name]),
             thirdCol: ' ',
             fourthCol: ' ',
             fifthCol: ' ',
           });
         })
       : this.records.push(empty);
+
+    this.records.push({
+      firstCol: 'Total',
+      secondCol: toCurrency(totalRevenueAmount),
+      thirdCol: ' ',
+      fourthCol: ' ',
+      fifthCol: ' ',
+      isSubTotal: true,
+    } as any);
 
     //second table
     this.records.push({
@@ -210,7 +221,6 @@ export class NightAuditRevenueReport
       fifthCol: 'Amount',
       isHeader: true,
     } as any);
-
     value?.itemPayments?.length
       ? value?.itemPayments.forEach((data) => {
           this.records.push({

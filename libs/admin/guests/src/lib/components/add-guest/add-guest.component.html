@@ -1,6 +1,6 @@
 <div class="wrapper" [id]="fa.referenceId">
   <hospitality-bot-navigation-header
-    *ngIf="!isSideBar; else sidebarHeader"
+    *ngIf="!isSidebar; else sidebarHeader"
     [heading]="pageTitle"
     [routes]="navRoutes"
   ></hospitality-bot-navigation-header>
@@ -33,7 +33,7 @@
       }"
     ></hospitality-bot-input>
     <hospitality-bot-phone-number
-      [ngClass]="{ 'full-width': isSideBar, 'half-width': !isSideBar }"
+      [ngClass]="{ 'full-width': isSidebar, 'half-width': !isSidebar }"
       preControlName="cc"
       postControlName="phoneNo"
       [props]="{
@@ -81,62 +81,6 @@
         placeholder: 'Select'
       }"
     ></hospitality-bot-select>
-    <!-- <hospitality-bot-input
-      class="half-width"
-      controlName="age"
-      label="Age"
-      [props]="{
-        placeholder: 'Enter'
-      }"
-    ></hospitality-bot-input> -->
-    <!-- <hospitality-bot-members-list
-      class="half-width"
-      controlName="company"
-      type="COMPANY"
-      label="Company Name"
-      [defaultMember]="selectedMember"
-      (createMembers)="createNewCompany()"
-    ></hospitality-bot-members-list> -->
-
-    <!-- <hospitality-bot-quick-select
-      class="half-width select"
-      controlName="company"
-      label="Company Name"
-      [inputType]="'select'"
-      [props]="{
-        showChips: false,
-        isAsync: true,
-        placeholder: 'Select',
-        createPrompt: '+ Add New Company',
-        selectedOption: selectedMember,
-        createType: 'sidebar'
-      }"
-      [apiConfig]="{
-        apiEndPoint: '/api/v1/members',
-        dataModel: {
-          key: 'records',
-          values: {
-            label: 'firstName',
-            value: 'id'
-          }
-        },
-        queryParams: { type: 'COMPANY' },
-        searchAPIEndPoint: '/api/v1/search/members',
-        searchModel: {
-          response: true,
-          values: {
-            label: 'firstName',
-            value: 'id'
-          }
-        },
-        searchQueryParams: { type: 'COMPANY' }
-      }"
-      [paginationConfig]="{
-        isPagination: true
-      }"
-      (clickedOption)="companyChange($event)"
-      (openSidebar)="createNewCompany()"
-    ></hospitality-bot-quick-select> -->
   </div>
 </div>
 

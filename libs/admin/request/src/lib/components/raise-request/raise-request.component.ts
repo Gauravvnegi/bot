@@ -1,6 +1,5 @@
 import {
   Component,
-  ComponentFactoryResolver,
   EventEmitter,
   Input,
   OnDestroy,
@@ -9,27 +8,20 @@ import {
   ViewChild,
   ViewContainerRef,
 } from '@angular/core';
-import {
-  FormBuilder,
-  FormGroup,
-  Validators,
-} from '@angular/forms';
-import { TranslateService } from '@ngx-translate/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
 import { ModalService, SnackBarService } from 'libs/shared/material/src';
 import { DateService } from '@hospitality-bot/shared/utils';
 import { Subscription } from 'rxjs';
 import { request } from '../../constants/request';
-import { debounceTime, filter, map, startWith } from 'rxjs/operators';
+import { debounceTime } from 'rxjs/operators';
 import { RequestService } from '../../services/request.service';
 import { Option } from '@hospitality-bot/admin/shared';
-import { ActivatedRoute, Router } from '@angular/router';
-import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { MatDialogConfig } from '@angular/material/dialog';
 import { AddItemComponent } from '../add-item/add-item.component';
 import { DepartmentList } from '../../data-models/request.model';
-import { convertToTitleCase } from 'libs/admin/shared/src/lib/utils/valueFormatter';
-import { ManagePermissionService } from 'libs/admin/roles-and-permissions/src/lib/services/manage-permission.service';
+import { SideBarService } from 'apps/admin/src/app/core/theme/src/lib/services/sidebar.service';
 
 @Component({
   selector: 'hospitality-bot-raise-request',
@@ -37,7 +29,7 @@ import { ManagePermissionService } from 'libs/admin/roles-and-permissions/src/li
   styleUrls: ['./raise-request.component.scss'],
 })
 export class RaiseRequestComponent implements OnInit, OnDestroy {
-  @Output() onRaiseRequestClose = new EventEmitter();
+  @Output() onCloseSidebar = new EventEmitter();
   requestFG: FormGroup;
   searchFG: FormGroup;
   entityId: string;
@@ -53,7 +45,7 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
   departmentList: Option[] = [];
   sidebarVisible = false;
   isItemUuid: boolean = false;
-  @Input() isSideBar = false;
+  @Input() isSidebar = false;
   @ViewChild('sidebarSlide', { read: ViewContainerRef })
   sidebarSlide: ViewContainerRef;
   constructor(
@@ -62,12 +54,8 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
     private snackbarService: SnackBarService,
     private _requestService: RequestService,
     private adminUtilityService: AdminUtilityService,
-    private _translateService: TranslateService,
-    private router: Router,
-    private route: ActivatedRoute,
     private _modalService: ModalService,
-    private _managePermissionService: ManagePermissionService,
-    private resolver: ComponentFactoryResolver
+    private sidebarService: SideBarService
   ) {}
 
   ngOnInit(): void {
@@ -111,7 +99,7 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
       quantity: [1, [Validators.required, Validators.min(1)]],
       assigneeId: [''],
       cc: ['+91'],
-      phoneNumber: ['' , [Validators.required, Validators.pattern('^[0-9]*$')]],
+      phoneNumber: ['', [Validators.required, Validators.pattern('^[0-9]*$')]],
     });
 
     this.requestFG.get('itemCode').valueChanges.subscribe((value) => {
@@ -188,7 +176,7 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
     }
 
     const { phoneNumber, cc, ...rest } = this.requestFG.getRawValue();
-   let countryCode = cc.replace('+', '');
+    let countryCode = cc.replace('+', '');
     const data = {
       phone: `${countryCode}${phoneNumber}`,
       ...rest,
@@ -223,7 +211,7 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
    * @param closeData The status and reservation data.
    */
   close(closeData: { status: boolean; data?; load: boolean }): void {
-    this.onRaiseRequestClose.emit(closeData);
+    this.onCloseSidebar.emit(closeData);
   }
 
   /**
@@ -274,17 +262,13 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
 
   create() {
     //to open add new item pop up
-    if (this.isSideBar) {
-      this.sidebarVisible = true;
-      const factory = this.resolver.resolveComponentFactory(AddItemComponent);
-      this.sidebarSlide.clear();
-      const componentRef = this.sidebarSlide.createComponent(factory);
-      componentRef.instance.isSidebar = true;
-      this.$subscription.add(
-        componentRef.instance.onClose.subscribe((res) => {
-          this.sidebarVisible = false;
-        })
-      );
+    if (this.isSidebar) {
+      this.sidebarService.openSidebar({
+        componentName: 'AddItem',
+        containerRef: this.sidebarSlide,
+        onOpen: () => (this.sidebarVisible = true),
+        onClose: (res) => (this.sidebarVisible = false),
+      });
     } else {
       // In-future pop-up will be remove from everywhere
       const dialogConfig = new MatDialogConfig();

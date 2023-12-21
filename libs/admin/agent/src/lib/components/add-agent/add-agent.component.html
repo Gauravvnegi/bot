@@ -1,17 +1,17 @@
 <div class="wrapper" [id]="fd.referenceId">
   <hospitality-bot-navigation-header
-    *ngIf="!isSideBar; else sidebarHeader"
+    *ngIf="!isSidebar; else sidebarHeader"
     [heading]="pageTitle"
     [routes]="navRoutes"
   ></hospitality-bot-navigation-header>
 
   <div class="form-block body" [formGroup]="agentForm">
-    <div class="code half-width" *ngIf="!isSideBar">
+    <div class="code half-width" *ngIf="!isSidebar">
       <span class="code__label"> Code: </span>
       <span class="code__hash"> {{ agentForm.get('packageCode').value }} </span>
     </div>
     <hospitality-bot-toggle-switch
-      *ngIf="!isSideBar"
+      *ngIf="!isSidebar"
       class="status half-width"
       controlName="status"
       label="Status:"
@@ -43,7 +43,7 @@
     ></hospitality-bot-input>
 
     <hospitality-bot-phone-number
-      [ngClass]="{ 'full-width': isSideBar, 'half-width': !isSideBar }"
+      [ngClass]="{ 'full-width': isSidebar, 'half-width': !isSidebar }"
       preControlName="cc"
       postControlName="phoneNo"
     ></hospitality-bot-phone-number>
@@ -71,15 +71,6 @@
         }
       }"
     ></hospitality-bot-input>
-
-    <!-- <hospitality-bot-members-list
-      class="half-width"
-      controlName="company"
-      type="COMPANY"
-      label="Agency Name"
-      [defaultMember]="selectedMember"
-      (createMembers)="createNewCompany()"
-    ></hospitality-bot-members-list> -->
     <hospitality-bot-input
       class="half-width"
       controlName="salesPersonName"
@@ -141,7 +132,7 @@
     ></hospitality-bot-prefix-field>
 
     <hospitality-bot-input
-      *ngIf="!isSideBar"
+      *ngIf="!isSidebar"
       class="half-width"
       controlName="taxId"
       maxLength="15"
@@ -152,7 +143,7 @@
     ></hospitality-bot-input>
 
     <hospitality-bot-input
-      *ngIf="!isSideBar"
+      *ngIf="!isSidebar"
       class="half-width"
       label="Billing Instruction"
       controlName="billingInstructions"
@@ -164,15 +155,6 @@
     </hospitality-bot-input>
   </div>
 </div>
-
-<p-sidebar
-  class="sidebar-slide"
-  [ngClass]="'agent-sidebar'"
-  [(visible)]="sidebarVisible"
-  position="right"
->
-  <ng-container #sidebarSlide></ng-container>
-</p-sidebar>
 
 <ng-template #sidebarHeader>
   <div class="sidebar-slide-header">

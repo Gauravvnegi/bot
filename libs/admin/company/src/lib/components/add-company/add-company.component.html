@@ -1,6 +1,6 @@
 <div class="wrapper" [id]="fa.referenceId">
   <hospitality-bot-navigation-header
-    *ngIf="!isSideBar; else sidebarHeader"
+    *ngIf="!isSidebar; else sidebarHeader"
     [heading]="pageTitle"
     [routes]="navRoutes"
   ></hospitality-bot-navigation-header>
@@ -49,14 +49,14 @@
 
     <hospitality-bot-phone-number
       *ngIf="isVisibleOnSideView('phoneNo')"
-      [ngClass]="{ 'full-width': isSideBar, 'half-width': !isSideBar }"
+      [ngClass]="{ 'full-width': isSidebar, 'half-width': !isSidebar }"
       preControlName="cc"
       postControlName="phoneNo"
     ></hospitality-bot-phone-number>
 
     <hospitality-bot-address-component
       *ngIf="isVisibleOnSideView('address')"
-      [ngClass]="{ 'full-width': isSideBar, 'half-width': !isSideBar }"
+      [ngClass]="{ 'full-width': isSidebar, 'half-width': !isSidebar }"
       controlName="address"
       [props]="{
         errorMessages: {

@@ -35,7 +35,7 @@ import { SendMessageComponent } from 'libs/admin/notification/src/lib/components
 import { MenuItem } from 'primeng/api';
 import { FileData } from '../../models/reservation-table.model';
 import { SnackbarHandlerService } from 'libs/admin/global-shared/src/lib/services/snackbar-handler.service';
-import { SideBarService } from 'libs/admin/shared/src/lib/services/sidebar.service';
+import { SideBarService } from 'apps/admin/src/app/core/theme/src/lib/services/sidebar.service';
 
 @Component({
   selector: 'hospitality-bot-details',

@@ -4,7 +4,6 @@ import {
   ComponentFactoryResolver,
   ElementRef,
   EventEmitter,
-  HostListener,
   Input,
   OnChanges,
   OnDestroy,
@@ -14,7 +13,7 @@ import {
   ViewContainerRef,
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ModalService, SnackBarService } from 'libs/shared/material/src';
+import { ModalService } from 'libs/shared/material/src';
 import { ModuleNames } from '@hospitality-bot/admin/shared';
 import { MessageService } from '../../services/messages.service';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
@@ -24,11 +23,10 @@ import { Subscription } from 'rxjs';
 import { FirebaseMessagingService } from 'apps/admin/src/app/core/theme/src/lib/services/messaging.service';
 import { IChats, Chats, Chat, RequestList } from '../../models/message.model';
 import { MatDialogConfig } from '@angular/material/dialog';
-import { RaiseRequestComponent } from 'libs/admin/request/src/lib/components/raise-request/raise-request.component';
 import * as FileSaver from 'file-saver';
 import { SubscriptionPlanService } from '@hospitality-bot/admin/core/theme';
 import { ModalComponent } from 'libs/admin/shared/src/lib/components/modal/modal.component';
-import { SideBarService } from 'libs/admin/shared/src/lib/services/sidebar.service';
+import { SideBarService } from 'apps/admin/src/app/core/theme/src/lib/services/sidebar.service';
 
 @Component({
   selector: 'hospitality-bot-chat',
@@ -68,11 +66,9 @@ export class ChatComponent
     private modalService: ModalService,
     private messageService: MessageService,
     private fb: FormBuilder,
-    private snackbarService: SnackBarService,
     private adminUtilityService: AdminUtilityService,
     private globalFilterService: GlobalFilterService,
     private _firebaseMessagingService: FirebaseMessagingService,
-    private resolver: ComponentFactoryResolver,
     private subscriptionPlanService: SubscriptionPlanService,
     private sideBarService: SideBarService
   ) {}
@@ -432,36 +428,7 @@ export class ChatComponent
       type: 'RAISE_REQUEST',
       open: true,
     });
-
     return;
-
-    // this.sidebarVisible = true;
-    // this.sidebarType = 'complaint';
-
-    // const factory = this.resolver.resolveComponentFactory(
-    //   RaiseRequestComponent
-    // );
-    // this.sidebarSlide.clear();
-    // const componentRef = this.sidebarSlide.createComponent(factory);
-    // componentRef.instance.isSideBar = true;
-    // componentRef.instance.onRaiseRequestClose.subscribe((res) => {
-    //   // Not getting used.. status is hardcode to false in the RaiseRequestComponent
-    //   if (res.status) {
-    //     this.getRequestList();
-    //     const values = {
-    //       reservationId: res.data.number,
-    //     };
-    //     this.$subscription.add(
-    //       this.messageService
-    //         .updateGuestDetail(this.entityId, this.data.receiverId, values)
-    //         .subscribe((response) => {
-    //           this.messageService.refreshData$.next(true);
-    //         })
-    //     );
-    //   }
-    //   this.sidebarVisible = false;
-    //   componentRef.destroy();
-    // });
   }
 
   exportChat() {

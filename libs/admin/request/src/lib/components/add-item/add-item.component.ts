@@ -24,7 +24,7 @@ export class AddItemComponent implements OnInit {
   useForm: FormGroup;
   entityId: string;
   isSidebar = false;
-  @Output() onClose = new EventEmitter();
+  @Output() onCloseSidebar = new EventEmitter();
 
   constructor(
     private fb: FormBuilder,
@@ -67,7 +67,7 @@ export class AddItemComponent implements OnInit {
   }
 
   close(): void {
-    this.onClose.emit();
+    this.onCloseSidebar.emit();
   }
 
   handleSubmit() {
@@ -94,7 +94,7 @@ export class AddItemComponent implements OnInit {
       { panelClass: 'success' }
     );
     this.requestService.refreshItemList.next(true);
-    this.onClose.emit();
+    this.onCloseSidebar.emit();
   };
 
   handleError = (error) => {

@@ -1,11 +1,11 @@
 <div class="wrapper">
-  <div *ngIf="!isSideBar; else sidebarHeader">
+  <div *ngIf="!isSidebar; else sidebarHeader">
     <div class="header">
       Settings
     </div>
-    <div *ngIf="isSideBar" (click)="close()" class="close">
+    <div *ngIf="isSidebar" (click)="close()" class="close">
       <i
-        [ngClass]="!isSideBar ? 'fa fa-times' : 'pi pi-arrow-right'"
+        [ngClass]="!isSidebar ? 'fa fa-times' : 'pi pi-arrow-right'"
         aria-hidden="true"
       ></i>
     </div>

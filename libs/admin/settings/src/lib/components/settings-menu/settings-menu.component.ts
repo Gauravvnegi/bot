@@ -12,8 +12,8 @@ import {
 export class SettingsMenuComponent implements OnInit {
   settings: SettingsMenuItem[];
   isImageLoaded = false;
-  isSideBar = false;
-  @Output() closeEvent = new EventEmitter(false);
+  isSidebar = false;
+  @Output() onCloseSidebar = new EventEmitter(false);
 
   constructor(
     private subscriptionService: SubscriptionPlanService
@@ -24,7 +24,7 @@ export class SettingsMenuComponent implements OnInit {
   }
 
   close() {
-    this.closeEvent.emit(false);
+    this.onCloseSidebar.emit(false);
   }
 
   onImageLoad() {

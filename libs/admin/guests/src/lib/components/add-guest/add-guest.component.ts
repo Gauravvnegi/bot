@@ -5,8 +5,6 @@ import {
   Output,
   ViewChild,
   ViewContainerRef,
-  ComponentFactoryResolver,
-  Compiler,
 } from '@angular/core';
 import { manageGuestRoutes } from '../../constant/routes';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
@@ -16,7 +14,6 @@ import {
   RoutesConfigService,
 } from '@hospitality-bot/admin/core/theme';
 import {
-  ModuleNames,
   NavRouteOptions,
   Option,
   Regex,
@@ -28,7 +25,6 @@ import { GuestTableService } from '../../services/guest-table.service';
 import { GuestFactory } from '../../data-models/guest.model';
 import { FormService } from 'libs/admin/shared/src/lib/services/form.service';
 import { GuestFormType } from 'libs/admin/agent/src/lib/types/form.types';
-import { AddCompanyComponent } from 'libs/admin/company/src/lib/components/add-company/add-company.component';
 import { GuestType } from '../../types/guest.type';
 
 @Component({
@@ -65,9 +61,9 @@ export class AddGuestComponent implements OnInit {
   ageRestriction = new Date();
 
   //Sidebar configuration
-  isSideBar = false;
+  isSidebar = false;
   sidebarVisible = false;
-  @Output() onClose = new EventEmitter<GuestType | boolean>(false);
+  @Output() onCloseSidebar = new EventEmitter<GuestType | boolean>(false);
   @ViewChild('sidebarSlide', { read: ViewContainerRef })
   sidebarSlide: ViewContainerRef;
   selectedMember: Option;
@@ -82,8 +78,6 @@ export class AddGuestComponent implements OnInit {
     private location: Location,
     private formService: FormService,
     private routesConfigService: RoutesConfigService,
-    private resolver: ComponentFactoryResolver,
-    private compiler: Compiler
   ) {}
 
   ngOnInit(): void {
@@ -158,50 +152,6 @@ export class AddGuestComponent implements OnInit {
     });
   }
 
-  createNewCompany() {
-    if (this.isSideBar) {
-      this.openCompanyFromSide();
-    } else {
-      this.saveForm();
-      this.routesConfigService.navigate({
-        subModuleName: ModuleNames.COMPANY,
-        additionalPath: 'add-company',
-      });
-    }
-  }
-
-  openCompanyFromSide() {
-    const lazyModulePromise = import(
-      '../../../../../company/src/lib/admin-company.module'
-    )
-      .then((module) => {
-        return this.compiler.compileModuleAsync(module.AdminCompanyModule);
-      })
-      .catch((error) => {
-        console.error('Error loading the lazy module:', error);
-      });
-
-    lazyModulePromise.then((moduleFactory) => {
-      this.sidebarVisible = true;
-      const factory = this.resolver.resolveComponentFactory(
-        AddCompanyComponent
-      );
-      this.sidebarSlide.clear();
-      const componentRef = this.sidebarSlide.createComponent(factory);
-      componentRef.instance.isSideBar = true;
-      componentRef.instance.onClose.subscribe((res) => {
-        if (typeof res !== 'boolean') {
-          this.selectedMember = {
-            label: res?.companyName,
-            value: res?.id,
-          };
-        }
-        this.sidebarVisible = false;
-        componentRef.destroy();
-      });
-    });
-  }
-
   saveForm() {
     this.formService.companyRedirectRoute = '/pages/members/agent';
     this.activatedRoute.snapshot.url.forEach((segment) => {
@@ -238,8 +188,8 @@ export class AddGuestComponent implements OnInit {
           );
           this.loading = false;
 
-          if (this.isSideBar) {
-            this.onClose.emit(res);
+          if (this.isSidebar) {
+            this.onCloseSidebar.emit(res);
           } else {
             this.location.back();
           }
@@ -272,7 +222,7 @@ export class AddGuestComponent implements OnInit {
   };
 
   closeSidebar() {
-    this.onClose.emit(true);
+    this.onCloseSidebar.emit(true);
   }
 
   /**

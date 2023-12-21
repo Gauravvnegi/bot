@@ -564,14 +564,17 @@
   z-index: 1;
 }
 
-@mixin tableFrom() {
+@mixin tableFrom($noOfItems) {
+  $flexBasisValue: 1 / $noOfItems * 100%;
   display: flex;
   align-items: center;
   padding: 20px 4%;
   gap: 4%;
 
-  background-color: white;
-  box-shadow: 0 3px 25px 0 rgba(0, 0, 0, 0.05);
+  &__wrapper {
+    background-color: white;
+    box-shadow: 0 3px 25px 0 rgba(0, 0, 0, 0.05);
+  }
 
   &__header {
     background-color: #f1f2f7;
@@ -582,5 +585,11 @@
   }
 
   &__fields {
+  }
+
+  &__item {
+    flex-basis: 10%;
+
+    flex-basis: $flexBasisValue;
   }
 }

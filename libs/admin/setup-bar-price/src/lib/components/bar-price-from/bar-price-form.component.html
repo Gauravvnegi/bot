@@ -1,0 +1,71 @@
+<ng-container *ngIf="isFormLoaded" [formGroup]="controlContainer.control">
+  <div class="form__wrapper" [formArrayName]="controlName">
+    <div class="form form__header">
+      <div class="form__item">Order</div>
+      <div class="form__item">Rate Plan</div>
+      <div class="form__item">Parent</div>
+      <div class="form__item">Rate Plan Change</div>
+      <div class="form__item">Modifier Level</div>
+    </div>
+    <div
+      class="form form__fields"
+      *ngFor="let plan of plans; let i = index"
+      [formGroupName]="i"
+    >
+      <div class="form__item">{{ i === 0 ? 'Base' : i + 1 }}</div>
+      <div class="form__item">{{ plan.label }}</div>
+
+      <div class="form__item">
+        <hospitality-bot-select
+          *ngIf="i !== 0; else showDash"
+          controlName="parentPlan"
+          [options]="planOptions"
+        ></hospitality-bot-select>
+      </div>
+
+      <div class="form__item">
+        <hospitality-bot-prefix-field
+          class="form__item"
+          preControlName="currency"
+          postControlName="modifierPrice"
+          [options]="configService.currency"
+          [props]="{
+            placeholder: 'Enter'
+          }"
+          [defaultProps]="{ post: { type: 'number' } }"
+          [disabled]="i === 0"
+        ></hospitality-bot-prefix-field>
+      </div>
+      <div class="form__item">
+        <ng-container *ngIf="i !== 0; else showDash">
+          <div
+            class="modifier-level"
+            [ngClass]="{
+              positive: modifierValue > 0,
+              negative: modifierValue < 0
+            }"
+            *ngIf="
+              inputControlArray.at(i).get('modifierLevel')
+                .value as modifierValue
+            "
+          >
+            <div>
+              {{ modifierValue | math: 'abs' }}
+            </div>
+            <i
+              class="pi"
+              [ngClass]="{
+                'pi-arrow-up': modifierValue > 0,
+                'pi-arrow-down': modifierValue < 0
+              }"
+            ></i>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+</ng-container>
+
+<ng-template #showDash>
+  <div class="form__item">-</div>
+</ng-template>

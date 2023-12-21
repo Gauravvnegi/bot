@@ -59,6 +59,7 @@ import { NumberDirective } from './directives/number.directive';
 import { StatusCellDirective } from './directives/status-cell.directive';
 import { ClickStopPropagation } from './directives/stoppropagation.directive';
 import { LinkDetector } from './pipes/linkDetector.pipe';
+import { MathPipe } from './pipes/math.pipe';
 import { NumberFormatterPipe } from './pipes/number-formatter.pipe';
 import { SafeHtmlPipe } from './pipes/safe-html.pipe';
 import { SafeUrlPipe } from './pipes/safe-url-pipe';
@@ -195,6 +196,7 @@ import { SplitButtonComponent } from './components/split-button/split-button.com
     UnsubscribeFeatureComponent,
     NumberFormatterPipe,
     LinkDetector,
+    MathPipe,
     MentionListComponent,
     MentionDirective,
     CustomSizeInputComponent,
@@ -310,6 +312,7 @@ import { SplitButtonComponent } from './components/split-button/split-button.com
     EmailChipListComponent,
     NumberFormatterPipe,
     LinkDetector,
+    MathPipe,
     MentionListComponent,
     MentionDirective,
     CustomSizeInputComponent,

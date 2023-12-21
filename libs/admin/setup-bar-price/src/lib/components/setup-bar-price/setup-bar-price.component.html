@@ -12,9 +12,10 @@
   ></hospitality-bot-stepper>
 
   <ng-container [formGroup]="useForm" [ngSwitch]="steps[activeStep].value">
-    <hospitality-bot-room-type-bar
+    <hospitality-bot-bar-price-form
       *ngSwitchCase="'ROOM_TYPE'"
-    ></hospitality-bot-room-type-bar>
+      [formConfiguration]="ratePlanConfiguration"
+    ></hospitality-bot-bar-price-form>
 
     <ng-container *ngSwitchCase="'RATE_PLAN'"> RATE_PLAN</ng-container>
 

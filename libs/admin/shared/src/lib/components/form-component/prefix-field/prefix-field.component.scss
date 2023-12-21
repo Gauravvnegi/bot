@@ -11,8 +11,11 @@
   display: flex;
   align-items: center;
   gap: 1em;
-  margin-top: $label-gap
+  margin-top: $label-gap;
+}
 
+.no-margin {
+  margin-top: 0;
 }
 
 .pre-input {
@@ -26,7 +29,7 @@
 }
 
 .auto-compelet {
-    flex-basis: 50%;
+  flex-basis: 50%;
 }
 
 :host ::ng-deep .label {
@@ -45,14 +48,14 @@
   display: none;
 }
 
-.primary{
-  flex-basis: 85%; ;
+.primary {
+  flex-basis: 85%;
 }
 
 .dashed {
- flex-basis: 50%;
+  flex-basis: 50%;
 }
 
-.secondary{
+.secondary {
   flex-basis: 15%;
 }

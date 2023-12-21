@@ -1,11 +1,14 @@
 export type BarPriceFromData = {
-  roomTypeBar: {
-    baseRate: string;
-    modifierLevel: string;
-    parent: string;
-    roomType: string;
-  };
-  ratePlanBar: any;
-  roomOccupancyBar: any;
+  roomTypeBar: PlanConfigForm;
+  ratePlanBar: PlanConfigForm;
+  roomOccupancyBar: PlanConfigForm;
   extrasBar: any;
+};
+
+export type PlanConfigForm = {
+  plan: string;
+  parentPlan: string;
+  currency: string;
+  modifierPrice: number;
+  modifierLevel: number;
 };

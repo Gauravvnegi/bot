@@ -1,9 +1,11 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from 'libs/shared/utils/src/lib/services/api.service';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { Option } from '../types/form.type';
 
 @Injectable({ providedIn: 'root' })
 export class ConfigService extends ApiService {
+  public currency: Option[] = [{ label: 'INR', value: 'INR' }];
   $config = new BehaviorSubject<Record<string, any>>(null);
 
   getColorAndIconConfig(

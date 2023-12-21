@@ -14,6 +14,7 @@ import { Subscription } from 'rxjs';
 import { setupBarPriceSteps } from '../../constants/setup-bar-price.const';
 import { BarPriceService } from '../../services/bar-price.service';
 import { BarPriceFromData } from '../../types/setup-bar-price.types';
+import { BarPriceFormConfig } from '../bar-price-from/bar-price-form.component';
 
 @Component({
   selector: 'hospitality-bot-setup-bar-price',
@@ -34,6 +35,45 @@ export class SetupBarPriceComponent implements OnInit {
   }));
 
   activeStep = 0;
+
+  ratePlanConfiguration: BarPriceFormConfig = {
+    plan: [
+      {
+        label: 'EP',
+        plan: 'EP',
+        modifierPrice: 123,
+        currency: 'INR',
+        modifierLevel: 0,
+        parentPlan: 'EP',
+        isBase: true,
+      },
+      {
+        label: 'CP',
+        plan: 'CP',
+        modifierPrice: 123,
+        currency: 'INR',
+        modifierLevel: 0,
+        parentPlan: 'EP',
+      },
+      {
+        label: 'MAP',
+        plan: 'MAP',
+        modifierPrice: 123,
+        currency: 'INR',
+        modifierLevel: 0,
+        parentPlan: 'EP',
+      },
+      {
+        label: 'AP',
+        plan: 'AP',
+        modifierPrice: 123,
+        currency: 'INR',
+        modifierLevel: 0,
+        parentPlan: 'EP',
+      },
+    ],
+    controlName: 'ratePlanBar',
+  };
 
   $subscription = new Subscription();
 
@@ -60,22 +100,9 @@ export class SetupBarPriceComponent implements OnInit {
     };
     this.useForm = this.fb.group(controlConfig);
 
-    this.createRoomTypeBar();
-
     this.useForm.valueChanges.subscribe((res) => {
       console.log(res, 'res');
     });
-  }
-
-  createRoomTypeBar() {
-    const controlConfig: Record<keyof BarPriceFromData['roomTypeBar'], any> = {
-      baseRate: [],
-      modifierLevel: [],
-      parent: [],
-      roomType: [],
-    };
-
-    this.useFromControl.roomTypeBar.push(this.fb.group(controlConfig));
   }
 
   get useFromControl() {

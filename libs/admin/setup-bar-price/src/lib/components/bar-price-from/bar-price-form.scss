@@ -4,5 +4,24 @@
 }
 
 .form {
-  @include tableFrom();
+  @include tableFrom(5);
+}
+
+.modifier-level {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.positive {
+  color: $completed-state;
+}
+
+.negative {
+  color: $inactive-state;
+}
+
+.pi {
+  font-size: 13px;
+  font-weight: bold !important;
 }

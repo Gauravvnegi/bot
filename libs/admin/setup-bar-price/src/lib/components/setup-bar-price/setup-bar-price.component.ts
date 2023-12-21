@@ -13,8 +13,12 @@ import { MenuItem } from 'primeng/api';
 import { Subscription } from 'rxjs';
 import { setupBarPriceSteps } from '../../constants/setup-bar-price.const';
 import { BarPriceService } from '../../services/bar-price.service';
-import { BarPriceFromData } from '../../types/setup-bar-price.types';
-import { BarPriceFormConfig } from '../bar-price-from/bar-price-form.component';
+import {
+  BarPriceFormData,
+  BarPricePlanFormControl,
+} from '../../types/setup-bar-price.types';
+import { BarPriceFormConfig } from '../bar-price-plan-from/bar-price-plan-form.component';
+import { SetupBarPriceService } from '../../services/setup-bar-price.service';
 
 @Component({
   selector: 'hospitality-bot-setup-bar-price',
@@ -36,44 +40,9 @@ export class SetupBarPriceComponent implements OnInit {
 
   activeStep = 0;
 
-  ratePlanConfiguration: BarPriceFormConfig = {
-    plan: [
-      {
-        label: 'EP',
-        plan: 'EP',
-        modifierPrice: 123,
-        currency: 'INR',
-        modifierLevel: 0,
-        parentPlan: 'EP',
-        isBase: true,
-      },
-      {
-        label: 'CP',
-        plan: 'CP',
-        modifierPrice: 123,
-        currency: 'INR',
-        modifierLevel: 0,
-        parentPlan: 'EP',
-      },
-      {
-        label: 'MAP',
-        plan: 'MAP',
-        modifierPrice: 123,
-        currency: 'INR',
-        modifierLevel: 0,
-        parentPlan: 'EP',
-      },
-      {
-        label: 'AP',
-        plan: 'AP',
-        modifierPrice: 123,
-        currency: 'INR',
-        modifierLevel: 0,
-        parentPlan: 'EP',
-      },
-    ],
-    controlName: 'ratePlanBar',
-  };
+  roomTypePlanConfiguration: BarPriceFormConfig;
+  ratePlanConfiguration: BarPriceFormConfig;
+  occupancyPlanConfiguration: BarPriceFormConfig;
 
   $subscription = new Subscription();
 
@@ -83,17 +52,40 @@ export class SetupBarPriceComponent implements OnInit {
     private globalFilter: GlobalFilterService,
     private adminUtilityService: AdminUtilityService,
     private snackbarService: SnackBarService,
-    private routeConfigService: RoutesConfigService
+    private routeConfigService: RoutesConfigService,
+    private setupBarPriceService: SetupBarPriceService
   ) {}
 
   ngOnInit(): void {
     this.initNavRoutes();
     this.initForm();
+    this.initConfig();
+  }
+
+  initConfig() {
+    this.setupBarPriceService.getPlanConfiguration().subscribe((res) => {
+      this.roomTypePlanConfiguration = {
+        controlName: 'roomTypeBar',
+        plan: res['roomTypeBar'],
+        modifierPriceLabel: 'Base Rate',
+        planTypeLabel: 'Room Type',
+      };
+
+      this.ratePlanConfiguration = {
+        controlName: 'ratePlanBar',
+        plan: res['ratePlanBar'],
+      };
+
+      this.occupancyPlanConfiguration = {
+        controlName: 'roomOccupancyBar',
+        plan: res['roomOccupancyBar'],
+      };
+    });
   }
 
   initForm() {
-    const controlConfig: Record<keyof BarPriceFromData, FormArray> = {
-      extrasBar: this.fb.array([]),
+    const controlConfig: Record<keyof BarPriceFormData, FormArray> = {
+      extraBar: this.fb.array([]),
       ratePlanBar: this.fb.array([]),
       roomOccupancyBar: this.fb.array([]),
       roomTypeBar: this.fb.array([]),
@@ -106,7 +98,7 @@ export class SetupBarPriceComponent implements OnInit {
   }
 
   get useFromControl() {
-    return this.useForm.controls as Record<keyof BarPriceFromData, FormArray>;
+    return this.useForm.controls as Record<keyof BarPriceFormData, FormArray>;
   }
 
   initNavRoutes() {
@@ -119,9 +111,13 @@ export class SetupBarPriceComponent implements OnInit {
 
   listenChanges() {}
 
-  handleNext() {}
+  handleNext() {
+    this.activeStep = this.activeStep + 1;
+  }
 
-  handleBack() {}
+  handleBack() {
+    this.activeStep = this.activeStep - 1;
+  }
 
   ngOnDestroy() {
     this.$subscription.unsubscribe();

@@ -1,21 +1,21 @@
 <ng-container *ngIf="isFormLoaded" [formGroup]="controlContainer.control">
   <div class="form__wrapper" [formArrayName]="controlName">
-    <div class="form form__header">
-      <div class="form__item">Order</div>
-      <div class="form__item">Rate Plan</div>
-      <div class="form__item">Parent</div>
-      <div class="form__item">Rate Plan Change</div>
-      <div class="form__item">Modifier Level</div>
+    <div class="form form__header form__sticky-header">
+      <div class="form__item order">Order</div>
+      <div class="form__item plan-type">{{ planTypeLabel }}</div>
+      <div class="form__item parent-plan">Parent</div>
+      <div class="form__item modifier-price">{{ modifierPriceLabel }}</div>
+      <div class="form__item modifier-level">Modifier Level</div>
     </div>
     <div
       class="form form__fields"
       *ngFor="let plan of plans; let i = index"
       [formGroupName]="i"
     >
-      <div class="form__item">{{ i === 0 ? 'Base' : i + 1 }}</div>
-      <div class="form__item">{{ plan.label }}</div>
+      <div class="form__item order">{{ i === 0 ? 'Base' : i + 1 }}</div>
+      <div class="form__item plan-type">{{ plan.label }}</div>
 
-      <div class="form__item">
+      <div class="form__item parent-plan">
         <hospitality-bot-select
           *ngIf="i !== 0; else showDash"
           controlName="parentPlan"
@@ -23,7 +23,7 @@
         ></hospitality-bot-select>
       </div>
 
-      <div class="form__item">
+      <div class="form__item modifier-price">
         <hospitality-bot-prefix-field
           class="form__item"
           preControlName="currency"
@@ -36,7 +36,7 @@
           [disabled]="i === 0"
         ></hospitality-bot-prefix-field>
       </div>
-      <div class="form__item">
+      <div class="form__item modifier-level">
         <ng-container *ngIf="i !== 0; else showDash">
           <div
             class="modifier-level"

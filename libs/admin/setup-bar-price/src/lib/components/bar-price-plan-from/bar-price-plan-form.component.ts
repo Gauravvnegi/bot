@@ -8,8 +8,10 @@ import {
 } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import {
-  BarPriceFromData,
+  BarPriceFormData,
+  BarPricePlanFormControl,
   PlanConfigForm,
+  PlanItems,
 } from '../../types/setup-bar-price.types';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
@@ -19,26 +21,45 @@ import {
 } from '@hospitality-bot/admin/shared';
 
 @Component({
-  selector: 'hospitality-bot-bar-price-form',
-  templateUrl: './bar-price-form.component.html',
-  styleUrls: ['./bar-price-form.scss'],
+  selector: 'hospitality-bot-bar-price-plan-form',
+  templateUrl: './bar-price-plan-form.component.html',
+  styleUrls: ['./bar-price-plan-form.scss'],
 })
-export class BarPriceForm implements OnInit, OnDestroy {
+export class BarPricePlanForm implements OnInit, OnDestroy {
   $subscription = new Subscription();
   entityId: string;
   loading: boolean;
   inputControlArray: FormArray;
-  controlName: keyof BarPriceFromData;
+  controlName: BarPricePlanFormControl;
   plans: PlanItems;
   planOptions: Option[];
   isFormLoaded = false;
 
-  @Input() set formConfiguration({ controlName, plan }: BarPriceFormConfig) {
+  planTypeLabel: BarPriceFormConfig['planTypeLabel'] = 'Rate Plan';
+  modifierPriceLabel: BarPriceFormConfig['modifierPriceLabel'] =
+    'Rate Plan Change';
+
+  @Input() set formConfiguration({
+    controlName,
+    plan,
+    modifierPriceLabel,
+    planTypeLabel,
+  }: BarPriceFormConfig) {
     this.plans = plan;
+
     this.planOptions = this.plans.map((item) => ({
       label: item.label,
       value: item.plan,
     }));
+
+    if (modifierPriceLabel) {
+      this.modifierPriceLabel = modifierPriceLabel;
+    }
+
+    if (planTypeLabel) {
+      this.planTypeLabel = planTypeLabel;
+    }
+
     this.controlName = controlName;
     this.initControl();
     this.isFormLoaded = true;
@@ -65,7 +86,6 @@ export class BarPriceForm implements OnInit, OnDestroy {
   }
 
   registerListener() {
-    console.log();
     this.inputControlArray.valueChanges.subscribe((res) => {
       console.log(res, 'roomType res');
     });
@@ -114,15 +134,11 @@ export class BarPriceForm implements OnInit, OnDestroy {
   }
 }
 
-type PlanItem = {
-  label: string;
-} & PlanConfigForm;
-
-export type PlanConfigFormGroup = FormGroup & FormGroupControls<PlanConfigForm>;
+type PlanConfigFormGroup = FormGroup & FormGroupControls<PlanConfigForm>;
 
 export type BarPriceFormConfig = {
   plan: PlanItems;
-  controlName: keyof BarPriceFromData;
+  controlName: BarPricePlanFormControl;
+  planTypeLabel?: string;
+  modifierPriceLabel?: string;
 };
-
-export type PlanItems = [PlanItem & { isBase: true }, ...PlanItem[]];

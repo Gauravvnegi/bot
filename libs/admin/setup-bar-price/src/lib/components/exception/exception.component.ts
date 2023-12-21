@@ -7,6 +7,9 @@ import { weeks } from 'libs/admin/channel-manager/src/lib/components/constants/b
   templateUrl: './exception.component.html',
   styleUrls: ['./exception.component.scss'],
 })
+/**
+ * @remarks To be discarded
+ */
 export class ExceptionComponent {
   startMinDate = new Date();
   endMinDate = new Date();

@@ -584,12 +584,17 @@
     font-weight: 600;
   }
 
+  &__sticky-header {
+    position: sticky;
+    top: 58px;
+    z-index: 1;
+  }
+
   &__fields {
+    border-bottom: 1px solid rgba(112, 112, 112, 0.35);
   }
 
   &__item {
-    flex-basis: 10%;
-
     flex-basis: $flexBasisValue;
   }
 }

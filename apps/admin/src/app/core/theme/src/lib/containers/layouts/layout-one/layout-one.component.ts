@@ -48,7 +48,19 @@ import {
 } from 'libs/admin/shared/src/lib/services/sidebar.service';
 import { tokensConfig } from 'libs/admin/shared/src/lib/constants/common';
 import { NightAuditComponent } from 'libs/admin/global-shared/src/lib/components/night-audit/night-audit.component';
-
+type MessagePayload = {
+  data: {
+    nickName: string;
+    message: string;
+    phoneNumber: string;
+    isBuzz: string;
+    isMute: string;
+    notificationType: string;
+  };
+  from: string;
+  fcmMessageId: string;
+  notification: {};
+};
 @Component({
   selector: 'admin-layout-one',
   templateUrl: './layout-one.component.html',
@@ -222,7 +234,7 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
     this.$firebaseMessagingSubscription.add(
       this.firebaseMessagingService.receiveMessage().subscribe((payload) => {
         console.log(payload, 'payload message when notification trigger');
-        const notificationPayload = payload;
+        const notificationPayload = payload as MessagePayload;
         this.getNotificationUnreadCount();
 
         const isMuted = notificationPayload.data.isMute === 'true';

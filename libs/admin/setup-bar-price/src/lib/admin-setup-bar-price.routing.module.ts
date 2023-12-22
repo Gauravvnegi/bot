@@ -6,24 +6,25 @@ import { MainComponent } from './components/main/main.component';
 import { RoomTypesComponent } from './components/room-types/room-types.component';
 import { SetupBarPriceComponent } from './components/setup-bar-price/setup-bar-price.component';
 import { BarPricePlanForm } from './components/bar-price-plan-from/bar-price-plan-form.component';
+import { BarPriceExtraPlanForm } from './components/bar-price-extra-plan-form/bar-price-extra-plan-form.component';
 
 const appRoutes: Route[] = [
   {
     path: '',
     component: MainComponent,
     children: [
-      // {
-      //   path: '',
-      //   component: BarPriceComponent,
-      // },
       {
         path: '',
-        redirectTo: 'create',
+        component: BarPriceComponent,
       },
-      {
-        path: 'create',
-        component: SetupBarPriceComponent,
-      },
+      // {
+      //   path: '',
+      //   redirectTo: 'create',
+      // },
+      // {
+      //   path: 'create',
+      //   component: SetupBarPriceComponent,
+      // },
     ],
   },
 ];
@@ -40,5 +41,6 @@ export class AdminSetupBarPriceRoutingModule {
     RoomTypesComponent,
     SetupBarPriceComponent,
     BarPricePlanForm,
+    BarPriceExtraPlanForm,
   ];
 }

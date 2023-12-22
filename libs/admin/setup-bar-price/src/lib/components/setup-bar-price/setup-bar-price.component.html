@@ -18,20 +18,26 @@
   >
     <hospitality-bot-bar-price-plan-form
       *ngSwitchCase="'ROOM_TYPE'"
-      [formConfiguration]="roomTypePlanConfiguration"
+      controlName="roomTypeBar"
+      [formConfiguration]="{
+        modifierPriceLabel: 'Base Rate',
+        planTypeLabel: 'Room Type'
+      }"
     ></hospitality-bot-bar-price-plan-form>
 
     <hospitality-bot-bar-price-plan-form
       *ngSwitchCase="'RATE_PLAN'"
-      [formConfiguration]="ratePlanConfiguration"
+      controlName="ratePlanBar"
     ></hospitality-bot-bar-price-plan-form>
 
     <hospitality-bot-bar-price-plan-form
       *ngSwitchCase="'ROOM_OCCUPANCY'"
-      [formConfiguration]="occupancyPlanConfiguration"
+      controlName="roomOccupancyBar"
     ></hospitality-bot-bar-price-plan-form>
 
-    <ng-container *ngSwitchCase="'EXTRAS'"> EXTRAS</ng-container>
+    <hospitality-bot-bar-price-extra-plan-form
+      *ngSwitchCase="'EXTRAS'"
+    ></hospitality-bot-bar-price-extra-plan-form>
 
     <ng-container *ngSwitchCase="'PREVIEW'">PREVIEW </ng-container>
 

@@ -1,21 +1,18 @@
 <ng-container [formGroup]="controlContainer.control">
-  <div class="form__wrapper" [formArrayName]="controlName">
-    <div class="form form__header form__sticky-header">
-      <div class="form__item order">Order</div>
-      <div class="form__item plan-type">{{ planTypeLabel }}</div>
-      <div class="form__item parent-plan">Parent</div>
-      <div class="form__item modifier-price">{{ modifierPriceLabel }}</div>
-      <div class="form__item modifier-level">Modifier Level</div>
-    </div>
-    <div
+  <div class="form__wrapper" [formGroupName]="controlName">
+    <ng-container>
+      <div class="form form__header form__sticky-header">
+        <div class="form__item order">Extras</div>
+
+        <div class="form__item parent-plan">Fixed Charges</div>
+      </div>
+      <!-- <div
       class="form form__fields"
-      *ngFor="let control of inputArrayControl; let i = index"
+      *ngFor="let plan of plans; let i = index"
       [formGroupName]="i"
     >
       <div class="form__item order">{{ i === 0 ? 'Base' : i + 1 }}</div>
-      <div class="form__item plan-type">
-        {{ control.get('name').value }}
-      </div>
+      <div class="form__item plan-type">{{ plan.label }}</div>
 
       <div class="form__item parent-plan">
         <hospitality-bot-select
@@ -30,7 +27,7 @@
           class="form__item"
           preControlName="currency"
           postControlName="modifierPrice"
-          [options]="currencies"
+          [options]="configService.currency"
           [props]="{
             placeholder: 'Enter'
           }"
@@ -46,7 +43,10 @@
               positive: modifierValue > 0,
               negative: modifierValue < 0
             }"
-            *ngIf="control.get('modifierLevel').value as modifierValue"
+            *ngIf="
+              inputControlArray.at(i).get('modifierLevel')
+                .value as modifierValue
+            "
           >
             <div>
               {{ modifierValue | math: 'abs' }}
@@ -61,7 +61,16 @@
           </div>
         </ng-container>
       </div>
-    </div>
+    </div> -->
+    </ng-container>
+
+    <ng-container>
+      <div class="form form__header form__sticky-header">
+        <div class="form__item order">Room Type</div>
+
+        <div class="form__item parent-plan">Extras Loop</div>
+      </div>
+    </ng-container>
   </div>
 </ng-container>
 

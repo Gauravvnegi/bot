@@ -41,3 +41,4 @@ export type UploadFileData = {
 };
 
 export type FieldValues = Record<string, any>;
+export type NewDataRecord<TData, TValue = any> = Record<keyof TData, TValue>;

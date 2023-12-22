@@ -1,0 +1,47 @@
+@import 'main';
+
+.wrapper {
+}
+
+.form {
+  @include tableFrom(5);
+
+  .order {
+    flex-basis: 10%;
+  }
+
+  .plan-type {
+    flex-basis: 20%;
+  }
+
+  .parent-plan {
+    flex-basis: 20%;
+  }
+
+  .modifier-price {
+    flex-basis: 30%;
+  }
+
+  .modifier-level {
+    flex-basis: 20%;
+  }
+}
+
+.modifier-level {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.positive {
+  color: $completed-state;
+}
+
+.negative {
+  color: $inactive-state;
+}
+
+.pi {
+  font-size: 13px;
+  font-weight: bold !important;
+}

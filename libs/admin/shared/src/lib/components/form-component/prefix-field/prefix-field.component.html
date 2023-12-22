@@ -2,7 +2,7 @@
   <label *ngIf="label" class="label label__static" [for]="postControlName">{{
     label
   }}</label>
-  <div class="main" [id]="postControlName">
+  <div class="main" [ngClass]="{ 'no-margin': !label }" [id]="postControlName">
     <ng-container [ngSwitch]="preFieldType">
       <hospitality-bot-input
         *ngSwitchCase="'input'"

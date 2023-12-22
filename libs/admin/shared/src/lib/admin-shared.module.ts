@@ -1,8 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { MatChipsModule } from '@angular/material/chips';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MenuModule } from 'primeng/menu';
 import { CKEditorModule } from 'ckeditor4-angular';
@@ -61,6 +59,7 @@ import { NumberDirective } from './directives/number.directive';
 import { StatusCellDirective } from './directives/status-cell.directive';
 import { ClickStopPropagation } from './directives/stoppropagation.directive';
 import { LinkDetector } from './pipes/linkDetector.pipe';
+import { MathPipe } from './pipes/math.pipe';
 import { NumberFormatterPipe } from './pipes/number-formatter.pipe';
 import { SafeHtmlPipe } from './pipes/safe-html.pipe';
 import { SafeUrlPipe } from './pipes/safe-url-pipe';
@@ -137,6 +136,9 @@ import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dial
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { CheckboxComponent } from './components/form-component/checkbox/checkbox.component';
 import { SplitButtonComponent } from './components/split-button/split-button.component';
+import { Dialog } from 'primeng/dialog';
+
+
 @NgModule({
   imports: [
     CommonModule,
@@ -157,8 +159,6 @@ import { SplitButtonComponent } from './components/split-button/split-button.com
     CalendarModule,
     MultiSelectModule,
     AutoCompleteModule,
-    MatChipsModule,
-    MatAutocompleteModule,
     CKEditorModule,
     MatTooltipModule,
     DialogModule,
@@ -197,6 +197,7 @@ import { SplitButtonComponent } from './components/split-button/split-button.com
     UnsubscribeFeatureComponent,
     NumberFormatterPipe,
     LinkDetector,
+    MathPipe,
     MentionListComponent,
     MentionDirective,
     CustomSizeInputComponent,
@@ -312,6 +313,7 @@ import { SplitButtonComponent } from './components/split-button/split-button.com
     EmailChipListComponent,
     NumberFormatterPipe,
     LinkDetector,
+    MathPipe,
     MentionListComponent,
     MentionDirective,
     CustomSizeInputComponent,
@@ -400,6 +402,7 @@ import { SplitButtonComponent } from './components/split-button/split-button.com
     CheckboxComponent,
     SplitButtonComponent,
     ContextMenuModule,
+    Dialog,
   ],
 })
 export class AdminSharedModule {}

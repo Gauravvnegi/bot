@@ -170,6 +170,7 @@ export class AddReservationComponent extends BaseReservationComponent
       instructions: this.fb.group({
         specialInstructions: [''],
       }),
+      printRate: [false],
     });
   }
 
@@ -279,11 +280,11 @@ export class AddReservationComponent extends BaseReservationComponent
               label: `${guestInformation?.firstName} ${guestInformation?.lastName}`,
               value: guestInformation.id,
             });
-
             this.userForm.patchValue({
               reservationInformation: reservationInfo,
               instructions: formData.instructions,
               paymentRule: formData.paymentRule,
+              printRate: formData.printRate,
               formData,
             });
 
@@ -468,6 +469,10 @@ export class AddReservationComponent extends BaseReservationComponent
     };
     this.inputControls.offerId.reset();
     this.offersList.records = [];
+  }
+
+  triggerPrintRate(isToggleOn: boolean) {
+    this.inputControls.printRate.patchValue(isToggleOn, { emitEvent: false });
   }
 
   handleEmailInvoice() {

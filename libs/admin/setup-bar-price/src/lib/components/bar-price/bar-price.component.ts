@@ -23,6 +23,9 @@ import { SnackBarService } from '@hospitality-bot/shared/material';
 import { BarPriceFactory } from '../../models/bar-price.model';
 import { BarPriceRatePlan } from '../../constants/barprice.const';
 
+/**
+ * @remarks To be discarded
+ */
 @Component({
   selector: 'hospitality-bot-bar-price',
   templateUrl: './bar-price.component.html',
@@ -43,7 +46,7 @@ export class BarPriceComponent implements OnInit {
   isPreview = false;
   hasPreviewRendered = false;
   @ViewChild('accordion') accordion: Accordion;
-  private valueChangesSubject = new Subject<string[]>(); 
+  private valueChangesSubject = new Subject<string[]>();
 
   constructor(
     private fb: FormBuilder,
@@ -56,7 +59,7 @@ export class BarPriceComponent implements OnInit {
   ngOnInit(): void {
     this.entityId = this.globalFilter.entityId;
     this.barPriceService.resetRoomDetails();
-    this.initRoomTypes(); 
+    this.initRoomTypes();
   }
 
   listenChanges() {
@@ -223,10 +226,10 @@ export class BarPriceComponent implements OnInit {
       return;
     }
     this.hasPreviewRendered = true;
-    this.isPreview = true; 
+    this.isPreview = true;
   }
 
-  saveData(){
+  saveData() {
     this.loading = true;
     const data: UpdateBarPriceRequest = BarPriceFactory.buildRequest(
       this.useForm.getRawValue()
@@ -341,7 +344,7 @@ export class BarPriceComponent implements OnInit {
     return this.useFormControl.barPrices?.controls;
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.barPriceService.resetRoomDetails();
   }
 }

@@ -113,11 +113,38 @@
       </div>
     </ng-container>
   </div>
-  <hospitality-bot-button
-    class="action-btn"
-    label="+ Add More Rooms"
-    (onClick)="addNewField()"
-    [disabled]="formService.disableBtn"
-    variant="text"
-  ></hospitality-bot-button>
+  <div class="btn-wrapper">
+    <hospitality-bot-button
+      *ngIf="isConfirmedBooking"
+      class="action-btn"
+      label="Upgrade Room"
+      (onClick)="openDialog = true"
+      [disabled]="formService.disableBtn"
+      [disabled]="isCheckedout"
+      variant="text"
+    ></hospitality-bot-button>
+    <hospitality-bot-button
+      class="action-btn"
+      label="+ Add More Rooms"
+      (onClick)="addNewField()"
+      [disabled]="formService.disableBtn"
+      variant="text"
+    ></hospitality-bot-button>
+  </div>
 </div>
+
+<p-dialog
+  class="dialog"
+  header="Room Upgrade"
+  [(visible)]="openDialog"
+  [style]="{ width: '60vw' }"
+  [modal]="true"
+>
+  <hospitality-bot-upgrade-room-type
+    (onClose)="openDialog = false"
+    [roomConfig]="{
+      entityId: entityId,
+      queryConfig: getConfig()
+    }"
+  ></hospitality-bot-upgrade-room-type>
+</p-dialog>

@@ -150,6 +150,7 @@ export class InvoiceService extends ApiService {
             isCoupon: item.isDiscount,
             discountType: item?.discountType,
             discountValue: item?.discountValue,
+            isRealised: item?.isRealised,
           }
         : {
             date: item.date,
@@ -162,6 +163,7 @@ export class InvoiceService extends ApiService {
             itemId: item.isNonEditableBillItem ? null : item.itemId,
             taxId: item.taxId,
             isCoupon: item.isDiscount,
+            isRealised: item?.isRealised,
           };
     });
 

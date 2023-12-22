@@ -2,7 +2,7 @@
 
 :host ::ng-deep .input.p-inputtext {
   @include input-default();
-  height: auto;
+  height: auto !important;
 }
 
 :host ::ng-deep .p-inputtext.ng-dirty.ng-invalid {

@@ -118,8 +118,7 @@
       <div class="bk-summary_btn-wrapper">
         <hospitality-bot-button
           *ngIf="
-            reservationId &&
-            reservationInfoControls?.reservationType?.value === 'CONFIRMED'
+            reservationId
           "
           class="btn"
           label="Guest Profile"
@@ -129,7 +128,7 @@
         <hospitality-bot-button
           (click)="handleBooking()"
           label="{{ this.reservationId ? 'Update' : 'Confirm' }} Reservation"
-          [disabled]="disabledForm"
+          [disabled]="disabledForm && !externalBooking"
           [isLoading]="isBooking"
         ></hospitality-bot-button>
       </div>

@@ -1,0 +1,16 @@
+@import 'main';
+
+.form-block {
+  @include form-block;
+}
+
+.one-third-width {
+  flex-basis: 29.33%;
+  width: 29.33%;
+} 
+
+:host ::ng-deep .select {
+  .option-items {
+    overflow: hidden !important;
+  }
+}

@@ -238,6 +238,7 @@
                       tableFormArray.at(rowIndex).get('isDiscount').value ||
                       tableFormArray.at(rowIndex).get('taxId').value ||
                       tableFormArray.at(rowIndex).get('isRefund').value ||
+                      tableFormArray.at(rowIndex).get('isRealised').value ||
                       (tableFormArray.at(rowIndex).get('creditAmount').value &&
                         !tableFormArray.at(rowIndex).get('isDiscount').value)
                     "
@@ -346,6 +347,7 @@
                         .value === 'CREDIT' &&
                         !tableFormArray.at(rowIndex).get('isDiscount').value) ||
                       isInvoiceDisabled ||
+                      tableFormArray.at(rowIndex).get('isRealised').value ||
                       (!tableFormArray.at(rowIndex).get('itemId').value &&
                         !tableFormArray.at(rowIndex).get('isNew').value) ||
                       tableFormArray.at(rowIndex).get('taxId').value ||

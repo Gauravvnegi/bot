@@ -563,3 +563,38 @@
   top: $topPosition;
   z-index: 1;
 }
+
+@mixin tableFrom($noOfItems) {
+  $flexBasisValue: 1 / $noOfItems * 100%;
+  display: flex;
+  align-items: center;
+  padding: 20px 4%;
+  gap: 4%;
+
+  &__wrapper {
+    background-color: white;
+    box-shadow: 0 3px 25px 0 rgba(0, 0, 0, 0.05);
+  }
+
+  &__header {
+    background-color: #f1f2f7;
+    font-size: 16px;
+    color: #787c9e;
+    letter-spacing: 0.96px;
+    font-weight: 600;
+  }
+
+  &__sticky-header {
+    position: sticky;
+    top: 58px;
+    z-index: 1;
+  }
+
+  &__fields {
+    border-bottom: 1px solid rgba(112, 112, 112, 0.35);
+  }
+
+  &__item {
+    flex-basis: $flexBasisValue;
+  }
+}

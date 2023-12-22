@@ -14,6 +14,7 @@ import { GuestInformationComponent } from './components/form-components/guest-in
 import { BookingSummaryComponent } from './components/form-components/booking-summary/booking-summary.component';
 import { ReservationFormWrapperComponent } from './components/reservation-form-wrapper/reservation-form-wrapper.component';
 import { ReservationComponent } from './components/reservation/reservation.component';
+import { UpgradeRoomTypeComponent } from './components/upgrade-room-type/upgrade-room-type.component';
 
 export const adminManageReservationRoutes: Route[] = [
   {
@@ -67,5 +68,6 @@ export class AdminManageReservationRoutingModule {
     BookingSummaryComponent,
     ReservationFormWrapperComponent,
     ReservationComponent,
+    UpgradeRoomTypeComponent,
   ];
 }

@@ -164,6 +164,17 @@
       font-size: 12px;
       color: $secondary;
     }
+    .mute-status {
+      justify-content: flex-end;
+      position: absolute;
+      bottom: -15px;
+      right: -5px;
+      gap: 0.4em;
+      img {
+        height: 1.5em;
+        width: 1.5em;
+      }
+    }
   }
   &_time {
     font-size: 10px;

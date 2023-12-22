@@ -176,8 +176,6 @@ export class NightAuditRevenueReport
   deserialize(value: NightAuditRevenueResponse) {
     this.records = new Array<NightAuditRevenueData>();
 
-    debugger;
-
     //first table
     this.records.push({
       firstCol: 'Revenue List',

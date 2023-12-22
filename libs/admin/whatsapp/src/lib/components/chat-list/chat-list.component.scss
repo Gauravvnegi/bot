@@ -92,3 +92,11 @@
 .cursor-pointer {
   cursor: pointer;
 }
+
+::ng-deep {
+  .p-contextmenu .p-menuitem-link {
+    font-size: 12px;
+    letter-spacing: 0.24px;
+    font-weight: 400;
+  }
+}

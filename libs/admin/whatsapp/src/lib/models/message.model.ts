@@ -106,6 +106,7 @@ export class ContactList {
 }
 
 export class Contact {
+  id: string;
   email: string;
   lastMessageAt: number;
   lastInboundMessageAt: number;
@@ -120,6 +121,8 @@ export class Contact {
   color: string;
   unreadCount: number;
   guestId: string;
+  mute: boolean;
+  important: boolean;
   deserialize(input, timezone) {
     Object.assign(
       this,
@@ -135,6 +138,10 @@ export class Contact {
       set({}, 'unreadCount', get(input, ['unreadCount'])),
       set({}, 'guestId', get(input, ['guestId']))
     );
+
+    this.id = input?.id;
+    this.mute = input?.muted;
+    this.important = input?.important;
     this.descriptionMessage = decodeURIComponent(
       get(input, ['descriptionMessage']) || ''
     );

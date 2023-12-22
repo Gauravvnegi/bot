@@ -23,6 +23,8 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { TabMenuModule } from 'primeng/tabmenu';
 import { AccordionModule } from 'primeng/accordion';
 import { OverlayPanelModule } from 'primeng/overlaypanel';
+import { ContextMenuModule } from 'primeng/contextmenu'; 
+
 
 import { ButtonComponent } from './components/button/button.component';
 import { ComingSoonComponent } from './components/coming-soon/coming-soon.component';
@@ -397,6 +399,7 @@ import { SplitButtonComponent } from './components/split-button/split-button.com
     ConfirmDialogComponent,
     CheckboxComponent,
     SplitButtonComponent,
+    ContextMenuModule,
   ],
 })
 export class AdminSharedModule {}

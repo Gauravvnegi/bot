@@ -13,18 +13,18 @@ const appRoutes: Route[] = [
     path: '',
     component: MainComponent,
     children: [
-      // {
-      //   path: '',
-      //   component: BarPriceComponent,
-      // },
       {
         path: '',
-        redirectTo: 'create',
+        component: BarPriceComponent,
       },
-      {
-        path: 'create',
-        component: SetupBarPriceComponent,
-      },
+      // {
+      //   path: '',
+      //   redirectTo: 'create',
+      // },
+      // {
+      //   path: 'create',
+      //   component: SetupBarPriceComponent,
+      // },
     ],
   },
 ];

@@ -1,15 +1,16 @@
 import { Injectable } from '@angular/core';
 import { Option } from '@hospitality-bot/admin/shared';
 import { ApiService } from '@hospitality-bot/shared/utils';
-import { Observable, of } from 'rxjs';
+import { BehaviorSubject, Observable, of } from 'rxjs';
 import {
   BarPricePlanConfiguration,
-  BarPricePlanFormControl,
-  PlanItem,
+  BarPricePlanFormControlName,
+  ExtraPlanConfigFormData,
   PlanItems,
   PlanOption,
   PlanOptions,
 } from '../types/setup-bar-price.types';
+import { LevelType } from '../constants/setup-bar-price.const';
 
 const ratePlanOptions: PlanOptions = [
   {
@@ -55,20 +56,80 @@ const occupancyPlanOptions: PlanOptions = [
   { label: 'Duodecuple', value: 'DUODECUPLE' },
 ];
 
+const extrasPlanOptions: PlanOption[] = [
+  {
+    label: 'Extra Bed',
+    value: 'EXTRA_BED',
+  },
+  {
+    label: 'Extra Child',
+    value: 'EXTRA_CHILD',
+  },
+];
+
 @Injectable()
-export class SetupBarPriceService extends ApiService {
+export class SetupBarPriceService extends ApiService
+  implements Record<BarPricePlanFormControlName, BehaviorSubject<Option[]>> {
+  ratePlanBar = new BehaviorSubject<Option[]>([]);
+  roomTypeBar = new BehaviorSubject<Option[]>([]);
+  roomOccupancyBar = new BehaviorSubject<Option[]>([]);
+
+  initPlans() {
+    this.roomTypeBar.next(
+      roomTypePlanOptions.map((item) => ({
+        label: item.label,
+        value: item.value,
+      }))
+    );
+
+    this.ratePlanBar.next(
+      ratePlanOptions.map((item) => ({
+        label: item.label,
+        value: item.value,
+      }))
+    );
+
+    this.roomOccupancyBar.next(
+      occupancyPlanOptions.map((item) => ({
+        label: item.label,
+        value: item.value,
+      }))
+    );
+  }
+
   getPlanConfiguration(id?: string): Observable<BarPricePlanConfiguration> {
     return of({
       roomTypeBar: this.getDefaultOption(roomTypePlanOptions),
       ratePlanBar: this.getDefaultOption(ratePlanOptions),
       roomOccupancyBar: this.getDefaultOption(occupancyPlanOptions),
+      extraBar: this.getExtraOption(),
     });
+  }
+
+  getExtraOption(): ExtraPlanConfigFormData {
+    return {
+      level: LevelType.ROOM_TYPE,
+      hotelTypeConfig: extrasPlanOptions.map((item) => ({
+        name: item.label,
+        plan: item.value,
+        price: 0,
+      })),
+      roomTypeConfig: roomTypePlanOptions.map((item) => ({
+        roomType: item.value,
+        roomTypeName: item.label,
+        extraPrice: extrasPlanOptions.map((item) => ({
+          name: item.label,
+          plan: item.value,
+          price: 0,
+        })),
+      })),
+    };
   }
 
   getDefaultOption(plan: PlanOptions): PlanItems {
     const [basePlan, ...restPlan] = plan;
     const basePlanItem: PlanItems[0] = {
-      label: basePlan.label,
+      name: basePlan.label,
       plan: basePlan.value,
       modifierPrice: basePlan.price,
       currency: 'INR',
@@ -80,7 +141,7 @@ export class SetupBarPriceService extends ApiService {
     return [
       basePlanItem,
       ...restPlan.map((item) => ({
-        label: item.label,
+        name: item.label,
         plan: item.value,
         modifierPrice: basePlan.price,
         currency: 'INR',

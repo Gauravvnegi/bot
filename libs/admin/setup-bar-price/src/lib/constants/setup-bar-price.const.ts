@@ -6,3 +6,8 @@ export const setupBarPriceSteps = [
   { label: 'Preview', value: 'PREVIEW' },
   { label: 'Summary', value: 'SUMMARY' },
 ];
+
+export enum LevelType {
+  'ROOM_TYPE' = 'ROOM_TYPE',
+  'HOTEL' = 'HOTEL',
+}

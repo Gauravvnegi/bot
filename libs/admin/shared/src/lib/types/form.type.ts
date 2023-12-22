@@ -1,4 +1,4 @@
-import { AbstractControl } from '@angular/forms';
+import { AbstractControl, FormGroup } from '@angular/forms';
 
 export type InputVariant = 'standard' | 'outlined';
 export type Alignment = 'vertical' | 'horizontal';
@@ -55,7 +55,7 @@ export type AddressData = {
   longitude?: number;
 };
 
-export type FormGroupControls<TFormData> = {
+export type FormGroupControls<TFormData> = FormGroup & {
   controls: Record<keyof TFormData, AbstractControl>;
   value: TFormData;
 };

@@ -223,11 +223,15 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
       this.firebaseMessagingService.receiveMessage().subscribe((payload) => {
         console.log(payload, 'payload message when notification trigger');
         const notificationPayload = payload;
-        this.firebaseMessagingService.playNotificationSound(
-          notificationPayload['data']?.notificationType,
-          notificationPayload['data']?.isBuzz
-        );
         this.getNotificationUnreadCount();
+
+        const isMuted = notificationPayload.data.isMute === 'true';
+
+        !isMuted &&
+          this.firebaseMessagingService.playNotificationSound(
+            notificationPayload['data']?.notificationType,
+            notificationPayload['data']?.isBuzz
+          );
         if (notificationPayload) {
           switch (notificationPayload['data']?.notificationType) {
             case 'Live Request':
@@ -250,7 +254,7 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
             default:
               if (this.checkForMessageRoute())
                 this.firebaseMessagingService.currentMessage.next(payload);
-              else if (Object.keys(payload).length) {
+              else if (Object.keys(payload).length && !isMuted) {
                 this.firebaseMessagingService.showNotificationAsSnackBar(
                   payload
                 );

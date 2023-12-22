@@ -73,6 +73,21 @@
         <div class="content-wrap-job-duration">JD: {{ taskStatus?.jd }}m</div>
       </div>
     </div>
+
+    <div class="content-wrap" *ngIf="important || muted">
+      <div class="content-wrap-r2 mute-status">
+        <!-- for message mute and important -->
+
+        <img *ngIf="important" src="assets/images/important-img.png" alt="" />
+
+        <!-- <i *ngIf="important" class="pi pi-star"></i> -->
+
+        <img *ngIf="muted" src="assets/images/mute-img.png" alt="" />
+
+        <!-- <i *ngIf="muted" class="pi pi-volume-off"></i> -->
+      </div>
+    </div>
+
     <div
       class="card-wrapper_information_department"
       *ngIf="cardType === 'feedback' || department"

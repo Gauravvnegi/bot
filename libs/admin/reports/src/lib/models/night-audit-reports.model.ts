@@ -14,7 +14,11 @@ import {
   NightAuditRevenueData,
   NightAuditRevenueResponse,
 } from '../types/night-audit-reports.types';
-import { ReportClass } from '../types/reports.types';
+import { ReportClass, RowStyles } from '../types/reports.types';
+import {
+  convertToNormalCase,
+  toCurrency,
+} from 'libs/admin/shared/src/lib/utils/valueFormatter';
 
 export class AuditRoomDetailsReport
   implements ReportClass<AuditRoomDetailsReportData, any> {
@@ -72,9 +76,8 @@ export class AuditTaxReport
       ...groupedData.values(),
       {
         taxName: 'Total Tax',
-        taxAmount: totalTaxAmount,
-        isBlackBg: true,
-        isBold: true,
+        taxAmount: toCurrency(totalTaxAmount) as any,
+        isSubTotal: true,
       },
     ];
 
@@ -167,12 +170,106 @@ export class MtdAndYtdReport
 
 //nightAuditRevenue
 export class NightAuditRevenueReport
-  implements ReportClass<NightAuditRevenueData, NightAuditRevenueResponse[]> {
+  implements ReportClass<NightAuditRevenueData, NightAuditRevenueResponse> {
   records: NightAuditRevenueData[];
 
-  deserialize(value: NightAuditRevenueResponse[]) {
+  deserialize(value: NightAuditRevenueResponse) {
     this.records = new Array<NightAuditRevenueData>();
+
+    //first table
+    this.records.push({
+      firstCol: 'Revenue List',
+      secondCol: 'Amount',
+      thirdCol: ' ',
+      fourthCol: ' ',
+      fifthCol: ' ',
+      isHeader: true,
+    } as any);
+
+    const revenueListData = value?.auditData;
+    let totalRevenueAmount = 0;
+    revenueListData
+      ? revenueListRows.forEach((row) => {
+          totalRevenueAmount += revenueListData[row?.name] ?? 0;
+          this.records.push({
+            firstCol: row?.label,
+            secondCol: toCurrency(revenueListData[row?.name]),
+            thirdCol: ' ',
+            fourthCol: ' ',
+            fifthCol: ' ',
+          });
+        })
+      : this.records.push(empty);
+
+    this.records.push({
+      firstCol: 'Total',
+      secondCol: toCurrency(totalRevenueAmount),
+      thirdCol: ' ',
+      fourthCol: ' ',
+      fifthCol: ' ',
+      isSubTotal: true,
+    } as any);
+
+    //second table
+    this.records.push({
+      firstCol: 'Inclusion Name',
+      secondCol: 'Quantity',
+      thirdCol: 'Total Price',
+      fourthCol: 'Total Tax',
+      fifthCol: 'Amount',
+      isHeader: true,
+    } as any);
+    value?.itemPayments?.length
+      ? value?.itemPayments.forEach((data) => {
+          this.records.push({
+            firstCol: data.description,
+            secondCol: data.quantity,
+            thirdCol: toCurrency(null),
+            fourthCol: toCurrency(data?.totalTaxAmount),
+            fifthCol: toCurrency(data?.amount),
+          });
+        })
+      : this.records.push(empty);
+
+    //third table
+    this.records.push({
+      firstCol: ' ',
+      secondCol: 'Booking Revenue',
+      thirdCol: 'Amount',
+      fourthCol: ' ',
+      fifthCol: ' ',
+      isHeader: true,
+    } as any);
+
+    value?.bookingRevenue
+      ? Object.keys(value?.bookingRevenue).forEach((key) => {
+          const data = value?.bookingRevenue[key];
+
+          this.records.push({
+            firstCol: ' ',
+            secondCol: convertToNormalCase(key),
+            thirdCol: data,
+            fourthCol: ' ',
+            fifthCol: ' ',
+          });
+        })
+      : this.records.push({ ...empty });
 
     return this;
   }
 }
+
+const revenueListRows = [
+  { label: 'Room Revenue(Excluding Tax)', name: 'roomRevenue' },
+  { label: 'Cancellation Charge', name: 'cancellationCharge' },
+  { label: 'No Shows Revenue', name: 'noShowReservationAmount' },
+  { label: 'Add Ons', name: 'addOns' },
+];
+
+const empty = {
+  firstCol: undefined,
+  secondCol: undefined,
+  thirdCol: undefined,
+  fourthCol: undefined,
+  fifthCol: undefined,
+};

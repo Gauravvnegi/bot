@@ -236,7 +236,7 @@ export class MonthlySummary extends RowStyles {
   directSaleTax: string;
   grossTotal: string;
   deserialize(input: MonthlySummaryReportResponse, isSubTotal?: boolean) {
-    this.day = isSubTotal ? ' ' : getFormattedDate(input?.date);
+    this.day = isSubTotal ? 'Total' : getFormattedDate(input?.date);
     this.roomCount = input.totalRooms;
     this.occupancy = input.occupancyPercentage + '%';
     this.avgDailyRateIncludeInclusion = toCurrency(input?.averageRateIncl);
@@ -247,8 +247,7 @@ export class MonthlySummary extends RowStyles {
     this.directSales = toCurrency(0);
     this.directSaleTax = toCurrency(0);
     this.grossTotal = toCurrency(input.grossTotal);
-    this.isBold = isSubTotal ? true : undefined;
-    this.isGreyBg = isSubTotal ? true : undefined;
+    this.isSubTotal = isSubTotal;
     return this;
   }
 }
@@ -296,9 +295,9 @@ export class DailyRevenueReport
             // adj: ' ',
             today: ' ',
             month: ' ',
-            year: ' ',
-            isBold: true,
-            isBlueBg: true,
+          year: ' ',
+            //@ts-ignore
+            isHeader: true,
           })
         : this.records.push({
             emptyCell: item.label,
@@ -307,9 +306,8 @@ export class DailyRevenueReport
             today: toCurrency(dayData[item.name]),
             month: toCurrency(monthData[item.name]),
             year: toCurrency(yearData[item.name]),
-            isBold: dailyRevenueReportSubTotalRows.includes(item.name),
-            isGreyBg: dailyRevenueReportSubTotalRows.includes(item.name),
-            isBlackBg: item.name === 'totalPayable',
+            isTotal: dailyRevenueReportSubTotalRows.includes(item.name),
+            isSubTotal: item.name === 'totalPayable',
           });
     });
 

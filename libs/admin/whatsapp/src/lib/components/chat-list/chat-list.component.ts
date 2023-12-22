@@ -21,6 +21,8 @@ import { Subscription } from 'rxjs';
 import { debounceTime, filter } from 'rxjs/operators';
 import { ContactList, IContactList } from '../../models/message.model';
 import { MessageService } from '../../services/messages.service';
+import { MenuItem } from 'libs/admin/all-outlets/src/lib/models/outlet.model';
+import { convertToNormalCase } from 'libs/admin/shared/src/lib/utils/valueFormatter';
 
 @Component({
   selector: 'hospitality-bot-chat-list',
@@ -139,19 +141,17 @@ export class ChatListComponent implements OnInit, OnDestroy {
             },
           ])
         )
-        .subscribe(
-          (response) => {
-            if (updatePagination) this.updatePagination(response.length);
-            this.chatList = new ContactList().deserialize(
-              response,
-              this.globalFilterService.timezone
-            );
-            this.messageService.setWhatsappUnreadContactCount(
-              this.chatList.unreadContacts
-            );
-            if (this.selected) this.markChatAsRead(this.selected);
-          }          
-        )
+        .subscribe((response) => {
+          if (updatePagination) this.updatePagination(response.length);
+          this.chatList = new ContactList().deserialize(
+            response,
+            this.globalFilterService.timezone
+          );
+          this.messageService.setWhatsappUnreadContactCount(
+            this.chatList.unreadContacts
+          );
+          if (this.selected) this.markChatAsRead(this.selected);
+        })
     );
   }
 
@@ -174,15 +174,13 @@ export class ChatListComponent implements OnInit, OnDestroy {
     if (this.chatList.contacts[index].unreadCount) {
       this.messageService
         .markAsRead(this.entityId, value.receiverId, { unreadCount: 0 })
-        .subscribe(
-          (response) => {
-            this.chatList.contacts[index].unreadCount = response.unreadCount;
-            this.chatList.unreadContacts -= 1;
-            this.messageService.setWhatsappUnreadContactCount(
-              this.chatList.unreadContacts
-            );
-          }
-        );
+        .subscribe((response) => {
+          this.chatList.contacts[index].unreadCount = response.unreadCount;
+          this.chatList.unreadContacts -= 1;
+          this.messageService.setWhatsappUnreadContactCount(
+            this.chatList.unreadContacts
+          );
+        });
     }
   }
 
@@ -207,35 +205,33 @@ export class ChatListComponent implements OnInit, OnDestroy {
             },
           ])
         )
-        .subscribe(
-          (response) => {
-            if (response) {
-              this.updatePagination(response.length);
+        .subscribe((response) => {
+          if (response) {
+            this.updatePagination(response.length);
 
-              this.chatList = new ContactList().deserialize(
-                response,
-                this.globalFilterService.timezone
-              );
-              if (this.autoSearched) {
-                this.selectedChat.emit({ value: this.chatList.contacts[0] });
-              }
-            } else {
-              this.chatList = new ContactList().deserialize(
-                [],
-                this.globalFilterService.timezone
-              );
-              this.snackbarService.openSnackBarWithTranslate(
-                {
-                  translateKey: `messages.SUCCESS.NO_CONTACT_FOUND`,
-                  priorityMessage: `No contact found with search key: ${searchKey}!`,
-                },
-                '',
-                { panelClass: 'success' }
-              );
-              this.autoSearched = false;
+            this.chatList = new ContactList().deserialize(
+              response,
+              this.globalFilterService.timezone
+            );
+            if (this.autoSearched) {
+              this.selectedChat.emit({ value: this.chatList.contacts[0] });
             }
-          }          
-        )
+          } else {
+            this.chatList = new ContactList().deserialize(
+              [],
+              this.globalFilterService.timezone
+            );
+            this.snackbarService.openSnackBarWithTranslate(
+              {
+                translateKey: `messages.SUCCESS.NO_CONTACT_FOUND`,
+                priorityMessage: `No contact found with search key: ${searchKey}!`,
+              },
+              '',
+              { panelClass: 'success' }
+            );
+            this.autoSearched = false;
+          }
+        })
     );
   }
 
@@ -277,7 +273,102 @@ export class ChatListComponent implements OnInit, OnDestroy {
     );
   }
 
+  contextOptions: ContextmenuOptions[] = [];
+  handelContextMenu(contact) {
+    this.contextOptions = [
+      !!contact?.important
+        ? {
+            label: 'Mark as unimportant',
+            name: 'UNIMPORTANT',
+            command: () =>
+              this.handleRightClick({
+                name: 'UNIMPORTANT',
+                id: contact?.receiverId,
+              }),
+          }
+        : {
+            label: 'Mark as important',
+            name: 'IMPORTANT',
+            command: () =>
+              this.handleRightClick({
+                name: 'IMPORTANT',
+                id: contact?.receiverId,
+              }),
+          },
+      !!contact?.mute
+        ? {
+            label: 'Unmute',
+            name: 'UNMUTE',
+            command: () =>
+              this.handleRightClick({
+                name: 'UNMUTE',
+                id: contact?.receiverId,
+              }),
+          }
+        : {
+            label: 'Mute',
+            name: 'MUTE',
+            command: () =>
+              this.handleRightClick({ name: 'MUTE', id: contact?.receiverId }),
+          },
+    ];
+  }
+
+  handleRightClick(data: { name: ContextmenuName; id: string }) {
+    const { name, id } = data || {};
+
+    switch (name) {
+      case 'IMPORTANT':
+        this.handleMarking(id, true, 'markAsImportant');
+        break;
+
+      case 'UNIMPORTANT':
+        this.handleMarking(id, false, 'markAsImportant');
+        break;
+
+      case 'MUTE':
+        this.handleMarking(id, true, 'markAsMute');
+        break;
+
+      case 'UNMUTE':
+        this.handleMarking(id, false, 'markAsMute');
+        break;
+    }
+  }
+
+  handleMarking(
+    id: string,
+    value: boolean,
+    method: 'markAsMute' | 'markAsImportant'
+  ) {
+    const key = method === 'markAsImportant' ? 'important' : 'mute';
+    const options = {
+      [key]: value,
+    };
+
+    this.messageService[method](this.entityId, id, options).subscribe((res) => {
+      this.chatList.contacts.forEach((item) => {
+        if (item?.receiverId === id) {
+          item[key] = options[key];
+        }
+      });
+
+      this.snackbarService.openSnackBarAsText('Status Updated', '', {
+        panelClass: 'success',
+      });
+    });
+  }
+
   ngOnDestroy(): void {
     this.$subscription.unsubscribe();
   }
 }
+
+type ContextmenuName = 'IMPORTANT' | 'MUTE' | 'UNMUTE' | 'UNIMPORTANT';
+
+type ContextmenuOptions = {
+  name: ContextmenuName;
+  label: string;
+  icon?: string;
+  command: () => void;
+};

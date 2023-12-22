@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 import {
   convertToNormalCase,
@@ -11,6 +11,7 @@ import {
   styleUrls: ['./chat-card.component.scss'],
 })
 export class ChatCardComponent implements OnInit {
+  id: string;
   cardType?: string;
   roomNo?: string;
   userImg?: any;
@@ -28,6 +29,8 @@ export class ChatCardComponent implements OnInit {
   feedbackType?: string;
   profileNickName?: string;
   backgroundColor?: any;
+  important: boolean;
+  muted: boolean;
 
   readonly convertToTitleCase = convertToTitleCase;
 
@@ -89,4 +92,12 @@ type Content = {
   feedbackType?: string;
   profileNickName?: string;
   backgroundColor?: any;
+  muted: boolean;
+  important: boolean;
+};
+
+export type ContextMenuOption = {
+  name: string;
+  label: string;
+  icon: string;
 };

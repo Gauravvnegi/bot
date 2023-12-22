@@ -61,6 +61,20 @@ export class MessageService extends ApiService {
     );
   }
 
+  markAsImportant(entityId: string, contactId: string, data): Observable<any> {
+    return this.patch(
+      `/api/v1/entity/${entityId}/conversations/${contactId}/important`,
+      data
+    );
+  }
+
+  markAsMute(entityId: string, contactId: string, data): Observable<any> {
+    return this.patch(
+      `/api/v1/entity/${entityId}/conversations/${contactId}/mute`,
+      data
+    );
+  }
+
   downloadDocuments(url) {
     return this.get(`/api/v1/download?url=${url}`, {
       responseType: 'blob',

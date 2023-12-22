@@ -253,11 +253,11 @@ export class QuickReservationFormComponent implements OnInit {
       guestData: Option;
     } = this.userForm.getRawValue();
     roomTypeData.guestData = {
-      label: this.selectedGuest.label,
-      value: this.selectedGuest.value,
+      label: this.selectedGuest?.label,
+      value: this.selectedGuest?.value,
     };
     roomTypeData.roomInformation.roomCount =
-      roomTypeData?.roomInformation?.roomNumbers.length ?? 1;
+      roomTypeData?.roomInformation?.roomNumbers?.length ?? 1;
     roomTypeData.agent = this.bookingInfo?.selectedAgent;
     roomTypeData.company = this.bookingInfo?.selectedCompany;
 

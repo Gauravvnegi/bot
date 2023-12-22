@@ -550,6 +550,7 @@ export class InvoiceComponent implements OnInit {
       isRefund: [false],
       discountType: [''],
       discountValue: [0],
+      isRealised: [false],
     };
 
     const formGroup = this.fb.group(data);
@@ -1322,6 +1323,7 @@ export class InvoiceComponent implements OnInit {
               date: item.control.value.date,
               discountType: res.discountType,
               discountValue: res.discountValue,
+              isRealised: item.control.value.isRealised,
             });
           });
         } else
@@ -1375,6 +1377,7 @@ export class InvoiceComponent implements OnInit {
     type: ChargesType;
     discountType?: string;
     discountValue?: number;
+    isRealised?: boolean;
   }) {
     const {
       type,
@@ -1385,6 +1388,7 @@ export class InvoiceComponent implements OnInit {
       transactionType,
       discountType,
       discountValue,
+      isRealised,
     } = {
       ...settings,
     };
@@ -1438,6 +1442,7 @@ export class InvoiceComponent implements OnInit {
         ? {
             discountType: discountType, // Replace with your actual value
             discountValue: discountValue, // Replace with your actual value
+            isRealised: isRealised,
           }
         : {}),
     };

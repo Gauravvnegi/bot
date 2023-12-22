@@ -230,11 +230,10 @@ export class FormComponent implements OnInit {
     const validators = this.inputControl?.validator;
     const isRequired =
       validators && validators({} as AbstractControl)?.required;
-    if (this.label && isRequired) {
+    if (this.label && isRequired && !this.label.includes('*'))
       this.label = this.label + ' *';
-    } else {
+    if (this.label && this.label.includes('*') && !isRequired)
       this.label = this.label.replace('*', '');
-    }
   }
 
   /**

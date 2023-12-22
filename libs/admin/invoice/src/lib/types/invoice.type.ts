@@ -17,6 +17,7 @@ export type BillItem = {
   taxId?: string;
   isCoupon?: boolean;
   isRefund?: boolean;
+  isRealised?: boolean;
 };
 
 export type CompanyDetails = {

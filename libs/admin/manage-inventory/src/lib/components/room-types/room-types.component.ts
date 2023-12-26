@@ -5,7 +5,7 @@ import { ControlContainer } from '@angular/forms';
 import { ChannelManagerFormService } from '../../services/channel-manager-form.service';
 import { Subscription } from 'rxjs';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
-import { RoomTypes } from '../../models/bulk-update.models';
+import { RoomTypes } from 'libs/admin/channel-manager/src/lib/models/bulk-update.models';
 
 @Component({
   selector: 'hospitality-bot-room-types',

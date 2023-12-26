@@ -31,7 +31,11 @@ import {
   DynamicPricingFactory,
   DynamicPricingHandler,
 } from '../../models/dynamic-pricing.model';
-import { BarPriceService, isDirty } from '../../services/bar-price.service';
+import {
+  BarPriceService,
+  isDirty,
+  markupValidator,
+} from '../../services/bar-price.service';
 import { DynamicPricingService } from '../../services/dynamic-pricing.service';
 import {
   ConfigCategory,
@@ -268,7 +272,7 @@ export class OccupancyComponent implements OnInit {
   }
 
   get seasonOccupancyFG(): FormGroup {
-    const seasonForm = this.fb.group({
+    const levelFG = this.fb.group({
       id: [],
       basePrice: [this.rooms.find((item) => item.isBase).price],
       start: [
@@ -281,24 +285,8 @@ export class OccupancyComponent implements OnInit {
       rate: [, [Validators.min(0), Validators.required]],
     });
 
-    seasonForm.get('isMarkup').valueChanges.subscribe((res) => {
-      const discount = seasonForm.get('discount');
-      if (res) {
-        discount.setValidators([Validators.min(0), Validators.required]);
-      } else {
-        discount.setValidators([
-          Validators.max(100),
-          Validators.min(0),
-          Validators.required,
-        ]);
-      }
-      discount.updateValueAndValidity();
-
-      if (discount.value || discount.value === 0) {
-        discount.markAllAsTouched();
-      }
-    });
-    return seasonForm;
+    markupValidator(levelFG);
+    return levelFG;
   }
 
   remove(

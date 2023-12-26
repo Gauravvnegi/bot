@@ -9,7 +9,7 @@ export class ChannelManagerFormService {
   isRoomDetailsLoaded = false;
   roomDetails = new BehaviorSubject<RoomTypes[]>([]);
 
-  constructor(private channelMangerService: ChannelManagerService) {}
+  constructor(public channelMangerService: ChannelManagerService) {}
 
   reset() {
     this.isRoomDetailsLoaded = false;

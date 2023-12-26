@@ -3,7 +3,7 @@ import {
   RoomTypes,
   UpdatedEmitType,
   Variant,
-} from '../../types/bulk-update.types';
+} from 'libs/admin/channel-manager/src/lib/types/bulk-update.types';
 import {
   ControlContainer,
   FormArray,

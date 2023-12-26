@@ -15,23 +15,28 @@ import {
   inventoryRestrictions,
   RestrictionAndValuesOption,
   restrictionsRecord,
-} from '../../constants/data';
+} from 'libs/admin/channel-manager/src/lib/constants/data';
 import { ChannelManagerFormService } from '../../services/channel-manager-form.service';
-import { DateOption } from '../../types/channel-manager.types';
-import { RoomTypes, getWeekendBG } from '../../models/bulk-update.models';
+import { DateOption } from 'libs/admin/channel-manager/src/lib/types/channel-manager.types';
+import {
+  RoomTypes,
+  getWeekendBG,
+} from 'libs/admin/channel-manager/src/lib/models/bulk-update.models';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { Subscription } from 'rxjs';
 import { ChannelManagerService } from '../../services/channel-manager.service';
 import * as moment from 'moment';
-import { UpdateInventory } from '../../models/channel-manager.model';
+import { UpdateInventory } from 'libs/admin/channel-manager/src/lib/models/channel-manager.model';
 import { debounceTime, tap } from 'rxjs/operators';
-import { UpdateInventoryResponse } from '../../types/response.type';
+import { UpdateInventoryResponse } from 'libs/admin/channel-manager/src/lib/types/response.type';
 
 @Component({
   selector: 'hospitality-bot-update-inventory',
   templateUrl: './update-inventory.component.html',
-  styleUrls: ['../update-rates/update-rates.component.scss'],
+  styleUrls: [
+    '../../../../../manage-rate/src/lib/components/update-rates/update-rates.component.scss',
+  ],
 })
 export class UpdateInventoryComponent implements OnInit {
   readonly restrictionsRecord = restrictionsRecord;

@@ -86,6 +86,7 @@ export class RoomTypes {
   value: string;
   channels: Channel[];
   price: number;
+  isBaseRoomType: boolean;
   roomCount: number;
   isBase: boolean;
   ratePlans: RatePlans[];
@@ -104,8 +105,11 @@ export class RoomTypes {
     this.roomCount = input.roomCount;
     this.pricingDetails = input.pricingDetails;
     this.ratePlans =
-      inputRatePlan.map((item) => new RatePlans().deserialize(item)) ?? [];
+      inputRatePlan.map((item) =>
+        new RatePlans().deserialize(item, input.pricingDetails.base)
+      ) ?? [];
     // Filter Room who have not any rate plan for channel-manager
+    this.isBaseRoomType = input.isBaseRoomType ?? false;
     return isChannelManager && !this.ratePlans.length ? null : this;
   }
 }
@@ -116,14 +120,16 @@ export class RatePlans {
   label: string;
   value: string;
   isBase: boolean;
+  basePrice: number;
   variablePrice: number;
   channels: Channel[];
-  deserialize(input) {
+  deserialize(input, basePrice) {
     this.type = input.label ?? '';
     this.label = input.label ?? '';
     this.value = input.id ?? '';
     this.id = input.id ?? '';
     this.isBase = input.isBase ?? false;
+    this.basePrice = basePrice;
     this.variablePrice = input.variablePrice;
     this.channels = [];
     return this;

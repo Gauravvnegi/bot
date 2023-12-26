@@ -1,14 +1,17 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { FormComponent } from 'libs/admin/shared/src/lib/components/form-component/form.components';
 import { ControlContainer, FormGroup, Validators } from '@angular/forms';
-import { updateItems, weeks } from '../constants/bulkupdate-response';
+import {
+  updateItems,
+  weeks,
+} from 'libs/admin/channel-manager/src/lib/constants/bulkupdate-response';
 import { RoomTypeOption } from 'libs/admin/room/src/lib/types/room';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { Subscription } from 'rxjs';
 import {
   RestrictionAndValuesOption,
   restrictionsRecord,
-} from '../../constants/data';
+} from 'libs/admin/channel-manager/src/lib/constants/data';
 @Component({
   selector: 'hospitality-bot-bulk-update-form',
   templateUrl: './bulk-update-form.component.html',

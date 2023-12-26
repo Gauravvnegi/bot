@@ -18,7 +18,7 @@ export const sharedConfig = {
 };
 
 export const fileUploadConfiguration = {
-  image: ['png', 'jpg', 'jpeg', 'gif', 'eps', 'webp'],
+  image: ['png', 'jpg', 'jpeg', 'gif', 'eps', 'webp', 'PNG'],
   video: ['mp4', 'MPEG', 'MOV', 'AVI', 'MKV'],
   docs: ['pdf', 'csv'],
 };

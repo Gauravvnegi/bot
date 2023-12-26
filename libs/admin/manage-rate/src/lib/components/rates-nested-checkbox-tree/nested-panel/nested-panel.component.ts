@@ -1,5 +1,8 @@
 import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
-import { RoomTypes, UpdatedEmitType } from '../../../types/bulk-update.types';
+import {
+  RoomTypes,
+  UpdatedEmitType,
+} from 'libs/admin/channel-manager/src/lib//types/bulk-update.types';
 
 @Component({
   selector: 'hospitality-bot-nested-panel',

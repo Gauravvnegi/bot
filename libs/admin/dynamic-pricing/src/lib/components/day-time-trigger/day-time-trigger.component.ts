@@ -41,7 +41,7 @@ import {
 import { ModalComponent } from 'libs/admin/shared/src/lib/components/modal/modal.component';
 import { MatDialogConfig } from '@angular/material/dialog';
 import { Accordion } from 'primeng/accordion';
-import { isDirty } from '../../services/bar-price.service';
+import { isDirty, markupValidator } from '../../services/bar-price.service';
 
 @Component({
   selector: 'hospitality-bot-day-time-trigger',
@@ -186,7 +186,7 @@ export class DayTimeTriggerComponent implements OnInit {
   }
 
   getLevelFG(): FormGroup {
-    return this.fb.group(
+    const levelFG = this.fb.group(
       {
         id: [],
         fromTime: ['', [Validators.required]],
@@ -198,6 +198,9 @@ export class DayTimeTriggerComponent implements OnInit {
       },
       { validators: this.dynamicPricingService.triggerLevelValidator }
     );
+
+    markupValidator(levelFG);
+    return levelFG;
   }
 
   modifyLevelFG(
@@ -335,18 +338,12 @@ export class DayTimeTriggerComponent implements OnInit {
         discount,
       } = levelFG.controls;
 
-      isMarkup.valueChanges.subscribe((res) => {
-        if (res) {
-          discount.setValidators([Validators.min(0), Validators.required]);
-        } else {
-          discount.setValidators([
-            Validators.max(100),
-            Validators.min(0),
-            Validators.required,
-          ]);
-        }
-        discount.updateValueAndValidity();
-      });
+      const makeConfigDirty = () => {
+        hotelConfig.markAsDirty();
+      };
+
+      isMarkup.valueChanges.subscribe(makeConfigDirty);
+      discount.valueChanges.subscribe(makeConfigDirty);
 
       start.valueChanges.subscribe((res) => {
         validateConfig(levelsFA);

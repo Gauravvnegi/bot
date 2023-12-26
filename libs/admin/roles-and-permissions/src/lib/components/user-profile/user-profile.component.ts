@@ -19,10 +19,13 @@ import {
 } from '@hospitality-bot/admin/shared';
 import { HotelDetailService } from 'libs/admin/shared/src/lib/services/hotel-detail.service';
 import { ModalService, SnackBarService } from 'libs/shared/material/src';
-import { UserConfig } from '../../../../../shared/src/lib/models/userConfig.model';
+import {
+  PermissionOption,
+  UserConfig,
+} from '../../../../../shared/src/lib/models/userConfig.model';
 import { managePermissionRoutes, navRoute } from '../../constants/routes';
 import { ManagePermissionService } from '../../services/manage-permission.service';
-import { PageState, Permission, PermissionMod, UserForm } from '../../types';
+import { PageState, PermissionMod, UserForm } from '../../types';
 import { UserPermissionDatatableComponent } from '../user-permission-datatable/user-permission-datatable.component';
 import { UserPermissionTable } from '../../models/user-permission-table.model';
 import {
@@ -67,8 +70,8 @@ export class UserProfileComponent implements OnInit {
 
   @Output() optionChange = new EventEmitter();
 
-  adminPermissions: Permission[];
-  userPermissions: Permission[];
+  adminPermissions: PermissionOption[];
+  userPermissions: PermissionOption[];
 
   pageTitle: string;
   navRoutes: NavRouteOptions = [];
@@ -388,7 +391,7 @@ export class UserProfileComponent implements OnInit {
       });
   }
 
-  constructPermission(config: Permission) {
+  constructPermission(config: PermissionOption) {
     const view = config.permissions.view;
     const manage = config.permissions.manage;
     const disabledPermissions = [
@@ -470,6 +473,7 @@ export class UserProfileComponent implements OnInit {
           label: [config.label],
           permissions: this.constructPermission(config),
           productType: [config.productType],
+          id: [config.id],
         })
       );
     });
@@ -539,11 +543,13 @@ export class UserProfileComponent implements OnInit {
       return;
     }
     const formValue = this.userForm.getRawValue();
-    const permissionConfigs: Permission[] = [];
+    console.log(formValue, 'formValue');
+
+    const permissionConfigs: PermissionOption[] = [];
 
     formValue.permissionConfigs.forEach((config: PermissionMod) => {
       const { permissions, ...rest } = config;
-      const permission: Permission = {
+      const permission: PermissionOption = {
         ...rest,
         permissions: {
           view: permissions.disabledPermissions.view
@@ -562,10 +568,13 @@ export class UserProfileComponent implements OnInit {
       permissionConfigs.push(permission);
     });
 
-    const data = this._managePermissionService.modifyPermissionDetailsForEdit({
-      ...formValue,
-      permissionConfigs,
-    });
+    const data = this._managePermissionService.modifyPermissionDetailsForEdit(
+      {
+        ...formValue,
+        permissionConfigs,
+      },
+      this.adminToModDetails
+    );
 
     const userProfileData = this._managePermissionService.modifyUserDetailsForEdit(
       formValue

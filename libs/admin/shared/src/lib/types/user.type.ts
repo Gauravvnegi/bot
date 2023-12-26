@@ -102,7 +102,6 @@ export type UserResponse = {
   lastName: string;
   email: string;
   title: string;
-  otpVerified: boolean;
   cc: string;
   phoneNumber: string;
   // hotelAccess: { brands: Brand[] };
@@ -129,6 +128,7 @@ type ProductPermission = {
   module: PermissionModuleNames;
   label: string;
   permissions: PermissionConfig;
+  productType: string;
 };
 
 type Product = {

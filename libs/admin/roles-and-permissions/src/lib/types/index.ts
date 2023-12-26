@@ -1,17 +1,8 @@
+import { PermissionOption } from '@hospitality-bot/admin/shared';
 import { managePermissionRoutes } from '../constants/routes';
 
-export type Permission = {
-  module: string;
-  label: string;
-  permissions: {
-    manage: -1 | 0 | 1;
-    view: -1 | 0 | 1;
-  };
-  productType: string;
-};
-
-export type PermissionMod = Permission & {
-  permissions: Permission['permissions'] & {
+export type PermissionMod = PermissionOption & {
+  permissions: PermissionOption['permissions'] & {
     disabledPermissions: {
       view: boolean;
       manage: boolean;

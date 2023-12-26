@@ -9,7 +9,7 @@ import { tokensConfig } from '../constants/common';
 import { PermissionModuleNames } from '../constants';
 
 type ProductOption = Option<ProductNames, { id: string }>;
-type PermissionOption = {
+export type PermissionOption = {
   id: string;
   module: PermissionModuleNames;
   label: string;
@@ -62,9 +62,8 @@ export class UserConfig implements IDeserializable {
   id: string;
   firstName: string;
   lastName: string;
-  products: { label: string; value: string }[];
+  products: ProductsPermissions['products'];
   permissionConfigs: ProductsPermissions['permission'];
-  product: ProductsPermissions['products'];
   jobTitle: string;
   brandName: string;
   branchName: string;

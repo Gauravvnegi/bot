@@ -350,7 +350,7 @@ export class UserSubscriptionPermission {
     input['products'].forEach((productItem) => {
       this.productPermission.push(productItem.module);
 
-      this.permission = productItem.productPermissions.reduce(
+      const newPermission = productItem.productPermissions.reduce(
         (value, current) => {
           value = {
             ...value,
@@ -364,6 +364,11 @@ export class UserSubscriptionPermission {
         },
         {}
       );
+
+      this.permission = {
+        ...this.permission,
+        ...newPermission,
+      };
     });
 
     return this;

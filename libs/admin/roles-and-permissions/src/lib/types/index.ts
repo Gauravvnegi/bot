@@ -27,22 +27,6 @@ export type QueryConfig = {
   entityId?: string;
 };
 
-export type Department = {
-  parentId: string;
-  id: string;
-  view: -1 | 0 | 1;
-  manage: -1 | 0 | 1;
-  module: string;
-  department: string;
-  entityId: string;
-  userId: string;
-  created: number;
-  updated: number;
-  productType: string;
-  departmentLabel: string;
-  productLabel: string;
-};
-
 export type HotelAccess = {
   brands: {
     id: string;

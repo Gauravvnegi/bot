@@ -80,6 +80,22 @@ export type Sites = {
   domainConnected: boolean;
 };
 
+export type DepartmentRes = {
+  parentId: string;
+  id: string;
+  view: -1 | 0 | 1;
+  manage: -1 | 0 | 1;
+  module: string;
+  department: string;
+  entityId: string;
+  userId: string;
+  created: number;
+  updated: number;
+  productType: string;
+  departmentLabel: string;
+  productLabel: string;
+};
+
 export type UserResponse = {
   id: string;
   firstName: string;
@@ -91,8 +107,9 @@ export type UserResponse = {
   phoneNumber: string;
   // hotelAccess: { brands: Brand[] };
   products: Product[];
+  departments?: DepartmentRes[];
   status: boolean;
-  parentId?: boolean;
+  parentId?: string;
   profileUrl?: string;
 
   sites: Sites[];

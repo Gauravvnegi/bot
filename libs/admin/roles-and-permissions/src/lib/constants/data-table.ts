@@ -11,11 +11,6 @@ export const cols: Cols[] = [
     searchField: ['firstName', 'getContactDetails', 'email'],
   },
   {
-    field: 'departments',
-    header: 'Department',
-    sortType: 'string',
-  },
-  {
     field: 'jobTitle',
     header: 'Job title',
     sortType: 'string',

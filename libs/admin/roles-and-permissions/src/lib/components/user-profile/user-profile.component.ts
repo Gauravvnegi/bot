@@ -39,7 +39,6 @@ import {
 export class UserProfileComponent implements OnInit {
   loggedInUserId: string;
 
-  departments: Option[];
   products: Option[];
   brandNames: Option[];
   branchNames: Option[];
@@ -140,16 +139,6 @@ export class UserProfileComponent implements OnInit {
           this.adminToModDetails = new UserConfig().deserialize(data);
           this.products = this.adminToModDetails.products;
 
-          /**
-           * Department flow is commented as no clarity of now - TO DO
-           */
-          // this.departments = this.adminToModDetails.departments;
-          this.departments = this.adminToModDetails.departments.map((item) => ({
-            ...item,
-            label: item.departmentLabel,
-            value: item.department,
-          }));
-
           const { permissionConfigs } = this._userService.userDetails;
           this.adminPermissions = permissionConfigs;
           this.initStateSubscription();
@@ -184,12 +173,7 @@ export class UserProfileComponent implements OnInit {
   }
 
   initFormValues() {
-    const {
-      departments,
-      products,
-      branchName,
-      ...rest
-    } = this.userToModDetails;
+    const { products, branchName, ...rest } = this.userToModDetails;
 
     this.userForm.patchValue({
       ...rest,
@@ -198,7 +182,7 @@ export class UserProfileComponent implements OnInit {
         this.userToModDetails?.phoneNumber.length
       ),
       products: products.map((item) => item.value),
-      departments: departments.map((item) => item.department),
+
       // branchName: branchName.map((item) => item.value),
       branchName: branchName,
     });
@@ -578,10 +562,10 @@ export class UserProfileComponent implements OnInit {
       permissionConfigs.push(permission);
     });
 
-    const data = this._managePermissionService.modifyPermissionDetailsForEdit(
-      { ...formValue, permissionConfigs },
-      this.departments.map(({ label, value, ...rest }) => ({ ...rest }))
-    );
+    const data = this._managePermissionService.modifyPermissionDetailsForEdit({
+      ...formValue,
+      permissionConfigs,
+    });
 
     const userProfileData = this._managePermissionService.modifyUserDetailsForEdit(
       formValue

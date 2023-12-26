@@ -1,18 +1,70 @@
 import { get, set } from 'lodash';
 import {
   IDeserializable,
+  Option,
   ProductNames,
   UserResponse,
 } from '@hospitality-bot/admin/shared';
 import { tokensConfig } from '../constants/common';
+import { PermissionModuleNames } from '../constants';
+
+type ProductOption = Option<ProductNames, { id: string }>;
+type PermissionOption = {
+  id: string;
+  module: PermissionModuleNames;
+  label: string;
+  permissions: {
+    manage: -1 | 0 | 1; // -1 is disabled that is there is nothing related to that permission
+    view: -1 | 0 | 1;
+  };
+  productType: string;
+};
+
+export class ProductsPermissions {
+  products: ProductOption[];
+  permission: PermissionOption[];
+  deserialize(input: UserResponse['products']) {
+    this.products = new Array<ProductOption>();
+    this.permission = new Array<PermissionOption>();
+
+    input.forEach((item) => {
+      this.products.push({
+        label: item.label,
+        value: item.module,
+        id: item.id,
+      });
+
+      item.productPermissions.map((productPermissionItem) => {
+        const hasPermission = this.permission.find(
+          (permissionItem) => permissionItem.id === productPermissionItem.id
+        );
+
+        if (hasPermission) {
+          hasPermission.productType =
+            hasPermission.productType + ',' + item.module;
+        } else {
+          this.permission.unshift({
+            id: productPermissionItem.id,
+            label: productPermissionItem.label,
+            module: productPermissionItem.module,
+            permissions: productPermissionItem.permissions,
+            productType: item.module,
+          });
+        }
+      });
+    });
+
+    return this;
+  }
+}
 
 export class UserConfig implements IDeserializable {
   id: string;
   firstName: string;
   lastName: string;
   products: { label: string; value: string }[];
-  permissionConfigs: UserResponse['permissions'];
-  departments;
+  permissionConfigs: ProductsPermissions['permission'];
+  product: ProductsPermissions['products'];
   jobTitle: string;
   brandName: string;
   branchName: string;
@@ -25,9 +77,13 @@ export class UserConfig implements IDeserializable {
   reportingTo: string;
 
   deserialize(input: UserResponse) {
+    const { permission, products } = new ProductsPermissions().deserialize(
+      input['products']
+    );
+
     this.id = input.id;
-    this.permissionConfigs = input.permissions;
-    this.departments = input.departments;
+    this.permissionConfigs = permission;
+
     this.firstName = input.firstName;
     this.lastName = input.lastName;
     this.jobTitle = input.title;
@@ -48,14 +104,12 @@ export class UserConfig implements IDeserializable {
       ?.find((item) => item.id === this.brandName)
       ?.entities?.find((item) => item.id === this.branchName)?.timezone;
 
-    this.products = this.departments.map(({ productLabel, productType }) => ({
-      label: productLabel,
-      value: productType,
-    }));
+    // this.products = this.departments.map(({ productLabel, productType }) => ({
+    //   label: productLabel,
+    //   value: productType,
+    // }));
 
-    this.products = [
-      ...new Map(this.products.map((item) => [item['label'], item])).values(),
-    ];
+    this.products = products;
 
     return this;
   }
@@ -164,16 +218,6 @@ export class Hotel {
     this.url = input.domain;
     this.expiry = input.expiry;
     this.status = 'published';
-    return this;
-  }
-}
-
-export class UserSubscriptionPermissions {
-  userPermissions: Record<string, { canView: boolean; canManage: boolean }>;
-  userProducts: ProductNames[];
-
-  deserialize(input: UserResponse['permissions']) {
-    // need to complete (To DO)
     return this;
   }
 }

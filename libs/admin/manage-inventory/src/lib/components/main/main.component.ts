@@ -1,4 +1,4 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component } from '@angular/core';
 import { ChannelManagerFormService } from '../../services/channel-manager-form.service';
 import { Router } from '@angular/router';
 @Component({

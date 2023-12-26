@@ -11,18 +11,18 @@ import {
   NavRouteOptions,
   QueryConfig,
 } from '@hospitality-bot/admin/shared';
-import { CheckBoxTreeFactory } from '../../models/bulk-update.models';
+import { CheckBoxTreeFactory } from 'libs/admin/channel-manager/src/lib/models/bulk-update.models';
 import { ChannelManagerFormService } from '../../services/channel-manager-form.service';
 import {
   GlobalFilterService,
   RoutesConfigService,
 } from '@hospitality-bot/admin/core/theme';
 import { Subscription } from 'rxjs';
-import { UpdateRates } from '../../models/channel-manager.model';
+import { UpdateRates } from 'libs/admin/channel-manager/src/lib/models/channel-manager.model';
 import { ChannelManagerService } from '../../services/channel-manager.service';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { Router } from '@angular/router';
-import { ratesRestrictions } from '../../constants/data';
+import { ratesRestrictions } from 'libs/admin/channel-manager/src/lib/constants/data';
 @Component({
   selector: 'hospitality-bot-rates-bulk-update',
   templateUrl: './rates-bulk-update.component.html',

@@ -17,10 +17,17 @@ import {
   ratesRestrictions,
   RestrictionAndValuesOption,
   restrictionsRecord,
-} from '../../constants/data';
+} from 'libs/admin/channel-manager/src/lib/constants/data';
 import { ChannelManagerFormService } from '../../services/channel-manager-form.service';
-import { DateOption, RoomMapType } from '../../types/channel-manager.types';
-import { RoomTypes, getWeekendBG } from '../../models/bulk-update.models';
+import {
+  DateOption,
+  RoomMapType,
+} from 'libs/admin/channel-manager/src/lib/types/channel-manager.types';
+import {
+  RoomTypes,
+  getWeekendBG,
+} from 'libs/admin/channel-manager/src/lib/models/bulk-update.models';
+
 import {
   GlobalFilterService,
   SubscriptionPlanService,
@@ -29,9 +36,9 @@ import { SnackBarService } from '@hospitality-bot/shared/material';
 import { ChannelManagerService } from '../../services/channel-manager.service';
 import * as moment from 'moment';
 import { Subject, Subscription } from 'rxjs';
-import { UpdateRates } from '../../models/channel-manager.model';
+import { UpdateRates } from 'libs/admin/channel-manager/src/lib/models/channel-manager.model';
 import { debounceTime, tap } from 'rxjs/operators';
-import { UpdateRatesResponse } from '../../types/response.type';
+import { UpdateRatesResponse } from 'libs/admin/channel-manager/src/lib/types/response.type';
 
 @Component({
   selector: 'hospitality-bot-update-rates',
@@ -408,7 +415,7 @@ export class UpdateRatesComponent implements OnInit {
           value: dynamicControl.at(rateIndex).get('value').value
             ? rate.get('value').value
             : price,
-        })); 
+        }));
 
         if (linkedValue) {
           rates.patchValue(newPriceList, {

@@ -1,5 +1,5 @@
 import { Option } from '@hospitality-bot/admin/shared';
-import { RoomTypes } from '../../types/bulk-update.types';
+import { RoomTypes } from '../types/bulk-update.types';
 const channels = [
   {
     name: 'Agoda',

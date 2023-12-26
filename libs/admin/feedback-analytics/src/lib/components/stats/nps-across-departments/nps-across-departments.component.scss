@@ -58,7 +58,7 @@
 
     .progress-indicator {
       position: absolute;
-      left: 0;
+      right: 0;
       display: flex;
       flex-direction: column;
 
@@ -66,6 +66,7 @@
         display: inline-flex;
         align-items: center;
         gap: 0.3em;
+        margin-bottom: 0.4em;
 
         .square {
           width: 1em;
@@ -78,7 +79,6 @@
           font-size: 14px;
           letter-spacing: 0.96px;
           color: #002046;
-          font-weight: 600;
         }
       }
     }

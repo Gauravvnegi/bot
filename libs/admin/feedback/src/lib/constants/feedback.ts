@@ -5,7 +5,8 @@ export const feedbackStatus: Record<
   | FeedbackStatusType
   | 'ENCOURAGEIMPROVEMENT'
   | 'EXCEEDEXPECTATIONS'
-  | 'MEETEXPECTATIONS',
+  | 'MEETEXPECTATIONS'
+  | 'OTHERS',
   { label: string; type: FlagType }
 > = {
   HIGHPOTENTIAL: {
@@ -42,6 +43,10 @@ export const feedbackStatus: Record<
   },
   MEETEXPECTATIONS: {
     label: 'Meet Expectations',
+    type: 'default',
+  },
+  OTHERS: {
+    label: 'Others Depts',
     type: 'default',
   },
 };

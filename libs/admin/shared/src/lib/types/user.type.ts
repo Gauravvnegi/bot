@@ -124,7 +124,6 @@ type PermissionConfig = {
 };
 
 type ProductPermission = {
-  id: string;
   module: PermissionModuleNames;
   label: string;
   permissions: PermissionConfig;

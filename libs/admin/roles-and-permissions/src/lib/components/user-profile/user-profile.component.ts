@@ -473,7 +473,6 @@ export class UserProfileComponent implements OnInit {
           label: [config.label],
           permissions: this.constructPermission(config),
           productType: [config.productType],
-          id: [config.id],
         })
       );
     });

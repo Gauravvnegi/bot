@@ -41,6 +41,7 @@ export class ChatListComponent implements OnInit, OnDestroy {
   filterData = {};
   autoSearched = false;
   paginationDisabled = false;
+  contextOptions: ContextmenuOptions[] = [];
 
   constructor(
     private messageService: MessageService,
@@ -137,6 +138,7 @@ export class ChatListComponent implements OnInit, OnDestroy {
             {
               entityId: this.entityId,
               limit: this.limit,
+              sort: 'isImportant',
               ...this.filterData,
             },
           ])
@@ -273,12 +275,11 @@ export class ChatListComponent implements OnInit, OnDestroy {
     );
   }
 
-  contextOptions: ContextmenuOptions[] = [];
   handelContextMenu(contact) {
     this.contextOptions = [
       !!contact?.important
         ? {
-            label: 'Mark as unimportant',
+            label: 'Unpin',
             name: 'UNIMPORTANT',
             command: () =>
               this.handleRightClick({
@@ -287,7 +288,7 @@ export class ChatListComponent implements OnInit, OnDestroy {
               }),
           }
         : {
-            label: 'Mark as important',
+            label: 'Pin to top',
             name: 'IMPORTANT',
             command: () =>
               this.handleRightClick({
@@ -352,6 +353,8 @@ export class ChatListComponent implements OnInit, OnDestroy {
           item[key] = options[key];
         }
       });
+
+      method === 'markAsImportant' && this.loadChatList();
 
       this.snackbarService.openSnackBarAsText('Status Updated', '', {
         panelClass: 'success',

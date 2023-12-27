@@ -13,6 +13,39 @@
 </div>
 <div class="sortFilterWrapper" *ngIf="parentFG">
   <div class="sortFilterContainer" [formGroup]="parentFG">
+    <!-- for filter -->
+    <div class="sortBy">
+      Filter By
+    </div>
+    <div class="sortTypes">
+      <div
+        [ngStyle]="
+          filterControl?.value.label === item.value
+            ? {
+                background: '#5f38f9',
+                border: '1px solid #5f38f9',
+                color: '#ffffff',
+                fontSize: '14px'
+              }
+            : {
+                background: '#ffffff',
+                border: '1px solid #5f38f9',
+                color: '#5f38f9',
+                fontSize: '14px'
+              }
+        "
+        class="sortItemWrapper"
+        *ngFor="let item of filterList"
+        (click)="setFilterBy(item)"
+      >
+        <div class="sortItem">
+          {{ item.label }}
+        </div>
+      </div>
+    </div>
+
+    <div class="filterUnderline"></div>
+
     <div class="sortBy">
       Sort By
     </div>

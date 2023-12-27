@@ -15,6 +15,13 @@ export class ContactSortFilterComponent implements OnInit {
     { label: 'Room Descending', value: 'roomNo', order: 'DESC' },
     { label: 'Name A -> Z', value: 'guestName', order: 'ASC' },
     { label: 'Name Z -> A', value: 'guestName', order: 'DESC' },
+    { label: 'Important', value: 'isImportant', order: 'DESC' },
+    { label: 'Muted', value: 'isMuted', order: 'DESC' },
+  ];
+
+  filterList = [
+    { label: 'Important', value: 'Important' },
+    { label: 'Muted', value: 'Muted' },
   ];
 
   constructor(private fb: FormBuilder) {}
@@ -25,13 +32,23 @@ export class ContactSortFilterComponent implements OnInit {
 
   initFG(): void {
     this.parentFG.addControl('sortBy', new FormControl([]));
+    this.parentFG.addControl('filterBy', new FormControl([]));
   }
 
   applyFilter() {
     const values = this.parentFG.getRawValue();
+
+    let data = {
+      order: values.sortBy.order,
+    };
+   //no
+    if (values.sortBy.label) data['sort'] = values?.sortBy?.label;
+    if (values?.filterBy?.label === 'Important') data['isImportant'] = true;
+    if (values?.filterBy?.label === 'Muted') data['isMute'] = true;
+
     this.filterApplied.emit({
       status: true,
-      data: { sort: values.sortBy.label, order: values.sortBy.order },
+      data: data,
     });
   }
 
@@ -44,12 +61,21 @@ export class ContactSortFilterComponent implements OnInit {
     this.parentFG.markAsTouched();
   }
 
+  setFilterBy(item) {
+    this.filterControl.setValue({ label: item.value });
+    this.parentFG.markAsTouched();
+  }
+
   clearFilter() {
-    this.parentFG.patchValue({ sortBy: [] });
+    this.parentFG.patchValue({ sortBy: [], filterBy: [] });
   }
 
   get sortControl(): FormControl {
     return this.parentFG?.get('sortBy') as FormControl;
+  }
+
+  get filterControl(): FormControl {
+    return this.parentFG?.get('filterBy') as FormControl;
   }
 
   get filterFormArray(): FormArray {

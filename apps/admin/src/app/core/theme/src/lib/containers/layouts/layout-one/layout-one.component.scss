@@ -467,10 +467,10 @@
 
   .guest-sidebar {
     @include default-close;
-    .body {
-      height: 83vh;
-      overflow: auto;
-    }
+    // .body {
+    //   height: 83vh;
+    //   overflow: auto;
+    // }
 
     // hospitality-bot-form-action {
     //   display: block;

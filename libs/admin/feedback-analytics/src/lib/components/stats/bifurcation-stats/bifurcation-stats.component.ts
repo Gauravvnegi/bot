@@ -235,7 +235,7 @@ export class BifurcationStatsComponent implements OnInit {
       }
     });
     this.feedback.push({
-      label: 'GTM',
+      label: 'Guest To Meet',
       score: this?.gtmCount,
       additionalData: this?.gtmCount,
       color: '#5f38f9',

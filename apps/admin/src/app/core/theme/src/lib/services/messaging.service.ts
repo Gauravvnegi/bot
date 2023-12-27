@@ -92,7 +92,10 @@ export class FirebaseMessagingService {
       );
 
       snackBarRef.instance.message = payload.data?.message;
-      snackBarRef.instance.title = payload.data?.phoneNumber;
+      snackBarRef.instance.title = payload.data?.nickName
+        ? payload.data?.nickName
+        : payload.data?.phoneNumber;
+      
     } else if (payload.notification?.body) {
       const title = payload.notification?.body.split('\n')[0];
       this._snackbarService.openSnackBarAsText(

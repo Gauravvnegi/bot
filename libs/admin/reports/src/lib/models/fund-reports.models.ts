@@ -17,7 +17,7 @@ export class AddWithdrawReport
         return {
           createdDate: getFormattedDate(data?.created),
           fundTransferredBy: `${data?.cashier?.firstName ?? ''} ${
-            data?.cashier?.lastName
+            data?.cashier?.lastName ?? ''
           }`,
           action: data?.paymentType,
           amount: toCurrency(data?.amount),

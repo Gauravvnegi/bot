@@ -903,6 +903,9 @@ export class DetailsComponent implements OnInit, OnDestroy {
   //   });
   // }
 
+  checkForConfirmedBooking() {
+    return !['NEW', 'NOSHOW', 'CANCELED'].includes(this.details.pmsStatus);
+  }
   openJourneyDialog(config) {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;
@@ -1143,6 +1146,10 @@ export class DetailsComponent implements OnInit, OnDestroy {
 
   get checkForCancelBooking() {
     return this.details.pmsStatus && this.details.pmsStatus === 'CHECKEDOUT';
+  }
+
+  get checkForCanceledBooking() {
+    return this.details.pmsStatus && this.details.pmsStatus === 'CANCELED';
   }
 
   get checkForValidBooking() {

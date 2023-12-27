@@ -6,10 +6,17 @@ export const tableName = 'My Team';
 export const cols: Cols[] = [
   {
     field: 'firstName',
-    header: 'Name / Mobile & Email',
+    header: 'Name',
     sortType: 'string',
-    searchField: ['firstName', 'getContactDetails', 'email'],
+    searchField: ['firstName'],
   },
+  {
+    field: 'email',
+    header: 'Mobile / Email',
+    sortType: 'string',
+    searchField: ['getContactDetails', 'email'],
+  },
+
   {
     field: 'jobTitle',
     header: 'Job title',

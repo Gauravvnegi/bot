@@ -52,15 +52,13 @@ import {
 } from '@hospitality-bot/shared/material';
 import { DetailsComponent } from '../details/details.component';
 import { RoomMapType } from 'libs/admin/channel-manager/src/lib/types/channel-manager.types';
-import { UpdateRatesResponse } from 'libs/admin/channel-manager/src/lib/types/response.type';
-import { UpdateRates } from 'libs/admin/channel-manager/src/lib/models/channel-manager.model';
-import { ChannelManagerService } from 'libs/admin/channel-manager/src/lib/services/channel-manager.service';
 import * as moment from 'moment';
 import { AdminDetailsService } from '../../services/admin-details.service';
 import { ReservationService } from '../../services/reservation.service';
 import { JourneyState } from 'libs/admin/manage-reservation/src/lib/constants/reservation';
 import { roomStatusDetails } from 'libs/admin/housekeeping/src/lib/constant/room';
 import { NightAuditService } from 'libs/admin/global-shared/src/lib/services/night-audit.service';
+import { CalendarOccupancy } from '../../models/reservation-table.model';
 
 @Component({
   selector: 'hospitality-bot-reservation-calendar-view',
@@ -88,6 +86,10 @@ export class ReservationCalendarViewComponent implements OnInit {
   $subscription = new Subscription();
   previousData: IGValue[] = [];
   ratesRoomDetails = new Map<string, RoomMapType>();
+  occupancyData = new Map<
+    number,
+    Map<string, { available: number; occupancy: number }>
+  >();
 
   formProps: QuickFormProps;
   fullView: boolean;
@@ -99,7 +101,6 @@ export class ReservationCalendarViewComponent implements OnInit {
     private roomService: RoomService,
     private adminUtilityService: AdminUtilityService,
     private modalService: ModalService,
-    private channelManagerService: ChannelManagerService,
     private adminDetailsService: AdminDetailsService,
     private _reservationService: ReservationService,
     private snackbarService: SnackBarService,
@@ -418,15 +419,15 @@ export class ReservationCalendarViewComponent implements OnInit {
 
   getRates(selectedDate = this.useForm.value.date) {
     this.$subscription.add(
-      this.channelManagerService
-        .getChannelManagerDetails<UpdateRatesResponse>(
+      this._reservationService
+        .getCalendarViewOccupancy(
           this.entityId,
           this.getRatesConfig(selectedDate)
         )
         .subscribe(
           (res) => {
-            const data = new UpdateRates().deserialize(res.roomTypes);
-            this.ratesRoomDetails = data.ratesRoomDetails;
+            const data = new CalendarOccupancy().deserialize(res);
+            this.occupancyData = data;
           },
           (error) => {}
         )
@@ -443,11 +444,7 @@ export class ReservationCalendarViewComponent implements OnInit {
     };
   }
 
-  getRatesConfig(
-    selectedDate?: number,
-    inventoryType = 'RATES',
-    roomTypeId?: string
-  ): QueryConfig {
+  getRatesConfig(selectedDate?: number, roomTypeId?: string): QueryConfig {
     const { fromDate, toDate } = this.getFromAndToDateEpoch(
       selectedDate ? selectedDate : this.useForm.controls['date'].value
     );
@@ -455,9 +452,7 @@ export class ReservationCalendarViewComponent implements OnInit {
       params: this.adminUtilityService.makeQueryParams([
         {
           type: 'ROOM_TYPE',
-          limit: 5,
-          inventoryUpdateType: inventoryType,
-          roomTypeIds: roomTypeId,
+          roomTypeStatus: true,
         },
         selectedDate && {
           fromDate: fromDate,
@@ -468,23 +463,50 @@ export class ReservationCalendarViewComponent implements OnInit {
     return config;
   }
 
+  // getAvailability(
+  //   nextDate: number,
+  //   type: 'quantity' | 'occupancy',
+  //   roomTypeId: string
+  // ) {
+  //   if (
+  //     Object.keys(this.occupancyData).length === 0 ||
+  //     !this.occupancyData[nextDate]?.availability
+  //   )
+  //     return 0;
+  //   const date = new Date(this.useForm.controls['date'].value);
+  //   date.setDate(date.getDate() + nextDate);
+  //   let room = this.occupancyData[roomTypeId]['availability'][
+  //     date.getTime()
+  //   ];
+  //   if (room) return room[type] === 'NaN' || !room[type] ? 0 : room[type];
+  //   return 0;
+  // }
+
   getAvailability(
-    nextDate: number,
-    type: 'quantity' | 'occupancy',
+    nextDate: { currentDate: Date },
+    index: number,
+    type: 'available' | 'occupancy',
     roomTypeId: string
   ) {
+    const currentDate = new Date(nextDate.currentDate);
+    currentDate.setHours(0, 0, 0, 0);
+    const currentEpoch = currentDate.getTime();
+    const obj = this.occupancyData.get(currentEpoch)?.get(roomTypeId)
+      ?.available;
     if (
-      Object.keys(this.ratesRoomDetails).length === 0 ||
-      !this.ratesRoomDetails[roomTypeId]?.availability
-    )
+      this.occupancyData.size === 0 ||
+      !this.occupancyData.get(currentEpoch)?.get(roomTypeId)?.available
+    ) {
       return 0;
-
+    }
     const date = new Date(this.useForm.controls['date'].value);
-    date.setDate(date.getDate() + nextDate);
-    let room = this.ratesRoomDetails[roomTypeId]['availability'][
-      date.getTime()
-    ];
-    if (room) return room[type] === 'NaN' || !room[type] ? 0 : room[type];
+    date.setDate(date.getDate() + index);
+    const roomData = this.occupancyData.get(date.getTime())?.get(roomTypeId);
+    if (roomData) {
+      const value = roomData[type];
+      return !value ? 0 : value;
+    }
+
     return 0;
   }
 

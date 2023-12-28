@@ -1,23 +1,42 @@
 <div class="chat-height">
   <div class="guestInfoOpen">
     <div class="guestInfoOpen-guest-wrap">
-      <div class="guestInfoAvatar" [style.background]="selectedChat?.color">
+      <div
+        class="guestInfoAvatar"
+        [style.background]="
+          selectedChat?.mute ? '#d9d9d9' : selectedChat?.color
+        "
+      >
         <img
           [src]="chat?.receiver?.profileUrl"
           *ngIf="chat?.receiver?.profileUrl"
         />
         <div
           class="guestInfoAvatar_nickName"
-          *ngIf="selectedChat?.getProfileNickName(); else defaultAvatar"
+          *ngIf="
+            selectedChat?.getProfileNickName() && !selectedChat?.mute;
+            else defaultOrMute
+          "
         >
           {{ selectedChat?.getProfileNickName() }}
         </div>
-        <ng-template #defaultAvatar
-          ><img
+        <ng-template #defaultOrMute>
+          <ng-container
+            *ngTemplateOutlet="selectedChat?.mute ? muteAvatar : defaultAvatar"
+          ></ng-container>
+        </ng-template>
+
+        <ng-template #defaultAvatar>
+          <img
             src="assets/svg/defaultUser.svg"
             alt="default"
             class="guestInfoAvatar_default"
-        /></ng-template>
+          />
+        </ng-template>
+
+        <ng-template #muteAvatar>
+          <img class="mute-avatar" src="assets/images/mute.svg" alt="default" />
+        </ng-template>
       </div>
       <div class="selectedChat">
         {{ selectedChat ? selectedChat?.name || selectedChat?.phone : '' }}

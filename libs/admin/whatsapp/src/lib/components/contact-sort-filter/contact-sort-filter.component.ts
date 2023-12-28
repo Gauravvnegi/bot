@@ -15,14 +15,11 @@ export class ContactSortFilterComponent implements OnInit {
     { label: 'Room Descending', value: 'roomNo', order: 'DESC' },
     { label: 'Name A -> Z', value: 'guestName', order: 'ASC' },
     { label: 'Name Z -> A', value: 'guestName', order: 'DESC' },
-    { label: 'Important', value: 'isImportant', order: 'DESC' },
+    { label: 'Pinned', value: 'isImportant', order: 'DESC' },
     { label: 'Muted', value: 'isMuted', order: 'DESC' },
   ];
 
-  filterList = [
-    { label: 'Important', value: 'Important' },
-    { label: 'Muted', value: 'Muted' },
-  ];
+  filterList = ['Pinned', 'Muted'];
 
   constructor(private fb: FormBuilder) {}
 
@@ -32,19 +29,20 @@ export class ContactSortFilterComponent implements OnInit {
 
   initFG(): void {
     this.parentFG.addControl('sortBy', new FormControl([]));
-    this.parentFG.addControl('filterBy', new FormControl([]));
+    this.parentFG.addControl(
+      'filterBy',
+      this.fb.array(this.filterList.map((x) => false))
+    );
   }
 
   applyFilter() {
     const values = this.parentFG.getRawValue();
-
     let data = {
       order: values.sortBy.order,
     };
-   //no
     if (values.sortBy.label) data['sort'] = values?.sortBy?.label;
-    if (values?.filterBy?.label === 'Important') data['isImportant'] = true;
-    if (values?.filterBy?.label === 'Muted') data['isMute'] = true;
+    if (values?.filterBy[0]) data['isImportant'] = true;
+    if (values?.filterBy[1]) data['isMute'] = true;
 
     this.filterApplied.emit({
       status: true,
@@ -67,7 +65,10 @@ export class ContactSortFilterComponent implements OnInit {
   }
 
   clearFilter() {
-    this.parentFG.patchValue({ sortBy: [], filterBy: [] });
+    this.parentFG.patchValue({
+      sortBy: [],
+      filterBy: this.filterList.map((item) => false),
+    });
   }
 
   get sortControl(): FormControl {

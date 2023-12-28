@@ -663,10 +663,7 @@ export class InvoiceComponent implements OnInit {
         }
         if (unit.invalid || debitAmount.invalid) return;
 
-        const discountControl = this.hasDiscount(
-          itemId.value,
-          date.value,
-        );
+        const discountControl = this.hasDiscount(itemId.value, date.value);
         const discountValue = discountControl?.value.creditAmount ?? 0;
 
         const currentDebitAmount = debitAmount.value;
@@ -1252,7 +1249,7 @@ export class InvoiceComponent implements OnInit {
         return (
           control.value.itemId === itemId &&
           control.value.isDiscount &&
-          (controlDate === targetDate)
+          controlDate === targetDate
         );
       }
     );
@@ -1526,6 +1523,59 @@ export class InvoiceComponent implements OnInit {
         this.modalService.close();
       }
     );
+  }
+
+  isValueDisabled(
+    rowIndex: number,
+    type: 'menu' | 'input' | 'description' | 'checkbox'
+  ) {
+    const controls = this.tableFormArray.at(rowIndex) as Controls;
+
+    switch (type) {
+      case 'menu':
+        return (
+          controls.value.isRefund ||
+          (controls.value.transactionType === 'CREDIT' &&
+            !controls.value.isDiscount) ||
+          this.isInvoiceDisabled ||
+          controls.value.isRealised ||
+          (!controls.value.itemId && !controls.value.isNew) ||
+          controls.value.taxId ||
+          (controls.value.isNonEditableBillItem &&
+            !controls.value.isMiscellaneous)
+        );
+
+      case 'input':
+        return (
+          controls.value.isDisabled ||
+          controls.value.isDiscount ||
+          controls.value.isNonEditableBillItem ||
+          !controls.value.billItemId ||
+          this.isInvoiceDisabled ||
+          controls.value.isRealised
+        );
+
+      case 'description':
+        return (
+          controls.value.isDisabled ||
+          controls.value.isDiscount ||
+          !controls.value.isNew ||
+          controls.value.isNonEditableBillItem
+        );
+
+      case 'checkbox':
+        return (
+          controls.value.isDisabled ||
+          controls.value.isDiscount ||
+          controls.value.taxId ||
+          controls.value.isRefund ||
+          controls.value.isRealised ||
+          (controls.value.creditAmount && !controls.value.isDiscount)
+        );
+
+      default:
+        return false; // Default case, return false if type is not recognized
+    }
   }
 }
 

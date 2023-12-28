@@ -134,3 +134,26 @@
   border: solid 1px $border;
   margin: 20px 0;
 }
+
+.filterBy {
+  font: normal normal $bold 10px/13px Poppins;
+  letter-spacing: 0.6px;
+  color: $grayLight;
+  margin-bottom: 10px;
+}
+.filterItemWrapper {
+  margin: 8px 0;
+  display: flex;
+  align-items: center;
+}
+.filterCheckbox {
+  margin-right: 10px;
+  height: 20px;
+  width: 20px;
+}
+.filterItem {
+  font: normal normal $medium 14px/19px Poppins;
+  letter-spacing: 0.84px;
+  color: $secondary;
+  opacity: 1;
+}

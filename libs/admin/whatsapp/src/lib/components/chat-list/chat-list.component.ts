@@ -281,6 +281,7 @@ export class ChatListComponent implements OnInit, OnDestroy {
         ? {
             label: 'Unpin',
             name: 'UNIMPORTANT',
+            icon: 'unpin-icon',
             command: () =>
               this.handleRightClick({
                 name: 'UNIMPORTANT',
@@ -290,6 +291,7 @@ export class ChatListComponent implements OnInit, OnDestroy {
         : {
             label: 'Pin to top',
             name: 'IMPORTANT',
+            icon: 'pin-icon',
             command: () =>
               this.handleRightClick({
                 name: 'IMPORTANT',
@@ -300,6 +302,7 @@ export class ChatListComponent implements OnInit, OnDestroy {
         ? {
             label: 'Unmute',
             name: 'UNMUTE',
+            icon: 'unmute-icon',
             command: () =>
               this.handleRightClick({
                 name: 'UNMUTE',
@@ -309,6 +312,7 @@ export class ChatListComponent implements OnInit, OnDestroy {
         : {
             label: 'Mute',
             name: 'MUTE',
+            icon: 'mute-icon',
             command: () =>
               this.handleRightClick({ name: 'MUTE', id: contact?.receiverId }),
           },

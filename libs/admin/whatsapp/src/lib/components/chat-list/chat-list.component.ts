@@ -43,6 +43,8 @@ export class ChatListComponent implements OnInit, OnDestroy {
   paginationDisabled = false;
   contextOptions: ContextmenuOptions[] = [];
 
+  loadedList: 'searched' | 'list' = 'list';
+
   constructor(
     private messageService: MessageService,
     private globalFilterService: GlobalFilterService,
@@ -153,6 +155,7 @@ export class ChatListComponent implements OnInit, OnDestroy {
             this.chatList.unreadContacts
           );
           if (this.selected) this.markChatAsRead(this.selected);
+          this.loadedList = 'list';
         })
     );
   }
@@ -201,7 +204,7 @@ export class ChatListComponent implements OnInit, OnDestroy {
           this.entityId,
           this.adminUtilityService.makeQueryParams([
             {
-              limit: this.limit,
+              // limit: this.limit,
               key: searchKey,
               ...this.filterData,
             },
@@ -233,24 +236,24 @@ export class ChatListComponent implements OnInit, OnDestroy {
             );
             this.autoSearched = false;
           }
+
+          this.loadedList = 'searched';
         })
     );
   }
 
   listenForSearchChanges() {
-    const formChanges$ = this.contactFG.valueChanges.pipe(
-      filter(() => !!(this.contactFG.get('search') as FormControl).value)
-    );
-
-    formChanges$.pipe(debounceTime(1000)).subscribe((response) => {
-      // setting minimum search character limit to 3
-      if (response?.search.length >= 3) {
-        this.loadSearchList(response?.search);
-      } else {
-        this.autoSearched = false;
-        this.loadChatList();
-      }
-    });
+    this.contactFG.valueChanges
+      .pipe(debounceTime(1000))
+      .subscribe((response) => {
+        // setting minimum search character limit to 3
+        if (response?.search.length >= 3) {
+          this.loadSearchList(response?.search);
+        } else if (this.loadedList === 'searched') {
+          this.autoSearched = false;
+          this.loadChatList();
+        }
+      });
   }
 
   handleFilter(event) {

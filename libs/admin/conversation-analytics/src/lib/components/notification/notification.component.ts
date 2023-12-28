@@ -18,7 +18,6 @@ export class NotificationComponent implements OnInit, OnDestroy {
   globalFilters;
   entityId: string;
   @ViewChild(BaseChartDirective) baseChart: BaseChartDirective;
-
   chart = analytics.notificationChart;
   stats: Notification;
   constructor(
@@ -58,12 +57,12 @@ export class NotificationComponent implements OnInit, OnDestroy {
     };
 
     this.$subscription.add(
-      this.analyticsService.getConversationTemplateStats(config).subscribe(
-        (response) => {
+      this.analyticsService
+        .getConversationTemplateStats(config)
+        .subscribe((response) => {
           this.stats = new Notification().deserialize(response);
           this.initGraphData();
-        }
-      )
+        })
     );
   }
 
@@ -104,6 +103,7 @@ export class NotificationComponent implements OnInit, OnDestroy {
   }
 
   get labels() {
+    //Note:- value will get updated in api call;
     return this.chart.chartLabels;
   }
 

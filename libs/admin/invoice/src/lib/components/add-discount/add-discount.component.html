@@ -11,9 +11,20 @@
   </div>
   <div *ngIf="!isRemove" class="container">
     <div class="amount-wrapper">
-      <div>
-        <span class="amount-label">Total Amount</span> : {{ originalAmount }}
-      </div>
+      <span class="amount-label"
+        >Total Amount :
+        <ng-container *ngIf="!checkForDistinctItems()">
+          {{ originalAmount }}</ng-container
+        ></span
+      >
+      <ng-container *ngIf="checkForDistinctItems()">
+        <ng-container *ngFor="let item of billItems">
+          <span class="item-info"
+            >Price on {{ item.date | date: 'dd/MM/yy' }} :
+            {{ item.debitAmount }}</span
+          >
+        </ng-container>
+      </ng-container>
       <!-- <span><span class="amount-label">Total Tax</span> : {{ tax }}</span> -->
     </div>
     <div class="discount-form" [formGroup]="discountForm">
@@ -28,14 +39,22 @@
       ></hospitality-bot-prefix-field>
     </div>
     <div class="total-amount">
-      <div>
+      <span>
         Total Discount :
-        <span [ngClass]="totalDiscount > 0 ? 'discount-amount' : ''">{{
-          totalDiscount > 0 ? totalDiscount : '0'
-        }}</span>
-      </div>
-      <span class="note">Total Tax will be updated for this billing item</span>
+        <ng-container *ngIf="!checkForDistinctItems()">
+          {{ totalDiscount[billItems[0].date] }}</ng-container
+        >
+      </span>
+      <ng-container *ngIf="checkForDistinctItems()">
+        <ng-container *ngFor="let item of billItems">
+          <span class="item-info">
+            Discount on {{ item.date | date: 'dd/MM/yy' }} :
+            {{ totalDiscount[item.date] > 0 ? totalDiscount[item.date] : '0' }}
+          </span>
+        </ng-container>
+      </ng-container>
     </div>
+    <span class="note">Total Tax will be updated for this billing item</span>
     <div class="buttons">
       <hospitality-bot-button
         label="Cancel"

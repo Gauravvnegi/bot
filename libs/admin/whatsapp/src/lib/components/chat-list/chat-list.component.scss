@@ -134,3 +134,12 @@
     background-size: cover;
   }
 }
+
+:host ::ng-deep {
+  .p-dialog {
+    .p-dialog-content {
+      padding: unset !important;
+      width: 38rem !important;
+    }
+  }
+}

@@ -3,6 +3,7 @@ import { ApiService } from '@hospitality-bot/shared/utils';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { GuestPostData } from '../models/guest-table.model';
 import { FileData } from '../models/reservation-table.model';
+import { QueryConfig } from '@hospitality-bot/admin/shared';
 
 @Injectable()
 export class ReservationService extends ApiService {
@@ -12,6 +13,12 @@ export class ReservationService extends ApiService {
 
   getReservationDetails(reservationId): Observable<any> {
     return this.get(`/api/v1/reservation/${reservationId}?raw=true`);
+  }
+
+  getCalendarViewOccupancy(entityId: string, config?: QueryConfig) {
+    return this.get(
+      `/api/v1/entity/${entityId}/inventory/by-date${config?.params}`
+    );
   }
 
   getCountryList(): Observable<any> {

@@ -17,6 +17,7 @@ import {
 } from 'libs/admin/shared/src/lib/utils/valueFormatter';
 import { NavRouteOption, NavRouteOptions } from '@hospitality-bot/admin/shared';
 import { ActivatedRoute, Router } from '@angular/router';
+import { manageMaskZIndex } from 'apps/admin/src/app/core/theme/src/lib/containers/sidenav/sidenav.component';
 
 @Component({
   selector: 'hospitality-bot-reports',
@@ -67,6 +68,7 @@ export class ReportsComponent implements OnInit {
   registerListener() {
     this.reportsService.showMenu.subscribe((res) => {
       this.showMenu = res;
+      res && manageMaskZIndex(150);
     });
     if (this.selectedReport) {
       this.selectedReport = this.selectedReport;

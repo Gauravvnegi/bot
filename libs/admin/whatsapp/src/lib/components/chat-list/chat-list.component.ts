@@ -346,6 +346,10 @@ export class ChatListComponent implements OnInit, OnDestroy {
         variant: 'contained',
       },
     ];
+
+    componentRef.instance.onClose.subscribe((res) => {
+      this.isMutePopUpVisible = false;
+    });
   }
 
   handleMarking(

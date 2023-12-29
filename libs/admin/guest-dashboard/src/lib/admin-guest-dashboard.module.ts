@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { Route, RouterModule } from '@angular/router';
+import { RouterModule } from '@angular/router';
 import {
   AdminSharedModule,
   getTranslationConfigs,
@@ -14,6 +14,7 @@ import { AdminReservationModule } from '@hospitality-bot/admin/reservation';
 import { AdminGuestDashboardRoutingModule } from './admin-guest-dashboard.routing.module';
 import { GuestTableService } from './services/guest-table.service';
 import { StatisticsService } from './services/statistics.service';
+import { DialogService } from 'primeng/dynamicdialog';
 
 /**
  * Not getting used was moved to reservation dashboard
@@ -33,6 +34,6 @@ import { StatisticsService } from './services/statistics.service';
   ],
   declarations: [...AdminGuestDashboardRoutingModule.components],
   exports: [...AdminGuestDashboardRoutingModule.components],
-  providers: [StatisticsService, GuestTableService],
+  providers: [StatisticsService, GuestTableService, DialogService],
 })
 export class AdminGuestDashboardModule {}

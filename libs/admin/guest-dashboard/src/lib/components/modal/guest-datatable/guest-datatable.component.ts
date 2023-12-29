@@ -10,6 +10,7 @@ import { FormBuilder } from '@angular/forms';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
   AdminUtilityService,
+  BookingDetailService,
   FeedbackService,
 } from '@hospitality-bot/admin/shared';
 import {
@@ -24,6 +25,9 @@ import { GuestDatatableComponent } from '../../datatable/guest/guest.component';
 import { NavigationEnd, Router } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { guestStatusDetails } from '../../../constants/guest';
+import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { GuestDialogData, GuestModalType } from '../../../types/guest.type';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'hospitality-bot-guest-datatable-modal',
@@ -37,6 +41,7 @@ import { guestStatusDetails } from '../../../constants/guest';
 export class GuestDatatableModalComponent extends GuestDatatableComponent
   implements OnInit, OnDestroy {
   isAllTabFilterRequired = true;
+  modalType?: GuestModalType;
   @Input() callingMethod: string;
   @Input() guestFilter: string;
   @Input() exportURL: string;
@@ -50,7 +55,11 @@ export class GuestDatatableModalComponent extends GuestDatatableComponent
     protected snackbarService: SnackBarService,
     protected _modal: ModalService,
     public feedbackService: FeedbackService,
-    private router: Router
+    private router: Router,
+    public bookingDetailService: BookingDetailService,
+    public ref: DynamicDialogRef,
+    public config: DynamicDialogConfig, // generic is not supported in v10
+    public _translateService: TranslateService
   ) {
     super(
       fb,
@@ -59,8 +68,16 @@ export class GuestDatatableModalComponent extends GuestDatatableComponent
       globalFilterService,
       snackbarService,
       _modal,
-      feedbackService
+      feedbackService,
+      bookingDetailService
     );
+
+    const data = config.data as GuestDialogData;
+    if (data) {
+      Object.entries(data).forEach(([key, value]) => {
+        this[key] = value;
+      });
+    }
   }
 
   ngOnInit(): void {
@@ -71,6 +88,9 @@ export class GuestDatatableModalComponent extends GuestDatatableComponent
       .subscribe(() => {
         this.closeModal();
       });
+    this._translateService
+      .get(this.modalType)
+      .subscribe((message) => (this.tableName = message));
   }
 
   loadInitialData(queries = [], loading = true) {
@@ -138,7 +158,7 @@ export class GuestDatatableModalComponent extends GuestDatatableComponent
             order: 'DESC',
             entityType: this.tabFilterItems[this.tabFilterIdx].value,
           },
-          ...this.getSelectedQuickReplyFilters({key: 'entityState'}),
+          ...this.getSelectedQuickReplyFilters({ key: 'entityState' }),
         ],
         {
           offset: this.first,
@@ -192,6 +212,7 @@ export class GuestDatatableModalComponent extends GuestDatatableComponent
   }
 
   closeModal() {
+    this.ref.close();
     this.onModalClose.emit(true);
   }
 }

@@ -15,7 +15,11 @@ import {
   DetailsComponent,
   DetailsTabOptions,
 } from '@hospitality-bot/admin/reservation';
-import { EntitySubType, ModuleNames } from '@hospitality-bot/admin/shared';
+import {
+  BookingDetailService,
+  EntitySubType,
+  ModuleNames,
+} from '@hospitality-bot/admin/shared';
 import {
   ModalService,
   SnackBarService,
@@ -70,7 +74,8 @@ export class CheckinReservationsComponent implements OnInit {
     private globalFilterService: GlobalFilterService,
     private modalService: ModalService,
     private _clipboard: Clipboard,
-    private routesConfigService: RoutesConfigService
+    private routesConfigService: RoutesConfigService,
+    public bookingDetailService: BookingDetailService
   ) {}
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -263,30 +268,36 @@ export class CheckinReservationsComponent implements OnInit {
   }
 
   openDetailsPage(reservationId: string) {
-    const openTab: DetailsTabOptions = 'guest_details';
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.disableClose = true;
-    dialogConfig.width = '100%';
-    const detailCompRef = this.modalService.openDialog(
-      DetailsComponent,
-      dialogConfig
-    );
+    // TODO: Need to remove
+    // const dialogConfig = new MatDialogConfig();
+    // dialogConfig.disableClose = true;
+    // dialogConfig.width = '100%';
+    // const detailCompRef = this.modalService.openDialog(
+    //   DetailsComponent,
+    //   dialogConfig
+    // );
 
-    detailCompRef.componentInstance.bookingId = reservationId;
-    detailCompRef.componentInstance.tabKey = openTab;
-    this.increaseZIndex(true);
-    this.$subscription.add(
-      detailCompRef.componentInstance.onDetailsClose.subscribe((res) => {
-        this.increaseZIndex(false);
-        detailCompRef.close();
-      })
-    );
+    // detailCompRef.componentInstance.bookingId = reservationId;
+    // detailCompRef.componentInstance.tabKey = openTab;
+    // this.increaseZIndex(true);
+    // this.$subscription.add(
+    //   detailCompRef.componentInstance.onDetailsClose.subscribe((res) => {
+    //     this.increaseZIndex(false);
+    //     detailCompRef.close();
+    //   })
+    // );
 
-    this.$subscription.add(
-      detailCompRef.componentInstance.onRoute.subscribe((res) => {
-        this.onClose.emit(true);
-      })
-    );
+    // this.$subscription.add(
+    //   detailCompRef.componentInstance.onRoute.subscribe((res) => {
+    //     this.onClose.emit(true);
+    //   })
+    // );
+
+    const activeTab: DetailsTabOptions = 'guest_details';
+    this.bookingDetailService.openBookingDetailSidebar({
+      bookingId: reservationId,
+      tabKey: activeTab,
+    });
   }
 
   increaseZIndex(toggleZIndex: boolean) {

@@ -9,6 +9,7 @@ import {
 import {
   AdminUtilityService,
   BaseDatatableComponent,
+  BookingDetailService,
   Cols,
   Option,
 } from '@hospitality-bot/admin/shared';
@@ -67,7 +68,8 @@ export class ReportsDataTableComponent extends BaseDatatableComponent {
     private globalFilterService: GlobalFilterService,
     private modalService: ModalService,
     private managePermissionService: ManagePermissionService,
-    private adminUtilityService: AdminUtilityService
+    private adminUtilityService: AdminUtilityService,
+    public bookingDetailService: BookingDetailService
   ) {
     super(fb);
   }
@@ -257,33 +259,40 @@ export class ReportsDataTableComponent extends BaseDatatableComponent {
     return styleClass.trim();
   }
 
-  onRowClick(data:{}) {
+  onRowClick(data: {}) {
     if (data.hasOwnProperty('id') || data.hasOwnProperty('guestId')) {
       this.openDetailPage(data);
     }
   }
 
   openDetailPage(rowData, tabKey?: DetailsTabOptions): void {
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.disableClose = true;
-    dialogConfig.width = '100%';
-    const detailCompRef = this.modalService.openDialog(
-      DetailsComponent,
-      dialogConfig
-    );
-    const instance = detailCompRef.componentInstance as DetailsComponent;
-    instance.bookingId = rowData?.id;
+    // Todo:  Need to remove
+    // const dialogConfig = new MatDialogConfig();
+    // dialogConfig.disableClose = true;
+    // dialogConfig.width = '100%';
+    // const detailCompRef = this.modalService.openDialog(
+    //   DetailsComponent,
+    //   dialogConfig
+    // );
+    // const instance = detailCompRef.componentInstance as DetailsComponent;
+    // instance.bookingId = rowData?.id;
 
-    //to open guestDetails popup with guestId
-    instance.guestId = rowData?.guestId;
+    // //to open guestDetails popup with guestId
+    // instance.guestId = rowData?.guestId;
 
-    tabKey && (detailCompRef.componentInstance.tabKey = tabKey);
+    // tabKey && (detailCompRef.componentInstance.tabKey = tabKey);
 
-    this.$subscription.add(
-      detailCompRef.componentInstance.onDetailsClose.subscribe((_) => {
-        detailCompRef.close();
-      })
-    );
+    // this.$subscription.add(
+    //   detailCompRef.componentInstance.onDetailsClose.subscribe((_) => {
+    //     detailCompRef.close();
+    //   })
+    // );
+
+    this.bookingDetailService.openBookingDetailSidebar({
+      ...(rowData?.id && { bookingId: rowData?.id }),
+      ...(rowData?.guestId && { guestId: rowData?.guestId }),
+      ...(tabKey && { tabKey: tabKey }),
+    });
   }
 
   get availableFilters() {

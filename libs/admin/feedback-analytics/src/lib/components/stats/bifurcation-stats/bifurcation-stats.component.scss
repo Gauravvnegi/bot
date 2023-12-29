@@ -48,7 +48,7 @@
     display: flex;
     justify-content: flex-start;
     &__title {
-      font: normal normal $bolder 21px/21px Poppins;
+      font: normal normal $bolder 16px/21px Poppins;
       letter-spacing: 0.96px;
       color: $secondary;
       @media screen and (max-width: 1024px) {

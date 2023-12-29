@@ -209,7 +209,6 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
     this.sidebarSlide.clear();
     this.sidebarSlide.createEmbeddedView(this.urlTemplate);
     this.sidebarVisible = true;
-    this.sideBarService.setSideBarZIndex(1000, true);
   }
 
   scrollToTop() {

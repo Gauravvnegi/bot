@@ -86,3 +86,9 @@
   color: #4423c6;
   box-shadow: 1px 1px 1px 0px #00000070;
 }
+
+:host ::ng-deep {
+  .p-button-icon {
+    font-size: 12px;
+  }
+}

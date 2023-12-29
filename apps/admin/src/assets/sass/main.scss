@@ -91,3 +91,24 @@
     color: $primary !important;
   }
 }
+
+// Dynamic dialog styling
+@mixin dialog-style {
+  .p-dialog-header {
+    display: none;
+  }
+  .p-dialog-content {
+    border-radius: 5px;
+    padding: 0;
+  }
+}
+
+.dynamic-modal {
+  min-width: 950px;
+  @include dialog-style;
+}
+
+// Confirmation dialog style
+.confirm-dialog {
+  @include dialog-style;
+}

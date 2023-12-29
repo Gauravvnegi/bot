@@ -20,6 +20,7 @@ import {
   RoutesConfigService,
 } from '@hospitality-bot/admin/core/theme';
 import {
+  BookingDetailService,
   EntitySubType,
   ModuleNames,
   Option,
@@ -129,7 +130,8 @@ export class QuickReservationFormComponent implements OnInit {
     private compiler: Compiler,
     private resolver: ComponentFactoryResolver,
     private modalService: ModalService,
-    protected routesConfigService: RoutesConfigService
+    protected routesConfigService: RoutesConfigService,
+    public bookingDetailService: BookingDetailService
   ) {
     this.formService.resetData();
     this.initForm();
@@ -541,23 +543,29 @@ export class QuickReservationFormComponent implements OnInit {
   }
 
   openDetailsPage() {
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.disableClose = true;
-    dialogConfig.width = '100%';
-    const detailCompRef = this.modalService.openDialog(
-      DetailsComponent,
-      dialogConfig
-    );
+    // Need to remove
+    // const dialogConfig = new MatDialogConfig();
+    // dialogConfig.disableClose = true;
+    // dialogConfig.width = '100%';
+    // const detailCompRef = this.modalService.openDialog(
+    //   DetailsComponent,
+    //   dialogConfig
+    // );
 
-    detailCompRef.componentInstance.bookingId = this.reservationId;
-    detailCompRef.componentInstance.tabKey = 'guest_details';
-    this.increaseZIndex(true);
-    this.$subscription.add(
-      detailCompRef.componentInstance.onDetailsClose.subscribe((res) => {
-        this.increaseZIndex(false);
-        detailCompRef.close();
-      })
-    );
+    // detailCompRef.componentInstance.bookingId = this.reservationId;
+    // detailCompRef.componentInstance.tabKey = 'guest_details';
+    // this.increaseZIndex(true);
+    // this.$subscription.add(
+    //   detailCompRef.componentInstance.onDetailsClose.subscribe((res) => {
+    //     this.increaseZIndex(false);
+    //     detailCompRef.close();
+    //   })
+    // );
+
+    this.bookingDetailService.openBookingDetailSidebar({
+      tabKey: 'guest_details',
+      bookingId: this.reservationId,
+    });
   }
 
   increaseZIndex(toggleZIndex: boolean) {

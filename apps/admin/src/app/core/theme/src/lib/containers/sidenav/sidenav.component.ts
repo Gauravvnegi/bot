@@ -354,6 +354,25 @@ export class SidenavComponent implements OnInit, OnDestroy {
   onExplore() {
     this.isMenuBarVisible = !this.isMenuBarVisible;
   }
+
+  /**
+   * Dynamically adding z index as mask has lower index
+   */
+  clickOnToggle() {
+    let interval;
+    interval = setInterval(() => {
+      const elements = document.querySelectorAll(
+        '.p-component-overlay.p-sidebar-mask'
+      );
+      if (elements?.length) {
+        elements[0].setAttribute('style', `z-index: 150 !important;`);
+        clearInterval(interval);
+      }
+    });
+    this.isMenuBarVisible = true;
+    this.navToggle.emit(false);
+  }
+
   onImageLoad() {
     this.isImageLoaded = true;
   }

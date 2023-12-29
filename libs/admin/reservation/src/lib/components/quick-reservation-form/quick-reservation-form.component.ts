@@ -42,7 +42,7 @@ import { Subscription } from 'rxjs';
 import { AddGuestComponent } from 'libs/admin/guests/src/lib/components/add-guest/add-guest.component';
 import { RoomTypeResponse } from 'libs/admin/room/src/lib/types/service-response';
 import { GuestType } from 'libs/admin/guests/src/lib/types/guest.type';
-import { RoomFieldTypeOption } from 'libs/admin/manage-reservation/src/lib/constants/reservation';
+import { RoomTypeOption } from 'libs/admin/manage-reservation/src/lib/constants/reservation';
 import { MatDialogConfig } from '@angular/material/dialog';
 import { DetailsComponent } from '../details/details.component';
 import { AgentTableResponse } from 'libs/admin/agent/src/lib/types/response';
@@ -84,7 +84,7 @@ export class QuickReservationFormComponent implements OnInit {
 
   selectedGuest: Option;
   defaultRoomType: IGRoomType;
-  selectedRoomType: RoomFieldTypeOption;
+  selectedRoomType: RoomTypeOption;
   selectedAgent: AgentTableResponse;
 
   selectedRoom: string;

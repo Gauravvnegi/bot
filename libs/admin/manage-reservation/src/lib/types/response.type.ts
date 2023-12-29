@@ -207,3 +207,15 @@ export type OfferResponse = {
   updated: number;
   offerType: string;
 };
+
+export type RoomUpgradeType = {
+  roomTypeId: string;
+  ratePlanId: string;
+  roomNumber: string;
+  chargeable: boolean;
+  chargedAmount: number;
+  remarks: string;
+  effectiveDate: number;
+  ratePlanOptions: string[];
+  roomNumberOptions: string[];
+};

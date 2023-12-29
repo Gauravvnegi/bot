@@ -138,12 +138,15 @@
   [(visible)]="openDialog"
   [style]="{ width: '60vw' }"
   [modal]="true"
+  (onHide)="closeDialog()"
 >
   <hospitality-bot-upgrade-room-type
-    (onClose)="openDialog = false"
+    (onClose)="onCloseRoomUpgrade($event)"
     [roomConfig]="{
       entityId: entityId,
-      queryConfig: getConfig()
+      queryConfig: getConfig(),
+      reservationId: reservationId,
+      effectiveDate: effectiveDate
     }"
   ></hospitality-bot-upgrade-room-type>
 </p-dialog>

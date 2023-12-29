@@ -1,8 +1,8 @@
 <div class="dialog-wrapper">
-  <div class="form-block" [formGroup]="useForm">
+  <div class="form-block" [formGroup]="formService.roomUpgradeForm">
     <hospitality-bot-quick-select
       label="Room Type"
-      controlName="roomType"
+      controlName="roomTypeId"
       class="one-third-width select"
       [inputType]="'select'"
       [props]="{
@@ -34,7 +34,7 @@
       class="one-third-width select"
       label="Room Number"
       controlName="roomNumber"
-      [options]="roomNumbers"
+      [options]="inputControls.roomNumberOptions.value"
       [props]="{
         placeholder: 'Select'
       }"
@@ -42,8 +42,8 @@
     <hospitality-bot-select
       class="one-third-width select"
       label="Rate Plan"
-      controlName="ratePlan"
-      [options]="ratePlans"
+      controlName="ratePlanId"
+      [options]="inputControls.ratePlanOptions.value"
       [props]="{
         placeholder: 'Select'
       }"
@@ -52,10 +52,11 @@
     <hospitality-bot-input
       class="one-third-width"
       label="Amount"
-      controlName="amount"
+      controlName="chargedAmount"
       [props]="{
         placeholder: 'Enter'
       }"
+      [disabled]="!inputControls.chargeable.value"
     ></hospitality-bot-input>
 
     <hospitality-bot-toggle-switch

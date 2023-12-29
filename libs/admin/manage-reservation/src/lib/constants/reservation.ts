@@ -56,7 +56,7 @@ export const roomFields: IteratorField[] = [
   },
 ];
 
-export type RoomFieldTypeOption = {
+export type RoomTypeOption = {
   label: string;
   value: string;
   roomCount: number;

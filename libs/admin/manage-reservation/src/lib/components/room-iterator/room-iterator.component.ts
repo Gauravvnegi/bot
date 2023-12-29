@@ -26,7 +26,7 @@ import {
 } from 'libs/admin/shared/src';
 import { IteratorComponent } from 'libs/admin/shared/src/lib/components/iterator/iterator.component';
 import { Subscription } from 'rxjs';
-import { roomFields, RoomFieldTypeOption } from '../../constants/reservation';
+import { roomFields, RoomTypeOption } from '../../constants/reservation';
 import { ReservationForm, RoomTypes } from '../../constants/form';
 import { IteratorField } from 'libs/admin/shared/src/lib/types/fields.type';
 import { FormService } from '../../services/form.service';
@@ -34,6 +34,7 @@ import { RoomTypeResponse } from 'libs/admin/room/src/lib/types/service-response
 import { ReservationType } from '../../constants/reservation-table';
 import { RoomService } from 'libs/admin/room/src/lib/services/room.service';
 import { ReservationCurrentStatus } from '../../models/reservations.model';
+import { RoomUpgradeType } from '../../types/response.type';
 
 @Component({
   selector: 'hospitality-bot-room-iterator',
@@ -63,7 +64,9 @@ export class RoomIteratorComponent extends IteratorComponent
   globalQueries = [];
   errorMessages = {};
 
-  selectedRoomTypes: RoomFieldTypeOption[] = [];
+  effectiveDate: number;
+
+  selectedRoomTypes: RoomTypeOption[] = [];
 
   $subscription = new Subscription();
 
@@ -135,11 +138,12 @@ export class RoomIteratorComponent extends IteratorComponent
       this.globalQueries = [...data['dateRange'].queryValue];
     });
     this.formService.currentJourneyStatus.subscribe((res) => {
-      this.isCheckedIn =
-        res &&
-        (res === ReservationCurrentStatus.INHOUSE ||
-          res === ReservationCurrentStatus.DUEOUT);
-      this.isCheckedout = res && res === ReservationCurrentStatus.CHECKEDOUT;
+      if (res) {
+        this.isCheckedIn =
+          res === ReservationCurrentStatus.INHOUSE ||
+          res === ReservationCurrentStatus.DUEOUT;
+        this.isCheckedout = res === ReservationCurrentStatus.CHECKEDOUT;
+      }
     });
   }
 
@@ -278,7 +282,7 @@ export class RoomIteratorComponent extends IteratorComponent
    * @param index to keep track of the form array.
    */
   listenRoomTypeChanges(
-    roomType: RoomFieldTypeOption,
+    roomType: RoomTypeOption,
     index: number,
     defaultOption: boolean
   ) {
@@ -418,6 +422,23 @@ export class RoomIteratorComponent extends IteratorComponent
       return;
     }
     this.roomTypeArray.removeAt(index);
+  }
+
+  closeDialog() {
+    this.formService.roomUpgradeForm.reset();
+  }
+
+  onCloseRoomUpgrade(upgradedRoom: RoomUpgradeType) {
+    if (upgradedRoom) {
+      // this.roomControls[0].patchValue({
+      //   roomTypeId: upgradedRoom.roomTypeId,
+      //   roomNumber: upgradedRoom.roomNumber,
+      //   ratePlan: upgradedRoom.ratePlanId,
+      //   roomNumberOptions: upgradedRoom.roomNumberOptions,
+      //   ratePlanOptions: upgradedRoom.ratePlanOptions,
+      // });
+    }
+    this.openDialog = false;
   }
 
   /**

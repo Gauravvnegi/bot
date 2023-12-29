@@ -288,6 +288,11 @@ export class AddReservationComponent extends BaseReservationComponent
               formData,
             });
 
+            this.formService.effectiveDate =
+              response.status === ReservationCurrentStatus.INHOUSE ||
+              response.status === ReservationCurrentStatus.DUEOUT
+                ? Date.now()
+                : reservationInfo.from;
             this.inputControls.offerId.patchValue(
               this.reservationFormData.offerId
             );

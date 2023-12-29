@@ -359,16 +359,7 @@ export class SidenavComponent implements OnInit, OnDestroy {
    * Dynamically adding z index as mask has lower index
    */
   clickOnToggle() {
-    let interval;
-    interval = setInterval(() => {
-      const elements = document.querySelectorAll(
-        '.p-component-overlay.p-sidebar-mask'
-      );
-      if (elements?.length) {
-        elements[0].setAttribute('style', `z-index: 150 !important;`);
-        clearInterval(interval);
-      }
-    });
+    manageMaskZIndex(150);
     this.isMenuBarVisible = true;
     this.navToggle.emit(false);
   }
@@ -376,4 +367,17 @@ export class SidenavComponent implements OnInit, OnDestroy {
   onImageLoad() {
     this.isImageLoaded = true;
   }
+}
+
+export function manageMaskZIndex(zIndex: number) {
+  let interval;
+  interval = setInterval(() => {
+    const elements = document.querySelectorAll(
+      '.p-component-overlay.p-sidebar-mask'
+    );
+    if (elements?.length) {
+      elements[0].setAttribute('style', `z-index: ${zIndex} !important;`);
+      clearInterval(interval);
+    }
+  });
 }

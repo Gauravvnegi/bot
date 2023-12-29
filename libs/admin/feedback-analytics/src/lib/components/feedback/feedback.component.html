@@ -44,15 +44,15 @@
     </div>
     <div class="shared-container">
       <div class="shared-stats">
+        <hospitality-bot-received-breakdown
+          [globalFeedbackFilterType]="globalFeedbackFilterType"
+        ></hospitality-bot-received-breakdown>
+      </div>
+      <div class="shared-stats">
         <hospitality-bot-gtm-stats
           [globalFeedbackFilterType]="globalFeedbackFilterType"
         >
         </hospitality-bot-gtm-stats>
-      </div>
-      <div class="shared-stats">
-        <hospitality-bot-received-breakdown
-          [globalFeedbackFilterType]="globalFeedbackFilterType"
-        ></hospitality-bot-received-breakdown>
       </div>
     </div>
   </div>

@@ -12,7 +12,14 @@
 <div class="feedback-container mb-20">
   <div class="stats--wrapper">
     <div class="bifurcation-stats">
+      <hospitality-bot-response-rate
+        class="shared-stats"
+        [globalFeedbackFilterType]="globalFeedbackFilterType"
+      >
+      </hospitality-bot-response-rate>
+
       <hospitality-bot-bifurcation-stats
+        class="shared-stats"
         [globalFeedbackFilterType]="globalFeedbackFilterType"
       ></hospitality-bot-bifurcation-stats>
     </div>
@@ -37,10 +44,10 @@
     </div>
     <div class="shared-container">
       <div class="shared-stats">
-        <hospitality-bot-response-rate
+        <hospitality-bot-gtm-stats
           [globalFeedbackFilterType]="globalFeedbackFilterType"
         >
-        </hospitality-bot-response-rate>
+        </hospitality-bot-gtm-stats>
       </div>
       <div class="shared-stats">
         <hospitality-bot-received-breakdown

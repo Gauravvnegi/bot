@@ -290,4 +290,8 @@ export class BifurcationStatsComponent implements OnInit {
       ? ''
       : this.tabFeedbackType;
   }
+
+  ngOnDestroy() {
+    this.$subscription.unsubscribe();
+  }
 }

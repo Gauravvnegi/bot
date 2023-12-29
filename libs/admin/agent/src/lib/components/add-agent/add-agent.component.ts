@@ -114,7 +114,7 @@ export class AddAgentComponent implements OnInit {
       phoneNo: ['', [Validators.required]],
       iataNo: ['', [CustomValidators.requiredLength(14)]],
       agencyName: ['', [Validators.required]],
-      address: [''],
+      address: ['', Validators.required],
       commissionType: [commissionType.PERCENTAGE],
       commission: ['', [Validators.min(0)]],
       marketSegment: [''],

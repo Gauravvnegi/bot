@@ -7,6 +7,7 @@ import {
 } from '@hospitality-bot/admin/core/theme';
 import {
   AdminUtilityService,
+  BookingDetailService,
   FlagType,
   ModuleNames,
   Option,
@@ -45,12 +46,10 @@ import {
   reservationMenuOptions,
   reservationStatusColorCode,
 } from '../../constants/reservation';
-import { MatDialogConfig } from '@angular/material/dialog';
 import {
   ModalService,
   SnackBarService,
 } from '@hospitality-bot/shared/material';
-import { DetailsComponent } from '../details/details.component';
 import { RoomMapType } from 'libs/admin/channel-manager/src/lib/types/channel-manager.types';
 import * as moment from 'moment';
 import { AdminDetailsService } from '../../services/admin-details.service';
@@ -100,13 +99,13 @@ export class ReservationCalendarViewComponent implements OnInit {
     private globalFilterService: GlobalFilterService,
     private roomService: RoomService,
     private adminUtilityService: AdminUtilityService,
-    private modalService: ModalService,
     private adminDetailsService: AdminDetailsService,
     private _reservationService: ReservationService,
     private snackbarService: SnackBarService,
     private _clipboard: Clipboard,
     private routesConfigService: RoutesConfigService,
-    private auditService: NightAuditService
+    private auditService: NightAuditService,
+    private bookingDetailService: BookingDetailService
   ) {}
 
   ngOnInit(): void {
@@ -769,20 +768,25 @@ export class ReservationCalendarViewComponent implements OnInit {
   }
 
   openDetailsPage(reservationId: string) {
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.disableClose = true;
-    dialogConfig.width = '100%';
-    const detailCompRef = this.modalService.openDialog(
-      DetailsComponent,
-      dialogConfig
-    );
-    detailCompRef.componentInstance.bookingId = reservationId;
-    detailCompRef.componentInstance.tabKey = 'guest_details';
-    this.$subscription.add(
-      detailCompRef.componentInstance.onDetailsClose.subscribe((res) => {
-        detailCompRef.close();
-      })
-    );
+    // TODO: Need to remove
+    // const dialogConfig = new MatDialogConfig();
+    // dialogConfig.disableClose = true;
+    // dialogConfig.width = '100%';
+    // const detailCompRef = this.modalService.openDialog(
+    //   DetailsComponent,
+    //   dialogConfig
+    // );
+    // detailCompRef.componentInstance.bookingId = reservationId;
+    // detailCompRef.componentInstance.tabKey = 'guest_details';
+    // this.$subscription.add(
+    //   detailCompRef.componentInstance.onDetailsClose.subscribe((res) => {
+    //     detailCompRef.close();
+    //   })
+    // );
+    this.bookingDetailService.openBookingDetailSidebar({
+      bookingId: reservationId,
+      tabKey: 'guest_details',
+    });
   }
 
   /**

@@ -1,3 +1,5 @@
+import { GuestDatatableModalComponent } from '../components';
+
 export type ChartTypeOption = {
   name: string;
   value: string;
@@ -29,3 +31,10 @@ export type GuestModalStatus =
   | 'MICROSITE'
   | 'OTHERS'
   | 'WHATSAPP';
+
+export type GuestDialogData = Partial<GuestDatatableModalComponent>;
+
+export type GuestModalType =
+  | 'payment.title'
+  | 'document.title'
+  | 'source.title';

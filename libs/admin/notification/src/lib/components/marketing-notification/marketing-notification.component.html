@@ -1,4 +1,7 @@
-<div class="container" *ngIf="config; else loader">
+<div
+  class="container market-notifiction__container"
+  *ngIf="config; else loader"
+>
   <div class="modal-header">
     <div></div>
     <div class="modal-header__heading">Send Email</div>
@@ -30,7 +33,7 @@
       class="half-width"
       [props]="{ placeholder: 'Select Template' }"
     ></hospitality-bot-select>
-      <hospitality-bot-select
+    <hospitality-bot-select
       *ngIf="isPackageVisible"
       label="Packages"
       controlName="packageId"

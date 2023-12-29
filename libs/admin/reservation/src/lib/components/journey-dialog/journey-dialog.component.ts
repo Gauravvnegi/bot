@@ -1,4 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 
 @Component({
   selector: 'hospitality-bot-journey-dialog',
@@ -38,7 +39,14 @@ export class JourneyDialogComponent implements OnInit {
 
   @Output() onDetailsClose = new EventEmitter();
 
-  constructor() {}
+  constructor(
+    private ref: DynamicDialogRef,
+    public dialogConfig: DynamicDialogConfig
+  ) {
+    if (dialogConfig?.data) {
+      this._config = { ...this._defaultValue, ...dialogConfig?.data };
+    }
+  }
 
   ngOnInit(): void {}
 
@@ -51,6 +59,7 @@ export class JourneyDialogComponent implements OnInit {
       ].apply(acceptButtonConfig.context, [...acceptButtonConfig.handler.args]);
     }
 
+    this.ref.close();
     this.onDetailsClose.next(true);
   }
 
@@ -62,6 +71,23 @@ export class JourneyDialogComponent implements OnInit {
         cancelButtonConfig.handler.fn_name
       ].apply(cancelButtonConfig.context, [...cancelButtonConfig.handler.args]);
     }
+    this.ref.close();
     this.onDetailsClose.next(true);
   }
 }
+
+export type ConfirmDialogData = {
+  title?: string;
+  description?: string;
+  question?: string;
+  buttons?: {
+    cancel?: {
+      label: string;
+      context: string;
+    };
+    accept?: {
+      label: string;
+      context: string;
+    };
+  };
+};

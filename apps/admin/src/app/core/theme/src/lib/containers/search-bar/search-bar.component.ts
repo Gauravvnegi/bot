@@ -16,10 +16,11 @@ import { HotelDetailService } from 'libs/admin/shared/src/lib/services/hotel-det
 import { ModalService } from 'libs/shared/material/src/lib/services/modal.service';
 import { Subscription, empty, of } from 'rxjs';
 import { catchError, debounceTime, switchMap } from 'rxjs/operators';
-import { SnackBarService } from '../../../../../../../../../../libs/shared/material/src/lib/services/snackbar.service';
+import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.service';
 import { SearchResultDetail } from '../../data-models/search-bar-config.model';
 import { GlobalFilterService } from '../../services/global-filters.service';
 import { SearchService } from '../../services/search.service';
+import { BookingDetailService } from 'libs/admin/shared/src/index';
 import { RoutesConfigService } from '../../services/routes-config.service';
 import { ModuleNames } from 'libs/admin/shared/src/lib/constants/subscriptionConfig';
 import { packagesRoutes } from 'libs/admin/packages/src/lib/constant/routes';
@@ -51,6 +52,7 @@ export class SearchBarComponent implements OnInit, OnDestroy {
     private snackbarService: SnackBarService,
     private router: Router,
     private globalFilterService: GlobalFilterService,
+    private bookingDetailService: BookingDetailService,
     private routesConfigService: RoutesConfigService
   ) {}
 
@@ -138,27 +140,34 @@ export class SearchBarComponent implements OnInit, OnDestroy {
   }
 
   openDetailsPage(searchData) {
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.disableClose = true;
-    dialogConfig.width = '100%';
-    const detailCompRef = this.modal.openDialog(
-      BookingDetailComponent,
-      dialogConfig
-    );
+    // const dialogConfig = new MatDialogConfig();
+    // dialogConfig.disableClose = true;
+    // dialogConfig.width = '100%';
+    // const detailCompRef = this.modal.openDialog(
+    //   BookingDetailComponent,
+    //   dialogConfig
+    // );
 
     if (searchData.type === 'GUEST') {
-      detailCompRef.componentInstance.guestId = searchData.id;
+      this.bookingDetailService.openBookingDetailSidebar({
+        guestId: searchData.id,
+      });
+      // detailCompRef.componentInstance.guestId = searchData.id;
     } else {
-      detailCompRef.componentInstance.guestId = searchData.guestId;
-      detailCompRef.componentInstance.bookingNumber = searchData.bookingNumber;
+      this.bookingDetailService.openBookingDetailSidebar({
+        bookingNumber: searchData.bookingNumber,
+        guestId: searchData.guestId,
+      });
+      // detailCompRef.componentInstance.guestId = searchData.guestId;
+      // detailCompRef.componentInstance.bookingNumber = searchData.bookingNumber;
     }
 
-    this.$subscription.add(
-      detailCompRef.componentInstance.onDetailsClose.subscribe((res) => {
-        // TODO statements
-        detailCompRef.close();
-      })
-    );
+    // this.$subscription.add(
+    //   detailCompRef.componentInstance.onDetailsClose.subscribe((res) => {
+    //     // TODO statements
+    //     detailCompRef.close();
+    //   })
+    // );
   }
 
   onFocus() {
@@ -179,7 +188,7 @@ export class SearchBarComponent implements OnInit, OnDestroy {
 
     this.routesConfigService.navigate({
       subModuleName: ModuleNames.PACKAGES,
-      additionalPath: `${packagesRoutes.createPackage}/${id}`,
+      additionalPath: `${packagesRoutes.createPackage.route}/${id}`,
     });
   }
 

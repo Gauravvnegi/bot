@@ -1,7 +1,6 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { MatDialogConfig } from '@angular/material/dialog';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
-import { AdminUtilityService } from '@hospitality-bot/admin/shared';
+import { AdminUtilityService, openModal } from '@hospitality-bot/admin/shared';
 import {
   ModalService,
   SnackBarService,
@@ -14,6 +13,8 @@ import { guest } from '../../../constants/guest';
 import { Payment } from '../../../data-models/statistics.model';
 import { StatisticsService } from '../../../services/statistics.service';
 import { GuestDatatableModalComponent } from '../../modal/guest-datatable/guest-datatable.component';
+import { GuestDialogData } from '../../../types/guest.type';
+import { DialogService } from 'primeng/dynamicdialog';
 
 @Component({
   selector: 'hospitality-bot-guest-payments-statistics',
@@ -45,9 +46,8 @@ export class GuestPaymentsStatisticsComponent implements OnInit, OnDestroy {
     private _adminUtilityService: AdminUtilityService,
     private _statisticService: StatisticsService,
     private globalFilterService: GlobalFilterService,
-    private snackbarService: SnackBarService,
-    private _modal: ModalService,
-    private _translateService: TranslateService
+    private _translateService: TranslateService,
+    public dialogService: DialogService
   ) {}
 
   ngOnInit(): void {
@@ -121,27 +121,46 @@ export class GuestPaymentsStatisticsComponent implements OnInit, OnDestroy {
   /**
    * @function openTableModal To open modal pop-up for guest table based on payment status filter.
    */
+  // openTableModal() {
+  //   const dialogConfig = new MatDialogConfig();
+  //   dialogConfig.disableClose = true;
+  //   dialogConfig.width = '100%';
+  //   const tableCompRef = this._modal.openDialog(
+  //     GuestDatatableModalComponent,
+  //     dialogConfig
+  //   );
+
+  //   this._translateService
+  //     .get('payment.title')
+  //     .subscribe(
+  //       (message) => (tableCompRef.componentInstance.tableName = message)
+  //     );
+  //   tableCompRef.componentInstance.tabFilterItems = this.tabFilterItems;
+  //   tableCompRef.componentInstance.callingMethod = 'getAllGuestStats';
+  //   tableCompRef.componentInstance.guestFilter = 'GUESTPAYMENTS';
+  //   tableCompRef.componentInstance.exportURL = 'exportCSVStat';
+
+  //   tableCompRef.componentInstance.onModalClose.subscribe((res) => {
+  //     tableCompRef.close();
+  //   });
+  // }
+
+  /**
+   * @function openTableModal To open modal pop-up for guest table based on document status filter.
+   */
   openTableModal() {
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.disableClose = true;
-    dialogConfig.width = '100%';
-    const tableCompRef = this._modal.openDialog(
-      GuestDatatableModalComponent,
-      dialogConfig
-    );
+    const data: GuestDialogData = {
+      tabFilterItems: this.tabFilterItems,
+      callingMethod: 'getAllGuestStats',
+      guestFilter: 'GUESTPAYMENTS',
+      exportURL: 'exportCSVStat',
+      modalType: 'payment.title',
+    };
 
-    this._translateService
-      .get('payment.title')
-      .subscribe(
-        (message) => (tableCompRef.componentInstance.tableName = message)
-      );
-    tableCompRef.componentInstance.tabFilterItems = this.tabFilterItems;
-    tableCompRef.componentInstance.callingMethod = 'getAllGuestStats';
-    tableCompRef.componentInstance.guestFilter = 'GUESTPAYMENTS';
-    tableCompRef.componentInstance.exportURL = 'exportCSVStat';
-
-    tableCompRef.componentInstance.onModalClose.subscribe((res) => {
-      tableCompRef.close();
+    openModal({
+      config: { data: data },
+      dialogService: this.dialogService,
+      component: GuestDatatableModalComponent,
     });
   }
 

@@ -1,7 +1,11 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialogConfig } from '@angular/material/dialog';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
-import { AdminUtilityService } from '@hospitality-bot/admin/shared';
+import {
+  AdminUtilityService,
+  openModal as openDynamicModal,
+  openModal,
+} from '@hospitality-bot/admin/shared';
 import {
   ModalService,
   SnackBarService,
@@ -14,6 +18,8 @@ import { guest, SourceChipsType } from '../../../constants/guest';
 import { Source } from '../../../data-models/statistics.model';
 import { StatisticsService } from '../../../services/statistics.service';
 import { GuestDatatableModalComponent } from '../../modal/guest-datatable/guest-datatable.component';
+import { GuestDialogData } from '../../../types/guest.type';
+import { DialogService } from 'primeng/dynamicdialog';
 
 @Component({
   selector: 'hospitality-bot-source-statistics',
@@ -87,7 +93,8 @@ export class SourceStatisticsComponent implements OnInit, OnDestroy {
     private snackbarService: SnackBarService,
     private _modal: ModalService,
     private dateService: DateService,
-    private _translateService: TranslateService
+    private _translateService: TranslateService,
+    private dialogService: DialogService
   ) {}
 
   ngOnInit(): void {
@@ -208,26 +215,41 @@ export class SourceStatisticsComponent implements OnInit, OnDestroy {
    */
   openTableModal() {
     this.updateTabChips();
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.disableClose = true;
-    dialogConfig.width = '100%';
-    const tableCompRef = this._modal.openDialog(
-      GuestDatatableModalComponent,
-      dialogConfig
-    );
+    // TODO: Need to remove
+    // const dialogConfig = new MatDialogConfig();
+    // dialogConfig.disableClose = true;
+    // dialogConfig.width = '100%';
+    // const tableCompRef = this._modal.openDialog(
+    //   GuestDatatableModalComponent,
+    //   dialogConfig
+    // );
 
-    this._translateService
-      .get('source.title')
-      .subscribe(
-        (message) => (tableCompRef.componentInstance.tableName = message)
-      );
-    tableCompRef.componentInstance.tabFilterItems = this.tabFilterItems;
-    tableCompRef.componentInstance.callingMethod = 'getAllGuestStats';
-    tableCompRef.componentInstance.guestFilter = 'GUESTSOURCES';
-    tableCompRef.componentInstance.exportURL = 'exportCSVStat';
-    
-    tableCompRef.componentInstance.onModalClose.subscribe((res) => {
-      tableCompRef.close();
+    // this._translateService
+    //   .get('source.title')
+    //   .subscribe(
+    //     (message) => (tableCompRef.componentInstance.tableName = message)
+    //   );
+    // tableCompRef.componentInstance.tabFilterItems = this.tabFilterItems;
+    // tableCompRef.componentInstance.callingMethod = 'getAllGuestStats';
+    // tableCompRef.componentInstance.guestFilter = 'GUESTSOURCES';
+    // tableCompRef.componentInstance.exportURL = 'exportCSVStat';
+
+    // tableCompRef.componentInstance.onModalClose.subscribe((res) => {
+    //   tableCompRef.close();
+    // });
+
+    const data: GuestDialogData = {
+      tabFilterItems: this.tabFilterItems as any[],
+      callingMethod: 'getAllGuestStats',
+      guestFilter: 'GUESTSOURCES',
+      exportURL: 'exportCSVStat',
+      modalType: 'source.title',
+    };
+
+    openModal({
+      config: { data: data },
+      dialogService: this.dialogService,
+      component: GuestDatatableModalComponent,
     });
   }
 

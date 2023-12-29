@@ -444,3 +444,37 @@ export class FileData {
   file_download_url: string;
   file_type: string;
 }
+
+export class CalendarOccupancy {
+  dataMap = new Map<
+    number,
+    Map<string, { available: number; occupancy: number }>
+  >();
+
+  deserialize(input: CalendarOccupancyResponse) {
+    Object.entries(input).forEach(([dateEpoch, roomData]) => {
+      const parsedDateEpoch = parseInt(dateEpoch, 10);
+      const roomMap = new Map<
+        string,
+        { available: number; occupancy: number }
+      >();
+
+      Object.entries(roomData).forEach(([roomId, values]) => {
+        roomMap.set(roomId, values);
+      });
+
+      this.dataMap.set(parsedDateEpoch, roomMap);
+    });
+
+    return this.dataMap;
+  }
+}
+
+export type CalendarOccupancyResponse = {
+  date: {
+    roomTypeId: {
+      available: number;
+      occupancy: number;
+    };
+  };
+};

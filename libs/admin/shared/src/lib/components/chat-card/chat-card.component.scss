@@ -10,9 +10,15 @@
     border-radius: 50%;
     margin-right: 15px;
     @include flex-all-center;
+    background-color: #d9d9d9;
     img {
       @include full-img;
     }
+
+    .mute-avatar {
+      width: 70%;
+    }
+
     &-nickName {
       width: 48px;
       height: 48px;
@@ -167,8 +173,9 @@
     .mute-status {
       justify-content: flex-end;
       position: absolute;
-      bottom: -15px;
-      right: -5px;
+      // bottom: -15px;
+      top: 0;
+      right: -12px;
       gap: 0.4em;
       img {
         height: 1.5em;

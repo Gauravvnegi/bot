@@ -159,7 +159,7 @@ export class Notification {
     );
     this.statistics.push(
       new Stat().deserialize({
-        label: 'Post Check-In',
+        label: 'In-House',
         count: input.checkInCounts,
         color: '#15eda3',
       })

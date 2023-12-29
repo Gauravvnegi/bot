@@ -96,3 +96,12 @@
   [model]="contextOptions"
   appendTo="body"
 ></p-contextMenu>
+
+<p-dialog
+  class="dialog"
+  [showHeader]="false"
+  [(visible)]="isMutePopUpVisible"
+  [modal]="true"
+>
+  <ng-container  #dailog></ng-container>
+</p-dialog>

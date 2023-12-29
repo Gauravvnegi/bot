@@ -1,6 +1,7 @@
 import {
   AfterViewChecked,
   Component,
+  ComponentFactoryResolver,
   ElementRef,
   EventEmitter,
   HostListener,
@@ -9,6 +10,7 @@ import {
   OnInit,
   Output,
   ViewChild,
+  ViewContainerRef,
 } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
@@ -23,6 +25,7 @@ import { ContactList, IContactList } from '../../models/message.model';
 import { MessageService } from '../../services/messages.service';
 import { MenuItem } from 'libs/admin/all-outlets/src/lib/models/outlet.model';
 import { convertToNormalCase } from 'libs/admin/shared/src/lib/utils/valueFormatter';
+import { ModalComponent } from 'libs/admin/shared/src/lib/components/modal/modal.component';
 
 @Component({
   selector: 'hospitality-bot-chat-list',
@@ -41,6 +44,11 @@ export class ChatListComponent implements OnInit, OnDestroy {
   filterData = {};
   autoSearched = false;
   paginationDisabled = false;
+  contextOptions: ContextmenuOptions[] = [];
+  isMutePopUpVisible: boolean = false;
+  @ViewChild('dailog', { read: ViewContainerRef }) popup: ViewContainerRef;
+
+  loadedList: 'searched' | 'list' = 'list';
 
   constructor(
     private messageService: MessageService,
@@ -50,7 +58,8 @@ export class ChatListComponent implements OnInit, OnDestroy {
     private _firebaseMessagingService: FirebaseMessagingService,
     private snackbarService: SnackBarService,
     private notificationService: NotificationService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private resolver: ComponentFactoryResolver
   ) {
     this.initFG();
   }
@@ -137,6 +146,7 @@ export class ChatListComponent implements OnInit, OnDestroy {
             {
               entityId: this.entityId,
               limit: this.limit,
+              sort: 'isImportant',
               ...this.filterData,
             },
           ])
@@ -151,6 +161,7 @@ export class ChatListComponent implements OnInit, OnDestroy {
             this.chatList.unreadContacts
           );
           if (this.selected) this.markChatAsRead(this.selected);
+          this.loadedList = 'list';
         })
     );
   }
@@ -199,7 +210,7 @@ export class ChatListComponent implements OnInit, OnDestroy {
           this.entityId,
           this.adminUtilityService.makeQueryParams([
             {
-              limit: this.limit,
+              // limit: this.limit,
               key: searchKey,
               ...this.filterData,
             },
@@ -231,24 +242,24 @@ export class ChatListComponent implements OnInit, OnDestroy {
             );
             this.autoSearched = false;
           }
+
+          this.loadedList = 'searched';
         })
     );
   }
 
   listenForSearchChanges() {
-    const formChanges$ = this.contactFG.valueChanges.pipe(
-      filter(() => !!(this.contactFG.get('search') as FormControl).value)
-    );
-
-    formChanges$.pipe(debounceTime(1000)).subscribe((response) => {
-      // setting minimum search character limit to 3
-      if (response?.search.length >= 3) {
-        this.loadSearchList(response?.search);
-      } else {
-        this.autoSearched = false;
-        this.loadChatList();
-      }
-    });
+    this.contactFG.valueChanges
+      .pipe(debounceTime(1000))
+      .subscribe((response) => {
+        // setting minimum search character limit to 3
+        if (response?.search.length >= 3) {
+          this.loadSearchList(response?.search);
+        } else if (this.loadedList === 'searched') {
+          this.autoSearched = false;
+          this.loadChatList();
+        }
+      });
   }
 
   handleFilter(event) {
@@ -273,67 +284,75 @@ export class ChatListComponent implements OnInit, OnDestroy {
     );
   }
 
-  contextOptions: ContextmenuOptions[] = [];
   handelContextMenu(contact) {
     this.contextOptions = [
       !!contact?.important
         ? {
-            label: 'Mark as unimportant',
-            name: 'UNIMPORTANT',
+            label: 'Unpin',
+            name: 'UNPIN',
+            icon: 'unpin-icon',
             command: () =>
-              this.handleRightClick({
-                name: 'UNIMPORTANT',
-                id: contact?.receiverId,
-              }),
+              this.handleMarking(contact?.receiverId, false, 'markAsImportant'),
           }
         : {
-            label: 'Mark as important',
-            name: 'IMPORTANT',
+            label: 'Pin to top',
+            name: 'PIN',
+            icon: 'pin-icon',
             command: () =>
-              this.handleRightClick({
-                name: 'IMPORTANT',
-                id: contact?.receiverId,
-              }),
+              this.handleMarking(contact?.receiverId, true, 'markAsImportant'),
           },
       !!contact?.mute
         ? {
             label: 'Unmute',
             name: 'UNMUTE',
+            icon: 'unmute-icon',
             command: () =>
-              this.handleRightClick({
-                name: 'UNMUTE',
-                id: contact?.receiverId,
-              }),
+              this.handleMarking(contact?.receiverId, false, 'markAsMute'),
           }
         : {
             label: 'Mute',
             name: 'MUTE',
-            command: () =>
-              this.handleRightClick({ name: 'MUTE', id: contact?.receiverId }),
+            icon: 'mute-icon',
+            command: () => {
+              this.openMutePopUp({ id: contact?.receiverId });
+              this.isMutePopUpVisible = true;
+            },
           },
     ];
   }
 
-  handleRightClick(data: { name: ContextmenuName; id: string }) {
-    const { name, id } = data || {};
+  openMutePopUp(data) {
+    this.popup.clear();
+    const factory = this.resolver.resolveComponentFactory(ModalComponent);
+    const componentRef = this.popup.createComponent(factory);
 
-    switch (name) {
-      case 'IMPORTANT':
-        this.handleMarking(id, true, 'markAsImportant');
-        break;
+    componentRef.instance.content = {
+      heading: `Mute Notification`,
+      description: [
+        `Guest will not see that you muted this chat and you will still be notified on Guest Message, but the escalation of these messages won't occur.`,
+      ],
+    };
+    componentRef.instance.actions = [
+      {
+        label: 'No',
+        onClick: () => {
+          this.isMutePopUpVisible = false;
+        },
+        variant: 'outlined',
+      },
+      {
+        label: 'Mute',
+        onClick: () => {
+          this.handleMarking(data.id, true, 'markAsMute');
+          this.isMutePopUpVisible = false;
+        },
+        variant: 'contained',
+      },
+    ];
 
-      case 'UNIMPORTANT':
-        this.handleMarking(id, false, 'markAsImportant');
-        break;
-
-      case 'MUTE':
-        this.handleMarking(id, true, 'markAsMute');
-        break;
-
-      case 'UNMUTE':
-        this.handleMarking(id, false, 'markAsMute');
-        break;
-    }
+    componentRef.instance.onClose.subscribe((res) => {
+      this.isMutePopUpVisible = false;
+    });
   }
 
   handleMarking(
@@ -353,9 +372,15 @@ export class ChatListComponent implements OnInit, OnDestroy {
         }
       });
 
-      this.snackbarService.openSnackBarAsText('Status Updated', '', {
-        panelClass: 'success',
-      });
+      method === 'markAsImportant' && this.loadChatList();
+
+      this.snackbarService.openSnackBarAsText(
+        popUpMessage[key][value ? 'true' : 'false'],
+        '',
+        {
+          panelClass: 'success',
+        }
+      );
     });
   }
 
@@ -364,11 +389,22 @@ export class ChatListComponent implements OnInit, OnDestroy {
   }
 }
 
-type ContextmenuName = 'IMPORTANT' | 'MUTE' | 'UNMUTE' | 'UNIMPORTANT';
+type ContextmenuName = 'PIN' | 'MUTE' | 'UNMUTE' | 'UNPIN';
 
 type ContextmenuOptions = {
   name: ContextmenuName;
   label: string;
   icon?: string;
   command: () => void;
+};
+
+const popUpMessage = {
+  important: {
+    true: 'Conversation Is Pinned',
+    false: 'Conversation Is Unpinned',
+  },
+  mute: {
+    true: 'Conversation Is Muted',
+    false: 'Conversation Is Unmuted',
+  },
 };

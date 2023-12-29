@@ -71,15 +71,17 @@ export class ManagePermissionService extends ApiService {
           manage: 1,
           view: 1,
         },
-        productPermissions: value.permissionConfigs.filter((permissionItem) =>
-          permissionItem.productType.includes(item.value)
-        ),
-        // .map((permissionItem) => ({
-        //   id: permissionItem.id,
-        //   module: permissionItem.module,
-        //   label: permissionItem.label,
-        //   permissions: permissionItem.permissions,
-        // })),
+        productPermissions: value.permissionConfigs
+          .filter((permissionItem) =>
+            permissionItem.productType.includes(item.value)
+          )
+          .map((permissionItem) => ({
+            ...permissionItem,
+            permissions: {
+              manage: permissionItem.permissions.manage !== 1 ? -1 : 1,
+              view: permissionItem.permissions.view !== 1 ? -1 : 1,
+            },
+          })),
       })),
       hotelAccess: {
         brands: [

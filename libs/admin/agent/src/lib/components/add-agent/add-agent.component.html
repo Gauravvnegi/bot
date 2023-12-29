@@ -71,15 +71,6 @@
         }
       }"
     ></hospitality-bot-input>
-
-    <!-- <hospitality-bot-members-list
-      class="half-width"
-      controlName="company"
-      type="COMPANY"
-      label="Agency Name"
-      [defaultMember]="selectedMember"
-      (createMembers)="createNewCompany()"
-    ></hospitality-bot-members-list> -->
     <hospitality-bot-input
       class="half-width"
       controlName="salesPersonName"
@@ -189,6 +180,7 @@
   [isId]="agentId"
   (onPreAction)="reset()"
   (onPostAction)="handleSubmit()"
+  [isFixed]="true"
   #fd
 >
 </hospitality-bot-form-action>

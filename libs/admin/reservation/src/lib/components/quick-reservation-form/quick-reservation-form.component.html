@@ -1,4 +1,4 @@
-<div class="container" *ngIf="isDataLoaded; else loader">
+<div class="container" [id]="fa.referenceId" *ngIf="isDataLoaded; else loader">
   <div class="header">
     <div class="heading">
       Booking Information
@@ -222,6 +222,7 @@
   (onPostAction)="handleSubmit()"
   (onPreAction)="openDetailsPage()"
   [isSticky]="true"
+  [isFixed]="true"
   [config]="{
     postLabel: reservationId ? 'Update Reservation' : 'Create Reservation',
     preHide: reservationId ? false : true,

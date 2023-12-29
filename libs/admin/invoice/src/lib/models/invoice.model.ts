@@ -111,7 +111,10 @@ export class TableList {
         idOfItemIdRecord
       );
       this.records.push(billItem);
-      this.serviceIds.add(billItem.itemId);
+
+      if (!billItem.isRealised) {
+        this.serviceIds.add(billItem.itemId);
+      }
     });
 
     return this;

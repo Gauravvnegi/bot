@@ -19,16 +19,12 @@ import {
 } from '@hospitality-bot/admin/shared';
 import { ModalService } from '@hospitality-bot/shared/material';
 import { NotificationService } from 'apps/admin/src/app/core/theme/src/lib/services/notification.service';
-import { PreArrivalDatatableComponent } from 'libs/admin/request-analytics/src/lib/components/pre-arrival-datatable/pre-arrival-datatable.component';
-
 import {
   ModuleNames,
   TableNames,
 } from 'libs/admin/shared/src/lib/constants/subscriptionConfig';
 import { Subscription } from 'rxjs';
-import * as moment from 'moment';
 import { AnalyticsService } from 'libs/admin/request-analytics/src/lib/services/analytics.service';
-import { PreArrivalRequestList } from '../../data-models/ex-checkin.model';
 import { dashboardPopUpTabs } from '../../constants/dashboard';
 import { ReservationService } from '../../services';
 import { InhouseTable } from 'libs/admin/request-analytics/src/lib/models/inhouse-datatable.model';

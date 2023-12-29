@@ -8,9 +8,8 @@ import {
 import { tokensConfig } from '../constants/common';
 import { PermissionModuleNames } from '../constants';
 
-type ProductOption = Option<ProductNames, { id: string }>;
+type ProductOption = Option<ProductNames>;
 export type PermissionOption = {
-  id: string;
   module: PermissionModuleNames;
   label: string;
   permissions: {
@@ -31,12 +30,12 @@ export class ProductsPermissions {
       this.products.push({
         label: item.label,
         value: item.module,
-        id: item.id,
       });
 
       item.productPermissions.map((productPermissionItem) => {
         const hasPermission = this.permission.find(
-          (permissionItem) => permissionItem.id === productPermissionItem.id
+          (permissionItem) =>
+            permissionItem.module === productPermissionItem.module
         );
 
         if (hasPermission) {
@@ -44,7 +43,6 @@ export class ProductsPermissions {
             hasPermission.productType + ',' + item.module;
         } else {
           this.permission.unshift({
-            id: productPermissionItem.id,
             label: productPermissionItem.label,
             module: productPermissionItem.module,
             permissions: productPermissionItem.permissions,

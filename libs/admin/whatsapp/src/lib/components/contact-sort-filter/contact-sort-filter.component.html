@@ -43,6 +43,25 @@
         </div>
       </div>
     </div>
+
+    <div class="filterUnderline"></div>
+
+    <!-- for filter -->
+    <div class="filterBy">
+      Filter By
+    </div>
+    <div
+      *ngFor="let filter of filterList; let i = index"
+      formArrayName="filterBy"
+      class="filterItemWrapper"
+    >
+      <div>
+        <input class="filterCheckbox" type="checkbox" [formControlName]="i" />
+      </div>
+      <div class="filterItem">
+        {{ filter }}
+      </div>
+    </div>
   </div>
   <div class="applyBtnWrapper">
     <hospitality-bot-button

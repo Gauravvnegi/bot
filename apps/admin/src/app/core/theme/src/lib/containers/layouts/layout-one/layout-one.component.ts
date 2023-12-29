@@ -39,7 +39,10 @@ import { LoadingService } from '../../../services/loader.service';
 import { FirebaseMessagingService } from '../../../services/messaging.service';
 import { NotificationService } from '../../../services/notification.service';
 import { ProgressSpinnerService } from '../../../services/progress-spinner.service';
-import { RoutesConfigService } from '../../../services/routes-config.service';
+import {
+  RouteConfigPathService,
+  RoutesConfigService,
+} from '../../../services/routes-config.service';
 import { SubscriptionPlanService } from '../../../services/subscription-plan.service';
 import { NightAuditService } from 'libs/admin/global-shared/src/lib/services/night-audit.service';
 import {
@@ -234,6 +237,9 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
     this.$firebaseMessagingSubscription.add(
       this.firebaseMessagingService.receiveMessage().subscribe((payload) => {
         console.log(payload, 'payload message when notification trigger');
+
+        this.firebaseMessagingService.receivedNewNotification();
+
         const notificationPayload = payload as MessagePayload;
         this.getNotificationUnreadCount();
 
@@ -459,12 +465,23 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
   //   );
   // }
 
+  /**
+   * Listening for active doc (When we switch from some other window)
+   */
   @HostListener('document:visibilitychange', ['$event'])
   visibilitychange() {
+    const routeService = new RouteConfigPathService();
+
+    const messagePath = routeService.getRouteFromName(
+      ModuleNames.LIVE_MESSAGING
+    );
+
     if (document.hidden) {
+      this.getNotificationUnreadCount(); // Refreshing the count
+      this.firebaseMessagingService.receivedNewNotification(); // Refreshing notification if opened
       this.firebaseMessagingService.tabActive.next(false);
-    } else if (this._router.url.includes('messages')) {
-      this.firebaseMessagingService.tabActive.next(true);
+    } else if (this._router.url.includes(messagePath)) {
+      this.firebaseMessagingService.tabActive.next(true); // Refreshing message list in for the chat module
     }
   }
 

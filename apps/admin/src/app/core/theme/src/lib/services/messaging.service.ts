@@ -20,6 +20,8 @@ export class FirebaseMessagingService {
   private subscription: Subscription = new Subscription();
   tabActive = new BehaviorSubject(false);
 
+  $receivedNewNotification = new BehaviorSubject(false);
+
   constructor(
     private fireMessaging: AngularFireMessaging,
     private messageTabService: MessageTabService,
@@ -31,6 +33,10 @@ export class FirebaseMessagingService {
         console.log('Messaging token Refreshed')
       )
     );
+  }
+
+  receivedNewNotification() {
+    this.$receivedNewNotification.next(true);
   }
 
   //#region Private Methods
@@ -75,6 +81,12 @@ export class FirebaseMessagingService {
     );
   }
 
+  /**
+   *
+   * @remarks Subscribe this only in layout (main-code).
+   * If subscribed in any other places than that will override the main one
+   * use $receivedNewNotification for it. It will get triggered from receiveMessage subscription
+   */
   receiveMessage() {
     return this.fireMessaging.messages;
   }

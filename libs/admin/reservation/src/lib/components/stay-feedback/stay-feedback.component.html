@@ -1,160 +1,161 @@
-<mat-accordion>
-  <mat-expansion-panel #depositPanel2 [expanded]="openedState">
-    <mat-expansion-panel-header class="accordian__header">
-      <mat-panel-title class="container__title">
-        <div class="booking_title">
-          {{ rowData.getTitle() }} -
-          <span class="booking_number">{{
-            rowData.booking.bookingNumber
-          }}</span>
-        </div>
-        <div class="header-seperator"></div>
-        <div class="visit-padding">
-          {{ rowData.booking.getArrivalDate(globalFilterService.timezone) }} -
-          {{ rowData.booking.getDepartureDate(globalFilterService.timezone) }}
-          ({{
-            rowData.booking.getDaysAndNights(globalFilterService.timezone)
-              .nights
-          }}N |
-          {{
-            rowData.booking.getDaysAndNights(globalFilterService.timezone).days
-          }}D)
-        </div>
-        <ng-container *ngIf="rowData.visitDetail?.feedbackId">
+<div class="custom-accordion_wrapper">
+  <p-accordion>
+    <p-accordionTab [selected]="openedState">
+      <ng-template pTemplate="header">
+        <div class="accordian__header">
+          <div class="booking_title">
+            {{ rowData.getTitle() }} -
+            <span class="booking_number">{{
+              rowData.booking.bookingNumber
+            }}</span>
+          </div>
           <div class="header-seperator"></div>
-          <div
-            class="booking-id-wrapper"
-            *ngIf="rowData.visitDetail?.feedbackId"
-            [ngStyle]=""
-          >
-            <div class="feedback">
-              <div class="booking-feedback">
-                <div
-                  class="number"
-                  [style.backgroundColor]="rowData.visitDetail?.color"
-                >
-                  {{ rowData.visitDetail?.intentToRecommends.rating }}
+          <div class="visit-padding">
+            {{ rowData.booking.getArrivalDate(globalFilterService.timezone) }} -
+            {{ rowData.booking.getDepartureDate(globalFilterService.timezone) }}
+            ({{
+              rowData.booking.getDaysAndNights(globalFilterService.timezone)
+                .nights
+            }}N |
+            {{
+              rowData.booking.getDaysAndNights(globalFilterService.timezone)
+                .days
+            }}D)
+          </div>
+          <ng-container *ngIf="rowData.visitDetail?.feedbackId">
+            <div class="header-seperator"></div>
+            <div
+              class="booking-id-wrapper"
+              *ngIf="rowData.visitDetail?.feedbackId"
+            >
+              <div class="feedback">
+                <div class="booking-feedback">
+                  <div
+                    class="number"
+                    [style.backgroundColor]="rowData.visitDetail?.color"
+                  >
+                    {{ rowData.visitDetail?.intentToRecommends.rating }}
+                  </div>
                 </div>
+              </div>
+              <div
+                class="visit-details"
+                (click)="
+                  downloadFeedback($event, rowData.visitDetail?.feedbackId)
+                "
+              >
+                <div class="view-feedback">
+                  <img src="assets/svg/View.svg" alt="" />
+                  View Feedback
+                </div>
+                <img src="assets/svg/union.svg" alt="" />
+              </div>
+            </div>
+          </ng-container>
+        </div>
+      </ng-template>
+      <div>
+        <ng-container>
+          <div class="fields-wrapper">
+            <div class="field width-quarter">
+              <label class="label">Arrival Date</label>
+              <div class="value">
+                {{
+                  rowData.booking.getArrivalDate(globalFilterService.timezone)
+                }}
+              </div>
+            </div>
+            <div class="field width-quarter">
+              <label class="label">Departure Date</label>
+              <div class="value">
+                {{
+                  rowData.booking.getDepartureDate(globalFilterService.timezone)
+                }}
+              </div>
+            </div>
+            <div class="field width-quarter">
+              <label class="label">Expected Arrival Time</label>
+              <div class="value">
+                {{
+                  rowData.booking.getArrivalTime(globalFilterService.timezone)
+                }}
               </div>
             </div>
           </div>
-          <div
-            class="visit-details"
-            (click)="downloadFeedback($event, rowData.visitDetail?.feedbackId)"
-          >
-            <div class="view-feedback">
-              <img src="assets/svg/View.svg" alt="" />
-              View Feedback
+          <div class="fields-wrapper">
+            <div class="field width-quarter">
+              <label class="label">Duration</label>
+              <div class="value">
+                {{
+                  rowData.booking.getDaysAndNights(globalFilterService.timezone)
+                    .nights
+                }}N |
+                {{
+                  rowData.booking.getDaysAndNights(globalFilterService.timezone)
+                    .days
+                }}D
+              </div>
             </div>
-            <img src="assets/svg/union.svg" alt="" />
+            <div class="field width-quarter">
+              <label class="label">Room Type</label>
+              <div class="value">
+                {{ rowData.rooms.type }}
+              </div>
+            </div>
+            <div class="field width-quarter">
+              <label class="label">Room Number</label>
+              <div class="value">
+                {{ rowData.rooms.roomNumber }}
+              </div>
+            </div>
           </div>
         </ng-container>
-        <mat-icon class="expand-icon" *ngIf="!depositPanel2.expanded"
-          >add</mat-icon
-        >
-        <mat-icon class="expand-icon" *ngIf="depositPanel2.expanded"
-          >remove</mat-icon
-        >
-      </mat-panel-title>
-    </mat-expansion-panel-header>
-    <div>
-      <ng-container>
+      </div>
+      <hr class="data-seperator" *ngIf="rowData.visitDetail?.feedbackId" />
+      <div *ngIf="rowData.visitDetail?.feedbackId">
         <div class="fields-wrapper">
           <div class="field width-quarter">
-            <mat-label class="label">Arrival Date</mat-label>
-            <div class="value">
-              {{ rowData.booking.getArrivalDate(globalFilterService.timezone) }}
-            </div>
-          </div>
-          <div class="field width-quarter">
-            <mat-label class="label">Departure Date</mat-label>
+            <label class="label">Date/Time</label>
             <div class="value">
               {{
-                rowData.booking.getDepartureDate(globalFilterService.timezone)
+                rowData.visitDetail?.getfeedbackSubmissionTime(
+                  globalFilterService.timezone
+                )
               }}
             </div>
           </div>
           <div class="field width-quarter">
-            <mat-label class="label">Expected Arrival Time</mat-label>
-            <div class="value">
-              {{ rowData.booking.getArrivalTime(globalFilterService.timezone) }}
-            </div>
-          </div>
-        </div>
-        <div class="fields-wrapper">
-          <div class="field width-quarter">
-            <mat-label class="label">Duration</mat-label>
-            <div class="value">
-              {{
-                rowData.booking.getDaysAndNights(globalFilterService.timezone)
-                  .nights
-              }}N |
-              {{
-                rowData.booking.getDaysAndNights(globalFilterService.timezone)
-                  .days
-              }}D
+            <label class="label">Intent to Recommend</label>
+            <div class="value" [style.color]="rowData.visitDetail?.color">
+              {{ rowData.visitDetail?.intentToRecommends.rating }}
+              {{ rowData.visitDetail?.intentToRecommends.Category }}
             </div>
           </div>
           <div class="field width-quarter">
-            <mat-label class="label">Room Type</mat-label>
+            <label class="label">Market Segment</label>
             <div class="value">
-              {{ rowData.rooms.type }}
-            </div>
-          </div>
-          <div class="field width-quarter">
-            <mat-label class="label">Room Number</mat-label>
-            <div class="value">
-              {{ rowData.rooms.roomNumber }}
+              {{ rowData.visitDetail?.marketSegment }}
             </div>
           </div>
         </div>
-      </ng-container>
-    </div>
-    <hr class="data-seperator" *ngIf="rowData.visitDetail?.feedbackId" />
-    <div *ngIf="rowData.visitDetail?.feedbackId">
-      <div class="fields-wrapper">
-        <div class="field width-quarter">
-          <mat-label class="label">Date/Time</mat-label>
-          <div class="value">
-            {{
-              rowData.visitDetail?.getfeedbackSubmissionTime(
-                globalFilterService.timezone
-              )
-            }}
-          </div>
-        </div>
-        <div class="field width-quarter">
-          <mat-label class="label">Intent to Recommend</mat-label>
-          <div class="value" [style.color]="rowData.visitDetail?.color">
-            {{ rowData.visitDetail?.intentToRecommends.rating }}
-            {{ rowData.visitDetail?.intentToRecommends.Category }}
-          </div>
-        </div>
-        <div class="field width-quarter">
-          <mat-label class="label">Market Segment</mat-label>
-          <div class="value">
-            {{ rowData.visitDetail?.marketSegment }}
+        <div class="fields-wrapper" *ngIf="rowData.visitDetail?.comment">
+          <div class="field">
+            <label class="label">Comments</label>
+            <div class="question">
+              {{ rowData.visitDetail?.comment?.question }}
+            </div>
+            <div
+              class="answer"
+              *ngIf="rowData.visitDetail?.comment?.answer; else emptyCell"
+            >
+              {{ rowData.visitDetail?.comment?.answer }}
+            </div>
           </div>
         </div>
       </div>
-      <div class="fields-wrapper" *ngIf="rowData.visitDetail?.comment">
-        <div class="field">
-          <mat-label class="label">Comments</mat-label>
-          <div class="question">
-            {{ rowData.visitDetail?.comment?.question }}
-          </div>
-          <div
-            class="answer"
-            *ngIf="rowData.visitDetail?.comment?.answer; else emptyCell"
-          >
-            {{ rowData.visitDetail?.comment?.answer }}
-          </div>
-        </div>
-      </div>
-    </div>
-  </mat-expansion-panel>
-</mat-accordion>
-
+    </p-accordionTab>
+  </p-accordion>
+</div>
 <ng-template #emptyCell>
   <div class="emptyCell">--</div>
 </ng-template>

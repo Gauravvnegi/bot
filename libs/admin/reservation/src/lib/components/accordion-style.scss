@@ -1,0 +1,32 @@
+@import 'main';
+
+:host ::ng-deep .custom-accordion_wrapper {
+  .p-accordion .p-accordion-tab {
+    box-shadow: none;
+  }
+  .p-accordion-header-link {
+    font-size: 14px;
+    font-weight: 500;
+    color: #484848 !important;
+    background-color: #e8eef5 !important;
+    border: 1px solid #dddddd;
+    padding: 15px;
+  }
+  .accordian__header {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    .visit-padding {
+      width: unset;
+    }
+  }
+  .p-accordion .p-accordion-tab.p-accordion-tab-active {
+    border: 1px solid #dddddd !important;
+  }
+  .p-accordion-toggle-icon {
+    color: $primary-cta;
+  }
+  .p-accordion-content {
+    padding-top: 0;
+  }
+}

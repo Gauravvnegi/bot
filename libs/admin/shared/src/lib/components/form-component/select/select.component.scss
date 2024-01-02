@@ -128,11 +128,10 @@
 
   &__standard {
     .p-dropdown {
-      // border-color: $primary-text-color;
+      border-color: $primary-text-color;
       border-width: 0 0 1px 0;
-      border-radius: unset;
     }
-    .p-focus {
+    &:focus {
       margin-bottom: -1px;
       border-width: 0 0 2px 0;
       border-color: $primary-form-color;

@@ -8,7 +8,7 @@ import { ReservationService } from '../../services/reservation.service';
 @Component({
   selector: 'hospitality-bot-instant-feedback',
   templateUrl: './instant-feedback.component.html',
-  styleUrls: ['./instant-feedback.component.scss'],
+  styleUrls: ['./instant-feedback.component.scss', '../accordion-style.scss'],
 })
 export class InstantFeedbackComponent implements OnInit, OnDestroy {
   @Input() title;

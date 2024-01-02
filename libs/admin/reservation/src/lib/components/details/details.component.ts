@@ -21,6 +21,7 @@ import {
   BookingDetailService,
   ConfigService,
   ModuleNames,
+  Option,
   openModal,
 } from '@hospitality-bot/admin/shared';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
@@ -71,6 +72,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
     { label: 'Advance Booking', icon: '' },
     { label: 'Current Booking', icon: '' },
   ];
+  guestDropDownList: Option[];
   @Input('bookingId') bookingId: string; //reservationId
   @Input() isDecreaseSnackbarZIndex = false;
   @Output() onRoute = new EventEmitter();
@@ -1114,6 +1116,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
         this.isGuestInfoPatched = true;
       }
     }
+    this.guestDropDownList = this.guestDropDown;
     this.bookingFG.get('booking').setValue(this.bookingId);
   }
 

@@ -244,7 +244,7 @@ mat-option {
   height: 80px !important;
 }
 
-:host ::ng-deep .p-dropdown {
+:host ::ng-deep .past-booking .p-dropdown {
   margin-left: 0;
   background: transparent;
   outline: none;
@@ -717,7 +717,7 @@ mat-option {
 :host ::ng-deep {
   .past-booking {
     min-width: 290px;
-    margin-left: 15px;
+    // margin-left: 15px; // remove for mat
     .input {
       .p-dropdown,
       .p-dropdown.p-focus {

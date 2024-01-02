@@ -14,8 +14,8 @@ import { ModalService } from 'libs/shared/material/src/lib/services/modal.servic
 import { Subscription } from 'rxjs';
 import {
   ModuleNames,
-  ProductMenu,
   ProductNames,
+  manageMaskZIndex,
   routes,
 } from '../../../../../../../../../../libs/admin/shared/src/index';
 import {
@@ -367,17 +367,4 @@ export class SidenavComponent implements OnInit, OnDestroy {
   onImageLoad() {
     this.isImageLoaded = true;
   }
-}
-
-export function manageMaskZIndex(zIndex: number) {
-  let interval;
-  interval = setInterval(() => {
-    const elements = document.querySelectorAll(
-      '.p-component-overlay.p-sidebar-mask'
-    );
-    if (elements?.length) {
-      elements[0].setAttribute('style', `z-index: ${zIndex} !important;`);
-      clearInterval(interval);
-    }
-  });
 }

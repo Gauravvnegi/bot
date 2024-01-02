@@ -506,12 +506,12 @@
                   </hospitality-bot-split-button>
                 </ng-container>
                 <ng-container *ngSwitchCase="'COMPLETED'">
-                  <hospitality-bot-button
+                  <!-- <hospitality-bot-button
                     *ngIf="isPrintRate"
                     label="Send Payment Link"
                     (click)="activateAndgenerateJourney('CHECKOUT')"
                     variant="outlined"
-                  ></hospitality-bot-button>
+                  ></hospitality-bot-button> -->
                   <hospitality-bot-button
                     *ngIf="checkForGenerateFeedbackSubscribed()"
                     label="Generate Feedback"
@@ -524,18 +524,20 @@
                     (click)="downloadFeedback()"
                     variant="outlined"
                   ></hospitality-bot-button>
-                  <!-- initiate force checkout -->
-                  <hospitality-bot-button
+                  <hospitality-bot-split-button
                     label="Checkout"
-                    (click)="manualCheckout()"
                     variant="outlined"
-                  ></hospitality-bot-button>
+                    (onClick)="manualCheckout()"
+                    [splitOptions]="checkOutOptions"
+                  >
+                  </hospitality-bot-split-button>
+                  <!-- initiate force checkout -->
                   <!-- <p-splitButton
                     class="download-btn"
                     label="Checkout"
                     (onClick)="manualCheckout()"
                     [model]="checkOutOptions"
-                  ></p-splitButton> -->
+                    ></p-splitButton> -->
                 </ng-container>
               </ng-container>
             </ng-template>
@@ -554,7 +556,14 @@
                   variant="outlined"
                 ></hospitality-bot-button>
                 <ng-container *ngSwitchCase="'PENDING'">
-                  <hospitality-bot-button
+                  <hospitality-bot-split-button
+                    label="Checkout"
+                    variant="outlined"
+                    (onClick)="manualCheckout()"
+                    [splitOptions]="checkOutOptions"
+                  >
+                  </hospitality-bot-split-button>
+                  <!-- <hospitality-bot-button
                     *ngIf="isPrintRate"
                     label="Send Payment Link"
                     (click)="activateAndgenerateJourney('CHECKOUT')"
@@ -564,7 +573,7 @@
                     label="Checkout"
                     (click)="manualCheckout()"
                     variant="outlined"
-                  ></hospitality-bot-button>
+                  ></hospitality-bot-button> -->
                   <!-- <p-splitButton
                     class="download-btn"
                     label="Checkout"
@@ -573,22 +582,29 @@
                   ></p-splitButton> -->
                 </ng-container>
                 <ng-container *ngSwitchCase="'INITIATED'">
-                  <hospitality-bot-button
+                  <hospitality-bot-split-button
+                    label="Checkout"
+                    variant="outlined"
+                    (onClick)="manualCheckout()"
+                    [splitOptions]="checkOutOptions"
+                  >
+                  </hospitality-bot-split-button>
+                  <!-- <hospitality-bot-button
                     *ngIf="isPrintRate"
                     label="Send Payment Link"
                     (click)="activateAndgenerateJourney('CHECKOUT')"
                     variant="outlined"
                   ></hospitality-bot-button>
+                  <hospitality-bot-button
+                    label="Checkout"
+                    (click)="manualCheckout()"
+                    variant="outlined"
+                  ></hospitality-bot-button> -->
                   <!-- <hospitality-bot-button
                     (click)="confirmAndNotifyCheckin()"
                     label="Confirm And Notify Checkout"
                     variant="outlined"
                   ></hospitality-bot-button> -->
-                  <hospitality-bot-button
-                    label="Checkout"
-                    (click)="manualCheckout()"
-                    variant="outlined"
-                  ></hospitality-bot-button>
                   <!-- <p-splitButton
                     class="download-btn"
                     label="Checkout"
@@ -598,7 +614,15 @@
                 </ng-container>
                 <ng-container *ngSwitchCase="'COMPLETED'"> </ng-container>
                 <ng-container *ngSwitchCase="'FAILED'">
-                  <hospitality-bot-button
+                  <hospitality-bot-split-button
+                    label="Checkout"
+                    variant="outlined"
+                    (onClick)="manualCheckout()"
+                    [splitOptions]="checkOutOptions"
+                  >
+                  </hospitality-bot-split-button>
+
+                  <!-- <hospitality-bot-button
                     *ngIf="isPrintRate"
                     label="Send Payment Link"
                     (click)="activateAndgenerateJourney('CHECKOUT')"
@@ -608,7 +632,7 @@
                     label="Checkout"
                     (click)="manualCheckout()"
                     variant="outlined"
-                  ></hospitality-bot-button>
+                  ></hospitality-bot-button> -->
                   <!-- <p-splitButton
                     class="download-btn"
                     label="Checkout"

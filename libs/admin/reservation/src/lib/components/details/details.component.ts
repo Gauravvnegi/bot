@@ -126,8 +126,9 @@ export class DetailsComponent implements OnInit, OnDestroy {
 
   checkOutOptions: MenuItem[] = [
     {
-      label: 'Generate Link',
+      label: 'Send Payment Link',
       command: () => this.activateAndgenerateJourney('CHECKOUT'),
+      disabled: !this.isPrintRate,
     },
   ];
 
@@ -800,6 +801,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
       title: 'Manual Checkout',
       description: 'Guest is about to checkout',
       question: 'Are you sure you want to continue?',
+      isSendInvoice: true,
       buttons: {
         cancel: {
           label: 'Cancel',
@@ -817,9 +819,14 @@ export class DetailsComponent implements OnInit, OnDestroy {
     });
   }
 
-  manualCheckoutfn() {
+  manualCheckoutfn(invoice?: Record<'isSendInvoice', any>) {
     this._reservationService
-      .manualCheckout(this.reservationDetailsFG.get('bookingId').value)
+      .manualCheckout(
+        this.reservationDetailsFG.get('bookingId').value,
+        typeof invoice != 'undefined' && {
+          params: `?sendInvoice=${invoice?.isSendInvoice}`,
+        }
+      )
       .subscribe((res) => {
         this.snackbarService.openSnackBarAsText('Checkout completed.', '', {
           panelClass: 'success',

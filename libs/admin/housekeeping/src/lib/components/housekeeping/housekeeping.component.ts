@@ -197,6 +197,7 @@ export class HousekeepingComponent extends BaseDatatableComponent
           offset: '0',
           limit: '0',
           roomTypeIds: this.useForm.get('roomType').value ?? [],
+          inventoryUpdateType: 'HOUSEKEEPING',
           raw: true,
         },
       ]),

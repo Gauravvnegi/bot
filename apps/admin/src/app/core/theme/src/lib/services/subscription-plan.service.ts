@@ -241,11 +241,10 @@ export class SubscriptionPlanService extends ApiService {
 
   show(): { isCalenderView: boolean } {
     return {
-      isCalenderView: !(
+      isCalenderView:
         this.checkModuleSubscription(ModuleNames.ADD_RESERVATION) &&
         this.hasManageUserPermission(PermissionModuleNames.RESERVATION) &&
-        this.checkProductSubscription(ModuleNames.PREDICTO_PMS)
-      ),
+        this.checkProductSubscription(ModuleNames.PREDICTO_PMS),
     };
   }
 }

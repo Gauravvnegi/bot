@@ -104,7 +104,7 @@
   }
 }
 .notification--form {
-  height: calc(100vh - 116.14px);
+  height: 100vh;
   .notification {
     @include full-img;
     overflow-y: auto;

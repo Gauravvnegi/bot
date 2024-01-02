@@ -12,6 +12,7 @@ import { AdminPackagesRoutingModule } from './admin-packages.routing.module';
 import { PackagesService } from './services/packages.service';
 import { MainComponent } from './components/main/main.component';
 import { AdminLibraryModule } from '@hospitality-bot/admin/library';
+import { AdminSettingsModule } from '@hospitality-bot/admin/settings';
 
 @NgModule({
   imports: [
@@ -25,6 +26,7 @@ import { AdminLibraryModule } from '@hospitality-bot/admin/library';
     DropdownModule,
     AdminPackagesRoutingModule,
     AdminLibraryModule,
+    AdminSettingsModule
   ],
   declarations: [...AdminPackagesRoutingModule.components],
   providers: [PackageService, CategoriesService, PackagesService],

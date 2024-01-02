@@ -712,16 +712,29 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
   }
 
   openSettings() {
-    this.sidebarVisible = true;
-    const factory = this.resolver.resolveComponentFactory(
-      SettingsMenuComponent
-    );
-    this.sidebarSlide.clear();
-    this.sidebarType = 'settings';
-    const componentRef = this.sidebarSlide.createComponent(factory);
-    componentRef.instance.isSideBar = true;
-    componentRef.instance.closeEvent.subscribe((res) => {
-      this.sidebarVisible = false;
+    const lazyModulePromise = import(
+      'libs/admin/settings/src/lib/admin-settings.module'
+    )
+      .then((module) => {
+        return this.compiler.compileModuleAsync(module.AdminSettingsModule);
+      })
+      .catch((error) => {
+        console.error('Error loading the lazy module:', error);
+      });
+
+    lazyModulePromise.then(() => {
+      this.sidebarVisible = true;
+      const factory = this.resolver.resolveComponentFactory(
+        SettingsMenuComponent
+      );
+      this.sidebarSlide.clear();
+      this.sidebarType = 'settings';
+      const componentRef = this.sidebarSlide.createComponent(factory);
+      componentRef.instance.isSideBar = true;
+      componentRef.instance.closeEvent.subscribe((res) => {
+        this.sidebarVisible = false;
+        componentRef.destroy();
+      });
     });
   }
 

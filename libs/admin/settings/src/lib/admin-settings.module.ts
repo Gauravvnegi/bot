@@ -7,6 +7,7 @@ import { SiteSettingsComponent } from './components/site-settings/site-settings.
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HotelService } from './components/services/hotel.service';
 import { BrandService } from './components/services/brand.service';
+import { NotificationSettingsComponent } from './components/notification-settings/notification-settings.component';
 
 @NgModule({
   imports: [
@@ -17,7 +18,12 @@ import { BrandService } from './components/services/brand.service';
     RouterModule,
     AdminSharedModule,
   ],
-  providers: [HotelService , BrandService],
-  declarations: [...AdminSettingsRoutingModule.components, SiteSettingsComponent],
+  providers: [HotelService, BrandService],
+  declarations: [
+    ...AdminSettingsRoutingModule.components,
+    SiteSettingsComponent,
+    NotificationSettingsComponent,
+  ],
+  exports: [NotificationSettingsComponent],
 })
 export class AdminSettingsModule {}

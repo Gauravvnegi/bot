@@ -9,6 +9,12 @@
   <div class="content">
     <p>{{ config.description }}</p>
     <p>{{ config.question }}</p>
+    <p *ngIf="config?.isSendInvoice" [formGroup]="useForm" class="invoice">
+      <hospitality-bot-input-switch
+        controlName="invoiceStatus"
+      ></hospitality-bot-input-switch>
+      Do you want send invoice ?
+    </p>
 
     <!-- <mat-form-field>
     <mat-label>Favorite Animal</mat-label>

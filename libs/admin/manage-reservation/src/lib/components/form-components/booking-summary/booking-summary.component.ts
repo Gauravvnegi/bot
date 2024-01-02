@@ -34,7 +34,7 @@ import {
   EntityType,
   ModuleNames,
 } from '@hospitality-bot/admin/shared';
-import { RoomReservationRes } from '../../../types/response.type';
+import { RoomReservationResponse } from '../../../types/response.type';
 import {
   OccupancyDetails,
   RoomReservationFormData,
@@ -176,7 +176,7 @@ export class BookingSummaryComponent implements OnInit {
       this.manageReservationService
         .createReservation(entityId, formData, type)
         .subscribe(
-          (res: RoomReservationRes) => {
+          (res: RoomReservationResponse) => {
             this.bookingConfirmationPopup(res?.reservationNumber);
           },
           (error) => {
@@ -198,7 +198,7 @@ export class BookingSummaryComponent implements OnInit {
       this.manageReservationService
         .updateReservation(entityId, this.reservationId, data, type)
         .subscribe(
-          (res: RoomReservationRes) => {
+          (res: RoomReservationResponse) => {
             this.bookingConfirmationPopup(res?.reservationNumber);
           },
           (error) => {

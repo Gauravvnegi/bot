@@ -112,3 +112,15 @@
 .confirm-dialog {
   @include dialog-style;
 }
+
+// Dialog with header
+.header-dialog {
+  min-width: 950px;
+  .p-dialog-header {
+    background-color: $header-background;
+    padding: 10px 15px;
+  }
+  .p-dialog-content {
+    padding: unset;
+  }
+}

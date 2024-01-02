@@ -26,7 +26,6 @@ import {
   Option,
 } from '@hospitality-bot/admin/shared';
 import {
-  ModalService,
   SnackBarService,
 } from '@hospitality-bot/shared/material';
 import {
@@ -35,7 +34,6 @@ import {
   ReservationFormData,
 } from 'libs/admin/manage-reservation/src/lib/models/reservations.model';
 import { ManageReservationService } from 'libs/admin/manage-reservation/src/lib/services/manage-reservation.service';
-import { GuestDetails } from '../../../../../dashboard/src/lib/data-models/reservation.model';
 import { FormService } from 'libs/admin/manage-reservation/src/lib/services/form.service';
 import { IGRoomType } from '../reservation-calendar-view/reservation-calendar-view.component';
 import { IGCol } from 'libs/admin/shared/src/lib/components/interactive-grid/interactive-grid.component';
@@ -44,12 +42,11 @@ import { AddGuestComponent } from 'libs/admin/guests/src/lib/components/add-gues
 import { RoomTypeResponse } from 'libs/admin/room/src/lib/types/service-response';
 import { GuestType } from 'libs/admin/guests/src/lib/types/guest.type';
 import { RoomTypeOption } from 'libs/admin/manage-reservation/src/lib/constants/reservation';
-import { MatDialogConfig } from '@angular/material/dialog';
-import { DetailsComponent } from '../details/details.component';
 import { AgentTableResponse } from 'libs/admin/agent/src/lib/types/response';
 import { ReservationForm } from 'libs/admin/manage-reservation/src/lib/constants/form';
 import { debounceTime } from 'rxjs/operators';
 import { BookingInfoComponent } from '../booking-info/booking-info.component';
+import { ReservationRatePlan } from 'libs/admin/room/src/lib/constant/form';
 
 @Component({
   selector: 'hospitality-bot-quick-reservation-form',
@@ -129,7 +126,6 @@ export class QuickReservationFormComponent implements OnInit {
     protected formService: FormService,
     private compiler: Compiler,
     private resolver: ComponentFactoryResolver,
-    private modalService: ModalService,
     protected routesConfigService: RoutesConfigService,
     public bookingDetailService: BookingDetailService
   ) {
@@ -307,7 +303,6 @@ export class QuickReservationFormComponent implements OnInit {
                   '' +
                   res.guest?.contactDetails?.contactNumber
                 : null,
-
               id: res.guest?.id ?? '',
               email: res.guest?.contactDetails?.emailId,
             };
@@ -402,11 +397,7 @@ export class QuickReservationFormComponent implements OnInit {
       const roomType = defaultRoomType
         ? defaultRoomType
         : this.selectedRoomType;
-      this.ratePlans = ((roomType?.ratePlans as Option[]) ?? []).map((res) => ({
-        label: res.label,
-        value: res.value,
-        isBase: res.isBase,
-      }));
+      this.ratePlans = (roomType?.ratePlans as ReservationRatePlan[]) ?? [];
       this.roomOptions = ((roomType?.rooms as Option[]) ?? []).map((room) => ({
         label: room?.roomNumber,
         value: room?.roomNumber,
@@ -634,4 +625,11 @@ export type QuickReservationConfig = {
   selectedRoom?: string;
   defaultRoomType?: IGRoomType;
   date?: IGCol;
+};
+
+export type GuestDetails = {
+  id: string;
+  guestName: string;
+  phoneNumber: string;
+  email: string;
 };

@@ -9,16 +9,18 @@ import { ItemsData } from './forms.types';
 import { JourneyState, JourneyType } from '../constants/reservation';
 import { AgentTableResponse } from 'libs/admin/agent/src/lib/types/response';
 import { CompanyResponseType } from 'libs/admin/company/src/lib/types/response';
+import { Option } from '@hospitality-bot/admin/shared';
+import { ReservationRatePlan } from 'libs/admin/room/src/lib/constant/form';
 
 /* Reservation List Response Types deceleration */
 export type ReservationListResponse = {
-  records?: RoomReservationRes[];
+  records?: RoomReservationResponse[];
   total: number;
   entityStateCounts: EntityStateCountsResponse;
   entityTypeCounts: EntityTypeCountsResponse;
 };
 
-export type RoomReservationRes = {
+export type RoomReservationResponse = {
   id: string;
   from: number;
   to: number;
@@ -40,9 +42,6 @@ export type RoomReservationRes = {
   company?: CompanyResponseType;
   externalBooking?: boolean;
   offer?: OfferResponse;
-};
-
-export type RoomReservationFormResponse = RoomReservationRes & {
   paymentRule?: PaymentRuleResponse;
   printRate?: boolean;
 };
@@ -149,42 +148,6 @@ export type SummaryPricing = {
   taxAndFees: number;
 };
 
-export type RoomReservationResponse = {
-  id: string;
-  from: number;
-  to: number;
-  totalAmount: number;
-  source: string;
-  reservationType: string;
-  sourceName: string;
-  marketSegment: string;
-  totalPaidAmount: number;
-  totalDueAmount: number;
-  reservationNumber: string;
-  status: ReservationCurrentStatus;
-  guest: GuestType;
-  created: number;
-  offerAmount: number;
-  nextStates: string[];
-  bookingItems: BookingItems[];
-  pricingDetails?: PricingDetails;
-  specialRequest: string;
-  offer: {
-    id: string;
-    created: number;
-    updated: number;
-    offerType: string;
-  };
-  journeysStatus: {
-    CHECKIN: JourneyState;
-  };
-  agent: AgentTableResponse;
-  company: CompanyResponseType;
-  externalBooking: boolean;
-  paymentRule: PaymentRuleResponse;
-  printRate: boolean;
-};
-
 export type PaymentRuleResponse = {
   id: string;
   amount: number;
@@ -216,6 +179,6 @@ export type RoomUpgradeType = {
   chargedAmount: number;
   remarks: string;
   effectiveDate: number;
-  ratePlanOptions: string[];
-  roomNumberOptions: string[];
+  ratePlans: ReservationRatePlan[];
+  rooms: Option[];
 };

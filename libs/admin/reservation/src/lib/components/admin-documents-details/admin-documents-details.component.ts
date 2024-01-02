@@ -5,20 +5,21 @@ import {
   FormBuilder,
   FormGroup,
 } from '@angular/forms';
-import { MatDialogConfig } from '@angular/material/dialog';
-import {
-  ModalService,
-  SnackBarService,
-} from '@hospitality-bot/shared/material';
+import { SnackBarService } from '@hospitality-bot/shared/material';
 
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
-import { DownloadService } from '@hospitality-bot/admin/shared';
+import {
+  DownloadService,
+  Option,
+  openModal,
+} from '@hospitality-bot/admin/shared';
 import { ImageHandlingComponent } from 'libs/admin/shared/src/lib/components/image-handling/image-handling.component';
 import {
   DocumentDetailsConfig,
   GuestDetailsConfig,
 } from 'libs/admin/shared/src/lib/models/detailsConfig.model';
 import { ReservationService } from '../../services/reservation.service';
+import { DialogService } from 'primeng/dynamicdialog';
 
 @Component({
   selector: 'hospitality-bot-admin-documents-details',
@@ -38,6 +39,10 @@ export class AdminDocumentsDetailsComponent implements OnInit {
   updatedDocGuest = [];
   isAllDocsAttached: boolean = false;
 
+  // Options List
+  guestOptions: Option[];
+  docTypeOptions: Option[];
+
   entityId: string;
 
   @Input() parentForm;
@@ -48,21 +53,35 @@ export class AdminDocumentsDetailsComponent implements OnInit {
     private _fb: FormBuilder,
     private _reservationService: ReservationService,
     private snackbarService: SnackBarService,
-    private modalService: ModalService,
     private globalFilterService: GlobalFilterService,
-    private downloadService: DownloadService
+    private downloadService: DownloadService,
+    private dialogService: DialogService
   ) {
     this.entityId = this.globalFilterService.entityId;
   }
 
   ngOnInit(): void {
     this.entityId = this.globalFilterService.entityId;
+    this.initOptions();
   }
 
   ngOnChanges() {
     this.getCountriesList();
     this.addDocumentStatusForm();
     this.setDefaultGuestForDocument();
+  }
+
+  initOptions() {
+    this.guestOptions = this.detailsData.guestDetails.guests.map(
+      (guest) =>
+        ({
+          label: guest.firstName
+            ? `${guest.title} ${guest.firstName} ${guest.lastName}`
+            : `Add ${guest.label} details`,
+          value: guest.id,
+          disabled: !guest.firstName,
+        } as Option)
+    );
   }
 
   addDocumentStatusForm() {
@@ -201,6 +220,10 @@ export class AdminDocumentsDetailsComponent implements OnInit {
       .getDocumentsByNationality(this.entityId, nationality)
       .subscribe((response) => {
         this.documentsList = response.documentList;
+        this.docTypeOptions = this.documentsList.map((item) => ({
+          label: item,
+          value: item,
+        }));
 
         /**
          * Patching the document type - Logic
@@ -367,22 +390,34 @@ export class AdminDocumentsDetailsComponent implements OnInit {
       .at(index)
       .get(`${docPage}Url`);
 
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.disableClose = true;
-    dialogConfig.id = 'image-cropper-modal';
+    // const dialogConfig = new MatDialogConfig();
+    // dialogConfig.disableClose = true;
+    // dialogConfig.id = 'image-cropper-modal';
 
-    const dialogRef = this.modalService.openDialog(
-      ImageHandlingComponent,
-      dialogConfig
-    );
+    // const dialogRef = this.modalService.openDialog(
+    //   ImageHandlingComponent,
+    //   dialogConfig
+    // );
 
-    dialogRef.componentInstance.imageChangedEvent = {
-      target: {
-        files: [data.file],
+    const dialogData: Partial<ImageHandlingComponent> = {
+      imageChangedEvent: {
+        target: {
+          files: [data.file],
+        },
       },
     };
 
-    dialogRef.componentInstance.onModalClose.subscribe((response) => {
+    const dialogRef = openModal({
+      config: {
+        width: 'unset',
+        styleClass: 'image-cropper-modal',
+        data: dialogData,
+      },
+      dialogService: this.dialogService,
+      component: ImageHandlingComponent,
+    });
+
+    dialogRef.onClose.subscribe((response) => {
       if (response.status) {
         if (response.data.file.size > this.fileUploadData.fileSize) {
           this.snackbarService.openSnackBarAsText('File size limit exceeded');
@@ -425,8 +460,59 @@ export class AdminDocumentsDetailsComponent implements OnInit {
             }
           );
       }
-      dialogRef.close();
     });
+
+    // dialogRef.componentInstance.imageChangedEvent = {
+    //   target: {
+    //     files: [data.file],
+    //   },
+    // };
+
+    // dialogRef.componentInstance.onModalClose.subscribe((response) => {
+    //   if (response.status) {
+    //     if (response.data.file.size > this.fileUploadData.fileSize) {
+    //       this.snackbarService.openSnackBarAsText('File size limit exceeded');
+    //       return;
+    //     }
+
+    //     const file = response.data.file;
+    //     this.uploadingDoc = `${docPage}-${index}`;
+    //     let formData = new FormData();
+    //     formData.append('file', file);
+    //     formData.append(
+    //       'doc_type',
+    //       this.documentFormGroup.at(index).get('documentType').value
+    //     );
+
+    //     formData.append('doc_page', docPage);
+    //     formData.append(
+    //       'doc_issue_place',
+    //       this.selectedGuestGroup.get('nationality').value
+    //     );
+
+    //     const guestID = this.selectedGuestGroup.get('id').value;
+
+    //     this._reservationService
+    //       .uploadDocumentFile(
+    //         this.detailsData.reservationDetails.bookingId,
+    //         guestID,
+    //         formData
+    //       )
+    //       .subscribe(
+    //         (res) => {
+    //           docPageControl.setValue(res.fileDownloadUrl);
+    //           this.uploadingDoc = '';
+    //           this.updatedDocGuest.push(guestID);
+    //           this.saveDocument();
+    //         },
+    //         ({ error }) => {
+    //           this.snackbarService.openSnackBarAsText(error?.message);
+    //           this.uploadingDoc = '';
+    //         }
+    //       );
+    //   }
+    //   dialogRef.close();
+    // });
   }
 
   isAllGuestDocsSubmitted() {

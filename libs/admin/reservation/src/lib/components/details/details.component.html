@@ -74,19 +74,19 @@
       *ngIf="isGuestInfoPatched && guestReservationDropdownList.length"
     >
       <div *ngIf="isGuestReservationFetched" [formGroup]="bookingFG">
-        <!-- TODO: If you want to replace MUI then use this... -->
-        <!-- <hospitality-bot-select
+        <hospitality-bot-select
           class="past-booking"
           controlName="booking"
-          [options]="guestDropDown"
+          [options]="guestDropDownList"
           [props]="{
             placeholder: 'Select',
             dropdownIcon: 'pi pi-sort-down'
           }"
           (itemSelection)="handleBookingChange($event)"
-        ></hospitality-bot-select> -->
+        ></hospitality-bot-select>
 
-        <mat-select
+        <!-- TODO: Need to remove mat -->
+        <!-- <mat-select
           class="past-booking"
           formControlName="booking"
           (selectionChange)="handleBookingChange($event)"
@@ -96,7 +96,7 @@
             *ngFor="let item of guestReservationDropdownList"
             >{{ item.label | titlecase }} - {{ item.bookingNumber }}</mat-option
           >
-        </mat-select>
+        </mat-select> -->
       </div>
       <div class="btn-wrapper">
         <!-- conformation voucher -->

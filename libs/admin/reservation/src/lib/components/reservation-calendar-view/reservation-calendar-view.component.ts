@@ -13,6 +13,7 @@ import {
   Option,
   QueryConfig,
   daysOfWeek,
+  openModal,
 } from '@hospitality-bot/admin/shared';
 import { getWeekendBG } from 'libs/admin/channel-manager/src/lib/models/bulk-update.models';
 import {
@@ -58,6 +59,8 @@ import { JourneyState } from 'libs/admin/manage-reservation/src/lib/constants/re
 import { roomStatusDetails } from 'libs/admin/housekeeping/src/lib/constant/room';
 import { NightAuditService } from 'libs/admin/global-shared/src/lib/services/night-audit.service';
 import { CalendarOccupancy } from '../../models/reservation-table.model';
+import { JourneyDialogComponent } from '../journey-dialog/journey-dialog.component';
+import { DialogService } from 'primeng/dynamicdialog';
 
 @Component({
   selector: 'hospitality-bot-reservation-calendar-view',
@@ -105,7 +108,8 @@ export class ReservationCalendarViewComponent implements OnInit {
     private _clipboard: Clipboard,
     private routesConfigService: RoutesConfigService,
     private auditService: NightAuditService,
-    private bookingDetailService: BookingDetailService
+    private bookingDetailService: BookingDetailService,
+    private dialogService: DialogService
   ) {}
 
   ngOnInit(): void {
@@ -663,7 +667,7 @@ export class ReservationCalendarViewComponent implements OnInit {
   }
 
   manualCheckin(reservationId: string, roomType: IGRoomType) {
-    this.adminDetailsService.openJourneyDialog({
+    this.openJourneyDialog({
       title: 'Check-In',
       description: 'Guest is about to checkin',
       question: 'Are you sure you want to continue?',
@@ -685,7 +689,7 @@ export class ReservationCalendarViewComponent implements OnInit {
   }
 
   manualCheckout(reservationId: string, roomType: IGRoomType) {
-    this.adminDetailsService.openJourneyDialog({
+    this.openJourneyDialog({
       title: 'Manual Checkout',
       description: 'Guest is about to checkout',
       question: 'Are you sure you want to continue?',
@@ -786,6 +790,18 @@ export class ReservationCalendarViewComponent implements OnInit {
     this.bookingDetailService.openBookingDetailSidebar({
       bookingId: reservationId,
       tabKey: 'guest_details',
+    });
+  }
+
+  openJourneyDialog(config) {
+    openModal({
+      config: {
+        width: '450px',
+        styleClass: 'confirm-dialog',
+        data: config,
+      },
+      component: JourneyDialogComponent,
+      dialogService: this.dialogService,
     });
   }
 

@@ -759,3 +759,7 @@ mat-option {
 // :host ::ng-deep .mat-select-value {
 //   // max-width: unset !important;
 // }
+
+:host ::ng-deep .p-splitbutton button {
+  font-size: 12px !important;
+}

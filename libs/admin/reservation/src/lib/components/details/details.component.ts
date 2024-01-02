@@ -1243,6 +1243,10 @@ export class DetailsComponent implements OnInit, OnDestroy {
     }));
   }
 
+  get isPermissionToCheckInOrOut() {
+    return this.subscriptionService.show().isCalenderView;
+  }
+
   ngOnDestroy() {
     this._reservationService.$reinitializeGuestDetails.next(false);
     this.$subscription.unsubscribe();

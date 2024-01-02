@@ -238,6 +238,16 @@ export class SubscriptionPlanService extends ApiService {
     }
     return isProductViewTrue || isModuleViewTrue;
   }
+
+  show(): { isCalenderView: boolean } {
+    return {
+      isCalenderView: !(
+        this.checkModuleSubscription(ModuleNames.ADD_RESERVATION) &&
+        this.hasManageUserPermission(PermissionModuleNames.RESERVATION) &&
+        this.checkProductSubscription(ModuleNames.PREDICTO_PMS)
+      ),
+    };
+  }
 }
 
 type PermissionType = 'product' | 'module';

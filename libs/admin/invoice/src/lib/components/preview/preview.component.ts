@@ -7,6 +7,7 @@ import { invoiceRoutes } from '../../constants/routes';
 import { MenuItem } from 'primeng/api';
 import { AdminDetailsService } from 'libs/admin/reservation/src/lib/services/admin-details.service';
 import { ReservationService } from 'libs/admin/reservation/src/lib/services/reservation.service';
+import { SubscriptionService } from 'libs/admin/subscription/src/lib/services/subscription.service';
 
 @Component({
   selector: 'hospitality-bot-preview',
@@ -42,7 +43,8 @@ export class PreviewComponent implements OnInit {
     private snackbarService: SnackBarService,
     private routesConfigService: RoutesConfigService,
     private adminDetailsService: AdminDetailsService,
-    private reservationService: ReservationService
+    private reservationService: ReservationService,
+    private subscriptionService: SubscriptionService
   ) {}
 
   ngOnInit(): void {

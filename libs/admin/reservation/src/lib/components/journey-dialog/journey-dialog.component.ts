@@ -1,4 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 
 @Component({
@@ -7,6 +8,7 @@ import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
   styleUrls: ['./journey-dialog.component.scss'],
 })
 export class JourneyDialogComponent implements OnInit {
+  useForm!: FormGroup;
   private _defaultValue = {
     title: '',
     description: '',
@@ -21,6 +23,7 @@ export class JourneyDialogComponent implements OnInit {
         context: '',
       },
     },
+    isSendInvoice: false,
   };
 
   private _config;
@@ -41,8 +44,12 @@ export class JourneyDialogComponent implements OnInit {
 
   constructor(
     private ref: DynamicDialogRef,
-    public dialogConfig: DynamicDialogConfig
+    public dialogConfig: DynamicDialogConfig,
+    public fb: FormBuilder
   ) {
+    this.useForm = this.fb.group({
+      invoiceStatus: [false],
+    });
     if (dialogConfig?.data) {
       this._config = { ...this._defaultValue, ...dialogConfig?.data };
     }
@@ -54,9 +61,15 @@ export class JourneyDialogComponent implements OnInit {
     const { accept: acceptButtonConfig } = this.config.buttons;
 
     if (acceptButtonConfig.context && acceptButtonConfig.handler) {
-      acceptButtonConfig.context[
-        acceptButtonConfig.handler.fn_name
-      ].apply(acceptButtonConfig.context, [...acceptButtonConfig.handler.args]);
+      acceptButtonConfig.context[acceptButtonConfig.handler.fn_name].apply(
+        acceptButtonConfig.context,
+        [
+          ...acceptButtonConfig.handler.args,
+          this.config.isSendInvoice && {
+            isSendInvoice: this.useForm.get('invoiceStatus').value,
+          },
+        ]
+      );
     }
 
     this.ref.close();

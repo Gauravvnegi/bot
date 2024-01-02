@@ -103,9 +103,11 @@ export class ReservationService extends ApiService {
     return this.post(`/api/v1/reservation/${reservationId}/manual-checkin`, {});
   }
 
-  manualCheckout(reservationId) {
+  manualCheckout(reservationId, config?: QueryConfig) {
     return this.post(
-      `/api/v1/reservation/${reservationId}/manual-checkout`,
+      `/api/v1/reservation/${reservationId}/manual-checkout${
+        config?.params ?? ''
+      }`,
       {}
     );
   }

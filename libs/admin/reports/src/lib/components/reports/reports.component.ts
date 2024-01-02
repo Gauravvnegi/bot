@@ -15,10 +15,12 @@ import {
   kebabToCamel,
   convertToTitleCase,
 } from 'libs/admin/shared/src/lib/utils/valueFormatter';
-import { NavRouteOption, NavRouteOptions } from '@hospitality-bot/admin/shared';
+import {
+  NavRouteOption,
+  NavRouteOptions,
+  manageMaskZIndex,
+} from '@hospitality-bot/admin/shared';
 import { ActivatedRoute, Router } from '@angular/router';
-import { manageMaskZIndex } from 'apps/admin/src/app/core/theme/src/lib/containers/sidenav/sidenav.component';
-
 @Component({
   selector: 'hospitality-bot-reports',
   templateUrl: './reports.component.html',

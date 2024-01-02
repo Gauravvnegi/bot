@@ -35,3 +35,4 @@ export * from './lib/types/user.type';
 export * from './lib/components/button/button.component';
 export * from './lib/components/tiered-menu-button/tiered-menu-button.component';
 export * from './lib/utils/dynamic-modal';
+export * from './lib/utils/dom-manager';

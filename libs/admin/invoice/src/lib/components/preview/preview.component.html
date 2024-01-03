@@ -7,7 +7,7 @@
         variant="outlined"
         (onClick)="handleCheckout()"
         [isLoading]="loadingPdf"
-        [disabled]="failedToLoad"
+        [disabled]="failedToLoad || !subscriptionService.show().isCalenderView"
       ></hospitality-bot-button>
 
       <!-- <hospitality-bot-button

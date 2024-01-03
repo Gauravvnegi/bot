@@ -61,6 +61,14 @@
         }
       }
     }
+
+    &__disabled {
+      opacity: 0.5;
+
+      .p-splitbutton button {
+        cursor: not-allowed;
+      }
+    }
   }
 
   .p-splitbutton {

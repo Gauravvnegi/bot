@@ -5,6 +5,7 @@ import { NavigationEnd, Router } from '@angular/router';
 import {
   GlobalFilterService,
   RoutesConfigService,
+  SubscriptionPlanService,
 } from '@hospitality-bot/admin/core/theme';
 import {
   AdminUtilityService,
@@ -108,7 +109,8 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
     private invoiceService: InvoiceService,
     private routesConfigService: RoutesConfigService,
     private router: Router,
-    private _clipboard: Clipboard
+    private _clipboard: Clipboard,
+    private subscriptionPlanService: SubscriptionPlanService
   ) {
     super(fb);
   }
@@ -138,9 +140,13 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
   }
 
   checkReservationSubscription() {
-    this.tableFG?.addControl('tableType', new FormControl('calendar'));
-    this.tableFG.patchValue({ tableType: 'calendar' });
-    this.selectedTableType = 'calendar';
+    this.tableFG?.addControl('tableType', new FormControl(''));
+
+    if (this.subscriptionPlanService.show().isCalenderView) {
+      this.setTableType(this.tableTypes[0].value);
+    } else {
+      this.setTableType(this.tableTypes[1].value);
+    }
   }
 
   setTableType(value: string) {

@@ -60,7 +60,8 @@
       <form [formGroup]="selectedGuestGroup">
         <div class="wrapper">
           <div class="document-name-nationality">
-            <mat-form-field class="nationality">
+            <!-- TODO: Need to remove -->
+            <!-- <mat-form-field class="nationality">
               <mat-select
                 [(value)]="selectedGuestId"
                 (selectionChange)="onGuestChange($event.value)"
@@ -78,11 +79,32 @@
                   </ng-template>
                 </mat-option>
               </mat-select>
-            </mat-form-field>
+            </mat-form-field> -->
+
+            <hospitality-bot-select
+              class="form_input"
+              controlName="id"
+              [options]="guestOptions"
+              [props]="{
+                placeholder: 'Select'
+              }"
+              (itemSelection)="onGuestChange($event.value)"
+            ></hospitality-bot-select>
 
             <div class="select-field">
               <span class="label">Nationality :</span>
-              <mat-form-field *ngIf="selectedGuestGroup">
+              <hospitality-bot-select
+                *ngIf="selectedGuestGroup"
+                class="form_input"
+                controlName="nationality"
+                [options]="countriesLOV"
+                [props]="{
+                  variant: 'standard'
+                }"
+              ></hospitality-bot-select>
+
+              <!-- TODO: Need to remove -->
+              <!-- <mat-form-field *ngIf="selectedGuestGroup">
                 <mat-select
                   [(value)]="selectedGuestGroup.get('nationality').value"
                   formControlName="nationality"
@@ -95,11 +117,21 @@
                     {{ country.label }}
                   </mat-option>
                 </mat-select>
-              </mat-form-field>
+              </mat-form-field> -->
             </div>
             <div class="select-field">
               <span class="label">Document Type :</span>
-              <mat-form-field *ngIf="selectedGuestGroup">
+              <hospitality-bot-select
+                *ngIf="selectedGuestGroup"
+                class="form_input"
+                controlName="selectedDocumentType"
+                [options]="docTypeOptions"
+                [props]="{
+                  variant: 'standard'
+                }"
+              ></hospitality-bot-select>
+              <!-- TODO : Need to remove -->
+              <!-- <mat-form-field *ngIf="selectedGuestGroup">
                 <mat-select
                   [(value)]="
                     selectedGuestGroup.get('selectedDocumentType').value
@@ -111,7 +143,7 @@
                     {{ doc }}
                   </mat-option>
                 </mat-select>
-              </mat-form-field>
+              </mat-form-field> -->
             </div>
           </div>
           <div class="nationality-wrapper"></div>
@@ -204,7 +236,7 @@
           </div>
         </div>
         <hr class="data-seperator" />
-        <mat-label class="mat-head">Documents Status</mat-label>
+        <label class="mat-head">Documents Status</label>
         <div class="pending-button-wrapper">
           <p class="health-status ml-0">
             Document Verification Status :&nbsp;<b class="pending">{{

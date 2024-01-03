@@ -1,4 +1,8 @@
-import { DialogService, DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
+import {
+  DialogService,
+  DynamicDialogConfig,
+  DynamicDialogRef,
+} from 'primeng/dynamicdialog';
 /**
  *
  * @param data require, configuration of the modal, its need service and component which you want to open inside that

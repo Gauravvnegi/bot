@@ -6,6 +6,7 @@ import {
 } from 'libs/shared/image-cropper/src/lib/interfaces';
 
 import { base64ToFile } from 'libs/shared/image-cropper/src/lib/utils/blob.utils';
+import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 
 @Component({
   selector: 'hospitality-bot-image-handling',
@@ -23,6 +24,21 @@ export class ImageHandlingComponent {
   showCropper = false;
   containWithinAspectRatio = false;
   transform: ImageTransform = {};
+
+  constructor(
+    private dialogConfig: DynamicDialogConfig,
+    private dialogRef: DynamicDialogRef
+  ) {
+    /**
+     * @remarks Extracting data from dialog Service
+     */
+    const data = this.dialogConfig.data as this;
+    if (data) {
+      Object.entries(data).forEach(([key, value]) => {
+        this[key] = value;
+      });
+    }
+  }
 
   imageCropped(event: ImageCroppedEvent) {
     const blob = base64ToFile(event.base64);
@@ -119,6 +135,16 @@ export class ImageHandlingComponent {
   }
 
   sendCroppedImage() {
+    // TODO : Will be remove after changing mat from everywhere
     this.onModalClose.emit({ status: true, data: this.croppedImage });
+
+    this.dialogRef.close({ status: true, data: this.croppedImage });
+  }
+
+  closeModal() {
+    // TODO : Will be remove after changing mat from everywhere
+    this.onModalClose.emit({ status: false });
+
+    this.dialogRef.close({ status: false });
   }
 }

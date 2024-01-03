@@ -2,7 +2,6 @@ export { AdminDocumentsDetailsComponent } from '../components/admin-documents-de
 export { AdminGuestDetailsComponent } from '../components/admin-guest-details/admin-guest-details.component';
 export { AdminPackageDetailsComponent } from '../components/admin-package-details/admin-package-details.component';
 export { AdminPaymentDetailsComponent } from '../components/admin-payment-details/admin-payment-details.component';
-export { DepositRuleComponent } from '../components/deposit-rule/deposit-rule.component';
 export { DetailsComponent } from '../components/details/details.component';
 export { JourneyDialogComponent } from '../components/journey-dialog/journey-dialog.component';
 export { ManualCheckinComponent } from '../components/manual-checkin/manual-checkin.component';

@@ -37,6 +37,10 @@ export class ManageReservationService extends ApiService {
     );
   }
 
+  getUpgradeRoomTypes(entityId: string, config: QueryConfig) {
+    return this.get(`/api/v1/entity/${entityId}/inventory${config.params}`);
+  }
+
   createReservation(entityId: string, data, bookingType): Observable<any> {
     return this.post(`/api/v1/booking?type=${bookingType}`, data, {
       headers: { 'entity-id': entityId },

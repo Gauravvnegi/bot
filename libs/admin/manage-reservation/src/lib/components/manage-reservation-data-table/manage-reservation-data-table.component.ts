@@ -47,7 +47,7 @@ import {
 import { ManageReservationService } from '../../services/manage-reservation.service';
 import {
   ReservationListResponse,
-  RoomReservationFormResponse,
+  RoomReservationResponse,
 } from '../../types/response.type';
 import { FormService } from '../../services/form.service';
 import { SelectedEntity } from '../../types/reservation.type';
@@ -94,7 +94,7 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
   selectedTableType: string;
   showCalendarView = false;
 
-  roomReservationList: RoomReservationFormResponse[] = [];
+  roomReservationList: RoomReservationResponse[] = [];
 
   private cancelRequests$ = new Subject<void>();
 

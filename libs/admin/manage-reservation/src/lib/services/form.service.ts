@@ -28,13 +28,11 @@ export class FormService {
   disableBtn: boolean = false;
   calendarView: boolean = false;
 
-  effectiveDate: number = 0;
   getSummary = new BehaviorSubject(false);
   deductedAmount = new BehaviorSubject(0);
   isDataInitialized = new BehaviorSubject(false);
   reinitializeRooms = new BehaviorSubject(false);
 
-  roomUpgradeForm: FormGroup;
   guestInformation: BehaviorSubject<Option> = new BehaviorSubject<Option>(null);
   offerType: BehaviorSubject<string> = new BehaviorSubject<string>(null);
 
@@ -139,7 +137,7 @@ export class FormService {
         (roomType) => {
           const bookingItem: any = {
             roomDetails: {
-              ratePlan: { id: roomType.ratePlan },
+              ratePlan: { id: roomType.ratePlanId },
               roomTypeId: roomType.roomTypeId,
               roomCount: roomType?.roomCount ? roomType.roomCount : 1,
               roomNumbers: roomType?.roomNumbers ? roomType?.roomNumbers : [],
@@ -165,7 +163,7 @@ export class FormService {
     } else if (type === 'quick') {
       roomReservationData.bookingItems[0] = {
         roomDetails: {
-          ratePlan: { id: input.roomInformation?.ratePlan },
+          ratePlan: { id: input.roomInformation?.ratePlanId },
           roomTypeId: input.roomInformation?.roomTypeId,
           roomCount: input.roomInformation?.roomNumbers.length
             ? input.roomInformation.roomNumbers.length

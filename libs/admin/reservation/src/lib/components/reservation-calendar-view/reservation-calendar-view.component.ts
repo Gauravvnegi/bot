@@ -10,7 +10,6 @@ import {
   BookingDetailService,
   FlagType,
   ModuleNames,
-  Option,
   QueryConfig,
   daysOfWeek,
   openModal,
@@ -61,6 +60,7 @@ import { NightAuditService } from 'libs/admin/global-shared/src/lib/services/nig
 import { CalendarOccupancy } from '../../models/reservation-table.model';
 import { JourneyDialogComponent } from '../journey-dialog/journey-dialog.component';
 import { DialogService } from 'primeng/dynamicdialog';
+import { ReservationRatePlan } from 'libs/admin/room/src/lib/constant/form';
 
 @Component({
   selector: 'hospitality-bot-reservation-calendar-view',
@@ -885,7 +885,7 @@ export type IGRoomType = {
   loading?: boolean;
   reinitialize?: boolean;
   data?: GridData;
-  ratePlans?: Option[];
+  ratePlans?: ReservationRatePlan[];
 };
 
 type GridData = {

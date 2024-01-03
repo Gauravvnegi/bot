@@ -44,7 +44,7 @@
               [options]="
                 field.options
                   ? field.options
-                  : controls.get('roomNumberOptions').value
+                  : controls.get('rooms').value
               "
               [disabled]="field.disabled"
               [settings]="{ showHeader: false }"
@@ -60,9 +60,9 @@
               [options]="
                 field.options
                   ? field.options
-                  : field.name === 'ratePlan'
-                  ? controls.get('ratePlanOptions').value
-                  : controls.get('roomNumberOptions').value
+                  : field.name === 'ratePlanId'
+                  ? controls.get('ratePlans').value
+                  : controls.get('rooms').value
               "
               [disabled]="field.disabled"
               [loading]="field.options ? loadingRoomTypes[i] : false"
@@ -118,7 +118,7 @@
       *ngIf="isConfirmedBooking"
       class="action-btn"
       label="Upgrade Room"
-      (onClick)="openDialog = true"
+      (onClick)="upgradeRoomType()"
       [disabled]="isCheckedout"
       variant="text"
     ></hospitality-bot-button>
@@ -131,7 +131,7 @@
     ></hospitality-bot-button>
   </div>
 </div>
-
+<!-- 
 <p-dialog
   class="dialog"
   header="Room Upgrade"
@@ -144,9 +144,8 @@
     (onClose)="onCloseRoomUpgrade($event)"
     [roomConfig]="{
       entityId: entityId,
-      queryConfig: getConfig(),
       reservationId: reservationId,
-      effectiveDate: effectiveDate
+      toDate: toDate
     }"
   ></hospitality-bot-upgrade-room-type>
-</p-dialog>
+</p-dialog> -->

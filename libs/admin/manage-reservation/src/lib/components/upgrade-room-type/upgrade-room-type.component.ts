@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import {
   AbstractControl,
   FormBuilder,
@@ -8,15 +8,13 @@ import {
 import { RoomTypeOption } from '../../constants/reservation';
 import { FormService } from '../../services/form.service';
 import { RoomTypeResponse } from 'libs/admin/room/src/lib/types/service-response';
-import {
-  EntitySubType,
-  Option,
-  QueryConfig,
-} from '@hospitality-bot/admin/shared';
+import { EntitySubType, QueryConfig } from '@hospitality-bot/admin/shared';
 import { ManageReservationService } from '../../services/manage-reservation.service';
 import { Subscription } from 'rxjs';
 import { RoomUpgradeType } from '../../types/response.type';
 import { SnackBarService } from '@hospitality-bot/shared/material';
+import { ReservationRatePlan } from 'libs/admin/room/src/lib/constant/form';
+import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 
 @Component({
   selector: 'hospitality-bot-upgrade-room-type',
@@ -28,30 +26,29 @@ export class UpgradeRoomTypeComponent implements OnInit {
   queryConfig: string;
   reservationId: string;
   effectiveDate: number;
+  toDate: number;
+
+  roomUpgradeForm: FormGroup;
 
   chargedAmount: number;
   selectedRoomType: RoomTypeOption;
-  ratePlans: (Option & { isBase: boolean })[] = [];
+  ratePlans: ReservationRatePlan[] = [];
   $subscription = new Subscription();
-
-  @Input() set roomConfig(value: RoomConfig) {
-    for (const key in value) {
-      const val = value[key];
-      this[key] = val;
-    }
-    value.effectiveDate &&
-      this.formService.roomUpgradeForm &&
-      this.inputControls.effectiveDate.patchValue(value.effectiveDate);
-  }
-
-  @Output() onClose = new EventEmitter<RoomUpgradeType>();
-
   constructor(
     private fb: FormBuilder,
     public formService: FormService,
     private manageReservationService: ManageReservationService,
-    private snackbarService: SnackBarService
-  ) {}
+    private snackbarService: SnackBarService,
+    public dialogConfig: DynamicDialogConfig, //generic not supported yet,
+    public dialogRef: DynamicDialogRef
+  ) {
+    const data = dialogConfig.data as RoomConfig;
+    if (data) {
+      Object.entries(data).forEach(([key, value]) => {
+        this[key] = value;
+      });
+    }
+  }
 
   ngOnInit(): void {
     this.initForm();
@@ -59,7 +56,7 @@ export class UpgradeRoomTypeComponent implements OnInit {
   }
 
   initForm() {
-    this.formService.roomUpgradeForm = this.fb.group({
+    this.roomUpgradeForm = this.fb.group({
       roomTypeId: ['', [Validators.required]],
       roomNumber: ['', [Validators.required]],
       ratePlanId: [''],
@@ -67,12 +64,10 @@ export class UpgradeRoomTypeComponent implements OnInit {
       chargedAmount: [0],
       chargeable: [false],
       effectiveDate: [0],
-      roomNumberOptions: [[]],
-      ratePlanOptions: [[]],
+      rooms: [[]],
+      ratePlans: [[]],
     });
-    this.inputControls.effectiveDate.patchValue(
-      this.effectiveDate ? this.effectiveDate : Date.now()
-    );
+    this.inputControls.effectiveDate.patchValue(this.effectiveDate);
   }
 
   getConfig(): QueryConfig {
@@ -83,11 +78,25 @@ export class UpgradeRoomTypeComponent implements OnInit {
           roomTypeId: this.selectedRoomType.value,
           ratePlanId: this.inputControls.ratePlanId.value,
           roomNumber: this.inputControls.roomNumber.value,
-          effectiveDate: this.formService.effectiveDate,
+          effectiveDate: this.effectiveDate,
         },
       ]),
     };
     return config;
+  }
+
+  getUpgradeRoomTypeConfig() {
+    const queries = {
+      type: EntitySubType.ROOM_TYPE,
+      createBooking: true,
+      roomTypeStatus: true,
+      raw: true,
+      roomUpgrade: true,
+      effectiveDate: this.effectiveDate,
+      reservationId: this.reservationId,
+    };
+
+    return queries;
   }
 
   roomTypeChange(event: RoomTypeResponse) {
@@ -99,16 +108,12 @@ export class UpgradeRoomTypeComponent implements OnInit {
 
   listenForRoomTypeChange() {
     if (this.selectedRoomType) {
-      this.ratePlans = this.selectedRoomType.ratePlans.map((item) => ({
-        label: item.label,
-        value: item.value,
-        isBase: item.isBase,
-      }));
+      this.ratePlans = this.selectedRoomType.ratePlans;
       let defaultPlan = this.ratePlans.find((item) => item.isBase);
-      this.formService.roomUpgradeForm.patchValue(
+      this.roomUpgradeForm.patchValue(
         {
-          ratePlanOptions: this.ratePlans,
-          roomNumberOptions: this.selectedRoomType.rooms,
+          ratePlans: this.ratePlans,
+          rooms: this.selectedRoomType.rooms,
           ratePlanId: defaultPlan.value,
         },
         { emitEvent: false }
@@ -144,14 +149,14 @@ export class UpgradeRoomTypeComponent implements OnInit {
   }
 
   handleSubmit() {
-    if (this.formService.roomUpgradeForm.invalid) {
-      this.formService.roomUpgradeForm.markAllAsTouched();
+    if (this.roomUpgradeForm.invalid) {
+      this.roomUpgradeForm.markAllAsTouched();
       this.snackbarService.openSnackBarAsText(
         'Invalid form: Please fix errors'
       );
       return;
     }
-    const data = this.formService.roomUpgradeForm.getRawValue() as RoomUpgradeType;
+    const data = this.roomUpgradeForm.getRawValue() as RoomUpgradeType;
     this.$subscription.add(
       this.manageReservationService
         .upgradeRoomType(this.reservationId, data)
@@ -161,27 +166,21 @@ export class UpgradeRoomTypeComponent implements OnInit {
     );
   }
 
-  handleSuccess = (res: RoomUpgradeType) => {
+  handleSuccess = (res: RoomUpgradeClose) => {
     this.snackbarService.openSnackBarAsText(
       `Room Type Upgraded Successfully`,
       '',
       { panelClass: 'success' }
     );
-    this.formService.roomUpgradeForm.reset();
-    this.onClose.emit(res);
+    this.handleDialogClose(res);
   };
 
-  handleCancel() {
-    this.formService.roomUpgradeForm.reset();
-    this.onClose.emit(null);
-  }
-
-  ngOnDestroy() {
-    this.formService.roomUpgradeForm.reset();
+  handleDialogClose(res: RoomUpgradeClose) {
+    this.dialogRef.close(res);
   }
 
   get inputControls() {
-    return this.formService.roomUpgradeForm.controls as Record<
+    return this.roomUpgradeForm.controls as Record<
       keyof RoomUpgradeType,
       AbstractControl
     >;
@@ -190,7 +189,9 @@ export class UpgradeRoomTypeComponent implements OnInit {
 
 export type RoomConfig = {
   entityId: string;
-  queryConfig: string;
   reservationId: string;
   effectiveDate: number;
+  toDate: number;
 };
+
+export type RoomUpgradeClose = RoomUpgradeType & { roomTypeLabel: string };

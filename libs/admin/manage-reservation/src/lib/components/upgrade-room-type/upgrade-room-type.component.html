@@ -1,5 +1,5 @@
 <div class="dialog-wrapper">
-  <div class="form-block" [formGroup]="formService.roomUpgradeForm">
+  <div class="form-block" [formGroup]="roomUpgradeForm">
     <hospitality-bot-quick-select
       label="Room Type"
       controlName="roomTypeId"
@@ -16,7 +16,7 @@
         dataModel: {
           key: 'roomTypes'
         },
-        queryParams: queryConfig,
+        queryParams: getUpgradeRoomTypeConfig(),
         searchAPIEndPoint: 'library/search',
         searchModel: {
           key: 'ROOM_TYPE'
@@ -34,7 +34,7 @@
       class="one-third-width select"
       label="Room Number"
       controlName="roomNumber"
-      [options]="inputControls.roomNumberOptions.value"
+      [options]="inputControls.rooms.value"
       [props]="{
         placeholder: 'Select'
       }"
@@ -43,7 +43,7 @@
       class="one-third-width select"
       label="Rate Plan"
       controlName="ratePlanId"
-      [options]="inputControls.ratePlanOptions.value"
+      [options]="inputControls.ratePlans.value"
       [props]="{
         placeholder: 'Select'
       }"
@@ -86,7 +86,7 @@
 <hospitality-bot-form-action
   class="full-width"
   (onPostAction)="handleSubmit()"
-  (onPreAction)="handleCancel()"
+  (onPreAction)="handleDialogClose(null)"
   [isSticky]="true"
   [config]="{
     postLabel: 'Confirm',

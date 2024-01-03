@@ -1,81 +1,85 @@
-<mat-accordion>
-  <mat-expansion-panel #depositPanel2 [expanded]="openedState">
-    <mat-expansion-panel-header class="accordian__header">
-      <mat-panel-title class="container__title">
-        <p>
-          Instant Feedback -
-          <span class="booking_number">{{ getOutlet(rowData.outletId) }}</span>
-        </p>
-        <div class="header-seperator"></div>
-        <p>
-          {{ rowData?.getfeedbackSubmissionTime(globalFilterService.timezone) }}
-        </p>
-        <div class="header-seperator"></div>
-        <div class="booking-id-wrapper">
-          <div class="feedback">
-            <div class="booking-feedback">
-              <p class="number" [style.backgroundColor]="rowData.color">
-                {{ rowData.intentToRecommends.rating }}
-              </p>
+<div class="custom-accordion_wrapper">
+  <p-accordion>
+    <p-accordionTab [selected]="openedState">
+      <ng-template pTemplate="header">
+        <div class="accordian__header">
+          <div class="container__title">
+            <p>
+              Instant Feedback -
+              <span class="booking_number">{{
+                getOutlet(rowData.outletId)
+              }}</span>
+            </p>
+            <div class="header-seperator"></div>
+            <p>
+              {{
+                rowData?.getfeedbackSubmissionTime(globalFilterService.timezone)
+              }}
+            </p>
+            <div class="header-seperator"></div>
+            <div class="booking-id-wrapper">
+              <div class="feedback">
+                <div class="booking-feedback">
+                  <p class="number" [style.backgroundColor]="rowData.color">
+                    {{ rowData.intentToRecommends.rating }}
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div
+              class="view-feedback-btn"
+              (click)="downloadFeedback($event, rowData.feedbackId)"
+            >
+              <div class="view-feedback-btn__text">
+                <img src="assets/svg/View.svg" alt="" />
+                View Feedback
+              </div>
+              <img src="assets/svg/union.svg" alt="" />
+            </div>
+            <i class="pi pi-plus" *ngIf="!openedState"></i>
+            <i class="pi pi-minus" *ngIf="openedState"></i>
+          </div>
+        </div>
+      </ng-template>
+      <div>
+        <div class="fields-wrapper">
+          <div class="field width-quarter">
+            <label class="label">Date/Time</label>
+            <div class="value">
+              {{
+                rowData?.getfeedbackSubmissionTime(globalFilterService.timezone)
+              }}
+            </div>
+          </div>
+          <div class="field width-quarter">
+            <label class="label">Intent to Recommend</label>
+            <div class="value" [style.color]="rowData.color">
+              {{ rowData.intentToRecommends.rating }}
+              {{ rowData.intentToRecommends.Category }}
+            </div>
+          </div>
+          <div class="field width-quarter">
+            <label class="label">Market Segment</label>
+            <div class="value">
+              {{ rowData.marketSegment }}
             </div>
           </div>
         </div>
-        <div
-          class="view-feedback-btn"
-          (click)="downloadFeedback($event, rowData.feedbackId)"
-        >
-          <div class="view-feedback-btn__text">
-            <img src="assets/svg/View.svg" alt="" />
-            View Feedback
-          </div>
-          <img src="assets/svg/union.svg" alt="" />
-        </div>
-        <mat-icon class="expand-icon" *ngIf="!depositPanel2.expanded"
-          >add</mat-icon
-        >
-        <mat-icon class="expand-icon" *ngIf="depositPanel2.expanded"
-          >remove</mat-icon
-        >
-      </mat-panel-title>
-    </mat-expansion-panel-header>
-    <div>
-      <div class="fields-wrapper">
-        <div class="field width-quarter">
-          <mat-label class="label">Date/Time</mat-label>
-          <div class="value">
-            {{
-              rowData?.getfeedbackSubmissionTime(globalFilterService.timezone)
-            }}
-          </div>
-        </div>
-        <div class="field width-quarter">
-          <mat-label class="label">Intent to Recommend</mat-label>
-          <div class="value" [style.color]="rowData.color">
-            {{ rowData.intentToRecommends.rating }}
-            {{ rowData.intentToRecommends.Category }}
-          </div>
-        </div>
-        <div class="field width-quarter">
-          <mat-label class="label">Market Segment</mat-label>
-          <div class="value">
-            {{ rowData.marketSegment }}
+        <div class="fields-wrapper" *ngIf="rowData.comment">
+          <div class="field">
+            <label class="label">Comments</label>
+            <div class="question">
+              {{ rowData.comment?.question }}
+            </div>
+            <div class="answer" *ngIf="rowData.comment?.answer; else emptyCell">
+              {{ rowData.comment?.answer }}
+            </div>
           </div>
         </div>
       </div>
-      <div class="fields-wrapper" *ngIf="rowData.comment">
-        <div class="field">
-          <mat-label class="label">Comments</mat-label>
-          <div class="question">
-            {{ rowData.comment?.question }}
-          </div>
-          <div class="answer" *ngIf="rowData.comment?.answer; else emptyCell">
-            {{ rowData.comment?.answer }}
-          </div>
-        </div>
-      </div>
-    </div>
-  </mat-expansion-panel>
-</mat-accordion>
+    </p-accordionTab>
+  </p-accordion>
+</div>
 
 <ng-template #emptyCell>
   <div class="emptyCell">--</div>

@@ -8,7 +8,10 @@ import { of } from 'rxjs';
 @Component({
   selector: 'hospitality-bot-admin-payment-details',
   templateUrl: './admin-payment-details.component.html',
-  styleUrls: ['./admin-payment-details.component.scss'],
+  styleUrls: [
+    './admin-payment-details.component.scss',
+    '../accordion-style.scss',
+  ],
 })
 export class AdminPaymentDetailsComponent implements OnInit {
   @Input('data') detailsData;

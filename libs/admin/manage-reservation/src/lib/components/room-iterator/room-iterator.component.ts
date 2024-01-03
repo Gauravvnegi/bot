@@ -298,10 +298,11 @@ export class RoomIteratorComponent extends IteratorComponent
         {
           ratePlans: ratePlanOptions,
           rooms:
-            this.selectedRoomNumber?.length &&
-            !roomType.rooms.some(
-              (room) => room?.value === this.selectedRoomNumber
-            )
+            (this.selectedRoomNumber?.length &&
+              !roomType.rooms.some(
+                (room) => room?.value === this.selectedRoomNumber
+              )) ||
+            this.updatedRoomsLoaded
               ? [
                   {
                     label: this.selectedRoomNumber,
@@ -316,7 +317,9 @@ export class RoomIteratorComponent extends IteratorComponent
       if (
         !this.isCheckedIn &&
         !this.isCheckedout &&
-        (this.isDataInitialized || (!this.reservationId && !this.isRouteData))
+        (this.isDataInitialized ||
+          (!this.reservationId && !this.isRouteData)) &&
+        (!this.updatedRoomsLoaded || !this.isConfirmedBooking)
       ) {
         this.roomControls[index].get('roomNumbers').reset();
         this.roomControls[index].get('roomNumber').reset();

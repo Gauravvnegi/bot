@@ -1,13 +1,15 @@
 import { Component, OnInit } from '@angular/core';
-import { InvoiceService } from '../../services/invoice.service';
 import { ActivatedRoute } from '@angular/router';
+import {
+  RoutesConfigService,
+  SubscriptionPlanService,
+} from '@hospitality-bot/admin/core/theme';
 import { SnackBarService } from '@hospitality-bot/shared/material';
-import { RoutesConfigService } from '@hospitality-bot/admin/core/theme';
-import { invoiceRoutes } from '../../constants/routes';
-import { MenuItem } from 'primeng/api';
 import { AdminDetailsService } from 'libs/admin/reservation/src/lib/services/admin-details.service';
 import { ReservationService } from 'libs/admin/reservation/src/lib/services/reservation.service';
-import { SubscriptionService } from 'libs/admin/subscription/src/lib/services/subscription.service';
+import { MenuItem } from 'primeng/api';
+import { invoiceRoutes } from '../../constants/routes';
+import { InvoiceService } from '../../services/invoice.service';
 
 @Component({
   selector: 'hospitality-bot-preview',
@@ -44,7 +46,7 @@ export class PreviewComponent implements OnInit {
     private routesConfigService: RoutesConfigService,
     private adminDetailsService: AdminDetailsService,
     private reservationService: ReservationService,
-    private subscriptionService: SubscriptionService
+    private subscriptionService: SubscriptionPlanService
   ) {}
 
   ngOnInit(): void {
@@ -189,5 +191,9 @@ export class PreviewComponent implements OnInit {
           panelClass: 'success',
         });
       });
+  }
+
+  get isPermissionToCheckInOrOut(): boolean {
+    return this.subscriptionService.show().isCalenderView;
   }
 }

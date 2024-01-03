@@ -15,6 +15,7 @@ import {
 import { LibraryItem, QueryConfig } from '@hospitality-bot/admin/library';
 import {
   AdminUtilityService,
+  BookingDetailService,
   EntitySubType,
   ModuleNames,
   NavRouteOptions,
@@ -66,7 +67,6 @@ import {
 import { AddDiscountComponent } from '../add-discount/add-discount.component';
 import { AddRefundComponent } from '../add-refund/add-refund.component';
 import { MenuItemListResponse } from 'libs/admin/all-outlets/src/lib/types/outlet';
-import { DetailsComponent } from '@hospitality-bot/admin/reservation';
 
 @Component({
   selector: 'hospitality-bot-invoice',
@@ -151,11 +151,11 @@ export class InvoiceComponent implements OnInit {
     private servicesService: ServicesService,
     private modalService: ModalService,
     private userService: UserService,
-    private router: Router,
     private route: ActivatedRoute,
     private manageReservationService: ManageReservationService,
     private reservationService: ReservationService,
-    private routesConfigService: RoutesConfigService
+    private routesConfigService: RoutesConfigService,
+    private bookingDetailsService: BookingDetailService
   ) {
     this.reservationId = this.activatedRoute.snapshot.paramMap.get('id');
     this.initPageHeaders();
@@ -1447,21 +1447,27 @@ export class InvoiceComponent implements OnInit {
   }
 
   viewDetails() {
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.disableClose = true;
-    dialogConfig.width = '100%';
-    const detailCompRef = this.modalService.openDialog(
-      DetailsComponent,
-      dialogConfig
-    );
+    // TODO: Need to remove
+    // const dialogConfig = new MatDialogConfig();
+    // dialogConfig.disableClose = true;
+    // dialogConfig.width = '100%';
+    // const detailCompRef = this.modalService.openDialog(
+    //   DetailsComponent,
+    //   dialogConfig
+    // );
 
-    detailCompRef.componentInstance.bookingId = this.reservationId;
-    detailCompRef.componentInstance.tabKey = 'guest_details';
-    this.$subscription.add(
-      detailCompRef.componentInstance.onDetailsClose.subscribe((res) => {
-        detailCompRef.close();
-      })
-    );
+    // detailCompRef.componentInstance.bookingId = this.reservationId;
+    // detailCompRef.componentInstance.tabKey = 'guest_details';
+    // this.$subscription.add(
+    //   detailCompRef.componentInstance.onDetailsClose.subscribe((res) => {
+    //     detailCompRef.close();
+    //   })
+    // );
+
+    this.bookingDetailsService.openBookingDetailSidebar({
+      bookingId: this.reservationId,
+      tabKey: 'guest_details',
+    });
   }
 
   editReservation() {

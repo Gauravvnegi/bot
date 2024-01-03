@@ -6,6 +6,7 @@ import { Observable } from 'rxjs';
 import { ReservationSummary } from '../types/forms.types';
 import { MenuItemListResponse } from 'libs/admin/all-outlets/src/lib/types/outlet';
 import { QueryConfig } from '@hospitality-bot/admin/shared';
+import { RoomUpgradeType } from '../types/response.type';
 
 @Injectable()
 export class ManageReservationService extends ApiService {
@@ -21,6 +22,23 @@ export class ManageReservationService extends ApiService {
       // `/api/v1/entity/${entityId}/configuration?configType=PAYMENT&status=ACTIVE`
       `/api/v1/payment/configurations/admin?entity_id=${entityId}&status=ACTIVE`
     );
+  }
+
+  getRoomTypeToUpgrade(reservationId: string, config: QueryConfig) {
+    return this.get(
+      `/api/v1/booking/${reservationId}/upgrade${config?.params}`
+    );
+  }
+
+  upgradeRoomType(reservationId: string, data: RoomUpgradeType) {
+    return this.put(
+      `/api/v1/booking/${reservationId}/upgrade?type=ROOM_TYPE`,
+      data
+    );
+  }
+
+  getUpgradeRoomTypes(entityId: string, config: QueryConfig) {
+    return this.get(`/api/v1/entity/${entityId}/inventory${config.params}`);
   }
 
   createReservation(entityId: string, data, bookingType): Observable<any> {

@@ -162,9 +162,9 @@ export class ManagePermissionService extends ApiService {
 
   exportCSV(config: QueryConfig, allUsers: boolean = false): Observable<any> {
     return this.get(
-      `/api/v1/${
-        allUsers ? `entity/${config.entityId}` : `user/${config.loggedInUserId}`
-      }/users/export${config.queryObj ? config.queryObj : ''}`,
+      `/api/v1/entity/${config.entityId}/users/export${
+        config.queryObj ? config.queryObj : ''
+      }`,
       {
         responseType: 'blob',
       }

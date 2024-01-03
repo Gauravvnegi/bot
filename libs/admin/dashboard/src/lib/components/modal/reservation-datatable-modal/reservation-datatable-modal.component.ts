@@ -2,6 +2,7 @@ import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import {
   AdminUtilityService,
+  BookingDetailService,
   FeedbackService,
 } from '@hospitality-bot/admin/shared';
 import {
@@ -17,6 +18,8 @@ import { ReservationService } from '../../../services/reservation.service';
 import { ReservationDatatableComponent } from '../../datatable/reservation/reservation.component';
 import { NavigationEnd, Router } from '@angular/router';
 import { filter } from 'rxjs/operators';
+import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { ReservationDialogData } from '../../../types/dashboard.type';
 
 @Component({
   selector: 'hospitality-bot-reservation-modal',
@@ -39,9 +42,12 @@ export class ReservationDatatableModalComponent
     protected snackbarService: SnackBarService,
     protected _modal: ModalService,
     public feedbackService: FeedbackService,
+    public router: Router,
+    protected bookingDetailService: BookingDetailService,
     protected subscriptionPlanService: SubscriptionPlanService,
     protected routesConfigService: RoutesConfigService,
-    protected router: Router
+    private dialogRef: DynamicDialogRef,
+    public dialogConfig: DynamicDialogConfig //generic not supported yet,
   ) {
     super(
       fb,
@@ -51,14 +57,26 @@ export class ReservationDatatableModalComponent
       snackbarService,
       _modal,
       feedbackService,
+      bookingDetailService,
       subscriptionPlanService,
       routesConfigService,
       router
     );
+
+    /**
+     * @remarks Extracting data from dialog Service
+     */
+    const data = dialogConfig.data as ReservationDialogData;
+    if (data) {
+      Object.entries(data).forEach(([key, value]) => {
+        this[key] = value;
+      });
+    }
   }
 
   ngOnInit(): void {
     this.registerListeners();
+    this.listenModal();
     this.router.events
       .pipe(filter((event) => event instanceof NavigationEnd))
       .subscribe(() => {
@@ -67,9 +85,23 @@ export class ReservationDatatableModalComponent
   }
 
   /**
+   * @function listenModal will listen the close event of the details, for refreshing data
+   */
+  listenModal() {
+    this.$subscription.add(
+      this.bookingDetailService.actionEvent.subscribe((res) => {
+        if (!res) {
+          super.refreshData();
+        }
+      })
+    );
+  }
+
+  /**
    * @function closeModal Emits the close click event for the modal
    */
   closeModal(): void {
+    this.dialogRef.close();
     this.onModalClose.emit(true);
   }
 }

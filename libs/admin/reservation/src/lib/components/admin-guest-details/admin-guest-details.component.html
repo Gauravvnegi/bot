@@ -1,8 +1,7 @@
 <div>
   <div class="material-body">
     <div class="label-wrapper">
-      <mat-label class="mat-head">Guest Info</mat-label>
-
+      <label class="mat-head">Guest Info</label>
       <img
         *ngIf="hasSharedGuestDetails"
         src="assets/svg/status/success.svg"
@@ -47,7 +46,7 @@
                   class="action-btn"
                   (click)="handleEdit(i)"
                 >
-                  <mat-icon class="expand-icon"> save</mat-icon>
+                  <i class="expand-icon pi pi-save" title="Save"></i>
                   <span class="action-text"> save</span>
                 </div>
                 <div
@@ -55,7 +54,7 @@
                   class="action-btn"
                   (click)="handleEdit(i, true)"
                 >
-                  <mat-icon class="expand-icon">cancel</mat-icon>
+                  <i class="pi pi-times-circle expand-icon" title="Cancel"></i>
                   <span class="action-text"> Cancel</span>
                 </div>
               </ng-container>
@@ -66,7 +65,7 @@
                 class="action-btn"
                 (click)="handleEdit(i)"
               >
-                <mat-icon class="expand-icon">edit</mat-icon>
+                <i class="pi pi-pencil expand-icon" title="Edit"></i>
                 <span class="action-text"> edit</span>
               </div>
             </ng-template>
@@ -144,7 +143,7 @@
 
             <div class="fields-wrapper" *ngIf="editGuestIndex !== i">
               <div class="field width-added">
-                <mat-label class="label">Full Name</mat-label>
+                <label class="label">Full Name</label>
                 <div
                   class="value"
                   *ngIf="
@@ -162,7 +161,7 @@
                 *ngIf="guestFA.at(i).value.role !== 'kids'; else viewAge"
               >
                 <div class="field width-added">
-                  <mat-label class="label">Phone No.</mat-label>
+                  <label class="label">Phone No.</label>
                   <a
                     *ngIf="guestFA.at(i).value.phoneNumber; else emptyCell"
                     href="tel:{{ guestFA.at(i).value.countryCode }}{{
@@ -176,7 +175,7 @@
                   </a>
                 </div>
                 <div class="field width-added">
-                  <mat-label class="label">Email</mat-label>
+                  <label class="label">Email</label>
                   <div
                     *ngIf="guestFA.at(i).value.email; else emptyCell"
                     class="value"
@@ -187,7 +186,7 @@
               </ng-container>
               <ng-template #viewAge>
                 <div class="field width-added">
-                  <mat-label class="label">Age</mat-label>
+                  <label class="label">Age</label>
                   <div
                     *ngIf="guestFA.at(i).value.age; else emptyCell"
                     class="value"
@@ -228,7 +227,7 @@
             >
               <div class="fields-wrapper" [formGroupName]="i">
                 <div class="field width-added">
-                  <mat-label class="label">Full Name</mat-label>
+                  <label class="label">Full Name</label>
                   <div class="value">
                     {{ guestFormGroup.title }}
                     {{ guestFormGroup.firstName }}
@@ -236,7 +235,7 @@
                   </div>
                 </div>
                 <div class="field width-added">
-                  <mat-label class="label">Phone No.</mat-label>
+                  <label class="label">Phone No.</label>
                   <a
                     *ngIf="guestData.phoneNumber; else emptyCell"
                     href="tel:{{ guestFormGroup.countryCode }}{{
@@ -250,7 +249,7 @@
                   </a>
                 </div>
                 <div class="field width-added">
-                  <mat-label class="label">Email</mat-label>
+                  <label class="label">Email</label>
                   <div
                     *ngIf="guestFormGroup.email; else emptyCell"
                     class="value"
@@ -290,7 +289,7 @@
             >
               <div class="fields-wrapper" [formGroupName]="i">
                 <div class="field width-added">
-                  <mat-label class="label">Full Name</mat-label>
+                  <label class="label">Full Name</label>
                   <div class="value">
                     {{ guestFormGroup.title }}
                     {{ guestFormGroup.firstName }}
@@ -298,7 +297,7 @@
                   </div>
                 </div>
                 <div class="field width-added">
-                  <mat-label class="label">Phone No.</mat-label>
+                  <label class="label">Phone No.</label>
                   <a
                     *ngIf="guestData.phoneNumber; else emptyCell"
                     href="tel:{{ guestFormGroup.countryCode }}{{
@@ -312,7 +311,7 @@
                   </a>
                 </div>
                 <div class="field width-added">
-                  <mat-label class="label">Email</mat-label>
+                  <label class="label">Email</label>
                   <div
                     *ngIf="guestFormGroup.email; else emptyCell"
                     class="value"
@@ -363,7 +362,7 @@
             >
               <div class="fields-wrapper" [formGroupName]="i">
                 <div class="field width-added">
-                  <mat-label class="label">Full Name</mat-label>
+                  <label class="label">Full Name</label>
                   <div class="value">
                     {{ guestFormGroup.title }}
                     {{ guestFormGroup.firstName }}
@@ -371,7 +370,7 @@
                   </div>
                 </div>
                 <div class="field width-added">
-                  <mat-label class="label">Age</mat-label>
+                  <label class="label">Age</label>
                   <div *ngIf="guestFormGroup.age; else emptyCell" class="value">
                     {{ guestFormGroup.age }} Years
                   </div>
@@ -390,23 +389,23 @@
       </mat-accordion> -->
     </form>
     <!-- <hr class="data-seperator" />
-    <mat-label class="mat-head">Stay Details</mat-label>
+    <label class="mat-head">Stay Details</label>
     <ng-container>
       <div class="fields-wrapper">
         <div class="field width-quarter">
-          <mat-label class="label">Arrival Date</mat-label>
+          <label class="label">Arrival Date</label>
           <div class="value">
             {{ stayDetailsForm.get('arrivalDate').value }}
           </div>
         </div>
         <div class="field width-quarter">
-          <mat-label class="label">Departure Date</mat-label>
+          <label class="label">Departure Date</label>
           <div class="value">
             {{ stayDetailsForm.get('departureDate').value }}
           </div>
         </div>
         <div class="field width-quarter">
-          <mat-label class="label">Expected Arrival Time</mat-label>
+          <label class="label">Expected Arrival Time</label>
           <div
             *ngIf="
               stayDetailsForm.get('expectedArrivalTime').value;
@@ -420,14 +419,14 @@
       </div>
       <div class="fields-wrapper">
         <div class="field width-quarter">
-          <mat-label class="label">Duration</mat-label>
+          <label class="label">Duration</label>
           <div class="value">
             {{ detailsData.stayDetails.getDaysAndNights().nights }}N |
             {{ detailsData.stayDetails.getDaysAndNights().days }}D
           </div>
         </div>
         <div class="field width-quarter">
-          <mat-label class="label">Room Type</mat-label>
+          <label class="label">Room Type</label>
           <div class="value">
             {{ stayDetailsForm.get('roomType').value }}
           </div>
@@ -436,7 +435,7 @@
     </ng-container> -->
     <!-- <ng-container *ngIf="healthCardDetailsForm">
       <hr class="data-seperator" />
-      <mat-label class="mat-head">Health Declaration</mat-label>
+      <label class="mat-head">Health Declaration</label>
       <ng-container>
         <div class="pending-button-wrapper">
           <p class="health-status">

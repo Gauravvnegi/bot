@@ -10,7 +10,9 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 export class ModalComponent {
   heading: string = 'Notification';
   descriptions: string[] = ['Are you sure?'];
+  subText: string;
   isRemarks: boolean = false;
+  isReservation: boolean = false;
 
   constructor(private fb: FormBuilder) {}
   modelForm: FormGroup;
@@ -32,10 +34,14 @@ export class ModalComponent {
   @Input() actions: ModalAction[];
 
   @Input() set content(value: ModalContent) {
-    if (value) {
-      this.heading = value.heading;
-      this.descriptions = value.description;
-      this.isRemarks = value.isRemarks;
+    for (const key in value) {
+      const val = value[key];
+      this[key] = val;
+    }
+    if (value.isReservation) {
+      // Add controls conditionally when isReservation is true
+      this.modelForm.addControl('chargeable', this.fb.control(''));
+      this.modelForm.addControl('chargedAmount', this.fb.control(''));
     }
   }
 

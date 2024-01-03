@@ -89,14 +89,24 @@
         <div
           *skeleton="disengagement == undefined; height: '25px'; width: '85px'"
         >
-          High Risk
-          <span>{{ disengagement?.gtmBreakDown?.HIGH_RISK || 0 }}</span>
+          <div>
+            High Risk
+            <span>{{ disengagement?.gtmBreakDown?.HIGH_RISK || 0 }}</span>
+          </div>
+          <div class="description">
+            (Below 1-4 Feedback Score)
+          </div>
         </div>
         <div
           *skeleton="disengagement == undefined; height: '25px'; width: '85px'"
         >
-          Medium Risk
-          <span>{{ disengagement?.gtmBreakDown?.MEDIUM_RISK || 0 }}</span>
+          <div>
+            Medium Risk
+            <span>{{ disengagement?.gtmBreakDown?.MEDIUM_RISK || 0 }}</span>
+          </div>
+          <div class="description">
+            (5-8 Feedback Score)
+          </div>
         </div>
       </div>
     </div>

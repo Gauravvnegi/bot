@@ -11,9 +11,9 @@ import {
 import { ReservationForm, ReservationInformation } from '../constants/form';
 import { ManageReservationService } from './manage-reservation.service';
 import { Option, QueryConfig } from '@hospitality-bot/admin/shared';
-import { AbstractControl } from '@angular/forms';
+import { AbstractControl, FormGroup } from '@angular/forms';
 import { RoomTypeResponse } from 'libs/admin/room/src/lib/types/service-response';
-import { RoomFieldTypeOption } from '../constants/reservation';
+import { RoomTypeOption } from '../constants/reservation';
 import { ReservationCurrentStatus } from '../models/reservations.model';
 import { AgentTableResponse } from 'libs/admin/agent/src/lib/types/response';
 import { CompanyResponseType } from 'libs/admin/company/src/lib/types/response';
@@ -27,6 +27,7 @@ export class FormService {
 
   disableBtn: boolean = false;
   calendarView: boolean = false;
+
   getSummary = new BehaviorSubject(false);
   deductedAmount = new BehaviorSubject(0);
   isDataInitialized = new BehaviorSubject(false);
@@ -136,7 +137,7 @@ export class FormService {
         (roomType) => {
           const bookingItem: any = {
             roomDetails: {
-              ratePlan: { id: roomType.ratePlan },
+              ratePlan: { id: roomType.ratePlanId },
               roomTypeId: roomType.roomTypeId,
               roomCount: roomType?.roomCount ? roomType.roomCount : 1,
               roomNumbers: roomType?.roomNumbers ? roomType?.roomNumbers : [],
@@ -162,7 +163,7 @@ export class FormService {
     } else if (type === 'quick') {
       roomReservationData.bookingItems[0] = {
         roomDetails: {
-          ratePlan: { id: input.roomInformation?.ratePlan },
+          ratePlan: { id: input.roomInformation?.ratePlanId },
           roomTypeId: input.roomInformation?.roomTypeId,
           roomCount: input.roomInformation?.roomNumbers.length
             ? input.roomInformation.roomNumbers.length
@@ -252,7 +253,7 @@ export class FormService {
     return reservationData;
   }
 
-  setReservationRoomType(data: RoomTypeResponse | RoomFieldTypeOption) {
+  setReservationRoomType(data: RoomTypeResponse | RoomTypeOption) {
     return 'name' in data
       ? {
           label: data.name,

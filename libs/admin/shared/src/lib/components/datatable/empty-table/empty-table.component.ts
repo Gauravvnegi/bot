@@ -10,8 +10,8 @@ export class EmptyTableComponent implements OnInit {
   imageSrc: string;
   description: string;
   actionName: string;
-  disabledAction: boolean;
   isError = false;
+  @Input() disabledAction: boolean;
   @Input() link: string;
   @Input() isLoading: boolean;
   @Output() action = new EventEmitter();
@@ -31,6 +31,10 @@ export class EmptyTableComponent implements OnInit {
   constructor() {}
 
   ngOnInit(): void {}
+
+  ngOnChanges() {
+    console.log(this.disabledAction, 'action');
+  }
 
   /**
    * Trigger create action

@@ -7,11 +7,12 @@ import {
 } from '@hospitality-bot/admin/core/theme';
 import {
   AdminUtilityService,
+  BookingDetailService,
   FlagType,
   ModuleNames,
-  Option,
   QueryConfig,
   daysOfWeek,
+  openModal,
 } from '@hospitality-bot/admin/shared';
 import { getWeekendBG } from 'libs/admin/channel-manager/src/lib/models/bulk-update.models';
 import {
@@ -45,12 +46,10 @@ import {
   reservationMenuOptions,
   reservationStatusColorCode,
 } from '../../constants/reservation';
-import { MatDialogConfig } from '@angular/material/dialog';
 import {
   ModalService,
   SnackBarService,
 } from '@hospitality-bot/shared/material';
-import { DetailsComponent } from '../details/details.component';
 import { RoomMapType } from 'libs/admin/channel-manager/src/lib/types/channel-manager.types';
 import * as moment from 'moment';
 import { AdminDetailsService } from '../../services/admin-details.service';
@@ -59,6 +58,9 @@ import { JourneyState } from 'libs/admin/manage-reservation/src/lib/constants/re
 import { roomStatusDetails } from 'libs/admin/housekeeping/src/lib/constant/room';
 import { NightAuditService } from 'libs/admin/global-shared/src/lib/services/night-audit.service';
 import { CalendarOccupancy } from '../../models/reservation-table.model';
+import { JourneyDialogComponent } from '../journey-dialog/journey-dialog.component';
+import { DialogService } from 'primeng/dynamicdialog';
+import { ReservationRatePlan } from 'libs/admin/room/src/lib/constant/form';
 
 @Component({
   selector: 'hospitality-bot-reservation-calendar-view',
@@ -100,13 +102,14 @@ export class ReservationCalendarViewComponent implements OnInit {
     private globalFilterService: GlobalFilterService,
     private roomService: RoomService,
     private adminUtilityService: AdminUtilityService,
-    private modalService: ModalService,
     private adminDetailsService: AdminDetailsService,
     private _reservationService: ReservationService,
     private snackbarService: SnackBarService,
     private _clipboard: Clipboard,
     private routesConfigService: RoutesConfigService,
-    private auditService: NightAuditService
+    private auditService: NightAuditService,
+    private bookingDetailService: BookingDetailService,
+    private dialogService: DialogService
   ) {}
 
   ngOnInit(): void {
@@ -664,7 +667,7 @@ export class ReservationCalendarViewComponent implements OnInit {
   }
 
   manualCheckin(reservationId: string, roomType: IGRoomType) {
-    this.adminDetailsService.openJourneyDialog({
+    this.openJourneyDialog({
       title: 'Check-In',
       description: 'Guest is about to checkin',
       question: 'Are you sure you want to continue?',
@@ -686,7 +689,7 @@ export class ReservationCalendarViewComponent implements OnInit {
   }
 
   manualCheckout(reservationId: string, roomType: IGRoomType) {
-    this.adminDetailsService.openJourneyDialog({
+    this.openJourneyDialog({
       title: 'Manual Checkout',
       description: 'Guest is about to checkout',
       question: 'Are you sure you want to continue?',
@@ -769,20 +772,37 @@ export class ReservationCalendarViewComponent implements OnInit {
   }
 
   openDetailsPage(reservationId: string) {
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.disableClose = true;
-    dialogConfig.width = '100%';
-    const detailCompRef = this.modalService.openDialog(
-      DetailsComponent,
-      dialogConfig
-    );
-    detailCompRef.componentInstance.bookingId = reservationId;
-    detailCompRef.componentInstance.tabKey = 'guest_details';
-    this.$subscription.add(
-      detailCompRef.componentInstance.onDetailsClose.subscribe((res) => {
-        detailCompRef.close();
-      })
-    );
+    // TODO: Need to remove
+    // const dialogConfig = new MatDialogConfig();
+    // dialogConfig.disableClose = true;
+    // dialogConfig.width = '100%';
+    // const detailCompRef = this.modalService.openDialog(
+    //   DetailsComponent,
+    //   dialogConfig
+    // );
+    // detailCompRef.componentInstance.bookingId = reservationId;
+    // detailCompRef.componentInstance.tabKey = 'guest_details';
+    // this.$subscription.add(
+    //   detailCompRef.componentInstance.onDetailsClose.subscribe((res) => {
+    //     detailCompRef.close();
+    //   })
+    // );
+    this.bookingDetailService.openBookingDetailSidebar({
+      bookingId: reservationId,
+      tabKey: 'guest_details',
+    });
+  }
+
+  openJourneyDialog(config) {
+    openModal({
+      config: {
+        width: '450px',
+        styleClass: 'confirm-dialog',
+        data: config,
+      },
+      component: JourneyDialogComponent,
+      dialogService: this.dialogService,
+    });
   }
 
   /**
@@ -865,7 +885,7 @@ export type IGRoomType = {
   loading?: boolean;
   reinitialize?: boolean;
   data?: GridData;
-  ratePlans?: Option[];
+  ratePlans?: ReservationRatePlan[];
 };
 
 type GridData = {

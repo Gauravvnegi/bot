@@ -1,5 +1,16 @@
 @import 'main';
 
+:host ::ng-deep {
+  .custom-accordion_wrapper {
+    margin-top: 20px;
+    .p-datatable .p-datatable-thead > tr > th,
+    td {
+      padding: 10px 0 !important;
+      color: #484848 !important;
+    }
+  }
+}
+
 .payment-header {
   @include flex-item-center;
   margin-bottom: 20px;
@@ -120,6 +131,7 @@ td {
 .total-detail-wrapper {
   margin-top: 20px;
   padding: 0 15px;
+  font-size: 14px;
   .total {
     margin-bottom: 15px;
     @include flex-center-algn-justify-end;

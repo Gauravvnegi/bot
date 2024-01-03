@@ -2,6 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable, Inject } from '@angular/core';
 import { Observable, throwError as observableThrowError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
+import { has, isBoolean } from 'lodash';
 
 @Injectable({ providedIn: 'root' })
 export class ApiService {
@@ -154,5 +155,33 @@ export class ApiService {
         .join('&')}`;
     }
     return '';
+  }
+
+  makeQueryParams(queries = [], callingMethod?) {
+    if (!queries.length) {
+      return;
+    }
+    const queryObj = queries.reduce((acc, curr) => {
+      for (let key in curr) {
+        // TO_DO: Readme
+        let currValue = curr[key];
+        if (currValue || isBoolean(currValue)) {
+          if (has(acc, key)) {
+            acc[key] = [acc[key], currValue].join(',');
+          } else if (currValue !== null && currValue !== undefined) {
+            acc[key] = currValue;
+          }
+        }
+      }
+      return { ...acc };
+    }, {});
+
+    let queryStr = '';
+
+    queryStr = Object.keys(queryObj)
+      .map((key) => `${key}=${queryObj[key]}`)
+      .join('&');
+
+    return `?${queryStr}`;
   }
 }

@@ -1,19 +1,19 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormControl } from '@angular/forms';
-import { MatDialogConfig } from '@angular/material/dialog';
 import {
   GlobalFilterService,
   RoutesConfigService,
   SubscriptionPlanService,
 } from '@hospitality-bot/admin/core/theme';
 import {
-  DetailsComponent,
+  DetailsTabOptions,
   Reservation,
   ReservationTable,
 } from '@hospitality-bot/admin/reservation';
 import {
   AdminUtilityService,
   BaseDatatableComponent,
+  BookingDetailService,
   FeedbackService,
   ModuleNames,
   sharedConfig,
@@ -30,6 +30,7 @@ import { TableValue } from '../../../constants/tabFilterItem';
 import { ReservationService } from '../../../services/reservation.service';
 import { reservationStatus } from '../../../constants/response';
 import { NavigationEnd, Router } from '@angular/router';
+
 @Component({
   selector: 'hospitality-bot-reservation-datatable',
   templateUrl: './reservation.component.html',
@@ -39,7 +40,7 @@ import { NavigationEnd, Router } from '@angular/router';
   ],
 })
 export class ReservationDatatableComponent extends BaseDatatableComponent
-  implements OnInit, OnDestroy {
+  implements OnInit {
   readonly reservationStatus = reservationStatus;
   @Input() tableName = 'Reservations';
   actionButtons = true;
@@ -69,6 +70,7 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
     protected snackbarService: SnackBarService,
     protected _modal: ModalService,
     public feedbackService: FeedbackService,
+    protected bookingDetailService: BookingDetailService,
     protected subscriptionPlanService: SubscriptionPlanService,
     protected routesConfigService: RoutesConfigService,
     protected router: Router
@@ -78,6 +80,7 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
 
   ngOnInit(): void {
     this.registerListeners();
+    this.listenBookingClose();
     this.entityId = this.globalFilterService.entityId;
   }
 
@@ -309,56 +312,57 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
   openDetailPage(
     event?: MouseEvent,
     rowData?: Reservation,
-    tabKey?: string,
-    guestData?
+    tabKey?: DetailsTabOptions,
+    guestData?: any
   ): void {
     event?.stopPropagation();
     if (!rowData && !guestData) return;
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.disableClose = true;
-    dialogConfig.width = '100%';
-    const detailCompRef = this._modal.openDialog(
-      DetailsComponent,
-      dialogConfig
-    );
+    const bookingId = rowData?.booking?.bookingNumber ?? guestData?.number;
+    const guestId = rowData?.guests?.primaryGuest?.id ?? guestData?.id;
+    this._reservationService.bookingNumber = bookingId;
+    this._reservationService.guestId = guestId;
+    this.bookingDetailService.openBookingDetailSidebar({
+      bookingNumber: bookingId,
+      guestId: guestId,
+      tabKey: tabKey,
+    });
+  }
 
-    this._reservationService.bookingNumber =
-      rowData?.booking?.bookingNumber ?? guestData?.number;
-    this._reservationService.guestId =
-      rowData?.guests?.primaryGuest?.id ?? guestData?.id;
-
-    detailCompRef.componentInstance.guestId =
-      rowData?.guests?.primaryGuest?.id ?? guestData?.id;
-    detailCompRef.componentInstance.bookingNumber =
-      rowData?.booking?.bookingNumber ?? guestData?.number;
-    tabKey && (detailCompRef.componentInstance.tabKey = tabKey);
+  /**
+   * listen booking close, add in subscription. after destroying details component will be destroyed
+   */
+  listenBookingClose() {
     this.$subscription.add(
-      detailCompRef.componentInstance.onDetailsClose.subscribe((res) => {
-        // remove loader for detail close
-        if (res) {
-          this.loadInitialData(
-            [
-              ...this.globalQueries,
-              {
-                order: sharedConfig.defaultOrder,
-                entityType: this.tabFilterItems[this.tabFilterIdx].value,
-              },
-              ...this.getSelectedQuickReplyFilters({ key: 'entityState' }),
-            ],
-            false,
-            {
-              offset: this.tempFirst,
-              limit: this.tempRowsPerPage
-                ? this.tempRowsPerPage
-                : this.rowsPerPage,
-            }
-          );
-          this._reservationService.bookingNumber = '';
-          this._reservationService.guestId = '';
+      this.bookingDetailService.actionEvent.subscribe((res) => {
+        if (!res) {
+          this.refreshData();
         }
-        detailCompRef.close();
       })
     );
+  }
+
+  /**
+   * @function refreshData is also can be called from other component, who is extended this component
+   */
+  refreshData() {
+    this.loadInitialData(
+      [
+        ...this.globalQueries,
+        {
+          order: sharedConfig.defaultOrder,
+          entityType:
+            this.tabFilterItems[this.tabFilterIdx]?.value ?? this.selectedTab,
+        },
+        ...this.getSelectedQuickReplyFilters({ key: 'entityState' }),
+      ],
+      false,
+      {
+        offset: this.tempFirst,
+        limit: this.tempRowsPerPage ? this.tempRowsPerPage : this.rowsPerPage,
+      }
+    );
+    this._reservationService.bookingNumber = '';
+    this._reservationService.guestId = '';
   }
 
   getStatusStyle(type: string, state: string): string {

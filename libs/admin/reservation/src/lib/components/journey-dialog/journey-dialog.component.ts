@@ -1,4 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 
 @Component({
   selector: 'hospitality-bot-journey-dialog',
@@ -6,6 +8,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
   styleUrls: ['./journey-dialog.component.scss'],
 })
 export class JourneyDialogComponent implements OnInit {
+  useForm!: FormGroup;
   private _defaultValue = {
     title: '',
     description: '',
@@ -20,6 +23,7 @@ export class JourneyDialogComponent implements OnInit {
         context: '',
       },
     },
+    isSendInvoice: false,
   };
 
   private _config;
@@ -38,7 +42,18 @@ export class JourneyDialogComponent implements OnInit {
 
   @Output() onDetailsClose = new EventEmitter();
 
-  constructor() {}
+  constructor(
+    private ref: DynamicDialogRef,
+    public dialogConfig: DynamicDialogConfig,
+    public fb: FormBuilder
+  ) {
+    this.useForm = this.fb.group({
+      invoiceStatus: [false],
+    });
+    if (dialogConfig?.data) {
+      this._config = { ...this._defaultValue, ...dialogConfig?.data };
+    }
+  }
 
   ngOnInit(): void {}
 
@@ -46,11 +61,18 @@ export class JourneyDialogComponent implements OnInit {
     const { accept: acceptButtonConfig } = this.config.buttons;
 
     if (acceptButtonConfig.context && acceptButtonConfig.handler) {
-      acceptButtonConfig.context[
-        acceptButtonConfig.handler.fn_name
-      ].apply(acceptButtonConfig.context, [...acceptButtonConfig.handler.args]);
+      acceptButtonConfig.context[acceptButtonConfig.handler.fn_name].apply(
+        acceptButtonConfig.context,
+        [
+          ...acceptButtonConfig.handler.args,
+          this.config.isSendInvoice && {
+            isSendInvoice: this.useForm.get('invoiceStatus').value,
+          },
+        ]
+      );
     }
 
+    this.ref.close();
     this.onDetailsClose.next(true);
   }
 
@@ -62,6 +84,23 @@ export class JourneyDialogComponent implements OnInit {
         cancelButtonConfig.handler.fn_name
       ].apply(cancelButtonConfig.context, [...cancelButtonConfig.handler.args]);
     }
+    this.ref.close();
     this.onDetailsClose.next(true);
   }
 }
+
+export type ConfirmDialogData = {
+  title?: string;
+  description?: string;
+  question?: string;
+  buttons?: {
+    cancel?: {
+      label: string;
+      context: string;
+    };
+    accept?: {
+      label: string;
+      context: string;
+    };
+  };
+};

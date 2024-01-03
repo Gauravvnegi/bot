@@ -29,16 +29,16 @@ import { Subscription } from 'rxjs';
 import { PaymentMethod, ReservationForm } from '../../../constants/form';
 import { FormService } from '../../../services/form.service';
 import {
+  BookingDetailService,
   EntitySubType,
   EntityType,
   ModuleNames,
 } from '@hospitality-bot/admin/shared';
-import { RoomReservationRes } from '../../../types/response.type';
+import { RoomReservationResponse } from '../../../types/response.type';
 import {
   OccupancyDetails,
   RoomReservationFormData,
 } from '../../../types/forms.types';
-import { DetailsComponent } from '@hospitality-bot/admin/reservation';
 import { ReservationType } from '../../../constants/reservation-table';
 
 @Component({
@@ -90,7 +90,8 @@ export class BookingSummaryComponent implements OnInit {
     protected activatedRoute: ActivatedRoute,
     private modalService: ModalService,
     private _clipboard: Clipboard,
-    public formService: FormService
+    public formService: FormService,
+    protected bookingDetailService: BookingDetailService
   ) {}
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -175,7 +176,7 @@ export class BookingSummaryComponent implements OnInit {
       this.manageReservationService
         .createReservation(entityId, formData, type)
         .subscribe(
-          (res: RoomReservationRes) => {
+          (res: RoomReservationResponse) => {
             this.bookingConfirmationPopup(res?.reservationNumber);
           },
           (error) => {
@@ -197,7 +198,7 @@ export class BookingSummaryComponent implements OnInit {
       this.manageReservationService
         .updateReservation(entityId, this.reservationId, data, type)
         .subscribe(
-          (res: RoomReservationRes) => {
+          (res: RoomReservationResponse) => {
             this.bookingConfirmationPopup(res?.reservationNumber);
           },
           (error) => {
@@ -361,21 +362,27 @@ export class BookingSummaryComponent implements OnInit {
   }
 
   openDetailsPage() {
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.disableClose = true;
-    dialogConfig.width = '100%';
-    const detailCompRef = this.modalService.openDialog(
-      DetailsComponent,
-      dialogConfig
-    );
+    // TODO: Need to remove
+    // const dialogConfig = new MatDialogConfig();
+    // dialogConfig.disableClose = true;
+    // dialogConfig.width = '100%';
+    // const detailCompRef = this.modalService.openDialog(
+    //   DetailsComponent,
+    //   dialogConfig
+    // );
 
-    detailCompRef.componentInstance.bookingId = this.reservationId;
-    detailCompRef.componentInstance.tabKey = 'guest_details';
-    this.$subscription.add(
-      detailCompRef.componentInstance.onDetailsClose.subscribe((res) => {
-        detailCompRef.close();
-      })
-    );
+    // detailCompRef.componentInstance.bookingId = this.reservationId;
+    // detailCompRef.componentInstance.tabKey = 'guest_details';
+    // this.$subscription.add(
+    //   detailCompRef.componentInstance.onDetailsClose.subscribe((res) => {
+    //     detailCompRef.close();
+    //   })
+    // );
+
+    this.bookingDetailService.openBookingDetailSidebar({
+      bookingId: this.reservationId,
+      tabKey: 'guest_details',
+    });
   }
 
   gobackToReservation() {
@@ -395,7 +402,7 @@ export class BookingSummaryComponent implements OnInit {
         ? summaryData.totalPaidAmount
         : this.paymentControls.totalPaidAmount.value;
     const refundAmount = summaryData?.refund ? summaryData.refund : 0;
-    return (totalAmount + refundAmount) - totalPaidAmount;
+    return totalAmount + refundAmount - totalPaidAmount;
   }
 
   copiedConfirmationNumber(number): void {

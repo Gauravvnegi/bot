@@ -2,28 +2,33 @@ import { Clipboard } from '@angular/cdk/clipboard';
 import {
   ChangeDetectorRef,
   Component,
+  ComponentFactoryResolver,
   EventEmitter,
   Input,
   OnDestroy,
   OnInit,
   Output,
   ViewChild,
+  ViewContainerRef,
 } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
-import { MatDialogConfig } from '@angular/material/dialog';
-import { Router } from '@angular/router';
 import {
   RoutesConfigService,
   SubscriptionPlanService,
 } from '@hospitality-bot/admin/core/theme';
 import { MarketingNotificationComponent } from '@hospitality-bot/admin/notification';
-import { ConfigService, ModuleNames } from '@hospitality-bot/admin/shared';
+import {
+  BookingDetailService,
+  ConfigService,
+  ModuleNames,
+  Option,
+  openModal,
+} from '@hospitality-bot/admin/shared';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 import * as FileSaver from 'file-saver';
 import { FeedbackService } from 'libs/admin/shared/src/lib/services/feedback.service';
 import { HotelDetailService } from 'libs/admin/shared/src/lib/services/hotel-detail.service';
 import { SnackBarService } from 'libs/shared/material/src';
-import { ModalService } from 'libs/shared/material/src/lib/services/modal.service';
 import { Subscription } from 'rxjs';
 import { Details } from '../../../../../shared/src/lib/models/detailsConfig.model';
 import { GuestDetail, GuestDetails } from '../../models/guest-feedback.model';
@@ -36,6 +41,7 @@ import { MenuItem } from 'primeng/api';
 import { FileData } from '../../models/reservation-table.model';
 import { SnackbarHandlerService } from 'libs/admin/global-shared/src/lib/services/snackbar-handler.service';
 import { SideBarService } from 'libs/admin/shared/src/lib/services/sidebar.service';
+import { DialogService } from 'primeng/dynamicdialog';
 
 @Component({
   selector: 'hospitality-bot-details',
@@ -66,6 +72,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
     { label: 'Advance Booking', icon: '' },
     { label: 'Current Booking', icon: '' },
   ];
+  guestDropDownList: Option[];
   @Input('bookingId') bookingId: string; //reservationId
   @Input() isDecreaseSnackbarZIndex = false;
   @Output() onRoute = new EventEmitter();
@@ -121,10 +128,16 @@ export class DetailsComponent implements OnInit, OnDestroy {
 
   checkOutOptions: MenuItem[] = [
     {
-      label: 'Generate Link',
+      label: 'Send Payment Link',
       command: () => this.activateAndgenerateJourney('CHECKOUT'),
+      disabled: !this.isPrintRate,
     },
   ];
+
+  //sidebar configuration
+  @ViewChild('sideBar', { read: ViewContainerRef })
+  sideBar: ViewContainerRef;
+  sidebarVisible = false;
 
   constructor(
     private _fb: FormBuilder,
@@ -133,18 +146,20 @@ export class DetailsComponent implements OnInit, OnDestroy {
     private snackbarService: SnackBarService,
     private _clipboard: Clipboard,
     public feedbackService: FeedbackService,
-    private _modal: ModalService,
-    private router: Router,
     private _hotelDetailService: HotelDetailService,
     private globalFilterService: GlobalFilterService,
     private subscriptionService: SubscriptionPlanService,
     private configService: ConfigService,
+    private resolver: ComponentFactoryResolver,
     private routesConfigService: RoutesConfigService,
     public snackbarHandler: SnackbarHandlerService,
-    protected sidebarService: SideBarService
+    protected sidebarService: SideBarService,
+    private dialogService: DialogService,
+    private bookingDetailService: BookingDetailService
   ) {
     this.self = this;
     this.snackbarHandler.isDecreaseSnackbarZIndex = false; // Protect MUI Element hiding on snackbar open
+    this.increaseZIndex(true);
     this.initDetailsForm();
   }
 
@@ -788,6 +803,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
       title: 'Manual Checkout',
       description: 'Guest is about to checkout',
       question: 'Are you sure you want to continue?',
+      isSendInvoice: true,
       buttons: {
         cancel: {
           label: 'Cancel',
@@ -805,9 +821,14 @@ export class DetailsComponent implements OnInit, OnDestroy {
     });
   }
 
-  manualCheckoutfn() {
+  manualCheckoutfn(invoice?: Record<'isSendInvoice', any>) {
     this._reservationService
-      .manualCheckout(this.reservationDetailsFG.get('bookingId').value)
+      .manualCheckout(
+        this.reservationDetailsFG.get('bookingId').value,
+        typeof invoice != 'undefined' && {
+          params: `?sendInvoice=${invoice?.isSendInvoice}`,
+        }
+      )
       .subscribe((res) => {
         this.snackbarService.openSnackBarAsText('Checkout completed.', '', {
           panelClass: 'success',
@@ -907,19 +928,41 @@ export class DetailsComponent implements OnInit, OnDestroy {
     return !['NEW', 'NOSHOW', 'CANCELED'].includes(this.details.pmsStatus);
   }
   openJourneyDialog(config) {
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.disableClose = true;
-    dialogConfig.width = '450px';
-    const journeyDialogCompRef = this._modal.openDialog(
-      JourneyDialogComponent,
-      dialogConfig
-    );
+    // TODO: Need to remove
+    // this.increaseZIndex(true);
+    // const dialogConfig = new MatDialogConfig();
+    // dialogConfig.disableClose = true;
+    // dialogConfig.width = '450px';
+    // const journeyDialogCompRef = this._modal.openDialog(
+    //   JourneyDialogComponent,
+    //   dialogConfig
+    // );
 
-    journeyDialogCompRef.componentInstance.config = config;
+    // journeyDialogCompRef.componentInstance.config = config;
 
-    journeyDialogCompRef.componentInstance.onDetailsClose.subscribe((res) => {
-      res && journeyDialogCompRef.close();
+    // journeyDialogCompRef.componentInstance.onDetailsClose.subscribe((res) => {
+    //   this.increaseZIndex(false);
+    //   res && journeyDialogCompRef.close();
+    // });
+
+    openModal({
+      config: {
+        width: '450px',
+        styleClass: 'confirm-dialog',
+        data: config,
+      },
+      component: JourneyDialogComponent,
+      dialogService: this.dialogService,
     });
+  }
+
+  // TODO: Need to remove
+  increaseZIndex(toggleZIndex: boolean) {
+    const cdkOverlayContainer = document.querySelector(
+      '.cdk-overlay-container'
+    ) as HTMLElement;
+    if (cdkOverlayContainer)
+      cdkOverlayContainer.style.zIndex = toggleZIndex ? '2000' : '1000';
   }
 
   verifyJourney(journeyName, status) {
@@ -964,47 +1007,79 @@ export class DetailsComponent implements OnInit, OnDestroy {
 
   openSendNotification(channel) {
     if (channel) {
-      const dialogConfig = new MatDialogConfig();
-      dialogConfig.disableClose = false;
-      dialogConfig.width = '100%';
-      const notificationCompRef = this._modal.openDialog(
-        channel === 'EMAIL'
-          ? MarketingNotificationComponent
-          : SendMessageComponent,
-        dialogConfig
-      );
+      // const dialogConfig = new MatDialogConfig();
+      // dialogConfig.disableClose = false;
+      // dialogConfig.width = '100%';
+      // const notificationCompRef = this._modal.openDialog(
+      //   channel === 'EMAIL'
+      //     ? MarketingNotificationComponent
+      //     : SendMessageComponent,
+      //   dialogConfig
+      // );
       if (channel === 'WHATSAPP_LITE') {
-        this._modal.close();
         this.onRoute.emit(true);
         this.routesConfigService.navigate({
           subModuleName: ModuleNames.LIVE_MESSAGING,
         });
-      }
-      if (channel === 'EMAIL') {
-        notificationCompRef.componentInstance.isEmail = true;
-        notificationCompRef.componentInstance.email = this.primaryGuest.email;
-        notificationCompRef.componentInstance.reservationId = this.bookingId;
-        notificationCompRef.componentInstance.details = this.details;
-      } else {
-        notificationCompRef.componentInstance.isEmail = false;
-        notificationCompRef.componentInstance.channel = channel.replace(
-          /\w\S*/g,
-          function (txt) {
-            return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
-          }
-        );
+        this.closeDetails();
+        return;
       }
 
-      notificationCompRef.componentInstance.entityId = this.entityId;
-      notificationCompRef.componentInstance.roomNumber = this.details.stayDetails.roomNumber;
-      notificationCompRef.componentInstance.isModal = true;
-      notificationCompRef.componentInstance.onModalClose.subscribe((res) => {
-        notificationCompRef.close();
-      });
+      this.sidebarVisible = true;
+      this.sideBar.clear();
+      if (channel === 'EMAIL') {
+        const emailFactory = this.resolver.resolveComponentFactory(
+          MarketingNotificationComponent
+        );
+        const emailRef = this.sideBar.createComponent(emailFactory);
+        emailRef.instance.isEmail = true;
+        emailRef.instance.email = this.primaryGuest.email;
+        emailRef.instance.entityId = this.entityId;
+        emailRef.instance.details = this.details;
+        emailRef.instance.roomNumber = this.details.stayDetails.roomNumber;
+        emailRef.instance.isModal = true;
+        emailRef.instance.onModalClose.subscribe((res) => {
+          this.sidebarVisible = false;
+        });
+      } else {
+        const messageFactory = this.resolver.resolveComponentFactory(
+          SendMessageComponent
+        );
+        const messageRef = this.sideBar.createComponent(messageFactory);
+        messageRef.instance.isEmail = false;
+        messageRef.instance.channel = channel.replace(/\w\S*/g, function (txt) {
+          return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+        });
+        messageRef.instance.entityId = this.entityId;
+        messageRef.instance.roomNumber = this.details.stayDetails.roomNumber;
+        messageRef.instance.isModal = true;
+        messageRef.instance.onModalClose.subscribe((res) => {
+          this.sidebarVisible = false;
+        });
+      }
+
+      // notificationCompRef.componentInstance.entityId = this.entityId;
+      // notificationCompRef.componentInstance.roomNumber = this.details.stayDetails.roomNumber;
+      // notificationCompRef.componentInstance.isModal = true;
+      // notificationCompRef.componentInstance.onModalClose.subscribe((res) => {
+      //   notificationCompRef.close();
+      // });
+    } else {
+      // this._modal.close();
+      this.sidebarVisible = false;
+      this.closeDetails();
+      // this.router.navigateByUrl('/pages/conversation/request');
+      // notificationCompRef.componentInstance.entityId = this.entityId;
+      // notificationCompRef.componentInstance.roomNumber = this.details.stayDetails.roomNumber;
+      // notificationCompRef.componentInstance.isModal = true;
+      // notificationCompRef.componentInstance.onModalClose.subscribe((res) => {
+      //   notificationCompRef.close();
+      // });
     }
   }
 
   closeDetails() {
+    // this.increaseZIndex(false);
     this.onDetailsClose.next(true);
   }
 
@@ -1041,6 +1116,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
         this.isGuestInfoPatched = true;
       }
     }
+    this.guestDropDownList = this.guestDropDown;
     this.bookingFG.get('booking').setValue(this.bookingId);
   }
 
@@ -1116,7 +1192,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
 
   get bookingCount() {
     let count = 0;
-    count += this.guestReservations.records.length;
+    count += this.guestReservations?.records?.length ?? 0;
     return count;
   }
 
@@ -1163,11 +1239,32 @@ export class DetailsComponent implements OnInit, OnDestroy {
     return index ? index : 0;
   }
 
+  get guestDropDown() {
+    return this.guestReservationDropdownList.map((item) => ({
+      label: toTitleCase(item.label) + ' - ' + item.bookingNumber,
+      value: item.bookingId,
+    }));
+  }
+
+  get isPermissionToCheckInOrOut() {
+    return this.subscriptionService.show().isCalenderView;
+  }
+
   ngOnDestroy() {
     this._reservationService.$reinitializeGuestDetails.next(false);
     this.$subscription.unsubscribe();
     this.isFirstTimeFetch = true;
+    this.bookingDetailService.resetBookingState();
   }
+}
+
+export function toTitleCase(str) {
+  return str
+    .split(' ')
+    .map(function (word) {
+      return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
+    })
+    .join(' ');
 }
 
 export type DetailsTabOptions =

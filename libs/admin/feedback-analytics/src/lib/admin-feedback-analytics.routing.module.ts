@@ -44,6 +44,7 @@ import {
   TwoWayProgressComponent,
 } from './components/stats';
 import { DepartmentBarGraphComponent } from './components/stats/department-bar-graph/department-bar-graph.component';
+import { GtmStatsComponent } from './components/stats/gtm-stats/gtm-stats.component';
 
 const appRoutes: CRoutes = [
   { path: '', component: FeedbackContainerComponent },
@@ -97,5 +98,6 @@ export class AdminFeedbackAnalyticsRoutingModule {
     BifurcationStatsComponent,
     FeedbackWrapperComponent,
     FeedbackTypesComponent,
+    GtmStatsComponent,
   ];
 }

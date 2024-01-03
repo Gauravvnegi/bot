@@ -209,7 +209,6 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
     this.sidebarSlide.clear();
     this.sidebarSlide.createEmbeddedView(this.urlTemplate);
     this.sidebarVisible = true;
-    this.sideBarService.setSideBarZIndex(1000, true);
   }
 
   scrollToTop() {
@@ -541,7 +540,7 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
   initBookingOption() {
     this.propertyList = this.hotelDetailService.getPropertyList();
     this.bookingOptions = [
-      this.isAddReservationSubscribed
+      this.subscriptionPlanService.show().isCalenderView
         ? {
             label: 'New Booking',
             icon: 'pi pi-calendar',
@@ -713,16 +712,29 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
   }
 
   openSettings() {
-    this.sidebarVisible = true;
-    const factory = this.resolver.resolveComponentFactory(
-      SettingsMenuComponent
-    );
-    this.sidebarSlide.clear();
-    this.sidebarType = 'settings';
-    const componentRef = this.sidebarSlide.createComponent(factory);
-    componentRef.instance.isSideBar = true;
-    componentRef.instance.closeEvent.subscribe((res) => {
-      this.sidebarVisible = false;
+    const lazyModulePromise = import(
+      'libs/admin/settings/src/lib/admin-settings.module'
+    )
+      .then((module) => {
+        return this.compiler.compileModuleAsync(module.AdminSettingsModule);
+      })
+      .catch((error) => {
+        console.error('Error loading the lazy module:', error);
+      });
+
+    lazyModulePromise.then(() => {
+      this.sidebarVisible = true;
+      const factory = this.resolver.resolveComponentFactory(
+        SettingsMenuComponent
+      );
+      this.sidebarSlide.clear();
+      this.sidebarType = 'settings';
+      const componentRef = this.sidebarSlide.createComponent(factory);
+      componentRef.instance.isSideBar = true;
+      componentRef.instance.closeEvent.subscribe((res) => {
+        this.sidebarVisible = false;
+        componentRef.destroy();
+      });
     });
   }
 
@@ -761,7 +773,7 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
   }
 
   onQuickButtonClick() {
-    this.isAddReservationSubscribed
+    this.subscriptionPlanService.show().isCalenderView
       ? this.showQuickReservation()
       : this.isGuestSubscribed
       ? this.showAddGuest()
@@ -769,7 +781,7 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
   }
 
   get getQuickLabel() {
-    return this.isAddReservationSubscribed
+    return this.subscriptionPlanService.show().isCalenderView
       ? 'Quick Booking'
       : this.isGuestSubscribed
       ? 'New Guest'

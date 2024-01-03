@@ -209,6 +209,10 @@
   @include tableCellPadding(0.3em);
 }
 
+:host ::ng-deep .p-sidebar-right {
+  // min-width: 61rem;
+}
+
 .margin-left {
   margin-left: 20px !important;
 }

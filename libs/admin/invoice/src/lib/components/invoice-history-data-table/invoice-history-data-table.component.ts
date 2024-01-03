@@ -6,6 +6,7 @@ import { QueryConfig } from '@hospitality-bot/admin/library';
 import {
   AdminUtilityService,
   BaseDatatableComponent,
+  BookingDetailService,
   NavRouteOption,
 } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
@@ -49,7 +50,8 @@ export class InvoiceHistoryDataTableComponent extends BaseDatatableComponent
     protected snackbarService: SnackBarService, // private router: Router, // private modalService: ModalService
     // private financeService: FinanceService,
     private invoiceService: InvoiceService,
-    private modalService: ModalService
+    private modalService: ModalService,
+    public bookingDetailService: BookingDetailService
   ) {
     super(fb);
   }
@@ -104,21 +106,24 @@ export class InvoiceHistoryDataTableComponent extends BaseDatatableComponent
   }
 
   openDetailsPage(reservationId: string) {
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.disableClose = true;
-    dialogConfig.width = '100%';
-    const detailCompRef = this.modalService.openDialog(
-      BookingDetailComponent,
-      dialogConfig
-    );
-
-    detailCompRef.componentInstance.bookingId = reservationId;
-    detailCompRef.componentInstance.tabKey = 'payment_details';
-    this.$subscription.add(
-      detailCompRef.componentInstance.onDetailsClose.subscribe((res) => {
-        detailCompRef.close();
-      })
-    );
+    // const dialogConfig = new MatDialogConfig();
+    // dialogConfig.disableClose = true;
+    // dialogConfig.width = '100%';
+    // const detailCompRef = this.modalService.openDialog(
+    //   BookingDetailComponent,
+    //   dialogConfig
+    // );
+    // detailCompRef.componentInstance.bookingId = reservationId;
+    // detailCompRef.componentInstance.tabKey = 'payment_details';
+    // this.$subscription.add(
+    //   detailCompRef.componentInstance.onDetailsClose.subscribe((res) => {
+    //     detailCompRef.close();
+    //   })
+    // );
+    this.bookingDetailService.openBookingDetailSidebar({
+      tabKey: 'payment_details',
+      bookingId: reservationId,
+    });
   }
 
   onEntityTabFilterChanges(event): void {

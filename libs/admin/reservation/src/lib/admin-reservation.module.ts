@@ -16,7 +16,6 @@ import {
   AirportPickupComponent,
   JourneyDialogComponent,
   RequestsTableComponent,
-  DepositRuleComponent,
   ManualCheckinComponent,
   StayDetailsComponent,
   DetailsComponent,
@@ -36,6 +35,7 @@ import { ChannelManagerService } from 'libs/admin/channel-manager/src/lib/servic
 import { BookingInfoComponent } from './components/booking-info/booking-info.component';
 import { BaseReservationComponent } from './components/base-reservation.component';
 import { GuestTableService } from 'libs/admin/guests/src/lib/services/guest-table.service';
+import { DialogService } from 'primeng/dynamicdialog';
 
 export const adminReservationRoutes: Route[] = [];
 
@@ -62,7 +62,6 @@ export const adminReservationRoutes: Route[] = [];
     ButtonDependencyDirective,
     JourneyDialogComponent,
     RequestsTableComponent,
-    DepositRuleComponent,
     ManualCheckinComponent,
     StayDetailsComponent,
     StayFeedbackComponent,
@@ -85,7 +84,6 @@ export const adminReservationRoutes: Route[] = [];
     ButtonDependencyDirective,
     JourneyDialogComponent,
     RequestsTableComponent,
-    DepositRuleComponent,
     StayDetailsComponent,
     StayFeedbackComponent,
     InstantFeedbackComponent,
@@ -102,6 +100,7 @@ export const adminReservationRoutes: Route[] = [];
     RoomService,
     ChannelManagerService,
     GuestTableService,
+    DialogService,
   ],
 })
 export class AdminReservationModule {}

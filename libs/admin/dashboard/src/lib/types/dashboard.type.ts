@@ -1,3 +1,5 @@
+import { ReservationDatatableModalComponent } from '../components';
+
 export type ChartTypeOption = {
   name: string;
   value: string;
@@ -27,3 +29,5 @@ export type EntityState = {
 };
 
 export type SelectOption = { label: string; value: string };
+
+export type ReservationDialogData = Partial<ReservationDatatableModalComponent>;

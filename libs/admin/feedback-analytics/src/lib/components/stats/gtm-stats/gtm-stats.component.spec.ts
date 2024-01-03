@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { DepositRuleComponent } from './deposit-rule.component';
+import { GtmStatsComponent } from './gtm-stats.component';
 
-describe('DepositRuleComponent', () => {
-  let component: DepositRuleComponent;
-  let fixture: ComponentFixture<DepositRuleComponent>;
+describe('GtmStatsComponent', () => {
+  let component: GtmStatsComponent;
+  let fixture: ComponentFixture<GtmStatsComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ DepositRuleComponent ]
+      declarations: [ GtmStatsComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(DepositRuleComponent);
+    fixture = TestBed.createComponent(GtmStatsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

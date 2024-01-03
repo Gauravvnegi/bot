@@ -33,6 +33,7 @@ export type ModalContent = {
   heading: string;
   description: string[];
   isRemarks?: boolean;
+  isReservation?: boolean;
 };
 
 export type UploadFileData = {

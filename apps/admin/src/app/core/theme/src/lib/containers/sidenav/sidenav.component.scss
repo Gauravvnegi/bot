@@ -257,9 +257,6 @@
 //  ::ng-deep .p-sidebar-mask {
 //   z-index: 1003 !important;
 // }
-::ng-deep .p-sidebar-mask.p-component-overlay {
-  z-index: $sidebar-z !important; //side bar z-index
-}
 
 :host ::ng-deep .p-sidebar-content {
   padding: 20px;

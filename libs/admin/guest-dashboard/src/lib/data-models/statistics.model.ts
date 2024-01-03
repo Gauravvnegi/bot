@@ -126,15 +126,19 @@ export class Source {
       set({}, 'label', get(input, ['label'])),
       set({}, 'totalCount', get(input, ['totalCount']))
     );
-    Object.keys(input.sourceStats).forEach((key, i) =>
+
+    Object.keys(input.sourceStats).forEach((key, i) => {
+      const label = (
+        key.charAt(0).toUpperCase() + key.slice(1).toLowerCase()
+      ).replace(/_/g, ' ');
       this.statistics.push(
         new Statistic().deserialize({
-          label: key.charAt(0).toUpperCase() + key.substr(1).toLowerCase(),
+          label: label,
           value: input.sourceStats[key],
           color: defaultColors[i],
         })
-      )
-    );
+      );
+    });
 
     return this;
   }
@@ -170,4 +174,5 @@ const defaultColors = [
   '#FAA700',
   '#389F99',
   '#3E8EF7',
+  '#EE1044',
 ];

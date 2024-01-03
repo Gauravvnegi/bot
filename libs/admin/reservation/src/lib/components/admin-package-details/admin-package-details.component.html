@@ -1,12 +1,12 @@
 <div class="material-body">
   <ng-container *ngIf="isVisible(); else emptyView">
     <div *ngIf="paidAmenityFA.controls.length" class="paid-wrapper">
-      <mat-label class="package-label">Paid</mat-label>
+      <label class="package-label">Paid</label>
       <ng-container #paidPackage></ng-container>
     </div>
     <div *ngIf="stayDetailsFG.get('special_comments').value">
       <hr class="data-seperator" />
-      <mat-label class="package-label">Special Request</mat-label>
+      <label class="package-label">Special Request</label>
       <div class="special-request-wrapper">
         <p class="text">{{ stayDetailsFG.get('special_comments').value }}</p>
       </div>
@@ -14,7 +14,7 @@
 
     <div *ngIf="stayDetailsFG.get('checkin_comments').value">
       <hr class="data-seperator" />
-      <mat-label class="package-label">Checkin Request</mat-label>
+      <label class="package-label">Checkin Request</label>
       <div class="special-request-wrapper">
         <p class="text">{{ stayDetailsFG.get('checkin_comments').value }}</p>
       </div>

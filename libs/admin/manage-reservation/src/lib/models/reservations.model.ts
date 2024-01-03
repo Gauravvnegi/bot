@@ -4,7 +4,7 @@ import {
   PaymentMethodConfig,
   PaymentRuleResponse,
   ReservationListResponse,
-  RoomReservationFormResponse,
+  RoomReservationResponse,
   SourceResponse,
   SummaryResponse,
 } from '../types/response.type';
@@ -60,7 +60,7 @@ export class RoomReservation {
   invoiceId: string;
   agentName?: string;
 
-  deserialize(input: RoomReservationFormResponse) {
+  deserialize(input: RoomReservationResponse) {
     this.id = input.id;
     this.from = input.from;
     this.to = input.to;
@@ -281,7 +281,7 @@ export class ReservationFormData {
   agent: AgentTableResponse;
   company: CompanyResponseType;
 
-  deserialize(input: RoomReservationFormResponse) {
+  deserialize(input: RoomReservationResponse) {
     this.reservationInformation = new BookingInfo().deserialize(input);
     this.guestInformation = new GuestInfo().deserialize(input.guest);
     this.offerId = input.offer ? input.offer?.id : null;
@@ -295,7 +295,7 @@ export class ReservationFormData {
       adultCount: item.occupancyDetails.maxAdult,
       childCount: item.occupancyDetails.maxChildren,
       roomTypeId: item.roomDetails.roomTypeId,
-      ratePlan: item.roomDetails.ratePlan.id,
+      ratePlanId: item.roomDetails.ratePlan.id,
       roomCount: item.roomDetails.roomCount,
       roomTypeLabel: item.roomDetails.roomTypeLabel,
       ratePlans: {

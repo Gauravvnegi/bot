@@ -15,7 +15,7 @@ export type SideBarConfig<TData extends Record<string, any> = {}> = {
     ? { firstName?: string; lastName?: string; roomNo?: string }
     : TData extends { type: 'ADD_GUEST' }
     ? { guestName: string }
-  : TData;
+    : TData;
   url?: string;
 };
 
@@ -43,11 +43,15 @@ export class SideBarService {
       const elements = document.querySelectorAll(
         '.p-component-overlay.p-sidebar-mask'
       );
-      elements.forEach((element) => {
-        condition
-          ? element.setAttribute('style', `z-index: ${zIndex} !important;`)
-          : element.setAttribute('style', `z-index: unset !important ;`);
-      });
+      condition
+        ? elements[elements?.length - 1].setAttribute(
+            'style',
+            `z-index: ${zIndex};`
+          )
+        : elements[elements?.length - 1].setAttribute(
+            'style',
+            `z-index: unset ;`
+          );
     }, 100);
   }
 }

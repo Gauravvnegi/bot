@@ -14,8 +14,8 @@ import { ModalService } from 'libs/shared/material/src/lib/services/modal.servic
 import { Subscription } from 'rxjs';
 import {
   ModuleNames,
-  ProductMenu,
   ProductNames,
+  manageMaskZIndex,
   routes,
 } from '../../../../../../../../../../libs/admin/shared/src/index';
 import {
@@ -354,6 +354,16 @@ export class SidenavComponent implements OnInit, OnDestroy {
   onExplore() {
     this.isMenuBarVisible = !this.isMenuBarVisible;
   }
+
+  /**
+   * Dynamically adding z index as mask has lower index
+   */
+  clickOnToggle() {
+    manageMaskZIndex(150);
+    this.isMenuBarVisible = true;
+    this.navToggle.emit(false);
+  }
+
   onImageLoad() {
     this.isImageLoaded = true;
   }

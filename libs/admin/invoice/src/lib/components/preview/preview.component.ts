@@ -192,4 +192,8 @@ export class PreviewComponent implements OnInit {
         });
       });
   }
+
+  get isPermissionToCheckInOrOut(): boolean {
+    return this.subscriptionService.show().isCalenderView;
+  }
 }

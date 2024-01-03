@@ -128,7 +128,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
 
   checkOutOptions: MenuItem[] = [
     {
-      label: 'Send Payment Link',
+      label: 'Generate Link',
       command: () => this.activateAndgenerateJourney('CHECKOUT'),
       disabled: !this.isPrintRate,
     },

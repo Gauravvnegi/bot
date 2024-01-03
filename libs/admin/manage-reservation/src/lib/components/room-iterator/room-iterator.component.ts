@@ -35,7 +35,6 @@ import { RoomTypeResponse } from 'libs/admin/room/src/lib/types/service-response
 import { ReservationType } from '../../constants/reservation-table';
 import { RoomService } from 'libs/admin/room/src/lib/services/room.service';
 import { ReservationCurrentStatus } from '../../models/reservations.model';
-import { RoomUpgradeType } from '../../types/response.type';
 import {
   RoomUpgradeClose,
   UpgradeRoomTypeComponent,
@@ -259,7 +258,6 @@ export class RoomIteratorComponent extends IteratorComponent
         },
         { emitEvent: false }
       );
-
       // Init rooms data
       this.initItems = true;
     });

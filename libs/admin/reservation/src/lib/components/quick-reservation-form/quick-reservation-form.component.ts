@@ -25,9 +25,7 @@ import {
   ModuleNames,
   Option,
 } from '@hospitality-bot/admin/shared';
-import {
-  SnackBarService,
-} from '@hospitality-bot/shared/material';
+import { SnackBarService } from '@hospitality-bot/shared/material';
 import {
   BookingConfig,
   ReservationCurrentStatus,
@@ -188,7 +186,7 @@ export class QuickReservationFormComponent implements OnInit {
 
       roomInformation: this.fb.group({
         roomTypeId: ['', [Validators.required]],
-        ratePlan: [''],
+        ratePlanId: [''],
         roomNumber: [''],
         roomNumbers: [[]],
         adultCount: ['', [Validators.required, Validators.min(1)]],
@@ -403,7 +401,7 @@ export class QuickReservationFormComponent implements OnInit {
         value: room?.roomNumber,
       }));
       this.inputControls.roomInformation.patchValue({
-        ratePlan: this.ratePlans?.filter((rateplan) => rateplan.isBase)[0]
+        ratePlanId: this.ratePlans?.filter((rateplan) => rateplan.isBase)[0]
           .value,
         adultCount: 1,
         childCount: 0,

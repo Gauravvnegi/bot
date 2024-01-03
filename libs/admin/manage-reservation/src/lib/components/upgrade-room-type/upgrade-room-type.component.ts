@@ -90,9 +90,9 @@ export class UpgradeRoomTypeComponent implements OnInit {
       type: EntitySubType.ROOM_TYPE,
       createBooking: true,
       roomTypeStatus: true,
+      raw: true,
       roomUpgrade: true,
-      fromDate: this.effectiveDate,
-      toDate: this.toDate,
+      effectiveDate: this.effectiveDate,
       reservationId: this.reservationId,
     };
 

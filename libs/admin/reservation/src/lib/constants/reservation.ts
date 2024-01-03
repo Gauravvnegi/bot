@@ -71,4 +71,5 @@ export const reservationMenuOptions: Record<
     { label: 'Activate Precheckin', value: 'PRECHECKIN' },
     ...viewDetails,
   ],
+  OUT_OF_SERVICE: [{ label: 'Cancel', value: 'CANCEL_OUT_OF_SERVICE' }],
 };

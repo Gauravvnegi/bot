@@ -560,8 +560,8 @@ export class InteractiveGridComponent {
       this.onDisabledClick.emit({ id });
     }
 
-    if(this.disableChanges){
-      this.onEdit.emit({id})
+    if (this.disableChanges) {
+      this.onEdit.emit({ id });
     }
   }
 

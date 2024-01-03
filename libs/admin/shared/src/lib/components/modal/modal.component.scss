@@ -5,6 +5,8 @@
   border-radius: 8px;
 }
 
+$border-color: rgba(112, 112, 112, 0.35);
+
 .detail--container {
   .header {
     @include flex-between-center;
@@ -22,6 +24,13 @@
     &__close {
       cursor: pointer;
     }
+
+    .date {
+      font-size: 16px;
+      color: $border-color;
+      font-weight: 500;
+      margin-left: 13px;
+    }
   }
   .body {
     padding: 20px 30px;
@@ -29,6 +38,14 @@
     display: flex;
     flex-direction: column;
     gap: 0.5em;
+
+    .title {
+      text-align: center;
+      color: #383838;
+      font-family: Poppins;
+      font-size: 16px;
+      font-weight: 500;
+    }
     .descriptions {
       display: flex;
       flex-direction: column;

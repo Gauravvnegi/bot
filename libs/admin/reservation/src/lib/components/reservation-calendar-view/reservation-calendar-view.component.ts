@@ -61,6 +61,7 @@ import { CalendarOccupancy } from '../../models/reservation-table.model';
 import { JourneyDialogComponent } from '../journey-dialog/journey-dialog.component';
 import { DialogService } from 'primeng/dynamicdialog';
 import { ReservationRatePlan } from 'libs/admin/room/src/lib/constant/form';
+import { ModalComponent } from 'libs/admin/shared/src/lib/components/modal/modal.component';
 
 @Component({
   selector: 'hospitality-bot-reservation-calendar-view',
@@ -262,7 +263,7 @@ export class ReservationCalendarViewComponent implements OnInit {
             return endDate !== null;
           })
           .map((status) => ({
-            id: null, // Set id as needed for unavailable rooms
+            id: status.id ?? null, // Set id as needed for unavailable rooms
             content: 'Out Of Service',
             startPos: this.getDate(status.fromDate),
             endPos: this.getStatusDate(status.toDate, status.fromDate),
@@ -270,6 +271,7 @@ export class ReservationCalendarViewComponent implements OnInit {
             colorCode: 'draft',
             nonInteractive: true,
             additionContent: status.remarks,
+            options: this.getMenuOptions(null, 'status'),
           }));
         return [...result, ...roomValues];
       }, []);
@@ -561,7 +563,14 @@ export class ReservationCalendarViewComponent implements OnInit {
     );
   }
 
-  getMenuOptions(reservation: RoomReservation) {
+  getMenuOptions(
+    reservation: RoomReservation,
+    type: 'reservation' | 'status' = 'reservation'
+  ) {
+    if (type === 'status') {
+      return reservationMenuOptions['OUT_OF_SERVICE'];
+    }
+
     return reservation.journeysStatus.PRECHECKIN === JourneyState.PENDING
       ? reservationMenuOptions['PRECHECKIN']
       : reservationMenuOptions[reservation.status];
@@ -648,6 +657,9 @@ export class ReservationCalendarViewComponent implements OnInit {
           subModuleName: ModuleNames.INVOICE,
           additionalPath: `${event.id}`,
         });
+        break;
+      case 'CANCEL_OUT_OF_SERVICE':
+        this.cancelOutOfService(event.id, roomType);
     }
   }
 
@@ -769,6 +781,75 @@ export class ReservationCalendarViewComponent implements OnInit {
       ...roomType.data,
       values: updatedValues,
     };
+  }
+
+  cancelOutOfService(statusId, roomType) {
+    const data: Partial<ModalComponent> = {
+      heading: `Out of Service`,
+      descriptions: [
+        `Once released, it will be visible to visitors, and the`,
+        `inventory will be available.`,
+      ],
+      title: `Are you sure you want to release this room from Maintenance?`,
+      isDate: true,
+      isRemarks: true,
+      actions: [
+        {
+          label: 'Cancel',
+          onClick: () => {
+            ref.close();
+          },
+          variant: 'outlined',
+        },
+        {
+          label: 'Release',
+          onClick: () => {
+            this.roomService
+              .updateRoomStatus(this.entityId, {
+                room: {
+                  id: this.getSelectedRoom(roomType).id,
+                  removeStatusIds: [statusId],
+                },
+              })
+              .subscribe(() => {
+                ref.close();
+                this.snackbarService.openSnackBarAsText(
+                  'Status changes successfully',
+                  '',
+                  {
+                    panelClass: 'success',
+                  }
+                );
+              });
+          },
+          variant: 'contained',
+        },
+      ],
+    };
+
+    const ref = openModal({
+      config: {
+        width: '40rem',
+        styleClass: 'confirm-dialog',
+        data,
+      },
+      component: ModalComponent,
+      dialogService: this.dialogService,
+    });
+  }
+  /**
+   * @function getSelectedRoom
+   * @param roomType room type data which is emittedd on context option click
+   * @returns selected room data
+   */
+  getSelectedRoom(roomType) {
+    let selectedRoom;
+    roomType.data.values.map((item) => {
+      selectedRoom = roomType.rooms.find(
+        (room) => room.roomNumber === item.rowValue
+      );
+    });
+    return selectedRoom;
   }
 
   openDetailsPage(reservationId: string) {

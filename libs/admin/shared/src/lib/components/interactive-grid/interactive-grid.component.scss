@@ -60,6 +60,10 @@
     cursor: not-allowed;
   }
 
+  &.allow-click {
+    cursor: default;
+  }
+
   &.click-only {
     cursor: pointer;
   }

@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ModalAction, ModalContent } from '../../types/fields.type';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { DynamicDialogConfig } from 'primeng/dynamicdialog';
 
 @Component({
   selector: 'hospitality-bot-modal',
@@ -10,11 +11,22 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 export class ModalComponent {
   heading: string = 'Notification';
   descriptions: string[] = ['Are you sure?'];
-  subText: string;
+  title: string;
   isRemarks: boolean = false;
   isReservation: boolean = false;
+  isDate: boolean = true;
+  toDate: string;
+  formDate: string;
 
-  constructor(private fb: FormBuilder) {}
+  constructor(
+    private fb: FormBuilder,
+    public dialogConfig: DynamicDialogConfig
+  ) {
+    const data = dialogConfig.data;
+    if (data) {
+      Object.assign(this, data);
+    }
+  }
   modelForm: FormGroup;
 
   ngOnInit(): void {

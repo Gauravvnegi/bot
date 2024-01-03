@@ -251,6 +251,7 @@
           colIdx: colIdx,
           rowIdx: rowIdx
         }),
+        'allow-click': !!data[row][col]?.options?.length,
         'click-only': disableChanges,
         'success-cell': data[row][col]?.colorCode === 'success',
         'active-cell': data[row][col]?.colorCode === 'active',

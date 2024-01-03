@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Route, RouterModule } from '@angular/router';
-import { OutletGraphsComponent } from './components/outlet-graphs/outlet-graphs.component';
+import { OutletComponent } from './components/outlet/outlet.component';
 import { OutletsDataTableComponent } from './components/outlets-data-table/outlets-data-table.component';
 import { MainComponent } from './components/main/main.component';
 
@@ -11,10 +11,10 @@ const appRoutes: Route[] = [
     children: [
       {
         path: '',
-        component: OutletGraphsComponent,
+        component: OutletComponent,
       },
     ],
-  }, 
+  },
 ];
 
 @NgModule({
@@ -24,7 +24,7 @@ const appRoutes: Route[] = [
 export class AdminOutletsDashboardRoutingModule {
   static components = [
     MainComponent,
-    OutletGraphsComponent,
+    OutletComponent,
     OutletsDataTableComponent,
   ];
 }

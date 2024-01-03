@@ -1,4 +1,5 @@
-import { Cols } from '@hospitality-bot/admin/shared';
+import { Cols, FlagType } from '@hospitality-bot/admin/shared';
+import { DeliveryStatus } from '../types/reservation-table';
 
 export const tabFilterItems = [
   {
@@ -117,3 +118,62 @@ export const status = [
     type: 'failed',
   },
 ];
+
+export const reservationTypes = {
+  dineIn: {
+    name: 'dinein',
+    value: 'dinein',
+    url: 'assets/svg/reservation-table.svg',
+    whiteUrl: 'assets/svg/reservation-table-white.svg',
+    backgroundColor: '#1AB99F',
+  },
+  delivery: {
+    name: 'delivery',
+    value: 'delivery',
+    url: 'assets/svg/calendar-dark.svg',
+    whiteUrl: 'assets/svg/calendar-white.svg',
+    backgroundColor: '#DEFFF3',
+  },
+};
+
+export const deliveryReservationStatusDetails: Record<
+  DeliveryStatus,
+  { label: string; type: FlagType }
+> = {
+  COMPLETED: {
+    label: 'Completed',
+    type: 'active',
+  },
+  CONFIRMED: {
+    label: 'Confirmed',
+    type: 'completed',
+  },
+  CANCELED: {
+    label: 'Canceled',
+    type: 'failed',
+  },
+  PREPARING: {
+    label: 'Preparing',
+    type: 'warning',
+  },
+  BLANK_TABLE: {
+    label: 'Blank Table',
+    type: 'draft',
+  },
+  PAID: {
+    label: 'Paid',
+    type: 'active',
+  },
+  RUNNING_KOT_TABLE: {
+    label: 'Running KOT Table',
+    type: 'completed',
+  },
+  RUNNING_TABLE: {
+    label: 'Running Table',
+    type: 'failed',
+  },
+  PRINTED_TABLE: {
+    label: 'Printed Table',
+    type: 'warning',
+  },
+};

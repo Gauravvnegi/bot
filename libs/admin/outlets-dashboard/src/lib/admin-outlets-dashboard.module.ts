@@ -5,6 +5,7 @@ import { AdminOutletsDashboardRoutingModule } from './admin-outlets-dashboard.ro
 import { ChartsModule } from 'ng2-charts';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { OutletTableService } from './services/outlet-table.service';
+import { GlobalSharedModule } from '@hospitality-bot/admin/global-shared';
 
 @NgModule({
   imports: [
@@ -14,6 +15,7 @@ import { OutletTableService } from './services/outlet-table.service';
     FormsModule,
     ChartsModule,
     ReactiveFormsModule,
+    GlobalSharedModule
   ],
   declarations: [...AdminOutletsDashboardRoutingModule.components],
   providers: [OutletTableService],

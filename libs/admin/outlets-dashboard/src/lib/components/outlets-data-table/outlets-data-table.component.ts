@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, FormControl } from '@angular/forms';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
   AdminUtilityService,
@@ -10,7 +10,10 @@ import { Subscription } from 'rxjs';
 import { OutletTableService } from '../../services/outlet-table.service';
 import * as FileSaver from 'file-saver';
 import { SnackBarService } from '@hospitality-bot/shared/material';
-import { cols, status, tabFilterItems } from '../../constants/data-table';
+import {
+  deliveryReservationStatusDetails,
+  reservationTypes,
+} from '../../constants/data-table';
 
 @Component({
   selector: 'hospitality-bot-outlets-data-table',
@@ -25,11 +28,8 @@ export class OutletsDataTableComponent extends BaseDatatableComponent
   entityId: string;
   globalQueries = [];
   $subscription = new Subscription();
-  limit = 10;
-  offset = 0;
-  tabFilterItems = tabFilterItems;
-  cols = cols;
-  status = status;
+  reservationTypes = [reservationTypes.dineIn, reservationTypes.delivery];
+  selectedReservationType: string;
 
   constructor(
     public fb: FormBuilder,
@@ -40,71 +40,60 @@ export class OutletsDataTableComponent extends BaseDatatableComponent
   ) {
     super(fb);
   }
+
   ngOnInit(): void {
-    this.listenForGlobalFilter();
+    this.entityId = this.globalFilterService.entityId;
+    this.tableFG?.addControl('reservationType', new FormControl(''));
+    this.setReservationType(this.reservationTypes[0].value);
   }
 
-  listenForGlobalFilter() {
-    this.globalFilterService.globalFilter$.subscribe((value) => {
-      this.entityId = this.globalFilterService.entityId;
-
-      this.globalQueries = [
-        ...value['filter'].queryValue,
-        ...value['dateRange'].queryValue,
-      ];
-      this.initTableValue();
-    });
+  setReservationType(value: string) {
+    this.selectedReservationType = value;
+    this.tableFG.patchValue({ reservationType: value });
+    value === 'dinein' && this.initDineInReservation();
+    value === 'delivery' && this.initDeliveryReservation();
   }
 
   loadData(event: LazyLoadEvent): void {
-    this.initTableValue();
+    this.selectedReservationType === 'dinein' && this.initDineInReservation();
+    this.selectedReservationType === 'delivery' &&
+      this.initDeliveryReservation();
   }
 
-  initTableValue(): void {
-    this.loading = true;
-
+  initDeliveryReservation() {
     this.$subscription.add(
-      this.outletService.getOutletList().subscribe(
-        (res) => {
-          this.values = res;
-          // this.totalRecords = 1;
-        },
-        (err) => {},
-        this.handleFinal
-      )
+      this.outletService
+        .getDeliveryReservations(this.entityId)
+        .subscribe((res) => {
+          if (res) {
+            this.values = res.records;
+            this.initFilters(
+              res.entityTypeCounts,
+              res.entityStateCounts,
+              12,
+              deliveryReservationStatusDetails
+            );
+          }
+        })
     );
   }
 
-  /**
-   * To get query params
-   */
-  getQueryConfig() {
-    const config = {
-      params: this.adminUtilityService.makeQueryParams([
-        ...this.getSelectedQuickReplyFilters(),
-        ...[...this.globalQueries, { order: 'DESC' }],
-        {
-          limit: this.limit,
-          offset: this.offset,
-        },
-      ]),
-    };
-    return config;
-  }
-
-  /**
-   * @function getSelectedQuickReplyFilters To return the selected chip list.
-   * @returns The selected chips.
-   */
-  getSelectedQuickReplyFilters() {
-    const chips = this.filterChips.filter(
-      (item) => item.isSelected && item.value !== 'ALL'
+  initDineInReservation() {
+    this.$subscription.add(
+      this.outletService
+        .getDineInReservations(this.entityId)
+        .subscribe((res) => {
+          if (res) {
+            this.values = res.records;
+            this.initFilters(
+              res.entityTypeCounts,
+              res.entityStateCounts,
+              12,
+              deliveryReservationStatusDetails
+            );
+          }
+        })
     );
-    return [
-      chips.length !== 1
-        ? { status: null }
-        : { status: chips[0].value === 'ACTIVE' },
-    ];
   }
 
   exportCSV(): void {
@@ -128,31 +117,7 @@ export class OutletsDataTableComponent extends BaseDatatableComponent
     );
   }
 
-  /**
-   * @function handleStatus To handle the status change
-   * @param status status value
-   */
-  handleStatus(status, rowData): void {
-    // Not working
-    this.loading = true;
-    this.$subscription.add(
-      this.outletService
-        .updateOutletItem(this.entityId, rowData.id, status)
-        .subscribe(
-          () => {
-            // this.updateStatusAndCount(rowData.status, status);
-
-            this.snackbarService.openSnackBarAsText(
-              'Status changes successfully',
-              '',
-              { panelClass: 'success' }
-            );
-          },
-          ({ error }) => {},
-          this.handleFinal
-        )
-    );
-  }
+  addNewOrder() {}
 
   handleFinal = () => {
     this.loading = false;

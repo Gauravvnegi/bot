@@ -55,7 +55,6 @@ import { InvoiceService } from 'libs/admin/invoice/src/lib/services/invoice.serv
 import { distinctUntilChanged, takeUntil, tap } from 'rxjs/operators';
 import { tableTypes } from 'libs/admin/dashboard/src/lib/constants/cols';
 import { Clipboard } from '@angular/cdk/clipboard';
-import { RoomReservationFormData } from '../../types/forms.types';
 
 @Component({
   selector: 'hospitality-bot-manage-reservation-data-table',

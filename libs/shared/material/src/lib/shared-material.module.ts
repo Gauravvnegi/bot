@@ -34,6 +34,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { TranslateModule } from '@ngx-translate/core';
 import { ModalService } from './services/modal.service';
 import { SnackBarService } from './services/snackbar.service';
+import { MessageService } from 'primeng/api';
 
 @NgModule({
   imports: [
@@ -99,6 +100,6 @@ import { SnackBarService } from './services/snackbar.service';
     OverlayModule,
     MatAutocompleteModule,
   ],
-  providers: [SnackBarService, ModalService],
+  providers: [SnackBarService, ModalService, MessageService],
 })
 export class SharedMaterialModule {}

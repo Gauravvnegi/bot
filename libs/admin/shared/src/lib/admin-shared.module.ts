@@ -1,3 +1,4 @@
+import { ToastModule } from 'primeng/toast';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -21,8 +22,7 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { TabMenuModule } from 'primeng/tabmenu';
 import { AccordionModule } from 'primeng/accordion';
 import { OverlayPanelModule } from 'primeng/overlaypanel';
-import { ContextMenuModule } from 'primeng/contextmenu'; 
-
+import { ContextMenuModule } from 'primeng/contextmenu';
 
 import { ButtonComponent } from './components/button/button.component';
 import { ComingSoonComponent } from './components/coming-soon/coming-soon.component';
@@ -138,7 +138,6 @@ import { CheckboxComponent } from './components/form-component/checkbox/checkbox
 import { SplitButtonComponent } from './components/split-button/split-button.component';
 import { Dialog } from 'primeng/dialog';
 
-
 @NgModule({
   imports: [
     CommonModule,
@@ -173,6 +172,7 @@ import { Dialog } from 'primeng/dialog';
     TooltipModule,
     TieredMenuModule,
     ConfirmDialogModule,
+    ToastModule,
   ],
   declarations: [
     DatatableComponent,
@@ -403,6 +403,7 @@ import { Dialog } from 'primeng/dialog';
     SplitButtonComponent,
     ContextMenuModule,
     Dialog,
+    ToastModule,
   ],
 })
 export class AdminSharedModule {}

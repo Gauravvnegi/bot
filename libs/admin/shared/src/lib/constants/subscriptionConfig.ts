@@ -9,6 +9,8 @@ export enum PermissionModuleNames {
   SITE = 'SITE',
   SEGMENTS = 'SEGMENTS',
   RESERVATION = 'RESERVATION',
+  POS = 'POS',
+  PREDICTO_PMS = 'PREDICTO_PMS',
 }
 
 export enum ProductNames {

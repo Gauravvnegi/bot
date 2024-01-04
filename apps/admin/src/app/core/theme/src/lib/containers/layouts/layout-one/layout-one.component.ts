@@ -7,6 +7,7 @@ import {
   HostListener,
   OnDestroy,
   OnInit,
+  SimpleChanges,
   TemplateRef,
   ViewChild,
   ViewContainerRef,

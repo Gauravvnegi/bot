@@ -196,9 +196,14 @@
             class="cell-content"
             *ngIf="rowData?.guestName.length; else emptyCell"
           >
-            <div class="primary-text">
+            <u
+              class="primary-text"
+              (click)="openDetailsPage(rowData.id)"
+              click-stop-propagation
+              [ngStyle]="{ cursor: 'pointer' }"
+            >
               {{ rowData.guestName }}
-            </div>
+            </u>
             <div class="secondary-text">
               {{ rowData?.companyName || '--' }}
             </div>

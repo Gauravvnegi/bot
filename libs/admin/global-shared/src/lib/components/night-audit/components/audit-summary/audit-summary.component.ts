@@ -47,7 +47,6 @@ export class AuditSummaryComponent implements OnInit {
     private nightAuditService: NightAuditService,
     private globalFilterService: GlobalFilterService,
     private adminUtilityService: AdminUtilityService,
-    private confirmationService: ConfirmationService,
     private modalService: ModalService
   ) {}
 

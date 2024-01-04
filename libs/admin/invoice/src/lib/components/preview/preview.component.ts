@@ -5,11 +5,13 @@ import {
   SubscriptionPlanService,
 } from '@hospitality-bot/admin/core/theme';
 import { SnackBarService } from '@hospitality-bot/shared/material';
-import { AdminDetailsService } from 'libs/admin/reservation/src/lib/services/admin-details.service';
 import { ReservationService } from 'libs/admin/reservation/src/lib/services/reservation.service';
 import { MenuItem } from 'primeng/api';
 import { invoiceRoutes } from '../../constants/routes';
 import { InvoiceService } from '../../services/invoice.service';
+import { openModal } from '@hospitality-bot/admin/shared';
+import { JourneyDialogComponent } from 'libs/admin/reservation/src/lib/components';
+import { DialogService } from 'primeng/dynamicdialog';
 
 @Component({
   selector: 'hospitality-bot-preview',
@@ -44,9 +46,9 @@ export class PreviewComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private snackbarService: SnackBarService,
     private routesConfigService: RoutesConfigService,
-    private adminDetailsService: AdminDetailsService,
     private reservationService: ReservationService,
-    private subscriptionService: SubscriptionPlanService
+    private subscriptionService: SubscriptionPlanService,
+    private dialogService: DialogService
   ) {}
 
   ngOnInit(): void {
@@ -161,7 +163,7 @@ export class PreviewComponent implements OnInit {
   }
 
   handleCheckout() {
-    this.adminDetailsService.openJourneyDialog({
+    const config = {
       title: 'Manual Checkout',
       description: 'Guest is about to checkout',
       question: 'Are you sure you want to continue?',
@@ -179,6 +181,16 @@ export class PreviewComponent implements OnInit {
           },
         },
       },
+    };
+
+    openModal({
+      config: {
+        width: '450px',
+        styleClass: 'confirm-dialog',
+        data: config,
+      },
+      component: JourneyDialogComponent,
+      dialogService: this.dialogService,
     });
   }
 

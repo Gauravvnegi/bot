@@ -10,6 +10,7 @@ import { ManageLoggedUsersComponent } from './components/night-audit/components/
 import { TableViewComponent } from './components/table-view/table-view.component';
 import { DynamicDialogModule } from 'primeng/dynamicdialog';
 import { SnackbarHandlerService } from './services/snackbar-handler.service';
+import { ModalService } from '@hospitality-bot/shared/material';
 
 @NgModule({
   imports: [CommonModule, AdminSharedModule, DynamicDialogModule],
@@ -23,6 +24,6 @@ import { SnackbarHandlerService } from './services/snackbar-handler.service';
     TableViewComponent,
   ],
   exports: [EntityTabFilterComponent],
-  providers: [SnackbarHandlerService],
+  providers: [SnackbarHandlerService, ModalService],
 })
 export class GlobalSharedModule {}

@@ -303,6 +303,8 @@ export class QuickReservationFormComponent implements OnInit {
                   res.guest?.contactDetails?.contactNumber
                 : null,
               id: res.guest?.id ?? '',
+              cc: res.guest?.contactDetails.cc,
+              contactNumber: res.guest?.contactDetails?.contactNumber,
               email: res.guest?.contactDetails?.emailId,
             };
 
@@ -534,25 +536,6 @@ export class QuickReservationFormComponent implements OnInit {
   }
 
   openDetailsPage() {
-    // Need to remove
-    // const dialogConfig = new MatDialogConfig();
-    // dialogConfig.disableClose = true;
-    // dialogConfig.width = '100%';
-    // const detailCompRef = this.modalService.openDialog(
-    //   DetailsComponent,
-    //   dialogConfig
-    // );
-
-    // detailCompRef.componentInstance.bookingId = this.reservationId;
-    // detailCompRef.componentInstance.tabKey = 'guest_details';
-    // this.increaseZIndex(true);
-    // this.$subscription.add(
-    //   detailCompRef.componentInstance.onDetailsClose.subscribe((res) => {
-    //     this.increaseZIndex(false);
-    //     detailCompRef.close();
-    //   })
-    // );
-
     this.bookingDetailService.openBookingDetailSidebar({
       tabKey: 'guest_details',
       bookingId: this.reservationId,
@@ -632,4 +615,6 @@ export type GuestDetails = {
   guestName: string;
   phoneNumber: string;
   email: string;
+  cc?: string;
+  contactNumber?: string;
 };

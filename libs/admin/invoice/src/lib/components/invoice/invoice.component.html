@@ -349,39 +349,52 @@
           <div class="py-row" *ngIf="inputControl.totalAmount.value">
             <span>Total Charges</span>
             <span>
-              INR {{ inputControl.totalAmount.value | number: '1.2-2' }}</span
+              {{
+                inputControl.totalAmount.value
+                  | number: '1.2-2'
+                  | currency: 'INR'
+              }}</span
             >
           </div>
           <div class="py-row" *ngIf="inputControl.discountedAmount.value">
             <span>Total Discount</span>
             <span>
-              <span
-                >INR
-                {{ inputControl.discountedAmount.value | number: '1.2-2' }}
+              <span>
+                {{
+                  inputControl.discountedAmount.value
+                    | number: '1.2-2'
+                    | currency: 'INR'
+                }}
               </span>
             </span>
           </div>
           <div class="py-row invert" *ngIf="inputControl.netAmount.value">
             <span>Total Payable</span>
             <span>
-              INR {{ inputControl.netAmount.value | number: '1.2-2' }}</span
+              {{
+                inputControl.netAmount.value | number: '1.2-2' | currency: 'INR'
+              }}</span
             >
           </div>
           <div class="py-row" *ngIf="inputControl.paidAmount.value">
             <span>Total Paid Amount</span>
             <span>
-              <span
-                >INR
-                {{ inputControl.paidAmount.value | number: '1.2-2' }}
+              <span>
+                {{
+                  inputControl.paidAmount.value
+                    | number: '1.2-2'
+                    | currency: 'INR'
+                }}
               </span>
             </span>
           </div>
           <div class="py-row" *ngIf="inputControl.refund.value">
             <span>Total Refund</span>
             <span>
-              <span
-                >INR
-                {{ inputControl.refund.value | number: '1.2-2' }}
+              <span>
+                {{
+                  inputControl.refund.value | number: '1.2-2' | currency: 'INR'
+                }}
               </span>
             </span>
           </div>
@@ -391,8 +404,14 @@
               [ngStyle]="{
                 color: inputControl.dueAmount.value < 0 ? 'red' : 'inherit'
               }"
-              >INR
-              <span>{{ inputControl.dueAmount.value | number: '1.2-2' }} </span>
+            >
+              <span
+                >{{
+                  inputControl.dueAmount.value
+                    | number: '1.2-2'
+                    | currency: 'INR'
+                }}
+              </span>
             </span>
           </div>
         </div>

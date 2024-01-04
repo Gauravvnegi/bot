@@ -57,6 +57,7 @@
   }
   .guest-name {
     @include normal-md-text;
+    cursor: pointer;
   }
   .due-amount {
     text-align: right;
@@ -79,6 +80,9 @@
     .phone-number {
       @include flex-item-center;
       gap: 5px;
+      .contact {
+        display: flex;
+      }
     }
     .email-id {
       @include flex-item-center;

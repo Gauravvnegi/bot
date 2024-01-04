@@ -10,6 +10,7 @@ import {
 import {
   AdminUtilityService,
   BaseDatatableComponent as BaseDatableComponent,
+  BookingDetailService,
   EntitySubType,
   EntityType,
   ModuleNames,
@@ -109,7 +110,8 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
     private routesConfigService: RoutesConfigService,
     private router: Router,
     private _clipboard: Clipboard,
-    private subscriptionPlanService: SubscriptionPlanService
+    private subscriptionPlanService: SubscriptionPlanService,
+    private bookingDetailService: BookingDetailService
   ) {
     super(fb);
   }
@@ -368,6 +370,13 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
       queryParams: {
         entityId: this.selectedEntity.id,
       },
+    });
+  }
+
+  openDetailsPage(reservationId: string) {
+    this.bookingDetailService.openBookingDetailSidebar({
+      tabKey: 'guest_details',
+      bookingId: reservationId,
     });
   }
 

@@ -10,6 +10,7 @@ import {
 import {
   AdminUtilityService,
   BaseDatatableComponent as BaseDatableComponent,
+  BookingDetailService,
   EntitySubType,
   EntityType,
   ModuleNames,
@@ -55,7 +56,6 @@ import { InvoiceService } from 'libs/admin/invoice/src/lib/services/invoice.serv
 import { distinctUntilChanged, takeUntil, tap } from 'rxjs/operators';
 import { tableTypes } from 'libs/admin/dashboard/src/lib/constants/cols';
 import { Clipboard } from '@angular/cdk/clipboard';
-import { RoomReservationFormData } from '../../types/forms.types';
 
 @Component({
   selector: 'hospitality-bot-manage-reservation-data-table',
@@ -110,7 +110,8 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
     private routesConfigService: RoutesConfigService,
     private router: Router,
     private _clipboard: Clipboard,
-    private subscriptionPlanService: SubscriptionPlanService
+    private subscriptionPlanService: SubscriptionPlanService,
+    private bookingDetailService: BookingDetailService
   ) {
     super(fb);
   }
@@ -369,6 +370,13 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
       queryParams: {
         entityId: this.selectedEntity.id,
       },
+    });
+  }
+
+  openDetailsPage(reservationId: string) {
+    this.bookingDetailService.openBookingDetailSidebar({
+      tabKey: 'guest_details',
+      bookingId: reservationId,
     });
   }
 

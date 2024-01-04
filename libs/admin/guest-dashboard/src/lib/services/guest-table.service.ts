@@ -48,6 +48,10 @@ export class GuestTableService extends ApiService {
     return this.get(`/api/v1/members/stats/${config.queryObj}`);
   }
 
+  getGuestDocsOrPaymentStats(config): Observable<any> {
+    return this.get(`/api/v1/dashboard-stats/reservation/${config.queryObj}`);
+  }
+
   exportCSVStat(config): Observable<any> {
     return this.get(`/api/v1/members/stats/export/${config.queryObj}`, {
       responseType: 'blob',

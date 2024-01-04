@@ -240,12 +240,13 @@ export class SubscriptionPlanService extends ApiService {
   }
 
   show(): { isCalenderView: boolean } {
-    return {
+    const data = {
       isCalenderView:
         this.checkModuleSubscription(ModuleNames.ADD_RESERVATION) &&
-        this.hasManageUserPermission(PermissionModuleNames.RESERVATION) &&
+        this.hasManageUserPermission(PermissionModuleNames.PREDICTO_PMS) &&
         this.checkProductSubscription(ModuleNames.PREDICTO_PMS),
     };
+    return data;
   }
 }
 

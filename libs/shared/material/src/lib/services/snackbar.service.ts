@@ -33,9 +33,9 @@ export class SnackBarService {
     action?: string,
     config?: SnackBarConfig | MessageSnackbarConfig
   ) {
-    const panelClass = config['panelClass'] || 'danger';
-    const duration = config['duration'] === 'danger' ? 3000 : 2000;
-
+    const panelClass = config ? config['panelClass'] ?? 'danger' : 'danger';
+    const duration = config && config['duration'] === 'danger' ? 3000 : 2000;
+    
     this.messageService.add({
       ...config,
       detail: message,

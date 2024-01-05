@@ -66,6 +66,7 @@ export class ModalComponent {
   @Output() onClose = new EventEmitter();
 
   close() {
+    this.dialogRef.close();
     this.onClose.emit();
   }
 }

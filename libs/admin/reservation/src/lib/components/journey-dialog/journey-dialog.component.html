@@ -1,15 +1,20 @@
 <div class="popup-wrapper">
   <div class="header">
-    <div class="title-container">
-      <!-- <mat-icon class="warning">report_problem</mat-icon> -->
-      <h1 class="heading">{{ config.title }}</h1>
+    <div class="header__title">
+      <mat-icon class="warning">report_problem</mat-icon>
+      <div>{{ title }}</div>
     </div>
-    <!-- <mat-icon class="clear">clear</mat-icon> -->
+    <div (click)="handleClose()" class="header__close">
+      <i class="fa fa-times" aria-hidden="true"></i>
+    </div>
   </div>
   <div class="content">
-    <p>{{ config.description }}</p>
-    <p>{{ config.question }}</p>
-    <p *ngIf="config?.isSendInvoice" [formGroup]="useForm" class="invoice">
+    <div class="descriptions">
+      <p *ngFor="let description of descriptions">
+        {{ description }}
+      </p>
+    </div>
+    <p *ngIf="isSendInvoice" [formGroup]="useForm" class="invoice">
       <hospitality-bot-input-switch
         controlName="invoiceStatus"
       ></hospitality-bot-input-switch>
@@ -22,13 +27,13 @@
   </mat-form-field> -->
     <div class="button-wrapper">
       <hospitality-bot-button
-        [label]="config.buttons.cancel.label"
-        (onClick)="onCancel()"
+        label="Cancel"
+        (onClick)="handleClose()"
         variant="outlined"
       ></hospitality-bot-button>
       <hospitality-bot-button
-        [label]="config.buttons.accept.label"
-        (onClick)="onAccept()"
+        label="Accept"
+        (onClick)="onAcceptClick()"
       ></hospitality-bot-button>
     </div>
   </div>

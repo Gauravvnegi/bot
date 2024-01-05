@@ -13,8 +13,8 @@
     &__title {
       @include flex-item-center;
       font-size: 16px;
-      font-weight: $medium;
-      color: $tooltip;
+      font-weight: 400;
+      color: #00162b;
       .alert {
         margin-right: 10px;
       }

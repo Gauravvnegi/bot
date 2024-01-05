@@ -57,4 +57,13 @@ export class GuestTableService extends ApiService {
       responseType: 'blob',
     });
   }
+
+  exportDocsCSV(config): Observable<any> {
+    return this.get(
+      `/api/v1/dashboard-stats/reservation/export/${config.queryObj}`,
+      {
+        responseType: 'blob',
+      }
+    );
+  }
 }

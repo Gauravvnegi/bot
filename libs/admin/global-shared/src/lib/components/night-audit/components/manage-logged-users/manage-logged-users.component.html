@@ -40,7 +40,7 @@
   <hospitality-bot-form-action
     class="full-width action-button"
     [loading]="loading"
-    [disabled]="loading || usersLoggedOut || !!items.length"
+    [disabled]="loading || usersLoggedOut || !!items?.length"
     [config]="actionConfig"
     (onPostAction)="handleNext()"
     (onPreAction)="handlePrev()"

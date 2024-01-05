@@ -9,11 +9,7 @@ import {
   ViewChild,
   ViewContainerRef,
 } from '@angular/core';
-import {
-  FormBuilder,
-  FormGroup,
-  Validators,
-} from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
@@ -21,14 +17,13 @@ import { ModalService, SnackBarService } from 'libs/shared/material/src';
 import { DateService } from '@hospitality-bot/shared/utils';
 import { Subscription } from 'rxjs';
 import { request } from '../../constants/request';
-import { debounceTime, filter, map, startWith } from 'rxjs/operators';
+import { debounceTime } from 'rxjs/operators';
 import { RequestService } from '../../services/request.service';
-import { Option } from '@hospitality-bot/admin/shared';
+import { Option, manageMaskZIndex } from '@hospitality-bot/admin/shared';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { MatDialogConfig } from '@angular/material/dialog';
 import { AddItemComponent } from '../add-item/add-item.component';
 import { DepartmentList } from '../../data-models/request.model';
-import { convertToTitleCase } from 'libs/admin/shared/src/lib/utils/valueFormatter';
 import { ManagePermissionService } from 'libs/admin/roles-and-permissions/src/lib/services/manage-permission.service';
 
 @Component({
@@ -111,7 +106,7 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
       quantity: [1, [Validators.required, Validators.min(1)]],
       assigneeId: [''],
       cc: ['+91'],
-      phoneNumber: ['' , [Validators.required, Validators.pattern('^[0-9]*$')]],
+      phoneNumber: ['', [Validators.required, Validators.pattern('^[0-9]*$')]],
     });
 
     this.requestFG.get('itemCode').valueChanges.subscribe((value) => {
@@ -188,7 +183,7 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
     }
 
     const { phoneNumber, cc, ...rest } = this.requestFG.getRawValue();
-   let countryCode = cc.replace('+', '');
+    let countryCode = cc.replace('+', '');
     const data = {
       phone: `${countryCode}${phoneNumber}`,
       ...rest,
@@ -278,6 +273,7 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
       this.sidebarVisible = true;
       const factory = this.resolver.resolveComponentFactory(AddItemComponent);
       this.sidebarSlide.clear();
+      manageMaskZIndex();
       const componentRef = this.sidebarSlide.createComponent(factory);
       componentRef.instance.isSidebar = true;
       this.$subscription.add(

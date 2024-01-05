@@ -58,6 +58,7 @@ export class InhouseData {
   source: string;
   assigneeId: string;
   assigneeName: string;
+  isFocused: boolean;
 
   deserialize(input: JobRequestResponse) {
     this.rooms = new Array<Room>();
@@ -95,6 +96,7 @@ export class InhouseData {
     this.source = input.source;
     this.itemId = input.itemId;
     this.assigneeId = input?.assigneeId;
+    this.isFocused = input?.focused;
 
     return this;
   }

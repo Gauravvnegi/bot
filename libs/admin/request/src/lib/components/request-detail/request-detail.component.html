@@ -10,32 +10,54 @@
     </div>
     <div class="request-items-header-right" [formGroup]="requestFG">
       <div class="form-elements-container">
-        <mat-select
+        <!-- <mat-select
           class="form-elements"
           placeholder="Status"
           formControlName="status"
           (selectionChange)="handleStatusChange($event)"
+          [disabled]="!data?.isFocused"
         >
           <mat-option
             *ngFor="let status of statusList"
             [value]="status.value"
             >{{ status.label }}</mat-option
           >
-        </mat-select>
+        </mat-select> -->
+        <hospitality-bot-select
+          controlName="status"
+          [options]="statusList"
+          [loading]="loading"
+          [disabled]="!data?.isFocused"
+          [pros]="{
+            placeholder: 'select'
+          }"
+          (itemSelection)="handleStatusChange($event)"
+        ></hospitality-bot-select>
       </div>
       <div class="form-elements-container">
-        <mat-select
+        <!-- <mat-select
           class="form-elements"
           placeholder="Assignee"
           formControlName="assignee"
           (selectionChange)="handleAssigneeChange($event)"
+          [disabled]="!data?.isFocused"
         >
           <mat-option
             *ngFor="let status of allAssigneeList"
             [value]="status.value"
             >{{ status.label }}</mat-option
           >
-        </mat-select>
+        </mat-select> -->
+        <hospitality-bot-select
+          controlName="assignee"
+          [options]="allAssigneeList"
+          [loading]="isAssigneeLoading"
+          [disabled]="!data?.isFocused"
+          [pros]="{
+            placeholder: 'select'
+          }"
+          (itemSelection)="handleAssigneeChange($event)"
+        ></hospitality-bot-select>
       </div>
       <!-- <div class="man-icon" (click)="openGuestInfo()">
         <img

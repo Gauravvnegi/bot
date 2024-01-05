@@ -25,7 +25,7 @@ Deploy_Admin:
     - kubectl apply -f deployment.yaml --validate=false
   tags:
     - k8s-dev
-  timeout: 1h
+  # timeout: 1h
 
 Deploy_Web:
   stage: deploy_web
@@ -52,7 +52,7 @@ Deploy_Web:
   
   tags:
     - k8s-dev
-  timeout: 1h
+  # timeout: 1h
 #test_project:
 #    stage: test
 #    script:
@@ -118,4 +118,6 @@ Deploy_Web:
 #    - ssh -p "$ssh_port" "$ssh_user"@"$server_ip" "sleep 40; rm -rf $admin_work_dir/*.sh; rm -rf $admin_work_dir/*.tar; ls $admin_work_dir && netstat -tnlp"
 #  only:
 #    - dev-deploy
+
+
 

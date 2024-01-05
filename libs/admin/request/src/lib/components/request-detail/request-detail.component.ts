@@ -18,7 +18,6 @@ import { Subscription } from 'rxjs';
 import { InhouseData } from '../../data-models/inhouse-list.model';
 import { RequestService } from '../../services/request.service';
 import { CMSUpdateJobData } from '../../types/request.type';
-import { error } from 'console';
 
 @Component({
   selector: 'hospitality-bot-request-detail',

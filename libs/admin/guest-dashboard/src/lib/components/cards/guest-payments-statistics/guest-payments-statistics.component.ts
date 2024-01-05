@@ -153,7 +153,7 @@ export class GuestPaymentsStatisticsComponent implements OnInit, OnDestroy {
       tabFilterItems: this.tabFilterItems,
       callingMethod: 'getGuestDocsOrPaymentStats',
       entityType: 'GUESTPAYMENTS',
-      exportURL: 'exportCSVStat',
+      exportURL: 'exportDocsCSV',
       modalType: 'payment.title',
     };
 

@@ -17,16 +17,25 @@
         class="full-width"
         controlName="itemName"
         label="Name"
+        [props]="{
+          placeholder: 'Enter'
+        }"
       ></hospitality-bot-input>
       <hospitality-bot-input
         class="half-width"
         controlName="categoryDesc"
         label="Category"
+        [props]="{
+          placeholder: 'Enter'
+        }"
       ></hospitality-bot-input>
       <hospitality-bot-input
         class="half-width"
         controlName="functionCode"
         label="Service Code"
+        [props]="{
+          placeholder: 'Enter'
+        }"
       ></hospitality-bot-input>
       <hospitality-bot-time-picker
         class="half-width"
@@ -44,12 +53,18 @@
         }"
         [loading]="loading"
         [stopEmission]="true"
+        [settings]="{
+          isExtras: true
+        }"
       ></hospitality-bot-multi-select>
 
       <hospitality-bot-text-area
         class="full-width"
         controlName="itemDesc"
         label="Remarks"
+        [props]="{
+          placeholder: 'Enter'
+        }"
       >
       </hospitality-bot-text-area>
 

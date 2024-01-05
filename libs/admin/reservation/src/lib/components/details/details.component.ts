@@ -825,6 +825,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
     this._reservationService
       .manualCheckout(
         this.reservationDetailsFG.get('bookingId').value,
+        {},
         typeof invoice != 'undefined' && {
           params: `?sendInvoice=${invoice?.isSendInvoice}`,
         }

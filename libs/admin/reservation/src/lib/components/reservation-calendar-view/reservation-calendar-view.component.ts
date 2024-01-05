@@ -46,13 +46,9 @@ import {
   reservationMenuOptions,
   reservationStatusColorCode,
 } from '../../constants/reservation';
-import {
-  ModalService,
-  SnackBarService,
-} from '@hospitality-bot/shared/material';
+import { SnackBarService } from '@hospitality-bot/shared/material';
 import { RoomMapType } from 'libs/admin/channel-manager/src/lib/types/channel-manager.types';
 import * as moment from 'moment';
-import { AdminDetailsService } from '../../services/admin-details.service';
 import { ReservationService } from '../../services/reservation.service';
 import { JourneyState } from 'libs/admin/manage-reservation/src/lib/constants/reservation';
 import { roomStatusDetails } from 'libs/admin/housekeeping/src/lib/constant/room';
@@ -61,6 +57,11 @@ import { CalendarOccupancy } from '../../models/reservation-table.model';
 import { JourneyDialogComponent } from '../journey-dialog/journey-dialog.component';
 import { DialogService } from 'primeng/dynamicdialog';
 import { ReservationRatePlan } from 'libs/admin/room/src/lib/constant/form';
+import {
+  CalendarJourneyResponse,
+  CalendarJourneyType,
+} from '../../types/reservation-types';
+import { ModalComponent } from 'libs/admin/shared/src/lib/components/modal/modal.component';
 
 @Component({
   selector: 'hospitality-bot-reservation-calendar-view',
@@ -102,7 +103,6 @@ export class ReservationCalendarViewComponent implements OnInit {
     private globalFilterService: GlobalFilterService,
     private roomService: RoomService,
     private adminUtilityService: AdminUtilityService,
-    private adminDetailsService: AdminDetailsService,
     private _reservationService: ReservationService,
     private snackbarService: SnackBarService,
     private _clipboard: Clipboard,
@@ -666,77 +666,201 @@ export class ReservationCalendarViewComponent implements OnInit {
       });
   }
 
-  manualCheckin(reservationId: string, roomType: IGRoomType) {
-    this.openJourneyDialog({
-      title: 'Check-In',
-      description: 'Guest is about to checkin',
-      question: 'Are you sure you want to continue?',
-      buttons: {
-        cancel: {
-          label: 'Cancel',
-          context: '',
-        },
-        accept: {
-          label: 'Accept',
-          context: this,
-          handler: {
-            fn_name: 'checkInfn',
-            args: [reservationId, roomType],
-          },
-        },
+  openModalComponent(
+    reservationId: string,
+    roomType: IGRoomType,
+    journey: CalendarJourneyType
+  ) {
+    // this.dialogService.open()
+    let modalRef;
+    let isCheckin = journey === CalendarJourneyType.EARLYCHECKIN;
+    const data = {
+      content: {
+        heading: isCheckin ? 'Early Checkin' : 'Late Checkout',
+        descriptions: isCheckin
+          ? [
+              'You are doing Checkin before the actual arrival time,',
+              'do you want to charge early checkin charges?',
+            ]
+          : [
+              'You are doing Checkout after the actual departure time,',
+              'do you want to charge late checkout charges',
+            ],
+        isReservation: true,
+        isRemarks: true,
       },
+      actions: [
+        {
+          label: 'Cancel',
+          onClick: () => modalRef.close(),
+          variant: 'outlined',
+        },
+        {
+          label: 'Ok',
+          onClick: (res) => {
+            let data = res;
+            if (isCheckin) this.checkInfn(reservationId, roomType, data);
+            else this.manualCheckoutfn(reservationId, roomType, data);
+            modalRef.close();
+          },
+          variant: 'contained',
+        },
+      ],
+    };
+    modalRef = openModal({
+      config: {
+        width: '35vw',
+        styleClass: 'confirm-dialog',
+        data: data,
+      },
+      component: ModalComponent,
+      dialogService: this.dialogService,
     });
+  }
+
+  manualCheckin(reservationId: string, roomType: IGRoomType) {
+    this._reservationService
+      .getJourneyDetails(this.entityId, CalendarJourneyType.EARLYCHECKIN)
+      .subscribe((res: CalendarJourneyResponse) => {
+        if (res) {
+          // Compare current time with the default early checkin time to show different popups
+          const currentDateTime = new Date();
+          const currentHours = currentDateTime.getHours();
+          const currentMinutes = currentDateTime.getMinutes();
+          const currentSeconds = currentDateTime.getSeconds();
+
+          const defaultEndTime =
+            res[CalendarJourneyType.EARLYCHECKIN].journeyEndTime;
+          const [
+            journeyHours,
+            journeyMinutes,
+            journeySeconds,
+          ] = defaultEndTime.split(':');
+
+          const currentEpochTime =
+            currentHours * 3600 + currentMinutes * 60 + currentSeconds;
+          const defaultJourneyEpoch =
+            parseInt(journeyHours) * 3600 +
+            parseInt(journeyMinutes) * 60 +
+            parseInt(journeySeconds);
+          if (currentEpochTime < defaultJourneyEpoch) {
+            this.openModalComponent(
+              reservationId,
+              roomType,
+              CalendarJourneyType.EARLYCHECKIN
+            );
+          } else {
+            this.openJourneyDialog({
+              title: 'Check-In',
+              description: 'Guest is about to checkin',
+              question: 'Are you sure you want to continue?',
+              buttons: {
+                cancel: {
+                  label: 'Cancel',
+                  context: '',
+                },
+                accept: {
+                  label: 'Accept',
+                  context: this,
+                  handler: {
+                    fn_name: 'checkInfn',
+                    args: [reservationId, roomType],
+                  },
+                },
+              },
+            });
+          }
+        }
+      });
   }
 
   manualCheckout(reservationId: string, roomType: IGRoomType) {
-    this.openJourneyDialog({
-      title: 'Manual Checkout',
-      description: 'Guest is about to checkout',
-      question: 'Are you sure you want to continue?',
-      buttons: {
-        cancel: {
-          label: 'Cancel',
-          context: '',
-        },
-        accept: {
-          label: 'Accept',
-          context: this,
-          handler: {
-            fn_name: 'manualCheckoutfn',
-            args: [reservationId, roomType],
-          },
-        },
-      },
-    });
+    this._reservationService
+      .getJourneyDetails(this.entityId, CalendarJourneyType.LATECHECKOUT)
+      .subscribe((res: CalendarJourneyResponse) => {
+        if (res) {
+          // Compare current time with the default early checkin time to show different popups
+          const currentDateTime = new Date();
+          const currentHours = currentDateTime.getHours();
+          const currentMinutes = currentDateTime.getMinutes();
+          const currentSeconds = currentDateTime.getSeconds();
+
+          const defaultEndTime =
+            res[CalendarJourneyType.LATECHECKOUT].journeyStartTime;
+          const [
+            journeyHours,
+            journeyMinutes,
+            journeySeconds,
+          ] = defaultEndTime.split(':');
+
+          const currentEpochTime =
+            currentHours * 3600 + currentMinutes * 60 + currentSeconds;
+          const defaultJourneyEpoch =
+            parseInt(journeyHours) * 3600 +
+            parseInt(journeyMinutes) * 60 +
+            parseInt(journeySeconds);
+          if (currentEpochTime > defaultJourneyEpoch) {
+            this.openModalComponent(
+              reservationId,
+              roomType,
+              CalendarJourneyType.LATECHECKOUT
+            );
+          } else {
+            this.openJourneyDialog({
+              title: 'Manual Checkout',
+              description: 'Guest is about to checkout',
+              question: 'Are you sure you want to continue?',
+              buttons: {
+                cancel: {
+                  label: 'Cancel',
+                  context: '',
+                },
+                accept: {
+                  label: 'Accept',
+                  context: this,
+                  handler: {
+                    fn_name: 'manualCheckoutfn',
+                    args: [reservationId, roomType],
+                  },
+                },
+              },
+            });
+          }
+        }
+      });
   }
 
-  checkInfn(reservationId: string, roomType: IGRoomType) {
+  checkInfn(reservationId: string, roomType: IGRoomType, data = {}) {
     this.$subscription.add(
-      this._reservationService.manualCheckin(reservationId).subscribe((res) => {
-        this.updateRoomType(
-          reservationId,
-          roomType,
-          ReservationCurrentStatus.INHOUSE
-        );
-        this.snackbarService.openSnackBarAsText('Checkin completed.', '', {
-          panelClass: 'success',
-        });
-      })
+      this._reservationService
+        .manualCheckin(reservationId, data)
+        .subscribe((res) => {
+          this.updateRoomType(
+            reservationId,
+            roomType,
+            ReservationCurrentStatus.INHOUSE
+          );
+          this.snackbarService.openSnackBarAsText('Checkin completed.', '', {
+            panelClass: 'success',
+          });
+        })
     );
   }
 
-  manualCheckoutfn(reservationId: string, roomType: IGRoomType) {
-    this._reservationService.manualCheckout(reservationId).subscribe((res) => {
-      this.updateRoomType(
-        reservationId,
-        roomType,
-        ReservationCurrentStatus.CHECKEDOUT,
-        true
-      );
-      this.snackbarService.openSnackBarAsText('Checkout completed.', '', {
-        panelClass: 'success',
+  manualCheckoutfn(reservationId: string, roomType: IGRoomType, data = {}) {
+    this._reservationService
+      .manualCheckout(reservationId, data)
+      .subscribe((res) => {
+        this.updateRoomType(
+          reservationId,
+          roomType,
+          ReservationCurrentStatus.CHECKEDOUT,
+          true
+        );
+        this.snackbarService.openSnackBarAsText('Checkout completed.', '', {
+          panelClass: 'success',
+        });
       });
-    });
   }
 
   updateRoomType(

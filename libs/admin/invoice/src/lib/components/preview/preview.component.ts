@@ -9,9 +9,7 @@ import { ReservationService } from 'libs/admin/reservation/src/lib/services/rese
 import { MenuItem } from 'primeng/api';
 import { invoiceRoutes } from '../../constants/routes';
 import { InvoiceService } from '../../services/invoice.service';
-import { openModal } from '@hospitality-bot/admin/shared';
-import { JourneyDialogComponent } from 'libs/admin/reservation/src/lib/components';
-import { DialogService } from 'primeng/dynamicdialog';
+import { ReservationFormService } from 'libs/admin/reservation/src/lib/services/reservation-form.service';
 
 @Component({
   selector: 'hospitality-bot-preview',
@@ -48,7 +46,7 @@ export class PreviewComponent implements OnInit {
     private routesConfigService: RoutesConfigService,
     private reservationService: ReservationService,
     private subscriptionService: SubscriptionPlanService,
-    private dialogService: DialogService
+    private formService: ReservationFormService
   ) {}
 
   ngOnInit(): void {
@@ -163,35 +161,7 @@ export class PreviewComponent implements OnInit {
   }
 
   handleCheckout() {
-    const config = {
-      title: 'Manual Checkout',
-      description: 'Guest is about to checkout',
-      question: 'Are you sure you want to continue?',
-      buttons: {
-        cancel: {
-          label: 'Cancel',
-          context: '',
-        },
-        accept: {
-          label: 'Accept',
-          context: this,
-          handler: {
-            fn_name: 'manualCheckoutfn',
-            args: [],
-          },
-        },
-      },
-    };
-
-    openModal({
-      config: {
-        width: '450px',
-        styleClass: 'confirm-dialog',
-        data: config,
-      },
-      component: JourneyDialogComponent,
-      dialogService: this.dialogService,
-    });
+    this.formService.manualCheckout(this.reservationId);
   }
 
   manualCheckoutfn() {

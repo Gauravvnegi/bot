@@ -35,6 +35,7 @@ import { BookingInfoComponent } from './components/booking-info/booking-info.com
 import { BaseReservationComponent } from './components/base-reservation.component';
 import { GuestTableService } from 'libs/admin/guests/src/lib/services/guest-table.service';
 import { DialogService } from 'primeng/dynamicdialog';
+import { ReservationFormService } from './services/reservation-form.service';
 
 export const adminReservationRoutes: Route[] = [];
 
@@ -99,6 +100,7 @@ export const adminReservationRoutes: Route[] = [];
     ChannelManagerService,
     GuestTableService,
     DialogService,
+    ReservationFormService,
   ],
 })
 export class AdminReservationModule {}

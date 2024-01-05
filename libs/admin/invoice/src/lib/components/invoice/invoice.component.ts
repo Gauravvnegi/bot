@@ -155,7 +155,7 @@ export class InvoiceComponent implements OnInit {
     private manageReservationService: ManageReservationService,
     private reservationService: ReservationService,
     private routesConfigService: RoutesConfigService,
-    private bookingDetailsService: BookingDetailService
+    private bookingDetailsService: BookingDetailService,
   ) {
     this.reservationId = this.activatedRoute.snapshot.paramMap.get('id');
     this.initPageHeaders();
@@ -300,7 +300,9 @@ export class InvoiceComponent implements OnInit {
           this.bookingNumber = res.number;
           this.invoicePrepareRequest = res.invoicePrepareRequest;
           this.pmsBooking = res.pmsBooking;
-          if (this.pmsBooking) this.disableInvoice();
+          if (this.pmsBooking) {
+            this.disableInvoice();
+          }
           this.isCheckin =
             res?.pmsStatus === ReservationCurrentStatus.DUEOUT ||
             res?.pmsStatus === ReservationCurrentStatus.INHOUSE;
@@ -1447,23 +1449,6 @@ export class InvoiceComponent implements OnInit {
   }
 
   viewDetails() {
-    // TODO: Need to remove
-    // const dialogConfig = new MatDialogConfig();
-    // dialogConfig.disableClose = true;
-    // dialogConfig.width = '100%';
-    // const detailCompRef = this.modalService.openDialog(
-    //   DetailsComponent,
-    //   dialogConfig
-    // );
-
-    // detailCompRef.componentInstance.bookingId = this.reservationId;
-    // detailCompRef.componentInstance.tabKey = 'guest_details';
-    // this.$subscription.add(
-    //   detailCompRef.componentInstance.onDetailsClose.subscribe((res) => {
-    //     detailCompRef.close();
-    //   })
-    // );
-
     this.bookingDetailsService.openBookingDetailSidebar({
       bookingId: this.reservationId,
       tabKey: 'guest_details',

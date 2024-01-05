@@ -4,7 +4,7 @@ import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { GuestPostData } from '../models/guest-table.model';
 import { FileData } from '../models/reservation-table.model';
 import { QueryConfig } from '@hospitality-bot/admin/shared';
-import { CalendarJourneyType } from '../types/reservation-types';
+import { JourneyTypes } from '../types/reservation-types';
 
 @Injectable()
 export class ReservationService extends ApiService {
@@ -16,7 +16,7 @@ export class ReservationService extends ApiService {
     return this.get(`/api/v1/reservation/${reservationId}?raw=true`);
   }
 
-  getJourneyDetails(entityId: string, journey: CalendarJourneyType) {
+  getJourneyDetails(entityId: string, journey: JourneyTypes) {
     return this.get(`/api/v1/entity/${entityId}/journeys?journey=${journey}`);
   }
 
@@ -105,7 +105,10 @@ export class ReservationService extends ApiService {
   }
 
   manualCheckin(reservationId, data = {}) {
-    return this.post(`/api/v1/reservation/${reservationId}/manual-checkin`, data);
+    return this.post(
+      `/api/v1/reservation/${reservationId}/manual-checkin`,
+      data
+    );
   }
 
   manualCheckout(reservationId, data = {}, config?: QueryConfig) {

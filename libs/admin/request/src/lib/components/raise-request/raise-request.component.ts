@@ -17,14 +17,13 @@ import { ModalService, SnackBarService } from 'libs/shared/material/src';
 import { DateService } from '@hospitality-bot/shared/utils';
 import { Subscription } from 'rxjs';
 import { request } from '../../constants/request';
-import { debounceTime, filter, map, startWith } from 'rxjs/operators';
+import { debounceTime } from 'rxjs/operators';
 import { RequestService } from '../../services/request.service';
-import { Option } from '@hospitality-bot/admin/shared';
+import { Option, manageMaskZIndex } from '@hospitality-bot/admin/shared';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { MatDialogConfig } from '@angular/material/dialog';
 import { AddItemComponent } from '../add-item/add-item.component';
 import { DepartmentList } from '../../data-models/request.model';
-import { convertToTitleCase } from 'libs/admin/shared/src/lib/utils/valueFormatter';
 import { ManagePermissionService } from 'libs/admin/roles-and-permissions/src/lib/services/manage-permission.service';
 
 @Component({
@@ -282,6 +281,7 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
       this.sidebarVisible = true;
       const factory = this.resolver.resolveComponentFactory(AddItemComponent);
       this.sidebarSlide.clear();
+      manageMaskZIndex();
       const componentRef = this.sidebarSlide.createComponent(factory);
       componentRef.instance.isSidebar = true;
       this.$subscription.add(

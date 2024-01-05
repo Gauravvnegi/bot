@@ -249,7 +249,13 @@
                   ></hospitality-bot-date>
                 </td>
                 <td>
+                  <hospitality-bot-input
+                    *ngIf="isInvoiceDisabled"
+                    class="bill-description"
+                    controlName="description"
+                  ></hospitality-bot-input>
                   <hospitality-bot-select
+                    *ngIf="!isInvoiceDisabled"
                     class="bill-description"
                     controlName="billItemId"
                     [controlIndex]="rowIndex"

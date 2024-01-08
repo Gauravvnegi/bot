@@ -13,6 +13,7 @@ import { SettingsMenuComponent } from 'libs/admin/settings/src/lib/components/se
 import { AddCompanyComponent } from 'libs/admin/company/src/lib/components/add-company/add-company.component';
 import { AddAgentComponent } from 'libs/admin/agent/src/lib/components/add-agent/add-agent.component';
 import { AddItemComponent } from 'libs/admin/request/src/lib/components/add-item/add-item.component';
+import { manageMaskZIndex } from '@hospitality-bot/admin/shared';
 
 // export type SideBarConfig<TData extends Record<string,any>> = {
 //   type?: 'RAISE_REQUEST' | 'ADD_GUEST';
@@ -57,8 +58,14 @@ export class SideBarService {
       );
       elements.forEach((element) => {
         condition
-          ? element.setAttribute('style', `z-index: ${zIndex} !important;`)
-          : element.setAttribute('style', `z-index: unset !important ;`);
+          ? elements[elements?.length - 1].setAttribute(
+              'style',
+              `z-index: ${zIndex};`
+            )
+          : elements[elements?.length - 1].setAttribute(
+              'style',
+              `z-index: unset ;`
+            );
       });
     }, 100);
   }
@@ -67,7 +74,7 @@ export class SideBarService {
     let isSidebarKey = sidebarProps.isSidebarKey ?? 'isSidebar';
     let onCloseKey = sidebarProps.onCloseKey ?? 'onCloseSidebar';
     sidebarProps.onOpen();
-
+    sidebarProps.manageMask && manageMaskZIndex();
     const factory = this.resolver.resolveComponentFactory(
       SidebarComponents[sidebarProps.componentName]
     );
@@ -90,6 +97,7 @@ export type SidebarProps = {
   onCloseKey?: string;
   isSidebarKey?: string;
   onClose?: (res: any) => void; // Callback function for onClose event
+  manageMask?: boolean;
 };
 
 export const SidebarComponents = {

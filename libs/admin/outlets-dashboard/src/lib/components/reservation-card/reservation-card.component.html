@@ -1,0 +1,27 @@
+<div class="wrapper">
+  <div class="header">
+    <h1>{{ data?.tableNumber }}</h1>
+    <span>{{ data?.reservationTime }}</span>
+    <span>
+      <img
+        class="filter-icon"
+        src="assets/svg/adult.svg"
+        alt="chats"
+        tooltipPosition="bottom"
+      />
+      {{ data?.adultCount }}</span
+    >
+  </div>
+  <div class="order-info">
+    <p>{{ data?.name }}</p>
+    <p>ORDER NO: {{ data?.orderNumber }}</p>
+    <span *ngIf="data.status">{{ data?.status }}</span>
+  </div>
+  <div class="price">
+    {{ data?.price }}
+  </div>
+  <div class="footer">
+    <span>{{ data?.preparationTime }}</span>
+    <div class="journey"></div>
+  </div>
+</div>

@@ -57,11 +57,6 @@ import { CalendarOccupancy } from '../../models/reservation-table.model';
 import { JourneyDialogComponent } from '../journey-dialog/journey-dialog.component';
 import { DialogService } from 'primeng/dynamicdialog';
 import { ReservationRatePlan } from 'libs/admin/room/src/lib/constant/form';
-import {
-  CalendarJourneyResponse,
-  JourneyTypes,
-} from '../../types/reservation-types';
-import { ModalComponent } from 'libs/admin/shared/src/lib/components/modal/modal.component';
 import { ReservationFormService } from '../../services/reservation-form.service';
 
 @Component({

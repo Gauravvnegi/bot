@@ -11,8 +11,13 @@
 }
 
 .heading-wrapper {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  @include flex-space-between-cen-Algn;
   gap: 1em;
+}
+
+.reservation-card-wrapper {
+  display: flex;
+  .reservation-card {
+    flex-basis: 30%;
+  }
 }

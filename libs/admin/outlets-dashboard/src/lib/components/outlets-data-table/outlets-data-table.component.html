@@ -89,7 +89,15 @@
       let-columns="columns"
       let-rowIndex="rowIndex"
     >
-      <tr class="table-row" (click)="editTax(rowData.id)"></tr>
+      <div class="reservation-card-wrapper">
+        <!-- <p>{{ data | json }}</p> -->
+        <ng-container *ngFor="let data of outletTableData">
+          <hospitality-bot-reservation-card
+            class="reservation-card"
+            [data]="data"
+          ></hospitality-bot-reservation-card>
+        </ng-container>
+      </div>
     </ng-template>
 
     <!-- *********************************FOOTER******************************* -->

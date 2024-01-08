@@ -371,7 +371,6 @@ export class BookingInfoComponent implements OnInit {
         this.configData = new BookingConfig().deserialize(
           response.bookingConfig
         );
-        debugger;
         this.mapMarketSegments();
         this.mapSourceOptions();
         this.reservationInfoControls.source.value === 'OTA' &&

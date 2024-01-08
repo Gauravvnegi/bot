@@ -14,6 +14,10 @@ import {
   deliveryReservationStatusDetails,
   reservationTypes,
 } from '../../constants/data-table';
+import {
+  OutletReservationList,
+  OutletReservation,
+} from '../../models/outlet-reservation.model';
 
 @Component({
   selector: 'hospitality-bot-outlets-data-table',
@@ -30,6 +34,7 @@ export class OutletsDataTableComponent extends BaseDatatableComponent
   $subscription = new Subscription();
   reservationTypes = [reservationTypes.dineIn, reservationTypes.delivery];
   selectedReservationType: string;
+  outletTableData: OutletReservation[];
 
   constructor(
     public fb: FormBuilder,
@@ -55,9 +60,9 @@ export class OutletsDataTableComponent extends BaseDatatableComponent
   }
 
   loadData(event: LazyLoadEvent): void {
-    this.selectedReservationType === 'dinein' && this.initDineInReservation();
-    this.selectedReservationType === 'delivery' &&
-      this.initDeliveryReservation();
+    // this.selectedReservationType === 'dinein' && this.initDineInReservation();
+    // this.selectedReservationType === 'delivery' &&
+    //   this.initDeliveryReservation();
   }
 
   initDeliveryReservation() {
@@ -66,7 +71,9 @@ export class OutletsDataTableComponent extends BaseDatatableComponent
         .getDeliveryReservations(this.entityId)
         .subscribe((res) => {
           if (res) {
-            this.values = res.records;
+            const data = new OutletReservationList().deserialize(res);
+            this.values = data.reservationData;
+            this.outletTableData = data.reservationData;
             this.initFilters(
               res.entityTypeCounts,
               res.entityStateCounts,
@@ -84,7 +91,9 @@ export class OutletsDataTableComponent extends BaseDatatableComponent
         .getDineInReservations(this.entityId)
         .subscribe((res) => {
           if (res) {
-            this.values = res.records;
+            const data = new OutletReservationList().deserialize(res);
+            this.values = data.reservationData;
+            this.outletTableData = data.reservationData;
             this.initFilters(
               res.entityTypeCounts,
               res.entityStateCounts,

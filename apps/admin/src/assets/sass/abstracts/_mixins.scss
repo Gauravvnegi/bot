@@ -219,7 +219,7 @@
 @mixin normal-vsm-text {
   font-size: 14px;
   font-weight: $bold;
-  letter-spacing: 0.96px;
+  letter-spacing: 0.72px;
 }
 
 @mixin normal-md-text {
@@ -234,6 +234,12 @@
   letter-spacing: 0.96px;
 }
 
+@mixin bold-vsm-text {
+  font-size: 14px;
+  font-weight: $bold;
+  letter-spacing: 0.72px;
+}
+
 @mixin light-sm-text {
   font-size: 16px;
   font-weight: $medium;
@@ -243,7 +249,7 @@
 @mixin light-vsm-text {
   font-size: 14px;
   font-weight: $medium;
-  letter-spacing: 0.96px;
+  letter-spacing: 0.72px;
 }
 
 @mixin light-md-text {

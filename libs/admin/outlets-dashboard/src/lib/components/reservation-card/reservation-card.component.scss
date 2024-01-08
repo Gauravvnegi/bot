@@ -1,24 +1,58 @@
 @import 'main';
 
 .wrapper {
-  .header {
+  padding: 10px;
+  @include flex-col;
+  gap: 10px;
+}
 
-    .filter-icon {
-
+.header-wrapper {
+  .heading {
+    @include bold-lg-text;
+  }
+  @include flex-space-between;
+  .heading-info {
+    @include light-vsm-text;
+    color: $grayMedium;
+    @include flex-item-center;
+    gap: 10px;
+    .adult-icon {
+      @include flex-item-center;
     }
   }
 }
 
-.order-info {
-
+.adult-svg {
+  height: 20px;
+  width: 20px;
 }
 
-.price {
+.content {
+  @include flex-space-between;
+  .order-info {
+    @include bold-vsm-text;
+    display: flex;
+    color: $grayMedium;
+    gap: 10px;
+    // .name {
+    // }
+    // .order-number {
+    // }
+  }
+}
 
+.pricing {
+  @include flex-space-between-cen-Algn;
+  .status {
+    @include light-vsm-text;
+    background-color: #dcf6d3;
+    padding: 5px;
+  }
 }
 
 .footer {
-    .journey{
+  @include flex-space-between;
 
-    }
+  //   .journey {
+  //   }
 }

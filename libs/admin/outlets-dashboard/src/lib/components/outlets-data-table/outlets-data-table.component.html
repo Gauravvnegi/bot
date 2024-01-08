@@ -89,15 +89,10 @@
       let-columns="columns"
       let-rowIndex="rowIndex"
     >
-      <div class="reservation-card-wrapper">
-        <!-- <p>{{ data | json }}</p> -->
-        <ng-container *ngFor="let data of outletTableData">
-          <hospitality-bot-reservation-card
-            class="reservation-card"
-            [data]="data"
-          ></hospitality-bot-reservation-card>
-        </ng-container>
-      </div>
+        <hospitality-bot-reservation-card
+          class="reservation-card"
+          [data]="rowData"
+        ></hospitality-bot-reservation-card>
     </ng-template>
 
     <!-- *********************************FOOTER******************************* -->

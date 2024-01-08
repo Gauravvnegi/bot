@@ -321,7 +321,6 @@ export class FilterComponent implements OnChanges, OnInit {
     this.selectedTabIndex = event.index;
     this.selectedTab = this.tabFilterItems[this.selectedTabIndex]
       .value as FilterTabs;
-    // debugger;
   }
 
   get propertyFG() {

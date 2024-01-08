@@ -19,10 +19,13 @@ import {
 } from '@hospitality-bot/admin/shared';
 import { HotelDetailService } from 'libs/admin/shared/src/lib/services/hotel-detail.service';
 import { ModalService, SnackBarService } from 'libs/shared/material/src';
-import { UserConfig } from '../../../../../shared/src/lib/models/userConfig.model';
+import {
+  PermissionOption,
+  UserConfig,
+} from '../../../../../shared/src/lib/models/userConfig.model';
 import { managePermissionRoutes, navRoute } from '../../constants/routes';
 import { ManagePermissionService } from '../../services/manage-permission.service';
-import { PageState, Permission, PermissionMod, UserForm } from '../../types';
+import { PageState, PermissionMod, UserForm } from '../../types';
 import { UserPermissionDatatableComponent } from '../user-permission-datatable/user-permission-datatable.component';
 import { UserPermissionTable } from '../../models/user-permission-table.model';
 import {
@@ -39,7 +42,6 @@ import {
 export class UserProfileComponent implements OnInit {
   loggedInUserId: string;
 
-  departments: Option[];
   products: Option[];
   brandNames: Option[];
   branchNames: Option[];
@@ -68,8 +70,8 @@ export class UserProfileComponent implements OnInit {
 
   @Output() optionChange = new EventEmitter();
 
-  adminPermissions: Permission[];
-  userPermissions: Permission[];
+  adminPermissions: PermissionOption[];
+  userPermissions: PermissionOption[];
 
   pageTitle: string;
   navRoutes: NavRouteOptions = [];
@@ -140,16 +142,6 @@ export class UserProfileComponent implements OnInit {
           this.adminToModDetails = new UserConfig().deserialize(data);
           this.products = this.adminToModDetails.products;
 
-          /**
-           * Department flow is commented as no clarity of now - TO DO
-           */
-          // this.departments = this.adminToModDetails.departments;
-          this.departments = this.adminToModDetails.departments.map((item) => ({
-            ...item,
-            label: item.departmentLabel,
-            value: item.department,
-          }));
-
           const { permissionConfigs } = this._userService.userDetails;
           this.adminPermissions = permissionConfigs;
           this.initStateSubscription();
@@ -184,12 +176,7 @@ export class UserProfileComponent implements OnInit {
   }
 
   initFormValues() {
-    const {
-      departments,
-      products,
-      branchName,
-      ...rest
-    } = this.userToModDetails;
+    const { products, branchName, ...rest } = this.userToModDetails;
 
     this.userForm.patchValue({
       ...rest,
@@ -198,7 +185,7 @@ export class UserProfileComponent implements OnInit {
         this.userToModDetails?.phoneNumber.length
       ),
       products: products.map((item) => item.value),
-      departments: departments.map((item) => item.department),
+
       // branchName: branchName.map((item) => item.value),
       branchName: branchName,
     });
@@ -404,7 +391,7 @@ export class UserProfileComponent implements OnInit {
       });
   }
 
-  constructPermission(config: Permission) {
+  constructPermission(config: PermissionOption) {
     const view = config.permissions.view;
     const manage = config.permissions.manage;
     const disabledPermissions = [
@@ -555,11 +542,13 @@ export class UserProfileComponent implements OnInit {
       return;
     }
     const formValue = this.userForm.getRawValue();
-    const permissionConfigs: Permission[] = [];
+    console.log(formValue, 'formValue');
+
+    const permissionConfigs: PermissionOption[] = [];
 
     formValue.permissionConfigs.forEach((config: PermissionMod) => {
       const { permissions, ...rest } = config;
-      const permission: Permission = {
+      const permission: PermissionOption = {
         ...rest,
         permissions: {
           view: permissions.disabledPermissions.view
@@ -579,8 +568,11 @@ export class UserProfileComponent implements OnInit {
     });
 
     const data = this._managePermissionService.modifyPermissionDetailsForEdit(
-      { ...formValue, permissionConfigs },
-      this.departments.map(({ label, value, ...rest }) => ({ ...rest }))
+      {
+        ...formValue,
+        permissionConfigs,
+      },
+      this.adminToModDetails
     );
 
     const userProfileData = this._managePermissionService.modifyUserDetailsForEdit(

@@ -1,11 +1,6 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { MatDialogConfig } from '@angular/material/dialog';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
-import { AdminUtilityService } from '@hospitality-bot/admin/shared';
-import {
-  ModalService,
-  SnackBarService,
-} from '@hospitality-bot/shared/material';
+import { AdminUtilityService, openModal } from '@hospitality-bot/admin/shared';
 import { TranslateService } from '@ngx-translate/core';
 import { BaseChartDirective } from 'ng2-charts';
 import { Subscription } from 'rxjs';
@@ -14,6 +9,8 @@ import { guest } from '../../../constants/guest';
 import { Document } from '../../../data-models/statistics.model';
 import { StatisticsService } from '../../../services/statistics.service';
 import { GuestDatatableModalComponent } from '../../modal/guest-datatable/guest-datatable.component';
+import { DialogService } from 'primeng/dynamicdialog';
+import { GuestDialogData } from '../../../types/guest.type';
 
 @Component({
   selector: 'hospitality-bot-guest-documents-statistics',
@@ -45,9 +42,8 @@ export class GuestDocumentsStatisticsComponent implements OnInit, OnDestroy {
     private _adminUtilityService: AdminUtilityService,
     private _statisticService: StatisticsService,
     private globalFilterService: GlobalFilterService,
-    private _modal: ModalService,
-    private snackbarService: SnackBarService,
-    private _translateService: TranslateService
+    private _translateService: TranslateService,
+    public dialogService: DialogService
   ) {}
 
   ngOnInit(): void {
@@ -117,30 +113,47 @@ export class GuestDocumentsStatisticsComponent implements OnInit, OnDestroy {
     }
   }
 
+  // TODO : Need to remove
+  // openTableModal() {
+  //   const dialogConfig = new MatDialogConfig();
+  //   dialogConfig.disableClose = true;
+  //   dialogConfig.width = '100%';
+  //   const tableCompRef = this._modal.openDialog(
+  //     GuestDatatableModalComponent,
+  //     dialogConfig
+  //   );
+
+  //   this._translateService
+  //     .get('document.title')
+  //     .subscribe(
+  //       (message) => (tableCompRef.componentInstance.tableName = message)
+  //     );
+  //   tableCompRef.componentInstance.tabFilterItems = this.tabFilterItems;
+  //   tableCompRef.componentInstance.callingMethod = 'getAllGuestStats';
+  //   tableCompRef.componentInstance.guestFilter = 'GUESTDOCUMENTS';
+  //   tableCompRef.componentInstance.exportURL = 'exportCSVStat';
+
+  //   tableCompRef.componentInstance.onModalClose.subscribe((res) => {
+  //     tableCompRef.close();
+  //   });
+  // }
+
   /**
    * @function openTableModal To open modal pop-up for guest table based on document status filter.
    */
   openTableModal() {
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.disableClose = true;
-    dialogConfig.width = '100%';
-    const tableCompRef = this._modal.openDialog(
-      GuestDatatableModalComponent,
-      dialogConfig
-    );
+    const data: GuestDialogData = {
+      tabFilterItems: this.tabFilterItems,
+      callingMethod: 'getGuestDocsOrPaymentStats',
+      entityType: 'GUESTDOCUMENTS',
+      exportURL: 'exportDocsCSV',
+      modalType: 'document.title',
+    };
 
-    this._translateService
-      .get('document.title')
-      .subscribe(
-        (message) => (tableCompRef.componentInstance.tableName = message)
-      );
-    tableCompRef.componentInstance.tabFilterItems = this.tabFilterItems;
-    tableCompRef.componentInstance.callingMethod = 'getAllGuestStats';
-    tableCompRef.componentInstance.guestFilter = 'GUESTDOCUMENTS';
-    tableCompRef.componentInstance.exportURL = 'exportCSVStat';
-    
-    tableCompRef.componentInstance.onModalClose.subscribe((res) => {
-      tableCompRef.close();
+    openModal({
+      config: { data: data },
+      dialogService: this.dialogService,
+      component: GuestDatatableModalComponent,
     });
   }
 

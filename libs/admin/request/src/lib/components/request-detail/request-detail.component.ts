@@ -37,6 +37,7 @@ export class RequestDetailComponent implements OnInit, OnDestroy {
   closedTimestamp: number;
   formattedClosedTimestamp: string;
   jobId: string;
+  isAssigneeLoading: boolean = false;
 
   alreadyAssignedName: Option[] = [];
 
@@ -58,9 +59,9 @@ export class RequestDetailComponent implements OnInit, OnDestroy {
   }
 
   get allAssigneeList() {
-    return this.data.assigneeName
-      ? this.alreadyAssignedName
-      : this.assigneeList;
+    return this.data.assigneeId && this.data.isFocused
+      ? this.assigneeList
+      : this.alreadyAssignedName;
   }
 
   registerListeners() {
@@ -114,9 +115,10 @@ export class RequestDetailComponent implements OnInit, OnDestroy {
 
           this.requestFG.patchValue({
             status: response.action,
-            assignee: response.assigneeId
-              ? response.assigneeId
-              : response.assigneeName,
+            assignee:
+              this.data.assigneeId && this.data.isFocused
+                ? response.assigneeId
+                : response.assigneeName,
           });
 
           this._requestService.selectedRequestStatus.next({
@@ -155,12 +157,11 @@ export class RequestDetailComponent implements OnInit, OnDestroy {
       value: this.data.action,
     } as Option);
   }
-
   getAssigneeList(itemId) {
+    this.isAssigneeLoading = true;
     this.$subscription.add(
-      this._requestService
-        .getItemDetails(this.entityId, itemId)
-        .subscribe((response) => {
+      this._requestService.getItemDetails(this.entityId, itemId).subscribe(
+        (response) => {
           this.assigneeList =
             response?.requestItemUsers?.map((item) => {
               return {
@@ -168,7 +169,12 @@ export class RequestDetailComponent implements OnInit, OnDestroy {
                 value: item.userId,
               };
             }) ?? [];
-        })
+          this.isAssigneeLoading = false;
+        },
+        (error) => {
+          this.isAssigneeLoading = false;
+        }
+      )
     );
   }
 

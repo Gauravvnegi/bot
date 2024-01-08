@@ -343,28 +343,33 @@ export class UserSubscriptionPermission {
   productPermission: ProductNames[];
   permission: Partial<
     Record<PermissionModuleNames, { canView: boolean; canManage: boolean }>
-  >;
+  > = {};
 
   deserialize(input: UserResponse) {
-    this.productPermission = [
-      ...new Map(
-        input.departments
-          .map(({ productType }) => productType)
-          .map((item) => [item, item])
-      ).values(),
-    ] as ProductNames[];
+    this.productPermission = new Array<ProductNames>();
+    input['products'].forEach((productItem) => {
+      this.productPermission.push(productItem.module);
 
-    this.permission = input.permissions.reduce((value, current) => {
-      value = {
-        ...value,
-        [current.module]: {
-          canView: current.permissions.view === 1,
-          canManage: current.permissions.manage === 1,
+      const newPermission = productItem.productPermissions.reduce(
+        (value, current) => {
+          value = {
+            ...value,
+            [current.module]: {
+              canView: current.permissions.view === 1,
+              canManage: current.permissions.manage === 1,
+            },
+          };
+
+          return value;
         },
-      };
+        {}
+      );
 
-      return value;
-    }, {});
+      this.permission = {
+        ...this.permission,
+        ...newPermission,
+      };
+    });
 
     return this;
   }

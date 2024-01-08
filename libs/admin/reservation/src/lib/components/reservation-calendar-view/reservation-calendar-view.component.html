@@ -141,12 +141,18 @@
                     >
                       <div class="main-text">
                         {{
-                          getAvailability(dateIndex, 'quantity', roomType.value)
+                          getAvailability(
+                            date,
+                            dateIndex,
+                            'available',
+                            roomType.value
+                          )
                         }}
                       </div>
                       <div class="seconday-text">
                         {{
                           getAvailability(
+                            date,
                             dateIndex,
                             'occupancy',
                             roomType.value
@@ -187,7 +193,7 @@
     *ngIf="viewReservationForm"
     [visible]="viewReservationForm"
     (onHide)="viewReservationForm = false"
-    class="sidebar"
+    class="reservation-sidebar"
     [showCloseIcon]="false"
     position="right"
   >

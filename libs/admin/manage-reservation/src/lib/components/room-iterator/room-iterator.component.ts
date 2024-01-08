@@ -23,10 +23,11 @@ import {
   AdminUtilityService,
   EntitySubType,
   QueryConfig,
+  openModal,
 } from 'libs/admin/shared/src';
 import { IteratorComponent } from 'libs/admin/shared/src/lib/components/iterator/iterator.component';
 import { Subscription } from 'rxjs';
-import { roomFields, RoomFieldTypeOption } from '../../constants/reservation';
+import { roomFields, RoomTypeOption } from '../../constants/reservation';
 import { ReservationForm, RoomTypes } from '../../constants/form';
 import { IteratorField } from 'libs/admin/shared/src/lib/types/fields.type';
 import { FormService } from '../../services/form.service';
@@ -34,6 +35,11 @@ import { RoomTypeResponse } from 'libs/admin/room/src/lib/types/service-response
 import { ReservationType } from '../../constants/reservation-table';
 import { RoomService } from 'libs/admin/room/src/lib/services/room.service';
 import { ReservationCurrentStatus } from '../../models/reservations.model';
+import {
+  RoomUpgradeClose,
+  UpgradeRoomTypeComponent,
+} from '../upgrade-room-type/upgrade-room-type.component';
+import { DialogService } from 'primeng/dynamicdialog';
 
 @Component({
   selector: 'hospitality-bot-room-iterator',
@@ -63,7 +69,7 @@ export class RoomIteratorComponent extends IteratorComponent
   globalQueries = [];
   errorMessages = {};
 
-  selectedRoomTypes: RoomFieldTypeOption[] = [];
+  selectedRoomTypes: RoomTypeOption[] = [];
 
   $subscription = new Subscription();
 
@@ -78,7 +84,6 @@ export class RoomIteratorComponent extends IteratorComponent
   isCheckedIn = false;
   isCheckedout = false;
   isRouteData = false;
-  openDialog = false;
 
   @ViewChild('main') main: ElementRef;
 
@@ -88,7 +93,8 @@ export class RoomIteratorComponent extends IteratorComponent
     private controlContainer: ControlContainer,
     public formService: FormService,
     private roomService: RoomService,
-    private adminUtilityService: AdminUtilityService
+    private adminUtilityService: AdminUtilityService,
+    public dialogService: DialogService
   ) {
     super(fb);
   }
@@ -135,11 +141,12 @@ export class RoomIteratorComponent extends IteratorComponent
       this.globalQueries = [...data['dateRange'].queryValue];
     });
     this.formService.currentJourneyStatus.subscribe((res) => {
-      this.isCheckedIn =
-        res &&
-        (res === ReservationCurrentStatus.INHOUSE ||
-          res === ReservationCurrentStatus.DUEOUT);
-      this.isCheckedout = res && res === ReservationCurrentStatus.CHECKEDOUT;
+      if (res) {
+        this.isCheckedIn =
+          res === ReservationCurrentStatus.INHOUSE ||
+          res === ReservationCurrentStatus.DUEOUT;
+        this.isCheckedout = res === ReservationCurrentStatus.CHECKEDOUT;
+      }
     });
   }
 
@@ -149,14 +156,14 @@ export class RoomIteratorComponent extends IteratorComponent
   createNewFields(initialField = false): void {
     const data = {
       roomTypeId: ['', [Validators.required]],
-      ratePlan: [''],
+      ratePlanId: [''],
       roomCount: ['', [Validators.required, Validators.min(1)]],
       roomNumber: [''],
       roomNumbers: [[]],
       adultCount: ['', [Validators.required, Validators.min(1)]],
       childCount: ['', [Validators.min(0)]],
-      ratePlanOptions: [[]],
-      roomNumberOptions: [[]],
+      ratePlans: [[]],
+      rooms: [[]],
       id: [''],
     };
 
@@ -244,14 +251,13 @@ export class RoomIteratorComponent extends IteratorComponent
           roomCount: value.roomCount,
           childCount: value.childCount,
           adultCount: value.adultCount,
-          ratePlan: value.ratePlans?.value ?? value.ratePlan,
+          ratePlanId: value.ratePlans?.value ?? value.ratePlanId,
           roomNumbers: value?.roomNumbers,
           roomNumber: value?.roomNumber,
           id: value?.id,
         },
         { emitEvent: false }
       );
-
       // Init rooms data
       this.initItems = true;
     });
@@ -278,27 +284,23 @@ export class RoomIteratorComponent extends IteratorComponent
    * @param index to keep track of the form array.
    */
   listenRoomTypeChanges(
-    roomType: RoomFieldTypeOption,
+    roomType: RoomTypeOption,
     index: number,
     defaultOption: boolean
   ) {
     if (roomType) {
       this.selectedRoomTypes[index] = defaultOption ? null : roomType;
-      const ratePlanOptions = roomType.ratePlans.map((item) => ({
-        label: item.label,
-        value: item.value,
-        sellingprice: item.sellingPrice,
-        isBase: item.isBase,
-      }));
+      const ratePlanOptions = roomType.ratePlans;
       // Patch the selected room number if available.
       this.roomControls[index].patchValue(
         {
-          ratePlanOptions: ratePlanOptions,
-          roomNumberOptions:
-            this.selectedRoomNumber?.length &&
-            !roomType.rooms.some(
-              (room) => room?.value === this.selectedRoomNumber
-            )
+          ratePlans: ratePlanOptions,
+          rooms:
+            (this.selectedRoomNumber?.length &&
+              !roomType.rooms.some(
+                (room) => room?.value === this.selectedRoomNumber
+              )) ||
+            this.updatedRoomsLoaded
               ? [
                   {
                     label: this.selectedRoomNumber,
@@ -313,7 +315,9 @@ export class RoomIteratorComponent extends IteratorComponent
       if (
         !this.isCheckedIn &&
         !this.isCheckedout &&
-        (this.isDataInitialized || (!this.reservationId && !this.isRouteData))
+        (this.isDataInitialized ||
+          (!this.reservationId && !this.isRouteData)) &&
+        (!this.updatedRoomsLoaded || !this.isConfirmedBooking)
       ) {
         this.roomControls[index].get('roomNumbers').reset();
         this.roomControls[index].get('roomNumber').reset();
@@ -322,7 +326,7 @@ export class RoomIteratorComponent extends IteratorComponent
           ?.value;
         this.roomControls[index].patchValue(
           {
-            ratePlan: defaultPlan ? defaultPlan : ratePlanOptions[0].value,
+            ratePlanId: defaultPlan ? defaultPlan : ratePlanOptions[0].value,
             adultCount: 1,
             roomCount: this.roomControls[index].get('roomNumbers')?.value
               ?.length
@@ -418,6 +422,39 @@ export class RoomIteratorComponent extends IteratorComponent
       return;
     }
     this.roomTypeArray.removeAt(index);
+  }
+
+  upgradeRoomType() {
+    const ref = openModal({
+      config: {
+        width: '60vw',
+        header: 'Room Upgrade',
+        styleClass: 'header-dialog',
+        data: {
+          entityId: this.entityId,
+          reservationId: this.reservationId,
+          effectiveDate: this.isCheckedIn
+            ? this.reservationInfoControls.from.value
+            : Date.now(),
+          toDate: this.reservationInfoControls.to.value,
+        },
+      },
+      component: UpgradeRoomTypeComponent,
+      dialogService: this.dialogService,
+    });
+    ref.onClose.subscribe((res) => res && this.onCloseRoomUpgrade(res));
+  }
+
+  onCloseRoomUpgrade(upgradedRoom: RoomUpgradeClose) {
+    if (upgradedRoom) {
+      // this.roomControls[0].patchValue({
+      //   roomTypeId: upgradedRoom.roomTypeId,
+      //   roomNumber: upgradedRoom.roomNumber,
+      //   ratePlanId: upgradedRoom.ratePlanId,
+      //   rooms: upgradedRoom.rooms,
+      //   ratePlans: upgradedRoom.ratePlans,
+      // });
+    }
   }
 
   /**

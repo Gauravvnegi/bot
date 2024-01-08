@@ -16,17 +16,17 @@ import { ChannelManagerFormService } from '../../services/channel-manager-form.s
 import {
   CheckBoxTreeFactory,
   RoomTypes,
-} from '../../models/bulk-update.models';
+} from 'libs/admin/channel-manager/src/lib/models/bulk-update.models';
 import {
   GlobalFilterService,
   RoutesConfigService,
 } from '@hospitality-bot/admin/core/theme';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { Subscription } from 'rxjs';
-import { UpdateInventory } from '../../models/channel-manager.model';
+import { UpdateInventory } from 'libs/admin/channel-manager/src/lib/models/channel-manager.model';
 import { ChannelManagerService } from '../../services/channel-manager.service';
 import { Router } from '@angular/router';
-import { inventoryRestrictions } from '../../constants/data';
+import { inventoryRestrictions } from 'libs/admin/channel-manager/src/lib/constants/data';
 
 @Component({
   selector: 'hospitality-bot-inventory-bulk-update',

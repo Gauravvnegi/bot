@@ -1,1 +1,20 @@
 <admin-layout-one></admin-layout-one>
+<!--Guest Reservation Details Sidebar -->
+<div class="detail-sidebar">
+  <p-sidebar
+    [dismissible]="true"
+    [visible]="openGuestReservationDetails"
+    (onHide)="openGuestReservationDetails = false"
+    [showCloseIcon]="false"
+    position="right"
+  >
+    <hospitality-bot-details
+      *ngIf="openGuestReservationDetails"
+      [bookingId]="bookingDetailService.bookingId"
+      [bookingNumber]="bookingDetailService.bookingNumber"
+      [guestId]="bookingDetailService.guestId"
+      [tabKey]="bookingDetailService.tabKey"
+      (onDetailsClose)="closeBookingSidebar()"
+    ></hospitality-bot-details>
+  </p-sidebar>
+</div>

@@ -1,4 +1,4 @@
-import { RoomFieldTypeOption } from 'libs/admin/manage-reservation/src/lib/constants/reservation';
+import { RoomTypeOption } from 'libs/admin/manage-reservation/src/lib/constants/reservation';
 import {
   AddedRatePlans,
   DynamicPricingRatePlan,

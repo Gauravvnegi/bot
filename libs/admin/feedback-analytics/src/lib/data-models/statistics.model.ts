@@ -469,7 +469,7 @@ export const SharedColors = {
   LUNCH: '#f18533',
   BREAKFAST: '#4974e0',
   DINNER: '#3db76b',
-  INPROGRESS: '#4ba0f5',
+  IN_PROGRESS: '#4ba0f5',
   RESOLVED: '#31bb92',
   OPEN: '#4ba0f5',
   CLOSED: '#ff6804',

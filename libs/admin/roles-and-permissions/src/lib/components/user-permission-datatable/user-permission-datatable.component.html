@@ -93,17 +93,27 @@
           <td>
             <div class="cell-content">
               <div class="primary-text">{{ rowData.getFullName() }}</div>
-              <div class="secondary-text">
-                <p>{{ rowData.getContactDetails() }}</p>
-                <p>{{ rowData.email }}</p>
-              </div>
             </div>
           </td>
           <td>
             <div class="cell-content">
-              <div class="primary-text">
-                {{ rowData.getDepartments() }}
+              <div class="primary-text" *ngIf="rowData?.getContactDetails()">
+                <a
+                  (click)="$event.stopPropagation()"
+                  class="link"
+                  href="tel:{{ rowData.getContactDetails() }}"
+                >
+                  <u> {{ rowData.getContactDetails() }}</u>
+                </a>
               </div>
+              <span class="primary-text" *ngIf="rowData.email; else emptyCell">
+                <a
+                  (click)="$event.stopPropagation()"
+                  href="mailto:{{ rowData.email }}"
+                >
+                  {{ rowData.email }}
+                </a>
+              </span>
             </div>
           </td>
           <td>

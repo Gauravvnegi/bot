@@ -1,4 +1,4 @@
-<div class="wrapper">
+<div class="wrapper" [id]="fa.referenceId">
   <hospitality-bot-navigation-header [heading]="pageTitle" [routes]="navRoutes">
     <ng-container *ngIf="isInitialized">
       <div class="btn-wrapper">
@@ -233,14 +233,7 @@
                         .value
                     "
                     [index]="rowIndex"
-                    [disabled]="
-                      tableFormArray.at(rowIndex).get('isDisabled').value ||
-                      tableFormArray.at(rowIndex).get('isDiscount').value ||
-                      tableFormArray.at(rowIndex).get('taxId').value ||
-                      tableFormArray.at(rowIndex).get('isRefund').value ||
-                      (tableFormArray.at(rowIndex).get('creditAmount').value &&
-                        !tableFormArray.at(rowIndex).get('isDiscount').value)
-                    "
+                    [disabled]="isValueDisabled(rowIndex, 'checkbox')"
                   ></p-tableCheckbox>
                 </td>
 
@@ -256,7 +249,13 @@
                   ></hospitality-bot-date>
                 </td>
                 <td>
+                  <hospitality-bot-input
+                    *ngIf="isInvoiceDisabled"
+                    class="bill-description"
+                    controlName="description"
+                  ></hospitality-bot-input>
                   <hospitality-bot-select
+                    *ngIf="!isInvoiceDisabled"
                     class="bill-description"
                     controlName="billItemId"
                     [controlIndex]="rowIndex"
@@ -277,13 +276,7 @@
                     (onSearch)="searchDescription($event)"
                     [stopEmission]="noMoreDescription"
                     (onCreate)="createService($event)"
-                    [disabled]="
-                      tableFormArray.at(rowIndex).get('isDisabled').value ||
-                      tableFormArray.at(rowIndex).get('isDiscount').value ||
-                      !tableFormArray.at(rowIndex).get('isNew').value ||
-                      tableFormArray.at(rowIndex).get('isNonEditableBillItem')
-                        .value
-                    "
+                    [disabled]="isValueDisabled(rowIndex, 'description')"
                     (onFocus)="handleFocus(rowIndex)"
                     (onBlur)="handleBlur()"
                   ></hospitality-bot-select>
@@ -307,14 +300,7 @@
                     [settings]="{
                       min: 1
                     }"
-                    [disabled]="
-                      tableFormArray.at(rowIndex).get('isDisabled').value ||
-                      tableFormArray.at(rowIndex).get('isDiscount').value ||
-                      tableFormArray.at(rowIndex).get('isNonEditableBillItem')
-                        .value ||
-                      !tableFormArray.at(rowIndex).get('billItemId').value ||
-                      isInvoiceDisabled
-                    "
+                    [disabled]="isValueDisabled(rowIndex, 'input')"
                   ></hospitality-bot-input-number>
                 </td>
 
@@ -340,20 +326,7 @@
                     alignment="horizontal"
                     (onClickItem)="handleMenuAction($event, rowIndex)"
                     [menuItems]="getMenu(rowIndex)"
-                    [disabled]="
-                      tableFormArray.at(rowIndex).get('isRefund').value ||
-                      (tableFormArray.at(rowIndex).get('transactionType')
-                        .value === 'CREDIT' &&
-                        !tableFormArray.at(rowIndex).get('isDiscount').value) ||
-                      isInvoiceDisabled ||
-                      (!tableFormArray.at(rowIndex).get('itemId').value &&
-                        !tableFormArray.at(rowIndex).get('isNew').value) ||
-                      tableFormArray.at(rowIndex).get('taxId').value ||
-                      (tableFormArray.at(rowIndex).get('isNonEditableBillItem')
-                        .value &&
-                        !tableFormArray.at(rowIndex).get('isMiscellaneous')
-                          .value)
-                    "
+                    [disabled]="isValueDisabled(rowIndex, 'menu')"
                   ></hospitality-bot-menu>
                 </td>
               </tr>
@@ -382,39 +355,52 @@
           <div class="py-row" *ngIf="inputControl.totalAmount.value">
             <span>Total Charges</span>
             <span>
-              INR {{ inputControl.totalAmount.value | number: '1.2-2' }}</span
+              {{
+                inputControl.totalAmount.value
+                  | number: '1.2-2'
+                  | currency: 'INR'
+              }}</span
             >
           </div>
           <div class="py-row" *ngIf="inputControl.discountedAmount.value">
             <span>Total Discount</span>
             <span>
-              <span
-                >INR
-                {{ inputControl.discountedAmount.value | number: '1.2-2' }}
+              <span>
+                {{
+                  inputControl.discountedAmount.value
+                    | number: '1.2-2'
+                    | currency: 'INR'
+                }}
               </span>
             </span>
           </div>
           <div class="py-row invert" *ngIf="inputControl.netAmount.value">
             <span>Total Payable</span>
             <span>
-              INR {{ inputControl.netAmount.value | number: '1.2-2' }}</span
+              {{
+                inputControl.netAmount.value | number: '1.2-2' | currency: 'INR'
+              }}</span
             >
           </div>
           <div class="py-row" *ngIf="inputControl.paidAmount.value">
             <span>Total Paid Amount</span>
             <span>
-              <span
-                >INR
-                {{ inputControl.paidAmount.value | number: '1.2-2' }}
+              <span>
+                {{
+                  inputControl.paidAmount.value
+                    | number: '1.2-2'
+                    | currency: 'INR'
+                }}
               </span>
             </span>
           </div>
           <div class="py-row" *ngIf="inputControl.refund.value">
             <span>Total Refund</span>
             <span>
-              <span
-                >INR
-                {{ inputControl.refund.value | number: '1.2-2' }}
+              <span>
+                {{
+                  inputControl.refund.value | number: '1.2-2' | currency: 'INR'
+                }}
               </span>
             </span>
           </div>
@@ -424,8 +410,14 @@
               [ngStyle]="{
                 color: inputControl.dueAmount.value < 0 ? 'red' : 'inherit'
               }"
-              >INR
-              <span>{{ inputControl.dueAmount.value | number: '1.2-2' }} </span>
+            >
+              <span
+                >{{
+                  inputControl.dueAmount.value
+                    | number: '1.2-2'
+                    | currency: 'INR'
+                }}
+              </span>
             </span>
           </div>
         </div>

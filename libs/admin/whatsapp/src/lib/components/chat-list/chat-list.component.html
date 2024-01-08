@@ -1,4 +1,5 @@
 <div
+  #lt
   class="chatlist-wrapper"
   [ngStyle]="
     !showFilter
@@ -32,26 +33,29 @@
         [ngStyle]="
           selected && selected.receiverId === contact.receiverId
             ? {
-                'pointer-events': 'none',
                 background: '#f1f1f1'
               }
             : {}
         "
         *ngFor="let contact of chatList?.contacts"
         (click)="onChatSelect(contact)"
+        (contextmenu)="handelContextMenu(contact)"
       >
         <hospitality-bot-chat-card
           [ngStyle]="{ width: '100%' }"
           [content]="{
+            id: contact?.receiverId,
             cardType: 'message',
             roomNo: contact.roomNo,
             userImg: contact.profileUrl,
             name: contact.name || contact.phone,
             remark: contact.descriptionMessage,
-            time: contact.getTime(globalFilterService.timezone),
+            time: contact?.getTime(globalFilterService?.timezone),
             unReadCount: contact?.unreadCount,
-            profileNickName: contact.getProfileNickName(),
-            backgroundColor: contact.color
+            profileNickName: contact?.getProfileNickName(),
+            backgroundColor: contact.color,
+            muted: contact?.mute,
+            important: contact?.important
           }"
         ></hospitality-bot-chat-card>
       </div>
@@ -85,3 +89,19 @@
     (filterClosed)="showFilter = false"
   ></hospitality-bot-contact-sort-filter>
 </div>
+
+<p-contextMenu
+  #menu
+  [target]="lt"
+  [model]="contextOptions"
+  appendTo="body"
+></p-contextMenu>
+
+<p-dialog
+  class="dialog"
+  [showHeader]="false"
+  [(visible)]="isMutePopUpVisible"
+  [modal]="true"
+>
+  <ng-container  #dailog></ng-container>
+</p-dialog>

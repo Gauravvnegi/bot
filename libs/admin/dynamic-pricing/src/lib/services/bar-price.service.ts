@@ -8,7 +8,7 @@ import {
 } from 'libs/admin/channel-manager/src/lib/models/bulk-update.models';
 import { QueryConfig } from '@hospitality-bot/admin/shared';
 import { UpdateBarPriceRequest } from '../types/bar-price.types';
-import { AbstractControl, FormGroup } from '@angular/forms';
+import { AbstractControl, FormGroup, Validators } from '@angular/forms';
 
 @Injectable()
 export class BarPriceService extends ApiService {
@@ -61,4 +61,23 @@ export function isDirty(control: AbstractControl): boolean {
   }
 
   return false;
+}
+
+export function markupValidator(form: AbstractControl) {
+  form.get('isMarkup').valueChanges.subscribe((res) => {
+    const discount = form.get('discount');
+    if (res) {
+      discount.setValidators([Validators.min(0), Validators.required]);
+    } else {
+      discount.setValidators([
+        Validators.max(100),
+        Validators.min(0),
+        Validators.required,
+      ]);
+    }
+    discount.updateValueAndValidity();
+    if (discount.value || discount.value === 0) {
+      discount.markAllAsTouched();
+    }
+  });
 }

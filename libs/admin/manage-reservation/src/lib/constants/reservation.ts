@@ -15,7 +15,7 @@ export const roomFields: IteratorField[] = [
   },
   {
     label: 'Rate Plan',
-    name: 'ratePlan',
+    name: 'ratePlanId',
     type: 'select',
     placeholder: 'Enter',
     width: '20%',
@@ -56,7 +56,7 @@ export const roomFields: IteratorField[] = [
   },
 ];
 
-export type RoomFieldTypeOption = {
+export type RoomTypeOption = {
   label: string;
   value: string;
   roomCount: number;

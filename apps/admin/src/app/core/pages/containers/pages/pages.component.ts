@@ -10,6 +10,7 @@ import { tokensConfig } from 'libs/admin/shared/src/lib/constants/common';
 import { HotelDetailService } from 'libs/admin/shared/src/lib/services/hotel-detail.service';
 import { get } from 'lodash';
 import { SubscriptionPlanService } from '../../../theme/src/lib/services/subscription-plan.service';
+import { BookingDetailService } from 'libs/admin/shared/src/lib/services/booking-detail.service';
 
 @Component({
   selector: 'admin-pages',
@@ -17,6 +18,8 @@ import { SubscriptionPlanService } from '../../../theme/src/lib/services/subscri
   styleUrls: ['./pages.component.scss'],
 })
 export class PagesComponent implements OnInit {
+  openGuestReservationDetails = false;
+
   constructor(
     private _userService: UserService,
     private _hotelDetailService: HotelDetailService,
@@ -24,11 +27,13 @@ export class PagesComponent implements OnInit {
     private _subscriptionPlanService: SubscriptionPlanService,
     private _configService: ConfigService,
     private _snackbarService: SnackBarService,
-    private cookiesSettingsService: CookiesSettingsService
+    private cookiesSettingsService: CookiesSettingsService,
+    public bookingDetailService: BookingDetailService
   ) {}
 
   ngOnInit(): void {
     this.initAdminDetails();
+    this.listenBookingSidebar();
   }
 
   /**
@@ -62,5 +67,15 @@ export class PagesComponent implements OnInit {
     this._configService
       .getColorAndIconConfig(entityId)
       .subscribe((response) => this._configService.$config.next(response));
+  }
+
+  listenBookingSidebar() {
+    this.bookingDetailService.actionEvent.subscribe((res) => {
+      this.openGuestReservationDetails = res;
+    });
+  }
+
+  closeBookingSidebar() {
+    this.bookingDetailService.resetBookingState();
   }
 }

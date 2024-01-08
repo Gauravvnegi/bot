@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { AbstractControl, FormArray, FormGroup } from '@angular/forms';
-import { weeks } from 'libs/admin/channel-manager/src/lib/components/constants/bulkupdate-response';
+import { weeks } from 'libs/admin/channel-manager/src/lib/constants/bulkupdate-response';
 import { Revenue } from '../../constants/revenue-manager.const';
 
 @Component({

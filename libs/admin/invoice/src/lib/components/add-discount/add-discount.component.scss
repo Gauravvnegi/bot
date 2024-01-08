@@ -25,17 +25,23 @@
     padding: 10px 20px 20px;
   }
   .amount-wrapper {
-    @include flex-between-center;
-    font-size: 18px;
+    @include flex-col;
+    font-size: 16px;
     font-weight: $bolder;
   }
   .amount-label {
     font-weight: $bolder;
   }
+  .item-info {
+    margin-left: 20px;
+    font-weight: $medium;
+    font-size: 12px;
+    color: $grayMedium;
+  }
   .total-amount {
     @include flex-col;
     font-weight: $bolder;
-    font-size: 18px;
+    font-size: 16px;
     .note {
       font-size: 14px;
       font-weight: $medium;

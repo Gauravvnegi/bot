@@ -61,9 +61,11 @@ export class NotificationComponent implements OnInit, OnDestroy {
   }
 
   listenForNewNotification() {
-    this.firebaseMessagingService
-      .receiveMessage()
-      .subscribe((_) => this.getNotifications());
+    this.$subscription.add(
+      this.firebaseMessagingService.$receivedNewNotification.subscribe((_) =>
+        this.getNotifications()
+      )
+    );
   }
 
   initFG(): void {

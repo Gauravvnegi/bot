@@ -313,13 +313,16 @@ $border-color: rgba(112, 112, 112, 0.35);
 //   background-color: rgba(0, 0, 0, 0) !important;
 // }
 
+// TODO: Do not override common class directly, it will hamper other component.
+// use @function manageMaskZIndex(ZIndex) instead of hardcode
 ::ng-deep .p-component-overlay {
-  z-index: 400 !important;
+  // z-index: 400 !important;
 }
 
-:host ::ng-deep .sidebar {
+:host ::ng-deep .reservation-sidebar {
   .p-sidebar {
     width: 35rem;
+    min-width: unset;
   }
 }
 

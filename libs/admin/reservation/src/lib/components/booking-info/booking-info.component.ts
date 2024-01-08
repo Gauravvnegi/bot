@@ -318,10 +318,12 @@ export class BookingInfoComponent implements OnInit {
         this.updateValueAndValidity(this.sourceNameControl);
         break;
       default:
-        this.setupControl(this.sourceNameControl, [
-          Validators.required,
-          Validators.maxLength(60),
-        ]);
+        const validators =
+          source === 'WALK_IN'
+            ? [Validators.maxLength(60)]
+            : [Validators.required, Validators.maxLength(60)];
+        this.setupControl(this.sourceNameControl, validators);
+        this.sourceNameControl.updateValueAndValidity();
         this.updateValueAndValidity(this.otaSourceControl);
         this.updateValueAndValidity(this.agentSourceControl);
         this.updateValueAndValidity(this.companySourceControl);

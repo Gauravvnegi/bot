@@ -1,36 +1,38 @@
-<div [ngClass]="{ 'details-wrapper': !isFirstTimeFetch }">
+<div [ngClass]="{ 'details-wrapper': !isFirstTimeFetch, details: true }">
   <div class="header">
     <div (click)="closeDetails()" class="close">
       <i class="fa fa-times" aria-hidden="true"></i>
     </div>
-    <div class="name-details" *ngIf="isGuestInfoPatched">
+    <div class="name-details">
       <div class="name-details-wrapper">
         <div class="profile-pic"></div>
         <div class="details">
           <div class="name">
-            <span>{{ guestData.getFullName() }}</span>
-            <div class="vip-image" *ngIf="guestData.vip">
+            <span>{{ guestData?.getFullName() }}</span>
+            <div class="vip-image" *ngIf="guestData?.vip">
               <img src="assets/images/VIP.png" />
             </div>
           </div>
-          <div class="contact-details" *ngIf="isGuestInfoPatched">
+          <div class="contact-details">
             <a
-              href="tel:{{ guestData.countryCode }}{{ guestData.phoneNumber }}"
-              *ngIf="guestData.phoneNumber"
+              href="tel:{{ guestData?.countryCode }}{{
+                guestData?.phoneNumber
+              }}"
+              *ngIf="guestData?.phoneNumber"
               class="call"
             >
-              <mat-icon class="material-icons" matSuffix>call</mat-icon>
-              <u>{{ guestData.countryCode }} {{ guestData.phoneNumber }}</u>
+              <img src="assets/images/white-phone.png" class="material-icons" />
+              <u>{{ guestData?.countryCode }} {{ guestData?.phoneNumber }}</u>
             </a>
           </div>
-          <div class="contact-details" *ngIf="isGuestInfoPatched">
+          <div class="contact-details">
             <a
-              href="mailto:{{ guestData.email }}"
-              *ngIf="guestData.email"
+              href="mailto:{{ guestData?.email }}"
+              *ngIf="guestData?.email"
               class="email"
             >
-              <mat-icon class="material-icons" matSuffix>email</mat-icon>
-              <u>{{ guestData.email }}</u>
+              <img src="assets/images/white-email.png" class="material-icons" />
+              <u>{{ guestData?.email }}</u>
             </a>
           </div>
         </div>
@@ -40,8 +42,8 @@
         <div class="guest_data__field">
           <div class="label">
             {{
-              guestData.guestAttributes.overAllNps !== 0
-                ? guestData.guestAttributes.overAllNps
+              guestData?.guestAttributes?.overAllNps !== 0
+                ? guestData?.guestAttributes?.overAllNps
                 : '-'
             }}/10
           </div>
@@ -55,12 +57,12 @@
         </div> -->
         <div class="guest_data__field">
           <div class="label">
-            {{ guestData.guestAttributes.totalSpend | currency: 'INR' }}
+            {{ guestData?.guestAttributes?.totalSpend | currency: 'INR' }}
           </div>
           <div class="value">Overall Spent</div>
         </div>
         <div class="guest_data__field">
-          <div class="label">{{ bookingCount }}</div>
+          <div class="label">{{ bookingCount ? bookingCount : '' }}</div>
           <div class="value">Bookings</div>
         </div>
       </div>
@@ -72,8 +74,20 @@
       *ngIf="isGuestInfoPatched && guestReservationDropdownList.length"
     >
       <div *ngIf="isGuestReservationFetched" [formGroup]="bookingFG">
-        <mat-select
-          class="past-booking full-text"
+        <hospitality-bot-select
+          class="past-booking"
+          controlName="booking"
+          [options]="guestDropDownList"
+          [props]="{
+            placeholder: 'Select',
+            dropdownIcon: 'pi pi-sort-down'
+          }"
+          (itemSelection)="handleBookingChange($event)"
+        ></hospitality-bot-select>
+
+        <!-- TODO: Need to remove mat -->
+        <!-- <mat-select
+          class="past-booking"
           formControlName="booking"
           (selectionChange)="handleBookingChange($event)"
         >
@@ -82,14 +96,13 @@
             *ngFor="let item of guestReservationDropdownList"
             >{{ item.label | titlecase }} - {{ item.bookingNumber }}</mat-option
           >
-        </mat-select>
+        </mat-select> -->
       </div>
       <div class="btn-wrapper">
-
         <!-- conformation voucher -->
         <!-- hide cta in case of opera booking -->
-            <button
-            *ngIf="!this?.details?.pmsBooking"
+        <button
+          *ngIf="!this?.details?.pmsBooking && this.checkForConfirmedBooking()"
           class="check-button"
           (click)="openConfirmationVoucher()"
         >
@@ -97,13 +110,23 @@
           &nbsp;
           <p class="text">Confirmation Voucher</p>
         </button>
-        
-       
+
+        <button
+          *ngIf="!this?.details?.pmsBooking && this.checkForCanceledBooking"
+          class="check-button"
+          (click)="openConfirmationVoucher()"
+        >
+          <img src="assets/svg/Layer_d.svg" alt="Download" srcset="" /> &nbsp;
+          &nbsp;
+          <p class="text">Cancellation Voucher</p>
+        </button>
 
         <!-- reg-card -->
         <button
           class="check-button"
-          (click)="openRegCardSideBar(details.guestDetails.guests[0].regcardUrl)"
+          (click)="
+            openRegCardSideBar(details.guestDetails.guests[0].regcardUrl)
+          "
         >
           <img src="assets/svg/Layer_d.svg" alt="Download" srcset="" /> &nbsp;
           &nbsp;
@@ -114,15 +137,16 @@
               details.guestDetails.guests[0].regcardStatus
             "
           >
-            <mat-icon
+            <img
               *ngSwitchCase="'COMPLETED'"
+              src="assets/images/white-check.png"
               class="material-icons"
-              matSuffix
-              >check_circle</mat-icon
-            >
-            <mat-icon *ngSwitchDefault class="material-icons" matSuffix
-              >help</mat-icon
-            >
+            />
+            <img
+              *ngSwitchDefault
+              src="assets/images/white-help.png"
+              class="material-icons"
+            />
           </ng-container>
         </button>
 
@@ -238,6 +262,18 @@
   </div>
 
   <div [ngClass]="{ 'details-wrapper': !isFirstTimeFetch }">
+    <p-sidebar
+      [ngClass]="{ 'marketing-notification': true }"
+      [visible]="sidebarVisible"
+      [appendTo]="'body'"
+      [style]="{ padding: 0, 'min-width': '990px' }"
+      (onHide)="sidebarVisible = false"
+      [showCloseIcon]="false"
+      position="right"
+    >
+      <ng-container #sideBar></ng-container>
+    </p-sidebar>
+
     <ng-container *ngIf="isReservationDetailFetched; else detailsLoader">
       <div class="mat-group">
         <mat-tab-group
@@ -275,7 +311,7 @@
               #adminStayDetailsComponent
               [parentForm]="detailsForm"
               [data]="details"
-              [guestReservations]="guestReservations.records"
+              [guestReservations]="guestReservations?.records"
               [bookingNumber]="bookingNumber"
               [colorMap]="colorMap"
               (addFGEvent)="addFGEvent($event)"
@@ -413,6 +449,7 @@
                     label="CheckIn"
                     (onClick)="manualCheckin()"
                     [splitOptions]="checkInOptions"
+                    [disabled]="!isPermissionToCheckInOrOut"
                   >
                   </hospitality-bot-split-button>
                 </ng-container>
@@ -444,6 +481,7 @@
                   ></p-splitButton> -->
 
                   <hospitality-bot-split-button
+                    [disabled]="!isPermissionToCheckInOrOut"
                     label="CheckIn"
                     [splitOptions]="checkInOptions"
                     (onClick)="manualCheckin()"
@@ -463,6 +501,7 @@
                     [model]="checkInOptions"
                   ></p-splitButton> -->
                   <hospitality-bot-split-button
+                    [disabled]="!isPermissionToCheckInOrOut"
                     label="CheckIn"
                     [splitOptions]="checkInOptions"
                     (onClick)="manualCheckin()"
@@ -470,12 +509,12 @@
                   </hospitality-bot-split-button>
                 </ng-container>
                 <ng-container *ngSwitchCase="'COMPLETED'">
-                  <hospitality-bot-button
+                  <!-- <hospitality-bot-button
                     *ngIf="isPrintRate"
                     label="Send Payment Link"
                     (click)="activateAndgenerateJourney('CHECKOUT')"
                     variant="outlined"
-                  ></hospitality-bot-button>
+                  ></hospitality-bot-button> -->
                   <hospitality-bot-button
                     *ngIf="checkForGenerateFeedbackSubscribed()"
                     label="Generate Feedback"
@@ -488,18 +527,21 @@
                     (click)="downloadFeedback()"
                     variant="outlined"
                   ></hospitality-bot-button>
-                  <!-- initiate force checkout -->
-                  <hospitality-bot-button
+                  <hospitality-bot-split-button
+                    [disabled]="!isPermissionToCheckInOrOut"
                     label="Checkout"
-                    (click)="manualCheckout()"
                     variant="outlined"
-                  ></hospitality-bot-button>
+                    (onClick)="manualCheckout()"
+                    [splitOptions]="checkOutOptions"
+                  >
+                  </hospitality-bot-split-button>
+                  <!-- initiate force checkout -->
                   <!-- <p-splitButton
                     class="download-btn"
                     label="Checkout"
                     (onClick)="manualCheckout()"
                     [model]="checkOutOptions"
-                  ></p-splitButton> -->
+                    ></p-splitButton> -->
                 </ng-container>
               </ng-container>
             </ng-template>
@@ -518,7 +560,15 @@
                   variant="outlined"
                 ></hospitality-bot-button>
                 <ng-container *ngSwitchCase="'PENDING'">
-                  <hospitality-bot-button
+                  <hospitality-bot-split-button
+                    [disabled]="!isPermissionToCheckInOrOut"
+                    label="Checkout"
+                    variant="outlined"
+                    (onClick)="manualCheckout()"
+                    [splitOptions]="checkOutOptions"
+                  >
+                  </hospitality-bot-split-button>
+                  <!-- <hospitality-bot-button
                     *ngIf="isPrintRate"
                     label="Send Payment Link"
                     (click)="activateAndgenerateJourney('CHECKOUT')"
@@ -528,7 +578,7 @@
                     label="Checkout"
                     (click)="manualCheckout()"
                     variant="outlined"
-                  ></hospitality-bot-button>
+                  ></hospitality-bot-button> -->
                   <!-- <p-splitButton
                     class="download-btn"
                     label="Checkout"
@@ -537,22 +587,30 @@
                   ></p-splitButton> -->
                 </ng-container>
                 <ng-container *ngSwitchCase="'INITIATED'">
-                  <hospitality-bot-button
+                  <hospitality-bot-split-button
+                    [disabled]="!isPermissionToCheckInOrOut"
+                    label="Checkout"
+                    variant="outlined"
+                    (onClick)="manualCheckout()"
+                    [splitOptions]="checkOutOptions"
+                  >
+                  </hospitality-bot-split-button>
+                  <!-- <hospitality-bot-button
                     *ngIf="isPrintRate"
                     label="Send Payment Link"
                     (click)="activateAndgenerateJourney('CHECKOUT')"
                     variant="outlined"
                   ></hospitality-bot-button>
+                  <hospitality-bot-button
+                    label="Checkout"
+                    (click)="manualCheckout()"
+                    variant="outlined"
+                  ></hospitality-bot-button> -->
                   <!-- <hospitality-bot-button
                     (click)="confirmAndNotifyCheckin()"
                     label="Confirm And Notify Checkout"
                     variant="outlined"
                   ></hospitality-bot-button> -->
-                  <hospitality-bot-button
-                    label="Checkout"
-                    (click)="manualCheckout()"
-                    variant="outlined"
-                  ></hospitality-bot-button>
                   <!-- <p-splitButton
                     class="download-btn"
                     label="Checkout"
@@ -562,7 +620,16 @@
                 </ng-container>
                 <ng-container *ngSwitchCase="'COMPLETED'"> </ng-container>
                 <ng-container *ngSwitchCase="'FAILED'">
-                  <hospitality-bot-button
+                  <hospitality-bot-split-button
+                    [disabled]="!isPermissionToCheckInOrOut"
+                    label="Checkout"
+                    variant="outlined"
+                    (onClick)="manualCheckout()"
+                    [splitOptions]="checkOutOptions"
+                  >
+                  </hospitality-bot-split-button>
+
+                  <!-- <hospitality-bot-button
                     *ngIf="isPrintRate"
                     label="Send Payment Link"
                     (click)="activateAndgenerateJourney('CHECKOUT')"
@@ -572,7 +639,7 @@
                     label="Checkout"
                     (click)="manualCheckout()"
                     variant="outlined"
-                  ></hospitality-bot-button>
+                  ></hospitality-bot-button> -->
                   <!-- <p-splitButton
                     class="download-btn"
                     label="Checkout"

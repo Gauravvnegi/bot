@@ -111,7 +111,10 @@ export class TableList {
         idOfItemIdRecord
       );
       this.records.push(billItem);
-      this.serviceIds.add(billItem.itemId);
+
+      if (!billItem.isRealised) {
+        this.serviceIds.add(billItem.itemId);
+      }
     });
 
     return this;
@@ -139,6 +142,7 @@ export class TableData {
   isRefund: boolean;
   discountType?: string;
   discountValue?: number;
+  isRealised?: boolean;
 
   deserialize(input: BillItem, idOfItemIdRecord: Record<string, string>) {
     let reservationId = input.id;
@@ -167,6 +171,7 @@ export class TableData {
     this.isAddOn = input.isAddOn;
     this.reservationItemId = reservationId;
     this.isRefund = input?.isRefund;
+    this.isRealised = input?.isRealised;
     return this;
   }
 }

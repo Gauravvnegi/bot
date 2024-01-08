@@ -1,3 +1,4 @@
+import { Option } from '@hospitality-bot/admin/shared';
 import { AgentTableResponse } from 'libs/admin/agent/src/lib/types/response';
 import { CompanyResponseType } from 'libs/admin/company/src/lib/types/response';
 import { ReservationRatePlan } from 'libs/admin/room/src/lib/constant/form';
@@ -59,7 +60,7 @@ export type RoomInformation = {
 
   // For quick form
   roomTypeId?: string;
-  ratePlan?: string;
+  ratePlanId?: string;
   roomNumber?: string;
   adultCount?: number;
   childCount?: number;
@@ -70,7 +71,7 @@ export type RoomInformation = {
 
 export type RoomTypes = {
   roomTypeId: string;
-  ratePlan: string;
+  ratePlanId: string;
   roomCount: number;
   roomNumbers?: string[];
   roomNumber?: string;
@@ -78,6 +79,7 @@ export type RoomTypes = {
   childCount: number;
   roomTypeLabel?: string;
   ratePlans?: ReservationRatePlan;
+  rooms?: Option[];
   id?: string;
 };
 

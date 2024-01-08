@@ -1,4 +1,4 @@
-import { PermissionModuleNames } from '../constants';
+import { PermissionModuleNames, ProductNames } from '../constants';
 import { EntitySubType, EntityType } from './table.type';
 
 export type CookiesData = {
@@ -80,44 +80,61 @@ export type Sites = {
   domainConnected: boolean;
 };
 
+export type DepartmentRes = {
+  parentId: string;
+  id: string;
+  view: -1 | 0 | 1;
+  manage: -1 | 0 | 1;
+  module: string;
+  department: string;
+  entityId: string;
+  userId: string;
+  created: number;
+  updated: number;
+  productType: string;
+  departmentLabel: string;
+  productLabel: string;
+};
+
 export type UserResponse = {
   id: string;
   firstName: string;
   lastName: string;
   email: string;
   title: string;
-  otpVerified: boolean;
   cc: string;
   phoneNumber: string;
   // hotelAccess: { brands: Brand[] };
-  permissions: {
-    module: PermissionModuleNames;
-    label: string;
-    permissions: {
-      manage: -1 | 0 | 1; // -1 is disabled that is there is nothing related to that permission
-      view: -1 | 0 | 1;
-    };
-    productType: string;
-  }[];
+  products: Product[];
+  departments?: DepartmentRes[];
   status: boolean;
-  parentId?: boolean;
+  parentId?: string;
   profileUrl?: string;
-  departments: {
-    parentId: string;
-    id: string;
-    view: -1 | 0 | 1;
-    manage: -1 | 0 | 1;
-    module: string;
-    department: string;
-    entityId: string;
-    userId: string;
-    created: number;
-    updated: number;
-    productType: string;
-    departmentLabel: string;
-    productLabel: string;
-  }[];
+
   sites: Sites[];
   agent: boolean;
   reportingTo: string;
+};
+
+type PermissionStatus = -1 | 0 | 1;
+
+type PermissionConfig = {
+  manage: PermissionStatus;
+  view: PermissionStatus;
+};
+
+type ProductPermission = {
+  module: PermissionModuleNames;
+  label: string;
+  permissions: PermissionConfig;
+  productType: string;
+};
+
+type Product = {
+  id: string;
+  module: ProductNames;
+  label: string;
+  permissions: PermissionConfig;
+  productType: string;
+  productPermissions: ProductPermission[];
 };

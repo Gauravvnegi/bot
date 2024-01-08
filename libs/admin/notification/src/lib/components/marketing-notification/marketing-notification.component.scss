@@ -1,9 +1,9 @@
-
 @import 'main';
-
+.market-notifiction__container {
+  max-height: 100vh;
+}
 .container {
   background-color: $header-background;
-  max-height: 85vh;
   display: flex;
   flex-direction: column;
 }
@@ -16,7 +16,7 @@
   padding-top: 15px;
 }
 
-.modal-header{
+.modal-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -30,7 +30,7 @@
     text-align: center;
     font-size: 20px;
   }
-  .close{
+  .close {
     bottom: 28px;
     position: relative;
     i {

@@ -15,11 +15,13 @@ import {
 import { LibraryItem, QueryConfig } from '@hospitality-bot/admin/library';
 import {
   AdminUtilityService,
+  BookingDetailService,
   EntitySubType,
   ModuleNames,
   NavRouteOptions,
   Option,
   UserService,
+  openModal,
 } from '@hospitality-bot/admin/shared';
 import {
   ModalService,
@@ -66,7 +68,7 @@ import {
 import { AddDiscountComponent } from '../add-discount/add-discount.component';
 import { AddRefundComponent } from '../add-refund/add-refund.component';
 import { MenuItemListResponse } from 'libs/admin/all-outlets/src/lib/types/outlet';
-import { DetailsComponent } from '@hospitality-bot/admin/reservation';
+import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 
 @Component({
   selector: 'hospitality-bot-invoice',
@@ -151,11 +153,12 @@ export class InvoiceComponent implements OnInit {
     private servicesService: ServicesService,
     private modalService: ModalService,
     private userService: UserService,
-    private router: Router,
     private route: ActivatedRoute,
     private manageReservationService: ManageReservationService,
     private reservationService: ReservationService,
-    private routesConfigService: RoutesConfigService
+    private routesConfigService: RoutesConfigService,
+    private bookingDetailsService: BookingDetailService,
+    private dialogService: DialogService
   ) {
     this.reservationId = this.activatedRoute.snapshot.paramMap.get('id');
     this.initPageHeaders();
@@ -300,7 +303,9 @@ export class InvoiceComponent implements OnInit {
           this.bookingNumber = res.number;
           this.invoicePrepareRequest = res.invoicePrepareRequest;
           this.pmsBooking = res.pmsBooking;
-          if (this.pmsBooking) this.disableInvoice();
+          if (this.pmsBooking) {
+            this.disableInvoice();
+          }
           this.isCheckin =
             res?.pmsStatus === ReservationCurrentStatus.DUEOUT ||
             res?.pmsStatus === ReservationCurrentStatus.INHOUSE;
@@ -407,7 +412,7 @@ export class InvoiceComponent implements OnInit {
     if (rowFG.isMiscellaneous) {
       return dMenu;
     }
-    if (this.hasDiscount(rowFG.itemId)) {
+    if (this.hasDiscount(rowFG.itemId, rowFG.date)) {
       return [...editDiscountMenu, ...dMenu];
     }
     return [...addDiscountMenu, ...dMenu];
@@ -550,6 +555,7 @@ export class InvoiceComponent implements OnInit {
       isRefund: [false],
       discountType: [''],
       discountValue: [0],
+      isRealised: [false],
     };
 
     const formGroup = this.fb.group(data);
@@ -588,6 +594,7 @@ export class InvoiceComponent implements OnInit {
       debitAmount,
       itemId,
       reservationItemId,
+      date,
     } = currentFormGroup.controls as TableFormItemControl;
 
     billItemId.valueChanges
@@ -661,7 +668,7 @@ export class InvoiceComponent implements OnInit {
         }
         if (unit.invalid || debitAmount.invalid) return;
 
-        const discountControl = this.hasDiscount(itemId.value);
+        const discountControl = this.hasDiscount(itemId.value, date.value);
         const discountValue = discountControl?.value.creditAmount ?? 0;
 
         const currentDebitAmount = debitAmount.value;
@@ -678,12 +685,16 @@ export class InvoiceComponent implements OnInit {
           return;
         }
 
+        const newDiscountValue = +(discountValue * currentUnitQuantity.value);
         currentFormGroup.patchValue({ debitAmount: newDebitAmount });
+        discountControl.patchValue({
+          creditAmount: newDiscountValue,
+        });
 
         this.updateTax(
-          currentDebitAmount - discountValue,
+          currentDebitAmount - newDiscountValue,
           reservationItemId.value,
-          newDebitAmount - discountValue
+          newDebitAmount - newDiscountValue
         );
       });
   }
@@ -712,14 +723,16 @@ export class InvoiceComponent implements OnInit {
     this.dateReflectionTrigger();
   }
 
-  removeDiscountItems(itemId: string) {
-    const itemsToRemove = this.tableFormArray.controls.filter(
+  removeDiscountItem(itemId: string) {
+    const itemToRemove = this.tableFormArray.controls.find(
       (control: Controls) =>
-        control.value.itemId === itemId && control.value.isDiscount
+        control.value.itemId === itemId &&
+        control.value.isDiscount &&
+        !control.value.isRealised
     );
     // Step 2: Remove each matching item
-    itemsToRemove.forEach((item) =>
-      this.tableFormArray.removeAt(this.tableFormArray.controls.indexOf(item))
+    this.tableFormArray.removeAt(
+      this.tableFormArray.controls.indexOf(itemToRemove)
     );
     this.tableFormArray.updateValueAndValidity();
     this.dateReflectionTrigger();
@@ -810,13 +823,18 @@ export class InvoiceComponent implements OnInit {
       (item) => !item.control.value.taxId && !item.control.value.isDiscount
     );
 
+    const reservationItems = this.getAllItemWithSameItemId(itemId).filter(
+      (item) => !item.control.value.taxId && !item.control.value.isDiscount
+    );
+
     this.addDiscountModal({
-      amount: priceItem.control.value.debitAmount,
       serviceName: priceItem.control.value.description,
-      index,
       itemId,
       reservationItemId,
       discountAction: value,
+      date: priceItem.control.value.date,
+      isRealised: priceItem.control.value.isRealised,
+      reservationItems,
     });
   }
 
@@ -885,6 +903,7 @@ export class InvoiceComponent implements OnInit {
         JSON.stringify({
           isCheckin: this.isCheckin,
           isCheckout: this.isCheckout,
+          isInvoiceGenerated: this.isInvoiceGenerated,
         })
       ),
     };
@@ -1040,37 +1059,39 @@ export class InvoiceComponent implements OnInit {
   }
 
   removeDetails(heading: string, description: string, callback: () => void) {
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.disableClose = true;
-    const togglePopupCompRef = this.modalService.openDialog(
-      ModalComponent,
-      dialogConfig
-    );
-
-    togglePopupCompRef.componentInstance.content = {
-      heading: heading,
-      description: [description],
+    let modalRef: DynamicDialogRef;
+    const data = {
+      content: {
+        heading: heading,
+        descriptions: [description],
+      },
+      actions: [
+        {
+          label: 'Yes',
+          onClick: () => {
+            callback();
+            modalRef.close();
+          },
+          variant: 'outlined',
+        },
+        {
+          label: 'No',
+          onClick: () => {
+            modalRef.close();
+          },
+          variant: 'contained',
+        },
+      ],
     };
 
-    togglePopupCompRef.componentInstance.actions = [
-      {
-        label: 'Yes',
-        onClick: () => {
-          callback();
-          this.modalService.close();
-        },
-        variant: 'outlined',
+    modalRef = openModal({
+      config: {
+        width: '35vw',
+        styleClass: 'confirm-dialog',
+        data: data,
       },
-      {
-        label: 'No',
-        onClick: () => {
-          this.modalService.close();
-        },
-        variant: 'contained',
-      },
-    ];
-    togglePopupCompRef.componentInstance.onClose.subscribe(() => {
-      this.modalService.close();
+      component: ModalComponent,
+      dialogService: this.dialogService,
     });
   }
 
@@ -1227,29 +1248,37 @@ export class InvoiceComponent implements OnInit {
     ];
   }
 
-  hasDiscount(itemId: string) {
+  hasDiscount(itemId: string, date: number) {
     const alreadyHasDiscount: Controls = this.tableFormArray.controls.find(
-      (control: Controls) =>
-        control.value.itemId === itemId && control.value.isDiscount
+      (control: Controls) => {
+        const controlDate = new Date(control.value.date).setHours(0, 0, 0, 0);
+        const targetDate = new Date(date).setHours(0, 0, 0, 0);
+        return (
+          control.value.itemId === itemId &&
+          control.value.isDiscount &&
+          controlDate === targetDate
+        );
+      }
     );
     return alreadyHasDiscount;
   }
 
   addDiscountModal(data: {
-    amount: number;
     serviceName: string;
-    index: number;
     itemId: string;
     reservationItemId: string;
     discountAction: MenuActionItem;
+    reservationItems: { control: Controls; index: number }[];
+    date: number;
+    isRealised: boolean;
   }) {
     const {
-      amount,
       serviceName,
-      index,
       itemId,
       reservationItemId,
       discountAction,
+      reservationItems,
+      date,
     } = data;
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = false;
@@ -1258,59 +1287,50 @@ export class InvoiceComponent implements OnInit {
       AddDiscountComponent,
       dialogConfig
     );
-    discountComponentRef.componentInstance.originalAmount = amount;
+
+    const billItems = reservationItems
+      .map((item) => {
+        return { index: item.index, ...item.control.value };
+      })
+      .filter((item) => !item.isRealised);
     discountComponentRef.componentInstance.serviceName = serviceName;
     discountComponentRef.componentInstance.discountAction = discountAction;
+    discountComponentRef.componentInstance.billItems = billItems;
     // discountComponentRef.componentInstance.tax = taxPercentage;
 
     discountComponentRef.componentInstance.onClose.subscribe(
       (res: {
         discountType: string;
         discountValue: number;
-        totalDiscount: number;
+        totalDiscount: { [date: number]: number };
       }) => {
         this.modalService.close();
         if (!res) return;
-        const totalDiscount = res.totalDiscount;
-        const alreadyHasDiscount = this.hasDiscount(itemId);
-        const taxedAmount =
-          amount - (alreadyHasDiscount?.value.creditAmount ?? 0); // Amount to be used for the reversed tax calculation
-        const newTaxedAmount = amount - totalDiscount;
+        billItems.forEach((item, index) => {
+          const discountItem = this.getAllItemWithSameItemId(itemId).filter(
+            (item) =>
+              item.control.value.isDiscount && !item.control.value.isRealised
+          );
+          let alreadyHasDiscount =
+            !res.discountValue && this.hasDiscount(itemId, date);
 
-        const reservationItem = this.getAllItemWithSameItemId(itemId).filter(
-          (item) => !item.control.value.taxId && !item.control.value.isDiscount
-        );
-
-        const discountItem = this.getAllItemWithSameItemId(itemId).filter(
-          (item) => item.control.value.isDiscount
-        );
-
-        // Update each discountItem with the total discount
-        discountItem.forEach((item) => {
-          item.control.patchValue({
-            creditAmount: totalDiscount,
-            discountType: res.discountType,
-            discountValue: res.discountValue,
-          });
-        });
-
-        if (!totalDiscount) {
-          if (alreadyHasDiscount) {
-            this.removeDiscountItems(discountItem[0].control.value.itemId);
-            reservationItem.forEach((item) => {
-              this.updateTax(
-                taxedAmount,
-                item.control.value.billItemId,
-                newTaxedAmount
-              );
-            });
+          if (discountAction === MenuActionItem.EDIT_DISCOUNT) {
+            alreadyHasDiscount = discountItem[index].control;
           }
-          return;
-        }
+          const totalDiscount = res.totalDiscount[item.date];
+          const taxedAmount =
+            item.debitAmount - (alreadyHasDiscount?.value?.creditAmount ?? 0); // Amount to be used for the reversed tax calculation
+          const newTaxedAmount = item.debitAmount - totalDiscount;
 
-        if (!alreadyHasDiscount) {
-          const value = `DISCOUNT (${serviceName})`;
-          reservationItem.forEach((item, index) => {
+          if (!totalDiscount) {
+            if (alreadyHasDiscount) {
+              this.removeDiscountItem(discountItem[0].control.value.itemId);
+              this.updateTax(taxedAmount, item.billItemId, newTaxedAmount);
+            }
+            return;
+          }
+          if (!alreadyHasDiscount) {
+            const value = `DISCOUNT (${serviceName})`;
             this.addNonBillItem({
               amount: totalDiscount,
               itemId: itemId,
@@ -1319,23 +1339,19 @@ export class InvoiceComponent implements OnInit {
               type: 'discount',
               value: value,
               entryIdx: item.index + 1 + index,
-              date: item.control.value.date,
+              date: item.date,
+              discountType: res.discountType,
+              discountValue: res.discountValue,
+              isRealised: item.isRealised,
+            });
+          } else {
+            discountItem[index].control.patchValue({
+              creditAmount: totalDiscount,
               discountType: res.discountType,
               discountValue: res.discountValue,
             });
-          });
-        } else
-          alreadyHasDiscount.patchValue({
-            creditAmount: totalDiscount,
-            discountType: res.discountType,
-            discountValue: res.discountValue,
-          });
-        reservationItem.forEach((item) => {
-          this.updateTax(
-            taxedAmount,
-            item.control.value.billItemId,
-            newTaxedAmount
-          );
+          }
+          this.updateTax(taxedAmount, item.billItemId, newTaxedAmount);
         });
       }
     );
@@ -1375,6 +1391,7 @@ export class InvoiceComponent implements OnInit {
     type: ChargesType;
     discountType?: string;
     discountValue?: number;
+    isRealised?: boolean;
   }) {
     const {
       type,
@@ -1385,23 +1402,14 @@ export class InvoiceComponent implements OnInit {
       transactionType,
       discountType,
       discountValue,
+      isRealised,
     } = {
       ...settings,
     };
-
     const entryIdx =
       settings.entryIdx || settings.entryIdx === 0
         ? settings.entryIdx
         : this.tableFormArray.length;
-
-    console.log('entryIdx', entryIdx);
-    console.log('addNewCharges', {
-      rowIndex: entryIdx,
-      isNewEntry: true,
-      isDebit: true,
-      isDisabled: true,
-      date: settings?.date,
-    });
 
     this.addNewCharges({
       rowIndex: entryIdx,
@@ -1438,29 +1446,18 @@ export class InvoiceComponent implements OnInit {
         ? {
             discountType: discountType, // Replace with your actual value
             discountValue: discountValue, // Replace with your actual value
+            isRealised: isRealised,
           }
         : {}),
     };
-
     this.tableFormArray.at(entryIdx).patchValue(data);
   }
 
   viewDetails() {
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.disableClose = true;
-    dialogConfig.width = '100%';
-    const detailCompRef = this.modalService.openDialog(
-      DetailsComponent,
-      dialogConfig
-    );
-
-    detailCompRef.componentInstance.bookingId = this.reservationId;
-    detailCompRef.componentInstance.tabKey = 'guest_details';
-    this.$subscription.add(
-      detailCompRef.componentInstance.onDetailsClose.subscribe((res) => {
-        detailCompRef.close();
-      })
-    );
+    this.bookingDetailsService.openBookingDetailSidebar({
+      bookingId: this.reservationId,
+      tabKey: 'guest_details',
+    });
   }
 
   editReservation() {
@@ -1522,6 +1519,59 @@ export class InvoiceComponent implements OnInit {
         this.modalService.close();
       }
     );
+  }
+
+  isValueDisabled(
+    rowIndex: number,
+    type: 'menu' | 'input' | 'description' | 'checkbox'
+  ) {
+    const controls = this.tableFormArray.at(rowIndex) as Controls;
+
+    switch (type) {
+      case 'menu':
+        return (
+          controls.value.isRefund ||
+          (controls.value.transactionType === 'CREDIT' &&
+            !controls.value.isDiscount) ||
+          this.isInvoiceDisabled ||
+          controls.value.isRealised ||
+          (!controls.value.itemId && !controls.value.isNew) ||
+          controls.value.taxId ||
+          (controls.value.isNonEditableBillItem &&
+            !controls.value.isMiscellaneous)
+        );
+
+      case 'input':
+        return (
+          controls.value.isDisabled ||
+          controls.value.isDiscount ||
+          controls.value.isNonEditableBillItem ||
+          !controls.value.billItemId ||
+          this.isInvoiceDisabled ||
+          controls.value.isRealised
+        );
+
+      case 'description':
+        return (
+          controls.value.isDisabled ||
+          controls.value.isDiscount ||
+          !controls.value.isNew ||
+          controls.value.isNonEditableBillItem
+        );
+
+      case 'checkbox':
+        return (
+          controls.value.isDisabled ||
+          controls.value.isDiscount ||
+          controls.value.taxId ||
+          controls.value.isRefund ||
+          controls.value.isRealised ||
+          (controls.value.creditAmount && !controls.value.isDiscount)
+        );
+
+      default:
+        return false; // Default case, return false if type is not recognized
+    }
   }
 }
 

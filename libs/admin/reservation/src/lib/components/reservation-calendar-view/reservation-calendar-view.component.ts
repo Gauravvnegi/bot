@@ -7,11 +7,12 @@ import {
 } from '@hospitality-bot/admin/core/theme';
 import {
   AdminUtilityService,
+  BookingDetailService,
   FlagType,
   ModuleNames,
-  Option,
   QueryConfig,
   daysOfWeek,
+  openModal,
 } from '@hospitality-bot/admin/shared';
 import { getWeekendBG } from 'libs/admin/channel-manager/src/lib/models/bulk-update.models';
 import {
@@ -45,22 +46,18 @@ import {
   reservationMenuOptions,
   reservationStatusColorCode,
 } from '../../constants/reservation';
-import { MatDialogConfig } from '@angular/material/dialog';
-import {
-  ModalService,
-  SnackBarService,
-} from '@hospitality-bot/shared/material';
-import { DetailsComponent } from '../details/details.component';
+import { SnackBarService } from '@hospitality-bot/shared/material';
 import { RoomMapType } from 'libs/admin/channel-manager/src/lib/types/channel-manager.types';
-import { UpdateRatesResponse } from 'libs/admin/channel-manager/src/lib/types/response.type';
-import { UpdateRates } from 'libs/admin/channel-manager/src/lib/models/channel-manager.model';
-import { ChannelManagerService } from 'libs/admin/channel-manager/src/lib/services/channel-manager.service';
 import * as moment from 'moment';
-import { AdminDetailsService } from '../../services/admin-details.service';
 import { ReservationService } from '../../services/reservation.service';
 import { JourneyState } from 'libs/admin/manage-reservation/src/lib/constants/reservation';
 import { roomStatusDetails } from 'libs/admin/housekeeping/src/lib/constant/room';
 import { NightAuditService } from 'libs/admin/global-shared/src/lib/services/night-audit.service';
+import { CalendarOccupancy } from '../../models/reservation-table.model';
+import { JourneyDialogComponent } from '../journey-dialog/journey-dialog.component';
+import { DialogService } from 'primeng/dynamicdialog';
+import { ReservationRatePlan } from 'libs/admin/room/src/lib/constant/form';
+import { ReservationFormService } from '../../services/reservation-form.service';
 
 @Component({
   selector: 'hospitality-bot-reservation-calendar-view',
@@ -88,6 +85,10 @@ export class ReservationCalendarViewComponent implements OnInit {
   $subscription = new Subscription();
   previousData: IGValue[] = [];
   ratesRoomDetails = new Map<string, RoomMapType>();
+  occupancyData = new Map<
+    number,
+    Map<string, { available: number; occupancy: number }>
+  >();
 
   formProps: QuickFormProps;
   fullView: boolean;
@@ -98,14 +99,14 @@ export class ReservationCalendarViewComponent implements OnInit {
     private globalFilterService: GlobalFilterService,
     private roomService: RoomService,
     private adminUtilityService: AdminUtilityService,
-    private modalService: ModalService,
-    private channelManagerService: ChannelManagerService,
-    private adminDetailsService: AdminDetailsService,
     private _reservationService: ReservationService,
     private snackbarService: SnackBarService,
     private _clipboard: Clipboard,
     private routesConfigService: RoutesConfigService,
-    private auditService: NightAuditService
+    private auditService: NightAuditService,
+    private bookingDetailService: BookingDetailService,
+    private dialogService: DialogService,
+    private formService: ReservationFormService
   ) {}
 
   ngOnInit(): void {
@@ -418,15 +419,15 @@ export class ReservationCalendarViewComponent implements OnInit {
 
   getRates(selectedDate = this.useForm.value.date) {
     this.$subscription.add(
-      this.channelManagerService
-        .getChannelManagerDetails<UpdateRatesResponse>(
+      this._reservationService
+        .getCalendarViewOccupancy(
           this.entityId,
           this.getRatesConfig(selectedDate)
         )
         .subscribe(
           (res) => {
-            const data = new UpdateRates().deserialize(res.roomTypes);
-            this.ratesRoomDetails = data.ratesRoomDetails;
+            const data = new CalendarOccupancy().deserialize(res);
+            this.occupancyData = data;
           },
           (error) => {}
         )
@@ -443,11 +444,7 @@ export class ReservationCalendarViewComponent implements OnInit {
     };
   }
 
-  getRatesConfig(
-    selectedDate?: number,
-    inventoryType = 'RATES',
-    roomTypeId?: string
-  ): QueryConfig {
+  getRatesConfig(selectedDate?: number, roomTypeId?: string): QueryConfig {
     const { fromDate, toDate } = this.getFromAndToDateEpoch(
       selectedDate ? selectedDate : this.useForm.controls['date'].value
     );
@@ -455,9 +452,7 @@ export class ReservationCalendarViewComponent implements OnInit {
       params: this.adminUtilityService.makeQueryParams([
         {
           type: 'ROOM_TYPE',
-          limit: 5,
-          inventoryUpdateType: inventoryType,
-          roomTypeIds: roomTypeId,
+          roomTypeStatus: true,
         },
         selectedDate && {
           fromDate: fromDate,
@@ -468,23 +463,50 @@ export class ReservationCalendarViewComponent implements OnInit {
     return config;
   }
 
+  // getAvailability(
+  //   nextDate: number,
+  //   type: 'quantity' | 'occupancy',
+  //   roomTypeId: string
+  // ) {
+  //   if (
+  //     Object.keys(this.occupancyData).length === 0 ||
+  //     !this.occupancyData[nextDate]?.availability
+  //   )
+  //     return 0;
+  //   const date = new Date(this.useForm.controls['date'].value);
+  //   date.setDate(date.getDate() + nextDate);
+  //   let room = this.occupancyData[roomTypeId]['availability'][
+  //     date.getTime()
+  //   ];
+  //   if (room) return room[type] === 'NaN' || !room[type] ? 0 : room[type];
+  //   return 0;
+  // }
+
   getAvailability(
-    nextDate: number,
-    type: 'quantity' | 'occupancy',
+    nextDate: { currentDate: Date },
+    index: number,
+    type: 'available' | 'occupancy',
     roomTypeId: string
   ) {
+    const currentDate = new Date(nextDate.currentDate);
+    currentDate.setHours(0, 0, 0, 0);
+    const currentEpoch = currentDate.getTime();
+    const obj = this.occupancyData.get(currentEpoch)?.get(roomTypeId)
+      ?.available;
     if (
-      Object.keys(this.ratesRoomDetails).length === 0 ||
-      !this.ratesRoomDetails[roomTypeId]?.availability
-    )
+      this.occupancyData.size === 0 ||
+      !this.occupancyData.get(currentEpoch)?.get(roomTypeId)?.available
+    ) {
       return 0;
-
+    }
     const date = new Date(this.useForm.controls['date'].value);
-    date.setDate(date.getDate() + nextDate);
-    let room = this.ratesRoomDetails[roomTypeId]['availability'][
-      date.getTime()
-    ];
-    if (room) return room[type] === 'NaN' || !room[type] ? 0 : room[type];
+    date.setDate(date.getDate() + index);
+    const roomData = this.occupancyData.get(date.getTime())?.get(roomTypeId);
+    if (roomData) {
+      const value = roomData[type];
+      return !value ? 0 : value;
+    }
+
     return 0;
   }
 
@@ -583,10 +605,14 @@ export class ReservationCalendarViewComponent implements OnInit {
   ) {
     switch (event.value) {
       case 'CHECKIN':
-        this.manualCheckin(event.id, roomType);
+        this.formService.manualCheckin(event.id, this, roomType);
         break;
       case 'CHECKOUT':
-        this.manualCheckout(event.id, roomType);
+        this.formService.manualCheckout(
+          event.id,
+          this,
+          roomType
+        );
         break;
       case 'CANCEL_CHECKIN':
         this._reservationService.cancelCheckin(event.id).subscribe((res) => {
@@ -641,78 +667,6 @@ export class ReservationCalendarViewComponent implements OnInit {
       });
   }
 
-  manualCheckin(reservationId: string, roomType: IGRoomType) {
-    this.adminDetailsService.openJourneyDialog({
-      title: 'Check-In',
-      description: 'Guest is about to checkin',
-      question: 'Are you sure you want to continue?',
-      buttons: {
-        cancel: {
-          label: 'Cancel',
-          context: '',
-        },
-        accept: {
-          label: 'Accept',
-          context: this,
-          handler: {
-            fn_name: 'checkInfn',
-            args: [reservationId, roomType],
-          },
-        },
-      },
-    });
-  }
-
-  manualCheckout(reservationId: string, roomType: IGRoomType) {
-    this.adminDetailsService.openJourneyDialog({
-      title: 'Manual Checkout',
-      description: 'Guest is about to checkout',
-      question: 'Are you sure you want to continue?',
-      buttons: {
-        cancel: {
-          label: 'Cancel',
-          context: '',
-        },
-        accept: {
-          label: 'Accept',
-          context: this,
-          handler: {
-            fn_name: 'manualCheckoutfn',
-            args: [reservationId, roomType],
-          },
-        },
-      },
-    });
-  }
-
-  checkInfn(reservationId: string, roomType: IGRoomType) {
-    this.$subscription.add(
-      this._reservationService.manualCheckin(reservationId).subscribe((res) => {
-        this.updateRoomType(
-          reservationId,
-          roomType,
-          ReservationCurrentStatus.INHOUSE
-        );
-        this.snackbarService.openSnackBarAsText('Checkin completed.', '', {
-          panelClass: 'success',
-        });
-      })
-    );
-  }
-
-  manualCheckoutfn(reservationId: string, roomType: IGRoomType) {
-    this._reservationService.manualCheckout(reservationId).subscribe((res) => {
-      this.updateRoomType(
-        reservationId,
-        roomType,
-        ReservationCurrentStatus.CHECKEDOUT,
-        true
-      );
-      this.snackbarService.openSnackBarAsText('Checkout completed.', '', {
-        panelClass: 'success',
-      });
-    });
-  }
 
   updateRoomType(
     reservationId: string,
@@ -720,6 +674,7 @@ export class ReservationCalendarViewComponent implements OnInit {
     status: ReservationCurrentStatus,
     isCheckout: boolean = false
   ) {
+    // this.reservationFormService.manualCheckin(reservationId, roomType, this)
     let currentDateEpoch = new Date();
     const updatedValues = roomType.data.values.map((item) => {
       const selectedRoom = roomType.rooms.find(
@@ -747,20 +702,22 @@ export class ReservationCalendarViewComponent implements OnInit {
   }
 
   openDetailsPage(reservationId: string) {
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.disableClose = true;
-    dialogConfig.width = '100%';
-    const detailCompRef = this.modalService.openDialog(
-      DetailsComponent,
-      dialogConfig
-    );
-    detailCompRef.componentInstance.bookingId = reservationId;
-    detailCompRef.componentInstance.tabKey = 'guest_details';
-    this.$subscription.add(
-      detailCompRef.componentInstance.onDetailsClose.subscribe((res) => {
-        detailCompRef.close();
-      })
-    );
+    this.bookingDetailService.openBookingDetailSidebar({
+      bookingId: reservationId,
+      tabKey: 'guest_details',
+    });
+  }
+
+  openJourneyDialog(config) {
+    openModal({
+      config: {
+        width: '450px',
+        styleClass: 'confirm-dialog',
+        data: config,
+      },
+      component: JourneyDialogComponent,
+      dialogService: this.dialogService,
+    });
   }
 
   /**
@@ -843,7 +800,7 @@ export type IGRoomType = {
   loading?: boolean;
   reinitialize?: boolean;
   data?: GridData;
-  ratePlans?: Option[];
+  ratePlans?: ReservationRatePlan[];
 };
 
 type GridData = {

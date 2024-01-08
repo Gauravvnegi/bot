@@ -15,9 +15,9 @@ export class SettingsMenuComponent implements OnInit {
   isSidebar = false;
   @Output() onCloseSidebar = new EventEmitter(false);
 
-  constructor(
-    private subscriptionService: SubscriptionPlanService
-  ) {}
+  page: SettingsPages = 'SETTINGS_MENU';
+
+  constructor(private subscriptionService: SubscriptionPlanService) {}
 
   ngOnInit(): void {
     this.settings = this.subscriptionService.settings;
@@ -30,4 +30,15 @@ export class SettingsMenuComponent implements OnInit {
   onImageLoad() {
     this.isImageLoaded = true;
   }
+
+  handelSettingsMenuClick(name: string) {
+    if (name === 'NOTIFICATION') this.page = 'NOTIFICATION';
+    else this.close();
+  }
+
+  setDefaultPage() {
+    this.page = 'SETTINGS_MENU';
+  }
 }
+
+type SettingsPages = 'NOTIFICATION' | 'SETTINGS_MENU';

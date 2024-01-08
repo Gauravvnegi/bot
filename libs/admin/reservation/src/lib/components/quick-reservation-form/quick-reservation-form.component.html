@@ -1,4 +1,4 @@
-<div class="container" *ngIf="isDataLoaded; else loader">
+<div class="container" [id]="fa.referenceId" *ngIf="isDataLoaded; else loader">
   <div class="header">
     <div class="heading">
       Booking Information
@@ -20,22 +20,39 @@
   </div>
   <div class="guest-data" *ngIf="reservationId">
     <div class="left-col">
-      <div class="guest-name">{{ guestDetails?.guestName }}</div>
+      <u class="guest-name" (click)="openDetailsPage()">{{
+        guestDetails?.guestName
+      }}</u>
       <div class="contact-details">
-        <div class="phone-number" *ngIf="guestDetails.phoneNumber">
+        <a
+          *ngIf="guestDetails.phoneNumber"
+          href="tel:{{ guestDetails?.cc }}{{ guestDetails?.contactNumber }}"
+          class="phone-number"
+        >
           <img [src]="'assets/svg/whatsapp.svg'" alt="" />
-          <p>{{ guestDetails?.phoneNumber }}</p>
-        </div>
-        <div class="email-id">
+          <u class="contact">
+            {{ guestDetails?.phoneNumber }}
+          </u>
+        </a>
+        <a
+          href="mailto:{{ guestDetails?.email }}"
+          *ngIf="guestDetails?.email"
+          class="email-id"
+        >
           <img [src]="'assets/svg/email-circle.svg'" alt="" />
-          <p>{{ guestDetails?.email }}</p>
-        </div>
+          <u>{{ guestDetails?.email }}</u>
+        </a>
       </div>
     </div>
     <div class="right-col">
       <div class="due-amount" *ngIf="reservationNumber">
         Booking Number -
-        <span class="amount">{{ reservationNumber }}</span>
+        <u
+          (click)="openDetailsPage()"
+          [ngStyle]="{ cursor: 'pointer' }"
+          class="amount"
+          >{{ reservationNumber }}</u
+        >
       </div>
       <div class="due-amount">
         Due Amount -
@@ -138,7 +155,7 @@
         <ng-container *ngIf="!reservationId">
           <hospitality-bot-select
             class="half-width select"
-            controlName="ratePlan"
+            controlName="ratePlanId"
             label="Rate Plans"
             [props]="{ placeholder: 'Select' }"
             [options]="ratePlans"
@@ -222,6 +239,7 @@
   (onPostAction)="handleSubmit()"
   (onPreAction)="openDetailsPage()"
   [isSticky]="true"
+  [isFixed]="true"
   [config]="{
     postLabel: reservationId ? 'Update Reservation' : 'Create Reservation',
     preHide: reservationId ? false : true,

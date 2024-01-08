@@ -14,6 +14,29 @@
         {{ text }}
       </div>
     </div>
+    <div class="sub-text" *ngIf="subText?.length">{{ subText }}</div>
+    <div class="reservation-input" *ngIf="isReservation">
+      <div class="amount">
+        <hospitality-bot-input
+          class="one-third-width"
+          label="Amount"
+          controlName="chargedAmount"
+          [props]="{
+            placeholder: 'Enter'
+          }"
+          [disabled]="!this.modelForm.get('chargeable').value"
+        ></hospitality-bot-input>
+        <ul class="charges-info">
+          <li>Exclusive of tax</li>
+        </ul>
+      </div>
+      <hospitality-bot-toggle-switch
+        class="status"
+        controlName="chargeable"
+        onLabel="Chargeable"
+        offLabel="Non-chargeable"
+      ></hospitality-bot-toggle-switch>
+    </div>
     <hospitality-bot-text-area
       *ngIf="isRemarks"
       controlName="remarks"

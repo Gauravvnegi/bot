@@ -205,6 +205,13 @@ export class SubscriptionPlanService extends ApiService {
   }
 
   /**
+   * Only for product
+   */
+  hasUserPermissionForProduct(names: ProductNames) {
+    return this.userSubscriptionPermission.productPermission.includes(names);
+  }
+
+  /**
    * View user permission will also have product
    */
   hasViewUserPermission<T extends PermissionType>(params: PermissionParams<T>) {
@@ -237,6 +244,17 @@ export class SubscriptionPlanService extends ApiService {
       ]?.canView;
     }
     return isProductViewTrue || isModuleViewTrue;
+  }
+
+  show(): { isCalenderView: boolean } {
+    const data = {
+      isCalenderView:
+        this.checkModuleSubscription(ModuleNames.ADD_RESERVATION) &&
+        this.hasManageUserPermission(PermissionModuleNames.RESERVATION) &&
+        this.checkProductSubscription(ModuleNames.PREDICTO_PMS) &&
+        this.hasUserPermissionForProduct(ProductNames.PREDICTO_PMS),
+    };
+    return data;
   }
 }
 

@@ -78,6 +78,14 @@
             color: $secondary;
           }
         }
+
+        .description {
+          text-align: left;
+          font: normal normal 400 12px/14px Poppins;
+          letter-spacing: 0.72px;
+          color: #727272;
+          opacity: 1;
+        }
       }
       .progress {
         height: 10px;

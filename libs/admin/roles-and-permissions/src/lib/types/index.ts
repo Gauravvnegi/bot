@@ -1,17 +1,8 @@
+import { PermissionOption } from '@hospitality-bot/admin/shared';
 import { managePermissionRoutes } from '../constants/routes';
 
-export type Permission = {
-  module: string;
-  label: string;
-  permissions: {
-    manage: -1 | 0 | 1;
-    view: -1 | 0 | 1;
-  };
-  productType: string;
-};
-
-export type PermissionMod = Permission & {
-  permissions: Permission['permissions'] & {
+export type PermissionMod = PermissionOption & {
+  permissions: PermissionOption['permissions'] & {
     disabledPermissions: {
       view: boolean;
       manage: boolean;
@@ -25,22 +16,6 @@ export type QueryConfig = {
   queryObj?: string;
   loggedInUserId?: string;
   entityId?: string;
-};
-
-export type Department = {
-  parentId: string;
-  id: string;
-  view: -1 | 0 | 1;
-  manage: -1 | 0 | 1;
-  module: string;
-  department: string;
-  entityId: string;
-  userId: string;
-  created: number;
-  updated: number;
-  productType: string;
-  departmentLabel: string;
-  productLabel: string;
 };
 
 export type HotelAccess = {

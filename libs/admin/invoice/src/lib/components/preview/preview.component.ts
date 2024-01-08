@@ -1,12 +1,15 @@
 import { Component, OnInit } from '@angular/core';
-import { InvoiceService } from '../../services/invoice.service';
 import { ActivatedRoute } from '@angular/router';
+import {
+  RoutesConfigService,
+  SubscriptionPlanService,
+} from '@hospitality-bot/admin/core/theme';
 import { SnackBarService } from '@hospitality-bot/shared/material';
-import { RoutesConfigService } from '@hospitality-bot/admin/core/theme';
-import { invoiceRoutes } from '../../constants/routes';
-import { MenuItem } from 'primeng/api';
-import { AdminDetailsService } from 'libs/admin/reservation/src/lib/services/admin-details.service';
 import { ReservationService } from 'libs/admin/reservation/src/lib/services/reservation.service';
+import { MenuItem } from 'primeng/api';
+import { invoiceRoutes } from '../../constants/routes';
+import { InvoiceService } from '../../services/invoice.service';
+import { ReservationFormService } from 'libs/admin/reservation/src/lib/services/reservation-form.service';
 
 @Component({
   selector: 'hospitality-bot-preview',
@@ -41,8 +44,9 @@ export class PreviewComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private snackbarService: SnackBarService,
     private routesConfigService: RoutesConfigService,
-    private adminDetailsService: AdminDetailsService,
-    private reservationService: ReservationService
+    private reservationService: ReservationService,
+    private subscriptionService: SubscriptionPlanService,
+    private formService: ReservationFormService
   ) {}
 
   ngOnInit(): void {
@@ -51,21 +55,19 @@ export class PreviewComponent implements OnInit {
     this.navRoutes = navRoutes;
     this.pageTitle = title;
     this.reservationId = id;
-    this.getPreviewUrl();
-    this.getInvoiceData();
-    this.initNavRoutes();
     this.listenRouteData();
+    this.getInvoiceData();
+    this.getPreviewUrl();
+    this.initNavRoutes();
   }
 
   getInvoiceData() {
     this.isLoading = true;
-    this.invoiceService
-      .getInvoiceData(this.reservationId, 'REALISED')
-      .subscribe(
-        (res) => (this.isInvoiceGenerated = res.invoiceGenerated),
-        () => {},
-        () => (this.isLoading = false)
-      );
+    this.invoiceService.getInvoiceData(this.reservationId).subscribe(
+      (res) => (this.isInvoiceGenerated = res.invoiceGenerated),
+      () => {},
+      () => (this.isLoading = false)
+    );
     this.invoiceService.isPrintRate.subscribe((res) => {
       if (typeof res === 'boolean') {
         this.isPrintRate = res;
@@ -93,16 +95,21 @@ export class PreviewComponent implements OnInit {
 
   getPreviewUrl() {
     this.loadingPdf = true;
-    this.invoiceService.downloadPDF(this.reservationId, 'REALISED').subscribe(
-      (res) => {
-        this.previewUrl = res.file_download_url;
-        this.loadingPdf = false;
-      },
-      (error) => {
-        this.loadingPdf = false;
-        this.failedToLoad = true;
-      }
-    );
+    this.invoiceService
+      .downloadPDF(
+        this.reservationId,
+        this.isInvoiceGenerated ? 'REALISED' : null
+      )
+      .subscribe(
+        (res) => {
+          this.previewUrl = res.file_download_url;
+          this.loadingPdf = false;
+        },
+        (error) => {
+          this.loadingPdf = false;
+          this.failedToLoad = true;
+        }
+      );
   }
 
   initNavRoutes() {
@@ -113,22 +120,20 @@ export class PreviewComponent implements OnInit {
   }
 
   handleGenerateInvoice() {
-    this.invoiceService
-      .generateInvoice(this.reservationId, 'REALISED')
-      .subscribe(
-        (res) => {
-          this.snackbarService.openSnackBarAsText(
-            'Invoice Generated Successfully',
-            '',
-            {
-              panelClass: 'success',
-            }
-          );
-          this.isInvoiceGenerated = true;
-          this.getPreviewUrl();
-        },
-        () => {}
-      );
+    this.invoiceService.generateInvoice(this.reservationId).subscribe(
+      (res) => {
+        this.snackbarService.openSnackBarAsText(
+          'Invoice Generated Successfully',
+          '',
+          {
+            panelClass: 'success',
+          }
+        );
+        this.isInvoiceGenerated = true;
+        this.getPreviewUrl();
+      },
+      () => {}
+    );
   }
 
   listenRouteData() {
@@ -138,6 +143,7 @@ export class PreviewComponent implements OnInit {
         const paramsData = JSON.parse(atob(data));
         this.isCheckIn = paramsData.isCheckin;
         this.isCheckedOut = paramsData.isCheckout;
+        this.isInvoiceGenerated = paramsData.isInvoiceGenerated;
       }
     });
   }
@@ -155,25 +161,7 @@ export class PreviewComponent implements OnInit {
   }
 
   handleCheckout() {
-    this.adminDetailsService.openJourneyDialog({
-      title: 'Manual Checkout',
-      description: 'Guest is about to checkout',
-      question: 'Are you sure you want to continue?',
-      buttons: {
-        cancel: {
-          label: 'Cancel',
-          context: '',
-        },
-        accept: {
-          label: 'Accept',
-          context: this,
-          handler: {
-            fn_name: 'manualCheckoutfn',
-            args: [],
-          },
-        },
-      },
-    });
+    this.formService.manualCheckout(this.reservationId);
   }
 
   manualCheckoutfn() {
@@ -185,5 +173,9 @@ export class PreviewComponent implements OnInit {
           panelClass: 'success',
         });
       });
+  }
+
+  get isPermissionToCheckInOrOut(): boolean {
+    return this.subscriptionService.show().isCalenderView;
   }
 }

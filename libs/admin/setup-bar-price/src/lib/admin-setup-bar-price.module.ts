@@ -5,6 +5,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AdminSetupBarPriceRoutingModule } from './admin-setup-bar-price.routing.module';
 import { AdminSharedModule } from '@hospitality-bot/admin/shared';
 import { BarPriceService } from './services/bar-price.service';
+import { SetupBarPriceService } from './services/setup-bar-price.service';
 
 @NgModule({
   imports: [
@@ -16,6 +17,6 @@ import { BarPriceService } from './services/bar-price.service';
     ReactiveFormsModule,
   ],
   declarations: [...AdminSetupBarPriceRoutingModule.components],
-  providers: [BarPriceService],
+  providers: [BarPriceService, SetupBarPriceService],
 })
 export class AdminSetupBarPriceModule {}

@@ -18,11 +18,10 @@ export class Cashier extends RowStyles {
   paymentType: string;
   amount: string;
   deserialize(input: CashierReportResponse, id: number, total?: number) {
-    this.id = total ? ' ' : (id + 1).toString();
+    this.id = total ? 'Total' : (id + 1).toString();
     this.paymentType = total ? ' ' : input?.paymentMode;
     this.amount = total ? toCurrency(total) : toCurrency(input?.totalAmount);
-    this.isBold = total ? true : undefined;
-    this.isGreyBg = total ? true : undefined;
+    this.isSubTotal = total ? true : false;
     return this;
   }
 }
@@ -100,7 +99,7 @@ export class PayTypeReport
 
 const sumGroupedData = new Map<string, number>();
 
-class PayTypeReportData {
+class PayTypeReportData extends RowStyles {
   id: string;
   paymentMode?: string;
   paymentType?: string;
@@ -113,9 +112,6 @@ class PayTypeReportData {
   dateAndTime?: string;
   amount?: string;
   description?: string;
-  isBold?: boolean;
-  isBlueBg?: boolean;
-  isBlackBg?: boolean;
 
   deserialize(
     input: Partial<PayTypeReportResponse>,
@@ -125,7 +121,7 @@ class PayTypeReportData {
     if (totalLabel) {
       this.setTotalLabel(totalLabel);
     } else if (paymentMode) {
-      this.setPaymentMode(paymentMode);
+      this.setPaymentModeLabel(paymentMode);
     } else {
       this.setDetails(input);
     }
@@ -145,11 +141,10 @@ class PayTypeReportData {
     this.dateAndTime = ' ';
     this.amount = toCurrency(sumGroupedData.get(totalLabel));
     this.description = ' ';
-    this.isBold = true;
-    this.isBlackBg = true;
+    this.isSubTotal = true;
   }
 
-  private setPaymentMode(paymentMode: string) {
+  private setPaymentModeLabel(paymentMode: string) {
     this.paymentMode = paymentMode;
     this.paymentType = ' ';
     this.employee = ' ';
@@ -161,13 +156,11 @@ class PayTypeReportData {
     this.dateAndTime = ' ';
     this.amount = ' ';
     this.description = ' ';
-    this.isBold = true;
-    this.isBlueBg = true;
+    this.isHeader = true;
   }
 
   private setDetails(input: Partial<PayTypeReportResponse>) {
-    this.id = input?.reservationId,
-    this.paymentMode = undefined;
+    (this.id = input?.reservationId), (this.paymentMode = undefined);
     this.paymentType = input?.paymentMethod;
 
     this.employee =

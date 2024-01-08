@@ -619,8 +619,7 @@ export const reportFiltersMapping: Record<
 };
 
 export const rowStylesMapping: Record<RowStylesKeys, string> = {
-  isBold: 'is-bold',
-  isGreyBg: 'is-grey-bg',
-  isBlueBg: 'is-babyBlue-bg',
-  isBlackBg: 'is-black-bg',
+  isHeader: 'is-header',
+  isTotal: 'is-total',
+  isSubTotal: 'is-sub-total'
 };

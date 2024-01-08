@@ -6,6 +6,9 @@
   border-radius: 5px;
   padding: 20px;
   height: 100%;
+  border: solid 1px $borderCol;
+  box-shadow: 0px 3px 6px $boxShadow;
+  border-radius: 5px;
   @media screen and (max-width: 800px) {
     height: 185px;
   }

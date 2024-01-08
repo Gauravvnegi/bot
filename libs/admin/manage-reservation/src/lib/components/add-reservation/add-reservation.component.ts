@@ -24,7 +24,7 @@ import { debounceTime, takeUntil } from 'rxjs/operators';
 import { OccupancyDetails, ReservationSummary } from '../../types/forms.types';
 import {
   BookingItemsSummary,
-  RoomReservationFormResponse,
+  RoomReservationResponse,
 } from '../../types/response.type';
 import { BaseReservationComponent } from '../../../../../reservation/src/lib/components/base-reservation.component';
 import { ReservationType } from '../../constants/reservation-table';
@@ -229,7 +229,7 @@ export class AddReservationComponent extends BaseReservationComponent
       this.manageReservationService
         .getReservationDataById(this.reservationId, this.selectedEntity.id)
         .subscribe(
-          (response: RoomReservationFormResponse) => {
+          (response: RoomReservationResponse) => {
             this.reservationFormData = new ReservationFormData().deserialize(
               response
             );
@@ -287,7 +287,6 @@ export class AddReservationComponent extends BaseReservationComponent
               printRate: formData.printRate,
               formData,
             });
-
             this.inputControls.offerId.patchValue(
               this.reservationFormData.offerId
             );
@@ -410,7 +409,7 @@ export class AddReservationComponent extends BaseReservationComponent
       bookingItems: this.roomControls.map((item) => ({
         roomDetails: {
           ratePlan: {
-            id: item.get('ratePlan').value,
+            id: item.get('ratePlanId').value,
           },
           roomTypeId: item.get('roomTypeId').value,
           roomCount: item.get('roomCount').value,

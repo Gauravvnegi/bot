@@ -96,8 +96,7 @@
             }
             .material-icons {
               font-size: 12px;
-              height: auto;
-              width: auto;
+              width: 15px;
               margin-right: 5px;
               text-decoration: none;
             }
@@ -234,11 +233,6 @@
     background: $white;
     opacity: 0.2;
   }
-
-  .past-booking {
-    width: 250px;
-    margin-left: 15px;
-  }
 }
 
 mat-option {
@@ -250,7 +244,7 @@ mat-option {
   height: 80px !important;
 }
 
-:host ::ng-deep .p-dropdown {
+:host ::ng-deep .past-booking .p-dropdown {
   margin-left: 0;
   background: transparent;
   outline: none;
@@ -433,11 +427,12 @@ mat-option {
   border-right: 2px solid $whiteDeep;
   padding-right: 15px;
   overflow-y: auto;
-  height: calc(85vh - 279px);
+  height: calc(97vh - 279px);
 }
 
 :host ::ng-deep .mat-group {
   position: relative;
+  height: 97%;
 }
 
 .pending-button-wrapper {
@@ -718,6 +713,53 @@ mat-option {
     max-width: unset !important;
   }
 }
+
+:host ::ng-deep {
+  .past-booking {
+    min-width: 290px;
+    // margin-left: 15px; // remove for mat
+    .input {
+      .p-dropdown,
+      .p-dropdown.p-focus {
+        border: none;
+        box-shadow: none;
+      }
+      .p-dropdown-panel {
+        min-width: 320px;
+      }
+      .option-label {
+        font-size: 16px;
+        font-weight: 480;
+      }
+    }
+    .p-dropdown-trigger-icon {
+      color: #ffff !important;
+    }
+  }
+
+  .marketing-notification {
+    .p-dropdown .p-inputtext {
+      color: unset;
+    }
+    .p-dropdown .p-dropdown-label.p-placeholder {
+      color: rgba(0, 0, 0, 0.6);
+    }
+    .p-sidebar-content .container {
+      max-height: 100vh;
+    }
+  }
+}
+
+:host ::ng-deep {
+  .details .marketing-notification .p-sidebar {
+    width: unset !important;
+  }
+}
+
 // :host ::ng-deep .mat-select-value {
 //   // max-width: unset !important;
 // }
+
+:host ::ng-deep .p-splitbutton button {
+  font-size: 12px !important;
+}

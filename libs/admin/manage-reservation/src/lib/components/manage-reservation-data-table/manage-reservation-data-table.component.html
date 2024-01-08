@@ -5,7 +5,7 @@
 >
   <div class="heading-wrapper">
     <div class="heading">{{ tableName }}</div>
-    <ng-container *ngIf="tableFG?.get('tableType').value === 'calendar'">
+    <ng-container *ngIf="tableFG?.get('tableType')?.value === 'calendar'">
       <hospitality-bot-info-panel type="booking"></hospitality-bot-info-panel>
       <div [ngStyle]="{ cursor: 'pointer' }">
         <img
@@ -21,7 +21,11 @@
 
   <div class="action-wrapper" *ngIf="!showCalendarView">
     <div class="pull-right" *ngIf="selectedEntity.subType === 'ROOM_TYPE'">
-      <label class="type-label" *ngFor="let option of tableTypes">
+      <label
+        class="type-label"
+        *ngFor="let option of tableTypes"
+        [ngClass]="{ disabled: !subscriptionPlanService.show().isCalenderView }"
+      >
         <input
           type="radio"
           formControlName="tableType"
@@ -41,6 +45,7 @@
     <hospitality-bot-button
       label="+ Create Reservation"
       (onClick)="createReservation()"
+      [disabled]="!subscriptionPlanService.show().isCalenderView"
     ></hospitality-bot-button>
     <hospitality-bot-export-list
       *ngIf="tableFG?.get('tableType').value !== 'calendar'"
@@ -191,9 +196,14 @@
             class="cell-content"
             *ngIf="rowData?.guestName.length; else emptyCell"
           >
-            <div class="primary-text">
+            <u
+              class="primary-text"
+              (click)="openDetailsPage(rowData.id)"
+              click-stop-propagation
+              [ngStyle]="{ cursor: 'pointer' }"
+            >
               {{ rowData.guestName }}
-            </div>
+            </u>
             <div class="secondary-text">
               {{ rowData?.companyName || '--' }}
             </div>
@@ -312,6 +322,7 @@
     [height]="'62vh'"
     [isLoading]="loading"
     (action)="createReservation()"
+    [disabledAction]="!subscriptionPlanService.show().isCalenderView"
     [content]="{
       description:
         'No Reservation found. Tap the +Create Reservation to create & manage the reservation offered by your hotel',

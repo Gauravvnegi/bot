@@ -40,8 +40,7 @@ export class HistoryAndForecastReportData extends RowStyles {
     this.DNRRooms = input?.outOfServiceRooms;
     this.houseUseRooms = input?.houseUseRooms;
     this.pax = input?.totalPersonInHouse;
-    this.isBold = input?.subTotalObject ? true : undefined;
-    this.isGreyBg = input?.subTotalObject ? true : undefined;
+    this.isSubTotal = input?.subTotalObject;
     return this;
   }
 }

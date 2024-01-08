@@ -239,14 +239,29 @@ export const mtdAndYtdReportRows = [
 ];
 
 export const nightAuditRevenueReportCols: ColsData<NightAuditRevenueData> = {
-  revenueList: {
-    header: 'Revenue List',
-    isSortDisabled: true,
+  firstCol: {
+    header: '',
     isSearchDisabled: true,
+    isSortDisabled: true,
   },
-  amount: {
-    header: 'Amount',
-    isSortDisabled: true,
+  secondCol: {
+    header: '',
     isSearchDisabled: true,
+    isSortDisabled: true,
+  },
+  thirdCol: {
+    header: '',
+    isSearchDisabled: true,
+    isSortDisabled: true,
+  },
+  fourthCol: {
+    header: '',
+    isSearchDisabled: true,
+    isSortDisabled: true,
+  },
+  fifthCol: {
+    header: '',
+    isSearchDisabled: true,
+    isSortDisabled: true,
   },
 };

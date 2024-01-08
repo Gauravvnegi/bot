@@ -11,7 +11,7 @@
 
   <div class="smiley-wrapper">
     <div class="smiley">
-      <div class="image">
+      <div class="image" [pTooltip]="'Good'" tooltipPosition="top">
         <img
           [src]="feedbackConfig.images.happy.url"
           [alt]="feedbackConfig.images.happy.alt"
@@ -20,7 +20,7 @@
       <div class="label">{{ settings.positive }}</div>
     </div>
     <div class="smiley">
-      <div class="image">
+      <div class="image" [pTooltip]="'Average'" tooltipPosition="top">
         <img
           [src]="feedbackConfig.images.sceptic.url"
           [alt]="feedbackConfig.images.sceptic.alt"
@@ -29,7 +29,7 @@
       <div class="label">{{ settings.neutral }}</div>
     </div>
     <div class="smiley">
-      <div class="image">
+      <div class="image" [pTooltip]="'Bad'" tooltipPosition="top">
         <img
           [src]="feedbackConfig.images.sad.url"
           [alt]="feedbackConfig.images.sad.alt"

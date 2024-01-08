@@ -4,7 +4,7 @@
     [ngClass]="{ 'tiered-button': !splitButton, 'split-button': splitButton }"
     (click)="!splitButton && menu.toggle($event)"
   >
-    <span class="label" (click)="labelClickedAction()">{{ label }}</span
+    <span class="label" [ngClass]="{disabled: disabled}" (click)="labelClickedAction()">{{ label }}</span
     ><span
       class="icon"
       (click)="splitButton && menu.toggle($event)"

@@ -82,6 +82,16 @@
       }"
     ></hospitality-bot-select>
   </div>
+  <hospitality-bot-form-action
+    class="full-width"
+    [loading]="loading"
+    [isId]="guestId"
+    (onPreAction)="resetForm()"
+    (onPostAction)="handleSubmit()"
+    [isFixed]="isSideBar"
+    #fa
+  >
+  </hospitality-bot-form-action>
 </div>
 
 <p-sidebar
@@ -101,14 +111,3 @@
     </span>
   </div>
 </ng-template>
-
-<hospitality-bot-form-action
-  class="full-width"
-  [loading]="loading"
-  [isId]="guestId"
-  (onPreAction)="resetForm()"
-  (onPostAction)="handleSubmit()"
-  [isSticky]="true"
-  #fa
->
-</hospitality-bot-form-action>

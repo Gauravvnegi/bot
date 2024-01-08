@@ -11,9 +11,21 @@ import {
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { MenuItem } from 'primeng/api';
 import { Subscription } from 'rxjs';
-import { setupBarPriceSteps } from '../../constants/setup-bar-price.const';
+import {
+  LevelType,
+  setupBarPriceSteps,
+} from '../../constants/setup-bar-price.const';
 import { BarPriceService } from '../../services/bar-price.service';
-import { BarPriceFromData } from '../../types/setup-bar-price.types';
+import { SetupBarPriceService } from '../../services/setup-bar-price.service';
+import {
+  BarPriceFormData,
+  BarPricePlanFormControlName,
+  ExtraBarPriceFormControlName,
+  ExtraPlanConfigFormData,
+  PlanConfigForm,
+  PlanConfigFormGroup,
+} from '../../types/setup-bar-price.types';
+import { NewDataRecord } from 'libs/admin/shared/src/lib/types/fields.type';
 
 @Component({
   selector: 'hospitality-bot-setup-bar-price',
@@ -43,44 +55,70 @@ export class SetupBarPriceComponent implements OnInit {
     private globalFilter: GlobalFilterService,
     private adminUtilityService: AdminUtilityService,
     private snackbarService: SnackBarService,
-    private routeConfigService: RoutesConfigService
+    private routeConfigService: RoutesConfigService,
+    private setupBarPriceService: SetupBarPriceService
   ) {}
 
   ngOnInit(): void {
     this.initNavRoutes();
     this.initForm();
+    this.initConfig();
   }
 
   initForm() {
-    const controlConfig: Record<keyof BarPriceFromData, FormArray> = {
-      extrasBar: this.fb.array([]),
+    const extraPlanControlConfig: NewDataRecord<ExtraPlanConfigFormData> = {
+      level: [],
+      hotelTypeConfig: this.fb.array([]),
+      roomTypeConfig: this.fb.array([]),
+    };
+    const extraPlanFG = this.fb.group(extraPlanControlConfig);
+
+    const controlConfig: NewDataRecord<BarPriceFormData> = {
+      extraBar: extraPlanFG,
       ratePlanBar: this.fb.array([]),
       roomOccupancyBar: this.fb.array([]),
       roomTypeBar: this.fb.array([]),
     };
-    this.useForm = this.fb.group(controlConfig);
 
-    this.createRoomTypeBar();
+    this.useForm = this.fb.group(controlConfig);
 
     this.useForm.valueChanges.subscribe((res) => {
       console.log(res, 'res');
     });
   }
 
-  createRoomTypeBar() {
-    const controlConfig: Record<keyof BarPriceFromData['roomTypeBar'], any> = {
-      baseRate: [],
-      modifierLevel: [],
-      parent: [],
-      roomType: [],
-    };
+  getExtraPlanFG() {}
 
-    this.useFromControl.roomTypeBar.push(this.fb.group(controlConfig));
+  initConfig() {
+    this.setupBarPriceService.initPlans();
+
+    this.setupBarPriceService.getPlanConfiguration().subscribe((res) => {
+      res['roomTypeBar'].forEach((plan, idx) => {
+        this.createPlanFA(plan, 'roomTypeBar');
+      });
+
+      res['ratePlanBar'].forEach((plan, idx) => {
+        this.createPlanFA(plan, 'ratePlanBar');
+      });
+
+      res['roomOccupancyBar'].forEach((plan, idx) => {
+        this.createPlanFA(plan, 'roomOccupancyBar');
+      });
+
+      // this.initExtraPlanFormData(res['extraBar']);
+    });
   }
 
   get useFromControl() {
-    return this.useForm.controls as Record<keyof BarPriceFromData, FormArray>;
+    return this.useForm.controls as Record<keyof BarPriceFormData, FormArray>;
   }
+  // get useFromControl() {
+  //   return this.useForm.controls as Record<
+  //     keyof BarPricePlanFormControlName,
+  //     FormArray
+  //   > &
+  //     Record<ExtraBarPriceFormControlName, FormGroup>;
+  // }
 
   initNavRoutes() {
     this.entityId = this.globalFilter.entityId;
@@ -90,11 +128,66 @@ export class SetupBarPriceComponent implements OnInit {
     });
   }
 
+  // initExtraPlanFormData(data: ExtraPlanConfigFormData) {
+  //   const dataa = this.useFromControl.extraBar.controls;
+  // }
+
+  createPlanFA(
+    value: Partial<PlanConfigForm>,
+    controlName: BarPricePlanFormControlName
+  ) {
+    const controlConfig: Record<keyof PlanConfigForm, any> = {
+      name: [value.name],
+      plan: [value.plan],
+      parentPlan: [{ value: value.parentPlan, disabled: true }],
+      currency: [value.currency],
+      modifierPrice: [value.modifierPrice],
+      modifierLevel: [value.modifierLevel],
+    };
+
+    const configForm = this.fb.group(controlConfig) as PlanConfigFormGroup;
+    this.initPlanFromSubscription(configForm, controlName);
+
+    // Pushing the FormArray Control
+    this.useFromControl[controlName].push(configForm);
+  }
+
+  /**
+   * Plan form subscription
+   */
+  initPlanFromSubscription(
+    configForm: PlanConfigFormGroup,
+    controlName: BarPricePlanFormControlName
+  ) {
+    const { modifierPrice, modifierLevel, parentPlan } = configForm.controls;
+
+    const parentPlanModifierPriceControl = this.getPlanInputFromGroupControl(
+      controlName
+    ).find((item) => {
+      return item.controls.plan.value === parentPlan.value;
+    });
+
+    const parentPlanModifierPrice =
+      parentPlanModifierPriceControl?.controls.modifierPrice.value ?? 0;
+
+    modifierPrice.valueChanges.subscribe((res) => {
+      modifierLevel.setValue(res - parentPlanModifierPrice);
+    });
+  }
+
+  getPlanInputFromGroupControl(controlName: BarPricePlanFormControlName) {
+    return this.useFromControl[controlName].controls as PlanConfigFormGroup[];
+  }
+
   listenChanges() {}
 
-  handleNext() {}
+  handleNext() {
+    this.activeStep = this.activeStep + 1;
+  }
 
-  handleBack() {}
+  handleBack() {
+    this.activeStep = this.activeStep - 1;
+  }
 
   ngOnDestroy() {
     this.$subscription.unsubscribe();

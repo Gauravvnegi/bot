@@ -15,9 +15,12 @@ import {
   kebabToCamel,
   convertToTitleCase,
 } from 'libs/admin/shared/src/lib/utils/valueFormatter';
-import { NavRouteOption, NavRouteOptions } from '@hospitality-bot/admin/shared';
+import {
+  NavRouteOption,
+  NavRouteOptions,
+  manageMaskZIndex,
+} from '@hospitality-bot/admin/shared';
 import { ActivatedRoute, Router } from '@angular/router';
-
 @Component({
   selector: 'hospitality-bot-reports',
   templateUrl: './reports.component.html',
@@ -67,6 +70,7 @@ export class ReportsComponent implements OnInit {
   registerListener() {
     this.reportsService.showMenu.subscribe((res) => {
       this.showMenu = res;
+      res && manageMaskZIndex(150);
     });
     if (this.selectedReport) {
       this.selectedReport = this.selectedReport;

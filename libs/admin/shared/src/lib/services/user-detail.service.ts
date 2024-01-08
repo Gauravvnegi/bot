@@ -40,7 +40,7 @@ export class UserService extends ApiService {
   }
 
   getUserDetailsById(userId): Observable<UserResponse> {
-    return this.get(`/api/v1/user/${userId}`);
+    return this.get(`/api/v1/user/${userId}?includeDepartment=true`);
   }
 
   getUserShareIconByNationality(nationality): Observable<any> {

@@ -1,5 +1,5 @@
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
-import { UpdatedEmitType, Variant } from '../../types/bulk-update.types';
+import { Variant } from 'libs/admin/channel-manager/src/lib/types/bulk-update.types';
 import { FormComponent } from 'libs/admin/shared/src/lib/components/form-component/form.components';
 import { FormGroup } from '@angular/forms';
 

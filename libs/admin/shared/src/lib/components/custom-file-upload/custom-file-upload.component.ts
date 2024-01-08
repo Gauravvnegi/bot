@@ -339,7 +339,7 @@ export class CustomFileUploadComponent
   }
 
   checkFileType(extension: string) {
-    return this.uploadFileData.fileType.includes(extension.toLocaleLowerCase());
+    return this.uploadFileData.fileType.includes(extension.toLowerCase());
   }
 
   removeImage(index: number) {

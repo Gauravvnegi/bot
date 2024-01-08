@@ -398,7 +398,6 @@ export class DynamicPricingHandler {
             start: rule.start,
             end: rule.end,
             discount: Math.abs(rule.discount),
-
             ...triggerConfig,
           },
           type === 'DAY_TIME_TRIGGER' ? { emitEvent: false } : {}

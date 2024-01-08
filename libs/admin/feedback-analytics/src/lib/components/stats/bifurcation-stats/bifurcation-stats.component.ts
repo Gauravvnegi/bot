@@ -235,7 +235,7 @@ export class BifurcationStatsComponent implements OnInit {
       }
     });
     this.feedback.push({
-      label: 'GTM',
+      label: 'Guest To Meet',
       score: this?.gtmCount,
       additionalData: this?.gtmCount,
       color: '#5f38f9',
@@ -289,5 +289,9 @@ export class BifurcationStatsComponent implements OnInit {
     return this.tabFeedbackType === feedback.types.both
       ? ''
       : this.tabFeedbackType;
+  }
+
+  ngOnDestroy() {
+    this.$subscription.unsubscribe();
   }
 }

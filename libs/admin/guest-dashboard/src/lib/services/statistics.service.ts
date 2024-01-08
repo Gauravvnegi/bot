@@ -5,7 +5,9 @@ import { Observable } from 'rxjs';
 @Injectable()
 export class StatisticsService extends ApiService {
   getDocumentStatistics(config): Observable<any> {
-    return this.get(`/api/v1/guest-stats/document${config.queryObj}`);
+    return this.get(
+      `/api/v1/dashboard-stats/reservation/documents${config.queryObj}`
+    );
   }
 
   getVIPStatistics(config): Observable<any> {
@@ -13,7 +15,9 @@ export class StatisticsService extends ApiService {
   }
 
   getPaymentStatistics(config): Observable<any> {
-    return this.get(`/api/v1/guest-stats/payment${config.queryObj}`);
+    return this.get(
+      `/api/v1/dashboard-stats/reservation/payments${config.queryObj}`
+    );
   }
 
   getGuestStatus(config): Observable<any> {
@@ -27,6 +31,8 @@ export class StatisticsService extends ApiService {
   }
 
   getSourceStatistics(config): Observable<any> {
-    return this.get(`/api/v1/guest-stats/source${config.queryObj}`);
+    return this.get(
+      `/api/v1/dashboard-stats/reservations/source${config.queryObj}`
+    );
   }
 }

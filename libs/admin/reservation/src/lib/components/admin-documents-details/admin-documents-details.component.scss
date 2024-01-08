@@ -19,16 +19,11 @@
   margin-bottom: 20px;
 }
 
-:host ::ng-deep .p-dropdown {
+:host ::ng-deep .form_input .p-dropdown {
   margin-left: 0;
   background: transparent;
   outline: none;
-  border: 1px solid $white;
-  border-radius: 5px;
   padding: 6px 20px;
-  .p-inputtext {
-    color: $white;
-  }
   &:hover {
     border-color: $white;
   }
@@ -62,6 +57,7 @@
       font-size: 16px;
       margin-right: 20px;
       font-weight: $bolder;
+      white-space: nowrap;
     }
   }
   .download {
@@ -124,14 +120,6 @@
     color: $grayMedium;
     margin-right: 7px;
   }
-
-  margin-top: 7px;
-
-  // &__wrapper {
-  //   display: flex;
-  //   flex-direction: row;
-  //   gap: 20px;
-  // }
 }
 
 :host ::ng-deep .select-field {
@@ -261,4 +249,15 @@
 
 .save-icon {
   margin-right: 5px;
+}
+
+:host ::ng-deep .image-cropper-modal {
+  max-height: 80vh;
+  max-width: 750px;
+  min-width: 400px;
+  padding: 2% 4% 2% 2%;
+  display: flex;
+  .p-dialog .p-dialog-content {
+    padding: 0 !important;
+  }
 }

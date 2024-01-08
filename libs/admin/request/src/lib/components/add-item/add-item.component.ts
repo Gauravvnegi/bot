@@ -1,11 +1,12 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { UserService } from '@hospitality-bot/admin/shared';
+import { Option, UserService } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { ManagePermissionService } from 'libs/admin/roles-and-permissions/src/lib/services/manage-permission.service';
 import { ServiceItemForm } from '../../types/request.type';
 import { RequestService } from '../../services/request.service';
 import { Router } from '@angular/router';
+import { convertToNormalCase } from 'libs/admin/shared/src/lib/utils/valueFormatter';
 
 @Component({
   selector: 'hospitality-bot-add-item',
@@ -20,7 +21,7 @@ export class AddItemComponent implements OnInit {
   navRoutes = [{ label: 'Add Service Item', link: './' }];
 
   loading: boolean = false;
-  userList;
+  userList: Option[] = [];
   useForm: FormGroup;
   entityId: string;
   isSidebar = false;
@@ -62,6 +63,9 @@ export class AddItemComponent implements OnInit {
         this.userList = data.users.map((item) => ({
           label: `${item.firstName} ${item.lastName}`,
           value: item.id,
+          extras: item?.departments
+            .map((item) => convertToNormalCase(item.department))
+            .join(', '),
         }));
       });
   }

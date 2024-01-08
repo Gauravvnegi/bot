@@ -139,6 +139,7 @@ export class RequestListComponent implements OnInit, OnDestroy {
     this._requestService.requestListFilter.subscribe((res) => {
       if (res) {
         this.requestTabFilter = res;
+        this.tabFilterIdx = 0;
         this._requestService.selectedRequest.next(null);
         this.loadInitialRequestList([
           ...this.globalQueries,

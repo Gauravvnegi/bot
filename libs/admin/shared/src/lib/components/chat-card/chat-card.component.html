@@ -2,15 +2,26 @@
   <div class="card-wrapper_image">
     <img [src]="userImg" *ngIf="userImg" />
     <div
-      *ngIf="profileNickName; else defaultAvatar"
+      *ngIf="profileNickName && !muted; else defaultOrMute"
       class="card-wrapper_image-nickName"
       [style.background]="backgroundColor"
     >
       {{ profileNickName }}
     </div>
-    <ng-template #defaultAvatar
-      ><img src="assets/svg/defaultUser.svg" alt="default"
-    /></ng-template>
+
+    <ng-template #defaultOrMute>
+      <ng-container
+        *ngTemplateOutlet="muted ? muteAvatar : defaultAvatar"
+      ></ng-container>
+    </ng-template>
+
+    <ng-template #defaultAvatar>
+      <img src="assets/svg/defaultUser.svg" alt="default" />
+    </ng-template>
+
+    <ng-template #muteAvatar>
+      <img class="mute-avatar" src="assets/images/mute.svg" alt="default" />
+    </ng-template>
   </div>
   <div class="card-wrapper_information">
     <div class="card-wrapper_information_roomInfoWrapper">
@@ -71,6 +82,12 @@
         </div>
         <div class="content-wrap-r2-divider"></div>
         <div class="content-wrap-job-duration">JD: {{ taskStatus?.jd }}m</div>
+      </div>
+    </div>
+    <div class="content-wrap" *ngIf="important || muted">
+      <div class="content-wrap-r2 mute-status">
+        <!-- for message pin -->
+        <img *ngIf="important" src="assets/images/pin-blue.svg" alt="" />
       </div>
     </div>
     <div

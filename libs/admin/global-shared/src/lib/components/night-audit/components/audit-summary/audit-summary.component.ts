@@ -1,8 +1,10 @@
+import { DialogService } from 'primeng/dynamicdialog';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
   AdminUtilityService,
   QueryConfig,
+  openModal,
 } from '@hospitality-bot/admin/shared';
 import { ConfirmationService, MenuItem } from 'primeng/api';
 import { Subscription } from 'rxjs';
@@ -11,8 +13,6 @@ import { ActionConfigType } from '../../../../types/night-audit.type';
 import { cols } from '../../constants/audit-summary.table';
 import { AuditSummary } from '../../models/audit-summary.model';
 import { AuditViewType } from '../../types/audit-summary.type';
-import { MatDialogConfig } from '@angular/material/dialog';
-import { ModalService } from '@hospitality-bot/shared/material';
 import { ModalComponent } from 'libs/admin/shared/src/lib/components/modal/modal.component';
 
 @Component({
@@ -47,8 +47,7 @@ export class AuditSummaryComponent implements OnInit {
     private nightAuditService: NightAuditService,
     private globalFilterService: GlobalFilterService,
     private adminUtilityService: AdminUtilityService,
-    private confirmationService: ConfirmationService,
-    private modalService: ModalService
+    private dialogService: DialogService
   ) {}
 
   ngOnInit(): void {
@@ -93,41 +92,19 @@ export class AuditSummaryComponent implements OnInit {
             };
             if (res?.length) {
               if (isNext) {
-                // this.confirmationService.confirm({
-                //   header: `Audit Summary`,
-                //   message: `There are ${res.length} more audit, do you want to continue ?`,
-                //   acceptButtonStyleClass: 'accept-button',
-                //   rejectButtonStyleClass: 'reject-button-outlined',
-                //   accept: () => {
-                //     this.indexChange.emit({ index: 0 });
-                //   },
-                //   reject: () => {
-                //     doNotLoad();
-                //     this.indexChange.emit(this.activeIndex + 1);
-                //   },
-                // });
-
-                const dialogConfig = new MatDialogConfig();
-                dialogConfig.disableClose = true;
-                const togglePopupCompRef = this.modalService.openDialog(
-                  ModalComponent,
-                  dialogConfig
-                );
-                this.increaseZIndex(true);
-                togglePopupCompRef.componentInstance.content = {
+                const content = {
                   heading: 'Audit Summary',
                   description: [
                     `There are ${res.length} more audit, do you want to continue ?`,
                   ],
                 };
-
-                togglePopupCompRef.componentInstance.actions = [
+                const actions = [
                   {
                     label: 'No',
                     onClick: () => {
                       doNotLoad();
                       this.indexChange.emit(this.activeIndex + 1);
-                      this.modalService.close();
+                      dialogRef.close();
                     },
                     variant: 'outlined',
                   },
@@ -135,11 +112,23 @@ export class AuditSummaryComponent implements OnInit {
                     label: 'Yes',
                     onClick: () => {
                       this.indexChange.emit({ index: 0 });
-                      this.modalService.close();
+                      dialogRef.close();
                     },
                     variant: 'contained',
                   },
                 ];
+                const dialogRef = openModal({
+                  component: ModalComponent,
+                  config: {
+                    styleClass: 'confirm-dialog',
+                    width: 'unset',
+                    data: {
+                      content: content,
+                      actions: actions,
+                    },
+                  },
+                  dialogService: this.dialogService,
+                });
               } else {
                 loadTable();
               }
@@ -155,14 +144,6 @@ export class AuditSummaryComponent implements OnInit {
           }
         )
     );
-  }
-
-  increaseZIndex(toggleZIndex: boolean) {
-    const cdkOverlayContainer = document.querySelector(
-      '.cdk-overlay-container'
-    ) as HTMLElement;
-    if (cdkOverlayContainer)
-      cdkOverlayContainer.style.zIndex = toggleZIndex ? '1500 ' : '1000';
   }
 
   initTable() {

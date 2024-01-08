@@ -5,6 +5,11 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { QueryConfig } from '../types';
 import { UserListResponse } from '../types/response';
+import {
+  PermissionOption,
+  UserConfig,
+  UserResponse,
+} from '@hospitality-bot/admin/shared';
 
 @Injectable({ providedIn: 'root' })
 export class ManagePermissionService extends ApiService {
@@ -16,67 +21,36 @@ export class ManagePermissionService extends ApiService {
     super(httpClient, baseUrl);
   }
 
-  modifyPermissionDetails(value) {
-    // to be changed when multiple hotels
-    // temp function
-    return {
-      email: value.email.trim(),
-      firstName: value.firstName,
-      lastName: value.lastName,
-      title: value.jobTitle,
-      cc: value.cc,
-      phoneNumber: value.phoneNumber,
-      profileUrl: value.profileUrl,
-      permissions: value.permissionConfigs,
-      departments: value.departments,
-      hotelAccess: {
-        brands: [
-          {
-            id: value.brandName,
-            entities: [
-              {
-                id: value.branchName,
-              },
-            ],
-          },
-        ],
-      },
-    };
-  }
-
   modifyUserDetailsForEdit(value) {
     return {
       firstName: value.firstName,
       lastName: value.lastName,
       phoneNumber: value.phoneNumber,
       profileUrl: value.profileUrl,
-      permissions:
-        value.permissionConfigs?.map((item) => ({
-          ...item,
-          permissions: {
-            manage: item.permissions.manage,
-            view: item.permissions.view,
-          },
-        })) ?? [],
-      hotelAccess: {
-        brands: [
-          {
-            id: value.brandName,
-            entities: [
-              {
-                id: value.branchName,
-              },
-            ],
-          },
-        ],
-      },
+      // hotelAccess: {
+      //   brands: [
+      //     {
+      //       id: value.brandName,
+      //       entities: [
+      //         {
+      //           id: value.branchName,
+      //         },
+      //       ],
+      //     },
+      //   ],
+      // },
     };
   }
 
-  modifyPermissionDetailsForEdit(value, allDepartments) {
+  modifyPermissionDetailsForEdit(
+    value: Record<string, any> & { permissionConfigs: PermissionOption[] },
+    adminDetail: UserConfig
+  ): Partial<UserResponse> & { hotelAccess: any } {
     // to be changed when multiple hotels
     // temp function
-    const products = value.products;
+    const products = adminDetail.products.filter((item) =>
+      value.products?.includes(item.value)
+    );
 
     return {
       id: value.id,
@@ -88,30 +62,27 @@ export class ManagePermissionService extends ApiService {
       phoneNumber: value.phoneNumber,
       profileUrl: value.profileUrl,
       reportingTo: value.reportingTo,
-      departments: allDepartments.filter((item) =>
-        // value.departments?.includes(item.department)
-        products.includes(item.productType)
-      ),
-      permissions: value.permissionConfigs.map((item) => {
-        return {
-          ...item,
-          permissions: {
-            ...item.permissions,
-            manage: item.permissions.manage !== 1 ? -1 : 1,
-            view: item.permissions.view !== 1 ? -1 : 1,
-          },
-        };
-      }),
-      // permissions: value.permissionConfigs.filter(
-      //   ({ permissions, productType }) => {
-      //     return (
-      //       (permissions.manage || permissions.view) &&
-      //       products?.reduce((value, curr) => {
-      //         return value || productType?.includes(curr);
-      //       }, false)
-      //     );
-      //   }
-      // ),
+      products: products.map((item) => ({
+        id: item.id,
+        label: item.label,
+        module: item.value,
+        productType: item.value,
+        permissions: {
+          manage: 1,
+          view: 1,
+        },
+        productPermissions: value.permissionConfigs
+          .filter((permissionItem) =>
+            permissionItem.productType.includes(item.value)
+          )
+          .map((permissionItem) => ({
+            ...permissionItem,
+            permissions: {
+              manage: permissionItem.permissions.manage !== 1 ? -1 : 1,
+              view: permissionItem.permissions.view !== 1 ? -1 : 1,
+            },
+          })),
+      })),
       hotelAccess: {
         brands: [
           {
@@ -191,9 +162,9 @@ export class ManagePermissionService extends ApiService {
 
   exportCSV(config: QueryConfig, allUsers: boolean = false): Observable<any> {
     return this.get(
-      `/api/v1/${
-        allUsers ? `entity/${config.entityId}` : `user/${config.loggedInUserId}`
-      }/users/export${config.queryObj ? config.queryObj : ''}`,
+      `/api/v1/entity/${config.entityId}/users/export${
+        config.queryObj ? config.queryObj : ''
+      }`,
       {
         responseType: 'blob',
       }

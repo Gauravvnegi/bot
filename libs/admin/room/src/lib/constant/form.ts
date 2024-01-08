@@ -143,7 +143,7 @@ export type ReservationRatePlan = {
   label: string;
   value: string;
   isBase: boolean;
-  sellingPrice: number;
+  sellingPrice?: number;
 };
 
 export type RoomTypeData = Omit<

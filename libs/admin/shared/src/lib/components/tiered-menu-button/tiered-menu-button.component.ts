@@ -23,6 +23,7 @@ export class TieredMenuButtonComponent implements OnInit {
   @Input() link: string;
   @Input() splitButton = false;
   @Input() openNewWindow = false;
+  @Input() disabled: boolean = false;
   @Output() clicked = new EventEmitter();
   @ViewChild('menu') menu: TieredMenu;
   @ViewChild('btn') button: ElementRef;

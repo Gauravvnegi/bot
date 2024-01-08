@@ -6,6 +6,7 @@ import { DetailsComponent } from '@hospitality-bot/admin/reservation';
 import {
   AdminUtilityService,
   BaseDatatableComponent,
+  BookingDetailService,
   FeedbackService,
 } from '@hospitality-bot/admin/shared';
 import { ModalService } from '@hospitality-bot/shared/material';
@@ -51,7 +52,8 @@ export class GuestDatatableComponent extends BaseDatatableComponent
     protected globalFilterService: GlobalFilterService,
     protected snackbarService: SnackBarService,
     protected _modal: ModalService,
-    public feedbackService: FeedbackService
+    public feedbackService: FeedbackService,
+    public bookingDetailService: BookingDetailService
   ) {
     super(fb);
   }
@@ -266,21 +268,28 @@ export class GuestDatatableComponent extends BaseDatatableComponent
   openDetailPage(event, rowData?, tabKey?): void {
     event.stopPropagation();
     if (rowData) {
-      const dialogConfig = new MatDialogConfig();
-      dialogConfig.disableClose = true;
-      dialogConfig.width = '100%';
-      const detailCompRef = this._modal.openDialog(
-        DetailsComponent,
-        dialogConfig
-      );
+      // const dialogConfig = new MatDialogConfig();
+      // dialogConfig.disableClose = true;
+      // dialogConfig.width = '100%';
+      // const detailCompRef = this._modal.openDialog(
+      //   DetailsComponent,
+      //   dialogConfig
+      // );
 
-      detailCompRef.componentInstance.guestId = rowData.id;
-      detailCompRef.componentInstance.bookingNumber =
-        rowData.booking.bookingNumber;
-      tabKey && (detailCompRef.componentInstance.tabKey = tabKey);
+      // detailCompRef.componentInstance.guestId = rowData.id;
+      // detailCompRef.componentInstance.bookingNumber =
+      //   rowData.booking.bookingNumber;
+      // tabKey && (detailCompRef.componentInstance.tabKey = tabKey);
+
+      this.bookingDetailService.openBookingDetailSidebar({
+        bookingNumber: rowData.booking.bookingNumber,
+        guestId: rowData.id,
+        tabKey: tabKey,
+      });
 
       this.$subscription.add(
-        detailCompRef.componentInstance.onDetailsClose.subscribe((res) => {
+        // detailCompRef.componentInstance.onDetailsClose.subscribe((res) => {
+        this.bookingDetailService.actionEvent.subscribe((res) => {
           this.loadInitialData(
             [
               ...this.globalQueries,
@@ -292,7 +301,7 @@ export class GuestDatatableComponent extends BaseDatatableComponent
             ],
             false
           );
-          detailCompRef.close();
+          // detailCompRef.close();
         })
       );
     }

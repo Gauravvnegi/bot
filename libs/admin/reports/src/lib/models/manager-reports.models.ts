@@ -36,14 +36,6 @@ export class ManagerFlashReport extends MangerReport
           (item?.totalRooms - item?.outOfServiceRooms)
         ).toFixed(2) + '%';
 
-      console.log(
-        'noOfLettableRooms',
-        noOfLettableRooms,
-        item?.totalRooms - item?.outOfServiceRooms,
-        item?.totalRooms,
-        item?.outOfServiceRooms
-      );
-
       // const roomsOccupiedMinusCompAndHouse =
       //   item?.occupiedRooms ??
       //   0 - item?.complimentaryRooms ??
@@ -89,6 +81,8 @@ export class ManagerFlashReport extends MangerReport
         day: dayData[item.name],
         year: yearData[item.name],
         month: monthData[item.name],
+        // @ts-ignore
+        isSubTotal: item.name === 'totalRevenue' ? true : false,
       });
     });
 

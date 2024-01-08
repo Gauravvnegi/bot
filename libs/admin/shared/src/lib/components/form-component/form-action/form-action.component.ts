@@ -58,12 +58,17 @@ export class FormActionComponent implements OnInit {
     }
   }
   @Input() loading: boolean = false;
+  /**
+   * if you set IsFixed true then by default form action will be sticky on the bottom of form
+   * we, only use this condition for side view , where we want form action to be sticky by default
+   */
+  @Input() isFixed = false;
+
   @Output() onPreAction = new EventEmitter<Event>();
   @Output() onPostAction = new EventEmitter<Event>();
 
   mainLayout: HTMLElement;
   formLayout: HTMLElement;
-  isFixed = false;
 
   ngOnInit(): void {}
 
@@ -71,12 +76,16 @@ export class FormActionComponent implements OnInit {
     this.mainLayout = document.getElementById('main-layout');
     this.formLayout = document.getElementById(this.referenceId);
     this.mainLayout?.addEventListener('scroll', this.onScroll.bind(this));
+    /**
+     * In case isFixed is true. i.e side view so skip this logic else make it sticky based on below logic
+     */
+    if (!this.isFixed) {
+      const distanceFromBottom =
+        this.formLayout?.scrollHeight -
+        (this.mainLayout?.scrollTop + this.mainLayout?.offsetHeight);
 
-    const distanceFromBottom =
-      this.formLayout?.scrollHeight -
-      (this.mainLayout?.scrollTop + this.mainLayout?.offsetHeight);
-
-    this.isFixed = distanceFromBottom > 0 ? true : false;
+      this.isFixed = distanceFromBottom > 0 ? true : false;
+    }
   }
 
   preAction() {

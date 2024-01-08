@@ -10,6 +10,7 @@ import { FormBuilder } from '@angular/forms';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
   AdminUtilityService,
+  BookingDetailService,
   FeedbackService,
 } from '@hospitality-bot/admin/shared';
 import {
@@ -18,12 +19,18 @@ import {
 } from '@hospitality-bot/shared/material';
 import * as FileSaver from 'file-saver';
 import { Observable } from 'rxjs';
-import { GuestTable } from '../../../data-models/guest-table.model';
+import {
+  GuestDocsOrPayment,
+  GuestTable,
+} from '../../../data-models/guest-table.model';
 import { GuestTableService } from '../../../services/guest-table.service';
 import { GuestDatatableComponent } from '../../datatable/guest/guest.component';
 import { NavigationEnd, Router } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { guestStatusDetails } from '../../../constants/guest';
+import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { GuestDialogData, GuestModalType } from '../../../types/guest.type';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'hospitality-bot-guest-datatable-modal',
@@ -37,11 +44,15 @@ import { guestStatusDetails } from '../../../constants/guest';
 export class GuestDatatableModalComponent extends GuestDatatableComponent
   implements OnInit, OnDestroy {
   isAllTabFilterRequired = true;
-  @Input() callingMethod: string;
+  modalType?: GuestModalType;
+  @Input() callingMethod: 'getGuestDocsOrPaymentStats' | 'getAllGuestStats';
   @Input() guestFilter: string;
   @Input() exportURL: string;
+  @Input() entityType: string;
   @Output() onModalClose = new EventEmitter();
   imageSrc: string;
+  isNpsColHidden: Boolean = false;
+
   constructor(
     public fb: FormBuilder,
     protected _guestTableService: GuestTableService,
@@ -50,7 +61,11 @@ export class GuestDatatableModalComponent extends GuestDatatableComponent
     protected snackbarService: SnackBarService,
     protected _modal: ModalService,
     public feedbackService: FeedbackService,
-    private router: Router
+    private router: Router,
+    public bookingDetailService: BookingDetailService,
+    public ref: DynamicDialogRef,
+    public config: DynamicDialogConfig, // generic is not supported in v10
+    public _translateService: TranslateService
   ) {
     super(
       fb,
@@ -59,8 +74,24 @@ export class GuestDatatableModalComponent extends GuestDatatableComponent
       globalFilterService,
       snackbarService,
       _modal,
-      feedbackService
+      feedbackService,
+      bookingDetailService
     );
+
+    const data = config.data as GuestDialogData;
+    if (data) {
+      Object.entries(data).forEach(([key, value]) => {
+        this[key] = value;
+      });
+    }
+
+    if (this.callingMethod === 'getGuestDocsOrPaymentStats') {
+      this.isAllTabFilterRequired = false;
+      this.isNpsColHidden = true;
+      this.cols = this.cols.filter(
+        (item) => item.field !== 'guestAttributes.overAllNps'
+      );
+    }
   }
 
   ngOnInit(): void {
@@ -71,6 +102,9 @@ export class GuestDatatableModalComponent extends GuestDatatableComponent
       .subscribe(() => {
         this.closeModal();
       });
+    this._translateService
+      .get(this.modalType)
+      .subscribe((message) => (this.tableName = message));
   }
 
   loadInitialData(queries = [], loading = true) {
@@ -96,6 +130,18 @@ export class GuestDatatableModalComponent extends GuestDatatableComponent
   }
 
   setRecords(data): void {
+    if (this.callingMethod === 'getGuestDocsOrPaymentStats') {
+      const guestRecord = new GuestDocsOrPayment().deserialize(data);
+      this.values = guestRecord.records;
+      this.initFilters(
+        {},
+        guestRecord.entityStateCounts,
+        guestRecord.totalRecord
+      );
+      this.loading = false;
+      return;
+    }
+
     const guestRecord = new GuestTable().deserialize(data);
     this.values = guestRecord.records;
     this.initFilters(
@@ -118,12 +164,18 @@ export class GuestDatatableModalComponent extends GuestDatatableComponent
   }
 
   fetchDataFrom(queries, defaultProps): Observable<any> {
+    if (this.entityType) {
+      queries.forEach((item) => {
+        if (item.hasOwnProperty('entityType')) {
+          item['entityType'] = this.entityType;
+        }
+      });
+    }
     this.resetRowSelection();
     queries.push(defaultProps);
     const config = {
       queryObj: this._adminUtilityService.makeQueryParams(queries),
     };
-
     return this._guestTableService[this.callingMethod](config);
   }
 
@@ -138,7 +190,7 @@ export class GuestDatatableModalComponent extends GuestDatatableComponent
             order: 'DESC',
             entityType: this.tabFilterItems[this.tabFilterIdx].value,
           },
-          ...this.getSelectedQuickReplyFilters({key: 'entityState'}),
+          ...this.getSelectedQuickReplyFilters({ key: 'entityState' }),
         ],
         {
           offset: this.first,
@@ -148,7 +200,6 @@ export class GuestDatatableModalComponent extends GuestDatatableComponent
         }
       ).subscribe(
         (data) => {
-          this.values = new GuestTable().deserialize(data).records;
           this.setRecords(data);
         },
         ({ error }) => {
@@ -192,6 +243,7 @@ export class GuestDatatableModalComponent extends GuestDatatableComponent
   }
 
   closeModal() {
+    this.ref.close();
     this.onModalClose.emit(true);
   }
 }

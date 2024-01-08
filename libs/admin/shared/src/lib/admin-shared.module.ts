@@ -1,3 +1,4 @@
+import { ToastModule } from 'primeng/toast';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -21,6 +22,7 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { TabMenuModule } from 'primeng/tabmenu';
 import { AccordionModule } from 'primeng/accordion';
 import { OverlayPanelModule } from 'primeng/overlaypanel';
+import { ContextMenuModule } from 'primeng/contextmenu';
 
 import { ButtonComponent } from './components/button/button.component';
 import { ComingSoonComponent } from './components/coming-soon/coming-soon.component';
@@ -57,6 +59,7 @@ import { NumberDirective } from './directives/number.directive';
 import { StatusCellDirective } from './directives/status-cell.directive';
 import { ClickStopPropagation } from './directives/stoppropagation.directive';
 import { LinkDetector } from './pipes/linkDetector.pipe';
+import { MathPipe } from './pipes/math.pipe';
 import { NumberFormatterPipe } from './pipes/number-formatter.pipe';
 import { SafeHtmlPipe } from './pipes/safe-html.pipe';
 import { SafeUrlPipe } from './pipes/safe-url-pipe';
@@ -134,7 +137,7 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { CheckboxComponent } from './components/form-component/checkbox/checkbox.component';
 import { SplitButtonComponent } from './components/split-button/split-button.component';
 import { Dialog } from 'primeng/dialog';
-
+import { TabViewModule } from 'primeng/tabview';
 
 @NgModule({
   imports: [
@@ -170,6 +173,8 @@ import { Dialog } from 'primeng/dialog';
     TooltipModule,
     TieredMenuModule,
     ConfirmDialogModule,
+    ToastModule,
+    TabViewModule,
   ],
   declarations: [
     DatatableComponent,
@@ -194,6 +199,7 @@ import { Dialog } from 'primeng/dialog';
     UnsubscribeFeatureComponent,
     NumberFormatterPipe,
     LinkDetector,
+    MathPipe,
     MentionListComponent,
     MentionDirective,
     CustomSizeInputComponent,
@@ -309,6 +315,7 @@ import { Dialog } from 'primeng/dialog';
     EmailChipListComponent,
     NumberFormatterPipe,
     LinkDetector,
+    MathPipe,
     MentionListComponent,
     MentionDirective,
     CustomSizeInputComponent,
@@ -396,7 +403,9 @@ import { Dialog } from 'primeng/dialog';
     ConfirmDialogComponent,
     CheckboxComponent,
     SplitButtonComponent,
+    ContextMenuModule,
     Dialog,
+    ToastModule,
   ],
 })
 export class AdminSharedModule {}

@@ -1,25 +1,24 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormControl } from '@angular/forms';
-import { MatDialogConfig } from '@angular/material/dialog';
 import { NavigationEnd, Router } from '@angular/router';
 import {
   GlobalFilterService,
   RoutesConfigService,
+  SubscriptionPlanService,
 } from '@hospitality-bot/admin/core/theme';
 import {
   AdminUtilityService,
   BaseDatatableComponent as BaseDatableComponent,
+  BookingDetailService,
   EntitySubType,
   EntityType,
   ModuleNames,
   Option,
   QueryConfig,
+  openModal,
   sharedConfig,
 } from '@hospitality-bot/admin/shared';
-import {
-  ModalService,
-  SnackBarService,
-} from '@hospitality-bot/shared/material';
+import { SnackBarService } from '@hospitality-bot/shared/material';
 import * as FileSaver from 'file-saver';
 import { ModalComponent } from 'libs/admin/shared/src/lib/components/modal/modal.component';
 import { LazyLoadEvent } from 'primeng/api';
@@ -46,7 +45,7 @@ import {
 import { ManageReservationService } from '../../services/manage-reservation.service';
 import {
   ReservationListResponse,
-  RoomReservationFormResponse,
+  RoomReservationResponse,
 } from '../../types/response.type';
 import { FormService } from '../../services/form.service';
 import { SelectedEntity } from '../../types/reservation.type';
@@ -54,7 +53,7 @@ import { InvoiceService } from 'libs/admin/invoice/src/lib/services/invoice.serv
 import { distinctUntilChanged, takeUntil, tap } from 'rxjs/operators';
 import { tableTypes } from 'libs/admin/dashboard/src/lib/constants/cols';
 import { Clipboard } from '@angular/cdk/clipboard';
-import { RoomReservationFormData } from '../../types/forms.types';
+import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 
 @Component({
   selector: 'hospitality-bot-manage-reservation-data-table',
@@ -93,7 +92,7 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
   selectedTableType: string;
   showCalendarView = false;
 
-  roomReservationList: RoomReservationFormResponse[] = [];
+  roomReservationList: RoomReservationResponse[] = [];
 
   private cancelRequests$ = new Subject<void>();
 
@@ -104,11 +103,13 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
     private formService: FormService,
     private globalFilterService: GlobalFilterService,
     protected snackbarService: SnackBarService,
-    private modalService: ModalService,
     private invoiceService: InvoiceService,
     private routesConfigService: RoutesConfigService,
     private router: Router,
-    private _clipboard: Clipboard
+    private _clipboard: Clipboard,
+    private subscriptionPlanService: SubscriptionPlanService,
+    private bookingDetailService: BookingDetailService,
+    private dialogService: DialogService
   ) {
     super(fb);
   }
@@ -138,9 +139,13 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
   }
 
   checkReservationSubscription() {
-    this.tableFG?.addControl('tableType', new FormControl('calendar'));
-    this.tableFG.patchValue({ tableType: 'calendar' });
-    this.selectedTableType = 'calendar';
+    this.tableFG?.addControl('tableType', new FormControl(''));
+
+    if (this.subscriptionPlanService.show().isCalenderView) {
+      this.setTableType(this.tableTypes[0].value);
+    } else {
+      this.setTableType(this.tableTypes[1].value);
+    }
   }
 
   setTableType(value: string) {
@@ -261,63 +266,68 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
    * @function handleStatus To handle the status change
    * @param status status value
    */
-  handleStatus(status: ReservationStatusType, reservationData): void {
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.disableClose = true;
-    const togglePopupCompRef = this.modalService.openDialog(
-      ModalComponent,
-      dialogConfig
-    );
-    togglePopupCompRef.componentInstance.content = {
-      heading: `Mark Reservation As ${
-        status.charAt(0).toUpperCase() + status.slice(1).toLowerCase()
-      }`,
-      description: [
-        `You are about to mark this reservation as ${status}`,
-        `Are you Sure?`,
-        status === 'CANCELED' && reservationData?.totalPaidAmount
-          ? ` A total of \u20B9 ${reservationData?.totalPaidAmount} is received for the reservation`
-          : '',
+  handleStatus(
+    status: ReservationStatusType,
+    reservationData: RoomReservation
+  ): void {
+    let modalRef: DynamicDialogRef;
+
+    const data = {
+      content: {
+        heading: `Mark Reservation As ${
+          status.charAt(0).toUpperCase() + status.slice(1).toLowerCase()
+        }`,
+        descriptions: [
+          `You are about to mark this reservation as ${status}`,
+          `Are you Sure?`,
+          status === 'CANCELED' && reservationData?.totalPaidAmount
+            ? ` A total of \u20B9 ${reservationData?.totalPaidAmount} is received for the reservation`
+            : '',
+        ],
+        isRemarks: status === 'CANCELED',
+      },
+      actions: [
+        {
+          label: status === 'CANCELED' ? 'Cancel & Settlement' : 'Cancel',
+          onClick: () => {
+            status === 'CANCELED' &&
+              this.routesConfigService.navigate({
+                subModuleName: ModuleNames.INVOICE,
+                additionalPath: reservationData.id,
+                queryParams: {
+                  entityId: this.selectedEntity.id,
+                  type: this.selectedEntity.subType,
+                },
+              });
+            modalRef.close();
+          },
+          variant: 'outlined',
+        },
+        {
+          label: 'Yes',
+          onClick: (modelData) => {
+            this.changeStatus(status, reservationData, modelData);
+            modalRef.close();
+          },
+          variant: 'contained',
+        },
       ],
-      isRemarks: status === 'CANCELED',
     };
 
-    togglePopupCompRef.componentInstance.actions = [
-      {
-        label: status === 'CANCELED' ? 'Cancel & Settlement' : 'Cancel',
-        onClick: () => {
-          status === 'CANCELED' &&
-            this.routesConfigService.navigate({
-              subModuleName: ModuleNames.INVOICE,
-              additionalPath: reservationData.id,
-              queryParams: {
-                entityId: this.selectedEntity.id,
-                type: this.selectedEntity.subType,
-              },
-            });
-
-          this.modalService.close();
-        },
-        variant: 'outlined',
+    modalRef = openModal({
+      config: {
+        width: '35vw',
+        styleClass: 'confirm-dialog',
+        data: data,
       },
-      {
-        label: 'Yes',
-        onClick: (modelData) => {
-          this.changeStatus(status, reservationData, modelData);
-          this.modalService.close();
-        },
-        variant: 'contained',
-      },
-    ];
-
-    togglePopupCompRef.componentInstance.onClose.subscribe(() => {
-      this.modalService.close();
+      component: ModalComponent,
+      dialogService: this.dialogService,
     });
   }
 
   changeStatus(
     status: ReservationStatusType,
-    reservationData,
+    reservationData: RoomReservation,
     additionalData?: any
   ) {
     let bookingType =
@@ -363,6 +373,13 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
       queryParams: {
         entityId: this.selectedEntity.id,
       },
+    });
+  }
+
+  openDetailsPage(reservationId: string) {
+    this.bookingDetailService.openBookingDetailSidebar({
+      tabKey: 'guest_details',
+      bookingId: reservationId,
     });
   }
 

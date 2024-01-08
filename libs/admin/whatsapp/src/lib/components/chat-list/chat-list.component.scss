@@ -92,3 +92,54 @@
 .cursor-pointer {
   cursor: pointer;
 }
+
+::ng-deep {
+  .p-contextmenu .p-menuitem-link {
+    font-size: 14px;
+    font-weight: 400;
+  }
+}
+
+::ng-deep {
+  .mute-icon {
+    width: 1rem;
+    height: 1rem;
+    background-image: url('/assets/images/mute.svg');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+  .unmute-icon {
+    width: 1rem;
+    height: 1rem;
+    background-image: url('/assets/images/unmute.svg');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+  .pin-icon {
+    width: 1rem;
+    height: 1rem;
+    background-image: url('/assets/images/pin.svg');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+  .unpin-icon {
+    width: 1rem;
+    height: 1rem;
+    background-image: url('/assets/images/unpin.svg');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+}
+
+:host ::ng-deep {
+  .p-dialog {
+    .p-dialog-content {
+      padding: unset !important;
+      width: 38rem !important;
+    }
+  }
+}

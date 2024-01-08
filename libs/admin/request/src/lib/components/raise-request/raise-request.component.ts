@@ -17,11 +17,10 @@ import { Subscription } from 'rxjs';
 import { request } from '../../constants/request';
 import { debounceTime } from 'rxjs/operators';
 import { RequestService } from '../../services/request.service';
-import { Option } from '@hospitality-bot/admin/shared';
 import { MatDialogConfig } from '@angular/material/dialog';
 import { AddItemComponent } from '../add-item/add-item.component';
-import { DepartmentList } from '../../data-models/request.model';
 import { SideBarService } from 'apps/admin/src/app/core/theme/src/lib/services/sidebar.service';
+import { Option } from '@hospitality-bot/admin/shared';
 
 @Component({
   selector: 'hospitality-bot-raise-request',
@@ -43,6 +42,7 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
   userList: Option[] = [];
   requestData: any;
   departmentList: Option[] = [];
+  assigneeList: Option[] = [];
   sidebarVisible = false;
   isItemUuid: boolean = false;
   @Input() isSidebar = false;
@@ -97,7 +97,7 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
       jobDuration: [''],
       remarks: ['', [Validators.maxLength(200)]],
       quantity: [1, [Validators.required, Validators.min(1)]],
-      assigneeId: [''],
+      assigneeId: ['', [Validators.required]], //as per BE ()
       cc: ['+91'],
       phoneNumber: ['', [Validators.required, Validators.pattern('^[0-9]*$')]],
     });
@@ -148,17 +148,24 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
       this.getItemDetails(itemId);
     });
   }
-
   getItemDetails(itemId) {
     this.$subscription.add(
       this._requestService
         .getItemDetails(this.entityId, itemId)
         .subscribe((response) => {
-          this.isItemUuid = response?.itemUuid ? true : false;
-          const data = new DepartmentList().deserialize(
-            response?.requestItemUsers
-          );
-          this.departmentList = data.departmentWithUsers;
+          this.isItemUuid = !!response?.itemUuid;
+
+          this.assigneeList = response.requestItemUsers.map((user) => {
+            return {
+              label: `${user.firstName} ${user.lastName}`,
+              value: user.userId,
+            };
+          });
+
+          // const data = new DepartmentList().deserialize(
+          //   response?.requestItemUsers
+          // );
+          // this.departmentList = data.departmentWithUsers;
         })
     );
   }
@@ -268,6 +275,7 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
         containerRef: this.sidebarSlide,
         onOpen: () => (this.sidebarVisible = true),
         onClose: (res) => (this.sidebarVisible = false),
+        manageMask: true,
       });
     } else {
       // In-future pop-up will be remove from everywhere

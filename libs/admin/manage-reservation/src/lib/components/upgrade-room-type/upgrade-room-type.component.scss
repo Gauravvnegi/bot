@@ -7,10 +7,17 @@
 .one-third-width {
   flex-basis: 29.33%;
   width: 29.33%;
-} 
+}
 
 :host ::ng-deep .select {
   .option-items {
     overflow: hidden !important;
   }
+}
+
+.charges-info {
+  padding: 0 4%;
+  color: rgba(0, 0, 0, 0.5);
+  font-size: 14px;
+  margin-top: -30px;
 }

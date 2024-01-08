@@ -9,6 +9,7 @@ export type Option<T = string, TOption = Record<string, any>> = {
   value: T;
   inactive?: boolean;
   icon?: string;
+  extras?: string;
 } & TOption;
 
 export type FormProps = {

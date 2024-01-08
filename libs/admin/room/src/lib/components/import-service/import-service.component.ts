@@ -110,7 +110,7 @@ export class ImportServiceComponent implements OnInit {
 
   saveForm(data: { serviceIds: string[]; packageCode: string }) {
     this.roomService
-      .updateHotel(this.entityId, { serviceIds: data.serviceIds })
+      .importService(this.entityId, { serviceIds: data.serviceIds })
       .subscribe(this.handleSuccess, this.handelError);
   }
 

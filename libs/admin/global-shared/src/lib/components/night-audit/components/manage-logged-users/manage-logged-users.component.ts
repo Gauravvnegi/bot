@@ -116,7 +116,7 @@ export class ManageLoggedUsersComponent implements OnInit {
   handleNext() {
     if (this.items?.length && !this.isTimerStart && this.activeIndex == 0) {
       this.handleMangeLoggedIn();
-    } else if (this.activeIndex + 1 < this.stepList.length)
+    } else if (this.activeIndex + 1 < this.stepList?.length)
       this.indexChange.emit(this.activeIndex + 1);
   }
 

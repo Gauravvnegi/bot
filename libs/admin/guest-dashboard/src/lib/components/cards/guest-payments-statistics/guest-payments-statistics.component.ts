@@ -151,9 +151,9 @@ export class GuestPaymentsStatisticsComponent implements OnInit, OnDestroy {
   openTableModal() {
     const data: GuestDialogData = {
       tabFilterItems: this.tabFilterItems,
-      callingMethod: 'getAllGuestStats',
-      guestFilter: 'GUESTPAYMENTS',
-      exportURL: 'exportCSVStat',
+      callingMethod: 'getGuestDocsOrPaymentStats',
+      entityType: 'GUESTPAYMENTS',
+      exportURL: 'exportDocsCSV',
       modalType: 'payment.title',
     };
 

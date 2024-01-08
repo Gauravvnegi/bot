@@ -1,0 +1,56 @@
+@import 'main';
+:host ::ng-deep .snackbar-message__wrapper {
+  .p-toast {
+    width: unset;
+    .p-toast-message {
+      .p-toast-message-content {
+        padding: 10px 25px;
+        .p-toast-message-icon {
+          display: none;
+        }
+        .p-toast-message-text {
+          margin: 0 1rem;
+        }
+        .p-toast-detail {
+          margin: unset;
+          font-size: 14px;
+        }
+      }
+
+      .notifications {
+        &__content {
+          @include flex-space-between-cen-Algn;
+          gap: 10px;
+        }
+      }
+    }
+
+    .wrapper {
+      background-color: #dcf6d3;
+      border-width: 0 0 0 5px;
+      padding: 14px 16px;
+      border-color: #72cf4d;
+      border-style: solid;
+      color: black;
+      min-width: 350px;
+      max-width: 350px;
+      overflow: hidden;
+      word-break: break-word;
+    }
+
+    .title {
+      font-weight: 500;
+    }
+
+    .watsapp {
+      margin-right: 5px;
+      margin-bottom: -2px;
+    }
+  }
+}
+
+:host ::ng-deep .whatsapp-notification {
+  .p-toast .p-toast-message .p-toast-message-content {
+    padding: 0;
+  }
+}

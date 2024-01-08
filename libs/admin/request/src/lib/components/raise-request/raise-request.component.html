@@ -101,10 +101,9 @@
         *ngIf="!isItemUuid"
         class="full-width department"
         [disabled]="!requestFG.get('itemCode').value"
-        [options]="departmentList"
+        [options]="assigneeList"
         label="Assign To"
         controlName="assigneeId"
-        [isGroupOptions]="true"
       ></hospitality-bot-select>
 
       <hospitality-bot-text-area

@@ -111,6 +111,7 @@
 // Confirmation dialog style
 .confirm-dialog {
   @include dialog-style;
+  min-width: 550px;
 }
 
 // Dialog with header

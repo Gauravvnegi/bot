@@ -117,9 +117,9 @@
             </p>
           </td>
           <td>
-            <p class="booking-number">{{ rowData.booking.bookingNumber }}</p>
+            <p class="booking-number">{{ rowData?.booking?.bookingNumber }}</p>
             <div
-              *ngIf="['COMPLETED'].includes(rowData.feedback.status)"
+              *ngIf="['COMPLETED'].includes(rowData?.feedback?.status)"
               class="booking-feedback"
               [ngClass]="
                 rowData.feedback.rating < 5
@@ -211,18 +211,18 @@
             >/ {{ rowData.payment.totalAmount | currency: 'INR' }}
           </td>
 
-          <td class="package">
+          <td class="package" *ngIf="!isNpsColHidden">
             <span
               [ngClass]="{
                 'status-text-initiated':
-                  rowData.guestAttributes.overAllNps > 40 &&
-                  rowData.guestAttributes.overAllNps <= 60,
+                  rowData?.guestAttributes?.overAllNps > 40 &&
+                  rowData?.guestAttributes?.overAllNps <= 60,
                 'status-text-reject':
-                  rowData.guestAttributes.overAllNps >= -100 &&
-                  rowData.guestAttributes.overAllNps <= 40,
-                'status-text-success': rowData.guestAttributes.overAllNps > 60
+                  rowData?.guestAttributes?.overAllNps >= -100 &&
+                  rowData?.guestAttributes?.overAllNps <= 40,
+                'status-text-success': rowData?.guestAttributes?.overAllNps > 60
               }"
-              >{{ rowData.guestAttributes.overAllNps }}
+              >{{ rowData?.guestAttributes?.overAllNps }}
             </span>
           </td>
 

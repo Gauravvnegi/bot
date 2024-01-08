@@ -2,13 +2,13 @@ import { Injectable } from '@angular/core';
 import { AngularFireMessaging } from '@angular/fire/messaging';
 // import { HttpClient } from '@angular/common/http';
 import { Subscription, BehaviorSubject } from 'rxjs';
-import { SnackBarService } from '../../../../../../../../../libs/shared/material/src/lib/services/snackbar.service';
+import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.service';
 import { MessageTabService } from './messages-tab.service';
 import { Howl } from 'howler';
-import { ModalService } from '../../../../../../../../../libs/shared/material/src';
+import { ModalService } from 'libs/shared/material/src';
 import { MatDialogConfig } from '@angular/material/dialog';
 import { NotificationPopupComponent } from '../containers/notification-popup/notification-popup.component';
-import { NotificationSnackbarComponent } from '../containers/notification-snackbar/notification-snackbar.component';
+import { ToastKeys } from 'libs/shared/material/src/lib/types/snackbar.type';
 
 @Injectable({
   providedIn: 'root',
@@ -93,21 +93,26 @@ export class FirebaseMessagingService {
 
   showNotificationAsSnackBar(payload: any) {
     if (payload?.data?.notificationType === 'WHATSAPP') {
-      const snackBarRef = this._snackbarService.openSnackBarAsComponent(
-        NotificationSnackbarComponent,
-        {
-          panelClass: 'whatsapp-notification',
-          duration: 5000,
-          horizontalPosition: 'right',
-          verticalPosition: 'top',
-        }
-      );
+      this._snackbarService.openSnackBarAsText(payload.data?.message, '', {
+        duration: 5000,
+        title: payload.data?.nickName ?? payload.data?.phoneNumber,
+        key: ToastKeys.whatsappNotification,
+      });
 
-      snackBarRef.instance.message = payload.data?.message;
-      snackBarRef.instance.title = payload.data?.nickName
-        ? payload.data?.nickName
-        : payload.data?.phoneNumber;
-      
+      // TODO: Need to remove
+      // const snackBarRef = this._snackbarService.openSnackBarAsComponent(
+      //   NotificationSnackbarComponent,
+      //   {
+      //     panelClass: 'whatsapp-notification',
+      //     duration: 5000,
+      //     horizontalPosition: 'right',
+      //     verticalPosition: 'top',
+      //   }
+      // );
+      // snackBarRef.instance.message = payload.data?.message;
+      // snackBarRef.instance.title = payload.data?.nickName
+      //   ? payload.data?.nickName
+      //   : payload.data?.phoneNumber;
     } else if (payload.notification?.body) {
       const title = payload.notification?.body.split('\n')[0];
       this._snackbarService.openSnackBarAsText(

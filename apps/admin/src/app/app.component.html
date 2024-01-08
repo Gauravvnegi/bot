@@ -1,1 +1,58 @@
 <router-outlet></router-outlet>
+<div class="snackbar-message__wrapper {{ snackbarConfig?.key }}">
+  <!-- Default Toast -->
+  <p-toast
+    [position]="snackbarConfig?.position"
+    [key]="toastKeys.default"
+  ></p-toast>
+
+  <!-- Notification Toast -->
+  <p-toast [position]="snackbarConfig?.position" [key]="toastKeys.notification">
+    <ng-template let-message pTemplate="message">
+      <ng-container
+        [ngTemplateOutlet]="customToast"
+        [ngTemplateOutletContext]="{
+          data: message
+        }"
+      ></ng-container>
+    </ng-template>
+  </p-toast>
+
+  <!-- Whatsapp Notification Toast -->
+  <p-toast
+    [position]="snackbarConfig?.position"
+    [key]="toastKeys.whatsappNotification"
+  >
+    <ng-template let-message pTemplate="message">
+      <ng-container
+        [ngTemplateOutlet]="whatsappNotification"
+        [ngTemplateOutletContext]="{
+          data: message
+        }"
+      ></ng-container>
+    </ng-template>
+  </p-toast>
+</div>
+
+<ng-template #customToast let-data="data">
+  <div class="notifications">
+    <div class="notifications__content">
+      <img *ngIf="data?.iconSrc" src="{{ data.iconSrc }}" alt="notifications" />
+      <div class="text">
+        <h4 *ngIf="data?.title?.length">{{ data.title }}</h4>
+        <p>{{ data.detail }}</p>
+      </div>
+    </div>
+    <!-- Action goes here -->
+    <!-- <div class="notifications__action"> </div> -->
+  </div>
+</ng-template>
+
+<ng-template #whatsappNotification let-data="data">
+  <div class="wrapper">
+    <img class="watsapp" src="assets/svg/whatsapp.svg" alt="notification" />
+    <span class="title">{{ data.title }}</span>
+    <span> : </span>
+    <span class="message">{{ data.detail }}</span>
+  </div>
+</ng-template>

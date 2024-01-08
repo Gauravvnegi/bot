@@ -14,15 +14,10 @@ import {
   Validators,
 } from '@angular/forms';
 import {
-  GlobalFilterService,
-  RoutesConfigService,
-} from '@hospitality-bot/admin/core/theme';
-import {
   BookingDetailService,
   EntitySubType,
   ModuleNames,
   Option,
-  manageMaskZIndex,
 } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import {
@@ -44,6 +39,8 @@ import { debounceTime } from 'rxjs/operators';
 import { BookingInfoComponent } from '../booking-info/booking-info.component';
 import { SideBarService } from 'apps/admin/src/app/core/theme/src/lib/services/sidebar.service';
 import { ReservationRatePlan } from 'libs/admin/room/src/lib/constant/form';
+import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
+import { RoutesConfigService } from 'apps/admin/src/app/core/theme/src/lib/services/routes-config.service';
 
 @Component({
   selector: 'hospitality-bot-quick-reservation-form',

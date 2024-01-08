@@ -16,8 +16,7 @@ import {
   ModuleNames,
   ProductNames,
   manageMaskZIndex,
-  routes,
-} from '../../../../../../../../../../libs/admin/shared/src/index';
+} from 'libs/admin/shared/src/index';
 import {
   Product,
   ProductItem,

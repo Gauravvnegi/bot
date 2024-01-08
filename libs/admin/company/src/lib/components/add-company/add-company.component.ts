@@ -6,10 +6,6 @@ import {
   Validators,
 } from '@angular/forms';
 import {
-  GlobalFilterService,
-  RoutesConfigService,
-} from '@hospitality-bot/admin/core/theme';
-import {
   ConfigService,
   NavRouteOptions,
   Option,
@@ -25,6 +21,8 @@ import { CompanyResponseType } from '../../types/response';
 import { companyDiscount, discountTypes } from '../../constants/company';
 import { Location } from '@angular/common';
 import { FormService } from 'libs/admin/shared/src/lib/services/form.service';
+import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
+import { RoutesConfigService } from 'apps/admin/src/app/core/theme/src/lib/services/routes-config.service';
 @Component({
   selector: 'hospitality-bot-add-company',
   templateUrl: './add-company.component.html',

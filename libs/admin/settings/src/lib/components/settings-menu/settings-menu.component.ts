@@ -1,8 +1,6 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import {
-  SettingsMenuItem,
-  SubscriptionPlanService,
-} from '@hospitality-bot/admin/core/theme';
+import { SettingsMenuItem } from 'apps/admin/src/app/core/theme/src/lib/data-models/subscription-plan-config.model';
+import { SubscriptionPlanService } from 'apps/admin/src/app/core/theme/src/lib/services/subscription-plan.service';
 
 @Component({
   selector: 'hospitality-bot-settings-menu',

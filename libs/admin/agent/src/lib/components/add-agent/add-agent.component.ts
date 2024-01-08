@@ -1,16 +1,7 @@
 import { Location } from '@angular/common';
-import {
-  Component,
-  EventEmitter,
-  OnInit,
-  Output,
-} from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
-import {
-  GlobalFilterService,
-  RoutesConfigService,
-} from '@hospitality-bot/admin/core/theme';
+import { ActivatedRoute } from '@angular/router';
 import {
   AdminUtilityService,
   ConfigService,
@@ -20,7 +11,6 @@ import {
   Regex,
 } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
-import { companyRoutes } from 'libs/admin/company/src/lib/constants/route';
 import { FormService } from 'libs/admin/shared/src/lib/services/form.service';
 import CustomValidators from 'libs/admin/shared/src/lib/utils/validators';
 import { Subscription } from 'rxjs';
@@ -30,6 +20,8 @@ import { AgentService } from '../../services/agent.service';
 import { commissionType } from '../../types/agent';
 import { AgentFormType } from '../../types/form.types';
 import { AgentTableResponse } from '../../types/response';
+import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
+import { RoutesConfigService } from 'apps/admin/src/app/core/theme/src/lib/services/routes-config.service';
 
 @Component({
   selector: 'hospitality-bot-add-agent',
@@ -75,11 +67,10 @@ export class AddAgentComponent implements OnInit {
     private adminUtilityService: AdminUtilityService,
     private snackbarService: SnackBarService,
     private route: ActivatedRoute,
-    private router: Router,
     private formService: FormService,
     private configService: ConfigService,
     private routesConfigService: RoutesConfigService,
-    private location: Location,
+    private location: Location
   ) {
     this.agentId = this.route.snapshot.paramMap.get('id');
     const { navRoutes, title } = agentRoutes[
@@ -228,7 +219,6 @@ export class AddAgentComponent implements OnInit {
   reset() {
     AgentModel.resetForm(this.agentForm);
   }
-
 
   saveForm() {
     this.formService.companyRedirectRoute = '/pages/members/agent';

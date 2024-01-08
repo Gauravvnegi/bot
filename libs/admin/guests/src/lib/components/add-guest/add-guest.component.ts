@@ -9,15 +9,7 @@ import {
 import { manageGuestRoutes } from '../../constant/routes';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import {
-  GlobalFilterService,
-  RoutesConfigService,
-} from '@hospitality-bot/admin/core/theme';
-import {
-  NavRouteOptions,
-  Option,
-  Regex,
-} from '@hospitality-bot/admin/shared';
+import { NavRouteOptions, Option, Regex } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { Subscription } from 'rxjs';
 import { Location } from '@angular/common';
@@ -26,6 +18,8 @@ import { GuestFactory } from '../../data-models/guest.model';
 import { FormService } from 'libs/admin/shared/src/lib/services/form.service';
 import { GuestFormType } from 'libs/admin/agent/src/lib/types/form.types';
 import { GuestType } from '../../types/guest.type';
+import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
+import { RoutesConfigService } from 'apps/admin/src/app/core/theme/src/lib/services/routes-config.service';
 
 @Component({
   selector: 'hospitality-bot-add-guest',
@@ -77,7 +71,7 @@ export class AddGuestComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private location: Location,
     private formService: FormService,
-    private routesConfigService: RoutesConfigService,
+    private routesConfigService: RoutesConfigService
   ) {}
 
   ngOnInit(): void {

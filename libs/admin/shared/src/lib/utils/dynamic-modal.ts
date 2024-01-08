@@ -8,7 +8,7 @@ import {
  * @param data require, configuration of the modal, its need service and component which you want to open inside that
  */
 export function openModal(data: {
-  config: DynamicDialogConfig;
+  config: ModalConfig;
   dialogService: DialogService;
   component: any;
 }): DynamicDialogRef {
@@ -21,3 +21,9 @@ export function openModal(data: {
     ...data.config,
   });
 }
+
+export type ModalConfig = DynamicDialogConfig & {
+  styleClass?: ModalStyleClass;
+};
+
+export type ModalStyleClass = 'dynamic-modal' | 'confirm-dialog' | string;

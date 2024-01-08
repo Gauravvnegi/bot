@@ -24,13 +24,6 @@
   </div>
 
   <div *skeleton="inhouse == undefined; height: '63px'; width: '100%'">
-    <!-- <mat-tab-group> -->
-    <!-- <mat-tab label="{{ 'card.inhouse.tab.request.title_text' | translate }}">
-        <ng-template matTabContent>
-          <hospitality-bot-inhouse-request-statistics
-            [inhouseRequest]="inhouseRequest || undefined"
-          ></hospitality-bot-inhouse-request-statistics> </ng-template
-      ></mat-tab> -->
     <div label="{{ 'card.inhouse.tab.total.title_text' | translate }}">
       <div>
         <div class="chart__wrapper">
@@ -125,9 +118,7 @@
           </div>
         </div>
       </div>
-      <!-- </mat-tab > -->
     </div>
-    <!-- </mat-tab-group> -->
   </div>
   <div *ngIf="inhouse == undefined" class="skeletonFlx">
     <ng-container

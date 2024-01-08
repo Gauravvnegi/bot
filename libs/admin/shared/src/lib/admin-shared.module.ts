@@ -137,6 +137,7 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { CheckboxComponent } from './components/form-component/checkbox/checkbox.component';
 import { SplitButtonComponent } from './components/split-button/split-button.component';
 import { Dialog } from 'primeng/dialog';
+import { TabViewModule } from 'primeng/tabview';
 
 @NgModule({
   imports: [
@@ -173,6 +174,7 @@ import { Dialog } from 'primeng/dialog';
     TieredMenuModule,
     ConfirmDialogModule,
     ToastModule,
+    TabViewModule,
   ],
   declarations: [
     DatatableComponent,

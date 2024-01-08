@@ -1,13 +1,15 @@
-<div>
-  <input type="checkbox" (change)="toggleSelectAll()" class="d-none" />
-  <div class="checkbox" (change)="toggleSelectAll()">
+<div class="checkbox__wrapper" [formGroup]="controlContainer.control">
+  <input [formControlName]="controlName" type="checkbox" class="d-none" />
+
+  <div class="checkbox" (click)="control?.setValue(!control.value)">
     <img
-      *ngIf="value"
+      *ngIf="control?.value"
       class="checkbox__img"
       src="assets/svg/checkboxSelect.svg"
       alt="select"
     />
   </div>
-
-  <span class="checkbox-label">{{ label }}</span>
+  <label (click)="control?.setValue(!control.value)" class="checkbox-label">{{
+    label
+  }}</label>
 </div>

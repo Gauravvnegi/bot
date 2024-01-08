@@ -9,6 +9,7 @@ import {
   ViewChild,
   ElementRef,
 } from '@angular/core';
+import { Filter } from '../../types/table.type';
 
 @Component({
   selector: 'hospitality-bot-tab-group',
@@ -16,9 +17,12 @@ import {
   styleUrls: ['./tab-group.component.scss'],
 })
 export class TabGroupComponent implements OnInit {
-  @Input() listItems = [];
+  @Input() listItems: Filter<string, string>[] = [];
   @Input() selectedIndex = 0;
   @Input() isLoading: boolean;
+  @Input() isContent = false;
+  @Input() isScrollable = false;
+  @Input() view: 'vertical' | 'horizontal' = 'horizontal';
   @Output() selectedTabChange = new EventEmitter();
   @ViewChild('tabFilter') tabFilter: ElementRef;
   @Input() extraGap = 40;

@@ -26,6 +26,7 @@
   }
   .reset-wrapper {
     @include flex-item-center;
+    gap: 10px;
     color: $grayLight;
     .material-icon {
       color: $grayLight;
@@ -54,7 +55,15 @@
   }
 }
 .filter--form {
+  display: flex;
   border: 1px solid $primary-cta;
+  height: 94vh;
+  .tabs {
+    border-right: 1px solid $primary-cta;
+  }
+  .tab-content {
+    width: 100%;
+  }
 }
 
 :host ::ng-deep .mat-tab-group {
@@ -202,6 +211,8 @@
 
 :host ::ng-deep .checkbox--wrapper {
   margin: 20px 0;
+  @include flex-col;
+  gap: 10px;
 }
 
 :host ::ng-deep {

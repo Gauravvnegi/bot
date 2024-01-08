@@ -592,39 +592,7 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
     this.useForm.get('isBaseRoomType').setValue(isToggleOn);
     this.setBasePriceDisability(isToggleOn);
 
-    if (isToggleOn) {
-      // const dialogConfig = new MatDialogConfig();
-      // dialogConfig.disableClose = true;
-      // const togglePopupCompRef = this.modalService.openDialog(
-      //   ModalComponent,
-      //   dialogConfig
-      // );
-      // togglePopupCompRef.componentInstance.content = {
-      //   heading: 'In-active Room Type',
-      //   description: [
-      //     'You are about to mark this room type in-active.',
-      //     'Are you Sure?',
-      //   ],
-      // };
-      // togglePopupCompRef.componentInstance.actions = [
-      //   {
-      //     label: 'No',
-      //     onClick: () => this.modalService.close(),
-      //     variant: 'outlined',
-      //   },
-      //   {
-      //     label: 'Yes',
-      //     onClick: () => {
-      //       this.useForm.get('isBaseRoomType').setValue(isToggleOn);
-      //       this.modalService.close();
-      //     },
-      //     variant: 'contained',
-      //   },
-      // ];
-      // togglePopupCompRef.componentInstance.onClose.subscribe(() => {
-      //   this.modalService.close();
-      // });
-    } else {
+    if (!isToggleOn) {
       this.initBaseRoomType();
     }
   }

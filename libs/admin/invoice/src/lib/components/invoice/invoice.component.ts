@@ -21,6 +21,7 @@ import {
   NavRouteOptions,
   Option,
   UserService,
+  openModal,
 } from '@hospitality-bot/admin/shared';
 import {
   ModalService,
@@ -67,6 +68,7 @@ import {
 import { AddDiscountComponent } from '../add-discount/add-discount.component';
 import { AddRefundComponent } from '../add-refund/add-refund.component';
 import { MenuItemListResponse } from 'libs/admin/all-outlets/src/lib/types/outlet';
+import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 
 @Component({
   selector: 'hospitality-bot-invoice',
@@ -156,6 +158,7 @@ export class InvoiceComponent implements OnInit {
     private reservationService: ReservationService,
     private routesConfigService: RoutesConfigService,
     private bookingDetailsService: BookingDetailService,
+    private dialogService: DialogService
   ) {
     this.reservationId = this.activatedRoute.snapshot.paramMap.get('id');
     this.initPageHeaders();
@@ -1056,37 +1059,39 @@ export class InvoiceComponent implements OnInit {
   }
 
   removeDetails(heading: string, description: string, callback: () => void) {
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.disableClose = true;
-    const togglePopupCompRef = this.modalService.openDialog(
-      ModalComponent,
-      dialogConfig
-    );
-
-    togglePopupCompRef.componentInstance.content = {
-      heading: heading,
-      description: [description],
+    let modalRef: DynamicDialogRef;
+    const data = {
+      content: {
+        heading: heading,
+        descriptions: [description],
+      },
+      actions: [
+        {
+          label: 'Yes',
+          onClick: () => {
+            callback();
+            modalRef.close();
+          },
+          variant: 'outlined',
+        },
+        {
+          label: 'No',
+          onClick: () => {
+            modalRef.close();
+          },
+          variant: 'contained',
+        },
+      ],
     };
 
-    togglePopupCompRef.componentInstance.actions = [
-      {
-        label: 'Yes',
-        onClick: () => {
-          callback();
-          this.modalService.close();
-        },
-        variant: 'outlined',
+    modalRef = openModal({
+      config: {
+        width: '35vw',
+        styleClass: 'confirm-dialog',
+        data: data,
       },
-      {
-        label: 'No',
-        onClick: () => {
-          this.modalService.close();
-        },
-        variant: 'contained',
-      },
-    ];
-    togglePopupCompRef.componentInstance.onClose.subscribe(() => {
-      this.modalService.close();
+      component: ModalComponent,
+      dialogService: this.dialogService,
     });
   }
 

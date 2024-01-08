@@ -1,0 +1,43 @@
+<div class="wrapper" [id]="fa.referenceId">
+  <hospitality-bot-navigation-header [heading]="pageTitle" [routes]="navRoutes">
+  </hospitality-bot-navigation-header>
+
+  <div class="sub-wrapper" [formGroup]="useForm">
+    <div class="main">
+      <div class="sub-heading">
+        Area Information
+      </div>
+      <div class="form-block">
+        <hospitality-bot-input
+          class="half-width"
+          controlName="name"
+          label="Area Name"
+          maxLength="60"
+          [props]="{
+            placeholder: 'Enter'
+          }"
+        ></hospitality-bot-input>
+
+        <hospitality-bot-input
+          class="full-width"
+          controlName="description"
+          label="Area Description"
+          maxLength="120"
+          [props]="{
+            placeholder: 'Enter'
+          }"
+        ></hospitality-bot-input>
+      </div>
+    </div>
+  </div>
+
+  <hospitality-bot-form-action
+    class="full-width"
+    [loading]="loading"
+    [isId]="areaId"
+    (onPreAction)="onReset()"
+    (onPostAction)="onSubmit()"
+    #fa
+  >
+  </hospitality-bot-form-action>
+</div>

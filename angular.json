@@ -2382,6 +2382,38 @@
           "style": "scss"
         }
       }
+    },
+    "table-management": {
+      "projectType": "library",
+      "root": "libs/table-management",
+      "sourceRoot": "libs/table-management/src",
+      "prefix": "hospitality-bot",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/table-management/tsconfig.lib.json",
+              "libs/table-management/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/table-management/**/*"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/table-management/jest.config.js",
+            "tsConfig": "libs/table-management/tsconfig.spec.json",
+            "passWithNoTests": true,
+            "setupFile": "libs/table-management/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "style": "scss"
+        }
+      }
     }
   },
   "cli": {

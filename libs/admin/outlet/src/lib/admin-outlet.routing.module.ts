@@ -23,6 +23,14 @@ const appRoutes: CRoutes = [
           ),
       },
       {
+        path: 'table-management',
+        name: ModuleNames.TABLE_MANAGEMENT,
+        loadChildren: () =>
+          import('@hospitality-bot/table-management').then(
+            (m) => m.TableManagementModule
+          ),
+      },
+      {
         path: 'all-outlets',
         name: ModuleNames.ALL_OUTLETS,
         loadChildren: () =>

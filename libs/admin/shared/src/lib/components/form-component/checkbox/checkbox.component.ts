@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormComponent } from '../form.components';
 import { ControlContainer } from '@angular/forms';
 
@@ -8,8 +8,8 @@ import { ControlContainer } from '@angular/forms';
   styleUrls: ['./checkbox.component.scss'],
 })
 export class CheckboxComponent extends FormComponent implements OnInit {
-  value: boolean = false;
   inputId: string;
+  @Output() change = new EventEmitter<CheckboxEvent>();
 
   constructor(public controlContainer: ControlContainer) {
     super(controlContainer);
@@ -17,10 +17,20 @@ export class CheckboxComponent extends FormComponent implements OnInit {
 
   ngOnInit(): void {
     this.initInputControl();
-    this.value = this.inputControl.value;
+    this.listenChanges();
   }
-  toggleSelectAll(): void {
-    this.value = !this.value;
-    this.controlContainer.control.get(this.controlName).setValue(this.value);
+
+  listenChanges() {
+    this.control.valueChanges.subscribe((res) => {
+      this.change.emit({ checked: res });
+    });
+  }
+
+  get control() {
+    return this.controlContainer.control.get(this.controlName);
   }
 }
+
+export type CheckboxEvent = {
+  checked: boolean;
+};

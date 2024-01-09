@@ -13,7 +13,7 @@ import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/servi
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
 import { SnackBarService } from 'libs/shared/material/src';
 import { DateService } from '@hospitality-bot/shared/utils';
-import { Subscription } from 'rxjs';
+import { Subscription, pipe } from 'rxjs';
 import { request } from '../../constants/request';
 import { debounceTime } from 'rxjs/operators';
 import { RequestService } from '../../services/request.service';
@@ -98,12 +98,6 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
       cc: ['+91'],
       phoneNumber: ['', [Validators.required, Validators.pattern('^[0-9]*$')]],
     });
-
-    this.requestFG.get('itemCode').valueChanges.subscribe((value) => {
-      const service = this.items.find((d) => d.value === value);
-      this.requestFG.get('itemName').setValue(service.label);
-      this.requestFG.get('itemId').setValue(service.itemId);
-    });
   }
 
   /**
@@ -140,9 +134,13 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
 
   listenForItemChanges(): void {
     this.requestFG.get('itemCode').valueChanges.subscribe((value) => {
-      const itemId = this.items.find((d) => d.value === value).itemId;
-      this.requestFG.get('assigneeId').setValue('', { emitEvent: false });
-      this.getItemDetails(itemId);
+      if (value) {
+        let service = this.items.find((d) => d.value === value);
+        this.requestFG.get('itemName').setValue(service?.label);
+        this.requestFG.get('itemId').setValue(service?.itemId);
+        this.requestFG.get('assigneeId').setValue('', { emitEvent: false });
+        this.getItemDetails(service?.itemId);
+      }
     });
   }
   getItemDetails(itemId) {
@@ -271,7 +269,21 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
         componentName: 'AddItem',
         containerRef: this.sidebarSlide,
         onOpen: () => (this.sidebarVisible = true),
-        onClose: (res) => (this.sidebarVisible = false),
+        onClose: (res) => {
+          if (res) {
+            this.requestFG.patchValue(
+              {
+                itemCode: res.itemCode,
+                itemId: res?.id,
+                itemName: res?.itemName,
+                assigneeId: '',
+              },
+              { emitEvent: false }
+            );
+            this.getItemDetails(res?.id);
+          }
+          this.sidebarVisible = false;
+        },
         manageMask: true,
       });
     }

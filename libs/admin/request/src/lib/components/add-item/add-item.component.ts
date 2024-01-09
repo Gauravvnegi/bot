@@ -85,20 +85,23 @@ export class AddItemComponent implements OnInit {
 
     const data = this.useForm.getRawValue() as ServiceItemForm;
     this.loading = true;
-    this.requestService
-      .addServiceItem(this.entityId, data)
-      .subscribe(this.handleSuccess, this.handleError);
+    this.requestService.addServiceItem(this.entityId, data).subscribe(
+      (res) => {
+        this.requestService.refreshItemList.next(true);
+        this.snackbarService.openSnackBarAsText(
+          `Service Created successfully`,
+          '',
+          { panelClass: 'success' }
+        );
+        this.onCloseSidebar.emit(res);
+      },
+      this.handleError,
+      this.handleSuccess
+    );
   }
 
   handleSuccess = () => {
     this.loading = false;
-    this.snackbarService.openSnackBarAsText(
-      `Service Created successfully`,
-      '',
-      { panelClass: 'success' }
-    );
-    this.requestService.refreshItemList.next(true);
-    this.onCloseSidebar.emit();
   };
 
   handleError = (error) => {

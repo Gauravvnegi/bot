@@ -64,6 +64,12 @@ import { AddDiscountComponent } from '../add-discount/add-discount.component';
 import { AddRefundComponent } from '../add-refund/add-refund.component';
 import { MenuItemListResponse } from 'libs/admin/all-outlets/src/lib/types/outlet';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
+import {
+  CalendarJourneyResponse,
+  JourneyTypes,
+} from 'libs/admin/reservation/src/lib/types/reservation-types';
+import { calculateJourneyTime } from 'libs/admin/reservation/src/lib/constants/reservation';
+import { ReservationFormService } from 'libs/admin/reservation/src/lib/services/reservation-form.service';
 
 @Component({
   selector: 'hospitality-bot-invoice',
@@ -95,6 +101,7 @@ export class InvoiceComponent implements OnInit {
   addPayment = false;
   addRefund = false;
 
+  showBanner = false;
   isInvoiceGenerated = false;
   pmsBooking = false;
   isInvoiceDisabled = false;
@@ -152,7 +159,8 @@ export class InvoiceComponent implements OnInit {
     private reservationService: ReservationService,
     private routesConfigService: RoutesConfigService,
     private bookingDetailsService: BookingDetailService,
-    private dialogService: DialogService
+    private dialogService: DialogService,
+    private formService: ReservationFormService
   ) {
     this.reservationId = this.activatedRoute.snapshot.paramMap.get('id');
     this.initPageHeaders();
@@ -179,6 +187,22 @@ export class InvoiceComponent implements OnInit {
     this.initForm();
     this.initOptions();
     this.initNavRoutes();
+    this.getLateCheckoutDetails();
+  }
+
+  getLateCheckoutDetails() {
+    this.$subscription.add(
+      this.reservationService
+        .getJourneyDetails(this.entityId, JourneyTypes.LATECHECKOUT)
+        .subscribe((res: CalendarJourneyResponse) => {
+          if (res) {
+            const { currentTime, defaultTime } = calculateJourneyTime(
+              res[JourneyTypes.LATECHECKOUT].journeyStartTime
+            );
+            this.showBanner = currentTime > defaultTime;
+          }
+        })
+    );
   }
 
   initOptions() {
@@ -1002,6 +1026,13 @@ export class InvoiceComponent implements OnInit {
     this.useForm.patchValue(paymentConfig);
   }
 
+  lateCheckout() {
+    this.formService.openModalComponent(JourneyTypes.LATECHECKOUT, () => {
+      this.showBanner = false;
+      this.refreshData();
+    });
+  }
+
   onAddGST() {
     if (this.addGST) {
       this.removeDetails(
@@ -1476,7 +1507,7 @@ export class InvoiceComponent implements OnInit {
 
     let modalRef: DynamicDialogRef;
     const inputData: Partial<AddRefundComponent> = {
-      heading: `Add ${additionalChargeDetails.label} Amount`
+      heading: `Add ${additionalChargeDetails.label} Amount`,
     };
     modalRef = openModal({
       config: {

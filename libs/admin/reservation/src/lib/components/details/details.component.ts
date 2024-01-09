@@ -38,7 +38,7 @@ import { SendMessageComponent } from 'libs/admin/notification/src/lib/components
 import { MenuItem } from 'primeng/api';
 import { FileData } from '../../models/reservation-table.model';
 import { SnackbarHandlerService } from 'libs/admin/global-shared/src/lib/services/snackbar-handler.service';
-import { SideBarService } from 'libs/admin/shared/src/lib/services/sidebar.service';
+import { SideBarService } from 'apps/admin/src/app/core/theme/src/lib/services/sidebar.service';
 import { ReservationFormService } from '../../services/reservation-form.service';
 
 @Component({
@@ -670,12 +670,16 @@ export class DetailsComponent implements OnInit, OnDestroy {
       });
   }
 
-  manualCheckoutfn(invoice?: Record<'isSendInvoice', any>) {
-    this.formService.manualCheckout(this.bookingId, this);
+  manualCheckout(invoice?: Record<'isSendInvoice', any>) {
+    this.formService.manualCheckout(this.bookingId, () => {
+      this.details.currentJourneyDetails.status = 'COMPLETED';
+    });
   }
 
   manualCheckin() {
-    this.formService.manualCheckin(this.bookingId, this);
+    this.formService.manualCheckin(this.bookingId, () => {
+      this.details.currentJourneyDetails.status = 'COMPLETED';
+    });
   }
 
   checkForConfirmedBooking() {

@@ -57,7 +57,10 @@ import { CalendarOccupancy } from '../../models/reservation-table.model';
 import { JourneyDialogComponent } from '../journey-dialog/journey-dialog.component';
 import { DialogService } from 'primeng/dynamicdialog';
 import { ReservationRatePlan } from 'libs/admin/room/src/lib/constant/form';
-import { ReservationFormService } from '../../services/reservation-form.service';
+import {
+  JourneyData,
+  ReservationFormService,
+} from '../../services/reservation-form.service';
 
 @Component({
   selector: 'hospitality-bot-reservation-calendar-view',
@@ -605,22 +608,30 @@ export class ReservationCalendarViewComponent implements OnInit {
   ) {
     switch (event.value) {
       case 'CHECKIN':
-        this.formService.manualCheckin(event.id, this, roomType);
+        this.formService.manualCheckin(
+          event.id,
+          (data: JourneyData) => {
+            this.updateRoomType(data);
+          },
+          roomType
+        );
         break;
       case 'CHECKOUT':
         this.formService.manualCheckout(
           event.id,
-          this,
+          (data: JourneyData) => {
+            this.updateRoomType(data);
+          },
           roomType
         );
         break;
       case 'CANCEL_CHECKIN':
         this._reservationService.cancelCheckin(event.id).subscribe((res) => {
-          this.updateRoomType(
-            event.id,
-            roomType,
-            ReservationCurrentStatus.DUEIN
-          );
+          this.updateRoomType({
+            reservationId: event.id,
+            roomType: roomType,
+            status: ReservationCurrentStatus.DUEIN,
+          });
           this.snackbarService.openSnackBarAsText('Checkin canceled.', '', {
             panelClass: 'success',
           });
@@ -628,11 +639,11 @@ export class ReservationCalendarViewComponent implements OnInit {
         break;
       case 'CANCEL_CHECKOUT':
         this._reservationService.cancelCheckout(event.id).subscribe((res) => {
-          this.updateRoomType(
-            event.id,
-            roomType,
-            ReservationCurrentStatus.DUEOUT
-          );
+          this.updateRoomType({
+            reservationId: event.id,
+            roomType: roomType,
+            status: ReservationCurrentStatus.DUEOUT,
+          });
           this.snackbarService.openSnackBarAsText('Checkin canceled.', '', {
             panelClass: 'success',
           });
@@ -667,13 +678,8 @@ export class ReservationCalendarViewComponent implements OnInit {
       });
   }
 
-
-  updateRoomType(
-    reservationId: string,
-    roomType: IGRoomType,
-    status: ReservationCurrentStatus,
-    isCheckout: boolean = false
-  ) {
+  updateRoomType(data: JourneyData) {
+    const { reservationId, roomType, status, isCheckout } = data;
     // this.reservationFormService.manualCheckin(reservationId, roomType, this)
     let currentDateEpoch = new Date();
     const updatedValues = roomType.data.values.map((item) => {

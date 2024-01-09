@@ -28,7 +28,8 @@ import { AnalyticsService } from 'libs/admin/request-analytics/src/lib/services/
 import { dashboardPopUpTabs } from '../../constants/dashboard';
 import { ReservationService } from '../../services';
 import { InhouseTable } from 'libs/admin/request-analytics/src/lib/models/inhouse-datatable.model';
-import { SideBarService } from 'libs/admin/shared/src/lib/services/sidebar.service';
+import { SideBarService } from 'apps/admin/src/app/core/theme/src/lib/services/sidebar.service';
+
 @Component({
   selector: 'hospitality-bot-dashboard',
   templateUrl: './dashboard.component.html',

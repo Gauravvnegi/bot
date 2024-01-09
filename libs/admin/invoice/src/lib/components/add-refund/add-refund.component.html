@@ -18,7 +18,6 @@
           max: 'Needs to be less than the excessive paid amount'
         }
       }"
-      [max]="maxAmount"
     ></hospitality-bot-input>
     <hospitality-bot-input
       class="full-width"
@@ -29,7 +28,7 @@
   <div class="buttons">
     <hospitality-bot-button
       label="Cancel"
-      (onClick)="handleCancel()"
+      (onClick)="close()"
       variant="outlined"
     ></hospitality-bot-button>
     <hospitality-bot-button

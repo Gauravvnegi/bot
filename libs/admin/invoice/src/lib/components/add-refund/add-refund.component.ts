@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { Option } from '@hospitality-bot/admin/shared';
+import { DynamicDialogRef, DynamicDialogConfig } from 'primeng/dynamicdialog';
 
 /**
  * @todo Make this component as additional charge component
@@ -11,13 +11,17 @@ import { Option } from '@hospitality-bot/admin/shared';
   styleUrls: ['./add-refund.component.scss'],
 })
 export class AddRefundComponent implements OnInit {
-  @Input() heading = 'Additional Charges Amount';
-  @Input() maxAmount: number;
+  heading = 'Additional Charges Amount';
   userForm: FormGroup;
 
-  @Output() onClose = new EventEmitter();
-
-  constructor(private fb: FormBuilder) {}
+  constructor(
+    private fb: FormBuilder,
+    public dialogRef: DynamicDialogRef,
+    public dialogConfig: DynamicDialogConfig
+  ) {
+    const data: { heading: string } = dialogConfig?.data;
+    this.heading = data?.heading;
+  }
 
   ngOnInit(): void {
     this.initForm();
@@ -25,30 +29,19 @@ export class AddRefundComponent implements OnInit {
 
   initForm(): void {
     this.userForm = this.fb.group({
-      refundAmount: [
-        null,
-        [
-          Validators.required,
-          Validators.max(this.maxAmount + 1),
-          Validators.min(0),
-        ],
-      ],
+      refundAmount: [null, [Validators.required, Validators.min(0)]],
       remarks: [''],
     });
   }
 
   handleApply() {
-    this.onClose.next({
+    this.dialogRef.close({
       refundAmount: +this.userForm.get('refundAmount').value,
       remarks: this.userForm.get('remarks').value,
     });
   }
 
-  handleCancel() {
-    this.onClose.emit();
-  }
-
   close() {
-    this.onClose.emit();
+    this.dialogRef.close();
   }
 }

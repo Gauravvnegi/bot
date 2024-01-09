@@ -4,16 +4,14 @@ import {
   Input,
   OnDestroy,
   OnInit,
-  Output,
-  ViewChild,
-  ViewContainerRef,
+  Output
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
 import { SnackBarService } from 'libs/shared/material/src';
 import { DateService } from '@hospitality-bot/shared/utils';
-import { Subscription, pipe } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { request } from '../../constants/request';
 import { debounceTime } from 'rxjs/operators';
 import { RequestService } from '../../services/request.service';

@@ -44,8 +44,7 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
   sidebarVisible = false;
   isItemUuid: boolean = false;
   @Input() isSidebar = false;
-  @ViewChild('sidebarSlide', { read: ViewContainerRef })
-  sidebarSlide: ViewContainerRef;
+
   constructor(
     private fb: FormBuilder,
     private globalFilterService: GlobalFilterService,
@@ -267,7 +266,6 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
     if (this.isSidebar) {
       this.sidebarService.openSidebar({
         componentName: 'AddItem',
-        containerRef: this.sidebarSlide,
         onOpen: () => (this.sidebarVisible = true),
         onClose: (res) => {
           if (res) {

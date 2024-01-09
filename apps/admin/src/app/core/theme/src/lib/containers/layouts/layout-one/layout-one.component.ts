@@ -170,6 +170,11 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
     this.initSidebarSubscription();
   }
 
+  ngAfterViewInit(): void {
+    // Set the sidebarSlide reference in the service
+    this.sideBarService.sidebarSlide = this.sidebarSlide;
+  }
+
   initSidebarSubscription() {
     this.sideBarService
       .sideBarSubscription()
@@ -189,11 +194,13 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
    * @param url link to be open in iframe
    */
   openSideBarWithUrl(url: string) {
-    this.sidebarType = 'url';
     this.iframeTempUrl = url;
-    this.sidebarSlide.clear();
-    this.sidebarSlide.createEmbeddedView(this.urlTemplate);
-    this.sidebarVisible = true;
+    this.sidebarType = 'url';
+    this.sideBarService.openSidebar({
+      templateRef: this.urlTemplate,
+      onOpen: () => (this.sidebarVisible = true),
+      onClose: (res) => (this.sidebarVisible = false),
+    });
   }
 
   scrollToTop() {
@@ -570,7 +577,6 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
     this.sidebarType = 'complaint';
     this.sideBarService.openSidebar({
       componentName: 'RaiseRequest',
-      containerRef: this.sidebarSlide,
       onOpen: () => (this.sidebarVisible = true),
       onClose: (res) => (this.sidebarVisible = false),
     });
@@ -580,7 +586,6 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
     this.sidebarType = 'guest-sidebar';
     this.sideBarService.openSidebar({
       componentName: 'AddGuest',
-      containerRef: this.sidebarSlide,
       onOpen: () => (this.sidebarVisible = true),
       onClose: (res) => (this.sidebarVisible = false),
     });
@@ -590,7 +595,6 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
     this.sidebarType = 'booking';
     this.sideBarService.openSidebar({
       componentName: 'QuickReservation',
-      containerRef: this.sidebarSlide,
       onOpen: () => (this.sidebarVisible = true),
       onClose: (res) => {
         this.sidebarVisible = false;
@@ -603,7 +607,6 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
     this.sidebarType = 'booking';
     this.sideBarService.openSidebar({
       componentName: 'NightAudit',
-      containerRef: this.sidebarSlide,
       onOpen: () => (this.sidebarVisible = true),
       onClose: (res) => (this.sidebarVisible = false),
     });
@@ -613,7 +616,6 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
     this.sidebarType = 'settings';
     this.sideBarService.openSidebar({
       componentName: 'SettingsMenu',
-      containerRef: this.sidebarSlide,
       onOpen: () => (this.sidebarVisible = true),
       onClose: (res) => (this.sidebarVisible = false),
     });

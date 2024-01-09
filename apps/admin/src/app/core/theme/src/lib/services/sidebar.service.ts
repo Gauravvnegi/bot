@@ -1,6 +1,7 @@
 import {
   ComponentFactoryResolver,
   Injectable,
+  TemplateRef,
   ViewContainerRef,
 } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
@@ -28,6 +29,7 @@ export class SideBarService {
   private _sideBarConfiguration = new BehaviorSubject<SideBarConfig>({
     open: false,
   });
+  sidebarSlide: ViewContainerRef;
 
   constructor(private resolver: ComponentFactoryResolver) {}
 
@@ -66,25 +68,33 @@ export class SideBarService {
     let onCloseKey = sidebarProps.onCloseKey ?? 'onCloseSidebar';
     sidebarProps.onOpen();
     sidebarProps?.manageMask && manageMaskZIndex();
-    const factory = this.resolver.resolveComponentFactory(
-      SidebarComponents[sidebarProps.componentName]
-    );
-    sidebarProps.containerRef.clear();
-    const componentRef = sidebarProps.containerRef.createComponent(factory);
-    componentRef.instance[isSidebarKey] = true;
+    this.sidebarSlide.clear();
 
-    componentRef.instance[onCloseKey].subscribe((res) => {
-      sidebarProps.onClose(res);
-      sidebarProps.containerRef.clear();
-      componentRef.destroy();
-    });
+    if (!!sidebarProps?.componentName) {
+      //for component
+      const factory = this.resolver.resolveComponentFactory(
+        SidebarComponents[sidebarProps.componentName]
+      );
+      const componentRef = this.sidebarSlide.createComponent(factory);
+      componentRef.instance[isSidebarKey] = true;
+
+      componentRef.instance[onCloseKey].subscribe((res) => {
+        sidebarProps.onClose(res);
+        sidebarProps.containerRef.clear();
+        componentRef.destroy();
+      });
+    } else {
+      //for template ref
+      this.sidebarSlide.createEmbeddedView(sidebarProps.templateRef);
+    }
   }
 }
 
 export type SidebarProps = {
-  componentName: string;
+  componentName?: string;
   onOpen?: () => void;
-  containerRef: ViewContainerRef;
+  containerRef?: ViewContainerRef;
+  templateRef?: TemplateRef<any>;
   onCloseKey?: string;
   isSidebarKey?: string;
   onClose?: (res: any) => void; // Callback function for onClose event

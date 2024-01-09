@@ -15,13 +15,11 @@ import { ReservationCurrentStatus } from 'libs/admin/manage-reservation/src/lib/
 import { JourneyDialogComponent } from '../components/journey-dialog/journey-dialog.component';
 import { ConfirmDialogData } from '../components/journey-dialog/journey-dialog.component';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
-import { BehaviorSubject } from 'rxjs';
+import { calculateJourneyTime } from '../constants/reservation';
 @Injectable()
 export class ReservationFormService {
   data: JourneyData;
   entityId: string;
-
-  triggerComponentChanges = new BehaviorSubject<JourneyData>(null);
 
   constructor(
     private dialogService: DialogService,
@@ -32,29 +30,11 @@ export class ReservationFormService {
     this.entityId = this.globalFilterService.entityId;
   }
 
-  calculateTime(
-    defaultEndTime: string
-  ): { currentTime: number; defaultTime: number } {
-    const currentDateTime = new Date();
-    const currentHours = currentDateTime.getHours();
-    const currentMinutes = currentDateTime.getMinutes();
-    const currentSeconds = currentDateTime.getSeconds();
-
-    const [journeyHours, journeyMinutes, journeySeconds] = defaultEndTime.split(
-      ':'
-    );
-
-    const currentEpochTime =
-      currentHours * 3600 + currentMinutes * 60 + currentSeconds;
-    const defaultJourneyEpoch =
-      parseInt(journeyHours) * 3600 +
-      parseInt(journeyMinutes) * 60 +
-      parseInt(journeySeconds);
-
-    return { currentTime: currentEpochTime, defaultTime: defaultJourneyEpoch };
-  }
-
-  manualCheckin(reservationId: string, roomType?: IGRoomType) {
+  manualCheckin(
+    reservationId: string,
+    callback?: (data?: JourneyData) => void,
+    roomType?: IGRoomType
+  ) {
     this.data = {
       reservationId: reservationId,
       roomType: roomType,
@@ -63,7 +43,7 @@ export class ReservationFormService {
       .getJourneyDetails(this.entityId, JourneyTypes.EARLYCHECKIN)
       .subscribe((res: CalendarJourneyResponse) => {
         if (res) {
-          const { currentTime, defaultTime } = this.calculateTime(
+          const { currentTime, defaultTime } = calculateJourneyTime(
             res[JourneyTypes.EARLYCHECKIN].journeyEndTime
           );
           if (currentTime < defaultTime) {
@@ -75,6 +55,7 @@ export class ReservationFormService {
                 descriptions: JourneyTypeConfig.CHECKIN.descriptions,
                 isSendInvoice: false,
               },
+              callback,
               undefined,
               undefined,
               true
@@ -84,7 +65,11 @@ export class ReservationFormService {
       });
   }
 
-  manualCheckout(reservationId: string, roomType?: IGRoomType) {
+  manualCheckout(
+    reservationId: string,
+    callback?: (data?: JourneyData) => void,
+    roomType?: IGRoomType
+  ) {
     this.data = {
       reservationId: reservationId,
       roomType: roomType,
@@ -94,23 +79,29 @@ export class ReservationFormService {
       .subscribe((res: CalendarJourneyResponse) => {
         if (res) {
           // Compare current time with the default early checkin time to show different popups
-          const { currentTime, defaultTime } = this.calculateTime(
+          const { currentTime, defaultTime } = calculateJourneyTime(
             res[JourneyTypes.LATECHECKOUT].journeyStartTime
           );
           if (currentTime > defaultTime) {
-            this.openModalComponent(JourneyTypes.LATECHECKOUT);
+            this.openModalComponent(JourneyTypes.LATECHECKOUT, callback);
           } else {
-            this.openJourneyDialog({
-              title: JourneyTypeConfig.CHECKOUT.title,
-              descriptions: JourneyTypeConfig.CHECKOUT.descriptions,
-              isSendInvoice: true,
-            });
+            this.openJourneyDialog(
+              {
+                title: JourneyTypeConfig.CHECKOUT.title,
+                descriptions: JourneyTypeConfig.CHECKOUT.descriptions,
+                isSendInvoice: true,
+              },
+              callback
+            );
           }
         }
       });
   }
 
-  openModalComponent(journeyType: JourneyTypes) {
+  openModalComponent(
+    journeyType: JourneyTypes,
+    callback?: (data?: JourneyData) => void
+  ) {
     let modalRef: DynamicDialogRef;
     const data = {
       content: {
@@ -130,7 +121,8 @@ export class ReservationFormService {
           onClick: (res) => {
             let data = res;
             if (journeyType === JourneyTypes.EARLYCHECKIN) this.checkIn(data);
-            else this.checkOut(false, data);
+            // else this.checkOut(callback, false, data);
+            else this.lateCheckout(res, callback);
             modalRef.close();
           },
           variant: 'contained',
@@ -148,15 +140,33 @@ export class ReservationFormService {
     });
   }
 
-  checkIn(data = {}) {
+  lateCheckout(
+    data: LateCheckoutData,
+    callback?: (data?: JourneyData) => void
+  ) {
+    this.reservationService
+      .updateLateCheckout(this.entityId, data)
+      .subscribe((res) => {
+        callback();
+        this.snackbarService.openSnackBarAsText(
+          'Late checkout charges updated.',
+          '',
+          {
+            panelClass: 'success',
+          }
+        );
+      });
+  }
+
+  checkIn(callback?: (data?: JourneyData) => void, data = {}) {
     this.reservationService
       .manualCheckin(this.data.reservationId, data)
       .subscribe((res) => {
-        // this.triggerComponentChanges(true);
-        this.triggerComponentChanges.next({
-          reservationId: this.data.reservationId,
-          status: ReservationCurrentStatus.INHOUSE,
+        callback({
+          reservationId: this.data?.reservationId,
+          status: ReservationCurrentStatus.CHECKEDOUT,
           roomType: this.data?.roomType,
+          isCheckout: false,
         });
         this.snackbarService.openSnackBarAsText('Checkin completed.', '', {
           panelClass: 'success',
@@ -170,6 +180,7 @@ export class ReservationFormService {
         title: JourneyTypeRequests[journeyType].title,
         descriptions: JourneyTypeRequests[journeyType].descriptions,
       },
+      undefined,
       JourneyTypeRequests[journeyType].args,
       bookingId
     );
@@ -201,16 +212,20 @@ export class ReservationFormService {
       });
   }
 
-  checkOut(isInvoice: boolean = false, data = {}) {
+  checkOut(
+    callback?: (data?: JourneyData) => void,
+    isInvoice: boolean = false,
+    data = {}
+  ) {
     this.reservationService
       .manualCheckout(this.data.reservationId, data, {
         params: `?sendInvoice=${isInvoice}`,
       })
       .subscribe((res) => {
-        this.triggerComponentChanges.next({
-          reservationId: this.data.reservationId,
+        callback({
+          reservationId: this.data?.reservationId,
           status: ReservationCurrentStatus.CHECKEDOUT,
-          roomType: this.data.roomType,
+          roomType: this.data?.roomType,
           isCheckout: true,
         });
         this.snackbarService.openSnackBarAsText('Checkout completed.', '', {
@@ -221,6 +236,7 @@ export class ReservationFormService {
 
   openJourneyDialog(
     config: ConfirmDialogData,
+    callback?: (data?: JourneyData) => void,
     args?: string[],
     bookingId?: string,
     isCheckin: boolean = false
@@ -236,8 +252,8 @@ export class ReservationFormService {
     });
     ref.onClose.subscribe((res) => {
       if (res) {
-        if (isCheckin) this.checkIn();
-        else this.checkOut(res?.isInvoice);
+        if (isCheckin) this.checkIn(callback);
+        else this.checkOut(callback, res?.isInvoice);
         args && this.verifyJourney(args[0], args[1], bookingId);
       }
     });
@@ -246,7 +262,13 @@ export class ReservationFormService {
 
 export type JourneyData = {
   reservationId: string;
-  roomType?: IGRoomType;
+  roomType: IGRoomType;
   status?: ReservationCurrentStatus;
   isCheckout?: boolean;
+};
+
+export type LateCheckoutData = {
+  remarks: string;
+  chargeable: boolean;
+  chargedAmount: number;
 };

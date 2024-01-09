@@ -20,6 +20,19 @@ export class ReservationService extends ApiService {
     return this.get(`/api/v1/entity/${entityId}/journeys?journey=${journey}`);
   }
 
+  updateLateCheckout(
+    entityId: string,
+    data: {
+      chargedAmount: number;
+      remarks: string;
+    }
+  ) {
+    return this.post(
+      `/api/v1/entity/${entityId}/charges?type=LATECHECKOUT`,
+      data
+    );
+  }
+
   getCalendarViewOccupancy(entityId: string, config?: QueryConfig) {
     return this.get(
       `/api/v1/entity/${entityId}/inventory/by-date${config?.params}`

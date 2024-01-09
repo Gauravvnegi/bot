@@ -61,7 +61,7 @@ export class SideBarService {
     }, 100);
   }
 
-  openSidebar(sidebarProps: SidebarProps) {
+  openSidebar(sidebarProps: SidebarProps<any>) {
     let isSidebarKey = sidebarProps.isSidebarKey ?? 'isSidebar';
     let onCloseKey = sidebarProps.onCloseKey ?? 'onCloseSidebar';
     sidebarProps.onOpen();
@@ -72,7 +72,7 @@ export class SideBarService {
     sidebarProps.containerRef.clear();
     const componentRef = sidebarProps.containerRef.createComponent(factory);
     componentRef.instance[isSidebarKey] = true;
-
+    Object.assign(componentRef.instance, sidebarProps.data);
     componentRef.instance[onCloseKey].subscribe((res) => {
       sidebarProps.onClose(res);
       sidebarProps.containerRef.clear();
@@ -81,7 +81,7 @@ export class SideBarService {
   }
 }
 
-export type SidebarProps = {
+export type SidebarProps<T extends Record<string, any>> = {
   componentName: string;
   onOpen?: () => void;
   containerRef: ViewContainerRef;
@@ -89,4 +89,5 @@ export type SidebarProps = {
   isSidebarKey?: string;
   onClose?: (res: any) => void; // Callback function for onClose event
   manageMask?: boolean;
+  data?: T;
 };

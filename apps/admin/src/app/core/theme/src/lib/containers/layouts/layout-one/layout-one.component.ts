@@ -1,6 +1,8 @@
 import { animate, style, transition, trigger } from '@angular/animations';
 import {
+  Compiler,
   Component,
+  ComponentFactoryResolver,
   HostListener,
   OnDestroy,
   OnInit,
@@ -43,6 +45,7 @@ import {
   SideBarService,
 } from 'apps/admin/src/app/core/theme/src/lib/services/sidebar.service';
 import { tokensConfig } from 'libs/admin/shared/src/lib/constants/common';
+import { SettingsMenuComponent } from 'libs/admin/settings/src/lib/components/settings-menu/settings-menu.component';
 
 type MessagePayload = {
   data: {
@@ -138,7 +141,9 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
     private hotelDetailService: HotelDetailService,
     private routesConfigService: RoutesConfigService,
     private nightAuditService: NightAuditService,
-    private sideBarService: SideBarService
+    private sideBarService: SideBarService,
+    private compiler: Compiler,
+    private resolver: ComponentFactoryResolver
   ) {
     this.initFG();
   }
@@ -596,6 +601,9 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
         this.sidebarVisible = false;
         if (res) this.refreshDashboard();
       },
+      data: {
+        isNewBooking: true,
+      },
     });
   }
 
@@ -609,13 +617,40 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
     });
   }
 
+  // openSettings() {
+  //   this.sidebarType = 'settings';
+  //   this.sideBarService.openSettings({
+  //     componentName: 'SettingsMenu',
+  //     containerRef: this.sidebarSlide,
+  //     onOpen: () => (this.sidebarVisible = true),
+  //     onClose: (res) => (this.sidebarVisible = false),
+  //   });
+  // }
+
   openSettings() {
-    this.sidebarType = 'settings';
-    this.sideBarService.openSidebar({
-      componentName: 'SettingsMenu',
-      containerRef: this.sidebarSlide,
-      onOpen: () => (this.sidebarVisible = true),
-      onClose: (res) => (this.sidebarVisible = false),
+    const lazyModulePromise = import(
+      'libs/admin/settings/src/lib/admin-settings.module'
+    )
+      .then((module) => {
+        return this.compiler.compileModuleAsync(module.AdminSettingsModule);
+      })
+      .catch((error) => {
+        console.error('Error loading the lazy module:', error);
+      });
+
+    lazyModulePromise.then(() => {
+      this.sidebarVisible = true;
+      const factory = this.resolver.resolveComponentFactory(
+        SettingsMenuComponent
+      );
+      this.sidebarSlide.clear();
+      this.sidebarType = 'settings';
+      const componentRef = this.sidebarSlide.createComponent(factory);
+      componentRef.instance.isSidebar = true;
+      componentRef.instance.onCloseSidebar.subscribe((res) => {
+        this.sidebarVisible = false;
+        componentRef.destroy();
+      });
     });
   }
 

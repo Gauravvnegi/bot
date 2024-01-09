@@ -169,6 +169,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
 
   registerListeners(): void {
     this.listenForGlobalFilters();
+    this.listenFormServiceChanges();
     this.$subscription.add(
       this._reservationService.$reinitializeGuestDetails.subscribe((res) => {
         if (res) {
@@ -178,6 +179,13 @@ export class DetailsComponent implements OnInit, OnDestroy {
       })
     );
     this.channels = this.subscriptionService.getChannelSubscription();
+  }
+
+  listenFormServiceChanges() {
+    this.formService.triggerComponentChanges.subscribe((res) => {
+      if (res.reservationId)
+        this.details.currentJourneyDetails.status = 'COMPLETED';
+    });
   }
 
   subscribeToConfirmDoc() {
@@ -671,11 +679,11 @@ export class DetailsComponent implements OnInit, OnDestroy {
   }
 
   manualCheckoutfn(invoice?: Record<'isSendInvoice', any>) {
-    this.formService.manualCheckout(this.bookingId, this);
+    this.formService.manualCheckout(this.bookingId);
   }
 
   manualCheckin() {
-    this.formService.manualCheckin(this.bookingId, this);
+    this.formService.manualCheckin(this.bookingId);
   }
 
   checkForConfirmedBooking() {

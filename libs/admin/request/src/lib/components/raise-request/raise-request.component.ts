@@ -11,14 +11,12 @@ import {
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
-import { ModalService, SnackBarService } from 'libs/shared/material/src';
+import { SnackBarService } from 'libs/shared/material/src';
 import { DateService } from '@hospitality-bot/shared/utils';
 import { Subscription } from 'rxjs';
 import { request } from '../../constants/request';
 import { debounceTime } from 'rxjs/operators';
 import { RequestService } from '../../services/request.service';
-import { MatDialogConfig } from '@angular/material/dialog';
-import { AddItemComponent } from '../add-item/add-item.component';
 import { SideBarService } from 'apps/admin/src/app/core/theme/src/lib/services/sidebar.service';
 import { Option } from '@hospitality-bot/admin/shared';
 
@@ -54,7 +52,6 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
     private snackbarService: SnackBarService,
     private _requestService: RequestService,
     private adminUtilityService: AdminUtilityService,
-    private _modalService: ModalService,
     private sidebarService: SideBarService
   ) {}
 
@@ -277,21 +274,6 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
         onClose: (res) => (this.sidebarVisible = false),
         manageMask: true,
       });
-    } else {
-      // In-future pop-up will be remove from everywhere
-      const dialogConfig = new MatDialogConfig();
-      dialogConfig.disableClose = true;
-      dialogConfig.width = '500px';
-      dialogConfig.height = '90vh';
-      const addItemCompRef = this._modalService.openDialog(
-        AddItemComponent,
-        dialogConfig
-      );
-      this.$subscription.add(
-        addItemCompRef.componentInstance.onClose.subscribe(() => {
-          addItemCompRef.close();
-        })
-      );
     }
   }
 

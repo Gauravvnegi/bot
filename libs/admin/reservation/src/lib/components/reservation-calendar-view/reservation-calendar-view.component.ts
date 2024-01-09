@@ -115,6 +115,21 @@ export class ReservationCalendarViewComponent implements OnInit {
       this.fullView = res;
     });
     this.checkAudit();
+    this.listenFormServiceChanges();
+  }
+
+  listenFormServiceChanges() {
+    this.$subscription.add(
+      this.formService.triggerComponentChanges.subscribe((res) => {
+        if (res)
+          this.updateRoomType(
+            res.reservationId,
+            res.roomType,
+            res.status,
+            res.isCheckout
+          );
+      })
+    );
   }
 
   initRoomTypes() {
@@ -605,14 +620,10 @@ export class ReservationCalendarViewComponent implements OnInit {
   ) {
     switch (event.value) {
       case 'CHECKIN':
-        this.formService.manualCheckin(event.id, this, roomType);
+        this.formService.manualCheckin(event.id, roomType);
         break;
       case 'CHECKOUT':
-        this.formService.manualCheckout(
-          event.id,
-          this,
-          roomType
-        );
+        this.formService.manualCheckout(event.id, roomType);
         break;
       case 'CANCEL_CHECKIN':
         this._reservationService.cancelCheckin(event.id).subscribe((res) => {
@@ -666,7 +677,6 @@ export class ReservationCalendarViewComponent implements OnInit {
         );
       });
   }
-
 
   updateRoomType(
     reservationId: string,

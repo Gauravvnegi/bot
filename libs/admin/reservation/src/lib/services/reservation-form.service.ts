@@ -1,8 +1,5 @@
 import { Injectable } from '@angular/core';
-import {
-  IGRoomType,
-  ReservationCalendarViewComponent,
-} from '../components/reservation-calendar-view/reservation-calendar-view.component';
+import { IGRoomType } from '../components/reservation-calendar-view/reservation-calendar-view.component';
 import {
   CalendarJourneyResponse,
   JourneyTypeConfig,
@@ -15,13 +12,16 @@ import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { ReservationService } from './reservation.service';
 import { ReservationCurrentStatus } from 'libs/admin/manage-reservation/src/lib/models/reservations.model';
-import { DetailsComponent, JourneyDialogComponent } from '../components';
+import { JourneyDialogComponent } from '../components/journey-dialog/journey-dialog.component';
 import { ConfirmDialogData } from '../components/journey-dialog/journey-dialog.component';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import { BehaviorSubject } from 'rxjs';
 @Injectable()
 export class ReservationFormService {
   data: JourneyData;
   entityId: string;
+
+  triggerComponentChanges = new BehaviorSubject<JourneyData>(null);
 
   constructor(
     private dialogService: DialogService,
@@ -54,14 +54,9 @@ export class ReservationFormService {
     return { currentTime: currentEpochTime, defaultTime: defaultJourneyEpoch };
   }
 
-  manualCheckin<T extends ReservationCalendarViewComponent | DetailsComponent>(
-    reservationId: string,
-    instance?: T,
-    roomType?: IGRoomType
-  ) {
+  manualCheckin(reservationId: string, roomType?: IGRoomType) {
     this.data = {
       reservationId: reservationId,
-      instance: instance,
       roomType: roomType,
     };
     this.reservationService
@@ -78,7 +73,7 @@ export class ReservationFormService {
               {
                 title: JourneyTypeConfig.CHECKIN.title,
                 descriptions: JourneyTypeConfig.CHECKIN.descriptions,
-                isSendInvoice: true,
+                isSendInvoice: false,
               },
               undefined,
               undefined,
@@ -89,14 +84,9 @@ export class ReservationFormService {
       });
   }
 
-  manualCheckout<T extends ReservationCalendarViewComponent | DetailsComponent>(
-    reservationId: string,
-    instance?: T,
-    roomType?: IGRoomType
-  ) {
+  manualCheckout(reservationId: string, roomType?: IGRoomType) {
     this.data = {
       reservationId: reservationId,
-      instance: instance,
       roomType: roomType,
     };
     this.reservationService
@@ -113,6 +103,7 @@ export class ReservationFormService {
             this.openJourneyDialog({
               title: JourneyTypeConfig.CHECKOUT.title,
               descriptions: JourneyTypeConfig.CHECKOUT.descriptions,
+              isSendInvoice: true,
             });
           }
         }
@@ -161,7 +152,12 @@ export class ReservationFormService {
     this.reservationService
       .manualCheckin(this.data.reservationId, data)
       .subscribe((res) => {
-        this.triggerComponentChanges(true);
+        // this.triggerComponentChanges(true);
+        this.triggerComponentChanges.next({
+          reservationId: this.data.reservationId,
+          status: ReservationCurrentStatus.INHOUSE,
+          roomType: this.data?.roomType,
+        });
         this.snackbarService.openSnackBarAsText('Checkin completed.', '', {
           panelClass: 'success',
         });
@@ -211,26 +207,16 @@ export class ReservationFormService {
         params: `?sendInvoice=${isInvoice}`,
       })
       .subscribe((res) => {
-        this.triggerComponentChanges();
+        this.triggerComponentChanges.next({
+          reservationId: this.data.reservationId,
+          status: ReservationCurrentStatus.CHECKEDOUT,
+          roomType: this.data.roomType,
+          isCheckout: true,
+        });
         this.snackbarService.openSnackBarAsText('Checkout completed.', '', {
           panelClass: 'success',
         });
       });
-  }
-
-  triggerComponentChanges(isCheckin: boolean = false) {
-    const instance = this.data?.instance;
-    instance instanceof ReservationCalendarViewComponent &&
-      instance.updateRoomType(
-        this.data.reservationId,
-        this.data.roomType,
-        isCheckin
-          ? ReservationCurrentStatus.INHOUSE
-          : ReservationCurrentStatus.CHECKEDOUT
-      );
-
-    if (instance instanceof DetailsComponent)
-      instance.details.currentJourneyDetails.status = 'COMPLETED';
   }
 
   openJourneyDialog(
@@ -260,6 +246,7 @@ export class ReservationFormService {
 
 export type JourneyData = {
   reservationId: string;
-  instance?: ReservationCalendarViewComponent | DetailsComponent;
   roomType?: IGRoomType;
+  status?: ReservationCurrentStatus;
+  isCheckout?: boolean;
 };

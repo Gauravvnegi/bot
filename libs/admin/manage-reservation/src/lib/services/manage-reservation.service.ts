@@ -8,7 +8,7 @@ import { MenuItemListResponse } from 'libs/admin/all-outlets/src/lib/types/outle
 import { QueryConfig } from '@hospitality-bot/admin/shared';
 import { RoomUpgradeType } from '../types/response.type';
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class ManageReservationService extends ApiService {
   getRoomTypeList(
     entityId: string,

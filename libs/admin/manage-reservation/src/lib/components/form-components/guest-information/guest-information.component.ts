@@ -1,7 +1,5 @@
 import {
-  Compiler,
   Component,
-  ComponentFactoryResolver,
   Input,
   OnInit,
   ViewChild,
@@ -19,9 +17,9 @@ import { Subscription } from 'rxjs';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { FormService } from '../../../services/form.service';
 import { GuestType } from 'libs/admin/guests/src/lib/types/guest.type';
-import { AddGuestComponent } from 'libs/admin/guests/src/lib/components';
 import { ReservationForm } from '../../../constants/form';
 import { ReservationCurrentStatus } from '../../../models/reservations.model';
+import { SideBarService } from 'apps/admin/src/app/core/theme/src/lib/services/sidebar.service';
 
 @Component({
   selector: 'hospitality-bot-guest-information',
@@ -52,8 +50,7 @@ export class GuestInformationComponent implements OnInit {
     public controlContainer: ControlContainer,
     private globalFilterService: GlobalFilterService,
     private formService: FormService,
-    private resolver: ComponentFactoryResolver,
-    private compiler: Compiler
+    private sidebarService: SideBarService
   ) {}
 
   ngOnInit(): void {
@@ -91,31 +88,19 @@ export class GuestInformationComponent implements OnInit {
   }
 
   showGuests() {
-    const lazyModulePromise = import(
-      'libs/admin/guests/src/lib/admin-guests.module'
-    )
-      .then((module) => {
-        return this.compiler.compileModuleAsync(module.AdminGuestsModule);
-      })
-      .catch((error) => {
-        console.error('Error loading the lazy module:', error);
-      });
-    lazyModulePromise.then((moduleFactory) => {
-      this.sidebarVisible = true;
-      const factory = this.resolver.resolveComponentFactory(AddGuestComponent);
-      this.sidebarSlide.clear();
-      const componentRef = this.sidebarSlide.createComponent(factory);
-      componentRef.instance.isSideBar = true;
-      componentRef.instance.onClose.subscribe((res: GuestType | boolean) => {
+    this.sidebarService.openSidebar({
+      componentName: 'AddGuest',
+      containerRef: this.sidebarSlide,
+      onOpen: () => (this.sidebarVisible = true),
+      onClose: (res) => {
+        this.sidebarVisible = false;
         if (typeof res !== 'boolean') {
           this.selectedGuest = {
             label: `${res.firstName} ${res.lastName}`,
             value: res.id,
           };
         }
-        this.sidebarVisible = false;
-        componentRef.destroy();
-      });
+      },
     });
   }
 

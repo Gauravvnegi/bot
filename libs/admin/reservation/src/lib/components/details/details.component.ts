@@ -22,7 +22,6 @@ import {
   ConfigService,
   ModuleNames,
   Option,
-  openModal,
 } from '@hospitality-bot/admin/shared';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 import * as FileSaver from 'file-saver';
@@ -35,13 +34,11 @@ import { GuestDetail, GuestDetails } from '../../models/guest-feedback.model';
 import { Guest } from '../../models/guest-table.model';
 import { ReservationService } from '../../services/reservation.service';
 import { AdminDocumentsDetailsComponent } from '../admin-documents-details/admin-documents-details.component';
-import { JourneyDialogComponent } from '../journey-dialog/journey-dialog.component';
 import { SendMessageComponent } from 'libs/admin/notification/src/lib/components/send-message/send-message.component';
 import { MenuItem } from 'primeng/api';
 import { FileData } from '../../models/reservation-table.model';
 import { SnackbarHandlerService } from 'libs/admin/global-shared/src/lib/services/snackbar-handler.service';
-import { SideBarService } from 'libs/admin/shared/src/lib/services/sidebar.service';
-import { DialogService } from 'primeng/dynamicdialog';
+import { SideBarService } from 'apps/admin/src/app/core/theme/src/lib/services/sidebar.service';
 import { ReservationFormService } from '../../services/reservation-form.service';
 
 @Component({
@@ -673,12 +670,16 @@ export class DetailsComponent implements OnInit, OnDestroy {
       });
   }
 
-  manualCheckoutfn(invoice?: Record<'isSendInvoice', any>) {
-    this.formService.manualCheckout(this.bookingId, this);
+  manualCheckout(invoice?: Record<'isSendInvoice', any>) {
+    this.formService.manualCheckout(this.bookingId, () => {
+      this.details.currentJourneyDetails.status = 'COMPLETED';
+    });
   }
 
   manualCheckin() {
-    this.formService.manualCheckin(this.bookingId, this);
+    this.formService.manualCheckin(this.bookingId, () => {
+      this.details.currentJourneyDetails.status = 'COMPLETED';
+    });
   }
 
   checkForConfirmedBooking() {

@@ -5,12 +5,13 @@ import {
   TemplateRef,
   ViewChild,
 } from '@angular/core';
-import { MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
 import { SnackBarService } from 'libs/shared/material/src';
-import { ModalService } from 'libs/shared/material/src/lib/services/modal.service';
 import { IChat } from '../../models/message.model';
 import { MessageService } from '../../services/messages.service';
 import * as FileSaver from 'file-saver';
+import { openModal } from '@hospitality-bot/admin/shared';
+import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { DynamicContentComponent } from 'libs/admin/shared/src/lib/components/dynamic-content/dynamic-content.component';
 
 @Component({
   selector: 'hospitality-bot-media-chat',
@@ -20,24 +21,29 @@ import * as FileSaver from 'file-saver';
 export class MediaChatComponent implements OnInit {
   @ViewChild('imageRef') imageRef: TemplateRef<any>;
   @Input() message: IChat;
-  dialogRef: MatDialogRef<any>;
+  dialogRef: DynamicDialogRef;
   isDownloading = false;
 
   constructor(
-    private modalService: ModalService,
     private messageService: MessageService,
-    private snackbarService: SnackBarService
+    private snackbarService: SnackBarService,
+    private dialogService: DialogService
   ) {}
 
   ngOnInit(): void {}
 
   openImage() {
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.panelClass = 'image-popup';
-    this.dialogRef = this.modalService.openDialogWithRef(
-      this.imageRef,
-      dialogConfig
-    );
+    const data: Partial<DynamicContentComponent> = {
+      templateRef: this.imageRef,
+    };
+    this.dialogRef = openModal({
+      config: {
+        styleClass: 'no-style',
+        data: data,
+      },
+      component: DynamicContentComponent,
+      dialogService: this.dialogService,
+    });
   }
 
   closeModal() {

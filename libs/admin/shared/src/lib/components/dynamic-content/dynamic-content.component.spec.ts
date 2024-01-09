@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AddDiscountComponent } from './add-discount.component';
+import { DynamicContentComponent } from './dynamic-content.component';
 
-describe('AddDiscountComponent', () => {
-  let component: AddDiscountComponent;
-  let fixture: ComponentFixture<AddDiscountComponent>;
+describe('DynamicContentComponent', () => {
+  let component: DynamicContentComponent;
+  let fixture: ComponentFixture<DynamicContentComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ AddDiscountComponent ]
+      declarations: [ DynamicContentComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(AddDiscountComponent);
+    fixture = TestBed.createComponent(DynamicContentComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

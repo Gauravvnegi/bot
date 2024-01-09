@@ -356,9 +356,7 @@
             <span>Total Charges</span>
             <span>
               {{
-                inputControl.totalAmount.value
-                  | number: '1.2-2'
-                  | currency: 'INR'
+                inputControl.totalAmount.value.toFixed(2) | currency: 'INR'
               }}</span
             >
           </div>
@@ -367,8 +365,7 @@
             <span>
               <span>
                 {{
-                  inputControl.discountedAmount.value
-                    | number: '1.2-2'
+                  inputControl.discountedAmount.value.toFixed(2)
                     | currency: 'INR'
                 }}
               </span>
@@ -378,7 +375,7 @@
             <span>Total Payable</span>
             <span>
               {{
-                inputControl.netAmount.value | number: '1.2-2' | currency: 'INR'
+                inputControl.netAmount.value.toFixed(2) | currency: 'INR'
               }}</span
             >
           </div>
@@ -386,11 +383,7 @@
             <span>Total Paid Amount</span>
             <span>
               <span>
-                {{
-                  inputControl.paidAmount.value
-                    | number: '1.2-2'
-                    | currency: 'INR'
-                }}
+                {{ inputControl.paidAmount.value.toFixed(2) | currency: 'INR' }}
               </span>
             </span>
           </div>
@@ -398,9 +391,7 @@
             <span>Total Refund</span>
             <span>
               <span>
-                {{
-                  inputControl.refund.value | number: '1.2-2' | currency: 'INR'
-                }}
+                {{ inputControl.refund.value.toFixed(2) | currency: 'INR' }}
               </span>
             </span>
           </div>
@@ -412,11 +403,7 @@
               }"
             >
               <span
-                >{{
-                  inputControl.dueAmount.value
-                    | number: '1.2-2'
-                    | currency: 'INR'
-                }}
+                >{{ inputControl.dueAmount.value.toFixed(2) | currency: 'INR' }}
               </span>
             </span>
           </div>
@@ -528,3 +515,23 @@
   #fa
 >
 </hospitality-bot-form-action>
+
+<div id="no-view" class="no-view" *ngIf="showBanner">
+  <div class="no-view__container">
+    <div class="no-view__content">
+      <h2 class="no-view__title-text">
+        Late Checkout
+      </h2>
+      <p class="no-view__sub-text">
+        You are doing Checkout after the actual departure time
+      </p>
+      <!-- <p class="no-view__sub-text">
+        Kindly request permission from your manager.
+      </p> -->
+    </div>
+    <hospitality-bot-button
+      label="Late Checkout"
+      (onClick)="lateCheckout()"
+    ></hospitality-bot-button>
+  </div>
+</div>

@@ -1,4 +1,3 @@
-import { Location } from '@angular/common';
 import { Component, HostListener, OnInit } from '@angular/core';
 import {
   AbstractControl,
@@ -7,14 +6,13 @@ import {
   Validators,
 } from '@angular/forms';
 
-import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import {
   HotelDetailService,
   ModuleNames,
   Option,
   Regex,
 } from '@hospitality-bot/admin/shared';
-import { ModalService } from '@hospitality-bot/shared/material';
 import { QrCodeModalComponent } from 'libs/admin/shared/src/lib/components/qr-code-modal/qr-code-modal.component';
 import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.service';
 import { DialogService } from 'primeng/dynamicdialog';
@@ -71,11 +69,8 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
     private snackbarService: SnackBarService,
     private hotelDetailService: HotelDetailService,
     private OutletFormService: OutletFormService,
-    private location: Location,
-    private modalService: ModalService,
     private dialogService: DialogService,
     protected routesConfigService: RoutesConfigService,
-
     router: Router,
     route: ActivatedRoute
   ) {
@@ -421,10 +416,8 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
       // contentStyle: { 'max-height': '500px', overflow: 'auto' },
     };
 
-    const ref = this.dialogService.open(QrCodeModalComponent, dialogConfig);
     const { imageUrl } = this.formControls;
-
-    this.modalService.__config = {
+    const data: Partial<QrCodeModalComponent> = {
       backgroundURl: imageUrl?.value.filter((item) => item.isFeatured)?.[0]
         ?.url,
       descriptionsHeading: 'HOW TO ORDER',
@@ -437,9 +430,9 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
       logoUrl: this.logoUrl,
     };
 
-    ref.onClose.subscribe(() => {
-      // Handle dialog close event
-      ref.close();
+    this.dialogService.open(QrCodeModalComponent, {
+      ...dialogConfig,
+      data: data,
     });
   }
 

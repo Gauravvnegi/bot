@@ -1,9 +1,9 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { Notification } from '../../../data-models/notifications.model';
-import { Router } from '@angular/router';
 import { NotificationService } from '../../../services/notification.service';
 import { RoutesConfigService } from '../../../services/routes-config.service';
 import { ModuleNames } from 'libs/admin/shared/src/index';
+import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 
 @Component({
   selector: 'admin-notification-detail',
@@ -15,12 +15,22 @@ export class NotificationDetailComponent {
   @Output() onNotificationClose = new EventEmitter();
   constructor(
     private notificationService: NotificationService,
-    private router: Router,
-    private routesConfigService: RoutesConfigService
-  ) {}
+    private routesConfigService: RoutesConfigService,
+    private dialogRef: DynamicDialogRef,
+    private dialogConfig: DynamicDialogConfig
+  ) {
+    /**
+     * @remark extracting data from dialog config
+     */
+    if (this.dialogConfig?.data) {
+      Object.entries(this.dialogConfig.data).forEach(([key, value]) => {
+        this[key] = value;
+      });
+    }
+  }
 
   closeNotes() {
-    this.onNotificationClose.emit({ close: true });
+    this.dialogRef.close({ close: true });
   }
 
   redirectToPage() {
@@ -64,6 +74,6 @@ export class NotificationDetailComponent {
         // Handle other notification types or add a default route
         break;
     }
-    this.onNotificationClose.emit({ close: true, notificationClose: true });
+    this.dialogRef.close({ close: true, notificationClose: true });
   }
 }

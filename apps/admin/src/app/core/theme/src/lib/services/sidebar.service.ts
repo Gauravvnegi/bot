@@ -68,6 +68,8 @@ export class SideBarService {
     let onCloseKey = sidebarProps.onCloseKey ?? 'onCloseSidebar';
     sidebarProps.onOpen();
     sidebarProps?.manageMask && manageMaskZIndex();
+    this.sidebarSlide.clear();
+
     if (!!sidebarProps?.componentName) {
       //for component
       const factory = this.resolver.resolveComponentFactory(

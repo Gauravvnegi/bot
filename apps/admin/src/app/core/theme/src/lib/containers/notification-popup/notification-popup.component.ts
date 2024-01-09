@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Output } from '@angular/core';
+import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 
 @Component({
   selector: 'hospitality-bot-notification-popup',
@@ -8,11 +9,23 @@ import { Component, EventEmitter, Output } from '@angular/core';
 export class NotificationPopupComponent {
   allowNotification: boolean;
   @Output() onNotificationClose = new EventEmitter();
-  constructor() {
+  constructor(
+    private dialogRef: DynamicDialogRef,
+    private dialogConfig: DynamicDialogConfig
+  ) {
     this.allowNotification = false;
+    /**
+     * @remark extracting data from dialog config
+     */
+    if (this.dialogConfig?.data) {
+      Object.entries(this.dialogConfig.data).forEach(([key, value]) => {
+        this[key] = value;
+      });
+    }
   }
 
   closeNotes() {
+    this.dialogRef.close({ close: true });
     this.onNotificationClose.emit({ close: true });
   }
 

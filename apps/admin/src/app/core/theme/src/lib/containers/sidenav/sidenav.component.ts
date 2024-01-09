@@ -7,15 +7,14 @@ import {
   OnInit,
   Output,
 } from '@angular/core';
-import { MatDialogConfig } from '@angular/material/dialog';
 import { Router, NavigationEnd } from '@angular/router';
 import { HotelDetailService } from 'libs/admin/shared/src/lib/services/hotel-detail.service';
-import { ModalService } from 'libs/shared/material/src/lib/services/modal.service';
 import { Subscription } from 'rxjs';
 import {
   ModuleNames,
   ProductNames,
   manageMaskZIndex,
+  openModal,
 } from 'libs/admin/shared/src/index';
 import {
   Product,
@@ -25,11 +24,11 @@ import {
 import { GlobalFilterService } from '../../services/global-filters.service';
 import { SubscriptionPlanService } from '../../services/subscription-plan.service';
 import { OrientationPopupComponent } from '../orientation-popup/orientation-popup.component';
-import { AuthService } from '../../../../../auth/services/auth.service';
 import {
   ActiveRouteConfig,
   RoutesConfigService,
 } from '../../services/routes-config.service';
+import { DialogService } from 'primeng/dynamicdialog';
 
 @Component({
   selector: 'hospitality-bot-sidenav',
@@ -58,13 +57,12 @@ export class SidenavComponent implements OnInit, OnDestroy {
 
   constructor(
     private _breakpointObserver: BreakpointObserver,
-    private _modal: ModalService,
     private globalFilterService: GlobalFilterService,
     private _hotelDetailService: HotelDetailService,
     private subscriptionPlanService: SubscriptionPlanService,
     private routeConfigService: RoutesConfigService,
     private router: Router,
-    private authService: AuthService
+    private dialogService: DialogService
   ) {}
 
   ngOnInit() {
@@ -250,10 +248,14 @@ export class SidenavComponent implements OnInit, OnDestroy {
   }
 
   openOrientationPopup() {
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.disableClose = true;
-    dialogConfig.width = '450px';
-    this._modal.openDialog(OrientationPopupComponent, dialogConfig);
+    openModal({
+      config: {
+        styleClass: 'confirm-dialog',
+        width: '450px',
+      },
+      component: OrientationPopupComponent,
+      dialogService: this.dialogService,
+    });
   }
   products;
   private initSideNavConfigs(config = {}) {

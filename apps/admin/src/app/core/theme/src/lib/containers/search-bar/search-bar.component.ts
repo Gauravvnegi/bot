@@ -9,11 +9,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { MatDialogConfig } from '@angular/material/dialog';
-import { Router } from '@angular/router';
-import { DetailsComponent as BookingDetailComponent } from 'libs/admin/reservation/src/lib/components/details/details.component';
 import { HotelDetailService } from 'libs/admin/shared/src/lib/services/hotel-detail.service';
-import { ModalService } from 'libs/shared/material/src/lib/services/modal.service';
 import { Subscription, empty, of } from 'rxjs';
 import { catchError, debounceTime, switchMap } from 'rxjs/operators';
 import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.service';
@@ -48,9 +44,7 @@ export class SearchBarComponent implements OnInit, OnDestroy {
   constructor(
     private searchService: SearchService,
     private hotelDetailService: HotelDetailService,
-    private modal: ModalService,
     private snackbarService: SnackBarService,
-    private router: Router,
     private globalFilterService: GlobalFilterService,
     private bookingDetailService: BookingDetailService,
     private routesConfigService: RoutesConfigService
@@ -140,34 +134,16 @@ export class SearchBarComponent implements OnInit, OnDestroy {
   }
 
   openDetailsPage(searchData) {
-    // const dialogConfig = new MatDialogConfig();
-    // dialogConfig.disableClose = true;
-    // dialogConfig.width = '100%';
-    // const detailCompRef = this.modal.openDialog(
-    //   BookingDetailComponent,
-    //   dialogConfig
-    // );
-
     if (searchData.type === 'GUEST') {
       this.bookingDetailService.openBookingDetailSidebar({
         guestId: searchData.id,
       });
-      // detailCompRef.componentInstance.guestId = searchData.id;
     } else {
       this.bookingDetailService.openBookingDetailSidebar({
         bookingNumber: searchData.bookingNumber,
         guestId: searchData.guestId,
       });
-      // detailCompRef.componentInstance.guestId = searchData.guestId;
-      // detailCompRef.componentInstance.bookingNumber = searchData.bookingNumber;
     }
-
-    // this.$subscription.add(
-    //   detailCompRef.componentInstance.onDetailsClose.subscribe((res) => {
-    //     // TODO statements
-    //     detailCompRef.close();
-    //   })
-    // );
   }
 
   onFocus() {

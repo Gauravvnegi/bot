@@ -252,10 +252,6 @@ export class BookingSummaryComponent implements OnInit {
         },
       ],
     };
-    // modalRef.onClose.subscribe(() => {
-    //   modalRef.close();
-    //   this.gobackToReservation();
-    // });
 
     modalRef = openModal({
       config: {

@@ -92,9 +92,9 @@ export class AuditSummaryComponent implements OnInit {
             };
             if (res?.length) {
               if (isNext) {
-                const content = {
+                const content: Partial<ModalComponent> = {
                   heading: 'Audit Summary',
-                  description: [
+                  descriptions: [
                     `There are ${res.length} more audit, do you want to continue ?`,
                   ],
                 };

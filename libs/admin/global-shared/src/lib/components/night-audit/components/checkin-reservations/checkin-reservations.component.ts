@@ -97,18 +97,18 @@ export class CheckinReservationsComponent implements OnInit {
 
   handelStatus(event, reservationData) {
     const status = event?.value;
-    const content = {
+    const content:Partial<ModalComponent> = {
       heading: `Mark Reservation As ${
         status.charAt(0).toUpperCase() + status.slice(1).toLowerCase()
       }`,
-      description: [
+      descriptions: [
         `You are about to mark this reservation as ${status}`,
         `Are you Sure?`,
         status === 'CANCELED' && reservationData?.totalPaidAmount
           ? ` A total of \u20B9 ${reservationData?.totalPaidAmount} is received for the reservation`
           : '',
       ],
-      isRemarks: status === 'CANCELED' || 'NOSHOW',
+      isRemarks: ['CANCELED','NOSHOW'].includes(status),
     };
     const actions = [
       {

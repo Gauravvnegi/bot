@@ -17,6 +17,8 @@
     width: $popup-button-width;
     border-radius: 25px;
     background-color: $primary-cta;
+    border: 0;
+    padding: 10px;
     color: white;
     &:hover {
       cursor: pointer;

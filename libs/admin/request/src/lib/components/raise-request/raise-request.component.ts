@@ -10,7 +10,6 @@ import {
   ViewContainerRef,
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { TranslateService } from '@ngx-translate/core';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
 import { ModalService, SnackBarService } from 'libs/shared/material/src';
@@ -20,11 +19,8 @@ import { request } from '../../constants/request';
 import { debounceTime } from 'rxjs/operators';
 import { RequestService } from '../../services/request.service';
 import { Option, manageMaskZIndex } from '@hospitality-bot/admin/shared';
-import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialogConfig } from '@angular/material/dialog';
 import { AddItemComponent } from '../add-item/add-item.component';
-import { DepartmentList } from '../../data-models/request.model';
-import { ManagePermissionService } from 'libs/admin/roles-and-permissions/src/lib/services/manage-permission.service';
 
 @Component({
   selector: 'hospitality-bot-raise-request',
@@ -58,11 +54,7 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
     private snackbarService: SnackBarService,
     private _requestService: RequestService,
     private adminUtilityService: AdminUtilityService,
-    private _translateService: TranslateService,
-    private router: Router,
-    private route: ActivatedRoute,
     private _modalService: ModalService,
-    private _managePermissionService: ManagePermissionService,
     private resolver: ComponentFactoryResolver
   ) {}
 

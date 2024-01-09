@@ -1,10 +1,7 @@
 import {
-  AfterViewChecked,
   Component,
   ComponentFactoryResolver,
-  ElementRef,
   EventEmitter,
-  HostListener,
   Input,
   OnDestroy,
   OnInit,
@@ -12,7 +9,7 @@ import {
   ViewChild,
   ViewContainerRef,
 } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 import { FirebaseMessagingService } from 'apps/admin/src/app/core/theme/src/lib/services/messaging.service';
@@ -20,12 +17,12 @@ import { NotificationService } from 'apps/admin/src/app/core/theme/src/lib/servi
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
 import { SnackBarService } from 'libs/shared/material/src';
 import { Subscription } from 'rxjs';
-import { debounceTime, filter } from 'rxjs/operators';
+import { debounceTime } from 'rxjs/operators';
 import { ContactList, IContactList } from '../../models/message.model';
 import { MessageService } from '../../services/messages.service';
-import { MenuItem } from 'libs/admin/all-outlets/src/lib/models/outlet.model';
-import { convertToNormalCase } from 'libs/admin/shared/src/lib/utils/valueFormatter';
 import { ModalComponent } from 'libs/admin/shared/src/lib/components/modal/modal.component';
+import { openModal } from '@hospitality-bot/admin/shared';
+import { DialogService } from 'primeng/dynamicdialog';
 
 @Component({
   selector: 'hospitality-bot-chat-list',
@@ -59,7 +56,7 @@ export class ChatListComponent implements OnInit, OnDestroy {
     private snackbarService: SnackBarService,
     private notificationService: NotificationService,
     private route: ActivatedRoute,
-    private resolver: ComponentFactoryResolver
+    private dialogService: DialogService
   ) {
     this.initFG();
   }
@@ -323,34 +320,72 @@ export class ChatListComponent implements OnInit, OnDestroy {
 
   openMutePopUp(data) {
     this.popup.clear();
-    const factory = this.resolver.resolveComponentFactory(ModalComponent);
-    const componentRef = this.popup.createComponent(factory);
+    // const factory = this.resolver.resolveComponentFactory(ModalComponent);
+    // const componentRef = this.popup.createComponent(factory);
 
-    componentRef.instance.content = {
+    // componentRef.instance.content = {
+    //   heading: `Mute Notification`,
+    //   description: [
+    //     `Guest will not see that you muted this chat and you will still be notified on Guest Message, but the escalation of these messages won't occur.`,
+    //   ],
+    // };
+    // componentRef.instance.actions = [
+    //   {
+    //     label: 'No',
+    //     onClick: () => {
+    //       this.isMutePopUpVisible = false;
+    //     },
+    //     variant: 'outlined',
+    //   },
+    //   {
+    //     label: 'Mute',
+    //     onClick: () => {
+    //       this.handleMarking(data.id, true, 'markAsMute');
+    //       this.isMutePopUpVisible = false;
+    //     },
+    //     variant: 'contained',
+    //   },
+    // ];
+    // componentRef.instance.onClose.subscribe((res) => {
+    //   this.isMutePopUpVisible = false;
+    // });
+    const modalData: Partial<ModalComponent> = {
       heading: `Mute Notification`,
-      description: [
+      descriptions: [
         `Guest will not see that you muted this chat and you will still be notified on Guest Message, but the escalation of these messages won't occur.`,
       ],
+      actions: [
+        {
+          label: 'No',
+          onClick: () => {
+            this.isMutePopUpVisible = false;
+            dialogRef.close();
+          },
+          variant: 'outlined',
+        },
+        {
+          label: 'Mute',
+          onClick: () => {
+            this.handleMarking(data.id, true, 'markAsMute');
+            this.isMutePopUpVisible = false;
+            dialogRef.close();
+          },
+          variant: 'contained',
+        },
+      ],
     };
-    componentRef.instance.actions = [
-      {
-        label: 'No',
-        onClick: () => {
-          this.isMutePopUpVisible = false;
-        },
-        variant: 'outlined',
-      },
-      {
-        label: 'Mute',
-        onClick: () => {
-          this.handleMarking(data.id, true, 'markAsMute');
-          this.isMutePopUpVisible = false;
-        },
-        variant: 'contained',
-      },
-    ];
 
-    componentRef.instance.onClose.subscribe((res) => {
+    const dialogRef = openModal({
+      config: {
+        width: '215px',
+        styleClass: 'confirm-dialog',
+        data: modalData,
+      },
+      component: ModalComponent,
+      dialogService: this.dialogService,
+    });
+
+    dialogRef.onClose.subscribe((res) => {
       this.isMutePopUpVisible = false;
     });
   }

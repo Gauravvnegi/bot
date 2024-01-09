@@ -6,8 +6,7 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
-import { MatDialogConfig } from '@angular/material/dialog';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import {
   GlobalFilterService,
   RoutesConfigService,
@@ -23,10 +22,7 @@ import {
   UserService,
   openModal,
 } from '@hospitality-bot/admin/shared';
-import {
-  ModalService,
-  SnackBarService,
-} from '@hospitality-bot/shared/material';
+import { SnackBarService } from '@hospitality-bot/shared/material';
 import {
   PaymentMethodList,
   ReservationCurrentStatus,
@@ -48,7 +44,6 @@ import {
   AdditionalChargesType,
   additionalChargesDetails,
 } from '../../constants/invoice.constant';
-
 import { cols } from '../../constants/payment';
 import { invoiceRoutes } from '../../constants/routes';
 import {
@@ -151,7 +146,6 @@ export class InvoiceComponent implements OnInit {
     private snackbarService: SnackBarService,
     private adminUtilityService: AdminUtilityService,
     private servicesService: ServicesService,
-    private modalService: ModalService,
     private userService: UserService,
     private route: ActivatedRoute,
     private manageReservationService: ManageReservationService,
@@ -1280,31 +1274,35 @@ export class InvoiceComponent implements OnInit {
       reservationItems,
       date,
     } = data;
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.disableClose = false;
-    dialogConfig.width = '40%';
-    const discountComponentRef = this.modalService.openDialog(
-      AddDiscountComponent,
-      dialogConfig
-    );
 
     const billItems = reservationItems
       .map((item) => {
         return { index: item.index, ...item.control.value };
       })
       .filter((item) => !item.isRealised);
-    discountComponentRef.componentInstance.serviceName = serviceName;
-    discountComponentRef.componentInstance.discountAction = discountAction;
-    discountComponentRef.componentInstance.billItems = billItems;
-    // discountComponentRef.componentInstance.tax = taxPercentage;
 
-    discountComponentRef.componentInstance.onClose.subscribe(
+    let modalRef: DynamicDialogRef;
+    const inputData: Partial<AddDiscountComponent> = {
+      serviceName: serviceName,
+      discountAction: discountAction,
+      billItems: billItems,
+    };
+    modalRef = openModal({
+      config: {
+        width: '40%',
+        styleClass: 'confirm-dialog',
+        data: inputData,
+      },
+      component: AddDiscountComponent,
+      dialogService: this.dialogService,
+    });
+
+    modalRef.onClose.subscribe(
       (res: {
         discountType: string;
         discountValue: number;
         totalDiscount: { [date: number]: number };
       }) => {
-        this.modalService.close();
         if (!res) return;
         billItems.forEach((item, index) => {
           const discountItem = this.getAllItemWithSameItemId(itemId).filter(
@@ -1468,10 +1466,6 @@ export class InvoiceComponent implements OnInit {
     });
   }
 
-  handleRefund() {
-    this.handleAdditionalCharges(AdditionalChargesType.REFUND);
-  }
-
   handleMiscellaneous() {
     this.handleAdditionalCharges(AdditionalChargesType.MISCELLANEOUS);
   }
@@ -1480,24 +1474,21 @@ export class InvoiceComponent implements OnInit {
     if (this.isTableInvalid()) return;
     const additionalChargeDetails = additionalChargesDetails[chargesType];
 
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.disableClose = false;
-    dialogConfig.width = '40%';
-    const discountComponentRef = this.modalService.openDialog(
-      // Rename this component to Additional Charge Component
-      AddRefundComponent,
-      dialogConfig
-    );
+    let modalRef: DynamicDialogRef;
+    const inputData: Partial<AddRefundComponent> = {
+      heading: `Add ${additionalChargeDetails.label} Amount`
+    };
+    modalRef = openModal({
+      config: {
+        width: '40%',
+        styleClass: 'confirm-dialog',
+        data: inputData,
+      },
+      component: AddRefundComponent,
+      dialogService: this.dialogService,
+    });
 
-    /**
-     * Need to update this with excess amount and need to add also
-     */
-    if (chargesType === AdditionalChargesType.REFUND)
-      discountComponentRef.componentInstance.maxAmount = -this.inputControl
-        .dueAmount.value;
-    discountComponentRef.componentInstance.heading = `Add ${additionalChargeDetails.label} Amount`;
-
-    discountComponentRef.componentInstance.onClose.subscribe(
+    modalRef.onClose.subscribe(
       (res: { refundAmount: number; remarks: string }) => {
         if (res) {
           this.addNonBillItem({
@@ -1515,8 +1506,6 @@ export class InvoiceComponent implements OnInit {
               `${res.remarks ? ` (${res.remarks})` : ''}`,
           });
         }
-
-        this.modalService.close();
       }
     );
   }

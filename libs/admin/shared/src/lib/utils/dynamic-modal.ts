@@ -1,3 +1,4 @@
+import { TemplateRef, Type } from '@angular/core';
 import {
   DialogService,
   DynamicDialogConfig,
@@ -10,7 +11,7 @@ import {
 export function openModal(data: {
   config: ModalConfig;
   dialogService: DialogService;
-  component: any;
+  component: Type<any>;
 }): DynamicDialogRef {
   return data.dialogService.open(data.component, {
     width: '80%',
@@ -26,4 +27,9 @@ export type ModalConfig = DynamicDialogConfig & {
   styleClass?: ModalStyleClass;
 };
 
-export type ModalStyleClass = 'dynamic-modal' | 'confirm-dialog' | string;
+export type ModalStyleClass =
+  | 'dynamic-modal'
+  | 'confirm-dialog'
+  | 'no-style'
+  | 'image-cropper-modal'
+  | 'header-dialog';

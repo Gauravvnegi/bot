@@ -138,6 +138,7 @@ import { CheckboxComponent } from './components/form-component/checkbox/checkbox
 import { SplitButtonComponent } from './components/split-button/split-button.component';
 import { Dialog } from 'primeng/dialog';
 import { TabViewModule } from 'primeng/tabview';
+import { DynamicContentComponent } from './components/dynamic-content/dynamic-content.component';
 
 @NgModule({
   imports: [
@@ -278,6 +279,7 @@ import { TabViewModule } from 'primeng/tabview';
     ConfirmDialogComponent,
     CheckboxComponent,
     SplitButtonComponent,
+    DynamicContentComponent,
   ],
 
   exports: [
@@ -406,6 +408,7 @@ import { TabViewModule } from 'primeng/tabview';
     ContextMenuModule,
     Dialog,
     ToastModule,
+    DynamicContentComponent,
   ],
 })
 export class AdminSharedModule {}

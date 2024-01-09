@@ -356,9 +356,7 @@
             <span>Total Charges</span>
             <span>
               {{
-                inputControl.totalAmount.value
-                  | number: '1.2-2'
-                  | currency: 'INR'
+                inputControl.totalAmount.value.toFixed(2) | currency: 'INR'
               }}</span
             >
           </div>
@@ -367,8 +365,7 @@
             <span>
               <span>
                 {{
-                  inputControl.discountedAmount.value
-                    | number: '1.2-2'
+                  inputControl.discountedAmount.value.toFixed(2)
                     | currency: 'INR'
                 }}
               </span>
@@ -378,7 +375,7 @@
             <span>Total Payable</span>
             <span>
               {{
-                inputControl.netAmount.value | number: '1.2-2' | currency: 'INR'
+                inputControl.netAmount.value.toFixed(2) | currency: 'INR'
               }}</span
             >
           </div>
@@ -386,11 +383,7 @@
             <span>Total Paid Amount</span>
             <span>
               <span>
-                {{
-                  inputControl.paidAmount.value
-                    | number: '1.2-2'
-                    | currency: 'INR'
-                }}
+                {{ inputControl.paidAmount.value.toFixed(2) | currency: 'INR' }}
               </span>
             </span>
           </div>
@@ -398,9 +391,7 @@
             <span>Total Refund</span>
             <span>
               <span>
-                {{
-                  inputControl.refund.value | number: '1.2-2' | currency: 'INR'
-                }}
+                {{ inputControl.refund.value.toFixed(2) | currency: 'INR' }}
               </span>
             </span>
           </div>
@@ -412,11 +403,7 @@
               }"
             >
               <span
-                >{{
-                  inputControl.dueAmount.value
-                    | number: '1.2-2'
-                    | currency: 'INR'
-                }}
+                >{{ inputControl.dueAmount.value.toFixed(2) | currency: 'INR' }}
               </span>
             </span>
           </div>

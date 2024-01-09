@@ -1,7 +1,6 @@
 import {
   AfterViewChecked,
   Component,
-  ComponentFactoryResolver,
   ElementRef,
   EventEmitter,
   Input,
@@ -13,8 +12,7 @@ import {
   ViewContainerRef,
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ModalService } from 'libs/shared/material/src';
-import { ModuleNames } from '@hospitality-bot/admin/shared';
+import { ModuleNames, openModal } from '@hospitality-bot/admin/shared';
 import { MessageService } from '../../services/messages.service';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
@@ -22,10 +20,10 @@ import { DateService } from '@hospitality-bot/shared/utils';
 import { Subscription } from 'rxjs';
 import { FirebaseMessagingService } from 'apps/admin/src/app/core/theme/src/lib/services/messaging.service';
 import { IChats, Chats, Chat, RequestList } from '../../models/message.model';
-import { MatDialogConfig } from '@angular/material/dialog';
 import * as FileSaver from 'file-saver';
 import { SubscriptionPlanService } from '@hospitality-bot/admin/core/theme';
 import { ModalComponent } from 'libs/admin/shared/src/lib/components/modal/modal.component';
+import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { SideBarService } from 'apps/admin/src/app/core/theme/src/lib/services/sidebar.service';
 
 @Component({
@@ -61,16 +59,17 @@ export class ChatComponent
   sidebarSlide: ViewContainerRef;
   // sidebarType;
   loadingChat: boolean = false;
+  dialogRef: DynamicDialogRef;
 
   constructor(
-    private modalService: ModalService,
     private messageService: MessageService,
     private fb: FormBuilder,
     private adminUtilityService: AdminUtilityService,
     private globalFilterService: GlobalFilterService,
     private _firebaseMessagingService: FirebaseMessagingService,
     private subscriptionPlanService: SubscriptionPlanService,
-    private sideBarService: SideBarService
+    private sideBarService: SideBarService,
+    private dialogService: DialogService
   ) {}
 
   ngOnInit(): void {
@@ -349,36 +348,34 @@ export class ChatComponent
   }
 
   openEndLiveChatPopup() {
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.disableClose = true;
-    const togglePopupCompRef = this.modalService.openDialog(
-      ModalComponent,
-      dialogConfig
-    );
-
-    togglePopupCompRef.componentInstance.content = {
-      heading: 'Exit Live Chat',
-      description: [
-        'Do you want to exit the live chat.',
-        'This will hand over the conversation back to the bot',
+    const data: Partial<ModalComponent> = {
+      content: {
+        heading: 'Exit Live Chat',
+        description: [
+          'Do you want to exit the live chat.',
+          'This will hand over the conversation back to the bot',
+        ],
+      },
+      actions: [
+        {
+          label: 'Cancel',
+          onClick: () => this.dialogRef.close(),
+          variant: 'outlined',
+        },
+        {
+          label: 'Confirm',
+          onClick: () => this.endLiveChat(),
+          variant: 'contained',
+        },
       ],
     };
 
-    togglePopupCompRef.componentInstance.actions = [
-      {
-        label: 'Cancel',
-        onClick: () => this.modalService.close(),
-        variant: 'outlined',
+    this.dialogRef = openModal({
+      config: {
+        data: data,
       },
-      {
-        label: 'Confirm',
-        onClick: () => this.endLiveChat(),
-        variant: 'contained',
-      },
-    ];
-
-    togglePopupCompRef.componentInstance.onClose.subscribe(() => {
-      this.modalService.close();
+      component: ModalComponent,
+      dialogService: this.dialogService,
     });
   }
 
@@ -401,7 +398,7 @@ export class ChatComponent
           this.liveChatFG.patchValue(res);
         })
     );
-    this.modalService.close();
+    this.dialogRef?.close();
   }
 
   handleButtonClick(): void {

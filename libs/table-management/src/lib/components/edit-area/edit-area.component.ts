@@ -8,10 +8,11 @@ import {
   RoutesConfigService,
 } from '@hospitality-bot/admin/core/theme';
 import {
-  TableManagementParmId,
+  tableManagementParmId,
   tableManagementRoutes,
 } from '../../constants/routes';
 import { Subscription } from 'rxjs';
+import { AreaForm } from '../../types/edit-area.type';
 
 @Component({
   selector: 'hospitality-bot-edit-area',
@@ -26,6 +27,8 @@ export class EditAreaComponent implements OnInit {
   areaId: string;
   $subscription = new Subscription();
   useForm: FormGroup;
+  tableForm: FormGroup;
+  tableList = new Array(10).fill(1);
 
   constructor(
     private fb: FormBuilder,
@@ -35,7 +38,7 @@ export class EditAreaComponent implements OnInit {
     private tableManagementService: TableManagementService,
     private globalFilterService: GlobalFilterService
   ) {
-    this.areaId = this.route.snapshot.paramMap.get(TableManagementParmId.AREA);
+    this.areaId = this.route.snapshot.paramMap.get(tableManagementParmId.AREA);
     const { navRoutes, title } = this.areaId
       ? tableManagementRoutes.editArea
       : tableManagementRoutes.createArea;
@@ -52,15 +55,37 @@ export class EditAreaComponent implements OnInit {
 
   initForm() {
     this.useForm = this.fb.group({
-      name: [''],
-      description: [''],
+      name: '',
+      description: '',
     });
+
+    this.tableForm = this.fb.group({
+      selectAll: [false],
+    });
+
+    if (this.areaId) {
+      this.getAreaDetails();
+    }
   }
 
   initNavRoutes() {
     this.routesConfigService.navRoutesChanges.subscribe((navRoutesRes) => {
       this.navRoutes = [...navRoutesRes, ...this.navRoutes];
     });
+  }
+
+  getAreaDetails() {
+    this.tableManagementService
+      .getAreaById(this.entityId, this.areaId)
+      .subscribe(
+        (res) => {
+          /**
+           * model for get by id
+           */
+        },
+        this.handleError,
+        this.handleSuccess
+      );
   }
 
   onReset() {
@@ -70,9 +95,13 @@ export class EditAreaComponent implements OnInit {
   }
 
   onSubmit() {
+    const areaFormData: AreaForm = this.useForm.getRawValue();
+
+    this.useForm.get('');
+
     this.$subscription.add(
       this.tableManagementService
-        .createTable('', '')
+        .createTable(this.entityId, '')
         .subscribe((res) => {}, this.handleError, this.handleSuccess)
     );
   }
@@ -84,6 +113,10 @@ export class EditAreaComponent implements OnInit {
   handleError = ({ error }): void => {
     this.loading = false;
   };
+
+  // getFormControls() {
+  //   return this.useForm.controls as AreaForm;
+  // }
 
   ngOnDestroy() {
     this.$subscription.unsubscribe();

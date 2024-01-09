@@ -5,6 +5,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { GlobalSharedModule } from '@hospitality-bot/admin/global-shared';
 import { AdminTableManagementRoutingModule } from './table-management.routing.module';
 import { TableManagementService } from './services/table-management.service';
+import { CheckboxModule } from 'primeng/checkbox';
 
 @NgModule({
   imports: [
@@ -14,6 +15,7 @@ import { TableManagementService } from './services/table-management.service';
     ReactiveFormsModule,
     GlobalSharedModule,
     AdminTableManagementRoutingModule,
+    CheckboxModule,
   ],
   declarations: [...AdminTableManagementRoutingModule.components],
   providers: [TableManagementService],

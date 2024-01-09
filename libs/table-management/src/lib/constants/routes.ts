@@ -4,7 +4,7 @@ import {
   TableFormSubmissionType,
   TableManagementDatableTabs,
 } from '../types/table-datable.type';
-export const TableManagementParmId: Record<
+export const tableManagementParmId: Record<
   TableManagementDatableTabs,
   string
 > = {
@@ -42,7 +42,7 @@ export const tableManagementRoutes: Record<ManageTablePages, PageRoutes> = {
     title: 'Create Table',
   },
   editable: {
-    route: `create-table/:${TableManagementParmId.TABLE}`,
+    route: `create-table/:${tableManagementParmId.TABLE}`,
     navRoutes: [navRoutes.editable],
     title: 'Edit Table',
   },
@@ -57,7 +57,7 @@ export const tableManagementRoutes: Record<ManageTablePages, PageRoutes> = {
     title: 'Create Area',
   },
   editArea: {
-    route: `create-area/:${TableManagementParmId.AREA}`,
+    route: `create-area/:${tableManagementParmId.AREA}`,
     navRoutes: [navRoutes.editArea],
     title: 'Edit Area',
   },

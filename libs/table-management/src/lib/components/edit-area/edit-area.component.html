@@ -31,6 +31,25 @@
     </div>
   </div>
 
+  <div class="sub-wrapper" [formGroup]="tableForm">
+    <div class="main">
+      <div class="sub-heading">
+        Tables
+      </div>
+      <div class="form-block">
+        <ng-container
+          [ngTemplateOutlet]="checkbox"
+          [ngTemplateOutletContext]="{
+            $implicit: { label: 'Select All', controlName: 'selectAll' }
+          }"
+        >
+        </ng-container>
+
+        <div class="table-row"></div>
+      </div>
+    </div>
+  </div>
+
   <hospitality-bot-form-action
     class="full-width"
     [loading]="loading"
@@ -41,3 +60,10 @@
   >
   </hospitality-bot-form-action>
 </div>
+
+<ng-template #checkbox let-data>
+  <div class="label" [formGroup]="tableForm">
+    <p-checkbox [formControlName]="controlName" [binary]="true"></p-checkbox>
+    {{ data.label }}
+  </div>
+</ng-template>

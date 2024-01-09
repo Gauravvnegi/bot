@@ -22,13 +22,13 @@ import {
   ReservationCurrentStatus,
 } from '../../../../../manage-reservation/src/lib/models/reservations.model';
 import * as moment from 'moment';
-import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { FormService } from '../../../../../manage-reservation/src/lib/services/form.service';
 import { ReservationForm } from '../../../../../manage-reservation/src/lib/constants/form';
 import { Subscription } from 'rxjs';
 import { AgentTableResponse } from 'libs/admin/agent/src/lib/types/response';
 import { CompanyResponseType } from 'libs/admin/company/src/lib/types/response';
 import { SideBarService } from 'apps/admin/src/app/core/theme/src/lib/services/sidebar.service';
+import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 
 @Component({
   selector: 'hospitality-bot-booking-info',

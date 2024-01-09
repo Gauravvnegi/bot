@@ -4,9 +4,7 @@ import {
   Input,
   OnDestroy,
   OnInit,
-  Output,
-  ViewChild,
-  ViewContainerRef,
+  Output
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';

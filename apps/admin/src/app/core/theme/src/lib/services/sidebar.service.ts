@@ -6,7 +6,10 @@ import {
 } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { manageMaskZIndex } from 'libs/admin/shared/src/index';
-import { SidebarComponents } from 'libs/admin/global-shared/src/lib/constants/common-components';
+import {
+  SidebarComponents,
+  SidebarInstanceProps,
+} from 'libs/admin/global-shared/src/lib/constants/common-components';
 // export type SideBarConfig<TData extends Record<string,any>> = {
 //   type?: 'RAISE_REQUEST' | 'ADD_GUEST';
 //   open: boolean;
@@ -63,7 +66,7 @@ export class SideBarService {
     }, 100);
   }
 
-  openSidebar(sidebarProps: SidebarProps<any>) {
+  openSidebar<T extends SidebarInstanceProps>(sidebarProps: SidebarProps<T>) {
     let isSidebarKey = sidebarProps.isSidebarKey ?? 'isSidebar';
     let onCloseKey = sidebarProps.onCloseKey ?? 'onCloseSidebar';
     sidebarProps.onOpen();
@@ -90,7 +93,7 @@ export class SideBarService {
   }
 }
 
-export type SidebarProps<T extends Record<string, any>> = {
+export type SidebarProps<T extends SidebarInstanceProps> = {
   componentName?: string;
   onOpen?: () => void;
   containerRef?: ViewContainerRef;
@@ -99,5 +102,5 @@ export type SidebarProps<T extends Record<string, any>> = {
   isSidebarKey?: string;
   onClose?: (res: any) => void; // Callback function for onClose event
   manageMask?: boolean;
-  data?: T;
+  data?: Partial<T>;
 };

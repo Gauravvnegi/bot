@@ -1,20 +1,21 @@
+import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { animate, style, transition, trigger } from '@angular/animations';
 import {
   Component,
   ElementRef,
   EventEmitter,
-  Inject,
   OnDestroy,
   OnInit,
   Output,
   ViewChild,
 } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
   AdminUtilityService,
   UserService,
+  manageMaskZIndex,
+  resetMaskZIndex,
 } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import * as FileSaver from 'file-saver';
@@ -52,8 +53,10 @@ import { convertToTitleCase } from 'libs/admin/shared/src/lib/utils/valueFormatt
       ]),
     ]),
   ],
+  providers: [CardService, FeedbackTableService],
 })
 export class FeedbackDetailModalComponent implements OnInit, OnDestroy {
+  data: Record<string, any>;
   @ViewChild('feedbackChatRef') private feedbackChatRef: ElementRef;
   @Output() onDetailsClose = new EventEmitter();
   globalFeedbackConfig = feedback;
@@ -67,12 +70,21 @@ export class FeedbackDetailModalComponent implements OnInit, OnDestroy {
   constructor(
     protected cardService: CardService,
     public globalFilterService: GlobalFilterService,
-    @Inject(MAT_DIALOG_DATA) public data: any,
     protected userService: UserService,
     protected _adminUtilityService: AdminUtilityService,
     protected tableService: FeedbackTableService,
-    protected snackbarService: SnackBarService
+    protected snackbarService: SnackBarService,
+    public dialogConfig: DynamicDialogConfig,
+    public dialogRef: DynamicDialogRef
   ) {
+    /**
+     * @Remarks Extracting data from he dialog service
+     */
+    if (this.dialogConfig?.data) {
+      Object.entries(this.dialogConfig.data).forEach(([key, value]) => {
+        this[key] = value;
+      });
+    }
     this.feedbackFG = new FormGroup({
       assignee: new FormControl(''),
       status: new FormControl(''),
@@ -80,12 +92,14 @@ export class FeedbackDetailModalComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    manageMaskZIndex(1010, '.cdk-overlay-container');
     this.getUserPermission();
     this.getStatusList();
   }
 
   close() {
     this.onDetailsClose.emit();
+    this.dialogRef.close();
   }
 
   getStatusList() {
@@ -361,6 +375,7 @@ export class FeedbackDetailModalComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    resetMaskZIndex('.cdk-overlay-container');
     this.$subscription.unsubscribe();
   }
 }

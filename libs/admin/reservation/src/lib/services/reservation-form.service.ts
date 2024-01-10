@@ -31,6 +31,7 @@ export class ReservationFormService {
   }
 
   manualCheckin(
+    checkinDate: number,
     reservationId: string,
     callback?: (data?: JourneyData) => void,
     roomType?: IGRoomType
@@ -46,7 +47,10 @@ export class ReservationFormService {
           const { currentTime, defaultTime } = calculateJourneyTime(
             res[JourneyTypes.EARLYCHECKIN].journeyEndTime
           );
-          if (currentTime < defaultTime) {
+          const todayEpoch = new Date().setHours(0, 0, 0, 0);
+          const checkinEpoch = new Date(checkinDate).setHours(0, 0, 0, 0);
+
+          if (currentTime < defaultTime && checkinEpoch === todayEpoch) {
             this.openModalComponent(JourneyTypes.EARLYCHECKIN);
           } else {
             this.openJourneyDialog(
@@ -78,22 +82,14 @@ export class ReservationFormService {
       .getJourneyDetails(this.entityId, JourneyTypes.LATECHECKOUT)
       .subscribe((res: CalendarJourneyResponse) => {
         if (res) {
-          // Compare current time with the default early checkin time to show different popups
-          const { currentTime, defaultTime } = calculateJourneyTime(
-            res[JourneyTypes.LATECHECKOUT].journeyStartTime
+          this.openJourneyDialog(
+            {
+              title: JourneyTypeConfig.CHECKOUT.title,
+              descriptions: JourneyTypeConfig.CHECKOUT.descriptions,
+              isSendInvoice: true,
+            },
+            callback
           );
-          if (currentTime > defaultTime) {
-            this.openModalComponent(JourneyTypes.LATECHECKOUT, callback);
-          } else {
-            this.openJourneyDialog(
-              {
-                title: JourneyTypeConfig.CHECKOUT.title,
-                descriptions: JourneyTypeConfig.CHECKOUT.descriptions,
-                isSendInvoice: true,
-              },
-              callback
-            );
-          }
         }
       });
   }

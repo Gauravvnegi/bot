@@ -516,7 +516,11 @@
 >
 </hospitality-bot-form-action>
 
-<div id="no-view" class="no-view" *ngIf="showBanner">
+<div
+  id="no-view"
+  class="no-view"
+  *ngIf="isCheckin && !isInvoiceGenerated && showBanner"
+>
   <div class="no-view__container">
     <div class="no-view__content">
       <h2 class="no-view__title-text">

@@ -13,11 +13,7 @@ import {
 } from '../../../models/reservations.model';
 import { AbstractControl, ControlContainer, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import {
-  ModalService,
-  SnackBarService,
-} from '@hospitality-bot/shared/material';
-import { MatDialogConfig } from '@angular/material/dialog';
+import { SnackBarService } from '@hospitality-bot/shared/material';
 import {
   GlobalFilterService,
   RoutesConfigService,
@@ -64,6 +60,7 @@ export class BookingSummaryComponent implements OnInit {
   bookingType: EntitySubType;
   outletId = '';
   externalBooking = false;
+  offerType: string;
 
   occupancyDetails: OccupancyDetails;
   $subscription = new Subscription();
@@ -90,7 +87,6 @@ export class BookingSummaryComponent implements OnInit {
     private manageReservationService: ManageReservationService,
     private routesConfigService: RoutesConfigService,
     protected activatedRoute: ActivatedRoute,
-    private modalService: ModalService,
     private _clipboard: Clipboard,
     public formService: FormService,
     protected bookingDetailService: BookingDetailService,
@@ -153,7 +149,8 @@ export class BookingSummaryComponent implements OnInit {
         this.parentFormGroup.getRawValue(),
         id,
         'full',
-        this.summaryData.totalAmount
+        this.summaryData.totalAmount,
+        this.offerType
       );
     else
       data = this.formService.mapOutletReservationData(
@@ -270,69 +267,62 @@ export class BookingSummaryComponent implements OnInit {
     type: string,
     reservationType = ReservationType.CANCELED
   ) {
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.disableClose = true;
-    const togglePopupCompRef = this.modalService.openDialog(
-      ModalComponent,
-      dialogConfig
-    );
-
-    togglePopupCompRef.componentInstance.content = {
-      heading: `Mark Reservation As ${
-        reservationType.charAt(0).toUpperCase() +
-        reservationType.slice(1).toLowerCase()
-      }`,
-      description: [
-        `You are about to mark this reservation as ${ReservationType.CANCELED}`,
-        `Are you Sure?`,
-        this.summaryData?.totalPaidAmount
-          ? ` A total of \u20B9 ${this.summaryData?.totalPaidAmount} is received for the reservation`
-          : '',
-      ],
-      isRemarks: true,
-    };
+    let modalRef: DynamicDialogRef;
 
     this.isBooking = false;
-    togglePopupCompRef.componentInstance.actions = [
-      {
-        label: 'Cancel & Settlement',
-        onClick: () => {
-          this.routesConfigService.navigate({
-            subModuleName: ModuleNames.INVOICE,
-            additionalPath: data.id,
-            queryParams: {
-              entityId: entityId,
-              type: EntitySubType.ROOM_TYPE,
-            },
-          });
-
-          this.modalService.close();
-        },
-        variant: 'outlined',
+    const modalData = {
+      content: {
+        heading: `Mark Reservation As ${
+          reservationType.charAt(0).toUpperCase() +
+          reservationType.slice(1).toLowerCase()
+        }`,
+        descriptions: [
+          `You are about to mark this reservation as ${ReservationType.CANCELED}`,
+          `Are you Sure?`,
+          this.summaryData?.totalPaidAmount
+            ? ` A total of \u20B9 ${this.summaryData?.totalPaidAmount} is received for the reservation`
+            : '',
+        ],
+        isRemarks: true,
       },
-      {
-        label: 'Yes',
-        onClick: (modelData: { remarks: string }) => {
-          let updatedData = { ...data, ...modelData };
-          this.updateReservation(updatedData, entityId, type);
-          this.modalService.close();
-        },
-        variant: 'contained',
-      },
-    ];
+      actions: [
+        {
+          label: 'Cancel & Settlement',
+          onClick: () => {
+            this.routesConfigService.navigate({
+              subModuleName: ModuleNames.INVOICE,
+              additionalPath: data.id,
+              queryParams: {
+                entityId: entityId,
+                type: EntitySubType.ROOM_TYPE,
+              },
+            });
 
-    togglePopupCompRef.componentInstance.onClose.subscribe(() => {
-      this.modalService.close();
+            modalRef.close();
+          },
+          variant: 'outlined',
+        },
+        {
+          label: 'Yes',
+          onClick: (modelData: { remarks: string }) => {
+            let updatedData = { ...data, ...modelData };
+            this.updateReservation(updatedData, entityId, type);
+            modalRef.close();
+          },
+          variant: 'contained',
+        },
+      ],
+    };
+
+    modalRef = openModal({
+      config: {
+        width: '35vw',
+        styleClass: 'confirm-dialog',
+        data: modalData,
+      },
+      component: ModalComponent,
+      dialogService: this.dialogService,
     });
-  }
-
-  listenForReservationTypeChanges(): void {
-    this.reservationInfoControls.reservationType.valueChanges.subscribe(
-      (res) => {
-        if (res === ReservationType.CANCELED && this.reservationId) {
-        }
-      }
-    );
   }
 
   openDetailsPage() {
@@ -401,4 +391,5 @@ type BookingSummaryInfo = {
   heading: string;
   occupancyDetails?: OccupancyDetails;
   externalBooking: boolean;
+  offerType?: string;
 };

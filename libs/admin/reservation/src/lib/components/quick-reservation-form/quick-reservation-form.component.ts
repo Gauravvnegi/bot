@@ -87,6 +87,7 @@ export class QuickReservationFormComponent implements OnInit {
   reservationData: ReservationFormData;
 
   $subscription = new Subscription();
+  offerType: string;
 
   isSidebar = false;
   sidebarVisible: boolean = false;
@@ -301,7 +302,7 @@ export class QuickReservationFormComponent implements OnInit {
               contactNumber: res.guest?.contactDetails?.contactNumber,
               email: res.guest?.contactDetails?.emailId,
             };
-
+            this.offerType = res?.offer?.offerType;
             this.inputControls.guestInformation
               .get('guestDetails')
               .patchValue(res.guest.id);
@@ -447,7 +448,9 @@ export class QuickReservationFormComponent implements OnInit {
     const data = this.formService.mapRoomReservationData(
       this.userForm.getRawValue(),
       this.entityId,
-      'quick'
+      'quick',
+      undefined,
+      this.offerType
     );
     this.loading = true;
 

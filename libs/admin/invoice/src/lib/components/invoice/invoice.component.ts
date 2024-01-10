@@ -187,7 +187,6 @@ export class InvoiceComponent implements OnInit {
     this.initForm();
     this.initOptions();
     this.initNavRoutes();
-    this.getLateCheckoutDetails();
   }
 
   getLateCheckoutDetails() {
@@ -199,7 +198,11 @@ export class InvoiceComponent implements OnInit {
             const { currentTime, defaultTime } = calculateJourneyTime(
               res[JourneyTypes.LATECHECKOUT].journeyStartTime
             );
-            this.showBanner = currentTime > defaultTime;
+            const todayEpoch = new Date().setHours(0, 0, 0, 0);
+
+            this.showBanner =
+              currentTime > defaultTime &&
+              this.inputControl.departureDate.value > todayEpoch;
           }
         })
     );
@@ -330,6 +333,7 @@ export class InvoiceComponent implements OnInit {
           this.isCheckout =
             res?.pmsStatus === ReservationCurrentStatus.CHECKEDOUT;
           this.isInitialized = true;
+          this.getLateCheckoutDetails();
         })
     );
 
@@ -386,8 +390,9 @@ export class InvoiceComponent implements OnInit {
 
           // disabling invoice if already generated
           this.isInvoiceGenerated = res.invoiceGenerated;
+          const todayEpoch = new Date().setHours(0, 0, 0, 0);
+          this.inputControl.departureDate.value > todayEpoch;
           if (this.isInvoiceGenerated) this.disableInvoice();
-
           this.getDescriptionOptions();
         },
         (error) => {

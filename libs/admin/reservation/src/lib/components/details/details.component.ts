@@ -677,7 +677,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
   }
 
   manualCheckin() {
-    this.formService.manualCheckin(this.bookingId, () => {
+    this.formService.manualCheckin(this.details.stayDetails.arrivalTimeStamp,  this.bookingId, () => {
       this.details.currentJourneyDetails.status = 'COMPLETED';
     });
   }

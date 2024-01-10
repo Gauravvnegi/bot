@@ -33,6 +33,7 @@ import { Subject } from 'rxjs';
 import { RoutesConfigService } from '@hospitality-bot/admin/core/theme';
 import { ReservationForm } from '../../constants/form';
 import { SnackBarService } from '@hospitality-bot/shared/material';
+import { ManualOffer } from '../form-components/booking-summary/booking-summary.component';
 
 @Component({
   selector: 'hospitality-bot-add-reservation',
@@ -62,7 +63,7 @@ export class AddReservationComponent extends BaseReservationComponent
   isRouteData = false;
   currentStatus: ReservationCurrentStatus;
   reservationFormData: ReservationFormData;
-  offerType: string;
+  offerResponse: ManualOffer;
 
   constructor(
     private fb: FormBuilder,
@@ -259,7 +260,12 @@ export class AddReservationComponent extends BaseReservationComponent
             this.checkinJourneyState = this.reservationFormData.journeyState;
             this.isExternalBooking = response.externalBooking;
 
-            this.offerType = response?.offer?.offerType;
+            if (response?.offer?.offerType === 'MANUAL')
+              this.offerResponse = {
+                offerType: response.offer?.offerType,
+                discountType: response.offer?.discountType,
+                discountValue: response.offer?.discountValue,
+              };
             // Init Source Data for booking info
             this.formService.initSourceData(
               this.reservationFormData.reservationInformation,

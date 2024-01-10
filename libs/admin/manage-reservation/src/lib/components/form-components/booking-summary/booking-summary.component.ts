@@ -60,7 +60,7 @@ export class BookingSummaryComponent implements OnInit {
   bookingType: EntitySubType;
   outletId = '';
   externalBooking = false;
-  offerType: string;
+  offerResponse: ManualOffer;
 
   occupancyDetails: OccupancyDetails;
   $subscription = new Subscription();
@@ -150,7 +150,7 @@ export class BookingSummaryComponent implements OnInit {
         id,
         'full',
         this.summaryData.totalAmount,
-        this.offerType
+        this.offerResponse
       );
     else
       data = this.formService.mapOutletReservationData(
@@ -391,5 +391,12 @@ type BookingSummaryInfo = {
   heading: string;
   occupancyDetails?: OccupancyDetails;
   externalBooking: boolean;
+  offerResponse?: ManualOffer;
+};
+
+export type ManualOffer = {
   offerType?: string;
+  discountType?: string;
+  discountValue?: number;
+  id?: string;
 };

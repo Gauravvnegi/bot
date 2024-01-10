@@ -17,6 +17,7 @@ import { RoomTypeOption } from '../constants/reservation';
 import { ReservationCurrentStatus } from '../models/reservations.model';
 import { AgentTableResponse } from 'libs/admin/agent/src/lib/types/response';
 import { CompanyResponseType } from 'libs/admin/company/src/lib/types/response';
+import { ManualOffer } from '../components/form-components/booking-summary/booking-summary.component';
 
 @Injectable({
   providedIn: 'root',
@@ -76,7 +77,7 @@ export class FormService {
     id?: string,
     type: 'full' | 'quick' = 'full',
     totalAmount?: number,
-    offerType?: string
+    offerData?: ManualOffer
   ): RoomReservationFormData {
     const roomReservationData = new RoomReservationFormData();
     // Map Reservation Info
@@ -128,11 +129,10 @@ export class FormService {
 
     roomReservationData.guestId = input.guestInformation?.guestDetails;
     roomReservationData.specialRequest = input.instructions.specialInstructions;
+
     roomReservationData.offer =
-      offerType && offerType === 'MANUAL'
-        ? {
-            offerType: offerType,
-          }
+      offerData?.offerType && offerData?.offerType === 'MANUAL'
+        ? offerData
         : {
             id: input.offerId ?? null,
           };

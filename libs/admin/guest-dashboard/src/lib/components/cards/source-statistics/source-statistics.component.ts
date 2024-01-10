@@ -234,11 +234,11 @@ export class SourceStatisticsComponent implements OnInit, OnDestroy {
       callingMethod: 'getAllGuestStats',
       guestFilter: 'GUESTSOURCES',
       exportURL: 'exportCSVStat',
-      modalType: 'source.title',
+      tableName: 'Booking Source',
     };
 
     openModal({
-      config: { data: data },
+      config: { width: '80%', data: data },
       dialogService: this.dialogService,
       component: GuestDatatableModalComponent,
     });

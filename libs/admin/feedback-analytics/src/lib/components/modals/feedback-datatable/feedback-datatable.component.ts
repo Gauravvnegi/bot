@@ -47,9 +47,11 @@ import {
     '../../datatable/feedback-datatable/feedback-datatable.component.scss',
     './feedback-datatable.component.scss',
   ],
+  providers: [FeedbackTableService, StatisticsService],
 })
 export class FeedbackDatatableModalComponent extends FeedbackDatatableComponent
   implements OnInit, OnDestroy {
+  data: any;
   @Input() config;
   @Input() feedbackType;
   @Input() tabFilterItems: any;
@@ -70,8 +72,7 @@ export class FeedbackDatatableModalComponent extends FeedbackDatatableComponent
     userService: UserService,
     dialogService: DialogService,
     dialogRef: DynamicDialogRef,
-    dialogConfig: DynamicDialogConfig,
-    @Inject(MAT_DIALOG_DATA) public data: any
+    dialogConfig: DynamicDialogConfig
   ) {
     /**
      * @Remarks dialog data will be extract in base class
@@ -153,6 +154,7 @@ export class FeedbackDatatableModalComponent extends FeedbackDatatableComponent
    */
   closeModal(): void {
     this.onModalClose.emit(true);
+    this.dialogRef.close();
   }
 
   /**

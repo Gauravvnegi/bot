@@ -85,7 +85,7 @@ export class FeedbackDetailComponent implements OnInit, OnDestroy {
     this.$subscription.add(
       this.cardService.$selectedFeedback.subscribe((response) => {
         this.feedback = response;
-        
+
         this.setStatusList(this.feedback);
 
         this.feedbackFG?.patchValue({
@@ -313,9 +313,10 @@ export class FeedbackDetailComponent implements OnInit, OnDestroy {
   }
 
   setStatusList(data) {
-    this.statusList = this.feedback.nextState.map((item) => {
-      return { label: convertToTitleCase(item), id: item };
-    });
+    this.statusList =
+      this.feedback?.nextState.map((item) => {
+        return { label: convertToTitleCase(item), id: item };
+      }) ?? [];
 
     this.statusList.unshift({
       label: convertToTitleCase(data.status),

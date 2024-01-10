@@ -48,23 +48,6 @@ export class ArrivalsStatisticsComponent implements OnInit, OnChanges {
    * @function openModal To open the arrival reservation list as modal.
    */
   openModal(): void {
-    // TODO: Need to remove
-    // const dialogConfig = new MatDialogConfig();
-    // dialogConfig.disableClose = true;
-    // dialogConfig.width = '100%';
-    // const detailCompRef = this._modalService.openDialog(
-    //   ReservationDatatableModalComponent,
-    //   dialogConfig
-    // );
-
-    // detailCompRef.componentInstance.tableName = dashboard.table.arrivals.name;
-    // detailCompRef.componentInstance.tabFilterItems = this.modalData.tabFilterItems;
-    // detailCompRef.componentInstance.tabFilterIdx = 0;
-    // detailCompRef.componentInstance.onModalClose.subscribe((res) => {
-    //   // remove loader for detail close
-    //   detailCompRef.close();
-    // });
-
     const data: ReservationDialogData = {
       tableName: dashboard.table.arrivals.name,
       tabFilterItems: this.modalData.tabFilterItems,
@@ -72,7 +55,7 @@ export class ArrivalsStatisticsComponent implements OnInit, OnChanges {
     };
 
     openDynamicModal({
-      config: { data },
+      config: { width: '80%', data },
       component: ReservationDatatableModalComponent,
       dialogService: this.dialogService,
     });

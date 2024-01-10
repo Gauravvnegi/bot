@@ -37,6 +37,7 @@ import { TranslateService } from '@ngx-translate/core';
     '../../datatable/guest/guest.component.scss',
     './guest-datatable.component.scss',
   ],
+  providers: [GuestTableService],
 })
 export class GuestDatatableModalComponent extends GuestDatatableComponent
   implements OnInit, OnDestroy {

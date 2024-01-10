@@ -54,3 +54,23 @@ export function manageMaskZIndex(
     }
   });
 }
+
+export function resetMaskZIndex(
+  targetClass = '.p-component-overlay.p-sidebar-mask'
+) {
+  let interval: number;
+  interval = setInterval(() => {
+    // List of DOM elements with the specified target class
+    const elements: NodeListOf<HTMLElement> = document.querySelectorAll(
+      targetClass
+    );
+
+    if (elements?.length) {
+      elements.forEach((element) => {
+        element.style.zIndex = null;
+      });
+      // Clear the interval as the zIndex has been applied
+      clearInterval(interval);
+    }
+  });
+}

@@ -264,10 +264,9 @@
   <div [ngClass]="{ 'details-wrapper': !isFirstTimeFetch }">
     <p-sidebar
       [ngClass]="{ 'marketing-notification': true }"
-      [visible]="sidebarVisible"
+      [(visible)]="sidebarVisible"
       [appendTo]="'body'"
       [style]="{ padding: 0, 'min-width': '990px' }"
-      (onHide)="sidebarVisible = false"
       [showCloseIcon]="false"
       position="right"
     >

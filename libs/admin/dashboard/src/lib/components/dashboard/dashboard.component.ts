@@ -5,19 +5,17 @@ import {
   TemplateRef,
   ViewChild,
 } from '@angular/core';
-import { MatDialogConfig } from '@angular/material/dialog';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
-  DetailsComponent,
   DetailsTabOptions,
   Reservation,
   ReservationTable,
 } from '@hospitality-bot/admin/reservation';
 import {
   AdminUtilityService,
+  BookingDetailService,
   NavRouteOptions,
 } from '@hospitality-bot/admin/shared';
-import { ModalService } from '@hospitality-bot/shared/material';
 import { NotificationService } from 'apps/admin/src/app/core/theme/src/lib/services/notification.service';
 import {
   ModuleNames,
@@ -55,11 +53,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
   constructor(
     private reservationService: ReservationService,
     private globalFilterService: GlobalFilterService,
-    private modalService: ModalService,
     private notificationService: NotificationService,
     private _adminUtilityService: AdminUtilityService,
     private analyticsService: AnalyticsService,
-    private sideBarService: SideBarService
+    private sideBarService: SideBarService,
+    private bookingDetailService: BookingDetailService
   ) {}
 
   ngOnInit(): void {
@@ -98,34 +96,21 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   openDetailPage(rowData, tabKey?: DetailsTabOptions): void {
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.disableClose = true;
-    dialogConfig.width = '100%';
-    const detailCompRef = this.modalService.openDialog(
-      DetailsComponent,
-      dialogConfig
-    );
+    let guestId, bookingNumber;
     if (this.selectedTab === (dashboardPopUpTabs[1].value as string)) {
       //PRE ARRIVAL REQUEST
-      detailCompRef.componentInstance.guestId =
-        rowData?.guestDetails?.primaryGuest?.id;
-
-      detailCompRef.componentInstance.bookingNumber =
-        rowData?.confirmationNumber;
+      guestId = rowData?.guestDetails?.primaryGuest?.id;
+      bookingNumber = rowData?.confirmationNumber;
     } else {
       //PRE CHECKIN GUEST
-      detailCompRef.componentInstance.guestId =
-        rowData?.guests?.primaryGuest?.id;
-
-      detailCompRef.componentInstance.bookingNumber =
-        rowData.booking.bookingNumber;
+      guestId = rowData?.guests?.primaryGuest?.id;
+      bookingNumber = rowData.booking.bookingNumber;
     }
-
-    tabKey && (detailCompRef.componentInstance.tabKey = tabKey);
-
     this.$subscription.add(
-      detailCompRef.componentInstance.onDetailsClose.subscribe((_) => {
-        detailCompRef.close();
+      this.bookingDetailService.openBookingDetailSidebar({
+        guestId: guestId,
+        bookingNumber: bookingNumber,
+        ...(tabKey && { tabKey: tabKey }),
       })
     );
   }
@@ -251,5 +236,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
   ngOnDestroy(): void {
     this.$subscription.unsubscribe();
+    this.bookingDetailService.resetBookingState();
   }
 }

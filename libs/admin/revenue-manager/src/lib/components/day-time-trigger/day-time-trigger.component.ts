@@ -1,3 +1,6 @@
+/**
+ * @Remark Duplicate component
+ */
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import {
   AbstractControl,

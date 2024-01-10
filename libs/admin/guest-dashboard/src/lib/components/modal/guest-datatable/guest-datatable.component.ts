@@ -13,10 +13,7 @@ import {
   BookingDetailService,
   FeedbackService,
 } from '@hospitality-bot/admin/shared';
-import {
-  ModalService,
-  SnackBarService,
-} from '@hospitality-bot/shared/material';
+import { SnackBarService } from '@hospitality-bot/shared/material';
 import * as FileSaver from 'file-saver';
 import { Observable } from 'rxjs';
 import {
@@ -59,7 +56,6 @@ export class GuestDatatableModalComponent extends GuestDatatableComponent
     protected _adminUtilityService: AdminUtilityService,
     protected globalFilterService: GlobalFilterService,
     protected snackbarService: SnackBarService,
-    protected _modal: ModalService,
     public feedbackService: FeedbackService,
     private router: Router,
     public bookingDetailService: BookingDetailService,
@@ -73,7 +69,6 @@ export class GuestDatatableModalComponent extends GuestDatatableComponent
       _adminUtilityService,
       globalFilterService,
       snackbarService,
-      _modal,
       feedbackService,
       bookingDetailService
     );

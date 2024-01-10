@@ -1,12 +1,8 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { MatDialogConfig } from '@angular/material/dialog';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
-import { AdminUtilityService } from '@hospitality-bot/admin/shared';
-import {
-  ModalService,
-  SnackBarService,
-} from '@hospitality-bot/shared/material';
+import { AdminUtilityService, openModal } from '@hospitality-bot/admin/shared';
+import { SnackBarService } from '@hospitality-bot/shared/material';
 import { DateService } from '@hospitality-bot/shared/utils';
 import { TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
@@ -16,6 +12,7 @@ import { Bifurcation } from '../../../data-models/statistics.model';
 import { FeedbackDatatableModalComponent } from '../../modals/feedback-datatable/feedback-datatable.component';
 import { MatSelectChange } from '@angular/material/select';
 import { StatisticsService } from '../../../services/feedback-statistics.service';
+import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 
 @Component({
   selector: 'hospitality-bot-received-breakdown',
@@ -62,8 +59,8 @@ export class ReceivedBreakdownComponent implements OnInit, OnDestroy {
     protected snackbarService: SnackBarService,
     protected dateService: DateService,
     protected _translateService: TranslateService,
-    protected _modalService: ModalService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private dialogService: DialogService
   ) {}
 
   ngOnInit(): void {
@@ -269,25 +266,47 @@ export class ReceivedBreakdownComponent implements OnInit, OnDestroy {
 
   openTableModal(event) {
     event.stopPropagation();
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.disableClose = true;
-    dialogConfig.width = '100%';
-    dialogConfig.data = {
-      tableName: feedback.tableName.receivedBreakdown,
-      tabFilterItems: this.createTabFilterItem(),
-      tabFilterIdx: this.keyLabels.findIndex(
-        (item) => item.key === this.entityType
-      ),
-      globalFeedbackFilterType: this.globalFeedbackFilterType,
-      config: [{ feedbackGraph: 'BIFURCATIONS' }],
-      feedbackType: this.getFeedbackType(),
+    // const dialogConfig = new MatDialogConfig();
+    // dialogConfig.disableClose = true;
+    // dialogConfig.width = '100%';
+    // dialogConfig.data = {
+    //   tableName: feedback.tableName.receivedBreakdown,
+    //   tabFilterItems: this.createTabFilterItem(),
+    //   tabFilterIdx: this.keyLabels.findIndex(
+    //     (item) => item.key === this.entityType
+    //   ),
+    //   globalFeedbackFilterType: this.globalFeedbackFilterType,
+    //   config: [{ feedbackGraph: 'BIFURCATIONS' }],
+    //   feedbackType: this.getFeedbackType(),
+    // };
+    // const detailCompRef = this._modalService.openDialog(
+    //   FeedbackDatatableModalComponent,
+    //   dialogConfig
+    // );
+    // detailCompRef.componentInstance.onModalClose.subscribe((res) => {
+    //   detailCompRef.close();
+    // });
+
+    let dialogRef: DynamicDialogRef;
+    const modalData: Partial<FeedbackDatatableModalComponent> = {
+      data: {
+        tableName: feedback.tableName.receivedBreakdown,
+        tabFilterItems: this.createTabFilterItem(),
+        tabFilterIdx: this.keyLabels.findIndex(
+          (item) => item.key === this.entityType
+        ),
+        globalFeedbackFilterType: this.globalFeedbackFilterType,
+        config: [{ feedbackGraph: 'BIFURCATIONS' }],
+        feedbackType: this.getFeedbackType(),
+      },
     };
-    const detailCompRef = this._modalService.openDialog(
-      FeedbackDatatableModalComponent,
-      dialogConfig
-    );
-    detailCompRef.componentInstance.onModalClose.subscribe((res) => {
-      detailCompRef.close();
+    dialogRef = openModal({
+      config: {
+        styleClass: 'confirm-dialog',
+        data: modalData,
+      },
+      component: FeedbackDatatableModalComponent,
+      dialogService: this.dialogService,
     });
   }
 

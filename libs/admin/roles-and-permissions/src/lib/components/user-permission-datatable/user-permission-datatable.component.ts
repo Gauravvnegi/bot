@@ -1,28 +1,22 @@
-import { Location } from '@angular/common';
-import {
-  Component,
-  EventEmitter,
-  Input,
-  OnDestroy,
-  OnInit,
-  Output,
-} from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
-import { UserService } from '@hospitality-bot/admin/shared';
+import { UserService, openModal } from '@hospitality-bot/admin/shared';
 import * as FileSaver from 'file-saver';
 import { BaseDatatableComponent } from 'libs/admin/shared/src/lib/components/datatable/base-datatable.component';
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
-import { ModalService, SnackBarService } from 'libs/shared/material/src';
-import { Observable, Subscription, forkJoin } from 'rxjs';
+import { SnackBarService } from 'libs/shared/material/src';
+import { Subscription } from 'rxjs';
 import { UserPermissionTable } from '../../models/user-permission-table.model';
 import { ManagePermissionService } from '../../services/manage-permission.service';
 import { QueryConfig } from '../../types';
 import { chips, cols, tableName } from '../../constants/data-table';
-import { get } from 'lodash';
 import { LazyLoadEvent } from 'primeng/api';
-import { MatDialogConfig } from '@angular/material/dialog';
 import { ModalComponent } from 'libs/admin/shared/src/lib/components/modal/modal.component';
+import {
+  DialogService,
+  DynamicDialogConfig,
+  DynamicDialogRef,
+} from 'primeng/dynamicdialog';
 
 @Component({
   selector: 'hospitality-bot-user-permission-datatable',
@@ -31,14 +25,9 @@ import { ModalComponent } from 'libs/admin/shared/src/lib/components/modal/modal
     '../../../../../shared/src/lib/components/datatable/datatable.component.scss',
     './user-permission-datatable.component.scss',
   ],
-  providers: [ModalService],
 })
 export class UserPermissionDatatableComponent extends BaseDatatableComponent
   implements OnInit, OnDestroy {
-  @Output() onModalClose = new EventEmitter<{
-    userId?: string;
-    isView?: boolean;
-  }>();
   loggedInUserId: string;
   @Input() tabFilterIdx = 1;
 
@@ -59,15 +48,23 @@ export class UserPermissionDatatableComponent extends BaseDatatableComponent
 
   constructor(
     public fb: FormBuilder,
-    private _router: Router,
-    private _route: ActivatedRoute,
     private _adminUtilityService: AdminUtilityService,
     private _managePermissionService: ManagePermissionService,
     public userService: UserService,
     private snackbarService: SnackBarService,
-    private modalService: ModalService
+    private dialogConfig: DynamicDialogConfig,
+    private dialogRef: DynamicDialogRef,
+    private dialogService: DialogService
   ) {
     super(fb);
+    /**
+     * @Remarks Extracting data from he dialog service
+     */
+    if (this.dialogConfig?.data) {
+      Object.entries(this.dialogConfig.data).forEach(([key, value]) => {
+        this[key] = value;
+      });
+    }
   }
 
   ngOnInit(): void {
@@ -177,12 +174,6 @@ export class UserPermissionDatatableComponent extends BaseDatatableComponent
       this._managePermissionService
         .getUserJobDetails(userData.userId)
         .subscribe((res) => {
-          const dialogConfig = new MatDialogConfig();
-          dialogConfig.disableClose = true;
-          const togglePopupCompRef = this.modalService.openDialog(
-            ModalComponent,
-            dialogConfig
-          );
           let description = [
             `Are you sure you want to deactivate the user?`,
             `user have ${res?.length} jobs pending`,
@@ -201,33 +192,41 @@ export class UserPermissionDatatableComponent extends BaseDatatableComponent
             label = 'Force Deactivate';
           }
 
-          togglePopupCompRef.componentInstance.content = {
+          let dialogRef: DynamicDialogRef;
+          const modalData: Partial<ModalComponent> = {
             heading: `Mark As ${status ? 'Active' : 'Inactive'}`,
-            description: description,
+            descriptions: description,
+            actions: [
+              {
+                label: 'Cancel',
+                onClick: () => {
+                  this.dialogRef.close();
+                  dialogRef.close();
+                },
+                variant: 'outlined',
+              },
+              {
+                label: label,
+                onClick: () => {
+                  this.updateRolesStatus(
+                    status,
+                    userData,
+                    force ? { queryObj: '?forceUpdate=true' } : {}
+                  );
+                  dialogRef.close();
+                },
+                variant: 'contained',
+              },
+            ],
           };
 
-          togglePopupCompRef.componentInstance.actions = [
-            {
-              label: 'Cancel',
-              onClick: () => this.modalService.close(),
-              variant: 'outlined',
+          dialogRef = openModal({
+            config: {
+              styleClass: 'confirm-dialog',
+              data: modalData,
             },
-            {
-              label: label,
-              onClick: () => {
-                this.updateRolesStatus(
-                  status,
-                  userData,
-                  force ? { queryObj: '?forceUpdate=true' } : {}
-                );
-                togglePopupCompRef.close();
-              },
-              variant: 'contained',
-            },
-          ];
-
-          togglePopupCompRef.componentInstance.onClose.subscribe(() => {
-            togglePopupCompRef.close();
+            dialogService: this.dialogService,
+            component: ModalComponent,
           });
         });
     } else {
@@ -262,7 +261,7 @@ export class UserPermissionDatatableComponent extends BaseDatatableComponent
   }
 
   openUserDetails(rowData) {
-    this.onModalClose.emit({
+    this.dialogRef.close({
       userId: rowData?.userId,
       isView: this.isEditAccessDenied(rowData),
     });
@@ -279,10 +278,15 @@ export class UserPermissionDatatableComponent extends BaseDatatableComponent
    * @function closeModal To emit user id on close modal
    */
   closeModal(): void {
-    this.onModalClose.emit();
+    this.dialogRef.close();
   }
 
   ngOnDestroy() {
     this.$subscription.unsubscribe();
   }
 }
+
+export type UserPermissionResponse = {
+  userId?: string;
+  isView?: boolean;
+};

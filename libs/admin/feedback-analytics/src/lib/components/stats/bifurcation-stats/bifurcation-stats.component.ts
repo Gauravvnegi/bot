@@ -7,10 +7,7 @@ import {
   CircularChart,
   StatCard,
 } from '@hospitality-bot/admin/shared';
-import {
-  SnackBarService,
-  ModalService,
-} from '@hospitality-bot/shared/material';
+import { SnackBarService } from '@hospitality-bot/shared/material';
 import { DateService } from '@hospitality-bot/shared/utils';
 import { TranslateService } from '@ngx-translate/core';
 import { feedback } from '../../../constants/feedback';
@@ -63,7 +60,6 @@ export class BifurcationStatsComponent implements OnInit {
     protected snackbarService: SnackBarService,
     protected dateService: DateService,
     protected _translateService: TranslateService,
-    protected _modalService: ModalService,
     private fb: FormBuilder
   ) {}
 

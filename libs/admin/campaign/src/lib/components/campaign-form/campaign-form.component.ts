@@ -8,12 +8,8 @@ import {
   Output,
 } from '@angular/core';
 import { FormArray, FormControl, FormGroup } from '@angular/forms';
-import { MatDialogConfig } from '@angular/material/dialog';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
-import {
-  ModalService,
-  SnackBarService,
-} from '@hospitality-bot/shared/material';
+import { SnackBarService } from '@hospitality-bot/shared/material';
 import { Subscription } from 'rxjs';
 import { campaignConfig } from '../../constant/campaign';
 import { Campaign } from '../../data-model/campaign.model';
@@ -22,7 +18,12 @@ import { CampaignService } from '../../services/campaign.service';
 import { EmailService } from '../../services/email.service';
 import { SendTestComponent } from '../send-test/send-test.component';
 import { TranslateService } from '@ngx-translate/core';
-import { Option, NavRouteOptions } from '@hospitality-bot/admin/shared';
+import {
+  Option,
+  NavRouteOptions,
+  openModal,
+} from '@hospitality-bot/admin/shared';
+import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 
 @Component({
   selector: 'hospitality-bot-campaign-form',
@@ -68,10 +69,10 @@ export class CampaignFormComponent implements OnInit, OnDestroy {
   constructor(
     private snackbarService: SnackBarService,
     private _emailService: EmailService,
-    private _modalService: ModalService,
     public globalFilterService: GlobalFilterService,
     private campaignService: CampaignService,
-    protected _translateService: TranslateService
+    protected _translateService: TranslateService,
+    private dialogService: DialogService
   ) {}
 
   ngOnInit(): void {
@@ -102,44 +103,44 @@ export class CampaignFormComponent implements OnInit, OnDestroy {
    *@function sendTestCampaign function to send test campaign email.
    */
   sendTestCampaign() {
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.disableClose = true;
-    const sendTestCampaignCompRef = this._modalService.openDialog(
-      SendTestComponent,
-      dialogConfig
-    );
-    sendTestCampaignCompRef.componentInstance.parentFG = this.campaignFG;
-
+    let dialogRef: DynamicDialogRef;
+    const modalData: Partial<SendTestComponent> = {};
+    dialogRef = openModal({
+      config: {
+        width: '80%',
+        styleClass: 'dynamic-modal',
+        data: modalData,
+      },
+      component: SendTestComponent,
+      dialogService: this.dialogService,
+    });
     this.$subscription.add(
-      sendTestCampaignCompRef.componentInstance.closeSendTest.subscribe(
-        (response) => {
-          if (response.status) {
-            const reqData = this._emailService.createRequestData(
-              this.campaignFG.getRawValue()
-            );
-            reqData.message = this.getTemplateMessage(reqData);
-            this.$subscription.add(
-              this._emailService
-                .sendTest(this.entityId, reqData)
-                .subscribe((response) => {
-                  this.snackbarService
-                    .openSnackBarWithTranslate(
-                      {
-                        translateKey: 'messages.success.sendTestcampaign',
-                        priorityMessage: 'Campaign sent to test email(s)',
-                      },
-                      '',
-                      {
-                        panelClass: 'success',
-                      }
-                    )
-                    .subscribe();
-                })
-            );
-          }
-          sendTestCampaignCompRef.close();
+      dialogRef.onClose.subscribe((response) => {
+        if (response.status) {
+          const reqData = this._emailService.createRequestData(
+            this.campaignFG.getRawValue()
+          );
+          reqData.message = this.getTemplateMessage(reqData);
+          this.$subscription.add(
+            this._emailService
+              .sendTest(this.entityId, reqData)
+              .subscribe((response) => {
+                this.snackbarService
+                  .openSnackBarWithTranslate(
+                    {
+                      translateKey: 'messages.success.sendTestcampaign',
+                      priorityMessage: 'Campaign sent to test email(s)',
+                    },
+                    '',
+                    {
+                      panelClass: 'success',
+                    }
+                  )
+                  .subscribe();
+              })
+          );
         }
-      )
+      })
     );
   }
 

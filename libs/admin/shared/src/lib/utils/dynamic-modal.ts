@@ -14,7 +14,7 @@ export function openModal(data: {
   component: Type<any>;
 }): DynamicDialogRef {
   return data.dialogService.open(data.component, {
-    width: '80%',
+    // width: '80%',
     styleClass: 'dynamic-modal',
     closable: true,
     closeOnEscape: true,

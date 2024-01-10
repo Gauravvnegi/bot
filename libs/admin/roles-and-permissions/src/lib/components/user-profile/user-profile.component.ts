@@ -1,3 +1,4 @@
+import { DialogService } from 'primeng/dynamicdialog';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import {
   AbstractControl,
@@ -6,7 +7,6 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
-import { MatDialogConfig } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
   CountryCode,
@@ -16,18 +16,21 @@ import {
   PermissionModuleNames,
   Regex,
   UserService,
+  openModal,
 } from '@hospitality-bot/admin/shared';
 import { HotelDetailService } from 'libs/admin/shared/src/lib/services/hotel-detail.service';
-import { ModalService, SnackBarService } from 'libs/shared/material/src';
+import { SnackBarService } from 'libs/shared/material/src';
 import {
   PermissionOption,
   UserConfig,
 } from '../../../../../shared/src/lib/models/userConfig.model';
-import { managePermissionRoutes, navRoute } from '../../constants/routes';
+import { managePermissionRoutes } from '../../constants/routes';
 import { ManagePermissionService } from '../../services/manage-permission.service';
 import { PageState, PermissionMod, UserForm } from '../../types';
-import { UserPermissionDatatableComponent } from '../user-permission-datatable/user-permission-datatable.component';
-import { UserPermissionTable } from '../../models/user-permission-table.model';
+import {
+  UserPermissionDatatableComponent,
+  UserPermissionResponse,
+} from '../user-permission-datatable/user-permission-datatable.component';
 import {
   RoutesConfigService,
   SubscriptionPlanService,
@@ -37,7 +40,6 @@ import {
   selector: 'hospitality-bot-user-profile',
   templateUrl: './user-profile.component.html',
   styleUrls: ['./user-profile.component.scss'],
-  providers: [ModalService],
 })
 export class UserProfileComponent implements OnInit {
   loggedInUserId: string;
@@ -88,7 +90,6 @@ export class UserProfileComponent implements OnInit {
 
   constructor(
     private _fb: FormBuilder,
-    private _modal: ModalService,
     private _userService: UserService,
     private _hotelDetailService: HotelDetailService,
     private _managePermissionService: ManagePermissionService,
@@ -96,7 +97,8 @@ export class UserProfileComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private routesConfigService: RoutesConfigService,
-    private subscriptionPlanService: SubscriptionPlanService
+    private subscriptionPlanService: SubscriptionPlanService,
+    private dialogService: DialogService
   ) {
     this.initUserForm();
   }
@@ -504,35 +506,34 @@ export class UserProfileComponent implements OnInit {
    * @function openTableModal To open modal pop-up for user persmission.
    */
   openTableModal() {
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.disableClose = true;
-    dialogConfig.width = '100%';
-    const tableCompRef = this._modal.openDialog(
-      UserPermissionDatatableComponent,
-      dialogConfig
-    );
+    const modalData: Partial<UserPermissionDatatableComponent> = {
+      tabFilterIdx: this.totalTeamMember === 0 ? 0 : 1,
+    };
+    const dialogRef = openModal({
+      config: {
+        width: '80%',
+        styleClass: 'dynamic-modal',
+        data: modalData,
+      },
+      dialogService: this.dialogService,
+      component: UserPermissionDatatableComponent,
+    });
 
-    tableCompRef.componentInstance.tabFilterIdx =
-      this.totalTeamMember === 0 ? 0 : 1;
-
-    tableCompRef.componentInstance.onModalClose.subscribe(
-      (res: { userId?: string; isView?: boolean }) => {
-        tableCompRef.close();
-        if (res?.userId) {
-          this.routesConfigService.navigate({
-            additionalPath: managePermissionRoutes[
-              res?.isView || !this.hasManagePermission ? 'viewUser' : 'editUser'
-            ].route.replace(':id', res.userId),
-          });
-          // this.router.navigate([
-          //   navRoute[res?.isView ? 'viewUser' : 'editUser'].link.replace(
-          //     ':userId',
-          //     res.userId
-          //   ),
-          // ]);
-        }
+    dialogRef.onClose.subscribe((res: UserPermissionResponse) => {
+      if (res?.userId) {
+        this.routesConfigService.navigate({
+          additionalPath: managePermissionRoutes[
+            res?.isView || !this.hasManagePermission ? 'viewUser' : 'editUser'
+          ].route.replace(':id', res.userId),
+        });
+        // this.router.navigate([
+        //   navRoute[res?.isView ? 'viewUser' : 'editUser'].link.replace(
+        //     ':userId',
+        //     res.userId
+        //   ),
+        // ]);
       }
-    );
+    });
   }
 
   savePermission() {

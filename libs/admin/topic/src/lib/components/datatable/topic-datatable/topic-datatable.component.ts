@@ -5,10 +5,7 @@ import {
   NavRouteOption,
   sharedConfig,
 } from '@hospitality-bot/admin/shared';
-import {
-  ModalService,
-  SnackBarService,
-} from '@hospitality-bot/shared/material';
+import { SnackBarService } from '@hospitality-bot/shared/material';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 import * as FileSaver from 'file-saver';
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
@@ -53,7 +50,6 @@ export class TopicDatatableComponent extends BaseDatatableComponent
     private adminUtilityService: AdminUtilityService,
     private globalFilterService: GlobalFilterService,
     protected snackbarService: SnackBarService,
-    protected _modal: ModalService,
     private topicService: TopicService,
     private routesConfigService: RoutesConfigService
   ) {

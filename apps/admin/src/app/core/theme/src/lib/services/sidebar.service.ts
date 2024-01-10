@@ -72,13 +72,16 @@ export class SideBarService {
     sidebarProps.onOpen();
     sidebarProps?.manageMask && manageMaskZIndex();
     this.sidebarSlide.clear();
-
+    sidebarProps?.containerRef && sidebarProps.containerRef.clear();
     if (!!sidebarProps?.componentName) {
       //for component
       const factory = this.resolver.resolveComponentFactory(
         SidebarComponents[sidebarProps.componentName]
       );
-      const componentRef = this.sidebarSlide.createComponent(factory);
+      const componentRef = sidebarProps.containerRef
+        ? sidebarProps.containerRef.createComponent(factory)
+        : this.sidebarSlide.createComponent(factory);
+
       componentRef.instance[isSidebarKey] = true;
       Object.assign(componentRef.instance, sidebarProps.data);
       componentRef.instance[onCloseKey].subscribe((res) => {

@@ -49,15 +49,22 @@
       }"
     ></hospitality-bot-select>
 
-    <hospitality-bot-input
-      class="one-third-width"
-      label="Amount"
-      controlName="chargedAmount"
-      [props]="{
-        placeholder: 'Enter'
-      }"
-      [disabled]="!inputControls.chargeable.value"
-    ></hospitality-bot-input>
+    <div class="one-third-width">
+      <hospitality-bot-input
+        class="one-third-width"
+        label="Amount"
+        controlName="chargedAmount"
+        [props]="{
+          placeholder: 'Enter'
+        }"
+        [disabled]="!inputControls.chargeable.value"
+      ></hospitality-bot-input>
+      <ul class="charges-info">
+        <li>Increased Amount</li>
+        <li>Exclusive of tax</li>
+        <li>Applied per day</li>
+      </ul>
+    </div>
 
     <hospitality-bot-toggle-switch
       class="status"
@@ -65,12 +72,6 @@
       onLabel="Chargeable"
       offLabel="Non-chargeable"
     ></hospitality-bot-toggle-switch>
-
-    <ul class="charges-info">
-      <li>Increased Amount</li>
-      <li>Exclusive of tax</li>
-      <li>Applied per day</li>
-    </ul>
 
     <hospitality-bot-text-area
       class="full-width"

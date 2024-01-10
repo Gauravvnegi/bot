@@ -41,7 +41,8 @@ export class ErrorHandlerInterceptor implements HttpInterceptor {
               [msg1, translateKey1],
               [msg2, translateKey2],
             ].forEach((data) => {
-              const translationToBeShown = priorityMessage || data[0];
+              const translationToBeShown =
+                statusCode == 500 ? data[0] : priorityMessage || data[0];
               if (data[0] !== data[1]) {
                 this._progressSpinnerService.$snackbarChange.next({
                   detail: translationToBeShown,

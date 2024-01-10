@@ -40,7 +40,7 @@
   [resizableColumns]="isResizableColumns"
   [autoLayout]="isAutoLayout"
   [loading]="loading"
-  [columns]="cols"
+  [columns]="getColumns()"
   [value]="values"
   [paginator]="isPaginator"
   [rows]="rowsPerPage"
@@ -100,6 +100,14 @@
         ></p-tableCheckbox>
       </td>
 
+      <ng-container
+        [ngTemplateOutlet]="
+          selectedTab === TableValue.table ? tableCell : areaCell
+        "
+        [ngTemplateOutletContext]="{ $implicit: rowData }"
+      >
+      </ng-container>
+
       <td>
         <hospitality-bot-status-dropdown-toggle
           [nextStates]="rowData.nextStates"
@@ -150,4 +158,59 @@
     [listItems]="tabFilterItems"
     (selectedTabChange)="onSelectedTabFilterChange($event)"
   ></hospitality-bot-tab-group>
+</ng-template>
+
+<ng-template #areaCell let-rowData>
+  <td>
+    <div *ngIf="rowData.name; else emptyCell">
+      <div class="primary-text">
+        {{ rowData.name }}
+      </div>
+    </div>
+  </td>
+  <td>
+    <div *ngIf="rowData?.table; else emptyCell">
+      <div class="primary-text">
+        {{ rowData?.table }}
+      </div>
+    </div>
+  </td>
+  <td>
+    <div *ngIf="rowData?.date; else emptyCell">
+      <div class="primary-text">
+        {{ rowData?.date }}
+      </div>
+    </div>
+  </td>
+  <td>
+    <div *ngIf="rowData?.description; else emptyCell">
+      <div class="primary-text">
+        {{ rowData?.description }}
+      </div>
+    </div>
+  </td>
+</ng-template>
+
+<ng-template #tableCell let-rowData>
+  <td>
+    <div *ngIf="rowData.name; else emptyCell">
+      <div class="primary-text">
+        {{ rowData.name }}
+      </div>
+    </div>
+  </td>
+  <td>
+    <div *ngIf="rowData?.pax; else emptyCell">
+      <div class="primary-text">
+        {{ rowData?.pax }}
+      </div>
+    </div>
+  </td>
+  <td>
+    <div *ngIf="rowData?.remark; else emptyCell">
+      <div class="primary-text">
+        {{ rowData?.remark }}
+      </div>
+    </div>
+  </td>
 </ng-template>

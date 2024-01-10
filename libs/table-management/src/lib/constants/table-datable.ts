@@ -27,20 +27,20 @@ export const tableManagementConfig: TableManagementDatableConfig = {
   [TableValue.table]: {
     cols: [
       {
-        field: 'table',
+        field: 'name',
         header: 'Table',
         sortType: 'string',
         searchField: ['type', 'roomNo'],
         width: '23%',
       },
       {
-        field: 'noOfPerson',
+        field: 'pax',
         header: 'No of Persons',
         sortType: 'date',
         isSearchDisabled: true,
       },
       {
-        field: 'remarks',
+        field: 'remark',
         header: 'Remarks',
         sortType: 'string',
         isSearchDisabled: true,
@@ -62,7 +62,7 @@ export const tableManagementConfig: TableManagementDatableConfig = {
       SINGLE: [
         {
           label: 'Table No.',
-          name: 'tableNo',
+          name: 'number',
           type: 'input',
           required: true,
           validators: [Validators.pattern(/^[a-zA-Z0-9]*$/)],
@@ -72,13 +72,13 @@ export const tableManagementConfig: TableManagementDatableConfig = {
         },
         {
           label: 'No of Person',
-          name: 'noOfPerson',
+          name: 'pax',
           type: 'input',
           required: true,
         },
         {
           label: 'Remarks',
-          name: 'remarks',
+          name: 'remark',
           type: 'input',
           required: true,
         },
@@ -98,13 +98,13 @@ export const tableManagementConfig: TableManagementDatableConfig = {
         },
         {
           label: 'No of Person',
-          name: 'noOfPerson',
+          name: 'pax',
           type: 'input',
           required: true,
         },
         {
           label: 'Remarks',
-          name: 'remarks',
+          name: 'remark',
           type: 'input',
           required: true,
         },

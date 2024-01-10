@@ -20,7 +20,7 @@
 
         <hospitality-bot-input
           class="full-width"
-          controlName="description"
+          controlName="shortDescription"
           label="Area Description"
           maxLength="120"
           [props]="{
@@ -31,7 +31,7 @@
     </div>
   </div>
 
-  <div class="sub-wrapper" [formGroup]="tableForm">
+  <div class="sub-wrapper" [formGroup]="tableForm" *ngIf="areaId">
     <div class="main">
       <div class="sub-heading">
         Tables

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { NavRouteOption } from '@hospitality-bot/admin/shared';
+import { ModuleNames, NavRouteOption } from '@hospitality-bot/admin/shared';
 import { TableManagementService } from '../../services/table-management.service';
 import {
   GlobalFilterService,
@@ -12,6 +12,8 @@ import {
   tableManagementRoutes,
 } from '../../constants/routes';
 import { Subscription } from 'rxjs';
+import { SnackBarService } from '@hospitality-bot/shared/material';
+import { AreaFormData } from '../../models/edit-area.model';
 import { AreaForm } from '../../types/edit-area.type';
 
 @Component({
@@ -36,7 +38,8 @@ export class EditAreaComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private tableManagementService: TableManagementService,
-    private globalFilterService: GlobalFilterService
+    private globalFilterService: GlobalFilterService,
+    private snackbarService: SnackBarService
   ) {
     this.areaId = this.route.snapshot.paramMap.get(tableManagementParmId.AREA);
     const { navRoutes, title } = this.areaId
@@ -55,8 +58,10 @@ export class EditAreaComponent implements OnInit {
 
   initForm() {
     this.useForm = this.fb.group({
-      name: '',
-      description: '',
+      id: [''],
+      name: ['', [Validators.required]],
+      description: ['test'],
+      shortDescription: ['', [Validators.required]],
     });
 
     this.tableForm = this.fb.group({
@@ -77,46 +82,53 @@ export class EditAreaComponent implements OnInit {
   getAreaDetails() {
     this.tableManagementService
       .getAreaById(this.entityId, this.areaId)
-      .subscribe(
-        (res) => {
-          /**
-           * model for get by id
-           */
-        },
-        this.handleError,
-        this.handleSuccess
-      );
+      .subscribe((res) => {
+        const data: AreaForm = new AreaFormData().deserialize(res);
+        this.useForm.patchValue({ ...data });
+      }, this.handleError);
   }
 
   onReset() {
-    /**
-     * reset
-     */
+    this.useForm.reset();
   }
 
   onSubmit() {
+    if (this.useForm.invalid) {
+      this.useForm.markAllAsTouched();
+      this.snackbarService.openSnackBarAsText('Please fill all the fields');
+      return;
+    }
     const areaFormData: AreaForm = this.useForm.getRawValue();
-
-    this.useForm.get('');
-
-    this.$subscription.add(
-      this.tableManagementService
-        .createTable(this.entityId, '')
-        .subscribe((res) => {}, this.handleError, this.handleSuccess)
-    );
+    if (this.areaId) {
+      this.$subscription.add(
+        this.tableManagementService
+          .updateArea(this.entityId, { area: areaFormData })
+          .subscribe((res) => {}, this.handleError, this.handleSuccess)
+      );
+    } else {
+      this.$subscription.add(
+        this.tableManagementService
+          .createArea(this.entityId, areaFormData)
+          .subscribe((res) => {}, this.handleError, this.handleSuccess)
+      );
+    }
   }
 
   handleSuccess = (): void => {
     this.loading = false;
+    this.snackbarService.openSnackBarAsText(
+      `Area is ${!this.areaId ? 'created' : 'edited'} successfully`,
+      '',
+      { panelClass: 'success' }
+    );
+    this.routesConfigService.navigate({
+      subModuleName: ModuleNames.TABLE_MANAGEMENT,
+    });
   };
 
   handleError = ({ error }): void => {
     this.loading = false;
   };
-
-  // getFormControls() {
-  //   return this.useForm.controls as AreaForm;
-  // }
 
   ngOnDestroy() {
     this.$subscription.unsubscribe();

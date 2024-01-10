@@ -1,19 +1,43 @@
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 import {
   GlobalFilterService,
   RoutesConfigService,
 } from '@hospitality-bot/admin/core/theme';
-import { NavRouteOption, Option } from '@hospitality-bot/admin/shared';
 import {
-  TableManagementParmId,
+  ModuleNames,
+  NavRouteOption,
+  Option,
+} from '@hospitality-bot/admin/shared';
+import { SnackBarService } from '@hospitality-bot/shared/material';
+import { Subscription } from 'rxjs';
+import {
+  tableManagementParmId,
   tableManagementRoutes,
 } from '../../constants/routes';
-import { ActivatedRoute, Router } from '@angular/router';
+import {
+  TableValue,
+  tableManagementConfig,
+} from '../../constants/table-datable';
+import { AreaData, AreaList } from '../../models/data-table.model';
+import {
+  MultipleTable,
+  MultipleTableList,
+  SingleTable,
+  SingleTableList,
+  TableFormData,
+} from '../../models/edit-table.model';
 import { TableManagementService } from '../../services/table-management.service';
-import { Subscription } from 'rxjs';
-import { TableFormSubmissionType } from '../../types/table-datable.type';
-import { tableManagementConfig } from '../../constants/table-datable';
+import {
+  MultipleTableForm,
+  SingleTableForm,
+  TableForm,
+} from '../../types/edit-table.type';
+import {
+  AreaListResponse,
+  TableFormSubmissionType,
+} from '../../types/table-datable.type';
 
 @Component({
   selector: 'hospitality-bot-edit-table',
@@ -31,6 +55,8 @@ export class EditTableComponent implements OnInit {
   useFormArray: FormArray;
   fields = [];
   formSubmissionType: TableFormSubmissionType = 'SINGLE';
+  areaOffset: number = 0;
+  areaLimit: number = 10;
 
   areaList: Option[] = [];
   isLoadingAreaList: boolean = false;
@@ -42,10 +68,11 @@ export class EditTableComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private tableManagementService: TableManagementService,
-    private globalFilterService: GlobalFilterService
+    private globalFilterService: GlobalFilterService,
+    private snackbarService: SnackBarService
   ) {
     this.tableId = this.route.snapshot.paramMap.get(
-      TableManagementParmId.TABLE
+      tableManagementParmId.TABLE
     );
     const { navRoutes, title } = this.tableId
       ? tableManagementRoutes.editable
@@ -62,6 +89,7 @@ export class EditTableComponent implements OnInit {
 
     this.initForm();
     this.initNavRoutes();
+    this.initOptions();
 
     this.fields =
       tableManagementConfig.TABLE.iteratorFields[this.formSubmissionType];
@@ -73,50 +101,156 @@ export class EditTableComponent implements OnInit {
     });
   }
 
+  initOptions() {
+    this.getAreaList();
+  }
+
   initForm() {
     this.useFormArray = this.fb.array([]);
 
     this.useForm = this.fb.group({
       areaId: [''],
-      rooms: this.useFormArray,
+      tables: this.useFormArray,
     });
+
+    if (this.tableId) {
+      this.getTableDetails();
+    }
+  }
+
+  getTableDetails() {
+    this.$subscription.add(
+      this.tableManagementService
+        .getTableById(this.entityId, this.tableId)
+        .subscribe((res) => {
+          const data = new TableFormData().deserialize(res);
+          this.useForm.patchValue({ ...data });
+        }, this.handleError)
+    );
   }
 
   onLoadMoreArea() {
-    /**
-     * on select area paginates
-     */
+    this.areaOffset = this.areaOffset + 10;
+    this.getAreaList();
   }
 
   onSearchArea(text: string) {
-    /**
-     * code for api search for area
-     */
+    if (text) {
+      this.loading = true;
+      this.tableManagementService
+        .searchLibraryItem(this.entityId, {
+          params: `?key=${text}&type=${TableValue.area}`,
+        })
+        .subscribe(
+          (res) => {
+            const data = res && res[TableValue.area];
+            this.areaLimit =
+              data
+                ?.filter((item) => item.status)
+                .map((item) => {
+                  const areaData = new AreaData().deserialize(item);
+
+                  return {
+                    label: areaData.name,
+                    value: areaData.id,
+                  };
+                }) ?? [];
+          },
+          (error) => {},
+          () => {
+            this.loading = false;
+          }
+        );
+    } else {
+      this.areaOffset = 0;
+      this.areaList = [];
+      this.getAreaList();
+    }
   }
 
   onCreateArea() {
-    /**
-     * on create area
-     */
+    this.routesConfigService.navigate({
+      subModuleName: ModuleNames.TABLE_MANAGEMENT,
+      additionalPath: tableManagementRoutes.createArea.route,
+    });
+  }
+
+  getAreaList() {
+    this.loading = true;
+    this.$subscription.add(
+      this.tableManagementService
+        .getList<AreaListResponse>(this.entityId, {
+          params: `?type=${TableValue.area}&offset=${this.areaOffset}&limit=${this.areaLimit}`,
+        })
+        .subscribe((res) => {
+          const data = new AreaList().deserialize(res);
+          this.areaList = data.records.map((item) => ({
+            label: item.name,
+            value: item?.id,
+          }));
+          this.loading = false;
+        }, this.handleError)
+    );
   }
 
   onSubmit() {
+    if (this.useForm.invalid) {
+      this.useForm.markAllAsTouched();
+      this.snackbarService.openSnackBarAsText('Please fill all the fields');
+      return;
+    }
+    if (this.tableId) {
+      this.updateTable();
+    } else {
+      this.addTable();
+    }
+  }
+
+  updateTable() {
+    const { areaId, tables } = this.useForm.getRawValue() as TableForm<
+      SingleTableForm
+    >;
+    const data = new SingleTable().deserialize(tables[0], areaId, this.tableId);
+
     this.$subscription.add(
       this.tableManagementService
-        .createTable('', '')
+        .updateTable(this.entityId, { table: data })
+        .subscribe((res) => {}, this.handleError, this.handleSuccess)
+    );
+  }
+
+  addTable() {
+    const tableFormData =
+      this.formSubmissionType === 'MULTIPLE'
+        ? new MultipleTableList().deserialize(this.useForm.getRawValue())
+        : new SingleTableList().deserialize(this.useForm.getRawValue());
+
+    this.$subscription.add(
+      this.tableManagementService
+        .createTable(this.entityId, tableFormData)
         .subscribe((res) => {}, this.handleError, this.handleSuccess)
     );
   }
 
   handleSuccess = (): void => {
     this.loading = false;
+    this.snackbarService.openSnackBarAsText(
+      `Table is ${!this.tableId ? 'created' : 'edited'} successfully`,
+      '',
+      { panelClass: 'success' }
+    );
+    this.routesConfigService.navigate({
+      subModuleName: ModuleNames.TABLE_MANAGEMENT,
+    });
   };
 
   handleError = ({ error }): void => {
     this.loading = false;
   };
 
-  onReset() {}
+  onReset() {
+    this.useForm.reset();
+  }
 
   ngOnDestroy() {
     this.$subscription.unsubscribe();

@@ -237,12 +237,14 @@ export class ResponseRateComponent implements OnInit, OnDestroy {
   openTableModal() {
     let dialogRef: DynamicDialogRef;
     const modalData: Partial<FeedbackDatatableModalComponent> = {
-      tableName: feedback.tableName.responseRate,
-      tabFilterItems: this.createTabFilterItem(),
-      tabFilterIdx: 0,
-      globalFeedbackFilterType: this.globalFeedbackFilterType,
-      config: [{ feedbackGraph: 'REQUESTED' }],
-      feedbackType: this.getFeedbackType(),
+      data: {
+        tableName: feedback.tableName.responseRate,
+        tabFilterItems: this.createTabFilterItem(),
+        tabFilterIdx: 0,
+        globalFeedbackFilterType: this.globalFeedbackFilterType,
+        config: [{ feedbackGraph: 'REQUESTED' }],
+        feedbackType: this.getFeedbackType(),
+      },
     };
     dialogRef = openModal({
       config: {

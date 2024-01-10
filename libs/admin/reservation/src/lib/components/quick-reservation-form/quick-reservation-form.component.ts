@@ -41,6 +41,7 @@ import { SideBarService } from 'apps/admin/src/app/core/theme/src/lib/services/s
 import { ReservationRatePlan } from 'libs/admin/room/src/lib/constant/form';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 import { RoutesConfigService } from 'apps/admin/src/app/core/theme/src/lib/services/routes-config.service';
+import { ManualOffer } from 'libs/admin/manage-reservation/src/lib/components/form-components/booking-summary/booking-summary.component';
 
 @Component({
   selector: 'hospitality-bot-quick-reservation-form',
@@ -87,7 +88,7 @@ export class QuickReservationFormComponent implements OnInit {
   reservationData: ReservationFormData;
 
   $subscription = new Subscription();
-  offerType: string;
+  offerResponse: ManualOffer;
 
   isSidebar = false;
   sidebarVisible: boolean = false;
@@ -302,7 +303,12 @@ export class QuickReservationFormComponent implements OnInit {
               contactNumber: res.guest?.contactDetails?.contactNumber,
               email: res.guest?.contactDetails?.emailId,
             };
-            this.offerType = res?.offer?.offerType;
+            if (res?.offer?.offerType === 'MANUAL')
+              this.offerResponse = {
+                offerType: res.offer?.offerType,
+                discountType: res.offer?.discountType,
+                discountValue: res.offer?.discountValue,
+              };
             this.inputControls.guestInformation
               .get('guestDetails')
               .patchValue(res.guest.id);
@@ -450,7 +456,7 @@ export class QuickReservationFormComponent implements OnInit {
       this.entityId,
       'quick',
       undefined,
-      this.offerType
+      this.offerResponse
     );
     this.loading = true;
 

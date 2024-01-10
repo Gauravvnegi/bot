@@ -30,7 +30,7 @@ export const SidebarComponents = {
   [SidebarComponentNames.AddCompany]: AddCompanyComponent,
   [SidebarComponentNames.AddAgent]: AddAgentComponent,
   [SidebarComponentNames.AddItem]: AddItemComponent,
-  [SidebarComponentNames.MarketNotification]: MarketingNotificationComponent,
+  // [SidebarComponentNames.MarketNotification]: MarketingNotificationComponent,
   [SidebarComponentNames.SendMessage]: SendMessageComponent,
 };
 

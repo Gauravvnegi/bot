@@ -302,7 +302,7 @@ export class ReceivedBreakdownComponent implements OnInit, OnDestroy {
     };
     dialogRef = openModal({
       config: {
-        styleClass: 'confirm-dialog',
+        width: '80%',
         data: modalData,
       },
       component: FeedbackDatatableModalComponent,

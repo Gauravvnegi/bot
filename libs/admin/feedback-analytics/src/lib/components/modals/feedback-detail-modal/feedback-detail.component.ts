@@ -52,8 +52,10 @@ import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
       ]),
     ]),
   ],
+  providers: [CardService, FeedbackTableService],
 })
 export class FeedbackDetailModalComponent implements OnInit, OnDestroy {
+  data: any;
   @ViewChild('feedbackChatRef') private feedbackChatRef: ElementRef;
   @Output() onDetailsClose = new EventEmitter();
   globalFeedbackConfig = feedback;
@@ -66,7 +68,6 @@ export class FeedbackDetailModalComponent implements OnInit, OnDestroy {
   constructor(
     protected cardService: CardService,
     public globalFilterService: GlobalFilterService,
-    @Inject(MAT_DIALOG_DATA) public data: any,
     protected userService: UserService,
     protected _adminUtilityService: AdminUtilityService,
     protected tableService: FeedbackTableService,

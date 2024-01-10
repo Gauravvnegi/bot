@@ -53,6 +53,7 @@ import {
 })
 export class FeedbackDatatableComponent extends BaseDatatableComponent
   implements OnInit, OnDestroy {
+  data: any;
   @ViewChild('cardComponent') cardComponent: MainComponent;
   @Input() globalFeedbackFilterType: string;
   @Input() tableName = feedback.table.name;

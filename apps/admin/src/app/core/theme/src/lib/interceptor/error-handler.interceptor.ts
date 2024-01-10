@@ -33,21 +33,6 @@ export class ErrorHandlerInterceptor implements HttpInterceptor {
           }`;
           const priorityMessage = err.error?.message;
 
-          // TODO: Remove
-          // const cdkOverlayContainer = document.querySelector(
-          //   '.cdk-overlay-container'
-          // ) as HTMLElement;
-
-          // if (cdkOverlayContainer) {
-          //   // Increase the z-index before showing the snackbar
-          //   cdkOverlayContainer.style.zIndex = '1500';
-          //   if (this.snackbarHandler.isDecreaseSnackbarZIndex) {
-          //     setTimeout(() => {
-          //       cdkOverlayContainer.style.zIndex = '1000';
-          //     }, 3000);
-          //   }
-          // }
-
           forkJoin([
             translateService.get(translateKey1),
             translateService.get(translateKey2),
@@ -56,7 +41,8 @@ export class ErrorHandlerInterceptor implements HttpInterceptor {
               [msg1, translateKey1],
               [msg2, translateKey2],
             ].forEach((data) => {
-              const translationToBeShown = priorityMessage || data[0];
+              const translationToBeShown =
+                statusCode == 500 ? data[0] : priorityMessage || data[0];
               if (data[0] !== data[1]) {
                 this._progressSpinnerService.$snackbarChange.next({
                   detail: translationToBeShown,

@@ -33,21 +33,6 @@ export class ErrorHandlerInterceptor implements HttpInterceptor {
           }`;
           const priorityMessage = err.error?.message;
 
-          // TODO: Remove
-          // const cdkOverlayContainer = document.querySelector(
-          //   '.cdk-overlay-container'
-          // ) as HTMLElement;
-
-          // if (cdkOverlayContainer) {
-          //   // Increase the z-index before showing the snackbar
-          //   cdkOverlayContainer.style.zIndex = '1500';
-          //   if (this.snackbarHandler.isDecreaseSnackbarZIndex) {
-          //     setTimeout(() => {
-          //       cdkOverlayContainer.style.zIndex = '1000';
-          //     }, 3000);
-          //   }
-          // }
-
           forkJoin([
             translateService.get(translateKey1),
             translateService.get(translateKey2),

@@ -1,6 +1,4 @@
-import { Location } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { MatDialogConfig } from '@angular/material/dialog';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { FeedbackNotificationComponent } from '@hospitality-bot/admin/notification';
 import {
@@ -9,8 +7,8 @@ import {
   HotelDetailService,
   ModuleNames,
   TableNames,
+  openModal,
 } from '@hospitality-bot/admin/shared';
-import { ModalService } from '@hospitality-bot/shared/material';
 import { NotificationService } from 'apps/admin/src/app/core/theme/src/lib/services/notification.service';
 import { SubscriptionPlanService } from 'apps/admin/src/app/core/theme/src/lib/services/subscription-plan.service';
 import { Subscription } from 'rxjs';
@@ -20,6 +18,7 @@ import { CardService } from '../../services/card.service';
 import { StatisticsService } from '../../services/feedback-statistics.service';
 import { FeedbackTableService } from '../../services/table.service';
 import { FeedbackDetailModalComponent } from '../modals/feedback-detail-modal/feedback-detail.component';
+import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 
 @Component({
   selector: 'hospitality-bot-feedback',
@@ -50,16 +49,15 @@ export class FeedbackComponent implements OnInit, OnDestroy {
     },
   ];
   constructor(
-    protected _modal: ModalService,
     protected globalFilterService: GlobalFilterService,
     protected _hotelDetailService: HotelDetailService,
     protected statisticsService: StatisticsService,
     protected subscriptionPlanService: SubscriptionPlanService,
     protected tableService: FeedbackTableService,
     private cardService: CardService,
-    private location: Location,
     private configService: ConfigService,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private dialogService: DialogService
   ) {}
 
   ngOnInit(): void {
@@ -207,19 +205,19 @@ export class FeedbackComponent implements OnInit, OnDestroy {
 
   openFeedbackRequestPage(event) {
     event.stopPropagation();
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.disableClose = true;
-    const detailCompRef = this._modal.openDialog(
-      FeedbackNotificationComponent,
-      dialogConfig
-    );
-    detailCompRef.componentInstance.entityId = this.entityId;
-
-    this.$subscription.add(
-      detailCompRef.componentInstance.onModalClose.subscribe((res) =>
-        detailCompRef.close()
-      )
-    );
+    let dialogRef: DynamicDialogRef;
+    const modalData: Partial<FeedbackNotificationComponent> = {
+      entityId: this.entityId,
+    };
+    dialogRef = openModal({
+      config: {
+        width: '80%',
+        styleClass: 'dynamic-modal',
+        data: modalData,
+      },
+      component: FeedbackNotificationComponent,
+      dialogService: this.dialogService,
+    });
   }
 
   checkForStaySubscribed() {
@@ -247,29 +245,26 @@ export class FeedbackComponent implements OnInit, OnDestroy {
                 response.feedbackType,
                 this.colorMap
               );
-              console.log(data);
-              const dialogConfig = new MatDialogConfig();
-              dialogConfig.disableClose = true;
-              dialogConfig.width = '100%';
-              dialogConfig.data = {
-                feedback: data.feedback,
-                colorMap: this.colorMap,
-                feedbackType: this.tabFilterItems[this.tabFilterIdx].value,
-                isModal: true,
-                globalQueries: [],
+              let dialogRef: DynamicDialogRef;
+              const modalData: Partial<FeedbackDetailModalComponent> = {
+                data: {
+                  feedback: data.feedback,
+                  colorMap: this.colorMap,
+                  feedbackType: this.tabFilterItems[this.tabFilterIdx].value,
+                  isModal: true,
+                  globalQueries: [],
+                },
               };
+              dialogRef = openModal({
+                config: {
+                  width: '80%',
+                  styleClass: 'dynamic-modal',
+                  data: modalData,
+                },
+                component: FeedbackDetailModalComponent,
+                dialogService: this.dialogService,
+              });
 
-              const detailCompRef = this._modal.openDialog(
-                FeedbackDetailModalComponent,
-                dialogConfig
-              );
-              this.$subscription.add(
-                detailCompRef.componentInstance.onDetailsClose.subscribe(
-                  (res) => {
-                    detailCompRef.close();
-                  }
-                )
-              );
               this.notificationService.$feedbackNotification.next(null);
             })
         );

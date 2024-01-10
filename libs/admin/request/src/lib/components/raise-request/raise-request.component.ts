@@ -4,19 +4,20 @@ import {
   Input,
   OnDestroy,
   OnInit,
-  Output
+  Output,
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
 import { SnackBarService } from 'libs/shared/material/src';
 import { DateService } from '@hospitality-bot/shared/utils';
-import { Subscription, pipe } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { request } from '../../constants/request';
 import { debounceTime } from 'rxjs/operators';
 import { RequestService } from '../../services/request.service';
-import { SideBarService } from 'apps/admin/src/app/core/theme/src/lib/services/sidebar.service';
 import { Option } from '@hospitality-bot/admin/shared';
+import { DialogService } from 'primeng/dynamicdialog';
+import { SideBarService } from 'apps/admin/src/app/core/theme/src/lib/services/sidebar.service';
 
 @Component({
   selector: 'hospitality-bot-raise-request',
@@ -49,6 +50,7 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
     private snackbarService: SnackBarService,
     private _requestService: RequestService,
     private adminUtilityService: AdminUtilityService,
+    private dialogService: DialogService,
     private sidebarService: SideBarService
   ) {}
 

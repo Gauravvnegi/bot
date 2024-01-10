@@ -1,8 +1,5 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { MatDialogConfig } from '@angular/material/dialog';
 import { BookingDetailService } from '@hospitality-bot/admin/shared';
-import { ModalService } from '@hospitality-bot/shared/material';
-import { DetailsComponent } from 'libs/admin/reservation/src/lib/components/details/details.component';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -17,10 +14,7 @@ export class GuestBookingInfoComponent implements OnInit, OnDestroy {
   pastBooking = [];
   upcomingBooking = [];
   $subscription = new Subscription();
-  constructor(
-    protected _modal: ModalService,
-    private bookingDetailService: BookingDetailService
-  ) {}
+  constructor(private bookingDetailService: BookingDetailService) {}
 
   ngOnInit(): void {}
 

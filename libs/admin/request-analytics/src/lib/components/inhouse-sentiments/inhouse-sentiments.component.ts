@@ -1,16 +1,17 @@
 import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { MatDialogConfig } from '@angular/material/dialog';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
-import { SnackBarService } from 'libs/shared/material/src';
-import { ModalService } from 'libs/shared/material/src/lib/services/modal.service';
 import { DateService } from '@hospitality-bot/shared/utils';
 import { BaseChartDirective } from 'ng2-charts';
 import { Subscription } from 'rxjs';
 import { InhouseSentiments } from '../../models/statistics.model';
 import { AnalyticsService } from '../../services/analytics.service';
-import { analytics } from '@hospitality-bot/admin/shared';
+import {
+  analytics,
+  openModal as openDynamicModal,
+} from '@hospitality-bot/admin/shared';
 import { InhouseRequestDatatableComponent } from '../inhouse-request-datatable/inhouse-request-datatable.component';
+import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 
 @Component({
   selector: 'hospitality-bot-inhouse-sentiments',
@@ -42,9 +43,8 @@ export class InhouseSentimentsComponent implements OnInit, OnDestroy {
     private _adminUtilityService: AdminUtilityService,
     private globalFilterService: GlobalFilterService,
     private analyticsService: AnalyticsService,
-    private snackbarService: SnackBarService,
     private dateService: DateService,
-    private modalService: ModalService
+    private dialogService: DialogService
   ) {}
 
   ngOnInit(): void {
@@ -177,20 +177,19 @@ export class InhouseSentimentsComponent implements OnInit, OnDestroy {
   }
 
   openModal() {
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.disableClose = true;
-    dialogConfig.width = '100%';
-    const detailCompRef = this.modalService.openDialog(
-      InhouseRequestDatatableComponent,
-      dialogConfig
-    );
-
-    detailCompRef.componentInstance.tableName = 'In-house Request';
-    detailCompRef.componentInstance.tabFilterIdx = 0;
-    detailCompRef.componentInstance.onModalClose.subscribe((res) =>
-      // remove loader for detail close
-      detailCompRef.close()
-    );
+    let dialogRef: DynamicDialogRef;
+    const modalData: Partial<InhouseRequestDatatableComponent> = {
+      tableName: 'In-house Request',
+      tabFilterIdx: 0,
+    };
+    dialogRef = openDynamicModal({
+      config: {
+        styleClass: 'confirm-dialog',
+        data: modalData,
+      },
+      component: InhouseRequestDatatableComponent,
+      dialogService: this.dialogService,
+    });
   }
 
   getFilteredConfig(label) {

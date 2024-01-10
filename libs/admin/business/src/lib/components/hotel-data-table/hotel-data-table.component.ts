@@ -1,17 +1,12 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
-import {
-  ActivatedRoute,
-  Router,
-} from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import {
   AdminUtilityService,
   BaseDatatableComponent,
+  openModal,
 } from '@hospitality-bot/admin/shared';
-import {
-  ModalService,
-  SnackBarService,
-} from '@hospitality-bot/shared/material';
+import { SnackBarService } from '@hospitality-bot/shared/material';
 import { Subscription } from 'rxjs';
 import {
   BrandTableName,
@@ -19,7 +14,6 @@ import {
   cols,
 } from '../../constant/hotel-data-table';
 import { BusinessService } from '../../services/business.service';
-import { MatDialogConfig } from '@angular/material/dialog';
 import { ModalComponent } from 'libs/admin/shared/src/lib/components/modal/modal.component';
 import { QueryConfig } from '@hospitality-bot/admin/library';
 import * as FileSaver from 'file-saver';
@@ -27,6 +21,7 @@ import { LazyLoadEvent } from 'primeng/api';
 import { businessRoute } from '../../constant/routes';
 import { HotelFormDataService } from '../../services/hotel-form.service';
 import { EntityList } from '../../models/property.model';
+import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 
 @Component({
   selector: 'hospitality-bot-hotel-data-table',
@@ -49,14 +44,14 @@ export class HotelDataTableComponent extends BaseDatatableComponent
   @Input() parentId: string = '';
 
   constructor(
-    private fb: FormBuilder,
+    public fb: FormBuilder,
     private adminUtilityService: AdminUtilityService,
     private snackbarService: SnackBarService,
     private router: Router,
     private route: ActivatedRoute,
     private businessService: BusinessService,
-    private modalService: ModalService,
-    private hotelFormDataService: HotelFormDataService
+    private hotelFormDataService: HotelFormDataService,
+    private dialogService: DialogService
   ) {
     super(fb);
   }
@@ -132,13 +127,6 @@ export class HotelDataTableComponent extends BaseDatatableComponent
    */
 
   handleStatus(status: boolean, rowData): void {
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.disableClose = true;
-    const togglePopupCompRef = this.modalService.openDialog(
-      ModalComponent,
-      dialogConfig
-    );
-
     // let heading: string;
     let description: string[] = [
       `Are you sure you want to Deactivate ${rowData?.name}?`,
@@ -154,29 +142,30 @@ export class HotelDataTableComponent extends BaseDatatableComponent
       label = 'Activate';
     }
 
-    togglePopupCompRef.componentInstance.content = {
+    let dialogRef: DynamicDialogRef;
+    const modalData: Partial<ModalComponent> = {
       heading: `Mark As ${status ? 'Active' : 'Inactive'}`,
-      description: description,
-    };
-
-    togglePopupCompRef.componentInstance.actions = [
-      {
-        label: 'Cancel',
-        onClick: () => this.modalService.close(),
-        variant: 'outlined',
-      },
-      {
-        label: label,
-        onClick: () => {
-          this.changeStatus(status, rowData);
-          this.modalService.close();
+      descriptions: description,
+      actions: [
+        {
+          label: 'Cancel',
+          onClick: () => dialogRef.close(),
+          variant: 'outlined',
         },
-        variant: 'contained',
-      },
-    ];
-
-    togglePopupCompRef.componentInstance.onClose.subscribe(() => {
-      this.modalService.close();
+        {
+          label: label,
+          onClick: () => {
+            this.changeStatus(status, rowData);
+            dialogRef.close();
+          },
+          variant: 'contained',
+        },
+      ],
+    };
+    dialogRef = openModal({
+      config: { styleClass: 'confirm-dialog', width: 'unset', data: modalData },
+      dialogService: this.dialogService,
+      component: ModalComponent,
     });
   }
 

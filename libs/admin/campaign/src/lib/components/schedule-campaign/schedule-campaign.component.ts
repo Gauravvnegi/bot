@@ -4,6 +4,7 @@ import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import * as moment from 'moment';
 import { campaignConfig } from '../../constant/campaign';
+import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 
 @Component({
   selector: 'hospitality-bot-schedule-campaign',
@@ -18,8 +19,19 @@ export class ScheduleCampaignComponent implements OnInit {
   minDate = new Date();
   constructor(
     private snackbarService: SnackBarService,
-    private globalFilterService: GlobalFilterService
+    private globalFilterService: GlobalFilterService,
+    private dialogConfig: DynamicDialogConfig,
+    private dialogRef: DynamicDialogRef
   ) {
+    /**
+     * @Remarks Extracting data from he dialog service
+     */
+    if (this.dialogConfig?.data) {
+      Object.entries(this.dialogConfig.data).forEach(([key, value]) => {
+        this[key] = value;
+      });
+    }
+
     this.createTimeList(
       moment().utcOffset(this.globalFilterService.timezone).valueOf()
     );
@@ -55,6 +67,7 @@ export class ScheduleCampaignComponent implements OnInit {
    */
   close() {
     this.onScheduleClose.emit({ status: false });
+    this.dialogRef.close({ status: false });
   }
 
   getDate() {
@@ -110,6 +123,7 @@ export class ScheduleCampaignComponent implements OnInit {
     this.onScheduleClose.emit({
       status: true,
     });
+    this.dialogRef.close({ status: true });
   }
 
   /**

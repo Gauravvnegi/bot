@@ -1,10 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
-import { Router } from '@angular/router';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { QueryConfig } from '@hospitality-bot/admin/library';
-import { MatDialogConfig } from '@angular/material/dialog';
-import { DetailsComponent as BookingDetailComponent } from 'libs/admin/reservation/src/lib/components/details/details.component';
 import {
   AdminUtilityService,
   BaseDatatableComponent,
@@ -13,7 +10,6 @@ import {
 } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import * as FileSaver from 'file-saver';
-import { ModalService } from 'libs/shared/material/src/lib/services/modal.service';
 import { LazyLoadEvent } from 'primeng/api';
 import { Subscription } from 'rxjs';
 import { cols, transactionStatus } from '../../constants/data-table';

@@ -9,9 +9,7 @@ import {
   SimpleChanges,
   ViewChild,
 } from '@angular/core';
-import { MatDialogConfig } from '@angular/material/dialog';
 import { MatTabGroup } from '@angular/material/tabs';
-import { ModalService } from 'libs/shared/material/src/lib/services/modal.service';
 import { MessageService } from '../../services/messages.service';
 import { GuestDetailMapComponent } from '../guest-detail-map/guest-detail-map.component';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
@@ -22,9 +20,10 @@ import {
   IContact,
   RequestList,
 } from '../../models/message.model';
-import { RaiseRequestComponent } from 'libs/admin/request/src/lib/components/raise-request/raise-request.component';
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
 import { SnackBarService } from 'libs/shared/material/src';
+import { openModal } from '@hospitality-bot/admin/shared';
+import { DialogService } from 'primeng/dynamicdialog';
 
 @Component({
   selector: 'hospitality-bot-guest-info',
@@ -46,11 +45,11 @@ export class GuestInfoComponent implements OnInit, OnChanges, OnDestroy {
   requestList;
 
   constructor(
-    private modalService: ModalService,
     private messageService: MessageService,
     private globalFilterService: GlobalFilterService,
     private snackbarService: SnackBarService,
-    private adminUtilityService: AdminUtilityService
+    private adminUtilityService: AdminUtilityService,
+    private dialogService: DialogService
   ) {}
 
   ngOnInit(): void {
@@ -141,21 +140,8 @@ export class GuestInfoComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   getRequestList() {
-    // const config = {
-    //   queryObj: this.adminUtilityService.makeQueryParams([
-    //     {
-    //       entityId: this.entityId,
-    //       confirmationNumber: this.data.reservationId,
-    //     },
-    //   ]),
-    // };
     this.$subscription.add(
       this.messageService
-        // .getRequestByConfNo(config)
-        // .subscribe(
-        //   (response) =>
-        //     (this.requestList = new RequestList().deserialize(response).data)
-        // )
         .getRequestByPhoneNumber(this.guestData?.phone)
         .subscribe((response) => {
           this.requestList = new RequestList().deserialize(response).data;
@@ -177,50 +163,16 @@ export class GuestInfoComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   updateGuestDetails() {
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.disableClose = true;
-    dialogConfig.width = '50%';
-    const detailCompRef = this.modalService.openDialog(
-      GuestDetailMapComponent,
-      dialogConfig
-    );
-
-    detailCompRef.componentInstance.data = this.data;
-    detailCompRef.componentInstance.onModalClose.subscribe((res) => {
-      detailCompRef.close();
+    openModal({
+      config: {
+        styleClass: 'dynamic-modal',
+        width: '50%',
+        data: { data: this.data },
+      },
+      component: GuestDetailMapComponent,
+      dialogService: this.dialogService,
     });
   }
-
-  // openRaiseRequest() {
-  //   const dialogConfig = new MatDialogConfig();
-  //   dialogConfig.disableClose = true;
-  //   dialogConfig.width = '50%';
-  //   const raiseRequestCompRef = this.modalService.openDialog(
-  //     RaiseRequestComponent,
-  //     dialogConfig
-  //   );
-
-  //   this.$subscription.add(
-  //     raiseRequestCompRef.componentInstance.onRaiseRequestClose.subscribe(
-  //       (res) => {
-  //         if (res.status) {
-  //           this.getRequestList();
-  //           const values = {
-  //             reservationId: res.data.number,
-  //           };
-  //           this.$subscription.add(
-  //             this.messageService
-  //               .updateGuestDetail(this.entityId, this.data.receiverId, values)
-  //               .subscribe((response) => {
-  //                 this.messageService.refreshData$.next(true);
-  //               })
-  //           );
-  //         }
-  //         raiseRequestCompRef.close();
-  //       }
-  //     )
-  //   );
-  // }
 
   ngOnDestroy(): void {
     this.$subscription.unsubscribe();

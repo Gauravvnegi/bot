@@ -7,16 +7,11 @@ import {
   Option,
   UserService,
   ModuleNames,
+  openModal,
 } from '@hospitality-bot/admin/shared';
 import { ModalComponent } from 'libs/admin/shared/src/lib/components/modal/modal.component';
 
-import { MatDialogConfig } from '@angular/material/dialog';
-import { Router } from '@angular/router';
-import { SettingOptions } from '@hospitality-bot/admin/settings';
-import {
-  ModalService,
-  SnackBarService,
-} from '@hospitality-bot/shared/material';
+import { SnackBarService } from '@hospitality-bot/shared/material';
 import { LazyLoadEvent } from 'primeng/api';
 import { Subscription } from 'rxjs';
 import {
@@ -32,6 +27,7 @@ import { NextState, QueryConfig } from '../../types/manage-site.type';
 import { environment } from '@hospitality-bot/admin/environment';
 import { siteStatusDetails } from '../../constants/response';
 import { RouteConfigPathService } from '@hospitality-bot/admin/core/theme';
+import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 
 @Component({
   selector: 'hospitality-bot-manage-site-data-table',
@@ -64,8 +60,7 @@ export class ManageSiteDataTableComponent extends BaseDatatableComponent {
     private snackbarService: SnackBarService,
     private adminUtilityService: AdminUtilityService,
     private cookiesSettingService: CookiesSettingsService,
-    private modalService: ModalService,
-    private router: Router
+    private dialogService: DialogService
   ) {
     super(fb);
   }
@@ -144,12 +139,6 @@ export class ManageSiteDataTableComponent extends BaseDatatableComponent {
       this.changeStatus(status, rowData);
       return;
     }
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.disableClose = true;
-    const togglePopupCompRef = this.modalService.openDialog(
-      ModalComponent,
-      dialogConfig
-    );
 
     const currStatus =
       status.charAt(0).toUpperCase() + status.slice(1).toLowerCase();
@@ -178,30 +167,27 @@ export class ManageSiteDataTableComponent extends BaseDatatableComponent {
       label = 'Trash';
     }
 
-    togglePopupCompRef.componentInstance.content = {
+    let dialogRef: DynamicDialogRef;
+    const modalData: Partial<ModalComponent> = {
       heading: `Mark As ${currStatus}`,
-      description: description,
-    };
-
-    togglePopupCompRef.componentInstance.actions = [
-      {
-        label: 'Cancel',
-        onClick: () => this.modalService.close(),
-        variant: 'outlined',
-      },
-      {
-        label: label,
-        onClick: () => {
-          this.changeStatus(status, rowData);
-          this.modalService.close();
+      descriptions: description,
+      actions: [
+        {
+          label: 'Cancel',
+          onClick: () => dialogRef.close(),
+          variant: 'outlined',
         },
-        variant: 'contained',
-      },
-    ];
-
-    togglePopupCompRef.componentInstance.onClose.subscribe(() => {
-      this.modalService.close();
-    });
+        {
+          label: label,
+          onClick: () => {
+            this.changeStatus(status, rowData);
+            dialogRef.close();
+          },
+          variant: 'contained',
+        },
+      ],
+    };
+    dialogRef = this.openDynamicModal(modalData);
   }
 
   changeStatus(status: ManageSiteStatus, rowData: ManageSite) {
@@ -233,38 +219,40 @@ export class ManageSiteDataTableComponent extends BaseDatatableComponent {
    * @function handlePublish Handle Publishing of site
    */
   handlePublish(entityId) {
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.disableClose = true;
-    const togglePopupCompRef = this.modalService.openDialog(
-      ModalComponent,
-      dialogConfig
-    );
-
-    togglePopupCompRef.componentInstance.content = {
+    let dialogRef: DynamicDialogRef;
+    const modalData: Partial<ModalComponent> = {
       heading: 'Cannot publish Page',
-      description: ['Connect your domain to publish your website'],
-    };
-    togglePopupCompRef.componentInstance.actions = [
-      {
-        label: 'Go to Website Settings',
-        onClick: () => {
-          this.modalService.close();
-          const routeConfig = new RouteConfigPathService();
-          this.cookiesSettingService.initPlatformChange(
-            entityId, // siteId
-            `/${routeConfig.getRouteFromName(
-              ModuleNames.CREATE_WITH
-            )}/${routeConfig.getRouteFromName(
-              ModuleNames.SETTINGS
-            )}/${routeConfig.getRouteFromName(ModuleNames.WEBSITE_SETTINGS)}`
-          );
+      descriptions: ['Connect your domain to publish your website'],
+      actions: [
+        {
+          label: 'Go to Website Settings',
+          onClick: () => {
+            dialogRef.close();
+            const routeConfig = new RouteConfigPathService();
+            this.cookiesSettingService.initPlatformChange(
+              entityId, // siteId
+              `/${routeConfig.getRouteFromName(
+                ModuleNames.CREATE_WITH
+              )}/${routeConfig.getRouteFromName(
+                ModuleNames.SETTINGS
+              )}/${routeConfig.getRouteFromName(ModuleNames.WEBSITE_SETTINGS)}`
+            );
+          },
+          variant: 'contained',
         },
-        variant: 'contained',
-      },
-    ];
+      ],
+    };
+    dialogRef = this.openDynamicModal(modalData);
+  }
 
-    togglePopupCompRef.componentInstance.onClose.subscribe(() => {
-      this.modalService.close();
+  openDynamicModal(modalData: Partial<ModalComponent>): DynamicDialogRef {
+    return openModal({
+      config: {
+        styleClass: 'confirm-dialog',
+        data: modalData,
+      },
+      component: ModalComponent,
+      dialogService: this.dialogService,
     });
   }
 

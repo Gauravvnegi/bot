@@ -1,3 +1,6 @@
+/**
+ * @Remarks Duplicate component
+ */
 import { Component, Input, OnInit } from '@angular/core';
 import {
   AbstractControl,

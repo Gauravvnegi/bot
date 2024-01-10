@@ -1,11 +1,7 @@
 import { Component } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
-import { MatDialogConfig } from '@angular/material/dialog';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
-import {
-  DetailsComponent,
-  DetailsTabOptions,
-} from '@hospitality-bot/admin/reservation';
+import { DetailsTabOptions } from '@hospitality-bot/admin/reservation';
 import {
   AdminUtilityService,
   BaseDatatableComponent,
@@ -13,7 +9,6 @@ import {
   Cols,
   Option,
 } from '@hospitality-bot/admin/shared';
-import { ModalService } from '@hospitality-bot/shared/material';
 import * as FileSaver from 'file-saver';
 import { ManagePermissionService } from 'libs/admin/roles-and-permissions/src/lib/services/manage-permission.service';
 import { Subscription } from 'rxjs';
@@ -21,7 +16,6 @@ import {
   reportFiltersMapping,
   reportsColumnMapping,
   reportsModelMapping,
-  reportsPopUpMapping,
   rowStylesMapping,
 } from '../../constant/reports.const';
 import { ReportsService } from '../../services/reports.service';
@@ -30,8 +24,6 @@ import {
   ReportFilters,
   ReportFiltersKey,
   ReportsMenu,
-  ReportsType,
-  ReportsTypeValues,
   RowStyles,
 } from '../../types/reports.types';
 
@@ -66,7 +58,6 @@ export class ReportsDataTableComponent extends BaseDatatableComponent {
     private reportsService: ReportsService,
     public fb: FormBuilder,
     private globalFilterService: GlobalFilterService,
-    private modalService: ModalService,
     private managePermissionService: ManagePermissionService,
     private adminUtilityService: AdminUtilityService,
     public bookingDetailService: BookingDetailService
@@ -266,28 +257,6 @@ export class ReportsDataTableComponent extends BaseDatatableComponent {
   }
 
   openDetailPage(rowData, tabKey?: DetailsTabOptions): void {
-    // Todo:  Need to remove
-    // const dialogConfig = new MatDialogConfig();
-    // dialogConfig.disableClose = true;
-    // dialogConfig.width = '100%';
-    // const detailCompRef = this.modalService.openDialog(
-    //   DetailsComponent,
-    //   dialogConfig
-    // );
-    // const instance = detailCompRef.componentInstance as DetailsComponent;
-    // instance.bookingId = rowData?.id;
-
-    // //to open guestDetails popup with guestId
-    // instance.guestId = rowData?.guestId;
-
-    // tabKey && (detailCompRef.componentInstance.tabKey = tabKey);
-
-    // this.$subscription.add(
-    //   detailCompRef.componentInstance.onDetailsClose.subscribe((_) => {
-    //     detailCompRef.close();
-    //   })
-    // );
-
     this.bookingDetailService.openBookingDetailSidebar({
       ...(rowData?.id && { bookingId: rowData?.id }),
       ...(rowData?.guestId && { guestId: rowData?.guestId }),

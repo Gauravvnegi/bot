@@ -7,17 +7,13 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
-import { MatDialogConfig } from '@angular/material/dialog';
 import { MatStepper } from '@angular/material/stepper';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
   GlobalFilterService,
   RoutesConfigService,
 } from '@hospitality-bot/admin/core/theme';
-import {
-  ModalService,
-  SnackBarService,
-} from '@hospitality-bot/shared/material';
+import { SnackBarService } from '@hospitality-bot/shared/material';
 import { TranslateService } from '@ngx-translate/core';
 import { empty, interval, of, Subscription } from 'rxjs';
 import { catchError, debounceTime, switchMap } from 'rxjs/operators';
@@ -26,7 +22,8 @@ import { Campaign } from '../../data-model/campaign.model';
 import { CampaignService } from '../../services/campaign.service';
 import { EmailService } from '../../services/email.service';
 import { ScheduleCampaignComponent } from '../schedule-campaign/schedule-campaign.component';
-import { ModuleNames } from '@hospitality-bot/admin/shared';
+import { openModal } from '@hospitality-bot/admin/shared';
+import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 
 @Component({
   selector: 'hospitality-bot-camapaign-email',
@@ -69,8 +66,8 @@ export class EditCampaignComponent implements OnInit, OnDestroy {
     private snackbarService: SnackBarService,
     private _router: Router,
     protected _translateService: TranslateService,
-    private _modalService: ModalService,
-    private routesConfigService: RoutesConfigService
+    private routesConfigService: RoutesConfigService,
+    private dialogService: DialogService
   ) {
     this.initFG();
   }
@@ -384,16 +381,56 @@ export class EditCampaignComponent implements OnInit, OnDestroy {
         .subscribe();
       return;
     }
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.disableClose = true;
-    dialogConfig.width = '550';
-    dialogConfig.disableClose = true;
-    const detailCompRef = this._modalService.openDialog(
-      ScheduleCampaignComponent,
-      dialogConfig
-    );
-    detailCompRef.componentInstance.scheduleFG = this.scheduleFG;
-    detailCompRef.componentInstance.onScheduleClose.subscribe((response) => {
+    // const dialogConfig = new MatDialogConfig();
+    // dialogConfig.disableClose = true;
+    // dialogConfig.width = '550';
+    // dialogConfig.disableClose = true;
+    // const detailCompRef = this._modalService.openDialog(
+    //   ScheduleCampaignComponent,
+    //   dialogConfig
+    // );
+    // detailCompRef.componentInstance.scheduleFG = this.scheduleFG;
+    // detailCompRef.componentInstance.onScheduleClose.subscribe((response) => {
+    //   if (response.status) {
+    //     this.$subscription.add(
+    //       this._emailService
+    //         .scheduleCampaign(
+    //           this.entityId,
+    //           this._emailService.createScheduleRequestData(
+    //             this.campaignFG.getRawValue(),
+    //             this.scheduleFG.get('time').value
+    //           )
+    //         )
+    //         .subscribe((response) => {
+    //           this.snackbarService.openSnackBarWithTranslate(
+    //             {
+    //               translateKey: `messages.SUCCESS.CAMPAIGN_SCEDULED`,
+    //               priorityMessage: 'Campaign scheduled.',
+    //             },
+    //             '',
+    //             { panelClass: 'success' }
+    //           );
+    //           this.routesConfigService.goBack();
+    //         })
+    //     );
+    //   } else this.scheduleFG.reset();
+    //   detailCompRef.close();
+    // });
+
+    let dialogRef: DynamicDialogRef;
+    const modalData: Partial<ScheduleCampaignComponent> = {
+      scheduleFG: this.scheduleFG,
+    };
+    dialogRef = openModal({
+      config: {
+        width: '550px',
+        styleClass: 'dynamic-modal',
+        data: modalData,
+      },
+      component: ScheduleCampaignComponent,
+      dialogService: this.dialogService,
+    });
+    dialogRef.onClose.subscribe((response) => {
       if (response.status) {
         this.$subscription.add(
           this._emailService
@@ -417,7 +454,6 @@ export class EditCampaignComponent implements OnInit, OnDestroy {
             })
         );
       } else this.scheduleFG.reset();
-      detailCompRef.close();
     });
   }
 

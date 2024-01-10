@@ -1,7 +1,8 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { TranslateService } from '@ngx-translate/core';
+import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 
 @Component({
   selector: 'hospitality-bot-send-test',
@@ -13,10 +14,20 @@ export class SendTestComponent implements OnInit {
   @Output() closeSendTest = new EventEmitter();
   isSending = false;
   constructor(
-    private _fb: FormBuilder,
     private snackbarService: SnackBarService,
-    protected _translateService: TranslateService
-  ) {}
+    protected _translateService: TranslateService,
+    private dialogConfig: DynamicDialogConfig,
+    private dialogRef: DynamicDialogRef
+  ) {
+    /**
+     * @Remarks Extracting data from he dialog service
+     */
+    if (this.dialogConfig?.data) {
+      Object.entries(this.dialogConfig.data).forEach(([key, value]) => {
+        this[key] = value;
+      });
+    }
+  }
 
   ngOnInit(): void {}
 
@@ -40,6 +51,7 @@ export class SendTestComponent implements OnInit {
       return;
     }
     this.closeSendTest.emit({ status: true });
+    this.dialogRef.close({ status: true });
   }
 
   /**
@@ -47,5 +59,6 @@ export class SendTestComponent implements OnInit {
    */
   close() {
     this.closeSendTest.emit({ status: false });
+    this.dialogRef.close({ status: false });
   }
 }

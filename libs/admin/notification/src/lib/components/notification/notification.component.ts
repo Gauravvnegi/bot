@@ -23,6 +23,7 @@ import { Subscription } from 'rxjs';
 import { RequestConfig, RequestData } from '../../data-models/request.model.js';
 import { RequestService } from '../../services/request.service.js';
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
+import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 
 @Component({
   selector: 'hospitality-bot-notification',
@@ -69,8 +70,19 @@ export class NotificationComponent implements OnInit, OnDestroy {
     protected requestService: RequestService,
     protected snackbarService: SnackBarService,
     protected route: ActivatedRoute,
-    protected _adminUtilityService: AdminUtilityService
-  ) {}
+    protected _adminUtilityService: AdminUtilityService,
+    protected dialogConfig: DynamicDialogConfig,
+    protected dialogRef: DynamicDialogRef
+  ) {
+    /**
+     * @Remarks Extracting data from he dialog service
+     */
+    if (this.dialogConfig?.data) {
+      Object.entries(this.dialogConfig.data).forEach(([key, value]) => {
+        this[key] = value;
+      });
+    }
+  }
 
   ngOnInit(): void {
     this.registerListeners();
@@ -134,10 +146,12 @@ export class NotificationComponent implements OnInit, OnDestroy {
   }
 
   getConfigData(entityId): void {
-    this.requestService.getNotificationConfig(entityId).subscribe((response) => {
-      this.config = new RequestConfig().deserialize(response);
-      this.initNotificationForm();
-    });
+    this.requestService
+      .getNotificationConfig(entityId)
+      .subscribe((response) => {
+        this.config = new RequestConfig().deserialize(response);
+        this.initNotificationForm();
+      });
   }
 
   isValidEmail(email): RegExpMatchArray {
@@ -233,7 +247,7 @@ export class NotificationComponent implements OnInit, OnDestroy {
             )
             .subscribe();
         },
-        ({ error }) => {  }
+        ({ error }) => {}
       );
   }
 
@@ -289,7 +303,7 @@ export class NotificationComponent implements OnInit, OnDestroy {
             this.isModal ? this.closeModal() : this._location.back();
           },
           ({ error }) => {
-            this.isSending = false; 
+            this.isSending = false;
           }
         )
     );
@@ -315,7 +329,7 @@ export class NotificationComponent implements OnInit, OnDestroy {
                 .get('message')
                 .patchValue(this.modifyTemplate(response.template));
             },
-            ({ error }) => { }
+            ({ error }) => {}
           )
       );
     }
@@ -336,6 +350,7 @@ export class NotificationComponent implements OnInit, OnDestroy {
 
   closeModal() {
     this.onModalClose.emit(true);
+    this.dialogRef.close(true);
   }
 
   modifyTemplate(template: string) {

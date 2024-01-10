@@ -63,7 +63,7 @@ export class FeedbackRecord {
       set({}, 'userId', get(input, ['userId'])),
       set({}, 'userName', get(input, ['userName'])),
       set({}, 'comments', get(input, [' feedback', 'comments'])),
-      set ({}, 'nextState', get(input, ['nextState']))
+      set({}, 'nextState', get(input, ['nextState']))
     );
 
     this.color = colors[Math.floor(Math.random() * colors.length)];
@@ -145,7 +145,7 @@ export class UserList {
     this.records = new Array<User>();
     input?.forEach((item) => {
       if (
-        item.userCategoryPermission.filter(
+        item.userCategoryPermission?.filter(
           (permission) => permission?.department === department
         ).length
       )
@@ -377,7 +377,7 @@ export class Departmentpermissions {
   total: number;
   deserialize(input) {
     this.records = new Array<Departmentpermission>();
-    input.forEach((item) =>
+    input?.forEach((item) =>
       this.records.push(new Departmentpermission().deserialize(item))
     );
     return this.records;

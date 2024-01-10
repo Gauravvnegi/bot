@@ -1,8 +1,8 @@
-import { MarketingNotificationComponent } from '@hospitality-bot/admin/notification';
 import { AddAgentComponent } from 'libs/admin/agent/src/lib/components/add-agent/add-agent.component';
 import { AddCompanyComponent } from 'libs/admin/company/src/lib/components/add-company/add-company.component';
 import { NightAuditComponent } from 'libs/admin/global-shared/src/lib/components/night-audit/night-audit.component';
 import { AddGuestComponent } from 'libs/admin/guests/src/lib/components';
+import { MarketingNotificationComponent } from 'libs/admin/notification/src/lib/components/marketing-notification/marketing-notification.component';
 import { SendMessageComponent } from 'libs/admin/notification/src/lib/components/send-message/send-message.component';
 import { AddItemComponent } from 'libs/admin/request/src/lib/components/add-item/add-item.component';
 import { RaiseRequestComponent } from 'libs/admin/request/src/lib/components/raise-request/raise-request.component';

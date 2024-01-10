@@ -264,20 +264,27 @@ export class ReservationCalendarViewComponent implements OnInit {
             const endDate = this.getStatusDate(status.toDate, status.fromDate);
             return endDate !== null;
           })
-          .map((status) => ({
-            id: status.id ?? null, // Set id as needed for unavailable rooms
-            content:
-              status.status === 'OUT_OF_SERVICE'
-                ? 'Out Of Service'
-                : 'Out Of Order',
-            startPos: this.getDate(status.fromDate),
-            endPos: this.getStatusDate(status.toDate, status.fromDate),
-            rowValue: room.roomNumber,
-            colorCode: 'draft',
-            nonInteractive: true,
-            additionContent: status.remarks,
-            options: this.getMenuOptions(null, 'status'),
-          }));
+          .map((status) => {
+            const isOutOfService = status.status === 'OUT_OF_SERVICE';
+            return {
+              id: status.id ?? null, // Set id as needed for unavailable rooms
+              content: isOutOfService ? 'Out Of Service' : 'Out Of Order',
+              startPos: this.getDate(status.fromDate),
+              endPos: this.getStatusDate(status.toDate, status.fromDate),
+              rowValue: room.roomNumber,
+              colorCode: 'draft',
+              nonInteractive: true,
+              additionContent: status.remarks,
+              allowAction: isOutOfService
+                ? ['showMenu']
+                : ['showMenu', 'create'],
+              options: this.getMenuOptions(
+                null,
+                isOutOfService ? 'out-of-service' : 'out-of-order'
+              ),
+              opacity: isOutOfService ? 1 : 0.6,
+            };
+          });
         return [...result, ...roomValues];
       }, []);
 
@@ -570,10 +577,13 @@ export class ReservationCalendarViewComponent implements OnInit {
 
   getMenuOptions(
     reservation: RoomReservation,
-    type: 'reservation' | 'status' = 'reservation'
+    type: 'reservation' | 'out-of-order' | 'out-of-service' = 'reservation'
   ) {
-    if (type === 'status') {
+    if (type === 'out-of-service') {
       return reservationMenuOptions['OUT_OF_SERVICE'];
+    }
+    if (type === 'out-of-order') {
+      return reservationMenuOptions['OUT_OF_ORDER'];
     }
 
     return reservation.journeysStatus.PRECHECKIN === JourneyState.PENDING

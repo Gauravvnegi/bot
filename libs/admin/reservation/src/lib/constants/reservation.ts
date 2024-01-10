@@ -72,6 +72,7 @@ export const reservationMenuOptions: Record<
     ...viewDetails,
   ],
   OUT_OF_SERVICE: [{ label: 'Cancel', value: 'CANCEL_OUT_OF_SERVICE' }],
+  OUT_OF_ORDER: [{ label: 'Cancel', value: 'CANCEL_OUT_OF_ORDER' }],
 };
 
 export function calculateJourneyTime(

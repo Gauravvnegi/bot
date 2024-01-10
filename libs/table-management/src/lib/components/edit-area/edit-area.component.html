@@ -37,15 +37,27 @@
         Tables
       </div>
       <div class="form-block">
-        <ng-container
-          [ngTemplateOutlet]="checkbox"
-          [ngTemplateOutletContext]="{
-            $implicit: { label: 'Select All', controlName: 'selectAll' }
-          }"
-        >
-        </ng-container>
+        <div class="select-all">
+          <ng-container
+            [ngTemplateOutlet]="checkbox"
+            [ngTemplateOutletContext]="{
+              $implicit: { label: 'Select All', controlName: 'selectAll' }
+            }"
+          >
+          </ng-container>
+        </div>
 
-        <div class="table-row"></div>
+        <div class="table-row-container" [formGroup]="tableListForm">
+          <ng-container *ngFor="let table of tableList">
+            <div class="card-container">
+              <p-checkbox
+                [formControlName]="table.controlName"
+                [binary]="true"
+              ></p-checkbox>
+              <div class="label">{{ table.label }}</div>
+            </div>
+          </ng-container>
+        </div>
       </div>
     </div>
   </div>
@@ -62,8 +74,11 @@
 </div>
 
 <ng-template #checkbox let-data>
-  <div class="label" [formGroup]="tableForm">
-    <p-checkbox [formControlName]="controlName" [binary]="true"></p-checkbox>
-    {{ data.label }}
+  <div class="card-container" [formGroup]="tableForm">
+    <p-checkbox
+      [formControlName]="data.controlName"
+      [binary]="true"
+    ></p-checkbox>
+    <div class="label">{{ data.label }}</div>
   </div>
 </ng-template>

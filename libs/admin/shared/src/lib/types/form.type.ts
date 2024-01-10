@@ -64,5 +64,5 @@ export type FormGroupControls<TFormData> = FormGroup & {
 export type FormClass<T, K> = {
   [key in keyof T]: T[key];
 } & {
-  deserialize(value: K[] | {}): FormClass<T, K>;
+  deserialize(value: K[] | {}): T;
 };

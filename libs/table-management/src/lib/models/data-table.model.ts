@@ -9,7 +9,7 @@ import {
 } from '../types/table-datable.type';
 
 export class TableList {
-  records: Table[];
+  records: TableData[];
   entityStateCounts: EntityState<string>;
   entityTypeCounts: EntityState<string>;
   totalRecord: number;

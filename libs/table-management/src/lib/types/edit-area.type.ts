@@ -2,6 +2,8 @@ export type AreaForm = {
   id: string;
   name: string;
   shortDescription: string;
+  attachedTables: string[];
+  removedTables: string[];
 };
 
 export type AreaFormDataResponse = {
@@ -12,4 +14,11 @@ export type AreaFormDataResponse = {
   status: true;
   updated: number;
   shortDescription: string;
+  tables: {
+    areaId: string;
+    created: string;
+    id: string;
+    number: string;
+    updated: number;
+  }[];
 };

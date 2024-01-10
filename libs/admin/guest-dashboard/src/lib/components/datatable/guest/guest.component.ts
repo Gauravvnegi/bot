@@ -1,15 +1,12 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
-import { MatDialogConfig } from '@angular/material/dialog';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
-import { DetailsComponent } from '@hospitality-bot/admin/reservation';
 import {
   AdminUtilityService,
   BaseDatatableComponent,
   BookingDetailService,
   FeedbackService,
 } from '@hospitality-bot/admin/shared';
-import { ModalService } from '@hospitality-bot/shared/material';
 import * as FileSaver from 'file-saver';
 import { SnackBarService } from 'libs/shared/material/src';
 import { SortEvent } from 'primeng/api/sortevent';
@@ -51,7 +48,6 @@ export class GuestDatatableComponent extends BaseDatatableComponent
     protected _adminUtilityService: AdminUtilityService,
     protected globalFilterService: GlobalFilterService,
     protected snackbarService: SnackBarService,
-    protected _modal: ModalService,
     public feedbackService: FeedbackService,
     public bookingDetailService: BookingDetailService
   ) {
@@ -268,19 +264,6 @@ export class GuestDatatableComponent extends BaseDatatableComponent
   openDetailPage(event, rowData?, tabKey?): void {
     event.stopPropagation();
     if (rowData) {
-      // const dialogConfig = new MatDialogConfig();
-      // dialogConfig.disableClose = true;
-      // dialogConfig.width = '100%';
-      // const detailCompRef = this._modal.openDialog(
-      //   DetailsComponent,
-      //   dialogConfig
-      // );
-
-      // detailCompRef.componentInstance.guestId = rowData.id;
-      // detailCompRef.componentInstance.bookingNumber =
-      //   rowData.booking.bookingNumber;
-      // tabKey && (detailCompRef.componentInstance.tabKey = tabKey);
-
       this.bookingDetailService.openBookingDetailSidebar({
         bookingNumber: rowData.booking.bookingNumber,
         guestId: rowData.id,

@@ -1,7 +1,5 @@
 import {
-  Compiler,
   Component,
-  ComponentFactoryResolver,
   EventEmitter,
   Input,
   OnInit,
@@ -16,15 +14,10 @@ import {
   Validators,
 } from '@angular/forms';
 import {
-  GlobalFilterService,
-  RoutesConfigService,
-} from '@hospitality-bot/admin/core/theme';
-import {
   BookingDetailService,
   EntitySubType,
   ModuleNames,
   Option,
-  manageMaskZIndex,
 } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import {
@@ -37,7 +30,6 @@ import { FormService } from 'libs/admin/manage-reservation/src/lib/services/form
 import { IGRoomType } from '../reservation-calendar-view/reservation-calendar-view.component';
 import { IGCol } from 'libs/admin/shared/src/lib/components/interactive-grid/interactive-grid.component';
 import { Subscription } from 'rxjs';
-import { AddGuestComponent } from 'libs/admin/guests/src/lib/components/add-guest/add-guest.component';
 import { RoomTypeResponse } from 'libs/admin/room/src/lib/types/service-response';
 import { GuestType } from 'libs/admin/guests/src/lib/types/guest.type';
 import { RoomTypeOption } from 'libs/admin/manage-reservation/src/lib/constants/reservation';
@@ -45,7 +37,10 @@ import { AgentTableResponse } from 'libs/admin/agent/src/lib/types/response';
 import { ReservationForm } from 'libs/admin/manage-reservation/src/lib/constants/form';
 import { debounceTime } from 'rxjs/operators';
 import { BookingInfoComponent } from '../booking-info/booking-info.component';
+import { SideBarService } from 'apps/admin/src/app/core/theme/src/lib/services/sidebar.service';
 import { ReservationRatePlan } from 'libs/admin/room/src/lib/constant/form';
+import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
+import { RoutesConfigService } from 'apps/admin/src/app/core/theme/src/lib/services/routes-config.service';
 
 @Component({
   selector: 'hospitality-bot-quick-reservation-form',
@@ -92,6 +87,7 @@ export class QuickReservationFormComponent implements OnInit {
   reservationData: ReservationFormData;
 
   $subscription = new Subscription();
+  offerType: string;
 
   isSidebar = false;
   sidebarVisible: boolean = false;
@@ -123,8 +119,7 @@ export class QuickReservationFormComponent implements OnInit {
     private globalFilterService: GlobalFilterService,
     private manageReservationService: ManageReservationService,
     protected formService: FormService,
-    private compiler: Compiler,
-    private resolver: ComponentFactoryResolver,
+    private sidebarService: SideBarService,
     protected routesConfigService: RoutesConfigService,
     public bookingDetailService: BookingDetailService
   ) {
@@ -307,7 +302,7 @@ export class QuickReservationFormComponent implements OnInit {
               contactNumber: res.guest?.contactDetails?.contactNumber,
               email: res.guest?.contactDetails?.emailId,
             };
-
+            this.offerType = res?.offer?.offerType;
             this.inputControls.guestInformation
               .get('guestDetails')
               .patchValue(res.guest.id);
@@ -453,7 +448,9 @@ export class QuickReservationFormComponent implements OnInit {
     const data = this.formService.mapRoomReservationData(
       this.userForm.getRawValue(),
       this.entityId,
-      'quick'
+      'quick',
+      undefined,
+      this.offerType
     );
     this.loading = true;
 
@@ -483,36 +480,23 @@ export class QuickReservationFormComponent implements OnInit {
   }
 
   createGuest() {
-    const lazyModulePromise = import(
-      'libs/admin/guests/src/lib/admin-guests.module'
-    )
-      .then((module) => {
-        return this.compiler.compileModuleAsync(module.AdminGuestsModule);
-      })
-      .catch((error) => {
-        console.error('Error loading the lazy module:', error);
-      });
-    lazyModulePromise.then((moduleFactory) => {
-      this.sidebarVisible = true;
-      const factory = this.resolver.resolveComponentFactory(AddGuestComponent);
-      this.sidebarSlide.clear();
-      const componentRef = this.sidebarSlide.createComponent(factory);
-      componentRef.instance.isSideBar = true;
-      manageMaskZIndex();
-      componentRef.instance.onClose.subscribe((res) => {
+    this.sidebarService.openSidebar({
+      componentName: 'AddGuest',
+      containerRef: this.sidebarSlide,
+      manageMask: true,
+      onOpen: () => (this.sidebarVisible = true),
+      onClose: (res) => {
         this.sidebarVisible = false;
         if (typeof res !== 'boolean') {
           this.selectedGuest = {
             label: `${res.firstName} ${res.lastName}`,
             value: res.id,
           };
-
           this.inputControls.guestInformation
             .get('guestDetails')
             .patchValue(res.id);
         }
-        componentRef.destroy();
-      });
+      },
     });
   }
 

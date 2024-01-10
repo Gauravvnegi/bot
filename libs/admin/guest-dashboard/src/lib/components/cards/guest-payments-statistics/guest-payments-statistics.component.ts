@@ -1,10 +1,6 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { AdminUtilityService, openModal } from '@hospitality-bot/admin/shared';
-import {
-  ModalService,
-  SnackBarService,
-} from '@hospitality-bot/shared/material';
 import { TranslateService } from '@ngx-translate/core';
 import { BaseChartDirective } from 'ng2-charts';
 import { Subscription } from 'rxjs';
@@ -151,9 +147,9 @@ export class GuestPaymentsStatisticsComponent implements OnInit, OnDestroy {
   openTableModal() {
     const data: GuestDialogData = {
       tabFilterItems: this.tabFilterItems,
-      callingMethod: 'getAllGuestStats',
-      guestFilter: 'GUESTPAYMENTS',
-      exportURL: 'exportCSVStat',
+      callingMethod: 'getGuestDocsOrPaymentStats',
+      entityType: 'GUESTPAYMENTS',
+      exportURL: 'exportDocsCSV',
       modalType: 'payment.title',
     };
 

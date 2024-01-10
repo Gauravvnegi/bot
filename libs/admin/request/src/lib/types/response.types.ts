@@ -1,5 +1,5 @@
-import { EntityState } from "@hospitality-bot/admin/shared";
-import { RequestStatus } from "../constants/request";
+import { EntityState } from '@hospitality-bot/admin/shared';
+import { RequestStatus } from '../constants/request';
 
 type Room = {
   id: string | null;
@@ -58,6 +58,7 @@ export type JobRequestResponse = {
   itemId: string;
   assigneeId?: string;
   assigneeName?: string;
+  focused: boolean;
 };
 
 export type AllJobRequestResponse = {

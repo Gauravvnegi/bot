@@ -4,7 +4,6 @@ import {
   SubscriptionPlanService,
 } from '@hospitality-bot/admin/core/theme';
 import { HotelDetailService } from '@hospitality-bot/admin/shared';
-import { ModalService } from '@hospitality-bot/shared/material';
 import { StatisticsService } from '../../services/feedback-statistics.service';
 import { FeedbackTableService } from '../../services/table.service';
 import { feedback } from '../../constants/feedback';
@@ -40,7 +39,6 @@ export class FeedbackTypesComponent implements OnInit {
   $subscription = new Subscription();
 
   constructor(
-    protected _modal: ModalService,
     protected globalFilterService: GlobalFilterService,
     protected _hotelDetailService: HotelDetailService,
     protected statisticsService: StatisticsService,

@@ -62,6 +62,7 @@ export class AddReservationComponent extends BaseReservationComponent
   isRouteData = false;
   currentStatus: ReservationCurrentStatus;
   reservationFormData: ReservationFormData;
+  offerType: string;
 
   constructor(
     private fb: FormBuilder,
@@ -258,6 +259,7 @@ export class AddReservationComponent extends BaseReservationComponent
             this.checkinJourneyState = this.reservationFormData.journeyState;
             this.isExternalBooking = response.externalBooking;
 
+            this.offerType = response?.offer?.offerType;
             // Init Source Data for booking info
             this.formService.initSourceData(
               this.reservationFormData.reservationInformation,

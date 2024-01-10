@@ -13,13 +13,13 @@ import {
   BookingDetailService,
   FeedbackService,
 } from '@hospitality-bot/admin/shared';
-import {
-  ModalService,
-  SnackBarService,
-} from '@hospitality-bot/shared/material';
+import { SnackBarService } from '@hospitality-bot/shared/material';
 import * as FileSaver from 'file-saver';
 import { Observable } from 'rxjs';
-import { GuestTable } from '../../../data-models/guest-table.model';
+import {
+  GuestDocsOrPayment,
+  GuestTable,
+} from '../../../data-models/guest-table.model';
 import { GuestTableService } from '../../../services/guest-table.service';
 import { GuestDatatableComponent } from '../../datatable/guest/guest.component';
 import { NavigationEnd, Router } from '@angular/router';
@@ -42,18 +42,20 @@ export class GuestDatatableModalComponent extends GuestDatatableComponent
   implements OnInit, OnDestroy {
   isAllTabFilterRequired = true;
   modalType?: GuestModalType;
-  @Input() callingMethod: string;
+  @Input() callingMethod: 'getGuestDocsOrPaymentStats' | 'getAllGuestStats';
   @Input() guestFilter: string;
   @Input() exportURL: string;
+  @Input() entityType: string;
   @Output() onModalClose = new EventEmitter();
   imageSrc: string;
+  isNpsColHidden: Boolean = false;
+
   constructor(
     public fb: FormBuilder,
     protected _guestTableService: GuestTableService,
     protected _adminUtilityService: AdminUtilityService,
     protected globalFilterService: GlobalFilterService,
     protected snackbarService: SnackBarService,
-    protected _modal: ModalService,
     public feedbackService: FeedbackService,
     private router: Router,
     public bookingDetailService: BookingDetailService,
@@ -67,7 +69,6 @@ export class GuestDatatableModalComponent extends GuestDatatableComponent
       _adminUtilityService,
       globalFilterService,
       snackbarService,
-      _modal,
       feedbackService,
       bookingDetailService
     );
@@ -77,6 +78,14 @@ export class GuestDatatableModalComponent extends GuestDatatableComponent
       Object.entries(data).forEach(([key, value]) => {
         this[key] = value;
       });
+    }
+
+    if (this.callingMethod === 'getGuestDocsOrPaymentStats') {
+      this.isAllTabFilterRequired = false;
+      this.isNpsColHidden = true;
+      this.cols = this.cols.filter(
+        (item) => item.field !== 'guestAttributes.overAllNps'
+      );
     }
   }
 
@@ -116,6 +125,18 @@ export class GuestDatatableModalComponent extends GuestDatatableComponent
   }
 
   setRecords(data): void {
+    if (this.callingMethod === 'getGuestDocsOrPaymentStats') {
+      const guestRecord = new GuestDocsOrPayment().deserialize(data);
+      this.values = guestRecord.records;
+      this.initFilters(
+        {},
+        guestRecord.entityStateCounts,
+        guestRecord.totalRecord
+      );
+      this.loading = false;
+      return;
+    }
+
     const guestRecord = new GuestTable().deserialize(data);
     this.values = guestRecord.records;
     this.initFilters(
@@ -138,12 +159,18 @@ export class GuestDatatableModalComponent extends GuestDatatableComponent
   }
 
   fetchDataFrom(queries, defaultProps): Observable<any> {
+    if (this.entityType) {
+      queries.forEach((item) => {
+        if (item.hasOwnProperty('entityType')) {
+          item['entityType'] = this.entityType;
+        }
+      });
+    }
     this.resetRowSelection();
     queries.push(defaultProps);
     const config = {
       queryObj: this._adminUtilityService.makeQueryParams(queries),
     };
-
     return this._guestTableService[this.callingMethod](config);
   }
 
@@ -168,7 +195,6 @@ export class GuestDatatableModalComponent extends GuestDatatableComponent
         }
       ).subscribe(
         (data) => {
-          this.values = new GuestTable().deserialize(data).records;
           this.setRecords(data);
         },
         ({ error }) => {

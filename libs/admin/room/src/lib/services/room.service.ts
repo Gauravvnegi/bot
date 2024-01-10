@@ -169,6 +169,13 @@ export class RoomService extends ApiService {
     return this.patch(`/api/v1/entity/${entityId}?type=HOTEL`, data);
   }
 
+  importService(entityId: string, data) {
+    return this.put(
+      `/api/v1/entity/${entityId}/library/import?type=SERVICE`,
+      data
+    );
+  }
+
   getFeatures(): Observable<any> {
     return this.get(`/api/v1/config?key=SERVICE_CONFIGURATION`);
   }

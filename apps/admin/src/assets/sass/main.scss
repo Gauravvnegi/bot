@@ -111,6 +111,8 @@
 // Confirmation dialog style
 .confirm-dialog {
   @include dialog-style;
+  width: unset;
+  min-width: 550px;
 }
 
 // Dialog with header
@@ -122,5 +124,24 @@
   }
   .p-dialog-content {
     padding: unset;
+  }
+}
+// no style dialog
+.no-style {
+  width: unset !important;
+  .p-dialog-header {
+    display: none;
+  }
+  .p-dialog-content {
+    padding: unset;
+    .close {
+      text-align: right;
+      margin-right: 11px;
+      cursor: pointer;
+    }
+    img {
+      max-height: 78vh;
+      max-width: 80vw;
+    }
   }
 }

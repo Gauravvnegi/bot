@@ -16,6 +16,7 @@ export class MultiSelectComponent extends FormComponent {
   showHeader = true;
   showChips = true;
   maxSelectedLabels = 20;
+  isExtras: boolean = false;
   /**
    * @Input to change default date setting
    */
@@ -50,6 +51,13 @@ export class MultiSelectComponent extends FormComponent {
     return !(
       this.controlContainer.control.get(this.controlName).value?.length ?? 0
     );
+  }
+
+  get multiSelectDropDownClass() {
+    return {
+      ...this.inputNgClasses,
+      'option-extras-wrapper': this.isExtras,
+    };
   }
 }
 

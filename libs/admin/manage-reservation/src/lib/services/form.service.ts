@@ -75,7 +75,8 @@ export class FormService {
     input: ReservationForm,
     id?: string,
     type: 'full' | 'quick' = 'full',
-    totalAmount?: number
+    totalAmount?: number,
+    offerType?: string
   ): RoomReservationFormData {
     const roomReservationData = new RoomReservationFormData();
     // Map Reservation Info
@@ -127,9 +128,14 @@ export class FormService {
 
     roomReservationData.guestId = input.guestInformation?.guestDetails;
     roomReservationData.specialRequest = input.instructions.specialInstructions;
-    roomReservationData.offer = {
-      id: input.offerId ?? null,
-    };
+    roomReservationData.offer =
+      offerType && offerType === 'MANUAL'
+        ? {
+            offerType: offerType,
+          }
+        : {
+            id: input.offerId ?? null,
+          };
 
     // Map Booking Items
     if (input.roomInformation?.roomTypes) {
@@ -165,7 +171,7 @@ export class FormService {
         roomDetails: {
           ratePlan: { id: input.roomInformation?.ratePlanId },
           roomTypeId: input.roomInformation?.roomTypeId,
-          roomCount: input.roomInformation?.roomNumbers.length
+          roomCount: input.roomInformation?.roomNumbers?.length
             ? input.roomInformation.roomNumbers.length
             : 1,
           roomNumbers: input.roomInformation?.roomNumbers

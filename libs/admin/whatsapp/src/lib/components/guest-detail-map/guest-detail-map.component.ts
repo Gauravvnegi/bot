@@ -19,6 +19,7 @@ import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-ut
 import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.service';
 import { debounceTime, filter } from 'rxjs/operators';
 import { Regex } from '@hospitality-bot/admin/shared';
+import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 
 @Component({
   selector: 'hospitality-bot-guest-detail-map',
@@ -40,8 +41,20 @@ export class GuestDetailMapComponent implements OnInit, OnDestroy {
     private messageService: MessageService,
     private adminUtilityService: AdminUtilityService,
     private globalFilterService: GlobalFilterService,
-    private snackbarService: SnackBarService // private subscriptionPlanService: SubscriptionPlanService
-  ) {}
+    private snackbarService: SnackBarService, // private subscriptionPlanService: SubscriptionPlanService
+    private dialogRef: DynamicDialogRef,
+    private dialogConfig: DynamicDialogConfig
+  ) {
+    /**
+     * @remark extracting data from dialog config
+     */
+
+    if (this.dialogConfig?.data) {
+      Object.entries(this.dialogConfig.data).forEach(([key, value]) => {
+        this[key] = value;
+      });
+    }
+  }
 
   ngOnInit(): void {
     this.initFG();
@@ -104,12 +117,10 @@ export class GuestDetailMapComponent implements OnInit, OnDestroy {
     this.$subscription.add(
       this.messageService
         .updateGuestDetail(this.entityId, this.data.receiverId, values)
-        .subscribe(
-          (response) => {
-            this.messageService.refreshData$.next(true);
-            this.onModalClose.emit();
-          }          
-        )
+        .subscribe((response) => {
+          this.messageService.refreshData$.next(true);
+          this.dialogRef.close();
+        })
     );
   }
 
@@ -167,7 +178,7 @@ export class GuestDetailMapComponent implements OnInit, OnDestroy {
   }
 
   closeModal() {
-    this.onModalClose.emit();
+    this.dialogRef.close();
     this.parentFG.reset();
   }
 

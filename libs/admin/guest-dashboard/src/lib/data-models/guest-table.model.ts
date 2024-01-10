@@ -216,3 +216,273 @@ export class GuestReservation {
     return this;
   }
 }
+
+export class GuestDocsOrPayment {
+  totalRecord: number;
+  entityTypeCounts: EntityState<string>;
+  entityStateCounts: EntityState<string>;
+  records: GuestDocumentDetails[];
+
+  deserialize(input: GuestDocsOrPaymentListResponse) {
+    this.records = input.records.map((record) =>
+      new GuestDocumentDetails().deserialize(record)
+    );
+    this.entityStateCounts = input?.entityStateCounts;
+    this.totalRecord = input?.total;
+    return this;
+  }
+}
+
+export class GuestDocumentDetails {
+  dateOfBirth: string;
+  contactDetails;
+  firstName: string;
+  id: string;
+  lastName: string;
+  salutation: string;
+  nationality: string;
+  countryCode: string;
+  phoneNumber: string;
+  email: string;
+  guestAttributes: GuestAttributes;
+  booking: Booking;
+  feedback: Feedback;
+  payment: Payment;
+  status: Status;
+  currentJourney: CurrentJourney;
+  rooms: Room;
+  documents: any[];
+  vip: boolean;
+  fullName: string;
+  deserialize(input: GuestDocumentDetailsResponse) {
+    const guest = input?.guestDetails?.primaryGuest;
+    this.id = guest.id;
+    this.firstName = guest?.firstName;
+    this.lastName = guest?.lastName;
+    // this.dateOfBirth= input?.guestDetails?.primaryGuest?.
+    this.contactDetails = guest?.contactDetails;
+    // this.salutation =guest?.
+    this.nationality = guest?.nationality;
+    this.countryCode = guest?.contactDetails?.cc;
+    this.phoneNumber = guest?.contactDetails?.contactNumber;
+    this.email = guest?.contactDetails?.emailId;
+    this.documents = this.documents = guest.documents;
+    this.booking = new Booking().deserialize(input);
+    // this.feedback = new Feedback().deserialize(input.feedback);
+    this.payment = new Payment().deserialize(input.paymentSummary);
+    this.status = new Status().deserialize(input);
+    this.currentJourney = new CurrentJourney().deserialize(input);
+    this.rooms = new Room().deserialize(input.stayDetails);
+    this.vip = input.vip;
+
+    set(
+      {},
+      'fullName',
+      `${trim(get(guest, ['firstName'], 'No'))} ${trim(
+        get(guest, ['lastName'], 'Name')
+      )}`
+    );
+
+    return this;
+  }
+  getFullName() {
+    return `${this.firstName} ${this.lastName}`;
+  }
+
+  getPhoneNumber() {
+    return `${this.countryCode ? this.countryCode : ''} ${
+      this.phoneNumber ? this.phoneNumber : ''
+    }`;
+  }
+
+  getNationality(cc) {
+    if (cc && cc.length) {
+      return cc.includes('+') ? cc : `+${cc}`;
+    }
+    return cc;
+  }
+}
+
+type GuestDocsOrPaymentListResponse = {
+  total: number;
+  entityStateCounts: {
+    INITIATED: number;
+    ACCEPTED: number;
+    REJECTED: number;
+    PENDING: number;
+  };
+  entityStateLabels: {
+    INITIATED: string;
+    PENDING: string;
+    ACCEPTED: string;
+    REJECTED: string;
+  };
+  records: GuestDocumentDetailsResponse[];
+};
+
+type GuestDocumentDetailsResponse = {
+  id: string;
+  updated: number;
+  created: number;
+  arrivalTime: number;
+  departureTime: number;
+  number: number;
+  updateOn: number;
+  pmsStatus: string;
+  state: string;
+  stateCompletedSteps: string;
+  redirectionParameter: {
+    journey: {
+      token: null;
+    };
+  };
+  stayDetails: {
+    statusMessage: {
+      code: string;
+      status: string;
+      state: string;
+      remarks: string;
+    };
+    arrivalTime: number;
+    departureTime: number;
+    expectedArrivalTime: number;
+    expectedDepartureTime: number;
+    adultsCount: number;
+    kidsCount: number;
+    comments: string;
+    totalRoomCount: number;
+    room: {
+      roomNumber: string;
+      type: string;
+      unit: number;
+      status: string;
+    };
+    checkInComment: string;
+    address: {};
+  };
+  guestDetails: GuestDetails;
+
+  healthDeclaration: {};
+  paymentSummary: PaymentSummary;
+  packages: {};
+  journeysStatus: {};
+  stepsStatus: {};
+  lastCompletedStep: string;
+  currentJourney: string;
+  currentJoureyStatus: string;
+  currentJourneyState: string;
+  source: string;
+  entity: {};
+  nextJourneys: {};
+  totalDueAmount: 0.0;
+  totalPaidAmount: 0.0;
+  totalAmount: 0.0;
+  nightCount: 0;
+  vip: false;
+  invoicePrepareRequest: false;
+  pmsBooking: false;
+};
+
+type GuestDetails = {
+  primaryGuest: {
+    statusMessage: {
+      code: number;
+      status: string;
+      state: string;
+      remarks: null;
+    };
+    id: string;
+    firstName: string;
+    lastName: string;
+    contactDetails: {
+      cc: string;
+      contactNumber: string;
+      emailId: string;
+    };
+    nationality: string;
+    documents: [];
+    regcardUrl: string;
+    age: 0;
+    privacy: false;
+    documentRequired: true;
+  };
+  accompanyGuests: [];
+  sharerGuests: [];
+  secondaryGuest: [];
+  kids: [];
+  allGuest: {
+    [key: string]: {
+      statusMessage: {
+        code: number;
+        status: string;
+        state: string;
+        remarks: null;
+      };
+      id: string;
+      firstName: string; // Updated this line to allow any string value
+      lastName: string; // Updated this line to allow any string value
+      contactDetails: {
+        cc: string; // Updated this line to allow any string value
+        contactNumber: string; // Updated this line to allow any string value
+        emailId: string; // Updated this line to allow any string value
+      };
+      nationality: string; // Updated this line to allow any string value
+      documents: any[]; // Updated this line to allow any array value
+      regcardUrl: string; // Updated this line to allow any string value
+      age: number; // Updated this line to allow any number value
+      privacy: boolean;
+      documentRequired: boolean;
+    };
+  };
+};
+
+type PaymentSummary = {
+  statusMessage: {
+    code: number;
+    status: string;
+    state: string;
+    remarks: null;
+  };
+  totalAmount: number;
+  taxAmount: number;
+  totalDiscount: number;
+  paidAmount: number;
+  dueAmount: number;
+  payableAmount: number;
+  currency: string;
+  roomRates: [
+    {
+      base: number;
+      totalAmount: number;
+      amount: number;
+      discount: number;
+      description: string;
+      label: string;
+      unit: number;
+      cgstAmount: number;
+      sgstAmount: number;
+    }
+  ];
+  inclusions: string;
+  printRate: boolean;
+  packages: any[]; // You can replace 'any' with the specific type if needed
+  transactionsHistory: any[]; // You can replace 'any' with the specific type if needed
+  depositRules: {
+    id: string;
+    amount: number;
+    label: string;
+    guaranteeType: string;
+    type: string;
+    depositNight: number;
+    payAtDesk: boolean;
+    dueDate: number;
+  };
+  paymentAmount: number;
+  totalCgstTax: number;
+  totalSgstTax: number;
+  totalAddOnsAmount: number;
+  totalRoomCharge: number;
+  totalRoomDiscount: number;
+  totalAddOnsTax: number;
+  totalAddOnsDiscount: number;
+};

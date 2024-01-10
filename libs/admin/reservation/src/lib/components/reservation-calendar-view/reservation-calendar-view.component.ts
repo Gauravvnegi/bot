@@ -46,13 +46,9 @@ import {
   reservationMenuOptions,
   reservationStatusColorCode,
 } from '../../constants/reservation';
-import {
-  ModalService,
-  SnackBarService,
-} from '@hospitality-bot/shared/material';
+import { SnackBarService } from '@hospitality-bot/shared/material';
 import { RoomMapType } from 'libs/admin/channel-manager/src/lib/types/channel-manager.types';
 import * as moment from 'moment';
-import { AdminDetailsService } from '../../services/admin-details.service';
 import { ReservationService } from '../../services/reservation.service';
 import { JourneyState } from 'libs/admin/manage-reservation/src/lib/constants/reservation';
 import { roomStatusDetails } from 'libs/admin/housekeeping/src/lib/constant/room';
@@ -62,6 +58,10 @@ import { JourneyDialogComponent } from '../journey-dialog/journey-dialog.compone
 import { DialogService } from 'primeng/dynamicdialog';
 import { ReservationRatePlan } from 'libs/admin/room/src/lib/constant/form';
 import { ModalComponent } from 'libs/admin/shared/src/lib/components/modal/modal.component';
+import {
+  JourneyData,
+  ReservationFormService,
+} from '../../services/reservation-form.service';
 
 @Component({
   selector: 'hospitality-bot-reservation-calendar-view',
@@ -103,14 +103,14 @@ export class ReservationCalendarViewComponent implements OnInit {
     private globalFilterService: GlobalFilterService,
     private roomService: RoomService,
     private adminUtilityService: AdminUtilityService,
-    private adminDetailsService: AdminDetailsService,
     private _reservationService: ReservationService,
     private snackbarService: SnackBarService,
     private _clipboard: Clipboard,
     private routesConfigService: RoutesConfigService,
     private auditService: NightAuditService,
     private bookingDetailService: BookingDetailService,
-    private dialogService: DialogService
+    private dialogService: DialogService,
+    private formService: ReservationFormService
   ) {}
 
   ngOnInit(): void {
@@ -255,7 +255,9 @@ export class ReservationCalendarViewComponent implements OnInit {
       // Map data for unavailable rooms
       const unavailableData = unavailableRooms.reduce((result, room) => {
         const unavailableStatusDetails = room.statusDetails.filter(
-          (status) => status.status === 'OUT_OF_SERVICE'
+          (status) =>
+            status.status === 'OUT_OF_SERVICE' ||
+            status.status === 'OUT_OF_ORDER'
         );
         const roomValues = unavailableStatusDetails
           .filter((status) => {
@@ -264,7 +266,10 @@ export class ReservationCalendarViewComponent implements OnInit {
           })
           .map((status) => ({
             id: status.id ?? null, // Set id as needed for unavailable rooms
-            content: 'Out Of Service',
+            content:
+              status.status === 'OUT_OF_SERVICE'
+                ? 'Out Of Service'
+                : 'Out Of Order',
             startPos: this.getDate(status.fromDate),
             endPos: this.getStatusDate(status.toDate, status.fromDate),
             rowValue: room.roomNumber,
@@ -617,18 +622,31 @@ export class ReservationCalendarViewComponent implements OnInit {
   ) {
     switch (event.value) {
       case 'CHECKIN':
-        this.manualCheckin(event.id, roomType);
+        this.formService.manualCheckin(
+          this.getCheckinDate(event.id),
+          event.id,
+          (data: JourneyData) => {
+            this.updateRoomType(data);
+          },
+          roomType
+        );
         break;
       case 'CHECKOUT':
-        this.manualCheckout(event.id, roomType);
+        this.formService.manualCheckout(
+          event.id,
+          (data: JourneyData) => {
+            this.updateRoomType(data);
+          },
+          roomType
+        );
         break;
       case 'CANCEL_CHECKIN':
         this._reservationService.cancelCheckin(event.id).subscribe((res) => {
-          this.updateRoomType(
-            event.id,
-            roomType,
-            ReservationCurrentStatus.DUEIN
-          );
+          this.updateRoomType({
+            reservationId: event.id,
+            roomType: roomType,
+            status: ReservationCurrentStatus.DUEIN,
+          });
           this.snackbarService.openSnackBarAsText('Checkin canceled.', '', {
             panelClass: 'success',
           });
@@ -636,11 +654,11 @@ export class ReservationCalendarViewComponent implements OnInit {
         break;
       case 'CANCEL_CHECKOUT':
         this._reservationService.cancelCheckout(event.id).subscribe((res) => {
-          this.updateRoomType(
-            event.id,
-            roomType,
-            ReservationCurrentStatus.DUEOUT
-          );
+          this.updateRoomType({
+            reservationId: event.id,
+            roomType: roomType,
+            status: ReservationCurrentStatus.DUEOUT,
+          });
           this.snackbarService.openSnackBarAsText('Checkin canceled.', '', {
             panelClass: 'success',
           });
@@ -663,6 +681,13 @@ export class ReservationCalendarViewComponent implements OnInit {
     }
   }
 
+  getCheckinDate(id: string) {
+    const reservation = this.reservationListData.find(
+      (reservation) => reservation.id === id
+    );
+    return reservation.from;
+  }
+
   activateAndGeneratePrecheckin(reservationId: string) {
     this._reservationService
       .generateJourneyLink(reservationId, 'PRECHECKIN')
@@ -678,85 +703,9 @@ export class ReservationCalendarViewComponent implements OnInit {
       });
   }
 
-  manualCheckin(reservationId: string, roomType: IGRoomType) {
-    this.openJourneyDialog({
-      title: 'Check-In',
-      description: 'Guest is about to checkin',
-      question: 'Are you sure you want to continue?',
-      buttons: {
-        cancel: {
-          label: 'Cancel',
-          context: '',
-        },
-        accept: {
-          label: 'Accept',
-          context: this,
-          handler: {
-            fn_name: 'checkInfn',
-            args: [reservationId, roomType],
-          },
-        },
-      },
-    });
-  }
-
-  manualCheckout(reservationId: string, roomType: IGRoomType) {
-    this.openJourneyDialog({
-      title: 'Manual Checkout',
-      description: 'Guest is about to checkout',
-      question: 'Are you sure you want to continue?',
-      buttons: {
-        cancel: {
-          label: 'Cancel',
-          context: '',
-        },
-        accept: {
-          label: 'Accept',
-          context: this,
-          handler: {
-            fn_name: 'manualCheckoutfn',
-            args: [reservationId, roomType],
-          },
-        },
-      },
-    });
-  }
-
-  checkInfn(reservationId: string, roomType: IGRoomType) {
-    this.$subscription.add(
-      this._reservationService.manualCheckin(reservationId).subscribe((res) => {
-        this.updateRoomType(
-          reservationId,
-          roomType,
-          ReservationCurrentStatus.INHOUSE
-        );
-        this.snackbarService.openSnackBarAsText('Checkin completed.', '', {
-          panelClass: 'success',
-        });
-      })
-    );
-  }
-
-  manualCheckoutfn(reservationId: string, roomType: IGRoomType) {
-    this._reservationService.manualCheckout(reservationId).subscribe((res) => {
-      this.updateRoomType(
-        reservationId,
-        roomType,
-        ReservationCurrentStatus.CHECKEDOUT,
-        true
-      );
-      this.snackbarService.openSnackBarAsText('Checkout completed.', '', {
-        panelClass: 'success',
-      });
-    });
-  }
-
-  updateRoomType(
-    reservationId: string,
-    roomType: IGRoomType,
-    status: ReservationCurrentStatus,
-    isCheckout: boolean = false
-  ) {
+  updateRoomType(data: JourneyData) {
+    const { reservationId, roomType, status, isCheckout } = data;
+    // this.reservationFormService.manualCheckin(reservationId, roomType, this)
     let currentDateEpoch = new Date();
     const updatedValues = roomType.data.values.map((item) => {
       const selectedRoom = roomType.rooms.find(
@@ -853,21 +802,6 @@ export class ReservationCalendarViewComponent implements OnInit {
   }
 
   openDetailsPage(reservationId: string) {
-    // TODO: Need to remove
-    // const dialogConfig = new MatDialogConfig();
-    // dialogConfig.disableClose = true;
-    // dialogConfig.width = '100%';
-    // const detailCompRef = this.modalService.openDialog(
-    //   DetailsComponent,
-    //   dialogConfig
-    // );
-    // detailCompRef.componentInstance.bookingId = reservationId;
-    // detailCompRef.componentInstance.tabKey = 'guest_details';
-    // this.$subscription.add(
-    //   detailCompRef.componentInstance.onDetailsClose.subscribe((res) => {
-    //     detailCompRef.close();
-    //   })
-    // );
     this.bookingDetailService.openBookingDetailSidebar({
       bookingId: reservationId,
       tabKey: 'guest_details',

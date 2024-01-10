@@ -97,9 +97,11 @@
                 <div [roomStatus]="rowData?.tableOrRoomNumber?.status">
                   <div>
                     {{
-                      rowData.bookingDetails.tableOrRoomNumber.roomNumber || '--'
+                      rowData.bookingDetails.tableOrRoomNumber.roomNumber ||
+                        '--'
                     }}&nbsp;-&nbsp;{{
-                      rowData?.bookingDetails?.tableOrRoomNumber?.roomType || '--'
+                      rowData?.bookingDetails?.tableOrRoomNumber?.roomType ||
+                        '--'
                     }}
                   </div>
                 </div>
@@ -375,7 +377,9 @@
               <td>
                 <div [roomStatus]="rowData?.tableOrRoomNumber?.status">
                   <div>
-                    {{ rowData?.tableOrRoomNumber?.roomNumber || '--' }}&nbsp;-&nbsp;{{
+                    {{
+                      rowData?.tableOrRoomNumber?.roomNumber || '--'
+                    }}&nbsp;-&nbsp;{{
                       rowData?.tableOrRoomNumber?.type || '--'
                     }}
                   </div>

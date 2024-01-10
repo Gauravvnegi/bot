@@ -1,13 +1,13 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { ModalService } from '@hospitality-bot/shared/material';
+import { Component, Input } from '@angular/core';
 import jsPDF from 'jspdf';
+import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 
 @Component({
   selector: 'hospitality-bot-qr-code-modal',
   templateUrl: './qr-code-modal.component.html',
   styleUrls: ['./qr-code-modal.component.scss'],
 })
-export class QrCodeModalComponent implements OnInit {
+export class QrCodeModalComponent {
   heading = 'Print QR Code';
   backgroundURl = 'assets/images/auth-banner.webp';
   logoUrl = 'assets/images/leela-logo.png';
@@ -20,21 +20,27 @@ export class QrCodeModalComponent implements OnInit {
     'Place your orders',
   ];
 
-  @Output() onClose = new EventEmitter();
-
   @Input() set content(value: QrCodeModalContent) {
     Object.assign(this, value);
   }
 
-  constructor(private modalService: ModalService) {}
-
-  ngOnInit(): void {
-    const data = this.modalService.__config;
-    Object.assign(this, data);
+  constructor(
+    private dialogConfig: DynamicDialogConfig,
+    private dialogRef: DynamicDialogRef
+  ) {
+    /**
+     * @remarks Extracting data from dialog Service
+     */
+    const data = this.dialogConfig?.data as QrCodeModalComponent;
+    if (data) {
+      Object.entries(data).forEach(([key, value]) => {
+        this[key] = value;
+      });
+    }
   }
 
   close(): void {
-    this.onClose.emit();
+    this.dialogRef.close();
   }
 
   generatePdf() {

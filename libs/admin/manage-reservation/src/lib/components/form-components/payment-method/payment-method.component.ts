@@ -7,6 +7,7 @@ import {
   Validators,
 } from '@angular/forms';
 import {
+  BookingDetailService,
   ConfigService,
   Option,
   UserService,
@@ -19,9 +20,6 @@ import {
 } from '../../../models/reservations.model';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { ReservationForm } from '../../../constants/form';
-import { DetailsComponent } from '@hospitality-bot/admin/reservation';
-import { ModalService } from '@hospitality-bot/shared/material';
-import { MatDialogConfig } from '@angular/material/dialog';
 import { ReservationType } from '../../../constants/reservation-table';
 import { FormService } from '../../../services/form.service';
 
@@ -51,8 +49,8 @@ export class PaymentMethodComponent implements OnInit {
     private manageReservationService: ManageReservationService,
     private globalFilterService: GlobalFilterService,
     private userService: UserService,
-    private modalService: ModalService,
-    private formService: FormService
+    private formService: FormService,
+    private bookingDetailsService: BookingDetailService
   ) {}
 
   ngOnInit(): void {
@@ -133,19 +131,10 @@ export class PaymentMethodComponent implements OnInit {
   }
 
   openDetailsPage() {
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.disableClose = true;
-    dialogConfig.width = '100%';
-    const detailCompRef = this.modalService.openDialog(
-      DetailsComponent,
-      dialogConfig
-    );
-
-    detailCompRef.componentInstance.bookingId = this.reservationId;
-    detailCompRef.componentInstance.tabKey = 'payment_details';
     this.$subscription.add(
-      detailCompRef.componentInstance.onDetailsClose.subscribe((res) => {
-        detailCompRef.close();
+      this.bookingDetailsService.openBookingDetailSidebar({
+        bookingId: this.reservationId,
+        tabKey: 'payment_details',
       })
     );
   }
@@ -164,5 +153,10 @@ export class PaymentMethodComponent implements OnInit {
       keyof ReservationForm['reservationInformation'],
       AbstractControl
     >;
+  }
+
+  ngOnDestroy(): void {
+    this.bookingDetailsService.resetBookingState();
+    this.$subscription.unsubscribe();
   }
 }

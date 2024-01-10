@@ -6,10 +6,6 @@ import {
 import { itemList } from '../../constants/night-audit.const';
 import { Subscription } from 'rxjs';
 import {
-  GlobalFilterService,
-  RoutesConfigService,
-} from '@hospitality-bot/admin/core/theme';
-import {
   AdminUtilityService,
   QueryConfig,
 } from '@hospitality-bot/admin/shared';
@@ -18,6 +14,8 @@ import {
   CheckedOutReservation,
   NightAudit,
 } from './models/night-audit.model';
+import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
+import { RoutesConfigService } from 'apps/admin/src/app/core/theme/src/lib/services/routes-config.service';
 
 @Component({
   selector: 'night-audit',

@@ -10,25 +10,24 @@ import { FormBuilder } from '@angular/forms';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 import { BaseDatatableComponent } from 'libs/admin/shared/src/lib/components/datatable/base-datatable.component';
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
-import { ModalService, SnackBarService } from 'libs/shared/material/src';
+import { SnackBarService } from 'libs/shared/material/src';
 import { DateService } from '@hospitality-bot/shared/utils';
 import { LazyLoadEvent, SortEvent } from 'primeng/api';
 import { Subscription, Observable } from 'rxjs';
 import { InhouseTable } from '../../models/inhouse-datatable.model';
 import { AnalyticsService } from '../../services/analytics.service';
 import * as FileSaver from 'file-saver';
-import { analytics, sharedConfig } from '@hospitality-bot/admin/shared';
-import { ChipType, inhouseStatus } from '../../constant/datatable';
+import {
+  BookingDetailService,
+  analytics,
+  sharedConfig,
+} from '@hospitality-bot/admin/shared';
+import { inhouseStatus } from '../../constant/datatable';
 import { RequestService } from 'libs/admin/request/src/lib/services/request.service';
 import { convertToTitleCase } from 'libs/admin/shared/src/lib/utils/valueFormatter';
 import { RequestStatus } from 'libs/admin/request/src/lib/constants/request';
-import {
-  DetailsComponent,
-  DetailsTabOptions,
-  Reservation,
-} from '@hospitality-bot/admin/reservation';
-import { MatDialogConfig } from '@angular/material/dialog';
-import { ReservationService } from '@hospitality-bot/admin/dashboard';
+import { DetailsTabOptions } from '@hospitality-bot/admin/reservation';
+import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 
 @Component({
   selector: 'hospitality-bot-pre-arrival-datatable',
@@ -54,10 +53,19 @@ export class PreArrivalDatatableComponent extends BaseDatatableComponent
     private snackbarService: SnackBarService,
     private analyticsService: AnalyticsService,
     private _requestService: RequestService,
-    private _modal: ModalService,
-    private _reservationService: ReservationService
+    private dialogConfig: DynamicDialogConfig,
+    private dialogRef: DynamicDialogRef,
+    private bookingService: BookingDetailService
   ) {
     super(fb);
+    /**
+     * @Remarks Extracting data from he dialog service
+     */
+    if (this.dialogConfig?.data) {
+      Object.entries(this.dialogConfig.data).forEach(([key, value]) => {
+        this[key] = value;
+      });
+    }
   }
 
   cols = analytics.preArrivalCols;
@@ -221,7 +229,7 @@ export class PreArrivalDatatableComponent extends BaseDatatableComponent
   }
 
   closeModal() {
-    this.onModalClose.emit(true);
+    this.dialogRef.close(true);
   }
 
   exportCSV() {
@@ -321,23 +329,15 @@ export class PreArrivalDatatableComponent extends BaseDatatableComponent
   ): void {
     event?.stopPropagation();
     // if (!rowData && !guestData) return;
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.disableClose = true;
-    dialogConfig.width = '100%';
-    const detailCompRef = this._modal.openDialog(
-      DetailsComponent,
-      dialogConfig
-    );
+    this.bookingService.openBookingDetailSidebar({
+      guestId: rowData?.guestDetails?.primaryGuest?.id ?? guestData?.id,
+      bookingNumber: rowData?.booking?.bookingNumber ?? guestData?.number,
+      ...(tabKey && { tabKey: tabKey }),
+    });
 
-    detailCompRef.componentInstance.guestId =
-      rowData?.guestDetails?.primaryGuest?.id ?? guestData?.id;
-
-    detailCompRef.componentInstance.bookingNumber =
-      rowData?.booking?.bookingNumber ?? guestData?.number;
-    tabKey && (detailCompRef.componentInstance.tabKey = tabKey);
     this.$subscription.add(
-      detailCompRef.componentInstance.onDetailsClose.subscribe((res) => {
-        if (res) {
+      this.bookingService.actionEvent.subscribe((res) => {
+        if (!res) {
           this.loadInitialData(
             [
               ...this.globalQueries,
@@ -357,9 +357,49 @@ export class PreArrivalDatatableComponent extends BaseDatatableComponent
             }
           );
         }
-        detailCompRef.close();
       })
     );
+
+    // TODO: Remove
+    // const dialogConfig = new MatDialogConfig();
+    // dialogConfig.disableClose = true;
+    // dialogConfig.width = '100%';
+    // const detailCompRef = this._modal.openDialog(
+    //   DetailsComponent,
+    //   dialogConfig
+    // );
+
+    // detailCompRef.componentInstance.guestId =
+    //   rowData?.guestDetails?.primaryGuest?.id ?? guestData?.id;
+
+    // detailCompRef.componentInstance.bookingNumber =
+    //   rowData?.booking?.bookingNumber ?? guestData?.number;
+    // tabKey && (detailCompRef.componentInstance.tabKey = tabKey);
+    // this.$subscription.add(
+    //   detailCompRef.componentInstance.onDetailsClose.subscribe((res) => {
+    //     if (res) {
+    //       this.loadInitialData(
+    //         [
+    //           ...this.globalQueries,
+    //           {
+    //             order: sharedConfig.defaultOrder,
+    //             entityType: this.tabFilterItems[this.tabFilterIdx]?.value,
+    //             journeyType: 'pre-arrival',
+    //           },
+    //           ...this.getSelectedQuickReplyFilters({ key: 'actionType' }),
+    //         ],
+    //         false,
+    //         {
+    //           offset: this.tempFirst,
+    //           limit: this.tempRowsPerPage
+    //             ? this.tempRowsPerPage
+    //             : this.rowsPerPage,
+    //         }
+    //       );
+    //     }
+    //     detailCompRef.close();
+    //   })
+    // );
   }
 
   ngOnDestroy(): void {

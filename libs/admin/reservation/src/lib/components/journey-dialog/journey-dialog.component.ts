@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { ModalAction } from 'libs/admin/shared/src/lib/types/fields.type';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 
 @Component({
@@ -9,98 +10,43 @@ import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 })
 export class JourneyDialogComponent implements OnInit {
   useForm!: FormGroup;
-  private _defaultValue = {
-    title: '',
-    description: '',
-    question: 'Are you sure you want to continue?',
-    buttons: {
-      cancel: {
-        label: 'Cancel',
-        context: '',
-      },
-      accept: {
-        label: 'Accept',
-        context: '',
-      },
-    },
-    isSendInvoice: false,
-  };
+  title: string = '';
+  descriptions: string[] = ['Are you sure?'];
+  isSendInvoice: boolean = false;
 
-  private _config;
-
-  @Input('config') set config(value) {
-    this._config = { ...this._defaultValue, ...value };
-  }
-
-  get config() {
-    if (this._config !== undefined) {
-      return { ...this._defaultValue, ...this._config };
-    } else {
-      return this._defaultValue;
-    }
-  }
-
-  @Output() onDetailsClose = new EventEmitter();
+  @Output() onClose = new EventEmitter<{ isInvoice?: boolean }>();
 
   constructor(
-    private ref: DynamicDialogRef,
-    public dialogConfig: DynamicDialogConfig,
-    public fb: FormBuilder
+    public fb: FormBuilder,
+    public dialogRef: DynamicDialogRef,
+    public dialogConfig: DynamicDialogConfig
   ) {
     this.useForm = this.fb.group({
       invoiceStatus: [false],
     });
-    if (dialogConfig?.data) {
-      this._config = { ...this._defaultValue, ...dialogConfig?.data };
+    const data = dialogConfig?.data as ConfirmDialogData;
+    if (data) {
+      Object.entries(data).forEach(([key, value]) => {
+        this[key] = value;
+      });
     }
   }
 
   ngOnInit(): void {}
 
-  onAccept() {
-    const { accept: acceptButtonConfig } = this.config.buttons;
-
-    if (acceptButtonConfig.context && acceptButtonConfig.handler) {
-      acceptButtonConfig.context[acceptButtonConfig.handler.fn_name].apply(
-        acceptButtonConfig.context,
-        [
-          ...acceptButtonConfig.handler.args,
-          this.config.isSendInvoice && {
-            isSendInvoice: this.useForm.get('invoiceStatus').value,
-          },
-        ]
-      );
-    }
-
-    this.ref.close();
-    this.onDetailsClose.next(true);
+  onAcceptClick() {
+    this.dialogRef.close({
+      isInvoice: this.useForm.get('invoiceStatus').value,
+    });
   }
 
-  onCancel() {
-    const { cancel: cancelButtonConfig } = this.config.buttons;
-
-    if (cancelButtonConfig.context && cancelButtonConfig.handler) {
-      cancelButtonConfig.context[
-        cancelButtonConfig.handler.fn_name
-      ].apply(cancelButtonConfig.context, [...cancelButtonConfig.handler.args]);
-    }
-    this.ref.close();
-    this.onDetailsClose.next(true);
+  handleClose() {
+    this.dialogRef.close();
   }
 }
 
 export type ConfirmDialogData = {
   title?: string;
-  description?: string;
-  question?: string;
-  buttons?: {
-    cancel?: {
-      label: string;
-      context: string;
-    };
-    accept?: {
-      label: string;
-      context: string;
-    };
-  };
+  descriptions?: string[];
+  isSendInvoice?: boolean;
 };

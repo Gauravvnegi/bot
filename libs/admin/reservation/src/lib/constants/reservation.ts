@@ -73,3 +73,25 @@ export const reservationMenuOptions: Record<
   ],
   OUT_OF_SERVICE: [{ label: 'Cancel', value: 'CANCEL_OUT_OF_SERVICE' }],
 };
+
+export function calculateJourneyTime(
+  defaultEndTime: string
+): { currentTime: number; defaultTime: number } {
+  const currentDateTime = new Date();
+  const currentHours = currentDateTime.getHours();
+  const currentMinutes = currentDateTime.getMinutes();
+  const currentSeconds = currentDateTime.getSeconds();
+
+  const [journeyHours, journeyMinutes, journeySeconds] = defaultEndTime.split(
+    ':'
+  );
+
+  const currentEpochTime =
+    currentHours * 3600 + currentMinutes * 60 + currentSeconds;
+  const defaultJourneyEpoch =
+    parseInt(journeyHours) * 3600 +
+    parseInt(journeyMinutes) * 60 +
+    parseInt(journeySeconds);
+
+  return { currentTime: currentEpochTime, defaultTime: defaultJourneyEpoch };
+}

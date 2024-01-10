@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ModalAction, ModalContent } from '../../types/fields.type';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { DynamicDialogConfig } from 'primeng/dynamicdialog';
+import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 
 @Component({
   selector: 'hospitality-bot-modal',
@@ -20,23 +20,34 @@ export class ModalComponent {
 
   constructor(
     private fb: FormBuilder,
-    public dialogConfig: DynamicDialogConfig
+    public dialogConfig: DynamicDialogConfig, //generic not supported yet,
+    public dialogRef: DynamicDialogRef
   ) {
-    const data = dialogConfig.data;
+    const data = dialogConfig?.data as ModalContent;
     if (data) {
-      Object.assign(this, data);
+      this.mapInputData(data);
     }
   }
+
   modelForm: FormGroup;
 
   ngOnInit(): void {
     this.modelForm = this.fb.group({
       remarks: [''],
     });
+
+    if (this.isReservation) {
+      // Add controls conditionally when isReservation is true
+      this.modelForm.addControl('chargeable', this.fb.control(false));
+      this.modelForm.addControl('chargedAmount', this.fb.control(0));
+      this.modelForm.get('chargeable').valueChanges.subscribe((res) => {
+        if (res === false) this.modelForm.get('chargedAmount').patchValue(0);
+      });
+    }
   }
 
   defaultAction: ModalAction = {
-    label: 'Okay',
+    label: 'Ok',
     onClick: () => {
       this.close();
     },
@@ -46,20 +57,19 @@ export class ModalComponent {
   @Input() actions: ModalAction[];
 
   @Input() set content(value: ModalContent) {
-    for (const key in value) {
-      const val = value[key];
-      this[key] = val;
-    }
-    if (value.isReservation) {
-      // Add controls conditionally when isReservation is true
-      this.modelForm.addControl('chargeable', this.fb.control(''));
-      this.modelForm.addControl('chargedAmount', this.fb.control(''));
-    }
+    this.mapInputData(value);
+  }
+
+  mapInputData(value: ModalContent) {
+    Object.entries(value).forEach(([key, value]) => {
+      this[key] = value;
+    });
   }
 
   @Output() onClose = new EventEmitter();
 
   close() {
+    this.dialogRef.close();
     this.onClose.emit();
   }
 }

@@ -226,3 +226,7 @@ td {
   color: #2a8853;
   gap: 0.1em;
 }
+
+:host ::ng-deep .p-dropdown {
+  width: 10em !important;
+}

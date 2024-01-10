@@ -1,7 +1,5 @@
 import { Component } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
-import { MatTabChangeEvent } from '@angular/material/tabs';
-import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
 import {
   GlobalFilterService,
   RoutesConfigService,
@@ -71,10 +69,8 @@ export class ServicesDataTableComponent extends BaseDatatableComponent {
     private servicesService: ServicesService,
     private adminUtilityService: AdminUtilityService,
     private globalFilterService: GlobalFilterService,
-    protected snackbarService: SnackBarService, // private router: Router, // private modalService: ModalService
-    private router: Router,
+    protected snackbarService: SnackBarService,
     private _hotelDetailService: HotelDetailService,
-    private route: ActivatedRoute,
     private routesConfigService: RoutesConfigService
   ) {
     super(fb);

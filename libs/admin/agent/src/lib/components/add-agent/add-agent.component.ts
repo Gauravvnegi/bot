@@ -1,32 +1,16 @@
 import { Location } from '@angular/common';
-import {
-  Compiler,
-  Component,
-  ComponentFactoryResolver,
-  EventEmitter,
-  OnInit,
-  Output,
-  ViewChild,
-  ViewContainerRef,
-} from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
-import {
-  GlobalFilterService,
-  RoutesConfigService,
-} from '@hospitality-bot/admin/core/theme';
+import { ActivatedRoute } from '@angular/router';
 import {
   AdminUtilityService,
   ConfigService,
-  ModuleNames,
   NavRouteOptions,
   Option,
   QueryConfig,
   Regex,
 } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
-import { AddCompanyComponent } from 'libs/admin/company/src/lib/components/add-company/add-company.component';
-import { companyRoutes } from 'libs/admin/company/src/lib/constants/route';
 import { FormService } from 'libs/admin/shared/src/lib/services/form.service';
 import CustomValidators from 'libs/admin/shared/src/lib/utils/validators';
 import { Subscription } from 'rxjs';
@@ -36,6 +20,9 @@ import { AgentService } from '../../services/agent.service';
 import { commissionType } from '../../types/agent';
 import { AgentFormType } from '../../types/form.types';
 import { AgentTableResponse } from '../../types/response';
+import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
+import { RoutesConfigService } from 'apps/admin/src/app/core/theme/src/lib/services/routes-config.service';
+
 @Component({
   selector: 'hospitality-bot-add-agent',
   templateUrl: './add-agent.component.html',
@@ -67,11 +54,10 @@ export class AddAgentComponent implements OnInit {
   marketSegment: Option[] = [];
 
   //Sidebar configuration
-  isSideBar = false;
-  sidebarVisible = false;
-  @ViewChild('sidebarSlide', { read: ViewContainerRef })
-  sidebarSlide: ViewContainerRef;
-  @Output() onClose = new EventEmitter<AgentTableResponse | boolean>(false);
+  isSidebar = false;
+  @Output() onCloseSidebar = new EventEmitter<AgentTableResponse | boolean>(
+    false
+  );
   selectedMember: Option;
 
   constructor(
@@ -81,13 +67,10 @@ export class AddAgentComponent implements OnInit {
     private adminUtilityService: AdminUtilityService,
     private snackbarService: SnackBarService,
     private route: ActivatedRoute,
-    private router: Router,
     private formService: FormService,
     private configService: ConfigService,
     private routesConfigService: RoutesConfigService,
-    private location: Location,
-    private resolver: ComponentFactoryResolver,
-    private compiler: Compiler
+    private location: Location
   ) {
     this.agentId = this.route.snapshot.paramMap.get('id');
     const { navRoutes, title } = agentRoutes[
@@ -219,8 +202,8 @@ export class AddAgentComponent implements OnInit {
         (res) => {
           this.loading = false;
           this.handleSuccess();
-          if (this.isSideBar) {
-            this.onClose.emit(res);
+          if (this.isSidebar) {
+            this.onCloseSidebar.emit(res);
           } else {
             this.location.back();
           }
@@ -235,77 +218,6 @@ export class AddAgentComponent implements OnInit {
 
   reset() {
     AgentModel.resetForm(this.agentForm);
-  }
-
-  openCompanyFromSide() {
-    const lazyModulePromise = import(
-      'libs/admin/company/src/lib/admin-company.module'
-    )
-      .then((module) => {
-        return this.compiler.compileModuleAsync(module.AdminCompanyModule);
-      })
-      .catch((error) => {
-        console.error('Error loading the lazy module:', error);
-      });
-
-    lazyModulePromise.then((moduleFactory) => {
-      this.sidebarVisible = true;
-      const factory = this.resolver.resolveComponentFactory(
-        AddCompanyComponent
-      );
-      this.sidebarSlide.clear();
-      const componentRef = this.sidebarSlide.createComponent(factory);
-      componentRef.instance.isSideBar = true;
-      componentRef.instance.onClose.subscribe((res) => {
-        if (typeof res !== 'boolean') {
-          this.selectedMember = {
-            label: res.companyName,
-            value: res.id,
-          };
-          this.agentForm.patchValue(
-            {
-              marketSegment: res?.marketSegment,
-              businessSource: res?.businessSource,
-            },
-            { emitEvent: false }
-          );
-        }
-        this.sidebarVisible = false;
-        componentRef.destroy();
-      });
-    });
-  }
-
-  /**
-   * @function createNewCompany Add new company
-   */
-  createNewCompany() {
-    if (this.isSideBar) {
-      this.openCompanyFromSide();
-    } else {
-      this.saveForm();
-      this.routesConfigService.navigate({
-        subModuleName: ModuleNames.COMPANY,
-        additionalPath: companyRoutes.addCompany.route,
-      });
-    }
-  }
-
-  companyChange(event) {
-    if (event) {
-      this.selectedMember = {
-        label: event.label ? event.label : event.firstName,
-        value: event.value ? event.value : event.id,
-      };
-      event.marketSegment &&
-        this.agentForm
-          .get('marketSegment')
-          .patchValue(event.marketSegment, { emitEvent: false });
-      event.businessSource &&
-        this.agentForm
-          .get('marketSegment')
-          .patchValue(event.businessSource, { emitEvent: false });
-    }
   }
 
   saveForm() {
@@ -353,7 +265,7 @@ export class AddAgentComponent implements OnInit {
   };
 
   closeSidebar() {
-    this.onClose.emit(true);
+    this.onCloseSidebar.emit(true);
   }
 
   /**

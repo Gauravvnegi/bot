@@ -10,10 +10,7 @@ import {
   RoutesConfigService,
   SubscriptionPlanService,
 } from '@hospitality-bot/admin/core/theme';
-import {
-  ModalService,
-  SnackBarService,
-} from '@hospitality-bot/shared/material';
+import { SnackBarService } from '@hospitality-bot/shared/material';
 import { ReservationService } from '../../../services/reservation.service';
 import { ReservationDatatableComponent } from '../../datatable/reservation/reservation.component';
 import { NavigationEnd, Router } from '@angular/router';
@@ -40,7 +37,6 @@ export class ReservationDatatableModalComponent
     protected _adminUtilityService: AdminUtilityService,
     protected globalFilterService: GlobalFilterService,
     protected snackbarService: SnackBarService,
-    protected _modal: ModalService,
     public feedbackService: FeedbackService,
     public router: Router,
     protected bookingDetailService: BookingDetailService,
@@ -55,7 +51,6 @@ export class ReservationDatatableModalComponent
       _adminUtilityService,
       globalFilterService,
       snackbarService,
-      _modal,
       feedbackService,
       bookingDetailService,
       subscriptionPlanService,

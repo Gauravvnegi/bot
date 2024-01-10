@@ -36,6 +36,11 @@ body {
     brightness(99%) contrast(100%);
 }
 
+.active-image {
+  filter: invert(18%) sepia(89%) saturate(7441%) hue-rotate(229deg)
+    brightness(95%) contrast(97%);
+}
+
 .image-popup {
   .mat-dialog-container {
     background: transparent !important;

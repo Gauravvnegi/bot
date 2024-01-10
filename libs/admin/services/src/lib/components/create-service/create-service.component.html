@@ -43,6 +43,13 @@
     >
     </hospitality-bot-category>
 
+    <hospitality-bot-select
+      class="half-width"
+      controlName="serviceType"
+      label="Type"
+      [options]="types"
+    ></hospitality-bot-select>
+
     <hospitality-bot-custom-file-upload
       class="upload"
       formControlName="imageUrl"

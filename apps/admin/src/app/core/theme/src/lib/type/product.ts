@@ -36,3 +36,9 @@ export type Modules = Record<
     tables: Partial<Tables>;
   }
 >;
+
+export enum FilterTabs {
+  PROPERTY = 'property',
+  OUTLETS = 'outlets',
+  GUEST = 'guest',
+}

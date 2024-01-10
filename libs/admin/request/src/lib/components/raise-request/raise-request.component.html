@@ -1,12 +1,4 @@
 <div class="container">
-  <p-sidebar
-    class="sidebar-slide"
-    [(visible)]="sidebarVisible"
-    position="right"
-    [showCloseIcon]="false"
-  >
-    <ng-container #sidebarSlide></ng-container>
-  </p-sidebar>
   <div class="header">
     <div class="button raise-request-btn">
       <!-- <img
@@ -18,7 +10,7 @@
     </div>
     <div (click)="close({ status: false })" class="close">
       <i
-        [ngClass]="!isSideBar ? 'fa fa-times' : 'pi pi-arrow-right'"
+        [ngClass]="!isSidebar ? 'fa fa-times' : 'pi pi-arrow-right'"
         style="color: #ffff;"
         aria-hidden="true"
       ></i>
@@ -101,10 +93,9 @@
         *ngIf="!isItemUuid"
         class="full-width department"
         [disabled]="!requestFG.get('itemCode').value"
-        [options]="departmentList"
+        [options]="assigneeList"
         label="Assign To"
         controlName="assigneeId"
-        [isGroupOptions]="true"
       ></hospitality-bot-select>
 
       <hospitality-bot-text-area

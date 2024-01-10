@@ -1,7 +1,5 @@
 import {
-  Compiler,
   Component,
-  ComponentFactoryResolver,
   Input,
   OnInit,
   ViewChild,
@@ -24,14 +22,13 @@ import {
   ReservationCurrentStatus,
 } from '../../../../../manage-reservation/src/lib/models/reservations.model';
 import * as moment from 'moment';
-import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { FormService } from '../../../../../manage-reservation/src/lib/services/form.service';
 import { ReservationForm } from '../../../../../manage-reservation/src/lib/constants/form';
 import { Subscription } from 'rxjs';
 import { AgentTableResponse } from 'libs/admin/agent/src/lib/types/response';
-import { AddAgentComponent } from 'libs/admin/agent/src/lib/components/add-agent/add-agent.component';
-import { AddCompanyComponent } from 'libs/admin/company/src/lib/components/add-company/add-company.component';
 import { CompanyResponseType } from 'libs/admin/company/src/lib/types/response';
+import { SideBarService } from 'apps/admin/src/app/core/theme/src/lib/services/sidebar.service';
+import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 
 @Component({
   selector: 'hospitality-bot-booking-info',
@@ -97,9 +94,8 @@ export class BookingInfoComponent implements OnInit {
     public controlContainer: ControlContainer,
     private configService: ConfigService,
     private globalFilterService: GlobalFilterService,
-    private resolver: ComponentFactoryResolver,
-    private compiler: Compiler,
-    private formService: FormService
+    private formService: FormService,
+    private sidebarService: SideBarService
   ) {}
 
   ngOnInit(): void {
@@ -447,22 +443,12 @@ export class BookingInfoComponent implements OnInit {
   }
 
   showAgent() {
-    const lazyModulePromise = import(
-      'libs/admin/agent/src/lib/admin-agent.module'
-    )
-      .then((module) => {
-        return this.compiler.compileModuleAsync(module.AdminAgentModule);
-      })
-      .catch((error) => {
-        console.error('Error loading the lazy module:', error);
-      });
-    lazyModulePromise.then((moduleFactory) => {
-      this.sidebarVisible = true;
-      const factory = this.resolver.resolveComponentFactory(AddAgentComponent);
-      this.sidebarSlide.clear();
-      const componentRef = this.sidebarSlide.createComponent(factory);
-      componentRef.instance.isSideBar = true;
-      componentRef.instance.onClose.subscribe((res) => {
+    this.sidebarService.openSidebar({
+      componentName: 'AddAgent',
+      containerRef: this.sidebarSlide,
+      onOpen: () => (this.sidebarVisible = true),
+      onClose: (res) => {
+        this.sidebarVisible = false;
         if (typeof res !== 'boolean') {
           this.selectedAgent = {
             label: `${res?.firstName}`,
@@ -473,31 +459,17 @@ export class BookingInfoComponent implements OnInit {
             this.patchValue(this.marketSegmentControl, res.marketSegment);
           this.formService.getSummary.next(true);
         }
-        this.sidebarVisible = false;
-        componentRef.destroy();
-      });
+      },
     });
   }
 
   showCompany() {
-    const lazyModulePromise = import(
-      'libs/admin/company/src/lib/admin-company.module'
-    )
-      .then((module) => {
-        return this.compiler.compileModuleAsync(module.AdminCompanyModule);
-      })
-      .catch((error) => {
-        console.error('Error loading the lazy module:', error);
-      });
-    lazyModulePromise.then((moduleFactory) => {
-      this.sidebarVisible = true;
-      const factory = this.resolver.resolveComponentFactory(
-        AddCompanyComponent
-      );
-      this.sidebarSlide.clear();
-      const componentRef = this.sidebarSlide.createComponent(factory);
-      componentRef.instance.isSideBar = true;
-      componentRef.instance.onClose.subscribe((res) => {
+    this.sidebarService.openSidebar({
+      componentName: 'AddCompany',
+      containerRef: this.sidebarSlide,
+      onOpen: () => (this.sidebarVisible = true),
+      onClose: (res) => {
+        this.sidebarVisible = false;
         if (typeof res !== 'boolean') {
           this.selectedCompany = {
             label: `${res?.companyName}`,
@@ -508,9 +480,7 @@ export class BookingInfoComponent implements OnInit {
             this.patchValue(this.marketSegmentControl, res.marketSegment);
           this.formService.getSummary.next(true);
         }
-        this.sidebarVisible = false;
-        componentRef.destroy();
-      });
+      },
     });
   }
 

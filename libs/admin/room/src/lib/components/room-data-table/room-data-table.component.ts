@@ -1,7 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
-import { MatDialogConfig } from '@angular/material/dialog';
-import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
 import {
   GlobalFilterService,
   RoutesConfigService,
@@ -9,9 +7,9 @@ import {
 import {
   AdminUtilityService,
   BaseDatatableComponent,
+  openModal,
 } from '@hospitality-bot/admin/shared';
 import {
-  ModalService,
   SnackBarService,
 } from '@hospitality-bot/shared/material';
 import * as FileSaver from 'file-saver';
@@ -30,6 +28,7 @@ import {
   RoomTypeListResponse,
 } from '../../types/service-response';
 import { FormService } from '../../services/form.service';
+import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 
 @Component({
   selector: 'hospitality-bot-room-data-table',
@@ -54,11 +53,9 @@ export class RoomDataTableComponent extends BaseDatatableComponent
     private adminUtilityService: AdminUtilityService,
     private globalFilterService: GlobalFilterService,
     protected snackbarService: SnackBarService,
-    private router: Router,
-    private modalService: ModalService,
     private formService: FormService,
-    private route: ActivatedRoute,
-    private routesConfigService: RoutesConfigService
+    private routesConfigService: RoutesConfigService,
+    private dialogService: DialogService
   ) {
     super(fb);
   }
@@ -286,55 +283,50 @@ export class RoomDataTableComponent extends BaseDatatableComponent
     if (this.selectedTab === TableValue.roomType) {
       const roomTypeStatus = status;
       if (!roomTypeStatus) {
-        const dialogConfig = new MatDialogConfig();
-        dialogConfig.disableClose = true;
-        const togglePopupCompRef = this.modalService.openDialog(
-          ModalComponent,
-          dialogConfig
-        );
-
         const soldOut = rowData?.roomCount?.soldOut;
 
-        if (soldOut) {
-          togglePopupCompRef.componentInstance.content = {
-            heading: 'Unpublish Page',
-            description: [
-              `${soldOut} rooms are already sold out in this category`,
-              'You can not mark this room type inactive',
-            ],
-          };
-          togglePopupCompRef.componentInstance.actions = undefined;
-        } else {
-          togglePopupCompRef.componentInstance.content = {
-            heading: 'In-active Room Type',
-            description: [
-              `There are ${rowData?.roomCount ?? 0} rooms in this room type`,
-              'You are about to mark this room type in-active.',
-              'Are you Sure?',
-            ],
-          };
-          togglePopupCompRef.componentInstance.actions = [
-            {
-              label: 'No',
-              onClick: () => this.modalService.close(),
-              variant: 'outlined',
-            },
-            {
-              label: 'Yes',
-              onClick: () => {
-                this.handleRoomTypeStatus(
-                  roomTypeStatus as boolean,
-                  rowData.id
-                );
-                this.modalService.close();
-              },
-              variant: 'contained',
-            },
-          ];
-        }
-
-        togglePopupCompRef.componentInstance.onClose.subscribe(() => {
-          this.modalService.close();
+        let modalRef: DynamicDialogRef;
+        const data: Partial<ModalComponent> = {
+          heading: soldOut ? 'Unpublish Page' : 'In-active Room Type',
+          descriptions: soldOut
+            ? [
+                `${soldOut} rooms are already sold out in this category`,
+                'You can not mark this room type inactive',
+              ]
+            : [
+                `There are ${rowData?.roomCount ?? 0} rooms in this room type`,
+                'You are about to mark this room type in-active.',
+                'Are you Sure?',
+              ],
+          actions: soldOut
+            ? undefined
+            : [
+                {
+                  label: 'No',
+                  onClick: () => modalRef.close(),
+                  variant: 'outlined',
+                },
+                {
+                  label: 'Yes',
+                  onClick: () => {
+                    this.handleRoomTypeStatus(
+                      roomTypeStatus as boolean,
+                      rowData.id
+                    );
+                    modalRef.close();
+                  },
+                  variant: 'contained',
+                },
+              ],
+        };
+        modalRef = openModal({
+          config: {
+            width: '35vw',
+            styleClass: 'confirm-dialog',
+            data: data,
+          },
+          dialogService: this.dialogService,
+          component: ModalComponent,
         });
       } else {
         this.handleRoomTypeStatus(roomTypeStatus as boolean, rowData.id);

@@ -12,7 +12,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { FeedbackTableService } from '../../services/table.service';
 import { Subscription } from 'rxjs';
-import { UserService } from '@hospitality-bot/admin/shared';
+import { UserService, manageMaskZIndex } from '@hospitality-bot/admin/shared';
 import { Departmentpermission } from '../../data-models/feedback-card.model';
 import {
   FlexibleConnectedPositionStrategy,
@@ -75,6 +75,7 @@ export class ActionOverlayComponent implements OnInit, OnDestroy {
 
   handleButtonClick(event) {
     event.stopPropagation();
+    manageMaskZIndex(undefined, '.cdk-overlay-container');
     if (this.positionStrategy) {
       this.removeOverlay();
     } else {

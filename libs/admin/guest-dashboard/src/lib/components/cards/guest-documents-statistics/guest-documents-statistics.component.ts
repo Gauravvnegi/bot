@@ -113,31 +113,6 @@ export class GuestDocumentsStatisticsComponent implements OnInit, OnDestroy {
     }
   }
 
-  // TODO : Need to remove
-  // openTableModal() {
-  //   const dialogConfig = new MatDialogConfig();
-  //   dialogConfig.disableClose = true;
-  //   dialogConfig.width = '100%';
-  //   const tableCompRef = this._modal.openDialog(
-  //     GuestDatatableModalComponent,
-  //     dialogConfig
-  //   );
-
-  //   this._translateService
-  //     .get('document.title')
-  //     .subscribe(
-  //       (message) => (tableCompRef.componentInstance.tableName = message)
-  //     );
-  //   tableCompRef.componentInstance.tabFilterItems = this.tabFilterItems;
-  //   tableCompRef.componentInstance.callingMethod = 'getAllGuestStats';
-  //   tableCompRef.componentInstance.guestFilter = 'GUESTDOCUMENTS';
-  //   tableCompRef.componentInstance.exportURL = 'exportCSVStat';
-
-  //   tableCompRef.componentInstance.onModalClose.subscribe((res) => {
-  //     tableCompRef.close();
-  //   });
-  // }
-
   /**
    * @function openTableModal To open modal pop-up for guest table based on document status filter.
    */
@@ -151,7 +126,7 @@ export class GuestDocumentsStatisticsComponent implements OnInit, OnDestroy {
     };
 
     openModal({
-      config: { data: data },
+      config: { width: '80%', data: data },
       dialogService: this.dialogService,
       component: GuestDatatableModalComponent,
     });

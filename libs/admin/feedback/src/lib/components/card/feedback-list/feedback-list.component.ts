@@ -65,7 +65,7 @@ export class FeedbackListComponent implements OnInit, OnDestroy {
     this.loading = true;
     this.initFG();
     this.registerListeners();
-    this.cardService.$selectedFeedback.next(null);
+    this.cardService?.$selectedFeedback.next(null);
   }
 
   initFG() {
@@ -133,7 +133,7 @@ export class FeedbackListComponent implements OnInit, OnDestroy {
   listenForAssigneeChange() {
     this.$subscription.add(
       this.cardService.$assigneeChange.subscribe((response) => {
-        if (response.status) {
+        if (response?.status) {
           this.loadInitialData([
             ...this.globalQueries,
             this.filterData,

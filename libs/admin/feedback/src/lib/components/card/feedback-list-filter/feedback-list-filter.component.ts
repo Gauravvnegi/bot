@@ -93,13 +93,15 @@ export class FeedbackListFilterComponent implements OnInit, OnDestroy {
   }
 
   addDepartmentControls(response) {
-    if (this.parentFG.get('department')) {
-      this.parentFG.patchValue({ department: response.map((key) => false) });
-    } else
-      this.parentFG.addControl(
-        'department',
-        this.fb.array(response.map((key) => false))
-      );
+    if (response) {
+      if (this.parentFG.get('department')) {
+        this.parentFG.patchValue({ department: response?.map((key) => false) });
+      } else
+        this.parentFG.addControl(
+          'department',
+          this.fb.array(response?.map((key) => false))
+        );
+    }
   }
 
   initFG(): void {

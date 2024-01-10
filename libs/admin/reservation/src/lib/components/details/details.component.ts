@@ -16,7 +16,7 @@ import {
   RoutesConfigService,
   SubscriptionPlanService,
 } from '@hospitality-bot/admin/core/theme';
-import { MarketingNotificationComponent } from '@hospitality-bot/admin/notification';
+// import { MarketingNotificationComponent } from '@hospitality-bot/admin/notification';
 import {
   BookingDetailService,
   ConfigService,
@@ -37,9 +37,9 @@ import { AdminDocumentsDetailsComponent } from '../admin-documents-details/admin
 import { SendMessageComponent } from 'libs/admin/notification/src/lib/components/send-message/send-message.component';
 import { MenuItem } from 'primeng/api';
 import { FileData } from '../../models/reservation-table.model';
-import { SnackbarHandlerService } from 'libs/admin/global-shared/src/lib/services/snackbar-handler.service';
 import { SideBarService } from 'apps/admin/src/app/core/theme/src/lib/services/sidebar.service';
 import { ReservationFormService } from '../../services/reservation-form.service';
+import { SidebarComponentNames } from 'libs/admin/global-shared/src/lib/constants/common-components';
 
 @Component({
   selector: 'hospitality-bot-details',
@@ -150,14 +150,11 @@ export class DetailsComponent implements OnInit, OnDestroy {
     private configService: ConfigService,
     private resolver: ComponentFactoryResolver,
     private routesConfigService: RoutesConfigService,
-    public snackbarHandler: SnackbarHandlerService,
     protected sidebarService: SideBarService,
     private bookingDetailService: BookingDetailService,
-    private formService: ReservationFormService
+    private formService: ReservationFormService // public dialogService: DialogService
   ) {
     this.self = this;
-    this.snackbarHandler.isDecreaseSnackbarZIndex = false; // Protect MUI Element hiding on snackbar open
-    this.increaseZIndex(true);
     this.initDetailsForm();
   }
 
@@ -677,22 +674,13 @@ export class DetailsComponent implements OnInit, OnDestroy {
   }
 
   manualCheckin() {
-    this.formService.manualCheckin(this.bookingId, () => {
+    this.formService.manualCheckin(this.details.stayDetails.arrivalTimeStamp,  this.bookingId, () => {
       this.details.currentJourneyDetails.status = 'COMPLETED';
     });
   }
 
   checkForConfirmedBooking() {
     return !['NEW', 'NOSHOW', 'CANCELED'].includes(this.details.pmsStatus);
-  }
-
-  // TODO: Need to remove
-  increaseZIndex(toggleZIndex: boolean) {
-    const cdkOverlayContainer = document.querySelector(
-      '.cdk-overlay-container'
-    ) as HTMLElement;
-    if (cdkOverlayContainer)
-      cdkOverlayContainer.style.zIndex = toggleZIndex ? '2000' : '1000';
   }
 
   verifyJourney(journeyName, status) {
@@ -735,37 +723,91 @@ export class DetailsComponent implements OnInit, OnDestroy {
         return;
       }
 
-      this.sidebarVisible = true;
-      this.sideBar.clear();
       if (channel === 'EMAIL') {
-        const emailFactory = this.resolver.resolveComponentFactory(
-          MarketingNotificationComponent
-        );
-        const emailRef = this.sideBar.createComponent(emailFactory);
-        emailRef.instance.isEmail = true;
-        emailRef.instance.email = this.primaryGuest.email;
-        emailRef.instance.entityId = this.entityId;
-        emailRef.instance.details = this.details;
-        emailRef.instance.roomNumber = this.details.stayDetails.roomNumber;
-        emailRef.instance.isModal = true;
-        emailRef.instance.onModalClose.subscribe((res) => {
-          this.sidebarVisible = false;
+        /**
+         * @TODO MarketNotificationComponent should add in the
+         * common components of openSidebar ( Ayush )
+         */
+        this.sidebarService.openSidebar({
+          componentName: SidebarComponentNames.MarketNotification,
+          containerRef: this.sideBar,
+          data: {
+            isEmail: true,
+            email: this.primaryGuest.email,
+            details: this.details,
+            roomNumber: this.details.stayDetails.roomNumber,
+            isModal: true,
+          },
+          onOpen: () => {
+            this.sidebarVisible = true;
+          },
+          onClose: (res) => {
+            this.sidebarVisible = false;
+          },
         });
+
+        // const emailRef = this.sidebar.createComponent(emailFactory);
+        // emailRef.instance.isEmail = true;
+        // emailRef.instance.email = this.primaryGuest.email;
+        // emailRef.instance.entityId = this.entityId;
+        // emailRef.instance.details = this.details;
+        // emailRef.instance.roomNumber = this.details.stayDetails.roomNumber;
+        // emailRef.instance.isModal = true;
+        // emailRef.instance.onCloseSidebar.subscribe((res) => {
+        //   this.sidebarVisible = false;
+        // });
       } else {
-        const messageFactory = this.resolver.resolveComponentFactory(
-          SendMessageComponent
-        );
-        const messageRef = this.sideBar.createComponent(messageFactory);
-        messageRef.instance.isEmail = false;
-        messageRef.instance.channel = channel.replace(/\w\S*/g, function (txt) {
-          return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+        this.sidebarService.openSidebar<SendMessageComponent>({
+          componentName: SidebarComponentNames.SendMessage,
+          data: {
+            isEmail: false,
+            channel: channel.replace(/\w\S*/g, function (txt) {
+              return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+            }),
+            entityId: this.entityId,
+            roomNumber: this.details.stayDetails.roomNumber,
+            isModal: true,
+          },
+          onOpen: () => {
+            this.sidebarVisible = true;
+          },
+          onClose: () => {
+            this.sidebarVisible = false;
+          },
         });
-        messageRef.instance.entityId = this.entityId;
-        messageRef.instance.roomNumber = this.details.stayDetails.roomNumber;
-        messageRef.instance.isModal = true;
-        messageRef.instance.onModalClose.subscribe((res) => {
-          this.sidebarVisible = false;
-        });
+
+        // const modalData: Partial<SendMessageComponent> = {
+        //   isEmail: false,
+        //   channel: channel.replace(/\w\S*/g, function (txt) {
+        //     return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+        //   }),
+        //   entityId: this.entityId,
+        //   roomNumber: this.details.stayDetails.roomNumber,
+        //   isModal: true,
+        // };
+        // openModal({
+        //   config: {
+        //     width: '80%',
+        //     data: modalData,
+        //   },
+        //   component: MarketingNotificationComponent,
+        //   dialogService: this.dialogService,
+        // });
+
+        // const messageFactory = this.resolver.resolveComponentFactory(
+        //   SendMessageComponent
+        // );
+        // const messageRef = this.sideBar.createComponent(messageFactory);
+        // messageRef.instance.isEmail = false;
+        // messageRef.instance.channel = channel.replace(/\w\S*/g, function (txt) {
+        //   return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+        // });
+        // messageRef.instance.entityId = this.entityId;
+        // messageRef.instance.roomNumber = this.details.stayDetails.roomNumber;
+        // messageRef.instance.isModal = true;
+        // messageRef.instance.onModalClose.subscribe((res) => {
+        //   this.sidebarVisible = false;
+        // });
       }
     } else {
       this.sidebarVisible = false;

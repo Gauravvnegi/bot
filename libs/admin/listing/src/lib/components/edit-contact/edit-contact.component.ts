@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Regex } from '@hospitality-bot/admin/shared';
 import { contactConfig } from '../../constants/contact';
+import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 
 @Component({
   selector: 'hospitality-bot-edit-contact',
@@ -16,7 +17,19 @@ export class EditContactComponent implements OnInit {
   @Input() entityId: string;
   contactFA: FormArray;
   salutationList = contactConfig.datatable.salutationList;
-  constructor(private _fb: FormBuilder) {
+  constructor(
+    private _fb: FormBuilder,
+    private dialogConfig: DynamicDialogConfig,
+    private dialogRef: DynamicDialogRef
+  ) {
+    /**
+     * @Remarks Extracting data from he dialog service
+     */
+    if (this.dialogConfig?.data) {
+      Object.entries(this.dialogConfig.data).forEach(([key, value]) => {
+        this[key] = value;
+      });
+    }
     this.createFA();
   }
 
@@ -65,7 +78,8 @@ export class EditContactComponent implements OnInit {
    * @function close To close add contact page.
    */
   close() {
-    this.onContactClosed.emit({ status: false });
+    this.onContactClosed.emit({ status: false }); // remove it
+    this.dialogRef.close({ status: false });
   }
 
   /**
@@ -78,6 +92,10 @@ export class EditContactComponent implements OnInit {
       return;
     }
     this.onContactClosed.emit({
+      status: true,
+      data: this.contactFA.getRawValue(),
+    }); // need to remove
+    this.dialogRef.close({
       status: true,
       data: this.contactFA.getRawValue(),
     });

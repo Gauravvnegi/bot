@@ -6,7 +6,6 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
-import { MatDialogConfig } from '@angular/material/dialog';
 import {
   GlobalFilterService,
   RoutesConfigService,
@@ -16,11 +15,9 @@ import {
   ModuleNames,
   Option,
   QueryConfig,
+  openModal,
 } from '@hospitality-bot/admin/shared';
-import {
-  ModalService,
-  SnackBarService,
-} from '@hospitality-bot/shared/material';
+import { SnackBarService } from '@hospitality-bot/shared/material';
 import { RoomTypes } from 'libs/admin/channel-manager/src/lib/models/bulk-update.models';
 import { ModalComponent } from 'libs/admin/shared/src/lib/components/modal/modal.component';
 import { Accordion } from 'primeng/accordion';
@@ -42,6 +39,7 @@ import {
   ConfigType,
   DynamicSeasonPricingForm,
 } from '../../types/dynamic-pricing.types';
+import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 
 export type ControlTypes = 'season' | 'occupancy' | 'hotel-occupancy';
 
@@ -95,9 +93,9 @@ export class OccupancyComponent implements OnInit {
     private adminUtilityService: AdminUtilityService,
     private snackbarService: SnackBarService,
     public fb: FormBuilder,
-    private modalService: ModalService,
     private barPriceService: BarPriceService,
-    private routesConfigService: RoutesConfigService
+    private routesConfigService: RoutesConfigService,
+    private dialogService: DialogService
   ) {}
 
   ngOnInit(): void {
@@ -307,55 +305,53 @@ export class OccupancyComponent implements OnInit {
         const season = this.dynamicPricingControl.occupancyFA;
         const { name, id, type } = (season.at(index) as FormGroup).controls;
         if (type.value === 'update') {
-          const dialogConfig = new MatDialogConfig();
-          dialogConfig.disableClose = true;
-          const togglePopupCompRef = this.modalService.openDialog(
-            ModalComponent,
-            dialogConfig
-          );
-          togglePopupCompRef.componentInstance.content = {
+          let dialogRef: DynamicDialogRef;
+          const modalData: Partial<ModalComponent> = {
             heading: 'Remove Season',
-            description: [
+            descriptions: [
               'Do you want to remove this season.',
               'Are you Sure?',
             ],
-          };
-          togglePopupCompRef.componentInstance.actions = [
-            {
-              label: 'No',
-              onClick: () => this.modalService.close(),
-              variant: 'outlined',
-            },
-            {
-              label: 'Yes',
-              onClick: () => {
-                this.$subscription.add(
-                  this.dynamicPricingService
-                    .deleteDynamicPricing(id.value)
-                    .subscribe(
-                      (res) => {
-                        this.snackbarService.openSnackBarAsText(
-                          `Season '${name.value}' deleted Successfully.`,
-                          '',
-                          { panelClass: 'success' }
-                        );
-
-                        // season.removeAt(index);
-                        this.navigateToMain();
-                      },
-                      (error) => {
-                        this.loading = false;
-                      },
-                      this.handleFinal
-                    )
-                );
-                this.modalService.close();
+            actions: [
+              {
+                label: 'No',
+                onClick: () => dialogRef.close(),
+                variant: 'outlined',
               },
-              variant: 'contained',
+              {
+                label: 'Yes',
+                onClick: () => {
+                  this.$subscription.add(
+                    this.dynamicPricingService
+                      .deleteDynamicPricing(id.value)
+                      .subscribe(
+                        (res) => {
+                          this.snackbarService.openSnackBarAsText(
+                            `Season '${name.value}' deleted Successfully.`,
+                            '',
+                            { panelClass: 'success' }
+                          );
+                          season.removeAt(index);
+                        },
+                        (error) => {
+                          this.loading = false;
+                        },
+                        this.handleFinal
+                      )
+                  );
+                  dialogRef.close();
+                },
+                variant: 'contained',
+              },
+            ],
+          };
+          dialogRef = openModal({
+            config: {
+              styleClass: 'confirm-dialog',
+              data: modalData,
             },
-          ];
-          togglePopupCompRef.componentInstance.onClose.subscribe(() => {
-            this.modalService.close();
+            component: ModalComponent,
+            dialogService: this.dialogService,
           });
         } else {
           season.removeAt(index);

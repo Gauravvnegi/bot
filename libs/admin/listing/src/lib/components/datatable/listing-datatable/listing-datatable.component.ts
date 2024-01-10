@@ -1,7 +1,6 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
-import { MatTabChangeEvent } from '@angular/material/tabs';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import {
   GlobalFilterService,
   RoutesConfigService,
@@ -12,13 +11,9 @@ import {
   NavRouteOption,
   sharedConfig,
 } from '@hospitality-bot/admin/shared';
-import {
-  ModalService,
-  SnackBarService,
-} from '@hospitality-bot/shared/material';
+import { SnackBarService } from '@hospitality-bot/shared/material';
 import { TranslateService } from '@ngx-translate/core';
 import * as FileSaver from 'file-saver';
-import { SelectedEntityState } from 'libs/admin/dashboard/src/lib/types/dashboard.type';
 import { LazyLoadEvent, SortEvent } from 'primeng/api';
 import { Observable, Subscription } from 'rxjs';
 import { listingConfig } from '../../../constants/listing';
@@ -59,9 +54,7 @@ export class ListingDatatableComponent extends BaseDatatableComponent
     protected _adminUtilityService: AdminUtilityService,
     protected globalFilterService: GlobalFilterService,
     protected snackbarService: SnackBarService,
-    protected _modal: ModalService,
     protected router: Router,
-    private route: ActivatedRoute,
     protected _translateService: TranslateService,
     private listingService: ListingService,
     private routesConfigService: RoutesConfigService

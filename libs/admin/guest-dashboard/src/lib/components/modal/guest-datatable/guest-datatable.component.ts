@@ -13,10 +13,7 @@ import {
   BookingDetailService,
   FeedbackService,
 } from '@hospitality-bot/admin/shared';
-import {
-  ModalService,
-  SnackBarService,
-} from '@hospitality-bot/shared/material';
+import { SnackBarService } from '@hospitality-bot/shared/material';
 import * as FileSaver from 'file-saver';
 import { Observable } from 'rxjs';
 import {
@@ -40,6 +37,7 @@ import { TranslateService } from '@ngx-translate/core';
     '../../datatable/guest/guest.component.scss',
     './guest-datatable.component.scss',
   ],
+  providers: [GuestTableService],
 })
 export class GuestDatatableModalComponent extends GuestDatatableComponent
   implements OnInit, OnDestroy {
@@ -59,7 +57,6 @@ export class GuestDatatableModalComponent extends GuestDatatableComponent
     protected _adminUtilityService: AdminUtilityService,
     protected globalFilterService: GlobalFilterService,
     protected snackbarService: SnackBarService,
-    protected _modal: ModalService,
     public feedbackService: FeedbackService,
     private router: Router,
     public bookingDetailService: BookingDetailService,
@@ -73,7 +70,6 @@ export class GuestDatatableModalComponent extends GuestDatatableComponent
       _adminUtilityService,
       globalFilterService,
       snackbarService,
-      _modal,
       feedbackService,
       bookingDetailService
     );

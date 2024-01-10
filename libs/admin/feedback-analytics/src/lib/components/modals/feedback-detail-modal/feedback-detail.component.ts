@@ -32,6 +32,7 @@ import {
 } from '../../../data-models/feedback-datatable.model';
 import { CardService } from '../../../services/card.service';
 import { FeedbackTableService } from '../../../services/table.service';
+import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 
 @Component({
   selector: 'hospitality-bot-feedback-detail-modal',
@@ -51,8 +52,10 @@ import { FeedbackTableService } from '../../../services/table.service';
       ]),
     ]),
   ],
+  providers: [CardService, FeedbackTableService],
 })
 export class FeedbackDetailModalComponent implements OnInit, OnDestroy {
+  data: any;
   @ViewChild('feedbackChatRef') private feedbackChatRef: ElementRef;
   @Output() onDetailsClose = new EventEmitter();
   globalFeedbackConfig = feedback;
@@ -65,12 +68,21 @@ export class FeedbackDetailModalComponent implements OnInit, OnDestroy {
   constructor(
     protected cardService: CardService,
     public globalFilterService: GlobalFilterService,
-    @Inject(MAT_DIALOG_DATA) public data: any,
     protected userService: UserService,
     protected _adminUtilityService: AdminUtilityService,
     protected tableService: FeedbackTableService,
-    protected snackbarService: SnackBarService
+    protected snackbarService: SnackBarService,
+    private dialogConfig: DynamicDialogConfig,
+    private dialogRef: DynamicDialogRef
   ) {
+    /**
+     * @Remarks Extracting data from he dialog service
+     */
+    if (this.dialogConfig?.data) {
+      Object.entries(this.dialogConfig.data).forEach(([key, value]) => {
+        this[key] = value;
+      });
+    }
     this.feedbackFG = new FormGroup({
       assignee: new FormControl(''),
     });
@@ -82,6 +94,7 @@ export class FeedbackDetailModalComponent implements OnInit, OnDestroy {
 
   close() {
     this.onDetailsClose.emit();
+    this.dialogRef.close();
   }
 
   getUserPermission() {

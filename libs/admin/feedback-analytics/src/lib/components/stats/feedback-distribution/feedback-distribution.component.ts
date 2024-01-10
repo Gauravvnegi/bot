@@ -3,19 +3,17 @@ import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
   AdminUtilityService,
   CircularChart,
+  openModal,
 } from '@hospitality-bot/admin/shared';
-import {
-  ModalService,
-  SnackBarService,
-} from '@hospitality-bot/shared/material';
+import { SnackBarService } from '@hospitality-bot/shared/material';
 import { Subscription } from 'rxjs';
 import { feedback } from '../../../constants/feedback';
 import { FeedbackDistribution } from '../../../data-models/statistics.model';
 import { TranslateService } from '@ngx-translate/core';
 import { chartConfig } from '../../../constants/chart';
-import { MatDialogConfig } from '@angular/material/dialog';
 import { FeedbackDatatableModalComponent } from '../../modals/feedback-datatable/feedback-datatable.component';
 import { StatisticsService } from '../../../services/feedback-statistics.service';
+import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 
 @Component({
   selector: 'hospitality-bot-feedback-distribution',
@@ -50,7 +48,7 @@ export class FeedbackDistributionComponent implements OnInit, OnDestroy {
     protected _adminUtilityService: AdminUtilityService,
     protected snackbarService: SnackBarService,
     protected _translateService: TranslateService,
-    protected _modalService: ModalService
+    private dialogService: DialogService
   ) {}
 
   ngOnInit(): void {
@@ -167,7 +165,7 @@ export class FeedbackDistributionComponent implements OnInit, OnDestroy {
         this.initChartData();
       },
       ({ error }) => {
-        this.loading = false; 
+        this.loading = false;
       }
     );
   }
@@ -184,24 +182,25 @@ export class FeedbackDistributionComponent implements OnInit, OnDestroy {
   }
 
   openTableModal() {
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.disableClose = true;
-    dialogConfig.width = '100%';
-    dialogConfig.data = {
-      tableName: feedback.tableName.distribution,
-      tabFilterItems: this.createTabFilterItem(),
-      tabFilterIdx: 0,
-      globalFeedbackFilterType: this.globalFeedbackFilterType,
-      config: [{ feedbackGraph: 'DISTRIBUTION' }],
-      feedbackType: this.getFeedbackType(),
+    let dialogRef: DynamicDialogRef;
+    const modalData: Partial<FeedbackDatatableModalComponent> = {
+      data: {
+        tableName: feedback.tableName.distribution,
+        tabFilterItems: this.createTabFilterItem(),
+        tabFilterIdx: 0,
+        globalFeedbackFilterType: this.globalFeedbackFilterType,
+        config: [{ feedbackGraph: 'DISTRIBUTION' }],
+        feedbackType: this.getFeedbackType(),
+      },
     };
-    const detailCompRef = this._modalService.openDialog(
-      FeedbackDatatableModalComponent,
-      dialogConfig
-    );
-    detailCompRef.componentInstance.onModalClose.subscribe((res) => {
-      // remove loader for detail close
-      detailCompRef.close();
+    dialogRef = openModal({
+      config: {
+        width: '80%',
+        styleClass: 'dynamic-modal',
+        data: modalData,
+      },
+      component: FeedbackDatatableModalComponent,
+      dialogService: this.dialogService,
     });
   }
 

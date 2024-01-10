@@ -1,17 +1,14 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
-import { AdminUtilityService } from '@hospitality-bot/admin/shared';
-import {
-  ModalService,
-  SnackBarService,
-} from '@hospitality-bot/shared/material';
+import { AdminUtilityService, openModal } from '@hospitality-bot/admin/shared';
+import { SnackBarService } from '@hospitality-bot/shared/material';
 import { TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
 import { feedback } from '../../../constants/feedback';
 import { GTM } from '../../../data-models/statistics.model';
-import { MatDialogConfig } from '@angular/material/dialog';
 import { FeedbackDatatableModalComponent } from '../../modals/feedback-datatable/feedback-datatable.component';
 import { StatisticsService } from '../../../services/feedback-statistics.service';
+import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 
 @Component({
   selector: 'hospitality-bot-gtm-across-services',
@@ -34,7 +31,7 @@ export class GtmAcrossServicesComponent implements OnInit, OnDestroy {
     protected _adminUtilityService: AdminUtilityService,
     protected snackbarService: SnackBarService,
     protected _translateService: TranslateService,
-    protected _modalService: ModalService
+    private dialogService: DialogService
   ) {}
 
   ngOnInit(): void {
@@ -152,24 +149,25 @@ export class GtmAcrossServicesComponent implements OnInit, OnDestroy {
   }
 
   openTableModal() {
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.disableClose = true;
-    dialogConfig.width = '100%';
-    dialogConfig.data = {
-      tableName: 'Feedback GTM across services',
-      tabFilterItems: this.createTabFilterItem(),
-      tabFilterIdx: 0,
-      globalFeedbackFilterType: this.globalFeedbackFilterType,
-      config: [{ feedbackGraph: 'GUESTTOMEET' }],
-      feedbackType: this.getFeedbackType(),
+    let dialogRef: DynamicDialogRef;
+    const modalData: Partial<FeedbackDatatableModalComponent> = {
+      data: {
+        tableName: 'Feedback GTM across services',
+        tabFilterItems: this.createTabFilterItem(),
+        tabFilterIdx: 0,
+        globalFeedbackFilterType: this.globalFeedbackFilterType,
+        config: [{ feedbackGraph: 'GUESTTOMEET' }],
+        feedbackType: this.getFeedbackType(),
+      },
     };
-    const detailCompRef = this._modalService.openDialog(
-      FeedbackDatatableModalComponent,
-      dialogConfig
-    );
-    detailCompRef.componentInstance.onModalClose.subscribe((res) => {
-      // remove loader for detail close
-      detailCompRef.close();
+    dialogRef = openModal({
+      config: {
+        width: '80%',
+        styleClass: 'dynamic-modal',
+        data: modalData,
+      },
+      component: FeedbackDatatableModalComponent,
+      dialogService: this.dialogService,
     });
   }
 

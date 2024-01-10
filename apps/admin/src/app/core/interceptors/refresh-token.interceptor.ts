@@ -7,7 +7,6 @@ import {
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { UserService } from '@hospitality-bot/admin/shared';
-import { ModalService } from '@hospitality-bot/shared/material';
 import { CookieService } from 'ngx-cookie-service';
 import { BehaviorSubject, Observable, throwError } from 'rxjs';
 import { catchError, filter, switchMap, take } from 'rxjs/operators';
@@ -25,7 +24,6 @@ export class RefreshTokenInterceptor implements HttpInterceptor {
     private _userService: UserService,
     private _router: Router,
     private loadingService: LoadingService,
-    private modalService: ModalService,
     private cookieService: CookieService
   ) {}
   intercept(
@@ -42,7 +40,6 @@ export class RefreshTokenInterceptor implements HttpInterceptor {
             console.log(
               'Error occured in refresh token. So logout current user and redirecting to login'
             );
-            this.modalService.close();
             this.logoutUser();
           }
           this.loadingService.close();

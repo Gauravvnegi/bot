@@ -609,6 +609,7 @@ export class ReservationCalendarViewComponent implements OnInit {
     switch (event.value) {
       case 'CHECKIN':
         this.formService.manualCheckin(
+          this.getCheckinDate(event.id),
           event.id,
           (data: JourneyData) => {
             this.updateRoomType(data);
@@ -661,6 +662,13 @@ export class ReservationCalendarViewComponent implements OnInit {
           additionalPath: `${event.id}`,
         });
     }
+  }
+
+  getCheckinDate(id: string) {
+    const reservation = this.reservationListData.find(
+      (reservation) => reservation.id === id
+    );
+    return reservation.from;
   }
 
   activateAndGeneratePrecheckin(reservationId: string) {

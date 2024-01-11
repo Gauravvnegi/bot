@@ -1,4 +1,11 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  Input,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatSelectChange } from '@angular/material/select';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
@@ -32,9 +39,9 @@ export class ResponseRateComponent implements OnInit, OnDestroy {
   stats: SharedStats;
   rateGraphFG: FormGroup;
   keyLabels = [
-    { label: 'All', key: 'ALL' },
-    { label: 'Whatsapp', key: 'WHATSAPP' },
-    { label: 'Email', key: 'EMAIL' },
+    { label: 'All', value: 'ALL' },
+    { label: 'Whatsapp', value: 'WHATSAPP' },
+    { label: 'Email', value: 'EMAIL' },
   ];
   entityType = 'ALL';
   chart: CircularChart = {
@@ -50,6 +57,7 @@ export class ResponseRateComponent implements OnInit, OnDestroy {
     ],
     options: chartConfig.options.shared,
   };
+  @ViewChild('selectBtn') selectBtn: ElementRef;
   constructor(
     protected _adminUtilityService: AdminUtilityService,
     protected _statisticService: StatisticsService,

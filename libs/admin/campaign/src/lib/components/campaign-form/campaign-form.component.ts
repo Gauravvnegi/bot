@@ -104,11 +104,13 @@ export class CampaignFormComponent implements OnInit, OnDestroy {
    */
   sendTestCampaign() {
     let dialogRef: DynamicDialogRef;
-    const modalData: Partial<SendTestComponent> = {};
+    const modalData: Partial<SendTestComponent> = {
+      parentFG: this.campaignFG,
+    };
     dialogRef = openModal({
       config: {
-        width: '80%',
-        styleClass: 'dynamic-modal',
+        width: '550px',
+        styleClass: 'confirm-dialog',
         data: modalData,
       },
       component: SendTestComponent,

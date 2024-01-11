@@ -145,7 +145,7 @@ export class UserList {
     this.records = new Array<User>();
     input?.forEach((item) => {
       if (
-        item.userCategoryPermission?.filter(
+        item?.departments?.filter(
           (permission) => permission?.department === department
         ).length
       )
@@ -167,7 +167,7 @@ export class User {
     this.lastName = input?.lastName;
     if (department)
       this.departmentPermission = new Departmentpermissions().deserialize(
-        input.userCategoryPermission
+        input.departments
       );
     return this;
   }

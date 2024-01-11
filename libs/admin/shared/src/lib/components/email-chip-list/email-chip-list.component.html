@@ -6,7 +6,7 @@
 >
   <mat-chip
     class="chip"
-    *ngFor="let email of parentFG?.get(name).value"
+    *ngFor="let email of parentFG?.get(name)?.value"
     (removed)="removeEmail(email, parentFG?.get(name))"
   >
     {{ email }}

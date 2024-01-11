@@ -30,9 +30,9 @@ export class ReceivedBreakdownComponent implements OnInit, OnDestroy {
   stats: Bifurcation;
   bifurcationFG: FormGroup;
   keyLabels = [
-    { label: 'GTM', key: 'GTM' },
-    { label: 'ALL', key: 'ALL' },
-    { label: 'Other Depts', key: 'OTHERS' },
+    { label: 'GTM', value: 'GTM' },
+    { label: 'ALL', value: 'ALL' },
+    { label: 'Other Depts', value: 'OTHERS' },
   ];
   timeout: number;
   timeoutColor: string;
@@ -266,34 +266,13 @@ export class ReceivedBreakdownComponent implements OnInit, OnDestroy {
 
   openTableModal(event) {
     event.stopPropagation();
-    // const dialogConfig = new MatDialogConfig();
-    // dialogConfig.disableClose = true;
-    // dialogConfig.width = '100%';
-    // dialogConfig.data = {
-    //   tableName: feedback.tableName.receivedBreakdown,
-    //   tabFilterItems: this.createTabFilterItem(),
-    //   tabFilterIdx: this.keyLabels.findIndex(
-    //     (item) => item.key === this.entityType
-    //   ),
-    //   globalFeedbackFilterType: this.globalFeedbackFilterType,
-    //   config: [{ feedbackGraph: 'BIFURCATIONS' }],
-    //   feedbackType: this.getFeedbackType(),
-    // };
-    // const detailCompRef = this._modalService.openDialog(
-    //   FeedbackDatatableModalComponent,
-    //   dialogConfig
-    // );
-    // detailCompRef.componentInstance.onModalClose.subscribe((res) => {
-    //   detailCompRef.close();
-    // });
-
     let dialogRef: DynamicDialogRef;
     const modalData: Partial<FeedbackDatatableModalComponent> = {
       data: {
         tableName: feedback.tableName.receivedBreakdown,
         tabFilterItems: this.createTabFilterItem(),
         tabFilterIdx: this.keyLabels.findIndex(
-          (item) => item.key === this.entityType
+          (item) => item.value === this.entityType
         ),
         globalFeedbackFilterType: this.globalFeedbackFilterType,
         config: [{ feedbackGraph: 'BIFURCATIONS' }],
@@ -315,7 +294,7 @@ export class ReceivedBreakdownComponent implements OnInit, OnDestroy {
       return {
         label: keyObj.label,
         content: '',
-        value: keyObj.key,
+        value: keyObj.value,
         disabled: false,
         total: 0,
         chips: this.feedbackConfig.chips.feedbackDatatable,

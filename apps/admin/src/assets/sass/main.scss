@@ -184,3 +184,17 @@
     }
   }
 }
+
+// graph select global style
+:host ::ng-deep .stats__select {
+  min-width: 125px;
+  .p-dropdown {
+    padding: 10px;
+    height: 34px;
+    .selected-item,
+    .p-dropdown-trigger-icon {
+      font-size: 12px;
+      margin-top: 0px;
+    }
+  }
+}

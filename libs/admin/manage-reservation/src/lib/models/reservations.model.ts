@@ -70,10 +70,10 @@ export class RoomReservation {
     this.sourceName = input.sourceName;
     this.source = input.source;
     this.status = ReservationCurrentStatus[input.status];
-    this.guestName = input.guest.firstName
+    this.guestName = input?.guest?.firstName
       ? input.guest?.firstName + ' ' + (input.guest?.lastName ?? '')
       : '';
-    this.guestId = input.guest.id;
+    this.guestId = input.guest?.id;
     this.companyName = input.guest?.company?.firstName ?? '';
     this.created = input.created;
     this.nextStates = [input.reservationType, ...input.nextStates];

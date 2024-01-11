@@ -1,6 +1,7 @@
 import { Clipboard } from '@angular/cdk/clipboard';
 import {
   ChangeDetectorRef,
+  Compiler,
   Component,
   ComponentFactoryResolver,
   EventEmitter,
@@ -16,7 +17,6 @@ import {
   RoutesConfigService,
   SubscriptionPlanService,
 } from '@hospitality-bot/admin/core/theme';
-// import { MarketingNotificationComponent } from '@hospitality-bot/admin/notification';
 import {
   BookingDetailService,
   ConfigService,
@@ -34,12 +34,11 @@ import { GuestDetail, GuestDetails } from '../../models/guest-feedback.model';
 import { Guest } from '../../models/guest-table.model';
 import { ReservationService } from '../../services/reservation.service';
 import { AdminDocumentsDetailsComponent } from '../admin-documents-details/admin-documents-details.component';
-import { SendMessageComponent } from 'libs/admin/notification/src/lib/components/send-message/send-message.component';
 import { MenuItem } from 'primeng/api';
 import { FileData } from '../../models/reservation-table.model';
 import { SideBarService } from 'apps/admin/src/app/core/theme/src/lib/services/sidebar.service';
 import { ReservationFormService } from '../../services/reservation-form.service';
-import { SidebarComponentNames } from 'libs/admin/global-shared/src/lib/constants/common-components';
+import { MarketingNotificationComponent } from '@hospitality-bot/admin/notification';
 
 @Component({
   selector: 'hospitality-bot-details',
@@ -136,7 +135,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
   @ViewChild('sideBar', { read: ViewContainerRef })
   sideBar: ViewContainerRef;
   sidebarVisible = false;
-
+  sidebarType = 'night-audit';
   constructor(
     private _fb: FormBuilder,
     private _reservationService: ReservationService,
@@ -149,10 +148,11 @@ export class DetailsComponent implements OnInit, OnDestroy {
     private subscriptionService: SubscriptionPlanService,
     private configService: ConfigService,
     private resolver: ComponentFactoryResolver,
+    private compiler: Compiler,
     private routesConfigService: RoutesConfigService,
     protected sidebarService: SideBarService,
     private bookingDetailService: BookingDetailService,
-    private formService: ReservationFormService // public dialogService: DialogService
+    private formService: ReservationFormService
   ) {
     this.self = this;
     this.initDetailsForm();
@@ -674,9 +674,13 @@ export class DetailsComponent implements OnInit, OnDestroy {
   }
 
   manualCheckin() {
-    this.formService.manualCheckin(this.details.stayDetails.arrivalTimeStamp,  this.bookingId, () => {
-      this.details.currentJourneyDetails.status = 'COMPLETED';
-    });
+    this.formService.manualCheckin(
+      this.details.stayDetails.arrivalTimeStamp,
+      this.bookingId,
+      () => {
+        this.details.currentJourneyDetails.status = 'COMPLETED';
+      }
+    );
   }
 
   checkForConfirmedBooking() {
@@ -728,54 +732,68 @@ export class DetailsComponent implements OnInit, OnDestroy {
          * @TODO MarketNotificationComponent should add in the
          * common components of openSidebar ( Ayush )
          */
-        this.sidebarService.openSidebar({
-          componentName: SidebarComponentNames.MarketNotification,
-          containerRef: this.sideBar,
-          data: {
-            isEmail: true,
-            email: this.primaryGuest.email,
-            details: this.details,
-            roomNumber: this.details.stayDetails.roomNumber,
-            isModal: true,
-          },
-          onOpen: () => {
-            this.sidebarVisible = true;
-          },
-          onClose: (res) => {
-            this.sidebarVisible = false;
-          },
-        });
-
-        // const emailRef = this.sidebar.createComponent(emailFactory);
-        // emailRef.instance.isEmail = true;
-        // emailRef.instance.email = this.primaryGuest.email;
-        // emailRef.instance.entityId = this.entityId;
-        // emailRef.instance.details = this.details;
-        // emailRef.instance.roomNumber = this.details.stayDetails.roomNumber;
-        // emailRef.instance.isModal = true;
-        // emailRef.instance.onCloseSidebar.subscribe((res) => {
-        //   this.sidebarVisible = false;
+        // this.sidebarService.openSidebar({
+        //   componentName: SidebarComponentNames.MarketNotification,
+        //   containerRef: this.sideBar,
+        //   data: {
+        //     isEmail: true,
+        //     email: this.primaryGuest.email,
+        //     details: this.details,
+        //     roomNumber: this.details.stayDetails.roomNumber,
+        //     isModal: true,
+        //   },
+        //   onOpen: () => {
+        //     this.sidebarVisible = true;
+        //   },
+        //   onClose: (res) => {
+        //     this.sidebarVisible = false;
+        //   },
         // });
-      } else {
-        this.sidebarService.openSidebar<SendMessageComponent>({
-          componentName: SidebarComponentNames.SendMessage,
-          data: {
-            isEmail: false,
-            channel: channel.replace(/\w\S*/g, function (txt) {
-              return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
-            }),
-            entityId: this.entityId,
-            roomNumber: this.details.stayDetails.roomNumber,
-            isModal: true,
-          },
-          onOpen: () => {
-            this.sidebarVisible = true;
-          },
-          onClose: () => {
-            this.sidebarVisible = false;
-          },
+
+        const lazyModulePromise = import(
+          'libs/admin/notification/src/lib/admin-notification.module'
+        ).then((module) => {
+          return this.compiler.compileModuleAsync(
+            module.AdminNotificationModule
+          );
         });
 
+        lazyModulePromise.then((moduleFactory) => {
+          this.sidebarVisible = true;
+          const factory = this.resolver.resolveComponentFactory(
+            MarketingNotificationComponent
+          );
+          this.sideBar.clear();
+          const emailRef = this.sideBar.createComponent(factory);
+          emailRef.instance.isEmail = true;
+          emailRef.instance.email = this.primaryGuest.email;
+          emailRef.instance.entityId = this.entityId;
+          emailRef.instance.details = this.details;
+          emailRef.instance.roomNumber = this.details.stayDetails.roomNumber;
+          emailRef.instance.onCloseSidebar.subscribe((res) => {
+            this.sidebarVisible = false;
+          });
+        });
+      } else {
+        // it is may be use in future...
+        // this.sidebarService.openSidebar<SendMessageComponent>({
+        //   componentName: SidebarComponentNames.SendMessage,
+        //   data: {
+        //     isEmail: false,
+        //     channel: channel.replace(/\w\S*/g, function (txt) {
+        //       return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+        //     }),
+        //     entityId: this.entityId,
+        //     roomNumber: this.details.stayDetails.roomNumber,
+        //     isModal: true,
+        //   },
+        //   onOpen: () => {
+        //     this.sidebarVisible = true;
+        //   },
+        //   onClose: () => {
+        //     this.sidebarVisible = false;
+        //   },
+        // });
         // const modalData: Partial<SendMessageComponent> = {
         //   isEmail: false,
         //   channel: channel.replace(/\w\S*/g, function (txt) {
@@ -793,7 +811,6 @@ export class DetailsComponent implements OnInit, OnDestroy {
         //   component: MarketingNotificationComponent,
         //   dialogService: this.dialogService,
         // });
-
         // const messageFactory = this.resolver.resolveComponentFactory(
         //   SendMessageComponent
         // );

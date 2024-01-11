@@ -1,4 +1,12 @@
-import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+  Output,
+  EventEmitter,
+} from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Location } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
@@ -44,6 +52,10 @@ export class MarketingNotificationComponent extends NotificationComponent
   packageList: Option[] = [];
 
   @ViewChild('attachmentComponent') updateAttachment: any;
+
+  //Sidebar configuration
+  isSidebar = false;
+  @Output() onCloseSidebar = new EventEmitter<boolean>(false);
 
   constructor(
     protected _fb: FormBuilder,

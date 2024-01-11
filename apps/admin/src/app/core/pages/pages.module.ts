@@ -7,6 +7,11 @@ import { PagesComponent } from './containers/pages/pages.component';
 import { TemporaryRedirectPageComponent } from './containers/trp/temporary-redirect-page/temporary-redirect-page.component';
 import { PagesRoutingModule } from './pages.routing.module';
 import { MainComponent } from './containers/main/main.component';
+import {
+  DialogService,
+  DynamicDialogConfig,
+  DynamicDialogRef,
+} from 'primeng/dynamicdialog';
 
 @NgModule({
   declarations: [PagesComponent, TemporaryRedirectPageComponent, MainComponent],
@@ -16,6 +21,11 @@ import { MainComponent } from './containers/main/main.component';
     PagesRoutingModule,
     AdminReservationModule,
   ],
-  providers: [ReservationService],
+  providers: [
+    ReservationService,
+    DialogService,
+    DynamicDialogConfig,
+    DynamicDialogRef,
+  ],
 })
 export class PagesModule {}

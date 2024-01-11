@@ -122,7 +122,7 @@ export class GuestDocumentsStatisticsComponent implements OnInit, OnDestroy {
       callingMethod: 'getGuestDocsOrPaymentStats',
       entityType: 'GUESTDOCUMENTS',
       exportURL: 'exportDocsCSV',
-      modalType: 'document.title',
+      tableName: 'Guest Documents',
     };
 
     openModal({

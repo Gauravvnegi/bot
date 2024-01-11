@@ -15,8 +15,8 @@ $border-color: rgba(112, 112, 112, 0.35);
     &__title {
       @include flex-item-center;
       font-size: 16px;
-      font-weight: $medium;
-      color: $tooltip;
+      font-weight: 400;
+      color: #00162b;
       .alert {
         margin-right: 10px;
       }
@@ -66,4 +66,25 @@ $border-color: rgba(112, 112, 112, 0.35);
       gap: 20px;
     }
   }
+}
+
+.reservation-input {
+  display: flex;
+  justify-content: space-around;
+  .status {
+    display: flex;
+    padding: 30px 0;
+  }
+  .amount {
+    display: flex;
+    flex-direction: column;
+    flex-basis: 35%;
+  }
+}
+
+.charges-info {
+  padding: 0 4%;
+  color: rgba(0, 0, 0, 0.5);
+  font-size: 14px;
+  margin-top: 5px;
 }

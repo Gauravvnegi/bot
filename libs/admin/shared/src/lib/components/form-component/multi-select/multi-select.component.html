@@ -17,7 +17,7 @@
 
   <p-multiSelect
     [class]="isEmpty ? 'input no-select' : 'input'"
-    [ngClass]="inputNgClasses"
+    [ngClass]="multiSelectDropDownClass"
     [disabled]="isDisabled || null"
     [formControlName]="controlName"
     [inputId]="controlName"
@@ -36,6 +36,18 @@
           <div>{{ dictionary[val] }}</div>
           <i class="pi pi-times" (click)="handleClear(val)"></i>
         </div>
+      </div>
+    </ng-template>
+
+    <ng-template let-option pTemplate="item">
+      <div class="option-items" *ngIf="!option.hidden">
+        <span class="option-label">{{ option.label }}</span>
+        <span
+          *ngIf="option?.extras && option?.extras.length"
+          class="option-extras"
+        >
+          {{ option.extras }}
+        </span>
       </div>
     </ng-template>
   </p-multiSelect>

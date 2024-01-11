@@ -17,7 +17,8 @@ export class RoomReservationFormData {
   id?: string;
   specialRequest: string;
   offer?: {
-    id: string;
+    id?: string;
+    offerType?: string;
   };
   paymentDetails: {
     amount: number;

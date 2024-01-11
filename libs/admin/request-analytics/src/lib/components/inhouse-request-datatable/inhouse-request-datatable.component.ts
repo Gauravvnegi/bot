@@ -22,6 +22,7 @@ import { inhouseStatus } from '../../constant/datatable';
 import { InhouseTable } from '../../models/inhouse-datatable.model';
 import { AnalyticsService } from '../../services/analytics.service';
 import { DateService } from '@hospitality-bot/shared/utils';
+import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 
 @Component({
   selector: 'hospitality-bot-inhouse-request-datatable',
@@ -36,7 +37,6 @@ export class InhouseRequestDatatableComponent extends BaseDatatableComponent
   isAllTabFilterRequired = true;
   @Input() entityType = 'Inhouse';
   optionLabels = [];
-  @Output() onModalClose = new EventEmitter();
   globalQueries;
   $subscription = new Subscription();
   tabFilterIdx = 0;
@@ -47,9 +47,19 @@ export class InhouseRequestDatatableComponent extends BaseDatatableComponent
     private globalFilterService: GlobalFilterService,
     private snackbarService: SnackBarService,
     private analyticsService: AnalyticsService,
-    private _requestService: RequestService
+    private _requestService: RequestService,
+    private dialogConfig: DynamicDialogConfig,
+    private dialogRef: DynamicDialogRef
   ) {
     super(fb);
+    /**
+     * @Remarks Extracting data from he dialog service
+     */
+    if (this.dialogConfig?.data) {
+      Object.entries(this.dialogConfig.data).forEach(([key, value]) => {
+        this[key] = value;
+      });
+    }
   }
   cols = analytics.cols;
   tabFilterItems = analytics.tabFilterItems;
@@ -194,7 +204,7 @@ export class InhouseRequestDatatableComponent extends BaseDatatableComponent
   }
 
   closeModal() {
-    this.onModalClose.emit(true);
+    this.dialogRef.close(true);
   }
 
   exportCSV() {

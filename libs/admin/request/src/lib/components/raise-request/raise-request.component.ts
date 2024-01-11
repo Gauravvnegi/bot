@@ -1,35 +1,23 @@
 import {
   Component,
-  ComponentFactoryResolver,
   EventEmitter,
   Input,
   OnDestroy,
   OnInit,
   Output,
-  ViewChild,
-  ViewContainerRef,
 } from '@angular/core';
-import {
-  FormBuilder,
-  FormGroup,
-  Validators,
-} from '@angular/forms';
-import { TranslateService } from '@ngx-translate/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
-import { ModalService, SnackBarService } from 'libs/shared/material/src';
+import { SnackBarService } from 'libs/shared/material/src';
 import { DateService } from '@hospitality-bot/shared/utils';
 import { Subscription } from 'rxjs';
 import { request } from '../../constants/request';
-import { debounceTime, filter, map, startWith } from 'rxjs/operators';
+import { debounceTime } from 'rxjs/operators';
 import { RequestService } from '../../services/request.service';
 import { Option } from '@hospitality-bot/admin/shared';
-import { ActivatedRoute, Router } from '@angular/router';
-import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
-import { AddItemComponent } from '../add-item/add-item.component';
-import { DepartmentList } from '../../data-models/request.model';
-import { convertToTitleCase } from 'libs/admin/shared/src/lib/utils/valueFormatter';
-import { ManagePermissionService } from 'libs/admin/roles-and-permissions/src/lib/services/manage-permission.service';
+import { DialogService } from 'primeng/dynamicdialog';
+import { SideBarService } from 'apps/admin/src/app/core/theme/src/lib/services/sidebar.service';
 
 @Component({
   selector: 'hospitality-bot-raise-request',
@@ -37,7 +25,7 @@ import { ManagePermissionService } from 'libs/admin/roles-and-permissions/src/li
   styleUrls: ['./raise-request.component.scss'],
 })
 export class RaiseRequestComponent implements OnInit, OnDestroy {
-  @Output() onRaiseRequestClose = new EventEmitter();
+  @Output() onCloseSidebar = new EventEmitter();
   requestFG: FormGroup;
   searchFG: FormGroup;
   entityId: string;
@@ -51,23 +39,19 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
   userList: Option[] = [];
   requestData: any;
   departmentList: Option[] = [];
+  assigneeList: Option[] = [];
   sidebarVisible = false;
   isItemUuid: boolean = false;
-  @Input() isSideBar = false;
-  @ViewChild('sidebarSlide', { read: ViewContainerRef })
-  sidebarSlide: ViewContainerRef;
+  @Input() isSidebar = false;
+
   constructor(
     private fb: FormBuilder,
     private globalFilterService: GlobalFilterService,
     private snackbarService: SnackBarService,
     private _requestService: RequestService,
     private adminUtilityService: AdminUtilityService,
-    private _translateService: TranslateService,
-    private router: Router,
-    private route: ActivatedRoute,
-    private _modalService: ModalService,
-    private _managePermissionService: ManagePermissionService,
-    private resolver: ComponentFactoryResolver
+    private dialogService: DialogService,
+    private sidebarService: SideBarService
   ) {}
 
   ngOnInit(): void {
@@ -109,15 +93,9 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
       jobDuration: [''],
       remarks: ['', [Validators.maxLength(200)]],
       quantity: [1, [Validators.required, Validators.min(1)]],
-      assigneeId: [''],
+      assigneeId: ['', [Validators.required]], //as per BE ()
       cc: ['+91'],
-      phoneNumber: ['' , [Validators.required, Validators.pattern('^[0-9]*$')]],
-    });
-
-    this.requestFG.get('itemCode').valueChanges.subscribe((value) => {
-      const service = this.items.find((d) => d.value === value);
-      this.requestFG.get('itemName').setValue(service.label);
-      this.requestFG.get('itemId').setValue(service.itemId);
+      phoneNumber: ['', [Validators.required, Validators.pattern('^[0-9]*$')]],
     });
   }
 
@@ -155,22 +133,33 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
 
   listenForItemChanges(): void {
     this.requestFG.get('itemCode').valueChanges.subscribe((value) => {
-      const itemId = this.items.find((d) => d.value === value).itemId;
-      this.requestFG.get('assigneeId').setValue('', { emitEvent: false });
-      this.getItemDetails(itemId);
+      if (value) {
+        let service = this.items.find((d) => d.value === value);
+        this.requestFG.get('itemName').setValue(service?.label);
+        this.requestFG.get('itemId').setValue(service?.itemId);
+        this.requestFG.get('assigneeId').setValue('', { emitEvent: false });
+        this.getItemDetails(service?.itemId);
+      }
     });
   }
-
   getItemDetails(itemId) {
     this.$subscription.add(
       this._requestService
         .getItemDetails(this.entityId, itemId)
         .subscribe((response) => {
-          this.isItemUuid = response?.itemUuid ? true : false;
-          const data = new DepartmentList().deserialize(
-            response?.requestItemUsers
-          );
-          this.departmentList = data.departmentWithUsers;
+          this.isItemUuid = !!response?.itemUuid;
+
+          this.assigneeList = response.requestItemUsers.map((user) => {
+            return {
+              label: `${user.firstName} ${user.lastName}`,
+              value: user.userId,
+            };
+          });
+
+          // const data = new DepartmentList().deserialize(
+          //   response?.requestItemUsers
+          // );
+          // this.departmentList = data.departmentWithUsers;
         })
     );
   }
@@ -188,7 +177,7 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
     }
 
     const { phoneNumber, cc, ...rest } = this.requestFG.getRawValue();
-   let countryCode = cc.replace('+', '');
+    let countryCode = cc.replace('+', '');
     const data = {
       phone: `${countryCode}${phoneNumber}`,
       ...rest,
@@ -223,7 +212,7 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
    * @param closeData The status and reservation data.
    */
   close(closeData: { status: boolean; data?; load: boolean }): void {
-    this.onRaiseRequestClose.emit(closeData);
+    this.onCloseSidebar.emit(closeData);
   }
 
   /**
@@ -274,32 +263,27 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
 
   create() {
     //to open add new item pop up
-    if (this.isSideBar) {
-      this.sidebarVisible = true;
-      const factory = this.resolver.resolveComponentFactory(AddItemComponent);
-      this.sidebarSlide.clear();
-      const componentRef = this.sidebarSlide.createComponent(factory);
-      componentRef.instance.isSidebar = true;
-      this.$subscription.add(
-        componentRef.instance.onClose.subscribe((res) => {
+    if (this.isSidebar) {
+      this.sidebarService.openSidebar({
+        componentName: 'AddItem',
+        onOpen: () => (this.sidebarVisible = true),
+        onClose: (res) => {
+          if (res) {
+            this.requestFG.patchValue(
+              {
+                itemCode: res.itemCode,
+                itemId: res?.id,
+                itemName: res?.itemName,
+                assigneeId: '',
+              },
+              { emitEvent: false }
+            );
+            this.getItemDetails(res?.id);
+          }
           this.sidebarVisible = false;
-        })
-      );
-    } else {
-      // In-future pop-up will be remove from everywhere
-      const dialogConfig = new MatDialogConfig();
-      dialogConfig.disableClose = true;
-      dialogConfig.width = '500px';
-      dialogConfig.height = '90vh';
-      const addItemCompRef = this._modalService.openDialog(
-        AddItemComponent,
-        dialogConfig
-      );
-      this.$subscription.add(
-        addItemCompRef.componentInstance.onClose.subscribe(() => {
-          addItemCompRef.close();
-        })
-      );
+        },
+        manageMask: true,
+      });
     }
   }
 

@@ -6,10 +6,6 @@ import {
 import { itemList } from '../../constants/night-audit.const';
 import { Subscription } from 'rxjs';
 import {
-  GlobalFilterService,
-  RoutesConfigService,
-} from '@hospitality-bot/admin/core/theme';
-import {
   AdminUtilityService,
   QueryConfig,
 } from '@hospitality-bot/admin/shared';
@@ -18,6 +14,8 @@ import {
   CheckedOutReservation,
   NightAudit,
 } from './models/night-audit.model';
+import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
+import { RoutesConfigService } from 'apps/admin/src/app/core/theme/src/lib/services/routes-config.service';
 
 @Component({
   selector: 'night-audit',
@@ -32,7 +30,7 @@ export class NightAuditComponent implements OnInit {
     private routesConfigService: RoutesConfigService
   ) {}
   @Input() isSidebar = true;
-  @Output() onClose = new EventEmitter();
+  @Output() onCloseSidebar = new EventEmitter();
   pageTitle = 'Night Audit';
   currentDate = new Date();
   auditDate: Date;
@@ -136,7 +134,7 @@ export class NightAuditComponent implements OnInit {
    * @param event calling from template
    */
   close(event?: boolean) {
-    this.onClose.emit(false);
+    this.onCloseSidebar.emit(false);
   }
 
   finish(event) {
@@ -160,7 +158,7 @@ export class NightAuditComponent implements OnInit {
    * @function onNavigate To navigate to the edit page
    */
   onNavigate(event) {
-    this.onClose.emit(true);
+    this.onCloseSidebar.emit(true);
     this.routesConfigService
       .navigate({
         skipLocationChange: true,

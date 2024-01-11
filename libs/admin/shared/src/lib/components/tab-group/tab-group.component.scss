@@ -78,3 +78,89 @@
   box-shadow: 1px 7px 8px -7px #b5b5b5;
   border-bottom: 1px solid #cdcdcd;
 }
+
+// Primeng Styles....
+:host ::ng-deep {
+  .hidden-content {
+    .p-tabview-panels {
+      display: none;
+    }
+  }
+  .example-stretched-tabs,
+  .p-tabview {
+    box-shadow: unset !important;
+  }
+}
+
+:host ::ng-deep .p-tabview {
+  &-title {
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: 0.96px;
+    color: #b5b5c3;
+    line-height: 23px;
+    @media (max-width: 1024px) {
+      font-size: 12px;
+    }
+  }
+  &-nav {
+    border-bottom: 1px solid #cdcdcd;
+    li a {
+      padding-top: 20px !important;
+    }
+    .p-highlight .p-tabview-title {
+      color: $primary-cta;
+    }
+  }
+
+  &-ink-bar {
+    background-color: $primary-cta !important;
+    height: 1px !important;
+  }
+}
+
+:host ::ng-deep .example-stretched-tabs .active-image {
+  filter: invert(18%) sepia(89%) saturate(7441%) hue-rotate(229deg)
+    brightness(95%) contrast(97%) !important;
+}
+
+// Tabs Group styles
+:host ::ng-deep .tab-group {
+  &__horizontal {
+  }
+  &__vertical {
+    .p-tabview {
+      &-nav {
+        display: unset;
+        li {
+          margin-top: unset;
+        }
+      }
+      .p-highlight {
+        border-bottom: 1px solid $primary-cta;
+      }
+    }
+    .example-stretched-tabs {
+      max-width: unset;
+      flex-grow: unset;
+    }
+    .p-tabview-ink-bar {
+      display: none;
+    }
+  }
+}
+
+// style for scrollable-tab
+:host ::ng-deep .scrollable-tab {
+  overflow-x: auto;
+  scrollbar-width: thin;
+  .p-tabview {
+    &-nav {
+      display: flex;
+      flex-wrap: unset;
+      .p-tabview-title span {
+        white-space: nowrap;
+      }
+    }
+  }
+}

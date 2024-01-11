@@ -51,7 +51,7 @@ export class UserService extends ApiService {
 
   getUserPermission(feedbackType: string) {
     return this.get(
-      `/api/v1/user/${this.getLoggedInUserId()}/module-permission?module=${feedbackType}`
+      `/api/v1/user/${this.getLoggedInUserId()}/module-permission?module=${feedbackType}&includeDepartment=true`
     );
   }
 

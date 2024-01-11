@@ -10,7 +10,6 @@ import { ServicesService } from '../../../services/src/lib/services/services.ser
 import { ManageReservationService } from 'libs/admin/manage-reservation/src/lib/services/manage-reservation.service';
 import { ReservationService } from 'libs/admin/reservation/src/lib/services/reservation.service';
 import { GlobalSharedModule } from '@hospitality-bot/admin/global-shared';
-import { AdminDetailsService } from 'libs/admin/reservation/src/lib/services/admin-details.service';
 
 @NgModule({
   imports: [
@@ -29,7 +28,6 @@ import { AdminDetailsService } from 'libs/admin/reservation/src/lib/services/adm
     ServicesService,
     ManageReservationService,
     ReservationService,
-    AdminDetailsService,
   ],
 })
 export class AdminInvoiceModule {}

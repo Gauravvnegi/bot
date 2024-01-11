@@ -8,8 +8,14 @@ import { CheckoutReservationsComponent } from './components/night-audit/componen
 import { AuditSummaryComponent } from './components/night-audit/components/audit-summary/audit-summary.component';
 import { ManageLoggedUsersComponent } from './components/night-audit/components/manage-logged-users/manage-logged-users.component';
 import { TableViewComponent } from './components/table-view/table-view.component';
-import { DynamicDialogModule } from 'primeng/dynamicdialog';
+import {
+  DialogService,
+  DynamicDialogConfig,
+  DynamicDialogModule,
+  DynamicDialogRef,
+} from 'primeng/dynamicdialog';
 import { SnackbarHandlerService } from './services/snackbar-handler.service';
+import { ModalService } from '@hospitality-bot/shared/material';
 
 @NgModule({
   imports: [CommonModule, AdminSharedModule, DynamicDialogModule],
@@ -23,6 +29,12 @@ import { SnackbarHandlerService } from './services/snackbar-handler.service';
     TableViewComponent,
   ],
   exports: [EntityTabFilterComponent],
-  providers: [SnackbarHandlerService],
+  providers: [
+    SnackbarHandlerService,
+    ModalService,
+    DialogService,
+    DynamicDialogConfig,
+    DynamicDialogRef,
+  ],
 })
 export class GlobalSharedModule {}

@@ -4,6 +4,7 @@ import { DashboardErrorComponent } from '@hospitality-bot/admin/shared';
 import { MainComponent } from './components/main/main.component';
 import { SettingsMenuComponent } from './components/settings-menu/settings-menu.component';
 import { SiteSettingsComponent } from './components/site-settings/site-settings.component';
+import { NotificationSettingsComponent } from './components/notification-settings/notification-settings.component';
 
 const appRoutes: Route[] = [
   {
@@ -54,5 +55,9 @@ const appRoutes: Route[] = [
   exports: [RouterModule],
 })
 export class AdminSettingsRoutingModule {
-  static components = [MainComponent, SettingsMenuComponent];
+  static components = [
+    MainComponent,
+    SettingsMenuComponent,
+    NotificationSettingsComponent,
+  ];
 }

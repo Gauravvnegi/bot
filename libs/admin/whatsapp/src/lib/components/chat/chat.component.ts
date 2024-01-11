@@ -1,10 +1,8 @@
 import {
   AfterViewChecked,
   Component,
-  ComponentFactoryResolver,
   ElementRef,
   EventEmitter,
-  HostListener,
   Input,
   OnChanges,
   OnDestroy,
@@ -14,8 +12,7 @@ import {
   ViewContainerRef,
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ModalService, SnackBarService } from 'libs/shared/material/src';
-import { ModuleNames } from '@hospitality-bot/admin/shared';
+import { ModuleNames, openModal } from '@hospitality-bot/admin/shared';
 import { MessageService } from '../../services/messages.service';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
@@ -23,12 +20,11 @@ import { DateService } from '@hospitality-bot/shared/utils';
 import { Subscription } from 'rxjs';
 import { FirebaseMessagingService } from 'apps/admin/src/app/core/theme/src/lib/services/messaging.service';
 import { IChats, Chats, Chat, RequestList } from '../../models/message.model';
-import { MatDialogConfig } from '@angular/material/dialog';
-import { RaiseRequestComponent } from 'libs/admin/request/src/lib/components/raise-request/raise-request.component';
 import * as FileSaver from 'file-saver';
 import { SubscriptionPlanService } from '@hospitality-bot/admin/core/theme';
 import { ModalComponent } from 'libs/admin/shared/src/lib/components/modal/modal.component';
-import { SideBarService } from 'libs/admin/shared/src/lib/services/sidebar.service';
+import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { SideBarService } from 'apps/admin/src/app/core/theme/src/lib/services/sidebar.service';
 
 @Component({
   selector: 'hospitality-bot-chat',
@@ -63,18 +59,17 @@ export class ChatComponent
   sidebarSlide: ViewContainerRef;
   // sidebarType;
   loadingChat: boolean = false;
+  dialogRef: DynamicDialogRef;
 
   constructor(
-    private modalService: ModalService,
     private messageService: MessageService,
     private fb: FormBuilder,
-    private snackbarService: SnackBarService,
     private adminUtilityService: AdminUtilityService,
     private globalFilterService: GlobalFilterService,
     private _firebaseMessagingService: FirebaseMessagingService,
-    private resolver: ComponentFactoryResolver,
     private subscriptionPlanService: SubscriptionPlanService,
-    private sideBarService: SideBarService
+    private sideBarService: SideBarService,
+    private dialogService: DialogService
   ) {}
 
   ngOnInit(): void {
@@ -353,36 +348,34 @@ export class ChatComponent
   }
 
   openEndLiveChatPopup() {
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.disableClose = true;
-    const togglePopupCompRef = this.modalService.openDialog(
-      ModalComponent,
-      dialogConfig
-    );
-
-    togglePopupCompRef.componentInstance.content = {
-      heading: 'Exit Live Chat',
-      description: [
-        'Do you want to exit the live chat.',
-        'This will hand over the conversation back to the bot',
+    const data: Partial<ModalComponent> = {
+      content: {
+        heading: 'Exit Live Chat',
+        description: [
+          'Do you want to exit the live chat.',
+          'This will hand over the conversation back to the bot',
+        ],
+      },
+      actions: [
+        {
+          label: 'Cancel',
+          onClick: () => this.dialogRef.close(),
+          variant: 'outlined',
+        },
+        {
+          label: 'Confirm',
+          onClick: () => this.endLiveChat(),
+          variant: 'contained',
+        },
       ],
     };
 
-    togglePopupCompRef.componentInstance.actions = [
-      {
-        label: 'Cancel',
-        onClick: () => this.modalService.close(),
-        variant: 'outlined',
+    this.dialogRef = openModal({
+      config: {
+        data: data,
       },
-      {
-        label: 'Confirm',
-        onClick: () => this.endLiveChat(),
-        variant: 'contained',
-      },
-    ];
-
-    togglePopupCompRef.componentInstance.onClose.subscribe(() => {
-      this.modalService.close();
+      component: ModalComponent,
+      dialogService: this.dialogService,
     });
   }
 
@@ -405,7 +398,7 @@ export class ChatComponent
           this.liveChatFG.patchValue(res);
         })
     );
-    this.modalService.close();
+    this.dialogRef?.close();
   }
 
   handleButtonClick(): void {
@@ -432,36 +425,7 @@ export class ChatComponent
       type: 'RAISE_REQUEST',
       open: true,
     });
-
     return;
-
-    // this.sidebarVisible = true;
-    // this.sidebarType = 'complaint';
-
-    // const factory = this.resolver.resolveComponentFactory(
-    //   RaiseRequestComponent
-    // );
-    // this.sidebarSlide.clear();
-    // const componentRef = this.sidebarSlide.createComponent(factory);
-    // componentRef.instance.isSideBar = true;
-    // componentRef.instance.onRaiseRequestClose.subscribe((res) => {
-    //   // Not getting used.. status is hardcode to false in the RaiseRequestComponent
-    //   if (res.status) {
-    //     this.getRequestList();
-    //     const values = {
-    //       reservationId: res.data.number,
-    //     };
-    //     this.$subscription.add(
-    //       this.messageService
-    //         .updateGuestDetail(this.entityId, this.data.receiverId, values)
-    //         .subscribe((response) => {
-    //           this.messageService.refreshData$.next(true);
-    //         })
-    //     );
-    //   }
-    //   this.sidebarVisible = false;
-    //   componentRef.destroy();
-    // });
   }
 
   exportChat() {

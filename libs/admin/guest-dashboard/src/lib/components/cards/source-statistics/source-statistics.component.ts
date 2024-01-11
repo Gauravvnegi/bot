@@ -1,15 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { MatDialogConfig } from '@angular/material/dialog';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
-import {
-  AdminUtilityService,
-  openModal as openDynamicModal,
-  openModal,
-} from '@hospitality-bot/admin/shared';
-import {
-  ModalService,
-  SnackBarService,
-} from '@hospitality-bot/shared/material';
+import { AdminUtilityService, openModal } from '@hospitality-bot/admin/shared';
+import { SnackBarService } from '@hospitality-bot/shared/material';
 import { DateService } from '@hospitality-bot/shared/utils';
 import { TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
@@ -91,7 +83,6 @@ export class SourceStatisticsComponent implements OnInit, OnDestroy {
     private _statisticService: StatisticsService,
     private globalFilterService: GlobalFilterService,
     private snackbarService: SnackBarService,
-    private _modal: ModalService,
     private dateService: DateService,
     private _translateService: TranslateService,
     private dialogService: DialogService
@@ -243,11 +234,11 @@ export class SourceStatisticsComponent implements OnInit, OnDestroy {
       callingMethod: 'getAllGuestStats',
       guestFilter: 'GUESTSOURCES',
       exportURL: 'exportCSVStat',
-      modalType: 'source.title',
+      tableName: 'Booking Source',
     };
 
     openModal({
-      config: { data: data },
+      config: { width: '80%', data: data },
       dialogService: this.dialogService,
       component: GuestDatatableModalComponent,
     });

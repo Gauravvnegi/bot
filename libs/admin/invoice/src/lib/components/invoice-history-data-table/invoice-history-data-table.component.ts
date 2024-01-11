@@ -44,8 +44,7 @@ export class InvoiceHistoryDataTableComponent extends BaseDatatableComponent
     public fb: FormBuilder,
     private adminUtilityService: AdminUtilityService,
     private globalFilterService: GlobalFilterService,
-    protected snackbarService: SnackBarService, // private router: Router, // private modalService: ModalService
-    // private financeService: FinanceService,
+    protected snackbarService: SnackBarService,
     private invoiceService: InvoiceService,
     public bookingDetailService: BookingDetailService
   ) {

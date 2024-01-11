@@ -8,6 +8,7 @@ import { RequestService } from '../../services/request.service';
 import { NotificationComponent } from '../notification/notification.component';
 import { FeedbackNotificationConfig } from '../../data-models/request.model';
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
+import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 
 @Component({
   selector: 'hospitality-bot-feedback-notification',
@@ -26,7 +27,9 @@ export class FeedbackNotificationComponent extends NotificationComponent
     protected snackbarService: SnackBarService,
     protected route: ActivatedRoute,
     protected _adminUtilityService: AdminUtilityService,
-    private globalFilterService: GlobalFilterService
+    protected globalFilterService: GlobalFilterService,
+    protected dialogConfig: DynamicDialogConfig,
+    protected dialogRef: DynamicDialogRef
   ) {
     super(
       _fb,
@@ -34,8 +37,18 @@ export class FeedbackNotificationComponent extends NotificationComponent
       requestService,
       snackbarService,
       route,
-      _adminUtilityService
+      _adminUtilityService,
+      dialogConfig,
+      dialogRef
     );
+    /**
+     * @Remarks Extracting data from he dialog service
+     */
+    if (this.dialogConfig?.data) {
+      Object.entries(this.dialogConfig.data).forEach(([key, value]) => {
+        this[key] = value;
+      });
+    }
   }
 
   ngOnInit() {
@@ -60,11 +73,13 @@ export class FeedbackNotificationComponent extends NotificationComponent
   }
 
   getConfigData(entityId): void {
-    this.requestService.getNotificationConfig(entityId).subscribe((response) => {
-      this.config = new FeedbackNotificationConfig().deserialize(response);
-      this.templates.entityId = entityId;
-      this.initNotificationForm();
-    });
+    this.requestService
+      .getNotificationConfig(entityId)
+      .subscribe((response) => {
+        this.config = new FeedbackNotificationConfig().deserialize(response);
+        this.templates.entityId = entityId;
+        this.initNotificationForm();
+      });
   }
 
   initNotificationForm() {
@@ -99,16 +114,15 @@ export class FeedbackNotificationComponent extends NotificationComponent
     this.$subscription.add(
       this.requestService
         .getTemplate(this.entityId, event.value.id, config)
-        .subscribe(
-          (response) =>
-            this.notificationForm
-              .get('message')
-              .patchValue(
-                this.notificationForm.get('channel').value === 'email'
-                  ? this.modifyTemplate(response.template)
-                  : response.template
-              )
+        .subscribe((response) =>
+          this.notificationForm
+            .get('message')
+            .patchValue(
+              this.notificationForm.get('channel').value === 'email'
+                ? this.modifyTemplate(response.template)
+                : response.template
             )
+        )
     );
   }
 
@@ -159,7 +173,7 @@ export class FeedbackNotificationComponent extends NotificationComponent
             this.closeModal();
           },
           ({ error }) => {
-            this.isSending = false; 
+            this.isSending = false;
           }
         )
     );

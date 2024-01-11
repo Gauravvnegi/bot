@@ -17,7 +17,6 @@ import {
   DiscountType,
   ModuleNames,
 } from '@hospitality-bot/admin/shared';
-import { ModalService } from '@hospitality-bot/shared/material';
 import { NavRouteOptions, Option } from 'libs/admin/shared/src';
 import CustomValidators from 'libs/admin/shared/src/lib/utils/validators';
 import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.service';
@@ -29,10 +28,7 @@ import {
   noRecordAction,
   noRecordActionForComp,
 } from '../../constant/form';
-import routes, {
-  navRoutesConfig,
-  roomRoutesConfig,
-} from '../../constant/routes';
+import routes, { roomRoutesConfig } from '../../constant/routes';
 import { Service, Services } from '../../models/amenities.model';
 import { RoomTypeForm } from '../../models/room.model';
 import { RoomType } from '../../models/rooms-data-table.model';
@@ -93,7 +89,6 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
     private snackbarService: SnackBarService,
     private formService: FormService,
     private subscriptionPlanService: SubscriptionPlanService,
-    private modalService: ModalService,
     private location: Location,
     private routesConfigService: RoutesConfigService
   ) {
@@ -592,39 +587,7 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
     this.useForm.get('isBaseRoomType').setValue(isToggleOn);
     this.setBasePriceDisability(isToggleOn);
 
-    if (isToggleOn) {
-      // const dialogConfig = new MatDialogConfig();
-      // dialogConfig.disableClose = true;
-      // const togglePopupCompRef = this.modalService.openDialog(
-      //   ModalComponent,
-      //   dialogConfig
-      // );
-      // togglePopupCompRef.componentInstance.content = {
-      //   heading: 'In-active Room Type',
-      //   description: [
-      //     'You are about to mark this room type in-active.',
-      //     'Are you Sure?',
-      //   ],
-      // };
-      // togglePopupCompRef.componentInstance.actions = [
-      //   {
-      //     label: 'No',
-      //     onClick: () => this.modalService.close(),
-      //     variant: 'outlined',
-      //   },
-      //   {
-      //     label: 'Yes',
-      //     onClick: () => {
-      //       this.useForm.get('isBaseRoomType').setValue(isToggleOn);
-      //       this.modalService.close();
-      //     },
-      //     variant: 'contained',
-      //   },
-      // ];
-      // togglePopupCompRef.componentInstance.onClose.subscribe(() => {
-      //   this.modalService.close();
-      // });
-    } else {
+    if (!isToggleOn) {
       this.initBaseRoomType();
     }
   }

@@ -1,6 +1,7 @@
 import { Clipboard } from '@angular/cdk/clipboard';
 import {
   ChangeDetectorRef,
+  Compiler,
   Component,
   ComponentFactoryResolver,
   EventEmitter,
@@ -16,13 +17,11 @@ import {
   RoutesConfigService,
   SubscriptionPlanService,
 } from '@hospitality-bot/admin/core/theme';
-import { MarketingNotificationComponent } from '@hospitality-bot/admin/notification';
 import {
   BookingDetailService,
   ConfigService,
   ModuleNames,
   Option,
-  openModal,
 } from '@hospitality-bot/admin/shared';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 import * as FileSaver from 'file-saver';
@@ -35,13 +34,11 @@ import { GuestDetail, GuestDetails } from '../../models/guest-feedback.model';
 import { Guest } from '../../models/guest-table.model';
 import { ReservationService } from '../../services/reservation.service';
 import { AdminDocumentsDetailsComponent } from '../admin-documents-details/admin-documents-details.component';
-import { JourneyDialogComponent } from '../journey-dialog/journey-dialog.component';
-import { SendMessageComponent } from 'libs/admin/notification/src/lib/components/send-message/send-message.component';
 import { MenuItem } from 'primeng/api';
 import { FileData } from '../../models/reservation-table.model';
-import { SnackbarHandlerService } from 'libs/admin/global-shared/src/lib/services/snackbar-handler.service';
-import { SideBarService } from 'libs/admin/shared/src/lib/services/sidebar.service';
-import { DialogService } from 'primeng/dynamicdialog';
+import { SideBarService } from 'apps/admin/src/app/core/theme/src/lib/services/sidebar.service';
+import { ReservationFormService } from '../../services/reservation-form.service';
+import { MarketingNotificationComponent } from '@hospitality-bot/admin/notification';
 
 @Component({
   selector: 'hospitality-bot-details',
@@ -138,7 +135,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
   @ViewChild('sideBar', { read: ViewContainerRef })
   sideBar: ViewContainerRef;
   sidebarVisible = false;
-
+  sidebarType = 'night-audit';
   constructor(
     private _fb: FormBuilder,
     private _reservationService: ReservationService,
@@ -151,15 +148,13 @@ export class DetailsComponent implements OnInit, OnDestroy {
     private subscriptionService: SubscriptionPlanService,
     private configService: ConfigService,
     private resolver: ComponentFactoryResolver,
+    private compiler: Compiler,
     private routesConfigService: RoutesConfigService,
-    public snackbarHandler: SnackbarHandlerService,
     protected sidebarService: SideBarService,
-    private dialogService: DialogService,
-    private bookingDetailService: BookingDetailService
+    private bookingDetailService: BookingDetailService,
+    private formService: ReservationFormService
   ) {
     this.self = this;
-    this.snackbarHandler.isDecreaseSnackbarZIndex = false; // Protect MUI Element hiding on snackbar open
-    this.increaseZIndex(true);
     this.initDetailsForm();
   }
 
@@ -668,301 +663,28 @@ export class DetailsComponent implements OnInit, OnDestroy {
       .checkCurrentWindow(this.reservationDetailsFG.get('bookingId').value)
       .subscribe((res) => {
         const journeyName = res.journey;
-        switch (journeyName) {
-          case 'EARLYCHECKIN':
-            this.openJourneyDialog({
-              title: 'Early Check-In Request',
-              description:
-                'Guest checkin request is before scheduled arrival time.',
-              buttons: {
-                cancel: {
-                  label: 'Cancel',
-                  context: '',
-                },
-                accept: {
-                  label: 'Accept',
-                  context: this,
-                  handler: {
-                    fn_name: 'verifyJourney',
-                    args: ['CHECKIN', 'ACCEPT'],
-                  },
-                },
-              },
-            });
-            break;
-          case 'CHECKIN':
-            this.openJourneyDialog({
-              title: 'Check-In Request',
-              description: 'Guest is about to checkin.',
-              buttons: {
-                cancel: {
-                  label: 'Cancel',
-                  context: '',
-                },
-                accept: {
-                  label: 'Accept',
-                  context: this,
-                  handler: {
-                    fn_name: 'verifyJourney',
-                    args: ['CHECKIN', 'ACCEPT'],
-                  },
-                },
-              },
-            });
-            break;
-          case 'LATECHECKIN ':
-            this.openJourneyDialog({
-              title: 'Late Check-In Request',
-              description:
-                'Guest checkin request is before scheduled arrival time.',
-              buttons: {
-                cancel: {
-                  label: 'Cancel',
-                  context: '',
-                },
-                accept: {
-                  label: 'Accept',
-                  context: this,
-                  handler: {
-                    fn_name: 'verifyJourney',
-                    args: ['CHECKIN', 'ACCEPT'],
-                  },
-                },
-              },
-            });
-            break;
-          case 'EARLYCHECKOUT':
-            this.openJourneyDialog({
-              title: 'Early Check-Out Request',
-              description:
-                'Guest checkout request is before scheduled departure time.',
-
-              buttons: {
-                cancel: {
-                  label: 'Cancel',
-                  context: '',
-                },
-                accept: {
-                  label: 'Accept',
-                  context: this,
-                  handler: {
-                    fn_name: 'verifyJourney',
-                    args: ['CHECKOUT', 'ACCEPT'],
-                  },
-                },
-              },
-            });
-            break;
-          case 'CHECKOUT':
-            this.openJourneyDialog({
-              title: 'Check-Out Request',
-              description: 'Guest is about to checkout.',
-              buttons: {
-                cancel: {
-                  label: 'Cancel',
-                  context: '',
-                },
-                accept: {
-                  label: 'Accept',
-                  context: this,
-                  handler: {
-                    fn_name: 'verifyJourney',
-                    args: ['CHECKOUT', 'ACCEPT'],
-                  },
-                },
-              },
-            });
-            break;
-          case 'LATECHECKOUT':
-            this.openJourneyDialog({
-              title: 'Late Check-Out Request',
-              description:
-                'Guest checkout request is after checkout request window.',
-              buttons: {
-                cancel: {
-                  label: 'Cancel',
-                  context: '',
-                },
-                accept: {
-                  label: 'Accept',
-                  context: this,
-                  handler: {
-                    fn_name: 'verifyJourney',
-                    args: ['CHECKOUT', 'ACCEPT'],
-                  },
-                },
-              },
-            });
-            break;
-        }
+        this.formService.confirmAndNotifyCheckin(journeyName, this.bookingId);
       });
   }
 
-  manualCheckout() {
-    this.openJourneyDialog({
-      title: 'Manual Checkout',
-      description: 'Guest is about to checkout',
-      question: 'Are you sure you want to continue?',
-      isSendInvoice: true,
-      buttons: {
-        cancel: {
-          label: 'Cancel',
-          context: '',
-        },
-        accept: {
-          label: 'Accept',
-          context: this,
-          handler: {
-            fn_name: 'manualCheckoutfn',
-            args: [],
-          },
-        },
-      },
+  manualCheckout(invoice?: Record<'isSendInvoice', any>) {
+    this.formService.manualCheckout(this.bookingId, () => {
+      this.details.currentJourneyDetails.status = 'COMPLETED';
     });
-  }
-
-  manualCheckoutfn(invoice?: Record<'isSendInvoice', any>) {
-    this._reservationService
-      .manualCheckout(
-        this.reservationDetailsFG.get('bookingId').value,
-        typeof invoice != 'undefined' && {
-          params: `?sendInvoice=${invoice?.isSendInvoice}`,
-        }
-      )
-      .subscribe((res) => {
-        this.snackbarService.openSnackBarAsText('Checkout completed.', '', {
-          panelClass: 'success',
-        });
-        this.details.currentJourneyDetails.status = 'COMPLETED';
-      });
   }
 
   manualCheckin() {
-    this.openJourneyDialog({
-      title: 'Check-In',
-      description: 'Guest is about to checkin',
-      question: 'Are you sure you want to continue?',
-      buttons: {
-        cancel: {
-          label: 'Cancel',
-          context: '',
-        },
-        accept: {
-          label: 'Accept',
-          context: this,
-          handler: {
-            fn_name: 'checkInfn',
-            args: [],
-          },
-        },
-      },
-    });
-  }
-
-  checkInfn() {
-    this.$subscription.add(
-      this._reservationService
-        .manualCheckin(this.reservationDetailsFG.get('bookingId').value)
-        .subscribe((res) => {
-          this.snackbarService.openSnackBarAsText('Checkin completed.', '', {
-            panelClass: 'success',
-          });
-          this.details.currentJourneyDetails.status = 'COMPLETED';
-        })
+    this.formService.manualCheckin(
+      this.details.stayDetails.arrivalTimeStamp,
+      this.bookingId,
+      () => {
+        this.details.currentJourneyDetails.status = 'COMPLETED';
+      }
     );
   }
 
-  // manualCheckin() {
-  //   const config = {
-  //     title: 'Manual Checkin',
-  //     description: '',
-  //   };
-  //   const dialogConfig = new MatDialogConfig();
-  //   dialogConfig.disableClose = true;
-  //   dialogConfig.width = '450px';
-  //   const manualCheckinCompRef = this._modal.openDialog(
-  //     ManualCheckinComponent,
-  //     dialogConfig
-  //   );
-
-  //   manualCheckinCompRef.componentInstance.guest = this.primaryGuest;
-  //   manualCheckinCompRef.componentInstance.config = config;
-  //   manualCheckinCompRef.componentInstance.loading = false;
-
-  //   manualCheckinCompRef.componentInstance.onDetailsClose.subscribe((res) => {
-  //     if (res?.status) {
-  //       if (res.data.phoneNumber.length === 0) res.data.cc = '';
-  //       manualCheckinCompRef.componentInstance.loading = true;
-  //       this.$subscription.add(
-  //         this._reservationService
-  //           .manualCheckin(
-  //             this.reservationDetailsFG.get('bookingId').value,
-  //             res.data
-  //           )
-  //           .subscribe(
-  //             (response) => {
-  //               manualCheckinCompRef.componentInstance.loading = false;
-  //               this.snackbarService
-  //                 .openSnackBarWithTranslate(
-  //                   {
-  //                     translateKey: 'messages.SUCCESS.GUEST_MANUAL_CHECKIN',
-  //                     priorityMessage: 'Guest Manually Checked In.',
-  //                   },
-  //                   '',
-  //                   { panelClass: 'success' }
-  //                 )
-  //                 .subscribe();
-  //               manualCheckinCompRef.close();
-  //               this.closeDetails();
-  //             },
-  //             ({ error }) => {
-  //               manualCheckinCompRef.componentInstance.loading = false;
-  //             }
-  //           )
-  //       );
-  //     } else res && manualCheckinCompRef.close();
-  //   });
-  // }
-
   checkForConfirmedBooking() {
     return !['NEW', 'NOSHOW', 'CANCELED'].includes(this.details.pmsStatus);
-  }
-  openJourneyDialog(config) {
-    // TODO: Need to remove
-    // this.increaseZIndex(true);
-    // const dialogConfig = new MatDialogConfig();
-    // dialogConfig.disableClose = true;
-    // dialogConfig.width = '450px';
-    // const journeyDialogCompRef = this._modal.openDialog(
-    //   JourneyDialogComponent,
-    //   dialogConfig
-    // );
-
-    // journeyDialogCompRef.componentInstance.config = config;
-
-    // journeyDialogCompRef.componentInstance.onDetailsClose.subscribe((res) => {
-    //   this.increaseZIndex(false);
-    //   res && journeyDialogCompRef.close();
-    // });
-
-    openModal({
-      config: {
-        width: '450px',
-        styleClass: 'confirm-dialog',
-        data: config,
-      },
-      component: JourneyDialogComponent,
-      dialogService: this.dialogService,
-    });
-  }
-
-  // TODO: Need to remove
-  increaseZIndex(toggleZIndex: boolean) {
-    const cdkOverlayContainer = document.querySelector(
-      '.cdk-overlay-container'
-    ) as HTMLElement;
-    if (cdkOverlayContainer)
-      cdkOverlayContainer.style.zIndex = toggleZIndex ? '2000' : '1000';
   }
 
   verifyJourney(journeyName, status) {
@@ -994,28 +716,8 @@ export class DetailsComponent implements OnInit, OnDestroy {
           .subscribe();
       });
   }
-
-  // getPrimaryGuestDetails() {
-  //   if (this.guestReservationDropdownList.length)
-  //     this.details.guestDetails.forEach((guest) => {
-  //       if (guest.isPrimary === true) {
-  //         this.primaryGuest = guest;
-  //         return;
-  //       }
-  //     });
-  // }
-
   openSendNotification(channel) {
     if (channel) {
-      // const dialogConfig = new MatDialogConfig();
-      // dialogConfig.disableClose = false;
-      // dialogConfig.width = '100%';
-      // const notificationCompRef = this._modal.openDialog(
-      //   channel === 'EMAIL'
-      //     ? MarketingNotificationComponent
-      //     : SendMessageComponent,
-      //   dialogConfig
-      // );
       if (channel === 'WHATSAPP_LITE') {
         this.onRoute.emit(true);
         this.routesConfigService.navigate({
@@ -1025,61 +727,112 @@ export class DetailsComponent implements OnInit, OnDestroy {
         return;
       }
 
-      this.sidebarVisible = true;
-      this.sideBar.clear();
       if (channel === 'EMAIL') {
-        const emailFactory = this.resolver.resolveComponentFactory(
-          MarketingNotificationComponent
-        );
-        const emailRef = this.sideBar.createComponent(emailFactory);
-        emailRef.instance.isEmail = true;
-        emailRef.instance.email = this.primaryGuest.email;
-        emailRef.instance.entityId = this.entityId;
-        emailRef.instance.details = this.details;
-        emailRef.instance.roomNumber = this.details.stayDetails.roomNumber;
-        emailRef.instance.isModal = true;
-        emailRef.instance.onModalClose.subscribe((res) => {
-          this.sidebarVisible = false;
+        /**
+         * @TODO MarketNotificationComponent should add in the
+         * common components of openSidebar ( Ayush )
+         */
+        // this.sidebarService.openSidebar({
+        //   componentName: SidebarComponentNames.MarketNotification,
+        //   containerRef: this.sideBar,
+        //   data: {
+        //     isEmail: true,
+        //     email: this.primaryGuest.email,
+        //     details: this.details,
+        //     roomNumber: this.details.stayDetails.roomNumber,
+        //     isModal: true,
+        //   },
+        //   onOpen: () => {
+        //     this.sidebarVisible = true;
+        //   },
+        //   onClose: (res) => {
+        //     this.sidebarVisible = false;
+        //   },
+        // });
+
+        const lazyModulePromise = import(
+          'libs/admin/notification/src/lib/admin-notification.module'
+        ).then((module) => {
+          return this.compiler.compileModuleAsync(
+            module.AdminNotificationModule
+          );
+        });
+
+        lazyModulePromise.then((moduleFactory) => {
+          this.sidebarVisible = true;
+          const factory = this.resolver.resolveComponentFactory(
+            MarketingNotificationComponent
+          );
+          this.sideBar.clear();
+          const emailRef = this.sideBar.createComponent(factory);
+          emailRef.instance.isEmail = true;
+          emailRef.instance.email = this.primaryGuest.email;
+          emailRef.instance.entityId = this.entityId;
+          emailRef.instance.details = this.details;
+          emailRef.instance.roomNumber = this.details.stayDetails.roomNumber;
+          emailRef.instance.onCloseSidebar.subscribe((res) => {
+            this.sidebarVisible = false;
+          });
         });
       } else {
-        const messageFactory = this.resolver.resolveComponentFactory(
-          SendMessageComponent
-        );
-        const messageRef = this.sideBar.createComponent(messageFactory);
-        messageRef.instance.isEmail = false;
-        messageRef.instance.channel = channel.replace(/\w\S*/g, function (txt) {
-          return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
-        });
-        messageRef.instance.entityId = this.entityId;
-        messageRef.instance.roomNumber = this.details.stayDetails.roomNumber;
-        messageRef.instance.isModal = true;
-        messageRef.instance.onModalClose.subscribe((res) => {
-          this.sidebarVisible = false;
-        });
+        // it is may be use in future...
+        // this.sidebarService.openSidebar<SendMessageComponent>({
+        //   componentName: SidebarComponentNames.SendMessage,
+        //   data: {
+        //     isEmail: false,
+        //     channel: channel.replace(/\w\S*/g, function (txt) {
+        //       return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+        //     }),
+        //     entityId: this.entityId,
+        //     roomNumber: this.details.stayDetails.roomNumber,
+        //     isModal: true,
+        //   },
+        //   onOpen: () => {
+        //     this.sidebarVisible = true;
+        //   },
+        //   onClose: () => {
+        //     this.sidebarVisible = false;
+        //   },
+        // });
+        // const modalData: Partial<SendMessageComponent> = {
+        //   isEmail: false,
+        //   channel: channel.replace(/\w\S*/g, function (txt) {
+        //     return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+        //   }),
+        //   entityId: this.entityId,
+        //   roomNumber: this.details.stayDetails.roomNumber,
+        //   isModal: true,
+        // };
+        // openModal({
+        //   config: {
+        //     width: '80%',
+        //     data: modalData,
+        //   },
+        //   component: MarketingNotificationComponent,
+        //   dialogService: this.dialogService,
+        // });
+        // const messageFactory = this.resolver.resolveComponentFactory(
+        //   SendMessageComponent
+        // );
+        // const messageRef = this.sideBar.createComponent(messageFactory);
+        // messageRef.instance.isEmail = false;
+        // messageRef.instance.channel = channel.replace(/\w\S*/g, function (txt) {
+        //   return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+        // });
+        // messageRef.instance.entityId = this.entityId;
+        // messageRef.instance.roomNumber = this.details.stayDetails.roomNumber;
+        // messageRef.instance.isModal = true;
+        // messageRef.instance.onModalClose.subscribe((res) => {
+        //   this.sidebarVisible = false;
+        // });
       }
-
-      // notificationCompRef.componentInstance.entityId = this.entityId;
-      // notificationCompRef.componentInstance.roomNumber = this.details.stayDetails.roomNumber;
-      // notificationCompRef.componentInstance.isModal = true;
-      // notificationCompRef.componentInstance.onModalClose.subscribe((res) => {
-      //   notificationCompRef.close();
-      // });
     } else {
-      // this._modal.close();
       this.sidebarVisible = false;
       this.closeDetails();
-      // this.router.navigateByUrl('/pages/conversation/request');
-      // notificationCompRef.componentInstance.entityId = this.entityId;
-      // notificationCompRef.componentInstance.roomNumber = this.details.stayDetails.roomNumber;
-      // notificationCompRef.componentInstance.isModal = true;
-      // notificationCompRef.componentInstance.onModalClose.subscribe((res) => {
-      //   notificationCompRef.close();
-      // });
     }
   }
 
   closeDetails() {
-    // this.increaseZIndex(false);
     this.onDetailsClose.next(true);
   }
 

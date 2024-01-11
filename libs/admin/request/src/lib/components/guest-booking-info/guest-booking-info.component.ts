@@ -1,7 +1,5 @@
 import { Component, Input, OnChanges, OnDestroy, OnInit } from '@angular/core';
-import { MatDialogConfig } from '@angular/material/dialog';
-import { DetailsComponent } from '@hospitality-bot/admin/reservation';
-import { ModalService } from '@hospitality-bot/shared/material';
+import { BookingDetailService } from '@hospitality-bot/admin/shared';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -19,7 +17,7 @@ export class GuestBookingInfoComponent implements OnInit, OnChanges, OnDestroy {
   pastBooking = [];
   upcomingBooking = [];
   $subscription = new Subscription();
-  constructor(protected _modal: ModalService) {}
+  constructor(private bookingService: BookingDetailService) {}
 
   ngOnInit(): void {}
 
@@ -38,26 +36,16 @@ export class GuestBookingInfoComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   openDetailPage(item) {
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.disableClose = true;
-    dialogConfig.width = '100%';
-    const detailCompRef = this._modal.openDialog(
-      DetailsComponent,
-      dialogConfig
-    );
-
-    detailCompRef.componentInstance.guestId = this.data.id;
-    detailCompRef.componentInstance.bookingNumber =
-      item.reservation.booking.bookingNumber;
     this.$subscription.add(
-      detailCompRef.componentInstance.onDetailsClose.subscribe((res) => {
-        // remove loader for detail close
-        detailCompRef.close();
+      this.bookingService.openBookingDetailSidebar({
+        guestId: this.data.id,
+        bookingNumber: item.reservation.booking.bookingNumber,
       })
     );
   }
 
   ngOnDestroy(): void {
+    this.bookingService.resetBookingState();
     this.$subscription.unsubscribe();
   }
 }

@@ -1,28 +1,12 @@
-import {
-  Component,
-  ComponentFactoryResolver,
-  OnInit,
-  ViewChild,
-  ViewContainerRef,
-} from '@angular/core';
+import { Component, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
-import {
-  AdminUtilityService,
-  ConfigService,
-  StatCard,
-} from '@hospitality-bot/admin/shared';
-import {
-  ModalService,
-  SnackBarService,
-} from '@hospitality-bot/shared/material';
+import { AdminUtilityService, StatCard } from '@hospitality-bot/admin/shared';
 import { Subscription } from 'rxjs';
-import { MatDialogConfig } from '@angular/material/dialog';
-import { AddItemComponent } from 'libs/admin/request/src/lib/components/add-item/add-item.component';
-import { RaiseRequestComponent } from 'libs/admin/request/src/lib/components/raise-request/raise-request.component';
 import { DateService } from '@hospitality-bot/shared/utils';
 import { AnalyticsService } from '../../services/analytics.service';
 import { AverageStats, DistributionStats } from '../../types/response.types';
 import { AverageRequestStats } from '../../models/statistics.model';
+import { SideBarService } from 'apps/admin/src/app/core/theme/src/lib/services/sidebar.service';
 
 @Component({
   selector: 'complaint-analytics',
@@ -47,7 +31,7 @@ export class ComplaintAnalyticsComponent implements OnInit {
 
   @ViewChild('sidebarSlide', { read: ViewContainerRef })
   sidebarSlide: ViewContainerRef;
-  sidebarType;
+  sidebarType = 'complaint';
 
   buttonConfig = [
     { button: true, label: 'Raise Complaint', icon: 'assets/svg/requests.svg' },
@@ -56,14 +40,11 @@ export class ComplaintAnalyticsComponent implements OnInit {
   $subscription = new Subscription();
 
   constructor(
-    private configService: ConfigService,
     private globalFilterService: GlobalFilterService,
-    private snackBarService: SnackBarService,
-    private modalService: ModalService,
+    private sidebarService: SideBarService,
     private dateService: DateService,
     private analyticsService: AnalyticsService,
-    private adminUtilityService: AdminUtilityService,
-    private resolver: ComponentFactoryResolver
+    private adminUtilityService: AdminUtilityService
   ) {}
 
   statCard: StatCard[] = [];
@@ -150,35 +131,20 @@ export class ComplaintAnalyticsComponent implements OnInit {
   }
 
   createServiceItem() {
-    this.sidebarVisible = true;
-    this.sidebarType = 'complaint';
-    const factory = this.resolver.resolveComponentFactory(AddItemComponent);
-    this.sidebarSlide.clear();
-    const componentRef = this.sidebarSlide.createComponent(factory);
-    componentRef.instance.isSidebar = true;
-    this.$subscription.add(
-      componentRef.instance.onClose.subscribe((res) => {
-        this.refreshStats();
-
-        this.sidebarVisible = false;
-      })
-    );
+    this.sidebarService.openSidebar({
+      componentName: 'AddItem',
+      containerRef: this.sidebarSlide,
+      onOpen: () => (this.sidebarVisible = true),
+      onClose: (res) => (this.sidebarVisible = false),
+    });
   }
+
   raiseRequest() {
-    this.sidebarVisible = true;
-    this.sidebarType = 'complaint';
-
-    const factory = this.resolver.resolveComponentFactory(
-      RaiseRequestComponent
-    );
-    this.sidebarSlide.clear();
-    const componentRef = this.sidebarSlide.createComponent(factory);
-    componentRef.instance.isSideBar = true;
-
-    componentRef.instance.onRaiseRequestClose.subscribe((res) => {
-      this.refreshStats();
-      this.sidebarVisible = false;
-      componentRef.destroy();
+    this.sidebarService.openSidebar({
+      componentName: 'RaiseRequest',
+      containerRef: this.sidebarSlide,
+      onOpen: () => (this.sidebarVisible = true),
+      onClose: (res) => (this.sidebarVisible = false),
     });
   }
 }

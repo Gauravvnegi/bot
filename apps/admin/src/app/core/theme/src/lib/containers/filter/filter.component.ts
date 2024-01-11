@@ -13,11 +13,17 @@ import {
   Validators,
 } from '@angular/forms';
 import { HotelDetailService } from 'libs/admin/shared/src/lib/services/hotel-detail.service';
-import { ModuleNames } from '../../../../../../../../../../libs/admin/shared/src/index';
+import {
+  Filter,
+  ModuleNames,
+} from '../../../../../../../../../../libs/admin/shared/src/index';
 import { SnackBarService } from '../../../../../../../../../../libs/shared/material/src/index';
 import { SubscriptionPlanService } from '../../services/subscription-plan.service';
 import { TokenUpdateService } from '../../services/token-update.service';
 import { layoutConfig } from '../../constants/layout';
+import { FilterTabs } from '../../type/product';
+import { TabFilterItems } from '../../constants/menu.contant';
+import { CheckboxEvent } from 'libs/admin/shared/src/lib/components/form-component/checkbox/checkbox.component';
 
 @Component({
   selector: 'admin-filter',
@@ -25,6 +31,7 @@ import { layoutConfig } from '../../constants/layout';
   styleUrls: ['./filter.component.scss'],
 })
 export class FilterComponent implements OnChanges, OnInit {
+  readonly filterTabs = FilterTabs;
   @Input() initialFilterValue;
   @Output() onCloseFilter = new EventEmitter();
   @Output() onApplyFilter = new EventEmitter();
@@ -35,6 +42,9 @@ export class FilterComponent implements OnChanges, OnInit {
   feedbackType;
   outlets = [{ name: 'All', id: 'ALL' }];
   hotelBasedToken = { key: null, value: null };
+  selectedTab = this.filterTabs.PROPERTY;
+  selectedTabIndex: number;
+  tabFilterItems: Filter<string, string>[] = TabFilterItems;
 
   filterForm: FormGroup;
   isTokenLoading = false;
@@ -96,11 +106,27 @@ export class FilterComponent implements OnChanges, OnInit {
     this.initLOV();
     this.registerListeners();
     this.setInitialFilterValue();
+    this.initOptions();
   }
 
   registerListeners() {
     this.listenForBrandChanges();
     this.listenForBranchChanges();
+  }
+
+  initOptions() {
+    this.tabFilterItems = this.tabFilterItems.filter((item) => {
+      switch (item.value) {
+        case this.filterTabs.OUTLETS:
+          return this.checkForOutlets();
+        default:
+          return true;
+      }
+    });
+
+    this.selectedTabIndex = this.tabFilterItems.findIndex(
+      (item) => item.value == this.selectedTab
+    );
   }
 
   listenForBrandChanges() {
@@ -239,7 +265,7 @@ export class FilterComponent implements OnChanges, OnInit {
    * @param event
    * @param outlet
    */
-  onOutletSelect(event, outlet) {
+  onOutletSelect(event: CheckboxEvent, outlet) {
     //to handle the case when all outlets are selected
     this.feedbackFG.get('feedbackType').setValue(layoutConfig.feedback.both);
 
@@ -289,6 +315,12 @@ export class FilterComponent implements OnChanges, OnInit {
     return this.subscriptionService.checkModuleSubscription(
       ModuleNames.FEEDBACK
     );
+  }
+
+  onSelectedTabFilterChange(event: Record<'index', number>) {
+    this.selectedTabIndex = event.index;
+    this.selectedTab = this.tabFilterItems[this.selectedTabIndex]
+      .value as FilterTabs;
   }
 
   get propertyFG() {

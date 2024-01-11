@@ -1,13 +1,15 @@
 import { Component, Input, OnChanges } from '@angular/core';
-import { MatDialogConfig } from '@angular/material/dialog';
-import { CircularChart } from '@hospitality-bot/admin/shared';
-import { ModalService } from '@hospitality-bot/shared/material';
+import {
+  CircularChart,
+  openModal as openDynamicModal,
+} from '@hospitality-bot/admin/shared';
 import { TranslateService } from '@ngx-translate/core';
 import { chartConfig } from '../../../constants/chart';
 import { dashboard } from '../../../constants/dashboard';
 import { tabFilterItems } from '../../../constants/tabFilterItem';
 import { Inhouse, InhouseRequest } from '../../../data-models/statistics.model';
 import { ReservationDatatableModalComponent } from '../../modal/reservation-datatable-modal/reservation-datatable-modal.component';
+import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 
 @Component({
   selector: 'hospitality-bot-inhouse-statistics',
@@ -33,8 +35,8 @@ export class InhouseStatisticsComponent implements OnChanges {
   };
 
   constructor(
-    private _modalService: ModalService,
-    private _translateService: TranslateService
+    private _translateService: TranslateService,
+    private dialogService: DialogService
   ) {}
 
   ngOnChanges(): void {
@@ -72,20 +74,21 @@ export class InhouseStatisticsComponent implements OnChanges {
    * @function openModal To open the reservation list for inhouse bookings.
    */
   openModal(): void {
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.disableClose = true;
-    dialogConfig.width = '100%';
-    const detailCompRef = this._modalService.openDialog(
-      ReservationDatatableModalComponent,
-      dialogConfig
-    );
-
-    detailCompRef.componentInstance.tableName = dashboard.table.inhouse.name;
-    detailCompRef.componentInstance.tabFilterItems = this.modalData.tabFilterItems;
-    detailCompRef.componentInstance.tabFilterIdx = 0;
-    detailCompRef.componentInstance.onModalClose.subscribe((response) =>
-      detailCompRef.close()
-    );
+    let dialogRef: DynamicDialogRef;
+    const modalData: Partial<ReservationDatatableModalComponent> = {
+      tableName: dashboard.table.inhouse.name,
+      tabFilterItems: this.modalData.tabFilterItems,
+      tabFilterIdx: 0,
+    };
+    dialogRef = openDynamicModal({
+      config: {
+        width: '80%',
+        styleClass: 'confirm-dialog',
+        data: modalData,
+      },
+      component: ReservationDatatableModalComponent,
+      dialogService: this.dialogService,
+    });
   }
 
   get dashboardConfig() {

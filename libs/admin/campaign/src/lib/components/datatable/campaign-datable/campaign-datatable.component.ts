@@ -99,8 +99,6 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
         (data) => this.setRecords(data),
         ({ error }) => {
           this.values = [];
-        },
-        () => {
           this.loading = false;
         }
       )

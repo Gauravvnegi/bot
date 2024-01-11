@@ -17,13 +17,13 @@ import { RoomService } from 'libs/admin/room/src/lib/services/room.service';
 
 @NgModule({
   imports: [
+    GlobalSharedModule,
     CommonModule,
     RouterModule,
     AdminSharedModule,
     FormsModule,
     ReactiveFormsModule,
     AdminManageReservationRoutingModule,
-    GlobalSharedModule,
     AdminAgentModule,
     AdminReservationModule,
   ],

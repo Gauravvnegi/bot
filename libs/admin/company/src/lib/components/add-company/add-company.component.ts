@@ -6,10 +6,6 @@ import {
   Validators,
 } from '@angular/forms';
 import {
-  GlobalFilterService,
-  RoutesConfigService,
-} from '@hospitality-bot/admin/core/theme';
-import {
   ConfigService,
   NavRouteOptions,
   Option,
@@ -25,6 +21,8 @@ import { CompanyResponseType } from '../../types/response';
 import { companyDiscount, discountTypes } from '../../constants/company';
 import { Location } from '@angular/common';
 import { FormService } from 'libs/admin/shared/src/lib/services/form.service';
+import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
+import { RoutesConfigService } from 'apps/admin/src/app/core/theme/src/lib/services/routes-config.service';
 @Component({
   selector: 'hospitality-bot-add-company',
   templateUrl: './add-company.component.html',
@@ -42,8 +40,8 @@ export class AddCompanyComponent implements OnInit {
   routes = companyRoutes;
   loading = false;
 
-  isSideBar = false;
-  @Output() onClose = new EventEmitter<
+  isSidebar = false;
+  @Output() onCloseSidebar = new EventEmitter<
     | Pick<
         CompanyResponseType,
         'id' | 'companyName' | 'marketSegment' | 'businessSource'
@@ -126,12 +124,12 @@ export class AddCompanyComponent implements OnInit {
   /**
    * @function isVisibleOnSideView
    * @param field as form control name
-   * @returns true if the control has a "required" validator and isSideBar is true
+   * @returns true if the control has a "required" validator and isSidebar is true
    * @else return false
    * @description to hide the field which is not required in sidebar
    */
   isVisibleOnSideView(field: string) {
-    if (!this.isSideBar) {
+    if (!this.isSidebar) {
       return true;
     }
     // Get the form control for the specified field
@@ -225,8 +223,8 @@ export class AddCompanyComponent implements OnInit {
             '',
             { panelClass: 'success' }
           );
-          if (this.isSideBar) {
-            this.onClose.emit({
+          if (this.isSidebar) {
+            this.onCloseSidebar.emit({
               id: res.id,
               companyName: res.firstName,
               marketSegment: res.marketSegment,
@@ -264,7 +262,7 @@ export class AddCompanyComponent implements OnInit {
   };
 
   closeSidebar() {
-    this.onClose.emit(true);
+    this.onCloseSidebar.emit(true);
   }
 
   /**

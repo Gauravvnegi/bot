@@ -1,11 +1,4 @@
-import {
-  Component,
-  EventEmitter,
-  Input,
-  OnInit,
-  Output,
-  ViewChild,
-} from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import {
   AbstractControl,
   FormArray,
@@ -24,24 +17,22 @@ import {
   AdminUtilityService,
   ModuleNames,
   QueryConfig,
+  openModal,
 } from '@hospitality-bot/admin/shared';
 import {
   DynamicPricingFactory,
   DynamicPricingHandler,
   validateConfig,
 } from '../../models/dynamic-pricing.model';
-import {
-  ModalService,
-  SnackBarService,
-} from '@hospitality-bot/shared/material';
+import { SnackBarService } from '@hospitality-bot/shared/material';
 import {
   GlobalFilterService,
   RoutesConfigService,
 } from '@hospitality-bot/admin/core/theme';
 import { ModalComponent } from 'libs/admin/shared/src/lib/components/modal/modal.component';
-import { MatDialogConfig } from '@angular/material/dialog';
 import { Accordion } from 'primeng/accordion';
 import { isDirty, markupValidator } from '../../services/bar-price.service';
+import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 
 @Component({
   selector: 'hospitality-bot-day-time-trigger',
@@ -70,8 +61,8 @@ export class DayTimeTriggerComponent implements OnInit {
     private snackbarService: SnackBarService,
     private globalFilter: GlobalFilterService,
     public fb: FormBuilder,
-    private modalService: ModalService,
-    private routesConfigService: RoutesConfigService
+    private routesConfigService: RoutesConfigService,
+    private dialogService: DialogService
   ) {}
 
   initForm() {
@@ -104,54 +95,58 @@ export class DayTimeTriggerComponent implements OnInit {
       const triggerFG = dayTimeFormArray.at(index) as FormGroup;
       const { type } = triggerFG.controls;
       if (type.value == 'update') {
-        const dialogConfig = new MatDialogConfig();
-        dialogConfig.disableClose = true;
-        const togglePopupCompRef = this.modalService.openDialog(
-          ModalComponent,
-          dialogConfig
-        );
-        togglePopupCompRef.componentInstance.content = {
+        let dialogRef: DynamicDialogRef;
+        const modalData: Partial<ModalComponent> = {
           heading: 'Remove Trigger',
-          description: ['Do you want to remove this trigger.', 'Are you Sure?'],
-        };
-        togglePopupCompRef.componentInstance.actions = [
-          {
-            label: 'No',
-            onClick: () => this.modalService.close(),
-            variant: 'outlined',
-          },
-          {
-            label: 'Yes',
-            onClick: () => {
-              this.loading = true;
-              this.$subscription.add(
-                this.dynamicPricingService
-                  .deleteDynamicPricing(triggerFG.get('id').value)
-                  .subscribe(
-                    (res) => {
-                      this.snackbarService.openSnackBarAsText(
-                        `Trigger '${
-                          triggerFG.get('name').value
-                        }' deleted Successfully.`,
-                        '',
-                        { panelClass: 'success' }
-                      );
-                      // dayTimeFormArray.removeAt(index);
-                      this.navigateToMain();
-                    },
-                    (error) => {
-                      this.loading = false;
-                    },
-                    this.handleFinal
-                  )
-              );
-              this.modalService.close();
+          descriptions: [
+            'Do you want to remove this trigger.',
+            'Are you Sure?',
+          ],
+          actions: [
+            {
+              label: 'No',
+              onClick: () => dialogRef.close(),
+              variant: 'outlined',
             },
-            variant: 'contained',
+            {
+              label: 'Yes',
+              onClick: () => {
+                this.loading = true;
+                this.$subscription.add(
+                  this.dynamicPricingService
+                    .deleteDynamicPricing(triggerFG.get('id').value)
+                    .subscribe(
+                      (res) => {
+                        this.snackbarService.openSnackBarAsText(
+                          `Trigger '${
+                            triggerFG.get('name').value
+                          }' deleted Successfully.`,
+                          '',
+                          { panelClass: 'success' }
+                        );
+                        // dayTimeFormArray.removeAt(index);
+                        this.navigateToMain();
+                      },
+                      (error) => {
+                        this.loading = false;
+                      },
+                      this.handleFinal
+                    )
+                );
+                dialogRef.close();
+              },
+              variant: 'contained',
+            },
+          ],
+        };
+
+        dialogRef = openModal({
+          config: {
+            styleClass: 'confirm-dialog',
+            data: modalData,
           },
-        ];
-        togglePopupCompRef.componentInstance.onClose.subscribe(() => {
-          this.modalService.close();
+          component: ModalComponent,
+          dialogService: this.dialogService,
         });
       } else {
         dayTimeFormArray.removeAt(index);

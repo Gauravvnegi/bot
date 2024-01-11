@@ -116,6 +116,7 @@ export class CreateServiceComponent implements OnInit {
     this.initOptionsConfig();
     this.initNavRoutes();
     this.listenForFormData();
+    this.listenForServiceTypeChanges();
   }
 
   listenForFormData() {
@@ -170,7 +171,7 @@ export class CreateServiceComponent implements OnInit {
       entityId: [''],
       imageUrl: [[], Validators.required],
       name: ['', Validators.required],
-      serviceType: [ServiceTypeOptionValue.PAID],
+      serviceType: [ServiceTypeOptionValue.PAID, Validators.required],
       rate: [''],
       description: [''],
 
@@ -209,6 +210,14 @@ export class CreateServiceComponent implements OnInit {
           }, this.handleError)
       );
     }
+  }
+
+  listenForServiceTypeChanges(): void {
+    this.useForm.get('serviceType').valueChanges.subscribe((res) => {
+      this.isComplimentaryService = !!(
+        res === ServiceTypeOptionValue.COMPLIMENTARY
+      );
+    });
   }
 
   initNavRoutes() {

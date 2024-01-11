@@ -24,7 +24,7 @@ export class RoomCardComponent implements OnInit {
     private roomService: RoomService,
     private snackbarService: SnackBarService,
     private housekeepingService: HousekeepingService,
-    private routesConfigService: RoutesConfigService,
+    private routesConfigService: RoutesConfigService
   ) {}
 
   ngOnInit(): void {}
@@ -45,7 +45,7 @@ export class RoomCardComponent implements OnInit {
       });
       return;
     }
-    this.roomService
+    this.housekeepingService
       .updateRoomStatus(this.entityId, {
         room: {
           id: id,

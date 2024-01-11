@@ -26,7 +26,6 @@ import { ReservationCalendarViewComponent } from './components/reservation-calen
 import { QuickReservationFormComponent } from './components/quick-reservation-form/quick-reservation-form.component';
 import { RoomTypesComponent } from './components/room-types/room-types.component';
 import { ButtonDependencyDirective } from './directives/button-dependency.directive';
-import { AdminDetailsService } from './services/admin-details.service';
 import { ReservationService } from './services/reservation.service';
 import { ManageReservationService } from 'libs/admin/manage-reservation/src/lib/services/manage-reservation.service';
 import { FormService } from 'libs/admin/manage-reservation/src/lib/services/form.service';
@@ -36,6 +35,7 @@ import { BookingInfoComponent } from './components/booking-info/booking-info.com
 import { BaseReservationComponent } from './components/base-reservation.component';
 import { GuestTableService } from 'libs/admin/guests/src/lib/services/guest-table.service';
 import { DialogService } from 'primeng/dynamicdialog';
+import { ReservationFormService } from './services/reservation-form.service';
 
 export const adminReservationRoutes: Route[] = [];
 
@@ -94,13 +94,13 @@ export const adminReservationRoutes: Route[] = [];
   ],
   providers: [
     ReservationService,
-    AdminDetailsService,
     ManageReservationService,
     FormService,
     RoomService,
     ChannelManagerService,
     GuestTableService,
     DialogService,
+    ReservationFormService,
   ],
 })
 export class AdminReservationModule {}

@@ -26,16 +26,20 @@
       </div>
     </div>
     <div class="reservation-input" *ngIf="isReservation">
-      <hospitality-bot-input
-        class="one-third-width"
-        label="Amount"
-        controlName="chargedAmount"
-        [props]="{
-          placeholder: 'Enter'
-        }"
-        [disabled]="!this.modelForm.get('chargeable').value"
-      ></hospitality-bot-input>
-
+      <div class="amount">
+        <hospitality-bot-input
+          class="one-third-width"
+          label="Amount"
+          controlName="chargedAmount"
+          [props]="{
+            placeholder: 'Enter'
+          }"
+          [disabled]="!this.modelForm.get('chargeable').value"
+        ></hospitality-bot-input>
+        <ul class="charges-info">
+          <li>Exclusive of tax</li>
+        </ul>
+      </div>
       <hospitality-bot-toggle-switch
         class="status"
         controlName="chargeable"

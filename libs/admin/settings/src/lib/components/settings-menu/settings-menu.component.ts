@@ -1,8 +1,6 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import {
-  SettingsMenuItem,
-  SubscriptionPlanService,
-} from '@hospitality-bot/admin/core/theme';
+import { SettingsMenuItem } from 'apps/admin/src/app/core/theme/src/lib/data-models/subscription-plan-config.model';
+import { SubscriptionPlanService } from 'apps/admin/src/app/core/theme/src/lib/services/subscription-plan.service';
 
 @Component({
   selector: 'hospitality-bot-settings-menu',
@@ -12,9 +10,8 @@ import {
 export class SettingsMenuComponent implements OnInit {
   settings: SettingsMenuItem[];
   isImageLoaded = false;
-  isSideBar = false;
-  isNotificationSettings: boolean = true;
-  @Output() closeEvent = new EventEmitter(false);
+  isSidebar = false;
+  @Output() onCloseSidebar = new EventEmitter(false);
 
   page: SettingsPages = 'SETTINGS_MENU';
 
@@ -25,7 +22,7 @@ export class SettingsMenuComponent implements OnInit {
   }
 
   close() {
-    this.closeEvent.emit(false);
+    this.onCloseSidebar.emit(false);
   }
 
   onImageLoad() {

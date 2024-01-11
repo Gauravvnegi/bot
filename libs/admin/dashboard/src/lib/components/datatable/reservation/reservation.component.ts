@@ -18,10 +18,7 @@ import {
   ModuleNames,
   sharedConfig,
 } from '@hospitality-bot/admin/shared';
-import {
-  ModalService,
-  SnackBarService,
-} from '@hospitality-bot/shared/material';
+import { SnackBarService } from '@hospitality-bot/shared/material';
 import * as FileSaver from 'file-saver';
 import { Observable, Subscription } from 'rxjs';
 import { cols, tableTypes } from '../../../constants/cols';
@@ -68,7 +65,6 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
     protected _adminUtilityService: AdminUtilityService,
     protected globalFilterService: GlobalFilterService,
     protected snackbarService: SnackBarService,
-    protected _modal: ModalService,
     public feedbackService: FeedbackService,
     protected bookingDetailService: BookingDetailService,
     protected subscriptionPlanService: SubscriptionPlanService,

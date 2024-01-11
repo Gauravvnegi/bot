@@ -7,7 +7,6 @@ import {
   ViewChild,
 } from '@angular/core';
 import { FormBuilder, FormControl } from '@angular/forms';
-import { MatDialogConfig } from '@angular/material/dialog';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { feedback, feedbackStatus } from '../../../constants/feedback';
 import { FeedbackNotificationComponent } from '@hospitality-bot/admin/notification';
@@ -18,13 +17,11 @@ import {
   ConfigService,
   FeedbackService,
   HotelDetailService,
+  openModal,
   sharedConfig,
   UserService,
 } from '@hospitality-bot/admin/shared';
-import {
-  ModalService,
-  SnackBarService,
-} from '@hospitality-bot/shared/material';
+import { SnackBarService } from '@hospitality-bot/shared/material';
 import { TranslateService } from '@ngx-translate/core';
 import * as FileSaver from 'file-saver';
 import { SortEvent } from 'primeng/api';
@@ -41,6 +38,11 @@ import {
 } from '../../../data-models/feedback-card.model';
 import { StatisticsService } from '../../../services/feedback-statistics.service';
 import { MainComponent } from '../../card';
+import {
+  DialogService,
+  DynamicDialogConfig,
+  DynamicDialogRef,
+} from 'primeng/dynamicdialog';
 @Component({
   selector: 'hospitality-bot-feedback-datatable',
   templateUrl: './feedback-datatable.component.html',
@@ -86,16 +88,26 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
     protected _adminUtilityService: AdminUtilityService,
     protected globalFilterService: GlobalFilterService,
     protected snackbarService: SnackBarService,
-    protected _modal: ModalService,
     public feedbackService: FeedbackService,
     protected tableService: FeedbackTableService,
     protected statisticService: StatisticsService,
     protected _hotelDetailService: HotelDetailService,
     protected _translateService: TranslateService,
     protected configService: ConfigService,
-    protected userService: UserService
+    protected userService: UserService,
+    protected dialogService: DialogService,
+    protected dialogConfig: DynamicDialogConfig,
+    protected dialogRef: DynamicDialogRef
   ) {
     super(fb);
+    /**
+     * @Remarks Extracting data from he dialog service
+     */
+    if (this.dialogConfig?.data) {
+      Object.entries(this.dialogConfig.data).forEach(([key, value]) => {
+        this[key] = value;
+      });
+    }
   }
 
   ngOnInit(): void {
@@ -127,7 +139,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
         )
         .subscribe((response) => {
           this.userPermissions = new Departmentpermissions().deserialize(
-            response.userCategoryPermission
+            response.departments
           );
           this.userService.userPermissions = response;
         })
@@ -595,22 +607,20 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
    */
   openFeedbackRequestPage(event: MouseEvent): void {
     event.stopPropagation();
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.disableClose = true;
-    const detailCompRef = this._modal.openDialog(
-      FeedbackNotificationComponent,
-      dialogConfig
-    );
-    detailCompRef.componentInstance.entityId = this.entityId;
-    detailCompRef.componentInstance.email = [
-      ...new Set(this.selectedRows.map((item) => item.guest.emailId)),
-    ];
-
-    this.$subscription.add(
-      detailCompRef.componentInstance.onModalClose.subscribe((res) => {
-        detailCompRef.close();
-      })
-    );
+    let dialogRef: DynamicDialogRef;
+    const modalData: Partial<FeedbackNotificationComponent> = {
+      entityId: this.entityId,
+      email: [...new Set(this.selectedRows.map((item) => item.guest.emailId))],
+    };
+    dialogRef = openModal({
+      config: {
+        width: '80%',
+        styleClass: 'dynamic-modal',
+        data: modalData,
+      },
+      component: FeedbackNotificationComponent,
+      dialogService: this.dialogService,
+    });
   }
 
   /**
@@ -622,26 +632,29 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
   openDetailPage(event: MouseEvent, rowData?, tabKey?: string): void {
     event.stopPropagation();
     if (!rowData) return;
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.disableClose = true;
-    dialogConfig.width = '100%';
-    dialogConfig.data = {
-      feedback: rowData,
-      colorMap: this.colorMap,
-      feedbackType: this.feedbackType,
-      isModal: true,
-      globalQueries: this.globalQueries,
+    let dialogRef: DynamicDialogRef;
+    const modalData: Partial<FeedbackDetailModalComponent> = {
+      data: {
+        feedback: rowData,
+        colorMap: this.colorMap,
+        feedbackType: this.feedbackType,
+        isModal: true,
+        globalQueries: this.globalQueries,
+      },
     };
-
-    const detailCompRef = this._modal.openDialog(
-      FeedbackDetailModalComponent,
-      dialogConfig
-    );
+    dialogRef = openModal({
+      config: {
+        width: '80%',
+        styleClass: 'dynamic-modal',
+        data: modalData,
+      },
+      component: FeedbackDetailModalComponent,
+      dialogService: this.dialogService,
+    });
     this.$subscription.add(
-      detailCompRef.componentInstance.onDetailsClose.subscribe((res) => {
+      dialogRef.onClose.subscribe((res) => {
         // remove loader for detail close
         this.refreshTableData();
-        detailCompRef.close();
       })
     );
   }

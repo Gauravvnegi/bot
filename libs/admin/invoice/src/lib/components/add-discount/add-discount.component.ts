@@ -1,9 +1,10 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AdminUtilityService, Option } from '@hospitality-bot/admin/shared';
 import { errorMessages } from 'libs/admin/room/src/lib/constant/form';
 import { MenuActionItem } from '../../constants/invoice.constant';
 import { BillItemFields } from '../../types/forms.types';
+import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 
 @Component({
   selector: 'hospitality-bot-add-discount',
@@ -17,13 +18,9 @@ export class AddDiscountComponent implements OnInit {
   isUpdate = false;
   isAdd = false;
 
-  @Input() serviceName: string;
-  @Input() billItems: BillItemFields[];
-  @Input() set discountAction(val: MenuActionItem) {
-    this.isAdd = val === MenuActionItem.ADD_DISCOUNT;
-    this.isRemove = val === MenuActionItem.REMOVE_DISCOUNT;
-    this.isUpdate = val === MenuActionItem.EDIT_DISCOUNT;
-  }
+  serviceName: string;
+  billItems: BillItemFields[];
+  discountAction: MenuActionItem;
 
   totalDiscount: { [date: number]: number } = {};
   discountType: string;
@@ -35,12 +32,24 @@ export class AddDiscountComponent implements OnInit {
     { label: '%Off', value: 'PERCENTAGE' },
   ];
 
-  @Output() onClose = new EventEmitter();
-
   constructor(
     private fb: FormBuilder,
-    private adminUtilityService: AdminUtilityService
-  ) {}
+    private adminUtilityService: AdminUtilityService,
+    public dialogRef: DynamicDialogRef,
+    public dialogConfig: DynamicDialogConfig
+  ) {
+    const data = dialogConfig?.data as DiscountInput;
+    const discountAction = data.discountAction;
+    if (data) {
+      this.serviceName = data.serviceName;
+      this.billItems = data.billItems;
+      if (discountAction) {
+        this.isAdd = discountAction === MenuActionItem.ADD_DISCOUNT;
+        this.isRemove = discountAction === MenuActionItem.REMOVE_DISCOUNT;
+        this.isUpdate = discountAction === MenuActionItem.EDIT_DISCOUNT;
+      }
+    }
+  }
 
   ngOnInit(): void {
     this.initForm();
@@ -135,15 +144,11 @@ export class AddDiscountComponent implements OnInit {
   }
 
   handleApply() {
-    this.onClose.next({
+    this.dialogRef.close({
       discountType: this.discountForm.get('discountType').value,
       discountValue: this.discountForm.get('discountValue').value,
       totalDiscount: this.totalDiscount,
     });
-  }
-
-  handleCancel() {
-    this.onClose.emit();
   }
 
   handleRemove() {
@@ -154,7 +159,7 @@ export class AddDiscountComponent implements OnInit {
       resetTotalDiscount[item.date] = 0;
     });
 
-    this.onClose.emit({
+    this.dialogRef.close({
       discountType: this.discountForm.get('discountType').value,
       discountValue: this.discountForm.get('discountValue').value ?? 0,
       totalDiscount: resetTotalDiscount,
@@ -162,6 +167,12 @@ export class AddDiscountComponent implements OnInit {
   }
 
   close() {
-    this.onClose.emit();
+    this.dialogRef.close();
   }
 }
+
+export type DiscountInput = {
+  serviceName: string;
+  billItems: BillItemFields[];
+  discountAction: MenuActionItem;
+};

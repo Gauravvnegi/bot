@@ -139,11 +139,11 @@ export class EditTableComponent implements OnInit {
       this.loading = true;
       this.tableManagementService
         .searchLibraryItem(this.entityId, {
-          params: `?key=${text}&type=${TableValue.area}`,
+          params: `?key=${text}&type=${TableValue.Area}`,
         })
         .subscribe(
           (res) => {
-            const data = res && res[TableValue.area];
+            const data = res && res[TableValue.Area];
             this.areaLimit =
               data
                 ?.filter((item) => item.status)
@@ -180,7 +180,7 @@ export class EditTableComponent implements OnInit {
     this.$subscription.add(
       this.tableManagementService
         .getList<AreaListResponse>(this.entityId, {
-          params: `?type=${TableValue.area}&offset=${this.areaOffset}&limit=${this.areaLimit}`,
+          params: `?type=${TableValue.Area}&offset=${this.areaOffset}&limit=${this.areaLimit}`,
         })
         .subscribe((res) => {
           const data = new AreaList().deserialize(res);

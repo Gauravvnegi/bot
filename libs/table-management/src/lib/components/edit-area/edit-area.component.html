@@ -6,6 +6,13 @@
     <div class="main">
       <div class="sub-heading">
         Area Information
+
+        <hospitality-bot-toggle-switch-with-label
+          [isToggleOn]="areaFormControls.status.value"
+          class="toggle action-wrapper"
+          controlName="status"
+          (onToggleSwitch)="statusUpdate($event)"
+        ></hospitality-bot-toggle-switch-with-label>
       </div>
       <div class="form-block">
         <hospitality-bot-input

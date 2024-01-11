@@ -15,8 +15,18 @@ export type TableManagementDatableConfig = Record<
       imageSrc: string;
     };
     iteratorFields?: Record<TableFormSubmissionType, IteratorField[]>;
+    entityStateKey?: string;
   }
 >;
+
+export type TableFoStatus = 'VACANT' | 'OCCUPIED';
+
+export type TableStatus =
+  | 'CLEAN'
+  | 'INSPECTED'
+  | 'OUT_OF_SERVICE'
+  | 'OUT_OF_ORDER'
+  | 'DIRTY';
 
 export type ManageTablePages =
   | 'createTable'
@@ -49,6 +59,13 @@ export type TableResponse = {
   remark: string;
   updated: string;
   status: boolean;
+  area: {
+    description: string;
+    id: string;
+    name: string;
+    shortDescription: string;
+    status: true;
+  };
 };
 
 export type Table = {};
@@ -73,7 +90,13 @@ export type AreaResponse = {
   name: string;
   status: true;
   updated: number;
-  table: string[];
+  tables: {
+    areaId: string;
+    created: number;
+    id: string;
+    number: string;
+    updated: number;
+  }[];
 };
 
 export type Area = {};

@@ -20,6 +20,8 @@
   letter-spacing: 0.96px;
   color: $secondary2;
   border-bottom: 1px solid #707070c1;
+  display: flex;
+  justify-content: space-between;
 }
 
 .form-block {

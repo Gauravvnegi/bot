@@ -4,6 +4,7 @@ export type AreaForm = {
   shortDescription: string;
   attachedTables: string[];
   removedTables: string[];
+  status: boolean;
 };
 
 export type AreaFormDataResponse = {

@@ -1,12 +1,15 @@
 import { Validators } from '@angular/forms';
 import {
+  TableFoStatus,
   TableManagementDatableConfig,
   TableManagementDatableTabs,
+  TableStatus,
 } from '../types/table-datable.type';
+import { FlagType } from '@hospitality-bot/admin/shared';
 
 export enum TableValue {
-  table = 'TABLE',
-  area = 'AREA',
+  Table = 'TABLE',
+  Area = 'AREA',
 }
 
 export const tabFilterItems: {
@@ -24,20 +27,18 @@ export const tabFilterItems: {
 ];
 
 export const tableManagementConfig: TableManagementDatableConfig = {
-  [TableValue.table]: {
+  [TableValue.Table]: {
     cols: [
       {
         field: 'name',
         header: 'Table',
         sortType: 'string',
-        searchField: ['type', 'roomNo'],
         width: '23%',
       },
       {
         field: 'pax',
         header: 'No of Persons',
-        sortType: 'date',
-        isSearchDisabled: true,
+        isSortDisabled: true,
       },
       {
         field: 'remark',
@@ -46,11 +47,10 @@ export const tableManagementConfig: TableManagementDatableConfig = {
         isSearchDisabled: true,
       },
       {
-        field: 'status',
-        header: 'Action / Status',
+        field: 'foStatus',
+        header: 'FO Status',
         sortType: 'string',
         isSearchDisabled: true,
-        width: '16%',
       },
     ],
     emptyTableMessage: {
@@ -110,8 +110,9 @@ export const tableManagementConfig: TableManagementDatableConfig = {
         },
       ],
     },
+    entityStateKey: 'inventoryStatus',
   },
-  [TableValue.area]: {
+  [TableValue.Area]: {
     cols: [
       {
         field: 'name',
@@ -120,7 +121,7 @@ export const tableManagementConfig: TableManagementDatableConfig = {
         width: '20%',
       },
       {
-        field: 'table',
+        field: 'tables',
         header: 'Table',
         sortType: 'number',
         width: '16%',
@@ -151,5 +152,45 @@ export const tableManagementConfig: TableManagementDatableConfig = {
       actionName: '+ Create Area',
       imageSrc: 'assets/images/empty-table-room-types.png',
     },
+    entityStateKey: 'inventoryTypeStatus',
   },
+};
+
+export const tableStatusDetails: Record<
+  TableStatus | TableFoStatus,
+  { label: string; type: FlagType }
+> = {
+  CLEAN: {
+    label: 'Clean',
+    type: 'active',
+  },
+  INSPECTED: {
+    label: 'Inspected',
+    type: 'completed',
+  },
+  OUT_OF_SERVICE: {
+    label: 'Out of Service',
+    type: 'inactive',
+  },
+  OUT_OF_ORDER: {
+    label: 'Out of Order',
+    type: 'failed',
+  },
+  VACANT: {
+    label: 'Vacant',
+    type: 'success',
+  },
+  OCCUPIED: {
+    label: 'Occupied',
+    type: 'inactive',
+  },
+  DIRTY: {
+    label: 'Dirty',
+    type: 'warning',
+  },
+};
+
+export const title: Record<TableValue, string> = {
+  [TableValue.Area]: 'Area',
+  [TableValue.Table]: 'Table',
 };

@@ -37,14 +37,16 @@ export class TableData {
   name: string;
   pax: number;
   remark: string;
-  status: boolean;
+  status: string;
+  nextStates: string[];
+  foStatus: string;
 
   deserialize(input: TableResponse) {
     this.id = input?.id;
-    this.name = `${input?.number}-${input?.inventoryType} `;
+    this.name = `${input?.number} ${input?.area?.name ?? ''}`.trim();
     this.pax = input?.pax;
     this.remark = input?.remark;
-    this.status = input?.status;
+    this.foStatus = input?.frontOfficeState;
     return this;
   }
 }
@@ -77,17 +79,17 @@ export class AreaList {
 export class AreaData {
   id: string;
   name: string;
-  table: string;
   description: string;
   date: string;
   status: boolean;
+  tables: string;
   deserialize(input: AreaResponse) {
     this.id = input?.id;
     this.name = input?.name;
-    this.table = input?.table?.join(', ');
     this.description = input?.description;
     this.status = input?.status;
     this.date = input?.updated && getFormattedDate(input?.updated);
+    this.tables = input.tables?.map((item) => item?.number).join(',');
     return this;
   }
 }

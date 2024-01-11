@@ -11,11 +11,14 @@ import {
   AreaListResponse,
   TableListResponse,
   TableManagementDatableTabs,
+  TableStatus,
 } from '../../types/table-datable.type';
 import {
   TableValue,
   tableManagementConfig,
   tabFilterItems,
+  tableStatusDetails,
+  title,
 } from '../../constants/table-datable';
 import {
   tableManagementParmId,
@@ -24,7 +27,12 @@ import {
 import { ActivatedRoute, Router } from '@angular/router';
 import { TableManagementService } from '../../services/table-management.service';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
-import { AreaList, TableList } from '../../models/data-table.model';
+import {
+  AreaData,
+  AreaList,
+  TableData,
+  TableList,
+} from '../../models/data-table.model';
 import { LazyLoadEvent } from 'primeng/api';
 
 @Component({
@@ -40,11 +48,12 @@ export class TableManagementDatableComponent extends BaseDatatableComponent
   readonly tableManagementConfig = tableManagementConfig;
   readonly TableValue = TableValue;
   readonly tableManagementRoutes = tableManagementRoutes;
+  readonly tableStatusDetails = tableStatusDetails;
   navRoutes: NavRouteOption[] = [];
   entityId: string;
 
   tableName: string = 'Table';
-  selectedTab: TableManagementDatableTabs = TableValue.table;
+  selectedTab: TableManagementDatableTabs = TableValue.Table;
   tabFilterItems = tabFilterItems;
 
   constructor(
@@ -61,10 +70,12 @@ export class TableManagementDatableComponent extends BaseDatatableComponent
   ngOnInit(): void {
     this.entityId = this.globalFilterService.entityId;
     this.initTableValue();
+    this.tableName = title[this.selectedTab];
   }
 
   loadData(event: LazyLoadEvent): void {
     this.selectedTab = this.tabFilterItems[this.tabFilterIdx].value;
+    this.tableName = title[this.selectedTab];
     this.initTableValue();
   }
 
@@ -80,7 +91,7 @@ export class TableManagementDatableComponent extends BaseDatatableComponent
         .subscribe(
           (res) => {
             switch (this.selectedTab) {
-              case TableValue.table:
+              case TableValue.Table:
                 const tableList = new TableList().deserialize(
                   res as TableListResponse
                 );
@@ -88,11 +99,12 @@ export class TableManagementDatableComponent extends BaseDatatableComponent
                 this.initFilters(
                   tableList.entityTypeCounts,
                   tableList.entityStateCounts,
-                  tableList.totalRecord
+                  tableList.totalRecord,
+                  tableStatusDetails
                 );
                 break;
 
-              case TableValue.area:
+              case TableValue.Area:
                 const areaList = new AreaList().deserialize(
                   res as AreaListResponse
                 );
@@ -100,7 +112,8 @@ export class TableManagementDatableComponent extends BaseDatatableComponent
                 this.initFilters(
                   areaList.entityTypeCounts,
                   areaList.entityStateCounts,
-                  areaList.totalRecord
+                  areaList.totalRecord,
+                  tableStatusDetails
                 );
             }
 
@@ -113,17 +126,72 @@ export class TableManagementDatableComponent extends BaseDatatableComponent
     );
   }
 
+  handleStatus(
+    status: TableStatus | boolean,
+    rowData: TableData | AreaData
+  ): void {
+    switch (this.selectedTab) {
+      case TableValue.Table:
+        this.handelTableStatus(status as TableStatus, rowData as TableData);
+
+      case TableValue.Area:
+        this.handleAreaStatus(status as boolean, rowData as AreaData);
+    }
+  }
+
+  handelTableStatus(status: TableStatus, data: TableData): void {
+    this.subscriptionList$.add(
+      this.tableManagementService
+        .updateTable(this.entityId, {
+          table: {
+            id: data.id,
+            status: status,
+          },
+        })
+        .subscribe(
+          () => this.initTableValue(),
+          () => {
+            this.loading = false;
+          }
+        )
+    );
+  }
+
+  handleAreaStatus(status: boolean, data: AreaData): void {
+    this.loading = true;
+    this.subscriptionList$.add(
+      this.tableManagementService
+        .updateArea(this.entityId, {
+          area: {
+            id: data.id,
+            status: status,
+          },
+        })
+        .subscribe(
+          () => this.initTableValue(),
+          () => {
+            this.loading = false;
+          }
+        )
+    );
+  }
+
   getQueryConfig(): QueryConfig {
     const config = {
       params: this.adminUtilityService.makeQueryParams([
         ...this.getSelectedQuickReplyFilters({
-          key: 'inventoryTypeStatus', //it will changed to inventoryTypeStatus
+          isStatusBoolean: this.selectedTab === TableValue.Area,
+          key:
+            this.selectedTab === TableValue.Area
+              ? tableManagementConfig.AREA.entityStateKey
+              : tableManagementConfig.TABLE.entityStateKey,
         }),
         {
           type: this.selectedTab,
           offset: this.first,
           limit: this.rowsPerPage,
           sort: 'updated',
+          raw: 'true',
         },
       ]),
     };
@@ -147,7 +215,7 @@ export class TableManagementDatableComponent extends BaseDatatableComponent
 
   openEditForm(data) {
     switch (this.selectedTab) {
-      case TableValue.table:
+      case TableValue.Table:
         this.router.navigate(
           [
             tableManagementRoutes.editable.route.replace(
@@ -160,7 +228,7 @@ export class TableManagementDatableComponent extends BaseDatatableComponent
           }
         );
         break;
-      case TableValue.area:
+      case TableValue.Area:
         this.router.navigate(
           [
             tableManagementRoutes.editArea.route.replace(

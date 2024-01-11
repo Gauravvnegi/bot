@@ -74,6 +74,7 @@ export class EditAreaComponent implements OnInit {
 
   initForm() {
     this.useForm = this.fb.group({
+      status: [true],
       id: [''],
       name: ['', [Validators.required]],
       description: [],
@@ -115,7 +116,7 @@ export class EditAreaComponent implements OnInit {
         .getList<TableListResponse>(this.entityId, {
           params: this.adminUtilityService.makeQueryParams([
             {
-              type: TableValue.table,
+              type: TableValue.Table,
               offset: '0',
               limit: '0',
               sort: 'updated',
@@ -224,6 +225,10 @@ export class EditAreaComponent implements OnInit {
       subModuleName: ModuleNames.TABLE_MANAGEMENT,
     });
   };
+
+  statusUpdate(status: boolean) {
+    this.areaFormControls.status.patchValue(status);
+  }
 
   handleError = ({ error }): void => {
     this.loading = false;

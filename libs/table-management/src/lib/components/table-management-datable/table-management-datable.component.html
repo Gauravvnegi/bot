@@ -6,19 +6,19 @@
   <div class="heading">{{ tableName }}</div>
   <div class="action-wrapper">
     <hospitality-bot-button
-      *ngIf="selectedTab === TableValue.table"
+      *ngIf="selectedTab === TableValue.Table"
       label="+ Add Multiple Tables"
       variant="text"
       (click)="navigateToAddMultipleTable()"
     ></hospitality-bot-button>
     <hospitality-bot-button
-      *ngIf="selectedTab === TableValue.table"
+      *ngIf="selectedTab === TableValue.Table"
       label="+ Add Table"
       [routerLink]="tableManagementRoutes.createTable.route"
       preserveQueryParams="true"
     ></hospitality-bot-button>
     <hospitality-bot-button
-      *ngIf="selectedTab === TableValue.area"
+      *ngIf="selectedTab === TableValue.Area"
       label="+ Add Area"
       [routerLink]="tableManagementRoutes.createArea.route"
       preserveQueryParams="true"
@@ -102,21 +102,11 @@
 
       <ng-container
         [ngTemplateOutlet]="
-          selectedTab === TableValue.table ? tableCell : areaCell
+          selectedTab === TableValue.Table ? tableCell : areaCell
         "
         [ngTemplateOutletContext]="{ $implicit: rowData }"
       >
       </ng-container>
-
-      <td>
-        <hospitality-bot-status-dropdown-toggle
-          [nextStates]="rowData.nextStates"
-          (onClick)="handleStatus($event, rowData)"
-          [state]="rowData.status"
-          [recordSetting]="roomStatusDetails"
-        >
-        </hospitality-bot-status-dropdown-toggle>
-      </td>
     </tr>
   </ng-template>
 
@@ -169,9 +159,9 @@
     </div>
   </td>
   <td>
-    <div *ngIf="rowData?.table; else emptyCell">
+    <div *ngIf="rowData?.tables; else emptyCell">
       <div class="primary-text">
-        {{ rowData?.table }}
+        {{ rowData?.tables }}
       </div>
     </div>
   </td>
@@ -188,6 +178,15 @@
         {{ rowData?.description }}
       </div>
     </div>
+  </td>
+  <td>
+    <hospitality-bot-status-dropdown-toggle
+      [nextStates]="rowData.nextStates"
+      (onClick)="handleStatus($event, rowData)"
+      [state]="rowData.status"
+      [recordSetting]="tableStatusDetails"
+    >
+    </hospitality-bot-status-dropdown-toggle>
   </td>
 </ng-template>
 
@@ -211,6 +210,15 @@
       <div class="primary-text">
         {{ rowData?.remark }}
       </div>
+    </div>
+  </td>
+  <td>
+    <div *ngIf="rowData.foStatus; else emptyCell">
+      <div
+        statusCell
+        [status]="rowData?.foStatus"
+        [type]="rowData.foStatus === 'VACANT' ? 'success' : 'failed'"
+      ></div>
     </div>
   </td>
 </ng-template>

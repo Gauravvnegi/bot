@@ -9,6 +9,7 @@ export class AreaFormData implements FormClass<AreaForm, AreaFormDataResponse> {
   tables: string[];
   attachedTables: string[];
   removedTables: string[];
+  status: boolean;
   deserialize(input: AreaFormDataResponse) {
     this.id = input?.id;
     this.name = input?.name;
@@ -16,6 +17,7 @@ export class AreaFormData implements FormClass<AreaForm, AreaFormDataResponse> {
     this.shortDescription = input?.shortDescription;
     this.attachedTables = input?.tables.map((item) => item.id);
     this.tables = input?.tables.map((item) => item.number);
+    this.status = input?.status;
 
     return this;
   }
@@ -27,6 +29,7 @@ export class AreaPayloadData implements FormClass<AreaForm, AreaForm> {
   removedTables: string[];
   attachedTables: string[];
   shortDescription: string;
+  status: boolean;
   deserialize(value: AreaForm) {
     this.id = value.id;
     this.name = value.name;
@@ -35,6 +38,7 @@ export class AreaPayloadData implements FormClass<AreaForm, AreaForm> {
       (item) => !value.removedTables.includes(item)
     );
     this.shortDescription = value.shortDescription;
+    this.status = value?.status;
     return this;
   }
 }

@@ -6,5 +6,5 @@
     "target": "es2015",
     "types": ["node", "jest"],
   },
-  "include": ["**/*.ts"],
+  "include": ["**/*.ts", "../../../../../../libs/admin/shared/src/lib/constants/common-component.ts"],
 }

@@ -66,4 +66,8 @@ export class NotificationSettingsComponent implements OnInit {
   close() {
     this.closeCustomize.emit();
   }
+
+  ngOnDestroy() {
+    this.$subscription.unsubscribe();
+  }
 }

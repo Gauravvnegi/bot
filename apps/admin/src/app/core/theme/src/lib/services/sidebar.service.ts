@@ -9,7 +9,7 @@ import { manageMaskZIndex } from 'libs/admin/shared/src/index';
 import {
   SidebarComponents,
   SidebarInstanceProps,
-} from '../type/common-component';
+} from '../../../../../../../../../libs/admin/shared/src/lib/constants/common-component';
 
 // export type SideBarConfig<TData extends Record<string,any>> = {
 //   type?: 'RAISE_REQUEST' | 'ADD_GUEST';
@@ -79,7 +79,7 @@ export class SideBarService {
       const factory = this.resolver.resolveComponentFactory(
         SidebarComponents[sidebarProps.componentName]
       );
-      const componentRef = sidebarProps.containerRef
+      const componentRef = sidebarProps?.containerRef
         ? sidebarProps.containerRef.createComponent(factory)
         : this.sidebarSlide.createComponent(factory);
 
@@ -87,7 +87,8 @@ export class SideBarService {
       Object.assign(componentRef.instance, sidebarProps.data);
       componentRef.instance[onCloseKey].subscribe((res) => {
         sidebarProps.onClose(res);
-        sidebarProps.containerRef.clear();
+        this.sidebarSlide?.clear();
+        sidebarProps?.containerRef?.clear();
         componentRef.destroy();
       });
     } else {

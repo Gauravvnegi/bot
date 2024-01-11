@@ -4,7 +4,6 @@ import {
   GlobalFilterService,
   SubscriptionPlanService,
 } from '@hospitality-bot/admin/core/theme';
-import { feedback } from '@hospitality-bot/admin/feedback';
 import { Subscription } from 'rxjs';
 import { HotelDetailService } from '../../../../../shared/src/lib/services/hotel-detail.service';
 import { EntityTabFilterResponse } from '@hospitality-bot/admin/shared';
@@ -13,6 +12,7 @@ import {
   EntityTabFilterConfig,
   FeedbackType,
 } from '../../types/entity-tab.type';
+import { feedback } from 'libs/admin/feedback/src/lib/constants/feedback';
 
 @Component({
   selector: 'hospitality-bot-entity-tab-filter',

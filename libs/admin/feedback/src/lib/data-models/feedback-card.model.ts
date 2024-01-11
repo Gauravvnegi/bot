@@ -143,7 +143,6 @@ export class UserList {
 
   deserialize(input, department?) {
     this.records = new Array<User>();
-    debugger;
     input?.forEach((item) => {
       if (
         item?.departments?.filter(

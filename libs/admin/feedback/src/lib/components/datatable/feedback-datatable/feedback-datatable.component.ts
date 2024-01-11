@@ -139,7 +139,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
         )
         .subscribe((response) => {
           this.userPermissions = new Departmentpermissions().deserialize(
-            response.userCategoryPermission
+            response.departments
           );
           this.userService.userPermissions = response;
         })

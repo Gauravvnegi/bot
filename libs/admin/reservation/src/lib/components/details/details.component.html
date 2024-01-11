@@ -84,19 +84,6 @@
           }"
           (itemSelection)="handleBookingChange($event)"
         ></hospitality-bot-select>
-
-        <!-- TODO: Need to remove mat -->
-        <!-- <mat-select
-          class="past-booking"
-          formControlName="booking"
-          (selectionChange)="handleBookingChange($event)"
-        >
-          <mat-option
-            [value]="item.bookingId"
-            *ngFor="let item of guestReservationDropdownList"
-            >{{ item.label | titlecase }} - {{ item.bookingNumber }}</mat-option
-          >
-        </mat-select> -->
       </div>
       <div class="btn-wrapper">
         <!-- conformation voucher -->

@@ -30,7 +30,7 @@ export class NightAuditComponent implements OnInit {
     private routesConfigService: RoutesConfigService
   ) {}
   @Input() isSidebar = true;
-  @Output() onClose = new EventEmitter();
+  @Output() onCloseSidebar = new EventEmitter();
   pageTitle = 'Night Audit';
   currentDate = new Date();
   auditDate: Date;
@@ -134,7 +134,7 @@ export class NightAuditComponent implements OnInit {
    * @param event calling from template
    */
   close(event?: boolean) {
-    this.onClose.emit(false);
+    this.onCloseSidebar.emit(false);
   }
 
   finish(event) {
@@ -158,7 +158,7 @@ export class NightAuditComponent implements OnInit {
    * @function onNavigate To navigate to the edit page
    */
   onNavigate(event) {
-    this.onClose.emit(true);
+    this.onCloseSidebar.emit(true);
     this.routesConfigService
       .navigate({
         skipLocationChange: true,

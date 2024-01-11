@@ -130,7 +130,7 @@ export class FeedbackDetailComponent implements OnInit, OnDestroy {
         )
         .subscribe((response) => {
           this.userPermissions = new Departmentpermissions().deserialize(
-            response.userCategoryPermission
+            response?.departments
           );
           this.userService.userPermissions = response;
         })

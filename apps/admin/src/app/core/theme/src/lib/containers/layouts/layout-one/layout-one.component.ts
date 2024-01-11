@@ -46,7 +46,6 @@ import {
 } from 'apps/admin/src/app/core/theme/src/lib/services/sidebar.service';
 import { tokensConfig } from 'libs/admin/shared/src/lib/constants/common';
 import { SettingsMenuComponent } from 'libs/admin/settings/src/lib/components/settings-menu/settings-menu.component';
-import { NightAuditComponent } from 'libs/admin/global-shared/src/lib/components/night-audit/night-audit.component';
 
 type MessagePayload = {
   data: {
@@ -613,44 +612,18 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
   }
 
   openNightAudit() {
-    const lazyModulePromise = import(
-      'libs/admin/global-shared/src/lib/admin-global-shared.module'
-    )
-      .then((module) => {
-        return this.compiler.compileModuleAsync(module.GlobalSharedModule);
-      })
-      .catch((error) => {
-        console.error('Error loading the lazy module:', error);
-      });
-
-    lazyModulePromise.then((moduleFactory) => {
-      this.sidebarVisible = true;
-      this.sidebarType = 'night-audit';
-      const factory = this.resolver.resolveComponentFactory(
-        NightAuditComponent
-      );
-      this.sidebarSlide.clear();
-      const componentRef = this.sidebarSlide.createComponent(factory);
-      componentRef.instance.isSidebar = true;
-      componentRef.instance.onClose.subscribe((res) => {
-        this.sidebarVisible = false;
-        componentRef.destroy();
-      });
+    this.sidebarType = 'night-audit';
+    this.sideBarService.openSidebar({
+      componentName: 'NightAudit',
+      onOpen: () => (this.sidebarVisible = true),
+      onClose: (res) => (this.sidebarVisible = false),
     });
-
-    // this.sidebarType = 'booking';
-    // this.sideBarService.openSidebar({
-    //   componentName: 'NightAudit',
-    //   onOpen: () => (this.sidebarVisible = true),
-    //   onClose: (res) => (this.sidebarVisible = false),
-    // });
   }
 
   // openSettings() {
   //   this.sidebarType = 'settings';
-  //   this.sideBarService.openSettings({
+  //   this.sideBarService.openSidebar({
   //     componentName: 'SettingsMenu',
-  //     containerRef: this.sidebarSlide,
   //     onOpen: () => (this.sidebarVisible = true),
   //     onClose: (res) => (this.sidebarVisible = false),
   //   });

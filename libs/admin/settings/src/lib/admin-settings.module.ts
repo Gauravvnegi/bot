@@ -8,6 +8,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HotelService } from './components/services/hotel.service';
 import { BrandService } from './components/services/brand.service';
 import { NotificationSettingsComponent } from './components/notification-settings/notification-settings.component';
+import { SettingsMenuComponent } from './components/settings-menu/settings-menu.component';
 
 @NgModule({
   imports: [
@@ -22,8 +23,7 @@ import { NotificationSettingsComponent } from './components/notification-setting
   declarations: [
     ...AdminSettingsRoutingModule.components,
     SiteSettingsComponent,
-    NotificationSettingsComponent,
   ],
-  exports: [NotificationSettingsComponent],
+  exports: [SettingsMenuComponent, NotificationSettingsComponent],
 })
 export class AdminSettingsModule {}

@@ -127,7 +127,7 @@ export class FeedbackDetailModalComponent implements OnInit, OnDestroy {
         .getUserPermission(this.data.feedbackType)
         .subscribe((response) => {
           this.userPermissions = new Departmentpermissions().deserialize(
-            response.userCategoryPermission
+            response.departments
           );
           this.assigneeList =
             new UserList().deserialize(

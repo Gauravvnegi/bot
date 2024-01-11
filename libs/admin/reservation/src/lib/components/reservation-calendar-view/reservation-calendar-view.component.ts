@@ -57,11 +57,11 @@ import { CalendarOccupancy } from '../../models/reservation-table.model';
 import { JourneyDialogComponent } from '../journey-dialog/journey-dialog.component';
 import { DialogService } from 'primeng/dynamicdialog';
 import { ReservationRatePlan } from 'libs/admin/room/src/lib/constant/form';
+import { ModalComponent } from 'libs/admin/shared/src/lib/components/modal/modal.component';
 import {
   JourneyData,
   ReservationFormService,
 } from '../../services/reservation-form.service';
-import { ModalComponent } from 'libs/admin/shared/src/lib/components/modal/modal.component';
 
 @Component({
   selector: 'hospitality-bot-reservation-calendar-view',
@@ -255,24 +255,36 @@ export class ReservationCalendarViewComponent implements OnInit {
       // Map data for unavailable rooms
       const unavailableData = unavailableRooms.reduce((result, room) => {
         const unavailableStatusDetails = room.statusDetails.filter(
-          (status) => status.status === 'OUT_OF_SERVICE'
+          (status) =>
+            status.status === 'OUT_OF_SERVICE' ||
+            status.status === 'OUT_OF_ORDER'
         );
         const roomValues = unavailableStatusDetails
           .filter((status) => {
             const endDate = this.getStatusDate(status.toDate, status.fromDate);
             return endDate !== null;
           })
-          .map((status) => ({
-            id: status.id ?? null, // Set id as needed for unavailable rooms
-            content: 'Out Of Service',
-            startPos: this.getDate(status.fromDate),
-            endPos: this.getStatusDate(status.toDate, status.fromDate),
-            rowValue: room.roomNumber,
-            colorCode: 'draft',
-            nonInteractive: true,
-            additionContent: status.remarks,
-            options: this.getMenuOptions(null, 'status'),
-          }));
+          .map((status) => {
+            const isOutOfService = status.status === 'OUT_OF_SERVICE';
+            return {
+              id: status.id ?? null, // Set id as needed for unavailable rooms
+              content: isOutOfService ? 'Out Of Service' : 'Out Of Order',
+              startPos: this.getDate(status.fromDate),
+              endPos: this.getStatusDate(status.toDate, status.fromDate),
+              rowValue: room.roomNumber,
+              colorCode: 'draft',
+              nonInteractive: true,
+              additionContent: status.remarks,
+              allowAction: isOutOfService
+                ? ['showMenu']
+                : ['showMenu', 'create'],
+              options: this.getMenuOptions(
+                null,
+                isOutOfService ? 'out-of-service' : 'out-of-order'
+              ),
+              opacity: isOutOfService ? 1 : 0.6,
+            };
+          });
         return [...result, ...roomValues];
       }, []);
 
@@ -565,10 +577,13 @@ export class ReservationCalendarViewComponent implements OnInit {
 
   getMenuOptions(
     reservation: RoomReservation,
-    type: 'reservation' | 'status' = 'reservation'
+    type: 'reservation' | 'out-of-order' | 'out-of-service' = 'reservation'
   ) {
-    if (type === 'status') {
+    if (type === 'out-of-service') {
       return reservationMenuOptions['OUT_OF_SERVICE'];
+    }
+    if (type === 'out-of-order') {
+      return reservationMenuOptions['OUT_OF_ORDER'];
     }
 
     return reservation.journeysStatus.PRECHECKIN === JourneyState.PENDING

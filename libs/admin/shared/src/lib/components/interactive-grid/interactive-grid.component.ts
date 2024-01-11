@@ -43,7 +43,7 @@ export class InteractiveGridComponent {
   halfwayCell: IGProps['halfwayCell'] = true;
   /** To decide whether i-grid can exist in single cell */
   oneCellGrid: IGProps['oneCellGrid'] = false;
-  disableChanges: IGProps['disableChanges'] = false;
+  disableChanges: IGProps['disableChanges'] = false; // not getting used
 
   /**
    * Props to show extra information
@@ -263,6 +263,13 @@ export class InteractiveGridComponent {
     }
   }
 
+  getZIndex(query: IGQueryEvent) {
+    const { data, id } = this.getCurrentDataInfo(query);
+    const { rowValue, colValue } = query;
+
+    return data?.id === this.toggleMenuId ? 20 : data?.nonInteractive ? 10 : 15;
+  }
+
   /**Emit selected menu option */
   handleMenuClick(event: MouseEvent, value: IGCellInfo['options'][number]) {
     event.stopPropagation();
@@ -294,6 +301,29 @@ export class InteractiveGridComponent {
       (!data.nonInteractive && this.toggleMenuId !== id) ||
       (!data.hasEnd && !data.hasStart)
     );
+  }
+
+  /**
+   * Check for additonal action
+   */
+  handleGridAllowAction(
+    query: IGQueryEvent,
+    action: ExtraGridInformation['allowAction'][number],
+    checkforNotInteraction = true
+  ) {
+    const { data, id } = this.getCurrentDataInfo(query);
+    const { rowValue, colValue } = query;
+    const isExecutable =
+      (checkforNotInteraction && data.nonInteractive) ||
+      !checkforNotInteraction;
+
+    // Handle Create
+    if (isExecutable && data.allowAction.includes(action)) {
+      this.handleCreate({
+        colValue,
+        rowValue,
+      });
+    }
   }
 
   /**
@@ -556,8 +586,12 @@ export class InteractiveGridComponent {
   handleClick(query: IGQueryEvent) {
     const { data, id } = this.getCurrentDataInfo(query);
     // handling disable only right now
-    if (data.nonInteractive && data.id) {
-      this.onDisabledClick.emit({ id });
+    if (data.nonInteractive) {
+      if (data.id && !data.allowAction?.length) {
+        this.onDisabledClick.emit({ id });
+      } else {
+        this.handleGridAllowAction(query, 'create', false);
+      }
     }
 
     if (this.disableChanges) {
@@ -823,7 +857,9 @@ type ExtraGridInformation = {
   colorCode?: FlagType;
   icons?: string[];
   nonInteractive?: boolean;
+  allowAction?: ('showMenu' | 'create' | 'edit')[];
   options?: { label: string; value: string; extras?: any }[];
+  opacity?: number;
 };
 
 type ExtraGridInformationKeys = keyof ExtraGridInformation;

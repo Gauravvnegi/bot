@@ -2,33 +2,19 @@
   <div class="stats__head" [formGroup]="rateGraphFG">
     <hospitality-bot-custom-tooltip
       [text]="'Response Breakdown as per feedback shared'"
-   *skeleton="stats == undefined; height: '25px'; width: '180px'" >
-      <div
-        class="stats__head__title"
-        
-      >
+      *skeleton="stats == undefined; height: '25px'; width: '180px'"
+    >
+      <div class="stats__head__title">
         {{ 'shared.title' | translate }}
       </div>
     </hospitality-bot-custom-tooltip>
-    <div
-      *skeleton="
-      stats == undefined;
-        height: '33px';
-        width: '115px';
-        borderRadius: '5px'
-      "
-    >
-      <mat-select
-        (click)="stopOpenModal($event)"
-        class="stats__head__select"
-        formControlName="rategraph"
-        (selectionChange)="handleRateGraphChange($event)"
-      >
-        <mat-option [value]="item.key" *ngFor="let item of keyLabels">{{
-          item.label
-        }}</mat-option>
-      </mat-select>
-    </div>
+    <hospitality-bot-select
+      (click)="stopOpenModal($event)"
+      class="stats__select"
+      controlName="rategraph"
+      [options]="keyLabels"
+      (itemSelection)="handleRateGraphChange($event)"
+    ></hospitality-bot-select>
   </div>
   <div class="stats__body">
     <div class="graph-container">

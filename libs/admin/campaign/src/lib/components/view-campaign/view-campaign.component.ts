@@ -242,7 +242,8 @@ export class ViewCampaignComponent implements OnInit, OnDestroy {
     };
     dialogRef = openModal({
       config: {
-        styleClass: 'dynamic-modal',
+        width: '550px',
+        styleClass: 'confirm-dialog',
         data: modalData,
       },
       component: SendTestComponent,

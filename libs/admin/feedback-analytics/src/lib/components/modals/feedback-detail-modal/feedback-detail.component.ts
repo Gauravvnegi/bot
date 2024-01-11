@@ -3,17 +3,16 @@ import {
   Component,
   ElementRef,
   EventEmitter,
-  Inject,
   OnDestroy,
   OnInit,
   Output,
   ViewChild,
 } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
   AdminUtilityService,
+  Option,
   UserService,
 } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
@@ -62,6 +61,7 @@ export class FeedbackDetailModalComponent implements OnInit, OnDestroy {
   userPermissions: Departmentpermission[];
   $subscription = new Subscription();
   assigneeList;
+  assigneeOption: Option[] = [];
   guestInfoEnable = false;
   feedbackFG: FormGroup;
   num = card.num;
@@ -121,10 +121,22 @@ export class FeedbackDetailModalComponent implements OnInit, OnDestroy {
               },
             ];
           }
-
-          this.feedbackFG?.patchValue({ assignee: this.data.feedback?.userId });
+          if (this.data.feedback?.userId) {
+            this.initAssigneeOption();
+            this.feedbackFG?.patchValue({
+              assignee: this.data.feedback?.userId,
+            });
+          }
         })
     );
+  }
+
+  initAssigneeOption() {
+    this.assigneeOption = this.assigneeList?.map((item) => ({
+      ...item,
+      label: `${item?.firstName ?? ''} ${item?.lastName ?? ''}`,
+      value: item.id,
+    }));
   }
 
   /**

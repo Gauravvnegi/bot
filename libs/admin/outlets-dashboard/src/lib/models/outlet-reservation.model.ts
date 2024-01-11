@@ -3,6 +3,8 @@ import {
   OutletReservationListResponse,
   OutletReservationResponse,
 } from '../types/outlet.response';
+import { ReservationStatus, PaymentStatus } from '../types/reservation-table';
+import { throwMatDialogContentAlreadyAttachedError } from '@angular/material/dialog';
 
 export class OutletReservationList {
   reservationData: OutletReservation[];
@@ -21,24 +23,48 @@ export class OutletReservationList {
 }
 
 export class OutletReservation {
-  name: string;
-  reservationTime: string;
+  invoiceId: string;
+  tableNumber: string;
+  area: string;
+  bookingNumber: string;
+  date: number;
+  time: string;
+  paymentMethod: string;
+  groupId: string;
+  totalAmount: number;
+  totalDueAmount: number;
+  nextStates: string[];
+  guestName: string;
   adultCount: number;
   orderNumber: number;
-  status: string;
   price: number;
   preparationTime: string;
-  tableNumber: string;
+  paymentStatus: PaymentStatus;
+  reservationStatus: ReservationStatus;
+  numberOfItems: number;
+  orderMethod: string;
 
   deserialize(input: OutletReservationResponse) {
-    this.name = input?.name;
-    this.reservationTime = input?.reservationTime;
+    this.invoiceId = input?.invoiceId;
+    this.area = input?.area;
+    this.bookingNumber = input?.bookingNumber;
+    this.date = input?.date;
+    this.time = input?.reservationTime;
+    this.paymentMethod = input?.paymentMethod;
+    this.groupId = input?.groupId;
+    this.totalAmount = input?.totalAmount;
+    this.totalDueAmount = input?.totalDueAmount;
+    this.nextStates = input?.nextStates;
+    this.guestName = input?.name;
     this.adultCount = input?.adultCount;
     this.orderNumber = input?.orderNumber;
-    this.status = input?.status;
+    this.reservationStatus = input?.reservationStatus;
     this.price = input?.price;
     this.preparationTime = input?.preparationTime;
     this.tableNumber = input?.tableNumber;
+    this.paymentStatus = input?.paymentStatus;
+    this.numberOfItems = input?.numberOfItems;
+    this.orderMethod = input?.orderMethod;
     return this;
   }
 }

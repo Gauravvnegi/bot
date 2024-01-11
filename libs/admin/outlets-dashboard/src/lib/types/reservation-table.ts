@@ -1,4 +1,4 @@
-export type DeliveryStatus =
+export type ReservationStatus =
   | 'COMPLETED'
   | 'CONFIRMED'
   | 'CANCELED'
@@ -8,3 +8,16 @@ export type DeliveryStatus =
   | 'RUNNING_KOT_TABLE'
   | 'RUNNING_TABLE'
   | 'PRINTED_TABLE';
+
+export type OrderMethod = 'DELIVERY' | 'DINEIN' | 'PICKUP';
+
+export type PaymentStatus = 'PAID' | 'UNPAID';
+
+export type PaymentData = {
+  icon: string;
+  text: string;
+};
+
+export type ReservationStatusData = {
+  borderColor: string;
+};

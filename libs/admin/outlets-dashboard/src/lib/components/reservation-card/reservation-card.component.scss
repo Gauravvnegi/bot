@@ -3,7 +3,7 @@
 .wrapper {
   padding: 10px;
   @include flex-col;
-  gap: 10px;
+  gap: 12px;
 }
 
 .header-wrapper {
@@ -36,23 +36,52 @@
     gap: 10px;
     // .name {
     // }
-    // .order-number {
-    // }
+    .order-number {
+      @include bold-vsm-text;
+      color: $black;
+    }
   }
 }
 
 .pricing {
-  @include flex-space-between-cen-Algn;
-  .status {
-    @include light-vsm-text;
-    background-color: #dcf6d3;
-    padding: 5px;
+  @include flex-item-center;
+  gap: 10px;
+  .price {
+    @include bold-vsm-text;
   }
 }
 
 .footer {
-  @include flex-space-between;
+  @include flex-space-between-cen-Algn;
+  .menu-item {
+    @include flex-space-between-cen-Algn;
+    gap: 10px;
+    .items {
+      @include flex-item-center;
+      gap: 5px;
+      .preparation-time {
+        color: $prepartion-time;
+      }
+    }
+  }
+  .journey {
+    @include flex-item-center;
+    gap: 10px;
+    font-size: 12px;
+    font-weight: 500;
+    .status {
+      background-color: white;
+      border-radius: 12px;
+      padding: 3px 8px;
+    }
+    .order-method {
+      background-color: #d8d8f0;
+      padding: 3px 8px;
+    }
+  }
+}
 
-  //   .journey {
-  //   }
+.add-item {
+  @include flex-justify-align-center;
+  margin: 15px 0 35px;
 }

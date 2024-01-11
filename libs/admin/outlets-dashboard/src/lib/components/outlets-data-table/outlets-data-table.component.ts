@@ -10,14 +10,17 @@ import { Subscription } from 'rxjs';
 import { OutletTableService } from '../../services/outlet-table.service';
 import * as FileSaver from 'file-saver';
 import { SnackBarService } from '@hospitality-bot/shared/material';
+import { Clipboard } from '@angular/cdk/clipboard';
 import {
-  deliveryReservationStatusDetails,
+  ReservationStatusDetails,
+  posCols,
   reservationTypes,
 } from '../../constants/data-table';
 import {
   OutletReservationList,
   OutletReservation,
 } from '../../models/outlet-reservation.model';
+import { ReservationStatus } from '../../types/reservation-table';
 
 @Component({
   selector: 'hospitality-bot-outlets-data-table',
@@ -32,14 +35,17 @@ export class OutletsDataTableComponent extends BaseDatatableComponent
   entityId: string;
   globalQueries = [];
   $subscription = new Subscription();
-  reservationTypes = [reservationTypes.dineIn, reservationTypes.delivery];
+  reservationTypes = [reservationTypes.card, reservationTypes.table];
   selectedReservationType: string;
   outletTableData: OutletReservation[];
+
+  readonly reservationStatusDetails = ReservationStatusDetails;
 
   constructor(
     public fb: FormBuilder,
     protected globalFilterService: GlobalFilterService,
     protected outletService: OutletTableService,
+    private _clipboard: Clipboard,
     protected adminUtilityService: AdminUtilityService,
     protected snackbarService: SnackBarService
   ) {
@@ -50,58 +56,36 @@ export class OutletsDataTableComponent extends BaseDatatableComponent
     this.entityId = this.globalFilterService.entityId;
     this.tableFG?.addControl('reservationType', new FormControl(''));
     this.setReservationType(this.reservationTypes[0].value);
+    this.cols = posCols;
+    this.initReservations();
   }
 
   setReservationType(value: string) {
     this.selectedReservationType = value;
     this.tableFG.patchValue({ reservationType: value });
-    value === 'dinein' && this.initDineInReservation();
-    value === 'delivery' && this.initDeliveryReservation();
   }
 
   loadData(event: LazyLoadEvent): void {
     // this.selectedReservationType === 'dinein' && this.initDineInReservation();
     // this.selectedReservationType === 'delivery' &&
-    //   this.initDeliveryReservation();
+    // this.initReservations();
   }
 
-  initDeliveryReservation() {
+  initReservations() {
     this.$subscription.add(
-      this.outletService
-        .getDeliveryReservations(this.entityId)
-        .subscribe((res) => {
-          if (res) {
-            const data = new OutletReservationList().deserialize(res);
-            this.values = data.reservationData;
-            this.outletTableData = data.reservationData;
-            this.initFilters(
-              res.entityTypeCounts,
-              res.entityStateCounts,
-              12,
-              deliveryReservationStatusDetails
-            );
-          }
-        })
-    );
-  }
-
-  initDineInReservation() {
-    this.$subscription.add(
-      this.outletService
-        .getDineInReservations(this.entityId)
-        .subscribe((res) => {
-          if (res) {
-            const data = new OutletReservationList().deserialize(res);
-            this.values = data.reservationData;
-            this.outletTableData = data.reservationData;
-            this.initFilters(
-              res.entityTypeCounts,
-              res.entityStateCounts,
-              12,
-              deliveryReservationStatusDetails
-            );
-          }
-        })
+      this.outletService.getReservations(this.entityId).subscribe((res) => {
+        if (res) {
+          const data = new OutletReservationList().deserialize(res);
+          this.values = data.reservationData;
+          this.outletTableData = data.reservationData;
+          this.initFilters(
+            res.entityTypeCounts,
+            res.entityStateCounts,
+            12,
+            ReservationStatusDetails
+          );
+        }
+      })
     );
   }
 
@@ -125,6 +109,19 @@ export class OutletsDataTableComponent extends BaseDatatableComponent
       }, this.handleFinal)
     );
   }
+
+  copyConfirmationNumber(number: string) {
+    this._clipboard.copy(number);
+    this.snackbarService.openSnackBarAsText('Booking number copied', '', {
+      panelClass: 'success',
+    });
+  }
+
+  handleStatus(status: ReservationStatus, reservationData: OutletReservation) {}
+
+  handleMenuClick(value: string, rowData: OutletReservation) {}
+
+  editReservation(id: string) {}
 
   addNewOrder() {}
 

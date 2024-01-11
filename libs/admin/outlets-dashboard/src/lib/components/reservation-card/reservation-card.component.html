@@ -2,7 +2,7 @@
   <div class="header-wrapper">
     <div class="heading">{{ data?.tableNumber }}</div>
     <div class="heading-info">
-      <span>{{ data?.reservationTime }}</span>
+      <span>{{ data?.time }}</span>
       <span class="adult-icon">
         <img
           src="assets/svg/standing-up-man-black.svg"
@@ -14,20 +14,50 @@
       </span>
     </div>
   </div>
-  <div class="content">
-    <div class="order-info">
-      <p class="name">{{ data?.name }}</p>
-      <p class="order-number">ORDER NO: {{ data?.orderNumber }}</p>
+  <ng-container *ngIf="isTableAvailable; else AddItem">
+    <div class="content">
+      <div class="order-info">
+        <!-- <p class="name">{{ data?.name }}</p> -->
+        ORDER NO:
+        <p class="order-number">{{ data?.orderNumber }}</p>
+      </div>
     </div>
-  </div>
-  <div class="pricing">
-    <div class="price">
-      {{ data?.price | currency: 'INR' }}
+    <div class="pricing">
+      <div class="price">
+        {{ data?.price | currency: 'INR' }}
+      </div>
+      <span>
+        <img [src]="cardConfig[data?.paymentStatus]?.icon" />
+        {{ cardConfig[data?.paymentStatus]?.text }}
+      </span>
     </div>
-    <span class="status" *ngIf="data.status">{{ data?.status }}</span>
-  </div>
-  <div class="footer">
-    <span>{{ data?.preparationTime }}</span>
-    <div class="journey"></div>
-  </div>
+    <div class="footer">
+      <div class="menu-item">
+        <span class="items">
+          <img src="assets/svg/menu-item.svg" />
+          <span class="prepartion-time">
+            {{ data?.numberOfItems }}
+          </span>
+        </span>
+        <span>{{ data?.preparationTime }}</span>
+      </div>
+      <div class="journey">
+        <span
+          *ngIf="data?.reservationStatus"
+          class="status"
+          [ngStyle]="{
+            border: '1px solid ' + statusColorConfig[data.reservationStatus]
+          }"
+          >{{ data?.reservationStatus | titlecase }}</span
+        >
+        <span class="order-method">{{ data?.orderMethod | titlecase }}</span>
+      </div>
+    </div>
+  </ng-container>
 </div>
+
+<ng-template #AddItem>
+  <div class="add-item">
+    <img src="assets/svg/add-item.svg" alt="" />
+  </div>
+</ng-template>

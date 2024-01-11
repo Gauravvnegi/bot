@@ -84,7 +84,8 @@ export class SideBarService {
         : this.sidebarSlide.createComponent(factory);
 
       componentRef.instance[isSidebarKey] = true;
-      Object.assign(componentRef.instance, sidebarProps.data);
+      sidebarProps?.data &&
+        Object.assign(componentRef.instance, sidebarProps?.data);
       componentRef.instance[onCloseKey].subscribe((res) => {
         sidebarProps.onClose(res);
         this.sidebarSlide?.clear();

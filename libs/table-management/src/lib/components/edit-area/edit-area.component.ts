@@ -28,7 +28,6 @@ import { AreaFormData, AreaPayloadData } from '../../models/edit-area.model';
 import { AreaForm } from '../../types/edit-area.type';
 import { TableListResponse } from '../../types/table-datable.type';
 import { TableValue } from '../../constants/table-datable';
-import { TableList } from '../../models/data-table.model';
 
 @Component({
   selector: 'hospitality-bot-edit-area',
@@ -77,7 +76,7 @@ export class EditAreaComponent implements OnInit {
     this.useForm = this.fb.group({
       id: [''],
       name: ['', [Validators.required]],
-      description: ['test'],
+      description: [],
       shortDescription: ['', [Validators.required]],
       attachedTables: [[]],
       removedTables: [[]],
@@ -147,6 +146,7 @@ export class EditAreaComponent implements OnInit {
       this.tableListForm
         .get(item?.controlName)
         .valueChanges.subscribe((res) => {
+          this.toggleCheckboxSelection();
           const { removedTables, attachedTables } = this.areaFormControls;
 
           if (res) {
@@ -161,18 +161,26 @@ export class EditAreaComponent implements OnInit {
         });
     });
 
-    this.tableForm.get('selectAll').valueChanges.subscribe((item) => {
+    this.tableFormControls.selectAll.valueChanges.subscribe((item: boolean) => {
       const controls = this.tableListForm.controls;
-      if (item) {
-        Object.keys(controls).forEach((item) => {
-          controls[item].setValue(true);
-        });
-      } else {
-        Object.keys(controls).forEach((item) => {
-          controls[item].setValue(false);
-        });
-      }
+      Object.keys(controls).forEach((key) => {
+        controls[key].setValue(item);
+      });
     });
+    //to check if all controls are selected then mark select all checked else unchecked
+    this.toggleCheckboxSelection();
+  }
+
+  /**
+   * To mark select control check/uncheck
+   */
+  toggleCheckboxSelection() {
+    const controls = this.tableListForm.controls;
+    if (Object.keys(controls).some((key) => !controls[key].value)) {
+      this.tableFormControls.selectAll.patchValue(false, { emitEvent: false });
+    } else {
+      this.tableFormControls.selectAll.patchValue(true, { emitEvent: false });
+    }
   }
 
   onSubmit() {
@@ -228,4 +236,13 @@ export class EditAreaComponent implements OnInit {
   get areaFormControls() {
     return this.useForm.controls as Record<keyof AreaForm, AbstractControl>;
   }
+
+  get tableFormControls() {
+    return this.tableForm.controls as Record<keyof TableForm, AbstractControl>;
+  }
 }
+
+type TableForm = {
+  selectAll: boolean;
+  tableList: {};
+};

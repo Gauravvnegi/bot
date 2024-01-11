@@ -53,6 +53,7 @@
               <p-checkbox
                 [formControlName]="table.controlName"
                 [binary]="true"
+                (onChanges)="toggleCheckboxSelection()"
               ></p-checkbox>
               <div class="label">{{ table.label }}</div>
             </div>

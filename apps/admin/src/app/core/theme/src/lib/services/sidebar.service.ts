@@ -9,7 +9,8 @@ import { manageMaskZIndex } from 'libs/admin/shared/src/index';
 import {
   SidebarComponents,
   SidebarInstanceProps,
-} from 'libs/admin/global-shared/src/lib/constants/common-components';
+} from '../type/common-component';
+
 // export type SideBarConfig<TData extends Record<string,any>> = {
 //   type?: 'RAISE_REQUEST' | 'ADD_GUEST';
 //   open: boolean;

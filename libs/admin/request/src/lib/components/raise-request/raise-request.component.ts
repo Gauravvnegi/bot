@@ -1,10 +1,14 @@
 import {
+  Compiler,
   Component,
+  ComponentFactoryResolver,
   EventEmitter,
   Input,
   OnDestroy,
   OnInit,
   Output,
+  ViewChild,
+  ViewContainerRef,
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
@@ -15,9 +19,8 @@ import { Subscription } from 'rxjs';
 import { request } from '../../constants/request';
 import { debounceTime } from 'rxjs/operators';
 import { RequestService } from '../../services/request.service';
-import { Option } from '@hospitality-bot/admin/shared';
-import { DialogService } from 'primeng/dynamicdialog';
-import { SideBarService } from 'apps/admin/src/app/core/theme/src/lib/services/sidebar.service';
+import { Option, manageMaskZIndex } from '@hospitality-bot/admin/shared';
+import { AddItemComponent } from '../add-item/add-item.component';
 
 @Component({
   selector: 'hospitality-bot-raise-request',
@@ -43,6 +46,8 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
   sidebarVisible = false;
   isItemUuid: boolean = false;
   @Input() isSidebar = false;
+  @ViewChild('sidebarSlide', { read: ViewContainerRef })
+  sidebarSlide: ViewContainerRef;
 
   constructor(
     private fb: FormBuilder,
@@ -50,8 +55,8 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
     private snackbarService: SnackBarService,
     private _requestService: RequestService,
     private adminUtilityService: AdminUtilityService,
-    private dialogService: DialogService,
-    private sidebarService: SideBarService
+    private compiler: Compiler,
+    private resolver: ComponentFactoryResolver
   ) {}
 
   ngOnInit(): void {
@@ -264,10 +269,14 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
   create() {
     //to open add new item pop up
     if (this.isSidebar) {
-      this.sidebarService.openSidebar({
-        componentName: 'AddItem',
-        onOpen: () => (this.sidebarVisible = true),
-        onClose: (res) => {
+      this.sidebarVisible = true;
+      const factory = this.resolver.resolveComponentFactory(AddItemComponent);
+      this.sidebarSlide.clear();
+      manageMaskZIndex();
+      const componentRef = this.sidebarSlide.createComponent(factory);
+      componentRef.instance.isSidebar = true;
+      this.$subscription.add(
+        componentRef.instance.onCloseSidebar.subscribe((res) => {
           if (res) {
             this.requestFG.patchValue(
               {
@@ -281,9 +290,8 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
             this.getItemDetails(res?.id);
           }
           this.sidebarVisible = false;
-        },
-        manageMask: true,
-      });
+        })
+      );
     }
   }
 

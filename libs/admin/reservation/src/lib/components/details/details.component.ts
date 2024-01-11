@@ -17,7 +17,6 @@ import {
   RoutesConfigService,
   SubscriptionPlanService,
 } from '@hospitality-bot/admin/core/theme';
-// import { MarketingNotificationComponent } from '@hospitality-bot/admin/notification';
 import {
   BookingDetailService,
   ConfigService,
@@ -40,7 +39,6 @@ import { FileData } from '../../models/reservation-table.model';
 import { SideBarService } from 'apps/admin/src/app/core/theme/src/lib/services/sidebar.service';
 import { ReservationFormService } from '../../services/reservation-form.service';
 import { MarketingNotificationComponent } from '@hospitality-bot/admin/notification';
-import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 
 @Component({
   selector: 'hospitality-bot-details',
@@ -154,9 +152,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
     private routesConfigService: RoutesConfigService,
     protected sidebarService: SideBarService,
     private bookingDetailService: BookingDetailService,
-    private dialogConfig: DynamicDialogConfig,
-    private dialogRef: DynamicDialogRef,
-    private formService: ReservationFormService // public dialogService: DialogService
+    private formService: ReservationFormService
   ) {
     this.self = this;
     this.initDetailsForm();
@@ -778,8 +774,8 @@ export class DetailsComponent implements OnInit, OnDestroy {
             this.sidebarVisible = false;
           });
         });
-        // const emailRef = this.sidebar.createComponent(emailFactory);
       } else {
+        // it is may be use in future...
         // this.sidebarService.openSidebar<SendMessageComponent>({
         //   componentName: SidebarComponentNames.SendMessage,
         //   data: {

@@ -30,7 +30,7 @@ export class UpgradeRoomTypeComponent implements OnInit {
 
   roomUpgradeForm: FormGroup;
 
-  chargedAmount: number;
+  chargedAmount: number = 0;
   selectedRoomType: RoomTypeOption;
   ratePlans: ReservationRatePlan[] = [];
   $subscription = new Subscription();
@@ -115,9 +115,11 @@ export class UpgradeRoomTypeComponent implements OnInit {
           ratePlans: this.ratePlans,
           rooms: this.selectedRoomType.rooms,
           ratePlanId: defaultPlan.value,
+          roomNumber: this.selectedRoomType.rooms[0].value,
         },
         { emitEvent: false }
       );
+      this.getUpgradedRoomTypeData();
     }
   }
 
@@ -129,7 +131,8 @@ export class UpgradeRoomTypeComponent implements OnInit {
           .subscribe((res: RoomUpgradeType) => {
             if (res) {
               this.chargedAmount = res.chargedAmount;
-              this.inputControls.chargedAmount.patchValue(this.chargedAmount);
+              this.inputControls.chargeable.value &&
+                this.inputControls.chargedAmount.patchValue(this.chargedAmount);
             }
           })
       );
@@ -145,6 +148,7 @@ export class UpgradeRoomTypeComponent implements OnInit {
     this.inputControls.chargeable.valueChanges.subscribe((res) => {
       if (res && this.chargedAmount)
         this.inputControls.chargedAmount.patchValue(this.chargedAmount);
+      else this.inputControls.chargedAmount.patchValue(0);
     });
   }
 

@@ -6,6 +6,7 @@ import {
   AdminUtilityService,
   CircularChart,
   StatCard,
+  openModal,
 } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { DateService } from '@hospitality-bot/shared/utils';
@@ -14,6 +15,8 @@ import { feedback } from '../../../constants/feedback';
 import { StatisticsService } from '../../../services/feedback-statistics.service';
 import { Subscription, forkJoin } from 'rxjs';
 import { chartConfig } from '../../../constants/chart';
+import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { FeedbackDatatableModalComponent } from '../../modals/feedback-datatable/feedback-datatable.component';
 
 @Component({
   selector: 'hospitality-bot-bifurcation-stats',
@@ -53,6 +56,13 @@ export class BifurcationStatsComponent implements OnInit {
     options: chartConfig.options.feedback,
   };
 
+  keyLabels = [
+    { label: 'GTM', value: 'GTM' },
+    { label: 'ALL', value: 'ALL' },
+    { label: 'Other Depts', value: 'OTHERS' },
+  ];
+  feedbackConfig = feedback;
+
   constructor(
     protected _adminUtilityService: AdminUtilityService,
     protected _statisticService: StatisticsService,
@@ -60,7 +70,8 @@ export class BifurcationStatsComponent implements OnInit {
     protected snackbarService: SnackBarService,
     protected dateService: DateService,
     protected _translateService: TranslateService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private dialogService: DialogService
   ) {}
 
   ngOnInit(): void {
@@ -285,6 +296,42 @@ export class BifurcationStatsComponent implements OnInit {
     return this.tabFeedbackType === feedback.types.both
       ? ''
       : this.tabFeedbackType;
+  }
+
+  openTableModal(event) {
+    event.stopPropagation();
+    let dialogRef: DynamicDialogRef;
+    const modalData: Partial<FeedbackDatatableModalComponent> = {
+      data: {
+        tableName: feedback.tableName.receivedBreakdown,
+        tabFilterItems: this.createTabFilterItem(),
+        tabFilterIdx: this.keyLabels.findIndex((item) => item.value === 'ALL'),
+        globalFeedbackFilterType: this.globalFeedbackFilterType,
+        config: [{ feedbackGraph: 'BIFURCATIONS' }],
+        feedbackType: this.getFeedbackType(),
+      },
+    };
+    dialogRef = openModal({
+      config: {
+        width: '80%',
+        data: modalData,
+      },
+      component: FeedbackDatatableModalComponent,
+      dialogService: this.dialogService,
+    });
+  }
+
+  createTabFilterItem() {
+    return this.keyLabels.map((keyObj) => {
+      return {
+        label: keyObj.label,
+        content: '',
+        value: keyObj.value,
+        disabled: false,
+        total: 0,
+        chips: this.feedbackConfig.chips.feedbackDatatable,
+      };
+    });
   }
 
   ngOnDestroy() {

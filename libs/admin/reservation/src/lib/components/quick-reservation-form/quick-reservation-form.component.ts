@@ -211,6 +211,7 @@ export class QuickReservationFormComponent implements OnInit {
       }),
 
       dailyPrice: [''],
+      rateImprovement: [false],
     });
 
     this.entityId = this.globalFilterService.entityId;
@@ -219,6 +220,14 @@ export class QuickReservationFormComponent implements OnInit {
 
   listenForRoomChanges() {
     let roomCount = 0;
+
+    const updateRateImprovement = () => {
+      this.reservationId &&
+        this.inputControls.rateImprovement.patchValue(true, {
+          emitEvent: false,
+        });
+    };
+
     this.roomControls.roomNumbers.valueChanges.subscribe((res) => {
       if (res) {
         const currentRoomCount = res.length ? res.length : 1;
@@ -237,6 +246,12 @@ export class QuickReservationFormComponent implements OnInit {
           });
         }
       }
+    });
+    this.roomControls.adultCount.valueChanges.subscribe((res) => {
+      res && updateRateImprovement;
+    });
+    this.roomControls.childCount.valueChanges.subscribe((res) => {
+      res && updateRateImprovement;
     });
   }
 

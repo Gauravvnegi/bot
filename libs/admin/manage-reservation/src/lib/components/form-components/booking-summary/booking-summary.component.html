@@ -115,11 +115,28 @@
           {{ calculateAmountToBePaid(summaryData) | currency: 'INR' }}
         </p>
       </div>
+      <!-- <input
+        #checkbox
+        type="checkbox"
+        [checked]="sendConfirmationMail"
+        (change)="onCheckboxClick($event.target)"
+      />
+      <label (click)="checkbox.click()" for="checkbox">
+        Give this service priority status, featuring it prominently on the
+        landing page as a highlighted service.</label
+      > -->
+      <div class="checkbox">
+        <input
+          #checkbox
+          type="checkbox"
+          [checked]="inputControls.printRate.value"
+          (change)="triggerPrintRate($event.target)"
+        />
+        <label (click)="checkbox.click()" for="checkbox"> Print Rate</label>
+      </div>
       <div class="bk-summary_btn-wrapper">
         <hospitality-bot-button
-          *ngIf="
-            reservationId
-          "
+          *ngIf="reservationId"
           class="btn"
           label="Guest Profile"
           variant="text"

@@ -5,7 +5,12 @@
         {{ data.guestDetails.primaryGuest.getProfileNickName() }}
       </div>
       <div class="request-items-header-left-title">
-        {{ data.guestDetails.primaryGuest.getFullName() }}
+        <div
+          guest-details-sidebar
+          [guestId]="data?.guestDetails?.primaryGuest?.id"
+        >
+          {{ data.guestDetails.primaryGuest.getFullName() }}
+        </div>
       </div>
     </div>
     <div class="request-items-header-right" [formGroup]="requestFG">
@@ -52,7 +57,10 @@
           controlName="assignee"
           [options]="allAssigneeList"
           [loading]="isAssigneeLoading"
-          [disabled]="!data?.isFocused"
+          [disabled]="
+            !data?.isFocused ||
+            ['RESOLVED', 'CANCELLED'].includes(requestFG.get('status')?.value)
+          "
           [pros]="{
             placeholder: 'select'
           }"

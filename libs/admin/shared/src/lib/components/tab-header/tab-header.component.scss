@@ -57,7 +57,7 @@
 
 .tab-wrapper {
   background-color: $white;
-  @include flex-item-center;
+  @include flex-space-between-cen-Algn;
 
   .tab-actions {
     display: flex;

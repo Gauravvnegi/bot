@@ -252,6 +252,10 @@ export class BookingInfoComponent implements OnInit {
         this.sourceValue = res;
         this.mapSourceOptions();
         this.initSourceDetails(res);
+        this.inputControls?.printRate?.patchValue(
+          res !== 'OTA' && res !== 'AGENT' && res !== 'COMPANY',
+          { emitEvent: false }
+        );
         (!this.editMode || !this.reservationId) &&
           this.sourceNameControl.reset();
       }

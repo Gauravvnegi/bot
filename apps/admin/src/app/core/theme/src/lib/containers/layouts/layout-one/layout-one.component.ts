@@ -123,6 +123,7 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
 
   @ViewChild('url') urlTemplate: TemplateRef<any>;
   iframeTempUrl: string;
+  sidebarStyle: {};
 
   constructor(
     private _router: Router,
@@ -185,11 +186,15 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
       .sideBarSubscription()
       .subscribe((res: SideBarConfig) => {
         if (res.open) {
-          if (res.type === 'RAISE_REQUEST') {
-            this.showComplaint();
-          }
-          if (res.type === 'URL') {
-            this.openSideBarWithUrl(res.url);
+          switch (res.type) {
+            case 'RAISE_REQUEST':
+              this.showComplaint();
+              break;
+            case 'URL':
+              this.openSideBarWithUrl(res.url);
+              break;
+            case 'ADD_GUEST':
+              this.showAddGuest(res?.data, res.sidebarType);
           }
         }
       });
@@ -587,12 +592,16 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
     });
   }
 
-  showAddGuest() {
-    this.sidebarType = 'guest-sidebar';
+  showAddGuest(guestConfig?: {}, sidebarType = 'guest-sidebar') {
+    this.sidebarType = sidebarType;
     this.sideBarService.openSidebar({
       componentName: 'AddGuest',
+      data: guestConfig,
       onOpen: () => (this.sidebarVisible = true),
-      onClose: (res) => (this.sidebarVisible = false),
+      onClose: (res) => (
+        res && this.sideBarService.sideBarEmittedData.next(res),
+        (this.sidebarVisible = false)
+      ),
     });
   }
 

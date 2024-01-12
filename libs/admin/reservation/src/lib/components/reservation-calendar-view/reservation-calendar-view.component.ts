@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Clipboard } from '@angular/cdk/clipboard';
 import {
   GlobalFilterService,
@@ -267,7 +267,7 @@ export class ReservationCalendarViewComponent implements OnInit {
           .map((status) => {
             const isOutOfService = status.status === 'OUT_OF_SERVICE';
             return {
-              id: status.id ?? null, // Set id as needed for unavailable rooms
+              id: status.id, // Set id as needed for unavailable rooms
               content: isOutOfService ? 'Out Of Service' : 'Out Of Order',
               startPos: this.getDate(status.fromDate),
               endPos: this.getStatusDate(status.toDate, status.fromDate),
@@ -282,7 +282,7 @@ export class ReservationCalendarViewComponent implements OnInit {
                 null,
                 isOutOfService ? 'out-of-service' : 'out-of-order'
               ),
-              opacity: isOutOfService ? 1 : 0.6,
+              opacity: isOutOfService ? 1 : 0.4,
             };
           });
         return [...result, ...roomValues];
@@ -687,7 +687,10 @@ export class ReservationCalendarViewComponent implements OnInit {
         });
         break;
       case 'CANCEL_OUT_OF_SERVICE':
-        this.cancelOutOfService(event.id, roomType);
+        this.cancelPopUp('SERVICE', event.id, roomType);
+        break;
+      case 'CANCEL_OUT_OF_ORDER':
+        this.cancelPopUp('ORDER', event.id, roomType);
     }
   }
 
@@ -742,9 +745,14 @@ export class ReservationCalendarViewComponent implements OnInit {
     };
   }
 
-  cancelOutOfService(statusId, roomType) {
+  cancelPopUp(type: 'SERVICE' | 'ORDER', statusId, roomType) {
+    const selectedData = this.getSelectedRoom(roomType);
+    const selectedStatus = selectedData?.statusDetails.find((data) =>
+      statusId ? data.id === statusId : data.isCurrentStatus
+    );
+    debugger;
     const data: Partial<ModalComponent> = {
-      heading: `Out of Service`,
+      heading: type === 'SERVICE' ? `Out of Service` : 'Out of order`',
       descriptions: [
         `Once released, it will be visible to visitors, and the`,
         `inventory will be available.`,
@@ -752,6 +760,9 @@ export class ReservationCalendarViewComponent implements OnInit {
       title: `Are you sure you want to release this room from Maintenance?`,
       isDate: true,
       isRemarks: true,
+      remarksValidators: [Validators.required],
+      fromDate: selectedStatus?.fromDate,
+      toDate: selectedStatus?.toDate,
       actions: [
         {
           label: 'Cancel',
@@ -766,8 +777,14 @@ export class ReservationCalendarViewComponent implements OnInit {
             this.roomService
               .updateRoomStatus(this.entityId, {
                 room: {
-                  id: this.getSelectedRoom(roomType).id,
-                  removeStatusIds: [statusId],
+                  id: selectedData.id,
+                  ...(statusId
+                    ? { removeStatusIds: [statusId] }
+                    : {
+                        statusDetailsList: [
+                          { isCurrentStatus: true, status: 'DIRTY' },
+                        ],
+                      }),
                 },
               })
               .subscribe(() => {

@@ -254,8 +254,6 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
                 ])
               )
               .subscribe((res) => {
-                debugger;
-
                 const guestData = res?.guestDetails?.primaryGuest;
                 this.requestFG.get('guestId').setValue(guestData.id);
 
@@ -263,20 +261,6 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
                   label: `${guestData.firstName} ${guestData.lastName}`,
                   value: guestData.id,
                 };
-
-                // if (res) {
-                //   this.reservation = res;
-                //   this.requestFG.patchValue({
-                //     firstName: res.guestDetails.primaryGuest.firstName,
-                //     lastName: res.guestDetails.primaryGuest.lastName,
-                //   });
-                //   this.requestFG.get('firstName').disable();
-                //   this.requestFG.get('lastName').disable();
-                // } else {
-                //   this.reservation = {};
-                //   this.requestFG.get('firstName').enable();
-                //   this.requestFG.get('lastName').enable();
-                // }
               })
           );
         else this.reservation = {};

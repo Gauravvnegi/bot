@@ -12,6 +12,7 @@ import {
   getFormattedDate,
   getFormattedDateWithTime,
 } from './reservation-reports.models';
+import { getFullName } from '../constant/reports.const';
 
 export class Cashier extends RowStyles {
   id: string;
@@ -163,14 +164,17 @@ class PayTypeReportData extends RowStyles {
     (this.id = input?.reservationId), (this.paymentMode = undefined);
     this.paymentType = input?.paymentMethod;
 
-    this.employee =
-      (input?.reservation?.user?.firstName ?? '') +
-      ' ' +
-      (input?.reservation?.user?.lastName ?? '');
+    this.employee = getFullName(
+      input?.reservation?.user?.firstName,
+      input?.reservation?.user?.lastName
+    );
 
     this.bookingNo = input?.reservationNumber;
     this.folioNo = input?.reservation?.invoiceCode;
-    this.guestName = `${input?.reservation?.guestDetails?.primaryGuest?.firstName} ${input?.reservation?.guestDetails?.primaryGuest?.lastName}`;
+    this.guestName = getFullName(
+      input?.reservation?.guestDetails?.primaryGuest?.firstName,
+      input?.reservation?.guestDetails?.primaryGuest?.lastName
+    );
     this.room = `${input?.reservation?.stayDetails?.room?.roomNumber} - ${input?.reservation?.stayDetails?.room?.type}`;
     this.counter = undefined;
     this.dateAndTime =

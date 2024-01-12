@@ -7,6 +7,7 @@ import {
 } from '../types/discount-reports.types';
 import { ReportClass } from '../types/reports.types';
 import { getFormattedDate } from './reservation-reports.models';
+import { getFullName } from '../constant/reports.const';
 
 export class DiscountAllowanceReport
   implements
@@ -22,10 +23,14 @@ export class DiscountAllowanceReport
           date: getFormattedDate(reservationData.created),
           group: undefined, //to be added in response
           res: reservationData.number,
-          createdBy:
-            reservationData?.user?.firstName &&
-            `${reservationData?.user?.firstName} ${reservationData?.user?.lastName}`, //to be added in response
-          guestName: `${reservationData.guestDetails.primaryGuest.firstName} ${reservationData.guestDetails.primaryGuest.lastName}`,
+          createdBy: getFullName(
+            reservationData?.user?.firstName,
+            reservationData?.user?.lastName
+          ), //to be added in response
+          guestName: getFullName(
+            reservationData.guestDetails.primaryGuest.firstName,
+            reservationData.guestDetails.primaryGuest.lastName
+          ),
           reasonForDiscount: undefined, //to be added in response
           directDiscount: toCurrency(
             reservationData?.reservationItemsPayment?.totalRoomDiscount

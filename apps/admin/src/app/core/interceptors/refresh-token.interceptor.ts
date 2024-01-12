@@ -34,7 +34,6 @@ export class RefreshTokenInterceptor implements HttpInterceptor {
       catchError((err) => {
         if (req.url.includes('refresh') || req.url.includes('login')) {
           console.log('Error occured in either login or refresh api');
-
           if (req.url.includes('refresh')) {
             //logout and redirect to login
             console.log(
@@ -87,12 +86,13 @@ export class RefreshTokenInterceptor implements HttpInterceptor {
             })
             .pipe(
               switchMap((tokenObj: any) => {
-                //     //When the call to refreshToken completes we reset the refreshTokenInProgress to false
-                //     // for the next time the token needs to be refreshed
+                //When the call to refreshToken completes we reset the refreshTokenInProgress to false
+                // for the next time the token needs to be refreshed
                 this.updateAccessToken(tokenObj);
                 this.refreshTokenInProgress = false;
+                const newRequest = this.addAuthenticationToken(req);
                 this.refreshTokenSubject.next(tokenObj);
-                return next.handle(this.addAuthenticationToken(req));
+                return next.handle(newRequest);
               }),
               catchError((err) => {
                 console.log('Refresh token api failed');
@@ -110,7 +110,6 @@ export class RefreshTokenInterceptor implements HttpInterceptor {
     // Get access token from Local Storage
     const isAccessTokens =
       this._authService.getTokenByName('x-access-refresh-token') &&
-      this._authService.getTokenByName('x-refresh-authorization') &&
       this._authService.getTokenByName('x-userId');
     // If access token is null this means that user is not logged in
     // And we return the original request
@@ -148,7 +147,8 @@ export class RefreshTokenInterceptor implements HttpInterceptor {
       'x-access-token',
       tokenConfig['x-access-token']
     );
-
-    this._authService.setTokenByName('x-userId', tokenConfig['x-userId']);
+    if (tokenConfig['x-userId']) {
+      this._authService.setTokenByName('x-userId', tokenConfig['x-userId']);
+    }
   }
 }

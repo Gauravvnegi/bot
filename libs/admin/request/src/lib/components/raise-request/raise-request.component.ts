@@ -21,6 +21,7 @@ import { RequestService } from '../../services/request.service';
 import { Option, manageMaskZIndex } from '@hospitality-bot/admin/shared';
 import { AddItemComponent } from '../add-item/add-item.component';
 import { SideBarService } from 'apps/admin/src/app/core/theme/src/lib/services/sidebar.service';
+import { AddGuestComponent } from 'libs/admin/guests/src/lib/components';
 
 @Component({
   selector: 'hospitality-bot-raise-request',
@@ -57,8 +58,7 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
     private snackbarService: SnackBarService,
     private _requestService: RequestService,
     private adminUtilityService: AdminUtilityService,
-    private resolver: ComponentFactoryResolver,
-    private sideBarService: SideBarService,
+    private resolver: ComponentFactoryResolver
   ) {}
 
   ngOnInit(): void {
@@ -252,27 +252,15 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
                 ])
               )
               .subscribe((res) => {
-                const guestData = res?.guestDetails?.primaryGuest;
-                this.requestFG.get('guestId').setValue(guestData.id);
+                if (res) {
+                  const guestData = res?.guestDetails?.primaryGuest;
+                  this.requestFG.get('guestId').setValue(guestData.id);
 
-                this.selectedGuest = {
-                  label: `${guestData.firstName} ${guestData.lastName}`,
-                  value: guestData.id,
-                };
-
-                // if (res) {
-                //   this.reservation = res;
-                //   this.requestFG.patchValue({
-                //     firstName: res.guestDetails.primaryGuest.firstName,
-                //     lastName: res.guestDetails.primaryGuest.lastName,
-                //   });
-                //   this.requestFG.get('firstName').disable();
-                //   this.requestFG.get('lastName').disable();
-                // } else {
-                //   this.reservation = {};
-                //   this.requestFG.get('firstName').enable();
-                //   this.requestFG.get('lastName').enable();
-                // }
+                  this.selectedGuest = {
+                    label: `${guestData.firstName} ${guestData.lastName}`,
+                    value: guestData.id,
+                  };
+                }
               })
           );
         else this.reservation = {};
@@ -328,20 +316,23 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
   }
 
   onAddGuest() {
-    this.sideBarService.openSideBar({
-      type: 'ADD_GUEST',
-      open: true,
-      data: { guestType: 'NON_RESIDENT_GUEST' },
-      sidebarType: 'complaint-guest-sidebar',
-    });
-    this.sideBarService.sideBarEmittedData.subscribe((res) => {
-      if (res) {
-        this.selectedGuest = {
-          label: `${res.firstName} ${res.lastName}`,
-          value: res.id,
-        };
-      }
-    });
+    this.sidebarVisible = true;
+    const factory = this.resolver.resolveComponentFactory(AddGuestComponent);
+    this.sidebarSlide.clear();
+    manageMaskZIndex();
+    const componentRef = this.sidebarSlide.createComponent(factory);
+    componentRef.instance.isSidebar = true;
+    this.$subscription.add(
+      componentRef.instance.onCloseSidebar.subscribe((res) => {
+        if (res) {
+          this.selectedGuest = {
+            label: `${res.firstName} ${res.lastName}`,
+            value: res.id,
+          };
+        }
+        this.sidebarVisible = false;
+      })
+    );
   }
 
   ngOnDestroy(): void {

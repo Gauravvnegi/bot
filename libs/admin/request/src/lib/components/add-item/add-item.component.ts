@@ -31,10 +31,8 @@ export class AddItemComponent implements OnInit {
     private _userService: UserService,
     private _managePermissionService: ManagePermissionService,
     private snackbarService: SnackBarService,
-    private requestService: RequestService
-  ) // private dialogConfig: DynamicDialogConfig,
-  // private dialogRef: DynamicDialogRef
-  {
+    private requestService: RequestService // private dialogConfig: DynamicDialogConfig, // private dialogRef: DynamicDialogRef
+  ) {
     /**
      * @Remarks Extracting data from he dialog service
      */
@@ -54,9 +52,9 @@ export class AddItemComponent implements OnInit {
   initForm() {
     this.useForm = this.fb.group({
       itemName: ['', [Validators.required]],
-      categoryDesc: ['', [Validators.required]],
+      // categoryDesc: ['', [Validators.required]],
       functionCode: [''],
-      serviceCode: [''],
+      // serviceCode: [''],
       itemDesc: [''],
       sla: ['', [Validators.required]],
       users: ['', [Validators.required]],

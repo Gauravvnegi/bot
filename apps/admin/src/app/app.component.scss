@@ -2,6 +2,7 @@
 :host ::ng-deep .snackbar-message__wrapper {
   .p-toast {
     width: unset;
+    max-width: 25rem;
     .p-toast-message {
       .p-toast-message-content {
         padding: 10px 25px;
@@ -9,7 +10,9 @@
           display: none;
         }
         .p-toast-message-text {
-          margin: 0 1rem;
+          margin: unset;
+          word-wrap: break-word;
+          width: 100%;
         }
         .p-toast-detail {
           margin: unset;

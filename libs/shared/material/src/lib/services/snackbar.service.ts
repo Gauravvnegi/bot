@@ -35,6 +35,7 @@ export class SnackBarService {
   ) {
     const panelClass = config && (config['panelClass'] ?? 'error');
     const duration = config && config['panelClass'] === 'danger' ? 3000 : 2000;
+    this.messageService.clear();
     this.messageService.add({
       ...config,
       detail: message,

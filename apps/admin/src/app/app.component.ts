@@ -68,6 +68,7 @@ export class AppComponent implements OnInit {
   listenProgress() {
     this.progressSpinner.$snackbarChange.subscribe(
       (res: MessageSnackbarConfig) => {
+        this.messageService.clear();
         this.messageService.add({ ...res });
       }
     );

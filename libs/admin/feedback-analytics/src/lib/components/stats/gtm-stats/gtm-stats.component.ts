@@ -7,6 +7,7 @@ import { DateService } from '@hospitality-bot/shared/utils';
 import { TranslateService } from '@ngx-translate/core';
 import { StatisticsService } from '../../../services/feedback-statistics.service';
 import { BifurcationStatsComponent } from '../bifurcation-stats/bifurcation-stats.component';
+import { DialogService } from 'primeng/dynamicdialog';
 
 @Component({
   selector: 'hospitality-bot-gtm-stats',
@@ -22,6 +23,8 @@ export class GtmStatsComponent extends BifurcationStatsComponent
     protected snackbarService: SnackBarService,
     protected dateService: DateService,
     protected _translateService: TranslateService,
+    dialogService: DialogService,
+
     fb: FormBuilder
   ) {
     super(
@@ -31,7 +34,8 @@ export class GtmStatsComponent extends BifurcationStatsComponent
       snackbarService,
       dateService,
       _translateService,
-      fb
+      fb,
+      dialogService
     );
   }
 }

@@ -173,6 +173,7 @@ export class AddReservationComponent extends BaseReservationComponent
         specialInstructions: [''],
       }),
       printRate: [false],
+      rateImprovement: [false],
     });
   }
 

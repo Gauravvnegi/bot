@@ -180,7 +180,12 @@ export class BookingInfoComponent implements OnInit {
       }
 
       let multipleDateChange = false;
-
+      const updateRateImprovement = () => {
+        this.reservationId &&
+          this.inputControls.rateImprovement.patchValue(true, {
+            emitEvent: false,
+          });
+      };
       fromDateControl.valueChanges.subscribe((res) => {
         if (res) {
           const maxToLimit = new Date(res);
@@ -199,6 +204,7 @@ export class BookingInfoComponent implements OnInit {
           this.minToDate = new Date(maxToLimit); // Create a new date object
           this.minToDate.setDate(maxToLimit.getDate());
           this.formService.reservationDate.next(res);
+          updateRateImprovement();
         }
       });
 
@@ -210,6 +216,7 @@ export class BookingInfoComponent implements OnInit {
             !multipleDateChange &&
             this.formService.reinitializeRooms.next(true);
           multipleDateChange = false;
+          updateRateImprovement();
         }
       });
     }
@@ -461,7 +468,6 @@ export class BookingInfoComponent implements OnInit {
       .catch((error) => {
         console.error('Error loading the lazy module:', error);
       });
-    manageMaskZIndex();
     lazyModulePromise.then((moduleFactory) => {
       this.sidebarVisible = true;
       const factory = this.resolver.resolveComponentFactory(AddAgentComponent);
@@ -481,6 +487,7 @@ export class BookingInfoComponent implements OnInit {
           this.formService.getSummary.next(true);
         }
       });
+      manageMaskZIndex();
     });
 
     // this.sidebarService.openSidebar({
@@ -514,8 +521,6 @@ export class BookingInfoComponent implements OnInit {
       .catch((error) => {
         console.error('Error loading the lazy module:', error);
       });
-    manageMaskZIndex();
-
     lazyModulePromise.then((moduleFactory) => {
       this.sidebarVisible = true;
       const factory = this.resolver.resolveComponentFactory(
@@ -539,6 +544,7 @@ export class BookingInfoComponent implements OnInit {
         this.sidebarVisible = false;
         componentRef.destroy();
       });
+      manageMaskZIndex();
     });
 
     // this.sidebarService.openSidebar({

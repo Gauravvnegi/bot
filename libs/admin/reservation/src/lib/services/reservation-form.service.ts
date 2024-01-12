@@ -51,7 +51,7 @@ export class ReservationFormService {
           const checkinEpoch = new Date(checkinDate).setHours(0, 0, 0, 0);
 
           if (currentTime < defaultTime && checkinEpoch === todayEpoch) {
-            this.openModalComponent(JourneyTypes.EARLYCHECKIN);
+            this.openModalComponent(JourneyTypes.EARLYCHECKIN, callback);
           } else {
             this.openJourneyDialog(
               {
@@ -116,7 +116,8 @@ export class ReservationFormService {
           label: 'Ok',
           onClick: (res) => {
             let data = res;
-            if (journeyType === JourneyTypes.EARLYCHECKIN) this.checkIn(data);
+            if (journeyType === JourneyTypes.EARLYCHECKIN)
+              this.checkIn(callback, data);
             // else this.checkOut(callback, false, data);
             else this.lateCheckout(res, callback);
             modalRef.close();
@@ -143,7 +144,7 @@ export class ReservationFormService {
     this.reservationService
       .updateLateCheckout(this.entityId, data)
       .subscribe((res) => {
-        callback();
+        callback && callback();
         this.snackbarService.openSnackBarAsText(
           'Late checkout charges updated.',
           '',
@@ -158,12 +159,13 @@ export class ReservationFormService {
     this.reservationService
       .manualCheckin(this.data.reservationId, data)
       .subscribe((res) => {
-        callback({
-          reservationId: this.data?.reservationId,
-          status: ReservationCurrentStatus.CHECKEDOUT,
-          roomType: this.data?.roomType,
-          isCheckout: false,
-        });
+        callback &&
+          callback({
+            reservationId: this.data?.reservationId,
+            status: ReservationCurrentStatus.INHOUSE,
+            roomType: this.data?.roomType,
+            isCheckout: false,
+          });
         this.snackbarService.openSnackBarAsText('Checkin completed.', '', {
           panelClass: 'success',
         });
@@ -218,12 +220,13 @@ export class ReservationFormService {
         params: `?sendInvoice=${isInvoice}`,
       })
       .subscribe((res) => {
-        callback({
-          reservationId: this.data?.reservationId,
-          status: ReservationCurrentStatus.CHECKEDOUT,
-          roomType: this.data?.roomType,
-          isCheckout: true,
-        });
+        callback &&
+          callback({
+            reservationId: this.data?.reservationId,
+            status: ReservationCurrentStatus.CHECKEDOUT,
+            roomType: this.data?.roomType,
+            isCheckout: true,
+          });
         this.snackbarService.openSnackBarAsText('Checkout completed.', '', {
           panelClass: 'success',
         });

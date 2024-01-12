@@ -52,7 +52,10 @@
           controlName="assignee"
           [options]="allAssigneeList"
           [loading]="isAssigneeLoading"
-          [disabled]="!data?.isFocused"
+          [disabled]="
+            !data?.isFocused ||
+            ['RESOLVED', 'CANCELLED'].includes(requestFG.get('status')?.value)
+          "
           [pros]="{
             placeholder: 'select'
           }"

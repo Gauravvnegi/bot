@@ -117,7 +117,7 @@
 
 .body {
   overflow: auto;
-  height: 64vh;
+  // height: 64vh;
   padding: 15px 30px;
 }
 
@@ -140,5 +140,11 @@
 :host ::ng-deep .department {
   .p-dropdown-panel .p-dropdown-items .p-dropdown-item {
     padding-left: 33px;
+  }
+}
+
+:host ::ng-deep {
+  .fixed {
+    left: 0 !important;
   }
 }

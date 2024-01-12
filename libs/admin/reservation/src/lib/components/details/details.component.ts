@@ -845,6 +845,9 @@ export class DetailsComponent implements OnInit, OnDestroy {
           bookingId: item.reservation.booking.bookingId,
           bookingNumber: item.reservation.booking.bookingNumber,
           label: `${item.subType} Booking`,
+          bookingType: item.subType,
+          arrivalTime: item.reservation.booking?.arrivalTimeStamp,
+          departureTime: item.reservation.booking?.departureTimeStamp,
         });
       }
     });
@@ -859,8 +862,73 @@ export class DetailsComponent implements OnInit, OnDestroy {
             (booking) => booking.bookingNumber === this.bookingNumber
           )[0].bookingId;
         else {
-          this.bookingNumber = this.guestReservationDropdownList[0]?.bookingNumber;
-          this.bookingId = this.guestReservationDropdownList[0]?.bookingId;
+          /**
+           * Sequence for subType PRESET->UPCOMING->PAST, when details open with guestId
+           * Present -> Prioritize with departureTime which is closer to todays date
+           * Upcoming -> Prioritize with arrivalTime which is closer to todays date
+           * Past -> Prioritize with arrivalTime which is closer to todays date
+           */
+
+          const currentTimestamp = Date.now();
+
+          /**
+           * @function timeDifferenceComparator will give negative || positive || zero
+           * @param aTime First Time
+           * @param bTime Second Time
+           * @returns closer to current time
+           * If the result is negative, it means that a should come before b in the sorted array.
+           * If the result is positive, it means that b should come before a in the sorted array.
+           * If the result is zero, it means that the order of a and b doesn't change
+           * (they are considered equal in the sorting order).
+           */
+          const timeDifferenceComparator = (
+            aTime: number,
+            bTime: number
+          ): number => {
+            const departureTimeA = new Date(aTime).getTime();
+            const departureTimeB = new Date(bTime).getTime();
+            const timeDifferenceA = Math.abs(departureTimeA - currentTimestamp);
+            const timeDifferenceB = Math.abs(departureTimeB - currentTimestamp);
+            return timeDifferenceA - timeDifferenceB;
+          };
+
+          //1. Priority, Filter all Present Booking
+          const presetBookings = this.guestReservationDropdownList.filter(
+            (item) => item.bookingType.toUpperCase() == 'PRESENT'
+          );
+
+          //2. Priority, Filter all Upcoming Booking
+          const upcomingBookings = this.guestReservationDropdownList.filter(
+            (item) => item.bookingType.toUpperCase() == 'UPCOMING'
+          );
+
+          //3. Priority, Filter all Past Booking
+          const pastBookings = this.guestReservationDropdownList.filter(
+            (item) => item.bookingType.toUpperCase() == 'PAST'
+          );
+
+          if (presetBookings?.length) {
+            //Present Booking, based on departureTime
+            presetBookings.sort((a, b) =>
+              timeDifferenceComparator(a.departureTime, b.departureTime)
+            );
+            this.bookingNumber = presetBookings[0]?.bookingNumber;
+            this.bookingId = presetBookings[0]?.bookingId;
+          } else if (upcomingBookings?.length) {
+            //Upcoming Booking, based on arrivalTime
+            upcomingBookings.sort((a, b) =>
+              timeDifferenceComparator(a.arrivalTime, b.arrivalTime)
+            );
+            this.bookingNumber = upcomingBookings[0]?.bookingNumber;
+            this.bookingId = upcomingBookings[0]?.bookingId;
+          } else {
+            //Past Booking, based on arrivalTime
+            pastBookings.sort((a, b) =>
+              timeDifferenceComparator(a.arrivalTime, b.arrivalTime)
+            );
+            this.bookingNumber = pastBookings[0]?.bookingNumber;
+            this.bookingId = pastBookings[0]?.bookingId;
+          }
         }
 
         this.getCurrentBookingGuestDetails();

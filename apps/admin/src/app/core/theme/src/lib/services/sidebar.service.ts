@@ -1,6 +1,7 @@
 import {
   ComponentFactoryResolver,
   Injectable,
+  Output,
   TemplateRef,
   ViewContainerRef,
 } from '@angular/core';
@@ -26,6 +27,8 @@ export type SideBarConfig<TData extends Record<string, any> = {}> = {
     ? { guestName: string }
     : TData;
   url?: string;
+  style?: {};
+  sidebarType?: string;
 };
 
 @Injectable({ providedIn: 'root' })
@@ -34,6 +37,7 @@ export class SideBarService {
     open: false,
   });
   sidebarSlide: ViewContainerRef;
+  sideBarEmittedData = new BehaviorSubject<any>(null);
 
   constructor(private resolver: ComponentFactoryResolver) {}
 

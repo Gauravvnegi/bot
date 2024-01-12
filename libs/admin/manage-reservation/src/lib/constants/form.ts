@@ -17,6 +17,7 @@ export type ReservationForm = {
   offerId: string;
   printRate?: boolean;
   dailyPrice?: string;
+  rateImprovement?: boolean;
   agent?: AgentTableResponse;
   company?: CompanyResponseType;
 };

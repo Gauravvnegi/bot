@@ -140,9 +140,9 @@ body {
 
 .clickable-card {
   cursor: pointer;
-  box-shadow: 0px 3px 20px #0368ff42;
-  border: 1px solid $primary-cta;
-  border-radius: 5px;
+  box-shadow: 0px 3px 20px #0368ff42 !important;
+  border: 1px solid $primary-cta !important;
+  border-radius: 5px !important;
 }
 .material-body {
   width: 79%;

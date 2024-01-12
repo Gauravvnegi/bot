@@ -485,6 +485,12 @@
     }
   }
 
+  .complaint-guest-sidebar {
+    .p-sidebar-right {
+      @include sidebar-design(30rem);
+    }
+  }
+
   .night-audit {
     @include default-close;
     .p-sidebar-right {

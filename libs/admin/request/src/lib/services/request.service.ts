@@ -6,6 +6,7 @@ import { RequestData } from '../../../../notification/src/lib/data-models/reques
 import { RequestStatus } from '../constants/request';
 import { CMSUpdateJobData } from '../types/request.type';
 import { AllJobRequestResponse } from '../types/response.types';
+import { ReservationResponse } from 'libs/admin/shared/src/lib/types/response';
 
 @Injectable({ providedIn: 'root' })
 export class RequestService extends ApiService {
@@ -127,7 +128,7 @@ export class RequestService extends ApiService {
     );
   }
 
-  searchBooking(config) {
+  searchBooking(config): Observable<any> {
     return this.get(`/api/v1/reservation/room${config}`);
   }
 

@@ -1,5 +1,4 @@
 import {
-  Compiler,
   Component,
   ComponentFactoryResolver,
   EventEmitter,
@@ -21,6 +20,7 @@ import { debounceTime } from 'rxjs/operators';
 import { RequestService } from '../../services/request.service';
 import { Option, manageMaskZIndex } from '@hospitality-bot/admin/shared';
 import { AddItemComponent } from '../add-item/add-item.component';
+import { SideBarService } from 'apps/admin/src/app/core/theme/src/lib/services/sidebar.service';
 
 @Component({
   selector: 'hospitality-bot-raise-request',
@@ -30,6 +30,7 @@ import { AddItemComponent } from '../add-item/add-item.component';
 export class RaiseRequestComponent implements OnInit, OnDestroy {
   @Output() onCloseSidebar = new EventEmitter();
   requestFG: FormGroup;
+  globalQueries = [];
   searchFG: FormGroup;
   entityId: string;
   reservation = {};
@@ -48,6 +49,7 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
   @Input() isSidebar = false;
   @ViewChild('sidebarSlide', { read: ViewContainerRef })
   sidebarSlide: ViewContainerRef;
+  selectedGuest;
 
   constructor(
     private fb: FormBuilder,
@@ -55,8 +57,8 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
     private snackbarService: SnackBarService,
     private _requestService: RequestService,
     private adminUtilityService: AdminUtilityService,
-    private compiler: Compiler,
-    private resolver: ComponentFactoryResolver
+    private resolver: ComponentFactoryResolver,
+    private sideBarService: SideBarService,
   ) {}
 
   ngOnInit(): void {
@@ -77,6 +79,8 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
   listenForGlobalFilters(): void {
     this.$subscription.add(
       this.globalFilterService.globalFilter$.subscribe((data) => {
+        this.globalQueries = [...data['dateRange'].queryValue];
+
         this.entityId = this.globalFilterService.entityId;
         this.initItemList();
       })
@@ -89,8 +93,8 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
   initFG(): void {
     this.requestFG = this.fb.group({
       roomNo: ['', Validators.required],
-      firstName: ['', Validators.required],
-      lastName: ['', Validators.required],
+      // firstName: ['', Validators.required],
+      // lastName: ['', Validators.required],
       itemName: [''],
       itemCode: ['', Validators.required],
       itemId: [''],
@@ -99,8 +103,9 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
       remarks: ['', [Validators.maxLength(200)]],
       quantity: [1, [Validators.required, Validators.min(1)]],
       assigneeId: ['', [Validators.required]], //as per BE ()
-      cc: ['+91'],
-      phoneNumber: ['', [Validators.required, Validators.pattern('^[0-9]*$')]],
+      // cc: ['+91'],
+      // phoneNumber: ['', [Validators.required, Validators.pattern('^[0-9]*$')]],
+      guestId: ['', [Validators.required]],
     });
   }
 
@@ -182,9 +187,9 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
     }
 
     const { phoneNumber, cc, ...rest } = this.requestFG.getRawValue();
-    let countryCode = cc.replace('+', '');
+    // let countryCode = cc?.replace('+', '');
     const data = {
-      phone: `${countryCode}${phoneNumber}`,
+      // phone: `${countryCode}${phoneNumber}`,
       ...rest,
       systemDateTime: DateService.currentDate('DD-MMM-YYYY HH:mm:ss'),
       sender: request.kiosk,
@@ -247,19 +252,27 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
                 ])
               )
               .subscribe((res) => {
-                if (res) {
-                  this.reservation = res;
-                  this.requestFG.patchValue({
-                    firstName: res.guestDetails.primaryGuest.firstName,
-                    lastName: res.guestDetails.primaryGuest.lastName,
-                  });
-                  this.requestFG.get('firstName').disable();
-                  this.requestFG.get('lastName').disable();
-                } else {
-                  this.reservation = {};
-                  this.requestFG.get('firstName').enable();
-                  this.requestFG.get('lastName').enable();
-                }
+                const guestData = res?.guestDetails?.primaryGuest;
+                this.requestFG.get('guestId').setValue(guestData.id);
+
+                this.selectedGuest = {
+                  label: `${guestData.firstName} ${guestData.lastName}`,
+                  value: guestData.id,
+                };
+
+                // if (res) {
+                //   this.reservation = res;
+                //   this.requestFG.patchValue({
+                //     firstName: res.guestDetails.primaryGuest.firstName,
+                //     lastName: res.guestDetails.primaryGuest.lastName,
+                //   });
+                //   this.requestFG.get('firstName').disable();
+                //   this.requestFG.get('lastName').disable();
+                // } else {
+                //   this.reservation = {};
+                //   this.requestFG.get('firstName').enable();
+                //   this.requestFG.get('lastName').enable();
+                // }
               })
           );
         else this.reservation = {};
@@ -293,6 +306,42 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
         })
       );
     }
+  }
+
+  getConfig(type = 'get') {
+    if (type === 'search') return { type: 'GUEST' };
+    const queries = {
+      entityId: this.entityId,
+      toDate: this.globalQueries[0].toDate,
+      fromDate: this.globalQueries[1].fromDate,
+      entityState: 'ALL',
+      type: 'GUEST',
+    };
+    return queries;
+  }
+
+  guestChange(event) {
+    this.selectedGuest = {
+      label: `${event.firstName} ${event.lastName}`,
+      value: event.id,
+    };
+  }
+
+  onAddGuest() {
+    this.sideBarService.openSideBar({
+      type: 'ADD_GUEST',
+      open: true,
+      data: { guestType: 'NON_RESIDENT_GUEST' },
+      sidebarType: 'complaint-guest-sidebar',
+    });
+    this.sideBarService.sideBarEmittedData.subscribe((res) => {
+      if (res) {
+        this.selectedGuest = {
+          label: `${res.firstName} ${res.lastName}`,
+          value: res.id,
+        };
+      }
+    });
   }
 
   ngOnDestroy(): void {

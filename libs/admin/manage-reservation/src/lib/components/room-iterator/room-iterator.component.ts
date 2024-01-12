@@ -209,6 +209,20 @@ export class RoomIteratorComponent extends IteratorComponent
           this.roomControls[index].get('roomCount').setValue(currentRoomCount);
         }
       });
+
+    const updateRateImprovement = () => {
+      this.reservationId &&
+        this.inputControls.rateImprovement.patchValue(true, {
+          emitEvent: false,
+        });
+    };
+
+    this.roomControls[index].get('adultCount').valueChanges.subscribe((res) => {
+      res && updateRateImprovement;
+    });
+    this.roomControls[index].get('childCount').valueChanges.subscribe((res) => {
+      res && updateRateImprovement;
+    });
     this.roomControls[index].get('roomCount').valueChanges.subscribe((res) => {
       if (res) {
         let currentRoomCount = +res ? +res : 1;
@@ -228,6 +242,7 @@ export class RoomIteratorComponent extends IteratorComponent
             .setValue(currentRoomCount, {
               emitEvent: false,
             });
+          updateRateImprovement;
         }
       }
     });
@@ -481,6 +496,15 @@ export class RoomIteratorComponent extends IteratorComponent
     return ((this.parentFormGroup.get('roomInformation') as FormGroup).get(
       'roomTypes'
     ) as FormArray).controls;
+  }
+
+  get roomTypeFA() {
+    // const asdasd = this.roomControls[0].get('sad');
+    return this.roomControls as (Omit<AbstractControl, 'get'> & {
+      get: (
+        formKey: keyof ReservationForm['roomInformation']
+      ) => AbstractControl;
+    })[];
   }
 
   errorMessage(field: IteratorField) {

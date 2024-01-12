@@ -18,7 +18,10 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
-import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import {
+  GlobalFilterService,
+  RoutesConfigService,
+} from '@hospitality-bot/admin/core/theme';
 import {
   AdminUtilityService,
   EntitySubType,
@@ -94,7 +97,8 @@ export class RoomIteratorComponent extends IteratorComponent
     public formService: FormService,
     private roomService: RoomService,
     private adminUtilityService: AdminUtilityService,
-    public dialogService: DialogService
+    public dialogService: DialogService,
+    private routesConfigService: RoutesConfigService
   ) {
     super(fb);
   }
@@ -116,7 +120,6 @@ export class RoomIteratorComponent extends IteratorComponent
   ngOnInit(): void {
     this.fields[3].name = 'roomNumbers';
     this.fields[3].type = 'multi-select';
-    this.entityId = this.globalFilterService.entityId;
     this.initDetails();
     this.listenForGlobalFilters();
     this.createNewFields(true);
@@ -447,13 +450,7 @@ export class RoomIteratorComponent extends IteratorComponent
 
   onCloseRoomUpgrade(upgradedRoom: RoomUpgradeClose) {
     if (upgradedRoom) {
-      // this.roomControls[0].patchValue({
-      //   roomTypeId: upgradedRoom.roomTypeId,
-      //   roomNumber: upgradedRoom.roomNumber,
-      //   ratePlanId: upgradedRoom.ratePlanId,
-      //   rooms: upgradedRoom.rooms,
-      //   ratePlans: upgradedRoom.ratePlans,
-      // });
+      this.routesConfigService.reload();
     }
   }
 
@@ -492,6 +489,7 @@ export class RoomIteratorComponent extends IteratorComponent
 }
 
 type BookingConfig = {
+  entityId: string;
   reservationId: string;
   isDraftBooking?: boolean;
   isRouteData?: boolean;

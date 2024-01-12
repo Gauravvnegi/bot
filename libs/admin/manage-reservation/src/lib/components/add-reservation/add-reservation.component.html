@@ -38,6 +38,7 @@
           (listenChanges)="listenForFormChanges()"
           [itemValues]="roomTypeValues"
           [bookingConfig]="{
+            entityId: selectedEntity.id,
             isDraftBooking: isDraftBooking,
             reservationId: reservationId,
             isRouteData: isRouteData,

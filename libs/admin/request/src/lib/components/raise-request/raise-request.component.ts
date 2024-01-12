@@ -1,5 +1,4 @@
 import {
-  Compiler,
   Component,
   ComponentFactoryResolver,
   EventEmitter,
@@ -58,9 +57,8 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
     private snackbarService: SnackBarService,
     private _requestService: RequestService,
     private adminUtilityService: AdminUtilityService,
-    private compiler: Compiler,
     private resolver: ComponentFactoryResolver,
-    private sideBarService: SideBarService
+    private sideBarService: SideBarService,
   ) {}
 
   ngOnInit(): void {

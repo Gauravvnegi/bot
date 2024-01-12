@@ -495,7 +495,16 @@ export class RoomIteratorComponent extends IteratorComponent
   get roomControls() {
     return ((this.parentFormGroup.get('roomInformation') as FormGroup).get(
       'roomTypes'
-    ) as ReservationForm['roomInformation']) as AbstractControl[];
+    ) as FormArray).controls;
+  }
+
+  get roomTypeFA() {
+    // const asdasd = this.roomControls[0].get('sad');
+    return this.roomControls as (Omit<AbstractControl, 'get'> & {
+      get: (
+        formKey: keyof ReservationForm['roomInformation']
+      ) => AbstractControl;
+    })[];
   }
 
   errorMessage(field: IteratorField) {

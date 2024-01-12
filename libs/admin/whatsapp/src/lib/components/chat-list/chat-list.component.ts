@@ -407,7 +407,11 @@ export class ChatListComponent implements OnInit, OnDestroy {
         }
       });
 
-      method === 'markAsImportant' && this.loadChatList();
+      if (method === 'markAsImportant') {
+        if (this.contactFG.get('search').value.length < 3) {
+          this.loadChatList();
+        } else this.loadSearchList(this.contactFG.get('search').value);
+      }
 
       this.snackbarService.openSnackBarAsText(
         popUpMessage[key][value ? 'true' : 'false'],

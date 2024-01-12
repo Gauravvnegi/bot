@@ -43,6 +43,8 @@ export class ChatCardComponent implements OnInit {
     });
   }
 
+  @Output() onUnpin = new EventEmitter<{ id: string }>();
+
   @Input() isSelected = false;
 
   constructor(public globalFilterService: GlobalFilterService) {}
@@ -62,6 +64,11 @@ export class ChatCardComponent implements OnInit {
       });
       return colorCode;
     }
+  }
+
+  onUnPinClick(event) {
+    event.stopPropagation();
+    this.onUnpin.emit({ id: this.id });
   }
 
   formatTime(timeLeft: number): string {

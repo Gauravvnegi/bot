@@ -87,7 +87,13 @@
     <div class="content-wrap" *ngIf="important || muted">
       <div class="content-wrap-r2 mute-status">
         <!-- for message pin -->
-        <img *ngIf="important" src="assets/images/pin-blue.svg" alt="" />
+        <img
+          (click)="onUnPinClick($event)"
+          *ngIf="important"
+          src="assets/images/pin-blue.svg"
+          alt="pin"
+          class="pin"
+        />
       </div>
     </div>
     <div

@@ -161,10 +161,6 @@ export class PreviewComponent implements OnInit {
   }
 
   handleCheckout() {
-    this.formService.manualCheckout(this.reservationId);
-  }
-
-  manualCheckoutfn() {
     this.reservationService
       .manualCheckout(this.reservationId)
       .subscribe((res) => {

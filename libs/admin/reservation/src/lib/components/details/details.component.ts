@@ -769,6 +769,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
           emailRef.instance.email = this.primaryGuest.email;
           emailRef.instance.entityId = this.entityId;
           emailRef.instance.details = this.details;
+          emailRef.instance.reservationId = this.bookingId;
           emailRef.instance.roomNumber = this.details.stayDetails.roomNumber;
           emailRef.instance.onCloseSidebar.subscribe((res) => {
             this.sidebarVisible = false;

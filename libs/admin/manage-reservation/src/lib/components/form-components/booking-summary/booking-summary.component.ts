@@ -325,6 +325,12 @@ export class BookingSummaryComponent implements OnInit {
     });
   }
 
+  triggerPrintRate(event: HTMLInputElement) {
+    this.inputControls.printRate.patchValue(event.checked, {
+      emitEvent: false,
+    });
+  }
+
   openDetailsPage() {
     this.bookingDetailService.openBookingDetailSidebar({
       bookingId: this.reservationId,

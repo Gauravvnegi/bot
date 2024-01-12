@@ -57,6 +57,9 @@
             muted: contact?.mute,
             important: contact?.important
           }"
+          (onUnpin)="
+            handleMarking(contact?.receiverId, false, 'markAsImportant')
+          "
         ></hospitality-bot-chat-card>
       </div>
     </div>
@@ -103,5 +106,5 @@
   [(visible)]="isMutePopUpVisible"
   [modal]="true"
 >
-  <ng-container  #dailog></ng-container>
+  <ng-container #dailog></ng-container>
 </p-dialog>

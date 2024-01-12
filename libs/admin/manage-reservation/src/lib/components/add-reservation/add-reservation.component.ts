@@ -478,10 +478,6 @@ export class AddReservationComponent extends BaseReservationComponent
     this.offersList.records = [];
   }
 
-  triggerPrintRate(isToggleOn: boolean) {
-    this.inputControls.printRate.patchValue(isToggleOn, { emitEvent: false });
-  }
-
   handleEmailInvoice() {
     this.manageReservationService
       .emailInvoice(this.reservationId, {})

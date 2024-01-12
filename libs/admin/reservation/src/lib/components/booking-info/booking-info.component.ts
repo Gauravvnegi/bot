@@ -180,12 +180,6 @@ export class BookingInfoComponent implements OnInit {
       }
 
       let multipleDateChange = false;
-      const updateRateImprovement = () => {
-        this.reservationId &&
-          this.inputControls.rateImprovement.patchValue(true, {
-            emitEvent: false,
-          });
-      };
       fromDateControl.valueChanges.subscribe((res) => {
         if (res) {
           const maxToLimit = new Date(res);
@@ -204,7 +198,6 @@ export class BookingInfoComponent implements OnInit {
           this.minToDate = new Date(maxToLimit); // Create a new date object
           this.minToDate.setDate(maxToLimit.getDate());
           this.formService.reservationDate.next(res);
-          updateRateImprovement();
         }
       });
 
@@ -216,7 +209,6 @@ export class BookingInfoComponent implements OnInit {
             !multipleDateChange &&
             this.formService.reinitializeRooms.next(true);
           multipleDateChange = false;
-          updateRateImprovement();
         }
       });
     }

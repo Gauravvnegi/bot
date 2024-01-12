@@ -209,20 +209,6 @@ export class RoomIteratorComponent extends IteratorComponent
           this.roomControls[index].get('roomCount').setValue(currentRoomCount);
         }
       });
-
-    const updateRateImprovement = () => {
-      this.reservationId &&
-        this.inputControls.rateImprovement.patchValue(true, {
-          emitEvent: false,
-        });
-    };
-
-    this.roomControls[index].get('adultCount').valueChanges.subscribe((res) => {
-      res && updateRateImprovement;
-    });
-    this.roomControls[index].get('childCount').valueChanges.subscribe((res) => {
-      res && updateRateImprovement;
-    });
     this.roomControls[index].get('roomCount').valueChanges.subscribe((res) => {
       if (res) {
         let currentRoomCount = +res ? +res : 1;
@@ -242,9 +228,24 @@ export class RoomIteratorComponent extends IteratorComponent
             .setValue(currentRoomCount, {
               emitEvent: false,
             });
-          updateRateImprovement;
         }
       }
+    });
+  }
+
+  listenForOccupancyChanges(index: number) {
+    const updateRateImprovement = () => {
+      this.reservationId &&
+        this.inputControls.rateImprovement.patchValue(true, {
+          emitEvent: false,
+        });
+    };
+
+    this.roomControls[index].get('adultCount').valueChanges.subscribe((res) => {
+      res && updateRateImprovement();
+    });
+    this.roomControls[index].get('childCount').valueChanges.subscribe((res) => {
+      res && updateRateImprovement();
     });
   }
 
@@ -403,7 +404,7 @@ export class RoomIteratorComponent extends IteratorComponent
         defaultOption
       );
       this.isDraftBooking && this.listenForRoomChanges(index);
-
+      this.listenForOccupancyChanges(index);
       // Data initialized only when all the roomTypes in itemValues are patched.
       this.itemValuesCount - 1 === index &&
         this.reservationId &&

@@ -852,6 +852,48 @@ export class DetailsComponent implements OnInit, OnDestroy {
       }
     });
 
+    /**
+     * @function Sort the guestReservationDropdownList based on the specified conditions
+     * Sequence for subType PRESET->UPCOMING->PAST, when details open with guestId
+     * Present -> Prioritize with departureTime which is closer to todays date
+     * Upcoming -> Prioritize with arrivalTime which is closer to todays date
+     * Past -> Prioritize with arrivalTime which is closer to todays date
+     */
+
+    this.guestReservationDropdownList.sort((a, b) => {
+      // Function to get timestamp from a given time, defaulting to 0 if invalid
+      const getTimestamp = (time) => new Date(time)?.getTime() || 0;
+
+      // Define the priority order for booking types
+      const priorityOrder = ['PRESENT', 'UPCOMING', 'PAST'];
+
+      // Compare priority based on bookingType
+      const priorityComparison =
+        priorityOrder.indexOf(a.bookingType) -
+        priorityOrder.indexOf(b.bookingType);
+
+      // If priority is different, return the result
+      if (priorityComparison !== 0) {
+        return priorityComparison;
+      }
+
+      // Function to compare timestamps between two times
+      const getTimeComparison = (timeA, timeB) =>
+        getTimestamp(timeA) - getTimestamp(timeB);
+
+      // Sorting logic based on bookingType
+      switch ((a.bookingType as String).toUpperCase()) {
+        case 'PRESENT':
+          return getTimeComparison(a?.departureTime, b?.departureTime);
+        case 'UPCOMING':
+          return getTimeComparison(a?.arrivalTime, b?.arrivalTime);
+        case 'PAST':
+          return getTimeComparison(a?.arrivalTime, b?.arrivalTime);
+        default:
+          return 0;
+      }
+    });
+
     if (this.bookingId) {
       this.mapValuesInForm();
       this.isReservationDetailFetched = true;
@@ -862,73 +904,8 @@ export class DetailsComponent implements OnInit, OnDestroy {
             (booking) => booking.bookingNumber === this.bookingNumber
           )[0].bookingId;
         else {
-          /**
-           * Sequence for subType PRESET->UPCOMING->PAST, when details open with guestId
-           * Present -> Prioritize with departureTime which is closer to todays date
-           * Upcoming -> Prioritize with arrivalTime which is closer to todays date
-           * Past -> Prioritize with arrivalTime which is closer to todays date
-           */
-
-          const currentTimestamp = Date.now();
-
-          /**
-           * @function timeDifferenceComparator will give negative || positive || zero
-           * @param aTime First Time
-           * @param bTime Second Time
-           * @returns closer to current time
-           * If the result is negative, it means that a should come before b in the sorted array.
-           * If the result is positive, it means that b should come before a in the sorted array.
-           * If the result is zero, it means that the order of a and b doesn't change
-           * (they are considered equal in the sorting order).
-           */
-          const timeDifferenceComparator = (
-            aTime: number,
-            bTime: number
-          ): number => {
-            const departureTimeA = new Date(aTime).getTime();
-            const departureTimeB = new Date(bTime).getTime();
-            const timeDifferenceA = Math.abs(departureTimeA - currentTimestamp);
-            const timeDifferenceB = Math.abs(departureTimeB - currentTimestamp);
-            return timeDifferenceA - timeDifferenceB;
-          };
-
-          //1. Priority, Filter all Present Booking
-          const presetBookings = this.guestReservationDropdownList.filter(
-            (item) => item.bookingType.toUpperCase() == 'PRESENT'
-          );
-
-          //2. Priority, Filter all Upcoming Booking
-          const upcomingBookings = this.guestReservationDropdownList.filter(
-            (item) => item.bookingType.toUpperCase() == 'UPCOMING'
-          );
-
-          //3. Priority, Filter all Past Booking
-          const pastBookings = this.guestReservationDropdownList.filter(
-            (item) => item.bookingType.toUpperCase() == 'PAST'
-          );
-
-          if (presetBookings?.length) {
-            //Present Booking, based on departureTime
-            presetBookings.sort((a, b) =>
-              timeDifferenceComparator(a.departureTime, b.departureTime)
-            );
-            this.bookingNumber = presetBookings[0]?.bookingNumber;
-            this.bookingId = presetBookings[0]?.bookingId;
-          } else if (upcomingBookings?.length) {
-            //Upcoming Booking, based on arrivalTime
-            upcomingBookings.sort((a, b) =>
-              timeDifferenceComparator(a.arrivalTime, b.arrivalTime)
-            );
-            this.bookingNumber = upcomingBookings[0]?.bookingNumber;
-            this.bookingId = upcomingBookings[0]?.bookingId;
-          } else {
-            //Past Booking, based on arrivalTime
-            pastBookings.sort((a, b) =>
-              timeDifferenceComparator(a.arrivalTime, b.arrivalTime)
-            );
-            this.bookingNumber = pastBookings[0]?.bookingNumber;
-            this.bookingId = pastBookings[0]?.bookingId;
-          }
+          this.bookingNumber = this.guestReservationDropdownList[0]?.bookingNumber;
+          this.bookingId = this.guestReservationDropdownList[0]?.bookingId;
         }
 
         this.getCurrentBookingGuestDetails();

@@ -223,6 +223,7 @@ export class QuickReservationFormComponent implements OnInit {
 
     const updateRateImprovement = () => {
       this.reservationId &&
+        this.isDataLoaded &&
         this.inputControls.rateImprovement.patchValue(true, {
           emitEvent: false,
         });

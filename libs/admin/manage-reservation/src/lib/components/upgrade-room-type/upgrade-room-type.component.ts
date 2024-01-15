@@ -130,7 +130,6 @@ export class UpgradeRoomTypeComponent implements OnInit {
           .getRoomTypeToUpgrade(this.reservationId, this.getConfig())
           .subscribe((res: RoomUpgradeType) => {
             if (res) {
-              debugger;
               this.chargedAmount = res.chargedAmount;
               this.inputControls.chargeable.value &&
                 this.inputControls.chargedAmount.patchValue(this.chargedAmount);
@@ -147,7 +146,6 @@ export class UpgradeRoomTypeComponent implements OnInit {
       if (res) this.getUpgradedRoomTypeData();
     });
     this.inputControls.chargeable.valueChanges.subscribe((res) => {
-      debugger;
       if (res && this.chargedAmount)
         this.inputControls.chargedAmount.patchValue(this.chargedAmount);
       else this.inputControls.chargedAmount.patchValue(0);

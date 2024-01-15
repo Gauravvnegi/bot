@@ -297,15 +297,17 @@
   color: $tab-menu-link;
 }
 
-:host ::ng-deep .p-dropdown {
-  border: none;
-  // margin-right: 5px;
-  &:hover {
-    border-color: $tab-menu-link;
-  }
-  &:focus {
-    outline: none;
+:host ::ng-deep .export-dropdown {
+  .p-dropdown {
     border: none;
+    // margin-right: 5px;
+    &:hover {
+      border-color: $tab-menu-link;
+    }
+    &:focus {
+      outline: none;
+      border: none;
+    }
   }
 }
 

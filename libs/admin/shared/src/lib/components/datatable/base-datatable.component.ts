@@ -158,9 +158,7 @@ export class BaseDatatableComponent implements OnInit {
    */
   subscriptionList$ = new Subscription();
 
-  constructor(
-    private _fb: FormBuilder,
-  ) {
+  constructor(private _fb: FormBuilder) {
     this.initTableFG();
     this.mainLayout = document.getElementById('main-layout');
     this.mainLayout?.addEventListener('scroll', this.onScroll);
@@ -285,7 +283,7 @@ export class BaseDatatableComponent implements OnInit {
    * @description This will reset the table to its initial state
    */
   resetTable() {
-    this.table?.reset();
+    this.table?.clear();
   }
 
   onDocumentActions() {
@@ -417,7 +415,6 @@ export class BaseDatatableComponent implements OnInit {
           total: value,
         })
       );
-
       const selectedTabIndex = this.tabFilterItems.findIndex(
         (item) => item.value === this.selectedTab
       );

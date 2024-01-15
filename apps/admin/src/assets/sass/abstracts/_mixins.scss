@@ -219,7 +219,7 @@
 @mixin normal-vsm-text {
   font-size: 14px;
   font-weight: $bold;
-  letter-spacing: 0.96px;
+  letter-spacing: 0.72px;
 }
 
 @mixin normal-md-text {
@@ -234,6 +234,12 @@
   letter-spacing: 0.96px;
 }
 
+@mixin bold-vsm-text {
+  font-size: 14px;
+  font-weight: $bold;
+  letter-spacing: 0.72px;
+}
+
 @mixin light-sm-text {
   font-size: 16px;
   font-weight: $medium;
@@ -243,7 +249,7 @@
 @mixin light-vsm-text {
   font-size: 14px;
   font-weight: $medium;
-  letter-spacing: 0.96px;
+  letter-spacing: 0.72px;
 }
 
 @mixin light-md-text {
@@ -596,5 +602,28 @@
 
   &__item {
     flex-basis: $flexBasisValue;
+  }
+}
+
+// Sidebar Mixins
+
+@mixin sidebarTopBorder() {
+  border-top-left-radius: 10px;
+}
+
+@mixin sidebar-design($width) {
+  @include sidebarTopBorder;
+  width: $width;
+}
+
+@mixin close-design() {
+  .close {
+    color: $primary-cta !important;
+  }
+}
+
+@mixin default-close() {
+  .p-sidebar-close {
+    display: none;
   }
 }

@@ -1,7 +1,7 @@
 export const card = {
   tabFilterItems: [
     {
-      label: 'Focussed',
+      label: 'Focused',
       value: 'GTM',
       total: 0,
     },

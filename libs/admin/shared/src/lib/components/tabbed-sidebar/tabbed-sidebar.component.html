@@ -4,10 +4,7 @@
       <div class="title">
         <h1 *ngIf="header" class="heading">{{ header }}</h1>
         <div class="close" (click)="onCloseSidebar.emit()">
-          <i
-            class="pi pi-arrow-right"
-            style="color: white; font-weight: 600;"
-          ></i>
+          <img class="close-sidebar-icon" src="assets/svg/close-sidebar.svg" />
         </div>
       </div>
       <hospitality-bot-tab-header

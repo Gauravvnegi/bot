@@ -4,10 +4,7 @@
       Settings
     </div>
     <div *ngIf="isSidebar" (click)="close()" class="close">
-      <i
-        [ngClass]="!isSidebar ? 'fa fa-times' : 'pi pi-arrow-right'"
-        aria-hidden="true"
-      ></i>
+      <img class="close-sidebar-icon" src="assets/svg/close-sidebar.svg" />
     </div>
   </div>
 
@@ -62,7 +59,7 @@
   <div class="sidebar-slide-header">
     <span class="title">Settings</span>
     <span class="close-icon" (click)="close()">
-      <i class="pi pi-arrow-right" aria-hidden="true"></i>
+      <img class="close-sidebar-icon" src="assets/svg/close-sidebar.svg" />
     </span>
   </div>
 </ng-template>

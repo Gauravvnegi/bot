@@ -9,11 +9,7 @@
       Raise Complaint
     </div>
     <div (click)="close({ status: false })" class="close">
-      <i
-        [ngClass]="!isSidebar ? 'fa fa-times' : 'pi pi-arrow-right'"
-        style="color: #ffff;"
-        aria-hidden="true"
-      ></i>
+      <img class="close-sidebar-icon" src="assets/svg/close-sidebar.svg" />
     </div>
   </div>
   <div class="body" [id]="fa.referenceId">

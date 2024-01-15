@@ -24,14 +24,15 @@
       tooltipPosition="bottom"
       (click)="openFilterForm()"
     />
-    <i
-      class="pi pi-arrow-right"
-      style="color: #fff;"
-      (click)="closePopup()"
-      aria-hidden="true"
+
+    <img
+      class="close-sidebar-icon"
       pTooltip="Close"
       tooltipPosition="bottom"
-    ></i>
+      aria-hidden="true"
+      (click)="closePopup()"
+      src="assets/svg/close-sidebar.svg"
+    />
   </div>
 </div>
 <ng-container

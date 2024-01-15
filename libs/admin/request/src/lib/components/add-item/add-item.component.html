@@ -4,11 +4,7 @@
       {{ 'Add Service Item' | translate }}
     </div>
     <div (click)="close()" class="close">
-      <i
-        [ngClass]="isSidebar ? 'pi pi-arrow-right' : 'fa fa-times'"
-        aria-hidden="true"
-        style="color: #ffff;"
-      ></i>
+      <img class="close-sidebar-icon" src="assets/svg/close-sidebar.svg" />
     </div>
   </div>
   <div class="body" [id]="fa.referenceId">

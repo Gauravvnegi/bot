@@ -199,10 +199,11 @@ export class InvoiceComponent implements OnInit {
               res[JourneyTypes.LATECHECKOUT].journeyStartTime
             );
             const todayEpoch = new Date().setHours(0, 0, 0, 0);
-
+            const departureDate = new Date(
+              this.inputControl.departureDate.value
+            ).setHours(0, 0, 0, 0);
             this.showBanner =
-              currentTime > defaultTime &&
-              this.inputControl.departureDate.value > todayEpoch;
+              currentTime > defaultTime && departureDate === todayEpoch;
           }
         })
     );

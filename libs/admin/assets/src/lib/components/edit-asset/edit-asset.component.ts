@@ -225,7 +225,7 @@ export class EditAssetComponent implements OnInit, OnDestroy {
                 }
               )
               .subscribe();
-            this.router.navigate(['/pages/library/assets']);
+            this.routesConfigService.goBack();
 
             this.isSavingasset = false;
           },

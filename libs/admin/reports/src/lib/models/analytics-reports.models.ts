@@ -1,5 +1,6 @@
 import {
   convertToNormalCase,
+  getFullName,
   toCurrency,
 } from 'libs/admin/shared/src/lib/utils/valueFormatter';
 import {
@@ -16,8 +17,6 @@ import {
 } from '../types/analytics-reports.types';
 import { ReportClass } from '../types/reports.types';
 import { getFormattedDate } from './reservation-reports.models';
-import { unescape } from 'lodash';
-import { getFullName } from '../constant/reports.const';
 
 export class CompanyContributionsReport
   implements

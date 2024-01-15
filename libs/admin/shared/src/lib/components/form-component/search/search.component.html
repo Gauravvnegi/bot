@@ -1,10 +1,10 @@
 <span class="p-input-icon-right">
-  <form [formGroup]="parentFG">
+  <form [formGroup]="controlContainer.control">
     <input
       type="text"
       pInputText
-      formControlName="search"
-      placeholder="Search by Name, Number..."
+      [formControlName]="controlName"
+      [placeholder]="placeholder"
     />
     <i class="pi pi-times-circle search-icon" (click)="clearSearch()"></i>
   </form>

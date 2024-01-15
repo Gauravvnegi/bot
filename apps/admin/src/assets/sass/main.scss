@@ -126,6 +126,45 @@
     padding: unset;
   }
 }
+
+// Table switch icons styling
+.pull-right {
+  @include flex-item-center;
+  gap: 5px;
+
+  margin: 0 20px;
+  .type-label {
+    margin: 0 1%;
+  }
+
+  .type-label > .image {
+    height: 38px;
+    width: 38px;
+    @include flex-all-center;
+    border-radius: 50%;
+    img {
+      height: 20px;
+    }
+  }
+  .type-label > input {
+    /* HIDE RADIO */
+    visibility: hidden; /* Makes input not-clickable */
+    position: absolute; /* Remove input from document flow */
+  }
+
+  .type-label > input + .image {
+    position: relative;
+    cursor: pointer;
+  }
+
+  .type-label > input:checked + .image {
+    background-color: $primary-cta;
+    img {
+      filter: invert(0);
+    }
+  }
+}
+
 // no style dialog
 .no-style {
   width: unset !important;
@@ -157,5 +196,20 @@
       font-size: 12px;
       margin-top: 0px;
     }
+  }
+}
+
+// Sidebar Styling
+.night-audit {
+  @include default-close;
+  .p-sidebar-right {
+    @include sidebar-design(60rem);
+  }
+}
+
+.booking {
+  @include default-close;
+  .p-sidebar-right {
+    width: 35rem;
   }
 }

@@ -1,11 +1,20 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from '@hospitality-bot/shared/utils';
-import { Observable } from 'rxjs';
+import { SelectedEntity } from 'libs/admin/manage-reservation/src/lib/types/reservation.type';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { dineInReservationResponse } from '../constants/data-table';
 
 @Injectable()
 export class OutletTableService extends ApiService {
-  getOutletList(): Observable<any> {
-    return this.get(`/api/v1/config?key=OUTLET_CONFIGURATION`);
+  public selectedEntity = new BehaviorSubject<SelectedEntity>(null);
+
+  getReservations(entityId): Observable<any> {
+    return this.get(`/api/v1/entity/${entityId}/inventory?type=ROOM_TYPE`).pipe(
+      map((res) => {
+        return dineInReservationResponse;
+      })
+    );
   }
 
   exportCSV(entityId, config): Observable<any> {

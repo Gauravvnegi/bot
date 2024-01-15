@@ -1,0 +1,53 @@
+@import 'main';
+
+.header {
+  @include flex-space-between-cen-Algn;
+  background-color: $primary-cta;
+  padding: 15px 10px;
+  color: white;
+  border-bottom: 1px solid $primary-cta;
+  .heading {
+    @include light-sm-text;
+    @include flex-item-center;
+    width: 50%;
+    gap: 20px;
+    .header-data {
+      color: black;
+      background-color: $white;
+      padding: 10px;
+      border-radius: 10px;
+    }
+    .menu {
+      width: 60%;
+    }
+  }
+
+  .invoice-id {
+    .close-sidebar-icon {
+      cursor: pointer;
+    }
+  }
+}
+
+:host ::ng-deep .menu {
+  .p-multiselect-label {
+    color: black;
+  }
+}
+
+.pos-form {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  padding: 20px 2%;
+  justify-content: space-between;
+  .search {
+    padding-top: 36px;
+  }
+  .one-fourth-width {
+    width: 24%;
+  }
+  .one-fifth-width {
+    width: 18%;
+  }
+}

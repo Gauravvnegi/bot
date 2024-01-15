@@ -71,6 +71,8 @@ export type Menu = {
   description: string;
   status: boolean;
   entityId: string;
+  label?: string;
+  value?: string;
 };
 
 type EntityStateCounts = {

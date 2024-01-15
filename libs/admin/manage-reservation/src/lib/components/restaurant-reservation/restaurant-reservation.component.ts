@@ -50,7 +50,7 @@ export class RestaurantReservationComponent extends BaseReservationComponent
 
   menuItemsValues = [];
   reservationTypes: Option[] = [];
-  statusOptions: Option[] = [];
+  statusOptions: Option[] = statusOptions;
   foodPackages: Option[] = [];
 
   expandAccordion = false;

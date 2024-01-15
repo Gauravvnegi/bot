@@ -166,4 +166,11 @@ export const subModuleConfig: Partial<Record<ModuleNames, any>> = {
   [ModuleNames.TRANSACTIONS]: () =>
     // This module to be rename as Transaction module
     import('@hospitality-bot/admin/finance').then((m) => m.AdminFinanceModule),
+
+  // Pos
+  [ModuleNames.POS_DASHBOARD]: () =>
+    // This module to be rename as Transaction module
+    import('@hospitality-bot/admin/outlets-dashboard').then(
+      (m) => m.AdminOutletsDashboardModule
+    ),
 };

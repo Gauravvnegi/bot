@@ -188,8 +188,8 @@ export class BaseReservationComponent {
       this.summaryData.totalPaidAmount = this.totalPaidAmount;
     }
     // Set value and validators for payment according to the summaryData.
-    this.paymentControls.totalPaidAmount.setValidators([Validators.min(0)]);
-    this.paymentRuleControls.amountToPay.setValidators([
+    this.paymentControls?.totalPaidAmount.setValidators([Validators.min(0)]);
+    this.paymentRuleControls?.amountToPay.setValidators([
       Validators.max(this.summaryData?.totalAmount),
       Validators.min(0),
     ]);

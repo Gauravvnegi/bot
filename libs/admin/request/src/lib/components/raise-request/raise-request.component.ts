@@ -20,7 +20,6 @@ import { debounceTime } from 'rxjs/operators';
 import { RequestService } from '../../services/request.service';
 import { Option, manageMaskZIndex } from '@hospitality-bot/admin/shared';
 import { AddItemComponent } from '../add-item/add-item.component';
-import { SideBarService } from 'apps/admin/src/app/core/theme/src/lib/services/sidebar.service';
 import { AddGuestComponent } from 'libs/admin/guests/src/lib/components';
 
 @Component({
@@ -273,7 +272,6 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
       this.sidebarVisible = true;
       const factory = this.resolver.resolveComponentFactory(AddItemComponent);
       this.sidebarSlide.clear();
-      manageMaskZIndex();
       const componentRef = this.sidebarSlide.createComponent(factory);
       componentRef.instance.isSidebar = true;
       this.$subscription.add(
@@ -293,6 +291,7 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
           this.sidebarVisible = false;
         })
       );
+      manageMaskZIndex();
     }
   }
 
@@ -319,7 +318,6 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
     this.sidebarVisible = true;
     const factory = this.resolver.resolveComponentFactory(AddGuestComponent);
     this.sidebarSlide.clear();
-    manageMaskZIndex();
     const componentRef = this.sidebarSlide.createComponent(factory);
     componentRef.instance.isSidebar = true;
     this.$subscription.add(
@@ -333,6 +331,7 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
         this.sidebarVisible = false;
       })
     );
+    manageMaskZIndex();
   }
 
   ngOnDestroy(): void {

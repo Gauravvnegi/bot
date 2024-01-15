@@ -49,6 +49,8 @@ class Menu {
   description: string;
   status: boolean;
   entityId: string;
+  label?: string;
+  value?: string;
 
   deserialize(input: MenuResponse) {
     this.id = input.id;
@@ -57,6 +59,8 @@ class Menu {
     this.description = input.description;
     this.status = input.status;
     this.entityId = input.entityId;
+    this.value = input?.id;
+    this.label = input?.name;
     return this;
   }
 }

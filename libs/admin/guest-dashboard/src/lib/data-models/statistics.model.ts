@@ -131,6 +131,7 @@ export class Source {
       const label = (
         key.charAt(0).toUpperCase() + key.slice(1).toLowerCase()
       ).replace(/_/g, ' ');
+
       this.statistics.push(
         new Statistic().deserialize({
           label: label,

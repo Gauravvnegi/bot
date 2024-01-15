@@ -143,7 +143,7 @@
     @include flex-all-center;
     border-radius: 50%;
     img {
-      height: 15px;
+      height: 20px;
     }
   }
   .type-label > input {
@@ -196,5 +196,20 @@
       font-size: 12px;
       margin-top: 0px;
     }
+  }
+}
+
+// Sidebar Styling
+.night-audit {
+  @include default-close;
+  .p-sidebar-right {
+    @include sidebar-design(60rem);
+  }
+}
+
+.booking {
+  @include default-close;
+  .p-sidebar-right {
+    width: 35rem;
   }
 }

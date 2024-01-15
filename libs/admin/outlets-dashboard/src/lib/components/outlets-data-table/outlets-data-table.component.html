@@ -336,3 +336,12 @@
 <ng-template #emptyCell>
   <div class="emptyCell">&mdash;</div>
 </ng-template>
+
+<p-sidebar
+  class="night-audit"
+  [(visible)]="sidebarVisible"
+  position="right"
+  [showCloseIcon]="false"
+>
+  <ng-container #sidebarSlide></ng-container>
+</p-sidebar>

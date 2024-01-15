@@ -77,15 +77,15 @@ export const reservationTypes = {
   card: {
     name: 'Card',
     value: 'card',
-    url: 'assets/svg/reservation-table.svg',
-    whiteUrl: 'assets/svg/reservation-table-white.svg',
+    url: 'assets/svg/card-view-black.svg',
+    whiteUrl: 'assets/svg/card-view-white.svg',
     backgroundColor: '#1AB99F',
   },
   table: {
     name: 'Table',
     value: 'table',
-    url: 'assets/svg/calendar-dark.svg',
-    whiteUrl: 'assets/svg/calendar-white.svg',
+    url: 'assets/svg/table-view-black.svg',
+    whiteUrl: 'assets/svg/table-view-white.svg',
     backgroundColor: '#DEFFF3',
   },
 };

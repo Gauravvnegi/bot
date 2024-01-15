@@ -1,9 +1,16 @@
-import { Component, OnInit } from '@angular/core';
+import {
+  Component,
+  ComponentFactoryResolver,
+  OnInit,
+  ViewChild,
+  ViewContainerRef,
+} from '@angular/core';
 import { FormBuilder, FormControl } from '@angular/forms';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
   AdminUtilityService,
   BaseDatatableComponent,
+  manageMaskZIndex,
 } from '@hospitality-bot/admin/shared';
 import { LazyLoadEvent } from 'primeng/api';
 import { Subscription } from 'rxjs';
@@ -21,6 +28,7 @@ import {
   OutletReservation,
 } from '../../models/outlet-reservation.model';
 import { ReservationStatus } from '../../types/reservation-table';
+import { PosReservationComponent } from '../pos-reservation/pos-reservation.component';
 
 @Component({
   selector: 'hospitality-bot-outlets-data-table',
@@ -39,6 +47,10 @@ export class OutletsDataTableComponent extends BaseDatatableComponent
   selectedReservationType: string;
   outletTableData: OutletReservation[];
 
+  sidebarVisible = false;
+  @ViewChild('sidebarSlide', { read: ViewContainerRef })
+  sidebarSlide: ViewContainerRef;
+
   readonly reservationStatusDetails = ReservationStatusDetails;
 
   constructor(
@@ -47,7 +59,8 @@ export class OutletsDataTableComponent extends BaseDatatableComponent
     protected outletService: OutletTableService,
     private _clipboard: Clipboard,
     protected adminUtilityService: AdminUtilityService,
-    protected snackbarService: SnackBarService
+    protected snackbarService: SnackBarService,
+    private resolver: ComponentFactoryResolver
   ) {
     super(fb);
   }
@@ -123,7 +136,30 @@ export class OutletsDataTableComponent extends BaseDatatableComponent
 
   editReservation(id: string) {}
 
-  addNewOrder() {}
+  addNewOrder() {
+    this.sidebarVisible = true;
+    const factory = this.resolver.resolveComponentFactory(
+      PosReservationComponent
+    );
+    const sidebarData = {
+      isSidebar: true,
+      data: {
+        tableName: 'G01',
+        area: 'Garden',
+        invoiceId: '3294093',
+        entityId: this.entityId,
+      },
+    };
+    this.sidebarSlide.clear();
+    const componentRef = this.sidebarSlide.createComponent(factory);
+    Object.assign(componentRef.instance, sidebarData);
+    this.$subscription.add(
+      componentRef.instance.onCloseSidebar.subscribe((res) => {
+        this.sidebarVisible = false;
+      })
+    );
+    manageMaskZIndex();
+  }
 
   handleFinal = () => {
     this.loading = false;

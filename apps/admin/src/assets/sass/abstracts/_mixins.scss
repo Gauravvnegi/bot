@@ -604,3 +604,26 @@
     flex-basis: $flexBasisValue;
   }
 }
+
+// Sidebar Mixins
+
+@mixin sidebarTopBorder() {
+  border-top-left-radius: 10px;
+}
+
+@mixin sidebar-design($width) {
+  @include sidebarTopBorder;
+  width: $width;
+}
+
+@mixin close-design() {
+  .close {
+    color: $primary-cta !important;
+  }
+}
+
+@mixin default-close() {
+  .p-sidebar-close {
+    display: none;
+  }
+}

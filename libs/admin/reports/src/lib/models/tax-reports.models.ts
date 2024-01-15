@@ -1,4 +1,4 @@
-import { toCurrency } from 'libs/admin/shared/src/lib/utils/valueFormatter';
+import { getFullName, toCurrency } from 'libs/admin/shared/src/lib/utils/valueFormatter';
 import { monthlyTaxReportRows } from '../constant/tax-reports.const';
 import { ReportClass } from '../types/reports.types';
 import {
@@ -10,7 +10,6 @@ import {
   TaxReportResponse,
 } from '../types/tax-reports.types';
 import { getFormattedDate } from './reservation-reports.models';
-import { getFullName } from '../constant/reports.const';
 
 export class MonthlyTaxReport
   implements ReportClass<MonthlyTaxReportData, MonthlyTaxReportResponse> {

@@ -1,5 +1,6 @@
 import {
   currencyToNumber,
+  getFullName,
   toCurrency,
 } from 'libs/admin/shared/src/lib/utils/valueFormatter';
 import { ReportClass, RowStyles } from '../types/reports.types';
@@ -12,7 +13,6 @@ import {
   getFormattedDate,
   getFormattedDateWithTime,
 } from './reservation-reports.models';
-import { getFullName } from '../constant/reports.const';
 
 export class Cashier extends RowStyles {
   id: string;

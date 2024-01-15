@@ -1,4 +1,7 @@
-import { toCurrency } from 'libs/admin/shared/src/lib/utils/valueFormatter';
+import {
+  getFullName,
+  toCurrency,
+} from 'libs/admin/shared/src/lib/utils/valueFormatter';
 import {
   DiscountAllowanceReportData,
   DiscountAllowanceReportResponse,
@@ -7,7 +10,6 @@ import {
 } from '../types/discount-reports.types';
 import { ReportClass } from '../types/reports.types';
 import { getFormattedDate } from './reservation-reports.models';
-import { getFullName } from '../constant/reports.const';
 
 export class DiscountAllowanceReport
   implements

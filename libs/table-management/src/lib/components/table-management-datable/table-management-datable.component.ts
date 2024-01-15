@@ -69,12 +69,19 @@ export class TableManagementDatableComponent extends BaseDatatableComponent
 
   ngOnInit(): void {
     this.entityId = this.globalFilterService.entityId;
-    this.initTableValue();
+    if (this.tableManagementService.selectedTab.value) {
+      this.selectedTab = this.tableManagementService.selectedTab.value;
+      this.selectedTab === TableValue.Table
+        ? (this.tabFilterIdx = 0)
+        : (this.tabFilterIdx = 1);
+    }
     this.tableName = title[this.selectedTab];
+    this.initTableValue();
   }
 
   loadData(event: LazyLoadEvent): void {
     this.selectedTab = this.tabFilterItems[this.tabFilterIdx].value;
+    this.tableManagementService.selectedTab.next(this.selectedTab);
     this.tableName = title[this.selectedTab];
     this.initTableValue();
   }

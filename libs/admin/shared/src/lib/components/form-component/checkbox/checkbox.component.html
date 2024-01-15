@@ -1,6 +1,6 @@
-<div>
+<div class="checkbox-wrapper" (click)="toggleSelectAll()">
   <input type="checkbox" (change)="toggleSelectAll()" class="d-none" />
-  <div class="checkbox" (change)="toggleSelectAll()">
+  <div class="checkbox">
     <img
       *ngIf="value"
       class="checkbox__img"
@@ -9,5 +9,5 @@
     />
   </div>
 
-  <span class="checkbox-label">{{ label }}</span>
+  <span *ngIf="label" class="checkbox-label">{{ label }}</span>
 </div>

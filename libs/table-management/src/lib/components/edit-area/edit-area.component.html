@@ -45,25 +45,27 @@
       </div>
       <div class="form-block">
         <div class="select-all">
-          <ng-container
-            [ngTemplateOutlet]="checkbox"
-            [ngTemplateOutletContext]="{
-              $implicit: { label: 'Select All', controlName: 'selectAll' }
-            }"
-          >
-          </ng-container>
+          <div class="card-container">
+            <hospitality-bot-checkbox
+              controlName="selectAll"
+              [label]="'Select All'"
+              [value]="tableFormControls.selectAll.value"
+            ></hospitality-bot-checkbox>
+          </div>
         </div>
-
-        <div class="table-row-container" [formGroup]="tableListForm">
-          <ng-container *ngFor="let table of tableList">
+        <div
+          *ngIf="tableListForm?.controls"
+          class="table-row-container"
+          [formGroup]="tableListForm"
+        >
+          <ng-container *ngFor="let table of tableList; let i = index">
             <div class="card-container">
-              <p-checkbox
-                [formControlName]="table.controlName"
-                [binary]="true"
-                (onChanges)="toggleCheckboxSelection()"
-              ></p-checkbox>
-              <div class="label">{{ table.label }}</div>
+              <hospitality-bot-checkbox
+                [controlName]="table.controlName"
+                [label]="table.label"
+              ></hospitality-bot-checkbox>
             </div>
+            <!-- <div class="line" *ngIf="[7, 14, 21].includes(i)"></div> -->
           </ng-container>
         </div>
       </div>
@@ -80,13 +82,3 @@
   >
   </hospitality-bot-form-action>
 </div>
-
-<ng-template #checkbox let-data>
-  <div class="card-container" [formGroup]="tableForm">
-    <p-checkbox
-      [formControlName]="data.controlName"
-      [binary]="true"
-    ></p-checkbox>
-    <div class="label">{{ data.label }}</div>
-  </div>
-</ng-template>

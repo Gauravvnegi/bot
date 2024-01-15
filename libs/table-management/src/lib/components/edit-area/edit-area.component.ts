@@ -107,6 +107,13 @@ export class EditAreaComponent implements OnInit {
         const data = new AreaFormData().deserialize(res);
         this.useForm.patchValue({ ...data });
         this.attachedTableNumber = data?.tables;
+
+        //updating tables control value
+        const controls = this.tableListForm?.controls;
+        controls &&
+          Object.keys(controls).forEach((key) => {
+            controls[key].setValue(this.attachedTableNumber?.includes(key));
+          });
       }, this.handleError);
   }
 
@@ -139,10 +146,10 @@ export class EditAreaComponent implements OnInit {
   initTableControl() {
     this.tableListForm = this.fb.group({});
 
-    this.tableList.forEach((item) => {
+    this.tableList?.forEach((item) => {
       this.tableListForm.addControl(
         item?.controlName,
-        this.fb.control(this.attachedTableNumber.includes(item?.controlName))
+        this.fb.control(this.attachedTableNumber?.includes(item?.controlName))
       );
       this.tableListForm
         .get(item?.controlName)
@@ -151,23 +158,25 @@ export class EditAreaComponent implements OnInit {
           const { removedTables, attachedTables } = this.areaFormControls;
 
           if (res) {
-            if (!attachedTables.value.includes(item?.id)) {
+            if (!attachedTables?.value?.includes(item?.id)) {
               attachedTables.patchValue([...attachedTables.value, item.id]);
             }
           } else {
-            if (attachedTables.value.includes(item?.id)) {
+            if (attachedTables?.value?.includes(item?.id)) {
               removedTables.patchValue([...removedTables.value, item.id]);
             }
           }
         });
     });
 
-    this.tableFormControls.selectAll.valueChanges.subscribe((item: boolean) => {
-      const controls = this.tableListForm.controls;
-      Object.keys(controls).forEach((key) => {
-        controls[key].setValue(item);
-      });
-    });
+    this.tableFormControls.selectAll?.valueChanges.subscribe(
+      (item: boolean) => {
+        const controls = this.tableListForm?.controls;
+        Object.keys(controls).forEach((key) => {
+          controls[key].setValue(item);
+        });
+      }
+    );
     //to check if all controls are selected then mark select all checked else unchecked
     this.toggleCheckboxSelection();
   }
@@ -180,6 +189,7 @@ export class EditAreaComponent implements OnInit {
     if (Object.keys(controls).some((key) => !controls[key].value)) {
       this.tableFormControls.selectAll.patchValue(false, { emitEvent: false });
     } else {
+      debugger;
       this.tableFormControls.selectAll.patchValue(true, { emitEvent: false });
     }
   }

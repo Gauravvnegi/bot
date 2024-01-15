@@ -1,17 +1,20 @@
 import { Injectable } from '@angular/core';
 import { QueryConfig } from '@hospitality-bot/admin/shared';
 import { ApiService } from '@hospitality-bot/shared/utils';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { AreaFormDataResponse } from '../types/edit-area.type';
+import { TableFormDataResponse } from '../types/edit-table.type';
 import {
   AreaListResponse,
   AreaResponse,
   TableListResponse,
+  TableManagementDatableTabs,
 } from '../types/table-datable.type';
-import { AreaFormDataResponse } from '../types/edit-area.type';
-import { TableFormDataResponse } from '../types/edit-table.type';
 
 @Injectable()
 export class TableManagementService extends ApiService {
+  selectedTab = new BehaviorSubject<TableManagementDatableTabs>(null);
+
   getTableById(
     entityId: string,
     areaId: string

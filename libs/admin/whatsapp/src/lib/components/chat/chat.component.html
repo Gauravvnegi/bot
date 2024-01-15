@@ -39,7 +39,9 @@
         </ng-template>
       </div>
       <div class="selectedChat">
-        {{ selectedChat ? selectedChat?.name || selectedChat?.phone : '' }}
+        <div guest-details-sidebar [guestId]="selectedChat?.guestId">
+          {{ selectedChat ? selectedChat?.name || selectedChat?.phone : '' }}
+        </div>
       </div>
     </div>
 
@@ -85,13 +87,13 @@
             (click)="openEndLiveChatPopup()"
           />
         </ng-container>
-        <img
+        <!-- <img
           *ngIf="!guestInfoEnable"
           class="icon"
           src="assets/svg/hamBurger.svg"
           [alt]=""
           (click)="openGuestInfo()"
-        />
+        /> -->
       </div>
     </div>
   </div>

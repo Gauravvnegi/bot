@@ -1,3 +1,4 @@
+import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
 import {
@@ -9,19 +10,19 @@ import {
 } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
-import {
-  ModalService,
-  SnackBarService,
-} from '@hospitality-bot/shared/material';
+import { SnackBarService } from '@hospitality-bot/shared/material';
 import { Subscription } from 'rxjs';
 import { Campaign } from '../../data-model/campaign.model';
 import { EmailList } from '../../data-model/email.model';
 import { CampaignService } from '../../services/campaign.service';
 import { EmailService } from '../../services/email.service';
-import { MatDialogConfig } from '@angular/material/dialog';
 import { SendTestComponent } from '../send-test/send-test.component';
 import { TranslateService } from '@ngx-translate/core';
-import { Option, NavRouteOptions } from '@hospitality-bot/admin/shared';
+import {
+  Option,
+  NavRouteOptions,
+  openModal,
+} from '@hospitality-bot/admin/shared';
 
 @Component({
   selector: 'hospitality-bot-view-campaign',
@@ -57,8 +58,8 @@ export class ViewCampaignComponent implements OnInit, OnDestroy {
     private _emailService: EmailService,
     private _campaignService: CampaignService,
     private activatedRoute: ActivatedRoute,
-    private _modalService: ModalService,
-    protected _translateService: TranslateService
+    protected _translateService: TranslateService,
+    private dialogService: DialogService
   ) {
     this.initFG();
   }
@@ -106,12 +107,14 @@ export class ViewCampaignComponent implements OnInit, OnDestroy {
    */
   getFromEmails() {
     this.$subscription.add(
-      this._emailService.getFromEmail(this.entityId).subscribe(
-        (response) =>
-          (this.fromEmailList = new EmailList()
-            .deserialize(response)
-            .map((item) => ({ label: item.email, value: item.id })))
-      )
+      this._emailService
+        .getFromEmail(this.entityId)
+        .subscribe(
+          (response) =>
+            (this.fromEmailList = new EmailList()
+              .deserialize(response)
+              .map((item) => ({ label: item.email, value: item.id })))
+        )
     );
   }
 
@@ -215,19 +218,17 @@ export class ViewCampaignComponent implements OnInit, OnDestroy {
     this.$subscription.add(
       this._campaignService
         .archiveCampaign(this.entityId, {}, this.campaignId)
-        .subscribe(
-          (response) => {
-            this.setDataAfterUpdate(response);
-            this.snackbarService.openSnackBarWithTranslate(
-              {
-                translateKey: `messages.SUCCESS.CAMPAIGN_ARCHIVED`,
-                priorityMessage: 'Campaign Archived.',
-              },
-              '',
-              { panelClass: 'success' }
-            );
-          }
-        )
+        .subscribe((response) => {
+          this.setDataAfterUpdate(response);
+          this.snackbarService.openSnackBarWithTranslate(
+            {
+              translateKey: `messages.SUCCESS.CAMPAIGN_ARCHIVED`,
+              priorityMessage: 'Campaign Archived.',
+            },
+            '',
+            { panelClass: 'success' }
+          );
+        })
     );
   }
 
@@ -235,44 +236,46 @@ export class ViewCampaignComponent implements OnInit, OnDestroy {
    * @function sendTestCampaign function to send test campaign email.
    */
   sendTestCampaign() {
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.disableClose = true;
-    const sendTestCampaignCompRef = this._modalService.openDialog(
-      SendTestComponent,
-      dialogConfig
-    );
-    sendTestCampaignCompRef.componentInstance.parentFG = this.campaignFG;
-
+    let dialogRef: DynamicDialogRef;
+    const modalData: Partial<SendTestComponent> = {
+      parentFG: this.campaignFG,
+    };
+    dialogRef = openModal({
+      config: {
+        width: '550px',
+        styleClass: 'confirm-dialog',
+        data: modalData,
+      },
+      component: SendTestComponent,
+      dialogService: this.dialogService,
+    });
     this.$subscription.add(
-      sendTestCampaignCompRef.componentInstance.closeSendTest.subscribe(
-        (response) => {
-          if (response.status) {
-            const reqData = this._emailService.createRequestData(
-              this.campaignFG.getRawValue()
-            );
-            this.$subscription.add(
-              this._emailService.sendTest(this.entityId, reqData).subscribe(
-                (response) => {
-                  this.setDataAfterUpdate(response);
-                  this.snackbarService
-                    .openSnackBarWithTranslate(
-                      {
-                        translateKey: 'messages.success.sendTestcampaign',
-                        priorityMessage: 'Campaign sent to test email(s)',
-                      },
-                      '',
-                      {
-                        panelClass: 'success',
-                      }
-                    )
-                    .subscribe();
-                }  
-              )
-            );
-          }
-          sendTestCampaignCompRef.close();
+      dialogRef.onClose.subscribe((response) => {
+        if (response.status) {
+          const reqData = this._emailService.createRequestData(
+            this.campaignFG.getRawValue()
+          );
+          this.$subscription.add(
+            this._emailService
+              .sendTest(this.entityId, reqData)
+              .subscribe((response) => {
+                this.setDataAfterUpdate(response);
+                this.snackbarService
+                  .openSnackBarWithTranslate(
+                    {
+                      translateKey: 'messages.success.sendTestcampaign',
+                      priorityMessage: 'Campaign sent to test email(s)',
+                    },
+                    '',
+                    {
+                      panelClass: 'success',
+                    }
+                  )
+                  .subscribe();
+              })
+          );
         }
-      )
+      })
     );
   }
 

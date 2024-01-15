@@ -3,11 +3,9 @@ import {
   Compiler,
   Component,
   ComponentFactoryResolver,
-  ElementRef,
   HostListener,
   OnDestroy,
   OnInit,
-  SimpleChanges,
   TemplateRef,
   ViewChild,
   ViewContainerRef,
@@ -16,10 +14,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { NavigationEnd, Router } from '@angular/router';
 import { ConfigService, UserService } from '@hospitality-bot/admin/shared';
 import { DateService } from '@hospitality-bot/shared/utils';
-import { AddGuestComponent } from 'libs/admin/guests/src/lib/components/add-guest/add-guest.component';
 import { manageReservationRoutes } from 'libs/admin/manage-reservation/src/lib/constants/routes';
-import { RaiseRequestComponent } from 'libs/admin/request/src/lib/components/raise-request/raise-request.component';
-import { SettingsMenuComponent } from 'libs/admin/settings/src/lib/components/settings-menu/settings-menu.component';
 import {
   ModuleNames,
   PermissionModuleNames,
@@ -28,7 +23,6 @@ import {
 import { HotelDetailService } from 'libs/admin/shared/src/lib/services/hotel-detail.service';
 import { MenuItem } from 'primeng/api';
 import { Subscription } from 'rxjs';
-import { QuickReservationFormComponent } from 'libs/admin/reservation/src/lib/components/quick-reservation-form/quick-reservation-form.component';
 import {
   defaultNotificationFilter,
   layoutConfig,
@@ -49,9 +43,10 @@ import { NightAuditService } from 'libs/admin/global-shared/src/lib/services/nig
 import {
   SideBarConfig,
   SideBarService,
-} from 'libs/admin/shared/src/lib/services/sidebar.service';
+} from 'apps/admin/src/app/core/theme/src/lib/services/sidebar.service';
 import { tokensConfig } from 'libs/admin/shared/src/lib/constants/common';
-import { NightAuditComponent } from 'libs/admin/global-shared/src/lib/components/night-audit/night-audit.component';
+import { SettingsMenuComponent } from 'libs/admin/settings/src/lib/components/settings-menu/settings-menu.component';
+
 type MessagePayload = {
   data: {
     nickName: string;
@@ -123,17 +118,12 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
   sidebarVisible: boolean;
   @ViewChild('sidebarSlide', { read: ViewContainerRef })
   sidebarSlide: ViewContainerRef;
-  sidebarType:
-    | 'complaint'
-    | 'settings'
-    | 'guest-sidebar'
-    | 'night-audit'
-    | 'url'
-    | 'booking' = 'complaint';
+  sidebarType: string = 'complaint';
   propertyList: any[];
 
   @ViewChild('url') urlTemplate: TemplateRef<any>;
   iframeTempUrl: string;
+  sidebarStyle: {};
 
   constructor(
     private _router: Router,
@@ -150,11 +140,11 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
     private notificationService: NotificationService,
     private configService: ConfigService,
     private hotelDetailService: HotelDetailService,
-    private resolver: ComponentFactoryResolver,
-    private compiler: Compiler,
     private routesConfigService: RoutesConfigService,
     private nightAuditService: NightAuditService,
-    private sideBarService: SideBarService
+    private sideBarService: SideBarService,
+    private compiler: Compiler,
+    private resolver: ComponentFactoryResolver
   ) {
     this.initFG();
   }
@@ -186,16 +176,25 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
     this.initSidebarSubscription();
   }
 
+  ngAfterViewInit(): void {
+    // Set the sidebarSlide reference in the service
+    this.sideBarService.sidebarSlide = this.sidebarSlide;
+  }
+
   initSidebarSubscription() {
     this.sideBarService
       .sideBarSubscription()
       .subscribe((res: SideBarConfig) => {
         if (res.open) {
-          if (res.type === 'RAISE_REQUEST') {
-            this.showComplaint();
-          }
-          if (res.type === 'URL') {
-            this.openSideBarWithUrl(res.url);
+          switch (res.type) {
+            case 'RAISE_REQUEST':
+              this.showComplaint();
+              break;
+            case 'URL':
+              this.openSideBarWithUrl(res.url);
+              break;
+            case 'ADD_GUEST':
+              this.showAddGuest(res?.data, res.sidebarType);
           }
         }
       });
@@ -205,11 +204,13 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
    * @param url link to be open in iframe
    */
   openSideBarWithUrl(url: string) {
-    this.sidebarType = 'url';
     this.iframeTempUrl = url;
-    this.sidebarSlide.clear();
-    this.sidebarSlide.createEmbeddedView(this.urlTemplate);
-    this.sidebarVisible = true;
+    this.sidebarType = 'url';
+    this.sideBarService.openSidebar({
+      templateRef: this.urlTemplate,
+      onOpen: () => (this.sidebarVisible = true),
+      onClose: (res) => (this.sidebarVisible = false),
+    });
   }
 
   scrollToTop() {
@@ -583,107 +584,81 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
   }
 
   showComplaint() {
-    const lazyModulePromise = import(
-      'libs/admin/request/src/lib/admin-request.module'
-    )
-      .then((module) => {
-        return this.compiler.compileModuleAsync(module.AdminRequestModule);
-      })
-      .catch((error) => {
-        console.error('Error loading the lazy module:', error);
-      });
-
-    lazyModulePromise.then((moduleFactory) => {
-      this.sidebarVisible = true;
-      this.sidebarType = 'complaint';
-      const factory = this.resolver.resolveComponentFactory(
-        RaiseRequestComponent
-      );
-      this.sidebarSlide.clear();
-      const componentRef = this.sidebarSlide.createComponent(factory);
-      componentRef.instance.isSideBar = true;
-      componentRef.instance.onRaiseRequestClose.subscribe((res) => {
-        this.sidebarVisible = false;
-        componentRef.destroy();
-      });
+    this.sidebarType = 'complaint';
+    this.sideBarService.openSidebar({
+      componentName: 'RaiseRequest',
+      onOpen: () => (this.sidebarVisible = true),
+      onClose: (res) => (this.sidebarVisible = false),
     });
   }
 
-  showAddGuest() {
-    const lazyModulePromise = import(
-      'libs/admin/guests/src/lib/admin-guests.module'
-    )
-      .then((module) => {
-        return this.compiler.compileModuleAsync(module.AdminGuestsModule);
-      })
-      .catch((error) => {
-        console.error('Error loading the lazy module:', error);
-      });
-
-    lazyModulePromise.then((moduleFactory) => {
-      this.sidebarVisible = true;
-      this.sidebarType = 'guest-sidebar';
-      const factory = this.resolver.resolveComponentFactory(AddGuestComponent);
-      this.sidebarSlide.clear();
-      const componentRef = this.sidebarSlide.createComponent(factory);
-      componentRef.instance.isSideBar = true;
-      componentRef.instance.onClose.subscribe((res) => {
-        this.sidebarVisible = false;
-        componentRef.destroy();
-      });
+  showAddGuest(guestConfig?: {}, sidebarType = 'guest-sidebar') {
+    this.sidebarType = sidebarType;
+    this.sideBarService.openSidebar({
+      componentName: 'AddGuest',
+      data: guestConfig,
+      onOpen: () => (this.sidebarVisible = true),
+      onClose: (res) => (
+        res && this.sideBarService.sideBarEmittedData.next(res),
+        (this.sidebarVisible = false)
+      ),
     });
   }
 
   showQuickReservation() {
-    const lazyModulePromise = import(
-      'libs/admin/reservation/src/lib/admin-reservation.module'
-    )
-      .then((module) => {
-        return this.compiler.compileModuleAsync(module.AdminReservationModule);
-      })
-      .catch((error) => {
-        console.error('Error loading the lazy module:', error);
-      });
-
-    lazyModulePromise.then((moduleFactory) => {
-      this.sidebarVisible = true;
-      this.sidebarType = 'booking';
-      const factory = this.resolver.resolveComponentFactory(
-        QuickReservationFormComponent
-      );
-      this.sidebarSlide.clear();
-      const componentRef = this.sidebarSlide.createComponent(factory);
-      componentRef.instance.isSidebar = true;
-      componentRef.instance.isNewBooking = true;
-      componentRef.instance.onCloseSidebar.subscribe((res) => {
+    this.sidebarType = 'booking';
+    this.sideBarService.openSidebar({
+      componentName: 'QuickReservation',
+      onOpen: () => (this.sidebarVisible = true),
+      onClose: (res) => {
         this.sidebarVisible = false;
-        componentRef.destroy();
         if (res) this.refreshDashboard();
-      });
+      },
+      data: {
+        isNewBooking: true,
+      },
     });
   }
 
   openNightAudit() {
+    this.sidebarType = 'night-audit';
+    this.sideBarService.openSidebar({
+      componentName: 'NightAudit',
+      onOpen: () => (this.sidebarVisible = true),
+      onClose: (res) => (this.sidebarVisible = false),
+    });
+  }
+
+  // openSettings() {
+  //   this.sidebarType = 'settings';
+  //   this.sideBarService.openSidebar({
+  //     componentName: 'SettingsMenu',
+  //     onOpen: () => (this.sidebarVisible = true),
+  //     onClose: (res) => (this.sidebarVisible = false),
+  //   });
+  // }
+
+  openSettings() {
     const lazyModulePromise = import(
-      'libs/admin/global-shared/src/lib/admin-global-shared.module'
+      'libs/admin/settings/src/lib/admin-settings.module'
     )
       .then((module) => {
-        return this.compiler.compileModuleAsync(module.GlobalSharedModule);
+        return this.compiler.compileModuleAsync(module.AdminSettingsModule);
       })
       .catch((error) => {
         console.error('Error loading the lazy module:', error);
       });
 
-    lazyModulePromise.then((moduleFactory) => {
+    lazyModulePromise.then(() => {
       this.sidebarVisible = true;
-      this.sidebarType = 'night-audit';
       const factory = this.resolver.resolveComponentFactory(
-        NightAuditComponent
+        SettingsMenuComponent
       );
       this.sidebarSlide.clear();
+      this.sidebarType = 'settings';
       const componentRef = this.sidebarSlide.createComponent(factory);
       componentRef.instance.isSidebar = true;
-      componentRef.instance.onClose.subscribe((res) => {
+      componentRef.instance.onCloseSidebar.subscribe((res) => {
         this.sidebarVisible = false;
         componentRef.destroy();
       });
@@ -710,33 +685,6 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
 
   get isSettingAvailable() {
     return !!this.subscriptionPlanService.settings?.length;
-  }
-
-  openSettings() {
-    const lazyModulePromise = import(
-      'libs/admin/settings/src/lib/admin-settings.module'
-    )
-      .then((module) => {
-        return this.compiler.compileModuleAsync(module.AdminSettingsModule);
-      })
-      .catch((error) => {
-        console.error('Error loading the lazy module:', error);
-      });
-
-    lazyModulePromise.then(() => {
-      this.sidebarVisible = true;
-      const factory = this.resolver.resolveComponentFactory(
-        SettingsMenuComponent
-      );
-      this.sidebarSlide.clear();
-      this.sidebarType = 'settings';
-      const componentRef = this.sidebarSlide.createComponent(factory);
-      componentRef.instance.isSideBar = true;
-      componentRef.instance.closeEvent.subscribe((res) => {
-        this.sidebarVisible = false;
-        componentRef.destroy();
-      });
-    });
   }
 
   checkModuleSubscription(module) {

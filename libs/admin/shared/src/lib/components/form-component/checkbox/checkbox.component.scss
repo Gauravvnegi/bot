@@ -37,3 +37,17 @@
 .d-none {
   display: none;
 }
+
+:host ::ng-deep .checkbox {
+  height: 17px;
+  width: 17px;
+  &__wrapper {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+  &:hover,
+  &-label:hover {
+    cursor: pointer;
+  }
+}

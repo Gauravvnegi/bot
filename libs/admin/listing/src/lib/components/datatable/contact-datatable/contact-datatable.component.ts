@@ -7,16 +7,13 @@ import {
   Output,
 } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
-import { MatDialogConfig } from '@angular/material/dialog';
 import {
   AdminUtilityService,
   BaseDatatableComponent,
+  openModal,
   sharedConfig,
 } from '@hospitality-bot/admin/shared';
-import {
-  ModalService,
-  SnackBarService,
-} from '@hospitality-bot/shared/material';
+import { SnackBarService } from '@hospitality-bot/shared/material';
 import * as FileSaver from 'file-saver';
 import { SortEvent } from 'primeng/api';
 import { Subscription } from 'rxjs';
@@ -27,6 +24,7 @@ import { ListingService } from '../../../services/listing.service';
 import { EditContactComponent } from '../../edit-contact/edit-contact.component';
 import { ImportContactComponent } from '../../import-contact/import-contact.component';
 import { TranslateService } from '@ngx-translate/core';
+import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 
 @Component({
   selector: 'hospitality-bot-contact-datatable',
@@ -56,7 +54,7 @@ export class ContactDatatableComponent extends BaseDatatableComponent
     private _listingService: ListingService,
     private snackbarService: SnackBarService,
     protected _translateService: TranslateService,
-    private _modal: ModalService
+    private dialogService: DialogService
   ) {
     super(fb);
   }
@@ -141,7 +139,7 @@ export class ContactDatatableComponent extends BaseDatatableComponent
             this.loading = false;
           },
           ({ error }) => {
-            this.loading = false; 
+            this.loading = false;
           }
         )
     );
@@ -175,7 +173,7 @@ export class ContactDatatableComponent extends BaseDatatableComponent
                 .subscribe();
               this.updateDataSourceAfterDelete(ids);
             },
-            ({ error }) => { }
+            ({ error }) => {}
           )
       );
     } else this.updateDataSourceAfterDelete(ids, this.selectedRows);
@@ -207,34 +205,35 @@ export class ContactDatatableComponent extends BaseDatatableComponent
    */
   openAddContact(event) {
     event.stopPropagation();
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.disableClose = true;
-    const editContactCompRef = this._modal.openDialog(
-      EditContactComponent,
-      dialogConfig
-    );
+    let dialogRef: DynamicDialogRef;
+    const modalData: Partial<EditContactComponent> = {
+      ...(this.add && { contacts: this.dataSource }),
+    };
+    dialogRef = openModal({
+      config: {
+        styleClass: 'confirm-dialog',
+        data: modalData,
+      },
+      component: EditContactComponent,
+      dialogService: this.dialogService,
+    });
 
-    if (this.add)
-      editContactCompRef.componentInstance.contacts = this.dataSource;
-    editContactCompRef.componentInstance.onContactClosed.subscribe(
-      (response) => {
-        if (response.status) {
-          if (!this.add) {
-            this.$subscription.add(
-              this._listingService
-                .updateListContact(this.entityId, this.list.id, response.data)
-                .subscribe(
-                  (response) => {
-                    this.handleContactAddEvent(response);
-                  },
-                  ({ error }) => { }
-                )
-            );
-          } else this.handleContactAddEvent(response.data);
-        }
-        editContactCompRef.close();
+    dialogRef.onClose.subscribe((response) => {
+      if (response.status) {
+        if (!this.add) {
+          this.$subscription.add(
+            this._listingService
+              .updateListContact(this.entityId, this.list.id, response.data)
+              .subscribe(
+                (response) => {
+                  this.handleContactAddEvent(response);
+                },
+                ({ error }) => {}
+              )
+          );
+        } else this.handleContactAddEvent(response.data);
       }
-    );
+    });
   }
 
   /**
@@ -263,19 +262,20 @@ export class ContactDatatableComponent extends BaseDatatableComponent
    */
   openImportContact(event) {
     event.stopPropagation();
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.disableClose = true;
-    dialogConfig.width = contactConfig.datatable.dialogWidth;
-    const importCompRef = this._modal.openDialog(
-      ImportContactComponent,
-      dialogConfig
-    );
-
-    importCompRef.componentInstance.entityId = this.entityId;
-    importCompRef.componentInstance.onImportClosed.subscribe((response) => {
+    let dialogRef: DynamicDialogRef;
+    const modalData: Partial<ImportContactComponent> = {
+      entityId: this.entityId,
+    };
+    dialogRef = openModal({
+      config: {
+        styleClass: 'confirm-dialog',
+        data: modalData,
+      },
+      component: ImportContactComponent,
+      dialogService: this.dialogService,
+    });
+    dialogRef.onClose.subscribe((response) => {
       if (response.status) this.handleContactImport(response.data);
-
-      importCompRef.close();
     });
   }
 
@@ -321,7 +321,7 @@ export class ContactDatatableComponent extends BaseDatatableComponent
               this.changePage(this.currentPage);
               this.updateContacts.emit();
             },
-            ({ error }) => {  }
+            ({ error }) => {}
           )
       );
     }

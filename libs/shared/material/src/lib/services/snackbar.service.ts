@@ -31,11 +31,11 @@ export class SnackBarService {
   openSnackBarAsText(
     message: string,
     action?: string,
-    config?: SnackBarConfig | MessageSnackbarConfig
+    config?: SnackBarConfig & MessageSnackbarConfig
   ) {
-    const panelClass = config ? config['panelClass'] ?? 'danger' : 'danger';
-    const duration = config && config['duration'] === 'danger' ? 3000 : 2000;
-    
+    const panelClass = config && (config['panelClass'] ?? 'error');
+    const duration = config && config['panelClass'] === 'danger' ? 3000 : 2000;
+    this.messageService.clear();
     this.messageService.add({
       ...config,
       detail: message,
@@ -43,36 +43,9 @@ export class SnackBarService {
       closable: !!action?.length,
       severity: panelClass,
       position: 'top-right',
-      key: config['key'] || ToastKeys.default,
+      key: config ? config['key'] ?? ToastKeys.default : ToastKeys.default,
     } as MessageSnackbarConfig);
-
-    // TODO: remove
-    // this.increaseZIndex();
-    // return this._snackBar.open(message, action, {
-    //   duration: duration,
-    //   horizontalPosition: _.get(config, ['horizontalPosition'], 'right'),
-    //   verticalPosition: _.get(config, ['verticalPosition'], 'top'),
-    //   panelClass: panelClass,
-    // });
   }
-
-  // TODO: Remove
-  // /**
-  //  * @function openSnackBarAsComponent To open snackbar.
-  //  * @param component Component to be instantiated.
-  //  * @param config  Extra configuration for the snack bar.
-  //  * @returns Reference to a snack bar dispatched from the snack bar service.
-  //  */
-  // openSnackBarAsComponent(
-  //   component: ComponentType<any>,
-  //   config?: SnackBarConfig
-  // ): MatSnackBarRef<any> {
-  //   this.increaseZIndex();
-  //   return this._snackBar.openFromComponent(component, {
-  //     duration: config.duration || 2000,
-  //     ...config,
-  //   });
-  // }
 
   /**
    * @function openSnackBarWithTranslate To open snackbar.
@@ -98,22 +71,4 @@ export class SnackBarService {
       .get(translateKey)
       .pipe(map((msg) => handleTranslation(msg)));
   }
-
-  // TODO: Remove
-  // increaseZIndex() {
-  //   const cdkOverlayContainer = document.querySelector(
-  //     '.cdk-overlay-container'
-  //   ) as HTMLElement;
-
-  //   // Check if the cdk container has zIndex 1500 already
-  //   if (cdkOverlayContainer && cdkOverlayContainer.style.zIndex !== '1500') {
-  //     // Increase the z-index before showing the snackbar
-  //     cdkOverlayContainer.style.zIndex = '1500';
-  //     if (this.snackbarHandler.isDecreaseSnackbarZIndex) {
-  //       setTimeout(() => {
-  //         cdkOverlayContainer.style.zIndex = '1000';
-  //       }, 3000);
-  //     }
-  //   }
-  // }
 }

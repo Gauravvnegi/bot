@@ -45,6 +45,7 @@ export class FeedbackRecord {
   comments: string;
   color: string;
   nextState: string[];
+  guestId: string;
 
   deserialize(input, outlets, feedbackType, colorMap) {
     this.remarks = new Array<Remark>();
@@ -63,9 +64,9 @@ export class FeedbackRecord {
       set({}, 'userId', get(input, ['userId'])),
       set({}, 'userName', get(input, ['userName'])),
       set({}, 'comments', get(input, [' feedback', 'comments'])),
-      set ({}, 'nextState', get(input, ['nextState']))
+      set({}, 'nextState', get(input, ['nextState']))
     );
-
+    this.guestId = input?.feedback?.guestId?.id;
     this.color = colors[Math.floor(Math.random() * colors.length)];
     input.remarks?.forEach((remark) =>
       this.remarks.push(new Remark().deserialize(remark))
@@ -145,7 +146,7 @@ export class UserList {
     this.records = new Array<User>();
     input?.forEach((item) => {
       if (
-        item.userCategoryPermission.filter(
+        item?.departments?.filter(
           (permission) => permission?.department === department
         ).length
       )
@@ -167,7 +168,7 @@ export class User {
     this.lastName = input?.lastName;
     if (department)
       this.departmentPermission = new Departmentpermissions().deserialize(
-        input.userCategoryPermission
+        input.departments
       );
     return this;
   }
@@ -377,7 +378,7 @@ export class Departmentpermissions {
   total: number;
   deserialize(input) {
     this.records = new Array<Departmentpermission>();
-    input.forEach((item) =>
+    input?.forEach((item) =>
       this.records.push(new Departmentpermission().deserialize(item))
     );
     return this.records;

@@ -2,6 +2,7 @@
 
 .wrapper-header {
   @include form-block;
+  width: unset;
   .one-fourth {
     flex-basis: 8%;
   }

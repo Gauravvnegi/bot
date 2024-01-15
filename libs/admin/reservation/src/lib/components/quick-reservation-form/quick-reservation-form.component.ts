@@ -16,15 +16,10 @@ import {
   Validators,
 } from '@angular/forms';
 import {
-  GlobalFilterService,
-  RoutesConfigService,
-} from '@hospitality-bot/admin/core/theme';
-import {
   BookingDetailService,
   EntitySubType,
   ModuleNames,
   Option,
-  manageMaskZIndex,
 } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import {
@@ -37,7 +32,6 @@ import { FormService } from 'libs/admin/manage-reservation/src/lib/services/form
 import { IGRoomType } from '../reservation-calendar-view/reservation-calendar-view.component';
 import { IGCol } from 'libs/admin/shared/src/lib/components/interactive-grid/interactive-grid.component';
 import { Subscription } from 'rxjs';
-import { AddGuestComponent } from 'libs/admin/guests/src/lib/components/add-guest/add-guest.component';
 import { RoomTypeResponse } from 'libs/admin/room/src/lib/types/service-response';
 import { GuestType } from 'libs/admin/guests/src/lib/types/guest.type';
 import { RoomTypeOption } from 'libs/admin/manage-reservation/src/lib/constants/reservation';
@@ -46,6 +40,10 @@ import { ReservationForm } from 'libs/admin/manage-reservation/src/lib/constants
 import { debounceTime } from 'rxjs/operators';
 import { BookingInfoComponent } from '../booking-info/booking-info.component';
 import { ReservationRatePlan } from 'libs/admin/room/src/lib/constant/form';
+import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
+import { RoutesConfigService } from 'apps/admin/src/app/core/theme/src/lib/services/routes-config.service';
+import { ManualOffer } from 'libs/admin/manage-reservation/src/lib/components/form-components/booking-summary/booking-summary.component';
+import { AddGuestComponent } from 'libs/admin/guests/src/lib/components';
 
 @Component({
   selector: 'hospitality-bot-quick-reservation-form',
@@ -92,6 +90,7 @@ export class QuickReservationFormComponent implements OnInit {
   reservationData: ReservationFormData;
 
   $subscription = new Subscription();
+  offerResponse: ManualOffer;
 
   isSidebar = false;
   sidebarVisible: boolean = false;
@@ -123,10 +122,10 @@ export class QuickReservationFormComponent implements OnInit {
     private globalFilterService: GlobalFilterService,
     private manageReservationService: ManageReservationService,
     protected formService: FormService,
-    private compiler: Compiler,
-    private resolver: ComponentFactoryResolver,
     protected routesConfigService: RoutesConfigService,
-    public bookingDetailService: BookingDetailService
+    public bookingDetailService: BookingDetailService,
+    private compiler: Compiler,
+    private resolver: ComponentFactoryResolver
   ) {
     this.formService.resetData();
     this.initForm();
@@ -212,6 +211,7 @@ export class QuickReservationFormComponent implements OnInit {
       }),
 
       dailyPrice: [''],
+      rateImprovement: [false],
     });
 
     this.entityId = this.globalFilterService.entityId;
@@ -220,6 +220,15 @@ export class QuickReservationFormComponent implements OnInit {
 
   listenForRoomChanges() {
     let roomCount = 0;
+
+    const updateRateImprovement = () => {
+      this.reservationId &&
+        this.isDataLoaded &&
+        this.inputControls.rateImprovement.patchValue(true, {
+          emitEvent: false,
+        });
+    };
+
     this.roomControls.roomNumbers.valueChanges.subscribe((res) => {
       if (res) {
         const currentRoomCount = res.length ? res.length : 1;
@@ -238,6 +247,12 @@ export class QuickReservationFormComponent implements OnInit {
           });
         }
       }
+    });
+    this.roomControls.adultCount.valueChanges.subscribe((res) => {
+      res && updateRateImprovement;
+    });
+    this.roomControls.childCount.valueChanges.subscribe((res) => {
+      res && updateRateImprovement;
     });
   }
 
@@ -307,7 +322,12 @@ export class QuickReservationFormComponent implements OnInit {
               contactNumber: res.guest?.contactDetails?.contactNumber,
               email: res.guest?.contactDetails?.emailId,
             };
-
+            if (res?.offer?.offerType === 'MANUAL')
+              this.offerResponse = {
+                offerType: res.offer?.offerType,
+                discountType: res.offer?.discountType,
+                discountValue: res.offer?.discountValue,
+              };
             this.inputControls.guestInformation
               .get('guestDetails')
               .patchValue(res.guest.id);
@@ -453,7 +473,9 @@ export class QuickReservationFormComponent implements OnInit {
     const data = this.formService.mapRoomReservationData(
       this.userForm.getRawValue(),
       this.entityId,
-      'quick'
+      'quick',
+      undefined,
+      this.offerResponse
     );
     this.loading = true;
 
@@ -497,16 +519,14 @@ export class QuickReservationFormComponent implements OnInit {
       const factory = this.resolver.resolveComponentFactory(AddGuestComponent);
       this.sidebarSlide.clear();
       const componentRef = this.sidebarSlide.createComponent(factory);
-      componentRef.instance.isSideBar = true;
-      manageMaskZIndex();
-      componentRef.instance.onClose.subscribe((res) => {
+      componentRef.instance.isSidebar = true;
+      componentRef.instance.onCloseSidebar.subscribe((res) => {
         this.sidebarVisible = false;
         if (typeof res !== 'boolean') {
           this.selectedGuest = {
             label: `${res.firstName} ${res.lastName}`,
             value: res.id,
           };
-
           this.inputControls.guestInformation
             .get('guestDetails')
             .patchValue(res.id);

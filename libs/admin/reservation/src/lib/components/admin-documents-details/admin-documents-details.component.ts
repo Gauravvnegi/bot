@@ -390,15 +390,6 @@ export class AdminDocumentsDetailsComponent implements OnInit {
       .at(index)
       .get(`${docPage}Url`);
 
-    // const dialogConfig = new MatDialogConfig();
-    // dialogConfig.disableClose = true;
-    // dialogConfig.id = 'image-cropper-modal';
-
-    // const dialogRef = this.modalService.openDialog(
-    //   ImageHandlingComponent,
-    //   dialogConfig
-    // );
-
     const dialogData: Partial<ImageHandlingComponent> = {
       imageChangedEvent: {
         target: {

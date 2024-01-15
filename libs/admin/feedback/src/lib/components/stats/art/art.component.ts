@@ -1,10 +1,7 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { AdminUtilityService } from '@hospitality-bot/admin/shared';
-import {
-  SnackBarService,
-  ModalService,
-} from '@hospitality-bot/shared/material';
+import { SnackBarService } from '@hospitality-bot/shared/material';
 import { TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
 import { chartConfig } from '../../../constants/chart';
@@ -54,8 +51,7 @@ export class ArtComponent implements OnInit, OnDestroy {
     protected globalFilterService: GlobalFilterService,
     protected _adminUtilityService: AdminUtilityService,
     protected snackbarService: SnackBarService,
-    protected _translateService: TranslateService,
-    protected _modalService: ModalService
+    protected _translateService: TranslateService
   ) {}
 
   ngOnInit(): void {

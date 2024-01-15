@@ -1,6 +1,7 @@
 import { Clipboard } from '@angular/cdk/clipboard';
 import {
   ChangeDetectorRef,
+  Compiler,
   Component,
   ComponentFactoryResolver,
   EventEmitter,
@@ -16,13 +17,11 @@ import {
   RoutesConfigService,
   SubscriptionPlanService,
 } from '@hospitality-bot/admin/core/theme';
-import { MarketingNotificationComponent } from '@hospitality-bot/admin/notification';
 import {
   BookingDetailService,
   ConfigService,
   ModuleNames,
   Option,
-  openModal,
 } from '@hospitality-bot/admin/shared';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 import * as FileSaver from 'file-saver';
@@ -35,14 +34,11 @@ import { GuestDetail, GuestDetails } from '../../models/guest-feedback.model';
 import { Guest } from '../../models/guest-table.model';
 import { ReservationService } from '../../services/reservation.service';
 import { AdminDocumentsDetailsComponent } from '../admin-documents-details/admin-documents-details.component';
-import { JourneyDialogComponent } from '../journey-dialog/journey-dialog.component';
-import { SendMessageComponent } from 'libs/admin/notification/src/lib/components/send-message/send-message.component';
 import { MenuItem } from 'primeng/api';
 import { FileData } from '../../models/reservation-table.model';
-import { SnackbarHandlerService } from 'libs/admin/global-shared/src/lib/services/snackbar-handler.service';
-import { SideBarService } from 'libs/admin/shared/src/lib/services/sidebar.service';
-import { DialogService } from 'primeng/dynamicdialog';
+import { SideBarService } from 'apps/admin/src/app/core/theme/src/lib/services/sidebar.service';
 import { ReservationFormService } from '../../services/reservation-form.service';
+import { MarketingNotificationComponent } from '@hospitality-bot/admin/notification';
 
 @Component({
   selector: 'hospitality-bot-details',
@@ -139,7 +135,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
   @ViewChild('sideBar', { read: ViewContainerRef })
   sideBar: ViewContainerRef;
   sidebarVisible = false;
-
+  sidebarType = 'night-audit';
   constructor(
     private _fb: FormBuilder,
     private _reservationService: ReservationService,
@@ -152,15 +148,13 @@ export class DetailsComponent implements OnInit, OnDestroy {
     private subscriptionService: SubscriptionPlanService,
     private configService: ConfigService,
     private resolver: ComponentFactoryResolver,
+    private compiler: Compiler,
     private routesConfigService: RoutesConfigService,
-    public snackbarHandler: SnackbarHandlerService,
     protected sidebarService: SideBarService,
     private bookingDetailService: BookingDetailService,
     private formService: ReservationFormService
   ) {
     this.self = this;
-    this.snackbarHandler.isDecreaseSnackbarZIndex = false; // Protect MUI Element hiding on snackbar open
-    this.increaseZIndex(true);
     this.initDetailsForm();
   }
 
@@ -673,25 +667,24 @@ export class DetailsComponent implements OnInit, OnDestroy {
       });
   }
 
-  manualCheckoutfn(invoice?: Record<'isSendInvoice', any>) {
-    this.formService.manualCheckout(this.bookingId, this);
+  manualCheckout(invoice?: Record<'isSendInvoice', any>) {
+    this.formService.manualCheckout(this.bookingId, () => {
+      this.details.currentJourneyDetails.status = 'COMPLETED';
+    });
   }
 
   manualCheckin() {
-    this.formService.manualCheckin(this.bookingId, this);
+    this.formService.manualCheckin(
+      this.details.stayDetails.arrivalTimeStamp,
+      this.bookingId,
+      () => {
+        this.details.currentJourneyDetails.status = 'COMPLETED';
+      }
+    );
   }
 
   checkForConfirmedBooking() {
     return !['NEW', 'NOSHOW', 'CANCELED'].includes(this.details.pmsStatus);
-  }
-
-  // TODO: Need to remove
-  increaseZIndex(toggleZIndex: boolean) {
-    const cdkOverlayContainer = document.querySelector(
-      '.cdk-overlay-container'
-    ) as HTMLElement;
-    if (cdkOverlayContainer)
-      cdkOverlayContainer.style.zIndex = toggleZIndex ? '2000' : '1000';
   }
 
   verifyJourney(journeyName, status) {
@@ -734,37 +727,105 @@ export class DetailsComponent implements OnInit, OnDestroy {
         return;
       }
 
-      this.sidebarVisible = true;
-      this.sideBar.clear();
       if (channel === 'EMAIL') {
-        const emailFactory = this.resolver.resolveComponentFactory(
-          MarketingNotificationComponent
-        );
-        const emailRef = this.sideBar.createComponent(emailFactory);
-        emailRef.instance.isEmail = true;
-        emailRef.instance.email = this.primaryGuest.email;
-        emailRef.instance.entityId = this.entityId;
-        emailRef.instance.details = this.details;
-        emailRef.instance.roomNumber = this.details.stayDetails.roomNumber;
-        emailRef.instance.isModal = true;
-        emailRef.instance.onModalClose.subscribe((res) => {
-          this.sidebarVisible = false;
+        /**
+         * @TODO MarketNotificationComponent should add in the
+         * common components of openSidebar ( Ayush )
+         */
+        // this.sidebarService.openSidebar({
+        //   componentName: SidebarComponentNames.MarketNotification,
+        //   containerRef: this.sideBar,
+        //   data: {
+        //     isEmail: true,
+        //     email: this.primaryGuest.email,
+        //     details: this.details,
+        //     roomNumber: this.details.stayDetails.roomNumber,
+        //     isModal: true,
+        //   },
+        //   onOpen: () => {
+        //     this.sidebarVisible = true;
+        //   },
+        //   onClose: (res) => {
+        //     this.sidebarVisible = false;
+        //   },
+        // });
+
+        const lazyModulePromise = import(
+          'libs/admin/notification/src/lib/admin-notification.module'
+        ).then((module) => {
+          return this.compiler.compileModuleAsync(
+            module.AdminNotificationModule
+          );
+        });
+
+        lazyModulePromise.then((moduleFactory) => {
+          this.sidebarVisible = true;
+          const factory = this.resolver.resolveComponentFactory(
+            MarketingNotificationComponent
+          );
+          this.sideBar.clear();
+          const emailRef = this.sideBar.createComponent(factory);
+          emailRef.instance.isEmail = true;
+          emailRef.instance.email = this.primaryGuest.email;
+          emailRef.instance.entityId = this.entityId;
+          emailRef.instance.details = this.details;
+          emailRef.instance.reservationId = this.bookingId;
+          emailRef.instance.roomNumber = this.details.stayDetails.roomNumber;
+          emailRef.instance.onCloseSidebar.subscribe((res) => {
+            this.sidebarVisible = false;
+          });
         });
       } else {
-        const messageFactory = this.resolver.resolveComponentFactory(
-          SendMessageComponent
-        );
-        const messageRef = this.sideBar.createComponent(messageFactory);
-        messageRef.instance.isEmail = false;
-        messageRef.instance.channel = channel.replace(/\w\S*/g, function (txt) {
-          return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
-        });
-        messageRef.instance.entityId = this.entityId;
-        messageRef.instance.roomNumber = this.details.stayDetails.roomNumber;
-        messageRef.instance.isModal = true;
-        messageRef.instance.onModalClose.subscribe((res) => {
-          this.sidebarVisible = false;
-        });
+        // it is may be use in future...
+        // this.sidebarService.openSidebar<SendMessageComponent>({
+        //   componentName: SidebarComponentNames.SendMessage,
+        //   data: {
+        //     isEmail: false,
+        //     channel: channel.replace(/\w\S*/g, function (txt) {
+        //       return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+        //     }),
+        //     entityId: this.entityId,
+        //     roomNumber: this.details.stayDetails.roomNumber,
+        //     isModal: true,
+        //   },
+        //   onOpen: () => {
+        //     this.sidebarVisible = true;
+        //   },
+        //   onClose: () => {
+        //     this.sidebarVisible = false;
+        //   },
+        // });
+        // const modalData: Partial<SendMessageComponent> = {
+        //   isEmail: false,
+        //   channel: channel.replace(/\w\S*/g, function (txt) {
+        //     return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+        //   }),
+        //   entityId: this.entityId,
+        //   roomNumber: this.details.stayDetails.roomNumber,
+        //   isModal: true,
+        // };
+        // openModal({
+        //   config: {
+        //     width: '80%',
+        //     data: modalData,
+        //   },
+        //   component: MarketingNotificationComponent,
+        //   dialogService: this.dialogService,
+        // });
+        // const messageFactory = this.resolver.resolveComponentFactory(
+        //   SendMessageComponent
+        // );
+        // const messageRef = this.sideBar.createComponent(messageFactory);
+        // messageRef.instance.isEmail = false;
+        // messageRef.instance.channel = channel.replace(/\w\S*/g, function (txt) {
+        //   return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+        // });
+        // messageRef.instance.entityId = this.entityId;
+        // messageRef.instance.roomNumber = this.details.stayDetails.roomNumber;
+        // messageRef.instance.isModal = true;
+        // messageRef.instance.onModalClose.subscribe((res) => {
+        //   this.sidebarVisible = false;
+        // });
       }
     } else {
       this.sidebarVisible = false;
@@ -784,7 +845,52 @@ export class DetailsComponent implements OnInit, OnDestroy {
           bookingId: item.reservation.booking.bookingId,
           bookingNumber: item.reservation.booking.bookingNumber,
           label: `${item.subType} Booking`,
+          bookingType: item.subType,
+          arrivalTime: item.reservation.booking?.arrivalTimeStamp,
+          departureTime: item.reservation.booking?.departureTimeStamp,
         });
+      }
+    });
+
+    /**
+     * @function Sort the guestReservationDropdownList based on the specified conditions
+     * Sequence for subType PRESET->UPCOMING->PAST, when details open with guestId
+     * Present -> Prioritize with departureTime which is closer to todays date
+     * Upcoming -> Prioritize with arrivalTime which is closer to todays date
+     * Past -> Prioritize with arrivalTime which is closer to todays date
+     */
+
+    this.guestReservationDropdownList.sort((a, b) => {
+      // Function to get timestamp from a given time, defaulting to 0 if invalid
+      const getTimestamp = (time) => new Date(time)?.getTime() || 0;
+
+      // Define the priority order for booking types
+      const priorityOrder = ['PRESENT', 'UPCOMING', 'PAST'];
+
+      // Compare priority based on bookingType
+      const priorityComparison =
+        priorityOrder.indexOf(a.bookingType) -
+        priorityOrder.indexOf(b.bookingType);
+
+      // If priority is different, return the result
+      if (priorityComparison !== 0) {
+        return priorityComparison;
+      }
+
+      // Function to compare timestamps between two times
+      const getTimeComparison = (timeA, timeB) =>
+        getTimestamp(timeA) - getTimestamp(timeB);
+
+      // Sorting logic based on bookingType
+      switch ((a.bookingType as String).toUpperCase()) {
+        case 'PRESENT':
+          return getTimeComparison(a?.departureTime, b?.departureTime);
+        case 'UPCOMING':
+          return getTimeComparison(a?.arrivalTime, b?.arrivalTime);
+        case 'PAST':
+          return getTimeComparison(a?.arrivalTime, b?.arrivalTime);
+        default:
+          return 0;
       }
     });
 

@@ -85,7 +85,7 @@ export class FeedbackDetailComponent implements OnInit, OnDestroy {
     this.$subscription.add(
       this.cardService.$selectedFeedback.subscribe((response) => {
         this.feedback = response;
-        
+
         this.setStatusList(this.feedback);
 
         this.feedbackFG?.patchValue({
@@ -130,7 +130,7 @@ export class FeedbackDetailComponent implements OnInit, OnDestroy {
         )
         .subscribe((response) => {
           this.userPermissions = new Departmentpermissions().deserialize(
-            response.userCategoryPermission
+            response?.departments
           );
           this.userService.userPermissions = response;
         })
@@ -152,17 +152,22 @@ export class FeedbackDetailComponent implements OnInit, OnDestroy {
     this.$subscription.add(
       this.cardService
         .updateFeedbackAssignee(this.feedback.id, event.value)
-        .subscribe((response) => {
-          this.cardService.$assigneeChange.next({ status: true });
-          this.snackbarService.openSnackBarWithTranslate(
-            {
-              translateKey: `messages.SUCCESS.ASSIGNEE_UPDATED`,
-              priorityMessage: 'Assignee updated.',
-            },
-            '',
-            { panelClass: 'success' }
-          );
-        })
+        .subscribe(
+          (response) => {
+            this.cardService.$assigneeChange.next({ status: true });
+            this.snackbarService.openSnackBarWithTranslate(
+              {
+                translateKey: `messages.SUCCESS.ASSIGNEE_UPDATED`,
+                priorityMessage: 'Assignee updated.',
+              },
+              '',
+              { panelClass: 'success' }
+            );
+          },
+          (error) => {
+            this.feedbackFG.patchValue({ assignee: this.feedback.userId });
+          }
+        )
     );
   }
 
@@ -313,9 +318,10 @@ export class FeedbackDetailComponent implements OnInit, OnDestroy {
   }
 
   setStatusList(data) {
-    this.statusList = this.feedback.nextState.map((item) => {
-      return { label: convertToTitleCase(item), id: item };
-    });
+    this.statusList =
+      this.feedback?.nextState.map((item) => {
+        return { label: convertToTitleCase(item), id: item };
+      }) ?? [];
 
     this.statusList.unshift({
       label: convertToTitleCase(data.status),

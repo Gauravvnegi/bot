@@ -7,8 +7,7 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
-import { MatDialogConfig } from '@angular/material/dialog';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import {
   GlobalFilterService,
   RoutesConfigService,
@@ -17,15 +16,13 @@ import {
   LibrarySearchItem,
   LibraryService,
 } from '@hospitality-bot/admin/library';
-import {
-  ModalService,
-  SnackBarService,
-} from '@hospitality-bot/shared/material';
+import { SnackBarService } from '@hospitality-bot/shared/material';
 import {
   FlagType,
   ModuleNames,
   NavRouteOptions,
   Option,
+  openModal,
 } from 'libs/admin/shared/src';
 import { ModalComponent } from 'libs/admin/shared/src/lib/components/modal/modal.component';
 import { IteratorField } from 'libs/admin/shared/src/lib/types/fields.type';
@@ -56,9 +53,8 @@ import {
 } from '../../types/use-form';
 import { Services } from '../../models/amenities.model';
 import { convertToTitleCase } from 'libs/admin/shared/src/lib/utils/valueFormatter';
-import { FormService } from '../../services/form.service';
 import { debounceTime } from 'rxjs/operators';
-import { NightAuditService } from 'libs/admin/global-shared/src/lib/services/night-audit.service';
+import { DialogService } from 'primeng/dynamicdialog';
 
 @Component({
   selector: 'hospitality-bot-add-room',
@@ -111,14 +107,11 @@ export class AddRoomComponent implements OnInit, OnDestroy {
     private globalFilterService: GlobalFilterService,
     private snackbarService: SnackBarService,
     private route: ActivatedRoute,
-    private router: Router,
     private location: Location,
-    private modalService: ModalService,
     private libraryService: LibraryService,
-    private formService: FormService,
     private routesConfigService: RoutesConfigService,
     private activatedRoute: ActivatedRoute,
-    private auditService: NightAuditService
+    private dialogService: DialogService
   ) {
     this.submissionType = this.route.snapshot.paramMap.get(
       'type'
@@ -550,22 +543,20 @@ export class AddRoomComponent implements OnInit, OnDestroy {
         })
         .subscribe(
           (res) => {
-            const dialogConfig = new MatDialogConfig();
-            dialogConfig.disableClose = true;
-            const togglePopupCompRef = this.modalService.openDialog(
-              ModalComponent,
-              dialogConfig
-            );
-
-            togglePopupCompRef.componentInstance.onClose.subscribe(() => {
-              this.modalService.close();
-            });
-
             if (res.errorMessages.length) {
-              togglePopupCompRef.componentInstance.content = {
+              const modalData: Partial<ModalComponent> = {
                 heading: 'Rooms not added',
-                description: res.errorMessages,
+                descriptions: res.errorMessages,
               };
+
+              openModal({
+                config: {
+                  styleClass: 'confirm-dialog',
+                  data: modalData,
+                },
+                dialogService: this.dialogService,
+                component: ModalComponent,
+              });
             } else this.location.back();
 
             if (res.rooms.length) {

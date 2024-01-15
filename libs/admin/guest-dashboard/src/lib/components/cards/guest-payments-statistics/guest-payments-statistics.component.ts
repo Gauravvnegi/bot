@@ -1,10 +1,6 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { AdminUtilityService, openModal } from '@hospitality-bot/admin/shared';
-import {
-  ModalService,
-  SnackBarService,
-} from '@hospitality-bot/shared/material';
 import { TranslateService } from '@ngx-translate/core';
 import { BaseChartDirective } from 'ng2-charts';
 import { Subscription } from 'rxjs';
@@ -119,34 +115,8 @@ export class GuestPaymentsStatisticsComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * @function openTableModal To open modal pop-up for guest table based on payment status filter.
-   */
-  // openTableModal() {
-  //   const dialogConfig = new MatDialogConfig();
-  //   dialogConfig.disableClose = true;
-  //   dialogConfig.width = '100%';
-  //   const tableCompRef = this._modal.openDialog(
-  //     GuestDatatableModalComponent,
-  //     dialogConfig
-  //   );
-
-  //   this._translateService
-  //     .get('payment.title')
-  //     .subscribe(
-  //       (message) => (tableCompRef.componentInstance.tableName = message)
-  //     );
-  //   tableCompRef.componentInstance.tabFilterItems = this.tabFilterItems;
-  //   tableCompRef.componentInstance.callingMethod = 'getAllGuestStats';
-  //   tableCompRef.componentInstance.guestFilter = 'GUESTPAYMENTS';
-  //   tableCompRef.componentInstance.exportURL = 'exportCSVStat';
-
-  //   tableCompRef.componentInstance.onModalClose.subscribe((res) => {
-  //     tableCompRef.close();
-  //   });
-  // }
-
-  /**
-   * @function openTableModal To open modal pop-up for guest table based on document status filter.
+   * @function openTableModal To open modal pop-up for
+   * guest table based on document status filter.
    */
   openTableModal() {
     const data: GuestDialogData = {
@@ -154,11 +124,11 @@ export class GuestPaymentsStatisticsComponent implements OnInit, OnDestroy {
       callingMethod: 'getGuestDocsOrPaymentStats',
       entityType: 'GUESTPAYMENTS',
       exportURL: 'exportDocsCSV',
-      modalType: 'payment.title',
+      tableName: 'Guest Payment',
     };
 
     openModal({
-      config: { data: data },
+      config: { width: '80%', data: data },
       dialogService: this.dialogService,
       component: GuestDatatableModalComponent,
     });

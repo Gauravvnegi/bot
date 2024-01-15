@@ -18,20 +18,21 @@ import {
   ConfigService,
   EntitySubType,
   Option,
+  manageMaskZIndex,
 } from '@hospitality-bot/admin/shared';
 import {
   BookingConfig,
   ReservationCurrentStatus,
 } from '../../../../../manage-reservation/src/lib/models/reservations.model';
 import * as moment from 'moment';
-import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { FormService } from '../../../../../manage-reservation/src/lib/services/form.service';
 import { ReservationForm } from '../../../../../manage-reservation/src/lib/constants/form';
 import { Subscription } from 'rxjs';
 import { AgentTableResponse } from 'libs/admin/agent/src/lib/types/response';
-import { AddAgentComponent } from 'libs/admin/agent/src/lib/components/add-agent/add-agent.component';
-import { AddCompanyComponent } from 'libs/admin/company/src/lib/components/add-company/add-company.component';
 import { CompanyResponseType } from 'libs/admin/company/src/lib/types/response';
+import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
+import { AddCompanyComponent } from 'libs/admin/company/src/lib/components/add-company/add-company.component';
+import { AddAgentComponent } from 'libs/admin/agent/src/lib/components/add-agent/add-agent.component';
 
 @Component({
   selector: 'hospitality-bot-booking-info',
@@ -97,9 +98,9 @@ export class BookingInfoComponent implements OnInit {
     public controlContainer: ControlContainer,
     private configService: ConfigService,
     private globalFilterService: GlobalFilterService,
+    private formService: FormService,
     private resolver: ComponentFactoryResolver,
-    private compiler: Compiler,
-    private formService: FormService
+    private compiler: Compiler
   ) {}
 
   ngOnInit(): void {
@@ -179,7 +180,6 @@ export class BookingInfoComponent implements OnInit {
       }
 
       let multipleDateChange = false;
-
       fromDateControl.valueChanges.subscribe((res) => {
         if (res) {
           const maxToLimit = new Date(res);
@@ -251,6 +251,10 @@ export class BookingInfoComponent implements OnInit {
         this.sourceValue = res;
         this.mapSourceOptions();
         this.initSourceDetails(res);
+        this.inputControls?.printRate?.patchValue(
+          res !== 'OTA' && res !== 'AGENT' && res !== 'COMPANY',
+          { emitEvent: false }
+        );
         (!this.editMode || !this.reservationId) &&
           this.sourceNameControl.reset();
       }
@@ -461,8 +465,9 @@ export class BookingInfoComponent implements OnInit {
       const factory = this.resolver.resolveComponentFactory(AddAgentComponent);
       this.sidebarSlide.clear();
       const componentRef = this.sidebarSlide.createComponent(factory);
-      componentRef.instance.isSideBar = true;
-      componentRef.instance.onClose.subscribe((res) => {
+      componentRef.instance.isSidebar = true;
+      componentRef.instance.onCloseSidebar.subscribe((res) => {
+        this.sidebarVisible = false;
         if (typeof res !== 'boolean') {
           this.selectedAgent = {
             label: `${res?.firstName}`,
@@ -473,10 +478,29 @@ export class BookingInfoComponent implements OnInit {
             this.patchValue(this.marketSegmentControl, res.marketSegment);
           this.formService.getSummary.next(true);
         }
-        this.sidebarVisible = false;
-        componentRef.destroy();
       });
+      manageMaskZIndex();
     });
+
+    // this.sidebarService.openSidebar({
+    //   componentName: 'AddAgent',
+    //   containerRef: this.sidebarSlide,
+    //   onOpen: () => (this.sidebarVisible = true),
+    //   manageMask: true,
+    //   onClose: (res) => {
+    //     this.sidebarVisible = false;
+    //     if (typeof res !== 'boolean') {
+    //       this.selectedAgent = {
+    //         label: `${res?.firstName}`,
+    //         value: res?.id,
+    //         ...res,
+    //       };
+    //       res.marketSegment &&
+    //         this.patchValue(this.marketSegmentControl, res.marketSegment);
+    //       this.formService.getSummary.next(true);
+    //     }
+    //   },
+    // });
   }
 
   showCompany() {
@@ -496,8 +520,9 @@ export class BookingInfoComponent implements OnInit {
       );
       this.sidebarSlide.clear();
       const componentRef = this.sidebarSlide.createComponent(factory);
-      componentRef.instance.isSideBar = true;
-      componentRef.instance.onClose.subscribe((res) => {
+      componentRef.instance.isSidebar = true;
+      componentRef.instance.onCloseSidebar.subscribe((res) => {
+        this.sidebarVisible = false;
         if (typeof res !== 'boolean') {
           this.selectedCompany = {
             label: `${res?.companyName}`,
@@ -511,7 +536,27 @@ export class BookingInfoComponent implements OnInit {
         this.sidebarVisible = false;
         componentRef.destroy();
       });
+      manageMaskZIndex();
     });
+
+    // this.sidebarService.openSidebar({
+    //   componentName: 'AddCompany',
+    //   containerRef: this.sidebarSlide,
+    //   onOpen: () => (this.sidebarVisible = true),
+    //   onClose: (res) => {
+    //     this.sidebarVisible = false;
+    //     if (typeof res !== 'boolean') {
+    //       this.selectedCompany = {
+    //         label: `${res?.companyName}`,
+    //         value: res?.id,
+    //         ...res,
+    //       };
+    //       res.marketSegment &&
+    //         this.patchValue(this.marketSegmentControl, res.marketSegment);
+    //       this.formService.getSummary.next(true);
+    //     }
+    //   },
+    // });
   }
 
   get reservationInfoControls() {

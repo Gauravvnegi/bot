@@ -1,14 +1,12 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { AbstractControl, ControlContainer } from '@angular/forms';
-import {
-  Categories,
-  CategoryData,
-  LibrarySearchItem,
-  LibraryService,
-} from '@hospitality-bot/admin/library';
 import { Option } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { Subscription } from 'rxjs';
+import { CategoryData } from '../../types/library';
+import { LibraryService } from '../../services/library.service';
+import { Categories } from '../../models/library.model';
+import { LibrarySearchItem } from '../../constant/library';
 
 @Component({
   selector: 'hospitality-bot-category',

@@ -3,20 +3,17 @@ import {
   Component,
   EventEmitter,
   Input,
+  OnDestroy,
   OnInit,
   Output,
   SimpleChanges,
 } from '@angular/core';
-import { MatDialogConfig } from '@angular/material/dialog';
+import { DetailsTabOptions } from '@hospitality-bot/admin/reservation';
 import {
-  DetailsComponent,
-  DetailsTabOptions,
-} from '@hospitality-bot/admin/reservation';
-import { ModuleNames } from '@hospitality-bot/admin/shared';
-import {
-  ModalService,
-  SnackBarService,
-} from '@hospitality-bot/shared/material';
+  BookingDetailService,
+  ModuleNames,
+} from '@hospitality-bot/admin/shared';
+import { SnackBarService } from '@hospitality-bot/shared/material';
 import { manageReservationRoutes } from 'libs/admin/manage-reservation/src/lib/constants/routes';
 import { MenuItem } from 'primeng/api';
 import { DialogService } from 'primeng/dynamicdialog';
@@ -39,7 +36,7 @@ import { CheckedOutReservation } from '../../models/night-audit.model';
   ],
   providers: [DialogService],
 })
-export class CheckoutReservationsComponent implements OnInit {
+export class CheckoutReservationsComponent implements OnInit, OnDestroy {
   title = 'Pending Check-out';
   cols = cols;
   loading = true;
@@ -60,8 +57,8 @@ export class CheckoutReservationsComponent implements OnInit {
     private snackbarService: SnackBarService,
     private nightAuditService: NightAuditService,
     private _clipboard: Clipboard,
-    private modalService: ModalService,
-    public dialogService: DialogService
+    public dialogService: DialogService,
+    private bookingDetailService: BookingDetailService
   ) {}
 
   ngOnInit(): void {
@@ -138,36 +135,13 @@ export class CheckoutReservationsComponent implements OnInit {
 
   openDetailsPage(reservationId: string) {
     const openTab: DetailsTabOptions = 'guest_details';
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.disableClose = true;
-    dialogConfig.width = '100%';
-    const detailCompRef = this.modalService.openDialog(
-      DetailsComponent,
-      dialogConfig
-    );
-
-    detailCompRef.componentInstance.bookingId = reservationId;
-    detailCompRef.componentInstance.tabKey = openTab;
-    this.increaseZIndex(true);
-    this.$subscription.add(
-      detailCompRef.componentInstance.onDetailsClose.subscribe((res) => {
-        this.increaseZIndex(false);
-        detailCompRef.close();
-      })
-    );
-
-    this.$subscription.add(
-      detailCompRef.componentInstance.onRoute.subscribe((res) => {
-        this.onClose.emit(true);
-      })
-    );
+    this.bookingDetailService.openBookingDetailSidebar({
+      bookingId: reservationId,
+      tabKey: openTab,
+    });
   }
 
-  increaseZIndex(toggleZIndex: boolean) {
-    const cdkOverlayContainer = document.querySelector(
-      '.cdk-overlay-container'
-    ) as HTMLElement;
-    if (cdkOverlayContainer)
-      cdkOverlayContainer.style.zIndex = toggleZIndex ? '1500 ' : '1000';
+  ngOnDestroy(): void {
+    this.bookingDetailService.resetBookingState();
   }
 }

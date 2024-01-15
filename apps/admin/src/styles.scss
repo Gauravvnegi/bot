@@ -36,6 +36,11 @@ body {
     brightness(99%) contrast(100%);
 }
 
+.active-image {
+  filter: invert(18%) sepia(89%) saturate(7441%) hue-rotate(229deg)
+    brightness(95%) contrast(97%);
+}
+
 .image-popup {
   .mat-dialog-container {
     background: transparent !important;
@@ -135,9 +140,9 @@ body {
 
 .clickable-card {
   cursor: pointer;
-  box-shadow: 0px 3px 20px #0368ff42;
-  border: 1px solid $primary-cta;
-  border-radius: 5px;
+  box-shadow: 0px 3px 20px #0368ff42 !important;
+  border: 1px solid $primary-cta !important;
+  border-radius: 5px !important;
 }
 .material-body {
   width: 79%;

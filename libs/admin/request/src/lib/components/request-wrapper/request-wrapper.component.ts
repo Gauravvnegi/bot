@@ -1,22 +1,19 @@
 import { animate, style, transition, trigger } from '@angular/animations';
 import {
   Component,
-  ComponentFactoryResolver,
   OnDestroy,
   OnInit,
   ViewChild,
   ViewContainerRef,
 } from '@angular/core';
-import { MatDialogConfig } from '@angular/material/dialog';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { SnackBarService } from 'libs/shared/material/src';
-import { ModalService } from 'libs/shared/material/src/lib/services/modal.service';
 import { Subscription } from 'rxjs';
 import { request } from '../../constants/request';
 import { RequestService } from '../../services/request.service';
-import { RaiseRequestComponent } from '../raise-request/raise-request.component';
 import { SubscriptionPlanService } from 'apps/admin/src/app/core/theme/src/lib/services/subscription-plan.service';
+import { SideBarService } from 'apps/admin/src/app/core/theme/src/lib/services/sidebar.service';
 
 @Component({
   selector: 'hospitality-bot-request-wrapper',
@@ -71,15 +68,14 @@ export class RequestWrapperComponent implements OnInit, OnDestroy {
   @ViewChild('sidebarSlide', { read: ViewContainerRef })
   sidebarSlide: ViewContainerRef;
   sidebarVisible: boolean = false;
-  sidebarType;
+  sidebarType = 'complaint';
 
   constructor(
-    private _modal: ModalService,
     private _requestService: RequestService,
     private _globalFilterService: GlobalFilterService,
     private snackbarService: SnackBarService,
     private subscriptionService: SubscriptionPlanService,
-    private resolver: ComponentFactoryResolver
+    private sidebarService: SideBarService
   ) {}
 
   ngOnInit(): void {
@@ -136,19 +132,11 @@ export class RequestWrapperComponent implements OnInit, OnDestroy {
    * @function openRaiseRequest To open raise request modal.
    */
   openRaiseRequest() {
-    const dialogConfig = new MatDialogConfig();
-    this.sidebarVisible = true;
-    this.sidebarType = 'complaint';
-
-    const factory = this.resolver.resolveComponentFactory(
-      RaiseRequestComponent
-    );
-    this.sidebarSlide.clear();
-    const componentRef = this.sidebarSlide.createComponent(factory);
-    componentRef.instance.isSideBar = true;
-    componentRef.instance.onRaiseRequestClose.subscribe((res) => {
-      this.sidebarVisible = false;
-      componentRef.destroy();
+    this.sidebarService.openSidebar({
+      componentName: 'RaiseRequest',
+      containerRef: this.sidebarSlide,
+      onOpen: () => (this.sidebarVisible = true),
+      onClose: (res) => (this.sidebarVisible = false),
     });
   }
 

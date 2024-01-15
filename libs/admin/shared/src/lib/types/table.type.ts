@@ -63,12 +63,14 @@ export type Cols = {
 
 // ---- chips need to be separated form filters
 export type Filter<T extends string, K extends string> = {
-  label: string;
+  label?: string;
   value: T;
   disabled?: boolean;
   content?: string;
-  total: number;
+  total?: number;
   chips?: Chip<K>[];
+  iconClass?: string;
+  iconSrc?: string;
 };
 
 export type Status = {

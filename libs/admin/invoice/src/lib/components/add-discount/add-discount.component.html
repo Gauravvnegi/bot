@@ -33,6 +33,7 @@
         postControlName="discountValue"
         [options]="discountOptions"
         [props]="{
+          placeholder: 'Enter',
           errorMessages: errorMessages,
           type: 'number'
         }"
@@ -58,7 +59,7 @@
     <div class="buttons">
       <hospitality-bot-button
         label="Cancel"
-        (onClick)="handleCancel()"
+        (onClick)="close()"
         variant="outlined"
       ></hospitality-bot-button>
       <hospitality-bot-button
@@ -76,7 +77,7 @@
     <div class="buttons">
       <hospitality-bot-button
         label="Cancel"
-        (onClick)="handleCancel()"
+        (onClick)="close()"
         variant="outlined"
       ></hospitality-bot-button>
       <hospitality-bot-button

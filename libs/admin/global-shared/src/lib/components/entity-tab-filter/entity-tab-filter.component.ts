@@ -4,8 +4,6 @@ import {
   GlobalFilterService,
   SubscriptionPlanService,
 } from '@hospitality-bot/admin/core/theme';
-import { feedback } from '@hospitality-bot/admin/feedback';
-import { ModalService } from '@hospitality-bot/shared/material';
 import { Subscription } from 'rxjs';
 import { HotelDetailService } from '../../../../../shared/src/lib/services/hotel-detail.service';
 import { EntityTabFilterResponse } from '@hospitality-bot/admin/shared';
@@ -14,6 +12,7 @@ import {
   EntityTabFilterConfig,
   FeedbackType,
 } from '../../types/entity-tab.type';
+import { feedback } from 'libs/admin/feedback/src/lib/constants/feedback';
 
 @Component({
   selector: 'hospitality-bot-entity-tab-filter',
@@ -48,7 +47,6 @@ export class EntityTabFilterComponent implements OnInit {
   }
 
   constructor(
-    protected _modal: ModalService,
     protected globalFilterService: GlobalFilterService,
     protected _hotelDetailService: HotelDetailService,
     protected subscriptionPlanService: SubscriptionPlanService

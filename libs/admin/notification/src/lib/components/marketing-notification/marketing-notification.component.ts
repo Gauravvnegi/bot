@@ -1,17 +1,24 @@
-import { ENTER, COMMA, J } from '@angular/cdk/keycodes';
-import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {
+  Component,
+  Input,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+  Output,
+  EventEmitter,
+} from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Location } from '@angular/common';
-import { MatChipInputEvent } from '@angular/material/chips';
 import { ActivatedRoute } from '@angular/router';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { AdminUtilityService, Option } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
-import { EmailList, Topics } from '../../data-models/email.model';
+import { EmailList } from '../../data-models/email.model';
 import { EmailService } from '../../services/email.service';
 import { RequestService } from '../../services/request.service';
 import { NotificationComponent } from '../notification/notification.component';
 import { RequestConfig } from '../../data-models/request.model';
+import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 
 @Component({
   selector: 'hospitality-bot-marketing-notification',
@@ -46,6 +53,10 @@ export class MarketingNotificationComponent extends NotificationComponent
 
   @ViewChild('attachmentComponent') updateAttachment: any;
 
+  //Sidebar configuration
+  isSidebar = false;
+  @Output() onCloseSidebar = new EventEmitter<boolean>(false);
+
   constructor(
     protected _fb: FormBuilder,
     protected _location: Location,
@@ -54,7 +65,9 @@ export class MarketingNotificationComponent extends NotificationComponent
     protected route: ActivatedRoute,
     protected _adminUtilityService: AdminUtilityService,
     protected globalFilterService: GlobalFilterService,
-    private _emailService: EmailService
+    private _emailService: EmailService,
+    protected dialogConfig: DynamicDialogConfig,
+    protected dialogRef: DynamicDialogRef
   ) {
     super(
       _fb,
@@ -62,7 +75,9 @@ export class MarketingNotificationComponent extends NotificationComponent
       requestService,
       snackbarService,
       route,
-      _adminUtilityService
+      _adminUtilityService,
+      dialogConfig,
+      dialogRef
     );
   }
 
@@ -357,6 +372,7 @@ export class MarketingNotificationComponent extends NotificationComponent
             )
             .subscribe();
           this.onModalClose.emit();
+          this.dialogRef.close();
         },
         ({ error }) => {
           this.isSending = false;

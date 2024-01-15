@@ -4,19 +4,20 @@
     [ngClass]="{ 'tiered-button': !splitButton, 'split-button': splitButton }"
     (click)="!splitButton && menu.toggle($event)"
   >
-    <span class="label" [ngClass]="{disabled: disabled}" (click)="labelClickedAction()">{{ label }}</span
-    ><span
-      class="icon"
-      (click)="splitButton && menu.toggle($event)"
-      title="Expand"
+    <span
+      class="label"
+      [ngClass]="{ disabled: disabled }"
+      (click)="labelClickedAction()"
+      >{{ label }}</span
+    ><span class="icon" (click)="splitButton && onToggle($event)" title="Expand"
       ><i [ngClass]="'pi pi-chevron-down'"></i
     ></span>
   </div>
 
   <p-tieredMenu
-    appendTo="body"
     #menu
     [model]="items"
+    appendTo="body"
     [popup]="true"
   ></p-tieredMenu>
 </div>

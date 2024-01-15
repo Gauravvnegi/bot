@@ -428,7 +428,7 @@
   .complaint {
     @include default-close;
     .body {
-      height: 84vh;
+      // height: 84vh;
     }
     .p-sidebar-right {
       @include sidebar-design(30rem);
@@ -482,6 +482,12 @@
     }
     .p-dropdown-items-wrapper {
       max-height: 130px !important;
+    }
+  }
+
+  .complaint-guest-sidebar {
+    .p-sidebar-right {
+      @include sidebar-design(30rem);
     }
   }
 

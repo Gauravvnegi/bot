@@ -7,9 +7,11 @@ import {
   Output,
 } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { MatDialogConfig } from '@angular/material/dialog';
-import { AdminUtilityService, UserService } from 'libs/admin/shared/src/index';
-import { ModalService } from 'libs/shared/material/src';
+import {
+  AdminUtilityService,
+  UserService,
+  openModal,
+} from 'libs/admin/shared/src/index';
 import * as moment from 'moment';
 import { Subscription } from 'rxjs';
 import {
@@ -20,6 +22,7 @@ import { GlobalFilterService } from '../../services/global-filters.service';
 import { FirebaseMessagingService } from '../../services/messaging.service';
 import { NotificationService } from '../../services/notification.service';
 import { NotificationDetailComponent } from './notification-detail/notification-detail.component';
+import { DialogService } from 'primeng/dynamicdialog';
 
 @Component({
   selector: 'admin-notification',
@@ -50,7 +53,7 @@ export class NotificationComponent implements OnInit, OnDestroy {
     public userService: UserService,
     public globalFilterService: GlobalFilterService,
     private firebaseMessagingService: FirebaseMessagingService,
-    private modalService: ModalService
+    private dialogService: DialogService
   ) {
     this.initFG();
   }
@@ -203,21 +206,19 @@ export class NotificationComponent implements OnInit, OnDestroy {
   }
 
   openNotificationDetail(item: Notification) {
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.disableClose = true;
-    dialogConfig.width = '550';
-    dialogConfig.disableClose = true;
-    const detailCompRef = this.modalService.openDialog(
-      NotificationDetailComponent,
-      dialogConfig
-    );
-    detailCompRef.componentInstance.data = item;
-    detailCompRef.componentInstance.onNotificationClose.subscribe(
-      (response) => {
-        if (response.close) detailCompRef.close();
-        if (response.notificationClose) this.closePopup();
-      }
-    );
+    const dialogRef = openModal({
+      component: NotificationDetailComponent,
+      config: {
+        width: '550px',
+        styleClass: 'confirm-dialog',
+        data: item,
+      },
+      dialogService: this.dialogService,
+    });
+    dialogRef.onClose.subscribe((response) => {
+      if (response.close) dialogRef.close();
+      if (response.notificationClose) this.closePopup();
+    });
   }
 
   ngOnDestroy(): void {

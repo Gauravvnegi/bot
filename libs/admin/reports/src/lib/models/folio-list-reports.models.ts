@@ -9,6 +9,7 @@ import {
 import { ReportClass } from '../types/reports.types';
 import { getPaymentMethodAmount } from './financial-reports.models';
 import { getFormattedDate } from './reservation-reports.models';
+import { getFullName } from '../constant/reports.const';
 
 export class FolioListReport
   implements ReportClass<FolioListReportData, FolioListReportResponse> {
@@ -22,7 +23,10 @@ export class FolioListReport
           id: item?.id,
           bookingNo: item?.number,
           folioNo: item?.invoiceCode,
-          guestName: `${item?.guestDetails.primaryGuest.firstName} ${item?.guestDetails.primaryGuest.lastName}`,
+          guestName: getFullName(
+            item?.guestDetails.primaryGuest.firstName,
+            item?.guestDetails.primaryGuest.lastName
+          ),
           discount: toCurrency(item?.reservationItemsPayment?.totalDiscount),
           amount: toCurrency(item?.reservationItemsPayment?.totalRoomCharge),
           tax: toCurrency(

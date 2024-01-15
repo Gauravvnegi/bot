@@ -17,7 +17,8 @@ export class RoomReservationFormData {
   id?: string;
   specialRequest: string;
   offer?: {
-    id: string;
+    id?: string;
+    offerType?: string;
   };
   paymentDetails: {
     amount: number;
@@ -29,6 +30,7 @@ export class RoomReservationFormData {
   paymentRule: PaymentRule;
   remarks?: string;
   printRate?: boolean;
+  chargedAmount?: number;
 }
 
 export type BookingItemFormData = {

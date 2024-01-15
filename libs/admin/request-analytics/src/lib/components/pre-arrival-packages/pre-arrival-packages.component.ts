@@ -1,17 +1,18 @@
 import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { MatDialogConfig } from '@angular/material/dialog';
-import { analytics } from '@hospitality-bot/admin/shared';
+import {
+  analytics,
+  openModal as dynamicDialog,
+} from '@hospitality-bot/admin/shared';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
-import { SnackBarService } from 'libs/shared/material/src';
-import { ModalService } from 'libs/shared/material/src/lib/services/modal.service';
 import { DateService } from '@hospitality-bot/shared/utils';
 import { BaseChartDirective } from 'ng2-charts';
 import { Subscription } from 'rxjs';
 import { InhouseSentiments } from '../../models/statistics.model';
 import { AnalyticsService } from '../../services/analytics.service';
 import { PreArrivalDatatableComponent } from '../pre-arrival-datatable/pre-arrival-datatable.component';
+import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 
 @Component({
   selector: 'hospitality-bot-pre-arrival-packages',
@@ -49,10 +50,9 @@ export class PreArrivalPackagesComponent implements OnInit, OnDestroy {
     private _adminUtilityService: AdminUtilityService,
     private globalFilterService: GlobalFilterService,
     private analyticsService: AnalyticsService,
-    private snackbarService: SnackBarService,
     private dateService: DateService,
-    private modalService: ModalService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private dialogService: DialogService
   ) {}
 
   ngOnInit(): void {
@@ -246,24 +246,22 @@ export class PreArrivalPackagesComponent implements OnInit, OnDestroy {
   }
 
   openModal() {
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.disableClose = true;
-    dialogConfig.width = '100%';
-    const detailCompRef = this.modalService.openDialog(
-      PreArrivalDatatableComponent,
-      dialogConfig
-    );
+    let dialogRef: DynamicDialogRef;
+    const modalData: Partial<PreArrivalDatatableComponent> = {
+      tableName: 'Pre-arrival Request',
+      entityType: 'pre-arrival',
+      tabFilterIdx: 0,
+      packageId: this.tabFilterItems[this.tabFilterIdx]?.value,
+    };
 
-    detailCompRef.componentInstance.tableName = 'Pre-arrival Request';
-    detailCompRef.componentInstance.entityType = 'pre-arrival';
-    detailCompRef.componentInstance.tabFilterIdx = 0;
-    detailCompRef.componentInstance.packageId = this.tabFilterItems[
-      this.tabFilterIdx
-    ]?.value;
-    detailCompRef.componentInstance.onModalClose.subscribe((res) =>
-      // remove loader for detail close
-      detailCompRef.close()
-    );
+    dialogRef = dynamicDialog({
+      config: {
+        styleClass: 'confirm-dialog',
+        data: modalData,
+      },
+      component: PreArrivalDatatableComponent,
+      dialogService: this.dialogService,
+    });
   }
 
   getFilteredConfig(label) {

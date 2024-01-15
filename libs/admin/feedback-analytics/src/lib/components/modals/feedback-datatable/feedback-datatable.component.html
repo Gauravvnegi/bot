@@ -97,9 +97,11 @@
                 <div [roomStatus]="rowData?.tableOrRoomNumber?.status">
                   <div>
                     {{
-                      rowData.bookingDetails.tableOrRoomNumber.roomNumber || '--'
+                      rowData.bookingDetails.tableOrRoomNumber.roomNumber ||
+                        '--'
                     }}&nbsp;-&nbsp;{{
-                      rowData?.bookingDetails?.tableOrRoomNumber?.roomType || '--'
+                      rowData?.bookingDetails?.tableOrRoomNumber?.roomType ||
+                        '--'
                     }}
                   </div>
                 </div>
@@ -348,6 +350,7 @@
                   </div>
                 </ng-container>
                 <ng-template #dropDown>
+                  <!-- Working -->
                   <hospitality-bot-action-overlay
                     [rowDataStatus]="rowData.status"
                     [guestId]="rowData.departmentId"
@@ -375,7 +378,9 @@
               <td>
                 <div [roomStatus]="rowData?.tableOrRoomNumber?.status">
                   <div>
-                    {{ rowData?.tableOrRoomNumber?.roomNumber || '--' }}&nbsp;-&nbsp;{{
+                    {{
+                      rowData?.tableOrRoomNumber?.roomNumber || '--'
+                    }}&nbsp;-&nbsp;{{
                       rowData?.tableOrRoomNumber?.type || '--'
                     }}
                   </div>

@@ -64,7 +64,7 @@ export type MessagePosition =
   | 'center';
 
 export type MessageSnackbarConfig = {
-  position: MessagePosition;
+  position?: MessagePosition;
   title?: String;
   iconSrc?: String;
 } & Message;

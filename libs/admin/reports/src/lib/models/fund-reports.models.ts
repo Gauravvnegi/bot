@@ -16,12 +16,14 @@ export class AddWithdrawReport
       value.map((data) => {
         return {
           createdDate: getFormattedDate(data?.created),
-          fundTransferredBy: `${data?.cashier?.firstName ?? ''} ${
-            data?.cashier?.lastName ?? ''
-          }`,
+          fundTransferredBy:
+            data?.cashier?.firstName &&
+            `${data?.cashier?.firstName ?? ''} ${
+              data?.cashier?.lastName ?? ''
+            }`,
           action: data?.paymentType,
           amount: toCurrency(data?.amount),
-          paymentMode: data?.paymentMethod,
+          paymentMode: data?.paymentMethod ?? undefined,
           comments: data?.remarks,
         };
       });

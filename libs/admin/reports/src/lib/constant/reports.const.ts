@@ -621,5 +621,11 @@ export const reportFiltersMapping: Record<
 export const rowStylesMapping: Record<RowStylesKeys, string> = {
   isHeader: 'is-header',
   isTotal: 'is-total',
-  isSubTotal: 'is-sub-total'
+  isSubTotal: 'is-sub-total',
 };
+
+export function getFullName(firstName: string, lastName: string) {
+  return firstName && lastName
+    ? `${firstName} ${lastName}`
+    : firstName || lastName || undefined;
+}

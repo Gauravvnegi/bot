@@ -1,3 +1,4 @@
+import { GlobalSharedModule } from './../../../global-shared/src/lib/admin-global-shared.module';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -29,6 +30,7 @@ import { FeedbackTypesComponent } from './components/feedback-types/feedback-typ
     AdminFeedbackRoutingModule,
     FlexLayoutModule,
     GaugeChartModule,
+    GlobalSharedModule,
     NgCircleProgressModule.forRoot(),
     TranslateModule.forChild(getTranslationConfigs([HttpClient], ['feedback'])),
   ],

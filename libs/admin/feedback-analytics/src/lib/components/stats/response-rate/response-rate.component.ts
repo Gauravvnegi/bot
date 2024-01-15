@@ -1,16 +1,20 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  Input,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { MatDialogConfig } from '@angular/material/dialog';
 import { MatSelectChange } from '@angular/material/select';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
   AdminUtilityService,
   CircularChart,
+  openModal,
 } from '@hospitality-bot/admin/shared';
-import {
-  ModalService,
-  SnackBarService,
-} from '@hospitality-bot/shared/material';
+import { SnackBarService } from '@hospitality-bot/shared/material';
 import { DateService } from '@hospitality-bot/shared/utils';
 import { TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
@@ -19,6 +23,7 @@ import { feedback } from '../../../constants/feedback';
 import { SharedStats } from '../../../data-models/statistics.model';
 import { StatisticsService } from '../../../services/feedback-statistics.service';
 import { FeedbackDatatableModalComponent } from '../../modals/feedback-datatable/feedback-datatable.component';
+import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 
 @Component({
   selector: 'hospitality-bot-response-rate',
@@ -34,9 +39,9 @@ export class ResponseRateComponent implements OnInit, OnDestroy {
   stats: SharedStats;
   rateGraphFG: FormGroup;
   keyLabels = [
-    { label: 'All', key: 'ALL' },
-    { label: 'Whatsapp', key: 'WHATSAPP' },
-    { label: 'Email', key: 'EMAIL' },
+    { label: 'All', value: 'ALL' },
+    { label: 'Whatsapp', value: 'WHATSAPP' },
+    { label: 'Email', value: 'EMAIL' },
   ];
   entityType = 'ALL';
   chart: CircularChart = {
@@ -52,6 +57,7 @@ export class ResponseRateComponent implements OnInit, OnDestroy {
     ],
     options: chartConfig.options.shared,
   };
+  @ViewChild('selectBtn') selectBtn: ElementRef;
   constructor(
     protected _adminUtilityService: AdminUtilityService,
     protected _statisticService: StatisticsService,
@@ -59,8 +65,8 @@ export class ResponseRateComponent implements OnInit, OnDestroy {
     protected snackbarService: SnackBarService,
     protected _dateService: DateService,
     protected _translateService: TranslateService,
-    protected _modalService: ModalService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private dialogService: DialogService
   ) {}
 
   ngOnInit(): void {
@@ -237,23 +243,25 @@ export class ResponseRateComponent implements OnInit, OnDestroy {
   }
 
   openTableModal() {
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.disableClose = true;
-    dialogConfig.width = '100%';
-    dialogConfig.data = {
-      tableName: feedback.tableName.responseRate,
-      tabFilterItems: this.createTabFilterItem(),
-      tabFilterIdx: 0,
-      globalFeedbackFilterType: this.globalFeedbackFilterType,
-      config: [{ feedbackGraph: 'REQUESTED' }],
-      feedbackType: this.getFeedbackType(),
+    let dialogRef: DynamicDialogRef;
+    const modalData: Partial<FeedbackDatatableModalComponent> = {
+      data: {
+        tableName: feedback.tableName.responseRate,
+        tabFilterItems: this.createTabFilterItem(),
+        tabFilterIdx: 0,
+        globalFeedbackFilterType: this.globalFeedbackFilterType,
+        config: [{ feedbackGraph: 'REQUESTED' }],
+        feedbackType: this.getFeedbackType(),
+      },
     };
-    const detailCompRef = this._modalService.openDialog(
-      FeedbackDatatableModalComponent,
-      dialogConfig
-    );
-    detailCompRef.componentInstance.onModalClose.subscribe((res) => {
-      detailCompRef.close();
+    dialogRef = openModal({
+      config: {
+        width: '80%',
+        styleClass: 'dynamic-modal',
+        data: modalData,
+      },
+      component: FeedbackDatatableModalComponent,
+      dialogService: this.dialogService,
     });
   }
 

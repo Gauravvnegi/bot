@@ -8,7 +8,7 @@ import { MenuItemListResponse } from 'libs/admin/all-outlets/src/lib/types/outle
 import { QueryConfig } from '@hospitality-bot/admin/shared';
 import { RoomUpgradeType } from '../types/response.type';
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class ManageReservationService extends ApiService {
   getRoomTypeList(
     entityId: string,
@@ -33,6 +33,13 @@ export class ManageReservationService extends ApiService {
   upgradeRoomType(reservationId: string, data: RoomUpgradeType) {
     return this.put(
       `/api/v1/booking/${reservationId}/upgrade?type=ROOM_TYPE`,
+      data
+    );
+  }
+
+  rateImprovement(entityId: string, reservationId: string, data: any) {
+    return this.put(
+      `/api/v1/booking/${reservationId}/price-differences?entityId=${entityId}&type=ROOM_TYPE`,
       data
     );
   }

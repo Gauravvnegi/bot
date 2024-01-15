@@ -137,6 +137,9 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { CheckboxComponent } from './components/form-component/checkbox/checkbox.component';
 import { SplitButtonComponent } from './components/split-button/split-button.component';
 import { Dialog } from 'primeng/dialog';
+import { TabViewModule } from 'primeng/tabview';
+import { DynamicContentComponent } from './components/dynamic-content/dynamic-content.component';
+import { GuestDetailsDirective } from './directives/guest-details.directive';
 
 @NgModule({
   imports: [
@@ -173,6 +176,7 @@ import { Dialog } from 'primeng/dialog';
     TieredMenuModule,
     ConfirmDialogModule,
     ToastModule,
+    TabViewModule,
   ],
   declarations: [
     DatatableComponent,
@@ -276,6 +280,8 @@ import { Dialog } from 'primeng/dialog';
     ConfirmDialogComponent,
     CheckboxComponent,
     SplitButtonComponent,
+    DynamicContentComponent,
+    GuestDetailsDirective,
   ],
 
   exports: [
@@ -404,6 +410,8 @@ import { Dialog } from 'primeng/dialog';
     ContextMenuModule,
     Dialog,
     ToastModule,
+    DynamicContentComponent,
+    GuestDetailsDirective,
   ],
 })
 export class AdminSharedModule {}

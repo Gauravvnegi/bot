@@ -13,11 +13,7 @@ import {
 } from '../../../models/reservations.model';
 import { AbstractControl, ControlContainer, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import {
-  ModalService,
-  SnackBarService,
-} from '@hospitality-bot/shared/material';
-import { MatDialogConfig } from '@angular/material/dialog';
+import { SnackBarService } from '@hospitality-bot/shared/material';
 import {
   GlobalFilterService,
   RoutesConfigService,
@@ -33,6 +29,7 @@ import {
   EntitySubType,
   EntityType,
   ModuleNames,
+  openModal,
 } from '@hospitality-bot/admin/shared';
 import { RoomReservationResponse } from '../../../types/response.type';
 import {
@@ -40,6 +37,8 @@ import {
   RoomReservationFormData,
 } from '../../../types/forms.types';
 import { ReservationType } from '../../../constants/reservation-table';
+import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { AddRefundComponent } from 'libs/admin/invoice/src/lib/components/add-refund/add-refund.component';
 
 @Component({
   selector: 'hospitality-bot-booking-summary',
@@ -62,6 +61,7 @@ export class BookingSummaryComponent implements OnInit {
   bookingType: EntitySubType;
   outletId = '';
   externalBooking = false;
+  offerResponse: ManualOffer;
 
   occupancyDetails: OccupancyDetails;
   $subscription = new Subscription();
@@ -88,10 +88,10 @@ export class BookingSummaryComponent implements OnInit {
     private manageReservationService: ManageReservationService,
     private routesConfigService: RoutesConfigService,
     protected activatedRoute: ActivatedRoute,
-    private modalService: ModalService,
     private _clipboard: Clipboard,
     public formService: FormService,
-    protected bookingDetailService: BookingDetailService
+    protected bookingDetailService: BookingDetailService,
+    private dialogService: DialogService
   ) {}
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -134,7 +134,6 @@ export class BookingSummaryComponent implements OnInit {
       );
       return;
     }
-    this.isBooking = true;
     let data: any;
 
     const id =
@@ -150,7 +149,8 @@ export class BookingSummaryComponent implements OnInit {
         this.parentFormGroup.getRawValue(),
         id,
         'full',
-        this.summaryData.totalAmount
+        this.summaryData.totalAmount,
+        this.offerResponse
       );
     else
       data = this.formService.mapOutletReservationData(
@@ -161,7 +161,9 @@ export class BookingSummaryComponent implements OnInit {
       if (data.reservationType === ReservationType.CANCELED) {
         this.openCancelPopup(data, id, type);
       } else {
-        this.updateReservation(data, id, type);
+        this.inputControls.rateImprovement.value
+          ? this.rateImprovement(data, id, type)
+          : this.updateReservation(data, id, type);
       }
     } else this.createReservation(data, id, type);
   }
@@ -171,6 +173,7 @@ export class BookingSummaryComponent implements OnInit {
     entityId: string,
     type: string
   ): void {
+    this.isBooking = true;
     const { id, ...formData } = data;
     this.$subscription.add(
       this.manageReservationService
@@ -189,11 +192,60 @@ export class BookingSummaryComponent implements OnInit {
     );
   }
 
+  rateImprovement(
+    data: RoomReservationFormData,
+    entityId: string,
+    type: string
+  ) {
+    this.$subscription.add(
+      this.manageReservationService
+        .rateImprovement(entityId, this.reservationId, data)
+        .subscribe((res) => {
+          if (res?.chargedAmount > 0) {
+            let modalRef: DynamicDialogRef;
+            const modalData: Partial<AddRefundComponent> = {
+              heading: 'Update Reservation',
+              isReservationPopup: true,
+              chargedAmount: res.chargedAmount,
+            };
+            modalRef = openModal({
+              config: {
+                width: '40%',
+                styleClass: 'confirm-dialog',
+                data: modalData,
+              },
+              component: AddRefundComponent,
+              dialogService: this.dialogService,
+            });
+
+            modalRef.onClose.subscribe(
+              (res: { chargedAmount: number; remarks: string }) => {
+                if (res) {
+                  this.updateReservation(
+                    { chargedAmount: res?.chargedAmount, ...data },
+                    entityId,
+                    type
+                  );
+                }
+              }
+            );
+          } else {
+            this.updateReservation(
+              { chargedAmount: res?.chargedAmount, ...data },
+              entityId,
+              type
+            );
+          }
+        })
+    );
+  }
+
   updateReservation(
     data: RoomReservationFormData,
     entityId: string,
     type: string
   ): void {
+    this.isBooking = true;
     this.$subscription.add(
       this.manageReservationService
         .updateReservation(entityId, this.reservationId, data, type)
@@ -214,79 +266,50 @@ export class BookingSummaryComponent implements OnInit {
   /**
    * @function bookingConfirmationPopup
    */
-  bookingConfirmationPopup(number?): void {
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.disableClose = true;
-    const togglePopupCompRef = this.modalService.openDialog(
-      ModalComponent,
-      dialogConfig
-    );
-    togglePopupCompRef.componentInstance.content = {
-      heading: `Reservation ${
-        this.reservationId ? 'Updated' : 'Created'
-      } Successfully`,
-
-      description: [
-        `Congratulations! Your reservation has been ${
-          this.reservationId ? 'updated' : 'created'
-        } successfully.`,
-        ` Your confirmation number is ${number}.`,
-        // "Keep this number safe as you'll need it for any future inquiries or changes to your reservation.",
+  bookingConfirmationPopup(number?: string): void {
+    let modalRef: DynamicDialogRef;
+    const data = {
+      content: {
+        heading: `Reservation ${
+          this.reservationId ? 'Updated' : 'Created'
+        } Successfully`,
+        descriptions: [
+          `Congratulations! Your reservation has been ${
+            this.reservationId ? 'updated' : 'created'
+          } successfully.`,
+          ` Your confirmation number is ${number}.`,
+          // "Keep this number safe as you'll need it for any future inquiries or changes to your reservation.",
+        ],
+      },
+      actions: [
+        {
+          label: 'Continue Reservation',
+          onClick: () => {
+            modalRef.close();
+            this.gobackToReservation();
+          },
+          variant: 'outlined',
+        },
+        {
+          label: 'Copy Confirmation number',
+          onClick: () => {
+            this.copiedConfirmationNumber(number);
+            modalRef.close();
+            this.gobackToReservation();
+          },
+          variant: 'contained',
+        },
       ],
     };
-    togglePopupCompRef.componentInstance.actions = [
-      {
-        label: 'Continue Reservation',
-        onClick: () => {
-          // Route but don't change location
-          // this.routesConfigService
-          //   .navigate({
-          //     skipLocationChange: true,
-          //   })
-          //   .then(() => {
-          //     this.routesConfigService.navigate({
-          //       additionalPath: manageReservationRoutes.addReservation.route,
-          //       queryParams: {
-          //         entityId: this.outletId ? this.outletId : this.entityId,
-          //       },
-          //     });
-          //   });
 
-          // this.router
-          //   .navigateByUrl('/pages/efrontdesk/reservation', {
-          //     skipLocationChange: true,
-          //   })
-          //   .then(() => {
-          //     // Route again to reload all form and service values.
-          //     this.router.navigate(
-          //       [
-          //         `/pages/efrontdesk/reservation/${manageReservationRoutes.addReservation.route}`,
-          //       ],
-          //       {
-          //         queryParams: {
-          //           entityId: this.outletId ? this.outletId : this.entityId,
-          //         },
-          //       }
-          //     );
-          //   });
-          this.modalService.close();
-          this.gobackToReservation();
-        },
-        variant: 'outlined',
+    modalRef = openModal({
+      config: {
+        width: '35vw',
+        styleClass: 'confirm-dialog',
+        data: data,
       },
-      {
-        label: 'Copy Confirmation number',
-        onClick: () => {
-          this.copiedConfirmationNumber(number);
-          this.modalService.close();
-          this.gobackToReservation();
-        },
-        variant: 'contained',
-      },
-    ];
-    togglePopupCompRef.componentInstance.onClose.subscribe(() => {
-      this.modalService.close();
-      this.gobackToReservation();
+      component: ModalComponent,
+      dialogService: this.dialogService,
     });
   }
 
@@ -296,89 +319,71 @@ export class BookingSummaryComponent implements OnInit {
     type: string,
     reservationType = ReservationType.CANCELED
   ) {
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.disableClose = true;
-    const togglePopupCompRef = this.modalService.openDialog(
-      ModalComponent,
-      dialogConfig
-    );
-
-    togglePopupCompRef.componentInstance.content = {
-      heading: `Mark Reservation As ${
-        reservationType.charAt(0).toUpperCase() +
-        reservationType.slice(1).toLowerCase()
-      }`,
-      description: [
-        `You are about to mark this reservation as ${ReservationType.CANCELED}`,
-        `Are you Sure?`,
-        this.summaryData?.totalPaidAmount
-          ? ` A total of \u20B9 ${this.summaryData?.totalPaidAmount} is received for the reservation`
-          : '',
-      ],
-      isRemarks: true,
-    };
+    let modalRef: DynamicDialogRef;
 
     this.isBooking = false;
-    togglePopupCompRef.componentInstance.actions = [
-      {
-        label: 'Cancel & Settlement',
-        onClick: () => {
-          this.routesConfigService.navigate({
-            subModuleName: ModuleNames.INVOICE,
-            additionalPath: data.id,
-            queryParams: {
-              entityId: entityId,
-              type: EntitySubType.ROOM_TYPE,
-            },
-          });
-
-          this.modalService.close();
-        },
-        variant: 'outlined',
+    const modalData = {
+      content: {
+        heading: `Mark Reservation As ${
+          reservationType.charAt(0).toUpperCase() +
+          reservationType.slice(1).toLowerCase()
+        }`,
+        descriptions: [
+          `You are about to mark this reservation as ${ReservationType.CANCELED}`,
+          `Are you Sure?`,
+          this.summaryData?.totalPaidAmount
+            ? ` A total of \u20B9 ${this.summaryData?.totalPaidAmount} is received for the reservation`
+            : '',
+        ],
+        isRemarks: true,
       },
-      {
-        label: 'Yes',
-        onClick: (modelData: { remarks: string }) => {
-          let updatedData = { ...data, ...modelData };
-          this.updateReservation(updatedData, entityId, type);
-          this.modalService.close();
-        },
-        variant: 'contained',
-      },
-    ];
+      actions: [
+        {
+          label: 'Cancel & Settlement',
+          onClick: () => {
+            this.routesConfigService.navigate({
+              subModuleName: ModuleNames.INVOICE,
+              additionalPath: data.id,
+              queryParams: {
+                entityId: entityId,
+                type: EntitySubType.ROOM_TYPE,
+              },
+            });
 
-    togglePopupCompRef.componentInstance.onClose.subscribe(() => {
-      this.modalService.close();
+            modalRef.close();
+          },
+          variant: 'outlined',
+        },
+        {
+          label: 'Yes',
+          onClick: (modelData: { remarks: string }) => {
+            let updatedData = { ...data, ...modelData };
+            this.updateReservation(updatedData, entityId, type);
+            modalRef.close();
+          },
+          variant: 'contained',
+        },
+      ],
+    };
+
+    modalRef = openModal({
+      config: {
+        width: '35vw',
+        styleClass: 'confirm-dialog',
+        data: modalData,
+      },
+      component: ModalComponent,
+      dialogService: this.dialogService,
     });
   }
 
-  listenForReservationTypeChanges(): void {
-    this.reservationInfoControls.reservationType.valueChanges.subscribe(
-      (res) => {
-        if (res === ReservationType.CANCELED && this.reservationId) {
-        }
-      }
-    );
+  triggerPrintRate(event: HTMLInputElement) {
+    this.inputControls.printRate.patchValue(event.checked, {
+      emitEvent: false,
+    });
   }
 
   openDetailsPage() {
-    // TODO: Need to remove
-    // const dialogConfig = new MatDialogConfig();
-    // dialogConfig.disableClose = true;
-    // dialogConfig.width = '100%';
-    // const detailCompRef = this.modalService.openDialog(
-    //   DetailsComponent,
-    //   dialogConfig
-    // );
-
-    // detailCompRef.componentInstance.bookingId = this.reservationId;
-    // detailCompRef.componentInstance.tabKey = 'guest_details';
-    // this.$subscription.add(
-    //   detailCompRef.componentInstance.onDetailsClose.subscribe((res) => {
-    //     detailCompRef.close();
-    //   })
-    // );
-
     this.bookingDetailService.openBookingDetailSidebar({
       bookingId: this.reservationId,
       tabKey: 'guest_details',
@@ -444,4 +449,12 @@ type BookingSummaryInfo = {
   heading: string;
   occupancyDetails?: OccupancyDetails;
   externalBooking: boolean;
+  offerResponse?: ManualOffer;
+};
+
+export type ManualOffer = {
+  offerType?: string;
+  discountType?: string;
+  discountValue?: number;
+  id?: string;
 };

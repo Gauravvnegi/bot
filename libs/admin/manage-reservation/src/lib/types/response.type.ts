@@ -165,10 +165,12 @@ export type SourceResponse = {
 };
 
 export type OfferResponse = {
-  id: string;
-  created: number;
-  updated: number;
+  id?: string;
+  created?: number;
+  updated?: number;
   offerType: string;
+  discountType?: string;
+  discountValue?: number;
 };
 
 export type RoomUpgradeType = {

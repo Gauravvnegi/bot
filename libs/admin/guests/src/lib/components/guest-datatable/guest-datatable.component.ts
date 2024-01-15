@@ -1,10 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import {
-  GlobalFilterService,
-  RoutesConfigService,
-} from '@hospitality-bot/admin/core/theme';
-import {
   AdminUtilityService,
   BaseDatatableComponent,
   NavRouteOption,
@@ -26,6 +22,8 @@ import {
   SortFilterList,
 } from 'libs/admin/agent/src/lib/constant/response';
 import { GuestListResponse } from '../../types/guest.type';
+import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
+import { RoutesConfigService } from 'apps/admin/src/app/core/theme/src/lib/services/routes-config.service';
 @Component({
   selector: 'hospitality-bot-guest-datatable',
   templateUrl: './guest-datatable.component.html',

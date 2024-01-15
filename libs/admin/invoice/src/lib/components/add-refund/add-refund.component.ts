@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { Option } from '@hospitality-bot/admin/shared';
+import { DynamicDialogRef, DynamicDialogConfig } from 'primeng/dynamicdialog';
 
 /**
  * @todo Make this component as additional charge component
@@ -11,44 +11,55 @@ import { Option } from '@hospitality-bot/admin/shared';
   styleUrls: ['./add-refund.component.scss'],
 })
 export class AddRefundComponent implements OnInit {
-  @Input() heading = 'Additional Charges Amount';
-  @Input() maxAmount: number;
+  heading = 'Additional Charges Amount';
+  isReservationPopup = false;
   userForm: FormGroup;
+  chargedAmount: number = 0;
 
-  @Output() onClose = new EventEmitter();
-
-  constructor(private fb: FormBuilder) {}
+  constructor(
+    private fb: FormBuilder,
+    public dialogRef: DynamicDialogRef,
+    public dialogConfig: DynamicDialogConfig
+  ) {
+    const data: {
+      heading: string;
+      isReservationPopup?: boolean;
+      chargedAmount?: number;
+    } = dialogConfig?.data;
+    this.heading = data?.heading;
+    this.isReservationPopup = data?.isReservationPopup;
+    this.chargedAmount = data?.chargedAmount;
+  }
 
   ngOnInit(): void {
     this.initForm();
   }
 
   initForm(): void {
-    this.userForm = this.fb.group({
-      refundAmount: [
-        null,
-        [
-          Validators.required,
-          Validators.max(this.maxAmount + 1),
-          Validators.min(0),
-        ],
-      ],
-      remarks: [''],
-    });
+    this.userForm = !this.isReservationPopup
+      ? this.fb.group({
+          refundAmount: [null, [Validators.required, Validators.min(0)]],
+          remarks: [''],
+        })
+      : this.fb.group({
+          chargedAmount: [this.chargedAmount],
+          remarks: [''],
+        });
   }
 
   handleApply() {
-    this.onClose.next({
-      refundAmount: +this.userForm.get('refundAmount').value,
-      remarks: this.userForm.get('remarks').value,
-    });
-  }
-
-  handleCancel() {
-    this.onClose.emit();
+    !this.isReservationPopup
+      ? this.dialogRef.close({
+          refundAmount: +this.userForm.get('refundAmount').value,
+          remarks: this.userForm.get('remarks').value,
+        })
+      : this.dialogRef.close({
+          chargedAmount: +this.userForm.get('chargedAmount').value,
+          remarks: this.userForm.get('remarks').value,
+        });
   }
 
   close() {
-    this.onClose.emit();
+    this.dialogRef.close();
   }
 }

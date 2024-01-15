@@ -3,7 +3,8 @@ import { ActionDataType, TableDataType } from '../../../types/table-view.type';
 import { CheckoutPendingResponse } from '../types/checkout-pending.type';
 import { CheckInResponseType } from '../types/checkin-pending.type';
 import { quickActions } from '../constants/checked-in-reservation.table';
-import { dateTimeWithFormat } from '@hospitality-bot/admin/shared';
+import { dateTimeWithFormat } from 'libs/admin/shared/src/lib/utils/date-utils';
+
 /**
  * Table ViewData implement for the styling recommendation
  */

@@ -98,20 +98,16 @@
           </div>
         </div>
         <div class="dropdown-wrapper">
-          <mat-select
-            class="assignee-dropdown"
-            [value]="feedbackFG?.get('assignee')?.value"
-            (selectionChange)="setAssignee($event)"
-            placeholder="Assignee"
+          <hospitality-bot-select
+            class="stats__select"
+            controlName="assignee"
+            [props]="{
+              placeholder: 'Assignee'
+            }"
             [disabled]="assigneeList?.length === 0"
-          >
-            <mat-option
-              *ngFor="let assignee of assigneeList"
-              [value]="assignee.id"
-            >
-              {{ assignee.firstName }} {{ assignee.lastName }}
-            </mat-option>
-          </mat-select>
+            [options]="assigneeOption"
+            (itemSelection)="setAssignee($event)"
+          ></hospitality-bot-select>
         </div>
       </div>
       <div class="guestInfoOpen-guest-wrap"></div>

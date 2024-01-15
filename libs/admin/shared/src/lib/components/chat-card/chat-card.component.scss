@@ -181,6 +181,10 @@
         height: 1.5em;
         width: 1.5em;
       }
+
+      img:hover {
+        filter: hue-rotate(45deg);
+      }
     }
   }
   &_time {

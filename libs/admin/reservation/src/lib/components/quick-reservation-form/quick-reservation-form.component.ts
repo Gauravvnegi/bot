@@ -1,5 +1,7 @@
 import {
+  Compiler,
   Component,
+  ComponentFactoryResolver,
   EventEmitter,
   Input,
   OnInit,
@@ -37,11 +39,11 @@ import { AgentTableResponse } from 'libs/admin/agent/src/lib/types/response';
 import { ReservationForm } from 'libs/admin/manage-reservation/src/lib/constants/form';
 import { debounceTime } from 'rxjs/operators';
 import { BookingInfoComponent } from '../booking-info/booking-info.component';
-import { SideBarService } from 'apps/admin/src/app/core/theme/src/lib/services/sidebar.service';
 import { ReservationRatePlan } from 'libs/admin/room/src/lib/constant/form';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 import { RoutesConfigService } from 'apps/admin/src/app/core/theme/src/lib/services/routes-config.service';
 import { ManualOffer } from 'libs/admin/manage-reservation/src/lib/components/form-components/booking-summary/booking-summary.component';
+import { AddGuestComponent } from 'libs/admin/guests/src/lib/components';
 
 @Component({
   selector: 'hospitality-bot-quick-reservation-form',
@@ -120,9 +122,10 @@ export class QuickReservationFormComponent implements OnInit {
     private globalFilterService: GlobalFilterService,
     private manageReservationService: ManageReservationService,
     protected formService: FormService,
-    private sidebarService: SideBarService,
     protected routesConfigService: RoutesConfigService,
-    public bookingDetailService: BookingDetailService
+    public bookingDetailService: BookingDetailService,
+    private compiler: Compiler,
+    private resolver: ComponentFactoryResolver
   ) {
     this.formService.resetData();
     this.initForm();
@@ -208,6 +211,7 @@ export class QuickReservationFormComponent implements OnInit {
       }),
 
       dailyPrice: [''],
+      rateImprovement: [false],
     });
 
     this.entityId = this.globalFilterService.entityId;
@@ -216,6 +220,15 @@ export class QuickReservationFormComponent implements OnInit {
 
   listenForRoomChanges() {
     let roomCount = 0;
+
+    const updateRateImprovement = () => {
+      this.reservationId &&
+        this.isDataLoaded &&
+        this.inputControls.rateImprovement.patchValue(true, {
+          emitEvent: false,
+        });
+    };
+
     this.roomControls.roomNumbers.valueChanges.subscribe((res) => {
       if (res) {
         const currentRoomCount = res.length ? res.length : 1;
@@ -234,6 +247,12 @@ export class QuickReservationFormComponent implements OnInit {
           });
         }
       }
+    });
+    this.roomControls.adultCount.valueChanges.subscribe((res) => {
+      res && updateRateImprovement;
+    });
+    this.roomControls.childCount.valueChanges.subscribe((res) => {
+      res && updateRateImprovement;
     });
   }
 
@@ -486,12 +505,22 @@ export class QuickReservationFormComponent implements OnInit {
   }
 
   createGuest() {
-    this.sidebarService.openSidebar({
-      componentName: 'AddGuest',
-      containerRef: this.sidebarSlide,
-      manageMask: true,
-      onOpen: () => (this.sidebarVisible = true),
-      onClose: (res) => {
+    const lazyModulePromise = import(
+      'libs/admin/guests/src/lib/admin-guests.module'
+    )
+      .then((module) => {
+        return this.compiler.compileModuleAsync(module.AdminGuestsModule);
+      })
+      .catch((error) => {
+        console.error('Error loading the lazy module:', error);
+      });
+    lazyModulePromise.then((moduleFactory) => {
+      this.sidebarVisible = true;
+      const factory = this.resolver.resolveComponentFactory(AddGuestComponent);
+      this.sidebarSlide.clear();
+      const componentRef = this.sidebarSlide.createComponent(factory);
+      componentRef.instance.isSidebar = true;
+      componentRef.instance.onCloseSidebar.subscribe((res) => {
         this.sidebarVisible = false;
         if (typeof res !== 'boolean') {
           this.selectedGuest = {
@@ -502,7 +531,8 @@ export class QuickReservationFormComponent implements OnInit {
             .get('guestDetails')
             .patchValue(res.id);
         }
-      },
+        componentRef.destroy();
+      });
     });
   }
 

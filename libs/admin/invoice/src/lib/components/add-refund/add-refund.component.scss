@@ -28,3 +28,18 @@
     padding: 20px;
   }
 }
+
+.charged-amount {
+  display: flex;
+  flex-direction: column;
+  .half-width {
+    flex-basis: 47%;
+    width: 47%;
+  }
+  .charges-info {
+    padding: 0 4%;
+    color: rgba(0, 0, 0, 0.5);
+    font-size: 14px;
+    margin-top: 10px;
+  }
+}

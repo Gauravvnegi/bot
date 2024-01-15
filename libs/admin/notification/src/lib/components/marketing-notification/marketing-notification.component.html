@@ -5,7 +5,7 @@
   <div class="modal-header">
     <div></div>
     <div class="modal-header__heading">Send Email</div>
-    <div (click)="closeModal()" class="close">
+    <div (click)="closeModal(); onCloseSidebar.emit(true)" class="close">
       <i class="fa fa-times" aria-hidden="true"></i>
     </div>
   </div>

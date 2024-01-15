@@ -173,6 +173,7 @@ export class AddReservationComponent extends BaseReservationComponent
         specialInstructions: [''],
       }),
       printRate: [false],
+      rateImprovement: [false],
     });
   }
 
@@ -476,10 +477,6 @@ export class AddReservationComponent extends BaseReservationComponent
     };
     this.inputControls.offerId.reset();
     this.offersList.records = [];
-  }
-
-  triggerPrintRate(isToggleOn: boolean) {
-    this.inputControls.printRate.patchValue(isToggleOn, { emitEvent: false });
   }
 
   handleEmailInvoice() {

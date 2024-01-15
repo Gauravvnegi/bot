@@ -16,12 +16,15 @@
       ></i>
     </div>
   </div>
-  <div class="body">
+  <div class="body" [id]="fa.referenceId">
     <div class="form-block" [formGroup]="requestFG">
       <hospitality-bot-input
         class="half-width"
         label="Room"
         controlName="roomNo"
+        [props]="{
+          placeholder: 'Enter'
+        }"
       ></hospitality-bot-input>
       <hospitality-bot-select
         class="half-width service-item"
@@ -30,13 +33,55 @@
         controlName="itemCode"
         [props]="{
           isAsync: true,
-          createPrompt: '+ Add New Item'
+          createPrompt: '+ Add New Item',
+          placeholder: 'Select'
         }"
         [stopEmission]="true"
         (onCreate)="create()"
       ></hospitality-bot-select>
 
-      <hospitality-bot-input
+      <hospitality-bot-quick-select
+        class="full-width select"
+        controlName="guestId"
+        label="Guest"
+        [inputType]="'select'"
+        [props]="{
+          showChips: false,
+          isAsync: true,
+          placeholder: 'Select',
+          createPrompt: '+ Add New Guest',
+          selectedOption: selectedGuest,
+          createType: 'sidebar'
+        }"
+        [apiConfig]="{
+          apiEndPoint: '/api/v1/members',
+          dataModel: {
+            key: 'records',
+            values: {
+              label: ['firstName', 'lastName'],
+              value: 'id'
+            }
+          },
+          queryParams: getConfig(),
+          searchAPIEndPoint: '/api/v1/search/members',
+          searchModel: {
+            response: true,
+            values: {
+              label: ['firstName', 'lastName'],
+              value: 'id'
+            }
+          },
+          searchQueryParams: { type: 'GUEST' }
+        }"
+        [paginationConfig]="{
+          isPagination: true
+        }"
+        (clickedOption)="guestChange($event)"
+        [initItems]="true"
+        (openSidebar)="onAddGuest()"
+      ></hospitality-bot-quick-select>
+
+      <!-- <hospitality-bot-input
         class="half-width"
         label="First Name"
         controlName="firstName"
@@ -48,13 +93,16 @@
         label="Last Name"
         controlName="lastName"
       >
-      </hospitality-bot-input>
+      </hospitality-bot-input> -->
 
       <hospitality-bot-select
         class="half-width"
         [options]="priorityList"
         label="Priority"
         controlName="priority"
+        [props]="{
+          placeholder: 'select'
+        }"
       ></hospitality-bot-select>
       <!-- <hospitality-bot-select
         class="half-width"
@@ -75,9 +123,9 @@
         label="Quantity"
         controlName="quantity"
       ></hospitality-bot-input>
-      <hospitality-bot-phone-number
+      <!-- <hospitality-bot-phone-number
         class="full-width"
-      ></hospitality-bot-phone-number>
+      ></hospitality-bot-phone-number> -->
 
       <!-- <hospitality-bot-input
         class="half-width"
@@ -96,16 +144,22 @@
         [options]="assigneeList"
         label="Assign To"
         controlName="assigneeId"
+        [props]="{
+          placeholder: 'Select Assignee'
+        }"
       ></hospitality-bot-select>
 
       <hospitality-bot-text-area
         class="full-width"
         controlName="remarks"
         label="Remarks"
+        [props]="{
+          placeholder: 'Enter'
+        }"
       >
       </hospitality-bot-text-area>
     </div>
-    <div class="request-popup-btnwrap">
+    <!-- <div class="request-popup-btnwrap">
       <hospitality-bot-button
         label="Cancel"
         (click)="close({ status: false })"
@@ -116,6 +170,28 @@
         (click)="raiseRequest()"
         [disabled]="isRaisingRequest"
       ></hospitality-bot-button>
-    </div>
+    </div> -->
+    <hospitality-bot-form-action
+      class="full-width"
+      (onPreAction)="close({ status: false })"
+      (onPostAction)="raiseRequest()"
+      [isFixed]="isSidebar"
+      [config]="{
+        preLabel: 'Cancel',
+        postLabel: 'Save',
+        postDisabled: isRaisingRequest
+      }"
+      #fa
+    >
+    </hospitality-bot-form-action>
   </div>
 </div>
+
+<p-sidebar
+  class="sidebar"
+  [(visible)]="sidebarVisible"
+  position="right"
+  [showCloseIcon]="false"
+>
+  <ng-container #sidebarSlide></ng-container>
+</p-sidebar>

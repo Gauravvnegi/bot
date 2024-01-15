@@ -52,16 +52,17 @@
     <div class="one-third-width">
       <hospitality-bot-input
         class="one-third-width"
-        label="Amount"
+        label="Charged Amount"
         controlName="chargedAmount"
         [props]="{
+          type: 'number',
           placeholder: 'Enter'
         }"
         [disabled]="!inputControls.chargeable.value"
       ></hospitality-bot-input>
       <ul class="charges-info">
         <li>Increased Amount</li>
-        <li>Exclusive of tax</li>
+        <li>Exclusive of Taxes</li>
         <li>Applied per day</li>
       </ul>
     </div>

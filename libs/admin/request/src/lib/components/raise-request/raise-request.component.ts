@@ -1,10 +1,13 @@
 import {
   Component,
+  ComponentFactoryResolver,
   EventEmitter,
   Input,
   OnDestroy,
   OnInit,
   Output,
+  ViewChild,
+  ViewContainerRef,
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
@@ -15,9 +18,10 @@ import { Subscription } from 'rxjs';
 import { request } from '../../constants/request';
 import { debounceTime } from 'rxjs/operators';
 import { RequestService } from '../../services/request.service';
-import { Option } from '@hospitality-bot/admin/shared';
-import { DialogService } from 'primeng/dynamicdialog';
+import { Option, manageMaskZIndex } from '@hospitality-bot/admin/shared';
+import { AddItemComponent } from '../add-item/add-item.component';
 import { SideBarService } from 'apps/admin/src/app/core/theme/src/lib/services/sidebar.service';
+import { AddGuestComponent } from 'libs/admin/guests/src/lib/components';
 
 @Component({
   selector: 'hospitality-bot-raise-request',
@@ -27,6 +31,7 @@ import { SideBarService } from 'apps/admin/src/app/core/theme/src/lib/services/s
 export class RaiseRequestComponent implements OnInit, OnDestroy {
   @Output() onCloseSidebar = new EventEmitter();
   requestFG: FormGroup;
+  globalQueries = [];
   searchFG: FormGroup;
   entityId: string;
   reservation = {};
@@ -43,6 +48,9 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
   sidebarVisible = false;
   isItemUuid: boolean = false;
   @Input() isSidebar = false;
+  @ViewChild('sidebarSlide', { read: ViewContainerRef })
+  sidebarSlide: ViewContainerRef;
+  selectedGuest;
 
   constructor(
     private fb: FormBuilder,
@@ -50,8 +58,7 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
     private snackbarService: SnackBarService,
     private _requestService: RequestService,
     private adminUtilityService: AdminUtilityService,
-    private dialogService: DialogService,
-    private sidebarService: SideBarService
+    private resolver: ComponentFactoryResolver
   ) {}
 
   ngOnInit(): void {
@@ -72,6 +79,8 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
   listenForGlobalFilters(): void {
     this.$subscription.add(
       this.globalFilterService.globalFilter$.subscribe((data) => {
+        this.globalQueries = [...data['dateRange'].queryValue];
+
         this.entityId = this.globalFilterService.entityId;
         this.initItemList();
       })
@@ -84,8 +93,8 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
   initFG(): void {
     this.requestFG = this.fb.group({
       roomNo: ['', Validators.required],
-      firstName: ['', Validators.required],
-      lastName: ['', Validators.required],
+      // firstName: ['', Validators.required],
+      // lastName: ['', Validators.required],
       itemName: [''],
       itemCode: ['', Validators.required],
       itemId: [''],
@@ -94,8 +103,9 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
       remarks: ['', [Validators.maxLength(200)]],
       quantity: [1, [Validators.required, Validators.min(1)]],
       assigneeId: ['', [Validators.required]], //as per BE ()
-      cc: ['+91'],
-      phoneNumber: ['', [Validators.required, Validators.pattern('^[0-9]*$')]],
+      // cc: ['+91'],
+      // phoneNumber: ['', [Validators.required, Validators.pattern('^[0-9]*$')]],
+      guestId: ['', [Validators.required]],
     });
   }
 
@@ -177,9 +187,9 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
     }
 
     const { phoneNumber, cc, ...rest } = this.requestFG.getRawValue();
-    let countryCode = cc.replace('+', '');
+    // let countryCode = cc?.replace('+', '');
     const data = {
-      phone: `${countryCode}${phoneNumber}`,
+      // phone: `${countryCode}${phoneNumber}`,
       ...rest,
       systemDateTime: DateService.currentDate('DD-MMM-YYYY HH:mm:ss'),
       sender: request.kiosk,
@@ -243,17 +253,13 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
               )
               .subscribe((res) => {
                 if (res) {
-                  this.reservation = res;
-                  this.requestFG.patchValue({
-                    firstName: res.guestDetails.primaryGuest.firstName,
-                    lastName: res.guestDetails.primaryGuest.lastName,
-                  });
-                  this.requestFG.get('firstName').disable();
-                  this.requestFG.get('lastName').disable();
-                } else {
-                  this.reservation = {};
-                  this.requestFG.get('firstName').enable();
-                  this.requestFG.get('lastName').enable();
+                  const guestData = res?.guestDetails?.primaryGuest;
+                  this.requestFG.get('guestId').setValue(guestData.id);
+
+                  this.selectedGuest = {
+                    label: `${guestData.firstName} ${guestData.lastName}`,
+                    value: guestData.id,
+                  };
                 }
               })
           );
@@ -264,10 +270,14 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
   create() {
     //to open add new item pop up
     if (this.isSidebar) {
-      this.sidebarService.openSidebar({
-        componentName: 'AddItem',
-        onOpen: () => (this.sidebarVisible = true),
-        onClose: (res) => {
+      this.sidebarVisible = true;
+      const factory = this.resolver.resolveComponentFactory(AddItemComponent);
+      this.sidebarSlide.clear();
+      manageMaskZIndex();
+      const componentRef = this.sidebarSlide.createComponent(factory);
+      componentRef.instance.isSidebar = true;
+      this.$subscription.add(
+        componentRef.instance.onCloseSidebar.subscribe((res) => {
           if (res) {
             this.requestFG.patchValue(
               {
@@ -281,10 +291,48 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
             this.getItemDetails(res?.id);
           }
           this.sidebarVisible = false;
-        },
-        manageMask: true,
-      });
+        })
+      );
     }
+  }
+
+  getConfig(type = 'get') {
+    if (type === 'search') return { type: 'GUEST' };
+    const queries = {
+      entityId: this.entityId,
+      toDate: this.globalQueries[0].toDate,
+      fromDate: this.globalQueries[1].fromDate,
+      entityState: 'ALL',
+      type: 'GUEST',
+    };
+    return queries;
+  }
+
+  guestChange(event) {
+    this.selectedGuest = {
+      label: `${event.firstName} ${event.lastName}`,
+      value: event.id,
+    };
+  }
+
+  onAddGuest() {
+    this.sidebarVisible = true;
+    const factory = this.resolver.resolveComponentFactory(AddGuestComponent);
+    this.sidebarSlide.clear();
+    manageMaskZIndex();
+    const componentRef = this.sidebarSlide.createComponent(factory);
+    componentRef.instance.isSidebar = true;
+    this.$subscription.add(
+      componentRef.instance.onCloseSidebar.subscribe((res) => {
+        if (res) {
+          this.selectedGuest = {
+            label: `${res.firstName} ${res.lastName}`,
+            value: res.id,
+          };
+        }
+        this.sidebarVisible = false;
+      })
+    );
   }
 
   ngOnDestroy(): void {

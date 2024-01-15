@@ -12,6 +12,7 @@ export class SelectGroupComponent extends FormComponent implements OnInit {
   defaultOptions: (Option & { isSelected: boolean })[];
 
   @Input() fieldType: FieldType = 'radio';
+  @Input() isAllOption: boolean = false;
 
   @Input() set options(input: Option[]) {
     this.menuOptions = input;
@@ -33,20 +34,47 @@ export class SelectGroupComponent extends FormComponent implements OnInit {
         ...item,
         isSelected: this?.inputControl?.value?.includes(item.value),
       }));
+      this.isAllOption && this.handelOptionSelection(); //it is not required but to handel old data
     }
-    
+
     this.inputControl.valueChanges.subscribe((res) => {
       this.defaultOptions = this.menuOptions.map((item) => ({
         ...item,
         isSelected: res?.includes(item.value),
       }));
+      this.isAllOption && this.handelOptionSelection(); //it is not required but to handel old data
     });
+  }
+
+  handleAllSelection() {
+    const allOption = this.defaultOptions.find((item) => item.value === 'ALL');
+    if (allOption) {
+      allOption.isSelected = !this.defaultOptions
+        .filter((item) => item.value !== 'ALL')
+        .some((item) => !item.isSelected);
+    }
+  }
+
+  handelOptionSelection() {
+    this.defaultOptions &&
+      this.defaultOptions.find((item) => item.value === 'ALL')?.isSelected &&
+      this.defaultOptions.forEach((item) => {
+        item.isSelected = true;
+      });
   }
 
   handleClick(value: string, idx: number) {
     if (this.fieldType === 'checkbox') {
       this.defaultOptions[idx].isSelected = !this.defaultOptions[idx]
         .isSelected;
+
+      this.isAllOption &&
+        value === 'ALL' &&
+        this.defaultOptions.map(
+          (item) => (item.isSelected = this.defaultOptions[idx].isSelected)
+        );
+      this.isAllOption && this.handleAllSelection();
+
       this.inputControl.setValue(
         this.defaultOptions
           .filter((item) => item.isSelected)

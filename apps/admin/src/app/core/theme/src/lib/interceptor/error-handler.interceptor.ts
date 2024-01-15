@@ -27,34 +27,65 @@ export class ErrorHandlerInterceptor implements HttpInterceptor {
         try {
           const statusCode = err.error?.status;
           const translateService = this.injector.get(TranslateService);
-          const translateKey1 = `messages.error.${err.error?.type}`;
-          const translateKey2 = `messages.error.${
-            statusCode == 403 ? 'forbiddenErr' : 'unknownErr'
-          }`;
           const priorityMessage = err.error?.message;
 
-          forkJoin([
-            translateService.get(translateKey1),
-            translateService.get(translateKey2),
-          ]).subscribe(([msg1, msg2]) => {
-            [
-              [msg1, translateKey1],
-              [msg2, translateKey2],
-            ].forEach((data) => {
-              const translationToBeShown =
-                statusCode == 500 ? data[0] : priorityMessage || data[0];
-              if (data[0] !== data[1]) {
-                this._progressSpinnerService.$snackbarChange.next({
-                  detail: translationToBeShown,
-                  severity: 'error',
-                  key: ToastKeys.default,
-                  position: 'top-right',
-                  life: 3000,
-                  closable: false,
-                });
-              }
+          // Define translation keys and corresponding error types
+          /**
+           * @var forbiddenStatusCode list of status code which you want to show forbidden error
+           * @var unAuthStatusCode status code which you want to show in unauthorized
+           * @var translationKeys all keys which you want to apply,
+           * key will selected based on their translation or priority
+           */
+          const baseKey = `messages.error`;
+          const forbiddenStatusCode = [403];
+          const unAuthStatusCode = [401];
+          const translationKeys: Record<number, string> = {
+            1: `${baseKey}.${err.error?.type}`,
+            2: `${baseKey}.${
+              forbiddenStatusCode.includes(statusCode)
+                ? 'forbiddenErr'
+                : 'unknownErr'
+            }`,
+            3: `${baseKey}.${
+              unAuthStatusCode.includes(statusCode) ? 'unAuthErr' : 'unknownErr'
+            }`,
+            // Add more keys as needed..........
+          };
+
+          /**
+           * @var translationObservables is Map translation keys to an array of Observables
+           */
+          const translationObservables: Observable<string>[] = Object.values(
+            translationKeys
+          ).map((key) => translateService.get(key));
+
+          /**
+           * @function forkJoin(translationObservables) translate the
+           * list of translationObservables
+           */
+          forkJoin(translationObservables)
+            .pipe(
+              catchError(() => translateService.get(`${baseKey}.unknownErr`))
+            )
+            .subscribe((messages: string[]) => {
+              messages.forEach((message, index) => {
+                const translationToBeShown =
+                  statusCode == 500 ? message : priorityMessage || message;
+                const translationKey = Object.values(translationKeys)[index];
+
+                // Showing only that message, which is translated successfully
+                if (message !== translationKey) {
+                  this._progressSpinnerService.$snackbarChange.next({
+                    detail: translationToBeShown,
+                    severity: 'error',
+                    key: ToastKeys.default,
+                    position: 'top-right',
+                    life: 3000,
+                    closable: false,
+                  });
+                }
+              });
             });
-          });
         } catch {
           console.error('Error: Translation Text is not available');
         }

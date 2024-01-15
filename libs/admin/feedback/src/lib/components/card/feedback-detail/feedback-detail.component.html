@@ -5,7 +5,9 @@
         {{ feedback.getProfileNickName() }}
       </div>
       <div class="selectedChat"></div>
-      {{ feedback?.feedback.guest.getFullName() }}
+      <div guest-details-sidebar [guestId]="feedback.guestId">
+        {{ feedback?.feedback.guest.getFullName() }}
+      </div>
     </div>
     <div class="mr-10">
       <div class="req_button">
@@ -23,13 +25,6 @@
           View Feedback
         </div>
       </div>
-      <img
-        *ngIf="!guestInfoEnable"
-        class=""
-        src="assets/svg/hamBurger.svg"
-        [alt]=""
-        (click)="openGuestInfo()"
-      />
     </div>
   </div>
   <div class="guestInfoOpen" [formGroup]="feedbackFG">

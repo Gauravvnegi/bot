@@ -82,6 +82,16 @@ export class RoutesConfigService extends RouteConfigPathService {
 
   private $navRoutes = new BehaviorSubject<NavRouteOption[]>([]);
 
+  /**
+   * Reload to the same route
+   */
+  reload() {
+    const currentPath = window.location.pathname + window.location.search;
+    this.navigate({ skipLocationChange: true }).then(() => {
+      this.router.navigateByUrl(currentPath);
+    });
+  }
+
   navigate(config: Partial<NavigateConfig> = {}) {
     const {
       subModuleName,

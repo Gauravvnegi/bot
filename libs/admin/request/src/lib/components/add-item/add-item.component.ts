@@ -6,7 +6,6 @@ import { ManagePermissionService } from 'libs/admin/roles-and-permissions/src/li
 import { ServiceItemForm } from '../../types/request.type';
 import { RequestService } from '../../services/request.service';
 import { convertToNormalCase } from 'libs/admin/shared/src/lib/utils/valueFormatter';
-import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 
 @Component({
   selector: 'hospitality-bot-add-item',
@@ -32,18 +31,16 @@ export class AddItemComponent implements OnInit {
     private _userService: UserService,
     private _managePermissionService: ManagePermissionService,
     private snackbarService: SnackBarService,
-    private requestService: RequestService,
-    private dialogConfig: DynamicDialogConfig,
-    private dialogRef: DynamicDialogRef
+    private requestService: RequestService // private dialogConfig: DynamicDialogConfig, // private dialogRef: DynamicDialogRef
   ) {
     /**
      * @Remarks Extracting data from he dialog service
      */
-    if (this.dialogConfig?.data) {
-      Object.entries(this.dialogConfig.data).forEach(([key, value]) => {
-        this[key] = value;
-      });
-    }
+    // if (this.dialogConfig?.data) {
+    //   Object.entries(this.dialogConfig.data).forEach(([key, value]) => {
+    //     this[key] = value;
+    //   });
+    // }
   }
   ngOnInit(): void {
     this.entityId = this._userService.getentityId();
@@ -55,9 +52,9 @@ export class AddItemComponent implements OnInit {
   initForm() {
     this.useForm = this.fb.group({
       itemName: ['', [Validators.required]],
-      categoryDesc: ['', [Validators.required]],
+      // categoryDesc: ['', [Validators.required]],
       functionCode: [''],
-      serviceCode: [''],
+      // serviceCode: [''],
       itemDesc: [''],
       sla: ['', [Validators.required]],
       users: ['', [Validators.required]],
@@ -84,7 +81,7 @@ export class AddItemComponent implements OnInit {
    * @function close will do close operation for the sidebar and dialog
    */
   close(): void {
-    this.dialogRef.close();
+    // this.dialogRef.close();
     this.onCloseSidebar.emit();
   }
 

@@ -19,6 +19,7 @@ export interface GuestMemberForm {
   dateOfBirth: string;
   age: string;
   address: AddressFieldType;
+  type: string;
 }
 
 export type ChartTypeOption = {

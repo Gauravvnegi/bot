@@ -5,6 +5,7 @@ import {
 } from '../types/rate-package-reports.types';
 import { ReportClass } from '../types/reports.types';
 import { toCurrency } from 'libs/admin/shared/src/lib/utils/valueFormatter';
+import { getFullName } from '../constant/reports.const';
 
 export class RateVariationReport
   implements ReportClass<RateVariationReportData, RateVariationReportResponse> {
@@ -20,12 +21,13 @@ export class RateVariationReport
           folio: data?.invoiceCode,
           roomNo: data?.stayDetails?.room?.roomNumber,
           roomType: data?.stayDetails?.room?.type,
-          employee: `${data?.user?.firstName ?? ''} ${
-            data?.user?.lastName ?? ''
-          }`,
-          guestName: `${data?.guestDetails?.primaryGuest?.firstName ?? ''} ${
-            data?.guestDetails?.primaryGuest?.lastName ?? ''
-          }`,
+          employee: getFullName(data?.user?.firstName, data?.user?.lastName),
+
+          guestName: getFullName(
+            data?.guestDetails?.primaryGuest?.firstName,
+            data?.guestDetails?.primaryGuest?.lastName
+          ),
+
           discountedRate: toCurrency(data?.paymentSummary?.totalAmount),
 
           rateVariance: toCurrency(

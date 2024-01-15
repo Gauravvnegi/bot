@@ -769,6 +769,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
           emailRef.instance.email = this.primaryGuest.email;
           emailRef.instance.entityId = this.entityId;
           emailRef.instance.details = this.details;
+          emailRef.instance.reservationId = this.bookingId;
           emailRef.instance.roomNumber = this.details.stayDetails.roomNumber;
           emailRef.instance.onCloseSidebar.subscribe((res) => {
             this.sidebarVisible = false;
@@ -844,7 +845,52 @@ export class DetailsComponent implements OnInit, OnDestroy {
           bookingId: item.reservation.booking.bookingId,
           bookingNumber: item.reservation.booking.bookingNumber,
           label: `${item.subType} Booking`,
+          bookingType: item.subType,
+          arrivalTime: item.reservation.booking?.arrivalTimeStamp,
+          departureTime: item.reservation.booking?.departureTimeStamp,
         });
+      }
+    });
+
+    /**
+     * @function Sort the guestReservationDropdownList based on the specified conditions
+     * Sequence for subType PRESET->UPCOMING->PAST, when details open with guestId
+     * Present -> Prioritize with departureTime which is closer to todays date
+     * Upcoming -> Prioritize with arrivalTime which is closer to todays date
+     * Past -> Prioritize with arrivalTime which is closer to todays date
+     */
+
+    this.guestReservationDropdownList.sort((a, b) => {
+      // Function to get timestamp from a given time, defaulting to 0 if invalid
+      const getTimestamp = (time) => new Date(time)?.getTime() || 0;
+
+      // Define the priority order for booking types
+      const priorityOrder = ['PRESENT', 'UPCOMING', 'PAST'];
+
+      // Compare priority based on bookingType
+      const priorityComparison =
+        priorityOrder.indexOf(a.bookingType) -
+        priorityOrder.indexOf(b.bookingType);
+
+      // If priority is different, return the result
+      if (priorityComparison !== 0) {
+        return priorityComparison;
+      }
+
+      // Function to compare timestamps between two times
+      const getTimeComparison = (timeA, timeB) =>
+        getTimestamp(timeA) - getTimestamp(timeB);
+
+      // Sorting logic based on bookingType
+      switch ((a.bookingType as String).toUpperCase()) {
+        case 'PRESENT':
+          return getTimeComparison(a?.departureTime, b?.departureTime);
+        case 'UPCOMING':
+          return getTimeComparison(a?.arrivalTime, b?.arrivalTime);
+        case 'PAST':
+          return getTimeComparison(a?.arrivalTime, b?.arrivalTime);
+        default:
+          return 0;
       }
     });
 

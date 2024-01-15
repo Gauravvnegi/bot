@@ -10,6 +10,7 @@ import {
   TaxReportResponse,
 } from '../types/tax-reports.types';
 import { getFormattedDate } from './reservation-reports.models';
+import { getFullName } from '../constant/reports.const';
 
 export class MonthlyTaxReport
   implements ReportClass<MonthlyTaxReportData, MonthlyTaxReportResponse> {
@@ -74,10 +75,10 @@ export class LodgingTaxReportDataModel {
   deserialize(input: LodgingTaxReportResponse) {
     this.id = input?.id;
     this.res = input?.number;
-    this.guestName =
-      input.guestDetails.primaryGuest.firstName +
-      ' ' +
-      input.guestDetails.primaryGuest.lastName;
+    this.guestName = getFullName(
+      input.guestDetails.primaryGuest.firstName,
+      input.guestDetails.primaryGuest.lastName
+    );
     this.checkInDate = input.stayDetails.arrivalTime
       ? getFormattedDate(input.stayDetails.arrivalTime)
       : '';

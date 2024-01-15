@@ -24,6 +24,7 @@ import {
   ReservationSummaryReportData,
 } from '../types/reservation-reports.types';
 import { toCurrency } from 'libs/admin/shared/src/lib/utils/valueFormatter';
+import { getFullName } from '../constant/reports.const';
 
 /**
  * @class Default Reservation Report class
@@ -38,10 +39,10 @@ class ReservationReport {
       balance: reservationData.totalDueAmount,
       bookingAmount: reservationData.paymentSummary?.totalAmount,
       bookingNo: reservationData.number,
-      guestName:
-        reservationData?.guestDetails?.primaryGuest.firstName +
-        ' ' +
-        reservationData?.guestDetails?.primaryGuest.lastName,
+      guestName: getFullName(
+        reservationData?.guestDetails?.primaryGuest.firstName,
+        reservationData?.guestDetails?.primaryGuest.lastName
+      ),
       otherCharges: null,
     };
 
@@ -66,10 +67,11 @@ export class NoShows {
     this.bookingNumber = value?.reservationNumber;
     this.dateOfArrival = getFormattedDate(value?.arrivalTime);
     this.noShowOn = getFormattedDate(value?.from);
-    this.guestName = `${value?.guest?.firstName ?? ''} ${
-      value?.guest?.lastName ?? ''
-    }`.trim();
-    this.bookingAmount = toCurrency(value?.pricingDetails?.totalAmount);
+    (this.guestName = getFullName(
+      value?.guest?.firstName,
+      value?.guest?.lastName
+    )),
+      (this.bookingAmount = toCurrency(value?.pricingDetails?.totalAmount));
     this.noShowCharge = null;
     this.noShowReason = null;
     this.otherCharge = null;
@@ -145,10 +147,10 @@ export class Arrival {
     this.id = input.id;
     (this.bookingAmount = input.paymentSummary.totalAmount),
       (this.bookingNo = input.number),
-      (this.guestName =
-        input.guestDetails.primaryGuest.firstName +
-        ' ' +
-        input.guestDetails.primaryGuest.lastName);
+      (this.guestName = getFullName(
+        input.guestDetails.primaryGuest.firstName,
+        input.guestDetails.primaryGuest.lastName
+      ));
 
     this.roomType = `${input?.stayDetails?.room?.roomNumber ?? '-'} - ${
       input.stayDetails.room.type ?? '-'
@@ -215,9 +217,11 @@ export class DraftReservationReport extends ReservationReport
         this.records.push({
           id: reservationData.id,
           bookingNo: reservationData.reservationNumber,
-          guestName: `${reservationData?.guest?.firstName ?? '-'} ${
-            reservationData.guest.lastName ?? '-'
-          }`,
+          guestName: getFullName(
+            reservationData?.guest?.firstName,
+            reservationData.guest.lastName
+          ),
+
           roomType: `${
             reservationData.bookingItems[0].roomDetails.roomNumber ?? '-'
           }-${
@@ -256,9 +260,10 @@ export class EmployeeWiseReservationReport
 
         this.records.push({
           id: reservationData.id,
-          userName:
-            reservationData?.user?.firstName &&
-            `${reservationData?.user?.firstName} ${reservationData?.user?.lastName}`,
+          userName: getFullName(
+            reservationData?.user?.firstName,
+            reservationData?.user?.lastName
+          ),
 
           bookingNo: reservationData.number,
           guestName: `${reservationData.guestDetails.primaryGuest.firstName} ${reservationData.guestDetails.primaryGuest.lastName}`,
@@ -289,7 +294,10 @@ export class ReservationAdrReport
         this.records.push({
           id: data.id,
           bookingNo: data.number,
-          guestName: `${data.guestDetails.primaryGuest.firstName} ${data.guestDetails.primaryGuest.lastName}`,
+          guestName: getFullName(
+            data.guestDetails.primaryGuest.firstName,
+            data.guestDetails.primaryGuest.lastName
+          ),
           roomType: data.stayDetails.room.type,
           roomNo: data.stayDetails.room.roomNumber,
           checkIn: getFormattedDate(data.stayDetails.arrivalTime),
@@ -321,7 +329,10 @@ export class IncomeSummaryReport
         this.records.push({
           id: data.id,
           bookingNo: data.number,
-          guestName: `${data.guestDetails.primaryGuest.firstName} ${data.guestDetails.primaryGuest.lastName}`,
+          guestName: getFullName(
+            data.guestDetails.primaryGuest.firstName,
+            data.guestDetails.primaryGuest.lastName
+          ),
           checkIn: getFormattedDate(data.stayDetails.arrivalTime),
           checkOut: getFormattedDate(data.stayDetails.departureTime),
           nights: data.nightCount,
@@ -419,7 +430,10 @@ export class ExpressCheckIn
       value.forEach((data) => {
         this.records.push({
           bookingNo: data?.number,
-          guestName: `${data.guestDetails.primaryGuest.firstName} ${data.guestDetails.primaryGuest.lastName}`,
+          guestName: getFullName(
+            data.guestDetails.primaryGuest.firstName,
+            data.guestDetails.primaryGuest.lastName
+          ),
           roomType: `${data?.stayDetails?.room?.roomNumber} - ${data?.stayDetails?.room?.type}`,
           checkIn: getFormattedDate(data?.stayDetails?.arrivalTime),
           checkOut: getFormattedDate(data?.stayDetails?.departureTime),

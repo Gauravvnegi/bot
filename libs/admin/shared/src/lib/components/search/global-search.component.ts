@@ -8,7 +8,7 @@ import { MemberSortTypes } from 'libs/admin/agent/src/lib/types/agent';
   selector: 'hospitality-bot-global-search',
   templateUrl: './global-search.component.html',
   styleUrls: [
-    '../../../../../../admin/request/src/lib/components/search/search.component.scss',
+    '../../../../../shared/src/lib/components/form-component/search/search.component.scss',
     './global-search.component.scss',
   ],
 })

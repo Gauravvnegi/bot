@@ -5,8 +5,10 @@ import {
 } from '../types/activity-reports.types';
 import { ReportClass } from '../types/reports.types';
 import { getFormattedDate } from './reservation-reports.models';
-import { toCurrency } from 'libs/admin/shared/src/lib/utils/valueFormatter';
-import { getFullName } from '../constant/reports.const';
+import {
+  getFullName,
+  toCurrency,
+} from 'libs/admin/shared/src/lib/utils/valueFormatter';
 
 export class ReservationCreatedReport
   implements

@@ -623,9 +623,3 @@ export const rowStylesMapping: Record<RowStylesKeys, string> = {
   isTotal: 'is-total',
   isSubTotal: 'is-sub-total',
 };
-
-export function getFullName(firstName: string, lastName: string) {
-  return firstName && lastName
-    ? `${firstName} ${lastName}`
-    : firstName || lastName || undefined;
-}

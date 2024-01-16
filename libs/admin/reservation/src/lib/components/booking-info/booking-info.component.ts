@@ -198,6 +198,11 @@ export class BookingInfoComponent implements OnInit {
           this.minToDate = new Date(maxToLimit); // Create a new date object
           this.minToDate.setDate(maxToLimit.getDate());
           this.formService.reservationDate.next(res);
+          this.reservationId &&
+            !this.isCheckedIn &&
+            this.formService.updateRateImprovement(
+              this.inputControls.rateImprovement
+            );
         }
       });
 
@@ -209,6 +214,11 @@ export class BookingInfoComponent implements OnInit {
             !multipleDateChange &&
             this.formService.reinitializeRooms.next(true);
           multipleDateChange = false;
+          this.reservationId &&
+            !this.isCheckedIn &&
+            this.formService.updateRateImprovement(
+              this.inputControls.rateImprovement
+            );
         }
       });
     }

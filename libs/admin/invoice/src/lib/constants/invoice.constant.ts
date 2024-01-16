@@ -1,5 +1,9 @@
 import { Option } from '@hospitality-bot/admin/shared';
-import { BillItemFields, ChargesType } from '../types/forms.types';
+import {
+  BillItemChargeType,
+  BillItemFields,
+  ChargesType,
+} from '../types/forms.types';
 
 export enum MenuActionItem {
   'ADD_DISCOUNT' = 'ADD_DISCOUNT',
@@ -59,6 +63,7 @@ export const additionalChargesDetails: Record<
     value: string;
     type: ChargesType;
     transactionType: BillItemFields['transactionType'];
+    chargeType?: BillItemChargeType;
   }
 > = {
   [AdditionalChargesType.REFUND]: {
@@ -66,17 +71,20 @@ export const additionalChargesDetails: Record<
     value: 'Paid Out',
     type: 'refund',
     transactionType: 'DEBIT',
+    chargeType: 'REFUND',
   },
   [AdditionalChargesType.MISCELLANEOUS]: {
     label: 'Miscellaneous',
     value: 'Miscellaneous Charges',
     type: 'miscellaneous',
     transactionType: 'DEBIT',
+    chargeType: 'MISCELLANEOUS',
   },
   [AdditionalChargesType.ALLOWANCE]: {
     label: 'Allowance',
     value: 'Allowance',
     type: 'other',
     transactionType: 'CREDIT',
+    chargeType: 'ALLOWANCE',
   },
 };

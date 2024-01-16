@@ -18,3 +18,15 @@ export type UseForm = InvoiceForm & PaymentForm;
 export type DescriptionOption = Option & Partial<Service>;
 
 export type ChargesType = 'discount' | 'refund' | 'miscellaneous' | 'other';
+
+export type BillItemChargeType =
+  | 'ROOM'
+  | 'TAX'
+  | 'DISCOUNT'
+  | 'MISCELLANEOUS'
+  | 'REFUND'
+  | 'PAYMENT'
+  | 'EARLY_CHECKIN'
+  | 'LATE_CHECKOUT'
+  | 'SERVICE'
+  | 'ALLOWANCE';

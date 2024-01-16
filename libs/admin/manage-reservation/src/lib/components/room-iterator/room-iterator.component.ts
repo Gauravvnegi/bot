@@ -234,18 +234,19 @@ export class RoomIteratorComponent extends IteratorComponent
   }
 
   listenForOccupancyChanges(index: number) {
-    const updateRateImprovement = () => {
-      this.reservationId &&
-        this.inputControls.rateImprovement.patchValue(true, {
-          emitEvent: false,
-        });
-    };
-
     this.roomControls[index].get('adultCount').valueChanges.subscribe((res) => {
-      res && updateRateImprovement();
+      res &&
+        this.reservationId &&
+        this.formService.updateRateImprovement(
+          this.inputControls.rateImprovement
+        );
     });
     this.roomControls[index].get('childCount').valueChanges.subscribe((res) => {
-      res && updateRateImprovement();
+      res &&
+        this.reservationId &&
+        this.formService.updateRateImprovement(
+          this.inputControls.rateImprovement
+        );
     });
   }
 

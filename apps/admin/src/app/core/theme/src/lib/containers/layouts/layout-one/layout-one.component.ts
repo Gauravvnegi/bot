@@ -825,9 +825,10 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
       this.subscriptionPlanService.checkModuleSubscription(
         ModuleNames.ADD_RESERVATION
       ) &&
-      this.subscriptionPlanService.hasManageUserPermission(
-        PermissionModuleNames.RESERVATION
-      )
+      this.subscriptionPlanService.hasViewUserPermission({
+        type: 'module',
+        name: ModuleNames.RESERVATION,
+      })
     );
   }
 

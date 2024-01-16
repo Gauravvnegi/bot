@@ -3,7 +3,7 @@
     "error": {
       "forbiddenErr": "Access denied: You do not have the necessary authorization.",
       "unknownErr": "Something went wrong",
-      "unAuthErr": "Unauthorize User",
+      "unAuthErr": "User Unauthorize",
       "exportCSV": "Failed to export CSV",
       "loadData": "Failed to load data",
       "fail": "Try again.",

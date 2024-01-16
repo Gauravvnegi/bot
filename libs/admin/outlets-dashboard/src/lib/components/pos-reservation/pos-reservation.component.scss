@@ -3,7 +3,7 @@
 .header {
   @include flex-space-between-cen-Algn;
   background-color: $primary-cta;
-  padding: 15px 10px;
+  padding: 10px 10px;
   color: white;
   border-bottom: 1px solid $primary-cta;
   .heading {
@@ -39,7 +39,7 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  padding: 20px 2%;
+  padding: 10px 2%;
   justify-content: space-between;
   .search {
     padding-top: 36px;
@@ -49,5 +49,85 @@
   }
   .one-fifth-width {
     width: 18%;
+  }
+}
+
+.tab-header {
+  border-top: 1px solid #d9d9d9;
+  border-bottom: 1px solid #d9d9d9;
+  background-color: #f1f2f7;
+  padding: 10px;
+}
+
+.content {
+  display: flex;
+  background-color: #f1f2f7;
+  .menu-section {
+    flex-basis: 60%;
+    border-right: 1px solid #d9d9d9;
+  }
+  .summary-section {
+    flex-basis: 40%;
+  }
+}
+
+.category-items {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 5px 10px;
+  .category-item {
+    background-color: white;
+    cursor: pointer;
+    padding: 5px 15px;
+    @include light-vsm-text;
+    @include flex-item-center;
+    gap: 5px;
+    img.veg {
+      border: 1px solid #3ca129;
+      padding: 2px;
+    }
+    img.non-veg {
+      border: 1px solid #b80023;
+      padding: 2px;
+    }
+  }
+}
+
+.menu-heading {
+  padding: 5px 15px;
+}
+
+.category-item.selected {
+  background: $primary !important;
+  color: $white;
+}
+
+.menu-items {
+  @include flex-wrap-even-space;
+  gap: 10px;
+  height: calc(100% - 428px);
+  overflow: scroll;
+  margin-bottom: 100px;
+  padding: 10px;
+  .menu-item {
+    flex-basis: 45%;
+  }
+}
+
+.btn-wrapper {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background-color: $white;
+  .checkbox {
+    padding: 5px 15px 0;
+    .checkbox-label {
+      padding: 0 15px 0 10px;
+    }
+  }
+  .buttons {
+    @include flex-space-around;
+    padding: 10px;
   }
 }

@@ -84,4 +84,104 @@
       label="No. of Person"
     ></hospitality-bot-input>
   </div>
+
+  <div class="tab-header">
+    <hospitality-bot-custom-tab-header
+      [listItems]="tabFilters"
+    ></hospitality-bot-custom-tab-header>
+  </div>
+
+  <div class="content">
+    <div class="menu-section">
+      <div class="category-items">
+        <span
+          class="category-item"
+          [class.selected]="selectedCategory === 'All'"
+          (click)="selectCategory('All')"
+        >
+          All</span
+        >
+        <span
+          class="category-item"
+          [class.selected]="selectedCategory === 'Veg'"
+          (click)="selectCategory('Veg')"
+          ><img class="veg" src="assets/svg/green-circle.svg" alt="" />
+          Veg</span
+        >
+        <span
+          class="category-item"
+          [class.selected]="selectedCategory === 'Non-veg'"
+          (click)="selectCategory('Non-veg')"
+          ><img class="non-veg" src="assets/svg/red-triangle.svg" alt="" />
+          Non-Veg</span
+        >
+      </div>
+      <h3 class="menu-heading">
+        Italian BreakFast
+      </h3>
+      <div class="menu-items">
+        <ng-container *ngFor="let card of getCards()">
+          <hospitality-bot-menu-item-card
+            class="menu-item"
+            [cardData]="card"
+          ></hospitality-bot-menu-item-card>
+        </ng-container>
+      </div>
+    </div>
+    <div class="summary-section"></div>
+  </div>
+</div>
+
+<div class="btn-wrapper">
+  <div class="checkbox">
+    <input
+      #feedbackCheckbox
+      type="checkbox"
+      [checked]="sendFeedback"
+      (change)="onSendFeedback($event.target)"
+    />
+    <label
+      class="checkbox-label"
+      (click)="feedbackCheckbox.click()"
+      for="checkbox"
+      >Send Feedback</label
+    >
+    <input
+      #emailCheckbox
+      type="checkbox"
+      [checked]="emailInvoice"
+      (change)="onEmailInvoice($event.target)"
+    />
+    <label class="checkbox-label" (click)="emailCheckbox.click()" for="checkbox"
+      >Email Invoice</label
+    >
+  </div>
+  <div class="buttons">
+    <hospitality-bot-button
+      label="Post to Room"
+      (onClick)="postToRoom()"
+    ></hospitality-bot-button>
+    <hospitality-bot-button
+      label="Save"
+      (onClick)="handleSave()"
+    ></hospitality-bot-button>
+    <hospitality-bot-button
+      label="Save & Print"
+      (onClick)="handleSave(true)"
+    ></hospitality-bot-button>
+    <hospitality-bot-button
+      label="Print KOT"
+      (onClick)="handleKOT(true)"
+    ></hospitality-bot-button>
+    <hospitality-bot-button
+      label="KOT"
+      (onClick)="handleKOT()"
+    ></hospitality-bot-button>
+    <hospitality-bot-button
+      label="Cancel"
+      variant="text"
+      severity="reset"
+      (onClick)="close()"
+    ></hospitality-bot-button>
+  </div>
 </div>

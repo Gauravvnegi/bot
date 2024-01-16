@@ -1,0 +1,51 @@
+@import 'main';
+
+.card-wrapper {
+  background-color: $white;
+  padding: 6px 10px;
+}
+
+.image-wrapper {
+  height: 100px;
+  width: 250px;
+  position: relative;
+  .category-img {
+    position: absolute;
+    padding: 5px;
+    img.veg {
+      border: 1px solid #3ca129;
+      padding: 2px;
+    }
+    img.non-veg {
+      border: 1px solid #b80023;
+      padding: 2px;
+    }
+  }
+  .item-img {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    border-radius: 10px;
+  }
+}
+
+.item-name {
+  @include bold-sm-text;
+}
+
+.item-price {
+  @include light-vsm-text;
+  color: $grayMedium;
+}
+
+.add-btn {
+  display: flex;
+  justify-content: flex-end;
+}
+
+:host ::ng-deep .add-btn {
+  .button {
+    height: 35px;
+    min-width: 95px;
+  }
+}

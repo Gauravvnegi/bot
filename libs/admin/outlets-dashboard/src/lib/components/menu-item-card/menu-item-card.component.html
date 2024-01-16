@@ -1,0 +1,29 @@
+<div class="card-wrapper">
+  <div class="image-wrapper">
+    <div class="category-img">
+      <img
+        *ngIf="cardData?.category === 'VEG'"
+        class="veg"
+        src="assets/svg/green-circle.svg"
+        alt=""
+      />
+      <img
+        *ngIf="cardData?.category === 'NON_VEG'"
+        class="non-veg"
+        src="assets/svg/red-triangle.svg"
+        alt=""
+      />
+    </div>
+    <img class="item-img" [src]="cardData.image" [alt]="cardData.itemName" />
+  </div>
+  <div class="item-name">{{ cardData.itemName }}</div>
+  <div class="item-price">{{ cardData.price | currency: 'INR' }}</div>
+
+  <div class="add-btn">
+    <hospitality-bot-button
+      label="Add"
+      variant="outlined"
+      (onClick)="addItem()"
+    ></hospitality-bot-button>
+  </div>
+</div>

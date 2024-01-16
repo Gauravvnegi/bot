@@ -85,6 +85,7 @@ export class OutletsDataTableComponent extends BaseDatatableComponent
   }
 
   initReservations() {
+    this.loading = true;
     this.$subscription.add(
       this.outletService.getReservations(this.entityId).subscribe((res) => {
         if (res) {
@@ -97,6 +98,7 @@ export class OutletsDataTableComponent extends BaseDatatableComponent
             12,
             ReservationStatusDetails
           );
+          this.loading = false;
         }
       })
     );

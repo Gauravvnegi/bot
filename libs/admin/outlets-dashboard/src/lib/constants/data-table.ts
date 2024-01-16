@@ -4,6 +4,7 @@ import {
   PaymentData,
   PaymentStatus,
 } from '../types/reservation-table';
+import { MenuItemCard } from '../types/menu-order';
 
 export const posCols: Cols[] = [
   {
@@ -375,3 +376,115 @@ export const dineInReservationResponse = {
     },
   ],
 };
+
+export const reservationTabFilters = [
+  {
+    label: 'Popular',
+    value: 'popular',
+    isSelected: true,
+  },
+  {
+    label: 'Burger',
+    value: 'burger',
+    isSelected: false,
+  },
+  {
+    label: 'Dessert',
+    value: 'dessert',
+    isSelected: false,
+  },
+  {
+    label: 'Beverages',
+    value: 'beverages',
+    isSelected: false,
+  },
+  {
+    label: 'Pizza',
+    value: 'pizza',
+    isSelected: false,
+  },
+  {
+    label: 'Biryani',
+    value: 'biryani',
+    isSelected: false,
+  },
+  {
+    label: 'Breads',
+    value: 'breads',
+    isSelected: false,
+  },
+  {
+    label: 'Chinense',
+    value: 'chinese',
+    isSelected: false,
+  },
+  {
+    label: 'Indian',
+    value: 'indian',
+    isSelected: false,
+  },
+  {
+    label: 'Italian',
+    value: 'italian',
+    isSelected: false,
+  },
+];
+
+export const menuCardData: MenuItemCard[] = [
+  {
+    id: 'burger',
+    itemName: 'Burger',
+    price: 200,
+    category: 'VEG',
+    image: 'assets/images/menu-item.jpg',
+  },
+  {
+    id: 'burger',
+    itemName: 'Burger',
+    price: 200,
+    category: 'VEG',
+    image: 'assets/images/menu-item.jpg',
+  },
+  {
+    id: 'burger',
+    itemName: 'Burger',
+    price: 200,
+    category: 'NON_VEG',
+    image: 'assets/images/menu-item.jpg',
+  },
+  {
+    id: 'burger',
+    itemName: 'Burger',
+    price: 200,
+    category: 'VEG',
+    image: 'assets/images/menu-item.jpg',
+  },
+  {
+    id: 'burger',
+    itemName: 'Burger',
+    price: 200,
+    category: 'NON_VEG',
+    image: 'assets/images/menu-item.jpg',
+  },
+  {
+    id: 'burger',
+    itemName: 'Burger',
+    price: 200,
+    category: 'VEG',
+    image: 'assets/images/menu-item.jpg',
+  },
+  {
+    id: 'burger',
+    itemName: 'Burger',
+    price: 200,
+    category: 'VEG',
+    image: 'assets/images/menu-item.jpg',
+  },
+  {
+    id: 'burger',
+    itemName: 'Burger',
+    price: 200,
+    category: 'VEG',
+    image: 'assets/images/menu-item.jpg',
+  },
+];

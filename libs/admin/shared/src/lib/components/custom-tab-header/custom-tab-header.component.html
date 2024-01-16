@@ -1,0 +1,33 @@
+<div
+  #tabFilter
+  class="custom-tab-wrapper"
+  [class.sticky]="isSticky && isScrolledUp"
+>
+  <div class="custom-tab-scroll" *ngIf="isScrollable">
+    <button (click)="scrollTabs('left')" class="scroll-btn left">&lt;</button>
+  </div>
+  <div class="custom-tab-container" #tabContainer>
+    <div
+      *ngFor="let tab of listItems; let index = index"
+      class="custom-tab"
+      [class.active]="selectedIndex === index"
+      [class.disabled]="tab.disabled"
+      (click)="selectTab(index)"
+    >
+      <ng-container *ngIf="tab?.iconSrc; else textLabel">
+        <img
+          src="{{ tab.iconSrc }}"
+          [class.active-image]="selectedIndex === index"
+        />
+      </ng-container>
+      <ng-template #textLabel>
+        {{
+          tab.total >= 0 ? tab.label.concat(' (', tab.total, ')') : tab.label
+        }}
+      </ng-template>
+    </div>
+  </div>
+  <div class="custom-tab-scroll" *ngIf="isScrollable">
+    <button (click)="scrollTabs('right')" class="scroll-btn right">&gt;</button>
+  </div>
+</div>

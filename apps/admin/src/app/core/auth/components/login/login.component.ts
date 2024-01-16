@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ModuleNames, Regex, UserService } from '@hospitality-bot/admin/shared';
-import { SnackBarService } from '@hospitality-bot/shared/material';
+import { ModuleNames, Regex } from '@hospitality-bot/admin/shared';
 import { authConstants } from '../../constants/auth';
 import { AuthService } from '../../services/auth.service';
 import { RoutesConfigService } from '../../../theme/src/lib/services/routes-config.service';
@@ -26,8 +25,6 @@ export class LoginComponent implements OnInit {
     private _fb: FormBuilder,
     private _router: Router,
     private _authService: AuthService,
-    private _userService: UserService,
-    private _snackbarService: SnackBarService,
     private _activatedRoute: ActivatedRoute,
     private routesConfigService: RoutesConfigService
   ) {

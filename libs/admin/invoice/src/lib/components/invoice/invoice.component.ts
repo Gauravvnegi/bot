@@ -43,6 +43,7 @@ import {
   editDiscountMenu,
   AdditionalChargesType,
   additionalChargesDetails,
+  allowanceMenu,
 } from '../../constants/invoice.constant';
 import { cols } from '../../constants/payment';
 import { invoiceRoutes } from '../../constants/routes';
@@ -199,10 +200,11 @@ export class InvoiceComponent implements OnInit {
               res[JourneyTypes.LATECHECKOUT].journeyStartTime
             );
             const todayEpoch = new Date().setHours(0, 0, 0, 0);
-
+            const departureDate = new Date(
+              this.inputControl.departureDate.value
+            ).setHours(0, 0, 0, 0);
             this.showBanner =
-              currentTime > defaultTime &&
-              this.inputControl.departureDate.value > todayEpoch;
+              currentTime > defaultTime && departureDate === todayEpoch;
           }
         })
     );
@@ -432,11 +434,14 @@ export class InvoiceComponent implements OnInit {
     const rowFG: BillItemFields = this.tableFormArray.at(rowIndex).value;
     const dMenu = rowFG.isDiscount || !rowFG.isAddOn ? [] : defaultMenu;
 
-    if (rowFG.isMiscellaneous) {
+    if (rowFG.isMiscellaneous && !rowFG.isRealised) {
       return dMenu;
     }
-    if (this.hasDiscount(rowFG.itemId, rowFG.date)) {
+    if (this.hasDiscount(rowFG.itemId, rowFG.date) && !rowFG.isRealised) {
       return [...editDiscountMenu, ...dMenu];
+    }
+    if (rowFG.isRealised) {
+      return allowanceMenu;
     }
     return [...addDiscountMenu, ...dMenu];
   }
@@ -833,6 +838,14 @@ export class InvoiceComponent implements OnInit {
      */
     if (value === MenuActionItem.DELETE_ITEM) {
       this.findAndRemoveItems(priceControls.reservationItemId);
+      return;
+    }
+
+    /**
+     * If Add Allowance action is performed
+     */
+    if (value === MenuActionItem.ADD_ALLOWANCE) {
+      this.handleAdditionalCharges(AdditionalChargesType.ALLOWANCE);
       return;
     }
 
@@ -1559,7 +1572,6 @@ export class InvoiceComponent implements OnInit {
           (controls.value.transactionType === 'CREDIT' &&
             !controls.value.isDiscount) ||
           this.isInvoiceDisabled ||
-          controls.value.isRealised ||
           (!controls.value.itemId && !controls.value.isNew) ||
           controls.value.taxId ||
           (controls.value.isNonEditableBillItem &&

@@ -6,6 +6,7 @@ export enum MenuActionItem {
   'REMOVE_DISCOUNT' = 'REMOVE_DISCOUNT',
   'EDIT_DISCOUNT' = 'EDIT_DISCOUNT',
   'DELETE_ITEM' = 'DELETE_ITEM',
+  'ADD_ALLOWANCE' = 'ADD_ALLOWANCE',
 }
 
 export const paymentOptions: Option[] = [
@@ -41,9 +42,14 @@ export const defaultMenu = [
   { label: 'Delete Item', value: MenuActionItem.DELETE_ITEM },
 ];
 
+export const allowanceMenu = [
+  { label: 'Add Allowance', value: MenuActionItem.ADD_ALLOWANCE },
+];
+
 export enum AdditionalChargesType {
   REFUND = 'REFUND',
   MISCELLANEOUS = 'MISCELLANEOUS',
+  ALLOWANCE = 'ALLOWANCE',
 }
 
 export const additionalChargesDetails: Record<
@@ -66,5 +72,11 @@ export const additionalChargesDetails: Record<
     value: 'Miscellaneous Charges',
     type: 'miscellaneous',
     transactionType: 'DEBIT',
+  },
+  [AdditionalChargesType.ALLOWANCE]: {
+    label: 'Allowance',
+    value: 'Allowance',
+    type: 'other',
+    transactionType: 'CREDIT',
   },
 };

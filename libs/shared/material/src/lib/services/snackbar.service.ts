@@ -33,8 +33,9 @@ export class SnackBarService {
     action?: string,
     config?: SnackBarConfig & MessageSnackbarConfig
   ) {
-    const panelClass = config ? config['panelClass'] ?? 'error' : 'error';
-    const duration = config && config['panelClass'] === 'danger' ? 3000 : 2000;
+    const panelClass = config?.panelClass ?? 'error';
+    const duration = config?.panelClass === 'danger' ? 3000 : 2000;
+
     this.messageService.clear();
     this.messageService.add({
       ...config,
@@ -43,7 +44,7 @@ export class SnackBarService {
       closable: !!action?.length,
       severity: panelClass,
       position: 'top-right',
-      key: config ? config['key'] ?? ToastKeys.default : ToastKeys.default,
+      key: config?.key ?? ToastKeys.default,
     } as MessageSnackbarConfig);
   }
 

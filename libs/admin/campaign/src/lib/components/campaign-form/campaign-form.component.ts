@@ -8,7 +8,10 @@ import {
   Output,
 } from '@angular/core';
 import { FormArray, FormControl, FormGroup } from '@angular/forms';
-import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import {
+  GlobalFilterService,
+  RoutesConfigService,
+} from '@hospitality-bot/admin/core/theme';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { Subscription } from 'rxjs';
 import { campaignConfig } from '../../constant/campaign';
@@ -60,11 +63,7 @@ export class CampaignFormComponent implements OnInit, OnDestroy {
   config = campaignConfig;
   draftDate: number | string = Date.now();
   pageTitle = 'Create Campaign';
-  navRoutes: NavRouteOptions = [
-    { label: 'Marketing', link: './' },
-    { label: 'Campaign', link: '/pages/marketing/campaign' },
-    { label: 'Create Campaign', link: './' },
-  ];
+  navRoutes: NavRouteOptions = [{ label: 'Create Campaign', link: './' }];
 
   constructor(
     private snackbarService: SnackBarService,
@@ -72,11 +71,19 @@ export class CampaignFormComponent implements OnInit, OnDestroy {
     public globalFilterService: GlobalFilterService,
     private campaignService: CampaignService,
     protected _translateService: TranslateService,
-    private dialogService: DialogService
+    private dialogService: DialogService,
+    private routesConfigService: RoutesConfigService
   ) {}
 
   ngOnInit(): void {
     this.getFromEmails();
+    this.initNavRoutes();
+  }
+
+  initNavRoutes() {
+    this.routesConfigService.navRoutesChanges.subscribe((navRoutesRes) => {
+      this.navRoutes = [...navRoutesRes, ...this.navRoutes];
+    });
   }
 
   /**

@@ -59,6 +59,10 @@ export class FormService {
 
   reservationForm = new BehaviorSubject<ReservationForm>(null);
 
+  updateRateImprovement(control: AbstractControl) {
+    if(control) control.patchValue(true, { emitEvent: false });
+  }
+
   initSourceData(
     reservationInfo: ReservationInformation,
     sourceData: { agent: AgentTableResponse; company: CompanyResponseType }

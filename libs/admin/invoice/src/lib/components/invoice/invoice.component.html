@@ -324,7 +324,14 @@
                   <hospitality-bot-menu
                     type="button"
                     alignment="horizontal"
-                    (onClickItem)="handleMenuAction($event, rowIndex)"
+                    (onClickItem)="
+                      handleMenuAction(
+                        $event,
+                        rowIndex,
+                        tableFormArray.at(rowIndex)?.get('reservationItemId')
+                          .value
+                      )
+                    "
                     [menuItems]="getMenu(rowIndex)"
                     [disabled]="isValueDisabled(rowIndex, 'menu')"
                   ></hospitality-bot-menu>

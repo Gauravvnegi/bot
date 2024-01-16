@@ -33,7 +33,7 @@ export class SnackBarService {
     action?: string,
     config?: SnackBarConfig & MessageSnackbarConfig
   ) {
-    const panelClass = config && (config['panelClass'] ?? 'error');
+    const panelClass = config ? config['panelClass'] ?? 'error' : 'error';
     const duration = config && config['panelClass'] === 'danger' ? 3000 : 2000;
     this.messageService.clear();
     this.messageService.add({

@@ -6,7 +6,10 @@
     <div></div>
     <div class="modal-header__heading">Send Email</div>
     <div (click)="closeModal(); onCloseSidebar.emit(true)" class="close">
-      <img class="close-sidebar-icon" src="assets/svg/close-sidebar.svg" />
+      <img
+        class="close-sidebar-icon"
+        src="assets/svg/close-sidebar-right-blue.svg"
+      />
     </div>
   </div>
   <div class="form-block" [formGroup]="emailFG" *ngIf="emailFG">

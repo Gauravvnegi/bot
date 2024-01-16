@@ -1,7 +1,8 @@
 <p-splitButton
   [ngClass]="{
     button__contained: variant === 'contained',
-    button__outlined: variant === 'outlined'
+    button__outlined: variant === 'outlined',
+    button__disabled: disabled || isLoading
   }"
   [label]="label"
   (onClick)="onClick.emit($event)"

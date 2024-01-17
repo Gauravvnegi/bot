@@ -97,7 +97,7 @@
     }
   }
   .p-datatable {
-    height: 43vh;
+    height: 57vh;
     overflow: auto;
   }
 
@@ -105,9 +105,6 @@
     .p-datatable {
       height: unset;
       overflow: auto;
-    }
-    .wrapper {
-      min-height: 37vh !important;
     }
   }
 }

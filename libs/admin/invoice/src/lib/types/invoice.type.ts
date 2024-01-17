@@ -1,3 +1,5 @@
+import { BillItemChargeType } from './forms.types';
+
 export type QueryConfig = {
   params: string;
 };
@@ -18,6 +20,7 @@ export type BillItem = {
   isCoupon?: boolean;
   isRefund?: boolean;
   isRealised?: boolean;
+  chargeType: BillItemChargeType;
 };
 
 export type CompanyDetails = {

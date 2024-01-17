@@ -22,6 +22,7 @@ import {
   ConfigService,
   ModuleNames,
   Option,
+  ProductNames,
 } from '@hospitality-bot/admin/shared';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 import * as FileSaver from 'file-saver';
@@ -1045,8 +1046,16 @@ export class DetailsComponent implements OnInit, OnDestroy {
     }));
   }
 
-  get isPermissionToCheckInOrOut() {
-    return this.subscriptionService.show().isCalenderView;
+  get isPermissionToCheckInOrOut(): boolean {
+    return (
+      this.subscriptionService.show().isCalenderView ||
+      this.subscriptionService.checkProductSubscription(
+        ModuleNames.FRONT_DESK
+      ) ||
+      this.subscriptionService.checkProductSubscription(
+        ModuleNames.PREDICTO_PMS
+      )
+    );
   }
 
   ngOnDestroy() {

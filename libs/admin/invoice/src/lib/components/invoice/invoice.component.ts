@@ -10,6 +10,7 @@ import { ActivatedRoute } from '@angular/router';
 import {
   GlobalFilterService,
   RoutesConfigService,
+  SubscriptionPlanService,
 } from '@hospitality-bot/admin/core/theme';
 import { LibraryItem, QueryConfig } from '@hospitality-bot/admin/library';
 import {
@@ -19,6 +20,7 @@ import {
   ModuleNames,
   NavRouteOptions,
   Option,
+  ProductNames,
   UserService,
   openModal,
 } from '@hospitality-bot/admin/shared';
@@ -55,6 +57,7 @@ import {
 } from '../../models/invoice.model';
 import { InvoiceService } from '../../services/invoice.service';
 import {
+  BillItemChargeType,
   BillItemFields,
   ChargesType,
   DescriptionOption,
@@ -161,7 +164,8 @@ export class InvoiceComponent implements OnInit {
     private routesConfigService: RoutesConfigService,
     private bookingDetailsService: BookingDetailService,
     private dialogService: DialogService,
-    private formService: ReservationFormService
+    private formService: ReservationFormService,
+    private subscriptionService: SubscriptionPlanService
   ) {
     this.reservationId = this.activatedRoute.snapshot.paramMap.get('id');
     this.initPageHeaders();
@@ -204,7 +208,9 @@ export class InvoiceComponent implements OnInit {
               this.inputControl.departureDate.value
             ).setHours(0, 0, 0, 0);
             this.showBanner =
-              currentTime > defaultTime && departureDate === todayEpoch;
+              currentTime > defaultTime &&
+              departureDate === todayEpoch &&
+              this.isPermissionToCheckInOrOut;
           }
         })
     );
@@ -376,6 +382,7 @@ export class InvoiceComponent implements OnInit {
               rowIndex: idx,
               isNewEntry: false,
               unit: item.unit,
+              chargeType: item.chargeType,
             });
           });
 
@@ -584,6 +591,7 @@ export class InvoiceComponent implements OnInit {
       discountType: [''],
       discountValue: [0],
       isRealised: [false],
+      chargeType: [settings.chargeType ? settings.chargeType : ''],
     };
 
     const formGroup = this.fb.group(data);
@@ -660,6 +668,7 @@ export class InvoiceComponent implements OnInit {
           debitAmount: this.adminUtilityService.getEpsilonValue(
             selectedService.amount * (item.taxValue / 100)
           ),
+          chargeType: 'TAX',
           billItemId: item.id + selectedService.value,
           description: `${selectedService.label} ${item.taxType} ${item.taxValue}% `,
         }));
@@ -667,7 +676,7 @@ export class InvoiceComponent implements OnInit {
         newServiceTax.forEach((item) => {
           const { debitAmount, ...data } = item;
           const length = this.tableFormArray.length;
-          this.addNewCharges({ isDisabled: true });
+          this.addNewCharges({ isDisabled: true, chargeType: 'TAX' });
           this.tableFormArray.at(length).patchValue(data, { emitEvent: false });
           this.tableFormArray
             .at(length)
@@ -829,7 +838,8 @@ export class InvoiceComponent implements OnInit {
    */
   handleMenuAction(
     { item: { value } }: { item: { value: MenuActionItem } },
-    index: number
+    index: number,
+    id?: string
   ) {
     const priceControls = this.getTableRowValue(index);
 
@@ -845,7 +855,7 @@ export class InvoiceComponent implements OnInit {
      * If Add Allowance action is performed
      */
     if (value === MenuActionItem.ADD_ALLOWANCE) {
-      this.handleAdditionalCharges(AdditionalChargesType.ALLOWANCE);
+      this.handleAdditionalCharges(AdditionalChargesType.ALLOWANCE, id);
       return;
     }
 
@@ -1390,6 +1400,7 @@ export class InvoiceComponent implements OnInit {
               discountType: res.discountType,
               discountValue: res.discountValue,
               isRealised: item.isRealised,
+              chargeType: 'DISCOUNT',
             });
           } else {
             discountItem[index].control.patchValue({
@@ -1400,6 +1411,7 @@ export class InvoiceComponent implements OnInit {
           }
           this.updateTax(taxedAmount, item.billItemId, newTaxedAmount);
         });
+        this.handleSave();
       }
     );
   }
@@ -1433,6 +1445,7 @@ export class InvoiceComponent implements OnInit {
     itemId: string;
     reservationItemId: string;
     value: string;
+    chargeType: BillItemChargeType;
     entryIdx?: number;
     date?: number;
     type: ChargesType;
@@ -1446,6 +1459,7 @@ export class InvoiceComponent implements OnInit {
       itemId,
       reservationItemId,
       value,
+      chargeType,
       transactionType,
       discountType,
       discountValue,
@@ -1464,6 +1478,7 @@ export class InvoiceComponent implements OnInit {
       isDebit: true,
       isDisabled: true,
       date: settings?.date,
+      chargeType: chargeType,
     });
 
     this.addNewDefaultDescription({
@@ -1483,6 +1498,7 @@ export class InvoiceComponent implements OnInit {
       reservationItemId,
       transactionType: transactionType,
       date: settings.date ? settings.date : moment(new Date()).unix() * 1000,
+      chargeType: chargeType,
     });
 
     // Add discountType and discountValue only when type is 'discount'
@@ -1519,7 +1535,7 @@ export class InvoiceComponent implements OnInit {
     this.handleAdditionalCharges(AdditionalChargesType.MISCELLANEOUS);
   }
 
-  handleAdditionalCharges(chargesType: AdditionalChargesType) {
+  handleAdditionalCharges(chargesType: AdditionalChargesType, id?: string) {
     if (this.isTableInvalid()) return;
     const additionalChargeDetails = additionalChargesDetails[chargesType];
 
@@ -1542,7 +1558,7 @@ export class InvoiceComponent implements OnInit {
         if (res) {
           this.addNonBillItem({
             amount: res.refundAmount,
-            itemId: `${additionalChargeDetails.value}-${
+            itemId: id ? id : `${additionalChargeDetails.value}-${
               moment(new Date()).unix() * 1000
             }`,
             reservationItemId: `${additionalChargeDetails.value}-${
@@ -1553,7 +1569,9 @@ export class InvoiceComponent implements OnInit {
             value:
               additionalChargesDetails[chargesType].value +
               `${res.remarks ? ` (${res.remarks})` : ''}`,
+            chargeType: additionalChargesDetails[chargesType].chargeType,
           });
+          id && this.handleSave();
         }
       }
     );
@@ -1610,6 +1628,17 @@ export class InvoiceComponent implements OnInit {
         return false; // Default case, return false if type is not recognized
     }
   }
+  get isPermissionToCheckInOrOut(): boolean {
+    return (
+      this.subscriptionService.show().isCalenderView ||
+      this.subscriptionService.checkProductSubscription(
+        ModuleNames.FRONT_DESK
+      ) ||
+      this.subscriptionService.checkProductSubscription(
+        ModuleNames.PREDICTO_PMS
+      )
+    );
+  }
 }
 
 export type TableFormItemControl = Record<
@@ -1624,6 +1653,7 @@ type AddNewChargesSettings = {
   unit?: number;
   isDisabled?: boolean;
   date?: number;
+  chargeType?: BillItemChargeType;
 };
 
 type Controls = Omit<AbstractControl, 'value'> & { value: BillItemFields };

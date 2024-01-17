@@ -60,3 +60,9 @@ export type FormGroupControls<TFormData> = FormGroup & {
   controls: Record<keyof TFormData, AbstractControl>;
   value: TFormData;
 };
+
+export type FormClass<T, K> = {
+  [key in keyof T]: T[key];
+} & {
+  deserialize(value: K[] | {}): T;
+};

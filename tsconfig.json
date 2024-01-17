@@ -160,6 +160,9 @@
       "@hospitality-bot/admin/reports": ["libs/admin/reports/src/index.ts"],
       "@hospitality-bot/admin/view-not-allowed": [
         "libs/admin/view-not-allowed/src/index.ts"
+      ],
+      "@hospitality-bot/table-management": [
+        "libs/table-management/src/index.ts"
       ]
     }
   },

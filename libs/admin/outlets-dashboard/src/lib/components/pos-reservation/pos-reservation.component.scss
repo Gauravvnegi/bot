@@ -1,5 +1,9 @@
 @import 'main';
 
+.container {
+  zoom: 0.9;
+}
+
 .header {
   @include flex-space-between-cen-Algn;
   background-color: $primary-cta;
@@ -62,35 +66,31 @@
 .content {
   display: flex;
   background-color: #f1f2f7;
+  height: calc(100vh - 220px);
+  overflow: hidden;
   .menu-section {
+    overflow: auto;
     flex-basis: 60%;
     border-right: 1px solid #d9d9d9;
   }
   .summary-section {
+    overflow: auto;
     flex-basis: 40%;
   }
 }
 
-.category-items {
+.meal-preferences {
   display: flex;
   justify-content: flex-end;
   gap: 10px;
   padding: 5px 10px;
-  .category-item {
+  .meal-preference {
     background-color: white;
     cursor: pointer;
     padding: 5px 15px;
     @include light-vsm-text;
     @include flex-item-center;
     gap: 5px;
-    img.veg {
-      border: 1px solid #3ca129;
-      padding: 2px;
-    }
-    img.non-veg {
-      border: 1px solid #b80023;
-      padding: 2px;
-    }
   }
 }
 
@@ -98,7 +98,7 @@
   padding: 5px 15px;
 }
 
-.category-item.selected {
+.meal-preference.selected {
   background: $primary !important;
   color: $white;
 }
@@ -106,9 +106,6 @@
 .menu-items {
   @include flex-wrap-even-space;
   gap: 10px;
-  height: calc(100% - 428px);
-  overflow: scroll;
-  margin-bottom: 100px;
   padding: 10px;
   .menu-item {
     flex-basis: 45%;
@@ -116,8 +113,6 @@
 }
 
 .btn-wrapper {
-  position: fixed;
-  bottom: 0;
   width: 100%;
   background-color: $white;
   .checkbox {

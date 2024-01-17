@@ -6,6 +6,7 @@ import { MainComponent } from './components/main/main.component';
 import { ReservationCardComponent } from './components/reservation-card/reservation-card.component';
 import { PosReservationComponent } from './components/pos-reservation/pos-reservation.component';
 import { MenuItemCardComponent } from './components/menu-item-card/menu-item-card.component';
+import { OrderSummaryComponent } from './components/order-summary/order-summary.component';
 
 const appRoutes: Route[] = [
   {
@@ -31,6 +32,7 @@ export class AdminOutletsDashboardRoutingModule {
     OutletsDataTableComponent,
     ReservationCardComponent,
     PosReservationComponent,
-    MenuItemCardComponent
+    MenuItemCardComponent,
+    OrderSummaryComponent,
   ];
 }

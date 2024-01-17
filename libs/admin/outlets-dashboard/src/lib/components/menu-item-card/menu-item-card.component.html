@@ -2,28 +2,30 @@
   <div class="image-wrapper">
     <div class="category-img">
       <img
-        *ngIf="cardData?.category === 'VEG'"
-        class="veg"
-        src="assets/svg/green-circle.svg"
-        alt=""
-      />
-      <img
-        *ngIf="cardData?.category === 'NON_VEG'"
-        class="non-veg"
-        src="assets/svg/red-triangle.svg"
-        alt=""
+        [ngStyle]="{
+          padding: '2px'
+        }"
+        [src]="mealPreferenceConfig[itemCard.mealPreference]?.image"
       />
     </div>
-    <img class="item-img" [src]="cardData.image" [alt]="cardData.itemName" />
+    <img class="item-img" [src]="itemCard.image" [alt]="itemCard.itemName" />
   </div>
-  <div class="item-name">{{ cardData.itemName }}</div>
-  <div class="item-price">{{ cardData.price | currency: 'INR' }}</div>
+  <div class="item-name">{{ itemCard.itemName }}</div>
+  <div class="item-price">{{ itemCard.price | currency: 'INR' }}</div>
 
   <div class="add-btn">
     <hospitality-bot-button
+      *ngIf="!itemCard?.selected"
       label="Add"
       variant="outlined"
       (onClick)="addItem()"
+    ></hospitality-bot-button>
+    <hospitality-bot-button
+      *ngIf="itemCard?.selected"
+      label="Remove"
+      variant="text"
+      severity="reset"
+      (onClick)="removeItem()"
     ></hospitality-bot-button>
   </div>
 </div>

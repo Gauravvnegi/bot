@@ -9,7 +9,11 @@ import {
   menuCardData,
   reservationTabFilters,
 } from '../../constants/data-table';
-import { MenuItemCard } from '../../types/menu-order';
+import {
+  MealPreferences,
+  mealPreferenceConfig,
+} from '../../types/menu-order';
+import { mealPreferences } from '../../constants/form';
 
 @Component({
   selector: 'hospitality-bot-pos-reservation',
@@ -23,12 +27,15 @@ export class PosReservationComponent implements OnInit {
   userForm: FormGroup;
   @Output() onCloseSidebar = new EventEmitter();
 
+  mealPreferences = ['ALL', ...mealPreferences];
+  readonly mealPreferenceConfig = mealPreferenceConfig;
+
   menuOptions: Menu[] = [];
   tableNumbers: Option[] = [];
   staffList: Option[] = [];
   guestList: Option[] = [];
 
-  cardData: MenuItemCard[] = menuCardData;
+  cardData = menuCardData;
   tabFilters: Filter<string, string>[] = reservationTabFilters;
   $subscription = new Subscription();
 
@@ -36,7 +43,7 @@ export class PosReservationComponent implements OnInit {
   emailInvoice: boolean = false;
 
   searchApi: string;
-  selectedCategory: string = 'All';
+  selectedPreference: MealPreferences = MealPreferences.ALL;
 
   constructor(private fb: FormBuilder, private outletService: OutletService) {}
 
@@ -73,18 +80,10 @@ export class PosReservationComponent implements OnInit {
     );
   }
 
-  selectCategory(category: string): void {
-    this.selectedCategory = category;
-  }
-
   getCards() {
-    const cards = this.cardData?.filter((item) => {
-      if (this.selectedCategory === 'All') return item;
-      if (this.selectedCategory === 'Veg') return item.category === 'VEG';
-      if (this.selectedCategory === 'Non-veg')
-        return item.category === 'NON_VEG';
-    });
-    return cards;
+    return this.cardData?.filter(
+      mealPreferenceConfig[this.selectedPreference].filterPreference
+    );
   }
 
   onSendFeedback(event: HTMLInputElement) {}

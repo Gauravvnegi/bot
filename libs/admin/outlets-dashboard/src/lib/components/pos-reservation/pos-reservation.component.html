@@ -93,29 +93,24 @@
 
   <div class="content">
     <div class="menu-section">
-      <div class="category-items">
+      <div class="meal-preferences">
         <span
-          class="category-item"
-          [class.selected]="selectedCategory === 'All'"
-          (click)="selectCategory('All')"
+          *ngFor="let preference of mealPreferences"
+          class="meal-preference"
+          [class.selected]="selectedPreference === preference"
+          (click)="selectedPreference = preference"
         >
-          All</span
-        >
-        <span
-          class="category-item"
-          [class.selected]="selectedCategory === 'Veg'"
-          (click)="selectCategory('Veg')"
-          ><img class="veg" src="assets/svg/green-circle.svg" alt="" />
-          Veg</span
-        >
-        <span
-          class="category-item"
-          [class.selected]="selectedCategory === 'Non-veg'"
-          (click)="selectCategory('Non-veg')"
-          ><img class="non-veg" src="assets/svg/red-triangle.svg" alt="" />
-          Non-Veg</span
-        >
+          <img
+            *ngIf="mealPreferenceConfig[preference]?.image"
+            [ngStyle]="{
+              padding: '2px'
+            }"
+            [src]="mealPreferenceConfig[preference]?.image"
+          />
+          {{ mealPreferenceConfig[preference].title }}
+        </span>
       </div>
+
       <h3 class="menu-heading">
         Italian BreakFast
       </h3>
@@ -123,12 +118,14 @@
         <ng-container *ngFor="let card of getCards()">
           <hospitality-bot-menu-item-card
             class="menu-item"
-            [cardData]="card"
+            [itemCard]="card"
           ></hospitality-bot-menu-item-card>
         </ng-container>
       </div>
     </div>
-    <div class="summary-section"></div>
+    <div class="summary-section">
+      <hospitality-bot-order-summary></hospitality-bot-order-summary>
+    </div>
   </div>
 </div>
 

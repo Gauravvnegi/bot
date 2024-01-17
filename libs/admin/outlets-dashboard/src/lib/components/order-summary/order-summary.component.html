@@ -1,0 +1,73 @@
+<div class="summary-wrapper">
+  <ng-container *ngIf="selectedItems.length; else emptyView">
+    <div class="btn-wrapper">
+      <hospitality-bot-button
+        label="Cancel Order"
+        variant="text"
+        severity="reset"
+        (onClick)="cancelOrder()"
+      ></hospitality-bot-button>
+      <hospitality-bot-button
+        label="Clear"
+        variant="text"
+        (onClick)="clear()"
+      ></hospitality-bot-button>
+    </div>
+
+    <div class="items-list">
+      <div class="items-header">
+        <p-accordion [multiple]="true">
+          <p-accordionTab click [selected]="true">
+            <p-header>
+              <div class="accordion-header">
+                <div class="heading">Dine-in</div>
+                <span class="amount">Qty: {{ selectedItems.length }}</span>
+              </div>
+            </p-header>
+            <div class="items-wrapper">
+              <ng-container *ngFor="let item of selectedItems">
+                <div class="selected-item">
+                  <img
+                    [src]="mealPreferenceConfig[item.mealPreference].image"
+                  />
+                  <div class="item-name-wrapper">
+                    <span class="item-name">{{ item.itemName }}</span>
+                    <span class="item-instructions"
+                      >Instruction
+                      <button
+                        class="scroll-btn left"
+                        (click)="addItemInstruction(item.id)"
+                      >
+                        &lt;
+                      </button>
+                    </span>
+                    <div class="items-count">
+                      <img
+                        src="assets/svg/remove-item-black.svg"
+                        (click)="(item - 1)"
+                      />
+                      <p>1</p>
+                      <img
+                        src="assets/svg/add-item-black.svg"
+                        (click)="(item + 1)"
+                      />
+                      <p>{{ item.price }}</p>
+                    </div>
+                  </div>
+                </div>
+              </ng-container>
+            </div>
+          </p-accordionTab>
+        </p-accordion>
+      </div>
+    </div>
+  </ng-container>
+</div>
+
+<ng-template #emptyView>
+  <div class="empty-view">
+    <img src="assets/svg/no-items.svg" alt="Empty" />
+    <h2>No items selected</h2>
+    <p>Select the item from the left menu</p>
+  </div>
+</ng-template>

@@ -430,61 +430,61 @@ export const reservationTabFilters = [
   },
 ];
 
-export const menuCardData: MenuItemCard[] = [
+export const menuCardData = [
   {
     id: 'burger',
     itemName: 'Burger',
     price: 200,
-    category: 'VEG',
+    mealPreference: 'VEG',
     image: 'assets/images/menu-item.jpg',
   },
   {
     id: 'burger',
     itemName: 'Burger',
     price: 200,
-    category: 'VEG',
+    mealPreference: 'VEG',
     image: 'assets/images/menu-item.jpg',
   },
   {
     id: 'burger',
     itemName: 'Burger',
     price: 200,
-    category: 'NON_VEG',
+    mealPreference: 'NON_VEG',
     image: 'assets/images/menu-item.jpg',
   },
   {
     id: 'burger',
     itemName: 'Burger',
     price: 200,
-    category: 'VEG',
+    mealPreference: 'VEG',
     image: 'assets/images/menu-item.jpg',
   },
   {
     id: 'burger',
     itemName: 'Burger',
     price: 200,
-    category: 'NON_VEG',
+    mealPreference: 'NON_VEG',
     image: 'assets/images/menu-item.jpg',
   },
   {
     id: 'burger',
     itemName: 'Burger',
     price: 200,
-    category: 'VEG',
+    mealPreference: 'VEG',
     image: 'assets/images/menu-item.jpg',
   },
   {
     id: 'burger',
     itemName: 'Burger',
     price: 200,
-    category: 'VEG',
+    mealPreference: 'VEG',
     image: 'assets/images/menu-item.jpg',
   },
   {
     id: 'burger',
     itemName: 'Burger',
     price: 200,
-    category: 'VEG',
+    mealPreference: 'VEG',
     image: 'assets/images/menu-item.jpg',
   },
 ];

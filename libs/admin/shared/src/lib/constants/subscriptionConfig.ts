@@ -163,10 +163,6 @@ export enum ModuleNames {
   FUND_REPORTS = 'FUND_REPORTS',
 
   PREDICTO_PMS = 'PREDICTO_PMS',
-
-  //POS
-  POS_DASHBOARD = 'POS_DASHBOARD',
-  TABLE_MANAGEMENT = 'TABLE_MANAGEMENT',
 }
 
 export enum Integrations {

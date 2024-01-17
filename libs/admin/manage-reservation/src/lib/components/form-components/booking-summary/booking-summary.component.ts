@@ -76,6 +76,8 @@ export class BookingSummaryComponent implements OnInit {
     });
   }
 
+  @Input() loadSummary: boolean = false;
+
   // @Output() onSubmitBooking: EventEmitter<void> = new EventEmitter<void>();
   @Output() onOfferSelect: EventEmitter<void> = new EventEmitter<void>();
   @Output() onOfferItemSelect: EventEmitter<any> = new EventEmitter<any>();

@@ -10,6 +10,7 @@ import { ActivatedRoute } from '@angular/router';
 import {
   GlobalFilterService,
   RoutesConfigService,
+  SubscriptionPlanService,
 } from '@hospitality-bot/admin/core/theme';
 import { LibraryItem, QueryConfig } from '@hospitality-bot/admin/library';
 import {
@@ -19,6 +20,7 @@ import {
   ModuleNames,
   NavRouteOptions,
   Option,
+  ProductNames,
   UserService,
   openModal,
 } from '@hospitality-bot/admin/shared';
@@ -162,7 +164,8 @@ export class InvoiceComponent implements OnInit {
     private routesConfigService: RoutesConfigService,
     private bookingDetailsService: BookingDetailService,
     private dialogService: DialogService,
-    private formService: ReservationFormService
+    private formService: ReservationFormService,
+    private subscriptionService: SubscriptionPlanService
   ) {
     this.reservationId = this.activatedRoute.snapshot.paramMap.get('id');
     this.initPageHeaders();
@@ -205,7 +208,9 @@ export class InvoiceComponent implements OnInit {
               this.inputControl.departureDate.value
             ).setHours(0, 0, 0, 0);
             this.showBanner =
-              currentTime > defaultTime && departureDate === todayEpoch;
+              currentTime > defaultTime &&
+              departureDate === todayEpoch &&
+              this.isPermissionToCheckInOrOut;
           }
         })
     );
@@ -1622,6 +1627,17 @@ export class InvoiceComponent implements OnInit {
       default:
         return false; // Default case, return false if type is not recognized
     }
+  }
+  get isPermissionToCheckInOrOut(): boolean {
+    return (
+      this.subscriptionService.show().isCalenderView ||
+      this.subscriptionService.checkProductSubscription(
+        ModuleNames.FRONT_DESK
+      ) ||
+      this.subscriptionService.checkProductSubscription(
+        ModuleNames.PREDICTO_PMS
+      )
+    );
   }
 }
 

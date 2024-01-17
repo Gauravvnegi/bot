@@ -1,8 +1,21 @@
-<div
-  [formGroup]="tableFG"
->
-  <hospitality-bot-navigation-header [heading]="tableName" [routes]="navRoutes" [isBack]="false">
-     <hospitality-bot-button
+<hospitality-bot-entity-tab-filter
+  [config]="{
+    isSticky: true,
+    extraGap: 60,
+    scrollBoundary: 25,
+    isAllOutletTabFilter: false
+  }"
+  class="tab-header"
+  (onEntityTabFilterChanges)="onGlobalTabFilterChanges($event)"
+></hospitality-bot-entity-tab-filter>
+
+<div [formGroup]="tableFG">
+  <hospitality-bot-navigation-header
+    [heading]="tableName"
+    [routes]="navRoutes"
+    [isBack]="false"
+  >
+    <hospitality-bot-button
       label="+ Create Offer"
       [routerLink]="routes.createOffer.route"
       preserveQueryParams="true"
@@ -135,7 +148,7 @@
   <div class="caption__wrapper">
     <hospitality-bot-empty-table
       [isLoading]="loading"
-      [link]="routes.createOffer"
+      [link]="routes.createOffer.route"
       [content]="{
         description:
           'No offers found. Tap the +Create Offers to create enticing offers to attract guests and boost bookings.',

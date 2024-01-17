@@ -7,6 +7,7 @@ import { CreateOfferComponent } from './components/create-offer/create-offer.com
 import { MainComponent } from './components/main/main.component';
 import { OffersDataTableComponent } from './components/offers-data-table/offers-data-table.component';
 import { OffersServices } from './services/offers.service';
+import { GlobalSharedModule } from '@hospitality-bot/admin/global-shared';
 
 @NgModule({
   imports: [
@@ -15,6 +16,7 @@ import { OffersServices } from './services/offers.service';
     AdminSharedModule,
     FormsModule,
     ReactiveFormsModule,
+    GlobalSharedModule,
   ],
   declarations: [MainComponent, CreateOfferComponent, OffersDataTableComponent],
   providers: [OffersServices],

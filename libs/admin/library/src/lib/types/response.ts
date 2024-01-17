@@ -21,6 +21,23 @@ export type CategoryResponse = {
   subPackages: any[];
 };
 
+export type MenuItemsResponse = {
+  category: string;
+  deliveryPrice: number;
+  description: string;
+  dineInPrice: number;
+  entityId: string;
+  hsnCode: string;
+  id: string;
+  mealPreference: string;
+  name: string;
+  preparationTime: number;
+  quantity: number;
+  status: boolean;
+  type: string;
+  unit: string;
+};
+
 export type CategoriesResponse = {
   total: number;
   records: CategoryResponse[];
@@ -32,4 +49,5 @@ export type SearchResultResponse = {
   [LibrarySearchItem.ROOM_TYPE]?: RoomTypeResponse[];
   [LibrarySearchItem.SERVICE_CATEGORY]?: CategoryResponse[];
   [LibrarySearchItem.PACKAGE_CATEGORY]?: CategoryResponse[];
+  [LibrarySearchItem.MENU_ITEM]?: MenuItemsResponse[];
 };

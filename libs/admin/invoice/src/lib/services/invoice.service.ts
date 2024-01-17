@@ -151,6 +151,7 @@ export class InvoiceService extends ApiService {
             discountType: item?.discountType,
             discountValue: item?.discountValue,
             isRealised: item?.isRealised,
+            chargeType: item?.chargeType,
           }
         : {
             date: item.date,
@@ -164,6 +165,7 @@ export class InvoiceService extends ApiService {
             taxId: item.taxId,
             isCoupon: item.isDiscount,
             isRealised: item?.isRealised,
+            chargeType: item?.chargeType,
           };
     });
 
@@ -194,6 +196,7 @@ export class InvoiceService extends ApiService {
             transactionType: 'CREDIT',
             debitAmount: 0,
             id: null,
+            chargeType: 'PAYMENT',
           }
         : {
             date: moment(new Date()).unix() * 1000,
@@ -204,6 +207,7 @@ export class InvoiceService extends ApiService {
             debitAmount: invoiceFormData.receivedPayment,
             id: null,
             isRefund: true,
+            chargeType: 'REFUND',
           };
 
       billItems.push(paymentItem);

@@ -232,7 +232,7 @@ export class BifurcationStatsComponent implements OnInit {
     allStats.feedbacks.forEach((feedback) => {
       if (feedback.label === 'No-Action') {
         this.feedback.push({
-          label: 'Positive Feedback',
+          label: 'Positive Experience',
           score: feedback.score.toString(),
           additionalData: feedback.score.toString(),
           color: '#beaeff',
@@ -242,7 +242,7 @@ export class BifurcationStatsComponent implements OnInit {
       }
     });
     this.feedback.push({
-      label: 'Guest To Meet',
+      label: 'Negative Experience',
       score: this?.gtmCount,
       additionalData: this?.gtmCount,
       color: '#5f38f9',

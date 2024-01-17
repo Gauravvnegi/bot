@@ -1,0 +1,19 @@
+<hospitality-bot-navigation-header
+  [heading]="welcomeMessage"
+  [routes]="navRoutes"
+  [isBack]="false"
+></hospitality-bot-navigation-header>
+
+<div class="wrapper">
+  <hospitality-bot-entity-tab-filter
+    [config]="{
+      isSticky: true,
+      extraGap: 70,
+      scrollBoundary: 25,
+      isAllOutletTabFilter: false
+    }"
+    class="tab-filter"
+    (onEntityTabFilterChanges)="onEntityTabFilterChanges($event)"
+  ></hospitality-bot-entity-tab-filter>
+  <hospitality-bot-outlets-data-table></hospitality-bot-outlets-data-table>
+</div>

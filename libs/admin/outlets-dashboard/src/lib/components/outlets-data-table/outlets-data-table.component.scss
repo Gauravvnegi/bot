@@ -9,3 +9,33 @@
 .txtSize {
   font-size: 12px !important;
 }
+
+.heading-wrapper {
+  @include flex-space-between-cen-Algn;
+  gap: 1em;
+}
+
+:host ::ng-deep .card-view {
+  .p-datatable-tbody {
+    display: flex;
+    flex-wrap: wrap;
+    overflow: hidden;
+    border: 1px solid #e4e4e4;
+    border-top: none;
+    gap: 18px;
+    padding: 18px;
+  }
+}
+
+:host ::ng-deep .status-toggle {
+  .wrapper {
+    display: flex;
+  }
+}
+
+.reservation-card {
+  flex-basis: 32%;
+  background-color: #fff;
+  border: solid 1px rgba(0, 0, 0, 0.14);
+  border-radius: 5px;
+}

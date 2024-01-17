@@ -5,14 +5,15 @@
   "
 >
   <div class="header">
-    <div class="header__search">
+    <div class="header__search" [formGroup]="parentFG">
       <hospitality-bot-search
-        [parentFG]="parentFG"
-        [globalQueries]="globalQueries"
-        [feedbackType]="getFeedbackType(feedbackType)"
-        [filterData]="filterData"
+        controlName="search"
         (clear)="clearSearch()"
         (search)="getSearchValue($event)"
+        [searchApi]="searchApi"
+        [props]="{
+          placeholder: 'Search by Name, Number, Room No...'
+        }"
       ></hospitality-bot-search>
     </div>
     <div class="header__filter">

@@ -140,6 +140,7 @@ import { Dialog } from 'primeng/dialog';
 import { TabViewModule } from 'primeng/tabview';
 import { DynamicContentComponent } from './components/dynamic-content/dynamic-content.component';
 import { GuestDetailsDirective } from './directives/guest-details.directive';
+import { SearchComponent } from './components/form-component/search/search.component';
 
 @NgModule({
   imports: [
@@ -282,6 +283,7 @@ import { GuestDetailsDirective } from './directives/guest-details.directive';
     SplitButtonComponent,
     DynamicContentComponent,
     GuestDetailsDirective,
+    SearchComponent,
   ],
 
   exports: [
@@ -412,6 +414,7 @@ import { GuestDetailsDirective } from './directives/guest-details.directive';
     ToastModule,
     DynamicContentComponent,
     GuestDetailsDirective,
+    SearchComponent,
   ],
 })
 export class AdminSharedModule {}

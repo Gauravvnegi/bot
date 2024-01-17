@@ -10,6 +10,7 @@ import { MenuItem } from 'primeng/api';
 import { invoiceRoutes } from '../../constants/routes';
 import { InvoiceService } from '../../services/invoice.service';
 import { ReservationFormService } from 'libs/admin/reservation/src/lib/services/reservation-form.service';
+import { ModuleNames, ProductNames } from '@hospitality-bot/admin/shared';
 
 @Component({
   selector: 'hospitality-bot-preview',
@@ -172,6 +173,14 @@ export class PreviewComponent implements OnInit {
   }
 
   get isPermissionToCheckInOrOut(): boolean {
-    return this.subscriptionService.show().isCalenderView;
+    return (
+      this.subscriptionService.show().isCalenderView ||
+      this.subscriptionService.checkProductSubscription(
+        ModuleNames.FRONT_DESK
+      ) ||
+      this.subscriptionService.checkProductSubscription(
+        ModuleNames.PREDICTO_PMS
+      )
+    );
   }
 }

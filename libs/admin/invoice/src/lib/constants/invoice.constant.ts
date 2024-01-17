@@ -1,11 +1,16 @@
 import { Option } from '@hospitality-bot/admin/shared';
-import { BillItemFields, ChargesType } from '../types/forms.types';
+import {
+  BillItemChargeType,
+  BillItemFields,
+  ChargesType,
+} from '../types/forms.types';
 
 export enum MenuActionItem {
   'ADD_DISCOUNT' = 'ADD_DISCOUNT',
   'REMOVE_DISCOUNT' = 'REMOVE_DISCOUNT',
   'EDIT_DISCOUNT' = 'EDIT_DISCOUNT',
   'DELETE_ITEM' = 'DELETE_ITEM',
+  'ADD_ALLOWANCE' = 'ADD_ALLOWANCE',
 }
 
 export const paymentOptions: Option[] = [
@@ -41,9 +46,14 @@ export const defaultMenu = [
   { label: 'Delete Item', value: MenuActionItem.DELETE_ITEM },
 ];
 
+export const allowanceMenu = [
+  { label: 'Add Allowance', value: MenuActionItem.ADD_ALLOWANCE },
+];
+
 export enum AdditionalChargesType {
   REFUND = 'REFUND',
   MISCELLANEOUS = 'MISCELLANEOUS',
+  ALLOWANCE = 'ALLOWANCE',
 }
 
 export const additionalChargesDetails: Record<
@@ -53,6 +63,7 @@ export const additionalChargesDetails: Record<
     value: string;
     type: ChargesType;
     transactionType: BillItemFields['transactionType'];
+    chargeType?: BillItemChargeType;
   }
 > = {
   [AdditionalChargesType.REFUND]: {
@@ -60,11 +71,20 @@ export const additionalChargesDetails: Record<
     value: 'Paid Out',
     type: 'refund',
     transactionType: 'DEBIT',
+    chargeType: 'REFUND',
   },
   [AdditionalChargesType.MISCELLANEOUS]: {
     label: 'Miscellaneous',
     value: 'Miscellaneous Charges',
     type: 'miscellaneous',
     transactionType: 'DEBIT',
+    chargeType: 'MISCELLANEOUS',
+  },
+  [AdditionalChargesType.ALLOWANCE]: {
+    label: 'Allowance',
+    value: 'Allowance',
+    type: 'other',
+    transactionType: 'CREDIT',
+    chargeType: 'ALLOWANCE',
   },
 };

@@ -198,6 +198,11 @@ export class BookingInfoComponent implements OnInit {
           this.minToDate = new Date(maxToLimit); // Create a new date object
           this.minToDate.setDate(maxToLimit.getDate());
           this.formService.reservationDate.next(res);
+          this.reservationId &&
+            !this.isCheckedIn &&
+            this.formService.updateRateImprovement(
+              this.inputControls.rateImprovement
+            );
         }
       });
 
@@ -209,6 +214,11 @@ export class BookingInfoComponent implements OnInit {
             !multipleDateChange &&
             this.formService.reinitializeRooms.next(true);
           multipleDateChange = false;
+          this.reservationId &&
+            !this.isCheckedIn &&
+            this.formService.updateRateImprovement(
+              this.inputControls.rateImprovement
+            );
         }
       });
     }
@@ -239,14 +249,14 @@ export class BookingInfoComponent implements OnInit {
 
   listenForConfigDataChanges() {
     // Add options Market Segment and Source for external reservations
-    this.marketSegmentControl.valueChanges.subscribe((res) => {
+    this.marketSegmentControl?.valueChanges.subscribe((res) => {
       if (res) {
         this.marketSegmentValue = res;
         this.mapMarketSegments();
       }
     });
 
-    this.sourceControl.valueChanges.subscribe((res) => {
+    this.sourceControl?.valueChanges.subscribe((res) => {
       if (res) {
         this.sourceValue = res;
         this.mapSourceOptions();
@@ -259,7 +269,7 @@ export class BookingInfoComponent implements OnInit {
           this.sourceNameControl.reset();
       }
     });
-    this.otaSourceControl.valueChanges.subscribe((res) => {
+    this.otaSourceControl?.valueChanges.subscribe((res) => {
       res && this.formService.getSummary.next(true);
     });
   }

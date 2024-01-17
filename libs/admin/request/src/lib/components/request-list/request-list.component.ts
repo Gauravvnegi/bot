@@ -6,7 +6,6 @@ import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/servi
 import { FirebaseMessagingService } from 'apps/admin/src/app/core/theme/src/lib/services/messaging.service';
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
 import { convertToTitleCase } from 'libs/admin/shared/src/lib/utils/valueFormatter';
-import { SnackBarService } from 'libs/shared/material/src';
 import { Observable, Subscription } from 'rxjs';
 import { request, RequestStatus } from '../../constants/request';
 import {
@@ -52,10 +51,10 @@ export class RequestListComponent implements OnInit, OnDestroy {
 
   timeInterval;
   timeLeft = [];
+  searchApi: string;
 
   constructor(
     private globalFilterService: GlobalFilterService,
-    private snackbarService: SnackBarService,
     private _requestService: RequestService,
     private _adminUtilityService: AdminUtilityService,
     private fb: FormBuilder,
@@ -131,6 +130,7 @@ export class RequestListComponent implements OnInit, OnDestroy {
                 : 10,
           },
         ]);
+        this.getSearchApi();
       })
     );
   }
@@ -414,6 +414,19 @@ export class RequestListComponent implements OnInit, OnDestroy {
       else this.loadData(0, 10);
     }
     this.showFilter = false;
+  }
+
+  getSearchApi() {
+    const config = {
+      queryObj: this._adminUtilityService.makeQueryParams([
+        ...this.globalQueries,
+        {
+          ...this.filterData,
+          entityType: this.entityType,
+        },
+      ]),
+    };
+    this.searchApi = `/api/v1/request/${this.entityId}/search${config.queryObj}`;
   }
 
   /**

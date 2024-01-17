@@ -7,7 +7,8 @@
  */
 export function manageMaskZIndex(
   zIndex?: number,
-  targetClass = '.p-component-overlay.p-sidebar-mask'
+  targetClass = '.p-component-overlay.p-sidebar-mask',
+  isManageAllLayer = false
 ) {
   let interval: number;
 
@@ -35,10 +36,16 @@ export function manageMaskZIndex(
       // The first element in the list
       const currentElement: HTMLElement = elements[0];
 
-      if (!zIndex) {
+      //either we will not give zIndex or will give zIndex along manage allLayer
+      if (!zIndex || isManageAllLayer) {
         // If zIndex is not provided, calculate it dynamically based on the current zIndex of the first element
         const currentZIndex = +window.getComputedStyle(currentElement)?.zIndex;
-        const baseZIndex = currentZIndex ? currentZIndex - 1 : 1000;
+        let baseZIndex = currentZIndex ? currentZIndex - 1 : 1000;
+
+        // we will give the preference to given zIndex if isManageAllLayerr will true.
+        if (zIndex && isManageAllLayer) {
+          baseZIndex = zIndex;
+        }
 
         // Apply zIndex to all elements in the list based on the dynamic calculation
         elements.forEach((element, index) => {

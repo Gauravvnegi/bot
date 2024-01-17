@@ -4,8 +4,7 @@ import {
   RateVariationReportResponse,
 } from '../types/rate-package-reports.types';
 import { ReportClass } from '../types/reports.types';
-import { toCurrency } from 'libs/admin/shared/src/lib/utils/valueFormatter';
-import { getFullName } from '../constant/reports.const';
+import { getFullName, toCurrency } from 'libs/admin/shared/src/lib/utils/valueFormatter';
 
 export class RateVariationReport
   implements ReportClass<RateVariationReportData, RateVariationReportResponse> {

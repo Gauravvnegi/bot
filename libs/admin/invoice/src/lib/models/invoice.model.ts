@@ -4,6 +4,7 @@ import {
   MenuItemListResponse,
   MenuItemResponse,
 } from 'libs/admin/all-outlets/src/lib/types/outlet';
+import { BillItemChargeType } from '../types/forms.types';
 
 export class Invoice {
   invoiceNumber: string;
@@ -143,6 +144,7 @@ export class TableData {
   discountType?: string;
   discountValue?: number;
   isRealised?: boolean;
+  chargeType?: BillItemChargeType;
 
   deserialize(input: BillItem, idOfItemIdRecord: Record<string, string>) {
     let reservationId = input.id;
@@ -172,6 +174,7 @@ export class TableData {
     this.reservationItemId = reservationId;
     this.isRefund = input?.isRefund;
     this.isRealised = input?.isRealised;
+    this.chargeType = input?.chargeType;
     return this;
   }
 }

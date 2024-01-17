@@ -2,6 +2,9 @@
   .message__wrapper {
     color: #a3a3a3;
   }
+  .content__wrapper {
+    height: 62vh;
+  }
 }
 
 // Table design
@@ -9,6 +12,12 @@
   .table-view__wrapper {
     .header {
       padding-top: 0 !important;
+    }
+    .wrapper {
+      min-height: 51vh !important;
+    }
+    .empty-datatable .wrapper {
+      height: 51vh;
     }
   }
 }

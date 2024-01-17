@@ -1,0 +1,84 @@
+<div class="wrapper" [id]="fa.referenceId">
+  <hospitality-bot-navigation-header [heading]="pageTitle" [routes]="navRoutes">
+  </hospitality-bot-navigation-header>
+
+  <div class="sub-wrapper" [formGroup]="useForm">
+    <div class="main">
+      <div class="sub-heading">
+        Area Information
+
+        <hospitality-bot-toggle-switch-with-label
+          [isToggleOn]="areaFormControls.status.value"
+          class="toggle action-wrapper"
+          controlName="status"
+          (onToggleSwitch)="statusUpdate($event)"
+        ></hospitality-bot-toggle-switch-with-label>
+      </div>
+      <div class="form-block">
+        <hospitality-bot-input
+          class="half-width"
+          controlName="name"
+          label="Area Name"
+          maxLength="60"
+          [props]="{
+            placeholder: 'Enter'
+          }"
+        ></hospitality-bot-input>
+
+        <hospitality-bot-input
+          class="full-width"
+          controlName="shortDescription"
+          label="Area Description"
+          maxLength="120"
+          [props]="{
+            placeholder: 'Enter'
+          }"
+        ></hospitality-bot-input>
+      </div>
+    </div>
+  </div>
+
+  <div class="sub-wrapper" [formGroup]="tableForm" *ngIf="areaId">
+    <div class="main">
+      <div class="sub-heading">
+        Tables
+      </div>
+      <div class="form-block">
+        <div class="select-all">
+          <div class="card-container">
+            <hospitality-bot-checkbox
+              controlName="selectAll"
+              [label]="'Select All'"
+              [value]="tableFormControls.selectAll.value"
+            ></hospitality-bot-checkbox>
+          </div>
+        </div>
+        <div
+          *ngIf="tableListForm?.controls"
+          class="table-row-container"
+          [formGroup]="tableListForm"
+        >
+          <ng-container *ngFor="let table of tableList; let i = index">
+            <div class="card-container">
+              <hospitality-bot-checkbox
+                [controlName]="table.controlName"
+                [label]="table.label"
+              ></hospitality-bot-checkbox>
+            </div>
+            <!-- <div class="line" *ngIf="[7, 14, 21].includes(i)"></div> -->
+          </ng-container>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hospitality-bot-form-action
+    class="full-width"
+    [loading]="loading"
+    [isId]="areaId"
+    (onPreAction)="onReset()"
+    (onPostAction)="onSubmit()"
+    #fa
+  >
+  </hospitality-bot-form-action>
+</div>

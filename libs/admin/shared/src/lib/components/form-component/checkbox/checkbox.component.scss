@@ -16,12 +16,19 @@
   }
 }
 
+.checkbox-wrapper {
+  @include flex-item-center();
+  gap: 0.5em;
+  cursor: pointer;
+}
+
 .checkbox {
   height: 1.4em;
   background: $border-color;
   width: 1.4em;
   border-radius: 2px;
   opacity: 0.8;
+
   &__img {
     height: 100%;
     width: 100%;
@@ -31,16 +38,16 @@
   display: none;
 }
 
-:host ::ng-deep .checkbox {
-  height: 17px;
-  width: 17px;
-  &__wrapper {
-    display: flex;
-    gap: 10px;
-    align-items: center;
-  }
-  &:hover,
-  &-label:hover {
-    cursor: pointer;
-  }
-}
+// :host ::ng-deep .checkbox {
+//   height: 17px;
+//   width: 17px;
+//   &__wrapper {
+//     display: flex;
+//     gap: 10px;
+//     align-items: center;
+//   }
+//   &:hover,
+//   &-label:hover {
+//     cursor: pointer;
+//   }
+// }

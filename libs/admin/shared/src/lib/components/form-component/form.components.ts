@@ -132,7 +132,7 @@ export class FormComponent implements OnInit {
       controlName ? controlName : this.controlName
     );
     this.addRequiredAsterisk();
-    this.inputControl.valueChanges.subscribe(() => this.addRequiredAsterisk());
+    this.inputControl?.valueChanges.subscribe(() => this.addRequiredAsterisk());
   }
 
   handleBlur() {

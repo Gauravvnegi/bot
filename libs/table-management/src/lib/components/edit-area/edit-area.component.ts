@@ -189,7 +189,6 @@ export class EditAreaComponent implements OnInit {
     if (Object.keys(controls).some((key) => !controls[key].value)) {
       this.tableFormControls.selectAll.patchValue(false, { emitEvent: false });
     } else {
-      debugger;
       this.tableFormControls.selectAll.patchValue(true, { emitEvent: false });
     }
   }
@@ -243,6 +242,36 @@ export class EditAreaComponent implements OnInit {
   handleError = ({ error }): void => {
     this.loading = false;
   };
+
+  isBorderNone(index: number): boolean {
+    index++;
+    const block = this.divideIntoBlocks(this.tableList.length);
+    if (
+      block.length === 1 ||
+      (index >= block[block.length - 1][0] &&
+        index <= block[block.length - 1][1])
+    ) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  divideIntoBlocks(
+    number: number,
+    blockSize: number = 8
+  ): Array<Array<number>> {
+    const blocks = [];
+    let start = 1;
+
+    while (start <= number) {
+      const end = Math.min(start + blockSize - 1, number);
+      blocks.push([start, end]);
+      start = end + 1;
+    }
+
+    return blocks;
+  }
 
   ngOnDestroy() {
     this.$subscription.unsubscribe();

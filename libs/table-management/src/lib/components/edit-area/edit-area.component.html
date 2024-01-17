@@ -43,7 +43,7 @@
       <div class="sub-heading">
         Tables
       </div>
-      <div class="form-block">
+      <div class="table-wrapper">
         <div class="select-all">
           <div class="card-container">
             <hospitality-bot-checkbox
@@ -53,20 +53,25 @@
             ></hospitality-bot-checkbox>
           </div>
         </div>
-        <div
-          *ngIf="tableListForm?.controls"
-          class="table-row-container"
-          [formGroup]="tableListForm"
-        >
-          <ng-container *ngFor="let table of tableList; let i = index">
-            <div class="card-container">
-              <hospitality-bot-checkbox
-                [controlName]="table.controlName"
-                [label]="table.label"
-              ></hospitality-bot-checkbox>
-            </div>
-            <!-- <div class="line" *ngIf="[7, 14, 21].includes(i)"></div> -->
-          </ng-container>
+        <div class="table-container">
+          <div
+            *ngIf="tableListForm?.controls"
+            class="table-row-container"
+            [formGroup]="tableListForm"
+          >
+            <ng-container *ngFor="let table of tableList; let i = index">
+              <div
+                class="card-container"
+                [ngClass]="{ border__none: isBorderNone(i) }"
+              >
+                <hospitality-bot-checkbox
+                  [controlName]="table.controlName"
+                  [label]="table.label"
+                ></hospitality-bot-checkbox>
+              </div>
+              <!-- <div class="line" *ngIf="[7, 14, 21].includes(i)"></div> -->
+            </ng-container>
+          </div>
         </div>
       </div>
     </div>

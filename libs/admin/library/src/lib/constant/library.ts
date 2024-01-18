@@ -15,6 +15,7 @@ export enum LibrarySearchItem {
   ROOM_TYPE = 'ROOM_TYPE',
   SERVICE = 'SERVICE',
   PACKAGE = 'PACKAGE',
+  MENU_ITEM = 'MENU_ITEM',
 }
 
 export enum ServiceTypeOptionValue {

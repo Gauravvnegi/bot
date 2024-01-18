@@ -14,21 +14,34 @@
       controlName="active"
       label="Status:"
     ></hospitality-bot-toggle-switch>
-    <div class="container">
-      <hospitality-bot-input
-        class="half-width"
-        controlName="name"
-        label="Offer Name"
-        maxLength="60"
-        [props]="{
-          placeholder: 'Enter'
-        }"
-      ></hospitality-bot-input>
-    </div>
+    <hospitality-bot-input
+      class="half-width"
+      controlName="name"
+      label="Offer Name"
+      maxLength="60"
+      [props]="{
+        placeholder: 'Enter'
+      }"
+    ></hospitality-bot-input>
+    <hospitality-bot-select
+      [loading]="loading"
+      [disabled]="offerId"
+      class="half-width"
+      controlName="entityId"
+      label="Property"
+      [options]="propertyList"
+      [props]="{
+        placeholder: 'Select Type'
+      }"
+    ></hospitality-bot-select>
     <hospitality-bot-auto-complete
       class="full-width"
       controlName="libraryItems"
-      label="Choose Services/rooms"
+      [label]="
+        selectedPropertyType === 'HOTEL'
+          ? 'Choose Services/rooms'
+          : 'Choose Menu Items'
+      "
       [options]="libraryItems"
       [loading]="loading"
       (onSearch)="searchOptions($event)"

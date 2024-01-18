@@ -81,7 +81,7 @@ export class HotelDetailService {
     propertyList.unshift({
       label: selectedHotel.name,
       value: selectedHotel.id,
-      type: selectedHotel.type ? selectedHotel.type : EntitySubType.ROOM_TYPE,
+      type: selectedHotel.type || selectedHotel?.category,
       id: selectedHotel.id,
     });
 

@@ -315,10 +315,11 @@
 
       .menu {
         @include flex-col;
-        gap: 0.4em;
-        flex-basis: 49%;
+        width: 49%;
         cursor: pointer !important;
         padding: 9px 12px;
+        height: 10vh;
+        // box-shadow: 0 3px 3px 0 rgba(0, 0, 0, 0.05);
 
         &:hover {
           background-color: #f2f0ff;
@@ -378,7 +379,9 @@
     //filter when item is selected for white color
     filter: brightness(0) invert(1) !important;
   }
-
+  .menu {
+    box-shadow: none !important;
+  }
   .menu-label {
     color: white !important;
     opacity: 1 !important;
@@ -390,11 +393,12 @@
 }
 
 .product-icon {
-  width: 1.5em;
-  height: 1.5em;
-  margin-right: 0.5em;
-  margin-bottom: 0.5em;
+  display: flex;
+  -o-object-fit: contain;
   object-fit: contain;
+  align-items: center;
+  gap: 0.5em;
+  padding: 7px 0px;
 
   img {
     width: 100%;

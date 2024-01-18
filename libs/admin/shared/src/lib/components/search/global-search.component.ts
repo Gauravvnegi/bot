@@ -42,7 +42,7 @@ export class GlobalSearchComponent extends FormComponent {
 
   get isInputEmpty() {
     return (
-      this.controlContainer.control.get(this.controlName).value.length == 0
+      this.controlContainer?.control?.get(this.controlName)?.value?.length == 0
     );
   }
 

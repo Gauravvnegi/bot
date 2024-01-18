@@ -1,0 +1,49 @@
+<div class="guest-list-sidebar">
+  <div class="sidebar-slide-header">
+    <span class="title">Guest List</span>
+    <span class="close-icon" (click)="close()">
+      <img class="close-sidebar-icon" src="assets/svg/close-sidebar.svg" />
+    </span>
+  </div>
+
+  <div class="guest-list-sidebar__content" [formGroup]="useForm">
+    <div class="header">
+      <div class="search-bar">
+        <hospitality-bot-input
+          controlName="search"
+          [props]="{
+            placeholder: 'Search by name'
+          }"
+        >
+        </hospitality-bot-input>
+      </div>
+      <div class="add-guest">
+        + add guest
+      </div>
+      <div class="filter">
+        <img src="assets/svg/Filter-Icon.svg" alt="filter" />
+      </div>
+    </div>
+
+    <div class="tab-group">
+      <hospitality-bot-tab-group
+        [listItems]="seatedTabGroup"
+      ></hospitality-bot-tab-group>
+    </div>
+
+    <div class="chips">
+      <hospitality-bot-chips [chips]="seatedChips"></hospitality-bot-chips>
+    </div>
+
+    <div class="content">
+      <ng-container *ngFor="let guest of guestList">
+        <hospitality-bot-seated-card [item]="guest">
+          <ng-container>
+            button 1, button 2
+          </ng-container>
+        </hospitality-bot-seated-card>
+        <hr />
+      </ng-container>
+    </div>
+  </div>
+</div>

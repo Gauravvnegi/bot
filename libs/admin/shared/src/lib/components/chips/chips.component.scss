@@ -1,0 +1,22 @@
+@import 'main';
+
+.chip__wrapper {
+  display: flex;
+  gap: 5px;
+  cursor: pointer;
+  .chip {
+    border-radius: 30px;
+    border: 1px solid $primary-cta;
+    color: $primary-cta;
+    padding: 5px 10px;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+  }
+
+  .active-chip {
+    background-color: black;
+    color: white;
+    border: unset;
+  }
+}

@@ -1,0 +1,35 @@
+@import 'main';
+
+.guest-list-sidebar {
+  &__content {
+    .header {
+      @include flex-space-between;
+      gap: 10px;
+      padding: 15px 17px;
+      padding-bottom: 0;
+      .search {
+      }
+      .add-guest,
+      .filter {
+        color: $primary-cta;
+        font-weight: 500;
+        cursor: pointer;
+        @include flex-justify-align-center;
+      }
+    }
+
+    .tab-group {
+    }
+
+    .chips {
+      padding: 15px 17px;
+    }
+
+    .content {
+      padding: 15px 17px;
+      padding-top: 0;
+      overflow-x: auto;
+      height: calc(100%-150px);
+    }
+  }
+}

@@ -1,0 +1,33 @@
+<div class="seated__card">
+  {{ item | json }}
+  <div class="first">
+    <div class="left">
+      <span>Table No - {{ item.tableNo }}</span>
+      <span>Order No: {{ item.tableNo }}</span>
+    </div>
+    <div class="right">
+      <span>{{ item.time }}</span>
+      <span>{{ item.people }}</span>
+    </div>
+  </div>
+  <div class="second">
+    <div class="left">
+      <span>{{ item.name }}</span>
+      <span>{{ item.type }}</span>
+    </div>
+  </div>
+  <div class="third">
+    <div class="left">
+      <span>{{ item?.feedback }}</span>
+    </div>
+  </div>
+  <div class="fourth">
+    <div class="left">
+      <span>Ph.{{ item?.phone }}</span>
+    </div>
+  </div>
+  <div class="fifth">
+    <div class="left"><ng-content></ng-content></div>
+    <div class="right">{{ item.timeLimit }}</div>
+  </div>
+</div>

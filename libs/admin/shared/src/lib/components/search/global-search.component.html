@@ -5,6 +5,7 @@
       pInputText
       [formControlName]="controlName"
       [placeholder]="placeholder.length ? placeholder : 'Search...'"
+      (keydown)="onKeyDown.emit($event)"
       (focus)="onBlurSearch($event)"
     />
     <!-- (blur)="onBlurSearch($event); clearSearch()" -->

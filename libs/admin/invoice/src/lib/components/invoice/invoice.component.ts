@@ -1590,6 +1590,7 @@ export class InvoiceComponent implements OnInit {
           (controls.value.transactionType === 'CREDIT' &&
             !controls.value.isDiscount) ||
           this.isInvoiceDisabled ||
+          (controls.value.isRealised && controls.value.isDiscount) ||
           (!controls.value.itemId && !controls.value.isNew) ||
           controls.value.taxId ||
           (controls.value.isNonEditableBillItem &&

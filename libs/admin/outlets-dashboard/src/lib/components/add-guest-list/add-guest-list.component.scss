@@ -9,3 +9,15 @@
     margin: 10px;
   }
 }
+
+:host ::ng-deep .guest-list-sidebar {
+  .content {
+    .p-multiselect {
+      .chips {
+        flex-wrap: unset;
+        max-width: 148px;
+        column-gap: 5px;
+      }
+    }
+  }
+}

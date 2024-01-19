@@ -3,18 +3,28 @@
     <div class="header__title">
       <mat-icon class="alert">warning</mat-icon>
       <div>{{ heading }}</div>
+
+      <div class="date" *ngIf="isDate">
+        <span *ngIf="fromDate; else empty">{{
+          fromDate | date: 'dd/MM/yyyy'
+        }}</span>
+        to
+        <span *ngIf="toDate; else empty">{{
+          toDate | date: 'dd/MM/yyyy'
+        }}</span>
+      </div>
     </div>
     <div (click)="close()" class="header__close">
       <i class="fa fa-times" aria-hidden="true"></i>
     </div>
   </div>
   <div class="body">
+    <div class="title" *ngIf="title?.length">{{ title }}</div>
     <div class="descriptions">
       <div class="text" *ngFor="let text of descriptions">
         {{ text }}
       </div>
     </div>
-    <div class="sub-text" *ngIf="subText?.length">{{ subText }}</div>
     <div class="reservation-input" *ngIf="isReservation">
       <div class="amount">
         <hospitality-bot-input
@@ -65,3 +75,5 @@
     [variant]="defaultAction.variant"
   ></hospitality-bot-button>
 </ng-template>
+
+<ng-template #empty>--/--/----</ng-template>

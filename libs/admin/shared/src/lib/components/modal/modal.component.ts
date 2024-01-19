@@ -11,9 +11,13 @@ import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 export class ModalComponent {
   heading: string = 'Notification';
   descriptions: string[] = ['Are you sure?'];
-  subText: string;
+  title: string;
   isRemarks: boolean = false;
   isReservation: boolean = false;
+  isDate: boolean = true;
+  toDate: string;
+  fromDate: string;
+  remarksValidators: Validators[];
 
   constructor(
     private fb: FormBuilder,
@@ -30,7 +34,7 @@ export class ModalComponent {
 
   ngOnInit(): void {
     this.modelForm = this.fb.group({
-      remarks: ['', [Validators.required]],
+      remarks: ['', this.remarksValidators],
     });
 
     if (this.isReservation) {

@@ -163,9 +163,17 @@
         }) + 'px',
       height: height + 'px',
       padding: cellGap + 'px',
-      marginLeft: '-' + outOfBoundRecord[data[row][col].id].lSpace + 'px'
+      marginLeft: '-' + outOfBoundRecord[data[row][col].id].lSpace + 'px',
+      opacity: data[row][col]?.opacity ? data[row][col]?.opacity : 1
     }"
-    [zIndex]="data[row][col]?.id === toggleMenuId ? 20 : 10"
+    [zIndex]="
+      getZIndex({
+        rowValue: row,
+        colValue: col,
+        colIdx: colIdx,
+        rowIdx: rowIdx
+      })
+    "
     zIndexMoving="100"
     [preventDefaultEvent]="true"
     rzHandles="e,w"
@@ -245,13 +253,14 @@
     <div
       class="cell-data"
       [ngClass]="{
-        'non-interactive-cell': !isInteractive({
+        'interactive-cell': isInteractive({
           rowValue: row,
           colValue: col,
           colIdx: colIdx,
           rowIdx: rowIdx
         }),
-        'click-only': disableChanges,
+        'allow-click': !!data[row][col]?.allowAction,
+        'right-click': !!data[row][col]?.allowAction?.includes('showMenu'),
         'success-cell': data[row][col]?.colorCode === 'success',
         'active-cell': data[row][col]?.colorCode === 'active',
         'inactive-cell': data[row][col]?.colorCode === 'inactive',

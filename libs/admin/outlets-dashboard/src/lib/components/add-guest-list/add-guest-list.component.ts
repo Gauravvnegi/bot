@@ -1,6 +1,6 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { tableList } from '../../constants/guest-list.const';
-import { Option } from '@hospitality-bot/admin/shared';
+import { BookingDetailService, Option } from '@hospitality-bot/admin/shared';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
@@ -13,8 +13,12 @@ export class AddGuestListComponent implements OnInit {
   @Output() onClose = new EventEmitter<boolean>();
 
   useForm!: FormGroup;
+  loading = false;
 
-  constructor(private fb: FormBuilder) {}
+  constructor(
+    private fb: FormBuilder,
+    private bookingDetailService: BookingDetailService
+  ) {}
 
   ngOnInit(): void {
     this.initForm();
@@ -28,7 +32,19 @@ export class AddGuestListComponent implements OnInit {
       segment: ['', Validators.required],
       checkIn: ['', Validators.required],
       checkOut: ['', Validators.required],
-      remark: ['', Validators.required],
+      remark: [''],
+    });
+  }
+
+  fullReservation() {}
+
+  createReservation() {}
+
+  openDetailsPage() {
+    // TODO: Replace guestId
+    this.bookingDetailService.openBookingDetailSidebar({
+      guestId: '42ca7269-deef-4709-83fd-df34abb0cf7e',
+      tabKey: 'guest_details',
     });
   }
 

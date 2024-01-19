@@ -1,8 +1,19 @@
 <div class="guest-list-sidebar">
   <div class="sidebar-slide-header">
     <span class="title">Guest List</span>
-    <span class="close-icon" (click)="close()">
-      <img class="close-sidebar-icon" src="assets/svg/close-sidebar.svg" />
+    <span class="close-icon">
+      <img
+        (click)="fullReservation()"
+        class="expand"
+        [src]="'assets/svg/expand-white.svg'"
+        alt="reservation"
+        [pTooltip]="'Create Full Reservation'"
+      />
+      <img
+        (click)="close()"
+        class="close-sidebar-icon"
+        src="assets/svg/close-sidebar.svg"
+      />
     </span>
   </div>
 
@@ -87,7 +98,7 @@
   class="sidebar-slide"
   [(visible)]="sidebarVisible"
   position="right"
-  [style]="{ width: '500px' }"
+  [style]="{ width: '550px' }"
   [dismissible]="true"
   [showCloseIcon]="false"
 >

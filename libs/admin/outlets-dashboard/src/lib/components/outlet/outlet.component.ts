@@ -37,11 +37,6 @@ export class OutletComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  ngAfterViewInit(): void {
-    // TODO: remove
-    this.openGuestList();
-  }
-
   getFormServiceEntity(item: EntityTabFilterResponse) {
     return {
       id: item.entityId[0],

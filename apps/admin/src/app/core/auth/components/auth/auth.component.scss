@@ -154,11 +154,12 @@
       color: $white;
 
       .heading {
-        font-size: 40px;
-        padding-bottom: 10px;
+        font-size: 38px;
+        padding-bottom: 20px;
         // margin: 20px 0px;
         @media only screen and (max-width: 1300px) {
           font-size: 30px;
+          padding-bottom: 10px;
         }
       }
       &-option-box {
@@ -166,12 +167,13 @@
         flex-wrap: wrap;
         flex-direction: column;
         max-height: 40vh;
-        gap: 1%;
+        row-gap: 2em;
+        column-gap: 2em;
         .option {
           width: 33.33%;
-          margin-bottom: 20px;
+          // margin-bottom: 20px;
           @include flex-item-center;
-          padding: 10px;
+          // padding: 10px;
           .material-icons {
             margin-right: 10px;
             width: 1.5em;
@@ -179,12 +181,12 @@
           }
           .option-container {
             .option-label {
-              font-size: 14px;
+              font-size: 12px;
               font-weight: 600;
               letter-spacing: 0.84px;
             }
             .option-description {
-              font-size: 13px;
+              font-size: 11px;
               letter-spacing: 0.84px;
               word-wrap: normal;
             }
@@ -201,6 +203,15 @@
           .option {
             margin-bottom: 43px;
             padding: 0;
+
+            .option-container {
+              .option-label {
+                font-size: 14px;
+              }
+              .option-description {
+                font-size: 13px;
+              }
+            }
           }
         }
       }

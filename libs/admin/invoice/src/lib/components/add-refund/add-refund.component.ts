@@ -13,6 +13,7 @@ import { DynamicDialogRef, DynamicDialogConfig } from 'primeng/dynamicdialog';
 export class AddRefundComponent implements OnInit {
   heading = 'Additional Charges Amount';
   isReservationPopup = false;
+  isAllowancePopup = false;
   userForm: FormGroup;
   chargedAmount: number = 0;
 
@@ -25,10 +26,12 @@ export class AddRefundComponent implements OnInit {
       heading: string;
       isReservationPopup?: boolean;
       chargedAmount?: number;
+      isAllowancePopup?: boolean;
     } = dialogConfig?.data;
     this.heading = data?.heading;
     this.isReservationPopup = data?.isReservationPopup;
     this.chargedAmount = data?.chargedAmount;
+    this.isAllowancePopup = data?.isAllowancePopup;
   }
 
   ngOnInit(): void {
@@ -39,11 +42,11 @@ export class AddRefundComponent implements OnInit {
     this.userForm = !this.isReservationPopup
       ? this.fb.group({
           refundAmount: [null, [Validators.required, Validators.min(0)]],
-          remarks: [''],
+          remarks: ['', [Validators.required]],
         })
       : this.fb.group({
           chargedAmount: [this.chargedAmount],
-          remarks: [''],
+          remarks: ['', [Validators.required]],
         });
   }
 

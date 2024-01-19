@@ -21,14 +21,14 @@ export class ReservationService extends ApiService {
   }
 
   updateLateCheckout(
-    entityId: string,
+    reservationId: string,
     data: {
       chargedAmount: number;
       remarks: string;
     }
   ) {
     return this.post(
-      `/api/v1/entity/${entityId}/charges?type=LATECHECKOUT`,
+      `/api/v1/reservation/${reservationId}/charges?type=LATECHECKOUT`,
       data
     );
   }

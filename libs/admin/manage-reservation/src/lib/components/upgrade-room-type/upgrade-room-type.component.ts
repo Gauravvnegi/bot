@@ -59,8 +59,8 @@ export class UpgradeRoomTypeComponent implements OnInit {
     this.roomUpgradeForm = this.fb.group({
       roomTypeId: ['', [Validators.required]],
       roomNumber: ['', [Validators.required]],
-      ratePlanId: [''],
-      remarks: [''],
+      ratePlanId: ['', [Validators.required]],
+      remarks: ['', [Validators.required]],
       chargedAmount: [0],
       chargeable: [true],
       effectiveDate: [0],

@@ -20,7 +20,6 @@ import {
   ModuleNames,
   NavRouteOptions,
   Option,
-  ProductNames,
   UserService,
   openModal,
 } from '@hospitality-bot/admin/shared';
@@ -655,6 +654,7 @@ export class InvoiceComponent implements OnInit {
           reservationItemId: selectedService.value,
           description: selectedService.label,
           debitAmount: selectedService.amount,
+          chargeType: 'SERVICE',
         });
 
         unit.patchValue(1, { emitEvent: false });
@@ -1338,7 +1338,17 @@ export class InvoiceComponent implements OnInit {
       .map((item) => {
         return { index: item.index, ...item.control.value };
       })
-      .filter((item) => !item.isRealised);
+      .filter((item) => {
+        if (!item.isRealised) {
+          if (
+            (discountAction === MenuActionItem.EDIT_DISCOUNT ||
+              discountAction === MenuActionItem.REMOVE_DISCOUNT) &&
+            !this.hasDiscount(item.itemId, item.date)
+          )
+            return false;
+          return true;
+        }
+      });
 
     let modalRef: DynamicDialogRef;
     const inputData: Partial<AddDiscountComponent> = {
@@ -1542,6 +1552,7 @@ export class InvoiceComponent implements OnInit {
     let modalRef: DynamicDialogRef;
     const inputData: Partial<AddRefundComponent> = {
       heading: `Add ${additionalChargeDetails.label} Amount`,
+      isAllowancePopup: chargesType === AdditionalChargesType.ALLOWANCE,
     };
     modalRef = openModal({
       config: {
@@ -1558,9 +1569,11 @@ export class InvoiceComponent implements OnInit {
         if (res) {
           this.addNonBillItem({
             amount: res.refundAmount,
-            itemId: id ? id : `${additionalChargeDetails.value}-${
-              moment(new Date()).unix() * 1000
-            }`,
+            itemId: id
+              ? id
+              : `${additionalChargeDetails.value}-${
+                  moment(new Date()).unix() * 1000
+                }`,
             reservationItemId: `${additionalChargeDetails.value}-${
               moment(new Date()).unix() * 1000
             }`,

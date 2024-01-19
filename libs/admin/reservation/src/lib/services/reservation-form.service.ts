@@ -96,7 +96,8 @@ export class ReservationFormService {
 
   openModalComponent(
     journeyType: JourneyTypes,
-    callback?: (data?: JourneyData) => void
+    callback?: (data?: JourneyData) => void,
+    reservationId?: string
   ) {
     let modalRef: DynamicDialogRef;
     const data = {
@@ -119,7 +120,7 @@ export class ReservationFormService {
             if (journeyType === JourneyTypes.EARLYCHECKIN)
               this.checkIn(callback, data);
             // else this.checkOut(callback, false, data);
-            else this.lateCheckout(res, callback);
+            else this.lateCheckout(res, callback, reservationId);
             modalRef.close();
           },
           variant: 'contained',
@@ -139,10 +140,11 @@ export class ReservationFormService {
 
   lateCheckout(
     data: LateCheckoutData,
-    callback?: (data?: JourneyData) => void
+    callback?: (data?: JourneyData) => void,
+    reservationId?: string
   ) {
     this.reservationService
-      .updateLateCheckout(this.entityId, data)
+      .updateLateCheckout(reservationId, data)
       .subscribe((res) => {
         callback && callback();
         this.snackbarService.openSnackBarAsText(

@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { TabsType } from '../../types/guest.type';
 
 @Component({
   selector: 'hospitality-bot-guest-card',
@@ -6,6 +7,7 @@ import { Component, Input, OnInit } from '@angular/core';
   styleUrls: ['./guest-card.component.scss'],
 })
 export class GuestCardComponent implements OnInit {
+  readonly tabs = TabsType;
   @Input() item: GuestCard;
   constructor() {}
 
@@ -19,7 +21,7 @@ export interface GuestCard {
   timeLimit?: string;
   people: number;
   name: string;
-  type: 'Resident' | 'None-Resident';
+  type: TabsType;
   feedback?: string;
   phone: string;
 }

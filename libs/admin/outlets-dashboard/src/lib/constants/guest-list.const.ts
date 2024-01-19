@@ -10,7 +10,7 @@ export const seatedCards: GuestCard[] = [
     timeLimit: '2 hours',
     people: 4,
     name: 'John Doe',
-    type: 'Resident',
+    type: TabsType['none-resident'],
     feedback: 'Excellent service!',
     phone: '123-456-7890',
   },
@@ -21,7 +21,7 @@ export const seatedCards: GuestCard[] = [
     timeLimit: '1.5 hours',
     people: 2,
     name: 'Jane Smith',
-    type: 'None-Resident',
+    type: TabsType.resident,
     phone: '987-654-3210',
   },
   {
@@ -31,7 +31,7 @@ export const seatedCards: GuestCard[] = [
     timeLimit: '1.5 hours',
     people: 2,
     name: 'Jane Smith',
-    type: 'None-Resident',
+    type: TabsType['none-resident'],
     phone: '987-654-3210',
   },
   {
@@ -41,7 +41,7 @@ export const seatedCards: GuestCard[] = [
     timeLimit: '1.5 hours',
     people: 2,
     name: 'Jane Smith',
-    type: 'None-Resident',
+    type: TabsType.resident,
     phone: '987-654-3210',
   },
   {
@@ -51,7 +51,7 @@ export const seatedCards: GuestCard[] = [
     timeLimit: '1.5 hours',
     people: 2,
     name: 'Jane Smith',
-    type: 'None-Resident',
+    type: TabsType['none-resident'],
     phone: '987-654-3210',
   },
   {
@@ -61,7 +61,7 @@ export const seatedCards: GuestCard[] = [
     timeLimit: '1.5 hours',
     people: 2,
     name: 'Jane Smith',
-    type: 'None-Resident',
+    type: TabsType.resident,
     phone: '987-654-3210',
   },
   {
@@ -71,7 +71,7 @@ export const seatedCards: GuestCard[] = [
     timeLimit: '1.5 hours',
     people: 2,
     name: 'Jane Smith',
-    type: 'None-Resident',
+    type: TabsType.resident,
     phone: '987-654-3210',
   },
   {
@@ -81,13 +81,88 @@ export const seatedCards: GuestCard[] = [
     timeLimit: '1.5 hours',
     people: 2,
     name: 'Jane Smith',
-    type: 'None-Resident',
+    type: TabsType['none-resident'],
     phone: '987-654-3210',
   },
   // Add more items as needed
 ];
 
-const asConst = <T extends string>(val: T) => val as T;
+export const watchListCards: GuestCard[] = [
+  {
+    tableNo: 'T001',
+    orderNo: 'O123',
+    time: '12:30 PM',
+    people: 4,
+    name: 'John Doe',
+    type: TabsType.resident,
+    feedback: 'Excellent service!',
+    phone: '123-456-7890',
+  },
+  {
+    tableNo: 'T002',
+    orderNo: 'O124',
+    time: '1:45 PM',
+    people: 2,
+    name: 'Jane Smith',
+    type: TabsType['none-resident'],
+    phone: '987-654-3210',
+  },
+  {
+    tableNo: 'T002',
+    orderNo: 'O124',
+    time: '1:45 PM',
+    people: 2,
+    name: 'Jane Smith',
+    type: TabsType.resident,
+    phone: '987-654-3210',
+  },
+  {
+    tableNo: 'T002',
+    orderNo: 'O124',
+    time: '1:45 PM',
+    people: 2,
+    name: 'Jane Smith',
+    type: TabsType['none-resident'],
+    phone: '987-654-3210',
+  },
+  {
+    tableNo: 'T002',
+    orderNo: 'O124',
+    time: '1:45 PM',
+    people: 2,
+    name: 'Jane Smith',
+    type: TabsType.resident,
+    phone: '987-654-3210',
+  },
+  {
+    tableNo: 'T002',
+    orderNo: 'O124',
+    time: '1:45 PM',
+    people: 2,
+    name: 'Jane Smith',
+    type: TabsType['none-resident'],
+    phone: '987-654-3210',
+  },
+  {
+    tableNo: 'T002',
+    orderNo: 'O124',
+    time: '1:45 PM',
+    people: 2,
+    name: 'Jane Smith',
+    type: TabsType.resident,
+    phone: '987-654-3210',
+  },
+  {
+    tableNo: 'T002',
+    orderNo: 'O124',
+    time: '1:45 PM',
+    people: 2,
+    name: 'Jane Smith',
+    type: TabsType['none-resident'],
+    phone: '987-654-3210',
+  },
+  // Add more items as needed
+];
 
 export const seatedChips: Option<ChipType>[] = [
   {

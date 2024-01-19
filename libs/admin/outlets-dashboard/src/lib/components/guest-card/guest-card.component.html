@@ -18,8 +18,8 @@
         ><span
           class="text__dynamic card-type bold-text"
           [ngClass]="{
-            resident: item.type === 'Resident',
-            'non-resident': item.type === 'None-Resident'
+            resident: item.type === tabs.resident,
+            'non-resident': item.type === tabs['none-resident']
           }"
           >{{ item.type }}</span
         ></span

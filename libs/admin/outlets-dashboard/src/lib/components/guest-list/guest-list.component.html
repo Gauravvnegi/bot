@@ -28,19 +28,31 @@
     <div class="tab-group">
       <hospitality-bot-tab-group
         [listItems]="seatedTabGroup"
+        (selectedTabChange)="tabChange($event)"
       ></hospitality-bot-tab-group>
     </div>
 
     <div class="chips">
-      <hospitality-bot-chips [chips]="seatedChips"></hospitality-bot-chips>
+      <hospitality-bot-chips
+        [chips]="seatedChips"
+        (changeChips)="setChip($event)"
+      ></hospitality-bot-chips>
     </div>
 
     <div class="content">
-      <ng-container *ngFor="let guest of guestList">
+      <ng-container
+        *ngFor="let guest of isSeated ? seatedGuestList : watchListGuestList"
+      >
         <hospitality-bot-guest-card [item]="guest">
-          <ng-container>
+          <ng-container *ngIf="isSeated; else watchList">
             button 1, button 2
           </ng-container>
+
+          <ng-template #watchList>
+            <ng-container>
+              button 1, button 2, button 3
+            </ng-container>
+          </ng-template>
         </hospitality-bot-guest-card>
       </ng-container>
     </div>

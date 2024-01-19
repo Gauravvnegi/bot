@@ -4,11 +4,8 @@
   &__content {
     .header {
       @include flex-space-between;
-      gap: 10px;
-      padding: 15px 17px;
+      padding: 20px 17px;
       padding-bottom: 0;
-      .search {
-      }
       .add-guest,
       .filter {
         color: $primary-cta;
@@ -32,6 +29,23 @@
       overflow: auto;
       height: calc(100vh - 240px);
       gap: 20px;
+    }
+  }
+}
+
+:host ::ng-deep .guest-list-sidebar {
+  &__content {
+    .header {
+      gap: 15px;
+      .search-bar {
+        width: calc(100% - 130px);
+      }
+      .add-guest {
+        width: 110px;
+      }
+      .filter {
+        width: 20px;
+      }
     }
   }
 }

@@ -8,7 +8,14 @@
 
   <div class="guest-list-sidebar__content" [formGroup]="useForm">
     <div class="header">
-      <div class="search-bar">
+      <div
+        class="search-bar"
+        [ngStyle]="
+          !isSeated && {
+            width: 'calc(100% - 20px)'
+          }
+        "
+      >
         <hospitality-bot-input
           controlName="search"
           [props]="{
@@ -17,7 +24,7 @@
         >
         </hospitality-bot-input>
       </div>
-      <div class="add-guest">
+      <div *ngIf="isSeated" class="add-guest">
         + add guest
       </div>
       <div class="filter">
@@ -45,12 +52,29 @@
       >
         <hospitality-bot-guest-card [item]="guest">
           <ng-container *ngIf="isSeated; else watchList">
-            button 1, button 2
+            <hospitality-bot-button
+              label="Print Invoice"
+              variant="outlined"
+            ></hospitality-bot-button>
+            <hospitality-bot-button
+              label="Change Table"
+              variant="outlined"
+            ></hospitality-bot-button>
           </ng-container>
-
           <ng-template #watchList>
             <ng-container>
-              button 1, button 2, button 3
+              <hospitality-bot-button
+                label="Notified"
+                variant="outlined"
+              ></hospitality-bot-button>
+              <hospitality-bot-button
+                label="Seated"
+                variant="outlined"
+              ></hospitality-bot-button>
+              <hospitality-bot-button
+                label="Delete"
+                variant="outlined"
+              ></hospitality-bot-button>
             </ng-container>
           </ng-template>
         </hospitality-bot-guest-card>

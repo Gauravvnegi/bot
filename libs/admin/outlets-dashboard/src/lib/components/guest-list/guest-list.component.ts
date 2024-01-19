@@ -50,6 +50,9 @@ export class GuestListComponent implements OnInit {
     const activeChip = this.useForm.get('chip').value;
     this.useForm.patchValue({ tab: activeTab });
 
+    /**
+     * filtration------
+     */
     let constCards =
       activeChip == this.chipEnum.seated ? seatedCards : watchListCards;
 

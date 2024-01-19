@@ -33,6 +33,7 @@ export class GuestTable implements IDeserializable {
 
     this.entityTypeCounts = input.entityTypeCounts;
     this.entityStateCounts = input.entityStateCounts;
+    this.entityStateLabels = input?.entityStateLabels;
 
     this.totalRecord = input.total;
     return this;

@@ -274,7 +274,7 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
 
   create() {
     //to open add new item pop up
-    if (this.isSidebar) {
+    if (this.isSideBar) {
       this.sidebarVisible = true;
       const factory = this.resolver.resolveComponentFactory(AddItemComponent);
       this.sidebarSlide.clear();

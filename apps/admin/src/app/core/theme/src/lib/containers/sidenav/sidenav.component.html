@@ -72,7 +72,7 @@
     [visible]="isMenuBarVisible"
     (onHide)="isMenuBarVisible = false"
     [showCloseIcon]="false"
-    [style]="{ width: '25em' }"
+    [style]="{ width: '27em' }"
     position="left"
   >
     <ng-template
@@ -121,8 +121,8 @@
                 [src]="product.iconUrl"
                 [alt]="product.name"
               />
+              <div class="menu-label">{{ product.title }}</div>
             </div>
-            <div class="menu-label">{{ product.title }}</div>
             <div class="menu-description">{{ product?.description }}</div>
           </div>
         </ng-container>

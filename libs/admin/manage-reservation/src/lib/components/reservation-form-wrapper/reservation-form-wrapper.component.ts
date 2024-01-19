@@ -29,7 +29,7 @@ export class ReservationFormWrapperComponent implements OnInit {
 
   getSelectedEntity() {
     const outletId = this.route.snapshot.queryParams.entityId;
-    const properties = this.hotelDetailService.getPropertyList();
+    const properties = this.hotelDetailService.getPropertyList('reservation');
     const selectedOutlet = properties.filter((item) => item.value === outletId);
     this.selectedOutlet = selectedOutlet[0].type;
   }

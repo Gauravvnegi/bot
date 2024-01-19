@@ -190,7 +190,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   getStatusStyle(type: string, state: string): string {
-    switch (type) {
+    switch (type?.toUpperCase()) {
       case 'INITIATED':
         return `status-background-initiated`;
       case 'PENDING':
@@ -199,6 +199,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
         return `status-background-reject`;
       case 'COMPLETED':
         return `status-background-success`;
+      case 'ACCEPT':
+        return `status-background-success`;
+      case 'REJECT':
+        return `status-background-reject`;
     }
   }
 

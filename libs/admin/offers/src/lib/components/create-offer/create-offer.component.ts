@@ -10,7 +10,11 @@ import {
   ServiceTypeOptionValue,
 } from '@hospitality-bot/admin/library';
 import { SnackBarService } from '@hospitality-bot/shared/material';
-import { NavRouteOptions, Option } from 'libs/admin/shared/src';
+import {
+  HotelDetailService,
+  NavRouteOptions,
+  Option,
+} from 'libs/admin/shared/src';
 import { ConfigService } from 'libs/admin/shared/src/lib/services/config.service';
 import { Subscription } from 'rxjs';
 import { offersRoutes } from '../../constant/routes';
@@ -38,6 +42,14 @@ export class CreateOfferComponent implements OnInit {
   loading = false;
   searchItems: LibrarySearchItem[];
   subscription$ = new Subscription();
+  propertyList: {
+    label: string;
+    value: string;
+    type: string;
+    id: string;
+  }[] = [];
+  paramData;
+  hotelId: string;
 
   /* Dropdown options */
   libraryItems: Option[] = [];
@@ -58,7 +70,9 @@ export class CreateOfferComponent implements OnInit {
     private snackbarService: SnackBarService,
     private route: ActivatedRoute,
     private router: Router,
-    private routesConfigService: RoutesConfigService
+    private routesConfigService: RoutesConfigService,
+    private hotelDetailService: HotelDetailService,
+    private globalFilterService: GlobalFilterService
   ) {
     this.route.params.subscribe((params) => {
       this.offerId = params['id'];
@@ -72,16 +86,26 @@ export class CreateOfferComponent implements OnInit {
 
     this.searchItems = [
       LibrarySearchItem.SERVICE,
-      // LibrarySearchItem.PACKAGE,
       LibrarySearchItem.ROOM_TYPE,
+      LibrarySearchItem.MENU_ITEM,
     ];
   }
 
   ngOnInit(): void {
-    this.entityId = this.globalService.entityId;
+    //to get the entityId from the query params
+    this.paramData = this.route.snapshot.queryParams;
+    this.entityId = this.paramData?.entityId;
+    //set the entityId in the service
+    this.hotelId = this.globalFilterService.entityId;
+
+    //if entityId is not present in the query params then set the entityId from the service
+    if (!this.paramData?.entityId)
+      this.entityId = this.offerService.entityId ?? this.hotelId;
+
     this.initUseForm();
     this.initOptionsConfig();
     this.initNavRoutes();
+    this.getPropertyList();
   }
 
   initUseForm() {
@@ -99,7 +123,9 @@ export class CreateOfferComponent implements OnInit {
       discountedPrice: [''],
       enableOnMicrosite: [false],
       priority: ['LOW'],
+      entityId: [],
     });
+    this.useForm.get('entityId').setValue(this.entityId);
 
     this.initFormSubscription();
 
@@ -249,15 +275,19 @@ export class CreateOfferComponent implements OnInit {
                 let data =
                   currentList?.map((item) => {
                     let price =
-                      item.rate ?? item.discountedPrice ?? item.originalPrice;
+                      item.rate ??
+                      item.discountedPrice ??
+                      item.originalPrice ??
+                      item?.deliveryPrice ??
+                      item?.dineInPrice;
                     return {
                       label: `${item.name} ${
-                        price ? `[${item.currency} ${price}]` : ''
+                        price ? `[${item?.currency ?? 'INR'} ${price}]` : ''
                       }`,
                       value: item.id,
                       type: convertToTitleCase(descriptiveType),
                       price: price,
-                       category: descriptiveType,
+                      category: descriptiveType,
                     };
                   }) ?? [];
 
@@ -325,6 +355,9 @@ export class CreateOfferComponent implements OnInit {
           case LibrarySearchItem.ROOM_TYPE:
             prev.roomTypeIds.push(value);
             break;
+          case LibrarySearchItem.MENU_ITEM:
+            prev.foodItemIds.push(value);
+            break;
         }
         return prev;
       },
@@ -332,6 +365,7 @@ export class CreateOfferComponent implements OnInit {
         serviceIds: [],
         // packageIds: [],
         roomTypeIds: [],
+        foodItemIds: [],
       }
     );
 
@@ -365,6 +399,18 @@ export class CreateOfferComponent implements OnInit {
       );
     }
   }
+  getPropertyList() {
+    this.propertyList = this.hotelDetailService.getPropertyList();
+  }
+
+  isProperty() {
+    if (this.paramData?.entityId && this.offerId) {
+      return true;
+    } else if (this.paramData?.entityId) {
+      return false;
+    }
+    return true;
+  }
 
   getOfferById() {
     this.loading = true;
@@ -379,6 +425,7 @@ export class CreateOfferComponent implements OnInit {
             packageCode,
             subPackages,
             roomTypes,
+            foodItems,
             imageUrl,
             ...restData
           } = res;
@@ -387,6 +434,19 @@ export class CreateOfferComponent implements OnInit {
             ...restData,
             imageUrl: imageUrl?.[0]?.url,
             libraryItems: [
+              ...foodItems?.map((item) => ({
+                label: `${item.name} ${
+                  item.dineInPrice || item.deliveryPrice
+                    ? `[${item.currency ?? 'INR'} ${
+                        item.dineInPrice || item.deliveryPrice
+                      }]`
+                    : ''
+                }`,
+                value: item.id,
+                price: item?.dineInPrice || item?.deliveryPrice,
+                type: item?.type,
+                category: item?.category,
+              })),
               ...subPackages?.map((item) => ({
                 label: `${item.name} ${
                   item.rate || item.discountedPrice || item.originalPrice
@@ -464,5 +524,9 @@ export class CreateOfferComponent implements OnInit {
    */
   ngOnDestroy(): void {
     this.subscription$.unsubscribe();
+  }
+
+  get selectedPropertyType() {
+    return this.propertyList.find((item) => item.id === this.entityId).type;
   }
 }

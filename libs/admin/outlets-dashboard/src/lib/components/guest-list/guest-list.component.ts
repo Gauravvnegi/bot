@@ -7,6 +7,7 @@ import {
 } from '../../constants/guest-list.const';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { GuestCard } from '../guest-card/guest-card.component';
+import { ChipType, TabsType } from '../../types/guest.type';
 
 @Component({
   selector: 'hospitality-bot-guest-list',
@@ -14,9 +15,9 @@ import { GuestCard } from '../guest-card/guest-card.component';
   styleUrls: ['./guest-list.component.scss'],
 })
 export class GuestListComponent implements OnInit {
-  readonly seatedChips: Option[] = seatedChips;
+  readonly seatedChips: Option<ChipType>[] = seatedChips;
   readonly guestList: GuestCard[] = seatedCards;
-  readonly seatedTabGroup: Option[] = seatedTabGroup;
+  readonly seatedTabGroup: Option<TabsType>[] = seatedTabGroup;
 
   useForm: FormGroup;
   @Output() onClose = new EventEmitter<boolean>();
@@ -30,6 +31,8 @@ export class GuestListComponent implements OnInit {
   initForm() {
     this.useForm = this.fb.group({
       search: [],
+      chip: [ChipType.seated],
+      tab: [TabsType.all],
     });
   }
 

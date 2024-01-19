@@ -1,5 +1,6 @@
 import { Option } from 'libs/admin/shared/src';
 import { GuestCard } from '../components/guest-card/guest-card.component';
+import { ChipType, TabsType } from '../types/guest.type';
 
 export const seatedCards: GuestCard[] = [
   {
@@ -86,28 +87,30 @@ export const seatedCards: GuestCard[] = [
   // Add more items as needed
 ];
 
-export const seatedChips: Option[] = [
+const asConst = <T extends string>(val: T) => val as T;
+
+export const seatedChips: Option<ChipType>[] = [
   {
     label: 'Seated',
-    value: 'seated',
+    value: ChipType.seated,
   },
   {
     label: 'Watchlist',
-    value: 'watchlist',
+    value: ChipType.watchlist,
   },
 ];
 
-export const seatedTabGroup: Option[] = [
+export const seatedTabGroup: Option<TabsType>[] = [
   {
     label: 'All',
-    value: 'all',
+    value: TabsType.all,
   },
   {
     label: 'Resident',
-    value: 'resident',
+    value: TabsType.resident,
   },
   {
     label: 'Non-Resident',
-    value: 'Resident',
+    value: TabsType['none-resident'],
   },
 ];

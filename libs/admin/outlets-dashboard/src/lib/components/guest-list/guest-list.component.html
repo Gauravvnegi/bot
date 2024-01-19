@@ -37,12 +37,11 @@
 
     <div class="content">
       <ng-container *ngFor="let guest of guestList">
-        <hospitality-bot-seated-card [item]="guest">
+        <hospitality-bot-guest-card [item]="guest">
           <ng-container>
             button 1, button 2
           </ng-container>
-        </hospitality-bot-seated-card>
-        <hr />
+        </hospitality-bot-guest-card>
       </ng-container>
     </div>
   </div>

@@ -1,0 +1,56 @@
+<div class="seated__card">
+  <div class="col left">
+    <div class="row">
+      <span class="text"
+        ><span class="text__static gray-bold-text">Table No -</span>
+        <span class="text__dynamic bold-text">{{ item.tableNo }}</span></span
+      >
+      <span class="text"
+        ><span class="text__static"> Order No: </span
+        ><span class="text__dynamic bold-text">{{ item.orderNo }}</span></span
+      >
+    </div>
+    <div class="row">
+      <span class="text"
+        ><span class="text__dynamic bold-text">{{ item.name }}</span></span
+      >
+      <span class="text"
+        ><span
+          class="text__dynamic card-type bold-text"
+          [ngClass]="{
+            resident: item.type === 'Resident',
+            'non-resident': item.type === 'None-Resident'
+          }"
+          >{{ item.type }}</span
+        ></span
+      >
+    </div>
+    <div *ngIf="item?.feedback" class="row">
+      <span class="text"
+        ><span class="text__dynamic">{{ item?.feedback }}</span></span
+      >
+    </div>
+    <div class="row">
+      <span class="text"
+        ><span class="text__static">Ph.</span
+        ><span class="text__dynamic bold-text">{{ item?.phone }}</span></span
+      >
+    </div>
+
+    <div class="row continer__wrapper">
+      <ng-content></ng-content>
+    </div>
+  </div>
+  <div class="col right">
+    <div class="row">
+      <span class="text tiny-text alng-cntr">{{ item.time }}</span>
+      <span class="text icon">
+        <img src="assets/svg/standing-up-man-black.svg" alt="people" />
+        <span class="text__dynamic">{{ item.people }}</span>
+      </span>
+    </div>
+    <div *ngIf="item?.timeLimit" class="row flex-end">
+      <span class="text tiny-text">{{ item?.timeLimit }}</span>
+    </div>
+  </div>
+</div>

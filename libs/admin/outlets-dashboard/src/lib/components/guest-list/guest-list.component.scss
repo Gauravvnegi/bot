@@ -26,10 +26,12 @@
     }
 
     .content {
+      @include flex-col;
       padding: 15px 17px;
       padding-top: 0;
-      overflow-x: auto;
-      height: calc(100%-150px);
+      overflow: auto;
+      height: calc(100vh - 240px);
+      gap: 20px;
     }
   }
 }

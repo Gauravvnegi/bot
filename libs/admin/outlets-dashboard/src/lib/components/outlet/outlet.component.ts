@@ -69,18 +69,12 @@ export class OutletComponent implements OnInit {
       GuestListComponent
     );
     const componentRef = this.sidebarSlide.createComponent(factory);
-
-    // Optionally, you can interact with the created component
     const instance: GuestListComponent = componentRef.instance;
 
     instance.onClose.subscribe((res) => {
       this.sidebarVisible = false;
       componentRef.destroy();
     });
-    // ...
-
-    // You can also destroy the component when it's no longer needed
-    // componentRef.destroy();
   }
 
   clearDynamicComponent() {

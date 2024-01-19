@@ -1,0 +1,70 @@
+@import 'main';
+.seated__card {
+  @include flex-space-between;
+  padding: 20px;
+  background: #ededed;
+  border-radius: 10px;
+  font-size: 15px;
+  border: 1px solid #cfcfcf;
+  min-height: 200px;
+  color: gray;
+  .col {
+    @include flex-col;
+    @include flex-space-between;
+    .row {
+      display: flex;
+      gap: 10px;
+      .text {
+        &__static {
+        }
+
+        &__dynamic {
+        }
+      }
+      .icon {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        img {
+          width: 10px;
+          opacity: 0.4;
+        }
+      }
+    }
+  }
+
+  .tiny-text {
+    font-size: 12px;
+  }
+
+  .alng-cntr {
+    display: flex;
+    align-items: center;
+  }
+
+  .bold-text {
+    color: black;
+    font-weight: 600;
+  }
+
+  .gray-bold-text {
+    color: grey;
+    font-weight: 600;
+  }
+
+  .resident,
+  .non-resident {
+    background-color: #a5f1d8;
+    padding: 0 5px;
+    font-size: 11px;
+    border-radius: 2px;
+  }
+  .non-resident {
+    background-color: #ffd68b;
+  }
+}
+
+.flex-end {
+  align-items: flex-end;
+  flex-direction: column;
+}

@@ -196,7 +196,7 @@ export const dineInReservationResponse = {
   total: 9,
   reservationData: [
     {
-      name: 'Natalia Portman',
+      name: 'Chris',
       date: 1704968202,
       area: 'Garden',
       paymentMethod: 'Cash',
@@ -219,7 +219,7 @@ export const dineInReservationResponse = {
       tableStatus: 'RUNNING_KOT_TABLE',
     },
     {
-      name: 'Natalia Portman',
+      name: 'Chris',
       date: 1704968202,
       area: 'Garden',
       paymentMethod: 'Cash',
@@ -236,7 +236,7 @@ export const dineInReservationResponse = {
       reservationStatus: 'CANCELED',
       preparationTime: '05:00',
       price: 200,
-      orderMethod: 'DELIVERY',
+      orderMethod: 'DINEIN',
       paymentStatus: 'UNPAID',
       numberOfItems: 4,
       tableStatus: 'RUNNING_TABLE',
@@ -265,7 +265,7 @@ export const dineInReservationResponse = {
       tableStatus: 'RUNNING_KOT_TABLE',
     },
     {
-      name: 'Natalia Portman',
+      name: 'Tom',
       date: 1704968202,
       area: 'Garden',
       paymentMethod: 'Cash',
@@ -288,7 +288,7 @@ export const dineInReservationResponse = {
       tableStatus: 'PRINTED_TABLE',
     },
     {
-      name: 'Natalia Portman',
+      name: 'Tom',
       date: 1704968202,
       area: 'Garden',
       paymentMethod: 'Cash',
@@ -305,13 +305,13 @@ export const dineInReservationResponse = {
       reservationStatus: 'COMPLETED',
       preparationTime: '05:00',
       price: 200,
-      orderMethod: 'DELIVERY',
-      paymentStatus: 'UNPAID',
+      orderMethod: 'DINEIN',
+      paymentStatus: 'PAID',
       numberOfItems: 4,
       tableStatus: 'RUNNING_KOT_TABLE',
     },
     {
-      name: 'Natalia Portman',
+      name: 'Natalia',
       date: 1704968202,
       area: 'Garden',
       paymentMethod: 'Cash',
@@ -357,7 +357,7 @@ export const dineInReservationResponse = {
       tableStatus: 'RUNNING_KOT_TABLE',
     },
     {
-      name: 'Natalia Portman',
+      name: 'Ayush',
       date: 1704968202,
       area: 'Garden',
       paymentMethod: 'Cash',
@@ -380,7 +380,7 @@ export const dineInReservationResponse = {
       tableStatus: 'RUNNING_KOT_TABLE',
     },
     {
-      name: 'Natalia Portman',
+      name: 'John Doe',
       date: 1704968202,
       area: 'Garden',
       paymentMethod: 'Cash',

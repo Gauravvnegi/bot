@@ -7,6 +7,12 @@ export const guestCols = [
     searchField: ['name', 'code'],
   },
   {
+    field: 'guestType',
+    header: 'Type',
+    sortType: 'string',
+    width: '20%',
+  },
+  {
     field: 'email',
     header: 'Email Id',
     sortType: 'string',

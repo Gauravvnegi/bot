@@ -90,6 +90,11 @@
         </div>
       </td>
       <td>
+        <div class="cell-content" *ngIf="rowData.guestType; else emptyCell">
+          <span class="primary-text">{{ rowData.guestType }}</span>
+        </div>
+      </td>
+      <td>
         <div class="cell-content">
           <span class="primary-text" *ngIf="rowData.email; else emptyCell">
             <a

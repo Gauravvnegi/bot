@@ -8,6 +8,10 @@ import {
   Status,
 } from '../../../../reservation/src/lib/models/reservation-table.model';
 import { EntityState } from '@hospitality-bot/admin/shared';
+import {
+  convertToNormalCase,
+  getFullName,
+} from 'libs/admin/shared/src/lib/utils/valueFormatter';
 
 export interface IDeserializable {
   deserialize(input: any, hotelNationality: string): this;
@@ -138,7 +142,7 @@ export class Guest implements IDeserializable {
   }
 
   getFullName() {
-    return `${this.firstName} ${this.lastName}`;
+    return getFullName(this.firstName, this.lastName);
   }
 
   getPhoneNumber() {
@@ -217,13 +221,15 @@ export class GuestReservation {
   }
 }
 
-export class GuestDocsOrPayment {
+export class GuestDocumentList {
   totalRecord: number;
   entityTypeCounts: EntityState<string>;
   entityStateCounts: EntityState<string>;
   records: GuestDocumentDetails[];
 
-  deserialize(input: GuestDocsOrPaymentListResponse) {
+  deserialize(
+    input: GuestDocsOrPaymentListResponse<GuestDocumentDetailsResponse>
+  ) {
     this.records = input.records.map((record) =>
       new GuestDocumentDetails().deserialize(record)
     );
@@ -254,7 +260,101 @@ export class GuestDocumentDetails {
   documents: any[];
   vip: boolean;
   fullName: string;
+  reservationId: string;
   deserialize(input: GuestDocumentDetailsResponse) {
+    this.dateOfBirth = input?.dateOfBirth;
+    this.contactDetails = input?.contactDetails;
+    this.firstName = input?.firstName;
+    this.lastName = input?.lastName;
+    this.id = input.id;
+    this.countryCode = input?.contactDetails?.cc;
+    this.phoneNumber = input?.contactDetails?.contactNumber;
+    this.email = input?.contactDetails?.emailId;
+    const reservationDetails = input?.reservation[0];
+
+    reservationDetails.stepsStatus['DOCUMENTS'] =
+      reservationDetails?.guestDetails?.allGuest[
+        input?.id
+      ]?.statusMessage?.status;
+
+    this.booking = new Booking().deserialize(reservationDetails);
+    // this.feedback = new Feedback().deserialize(input.feedback);
+    this.payment = new Payment().deserialize(reservationDetails.paymentSummary);
+    this.status = new Status().deserialize(reservationDetails);
+    this.currentJourney = new CurrentJourney().deserialize(reservationDetails);
+    this.rooms = new Room().deserialize(reservationDetails.stayDetails);
+    this.vip = reservationDetails.vip;
+    this.reservationId = reservationDetails?.id;
+
+    set(
+      {},
+      'fullName',
+      `${trim(get(input, ['firstName'], 'No'))} ${trim(
+        get(input, ['lastName'], 'Name')
+      )}`
+    );
+
+    return this;
+  }
+  getFullName() {
+    return getFullName(this.firstName, this.lastName);
+  }
+
+  getPhoneNumber() {
+    return `${this.countryCode ? this.countryCode : ''} ${
+      this.phoneNumber ? this.phoneNumber : ''
+    }`;
+  }
+
+  getNationality(cc) {
+    if (cc && cc.length) {
+      return cc.includes('+') ? cc : `+${cc}`;
+    }
+    return cc;
+  }
+}
+
+export class GuestPaymentList {
+  totalRecord: number;
+  entityTypeCounts: EntityState<string>;
+  entityStateCounts: EntityState<string>;
+  records: GuestPaymentDetails[];
+
+  deserialize(
+    input: GuestDocsOrPaymentListResponse<GuestPaymentDetailsResponse>
+  ) {
+    this.records = input.records.map((record) =>
+      new GuestPaymentDetails().deserialize(record)
+    );
+    this.entityStateCounts = input?.entityStateCounts;
+    this.totalRecord = input?.total;
+    return this;
+  }
+}
+
+export class GuestPaymentDetails {
+  dateOfBirth: string;
+  contactDetails;
+  firstName: string;
+  id: string;
+  lastName: string;
+  salutation: string;
+  nationality: string;
+  countryCode: string;
+  phoneNumber: string;
+  email: string;
+  guestAttributes: GuestAttributes;
+  booking: Booking;
+  feedback: Feedback;
+  payment: Payment;
+  status: Status;
+  currentJourney: CurrentJourney;
+  rooms: Room;
+  documents: any[];
+  vip: boolean;
+  fullName: string;
+  reservationId: string;
+  deserialize(input: GuestPaymentDetailsResponse) {
     const guest = input?.guestDetails?.primaryGuest;
     this.id = guest.id;
     this.firstName = guest?.firstName;
@@ -274,7 +374,9 @@ export class GuestDocumentDetails {
     this.currentJourney = new CurrentJourney().deserialize(input);
     this.rooms = new Room().deserialize(input.stayDetails);
     this.vip = input.vip;
+    this.reservationId = input?.id;
 
+    convertToNormalCase;
     set(
       {},
       'fullName',
@@ -286,7 +388,7 @@ export class GuestDocumentDetails {
     return this;
   }
   getFullName() {
-    return `${this.firstName} ${this.lastName}`;
+    return getFullName(this.firstName, this.lastName);
   }
 
   getPhoneNumber() {
@@ -303,7 +405,7 @@ export class GuestDocumentDetails {
   }
 }
 
-type GuestDocsOrPaymentListResponse = {
+type GuestDocsOrPaymentListResponse<T> = {
   total: number;
   entityStateCounts: {
     INITIATED: number;
@@ -317,10 +419,10 @@ type GuestDocsOrPaymentListResponse = {
     ACCEPTED: string;
     REJECTED: string;
   };
-  records: GuestDocumentDetailsResponse[];
+  records: T[];
 };
 
-type GuestDocumentDetailsResponse = {
+type GuestPaymentDetailsResponse = {
   id: string;
   updated: number;
   created: number;
@@ -485,4 +587,44 @@ type PaymentSummary = {
   totalRoomDiscount: number;
   totalAddOnsTax: number;
   totalAddOnsDiscount: number;
+};
+
+type Address = {
+  addressLine1: string;
+  city: string;
+  // Add other address properties as needed
+};
+
+type Attributes = {
+  overAllNps: number;
+  transactionUsage: string;
+  totalSpend: number;
+  churnProbalilty: number;
+  numberOfBookings: number;
+  // Add other attribute properties as needed
+};
+
+type ContactDetails = {
+  cc: string;
+  contactNumber: string;
+  emailId: string;
+  // Add other contact details properties as needed
+};
+
+type GuestDocumentDetailsResponse = {
+  address: Address;
+  age: number;
+  attributes: Attributes;
+  code: string;
+  contactDetails: ContactDetails;
+  created: number;
+  dateOfBirth: string;
+  firstName: string;
+  gender: string;
+  id: string;
+  lastName: string;
+  reservation: GuestPaymentDetailsResponse[];
+  status: boolean;
+  type: string;
+  updated: number;
 };

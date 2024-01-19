@@ -48,7 +48,11 @@ export class GuestTableService extends ApiService {
     return this.get(`/api/v1/members/stats/${config.queryObj}`);
   }
 
-  getGuestDocsOrPaymentStats(config): Observable<any> {
+  getGuestDocsStats(config): Observable<any> {
+    return this.get(`/api/v1/dashboard-stats/reservation/${config.queryObj}`);
+  }
+
+  getGuestPaymentStats(config): Observable<any> {
     return this.get(`/api/v1/dashboard-stats/reservation/${config.queryObj}`);
   }
 
@@ -58,12 +62,14 @@ export class GuestTableService extends ApiService {
     });
   }
 
-  exportDocsCSV(config): Observable<any> {
-    return this.get(
-      `/api/v1/dashboard-stats/reservation/export/${config.queryObj}`,
-      {
-        responseType: 'blob',
-      }
+  exportDocsCSV(
+    config,
+    payload: { guestId: string; reservationId: string }[]
+  ): Observable<any> {
+    return this.post(
+      `/api/v1/dashboard-stats/reservation/export${config.queryObj}`,
+      payload,
+      { responseType: 'blob' }
     );
   }
 }

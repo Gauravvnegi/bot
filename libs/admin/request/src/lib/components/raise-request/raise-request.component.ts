@@ -308,7 +308,7 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
       toDate: this.globalQueries[0].toDate,
       fromDate: this.globalQueries[1].fromDate,
       entityState: 'ALL',
-      type: 'GUEST',
+      type: 'GUEST,NON_RESIDENT_GUEST',
     };
     return queries;
   }

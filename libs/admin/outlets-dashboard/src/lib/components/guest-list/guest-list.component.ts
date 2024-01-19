@@ -1,5 +1,13 @@
 import { Option } from 'libs/admin/shared/src/lib/types/form.type';
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  ComponentFactoryResolver,
+  EventEmitter,
+  OnInit,
+  Output,
+  ViewChild,
+  ViewContainerRef,
+} from '@angular/core';
 import {
   seatedCards,
   seatedChips,
@@ -9,6 +17,8 @@ import {
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { GuestCard } from '../guest-card/guest-card.component';
 import { ChipType, TabsType } from '../../types/guest.type';
+import { AddGuestListComponent } from '../add-guest-list/add-guest-list.component';
+import { manageMaskZIndex } from '@hospitality-bot/admin/shared';
 
 @Component({
   selector: 'hospitality-bot-guest-list',
@@ -26,7 +36,14 @@ export class GuestListComponent implements OnInit {
   useForm: FormGroup;
   @Output() onClose = new EventEmitter<boolean>();
 
-  constructor(private fb: FormBuilder) {}
+  sidebarVisible = false;
+  @ViewChild('sidebarSlide', { read: ViewContainerRef })
+  sidebarSlide: ViewContainerRef;
+
+  constructor(
+    private fb: FormBuilder,
+    private componentFactoryResolver: ComponentFactoryResolver
+  ) {}
 
   ngOnInit(): void {
     this.initForm();
@@ -74,6 +91,23 @@ export class GuestListComponent implements OnInit {
 
   get isSeated() {
     return this.useForm.get('chip').value == this.chipEnum.seated;
+  }
+
+  openAddGuest() {
+    this.sidebarSlide.clear();
+    this.sidebarVisible = true;
+    manageMaskZIndex();
+    const factory = this.componentFactoryResolver.resolveComponentFactory(
+      AddGuestListComponent
+    );
+    const componentRef = this.sidebarSlide.createComponent(factory);
+    const instance: AddGuestListComponent = componentRef.instance;
+
+    const closeSubscription = instance.onClose.subscribe((res: any) => {
+      componentRef.destroy();
+      closeSubscription.unsubscribe();
+      this.sidebarVisible = false;
+    });
   }
 
   close() {

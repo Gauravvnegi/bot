@@ -65,21 +65,22 @@ export class OutletComponent implements OnInit {
 
   createDynamicComponent() {
     // Dynamically create an instance of DynamicComponent
+    this.sidebarSlide.clear();
     const factory = this.componentFactoryResolver.resolveComponentFactory(
       GuestListComponent
     );
     const componentRef = this.sidebarSlide.createComponent(factory);
     const instance: GuestListComponent = componentRef.instance;
 
-    instance.onClose.subscribe((res) => {
-      this.sidebarVisible = false;
+    const closeSubscription = instance.onClose.subscribe((res: any) => {
       componentRef.destroy();
+      closeSubscription.unsubscribe();
+      this.sidebarVisible = false;
     });
   }
 
   clearDynamicComponent() {
     // Clear the dynamic component container
     this.sidebarVisible = false;
-    this.sidebarSlide.clear();
   }
 }

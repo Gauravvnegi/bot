@@ -24,7 +24,7 @@
         >
         </hospitality-bot-input>
       </div>
-      <div *ngIf="isSeated" class="add-guest">
+      <div *ngIf="isSeated" (click)="openAddGuest()" class="add-guest">
         + add guest
       </div>
       <div class="filter">
@@ -82,3 +82,14 @@
     </div>
   </div>
 </div>
+
+<p-sidebar
+  class="sidebar-slide"
+  [(visible)]="sidebarVisible"
+  position="right"
+  [style]="{ width: '500px' }"
+  [dismissible]="true"
+  [showCloseIcon]="false"
+>
+  <ng-container #sidebarSlide></ng-container>
+</p-sidebar>

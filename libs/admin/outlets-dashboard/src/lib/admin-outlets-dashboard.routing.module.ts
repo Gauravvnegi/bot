@@ -9,6 +9,7 @@ import { MenuItemCardComponent } from './components/menu-item-card/menu-item-car
 import { OrderSummaryComponent } from './components/order-summary/order-summary.component';
 import { GuestCardComponent } from './components/guest-card/guest-card.component';
 import { GuestListComponent } from './components/guest-list/guest-list.component';
+import { AddGuestListComponent } from './components/add-guest-list/add-guest-list.component';
 
 const appRoutes: Route[] = [
   {
@@ -38,5 +39,6 @@ export class AdminOutletsDashboardRoutingModule {
     OrderSummaryComponent,
     GuestCardComponent,
     GuestListComponent,
+    AddGuestListComponent,
   ];
 }

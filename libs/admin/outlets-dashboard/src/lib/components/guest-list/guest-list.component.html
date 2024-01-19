@@ -27,13 +27,17 @@
           }
         "
       >
-        <hospitality-bot-input
+        <hospitality-bot-global-search
+          [formGroup]="useForm"
           controlName="search"
           [props]="{
-            placeholder: 'Search by name'
+            placeholder: 'Search by Name',
+            hasSuggestion: false
           }"
-        >
-        </hospitality-bot-input>
+          (onKeyDown)="loading = true"
+          [suggestionList]="[]"
+          (onSearch)="searchGuest($event)"
+        ></hospitality-bot-global-search>
       </div>
       <div *ngIf="isSeated" (click)="openAddGuest()" class="add-guest">
         + add guest
@@ -58,41 +62,51 @@
     </div>
 
     <div class="content">
-      <ng-container
-        *ngFor="let guest of isSeated ? seatedGuestList : watchListGuestList"
-      >
-        <hospitality-bot-guest-card [item]="guest">
-          <ng-container *ngIf="isSeated; else watchList">
-            <hospitality-bot-button
-              label="Print Invoice"
-              variant="outlined"
-            ></hospitality-bot-button>
-            <hospitality-bot-button
-              label="Change Table"
-              variant="outlined"
-            ></hospitality-bot-button>
-          </ng-container>
-          <ng-template #watchList>
-            <ng-container>
+      <ng-container *ngIf="!loading && guestList.length; else emptyGuest">
+        <ng-container *ngFor="let guest of guestList">
+          <hospitality-bot-guest-card [item]="guest">
+            <ng-container *ngIf="isSeated; else watchList">
               <hospitality-bot-button
-                label="Notified"
+                label="Print Invoice"
                 variant="outlined"
               ></hospitality-bot-button>
               <hospitality-bot-button
-                label="Seated"
-                variant="outlined"
-              ></hospitality-bot-button>
-              <hospitality-bot-button
-                label="Delete"
+                label="Change Table"
                 variant="outlined"
               ></hospitality-bot-button>
             </ng-container>
-          </ng-template>
-        </hospitality-bot-guest-card>
+            <ng-template #watchList>
+              <ng-container>
+                <hospitality-bot-button
+                  label="Notified"
+                  variant="outlined"
+                ></hospitality-bot-button>
+                <hospitality-bot-button
+                  label="Seated"
+                  variant="outlined"
+                ></hospitality-bot-button>
+                <hospitality-bot-button
+                  label="Delete"
+                  variant="outlined"
+                ></hospitality-bot-button>
+              </ng-container>
+            </ng-template>
+          </hospitality-bot-guest-card>
+        </ng-container>
       </ng-container>
     </div>
   </div>
 </div>
+
+<ng-template #emptyGuest>
+  <div class="empty-guest">
+    <hospitality-bot-loader-bounce
+      *ngIf="loading; else empty"
+    ></hospitality-bot-loader-bounce>
+
+    <ng-template #empty>No Record Found...</ng-template>
+  </div>
+</ng-template>
 
 <p-sidebar
   class="sidebar-slide"

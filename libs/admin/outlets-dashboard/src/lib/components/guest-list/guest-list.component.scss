@@ -35,10 +35,17 @@
 
 :host ::ng-deep .guest-list-sidebar {
   &__content {
+    .empty-guest {
+      @include flex-justify-align-center;
+      height: calc(100vh - 300px);
+    }
     .header {
       gap: 15px;
       .search-bar {
         width: calc(100% - 130px);
+        .search__container {
+          width: 100% !important;
+        }
       }
       .add-guest {
         width: 110px;

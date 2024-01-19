@@ -30,8 +30,8 @@ export class GuestListComponent implements OnInit {
   readonly tabEnum = TabsType;
   readonly seatedChips: Option<ChipType>[] = seatedChips;
   readonly seatedTabGroup: Option<TabsType>[] = seatedTabGroup;
-  seatedGuestList: GuestCard[] = seatedCards;
-  watchListGuestList: GuestCard[] = watchListCards;
+  seatedGuestList: GuestCard[] = [...seatedCards];
+  watchListGuestList: GuestCard[] = [...watchListCards];
 
   useForm: FormGroup;
   @Output() onClose = new EventEmitter<boolean>();
@@ -39,6 +39,7 @@ export class GuestListComponent implements OnInit {
   sidebarVisible = false;
   @ViewChild('sidebarSlide', { read: ViewContainerRef })
   sidebarSlide: ViewContainerRef;
+  loading = false;
 
   constructor(
     private fb: FormBuilder,
@@ -59,13 +60,19 @@ export class GuestListComponent implements OnInit {
 
   setChip(event: Option) {
     console.log(ChipType[event.value]);
-    this.useForm.patchValue({ chip: ChipType[event.value] });
+    this.useForm.patchValue(
+      { search: '', chip: ChipType[event.value] },
+      { emitEvent: false }
+    );
   }
 
   tabChange(event: { index: number }) {
     const activeTab = TabsType[Object.keys(TabsType)[event.index]] as TabsType;
     const activeChip = this.useForm.get('chip').value;
-    this.useForm.patchValue({ tab: activeTab });
+    this.useForm.patchValue(
+      { search: '', tab: activeTab },
+      { emitEvent: false }
+    );
 
     /**
      * filtration------
@@ -111,6 +118,37 @@ export class GuestListComponent implements OnInit {
   }
 
   fullReservation() {}
+
+  searchGuest(event: string) {
+    const activeChip = this.useForm.get('chip').value;
+    const activeTab = this.useForm.get('tab').value;
+
+    let constCards =
+      activeChip == this.chipEnum.seated ? seatedCards : watchListCards;
+
+    if (event) {
+      const isAll = activeTab == this.tabEnum.all;
+      this.watchListGuestList = constCards.filter(
+        (item) =>
+          item.name.toLocaleLowerCase().includes(event.toLocaleLowerCase()) &&
+          (isAll || item.type === activeTab)
+      );
+      this.seatedGuestList = constCards.filter(
+        (item) =>
+          item.name.toLocaleLowerCase().includes(event.toLocaleLowerCase()) &&
+          (isAll || item.type === activeTab)
+      );
+      console.log(activeChip, activeTab, event);
+    } else {
+      this.tabChange({ index: Object.keys(TabsType).indexOf(activeTab) });
+      this.setChip({ value: activeChip } as any);
+    }
+    this.loading = false;
+  }
+
+  get guestList() {
+    return this.isSeated ? this.seatedGuestList : this.watchListGuestList;
+  }
 
   close() {
     this.onClose.emit(true);

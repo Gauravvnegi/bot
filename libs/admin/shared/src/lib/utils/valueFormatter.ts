@@ -97,3 +97,9 @@ export function convertToNormalCase(inputString) {
 
   return normalCaseString;
 }
+
+export function getFullName(firstName: string, lastName: string) {
+  return firstName && lastName
+    ? `${firstName} ${lastName}`
+    : firstName || lastName || undefined;
+}

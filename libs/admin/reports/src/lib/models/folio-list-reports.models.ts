@@ -1,5 +1,6 @@
 import {
   currencyToNumber,
+  getFullName,
   toCurrency,
 } from 'libs/admin/shared/src/lib/utils/valueFormatter';
 import {
@@ -22,7 +23,10 @@ export class FolioListReport
           id: item?.id,
           bookingNo: item?.number,
           folioNo: item?.invoiceCode,
-          guestName: `${item?.guestDetails.primaryGuest.firstName} ${item?.guestDetails.primaryGuest.lastName}`,
+          guestName: getFullName(
+            item?.guestDetails.primaryGuest.firstName,
+            item?.guestDetails.primaryGuest.lastName
+          ),
           discount: toCurrency(item?.reservationItemsPayment?.totalDiscount),
           amount: toCurrency(item?.reservationItemsPayment?.totalRoomCharge),
           tax: toCurrency(

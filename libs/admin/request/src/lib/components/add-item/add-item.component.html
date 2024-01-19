@@ -4,14 +4,10 @@
       {{ 'Add Service Item' | translate }}
     </div>
     <div (click)="close()" class="close">
-      <i
-        [ngClass]="isSidebar ? 'pi pi-arrow-right' : 'fa fa-times'"
-        aria-hidden="true"
-        style="color: #ffff;"
-      ></i>
+      <img class="close-sidebar-icon" src="assets/svg/close-sidebar.svg" />
     </div>
   </div>
-  <div class="body">
+  <div class="body" [id]="fa.referenceId">
     <div class="form-block" [formGroup]="useForm">
       <hospitality-bot-input
         class="full-width"
@@ -21,22 +17,22 @@
           placeholder: 'Enter'
         }"
       ></hospitality-bot-input>
-      <hospitality-bot-input
+      <!-- <hospitality-bot-input
         class="half-width"
         controlName="categoryDesc"
         label="Category"
         [props]="{
           placeholder: 'Enter'
         }"
-      ></hospitality-bot-input>
-      <hospitality-bot-input
+      ></hospitality-bot-input> -->
+      <!-- <hospitality-bot-input
         class="half-width"
         controlName="functionCode"
         label="Service Code"
         [props]="{
           placeholder: 'Enter'
         }"
-      ></hospitality-bot-input>
+      ></hospitality-bot-input> -->
       <hospitality-bot-time-picker
         class="half-width"
         controlName="sla"
@@ -68,7 +64,7 @@
       >
       </hospitality-bot-text-area>
 
-      <div class="request-popup-btnwrap">
+      <!-- <div class="request-popup-btnwrap">
         <hospitality-bot-button
           label="Cancel"
           (click)="close()"
@@ -78,7 +74,20 @@
           label="Save"
           (click)="handleSubmit()"
         ></hospitality-bot-button>
-      </div>
+      </div> -->
+
+      <hospitality-bot-form-action
+        class="full-width"
+        (onPreAction)="close()"
+        (onPostAction)="handleSubmit()"
+        [isFixed]="isSidebar"
+        [config]="{
+          preLabel: 'Cancel',
+          postLabel: 'Save'
+        }"
+        #fa
+      >
+      </hospitality-bot-form-action>
     </div>
   </div>
 </div>

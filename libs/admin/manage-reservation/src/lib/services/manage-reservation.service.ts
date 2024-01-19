@@ -37,6 +37,13 @@ export class ManageReservationService extends ApiService {
     );
   }
 
+  rateImprovement(entityId: string, reservationId: string, data: any) {
+    return this.put(
+      `/api/v1/booking/${reservationId}/price-differences?entityId=${entityId}&type=ROOM_TYPE`,
+      data
+    );
+  }
+
   getUpgradeRoomTypes(entityId: string, config: QueryConfig) {
     return this.get(`/api/v1/entity/${entityId}/inventory${config.params}`);
   }

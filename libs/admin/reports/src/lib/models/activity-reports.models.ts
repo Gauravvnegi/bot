@@ -5,7 +5,10 @@ import {
 } from '../types/activity-reports.types';
 import { ReportClass } from '../types/reports.types';
 import { getFormattedDate } from './reservation-reports.models';
-import { toCurrency } from 'libs/admin/shared/src/lib/utils/valueFormatter';
+import {
+  getFullName,
+  toCurrency,
+} from 'libs/admin/shared/src/lib/utils/valueFormatter';
 
 export class ReservationCreatedReport
   implements
@@ -20,7 +23,10 @@ export class ReservationCreatedReport
           bookingNo: data.number,
           createdOn: getFormattedDate(data.created),
           roomType: data.stayDetails.room.type,
-          primaryGuest: `${data.guestDetails.primaryGuest.firstName} ${data.guestDetails.primaryGuest.lastName}`,
+          primaryGuest: getFullName(
+            data.guestDetails.primaryGuest.firstName,
+            data.guestDetails.primaryGuest.lastName
+          ),
           arrival: getFormattedDate(data.stayDetails.arrivalTime),
           departure: getFormattedDate(data.stayDetails.departureTime),
           nights: data.nightCount,
@@ -45,7 +51,10 @@ export class ReservationActivityReport
           id: data.id,
           bookingNo: data.number,
           roomType: data.stayDetails.room.type,
-          primaryGuest: `${data.guestDetails.primaryGuest.firstName} ${data.guestDetails.primaryGuest.lastName}`,
+          primaryGuest: getFullName(
+            data.guestDetails.primaryGuest.firstName,
+            data.guestDetails.primaryGuest.lastName
+          ),
           sharers: `${data.guestDetails.sharerGuests.length}`,
           arrival: getFormattedDate(data.stayDetails.arrivalTime),
           departure: getFormattedDate(data.stayDetails.departureTime),

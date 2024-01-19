@@ -8,7 +8,6 @@ import {
   FeedbackListComponent,
   FeedbackListFilterComponent,
   MainComponent,
-  SearchComponent,
 } from './components/card';
 import { FeedbackDatatableComponent } from './components/datatable/feedback-datatable/feedback-datatable.component';
 import { FeedbackContainerComponent } from './components/feedback-container/feedback-container.component';
@@ -80,7 +79,6 @@ export class AdminFeedbackAnalyticsRoutingModule {
     FeedbackListFilterComponent,
     ActionOverlayComponent,
     FeedbackDetailComponent,
-    SearchComponent,
     FeedbackDetailFooterComponent,
     GuestInfoComponent,
     GuestPersonalInfoComponent,

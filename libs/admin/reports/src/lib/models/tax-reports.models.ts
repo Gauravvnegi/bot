@@ -1,4 +1,4 @@
-import { toCurrency } from 'libs/admin/shared/src/lib/utils/valueFormatter';
+import { getFullName, toCurrency } from 'libs/admin/shared/src/lib/utils/valueFormatter';
 import { monthlyTaxReportRows } from '../constant/tax-reports.const';
 import { ReportClass } from '../types/reports.types';
 import {
@@ -74,10 +74,10 @@ export class LodgingTaxReportDataModel {
   deserialize(input: LodgingTaxReportResponse) {
     this.id = input?.id;
     this.res = input?.number;
-    this.guestName =
-      input.guestDetails.primaryGuest.firstName +
-      ' ' +
-      input.guestDetails.primaryGuest.lastName;
+    this.guestName = getFullName(
+      input.guestDetails.primaryGuest.firstName,
+      input.guestDetails.primaryGuest.lastName
+    );
     this.checkInDate = input.stayDetails.arrivalTime
       ? getFormattedDate(input.stayDetails.arrivalTime)
       : '';

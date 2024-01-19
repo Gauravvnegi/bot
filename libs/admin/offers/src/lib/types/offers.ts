@@ -29,4 +29,5 @@ export type OffersOnEntity = {
   serviceIds: string[];
   packageIds?: string[];
   roomTypeIds: string[];
+  foodItemIds: string[];
 };

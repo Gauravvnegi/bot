@@ -1,15 +1,5 @@
-import {
-  JourneyState,
-  JourneyType,
-} from 'libs/admin/manage-reservation/src/lib/constants/reservation';
 import { ReservationCurrentStatus } from 'libs/admin/manage-reservation/src/lib/models/reservations.model';
 import { IGCellInfo } from 'libs/admin/shared/src/lib/components/interactive-grid/interactive-grid.component';
-
-const actionBtnConfig = [
-  {
-    label: 'Activate & Generate PreCheckIn',
-  },
-];
 
 export enum actionType {
   ACTIVATE_AND_GENERATE_JOURNEY = 'ACTIVATE_AND_GENERATE_JOURNEY',

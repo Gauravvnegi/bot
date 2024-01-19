@@ -1,4 +1,7 @@
-import { toCurrency } from 'libs/admin/shared/src/lib/utils/valueFormatter';
+import {
+  getFullName,
+  toCurrency,
+} from 'libs/admin/shared/src/lib/utils/valueFormatter';
 import {
   DiscountAllowanceReportData,
   DiscountAllowanceReportResponse,
@@ -22,10 +25,14 @@ export class DiscountAllowanceReport
           date: getFormattedDate(reservationData.created),
           group: undefined, //to be added in response
           res: reservationData.number,
-          createdBy:
-            reservationData?.user?.firstName &&
-            `${reservationData?.user?.firstName} ${reservationData?.user?.lastName}`, //to be added in response
-          guestName: `${reservationData.guestDetails.primaryGuest.firstName} ${reservationData.guestDetails.primaryGuest.lastName}`,
+          createdBy: getFullName(
+            reservationData?.user?.firstName,
+            reservationData?.user?.lastName
+          ), //to be added in response
+          guestName: getFullName(
+            reservationData.guestDetails.primaryGuest.firstName,
+            reservationData.guestDetails.primaryGuest.lastName
+          ),
           reasonForDiscount: undefined, //to be added in response
           directDiscount: toCurrency(
             reservationData?.reservationItemsPayment?.totalRoomDiscount

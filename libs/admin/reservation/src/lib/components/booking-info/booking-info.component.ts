@@ -1,5 +1,7 @@
 import {
+  Compiler,
   Component,
+  ComponentFactoryResolver,
   Input,
   OnInit,
   ViewChild,
@@ -16,6 +18,7 @@ import {
   ConfigService,
   EntitySubType,
   Option,
+  manageMaskZIndex,
 } from '@hospitality-bot/admin/shared';
 import {
   BookingConfig,
@@ -27,8 +30,9 @@ import { ReservationForm } from '../../../../../manage-reservation/src/lib/const
 import { Subscription } from 'rxjs';
 import { AgentTableResponse } from 'libs/admin/agent/src/lib/types/response';
 import { CompanyResponseType } from 'libs/admin/company/src/lib/types/response';
-import { SideBarService } from 'apps/admin/src/app/core/theme/src/lib/services/sidebar.service';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
+import { AddCompanyComponent } from 'libs/admin/company/src/lib/components/add-company/add-company.component';
+import { AddAgentComponent } from 'libs/admin/agent/src/lib/components/add-agent/add-agent.component';
 
 @Component({
   selector: 'hospitality-bot-booking-info',
@@ -95,7 +99,8 @@ export class BookingInfoComponent implements OnInit {
     private configService: ConfigService,
     private globalFilterService: GlobalFilterService,
     private formService: FormService,
-    private sidebarService: SideBarService
+    private resolver: ComponentFactoryResolver,
+    private compiler: Compiler
   ) {}
 
   ngOnInit(): void {
@@ -175,7 +180,6 @@ export class BookingInfoComponent implements OnInit {
       }
 
       let multipleDateChange = false;
-
       fromDateControl.valueChanges.subscribe((res) => {
         if (res) {
           const maxToLimit = new Date(res);
@@ -194,6 +198,11 @@ export class BookingInfoComponent implements OnInit {
           this.minToDate = new Date(maxToLimit); // Create a new date object
           this.minToDate.setDate(maxToLimit.getDate());
           this.formService.reservationDate.next(res);
+          this.reservationId &&
+            !this.isCheckedIn &&
+            this.formService.updateRateImprovement(
+              this.inputControls.rateImprovement
+            );
         }
       });
 
@@ -205,6 +214,11 @@ export class BookingInfoComponent implements OnInit {
             !multipleDateChange &&
             this.formService.reinitializeRooms.next(true);
           multipleDateChange = false;
+          this.reservationId &&
+            !this.isCheckedIn &&
+            this.formService.updateRateImprovement(
+              this.inputControls.rateImprovement
+            );
         }
       });
     }
@@ -235,23 +249,27 @@ export class BookingInfoComponent implements OnInit {
 
   listenForConfigDataChanges() {
     // Add options Market Segment and Source for external reservations
-    this.marketSegmentControl.valueChanges.subscribe((res) => {
+    this.marketSegmentControl?.valueChanges.subscribe((res) => {
       if (res) {
         this.marketSegmentValue = res;
         this.mapMarketSegments();
       }
     });
 
-    this.sourceControl.valueChanges.subscribe((res) => {
+    this.sourceControl?.valueChanges.subscribe((res) => {
       if (res) {
         this.sourceValue = res;
         this.mapSourceOptions();
         this.initSourceDetails(res);
+        this.inputControls?.printRate?.patchValue(
+          res !== 'OTA' && res !== 'AGENT' && res !== 'COMPANY',
+          { emitEvent: false }
+        );
         (!this.editMode || !this.reservationId) &&
           this.sourceNameControl.reset();
       }
     });
-    this.otaSourceControl.valueChanges.subscribe((res) => {
+    this.otaSourceControl?.valueChanges.subscribe((res) => {
       res && this.formService.getSummary.next(true);
     });
   }
@@ -443,11 +461,22 @@ export class BookingInfoComponent implements OnInit {
   }
 
   showAgent() {
-    this.sidebarService.openSidebar({
-      componentName: 'AddAgent',
-      containerRef: this.sidebarSlide,
-      onOpen: () => (this.sidebarVisible = true),
-      onClose: (res) => {
+    const lazyModulePromise = import(
+      'libs/admin/agent/src/lib/admin-agent.module'
+    )
+      .then((module) => {
+        return this.compiler.compileModuleAsync(module.AdminAgentModule);
+      })
+      .catch((error) => {
+        console.error('Error loading the lazy module:', error);
+      });
+    lazyModulePromise.then((moduleFactory) => {
+      this.sidebarVisible = true;
+      const factory = this.resolver.resolveComponentFactory(AddAgentComponent);
+      this.sidebarSlide.clear();
+      const componentRef = this.sidebarSlide.createComponent(factory);
+      componentRef.instance.isSidebar = true;
+      componentRef.instance.onCloseSidebar.subscribe((res) => {
         this.sidebarVisible = false;
         if (typeof res !== 'boolean') {
           this.selectedAgent = {
@@ -459,16 +488,50 @@ export class BookingInfoComponent implements OnInit {
             this.patchValue(this.marketSegmentControl, res.marketSegment);
           this.formService.getSummary.next(true);
         }
-      },
+      });
+      manageMaskZIndex();
     });
+
+    // this.sidebarService.openSidebar({
+    //   componentName: 'AddAgent',
+    //   containerRef: this.sidebarSlide,
+    //   onOpen: () => (this.sidebarVisible = true),
+    //   manageMask: true,
+    //   onClose: (res) => {
+    //     this.sidebarVisible = false;
+    //     if (typeof res !== 'boolean') {
+    //       this.selectedAgent = {
+    //         label: `${res?.firstName}`,
+    //         value: res?.id,
+    //         ...res,
+    //       };
+    //       res.marketSegment &&
+    //         this.patchValue(this.marketSegmentControl, res.marketSegment);
+    //       this.formService.getSummary.next(true);
+    //     }
+    //   },
+    // });
   }
 
   showCompany() {
-    this.sidebarService.openSidebar({
-      componentName: 'AddCompany',
-      containerRef: this.sidebarSlide,
-      onOpen: () => (this.sidebarVisible = true),
-      onClose: (res) => {
+    const lazyModulePromise = import(
+      'libs/admin/company/src/lib/admin-company.module'
+    )
+      .then((module) => {
+        return this.compiler.compileModuleAsync(module.AdminCompanyModule);
+      })
+      .catch((error) => {
+        console.error('Error loading the lazy module:', error);
+      });
+    lazyModulePromise.then((moduleFactory) => {
+      this.sidebarVisible = true;
+      const factory = this.resolver.resolveComponentFactory(
+        AddCompanyComponent
+      );
+      this.sidebarSlide.clear();
+      const componentRef = this.sidebarSlide.createComponent(factory);
+      componentRef.instance.isSidebar = true;
+      componentRef.instance.onCloseSidebar.subscribe((res) => {
         this.sidebarVisible = false;
         if (typeof res !== 'boolean') {
           this.selectedCompany = {
@@ -480,8 +543,30 @@ export class BookingInfoComponent implements OnInit {
             this.patchValue(this.marketSegmentControl, res.marketSegment);
           this.formService.getSummary.next(true);
         }
-      },
+        this.sidebarVisible = false;
+        componentRef.destroy();
+      });
+      manageMaskZIndex();
     });
+
+    // this.sidebarService.openSidebar({
+    //   componentName: 'AddCompany',
+    //   containerRef: this.sidebarSlide,
+    //   onOpen: () => (this.sidebarVisible = true),
+    //   onClose: (res) => {
+    //     this.sidebarVisible = false;
+    //     if (typeof res !== 'boolean') {
+    //       this.selectedCompany = {
+    //         label: `${res?.companyName}`,
+    //         value: res?.id,
+    //         ...res,
+    //       };
+    //       res.marketSegment &&
+    //         this.patchValue(this.marketSegmentControl, res.marketSegment);
+    //       this.formService.getSummary.next(true);
+    //     }
+    //   },
+    // });
   }
 
   get reservationInfoControls() {

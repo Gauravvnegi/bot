@@ -19,6 +19,7 @@ export interface GuestMemberForm {
   dateOfBirth: string;
   age: string;
   address: AddressFieldType;
+  type: string;
 }
 
 export type ChartTypeOption = {
@@ -60,4 +61,7 @@ export type GuestListResponse = {
   total: number;
   entityTypeCounts: EntityState<string>;
   entityStateCounts: EntityState<string>;
+  entityStateLabels: EntityState<string>;
 };
+
+export type GuestTypes = 'NON_RESIDENT_GUEST' | 'GUEST';

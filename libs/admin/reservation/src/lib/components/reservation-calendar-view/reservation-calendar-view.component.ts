@@ -512,7 +512,8 @@ export class ReservationCalendarViewComponent implements OnInit {
       ?.available;
     if (
       this.occupancyData.size === 0 ||
-      !this.occupancyData.get(currentEpoch)?.get(roomTypeId)?.available
+      (!this.occupancyData.get(currentEpoch)?.get(roomTypeId)?.available &&
+        !this.occupancyData.get(currentEpoch)?.get(roomTypeId)?.occupancy)
     ) {
       return 0;
     }

@@ -21,7 +21,10 @@ export enum ProductNames {
   COMPLAINT_TRACKER = 'COMPLAINT_TRACKER',
   CHANNEL_MANAGER = 'CHANNEL_MANAGER', // Product
   PREDICTO_PMS = 'PREDICTO_PMS',
-  REPORTS = 'REPORTS',
+
+  REPORTS = 'REPORTS', // remove
+
+  POS = 'POS',
 }
 
 export enum ModuleNames {
@@ -90,6 +93,12 @@ export enum ModuleNames {
   OUTLET = 'OUTLET',
   OUTLETS_DASHBOARD = 'OUTLETS_DASHBOARD',
   ALL_OUTLETS = 'ALL_OUTLETS',
+
+  // POS
+  POS_HOME = 'POS_HOME',
+  POS_DASHBOARD = 'POS_DASHBOARD',
+  KOT = 'KOT',
+  TABLE_MANAGEMENT = 'TABLE_MANAGEMENT',
 
   // FINANCE
   FINANCE = 'FINANCE',

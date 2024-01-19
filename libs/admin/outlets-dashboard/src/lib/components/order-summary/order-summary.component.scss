@@ -1,0 +1,10 @@
+@import 'main';
+
+.summary-wrapper {
+  @include flex-justify-center;
+  height: 100%;
+}
+
+.empty-view {
+  @include flex-col-all-Center;
+}

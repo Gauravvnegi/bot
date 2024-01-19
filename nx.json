@@ -29,11 +29,9 @@
     "admin-shared": {
       "tags": []
     },
-
     "shared-auth": {
       "tags": []
     },
-
     "shared-theme": {
       "tags": []
     },
@@ -227,6 +225,9 @@
       "tags": []
     },
     "admin-view-not-allowed": {
+      "tags": []
+    },
+    "table-management": {
       "tags": []
     }
   }

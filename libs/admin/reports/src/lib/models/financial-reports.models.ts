@@ -1,4 +1,3 @@
-import { I } from '@angular/cdk/keycodes';
 import {
   advanceDepositPaymentCols,
   dailyRevenueReportRows,
@@ -29,9 +28,10 @@ import {
 } from './reservation-reports.models';
 import {
   currencyToNumber,
+  getFullName,
   toCurrency,
 } from 'libs/admin/shared/src/lib/utils/valueFormatter';
-import { get } from 'lodash';
+
 
 export class FinancialReport
   implements ReportClass<FinancialReportData, FinancialReportResponse> {
@@ -100,7 +100,10 @@ export class CloseOutBalanceReport
           bookingNo: item?.number,
           folioNo: item?.invoiceCode,
           checkOut: getFormattedDate(item?.departureTime),
-          guestName: `${item?.guestDetails.primaryGuest.firstName} ${item?.guestDetails.primaryGuest.lastName}`,
+          guestName: getFullName(
+            item?.guestDetails.primaryGuest.firstName,
+            item?.guestDetails.primaryGuest.lastName
+          ),
           lodgingAndTax: toCurrency(
             +(
               item?.reservationItemsPayment?.totalCgstTax +
@@ -151,9 +154,10 @@ export class DepositReport
 
         return {
           bookingNo: item?.number,
-          guestName: item?.guestDetails?.primaryGuest
-            ? `${item?.guestDetails.primaryGuest.firstName} ${item?.guestDetails.primaryGuest.lastName}`
-            : '',
+          guestName: getFullName(
+            item?.guestDetails.primaryGuest.firstName,
+            item?.guestDetails.primaryGuest.lastName
+          ),
           checkIn: formattedCheckIn,
           checkOut: formattedCheckOut,
           nights: item?.nightCount,
@@ -207,10 +211,11 @@ export class PostingAuditReport
       value.map((item) => {
         return {
           room: `${item?.stayDetails?.room.roomNumber} ${item?.stayDetails?.room.type}`,
-          name: `${item?.guestDetails?.primaryGuest?.firstName} ${item?.guestDetails?.primaryGuest?.lastName}`,
-          user:
-            item?.user?.firstName &&
-            `${item?.user.firstName} ${item?.user?.lastName}`,
+          name: getFullName(
+            item?.guestDetails?.primaryGuest?.firstName,
+            item?.guestDetails?.primaryGuest?.lastName
+          ),
+          user: getFullName(item?.user.firstName, item?.user?.lastName),
           trxAmount: toCurrency(item?.paymentSummary?.totalAmount),
           baseAmount: toCurrency(
             item?.reservationItemsPayment?.totalRoomCharge
@@ -295,7 +300,7 @@ export class DailyRevenueReport
             // adj: ' ',
             today: ' ',
             month: ' ',
-          year: ' ',
+            year: ' ',
             //@ts-ignore
             isHeader: true,
           })

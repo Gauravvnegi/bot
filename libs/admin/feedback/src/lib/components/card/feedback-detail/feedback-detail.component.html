@@ -2,10 +2,12 @@
   <div class="guestInfoOpen">
     <div class="guestInfoOpen-guest-wrap">
       <div class="guestInfoAvatar">
-        {{ feedback.getProfileNickName() }}
+        {{ feedback?.getProfileNickName() }}
       </div>
       <div class="selectedChat"></div>
-      {{ feedback?.feedback.guest.getFullName() }}
+      <div guest-details-sidebar [guestId]="feedback.guestId">
+        {{ feedback?.feedback.guest.getFullName() }}
+      </div>
     </div>
     <div class="mr-10">
       <div class="req_button">
@@ -23,13 +25,6 @@
           View Feedback
         </div>
       </div>
-      <img
-        *ngIf="!guestInfoEnable"
-        class=""
-        src="assets/svg/hamBurger.svg"
-        [alt]=""
-        (click)="openGuestInfo()"
-      />
     </div>
   </div>
   <div class="guestInfoOpen" [formGroup]="feedbackFG">
@@ -85,29 +80,32 @@
         </div>
       </div>
     </div>
-    <mat-select
-      class="assignee-dropdown state-dropdown"
-      (selectionChange)="updateFeedbackState($event)"
-      placeholder="Status"
-      formControlName="status"
-      [disabled]="statusList?.length === 0"
-    >
-      <mat-option *ngFor="let status of statusList" [value]="status?.id">
-        {{ status?.label }}
-      </mat-option>
-    </mat-select>
 
-    <mat-select
-      class="assignee-dropdown"
-      (selectionChange)="setAssignee($event)"
-      placeholder="Assignee"
-      formControlName="assignee"
-      [disabled]="assigneeList?.length === 0"
-    >
-      <mat-option *ngFor="let assignee of assigneeList" [value]="assignee.id">
-        {{ assignee.firstName }} {{ assignee.lastName }}
-      </mat-option>
-    </mat-select>
+    <div class="select-wrapper" *ngIf="feedback.status !== 'NOACTION'">
+      <mat-select
+        class="assignee-dropdown state-dropdown"
+        (selectionChange)="updateFeedbackState($event)"
+        placeholder="Status"
+        formControlName="status"
+        [disabled]="statusList?.length === 0"
+      >
+        <mat-option *ngFor="let status of statusList" [value]="status?.id">
+          {{ status?.label }}
+        </mat-option>
+      </mat-select>
+
+      <mat-select
+        class="assignee-dropdown"
+        (selectionChange)="setAssignee($event)"
+        placeholder="Assignee"
+        formControlName="assignee"
+        [disabled]="assigneeList?.length === 0"
+      >
+        <mat-option *ngFor="let assignee of assigneeList" [value]="assignee.id">
+          {{ assignee.firstName }} {{ assignee.lastName }}
+        </mat-option>
+      </mat-select>
+    </div>
 
     <div class="guestInfoOpen-guest-wrap"></div>
   </div>
@@ -199,7 +197,7 @@
           {{ feedback?.feedback.comments }}
         </div>
         <div class="userImage">
-          {{ feedback.getProfileNickName() }}
+          {{ feedback?.getProfileNickName() }}
         </div>
       </div>
       <ng-container *ngFor="let remark of feedback?.remarks">

@@ -51,6 +51,9 @@
       *ngIf="isRemarks"
       controlName="remarks"
       label="Remarks"
+      [props]="{
+        placeholder: 'Enter'
+      }"
     ></hospitality-bot-text-area>
     <div class="actions">
       <ng-container *ngIf="!!actions?.length; else defaultCTA">

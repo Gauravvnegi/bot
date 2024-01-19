@@ -6,11 +6,36 @@ import {
   HttpRequest,
 } from '@angular/common/http';
 import { Injectable, Injector } from '@angular/core';
-import { Observable, throwError, forkJoin } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { Observable, throwError, of } from 'rxjs';
+import { catchError, switchMap } from 'rxjs/operators';
 import { TranslateService } from '@ngx-translate/core';
 import { SnackbarHandlerService } from 'libs/admin/global-shared/src/lib/services/snackbar-handler.service';
 import { ToastKeys } from 'libs/shared/material/src/lib/types/snackbar.type';
+
+/**
+ * A utility function to create a readonly string literal type from a string key.
+ * @param key - The input key.
+ * @returns A readonly string literal type.
+ */
+const asConst = <TKey extends string>(key: TKey) => key;
+
+/**
+ * An object that maps HTTP error status codes to corresponding error keys.
+ */
+const errorCodeKeys = {
+  403: asConst('forbiddenErr'), // Key for 403 status code
+  401: asConst('unAuthErr'), // Key for 401 status code
+  default: asConst('unknownErr'), // Default key for other status codes
+};
+
+/**
+ * Get the base translation key based on the provided error key.
+ * @param key - The error key for which the base translation key is needed.
+ * @returns The base translation key.
+ */
+const getTranslationKeyOf = (key: keyof typeof errorCodeKeys) =>
+  `messages.error.${errorCodeKeys[key] ?? 'unknownErr'}`; // Default to 'unknownErr' if key is not found
+
 @Injectable()
 export class ErrorHandlerInterceptor implements HttpInterceptor {
   constructor(
@@ -27,34 +52,34 @@ export class ErrorHandlerInterceptor implements HttpInterceptor {
         try {
           const statusCode = err.error?.status;
           const translateService = this.injector.get(TranslateService);
-          const translateKey1 = `messages.error.${err.error?.type}`;
-          const translateKey2 = `messages.error.${
-            statusCode == 403 ? 'forbiddenErr' : 'unknownErr'
-          }`;
           const priorityMessage = err.error?.message;
+          let translationKey = getTranslationKeyOf(statusCode);
 
-          forkJoin([
-            translateService.get(translateKey1),
-            translateService.get(translateKey2),
-          ]).subscribe(([msg1, msg2]) => {
-            [
-              [msg1, translateKey1],
-              [msg2, translateKey2],
-            ].forEach((data) => {
-              const translationToBeShown =
-                statusCode == 500 ? data[0] : priorityMessage || data[0];
-              if (data[0] !== data[1]) {
-                this._progressSpinnerService.$snackbarChange.next({
-                  detail: translationToBeShown,
-                  severity: 'error',
-                  key: ToastKeys.default,
-                  position: 'top-right',
-                  life: 3000,
-                  closable: false,
-                });
-              }
+          translateService
+            .get(translationKey)
+            .pipe(
+              switchMap((message) => {
+                const translationToBeShown = priorityMessage || message;
+                // Check if the translation is the same as the requested translation key
+                if (translationToBeShown === translationKey) {
+                  // If it's the same, fetch the default 'unknownErr' message
+                  return translateService.get(getTranslationKeyOf('default'));
+                } else {
+                  // If not the same, return the original translated message
+                  return of(translationToBeShown);
+                }
+              })
+            )
+            .subscribe((message) => {
+              this._progressSpinnerService.$snackbarChange.next({
+                detail: priorityMessage || message,
+                severity: 'error',
+                key: ToastKeys.default,
+                position: 'top-right',
+                life: 3000,
+                closable: false,
+              });
             });
-          });
         } catch {
           console.error('Error: Translation Text is not available');
         }

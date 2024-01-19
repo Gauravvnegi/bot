@@ -1,5 +1,6 @@
 import {
   convertToNormalCase,
+  getFullName,
   toCurrency,
 } from 'libs/admin/shared/src/lib/utils/valueFormatter';
 import {
@@ -16,7 +17,6 @@ import {
 } from '../types/analytics-reports.types';
 import { ReportClass } from '../types/reports.types';
 import { getFormattedDate } from './reservation-reports.models';
-import { unescape } from 'lodash';
 
 export class CompanyContributionsReport
   implements
@@ -81,10 +81,10 @@ export class NoShowSummaryReport
         reservationNumber: reservationData?.reservationNumber,
         createdOn: getFormattedDate(reservationData?.created),
         bookingNo: reservationData?.reservationNumber,
-        guestName:
-          reservationData?.guest?.firstName +
-          ' ' +
-          reservationData?.guest?.lastName,
+        guestName: getFullName(
+          reservationData?.guest?.firstName,
+          reservationData?.guest?.lastName
+        ),
         pax: reservationData?.bookingItems[0]?.occupancyDetails.maxAdult,
         rooms: reservationData?.bookingItems[0]?.roomDetails.roomCount,
         roomType: reservationData?.bookingItems[0]?.roomDetails.roomTypeLabel,
@@ -92,10 +92,10 @@ export class NoShowSummaryReport
         status: reservationData?.status,
         checkIn: getFormattedDate(reservationData?.from),
         checkOut: getFormattedDate(reservationData?.to),
-        createdBy:
-          reservationData?.guest?.firstName +
-          ' ' +
-          reservationData?.guest?.lastName,
+        createdBy: getFullName(
+          reservationData?.guest?.firstName,
+          reservationData?.guest?.lastName
+        ),
       });
     });
     return this;

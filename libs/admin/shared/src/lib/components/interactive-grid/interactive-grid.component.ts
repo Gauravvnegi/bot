@@ -340,12 +340,16 @@ export class InteractiveGridComponent {
     const startPosIdx = Math.trunc(currentStartIdx) - 1;
     const endPosIdx = startPosIdx + data.cellOccupied - 1;
 
+    const additionEnd = data.hasStart ? 0 : 1;
+
     // Current Data - which will be update as per calculation below
     let currentData: IGChangeEvent = {
       id: id,
       rowValue,
       startPos: data.hasStart ? this.gridColumns[startPosIdx] : data.oStartPos,
-      endPos: data.hasEnd ? this.gridColumns[endPosIdx] : data.oEndPos,
+      endPos: data.hasEnd
+        ? this.gridColumns[endPosIdx + additionEnd]
+        : data.oEndPos,
     };
 
     const width = event.size.width;
@@ -366,11 +370,12 @@ export class InteractiveGridComponent {
       };
     } else {
       const isEndHalf = data.hasNext;
-      const newEndPos = Math.round(
-        endPosIdx +
-          (width - currentWidth) / this.cellSize -
-          (isEndHalf ? 0.5 : 0)
-      );
+      const newEndPos =
+        Math.round(
+          endPosIdx +
+            (width - currentWidth) / this.cellSize -
+            (isEndHalf ? 0.5 : 0)
+        ) + additionEnd;
 
       /**
        * Updating new end data

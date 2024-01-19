@@ -46,6 +46,7 @@ import {
 } from 'apps/admin/src/app/core/theme/src/lib/services/sidebar.service';
 import { tokensConfig } from 'libs/admin/shared/src/lib/constants/common';
 import { SettingsMenuComponent } from 'libs/admin/settings/src/lib/components/settings-menu/settings-menu.component';
+import { NightAuditComponent } from 'libs/admin/global-shared/src/lib/components/night-audit/night-audit.component';
 
 type MessagePayload = {
   data: {
@@ -123,6 +124,7 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
 
   @ViewChild('url') urlTemplate: TemplateRef<any>;
   iframeTempUrl: string;
+  sidebarStyle: {};
 
   constructor(
     private _router: Router,
@@ -185,11 +187,15 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
       .sideBarSubscription()
       .subscribe((res: SideBarConfig) => {
         if (res.open) {
-          if (res.type === 'RAISE_REQUEST') {
-            this.showComplaint();
-          }
-          if (res.type === 'URL') {
-            this.openSideBarWithUrl(res.url);
+          switch (res.type) {
+            case 'RAISE_REQUEST':
+              this.showComplaint();
+              break;
+            case 'URL':
+              this.openSideBarWithUrl(res.url);
+              break;
+            case 'ADD_GUEST':
+              this.showAddGuest(res?.data, res.sidebarType);
           }
         }
       });
@@ -587,12 +593,16 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
     });
   }
 
-  showAddGuest() {
-    this.sidebarType = 'guest-sidebar';
+  showAddGuest(guestConfig?: {}, sidebarType = 'guest-sidebar') {
+    this.sidebarType = sidebarType;
     this.sideBarService.openSidebar({
       componentName: 'AddGuest',
+      data: guestConfig,
       onOpen: () => (this.sidebarVisible = true),
-      onClose: (res) => (this.sidebarVisible = false),
+      onClose: (res) => (
+        res && this.sideBarService.sideBarEmittedData.next(res),
+        (this.sidebarVisible = false)
+      ),
     });
   }
 
@@ -612,13 +622,38 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
   }
 
   openNightAudit() {
-    this.sidebarType = 'night-audit';
-    this.sideBarService.openSidebar({
-      componentName: 'NightAudit',
-      onOpen: () => (this.sidebarVisible = true),
-      onClose: (res) => (this.sidebarVisible = false),
+    const lazyModulePromise = import(
+      'libs/admin/global-shared/src/lib/admin-global-shared.module'
+    )
+      .then((module) => {
+        return this.compiler.compileModuleAsync(module.GlobalSharedModule);
+      })
+      .catch((error) => {
+        console.error('Error loading the lazy module:', error);
+      });
+
+    lazyModulePromise.then(() => {
+      this.sidebarVisible = true;
+      const factory = this.resolver.resolveComponentFactory(
+        NightAuditComponent
+      );
+      this.sidebarSlide.clear();
+      this.sidebarType = 'night-audit';
+      const componentRef = this.sidebarSlide.createComponent(factory);
+      componentRef.instance.isSidebar = true;
+      componentRef.instance.onCloseSidebar.subscribe((res) => {
+        this.sidebarVisible = false;
+        componentRef.destroy();
+      });
     });
   }
+
+  //  this.sidebarType = 'night-audit',
+  //   this.sideBarService.openSidebar({
+  //     componentName: 'NightAudit',
+  //     onOpen: () => (this.sidebarVisible = true),
+  //     onClose: (res) => (this.sidebarVisible = false),
+  //   }))
 
   // openSettings() {
   //   this.sidebarType = 'settings';
@@ -790,9 +825,10 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
       this.subscriptionPlanService.checkModuleSubscription(
         ModuleNames.ADD_RESERVATION
       ) &&
-      this.subscriptionPlanService.hasManageUserPermission(
-        PermissionModuleNames.RESERVATION
-      )
+      this.subscriptionPlanService.hasViewUserPermission({
+        type: 'module',
+        name: ModuleNames.RESERVATION,
+      })
     );
   }
 

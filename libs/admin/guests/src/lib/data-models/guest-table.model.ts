@@ -10,6 +10,10 @@ import {
 import { EntityState } from '@hospitality-bot/admin/shared';
 import { DateService } from '@hospitality-bot/shared/utils';
 import { GuestListResponse, GuestType } from '../types/guest.type';
+import {
+  convertToNormalCase,
+  getFullName,
+} from 'libs/admin/shared/src/lib/utils/valueFormatter';
 
 export interface IDeserializable {
   deserialize(input: any, hotelNationality: string): this;
@@ -19,15 +23,17 @@ export class GuestTable implements IDeserializable {
   totalRecord: number;
   entityTypeCounts: EntityState<string>;
   entityStateCounts: EntityState<string>;
+  entityStateLabels: EntityState<string>;
   records: GuestData[];
 
   deserialize(input: GuestListResponse) {
     this.records = input.records.map((record) =>
-      new GuestData().deserialize(record)
+      new GuestData().deserialize(record, input?.entityStateLabels)
     );
 
     this.entityTypeCounts = input.entityTypeCounts;
     this.entityStateCounts = input.entityStateCounts;
+    this.entityStateLabels = input?.entityStateLabels;
 
     this.totalRecord = input.total;
     return this;
@@ -49,7 +55,7 @@ export class GuestData {
   status: boolean;
   type: string;
 
-  deserialize(input: GuestType) {
+  deserialize(input: GuestType, EntityStateLabels?: EntityState<string>) {
     const contact = input.contactDetails;
     Object.assign(this, {
       age: input.age,
@@ -58,14 +64,13 @@ export class GuestData {
           ? contact.cc + '-' + contact.contactNumber
           : '',
       email: contact.emailId,
-      name:
-        input?.firstName || input?.lastName
-          ? input?.firstName + ' ' + (input?.lastName ?? '')
-          : '',
+      name: getFullName(input.firstName, input.lastName),
       id: input.id,
       isVerified: input.isVerified,
       status: input.status,
       type: input.type,
+      guestType:
+        EntityStateLabels[input?.type] ?? convertToNormalCase(input?.type),
       code: input.code,
       dob: input.dateOfBirth,
       created: input.created,
@@ -152,7 +157,7 @@ export class Guest implements IDeserializable {
   }
 
   getFullName() {
-    return `${this.firstName} ${this.lastName}`;
+    return getFullName(this.firstName, this.lastName);
   }
 
   getPhoneNumber() {

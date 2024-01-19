@@ -70,9 +70,12 @@ export class RoomReservation {
     this.sourceName = input.sourceName;
     this.source = input.source;
     this.status = ReservationCurrentStatus[input.status];
-    this.guestName = input?.guest?.firstName
-      ? input.guest?.firstName + ' ' + (input.guest?.lastName ?? '')
-      : '';
+    const { firstName, lastName } = input?.guest || {};
+    this.guestName = firstName
+      ? lastName
+        ? `${firstName} ${lastName}`
+        : firstName
+      : lastName || '';
     this.guestId = input.guest?.id;
     this.companyName = input.guest?.company?.firstName ?? '';
     this.created = input.created;
@@ -80,14 +83,35 @@ export class RoomReservation {
     this.totalAmount = input.pricingDetails.totalAmount;
     this.totalPaidAmount = input.pricingDetails.totalPaidAmount;
     this.totalDueAmount = input.pricingDetails.totalDueAmount;
-    if (input?.bookingItems) {
-      this.bookingItems = input?.bookingItems;
+    // if (input?.bookingItems) {
+    //   this.bookingItems = input?.bookingItems;
+    //   this.roomTypes =
+    //     input?.bookingItems.map((item) => item?.roomDetails?.roomTypeLabel) ??
+    //     [];
+    // }
+    // (this.roomNumber =
+    //   (input.bookingItems && input.bookingItems[0]?.roomDetails?.roomNumber) ??
+    //   ''),
+    //   (this.roomType =
+    //     (input.bookingItems &&
+    //       input.bookingItems[0]?.roomDetails?.roomTypeLabel) ??
+    //     '');
+
+    if (input.bookingItems && input.bookingItems.length) {
+      this.bookingItems = input.bookingItems;
+      const firstBookingItem = input.bookingItems[0];
+      this.roomNumber = firstBookingItem.roomDetails?.roomNumber ?? '';
+      this.roomType = firstBookingItem.roomDetails?.roomTypeLabel ?? '';
       this.roomTypes =
-        input?.bookingItems.map((item) => item?.roomDetails?.roomTypeLabel) ??
-        [];
+        input.bookingItems
+          .map((item) => item.roomDetails?.roomTypeLabel)
+          .filter(Boolean) ?? [];
+    } else {
+      this.bookingItems = [];
+      this.roomNumber = '';
+      this.roomType = '';
+      this.roomTypes = [];
     }
-    (this.roomNumber = input.bookingItems[0]?.roomDetails?.roomNumber ?? ''),
-      (this.roomType = input.bookingItems[0]?.roomDetails?.roomTypeLabel ?? '');
     this.journeysStatus = input.journeysStatus;
     this.invoiceId = input?.invoiceId ?? '';
     this.agentName = input?.agent

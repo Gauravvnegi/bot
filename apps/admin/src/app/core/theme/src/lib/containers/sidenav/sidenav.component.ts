@@ -360,7 +360,7 @@ export class SidenavComponent implements OnInit, OnDestroy {
    * Dynamically adding z index as mask has lower index
    */
   clickOnToggle() {
-    manageMaskZIndex(150);
+    manageMaskZIndex(150, '.p-component-overlay.p-sidebar-mask', true);
     this.isMenuBarVisible = true;
     this.navToggle.emit(false);
   }

@@ -1,4 +1,4 @@
-import { toCurrency } from 'libs/admin/shared/src/lib/utils/valueFormatter';
+import { getFullName, toCurrency } from 'libs/admin/shared/src/lib/utils/valueFormatter';
 import {
   GuestContactReportData,
   GuestContactReportResponse,
@@ -36,7 +36,7 @@ export class GuestContactReport
         return {
           guestId: item?.id,
           salutation: item?.salutation,
-          name: `${item?.firstName} ${item?.lastName}`,
+          name: getFullName(item?.firstName, item?.lastName),
           address: item?.address?.addressLine1,
           city: item?.address?.city,
           state: item?.address?.state,
@@ -69,9 +69,7 @@ export class GuestHistoryModel {
   amountPaid: string;
   balance: string;
   deserialize(input: GuestHistoryResponse) {
-    this.guestName = `${input?.firstName ?? ''} ${
-      input?.lastName ?? ''
-    }`.trim();
+    this.guestName = getFullName(input?.firstName, input?.lastName);
     if (input.firstStay) this.firstStayed = getFormattedDate(input.firstStay);
     if (input.lastStay) this.lastStayed = getFormattedDate(input.lastStay);
     this.noOfResv = input.reservation.length;
@@ -151,11 +149,10 @@ export class GuestLedger implements ReportClass<GuestLedgerData, any> {
         this.records.push({
           id: reservationData?.id,
           roomNo: reservationData?.stayDetails?.room?.roomNumber,
-          name: `${
-            reservationData?.guestDetails.primaryGuest.firstName ?? ''
-          } ${
-            reservationData?.guestDetails?.primaryGuest.lastName ?? ''
-          }`.trim(),
+          name: getFullName(
+            reservationData?.guestDetails.primaryGuest.firstName,
+            reservationData?.guestDetails?.primaryGuest.lastName
+          ),
           confirmationNo: reservationData?.number,
           balance: toCurrency(reservationData?.paymentSummary?.dueAmount),
         });

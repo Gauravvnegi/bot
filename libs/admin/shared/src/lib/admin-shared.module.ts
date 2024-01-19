@@ -139,6 +139,9 @@ import { SplitButtonComponent } from './components/split-button/split-button.com
 import { Dialog } from 'primeng/dialog';
 import { TabViewModule } from 'primeng/tabview';
 import { DynamicContentComponent } from './components/dynamic-content/dynamic-content.component';
+import { GuestDetailsDirective } from './directives/guest-details.directive';
+import { SearchComponent } from './components/form-component/search/search.component';
+import { CustomTabHeaderComponent } from './components/custom-tab-header/custom-tab-header.component';
 
 @NgModule({
   imports: [
@@ -280,6 +283,9 @@ import { DynamicContentComponent } from './components/dynamic-content/dynamic-co
     CheckboxComponent,
     SplitButtonComponent,
     DynamicContentComponent,
+    GuestDetailsDirective,
+    SearchComponent,
+    CustomTabHeaderComponent,
   ],
 
   exports: [
@@ -409,6 +415,9 @@ import { DynamicContentComponent } from './components/dynamic-content/dynamic-co
     Dialog,
     ToastModule,
     DynamicContentComponent,
+    GuestDetailsDirective,
+    SearchComponent,
+    CustomTabHeaderComponent,
   ],
 })
 export class AdminSharedModule {}

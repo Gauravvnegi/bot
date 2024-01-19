@@ -1,16 +1,34 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import {
+  Component,
+  ComponentFactoryResolver,
+  OnInit,
+  ViewChild,
+  ViewContainerRef,
+} from '@angular/core';
+import { FormBuilder, FormControl } from '@angular/forms';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
   AdminUtilityService,
   BaseDatatableComponent,
+  manageMaskZIndex,
 } from '@hospitality-bot/admin/shared';
 import { LazyLoadEvent } from 'primeng/api';
 import { Subscription } from 'rxjs';
 import { OutletTableService } from '../../services/outlet-table.service';
 import * as FileSaver from 'file-saver';
 import { SnackBarService } from '@hospitality-bot/shared/material';
-import { cols, status, tabFilterItems } from '../../constants/data-table';
+import { Clipboard } from '@angular/cdk/clipboard';
+import {
+  ReservationStatusDetails,
+  posCols,
+  reservationTypes,
+} from '../../constants/data-table';
+import {
+  OutletReservationList,
+  OutletReservation,
+} from '../../models/outlet-reservation.model';
+import { ReservationStatus } from '../../types/reservation-table';
+import { PosReservationComponent } from '../pos-reservation/pos-reservation.component';
 
 @Component({
   selector: 'hospitality-bot-outlets-data-table',
@@ -25,86 +43,65 @@ export class OutletsDataTableComponent extends BaseDatatableComponent
   entityId: string;
   globalQueries = [];
   $subscription = new Subscription();
-  limit = 10;
-  offset = 0;
-  tabFilterItems = tabFilterItems;
-  cols = cols;
-  status = status;
+  reservationTypes = [reservationTypes.card, reservationTypes.table];
+  selectedReservationType: string;
+  outletTableData: OutletReservation[];
+
+  sidebarVisible = false;
+  @ViewChild('sidebarSlide', { read: ViewContainerRef })
+  sidebarSlide: ViewContainerRef;
+
+  readonly reservationStatusDetails = ReservationStatusDetails;
 
   constructor(
     public fb: FormBuilder,
     protected globalFilterService: GlobalFilterService,
     protected outletService: OutletTableService,
+    private _clipboard: Clipboard,
     protected adminUtilityService: AdminUtilityService,
-    protected snackbarService: SnackBarService
+    protected snackbarService: SnackBarService,
+    private resolver: ComponentFactoryResolver
   ) {
     super(fb);
   }
+
   ngOnInit(): void {
-    this.listenForGlobalFilter();
+    this.entityId = this.globalFilterService.entityId;
+    this.tableFG?.addControl('reservationType', new FormControl(''));
+    this.setReservationType(this.reservationTypes[0].value);
+    this.cols = posCols;
+    this.initReservations();
   }
 
-  listenForGlobalFilter() {
-    this.globalFilterService.globalFilter$.subscribe((value) => {
-      this.entityId = this.globalFilterService.entityId;
-
-      this.globalQueries = [
-        ...value['filter'].queryValue,
-        ...value['dateRange'].queryValue,
-      ];
-      this.initTableValue();
-    });
+  setReservationType(value: string) {
+    this.selectedReservationType = value;
+    this.tableFG.patchValue({ reservationType: value });
   }
 
   loadData(event: LazyLoadEvent): void {
-    this.initTableValue();
+    // this.selectedReservationType === 'dinein' && this.initDineInReservation();
+    // this.selectedReservationType === 'delivery' &&
+    // this.initReservations();
   }
 
-  initTableValue(): void {
+  initReservations() {
     this.loading = true;
-
     this.$subscription.add(
-      this.outletService.getOutletList().subscribe(
-        (res) => {
-          this.values = res;
-          // this.totalRecords = 1;
-        },
-        (err) => {},
-        this.handleFinal
-      )
+      this.outletService.getReservations(this.entityId).subscribe((res) => {
+        if (res) {
+          const data = new OutletReservationList().deserialize(res);
+          this.values = data.reservationData;
+          this.outletTableData = data.reservationData;
+          this.initFilters(
+            res.entityTypeCounts,
+            res.entityStateCounts,
+            12,
+            ReservationStatusDetails
+          );
+          this.loading = false;
+        }
+      })
     );
-  }
-
-  /**
-   * To get query params
-   */
-  getQueryConfig() {
-    const config = {
-      params: this.adminUtilityService.makeQueryParams([
-        ...this.getSelectedQuickReplyFilters(),
-        ...[...this.globalQueries, { order: 'DESC' }],
-        {
-          limit: this.limit,
-          offset: this.offset,
-        },
-      ]),
-    };
-    return config;
-  }
-
-  /**
-   * @function getSelectedQuickReplyFilters To return the selected chip list.
-   * @returns The selected chips.
-   */
-  getSelectedQuickReplyFilters() {
-    const chips = this.filterChips.filter(
-      (item) => item.isSelected && item.value !== 'ALL'
-    );
-    return [
-      chips.length !== 1
-        ? { status: null }
-        : { status: chips[0].value === 'ACTIVE' },
-    ];
   }
 
   exportCSV(): void {
@@ -128,30 +125,42 @@ export class OutletsDataTableComponent extends BaseDatatableComponent
     );
   }
 
-  /**
-   * @function handleStatus To handle the status change
-   * @param status status value
-   */
-  handleStatus(status, rowData): void {
-    // Not working
-    this.loading = true;
-    this.$subscription.add(
-      this.outletService
-        .updateOutletItem(this.entityId, rowData.id, status)
-        .subscribe(
-          () => {
-            // this.updateStatusAndCount(rowData.status, status);
+  copyConfirmationNumber(number: string) {
+    this._clipboard.copy(number);
+    this.snackbarService.openSnackBarAsText('Booking number copied', '', {
+      panelClass: 'success',
+    });
+  }
 
-            this.snackbarService.openSnackBarAsText(
-              'Status changes successfully',
-              '',
-              { panelClass: 'success' }
-            );
-          },
-          ({ error }) => {},
-          this.handleFinal
-        )
+  handleStatus(status: ReservationStatus, reservationData: OutletReservation) {}
+
+  handleMenuClick(value: string, rowData: OutletReservation) {}
+
+  editReservation(id: string) {}
+
+  addNewOrder() {
+    this.sidebarVisible = true;
+    const factory = this.resolver.resolveComponentFactory(
+      PosReservationComponent
     );
+    const sidebarData = {
+      isSidebar: true,
+      data: {
+        tableName: 'G01',
+        area: 'Garden',
+        invoiceId: '3294093',
+        entityId: this.entityId,
+      },
+    };
+    this.sidebarSlide.clear();
+    const componentRef = this.sidebarSlide.createComponent(factory);
+    Object.assign(componentRef.instance, sidebarData);
+    this.$subscription.add(
+      componentRef.instance.onCloseSidebar.subscribe((res) => {
+        this.sidebarVisible = false;
+      })
+    );
+    manageMaskZIndex();
   }
 
   handleFinal = () => {

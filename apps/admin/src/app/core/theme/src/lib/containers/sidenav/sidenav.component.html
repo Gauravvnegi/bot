@@ -72,7 +72,7 @@
     [visible]="isMenuBarVisible"
     (onHide)="isMenuBarVisible = false"
     [showCloseIcon]="false"
-    [style]="{ width: '25em' }"
+    [style]="{ width: '27em' }"
     position="left"
   >
     <ng-template
@@ -87,11 +87,10 @@
     <div class="header">
       <div class="cross">
         <div (click)="isMenuBarVisible = false" class="close">
-          <i
-            class="pi pi-arrow-left"
-            style="color: #5f38f9;"
-            aria-hidden="true"
-          ></i>
+          <img
+            class="close-sidebar-icon"
+            src="assets/svg/close-sidebar-left-blue.svg"
+          />
         </div>
       </div>
       <div class="bot-logo">
@@ -122,8 +121,8 @@
                 [src]="product.iconUrl"
                 [alt]="product.name"
               />
+              <div class="menu-label">{{ product.title }}</div>
             </div>
-            <div class="menu-label">{{ product.title }}</div>
             <div class="menu-description">{{ product?.description }}</div>
           </div>
         </ng-container>

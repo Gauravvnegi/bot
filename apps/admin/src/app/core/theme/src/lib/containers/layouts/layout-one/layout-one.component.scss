@@ -402,33 +402,13 @@
   }
 }
 
-@mixin sidebarTopBorder() {
-  border-top-left-radius: 10px;
-}
-
-@mixin sidebar-design($width) {
-  @include sidebarTopBorder;
-  width: $width;
-}
-
-@mixin close-design() {
-  .close {
-    color: $primary-cta !important;
-  }
-}
-
-@mixin default-close() {
-  .p-sidebar-close {
-    display: none;
-  }
-}
 
 // Sidebar design
 :host ::ng-deep {
   .complaint {
     @include default-close;
     .body {
-      height: 84vh;
+      // height: 84vh;
     }
     .p-sidebar-right {
       @include sidebar-design(30rem);
@@ -485,19 +465,12 @@
     }
   }
 
-  .night-audit {
-    @include default-close;
+  .complaint-guest-sidebar {
     .p-sidebar-right {
-      @include sidebar-design(60rem);
+      @include sidebar-design(30rem);
     }
   }
 
-  .booking {
-    @include default-close;
-    .p-sidebar-right {
-      width: 35rem;
-    }
-  }
 
   .url {
     @include default-close;

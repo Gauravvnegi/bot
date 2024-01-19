@@ -621,5 +621,5 @@ export const reportFiltersMapping: Record<
 export const rowStylesMapping: Record<RowStylesKeys, string> = {
   isHeader: 'is-header',
   isTotal: 'is-total',
-  isSubTotal: 'is-sub-total'
+  isSubTotal: 'is-sub-total',
 };

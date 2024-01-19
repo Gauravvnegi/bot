@@ -18,7 +18,10 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
-import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import {
+  GlobalFilterService,
+  RoutesConfigService,
+} from '@hospitality-bot/admin/core/theme';
 import {
   AdminUtilityService,
   EntitySubType,
@@ -94,7 +97,8 @@ export class RoomIteratorComponent extends IteratorComponent
     public formService: FormService,
     private roomService: RoomService,
     private adminUtilityService: AdminUtilityService,
-    public dialogService: DialogService
+    public dialogService: DialogService,
+    private routesConfigService: RoutesConfigService
   ) {
     super(fb);
   }
@@ -116,7 +120,6 @@ export class RoomIteratorComponent extends IteratorComponent
   ngOnInit(): void {
     this.fields[3].name = 'roomNumbers';
     this.fields[3].type = 'multi-select';
-    this.entityId = this.globalFilterService.entityId;
     this.initDetails();
     this.listenForGlobalFilters();
     this.createNewFields(true);
@@ -227,6 +230,23 @@ export class RoomIteratorComponent extends IteratorComponent
             });
         }
       }
+    });
+  }
+
+  listenForOccupancyChanges(index: number) {
+    this.roomControls[index].get('adultCount').valueChanges.subscribe((res) => {
+      res &&
+        this.reservationId &&
+        this.formService.updateRateImprovement(
+          this.inputControls.rateImprovement
+        );
+    });
+    this.roomControls[index].get('childCount').valueChanges.subscribe((res) => {
+      res &&
+        this.reservationId &&
+        this.formService.updateRateImprovement(
+          this.inputControls.rateImprovement
+        );
     });
   }
 
@@ -385,7 +405,7 @@ export class RoomIteratorComponent extends IteratorComponent
         defaultOption
       );
       this.isDraftBooking && this.listenForRoomChanges(index);
-
+      this.listenForOccupancyChanges(index);
       // Data initialized only when all the roomTypes in itemValues are patched.
       this.itemValuesCount - 1 === index &&
         this.reservationId &&
@@ -447,13 +467,7 @@ export class RoomIteratorComponent extends IteratorComponent
 
   onCloseRoomUpgrade(upgradedRoom: RoomUpgradeClose) {
     if (upgradedRoom) {
-      // this.roomControls[0].patchValue({
-      //   roomTypeId: upgradedRoom.roomTypeId,
-      //   roomNumber: upgradedRoom.roomNumber,
-      //   ratePlanId: upgradedRoom.ratePlanId,
-      //   rooms: upgradedRoom.rooms,
-      //   ratePlans: upgradedRoom.ratePlans,
-      // });
+      this.routesConfigService.reload();
     }
   }
 
@@ -486,12 +500,22 @@ export class RoomIteratorComponent extends IteratorComponent
     ) as FormArray).controls;
   }
 
+  get roomTypeFA() {
+    // const asdasd = this.roomControls[0].get('sad');
+    return this.roomControls as (Omit<AbstractControl, 'get'> & {
+      get: (
+        formKey: keyof ReservationForm['roomInformation']
+      ) => AbstractControl;
+    })[];
+  }
+
   errorMessage(field: IteratorField) {
     return `Value should be more than ${field.minValue}`;
   }
 }
 
 type BookingConfig = {
+  entityId: string;
   reservationId: string;
   isDraftBooking?: boolean;
   isRouteData?: boolean;

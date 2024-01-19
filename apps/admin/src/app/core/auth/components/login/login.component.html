@@ -81,7 +81,7 @@
           'button.forgot_password' | translate
         }}</a>
       </div>
-      <div class="card-footer">
+      <div class="card-footer {{ isSigningIn && 'click-disable' }}">
         <button type="submit" class="login" mat-button (click)="login()">
           <i *ngIf="isSigningIn" class="fa fa-spinner fa-spin"></i>
           {{ 'button.login' | translate }}

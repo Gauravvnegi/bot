@@ -80,7 +80,7 @@ export class BaseReservationComponent {
   getSelectedEntity() {
     const outletId = this.activatedRoute.snapshot.queryParams.entityId;
 
-    const properties = this.hotelDetailService.getPropertyList();
+    const properties = this.hotelDetailService.getPropertyList('reservation');
     const selectedOutlet = properties.filter((item) => item.value === outletId);
 
     this.selectedEntity = selectedOutlet[0];
@@ -188,8 +188,8 @@ export class BaseReservationComponent {
       this.summaryData.totalPaidAmount = this.totalPaidAmount;
     }
     // Set value and validators for payment according to the summaryData.
-    this.paymentControls.totalPaidAmount.setValidators([Validators.min(0)]);
-    this.paymentRuleControls.amountToPay.setValidators([
+    this.paymentControls?.totalPaidAmount.setValidators([Validators.min(0)]);
+    this.paymentRuleControls?.amountToPay.setValidators([
       Validators.max(this.summaryData?.totalAmount),
       Validators.min(0),
     ]);

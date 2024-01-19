@@ -1,4 +1,4 @@
-import { toCurrency } from 'libs/admin/shared/src/lib/utils/valueFormatter';
+import { getFullName, toCurrency } from 'libs/admin/shared/src/lib/utils/valueFormatter';
 import {
   DirectAgentBillingReportData,
   DirectAgentBillingReportResponse,
@@ -23,8 +23,7 @@ export class DirectAgentBillingReport
         return {
           guestId: item?.guest?.id,
           agentCode: item?.agent?.code,
-          agentName:
-            item?.agent && `${item?.agent?.firstName} ${item?.agent?.lastName}`,
+          agentName: getFullName(item?.agent?.firstName, item?.agent?.lastName),
           bookingNo: item?.reservationNumber,
           guestName: `${item?.guest?.firstName ?? ''} ${
             item?.guest?.lastName ?? ''
@@ -72,7 +71,7 @@ export class DirectCompanyBillingReport
           companyCode: item?.company?.code,
           companyName: item?.company?.firstName,
           bookingNo: item?.reservationNumber,
-          guestName: `${item?.guest?.firstName} ${item?.guest?.lastName}`,
+          guestName: getFullName(item?.guest?.firstName, item?.guest?.lastName),
           roomType: item?.bookingItems[0]?.roomDetails?.roomTypeLabel,
           roomNo: item?.bookingItems[0]?.roomDetails?.roomNumber,
           checkInDate: getFormattedDate(item?.from),

@@ -2,7 +2,7 @@
   <div class="guestInfoOpen">
     <div class="guestInfoOpen-guest-wrap">
       <div class="guestInfoAvatar">
-        {{ feedback.getProfileNickName() }}
+        {{ feedback?.getProfileNickName() }}
       </div>
       <div class="selectedChat"></div>
       {{ feedback?.feedback.guest.getFullName() }}
@@ -186,7 +186,7 @@
           {{ feedback?.feedback.comments }}
         </div>
         <div class="userImage">
-          {{ feedback.getProfileNickName() }}
+          {{ feedback?.getProfileNickName() }}
         </div>
       </div>
       <ng-container *ngFor="let remark of feedback?.remarks">

@@ -1,7 +1,6 @@
 import {
   Component,
   ElementRef,
-  HostListener,
   Input,
   OnDestroy,
   OnInit,
@@ -48,7 +47,7 @@ export class FeedbackListComponent implements OnInit, OnDestroy {
   pagination = card.pagination;
   totalRecords = card.totalRecords;
   outletChangeSubscribed = false;
-
+  searchApi: string;
   paginationDisabled = false;
 
   constructor(
@@ -109,6 +108,7 @@ export class FeedbackListComponent implements OnInit, OnDestroy {
         this.cardService.$selectedFeedback.next(null);
         if (!this.outletChangeSubscribed) this.listenForOutletChanged();
         this.loadData();
+        this.getSearchApi();
       })
     );
   }
@@ -145,6 +145,16 @@ export class FeedbackListComponent implements OnInit, OnDestroy {
         }
       })
     );
+  }
+
+  getSearchApi() {
+    const config = {
+      queryObj: this._adminUtilityService.makeQueryParams([
+        ...this.globalQueries,
+        { feedbackType: this.feedbackType, ...this.filterData },
+      ]),
+    };
+    this.searchApi = `/api/v1/feedback/guests/search${config.queryObj}`;
   }
 
   /**

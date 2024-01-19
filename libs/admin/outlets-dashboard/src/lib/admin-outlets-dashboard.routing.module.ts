@@ -1,8 +1,12 @@
 import { NgModule } from '@angular/core';
 import { Route, RouterModule } from '@angular/router';
-import { OutletGraphsComponent } from './components/outlet-graphs/outlet-graphs.component';
+import { OutletComponent } from './components/outlet/outlet.component';
 import { OutletsDataTableComponent } from './components/outlets-data-table/outlets-data-table.component';
 import { MainComponent } from './components/main/main.component';
+import { ReservationCardComponent } from './components/reservation-card/reservation-card.component';
+import { PosReservationComponent } from './components/pos-reservation/pos-reservation.component';
+import { MenuItemCardComponent } from './components/menu-item-card/menu-item-card.component';
+import { OrderSummaryComponent } from './components/order-summary/order-summary.component';
 
 const appRoutes: Route[] = [
   {
@@ -11,10 +15,10 @@ const appRoutes: Route[] = [
     children: [
       {
         path: '',
-        component: OutletGraphsComponent,
+        component: OutletComponent,
       },
     ],
-  }, 
+  },
 ];
 
 @NgModule({
@@ -24,7 +28,11 @@ const appRoutes: Route[] = [
 export class AdminOutletsDashboardRoutingModule {
   static components = [
     MainComponent,
-    OutletGraphsComponent,
+    OutletComponent,
     OutletsDataTableComponent,
+    ReservationCardComponent,
+    PosReservationComponent,
+    MenuItemCardComponent,
+    OrderSummaryComponent,
   ];
 }

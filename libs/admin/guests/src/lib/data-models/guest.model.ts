@@ -22,6 +22,7 @@ export class GuestFactory {
         countryCode: formData?.address?.countryCode ?? '',
         postalCode: formData?.address?.postalCode ?? '',
       },
+      type: formData?.type,
     };
   }
   static patchEditView(form: FormGroup, input: GuestType) {

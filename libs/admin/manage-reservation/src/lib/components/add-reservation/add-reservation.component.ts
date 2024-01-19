@@ -64,6 +64,7 @@ export class AddReservationComponent extends BaseReservationComponent
   currentStatus: ReservationCurrentStatus;
   reservationFormData: ReservationFormData;
   offerResponse: ManualOffer;
+  loadSummary: boolean = false;
 
   constructor(
     private fb: FormBuilder,
@@ -173,6 +174,7 @@ export class AddReservationComponent extends BaseReservationComponent
         specialInstructions: [''],
       }),
       printRate: [false],
+      rateImprovement: [false],
     });
   }
 
@@ -227,6 +229,7 @@ export class AddReservationComponent extends BaseReservationComponent
   }
 
   getReservationDetails(): void {
+    this.loadSummary = true;
     this.$subscription.add(
       this.manageReservationService
         .getReservationDataById(this.reservationId, this.selectedEntity.id)
@@ -305,7 +308,9 @@ export class AddReservationComponent extends BaseReservationComponent
               this.getOfferByRoomType(roomTypeIds);
             }
           },
-          (error) => {}
+          (error) => {
+            this.loadSummary = false;
+          }
         )
     );
   }
@@ -366,6 +371,7 @@ export class AddReservationComponent extends BaseReservationComponent
     });
 
     if (isAdultAndRoomCount && (!this.reservationId || configData.guestId)) {
+      this.loadSummary = true;
       this.$subscription.add(
         this.manageReservationService
           .getSummaryData(this.selectedEntity.id, this.getFormData(), {
@@ -397,7 +403,8 @@ export class AddReservationComponent extends BaseReservationComponent
                 this.formValueChanges = false;
               }
             },
-            (error) => {}
+            (error) => (this.loadSummary = false),
+            () => (this.loadSummary = false)
           )
       );
       const roomTypeIds = configData.bookingItems.map(
@@ -476,10 +483,6 @@ export class AddReservationComponent extends BaseReservationComponent
     };
     this.inputControls.offerId.reset();
     this.offersList.records = [];
-  }
-
-  triggerPrintRate(isToggleOn: boolean) {
-    this.inputControls.printRate.patchValue(isToggleOn, { emitEvent: false });
   }
 
   handleEmailInvoice() {

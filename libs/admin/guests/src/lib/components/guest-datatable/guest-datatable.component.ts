@@ -3,6 +3,7 @@ import { FormBuilder } from '@angular/forms';
 import {
   AdminUtilityService,
   BaseDatatableComponent,
+  EntityState,
   NavRouteOption,
   QueryConfig,
 } from '@hospitality-bot/admin/shared';
@@ -21,7 +22,7 @@ import {
   SortBy,
   SortFilterList,
 } from 'libs/admin/agent/src/lib/constant/response';
-import { GuestListResponse } from '../../types/guest.type';
+import { GuestListResponse, GuestTypes } from '../../types/guest.type';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 import { RoutesConfigService } from 'apps/admin/src/app/core/theme/src/lib/services/routes-config.service';
 @Component({
@@ -48,6 +49,9 @@ export class GuestDatatableComponent extends BaseDatatableComponent
       link: './',
     },
   ];
+
+  guestType: GuestTypes[] = ['NON_RESIDENT_GUEST', 'GUEST'];
+  entityStateLabels: EntityState<string>;
 
   constructor(
     public fb: FormBuilder,
@@ -113,6 +117,7 @@ export class GuestDatatableComponent extends BaseDatatableComponent
   mapData(res: GuestListResponse) {
     const guestData = new GuestTable().deserialize(res);
     this.values = guestData.records;
+    this.entityStateLabels = guestData?.entityStateLabels;
     this.initFilters(
       guestData.entityStateCounts,
       guestData.entityTypeCounts,
@@ -132,7 +137,7 @@ export class GuestDatatableComponent extends BaseDatatableComponent
         ...this.globalQueries,
         ...this.getSelectedQuickReplyFilters({ key: 'entityState' }),
         {
-          type: 'GUEST',
+          type: this.guestType.join(','),
           entityId: this.entityId,
           order: 'DESC',
           sort: 'created',
@@ -164,13 +169,15 @@ export class GuestDatatableComponent extends BaseDatatableComponent
         params: this.adminUtilityService.makeQueryParams([
           {
             key: key,
-            type: 'GUEST',
+            type: this.guestType.join(','),
             ...SortBy[this.sortedBy],
           },
         ]),
       })
       .subscribe((res) => {
-        this.values = res.map((item) => new GuestData().deserialize(item));
+        this.values = res.map((item) =>
+          new GuestData().deserialize(item, this.entityStateLabels)
+        );
         this.loading = false;
       });
   }
@@ -183,7 +190,7 @@ export class GuestDatatableComponent extends BaseDatatableComponent
         ...this.globalQueries,
         {
           order: 'DESC',
-          type: 'GUEST',
+          type: this.guestType.join(','),
           entityType: this.selectedTab,
           pagination: false,
           limit: this.totalRecords,

@@ -2,137 +2,166 @@
   <div class="summary-wrapper">
     <div class="bk-summary_heading page-heading">Reservation Summary</div>
     <!-- <p class="divider"></p> -->
-    <div class="container">
-      <div class="bk-summary_header">
-        <div
-          class="bk-summary_subheading"
-          *ngIf="bookingType === 'ROOM_TYPE' && summaryData?.bookingItems"
-        >
-          {{ (summaryData?.bookingItems)[0]?.roomTypeLabel }}
-          <span class="room-count" *ngIf="summaryData?.bookingItems.length > 1"
-            >+{{ summaryData?.bookingItems.length - 1 }}</span
+    <ng-container *ngIf="!loadSummary; else loader">
+      <div class="container">
+        <div class="bk-summary_header">
+          <div
+            class="bk-summary_subheading"
+            *ngIf="bookingType === 'ROOM_TYPE' && summaryData?.bookingItems"
           >
+            {{ (summaryData?.bookingItems)[0]?.roomTypeLabel }}
+            <span
+              class="room-count"
+              *ngIf="summaryData?.bookingItems.length > 1"
+              >+{{ summaryData?.bookingItems.length - 1 }}</span
+            >
+          </div>
+          <div class="bk-summary_subheading" *ngIf="heading">
+            {{ heading }}
+          </div>
+          <div class="bk-summary_subheading_label">
+            {{ summaryData?.location }}
+          </div>
         </div>
-        <div class="bk-summary_subheading" *ngIf="heading">
-          {{ heading }}
-        </div>
-        <div class="bk-summary_subheading_label">
-          {{ summaryData?.location }}
-        </div>
-      </div>
 
-      <div class="bk-summary_roomInfo">
-        <ng-content *ngIf="!displayBookingOffer"></ng-content>
-      </div>
-      <ng-container
-        *ngIf="bookingType === 'ROOM_TYPE' && summaryData?.bookingItems.length"
-      >
+        <div class="bk-summary_roomInfo">
+          <ng-content *ngIf="!displayBookingOffer"></ng-content>
+        </div>
         <ng-container
-          [ngTemplateOutlet]="summaryTemplate"
-          [ngTemplateOutletContext]="{
-            bookingItem: summaryData
-          }"
-        >
-        </ng-container>
-      </ng-container>
-      <div class="view-details-btn" *ngIf="bookingType === 'ROOM_TYPE'">
-        <hospitality-bot-button
-          class="btn"
-          *ngIf="summaryData?.bookingItems.length > 1"
-          [label]="detailsView ? 'View Less' : 'View Details'"
-          variant="text"
-          (onClick)="detailsView = !detailsView"
-        ></hospitality-bot-button>
-      </div>
-      <ng-container *ngIf="bookingType === 'ROOM_TYPE' && detailsView">
-        <ng-container
-          *ngFor="
-            let bookingItem of summaryData?.bookingItems;
-            let index = index
+          *ngIf="
+            bookingType === 'ROOM_TYPE' && summaryData?.bookingItems.length
           "
         >
           <ng-container
             [ngTemplateOutlet]="summaryTemplate"
             [ngTemplateOutletContext]="{
-              bookingItem: bookingItem,
-              index: index
+              bookingItem: summaryData
             }"
           >
           </ng-container>
         </ng-container>
-      </ng-container>
-      <ng-container *ngIf="bookingType !== 'ROOM_TYPE'">
+        <div class="view-details-btn" *ngIf="bookingType === 'ROOM_TYPE'">
+          <hospitality-bot-button
+            class="btn"
+            *ngIf="summaryData?.bookingItems.length > 1"
+            [label]="detailsView ? 'View Less' : 'View Details'"
+            variant="text"
+            (onClick)="detailsView = !detailsView"
+          ></hospitality-bot-button>
+        </div>
+        <ng-container *ngIf="bookingType === 'ROOM_TYPE' && detailsView">
+          <ng-container
+            *ngFor="
+              let bookingItem of summaryData?.bookingItems;
+              let index = index
+            "
+          >
+            <ng-container
+              [ngTemplateOutlet]="summaryTemplate"
+              [ngTemplateOutletContext]="{
+                bookingItem: bookingItem,
+                index: index
+              }"
+            >
+            </ng-container>
+          </ng-container>
+        </ng-container>
+        <ng-container *ngIf="bookingType !== 'ROOM_TYPE'">
+          <ng-container
+            [ngTemplateOutlet]="outletSummaryTemplate"
+            [ngTemplateOutletContext]="{
+              summaryData: summaryData
+            }"
+          >
+          </ng-container>
+        </ng-container>
+        <!-- when there is no summary -->
         <ng-container
-          [ngTemplateOutlet]="outletSummaryTemplate"
-          [ngTemplateOutletContext]="{
-            summaryData: summaryData
-          }"
+          *ngIf="
+            bookingType === 'ROOM_TYPE' && !summaryData?.bookingItems.length
+          "
         >
+          <ng-container [ngTemplateOutlet]="summaryTemplate"> </ng-container>
         </ng-container>
-      </ng-container>
-      <!-- when there is no summary -->
-      <ng-container
-        *ngIf="bookingType === 'ROOM_TYPE' && !summaryData?.bookingItems.length"
-      >
-        <ng-container [ngTemplateOutlet]="summaryTemplate"> </ng-container>
-      </ng-container>
-      <ng-container *ngIf="bookingType !== 'ROOM_TYPE' && !summaryData">
-        <ng-container [ngTemplateOutlet]="outletSummaryTemplate">
+        <ng-container *ngIf="bookingType !== 'ROOM_TYPE' && !summaryData">
+          <ng-container [ngTemplateOutlet]="outletSummaryTemplate">
+          </ng-container>
         </ng-container>
-      </ng-container>
-      <p class="bk-summary_priceInfo_perNight" *ngIf="summaryData?.totalAmount">
-        <span class="bk-summary_priceInfo_perNight_label">Total Payable</span>
-        <span class="bk-summary_priceInfo_perNight_amount">{{
-          summaryData.totalAmount | currency: 'INR'
-        }}</span>
-      </p>
-      <p
-        class="bk-summary_priceInfo_perNight"
-        *ngIf="
-          paymentControls?.totalPaidAmount.value || summaryData?.totalPaidAmount
-        "
-      >
-        <span class="bk-summary_priceInfo_perNight_label"
-          >Total Paid Amount</span
+        <p
+          class="bk-summary_priceInfo_perNight"
+          *ngIf="summaryData?.totalAmount"
         >
-        <span class="bk-summary_priceInfo_perNight_amount">{{
-          +paymentControls.totalPaidAmount.value + +summaryData.totalPaidAmount
-            | currency: 'INR'
-        }}</span>
-      </p>
-      <p class="bk-summary_priceInfo_perNight" *ngIf="summaryData?.refund">
-        <span class="bk-summary_priceInfo_perNight_label">Total Refund</span>
-        <span class="bk-summary_priceInfo_perNight_amount"
-          >-{{ summaryData.refund | currency: 'INR' }}</span
+          <span class="bk-summary_priceInfo_perNight_label">Total Payable</span>
+          <span class="bk-summary_priceInfo_perNight_amount">{{
+            summaryData.totalAmount | currency: 'INR'
+          }}</span>
+        </p>
+        <p
+          class="bk-summary_priceInfo_perNight"
+          *ngIf="
+            paymentControls?.totalPaidAmount.value ||
+            summaryData?.totalPaidAmount
+          "
         >
-      </p>
-    </div>
-    <p class="divider"></p>
-    <div class="footer">
-      <div class="bk-summary_total">
-        <p class="bk-summary_total_label">Remaining Balance</p>
-        <p class="bk-summary_total_amount">
-          {{ calculateAmountToBePaid(summaryData) | currency: 'INR' }}
+          <span class="bk-summary_priceInfo_perNight_label"
+            >Total Paid Amount</span
+          >
+          <span class="bk-summary_priceInfo_perNight_amount">{{
+            +paymentControls.totalPaidAmount.value +
+              +summaryData.totalPaidAmount | currency: 'INR'
+          }}</span>
+        </p>
+        <p class="bk-summary_priceInfo_perNight" *ngIf="summaryData?.refund">
+          <span class="bk-summary_priceInfo_perNight_label">Total Refund</span>
+          <span class="bk-summary_priceInfo_perNight_amount"
+            >-{{ summaryData.refund | currency: 'INR' }}</span
+          >
         </p>
       </div>
-      <div class="bk-summary_btn-wrapper">
-        <hospitality-bot-button
-          *ngIf="
-            reservationId
-          "
-          class="btn"
-          label="Guest Profile"
-          variant="text"
-          (onClick)="openDetailsPage()"
-        ></hospitality-bot-button>
-        <hospitality-bot-button
-          (click)="handleBooking()"
-          label="{{ this.reservationId ? 'Update' : 'Confirm' }} Reservation"
-          [disabled]="disabledForm && !externalBooking"
-          [isLoading]="isBooking"
-        ></hospitality-bot-button>
+      <p class="divider"></p>
+      <div class="footer">
+        <div class="bk-summary_total">
+          <p class="bk-summary_total_label">Remaining Balance</p>
+          <p class="bk-summary_total_amount">
+            {{ calculateAmountToBePaid(summaryData) | currency: 'INR' }}
+          </p>
+        </div>
+        <!-- <input
+          #checkbox
+          type="checkbox"
+          [checked]="sendConfirmationMail"
+          (change)="onCheckboxClick($event.target)"
+        />
+        <label (click)="checkbox.click()" for="checkbox">
+          Give this service priority status, featuring it prominently on the
+          landing page as a highlighted service.</label
+        > -->
+        <div class="checkbox">
+          <input
+            #checkbox
+            type="checkbox"
+            [checked]="inputControls.printRate.value"
+            (change)="triggerPrintRate($event.target)"
+          />
+          <label (click)="checkbox.click()" for="checkbox"> Print Rate</label>
+        </div>
+        <div class="bk-summary_btn-wrapper">
+          <hospitality-bot-button
+            *ngIf="reservationId"
+            class="btn"
+            label="Guest Profile"
+            variant="text"
+            (onClick)="openDetailsPage()"
+          ></hospitality-bot-button>
+          <hospitality-bot-button
+            (click)="handleBooking()"
+            label="{{ this.reservationId ? 'Update' : 'Confirm' }} Reservation"
+            [disabled]="disabledForm && !externalBooking"
+            [isLoading]="isBooking"
+          ></hospitality-bot-button>
+        </div>
       </div>
-    </div>
+    </ng-container>
   </div>
 </ng-container>
 <ng-template #bookingOffer>
@@ -335,4 +364,8 @@
       >
     </p>
   </div>
+</ng-template>
+
+<ng-template #loader>
+  <hospitality-bot-loader-bounce class="loader"></hospitality-bot-loader-bounce>
 </ng-template>

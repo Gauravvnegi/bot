@@ -7,15 +7,15 @@
   "
 >
   <div class="right-side-header">
-    <div class="right-side-header-search">
+    <div class="right-side-header-search" [formGroup]="parentFG">
       <hospitality-bot-search
-        [parentFG]="parentFG"
-        [entityId]="entityId"
-        [globalQueries]="globalQueries"
-        [entityType]="entityType"
-        [filterData]="filterData"
+        controlName="search"
         (clear)="clearSearch()"
         (search)="getSearchValue($event)"
+        [searchApi]="searchApi"
+        [props]="{
+          placeholder: 'Search by Item Name, Room No...'
+        }"
       ></hospitality-bot-search>
     </div>
     <div class="right-side-header-filter">
@@ -76,7 +76,7 @@
               },
               priority: item.priority,
               subTitle: item.itemName,
-              profileNickName: item.guestDetails.primaryGuest.getProfileNickName(),
+              profileNickName: item.guestDetails?.primaryGuest?.getProfileNickName(),
               backgroundColor: item.color
             }"
             [isSelected]="selectedRequest?.id === item.id"

@@ -12,6 +12,7 @@ import {
   DynamicDialogConfig,
   DynamicDialogRef,
 } from 'primeng/dynamicdialog';
+import { SidebarModule } from 'primeng/sidebar';
 
 @NgModule({
   declarations: [PagesComponent, TemporaryRedirectPageComponent, MainComponent],
@@ -19,6 +20,7 @@ import {
     CommonModule,
     ThemeModule,
     PagesRoutingModule,
+    SidebarModule,
     AdminReservationModule,
   ],
   providers: [

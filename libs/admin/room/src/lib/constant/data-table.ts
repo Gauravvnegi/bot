@@ -22,7 +22,7 @@ export const cols: Record<TableValue, Cols[]> = {
     },
     {
       field: 'foStatus',
-      header: 'Housekeeping Status',
+      header: 'FO Status',
       sortType: 'string',
       isSearchDisabled: true,
     },

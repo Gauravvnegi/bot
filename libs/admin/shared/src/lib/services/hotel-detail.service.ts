@@ -63,7 +63,7 @@ export class HotelDetailService {
    * @returns propertyList [{ label : '' , value : '' , type : ''} , {...} , ...}]
    * @memberof HotelDetailService
    */
-  getPropertyList() {
+  getPropertyList(type: 'default' | 'reservation' = 'default') {
     let propertyList = [];
     const selectedHotel = this.hotels.find((item) => item.id === this.entityId);
 
@@ -85,6 +85,21 @@ export class HotelDetailService {
       id: selectedHotel.id,
     });
 
+    type === 'default'
+      ? propertyList.unshift({
+          label: selectedHotel.name,
+          value: selectedHotel.id,
+          type: selectedHotel.type || selectedHotel?.category,
+          id: selectedHotel.id,
+        })
+      : propertyList.unshift({
+          label: selectedHotel.name,
+          value: selectedHotel.id,
+          type: selectedHotel.type
+            ? selectedHotel.type
+            : EntitySubType.ROOM_TYPE,
+          id: selectedHotel.id,
+        });
     return propertyList;
   }
 }

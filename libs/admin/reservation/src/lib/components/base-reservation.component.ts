@@ -80,7 +80,7 @@ export class BaseReservationComponent {
   getSelectedEntity() {
     const outletId = this.activatedRoute.snapshot.queryParams.entityId;
 
-    const properties = this.hotelDetailService.getPropertyList();
+    const properties = this.hotelDetailService.getPropertyList('reservation');
     const selectedOutlet = properties.filter((item) => item.value === outletId);
 
     this.selectedEntity = selectedOutlet[0];

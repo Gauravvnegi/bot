@@ -9,18 +9,29 @@
   </div>
   <div class="form-block" [formGroup]="userForm">
     <hospitality-bot-input
-      *ngIf="!isReservationPopup"
+      *ngIf="!isReservationPopup && !isAllowancePopup"
       class="half-width"
       controlName="refundAmount"
       label="Amount"
       [props]="{
         type: 'number',
-        placeholder: 'Enter',
-        errorMessages: {
-          max: 'Needs to be less than the excessive paid amount'
-        }
+        placeholder: 'Enter'
       }"
     ></hospitality-bot-input>
+    <div class="charged-amount" *ngIf="isAllowancePopup">
+      <hospitality-bot-input
+        class="half-width"
+        controlName="refundAmount"
+        label="Amount"
+        [props]="{
+          type: 'number',
+          placeholder: 'Enter'
+        }"
+      ></hospitality-bot-input>
+      <ul class="charges-info">
+        <li>Exclusive of Taxes</li>
+      </ul>
+    </div>
     <div class="charged-amount" *ngIf="isReservationPopup">
       <hospitality-bot-input
         #chargedAmount
@@ -36,11 +47,14 @@
         <li>Exclusive of Taxes</li>
       </ul>
     </div>
-    <hospitality-bot-input
+    <hospitality-bot-text-area
       class="full-width"
       controlName="remarks"
-      label="Add Remarks"
-    ></hospitality-bot-input>
+      label="Remarks"
+      [props]="{
+        placeholder: 'Enter Remarks'
+      }"
+    ></hospitality-bot-text-area>
   </div>
   <div class="buttons">
     <hospitality-bot-button

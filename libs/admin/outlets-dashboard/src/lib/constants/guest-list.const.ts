@@ -164,6 +164,29 @@ export const watchListCards: GuestCard[] = [
   // Add more items as needed
 ];
 
+export const tableList: Option[] = [
+  { label: 'Tb01', value: 'tb01' },
+  { label: 'Tb02', value: 'tb02' },
+  { label: 'Tb03', value: 'tb03', disabled: true },
+  { label: 'Tb04', value: 'tb04' },
+  { label: 'Tb05', value: 'tb05' },
+  { label: 'Tb06', value: 'tb06', disabled: true },
+  { label: 'Tb07', value: 'tb07' },
+  { label: 'Tb08', value: 'tb08' },
+  { label: 'Tb09', value: 'tb09', disabled: true },
+  { label: 'Tb10', value: 'tb10', disabled: true },
+  { label: 'Tb11', value: 'tb11', disabled: true },
+  { label: 'Tb12', value: 'tb12' },
+  { label: 'Tb13', value: 'tb13' },
+  { label: 'Tb14', value: 'tb14' },
+  { label: 'Tb15', value: 'tb15' },
+  { label: 'Tb16', value: 'tb16', disabled: true },
+  { label: 'Tb17', value: 'tb17' },
+  { label: 'Tb18', value: 'tb18' },
+  { label: 'Tb19', value: 'tb19' },
+  { label: 'Tb20', value: 'tb20' },
+];
+
 export const seatedChips: Option<ChipType>[] = [
   {
     label: 'Seated',

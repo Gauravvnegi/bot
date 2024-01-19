@@ -49,6 +49,12 @@ export class GuestListComponent implements OnInit {
     this.initForm();
   }
 
+  ngAfterViewInit(): void {
+    //Called after ngAfterContentInit when the component's view has been initialized. Applies to components only.
+    //Add 'implements AfterViewInit' to the class.
+    this.openAddGuest();
+  }
+
   initForm() {
     this.useForm = this.fb.group({
       search: [],

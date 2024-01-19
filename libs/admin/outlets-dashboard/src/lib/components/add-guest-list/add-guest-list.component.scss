@@ -1,0 +1,11 @@
+@import 'main';
+
+.form-block {
+  @include form-block;
+}
+
+.guest-list-sidebar {
+  &__content {
+    margin: 10px;
+  }
+}

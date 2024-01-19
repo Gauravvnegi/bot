@@ -1,9 +1,13 @@
 @import 'main';
 
+.container {
+  zoom: 0.9;
+}
+
 .header {
   @include flex-space-between-cen-Algn;
   background-color: $primary-cta;
-  padding: 15px 10px;
+  padding: 10px 10px;
   color: white;
   border-bottom: 1px solid $primary-cta;
   .heading {
@@ -39,7 +43,7 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  padding: 20px 2%;
+  padding: 10px 2%;
   justify-content: space-between;
   .search {
     padding-top: 36px;
@@ -49,5 +53,76 @@
   }
   .one-fifth-width {
     width: 18%;
+  }
+}
+
+.tab-header {
+  border-top: 1px solid #d9d9d9;
+  border-bottom: 1px solid #d9d9d9;
+  background-color: #f1f2f7;
+  padding: 10px;
+}
+
+.content {
+  display: flex;
+  background-color: #f1f2f7;
+  height: calc(100vh - 220px);
+  overflow: hidden;
+  .menu-section {
+    overflow: auto;
+    flex-basis: 60%;
+    border-right: 1px solid #d9d9d9;
+  }
+  .summary-section {
+    overflow: auto;
+    flex-basis: 40%;
+  }
+}
+
+.meal-preferences {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 5px 10px;
+  .meal-preference {
+    background-color: white;
+    cursor: pointer;
+    padding: 5px 15px;
+    @include light-vsm-text;
+    @include flex-item-center;
+    gap: 5px;
+  }
+}
+
+.menu-heading {
+  padding: 5px 15px;
+}
+
+.meal-preference.selected {
+  background: $primary !important;
+  color: $white;
+}
+
+.menu-items {
+  @include flex-wrap-even-space;
+  gap: 10px;
+  padding: 10px;
+  .menu-item {
+    flex-basis: 45%;
+  }
+}
+
+.btn-wrapper {
+  width: 100%;
+  background-color: $white;
+  .checkbox {
+    padding: 5px 15px 0;
+    .checkbox-label {
+      padding: 0 15px 0 10px;
+    }
+  }
+  .buttons {
+    @include flex-space-around;
+    padding: 10px;
   }
 }

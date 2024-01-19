@@ -3,6 +3,7 @@ import { OutletReservation } from '../../models/outlet-reservation.model';
 import {
   CardConfig,
   ReservationStatusColorConfig,
+  TableStatusConfig,
 } from '../../constants/data-table';
 
 @Component({
@@ -16,7 +17,7 @@ export class ReservationCardComponent implements OnInit {
 
   readonly cardConfig = CardConfig;
   readonly statusColorConfig = ReservationStatusColorConfig;
-  
+  readonly tableStatusConfig = TableStatusConfig;
   constructor() {}
 
   ngOnInit(): void {}

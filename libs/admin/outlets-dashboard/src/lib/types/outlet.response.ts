@@ -3,6 +3,7 @@ import {
   ReservationStatus,
   OrderMethod,
   PaymentStatus,
+  TableStatus,
 } from './reservation-table';
 
 export type OutletReservationListResponse = {
@@ -34,4 +35,5 @@ export type OutletReservationResponse = {
   totalAmount: number;
   totalDueAmount: number;
   nextStates: string[];
+  tableStatus: TableStatus;
 };

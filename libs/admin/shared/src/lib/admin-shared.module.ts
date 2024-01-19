@@ -141,6 +141,7 @@ import { TabViewModule } from 'primeng/tabview';
 import { DynamicContentComponent } from './components/dynamic-content/dynamic-content.component';
 import { GuestDetailsDirective } from './directives/guest-details.directive';
 import { SearchComponent } from './components/form-component/search/search.component';
+import { CustomTabHeaderComponent } from './components/custom-tab-header/custom-tab-header.component';
 
 @NgModule({
   imports: [
@@ -284,6 +285,7 @@ import { SearchComponent } from './components/form-component/search/search.compo
     DynamicContentComponent,
     GuestDetailsDirective,
     SearchComponent,
+    CustomTabHeaderComponent,
   ],
 
   exports: [
@@ -415,6 +417,7 @@ import { SearchComponent } from './components/form-component/search/search.compo
     DynamicContentComponent,
     GuestDetailsDirective,
     SearchComponent,
+    CustomTabHeaderComponent,
   ],
 })
 export class AdminSharedModule {}

@@ -7,6 +7,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { OutletTableService } from './services/outlet-table.service';
 import { GlobalSharedModule } from '@hospitality-bot/admin/global-shared';
 import { OutletService } from 'libs/admin/all-outlets/src/lib/services/outlet.service';
+import { OutletFormService } from './services/outlet-form.service';
 
 @NgModule({
   imports: [
@@ -19,6 +20,6 @@ import { OutletService } from 'libs/admin/all-outlets/src/lib/services/outlet.se
     GlobalSharedModule
   ],
   declarations: [...AdminOutletsDashboardRoutingModule.components],
-  providers: [OutletTableService, OutletService],
+  providers: [OutletTableService, OutletService, OutletFormService],
 })
 export class AdminOutletsDashboardModule {}

@@ -21,3 +21,8 @@ export type PaymentData = {
 export type ReservationStatusData = {
   borderColor: string;
 };
+
+export type TableStatus =
+  | 'RUNNING_KOT_TABLE'
+  | 'RUNNING_TABLE'
+  | 'PRINTED_TABLE';

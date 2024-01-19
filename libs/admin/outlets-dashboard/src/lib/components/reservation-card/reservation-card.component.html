@@ -1,11 +1,17 @@
-<div class="wrapper">
+<div
+  [ngStyle]="{
+    border: '1px solid ' + tableStatusConfig[data?.tableStatus]?.borderColor,
+    backgroundColor: tableStatusConfig[data?.tableStatus]?.backgroundColor
+  }"
+  class="wrapper"
+>
   <div class="header-wrapper">
     <div class="heading">{{ data?.tableNumber }}</div>
     <div class="heading-info">
       <span>{{ data?.time }}</span>
       <span class="adult-icon">
         <img
-          src="assets/svg/standing-up-man-black.svg"
+          src="assets/svg/standing-up-man-grey.svg"
           alt="chats"
           tooltipPosition="bottom"
           class="adult-svg"
@@ -26,8 +32,12 @@
       <div class="price">
         {{ data?.price | currency: 'INR' }}
       </div>
-      <span>
-        <img [src]="cardConfig[data?.paymentStatus]?.icon" />
+      <span class="payment-status">
+        <img
+          [src]="cardConfig[data?.paymentStatus]?.icon"
+          height="15px"
+          width="15px"
+        />
         {{ cardConfig[data?.paymentStatus]?.text }}
       </span>
     </div>
@@ -35,7 +45,7 @@
       <div class="menu-item">
         <span class="items">
           <img src="assets/svg/menu-item.svg" />
-          <span class="prepartion-time">
+          <span class="order-items">
             {{ data?.numberOfItems }}
           </span>
         </span>

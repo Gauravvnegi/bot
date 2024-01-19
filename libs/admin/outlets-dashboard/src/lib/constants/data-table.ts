@@ -3,6 +3,7 @@ import {
   ReservationStatus,
   PaymentData,
   PaymentStatus,
+  TableStatus,
 } from '../types/reservation-table';
 import { MenuItemCard } from '../types/menu-order';
 
@@ -102,6 +103,24 @@ export const CardConfig: Record<PaymentStatus, PaymentData> = {
   },
 };
 
+export const TableStatusConfig: Record<
+  TableStatus,
+  { backgroundColor: string; borderColor: string }
+> = {
+  RUNNING_KOT_TABLE: {
+    borderColor: '#F9E2C8',
+    backgroundColor: '#FDF5EC',
+  },
+  RUNNING_TABLE: {
+    borderColor: '#CFEBFC',
+    backgroundColor: '#F1F9FE',
+  },
+  PRINTED_TABLE: {
+    borderColor: '#E0EFD7',
+    backgroundColor: '#EEF8EC',
+  },
+};
+
 export const ReservationStatusColorConfig: Record<ReservationStatus, string> = {
   COMPLETED: '#52B33F',
   CONFIRMED: '#3166F0',
@@ -197,6 +216,7 @@ export const dineInReservationResponse = {
       orderMethod: 'DELIVERY',
       paymentStatus: 'UNPAID',
       numberOfItems: 4,
+      tableStatus: 'RUNNING_KOT_TABLE',
     },
     {
       name: 'Natalia Portman',
@@ -219,6 +239,7 @@ export const dineInReservationResponse = {
       orderMethod: 'DELIVERY',
       paymentStatus: 'UNPAID',
       numberOfItems: 4,
+      tableStatus: 'RUNNING_TABLE',
     },
     {
       name: 'Natalia Portman',
@@ -241,6 +262,7 @@ export const dineInReservationResponse = {
       orderMethod: 'DELIVERY',
       paymentStatus: 'UNPAID',
       numberOfItems: 4,
+      tableStatus: 'RUNNING_KOT_TABLE',
     },
     {
       name: 'Natalia Portman',
@@ -263,6 +285,7 @@ export const dineInReservationResponse = {
       orderMethod: 'DELIVERY',
       paymentStatus: 'UNPAID',
       numberOfItems: 4,
+      tableStatus: 'PRINTED_TABLE',
     },
     {
       name: 'Natalia Portman',
@@ -285,6 +308,7 @@ export const dineInReservationResponse = {
       orderMethod: 'DELIVERY',
       paymentStatus: 'UNPAID',
       numberOfItems: 4,
+      tableStatus: 'RUNNING_KOT_TABLE',
     },
     {
       name: 'Natalia Portman',
@@ -307,6 +331,7 @@ export const dineInReservationResponse = {
       orderMethod: 'DELIVERY',
       paymentStatus: 'UNPAID',
       numberOfItems: 4,
+      tableStatus: 'RUNNING_TABLE',
     },
     {
       name: 'Natalia Portman',
@@ -329,6 +354,7 @@ export const dineInReservationResponse = {
       orderMethod: 'DELIVERY',
       paymentStatus: 'PAID',
       numberOfItems: 4,
+      tableStatus: 'RUNNING_KOT_TABLE',
     },
     {
       name: 'Natalia Portman',
@@ -351,6 +377,7 @@ export const dineInReservationResponse = {
       orderMethod: 'DELIVERY',
       paymentStatus: 'PAID',
       numberOfItems: 4,
+      tableStatus: 'RUNNING_KOT_TABLE',
     },
     {
       name: 'Natalia Portman',
@@ -373,6 +400,7 @@ export const dineInReservationResponse = {
       orderMethod: 'DELIVERY',
       paymentStatus: 'PAID',
       numberOfItems: 4,
+      tableStatus: 'PRINTED_TABLE',
     },
   ],
 };

@@ -3,7 +3,11 @@ import {
   OutletReservationListResponse,
   OutletReservationResponse,
 } from '../types/outlet.response';
-import { ReservationStatus, PaymentStatus } from '../types/reservation-table';
+import {
+  ReservationStatus,
+  PaymentStatus,
+  TableStatus,
+} from '../types/reservation-table';
 import { throwMatDialogContentAlreadyAttachedError } from '@angular/material/dialog';
 
 export class OutletReservationList {
@@ -43,6 +47,7 @@ export class OutletReservation {
   reservationStatus: ReservationStatus;
   numberOfItems: number;
   orderMethod: string;
+  tableStatus: TableStatus;
 
   deserialize(input: OutletReservationResponse) {
     this.invoiceId = input?.invoiceId;
@@ -65,6 +70,7 @@ export class OutletReservation {
     this.paymentStatus = input?.paymentStatus;
     this.numberOfItems = input?.numberOfItems;
     this.orderMethod = input?.orderMethod;
+    this.tableStatus = input?.tableStatus;
     return this;
   }
 }

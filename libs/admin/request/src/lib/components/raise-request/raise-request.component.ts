@@ -46,7 +46,7 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
   assigneeList: Option[] = [];
   sidebarVisible = false;
   isAssigneeList: boolean = false;
-  @Input() isSideBar: boolean = false;
+  @Input() isSidebar: boolean = false;
   @ViewChild('sidebarSlide', { read: ViewContainerRef })
   sidebarSlide: ViewContainerRef;
   selectedGuest;
@@ -274,7 +274,7 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
 
   create() {
     //to open add new item pop up
-    if (this.isSideBar) {
+    if (this.isSidebar) {
       this.sidebarVisible = true;
       const factory = this.resolver.resolveComponentFactory(AddItemComponent);
       this.sidebarSlide.clear();

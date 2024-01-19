@@ -8,16 +8,34 @@
   &__content {
     margin: 10px;
   }
+
+  .content__wrapper {
+    height: calc(100vh - 270px);
+  }
+
+  .item-view__wrapper {
+    margin: 25px 15px;
+  }
 }
 
 :host ::ng-deep .guest-list-sidebar {
   .content {
+    padding: unset;
+    box-shadow: unset;
+    margin: 15px;
     .p-multiselect {
       .chips {
         flex-wrap: unset;
         max-width: 148px;
         column-gap: 5px;
       }
+    }
+  }
+
+  .action {
+    .footer-buttons {
+      left: unset;
+      box-shadow: 11px 7px 7px 7px #b5b5b5;
     }
   }
 }

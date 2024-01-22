@@ -97,7 +97,7 @@
     }
   }
   .p-datatable {
-    height: 57vh;
+    height: calc(100vh - 400px);
     overflow: auto;
   }
 

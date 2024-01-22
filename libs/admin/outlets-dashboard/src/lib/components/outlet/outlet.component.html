@@ -2,7 +2,13 @@
   [heading]="welcomeMessage"
   [routes]="navRoutes"
   [isBack]="false"
-></hospitality-bot-navigation-header>
+>
+  <hospitality-bot-button
+    label="Guest List"
+    preserveQueryParams="true"
+    (onClick)="openGuestList()"
+  ></hospitality-bot-button>
+</hospitality-bot-navigation-header>
 
 <div class="wrapper">
   <hospitality-bot-entity-tab-filter
@@ -17,3 +23,14 @@
   ></hospitality-bot-entity-tab-filter>
   <hospitality-bot-outlets-data-table></hospitality-bot-outlets-data-table>
 </div>
+
+<p-sidebar
+  class="sidebar-slide"
+  [(visible)]="sidebarVisible"
+  position="right"
+  [style]="{ width: '468px' }"
+  [dismissible]="true"
+  [showCloseIcon]="false"
+>
+  <ng-container #sidebarSlide></ng-container>
+</p-sidebar>

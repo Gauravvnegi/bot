@@ -142,6 +142,8 @@ import { DynamicContentComponent } from './components/dynamic-content/dynamic-co
 import { GuestDetailsDirective } from './directives/guest-details.directive';
 import { SearchComponent } from './components/form-component/search/search.component';
 import { CustomTabHeaderComponent } from './components/custom-tab-header/custom-tab-header.component';
+import { ChipsComponent } from './components/chips/chips.component';
+import { ItemViewComponent } from './view/item-view/item-view.component';
 
 @NgModule({
   imports: [
@@ -286,6 +288,8 @@ import { CustomTabHeaderComponent } from './components/custom-tab-header/custom-
     GuestDetailsDirective,
     SearchComponent,
     CustomTabHeaderComponent,
+    ChipsComponent,
+    ItemViewComponent,
   ],
 
   exports: [
@@ -418,6 +422,8 @@ import { CustomTabHeaderComponent } from './components/custom-tab-header/custom-
     GuestDetailsDirective,
     SearchComponent,
     CustomTabHeaderComponent,
+    ChipsComponent,
+    ItemViewComponent,
   ],
 })
 export class AdminSharedModule {}

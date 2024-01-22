@@ -19,6 +19,8 @@
       label="Add"
       variant="outlined"
       (onClick)="addItem()"
+      minWidth="95px"
+      height="35px"
     ></hospitality-bot-button>
     <hospitality-bot-button
       *ngIf="itemCard?.selected"
@@ -26,6 +28,8 @@
       variant="text"
       severity="reset"
       (onClick)="removeItem()"
+      minWidth="95px"
+      height="35px"
     ></hospitality-bot-button>
   </div>
 </div>

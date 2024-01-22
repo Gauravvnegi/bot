@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { MenuItemCard } from '../types/menu-order';
-import { Observable, BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',

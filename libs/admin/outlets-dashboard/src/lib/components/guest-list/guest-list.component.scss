@@ -1,0 +1,71 @@
+@import 'main';
+
+.guest-list-sidebar {
+  &__content {
+    .header {
+      @include flex-space-between;
+      padding: 20px 17px;
+      padding-bottom: 0;
+      .add-guest,
+      .filter {
+        color: $primary-cta;
+        font-weight: 500;
+        cursor: pointer;
+        @include flex-justify-align-center;
+      }
+    }
+
+    .tab-group {
+    }
+
+    .chips {
+      padding: 15px 17px;
+    }
+
+    .content {
+      @include flex-col;
+      padding: 15px 17px;
+      padding-top: 0;
+      overflow: auto;
+      height: calc(100vh - 240px);
+      gap: 16px;
+      .date__divider {
+        @include flex-justify-align-center;
+        font-size: 12px;
+        color: #d9d9d9;
+        &::before,
+        &::after {
+          content: '';
+          width: 95px;
+          height: 1px;
+          margin: 0 16px;
+          background-color: #d9d9d9;
+        }
+      }
+    }
+  }
+}
+
+:host ::ng-deep .guest-list-sidebar {
+  &__content {
+    .empty-guest {
+      @include flex-justify-align-center;
+      height: calc(100vh - 300px);
+    }
+    .header {
+      gap: 15px;
+      .search-bar {
+        width: calc(100% - 130px);
+        .search__container {
+          width: 100% !important;
+        }
+      }
+      .add-guest {
+        width: 110px;
+      }
+      .filter {
+        width: 20px;
+      }
+    }
+  }
+}

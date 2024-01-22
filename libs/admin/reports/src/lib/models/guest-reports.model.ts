@@ -1,7 +1,15 @@
-import { getFullName, toCurrency } from 'libs/admin/shared/src/lib/utils/valueFormatter';
 import {
+  convertToNormalCase,
+  getFullName,
+  toCurrency,
+} from 'libs/admin/shared/src/lib/utils/valueFormatter';
+import {
+  GuestComplaintReportData,
+  GuestComplaintReportResponse,
   GuestContactReportData,
   GuestContactReportResponse,
+  GuestEscalationComplaintReportData,
+  GuestEscalationComplaintReportResponse,
   GuestHistoryData,
   GuestHistoryResponse,
   GuestLedgerData,
@@ -156,6 +164,71 @@ export class GuestLedger implements ReportClass<GuestLedgerData, any> {
           confirmationNo: reservationData?.number,
           balance: toCurrency(reservationData?.paymentSummary?.dueAmount),
         });
+      });
+    return this;
+  }
+}
+
+export class GuestEscalationComplaintReport
+  implements
+    ReportClass<
+      GuestEscalationComplaintReportData,
+      GuestEscalationComplaintReportResponse
+    > {
+  records: GuestEscalationComplaintReportData[];
+  deserialize(value: GuestEscalationComplaintReportResponse[]): this {
+    this.records = new Array<GuestEscalationComplaintReportData>();
+
+    this.records =
+      value &&
+      value.map((item) => {
+        return {
+          id: item?.guestDetails?.primaryGuest?.id,
+          guestName: getFullName(
+            item?.guestDetails?.primaryGuest?.firstName,
+            item?.guestDetails?.primaryGuest?.lastName
+          ),
+          serviceItem: item?.itemName,
+          complaint: item?.remarks,
+          status: item?.status,
+          actionTakenBy: item?.assigneeName,
+          department: convertToNormalCase(item?.departmentName),
+          customerSentiment: undefined,
+          sla: item?.sla,
+          jobDuration: item?.jobDuration,
+          escalationLevel: item?.sentCount,
+          frequency: undefined,
+        };
+      });
+    return this;
+  }
+}
+
+export class GuestComplaintReport
+  implements
+    ReportClass<GuestComplaintReportData, GuestComplaintReportResponse> {
+  records: GuestComplaintReportData[];
+  deserialize(value: GuestComplaintReportResponse[]): this {
+    this.records = new Array<GuestComplaintReportData>();
+
+    this.records =
+      value &&
+      value.map((item) => {
+        return {
+          id: item?.guestDetails?.primaryGuest?.id,
+          guestName: getFullName(
+            item?.guestDetails?.primaryGuest?.firstName,
+            item?.guestDetails?.primaryGuest?.lastName
+          ),
+          serviceItem: item?.itemName,
+          complaint: item?.remarks,
+          status: item?.status,
+          actionTakenBy: item?.assigneeName,
+          department: convertToNormalCase(item?.departmentName),
+          customerSentiment: undefined,
+          sla: item?.sla,
+          jobDuration: undefined,
+        };
       });
     return this;
   }

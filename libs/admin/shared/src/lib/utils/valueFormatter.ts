@@ -82,6 +82,7 @@ export function currencyToNumber(currency: string) {
  * @returns normal formatted string
  */
 export function convertToNormalCase(inputString) {
+  if (!inputString) return;
   // Handle camelCase, PascalCase, snake_case, and kebab-case
   const words = inputString
     .replace(/([a-z])([A-Z])/g, '$1 $2') // Add space between camelCase and PascalCase

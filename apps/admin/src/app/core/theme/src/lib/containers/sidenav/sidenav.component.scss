@@ -317,8 +317,7 @@
         @include flex-col;
         width: 49%;
         cursor: pointer !important;
-        padding: 9px 12px;
-        // box-shadow: 0 3px 3px 0 rgba(0, 0, 0, 0.05);
+        padding: 10px;
 
         &:hover {
           background-color: #f2f0ff;
@@ -352,8 +351,8 @@
           font-size: 12px;
           line-height: 1.17;
           letter-spacing: 0.72px;
-          text-align: left;
           color: #001037;
+          margin-top: 9px;
         }
       }
     }
@@ -397,7 +396,6 @@
   object-fit: contain;
   align-items: center;
   gap: 0.5em;
-  padding: 7px 0px;
 
   img {
     width: 100%;

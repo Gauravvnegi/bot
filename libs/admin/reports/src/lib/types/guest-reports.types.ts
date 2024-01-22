@@ -76,6 +76,67 @@ export type SalesByGuestResponse = GuestHistoryResponse & {
   totalSales: number;
 };
 
+export type GuestEscalationComplaintReportData = GuestComplaintReportData & {
+  escalationLevel: number;
+  frequency: number;
+};
+
+export type GuestComplaintReportData = {
+  id: string;
+  guestName: string;
+  serviceItem: string;
+  complaint: string;
+  status: string;
+  actionTakenBy: string;
+  department: string;
+  customerSentiment: string;
+  sla: number;
+  jobDuration: number;
+};
+
+export type GuestEscalationComplaintReportResponse = {
+  id: string;
+  rooms: Room[];
+  remarks: string;
+  requestTime: number;
+  status: string;
+  action: string;
+  entityId: string;
+  guestDetails: GuestDetails;
+  priority: string;
+  jobDuration: number;
+  jobID: string;
+  jobNo: string;
+  itemCode: string;
+  itemName: string;
+  itemId: string;
+  quantity: number;
+  closedTime: number;
+  source: string;
+  pickupTime: number;
+  timeLeft: number;
+  assigneeName: string;
+  assigneeId: string;
+  departmentEscalationTime: number;
+  scheduledEscalation: number;
+  sentCount: number;
+  departmentName: string;
+  sla: number;
+};
+
+export type GuestComplaintReportResponse = GuestEscalationComplaintReportResponse & {};
+
+interface ContactDetails {
+  contactNumber: string;
+}
+
+interface Room {
+  roomNumber: string;
+  type: string;
+  unit: number;
+  status: string;
+}
+
 export type GuestLedgerResponse = {
   id: string;
   updated: number;

@@ -277,7 +277,7 @@ export class ReportsDataTableComponent extends BaseDatatableComponent {
   }
 
   get currentFilters() {
-    return reportFiltersMapping[this.selectedReport.value];
+    return reportFiltersMapping[this.selectedReport?.value];
   }
 
   toggleMenu() {

@@ -104,7 +104,7 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
       assigneeId: ['', [Validators.required]], //as per BE ()
       // cc: ['+91'],
       // phoneNumber: ['', [Validators.required, Validators.pattern('^[0-9]*$')]],
-      guestId: ['', [Validators.required]],
+      guestId: [''],
     });
   }
 

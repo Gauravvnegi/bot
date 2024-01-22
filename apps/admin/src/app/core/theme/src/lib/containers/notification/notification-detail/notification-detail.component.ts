@@ -23,9 +23,11 @@ export class NotificationDetailComponent {
      * @remark extracting data from dialog config
      */
     if (this.dialogConfig?.data) {
-      Object.entries(this.dialogConfig.data).forEach(([key, value]) => {
-        this[key] = value;
-      });
+      this.data = this.dialogConfig.data;
+      // Object.entries(this.dialogConfig.data).forEach(([key, value]) => {
+      //   debugger;
+      //   this[key] = value;
+      // });
     }
   }
 

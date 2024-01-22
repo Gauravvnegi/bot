@@ -1,12 +1,12 @@
 @import 'main';
 .guest__card {
   @include flex-space-between;
-  padding: 20px;
+  padding: 16px;
   background: #f0ecff;
   border-radius: 10px;
   font-size: 15px;
   border: 1px solid #cfcfcf;
-  min-height: 200px;
+  height: 202px;
   color: gray;
   .col {
     @include flex-col;

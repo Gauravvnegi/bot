@@ -2,13 +2,13 @@
 
 .chip__wrapper {
   display: flex;
-  gap: 5px;
+  gap: 12px;
   cursor: pointer;
   .chip {
     border-radius: 30px;
     border: 1px solid $primary-cta;
     color: $primary-cta;
-    padding: 5px 10px;
+    padding: 10px 16px;
     font-size: 12px;
     display: flex;
     align-items: center;

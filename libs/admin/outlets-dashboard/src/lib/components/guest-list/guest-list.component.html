@@ -63,7 +63,7 @@
 
     <div class="content">
       <ng-container *ngIf="!loading && guestList.length; else emptyGuest">
-        <ng-container *ngFor="let guest of guestList">
+        <ng-container *ngFor="let guest of guestList; let i = index">
           <hospitality-bot-guest-card [item]="guest">
             <ng-container *ngIf="isSeated; else watchList">
               <hospitality-bot-button
@@ -92,6 +92,12 @@
               </ng-container>
             </ng-template>
           </hospitality-bot-guest-card>
+
+          <ng-container *ngIf="!isSeated">
+            <div class="date__divider">
+              {{ '20/12/2024' }}
+            </div></ng-container
+          >
         </ng-container>
       </ng-container>
     </div>
@@ -112,7 +118,7 @@
   class="sidebar-slide"
   [(visible)]="sidebarVisible"
   position="right"
-  [style]="{ width: '550px' }"
+  [style]="{ width: '468px' }"
   [dismissible]="true"
   [showCloseIcon]="false"
 >

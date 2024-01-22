@@ -6,11 +6,14 @@
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
-    padding: 10px;
+    row-gap: 16px;
+    padding: 16px 10px;
     border-radius: 5px;
 
     .item {
-      width: 87px;
+      @include flex-justify-align-center;
+      width: 74.4px;
+      height: 37px;
       padding: 5px;
       font-size: 14px;
       font-weight: 600;

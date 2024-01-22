@@ -2,11 +2,40 @@
 
 .form-block {
   @include form-block;
+  row-gap: 24px;
+  column-gap: 12px;
+}
+
+:host ::ng-deep .form-block {
+  font-size: 14px;
+  font-weight: 500;
+  .input {
+    margin-top: 7px;
+  }
+  .label {
+    font-weight: 500;
+  }
+  .p-inputtext,
+  .label,
+  .p-dropdown-label.p-placeholder {
+    font-size: 14px;
+  }
+  input::placeholder {
+    font-size: 14px !important;
+  }
+
+  .dates {
+    row-gap: 24px;
+    column-gap: 12px;
+  }
+  .half-width {
+    flex: 1;
+  }
 }
 
 .guest-list-sidebar {
   &__content {
-    margin: 10px;
+    margin: 35px 10px 10px 10px;
   }
 
   .content__wrapper {
@@ -14,7 +43,7 @@
   }
 
   .item-view__wrapper {
-    margin: 25px 15px;
+    margin: 25px 7px;
   }
 }
 
@@ -26,7 +55,7 @@
     .p-multiselect {
       .chips {
         flex-wrap: unset;
-        max-width: 148px;
+        max-width: 130px;
         column-gap: 5px;
       }
     }

@@ -751,7 +751,6 @@ export class ReservationCalendarViewComponent implements OnInit {
     const selectedStatus = selectedData?.statusDetails.find((data) =>
       statusId ? data.id === statusId : data.isCurrentStatus
     );
-    debugger;
     const data: Partial<ModalComponent> = {
       heading: type === 'SERVICE' ? `Out of Service` : 'Out of order`',
       descriptions: [

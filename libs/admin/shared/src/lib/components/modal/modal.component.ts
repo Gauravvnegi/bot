@@ -14,7 +14,7 @@ export class ModalComponent {
   title: string;
   isRemarks: boolean = false;
   isReservation: boolean = false;
-  isDate: boolean = true;
+  isDate: boolean = false;
   toDate: string;
   fromDate: string;
   remarksValidators: Validators[];

@@ -82,7 +82,7 @@ export class GuestListComponent implements OnInit {
 
     if (
       activeTab == TabsType.resident ||
-      activeTab == TabsType['none-resident']
+      activeTab == TabsType['non-resident']
     ) {
       this.watchListGuestList = constCards.filter(
         (item) => item.type === activeTab

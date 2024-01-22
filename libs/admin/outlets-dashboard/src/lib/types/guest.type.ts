@@ -1,7 +1,7 @@
 export enum TabsType {
   all = 'all',
-  resident = 'resident',
-  'none-resident' = 'none-resident',
+  resident = 'Resident',
+  'non-resident' = 'Non-Resident',
 }
 export enum ChipType {
   seated = 'seated',

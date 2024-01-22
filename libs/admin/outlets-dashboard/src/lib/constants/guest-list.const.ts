@@ -10,7 +10,7 @@ export const seatedCards: GuestCard[] = [
     timeLimit: '2 hours',
     people: 4,
     name: 'John Doe',
-    type: TabsType['none-resident'],
+    type: TabsType['non-resident'],
     feedback: 'Excellent service!',
     phone: '123-456-7890',
   },
@@ -31,7 +31,7 @@ export const seatedCards: GuestCard[] = [
     timeLimit: '1.5 hours',
     people: 2,
     name: 'Jane Smith',
-    type: TabsType['none-resident'],
+    type: TabsType['non-resident'],
     phone: '987-654-3210',
   },
   {
@@ -51,7 +51,7 @@ export const seatedCards: GuestCard[] = [
     timeLimit: '1.5 hours',
     people: 2,
     name: 'Jane Smith',
-    type: TabsType['none-resident'],
+    type: TabsType['non-resident'],
     phone: '987-654-3210',
   },
   {
@@ -81,7 +81,7 @@ export const seatedCards: GuestCard[] = [
     timeLimit: '1.5 hours',
     people: 2,
     name: 'Jane Smith',
-    type: TabsType['none-resident'],
+    type: TabsType['non-resident'],
     phone: '987-654-3210',
   },
   // Add more items as needed
@@ -104,7 +104,7 @@ export const watchListCards: GuestCard[] = [
     time: '1:45 PM',
     people: 2,
     name: 'Jane Smith',
-    type: TabsType['none-resident'],
+    type: TabsType['non-resident'],
     phone: '987-654-3210',
   },
   {
@@ -122,7 +122,7 @@ export const watchListCards: GuestCard[] = [
     time: '1:45 PM',
     people: 2,
     name: 'Jane Smith',
-    type: TabsType['none-resident'],
+    type: TabsType['non-resident'],
     phone: '987-654-3210',
   },
   {
@@ -140,7 +140,7 @@ export const watchListCards: GuestCard[] = [
     time: '1:45 PM',
     people: 2,
     name: 'Jane Smith',
-    type: TabsType['none-resident'],
+    type: TabsType['non-resident'],
     phone: '987-654-3210',
   },
   {
@@ -158,7 +158,7 @@ export const watchListCards: GuestCard[] = [
     time: '1:45 PM',
     people: 2,
     name: 'Jane Smith',
-    type: TabsType['none-resident'],
+    type: TabsType['non-resident'],
     phone: '987-654-3210',
   },
   // Add more items as needed
@@ -209,6 +209,6 @@ export const seatedTabGroup: Option<TabsType>[] = [
   },
   {
     label: 'Non-Resident',
-    value: TabsType['none-resident'],
+    value: TabsType['non-resident'],
   },
 ];

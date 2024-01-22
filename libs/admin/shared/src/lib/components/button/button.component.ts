@@ -20,7 +20,8 @@ export class ButtonComponent {
   @Input() isLoading: boolean = false;
   @Input() icon: string;
   @Input() piIcon: string = '';
-
+  @Input() minWidth: string = '145px';
+  @Input() height: string = '46px';
   constructor(private router: Router) {}
 
   handleClick(event) {

@@ -11,7 +11,7 @@ import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/servi
 import * as FileSaver from 'file-saver';
 import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.service';
 import { LazyLoadEvent } from 'primeng/api/lazyloadevent';
-import { Subscription } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
 import { chips, cols, title } from '../../constant/data-table';
 import { Offer, OfferList } from '../../models/offers.model';
 import { OffersServices } from '../../services/offers.service';
@@ -19,6 +19,7 @@ import { OfferData } from '../../types/offers';
 import { OfferListResponse, OfferResponse } from '../../types/response';
 import { RoutesConfigService } from '@hospitality-bot/admin/core/theme';
 import { offersRoutes } from '../../constant/routes';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'hospitality-bot-offers-data-table',
@@ -56,6 +57,7 @@ export class OffersDataTableComponent extends BaseDatatableComponent
       link: './',
     },
   ];
+  private cancelRequests$ = new Subject<void>();
 
   ngOnInit(): void {
     this.entityId = this.globalFilterService.entityId;
@@ -70,6 +72,15 @@ export class OffersDataTableComponent extends BaseDatatableComponent
     this.initTableValue();
   }
 
+  onGlobalTabFilterChanges(event) {
+    //to cancel previous api call in between when tab filter changes
+    this.cancelRequests$.next();
+    this.entityId = event.entityId[0];
+    this.tabFilterIdx = 0;
+    this.offerService.entityId = this.entityId;
+    this.initTableValue();
+  }
+
   initTableValue() {
     this.loading = true;
     this.subscription$.add(
@@ -78,6 +89,7 @@ export class OffersDataTableComponent extends BaseDatatableComponent
           this.entityId,
           this.getQueryConfig()
         )
+        .pipe(takeUntil(this.cancelRequests$))
         .subscribe(
           (res) => {
             const data = new OfferList().deserialize(res);
@@ -146,6 +158,7 @@ export class OffersDataTableComponent extends BaseDatatableComponent
    * @params rowData
    */
   editOffer(rowData: OfferResponse) {
+    this.offerService.entityId = this.entityId;
     this.routesConfigService.navigate({
       additionalPath: `${this.routes.createOffer.route}/${rowData.id}`,
     });

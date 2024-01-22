@@ -320,6 +320,7 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
     this.sidebarSlide.clear();
     const componentRef = this.sidebarSlide.createComponent(factory);
     componentRef.instance.isSidebar = true;
+    componentRef.instance.guestType = 'NON_RESIDENT_GUEST';
     this.$subscription.add(
       componentRef.instance.onCloseSidebar.subscribe((res) => {
         if (res) {

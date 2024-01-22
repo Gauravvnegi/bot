@@ -17,7 +17,9 @@ import { SnackBarService } from '@hospitality-bot/shared/material';
 import * as FileSaver from 'file-saver';
 import { Observable } from 'rxjs';
 import {
-  GuestDocsOrPayment,
+  GuestDocumentDetails,
+  GuestDocumentList,
+  GuestPaymentList,
   GuestTable,
 } from '../../../data-models/guest-table.model';
 import { GuestTableService } from '../../../services/guest-table.service';
@@ -43,7 +45,10 @@ export class GuestDatatableModalComponent extends GuestDatatableComponent
   implements OnInit, OnDestroy {
   isAllTabFilterRequired = true;
   modalType?: GuestModalType;
-  @Input() callingMethod: 'getGuestDocsOrPaymentStats' | 'getAllGuestStats';
+  @Input() callingMethod:
+    | 'getGuestDocsStats'
+    | 'getGuestPaymentStats'
+    | 'getAllGuestStats';
   @Input() guestFilter: string;
   @Input() exportURL: string;
   @Input() entityType: string;
@@ -81,7 +86,9 @@ export class GuestDatatableModalComponent extends GuestDatatableComponent
       });
     }
 
-    if (this.callingMethod === 'getGuestDocsOrPaymentStats') {
+    if (
+      ['getGuestDocsStats', 'getGuestPaymentStats'].includes(this.callingMethod)
+    ) {
       this.isAllTabFilterRequired = false;
       this.isNpsColHidden = true;
       this.cols = this.cols.filter(
@@ -98,9 +105,12 @@ export class GuestDatatableModalComponent extends GuestDatatableComponent
       .subscribe(() => {
         this.closeModal();
       });
-    this._translateService
-      .get(this.modalType)
-      .subscribe((message) => (this.tableName = message));
+
+    if (this.modalType) {
+      this._translateService
+        .get(this?.modalType)
+        .subscribe((message) => (this.tableName = message));
+    }
   }
 
   loadInitialData(queries = [], loading = true) {
@@ -126,27 +136,40 @@ export class GuestDatatableModalComponent extends GuestDatatableComponent
   }
 
   setRecords(data): void {
-    if (this.callingMethod === 'getGuestDocsOrPaymentStats') {
-      const guestRecord = new GuestDocsOrPayment().deserialize(data);
-      this.values = guestRecord.records;
-      this.initFilters(
-        {},
-        guestRecord.entityStateCounts,
-        guestRecord.totalRecord
-      );
-      this.loading = false;
-      return;
-    }
+    let guestRecord;
+    switch (this.callingMethod) {
+      case 'getGuestPaymentStats':
+        guestRecord = new GuestPaymentList().deserialize(data);
+        this.values = guestRecord.records;
+        this.initFilters(
+          {},
+          guestRecord.entityStateCounts,
+          guestRecord.totalRecord
+        );
+        this.loading = false;
+        return;
+      case 'getGuestDocsStats':
+        guestRecord = new GuestDocumentList().deserialize(data);
+        this.values = guestRecord.records;
+        this.initFilters(
+          {},
+          guestRecord.entityStateCounts,
+          guestRecord.totalRecord
+        );
+        this.loading = false;
+        return;
 
-    const guestRecord = new GuestTable().deserialize(data);
-    this.values = guestRecord.records;
-    this.initFilters(
-      guestRecord.entityTypeCounts,
-      guestRecord.entityStateCounts,
-      guestRecord.totalRecord,
-      guestStatusDetails
-    );
-    this.loading = false;
+      case 'getAllGuestStats':
+        guestRecord = new GuestTable().deserialize(data);
+        this.values = guestRecord.records;
+        this.initFilters(
+          guestRecord.entityTypeCounts,
+          guestRecord.entityStateCounts,
+          guestRecord.totalRecord,
+          guestStatusDetails
+        );
+        this.loading = false;
+    }
   }
 
   setEmptyViewImage() {
@@ -184,7 +207,7 @@ export class GuestDatatableModalComponent extends GuestDatatableComponent
           ...this.globalQueries,
           {
             order: 'DESC',
-            entityType: this.tabFilterItems[this.tabFilterIdx].value,
+            entityType: this.entityType,
           },
           ...this.getSelectedQuickReplyFilters({ key: 'entityState' }),
         ],
@@ -215,15 +238,32 @@ export class GuestDatatableModalComponent extends GuestDatatableComponent
         ...this.globalQueries,
         {
           order: 'DESC',
-          entityType: this.tabFilterItems[this.tabFilterIdx].value,
+          entityType: this.entityType,
           guestFilter: this.guestFilter,
         },
         ...this.getSelectedQuickReplyFilters({ key: 'entityState' }),
         ...this.selectedRows.map((item) => ({ ids: item.booking.bookingId })),
       ]),
     };
+
+    let responseObj;
+    if (this.exportURL === 'exportDocsCSV') {
+      const payload = this.selectedRows.map((item: GuestDocumentDetails) => {
+        return {
+          guestId: item?.id,
+          reservationId: item?.reservationId,
+        };
+      });
+
+      responseObj = this._guestTableService.exportDocsCSV(config, payload);
+    } else {
+      responseObj = this._guestTableService[this.exportURL || 'exportCSV'](
+        config
+      );
+    }
+
     this.$subscription.add(
-      this._guestTableService[this.exportURL || 'exportCSV'](config).subscribe(
+      responseObj.subscribe(
         (response) => {
           FileSaver.saveAs(
             response,

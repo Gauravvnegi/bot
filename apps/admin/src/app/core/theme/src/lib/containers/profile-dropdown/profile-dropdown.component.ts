@@ -41,8 +41,8 @@ export class ProfileDropdownComponent implements OnInit {
   }
 
   getUserDetails() {
-    this.initials = this.userService.userDetails.getProfileNickName();
-    this.profilePic = this.userService.userDetails.profileUrl;
+    this.initials = this.userService?.userDetails?.getProfileNickName();
+    this.profilePic = this.userService?.userDetails?.profileUrl;
     console.log(this.initials, this.profilePic);
   }
 

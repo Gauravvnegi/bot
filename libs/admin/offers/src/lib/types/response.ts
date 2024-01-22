@@ -26,6 +26,23 @@ export type OfferResponse = {
   discountedPrice: number;
   subPackages: any[];
   roomTypes: any[];
+  foodItems: {
+    category: string;
+    deliveryPrice: number;
+    description: string;
+    dineInPrice: number;
+    entityId: string;
+    hsnCode: string;
+    id: string;
+    mealPreference: string;
+    name: string;
+    preparationTime: number;
+    quantity: number;
+    status: boolean;
+    type: string;
+    unit: string;
+    currency: string;
+  }[];
   enableOnMicrosite: boolean;
   priority: string;
 };
@@ -38,4 +55,6 @@ export type SearchResult = {
   currency: string;
   discountedPrice?: number;
   originalPrice?: number;
+  dineInPrice?: number;
+  deliveryPrice?: number;
 };

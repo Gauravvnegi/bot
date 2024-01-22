@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ModalAction, ModalContent } from '../../types/fields.type';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 
 @Component({
@@ -30,7 +30,7 @@ export class ModalComponent {
 
   ngOnInit(): void {
     this.modelForm = this.fb.group({
-      remarks: [''],
+      remarks: ['', [Validators.required]],
     });
 
     if (this.isReservation) {

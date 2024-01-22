@@ -115,7 +115,11 @@ export class ManageSiteDataTableComponent extends BaseDatatableComponent {
   }
 
   selectSite(rowData) {
-    if (rowData.id && rowData.status !== ManageSiteStatus.DELETE) {
+    if (
+      rowData.id &&
+      rowData.status !== ManageSiteStatus.DELETE &&
+      rowData.status !== ManageSiteStatus.TRASH
+    ) {
       this.cookiesSettingService.initPlatformChange(rowData.id, '/');
     }
   }

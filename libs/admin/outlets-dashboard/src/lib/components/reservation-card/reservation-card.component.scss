@@ -1,9 +1,10 @@
 @import 'main';
 
 .wrapper {
-  padding: 10px;
+  padding: 15px;
   @include flex-col;
   gap: 12px;
+  border-radius: 10px;
 }
 
 .header-wrapper {
@@ -18,14 +19,17 @@
     gap: 10px;
     .adult-icon {
       @include flex-item-center;
+      color: black;
+      gap: 3px;
+      font-weight: 500;
     }
   }
 }
 
-.adult-svg {
-  height: 20px;
-  width: 20px;
-}
+// .adult-svg {
+//   height: 20px;
+//   width: 20px;
+// }
 
 .content {
   @include flex-space-between;
@@ -47,7 +51,11 @@
   @include flex-item-center;
   gap: 10px;
   .price {
-    @include bold-vsm-text;
+    @include bold-sm-text;
+  }
+  .payment-status {
+    @include flex-item-center;
+    gap: 5px;
   }
 }
 
@@ -59,8 +67,8 @@
     .items {
       @include flex-item-center;
       gap: 5px;
-      .preparation-time {
-        color: $prepartion-time;
+      .order-items {
+        color: $order-items;
       }
     }
   }

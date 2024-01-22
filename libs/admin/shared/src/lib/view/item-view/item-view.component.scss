@@ -19,18 +19,18 @@
       font-weight: 600;
       border-radius: 5px;
       background: #f9f9f9;
-      border: 1px solid #cbcbcb;
+      border: 0.1px solid #eaeaea;
       cursor: not-allowed;
     }
     .reserved {
-      border: 1px solid #ffb9b9;
+      border: 0.1px solid #ffd7d7;
       background: #ffeded;
       color: #ffb3b3;
       opacity: 0.6;
     }
 
     .active {
-      border: 1px solid #b0b0ff;
+      border: 0.1px solid #ccccff;
       background: #e4e4ff;
       color: #7a7aff;
     }

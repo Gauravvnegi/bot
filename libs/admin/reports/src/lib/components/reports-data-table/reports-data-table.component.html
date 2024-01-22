@@ -158,10 +158,7 @@
     let-columns="columns"
     let-rowIndex="rowIndex"
   >
-    <tr
-      class="table-row"
-      [ngStyle]="{ cursor: rowData?.id || rowData?.guestId ? 'pointer' : '' }"
-    >
+    <tr class="table-row">
       <td class="table-row__checkbox" *ngIf="isSelectable">
         <p-tableCheckbox
           [value]="rowData"
@@ -170,9 +167,12 @@
         ></p-tableCheckbox>
       </td>
       <td
+        guest-details-sidebar
+        [bookingId]="rowData?.id"
+        [guestId]="rowData?.guestId"
+        [isTextDecoration]="false"
         *ngFor="let column of columns"
         [class]="getStyle(rowData)"
-        (click)="onRowClick(rowData)"
       >
         <div
           class="cell-content"

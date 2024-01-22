@@ -183,7 +183,7 @@ export class GuestEscalationComplaintReport
       value &&
       value.map((item) => {
         return {
-          id: item?.guestDetails?.primaryGuest?.id,
+          guestId: item?.guestDetails?.primaryGuest?.id,
           guestName: getFullName(
             item?.guestDetails?.primaryGuest?.firstName,
             item?.guestDetails?.primaryGuest?.lastName
@@ -215,7 +215,7 @@ export class GuestComplaintReport
       value &&
       value.map((item) => {
         return {
-          id: item?.guestDetails?.primaryGuest?.id,
+          guestId: item?.guestDetails?.primaryGuest?.id,
           guestName: getFullName(
             item?.guestDetails?.primaryGuest?.firstName,
             item?.guestDetails?.primaryGuest?.lastName

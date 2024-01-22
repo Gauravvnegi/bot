@@ -250,19 +250,7 @@ export class ReportsDataTableComponent extends BaseDatatableComponent {
     return styleClass.trim();
   }
 
-  onRowClick(data: {}) {
-    if (data.hasOwnProperty('id') || data.hasOwnProperty('guestId')) {
-      this.openDetailPage(data);
-    }
-  }
-
-  openDetailPage(rowData, tabKey?: DetailsTabOptions): void {
-    this.bookingDetailService.openBookingDetailSidebar({
-      ...(rowData?.id && { bookingId: rowData?.id }),
-      ...(rowData?.guestId && { guestId: rowData?.guestId }),
-      ...(tabKey && { tabKey: tabKey }),
-    });
-  }
+  onRowClick(data: {}) {}
 
   get availableFilters() {
     return {

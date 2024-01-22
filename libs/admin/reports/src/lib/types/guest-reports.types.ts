@@ -82,7 +82,7 @@ export type GuestEscalationComplaintReportData = GuestComplaintReportData & {
 };
 
 export type GuestComplaintReportData = {
-  id: string;
+  guestId: string;
   guestName: string;
   serviceItem: string;
   complaint: string;

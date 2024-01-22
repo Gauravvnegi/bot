@@ -116,11 +116,13 @@
                 'empty-img-view': !isImageLoaded
               }"
             >
-              <img
-                (load)="onImageLoad()"
-                [src]="product.iconUrl"
-                [alt]="product.name"
-              />
+              <div class="icon">
+                <img
+                  (load)="onImageLoad()"
+                  [src]="product.iconUrl"
+                  [alt]="product.name"
+                />
+              </div>
               <div class="menu-label">{{ product.title }}</div>
             </div>
             <div class="menu-description">{{ product?.description }}</div>

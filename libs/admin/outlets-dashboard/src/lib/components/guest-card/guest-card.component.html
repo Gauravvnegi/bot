@@ -30,10 +30,10 @@
         ><span class="text__dynamic">{{ item?.feedback }}</span></span
       >
     </div>
-    <div class="row">
-      <span class="text"
-        ><span class="text__static">Ph.</span
-        ><span class="text__dynamic bold-text">{{ item?.phone }}</span></span
+    <div class="row" *ngIf="item?.phone">
+      <span class="text inline">
+        <img class="icon" src="assets/svg/phone.svg" alt="" />
+        <span class="text__dynamic bold-text">{{ item?.phone }}</span></span
       >
     </div>
 

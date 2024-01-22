@@ -32,6 +32,7 @@
   >
     <ng-template *ngIf="showChips" let-value pTemplate="selectedItems">
       <div class="chips">
+        <div class="placeholder" *ngIf="!value?.length">{{ placeholder }}</div>
         <div class="chip" [click-stop-propagation] *ngFor="let val of value">
           <div>{{ dictionary[val] }}</div>
           <i class="pi pi-times" (click)="handleClear(val)"></i>

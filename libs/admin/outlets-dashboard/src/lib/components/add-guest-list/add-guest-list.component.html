@@ -1,0 +1,118 @@
+<div class="guest-list-sidebar" [id]="fa.referenceId">
+  <div class="sidebar-slide-header">
+    <span class="title">Add Guest</span>
+    <span class="close-icon">
+      <img
+        (click)="fullReservation()"
+        class="expand"
+        [src]="'assets/svg/expand-white.svg'"
+        alt="reservation"
+        [pTooltip]="'Create Full Reservation'"
+      />
+      <img
+        (click)="close()"
+        class="close-sidebar-icon"
+        src="assets/svg/close-sidebar.svg"
+      />
+    </span>
+  </div>
+
+  <div class="guest-list-sidebar__content" [formGroup]="useForm">
+    <div class="item-view__wrapper">
+      <hospitality-bot-item-view
+        controlName="tables"
+        [items]="tableOptions"
+      ></hospitality-bot-item-view>
+    </div>
+    <div class="content__wrapper">
+      <div class="form-block content">
+        <hospitality-bot-multi-select
+          label="Table No./Area"
+          class="half-width"
+          controlName="tables"
+          [props]="{
+            maxSelectedLabels: 1,
+            placeholder: 'Select Tables'
+          }"
+          [options]="tableOptions"
+        ></hospitality-bot-multi-select>
+        <hospitality-bot-input
+          class="half-width"
+          controlName="personCount"
+          label="No of Person"
+          min="1"
+          [props]="{
+            type: 'number',
+            placeholder: 'Enter',
+            errorMessages: {
+              required: 'This is a required field.',
+              min: 'Value should be greater than 1'
+            }
+          }"
+        ></hospitality-bot-input>
+        <hospitality-bot-select
+          label="Guest"
+          class="half-width"
+          controlName="guest"
+          [props]="{
+            placeholder: 'Select Guest'
+          }"
+          [options]="[
+            {
+              label: 'Standard',
+              value: 'standard'
+            }
+          ]"
+        ></hospitality-bot-select>
+        <hospitality-bot-select
+          label="Market Segment"
+          class="half-width"
+          controlName="segment"
+          [props]="{
+            placeholder: 'Select Segment'
+          }"
+          [options]="[
+            {
+              label: 'Standard',
+              value: 'standard'
+            }
+          ]"
+        ></hospitality-bot-select>
+        <hospitality-bot-from-to-date
+          [controlNames]="{
+            from: 'checkIn',
+            to: 'checkOut'
+          }"
+          [labels]="{
+            from: 'Check-in Date',
+            to: 'Check-out Date'
+          }"
+        ></hospitality-bot-from-to-date>
+        <hospitality-bot-text-area
+          class="full-width"
+          controlName="remark"
+          label="Remarks"
+          [props]="{
+            placeholder: 'Write remark'
+          }"
+        ></hospitality-bot-text-area>
+      </div>
+    </div>
+  </div>
+  <hospitality-bot-form-action
+    class="action full-width"
+    [loading]="loading"
+    (onPostAction)="createReservation()"
+    (onPreAction)="openDetailsPage()"
+    [isSticky]="true"
+    [isFixed]="true"
+    [config]="{
+      postLabel: 'Create Reservation',
+      preLabel: 'Guest Profile',
+      preVariant: 'text',
+      preSeverity: 'primary'
+    }"
+    #fa
+  >
+  </hospitality-bot-form-action>
+</div>

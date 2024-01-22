@@ -1,0 +1,70 @@
+@import 'main';
+
+.form-block {
+  @include form-block;
+  row-gap: 24px;
+  column-gap: 12px;
+}
+
+:host ::ng-deep .form-block {
+  font-size: 14px;
+  font-weight: 500;
+  .input {
+    margin-top: 7px;
+  }
+  .label {
+    font-weight: 500;
+  }
+  .p-inputtext,
+  .label,
+  .p-dropdown-label.p-placeholder {
+    font-size: 14px;
+  }
+  input::placeholder {
+    font-size: 14px !important;
+  }
+
+  .dates {
+    row-gap: 24px;
+    column-gap: 12px;
+  }
+  .half-width {
+    flex: 1;
+  }
+}
+
+.guest-list-sidebar {
+  &__content {
+    margin: 35px 10px 10px 10px;
+  }
+
+  .content__wrapper {
+    height: calc(100vh - 270px);
+  }
+
+  .item-view__wrapper {
+    margin: 25px 7px;
+  }
+}
+
+:host ::ng-deep .guest-list-sidebar {
+  .content {
+    padding: unset;
+    box-shadow: unset;
+    margin: 15px;
+    .p-multiselect {
+      .chips {
+        flex-wrap: unset;
+        max-width: 130px;
+        column-gap: 5px;
+      }
+    }
+  }
+
+  .action {
+    .footer-buttons {
+      left: unset;
+      box-shadow: 11px 7px 7px 7px #b5b5b5;
+    }
+  }
+}

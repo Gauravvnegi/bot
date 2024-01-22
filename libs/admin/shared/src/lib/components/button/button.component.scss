@@ -1,8 +1,6 @@
 @import 'main';
 
 .button {
-  height: 46px;
-  min-width: 145px;
   @include flex-all-center;
   padding: 9.5px 18.5px;
   font-size: 14px;

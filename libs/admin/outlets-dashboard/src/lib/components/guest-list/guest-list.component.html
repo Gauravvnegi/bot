@@ -1,0 +1,126 @@
+<div class="guest-list-sidebar">
+  <div class="sidebar-slide-header">
+    <span class="title">Guest List</span>
+    <span class="close-icon">
+      <img
+        (click)="fullReservation()"
+        class="expand"
+        [src]="'assets/svg/expand-white.svg'"
+        alt="reservation"
+        [pTooltip]="'Create Full Reservation'"
+      />
+      <img
+        (click)="close()"
+        class="close-sidebar-icon"
+        src="assets/svg/close-sidebar.svg"
+      />
+    </span>
+  </div>
+
+  <div class="guest-list-sidebar__content" [formGroup]="useForm">
+    <div class="header">
+      <div
+        class="search-bar"
+        [ngStyle]="
+          !isSeated && {
+            width: 'calc(100% - 20px)'
+          }
+        "
+      >
+        <hospitality-bot-global-search
+          [formGroup]="useForm"
+          controlName="search"
+          [props]="{
+            placeholder: 'Search by Name',
+            hasSuggestion: false
+          }"
+          (onKeyDown)="loading = true"
+          [suggestionList]="[]"
+          (onSearch)="searchGuest($event)"
+        ></hospitality-bot-global-search>
+      </div>
+      <div *ngIf="isSeated" (click)="openAddGuest()" class="add-guest">
+        + add guest
+      </div>
+      <div class="filter">
+        <img src="assets/svg/Filter-Icon.svg" alt="filter" />
+      </div>
+    </div>
+
+    <div class="tab-group">
+      <hospitality-bot-tab-group
+        [listItems]="seatedTabGroup"
+        (selectedTabChange)="tabChange($event)"
+      ></hospitality-bot-tab-group>
+    </div>
+
+    <div class="chips">
+      <hospitality-bot-chips
+        [chips]="seatedChips"
+        (changeChips)="setChip($event)"
+      ></hospitality-bot-chips>
+    </div>
+
+    <div class="content">
+      <ng-container *ngIf="!loading && guestList.length; else emptyGuest">
+        <ng-container *ngFor="let guest of guestList; let i = index">
+          <hospitality-bot-guest-card [item]="guest">
+            <ng-container *ngIf="isSeated; else watchList">
+              <hospitality-bot-button
+                label="Print Invoice"
+                variant="outlined"
+              ></hospitality-bot-button>
+              <hospitality-bot-button
+                label="Change Table"
+                variant="outlined"
+              ></hospitality-bot-button>
+            </ng-container>
+            <ng-template #watchList>
+              <ng-container>
+                <hospitality-bot-button
+                  label="Notified"
+                  variant="outlined"
+                ></hospitality-bot-button>
+                <hospitality-bot-button
+                  label="Seated"
+                  variant="outlined"
+                ></hospitality-bot-button>
+                <hospitality-bot-button
+                  label="Delete"
+                  variant="outlined"
+                ></hospitality-bot-button>
+              </ng-container>
+            </ng-template>
+          </hospitality-bot-guest-card>
+
+          <ng-container *ngIf="!isSeated">
+            <div class="date__divider">
+              {{ '20/12/2024' }}
+            </div></ng-container
+          >
+        </ng-container>
+      </ng-container>
+    </div>
+  </div>
+</div>
+
+<ng-template #emptyGuest>
+  <div class="empty-guest">
+    <hospitality-bot-loader-bounce
+      *ngIf="loading; else empty"
+    ></hospitality-bot-loader-bounce>
+
+    <ng-template #empty>No Record Found...</ng-template>
+  </div>
+</ng-template>
+
+<p-sidebar
+  class="sidebar-slide"
+  [(visible)]="sidebarVisible"
+  position="right"
+  [style]="{ width: '468px' }"
+  [dismissible]="true"
+  [showCloseIcon]="false"
+>
+  <ng-container #sidebarSlide></ng-container>
+</p-sidebar>

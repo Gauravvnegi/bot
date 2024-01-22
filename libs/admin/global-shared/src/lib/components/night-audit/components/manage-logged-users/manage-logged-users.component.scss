@@ -3,7 +3,7 @@
     color: #a3a3a3;
   }
   .content__wrapper {
-    height: 62vh;
+    height: calc(100vh - 350px);
   }
 }
 
@@ -14,10 +14,11 @@
       padding-top: 0 !important;
     }
     .wrapper {
-      min-height: 51vh !important;
+      max-height: 450px;
+      min-height: unset !important;
     }
     .empty-datatable .wrapper {
-      height: 51vh;
+      height: calc(100vh - 450px);
     }
   }
 }

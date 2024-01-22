@@ -40,8 +40,14 @@
           class="half-width"
           controlName="personCount"
           label="No of Person"
+          min="1"
           [props]="{
-            placeholder: 'Enter'
+            type: 'number',
+            placeholder: 'Enter',
+            errorMessages: {
+              required: 'This is a required field.',
+              min: 'Value should be greater than 1'
+            }
           }"
         ></hospitality-bot-input>
         <hospitality-bot-select
@@ -87,7 +93,7 @@
           controlName="remark"
           label="Remarks"
           [props]="{
-            placeholder: 'Write remark...'
+            placeholder: 'Write remark'
           }"
         ></hospitality-bot-text-area>
       </div>

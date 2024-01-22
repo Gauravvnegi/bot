@@ -31,7 +31,9 @@ import {
 import { FolioListReport } from '../models/folio-list-reports.models';
 import { AddWithdrawReport } from '../models/fund-reports.models';
 import {
+  GuestComplaintReport,
   GuestContactReport,
+  GuestEscalationComplaintReport,
   GuestHistory,
   GuestLedger,
   SalesByGuest,
@@ -109,7 +111,9 @@ import { folioListReportHeaderCols } from './folio-list-reports.const';
 import { addWithdrawReportCols } from './fund-reports.const';
 import {
   SalesByGuestCols,
+  guestComplaintReportDataCols,
   guestContactReportCols,
+  guestEscalationComplaintReportCols,
   guestHistoryCols,
   guestLedgerCols,
 } from './guest-reports.const';
@@ -320,6 +324,14 @@ export const reportsConfig: ReportsConfig = {
         label: 'Guest Contact Report',
         value: 'guestContactReport',
       },
+      {
+        label: 'Guest Complaint Report',
+        value: 'guestComplaintReport',
+      },
+      {
+        label: 'Guest Escalation Complaint Report',
+        value: 'guestEscalationComplaintReport',
+      },
     ],
   },
   ACTIVITY_REPORTS: {
@@ -492,6 +504,8 @@ export const reportsModelMapping: Record<ReportsTypeValues, ClassType> = {
   promoCodeReport: PromoCodeReport,
   addWithdrawalFundReport: AddWithdrawReport,
   rateVariation: RateVariationReport,
+  guestComplaintReport: GuestComplaintReport,
+  guestEscalationComplaintReport: GuestEscalationComplaintReport,
 };
 
 function getColsArray(colsData: ColsData): Cols[] {
@@ -558,6 +572,10 @@ export const reportsColumnMapping: Record<ReportsTypeValues, Cols[]> = {
   promoCodeReport: getColsArray(promoCodeReportCols),
   addWithdrawalFundReport: getColsArray(addWithdrawReportCols),
   rateVariation: getColsArray(rateVariationReportCols),
+  guestComplaintReport: getColsArray(guestComplaintReportDataCols),
+  guestEscalationComplaintReport: getColsArray(
+    guestEscalationComplaintReportCols
+  ),
 };
 
 export const reportFiltersMapping: Record<
@@ -616,6 +634,8 @@ export const reportFiltersMapping: Record<
   promoCodeReport: ['fromDate', 'toDate'],
   addWithdrawalFundReport: ['fromDate', 'toDate'],
   rateVariation: ['fromDate', 'toDate'],
+  guestComplaintReport: ['fromDate', 'toDate'],
+  guestEscalationComplaintReport: ['fromDate', 'toDate'],
 };
 
 export const rowStylesMapping: Record<RowStylesKeys, string> = {

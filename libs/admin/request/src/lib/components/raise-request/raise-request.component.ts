@@ -45,8 +45,8 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
   departmentList: Option[] = [];
   assigneeList: Option[] = [];
   sidebarVisible = false;
-  isItemUuid: boolean = false;
-  @Input() isSidebar = false;
+  isAssigneeList: boolean = false;
+  @Input() isSidebar: boolean = false;
   @ViewChild('sidebarSlide', { read: ViewContainerRef })
   sidebarSlide: ViewContainerRef;
   selectedGuest;
@@ -104,7 +104,7 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
       assigneeId: ['', [Validators.required]], //as per BE ()
       // cc: ['+91'],
       // phoneNumber: ['', [Validators.required, Validators.pattern('^[0-9]*$')]],
-      guestId: ['', [Validators.required]],
+      guestId: [''],
     });
   }
 
@@ -156,8 +156,14 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
       this._requestService
         .getItemDetails(this.entityId, itemId)
         .subscribe((response) => {
-          this.isItemUuid = !!response?.itemUuid;
-
+          this.isAssigneeList = !!response?.requestItemUsers?.length;
+          if (!this.isAssigneeList)
+            this.requestFG.get('assigneeId').clearValidators();
+          else
+            this.requestFG
+              .get('assigneeId')
+              .setValidators([Validators.required]);
+          this.requestFG.get('assigneeId').updateValueAndValidity();
           this.assigneeList = response.requestItemUsers.map((user) => {
             return {
               label: `${user.firstName} ${user.lastName}`,
@@ -302,7 +308,7 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
       toDate: this.globalQueries[0].toDate,
       fromDate: this.globalQueries[1].fromDate,
       entityState: 'ALL',
-      type: 'GUEST',
+      type: 'GUEST,NON_RESIDENT_GUEST',
     };
     return queries;
   }

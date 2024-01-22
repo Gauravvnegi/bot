@@ -47,7 +47,7 @@
 }
 
 .cell-data {
-  cursor: move;
+  cursor: not-allowed;
 
   padding: 0 5px;
   border-width: 0 0 0 5px;
@@ -56,12 +56,15 @@
   background-color: $primary-text-bg;
   border-color: $primary;
 
-  &.non-interactive-cell {
-    cursor: not-allowed;
+  // sequence matters
+  &.right-click {
+    cursor: default;
   }
-
-  &.click-only {
+  &.allow-click {
     cursor: pointer;
+  }
+  &.interactive-cell {
+    cursor: move;
   }
 
   &__content {

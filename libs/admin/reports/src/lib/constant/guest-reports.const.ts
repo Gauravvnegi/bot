@@ -1,10 +1,77 @@
 import {
+  GuestComplaintReportData,
   GuestContactReportData,
+  GuestEscalationComplaintReportData,
   GuestHistoryData,
   GuestLedgerData,
   SalesByGuestData,
 } from '../types/guest-reports.types';
 import { ColsData } from '../types/reports.types';
+
+export const guestComplaintReportDataCols: Partial<ColsData<
+  GuestComplaintReportData
+>> = {
+  guestName: {
+    header: 'Guest Name',
+    isSortDisabled: true,
+    isSearchDisabled: true,
+  },
+  serviceItem: {
+    header: 'Service Item',
+    isSortDisabled: true,
+    isSearchDisabled: true,
+  },
+  complaint: {
+    header: 'Complaint',
+    isSortDisabled: true,
+    isSearchDisabled: true,
+  },
+  status: {
+    header: 'Status',
+    isSortDisabled: true,
+    isSearchDisabled: true,
+  },
+  actionTakenBy: {
+    header: 'Action Taken By',
+    isSortDisabled: true,
+    isSearchDisabled: true,
+  },
+  department: {
+    header: 'Department',
+    isSortDisabled: true,
+    isSearchDisabled: true,
+  },
+  customerSentiment: {
+    header: 'Customer Sentiment',
+    isSortDisabled: true,
+    isSearchDisabled: true,
+  },
+  sla: {
+    header: 'SLA',
+    isSortDisabled: true,
+    isSearchDisabled: true,
+  },
+  jobDuration: {
+    header: 'Job Duration',
+    isSortDisabled: true,
+    isSearchDisabled: true,
+  },
+};
+export const guestEscalationComplaintReportCols: Partial<ColsData<
+  GuestEscalationComplaintReportData
+>> = {
+  ...guestComplaintReportDataCols,
+  escalationLevel: {
+    header: 'Escalation Level',
+    isSortDisabled: true,
+    isSearchDisabled: true,
+  },
+  frequency: {
+    header: 'Frequency',
+    isSortDisabled: true,
+    isSearchDisabled: true,
+  },
+};
 
 export const guestHistoryCols: ColsData<GuestHistoryData> = {
   guestName: {

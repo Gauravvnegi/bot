@@ -10,46 +10,48 @@
       [activeIndex]="activeStep"
       (onActive)="activeStep = $event.index"
     ></hospitality-bot-stepper>
-    <ng-container [ngSwitch]="activeStep">
-      <hospitality-bot-manage-logged-users
-        *ngSwitchCase="0"
-        class="audit-content"
-        [activeIndex]="activeStep"
-        [stepList]="itemList"
-        (onCheckAudit)="checkAudit(true, true)"
-        (indexChange)="activeStep = $event"
-      ></hospitality-bot-manage-logged-users>
-      <hospitality-bot-checkin-reservations
-        *ngSwitchCase="1"
-        class="audit-content"
-        [activeIndex]="activeStep"
-        [items]="checkedInReservation"
-        [stepList]="itemList"
-        (reload)="checkAudit($event)"
-        (onClose)="close($event)"
-        (indexChange)="activeStep = $event"
-        (onNavigate)="onNavigate($event)"
-      ></hospitality-bot-checkin-reservations>
-      <hospitality-bot-checkout-reservations
-        *ngSwitchCase="2"
-        class="audit-content"
-        [items]="checkedOutReservation"
-        [activeIndex]="activeStep"
-        [stepList]="itemList"
-        (reload)="checkAudit($event)"
-        (onClose)="close($event)"
-        (indexChange)="activeStep = $event"
-        (onNavigate)="onNavigate($event)"
-      ></hospitality-bot-checkout-reservations>
-      <hospitality-bot-audit-summary
-        *ngSwitchCase="3"
-        class="audit-content"
-        [activeIndex]="activeStep"
-        [stepList]="itemList"
-        (indexChange)="finish($event)"
-        (auditDateChange)="auditDate = $event"
-      ></hospitality-bot-audit-summary>
-    </ng-container>
+    <div class="step__content">
+      <ng-container [ngSwitch]="activeStep">
+        <hospitality-bot-manage-logged-users
+          *ngSwitchCase="0"
+          class="audit-content"
+          [activeIndex]="activeStep"
+          [stepList]="itemList"
+          (onCheckAudit)="checkAudit(true, true)"
+          (indexChange)="activeStep = $event"
+        ></hospitality-bot-manage-logged-users>
+        <hospitality-bot-checkin-reservations
+          *ngSwitchCase="1"
+          class="audit-content"
+          [activeIndex]="activeStep"
+          [items]="checkedInReservation"
+          [stepList]="itemList"
+          (reload)="checkAudit($event)"
+          (onClose)="close($event)"
+          (indexChange)="activeStep = $event"
+          (onNavigate)="onNavigate($event)"
+        ></hospitality-bot-checkin-reservations>
+        <hospitality-bot-checkout-reservations
+          *ngSwitchCase="2"
+          class="audit-content"
+          [items]="checkedOutReservation"
+          [activeIndex]="activeStep"
+          [stepList]="itemList"
+          (reload)="checkAudit($event)"
+          (onClose)="close($event)"
+          (indexChange)="activeStep = $event"
+          (onNavigate)="onNavigate($event)"
+        ></hospitality-bot-checkout-reservations>
+        <hospitality-bot-audit-summary
+          *ngSwitchCase="3"
+          class="audit-content"
+          [activeIndex]="activeStep"
+          [stepList]="itemList"
+          (indexChange)="finish($event)"
+          (auditDateChange)="auditDate = $event"
+        ></hospitality-bot-audit-summary>
+      </ng-container>
+    </div>
   </div>
 </div>
 

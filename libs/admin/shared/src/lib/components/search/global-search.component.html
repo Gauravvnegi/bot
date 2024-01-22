@@ -5,6 +5,7 @@
       pInputText
       [formControlName]="controlName"
       [placeholder]="placeholder.length ? placeholder : 'Search...'"
+      (keydown)="onKeyDown.emit($event)"
       (focus)="onBlurSearch($event)"
     />
     <!-- (blur)="onBlurSearch($event); clearSearch()" -->
@@ -18,10 +19,10 @@
       (keyup)="valueChange($event, searchBar.value)" 
       *ngIf="isClearShow" // ADD it into pi-times-circle icon
     -->
-
     <i
-      [ngClass]="!isInputEmpty ? 'pi pi-times-circle search-icon' : ''"
-      (click)="!isInputEmpty && clearSearch()"
+      class="search-icon"
+      [ngClass]="isInputEmpty ? 'pi pi-times-circle' : 'pi pi-search'"
+      (click)="isInputEmpty && clearSearch()"
     ></i>
     <!-- <i
       class="pi pi-search search-bar-icon"

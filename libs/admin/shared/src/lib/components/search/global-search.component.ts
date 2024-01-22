@@ -41,9 +41,8 @@ export class GlobalSearchComponent extends FormComponent {
   }
 
   get isInputEmpty() {
-    return (
-      this.controlContainer.control.get(this.controlName).value.length == 0
-    );
+    return !!this.controlContainer?.control?.get(this.controlName)?.value
+      ?.length;
   }
 
   suggestClick(key: MemberSortTypes) {

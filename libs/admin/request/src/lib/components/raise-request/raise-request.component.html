@@ -67,7 +67,7 @@
               value: 'id'
             }
           },
-          searchQueryParams: { type: 'GUEST' }
+          searchQueryParams: { type: 'GUEST,NON_RESIDENT_GUEST' }
         }"
         [paginationConfig]="{
           isPagination: true
@@ -134,7 +134,7 @@
       </hospitality-bot-input> -->
 
       <hospitality-bot-select
-        *ngIf="!isItemUuid"
+        *ngIf="isAssigneeList"
         class="full-width department"
         [disabled]="!requestFG.get('itemCode').value"
         [options]="assigneeList"

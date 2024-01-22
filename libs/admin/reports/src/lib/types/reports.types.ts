@@ -74,7 +74,9 @@ export type ReportsType = {
     | 'salesByGuest'
     | 'guestTypeReport'
     | 'guestLedger'
-    | 'guestContactReport';
+    | 'guestContactReport'
+    | 'guestComplaintReport'
+    | 'guestEscalationComplaintReport';
   ACTIVITY_REPORTS: 'reservationCreatedReport' | 'reservationActivityReport';
   ANALYTICS_REPORTS:
     | 'companyContributionsReport'

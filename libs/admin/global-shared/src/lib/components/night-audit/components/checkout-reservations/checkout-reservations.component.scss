@@ -1,7 +1,7 @@
 @import 'main';
 :host ::ng-deep .main__wrapper {
   .p-datatable {
-    height: 62vh;
+    height: calc(100vh - 300px);
     overflow-x: hidden;
     overflow-y: auto;
     tr {
@@ -20,7 +20,8 @@
   }
 
   .empty-datatable .wrapper {
-    min-height: 53vh !important;
+    min-height: unset !important;
+    height: calc(100vh - 365px);
   }
 
   .sticky-header {
@@ -29,15 +30,5 @@
 
   .activeButton .p-button {
     background-color: $primary-cta;
-  }
-}
-
-:host ::ng-deep .main__wrapper {
-  .p-datatable {
-    height: 67vh;
-  }
-
-  .empty-datatable .wrapper {
-    min-height: 60vh !important;
   }
 }

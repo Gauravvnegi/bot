@@ -3,6 +3,7 @@ import { FormBuilder } from '@angular/forms';
 import {
   AdminUtilityService,
   BaseDatatableComponent,
+  EntityState,
   NavRouteOption,
   QueryConfig,
 } from '@hospitality-bot/admin/shared';
@@ -50,6 +51,7 @@ export class GuestDatatableComponent extends BaseDatatableComponent
   ];
 
   guestType: GuestTypes[] = ['NON_RESIDENT_GUEST', 'GUEST'];
+  entityStateLabels: EntityState<string>;
 
   constructor(
     public fb: FormBuilder,
@@ -115,6 +117,7 @@ export class GuestDatatableComponent extends BaseDatatableComponent
   mapData(res: GuestListResponse) {
     const guestData = new GuestTable().deserialize(res);
     this.values = guestData.records;
+    this.entityStateLabels = guestData?.entityStateLabels;
     this.initFilters(
       guestData.entityStateCounts,
       guestData.entityTypeCounts,
@@ -172,7 +175,9 @@ export class GuestDatatableComponent extends BaseDatatableComponent
         ]),
       })
       .subscribe((res) => {
-        this.values = res.map((item) => new GuestData().deserialize(item));
+        this.values = res.map((item) =>
+          new GuestData().deserialize(item, this.entityStateLabels)
+        );
         this.loading = false;
       });
   }

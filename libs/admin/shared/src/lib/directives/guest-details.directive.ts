@@ -15,6 +15,7 @@ export class GuestDetailsDirective {
   @Input() bookingId: string;
   @Input() guestId: string;
   @Input() tabKey: DetailsTabOptions;
+  @Input() isTextDecoration: boolean = true;
   constructor(
     private bookingDetailService: BookingDetailService,
     private renderer: Renderer2,
@@ -25,12 +26,14 @@ export class GuestDetailsDirective {
     // Add styles for mouse enter (hover) event
     if (this.guestId || this.bookingId) {
       this.renderer.setStyle(this.el.nativeElement, 'cursor', 'pointer');
-      this.renderer.setStyle(this.el.nativeElement, 'color', 'darkblue');
-      this.renderer.setStyle(
-        this.el.nativeElement,
-        'text-decoration',
-        'underline'
-      );
+      if (this.isTextDecoration) {
+        this.renderer.setStyle(this.el.nativeElement, 'color', 'darkblue');
+        this.renderer.setStyle(
+          this.el.nativeElement,
+          'text-decoration',
+          'underline'
+        );
+      }
     }
   }
 

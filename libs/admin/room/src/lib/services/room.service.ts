@@ -99,7 +99,8 @@ export class RoomService extends ApiService {
     data: {
       room: {
         id: string;
-        statusDetailsList: [{ isCurrentStatus: boolean; status: RoomStatus }];
+        statusDetailsList?: [{ isCurrentStatus: boolean; status: RoomStatus }];
+        removeStatusIds?: string[];
       };
     }
   ) {

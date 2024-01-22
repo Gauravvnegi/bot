@@ -291,7 +291,10 @@
               (addFGEvent)="addFGEvent($event)"
             ></hospitality-bot-admin-documents-details>
           </mat-tab>
-          <mat-tab [label]="getVisitDetaillabel()">
+          <mat-tab
+            [label]="getVisitDetaillabel()"
+            *ngIf="guestReservations.records.length"
+          >
             <hospitality-bot-stay-details
               *ngIf="isReservationDetailFetched"
               #adminStayDetailsComponent

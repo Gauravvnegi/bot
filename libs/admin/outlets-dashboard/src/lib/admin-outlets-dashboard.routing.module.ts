@@ -7,6 +7,9 @@ import { ReservationCardComponent } from './components/reservation-card/reservat
 import { PosReservationComponent } from './components/pos-reservation/pos-reservation.component';
 import { MenuItemCardComponent } from './components/menu-item-card/menu-item-card.component';
 import { OrderSummaryComponent } from './components/order-summary/order-summary.component';
+import { GuestCardComponent } from './components/guest-card/guest-card.component';
+import { GuestListComponent } from './components/guest-list/guest-list.component';
+import { AddGuestListComponent } from './components/add-guest-list/add-guest-list.component';
 
 const appRoutes: Route[] = [
   {
@@ -34,5 +37,8 @@ export class AdminOutletsDashboardRoutingModule {
     PosReservationComponent,
     MenuItemCardComponent,
     OrderSummaryComponent,
+    GuestCardComponent,
+    GuestListComponent,
+    AddGuestListComponent,
   ];
 }

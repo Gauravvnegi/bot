@@ -10,6 +10,7 @@
   padding: 10px 10px;
   color: white;
   border-bottom: 1px solid $primary-cta;
+  height: 55px;
   .heading {
     @include light-sm-text;
     @include flex-item-center;
@@ -30,6 +31,29 @@
     .close-sidebar-icon {
       cursor: pointer;
     }
+  }
+}
+
+:host ::ng-deep .menu-field .p-multiselect {
+  margin-left: 0;
+  background: transparent;
+  outline: none;
+  border: 1px solid $white;
+  border-radius: 5px;
+  padding: 6px 20px;
+  border-color: transparent !important;
+  .p-multiselect-label-container {
+    margin-top: 0.2em;
+    margin-bottom: 0;
+  }
+  .p-multiselect-label {
+    color: $white;
+  }
+  &:hover {
+    border-color: $white;
+  }
+  .p-multiselect-trigger-icon {
+    color: $white;
   }
 }
 
@@ -70,12 +94,13 @@
   overflow: hidden;
   .menu-section {
     overflow: auto;
-    flex-basis: 60%;
+    flex-basis: 55%;
     border-right: 1px solid #d9d9d9;
+    padding: 10px 30px;
   }
   .summary-section {
     overflow: auto;
-    flex-basis: 40%;
+    flex-basis: 45%;
   }
 }
 
@@ -83,7 +108,6 @@
   display: flex;
   justify-content: flex-end;
   gap: 10px;
-  padding: 5px 10px;
   .meal-preference {
     background-color: white;
     cursor: pointer;
@@ -94,19 +118,15 @@
   }
 }
 
-.menu-heading {
-  padding: 5px 15px;
-}
-
 .meal-preference.selected {
   background: $primary !important;
   color: $white;
 }
 
 .menu-items {
-  @include flex-wrap-even-space;
-  gap: 10px;
-  padding: 10px;
+  @include flex-wrap;
+  row-gap: 15px;
+  column-gap: 15px;
   .menu-item {
     flex-basis: 45%;
   }

@@ -3,8 +3,9 @@ export type MenuItemCard = {
   itemName: string;
   mealPreference: MealPreferences;
   price: number;
-  image: string;
-  selected?: boolean;
+  itemInstruction?: string;
+  unit?: number;
+  image?: string;
 };
 
 export enum MealPreferences {
@@ -13,27 +14,29 @@ export enum MealPreferences {
   NON_VEG = 'NON_VEG',
 }
 
+export type ItemsFormFields = 'Instruction' | 'Offer' | 'ItemInstruction';
+
 export const mealPreferenceConfig: Record<
   MealPreferences,
   {
     title: string;
     image?: string;
-    filterPreference?: (item: MenuItemCard) => boolean;
+    filterPreference?: (mealPreference?: MealPreferences) => boolean;
   }
 > = {
-  ALL: {
+  [MealPreferences.ALL]: {
     title: 'All',
-    filterPreference: () => true,
+    filterPreference: (item) => true,
   },
   [MealPreferences.VEG]: {
     title: 'Veg',
     image: 'assets/svg/veg.svg',
-    filterPreference: (item) => item.mealPreference === MealPreferences.VEG,
+    filterPreference: (item) => item === MealPreferences.VEG,
   },
   [MealPreferences.NON_VEG]: {
     title: 'Non-veg',
     image: 'assets/svg/non-veg.svg',
-    filterPreference: (item) => item.mealPreference === MealPreferences.NON_VEG,
+    filterPreference: (item) => item === MealPreferences.NON_VEG,
   },
   // Add more preferences with their corresponding display and filter conditions
 };

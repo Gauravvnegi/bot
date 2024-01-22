@@ -1,89 +1,91 @@
-<div class="container">
+<div class="container" [formGroup]="userForm">
   <!-- Header -->
-  <div class="header">
-    <div class="heading">
-      <span class="header-data">
-        {{ data.tableName }} - {{ data.area }}
-        <img
-          class="pos-reservation-icon"
-          src="assets/svg/pos-reservation.svg"
-        />
-      </span>
-      <div [formGroup]="menuForm" class="form-block menu">
-        <hospitality-bot-multi-select
-          class="one-third-width"
-          controlName="menu"
-          [props]="{
-            placeholder: 'Select Menu',
-            variant: 'outlined'
-          }"
-          [settings]="{
-            placeholder: 'Select Menu',
-            showChips: false,
-            maxSelectedLabels: 1
-          }"
-          [options]="menuOptions"
-        ></hospitality-bot-multi-select>
+  <ng-container formGroupName="orderInformation">
+    <div class="header">
+      <div class="heading">
+        <!-- <span class="header-data">
+          {{ data.tableName }} - {{ data.area }}
+          <img
+            class="pos-reservation-icon"
+            src="assets/svg/pos-reservation.svg"
+          />
+        </span> -->
+        <div class="form-block menu">
+          <hospitality-bot-multi-select
+            class="one-third-width menu-field"
+            controlName="menu"
+            [options]="menuOptions"
+            [props]="{
+              placeholder: 'Select Menu',
+              dropdownIcon: 'pi pi-sort-down'
+            }"
+            [settings]="{
+              placeholder: 'Select Menu',
+              showChips: false,
+              maxSelectedLabels: 1
+            }"
+          ></hospitality-bot-multi-select>
+        </div>
+      </div>
+
+      <div class="invoice-id">
+        <!-- Invoice Id: {{ data.invoiceId }} &nbsp; -->
+        <span>
+          <img
+            class="close-sidebar-icon"
+            src="assets/svg/close-sidebar.svg"
+            (click)="close()"
+          />
+        </span>
       </div>
     </div>
 
-    <div class="invoice-id">
-      Invoice Id: {{ data.invoiceId }} &nbsp;
-      <span>
-        <img
-          class="close-sidebar-icon"
-          src="assets/svg/close-sidebar.svg"
-          (click)="close()"
-        />
-      </span>
+    <!-- Form -->
+    <div class="pos-form">
+      <hospitality-bot-search
+        class="one-fourth-width search"
+        controlName="search"
+        (clear)="clearSearch()"
+        (search)="getSearchValue($event)"
+        [searchApi]="searchApi"
+        [props]="{
+          placeholder: 'Search by Dish Name or Code'
+        }"
+      ></hospitality-bot-search>
+      <hospitality-bot-multi-select
+        class="one-fifth-width"
+        controlName="tableNumber"
+        [options]="tableNumbers"
+        label="Table No./Area"
+      ></hospitality-bot-multi-select>
+      <hospitality-bot-select
+        class="one-fifth-width"
+        controlName="staff"
+        [options]="staffList"
+        [props]="{
+          placeholder: 'Select'
+        }"
+        label="Staff"
+      ></hospitality-bot-select>
+      <hospitality-bot-select
+        class="one-fifth-width"
+        controlName="guest"
+        [options]="guestList"
+        [props]="{
+          placeholder: 'Select'
+        }"
+        label="Guest"
+      ></hospitality-bot-select>
+      <hospitality-bot-input
+        class="one-fifth-width"
+        controlName="numberOfPersons"
+        [props]="{
+          placeholder: 'Enter'
+        }"
+        label="No. of Person"
+      ></hospitality-bot-input>
     </div>
-  </div>
-
-  <!-- Form -->
-  <div class="pos-form" [formGroup]="userForm">
-    <hospitality-bot-search
-      class="one-fourth-width search"
-      controlName="search"
-      (clear)="clearSearch()"
-      (search)="getSearchValue($event)"
-      [searchApi]="searchApi"
-      [props]="{
-        placeholder: 'Search by Dish Name or Code'
-      }"
-    ></hospitality-bot-search>
-    <hospitality-bot-multi-select
-      class="one-fifth-width"
-      controlName="tableNumber"
-      [options]="tableNumbers"
-      label="Table No./Area"
-    ></hospitality-bot-multi-select>
-    <hospitality-bot-select
-      class="one-fifth-width"
-      controlName="staff"
-      [options]="staffList"
-      [props]="{
-        placeholder: 'Select'
-      }"
-      label="Staff"
-    ></hospitality-bot-select>
-    <hospitality-bot-select
-      class="one-fifth-width"
-      controlName="guest"
-      [options]="guestList"
-      [props]="{
-        placeholder: 'Select'
-      }"
-      label="Guest"
-    ></hospitality-bot-select>
-    <hospitality-bot-input
-      class="one-fifth-width"
-      controlName="numberOfPersons"
-      [props]="{
-        placeholder: 'Enter'
-      }"
-      label="No. of Person"
-    ></hospitality-bot-input>
-  </div>
+  </ng-container>
 
   <div class="tab-header">
     <hospitality-bot-custom-tab-header

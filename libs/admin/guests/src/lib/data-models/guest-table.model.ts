@@ -55,7 +55,6 @@ export class GuestData {
   type: string;
 
   deserialize(input: GuestType, EntityStateLabels?: EntityState<string>) {
-    debugger;
     const contact = input.contactDetails;
     Object.assign(this, {
       age: input.age,

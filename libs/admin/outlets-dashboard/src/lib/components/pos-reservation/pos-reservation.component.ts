@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup } from '@angular/forms';
 import { Filter, Option } from '@hospitality-bot/admin/shared';
 import { MenuList } from 'libs/admin/all-outlets/src/lib/models/outlet.model';
 import { OutletService } from 'libs/admin/all-outlets/src/lib/services/outlet.service';
@@ -9,11 +9,9 @@ import {
   menuCardData,
   reservationTabFilters,
 } from '../../constants/data-table';
-import {
-  MealPreferences,
-  mealPreferenceConfig,
-} from '../../types/menu-order';
+import { MealPreferences, mealPreferenceConfig } from '../../types/menu-order';
 import { mealPreferences } from '../../constants/form';
+import { MenuForm } from '../../types/form';
 
 @Component({
   selector: 'hospitality-bot-pos-reservation',
@@ -23,7 +21,6 @@ import { mealPreferences } from '../../constants/form';
 export class PosReservationComponent implements OnInit {
   isSidebar: boolean;
   data: PosConfig;
-  menuForm: FormGroup;
   userForm: FormGroup;
   @Output() onCloseSidebar = new EventEmitter();
 
@@ -53,16 +50,21 @@ export class PosReservationComponent implements OnInit {
   }
 
   initForm() {
-    this.menuForm = this.fb.group({
-      menu: [[]],
-    });
-
     this.userForm = this.fb.group({
-      search: [''],
-      tableNumber: [[]],
-      staff: [''],
-      guest: [''],
-      numberOfPersons: [''],
+      orderInformation: this.fb.group({
+        search: [''],
+        tableNumber: [[]],
+        staff: [''],
+        guest: [''],
+        numberOfPersons: [''],
+        menu: [[]],
+      }),
+      paymentInformation: this.fb.group({
+        complementery: [false],
+        paymentMethod: [''],
+        paymentRecieved: [null],
+        transactionId: [''],
+      }),
     });
   }
 
@@ -75,14 +77,19 @@ export class PosReservationComponent implements OnInit {
       this.outletService.getMenuList(this.data.entityId).subscribe((res) => {
         if (res) {
           this.menuOptions = new MenuList().deserialize(res).records;
+          this.orderInfoControls.menu.patchValue(this.menuOptions, {
+            emitEvent: false,
+          });
         }
       })
     );
   }
 
   getCards() {
-    return this.cardData?.filter(
-      mealPreferenceConfig[this.selectedPreference].filterPreference
+    return this.cardData?.filter((item) =>
+      mealPreferenceConfig[this.selectedPreference].filterPreference(
+        item?.mealPreference
+      )
     );
   }
 
@@ -102,6 +109,11 @@ export class PosReservationComponent implements OnInit {
 
   close() {
     this.onCloseSidebar.emit();
+  }
+
+  get orderInfoControls() {
+    return (this.userForm.get('orderInformation') as FormGroup)
+      .controls as Record<keyof MenuForm['orderInformation'], AbstractControl>;
   }
 }
 

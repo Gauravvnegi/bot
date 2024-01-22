@@ -3,11 +3,12 @@
 .card-wrapper {
   background-color: $white;
   padding: 6px 10px;
+  border-radius: 8px;
 }
 
 .image-wrapper {
-  height: 100px;
-  width: 250px;
+  height: 99px;
+  width: 232px;
   position: relative;
   .category-img {
     position: absolute;
@@ -17,7 +18,7 @@
     height: 100%;
     width: 100%;
     object-fit: cover;
-    border-radius: 10px;
+    border-radius: 4px;
   }
 }
 
@@ -26,7 +27,7 @@
 }
 
 .item-price {
-  @include light-vsm-text;
+  @include normal-vsm-text;
   color: $grayMedium;
 }
 

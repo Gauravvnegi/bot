@@ -1,0 +1,13 @@
+<div class="chip__wrapper">
+  <ng-container *ngFor="let chip of chips; let i = index">
+    <div
+      class="chip"
+      [ngClass]="{
+        'active-chip': i == activeIndex
+      }"
+      (click)="clicked(chip, i)"
+    >
+      {{ chip?.label }}
+    </div>
+  </ng-container>
+</div>

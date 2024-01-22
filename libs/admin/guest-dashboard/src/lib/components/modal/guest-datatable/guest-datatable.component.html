@@ -87,7 +87,9 @@
             </p-tableCheckbox>
           </td>
           <td class="cell-content center-align justify-center">
-            <span class="primary-text">{{ rowData.getFullName() }}</span>
+            <span class="primary-text">{{
+              rowData.getFullName() || '&mdash;'
+            }}</span>
           </td>
           <td>
             <p class="arrival-date">

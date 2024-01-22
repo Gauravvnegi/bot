@@ -17,7 +17,7 @@ import { GuestTableService } from '../../services/guest-table.service';
 import { GuestFactory } from '../../data-models/guest.model';
 import { FormService } from 'libs/admin/shared/src/lib/services/form.service';
 import { GuestFormType } from 'libs/admin/agent/src/lib/types/form.types';
-import { GuestType } from '../../types/guest.type';
+import { GuestType, GuestTypes } from '../../types/guest.type';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 import { RoutesConfigService } from 'apps/admin/src/app/core/theme/src/lib/services/routes-config.service';
 
@@ -61,7 +61,7 @@ export class AddGuestComponent implements OnInit {
   @ViewChild('sidebarSlide', { read: ViewContainerRef })
   sidebarSlide: ViewContainerRef;
   selectedMember: Option;
-  guestType: 'NON_RESIDENT_GUEST' | 'RESIDENT_GUEST';
+  guestType: GuestTypes = 'GUEST';
 
   constructor(
     private fb: FormBuilder,
@@ -169,7 +169,9 @@ export class AddGuestComponent implements OnInit {
     }
     this.loading = true;
     const formData = GuestFactory.mapFormData(this.guestForm.getRawValue());
-    const queryParams = { params: `?type=GUEST&entityId=${this.entityId}` };
+    const queryParams = {
+      params: `?type=${this.guestType}&entityId=${this.entityId}`,
+    };
     const request = this.guestId
       ? this.guestService.updateGuest(formData, this.guestId)
       : this.guestService.addGuest(formData, queryParams);

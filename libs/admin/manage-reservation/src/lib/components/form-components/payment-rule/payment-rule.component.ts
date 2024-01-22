@@ -70,7 +70,7 @@ export class PaymentRuleComponent implements OnInit {
     const data = {
       amountToPay: [0],
       deductedAmount: [''],
-      makePaymentBefore: [''],
+      makePaymentBefore: [Date.now()],
       inclusionsAndTerms: [''],
       type: ['FLAT'],
       partialPayment: [true],

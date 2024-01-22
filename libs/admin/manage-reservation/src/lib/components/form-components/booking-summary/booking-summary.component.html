@@ -47,6 +47,7 @@
             [label]="detailsView ? 'View Less' : 'View Details'"
             variant="text"
             (onClick)="detailsView = !detailsView"
+            minWidth="0px"
           ></hospitality-bot-button>
         </div>
         <ng-container *ngIf="bookingType === 'ROOM_TYPE' && detailsView">

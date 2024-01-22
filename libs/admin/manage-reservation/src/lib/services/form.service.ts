@@ -60,7 +60,7 @@ export class FormService {
   reservationForm = new BehaviorSubject<ReservationForm>(null);
 
   updateRateImprovement(control: AbstractControl) {
-    if(control) control.patchValue(true, { emitEvent: false });
+    if (control) control.patchValue(true, { emitEvent: false });
   }
 
   initSourceData(
@@ -116,20 +116,22 @@ export class FormService {
       cashierId: input?.paymentMethod?.cashierId ?? '',
     };
 
-    if (input?.paymentRule?.amountToPay && input.paymentRule.partialPayment)
-      roomReservationData.paymentRule = {
-        amount: input?.paymentRule?.amountToPay,
-        type: 'FLAT',
-        dueDate: input?.paymentRule?.makePaymentBefore,
-        remarks: input?.paymentRule?.inclusionsAndTerms,
-      };
-    if (input.paymentRule.partialPayment === false)
-      roomReservationData.paymentRule = {
-        amount: totalAmount,
-        type: 'FLAT',
-        dueDate: input?.paymentRule?.makePaymentBefore,
-        remarks: input?.paymentRule?.inclusionsAndTerms,
-      };
+    if (type === 'full') {
+      if (input?.paymentRule?.amountToPay && input.paymentRule.partialPayment)
+        roomReservationData.paymentRule = {
+          amount: input?.paymentRule?.amountToPay,
+          type: 'FLAT',
+          dueDate: input?.paymentRule?.makePaymentBefore,
+          remarks: input?.paymentRule?.inclusionsAndTerms,
+        };
+      if (input.paymentRule.partialPayment === false)
+        roomReservationData.paymentRule = {
+          amount: totalAmount,
+          type: 'FLAT',
+          dueDate: input?.paymentRule?.makePaymentBefore,
+          remarks: input?.paymentRule?.inclusionsAndTerms,
+        };
+    }
 
     roomReservationData.guestId = input.guestInformation?.guestDetails;
     roomReservationData.specialRequest = input.instructions.specialInstructions;

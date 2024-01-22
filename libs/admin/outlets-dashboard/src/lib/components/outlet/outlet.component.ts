@@ -1,4 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import {
+  Component,
+  ComponentFactoryResolver,
+  OnInit,
+  ViewChild,
+  ViewContainerRef,
+} from '@angular/core';
 import {
   NavRouteOptions,
   EntityTabFilterResponse,
@@ -6,6 +12,7 @@ import {
   EntitySubType,
 } from '@hospitality-bot/admin/shared';
 import { OutletTableService } from '../../services/outlet-table.service';
+import { GuestListComponent } from '../guest-list/guest-list.component';
 
 @Component({
   selector: 'hospitality-bot-outlet',
@@ -19,7 +26,14 @@ export class OutletComponent implements OnInit {
   selectedInterval: string;
   entityId: string;
 
-  constructor(private outletTableService: OutletTableService) {}
+  sidebarVisible = false;
+  @ViewChild('sidebarSlide', { read: ViewContainerRef })
+  sidebarSlide: ViewContainerRef;
+
+  constructor(
+    private outletTableService: OutletTableService,
+    private componentFactoryResolver: ComponentFactoryResolver
+  ) {}
 
   ngOnInit(): void {}
 
@@ -37,5 +51,31 @@ export class OutletComponent implements OnInit {
     this.outletTableService.selectedEntity.next(
       this.getFormServiceEntity(event)
     );
+  }
+
+  openGuestList() {
+    this.sidebarVisible = true;
+    this.createDynamicComponent();
+  }
+
+  createDynamicComponent() {
+    // Dynamically create an instance of DynamicComponent
+    this.sidebarSlide.clear();
+    const factory = this.componentFactoryResolver.resolveComponentFactory(
+      GuestListComponent
+    );
+    const componentRef = this.sidebarSlide.createComponent(factory);
+    const instance: GuestListComponent = componentRef.instance;
+
+    const closeSubscription = instance.onClose.subscribe((res: any) => {
+      componentRef.destroy();
+      closeSubscription.unsubscribe();
+      this.sidebarVisible = false;
+    });
+  }
+
+  clearDynamicComponent() {
+    // Clear the dynamic component container
+    this.sidebarVisible = false;
   }
 }

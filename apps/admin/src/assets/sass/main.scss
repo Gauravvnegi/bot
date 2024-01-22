@@ -78,6 +78,8 @@
     }
   }
   .close-icon {
+    display: flex;
+    gap: 20px;
     color: $white;
     &:hover {
       cursor: pointer;

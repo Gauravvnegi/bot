@@ -12,7 +12,7 @@
     <hospitality-bot-toggle-switch
       class="status"
       controlName="status"
-      label="Status"
+      label="Status:"
     ></hospitality-bot-toggle-switch>
     <hospitality-bot-input
       class="one-third-width"
@@ -123,6 +123,14 @@
       (onCreate)="createTax()"
       [options]="taxes"
     ></hospitality-bot-multi-select>
+    <hospitality-bot-custom-file-upload
+      formControlName="imageUrl"
+      label="Image"
+      class="full-width"
+      [description]="
+        'This image will also reflect on Webapp and on your services'
+      "
+    ></hospitality-bot-custom-file-upload>
     <div class="des-template">
       <div class="des-template__label">Notes</div>
       <div class="des-template__input">

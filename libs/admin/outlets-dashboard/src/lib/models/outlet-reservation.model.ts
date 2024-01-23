@@ -8,7 +8,6 @@ import {
   PaymentStatus,
   TableStatus,
 } from '../types/reservation-table';
-import { throwMatDialogContentAlreadyAttachedError } from '@angular/material/dialog';
 
 export class OutletReservationList {
   reservationData: OutletReservation[];

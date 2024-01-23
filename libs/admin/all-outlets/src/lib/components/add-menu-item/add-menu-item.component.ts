@@ -1,12 +1,7 @@
 import { Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import {
-  ActivatedRoute,
-  NavigationExtras,
-  Route,
-  Router,
-} from '@angular/router';
+import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
 import {
   GlobalFilterService,
   RoutesConfigService,
@@ -61,7 +56,7 @@ export class AddMenuItemComponent extends OutletBaseComponent
     private globalFilterService: GlobalFilterService,
     private configService: ConfigService,
     private location: Location,
-    protected routesConfigService: RoutesConfigService,
+    protected routesConfigService: RoutesConfigService
   ) {
     super(router, route, routesConfigService);
   }
@@ -129,6 +124,7 @@ export class AddMenuItemComponent extends OutletBaseComponent
       hsnCode: [''],
       taxIds: [[]],
       description: [''],
+      imageUrl: ['', [Validators.required]],
     });
     if (this.menuItemId) {
       this.$subscription.add(

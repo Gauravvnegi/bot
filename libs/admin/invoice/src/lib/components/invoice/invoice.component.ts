@@ -592,6 +592,7 @@ export class InvoiceComponent implements OnInit {
       discountValue: [0],
       isRealised: [false],
       chargeType: [settings.chargeType ? settings.chargeType : ''],
+      remarks: [''],
     };
 
     const formGroup = this.fb.group(data);
@@ -1463,6 +1464,7 @@ export class InvoiceComponent implements OnInit {
     discountType?: string;
     discountValue?: number;
     isRealised?: boolean;
+    remarks?: string;
   }) {
     const {
       type,
@@ -1475,6 +1477,7 @@ export class InvoiceComponent implements OnInit {
       discountType,
       discountValue,
       isRealised,
+      remarks,
     } = {
       ...settings,
     };
@@ -1510,6 +1513,7 @@ export class InvoiceComponent implements OnInit {
       transactionType: transactionType,
       date: settings.date ? settings.date : moment(new Date()).unix() * 1000,
       chargeType: chargeType,
+      remarks: remarks,
     });
 
     // Add discountType and discountValue only when type is 'discount'
@@ -1568,7 +1572,7 @@ export class InvoiceComponent implements OnInit {
     modalRef.onClose.subscribe(
       (res: { refundAmount: number; remarks: string }) => {
         if (res) {
-          this.addNonBillItem({
+          let billItem = {
             amount: res.refundAmount,
             itemId: id
               ? id
@@ -1584,7 +1588,10 @@ export class InvoiceComponent implements OnInit {
               additionalChargesDetails[chargesType].value +
               `${res.remarks ? ` (${res.remarks})` : ''}`,
             chargeType: additionalChargesDetails[chargesType].chargeType,
-          });
+          };
+          if (chargesType === AdditionalChargesType.ALLOWANCE)
+            billItem['remarks'] = res.remarks;
+          this.addNonBillItem(billItem);
           id && this.handleSave();
         }
       }
@@ -1608,7 +1615,8 @@ export class InvoiceComponent implements OnInit {
           (!controls.value.itemId && !controls.value.isNew) ||
           controls.value.taxId ||
           (controls.value.isNonEditableBillItem &&
-            !controls.value.isMiscellaneous)
+            !controls.value.isMiscellaneous) ||
+          controls.value.chargeType === 'ALLOWANCE'
         );
 
       case 'input':

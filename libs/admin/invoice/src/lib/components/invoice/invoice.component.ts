@@ -316,9 +316,8 @@ export class InvoiceComponent implements OnInit {
    */
   initFormDetails() {
     this.$subscription.add(
-      this.invoiceService
-        .getReservationDetail(this.reservationId)
-        .subscribe((res) => {
+      this.invoiceService.getReservationDetail(this.reservationId).subscribe(
+        (res) => {
           const guestData = res.guestDetails.primaryGuest;
           this.useForm.patchValue({
             guestName: `${guestData.firstName} ${guestData.lastName}`,
@@ -339,9 +338,11 @@ export class InvoiceComponent implements OnInit {
             res?.pmsStatus === ReservationCurrentStatus.INHOUSE;
           this.isCheckout =
             res?.pmsStatus === ReservationCurrentStatus.CHECKEDOUT;
-          this.isInitialized = true;
           this.getLateCheckoutDetails();
-        })
+        },
+        (error) => (this.isInitialized = true),
+        () => (this.isInitialized = true)
+      )
     );
 
     this.getBillingSummary();

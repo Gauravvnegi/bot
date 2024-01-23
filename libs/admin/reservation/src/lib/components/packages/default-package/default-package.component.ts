@@ -63,6 +63,11 @@ export class DefaultPackageComponent implements OnInit {
   }
 
   getMetaDataList(value) {
+    /**
+     * @Remark value is in second, it may be change in future,
+     * we have to convert it in millisecond.
+     *
+     */
     let format: string = 'DD-MM-YYYY , HH:mm A';
     this.metaDataList = Object.entries(value.metaData as MetaData).map(
       ([key, value]) => ({
@@ -71,7 +76,9 @@ export class DefaultPackageComponent implements OnInit {
           ' $1'
         ),
         value:
-          key == 'pickupTime' ? this.convertEpochToDate(value, format) : value,
+          key == 'pickupTime'
+            ? this.convertEpochToDate(+value * 1000, format)
+            : value,
       })
     );
   }

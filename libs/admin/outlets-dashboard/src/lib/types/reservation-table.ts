@@ -9,7 +9,7 @@ export type ReservationStatus =
   | 'RUNNING_TABLE'
   | 'PRINTED_TABLE';
 
-export type OrderMethod = 'DELIVERY' | 'DINEIN' | 'PICKUP';
+export type OrderMethod = 'DELIVERY' | 'DINE_IN' | 'PICKUP';
 
 export type PaymentStatus = 'PAID' | 'UNPAID';
 

@@ -55,12 +55,6 @@
   }
 }
 
-:host ::ng-deep .select-group {
-  .option-btn {
-    background-color: $white;
-  }
-}
-
 .payment-details {
   background-color: white;
   padding: 15px;
@@ -81,18 +75,11 @@
 .item-footer {
   @include flex-col;
   gap: 10px;
-  padding: 10px;
+  padding: 10px 15px;
   .instructions {
     @include add-cta;
     @include light-vsm-text;
     font-size: 12px;
-  }
-  .offer-wrapper {
-    @include light-vsm-text;
-    font-size: 12px;
-    .offer {
-      @include add-cta;
-    }
   }
 }
 
@@ -133,6 +120,12 @@
   }
 }
 
+:host ::ng-deep .select-group {
+  .option-btn {
+    background-color: $white;
+  }
+}
+
 :host ::ng-deep p-header {
   width: 100%;
   @include flex-space-between-cen-Algn;
@@ -140,6 +133,19 @@
 
 :host ::ng-deep .p-accordion-header-link {
   padding: 0.8rem !important;
+}
+
+:host ::ng-deep .offer-wrapper {
+  .p-multiselect-panel {
+    left: 0 !important;
+  }
+}
+
+:host ::ng-deep .item-instruction {
+  .input.p-inputtext {
+    width: 80%;
+    margin-top: 5px;
+  }
 }
 
 .rotated-up {

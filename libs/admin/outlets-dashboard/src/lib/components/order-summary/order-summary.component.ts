@@ -34,6 +34,7 @@ export class OrderSummaryComponent implements OnInit {
   entityId: string;
 
   paymentOptions: Option[] = [];
+  itemOffers: Option[] = [];
 
   constructor(
     private fb: FormBuilder,

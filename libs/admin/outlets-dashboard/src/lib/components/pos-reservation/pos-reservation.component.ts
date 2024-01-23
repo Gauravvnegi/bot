@@ -77,9 +77,10 @@ export class PosReservationComponent implements OnInit {
       this.outletService.getMenuList(this.data.entityId).subscribe((res) => {
         if (res) {
           this.menuOptions = new MenuList().deserialize(res).records;
-          this.orderInfoControls.menu.patchValue(this.menuOptions, {
-            emitEvent: false,
-          });
+          this.orderInfoControls.menu.patchValue(
+            this.menuOptions.map((item) => item.value),
+            { emitEvent: false }
+          );
         }
       })
     );

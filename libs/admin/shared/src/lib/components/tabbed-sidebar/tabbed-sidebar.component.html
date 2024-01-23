@@ -16,7 +16,8 @@
         <ng-container *ngFor="let date of dates; let i = index">
           <div
             (click)="
-              onDateFilterChange.emit(dates[i]); selectedDateFilter = date.date
+              onSelectedDateRangeChange(dates[i]);
+              selectedDateFilter = date.date
             "
             class="card"
             [ngClass]="{ card__selected: selectedDateFilter === date.date }"
@@ -28,7 +29,13 @@
       </div>
     </div>
   </div>
-  <div class="container" *ngIf="!loading; else loader">
+  <div
+    class="container"
+    infiniteScroll
+    [toggleScrollListener]="paginationDisabled"
+    (scrolled)="loadMore()"
+    *ngIf="!loading; else loader"
+  >
     <ng-container *ngIf="options.length; else empty">
       <div *ngFor="let item of options">
         <ng-container

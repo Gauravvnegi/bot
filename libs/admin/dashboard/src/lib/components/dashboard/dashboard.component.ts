@@ -21,13 +21,13 @@ import {
   ModuleNames,
   TableNames,
 } from 'libs/admin/shared/src/lib/constants/subscriptionConfig';
-import { Subscription } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
 import { AnalyticsService } from 'libs/admin/request-analytics/src/lib/services/analytics.service';
 import { dashboardPopUpTabs } from '../../constants/dashboard';
 import { ReservationService } from '../../services';
 import { InhouseTable } from 'libs/admin/request-analytics/src/lib/models/inhouse-datatable.model';
+import { takeUntil } from 'rxjs/operators';
 import { SideBarService } from 'apps/admin/src/app/core/theme/src/lib/services/sidebar.service';
-
 @Component({
   selector: 'hospitality-bot-dashboard',
   templateUrl: './dashboard.component.html',
@@ -48,7 +48,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
   selectedTab: string = dashboardPopUpTabs[0].value;
   @ViewChild('request') preArrivalRequestTemplateRef: TemplateRef<any>;
   @ViewChild('guest') preCheckinGuestTemplateRef: TemplateRef<any>;
-
+  limit: number = 20;
+  recordLength: number;
   private $subscription = new Subscription();
   constructor(
     private reservationService: ReservationService,
@@ -116,25 +117,40 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   getPreArrivalRequest(queryObj?: any) {
-    this.loading = true;
     const query = {
       queryObj: this._adminUtilityService.makeQueryParams([queryObj]),
     };
 
-    this.analyticsService.getInhouseRequest(query).subscribe((res) => {
-      this.options = new InhouseTable().deserialize(res).records;
+    this.analyticsService
+      .getInhouseRequest(query)
+      .pipe(takeUntil(this.cancelRequests$))
+      .subscribe((res) => {
+        const data = new InhouseTable().deserialize(res);
+        this.options = [...this.options, ...data.records];
+        this.recordLength = data?.total;
 
-      this.loading = false;
-    });
+        this.loading = false;
+      });
   }
+  private cancelRequests$ = new Subject<void>();
 
   onSelectedTabFilterChange(data) {
+    this.loading = true;
+    this.options = [];
+    this.limit = 20;
+
     this.tabFilterIdx = data.index;
     this.selectedTab = this.tabFilterItems[data.index].value;
+    this.cancelRequests$.next();
     this.getRespectiveTabData(data);
   }
 
   onDateFilterChange(date) {
+    this.loading = true;
+    this.options = [];
+    this.limit = 20;
+
+    this.cancelRequests$.next();
     this.getRespectiveTabData(date);
   }
 
@@ -143,7 +159,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
       this.tabFilterItems[this.tabFilterIdx].value ===
       dashboardPopUpTabs[1].value
     ) {
-      this.options = [];
       //GET PRE ARRIVAL REQUEST DATA
       this.getPreArrivalRequest({
         fromDate: data.from,
@@ -153,9 +168,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
         journeyType: 'pre-arrival',
         entityId: this.entityId,
         onArrivalDate: true,
+        limit: this.limit,
+        offset: 0,
       });
     } else {
-      this.options = [];
       //GET PRE CHECK-IN GUEST DATA
       this.getPreCheckinGuest({
         entityId: this.entityId,
@@ -164,29 +180,45 @@ export class DashboardComponent implements OnInit, OnDestroy {
         order: 'DESC',
         entityType: 'ARRIVAL',
         entityState: 'EXPRESSCHECKIN',
+        limit: this.limit,
+        offset: 0,
       });
     }
   }
 
   getPreCheckinGuest(queryObj?: any) {
-    this.loading = true;
     const config = {
       queryObj: this._adminUtilityService.makeQueryParams([queryObj]),
     };
 
-    this.reservationService.getReservationDetails(config).subscribe(
-      (res) => {
-        this.options = new ReservationTable().deserialize(
-          res,
-          this.globalFilterService.timezone
-        ).records;
+    this.reservationService
+      .getReservationDetails(config)
+      .pipe(takeUntil(this.cancelRequests$))
+      .subscribe(
+        (res) => {
+          const data = new ReservationTable().deserialize(
+            res,
+            this.globalFilterService.timezone
+          );
+          this.options = [...this.options, ...data.records];
+          this.recordLength = data?.entityStateCounts['EXPRESSCHECKIN'];
+          this.loading = false;
+        },
+        (error) => {
+          this.loading = false;
+        }
+      );
+  }
 
-        this.loading = false;
-      },
-      (error) => {
-        this.loading = false;
-      }
-    );
+  loadMore(data) {
+    if (!this.isPaginationDisabled) {
+      this.limit += 20;
+      this.getRespectiveTabData(data);
+    }
+  }
+
+  get isPaginationDisabled() {
+    return this.limit >= this.recordLength;
   }
 
   getStatusStyle(type: string, state: string): string {

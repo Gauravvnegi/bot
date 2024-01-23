@@ -28,6 +28,8 @@
           header="E-Checkin"
           [template]="getTemplate()"
           (onCloseSidebar)="closeSidebar()"
+          (onLoadMore)="loadMore($event)"
+          [paginationDisabled]="isPaginationDisabled"
         >
         </hospitality-bot-tabbed-sidebar>
       </div>

@@ -15,11 +15,12 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 })
 export class TabbedSidebarComponent implements OnInit {
   //event emitter
-  @Output() onCloseSidebar: any = new EventEmitter<string>();
+  @Output() onCloseSidebar = new EventEmitter<string>();
 
-  @Output() onDateFilterChange: any = new EventEmitter<DateOption>();
+  @Output() onDateFilterChange = new EventEmitter<DateOption>();
 
-  @Output() selectedTabFilterChange: any = new EventEmitter<TabChangeData>();
+  @Output() selectedTabFilterChange = new EventEmitter<TabChangeData>();
+  @Output() onLoadMore = new EventEmitter<any>();
 
   @Input() loading: boolean = false;
   @Input() header: string = '';
@@ -27,6 +28,7 @@ export class TabbedSidebarComponent implements OnInit {
   @Input() tabFilterIdx: number = 0;
   @Input() options: any[] = [];
   @Input() template: TemplateRef<any>;
+  @Input() paginationDisabled: boolean = false;
 
   type = 'pre';
   selectedDateFilter: number;
@@ -36,6 +38,7 @@ export class TabbedSidebarComponent implements OnInit {
     description: string;
     img: string;
   };
+  selectedDateRange = this.dates[0];
 
   constructor(private fb: FormBuilder) {}
 
@@ -88,8 +91,12 @@ export class TabbedSidebarComponent implements OnInit {
     this.dates = dates;
   }
 
+  loadMore() {
+    this.onLoadMore.emit(this.selectedDateRange);
+  }
+
   /**
-   * @function onDateFilterChange
+   * @function onTabFilterChange
    * @description on date filter change
    * @param date
    */
@@ -102,6 +109,11 @@ export class TabbedSidebarComponent implements OnInit {
     });
     this.setEmptyMessage(index);
     this.selectedDateFilter = this.dates[0].date;
+  }
+
+  onSelectedDateRangeChange(date) {
+    this.selectedDateRange = date;
+    this.onDateFilterChange.emit(date);
   }
 
   /**
@@ -131,10 +143,10 @@ type TabChangeData = {
 } & DateOption;
 
 type DateOption = {
-  day: string;
-  date: number;
-  from: number;
-  to: number;
+  day?: string;
+  date?: number;
+  from?: number;
+  to?: number;
 };
 
 const daysOfWeek = [

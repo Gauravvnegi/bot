@@ -194,7 +194,7 @@
           <img src="assets/svg/delete.svg" alt="delete" />
         </div>
       </div>
-      <div *ngIf="!loadingData; else loader">
+      <div *ngIf="!loadingData && isInitialized; else loader">
         <div class="payment-form__details" formArrayName="tableData">
           <p-table
             #dt
@@ -253,6 +253,7 @@
                     *ngIf="isInvoiceDisabled"
                     class="bill-description"
                     controlName="description"
+                    [disabled]="isValueDisabled(rowIndex, 'description')"
                   ></hospitality-bot-input>
                   <hospitality-bot-select
                     *ngIf="!isInvoiceDisabled"

@@ -61,7 +61,6 @@ export class FeedbackListComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.loading = true;
     this.initFG();
     this.registerListeners();
     this.cardService?.$selectedFeedback.next(null);
@@ -250,7 +249,8 @@ export class FeedbackListComponent implements OnInit, OnDestroy {
         },
         ({ error }) => {
           this.loading = false;
-        }
+        },
+        () => (this.loading = false)
       )
     );
   }
@@ -305,6 +305,7 @@ export class FeedbackListComponent implements OnInit, OnDestroy {
     this.parentFG.patchValue({ search: '' }, { emitEvent: false });
     this.enableSearchField = false;
     this.loading = true;
+    this.loadData();
   }
 
   /**
@@ -387,7 +388,8 @@ export class FeedbackListComponent implements OnInit, OnDestroy {
               ).records),
             ({ error }) => {
               this.loading = false;
-            }
+            },
+            () => (this.loading = false)
           )
       );
     } else {

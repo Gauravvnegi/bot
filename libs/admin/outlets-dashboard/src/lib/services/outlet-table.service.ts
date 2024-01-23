@@ -17,6 +17,12 @@ export class OutletTableService extends ApiService {
     );
   }
 
+  getPaymentMethod(entityId: string) {
+    return this.get(
+      `/api/v1/payment/configurations/admin?entity_id=${entityId}&status=ACTIVE`
+    );
+  }
+
   exportCSV(entityId, config): Observable<any> {
     return this.get(`/api/v1/outlets/export/${config.queryObj}`);
   }

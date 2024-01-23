@@ -15,7 +15,7 @@
 
   <div class="add-btn">
     <hospitality-bot-button
-      *ngIf="!itemCard?.selected"
+      *ngIf="checkSelectedItemCTA('add')"
       label="Add"
       variant="outlined"
       (onClick)="addItem()"
@@ -23,7 +23,7 @@
       height="35px"
     ></hospitality-bot-button>
     <hospitality-bot-button
-      *ngIf="itemCard?.selected"
+      *ngIf="checkSelectedItemCTA('remove')"
       label="Remove"
       variant="text"
       severity="reset"

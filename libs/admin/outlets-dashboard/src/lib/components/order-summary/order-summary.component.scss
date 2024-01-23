@@ -1,10 +1,153 @@
 @import 'main';
 
+@mixin add-cta {
+  cursor: pointer;
+  color: $primary;
+}
+
 .summary-wrapper {
-  @include flex-justify-center;
+  @include flex-col;
   height: 100%;
+  padding: 0px 15px;
+  .btn-wrapper {
+    display: flex;
+    justify-content: flex-end;
+    padding: 5px 0;
+  }
+}
+
+.form-block {
+  @include form-block;
+  padding: 15px 0;
+  background-color: $table-header;
+  box-shadow: none;
+  row-gap: 15px;
 }
 
 .empty-view {
   @include flex-col-all-Center;
+  height: 100%;
+}
+
+.items-wrapper {
+  .heading {
+    color: $primary;
+    font-weight: 500;
+  }
+  .amount {
+    color: $primary;
+  }
+}
+
+.items-content {
+  @include flex-col;
+  gap: 15px;
+  padding: 15px;
+  border-bottom: 1px solid $border-line;
+  overflow-y: auto;
+  max-height: 220px;
+}
+
+.payment-wrapper {
+  .payment-header {
+    @include bold-vsm-text;
+    padding-bottom: 10px;
+  }
+}
+
+.payment-details {
+  background-color: white;
+  padding: 15px;
+  border-radius: 8px;
+  @include light-vsm-text;
+  .payment-item {
+    @include flex-space-between;
+    padding: 5px 0;
+  }
+  .remaining-balance {
+    border-top: 1px solid $border-line;
+    @include flex-space-between;
+    font-weight: $bolder;
+    padding: 5px 0;
+  }
+}
+
+.item-footer {
+  @include flex-col;
+  gap: 10px;
+  padding: 10px 15px;
+  .instructions {
+    @include add-cta;
+    @include light-vsm-text;
+    font-size: 12px;
+  }
+}
+
+.selected-item {
+  @include flex-between-center;
+  .items-count {
+    @include flex-item-center;
+    gap: 10px;
+  }
+}
+
+.item-name-wrapper {
+  display: flex;
+  gap: 20px;
+  .item-name {
+    @include flex-col;
+    .name {
+      @include normal-vsm-text;
+    }
+    .instructions {
+      @include add-cta;
+      font-size: 11px;
+    }
+  }
+}
+
+:host ::ng-deep .p-accordion {
+  .p-accordion-tab {
+    border: solid 1px rgba(112, 112, 112, 0.35) !important;
+  }
+  .p-accordion-content {
+    padding: 0;
+  }
+  .p-accordion-tab-active {
+    .p-accordion-header {
+      border-bottom: solid 1px rgba(112, 112, 112, 0.35);
+    }
+  }
+}
+
+:host ::ng-deep .select-group {
+  .option-btn {
+    background-color: $white;
+  }
+}
+
+:host ::ng-deep p-header {
+  width: 100%;
+  @include flex-space-between-cen-Algn;
+}
+
+:host ::ng-deep .p-accordion-header-link {
+  padding: 0.8rem !important;
+}
+
+:host ::ng-deep .offer-wrapper {
+  .p-multiselect-panel {
+    left: 0 !important;
+  }
+}
+
+:host ::ng-deep .item-instruction {
+  .input.p-inputtext {
+    width: 80%;
+    margin-top: 5px;
+  }
+}
+
+.rotated-up {
+  transform: rotate(180deg);
 }

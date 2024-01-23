@@ -5,7 +5,7 @@ import {
   PaymentStatus,
   TableStatus,
 } from '../types/reservation-table';
-import { MenuItemCard } from '../types/menu-order';
+import { MealPreferences, MenuItemCard } from '../types/menu-order';
 
 export const posCols: Cols[] = [
   {
@@ -458,61 +458,61 @@ export const reservationTabFilters = [
   },
 ];
 
-export const menuCardData = [
+export const menuCardData: MenuItemCard[] = [
   {
-    id: 'burger',
+    id: 'burger1',
     itemName: 'Burger',
     price: 200,
-    mealPreference: 'VEG',
+    mealPreference: MealPreferences.VEG,
     image: 'assets/images/menu-item.jpg',
   },
   {
-    id: 'burger',
+    id: 'burger2',
     itemName: 'Burger',
     price: 200,
-    mealPreference: 'VEG',
+    mealPreference: MealPreferences.VEG,
     image: 'assets/images/menu-item.jpg',
   },
   {
-    id: 'burger',
+    id: 'burger3',
     itemName: 'Burger',
     price: 200,
-    mealPreference: 'NON_VEG',
+    mealPreference: MealPreferences.NON_VEG,
     image: 'assets/images/menu-item.jpg',
   },
   {
-    id: 'burger',
+    id: 'burger4',
     itemName: 'Burger',
     price: 200,
-    mealPreference: 'VEG',
+    mealPreference: MealPreferences.VEG,
     image: 'assets/images/menu-item.jpg',
   },
   {
-    id: 'burger',
+    id: 'burger5',
     itemName: 'Burger',
     price: 200,
-    mealPreference: 'NON_VEG',
+    mealPreference: MealPreferences.NON_VEG,
     image: 'assets/images/menu-item.jpg',
   },
   {
-    id: 'burger',
+    id: 'burger6',
     itemName: 'Burger',
     price: 200,
-    mealPreference: 'VEG',
+    mealPreference: MealPreferences.VEG,
     image: 'assets/images/menu-item.jpg',
   },
   {
-    id: 'burger',
+    id: 'burger7',
     itemName: 'Burger',
     price: 200,
-    mealPreference: 'VEG',
+    mealPreference: MealPreferences.VEG,
     image: 'assets/images/menu-item.jpg',
   },
   {
-    id: 'burger',
+    id: 'burger8',
     itemName: 'Burger',
     price: 200,
-    mealPreference: 'VEG',
+    mealPreference: MealPreferences.VEG,
     image: 'assets/images/menu-item.jpg',
   },
 ];

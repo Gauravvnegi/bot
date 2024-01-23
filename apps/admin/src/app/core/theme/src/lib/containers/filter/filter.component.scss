@@ -75,11 +75,12 @@
 :host ::ng-deep .mat-tab-label {
   text-align: initial;
   display: block;
-  padding: 20px;
+  padding: 15px 20px;
   opacity: 1;
   height: 3.9em;
   color: $grayLight;
   min-width: 3rem !important;
+  height: unset !important;
   .svg path {
     fill: $grayLight;
   }

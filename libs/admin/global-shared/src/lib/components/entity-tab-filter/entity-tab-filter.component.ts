@@ -26,7 +26,6 @@ export class EntityTabFilterComponent implements OnInit {
   entityId = '';
   globalFeedbackFilterType = '';
   outletIds;
-  outlets;
   @Input() isAllOutletTabFilter = true;
   isSticky = false;
   extraGap = 60;
@@ -117,12 +116,15 @@ export class EntityTabFilterComponent implements OnInit {
    * @param globalQueryValue
    */
   setStayTabFilters(globalQueryFilterValue: FilterValue) {
-    const branch = this._hotelDetailService.brands
-      .find((brand) => brand.id === globalQueryFilterValue.property.brandName)
-      .entities.find(
-        (branch) => branch['id'] === globalQueryFilterValue.property.entityName
-      );
-    this.setTabFilterItems(branch);
+    const branch = this._hotelDetailService.brands.find(
+      (brand) => brand.id === globalQueryFilterValue.property.brandName
+    );
+
+    const property = branch.entities.find(
+      (branch) => branch['id'] === globalQueryFilterValue.property.entityName
+    );
+
+    this.setTabFilterItems(property);
   }
 
   /**
@@ -152,13 +154,29 @@ export class EntityTabFilterComponent implements OnInit {
    * @param brandId
    */
   getOutlets(brandId: string, entityId: string) {
-    const branch = this._hotelDetailService.brands
-      .find((brand) => brand.id === brandId)
-      .entities.find((branch) => branch['id'] === entityId);
-
-    this.outlets = branch.entities;
-
-    this.setTabFilterItems(branch); // brach = [{ id : '' ,  name : ''} , {...} , ...]
+    const branch = this._hotelDetailService.brands.find(
+      (brand) => brand.id === brandId
+    );
+    const property = branch.entities.find(
+      (branch) => branch['id'] === entityId
+    );
+    if (property.category === 'OUTLET') {
+      branch.entities
+        .filter(
+          (property) =>
+            property.category !== 'HOTEL' && property.status === 'ACTIVE'
+        )
+        .forEach((outlet) => {
+          this.tabFilterItems.push(
+            this.getTabItem(
+              outlet,
+              feedback.types.transactional as FeedbackType
+            )
+          );
+        });
+    } else {
+      this.setTabFilterItems(property); // brach = [{ id : '' ,  name : ''} , {...} , ...]
+    }
   }
 
   /**
@@ -194,7 +212,7 @@ export class EntityTabFilterComponent implements OnInit {
       });
     }
     //check if the outlet is selected in the global filter and set the tab filter items
-    this.outlets.forEach((outlet) => {
+    branch.entities.forEach((outlet) => {
       if (this.outletIds[outlet.id]) {
         this.tabFilterItems.push(
           this.getTabItem(outlet, feedback.types.transactional as FeedbackType)

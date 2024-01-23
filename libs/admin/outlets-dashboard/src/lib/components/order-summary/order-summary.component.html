@@ -40,70 +40,69 @@
                           let j = index
                         "
                       >
-                        <div
-                          class="selected-item"
-                          [formGroupName]="j"
-                          *ngIf="itemControls.value.unit > 0"
-                        >
-                          <div class="item-name-wrapper">
-                            <img
-                              [src]="
-                                mealPreferenceConfig[
-                                  selectedItems[j].mealPreference
-                                ].image
-                              "
-                            />
-                            <div class="item-name">
-                              <span class="name">{{
-                                itemControls.value.itemName
-                              }}</span>
-                              <span
-                                class="instructions"
-                                (click)="
-                                  toggleControlVisibility(
-                                    'ItemInstruction',
-                                    j,
-                                    itemFormArray
-                                  )
+                        <ng-container [formGroupName]="j">
+                          <div
+                            class="selected-item"
+                            *ngIf="itemControls.value.unit > 0"
+                          >
+                            <div class="item-name-wrapper">
+                              <img
+                                [src]="
+                                  mealPreferenceConfig[
+                                    selectedItems[j].mealPreference
+                                  ].image
                                 "
-                              >
-                                Instruction
-                                <img
-                                  [ngClass]="{
-                                    'rotated-up': itemFormArray
-                                      .at(j)
-                                      ?.get('viewItemInstruction')?.value
-                                  }"
-                                  src="assets/svg/union.svg"
-                                />
-                              </span>
-                              <!-- Item Instructions -->
-                              <hospitality-bot-input
-                                class="item-instruction"
-                                *ngIf="
-                                  itemFormArray
-                                    .at(j)
-                                    ?.get('viewItemInstruction')?.value
-                                "
-                                controlName="itemInstruction"
-                                [props]="{
-                                  placeholder: 'Enter'
-                                }"
-                              ></hospitality-bot-input>
+                              />
+                              <div class="item-name">
+                                <span class="name">{{
+                                  itemControls.value.itemName
+                                }}</span>
+                                <span
+                                  class="instructions"
+                                  (click)="
+                                    toggleControlVisibility(
+                                      'ItemInstruction',
+                                      j,
+                                      itemFormArray
+                                    )
+                                  "
+                                >
+                                  Instruction
+                                  <img
+                                    [ngClass]="{
+                                      'rotated-up': itemFormArray
+                                        .at(j)
+                                        ?.get('viewItemInstruction')?.value
+                                    }"
+                                    src="assets/svg/union.svg"
+                                  />
+                                </span>
+                              </div>
+                            </div>
+                            <div class="items-count">
+                              <img
+                                src="assets/svg/remove-item-black.svg"
+                                (click)="decrementQuantity(itemControls)"
+                              />
+                              <p>{{ itemControls.value.unit }}</p>
+                              <img
+                                src="assets/svg/add-item-black.svg"
+                                (click)="incrementQuantity(j)"
+                              />
                             </div>
                           </div>
-                          <div class="items-count">
-                            <img
-                              src="assets/svg/remove-item-black.svg"
-                              (click)="decrementQuantity(itemControls)"
-                            />
-                            <p>{{ itemControls.value.unit }}</p>
-                            <img
-                              src="assets/svg/add-item-black.svg"
-                              (click)="incrementQuantity(j)"
-                            />
-                          </div>
-                        </div>
+                          <hospitality-bot-input
+                            class="item-instruction"
+                            *ngIf="
+                              itemFormArray.at(j)?.get('viewItemInstruction')
+                                ?.value
+                            "
+                            controlName="itemInstruction"
+                            [props]="{
+                              placeholder: 'Enter'
+                            }"
+                          ></hospitality-bot-input>
+                        </ng-container>
                       </ng-container>
                     </div>
                     <div class="item-footer">

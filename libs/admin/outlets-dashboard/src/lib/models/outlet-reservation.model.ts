@@ -8,7 +8,6 @@ import {
   PaymentStatus,
   TableStatus,
 } from '../types/reservation-table';
-import { throwMatDialogContentAlreadyAttachedError } from '@angular/material/dialog';
 
 export class OutletReservationList {
   reservationData: OutletReservation[];
@@ -69,7 +68,11 @@ export class OutletReservation {
     this.tableNumber = input?.tableNumber;
     this.paymentStatus = input?.paymentStatus;
     this.numberOfItems = input?.numberOfItems;
-    this.orderMethod = input?.orderMethod;
+    this.orderMethod = input?.orderMethod
+      .toLowerCase()
+      .split('_')
+      .map((word) => word?.charAt(0)?.toUpperCase() + word?.slice(1))
+      .join('-');
     this.tableStatus = input?.tableStatus;
     return this;
   }

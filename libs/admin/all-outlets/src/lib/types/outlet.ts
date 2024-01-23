@@ -105,6 +105,7 @@ export type MenuItemForm = {
   hsnCode: string;
   taxes: TaxData[];
   status: boolean;
+  imageUrl: string;
 };
 
 export type MenuItemResponse = MenuItemForm & {

@@ -8,11 +8,9 @@ import {
 import {
   NavRouteOptions,
   EntityTabFilterResponse,
-  EntityType,
-  EntitySubType,
 } from '@hospitality-bot/admin/shared';
-import { OutletTableService } from '../../services/outlet-table.service';
 import { GuestListComponent } from '../guest-list/guest-list.component';
+import { OutletFormService } from '../../services/outlet-form.service';
 
 @Component({
   selector: 'hospitality-bot-outlet',
@@ -23,7 +21,6 @@ export class OutletComponent implements OnInit {
   welcomeMessage = 'Welcome to your dashboard';
   navRoutes: NavRouteOptions = [{ label: 'Outlet Dashboard', link: './' }];
 
-  selectedInterval: string;
   entityId: string;
 
   sidebarVisible = false;
@@ -31,26 +28,15 @@ export class OutletComponent implements OnInit {
   sidebarSlide: ViewContainerRef;
 
   constructor(
-    private outletTableService: OutletTableService,
-    private componentFactoryResolver: ComponentFactoryResolver
+    private componentFactoryResolver: ComponentFactoryResolver,
+    private formService: OutletFormService
   ) {}
 
   ngOnInit(): void {}
 
-  getFormServiceEntity(item: EntityTabFilterResponse) {
-    return {
-      id: item.entityId[0],
-      label: item.label,
-      type: item.outletType ? EntityType.OUTLET : EntityType.HOTEL,
-      subType: item.outletType ? item.outletType : EntitySubType.ROOM_TYPE,
-      value: item.entityId[0],
-    };
-  }
 
   onEntityTabFilterChanges(event: EntityTabFilterResponse): void {
-    this.outletTableService.selectedEntity.next(
-      this.getFormServiceEntity(event)
-    );
+    this.formService.entityId = event.entityId[0];
   }
 
   openGuestList() {

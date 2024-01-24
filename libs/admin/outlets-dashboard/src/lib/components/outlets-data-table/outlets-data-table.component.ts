@@ -29,6 +29,7 @@ import {
 } from '../../models/outlet-reservation.model';
 import { ReservationStatus } from '../../types/reservation-table';
 import { PosReservationComponent } from '../pos-reservation/pos-reservation.component';
+import { OutletFormService } from '../../services/outlet-form.service';
 
 @Component({
   selector: 'hospitality-bot-outlets-data-table',
@@ -60,13 +61,14 @@ export class OutletsDataTableComponent extends BaseDatatableComponent
     private _clipboard: Clipboard,
     protected adminUtilityService: AdminUtilityService,
     protected snackbarService: SnackBarService,
-    private resolver: ComponentFactoryResolver
+    private resolver: ComponentFactoryResolver,
+    private formService: OutletFormService
   ) {
     super(fb);
   }
 
   ngOnInit(): void {
-    this.entityId = this.globalFilterService.entityId;
+    this.entityId = this.formService.entityId;
     this.tableFG?.addControl('reservationType', new FormControl(''));
     this.setReservationType(this.reservationTypes[0].value);
     this.cols = posCols;

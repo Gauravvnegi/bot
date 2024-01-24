@@ -11,7 +11,6 @@ import {
 import { OutletTableService } from '../../services/outlet-table.service';
 import { Subscription } from 'rxjs';
 import { PaymentMethodList } from 'libs/admin/manage-reservation/src/lib/models/reservations.model';
-import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { Option } from '@hospitality-bot/admin/shared';
 
 @Component({
@@ -40,12 +39,11 @@ export class OrderSummaryComponent implements OnInit {
     private fb: FormBuilder,
     private formService: OutletFormService,
     public controlContainer: ControlContainer,
-    private outletService: OutletTableService,
-    private globalFilterService: GlobalFilterService
+    private outletService: OutletTableService
   ) {}
 
   ngOnInit(): void {
-    this.entityId = this.globalFilterService.entityId;
+    this.entityId = this.formService.entityId;
     this.initForm();
     this.getPaymentMethod();
     this.listenForItemsChange();

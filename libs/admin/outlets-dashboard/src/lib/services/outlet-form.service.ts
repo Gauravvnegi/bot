@@ -10,6 +10,7 @@ export class OutletFormService {
     MenuItemCard[]
   >([]);
 
+  entityId: string;
   // Method to add an item to the selectedMenuItems array
   addItemToSelectedItems(item: MenuItemCard): void {
     const currentItems = this.selectedMenuItems.value;
@@ -28,4 +29,8 @@ export class OutletFormService {
   }
 
   constructor() {}
+
+  resetData() {
+    this.selectedMenuItems.next([]);
+  }
 }

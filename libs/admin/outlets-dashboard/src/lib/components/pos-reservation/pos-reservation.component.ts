@@ -1,6 +1,10 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup } from '@angular/forms';
-import { Filter, Option } from '@hospitality-bot/admin/shared';
+import {
+  AdminUtilityService,
+  Filter,
+  Option,
+} from '@hospitality-bot/admin/shared';
 import { MenuList } from 'libs/admin/all-outlets/src/lib/models/outlet.model';
 import { OutletService } from 'libs/admin/all-outlets/src/lib/services/outlet.service';
 import { Menu } from 'libs/admin/all-outlets/src/lib/types/outlet';
@@ -12,6 +16,10 @@ import {
 import { MealPreferences, mealPreferenceConfig } from '../../types/menu-order';
 import { mealPreferences } from '../../constants/form';
 import { MenuForm } from '../../types/form';
+import { OutletFormService } from '../../services/outlet-form.service';
+import { TableManagementService } from 'libs/table-management/src/lib/services/table-management.service';
+import { AreaList } from 'libs/table-management/src/lib/models/data-table.model';
+import { AreaListResponse } from 'libs/table-management/src/lib/types/table-datable.type';
 
 @Component({
   selector: 'hospitality-bot-pos-reservation',
@@ -20,6 +28,7 @@ import { MenuForm } from '../../types/form';
 })
 export class PosReservationComponent implements OnInit {
   isSidebar: boolean;
+  entityId: string;
   data: PosConfig;
   userForm: FormGroup;
   @Output() onCloseSidebar = new EventEmitter();
@@ -28,7 +37,6 @@ export class PosReservationComponent implements OnInit {
   readonly mealPreferenceConfig = mealPreferenceConfig;
 
   menuOptions: Menu[] = [];
-  tableNumbers: Option[] = [];
   staffList: Option[] = [];
   guestList: Option[] = [];
 
@@ -42,7 +50,15 @@ export class PosReservationComponent implements OnInit {
   searchApi: string;
   selectedPreference: MealPreferences = MealPreferences.ALL;
 
-  constructor(private fb: FormBuilder, private outletService: OutletService) {}
+  areaList: ({ label: string } & { list: Option[] })[] = [];
+
+  constructor(
+    private fb: FormBuilder,
+    private outletService: OutletService,
+    private formService: OutletFormService,
+    private tableManagementService: TableManagementService,
+    private adminUtilityService: AdminUtilityService
+  ) {}
 
   ngOnInit(): void {
     this.initForm();
@@ -69,12 +85,14 @@ export class PosReservationComponent implements OnInit {
   }
 
   initDetails() {
+    this.entityId = this.formService.entityId;
     this.getMenus();
+    this.getTableData();
   }
 
   getMenus() {
     this.$subscription.add(
-      this.outletService.getMenuList(this.data.entityId).subscribe((res) => {
+      this.outletService.getMenuList(this.entityId).subscribe((res) => {
         if (res) {
           this.menuOptions = new MenuList().deserialize(res).records;
           this.orderInfoControls.menu.patchValue(
@@ -84,6 +102,35 @@ export class PosReservationComponent implements OnInit {
         }
       })
     );
+  }
+
+  getAreaConfig() {
+    const config = {
+      params: this.adminUtilityService.makeQueryParams([
+        {
+          type: 'AREA',
+          offset: 0,
+          limit: 200,
+          sort: 'updated',
+          raw: 'true',
+        },
+      ]),
+    };
+    return config;
+  }
+
+  getTableData() {
+    this.$subscription.add;
+    this.tableManagementService
+      .getList('bb531a26-a258-472a-b918-1bc3e8c25285', this.getAreaConfig())
+      .subscribe((res) => {
+        const records = new AreaList().deserialize(res as AreaListResponse)
+          .records;
+        this.areaList = records.map((item) => ({
+          label: item.name,
+          list: item.tableList,
+        }));
+      });
   }
 
   getCards() {
@@ -109,6 +156,7 @@ export class PosReservationComponent implements OnInit {
   handleKOT(print: boolean = false) {}
 
   close() {
+    this.formService.resetData();
     this.onCloseSidebar.emit();
   }
 
@@ -116,11 +164,13 @@ export class PosReservationComponent implements OnInit {
     return (this.userForm.get('orderInformation') as FormGroup)
       .controls as Record<keyof MenuForm['orderInformation'], AbstractControl>;
   }
+
+  ngOnDestroy() {
+    this.$subscription.unsubscribe();
+  }
 }
 
 export type PosConfig = {
   area: string;
   tableName: string;
-  invoiceId: string;
-  entityId: string;
 };

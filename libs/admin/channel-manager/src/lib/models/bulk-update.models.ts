@@ -74,9 +74,10 @@ export function getWeekendBG(day: string, isOccupancy = false) {
 export type UsedType = 'channel-manager' | 'revenue-manager';
 export class Rooms {
   deserialize(input: RoomType[], used?: UsedType) {
-    return input
+    const rooms = input
       .map((item) => new RoomTypes().deserialize(item, used))
       .filter((item) => item);
+    return rooms;
   }
 }
 
@@ -90,6 +91,7 @@ export class RoomTypes {
   roomCount: number;
   isBase: boolean;
   ratePlans: RatePlans[];
+  maxOccupancy: number;
   pricingDetails: PricingDetails;
   deserialize(input: RoomType, used: UsedType) {
     const isChannelManager = used == 'channel-manager';
@@ -103,10 +105,16 @@ export class RoomTypes {
     this.price = input.price;
     this.isBase = input.isBaseRoomType ?? false;
     this.roomCount = input.roomCount;
+    this.maxOccupancy = input.occupancy;
     this.pricingDetails = input.pricingDetails;
     this.ratePlans =
       inputRatePlan.map((item) =>
-        new RatePlans().deserialize(item, input.pricingDetails.base)
+        new RatePlans().deserialize(
+          item,
+          input.pricingDetails.base,
+          input.occupancy,
+          input.pricingDetails
+        )
       ) ?? [];
     // Filter Room who have not any rate plan for channel-manager
     this.isBaseRoomType = input.isBaseRoomType ?? false;
@@ -122,15 +130,24 @@ export class RatePlans {
   isBase: boolean;
   basePrice: number;
   variablePrice: number;
+  maxOccupancy: number;
+  pricingDetails: PricingDetails;
   channels: Channel[];
-  deserialize(input, basePrice) {
+  deserialize(
+    input,
+    basePrice,
+    maxOccupancy: number,
+    pricingDetails: PricingDetails
+  ) {
     this.type = input.label ?? '';
     this.label = input.label ?? '';
     this.value = input.id ?? '';
     this.id = input.id ?? '';
     this.isBase = input.isBase ?? false;
     this.basePrice = basePrice;
+    this.maxOccupancy = maxOccupancy;
     this.variablePrice = input.variablePrice;
+    this.pricingDetails = pricingDetails;
     this.channels = [];
     return this;
   }

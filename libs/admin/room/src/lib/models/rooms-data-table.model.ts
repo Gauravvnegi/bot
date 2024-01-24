@@ -124,6 +124,7 @@ export class RoomType {
   nextStates: string[];
   ratePlans?: RatePlanRes[];
   pricingDetails?: PricingDetails;
+  maxAdult?: number;
 
   deserialize(input: RoomTypeResponse) {
     this.id = input.id ?? '';
@@ -134,7 +135,7 @@ export class RoomType {
       input.paidAmenities
         ?.map((item) => item.name)
         .concat(input.complimentaryAmenities.map((item) => item.name)) ?? [];
-    this.occupancy = input.occupancyDetails.maxOccupancy ?? null;
+    this.occupancy = input.occupancyDetails.maxOccupancy ?? 0;
     this.status = input.status;
     // mapping discounted price
     this.price =
@@ -146,6 +147,7 @@ export class RoomType {
       ...item,
       basePrice: input?.pricingDetails?.base ?? 0,
     }));
+    this.maxAdult = input?.occupancyDetails?.maxAdult ?? 0;
     this.isBaseRoomType = input.isBaseRoomType ?? false;
     this.pricingDetails = new PricingDetails().deserialize(input);
     return this;

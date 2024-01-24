@@ -14,7 +14,7 @@
   >
   <div [formGroup]="controlContainer.control">
     <p-inputSwitch
-      [disabled]="isDisabled"
+      [attr.disabled]="isDisabled || null"
       [formControlName]="controlName"
     ></p-inputSwitch>
   </div>

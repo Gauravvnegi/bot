@@ -10,7 +10,7 @@ export type RoomMapType = {
     string, //rate planId
     Record<
       number, //date
-      { date: number; available: number }
+      { date: number; available: number; pax?: Record<number, number> }
     > // date, qty
   >;
 };
@@ -26,10 +26,18 @@ export type UpdateInventoryType = {
 
 export type UpdateRatesType = Omit<UpdateInventoryType, 'rooms'> & {
   rates: {
+    pax: number;
     roomTypeId: string;
     rate: number;
     ratePlanId: string;
     ratePlanCode?: string;
     dynamicPricing: boolean;
   }[];
+};
+
+export type DynamicPricingType = Record<string, PriceInfo>;
+
+export type PriceInfo = {
+  price: number;
+  pax: Record<number, number>;
 };

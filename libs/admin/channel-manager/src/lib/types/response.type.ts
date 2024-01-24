@@ -25,6 +25,7 @@ export type ChannelManagerResponse = {
 
 export type Rates = {
   dynamicPricing: boolean;
+  pax?: number;
   rate: number;
   ratePlanId: string;
   roomCode: string;

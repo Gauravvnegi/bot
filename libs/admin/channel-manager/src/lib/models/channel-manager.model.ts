@@ -1,16 +1,20 @@
-import { FormGroup } from '@angular/forms';
+import {
+  RatePlanForm,
+  UpdateRateFormObj,
+} from './../../../../manage-rate/src/lib/components/update-rates/update-rates.component';
 import { pick, reduce } from 'lodash';
 import {
+  DynamicPricingType,
+  PriceInfo,
   RoomMapType,
   UpdateInventoryType,
   UpdateRatesType,
 } from '../types/channel-manager.types';
 import {
-  ChannelManagerResponse,
-  Rates,
   UpdateInventoryResponse,
   UpdateRatesResponse,
 } from '../types/response.type';
+import { RATE_CONFIG_TYPE } from 'libs/admin/manage-rate/src/lib/constants/rates.const';
 
 export class UpdateInventory {
   inventoryRoomDetails = new Map<
@@ -112,7 +116,7 @@ export class UpdateInventory {
     lastDay.setDate(lastDay.getDate() + 1);
     while (currentDay.getTime() != lastDay.getTime()) {
       const day = currentDay.toLocaleDateString(undefined, { weekday: 'long' });
-      console.log(day, selectedDays.includes(day));
+
       selectedDays.includes(day) &&
         updates.push({
           startDate: currentDay.getTime(),
@@ -129,9 +133,27 @@ export class UpdateInventory {
 }
 
 export class UpdateRates {
-  ratesRoomDetails = new Map<string, RoomMapType>();
+  /**
+   * Record to store room details and rates.
+   * @type {Record<string, RoomRecordType>}
+   */
+  ratesRoomDetails: Record<string, RoomMapType> = {};
 
-  deserialize(input: UpdateRatesResponse[]) {
+  /**
+   * Deserialize the input data and update the rates room details.
+   * @param {UpdateRatesResponse[]} input - The input data to be deserialized.
+   * @returns {UpdateRates} - The updated UpdateRates instance.
+   */
+  deserialize(
+    input: UpdateRatesResponse[],
+    configType: RATE_CONFIG_TYPE
+  ): UpdateRates {
+    const isPaxType = configType === RATE_CONFIG_TYPE.pax;
+
+    /**
+     * Data Iterate day-wise
+     * Mapping based on day
+     */
     input?.forEach((currentData) => {
       const currentDay = currentData.startDate ?? currentData.endDate;
       // rate plan iteration
@@ -141,18 +163,23 @@ export class UpdateRates {
         if (!this.ratesRoomDetails[currentRoomId]) {
           // if first time create
           this.ratesRoomDetails[currentRoomId] = {
-            availability: new Map(),
-            ratePlans: new Map(),
+            availability: {},
+            ratePlans: {},
           };
         }
         this.ratesRoomDetails[currentRoomId].availability[currentDay] = {
           quantity: available,
-          occupancy: occupancy,
+          occupy: occupancy,
           dynamicPrice: false,
         };
       });
 
-      // all rates plan on current day
+      /**
+       * Iterating all rates &
+       * Mapping their value,
+       * NOTE: First rate plan should be the 1st PAX
+       * if configuration will be PAX type
+       */
       currentData.rates.forEach((currentRatePlan) => {
         const currentRoomId = currentRatePlan.roomTypeId;
         const currentRatePlanId = currentRatePlan.ratePlanId;
@@ -163,8 +190,8 @@ export class UpdateRates {
 
         if (!this.ratesRoomDetails[currentRoomId]) {
           this.ratesRoomDetails[currentRoomId] = {
-            availability: new Map(),
-            ratePlans: new Map(),
+            availability: {},
+            ratePlans: {},
           };
         }
 
@@ -175,13 +202,41 @@ export class UpdateRates {
         if (!currentDayPlan) {
           this.ratesRoomDetails[currentRoomId].ratePlans[
             currentRatePlanId
-          ] = new Map();
+          ] = {};
         }
+
+        /**
+         * Collecting all pax of current,
+         * RatePlan, and filtering except to PAX number 1,
+         * NOTE: This will be execute if configuration will be
+         * PAX type
+         */
+        let allPax: Record<number, number>;
+        if (isPaxType) {
+          allPax = currentData.rates
+            .filter(
+              (item) => item?.pax != 1 && item.ratePlanId == currentRatePlanId
+            )
+            .reduce((prev, curr) => ({ ...prev, [curr.pax]: curr.rate }), {});
+        }
+
+        /**
+         * Storing current RoomType of each RatePlan,
+         * First will be the PAX 1 if configuration is PAX,
+         * other pax will be stored in {[paxNumber]:paxValue} of list
+         */
         this.ratesRoomDetails[currentRoomId].ratePlans[currentRatePlanId][
           currentDay
         ] = {
+          name: currentRatePlan.roomCode,
           date: currentDay,
-          available: currentRatePlan.rate,
+          available: currentData.rates.filter(
+            (item) => item.pax == 1 && item.ratePlanId == currentRatePlanId
+          )?.[0]?.rate,
+          ...(isPaxType &&
+            ({
+              pax: allPax,
+            } as any)),
         };
       });
     });
@@ -189,63 +244,139 @@ export class UpdateRates {
     return this;
   }
 
-  static buildDynamicPricing(input: UpdateRatesType) {
-    let dynamicPricing = new Map<string, Map<string, number>>();
+  /**
+   * Build dynamic pricing map from input data.
+   * @param {UpdateRatesType} input - The input data to build dynamic pricing from.
+   * @returns {Map<DynamicPricingType>} - The dynamic pricing map.
+   */
+  static buildDynamicPricing(
+    input: UpdateRatesType,
+    configType: RATE_CONFIG_TYPE
+  ): Map<string, DynamicPricingType> {
+    let dynamicPricing = new Map<string, DynamicPricingType>();
     input.rates.forEach((ratePlans) => {
       if (!dynamicPricing[ratePlans.roomTypeId]) {
         dynamicPricing[ratePlans.roomTypeId] = new Map();
       }
-      dynamicPricing[ratePlans.roomTypeId][ratePlans.ratePlanId] =
-        ratePlans.rate;
+
+      if (ratePlans.pax == 1 || configType === RATE_CONFIG_TYPE.ratePlan) {
+        dynamicPricing[ratePlans.roomTypeId][ratePlans.ratePlanId] = {
+          price: ratePlans.rate,
+        };
+      } else if (configType === RATE_CONFIG_TYPE.pax) {
+        let prevData: PriceInfo =
+          dynamicPricing[ratePlans.roomTypeId][ratePlans.ratePlanId];
+        dynamicPricing[ratePlans.roomTypeId][ratePlans.ratePlanId] = {
+          ...prevData,
+          pax: {
+            ...prevData.pax,
+            [ratePlans.pax]: ratePlans.rate,
+          },
+        };
+      }
     });
     return dynamicPricing;
   }
+
+  /**
+   * Build request data for submitting form or dynamic pricing.
+   * @param {Record<string, any>} formData - The form data.
+   * @param {number} fromDate - The starting date.
+   * @param {'submit-form' | 'dynamic-pricing'} type - The type of request.
+   * @returns {object} - The built request data.
+   */
   static buildRequestData(
-    formData,
+    formData: UpdateRateFormObj,
     fromDate: number,
-    type: 'submit-form' | 'dynamic-pricing'
-  ) {
+    type: 'submit-form' | 'dynamic-pricing',
+    configType?: RATE_CONFIG_TYPE
+  ): Record<'inventoryList', UpdateRatesType[]> {
     let updates: UpdateRatesType[] = [];
+    const isPaxConfig = configType === RATE_CONFIG_TYPE.pax;
 
     let selectedDate = new Date(fromDate);
-    formData.roomTypes.forEach((room) => {
+    formData.roomTypes.forEach((room, roomIndex: number) => {
+      let newRPType: Partial<RatePlanForm & { paxNumber: number }>[] = [];
       room.ratePlans.forEach((ratePlan) => {
+        /**
+         * Always consider first ratePlan as first pax
+         * if configuration type is pax
+         */
+        newRPType.push({
+          value: ratePlan.value,
+          rates: ratePlan.rates,
+          ...(isPaxConfig && { paxNumber: 1 }),
+        });
+
+        /**
+         * When configuration type will pax
+         * all pax will be the new rate plan,
+         * with labeled paxNumber
+         */
+        if (isPaxConfig) {
+          ratePlan.pax.forEach((pax, paxInd: number) => {
+            newRPType.push({
+              value: ratePlan.value,
+              rates: pax.paxData,
+              paxNumber: paxInd + 2,
+            });
+          });
+        }
+      });
+
+      /**
+       * Iterate and map all data of each rate plan
+       * main section who is responsible for mapping of response
+       */
+      newRPType.forEach((ratePlan) => {
         selectedDate = new Date(fromDate);
-        updates = ratePlan.rates.map((rate, dayIndex) => {
+        updates = ratePlan?.rates?.map((rate, dayIndex) => {
           const rates = {
             roomTypeId: room.value,
             rate: rate.value ? +rate.value : null,
             ratePlanId: ratePlan.value,
             dynamicPricing: room['dynamicPrice'][dayIndex]?.value, // get current day dynamic pricing status from Map, if required ex- dynamicPricingMap[currentDay]
+            ...(isPaxConfig && {
+              pax: ratePlan.paxNumber,
+            }),
           };
 
-          let perDayData = {
+          let dwData = {
             startDate: selectedDate.getTime(),
             endDate: selectedDate.getTime(),
-            rates: updates[dayIndex]
-              ? [...updates[dayIndex]?.rates, rates]
-              : [rates],
+            rates:
+              updates && updates[dayIndex]
+                ? [...updates[dayIndex]?.rates, rates]
+                : [rates],
           };
 
           // filter rates plan who have not any input on this particular day
-          perDayData.rates = perDayData.rates.filter((item) =>
+          dwData.rates = dwData.rates.filter((item) =>
             type === 'submit-form' ? item.rate : true
           );
           selectedDate.setDate(selectedDate.getDate() + 1);
-          return perDayData;
+          return dwData as UpdateRatesType;
         });
       });
     });
 
     // filter data who haven't exist any rate plans
     return {
-      inventoryList: updates.filter((item) =>
-        type === 'submit-form' ? item.rates.length > 0 : true
-      ),
+      inventoryList:
+        updates?.filter((item) =>
+          type === 'submit-form' ? item.rates.length > 0 : true
+        ) ?? [],
     };
   }
 
-  static buildBulkUpdateRequest(formData) {
+  /**
+   * Build bulk update request data.
+   * @param {Record<string, any>} formData - The form data for bulk update.
+   * @returns {UpdateRatesType[]} - The built bulk update request data.
+   */
+  static buildBulkUpdateRequest(
+    formData: Record<string, any>
+  ): UpdateRatesType[] {
     let updates: UpdateRatesType[] = [];
     let { fromDate, toDate, roomTypes, selectedDays, updateValue } = formData;
     let currentDay = new Date(fromDate);

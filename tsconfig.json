@@ -163,7 +163,8 @@
       ],
       "@hospitality-bot/table-management": [
         "libs/table-management/src/index.ts"
-      ]
+      ],
+      "@hospitality-bot/admin/kot": ["libs/admin/kot/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

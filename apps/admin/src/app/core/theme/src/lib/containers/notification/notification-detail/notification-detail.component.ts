@@ -25,7 +25,6 @@ export class NotificationDetailComponent {
     if (this.dialogConfig?.data) {
       this.data = this.dialogConfig.data;
       // Object.entries(this.dialogConfig.data).forEach(([key, value]) => {
-      //   debugger;
       //   this[key] = value;
       // });
     }

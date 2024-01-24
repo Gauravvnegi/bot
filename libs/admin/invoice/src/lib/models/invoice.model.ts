@@ -145,6 +145,7 @@ export class TableData {
   discountValue?: number;
   isRealised?: boolean;
   chargeType?: BillItemChargeType;
+  remarks?: string;
 
   deserialize(input: BillItem, idOfItemIdRecord: Record<string, string>) {
     let reservationId = input.id;

@@ -241,7 +241,7 @@ export class NightAuditRevenueReport
       isHeader: true,
     } as any);
 
-    value?.bookingRevenue
+    Object.entries(value?.bookingRevenue).length
       ? Object.keys(value?.bookingRevenue).forEach((key) => {
           const data = value?.bookingRevenue[key];
 
@@ -253,7 +253,7 @@ export class NightAuditRevenueReport
             fifthCol: ' ',
           });
         })
-      : this.records.push({ ...empty });
+      : this.records.push(empty);
 
     return this;
   }

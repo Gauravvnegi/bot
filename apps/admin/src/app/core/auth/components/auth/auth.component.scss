@@ -167,10 +167,10 @@
         flex-wrap: wrap;
         flex-direction: column;
         max-height: 40vh;
-        row-gap: 2em;
-        column-gap: 2em;
+        gap: 1em;
+
         .option {
-          width: 33.33%;
+          width: 230px;
           // margin-bottom: 20px;
           @include flex-item-center;
           // padding: 10px;

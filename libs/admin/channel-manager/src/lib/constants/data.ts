@@ -106,68 +106,68 @@ export const restrictionsRecord: Record<
     label: 'Availability',
     type: 'number',
   },
-  stopSell: {
-    label: 'Stop Sell',
-    type: 'boolean',
-  },
-  closeOnArrival: {
-    label: 'CTA',
-    type: 'boolean',
-  },
-  closeOnDeparture: {
-    label: 'CTD',
-    type: 'boolean',
-  },
-  exactStayArrival: {
-    label: 'ESA',
-    type: 'number',
-  },
-  minimumStay: {
-    label: 'Max Stay',
-    type: 'number',
-  },
-  minimumStayArrival: {
-    label: 'MAX STAY ARRIVAL',
-    type: 'number',
-  },
-  maximumAdvanceReservation: {
-    label: 'MAX AR',
-    type: 'number',
-  },
-  maximumStay: {
-    label: 'Min Stay',
-    type: 'number',
-  },
-  maximumStayArrival: {
-    label: 'Min Stay',
-    type: 'number',
-  },
-  minimumAdvanceReservation: {
-    label: 'MIN AR',
-    type: 'number',
-  },
+  // stopSell: {
+  //   label: 'Stop Sell',
+  //   type: 'boolean',
+  // },
+  // closeOnArrival: {
+  //   label: 'CTA',
+  //   type: 'boolean',
+  // },
+  // closeOnDeparture: {
+  //   label: 'CTD',
+  //   type: 'boolean',
+  // },
+  // exactStayArrival: {
+  //   label: 'ESA',
+  //   type: 'number',
+  // },
+  // minimumStay: {
+  //   label: 'Max Stay',
+  //   type: 'number',
+  // },
+  // minimumStayArrival: {
+  //   label: 'MAX STAY ARRIVAL',
+  //   type: 'number',
+  // },
+  // maximumAdvanceReservation: {
+  //   label: 'MAX AR',
+  //   type: 'number',
+  // },
+  // maximumStay: {
+  //   label: 'Min Stay',
+  //   type: 'number',
+  // },
+  // maximumStayArrival: {
+  //   label: 'Min Stay',
+  //   type: 'number',
+  // },
+  // minimumAdvanceReservation: {
+  //   label: 'MIN AR',
+  //   type: 'number',
+  // },
 };
 
 export const ratesRestrictions = [
   'rates',
-  'stopSell',
-  'closeOnArrival',
-  'closeOnDeparture',
-  'exactStayArrival',
-  'minimumStay',
-  'minimumStayArrival',
+  // 'stopSell',
+  // 'closeOnArrival',
+  // 'closeOnDeparture',
+  // 'exactStayArrival',
+  // 'minimumStay',
+  // 'minimumStayArrival',
 ] as const;
 
 export const inventoryRestrictions = [
   'availability',
-  'stopSell',
-  'closeOnArrival',
-  'closeOnDeparture',
-  'exactStayArrival',
-  'maximumAdvanceReservation',
-  'maximumStay',
-  'maximumStayArrival',
-  'minimumAdvanceReservation',
-  'minimumStay',
-  'minimumStayArrival',
+  // 'stopSell',
+  // 'closeOnArrival',
+  // 'closeOnDeparture',
+  // 'exactStayArrival',
+  // 'maximumAdvanceReservation',
+  // 'maximumStay',
+  // 'maximumStayArrival',
+  // 'minimumAdvanceReservation',
+  // 'minimumStay',
+  // 'minimumStayArrival',
 ] as const;

@@ -132,7 +132,7 @@ export class UpdateInventoryComponent implements OnInit {
         this.fb.group({
           label: [roomType.label],
           value: [roomType.value],
-          linked: [false],
+          linked: [true],
           showChannels: [false],
           selectedRestriction: [
             this.restrictions && this.restrictions[0].value,

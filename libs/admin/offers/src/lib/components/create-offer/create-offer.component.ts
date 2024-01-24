@@ -92,6 +92,7 @@ export class CreateOfferComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.getPropertyList();
     //to get the entityId from the query params
     this.paramData = this.route.snapshot.queryParams;
     this.entityId = this.paramData?.entityId;
@@ -105,7 +106,6 @@ export class CreateOfferComponent implements OnInit {
     this.initUseForm();
     this.initOptionsConfig();
     this.initNavRoutes();
-    this.getPropertyList();
   }
 
   initUseForm() {
@@ -527,6 +527,6 @@ export class CreateOfferComponent implements OnInit {
   }
 
   get selectedPropertyType() {
-    return this.propertyList.find((item) => item.id === this.entityId).type;
+    return this.propertyList?.find((item) => item?.id === this?.entityId)?.type;
   }
 }

@@ -4,23 +4,14 @@ import {
   GlobalFilterService,
   RoutesConfigService,
 } from '@hospitality-bot/admin/core/theme';
-import {
-  AdminUtilityService,
-  NavRouteOptions,
-} from '@hospitality-bot/admin/shared';
-import { SnackBarService } from '@hospitality-bot/shared/material';
+import { NavRouteOptions } from '@hospitality-bot/admin/shared';
 import { MenuItem } from 'primeng/api';
 import { Subscription } from 'rxjs';
-import {
-  LevelType,
-  setupBarPriceSteps,
-} from '../../constants/setup-bar-price.const';
-import { BarPriceService } from '../../services/bar-price.service';
+import { setupBarPriceSteps } from '../../constants/setup-bar-price.const';
 import { SetupBarPriceService } from '../../services/setup-bar-price.service';
 import {
   BarPriceFormData,
   BarPricePlanFormControlName,
-  ExtraBarPriceFormControlName,
   ExtraPlanConfigFormData,
   PlanConfigForm,
   PlanConfigFormGroup,
@@ -51,10 +42,7 @@ export class SetupBarPriceComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private barPriceService: BarPriceService,
     private globalFilter: GlobalFilterService,
-    private adminUtilityService: AdminUtilityService,
-    private snackbarService: SnackBarService,
     private routeConfigService: RoutesConfigService,
     private setupBarPriceService: SetupBarPriceService
   ) {}
@@ -178,8 +166,6 @@ export class SetupBarPriceComponent implements OnInit {
   getPlanInputFromGroupControl(controlName: BarPricePlanFormControlName) {
     return this.useFromControl[controlName].controls as PlanConfigFormGroup[];
   }
-
-  listenChanges() {}
 
   handleNext() {
     this.activeStep = this.activeStep + 1;

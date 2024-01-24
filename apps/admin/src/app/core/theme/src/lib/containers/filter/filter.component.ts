@@ -138,10 +138,12 @@ export class FilterComponent implements OnChanges, OnInit {
           (brand) => brand['id'] === brandId
         );
 
-        this.brandList = entities.map((item) => ({
-          label: item.name,
-          value: item.id,
-        }));
+        this.brandList = entities
+          .filter((item) => item.status === 'ACTIVE')
+          .map((item) => ({
+            label: item.name,
+            value: item.id,
+          }));
 
         const currentBranch = this.filterForm.get('property').get('entityName')
           .value;
@@ -168,9 +170,9 @@ export class FilterComponent implements OnChanges, OnInit {
             .find((item) => item.id == brandName)
             ?.entities.find((item) => item.id === id)
             .entities.filter((outlet) => outlet.status === 'ACTIVE') ?? [];
-
         this.outlets = [...this.outlets, ...outlets];
         this.updateOutletsFormControls(this.outlets);
+        this.initOptions();
       });
   }
 
@@ -200,10 +202,12 @@ export class FilterComponent implements OnChanges, OnInit {
   }
 
   setBrandLOV() {
-    this.entityList = this._hotelDetailService.brands.map((item) => ({
-      label: item.name,
-      value: item.id,
-    }));
+    this.entityList = this._hotelDetailService.brands
+      .filter((brand) => brand.status === 'ACTIVE')
+      .map((item) => ({
+        label: item.name,
+        value: item.id,
+      }));
   }
 
   applyFilter() {

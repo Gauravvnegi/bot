@@ -21,6 +21,7 @@ export type BillItem = {
   isRefund?: boolean;
   isRealised?: boolean;
   chargeType: BillItemChargeType;
+  remarks?: string;
 };
 
 export type CompanyDetails = {

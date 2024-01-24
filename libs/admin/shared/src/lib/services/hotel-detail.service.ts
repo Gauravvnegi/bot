@@ -71,35 +71,41 @@ export class HotelDetailService {
       propertyList = [];
       return;
     }
-    propertyList = selectedHotel.entities.map((entity) => ({
-      label: entity.name,
-      value: entity.id,
-      type: entity.type ? entity.type : EntitySubType.ROOM_TYPE,
-      id: entity.id,
-    }));
 
-    propertyList.unshift({
-      label: selectedHotel.name,
-      value: selectedHotel.id,
-      type: selectedHotel.type || selectedHotel?.category,
-      id: selectedHotel.id,
-    });
+    if (selectedHotel.category === 'OUTLET') {
+      this.hotels = this.hotels.filter((item) => item.category !== 'HOTEL');
 
-    type === 'default'
-      ? propertyList.unshift({
-          label: selectedHotel.name,
-          value: selectedHotel.id,
-          type: selectedHotel.type || selectedHotel?.category,
-          id: selectedHotel.id,
-        })
-      : propertyList.unshift({
-          label: selectedHotel.name,
-          value: selectedHotel.id,
-          type: selectedHotel.type
-            ? selectedHotel.type
-            : EntitySubType.ROOM_TYPE,
-          id: selectedHotel.id,
-        });
+      propertyList = this.hotels.map((entity) => ({
+        label: entity.name,
+        value: entity.id,
+        type: entity.type ? entity.type : EntitySubType.ROOM_TYPE,
+        id: entity.id,
+      }));
+    } else {
+      propertyList = selectedHotel.entities.map((entity) => ({
+        label: entity.name,
+        value: entity.id,
+        type: entity.type ? entity.type : EntitySubType.ROOM_TYPE,
+        id: entity.id,
+      }));
+
+      type === 'default'
+        ? propertyList.unshift({
+            label: selectedHotel.name,
+            value: selectedHotel.id,
+            type: selectedHotel.type || selectedHotel?.category,
+            id: selectedHotel.id,
+          })
+        : propertyList.unshift({
+            label: selectedHotel.name,
+            value: selectedHotel.id,
+            type: selectedHotel.type
+              ? selectedHotel.type
+              : EntitySubType.ROOM_TYPE,
+            id: selectedHotel.id,
+          });
+    }
+
     return propertyList;
   }
 }

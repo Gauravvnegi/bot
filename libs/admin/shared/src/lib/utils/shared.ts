@@ -125,3 +125,20 @@ export function getDayOfWeekFromEpoch(epoch: number) {
 
   return { day: weeks[dayIndex].value, dayIndex };
 }
+
+/**
+ *
+ * @returns unique random id
+ */
+export function generateUniqueId() {
+  let timestamp = new Date().getTime();
+  const uniqueId = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(
+    /[xy]/g,
+    function (c) {
+      const r = (timestamp + Math.random() * 16) % 16 | 0;
+      timestamp = Math.floor(timestamp / 16);
+      return (c === 'x' ? r : (r & 0x3) | 0x8).toString(16);
+    }
+  );
+  return uniqueId;
+}

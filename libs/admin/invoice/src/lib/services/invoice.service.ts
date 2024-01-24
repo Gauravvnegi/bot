@@ -5,6 +5,7 @@ import * as moment from 'moment';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { BillItemFields, UseForm } from '../types/forms.types';
 import { BillItem, BillSummaryData, QueryConfig } from '../types/invoice.type';
+import { AdditionalChargesType } from '../constants/invoice.constant';
 
 @Injectable()
 export class InvoiceService extends ApiService {
@@ -130,43 +131,27 @@ export class InvoiceService extends ApiService {
 
     const billItems: BillItem[] = invoiceFormData.tableData.map((item) => {
       descriptionIds.push(item.billItemId);
-      // let description = item.description;
-      // if (item.isNew) {
-      //   description = descriptionData.find(
-      //     (des) => des.value === item.billItemId
-      //   ).label;
-      // }
-      return item.isDiscount
-        ? {
-            date: item.date,
-            description: item.description,
-            unit: item.unit,
-            creditAmount: +item.creditAmount,
-            debitAmount: +item.debitAmount,
-            transactionType: item.transactionType,
-            id: item.isNew ? null : item.billItemId,
-            itemId: item.isNonEditableBillItem ? null : item.itemId,
-            taxId: item.taxId,
-            isCoupon: item.isDiscount,
-            discountType: item?.discountType,
-            discountValue: item?.discountValue,
-            isRealised: item?.isRealised,
-            chargeType: item?.chargeType,
-          }
-        : {
-            date: item.date,
-            description: item.description,
-            unit: item.unit,
-            creditAmount: +item.creditAmount,
-            debitAmount: +item.debitAmount,
-            transactionType: item.transactionType,
-            id: item.isNew ? null : item.billItemId,
-            itemId: item.isNonEditableBillItem ? null : item.itemId,
-            taxId: item.taxId,
-            isCoupon: item.isDiscount,
-            isRealised: item?.isRealised,
-            chargeType: item?.chargeType,
-          };
+      let billItemData = {
+        date: item.date,
+        description: item.description,
+        unit: item.unit,
+        creditAmount: +item.creditAmount,
+        debitAmount: +item.debitAmount,
+        transactionType: item.transactionType,
+        id: item.isNew ? null : item.billItemId,
+        itemId: item.isNonEditableBillItem ? null : item.itemId,
+        taxId: item.taxId,
+        isCoupon: item.isDiscount,
+        isRealised: item?.isRealised,
+        chargeType: item?.chargeType,
+      };
+      if (item.chargeType === 'ALLOWANCE')
+        billItemData['remarks'] = item?.remarks;
+      if (item.isDiscount) {
+        billItemData['discountType'] = item?.discountType;
+        billItemData['discountValue'] = item?.discountValue;
+      }
+      return billItemData;
     });
 
     const deletedItemsId = previousSavedIds.filter(

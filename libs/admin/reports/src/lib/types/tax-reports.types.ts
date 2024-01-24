@@ -3,7 +3,7 @@ import { ReservationItemsPayment } from './financial-reports.types';
 export type MonthlyTaxReportData = {
   taxName: string;
   taxCategory: string;
-  amount: number;
+  amount: string;
 };
 
 export type MonthlyTaxReportResponse = {

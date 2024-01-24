@@ -1,4 +1,8 @@
-import { getFullName, toCurrency } from 'libs/admin/shared/src/lib/utils/valueFormatter';
+import {
+  currencyToNumber,
+  getFullName,
+  toCurrency,
+} from 'libs/admin/shared/src/lib/utils/valueFormatter';
 import { monthlyTaxReportRows } from '../constant/tax-reports.const';
 import { ReportClass } from '../types/reports.types';
 import {
@@ -31,7 +35,7 @@ export class MonthlyTaxReport
       taxCategory: ' ',
       amount: toCurrency(
         this.records.reduce((acc, item) => {
-          acc += item.amount;
+          acc += currencyToNumber(item?.amount);
           return acc;
         }, 0)
       ),

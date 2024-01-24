@@ -21,8 +21,6 @@ export class OutletComponent implements OnInit {
   welcomeMessage = 'Welcome to your dashboard';
   navRoutes: NavRouteOptions = [{ label: 'Outlet Dashboard', link: './' }];
 
-  entityId: string;
-
   sidebarVisible = false;
   @ViewChild('sidebarSlide', { read: ViewContainerRef })
   sidebarSlide: ViewContainerRef;

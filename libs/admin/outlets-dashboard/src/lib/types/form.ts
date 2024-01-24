@@ -23,7 +23,7 @@ export type MenuOrderResponse = {
   entityId: string;
   createdBy: string;
   pricingDetails: OutletPricingDetails;
-  kots: KotItemsResponse;
+  kots: KotItemsResponse[];
   source: string;
 };
 
@@ -31,13 +31,13 @@ export type MenuItemResponse = {
   id: string;
   amount: number;
   description: string;
-  remarks: string;
+  remarks?: string;
   transactionType: 'Debit' | 'Credit';
   unit: number;
   type: ItemType;
   currency?: string;
   itemId: string;
-  kotId: string;
+  kotId?: string;
 };
 
 export type ItemType = 'ITEM_CHARGE' | 'ITEM_TAX' | 'PAID';
@@ -61,8 +61,10 @@ export type OutletPricingDetails = {
 export type KotItemsResponse = {
   id: string;
   number: string;
-  status: 'PREPARED';
+  status: KotItemStatus;
   instructions: string;
   items: MenuItemResponse[];
-  preparedTime: 387126;
+  preparedTime?: 387126;
 };
+
+export type KotItemStatus = 'PREPARED' | 'PENDING';

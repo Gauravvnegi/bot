@@ -172,7 +172,6 @@ export class FilterComponent implements OnChanges, OnInit {
             .entities.filter((outlet) => outlet.status === 'ACTIVE') ?? [];
         this.outlets = [...this.outlets, ...outlets];
         this.updateOutletsFormControls(this.outlets);
-        debugger;
         this.initOptions();
       });
   }

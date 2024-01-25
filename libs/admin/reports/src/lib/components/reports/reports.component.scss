@@ -64,3 +64,9 @@ $reports-menu-padding: 16px;
 :host ::ng-deep .action-header {
   margin-top: unset !important;
 }
+
+.loader {
+  display: block;
+  width: 100%;
+  height: 100%;
+}

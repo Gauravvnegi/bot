@@ -105,9 +105,7 @@ export class UserConfig implements IDeserializable {
     //   label: productLabel,
     //   value: productType,
     // }));
-
-    this.products = products;
-
+    this.products = products.sort((a, b) => a.label.localeCompare(b.label));
     return this;
   }
 

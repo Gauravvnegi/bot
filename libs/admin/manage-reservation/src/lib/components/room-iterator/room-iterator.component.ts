@@ -357,6 +357,8 @@ export class RoomIteratorComponent extends IteratorComponent
           { emitEvent: false }
         );
       }
+      // Check just for the initial case.
+      this.isRouteData = false;
     }
   }
 

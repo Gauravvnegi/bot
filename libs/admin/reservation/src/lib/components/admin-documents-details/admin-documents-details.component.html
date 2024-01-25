@@ -81,15 +81,17 @@
               </mat-select>
             </mat-form-field> -->
 
-            <hospitality-bot-select
-              class="form_input"
-              controlName="id"
-              [options]="guestOptions"
-              [props]="{
-                placeholder: 'Select'
-              }"
-              (itemSelection)="onGuestChange($event.value)"
-            ></hospitality-bot-select>
+            <ng-container [formGroup]="docDetailsFG">
+              <hospitality-bot-select
+                class="form_input"
+                controlName="selectedGuest"
+                [options]="guestOptions"
+                [props]="{
+                  placeholder: 'Select'
+                }"
+                (itemSelection)="onGuestChange($event.value)"
+              ></hospitality-bot-select>
+            </ng-container>
 
             <div class="select-field">
               <span class="label">Nationality :</span>

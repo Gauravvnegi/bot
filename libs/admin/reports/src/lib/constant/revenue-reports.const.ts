@@ -5,7 +5,7 @@ import {
 } from '../types/revenue-reports.types';
 
 export const cashierReportCols: ColsData<CashierReportData> = {
-  id: {
+  index: {
     header: '#',
     isSearchDisabled: true,
     isSortDisabled: true,
@@ -23,49 +23,49 @@ export const cashierReportCols: ColsData<CashierReportData> = {
 };
 
 export const payTypeReportCols: Partial<ColsData<PayTypeReportData>> = {
-         paymentMode: {
-           header: 'Payment Mode',
-           isSortDisabled: true,
-         },
-         paymentType: {
-           header: 'Payment Type',
-           isSortDisabled: true,
-         },
-         employee: {
-           header: 'Employee',
-           isSortDisabled: true,
-         },
-         bookingNo: {
-           header: 'Res',
-           isSortDisabled: true,
-         },
-         folioNo: {
-           header: 'Folio No',
-           isSortDisabled: true,
-         },
-         guestName: {
-           header: 'Guest Name',
-           isSortDisabled: true,
-         },
-         room: {
-           header: 'Room',
-           isSortDisabled: true,
-         },
-         // counter: {
-         //   header: 'Counter',
-         //   isSortDisabled: true,
-         // },
-         dateAndTime: {
-           header: 'Date & Time',
-           isSortDisabled: true,
-         },
-         amount: {
-           header: 'Amount',
-           isSortDisabled: true,
-           isSearchDisabled: true,
-         },
-         description: {
-           header: 'Description',
-           isSortDisabled: true,
-         },
-       };
+  paymentMode: {
+    header: 'Payment Mode',
+    isSortDisabled: true,
+  },
+  paymentType: {
+    header: 'Payment Type',
+    isSortDisabled: true,
+  },
+  employee: {
+    header: 'Employee',
+    isSortDisabled: true,
+  },
+  bookingNo: {
+    header: 'Res',
+    isSortDisabled: true,
+  },
+  folioNo: {
+    header: 'Folio No',
+    isSortDisabled: true,
+  },
+  guestName: {
+    header: 'Guest Name',
+    isSortDisabled: true,
+  },
+  room: {
+    header: 'Room',
+    isSortDisabled: true,
+  },
+  // counter: {
+  //   header: 'Counter',
+  //   isSortDisabled: true,
+  // },
+  dateAndTime: {
+    header: 'Date & Time',
+    isSortDisabled: true,
+  },
+  amount: {
+    header: 'Amount',
+    isSortDisabled: true,
+    isSearchDisabled: true,
+  },
+  description: {
+    header: 'Description',
+    isSortDisabled: true,
+  },
+};

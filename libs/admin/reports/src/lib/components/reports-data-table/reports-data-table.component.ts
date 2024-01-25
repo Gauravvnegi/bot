@@ -254,13 +254,13 @@ export class ReportsDataTableComponent extends BaseDatatableComponent {
 
   get availableFilters() {
     return {
-      isFromDate: this.currentFilters.includes('fromDate'),
-      isToDate: this.currentFilters.includes('toDate'),
-      isRoomType: this.currentFilters.includes('roomType'),
-      isMonth: this.currentFilters.includes('month'),
-      isDate: this.currentFilters.includes('date'),
-      isCashier: this.currentFilters.includes('cashierId'),
-      isEmployee: this.currentFilters.includes('employeeId'),
+      isFromDate: this.currentFilters?.includes('fromDate'),
+      isToDate: this.currentFilters?.includes('toDate'),
+      isRoomType: this.currentFilters?.includes('roomType'),
+      isMonth: this.currentFilters?.includes('month'),
+      isDate: this.currentFilters?.includes('date'),
+      isCashier: this.currentFilters?.includes('cashierId'),
+      isEmployee: this.currentFilters?.includes('employeeId'),
     };
   }
 

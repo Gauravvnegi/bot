@@ -45,9 +45,11 @@ export class AdminDocumentsDetailsComponent implements OnInit {
 
   entityId: string;
 
-  @Input() parentForm;
+  @Input() parentForm: FormGroup;
   @Input('data') detailsData;
   @Output() addFGEvent = new EventEmitter();
+
+  docDetailsFG: FormGroup;
 
   constructor(
     private _fb: FormBuilder,
@@ -82,6 +84,9 @@ export class AdminDocumentsDetailsComponent implements OnInit {
           disabled: !guest.firstName,
         } as Option)
     );
+    this.docDetailsFG = this._fb.group({
+      selectedGuest: this.selectedGuestGroup.get('id').value,
+    });
   }
 
   addDocumentStatusForm() {
@@ -630,18 +635,18 @@ export class AdminDocumentsDetailsComponent implements OnInit {
   }
 
   onGuestChange(value: string) {
-    this.guestsFA.controls.forEach((guest: FormGroup) => {
-      if (guest.get('id').value === value) {
+    this.guestsFA?.controls?.forEach((guest: FormGroup) => {
+      if (guest?.get('id')?.value === value) {
         // Resetting the value on guest change id docs not updated
         this.isAllDocsAttached = false;
         const previousGuestId = this.selectedGuestId;
         const prevGuest = this.guestsFA.controls.find(
-          (item) => item.get('id').value === previousGuestId
+          (item) => item?.get('id')?.value === previousGuestId
         );
         const guestData: GuestDetailsConfig = this.getGuestDataById(
           this.selectedGuestId
         );
-        prevGuest.get('nationality').patchValue(guestData.nationality);
+        prevGuest?.get('nationality').patchValue(guestData.nationality);
 
         this.selectedGuestId = value;
         // this.selectedGuestGroup = guest;

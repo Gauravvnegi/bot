@@ -15,11 +15,11 @@ import {
 } from './reservation-reports.models';
 
 export class Cashier extends RowStyles {
-  id: string;
+  index: string;
   paymentType: string;
   amount: string;
   deserialize(input: CashierReportResponse, id: number, total?: number) {
-    this.id = total ? 'Total' : (id + 1).toString();
+    this.index = total ? 'Total' : (id + 1).toString();
     this.paymentType = total ? ' ' : input?.paymentMode;
     this.amount = total ? toCurrency(total) : toCurrency(input?.totalAmount);
     this.isSubTotal = total ? true : false;

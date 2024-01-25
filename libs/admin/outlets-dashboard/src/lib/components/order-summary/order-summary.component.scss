@@ -124,6 +124,12 @@
   .option-btn {
     background-color: $white;
   }
+  .option-selected {
+    &__radio {
+      background-color: $primary-cta;
+      color: $white;
+    }
+  }
 }
 
 :host ::ng-deep p-header {

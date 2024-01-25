@@ -141,7 +141,6 @@ export class QuickReservationFormComponent implements OnInit {
       this.roomControls.roomTypeId.disable({ emitEvent: false });
     } else {
       this.isDataLoaded = true;
-      this.listenForRoomChanges();
       this.inputControls.roomInformation.patchValue({
         roomTypeId: this.defaultRoomType.value,
         roomNumber: this.selectedRoom,
@@ -216,6 +215,7 @@ export class QuickReservationFormComponent implements OnInit {
 
     this.entityId = this.globalFilterService.entityId;
     this.listenForDateChanges();
+    if (!this.reservationId) this.listenForRoomChanges();
   }
 
   listenForRoomChanges() {
@@ -234,7 +234,6 @@ export class QuickReservationFormComponent implements OnInit {
         const currentRoomCount = res.length ? res.length : 1;
         const previousRoomCount = roomCount;
         let previousAdulCount = this.roomControls.adultCount.value;
-
         // Update roomCount
         roomCount = currentRoomCount;
         // Update adultCount only if room count is increased

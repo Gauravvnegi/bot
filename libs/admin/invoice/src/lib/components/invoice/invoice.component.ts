@@ -1652,15 +1652,7 @@ export class InvoiceComponent implements OnInit {
     }
   }
   get isPermissionToCheckInOrOut(): boolean {
-    return (
-      this.subscriptionService.show().isCalenderView ||
-      this.subscriptionService.checkProductSubscription(
-        ModuleNames.FRONT_DESK
-      ) ||
-      this.subscriptionService.checkProductSubscription(
-        ModuleNames.PREDICTO_PMS
-      )
-    );
+    return this.subscriptionService.show().isPermissionToEditReservation;
   }
 }
 

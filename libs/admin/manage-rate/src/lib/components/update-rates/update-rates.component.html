@@ -106,7 +106,7 @@
                         <div class="input-content-section left-main-cell">
                           <div class="left-main-cell__left">
                             <div class="room-type">
-                              <span
+                              <!-- <span
                                 *ngIf="configType == rateConfigTypes.pax"
                                 class="collapse"
                                 (click)="togglePax(ratePlan)"
@@ -122,7 +122,7 @@
                                 <ng-template #hiddenPax>
                                   <span pTooltip="Hide Pax">-</span>
                                 </ng-template>
-                              </span>
+                              </span> -->
                               <span class="label">
                                 <div class="room-type__subtitle">
                                   {{ ratePlan.get('label').value }}
@@ -135,6 +135,15 @@
                                 </div>
                               </span>
                             </div>
+                            <hospitality-bot-menu-button
+                              *ngIf="
+                                configType == rateConfigTypes.pax &&
+                                getPaxCount(ratePlan)
+                              "
+                              label="{{ getPaxCount(ratePlan) }} Pax"
+                              class="channel-btn channel-heading enable-child"
+                              (click)="togglePax(ratePlan)"
+                            ></hospitality-bot-menu-button>
                             <!-- TODO: This feature may be used in future -->
                             <!-- <p-toggleButton
                                 class="channel-btn"

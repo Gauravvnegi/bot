@@ -79,14 +79,52 @@
                     "
                     >{{ variant.name }}</span
                   >
-                  <!-- TODO: This feature may be used in future -->
-                  <!-- <hospitality-bot-menu-button
+                  <hospitality-bot-menu-button
+                    *ngIf="variant.pax.length"
+                    class="channel-heading enable-child"
+                    [label]="variant.pax.length + ' Pax'"
+                  ></hospitality-bot-menu-button>
+
+                  <!-- REMARKS: This feature may be used in future
+                  <hospitality-bot-menu-button
                     class="channel-heading enable-child"
                     [label]="roomsData.variants.length + ' Channels'"
                   ></hospitality-bot-menu-button> -->
                 </span>
               </div>
             </p-header>
+            <label
+              class="pax channel label-checkbox-wrapper panel-tree__header enable-child"
+              *ngFor="let pax of variant.pax; let paxIndex = index"
+              (click)="
+                onRoomChange(
+                  !pax.isSelected,
+                  pax.id,
+                  'pax',
+                  variantIndex,
+                  paxIndex
+                )
+              "
+              [ngClass]="'active-channel'"
+            >
+              <span class="panel-tree__header-checkbox">
+                <div
+                  [id]="roomsData.id + '-' + variant.id + '-' + [pax].id"
+                  class="checkbox"
+                >
+                  <img
+                    *ngIf="pax.isSelected"
+                    class="checkbox__img"
+                    src="assets/svg/checkboxSelect.svg"
+                    alt="select"
+                  />
+                </div>
+              </span>
+              <span class="panel-tree__header-label">
+                {{ pax.name }}
+              </span>
+            </label>
+
             <label
               class="channel label-checkbox-wrapper panel-tree__header enable-child"
               *ngFor="let channel of variant.channels; let channelIndex = index"

@@ -21,10 +21,26 @@ export class NestedPanelComponent {
   onRoomChange(
     status: boolean,
     id: string,
-    source: 'parent' | 'variant' | 'channel',
+    source: 'parent' | 'variant' | 'channel' | 'pax',
     variantIndex?: number,
     channelIndex?: number
   ) {
+    const otherVariantConfig = (type: 'channels' | 'pax', index: number) => {
+      this.roomsData.variants[variantIndex][type][index].isSelected = status;
+      this.roomsData.variants[
+        variantIndex
+      ].isSelected = this.roomsData.variants[variantIndex][type].every(
+        (item) => item.isSelected
+      );
+
+      this.roomsData.isSelected = this.roomsData.variants.every(
+        (item) => item.isSelected
+      );
+      this.changeChildrenStatus(
+        this.roomsData.variants[variantIndex][type][index]
+      );
+    };
+
     switch (source) {
       case 'parent':
         this.roomsData.isSelected = status;
@@ -38,21 +54,10 @@ export class NestedPanelComponent {
         this.changeChildrenStatus(this.roomsData.variants[variantIndex]);
         break;
       case 'channel':
-        this.roomsData.variants[variantIndex].channels[
-          channelIndex
-        ].isSelected = status;
-        this.roomsData.variants[
-          variantIndex
-        ].isSelected = this.roomsData.variants[variantIndex].channels.every(
-          (item) => item.isSelected
-        );
-
-        this.roomsData.isSelected = this.roomsData.variants.every(
-          (item) => item.isSelected
-        );
-        this.changeChildrenStatus(
-          this.roomsData.variants[variantIndex].channels[channelIndex]
-        );
+        otherVariantConfig('channels', channelIndex);
+        break;
+      case 'pax':
+        otherVariantConfig('pax', channelIndex);
         break;
     }
 
@@ -76,7 +81,14 @@ export class NestedPanelComponent {
           });
           stack.push(variant);
         });
-      } else if ('channels' in current) {
+      }
+      if ('pax' in current) {
+        current.pax.forEach((pax) => {
+          pax.isSelected = current.isSelected;
+        });
+      }
+
+      if ('channels' in current) {
         current.channels.forEach((channel) => {
           channel.isSelected = current.isSelected;
         });

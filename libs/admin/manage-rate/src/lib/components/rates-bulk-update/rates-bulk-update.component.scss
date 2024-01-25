@@ -3,3 +3,21 @@
   @include flex-all-center();
   margin-top: 20px;
 }
+
+:host ::ng-deep .invalid-tree {
+  .panel-tree__wrapper {
+    border: 1px solid #f44336;
+  }
+}
+
+@keyframes glow {
+  0% {
+    box-shadow: 0 0 5px 0px red;
+  }
+  50% {
+    box-shadow: 0 0 50px 0px red;
+  }
+  100% {
+    box-shadow: 0 0 5px 0px red;
+  }
+}

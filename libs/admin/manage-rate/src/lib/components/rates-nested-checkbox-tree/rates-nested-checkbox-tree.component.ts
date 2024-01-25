@@ -52,16 +52,22 @@ export class RatesNestedCheckboxTreeComponent extends FormControl {
 
   patchTreeChanges() {
     const selectedItems = this.roomsData?.filter((item) =>
-      item.variants.some((ratePlan) => ratePlan.isSelected)
+      item.variants.some(
+        (ratePlan) =>
+          ratePlan.isSelected || ratePlan?.pax?.some((pax) => pax.isSelected)
+      )
     );
+
     this.manageControl();
     selectedItems?.forEach((item) => {
       const types = this.parentFG.controls[
         this.controlNames.roomTypes
       ] as FormArray;
 
-      item.variants.forEach((variant, index) => {
-        if (variant.isSelected) {
+      item.variants
+        .filter((rp) => rp.isSelected || rp?.pax?.some((pax) => pax.isSelected))
+        .forEach((variant, index) => {
+          // if (variant.isSelected) {
           types.controls.push(
             this.fb.group({
               roomTypeId: item.id,
@@ -76,8 +82,8 @@ export class RatesNestedCheckboxTreeComponent extends FormControl {
               ratePlanId: variant.id,
             },
           ]);
-        }
-      });
+          // }
+        });
     });
   }
 

@@ -1413,6 +1413,11 @@ export class UpdateRatesComponent implements OnInit {
     paxVisible.patchValue(!paxVisible.value);
   }
 
+  getPaxCount(ratePlan: FormGroup): number {
+    const pax = ratePlan.get('pax') as FormArray;
+    return pax?.controls?.length;
+  }
+
   ngOnDestroy(): void {
     this.$subscription.unsubscribe();
   }

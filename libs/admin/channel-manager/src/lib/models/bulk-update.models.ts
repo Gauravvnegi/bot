@@ -4,6 +4,7 @@ import {
   PricingDetails,
   RoomType,
 } from 'libs/admin/room/src/lib/models/rooms-data-table.model';
+import { PAX } from 'libs/admin/manage-rate/src/lib/constants/rates.const';
 
 export function makeRoomOption(...data) {
   return data.map((item) => {
@@ -53,6 +54,12 @@ export class CheckBoxTreeFactory {
             name: ratePlan.label,
             isSelected: true,
             channels: getChannels(ratePlan),
+            pax:
+              ratePlan?.['pax']?.map((paxItem: Pax, paxInd: number) => ({
+                id: paxItem?.id,
+                name: `${ratePlan.label} - ${paxItem.label}`,
+                isSelected: true,
+              })) ?? [],
           });
         }
       }
@@ -133,6 +140,7 @@ export class RatePlans {
   maxOccupancy: number;
   pricingDetails: PricingDetails;
   channels: Channel[];
+  pax: Pax[] = [];
   deserialize(
     input,
     basePrice,
@@ -149,6 +157,11 @@ export class RatePlans {
     this.variablePrice = input.variablePrice;
     this.pricingDetails = pricingDetails;
     this.channels = [];
+    for (let paxInd = 0; paxInd < maxOccupancy; paxInd++) {
+      this.pax.push(
+        new Pax({ label: PAX[paxInd], value: PAX[paxInd], id: paxInd + 1 })
+      );
+    }
     return this;
   }
 }
@@ -160,5 +173,18 @@ export class Channel {
     this.label = input.label ?? '';
     this.value = input.value ?? '';
     return this;
+  }
+}
+
+export class Pax {
+  label: string;
+  value: string;
+  isSelected?: boolean;
+  id?: number;
+  constructor(input: Pax) {
+    this.label = input.label ?? '';
+    this.value = input.value ?? '';
+    this.isSelected = input.isSelected ?? true;
+    this.id = input?.id;
   }
 }

@@ -1,16 +1,20 @@
+import { Pax } from '../models/bulk-update.models';
+
 export type TreeType = {
   name: string;
   id: string;
   isSelected: boolean;
 };
-export type RoomTypes = TreeType & {
+export interface RoomTypes extends TreeType {
   channels: Channel[];
   variants: Variant[];
-};
+  pax?: Pax[];
+}
 
-export type Variant = TreeType & {
+export interface Variant extends TreeType {
   channels: Channel[];
-};
+  pax?: Pax[];
+}
 
 export type Channel = TreeType;
 

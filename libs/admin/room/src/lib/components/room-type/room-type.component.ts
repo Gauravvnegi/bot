@@ -367,11 +367,10 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
       res: number,
       type: 'maxAdult' | 'maxChildren'
     ) => {
-      const isError = +maxOccupancy.value < +res;
-      this.useForm.patchValue(
-        { [type]: isError ? 0 : maxOccupancy.value - res },
-        doNotEmit
-      );
+      const isError =
+        type === 'maxAdult'
+          ? +maxOccupancy.value < +res
+          : +maxOccupancy.value <= +res;
       return isError;
     };
 
@@ -388,15 +387,15 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
     });
 
     maxChildren.valueChanges.subscribe((res) => {
-      if (setOccupancyAndError(res, 'maxAdult')) {
+      if (setOccupancyAndError(res, 'maxChildren'))
         maxChildren.setErrors({ maxOccupancy: true });
-      }
+      else maxChildren.setErrors(null, doNotEmit);
     });
 
     maxAdult.valueChanges.subscribe((res) => {
-      if (setOccupancyAndError(res, 'maxChildren')) {
+      if (setOccupancyAndError(res, 'maxAdult'))
         maxAdult.setErrors({ maxOccupancy: true });
-      }
+      else maxAdult.setErrors(null, doNotEmit);
     });
   }
 

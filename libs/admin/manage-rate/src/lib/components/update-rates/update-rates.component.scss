@@ -239,10 +239,6 @@ $border-color: rgba(112, 112, 112, 0.35);
   gap: 5px;
   color: #5f38f9;
   width: 100%;
-
-  &-btn {
-    min-width: 140px;
-  }
 }
 
 .rates {
@@ -300,29 +296,6 @@ $border-color: rgba(112, 112, 112, 0.35);
 }
 
 // Channel toggle btn styling
-:host ::ng-deep .channel-btn {
-  zoom: 0.8;
-  & .p-togglebutton {
-    &.p-button {
-      border: none;
-      background: #e8e2ff !important;
-      color: $primary !important;
-      padding: 4px 6px;
-
-      & .p-button-label {
-        white-space: nowrap;
-        font-size: 14px;
-        letter-spacing: 0.84px;
-        font-weight: normal;
-      }
-      & .p-button-icon {
-        color: $primary !important;
-        zoom: 0.8;
-      }
-    }
-  }
-}
-
 .save-btn {
   padding: 35px 0 15px;
   display: flex;

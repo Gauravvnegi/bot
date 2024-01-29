@@ -220,3 +220,27 @@
   pointer-events: none;
   opacity: 0.5;
 }
+
+// Channel manager button style
+:host ::ng-deep .channel-btn {
+  zoom: 0.8;
+  & .p-togglebutton {
+    &.p-button {
+      border: none;
+      background: #e8e2ff !important;
+      color: $primary !important;
+      padding: 4px 6px;
+
+      & .p-button-label {
+        white-space: nowrap;
+        font-size: 14px;
+        letter-spacing: 0.84px;
+        font-weight: normal;
+      }
+      & .p-button-icon {
+        color: $primary !important;
+        zoom: 0.8;
+      }
+    }
+  }
+}

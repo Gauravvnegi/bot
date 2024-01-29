@@ -221,6 +221,10 @@ export class UpdateRates {
             .reduce((prev, curr) => ({ ...prev, [curr.pax]: curr.rate }), {});
         }
 
+        const availabilityFilter = isPaxType
+          ? (item) => item.pax === 1 && item.ratePlanId === currentRatePlanId
+          : (item) => item.ratePlanId === currentRatePlanId;
+
         /**
          * Storing current RoomType of each RatePlan,
          * First will be the PAX 1 if configuration is PAX,
@@ -231,9 +235,7 @@ export class UpdateRates {
         ] = {
           name: currentRatePlan.roomCode,
           date: currentDay,
-          available: currentData.rates.filter(
-            (item) => item.pax == 1 && item.ratePlanId == currentRatePlanId
-          )?.[0]?.rate,
+          available: currentData.rates.filter(availabilityFilter)?.[0]?.rate,
           ...(isPaxType &&
             ({
               pax: allPax,
@@ -294,7 +296,7 @@ export class UpdateRates {
   ): Record<'inventoryList', UpdateRatesType[]> {
     let updates: UpdateRatesType[] = [];
     const isPaxConfig = configType === RATE_CONFIG_TYPE.pax;
-
+    // console.log(isPaxConfig);
     let selectedDate = new Date(fromDate);
     formData.roomTypes.forEach((room, roomIndex: number) => {
       let newRPType: Partial<RatePlanForm & { paxNumber: number }>[] = [];

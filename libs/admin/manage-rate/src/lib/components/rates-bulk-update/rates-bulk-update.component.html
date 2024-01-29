@@ -10,14 +10,21 @@
       [isRoomsEmpty]="isRoomsEmpty"
       [endDateValue]="seventhDate"
     ></hospitality-bot-bulk-update-form>
+
+    <span *ngIf="!treeValid" [style]="{ color: 'red', 'font-size': '10px' }">
+      At least 1
+      {{ this.configType == ratePlanConfig.pax ? 'Pax' : 'Rateplan' }} is
+      required *</span
+    >
     <hospitality-bot-rates-nested-checkbox-tree
-      class="full-width"
+      class="full-width {{ treeValid ? 'valid-tree' : 'invalid-tree' }}"
       [roomsData]="roomsData"
       [controlNames]="{
         roomTypes: 'roomTypes'
       }"
-      *ngIf="!isRoomsEmpty; else emptyTable"
-    ></hospitality-bot-rates-nested-checkbox-tree>
+      *ngIf="!loading || (!isRoomsEmpty && configType); else emptyTable"
+    >
+    </hospitality-bot-rates-nested-checkbox-tree>
 
     <hospitality-bot-form-action
       class="full-width"
@@ -26,7 +33,6 @@
         preHide: true,
         postLabel: 'Save'
       }"
-      [disabled]="!isFormValid"
       (onPostAction)="onSubmit()"
       #fa
     >
@@ -36,9 +42,13 @@
       <hospitality-bot-empty-table
         [isLoading]="loading"
         [content]="{
-          description: 'Please select at least one room',
-          imageSrc: 'assets/images/empty-table-service.png'
+          description: !configType
+            ? 'Configuration does not exist.'
+            : 'Please select at least one room',
+          imageSrc: 'assets/images/empty-table-service.png',
+          actionName: !configType && 'Reload'
         }"
+        (action)="initConfigType()"
       >
       </hospitality-bot-empty-table>
     </ng-template>

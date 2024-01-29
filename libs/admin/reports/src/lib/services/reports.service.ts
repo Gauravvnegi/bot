@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from '@hospitality-bot/shared/utils';
-import { BehaviorSubject, Subject } from 'rxjs';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import {
   GetReportQuery,
   ReportType,
   ReportsMenu,
 } from '../types/reports.types';
+import { ReportConfigResponse } from '../types/report-response.types';
 
 @Injectable()
 export class ReportsService extends ApiService {
@@ -23,6 +24,12 @@ export class ReportsService extends ApiService {
         ...(isExport ? { exportType: 'csv' } : {}),
       })}`,
       isExport ? { responseType: 'blob' } : {}
+    );
+  }
+
+  getReportConfig(): Observable<ReportConfigResponse> {
+    return this.get(
+      `/api/v1/cms/master-configuration?configType=reportConfig&includeObject=reportModules`
     );
   }
 }

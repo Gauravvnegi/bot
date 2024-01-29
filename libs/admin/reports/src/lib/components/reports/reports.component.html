@@ -25,11 +25,16 @@
     </div>
   </div>
 </p-sidebar>
-
 <hospitality-bot-navigation-header
-  [routes]="navRoutes"
-  [isBack]="false"
-  [onlyNavRoutes]="true"
-  (routeNumber)="handleNavClick($event)"
+[routes]="navRoutes"
+[isBack]="false"
+[onlyNavRoutes]="true"
+(routeNumber)="handleNavClick($event)"
 ></hospitality-bot-navigation-header>
+<ng-container *ngIf="!isLoading; else loader">
 <hospitality-bot-reports-data-table></hospitality-bot-reports-data-table>
+</ng-container>
+
+<ng-template #loader>
+  <hospitality-bot-loader-bounce class="loader"></hospitality-bot-loader-bounce>
+</ng-template>

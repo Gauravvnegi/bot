@@ -15,6 +15,7 @@ import {
   UpdateRatesResponse,
 } from '../types/response.type';
 import { RATE_CONFIG_TYPE } from 'libs/admin/manage-rate/src/lib/constants/rates.const';
+import { RoomTypes, Variant } from '../types/bulk-update.types';
 
 export class UpdateInventory {
   inventoryRoomDetails = new Map<
@@ -220,6 +221,10 @@ export class UpdateRates {
             .reduce((prev, curr) => ({ ...prev, [curr.pax]: curr.rate }), {});
         }
 
+        const availabilityFilter = isPaxType
+          ? (item) => item.pax === 1 && item.ratePlanId === currentRatePlanId
+          : (item) => item.ratePlanId === currentRatePlanId;
+
         /**
          * Storing current RoomType of each RatePlan,
          * First will be the PAX 1 if configuration is PAX,
@@ -230,9 +235,7 @@ export class UpdateRates {
         ] = {
           name: currentRatePlan.roomCode,
           date: currentDay,
-          available: currentData.rates.filter(
-            (item) => item.pax == 1 && item.ratePlanId == currentRatePlanId
-          )?.[0]?.rate,
+          available: currentData.rates.filter(availabilityFilter)?.[0]?.rate,
           ...(isPaxType &&
             ({
               pax: allPax,
@@ -293,7 +296,7 @@ export class UpdateRates {
   ): Record<'inventoryList', UpdateRatesType[]> {
     let updates: UpdateRatesType[] = [];
     const isPaxConfig = configType === RATE_CONFIG_TYPE.pax;
-
+    // console.log(isPaxConfig);
     let selectedDate = new Date(fromDate);
     formData.roomTypes.forEach((room, roomIndex: number) => {
       let newRPType: Partial<RatePlanForm & { paxNumber: number }>[] = [];
@@ -370,32 +373,86 @@ export class UpdateRates {
   }
 
   /**
+   * Updates rates for selected days based on the specified configuration.
    * Build bulk update request data.
    * @param {Record<string, any>} formData - The form data for bulk update.
    * @returns {UpdateRatesType[]} - The built bulk update request data.
+   * @param {Date} currentDay - The starting date for rate updates.
+   * @param {Date} lastDay - The last date for rate updates.
+   * @param {string[]} selectedDays - An array of weekdays for which rates should be updated.
+   * @param {string} roomInfo - The new rate value.
+   * @param {string} roomTypes.roomTypeId - The ID of the room type.
+   * @param {string} roomTypes.ratePlanId - The ID of the rate plan for the room type.
+   * @param {number} configType - The configuration type (e.g., RATE_CONFIG_TYPE.pax).
+   * @param {*}
+   * @param {string} roomInfo.id - The ID of the room.
+   * @param {Variant[]} roomInfo.variants - An array of room variants.} roomInfo - An array of room information.
+   * @param {Object} roomInfo.variants.pax - Pax information for the room variant.
+   * @param {Variant} Variant - Type representing a room variant.
+   * @returns {UpdateRatesType[]} updates - An array of rate updates.
    */
   static buildBulkUpdateRequest(
-    formData: Record<string, any>
+    formData: Record<string, any>,
+    configType?: RATE_CONFIG_TYPE,
+    roomInfo?: RoomTypes[]
   ): UpdateRatesType[] {
     let updates: UpdateRatesType[] = [];
     let { fromDate, toDate, roomTypes, selectedDays, updateValue } = formData;
     let currentDay = new Date(fromDate);
     let lastDay = new Date(toDate);
-    lastDay.setDate(lastDay.getDate() + 1);
-    while (currentDay.getTime() != lastDay.getTime()) {
+    /**
+     *  Loop through days from currentDay to lastDay
+     */
+    while (currentDay.getTime() <= lastDay.getTime()) {
       const day = currentDay.toLocaleDateString(undefined, { weekday: 'long' });
-
       selectedDays.includes(day) &&
         updates.push({
           startDate: currentDay.getTime(),
           endDate: currentDay.getTime(),
-          rates: roomTypes.map((item) => ({
-            roomTypeId: item.roomTypeId,
-            rate: +updateValue,
-            ratePlanId: item.ratePlanId,
-            dynamicPricing: false, // TODO, Manage dynamic pricing according to your need
-          })),
+          rates: roomTypes.reduce((prev, currItem) => {
+            let currRPInfo: Variant;
+            // Check if the configuration type is pax
+            if (configType == RATE_CONFIG_TYPE.pax) {
+              // Find the current room based on roomTypeId
+              const currentRoom = roomInfo.find(
+                (room) => room.id == currItem.roomTypeId
+              );
+
+              // Find the rate plan info based on ratePlanId
+              currRPInfo = currentRoom?.variants?.find(
+                (rp) => rp.id == currItem.ratePlanId
+              );
+            }
+
+            // Push the base rate update object to the rates array
+            return [
+              ...prev,
+
+              // This is for only non pax base configuration, mapping
+              ...(configType !== RATE_CONFIG_TYPE.pax
+                ? [
+                    {
+                      roomTypeId: currItem.roomTypeId,
+                      rate: +updateValue,
+                      ratePlanId: currItem.ratePlanId,
+                      dynamicPricing: false, // TODO, Manage dynamic pricing according to your need
+                    },
+                  ]
+                : []),
+              // If currRPInfo is available, push additional rate updates for pax
+              ...(currRPInfo?.pax
+                ?.filter((pax) => pax.isSelected)
+                .map((paxInfo, paxInd: number) => ({
+                  roomTypeId: currItem.roomTypeId,
+                  rate: +updateValue,
+                  pax: paxInfo?.id,
+                  ratePlanId: currItem.ratePlanId,
+                  dynamicPricing: false,
+                })) ?? []),
+            ];
+          }, []),
         });
+
       currentDay.setDate(currentDay.getDate() + 1);
     }
     return updates;

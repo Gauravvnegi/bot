@@ -605,10 +605,13 @@ export class UpdateRatesComponent implements OnInit {
                */
               if (!isBaseRatePlanRow) {
                 // console.log('Non BaseRatePlan Row====>>', !isBaseRatePlanRow);
+                // console.log(' PAX MAPPING CASE 1', controlG);
+                const { variablePrice } = controlG.controls;
                 this.mapPaxPrice(controlG, dpArray, {
                   dayWise: dayIndex,
                   isLinked: linkedValue,
                   res: res,
+                  extraFoodPrice: +variablePrice.value,
                 });
               }
 
@@ -803,6 +806,12 @@ export class UpdateRatesComponent implements OnInit {
         price += +variablePriceRP * (paxInd + 1);
         // console.log('Base room type mapping', variablePriceRP, ratePlan);
       }
+
+      //Extra food price add in price
+      if (mappingInfo?.extraFoodPrice) {
+        price = +price + mappingInfo.extraFoodPrice * (paxInd + 1);
+      }
+
       // Check linked, then modify all data
       if (mappingInfo.isLinked) {
         // Iterate over paxData controls and set the value
@@ -1413,6 +1422,11 @@ export class UpdateRatesComponent implements OnInit {
     paxVisible.patchValue(!paxVisible.value);
   }
 
+  getPaxCount(ratePlan: FormGroup): number {
+    const pax = ratePlan.get('pax') as FormArray;
+    return pax?.controls?.length;
+  }
+
   ngOnDestroy(): void {
     this.$subscription.unsubscribe();
   }
@@ -1422,6 +1436,7 @@ type RoomMapProps = {
   isLinked: boolean;
   dayWise: number;
   res: { value: string };
+  extraFoodPrice?: number;
 };
 
 export interface UpdateRateFormObj {

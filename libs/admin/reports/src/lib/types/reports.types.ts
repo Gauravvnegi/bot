@@ -97,7 +97,7 @@ export type ReportsType = {
 export type ReportsTypeValues = ReportsType[keyof ReportsType];
 
 export type ReportsConfig = {
-  [K in ReportModules]: {
+  [K in ReportModules]?: {
     menu: Array<{ label: string; value: ReportsType[K] }>;
   };
 };

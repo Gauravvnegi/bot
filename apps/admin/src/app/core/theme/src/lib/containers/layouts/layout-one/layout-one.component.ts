@@ -543,7 +543,7 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
   initBookingOption() {
     this.propertyList = this.hotelDetailService.getPropertyList();
     this.bookingOptions = [
-      this.subscriptionPlanService.show().isCalenderView
+      this.subscriptionPlanService.show().isPermissionToCreateReservation
         ? {
             label: 'New Booking',
             icon: 'pi pi-calendar',
@@ -748,7 +748,7 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
   }
 
   onQuickButtonClick() {
-    this.subscriptionPlanService.show().isCalenderView
+    this.subscriptionPlanService.show().isPermissionToCreateReservation
       ? this.showQuickReservation()
       : this.isGuestSubscribed
       ? this.showAddGuest()
@@ -756,7 +756,7 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
   }
 
   get getQuickLabel() {
-    return this.subscriptionPlanService.show().isCalenderView
+    return this.subscriptionPlanService.show().isPermissionToCreateReservation
       ? 'Quick Booking'
       : this.isGuestSubscribed
       ? 'New Guest'

@@ -42,6 +42,7 @@ export function convertToTitleCase(str: string) {
  * @returns kebab formatted string
  */
 export function camelToKebab(str) {
+  if (!str) return;
   return str.replace(/[A-Z]/g, (match) => `-${match.toLowerCase()}`);
 }
 
@@ -52,6 +53,7 @@ export function camelToKebab(str) {
  * @returns camel formatted string
  */
 export function kebabToCamel(str) {
+  if (!str) return;
   return str.replace(/-([a-z])/g, (match, letter) => letter.toUpperCase());
 }
 

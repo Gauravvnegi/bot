@@ -9,7 +9,6 @@ import {
   ReportType,
   ReportsMenu,
 } from '../../types/reports.types';
-import { reportsConfig } from '../../constant/reports.const';
 import {
   camelToKebab,
   kebabToCamel,
@@ -18,9 +17,11 @@ import {
 import {
   NavRouteOption,
   NavRouteOptions,
+  ProductNames,
   manageMaskZIndex,
 } from '@hospitality-bot/admin/shared';
 import { ActivatedRoute, Router } from '@angular/router';
+import { ProductReportConfig, ReportConfig } from '../../models/report.models';
 @Component({
   selector: 'hospitality-bot-reports',
   templateUrl: './reports.component.html',
@@ -33,6 +34,9 @@ export class ReportsComponent implements OnInit {
   selectedReportModule: ReportModules;
   selectedReport: ReportsMenu[number];
   navRoutes: NavRouteOptions = [];
+  reportConfig: ProductReportConfig;
+  selectedProduct: keyof typeof ProductNames;
+  isLoading: boolean = false;
 
   constructor(
     private reportsService: ReportsService,
@@ -42,6 +46,24 @@ export class ReportsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.getReportConfig();
+  }
+
+  getReportConfig() {
+    this.isLoading = true;
+    this.reportsService.getReportConfig().subscribe(
+      (res) => {
+        this.reportConfig = new ReportConfig().deserialize(res).reportConfig;
+        this.initConfiguration();
+        this.isLoading = false;
+      },
+      ({ error }) => {
+        this.isLoading = false;
+      }
+    );
+  }
+
+  initConfiguration() {
     let reportName = this.route.snapshot.params['report'] as ReportType;
     reportName = reportName && kebabToCamel(reportName);
     this.initReportConfigDetails(); //we are getting the report menu options from the config file
@@ -49,7 +71,7 @@ export class ReportsComponent implements OnInit {
     //if there is no report selected, then select the first report from the list and navigate to that report
     !reportName &&
       this.router.navigate(
-        [`${camelToKebab(this.reportsMenuOptions[0].value)}`],
+        [`${camelToKebab(this.reportsMenuOptions?.[0]?.value)}`],
         {
           relativeTo: this.route,
           replaceUrl: true,
@@ -89,11 +111,12 @@ export class ReportsComponent implements OnInit {
     this.selectedReportModule = (this.routesConfigService
       .subModuleName as unknown) as ReportModules;
 
+    this.selectedProduct = this.routesConfigService.productName;
+
     this.settReportMainTitle();
     this.reportsMenuOptions =
-      reportsConfig[this.selectedReportModule]?.menu ?? [];
-
-    // this.reportsService.$selectedReport.next(this.reportsMenuOptions[0]);
+      this.reportConfig[this.selectedProduct][this.selectedReportModule]
+        ?.menu ?? [];
   }
 
   initNavRoutes() {

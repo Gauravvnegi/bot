@@ -1,0 +1,115 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #f4f5f6;
+
+  .progress-bar {
+    height: 11px;
+    background-color: red;
+  }
+
+  .wrapper {
+    padding: 10px;
+
+    &-top {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      .header {
+        display: inline-flex;
+        justify-content: space-between;
+        &__title {
+          color: #272727;
+          font-family: Poppins;
+          font-size: 16px;
+          font-style: normal;
+          font-weight: 700;
+          line-height: normal;
+        }
+        &__timer {
+          color: #9a9a9a;
+          text-align: right;
+          font-family: Inter;
+          font-size: 12px;
+          font-style: normal;
+          font-weight: 400;
+          line-height: normal;
+        }
+      }
+      .middle {
+        display: inline-flex;
+        justify-content: space-between;
+
+        .left {
+          display: inline-flex;
+          gap: 5px;
+
+          .info {
+            display: inline-flex;
+            gap: 3px;
+
+            .text {
+              color: rgba(39, 39, 39, 0.5);
+              font-size: 14px;
+              font-weight: 500;
+              text-transform: uppercase;
+            }
+
+            .number {
+              color: #272727;
+              font-size: 14px;
+              font-weight: 500;
+              text-transform: uppercase;
+            }
+          }
+        }
+
+        .right {
+          border: 1px solid #36a2eb;
+          color: #36a2eb;
+          border-radius: 8px;
+          padding: 4px;
+          color: #36a2eb;
+          text-align: center;
+          font-size: 12px;
+          font-weight: 500;
+        }
+      }
+      .summary-container {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+
+        .details-card {
+          display: inline-flex;
+          justify-content: space-between;
+          .info {
+            display: inline-flex;
+            gap: 5px;
+
+            .details {
+              .title {
+                color: #000;
+                text-align: center;
+                font-size: 14px;
+                font-weight: 500;
+              }
+              .instruction {
+                color: rgba(36, 36, 36, 0.5);
+                font-size: 11px;
+                font-weight: 500;
+              }
+            }
+          }
+          .quantity {
+            color: rgba(36, 36, 36, 0.7);
+            font-size: 14px;
+            font-weight: 500;
+          }
+        }
+      }
+    }
+  }
+}

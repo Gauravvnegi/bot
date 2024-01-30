@@ -1,0 +1,13 @@
+:host ::ng-deep {
+  .p-datatable-tbody {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1em;
+    background-color: #ffff;
+    padding: 20px;
+  }
+}
+
+.flex-width {
+  flex-basis: 49%;
+}

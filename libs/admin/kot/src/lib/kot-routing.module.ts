@@ -4,6 +4,7 @@ import { MainComponent } from './components/main/main.component';
 import { KotTableComponent } from './components/kot-table/kot-table.component';
 import { KotComponent } from './components/kot/kot.component';
 import { KotCardComponent } from './components/kot-card/kot-card.component';
+import { PendingItemSummaryComponent } from './components/pending-item-summary/pending-item-summary.component';
 
 const routes: Routes = [
   {
@@ -28,5 +29,6 @@ export class KotRoutingModule {
     KotTableComponent,
     KotComponent,
     KotCardComponent,
+    PendingItemSummaryComponent,
   ];
 }

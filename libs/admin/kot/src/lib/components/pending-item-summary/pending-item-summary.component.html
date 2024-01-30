@@ -1,0 +1,26 @@
+<section class="container">
+  <div class="header">
+    Pending item Summary
+  </div>
+  <div class="title">
+    <div>Item</div>
+    <div>Quantity</div>
+  </div>
+  <div class="item-container" *ngIf="itemPendingSummaryList; else empty">
+    <div class="items" *ngFor="let item of itemPendingSummaryList">
+      <div class="items-title">
+        <img src="assets/svg/veg.svg" alt="" />
+        <div>{{ item?.name }}</div>
+      </div>
+      <div class="quantity">
+        {{ item?.quantity }}
+      </div>
+    </div>
+  </div>
+</section>
+
+<ng-template #empty>
+  <div class="empty-container">
+    No Items found
+  </div>
+</ng-template>

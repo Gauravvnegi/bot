@@ -11,3 +11,16 @@
 .flex-width {
   flex-basis: 49%;
 }
+
+.container {
+  display: inline-flex;
+  gap: 1em;
+
+  .three-fourth {
+    width: 80%;
+  }
+
+  .one-fourth {
+    width: 20%;
+  }
+}

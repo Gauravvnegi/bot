@@ -9,6 +9,8 @@ import {
 } from '@hospitality-bot/admin/shared';
 import { LazyLoadEvent } from 'primeng/api';
 import { Subject, Subscription } from 'rxjs';
+import { config } from '../../constants/kot-datatable.constant';
+import { Config } from '../../types/kot-card.type';
 
 @Component({
   selector: 'hospitality-bot-kot-table',
@@ -21,7 +23,7 @@ import { Subject, Subscription } from 'rxjs';
 export class KotTableComponent extends BaseDatatableComponent
   implements OnInit {
   navRoutes: NavRouteOptions = [];
-  values: any[] = [1, 2, 3, 4];
+  values: Config[] = [];
   pageTitle: string = 'KOT';
   loading: boolean = false;
   entityId: string;
@@ -35,7 +37,12 @@ export class KotTableComponent extends BaseDatatableComponent
     super(fb);
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.values = [];
+    for (let i = 0; i < 5; i++) {
+      this.values.push(config);
+    }
+  }
 
   loadData(event: LazyLoadEvent): void {
     this.cancelRequests$.next();

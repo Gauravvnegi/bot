@@ -4,8 +4,8 @@
   <div class="wrapper">
     <div class="wrapper-top">
       <div class="header">
-        <div class="header__title">Natalia Server</div>
-        <div class="header__timer">5:00</div>
+        <div class="header__title">{{ config?.name }}</div>
+        <div class="header__timer">{{ config.time }}</div>
       </div>
 
       <div class="middle">
@@ -14,36 +14,56 @@
             <div class="text">
               ORDER NO:
             </div>
-            <div class="number">11122</div>
+            <div class="number">{{ config?.orderNo }}</div>
           </div>
           <div class="info">
             <div class="text">
               KOT NO:
             </div>
-            <div class="number">1076</div>
+            <div class="number">{{ config?.kotNo }}</div>
           </div>
         </div>
         <div class="right">
-          pickUp
+          {{ config?.kotType }}
         </div>
       </div>
 
       <div class="summary-container">
-        <div class="details-card">
-          <div class="info">
-            <img src="assets/svg/veg.svg" alt="" />
+        <div
+          class="card-wrapper"
+          *ngFor="let item of config?.menuItem; let i = index"
+        >
+          <div class="details-card">
+            <div class="info">
+              <img src="assets/svg/veg.svg" alt="" />
 
-            <div class="details">
-              <div class="title">Mexican Burger</div>
-              <div class="instruction">
-                instruction
-                <img src="assets/svg/union.svg" />
+              <div class="details">
+                <div class="title">{{ item?.name }}</div>
+                <div class="instruction">
+                  instruction
+                  <img
+                    src="assets/svg/union.svg"
+                    [ngClass]="{ rotate: item?.isExpandedInstruction }"
+                    (click)="toggleInstruction(i)"
+                  />
+                </div>
               </div>
             </div>
+            <div className="quantity">{{ item?.quantity }}</div>
           </div>
-          <div className="quantity">5</div>
+          <div *ngIf="item?.isExpandedInstruction" class="instrction-deatils">
+            {{ item?.instructions }}
+          </div>
         </div>
       </div>
+    </div>
+  </div>
+  <div class="instruction-wrapper">
+    {{ config?.instructions }}
+  </div>
+  <div class="bottom">
+    <div class="cta" (click)="markFoodIsReady()">
+      Food is ready
     </div>
   </div>
 </section>

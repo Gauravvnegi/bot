@@ -13,66 +13,74 @@
     ></hospitality-bot-export-list>
   </hospitality-bot-navigation-header>
 </div>
-<p-table
-  #dt
-  [styleClass]="tableConfig.styleClass"
-  [resizableColumns]="isResizableColumns"
-  [autoLayout]="isAutoLayout"
-  [loading]="loading"
-  [columns]="cols"
-  [value]="values"
-  [paginator]="isPaginator"
-  [rows]="rowsPerPage"
-  [showCurrentPageReport]="showCurrentPageReport"
-  [rowsPerPageOptions]="rowsPerPageOptions"
-  [(first)]="first"
-  [totalRecords]="totalRecords"
-  [filterDelay]="0"
-  [selectionMode]="selectionMode"
-  [(selection)]="selectedRows"
-  (onRowSelect)="onRowSelect($event)"
-  (onRowUnselect)="onRowUnselect($event)"
-  (onHeaderCheckboxToggle)="onToggleSelectAll($event)"
-  (sortFunction)="customSort($event)"
-  [customSort]="isCustomSort"
-  (onFilter)="onDataFilter()"
-  *ngIf="values.length; else emptyTable"
->
-  <ng-template pTemplate="caption">
-    <div class="caption__wrapper" [formGroup]="tableFG">
-      <ng-container [ngTemplateOutlet]="tabFilter"> </ng-container>
-    </div>
-  </ng-template>
-  <ng-template pTemplate="emptymessage">
-    <tr hospitality-bot-empty-view [noOfColumns]="cols.length"></tr>
-  </ng-template>
 
-  <!-- **************************************BODY********************************* -->
-  <ng-template
-    pTemplate="body"
-    let-rowData
-    let-columns="columns"
-    let-rowIndex="rowIndex"
+<div class="container">
+  <p-table
+    class="three-fourth"
+    #dt
+    [styleClass]="tableConfig.styleClass"
+    [resizableColumns]="isResizableColumns"
+    [autoLayout]="isAutoLayout"
+    [loading]="loading"
+    [columns]="cols"
+    [value]="values"
+    [paginator]="isPaginator"
+    [rows]="rowsPerPage"
+    [showCurrentPageReport]="showCurrentPageReport"
+    [rowsPerPageOptions]="rowsPerPageOptions"
+    [(first)]="first"
+    [totalRecords]="totalRecords"
+    [filterDelay]="0"
+    [selectionMode]="selectionMode"
+    [(selection)]="selectedRows"
+    (onRowSelect)="onRowSelect($event)"
+    (onRowUnselect)="onRowUnselect($event)"
+    (onHeaderCheckboxToggle)="onToggleSelectAll($event)"
+    (sortFunction)="customSort($event)"
+    [customSort]="isCustomSort"
+    (onFilter)="onDataFilter()"
+    *ngIf="values.length; else emptyTable"
   >
-    <!-- <td > -->
-    <hospitality-bot-kot-card class="flex-width"> </hospitality-bot-kot-card>
+    <ng-template pTemplate="caption">
+      <div class="caption__wrapper" [formGroup]="tableFG">
+        <ng-container [ngTemplateOutlet]="tabFilter"> </ng-container>
+      </div>
+    </ng-template>
+    <ng-template pTemplate="emptymessage">
+      <tr hospitality-bot-empty-view [noOfColumns]="cols.length"></tr>
+    </ng-template>
 
-    <!-- </td> -->
-  </ng-template>
+    <!-- **************************************BODY********************************* -->
+    <ng-template
+      pTemplate="body"
+      let-rowData
+      let-columns="columns"
+      let-rowIndex="rowIndex"
+    >
+      <!-- <td > -->
+      <hospitality-bot-kot-card class="flex-width" [config]="rowData">
+      </hospitality-bot-kot-card>
 
-  <!-- *********************************FOOTER******************************* -->
-  <ng-template pTemplate="summary">
-    <p-paginator
-      #paginator
-      [rows]="rowsPerPage"
-      [totalRecords]="totalRecords"
-      [rowsPerPageOptions]="rowsPerPageOptions"
-      (onPageChange)="paginate($event)"
-      [currentPageReportTemplate]="reportTemplate"
-      showCurrentPageReport="true"
-    ></p-paginator>
-  </ng-template>
-</p-table>
+      <!-- </td> -->
+    </ng-template>
+
+    <!-- *********************************FOOTER******************************* -->
+    <ng-template pTemplate="summary">
+      <p-paginator
+        #paginator
+        [rows]="rowsPerPage"
+        [totalRecords]="totalRecords"
+        [rowsPerPageOptions]="rowsPerPageOptions"
+        (onPageChange)="paginate($event)"
+        [currentPageReportTemplate]="reportTemplate"
+        showCurrentPageReport="true"
+      ></p-paginator>
+    </ng-template>
+  </p-table>
+  <hospitality-bot-pending-item-summary
+    class="one-fourth"
+  ></hospitality-bot-pending-item-summary>
+</div>
 
 <ng-template #emptyTable>
   <hospitality-bot-empty-table

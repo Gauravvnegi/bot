@@ -13,6 +13,7 @@ import { RequestService } from './services/request.service';
 import { HttpClient } from '@angular/common/http';
 import { TranslateModule } from '@ngx-translate/core';
 import { RequestWrapperComponent } from './components/request-wrapper/request-wrapper.component';
+import { ServiceItemService } from 'libs/admin/service-item/src/lib/services/service-item-datatable.service';
 
 @NgModule({
   imports: [

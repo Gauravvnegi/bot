@@ -3,11 +3,12 @@
     <hospitality-bot-navigation-header
       [heading]="pageTitle"
       [routes]="navRoutes"
+      *ngIf="!isSidebar; else sidebarHeader"
     >
     </hospitality-bot-navigation-header>
     <div class="form-block" [formGroup]="useForm">
       <hospitality-bot-input
-        class="half-width"
+        [class]="isSidebar ? 'full-width' : 'half-width'"
         controlName="itemName"
         label="Name"
         [props]="{
@@ -15,17 +16,18 @@
         }"
       ></hospitality-bot-input>
       <hospitality-bot-select
-        class="half-width"
+        [class]="isSidebar ? 'full-width' : 'half-width'"
         [options]="categoryList"
         label="Category Name"
         controlName="categoryId"
         [props]="{
           isAsync: true,
           createPrompt: '+ Add New Category',
-          placeholder: 'Select'
+          inputPrompt: isSidebar ? 'Category Name' : undefined,
+          placeholder: 'Select Category'
         }"
         [stopEmission]="true"
-        (onCreate)="create()"
+        (onCreate)="createCategory($event)"
       ></hospitality-bot-select>
 
       <hospitality-bot-time-picker
@@ -35,7 +37,7 @@
         format="millisecond"
       ></hospitality-bot-time-picker>
       <hospitality-bot-multi-select
-        class="half-width"
+        [class]="isSidebar ? 'full-width' : 'half-width'"
         controlName="users"
         label="Users"
         [options]="userList"
@@ -50,7 +52,7 @@
       ></hospitality-bot-multi-select>
 
       <hospitality-bot-text-area
-        class="full-width"
+        [class]="isSidebar ? 'full-width' : 'half-width'"
         controlName="remarks"
         label="Remarks"
         [props]="{
@@ -67,9 +69,19 @@
           preLabel: 'Cancel',
           postLabel: 'Save'
         }"
+        [isFixed]="isSidebar"
         #fa
       >
       </hospitality-bot-form-action>
     </div>
   </div>
 </div>
+
+<ng-template #sidebarHeader>
+  <div class="sidebar-slide-header">
+    <span class="title">{{ pageTitle }}</span>
+    <span class="close-icon" (click)="closeSidebar()">
+      <img class="close-sidebar-icon" src="assets/svg/close-sidebar.svg" />
+    </span>
+  </div>
+</ng-template>

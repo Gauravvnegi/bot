@@ -1,12 +1,24 @@
-import { Component, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
+import {
+  Compiler,
+  Component,
+  ComponentFactoryResolver,
+  OnInit,
+  ViewChild,
+  ViewContainerRef,
+} from '@angular/core';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
-import { AdminUtilityService, StatCard } from '@hospitality-bot/admin/shared';
+import {
+  AdminUtilityService,
+  StatCard,
+  manageMaskZIndex,
+} from '@hospitality-bot/admin/shared';
 import { Subscription } from 'rxjs';
 import { DateService } from '@hospitality-bot/shared/utils';
 import { AnalyticsService } from '../../services/analytics.service';
 import { AverageStats, DistributionStats } from '../../types/response.types';
 import { AverageRequestStats } from '../../models/statistics.model';
 import { SideBarService } from 'apps/admin/src/app/core/theme/src/lib/services/sidebar.service';
+import { CreateServiceItemComponent } from 'libs/admin/service-item/src/lib/components/create-service-item/create-service-item.component';
 
 @Component({
   selector: 'complaint-analytics',
@@ -44,7 +56,9 @@ export class ComplaintAnalyticsComponent implements OnInit {
     private sidebarService: SideBarService,
     private dateService: DateService,
     private analyticsService: AnalyticsService,
-    private adminUtilityService: AdminUtilityService
+    private adminUtilityService: AdminUtilityService,
+    private compiler: Compiler,
+    private resolver: ComponentFactoryResolver
   ) {}
 
   statCard: StatCard[] = [];
@@ -131,11 +145,32 @@ export class ComplaintAnalyticsComponent implements OnInit {
   }
 
   createServiceItem() {
-    this.sidebarService.openSidebar({
-      componentName: 'AddItem',
-      containerRef: this.sidebarSlide,
-      onOpen: () => (this.sidebarVisible = true),
-      onClose: (res) => (this.sidebarVisible = false),
+    const lazyModulePromise = import(
+      'libs/admin/service-item/src/lib/admin-service-item.module'
+    )
+      .then((module) => {
+        return this.compiler.compileModuleAsync(module.AdminServiceItemModule);
+      })
+      .catch((error) => {
+        console.error('Error loading the lazy module:', error);
+      });
+
+    lazyModulePromise.then(() => {
+      this.sidebarVisible = true;
+      const factory = this.resolver.resolveComponentFactory(
+        CreateServiceItemComponent
+      );
+      this.sidebarSlide.clear();
+      const componentRef = this.sidebarSlide.createComponent(factory);
+      componentRef.instance.isSidebar = true;
+
+      this.$subscription.add(
+        componentRef.instance.onCloseSidebar.subscribe((res) => {
+          this.sidebarVisible = false;
+        })
+      );
+
+      manageMaskZIndex();
     });
   }
 
@@ -144,7 +179,10 @@ export class ComplaintAnalyticsComponent implements OnInit {
       componentName: 'RaiseRequest',
       containerRef: this.sidebarSlide,
       onOpen: () => (this.sidebarVisible = true),
-      onClose: (res) => (this.sidebarVisible = false),
+      onClose: (res) => {
+        this.refreshStats();
+        this.sidebarVisible = false;
+      },
     });
   }
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import {
@@ -7,15 +7,13 @@ import {
   Option,
 } from '@hospitality-bot/admin/shared';
 import { parmaId, serviceItemRoutes } from '../../constants/routes';
-import {
-  GlobalFilterService,
-  RoutesConfigService,
-} from '@hospitality-bot/admin/core/theme';
 import { convertToNormalCase } from 'libs/admin/shared/src/lib/utils/valueFormatter';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { ManagePermissionService } from 'libs/admin/roles-and-permissions/src/lib/services/manage-permission.service';
 import { ServiceItemService } from '../../services/service-item-datatable.service';
 import { Subscription } from 'rxjs';
+import { RoutesConfigService } from 'apps/admin/src/app/core/theme/src/lib/services/routes-config.service';
+import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 
 @Component({
   selector: 'hospitality-bot-create-service-item',
@@ -32,6 +30,8 @@ export class CreateServiceItemComponent implements OnInit {
   entityId: string;
   $subscription = new Subscription();
   categoryList: Option[] = [];
+  isSidebar: boolean = false;
+  @Output() onCloseSidebar = new EventEmitter<boolean>(false);
 
   constructor(
     private fb: FormBuilder,
@@ -161,14 +161,41 @@ export class CreateServiceItemComponent implements OnInit {
 
   close() {}
 
-  create() {
-    this.routesConfigService.navigate({
-      subModuleName: ModuleNames.SERVICE_ITEM,
-      additionalPath: serviceItemRoutes.createCategory.route,
-    });
+  createCategory(categoryName: string) {
+    if (this.isSidebar) {
+      this.serviceItemService
+        .createCategory(this.entityId, {
+          name: categoryName,
+          active: true,
+        })
+        .subscribe(
+          (res) => {
+            this.categoryList.push({
+              label: res?.name,
+              value: res?.id,
+            });
+            this.useForm.get('categoryId').setValue(res.id);
+            this.snackbarService.openSnackBarAsText(
+              'Category created successfully',
+              '',
+              { panelClass: 'success' }
+            );
+          },
+          () => {}
+        );
+    } else {
+      this.routesConfigService.navigate({
+        subModuleName: ModuleNames.SERVICE_ITEM,
+        additionalPath: `${serviceItemRoutes.manageCategory.route}/${serviceItemRoutes.createCategory.route}`,
+      });
+    }
   }
 
-  handleSuccess = () => {
+  closeSidebar() {
+    this.onCloseSidebar.emit(true);
+  }
+
+  handleSuccess = (res) => {
     this.loading = false;
     this.snackbarService.openSnackBarAsText(
       this.serviceItemId
@@ -178,7 +205,11 @@ export class CreateServiceItemComponent implements OnInit {
       { panelClass: 'success' }
     );
 
-    this.routesConfigService.goBack();
+    if (res) {
+      this.onCloseSidebar.emit(res);
+    } else {
+      this.routesConfigService.goBack();
+    }
   };
 
   handleError = (error) => {

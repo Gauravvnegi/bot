@@ -10,7 +10,12 @@ import { CategoryDatatableComponent } from './components/category-datatable/cate
 import { CreateCategoryComponent } from './components/create-category/create-category.component';
 import { CreateServiceItemComponent } from './components/create-service-item/create-service-item.component';
 @NgModule({
-  declarations: [...AdminServiceItemRoutingModule.components, CategoryDatatableComponent, CreateCategoryComponent, CreateServiceItemComponent],
+  declarations: [
+    ...AdminServiceItemRoutingModule.components,
+    CategoryDatatableComponent,
+    CreateCategoryComponent,
+    CreateServiceItemComponent,
+  ],
   imports: [
     CommonModule,
     RouterModule,
@@ -19,5 +24,6 @@ import { CreateServiceItemComponent } from './components/create-service-item/cre
     AdminSharedModule,
   ],
   providers: [ServiceItemService],
+  exports: [CreateServiceItemComponent],
 })
 export class AdminServiceItemModule {}

@@ -5,7 +5,9 @@ import { Observable } from 'rxjs';
 import { ServiceItemListResponse } from '../types/service-item-datatable.type';
 import { CategoryListResponse } from '../types/service-items-category-datable.type';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class ServiceItemService extends ApiService {
   createServiceItem(entityId: string, data): Observable<any> {
     return this.post(`/api/v1/entity/${entityId}/cms-service`, data);

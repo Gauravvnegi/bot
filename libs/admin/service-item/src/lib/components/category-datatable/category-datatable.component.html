@@ -130,10 +130,11 @@
     [isLoading]="loading"
     [content]="{
       description:
-        'No services found. Tap the +Create Services to create & manage the services offered by your hotel',
-      actionName: '+Create Service',
+        'No Category found. Tap the +Create Category to create & manage category',
+      actionName: '+Create Category',
       imageSrc: 'assets/images/empty-table-service.png'
     }"
+    [link]="serviceItemRoutes.createCategory.route"
   >
     <ng-container [ngTemplateOutlet]="tabFilter"> </ng-container>
   </hospitality-bot-empty-table>

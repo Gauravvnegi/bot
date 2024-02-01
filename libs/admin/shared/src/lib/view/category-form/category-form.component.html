@@ -25,7 +25,7 @@
     ></hospitality-bot-custom-file-upload>
     <hospitality-bot-button
       class="create-btn"
-      label="Create"
+      [label]="categoryId ? 'Update' : 'Create'"
       (onClick)="create()"
     ></hospitality-bot-button>
   </div>

@@ -121,11 +121,11 @@
                   {{ item.name }}
                 </div>
               </div>
-            </div>
-            <div class="total-member">
-              <ng-container *ngIf="rowData.totalUsers > 3">
-                + {{ rowData.totalUsers - 3 }}
-              </ng-container>
+              <div class="total-member">
+                <ng-container *ngIf="rowData.totalUsers > 3">
+                  +{{ rowData.totalUsers - 3 }}
+                </ng-container>
+              </div>
             </div>
           </div>
         </div>

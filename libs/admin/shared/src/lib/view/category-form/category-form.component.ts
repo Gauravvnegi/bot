@@ -12,6 +12,7 @@ export class CategoryFormComponent implements OnInit {
   useForm: FormGroup = new FormGroup({});
 
   @Input() entityId: string;
+  @Input() categoryId: string;
   @Output() onSave = new EventEmitter<CategoryFormValue>();
   @Input() set formData(value: FromData) {
     if (value) {

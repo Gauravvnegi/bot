@@ -19,7 +19,6 @@ import { calculateJourneyTime } from '../constants/reservation';
 @Injectable()
 export class ReservationFormService {
   data: JourneyData;
-  entityId: string;
 
   constructor(
     private dialogService: DialogService,
@@ -27,21 +26,21 @@ export class ReservationFormService {
     private reservationService: ReservationService,
     private globalFilterService: GlobalFilterService
   ) {
-    this.entityId = this.globalFilterService.entityId;
   }
 
   manualCheckin(
     checkinDate: number,
     reservationId: string,
     callback?: (data?: JourneyData) => void,
-    roomType?: IGRoomType
+    entityId?: string,
+    roomType?: IGRoomType,
   ) {
     this.data = {
       reservationId: reservationId,
       roomType: roomType,
     };
     this.reservationService
-      .getJourneyDetails(this.entityId, JourneyTypes.EARLYCHECKIN)
+      .getJourneyDetails(entityId, JourneyTypes.EARLYCHECKIN)
       .subscribe((res: CalendarJourneyResponse) => {
         if (res) {
           const { currentTime, defaultTime } = calculateJourneyTime(
@@ -49,9 +48,8 @@ export class ReservationFormService {
           );
           const todayEpoch = new Date().setHours(0, 0, 0, 0);
           const checkinEpoch = new Date(checkinDate).setHours(0, 0, 0, 0);
-
           if (currentTime < defaultTime && checkinEpoch === todayEpoch) {
-            this.openModalComponent(JourneyTypes.EARLYCHECKIN, callback);
+            this.openModalComponent(JourneyTypes.EARLYCHECKIN, callback, reservationId);
           } else {
             this.openJourneyDialog(
               {
@@ -72,14 +70,15 @@ export class ReservationFormService {
   manualCheckout(
     reservationId: string,
     callback?: (data?: JourneyData) => void,
-    roomType?: IGRoomType
+    entityId?: string,
+    roomType?: IGRoomType,
   ) {
     this.data = {
       reservationId: reservationId,
       roomType: roomType,
     };
     this.reservationService
-      .getJourneyDetails(this.entityId, JourneyTypes.LATECHECKOUT)
+      .getJourneyDetails(entityId, JourneyTypes.LATECHECKOUT)
       .subscribe((res: CalendarJourneyResponse) => {
         if (res) {
           this.openJourneyDialog(

@@ -671,7 +671,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
   manualCheckout(invoice?: Record<'isSendInvoice', any>) {
     this.formService.manualCheckout(this.bookingId, () => {
       this.details.currentJourneyDetails.status = 'COMPLETED';
-    });
+    }, this.entityId);
   }
 
   manualCheckin() {
@@ -680,7 +680,8 @@ export class DetailsComponent implements OnInit, OnDestroy {
       this.bookingId,
       () => {
         this.details.currentJourneyDetails.status = 'COMPLETED';
-      }
+      },
+      this.entityId
     );
   }
 

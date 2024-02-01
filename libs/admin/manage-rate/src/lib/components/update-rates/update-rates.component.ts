@@ -1446,7 +1446,7 @@ export class UpdateRatesComponent implements OnInit {
 
   getPaxCount(ratePlan: FormGroup): number {
     const pax = ratePlan.get('pax') as FormArray;
-    return pax?.controls?.length;
+    return pax?.controls?.length + 1;
   }
 
   ngOnDestroy(): void {

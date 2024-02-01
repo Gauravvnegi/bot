@@ -168,7 +168,7 @@ export class UpdateRatesComponent implements OnInit {
         .getConfigType({ 'entity-id': this.entityId })
         .subscribe(
           (res) => {
-            this.configType = res.type;
+            this.configType = res?.type;
             this.loading = false;
             this.initForm();
           },
@@ -623,13 +623,15 @@ export class UpdateRatesComponent implements OnInit {
                 //   'Non Base Room Type && BaseRatePlan Row====>>',
                 //   !isBaseRatePlanRow
                 // );
-
+                const { variablePrice } = controlG.controls;
                 const ratePlans = control as FormArray;
                 ratePlans.controls.forEach((ratePlan: FormGroup) => {
                   this.mapPaxPrice(ratePlan, dpArray, {
                     dayWise: dayIndex,
                     isLinked: linkedValue,
                     res: res,
+                    extraFoodPrice: +variablePrice.value,
+                    onlyNonBase: true,
                   });
                 });
               }
@@ -685,11 +687,18 @@ export class UpdateRatesComponent implements OnInit {
         const rates = ratePlanControl.get('rates') as FormArray;
 
         // mapping data in which dynamic pricing off
-        const newPriceList = rates.controls.map((rate, rateIndex) => ({
-          value: dynamicControl.at(rateIndex).get('value').value
-            ? rate.get('value').value
-            : price,
-        }));
+        let newPriceList;
+        if (this.hasDynamicPricing) {
+          newPriceList = rates.controls.map((rate, rateIndex) => ({
+            value: dynamicControl.at(rateIndex).get('value').value
+              ? rate.get('value').value
+              : price,
+          }));
+        } else {
+          newPriceList = rates.controls.map((rate, rateIndex) => ({
+            value: price,
+          }));
+        }
 
         if (linkedValue) {
           rates.patchValue(newPriceList, {
@@ -699,13 +708,22 @@ export class UpdateRatesComponent implements OnInit {
           rates.at(dayIndex).patchValue({ value: price }, { emitEvent: false });
         }
 
-        if (isMapInAllRoom) {
-          this.mapAllRoomPrice({
-            isLinked: linkedValue,
-            dayWise: dayIndex,
-            res: res,
-          });
-        }
+        //NO NEED Remove.....
+        // if (isMapInAllRoom) {
+        //   this.mapAllRoomPrice({
+        //     isLinked: linkedValue,
+        //     dayWise: dayIndex,
+        //     res: res,
+        //   });
+        // }
+      }
+
+      if (isMapInAllRoom) {
+        this.mapAllRoomPrice({
+          isLinked: linkedValue,
+          dayWise: dayIndex,
+          res: res,
+        });
       }
     });
   }
@@ -808,7 +826,11 @@ export class UpdateRatesComponent implements OnInit {
       }
 
       //Extra food price add in price
-      if (mappingInfo?.extraFoodPrice) {
+      if (
+        mappingInfo?.onlyNonBase
+          ? !isBaseRP && mappingInfo?.extraFoodPrice
+          : mappingInfo?.extraFoodPrice
+      ) {
         price = +price + mappingInfo.extraFoodPrice * (paxInd + 1);
       }
 
@@ -1424,7 +1446,7 @@ export class UpdateRatesComponent implements OnInit {
 
   getPaxCount(ratePlan: FormGroup): number {
     const pax = ratePlan.get('pax') as FormArray;
-    return pax?.controls?.length;
+    return pax?.controls?.length + 1;
   }
 
   ngOnDestroy(): void {
@@ -1437,6 +1459,7 @@ type RoomMapProps = {
   dayWise: number;
   res: { value: string };
   extraFoodPrice?: number;
+  onlyNonBase?: boolean;
 };
 
 export interface UpdateRateFormObj {

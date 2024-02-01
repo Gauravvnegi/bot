@@ -94,7 +94,7 @@ export type GuestComplaintReportData = {
   jobDuration: number;
 };
 
-export type GuestEscalationComplaintReportResponse = {
+export type GuestComplaintReportResponse = {
   id: string;
   rooms: Room[];
   remarks: string;
@@ -124,7 +124,25 @@ export type GuestEscalationComplaintReportResponse = {
   sla: number;
 };
 
-export type GuestComplaintReportResponse = GuestEscalationComplaintReportResponse & {};
+export type GuestEscalationComplaintReportResponse = {
+  id: string;
+  type: string;
+  dateTime: number;
+  assignedTo: string;
+  description: string;
+  level: number;
+  ccEmails: string;
+  reservationJobId: string;
+  subject: string;
+  fromEmail: string;
+  toEmails: string;
+  entityId: string;
+  guestName: string;
+  itemName: string;
+  jobDuration: number;
+  sla: number;
+  status: string;
+};
 
 interface ContactDetails {
   contactNumber: string;

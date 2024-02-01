@@ -9,10 +9,15 @@ import { CategoryFormValue } from '../../types/form.type';
   styleUrls: ['./category-form.component.scss'],
 })
 export class CategoryFormComponent implements OnInit {
-  useForm: FormGroup;
+  useForm: FormGroup = new FormGroup({});
 
   @Input() entityId: string;
   @Output() onSave = new EventEmitter<CategoryFormValue>();
+  @Input() set formData(value: FromData) {
+    if (value) {
+      this.useForm.patchValue(value);
+    }
+  }
 
   constructor(
     private fb: FormBuilder,
@@ -47,3 +52,10 @@ export class CategoryFormComponent implements OnInit {
     this.onSave.emit(this.useForm.getRawValue());
   }
 }
+
+type FromData = {
+  name: string;
+  active: boolean;
+  imageUrl: string;
+  description: string;
+};

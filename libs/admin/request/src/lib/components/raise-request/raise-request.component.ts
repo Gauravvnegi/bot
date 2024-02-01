@@ -1,4 +1,5 @@
 import {
+  Compiler,
   Component,
   ComponentFactoryResolver,
   EventEmitter,
@@ -10,17 +11,17 @@ import {
   ViewContainerRef,
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Option, manageMaskZIndex } from '@hospitality-bot/admin/shared';
+import { DateService } from '@hospitality-bot/shared/utils';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
+import { AddGuestComponent } from 'libs/admin/guests/src/lib/components';
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
 import { SnackBarService } from 'libs/shared/material/src';
-import { DateService } from '@hospitality-bot/shared/utils';
 import { Subscription } from 'rxjs';
-import { request } from '../../constants/request';
 import { debounceTime } from 'rxjs/operators';
+import { request } from '../../constants/request';
 import { RequestService } from '../../services/request.service';
-import { Option, manageMaskZIndex } from '@hospitality-bot/admin/shared';
-import { AddItemComponent } from '../add-item/add-item.component';
-import { AddGuestComponent } from 'libs/admin/guests/src/lib/components';
+import { CreateServiceItemComponent } from 'libs/admin/service-item/src/lib/components/create-service-item/create-service-item.component';
 
 @Component({
   selector: 'hospitality-bot-raise-request',
@@ -50,6 +51,7 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
   @ViewChild('sidebarSlide', { read: ViewContainerRef })
   sidebarSlide: ViewContainerRef;
   selectedGuest;
+  loadingServiceItem: boolean = false;
 
   constructor(
     private fb: FormBuilder,
@@ -57,6 +59,7 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
     private snackbarService: SnackBarService,
     private _requestService: RequestService,
     private adminUtilityService: AdminUtilityService,
+    private compiler: Compiler,
     private resolver: ComponentFactoryResolver
   ) {}
 
@@ -107,30 +110,39 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
       guestId: [''],
     });
   }
-
   /**
    * @function initItemList To init Item List.
    */
   initItemList(): void {
+    this.loadingServiceItem = true;
     const config = {
       queryObj: this.adminUtilityService.makeQueryParams([
-        { entityType: request.cmsServices },
+        {
+          status: true,
+          limit: '0',
+          offset: '0',
+        },
       ]),
     };
     this.$subscription.add(
-      this._requestService
-        .getCMSServices(this.entityId, config)
-        .subscribe((response) => {
+      this._requestService.getCMSServices(this.entityId, config).subscribe(
+        (response) => {
           this.requestData = response;
-          this.items = response.cms_services
+          this.items = response.records
             .sort((a, b) => a.itemName.trim().localeCompare(b.itemName.trim()))
             .map((item) => ({
               label: item.itemName,
               value: item.itemCode,
               itemId: item.id,
-              duration: item.duration,
             }));
-        })
+        },
+        ({ error }) => {
+          this.loadingServiceItem = false;
+        },
+        () => {
+          this.loadingServiceItem = false;
+        }
+      )
     );
   }
 
@@ -273,32 +285,44 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
   }
 
   create() {
-    //to open add new item pop up
-    if (this.isSidebar) {
+    const lazyModulePromise = import(
+      'libs/admin/service-item/src/lib/admin-service-item.module'
+    )
+      .then((module) => {
+        return this.compiler.compileModuleAsync(module.AdminServiceItemModule);
+      })
+      .catch((error) => {
+        console.error('Error loading the lazy module:', error);
+      });
+
+    lazyModulePromise.then(() => {
       this.sidebarVisible = true;
-      const factory = this.resolver.resolveComponentFactory(AddItemComponent);
+      const factory = this.resolver.resolveComponentFactory(
+        CreateServiceItemComponent
+      );
       this.sidebarSlide.clear();
       const componentRef = this.sidebarSlide.createComponent(factory);
       componentRef.instance.isSidebar = true;
+
       this.$subscription.add(
         componentRef.instance.onCloseSidebar.subscribe((res) => {
-          if (res) {
-            this.requestFG.patchValue(
-              {
-                itemCode: res.itemCode,
-                itemId: res?.id,
-                itemName: res?.itemName,
-                assigneeId: '',
-              },
-              { emitEvent: false }
-            );
-            this.getItemDetails(res?.id);
-          }
+          this.initItemList();
+          this.requestFG.patchValue(
+            {
+              itemCode: res.itemCode,
+              itemId: res?.id,
+              itemName: res?.itemName,
+              assigneeId: '',
+            },
+            { emitEvent: false }
+          );
+          this.getItemDetails(res?.id);
           this.sidebarVisible = false;
         })
       );
+
       manageMaskZIndex();
-    }
+    });
   }
 
   getConfig(type = 'get') {
@@ -312,7 +336,7 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
     };
     return queries;
   }
-
+  z;
   guestChange(event) {
     this.selectedGuest = {
       label: `${event.firstName} ${event.lastName}`,

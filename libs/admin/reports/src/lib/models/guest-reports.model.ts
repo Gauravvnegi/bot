@@ -183,20 +183,17 @@ export class GuestEscalationComplaintReport
       value &&
       value.map((item) => {
         return {
-          guestId: item?.guestDetails?.primaryGuest?.id,
-          guestName: getFullName(
-            item?.guestDetails?.primaryGuest?.firstName,
-            item?.guestDetails?.primaryGuest?.lastName
-          ),
+          guestId: item?.id,
+          guestName: item?.guestName,
           serviceItem: item?.itemName,
-          complaint: item?.remarks,
+          complaint: item?.description,
           status: item?.status,
-          actionTakenBy: item?.assigneeName,
-          department: convertToNormalCase(item?.departmentName),
+          actionTakenBy: item?.assignedTo,
+          department: undefined,
           customerSentiment: undefined,
           sla: item?.sla,
           jobDuration: item?.jobDuration,
-          escalationLevel: item?.sentCount,
+          escalationLevel: item?.level,
           frequency: undefined,
         };
       });
@@ -227,7 +224,7 @@ export class GuestComplaintReport
           department: convertToNormalCase(item?.departmentName),
           customerSentiment: undefined,
           sla: item?.sla,
-          jobDuration: undefined,
+          jobDuration: item?.jobDuration,
         };
       });
     return this;

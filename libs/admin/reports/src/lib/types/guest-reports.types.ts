@@ -117,7 +117,7 @@ export type GuestEscalationComplaintReportResponse = {
   timeLeft: number;
   assigneeName: string;
   assigneeId: string;
-  departmentEscalationTime: number;
+  departmentEscalationTime: number; 
   scheduledEscalation: number;
   sentCount: number;
   departmentName: string;

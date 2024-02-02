@@ -76,7 +76,7 @@ export class CreateServiceItemComponent implements OnInit {
       categoryId: ['', [Validators.required]],
       sla: ['', [Validators.required]],
       users: ['', [Validators.required]],
-      remarks: ['', Validators.required],
+      remarks: [''],
     });
 
     if (this.serviceItemId) {
@@ -205,7 +205,7 @@ export class CreateServiceItemComponent implements OnInit {
       { panelClass: 'success' }
     );
 
-    if (res) {
+    if (this.isSidebar) {
       this.onCloseSidebar.emit(res);
     } else {
       this.routesConfigService.goBack();

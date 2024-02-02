@@ -212,7 +212,6 @@ export class GuestComplaintReport
       value &&
       value.map((item) => {
         return {
-          guestId: item?.guestDetails?.primaryGuest?.id,
           guestName: getFullName(
             item?.guestDetails?.primaryGuest?.firstName,
             item?.guestDetails?.primaryGuest?.lastName

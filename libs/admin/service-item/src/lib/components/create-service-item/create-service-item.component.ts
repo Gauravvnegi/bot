@@ -76,7 +76,7 @@ export class CreateServiceItemComponent implements OnInit {
       categoryId: ['', [Validators.required]],
       sla: ['', [Validators.required]],
       users: ['', [Validators.required]],
-      remarks: ['', Validators.required],
+      remarks: [''],
     });
 
     if (this.serviceItemId) {

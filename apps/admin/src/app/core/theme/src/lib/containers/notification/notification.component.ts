@@ -217,7 +217,7 @@ export class NotificationComponent implements OnInit, OnDestroy {
     });
     dialogRef.onClose.subscribe((response) => {
       // if (response.close) dialogRef.close();
-      if (response.notificationClose) this.closePopup();
+      if (response?.notificationClose) this.closePopup();
     });
   }
 

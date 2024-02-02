@@ -462,10 +462,14 @@ export class UpdateRatesComponent implements OnInit {
       'pax',
       this.fb.array(
         Array.from({ length: ratePlan.maxOccupancy - 1 }, (_, ind) => {
+          // Be careful during calculation,
+          // Previous issue was, double=0,triple=0 then result was wrong
+          const paxNumber = ind + 2 - 3;
+          const currPaxMPrice =
+            (paxNumber < 0 ? 0 : paxNumber) * ratePlan.pricingDetails.paxAdult;
           const paxPrice = masterPaxPrice[ind]
             ? masterPaxPrice[ind]
-            : masterPaxPrice[1] +
-              (ind + 2 - 3) * ratePlan.pricingDetails.paxAdult;
+            : masterPaxPrice[1] + currPaxMPrice;
 
           const paxFG = this.fb.group({
             basePrice: [ratePlan.basePrice],

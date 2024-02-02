@@ -347,13 +347,13 @@
               variant="outlined"
             ></hospitality-bot-button>
             <hospitality-bot-button
-              *ngIf="details?.pmsStatus && details?.pmsStatus === 'CHECKEDOUT'"
+              *ngIf="!details?.pmsBooking && details?.pmsStatus === 'CHECKEDOUT'"
               label="View Booking"
               variant="outlined"
               (click)="editBooking()"
             ></hospitality-bot-button>
             <hospitality-bot-button
-              *ngIf="details?.pmsStatus && details?.pmsStatus !== 'CHECKEDOUT'"
+              *ngIf="!details?.pmsBooking && details?.pmsStatus !== 'CHECKEDOUT'"
               label="Edit Booking"
               variant="outlined"
               (click)="editBooking()"
@@ -505,7 +505,7 @@
                     variant="outlined"
                   ></hospitality-bot-button> -->
                   <hospitality-bot-button
-                    *ngIf="checkForGenerateFeedbackSubscribed()"
+                    *ngIf="checkForGenerateFeedbackSubscribed(false)"
                     label="Generate Feedback"
                     (click)="generateFeedback()"
                     variant="outlined"

@@ -253,7 +253,6 @@ export class SubscriptionPlanService extends ApiService {
   } {
     const data = {
       isPermissionToEditReservation:
-        this.checkModuleSubscription(ModuleNames.ADD_RESERVATION) &&
         this.hasManageUserPermission(PermissionModuleNames.RESERVATION) &&
         ((this.checkProductSubscription(ModuleNames.PREDICTO_PMS) &&
           this.hasUserPermissionForProduct(ProductNames.PREDICTO_PMS)) ||

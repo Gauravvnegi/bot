@@ -40,6 +40,9 @@ export class QuickSelectComponent extends FormComponent implements OnInit {
   qsLoading = false;
   resetApiData = false;
 
+  /** For handling data after api call */
+  emitResponse = false;
+
   /**
    * Pagination Variables
    */
@@ -278,12 +281,13 @@ export class QuickSelectComponent extends FormComponent implements OnInit {
                 ]);
 
             // To be improved later.
-            // this.controlContainer.control
-            //   .get(this.controlName)
-            //   .setValue(
-            //     this.controlContainer.control.get(this.controlName)?.value,
-            //     { emitEvent: true }
-            //   );
+            this.emitResponse &&
+              this.controlContainer.control
+                .get(this.controlName)
+                .setValue(
+                  this.controlContainer.control.get(this.controlName)?.value,
+                  { emitEvent: true }
+                );
             this.noMoreData = data.length < this.limit;
           },
           (error) => {},
@@ -495,6 +499,7 @@ export type QSProps = FormProps & {
   selectedOption: Option;
   showChips: boolean;
   createType?: string;
+  emitResponse?: boolean;
 };
 
 /**

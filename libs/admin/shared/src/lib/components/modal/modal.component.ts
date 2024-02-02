@@ -53,6 +53,7 @@ export class ModalComponent {
       this.close();
     },
     variant: 'contained',
+    type: 'SUCCESS',
   };
 
   @Input() actions: ModalAction[];

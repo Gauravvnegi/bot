@@ -20,6 +20,7 @@ import {
   EntitySubType,
   ModuleNames,
   Option,
+  manageMaskZIndex,
 } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import {
@@ -519,6 +520,7 @@ export class QuickReservationFormComponent implements OnInit {
       this.sidebarSlide.clear();
       const componentRef = this.sidebarSlide.createComponent(factory);
       componentRef.instance.isSidebar = true;
+      manageMaskZIndex();
       componentRef.instance.onCloseSidebar.subscribe((res) => {
         this.sidebarVisible = false;
         if (typeof res !== 'boolean') {

@@ -278,12 +278,12 @@ export class QuickSelectComponent extends FormComponent implements OnInit {
                 ]);
 
             // To be improved later.
-            this.controlContainer.control
-              .get(this.controlName)
-              .setValue(
-                this.controlContainer.control.get(this.controlName)?.value,
-                { emitEvent: true }
-              );
+            // this.controlContainer.control
+            //   .get(this.controlName)
+            //   .setValue(
+            //     this.controlContainer.control.get(this.controlName)?.value,
+            //     { emitEvent: true }
+            //   );
             this.noMoreData = data.length < this.limit;
           },
           (error) => {},

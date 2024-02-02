@@ -59,8 +59,11 @@ export class UpdateInventory {
         occupancy: number;
       }
     >();
+    // debugger;
     input.map((item) => {
-      const selectedAvailability = pick(item.inventoryDataMap, selectedRooms);
+      let selectedAvailability = !selectedRooms
+        ? item.inventoryDataMap
+        : pick(item.inventoryDataMap, selectedRooms);
       const totalSelectedRooms = Object.keys(selectedAvailability).length;
       perDayRoomAvailability[item.startDate] = {
         roomAvailable: reduce(

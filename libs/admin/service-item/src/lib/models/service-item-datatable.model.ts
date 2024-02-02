@@ -66,6 +66,8 @@ export class ServiceItem {
   }
 
   formatDuration(minutes: number): string {
+    if (!minutes) return undefined;
+
     const hours = Math.floor(minutes / 60);
     const remainingMinutes = minutes % 60;
 

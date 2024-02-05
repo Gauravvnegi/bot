@@ -39,6 +39,7 @@ export class NotificationDetailComponent {
 
     switch (this.data.notificationType.toUpperCase()) {
       case 'WHATSAPP':
+      case 'BOT':
         this.notificationService.$whatsappNotification.next(
           data['phoneNumber']
         );
@@ -46,6 +47,7 @@ export class NotificationDetailComponent {
           subModuleName: ModuleNames.LIVE_MESSAGING,
         });
         break;
+
 
       case 'IN-HOUSE REQUEST':
         // requestId is not coming from backend

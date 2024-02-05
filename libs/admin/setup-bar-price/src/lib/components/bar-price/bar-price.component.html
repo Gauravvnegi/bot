@@ -172,6 +172,7 @@
     </ng-container>
   </ng-container>
 
+  <!-- This component is deleted, please add existing component -->
   <ng-template #preview>
     <hospitality-bot-bar-price-preview
       [useForm]="useForm"
@@ -198,14 +199,14 @@
     class="full-width"
     [loading]="loading"
     [config]="{
-      preHide: !isPreview,
+      preHide: true,
       preLabel: 'Cancel',
-      postLabel: isPreview ? 'Save' : 'Preview & Save',
+      postLabel: true ? 'Save' : 'Preview & Save',
       postDisable:
         (!isRoomsEmpty && loading) || loadingError || !allRoomTypes?.length
     }"
-    (onPostAction)="isPreview ? saveData() : handleSave()"
-    (onPreAction)="isPreview && (isPreview = false)"
+    (onPostAction)="false ? saveData() : handleSave()"
+    (onPreAction)="false && (isPreview = false)"
     #fa
   >
   </hospitality-bot-form-action>

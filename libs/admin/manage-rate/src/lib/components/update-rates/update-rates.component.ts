@@ -462,10 +462,12 @@ export class UpdateRatesComponent implements OnInit {
       'pax',
       this.fb.array(
         Array.from({ length: ratePlan.maxOccupancy - 1 }, (_, ind) => {
-          const paxPrice = masterPaxPrice[ind]
-            ? masterPaxPrice[ind]
-            : masterPaxPrice[1] +
-              (ind + 2 - 3) * ratePlan.pricingDetails.paxAdult;
+          // New price will be calculated when, (PaxN = (BP+Triple) + [(n-3)*adult]) for all n>=4
+          const n = ind + 2;
+          const newPrice =
+            masterPaxPrice[1] + (n - 3) * ratePlan.pricingDetails.paxAdult;
+
+          const paxPrice = ind > 1 ? newPrice : masterPaxPrice[ind];
 
           const paxFG = this.fb.group({
             basePrice: [ratePlan.basePrice],
@@ -621,16 +623,15 @@ export class UpdateRatesComponent implements OnInit {
               if (!isBaseRoomType && isBaseRatePlanRow) {
                 // console.log(
                 //   'Non Base Room Type && BaseRatePlan Row====>>',
-                //   !isBaseRatePlanRow
+                //   !isBaseRatePlanRow,
+                //   controlG.controls['variablePrice'].value
                 // );
-                const { variablePrice } = controlG.controls;
                 const ratePlans = control as FormArray;
                 ratePlans.controls.forEach((ratePlan: FormGroup) => {
                   this.mapPaxPrice(ratePlan, dpArray, {
                     dayWise: dayIndex,
                     isLinked: linkedValue,
                     res: res,
-                    extraFoodPrice: +variablePrice.value,
                     onlyNonBase: true,
                   });
                 });
@@ -827,11 +828,18 @@ export class UpdateRatesComponent implements OnInit {
 
       //Extra food price add in price
       if (
-        mappingInfo?.onlyNonBase
-          ? !isBaseRP && mappingInfo?.extraFoodPrice
-          : mappingInfo?.extraFoodPrice
+        !isBaseRP &&
+        mappingInfo?.extraFoodPrice &&
+        !mappingInfo?.onlyNonBase
       ) {
         price = +price + mappingInfo.extraFoodPrice * (paxInd + 1);
+      }
+
+      //Extra price for @Case 3
+      if (!isBaseRP && mappingInfo?.onlyNonBase) {
+        console.log('production...', ratePlan);
+        const variablePrice = ratePlan.get('variablePrice')?.value;
+        price = +price + +variablePrice * (paxInd + 1);
       }
 
       // Check linked, then modify all data

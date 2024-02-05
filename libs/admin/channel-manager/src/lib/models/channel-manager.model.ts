@@ -59,7 +59,6 @@ export class UpdateInventory {
         occupancy: number;
       }
     >();
-    // debugger;
     input.map((item) => {
       let selectedAvailability = !selectedRooms
         ? item.inventoryDataMap

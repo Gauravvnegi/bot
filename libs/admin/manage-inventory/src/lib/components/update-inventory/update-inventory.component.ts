@@ -306,7 +306,6 @@ export class UpdateInventoryComponent implements OnInit {
           (res) => {
             const data = new UpdateInventory().deserialize(res.roomTypes);
             this.inventoryResponse = res.roomTypes;
-            // debugger;
             this.perDayRoomAvailability = UpdateInventory.buildAvailability(
               this.inventoryResponse,
               this.useFormControl.roomType.value

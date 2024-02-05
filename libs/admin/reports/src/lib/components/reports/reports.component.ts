@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {
   GlobalFilterService,
   RoutesConfigService,
+  SubscriptionPlanService,
 } from '@hospitality-bot/admin/core/theme';
 import { ReportsService } from '../../services/reports.service';
 import {
@@ -42,7 +43,8 @@ export class ReportsComponent implements OnInit {
     private reportsService: ReportsService,
     private routesConfigService: RoutesConfigService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private subscriptionPlanService: SubscriptionPlanService
   ) {}
 
   ngOnInit(): void {
@@ -50,17 +52,10 @@ export class ReportsComponent implements OnInit {
   }
 
   getReportConfig() {
-    this.isLoading = true;
-    this.reportsService.getReportConfig().subscribe(
-      (res) => {
-        this.reportConfig = new ReportConfig().deserialize(res).reportConfig;
-        this.initConfiguration();
-        this.isLoading = false;
-      },
-      ({ error }) => {
-        this.isLoading = false;
-      }
-    );
+    this.reportConfig = new ReportConfig().deserialize(
+      this.subscriptionPlanService.getReportConfig()
+    ).reportConfig;
+    this.initConfiguration();
   }
 
   initConfiguration() {

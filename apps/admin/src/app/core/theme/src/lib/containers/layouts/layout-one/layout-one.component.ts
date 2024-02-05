@@ -780,9 +780,10 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
   get isAuditSubscribed() {
     return (
       this.subscriptionPlanService.checkModuleSubscription(ModuleNames.AUDIT) &&
-      this.subscriptionPlanService.hasManageUserPermission(
-        PermissionModuleNames.AUDIT
-      )
+      this.subscriptionPlanService.hasViewUserPermission({
+        type: 'module',
+        name: ModuleNames.AUDIT,
+      })
     );
   }
 

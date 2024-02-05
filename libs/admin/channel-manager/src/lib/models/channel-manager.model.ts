@@ -16,7 +16,7 @@ import {
 } from '../types/response.type';
 import { RATE_CONFIG_TYPE } from 'libs/admin/manage-rate/src/lib/constants/rates.const';
 import { RoomTypes, Variant } from '../types/bulk-update.types';
-
+import { RoomTypes as InventoryRoomTypes } from 'libs/admin/channel-manager/src/lib/models/bulk-update.models';
 export class UpdateInventory {
   inventoryRoomDetails = new Map<
     string,
@@ -50,7 +50,8 @@ export class UpdateInventory {
 
   static buildAvailability(
     input: UpdateInventoryResponse[],
-    selectedRooms: string[]
+    selectedRooms: string[],
+    roomTypes: InventoryRoomTypes[]
   ) {
     let perDayRoomAvailability = new Map<
       number,
@@ -59,23 +60,25 @@ export class UpdateInventory {
         occupancy: number;
       }
     >();
+    const totalRoomCount = roomTypes.reduce(
+      (sum, curr) => sum + curr?.roomCount,
+      0
+    );
+
     input.map((item) => {
       let selectedAvailability = !selectedRooms
         ? item.inventoryDataMap
         : pick(item.inventoryDataMap, selectedRooms);
-      const totalSelectedRooms = Object.keys(selectedAvailability).length;
+      const totalAvailable = reduce(
+        selectedAvailability,
+        (sum, curr) => sum + curr['available'],
+        0
+      );
       perDayRoomAvailability[item.startDate] = {
-        roomAvailable: reduce(
-          selectedAvailability,
-          (sum, curr) => sum + curr['available'],
-          0
-        ),
+        roomAvailable: totalAvailable,
         occupancy: (
-          reduce(
-            selectedAvailability,
-            (sum, curr) => sum + curr['occupancy'],
-            0
-          ) / totalSelectedRooms
+          ((totalRoomCount - totalAvailable) / totalRoomCount) *
+          100
         ).toFixed(2),
       };
     });
@@ -102,7 +105,9 @@ export class UpdateInventory {
           };
 
           rooms.rooms =
-            rooms.rooms.filter((filterItem) => filterItem.available) ?? [];
+            rooms.rooms.filter(
+              (filterItem) => typeof filterItem.available == 'number'
+            ) ?? [];
 
           currentDate.setDate(currentDate.getDate() + 1);
           return rooms.rooms.length > 0 && rooms;
@@ -357,7 +362,7 @@ export class UpdateRates {
 
           // filter rates plan who have not any input on this particular day
           dwData.rates = dwData.rates.filter((item) =>
-            type === 'submit-form' ? item.rate : true
+            type === 'submit-form' ? typeof item.rate == 'number' : true
           );
           selectedDate.setDate(selectedDate.getDate() + 1);
           return dwData as UpdateRatesType;

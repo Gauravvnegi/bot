@@ -32,7 +32,11 @@ export class RefreshTokenInterceptor implements HttpInterceptor {
   ): Observable<HttpEvent<any>> {
     return next.handle(req).pipe(
       catchError((err) => {
-        if (req.url.includes('refresh') || req.url.includes('login')) {
+        if (
+          req.url.includes('refresh') ||
+          req.url.includes('login') ||
+          req.url.includes('logout')
+        ) {
           console.log('Error occured in either login or refresh api');
           if (req.url.includes('refresh')) {
             //logout and redirect to login

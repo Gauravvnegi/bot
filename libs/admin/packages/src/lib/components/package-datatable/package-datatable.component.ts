@@ -189,7 +189,6 @@ export class PackageDataTableComponent extends BaseDatatableComponent
             );
           },
           ({ error }) => {
-            this.values = [];
             this.loading = false;
           },
           this.handleFinal

@@ -16,6 +16,7 @@ import {
   convertToTitleCase,
 } from 'libs/admin/shared/src/lib/utils/valueFormatter';
 import {
+  ModuleNames,
   NavRouteOption,
   NavRouteOptions,
   ProductNames,
@@ -23,6 +24,8 @@ import {
 } from '@hospitality-bot/admin/shared';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ProductReportConfig, ReportConfig } from '../../models/report.models';
+import { switchMap } from 'rxjs/operators';
+import { Subscription, of } from 'rxjs';
 @Component({
   selector: 'hospitality-bot-reports',
   templateUrl: './reports.component.html',
@@ -38,6 +41,7 @@ export class ReportsComponent implements OnInit {
   reportConfig: ProductReportConfig;
   selectedProduct: keyof typeof ProductNames;
   isLoading: boolean = false;
+  subscription$ = new Subscription();
 
   constructor(
     private reportsService: ReportsService,
@@ -85,10 +89,25 @@ export class ReportsComponent implements OnInit {
   }
 
   registerListener() {
-    this.reportsService.showMenu.subscribe((res) => {
-      this.showMenu = res;
-      res && manageMaskZIndex(150);
-    });
+    this.subscription$.add(
+      this.reportsService.showMenu
+        .pipe(
+          switchMap((res) => {
+            return of(
+              res &&
+                this.subscriptionPlanService.hasViewUserPermission({
+                  type: 'module',
+                  name: this.routesConfigService.subModuleName,
+                })
+            );
+          })
+        )
+        .subscribe((res) => {
+          console.log(res, 'toggle');
+          this.showMenu = res;
+          res && manageMaskZIndex(150);
+        })
+    );
     if (this.selectedReport) {
       this.selectedReport = this.selectedReport;
       this.navRoutes.pop();
@@ -154,5 +173,8 @@ export class ReportsComponent implements OnInit {
     if (num === 3) {
       this.toggleMenu();
     }
+  }
+  ngOnDestroy(): void {
+    this.subscription$.unsubscribe();
   }
 }

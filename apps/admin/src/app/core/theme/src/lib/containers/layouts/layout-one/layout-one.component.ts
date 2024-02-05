@@ -534,10 +534,12 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
 
     if (isComingSoon) return true;
 
-    return this.subscriptionPlanService.hasViewUserPermission({
+    const ans = this.subscriptionPlanService.hasViewUserPermission({
       type: 'module',
       name: this.routesConfigService.subModuleName,
     });
+
+    return ans;
   }
 
   initBookingOption() {

@@ -140,7 +140,10 @@
       <td>
         <div class="center-align">
           <div class="primary-text">
-            {{ rowData.complaintDue }} /
+            <span [ngClass]="{ 'status-text-reject': !!rowData.complaintDue }"
+              >{{ rowData.complaintDue }}
+            </span>
+            /
             {{ rowData.total }}
           </div>
         </div>

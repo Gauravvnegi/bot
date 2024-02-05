@@ -280,6 +280,7 @@ export class UpdateInventoryComponent implements OnInit {
           this.inventoryResponse,
           this.useFormControl.roomType.value
         );
+        console.log('onChange.....', this.perDayRoomAvailability, res);
         this.roomTypes = this.allRoomTypes.filter((item) =>
           res.includes(item.value)
         );
@@ -309,6 +310,8 @@ export class UpdateInventoryComponent implements OnInit {
               this.inventoryResponse,
               this.useFormControl.roomType.value
             );
+            console.log('onLoad.....,', this.perDayRoomAvailability, res);
+
             this.inventoryRoomDetails = data.inventoryRoomDetails;
             this.setRoomDetails(selectedDate);
             this.loading = false;

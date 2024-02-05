@@ -771,9 +771,11 @@ export class ReservationCalendarViewComponent implements OnInit {
             ref.close();
           },
           variant: 'outlined',
+          type: 'REJECT',
         },
         {
           label: 'Release',
+          type: 'SUCCESS',
           onClick: () => {
             this.roomService
               .updateRoomStatus(this.entityId, {

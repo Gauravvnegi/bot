@@ -27,6 +27,7 @@ export type ModalAction = {
   label: string;
   onClick: () => void;
   variant: ButtonVariant;
+  type?: 'SUCCESS' | 'REJECT';
 };
 
 export type ModalContent = {

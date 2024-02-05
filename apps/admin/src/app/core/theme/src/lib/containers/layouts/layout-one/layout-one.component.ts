@@ -775,6 +775,15 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
     );
   }
 
+  get isAuditSubscribed() {
+    return (
+      this.subscriptionPlanService.checkModuleSubscription(ModuleNames.AUDIT) &&
+      this.subscriptionPlanService.hasManageUserPermission(
+        PermissionModuleNames.AUDIT
+      )
+    );
+  }
+
   get isComplaintTrackerSubscribed() {
     return this.subscriptionPlanService.checkProductSubscription(
       ModuleNames.COMPLAINT_TRACKER

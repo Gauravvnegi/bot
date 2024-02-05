@@ -9,6 +9,7 @@ export enum PermissionModuleNames {
   SITE = 'SITE',
   SEGMENTS = 'SEGMENTS',
   RESERVATION = 'RESERVATION',
+  AUDIT = 'AUDIT',
 }
 
 export enum ProductNames {
@@ -164,6 +165,7 @@ export enum ModuleNames {
   FUND_REPORTS = 'FUND_REPORTS',
 
   PREDICTO_PMS = 'PREDICTO_PMS',
+  AUDIT = 'AUDIT',
 }
 
 export enum Integrations {

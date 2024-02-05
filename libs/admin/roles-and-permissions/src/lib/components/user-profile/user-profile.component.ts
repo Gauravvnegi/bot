@@ -605,7 +605,6 @@ export class UserProfileComponent implements OnInit {
       this._managePermissionService
         .editUserDetails({
           ...userProfileData,
-          status: true,
           id: this._userService.getLoggedInUserId(),
         })
         .subscribe(handleSuccess, handleError);
@@ -624,7 +623,6 @@ export class UserProfileComponent implements OnInit {
       this._managePermissionService
         .updateUserDetailsById({
           ...data,
-          status: true,
           parentId: this._userService.getLoggedInUserId(),
         })
         .subscribe(handleSuccess, handleError);

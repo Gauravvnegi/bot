@@ -17,7 +17,6 @@ export const categoryCols: Cols[] = [
     field: 'status',
     header: 'Status',
     isSearchDisabled: true,
-    isSortDisabled: true,
     width: '20%',
   },
 ];

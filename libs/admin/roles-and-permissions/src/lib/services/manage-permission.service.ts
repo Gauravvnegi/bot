@@ -27,6 +27,7 @@ export class ManagePermissionService extends ApiService {
       lastName: value.lastName,
       phoneNumber: value.phoneNumber,
       profileUrl: value.profileUrl,
+      status: value?.status,
       // hotelAccess: {
       //   brands: [
       //     {
@@ -53,6 +54,7 @@ export class ManagePermissionService extends ApiService {
     );
 
     return {
+      status: value?.status,
       id: value.id,
       email: value.email.trim(),
       firstName: value.firstName,

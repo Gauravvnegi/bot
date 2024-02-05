@@ -72,6 +72,7 @@ export class UserConfig implements IDeserializable {
   profileUrl: string;
   timezone: string;
   reportingTo: string;
+  status: boolean;
 
   deserialize(input: UserResponse) {
     const { permission, products } = new ProductsPermissions().deserialize(
@@ -80,6 +81,7 @@ export class UserConfig implements IDeserializable {
 
     this.id = input.id;
     this.permissionConfigs = permission;
+    this.status = input?.status;
 
     this.firstName = input.firstName;
     this.lastName = input.lastName;

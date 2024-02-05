@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {
   GlobalFilterService,
   RoutesConfigService,
+  SubscriptionPlanService,
 } from '@hospitality-bot/admin/core/theme';
 import { ReportsService } from '../../services/reports.service';
 import {
@@ -15,6 +16,7 @@ import {
   convertToTitleCase,
 } from 'libs/admin/shared/src/lib/utils/valueFormatter';
 import {
+  ModuleNames,
   NavRouteOption,
   NavRouteOptions,
   ProductNames,
@@ -22,6 +24,8 @@ import {
 } from '@hospitality-bot/admin/shared';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ProductReportConfig, ReportConfig } from '../../models/report.models';
+import { switchMap } from 'rxjs/operators';
+import { Subscription, of } from 'rxjs';
 @Component({
   selector: 'hospitality-bot-reports',
   templateUrl: './reports.component.html',
@@ -37,12 +41,14 @@ export class ReportsComponent implements OnInit {
   reportConfig: ProductReportConfig;
   selectedProduct: keyof typeof ProductNames;
   isLoading: boolean = false;
+  subscription$ = new Subscription();
 
   constructor(
     private reportsService: ReportsService,
     private routesConfigService: RoutesConfigService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private subscriptionPlanService: SubscriptionPlanService
   ) {}
 
   ngOnInit(): void {
@@ -50,17 +56,10 @@ export class ReportsComponent implements OnInit {
   }
 
   getReportConfig() {
-    this.isLoading = true;
-    this.reportsService.getReportConfig().subscribe(
-      (res) => {
-        this.reportConfig = new ReportConfig().deserialize(res).reportConfig;
-        this.initConfiguration();
-        this.isLoading = false;
-      },
-      ({ error }) => {
-        this.isLoading = false;
-      }
-    );
+    this.reportConfig = new ReportConfig().deserialize(
+      this.subscriptionPlanService.getReportConfig()
+    ).reportConfig;
+    this.initConfiguration();
   }
 
   initConfiguration() {
@@ -90,10 +89,25 @@ export class ReportsComponent implements OnInit {
   }
 
   registerListener() {
-    this.reportsService.showMenu.subscribe((res) => {
-      this.showMenu = res;
-      res && manageMaskZIndex(150);
-    });
+    this.subscription$.add(
+      this.reportsService.showMenu
+        .pipe(
+          switchMap((res) => {
+            return of(
+              res &&
+                this.subscriptionPlanService.hasViewUserPermission({
+                  type: 'module',
+                  name: this.routesConfigService.subModuleName,
+                })
+            );
+          })
+        )
+        .subscribe((res) => {
+          console.log(res, 'toggle');
+          this.showMenu = res;
+          res && manageMaskZIndex(150);
+        })
+    );
     if (this.selectedReport) {
       this.selectedReport = this.selectedReport;
       this.navRoutes.pop();
@@ -159,5 +173,8 @@ export class ReportsComponent implements OnInit {
     if (num === 3) {
       this.toggleMenu();
     }
+  }
+  ngOnDestroy(): void {
+    this.subscription$.unsubscribe();
   }
 }

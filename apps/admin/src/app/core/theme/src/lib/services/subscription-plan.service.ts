@@ -15,12 +15,14 @@ import {
   UserSubscriptionPermission,
 } from '../data-models/subscription-plan-config.model';
 import { RouteConfigPathService } from './routes-config.service';
+import { ReportConfigResponse } from '../type/report-type';
 
 @Injectable({ providedIn: 'root' })
 export class SubscriptionPlanService extends ApiService {
   subscription$ = new BehaviorSubject({});
   private subscriptions: Subscriptions;
   private productSubscription: ProductSubscription;
+  private reportsConfig: ReportConfigResponse;
   settings: SettingsMenuItem[];
   selectedProduct: ProductNames;
   comingSoonModules: ModuleNames[] = [];
@@ -60,9 +62,24 @@ export class SubscriptionPlanService extends ApiService {
     );
   }
 
+  initReportConfig(): Observable<ReportConfigResponse> {
+    return this.get(
+      `/api/v1/cms/master-configuration?configType=reportConfig&includeObject=reportModules`
+    );
+  }
+
   setSubscription(data) {
     this.subscriptions = new Subscriptions().deserialize(data);
     this.productSubscription = new ProductSubscription().deserialize(data);
+    if (this.checkModuleSubscription(ModuleNames.REPORTS)) {
+      this.initReportConfig().subscribe((res) => {
+        this.reportsConfig = res;
+      });
+    }
+  }
+
+  getReportConfig() {
+    return this.reportsConfig;
   }
 
   setSelectedProduct(productName: ProductNames) {

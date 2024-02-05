@@ -26,7 +26,7 @@ import {
   ReportsMenu,
   RowStyles,
 } from '../../types/reports.types';
-import { takeUntil } from 'rxjs/operators';
+import { distinctUntilChanged, takeUntil, shareReplay } from 'rxjs/operators';
 
 @Component({
   selector: 'hospitality-bot-reports-data-table',
@@ -51,6 +51,8 @@ export class ReportsDataTableComponent extends BaseDatatableComponent {
       value: '',
     },
   ];
+  userOffset: number = 0;
+  noMoreUsers: boolean = false;
 
   selectedReport: ReportsMenu[number];
   $subscription = new Subscription();
@@ -70,17 +72,28 @@ export class ReportsDataTableComponent extends BaseDatatableComponent {
     this.entityId = this.globalFilterService.entityId;
     this.initTime();
     this.initReportFilters();
-    this.getUserList();
-    this.reportsService.$selectedReport.subscribe((report) => {
-      if (report) {
-        this.selectedReport = report;
-        this.cancelRequests$.next();
-        this.loadInitialData();
-      }
-    });
+    this.$subscription.add(
+      this.reportsService.$selectedReport
+        .pipe(distinctUntilChanged(), shareReplay(1))
+        .subscribe(
+          (report) => {
+            if (report) {
+              this.selectedReport = report;
+              this.cancelRequests$.next();
+              this.loadInitialData();
+              if (
+                this.currentFilters?.includes('employeeId') ||
+                this.currentFilters?.includes('cashierId')
+              ) {
+                this.getUserList();
+              }
+            }
+          },
+          ({ error }) => {}
+        )
+    );
   }
-  userOffset: number = 0;
-  noMoreUsers: boolean = false;
+
   loadMoreUsers() {
     this.userOffset = this.userOffset + 10;
     this.getUserList();
@@ -115,7 +128,7 @@ export class ReportsDataTableComponent extends BaseDatatableComponent {
     return {
       entityId: this.globalFilterService.entityId,
       reportName: this.selectedReport.value,
-      ...this.currentFilters.reduce((value, curr) => {
+      ...this.currentFilters?.reduce((value, curr) => {
         if (curr === 'month') {
           const startDate = new Date(filters.month);
           if (startDate instanceof Date) {
@@ -280,5 +293,9 @@ export class ReportsDataTableComponent extends BaseDatatableComponent {
 
   toggleMenu() {
     this.reportsService.toggleMenu();
+  }
+
+  ngOnDestroy(): void {
+    this.$subscription.unsubscribe();
   }
 }

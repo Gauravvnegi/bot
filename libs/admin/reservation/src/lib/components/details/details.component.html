@@ -323,7 +323,9 @@
           </mat-tab>
           <mat-tab
             label="Activities"
-            *ngIf="guestReservationDropdownList.length"
+            *ngIf="
+              hasComplaintViewPermission && guestReservationDropdownList.length
+            "
           >
             <hospitality-bot-requests-table
               *ngIf="isReservationDetailFetched"
@@ -347,13 +349,17 @@
               variant="outlined"
             ></hospitality-bot-button>
             <hospitality-bot-button
-              *ngIf="!details?.pmsBooking && details?.pmsStatus === 'CHECKEDOUT'"
+              *ngIf="
+                !details?.pmsBooking && details?.pmsStatus === 'CHECKEDOUT'
+              "
               label="View Booking"
               variant="outlined"
               (click)="editBooking()"
             ></hospitality-bot-button>
             <hospitality-bot-button
-              *ngIf="!details?.pmsBooking && details?.pmsStatus !== 'CHECKEDOUT'"
+              *ngIf="
+                !details?.pmsBooking && details?.pmsStatus !== 'CHECKEDOUT'
+              "
               label="Edit Booking"
               variant="outlined"
               (click)="editBooking()"

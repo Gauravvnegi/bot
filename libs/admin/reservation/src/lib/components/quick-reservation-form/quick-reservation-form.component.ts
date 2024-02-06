@@ -45,6 +45,8 @@ import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/servi
 import { RoutesConfigService } from 'apps/admin/src/app/core/theme/src/lib/services/routes-config.service';
 import { ManualOffer } from 'libs/admin/manage-reservation/src/lib/components/form-components/booking-summary/booking-summary.component';
 import { AddGuestComponent } from 'libs/admin/guests/src/lib/components';
+import { RoomReservationFormData } from 'libs/admin/manage-reservation/src/lib/types/forms.types';
+import { ReservationType } from 'libs/admin/manage-reservation/src/lib/constants/reservation-table';
 
 @Component({
   selector: 'hospitality-bot-quick-reservation-form',
@@ -352,6 +354,7 @@ export class QuickReservationFormComponent implements OnInit {
             this.isCheckedout =
               res.status === ReservationCurrentStatus.CHECKEDOUT;
             this.setFormDisability();
+            this.listenForRoomChanges();
             this.isDataLoaded = true;
           },
           (error) => {
@@ -372,6 +375,22 @@ export class QuickReservationFormComponent implements OnInit {
     if (this.isCheckinCompleted) {
       this.userForm.disable({ emitEvent: false });
       this.reservationInfoControls.to.enable({ emitEvent: false });
+    }
+    if (
+      this.reservationData.reservationInformation.reservationType ===
+      ReservationType.CONFIRMED
+    ) {
+      [
+        'source',
+        'sourceName',
+        'otaSourceName',
+        'agentSourceName',
+        'companySourceName',
+      ].forEach((controlName) => {
+        this.inputControls.reservationInformation
+          .get(controlName)
+          .disable({ emitEvent: false });
+      });
     }
     this.isCheckedout && this.userForm.disable();
   }
@@ -480,7 +499,16 @@ export class QuickReservationFormComponent implements OnInit {
     this.loading = true;
 
     if (this.reservationId) {
-      this.updateReservation(data);
+      this.inputControls.rateImprovement.value
+        ? this.formService.rateImprovement(
+            data,
+            this.entityId,
+            this.reservationId,
+            (formData: RoomReservationFormData) => {
+              this.updateReservation(formData);
+            }
+          )
+        : this.updateReservation(data);
     } else this.createReservation(data);
   }
 

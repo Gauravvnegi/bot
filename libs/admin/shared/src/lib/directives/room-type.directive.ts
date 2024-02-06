@@ -34,8 +34,7 @@ export class RoomTypeDirective {
     elementRef.nativeElement.style.backgroundColor = this.getBackgroundColorByStatus(
       this.roomStatus
     );
-    elementRef.nativeElement.style.padding =
-      '0.4375rem 0.73125rem 0.46875rem 0.75rem';
+    elementRef.nativeElement.style.padding = '7px 11.7px 7.5px 12px';
     elementRef.nativeElement.style.textOverflow = 'unset';
     // elementRef.nativeElement.style.overflow = 'hidden';
     elementRef.nativeElement.style.letterSpacing = '0.84px';

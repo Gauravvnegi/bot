@@ -8,8 +8,6 @@
     <img [src]="profilePic" (error)="handleImageError()" />
   </div>
 
-  <span class="dropdown-text">{{ userService.userDetails.getFullName() }}</span>
-  <mat-icon class="material-icons" matPrefix>keyboard_arrow_down</mat-icon>
   <div class="dropdown-list">
     <p
       (click)="profileAction(item.value)"

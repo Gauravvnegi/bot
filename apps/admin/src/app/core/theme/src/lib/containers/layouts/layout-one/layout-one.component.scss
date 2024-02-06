@@ -152,7 +152,6 @@
       }
 
       .header--button {
-        padding: 0px 10px;
         height: 42px;
         border: none;
         font-size: 12px;
@@ -357,6 +356,8 @@
 .options2 {
   @include flex-row-justify-end;
   flex: 2;
+  gap: 0.8em;
+  padding-right: 10px;
 }
 
 .disabled {

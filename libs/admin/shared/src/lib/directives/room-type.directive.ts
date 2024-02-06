@@ -41,11 +41,10 @@ export class RoomTypeDirective {
     elementRef.nativeElement.style.fontSize = '12px';
     elementRef.nativeElement.style.borderRadius = '8px';
     elementRef.nativeElement.style.textAlign = 'center';
-        elementRef.nativeElement.style.whiteSpace = 'normal';
+    elementRef.nativeElement.style.whiteSpace = 'normal';
 
     elementRef.nativeElement.style.overflow = 'visible';
-        elementRef.nativeElement.style.position = 'relative';
-
+    elementRef.nativeElement.style.position = 'relative';
 
     elementRef.nativeElement.style.color = this.getColorByStatus(
       this.roomStatus

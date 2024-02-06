@@ -1,3 +1,4 @@
+/* Base styles */
 .wrapper {
   display: flex;
   flex-direction: column;
@@ -5,40 +6,39 @@
   justify-content: space-between;
   min-height: 26vh;
   border: solid 1px rgba(0, 0, 0, 0.14);
-  padding: 10px;
+  padding: 0.625rem;
+  // min-width: 11rem;
+}
 
-  .room {
+.room {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap; /* Allow items to wrap to the next line on smaller screens */
+  align-items: center;
+  justify-content: space-between;
+}
+
+.room-features {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5em;
+}
+
+.room-feature-icon {
+  width: 1.3em;
+  height: 1.3em;
+
+  img {
     width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    .room-features {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.5em;
-
-      .room-feature-icon {
-        width: 1.3em;
-        height: 1.3em;
-        img {
-          width: 100%;
-          height: 100%;
-        }
-      }
-    }
-    .room-status {
-      font-family: Poppins;
-      font-size: 10px;
-      letter-spacing: 0.6px;
-      text-align: left;
-      color: #ef1d45;
-    }
+    height: 100%;
   }
 }
 
-// :host ::ng-deep .button {
-//   border-radius: 3em !important;
-//   height: 33px !important;
-//   min-width: 99px !important;
-// }
+.room-status {
+  font-family: Poppins;
+  font-size: 10px;
+  letter-spacing: 0.6px;
+  text-align: left;
+  color: #ef1d45;
+}

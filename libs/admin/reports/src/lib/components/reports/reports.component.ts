@@ -83,6 +83,7 @@ export class ReportsComponent implements OnInit {
 
     //after emitting the selected report to get the corresponding data
     this.reportsService.$selectedReport.next(this.selectedReport);
+    this.reportsService.showMenu.next(true);
 
     this.registerListener();
     this.initNavRoutes();
@@ -103,7 +104,6 @@ export class ReportsComponent implements OnInit {
           })
         )
         .subscribe((res) => {
-          console.log(res, 'toggle');
           this.showMenu = res;
           res && manageMaskZIndex(150);
         })

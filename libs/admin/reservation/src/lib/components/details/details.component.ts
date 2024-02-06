@@ -975,10 +975,10 @@ export class DetailsComponent implements OnInit, OnDestroy {
   }
 
   checkForGenerateFeedbackSubscribed(isSubmitted: boolean) {
-    return this.subscriptionService.checkModuleSubscription(ModuleNames.HEDA) &&
-      isSubmitted
-      ? this.currentFeedbackId
-      : !this.currentFeedbackId;
+    return (
+      this.subscriptionService.checkModuleSubscription(ModuleNames.HEDA) &&
+      (isSubmitted ? this.currentFeedbackId : !this.currentFeedbackId)
+    );
   }
 
   get isFinanceSubscribed() {

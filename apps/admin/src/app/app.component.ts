@@ -17,7 +17,12 @@ import { NotificationPopupComponent } from './core/theme/src/lib/containers/noti
   selector: 'admin-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
-  providers: [SnackBarService, MessageService, DialogService],
+  providers: [
+    SnackBarService,
+    MessageService,
+    DialogService,
+    FirebaseMessagingService,
+  ],
 })
 export class AppComponent implements OnInit {
   readonly toastKeys = ToastKeys;
@@ -56,6 +61,7 @@ export class AppComponent implements OnInit {
   listenSnackbar() {
     this.messageService.messageObserver.subscribe(
       (res: MessageSnackbarConfig) => {
+        debugger;
         this.snackbarConfig = res;
       }
     );

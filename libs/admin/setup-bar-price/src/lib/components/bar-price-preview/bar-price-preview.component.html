@@ -1,0 +1,120 @@
+<div class="main" *ngIf="allFormData">
+  <p-accordion [multiple]="true">
+    <ng-container *ngFor="let room of allFormData.barPrices; let i = index">
+      <p-accordionTab [selected]="true">
+        <p-header class="header">
+          <span>{{ room.label }}</span>
+        </p-header>
+        <div class="content">
+          <div class="info" [ngStyle]="getRates(room.ratePlans,false).length ? {flex:1} : {'min-width':'50%'}">
+            <div class="item">
+              <span class="left">EP Single</span>
+              <span class="right"
+                ><span>-</span
+                ><span>{{ +room.price + +room.variablePrice }}</span></span
+              >
+            </div>
+
+            <div
+              class="item"
+              *ngFor="let otherRoom of getRates(room.ratePlans, true)"
+            >
+              <span class="left">{{ otherRoom.label }}</span>
+              <span class="right"
+                ><span>-</span
+                ><span>{{
+                  +otherRoom.value + +room.price + +room.variablePrice
+                }}</span></span
+              >
+            </div>
+
+            <ng-container
+              [ngTemplateOutlet]="roomDetailsTemplate"
+              [ngTemplateOutletContext]="{
+                details: {
+                  childBelowFive: room.childBelowFive,
+                  chileFiveToTwelve: room.chileFiveToTwelve,
+                  adult: room.adult,
+                  type: ''
+                }
+              }"
+            >
+            </ng-container>
+          </div>
+
+          <!-- Remaining Rate Plans -->
+          <div
+            class="info"
+            *ngFor="let ratePlans of getRates(room.ratePlans, false)"
+            [ngStyle]="getRates(room.ratePlans,false).length && {flex:1}"
+          >
+            <div class="item">
+              <span class="left">{{ ratePlans.label }}</span>
+              <span class="right"
+                ><span>-</span
+                ><span>{{
+                  +ratePlans.value + (+room.price + +room.variablePrice)
+                }}</span></span
+              >
+            </div>
+            <div
+              class="item"
+              *ngFor="
+                let otherRoom of getRates(room.ratePlans, true);
+                let ratePlanIndex = index
+              "
+            >
+              <span class="left"
+                >{{ otherRoom.label }}</span
+              >
+              <span class="right"
+                ><span>-</span
+                ><span>{{
+                  +otherRoom.value +
+                    +ratePlans.value * (ratePlanIndex + 2) +
+                    (+room.price + +room.variablePrice)
+                }}</span></span
+              >
+            </div>
+
+            <ng-container
+              [ngTemplateOutlet]="roomDetailsTemplate"
+              [ngTemplateOutletContext]="{
+                details: {
+                  childBelowFive: room.childBelowFive,
+                  chileFiveToTwelve: room.chileFiveToTwelve,
+                  adult: room.adult,
+                  type: ''
+                }
+              }"
+            >
+            </ng-container>
+          </div>
+        </div>
+
+        <ng-template #roomDetailsTemplate let-details="details">
+          <div class="item">
+            <span class="left">{{ details.type }} Child Below 5</span>
+            <span class="right"
+              ><span>-</span><span>{{ details.childBelowFive }}</span></span
+            >
+          </div>
+
+          <div class="item">
+            <span class="left">{{ details.type }} Child 5 to 12</span>
+            <span class="right"
+              ><span>-</span><span>{{ details.chileFiveToTwelve }}</span></span
+            >
+          </div>
+
+          <div class="item">
+            <span class="left">{{ details.type }} Adult 12+</span>
+            <span class="right"
+              ><span>-</span><span>{{ details.adult }}</span></span
+            >
+          </div>
+        </ng-template>
+      </p-accordionTab>
+    </ng-container>
+  </p-accordion>
+</div>

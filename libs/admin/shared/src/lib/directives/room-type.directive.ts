@@ -34,18 +34,18 @@ export class RoomTypeDirective {
     elementRef.nativeElement.style.backgroundColor = this.getBackgroundColorByStatus(
       this.roomStatus
     );
-    elementRef.nativeElement.style.padding = '7px 11.7px 7.5px 12px';
+    elementRef.nativeElement.style.padding =
+      '0.4375rem 0.73125rem 0.46875rem 0.75rem';
     elementRef.nativeElement.style.textOverflow = 'unset';
     // elementRef.nativeElement.style.overflow = 'hidden';
     elementRef.nativeElement.style.letterSpacing = '0.84px';
     elementRef.nativeElement.style.fontSize = '12px';
     elementRef.nativeElement.style.borderRadius = '8px';
     elementRef.nativeElement.style.textAlign = 'center';
-        elementRef.nativeElement.style.whiteSpace = 'normal';
+    elementRef.nativeElement.style.whiteSpace = 'normal';
 
     elementRef.nativeElement.style.overflow = 'visible';
-        elementRef.nativeElement.style.position = 'relative';
-
+    elementRef.nativeElement.style.position = 'relative';
 
     elementRef.nativeElement.style.color = this.getColorByStatus(
       this.roomStatus

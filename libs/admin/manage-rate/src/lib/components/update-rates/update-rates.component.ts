@@ -202,6 +202,14 @@ export class UpdateRatesComponent implements OnInit {
     if (this.hasDynamicPricing) this.addRootDynamicControl();
     this.listenChanges();
     this.getRates();
+    this.useForm.patchValue(
+      {
+        roomType: this.allRoomTypes.map((item) => item.id, {
+          eventEmitter: false,
+        }),
+      },
+      { emitEvent: false }
+    );
   }
 
   /**
@@ -837,7 +845,7 @@ export class UpdateRatesComponent implements OnInit {
 
       //Extra price for @Case 3
       if (!isBaseRP && mappingInfo?.onlyNonBase) {
-        console.log('production...', ratePlan);
+        // console.log('production...', ratePlan);
         const variablePrice = ratePlan.get('variablePrice')?.value;
         price = +price + +variablePrice * (paxInd + 1);
       }

@@ -35,7 +35,7 @@ export class GuestFactory {
       phoneNo: contact.contactNumber,
       company: input.companyId,
       gender: input.gender ?? '',
-      dateOfBirth: input.dateOfBirth ?? Date.now(),
+      dateOfBirth: input?.dateOfBirth ?? undefined,
       age: input?.age ?? '',
       address: {
         formattedAddress: `${input.address?.addressLine1 ?? ''}`,

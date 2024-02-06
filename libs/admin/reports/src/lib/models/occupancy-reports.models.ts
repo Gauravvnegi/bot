@@ -1,6 +1,11 @@
 import { formatDateToCustomString } from '@hospitality-bot/admin/shared';
-import { HistoryAndForecastReportResponse } from '../types/occupany-reports.types';
+import {
+  HistoryAndForecastReportResponse,
+  HouseCountReportData,
+  HouseCountReportResponse,
+} from '../types/occupany-reports.types';
 import { ReportClass, RowStyles } from '../types/reports.types';
+import { getFormattedDate } from './reservation-reports.models';
 
 export class HistoryAndForecastReportData extends RowStyles {
   date: number | string;
@@ -55,6 +60,31 @@ export class HistoryAndForecastReport
         this.records.push(new HistoryAndForecastReportData().deserialize(item));
       });
     }
+    return this;
+  }
+}
+
+export class HouseCountReport
+  implements ReportClass<HouseCountReportData, HouseCountReportResponse[]> {
+  records: HouseCountReportData[];
+
+  deserialize(value: HouseCountReportResponse[]): this {
+    this.records = new Array<HouseCountReportData>();
+
+    this.records = value.map((item) => {
+      return {
+        date: getFormattedDate(item?.date),
+        roomsAvailable: item?.availableRoom,
+        roomsOccupied: item?.occupiedRooms,
+        roomReserved: item?.roomNightsReserved,
+        roomsSold: item?.arrivalRooms,
+        total: item?.totalRooms,
+        guestOccupied: item?.occupiedRoomGuests,
+        guestReserved: item?.inhouseGuest,
+        totalGuest: item?.totalPersonInHouse,
+      };
+    });
+
     return this;
   }
 }

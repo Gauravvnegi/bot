@@ -1,6 +1,5 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
-import { MatTabChangeEvent } from '@angular/material/tabs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 import * as FileSaver from 'file-saver';
@@ -9,13 +8,11 @@ import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-ut
 import {
   BaseDatatableComponent,
   NavRouteOption,
-  NavRouteOptions,
   sharedConfig,
 } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { TranslateService } from '@ngx-translate/core';
-import { SelectedEntityState } from 'libs/admin/dashboard/src/lib/types/dashboard.type';
-import { LazyLoadEvent, SortEvent } from 'primeng/api';
+import { SortEvent } from 'primeng/api';
 import { Observable, Subscription } from 'rxjs';
 import { assetConfig } from '../../../constants/asset';
 import { assetsRoutes } from '../../../constants/routes';
@@ -254,7 +251,10 @@ export class AssetDatatableComponent extends BaseDatatableComponent
           .subscribe();
       },
       ({ error }) => {
-        this.values = [];
+        this.values = this.values.map((item) => ({
+          ...item,
+          status: item.id == assetId ? !event.checked : item.status,
+        }));
         this.loading = false;
       }
     );

@@ -224,6 +224,7 @@
 // Channel manager button style
 :host ::ng-deep .channel-btn {
   zoom: 0.8;
+  white-space: nowrap;
   & .p-togglebutton {
     &.p-button {
       border: none;

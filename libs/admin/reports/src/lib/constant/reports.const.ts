@@ -45,7 +45,10 @@ import {
   MtdAndYtdReport,
   NightAuditRevenueReport,
 } from '../models/night-audit-reports.model';
-import { HistoryAndForecastReport } from '../models/occupancy-reports.models';
+import {
+  HistoryAndForecastReport,
+  HouseCountReport,
+} from '../models/occupancy-reports.models';
 import { RateVariationReport } from '../models/rate-package-reports-models';
 import {
   AddOnRequestReport,
@@ -124,7 +127,10 @@ import {
   mtdAndYtdReportCols,
   nightAuditRevenueReportCols,
 } from './night-audit-reports.const';
-import { historyAndForecastReportCols } from './occupancy-reports.const';
+import {
+  historyAndForecastReportCols,
+  houseCountReportCols,
+} from './occupancy-reports.const';
 import { rateVariationReportCols } from './rate-package-reports.const';
 import {
   addOnRequestReportCols,
@@ -203,6 +209,8 @@ export const reportsModelMapping: Record<ReportsTypeValues, ClassType> = {
   rateVariation: RateVariationReport,
   guestComplaintReport: GuestComplaintReport,
   guestEscalationComplaintReport: GuestEscalationComplaintReport,
+  houseCountReport: HouseCountReport,
+  nightAuditOperation: undefined,
 };
 
 function getColsArray(colsData: ColsData): Cols[] {
@@ -273,6 +281,8 @@ export const reportsColumnMapping: Record<ReportsTypeValues, Cols[]> = {
   guestEscalationComplaintReport: getColsArray(
     guestEscalationComplaintReportCols
   ),
+  houseCountReport: getColsArray(houseCountReportCols),
+  nightAuditOperation: getColsArray({}),
 };
 
 export const reportFiltersMapping: Record<
@@ -333,6 +343,8 @@ export const reportFiltersMapping: Record<
   rateVariation: ['fromDate', 'toDate'],
   guestComplaintReport: ['fromDate', 'toDate'],
   guestEscalationComplaintReport: ['fromDate', 'toDate'],
+  houseCountReport: ['fromDate', 'toDate'],
+  nightAuditOperation: ['fromDate', 'toDate'],
 };
 
 export const rowStylesMapping: Record<RowStylesKeys, string> = {

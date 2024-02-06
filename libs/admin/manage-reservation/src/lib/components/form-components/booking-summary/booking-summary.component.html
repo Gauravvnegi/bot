@@ -357,6 +357,17 @@
     </p>
     <p
       class="bk-summary_priceInfo_taxFair"
+      *ngIf="summaryData?.allowance && index === undefined"
+    >
+      <span class="bk-summary_priceInfo_perNight_label">Total Allowance</span>
+      <span class="bk-summary_priceInfo_perNight_amount"
+        >-{{
+          summaryData?.allowance | currency: 'INR'
+        }}</span
+      >
+    </p>
+    <p
+      class="bk-summary_priceInfo_taxFair"
       *ngIf="bookingItem?.discountedAmount && index !== undefined"
     >
       <span class="bk-summary_priceInfo_perNight_label">Total Discount</span>

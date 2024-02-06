@@ -225,9 +225,8 @@ export class BarPriceComponent implements OnInit {
       );
       return;
     }
-    // this.hasPreviewRendered = true;
-    // this.isPreview = true;
-    this.saveData();
+    this.hasPreviewRendered = true;
+    this.isPreview = true;
   }
 
   saveData() {

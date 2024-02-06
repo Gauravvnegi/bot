@@ -138,6 +138,7 @@ export type PricingDetails = {
   discountedAmount?: number;
   refund?: number;
   miscellaneousCharges?: number;
+  allowance?: number;
   roomCharges?: number;
 };
 

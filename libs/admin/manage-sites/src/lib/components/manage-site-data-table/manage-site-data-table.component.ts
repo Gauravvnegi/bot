@@ -8,6 +8,7 @@ import {
   UserService,
   ModuleNames,
   openModal,
+  HotelDetailService,
 } from '@hospitality-bot/admin/shared';
 import { ModalComponent } from 'libs/admin/shared/src/lib/components/modal/modal.component';
 
@@ -60,7 +61,8 @@ export class ManageSiteDataTableComponent extends BaseDatatableComponent {
     private snackbarService: SnackBarService,
     private adminUtilityService: AdminUtilityService,
     private cookiesSettingService: CookiesSettingsService,
-    private dialogService: DialogService
+    private dialogService: DialogService,
+    private hotelDetailService: HotelDetailService
   ) {
     super(fb);
   }
@@ -205,6 +207,9 @@ export class ManageSiteDataTableComponent extends BaseDatatableComponent {
             '',
             { panelClass: 'success' }
           );
+          this.userService.getUserDetailsById(this.userId).subscribe((res) => {
+            this.hotelDetailService.initHotelDetails(res);
+          });
           this.initTableValue();
         },
         ({ error }) => {

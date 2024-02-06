@@ -7,6 +7,7 @@ import { RoomTypesComponent } from './components/room-types/room-types.component
 import { SetupBarPriceComponent } from './components/setup-bar-price/setup-bar-price.component';
 import { BarPricePlanForm } from './components/bar-price-plan-from/bar-price-plan-form.component';
 import { BarPriceExtraPlanForm } from './components/bar-price-extra-plan-form/bar-price-extra-plan-form.component';
+import { BarPricePreviewComponent } from './components/bar-price-preview/bar-price-preview.component';
 
 const appRoutes: Route[] = [
   {
@@ -42,5 +43,6 @@ export class AdminSetupBarPriceRoutingModule {
     SetupBarPriceComponent,
     BarPricePlanForm,
     BarPriceExtraPlanForm,
+    BarPricePreviewComponent,
   ];
 }

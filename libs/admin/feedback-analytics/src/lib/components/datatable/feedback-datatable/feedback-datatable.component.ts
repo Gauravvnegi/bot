@@ -324,7 +324,6 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
   ): Observable<any> {
     this.resetRowSelection();
     queries.push(defaultProps);
-
     const config = {
       queryObj: this._adminUtilityService.makeQueryParams([
         ...queries,

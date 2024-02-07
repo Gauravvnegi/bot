@@ -1060,7 +1060,7 @@ export class InvoiceComponent implements OnInit {
     this.formService.openModalComponent(JourneyTypes.LATECHECKOUT, () => {
       this.showBanner = false;
       this.refreshData();
-    });
+    }, this.reservationId);
   }
 
   onAddGST() {

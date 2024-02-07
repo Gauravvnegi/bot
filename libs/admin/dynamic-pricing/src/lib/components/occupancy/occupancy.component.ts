@@ -243,7 +243,7 @@ export class OccupancyComponent implements OnInit {
       configCategory: ['ROOM_TYPE', [Validators.required]],
       hotelConfig: this.fb.array([this.seasonOccupancyFG]),
       hotelId: [this.entityId],
-      basePrice: [this.rooms.find((item) => item.isBase).price],
+      basePrice: [this.rooms.find((item) => item.isBase)?.price],
       roomCount: [this.rooms.find((item) => item.isBase)?.roomCount ?? 0],
       roomType: [, [Validators.required]],
       removedRules: this.fb.array([]),
@@ -272,7 +272,7 @@ export class OccupancyComponent implements OnInit {
   get seasonOccupancyFG(): FormGroup {
     const levelFG = this.fb.group({
       id: [],
-      basePrice: [this.rooms.find((item) => item.isBase).price],
+      basePrice: [this.rooms.find((item) => item.isBase)?.price],
       start: [
         { value: 0, disabled: true },
         [Validators.min(0), Validators.required],

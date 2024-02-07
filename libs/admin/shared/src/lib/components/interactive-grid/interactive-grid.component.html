@@ -266,7 +266,8 @@
         'inactive-cell': data[row][col]?.colorCode === 'inactive',
         'failed-cell': data[row][col]?.colorCode === 'failed',
         'warning-cell': data[row][col]?.colorCode === 'warning',
-        'draft-cell': data[row][col]?.colorCode === 'draft'
+        'draft-cell': data[row][col]?.colorCode === 'draft',
+        'transparent-draft-cell': data[row][col]?.colorCode === 'transparent'
       }"
       [ngStyle]="{
         height: height - 2 * cellGap + 'px',

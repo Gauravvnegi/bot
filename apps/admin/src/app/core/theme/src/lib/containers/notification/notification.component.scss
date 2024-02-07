@@ -106,7 +106,7 @@
 .notification--form {
   height: 100vh;
   .notification {
-    @include full-img;
+    height: calc(100% - 59px);
     overflow-y: auto;
     @include flex-col-center-algn();
     gap: 7px;

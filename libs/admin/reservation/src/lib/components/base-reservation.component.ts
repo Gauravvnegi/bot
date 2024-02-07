@@ -102,19 +102,21 @@ export class BaseReservationComponent {
         this.bookingType === EntitySubType.ROOM_TYPE
           ? this.reservationInfoControls.reservationType
           : this.reservationInfoControls.status;
+
+      const disableForm = () => {
+        this.userForm.disable({ emitEvent: false });
+        this.formService.disableBtn = true;
+        this.disableBtn = true;
+      }
       switch (true) {
         case status === ReservationCurrentStatus.CHECKEDOUT ||
           reservationType.value === ReservationType.CANCELED:
-          this.userForm.disable({ emitEvent: false });
-          this.formService.disableBtn = true;
-          this.disableBtn = true;
+          disableForm();
           this.disabledForm = true;
           break;
         case this.isExternalBooking && journeyState !== JourneyState.COMPLETED:
-          this.userForm.disable({ emitEvent: false });
           this.disabledForm = true;
-          this.formService.disableBtn = true;
-          this.disableBtn = true;
+          disableForm();
           const roomTypeArray = ((this.inputControls
             .roomInformation as FormGroup).get('roomTypes') as FormArray)
             .controls;
@@ -127,9 +129,7 @@ export class BaseReservationComponent {
           journeyState === JourneyState.COMPLETED ||
           status === ReservationCurrentStatus.INHOUSE ||
           status === ReservationCurrentStatus.DUEOUT:
-          this.userForm.disable({ emitEvent: false });
-          this.formService.disableBtn = true;
-          this.disableBtn = true;
+          disableForm();
           break;
         case journeyState !== JourneyState.COMPLETED:
           if (reservationType.value === ReservationType.CONFIRMED) {

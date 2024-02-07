@@ -118,29 +118,32 @@ export class AdminPaymentDetailsComponent implements OnInit {
 
   getModifiedPaymentSummary() {
     const paymentSummary = this.detailsData.paymentDetails;
-    const {
-      label,
-      description,
-      unit,
-      base,
-      amount,
-      totalAmount,
-      cgstAmount,
-      sgstAmount,
-      discount,
-    } = paymentSummary.roomRates;
 
-    this.dataSource.push({
-      label,
-      description,
-      unit,
-      base,
-      amount,
-      totalAmount,
-      cgstAmount,
-      sgstAmount,
-      discount,
-      currency: paymentSummary.currency,
+    paymentSummary.roomRates.forEach((item) => {
+      const {
+        label,
+        description,
+        unit,
+        base,
+        amount,
+        totalAmount,
+        cgstAmount,
+        sgstAmount,
+        discount,
+      } = item;
+
+      this.dataSource.push({
+        label,
+        description,
+        unit,
+        base,
+        amount,
+        totalAmount,
+        cgstAmount,
+        sgstAmount,
+        discount,
+        currency: paymentSummary.currency,
+      });
     });
   }
 

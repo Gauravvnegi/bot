@@ -38,8 +38,6 @@ import {
 } from '../../../types/forms.types';
 import { ReservationType } from '../../../constants/reservation-table';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
-import { AddRefundComponent } from 'libs/admin/invoice/src/lib/components/add-refund/add-refund.component';
-
 @Component({
   selector: 'hospitality-bot-booking-summary',
   templateUrl: './booking-summary.component.html',
@@ -164,8 +162,15 @@ export class BookingSummaryComponent implements OnInit {
         this.openCancelPopup(data, id, type);
       } else {
         this.inputControls.rateImprovement.value
-          ? this.rateImprovement(data, id, type)
-          : this.updateReservation(data, id, type);
+          ? this.formService.rateImprovement(
+              data,
+              this.entityId,
+              this.reservationId,
+              (formData: RoomReservationFormData) => {
+                this.updateReservation(formData, type);
+              }
+            )
+          : this.updateReservation(data, type);
       }
     } else this.createReservation(data, id, type);
   }
@@ -194,63 +199,11 @@ export class BookingSummaryComponent implements OnInit {
     );
   }
 
-  rateImprovement(
-    data: RoomReservationFormData,
-    entityId: string,
-    type: string
-  ) {
-    this.$subscription.add(
-      this.manageReservationService
-        .rateImprovement(entityId, this.reservationId, data)
-        .subscribe((res) => {
-          if (res?.chargedAmount > 0) {
-            let modalRef: DynamicDialogRef;
-            const modalData: Partial<AddRefundComponent> = {
-              heading: 'Update Reservation',
-              isReservationPopup: true,
-              chargedAmount: res.chargedAmount,
-            };
-            modalRef = openModal({
-              config: {
-                width: '40%',
-                styleClass: 'confirm-dialog',
-                data: modalData,
-              },
-              component: AddRefundComponent,
-              dialogService: this.dialogService,
-            });
-
-            modalRef.onClose.subscribe(
-              (res: { chargedAmount: number; remarks: string }) => {
-                if (res) {
-                  this.updateReservation(
-                    { chargedAmount: res?.chargedAmount, ...data },
-                    entityId,
-                    type
-                  );
-                }
-              }
-            );
-          } else {
-            this.updateReservation(
-              { chargedAmount: res?.chargedAmount, ...data },
-              entityId,
-              type
-            );
-          }
-        })
-    );
-  }
-
-  updateReservation(
-    data: RoomReservationFormData,
-    entityId: string,
-    type: string
-  ): void {
+  updateReservation(data: RoomReservationFormData, type: string): void {
     this.isBooking = true;
     this.$subscription.add(
       this.manageReservationService
-        .updateReservation(entityId, this.reservationId, data, type)
+        .updateReservation(this.entityId, this.reservationId, data, type)
         .subscribe(
           (res: RoomReservationResponse) => {
             this.bookingConfirmationPopup(res?.reservationNumber);
@@ -360,7 +313,7 @@ export class BookingSummaryComponent implements OnInit {
           label: 'Yes',
           onClick: (modelData: { remarks: string }) => {
             let updatedData = { ...data, ...modelData };
-            this.updateReservation(updatedData, entityId, type);
+            this.updateReservation(updatedData, type);
             modalRef.close();
           },
           variant: 'contained',

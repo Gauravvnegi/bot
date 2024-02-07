@@ -164,7 +164,10 @@
       "@hospitality-bot/table-management": [
         "libs/table-management/src/index.ts"
       ],
-      "@hospitality-bot/admin/kot": ["libs/admin/kot/src/index.ts"]
+      "@hospitality-bot/admin/kot": ["libs/admin/kot/src/index.ts"],
+      "@hospitality-bot/admin/service-item": [
+        "libs/admin/service-item/src/index.ts"
+      ]
     }
   },
   "exclude": ["node_modules", "tmp"]

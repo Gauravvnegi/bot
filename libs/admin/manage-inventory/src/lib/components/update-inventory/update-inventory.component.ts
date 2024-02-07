@@ -119,6 +119,14 @@ export class UpdateInventoryComponent implements OnInit {
     this.addRoomTypesControl();
     this.listenChanges();
     this.getInventory();
+    this.useForm.patchValue(
+      {
+        roomType: this.allRoomTypes.map((item) => item.id, {
+          eventEmitter: false,
+        }),
+      },
+      { emitEvent: false }
+    );
   }
 
   /**
@@ -276,12 +284,13 @@ export class UpdateInventoryComponent implements OnInit {
         debounceTime(300)
       )
       .subscribe((res: string[]) => {
-        this.perDayRoomAvailability = UpdateInventory.buildAvailability(
-          this.inventoryResponse,
-          this.useFormControl.roomType.value
-        );
         this.roomTypes = this.allRoomTypes.filter((item) =>
           res.includes(item.value)
+        );
+        this.perDayRoomAvailability = UpdateInventory.buildAvailability(
+          this.inventoryResponse,
+          this.useFormControl.roomType.value,
+          this.roomTypes
         );
         this.isRoomsEmpty = !res.length;
         this.useForm.removeControl('roomTypes');
@@ -307,7 +316,8 @@ export class UpdateInventoryComponent implements OnInit {
             this.inventoryResponse = res.roomTypes;
             this.perDayRoomAvailability = UpdateInventory.buildAvailability(
               this.inventoryResponse,
-              this.useFormControl.roomType.value
+              this.useFormControl.roomType.value,
+              this.roomTypes
             );
             this.inventoryRoomDetails = data.inventoryRoomDetails;
             this.setRoomDetails(selectedDate);
@@ -386,7 +396,6 @@ export class UpdateInventoryComponent implements OnInit {
       this.useForm.getRawValue(),
       fromDate
     );
-
     this.$subscription.add(
       this.channelManagerService
         .updateChannelManager(

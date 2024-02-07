@@ -173,7 +173,7 @@ export class AddReservationComponent extends BaseReservationComponent
       instructions: this.fb.group({
         specialInstructions: [''],
       }),
-      printRate: [false],
+      printRate: [true],
       rateImprovement: [false],
     });
   }

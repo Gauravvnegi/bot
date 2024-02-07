@@ -96,8 +96,8 @@ export class Guest implements IDeserializable {
       set({}, 'contactDetails', get(input, ['contactDetails'])),
       set({}, 'id', get(input, ['id'])),
       set({}, 'title', get(input, ['title'])),
-      set({}, 'firstName', trim(get(input, ['firstName'], 'No'))),
-      set({}, 'lastName', trim(get(input, ['lastName'], 'Name'))),
+      set({}, 'firstName', trim(get(input, ['firstName'], ''))),
+      set({}, 'lastName', trim(get(input, ['lastName'], ''))),
       set({}, 'salutation', get(input, ['salutation'], '')),
       set({}, 'nationality', get(input, ['nationality'])),
       set(
@@ -133,6 +133,8 @@ export class Guest implements IDeserializable {
   }
 
   getFullName() {
+    if (!this.firstName && !this.lastName) return 'No Name';
+
     return `${this.salutation} ${this.firstName} ${this.lastName}`;
   }
 

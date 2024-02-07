@@ -50,7 +50,7 @@ export type ReportsType = {
     | 'expressCheckIn'
     | 'addOnRequestReport';
   MANAGER_REPORTS: 'managerFlashReport';
-  OCCUPANCY_REPORTS: 'historyAndForecastReport';
+  OCCUPANCY_REPORTS: 'historyAndForecastReport' | 'houseCountReport';
   FINANCIAL_REPORTS:
     | 'monthlySummaryReport'
     | 'dailyRevenueReport'
@@ -67,7 +67,8 @@ export type ReportsType = {
     | 'auditTaxReport'
     | 'revenueReport'
     | 'mtdAndYtdReport'
-    | 'nightAuditRevenue';
+    | 'nightAuditRevenue'
+    | 'nightAuditOperation';
   TAX_REPORTS: 'monthlyTaxReport' | 'lodgingTaxReport' | 'taxReport';
   GUEST_REPORTS:
     | 'guestHistory'

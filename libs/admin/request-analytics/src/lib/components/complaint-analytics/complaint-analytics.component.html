@@ -4,7 +4,7 @@
   [isBack]="false"
 >
   <hospitality-bot-button
-    label="+ Create Item"
+    label="+ Create Service Item"
     variant="text"
     severity="primary"
     (onClick)="createServiceItem()"
@@ -13,16 +13,16 @@
     label="+ Raise Complaint"
     (onClick)="raiseRequest()"
   ></hospitality-bot-button> -->
-   <div
-      class="guestInfoEditContainer"
-      *ngIf="buttonConfig[0].button"
-      (click)="raiseRequest()"
-    >
-      <img [src]="buttonConfig[0].icon" alt="" />
-      <div class="guestInfoEditText">
-        {{ buttonConfig[0].label }}
-      </div>
+  <div
+    class="guestInfoEditContainer"
+    *ngIf="buttonConfig[0].button"
+    (click)="raiseRequest()"
+  >
+    <img [src]="buttonConfig[0].icon" alt="" />
+    <div class="guestInfoEditText">
+      {{ buttonConfig[0].label }}
     </div>
+  </div>
 </hospitality-bot-navigation-header>
 
 <div class="feedback-container mb-20">

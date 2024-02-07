@@ -272,7 +272,7 @@ export class ReservationCalendarViewComponent implements OnInit {
               startPos: this.getDate(status.fromDate),
               endPos: this.getStatusDate(status.toDate, status.fromDate),
               rowValue: room.roomNumber,
-              colorCode: 'draft',
+              colorCode: isOutOfService ? 'draft' : 'transparent',
               nonInteractive: true,
               additionContent: status.remarks,
               allowAction: isOutOfService
@@ -282,7 +282,6 @@ export class ReservationCalendarViewComponent implements OnInit {
                 null,
                 isOutOfService ? 'out-of-service' : 'out-of-order'
               ),
-              opacity: isOutOfService ? 1 : 0.4,
             };
           });
         return [...result, ...roomValues];
@@ -639,6 +638,7 @@ export class ReservationCalendarViewComponent implements OnInit {
           (data: JourneyData) => {
             this.updateRoomType(data);
           },
+          this.entityId,
           roomType
         );
         break;
@@ -648,6 +648,7 @@ export class ReservationCalendarViewComponent implements OnInit {
           (data: JourneyData) => {
             this.updateRoomType(data);
           },
+          this.entityId,
           roomType
         );
         break;
@@ -719,7 +720,6 @@ export class ReservationCalendarViewComponent implements OnInit {
 
   updateRoomType(data: JourneyData) {
     const { reservationId, roomType, status, isCheckout } = data;
-    // this.reservationFormService.manualCheckin(reservationId, roomType, this)
     let currentDateEpoch = new Date();
     const updatedValues = roomType.data.values.map((item) => {
       const selectedRoom = roomType.rooms.find(
@@ -770,9 +770,11 @@ export class ReservationCalendarViewComponent implements OnInit {
             ref.close();
           },
           variant: 'outlined',
+          type: 'REJECT',
         },
         {
           label: 'Release',
+          type: 'SUCCESS',
           onClick: () => {
             this.roomService
               .updateRoomStatus(this.entityId, {

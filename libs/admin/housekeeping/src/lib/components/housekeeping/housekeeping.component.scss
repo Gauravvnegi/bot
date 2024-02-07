@@ -1,9 +1,5 @@
 @import 'main';
 
-.card-width {
-  flex-basis: 14.282%;
-}
-
 .btn-width {
   flex-basis: 20%;
 }
@@ -23,8 +19,8 @@
 }
 
 :host ::ng-deep .p-datatable-tbody {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(14.268%, 1fr));
   overflow: hidden;
   border: 1px solid #e4e4e4;
   border-top: none;

@@ -107,7 +107,9 @@ export class ChatListComponent implements OnInit, OnDestroy {
   listenForRefreshData() {
     this.messageService.refreshData$.subscribe((response) => {
       if (response) {
-        this.loadChatList();
+        if (this.contactFG.get('search').value.length < 3) {
+          this.loadChatList();
+        } else this.loadSearchList(this.contactFG.get('search').value);
         this.messageService.refreshData$.next(false);
       }
     });

@@ -1,8 +1,10 @@
-<div
-  [formGroup]="tableFG"
->
-  <hospitality-bot-navigation-header [heading]="tableName" [routes]="navRoutes" [isBack]="false">
-  <hospitality-bot-button
+<div [formGroup]="tableFG">
+  <hospitality-bot-navigation-header
+    [heading]="tableName"
+    [routes]="navRoutes"
+    [isBack]="false"
+  >
+    <hospitality-bot-button
       (click)="openCreateAsset()"
       label=" {{ 'createAsset' | translate }}"
     ></hospitality-bot-button>

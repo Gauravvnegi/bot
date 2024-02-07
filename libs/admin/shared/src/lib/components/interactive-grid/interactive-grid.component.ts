@@ -386,13 +386,20 @@ export class InteractiveGridComponent {
       };
     }
 
-    if (width !== currentWidth) {
-      this.onChange.emit(currentData);
-    } else {
+    const handleEdit = () => {
       if (!this.isResized) {
         this.onEdit.emit({ id: currentData.id });
       }
       this.isResized = false;
+    };
+
+    const hasStart = data.hasStart;
+    if (!hasStart && width === currentWidth - 0.5) {
+      handleEdit();
+    } else if (width !== currentWidth) {
+      this.onChange.emit(currentData);
+    } else {
+      handleEdit();
     }
   }
 

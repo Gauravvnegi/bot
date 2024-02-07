@@ -17,6 +17,7 @@ import {
   FeedbackService,
   HotelDetailService,
   openModal,
+  QueryConfig,
   sharedConfig,
   UserService,
 } from '@hospitality-bot/admin/shared';
@@ -47,7 +48,7 @@ import {
     '../../datatable/feedback-datatable/feedback-datatable.component.scss',
     './feedback-datatable.component.scss',
   ],
-  providers: [FeedbackTableService, StatisticsService],
+  providers: [FeedbackTableService],
 })
 export class FeedbackDatatableModalComponent extends FeedbackDatatableComponent
   implements OnInit, OnDestroy {
@@ -177,6 +178,27 @@ export class FeedbackDatatableModalComponent extends FeedbackDatatableComponent
           ...this.getSelectedQuickReplyFilters(),
         ]);
       })
+    );
+  }
+
+  /**
+   * @function loadInitialData To load initial feedback data.
+   * @param queries The filter list data.
+   * @param loading The table loading status.
+   */
+  loadInitialData(queries = [], loading = true): void {
+    this.loading = loading && true;
+    this.$subscription.add(
+      this.fetchDataFrom(queries).subscribe(
+        (data) => {
+          this.initialLoading = false;
+          this.setRecords(data);
+        },
+        ({ error }) => {
+          this.values = [];
+          this.loading = false;
+        }
+      )
     );
   }
 

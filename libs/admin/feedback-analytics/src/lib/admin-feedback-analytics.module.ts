@@ -34,6 +34,6 @@ import { FeedbackTableService } from './services/table.service';
   ],
   exports: [FeedbackTypesComponent],
   declarations: [...AdminFeedbackAnalyticsRoutingModule.components],
-  providers: [StatisticsService, FeedbackTableService, CardService],
+  providers: [FeedbackTableService, CardService],
 })
 export class AdminFeedbackAnalyticsModule {}

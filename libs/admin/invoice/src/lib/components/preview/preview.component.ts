@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import {
+  GlobalFilterService,
   RoutesConfigService,
   SubscriptionPlanService,
 } from '@hospitality-bot/admin/core/theme';
@@ -29,6 +30,7 @@ export class PreviewComponent implements OnInit {
   isPrintRate = true;
   isCheckIn = false;
   isCheckedOut = false;
+  entityId: string;
   // items = [
   //   {
   //     label: 'Generate Proforma',
@@ -45,14 +47,15 @@ export class PreviewComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private snackbarService: SnackBarService,
     private routesConfigService: RoutesConfigService,
-    private reservationService: ReservationService,
     private subscriptionService: SubscriptionPlanService,
-    private formService: ReservationFormService
+    private formService: ReservationFormService,
+    private globalFilterService: GlobalFilterService
   ) {}
 
   ngOnInit(): void {
     const id = this.activatedRoute.snapshot.paramMap.get('id');
     const { navRoutes, title } = invoiceRoutes['previewInvoice'];
+    this.entityId =  this.globalFilterService.entityId;
     this.navRoutes = navRoutes;
     this.pageTitle = title;
     this.reservationId = id;
@@ -162,14 +165,17 @@ export class PreviewComponent implements OnInit {
   }
 
   handleCheckout() {
-    this.reservationService
-      .manualCheckout(this.reservationId)
-      .subscribe((res) => {
-        this.isCheckedOut = true;
-        this.snackbarService.openSnackBarAsText('Checkout completed.', '', {
-          panelClass: 'success',
-        });
+    this.formService.manualCheckout(this.reservationId, () => {
+      this.isCheckedOut = true;
+      this.snackbarService.openSnackBarAsText('Checkout completed.', '', {
+        panelClass: 'success',
       });
+    }, this.entityId);
+    // this.reservationService
+    //   .manualCheckout(this.reservationId)
+    //   .subscribe((res) => {
+
+    //   });
   }
 
   get isPermissionToCheckInOrOut(): boolean {

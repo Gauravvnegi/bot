@@ -55,9 +55,10 @@
 
 .dropdown-list {
   position: absolute;
-  width: 90%;
   left: 10px;
   top: 95%;
+  width: 180px;
+  left: -125px;
   display: none;
   background-color: $white;
   z-index: $header-menu-dropdown-z;

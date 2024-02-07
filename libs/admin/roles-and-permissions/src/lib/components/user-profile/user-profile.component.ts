@@ -305,6 +305,7 @@ export class UserProfileComponent implements OnInit {
       profileUrl: [''],
       permissionConfigs: this._fb.array([]),
       reportingTo: [''],
+      status: [true],
     });
   }
 
@@ -605,7 +606,6 @@ export class UserProfileComponent implements OnInit {
       this._managePermissionService
         .editUserDetails({
           ...userProfileData,
-          status: true,
           id: this._userService.getLoggedInUserId(),
         })
         .subscribe(handleSuccess, handleError);
@@ -616,7 +616,6 @@ export class UserProfileComponent implements OnInit {
       this._managePermissionService
         .addNewUser(this._userService.getLoggedInUserId(), {
           ...data,
-          status: true,
         })
         .subscribe(handleSuccess, handleError);
 
@@ -624,7 +623,6 @@ export class UserProfileComponent implements OnInit {
       this._managePermissionService
         .updateUserDetailsById({
           ...data,
-          status: true,
           parentId: this._userService.getLoggedInUserId(),
         })
         .subscribe(handleSuccess, handleError);

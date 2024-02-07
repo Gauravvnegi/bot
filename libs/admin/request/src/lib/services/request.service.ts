@@ -7,6 +7,7 @@ import { RequestStatus } from '../constants/request';
 import { CMSUpdateJobData } from '../types/request.type';
 import { AllJobRequestResponse } from '../types/response.types';
 import { ReservationResponse } from 'libs/admin/shared/src/lib/types/response';
+import { ServiceItemListResponse } from 'libs/admin/service-item/src/lib/types/service-item-datatable.type';
 
 @Injectable({ providedIn: 'root' })
 export class RequestService extends ApiService {
@@ -82,9 +83,12 @@ export class RequestService extends ApiService {
     return this.get(`/api/v1/cms/entity/${entityId}/notification-config`);
   }
 
-  getCMSServices(entityId: string, config) {
+  getCMSServices(
+    entityId: string,
+    config
+  ): Observable<ServiceItemListResponse> {
     return this.get(
-      `/api/v1/entity/${entityId}/cms-services${config.queryObj}`
+      `/api/v1/entity/${entityId}/cms-service-items${config.queryObj}`
     );
   }
 

@@ -307,17 +307,19 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
 
       this.$subscription.add(
         componentRef.instance.onCloseSidebar.subscribe((res) => {
-          this.initItemList();
-          this.requestFG.patchValue(
-            {
-              itemCode: res.itemCode,
-              itemId: res?.id,
-              itemName: res?.itemName,
-              assigneeId: '',
-            },
-            { emitEvent: false }
-          );
-          this.getItemDetails(res?.id);
+          if (res) {
+            this.initItemList();
+            this.requestFG.patchValue(
+              {
+                itemCode: res.itemCode,
+                itemId: res?.id,
+                itemName: res?.itemName,
+                assigneeId: '',
+              },
+              { emitEvent: false }
+            );
+            this.getItemDetails(res?.id);
+          }
           this.sidebarVisible = false;
         })
       );

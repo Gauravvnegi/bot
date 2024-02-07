@@ -274,7 +274,7 @@ export class ReservationCalendarViewComponent implements OnInit {
               startPos: this.getDate(status.fromDate),
               endPos: this.getStatusDate(status.toDate, status.fromDate),
               rowValue: room.roomNumber,
-              colorCode: 'draft',
+              colorCode: isOutOfService ? 'draft' : 'transparent',
               nonInteractive: true,
               additionContent: status.remarks,
               allowAction: isOutOfService
@@ -284,7 +284,6 @@ export class ReservationCalendarViewComponent implements OnInit {
                 null,
                 isOutOfService ? 'out-of-service' : 'out-of-order'
               ),
-              opacity: isOutOfService ? 1 : 0.4,
             };
           });
         return [...result, ...roomValues];

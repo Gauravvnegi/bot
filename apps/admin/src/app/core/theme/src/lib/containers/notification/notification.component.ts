@@ -92,7 +92,6 @@ export class NotificationComponent implements OnInit, OnDestroy {
   getNotifications(isRefresh = false) {
     const config = {
       queryObj: this.adminUtilityService.makeQueryParams([
-        this.notificationFilterData,
         {
           limit:
             this.limit -
@@ -101,6 +100,7 @@ export class NotificationComponent implements OnInit, OnDestroy {
             this.limit > this.limitDelimiter
               ? this.limitDelimiter
               : 0),
+          ...this.notificationFilterData,
         },
       ]),
     };
@@ -173,7 +173,7 @@ export class NotificationComponent implements OnInit, OnDestroy {
 
   openFilterForm() {
     if (!this.isFilterVisible) {
-      let data = this.notificationFilterData;
+      let data = JSON.parse(JSON.stringify(this.notificationFilterData));
       data.fromDate = data.fromDate ? moment(data.fromDate) : data.fromDate;
       data.toDate = data.toDate ? moment(data.toDate) : data.toDate;
       if (!('read' in data.status)) {

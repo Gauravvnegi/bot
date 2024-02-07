@@ -9,7 +9,8 @@ export type FlagType =
   | 'success'
   | 'unavailable'
   | 'paid'
-  | 'unpaid';
+  | 'unpaid'
+  | 'transparent'; //  // opaque // blur
 
 // more modes can be added (take reference form primeNg filter)
 export type MatchModes = 'startsWith' | 'contains' | 'endsWith' | 'equals';

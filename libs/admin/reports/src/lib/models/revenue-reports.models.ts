@@ -83,15 +83,30 @@ export class PayTypeReport
       );
     });
 
+    const empty = {
+      id: undefined,
+      paymentMode: undefined,
+      paymentType: undefined,
+      employee: undefined,
+      bookingNo: undefined,
+      folioNo: undefined,
+      guestName: undefined,
+      room: undefined,
+      counter: undefined,
+      dateAndTime: undefined,
+      amount: undefined,
+      description: undefined,
+    };
+
     this.records = [
       new PayTypeReportData().deserialize({}, 'Cash Payment'),
-      ...(groupedData.get('Cash Payment') || []),
+      ...(groupedData.get('Cash Payment') || [empty as any]),
       new PayTypeReportData().deserialize({}, '', 'Cash Payment'),
       new PayTypeReportData().deserialize({}, 'Bank Transfer'),
-      ...(groupedData.get('Bank Transfer') || []),
+      ...(groupedData.get('Bank Transfer') || [empty as any]),
       new PayTypeReportData().deserialize({}, '', 'Bank Transfer'),
       new PayTypeReportData().deserialize({}, 'Other'),
-      ...(groupedData.get('Other') || []),
+      ...(groupedData.get('Other') || [empty as any]),
       new PayTypeReportData().deserialize({}, '', 'Other'),
     ];
     return this;
@@ -162,7 +177,7 @@ class PayTypeReportData extends RowStyles {
 
   private setDetails(input: Partial<PayTypeReportResponse>) {
     (this.id = input?.reservationId), (this.paymentMode = undefined);
-    this.paymentType = input?.paymentMethod;
+    this.paymentType = input?.paymentMethod ? input?.paymentMethod : undefined;
 
     this.employee = getFullName(
       input?.reservation?.user?.firstName,
@@ -180,6 +195,6 @@ class PayTypeReportData extends RowStyles {
     this.dateAndTime =
       input.created && getFormattedDateWithTime(input?.created);
     this.amount = toCurrency(input?.amount);
-    this.description = input?.remarks;
+    this.description = input?.remarks ? input?.remarks : undefined;
   }
 }

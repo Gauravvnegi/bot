@@ -627,7 +627,7 @@ export class ReservationCalendarViewComponent implements OnInit {
   }
 
   handleMenuClick(
-    event: { label: string; value: string; id: string },
+    event: { label: string; value: string; id: string; rowValue: string },
     roomType: IGRoomType
   ) {
     switch (event.value) {
@@ -689,10 +689,10 @@ export class ReservationCalendarViewComponent implements OnInit {
         });
         break;
       case 'CANCEL_OUT_OF_SERVICE':
-        this.cancelPopUp('SERVICE', event.id, roomType);
+        this.cancelPopUp('SERVICE', event.id, roomType, event?.rowValue);
         break;
       case 'CANCEL_OUT_OF_ORDER':
-        this.cancelPopUp('ORDER', event.id, roomType);
+        this.cancelPopUp('ORDER', event.id, roomType, event?.rowValue);
     }
   }
 
@@ -746,8 +746,9 @@ export class ReservationCalendarViewComponent implements OnInit {
     };
   }
 
-  cancelPopUp(type: 'SERVICE' | 'ORDER', statusId, roomType) {
-    const selectedData = this.getSelectedRoom(roomType);
+  cancelPopUp(type: 'SERVICE' | 'ORDER', statusId, roomType, rowValue: string) {
+    const selectedData = this.getSelectedRoom(roomType, rowValue);
+
     const selectedStatus = selectedData?.statusDetails.find((data) =>
       statusId ? data.id === statusId : data.isCurrentStatus
     );
@@ -820,14 +821,8 @@ export class ReservationCalendarViewComponent implements OnInit {
    * @param roomType room type data which is emittedd on context option click
    * @returns selected room data
    */
-  getSelectedRoom(roomType) {
-    let selectedRoom;
-    roomType.data.values.map((item) => {
-      selectedRoom = roomType.rooms.find(
-        (room) => room.roomNumber === item.rowValue
-      );
-    });
-    return selectedRoom;
+  getSelectedRoom(roomType, rowValue) {
+    return roomType.rooms.find((item) => item.roomNumber === rowValue);
   }
 
   openDetailsPage(reservationId: string) {

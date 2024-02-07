@@ -230,7 +230,9 @@ export class ReservationCalendarViewComponent implements OnInit {
 
       const unavailableRooms = roomType.rooms.filter((room) => {
         const hasUnavailableStatus = room?.statusDetails.some(
-          (statusDetail) => statusDetail.status === 'OUT_OF_SERVICE'
+          (statusDetail) =>
+            statusDetail.status === 'OUT_OF_SERVICE' ||
+            statusDetail.status === 'OUT_OF_ORDER'
         );
 
         return hasUnavailableStatus;

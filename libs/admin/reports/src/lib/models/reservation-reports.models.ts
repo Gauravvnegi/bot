@@ -13,6 +13,7 @@ import {
   AddOnRequestReportResponse,
   ArrivalReportData,
   CancellationReportData,
+  CancellationReportResponse,
   DepartureReportData,
   DraftReservationReportData,
   EmployeeWiseReservationReportData,
@@ -104,29 +105,40 @@ export class Cancellation extends NoShows {
   cancelledOn: string;
   cancellationCharge: string;
   cancellationReason: string;
-
-  deserialize(value: ReservationResponse): this {
-    super.deserialize(value);
-    const roomDetails = value?.bookingItems?.[0];
-    this.roomType = `${roomDetails?.roomDetails?.roomNumber ?? ' '} - ${
-      roomDetails?.roomDetails?.roomTypeLabel ?? ''
+  IDeserialize(value: CancellationReportResponse): this {
+    this.id = value?.id;
+    this.bookingNumber = value?.number;
+    const guestDetails = value?.guestDetails?.primaryGuest;
+    this.guestName = getFullName(
+      guestDetails?.firstName,
+      guestDetails?.lastName
+    );
+    this.roomType = `${value?.stayDetails?.room?.roomNumber ?? ' '} - ${
+      value?.stayDetails?.room?.type ?? ''
     }`;
-    this.checkIn = getFormattedDate(value?.from);
-    this.checkOut = getFormattedDate(value?.to);
+
+    this.checkIn = getFormattedDate(value?.arrivalTime);
+    this.checkOut = getFormattedDate(value?.departureTime);
     this.night = value?.nightCount;
-    this.cancelledOn = getFormattedDate(value?.from);
-    this.cancellationCharge = null;
-    this.cancellationReason = null;
+    this.cancelledOn = getFormattedDate(value?.updateOn);
+    this.cancellationCharge = toCurrency(value?.paymentSummary?.paidAmount);
+    this.cancellationReason = value?.remarks ? value?.remarks : undefined;
+    this.bookingAmount = toCurrency(value?.paymentSummary.totalAmount);
+    this.otherCharge = toCurrency(
+      value?.reservationItemsPayment?.totalAddOnsAmount
+    );
+    this.amountPaid = toCurrency(value?.paymentSummary?.paidAmount);
+    this.balance = toCurrency(value?.paymentSummary?.dueAmount);
     return this;
   }
 }
 export class CancellationReport extends ReservationReport
-  implements ReportClass<CancellationReportData, ReservationResponse> {
+  implements ReportClass<CancellationReportData, CancellationReportResponse> {
   records: CancellationReportData[];
-  deserialize(value: ReservationResponse[]) {
+  deserialize(value: CancellationReportResponse[]) {
     this.records = new Array<CancellationReportData>();
     value.forEach((reservationData) => {
-      this.records.push(new Cancellation().deserialize(reservationData));
+      this.records.push(new Cancellation().IDeserialize(reservationData));
     });
     return this;
   }

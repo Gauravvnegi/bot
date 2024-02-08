@@ -138,7 +138,6 @@ export class ComplaintBifurcationComponent implements OnInit {
         label: stat.label,
         score: stat.value,
         additionalData: stat.value.toString(),
-        comparisonPercent: 100,
         color: stat.color,
       });
     });

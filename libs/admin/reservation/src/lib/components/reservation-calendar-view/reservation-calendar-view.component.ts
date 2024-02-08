@@ -350,7 +350,8 @@ export class ReservationCalendarViewComponent implements OnInit {
       this.auditService.checkAudit(this.entityId).subscribe(
         (res) => {
           const date = res?.shift() ?? Date.now();
-          this.initConfig(date);
+          const nextDate = new Date(date);
+          this.initConfig(nextDate.setDate(nextDate.getDate() - 1));
         },
         (error) => {
           this.initConfig(Date.now());

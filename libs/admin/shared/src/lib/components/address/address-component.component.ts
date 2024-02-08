@@ -19,6 +19,7 @@ declare let google: any;
 })
 export class AddressComponent extends FormComponent implements OnInit {
   @Input() controlName: string = 'address';
+  @Input() label: string = 'Address';
   addressList;
   addressForm: FormGroup;
 

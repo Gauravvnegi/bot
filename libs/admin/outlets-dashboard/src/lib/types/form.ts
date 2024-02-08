@@ -1,4 +1,3 @@
-import { PricingDetails } from 'libs/admin/manage-reservation/src/lib/types/response.type';
 import { OrderMethod, ReservationStatus } from './reservation-table';
 
 export type MenuForm = {
@@ -12,6 +11,7 @@ export type OrderInformation = {
   guest: string;
   numberOfPersons: string;
   menu: string[];
+  orderType: string;
 };
 
 export type MenuOrderResponse = {

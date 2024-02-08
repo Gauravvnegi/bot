@@ -2,8 +2,10 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup } from '@angular/forms';
 import {
   AdminUtilityService,
+  ConfigService,
   Filter,
   Option,
+  QueryConfig,
 } from '@hospitality-bot/admin/shared';
 import { MenuList } from 'libs/admin/all-outlets/src/lib/models/outlet.model';
 import { OutletService } from 'libs/admin/all-outlets/src/lib/services/outlet.service';
@@ -13,13 +15,18 @@ import {
   menuCardData,
   reservationTabFilters,
 } from '../../constants/data-table';
-import { MealPreferences, mealPreferenceConfig } from '../../types/menu-order';
+import {
+  MealPreferences,
+  OrderTypes,
+  mealPreferenceConfig,
+} from '../../types/menu-order';
 import { mealPreferences } from '../../constants/form';
 import { MenuForm } from '../../types/form';
 import { OutletFormService } from '../../services/outlet-form.service';
 import { TableManagementService } from 'libs/table-management/src/lib/services/table-management.service';
 import { AreaList } from 'libs/table-management/src/lib/models/data-table.model';
 import { AreaListResponse } from 'libs/table-management/src/lib/types/table-datable.type';
+import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 
 @Component({
   selector: 'hospitality-bot-pos-reservation',
@@ -39,6 +46,8 @@ export class PosReservationComponent implements OnInit {
   menuOptions: Menu[] = [];
   staffList: Option[] = [];
   guestList: Option[] = [];
+  orderTypes: Option[] = [];
+  globalQueries = [];
 
   cardData = menuCardData;
   tabFilters: Filter<string, string>[] = reservationTabFilters;
@@ -46,6 +55,7 @@ export class PosReservationComponent implements OnInit {
 
   sendFeedback: boolean = false;
   emailInvoice: boolean = false;
+  printInvoice: boolean = false;
 
   searchApi: string;
   selectedPreference: MealPreferences = MealPreferences.ALL;
@@ -57,10 +67,13 @@ export class PosReservationComponent implements OnInit {
     private outletService: OutletService,
     private formService: OutletFormService,
     private tableManagementService: TableManagementService,
-    private adminUtilityService: AdminUtilityService
+    private adminUtilityService: AdminUtilityService,
+    private configService: ConfigService,
+    private globalFilterService: GlobalFilterService
   ) {}
 
   ngOnInit(): void {
+    this.listenForGlobalFilters();
     this.initForm();
     this.initDetails();
   }
@@ -68,12 +81,14 @@ export class PosReservationComponent implements OnInit {
   initForm() {
     this.userForm = this.fb.group({
       orderInformation: this.fb.group({
+        orderType: [],
         search: [''],
         tableNumber: [[]],
         staff: [''],
         guest: [''],
         numberOfPersons: [''],
         menu: [[]],
+        address: [''],
       }),
       paymentInformation: this.fb.group({
         complementery: [false],
@@ -84,9 +99,23 @@ export class PosReservationComponent implements OnInit {
     });
   }
 
+  /**
+   * @function listenForGlobalFilters To listen for global filters and load data when filter value is changed.
+   */
+  listenForGlobalFilters(): void {
+    this.globalFilterService.globalFilter$.subscribe((data) => {
+      // set-global query everytime global filter changes
+      this.globalQueries = [
+        ...data['filter'].queryValue,
+        ...data['dateRange'].queryValue,
+      ];
+    });
+  }
+
   initDetails() {
     this.entityId = this.formService.entityId;
     this.getMenus();
+    this.getOrderConfig();
     this.getTableData();
   }
 
@@ -99,9 +128,34 @@ export class PosReservationComponent implements OnInit {
             this.menuOptions.map((item) => item.value),
             { emitEvent: false }
           );
+          this.menuOptions.forEach((item) => {
+            this.getMenuItems(item.id);
+          });
         }
       })
     );
+  }
+
+  getMenuItems(menuId: string) {
+    this.$subscription.add(
+      this.outletService
+        .getMenuItems(this.getQueryConfig(menuId), this.entityId)
+        .subscribe((res) => {})
+    );
+  }
+
+  getQueryConfig(id: string): QueryConfig {
+    const config = {
+      params: this.adminUtilityService.makeQueryParams([
+        ...this.globalQueries,
+        {
+          // offset: this.first,
+          // limit: this.rowsPerPage,
+          menuId: id,
+        },
+      ]),
+    };
+    return config;
   }
 
   getAreaConfig() {
@@ -141,9 +195,32 @@ export class PosReservationComponent implements OnInit {
     );
   }
 
+  getOrderConfig() {
+    this.configService.getColorAndIconConfig(this.entityId).subscribe((res) => {
+      if (res) {
+        this.orderTypes = res.orderConfig.type.map(
+          (item: { key: string; value: OrderTypes }) => ({
+            label: item.key,
+            value: item.value,
+          })
+        );
+        this.orderInfoControls.orderType.patchValue(OrderTypes.DINE_IN, {
+          emitEvent: false,
+        });
+      }
+    });
+  }
+
+  checkOrderType(isAddress: boolean = false) {
+    const selectedOrderType = this.orderInfoControls.orderType.value;
+    return selectedOrderType === OrderTypes.DINE_IN;
+  }
+
   onSendFeedback(event: HTMLInputElement) {}
 
   onEmailInvoice(event: HTMLInputElement) {}
+
+  onPrintInvoice(event: HTMLInputElement) {}
 
   clearSearch() {}
 

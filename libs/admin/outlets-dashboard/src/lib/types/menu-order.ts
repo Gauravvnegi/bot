@@ -14,6 +14,13 @@ export enum MealPreferences {
   NON_VEG = 'NON_VEG',
 }
 
+export enum OrderTypes {
+  DINE_IN = 'DINE_IN',
+  DELIVERY = 'DELIVERY',
+  TAKE_AWAY = 'TAKE_AWAY',
+  KIOSK = 'KIOSK',
+}
+
 export type ItemsFormFields = 'Instruction' | 'Offer' | 'ItemInstruction';
 
 export const mealPreferenceConfig: Record<

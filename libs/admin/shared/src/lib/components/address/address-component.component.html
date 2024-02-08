@@ -1,7 +1,7 @@
 <div [formGroup]="addressForm" class="input-wrapper">
   <hospitality-bot-auto-complete
     controlName="addressData"
-    label="Address"
+    [label]="label"
     class="auto-complete"
     [options]="addressList"
     [loading]="loading"

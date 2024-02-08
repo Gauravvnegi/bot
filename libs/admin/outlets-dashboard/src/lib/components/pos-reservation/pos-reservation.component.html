@@ -10,17 +10,20 @@
             src="assets/svg/pos-reservation.svg"
           />
         </span> -->
-        <div class="form-block menu">
+        <div class="header-form">
+          <hospitality-bot-select
+            class="half-width"
+            controlName="orderType"
+            [options]="orderTypes"
+          ></hospitality-bot-select>
           <hospitality-bot-multi-select
-            class="one-third-width menu-field"
+            class="half-width menu-field"
             controlName="menu"
             [options]="menuOptions"
             [props]="{
-              placeholder: 'Select Menu',
-              dropdownIcon: 'pi pi-sort-down'
+              placeholder: 'Select Menu'
             }"
             [settings]="{
-              placeholder: 'Select Menu',
               showChips: false,
               maxSelectedLabels: 1
             }"
@@ -58,32 +61,41 @@
         [options]="areaList"
         label="Table No./Area"
       ></hospitality-bot-multi-select>
-      <hospitality-bot-select
-        class="one-fifth-width"
-        controlName="staff"
-        [options]="staffList"
-        [props]="{
-          placeholder: 'Select'
-        }"
-        label="Staff"
-      ></hospitality-bot-select>
-      <hospitality-bot-select
-        class="one-fifth-width"
-        controlName="guest"
-        [options]="guestList"
-        [props]="{
-          placeholder: 'Select'
-        }"
-        label="Guest"
-      ></hospitality-bot-select>
-      <hospitality-bot-input
-        class="one-fifth-width"
-        controlName="numberOfPersons"
-        [props]="{
-          placeholder: 'Enter'
-        }"
-        label="No. of Person"
-      ></hospitality-bot-input>
+      <ng-container *ngIf="checkOrderType()">
+        <hospitality-bot-select
+          class="one-fifth-width"
+          controlName="staff"
+          [options]="staffList"
+          [props]="{
+            placeholder: 'Select'
+          }"
+          label="Staff"
+        ></hospitality-bot-select>
+        <hospitality-bot-select
+          class="one-fifth-width"
+          controlName="guest"
+          [options]="guestList"
+          [props]="{
+            placeholder: 'Select'
+          }"
+          label="Guest"
+        ></hospitality-bot-select>
+        <hospitality-bot-input
+          class="one-fifth-width"
+          controlName="numberOfPersons"
+          [props]="{
+            placeholder: 'Enter'
+          }"
+          label="No. of Person"
+        ></hospitality-bot-input>
+      </ng-container>
+      <hospitality-bot-address-component
+        *ngIf="orderInfoControls.orderType.value === 'DELIVERY'"
+        label="Delivery Address"
+        class="half-width"
+        controlName="address"
+      >
+      </hospitality-bot-address-component>
     </div>
   </ng-container>
 
@@ -154,6 +166,15 @@
     <label class="checkbox-label" (click)="emailCheckbox.click()" for="checkbox"
       >Email Invoice</label
     >
+    <input
+      #printCheckbox
+      type="checkbox"
+      [checked]="printInvoice"
+      (change)="onPrintInvoice($event.target)"
+    />
+    <label class="checkbox-label" (click)="printCheckbox.click()" for="checkbox"
+      >Print Invoice</label
+    >
   </div>
   <div class="buttons">
     <hospitality-bot-button
@@ -165,12 +186,6 @@
     <hospitality-bot-button
       label="Save"
       (onClick)="handleSave()"
-      minWidth="120px"
-      height="40px"
-    ></hospitality-bot-button>
-    <hospitality-bot-button
-      label="Save & Print"
-      (onClick)="handleSave(true)"
       minWidth="120px"
       height="40px"
     ></hospitality-bot-button>

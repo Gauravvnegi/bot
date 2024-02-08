@@ -77,7 +77,7 @@ export class SearchBarComponent implements OnInit, OnDestroy {
     const formChanges$ = this.parentForm.valueChanges;
     const findSearch$ = ({ search }: { search: string }) =>
       this.searchService.search(
-        search.trim(),
+        btoa(search.trim()),
         this.hotelDetailService.entityId
       );
     formChanges$

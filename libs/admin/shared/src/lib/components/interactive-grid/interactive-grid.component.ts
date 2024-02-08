@@ -220,7 +220,10 @@ export class InteractiveGridComponent {
   toggleMenuPos: 'SE' | 'SW' | 'NE' | 'NW' = 'SE';
 
   @Output() onMenuClick = new EventEmitter<
-    Omit<IGCellInfo['options'][number], 'label'> & { id: string }
+    Omit<IGCellInfo['options'][number], 'label'> & {
+      id: string;
+      rowValue: IGRow;
+    }
   >();
 
   @HostListener('document:click', ['$event'])
@@ -271,10 +274,15 @@ export class InteractiveGridComponent {
   }
 
   /**Emit selected menu option */
-  handleMenuClick(event: MouseEvent, value: IGCellInfo['options'][number]) {
+  handleMenuClick(
+    event: MouseEvent,
+    value: IGCellInfo['options'][number],
+    query: IGQueryEvent
+  ) {
     event.stopPropagation();
     this.onMenuClick.emit({
       id: this.toggleMenuId,
+      rowValue: query.rowValue,
       ...value,
     });
     this.toggleMenuId = '';

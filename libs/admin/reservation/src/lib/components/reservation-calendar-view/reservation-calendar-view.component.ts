@@ -589,9 +589,21 @@ export class ReservationCalendarViewComponent implements OnInit {
       return reservationMenuOptions['OUT_OF_ORDER'];
     }
 
-    return reservation.journeysStatus.PRECHECKIN === JourneyState.PENDING
-      ? reservationMenuOptions['PRECHECKIN']
-      : reservationMenuOptions[reservation.status];
+    let menuOptions =
+      reservation.journeysStatus.PRECHECKIN === JourneyState.PENDING
+        ? reservationMenuOptions['PRECHECKIN']
+        : reservationMenuOptions[reservation.status];
+
+    const endDate = new Date(reservation.to).setHours(0, 0, 0, 0);
+    const today = new Date(Date.now()).setHours(0, 0, 0, 0);
+
+    if (
+      endDate < today &&
+      reservation.status === ReservationCurrentStatus.CHECKEDOUT
+    ) {
+      menuOptions = [{ label: 'View Details', value: 'VEIW_DETAILS' }];
+    }
+    return menuOptions;
   }
 
   hideFooter(hide: boolean) {

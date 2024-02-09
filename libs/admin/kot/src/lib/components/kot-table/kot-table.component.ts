@@ -94,7 +94,6 @@ export class KotTableComponent extends BaseDatatableComponent
             data?.total,
             kotStatusDetails
           );
-          debugger;
         })
     );
   }

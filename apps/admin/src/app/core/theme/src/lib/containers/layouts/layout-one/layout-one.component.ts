@@ -534,10 +534,12 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
 
     if (isComingSoon) return true;
 
-    return this.subscriptionPlanService.hasViewUserPermission({
+    const ans = this.subscriptionPlanService.hasViewUserPermission({
       type: 'module',
       name: this.routesConfigService.subModuleName,
     });
+
+    return ans;
   }
 
   initBookingOption() {
@@ -772,6 +774,16 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
       this.subscriptionPlanService.checkProductSubscription(
         ProductNames.PREDICTO_PMS
       )
+    );
+  }
+
+  get isAuditSubscribed() {
+    return (
+      this.subscriptionPlanService.checkModuleSubscription(ModuleNames.AUDIT) &&
+      this.subscriptionPlanService.hasViewUserPermission({
+        type: 'module',
+        name: ModuleNames.AUDIT,
+      })
     );
   }
 

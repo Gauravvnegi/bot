@@ -456,8 +456,8 @@ export class RoomIteratorComponent extends IteratorComponent
           entityId: this.entityId,
           reservationId: this.reservationId,
           effectiveDate: this.isCheckedIn
-            ? this.reservationInfoControls.from.value
-            : Date.now(),
+            ? Date.now()
+            : this.reservationInfoControls.from.value,
           toDate: this.reservationInfoControls.to.value,
         },
       },

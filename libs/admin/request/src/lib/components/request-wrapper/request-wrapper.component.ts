@@ -136,7 +136,13 @@ export class RequestWrapperComponent implements OnInit, OnDestroy {
       componentName: 'RaiseRequest',
       containerRef: this.sidebarSlide,
       onOpen: () => (this.sidebarVisible = true),
-      onClose: (res) => (this.sidebarVisible = false),
+      onClose: (res) => {
+        this.sidebarVisible = false;
+
+        if (res?.load) {
+          this._requestService.refreshData.next(true);
+        }
+      },
     });
   }
 

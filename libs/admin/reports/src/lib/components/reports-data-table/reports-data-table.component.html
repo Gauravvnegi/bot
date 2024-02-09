@@ -31,6 +31,7 @@
         }"
         (paginate)="loadMoreUsers()"
         [stopEmission]="noMoreUsers"
+        [disabled]="loading"
       ></hospitality-bot-select>
       <hospitality-bot-select
         *ngIf="availableFilters.isEmployee"
@@ -46,6 +47,7 @@
         }"
         (paginate)="loadMoreUsers()"
         [stopEmission]="noMoreUsers"
+        [disabled]="loading"
       ></hospitality-bot-select>
       <hospitality-bot-date
         *ngIf="availableFilters.isMonth"
@@ -58,6 +60,7 @@
           view: 'month',
           dateFormat: 'mm/yy'
         }"
+        [disabled]="loading"
       >
       </hospitality-bot-date>
       <hospitality-bot-date
@@ -69,6 +72,7 @@
         [settings]="{
           enableTime: false
         }"
+        [disabled]="loading"
       >
       </hospitality-bot-date>
       <hospitality-bot-date
@@ -81,6 +85,7 @@
         [settings]="{
           enableTime: false
         }"
+        [disabled]="loading"
       >
       </hospitality-bot-date>
       <hospitality-bot-date
@@ -92,6 +97,7 @@
         [settings]="{
           enableTime: false
         }"
+        [disabled]="loading"
       >
       </hospitality-bot-date>
       <hospitality-bot-room-types
@@ -102,6 +108,7 @@
           floatInsideLabel: true,
           placeholder: 'Select'
         }"
+        [disabled]="loading"
       ></hospitality-bot-room-types>
     </ng-container>
     <hospitality-bot-export-list

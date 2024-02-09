@@ -1,4 +1,7 @@
-import { HistoryAndForecastColumns } from '../types/occupany-reports.types';
+import {
+  HistoryAndForecastColumns,
+  HouseCountReportData,
+} from '../types/occupany-reports.types';
 import { ColsData } from '../types/reports.types';
 
 export const historyAndForecastReportCols: ColsData<Omit<
@@ -89,3 +92,51 @@ export const historyAndForecastReportRows = Object.keys(
   label: historyAndForecastReportCols[key].header,
   name: key,
 }));
+
+export const houseCountReportCols: ColsData<HouseCountReportData> = {
+  date: {
+    header: 'Date',
+    isSearchDisabled: true,
+    isSortDisabled: true,
+  },
+  roomsAvailable: {
+    header: 'Rooms Available',
+    isSearchDisabled: true,
+    isSortDisabled: true,
+  },
+  roomsOccupied: {
+    header: 'Rooms Occupied',
+    isSearchDisabled: true,
+    isSortDisabled: true,
+  },
+  roomReserved: {
+    header: 'Rooms Reserved',
+    isSearchDisabled: true,
+    isSortDisabled: true,
+  },
+  roomsSold: {
+    header: 'Rooms Sold',
+    isSearchDisabled: true,
+    isSortDisabled: true,
+  },
+  total: {
+    header: 'Total Rooms',
+    isSearchDisabled: true,
+    isSortDisabled: true,
+  },
+  guestOccupied: {
+    header: 'Guest Occupied',
+    isSearchDisabled: true,
+    isSortDisabled: true,
+  },
+  guestReserved: {
+    header: 'Guest Reserved',
+    isSearchDisabled: true,
+    isSortDisabled: true,
+  },
+  totalGuest: {
+    header: 'Total Guest',
+    isSearchDisabled: true,
+    isSortDisabled: true,
+  },
+};

@@ -11,7 +11,7 @@ import {
 } from '@hospitality-bot/admin/shared';
 import * as FileSaver from 'file-saver';
 import { ManagePermissionService } from 'libs/admin/roles-and-permissions/src/lib/services/manage-permission.service';
-import { Subscription } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
 import {
   reportFiltersMapping,
   reportsColumnMapping,
@@ -26,6 +26,7 @@ import {
   ReportsMenu,
   RowStyles,
 } from '../../types/reports.types';
+import { distinctUntilChanged, takeUntil, shareReplay } from 'rxjs/operators';
 
 @Component({
   selector: 'hospitality-bot-reports-data-table',
@@ -50,10 +51,12 @@ export class ReportsDataTableComponent extends BaseDatatableComponent {
       value: '',
     },
   ];
+  userOffset: number = 0;
+  noMoreUsers: boolean = false;
 
   selectedReport: ReportsMenu[number];
-
   $subscription = new Subscription();
+  private cancelRequests$ = new Subject<void>();
   constructor(
     private reportsService: ReportsService,
     public fb: FormBuilder,
@@ -69,16 +72,28 @@ export class ReportsDataTableComponent extends BaseDatatableComponent {
     this.entityId = this.globalFilterService.entityId;
     this.initTime();
     this.initReportFilters();
-    this.getUserList();
-    this.reportsService.$selectedReport.subscribe((report) => {
-      if (report) {
-        this.selectedReport = report;
-        this.loadInitialData();
-      }
-    });
+    this.$subscription.add(
+      this.reportsService.$selectedReport
+        .pipe(distinctUntilChanged(), shareReplay(1))
+        .subscribe(
+          (report) => {
+            if (report) {
+              this.selectedReport = report;
+              this.cancelRequests$.next();
+              this.loadInitialData();
+              if (
+                this.currentFilters?.includes('employeeId') ||
+                this.currentFilters?.includes('cashierId')
+              ) {
+                this.getUserList();
+              }
+            }
+          },
+          ({ error }) => {}
+        )
+    );
   }
-  userOffset: number = 0;
-  noMoreUsers: boolean = false;
+
   loadMoreUsers() {
     this.userOffset = this.userOffset + 10;
     this.getUserList();
@@ -113,7 +128,7 @@ export class ReportsDataTableComponent extends BaseDatatableComponent {
     return {
       entityId: this.globalFilterService.entityId,
       reportName: this.selectedReport.value,
-      ...this.currentFilters.reduce((value, curr) => {
+      ...this.currentFilters?.reduce((value, curr) => {
         if (curr === 'month') {
           const startDate = new Date(filters.month);
           if (startDate instanceof Date) {
@@ -162,22 +177,30 @@ export class ReportsDataTableComponent extends BaseDatatableComponent {
     this.loading = true;
     const query = this.getQueryParams();
 
-    this.reportsService.getReport(query).subscribe(
-      (res) => {
-        const ReportModel = reportsModelMapping[this.selectedReport.value];
-        this.cols = reportsColumnMapping[this.selectedReport.value];
-        this.values = new ReportModel().deserialize(res).records;
-        if (this.selectedReport.value === 'managerFlashReport') {
-          const date = this.tableFG.controls['filters'].get('date').value;
-          this.addAdditionalTextToCols(new Date(date).getFullYear().toString());
+    this.reportsService
+      .getReport(query)
+      .pipe(
+        //to cancel api call between using take until
+        takeUntil(this.cancelRequests$)
+      )
+      .subscribe(
+        (res) => {
+          const ReportModel = reportsModelMapping[this.selectedReport.value];
+          this.cols = reportsColumnMapping[this.selectedReport.value];
+          this.values = new ReportModel().deserialize(res).records;
+          if (this.selectedReport.value === 'managerFlashReport') {
+            const date = this.tableFG.controls['filters'].get('date').value;
+            this.addAdditionalTextToCols(
+              new Date(date).getFullYear().toString()
+            );
+          }
+          this.loading = false;
+        },
+        () => {
+          this.loading = false;
+          this.values = [];
         }
-        this.loading = false;
-      },
-      () => {
-        this.loading = false;
-        this.values = [];
-      }
-    );
+      );
   }
 
   exportCSV(): void {
@@ -270,5 +293,9 @@ export class ReportsDataTableComponent extends BaseDatatableComponent {
 
   toggleMenu() {
     this.reportsService.toggleMenu();
+  }
+
+  ngOnDestroy(): void {
+    this.$subscription.unsubscribe();
   }
 }

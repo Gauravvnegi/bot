@@ -64,8 +64,6 @@
 }
 
 .filter-range-wrapper {
-  width: 30%;
-
   @include flex-between-center;
   @media (max-width: $L) {
     @include flex-start;
@@ -402,7 +400,6 @@
   }
 }
 
-
 // Sidebar design
 :host ::ng-deep {
   .complaint {
@@ -470,7 +467,6 @@
       @include sidebar-design(30rem);
     }
   }
-
 
   .url {
     @include default-close;

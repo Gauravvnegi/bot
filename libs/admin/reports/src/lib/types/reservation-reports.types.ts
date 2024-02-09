@@ -9,6 +9,7 @@ import {
   NoShows,
 } from '../models/reservation-reports.models';
 import { PaymentSummary } from './guest-reports.types';
+import { ReservationItemsPayment } from './financial-reports.types';
 
 export type ReservationReportData = {
   id?: string;
@@ -32,7 +33,10 @@ export type DepartureReportData = Omit<
   'deserialize' | 'id' | 'arrivalTime'
 >;
 
-export type CancellationReportData = Omit<Cancellation, 'deserialize' | 'id'>;
+export type CancellationReportData = Omit<
+  Cancellation,
+  'IDeserialize' | 'id' | 'deserialize'
+>;
 export type CancellationReportPartialData = Omit<
   CancellationReportData,
   UnnecessaryCancellationObject
@@ -207,3 +211,98 @@ export type AddOnRequestReportResponse = {
   source: string;
   category: string;
 };
+
+export type CancellationReportResponse = {
+  id: string;
+  updated: number;
+  created: number;
+  arrivalTime: number;
+  departureTime: number;
+  updateOn: number;
+  remarks: string;
+  number: string;
+  pmsStatus: string;
+  state: string;
+  offer: any[]; // Define a proper type for offer if needed
+  stateCompletedSteps: string;
+  stayDetails: StayDetails;
+  guestDetails: {
+    primaryGuest: GuestInfo;
+    accompanyGuests: any[]; // Define a proper type for accompanyGuests if needed
+    sharerGuests: any[]; // Define a proper type for sharerGuests if needed
+    secondaryGuest: any[]; // Define a proper type for secondaryGuest if needed
+    kids: any[]; // Define a proper type for kids if needed
+    allGuest: Record<string, GuestInfo>;
+  };
+  paymentSummary: PaymentSummary;
+  journeysStatus: JourneyStatus;
+  stepsStatus: StepsStatus;
+  lastCompletedStep: string;
+  currentJourney: string;
+  currentJoureyStatus: string;
+  currentJourneyState: string;
+  marketSegment: string;
+  source: string;
+  status: string;
+  invoiceCode: string;
+  reservationItemsPayment: ReservationItemsPayment;
+  nightCount: number;
+  invoicePrepareRequest: boolean;
+  vip: boolean;
+  pmsBooking: boolean;
+};
+
+interface JourneyStatus {
+  CHECKOUT: string;
+  NEW: string;
+  PRECHECKIN: string;
+  CHECKIN: string;
+}
+
+interface StepsStatus {
+  DOCUMENTS: string;
+  HEALTHDECLARATION: string;
+  GUESTDETAILS: string;
+  PAYMENT: string;
+  STAYDETAILS: string;
+}
+
+interface GuestContactDetails {
+  cc: string;
+  contactNumber: string;
+  emailId: string;
+}
+
+interface GuestInfo {
+  id: string;
+  salutation: string;
+  firstName: string;
+  lastName: string;
+  contactDetails: GuestContactDetails;
+  nationality: string;
+  regcardUrl: string;
+  age: number;
+  privacy: boolean;
+  firstStay: number;
+  lastStay: number;
+  totalNights: number;
+  documentRequired: boolean;
+}
+
+interface StayDetails {
+  arrivalTime: number;
+  departureTime: number;
+  expectedArrivalTime: number;
+  expectedDepartureTime: number;
+  adultsCount: number;
+  kidsCount: number;
+  comments: string;
+  room: {
+    roomNumber: string;
+    type: string;
+    unit: number;
+    status: string;
+  };
+  checkInComment: string;
+  address: object; // You may want to define a proper type for address if needed
+}

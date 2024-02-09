@@ -20,6 +20,7 @@ import { BookingDetailService } from 'libs/admin/shared/src/index';
 import { RoutesConfigService } from '../../services/routes-config.service';
 import { ModuleNames } from 'libs/admin/shared/src/lib/constants/subscriptionConfig';
 import { packagesRoutes } from 'libs/admin/packages/src/lib/constant/routes';
+import { OverlayPanel } from 'primeng/overlaypanel';
 
 @Component({
   selector: 'admin-search-bar',
@@ -31,7 +32,7 @@ export class SearchBarComponent implements OnInit, OnDestroy {
   @Input() name: string;
   @Input() parentSearchVisible: boolean;
   @Output() parentFilterVisible = new EventEmitter();
-  @ViewChild('searchResult') searchResult;
+  @ViewChild('searchResult') searchResult: OverlayPanel;
   @ViewChild('searchBar') searchBar: ElementRef;
 
   entityId: string;
@@ -76,7 +77,7 @@ export class SearchBarComponent implements OnInit, OnDestroy {
     const formChanges$ = this.parentForm.valueChanges;
     const findSearch$ = ({ search }: { search: string }) =>
       this.searchService.search(
-        search.trim(),
+        btoa(search.trim()),
         this.hotelDetailService.entityId
       );
     formChanges$
@@ -103,6 +104,7 @@ export class SearchBarComponent implements OnInit, OnDestroy {
 
           this.searchOptions = [];
           this.searchDropdownVisible = true;
+          this.searchResult.show(this.searchDropdownVisible);
 
           this.searchValue = true;
           if (

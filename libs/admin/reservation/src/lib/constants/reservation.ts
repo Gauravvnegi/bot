@@ -52,7 +52,10 @@ export const reservationMenuOptions: Record<
     { label: 'Cancel Checkin', value: 'CANCEL_CHECKIN' },
     ...checkoutOptions,
   ],
-  DUEOUT: checkoutOptions,
+  DUEOUT: [
+    { label: 'Cancel Checkin', value: 'CANCEL_CHECKIN' },
+    ...checkoutOptions,
+  ],
   CHECKEDOUT: [
     { label: 'Cancel Checkout', value: 'CANCEL_CHECKOUT' },
     ...viewDetails,

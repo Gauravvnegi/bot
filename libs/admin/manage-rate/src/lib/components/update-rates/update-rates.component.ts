@@ -168,7 +168,7 @@ export class UpdateRatesComponent implements OnInit {
         .getConfigType({ 'entity-id': this.entityId })
         .subscribe(
           (res) => {
-            this.configType = res.type;
+            this.configType = res?.type;
             this.loading = false;
             this.initForm();
           },
@@ -202,6 +202,14 @@ export class UpdateRatesComponent implements OnInit {
     if (this.hasDynamicPricing) this.addRootDynamicControl();
     this.listenChanges();
     this.getRates();
+    this.useForm.patchValue(
+      {
+        roomType: this.allRoomTypes.map((item) => item.id, {
+          eventEmitter: false,
+        }),
+      },
+      { emitEvent: false }
+    );
   }
 
   /**
@@ -462,10 +470,12 @@ export class UpdateRatesComponent implements OnInit {
       'pax',
       this.fb.array(
         Array.from({ length: ratePlan.maxOccupancy - 1 }, (_, ind) => {
-          const paxPrice = masterPaxPrice[ind]
-            ? masterPaxPrice[ind]
-            : masterPaxPrice[1] +
-              (ind + 2 - 3) * ratePlan.pricingDetails.paxAdult;
+          // New price will be calculated when, (PaxN = (BP+Triple) + [(n-3)*adult]) for all n>=4
+          const n = ind + 2;
+          const newPrice =
+            masterPaxPrice[1] + (n - 3) * ratePlan.pricingDetails.paxAdult;
+
+          const paxPrice = ind > 1 ? newPrice : masterPaxPrice[ind];
 
           const paxFG = this.fb.group({
             basePrice: [ratePlan.basePrice],
@@ -621,15 +631,16 @@ export class UpdateRatesComponent implements OnInit {
               if (!isBaseRoomType && isBaseRatePlanRow) {
                 // console.log(
                 //   'Non Base Room Type && BaseRatePlan Row====>>',
-                //   !isBaseRatePlanRow
+                //   !isBaseRatePlanRow,
+                //   controlG.controls['variablePrice'].value
                 // );
-
                 const ratePlans = control as FormArray;
                 ratePlans.controls.forEach((ratePlan: FormGroup) => {
                   this.mapPaxPrice(ratePlan, dpArray, {
                     dayWise: dayIndex,
                     isLinked: linkedValue,
                     res: res,
+                    onlyNonBase: true,
                   });
                 });
               }
@@ -685,11 +696,18 @@ export class UpdateRatesComponent implements OnInit {
         const rates = ratePlanControl.get('rates') as FormArray;
 
         // mapping data in which dynamic pricing off
-        const newPriceList = rates.controls.map((rate, rateIndex) => ({
-          value: dynamicControl.at(rateIndex).get('value').value
-            ? rate.get('value').value
-            : price,
-        }));
+        let newPriceList;
+        if (this.hasDynamicPricing) {
+          newPriceList = rates.controls.map((rate, rateIndex) => ({
+            value: dynamicControl.at(rateIndex).get('value').value
+              ? rate.get('value').value
+              : price,
+          }));
+        } else {
+          newPriceList = rates.controls.map((rate, rateIndex) => ({
+            value: price,
+          }));
+        }
 
         if (linkedValue) {
           rates.patchValue(newPriceList, {
@@ -699,13 +717,22 @@ export class UpdateRatesComponent implements OnInit {
           rates.at(dayIndex).patchValue({ value: price }, { emitEvent: false });
         }
 
-        if (isMapInAllRoom) {
-          this.mapAllRoomPrice({
-            isLinked: linkedValue,
-            dayWise: dayIndex,
-            res: res,
-          });
-        }
+        //NO NEED Remove.....
+        // if (isMapInAllRoom) {
+        //   this.mapAllRoomPrice({
+        //     isLinked: linkedValue,
+        //     dayWise: dayIndex,
+        //     res: res,
+        //   });
+        // }
+      }
+
+      if (isMapInAllRoom) {
+        this.mapAllRoomPrice({
+          isLinked: linkedValue,
+          dayWise: dayIndex,
+          res: res,
+        });
       }
     });
   }
@@ -808,8 +835,19 @@ export class UpdateRatesComponent implements OnInit {
       }
 
       //Extra food price add in price
-      if (mappingInfo?.extraFoodPrice) {
+      if (
+        !isBaseRP &&
+        mappingInfo?.extraFoodPrice &&
+        !mappingInfo?.onlyNonBase
+      ) {
         price = +price + mappingInfo.extraFoodPrice * (paxInd + 1);
+      }
+
+      //Extra price for @Case 3
+      if (!isBaseRP && mappingInfo?.onlyNonBase) {
+        // console.log('production...', ratePlan);
+        const variablePrice = ratePlan.get('variablePrice')?.value;
+        price = +price + +variablePrice * (paxInd + 1);
       }
 
       // Check linked, then modify all data
@@ -1424,7 +1462,7 @@ export class UpdateRatesComponent implements OnInit {
 
   getPaxCount(ratePlan: FormGroup): number {
     const pax = ratePlan.get('pax') as FormArray;
-    return pax?.controls?.length;
+    return pax?.controls?.length + 1;
   }
 
   ngOnDestroy(): void {
@@ -1437,6 +1475,7 @@ type RoomMapProps = {
   dayWise: number;
   res: { value: string };
   extraFoodPrice?: number;
+  onlyNonBase?: boolean;
 };
 
 export interface UpdateRateFormObj {

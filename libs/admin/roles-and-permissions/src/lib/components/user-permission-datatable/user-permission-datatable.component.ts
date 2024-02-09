@@ -268,9 +268,11 @@ export class UserPermissionDatatableComponent extends BaseDatatableComponent
   }
 
   isEditAccessDenied(rowData) {
-    return !(
-      rowData?.parentId === this.loggedInUserId ||
-      rowData?.reportingTo === this.loggedInUserId
+    return (
+      !(
+        rowData?.parentId === this.loggedInUserId ||
+        rowData?.reportingTo === this.loggedInUserId
+      ) || !rowData?.parentId
     );
   }
 

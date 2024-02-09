@@ -12,7 +12,10 @@ export class FeedbackList {
 
   deserialize(input, outlets, feedbackType, colorMap) {
     this.records = new Array<FeedbackRecord>();
-    input?.records?.forEach((record) =>
+    const inputRecords = Array.isArray(input?.records)
+      ? input?.records
+      : input?.records.records;
+    inputRecords?.forEach((record) =>
       this.records.push(
         new FeedbackRecord().deserialize(
           record,

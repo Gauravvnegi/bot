@@ -1,0 +1,40 @@
+.main {
+  .content {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    padding: 20px;
+    .info {
+      width: 300px;
+      border-right: 1px solid #d7d7d7; 
+      &:last-child {
+        border-right: unset;
+      } 
+      padding: 20px;
+      .item {
+        display: flex;
+        justify-content: space-between;
+        column-gap: 10px;
+        font-weight: 600;
+        padding: 10px;
+        .left {
+          color: grey;
+        }
+        .right {
+          font-weight: 600;
+          display: flex;
+          column-gap: 10px;
+        }
+      }
+    }
+  }
+}
+
+:host ::ng-deep .main {
+  .p-accordion
+    .p-accordion-header:not(.p-disabled).p-highlight
+    .p-accordion-header-link,
+  .p-accordion .p-accordion-header .p-accordion-header-link {
+    background-color: white !important;
+  }
+}

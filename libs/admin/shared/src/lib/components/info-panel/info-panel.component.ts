@@ -38,6 +38,10 @@ export class InfoPanelComponent implements OnInit {
       name: 'Out of Service',
       color: '#555555',
     },
+    {
+      name: 'Out of Order',
+      color: 'rgba(85, 85, 85, 0.1',
+    },
   ];
 
   roomStatus = [

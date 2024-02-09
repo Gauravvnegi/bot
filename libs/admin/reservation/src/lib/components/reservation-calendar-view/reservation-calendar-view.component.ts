@@ -230,7 +230,9 @@ export class ReservationCalendarViewComponent implements OnInit {
 
       const unavailableRooms = roomType.rooms.filter((room) => {
         const hasUnavailableStatus = room?.statusDetails.some(
-          (statusDetail) => statusDetail.status === 'OUT_OF_SERVICE'
+          (statusDetail) =>
+            statusDetail.status === 'OUT_OF_SERVICE' ||
+            statusDetail.status === 'OUT_OF_ORDER'
         );
 
         return hasUnavailableStatus;
@@ -272,7 +274,7 @@ export class ReservationCalendarViewComponent implements OnInit {
               startPos: this.getDate(status.fromDate),
               endPos: this.getStatusDate(status.toDate, status.fromDate),
               rowValue: room.roomNumber,
-              colorCode: 'draft',
+              colorCode: isOutOfService ? 'draft' : 'transparent',
               nonInteractive: true,
               additionContent: status.remarks,
               allowAction: isOutOfService
@@ -282,7 +284,6 @@ export class ReservationCalendarViewComponent implements OnInit {
                 null,
                 isOutOfService ? 'out-of-service' : 'out-of-order'
               ),
-              opacity: isOutOfService ? 1 : 0.4,
             };
           });
         return [...result, ...roomValues];
@@ -349,7 +350,8 @@ export class ReservationCalendarViewComponent implements OnInit {
       this.auditService.checkAudit(this.entityId).subscribe(
         (res) => {
           const date = res?.shift() ?? Date.now();
-          this.initConfig(date);
+          const nextDate = new Date(date);
+          this.initConfig(nextDate.setDate(nextDate.getDate() - 1));
         },
         (error) => {
           this.initConfig(Date.now());
@@ -587,9 +589,21 @@ export class ReservationCalendarViewComponent implements OnInit {
       return reservationMenuOptions['OUT_OF_ORDER'];
     }
 
-    return reservation.journeysStatus.PRECHECKIN === JourneyState.PENDING
-      ? reservationMenuOptions['PRECHECKIN']
-      : reservationMenuOptions[reservation.status];
+    let menuOptions =
+      reservation.journeysStatus.PRECHECKIN === JourneyState.PENDING
+        ? reservationMenuOptions['PRECHECKIN']
+        : reservationMenuOptions[reservation.status];
+
+    const endDate = new Date(reservation.to).setHours(0, 0, 0, 0);
+    const today = new Date(Date.now()).setHours(0, 0, 0, 0);
+
+    if (
+      endDate < today &&
+      reservation.status === ReservationCurrentStatus.CHECKEDOUT
+    ) {
+      menuOptions = [{ label: 'View Details', value: 'VEIW_DETAILS' }];
+    }
+    return menuOptions;
   }
 
   hideFooter(hide: boolean) {
@@ -628,7 +642,7 @@ export class ReservationCalendarViewComponent implements OnInit {
   }
 
   handleMenuClick(
-    event: { label: string; value: string; id: string },
+    event: { label: string; value: string; id: string; rowValue: string },
     roomType: IGRoomType
   ) {
     switch (event.value) {
@@ -639,6 +653,7 @@ export class ReservationCalendarViewComponent implements OnInit {
           (data: JourneyData) => {
             this.updateRoomType(data);
           },
+          this.entityId,
           roomType
         );
         break;
@@ -648,6 +663,7 @@ export class ReservationCalendarViewComponent implements OnInit {
           (data: JourneyData) => {
             this.updateRoomType(data);
           },
+          this.entityId,
           roomType
         );
         break;
@@ -688,10 +704,10 @@ export class ReservationCalendarViewComponent implements OnInit {
         });
         break;
       case 'CANCEL_OUT_OF_SERVICE':
-        this.cancelPopUp('SERVICE', event.id, roomType);
+        this.cancelPopUp('SERVICE', event.id, roomType, event?.rowValue);
         break;
       case 'CANCEL_OUT_OF_ORDER':
-        this.cancelPopUp('ORDER', event.id, roomType);
+        this.cancelPopUp('ORDER', event.id, roomType, event?.rowValue);
     }
   }
 
@@ -719,7 +735,6 @@ export class ReservationCalendarViewComponent implements OnInit {
 
   updateRoomType(data: JourneyData) {
     const { reservationId, roomType, status, isCheckout } = data;
-    // this.reservationFormService.manualCheckin(reservationId, roomType, this)
     let currentDateEpoch = new Date();
     const updatedValues = roomType.data.values.map((item) => {
       const selectedRoom = roomType.rooms.find(
@@ -746,8 +761,9 @@ export class ReservationCalendarViewComponent implements OnInit {
     };
   }
 
-  cancelPopUp(type: 'SERVICE' | 'ORDER', statusId, roomType) {
-    const selectedData = this.getSelectedRoom(roomType);
+  cancelPopUp(type: 'SERVICE' | 'ORDER', statusId, roomType, rowValue: string) {
+    const selectedData = this.getSelectedRoom(roomType, rowValue);
+
     const selectedStatus = selectedData?.statusDetails.find((data) =>
       statusId ? data.id === statusId : data.isCurrentStatus
     );
@@ -770,9 +786,11 @@ export class ReservationCalendarViewComponent implements OnInit {
             ref.close();
           },
           variant: 'outlined',
+          type: 'REJECT',
         },
         {
           label: 'Release',
+          type: 'SUCCESS',
           onClick: () => {
             this.roomService
               .updateRoomStatus(this.entityId, {
@@ -818,14 +836,8 @@ export class ReservationCalendarViewComponent implements OnInit {
    * @param roomType room type data which is emittedd on context option click
    * @returns selected room data
    */
-  getSelectedRoom(roomType) {
-    let selectedRoom;
-    roomType.data.values.map((item) => {
-      selectedRoom = roomType.rooms.find(
-        (room) => room.roomNumber === item.rowValue
-      );
-    });
-    return selectedRoom;
+  getSelectedRoom(roomType, rowValue) {
+    return roomType.rooms.find((item) => item.roomNumber === rowValue);
   }
 
   openDetailsPage(reservationId: string) {

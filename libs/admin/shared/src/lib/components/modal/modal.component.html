@@ -62,6 +62,7 @@
           [label]="action.label"
           (onClick)="action.onClick(modelForm.value)"
           [variant]="action.variant"
+          [disabled]="modelForm.invalid && action.type === 'SUCCESS'"
         ></hospitality-bot-button>
       </ng-container>
     </div>

@@ -15,7 +15,7 @@ export class BarPriceService extends ApiService {
   roomDetails = new BehaviorSubject<RoomTypes[]>([]);
   getRoomDetails(entityId) {
     return this.get(
-      `/api/v1/entity/${entityId}/inventory?roomTypeStatus=true&type=ROOM_TYPE&offset=0&limit=${100}`
+      `/api/v1/entity/${entityId}/inventory?roomTypeStatus=true&inventoryUpdateType=SETUP_BAR_PRICE&type=ROOM_TYPE&offset=0&limit=${100}`
     );
   }
 

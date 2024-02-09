@@ -22,7 +22,6 @@ import {
   ConfigService,
   ModuleNames,
   Option,
-  ProductNames,
 } from '@hospitality-bot/admin/shared';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 import * as FileSaver from 'file-saver';
@@ -669,9 +668,13 @@ export class DetailsComponent implements OnInit, OnDestroy {
   }
 
   manualCheckout(invoice?: Record<'isSendInvoice', any>) {
-    this.formService.manualCheckout(this.bookingId, () => {
-      this.details.currentJourneyDetails.status = 'COMPLETED';
-    });
+    this.formService.manualCheckout(
+      this.bookingId,
+      () => {
+        this.details.currentJourneyDetails.status = 'COMPLETED';
+      },
+      this.entityId
+    );
   }
 
   manualCheckin() {
@@ -680,7 +683,8 @@ export class DetailsComponent implements OnInit, OnDestroy {
       this.bookingId,
       () => {
         this.details.currentJourneyDetails.status = 'COMPLETED';
-      }
+      },
+      this.entityId
     );
   }
 
@@ -971,10 +975,10 @@ export class DetailsComponent implements OnInit, OnDestroy {
   }
 
   checkForGenerateFeedbackSubscribed(isSubmitted: boolean) {
-    return this.subscriptionService.checkModuleSubscription(ModuleNames.HEDA) &&
-      isSubmitted
-      ? this.currentFeedbackId
-      : !this.currentFeedbackId;
+    return (
+      this.subscriptionService.checkModuleSubscription(ModuleNames.HEDA) &&
+      (isSubmitted ? this.currentFeedbackId : !this.currentFeedbackId)
+    );
   }
 
   get isFinanceSubscribed() {
@@ -1055,6 +1059,13 @@ export class DetailsComponent implements OnInit, OnDestroy {
     this.$subscription.unsubscribe();
     this.isFirstTimeFetch = true;
     this.bookingDetailService.resetBookingState();
+  }
+
+  get hasComplaintViewPermission(): boolean {
+    return this.subscriptionService.hasViewUserPermission({
+      type: 'module',
+      name: ModuleNames.COMPLAINTS,
+    });
   }
 }
 

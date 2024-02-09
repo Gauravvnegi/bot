@@ -36,11 +36,6 @@ export const guestComplaintReportDataCols: Partial<ColsData<
     isSortDisabled: true,
     isSearchDisabled: true,
   },
-  department: {
-    header: 'Department',
-    isSortDisabled: true,
-    isSearchDisabled: true,
-  },
   customerSentiment: {
     header: 'Customer Sentiment',
     isSortDisabled: true,

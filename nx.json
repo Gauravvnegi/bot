@@ -230,8 +230,13 @@
     "table-management": {
       "tags": []
     },
-    "admin-kot": {
+   
+    "admin-service-item": {
       "tags": []
-    }
+    },
+     "admin-kot": {
+     "tags": []
+
+     }
   }
 }

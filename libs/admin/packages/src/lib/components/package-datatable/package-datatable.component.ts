@@ -151,12 +151,16 @@ export class PackageDataTableComponent extends BaseDatatableComponent
     };
 
     this.$subscription.add(
-      this.packagesService.exportCSV(this.entityId, config).subscribe((res) => {
-        FileSaver.saveAs(
-          res,
-          `${this.tableName.toLowerCase()}_export_${new Date().getTime()}.csv`
-        );
-      }, this.handleFinal)
+      this.packagesService.exportCSV(this.entityId, config).subscribe(
+        (res) => {
+          FileSaver.saveAs(
+            res,
+            `${this.tableName.toLowerCase()}_export_${new Date().getTime()}.csv`
+          );
+        },
+        (error) => (this.loading = false),
+        () => (this.loading = false)
+      )
     );
   }
 
@@ -185,7 +189,6 @@ export class PackageDataTableComponent extends BaseDatatableComponent
             );
           },
           ({ error }) => {
-            this.values = [];
             this.loading = false;
           },
           this.handleFinal

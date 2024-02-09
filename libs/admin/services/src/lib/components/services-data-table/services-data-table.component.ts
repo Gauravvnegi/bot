@@ -93,7 +93,7 @@ export class ServicesDataTableComponent extends BaseDatatableComponent {
     this.entityId = event.entityId[0];
     this.tabFilterIdx = 0;
     this.initTableValue();
-  }
+}
 
   /**
    * @function listenForGlobalFilters To listen to global filters

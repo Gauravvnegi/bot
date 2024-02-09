@@ -177,6 +177,8 @@ export const subModuleConfig: Partial<Record<ModuleNames, any>> = {
     import('@hospitality-bot/table-management').then(
       (m) => m.TableManagementModule
     ),
+  [ModuleNames.KOT]: () =>
+    import('@hospitality-bot/admin/kot').then((m) => m.AdminKotModule),
 
   [ModuleNames.SERVICE_ITEM]: () =>
     import('@hospitality-bot/admin/service-item').then(

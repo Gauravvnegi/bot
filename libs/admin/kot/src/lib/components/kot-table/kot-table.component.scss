@@ -6,6 +6,15 @@
     background-color: #ffff;
     padding: 20px;
   }
+
+  .p-datatable .p-datatable-tbody tr {
+    border-bottom: unset !important;
+    margin-inline: auto;
+  }
+
+  .p-datatable.p-datatable-sm .p-datatable-footer {
+    border-top: 1px solid #eaeaea;
+  }
 }
 
 .flex-width {
@@ -15,6 +24,7 @@
 .container {
   display: inline-flex;
   gap: 1em;
+  width: 100%;
 
   .three-fourth {
     width: 80%;

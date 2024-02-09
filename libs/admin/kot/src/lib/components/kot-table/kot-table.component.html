@@ -39,11 +39,18 @@
     (sortFunction)="customSort($event)"
     [customSort]="isCustomSort"
     (onFilter)="onDataFilter()"
-    *ngIf="values.length; else emptyTable"
+    *ngIf="!isEmpty; else emptyTable"
   >
     <ng-template pTemplate="caption">
       <div class="caption__wrapper" [formGroup]="tableFG">
         <ng-container [ngTemplateOutlet]="tabFilter"> </ng-container>
+
+        <hospitality-bot-filter-chips
+          *ngIf="isQuickFilters"
+          [chips]="filterChips"
+          [isCountVisible]="false"
+          (onChange)="toggleQuickReplyFilter($event)"
+        ></hospitality-bot-filter-chips>
       </div>
     </ng-template>
     <ng-template pTemplate="emptymessage">
@@ -58,7 +65,11 @@
       let-rowIndex="rowIndex"
     >
       <!-- <td > -->
-      <hospitality-bot-kot-card class="flex-width" [config]="rowData">
+      <hospitality-bot-kot-card
+        class="flex-width"
+        [config]="rowData"
+        [entityId]="entityId"
+      >
       </hospitality-bot-kot-card>
 
       <!-- </td> -->
@@ -84,9 +95,13 @@
 
 <ng-template #emptyTable>
   <hospitality-bot-empty-table
+    class="three-fourth"
     [isLoading]="loading"
     (action)="navigateToAddRoom()"
-    [content]="emptyViewDescription"
+    [content]="{
+      description: 'No item found.',
+      imageSrc: 'assets/images/empty-table-package.png'
+    }"
   >
     <ng-container [ngTemplateOutlet]="tabFilter"> </ng-container>
   </hospitality-bot-empty-table>

@@ -27,6 +27,7 @@ export type Chip<T extends string> = {
   total?: number;
   isSelected?: boolean;
   type: FlagType;
+  color?: string;
 };
 
 export type TableSortType = number | string | Date;

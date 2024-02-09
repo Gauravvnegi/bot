@@ -29,13 +29,13 @@
           font-weight: 700;
           line-height: normal;
         }
-        &__timer {
+        .timer {
           color: #9a9a9a;
           text-align: right;
           font-family: Inter;
-          font-size: 12px;
+          font-size: 14px;
           font-style: normal;
-          font-weight: 400;
+          font-weight: 600;
           line-height: normal;
         }
       }
@@ -45,6 +45,7 @@
 
         .left {
           display: inline-flex;
+          align-items: center;
           gap: 5px;
 
           .info {
@@ -68,14 +69,31 @@
         }
 
         .right {
-          border: 1px solid #36a2eb;
-          color: #36a2eb;
-          border-radius: 8px;
-          padding: 4px;
-          color: #36a2eb;
-          text-align: center;
-          font-size: 12px;
-          font-weight: 500;
+          display: flex;
+          flex-direction: row-reverse;
+          justify-content: center;
+          align-items: center;
+          gap: 0.5em;
+
+          .type {
+            border: 1px solid #36a2eb;
+            color: #36a2eb;
+            border-radius: 8px;
+            padding: 4px;
+            color: #36a2eb;
+            text-align: center;
+            font-size: 12px;
+            font-weight: 500;
+          }
+          .timer {
+            color: #9a9a9a;
+            text-align: right;
+            font-family: Inter;
+            font-size: 14px;
+            font-style: normal;
+            font-weight: 600;
+            line-height: normal;
+          }
         }
       }
       .summary-container {
@@ -95,7 +113,6 @@
               .details {
                 .title {
                   color: #000;
-                  text-align: center;
                   font-size: 14px;
                   font-weight: 500;
                 }
@@ -154,4 +171,11 @@
 
 .rotate {
   rotate: 180deg;
+}
+
+.dot {
+  background-color: #9a9a9a;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
 }

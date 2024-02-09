@@ -6,10 +6,18 @@
     <div>Item</div>
     <div>Quantity</div>
   </div>
-  <div class="item-container" *ngIf="itemPendingSummaryList; else empty">
+  <div class="item-container" *ngIf="itemPendingSummaryList.length; else empty">
     <div class="items" *ngFor="let item of itemPendingSummaryList">
       <div class="items-title">
-        <img src="assets/svg/veg.svg" alt="" />
+        <img
+          [src]="
+            item?.mealPreference === 'Veg'
+              ? 'assets/svg/veg.svg'
+              : 'assets/svg/non-veg.svg'
+          "
+          alt=""
+        />
+
         <div>{{ item?.name }}</div>
       </div>
       <div class="quantity">

@@ -1,41 +1,49 @@
 <section class="container">
-  <div class="progress-bar"></div>
+  <div
+    class="progress-bar"
+    [ngStyle]="{ backgroundColor: _config.color }"
+  ></div>
 
   <div class="wrapper">
     <div class="wrapper-top">
-      <div class="header">
-        <div class="header__title">{{ config?.name }}</div>
-        <div class="header__timer">{{ config.time }}</div>
-      </div>
-
       <div class="middle">
         <div class="left">
           <div class="info">
             <div class="text">
               ORDER NO:
             </div>
-            <div class="number">{{ config?.orderNo }}</div>
+            <div class="number">{{ _config?.orderNo }}</div>
           </div>
+          <div class="dot"></div>
           <div class="info">
             <div class="text">
               KOT NO:
             </div>
-            <div class="number">{{ config?.kotNo }}</div>
+            <div class="number">{{ _config?.kotNo }}</div>
           </div>
         </div>
         <div class="right">
-          {{ config?.kotType }}
+          <div class="type">
+            {{ _config?.kotType }}
+          </div>
+          <div class="timer">{{ _config?.timer }}</div>
         </div>
       </div>
-
       <div class="summary-container">
         <div
           class="card-wrapper"
-          *ngFor="let item of config?.menuItem; let i = index"
+          *ngFor="let item of _config?.menuItem; let i = index"
         >
           <div class="details-card">
             <div class="info">
-              <img src="assets/svg/veg.svg" alt="" />
+              <img
+                [src]="
+                  item?.mealPreference === 'Veg'
+                    ? 'assets/svg/veg.svg'
+                    : 'assets/svg/non-veg.svg'
+                "
+                alt=""
+              />
 
               <div class="details">
                 <div class="title">{{ item?.name }}</div>
@@ -59,7 +67,7 @@
     </div>
   </div>
   <div class="instruction-wrapper">
-    {{ config?.instructions }}
+    {{ _config?.kotInstructions }}
   </div>
   <div class="bottom">
     <div class="cta" (click)="markFoodIsReady()">

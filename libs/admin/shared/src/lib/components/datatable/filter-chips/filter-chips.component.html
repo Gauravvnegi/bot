@@ -10,6 +10,15 @@
         *ngFor="let chip of chips; let chipIdx = index"
         selectable="true"
         (click)="toggleQuickReplyFilter(chipIdx)"
+        [ngStyle]="{
+          borderColor: chip?.color,
+          color:
+            chip.isSelected || selectedChips.has(chip.value)
+              ? '#ffff'
+              : chip?.color,
+          backgroundColor:
+            chip.isSelected || selectedChips.has(chip.value) ? chip?.color : ''
+        }"
         [ngClass]="{
           'chip-outlined-default': chip.type === 'default',
           'chip-contained-default':
@@ -58,7 +67,9 @@
         }"
       >
         <span> {{ chip.label }}</span>
-        <span *ngIf="chip.total >= 0"> ({{ chip.total }})</span>
+        <span *ngIf="chip.total >= 0 && isCountVisible">
+          ({{ chip.total }})</span
+        >
       </mat-chip>
     </mat-chip-list>
     <ng-content></ng-content>

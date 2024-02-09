@@ -33,4 +33,5 @@ type ConfigurationValue =
   | 'communicationChannels'
   | '_id'
   | 'packageVisibility'
-  | 'bookingConfig';
+  | 'bookingConfig'
+  | 'orderConfig';

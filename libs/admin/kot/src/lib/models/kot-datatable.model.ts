@@ -95,7 +95,6 @@ export class MenuItem {
     this.instructions = value?.remarks;
     this.isExpandedInstruction = false;
     this.quantity = value?.unit;
-    debugger;
     this.mealPreference = value?.menuItem?.mealPreference;
     return this;
   }

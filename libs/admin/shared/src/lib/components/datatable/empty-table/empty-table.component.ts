@@ -13,6 +13,7 @@ export class EmptyTableComponent implements OnInit {
   isError = false;
   @Input() disabledAction: boolean;
   @Input() link: string;
+  @Input() href: string;
   @Input() isLoading: boolean;
   @Output() action = new EventEmitter();
   @Input() height: string;

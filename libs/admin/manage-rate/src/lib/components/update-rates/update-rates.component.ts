@@ -1425,7 +1425,7 @@ export class UpdateRatesComponent implements OnInit {
    */
   getAvailability(
     nextDate: number,
-    type: 'quantity' | 'occupancy',
+    type: 'quantity' | 'occupy',
     roomTypeId: string
   ) {
     if (
@@ -1439,7 +1439,8 @@ export class UpdateRatesComponent implements OnInit {
     let room = this.ratesRoomDetails[roomTypeId]['availability'][
       date.getTime()
     ];
-    if (room) return room[type] === 'NaN' || !room[type] ? 0 : room[type];
+    if (room)
+      return room[type as any] === 'NaN' || !room[type] ? 0 : room[type];
     return 0;
   }
 

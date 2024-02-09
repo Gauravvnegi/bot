@@ -159,7 +159,9 @@ export class CreateServiceItemComponent implements OnInit {
     }
   }
 
-  close() {}
+  close() {
+    this.closeSidebar();
+  }
 
   createCategory(categoryName: string) {
     if (this.isSidebar) {
@@ -192,7 +194,7 @@ export class CreateServiceItemComponent implements OnInit {
   }
 
   closeSidebar() {
-    this.onCloseSidebar.emit(true);
+    this.onCloseSidebar.emit();
   }
 
   handleSuccess = (res) => {

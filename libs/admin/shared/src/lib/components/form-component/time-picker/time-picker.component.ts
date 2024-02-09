@@ -25,6 +25,7 @@ export class TimePickerComponent extends FormComponent {
   ngOnInit(): void {
     this.initForm();
     this.listenChanges();
+    this.initInputControl();
   }
 
   initForm() {

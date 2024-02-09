@@ -172,3 +172,9 @@
     padding: 10px;
   }
 }
+
+.loader {
+  height: 65vh;
+  width: 100%;
+  @include flex-justify-align-center;
+}

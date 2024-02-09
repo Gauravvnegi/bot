@@ -1,1 +1,1 @@
-export const mealPreferences = ['VEG', 'NON_VEG'];
+export const mealPreferences = ['VEG', 'NONVEG'];

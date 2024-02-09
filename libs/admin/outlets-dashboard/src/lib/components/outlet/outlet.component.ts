@@ -32,7 +32,6 @@ export class OutletComponent implements OnInit {
 
   ngOnInit(): void {}
 
-
   onEntityTabFilterChanges(event: EntityTabFilterResponse): void {
     this.formService.entityId = event.entityId[0];
   }

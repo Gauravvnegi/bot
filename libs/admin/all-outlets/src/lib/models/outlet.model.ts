@@ -10,6 +10,7 @@ import {
   FoodPackageListResponse,
   FoodPackageResponse,
 } from '../types/response';
+import { MealPreferences } from 'libs/admin/outlets-dashboard/src/lib/types/menu-order';
 
 export class OutletList {
   id: string;
@@ -82,6 +83,8 @@ export class MenuItem {
   status: boolean;
   quantity: number;
   id: string;
+  mealPreference: MealPreferences;
+  imageUrl: string;
 
   deserialize(input: MenuItemResponse) {
     this.code = input.code;
@@ -97,6 +100,10 @@ export class MenuItem {
     this.status = input.status;
     this.quantity = input.quantity;
     this.id = input.id;
+    this.mealPreference = input?.mealPreference
+      .replace(/[-_]/g, '')
+      .toUpperCase() as MealPreferences;
+    this.imageUrl = input?.imageUrl;
     return this;
   }
 }

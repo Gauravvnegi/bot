@@ -1,7 +1,11 @@
+import { EntitySubType } from '@hospitality-bot/admin/shared';
+import { MealPreferences, OrderTypes } from './menu-order';
 import { OrderMethod, ReservationStatus } from './reservation-table';
 
 export type MenuForm = {
   orderInformation: OrderInformation;
+  paymentInformation: PaymentInformation;
+  kotInformation: KotInformation;
 };
 
 export type OrderInformation = {
@@ -9,9 +13,37 @@ export type OrderInformation = {
   tableNumber: string[];
   staff: string;
   guest: string;
-  numberOfPersons: string;
+  numberOfPersons: number;
   menu: string[];
-  orderType: string;
+  orderType: OrderTypes;
+};
+
+export type PaymentInformation = {
+  complementary: boolean;
+  paymentMethod: string;
+  paymentRecieved: number;
+  transactionId: string;
+};
+
+export type KotInformation = {
+  kotItems: {
+    items: KotItemsForm[];
+    kotInstruction: string;
+    kotOffer: string[];
+    viewKotOffer?: boolean;
+    viewKotInstruction?: boolean;
+  }[];
+};
+
+export type KotItemsForm = {
+  id: string;
+  itemName: string;
+  unit: number;
+  mealPreference: MealPreferences;
+  price: number;
+  itemInstruction: string;
+  image: string;
+  viewItemInstruction: boolean;
 };
 
 export type MenuOrderResponse = {
@@ -65,6 +97,36 @@ export type KotItemsResponse = {
   instructions: string;
   items: MenuItemResponse[];
   preparedTime?: 387126;
+};
+
+export type CreateOrderData = {
+  status: 'CONFIRMED' | 'DRAFT';
+  type: OrderTypes;
+  source?: string;
+  kots: {
+    instructions: string;
+    items: {
+      itemId: string;
+      unit: number;
+      amount: number;
+      remarks: string;
+    }[];
+  }[];
+  outletType: EntitySubType;
+  guestId: string;
+  reservation: {
+    id?: string;
+    occupancyDetails: {
+      maxAdult: number;
+    };
+    status: 'CONFIRMED' | 'DRAFT';
+    tableIds: string[];
+    from?: number;
+    to?: number;
+    source?: string;
+    sourceName?: string;
+    marketSegment?: string;
+  };
 };
 
 export type KotItemStatus = 'PREPARED' | 'PENDING';

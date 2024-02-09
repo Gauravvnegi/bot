@@ -11,7 +11,7 @@ export type MenuItemCard = {
 export enum MealPreferences {
   ALL = 'ALL',
   VEG = 'VEG',
-  NON_VEG = 'NON_VEG',
+  NONVEG = 'NONVEG',
 }
 
 export enum OrderTypes {
@@ -40,10 +40,10 @@ export const mealPreferenceConfig: Record<
     image: 'assets/svg/veg.svg',
     filterPreference: (item) => item === MealPreferences.VEG,
   },
-  [MealPreferences.NON_VEG]: {
+  [MealPreferences.NONVEG]: {
     title: 'Non-veg',
     image: 'assets/svg/non-veg.svg',
-    filterPreference: (item) => item === MealPreferences.NON_VEG,
+    filterPreference: (item) => item === MealPreferences.NONVEG,
   },
   // Add more preferences with their corresponding display and filter conditions
 };

@@ -71,15 +71,45 @@
           }"
           label="Staff"
         ></hospitality-bot-select>
-        <hospitality-bot-select
+        <hospitality-bot-quick-select
           class="one-fifth-width"
           controlName="guest"
-          [options]="guestList"
-          [props]="{
-            placeholder: 'Select'
-          }"
           label="Guest"
-        ></hospitality-bot-select>
+          [inputType]="'select'"
+          [props]="{
+            showChips: false,
+            isAsync: true,
+            placeholder: 'Select',
+            createPrompt: '+ Add New Guest',
+            selectedOption: selectedGuest,
+            createType: 'sidebar'
+          }"
+          [apiConfig]="{
+            apiEndPoint: '/api/v1/members',
+            dataModel: {
+              key: 'records',
+              values: {
+                label: ['firstName', 'lastName'],
+                value: 'id'
+              }
+            },
+            queryParams: getGuestConfig(),
+            searchAPIEndPoint: '/api/v1/search/members',
+            searchModel: {
+              response: true,
+              values: {
+                label: ['firstName', 'lastName'],
+                value: 'id'
+              }
+            },
+            searchQueryParams: { type: 'GUEST,NON_RESIDENT_GUEST' }
+          }"
+          [paginationConfig]="{
+            isPagination: true
+          }"
+          (clickedOption)="guestChange($event)"
+          [initItems]="true"
+        ></hospitality-bot-quick-select>
         <hospitality-bot-input
           class="one-fifth-width"
           controlName="numberOfPersons"
@@ -121,7 +151,7 @@
             }"
             [src]="mealPreferenceConfig[preference]?.image"
           />
-          {{ mealPreferenceConfig[preference].title }}
+          {{ mealPreferenceConfig[preference]?.title }}
         </span>
       </div>
 
@@ -129,11 +159,15 @@
         Italian BreakFast
       </h3>
       <div class="menu-items">
-        <ng-container *ngFor="let card of getCards()">
-          <hospitality-bot-menu-item-card
-            class="menu-item"
-            [itemCard]="card"
-          ></hospitality-bot-menu-item-card>
+        <ng-container *ngIf="!loadingMenuItems; else loader">
+          <ng-container *ngIf="getCards().length; else emptyCardView">
+            <ng-container *ngFor="let card of getCards()">
+              <hospitality-bot-menu-item-card
+                class="menu-item"
+                [itemCard]="card"
+              ></hospitality-bot-menu-item-card>
+            </ng-container>
+          </ng-container>
         </ng-container>
       </div>
     </div>
@@ -211,3 +245,16 @@
     ></hospitality-bot-button>
   </div>
 </div>
+
+<ng-template #loader>
+  <hospitality-bot-loader-bounce class="loader"></hospitality-bot-loader-bounce>
+</ng-template>
+
+<ng-template #emptyCardView>
+  <hospitality-bot-empty-table
+    [content]="{
+      description: 'No Menu Items'
+    }"
+  >
+  </hospitality-bot-empty-table>
+</ng-template>

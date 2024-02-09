@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { MenuItemCard, mealPreferenceConfig } from '../../types/menu-order';
+import { mealPreferenceConfig } from '../../types/menu-order';
 import { OutletFormService } from '../../services/outlet-form.service';
 import {
+  AbstractControl,
   ControlContainer,
   FormArray,
   FormBuilder,
@@ -12,6 +13,8 @@ import { OutletTableService } from '../../services/outlet-table.service';
 import { Subscription } from 'rxjs';
 import { PaymentMethodList } from 'libs/admin/manage-reservation/src/lib/models/reservations.model';
 import { Option } from '@hospitality-bot/admin/shared';
+import { MenuItem } from 'libs/admin/all-outlets/src/lib/models/outlet.model';
+import { KotItemsForm, MenuForm } from '../../types/form';
 
 @Component({
   selector: 'hospitality-bot-order-summary',
@@ -19,7 +22,7 @@ import { Option } from '@hospitality-bot/admin/shared';
   styleUrls: ['./order-summary.component.scss'],
 })
 export class OrderSummaryComponent implements OnInit {
-  selectedItems: MenuItemCard[] = [];
+  selectedItems: MenuItem[] = [];
   kotList: string[] = ['item'];
 
   readonly mealPreferenceConfig = mealPreferenceConfig;
@@ -34,6 +37,8 @@ export class OrderSummaryComponent implements OnInit {
 
   paymentOptions: Option[] = [];
   itemOffers: Option[] = [];
+
+  totalAmount: number = 0;
 
   constructor(
     private fb: FormBuilder,
@@ -74,18 +79,18 @@ export class OrderSummaryComponent implements OnInit {
     ) as FormArray;
   }
 
-  createNewItemFields(newItem: MenuItemCard) {
+  createNewItemFields(newItem: MenuItem) {
     const data: Record<
-      keyof MenuItemCard & { viewItemInstruction: boolean },
+      keyof MenuItem & { viewItemInstruction: boolean },
       any
     > = {
       id: [newItem.id],
-      itemName: [newItem.itemName],
+      itemName: [newItem.name],
       unit: [1],
       mealPreference: [newItem.mealPreference],
-      price: [newItem.price],
+      price: [newItem.dineInPrice],
       itemInstruction: [''],
-      image: [newItem.image],
+      image: [newItem.imageUrl],
       viewItemInstruction: [false],
     };
 
@@ -93,17 +98,20 @@ export class OrderSummaryComponent implements OnInit {
     this.itemFormArray.push(itemFormGroup);
   }
 
-  decrementQuantity(itemControl: FormControl) {
-    const unitControl = itemControl.get('unit');
-    unitControl.patchValue(unitControl.value - 1, { emitEvent: false });
-    unitControl.value === 0 &&
+  decrementQuantity(itemControl: Controls) {
+    itemControl
+      .get('unit')
+      .patchValue(itemControl.value.unit - 1, { emitEvent: false });
+    this.totalAmount = this.totalAmount - itemControl.get('price').value;
+    itemControl.value.unit === 0 &&
       this.formService.removeItemFromSelectedItems(itemControl.value.id);
   }
 
-  incrementQuantity(index: number) {
-    const currentUnit = this.itemFormArray.at(index).get('unit') as FormControl;
-    const newUnitValue = currentUnit.value + 1;
-    currentUnit.setValue(newUnitValue, { emitEvent: false });
+  incrementQuantity(itemControl: Controls) {
+    itemControl
+      .get('unit')
+      .patchValue(itemControl.value.unit + 1, { emitEvent: false });
+    this.totalAmount = this.totalAmount + itemControl.get('price').value;
   }
 
   getPaymentMethod(): void {
@@ -135,7 +143,10 @@ export class OrderSummaryComponent implements OnInit {
         const removedItems = this.itemFormArray.controls.filter(
           (control, index) => !res.some((item) => item.id === control.value.id)
         );
-
+        this.totalAmount = this.selectedItems.reduce(
+          (total, currentItem) => total + currentItem.dineInPrice,
+          0
+        );
         if (newItems.length > 0 || removedItems.length > 0) {
           newItems.forEach((newItem) => {
             this.createNewItemFields(newItem);
@@ -154,7 +165,9 @@ export class OrderSummaryComponent implements OnInit {
     this.itemFormArray.removeAt(index);
   }
 
-  clear() {}
+  clear() {
+    this.formService.removeItemFromSelectedItems();
+  }
 
   cancelOrder() {}
 
@@ -171,6 +184,19 @@ export class OrderSummaryComponent implements OnInit {
       .patchValue(!array.at(index).get(controlName).value, {
         emitEvent: false,
       });
+  }
+
+  get orderInfoControls() {
+    return (this.parentFormGroup.get('orderInformation') as FormGroup)
+      .controls as Record<keyof MenuForm['orderInformation'], AbstractControl>;
+  }
+
+  get paymentControls() {
+    return (this.parentFormGroup.get('paymentInformation') as FormGroup)
+      .controls as Record<
+      keyof MenuForm['paymentInformation'],
+      AbstractControl
+    >;
   }
 }
 
@@ -190,20 +216,6 @@ export class OrderSummaryComponent implements OnInit {
 //   };
 // };
 
-type KotForm = {
-  items: FormArray;
-  instruction: string;
-  kotInstruction: string;
-  kotOffer: string[];
-  viewKotInstructions: boolean;
-  viewKotOffer: boolean;
-};
-
-type ItemForm = {
-  itemId: string;
-  unit: number;
-  itemInstruction: string;
-  viewInstruction: string;
-  mealPreference: string;
-  price: string;
+type Controls = Omit<AbstractControl, 'value'> & {
+  value: KotItemsForm;
 };

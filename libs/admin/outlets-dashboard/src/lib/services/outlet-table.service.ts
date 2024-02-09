@@ -33,4 +33,8 @@ export class OutletTableService extends ApiService {
       {}
     );
   }
+
+  createBooking(entityId: string, data) {
+    return this.post(`/api/v1/entity/${entityId}/order`, data);
+  }
 }

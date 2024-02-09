@@ -56,10 +56,17 @@
         }"
       ></hospitality-bot-search>
       <hospitality-bot-multi-select
-        class="one-fifth-width"
+        class="one-fourth-width"
         controlName="tableNumber"
         [options]="areaList"
         label="Table No./Area"
+        [props]="{
+          placeholder: 'Select Table No.'
+        }"
+        [settings]="{
+          showChips: false,
+          maxSelectedLabels: 1
+        }"
       ></hospitality-bot-multi-select>
       <ng-container *ngIf="checkOrderType()">
         <hospitality-bot-select
@@ -111,7 +118,7 @@
           [initItems]="true"
         ></hospitality-bot-quick-select>
         <hospitality-bot-input
-          class="one-fifth-width"
+          class="number"
           controlName="numberOfPersons"
           [props]="{
             placeholder: 'Enter'

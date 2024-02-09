@@ -23,3 +23,10 @@
     word-break: break-word;
   }
 }
+
+:host ::ng-deep .main__wrapper {
+  .caption__wrapper .wrapper {
+    min-height: unset !important;
+    height: calc(100vh - 245px);
+  }
+}

@@ -381,41 +381,6 @@ export class EditCampaignComponent implements OnInit, OnDestroy {
         .subscribe();
       return;
     }
-    // const dialogConfig = new MatDialogConfig();
-    // dialogConfig.disableClose = true;
-    // dialogConfig.width = '550';
-    // dialogConfig.disableClose = true;
-    // const detailCompRef = this._modalService.openDialog(
-    //   ScheduleCampaignComponent,
-    //   dialogConfig
-    // );
-    // detailCompRef.componentInstance.scheduleFG = this.scheduleFG;
-    // detailCompRef.componentInstance.onScheduleClose.subscribe((response) => {
-    //   if (response.status) {
-    //     this.$subscription.add(
-    //       this._emailService
-    //         .scheduleCampaign(
-    //           this.entityId,
-    //           this._emailService.createScheduleRequestData(
-    //             this.campaignFG.getRawValue(),
-    //             this.scheduleFG.get('time').value
-    //           )
-    //         )
-    //         .subscribe((response) => {
-    //           this.snackbarService.openSnackBarWithTranslate(
-    //             {
-    //               translateKey: `messages.SUCCESS.CAMPAIGN_SCEDULED`,
-    //               priorityMessage: 'Campaign scheduled.',
-    //             },
-    //             '',
-    //             { panelClass: 'success' }
-    //           );
-    //           this.routesConfigService.goBack();
-    //         })
-    //     );
-    //   } else this.scheduleFG.reset();
-    //   detailCompRef.close();
-    // });
 
     let dialogRef: DynamicDialogRef;
     const modalData: Partial<ScheduleCampaignComponent> = {
@@ -423,8 +388,7 @@ export class EditCampaignComponent implements OnInit, OnDestroy {
     };
     dialogRef = openModal({
       config: {
-        width: '550px',
-        styleClass: 'dynamic-modal',
+        styleClass: 'no-style',
         data: modalData,
       },
       component: ScheduleCampaignComponent,

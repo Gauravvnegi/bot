@@ -15,6 +15,7 @@
       *ngIf="actionName?.length"
       [label]="actionName"
       [routerLink]="link"
+      [href]="href"
       preserveQueryParams="true"
       (onClick)="action.emit()"
     ></hospitality-bot-button>

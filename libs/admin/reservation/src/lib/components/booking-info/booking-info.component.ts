@@ -178,7 +178,6 @@ export class BookingInfoComponent implements OnInit {
         fromDateControl.setValue(startTime);
         toDateControl.setValue(endTime);
       }
-
       let multipleDateChange = false;
       fromDateControl.valueChanges.subscribe((res) => {
         if (res) {
@@ -195,8 +194,6 @@ export class BookingInfoComponent implements OnInit {
           (this.formService.isDataInitialized.value || !this.reservationId) &&
             this.formService.reinitializeRooms.next(true);
           this.updateDateDifference();
-          this.minToDate = new Date(maxToLimit); // Create a new date object
-          this.minToDate.setDate(maxToLimit.getDate());
           this.formService.reservationDate.next(res);
           this.reservationId &&
             !this.isCheckedIn &&

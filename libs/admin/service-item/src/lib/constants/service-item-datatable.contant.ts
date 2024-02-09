@@ -35,7 +35,7 @@ export const cols: Cols[] = [
     field: 'remarks',
     header: 'Remarks',
     width: '15%',
-    sortType: 'string',
+    isSortDisabled: true,
     searchField: ['remarks'],
   },
   {

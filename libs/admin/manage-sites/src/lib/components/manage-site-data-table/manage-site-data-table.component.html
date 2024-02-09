@@ -13,160 +13,144 @@
   </div>
 </div>
 <div [ngClass]="{ 'sticky-header-gap': isScrolledUp }"></div>
-
-<ng-container *ngIf="!totalRecords">
-  <div class="empty-view__wrapper">
-    <ng-container *ngTemplateOutlet="siteHeader"></ng-container>
-
-    <div class="empty-view">
-      <div class="empty-view__caption">
-        <img src="assets/images/no-sites.png" alt="no-site" />
-        <span>
-          Currently you do not have any website
-        </span>
-      </div>
+<p-table
+  #dt
+  [styleClass]="tableConfig.styleClass"
+  [resizableColumns]="isResizableColumns"
+  [autoLayout]="isAutoLayout"
+  [loading]="loading"
+  [columns]="cols"
+  [value]="values"
+  [paginator]="isPaginator"
+  [rows]="rowsPerPage"
+  [showCurrentPageReport]="showCurrentPageReport"
+  [rowsPerPageOptions]="rowsPerPageOptions"
+  [(first)]="first"
+  [totalRecords]="totalRecords"
+  [filterDelay]="0"
+  [selectionMode]="selectionMode"
+  [(selection)]="selectedRows"
+  (onRowSelect)="onRowSelect($event)"
+  (onRowUnselect)="onRowUnselect($event)"
+  (sortFunction)="customSort($event)"
+  [customSort]="isCustomSort"
+  (onFilter)="onDataFilter()"
+  *ngIf="!isEmpty; else emptyTable"
+>
+  <ng-template pTemplate="caption">
+    <div class="caption__wrapper">
+      <ng-container *ngTemplateOutlet="siteHeader"></ng-container>
+      <ng-container [ngTemplateOutlet]="tabFilter"> </ng-container>
     </div>
-  </div>
-</ng-container>
+  </ng-template>
 
-<ng-container *ngIf="totalRecords">
-  <p-table
-    #dt
-    [styleClass]="tableConfig.styleClass"
-    [resizableColumns]="isResizableColumns"
-    [autoLayout]="isAutoLayout"
-    [loading]="loading"
-    [columns]="cols"
-    [value]="values"
-    [paginator]="isPaginator"
-    [rows]="rowsPerPage"
-    [showCurrentPageReport]="showCurrentPageReport"
-    [rowsPerPageOptions]="rowsPerPageOptions"
-    [(first)]="first"
-    [totalRecords]="totalRecords"
-    [filterDelay]="0"
-    [selectionMode]="selectionMode"
-    [(selection)]="selectedRows"
-    (onRowSelect)="onRowSelect($event)"
-    (onRowUnselect)="onRowUnselect($event)"
-    (sortFunction)="customSort($event)"
-    [customSort]="isCustomSort"
-    (onFilter)="onDataFilter()"
-    *ngIf="!isEmpty; emptyTable"
+  <ng-template pTemplate="emptymessage">
+    <tr hospitality-bot-empty-view [noOfColumns]="cols.length"></tr>
+  </ng-template>
+  <!-- *******************************HEADER WITH SEARCH******************************* -->
+  <ng-template pTemplate="header" let-columns class="table_head">
+    <tr
+      hospitality-bot-table-header
+      [columns]="columns"
+      [showCheckbox]="isSelectable"
+      (search)="handleFieldSearch($event)"
+    ></tr>
+  </ng-template>
+  <!-- **************************************BODY********************************* -->
+  <ng-template
+    pTemplate="body"
+    let-rowData
+    let-columns="columns"
+    let-rowIndex="rowIndex"
   >
-    <ng-template pTemplate="caption">
-      <div class="caption__wrapper">
-        <form [formGroup]="tableFG">
-          <ng-container *ngTemplateOutlet="siteHeader"></ng-container>
-          <hospitality-bot-filter-chips
-            *ngIf="isQuickFilters"
-            [chips]="filterChips"
-            (onChange)="toggleQuickReplyFilter($event)"
-            [selectedChips]="selectedFilterChips"
-          ></hospitality-bot-filter-chips>
-        </form>
-      </div>
-    </ng-template>
+    <tr class="table-row" (click)="selectSite(rowData)">
+      <td class="table--checkbox" *ngIf="isSelectable">
+        <p-tableCheckbox
+          [value]="rowData"
+          [index]="rowIndex"
+          (click)="onCheckboxClicked($event)"
+        ></p-tableCheckbox>
+      </td>
 
-    <ng-template pTemplate="emptymessage">
-      <tr hospitality-bot-empty-view [noOfColumns]="cols.length"></tr>
-    </ng-template>
-    <!-- *******************************HEADER WITH SEARCH******************************* -->
-    <ng-template pTemplate="header" let-columns class="table_head">
-      <tr
-        hospitality-bot-table-header
-        [columns]="columns"
-        [showCheckbox]="isSelectable"
-        (search)="handleFieldSearch($event)"
-      ></tr>
-    </ng-template>
-    <!-- **************************************BODY********************************* -->
-    <ng-template
-      pTemplate="body"
-      let-rowData
-      let-columns="columns"
-      let-rowIndex="rowIndex"
-    >
-      <tr class="table-row" (click)="selectSite(rowData)">
-        <td class="table--checkbox" *ngIf="isSelectable">
-          <p-tableCheckbox
-            [value]="rowData"
-            [index]="rowIndex"
-            (click)="onCheckboxClicked($event)"
-          ></p-tableCheckbox>
-        </td>
-
-        <td>
-          <div class="thumbnail" *ngIf="rowData.thumbnail; else emptyCell">
-            <div class="img-wrapper">
-              <img [src]="rowData.thumbnail" alt="logo" />
-            </div>
+      <td>
+        <div class="thumbnail" *ngIf="rowData.thumbnail; else emptyCell">
+          <div class="img-wrapper">
+            <img [src]="rowData.thumbnail" alt="logo" />
           </div>
-        </td>
-        <td>
-          <div class="primary-text" *ngIf="rowData.siteName; else emptyCell">
-            {{ rowData.siteName }}
-          </div>
-        </td>
-        <td>
-          <hospitality-bot-copy-link
-            [url]="rowData.url"
-          ></hospitality-bot-copy-link>
-        </td>
-        <!-- <td>
+        </div>
+      </td>
+      <td>
+        <div class="primary-text" *ngIf="rowData.siteName; else emptyCell">
+          {{ rowData.siteName }}
+        </div>
+      </td>
+      <td>
+        <hospitality-bot-copy-link
+          [url]="rowData.url"
+        ></hospitality-bot-copy-link>
+      </td>
+      <!-- <td>
         <div class="primary-text" *ngIf="rowData.expiryDate; else emptyCell">
           {{ rowData.expiryDate | date: 'mediumDate' }}
         </div>
       </td> -->
 
-        <td>
-          <div class="" *ngIf="rowData.status; else emptyCell">
-            <hospitality-bot-status-dropdown-toggle
-              class="status-toggle"
-              [nextStates]="rowData.nextState"
-              (onClick)="handleStatus($event, rowData)"
-              [state]="rowData.status"
-              [recordSetting]="siteStatusDetails"
-              [disabled]="rowData.status === 'DELETE'"
-              (onMenuItemClick)="handleMenuClick($event, rowData)"
-            >
-            </hospitality-bot-status-dropdown-toggle>
-          </div>
-        </td>
-      </tr>
-    </ng-template>
+      <td>
+        <div class="" *ngIf="rowData.status; else emptyCell">
+          <hospitality-bot-status-dropdown-toggle
+            class="status-toggle"
+            [nextStates]="rowData.nextState"
+            (onClick)="handleStatus($event, rowData)"
+            [state]="rowData.status"
+            [recordSetting]="siteStatusDetails"
+            [disabled]="rowData.status === 'DELETE'"
+            (onMenuItemClick)="handleMenuClick($event, rowData)"
+          >
+          </hospitality-bot-status-dropdown-toggle>
+        </div>
+      </td>
+    </tr>
+  </ng-template>
 
-    <ng-template pTemplate="summary">
-      <p-paginator
-        #paginator
-        [rows]="rowsPerPage"
-        [totalRecords]="totalRecords"
-        [rowsPerPageOptions]="rowsPerPageOptions"
-        (onPageChange)="paginate($event)"
-        [currentPageReportTemplate]="reportTemplate"
-        showCurrentPageReport="true"
-      ></p-paginator>
-    </ng-template>
-  </p-table>
-</ng-container>
+  <ng-template pTemplate="summary">
+    <p-paginator
+      #paginator
+      [rows]="rowsPerPage"
+      [totalRecords]="totalRecords"
+      [rowsPerPageOptions]="rowsPerPageOptions"
+      (onPageChange)="paginate($event)"
+      [currentPageReportTemplate]="reportTemplate"
+      showCurrentPageReport="true"
+    ></p-paginator>
+  </ng-template>
+</p-table>
 
 <ng-template #emptyCell>
   <div class="emptyCell">&mdash;</div>
 </ng-template>
-
 <ng-template #emptyTable>
   <hospitality-bot-empty-table
     [isLoading]="loading"
-    [link]="selectedTable === 'ROOM' ? 'add-room/multiple' : 'add-room-type'"
+    [href]="createSiteUrl"
     [content]="{
-      description:
-        'No site found. Tap the +Add Site to Manage and track your site',
-      actionName: '+ Add Site',
-      imageSrc: 'assets/images/empty-table-room-types.png'
+      description: ' Currently you do not have any website',
+      actionName: 'Create Site',
+      imageSrc: 'assets/images/no-sites.png'
     }"
   >
-    <ng-container [ngTemplateOutlet]="tabFilter"> </ng-container>
+    <ng-container *ngTemplateOutlet="siteHeader"></ng-container>
   </hospitality-bot-empty-table>
+</ng-template>
+
+<ng-template #tabFilter>
+  <form [formGroup]="tableFG">
+    <hospitality-bot-filter-chips
+      *ngIf="isQuickFilters"
+      [chips]="filterChips"
+      (onChange)="toggleQuickReplyFilter($event)"
+      [selectedChips]="selectedFilterChips"
+    ></hospitality-bot-filter-chips>
+  </form>
 </ng-template>
 
 <ng-template #siteHeader>

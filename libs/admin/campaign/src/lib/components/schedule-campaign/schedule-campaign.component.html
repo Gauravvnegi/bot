@@ -35,16 +35,14 @@
             [alt]="campaignConfiguration.images.time.alt"
           />
         </div>
-        <mat-form-field class="time">
-          <mat-select formControlName="time" placeholder="Time">
-            <mat-option
-              *ngFor="let item of timeList"
-              [value]="item.value"
-              [disabled]="!checkEnableTime(item.value)"
-              >{{ item.label }}</mat-option
-            >
-          </mat-select>
-        </mat-form-field>
+        <hospitality-bot-select
+          class="time"
+          controlName="time"
+          [options]="timeList"
+          [props]="{
+            placeholder: 'Time'
+          }"
+        ></hospitality-bot-select>
       </div>
     </div>
   </div>

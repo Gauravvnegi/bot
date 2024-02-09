@@ -107,9 +107,10 @@ export class ManageSiteDataTableComponent extends BaseDatatableComponent {
             manageSiteData.total,
             this.manageSiteStatus
           );
+          this.loading = false;
         },
-        () => {
-          this.values = [];
+        (error) => {
+          this.loading = false;
         },
         this.handleFinal
       )

@@ -387,7 +387,7 @@ export class CustomFileUploadComponent
             priorityMessage: priorityMessageValue,
           },
           '',
-          { panelClass: 'danger' }
+          { panelClass: 'error' }
         )
         .subscribe();
     }

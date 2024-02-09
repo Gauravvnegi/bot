@@ -1,7 +1,7 @@
 @import 'main';
 :host ::ng-deep .main__wrapper {
   .p-datatable {
-    height: calc(100vh - 300px);
+    height: calc(100vh - 310px);
     overflow-x: hidden;
     overflow-y: auto;
     tr {

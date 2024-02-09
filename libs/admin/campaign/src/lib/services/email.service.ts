@@ -157,7 +157,7 @@ export class EmailService extends ApiService {
    * @returns
    */
   mapSendersData(field: ReceiverFields, data): SendersData {
-    const reqData = {
+    let reqData = {
       subscribers: [],
       listing: [],
       individual: [],
@@ -167,6 +167,10 @@ export class EmailService extends ApiService {
       else if (item.type === 'listing') reqData.listing.push(item.data.id);
       else reqData.subscribers.push(item.data.id);
     });
+    reqData = {
+      ...reqData,
+      subscribers: reqData.subscribers?.filter((item) => item),
+    };
     return reqData;
   }
 

@@ -51,8 +51,12 @@ export class ScheduleCampaignComponent implements OnInit {
         {
           label: currentTime.format('h:mm A'),
           value: currentTime.valueOf(),
+          disabled: !this.checkEnableTime(currentTime.valueOf()),
         },
-        ...this.timeList,
+        ...this.timeList.map((item) => ({
+          ...item,
+          disabled: !this.checkEnableTime(item.value),
+        })),
       ];
       this.timeList.sort((a, b) => (a.value < b.value ? -1 : 1));
     }
@@ -147,6 +151,7 @@ export class ScheduleCampaignComponent implements OnInit {
       this.timeList.push({
         label: time.format('hh:mm A'),
         value: time.valueOf(),
+        disabled: !this.checkEnableTime(time.valueOf()),
       });
       time = time.add(30, 'minutes');
     }

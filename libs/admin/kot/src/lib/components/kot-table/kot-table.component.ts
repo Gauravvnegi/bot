@@ -107,12 +107,13 @@ export class KotTableComponent extends BaseDatatableComponent
       this.values = this.backUpData;
       return;
     }
-    keys = data
+    keys = (data as Array<{ status: string }>)
       ?.map((item) => {
-        const status = item?.status as string | undefined;
+        const status = item?.status;
         return status ? status.match(/\d+/)[0] : undefined;
       })
-      .filter(Boolean);
+      ?.filter(Boolean);
+
     // Filter the values array based on the extracted numbers
     this.values = this.backUpData.filter((value) => {
       const timerValue = value.timer.split(':')[0];

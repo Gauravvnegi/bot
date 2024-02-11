@@ -1,13 +1,14 @@
 import { Injectable } from '@angular/core';
-import { QueryConfig } from '@hospitality-bot/admin/shared';
+import { EntityTabFilterResponse, QueryConfig } from '@hospitality-bot/admin/shared';
 import { ApiService } from '@hospitality-bot/shared/utils';
-import { Observable, Subject } from 'rxjs';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { OrderListResponse } from '../types/kot-card.type';
 import { PendingItemListResponse } from '../types/pending-item.summary.type';
 
 @Injectable()
 export class KotService extends ApiService {
   refreshData = new Subject<boolean>();
+  OnGlobalFilterChange = new BehaviorSubject<EntityTabFilterResponse>(null);
 
   getKotList(entityId: string, config: QueryConfig): Observable<any> {
     return this.get(`/api/v1/entity/${entityId}/kot${config.params}`);

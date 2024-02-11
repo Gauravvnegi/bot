@@ -1,5 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { NavRouteOption } from '@hospitality-bot/admin/shared';
+import {
+  EntityTabFilterResponse,
+  NavRouteOption,
+} from '@hospitality-bot/admin/shared';
+import { KotService } from '../../services/kot.service';
 
 @Component({
   selector: 'hospitality-bot-kot',
@@ -16,7 +20,7 @@ export class KotComponent implements OnInit {
 
   welcomeMessage: string = 'Welcome to KOT Dashboard';
 
-  constructor() {}
+  constructor(private kotService: KotService) {}
 
   ngOnInit(): void {}
 
@@ -25,12 +29,7 @@ export class KotComponent implements OnInit {
    * @param value
    */
 
-  onGlobalTabFilterChanges(event) {
-    //to cancel previous api call in between when tab filter changes
-    // this.cancelRequests$.next();
-    // this.isRestaurant = event.outletType === 'RESTAURANT' ? true : false;
-    // this.entityId = event.entityId[0];
-    // this.tabFilterIdx = 0;
-    // this.initTableValue();
+  onGlobalTabFilterChanges(event: EntityTabFilterResponse) {
+    this.kotService.OnGlobalFilterChange.next(event);
   }
 }

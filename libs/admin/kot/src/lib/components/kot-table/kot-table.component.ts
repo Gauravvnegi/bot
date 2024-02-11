@@ -56,11 +56,17 @@ export class KotTableComponent extends BaseDatatableComponent
 
   ngOnInit(): void {
     this.entityId = this.globalFilterService.entityId;
-    this.configService.$config.subscribe((res) => {
-      if (res) {
-        this.orderConfig = new OrderConfigData().deserialize(res.orderConfig);
-        this.initTableValue();
-      }
+    this.orderConfig = new OrderConfigData().deserialize(
+      this.configService.$config.value.orderConfig
+    );
+    this.listenForGlobalFilterChange();
+  }
+
+  listenForGlobalFilterChange() {
+    this.kotService.OnGlobalFilterChange.subscribe((res) => {
+      this.cancelRequests$.next();
+      this.entityId = res.entityId[0];
+      this.initTableValue();
     });
   }
 
@@ -98,14 +104,23 @@ export class KotTableComponent extends BaseDatatableComponent
     );
   }
 
+  /**
+   * @function changePage
+   * @param page
+   * @returns
+   * @description override the base property method to handel QuickFilter locally
+   */
   changePage(page) {
     let keys: string[] = [];
     const data = this.getSelectedQuickReplyFilters();
 
     if (!data?.length) {
+      //when we select all filter
       this.values = this.backUpData;
       return;
     }
+
+    //extracting keys from selected quick filters
     keys = (data as Array<{ status: string }>)
       ?.map((item) => {
         const status = item?.status;
@@ -117,6 +132,7 @@ export class KotTableComponent extends BaseDatatableComponent
     this.values = this.backUpData.filter((value) => {
       const timerValue = value.timer.split(':')[0];
 
+      //checking for conditions
       return keys.some((key) => {
         switch (key) {
           case '5':
@@ -138,7 +154,6 @@ export class KotTableComponent extends BaseDatatableComponent
    * @function getQueryConfig To get query config
    * @returns QueryConfig
    */
-
   getQueryConfig(): QueryConfig {
     const config = {
       params: this.adminUtilityService.makeQueryParams([

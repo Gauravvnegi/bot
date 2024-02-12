@@ -76,7 +76,16 @@ export class TableManagementDatableComponent extends BaseDatatableComponent
         : (this.tabFilterIdx = 1);
     }
     this.tableName = title[this.selectedTab];
-    this.initTableValue();
+    this.listenGlobalFilterChange();
+  }
+
+  listenGlobalFilterChange() {
+    this.subscriptionList$.add(
+      this.tableManagementService.onGlobalFilterChange.subscribe((res) => {
+        this.entityId = res.entityId[0];
+        this.initTableValue();
+      })
+    );
   }
 
   loadData(event: LazyLoadEvent): void {

@@ -388,8 +388,8 @@ export class BaseDatatableComponent implements OnInit {
    * Handle the value of tab filters and filter chips
    * @param entityTypeCounts Tab filters value
    * @param entityStateCounts Filter chips value
-   * @param recordsJson Json data for label and type value against the key
    * @param totalMainCount total count of all data
+   * @param recordsJson Json data for label and type value against the key
    */
   initFilters<T extends string>(
     entityTypeCounts: EntityState<T>,
@@ -439,6 +439,7 @@ export class BaseDatatableComponent implements OnInit {
           value: key,
           total: value,
           type: record[key]?.type ?? 'active',
+          color: record[key]?.color,
         } as Chip<T>;
         return stateCount;
       });

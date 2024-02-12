@@ -356,7 +356,7 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
     componentRef.instance.guestType = 'NON_RESIDENT_GUEST';
     this.$subscription.add(
       componentRef.instance.onCloseSidebar.subscribe((res) => {
-        if (res) {
+        if (typeof res !== 'boolean') {
           this.selectedGuest = {
             label: `${res.firstName} ${res.lastName}`,
             value: res.id,

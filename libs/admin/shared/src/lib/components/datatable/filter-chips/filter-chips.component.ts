@@ -16,6 +16,7 @@ export class FilterChipsComponent implements OnInit {
    */
   @Input() controlName = 'quickReplyActionFilters';
   @Input() selectedChips = new Set<string>();
+  @Input() isCountVisible: boolean = true;
 
   // --chips will be removed from type (only index)
   @Output() onChange = new EventEmitter<{
@@ -46,7 +47,7 @@ export class FilterChipsComponent implements OnInit {
 
     const defaultSelectedChip = new Set([defaultFilterChipValue.value]);
     const clickedChip = this.chips[quickReplyTypeIdx].value;
-    
+
     if (clickedChip !== defaultFilterChipValue.value) {
       this.selectedChips.delete(defaultFilterChipValue.value);
       this.selectedChips.has(clickedChip)

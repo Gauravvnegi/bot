@@ -34,4 +34,5 @@ type ConfigurationValue =
   | 'orderConfig'
   | '_id'
   | 'packageVisibility'
-  | 'bookingConfig';
+  | 'bookingConfig'
+  | 'orderConfig';

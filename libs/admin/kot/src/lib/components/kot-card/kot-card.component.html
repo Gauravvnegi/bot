@@ -1,0 +1,77 @@
+<section class="container">
+  <div
+    class="progress-bar"
+    [ngStyle]="{ backgroundColor: _config.color }"
+  ></div>
+
+  <div class="wrapper">
+    <div class="wrapper-top">
+      <div class="middle">
+        <div class="left">
+          <div class="info">
+            <div class="text">
+              ORDER NO:
+            </div>
+            <div class="number">{{ _config?.orderNo }}</div>
+          </div>
+          <div class="dot"></div>
+          <div class="info">
+            <div class="text">
+              KOT NO:
+            </div>
+            <div class="number">{{ _config?.kotNo }}</div>
+          </div>
+        </div>
+        <div class="right">
+          <div class="type">
+            {{ _config?.kotType }}
+          </div>
+          <div class="timer">{{ _config?.timer }}</div>
+        </div>
+      </div>
+      <div class="summary-container">
+        <div
+          class="card-wrapper"
+          *ngFor="let item of _config?.menuItem; let i = index"
+        >
+          <div class="details-card">
+            <div class="info">
+              <img
+                [src]="
+                  item?.mealPreference === 'Veg'
+                    ? 'assets/svg/veg.svg'
+                    : 'assets/svg/non-veg.svg'
+                "
+                alt=""
+              />
+
+              <div class="details">
+                <div class="title">{{ item?.name }}</div>
+                <div class="instruction">
+                  instruction
+                  <img
+                    src="assets/svg/union.svg"
+                    [ngClass]="{ rotate: item?.isExpandedInstruction }"
+                    (click)="toggleInstruction(i)"
+                  />
+                </div>
+              </div>
+            </div>
+            <div className="quantity">{{ item?.quantity }}</div>
+          </div>
+          <div *ngIf="item?.isExpandedInstruction" class="instrction-deatils">
+            {{ item?.instructions }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="instruction-wrapper">
+    {{ _config?.kotInstructions }}
+  </div>
+  <div class="bottom">
+    <div class="cta" (click)="markFoodIsReady()">
+      Food is ready
+    </div>
+  </div>
+</section>

@@ -174,6 +174,13 @@ export class EntityTabFilterComponent implements OnInit {
             )
           );
         });
+
+      //to move selected entity at first index
+      const index = this.tabFilterItems.findIndex(
+        (obj) => obj.value === entityId
+      );
+      if (index > 0)
+        this.tabFilterItems.unshift(this.tabFilterItems.splice(index, 1)[0]);
     } else {
       this.setTabFilterItems(property); // brach = [{ id : '' ,  name : ''} , {...} , ...]
     }
@@ -258,6 +265,7 @@ export class EntityTabFilterComponent implements OnInit {
         : this.tabFilterItems
             .map((item) => item.value)
             .filter((value) => value !== 'ALL');
+
     this.onEntityTabFilterChanges.emit({
       entityId: outletIds,
       feedbackType: feedbackType,

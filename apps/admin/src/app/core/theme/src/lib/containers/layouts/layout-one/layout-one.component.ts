@@ -88,6 +88,7 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
   outlets = [];
   lastUpdatedAt: string;
   isNightAuditPending = false;
+  selectedProductName: string;
 
   isGlobalFilterVisible = false;
   showNotification = false;
@@ -345,12 +346,14 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
     if (this.isPredictoSubscribed) {
       // first time adding subscription
       this.nightAuditCheckListener();
+
       this.nightAuditCheck();
 
-      //every 15 minute, we will check
-      setInterval(() => {
-        this.nightAuditCheck();
-      }, 15 * 60 * 1000);
+      if (this.isAuditSubscribed)
+        setInterval(() => {
+          //every 15 minute, we will check
+          this.nightAuditCheck();
+        }, 15 * 60 * 1000);
     }
   }
 
@@ -731,7 +734,6 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
     );
   }
 
-  selectedProductName: string;
   get selectedProduct() {
     this.selectedProductName = this.routesConfigService.productName;
     return this.subscriptionPlanService.getSelectedProductData(

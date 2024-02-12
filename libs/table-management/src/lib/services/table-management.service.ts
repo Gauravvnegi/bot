@@ -10,10 +10,12 @@ import {
   TableListResponse,
   TableManagementDatableTabs,
 } from '../types/table-datable.type';
+import { EntityTabFilterConfig } from 'libs/admin/global-shared/src/lib/types/entity-tab.type';
 
 @Injectable()
 export class TableManagementService extends ApiService {
   selectedTab = new BehaviorSubject<TableManagementDatableTabs>(null);
+  onGlobalFilterChange = new BehaviorSubject<EntityTabFilterConfig>(null);
 
   getTableById(
     entityId: string,

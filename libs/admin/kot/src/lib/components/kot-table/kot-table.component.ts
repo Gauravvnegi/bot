@@ -31,7 +31,7 @@ export class KotTableComponent extends BaseDatatableComponent
   implements OnInit {
   navRoutes: NavRouteOptions = [];
   values: Kot[] = [];
-  pageTitle: string = 'KOT';
+  tableName: string = 'KOT';
   loading: boolean = false;
   entityId: string;
   $subscription = new Subscription();
@@ -56,10 +56,10 @@ export class KotTableComponent extends BaseDatatableComponent
 
   ngOnInit(): void {
     this.entityId = this.globalFilterService.entityId;
-    this.orderConfig = new OrderConfigData().deserialize(
-      this.configService.$config.value.orderConfig
-    );
-    this.listenForGlobalFilterChange();
+    this.configService.$config.subscribe((res) => {
+      this.orderConfig = new OrderConfigData().deserialize(res?.orderConfig);
+      this.listenForGlobalFilterChange();
+    });
   }
 
   listenForGlobalFilterChange() {

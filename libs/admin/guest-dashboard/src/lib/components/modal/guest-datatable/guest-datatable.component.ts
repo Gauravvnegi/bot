@@ -278,6 +278,37 @@ export class GuestDatatableModalComponent extends GuestDatatableComponent
     );
   }
 
+  openDetailPage(event, rowData?, tabKey?): void {
+    event.stopPropagation();
+    if (rowData) {
+      this.bookingDetailService.openBookingDetailSidebar({
+        bookingNumber: rowData.booking.bookingNumber,
+        guestId: rowData.id,
+        tabKey: tabKey,
+      });
+
+      this.$subscription.add(
+        // detailCompRef.componentInstance.onDetailsClose.subscribe((res) => {
+        this.bookingDetailService.actionEvent.subscribe((res) => {
+          if (!res) {
+            this.loadInitialData(
+              [
+                ...this.globalQueries,
+                {
+                  order: 'DESC',
+                  entityType: this.entityType,
+                },
+                ...this.getSelectedQuickReplyFilters({ key: 'entityState' }),
+              ],
+              false
+            );
+            // detailCompRef.close();
+          }
+        })
+      );
+    }
+  }
+
   closeModal() {
     this.ref.close();
     this.onModalClose.emit(true);

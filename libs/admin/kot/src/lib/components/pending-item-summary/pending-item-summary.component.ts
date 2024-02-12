@@ -12,7 +12,14 @@ import { PendingItemSummaryList } from '../../models/kot-pending-item.model';
 export class PendingItemSummaryComponent implements OnInit {
   @Input() itemPendingSummaryList: ItemPendingSummaryList[];
   subscription = new Subscription();
-  entityId: string;
+
+  _entityId: string;
+  @Input() set entityId(value: string) {
+    if (value) {
+      this._entityId = value;
+      this.initSummaryList();
+    }
+  }
 
   constructor(
     private kotService: KotService,
@@ -20,9 +27,6 @@ export class PendingItemSummaryComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.entityId = this.globalFilterService.entityId;
-    this.initSummaryList();
-
     this.subscription.add(
       this.kotService.refreshData.subscribe((res) => {
         if (res) {
@@ -34,7 +38,7 @@ export class PendingItemSummaryComponent implements OnInit {
 
   initSummaryList() {
     this.subscription.add(
-      this.kotService.getPendingItemSummary(this.entityId).subscribe((res) => {
+      this.kotService.getPendingItemSummary(this._entityId).subscribe((res) => {
         this.itemPendingSummaryList = new PendingItemSummaryList().deserialize(
           res
         ).records;

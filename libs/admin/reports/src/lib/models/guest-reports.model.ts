@@ -185,7 +185,7 @@ export class GuestEscalationComplaintReport
         return {
           guestName: item?.guestName,
           serviceItem: item?.itemName,
-          complaint: item?.description,
+          complaint: item?.description.length ? item?.description : undefined,
           status: item?.status,
           actionTakenBy: item?.assignedTo,
           department: undefined,
@@ -217,7 +217,7 @@ export class GuestComplaintReport
             item?.guestDetails?.primaryGuest?.lastName
           ),
           serviceItem: item?.itemName,
-          complaint: item?.remarks,
+          complaint: item?.remarks.length ? item?.remarks : undefined,
           status: item?.status,
           actionTakenBy: item?.assigneeName,
           department: convertToNormalCase(item?.departmentName),

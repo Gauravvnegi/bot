@@ -273,18 +273,20 @@ export class GuestDatatableComponent extends BaseDatatableComponent
       this.$subscription.add(
         // detailCompRef.componentInstance.onDetailsClose.subscribe((res) => {
         this.bookingDetailService.actionEvent.subscribe((res) => {
-          this.loadInitialData(
-            [
-              ...this.globalQueries,
-              {
-                order: 'DESC',
-                entityType: this.tabFilterItems[this.tabFilterIdx].value,
-              },
-              ...this.getSelectedQuickReplyFilters(),
-            ],
-            false
-          );
-          // detailCompRef.close();
+          if (!res) {
+            this.loadInitialData(
+              [
+                ...this.globalQueries,
+                {
+                  order: 'DESC',
+                  entityType: this.tabFilterItems[this.tabFilterIdx].value,
+                },
+                ...this.getSelectedQuickReplyFilters(),
+              ],
+              false
+            );
+            // detailCompRef.close();
+          }
         })
       );
     }

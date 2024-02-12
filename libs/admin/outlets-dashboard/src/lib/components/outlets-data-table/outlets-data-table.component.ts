@@ -26,9 +26,11 @@ import {
 import {
   OutletReservationList,
   OutletReservation,
+  OutletReservationTableList,
 } from '../../models/outlet-reservation.model';
 import { ReservationStatus } from '../../types/reservation-table';
 import { PosReservationComponent } from '../pos-reservation/pos-reservation.component';
+import { OutletFormService } from '../../services/outlet-form.service';
 
 @Component({
   selector: 'hospitality-bot-outlets-data-table',
@@ -60,28 +62,29 @@ export class OutletsDataTableComponent extends BaseDatatableComponent
     private _clipboard: Clipboard,
     protected adminUtilityService: AdminUtilityService,
     protected snackbarService: SnackBarService,
-    private resolver: ComponentFactoryResolver
+    private resolver: ComponentFactoryResolver,
+    private formService: OutletFormService
   ) {
     super(fb);
   }
 
   ngOnInit(): void {
-    this.entityId = this.globalFilterService.entityId;
+    this.entityId = this.formService.entityId;
     this.tableFG?.addControl('reservationType', new FormControl(''));
     this.setReservationType(this.reservationTypes[0].value);
     this.cols = posCols;
-    this.initReservations();
   }
 
   setReservationType(value: string) {
     this.selectedReservationType = value;
     this.tableFG.patchValue({ reservationType: value });
+    this.selectedReservationType === 'table' && this.initTableReservations();
+    this.selectedReservationType === 'card' && this.initReservations();
   }
 
   loadData(event: LazyLoadEvent): void {
-    // this.selectedReservationType === 'dinein' && this.initDineInReservation();
-    // this.selectedReservationType === 'delivery' &&
-    // this.initReservations();
+    this.selectedReservationType === 'table' && this.initTableReservations();
+    this.selectedReservationType === 'card' && this.initReservations();
   }
 
   initReservations() {
@@ -101,6 +104,25 @@ export class OutletsDataTableComponent extends BaseDatatableComponent
           this.loading = false;
         }
       })
+    );
+  }
+
+  initTableReservations() {
+    this.loading = true;
+    this.$subscription.add(
+      this.outletService
+        .getTableReservations(this.entityId)
+        .subscribe((res) => {
+          const data = new OutletReservationTableList().deserialize(res);
+          this.values = data.reservationData;
+          this.initFilters(
+            data?.entityTypeCounts,
+            {},
+            12,
+            ReservationStatusDetails
+          );
+          this.loading = false;
+        })
     );
   }
 

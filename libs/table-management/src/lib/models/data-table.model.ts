@@ -1,4 +1,4 @@
-import { EntityState } from '@hospitality-bot/admin/shared';
+import { EntityState, Option } from '@hospitality-bot/admin/shared';
 import {
   Area,
   AreaListResponse,
@@ -83,6 +83,7 @@ export class AreaData {
   date: string;
   status: boolean;
   tables: string;
+  tableList?: Option[];
   deserialize(input: AreaResponse) {
     this.id = input?.id;
     this.name = input?.name;
@@ -90,6 +91,10 @@ export class AreaData {
     this.status = input?.status;
     this.date = input?.updated && getFormattedDate(input?.updated);
     this.tables = input.tables?.map((item) => item?.number).join(',');
+    this.tableList = input?.tables?.map((item) => ({
+      label: item?.number,
+      value: item?.id,
+    }));
     return this;
   }
 }

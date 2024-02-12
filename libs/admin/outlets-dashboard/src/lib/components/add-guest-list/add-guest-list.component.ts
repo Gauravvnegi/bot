@@ -3,6 +3,9 @@ import { tableList } from '../../constants/guest-list.const';
 import { BookingDetailService, Option } from '@hospitality-bot/admin/shared';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SnackBarService } from '@hospitality-bot/shared/material';
+import { AddGuestForm } from '../../types/form';
+import { OutletFormService } from '../../services/outlet-form.service';
+import { OutletTableService } from '../../services/outlet-table.service';
 
 @Component({
   selector: 'hospitality-bot-add-guest-list',
@@ -16,10 +19,19 @@ export class AddGuestListComponent implements OnInit {
   useForm!: FormGroup;
   loading = false;
 
+  marketSegments = [
+    {
+      label: 'val',
+      value: 'val',
+    },
+  ];
+
   constructor(
     private fb: FormBuilder,
     private bookingDetailService: BookingDetailService,
-    private snackbarService: SnackBarService
+    private snackbarService: SnackBarService,
+    private formService: OutletFormService,
+    private outletService: OutletTableService
   ) {}
 
   ngOnInit(): void {
@@ -29,9 +41,9 @@ export class AddGuestListComponent implements OnInit {
   initForm() {
     this.useForm = this.fb.group({
       tables: [[], Validators.required],
-      personCount: [, Validators.min(1)],
+      personCount: [null, Validators.min(1)],
       guest: ['', Validators.required],
-      segment: ['', Validators.required],
+      marketSegment: ['', Validators.required],
       checkIn: ['', Validators.required],
       checkOut: ['', Validators.required],
       remark: [''],
@@ -55,10 +67,20 @@ export class AddGuestListComponent implements OnInit {
       return;
     }
 
-    this.snackbarService.openSnackBarAsText('Guest Registered !', '', {
-      panelClass: 'success',
-    });
-    this.close();
+    const formData = this.formService.getGuestFormData(
+      this.useForm.getRawValue() as AddGuestForm
+    );
+
+    this.outletService.createReservation(formData).subscribe(
+      (res) => {},
+      (error) => {},
+      () => {
+        this.snackbarService.openSnackBarAsText('Guest Registered !', '', {
+          panelClass: 'success',
+        });
+        this.close();
+      }
+    );
   }
 
   close() {

@@ -8,10 +8,10 @@
         [src]="mealPreferenceConfig[itemCard.mealPreference]?.image"
       />
     </div>
-    <img class="item-img" [src]="itemCard.image" [alt]="itemCard.itemName" />
+    <img class="item-img" [src]="itemCard.imageUrl" [alt]="itemCard.name" />
   </div>
-  <div class="item-name">{{ itemCard.itemName }}</div>
-  <div class="item-price">{{ itemCard.price | currency: 'INR' }}</div>
+  <div class="item-name">{{ itemCard.name }}</div>
+  <div class="item-price">{{ itemCard.dineInPrice | currency: 'INR' }}</div>
 
   <div class="add-btn">
     <hospitality-bot-button

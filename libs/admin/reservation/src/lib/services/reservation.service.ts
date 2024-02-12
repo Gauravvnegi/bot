@@ -20,6 +20,12 @@ export class ReservationService extends ApiService {
     return this.get(`/api/v1/entity/${entityId}/journeys?journey=${journey}`);
   }
 
+  isLateCheckoutValid(reservationId: string, journey: JourneyTypes) {
+    return this.get(
+      `/api/v1/reservation/${reservationId}/journey/requests?journey=${journey}`
+    );
+  }
+
   updateLateCheckout(
     reservationId: string,
     data: {

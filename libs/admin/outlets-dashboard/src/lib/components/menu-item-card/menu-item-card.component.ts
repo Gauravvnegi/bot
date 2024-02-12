@@ -1,7 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { MenuItemCard, mealPreferenceConfig } from '../../types/menu-order';
+import { mealPreferenceConfig } from '../../types/menu-order';
 import { OutletFormService } from '../../services/outlet-form.service';
-import { ControlContainer, FormGroup } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
+import { MenuItem } from 'libs/admin/all-outlets/src/lib/models/outlet.model';
 
 @Component({
   selector: 'hospitality-bot-menu-item-card',
@@ -9,8 +10,8 @@ import { ControlContainer, FormGroup } from '@angular/forms';
   styleUrls: ['./menu-item-card.component.scss'],
 })
 export class MenuItemCardComponent implements OnInit {
-  @Input() itemCard: MenuItemCard;
-  selectedItems: MenuItemCard[] = [];
+  @Input() itemCard: MenuItem;
+  selectedItems: MenuItem[] = [];
   parentFormGroup: FormGroup;
   readonly mealPreferenceConfig = mealPreferenceConfig;
 

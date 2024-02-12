@@ -67,16 +67,11 @@
         <hospitality-bot-select
           label="Market Segment"
           class="half-width"
-          controlName="segment"
+          controlName="marketSegment"
           [props]="{
-            placeholder: 'Select Segment'
+            placeholder: 'Select'
           }"
-          [options]="[
-            {
-              label: 'Standard',
-              value: 'standard'
-            }
-          ]"
+          [options]="marketSegments"
         ></hospitality-bot-select>
         <hospitality-bot-from-to-date
           [controlNames]="{

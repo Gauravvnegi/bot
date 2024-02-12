@@ -215,6 +215,23 @@ export class InvoiceComponent implements OnInit {
     );
   }
 
+  isLateCheckoutValid() {
+    this.$subscription.add(
+      this.reservationService
+        .isLateCheckoutValid(this.reservationId, JourneyTypes.LATECHECKOUT)
+        .subscribe(
+          (res) => {
+            if (!res) {
+              this.getLateCheckoutDetails();
+            }
+          },
+          (error) => {
+            return true;
+          }
+        )
+    );
+  }
+
   initOptions() {
     this.initPaymentOptions();
   }
@@ -338,7 +355,7 @@ export class InvoiceComponent implements OnInit {
             res?.pmsStatus === ReservationCurrentStatus.INHOUSE;
           this.isCheckout =
             res?.pmsStatus === ReservationCurrentStatus.CHECKEDOUT;
-          this.getLateCheckoutDetails();
+          this.isLateCheckoutValid();
         },
         (error) => (this.isInitialized = true),
         () => (this.isInitialized = true)
@@ -1057,10 +1074,14 @@ export class InvoiceComponent implements OnInit {
   }
 
   lateCheckout() {
-    this.formService.openModalComponent(JourneyTypes.LATECHECKOUT, () => {
-      this.showBanner = false;
-      this.refreshData();
-    }, this.reservationId);
+    this.formService.openModalComponent(
+      JourneyTypes.LATECHECKOUT,
+      () => {
+        this.showBanner = false;
+        this.refreshData();
+      },
+      this.reservationId
+    );
   }
 
   onAddGST() {

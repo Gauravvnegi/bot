@@ -17,6 +17,8 @@ export class MultiSelectComponent extends FormComponent {
   showChips = true;
   maxSelectedLabels = 20;
   isExtras: boolean = false;
+  isGroupOptions = false;
+
   /**
    * @Input to change default date setting
    */
@@ -65,4 +67,5 @@ export type MultiSelectSettings = {
   showHeader: boolean;
   maxSelectedLabels: number;
   showChips: boolean;
+  isGroupOptions: boolean;
 };

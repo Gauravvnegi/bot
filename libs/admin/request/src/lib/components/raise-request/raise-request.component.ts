@@ -339,7 +339,7 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
     };
     return queries;
   }
-  z;
+
   guestChange(event) {
     this.selectedGuest = {
       label: `${event.firstName} ${event.lastName}`,

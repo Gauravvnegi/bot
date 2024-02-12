@@ -31,6 +31,7 @@ type ConfigurationValue =
   | 'flashNotifications'
   | 'roomDiscountConfig'
   | 'communicationChannels'
+  | 'orderConfig'
   | '_id'
   | 'packageVisibility'
   | 'bookingConfig'

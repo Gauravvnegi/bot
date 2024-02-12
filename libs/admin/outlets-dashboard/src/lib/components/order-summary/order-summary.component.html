@@ -87,7 +87,7 @@
                               <p>{{ itemControls.value.unit }}</p>
                               <img
                                 src="assets/svg/add-item-black.svg"
-                                (click)="incrementQuantity(j)"
+                                (click)="incrementQuantity(itemControls)"
                               />
                             </div>
                           </div>
@@ -183,28 +183,31 @@
             <ul>
               <li class="payment-item">
                 <span>Total Charges</span>
-                <span>{{ 223 | currency: 'INR' }} </span>
+                <span>{{ totalAmount | currency: 'INR' }} </span>
               </li>
-              <li class="payment-item">
+              <!-- <li class="payment-item">
                 <span>Total Container Charges</span>
                 <span>{{ 223 | currency: 'INR' }} </span>
-              </li>
+              </li> -->
               <li class="payment-item">
                 <span>Total Discount</span>
-                <span>{{ 223 | currency: 'INR' }} </span>
+                <span>{{ 0 | currency: 'INR' }} </span>
               </li>
               <li class="payment-item">
                 <span>Total Payable</span>
-                <span>{{ 223 | currency: 'INR' }} </span>
+                <span>{{ totalAmount | currency: 'INR' }} </span>
               </li>
               <li class="payment-item">
                 <span>Total Paid Amount</span>
-                <span>{{ 223 | currency: 'INR' }} </span>
+                <span>{{ 0 | currency: 'INR' }} </span>
               </li>
             </ul>
             <div class="remaining-balance">
               <span>Remaining Balance</span>
-              <span>{{ 0 | currency: 'INR' }}</span>
+              <span>{{
+                totalAmount - paymentControls.paymentRecieved.value
+                  | currency: 'INR'
+              }}</span>
             </div>
           </div>
           <div class="form-block">

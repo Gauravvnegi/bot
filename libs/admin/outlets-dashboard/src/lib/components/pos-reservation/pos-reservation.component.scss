@@ -14,16 +14,13 @@
   .heading {
     @include light-sm-text;
     @include flex-item-center;
-    width: 50%;
+    width: 60%;
     gap: 20px;
     .header-data {
       color: black;
       background-color: $white;
       padding: 10px;
       border-radius: 10px;
-    }
-    .menu {
-      width: 60%;
     }
   }
 
@@ -34,29 +31,38 @@
   }
 }
 
-:host ::ng-deep .menu-field .p-multiselect {
-  margin-left: 0;
-  background: transparent;
-  outline: none;
-  border: 1px solid $white;
-  border-radius: 5px;
-  padding: 6px 20px;
-  border-color: transparent !important;
+.header-form {
   width: 80%;
-  .p-multiselect-label-container {
-    margin-top: 0.2em;
-    margin-bottom: 0;
-  }
-  .p-multiselect-label {
-    color: $white;
-  }
-  &:hover {
-    border-color: $white;
-  }
-  .p-multiselect-trigger-icon {
-    color: $white;
+  display: flex;
+  gap: 20px;
+  .half-width {
+    flex-basis: 43%;
   }
 }
+
+// :host ::ng-deep .menu-field .p-multiselect {
+//   margin-left: 0;
+//   background: transparent;
+//   outline: none;
+//   border: 1px solid $white;
+//   border-radius: 5px;
+//   padding: 6px 20px;
+//   border-color: transparent !important;
+//   width: 80%;
+//   .p-multiselect-label-container {
+//     margin-top: 0.2em;
+//     margin-bottom: 0;
+//   }
+//   .p-multiselect-label {
+//     color: $white;
+//   }
+//   &:hover {
+//     border-color: $white;
+//   }
+//   .p-multiselect-trigger-icon {
+//     color: $white;
+//   }
+// }
 
 :host ::ng-deep .menu {
   .p-multiselect-label {
@@ -81,7 +87,8 @@
   flex-wrap: wrap;
   align-items: center;
   padding: 6px 2%;
-  justify-content: space-between;
+  gap: 10px;
+
   .search {
     padding-top: 30px;
   }
@@ -90,6 +97,12 @@
   }
   .one-fifth-width {
     width: 18%;
+  }
+  .half-width {
+    width: 55%;
+  }
+  .number {
+    width: 12%;
   }
 }
 
@@ -150,15 +163,21 @@
   background-color: $white;
   .checkbox {
     padding: 5px 15px 0px;
-    @include flex-item-center;
+    @include flex-justify-align-center;
     .checkbox-label {
       padding: 0 15px 0 10px;
       @include light-vsm-text;
     }
   }
   .buttons {
-    display: flex;
+    @include flex-justify-align-center;
     gap: 10px;
     padding: 10px;
   }
+}
+
+.loader {
+  height: 65vh;
+  width: 100%;
+  @include flex-justify-align-center;
 }

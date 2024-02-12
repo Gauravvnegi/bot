@@ -98,7 +98,6 @@ export enum ModuleNames {
   // POS
   POS_HOME = 'POS_HOME',
   POS_DASHBOARD = 'POS_DASHBOARD',
-  KOT = 'KOT',
   TABLE_MANAGEMENT = 'TABLE_MANAGEMENT',
 
   // FINANCE

@@ -1,8 +1,11 @@
-import { PricingDetails } from 'libs/admin/manage-reservation/src/lib/types/response.type';
+import { EntitySubType } from '@hospitality-bot/admin/shared';
+import { MealPreferences, OrderTypes } from './menu-order';
 import { OrderMethod, ReservationStatus } from './reservation-table';
 
 export type MenuForm = {
   orderInformation: OrderInformation;
+  paymentInformation: PaymentInformation;
+  kotInformation: KotInformation;
 };
 
 export type OrderInformation = {
@@ -10,8 +13,37 @@ export type OrderInformation = {
   tableNumber: string[];
   staff: string;
   guest: string;
-  numberOfPersons: string;
+  numberOfPersons: number;
   menu: string[];
+  orderType: OrderTypes;
+};
+
+export type PaymentInformation = {
+  complementary: boolean;
+  paymentMethod: string;
+  paymentRecieved: number;
+  transactionId: string;
+};
+
+export type KotInformation = {
+  kotItems: {
+    items: KotItemsForm[];
+    kotInstruction: string;
+    kotOffer: string[];
+    viewKotOffer?: boolean;
+    viewKotInstruction?: boolean;
+  }[];
+};
+
+export type KotItemsForm = {
+  id: string;
+  itemName: string;
+  unit: number;
+  mealPreference: MealPreferences;
+  price: number;
+  itemInstruction: string;
+  image: string;
+  viewItemInstruction: boolean;
 };
 
 export type MenuOrderResponse = {
@@ -23,7 +55,7 @@ export type MenuOrderResponse = {
   entityId: string;
   createdBy: string;
   pricingDetails: OutletPricingDetails;
-  kots: KotItemsResponse;
+  kots: KotItemsResponse[];
   source: string;
 };
 
@@ -31,13 +63,13 @@ export type MenuItemResponse = {
   id: string;
   amount: number;
   description: string;
-  remarks: string;
+  remarks?: string;
   transactionType: 'Debit' | 'Credit';
   unit: number;
   type: ItemType;
   currency?: string;
   itemId: string;
-  kotId: string;
+  kotId?: string;
 };
 
 export type ItemType = 'ITEM_CHARGE' | 'ITEM_TAX' | 'PAID';
@@ -61,8 +93,64 @@ export type OutletPricingDetails = {
 export type KotItemsResponse = {
   id: string;
   number: string;
-  status: 'PREPARED';
+  status: KotItemStatus;
   instructions: string;
   items: MenuItemResponse[];
-  preparedTime: 387126;
+  preparedTime?: 387126;
 };
+
+export type CreateOrderData = {
+  status: 'CONFIRMED' | 'DRAFT';
+  type: OrderTypes;
+  source?: string;
+  kots: {
+    instructions: string;
+    items: {
+      itemId: string;
+      unit: number;
+      amount: number;
+      remarks: string;
+    }[];
+  }[];
+  outletType: EntitySubType;
+  guestId: string;
+  reservation: {
+    id?: string;
+    occupancyDetails: {
+      maxAdult: number;
+    };
+    status: 'CONFIRMED' | 'DRAFT';
+    tableIds: string[];
+    from?: number;
+    to?: number;
+    source?: string;
+    sourceName?: string;
+    marketSegment?: string;
+  };
+};
+
+export type AddGuestForm = {
+  tables: string[];
+  personCount: number;
+  guest: string;
+  marketSegment: string;
+  checkIn: number;
+  checkOut: number;
+  remark: string;
+};
+
+export type CreateReservationData = {
+  occupancyDetails: {
+    maxAdult: number;
+  };
+  status: ReservationStatus;
+  guestId: string;
+  tableIds: string[];
+  from: number;
+  to: number;
+  source?: string;
+  sourceName?: string;
+  marketSegment: string;
+};
+
+export type KotItemStatus = 'PREPARED' | 'PENDING';

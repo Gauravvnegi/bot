@@ -7,6 +7,8 @@ import {
   ReservationStatus,
   PaymentStatus,
   TableStatus,
+  ReservationTableListResponse,
+  ReservationTableResponse,
 } from '../types/reservation-table';
 
 export class OutletReservationList {
@@ -74,6 +76,55 @@ export class OutletReservation {
       .map((word) => word?.charAt(0)?.toUpperCase() + word?.slice(1))
       .join('-');
     this.tableStatus = input?.tableStatus;
+    return this;
+  }
+}
+
+export class OutletReservationTableList {
+  reservationData: OutletReservationTable[];
+  entityTypeCounts: EntityState<string>;
+  total: number;
+  deserialize(input: ReservationTableListResponse) {
+    this.reservationData = (input?.records ?? []).map((item) =>
+      new OutletReservationTable().deserialize(item)
+    );
+    this.entityTypeCounts = input.entityTypeCounts;
+    this.total = input.total;
+    return this;
+  }
+}
+
+export class OutletReservationTable {
+  invoiceId: string;
+  tableNumber: string;
+  area: string;
+  bookingNumber: string;
+  date: number;
+  time: string;
+  paymentMethod: string;
+  totalAmount: number;
+  totalDueAmount: number;
+  nextStates: string[];
+  guestName: string;
+  reservationStatus: ReservationStatus;
+
+  deserialize(input: ReservationTableResponse) {
+    this.area = 'A1';
+    this.bookingNumber = input?.number;
+    this.date = input?.reservation.from;
+    // this.time = input?.reservation.;
+    // this.paymentMethod = ;
+    this.totalAmount = input?.pricingDetails.totalAmount;
+    this.totalDueAmount = input.pricingDetails.totalDueAmount;
+    this.nextStates = ['DRAFT'];
+    const { firstName, lastName } = input?.guest || {};
+    this.guestName = firstName
+      ? lastName
+        ? `${firstName} ${lastName}`
+        : firstName
+      : lastName || '';
+    this.reservationStatus = input?.reservation.status;
+    this.tableNumber = input?.reservation.tableNumberOrRoomNumber;
     return this;
   }
 }

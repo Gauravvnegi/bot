@@ -4,6 +4,7 @@ import { SelectedEntity } from 'libs/admin/manage-reservation/src/lib/types/rese
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { dineInReservationResponse } from '../constants/data-table';
+import { CreateOrderData, CreateReservationData } from '../types/form';
 
 @Injectable()
 export class OutletTableService extends ApiService {
@@ -34,7 +35,17 @@ export class OutletTableService extends ApiService {
     );
   }
 
-  createBooking(entityId: string, data) {
+  createOrder(entityId: string, data: CreateOrderData) {
     return this.post(`/api/v1/entity/${entityId}/order`, data);
+  }
+
+  createReservation(data: CreateReservationData) {
+    return this.post(`/api/v1/booking?type=OUTLET`, data);
+  }
+
+  getTableReservations(entityId: string) {
+    return this.get(
+      `/api/v1/entity/${entityId}/order?order=DESC&includeKot=true&raw=true`
+    );
   }
 }

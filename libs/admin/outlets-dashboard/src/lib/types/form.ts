@@ -129,4 +129,28 @@ export type CreateOrderData = {
   };
 };
 
+export type AddGuestForm = {
+  tables: string[];
+  personCount: number;
+  guest: string;
+  marketSegment: string;
+  checkIn: number;
+  checkOut: number;
+  remark: string;
+};
+
+export type CreateReservationData = {
+  occupancyDetails: {
+    maxAdult: number;
+  };
+  status: ReservationStatus;
+  guestId: string;
+  tableIds: string[];
+  from: number;
+  to: number;
+  source?: string;
+  sourceName?: string;
+  marketSegment: string;
+};
+
 export type KotItemStatus = 'PREPARED' | 'PENDING';

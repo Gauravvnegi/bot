@@ -1,7 +1,12 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { MenuItem } from 'libs/admin/all-outlets/src/lib/models/outlet.model';
-import { CreateOrderData, MenuForm } from '../types/form';
+import {
+  AddGuestForm,
+  CreateOrderData,
+  CreateReservationData,
+  MenuForm,
+} from '../types/form';
 import { EntitySubType } from '@hospitality-bot/admin/shared';
 
 @Injectable({
@@ -62,5 +67,19 @@ export class OutletFormService {
           },
     };
     return orderData;
+  }
+
+  getGuestFormData(data: AddGuestForm) {
+    const formData: CreateReservationData = {
+      occupancyDetails: { maxAdult: data.personCount },
+      status: 'CONFIRMED',
+      guestId: data.guest,
+      tableIds: data.tables,
+      from: data.checkIn,
+      to: data.checkOut,
+      marketSegment: data.marketSegment,
+    };
+
+    return formData;
   }
 }

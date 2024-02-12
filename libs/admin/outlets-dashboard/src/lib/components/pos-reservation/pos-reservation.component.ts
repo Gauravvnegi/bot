@@ -273,7 +273,7 @@ export class PosReservationComponent implements OnInit {
     const data = this.formService.getOutletFormData(
       this.userForm.getRawValue() as MenuForm
     );
-    this.outletTableService.createBooking(this.entityId, data).subscribe(
+    this.outletTableService.createOrder(this.entityId, data).subscribe(
       (res) => {},
       (error) => {},
       () => {

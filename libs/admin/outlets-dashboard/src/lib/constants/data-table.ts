@@ -131,6 +131,7 @@ export const ReservationStatusColorConfig: Record<ReservationStatus, string> = {
   RUNNING_KOT_TABLE: '',
   RUNNING_TABLE: '',
   PRINTED_TABLE: '',
+  DRAFT: '',
 };
 
 export const ReservationStatusDetails: Record<
@@ -171,6 +172,10 @@ export const ReservationStatusDetails: Record<
   },
   PRINTED_TABLE: {
     label: 'Printed Table',
+    type: 'warning',
+  },
+  DRAFT: {
+    label: 'Draft',
     type: 'warning',
   },
 };
@@ -477,7 +482,7 @@ export const menuCardData: MenuItemCard[] = [
     id: 'burger3',
     itemName: 'Burger',
     price: 200,
-    mealPreference: MealPreferences.NON_VEG,
+    mealPreference: MealPreferences.NONVEG,
     image: 'assets/images/menu-item.jpg',
   },
   {
@@ -491,7 +496,7 @@ export const menuCardData: MenuItemCard[] = [
     id: 'burger5',
     itemName: 'Burger',
     price: 200,
-    mealPreference: MealPreferences.NON_VEG,
+    mealPreference: MealPreferences.NONVEG,
     image: 'assets/images/menu-item.jpg',
   },
   {

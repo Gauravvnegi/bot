@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, of } from 'rxjs';
-import { MenuTabValue, TabValue } from '../constants/data-table';
+import { TabValue } from '../constants/data-table';
 import { ApiService } from '@hospitality-bot/shared/utils';
-import { map } from 'rxjs/operators';
 import { QueryConfig } from '@hospitality-bot/admin/library';
 import { OutletConfig } from '../types/config';
 import {
@@ -10,9 +9,8 @@ import {
   FoodPackageResponse,
   OutletResponse,
 } from '../types/response';
-import { ServiceResponse } from 'libs/admin/services/src/lib/types/response';
 import { SearchResultResponse } from 'libs/admin/library/src/lib/types/response';
-import { MenuFormData, MenuResponse } from '../types/menu';
+import { MenuFormData, MenuItemCategory, MenuResponse } from '../types/menu';
 import {
   FoodPackageForm,
   MenuItemForm,
@@ -111,6 +109,14 @@ export class OutletService extends ApiService {
     return this.get(`/api/v1/menus/${menuId}`, {
       headers: { 'entity-id': entityId },
     });
+  }
+
+  getAllCategories(entityId: string, config: QueryConfig) {
+    return this.get(`/api/v1/entity/${entityId}/categories${config.params}`);
+  }
+
+  createCategory(entityId: string, data: MenuItemCategory) {
+    return this.post(`/api/v1/entity/${entityId}/categories`, data);
   }
 
   getMenuItemsById(menuItemId: string): Observable<any> {

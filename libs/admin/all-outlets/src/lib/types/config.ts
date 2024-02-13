@@ -1,3 +1,5 @@
+import { Option } from '@hospitality-bot/admin/shared';
+
 export type OutletConfig = {
   HOURS;
   WEEKDAYS;
@@ -17,4 +19,5 @@ export type MenuConfig = {
   type: string[];
   mealPreference: string[];
   category: string[];
+  units: Option[];
 };

@@ -6,7 +6,7 @@ export type CategoryData = {
   imageUrl?: ImageUrl[];
   active?: boolean;
   source: 1;
-  type: 'SERVICE_CATEGORY' | 'PACKAGE_CATEGORY' | 'FOOD_PACKAGE_CATEGORY';
+  type: CategoryType;
 };
 
 /**
@@ -17,3 +17,9 @@ export type CategoryData = {
 export type QueryConfig = {
   params: string;
 };
+
+export type CategoryType =
+  | 'SERVICE_CATEGORY'
+  | 'PACKAGE_CATEGORY'
+  | 'FOOD_PACKAGE_CATEGORY'
+  | 'MENU_CATEGORY';

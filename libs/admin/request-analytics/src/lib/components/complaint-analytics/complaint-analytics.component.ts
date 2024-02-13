@@ -113,7 +113,6 @@ export class ComplaintAnalyticsComponent implements OnInit {
             label: stat.label,
             score: stat.value,
             additionalData: stat.value,
-            comparisonPercent: 100,
           });
         });
       });

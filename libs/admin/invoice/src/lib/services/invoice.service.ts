@@ -128,9 +128,9 @@ export class InvoiceService extends ApiService {
   ): Partial<BillSummaryData> {
     const descriptionIds = [];
     const previousSavedIds = this.invoiceData.billItems.map((item) => item.id);
-
     const billItems: BillItem[] = invoiceFormData.tableData.map((item) => {
       descriptionIds.push(item.billItemId);
+
       let billItemData = {
         date: item.date,
         description: item.description,
@@ -142,15 +142,14 @@ export class InvoiceService extends ApiService {
         itemId: item.isNonEditableBillItem ? null : item.itemId,
         taxId: item.taxId,
         isCoupon: item.isDiscount,
-        isRealised: item?.isRealised,
-        chargeType: item?.chargeType,
+        chargeType: item.chargeType,
+        ...(item.chargeType === 'ALLOWANCE' && { remarks: item.remarks }),
+        ...(item.isDiscount && {
+          discountType: item.discountType,
+          discountValue: item.discountValue,
+        }),
+        ...(item.isDiscount ? {} : { isRealised: item.isRealised }),
       };
-      if (item.chargeType === 'ALLOWANCE')
-        billItemData['remarks'] = item?.remarks;
-      if (item.isDiscount) {
-        billItemData['discountType'] = item?.discountType;
-        billItemData['discountValue'] = item?.discountValue;
-      }
       return billItemData;
     });
 

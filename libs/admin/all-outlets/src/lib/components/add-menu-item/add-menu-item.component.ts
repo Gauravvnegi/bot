@@ -1,12 +1,18 @@
 import { Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {
+  AbstractControl,
+  FormBuilder,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
 import {
   GlobalFilterService,
   RoutesConfigService,
 } from '@hospitality-bot/admin/core/theme';
 import {
+  AdminUtilityService,
   ConfigService,
   ModuleNames,
   NavRouteOptions,
@@ -19,6 +25,7 @@ import { OutletService } from '../../services/outlet.service';
 import { PageReloadService } from '../../services/page-reload.service.service';
 import { MenuItemForm, MenuItemResponse } from '../../types/outlet';
 import { OutletBaseComponent } from '../outlet-base.components';
+import { MenuItemCategory } from '../../types/menu';
 
 @Component({
   selector: 'hospitality-bot-add-menu-item',
@@ -38,13 +45,7 @@ export class AddMenuItemComponent extends OutletBaseComponent
   $subscription = new Subscription();
   taxes: Option[] = [];
   currencies: Option[] = [{ label: 'INR', value: 'INR' }];
-  unitOptions = [
-    { label: 'gm', value: 'GRAMS' },
-    { label: 'piece', value: 'PIECE' },
-    { label: 'litre', value: 'LITRE' },
-    { label: 'kg', value: 'KILOGRAM' },
-    { label: 'ml', value: 'MILLILITER' },
-  ];
+  unitOptions: Option[] = [];
   constructor(
     private fb: FormBuilder,
     private outletService: OutletService,
@@ -56,7 +57,8 @@ export class AddMenuItemComponent extends OutletBaseComponent
     private globalFilterService: GlobalFilterService,
     private configService: ConfigService,
     private location: Location,
-    protected routesConfigService: RoutesConfigService
+    protected routesConfigService: RoutesConfigService,
+    private adminUtilityService: AdminUtilityService
   ) {
     super(router, route, routesConfigService);
   }
@@ -67,6 +69,7 @@ export class AddMenuItemComponent extends OutletBaseComponent
     this.initForm();
     // this.initConfig();
     this.initRoutes('menuItem');
+    this.getAllCategories();
   }
 
   // initConfig() {
@@ -99,10 +102,7 @@ export class AddMenuItemComponent extends OutletBaseComponent
         label: item,
         value: item,
       }));
-      this.categories = config[0].menu.category.map((item) => ({
-        label: item,
-        value: item,
-      }));
+      this.unitOptions = config[0].menu.units;
     });
     this.getTax();
   }
@@ -113,7 +113,7 @@ export class AddMenuItemComponent extends OutletBaseComponent
       name: ['', Validators.required],
       mealPreference: ['', Validators.required],
       category: ['', Validators.required],
-      type: ['', Validators.required],
+      type: [''],
       preparationTime: ['', Validators.required],
       quantity: ['', Validators.required],
       unit: ['GRAMS'],
@@ -125,6 +125,7 @@ export class AddMenuItemComponent extends OutletBaseComponent
       taxIds: [[]],
       description: [''],
       imageUrl: ['', [Validators.required]],
+      itemCode: ['', [Validators.required]],
     });
     if (this.menuItemId) {
       this.$subscription.add(
@@ -139,6 +140,36 @@ export class AddMenuItemComponent extends OutletBaseComponent
           })
       );
     }
+  }
+
+  getAllCategories() {
+    this.$subscription.add(
+      this.outletService
+        .getAllCategories(this.outletId, this.getCategoryConfig())
+        .subscribe((res) => {
+          this.categories = res.records.map(
+            (item: { name: string; id: string }) => ({
+              label: item?.name,
+              value: item?.id,
+            })
+          );
+        })
+    );
+  }
+
+  getCategoryConfig() {
+    const config = {
+      params: this.adminUtilityService.makeQueryParams([
+        {
+          type: 'MENU_CATEGORY',
+          offset: 0,
+          limit: 50,
+          status: true,
+          pagination: false,
+        },
+      ]),
+    };
+    return config;
   }
 
   /**
@@ -177,7 +208,35 @@ export class AddMenuItemComponent extends OutletBaseComponent
   }
 
   // To be added from BE first
-  createCategory(name: string) {}
+  createCategory(name: string) {
+    const categoryData: MenuItemCategory = {
+      name: name,
+      type: 'MENU_CATEGORY',
+      source: 1,
+      active: true,
+    };
+    this.$subscription.add(
+      this.outletService.createCategory(this.outletId, categoryData).subscribe(
+        (res) => {
+          this.categories.push({
+            label: res.name,
+            value: res.id,
+          });
+          this.inputControls.category.patchValue(res.id, {
+            emitEvent: false,
+          });
+        },
+        (error) => {},
+        () => {
+          this.snackbarService.openSnackBarAsText(
+            `Category created successfully`,
+            '',
+            { panelClass: 'success' }
+          );
+        }
+      )
+    );
+  }
 
   createMealPreference(name: string) {}
 
@@ -236,5 +295,9 @@ export class AddMenuItemComponent extends OutletBaseComponent
   ngOnDestroy(): void {
     this.$subscription.unsubscribe();
     this.pageReloadService.disablePageReloadConfirmation();
+  }
+
+  get inputControls() {
+    return this.useForm.controls as Record<keyof MenuItemForm, AbstractControl>;
   }
 }

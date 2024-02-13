@@ -761,7 +761,6 @@ export class InvoiceComponent implements OnInit {
    */
   findAndRemoveItems(idToRemove?: string) {
     // removing the selected serviceID
-
     // Step 1: Filter out items with the same ID
     const itemsToRemove = this.tableFormArray.controls.filter(
       (control: Controls) => control.value.reservationItemId === idToRemove
@@ -790,6 +789,7 @@ export class InvoiceComponent implements OnInit {
     this.tableFormArray.removeAt(
       this.tableFormArray.controls.indexOf(itemToRemove)
     );
+
     this.tableFormArray.updateValueAndValidity();
     this.dateReflectionTrigger();
   }
@@ -868,6 +868,19 @@ export class InvoiceComponent implements OnInit {
     if (value === MenuActionItem.DELETE_ITEM) {
       this.findAndRemoveItems(priceControls.reservationItemId);
       return;
+    }
+
+    if (value === MenuActionItem.REMOVE_DISCOUNT) {
+      const itemsToRemove = this.tableFormArray.controls.filter(
+        (control: Controls) =>
+          control.value.isDiscount && !control.value.isRealised
+      );
+
+      itemsToRemove.forEach((item) => {
+        this.tableFormArray.removeAt(
+          this.tableFormArray.controls.indexOf(item)
+        );
+      });
     }
 
     /**
@@ -1198,9 +1211,8 @@ export class InvoiceComponent implements OnInit {
   /**
    * Getting All Services (Description)
    */
-  getDescriptionOptions() {
+  getDescriptionOptions(index?: number) {
     this.loadingDescription = true;
-
     if (this.entityType === EntitySubType.RESTAURANT) {
       this.manageReservationService.getMenuList(this.entityId).subscribe(
         (items: MenuItemListResponse) => {
@@ -1228,6 +1240,7 @@ export class InvoiceComponent implements OnInit {
             this.serviceListResponse.total = res.total;
             this.noMoreDescription = res.paidPackages.length < this.limit;
             this.loadingDescription = false;
+            index && this.handleFocus(index);
           },
           (err) => {
             this.loadingDescription = false;
@@ -1263,7 +1276,7 @@ export class InvoiceComponent implements OnInit {
    * Search Services
    * @param text input text
    */
-  searchDescription(text: string) {
+  searchDescription(text: string, index: number) {
     if (text) {
       this.loadingDescription = true;
 
@@ -1289,7 +1302,7 @@ export class InvoiceComponent implements OnInit {
 
       this.descriptionOptions = [];
 
-      this.getDescriptionOptions();
+      this.getDescriptionOptions(index);
     }
   }
 

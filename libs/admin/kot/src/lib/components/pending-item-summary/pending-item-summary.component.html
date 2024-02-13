@@ -6,7 +6,10 @@
     <div>Item</div>
     <div>Quantity</div>
   </div>
-  <div class="item-container" *ngIf="itemPendingSummaryList.length; else empty">
+  <div
+    class="item-container"
+    *ngIf="itemPendingSummaryList?.length; else empty"
+  >
     <div class="items" *ngFor="let item of itemPendingSummaryList">
       <div class="items-title">
         <img

@@ -274,7 +274,7 @@
                       rowIndex === selectedSearchIndex && loadingDescription
                     "
                     (paginate)="loadMoreDescription()"
-                    (onSearch)="searchDescription($event)"
+                    (onSearch)="searchDescription($event, rowIndex)"
                     [stopEmission]="noMoreDescription"
                     (onCreate)="createService($event)"
                     [disabled]="isValueDisabled(rowIndex, 'description')"

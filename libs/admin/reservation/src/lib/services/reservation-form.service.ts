@@ -16,6 +16,7 @@ import { JourneyDialogComponent } from '../components/journey-dialog/journey-dia
 import { ConfirmDialogData } from '../components/journey-dialog/journey-dialog.component';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { calculateJourneyTime } from '../constants/reservation';
+import { Validators } from '@angular/forms';
 @Injectable()
 export class ReservationFormService {
   data: JourneyData;
@@ -25,15 +26,14 @@ export class ReservationFormService {
     private snackbarService: SnackBarService,
     private reservationService: ReservationService,
     private globalFilterService: GlobalFilterService
-  ) {
-  }
+  ) {}
 
   manualCheckin(
     checkinDate: number,
     reservationId: string,
     callback?: (data?: JourneyData) => void,
     entityId?: string,
-    roomType?: IGRoomType,
+    roomType?: IGRoomType
   ) {
     this.data = {
       reservationId: reservationId,
@@ -49,7 +49,11 @@ export class ReservationFormService {
           const todayEpoch = new Date().setHours(0, 0, 0, 0);
           const checkinEpoch = new Date(checkinDate).setHours(0, 0, 0, 0);
           if (currentTime < defaultTime && checkinEpoch === todayEpoch) {
-            this.openModalComponent(JourneyTypes.EARLYCHECKIN, callback, reservationId);
+            this.openModalComponent(
+              JourneyTypes.EARLYCHECKIN,
+              callback,
+              reservationId
+            );
           } else {
             this.openJourneyDialog(
               {
@@ -71,7 +75,7 @@ export class ReservationFormService {
     reservationId: string,
     callback?: (data?: JourneyData) => void,
     entityId?: string,
-    roomType?: IGRoomType,
+    roomType?: IGRoomType
   ) {
     this.data = {
       reservationId: reservationId,
@@ -105,6 +109,7 @@ export class ReservationFormService {
         descriptions: JourneyTypeConfig[journeyType].descriptions,
         isReservation: true,
         isRemarks: true,
+        remarksValidators: [Validators.required],
       },
       actions: [
         {

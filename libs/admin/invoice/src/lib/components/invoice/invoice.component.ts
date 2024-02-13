@@ -457,17 +457,24 @@ export class InvoiceComponent implements OnInit {
   getMenu(rowIndex: number) {
     const rowFG: BillItemFields = this.tableFormArray.at(rowIndex).value;
     const dMenu = rowFG.isDiscount || !rowFG.isAddOn ? [] : defaultMenu;
-
     if (rowFG.isMiscellaneous && !rowFG.isRealised) {
       return dMenu;
     }
-    if (this.hasDiscount(rowFG.itemId, rowFG.date) && !rowFG.isRealised) {
-      return [...editDiscountMenu, ...dMenu];
-    }
+    // if (
+    //   this.hasDiscount(rowFG.itemId, rowFG.date) &&
+    //   !rowFG.isRealised &&
+    //   !rowFG?.reservationItemId
+    // ) {
+    //   return [...editDiscountMenu, ...dMenu];
+    // }
     if (rowFG.isRealised) {
       return allowanceMenu;
+    } else {
+      if (this.hasDiscount(rowFG.itemId, rowFG.date, true)) {
+        return [...editDiscountMenu, ...dMenu];
+      }
+      return [...addDiscountMenu, ...dMenu];
     }
-    return [...addDiscountMenu, ...dMenu];
   }
 
   paymentValidation(addValidation: boolean = true) {
@@ -881,6 +888,7 @@ export class InvoiceComponent implements OnInit {
           this.tableFormArray.controls.indexOf(item)
         );
       });
+      return;
     }
 
     /**
@@ -1337,7 +1345,7 @@ export class InvoiceComponent implements OnInit {
     ];
   }
 
-  hasDiscount(itemId: string, date: number) {
+  hasDiscount(itemId: string, date: number, isMenu: boolean = false) {
     const alreadyHasDiscount: Controls = this.tableFormArray.controls.find(
       (control: Controls) => {
         const controlDate = new Date(control.value.date).setHours(0, 0, 0, 0);
@@ -1345,7 +1353,8 @@ export class InvoiceComponent implements OnInit {
         return (
           control.value.itemId === itemId &&
           control.value.isDiscount &&
-          controlDate === targetDate
+          controlDate === targetDate  &&
+          (!isMenu || !control.value.isRealised)
         );
       }
     );
@@ -1407,6 +1416,7 @@ export class InvoiceComponent implements OnInit {
         discountType: string;
         discountValue: number;
         totalDiscount: { [date: number]: number };
+        isEditable: boolean;
       }) => {
         if (!res) return;
         billItems.forEach((item, index) => {
@@ -1457,7 +1467,7 @@ export class InvoiceComponent implements OnInit {
           }
           this.updateTax(taxedAmount, item.billItemId, newTaxedAmount);
         });
-        this.handleSave();
+        !res.isEditable && this.handleSave();
       }
     );
   }

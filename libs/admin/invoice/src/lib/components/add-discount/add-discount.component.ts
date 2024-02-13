@@ -148,6 +148,7 @@ export class AddDiscountComponent implements OnInit {
       discountType: this.discountForm.get('discountType').value,
       discountValue: this.discountForm.get('discountValue').value,
       totalDiscount: this.totalDiscount,
+      isEditable: this.billItems[0].chargeType !== 'ROOM',
     });
   }
 
@@ -163,6 +164,7 @@ export class AddDiscountComponent implements OnInit {
       discountType: this.discountForm.get('discountType').value,
       discountValue: this.discountForm.get('discountValue').value ?? 0,
       totalDiscount: resetTotalDiscount,
+      isEditable: this.billItems[0].chargeType !== 'ROOM',
     });
   }
 

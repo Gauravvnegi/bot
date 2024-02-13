@@ -761,7 +761,6 @@ export class InvoiceComponent implements OnInit {
    */
   findAndRemoveItems(idToRemove?: string) {
     // removing the selected serviceID
-
     // Step 1: Filter out items with the same ID
     const itemsToRemove = this.tableFormArray.controls.filter(
       (control: Controls) => control.value.reservationItemId === idToRemove
@@ -790,6 +789,7 @@ export class InvoiceComponent implements OnInit {
     this.tableFormArray.removeAt(
       this.tableFormArray.controls.indexOf(itemToRemove)
     );
+
     this.tableFormArray.updateValueAndValidity();
     this.dateReflectionTrigger();
   }
@@ -868,6 +868,19 @@ export class InvoiceComponent implements OnInit {
     if (value === MenuActionItem.DELETE_ITEM) {
       this.findAndRemoveItems(priceControls.reservationItemId);
       return;
+    }
+
+    if (value === MenuActionItem.REMOVE_DISCOUNT) {
+      const itemsToRemove = this.tableFormArray.controls.filter(
+        (control: Controls) =>
+          control.value.isDiscount && !control.value.isRealised
+      );
+
+      itemsToRemove.forEach((item) => {
+        this.tableFormArray.removeAt(
+          this.tableFormArray.controls.indexOf(item)
+        );
+      });
     }
 
     /**

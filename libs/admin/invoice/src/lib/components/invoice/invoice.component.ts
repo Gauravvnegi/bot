@@ -1198,9 +1198,8 @@ export class InvoiceComponent implements OnInit {
   /**
    * Getting All Services (Description)
    */
-  getDescriptionOptions() {
+  getDescriptionOptions(index?: number) {
     this.loadingDescription = true;
-
     if (this.entityType === EntitySubType.RESTAURANT) {
       this.manageReservationService.getMenuList(this.entityId).subscribe(
         (items: MenuItemListResponse) => {
@@ -1228,6 +1227,7 @@ export class InvoiceComponent implements OnInit {
             this.serviceListResponse.total = res.total;
             this.noMoreDescription = res.paidPackages.length < this.limit;
             this.loadingDescription = false;
+            index && this.handleFocus(index);
           },
           (err) => {
             this.loadingDescription = false;
@@ -1263,7 +1263,7 @@ export class InvoiceComponent implements OnInit {
    * Search Services
    * @param text input text
    */
-  searchDescription(text: string) {
+  searchDescription(text: string, index: number) {
     if (text) {
       this.loadingDescription = true;
 
@@ -1289,7 +1289,7 @@ export class InvoiceComponent implements OnInit {
 
       this.descriptionOptions = [];
 
-      this.getDescriptionOptions();
+      this.getDescriptionOptions(index);
     }
   }
 

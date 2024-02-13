@@ -1,1 +1,7 @@
 @import 'main';
+
+:host ::ng-deep {
+  .p-datatable .p-datatable-thead {
+    top: 116px !important;
+  }
+}

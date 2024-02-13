@@ -32,7 +32,6 @@ import {
   toCurrency,
 } from 'libs/admin/shared/src/lib/utils/valueFormatter';
 
-
 export class FinancialReport
   implements ReportClass<FinancialReportData, FinancialReportResponse> {
   records: FinancialReportData[];
@@ -215,7 +214,7 @@ export class PostingAuditReport
             item?.guestDetails?.primaryGuest?.firstName,
             item?.guestDetails?.primaryGuest?.lastName
           ),
-          user: getFullName(item?.user.firstName, item?.user?.lastName),
+          user: getFullName(item?.user?.firstName, item?.user?.lastName),
           trxAmount: toCurrency(item?.paymentSummary?.totalAmount),
           baseAmount: toCurrency(
             item?.reservationItemsPayment?.totalRoomCharge

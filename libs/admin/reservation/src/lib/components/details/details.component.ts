@@ -547,6 +547,8 @@ export class DetailsComponent implements OnInit, OnDestroy {
   manageInvoice() {
     this.onDetailsClose.next(true);
     this.onRoute.next(true);
+    this.bookingDetailService.changeRoute.next(true);
+    this.bookingDetailService.changeRoute.next(true);
     this.routesConfigService.navigate({
       subModuleName: ModuleNames.INVOICE,
       additionalPath: `${this.bookingId}`,
@@ -556,6 +558,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
   editBooking() {
     this.onDetailsClose.next(true);
     this.onRoute.next(true);
+    this.bookingDetailService.changeRoute.next(true);
     this.routesConfigService.navigate({
       subModuleName: ModuleNames.ADD_RESERVATION,
       additionalPath: `edit-reservation/${this.bookingId}`,

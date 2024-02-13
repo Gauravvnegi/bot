@@ -97,7 +97,7 @@ export class CheckinReservationsComponent implements OnInit {
 
   handelStatus(event, reservationData) {
     const status = event?.value;
-    const content:Partial<ModalComponent> = {
+    const content: Partial<ModalComponent> = {
       heading: `Mark Reservation As ${
         status.charAt(0).toUpperCase() + status.slice(1).toLowerCase()
       }`,
@@ -108,7 +108,7 @@ export class CheckinReservationsComponent implements OnInit {
           ? ` A total of \u20B9 ${reservationData?.totalPaidAmount} is received for the reservation`
           : '',
       ],
-      isRemarks: ['CANCELED','NOSHOW'].includes(status),
+      isRemarks: ['CANCELED', 'NOSHOW'].includes(status),
     };
     const actions = [
       {
@@ -227,6 +227,11 @@ export class CheckinReservationsComponent implements OnInit {
     this.bookingDetailService.openBookingDetailSidebar({
       bookingId: reservationId,
       tabKey: activeTab,
+    });
+    this.bookingDetailService.changeRoute.subscribe((res) => {
+      if (res) {
+        this.onClose.emit();
+      }
     });
   }
 

@@ -10,6 +10,11 @@ export class BookingDetailService {
   bookingId: string;
   actionEvent = new BehaviorSubject<boolean>(false);
 
+  /**
+   * Handle Change in route for closing multiple sidebars
+   */
+  changeRoute = new BehaviorSubject<boolean>(false);
+
   resetBookingState() {
     this.bookingNumber = undefined;
     this.guestId = undefined;
@@ -17,6 +22,7 @@ export class BookingDetailService {
     this.guestId = undefined;
     this.bookingId = undefined;
     this.actionEvent.next(false);
+    this.changeRoute.next(false);
   }
 
   /**

@@ -276,8 +276,10 @@
             <p-accordionTab *ngIf="transaction.amount">
               <ng-template pTemplate="header">
                 <div class="container__title">
-                  <p>
-                    Transaction ID - {{ transaction.transactionId || '--' }}
+                  <p class="transaction-history-heading">
+                    <span class="transaction-id">
+                      Transaction ID - {{ transaction.transactionId || '--' }}
+                    </span>
                     <span class="seperator"> | </span>
                     {{
                       transaction.amount
@@ -317,7 +319,7 @@
                 </ng-template>
                 <ng-template pTemplate="body" let-element>
                   <tr>
-                    <td>{{ element?.transactionId || '--' }}</td>
+                    <td class="transaction-id">{{ element?.transactionId || '--' }}</td>
                     <td>
                       {{ element?.created | date: 'MMM d, h:mm a, z' || '--' }}
                     </td>

@@ -139,6 +139,11 @@ export class CheckoutReservationsComponent implements OnInit, OnDestroy {
       bookingId: reservationId,
       tabKey: openTab,
     });
+    this.bookingDetailService.changeRoute.subscribe((res) => {
+      if (res) {
+        this.onClose.emit();
+      }
+    });
   }
 
   ngOnDestroy(): void {

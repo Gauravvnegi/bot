@@ -229,11 +229,22 @@ td {
   }
 }
 
+.transaction-history-heading {
+  display: flex;
+}
+
 :host ::ng-deep .container__title {
   @include flex-space-between-cen-Algn;
   color: $primary-black;
   font-weight: $medium;
   letter-spacing: 0.84px;
+}
+
+.transaction-id {
+  max-width: 300px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 :host ::ng-deep .expand-icon {

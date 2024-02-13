@@ -548,7 +548,6 @@ export class DetailsComponent implements OnInit, OnDestroy {
     this.onDetailsClose.next(true);
     this.onRoute.next(true);
     this.bookingDetailService.changeRoute.next(true);
-    this.bookingDetailService.changeRoute.next(true);
     this.routesConfigService.navigate({
       subModuleName: ModuleNames.INVOICE,
       additionalPath: `${this.bookingId}`,

@@ -50,7 +50,7 @@ export class ErrorHandlerInterceptor implements HttpInterceptor {
     return next.handle(req).pipe(
       catchError((err) => {
         try {
-          const statusCode = err.error?.status;
+          const statusCode = err.error?.status ?? err?.status;
           const translateService = this.injector.get(TranslateService);
           const priorityMessage = err.error?.message;
           let translationKey = getTranslationKeyOf(statusCode);

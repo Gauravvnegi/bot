@@ -176,7 +176,7 @@ export class CreateServiceComponent implements OnInit {
       description: [''],
 
       unit: ['', Validators.required],
-      enableVisibility: [['ADMIN_PANEL'], Validators.required],
+      enableVisibility: [[], Validators.required],
       taxIds: [[]],
       hsnCode: [''],
       enableOnMicrosite: [true],
@@ -262,6 +262,8 @@ export class CreateServiceComponent implements OnInit {
         this.visibilities = packageVisibility.map(({ key, value }) => ({
           label: value,
           value: key,
+          isDisabled: key === 'ADMIN_PANEL',
+          isSelected: key === 'ADMIN_PANEL',
         }));
       }
     });

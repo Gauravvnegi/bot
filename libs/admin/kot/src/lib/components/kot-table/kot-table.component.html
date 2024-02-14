@@ -39,7 +39,7 @@
     (sortFunction)="customSort($event)"
     [customSort]="isCustomSort"
     (onFilter)="onDataFilter()"
-    *ngIf="!isEmpty; else emptyTable"
+    *ngIf="values?.length; else emptyTable"
   >
     <ng-template pTemplate="caption">
       <div class="caption__wrapper" [formGroup]="tableFG">
@@ -78,6 +78,7 @@
     <!-- *********************************FOOTER******************************* -->
     <ng-template pTemplate="summary">
       <p-paginator
+        [hidden]="true"
         #paginator
         [rows]="rowsPerPage"
         [totalRecords]="totalRecords"
@@ -110,6 +111,7 @@
 
 <ng-template #tabFilter>
   <hospitality-bot-tab-group
+    [isCountVisible]="false"
     [selectedIndex]="tabFilterIdx"
     *ngIf="isTabFilters"
     [listItems]="tabFilterItems"

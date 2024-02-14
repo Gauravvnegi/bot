@@ -99,7 +99,7 @@ export class HotelInfoFormComponent implements OnInit {
           number: [''],
         }),
         gstNumber: [''],
-        address: [{} , Validators.required],
+        address: [{}, Validators.required],
         imageUrl: [[], [Validators.required]],
         description: [''],
         serviceIds: [[]],
@@ -142,7 +142,8 @@ export class HotelInfoFormComponent implements OnInit {
       //get the servcie list after getting hotel by id
       this.businessService
         .getServiceList(this.entityId, {
-          params: '?type=SERVICE&serviceType=COMPLIMENTARY&pagination=false',
+          params:
+            '?type=SERVICE&serviceType=COMPLIMENTARY&pagination=false&visibilitySource=ADMIN_PANEL',
         })
         .subscribe((res) => {
           res = new Services().deserialize(res.complimentaryPackages).services;

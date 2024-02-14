@@ -219,6 +219,7 @@ export class ServicesComponent implements OnInit, OnDestroy {
           limit: this.limit,
           type: 'SERVICE',
           serviceType: 'COMPLIMENTARY',
+          visibilitySource: 'ADMIN_PANEL',
         },
       ]),
     };

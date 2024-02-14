@@ -13,13 +13,14 @@
     <div
       class="option-btn"
       *ngFor="let option of defaultOptions; let i = index"
-      (click)="handleClick(option.value, i)"
+      (click)="!option.isDisabled && handleClick(option.value, i)"
       [ngClass]="{
         'option-btn__checkbox': fieldType === 'checkbox',
         'option-btn__radio': fieldType === 'radio',
         'option-selected__radio': fieldType === 'radio' && option.isSelected,
         'option-selected__checkbox':
-          fieldType === 'checkbox' && option.isSelected
+          fieldType === 'checkbox' && option.isSelected,
+        'option-btn__disabled': option.isDisabled
       }"
     >
       <span>

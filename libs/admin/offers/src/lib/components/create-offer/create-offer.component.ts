@@ -55,6 +55,7 @@ export class CreateOfferComponent implements OnInit {
   libraryItems: Option[] = [];
   discount: Option[];
   currency = 'INR';
+  visibilities: Option[];
 
   /* min max date */
   startMinDate = new Date();
@@ -121,6 +122,7 @@ export class CreateOfferComponent implements OnInit {
       discountType: ['PERCENTAGE', [Validators.required]],
       discountValue: ['0', [Validators.required, Validators.min(0)]],
       discountedPrice: [''],
+      enableVisibility: [[''], Validators.required],
       enableOnMicrosite: [false],
       priority: ['LOW'],
       entityId: [],
@@ -300,10 +302,17 @@ export class CreateOfferComponent implements OnInit {
 
   initOptionsConfig() {
     this.subscription$.add(
-      this.configService.$config.subscribe((res) => {
-        this.discount = res?.roomDiscountConfig?.map(({ value }) => ({
+      this.configService.$config.subscribe((value) => {
+        this.discount = value?.roomDiscountConfig?.map(({ value }) => ({
           label: DiscountType[value],
           value,
+        }));
+
+        this.visibilities = value?.packageVisibility.map(({ key, value }) => ({
+          label: value,
+          value: key,
+          isDisabled: key === 'ADMIN_PANEL',
+          isSelected: key === 'ADMIN_PANEL',
         }));
       })
     );

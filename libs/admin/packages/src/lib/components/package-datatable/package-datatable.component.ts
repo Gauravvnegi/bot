@@ -128,6 +128,7 @@ export class PackageDataTableComponent extends BaseDatatableComponent
           type: LibraryItem.package,
           offset: this.first,
           limit: this.rowsPerPage,
+          visibilitySource: 'ADMIN_PANEL',
         },
       ]),
     };

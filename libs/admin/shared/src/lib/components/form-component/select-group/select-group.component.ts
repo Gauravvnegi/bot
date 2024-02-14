@@ -9,17 +9,24 @@ import { FormComponent } from '../form.components';
   styleUrls: ['./select-group.component.scss'],
 })
 export class SelectGroupComponent extends FormComponent implements OnInit {
-  defaultOptions: (Option & { isSelected: boolean })[];
+  defaultOptions: (Option & { isSelected: boolean; isDisabled?: boolean })[];
 
   @Input() fieldType: FieldType = 'radio';
   @Input() isAllOption: boolean = false;
 
   @Input() set options(input: Option[]) {
+    this.initInputControl();
+    const selectedValue = [];
     this.menuOptions = input;
-    this.defaultOptions = input?.map((item) => ({
-      ...item,
-      isSelected: false,
-    }));
+    this.defaultOptions = input?.map((item) => {
+      if (item?.isSelected) selectedValue.push(item.value);
+      return {
+        ...item,
+        isSelected: item.isSelected ?? false,
+      };
+    });
+
+    this.inputControl.patchValue(selectedValue, { emitEvent: false });
   }
 
   constructor(public controlContainer: ControlContainer) {
@@ -68,11 +75,15 @@ export class SelectGroupComponent extends FormComponent implements OnInit {
       this.defaultOptions[idx].isSelected = !this.defaultOptions[idx]
         .isSelected;
 
+      //to handle the case when all option is toggle, then we need mark all option selected
       this.isAllOption &&
         value === 'ALL' &&
-        this.defaultOptions.map(
-          (item) => (item.isSelected = this.defaultOptions[idx].isSelected)
-        );
+        this.defaultOptions
+          .filter((item) => !item?.isDisabled)
+          .map(
+            (item) => (item.isSelected = this.defaultOptions[idx].isSelected)
+          );
+
       this.isAllOption && this.handleAllSelection();
 
       this.inputControl.setValue(

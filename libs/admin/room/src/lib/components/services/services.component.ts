@@ -232,6 +232,7 @@ export class ServicesComponent implements OnInit, OnDestroy {
           type: 'SERVICE',
           serviceType: type,
           status: true,
+          visibilitySource: 'ADMIN_PANEL',
         },
       ]),
     };

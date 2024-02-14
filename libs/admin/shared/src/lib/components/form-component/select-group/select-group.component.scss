@@ -36,6 +36,11 @@
     align-items: center;
     cursor: pointer;
   }
+
+  &__disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
 }
 
 .option-selected {

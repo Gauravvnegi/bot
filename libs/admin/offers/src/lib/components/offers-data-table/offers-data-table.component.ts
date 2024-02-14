@@ -147,6 +147,7 @@ export class OffersDataTableComponent extends BaseDatatableComponent
           limit: this.rowsPerPage,
           source: 1,
           raw: true,
+          visibilitySource: 'ADMIN_PANEL',
         },
       ]),
     };

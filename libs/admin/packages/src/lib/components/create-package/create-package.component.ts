@@ -115,7 +115,7 @@ export class CreatePackageComponent implements OnInit {
       discountValue: ['0', [Validators.required, Validators.min(0)]],
       discountedCurrency: ['', Validators.required],
       discountedPrice: ['', Validators.required],
-      enableVisibility: [['ADMIN_PANEL'], Validators.required],
+      enableVisibility: [[''], Validators.required],
       enableOnMicrosite: [false],
       priority: ['LOW'],
     });
@@ -218,7 +218,12 @@ export class CreatePackageComponent implements OnInit {
           roomDiscountConfig,
         } = value;
         this.currencies = currencyConfiguration.map(modOption);
-        this.visibilities = packageVisibility.map(modOption);
+        this.visibilities = packageVisibility.map(({ key, value }) => ({
+          label: value,
+          value: key,
+          isDisabled: key === 'ADMIN_PANEL',
+          isSelected: key === 'ADMIN_PANEL',
+        }));
 
         this.discountType = roomDiscountConfig.map(({ value }) => ({
           label: DiscountType[value],

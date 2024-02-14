@@ -323,6 +323,7 @@ export class AddReservationComponent extends BaseReservationComponent
           type: 'OFFER',
           source: 1,
           serviceIds: roomTypeIds,
+          visibilitySource: 'ADMIN_PANEL',
         },
       ]),
     };

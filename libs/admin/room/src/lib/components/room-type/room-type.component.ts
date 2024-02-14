@@ -410,7 +410,7 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
     this.subscription$.add(
       this.roomService
         .getServices(this.entityId, {
-          params: `?limit=5&type=SERVICE&serviceType=${serviceType}&status=true&entityId=${this.entityId}`,
+          params: `?limit=5&type=SERVICE&serviceType=${serviceType}&status=true&entityId=${this.entityId}&visibilitySource=ADMIN_PANEL`,
         })
         .subscribe(
           (res) => {

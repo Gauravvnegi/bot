@@ -236,6 +236,7 @@ export class ServicesDataTableComponent extends BaseDatatableComponent {
           offset: this.first,
           limit: this.rowsPerPage,
           entityIds: this.getEntityId(),
+          visibilitySource: 'ADMIN_PANEL',
         },
       ]),
     };

@@ -26,6 +26,7 @@ export class TabGroupComponent implements OnInit {
   @Output() selectedTabChange = new EventEmitter();
   @ViewChild('tabFilter') tabFilter: ElementRef;
   @Input() extraGap = 40;
+  @Input() isCountVisible: boolean = true;
 
   @Input() isSticky = false;
   isScrolledUp: boolean = false;

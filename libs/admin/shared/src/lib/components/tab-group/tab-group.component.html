@@ -21,7 +21,7 @@
 
           <ng-template #textLabel>
             {{
-              tab.total >= 0
+              tab.total >= 0 && isCountVisible
                 ? tab.label.concat(' (', tab.total, ')')
                 : tab.label
             }}

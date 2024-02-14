@@ -185,7 +185,7 @@ export class ReportsDataTableComponent extends BaseDatatableComponent {
       )
       .subscribe(
         (res) => {
-=          const ReportModel = reportsModelMapping[this.selectedReport.value];
+          const ReportModel = reportsModelMapping[this.selectedReport.value];
           this.cols = reportsColumnMapping[this.selectedReport.value];
           this.values = new ReportModel().deserialize(res).records;
           if (this.selectedReport.value === 'managerFlashReport') {

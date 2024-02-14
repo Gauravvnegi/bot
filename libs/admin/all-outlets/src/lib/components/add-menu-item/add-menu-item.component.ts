@@ -94,10 +94,7 @@ export class AddMenuItemComponent extends OutletBaseComponent
       const config = res.type.filter((item) => {
         if (item.menu) return item.menu;
       });
-      this.mealPreferences = config[0].menu.mealPreference.map((item) => ({
-        label: item,
-        value: item,
-      }));
+      this.mealPreferences = config[0].menu.mealPreference;
       this.types = config[0].menu.type.map((item) => ({
         label: item,
         value: item,

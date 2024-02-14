@@ -17,7 +17,7 @@ export type ConfigTypes = {
 
 export type MenuConfig = {
   type: string[];
-  mealPreference: string[];
+  mealPreference: Option[];
   category: string[];
   units: Option[];
 };
